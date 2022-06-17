@@ -2,181 +2,218 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42568C433EF
-	for <linux-media@archiver.kernel.org>; Fri, 17 Jun 2022 10:59:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5D23C433EF
+	for <linux-media@archiver.kernel.org>; Fri, 17 Jun 2022 11:39:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236254AbiFQK7F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Jun 2022 06:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55478 "EHLO
+        id S1381447AbiFQLjE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Jun 2022 07:39:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236167AbiFQK7E (ORCPT
+        with ESMTP id S1380126AbiFQLjD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Jun 2022 06:59:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C826066FBC;
-        Fri, 17 Jun 2022 03:59:01 -0700 (PDT)
+        Fri, 17 Jun 2022 07:39:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A8B12610
+        for <linux-media@vger.kernel.org>; Fri, 17 Jun 2022 04:39:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 87DAEB828D2;
-        Fri, 17 Jun 2022 10:59:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDED4C3411B;
-        Fri, 17 Jun 2022 10:58:55 +0000 (UTC)
-Message-ID: <ae3a7a1b-23bf-ecc8-5afe-2c3ce4ecec05@xs4all.nl>
-Date:   Fri, 17 Jun 2022 12:58:54 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 467CE61F2F
+        for <linux-media@vger.kernel.org>; Fri, 17 Jun 2022 11:39:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE7CDC3411D;
+        Fri, 17 Jun 2022 11:38:58 +0000 (UTC)
+Message-ID: <c9c5b7d6-eb91-f609-ff85-1de069a8a57b@xs4all.nl>
+Date:   Fri, 17 Jun 2022 13:38:57 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v9 00/17] Move HEVC stateless controls out of staging
+Subject: Re: [PATCH 37/55] media: mc-entity: Add a new helper function to get
+ a remote pad
 Content-Language: en-US
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, andrzej.p@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com
-References: <20220617083545.133920-1-benjamin.gaignard@collabora.com>
+To:     Paul Elder <paul.elder@ideasonboard.com>,
+        linux-media@vger.kernel.org
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        dafna@fastmail.com, heiko@sntech.de,
+        jeanmichel.hautbois@ideasonboard.com, jacopo@jmondi.org,
+        djrscally@gmail.com, helen.koike@collabora.com,
+        linux-rockchip@lists.infradead.org
+References: <20220614191127.3420492-1-paul.elder@ideasonboard.com>
+ <20220614191127.3420492-38-paul.elder@ideasonboard.com>
 From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220617083545.133920-1-benjamin.gaignard@collabora.com>
+In-Reply-To: <20220614191127.3420492-38-paul.elder@ideasonboard.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Benjamin,
 
-On 6/17/22 10:35, Benjamin Gaignard wrote:
-> This series aims to make HEVC uapi stable and usable for hardware
-> decoder. HEVC uapi is used by 2 mainlined drivers (Cedrus and Hantro)
-> and 2 out of the tree drivers (rkvdec and RPI).
+
+On 6/14/22 21:11, Paul Elder wrote:
+> From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > 
-> version 9:
-> - Reword some commit message
-> - Use fls()
-> - Remove useless padding at the end of hevc structures
-> - Reword all _minus* field description
-> - change CVS to codec video sequence
-> - Fix various typo
-> - Fix undefined label: v4l2-ctrl-flag-dynamic-array warning
-> - fix the waring reported by 'scripts/kernel-doc -none
->   include/uapi/linux/v4l2-controls.h'
+> The media_entity_remote_pad() helper function returns the first remote
+> pad it find connected to a given pad. Beside being possibly ill-named
 
-This looks great, all my tests (sparse, smatch, etc) pass and all my issues are now
-addressed.
+find -> finds
 
-So all I need is some more Acked-by/Reviewed-by tags for this series, esp. from Nicolas.
+> (as it operates on a pad, not an entity) and non-deterministic (as it
+> stops at the first enabled link), the fact that it returns the first
+> match makes it unsuitable for drivers that need to guarantee that a
+> single link is enabled, for instance when an entity can process data
+> from one of multiple sources at a time.
+> 
+> For those use cases, add a new helper function,
+> media_entity_remote_pad_unique(), that operates on an entity and returns
+> a remote pad, with a guarantee that only one link is enabled. To ease
+> its use in drivers, also add an inline wrapper that locates source pads
+> specifically. A wrapper that locates sink pads can easily be added when
+> needed.
+> 
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> ---
+>  Documentation/driver-api/media/mc-core.rst |  4 +-
+>  drivers/media/mc/mc-entity.c               | 38 ++++++++++++++++++
+>  include/media/media-entity.h               | 45 ++++++++++++++++++++++
+>  3 files changed, 85 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/driver-api/media/mc-core.rst b/Documentation/driver-api/media/mc-core.rst
+> index 02481a2513b9..a2d1e32e3abb 100644
+> --- a/Documentation/driver-api/media/mc-core.rst
+> +++ b/Documentation/driver-api/media/mc-core.rst
+> @@ -186,8 +186,8 @@ is required and the graph structure can be freed normally.
+>  
+>  Helper functions can be used to find a link between two given pads, or a pad
+>  connected to another pad through an enabled link
+> -:c:func:`media_entity_find_link()` and
+> -:c:func:`media_entity_remote_pad()`.
+> +(:c:func:`media_entity_find_link()`, :c:func:`media_entity_remote_pad()` and
+> +:c:func:`media_entity_remote_source_pad()`).
+>  
+>  Use count and power handling
+>  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+> index 11f5207f73aa..1febf5a86be6 100644
+> --- a/drivers/media/mc/mc-entity.c
+> +++ b/drivers/media/mc/mc-entity.c
+> @@ -9,6 +9,7 @@
+>   */
+>  
+>  #include <linux/bitmap.h>
+> +#include <linux/list.h>
+>  #include <linux/property.h>
+>  #include <linux/slab.h>
+>  #include <media/media-entity.h>
+> @@ -920,6 +921,43 @@ struct media_pad *media_entity_remote_pad(const struct media_pad *pad)
+>  }
+>  EXPORT_SYMBOL_GPL(media_entity_remote_pad);
+>  
+> +struct media_pad *
+> +media_entity_remote_pad_unique(const struct media_entity *entity,
+> +			       unsigned int type)
+> +{
+> +	struct media_pad *pad = NULL;
+> +	struct media_link *link;
+> +
+> +	list_for_each_entry(link, &entity->links, list) {
+> +		struct media_pad *local_pad;
+> +		struct media_pad *remote_pad;
+> +
+> +		if (!(link->flags & MEDIA_LNK_FL_ENABLED))
+> +			continue;
+> +
+> +		if (type == MEDIA_PAD_FL_SOURCE) {
+> +			local_pad = link->sink;
+> +			remote_pad = link->source;
+> +		} else {
+> +			local_pad = link->source;
+> +			remote_pad = link->sink;
+> +		}
+> +
+> +		if (local_pad->entity == entity) {
+> +			if (pad)
+> +				return ERR_PTR(-ENOTUNIQ);
+> +
+> +			pad = remote_pad;
+> +		}
+> +	}
+> +
+> +	if (!pad)
+> +		return ERR_PTR(-ENOLINK);
+> +
+> +	return pad;
+> +}
+> +EXPORT_SYMBOL_GPL(media_entity_remote_pad_unique);
+> +
+>  static void media_interface_init(struct media_device *mdev,
+>  				 struct media_interface *intf,
+>  				 u32 gobj_type,
+> diff --git a/include/media/media-entity.h b/include/media/media-entity.h
+> index a9a1c0ec5d1c..33d5f52719a0 100644
+> --- a/include/media/media-entity.h
+> +++ b/include/media/media-entity.h
+> @@ -859,6 +859,51 @@ struct media_link *media_entity_find_link(struct media_pad *source,
+>   */
+>  struct media_pad *media_entity_remote_pad(const struct media_pad *pad);
+>  
+> +/**
+> + * media_entity_remote_pad_unique - Find a remote pad connected to an entity
+> + * @entity: The entity
+> + * @type: The type of pad to find (MEDIA_PAD_FL_SINK or MEDIA_PAD_FL_SOURCE)
+> + *
+> + * Search for and return a remote pad of @type connected to @entity through an
+> + * enabled link. If multiple (or no) remote pads match these criteria, an error
+> + * is returned.
+> + *
+> + * The uniqueness constraint makes this helper function suitable for entities
+> + * that support a single active source or sink at a time.
+> + *
+> + * Return: A pointer to the remote pad, or one of the following error pointers
+> + * if an error occurs:
+> + *
+> + * * -ENOTUNIQ - Multiple links are enabled
+> + * * -ENOLINK - No connected pad found
+> + */
+> +struct media_pad *
+> +media_entity_remote_pad_unique(const struct media_entity *entity,
+> +			       unsigned int type);
+> +
+> +/**
+> + * media_entity_remote_source_pad - Find a remote source pad connected to an entity
 
-Once I have that I'll make a PR for this.
+Shouldn't this be called media_entity_remote_source_pad_unique?
+
+After all, it has the uniqueness constraint, but that's not reflected in the name.
+
+With that change you can add my:
+
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
 Regards,
 
 	Hans
 
-> 
-> This version has been tested with these branches:
-> - GStreamer: https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer/-/tree/HEVC_aligned_with_kernel_5.15
-> - Linux: https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/tree/HEVC_UAPI_V9
-> 
-> With patches to decode 10-bits bitstream and produce P010 frames the Fluster score 
-> which was 77/147 before, is now 141/147.
-> The 10-bits series will comes after this because of it dependency to
-> uAPI change. If you are curious you can find the WIP branch here:
-> https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/commits/WIP_HEVC_UAPI_V9
-> 
-> The 6 failing tests are:
-> - PICSIZE_{A,B,C,D}_Bossen_1 where resolutions are to big for Hantro hardware.
-> - WPP_D_ericsson_MAIN_2 and WPP_D_ericsson_MAIN10_2 are visually ok but some 
->   difference exist on 5 decoded frames. Some pixels values are no the same 
->   the very end of few lines.
-> 
-> version 8:
-> - Same than v7 but rebased on media_stage/master
-> 
-> version 7:
-> - Apply Jernej patches for Cedrus about bit offset definition and
->   V4L2_CID_STATELESS_HEVC_SLICE_PARAMS being a dynamic array control.
-> - Based on media_tree/master
-> 
-> version 6:
-> - Add short_term_ref_pic_set_size and long_term_ref_pic_set_size
->   in v4l2_ctrl_hevc_decode_params structure.
-> - Change slice_pic_order_cnt type to s32 to match with PoC type.
-> - Set V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag automatically when using
->   V4L2_CID_STATELESS_HEVC_SLICE_PARAMS control.
-> - Add a define for max slices count
-> - Stop using Hantro dedicated control.
-> 
-> version 5:
-> - Change __u16 pic_order_cnt[2] into __s32 pic_order_cnt_val in
->   hevc_dpb_entry structure
-> - Add defines for SEI pic_struct values (patch 4)
-> - Fix numbers of bits computation in cedrus_h265_skip_bits() parameters
-> - Fix num_short_term_ref_pic_sets and num_long_term_ref_pics_sps
->   documentation (patch 8)
-> - Rebased on v5-18-rc1
-> 
-> Version 4:
-> - Add num_entry_point_offsets field in  struct v4l2_ctrl_hevc_slice_params
-> - Fix V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS name
-> - Initialize control V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS
-> - Fix space/tab issue in kernel-doc
-> - Add patch to change data_bit_offset definition
-> - Fix hantro-media SPDX license
-> - put controls under stateless section in v4l2-ctrls-defs.c
-> 
-> Benjamin Gaignard (14):
->   media: uapi: HEVC: Add missing fields in HEVC controls
->   media: uapi: HEVC: Rename HEVC stateless controls with STATELESS
->     prefix
->   media: uapi: HEVC: Change pic_order_cnt definition in
->     v4l2_hevc_dpb_entry
->   media: uapi: HEVC: Add SEI pic struct flags
->   media: uapi: HEVC: Add documentation to uAPI structure
->   media: uapi: HEVC: Define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS as a
->     dynamic array
->   media: uapi: Move parsed HEVC pixel format out of staging
->   media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS control
->   media: uapi: Move the HEVC stateless control type out of staging
->   media: controls: Log HEVC stateless control in .std_log
->   media: hantro: Stop using Hantro dedicated control
->   media: uapi: HEVC: fix padding in v4l2 control structures
->   media: uapi: Change data_bit_offset definition
->   media: uapi: move HEVC stateless controls out of staging
-> 
-> Hans Verkuil (3):
->   videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
->   v4l2-ctrls: add support for dynamically allocated arrays.
->   vivid: add dynamic array test control
-> 
->  .../media/v4l/ext-ctrls-codec-stateless.rst   | 897 ++++++++++++++++++
->  .../media/v4l/ext-ctrls-codec.rst             | 780 ---------------
->  .../media/v4l/pixfmt-compressed.rst           |   7 +-
->  .../media/v4l/vidioc-g-ext-ctrls.rst          |  20 +
->  .../media/v4l/vidioc-queryctrl.rst            |   8 +
->  .../media/videodev2.h.rst.exceptions          |   6 +
->  .../media/test-drivers/vivid/vivid-ctrls.c    |  15 +
->  drivers/media/v4l2-core/v4l2-ctrls-api.c      | 103 +-
->  drivers/media/v4l2-core/v4l2-ctrls-core.c     | 212 ++++-
->  drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  38 +-
->  drivers/media/v4l2-core/v4l2-ctrls-priv.h     |   3 +-
->  drivers/media/v4l2-core/v4l2-ctrls-request.c  |  13 +-
->  drivers/staging/media/hantro/hantro_drv.c     |  62 +-
->  .../staging/media/hantro/hantro_g2_hevc_dec.c |  44 +-
->  drivers/staging/media/hantro/hantro_hevc.c    |  10 +-
->  drivers/staging/media/hantro/hantro_hw.h      |   4 +-
->  drivers/staging/media/sunxi/cedrus/cedrus.c   |  26 +-
->  .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
->  .../staging/media/sunxi/cedrus/cedrus_h265.c  |  23 +-
->  .../staging/media/sunxi/cedrus/cedrus_video.c |   1 -
->  include/media/hevc-ctrls.h                    | 250 -----
->  include/media/v4l2-ctrls.h                    |  48 +-
->  include/uapi/linux/v4l2-controls.h            | 459 +++++++++
->  include/uapi/linux/videodev2.h                |  13 +
->  24 files changed, 1826 insertions(+), 1226 deletions(-)
->  delete mode 100644 include/media/hevc-ctrls.h
-> 
+> + * @entity: The entity
+> + *
+> + * Search for and return a remote source pad connected to @entity through an
+> + * enabled link. If multiple (or no) remote pads match these criteria, an error
+> + * is returned.
+> + *
+> + * The uniqueness constraint makes this helper function suitable for entities
+> + * that support a single active source at a time.
+> + *
+> + * Return: A pointer to the remote pad, or one of the following error pointers
+> + * if an error occurs:
+> + *
+> + * * -ENOTUNIQ - Multiple links are enabled
+> + * * -ENOLINK - No connected pad found
+> + */
+> +static inline struct media_pad *
+> +media_entity_remote_source_pad(const struct media_entity *entity)
+> +{
+> +	return media_entity_remote_pad_unique(entity, MEDIA_PAD_FL_SOURCE);
+> +}
+> +
+>  /**
+>   * media_entity_is_streaming - Test if an entity is part of a streaming pipeline
+>   * @entity: The entity
