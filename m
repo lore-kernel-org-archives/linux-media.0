@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDA69CCA479
-	for <linux-media@archiver.kernel.org>; Fri, 17 Jun 2022 08:36:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC659C43334
+	for <linux-media@archiver.kernel.org>; Fri, 17 Jun 2022 08:36:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381069AbiFQIgC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Jun 2022 04:36:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
+        id S1381085AbiFQIgD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Jun 2022 04:36:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381062AbiFQIf7 (ORCPT
+        with ESMTP id S1381066AbiFQIgA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Jun 2022 04:35:59 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC7264BF0;
-        Fri, 17 Jun 2022 01:35:58 -0700 (PDT)
+        Fri, 17 Jun 2022 04:36:00 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF076928C;
+        Fri, 17 Jun 2022 01:35:59 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:faf2:1a12:f903:cc5e])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0F809660180B;
-        Fri, 17 Jun 2022 09:35:56 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 79165660183A;
+        Fri, 17 Jun 2022 09:35:57 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655454956;
-        bh=nzHCoS01czAEUF9ZQKC33uGYkjGqR8iujg/G9JAYMcA=;
+        s=mail; t=1655454958;
+        bh=1iR3IMRUO+2Hkzq4QhZw0P+p+hDWtdsg2JkgewgtLFQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZokP0qWY5xXBgS+zTUMB4IHtNnEYJI5UdkMMRHgB+D90uFBTJksKu6wiKCzXT5nge
-         SgGhfN93iUXfgUE+KFuhdTvkbFA24eUeYP5P/NP7zUYniqN5oN9yvQwObmecJC5hy+
-         Nw1yrfSWNm3bXrk1moOIKyCZD1nJjXQrDD7eDnnHe5FmRWDpfz0FhAnwE3OUjZ4m08
-         uJkLwg/a5Ayd9o7W8O5/Of5JUM2PcRW/w7Jqz9USFWJHdIj9Ezkraq8kmmL7OHeoyI
-         Fj55ZCNghfkUwv+L62IM7VkJeafIi5MFrM8+V0XFhk/36kewHAYHv+16yDT3z6kA9f
-         0dYR9IVoAzulw==
+        b=EcZZdH5FRk31PZbHWmRmROqsB9qDgKFNfTC58awucALcsUB5gZZomGsUFbhHjWB+S
+         ZryEwViPH3gv0OFh83tfzhd0EDgzDcK2AZW9DdvkOut1wEifKGZbAz5Ni0w3fGzgpM
+         yVTDwWL6ftuTxMx3/K6EzuzYhnYbXE8TLFxcgLwN2EKHPlhkDHofhWzTzRHRAerVJ1
+         YTpOMnwA5cGvCUUBWqZ1/9Y3cFFESf6BYaI6EuMaGOREt44TeI/djHMXInopxBiSjU
+         pE+Wvw3CjBkvzEazibCQnR9PFCERSDwUOlnEi9S5wzm1obKVmvSsp2CNYirR+dbdCi
+         OO0LCD+OEy5zg==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, hverkuil@xs4all.nl,
         ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
@@ -44,135 +44,150 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v9 04/17] media: uapi: HEVC: Add missing fields in HEVC controls
-Date:   Fri, 17 Jun 2022 10:35:32 +0200
-Message-Id: <20220617083545.133920-5-benjamin.gaignard@collabora.com>
+Subject: [PATCH v9 06/17] media: uapi: HEVC: Change pic_order_cnt definition in v4l2_hevc_dpb_entry
+Date:   Fri, 17 Jun 2022 10:35:34 +0200
+Message-Id: <20220617083545.133920-7-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220617083545.133920-1-benjamin.gaignard@collabora.com>
 References: <20220617083545.133920-1-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Complete the HEVC controls with missing fields from H.265 specifications.
-Even if these fields aren't used by the current mainlined drivers
-they will be required for (at least) the rkvdec driver.
+The HEVC specification describes the following:
+"PicOrderCntVal is derived as follows:
+PicOrderCntVal = PicOrderCntMsb + slice_pic_order_cnt_lsb
+The value of PicOrderCntVal shall be in the range of −2^31 to 2^31 − 1, inclusive."
+
+To match with these definitions change __u16 pic_order_cnt[2]
+into __s32 pic_order_cnt_val.
+Change v4l2_ctrl_hevc_slice_params->slice_pic_order_cnt to __s32 too.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
-version 9:
-- fix typo
-
- .../media/v4l/ext-ctrls-codec.rst             | 32 +++++++++++++++++++
- include/media/hevc-ctrls.h                    |  8 ++++-
- 2 files changed, 39 insertions(+), 1 deletion(-)
+ Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 2 +-
+ drivers/staging/media/hantro/hantro_g2_hevc_dec.c         | 7 +++----
+ drivers/staging/media/hantro/hantro_hevc.c                | 2 +-
+ drivers/staging/media/hantro/hantro_hw.h                  | 4 ++--
+ drivers/staging/media/sunxi/cedrus/cedrus_h265.c          | 4 ++--
+ include/media/hevc-ctrls.h                                | 4 ++--
+ 6 files changed, 11 insertions(+), 12 deletions(-)
 
 diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index 6183f43f4d73..cff742142a55 100644
+index 868669ae6831..3dfb81a93935 100644
 --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
 +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -2683,6 +2683,16 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-     :stub-columns: 0
-     :widths:       1 1 2
- 
-+    * - __u8
-+      - ``video_parameter_set_id``
-+      - Specifies the value of the vps_video_parameter_set_id of the active VPS
-+        as described in section "7.4.3.2.1 General sequence parameter set RBSP semantics"
-+        of H.265 specifications.
-+    * - __u8
-+      - ``seq_parameter_set_id``
-+      - Provides an identifier for the SPS for reference by other syntax elements
-+        as described in section "7.4.3.2.1 General sequence parameter set RBSP semantics"
-+        of H.265 specifications.
-     * - __u16
-       - ``pic_width_in_luma_samples``
+@@ -3010,7 +3010,7 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+     * - __u8
+       - ``colour_plane_id``
        -
-@@ -2822,6 +2832,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-     :stub-columns: 0
-     :widths:       1 1 2
- 
-+    * - __u8
-+      - ``pic_parameter_set_id``
-+      - Identifies the PPS for reference by other syntax elements.
-     * - __u8
-       - ``num_extra_slice_header_bits``
+-    * - __u16
++    * - __s32
+       - ``slice_pic_order_cnt``
        -
-@@ -3048,6 +3061,15 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
      * - __u8
-       - ``ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
-       - The list of L1 reference elements as indices in the DPB.
-+    * - __u16
-+      - ``short_term_ref_pic_set_size``
-+      - Specifies the size, in bits, of the short-term reference picture set, described as st_ref_pic_set()
-+        in the specification, included in the slice header or SPS (section 7.3.6.1).
-+    * - __u16
-+      - ``long_term_ref_pic_set_size``
-+      - Specifies the size, in bits, of the long-term reference picture set include in the slice header
-+        or SPS. It is the number of bits in the conditional block if(long_term_ref_pics_present_flag)
-+        in section 7.3.6.1 of the specification.
-     * - __u8
-       - ``padding``
-       - Applications and drivers must set this to zero.
-@@ -3385,6 +3407,16 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-       - ``pic_order_cnt_val``
-       - PicOrderCntVal as described in section 8.3.1 "Decoding process
-         for picture order count" of the specification.
-+    * - __u16
-+      - ``short_term_ref_pic_set_size``
-+      - Specifies the size, in bits, of the short-term reference picture set, of the first slice
-+        described as st_ref_pic_set() in the specification, included in the slice header
-+        or SPS (section 7.3.6.1).
-+    * - __u16
-+      - ``long_term_ref_pic_set_size``
-+      - Specifies the size, in bits, of the long-term reference picture set, of the first slice
-+        included in the slice header or SPS. It is the number of bits in the conditional block
-+        if(long_term_ref_pics_present_flag) in section 7.3.6.1 of the specification.
-     * - __u8
-       - ``num_active_dpb_entries``
-       - The number of entries in ``dpb``.
+diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+index 5df6f08e26f5..d28653d04d20 100644
+--- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
++++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+@@ -390,11 +390,10 @@ static int set_ref(struct hantro_ctx *ctx)
+ 			 !!(pps->flags & V4L2_HEVC_PPS_FLAG_LOOP_FILTER_ACROSS_TILES_ENABLED));
+ 
+ 	/*
+-	 * Write POC count diff from current pic. For frame decoding only compute
+-	 * pic_order_cnt[0] and ignore pic_order_cnt[1] used in field-coding.
++	 * Write POC count diff from current pic.
+ 	 */
+ 	for (i = 0; i < decode_params->num_active_dpb_entries && i < ARRAY_SIZE(cur_poc); i++) {
+-		char poc_diff = decode_params->pic_order_cnt_val - dpb[i].pic_order_cnt[0];
++		char poc_diff = decode_params->pic_order_cnt_val - dpb[i].pic_order_cnt_val;
+ 
+ 		hantro_reg_write(vpu, &cur_poc[i], poc_diff);
+ 	}
+@@ -421,7 +420,7 @@ static int set_ref(struct hantro_ctx *ctx)
+ 	dpb_longterm_e = 0;
+ 	for (i = 0; i < decode_params->num_active_dpb_entries &&
+ 	     i < (V4L2_HEVC_DPB_ENTRIES_NUM_MAX - 1); i++) {
+-		luma_addr = hantro_hevc_get_ref_buf(ctx, dpb[i].pic_order_cnt[0]);
++		luma_addr = hantro_hevc_get_ref_buf(ctx, dpb[i].pic_order_cnt_val);
+ 		if (!luma_addr)
+ 			return -ENOMEM;
+ 
+diff --git a/drivers/staging/media/hantro/hantro_hevc.c b/drivers/staging/media/hantro/hantro_hevc.c
+index 1df87ca88ebf..5984c5fa6f83 100644
+--- a/drivers/staging/media/hantro/hantro_hevc.c
++++ b/drivers/staging/media/hantro/hantro_hevc.c
+@@ -33,7 +33,7 @@ void hantro_hevc_ref_init(struct hantro_ctx *ctx)
+ }
+ 
+ dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx,
+-				   int poc)
++				   s32 poc)
+ {
+ 	struct hantro_hevc_dec_hw_ctx *hevc_dec = &ctx->hevc_dec;
+ 	int i;
+diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+index a2e0f0836281..33d156ccbfeb 100644
+--- a/drivers/staging/media/hantro/hantro_hw.h
++++ b/drivers/staging/media/hantro/hantro_hw.h
+@@ -145,7 +145,7 @@ struct hantro_hevc_dec_hw_ctx {
+ 	struct hantro_aux_buf tile_bsd;
+ 	struct hantro_aux_buf ref_bufs[NUM_REF_PICTURES];
+ 	struct hantro_aux_buf scaling_lists;
+-	int ref_bufs_poc[NUM_REF_PICTURES];
++	s32 ref_bufs_poc[NUM_REF_PICTURES];
+ 	u32 ref_bufs_used;
+ 	struct hantro_hevc_dec_ctrls ctrls;
+ 	unsigned int num_tile_cols_allocated;
+@@ -357,7 +357,7 @@ void hantro_hevc_dec_exit(struct hantro_ctx *ctx);
+ int hantro_g2_hevc_dec_run(struct hantro_ctx *ctx);
+ int hantro_hevc_dec_prepare_run(struct hantro_ctx *ctx);
+ void hantro_hevc_ref_init(struct hantro_ctx *ctx);
+-dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx, int poc);
++dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx, s32 poc);
+ int hantro_hevc_add_ref_buf(struct hantro_ctx *ctx, int poc, dma_addr_t addr);
+ int hantro_hevc_validate_sps(struct hantro_ctx *ctx, const struct v4l2_ctrl_hevc_sps *sps);
+ 
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+index 44f385be9f6c..411601975124 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+@@ -143,8 +143,8 @@ static void cedrus_h265_frame_info_write_dpb(struct cedrus_ctx *ctx,
+ 	for (i = 0; i < num_active_dpb_entries; i++) {
+ 		int buffer_index = vb2_find_timestamp(vq, dpb[i].timestamp, 0);
+ 		u32 pic_order_cnt[2] = {
+-			dpb[i].pic_order_cnt[0],
+-			dpb[i].pic_order_cnt[1]
++			dpb[i].pic_order_cnt_val,
++			dpb[i].pic_order_cnt_val
+ 		};
+ 
+ 		cedrus_h265_frame_info_write_single(ctx, i, dpb[i].field_pic,
 diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-index 01ccda48d8c5..752a8d10782c 100644
+index 45734bd8fdfc..01c1795c57a9 100644
 --- a/include/media/hevc-ctrls.h
 +++ b/include/media/hevc-ctrls.h
-@@ -58,6 +58,8 @@ enum v4l2_mpeg_video_hevc_start_code {
- /* The controls are not stable at the moment and will likely be reworked. */
- struct v4l2_ctrl_hevc_sps {
- 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Sequence parameter set */
-+	__u8	video_parameter_set_id;
-+	__u8	seq_parameter_set_id;
- 	__u16	pic_width_in_luma_samples;
- 	__u16	pic_height_in_luma_samples;
- 	__u8	bit_depth_luma_minus8;
-@@ -108,6 +110,7 @@ struct v4l2_ctrl_hevc_sps {
+@@ -138,7 +138,7 @@ struct v4l2_hevc_dpb_entry {
+ 	__u64	timestamp;
+ 	__u8	flags;
+ 	__u8	field_pic;
+-	__u16	pic_order_cnt[2];
++	__s32	pic_order_cnt_val;
+ 	__u8	padding[2];
+ };
  
- struct v4l2_ctrl_hevc_pps {
- 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture parameter set */
-+	__u8	pic_parameter_set_id;
- 	__u8	num_extra_slice_header_bits;
- 	__u8	num_ref_idx_l0_default_active_minus1;
- 	__u8	num_ref_idx_l1_default_active_minus1;
-@@ -199,7 +202,8 @@ struct v4l2_ctrl_hevc_slice_params {
- 	__u32	slice_segment_addr;
- 	__u8	ref_idx_l0[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
- 	__u8	ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
--
-+	__u16	short_term_ref_pic_set_size;
-+	__u16	long_term_ref_pic_set_size;
- 	__u8	padding;
- 
- 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Weighted prediction parameter */
-@@ -214,6 +218,8 @@ struct v4l2_ctrl_hevc_slice_params {
- 
- struct v4l2_ctrl_hevc_decode_params {
- 	__s32	pic_order_cnt_val;
-+	__u16	short_term_ref_pic_set_size;
-+	__u16	long_term_ref_pic_set_size;
- 	__u8	num_active_dpb_entries;
- 	struct	v4l2_hevc_dpb_entry dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
- 	__u8	num_poc_st_curr_before;
+@@ -181,7 +181,7 @@ struct v4l2_ctrl_hevc_slice_params {
+ 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: General slice segment header */
+ 	__u8	slice_type;
+ 	__u8	colour_plane_id;
+-	__u16	slice_pic_order_cnt;
++	__s32	slice_pic_order_cnt;
+ 	__u8	num_ref_idx_l0_active_minus1;
+ 	__u8	num_ref_idx_l1_active_minus1;
+ 	__u8	collocated_ref_idx;
 -- 
 2.32.0
 
