@@ -2,58 +2,58 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F88CCCA479
-	for <linux-media@archiver.kernel.org>; Fri, 17 Jun 2022 23:56:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35C7AC433EF
+	for <linux-media@archiver.kernel.org>; Fri, 17 Jun 2022 23:56:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383733AbiFQX4d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Jun 2022 19:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51018 "EHLO
+        id S1383444AbiFQX4e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Jun 2022 19:56:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347078AbiFQX4R (ORCPT
+        with ESMTP id S1382738AbiFQX4S (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Jun 2022 19:56:17 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184FD5A5B5
-        for <linux-media@vger.kernel.org>; Fri, 17 Jun 2022 16:56:16 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id b8so8015675edj.11
-        for <linux-media@vger.kernel.org>; Fri, 17 Jun 2022 16:56:16 -0700 (PDT)
+        Fri, 17 Jun 2022 19:56:18 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5976129A
+        for <linux-media@vger.kernel.org>; Fri, 17 Jun 2022 16:56:17 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id s12so11380464ejx.3
+        for <linux-media@vger.kernel.org>; Fri, 17 Jun 2022 16:56:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=jzUksJeBIzpsy16UnewiZbK9lVKFqzRfDsj2A+v5TqE=;
-        b=Aqcio3+OisfYLPjsZkAJKSDbmJUrEQObnag1l5b3iiryXcpoj/AzYByWjPa7XmotVb
-         3Udj1arHXw5FldLsfjkY3r3XK3Tv8oHTJ/zxgHkZKS/YBBZ1jj81q+0Xj7+Xe/fz4srz
-         cqgqum6vhWyih0CIe9y0AFr+DzXsP7UUFo+yc=
+        bh=+5NDpsm7942F8ZAmDt1/U3OvWgy4XsdEFDVSVEbFO9s=;
+        b=nVc1TlGRzm+6zidFMBS9tzR7dsyWC9GpBonuqwNbiK1F8F0kYLpp++P6ranijiHZl6
+         z812PWhsI0Wgc3cdj7Ye2gLpye5PLOEQWMOWkNvpwc72n/wflQVNpgFJhswrm7QL/wc5
+         +56RwvzIfBf2LUgOv8PqSdkytqoJQXHO7yo5E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=jzUksJeBIzpsy16UnewiZbK9lVKFqzRfDsj2A+v5TqE=;
-        b=zrkglKa7gLKLvpuu+NeQ9fAJtb3d8llZ02zhhCT65+zQ/axxyi+SgqRBsLuRvs7rbd
-         bJSlVLOAH03spWyI1tXwIZfuhPXhVVJpSejJcfkuPqDfj9TP0OU3kjlZ2LeLJNVaC0N/
-         Sy7PatR4J2wm6hsqxEDUk6jAGpJ/bvmK8MNHWnFRXVMUJzQ+w+QwsndonH1rDD2OiPK0
-         470l4h8FaJ4v8Cl/o8An/cGgmKRJwOTDCDU75sb+5yzL+K0jmv5bo2vm9AXsQxEGasKL
-         A7JaTKR4Lo+sciuWanjxtL+y/Tfkcse1k29j0Ffvt2zYDZoPrGbsrTXGIIzyxAkALvCw
-         Rozg==
-X-Gm-Message-State: AJIora8Dnau/t9YuqUace0CDXemrPFTndDi0lte3AGJ234muwu0eh0hV
-        gORQntR8tce6w0ViaFZvb7gzWw==
-X-Google-Smtp-Source: AGRyM1v1BXRQH1QU7y1eRqMlDrpZIcr1QOY200xBGU0eoON+62vb30JkTD1Vhq7N6dpOxtL8S7WF5w==
-X-Received: by 2002:aa7:df19:0:b0:435:5eb7:5e31 with SMTP id c25-20020aa7df19000000b004355eb75e31mr6980994edy.418.1655510174636;
-        Fri, 17 Jun 2022 16:56:14 -0700 (PDT)
+        bh=+5NDpsm7942F8ZAmDt1/U3OvWgy4XsdEFDVSVEbFO9s=;
+        b=QCN4ShGY04c6AIW6MgBT/eIk+n29xnDTItrQkTJlfZW9A3ownKpeW77rH0b/yLgj9P
+         Lq+25EpoufdzQoaWcu/RrzSy610W1R0Rwh0mRkWPhXS08fGFGlCMr+7P6/N0ieG2Q8+P
+         UiOB5rKQIInF7P3zoTcEYoUFExvf75Kh7M6MXLBkeIhB6bsV0Xb/ubq6bmMXVZF5gE7M
+         kuCD7JfiW5iJ56IRwYFkygTRnTNw737V32nc2ze5O0A5sboufj899Otk47q7tpAgW+h5
+         trZjGf2SehBe1/mzdh7Jv2M973uSomFfX2zj4uTAWT24Zcfxa2VTId1jX6qWCglPQ6Mx
+         CQ+A==
+X-Gm-Message-State: AJIora8TKxMW+pnu6lkDloC0zEJTI9uxboK+YhjCONfmrsflND1ZT+5p
+        V2QrIQsNOzNZbuIachpof8FZ5A==
+X-Google-Smtp-Source: AGRyM1sjg2BOhrpcR/L31d1agtFPImts7SKC/0t9bER+Rl1EmJAIC4owlQjbMXcYeutidfMIL+I7vA==
+X-Received: by 2002:a17:906:c041:b0:718:c984:d9ee with SMTP id bm1-20020a170906c04100b00718c984d9eemr12078098ejb.722.1655510176399;
+        Fri, 17 Jun 2022 16:56:16 -0700 (PDT)
 Received: from alco.lan (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id z21-20020aa7d415000000b0043566884333sm1452538edq.63.2022.06.17.16.56.13
+        by smtp.gmail.com with ESMTPSA id z21-20020aa7d415000000b0043566884333sm1452538edq.63.2022.06.17.16.56.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 16:56:14 -0700 (PDT)
+        Fri, 17 Jun 2022 16:56:16 -0700 (PDT)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         tfiga@chromium.org, senozhatsky@chromium.org, yunkec@google.com
 Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v8 3/9] media: uvcvideo: Implement mask for V4L2_CTRL_TYPE_MENU
-Date:   Sat, 18 Jun 2022 01:56:04 +0200
-Message-Id: <20220617235610.321917-4-ribalda@chromium.org>
+Subject: [PATCH v8 5/9] media: uvcvideo: Limit power line control for Quanta UVC Webcam
+Date:   Sat, 18 Jun 2022 01:56:06 +0200
+Message-Id: <20220617235610.321917-6-ribalda@chromium.org>
 X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
 In-Reply-To: <20220617235610.321917-1-ribalda@chromium.org>
 References: <20220617235610.321917-1-ribalda@chromium.org>
@@ -63,139 +63,77 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Replace the count with a mask field that let us choose not only the max
-value, but also the minimum value and what values are valid in between.
+The device does not implement the power line control correctly. Add a
+corresponding control mapping override.
+
+Bus 001 Device 003: ID 0408:3090 Quanta Computer, Inc. USB2.0 HD UVC WebCam
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass          239 Miscellaneous Device
+  bDeviceSubClass         2
+  bDeviceProtocol         1 Interface Association
+  bMaxPacketSize0        64
+  idVendor           0x0408 Quanta Computer, Inc.
+  idProduct          0x3090
+  bcdDevice            0.04
+  iManufacturer           3 Quanta
+  iProduct                1 USB2.0 HD UVC WebCam
+  iSerial                 2 0x0001
+  bNumConfigurations      1
 
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/usb/uvc/uvc_ctrl.c | 32 ++++++++++++++++++++++----------
- drivers/media/usb/uvc/uvc_v4l2.c |  2 +-
- drivers/media/usb/uvc/uvcvideo.h |  2 +-
- 3 files changed, 24 insertions(+), 12 deletions(-)
+ drivers/media/usb/uvc/uvc_driver.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index 38e35e369ddf..a03714c3a265 100644
---- a/drivers/media/usb/uvc/uvc_ctrl.c
-+++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -524,7 +524,8 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.v4l2_type	= V4L2_CTRL_TYPE_MENU,
- 		.data_type	= UVC_CTRL_DATA_TYPE_BITMASK,
- 		.menu_info	= exposure_auto_controls,
--		.menu_count	= ARRAY_SIZE(exposure_auto_controls),
-+		.menu_mask	=
-+			BIT_MASK(ARRAY_SIZE(exposure_auto_controls)),
- 		.slave_ids	= { V4L2_CID_EXPOSURE_ABSOLUTE, },
- 	},
- 	{
-@@ -730,7 +731,8 @@ static const struct uvc_control_mapping uvc_ctrl_mappings_uvc11[] = {
- 		.v4l2_type	= V4L2_CTRL_TYPE_MENU,
- 		.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
- 		.menu_info	= power_line_frequency_controls,
--		.menu_count	= ARRAY_SIZE(power_line_frequency_controls) - 1,
-+		.menu_mask	=
-+			BIT_MASK(ARRAY_SIZE(power_line_frequency_controls) - 1),
- 	},
- };
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 6c86faecbea2..ea8f0bb7a20c 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -2643,6 +2643,24 @@ MODULE_PARM_DESC(timeout, "Streaming control requests timeout");
+  * Driver initialization and cleanup
+  */
  
-@@ -744,7 +746,8 @@ static const struct uvc_control_mapping uvc_ctrl_mappings_uvc15[] = {
- 		.v4l2_type	= V4L2_CTRL_TYPE_MENU,
- 		.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
- 		.menu_info	= power_line_frequency_controls,
--		.menu_count	= ARRAY_SIZE(power_line_frequency_controls),
-+		.menu_mask	=
-+			BIT_MASK(ARRAY_SIZE(power_line_frequency_controls)),
- 	},
- };
- 
-@@ -970,7 +973,9 @@ static s32 __uvc_ctrl_get_value(struct uvc_control_mapping *mapping,
- 		const struct uvc_menu_info *menu = mapping->menu_info;
- 		unsigned int i;
- 
--		for (i = 0; i < mapping->menu_count; ++i, ++menu) {
-+		for (i = 1; BIT(i) <= mapping->menu_mask; ++i, ++menu) {
-+			if (!test_bit(i, &mapping->menu_mask))
-+				continue;
- 			if (menu->value == value) {
- 				value = i;
- 				break;
-@@ -1144,12 +1149,14 @@ static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
- 
- 	switch (mapping->v4l2_type) {
- 	case V4L2_CTRL_TYPE_MENU:
--		v4l2_ctrl->minimum = 0;
--		v4l2_ctrl->maximum = mapping->menu_count - 1;
-+		v4l2_ctrl->minimum = ffs(mapping->menu_mask) - 1;
-+		v4l2_ctrl->maximum = fls(mapping->menu_mask) - 1;
- 		v4l2_ctrl->step = 1;
- 
- 		menu = mapping->menu_info;
--		for (i = 0; i < mapping->menu_count; ++i, ++menu) {
-+		for (i = 1; BIT(i) <= mapping->menu_mask; ++i, ++menu) {
-+			if (!test_bit(i, &mapping->menu_mask))
-+				continue;
- 			if (menu->value == v4l2_ctrl->default_value) {
- 				v4l2_ctrl->default_value = i;
- 				break;
-@@ -1264,7 +1271,7 @@ int uvc_query_v4l2_menu(struct uvc_video_chain *chain,
- 		goto done;
- 	}
- 
--	if (query_menu->index >= mapping->menu_count) {
-+	if (!test_bit(query_menu->index, &mapping->menu_mask)) {
- 		ret = -EINVAL;
- 		goto done;
- 	}
-@@ -1769,8 +1776,13 @@ int uvc_ctrl_set(struct uvc_fh *handle,
- 		break;
- 
- 	case V4L2_CTRL_TYPE_MENU:
--		if (xctrl->value < 0 || xctrl->value >= mapping->menu_count)
-+		if (xctrl->value < (ffs(mapping->menu_mask) - 1) ||
-+		    xctrl->value > (fls(mapping->menu_mask) - 1))
- 			return -ERANGE;
++static const struct uvc_control_mapping uvc_ctrl_power_line_mapping_limited = {
++	.id		= V4L2_CID_POWER_LINE_FREQUENCY,
++	.entity		= UVC_GUID_UVC_PROCESSING,
++	.selector	= UVC_PU_POWER_LINE_FREQUENCY_CONTROL,
++	.size		= 2,
++	.offset		= 0,
++	.v4l2_type	= V4L2_CTRL_TYPE_MENU,
++	.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
++	.menu_mask	= 0x6,
++};
 +
-+		if (!test_bit(xctrl->value, &mapping->menu_mask))
-+			return -EINVAL;
++static const struct uvc_device_info uvc_ctrl_power_line_limited = {
++	.mappings = (const struct uvc_control_mapping *[]) {
++		&uvc_ctrl_power_line_mapping_limited,
++		NULL, /* Sentinel */
++	},
++};
 +
- 		value = mapping->menu_info[xctrl->value].value;
- 
- 		/* Valid menu indices are reported by the GET_RES request for
-@@ -2217,7 +2229,7 @@ static int __uvc_ctrl_add_mapping(struct uvc_video_chain *chain,
- 
- 	INIT_LIST_HEAD(&map->ev_subs);
- 
--	size = sizeof(*mapping->menu_info) * mapping->menu_count;
-+	size = sizeof(*mapping->menu_info) * fls(mapping->menu_mask);
- 	map->menu_info = kmemdup(mapping->menu_info, size, GFP_KERNEL);
- 	if (map->menu_info == NULL) {
- 		kfree(map->name);
-diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-index 648dcd579e81..85aced173daa 100644
---- a/drivers/media/usb/uvc/uvc_v4l2.c
-+++ b/drivers/media/usb/uvc/uvc_v4l2.c
-@@ -79,7 +79,7 @@ static int uvc_ioctl_ctrl_map(struct uvc_video_chain *chain,
- 			goto free_map;
- 		}
- 
--		map->menu_count = xmap->menu_count;
-+		map->menu_mask = BIT_MASK(xmap->menu_count);
- 		break;
- 
- 	default:
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index fff5c5c99a3d..0736b8815d79 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -254,7 +254,7 @@ struct uvc_control_mapping {
- 	u32 data_type;
- 
- 	const struct uvc_menu_info *menu_info;
--	u32 menu_count;
-+	unsigned long menu_mask;
- 
- 	u32 master_id;
- 	s32 master_manual;
+ static const struct uvc_device_info uvc_quirk_probe_minmax = {
+ 	.quirks = UVC_QUIRK_PROBE_MINMAX,
+ };
+@@ -2673,6 +2691,15 @@ static const struct uvc_device_info uvc_quirk_force_y8 = {
+  * though they are compliant.
+  */
+ static const struct usb_device_id uvc_ids[] = {
++	/* Quanta USB2.0 HD UVC Webcam */
++	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
++				| USB_DEVICE_ID_MATCH_INT_INFO,
++	  .idVendor		= 0x0408,
++	  .idProduct		= 0x3090,
++	  .bInterfaceClass	= USB_CLASS_VIDEO,
++	  .bInterfaceSubClass	= 1,
++	  .bInterfaceProtocol	= 0,
++	  .driver_info		= (kernel_ulong_t)&uvc_ctrl_power_line_limited },
+ 	/* LogiLink Wireless Webcam */
+ 	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+ 				| USB_DEVICE_ID_MATCH_INT_INFO,
 -- 
 2.37.0.rc0.104.g0611611a94-goog
 
