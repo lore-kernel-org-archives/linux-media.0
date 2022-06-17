@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BE66C43334
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9098ECCA479
 	for <linux-media@archiver.kernel.org>; Fri, 17 Jun 2022 11:58:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382150AbiFQL6P (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Jun 2022 07:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53390 "EHLO
+        id S1382172AbiFQL6R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Jun 2022 07:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381709AbiFQL6N (ORCPT
+        with ESMTP id S1382145AbiFQL6P (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Jun 2022 07:58:13 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DD7220FB;
-        Fri, 17 Jun 2022 04:58:13 -0700 (PDT)
+        Fri, 17 Jun 2022 07:58:15 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3BB220EB;
+        Fri, 17 Jun 2022 04:58:14 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:faf2:1a12:f903:cc5e])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0F50A660179B;
-        Fri, 17 Jun 2022 12:58:11 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7B38066017E6;
+        Fri, 17 Jun 2022 12:58:12 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655467091;
-        bh=p1IL0WApAId0OF2roNkCC1LN0QMRN6h/Fzya6tDqTJk=;
+        s=mail; t=1655467093;
+        bh=UCYAWxfH7NqhDgW2LvrbsQwdBrhxn/zmxyr+y6/KCnw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O6latk3LWVF1Zw3HOlI6NzxIuXB815MakCNbc3pJmtgKdofzf6w08jd57TXK/Eh50
-         s9WBWe/hiDYqdPXNM8UQanOMXEkmE3GELVblXCsSRAIIpjUdiQy+FTtlAYxReVpQQr
-         cMFITh4k19Q0S0AIv5FKNuU+YT9AtQzfeV43nsIm+QoOqnZ4ctJ6NnXpWygkBaomOH
-         MsgIL7ELBB0sbMdm9/UtCkIPeJMm6yMv4ZYJjOB7A8IvWiGDrenDxyjeiiqdtR3fJD
-         365J04MD9DgFqFKYXBV/p1g1lvqsBC+6yB4FyFC877kowvJ/hAT4b5LYN00pmv+fQ2
-         UC2aJjRGXK+Bw==
+        b=gpL482i9rVqH8nuvkKstUQRydbw9K6qvl1weUz0Qvvi2hCu3gWoKEXUp7ATR/OeH9
+         yqSt0AB0X2ZZLXxLULLJLZoJa1zuZ4Pwb/Y0L5WZaBRwL0LnXH6hdh9SHILYPKEOBc
+         duFRTtLJsT40jracOgjtXRwUXVquPVD8K2TX7ASEQIRD7G8RxlXlepEW+xtSXgjs6K
+         5X0lzuqj8zPDiZh194vkfaZxEXjREDTA4KNHn/Ny/z3lzDmWhxjrgZsk85VP4NUDUT
+         Sb+93VPYO2ksa/Vf33gMIOQZbyOc4t7kEDlpU9lqi3bWef8N0IQjNLFwgR5BCKwvmu
+         TY6CNssUSUz7w==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, hverkuil@xs4all.nl,
         ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
@@ -44,9 +44,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH 1/7] media: hantro: Store HEVC bit depth in context
-Date:   Fri, 17 Jun 2022 13:57:56 +0200
-Message-Id: <20220617115802.396442-2-benjamin.gaignard@collabora.com>
+Subject: [PATCH 3/7] media: hantro: HEVC: Fix chroma offset computation
+Date:   Fri, 17 Jun 2022 13:57:58 +0200
+Message-Id: <20220617115802.396442-4-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220617115802.396442-1-benjamin.gaignard@collabora.com>
 References: <20220617115802.396442-1-benjamin.gaignard@collabora.com>
@@ -56,27 +56,27 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Store HEVC bit depth in context.
-Bit depth is equal to hevc sps bit_depth_luma_minus8 + 8.
+The chroma offset depends of the bitstream depth.
+Make sure that ctx->bit_depth is used to compute it.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/staging/media/hantro/hantro_hevc.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/staging/media/hantro/hantro_g2_hevc_dec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/hantro/hantro_hevc.c b/drivers/staging/media/hantro/hantro_hevc.c
-index 5984c5fa6f83..dcb5c8703b6e 100644
---- a/drivers/staging/media/hantro/hantro_hevc.c
-+++ b/drivers/staging/media/hantro/hantro_hevc.c
-@@ -163,6 +163,8 @@ int hantro_hevc_validate_sps(struct hantro_ctx *ctx, const struct v4l2_ctrl_hevc
- 		/* Only 8-bit is supported */
- 		return -EINVAL;
+diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+index 9eac133bda68..8407ad45b7b7 100644
+--- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
++++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+@@ -12,7 +12,7 @@
  
-+	ctx->bit_depth = sps->bit_depth_luma_minus8 + 8;
-+
- 	/*
- 	 * for tile pixel format check if the width and height match
- 	 * hardware constraints
+ static size_t hantro_hevc_chroma_offset(struct hantro_ctx *ctx)
+ {
+-	return ctx->dst_fmt.width * ctx->dst_fmt.height;
++	return ctx->dst_fmt.width * ctx->dst_fmt.height * ctx->bit_depth / 8;
+ }
+ 
+ static size_t hantro_hevc_motion_vectors_offset(struct hantro_ctx *ctx)
 -- 
 2.32.0
 
