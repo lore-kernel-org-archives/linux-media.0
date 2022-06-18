@@ -2,113 +2,106 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74466C43334
-	for <linux-media@archiver.kernel.org>; Fri, 17 Jun 2022 23:56:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7301BC433EF
+	for <linux-media@archiver.kernel.org>; Sat, 18 Jun 2022 03:48:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383083AbiFQX4l (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Jun 2022 19:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51000 "EHLO
+        id S236861AbiFRDsI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Jun 2022 23:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380778AbiFQX4a (ORCPT
+        with ESMTP id S230316AbiFRDsH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Jun 2022 19:56:30 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A8764D30
-        for <linux-media@vger.kernel.org>; Fri, 17 Jun 2022 16:56:19 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id y19so11354754ejq.6
-        for <linux-media@vger.kernel.org>; Fri, 17 Jun 2022 16:56:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=scX391f5blpJybIeBstalb8q/E+bG9Wz4cWkWDEOBNM=;
-        b=WZ25gGhFa6piGaIAblr/7+DjWPKrFrCiYrhva2rjbsBCWQkVv8JG0shVuTPmm4a78Y
-         5oUqPdiKh8Iopv/haFtV9Fvxg20fPQHUVTN4P5TRhETIt+HM1tyVhbOBj+9kSl9MsSIW
-         Fr0D36hT+p/cFaQkJgwyAKlW8wuNzg/LuTeQo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=scX391f5blpJybIeBstalb8q/E+bG9Wz4cWkWDEOBNM=;
-        b=Q5BQIDolzrC4i7sCBlaAgVfP/gQHOtNAnmZ8eLLuF8aBYDHD/0s6241JCH95/9WeFE
-         YZ8/TH6nlCZnzf8eqXPP3acRc7KXNFRWXDtbJQDjc3n/c7XkOuQ2JqsXNfWLPUZR9/zy
-         +4L/MTI1qZ7GaaDsmVCh8C5llzWVUvL4Jxkt/EQbAvDUbK9Vlt6DLxUVSJpVFlDoZupb
-         /rAJspELL/JBQSpZJl5W50hUd89vudMWJj58Udce6JX630IDznw3qjWDgOTUpgWcITNn
-         VzHd1MkSvw2/I7Y7XPo9aT7EAQnNui8kNiWqkyTdd7e7izbWRfFM5vMzGPF8pnaS/F5R
-         bviQ==
-X-Gm-Message-State: AJIora+JW7bk+1iQC/gvFAHZ7AxMyPGOWZJ5jKwR49iG0+XrslBiQK2d
-        j3Zcgh2SK80iJdAkRli/9VUVKw==
-X-Google-Smtp-Source: AGRyM1vxunrryRLKRZB0tZ5E/wpySmxklz+mBU9GpldYHFwnCyJousJygAXN+QATaDteTf4N0dO/gg==
-X-Received: by 2002:a17:907:7da5:b0:711:c9cd:61e0 with SMTP id oz37-20020a1709077da500b00711c9cd61e0mr11257153ejc.443.1655510177994;
-        Fri, 17 Jun 2022 16:56:17 -0700 (PDT)
-Received: from alco.lan (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id z21-20020aa7d415000000b0043566884333sm1452538edq.63.2022.06.17.16.56.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 16:56:17 -0700 (PDT)
-From:   Ricardo Ribalda <ribalda@chromium.org>
+        Fri, 17 Jun 2022 23:48:07 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520AE11458
+        for <linux-media@vger.kernel.org>; Fri, 17 Jun 2022 20:48:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655524086; x=1687060086;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+73wmu9w5PKNPb+oGwEav1hlCY7yULhdrIMFZgwiZXk=;
+  b=lFkcLDchyMlP/5WeHQafRIfLYdlJBeDmzqauLPlGqllFE94KgY1JV9aX
+   SR+xL7hAcE9Q+QKv7QGzqRJH1o8PBNdUzGlop3250fpm5uVOgpPSjZrQf
+   +5i/3Ud0JzlB6DSa39YXBue1NgcNbe17DdjKVWYBlZiAHDTbSG78UIvjE
+   pXDQx8hsx9nhfMUmfb2y0gy+LNIGbPuomL5XUwcQYcIc+CpTJq2LvhUqW
+   OtBP0gnSU1NaRfbPjhloBYgG0Dz28B1j6AUbj6tFyBFgTtrxDFYd83f1/
+   5IcGQbHk6u1CHcOQ5xR24Jv5pJutthZPFIIOPS6EbVQ0jrAnKBYwqL+eH
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="343617699"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="343617699"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 20:48:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="584241633"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 17 Jun 2022 20:48:03 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o2PRL-000PzX-5s;
+        Sat, 18 Jun 2022 03:48:03 +0000
+Date:   Sat, 18 Jun 2022 11:47:16 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org
+Cc:     Paul Gazzillo <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        kbuild-all@lists.01.org, Sakari Ailus <sakari.ailus@iki.fi>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tfiga@chromium.org, senozhatsky@chromium.org, yunkec@google.com
-Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v8 7/9] media: uvcvideo: Limit power line control for Chicony Easycamera
-Date:   Sat, 18 Jun 2022 01:56:08 +0200
-Message-Id: <20220617235610.321917-8-ribalda@chromium.org>
-X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
-In-Reply-To: <20220617235610.321917-1-ribalda@chromium.org>
-References: <20220617235610.321917-1-ribalda@chromium.org>
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Subject: Re: [PATCH] media: Replace dependency on VIDEO_V4L2_SUBDEV_API with
+ select
+Message-ID: <202206181114.qnuagBIA-lkp@intel.com>
+References: <20220616163632.13562-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616163632.13562-1-laurent.pinchart@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Another Chicony camera device does not implement the power line control
-correctly. Add a corresponding control mapping override.
+Hi Laurent,
 
-Bus 001 Device 003: ID 04f2:b5eb Chicony Electronics Co., Ltd EasyCamera
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass          239 Miscellaneous Device
-  bDeviceSubClass         2
-  bDeviceProtocol         1 Interface Association
-  bMaxPacketSize0        64
-  idVendor           0x04f2 Chicony Electronics Co., Ltd
-  idProduct          0xb5eb
-  bcdDevice           90.45
-  iManufacturer           3 Chicony Electronics Co.,Ltd.
-  iProduct                1 EasyCamera
-  iSerial                 2 0001
-  bNumConfigurations      1
+I love your patch! Perhaps something to improve:
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
- drivers/media/usb/uvc/uvc_driver.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on linus/master v5.19-rc2 next-20220617]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index b22d083833ee..425520f06ce4 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -2812,6 +2812,15 @@ static const struct usb_device_id uvc_ids[] = {
- 	  .bInterfaceProtocol	= 0,
- 	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_RESTRICT_FRAME_RATE) },
- 	/* Chicony EasyCamera */
-+	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-+				| USB_DEVICE_ID_MATCH_INT_INFO,
-+	  .idVendor		= 0x04f2,
-+	  .idProduct		= 0xb5eb,
-+	  .bInterfaceClass	= USB_CLASS_VIDEO,
-+	  .bInterfaceSubClass	= 1,
-+	  .bInterfaceProtocol	= 0,
-+	  .driver_info		= (kernel_ulong_t)&uvc_ctrl_power_line_limited },
-+	/* Chicony EasyCamera */
- 	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
- 				| USB_DEVICE_ID_MATCH_INT_INFO,
- 	  .idVendor		= 0x04f2,
+url:    https://github.com/intel-lab-lkp/linux/commits/Laurent-Pinchart/media-Replace-dependency-on-VIDEO_V4L2_SUBDEV_API-with-select/20220617-003721
+base:   git://linuxtv.org/media_tree.git master
+config: (https://download.01.org/0day-ci/archive/20220618/202206181114.qnuagBIA-lkp@intel.com/config)
+reproduce:
+        # https://github.com/intel-lab-lkp/linux/commit/efc926771b1dc55aaa144308fd649aa1bc6e69ba
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Laurent-Pinchart/media-Replace-dependency-on-VIDEO_V4L2_SUBDEV_API-with-select/20220617-003721
+        git checkout efc926771b1dc55aaa144308fd649aa1bc6e69ba
+        # 1. reproduce by kismet
+           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
+           kismet --linux-ksrc=linux --selectees CONFIG_VIDEO_V4L2_SUBDEV_API --selectors CONFIG_VIDEO_IMX208 -a=x86_64
+        # 2. reproduce by make
+           # save the config file to linux source tree
+           cd linux
+           make ARCH=x86_64 olddefconfig
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for VIDEO_V4L2_SUBDEV_API when selected by VIDEO_IMX208
+   
+   WARNING: unmet direct dependencies detected for VIDEO_V4L2_SUBDEV_API
+     Depends on [n]: MEDIA_SUPPORT [=y] && VIDEO_DEV [=y] && MEDIA_CONTROLLER [=n]
+     Selected by [y]:
+     - VIDEO_IMX208 [=y] && MEDIA_SUPPORT [=y] && I2C [=y] && VIDEO_DEV [=y] && MEDIA_CAMERA_SUPPORT [=y]
+
 -- 
-2.37.0.rc0.104.g0611611a94-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
