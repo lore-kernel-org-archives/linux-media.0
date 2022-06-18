@@ -2,128 +2,96 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2B22C433EF
-	for <linux-media@archiver.kernel.org>; Sat, 18 Jun 2022 18:54:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A362DC43334
+	for <linux-media@archiver.kernel.org>; Sat, 18 Jun 2022 22:21:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbiFRSyl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 18 Jun 2022 14:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59594 "EHLO
+        id S231557AbiFRWVU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 18 Jun 2022 18:21:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiFRSyk (ORCPT
+        with ESMTP id S230037AbiFRWVT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 18 Jun 2022 14:54:40 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BFB2DF8
-        for <linux-media@vger.kernel.org>; Sat, 18 Jun 2022 11:54:38 -0700 (PDT)
-Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 48CD725B;
-        Sat, 18 Jun 2022 20:54:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1655578476;
-        bh=W/VejVRv9d66+US5gmPY4HD+nIEoQxDUUIY4qe4AlGA=;
+        Sat, 18 Jun 2022 18:21:19 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0AE10FFB
+        for <linux-media@vger.kernel.org>; Sat, 18 Jun 2022 15:21:17 -0700 (PDT)
+Received: from tr.lan (ip-86-49-12-201.net.upcbroadband.cz [86.49.12.201])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 2DE2983F6A;
+        Sun, 19 Jun 2022 00:21:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1655590874;
+        bh=l3Nfidy/ECss9Wwgs79LDwLmT12rwop0BbbKE53CdCk=;
         h=From:To:Cc:Subject:Date:From;
-        b=fNC00IDL3FRpWGl+xngeIbZJKMjPPFjrzSV02jeDZ+tNERK5CAMpnZutSxnBnMamG
-         U0VUesJUu20DXGh4UhtBAicfrq+4B5S8L3uOzd/M/6+UNoZbyNlWefASNjiGfaDv4e
-         PlgvXTFFikj/rExJa9+t4h1rO1gMGA4w6/TNmrJU=
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+        b=R1HMdYCdIGusnppA74LMvuyrATzDa5BTUCRPBblE7K90p4FFXpqLyDeOjIXObKije
+         7ofDyopHSG83V+0bVaPGrU5EhbDFz0cUjA8KOdVSSdqyGzWKzdVUnbte34bdy5WnWa
+         H5/JBKoPQorz9v6h1U3Nbwy3IQAfM1Zjlrlm03BHUKn8IkRODNqaOxXmx6ImfrI1in
+         R81Z2y+sWwCczRCr7DmMg16HlPNIlNcv+RP5USdsOUWKAnHX45c7HKspzBnmogbkac
+         wjieYMu7g58yLbONpA0PDsUdHAdsozKNIUXnbHpwTqdLEln3oeChMj0tKeXtsoKOHH
+         v8lWegGWZ0MRg==
+From:   Marek Vasut <marex@denx.de>
 To:     linux-media@vger.kernel.org
-Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: [PATCH v2] media: Replace dependency on VIDEO_V4L2_SUBDEV_API with select
-Date:   Sat, 18 Jun 2022 21:54:19 +0300
-Message-Id: <20220618185419.14921-1-laurent.pinchart@ideasonboard.com>
+Cc:     Marek Vasut <marex@denx.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Stefan Riedmueller <s.riedmueller@phytec.de>
+Subject: [PATCH] media: mt9p031: Implement crop bounds get selection
+Date:   Sun, 19 Jun 2022 00:21:08 +0200
+Message-Id: <20220618222108.478082-1-marex@denx.de>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.5 at phobos.denx.de
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Implement V4L2_SEL_TGT_CROP_BOUNDS query in get_selection subdev op
+for this sensor. This is required e.g. to bind it to STM32MP15x DCMI.
 
-The VIDEO_V4L2_SUBDEV_API Kconfig symbol is mostly selected
-automatically, with a a handful of drivers still using it as a
-dependency. Fix them to use selection, and drop the symbol title text to
-not expose it for manual selection.
-
-Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Stefan Riedmueller <s.riedmueller@phytec.de>
 ---
-Changes since v1:
+ drivers/media/i2c/mt9p031.c | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
 
-- Add missing selection of MEDIA_CONTROLLER
----
- drivers/media/i2c/Kconfig            | 4 +++-
- drivers/media/platform/atmel/Kconfig | 4 +++-
- drivers/media/v4l2-core/Kconfig      | 6 ++++--
- 3 files changed, 10 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index 2b20aa6c37b1..e58e85650d87 100644
---- a/drivers/media/i2c/Kconfig
-+++ b/drivers/media/i2c/Kconfig
-@@ -75,8 +75,10 @@ config VIDEO_HI847
+diff --git a/drivers/media/i2c/mt9p031.c b/drivers/media/i2c/mt9p031.c
+index cbce8b88dbcf5..e73e814c60207 100644
+--- a/drivers/media/i2c/mt9p031.c
++++ b/drivers/media/i2c/mt9p031.c
+@@ -623,12 +623,20 @@ static int mt9p031_get_selection(struct v4l2_subdev *subdev,
+ {
+ 	struct mt9p031 *mt9p031 = to_mt9p031(subdev);
  
- config VIDEO_IMX208
- 	tristate "Sony IMX208 sensor support"
--	depends on I2C && VIDEO_DEV && VIDEO_V4L2_SUBDEV_API
-+	depends on I2C && VIDEO_DEV
- 	depends on MEDIA_CAMERA_SUPPORT
-+	select MEDIA_CONTROLLER
-+	select VIDEO_V4L2_SUBDEV_API
- 	help
- 	  This is a Video4Linux2 sensor driver for the Sony
- 	  IMX208 camera.
-diff --git a/drivers/media/platform/atmel/Kconfig b/drivers/media/platform/atmel/Kconfig
-index 83aebee0c8eb..f399dba62e17 100644
---- a/drivers/media/platform/atmel/Kconfig
-+++ b/drivers/media/platform/atmel/Kconfig
-@@ -20,12 +20,14 @@ config VIDEO_ATMEL_ISC
- config VIDEO_ATMEL_XISC
- 	tristate "ATMEL eXtended Image Sensor Controller (XISC) support"
- 	depends on V4L_PLATFORM_DRIVERS
--	depends on VIDEO_DEV && COMMON_CLK && VIDEO_V4L2_SUBDEV_API
-+	depends on VIDEO_DEV && COMMON_CLK
- 	depends on ARCH_AT91 || COMPILE_TEST
- 	select VIDEOBUF2_DMA_CONTIG
- 	select REGMAP_MMIO
- 	select V4L2_FWNODE
- 	select VIDEO_ATMEL_ISC_BASE
-+	select MEDIA_CONTROLLER
-+	select VIDEO_V4L2_SUBDEV_API
- 	help
- 	   This module makes the ATMEL eXtended Image Sensor Controller
- 	   available as a v4l2 device.
-diff --git a/drivers/media/v4l2-core/Kconfig b/drivers/media/v4l2-core/Kconfig
-index 1be9a2cc947a..348559bc2468 100644
---- a/drivers/media/v4l2-core/Kconfig
-+++ b/drivers/media/v4l2-core/Kconfig
-@@ -9,7 +9,7 @@ config VIDEO_V4L2_I2C
- 	default y
+-	if (sel->target != V4L2_SEL_TGT_CROP)
++	switch (sel->target) {
++	case V4L2_SEL_TGT_CROP_BOUNDS:
++		sel->r.left = MT9P031_COLUMN_START_DEF;
++		sel->r.top = MT9P031_ROW_START_DEF;
++		sel->r.width = MT9P031_WINDOW_WIDTH_DEF;
++		sel->r.height = MT9P031_WINDOW_HEIGHT_DEF;
++		return 0;
++	case V4L2_SEL_TGT_CROP:
++		sel->r = *__mt9p031_get_pad_crop(mt9p031, sd_state,
++						 sel->pad, sel->which);
++		return 0;
++	default:
+ 		return -EINVAL;
+-
+-	sel->r = *__mt9p031_get_pad_crop(mt9p031, sd_state, sel->pad,
+-					 sel->which);
+-	return 0;
++	}
+ }
  
- config VIDEO_V4L2_SUBDEV_API
--	bool "V4L2 sub-device userspace API"
-+	bool
- 	depends on VIDEO_DEV && MEDIA_CONTROLLER
- 	help
- 	  Enables the V4L2 sub-device pad-level userspace API used to configure
-@@ -56,9 +56,11 @@ config V4L2_MEM2MEM_DEV
- # Used by LED subsystem flash drivers
- config V4L2_FLASH_LED_CLASS
- 	tristate "V4L2 flash API for LED flash class devices"
--	depends on VIDEO_DEV && VIDEO_V4L2_SUBDEV_API
-+	depends on VIDEO_DEV
- 	depends on LEDS_CLASS_FLASH
-+	select MEDIA_CONTROLLER
- 	select V4L2_ASYNC
-+	select VIDEO_V4L2_SUBDEV_API
- 	help
- 	  Say Y here to enable V4L2 flash API support for LED flash
- 	  class drivers.
+ static int mt9p031_set_selection(struct v4l2_subdev *subdev,
 -- 
-Regards,
-
-Laurent Pinchart
+2.35.1
 
