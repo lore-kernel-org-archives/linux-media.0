@@ -2,188 +2,108 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE762C433EF
-	for <linux-media@archiver.kernel.org>; Wed, 22 Jun 2022 09:31:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79D22C433EF
+	for <linux-media@archiver.kernel.org>; Wed, 22 Jun 2022 09:35:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349544AbiFVJb5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Jun 2022 05:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32978 "EHLO
+        id S233102AbiFVJfV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Jun 2022 05:35:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355133AbiFVJbz (ORCPT
+        with ESMTP id S232954AbiFVJfU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Jun 2022 05:31:55 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1869B38BFB
-        for <linux-media@vger.kernel.org>; Wed, 22 Jun 2022 02:31:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 800B8CE1DFE
-        for <linux-media@vger.kernel.org>; Wed, 22 Jun 2022 09:31:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDC4FC3411D;
-        Wed, 22 Jun 2022 09:31:48 +0000 (UTC)
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 1/2] vb2: add (un)prepare_streaming queue ops
-Date:   Wed, 22 Jun 2022 11:31:44 +0200
-Message-Id: <20220622093145.927377-2-hverkuil-cisco@xs4all.nl>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220622093145.927377-1-hverkuil-cisco@xs4all.nl>
-References: <20220622093145.927377-1-hverkuil-cisco@xs4all.nl>
+        Wed, 22 Jun 2022 05:35:20 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A503526C
+        for <linux-media@vger.kernel.org>; Wed, 22 Jun 2022 02:35:18 -0700 (PDT)
+X-UUID: 17ae810dd06542f2aa0b3891c145c1ff-20220622
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:7bd3c583-fb50-48f4-998a-31200afae44d,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:b14ad71,CLOUDID:21262b38-5e4b-44d7-80b2-bb618cb09d29,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 17ae810dd06542f2aa0b3891c145c1ff-20220622
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <irui.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 910829544; Wed, 22 Jun 2022 17:35:14 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 22 Jun 2022 17:35:13 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 22 Jun 2022 17:35:13 +0800
+Message-ID: <4e982d51ebad98ccfd3d3f135f4773b6fb7948ac.camel@mediatek.com>
+Subject: Re: [PATCH] media: mediatek: vcodec: Report supported bitrate modes
+From:   Irui Wang <irui.wang@mediatek.com>
+To:     Hirokazu Honda <hiroh@chromium.org>, <linux-media@vger.kernel.org>
+CC:     <stevecho@chromium.org>
+Date:   Wed, 22 Jun 2022 17:35:13 +0800
+In-Reply-To: <20220622083624.3204916-1-hiroh@chromium.org>
+References: <20220622083624.3204916-1-hiroh@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When userspace called VIDIOC_STREAMON, then you want to claim any streaming
-resources needed and validate the video pipeline. Waiting for
-start_streaming to be called is too late, since that can be postponed
-until the required minimum of buffers is queued.
+Dear Hiro,
 
-So add a prepare_streaming op (optional) that can be used for that
-purpose, and a matching unprepare_streaming op (optional) that can
-release any claimed resources. The unprepare_streaming op is called
-when VIDIOC_STREAMOFF is called and q->streaming is 1, or when the
-filehandle is closed while q->streaming is 1.
+Thanks for the patch.
+On Wed, 2022-06-22 at 17:36 +0900, Hirokazu Honda wrote:
+> The media driver supports constant bitrate mode only.
+> The supported rate control mode is reported through querymenu() and
+> s_ctrl() fails if non constant bitrate mode (e.g. VBR) is requested.
+> 
+> Signed-off-by: Hirokazu Honda <hiroh@chromium.org>
+> ---
+>  .../media/platform/mediatek/vcodec/mtk_vcodec_enc.c   | 11
+> +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
+> b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
+> index c21367038c34..98d451ce2545 100644
+> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
+> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
+> @@ -50,6 +50,14 @@ static int vidioc_venc_s_ctrl(struct v4l2_ctrl
+> *ctrl)
+>  	int ret = 0;
+>  
+>  	switch (ctrl->id) {
+> +	case V4L2_CID_MPEG_VIDEO_BITRATE_MODE:
+> +		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_BITRATE_MODE
+> val= %d",
+> +			       ctrl->val);
+> +		if (ctrl->val != V4L2_MPEG_VIDEO_BITRATE_MODE_CBR) {
+> +			mtk_v4l2_err("Unsupported bitrate mode =%d",
+> ctrl->val);
+> +			ret = -EINVAL;
+> +		}
+> +		break;
+>  	case V4L2_CID_MPEG_VIDEO_BITRATE:
+>  		mtk_v4l2_debug(2, "V4L2_CID_MPEG_VIDEO_BITRATE val =
+> %d",
+>  			       ctrl->val);
+> @@ -1373,6 +1381,9 @@ int mtk_vcodec_enc_ctrls_setup(struct
+> mtk_vcodec_ctx *ctx)
+>  			       0, V4L2_MPEG_VIDEO_H264_LEVEL_4_0);
+>  	v4l2_ctrl_new_std_menu(handler, ops,
+> V4L2_CID_MPEG_VIDEO_VP8_PROFILE,
+>  			       V4L2_MPEG_VIDEO_VP8_PROFILE_0, 0,
+> V4L2_MPEG_VIDEO_VP8_PROFILE_0);
+> +	v4l2_ctrl_new_std_menu(handler, ops,
+> V4L2_CID_MPEG_VIDEO_BITRATE_MODE,
+> +			       V4L2_MPEG_VIDEO_BITRATE_MODE_CBR,
+> +			       0, V4L2_MPEG_VIDEO_BITRATE_MODE_CBR);
+>  
+>  
+>  	if (handler->error) {
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- .../media/common/videobuf2/videobuf2-core.c   | 25 ++++++++++++++++---
- include/media/videobuf2-core.h                | 14 +++++++++++
- 2 files changed, 35 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-index b203c1e26353..d4d4b433c0e5 100644
---- a/drivers/media/common/videobuf2/videobuf2-core.c
-+++ b/drivers/media/common/videobuf2/videobuf2-core.c
-@@ -544,6 +544,7 @@ static int __vb2_queue_free(struct vb2_queue *q, unsigned int buffers)
- 	 */
- 	if (q->num_buffers) {
- 		bool unbalanced = q->cnt_start_streaming != q->cnt_stop_streaming ||
-+				  q->cnt_prepare_streaming != q->cnt_unprepare_streaming ||
- 				  q->cnt_wait_prepare != q->cnt_wait_finish;
- 
- 		if (unbalanced || debug) {
-@@ -552,14 +553,18 @@ static int __vb2_queue_free(struct vb2_queue *q, unsigned int buffers)
- 			pr_info("     setup: %u start_streaming: %u stop_streaming: %u\n",
- 				q->cnt_queue_setup, q->cnt_start_streaming,
- 				q->cnt_stop_streaming);
-+			pr_info("     prepare_streaming: %u unprepare_streaming: %u\n",
-+				q->cnt_prepare_streaming, q->cnt_unprepare_streaming);
- 			pr_info("     wait_prepare: %u wait_finish: %u\n",
- 				q->cnt_wait_prepare, q->cnt_wait_finish);
- 		}
- 		q->cnt_queue_setup = 0;
- 		q->cnt_wait_prepare = 0;
- 		q->cnt_wait_finish = 0;
-+		q->cnt_prepare_streaming = 0;
- 		q->cnt_start_streaming = 0;
- 		q->cnt_stop_streaming = 0;
-+		q->cnt_unprepare_streaming = 0;
- 	}
- 	for (buffer = 0; buffer < q->num_buffers; ++buffer) {
- 		struct vb2_buffer *vb = q->bufs[buffer];
-@@ -1991,6 +1996,9 @@ static void __vb2_queue_cancel(struct vb2_queue *q)
- 	if (q->start_streaming_called)
- 		call_void_qop(q, stop_streaming, q);
- 
-+	if (q->streaming)
-+		call_void_qop(q, unprepare_streaming, q);
-+
- 	/*
- 	 * If you see this warning, then the driver isn't cleaning up properly
- 	 * in stop_streaming(). See the stop_streaming() documentation in
-@@ -2102,6 +2110,12 @@ int vb2_core_streamon(struct vb2_queue *q, unsigned int type)
- 		return -EINVAL;
- 	}
- 
-+	ret = call_qop(q, prepare_streaming, q);
-+	if (ret)
-+		return ret;
-+
-+	q->streaming = 1;
-+
- 	/*
- 	 * Tell driver to start streaming provided sufficient buffers
- 	 * are available.
-@@ -2109,16 +2123,19 @@ int vb2_core_streamon(struct vb2_queue *q, unsigned int type)
- 	if (q->queued_count >= q->min_buffers_needed) {
- 		ret = v4l_vb2q_enable_media_source(q);
- 		if (ret)
--			return ret;
-+			goto unprepare;
- 		ret = vb2_start_streaming(q);
- 		if (ret)
--			return ret;
-+			goto unprepare;
- 	}
- 
--	q->streaming = 1;
--
- 	dprintk(q, 3, "successful\n");
- 	return 0;
-+
-+unprepare:
-+	call_void_qop(q, unprepare_streaming, q);
-+	q->streaming = 0;
-+	return ret;
- }
- EXPORT_SYMBOL_GPL(vb2_core_streamon);
- 
-diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
-index 5468b633b9d2..dbc965dec5ef 100644
---- a/include/media/videobuf2-core.h
-+++ b/include/media/videobuf2-core.h
-@@ -386,6 +386,12 @@ struct vb2_buffer {
-  *			the buffer contents will be ignored anyway.
-  * @buf_cleanup:	called once before the buffer is freed; drivers may
-  *			perform any additional cleanup; optional.
-+ * @prepare_streaming:	called once to prepare for 'streaming' state; this is
-+ *			where validation can be done to verify everything is
-+ *			okay and streaming resources can be claimed. It is
-+ *			called when the VIDIOC_STREAMON ioctl is called. The
-+ *			actual streaming starts when @start_streaming is called.
-+ *			Optional.
-  * @start_streaming:	called once to enter 'streaming' state; the driver may
-  *			receive buffers with @buf_queue callback
-  *			before @start_streaming is called; the driver gets the
-@@ -405,6 +411,10 @@ struct vb2_buffer {
-  *			callback by calling vb2_buffer_done() with either
-  *			%VB2_BUF_STATE_DONE or %VB2_BUF_STATE_ERROR; may use
-  *			vb2_wait_for_all_buffers() function
-+ * @unprepare_streaming:called as counterpart to @prepare_streaming; any claimed
-+ *			streaming resources can be released here. It is
-+ *			called when the VIDIOC_STREAMOFF ioctls is called or
-+ *			when the streaming filehandle is closed. Optional.
-  * @buf_queue:		passes buffer vb to the driver; driver may start
-  *			hardware operation on this buffer; driver should give
-  *			the buffer back by calling vb2_buffer_done() function;
-@@ -432,8 +442,10 @@ struct vb2_ops {
- 	void (*buf_finish)(struct vb2_buffer *vb);
- 	void (*buf_cleanup)(struct vb2_buffer *vb);
- 
-+	int (*prepare_streaming)(struct vb2_queue *q);
- 	int (*start_streaming)(struct vb2_queue *q, unsigned int count);
- 	void (*stop_streaming)(struct vb2_queue *q);
-+	void (*unprepare_streaming)(struct vb2_queue *q);
- 
- 	void (*buf_queue)(struct vb2_buffer *vb);
- 
-@@ -641,8 +653,10 @@ struct vb2_queue {
- 	u32				cnt_queue_setup;
- 	u32				cnt_wait_prepare;
- 	u32				cnt_wait_finish;
-+	u32				cnt_prepare_streaming;
- 	u32				cnt_start_streaming;
- 	u32				cnt_stop_streaming;
-+	u32				cnt_unprepare_streaming;
- #endif
- };
- 
--- 
-2.35.1
+Reviewed-by: Irui Wang <irui.wang@mediatek.com>
 
