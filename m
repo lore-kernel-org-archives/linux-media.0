@@ -2,50 +2,53 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 066BBCCA479
-	for <linux-media@archiver.kernel.org>; Wed, 22 Jun 2022 18:54:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58B46CCA47F
+	for <linux-media@archiver.kernel.org>; Wed, 22 Jun 2022 19:39:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377699AbiFVSyB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Jun 2022 14:54:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40592 "EHLO
+        id S1358996AbiFVTi7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Jun 2022 15:38:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377362AbiFVSxt (ORCPT
+        with ESMTP id S1359510AbiFVTie (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Jun 2022 14:53:49 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190EF39170;
-        Wed, 22 Jun 2022 11:53:49 -0700 (PDT)
+        Wed, 22 Jun 2022 15:38:34 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559503FBF2;
+        Wed, 22 Jun 2022 12:38:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655924029; x=1687460029;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=9mAOWFjQXMW4Rt3WcvW9GVCZ90S9lJN3oM8X4tRezUI=;
-  b=YybTW9rZxlQqu8hl3G2qdQFLlWrWCzWBzy00RIazJPM2JtIGaBm8E91k
-   fSpSfYAGAdFSsZZvvUVUKjAeDjgZamMGRmwlx9WYew//9uL6JASopI59K
-   rj+TuYNxOflZxJ8ha3Ksk941BMuKMq7O2UdyCpeUs2z4TUMvD76gUetSq
-   zj8Ahvdj93+ARkEIx0HAg9IjuvwQcuS1tbpTxbJs2m6ksqn93JvAZoElh
-   EtJzUFeRharWyHNwB1h12OfAmx1HIMRihAgEcXG5pLrAqV1VaTgRxSHoh
-   XNMIbDbgCGAv6RchJ7JyMFMuiTw7g4eI6g/MRdmvzPy7PDui+2erXJ1yj
+  t=1655926708; x=1687462708;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=z4XHvCp2tz/HRUiqGeVSctq6Lz1nKjefH4McWG6X49M=;
+  b=fz/j4/JnaOve+KD0Of3TAwoyO/U1onwrg7Qirut7x6ybfQDDpR4NSlln
+   /qz6sOWbNn3NHSHLb2sSUkJexLlQfhxGFXuJbPMICBQxH87eSogGZMlHv
+   hEnoiMzrPan+/KkMmhDZljBj51QArquVvHshsUc1UXlRq/VMuowYC7XT8
+   wDAaFx4c/7srcBoRHbr8DwAf4A9EMaUXmEOmqF6Us0VAxl4H9KQ38htoN
+   CiXBwdpg7FJp6Ezu1VYsxO3rabM8ac0CIWXqTTpSmyyMTyLUsXyYPOtcq
+   b/VeO0GkTUQK99ZpK9nAfHv7hQm5a/atMLqtpYgUdI/CZnogqfyZM/fST
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="260949237"
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="305983091"
 X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="260949237"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 11:53:49 -0700
+   d="scan'208";a="305983091"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 12:38:27 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="834264901"
+   d="scan'208";a="715542092"
 Received: from bwalker-desk.ch.intel.com ([143.182.136.162])
-  by fmsmga006.fm.intel.com with ESMTP; 22 Jun 2022 11:53:48 -0700
+  by orsmga004.jf.intel.com with ESMTP; 22 Jun 2022 12:38:27 -0700
 From:   Ben Walker <benjamin.walker@intel.com>
 To:     vkoul@kernel.org
 Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org
-Subject: [PATCH v3 07/15] media: pxa_camera: Use dmaengine_async_is_tx_complete
-Date:   Wed, 22 Jun 2022 11:53:46 -0700
-Message-Id: <20220622185346.3043590-1-benjamin.walker@intel.com>
+Subject: [PATCH v4 07/15] media: pxa_camera: Use dmaengine_async_is_tx_complete
+Date:   Wed, 22 Jun 2022 12:37:45 -0700
+Message-Id: <20220622193753.3044206-8-benjamin.walker@intel.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220622193753.3044206-1-benjamin.walker@intel.com>
+References: <20220503200728.2321188-1-benjamin.walker@intel.com>
+ <20220622193753.3044206-1-benjamin.walker@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -55,6 +58,7 @@ X-Mailing-List: linux-media@vger.kernel.org
 Replace dma_async_is_tx_complete with dmaengine_async_is_tx_complete.
 The previous PAI will be removed in favor of the new one.
 
+Cc: linux-media@vger.kernel.org
 Signed-off-by: Ben Walker <benjamin.walker@intel.com>
 ---
  drivers/media/platform/intel/pxa_camera.c | 15 ++++++++++++---
