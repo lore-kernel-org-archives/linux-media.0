@@ -2,264 +2,79 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 395E4C43334
-	for <linux-media@archiver.kernel.org>; Wed, 22 Jun 2022 14:55:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5E6AC433EF
+	for <linux-media@archiver.kernel.org>; Wed, 22 Jun 2022 15:25:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358765AbiFVOzg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Jun 2022 10:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54664 "EHLO
+        id S1358635AbiFVPZb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Jun 2022 11:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358738AbiFVOzd (ORCPT
+        with ESMTP id S236696AbiFVPZa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:55:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C70E3A1B7;
-        Wed, 22 Jun 2022 07:55:32 -0700 (PDT)
+        Wed, 22 Jun 2022 11:25:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409A039160;
+        Wed, 22 Jun 2022 08:25:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F11F261C5D;
-        Wed, 22 Jun 2022 14:55:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F31E9C3411B;
-        Wed, 22 Jun 2022 14:55:29 +0000 (UTC)
-Message-ID: <01b837f6-f8a2-1f59-45c1-f746b741f2db@xs4all.nl>
-Date:   Wed, 22 Jun 2022 16:55:27 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D16F961655;
+        Wed, 22 Jun 2022 15:25:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 958B2C34114;
+        Wed, 22 Jun 2022 15:25:26 +0000 (UTC)
+Message-ID: <f14cd01b-e0fa-005c-0a90-3aaaa3dd7c12@xs4all.nl>
+Date:   Wed, 22 Jun 2022 17:25:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v10 0/5] media: atmel: atmel-isc: implement media
- controller
+Subject: Re: [PATCH] media: sta2x11: remove VIRT_TO_BUS dependency
 Content-Language: en-US
-Cc:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Claudiu.Beznea@microchip.com, Nicolas.Ferre@microchip.com,
-        Jacopo Mondi <jacopo@jmondi.org>
-References: <20220503095127.48710-1-eugen.hristev@microchip.com>
- <1da61f9c-0605-dc9d-63a3-21c18fcb74c7@xs4all.nl>
- <a19d9e72-7609-1daa-93eb-fdedcaa672c4@microchip.com>
- <bc22469c-d1ab-72e2-8e9e-6bd42d66f3d9@microchip.com>
- <c1b8820d-5ff5-b6dd-bc22-35f8daf756db@xs4all.nl>
- <20220622141439.v2ozrctikjxd67ue@uno.localdomain>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Federico Vaga <federico.vaga@gmail.com>,
+        Giancarlo Asnaghi <giancarlo.asnaghi@st.com>
+Cc:     =?UTF-8?Q?=c5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220616085254.2275372-1-arnd@kernel.org>
+ <CAK8P3a3O1CEuahB+VeKfFe3iycTwG=1RH2hq2eMn6rGwGA0p=g@mail.gmail.com>
 From:   Hans Verkuil <hverkuil@xs4all.nl>
-To:     Eugen.Hristev@microchip.com
-In-Reply-To: <20220622141439.v2ozrctikjxd67ue@uno.localdomain>
+In-Reply-To: <CAK8P3a3O1CEuahB+VeKfFe3iycTwG=1RH2hq2eMn6rGwGA0p=g@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Eugen, Jacopo,
-
-On 22/06/2022 16:14, Jacopo Mondi wrote:
-> Hi Hans, Eugen
-> 
-> On Wed, Jun 22, 2022 at 03:47:33PM +0200, Hans Verkuil wrote:
->> On 22/06/2022 14:42, Eugen.Hristev@microchip.com wrote:
->>> On 6/22/22 3:25 PM, Eugen Hristev - M18282 wrote:
->>>> On 6/22/22 2:53 PM, Hans Verkuil wrote:
->>>>> Hi Eugen,
->>>>>
->>>>> On 03/05/2022 11:51, Eugen Hristev wrote:
->>>>>> This series is a split from the series :
->>>>>> [PATCH v9 00/13] media: atmel: atmel-isc: implement media controller
->>>>>> and it includes the media controller part.
->>>>>> previous fixes were sent on a different patch series.
->>>>>>
->>>>>> As discussed on the ML, moving forward with having the media link validate at
->>>>>> start/stop streaming call.
->>>>>> I will test the patch :
->>>>>> [RFC PATCHv2] vb2: add support for (un)prepare_streaming queue ops
->>>>>> afterwards, but that patch requires moving my logic to the new vb2 callbacks.
->>>>>
->>>>> I'm looking at merging this series, but I would like to have the output of
->>>>> 'v4l2-compliance -m /dev/mediaX' to verify that the MC links etc. is all
->>>>> correct.
->>>>
->>>> Hello Hans,
->>>>
->>>> Please have a look at attached file . Unless you want me to add the
->>>> whole output to the e-mail ?
->>>>
->>>> I also added output of media-ctl -p for your convenience.
->>>> the subdev2 is a device and driver that is not upstream and has some
->>>> compliance issues, they are reported by the v4l2-compliance tool, but
->>>> they should not affect this series, it's a synopsys driver that was
->>>> rejected on mainline a few years ago, I took it for internal usage, but
->>>> it's not cleaned up nor worked a lot upon.
->>>>
->>>>>
->>>>> And one more question which may have been answered already in the past:
->>>>>
->>>>> Changing to the MC will break existing applications, doesn't it? Or did I
->>>>> miss something?
->>>>>
->>>>
->>>> The existing applications will have to configure the pipeline now. It
->>>> will no longer work by configuring just the top video node /dev/video0 .
->>>> They would have to use media-ctl for it, something similar with this set
->>>> of commands:
->>>
->>> To add on top of that, actually, the reality is that without the MC
->>> support in atmel-isc , some of our platforms do not work at all, because
->>> the csi2dc driver which is in the middle of the pipeline, is a MC
->>> driver. So it will not work without configuring it with MC anyway. It
->>> used to work in a very preliminary version of the csi2dc driver which I
->>> sent a few years ago, but that way of handling things was rejected.
->>> Hence I changed the csi2dc to being full-MC driver (requested for new
->>> drivers) and now I am completing the conversion for the whole pipeline.
->>> We are using this MC-centric approach in production for our products to
->>> be as close as possible to mainline, and backported it to our 5.15
->>> internal releases, which people are using right now.
+On 16/06/2022 11:32, Arnd Bergmann wrote:
+> On Thu, Jun 16, 2022 at 10:52 AM Arnd Bergmann <arnd@kernel.org> wrote:
 >>
->> I'm not all that keen on breaking userspace for those who do NOT use the
->> Atmel BSP. Basically some platforms are currently broken, and with this patch
->> series some other platforms are broken, but at least can be fixed by changing
->> userspace.
->>
->> How feasible is it to do something similar that TI did for the cal driver?
->> (drivers/media/platform/ti/cal)
->>
->> I.e., based on a module option the MC is enabled or disabled. And if a
->> csi2dc is present, then the MC API is always enabled.
->>
+>> diff --git a/drivers/media/pci/sta2x11/Kconfig b/drivers/media/pci/sta2x11/Kconfig
+>> index a96e170ab04e..118b922c08c3 100644
+>> --- a/drivers/media/pci/sta2x11/Kconfig
+>> +++ b/drivers/media/pci/sta2x11/Kconfig
+>> @@ -1,7 +1,7 @@
+>>  # SPDX-License-Identifier: GPL-2.0-only
+>>  config STA2X11_VIP
+>>         tristate "STA2X11 VIP Video For Linux"
+>> -       depends on PCI && VIDEO_DEV && VIRT_TO_BUS && I2C
+>> +       depends on PCI && VIDEO_DEV && I2C
+>>         depends on STA2X11 || COMPILE_TEST
 > 
-> I think I have suggested Eugen to move to MC when he
-> started looking in libcamera, so sorry for the intrusion but I feel
-> a bit bad for not rising the point earlier and get him to v10
+> As I resent this one out of series, I guess I should clarify: I would
+> like to merge the patch to remove VIRT_TO_BUS through the
+> asm-generic tree for 5.20, which would make STA2X11_VIP
+> impossible to select, unless this patch gets applied as well.
 > 
-> I understand your point Hans, and when a vendor upstreaming code or a
-> user requires to maintain compatibility, the burden of keeping more
-> code in to handle the MC and non-MC cases is worth the complications.
-
-Eugen, can you provide a list of platforms that will break with this
-change and which platforms are currently broken without this series?
-
-I'm trying to get a bit of a feel of the potential problems this change
-will introduce.
-
+> I can take the patch through the asm-generic tree as well if anyone
+> cares about bisectibility here.
 > 
-> But if even the vendor wants to move to MC to allow more use-cases I
-> think we have to acknolege that if you're running mainline on an
-> embedded system you could expect to adjust your setup between kernel
-> updates. The idea to document the media-ctl commands required to setup
-> the pipeline it's helpful, and might help in the interim period until
-> the platform is not supported by libcamera.
+>          Arnd
 
-Well, I don't want Linus to start yelling at me for breaking userspace :-)
-
-We have broken userspace API (intentionally) in the past, but only with
-good reasons. And sometimes a driver is used so rarely that it is not worth
-the effort to try and keep compatible.
-
-As a developer I'd love to just forget about the old API, but as subsystem
-maintainer I need good arguments.
-
-Another option might be to take the TI cal approach, but have warnings that
-it will be removed in, say, 2 years time. Or even make a copy of the driver
-for the old platforms, and perhaps move that to staging to be removed eventually.
-
-The idea of a sudden breakage when going from kernel K to K+1 doesn't sit
-well with me, if there was a transition period of 1-2 years then that would be
-better.
+I'll take this patch through the media subsystem for 5.20.
 
 Regards,
 
 	Hans
-
-> 
-> That said, if Eugen wants to give the flag a try I won't
-> oppose :)
-> 
-> 
->> Regards,
->>
->> 	Hans
->>
->>>
->>>>
->>>> media-ctl -d /dev/media0 --set-v4l2 '"imx219
->>>> 1-0010":0[fmt:SRGGB10_1X10/1920x1080]'
->>>> media-ctl -d /dev/media0 --set-v4l2
->>>> '"dw-csi.0":0[fmt:SRGGB10_1X10/1920x1080]'
->>>> media-ctl -d /dev/media0 --set-v4l2 '"csi2dc":0[fmt:SRGGB10_1X10/1920x1080]'
->>>> media-ctl -d /dev/media0 --set-v4l2
->>>> '"atmel_isc_scaler":0[fmt:SRGGB10_1X10/1920x1080]'
->>>>
->>>> Thank you for taking care of this !
->>>>
->>>> Eugen
->>>>
->>>>> Regards,
->>>>>
->>>>>           Hans
->>>>>
->>>>>>
->>>>>> Full series history:
->>>>>>
->>>>>> Changes in v10:
->>>>>> -> split the series into this first fixes part.
->>>>>> -> moved IO_MC addition from first patch to the second patch on the driver changes
->>>>>> -> edited commit messages
->>>>>> -> DT nodes now disabled by default.
->>>>>>
->>>>>> Changes in v9:
->>>>>> -> kernel robot reported isc_link_validate is not static, changed to static.
->>>>>>
->>>>>> Changes in v8:
->>>>>> -> scaler: modified crop bounds to have the exact source size
->>>>>>
->>>>>> Changes in v7:
->>>>>> -> scaler: modified crop bounds to have maximum isc size
->>>>>> -> format propagation: did small changes as per Jacopo review
->>>>>>
->>>>>>
->>>>>> Changes in v6:
->>>>>> -> worked a bit on scaler, added try crop and other changes as per Jacopo review
->>>>>> -> worked on isc-base enum_fmt , reworked as per Jacopo review
->>>>>>
->>>>>> Changes in v5:
->>>>>> -> removed patch that removed the 'stop' variable as it was still required
->>>>>> -> added two new trivial patches
->>>>>> -> reworked some parts of the scaler and format propagation after discussions with Jacopo
->>>>>>
->>>>>>
->>>>>> Changes in v4:
->>>>>> -> as reviewed by Hans, added new patch to remove the 'stop' variable and reworked
->>>>>> one patch that was using it
->>>>>> -> as reviewed by Jacopo, reworked some parts of the media controller implementation
->>>>>>
->>>>>>
->>>>>> Changes in v3:
->>>>>> - change in bindings, small fixes in csi2dc driver and conversion to mc
->>>>>> for the isc-base.
->>>>>> - removed some MAINTAINERS patches and used patterns in MAINTAINERS
->>>>>>
->>>>>> Changes in v2:
->>>>>> - integrated many changes suggested by Jacopo in the review of the v1 series.
->>>>>> - add a few new patches
->>>>>>
->>>>>> Eugen Hristev (5):
->>>>>>     media: atmel: atmel-isc: prepare for media controller support
->>>>>>     media: atmel: atmel-isc: implement media controller
->>>>>>     ARM: dts: at91: sama7g5: add nodes for video capture
->>>>>>     ARM: configs: at91: sama7: add xisc and csi2dc
->>>>>>     ARM: multi_v7_defconfig: add atmel video pipeline modules
->>>>>>
->>>>>>    arch/arm/boot/dts/sama7g5.dtsi                |  51 ++
->>>>>>    arch/arm/configs/multi_v7_defconfig           |   3 +
->>>>>>    arch/arm/configs/sama7_defconfig              |   2 +
->>>>>>    drivers/media/platform/atmel/Makefile         |   2 +-
->>>>>>    drivers/media/platform/atmel/atmel-isc-base.c | 485 +++++++++---------
->>>>>>    .../media/platform/atmel/atmel-isc-scaler.c   | 267 ++++++++++
->>>>>>    drivers/media/platform/atmel/atmel-isc.h      |  50 +-
->>>>>>    .../media/platform/atmel/atmel-sama5d2-isc.c  |  34 +-
->>>>>>    .../media/platform/atmel/atmel-sama7g5-isc.c  |  32 +-
->>>>>>    9 files changed, 685 insertions(+), 241 deletions(-)
->>>>>>    create mode 100644 drivers/media/platform/atmel/atmel-isc-scaler.c
->>>>>>
->>>>>
->>>>
->>>
->>
-
