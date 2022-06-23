@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E4F9CCA485
-	for <linux-media@archiver.kernel.org>; Thu, 23 Jun 2022 14:32:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26105CCA486
+	for <linux-media@archiver.kernel.org>; Thu, 23 Jun 2022 14:32:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231935AbiFWOck (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 Jun 2022 10:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59968 "EHLO
+        id S231948AbiFWOcl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 Jun 2022 10:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231873AbiFWOci (ORCPT
+        with ESMTP id S231759AbiFWOcj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 23 Jun 2022 10:32:38 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60050.outbound.protection.outlook.com [40.107.6.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0816E457A8;
+        Thu, 23 Jun 2022 10:32:39 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2076.outbound.protection.outlook.com [40.107.20.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC5C457B2;
         Thu, 23 Jun 2022 07:32:38 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hXXZZ4L3nnknqm7qq7itRw1D1V6zSAr1eC07LY0vboupk0yMqU4WeTH1Lpreew3OSJThYycCfpqVcylOA0ZhmXleXyRAazlCP3AQR7XpzithKRajuPoTk6DcXCmg7BxLLMEk1PMnAdNoImJq1Cz3dYZhq8iAtcplcijj0GpJftjJ/MOtlKlXSb6E/Bmm3Ch1PJDeht8EhGwqPrpENevomeKBCL9qGwNx0ykHND2MmIe533eCsKnWY2LXqV/JQI9aVOvd1PMaSU8isa9Urs5tQkEJj+9Ig4LUsvAZ3FrOkxs/IZSRkJVyYwDUYXCPlMYkmaTnGPXLkCnOrICQy6XV+Q==
+ b=fpJD/RWAdkRJGuCApKIX8MWfJfHcpfLLOrbVHsbY6SyNpcly8Ut55bd5zDwnhSuMpEPq3ZvrT+W9mNLfJnMEXHLCwXfV3IDIetFbqsAgdglPZb6MLaIxg/cOmPG9tS9D7iM2Vil9/LsJ0SEhYhXBIBbXz+4lPqj56wlYCurRHl2/2XUitOGWvi43EznHLbZLmssCG0HqinuSQGnjp8PRTJgL2xwum55pK2gK9saWz2dJ8JunWy9Bb/FDPu0GWUZXex6Ar44vI3Z4JwaMMqi6OrYrvPGd30+oQdYPVYLz1Zo8Vgjle+EyKBrv2SjEk+99jn0JzLYrdT5IceF9n7W2yw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eURltwAV4tNodGbg1ojZs9s+OEBwtGLfriuLHC1afSc=;
- b=ZuGTne2paSvd/EtlqW2o8/TZJggEa4Go+psFEy0ZoTm8ZK2pgQi4cIY0UNAFayQrUuLBSb+LxiLlubOTjoygkxJNxzuefWKtLOiXbcYVpr5ksUcdCfljcmfJD4lc9oScV4BRcml4q5K7Rf/7eJFisBc27y5SUpvmyCiSK5vcnm6LAvSovgzlJBfhnqmQBd/C+91ZYN3zHZPN0zSA6S9u2OvPK6l75h8HjRkXTGMJltjlPudh2YCYC+9AGv6jCk7Hxu5xnS3pilXqYpDr/oqKFkfv6UMuZVpp5L/j+BYuL1gVQvtU8BVXAg9F3CYxQcqq4GNFYhPrR7gak6y6MxaygQ==
+ bh=9Ub4+JZBGltLoOx1xK+8vwkxZwHiJdknEo54z47mSJs=;
+ b=VeWYtx3H7ArE++4QuYIJAQMFAfBLY2F9SfhY86HU/8RBXR+29pc7xXJ3DiNESgcWqC6w3pnmZO3u8hBvWIB1RRuzlGxTn65+84JrHDtyq6y9htooDNRpeo/HJ3+G9XsuS4YCD4fs1fV3ma4CEv+0BE0ZvmzELY8Dehi1/6tg5X0v5uZEteUMuqd86f5BXrQE5UHKiu3SOJplMERBx07WUyXlE7mYfPCQpNaI/OdjuSLBJCZPGqNMtM2rpbxyueBmsSedf2a8xgzPTNNCPZ0WnBScSj5ypXR7ujekl9H6WXu79ovYu+XXbPpIBGpYOh5AcEbZTLb9GvnzYS1shGe/RA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eURltwAV4tNodGbg1ojZs9s+OEBwtGLfriuLHC1afSc=;
- b=fBucCHlmJOn2E2TlHrQOEQNhFgUFm02Xc6PJgx3ksKFSb1NW5CZRdgEvNLEOQ5AjnlMYwVlgBRZewDIzLQArFu/mkZO1VpJUsWJsh7a3QPYnKddUX+lyU3LohdyfZEGL0YD9TJ7Q5Th1GAVDh1ytODZS3G2QN7BgAYfEeshAGjs=
+ bh=9Ub4+JZBGltLoOx1xK+8vwkxZwHiJdknEo54z47mSJs=;
+ b=LJcWJGVxXMR4LVts+drunMxwDMaMZUzK9gz089NGGq/PXabkfU7H0ssJI4HXDHwgpU6BEXx+lj9c4379uVcSCVAuX09uvORt/xLysaDZnZF4zHntHk45VnIOpmNKfOi0khdJB78oUO67FgFRLyrMPSLrVkU1ssQPfHMNNQoiPUY=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from PAXPR04MB8703.eurprd04.prod.outlook.com (2603:10a6:102:21e::22)
- by VI1PR0401MB2288.eurprd04.prod.outlook.com (2603:10a6:800:28::11) with
+ by DB8PR04MB6505.eurprd04.prod.outlook.com (2603:10a6:10:10d::32) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.16; Thu, 23 Jun
- 2022 14:32:32 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.22; Thu, 23 Jun
+ 2022 14:32:35 +0000
 Received: from PAXPR04MB8703.eurprd04.prod.outlook.com
  ([fe80::9127:3fe0:f694:9485]) by PAXPR04MB8703.eurprd04.prod.outlook.com
  ([fe80::9127:3fe0:f694:9485%5]) with mapi id 15.20.5353.022; Thu, 23 Jun 2022
- 14:32:31 +0000
+ 14:32:35 +0000
 From:   Xavier Roumegue <xavier.roumegue@oss.nxp.com>
 To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
         stanimir.varbanov@linaro.org, laurent.pinchart@ideasonboard.com,
         tomi.valkeinen@ideasonboard.com, robh+dt@kernel.org,
         nicolas@ndufresne.ca, alexander.stein@ew.tq-group.com
 Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v6 01/14] videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
-Date:   Thu, 23 Jun 2022 16:31:02 +0200
-Message-Id: <20220623143115.3185297-2-xavier.roumegue@oss.nxp.com>
+Subject: [PATCH v6 08/14] vivid: add pixel_array test control
+Date:   Thu, 23 Jun 2022 16:31:09 +0200
+Message-Id: <20220623143115.3185297-9-xavier.roumegue@oss.nxp.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220623143115.3185297-1-xavier.roumegue@oss.nxp.com>
 References: <20220623143115.3185297-1-xavier.roumegue@oss.nxp.com>
@@ -61,114 +61,146 @@ X-ClientProxiedBy: PR2P264CA0026.FRAP264.PROD.OUTLOOK.COM
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 50bc2ca6-5d0a-4080-984c-08da552534bf
-X-MS-TrafficTypeDiagnostic: VI1PR0401MB2288:EE_
+X-MS-Office365-Filtering-Correlation-Id: 389a6efd-83e4-4187-dfcc-08da5525372b
+X-MS-TrafficTypeDiagnostic: DB8PR04MB6505:EE_
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <VI1PR0401MB22886F6058708F23C2466917BAB59@VI1PR0401MB2288.eurprd04.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <DB8PR04MB6505D58985133A42A2E015A5BAB59@DB8PR04MB6505.eurprd04.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: I3BQO6PQEB5k7MWt0v6x0glSWVfGVHW1uqUHMxo7ORuwCp98Q5hAG954cnH7ACFMSsLefAkWK4RA0HDSnfd9HW4CvwWV09BVD47s/aakAMwrg8UpYcIDXB8vTWASeEDjj5CaFk3nCZpSNm+Xk7oJ7vFuMLMQmmeOJ8iyVRvM3hTZBR4hh7AJgi4YvT0IzRldvXUg/D7HqSpO1bQap+AKcJqpWHrjdFXbgazBi8XiJJps07bsVR+4fSVib45ttWicV6Lu4kG6i1y2fRNLaFpgqGZn23rbMdGPnG+IHtMuP2ug5AtOM8VzIJjai08MBpY9HGnVBSThxdYDenXa51teYTEW5wawS0hKmZuxD5cQCTjukWpD4oOgtC3kuV74NPtRjAH0pa+lNVMYjrTmTa4wYDOeknCSrQ/qmj2/viTCUsnk1BqmVvpwb+gAhOdzRDPWuhDchb1pjTxEC/1kd72qibWrKrBLoQPg8BBJHn6n9P+2AKwn/d6GQcg6ksMqKoeiK33To7oYr+uwDlQVApRIQB/QuJH6q6j3F1/vyqCuhq+t8hBpfLqjTBzuHbgIMTO7psr7bf+ahXKBPVtuPbzwIYqil2lYHXov/pUpIF0gnPSgbPL7n3OG6KI2lMWiFk5C+05G2xa7s4CFRWCbLLWUTHB7tNA2UaTpv1/TRNCmrn/Ws2YZTfXjKlbW3jIX9I5OMGsHemTYY4DIbkWyq5CiTA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8703.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(376002)(366004)(396003)(39860400002)(52116002)(66476007)(4326008)(6506007)(86362001)(2616005)(38100700002)(6666004)(41300700001)(66556008)(8676002)(66946007)(2906002)(316002)(1076003)(44832011)(478600001)(8936002)(83380400001)(7416002)(6512007)(5660300002)(186003)(6486002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: a9SgzBox73qyQdfSv6vDZmSgNN3VypiSeHi1pYPIPT8NEHFwomHVxU7QSnqKjaTrqaYEfdOUA+UKCJX9ChZRNdpYUoxPkkia5x1Cbn2VP3ANC2oBXDbG3LGeWF8LPYTzPKdK6Oz639qqf32MTm9dXTz0kbAM1nhWcU2ojw2b5fiZhfSwyHZgGunSnuStWANVScLAX+G9mHSRZirFtRDYBPmuBtgamEZN38cBlVLyr9v4j6AD3jvriPIiFoh6PdEayoaM8DBn11WtYjZ5na3ngbLvNtth/QXq22QntpB6rs5YdXCQTzI42tE2m3WG03QrK8EQiELTIW0WHLhFjR4lq//JD4zS0qEpNKzcxJbHx1ZTaWFHyTyeQy+DPDd5LzMH4y+DNGhDUt36YL5e0UJtp0ITVqv7VGykl8/+L/O5YWAVPpDI+V824xuTsv9HCwoyGBSfkqvsHzqYqJLtKu9R2vtCUnTPiO34UNV/1ZbVeWDHIVbmqQrZ/FZSuw7VnlGewZUkFxAZ87GM/gIN6fdzkiHsC95m9zXX049jmq3xj/Go2Yu62t3zVOjVrn2daFXvjjhkO3tOORRz8lbWLNlNb/+LSqTTfAQMM3G/PgV7HQCHojozMfz+w91xp4VgbumiT7hrgnyj8xrSoxyPe2dQtsLYHJI1CkKLj1xFU0EjpNnG7oxJ9X8qEl5SLZXEyhPtcAG0Viq9OkO2U/1E9FhH3A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8703.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(376002)(366004)(396003)(346002)(2906002)(38100700002)(6666004)(66946007)(86362001)(1076003)(66556008)(44832011)(8676002)(66476007)(6486002)(316002)(4326008)(478600001)(6512007)(5660300002)(7416002)(186003)(83380400001)(2616005)(52116002)(6506007)(8936002)(41300700001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Y4Qkw8Y7fBzr4nwteS3ta+yTo2qs3cd/yApj8Nlb18mYNIQikhqbh+0wrUbI?=
- =?us-ascii?Q?9Z0PFfyOIjrUGTUPwEt37YDrVyM7T/kSzzbqpCRStnfDe0aq3bOrhX6BlrCa?=
- =?us-ascii?Q?vf5njdTHQN4mnhSc9XOsKoj7iGMbz6j7H9t4JmTBBchPhZB0v/9XZ8A9gXMH?=
- =?us-ascii?Q?lue5L13B6gci9UcYfwyAU2ctk7CJdQSWPcpXleBbKtCqy706GEu+YqZFS9vz?=
- =?us-ascii?Q?VBcibp/2JDKoJZf3+K6pzieHfPy78emEp8KO17c2bGCPl5tVeMukuUgnTWZw?=
- =?us-ascii?Q?6ebkQ20/0u/aCsa96WxBUa4CCsOsFSwKO30N+Di/afRHAspYsO9QCq3jevW1?=
- =?us-ascii?Q?tuFuDZDiLWlo5iOGzbNNVQ10MBowZIXa+8sWtqQ3qdWg/hHjJxHNa/iPuqvn?=
- =?us-ascii?Q?GZ+RJNj+fEguyqTXzqg4a54ISiNj2DTVizjoAwIPtjpiSUbBhbkYfeCi8gcW?=
- =?us-ascii?Q?7Hg02djMt7TFK1MCfJBPdobPSuJg7whcqJr+JFAH8GBadaNkdVgLAbSAAxvE?=
- =?us-ascii?Q?zCRbaSerybtYf2q8pEwVc9+4vr7XI6S0ZGIeZmzYTDRjSEK1nXZLSXgZN2ku?=
- =?us-ascii?Q?JF1cwKIrMkTAmCJM7FmhHD9yqCBW7sP7/RDejnVlV/C9ZgrwWtAU3tjOa31v?=
- =?us-ascii?Q?e3oTob6tDDGzmRJ/wOcaq32+3PAm7auZ8YqTVPmGOeVaLcxyEiZ/Mf/OQhx4?=
- =?us-ascii?Q?ePKEE+VVD0Lcc0fDnoeetrHnUv7TGAW76z7GFoU2sVtsayNkd+PCi03jNJOD?=
- =?us-ascii?Q?tOzxU3qbMmDl6rZOoi1DLVml9HzFl/aSOa/5TxTesIyuIpHwqahyte6Oh9VS?=
- =?us-ascii?Q?XnYhm/g857USllWfvskpeMPRR6/s7iWYlk6et0WcTW4Yphr9AcnBQhGaOQcJ?=
- =?us-ascii?Q?ltc2PGBJ0iloNwmeOiSL46oWkzGkji+SfN/vFMdnc+OGAmP0Zzlrg3w4qP6u?=
- =?us-ascii?Q?XVWvtu+CUnRz3c2+K07iBTSlJkAIehapKQOzMY2QpVV/B614Ebfov0Kr3iJR?=
- =?us-ascii?Q?IklwkPQyQi3WLhTZNOYRurkmUA+ZPpSDPm6tZhunLpCpWtua35BuoUtkwRLG?=
- =?us-ascii?Q?UmtqZUtOvEHBj6yWRsjbrOWTpZD0wfcGhgacmq85jQ3c0G9xtigFNpcDam3R?=
- =?us-ascii?Q?OssSWeorJ/YLmlfxsWbf97UyXDnUxbDOfob/zlg8IbKPcXUpM38K3j97zb4T?=
- =?us-ascii?Q?ptn0M9C2DaOC4M7jKTQWTk8TtuDIQWg+Kj7ENMQlJvg6YEzhXYaNidIV+X2w?=
- =?us-ascii?Q?iRrHv6naboMEITBP8s9IThdCfs+tOggKSo/LdazR7pSC9w1PjCc+87NKpupb?=
- =?us-ascii?Q?OnrtUZlGed+l57Hc0Hf/ZGKiyg1O1GxpJxlG6bFV5n/wKsbsDQOU+qizN0z0?=
- =?us-ascii?Q?/DPeib99Ec8ft8KmKiI1Cwxw/zZmHzwUUIuiSg0CX3Aghq/lztLk1yFNrE6G?=
- =?us-ascii?Q?ijznHUtoIqXTiv7kBVDgHmGYPRN+uPl1cYuRpmG6ywbOsQXrhbrAwo+JvORU?=
- =?us-ascii?Q?/+JY09ZYNkCeENc/nw96aSJi6+PWS0BBrZsRi5SoFQZhsN00F9LzDJK1uMin?=
- =?us-ascii?Q?la4PWaoH+zhJlyvG0u1oXjOz50X7WzbWU7k7uZEzxSCUxKp07QxYOtOGsYES?=
- =?us-ascii?Q?WFiZMxuiz6KNYxmCcnKJYBtHB3+7tEZFEpuDYFKn2afHjItmxoQzLtshUHuL?=
- =?us-ascii?Q?OPxtDX/UAi7rwDyJfb8OyOCRi2+Iy002g6YqRL9suZDjMVV6s0SM8bMtdxmi?=
- =?us-ascii?Q?2eNZWNuIQSLubMc6nHdgVTqNiIoPirz6dNpdchp3TzgycC/OJLLkttgb52al?=
-X-MS-Exchange-AntiSpam-MessageData-1: uOxpGIesddbX9IsCghUihEoU7cuAwtvthD4=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?W7CvrQdjhaYxCrqRx3sc+bz99y/YskuMLYzmjK+3eKtb7fj7IS7klpDUI91d?=
+ =?us-ascii?Q?zH++eWEAj1TVd14HujSJuZdoBsuaNwmkNxuG6GkP70wiKq9Cyan1Dx6RYOsF?=
+ =?us-ascii?Q?of00Z+2jk5mu1spL8DykJixqc6zAWPGruQvgTPZaSt+93guXXwlJO1x+otB3?=
+ =?us-ascii?Q?9o8ghulljQuApYUnMlWfkwVI0R/D21T0XDFR2IaPx9SWtjvDDTONw1gd80ue?=
+ =?us-ascii?Q?tPyHljhSOVbtiTBNh1K+FY6agosXiyx1yqsaTu8twAz95WYLp8ToxE0dcX0f?=
+ =?us-ascii?Q?q22mQ/6UO/prU7Dpjc3v0gc5+S2SuJXQDUF8DZ6suaSpQd9kZzVp1BQShLsO?=
+ =?us-ascii?Q?+ArHsJ3dSxrX/gPcYYHBmxxJ27f5S22TzF8uv8fZianBY2eKcEFoCVV6PtFL?=
+ =?us-ascii?Q?HGmE9ke1OHMObyOrEFxXXsMYq+gAH1TLvJBeimxH4coToIMc/9dcLdet6bik?=
+ =?us-ascii?Q?mnZfInZhifp6fI5luuGdnXApvocEYhMxzMcF3pkt4RF24m5xchZEbT9Btbzv?=
+ =?us-ascii?Q?B16m5N2i9TE0NB2yKTdvNAfDNGREyAvS+yZBodLXAwe4kLo9IZMv1wOdrOI1?=
+ =?us-ascii?Q?eQIrZCF13zGLxBCvPWIq92tTn7W7K44ObVUcqz7JHx0pM+NxxbFK2zM+rnuB?=
+ =?us-ascii?Q?kWReRvC/Fo7fOONNtwPuB5b7nePzJ8+NwHUVjO7jR5OfzRvZP9ISDgp5Orku?=
+ =?us-ascii?Q?ZMSqNn6zgeCKvyPkaHsGKC9CumjTrA0U4L9VTHoMKFLgKBPxwHQJ2264rBp2?=
+ =?us-ascii?Q?NB8gZBhFiEekyvmaX5wtSMVFnMJbGOhUNAn29fBMZI8LQmJTzoaPjFXf+PoH?=
+ =?us-ascii?Q?/U/VHocB+gkSF9ShFdGiz0xcnHj6Q6Enoe140XQ+sk/jMUF0S2XiGfaIGv3w?=
+ =?us-ascii?Q?7yEjNt/KaPdjtkaaiChmWWvviP6QpCGSNbQYWHtbmehRehyEJt62QN1ycKxb?=
+ =?us-ascii?Q?Flp9WmlKA2KEmcp68rxGIz3gswfDgujMA4EVdjfQWiLMqxl8c6unnZ5bJX0J?=
+ =?us-ascii?Q?7CiZZYwkAtPfLr1oMFjztb06ErdGuE0wngwLvoouh8X0gfvWWp7oIzOyj1ga?=
+ =?us-ascii?Q?a2bhNu6zqmJGpwuoG6x48YtjbBCdGTVXPxV20b0mpLYD8CSIbu91DoM+QCTG?=
+ =?us-ascii?Q?cGpnBva/N/Jp+pnRPrEJHCXZIJQh6NydMNBsi32LWRSLytjTMvwMGFnjfrou?=
+ =?us-ascii?Q?s44MM4PQC19XBxBl/E5LIBEFBasXjpODekyfOxFaoAl4EEpMOkpaSLJpWIMG?=
+ =?us-ascii?Q?vZO0k53vQKUZsWdQXitH/gHjSJLGIJTmRuSpNHNuZAYCbQgTQQH/RjIueFZm?=
+ =?us-ascii?Q?FnuGgFmXbQOmmUR1wBYGPFpWsF/8YZQ2fXrFYAuKX/Hsi54CQe7X6vN/TQBI?=
+ =?us-ascii?Q?x4DwLYGvSu/vsUKtN+KfoGkY+l+/2Mp/4Y3xqtyfNoYmk39V+/4UdWLpj8a3?=
+ =?us-ascii?Q?SPApW04O8xf8amdJ6h2nOrbPKwAzlJ2WKJEQpLnoxHPjDE0xmrlv8WI3xWBN?=
+ =?us-ascii?Q?Ig3umxegj3MvDlZqq7xg4HPrsj3VdHk2oHsHdjm8RwAiJr4WBLZUOUXz42c+?=
+ =?us-ascii?Q?uaKlF+Ayq8vBPqYgpHVcdVVYtZw+C676v1lzYOLcMv04/WVNkP283mZcpgmX?=
+ =?us-ascii?Q?XZzEW1IoE7bFUL0RANQTitLU4EMebiyEIinIkKZi6orOk900rYVZnaQqBjyK?=
+ =?us-ascii?Q?h5Nnr0KMt/ZQL61Ixd2dNo/gcnrL4JwIZG1KjSExbDJDwURjb6ch0cYJ0OE0?=
+ =?us-ascii?Q?6ENEgl1Go9hoAGGzuSuYY5at+qcCgmeYXClEprwVvOX1aCmKG4TssC4IFQpz?=
+X-MS-Exchange-AntiSpam-MessageData-1: yJ1RvoGQbPELFgtnya/V9nc9i7gp3/h8kLc=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 50bc2ca6-5d0a-4080-984c-08da552534bf
+X-MS-Exchange-CrossTenant-Network-Message-Id: 389a6efd-83e4-4187-dfcc-08da5525372b
 X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8703.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2022 14:32:31.5499
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2022 14:32:35.5525
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QsaispBxIdTNw5JImvEFimsbc4KCFPQIPpna2KOdZdFi//0EkuA8KWQIVkymMJRfHBfC63UDv+eqtUAY4b4p+Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0401MB2288
+X-MS-Exchange-CrossTenant-UserPrincipalName: TtPKbf2oDA950qIeY34tyAGWjw30a647LT6i6v6+3MvVre2pkfpJ31hE+dkOkCI1r/fU/hHgiMAWAJ1zDYJPtw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6505
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-Add a new flag that indicates that this control is a dynamically sized
-array. Also document this flag.
-
-Currently dynamically sized arrays are limited to one dimensional arrays,
-but that might change in the future if there is a need for it.
-
-The initial use-case of dynamic arrays are stateless codecs. A frame
-can be divided in many slices, so you want to provide an array containing
-slice information for each slice. Typically the number of slices is small,
-but the standard allow for hundreds or thousands of slices. Dynamic arrays
-are a good solution since sizing the array for the worst case would waste
-substantial amounts of memory.
+This control will change dimensions according to the source resolution.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- .../userspace-api/media/v4l/vidioc-queryctrl.rst          | 8 ++++++++
- include/uapi/linux/videodev2.h                            | 1 +
- 2 files changed, 9 insertions(+)
+ drivers/media/test-drivers/vivid/vivid-core.h    |  1 +
+ drivers/media/test-drivers/vivid/vivid-ctrls.c   | 14 ++++++++++++++
+ drivers/media/test-drivers/vivid/vivid-vid-cap.c |  4 ++++
+ 3 files changed, 19 insertions(+)
 
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-index 88f630252d98..a20dfa2a933b 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-@@ -625,6 +625,14 @@ See also the examples in :ref:`control`.
- 	``V4L2_CTRL_FLAG_GRABBED`` flag when buffers are allocated or
- 	streaming is in progress since most drivers do not support changing
- 	the format in that case.
-+    * - ``V4L2_CTRL_FLAG_DYNAMIC_ARRAY``
-+      - 0x0800
-+      - This control is a dynamically sized 1-dimensional array. It
-+        behaves the same as a regular array, except that the number
-+	of elements as reported by the ``elems`` field is between 1 and
-+	``dims[0]``. So setting the control with a differently sized
-+	array will change the ``elems`` field when the control is
-+	queried afterwards.
+diff --git a/drivers/media/test-drivers/vivid/vivid-core.h b/drivers/media/test-drivers/vivid/vivid-core.h
+index 176b72cb143b..e7b23ebc705e 100644
+--- a/drivers/media/test-drivers/vivid/vivid-core.h
++++ b/drivers/media/test-drivers/vivid/vivid-core.h
+@@ -227,6 +227,7 @@ struct vivid_dev {
+ 	struct v4l2_ctrl		*bitmask;
+ 	struct v4l2_ctrl		*int_menu;
+ 	struct v4l2_ctrl		*ro_int32;
++	struct v4l2_ctrl		*pixel_array;
+ 	struct v4l2_ctrl		*test_pattern;
+ 	struct v4l2_ctrl		*colorspace;
+ 	struct v4l2_ctrl		*rgb_range_cap;
+diff --git a/drivers/media/test-drivers/vivid/vivid-ctrls.c b/drivers/media/test-drivers/vivid/vivid-ctrls.c
+index 7267892dc18a..c46986519bee 100644
+--- a/drivers/media/test-drivers/vivid/vivid-ctrls.c
++++ b/drivers/media/test-drivers/vivid/vivid-ctrls.c
+@@ -35,6 +35,7 @@
+ #define VIVID_CID_AREA			(VIVID_CID_CUSTOM_BASE + 11)
+ #define VIVID_CID_RO_INTEGER		(VIVID_CID_CUSTOM_BASE + 12)
+ #define VIVID_CID_U32_DYN_ARRAY		(VIVID_CID_CUSTOM_BASE + 13)
++#define VIVID_CID_U8_PIXEL_ARRAY	(VIVID_CID_CUSTOM_BASE + 14)
  
- Return Value
- ============
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 343b95107fce..5c45ca18fac9 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -1889,6 +1889,7 @@ struct v4l2_querymenu {
- #define V4L2_CTRL_FLAG_HAS_PAYLOAD	0x0100
- #define V4L2_CTRL_FLAG_EXECUTE_ON_WRITE	0x0200
- #define V4L2_CTRL_FLAG_MODIFY_LAYOUT	0x0400
-+#define V4L2_CTRL_FLAG_DYNAMIC_ARRAY	0x0800
+ #define VIVID_CID_VIVID_BASE		(0x00f00000 | 0xf000)
+ #define VIVID_CID_VIVID_CLASS		(0x00f00000 | 1)
+@@ -227,6 +228,18 @@ static const struct v4l2_ctrl_config vivid_ctrl_u8_4d_array = {
+ 	.dims = { 2, 3, 4, 5 },
+ };
  
- /*  Query flags, to be ORed with the control ID */
- #define V4L2_CTRL_FLAG_NEXT_CTRL	0x80000000
++static const struct v4l2_ctrl_config vivid_ctrl_u8_pixel_array = {
++	.ops = &vivid_user_gen_ctrl_ops,
++	.id = VIVID_CID_U8_PIXEL_ARRAY,
++	.name = "U8 Pixel Array",
++	.type = V4L2_CTRL_TYPE_U8,
++	.def = 0x80,
++	.min = 0x00,
++	.max = 0xff,
++	.step = 1,
++	.dims = { 640, 360 },
++};
++
+ static const char * const vivid_ctrl_menu_strings[] = {
+ 	"Menu Item 0 (Skipped)",
+ 	"Menu Item 1",
+@@ -1629,6 +1642,7 @@ int vivid_create_controls(struct vivid_dev *dev, bool show_ccs_cap,
+ 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u32_dyn_array, NULL);
+ 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u16_matrix, NULL);
+ 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u8_4d_array, NULL);
++	dev->pixel_array = v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u8_pixel_array, NULL);
+ 
+ 	if (dev->has_vid_cap) {
+ 		/* Image Processing Controls */
+diff --git a/drivers/media/test-drivers/vivid/vivid-vid-cap.c b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+index b9caa4b26209..6dc4091fcabb 100644
+--- a/drivers/media/test-drivers/vivid/vivid-vid-cap.c
++++ b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+@@ -381,6 +381,7 @@ static enum tpg_pixel_aspect vivid_get_pixel_aspect(const struct vivid_dev *dev)
+ void vivid_update_format_cap(struct vivid_dev *dev, bool keep_controls)
+ {
+ 	struct v4l2_bt_timings *bt = &dev->dv_timings_cap[dev->input].bt;
++	u32 dims[V4L2_CTRL_MAX_DIMS] = {};
+ 	unsigned size;
+ 	u64 pixelclock;
+ 
+@@ -459,6 +460,9 @@ void vivid_update_format_cap(struct vivid_dev *dev, bool keep_controls)
+ 	tpg_s_video_aspect(&dev->tpg, vivid_get_video_aspect(dev));
+ 	tpg_s_pixel_aspect(&dev->tpg, vivid_get_pixel_aspect(dev));
+ 	tpg_update_mv_step(&dev->tpg);
++	dims[0] = dev->src_rect.width;
++	dims[1] = dev->src_rect.height;
++	v4l2_ctrl_modify_dimensions(dev->pixel_array, dims);
+ }
+ 
+ /* Map the field to something that is valid for the current input */
 -- 
 2.36.1
 
