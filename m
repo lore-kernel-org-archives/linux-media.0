@@ -2,59 +2,62 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5537CCA473
-	for <linux-media@archiver.kernel.org>; Fri, 24 Jun 2022 23:03:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E607C43334
+	for <linux-media@archiver.kernel.org>; Fri, 24 Jun 2022 23:03:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229454AbiFXXDj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 24 Jun 2022 19:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37700 "EHLO
+        id S231907AbiFXXDw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 24 Jun 2022 19:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231680AbiFXXDh (ORCPT
+        with ESMTP id S231642AbiFXXDk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 24 Jun 2022 19:03:37 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FA388969
-        for <linux-media@vger.kernel.org>; Fri, 24 Jun 2022 16:03:36 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id ge10so7523401ejb.7
-        for <linux-media@vger.kernel.org>; Fri, 24 Jun 2022 16:03:36 -0700 (PDT)
+        Fri, 24 Jun 2022 19:03:40 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C805451E5D
+        for <linux-media@vger.kernel.org>; Fri, 24 Jun 2022 16:03:39 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id fi2so7505441ejb.9
+        for <linux-media@vger.kernel.org>; Fri, 24 Jun 2022 16:03:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=amarulasolutions.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=mbhraybs4BrIz6d4796cwXXFW6lfNPQ37w8o2Zpee1o=;
-        b=gH2Z7bGufOOexKb1QCi6vG5Jtst7PDiEp12YxfktJF6iT9LumdlhD7WGjFie91X0EY
-         EpBVumPmxwiot9IDUQdu/IHpt23AG03XrapwS25ESQZzkMcVJHogiTvYkEhc6/qwIFDs
-         lNllUY9JchYHRn/k/rpE8Qnl6m8JU+JCnqUO4=
+        bh=iJe+xcZ3/D6PBSynO0jW7/Eqhilgv6gNqpZ8p3aGXd0=;
+        b=MnE6HFKeJE96PcaRLagx5/+3ziVOcE+1hsvFY5sY/Cdn8gEfANbQZhJr3yWzr0DNyP
+         cro1ywge4Mq9rwcGE7j2QM9hpm+qkHMKIJ4pyk3i2OioePxvc1btkQSHwEaekZnjwoT5
+         UXFwfiwVrYlb6RLk8vuzINxhNcravsga2+dD0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=mbhraybs4BrIz6d4796cwXXFW6lfNPQ37w8o2Zpee1o=;
-        b=uwgfttPBJCStXZ1XHEAXFLeZXw4nb2XdB3DvTYnnUFB04OcE+GZA2LR2Ch6U9B1GAM
-         nP8dBTJX4GHlqL3GCAYjVQJxiIghtAUUl+8jtM2dDdOG0q3uwTp95c4TGUY93KDokwk9
-         YlS+JgloKx7/SO8Ra2IkPKbL2Ob73zeOPINm1CQrQi7/2NI9KOTiCYed2735jXIe30/J
-         utqtBNGdsqlvm5/wFQzpudxoSyBL+x5DKTrbs7UOLBfHk2UR+1Yp417rxZgaR7qdEkwL
-         KmI/aCuV4IoqXsiYvX1LAZyaKy7xpxKMyJrmPZ4qbc9wP1kpGOXOiFXZvXLD96N/BIoL
-         4xtw==
-X-Gm-Message-State: AJIora+j8/wLwOZpomha0LY6h+veIA82NEitPEi18g85dG5oFLsC4x8N
-        SQPr45J9l6PJZPnr4xTrJfBzEw==
-X-Google-Smtp-Source: AGRyM1sJyFili14FlSFtjNScmHSlGY/vuxR8LImiMA2h51vjwTyXUpuN4qaa6WmJWtoJh/H7vUvGeQ==
-X-Received: by 2002:a17:906:4f87:b0:718:c7ce:bd64 with SMTP id o7-20020a1709064f8700b00718c7cebd64mr1236330eju.507.1656111815169;
-        Fri, 24 Jun 2022 16:03:35 -0700 (PDT)
+        bh=iJe+xcZ3/D6PBSynO0jW7/Eqhilgv6gNqpZ8p3aGXd0=;
+        b=YnTmWgcsN5HHa5l64+AOEb9X1wFffsBATxNgzQnRnCp62aMEkUJvrpV8O4U3BGtfQX
+         VDNnsDNx8PdmeSY6Rtafnahrq3qePcZaYZosje3dalkL/fgwmOhVXYydEeHM1PB2FOUj
+         f80KjrHfVvtQnZpN3zJW2VM1w2bonKUWpIyo/hWlTypwieejB+cVMRRUowVhIEGRYs7I
+         7EPiafmW+GoKjmpJWoADR8BffLqA+kx9/2+Qbb1G42kgNE0tghApeSl9duam3AGwD/9h
+         7jB21wn4HBSmzRc7PZWCqSJhD61ORrBVgN2Pk9oP3zPHEkby13pQzvqI+f9CkNVaxAN3
+         RBJg==
+X-Gm-Message-State: AJIora+66M9+3khAHOQ49lS5O9JPdVA2KYGXphDVNEw0zaRHQl1KwJMc
+        geU+A1TS0dr3L23aktQQsANuvQ==
+X-Google-Smtp-Source: AGRyM1u9OrGaQ3FO3H0QgxOTsvLQiGp1ni6Lj1KBxemuMVOZbqVG6TzVRElD9/a1D3MJ77tfYQcEng==
+X-Received: by 2002:a17:906:9c84:b0:6e0:7c75:6f01 with SMTP id fj4-20020a1709069c8400b006e07c756f01mr1328997ejc.103.1656111819427;
+        Fri, 24 Jun 2022 16:03:39 -0700 (PDT)
 Received: from tom-ThinkPad-T14s-Gen-2i.station (net-188-217-58-216.cust.vodafonedsl.it. [188.217.58.216])
-        by smtp.gmail.com with ESMTPSA id w1-20020aa7da41000000b004356a647d08sm2880291eds.94.2022.06.24.16.03.34
+        by smtp.gmail.com with ESMTPSA id w1-20020aa7da41000000b004356a647d08sm2880291eds.94.2022.06.24.16.03.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 16:03:34 -0700 (PDT)
+        Fri, 24 Jun 2022 16:03:39 -0700 (PDT)
 From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
 Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
         quentin.schulz@theobroma-systems.com,
         Tommaso Merciai <tommaso.merciai@amarulasolutions.com>,
         Daniel Scally <djrscally@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 5/7] media: ov5693: rename ov5693_check_hwcfg into ov5693_get_hwcfg
-Date:   Sat, 25 Jun 2022 01:03:05 +0200
-Message-Id: <20220624230307.3066530-6-tommaso.merciai@amarulasolutions.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 7/7] media: dt-bindings: ov5693: document YAML binding
+Date:   Sat, 25 Jun 2022 01:03:07 +0200
+Message-Id: <20220624230307.3066530-8-tommaso.merciai@amarulasolutions.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220624230307.3066530-1-tommaso.merciai@amarulasolutions.com>
 References: <20220624230307.3066530-1-tommaso.merciai@amarulasolutions.com>
@@ -65,36 +68,158 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Function ov5693_check_hwcfg don't only check the hw configuration but
-also get the hw configuration. Is better better to rename this into ov5693_get_hwcfg
+This patch adds documentation of device tree in YAML schema for the
+OV5693 CMOS image sensor from Omnivision
 
 Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
 ---
- drivers/media/i2c/ov5693.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../bindings/media/i2c/ovti,ov5693.yaml       | 123 ++++++++++++++++++
+ MAINTAINERS                                   |   1 +
+ 2 files changed, 124 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
 
-diff --git a/drivers/media/i2c/ov5693.c b/drivers/media/i2c/ov5693.c
-index d5a934ace597..273caef467fe 100644
---- a/drivers/media/i2c/ov5693.c
-+++ b/drivers/media/i2c/ov5693.c
-@@ -1339,7 +1339,7 @@ static int ov5693_get_regulators(struct ov5693_device *ov5693)
- 				       ov5693->supplies);
- }
+diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
+new file mode 100644
+index 000000000000..1ee70af40000
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
+@@ -0,0 +1,123 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (c) 2022 Amarulasolutions
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/ovti,ov5693.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Omnivision OV5693 CMOS Sensor
++
++maintainers:
++  - Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
++
++allOf:
++  - $ref: /schemas/media/video-interface-devices.yaml#
++
++description: |
++  The Omnivision OV5693 is a high performance, 1/4-inch, 5 megapixel, CMOS
++  image sensor that delivers 2592x1944 at 30fps. It provides full-frame,
++  sub-sampled, and windowed 10-bit MIPI images in various formats via the
++  Serial Camera Control Bus (SCCB) interface.
++
++  Supports images sizes: 5 Mpixel, EIS1080p, 1080p, 720p, VGA, QVGA
++
++  OV5693 is programmable through I2C and two-wire Serial Camera Control Bus (SCCB).
++  The sensor output is available via CSI-2 serial data output (up to 2-lane).
++
++properties:
++  compatible:
++    const: ovti,ov5693
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    description:
++      System input clock (aka XVCLK). From 6 to 27 MHz.
++    maxItems: 1
++
++  dovdd-supply:
++    description:
++      Digital I/O voltage supply, 1.8V.
++
++  avdd-supply:
++    description:
++      Analog voltage supply, 2.8V.
++
++  dvdd-supply:
++    description:
++      Digital core voltage supply, 1.2V.
++
++  reset-gpios:
++    description:
++      The phandle and specifier for the GPIO that controls sensor reset.
++      This corresponds to the hardware pin XSHUTDN which is physically
++      active low.
++    maxItems: 1
++
++  port:
++    $ref: /schemas/graph.yaml#/$defs/port-base
++    additionalProperties: false
++
++    properties:
++      endpoint:
++        $ref: /schemas/media/video-interfaces.yaml#
++        unevaluatedProperties: false
++
++        properties:
++          data-lanes:
++            minItems: 1
++            maxItems: 2
++
++          # Supports max data transfer of 900 Mbps per lane
++          link-frequencies: true
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - dovdd-supply
++  - avdd-supply
++  - dvdd-supply
++  - port
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/px30-cru.h>
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/pinctrl/rockchip.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        ov5693: camera@36 {
++            compatible = "ovti,ov5693";
++            reg = <0x36>;
++
++            reset-gpios = <&gpio2 RK_PB1 GPIO_ACTIVE_LOW>;
++            pinctrl-names = "default";
++            pinctrl-0 = <&cif_clkout_m0>;
++
++            clocks = <&cru SCLK_CIF_OUT>;
++            assigned-clocks = <&cru SCLK_CIF_OUT>;
++            assigned-clock-rates = <19200000>;
++
++            avdd-supply = <&vcc_1v8>;
++            dvdd-supply = <&vcc_1v2>;
++            dovdd-supply = <&vcc_2v8>;
++
++            rotation = <90>;
++            orientation = <0>;
++
++            port {
++                ucam_out: endpoint {
++                    remote-endpoint = <&mipi_in_ucam>;
++                    data-lanes = <1 2>;
++                    link-frequencies = /bits/ 64 <450000000>;
++                };
++            };
++        };
++    };
+\ No newline at end of file
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 1fc9ead83d2a..844307cb20c4 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14719,6 +14719,7 @@ M:	Daniel Scally <djrscally@gmail.com>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ T:	git git://linuxtv.org/media_tree.git
++F:	Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
+ F:	drivers/media/i2c/ov5693.c
  
--static int ov5693_check_hwcfg(struct ov5693_device *ov5693)
-+static int ov5693_get_hwcfg(struct ov5693_device *ov5693)
- {
- 	struct fwnode_handle *fwnode = dev_fwnode(ov5693->dev);
- 	struct v4l2_fwnode_endpoint bus_cfg = {
-@@ -1431,7 +1431,7 @@ static int ov5693_probe(struct i2c_client *client)
- 	ov5693->client = client;
- 	ov5693->dev = &client->dev;
- 
--	ret = ov5693_check_hwcfg(ov5693);
-+	ret = ov5693_get_hwcfg(ov5693);
- 	if (ret)
- 		return ret;
- 
+ OMNIVISION OV5695 SENSOR DRIVER
 -- 
 2.25.1
 
