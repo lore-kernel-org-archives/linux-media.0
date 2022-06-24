@@ -2,318 +2,233 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D0A6CCA47E
-	for <linux-media@archiver.kernel.org>; Fri, 24 Jun 2022 09:01:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7048CC43334
+	for <linux-media@archiver.kernel.org>; Fri, 24 Jun 2022 09:19:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbiFXJBL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 24 Jun 2022 05:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47532 "EHLO
+        id S230281AbiFXJTV convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 24 Jun 2022 05:19:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbiFXJBH (ORCPT
+        with ESMTP id S229936AbiFXJTU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 24 Jun 2022 05:01:07 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079753BFBB;
-        Fri, 24 Jun 2022 02:01:02 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BA1B866017FA;
-        Fri, 24 Jun 2022 10:00:59 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656061261;
-        bh=0a4LN2Xv/2R17lSduW2ToqfNrWrNFnf/+npA9hiKOsU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lsBRTjbNyPOW9/ad+sWs/fw3bnIKqKwnDOIInfLBnXAffGknXZPX3g4fCEk2rbThv
-         DWJEsXAiybhVuJWmyI3PZgO1Z3JJpo0s+Q2jO9xsJJC+x3O4Hi/hHaDC6lNS35nzs1
-         OJH3CzJ4+q2De1wXMzgW7LAA7dj0GBjRMGYNCpFdNZ+z8uc1he95WEpLfATiUXuJUn
-         wmBZldtJeBKEo6UnuunB3OcV9z1SM3SzipujhRHxxLUqNTFgF0vMOiAZX6mucXwqfm
-         lcS9/MeKctwN5j1q889mlZV7wPTgzedRUGftRDUTk5gjeM+1RzRPO+uD/XZ4jwexHU
-         lQ4w0AxvWcrNA==
-Message-ID: <a8c3e22c-8f22-2fb9-ff23-f394c5c34366@collabora.com>
-Date:   Fri, 24 Jun 2022 11:00:57 +0200
+        Fri, 24 Jun 2022 05:19:20 -0400
+Received: from www.linuxtv.org (www.linuxtv.org [130.149.80.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB7762C0C
+        for <linux-media@vger.kernel.org>; Fri, 24 Jun 2022 02:19:18 -0700 (PDT)
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1o4fTB-00HCzZ-9P; Fri, 24 Jun 2022 09:19:17 +0000
+Received: from localhost ([127.0.0.1] helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.94.2)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1o4fT9-008vEc-GT; Fri, 24 Jun 2022 09:19:14 +0000
+Date:   Fri, 24 Jun 2022 09:19:14 +0000 (UTC)
+From:   Jenkins Builder Robot <jenkins@linuxtv.org>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org
+Message-ID: <742676497.0.1656062354870@builder.linuxtv.org>
+In-Reply-To: <1751608910.0.1655975954414@builder.linuxtv.org>
+References: <1751608910.0.1655975954414@builder.linuxtv.org>
+Subject: Build failed in Jenkins: media-build #3939
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4, 4/8] media: mediatek: vcodec: Add more extra
- processing for multi-core encoding
-Content-Language: en-US
-To:     Irui Wang <irui.wang@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        nicolas.dufresne@collabora.com
-Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Maoguang Meng <maoguang.meng@mediatek.com>,
-        Longfei Wang <longfei.wang@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220624082335.10165-1-irui.wang@mediatek.com>
- <20220624082335.10165-5-irui.wang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220624082335.10165-5-irui.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
+X-Jenkins-Job: media-build
+X-Jenkins-Result: FAILURE
+Auto-submitted: auto-generated
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Il 24/06/22 10:23, Irui Wang ha scritto:
-> Add a bit for indicating support multi-core encoding, because multi-core
-> encoding need more working buffers for encoder hardware. The working
-> buffers are allocated from kernel side then pass to scp firmware side
-> through shared memory, the struct definition must be kept align between
-> kernel and scp firmware side. New another shared memory struct for
-> multi-core encoding.
-> 
-> Signed-off-by: Irui Wang <irui.wang@mediatek.com>
-> ---
->   .../platform/mediatek/vcodec/mtk_vcodec_drv.h |   2 +
->   .../mediatek/vcodec/mtk_vcodec_util.c         |  19 ++
->   .../mediatek/vcodec/mtk_vcodec_util.h         |   2 +
->   .../mediatek/vcodec/venc/venc_h264_if.c       | 171 +++++++++++++++---
->   4 files changed, 170 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-> index 8919bdf2eef5..3a291cac6b5e 100644
-> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-> @@ -29,6 +29,8 @@
->   #define WAIT_INTR_TIMEOUT_MS	1000
->   #define IS_VDEC_LAT_ARCH(hw_arch) ((hw_arch) >= MTK_VDEC_LAT_SINGLE_CORE)
->   #define IS_VDEC_INNER_RACING(capability) ((capability) & MTK_VCODEC_INNER_RACING)
-> +#define MTK_VENC_MULTICORE_ENABLE BIT(1)
-> +#define IS_VENC_MULTICORE(capability) ((capability) & MTK_VENC_MULTICORE_ENABLE)
->   
->   /*
->    * enum mtk_hw_reg_idx - MTK hw register base index
-> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.c
-> index ace78c4b5b9e..a723243626c0 100644
-> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.c
-> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.c
-> @@ -11,6 +11,7 @@
->   
->   #include "mtk_vcodec_dec_hw.h"
->   #include "mtk_vcodec_drv.h"
-> +#include "mtk_vcodec_enc_hw.h"
->   #include "mtk_vcodec_util.h"
->   
->   void __iomem *mtk_vcodec_get_reg_addr(struct mtk_vcodec_ctx *data,
-> @@ -26,6 +27,24 @@ void __iomem *mtk_vcodec_get_reg_addr(struct mtk_vcodec_ctx *data,
->   }
->   EXPORT_SYMBOL(mtk_vcodec_get_reg_addr);
->   
-> +void __iomem *mtk_venc_get_core_reg_addr(struct mtk_vcodec_ctx *ctx,
-> +					 unsigned int hw_id)
+See <https://builder.linuxtv.org/job/media-build/3939/display/redirect>
 
-This is enum mtk_venc_hw_id.....
-
-> +{
-> +	struct mtk_venc_hw_dev *sub_core;
-> +
-> +	if (hw_id >= MTK_VENC_HW_MAX) {
-> +		mtk_v4l2_err("Invalid hw_id = %d", hw_id);
-> +		return NULL;
-> +	}
-> +
-> +	sub_core = (struct mtk_venc_hw_dev *)ctx->dev->enc_hw_dev[hw_id];
-> +	if (!sub_core)
-> +		return NULL;
-> +
-> +	return sub_core->reg_base;
-> +}
-> +EXPORT_SYMBOL(mtk_venc_get_core_reg_addr);
-> +
->   int mtk_vcodec_mem_alloc(struct mtk_vcodec_ctx *data,
->   			struct mtk_vcodec_mem *mem)
->   {
-> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
-> index 71956627a0e2..a74c98aa355b 100644
-> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
-> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
-> @@ -50,6 +50,8 @@ struct mtk_vcodec_dev;
->   
->   void __iomem *mtk_vcodec_get_reg_addr(struct mtk_vcodec_ctx *data,
->   				unsigned int reg_idx);
-> +void __iomem *mtk_venc_get_core_reg_addr(struct mtk_vcodec_ctx *data,
-> +					 unsigned int hw_id);
->   int mtk_vcodec_mem_alloc(struct mtk_vcodec_ctx *data,
->   				struct mtk_vcodec_mem *mem);
->   void mtk_vcodec_mem_free(struct mtk_vcodec_ctx *data,
-> diff --git a/drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c b/drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c
-> index 4d9b8798dffe..888cee39d324 100644
-> --- a/drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c
-> +++ b/drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c
-
-..snip..
-
-> @@ -143,8 +184,8 @@ struct venc_h264_vsi {
->    * @ctx: context for v4l2 layer integration
->    */
->   struct venc_h264_inst {
-> -	void __iomem *hw_base;
-> -	struct mtk_vcodec_mem work_bufs[VENC_H264_VPU_WORK_BUF_MAX];
-> +	void __iomem *hw_base[MTK_VENC_HW_MAX];
-> +	struct mtk_vcodec_mem work_bufs[VENC_MULTI_CORE_WORK_BUF_MAX];
->   	struct mtk_vcodec_mem pps_buf;
->   	bool work_buf_allocated;
->   	unsigned int frm_cnt;
-> @@ -152,12 +193,13 @@ struct venc_h264_inst {
->   	unsigned int prepend_hdr;
->   	struct venc_vpu_inst vpu_inst;
->   	struct venc_h264_vsi *vsi;
-> +	struct venc_multi_core_vsi *core_vsi;
-
-You're adding a new struct member without adding it to the documentation,
-please add it there too.
-
->   	struct mtk_vcodec_ctx *ctx;
->   };
->   
->   static inline u32 h264_read_reg(struct venc_h264_inst *inst, u32 addr)
->   {
-> -	return readl(inst->hw_base + addr);
-> +	return readl(inst->hw_base[MTK_VENC_CORE_0] + addr);
->   }
->   
->   static unsigned int h264_get_profile(struct venc_h264_inst *inst,
-> @@ -228,13 +270,20 @@ static unsigned int h264_get_level(struct venc_h264_inst *inst,
->   static void h264_enc_free_work_buf(struct venc_h264_inst *inst)
->   {
->   	int i;
-> +	struct mtk_vcodec_ctx *ctx = inst->ctx;
-> +	int max_work_buf;
-
-int i, max_work_buf;
-
->   
->   	mtk_vcodec_debug_enter(inst);
->   
-> +	if (IS_VENC_MULTICORE(ctx->dev->enc_capability))
-> +		max_work_buf = VENC_MULTI_CORE_WORK_BUF_MAX;
-> +	else
-> +		max_work_buf = VENC_H264_VPU_WORK_BUF_MAX;
-> +
->   	/* Except the SKIP_FRAME buffers,
->   	 * other buffers need to be freed by AP.
->   	 */
-> -	for (i = 0; i < VENC_H264_VPU_WORK_BUF_MAX; i++) {
-> +	for (i = 0; i < max_work_buf; i++) {
->   		if (i != VENC_H264_VPU_WORK_BUF_SKIP_FRAME)
->   			mtk_vcodec_mem_free(inst->ctx, &inst->work_bufs[i]);
->   	}
-> @@ -248,11 +297,21 @@ static int h264_enc_alloc_work_buf(struct venc_h264_inst *inst)
->   {
->   	int i;
->   	int ret = 0;
-> -	struct venc_h264_vpu_buf *wb = inst->vsi->work_bufs;
-> +	struct mtk_vcodec_ctx *ctx = inst->ctx;
-> +	struct venc_h264_vpu_buf *wb;
-> +	int max_work_buf;
-
-While at it, can you please fix the order of these declarations?
-
-	struct mtk_vcodec_ctx *ctx = inst->ctx;
-	struct venc_h264_vpu_buf *wb;
-	int i, max_work_buf;
-	int ret = 0;
-
->   
->   	mtk_vcodec_debug_enter(inst);
->   
-> -	for (i = 0; i < VENC_H264_VPU_WORK_BUF_MAX; i++) {
-> +	if (IS_VENC_MULTICORE(ctx->dev->enc_capability)) {
-> +		wb = inst->core_vsi->work_bufs;
-> +		max_work_buf = VENC_MULTI_CORE_WORK_BUF_MAX;
-> +	} else {
-> +		wb = inst->vsi->work_bufs;
-> +		max_work_buf = VENC_H264_VPU_WORK_BUF_MAX;
-> +	}
-> +
-> +	for (i = 0; i < max_work_buf; i++) {
->   		/*
->   		 * This 'wb' structure is set by VPU side and shared to AP for
->   		 * buffer allocation and IO virtual addr mapping. For most of
-> @@ -358,6 +417,26 @@ static int h264_frame_type(struct venc_h264_inst *inst)
->   		return VENC_H264_P_FRM;  /* Note: B frames are not supported */
->   	}
->   }
-> +
-> +static int h264_core_frame_type(struct venc_h264_inst *inst)
-> +{
-> +	struct venc_multi_core_vsi *vsi = inst->core_vsi;
-> +
-> +	if ((vsi->config.gop_size != 0 &&
-> +	     (inst->frm_cnt % vsi->config.gop_size) == 0) ||
-> +	    (inst->frm_cnt == 0 && vsi->config.gop_size == 0)) {
-> +		/* IDR frame */
-> +		return VENC_H264_IDR_FRM;
-
-You can get to a maximum of 100 columns and, thinking about readability...:
-
-if ((vsi->config.gop_size != 0 && (inst->frm_cnt % vsi->config.gop_size) == 0) ||
-     (inst->frm_cnt == 0 && vsi->config.gop_size == 0)) {
-
-this gets to 90 columns, so it's acceptable (and more readable).
+Changes:
 
 
-> +	} else if ((vsi->config.intra_period != 0 &&
-> +		    (inst->frm_cnt % vsi->config.intra_period) == 0) ||
-> +		   (inst->frm_cnt == 0 && vsi->config.intra_period == 0)) {
+------------------------------------------
+Started by timer
+Running as SYSTEM
+Building remotely on slave2 in workspace <https://builder.linuxtv.org/job/media-build/ws/>
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir <https://builder.linuxtv.org/job/media-build/ws/.git> # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url git://linuxtv.org/media_build.git # timeout=10
+Fetching upstream changes from git://linuxtv.org/media_build.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.30.2'
+ > git fetch --tags --force --progress -- git://linuxtv.org/media_build.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+Checking out Revision 0fe857b86addf382f6fd383948bd7736a3201403 (refs/remotes/origin/master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 0fe857b86addf382f6fd383948bd7736a3201403 # timeout=10
+Commit message: "versions.txt: IMON builds for 4.11 and up only"
+ > git rev-list --no-walk 0fe857b86addf382f6fd383948bd7736a3201403 # timeout=10
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse 0fe857b86addf382f6fd383948bd7736a3201403^{commit} # timeout=10
+The recommended git tool is: NONE
+No credentials specified
+[GitCheckoutListener] Recording commits of 'git git://linuxtv.org/media_build.git'
+[GitCheckoutListener] Found previous build 'media-build #3938' that contains recorded Git commits
+[GitCheckoutListener] -> Starting recording of new commits since '0fe857b'
+[GitCheckoutListener] -> Using head commit '0fe857b' as starting point
+[GitCheckoutListener] -> Git commit decorator could not be created for SCM 'hudson.plugins.git.GitSCM@72ac2460'
+[GitCheckoutListener] -> No new commits found
+[media-build] $ /bin/sh -xe /tmp/jenkins8667008299357501198.sh
++ make distclean
+make -C <https://builder.linuxtv.org/job/media-build/ws/v4l> distclean
+make[1]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+rm -f *~ *.o *.ko .*.o.cmd .*.ko.cmd *.mod.c av7110_firm.h fdump \
+	config-compat.h Module.symvers Module.markers modules.order \
+	*.unsigned .*.ko.unsigned.cmd
+rm -f .version .*.o.flags .*.o.d *.mod.gcno Makefile.media \
+	Kconfig Kconfig.kern .config .config.cmd .myconfig \
+	.kconfig.dep config-mycompat.h
+rm -rf .tmp_versions .tmp*.ver .tmp*.o .*.gcno .cache.mk
+rm -f scripts/lxdialog scripts/kconfig
+make[1]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
++ ./build
+Checking if the needed tools for Debian GNU/Linux 11 (bullseye) are available
+Needed package dependencies are met.
 
-..but, unfortunately, this doesn't, so we have to live with it.
+************************************************************
+* This script will download the latest tarball and build it*
+* Assuming that your kernel is compatible with the latest  *
+* drivers. If not, you'll need to add some extra backports,*
+* ./backports/<kernel> directory.                          *
+* It will also update this tree to be sure that all compat *
+* bits are there, to avoid compilation failures            *
+************************************************************
+************************************************************
+* All drivers and build system are under GPLv2 License     *
+* Firmware files are under the license terms found at:     *
+* http://www.linuxtv.org/downloads/firmware/               *
+* Please abort in the next 5 secs if you don't agree with  *
+* the license                                              *
+************************************************************
 
-> +		/* I frame */
-> +		return VENC_H264_I_FRM;
-> +	} else {
-> +		return VENC_H264_P_FRM;  /* Note: B frames are not supported */
-> +	}
-> +}
-> +
->   static int h264_encode_sps(struct venc_h264_inst *inst,
->   			   struct mtk_vcodec_mem *bs_buf,
->   			   unsigned int *bs_size)
-> @@ -440,12 +519,16 @@ static int h264_encode_frame(struct venc_h264_inst *inst,
->   	int ret = 0;
->   	unsigned int irq_status;
->   	struct venc_frame_info frame_info;
-> +	struct mtk_vcodec_ctx *ctx = inst->ctx;
->   
->   	mtk_vcodec_debug_enter(inst);
->   	mtk_vcodec_debug(inst, "frm_cnt = %d\n ", inst->frm_cnt);
->   	frame_info.frm_count = inst->frm_cnt;
->   	frame_info.skip_frm_count = inst->skip_frm_cnt;
-> -	frame_info.frm_type = h264_frame_type(inst);
-> +	if (IS_VENC_MULTICORE(ctx->dev->enc_capability))
-> +		frame_info.frm_type = h264_core_frame_type(inst);
-> +	else
-> +		frame_info.frm_type = h264_frame_type(inst);
->   	mtk_vcodec_debug(inst, "frm_count = %d,skip_frm_count =%d,frm_type=%d.\n",
->   			 frame_info.frm_count, frame_info.skip_frm_count,
->   			 frame_info.frm_type);
-> @@ -501,7 +584,7 @@ static void h264_encode_filler(struct venc_h264_inst *inst, void *buf,
->   static int h264_enc_init(struct mtk_vcodec_ctx *ctx)
->   {
->   	const bool is_ext = MTK_ENC_CTX_IS_EXT(ctx);
-> -	int ret = 0;
-> +	int ret, i;
+Not aborted. It means that the licence was agreed. Proceeding...
 
-Can you also move this after `inst` please?
+****************************
+Updating the building system
+****************************
+hint: Pulling without specifying how to reconcile divergent branches is
+hint: discouraged. You can squelch this message by running one of the following
+hint: commands sometime before your next pull:
+hint: 
+hint:   git config pull.rebase false  # merge (the default strategy)
+hint:   git config pull.rebase true   # rebase
+hint:   git config pull.ff only       # fast-forward only
+hint: 
+hint: You can replace "git config" with "git config --global" to set a default
+hint: preference for all repositories. You can also pass --rebase, --no-rebase,
+hint: or --ff-only on the command line to override the configured default per
+hint: invocation.
+From git://linuxtv.org/media_build
+ * branch                      master     -> FETCH_HEAD
+Already up to date.
+make: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+wget http://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5 -O linux-media.tar.bz2.md5.tmp
+--2022-06-24 09:19:09--  http://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5
+Resolving linuxtv.org (linuxtv.org)... 130.149.80.248
+Connecting to linuxtv.org (linuxtv.org)|130.149.80.248|:80... connected.
+HTTP request sent, awaiting response... 301 Moved Permanently
+Location: https://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5 [following]
+--2022-06-24 09:19:09--  https://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5
+Connecting to linuxtv.org (linuxtv.org)|130.149.80.248|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 105 [application/x-bzip2]
+Saving to: ‘linux-media.tar.bz2.md5.tmp’
 
->   	struct venc_h264_inst *inst;
->   
+     0K                                                       100% 40.3M=0s
 
-Cheers,
-Angelo
+2022-06-24 09:19:10 (40.3 MB/s) - ‘linux-media.tar.bz2.md5.tmp’ saved [105/105]
+
+make: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+make: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+tar xfj linux-media.tar.bz2
+rm -f .patches_applied .linked_dir .git_log.md5
+make: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+**********************************************************
+* Downloading firmwares from linuxtv.org.                *
+**********************************************************
+firmware/dvb-usb-vp702x-01.fw
+firmware/dvb-usb-vp7045-01.fw
+firmware/dvb-fe-bcm3510-01.fw
+firmware/as102_data2_st.hex
+firmware/dvb-usb-terratec-h7-drxk.fw
+firmware/isdbt_nova_12mhz.inp
+firmware/Boot.S
+firmware/dvb_nova_12mhz_b0.inp
+firmware/dvb-fe-xc4000-1.4.1.fw
+firmware/sms1xxx-hcw-55xxx-isdbt-02.fw
+firmware/sms1xxx-nova-a-dvbt-01.fw
+firmware/dvb-usb-avertv-a800-02.fw
+firmware/cmmb_venice_12mhz.inp
+firmware/dvb-fe-xc5000c-4.1.30.7.fw
+firmware/v4l-cx23418-cpu.fw
+firmware/v4l-cx23885-enc-broken.fw
+firmware/dvb-fe-drxj-mc-vsb-1.0.8.fw
+firmware/dvb_nova_12mhz.inp
+firmware/dvb-usb-dib0700-1.20.fw
+firmware/tdmb_nova_12mhz.inp
+firmware/as102_data1_st.hex
+firmware/dvb-fe-or51132-vsb.fw
+firmware/dvb-usb-it9135-02.fw
+firmware/v4l-cx23418-apu.fw
+firmware/dvb-ttpci-01.fw-261f
+firmware/v4l-cx23418-dig.fw
+firmware/dvb-ttpci-01.fw-261c
+firmware/dvb-usb-bluebird-01.fw
+firmware/dvb-fe-or51211.fw
+firmware/dvb-fe-or51132-qam.fw
+firmware/sms1xxx-stellar-dvbt-01.fw
+firmware/dvb-usb-dibusb-5.0.0.11.fw
+firmware/dvb-fe-drxj-mc-vsb-qam-1.0.8.fw
+firmware/dvb-usb-terratec-h5-drxk.fw
+firmware/dvb-usb-wt220u-02.fw
+firmware/v4l-cx23885-enc.fw
+firmware/dvb-ttpci-01.fw-2622
+firmware/dvb-usb-wt220u-01.fw
+firmware/v4l-cx25840.fw
+firmware/dvb-fe-drxj-mc-1.0.8.fw
+firmware/v4l-cx231xx-avcore-01.fw
+firmware/dvb-usb-dtt200u-01.fw
+firmware/dvb-usb-dibusb-6.0.0.8.fw
+firmware/sms1xxx-nova-b-dvbt-01.fw
+firmware/dvb-fe-xc5000-1.6.114.fw
+firmware/cmmb_vega_12mhz.inp
+firmware/dvb-usb-it9135-01.fw
+firmware/isdbt_nova_12mhz_b0.inp
+firmware/dvb-ttpci-01.fw-261a
+firmware/dvb-ttpci-01.fw-261b
+firmware/dvb-ttpci-01.fw-261d
+firmware/README
+firmware/isdbt_rio.inp
+firmware/dvb-usb-umt-010-02.fw
+firmware/sms1xxx-hcw-55xxx-dvbt-02.fw
+firmware/dvb-usb-terratec-h7-az6007.fw
+firmware/v4l-cx23885-avcore-01.fw
+******************
+* Start building *
+******************
+make -C <https://builder.linuxtv.org/job/media-build/ws/v4l> allyesconfig
+make[1]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+No version yet, using 5.10.0-14-amd64
+make[2]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+Applying patches for kernel 5.10.0-14-amd64
+patch -s -f -N -p1 -i ../backports/api_version.patch
+patch -s -f -N -p1 -i ../backports/pr_fmt.patch
+1 out of 1 hunk FAILED
+1 out of 1 hunk FAILED
+make[2]: *** [Makefile:132: apply_patches] Error 1
+make[2]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+make[1]: *** [Makefile:366: allyesconfig] Error 2
+make[1]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+make: *** [Makefile:26: allyesconfig] Error 2
+can't select all drivers at ./build line 531
+Build step 'Execute shell' marked build as failure
