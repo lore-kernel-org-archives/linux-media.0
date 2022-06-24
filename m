@@ -2,49 +2,49 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13B33C433EF
-	for <linux-media@archiver.kernel.org>; Fri, 24 Jun 2022 23:03:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 504CEC43334
+	for <linux-media@archiver.kernel.org>; Fri, 24 Jun 2022 23:03:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231725AbiFXXDj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 24 Jun 2022 19:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37654 "EHLO
+        id S231708AbiFXXDk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 24 Jun 2022 19:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbiFXXDg (ORCPT
+        with ESMTP id S231713AbiFXXDi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 24 Jun 2022 19:03:36 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52AA187D6A
-        for <linux-media@vger.kernel.org>; Fri, 24 Jun 2022 16:03:35 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id fi2so7505441ejb.9
-        for <linux-media@vger.kernel.org>; Fri, 24 Jun 2022 16:03:35 -0700 (PDT)
+        Fri, 24 Jun 2022 19:03:38 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC580828B4
+        for <linux-media@vger.kernel.org>; Fri, 24 Jun 2022 16:03:37 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id z11so5388452edp.9
+        for <linux-media@vger.kernel.org>; Fri, 24 Jun 2022 16:03:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=amarulasolutions.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=AtZ/cIs6lq2eirM771Yk+JBARQCD5B0BoigyCmO2Az8=;
-        b=Nslflgx+vC6wlDa38RA+REXLnTqEX5+bu6g9ShxBqsc+cFFvdjQ9T4GPzoyet4MDoJ
-         vjxmrnleCvPcD1wlhC/HxPb9qrINaBBrNR8jh7djyIGY9uZVrSApbuKks43rlsfdrdqp
-         sw0CY8OILmEVZ6L+S0OwjZIuZKWnioNgA/3QU=
+        bh=oj4upZHCp3jgvvltD1qbGy+vaQmuJfrulVaI6ymBNWA=;
+        b=CANYcJDLEMAvkkSJzGjJ5i4Or7H+i4cAqYsHgubfePpnNilvBBbUtSa/bvKEpt7G0s
+         6ui13IbdkntInhPQDYm5nPPg1XkjBhHGw+vzEas13LOfaGe/IupyU2jV1gII3TtWJbMo
+         X1C6hdT+Itfr2MXQDsIC18VwNaDK4MNiE97G8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=AtZ/cIs6lq2eirM771Yk+JBARQCD5B0BoigyCmO2Az8=;
-        b=mCKxIgM57CjbdPjcXoF9Qc1U3TttppboOaK7UEJeQtGD0SIm1hHgNermY5X+DmCOvQ
-         Wjc1dEeW0q+GxiqEKCGp06Lnp809TGUMXb6DnF1+LhxjmMjZd5sVxApjzCNWLC7eIvqd
-         JjPGboK+Y23+s2LlajfNXPHSX7jtp/oD6sFdJAp0uctJl2zwuZKAU51aRxLr9QHmr4qL
-         e6Tm5cRTt+uxVwqsnce31NDKWj5XlCtegCWTEZP6WDyhr7tsNwxX6fZ7XYLWhVQPvvbS
-         LPt2b1xI225mr97It/4Xl8nScPbEvUJOoCq7fYuQawliYDcg9BjoaX/qjDDsjILxpZn9
-         f+OA==
-X-Gm-Message-State: AJIora+Rh7JEwYRQ9VWuWz+3m4Eo3hGu0TpoKJzIIL82TP3SoHwnY0FS
-        gtcdqZf60+ez9P2qBbvRqFdktg==
-X-Google-Smtp-Source: AGRyM1tlrG2DIrP2a8KAibUba590k2twf2MsHXy9VNHXYbTtgBZ6tdw82kShPk057cNTiqdMRQOIVQ==
-X-Received: by 2002:a17:907:948f:b0:722:e90c:6bc9 with SMTP id dm15-20020a170907948f00b00722e90c6bc9mr1371123ejc.180.1656111813900;
-        Fri, 24 Jun 2022 16:03:33 -0700 (PDT)
+        bh=oj4upZHCp3jgvvltD1qbGy+vaQmuJfrulVaI6ymBNWA=;
+        b=OtMMFs+vOn70i0RayfFTx2Z8gccJNH92dXwXFjIKQNWWEVcD6TOvPms12Gmc3vEi1O
+         EvSe76rRYCG+kv9I6BUw/QHlyjdK3bt5CyqBU9Y4OGfDYnC9mH0NHMA68NX3w48hgw2C
+         /NFKQ4y9GbfnI9Y9FDpha9NWmgTNkPrtZSG8HDDn3qI8vyr8+7W5nsZEQ0fB5jRXZUwu
+         /T0bLQFyl1YVQT0dVY5Ma+aWPWlY6dpXQgAXSX8b9x7ZDsvmBYlVluFfVKPobxOeZGmg
+         kSrDMlqWVgfdwDXQzzHGIEq+zSHL3UlwTZLunzJii9XzGXJTU3wXGnQeGEkFpPIMq6zy
+         1kWg==
+X-Gm-Message-State: AJIora8SK4O8jD9LvJ0+tfWqvNDH0Ll5q4b2Bu4auJ1rXRzhE1nmUgVp
+        ZlBVea3TuhJL61JnqUWdfZc6ow==
+X-Google-Smtp-Source: AGRyM1sp3U0cy5ITjeNoalU6rxPTZugvJj4o7nifc+gaGqrY9rfIZ15IHJh/Mx8hLFdGHpoxS7tDfA==
+X-Received: by 2002:a05:6402:2402:b0:435:3418:61b5 with SMTP id t2-20020a056402240200b00435341861b5mr1770090eda.82.1656111816540;
+        Fri, 24 Jun 2022 16:03:36 -0700 (PDT)
 Received: from tom-ThinkPad-T14s-Gen-2i.station (net-188-217-58-216.cust.vodafonedsl.it. [188.217.58.216])
-        by smtp.gmail.com with ESMTPSA id w1-20020aa7da41000000b004356a647d08sm2880291eds.94.2022.06.24.16.03.33
+        by smtp.gmail.com with ESMTPSA id w1-20020aa7da41000000b004356a647d08sm2880291eds.94.2022.06.24.16.03.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 16:03:33 -0700 (PDT)
+        Fri, 24 Jun 2022 16:03:36 -0700 (PDT)
 From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
 Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
         quentin.schulz@theobroma-systems.com,
@@ -52,9 +52,9 @@ Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
         Daniel Scally <djrscally@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/7] media: ov5693: move hw cfg functions into ov5693_check_hwcfg
-Date:   Sat, 25 Jun 2022 01:03:04 +0200
-Message-Id: <20220624230307.3066530-5-tommaso.merciai@amarulasolutions.com>
+Subject: [PATCH 6/7] media: ov5693: add ov5693_of_match, dts support
+Date:   Sat, 25 Jun 2022 01:03:06 +0200
+Message-Id: <20220624230307.3066530-7-tommaso.merciai@amarulasolutions.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220624230307.3066530-1-tommaso.merciai@amarulasolutions.com>
 References: <20220624230307.3066530-1-tommaso.merciai@amarulasolutions.com>
@@ -65,92 +65,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Move hw configuration functions into ov5693_check_hwcfg. This is done to
-separe the code that handle the hw cfg from probe in a clean way
+Add ov5693_of_match. Device tree support
 
 Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
 ---
- drivers/media/i2c/ov5693.c | 53 +++++++++++++++++++++++---------------
- 1 file changed, 32 insertions(+), 21 deletions(-)
+ drivers/media/i2c/ov5693.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/drivers/media/i2c/ov5693.c b/drivers/media/i2c/ov5693.c
-index d2adc5513a21..d5a934ace597 100644
+index 273caef467fe..0854226dc140 100644
 --- a/drivers/media/i2c/ov5693.c
 +++ b/drivers/media/i2c/ov5693.c
-@@ -1348,6 +1348,38 @@ static int ov5693_check_hwcfg(struct ov5693_device *ov5693)
- 	struct fwnode_handle *endpoint;
- 	unsigned int i;
- 	int ret;
-+	u32 xvclk_rate;
-+
-+	ov5693->xvclk = devm_clk_get(ov5693->dev, "xvclk");
-+	if (IS_ERR(ov5693->xvclk))
-+		return dev_err_probe(ov5693->dev, PTR_ERR(ov5693->xvclk),
-+				     "failed to get xvclk: %ld\n",
-+				     PTR_ERR(ov5693->xvclk));
-+
-+	if (ov5693->xvclk) {
-+		xvclk_rate = clk_get_rate(ov5693->xvclk);
-+	} else {
-+		ret = fwnode_property_read_u32(fwnode, "clock-frequency",
-+					       &xvclk_rate);
-+
-+		if (ret) {
-+			dev_err(ov5693->dev, "can't get clock frequency");
-+			return ret;
-+		}
-+	}
-+
-+	if (xvclk_rate != OV5693_XVCLK_FREQ)
-+		dev_warn(ov5693->dev, "Found clk freq %u, expected %u\n",
-+			 xvclk_rate, OV5693_XVCLK_FREQ);
-+
-+	ret = ov5693_configure_gpios(ov5693);
-+	if (ret)
-+		return ret;
-+
-+	ret = ov5693_get_regulators(ov5693);
-+	if (ret)
-+		return dev_err_probe(ov5693->dev, ret,
-+				     "Error fetching regulators\n");
+@@ -1532,10 +1532,17 @@ static const struct acpi_device_id ov5693_acpi_match[] = {
+ };
+ MODULE_DEVICE_TABLE(acpi, ov5693_acpi_match);
  
- 	endpoint = fwnode_graph_get_next_endpoint(fwnode, NULL);
- 	if (!endpoint)
-@@ -1390,7 +1422,6 @@ static int ov5693_check_hwcfg(struct ov5693_device *ov5693)
- static int ov5693_probe(struct i2c_client *client)
- {
- 	struct ov5693_device *ov5693;
--	u32 xvclk_rate;
- 	int ret = 0;
- 
- 	ov5693 = devm_kzalloc(&client->dev, sizeof(*ov5693), GFP_KERNEL);
-@@ -1408,26 +1439,6 @@ static int ov5693_probe(struct i2c_client *client)
- 
- 	v4l2_i2c_subdev_init(&ov5693->sd, client, &ov5693_ops);
- 
--	ov5693->xvclk = devm_clk_get(&client->dev, "xvclk");
--	if (IS_ERR(ov5693->xvclk)) {
--		dev_err(&client->dev, "Error getting clock\n");
--		return PTR_ERR(ov5693->xvclk);
--	}
--
--	xvclk_rate = clk_get_rate(ov5693->xvclk);
--	if (xvclk_rate != OV5693_XVCLK_FREQ)
--		dev_warn(&client->dev, "Found clk freq %u, expected %u\n",
--			 xvclk_rate, OV5693_XVCLK_FREQ);
--
--	ret = ov5693_configure_gpios(ov5693);
--	if (ret)
--		return ret;
--
--	ret = ov5693_get_regulators(ov5693);
--	if (ret)
--		return dev_err_probe(&client->dev, ret,
--				     "Error fetching regulators\n");
--
- 	ov5693->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
- 	ov5693->pad.flags = MEDIA_PAD_FL_SOURCE;
- 	ov5693->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
++static const struct of_device_id ov5693_of_match[] = {
++	{ .compatible = "ovti,ov5693", },
++	{ /* sentinel */ },
++};
++MODULE_DEVICE_TABLE(of, ov5693_of_match);
++
+ static struct i2c_driver ov5693_driver = {
+ 	.driver = {
+ 		.name = "ov5693",
+ 		.acpi_match_table = ov5693_acpi_match,
++		.of_match_table = ov5693_of_match,
+ 		.pm = &ov5693_pm_ops,
+ 	},
+ 	.probe_new = ov5693_probe,
 -- 
 2.25.1
 
