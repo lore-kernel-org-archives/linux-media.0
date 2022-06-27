@@ -2,153 +2,264 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89FF8C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 27 Jun 2022 01:31:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12F4DC433EF
+	for <linux-media@archiver.kernel.org>; Mon, 27 Jun 2022 02:55:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbiF0BbD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Jun 2022 21:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59030 "EHLO
+        id S231934AbiF0Czw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Jun 2022 22:55:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbiF0BbC (ORCPT
+        with ESMTP id S231343AbiF0Czv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 Jun 2022 21:31:02 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639032673
-        for <linux-media@vger.kernel.org>; Sun, 26 Jun 2022 18:31:01 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-3178acf2a92so71649187b3.6
-        for <linux-media@vger.kernel.org>; Sun, 26 Jun 2022 18:31:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=I7VJ+Ef59I/S/1ra/0+o/r4IfdPzo+3MZUOqiUm6eCw=;
-        b=KHzomc0ujei0qoWuvQDE4WDn1VSBJcV2TY30q74+tXbH8Y0qWMU3ndk/P0Jhso9jf1
-         /uqtc6XSjfH7d8Vl+rw1i/3lRozIWsLQGYTdOtmaXzOmHuICEuLGAkoj+wrCLrhTmBCn
-         QO5H2BeJla2BZoJU3DxhBy0wPIc9uN9ltC1ttnQyrmmZRBMeYCg81NbR4zUPTamgHuvO
-         4WY0Aoq+gDqa1RzCaXjxra8KkozErRQH6SXTG9sFyDRWt7hsEjLBUpzslL0jI75mHrgl
-         6100Aa0ZRBsOxHW9qMZAv7JQnTWUClyMa4iyyiLnLgpDQ3uCYdTy3+xCIlTcczTlL9Wv
-         tkWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=I7VJ+Ef59I/S/1ra/0+o/r4IfdPzo+3MZUOqiUm6eCw=;
-        b=mzp2w1ZGbhOkwscJRqD3BuGspde3yglX1lCOWhf4ZyX/qHCcw89Bq4k0e1hv6RR9MM
-         FX0AM8S+i0KpiaLrwufWSApk+gfTYhUbuCwGl8pl927PpBJcpXSW1ePbAJtKTmKtXI2B
-         wf9X/lMtrY9X8Uz9V48dPWMOqNN5OyiXzavb8B0eRy1FYhMw/Hlw0iHoqc3H04sALm2w
-         CVmKYZJZs+OEwjs4gHQhnvcCRYWe+wWJSS0ZA8wBvm5kdFpnouVi4GOpSe1XvyaKnV7A
-         aUbe/60e3inWi8jrP4LpKm73i36T0EFc34DW5/I6qdZnnz+gPUmEGJiMA0EXfdZgxNYX
-         gITQ==
-X-Gm-Message-State: AJIora8ZHZUNc3GpVeRi+d2N8F8hqnl6TAw3M50/T+4TQDV5dV7Igo00
-        VfPjvXUtyaL7N4gr8279jH0DuDKVaqKSJNdWh5XlDA==
-X-Google-Smtp-Source: AGRyM1uf+37LwHywtWpq4gumsTdSxtZhth7l6SODU/V8Jb06OsmhrxAq34HaGFqc2VGD0bOIhqIzxOHujHNIZPpQ3Zc=
-X-Received: by 2002:a05:690c:90:b0:2f1:9b7a:ceec with SMTP id
- be16-20020a05690c009000b002f19b7aceecmr12358673ywb.308.1656293460409; Sun, 26
- Jun 2022 18:31:00 -0700 (PDT)
+        Sun, 26 Jun 2022 22:55:51 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2119C3894;
+        Sun, 26 Jun 2022 19:55:49 -0700 (PDT)
+X-UUID: 818064a749e3490281c83869fc72fefb-20220627
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:1d70141f-114d-4b02-8be4-c7410f032bbc,OB:0,LO
+        B:0,IP:0,URL:25,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:20
+X-CID-META: VersionHash:b14ad71,CLOUDID:37da9ed8-850a-491d-a127-60d9309b2b3e,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 818064a749e3490281c83869fc72fefb-20220627
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <irui.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 2073135488; Mon, 27 Jun 2022 10:55:46 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 27 Jun 2022 10:55:45 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 27 Jun 2022 10:55:45 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 27 Jun 2022 10:55:43 +0800
+From:   Irui Wang <irui.wang@mediatek.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <nicolas.dufresne@collabora.com>, <wenst@chromium.org>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
+        <maoguang.meng@mediatek.com>, kyrie wu <kyrie.wu@mediatek.com>,
+        <srv_heupstream@mediatek.com>
+Subject: [V4,1/8] dt-bindings: mediatek: Add mediatek,mt8195-jpgdec compatible
+Date:   Mon, 27 Jun 2022 10:55:33 +0800
+Message-ID: <20220627025540.8901-2-irui.wang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220627025540.8901-1-irui.wang@mediatek.com>
+References: <20220627025540.8901-1-irui.wang@mediatek.com>
 MIME-Version: 1.0
-References: <20220617015745.3950197-1-yunkec@google.com> <20220617015745.3950197-2-yunkec@google.com>
- <177345ff-f601-e440-31e0-2c967736af6b@linuxfoundation.org>
- <CANqU6Fed=E1ogvR1ccwJA9bR_9VxU4QPd6PjvBAyRrMeQuRWfg@mail.gmail.com> <610bc1b9-c013-46d7-4446-5a5eab4c2569@linuxfoundation.org>
-In-Reply-To: <610bc1b9-c013-46d7-4446-5a5eab4c2569@linuxfoundation.org>
-From:   Yunke Cao <yunkec@google.com>
-Date:   Mon, 27 Jun 2022 10:30:49 +0900
-Message-ID: <CANqU6Fcspk-CWi3xYfUBg80vUWb1ZhJhr8G6YF9Nna6nrq_17Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] media: vimc: add ancillary lens
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Tomasz Figa <tfiga@chromium.org>, linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Shuah,
+From: kyrie wu <kyrie.wu@mediatek.com>
 
-Thanks for the pointers.
+Add mediatek,mt8195-jpgdec compatible to binding document.
 
-On Wed, Jun 22, 2022 at 12:57 AM Shuah Khan <skhan@linuxfoundation.org> wro=
-te:
->
-> On 6/19/22 7:57 PM, Yunke Cao wrote:
-> > Hi Shuah,
-> >
-> > Thanks for the review.
-> >
-> > On Sat, Jun 18, 2022 at 5:01 AM Shuah Khan <skhan@linuxfoundation.org> =
-wrote:
-> >>
-> >> On 6/16/22 7:57 PM, Yunke Cao wrote:
-> >>> Add a basic version of vimc lens.
-> >>> The lens supports V4L2_CID_FOCUS_ABSOLUTE control.
-> >>> Link the lens with vimc sensors using media-controller
-> >>> ancillary links.
-> >>>
-> >>
-> >> Commit log lines are usually ~75 charracters long. Make it easier
-> >> to read.
-> > That's good to know. Thanks!
-> > Should I send v3 and trim the commit log?
-> > I'm thinking something like this:
-> >
-> > The lens supports FOCUS_ABSOLUTE control.
-> > Link the lens with sensors using ancillary links.
-> >
->
-> Why is this necessary? How did you test this change? How could
-> one use this feature?
->
+Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
+---
+ .../media/mediatek,mt8195-jpegdec.yaml        | 176 ++++++++++++++++++
+ 1 file changed, 176 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
 
-Add lens to vimc driver and link them with sensors using ancillary links.
-Provides an example of ancillary link usage.The lens supports
-FOCUS_ABSOLUTE control.
+diff --git a/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml b/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
+new file mode 100644
+index 000000000000..8a255e8e2e09
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
+@@ -0,0 +1,176 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/mediatek,mt8195-jpegdec.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: MediaTek JPEG Encoder Device Tree Bindings
++
++maintainers:
++  - kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>
++
++description: |-
++  MediaTek JPEG Decoder is the JPEG decode hardware present in MediaTek SoCs
++
++properties:
++  compatible:
++    items:
++      - const: mediatek,mt8195-jpgdec
++
++  mediatek,jpegdec-multi-core:
++    type: boolean
++    description: |
++      Indicates whether the jpeg encoder has multiple cores or not.
++
++  power-domains:
++    maxItems: 1
++
++  iommus:
++    maxItems: 6
++    description: |
++      Points to the respective IOMMU block with master port as argument, see
++      Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for details.
++      Ports are according to the HW.
++
++  "#address-cells":
++    const: 2
++
++  "#size-cells":
++    const: 2
++
++  ranges: true
++
++# Required child node:
++patternProperties:
++  "^jpgdec@[0-9a-f]+$":
++    type: object
++    description: |
++      The jpeg decoder hardware device node which should be added as subnodes to
++      the main jpeg node.
++
++    properties:
++      compatible:
++        const: mediatek,mt8195-jpgdec-hw
++
++      reg:
++        maxItems: 1
++
++      hw_id:
++        description: |
++          MT8195 decoding hardware id value. MT8195 has three decoding hardwares,
++          which is represented by this parameter.
++
++      iommus:
++        minItems: 1
++        maxItems: 32
++        description: |
++          List of the hardware port in respective IOMMU block for current Socs.
++          Refer to bindings/iommu/mediatek,iommu.yaml.
++
++      interrupts:
++        maxItems: 1
++
++      clocks:
++        maxItems: 1
++
++      clock-names:
++        items:
++          - const: jpgdec
++
++      power-domains:
++        maxItems: 1
++
++    required:
++      - compatible
++      - reg
++      - hw_id
++      - iommus
++      - interrupts
++      - clocks
++      - clock-names
++      - power-domains
++
++    additionalProperties: false
++
++required:
++  - compatible
++  - power-domains
++  - iommus
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/memory/mt8195-memory-port.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/clock/mt8195-clk.h>
++    #include <dt-bindings/power/mt8195-power.h>
++
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        jpgdec_master {
++                compatible = "mediatek,mt8195-jpgdec";
++                mediatek,jpegdec-multi-core;
++                power-domains = <&spm MT8195_POWER_DOMAIN_VDEC1>;
++                iommus = <&iommu_vpp M4U_PORT_L19_JPGDEC_WDMA0>,
++                     <&iommu_vpp M4U_PORT_L19_JPGDEC_BSDMA0>,
++                     <&iommu_vpp M4U_PORT_L19_JPGDEC_WDMA1>,
++                     <&iommu_vpp M4U_PORT_L19_JPGDEC_BSDMA1>,
++                     <&iommu_vpp M4U_PORT_L19_JPGDEC_BUFF_OFFSET1>,
++                     <&iommu_vpp M4U_PORT_L19_JPGDEC_BUFF_OFFSET0>;
++                #address-cells = <2>;
++                #size-cells = <2>;
++                ranges;
++
++                jpgdec@1a040000 {
++                    compatible = "mediatek,mt8195-jpgdec-hw";
++                    reg = <0 0x1a040000 0 0x10000>;/* JPGDEC_C0 */
++                    hw_id = <0>;
++                    iommus = <&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA0>,
++                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BSDMA0>,
++                        <&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA1>,
++                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BSDMA1>,
++                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BUFF_OFFSET1>,
++                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BUFF_OFFSET0>;
++                    interrupts = <GIC_SPI 343 IRQ_TYPE_LEVEL_HIGH 0>;
++                    clocks = <&vencsys CLK_VENC_JPGDEC>;
++                    clock-names = "jpgdec";
++                    power-domains = <&spm MT8195_POWER_DOMAIN_VDEC0>;
++                };
++
++                jpgdec@1a050000 {
++                    compatible = "mediatek,mt8195-jpgdec-hw";
++                    reg = <0 0x1a050000 0 0x10000>;/* JPGDEC_C1 */
++                    hw_id = <1>;
++                    iommus = <&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA0>,
++                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BSDMA0>,
++                        <&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA1>,
++                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BSDMA1>,
++                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BUFF_OFFSET1>,
++                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BUFF_OFFSET0>;
++                    interrupts = <GIC_SPI 344 IRQ_TYPE_LEVEL_HIGH 0>;
++                    clocks = <&vencsys CLK_VENC_JPGDEC_C1>;
++                    clock-names = "jpgdec";
++                    power-domains = <&spm MT8195_POWER_DOMAIN_VDEC1>;
++                };
++
++                jpgdec@1b040000 {
++                    compatible = "mediatek,mt8195-jpgdec-hw";
++                    reg = <0 0x1b040000 0 0x10000>;/* JPGDEC_C2 */
++                    hw_id = <2>;
++                    iommus = <&iommu_vpp M4U_PORT_L20_JPGDEC_WDMA0>,
++                        <&iommu_vpp M4U_PORT_L20_JPGDEC_BSDMA0>,
++                        <&iommu_vpp M4U_PORT_L20_JPGDEC_WDMA1>,
++                        <&iommu_vpp M4U_PORT_L20_JPGDEC_BSDMA1>,
++                        <&iommu_vpp M4U_PORT_L20_JPGDEC_BUFF_OFFSET1>,
++                        <&iommu_vpp M4U_PORT_L20_JPGDEC_BUFF_OFFSET0>;
++                    interrupts = <GIC_SPI 348 IRQ_TYPE_LEVEL_HIGH 0>;
++                    clocks = <&vencsys_core1 CLK_VENC_CORE1_JPGDEC>;
++                    clock-names = "jpgdec";
++                    power-domains = <&spm MT8195_POWER_DOMAIN_VDEC2>;
++                };
++        };
++    };
+-- 
+2.18.0
 
-Test example: With default vimc topology
-> media-ctl -p
-Media controller API version 5.18.0
-=E2=80=A6
-- entity 28: Lens A (0 pad, 0 link)
-             type V4L2 subdev subtype Lens flags 0
-             device node name /dev/v4l-subdev6
-- entity 29: Lens B (0 pad, 0 link)
-             type V4L2 subdev subtype Lens flags 0
-             device node name /dev/v4l-subdev7
->  v4l2-ctl -d /dev/v4l-subdev7 -C focus_absolute
-focus_absolute: 0
-
-Let me know what you think. Thanks!
-
-Best,
-Yunke
-
-> >>
-> >>> This change can be used to test the recently added ancillary
-> >>> links.
-> >>>
-> >>
-> >> Care to add instructions on how one would test ancillary with
-> >> this feature?
-> >
-> > The lens shows up in the media topology. I documented it in 2/2.
-> > Not sure what else is necessary here.
-> >
->
-> Why is this necessary? How did you test this change? How could
-> one use this feature?
->
-> Take a look at the some of the other commit messages e.g:
-> 4a2e0a806cb58a4d3106add079488e0b56a221b6
-> 5f3fb5c54d67670fa6743d2434a5bd43a97c01de
->
-> This one is a good example of what would a commit log adding a
-> new feature should include.
->
-> commit 9b4a9b31b9aeef262b4fa211f2083c30c4391df7
-> Author: Pedro Terra <pedro@terraco.de>
-> Date:   Tue Aug 31 19:48:22 2021 +0200
->
->      media: vimc: Enable set resolution at the scaler src pad
->
-> thanks,
-> -- Shuah
