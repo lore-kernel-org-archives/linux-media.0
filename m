@@ -2,233 +2,92 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8FA7C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jun 2022 09:19:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EB24C433EF
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jun 2022 09:47:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344124AbiF1JTU convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Jun 2022 05:19:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
+        id S1344007AbiF1JrF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Jun 2022 05:47:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243314AbiF1JTT (ORCPT
+        with ESMTP id S1344309AbiF1Jqf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Jun 2022 05:19:19 -0400
-Received: from www.linuxtv.org (www.linuxtv.org [130.149.80.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12AB31CB04
-        for <linux-media@vger.kernel.org>; Tue, 28 Jun 2022 02:19:18 -0700 (PDT)
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1o67NM-005YQj-BB; Tue, 28 Jun 2022 09:19:16 +0000
-Received: from localhost ([127.0.0.1] helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.94.2)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1o67NK-003RiO-Li; Tue, 28 Jun 2022 09:19:14 +0000
-Date:   Tue, 28 Jun 2022 09:19:13 +0000 (UTC)
-From:   Jenkins Builder Robot <jenkins@linuxtv.org>
-To:     mchehab@kernel.org, linux-media@vger.kernel.org
-Message-ID: <1560692231.0.1656407954030@builder.linuxtv.org>
-In-Reply-To: <16556011.0.1656321554708@builder.linuxtv.org>
-References: <16556011.0.1656321554708@builder.linuxtv.org>
-Subject: Build failed in Jenkins: media-build #3943
+        Tue, 28 Jun 2022 05:46:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970AC25C69;
+        Tue, 28 Jun 2022 02:46:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1191D617EF;
+        Tue, 28 Jun 2022 09:46:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 580D6C36AEB;
+        Tue, 28 Jun 2022 09:46:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656409590;
+        bh=wOl3phQK/9dc8MhyVGH3zTw/kzoObzt1n8crGoupegI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=QKNOLdAgIvkT4X0FxaygrM4yibUdjhAvTqPQ7kO0iAvmvgn5XbUyygCIqqD65Udur
+         2Yp+3vwpX2T1jnC3bnFmc4NnrFvGW1dhmdZpRY9X5u6JM16c4kRrbiwlNqfBLyb0+v
+         aDH/wA7eZkZK/MoozW1Cff+MhD6xPlpvYkpxTlP4iXHEAFPBZQKGk2bWPNYoCv2hmS
+         gsvnqrBBvgyAxpAKjkZjv///VTxm7CJmQVps6auaZ2cmSrgA3RWh5XwiO/GqswQqco
+         cBU2zfjCd8YBGkqcYtWPnq1VrSO4aZLhwAvOjW5xwOw0dPqPJ+bxUx6mVDckPmV8ZA
+         WpV1EUUkQuaUw==
+Received: from mchehab by mail.kernel.org with local (Exim 4.95)
+        (envelope-from <mchehab@kernel.org>)
+        id 1o67nf-005HFX-Tp;
+        Tue, 28 Jun 2022 10:46:27 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Marco Elver <elver@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH 14/22] kfence: fix a kernel-doc parameter
+Date:   Tue, 28 Jun 2022 10:46:18 +0100
+Message-Id: <687a2e724020d135bc7dfef0ec9010a00ecc0a3a.1656409369.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <cover.1656409369.git.mchehab@kernel.org>
+References: <cover.1656409369.git.mchehab@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
-X-Jenkins-Job: media-build
-X-Jenkins-Result: FAILURE
-Auto-submitted: auto-generated
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-See <https://builder.linuxtv.org/job/media-build/3943/display/redirect>
+The kernel-doc markup is missing the slab pointer description:
 
-Changes:
+	include/linux/kfence.h:221: warning: Function parameter or member 'slab' not described in '__kfence_obj_info'
 
+Document it.
 
-------------------------------------------
-Started by timer
-Running as SYSTEM
-Building remotely on slave2 in workspace <https://builder.linuxtv.org/job/media-build/ws/>
-The recommended git tool is: NONE
-No credentials specified
- > git rev-parse --resolve-git-dir <https://builder.linuxtv.org/job/media-build/ws/.git> # timeout=10
-Fetching changes from the remote Git repository
- > git config remote.origin.url git://linuxtv.org/media_build.git # timeout=10
-Fetching upstream changes from git://linuxtv.org/media_build.git
- > git --version # timeout=10
- > git --version # 'git version 2.30.2'
- > git fetch --tags --force --progress -- git://linuxtv.org/media_build.git +refs/heads/*:refs/remotes/origin/* # timeout=10
- > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
-Checking out Revision 0fe857b86addf382f6fd383948bd7736a3201403 (refs/remotes/origin/master)
- > git config core.sparsecheckout # timeout=10
- > git checkout -f 0fe857b86addf382f6fd383948bd7736a3201403 # timeout=10
-Commit message: "versions.txt: IMON builds for 4.11 and up only"
- > git rev-list --no-walk 0fe857b86addf382f6fd383948bd7736a3201403 # timeout=10
-The recommended git tool is: NONE
-No credentials specified
- > git rev-parse 0fe857b86addf382f6fd383948bd7736a3201403^{commit} # timeout=10
-The recommended git tool is: NONE
-No credentials specified
-[GitCheckoutListener] Recording commits of 'git git://linuxtv.org/media_build.git'
-[GitCheckoutListener] Found previous build 'media-build #3942' that contains recorded Git commits
-[GitCheckoutListener] -> Starting recording of new commits since '0fe857b'
-[GitCheckoutListener] -> Using head commit '0fe857b' as starting point
-[GitCheckoutListener] -> Git commit decorator could not be created for SCM 'hudson.plugins.git.GitSCM@611214ca'
-[GitCheckoutListener] -> No new commits found
-[media-build] $ /bin/sh -xe /tmp/jenkins7100296555636848643.sh
-+ make distclean
-make -C <https://builder.linuxtv.org/job/media-build/ws/v4l> distclean
-make[1]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
-rm -f *~ *.o *.ko .*.o.cmd .*.ko.cmd *.mod.c av7110_firm.h fdump \
-	config-compat.h Module.symvers Module.markers modules.order \
-	*.unsigned .*.ko.unsigned.cmd
-rm -f .version .*.o.flags .*.o.d *.mod.gcno Makefile.media \
-	Kconfig Kconfig.kern .config .config.cmd .myconfig \
-	.kconfig.dep config-mycompat.h
-rm -rf .tmp_versions .tmp*.ver .tmp*.o .*.gcno .cache.mk
-rm -f scripts/lxdialog scripts/kconfig
-make[1]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
-+ ./build
-Checking if the needed tools for Debian GNU/Linux 11 (bullseye) are available
-Needed package dependencies are met.
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
 
-************************************************************
-* This script will download the latest tarball and build it*
-* Assuming that your kernel is compatible with the latest  *
-* drivers. If not, you'll need to add some extra backports,*
-* ./backports/<kernel> directory.                          *
-* It will also update this tree to be sure that all compat *
-* bits are there, to avoid compilation failures            *
-************************************************************
-************************************************************
-* All drivers and build system are under GPLv2 License     *
-* Firmware files are under the license terms found at:     *
-* http://www.linuxtv.org/downloads/firmware/               *
-* Please abort in the next 5 secs if you don't agree with  *
-* the license                                              *
-************************************************************
+To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+See [PATCH 00/22] at: https://lore.kernel.org/all/cover.1656409369.git.mchehab@kernel.org/
 
-Not aborted. It means that the licence was agreed. Proceeding...
+ include/linux/kfence.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-****************************
-Updating the building system
-****************************
-hint: Pulling without specifying how to reconcile divergent branches is
-hint: discouraged. You can squelch this message by running one of the following
-hint: commands sometime before your next pull:
-hint: 
-hint:   git config pull.rebase false  # merge (the default strategy)
-hint:   git config pull.rebase true   # rebase
-hint:   git config pull.ff only       # fast-forward only
-hint: 
-hint: You can replace "git config" with "git config --global" to set a default
-hint: preference for all repositories. You can also pass --rebase, --no-rebase,
-hint: or --ff-only on the command line to override the configured default per
-hint: invocation.
-From git://linuxtv.org/media_build
- * branch                      master     -> FETCH_HEAD
-Already up to date.
-make: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
-wget http://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5 -O linux-media.tar.bz2.md5.tmp
---2022-06-28 09:19:09--  http://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5
-Resolving linuxtv.org (linuxtv.org)... 130.149.80.248
-Connecting to linuxtv.org (linuxtv.org)|130.149.80.248|:80... connected.
-HTTP request sent, awaiting response... 301 Moved Permanently
-Location: https://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5 [following]
---2022-06-28 09:19:09--  https://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5
-Connecting to linuxtv.org (linuxtv.org)|130.149.80.248|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 105 [application/x-bzip2]
-Saving to: ‘linux-media.tar.bz2.md5.tmp’
+diff --git a/include/linux/kfence.h b/include/linux/kfence.h
+index 726857a4b680..9c242f4e9fab 100644
+--- a/include/linux/kfence.h
++++ b/include/linux/kfence.h
+@@ -210,6 +210,7 @@ struct kmem_obj_info;
+  * __kfence_obj_info() - fill kmem_obj_info struct
+  * @kpp: kmem_obj_info to be filled
+  * @object: the object
++ * @slab: pointer to slab
+  *
+  * Return:
+  * * false - not a KFENCE object
+-- 
+2.36.1
 
-     0K                                                       100%  108M=0s
-
-2022-06-28 09:19:10 (108 MB/s) - ‘linux-media.tar.bz2.md5.tmp’ saved [105/105]
-
-make: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
-make: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
-tar xfj linux-media.tar.bz2
-rm -f .patches_applied .linked_dir .git_log.md5
-make: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
-**********************************************************
-* Downloading firmwares from linuxtv.org.                *
-**********************************************************
-firmware/dvb-usb-vp702x-01.fw
-firmware/dvb-usb-vp7045-01.fw
-firmware/dvb-fe-bcm3510-01.fw
-firmware/as102_data2_st.hex
-firmware/dvb-usb-terratec-h7-drxk.fw
-firmware/isdbt_nova_12mhz.inp
-firmware/Boot.S
-firmware/dvb_nova_12mhz_b0.inp
-firmware/dvb-fe-xc4000-1.4.1.fw
-firmware/sms1xxx-hcw-55xxx-isdbt-02.fw
-firmware/sms1xxx-nova-a-dvbt-01.fw
-firmware/dvb-usb-avertv-a800-02.fw
-firmware/cmmb_venice_12mhz.inp
-firmware/dvb-fe-xc5000c-4.1.30.7.fw
-firmware/v4l-cx23418-cpu.fw
-firmware/v4l-cx23885-enc-broken.fw
-firmware/dvb-fe-drxj-mc-vsb-1.0.8.fw
-firmware/dvb_nova_12mhz.inp
-firmware/dvb-usb-dib0700-1.20.fw
-firmware/tdmb_nova_12mhz.inp
-firmware/as102_data1_st.hex
-firmware/dvb-fe-or51132-vsb.fw
-firmware/dvb-usb-it9135-02.fw
-firmware/v4l-cx23418-apu.fw
-firmware/dvb-ttpci-01.fw-261f
-firmware/v4l-cx23418-dig.fw
-firmware/dvb-ttpci-01.fw-261c
-firmware/dvb-usb-bluebird-01.fw
-firmware/dvb-fe-or51211.fw
-firmware/dvb-fe-or51132-qam.fw
-firmware/sms1xxx-stellar-dvbt-01.fw
-firmware/dvb-usb-dibusb-5.0.0.11.fw
-firmware/dvb-fe-drxj-mc-vsb-qam-1.0.8.fw
-firmware/dvb-usb-terratec-h5-drxk.fw
-firmware/dvb-usb-wt220u-02.fw
-firmware/v4l-cx23885-enc.fw
-firmware/dvb-ttpci-01.fw-2622
-firmware/dvb-usb-wt220u-01.fw
-firmware/v4l-cx25840.fw
-firmware/dvb-fe-drxj-mc-1.0.8.fw
-firmware/v4l-cx231xx-avcore-01.fw
-firmware/dvb-usb-dtt200u-01.fw
-firmware/dvb-usb-dibusb-6.0.0.8.fw
-firmware/sms1xxx-nova-b-dvbt-01.fw
-firmware/dvb-fe-xc5000-1.6.114.fw
-firmware/cmmb_vega_12mhz.inp
-firmware/dvb-usb-it9135-01.fw
-firmware/isdbt_nova_12mhz_b0.inp
-firmware/dvb-ttpci-01.fw-261a
-firmware/dvb-ttpci-01.fw-261b
-firmware/dvb-ttpci-01.fw-261d
-firmware/README
-firmware/isdbt_rio.inp
-firmware/dvb-usb-umt-010-02.fw
-firmware/sms1xxx-hcw-55xxx-dvbt-02.fw
-firmware/dvb-usb-terratec-h7-az6007.fw
-firmware/v4l-cx23885-avcore-01.fw
-******************
-* Start building *
-******************
-make -C <https://builder.linuxtv.org/job/media-build/ws/v4l> allyesconfig
-make[1]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
-No version yet, using 5.10.0-14-amd64
-make[2]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
-Applying patches for kernel 5.10.0-14-amd64
-patch -s -f -N -p1 -i ../backports/api_version.patch
-patch -s -f -N -p1 -i ../backports/pr_fmt.patch
-1 out of 1 hunk FAILED
-1 out of 1 hunk FAILED
-make[2]: *** [Makefile:132: apply_patches] Error 1
-make[2]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
-make[1]: *** [Makefile:366: allyesconfig] Error 2
-make[1]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
-make: *** [Makefile:26: allyesconfig] Error 2
-can't select all drivers at ./build line 531
-Build step 'Execute shell' marked build as failure
