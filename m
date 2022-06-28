@@ -2,66 +2,138 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA880C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jun 2022 12:14:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BC12C43334
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jun 2022 12:14:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345632AbiF1MOB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1345634AbiF1MOB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 28 Jun 2022 08:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44532 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344914AbiF1MN7 (ORCPT
+        with ESMTP id S1345373AbiF1MOA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Jun 2022 08:13:59 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C2A2317D
-        for <linux-media@vger.kernel.org>; Tue, 28 Jun 2022 05:13:58 -0700 (PDT)
+        Tue, 28 Jun 2022 08:14:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16BF237CF
+        for <linux-media@vger.kernel.org>; Tue, 28 Jun 2022 05:13:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id F3707CE1FAF
-        for <linux-media@vger.kernel.org>; Tue, 28 Jun 2022 12:13:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95E0BC3411D;
-        Tue, 28 Jun 2022 12:13:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98C53B81DCF
+        for <linux-media@vger.kernel.org>; Tue, 28 Jun 2022 12:13:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC7F7C341CA;
+        Tue, 28 Jun 2022 12:13:56 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     Xavier Roumegue <xavier.roumegue@oss.nxp.com>
-Subject: [PATCH 0/3] v4l2-ctl/compliance: improve array control tests
-Date:   Tue, 28 Jun 2022 14:13:49 +0200
-Message-Id: <20220628121352.2916813-1-hverkuil-cisco@xs4all.nl>
+Cc:     Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 2/3] v4l2-compliance: check vivid pixel array control behavior
+Date:   Tue, 28 Jun 2022 14:13:51 +0200
+Message-Id: <20220628121352.2916813-3-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220628121352.2916813-1-hverkuil-cisco@xs4all.nl>
+References: <20220628121352.2916813-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The first patch adds support for dynamic array controls. The second
-patch add tests for the vivid pixel array control that changes dimensions
-when the video format changes. The last patch tests support for the vivid
-pixel array control in a request.
+Changing the input will change the format, which will also change
+the dimensions of the pixel array control, and reset the contents
+of that array to the default value. Check that this is in fact
+happening.
 
-It tests the control framework patch series posted here:
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ utils/v4l2-compliance/v4l2-compliance.h       |  1 +
+ .../v4l2-test-input-output.cpp                | 48 +++++++++++++++++++
+ 2 files changed, 49 insertions(+)
 
-https://patchwork.linuxtv.org/project/linux-media/cover/20220628120523.2915913-1-hverkuil-cisco@xs4all.nl/
-
-Regards,
-
-	Hans
-
-Hans Verkuil (3):
-  v4l2-compliance/ctl: add dynamic array support
-  v4l2-compliance: check vivid pixel array control behavior
-  v4l2-compliance: test of vivid's pixel array in requests
-
- include/linux/videodev2.h                     |   1 +
- utils/common/v4l2-info.cpp                    |   1 +
- utils/v4l2-compliance/v4l2-compliance.h       |   2 +
- utils/v4l2-compliance/v4l2-test-buffers.cpp   | 149 +++++++++++++++++-
- utils/v4l2-compliance/v4l2-test-controls.cpp  | 147 +++++++++++++++++
- .../v4l2-test-input-output.cpp                |  48 ++++++
- utils/v4l2-ctl/v4l2-ctl-common.cpp            |   7 +
- 7 files changed, 354 insertions(+), 1 deletion(-)
-
+diff --git a/utils/v4l2-compliance/v4l2-compliance.h b/utils/v4l2-compliance/v4l2-compliance.h
+index d9efe2cd..ef021ed2 100644
+--- a/utils/v4l2-compliance/v4l2-compliance.h
++++ b/utils/v4l2-compliance/v4l2-compliance.h
+@@ -89,6 +89,7 @@ enum poll_mode {
+ #define VIVID_CID_CUSTOM_BASE		(V4L2_CID_USER_BASE | 0xf000)
+ #define VIVID_CID_RO_INTEGER		(VIVID_CID_CUSTOM_BASE + 12)
+ #define VIVID_CID_U32_DYN_ARRAY		(VIVID_CID_CUSTOM_BASE + 13)
++#define VIVID_CID_U8_PIXEL_ARRAY	(VIVID_CID_CUSTOM_BASE + 14)
+ 
+ struct test_query_ext_ctrl: v4l2_query_ext_ctrl {
+ 	__u64 menu_mask;
+diff --git a/utils/v4l2-compliance/v4l2-test-input-output.cpp b/utils/v4l2-compliance/v4l2-test-input-output.cpp
+index 006e05ec..0b3be8db 100644
+--- a/utils/v4l2-compliance/v4l2-test-input-output.cpp
++++ b/utils/v4l2-compliance/v4l2-test-input-output.cpp
+@@ -448,6 +448,44 @@ static int checkInput(struct node *node, const struct v4l2_input &descr, unsigne
+ 	return 0;
+ }
+ 
++static int checkVividPixelArray(struct node *node)
++{
++	struct v4l2_query_ext_ctrl qextctrl = {
++		.id = VIVID_CID_U8_PIXEL_ARRAY
++	};
++	cv4l_fmt fmt;
++
++	fail_on_test(node->query_ext_ctrl(qextctrl));
++	fail_on_test(node->g_fmt(fmt));
++	fail_on_test(qextctrl.nr_of_dims != 2);
++	fail_on_test(qextctrl.dims[0] != fmt.g_width());
++	fail_on_test(qextctrl.dims[1] != fmt.g_height());
++	fail_on_test(qextctrl.minimum == qextctrl.default_value);
++
++	struct v4l2_ext_control ctrl = {
++		.id = VIVID_CID_U8_PIXEL_ARRAY
++	};
++	struct v4l2_ext_controls ctrls = {
++		.count = 1
++	};
++
++	ctrl.size = qextctrl.elems * qextctrl.elem_size;
++	ctrl.p_u8 = new unsigned char[ctrl.size];
++	ctrls.controls = &ctrl;
++	fail_on_test(node->g_ext_ctrls(ctrls));
++	for (unsigned i = 0; i < qextctrl.elems; i++) {
++		fail_on_test(ctrl.p_u8[i] != qextctrl.default_value);
++		ctrl.p_u8[i] = qextctrl.minimum;
++	}
++	fail_on_test(node->s_ext_ctrls(ctrls));
++	fail_on_test(node->g_ext_ctrls(ctrls));
++	for (unsigned i = 0; i < qextctrl.elems; i++) {
++		fail_on_test(ctrl.p_u8[i] != qextctrl.minimum);
++	}
++	delete [] ctrl.p_u8;
++	return 0;
++}
++
+ int testInput(struct node *node)
+ {
+ 	struct v4l2_input descr;
+@@ -479,6 +517,14 @@ int testInput(struct node *node)
+ 		return fail("VIDIOC_G_INPUT didn't fill in the input\n");
+ 	if (node->is_radio)
+ 		return fail("radio can't have input support\n");
++	if (is_vivid && cur_input == 0) {
++		// for vivid start off with a different input than the
++		// current one. This ensures that the checkVividPixelArray()
++		// call later succeeds since switching to input 0 will reset
++		// that control to the default values.
++		input = 1;
++		doioctl(node, VIDIOC_S_INPUT, &input);
++	}
+ 	for (;;) {
+ 		memset(&descr, 0xff, sizeof(descr));
+ 		descr.index = i;
+@@ -494,6 +540,8 @@ int testInput(struct node *node)
+ 			return fail("input set to %d, but becomes %d?!\n", i, input);
+ 		if (checkInput(node, descr, i))
+ 			return fail("invalid attributes for input %d\n", i);
++		if (is_vivid && node->is_video && checkVividPixelArray(node))
++			return fail("vivid pixel array control test failed\n");
+ 		node->inputs++;
+ 		i++;
+ 	}
 -- 
 2.35.1
 
