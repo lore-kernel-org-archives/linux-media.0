@@ -2,110 +2,92 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09BB5C43334
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jun 2022 20:16:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 488D5CCA47F
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jun 2022 20:21:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232360AbiF1UQb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Jun 2022 16:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58030 "EHLO
+        id S232486AbiF1UVw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Jun 2022 16:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232362AbiF1UQC (ORCPT
+        with ESMTP id S231361AbiF1UV2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Jun 2022 16:16:02 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8211539B90;
-        Tue, 28 Jun 2022 13:12:13 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9E4034A8;
-        Tue, 28 Jun 2022 22:12:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1656447130;
-        bh=1KFKpGabrPsLOZMg4bDsc1e3TNFDFyzj4rrD0GK8bsA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OzXjlrswPCXZTTzUNin7g5mBtc28rDF4mCZs8Bgiy82m4YNxEuByizuEF0RF2pbe1
-         XAONtK07FoQ5TdnqG9tpXRqTbToyliQYIksOum4H2MguzqtFFDwUcvHVLddSfiJ8aj
-         P7P/sFSA2bDxIu3PP6g9sFWB2CfopxO6baElfny4=
-Date:   Tue, 28 Jun 2022 23:11:51 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Michael Rodin <mrodin@de.adit-jv.com>,
-        Koji Matsuoka <koji.matsuoka.xm@renesas.com>,
-        Eugen Friedrich <efriedrich@de.adit-jv.com>,
-        Eugeniu Rosca <rosca.eugeniu@gmail.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: [RFC PATCH v2] media: renesas: vsp1: Add VSPD underrun detection
- & tracing
-Message-ID: <YrtghyHkWZyj8hxL@pendragon.ideasonboard.com>
-References: <1651584010-10156-1-git-send-email-erosca@de.adit-jv.com>
- <YripkuWiMOcOl8Qu@pendragon.ideasonboard.com>
- <20220628190534.GA22969@lxhi-065>
- <YrtbgUhNS8Z1pgVA@pendragon.ideasonboard.com>
- <CAMuHMdX7HzbUime4EOhtzcRV2YSA44qJRFXvu0LNtmpzgBJzRA@mail.gmail.com>
+        Tue, 28 Jun 2022 16:21:28 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754C51055A
+        for <linux-media@vger.kernel.org>; Tue, 28 Jun 2022 13:19:17 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-101dc639636so18563535fac.6
+        for <linux-media@vger.kernel.org>; Tue, 28 Jun 2022 13:19:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ffmGpu8lcBy732Yk8UHhROTWkBhCmV9KGHp9cpeZHLA=;
+        b=sdI3ZUdRAHHVE8/wQfFVoULz3rY1/eCdO+vvQ3F7p3sAbpr6rHigx3+PG9NfuiyqV2
+         E97mndzUHIqIO8lH34KVWzKQGSRnnjjcKrroTzWl4F/5ZlLeJlHABX7Lq7HMh9Kq2Nfl
+         dN66zDKhzLJpn4O9789H5y04a259o5vmpMZ9xw0xpn7DJsNqKdk+1c6a5A8QsSbhPbKT
+         JRKxC999b1rgJWCHnWRsz2IIeoYbNy0/0h/4UMMiseRKUEJHkdP91hhybRz5sbKqZJDA
+         WOuvdHizBu6OCVLVs97xPWz2YF1TTAVq8N+v9qD6cSyTVSHkofT5sIzhpGHl8EFQd0ns
+         xr9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ffmGpu8lcBy732Yk8UHhROTWkBhCmV9KGHp9cpeZHLA=;
+        b=xXRHMH3WVaVbdHrD7R1bPmBHCXk+8L0J3qxr9zAb2zp1C/dg5EsZnZSjuqv13fzkVu
+         y1G6nn3cQJEEUsV3LaxtFmxXwwCf/KHgc+2Frd9sPL6Kpx27L9sfboqXgMno7RP1fwFt
+         mYeO4Buj/wC0+9zDy4c3xYCK6z/yXSWr6H6JEucmBXo5ehA3Fpxm/3ZYPbnT6CEy7FF9
+         bSemq2u9KK+kcr+UrEGUug7pHQgI7CWicUaAolU8KUSo6w5rSs/hRK3qtUyuP/iKBU/4
+         LINmaTUNNPiUe7dJXnuJwzW5XuxKWHGplLZqU9QY2jPLkZmTxWO88ZfhE6/Iaz7zOxst
+         BAYQ==
+X-Gm-Message-State: AJIora/rYnIAIzqsQXsPfugfqCtzpnb4DzftR7gwB/jUN4BfDlxzmQDR
+        p+LVfVi6DsTbscGKBTEphlfypgxiEYWvdw==
+X-Google-Smtp-Source: AGRyM1uTQQ2KoLG26Y8RnJhozVXkKtEORXk+Ro4fTTJ7srHBYCflhtHp1c5ieKZR/q5bUIfJbdPP+g==
+X-Received: by 2002:a05:6870:580b:b0:f1:8489:343e with SMTP id r11-20020a056870580b00b000f18489343emr852863oap.298.1656447556812;
+        Tue, 28 Jun 2022 13:19:16 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id a12-20020a056870d60c00b000f30837129esm9536923oaq.55.2022.06.28.13.19.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 13:19:16 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, mchehab@kernel.org,
+        hverkuil@xs4all.nl, linux-media@vger.kernel.org,
+        robert.foss@linaro.org
+Cc:     hfink@snap.com, andrey.konovalov@linaro.org, jonathan@marek.ca,
+        dmitry.baryshkov@linaro.org, jgrahsl@snap.com,
+        vladimir.zapolskiy@linaro.org, agross@kernel.org,
+        todor.too@gmail.com
+Subject: Re: (subset) [PATCH v3 0/8] camss: Fixup multiple VDDA regulator support
+Date:   Tue, 28 Jun 2022 15:18:52 -0500
+Message-Id: <165644753306.10525.8589449831598361545.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220111125212.2343184-1-bryan.odonoghue@linaro.org>
+References: <20220111125212.2343184-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdX7HzbUime4EOhtzcRV2YSA44qJRFXvu0LNtmpzgBJzRA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Geert,
-
-On Tue, Jun 28, 2022 at 10:08:28PM +0200, Geert Uytterhoeven wrote:
-> On Tue, Jun 28, 2022 at 9:53 PM Laurent Pinchart wrote:
-> > On Tue, Jun 28, 2022 at 09:05:34PM +0200, Eugeniu Rosca wrote:
-> > > On So, Jun 26, 2022 at 09:46:42 +0300, Laurent Pinchart wrote:
-> > > > On Tue, May 03, 2022 at 03:20:10PM +0200, Eugeniu Rosca wrote:
-> > > > >
-> > > > > Troubleshooting the above without the right tools becomes a nightmare.
-> > > >
-> > > > Having spent lots of time working in userspace recently, I can't agree
-> > > > more.
-> > >
-> > > Thanks for the feedback and for endorsing the utility of this patch.
-> > >
-> > > > > +static int vspd_underrun[VSPD_MAX_NUM];
-> > > > > +module_param_array(vspd_underrun, int, NULL, 0444);
-> > > > > +MODULE_PARM_DESC(vspd_underrun, "VSPD underrun counter");
-> > > >
-> > > > Module parameters are not meant to convey information back to userspace.
-> > > > This should be done through either a debugfs file or a sysfs file. Given
-> > > > the debugging nature of this feature, I'd recommend the former.
-> > >
-> > > It is a bit unfortunate that we have to go the debugFS route, since I
-> > > recall at least one Customer in the past, who disabled the debugFS in
-> > > the end product, since it was the only available means to meet the
-> > > stringent automotive requirements (w.r.t. KNL binary size). Anybody
-> > > who has no choice but to disable debugFS will consequently not be able
-> > > to take advantage of this patch in the production/release software.
-> >
-> > debugfs isn't meant to be enabled in production, so if you need a
-> > solution for production environment, it's not an option indeed.
-> >
-> > > If there is no alternative, then for sure I can go this way.
-> > >
-> > > However, before submitting PATCH v3, would you consider SYSFS viable
-> > > too, if keeping the module param is totally unacceptable?
-> > >
-> > > I was hoping to keep the number of external dependencies to the bare
-> > > minimum, hence the initial choice of module param. Looking forward to
-> > > your final suggestion/preference.
-> >
-> > sysfs would be my next recommendation. I don't think a Linux system can
-> > meaningfully run without sysfs, so it shouldn't be an issue
-> > dependency-wise.
+On Tue, 11 Jan 2022 12:52:04 +0000, Bryan O'Donoghue wrote:
+> V3:
+> - Adds Robert's R-B for 7/8 patches
+> - 5/8 should be a NOP, for the sake of procedure left out Robert's RB
 > 
-> Indeed, you can add a device attribute.
-> But as that is not a debug feature, the attribute must be documented,
-> and becomes ABI.
+> V2:
+> - Only do array allocation when num_supplies > 0 - Bjorn
+> - Set unused regulators to {} instead of { NULL } - Bjorn
+> 
+> [...]
 
-Thanks for the comment, that's correct
+Applied, thanks!
 
+[3/8] arm64: dts: qcom: sdm845: Rename camss vdda-supply to vdda-phy-supply
+      commit: 11c83450ff1157d31acbbff4d236d9787929c4c5
+[4/8] arm64: dts: qcom: sdm845: Add camss vdda-pll-supply
+      commit: f424d754212ae976dcbea997d5699fe508b737d9
+
+Best regards,
 -- 
-Regards,
-
-Laurent Pinchart
+Bjorn Andersson <bjorn.andersson@linaro.org>
