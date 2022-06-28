@@ -2,34 +2,33 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79962C43334
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jun 2022 12:06:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7373CCCA479
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jun 2022 12:06:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245139AbiF1MGN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Jun 2022 08:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35216 "EHLO
+        id S245151AbiF1MGO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Jun 2022 08:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244304AbiF1MGJ (ORCPT
+        with ESMTP id S1344929AbiF1MGJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 28 Jun 2022 08:06:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DACD252BD
-        for <linux-media@vger.kernel.org>; Tue, 28 Jun 2022 05:05:34 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515A7326C7
+        for <linux-media@vger.kernel.org>; Tue, 28 Jun 2022 05:05:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4AB1BB81D2C
-        for <linux-media@vger.kernel.org>; Tue, 28 Jun 2022 12:05:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13D2DC341CB;
-        Tue, 28 Jun 2022 12:05:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CD5B60F56
+        for <linux-media@vger.kernel.org>; Tue, 28 Jun 2022 12:05:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE270C341CA;
+        Tue, 28 Jun 2022 12:05:33 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH 1/8] videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
-Date:   Tue, 28 Jun 2022 14:05:16 +0200
-Message-Id: <20220628120523.2915913-2-hverkuil-cisco@xs4all.nl>
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 7/8] v4l2-ctrls: add change flag for when dimensions change
+Date:   Tue, 28 Jun 2022 14:05:22 +0200
+Message-Id: <20220628120523.2915913-8-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220628120523.2915913-1-hverkuil-cisco@xs4all.nl>
 References: <20220628120523.2915913-1-hverkuil-cisco@xs4all.nl>
@@ -39,71 +38,73 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a new flag that indicates that this control is a dynamically sized
-array. Also document this flag.
+Add a new V4L2_EVENT_CTRL_CH_DIMENSIONS change flag that is issued
+when the dimensions of an array change as a result of a
+__v4l2_ctrl_modify_dimensions() call.
 
-Currently dynamically sized arrays are limited to one dimensional arrays,
-but that might change in the future if there is a need for it.
-
-The initial use-case of dynamic arrays are stateless codecs. A frame
-can be divided in many slices, so you want to provide an array containing
-slice information for each slice. Typically the number of slices is small,
-but the standard allow for hundreds or thousands of slices. Dynamic arrays
-are a good solution since sizing the array for the worst case would waste
-substantial amounts of memory.
+This will inform userspace that there are new dimensions.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Acked-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Tested-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- .../userspace-api/media/v4l/vidioc-queryctrl.rst          | 8 ++++++++
- .../userspace-api/media/videodev2.h.rst.exceptions        | 1 +
- include/uapi/linux/videodev2.h                            | 1 +
- 3 files changed, 10 insertions(+)
+ Documentation/userspace-api/media/v4l/vidioc-dqevent.rst     | 5 +++++
+ Documentation/userspace-api/media/videodev2.h.rst.exceptions | 1 +
+ drivers/media/v4l2-core/v4l2-ctrls-api.c                     | 2 ++
+ include/uapi/linux/videodev2.h                               | 1 +
+ 4 files changed, 9 insertions(+)
 
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-index 88f630252d98..a20dfa2a933b 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-@@ -625,6 +625,14 @@ See also the examples in :ref:`control`.
- 	``V4L2_CTRL_FLAG_GRABBED`` flag when buffers are allocated or
- 	streaming is in progress since most drivers do not support changing
- 	the format in that case.
-+    * - ``V4L2_CTRL_FLAG_DYNAMIC_ARRAY``
-+      - 0x0800
-+      - This control is a dynamically sized 1-dimensional array. It
-+        behaves the same as a regular array, except that the number
-+	of elements as reported by the ``elems`` field is between 1 and
-+	``dims[0]``. So setting the control with a differently sized
-+	array will change the ``elems`` field when the control is
-+	queried afterwards.
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst b/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst
+index 6eb40073c906..8db103760930 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst
+@@ -332,6 +332,11 @@ call.
+       - 0x0004
+       - This control event was triggered because the minimum, maximum,
+ 	step or the default value of the control changed.
++    * - ``V4L2_EVENT_CTRL_CH_DIMENSIONS``
++      - 0x0008
++      - This control event was triggered because the dimensions of the
++	control changed. Note that the number of dimensions remains the
++	same.
  
- Return Value
- ============
+ 
+ .. tabularcolumns:: |p{6.6cm}|p{2.2cm}|p{8.5cm}|
 diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-index 9cbb7a0c354a..0b91200776f8 100644
+index 0b91200776f8..274474425b05 100644
 --- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
 +++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-@@ -379,6 +379,7 @@ replace define V4L2_CTRL_FLAG_VOLATILE control-flags
- replace define V4L2_CTRL_FLAG_HAS_PAYLOAD control-flags
- replace define V4L2_CTRL_FLAG_EXECUTE_ON_WRITE control-flags
- replace define V4L2_CTRL_FLAG_MODIFY_LAYOUT control-flags
-+replace define V4L2_CTRL_FLAG_DYNAMIC_ARRAY control-flags
+@@ -506,6 +506,7 @@ replace define V4L2_EVENT_PRIVATE_START event-type
+ replace define V4L2_EVENT_CTRL_CH_VALUE ctrl-changes-flags
+ replace define V4L2_EVENT_CTRL_CH_FLAGS ctrl-changes-flags
+ replace define V4L2_EVENT_CTRL_CH_RANGE ctrl-changes-flags
++replace define V4L2_EVENT_CTRL_CH_DIMENSIONS ctrl-changes-flags
  
- replace define V4L2_CTRL_FLAG_NEXT_CTRL control
- replace define V4L2_CTRL_FLAG_NEXT_COMPOUND control
+ replace define V4L2_EVENT_SRC_CH_RESOLUTION src-changes-flags
+ 
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-api.c b/drivers/media/v4l2-core/v4l2-ctrls-api.c
+index 16be31966cb1..47f69de9a067 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-api.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-api.c
+@@ -1019,6 +1019,8 @@ int __v4l2_ctrl_modify_dimensions(struct v4l2_ctrl *ctrl,
+ 		ctrl->type_ops->init(ctrl, i, ctrl->p_cur);
+ 		ctrl->type_ops->init(ctrl, i, ctrl->p_new);
+ 	}
++	send_event(NULL, ctrl,
++		   V4L2_EVENT_CTRL_CH_VALUE | V4L2_EVENT_CTRL_CH_DIMENSIONS);
+ 	return 0;
+ }
+ EXPORT_SYMBOL(__v4l2_ctrl_modify_dimensions);
 diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 5311ac4fde35..9018aa984db3 100644
+index 9018aa984db3..3971af623c56 100644
 --- a/include/uapi/linux/videodev2.h
 +++ b/include/uapi/linux/videodev2.h
-@@ -1890,6 +1890,7 @@ struct v4l2_querymenu {
- #define V4L2_CTRL_FLAG_HAS_PAYLOAD	0x0100
- #define V4L2_CTRL_FLAG_EXECUTE_ON_WRITE	0x0200
- #define V4L2_CTRL_FLAG_MODIFY_LAYOUT	0x0400
-+#define V4L2_CTRL_FLAG_DYNAMIC_ARRAY	0x0800
+@@ -2398,6 +2398,7 @@ struct v4l2_event_vsync {
+ #define V4L2_EVENT_CTRL_CH_VALUE		(1 << 0)
+ #define V4L2_EVENT_CTRL_CH_FLAGS		(1 << 1)
+ #define V4L2_EVENT_CTRL_CH_RANGE		(1 << 2)
++#define V4L2_EVENT_CTRL_CH_DIMENSIONS		(1 << 3)
  
- /*  Query flags, to be ORed with the control ID */
- #define V4L2_CTRL_FLAG_NEXT_CTRL	0x80000000
+ struct v4l2_event_ctrl {
+ 	__u32 changes;
 -- 
 2.35.1
 
