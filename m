@@ -2,92 +2,148 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BB9ACCA488
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jun 2022 20:22:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97106CCA47F
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jun 2022 20:48:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232678AbiF1UWF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Jun 2022 16:22:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34732 "EHLO
+        id S229749AbiF1Usa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Jun 2022 16:48:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232211AbiF1UVh (ORCPT
+        with ESMTP id S229448AbiF1Us3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Jun 2022 16:21:37 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C253D1D7
-        for <linux-media@vger.kernel.org>; Tue, 28 Jun 2022 13:19:30 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id e131so18690205oif.13
-        for <linux-media@vger.kernel.org>; Tue, 28 Jun 2022 13:19:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=N0YiwTB5Lzrx5Idx6QrshGkTc9HqjV5relJPYoRStTk=;
-        b=g/3vrQcchq4kooUu20T9KbQIxXKpLeQOijcueNHFCafx+EJyK3+54EwZDipg54Nx6G
-         VU5gvK8p2FpcvT/uape/TLThvTEJkzEGpD/RYa699UxO0MueLXXMtpNKffkII+uvHsPG
-         Sd0sEg+/AXu9TN4Di3xmJIf57O6imnMViYGCU3ImRv8m5EWqb81gkNRvR5AOi195BD6s
-         feYOjaQAk+uNkBTCFNAZo2GIl9keI31UfE/lRzhMhVVCXrBIQhSFoYqdXQ80cGSI4Jo2
-         Co3E5XRKJ3wCD8nv29EyW5NfialfZxZ6UUMdSe/Sn7ScucuhvixhOABwbqr+bIBSLYFf
-         s+nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=N0YiwTB5Lzrx5Idx6QrshGkTc9HqjV5relJPYoRStTk=;
-        b=BaA6kS/24L9h9TNkEE2n5iEzFwhx369XzeWnymaKjwJ6GY6zHUqWyVcly0D6YN521S
-         VxMVJCvNmyqBwhjnNN6U27Qz3PvzqGMrt/3WbAXERhSyNq/UiYICdLA5FbkGmyo5TBlb
-         jpqtMjDhRwj12apXkYTSxqhNWygwNVaswzoBH1O/sMtiLu3UolwliO/QJRF5z+StrJLN
-         P+jUopDRcvHlNFm6+zhNyBEYl8caH6EIXGVGZl+hVa7jnN/SYg2ikHHhOuBTeFJ6UUlw
-         pB6Fy6Ep3HYmb8gcC4KM2pUw/lqJwFpR8MU670KV0DBxdLmPgp7a8r0SK+FASlsaA8fz
-         tjtQ==
-X-Gm-Message-State: AJIora9/LAfM0d7MgrtNxDwwsB0pcNfKvp0atwbtGzrDRUa+dJCHabdA
-        AEZMjzq2m6VLlDajNMvVRKRFfw==
-X-Google-Smtp-Source: AGRyM1sayXBpFlqlsyzHRDsKb9iKdp5I9/c1DrxmlcZOsE7L1zswG61hqMQPBubjaor3cm3c4bSMYQ==
-X-Received: by 2002:a05:6808:f94:b0:32f:6378:d8b5 with SMTP id o20-20020a0568080f9400b0032f6378d8b5mr917133oiw.171.1656447570030;
-        Tue, 28 Jun 2022 13:19:30 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id a12-20020a056870d60c00b000f30837129esm9536923oaq.55.2022.06.28.13.19.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 13:19:29 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Todor Tomov <todor.too@gmail.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-media@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Del Regno <angelogioacchino.delregno@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: Re: (subset) [PATCH 1/4] media: dt-bindings: qcom,sdm660-camss: document interconnects
-Date:   Tue, 28 Jun 2022 15:19:01 -0500
-Message-Id: <165644753308.10525.1413224152892133110.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220509144714.144154-1-krzysztof.kozlowski@linaro.org>
-References: <20220509144714.144154-1-krzysztof.kozlowski@linaro.org>
+        Tue, 28 Jun 2022 16:48:29 -0400
+X-Greylist: delayed 1198 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 28 Jun 2022 13:48:27 PDT
+Received: from ste-pvt-msa1.bahnhof.se (ste-pvt-msa1.bahnhof.se [213.80.101.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1132180D;
+        Tue, 28 Jun 2022 13:48:27 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTP id AC47E3F6D0;
+        Tue, 28 Jun 2022 22:12:59 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at bahnhof.se
+Authentication-Results: ste-pvt-msa1.bahnhof.se (amavisd-new);
+        dkim=pass (1024-bit key) header.d=shipmail.org
+Received: from ste-pvt-msa1.bahnhof.se ([127.0.0.1])
+        by localhost (ste-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id mmpRsQHvcbQV; Tue, 28 Jun 2022 22:12:58 +0200 (CEST)
+Received: by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id CDA333F5E5;
+        Tue, 28 Jun 2022 22:12:55 +0200 (CEST)
+Received: from [192.168.0.209] (h-155-4-205-35.A357.priv.bahnhof.se [155.4.205.35])
+        by mail1.shipmail.org (Postfix) with ESMTPSA id 5504F360156;
+        Tue, 28 Jun 2022 22:12:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=shipmail.org; s=mail;
+        t=1656447175; bh=8qVW4B3M3sdbclxh8UQh5P9peDN3xxFvdDdC5TV32/0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=dVFF/BzMCsmmWG2zHPWW6M0VCmuZz4GO4qbbISmpcnG1hjGYEkIoPCt6RUdqXtSN5
+         Zw7NouOgpWzqOWItxknC6wyoxQz+N4x4jBvrz2P0oIotiPufQ3K9y8CBhGSA/p5GgE
+         mX1Zal2b0Dlj2qezn+xXIo0JguejcKH2kGq5qm/s=
+Message-ID: <d3fcb4ee-83ec-09b8-d1ef-0191512fda91@shipmail.org>
+Date:   Tue, 28 Jun 2022 22:12:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v6 01/22] drm/gem: Properly annotate WW context on
+ drm_gem_lock_reservations() error
+Content-Language: en-US
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Qiang Yu <yuq825@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        linaro-mm-sig@lists.linaro.org, amd-gfx@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
+        kernel@collabora.com, linux-media@vger.kernel.org
+References: <20220526235040.678984-1-dmitry.osipenko@collabora.com>
+ <20220526235040.678984-2-dmitry.osipenko@collabora.com>
+From:   =?UTF-8?Q?Thomas_Hellstr=c3=b6m_=28Intel=29?= 
+        <thomas_os@shipmail.org>
+In-Reply-To: <20220526235040.678984-2-dmitry.osipenko@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, 9 May 2022 16:47:11 +0200, Krzysztof Kozlowski wrote:
-> Document the interconnect properties used in the Qualcomm CAMSS on
-> SDM660:
-> 
->   sdm630-sony-xperia-nile-discovery.dtb: camss@ca00000: 'interconnect-names', 'interconnects' do not match any of the regexes: 'pinctrl-[0-9]+'
-> 
-> 
+Hi,
 
-Applied, thanks!
+On 5/27/22 01:50, Dmitry Osipenko wrote:
+> Use ww_acquire_fini() in the error code paths. Otherwise lockdep
+> thinks that lock is held when lock's memory is freed after the
+> drm_gem_lock_reservations() error. The WW needs to be annotated
+> as "freed"
 
-[2/4] arm64: dts: qcom: sdm630: order clocks according to bindings
-      commit: e8881372ccc6ff5a86bddeb4ebc248ff892d2ffc
-[3/4] arm64: dts: qcom: sdm630: order regs according to bindings
-      commit: 7908dcc8be2db90c9d9bbcbd5fb021f935b76b26
-[4/4] arm64: dts: qcom: sdm630: order interrupts according to bindings
-      commit: cb0b68537713208824af74f2b1dbae22e8e52f82
+s /WW/ww_acquire_context/ ?
+s /"freed"/"released"/ ?
 
-Best regards,
--- 
-Bjorn Andersson <bjorn.andersson@linaro.org>
+
+> , which fixes the noisy "WARNING: held lock freed!" splat
+> of VirtIO-GPU driver with CONFIG_DEBUG_MUTEXES=y and enabled lockdep.
+>
+> Cc: stable@vger.kernel.org
+
+Can you dig up the commit in error and add a Fixes: Tag?
+
+Using that and "dim fixes" will also make the Cc: stable tag a bit more 
+verbose.
+
+With that fixed,
+
+Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+
+
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> ---
+>   drivers/gpu/drm/drm_gem.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+> index eb0c2d041f13..86d670c71286 100644
+> --- a/drivers/gpu/drm/drm_gem.c
+> +++ b/drivers/gpu/drm/drm_gem.c
+> @@ -1226,7 +1226,7 @@ drm_gem_lock_reservations(struct drm_gem_object **objs, int count,
+>   		ret = dma_resv_lock_slow_interruptible(obj->resv,
+>   								 acquire_ctx);
+>   		if (ret) {
+> -			ww_acquire_done(acquire_ctx);
+> +			ww_acquire_fini(acquire_ctx);
+>   			return ret;
+>   		}
+>   	}
+> @@ -1251,7 +1251,7 @@ drm_gem_lock_reservations(struct drm_gem_object **objs, int count,
+>   				goto retry;
+>   			}
+>   
+> -			ww_acquire_done(acquire_ctx);
+> +			ww_acquire_fini(acquire_ctx);
+>   			return ret;
+>   		}
+>   	}
