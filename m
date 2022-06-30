@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 391D3C433EF
-	for <linux-media@archiver.kernel.org>; Thu, 30 Jun 2022 23:11:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68714C43334
+	for <linux-media@archiver.kernel.org>; Thu, 30 Jun 2022 23:11:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbiF3XLn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 30 Jun 2022 19:11:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59830 "EHLO
+        id S232169AbiF3XLr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 30 Jun 2022 19:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232169AbiF3XLm (ORCPT
+        with ESMTP id S232173AbiF3XLr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 30 Jun 2022 19:11:42 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8DB36334
-        for <linux-media@vger.kernel.org>; Thu, 30 Jun 2022 16:11:37 -0700 (PDT)
+        Thu, 30 Jun 2022 19:11:47 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F8659265
+        for <linux-media@vger.kernel.org>; Thu, 30 Jun 2022 16:11:43 -0700 (PDT)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2304A2A59;
-        Fri,  1 Jul 2022 01:08:11 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6262D2A67;
+        Fri,  1 Jul 2022 01:08:12 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1656630491;
-        bh=7944xSN0uq3rpNEJb3CtzLzMdC4oI4/1ClzARNyUoAg=;
+        s=mail; t=1656630492;
+        bh=yO8fQy8aUsBlWZeXvaxtSZ7JcDGOXwPLF/nRHM7j6Ik=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NwWGTEaOuJQ+hVrd+kFIAU1pufMh03hyiRG44R8/pSUuuTWrCF0HrXigbIjwPZh4L
-         LdmfRAa0eDlKy1lG7eO3JBtf9tdWtU63AnHTvpKSO5WULbvQV7skJJBg5djQW3WNjg
-         BVQeOA4s/CC3BFJTwDWAgRWQQ374aClVW6PY0478=
+        b=ayWs8Y3QO30hHttDRKaw9JKpE9lL4xScBUR7h1gaCiUuAFHsbIIQUwKg1GU9FkKq4
+         +YOARLRuN+Bi4C4z70vU6BVoM52GlAL5d7lyuCAXZgihvagSnmRDx364vxgxGGGd76
+         87Y9XCMYTfn/MaL94LVhNvjuVDvIbtTLFD/1gtvo=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     linux-rockchip@lists.infradead.org,
@@ -32,9 +32,9 @@ Cc:     linux-rockchip@lists.infradead.org,
         Heiko Stuebner <heiko@sntech.de>,
         Helen Koike <helen.koike@collabora.com>,
         Paul Elder <paul.elder@ideasonboard.com>
-Subject: [PATCH v2 52/55] media: rkisp1: Add i.MX8MP-specific registers for MI and resizer
-Date:   Fri,  1 Jul 2022 02:07:10 +0300
-Message-Id: <20220630230713.10580-53-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 54/55] media: rkisp1: Add register definitions for the test pattern generator
+Date:   Fri,  1 Jul 2022 02:07:12 +0300
+Message-Id: <20220630230713.10580-55-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220630230713.10580-1-laurent.pinchart@ideasonboard.com>
 References: <20220630230713.10580-1-laurent.pinchart@ideasonboard.com>
@@ -46,67 +46,64 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Paul Elder <paul.elder@ideasonboard.com>
 
-Add register definitions for resizer format conversion control and for
-the memory interface output that are specific to the ISP version in the
-i.MX8MP.
+Add register definitions and value macros for the test pattern generator
+block in the ISP.
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
 ---
- .../platform/rockchip/rkisp1/rkisp1-regs.h    | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ .../platform/rockchip/rkisp1/rkisp1-regs.h    | 32 +++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
 diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-regs.h b/drivers/media/platform/rockchip/rkisp1/rkisp1-regs.h
-index 5c2195019723..dd63ae13e603 100644
+index dd63ae13e603..34f4fe09c88d 100644
 --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-regs.h
 +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-regs.h
-@@ -171,6 +171,23 @@
- /* RSZ_CROP_[XY]_DIR */
- #define RKISP1_CIF_RSZ_CROP_XY_DIR(start, end)		((end) << 16 | (start) << 0)
+@@ -717,6 +717,27 @@
+ #define RKISP1_CIF_ISP_DPF_SPATIAL_COEFF_MAX		0x1F
+ #define RKISP1_CIF_ISP_DPF_NLL_COEFF_N_MAX		0x3FF
  
-+/* RSZ_FORMAT_CONV_CTRL */
-+#define RKISP1_CIF_RSZ_FORMAT_CONV_CTRL_RSZ_INPUT_FORMAT_YCBCR_400	(0 << 0)
-+#define RKISP1_CIF_RSZ_FORMAT_CONV_CTRL_RSZ_INPUT_FORMAT_YCBCR_420	(1 << 0)
-+#define RKISP1_CIF_RSZ_FORMAT_CONV_CTRL_RSZ_INPUT_FORMAT_YCBCR_422	(2 << 0)
-+#define RKISP1_CIF_RSZ_FORMAT_CONV_CTRL_RSZ_INPUT_FORMAT_YCBCR_444	(3 << 0)
-+#define RKISP1_CIF_RSZ_FORMAT_CONV_CTRL_RSZ_OUTPUT_FORMAT_YCBCR_400	(0 << 2)
-+#define RKISP1_CIF_RSZ_FORMAT_CONV_CTRL_RSZ_OUTPUT_FORMAT_YCBCR_420	(1 << 2)
-+#define RKISP1_CIF_RSZ_FORMAT_CONV_CTRL_RSZ_OUTPUT_FORMAT_YCBCR_422	(2 << 2)
-+#define RKISP1_CIF_RSZ_FORMAT_CONV_CTRL_RSZ_OUTPUT_FORMAT_YCBCR_444	(3 << 2)
-+#define RKISP1_CIF_RSZ_FORMAT_CONV_CTRL_CFG_Y_FULL			BIT(5)
-+#define RKISP1_CIF_RSZ_FORMAT_CONV_CTRL_CFG_CBCR_FULL			BIT(6)
-+#define RKISP1_CIF_RSZ_FORMAT_CONV_CTRL_CFG_422NOCOSITED		BIT(7)
-+#define RKISP1_CIF_RSZ_FORMAT_CONV_CTRL_DATA_WIDTH_10_BIT_ENABLE	BIT(8)
-+#define RKISP1_CIF_RSZ_FORMAT_CONV_CTRL_DATA_WIDTH_10_BIT_METHOD	BIT(9)
-+#define RKISP1_CIF_RSZ_FORMAT_CONV_CTRL_RSZ_PACK_FORMAT_PLANAR		(0 << 10)
-+#define RKISP1_CIF_RSZ_FORMAT_CONV_CTRL_RSZ_PACK_FORMAT_SEMI_PLANAR	(1 << 10)
++/* TPG */
++#define RKISP1_CIF_ISP_TPG_CTRL_ENA			BIT(0)
++#define RKISP1_CIF_ISP_TPG_CTRL_IMG_3X3_COLOR_BLOCK	(0 << 1)
++#define RKISP1_CIF_ISP_TPG_CTRL_IMG_COLOR_BAR		(1 << 1)
++#define RKISP1_CIF_ISP_TPG_CTRL_IMG_GRAY_BAR		(2 << 1)
++#define RKISP1_CIF_ISP_TPG_CTRL_IMG_HIGHLIGHT_GRID	(3 << 1)
++#define RKISP1_CIF_ISP_TPG_CTRL_IMG_RAND		(4 << 1)
++#define RKISP1_CIF_ISP_TPG_CTRL_CFA_RGGB		(0 << 4)
++#define RKISP1_CIF_ISP_TPG_CTRL_CFA_GRBG		(1 << 4)
++#define RKISP1_CIF_ISP_TPG_CTRL_CFA_GBRB		(2 << 4)
++#define RKISP1_CIF_ISP_TPG_CTRL_CFA_BGGR		(3 << 4)
++#define RKISP1_CIF_ISP_TPG_CTRL_DEPTH_8			(0 << 6)
++#define RKISP1_CIF_ISP_TPG_CTRL_DEPTH_10		(1 << 6)
++#define RKISP1_CIF_ISP_TPG_CTRL_DEPTH_12		(2 << 6)
++#define RKISP1_CIF_ISP_TPG_CTRL_DEF_SYNC		BIT(8)
++#define RKISP1_CIF_ISP_TPG_CTRL_MAX_SYNC		BIT(9)
++#define RKISP1_CIF_ISP_TPG_CTRL_SOL_1080P		(0 << 10)
++#define RKISP1_CIF_ISP_TPG_CTRL_SOL_720P		(1 << 10)
++#define RKISP1_CIF_ISP_TPG_CTRL_SOL_4K			(2 << 10)
++#define RKISP1_CIF_ISP_TPG_CTRL_SOL_USER_DEFINED	(3 << 10)
 +
- /* MI_IMSC - MI_MIS - MI_RIS - MI_ICR - MI_ISR */
- #define RKISP1_CIF_MI_FRAME(stream)			BIT((stream)->id)
- #define RKISP1_CIF_MI_MBLK_LINE				BIT(2)
-@@ -212,6 +229,22 @@
- #define RKISP1_CIF_MI_XTD_FMT_CTRL_MP_CB_CR_SWAP	BIT(0)
- #define RKISP1_CIF_MI_XTD_FMT_CTRL_SP_CB_CR_SWAP	BIT(1)
- #define RKISP1_CIF_MI_XTD_FMT_CTRL_DMA_CB_CR_SWAP	BIT(2)
-+/* MI_OUTPUT_ALIGN_FORMAT */
-+#define RKISP1_CIF_OUTPUT_ALIGN_FORMAT_MP_LSB_ALIGNMENT			BIT(0)
-+#define RKISP1_CIF_OUTPUT_ALIGN_FORMAT_MP_BYTE_SWAP_BYTES		BIT(1)
-+#define RKISP1_CIF_OUTPUT_ALIGN_FORMAT_MP_BYTE_SWAP_WORDS		BIT(2)
-+#define RKISP1_CIF_OUTPUT_ALIGN_FORMAT_MP_BYTE_SWAP_DWORDS		BIT(3)
-+#define RKISP1_CIF_OUTPUT_ALIGN_FORMAT_SP_BYTE_SWAP_BYTES		BIT(4)
-+#define RKISP1_CIF_OUTPUT_ALIGN_FORMAT_SP_BYTE_SWAP_WORDS		BIT(5)
-+#define RKISP1_CIF_OUTPUT_ALIGN_FORMAT_SP_BYTE_SWAP_DWORDS		BIT(6)
-+#define RKISP1_CIF_OUTPUT_ALIGN_FORMAT_DMA_BYTE_SWAP_BYTES		BIT(7)
-+#define RKISP1_CIF_OUTPUT_ALIGN_FORMAT_DMA_BYTE_SWAP_WORDS		BIT(8)
-+#define RKISP1_CIF_OUTPUT_ALIGN_FORMAT_DMA_BYTE_SWAP_DWORDS		BIT(9)
-+/* MI_MP_OUTPUT_FIFO_SIZE */
-+#define RKISP1_CIF_MI_MP_OUTPUT_FIFO_SIZE_OUTPUT_FIFO_DEPTH_FULL	(0 << 0)
-+#define RKISP1_CIF_MI_MP_OUTPUT_FIFO_SIZE_OUTPUT_FIFO_DEPTH_HALF	(1 << 0)
-+#define RKISP1_CIF_MI_MP_OUTPUT_FIFO_SIZE_OUTPUT_FIFO_DEPTH_QUARTER	(2 << 0)
-+#define RKISP1_CIF_MI_MP_OUTPUT_FIFO_SIZE_OUTPUT_FIFO_DEPTH_EIGHT	(3 << 0)
+ /* =================================================================== */
+ /*                            CIF Registers                            */
+ /* =================================================================== */
+@@ -912,6 +933,17 @@
+ #define RKISP1_CIF_ISP_SH_DELAY			(RKISP1_CIF_ISP_SH_BASE + 0x00000008)
+ #define RKISP1_CIF_ISP_SH_TIME			(RKISP1_CIF_ISP_SH_BASE + 0x0000000C)
  
- /* VI_CCL */
- #define RKISP1_CIF_CCL_CIF_CLK_DIS			BIT(2)
++#define RKISP1_CIF_ISP_TPG_BASE			0x00000700
++#define RKISP1_CIF_ISP_TPG_CTRL			(RKISP1_CIF_ISP_TPG_BASE + 0x00000000)
++#define RKISP1_CIF_ISP_TPG_TOTAL_IN		(RKISP1_CIF_ISP_TPG_BASE + 0x00000004)
++#define RKISP1_CIF_ISP_TPG_ACT_IN		(RKISP1_CIF_ISP_TPG_BASE + 0x00000008)
++#define RKISP1_CIF_ISP_TPG_FP_IN		(RKISP1_CIF_ISP_TPG_BASE + 0x0000000C)
++#define RKISP1_CIF_ISP_TPG_BP_IN		(RKISP1_CIF_ISP_TPG_BASE + 0x00000010)
++#define RKISP1_CIF_ISP_TPG_W_IN			(RKISP1_CIF_ISP_TPG_BASE + 0x00000014)
++#define RKISP1_CIF_ISP_TPG_GAP_IN		(RKISP1_CIF_ISP_TPG_BASE + 0x00000018)
++#define RKISP1_CIF_ISP_TPG_GAP_STD_IN		(RKISP1_CIF_ISP_TPG_BASE + 0x0000001C)
++#define RKISP1_CIF_ISP_TPG_RANDOM_SEED_IN	(RKISP1_CIF_ISP_TPG_BASE + 0x00000020)
++
+ #define RKISP1_CIF_C_PROC_BASE			0x00000800
+ #define RKISP1_CIF_C_PROC_CTRL			(RKISP1_CIF_C_PROC_BASE + 0x00000000)
+ #define RKISP1_CIF_C_PROC_CONTRAST		(RKISP1_CIF_C_PROC_BASE + 0x00000004)
 -- 
 Regards,
 
