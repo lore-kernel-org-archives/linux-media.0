@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03530C43334
-	for <linux-media@archiver.kernel.org>; Thu, 30 Jun 2022 23:10:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CEFDC433EF
+	for <linux-media@archiver.kernel.org>; Thu, 30 Jun 2022 23:10:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbiF3XKe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 30 Jun 2022 19:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58744 "EHLO
+        id S231839AbiF3XKn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 30 Jun 2022 19:10:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231634AbiF3XKc (ORCPT
+        with ESMTP id S231673AbiF3XKh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 30 Jun 2022 19:10:32 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D7936334
-        for <linux-media@vger.kernel.org>; Thu, 30 Jun 2022 16:10:18 -0700 (PDT)
+        Thu, 30 Jun 2022 19:10:37 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E9DBE34
+        for <linux-media@vger.kernel.org>; Thu, 30 Jun 2022 16:10:33 -0700 (PDT)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 91E9F29DB;
-        Fri,  1 Jul 2022 01:07:56 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D75D2895;
+        Fri,  1 Jul 2022 01:07:57 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1656630477;
-        bh=99UIE8oqmPmd0m1zZDgA48K/oWQ1/6lftaY/SpI4KEo=;
+        s=mail; t=1656630478;
+        bh=UTX1KlpduCbPiHTFDfiCrohJLjz4TSl7CUWviqNLgzs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BtWRnjMdjVfn3JrwbLRLfEAOX7a1O3f8Iy0r3q9R5NsPEAGESCdeFfANSn/gNE4bh
-         eNndeRuIrOye1tILSlg7o8HWP+x6BNsnxKTEEAOIffrbgLWzdcSQASnA7WeZTYSoQL
-         zD5zASYRRWeozmzoz4TnlCNc2uIn44B91PPWLLcE=
+        b=MB+ncRByxwUjuLVQ5mDFrrtkbgjTjBjAXLLlZ5mWeBabbhAz0UayrhAV5fRAXV02+
+         xNN8fWLQLGE3iPSyeU01d82MQc9sZLGl83UQuYhkeAcVCci4aazFUEbAno2FUM/MCS
+         FKeLyz+Nrgg5HZwPT1TsUCv4Zdg1/lCC1/kPVtP8=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     linux-rockchip@lists.infradead.org,
@@ -32,9 +32,9 @@ Cc:     linux-rockchip@lists.infradead.org,
         Heiko Stuebner <heiko@sntech.de>,
         Helen Koike <helen.koike@collabora.com>,
         Paul Elder <paul.elder@ideasonboard.com>
-Subject: [PATCH v2 30/55] media: rkisp1: isp: Add rkisp1_device backpointer to rkisp1_isp
-Date:   Fri,  1 Jul 2022 02:06:48 +0300
-Message-Id: <20220630230713.10580-31-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 32/55] media: rkisp1: isp: Move input configuration to rkisp1_config_isp()
+Date:   Fri,  1 Jul 2022 02:06:50 +0300
+Message-Id: <20220630230713.10580-33-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220630230713.10580-1-laurent.pinchart@ideasonboard.com>
 References: <20220630230713.10580-1-laurent.pinchart@ideasonboard.com>
@@ -44,77 +44,136 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The rkisp1_isp structure documentation mentions a backpointer field to
-rkisp1_device, but the field is missing. Add it, and use it to replace
-more complicated constructs using container_of() on the v4l2_device.
+The ISP_ACQ_PROP register is set twice, once in rkisp1_config_isp() for
+most of its fields, and once in rkisp1_config_dvp() (called from
+rkisp1_config_path()) to configure the input selection field. Move the
+latter to rkisp1_config_isp() to write the register once only, and drop
+the now empty rkisp1_config_dvp() function.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Dafna Hirschfeld <dafna@fastmail.com>
 ---
- .../media/platform/rockchip/rkisp1/rkisp1-common.h    |  1 +
- drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c   | 11 +++++------
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Changes since v1:
 
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-index ee9e724f4bf2..5301461d3ea3 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-@@ -162,6 +162,7 @@ struct rkisp1_csi {
-  */
- struct rkisp1_isp {
- 	struct v4l2_subdev sd;
-+	struct rkisp1_device *rkisp1;
- 	struct media_pad pads[RKISP1_ISP_PAD_MAX];
- 	struct v4l2_subdev_pad_config pad_cfg[RKISP1_ISP_PAD_MAX];
- 	const struct rkisp1_mbus_info *sink_fmt;
+- Print the value of unsupported bus width
+- Remove unneeded curly braces
+---
+ .../platform/rockchip/rkisp1/rkisp1-isp.c     | 66 +++++++------------
+ 1 file changed, 24 insertions(+), 42 deletions(-)
+
 diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
-index 9f4fb984194d..3f9541fc4a2f 100644
+index 9b32ae585de8..85c1995bb5c2 100644
 --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
 +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
-@@ -704,15 +704,13 @@ static int rkisp1_isp_set_selection(struct v4l2_subdev *sd,
- 				    struct v4l2_subdev_state *sd_state,
- 				    struct v4l2_subdev_selection *sel)
+@@ -141,7 +141,7 @@ static int rkisp1_config_isp(struct rkisp1_isp *isp,
+ 			     enum v4l2_mbus_type mbus_type, u32 mbus_flags)
  {
--	struct rkisp1_device *rkisp1 =
--		container_of(sd->v4l2_dev, struct rkisp1_device, v4l2_dev);
- 	struct rkisp1_isp *isp = to_rkisp1_isp(sd);
- 	int ret = 0;
- 
- 	if (sel->target != V4L2_SEL_TGT_CROP)
- 		return -EINVAL;
- 
--	dev_dbg(rkisp1->dev, "%s: pad: %d sel(%d,%d)/%dx%d\n", __func__,
-+	dev_dbg(isp->rkisp1->dev, "%s: pad: %d sel(%d,%d)/%dx%d\n", __func__,
- 		sel->pad, sel->r.left, sel->r.top, sel->r.width, sel->r.height);
- 	mutex_lock(&isp->ops_lock);
- 	if (sel->pad == RKISP1_ISP_PAD_SINK_VIDEO)
-@@ -751,9 +749,8 @@ static const struct v4l2_subdev_pad_ops rkisp1_isp_pad_ops = {
- 
- static int rkisp1_isp_s_stream(struct v4l2_subdev *sd, int enable)
- {
--	struct rkisp1_device *rkisp1 =
--		container_of(sd->v4l2_dev, struct rkisp1_device, v4l2_dev);
- 	struct rkisp1_isp *isp = to_rkisp1_isp(sd);
-+	struct rkisp1_device *rkisp1 = isp->rkisp1;
- 	struct rkisp1_sensor_async *asd;
- 	int ret;
- 
-@@ -840,12 +837,14 @@ int rkisp1_isp_register(struct rkisp1_device *rkisp1)
- {
- 	struct v4l2_subdev_state state = {
- 		.pads = rkisp1->isp.pad_cfg
--		};
-+	};
- 	struct rkisp1_isp *isp = &rkisp1->isp;
- 	struct media_pad *pads = isp->pads;
- 	struct v4l2_subdev *sd = &isp->sd;
- 	int ret;
- 
-+	isp->rkisp1 = rkisp1;
+ 	struct rkisp1_device *rkisp1 = isp->rkisp1;
+-	u32 isp_ctrl = 0, irq_mask = 0, acq_mult = 0, signal = 0;
++	u32 isp_ctrl = 0, irq_mask = 0, acq_mult = 0, signal = 0, input_sel = 0;
+ 	const struct rkisp1_mbus_info *src_fmt, *sink_fmt;
+ 	struct v4l2_mbus_framefmt *sink_frm;
+ 	struct v4l2_rect *sink_crop;
+@@ -189,6 +189,22 @@ static int rkisp1_config_isp(struct rkisp1_isp *isp,
+ 	if (mbus_type == V4L2_MBUS_BT656 || mbus_type == V4L2_MBUS_PARALLEL) {
+ 		if (mbus_flags & V4L2_MBUS_PCLK_SAMPLE_RISING)
+ 			signal = RKISP1_CIF_ISP_ACQ_PROP_POS_EDGE;
 +
- 	v4l2_subdev_init(sd, &rkisp1_isp_ops);
- 	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE | V4L2_SUBDEV_FL_HAS_EVENTS;
- 	sd->entity.ops = &rkisp1_isp_media_ops;
++		switch (sink_fmt->bus_width) {
++		case 8:
++			input_sel = RKISP1_CIF_ISP_ACQ_PROP_IN_SEL_8B_ZERO;
++			break;
++		case 10:
++			input_sel = RKISP1_CIF_ISP_ACQ_PROP_IN_SEL_10B_ZERO;
++			break;
++		case 12:
++			input_sel = RKISP1_CIF_ISP_ACQ_PROP_IN_SEL_12B;
++			break;
++		default:
++			dev_err(rkisp1->dev, "Invalid bus width %u\n",
++				sink_fmt->bus_width);
++			return -EINVAL;
++		}
+ 	}
+ 
+ 	if (mbus_type == V4L2_MBUS_PARALLEL) {
+@@ -201,7 +217,7 @@ static int rkisp1_config_isp(struct rkisp1_isp *isp,
+ 
+ 	rkisp1_write(rkisp1, RKISP1_CIF_ISP_CTRL, isp_ctrl);
+ 	rkisp1_write(rkisp1, RKISP1_CIF_ISP_ACQ_PROP,
+-		     signal | sink_fmt->yuv_seq |
++		     signal | sink_fmt->yuv_seq | input_sel |
+ 		     RKISP1_CIF_ISP_ACQ_PROP_BAYER_PAT(sink_fmt->bayer_pat) |
+ 		     RKISP1_CIF_ISP_ACQ_PROP_FIELD_SEL_ALL);
+ 	rkisp1_write(rkisp1, RKISP1_CIF_ISP_ACQ_NR_FRAMES, 0);
+@@ -238,52 +254,19 @@ static int rkisp1_config_isp(struct rkisp1_isp *isp,
+ 	return 0;
+ }
+ 
+-static int rkisp1_config_dvp(struct rkisp1_isp *isp)
+-{
+-	struct rkisp1_device *rkisp1 = isp->rkisp1;
+-	const struct rkisp1_mbus_info *sink_fmt = isp->sink_fmt;
+-	u32 val, input_sel;
+-
+-	switch (sink_fmt->bus_width) {
+-	case 8:
+-		input_sel = RKISP1_CIF_ISP_ACQ_PROP_IN_SEL_8B_ZERO;
+-		break;
+-	case 10:
+-		input_sel = RKISP1_CIF_ISP_ACQ_PROP_IN_SEL_10B_ZERO;
+-		break;
+-	case 12:
+-		input_sel = RKISP1_CIF_ISP_ACQ_PROP_IN_SEL_12B;
+-		break;
+-	default:
+-		dev_err(rkisp1->dev, "Invalid bus width\n");
+-		return -EINVAL;
+-	}
+-
+-	val = rkisp1_read(rkisp1, RKISP1_CIF_ISP_ACQ_PROP);
+-	rkisp1_write(rkisp1, RKISP1_CIF_ISP_ACQ_PROP, val | input_sel);
+-
+-	return 0;
+-}
+-
+ /* Configure MUX */
+-static int rkisp1_config_path(struct rkisp1_isp *isp,
+-			      enum v4l2_mbus_type mbus_type)
++static void rkisp1_config_path(struct rkisp1_isp *isp,
++			       enum v4l2_mbus_type mbus_type)
+ {
+ 	struct rkisp1_device *rkisp1 = isp->rkisp1;
+ 	u32 dpcl = rkisp1_read(rkisp1, RKISP1_CIF_VI_DPCL);
+-	int ret = 0;
+ 
+-	if (mbus_type == V4L2_MBUS_BT656 ||
+-	    mbus_type == V4L2_MBUS_PARALLEL) {
+-		ret = rkisp1_config_dvp(isp);
++	if (mbus_type == V4L2_MBUS_BT656 || mbus_type == V4L2_MBUS_PARALLEL)
+ 		dpcl |= RKISP1_CIF_VI_DPCL_IF_SEL_PARALLEL;
+-	} else if (mbus_type == V4L2_MBUS_CSI2_DPHY) {
++	else if (mbus_type == V4L2_MBUS_CSI2_DPHY)
+ 		dpcl |= RKISP1_CIF_VI_DPCL_IF_SEL_MIPI;
+-	}
+ 
+ 	rkisp1_write(rkisp1, RKISP1_CIF_VI_DPCL, dpcl);
+-
+-	return ret;
+ }
+ 
+ /* Hardware configure Entry */
+@@ -295,9 +278,8 @@ static int rkisp1_config_cif(struct rkisp1_isp *isp,
+ 	ret = rkisp1_config_isp(isp, mbus_type, mbus_flags);
+ 	if (ret)
+ 		return ret;
+-	ret = rkisp1_config_path(isp, mbus_type);
+-	if (ret)
+-		return ret;
++
++	rkisp1_config_path(isp, mbus_type);
+ 	rkisp1_config_ism(isp);
+ 
+ 	return 0;
 -- 
 Regards,
 
