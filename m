@@ -2,106 +2,102 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1469C43334
-	for <linux-media@archiver.kernel.org>; Fri,  1 Jul 2022 09:19:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE8C7C433EF
+	for <linux-media@archiver.kernel.org>; Fri,  1 Jul 2022 09:41:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233682AbiGAJTd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 1 Jul 2022 05:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36060 "EHLO
+        id S236402AbiGAJlL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 1 Jul 2022 05:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232834AbiGAJTc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 1 Jul 2022 05:19:32 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E643451B2B
-        for <linux-media@vger.kernel.org>; Fri,  1 Jul 2022 02:19:30 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9E91025C;
-        Fri,  1 Jul 2022 11:19:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1656667168;
-        bh=PiwUbyUV4xv77mPNNleUvrhzAfhgzSm779hMBHQ+4Gg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RiEXrSsWz0vix7wNf+yys2R/x1h13eceuCys6fj5t5lAhhu5jNftyK0bC4LuhdCOe
-         +Tu/z/P72YCiYjCsZwtygPEaRLAr41uxYTkDFXWKG3jtv4ymXqbH4uiXzst9oxO67r
-         XzMNgrns7ZJkZx+hlqFiINQkl4r8WXb5DQqIK/ls=
-Date:   Fri, 1 Jul 2022 12:19:07 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Dafna Hirschfeld <dafna@fastmail.com>
-Cc:     Paul Elder <paul.elder@ideasonboard.com>,
-        linux-media@vger.kernel.org, heiko@sntech.de,
-        jeanmichel.hautbois@ideasonboard.com, jacopo@jmondi.org,
-        djrscally@gmail.com, helen.koike@collabora.com,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH 43/55] dt-bindings: media: rkisp1: Add port for parallel
- interface
-Message-ID: <Yr68C1T5Pai8m/O+@pendragon.ideasonboard.com>
-References: <20220614191127.3420492-1-paul.elder@ideasonboard.com>
- <20220614191127.3420492-44-paul.elder@ideasonboard.com>
- <20220701052222.a7rtl5hivr4oy7bk@guri>
+        with ESMTP id S229911AbiGAJlK (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 1 Jul 2022 05:41:10 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4C95C9EE
+        for <linux-media@vger.kernel.org>; Fri,  1 Jul 2022 02:41:09 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id h23so2984855ejj.12
+        for <linux-media@vger.kernel.org>; Fri, 01 Jul 2022 02:41:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bfhnkjN8EYZiKALNnk0S4AvyDtRhk5bZ1VENz1EbQN0=;
+        b=RGox5xdyqGFXrCdbw3CeWW/NSsxMi+SzQB5t5l3N/wdMKCPjFxUFCHEw7RRUZQ4jpp
+         r68a89T4vEDTe+jksp+Vxzyef8gv3h1i5+SLLmwA8N3GM4SnvFUWCMoK6lGKTa/yHTwz
+         fJAoCsTIQK8P8NFdLWw2NbW+jI42P58LDAZqYngOq8/E0E4noRXtX2dDrGsiwWageJ2i
+         WADmKrA6JkrVGcmj0HA0wTxaljaojMj2YAaSjt7ghY3wrJyslFRD4eg34NH0a4U6z09s
+         NC+uLDQ6O1OZ6aaXwOD3dwn7WxVnA1aVmk9emhAcmbO7BLB1UPlDJfoGV7+St6x1gXxS
+         eELA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bfhnkjN8EYZiKALNnk0S4AvyDtRhk5bZ1VENz1EbQN0=;
+        b=BBGpeze3wuyXNUUXDR97qyWZEWYgPBaVhDpfHGL11KlmweQ5jZTJYhOsStucAkI0i/
+         PPfsINZAnj4md1fbCR9WTOVj2FoJfdDP3IJOJM2n1jZGVVXCr6D54rOEGtFFRMegyuPM
+         9tmnWXmars1f+3EKC/5wDSG/j0ogsMD9y0wpgUU9tvE8j6KUCgazMB+ZeJbUlc24Aaw5
+         04srbFH/1ghfM4cKEWKFoiA5+nAYDMEhh/x3yqJVFPUrAAdSgGELFXJFCZHUkLZ2J7U3
+         L7QlbY5x9fwOccf0U4DkGp47CbkXpJ+SAxSk6txeTOiYaAzhvoicbUWawwpLouvTsbmA
+         /EiQ==
+X-Gm-Message-State: AJIora+aDGbSmKMCc1P11T9VLb/CBQyBMpoo8Bm975ZKRo8EJGt0PeTz
+        9qfLBHFg+yvvM/yObPv2LkeDEZD9pc/Td3mj
+X-Google-Smtp-Source: AGRyM1su/lsOgxkpxTFhKaZxuNVRmVdhMSKldMIp449vxK8MPbK91toPEIqQwwl/2VEqcDWHukbKqg==
+X-Received: by 2002:a17:907:c0a:b0:726:22b1:9734 with SMTP id ga10-20020a1709070c0a00b0072622b19734mr13542260ejc.195.1656668467706;
+        Fri, 01 Jul 2022 02:41:07 -0700 (PDT)
+Received: from localhost.localdomain ([195.24.90.54])
+        by smtp.gmail.com with ESMTPSA id t17-20020a1709067c1100b00711d5baae0esm10317528ejo.145.2022.07.01.02.41.06
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 02:41:06 -0700 (PDT)
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+To:     linux-media@vger.kernel.org
+Subject: [GIT PULL FOR v5.20] Venus updates
+Date:   Fri,  1 Jul 2022 12:40:59 +0300
+Message-Id: <20220701094059.82319-1-stanimir.varbanov@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220701052222.a7rtl5hivr4oy7bk@guri>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dafna,
+Hi Mauro,
 
-On Fri, Jul 01, 2022 at 08:22:22AM +0300, Dafna Hirschfeld wrote:
-> On 15.06.2022 04:11, Paul Elder wrote:
-> > The rkisp1 can take an input on the parallel interface. Add a port for
-> > it, and update the required field. At least one port is required, and
-> > both may be specified.
-> >
-> > Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
-> > ---
-> >  .../bindings/media/rockchip-isp1.yaml         | 23 +++++++++++++++++--
-> >  1 file changed, 21 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/media/rockchip-isp1.yaml b/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
-> > index d1489b177331..b3661d7d4357 100644
-> > --- a/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
-> > +++ b/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
-> > @@ -84,8 +84,27 @@ properties:
-> >                  minItems: 1
-> >                  maxItems: 4
-> > 
-> > -    required:
-> > -      - port@0
-> > +      port@1:
-> > +        $ref: /schemas/graph.yaml#/$defs/port-base
-> > +        unevaluatedProperties: false
-> > +        description: connection point for input on the parallel interface
-> > +
-> > +        properties:
-> > +          bus-type:
-> > +            enum: [5, 6]
-> > +
-> > +          endpoint:
-> > +            $ref: video-interfaces.yaml#
-> > +            unevaluatedProperties: false
-> > +
-> > +        required:
-> > +          - bus-type
-> > +
-> > +    anyOf:
-> > +      - required:
-> > +          - port@0
-> > +      - required:
-> > +          - port@1
-> > 
-> >  required:
-> >    - compatible
-> 
-> Could be nice to add an example
+This time the updates include:
 
-I don't have a real-life example of a parallel sensor connected to a
-RK3399, but the i.MX8MP connects its CSI-2 receiver to the parallel
-input of the ISP. I'll add an example to the other DT bindings patch
-that adds the compatible string for the i.MX8MP, is that OK ?
+ * Trigger Subsystem reset through fault-inject.
+ * Correct supported codecs for sc7280.
 
--- 
-Regards,
+Please pull.
 
-Laurent Pinchart
+regards,
+Stan
+
+The following changes since commit 945a9a8e448b65bec055d37eba58f711b39f66f0:
+
+  media: pvrusb2: fix memory leak in pvr_probe (2022-06-20 10:30:37 +0100)
+
+are available in the Git repository at:
+
+  git://linuxtv.org/svarbanov/media_tree.git tags/venus-for-v5.20
+
+for you to fetch changes up to 52a71814f6b71fe99b61fcc67898830ccf26c266:
+
+  media: venus: hfi_platform: Correct supported codecs for sc7280 (2022-06-29 16:11:30 +0300)
+
+----------------------------------------------------------------
+Venus updates for v5.20
+
+----------------------------------------------------------------
+Dikshita Agarwal (1):
+      venus: Add support for SSR trigger using fault injection
+
+Vikash Garodia (1):
+      media: venus: hfi_platform: Correct supported codecs for sc7280
+
+ drivers/media/platform/qcom/venus/core.c         | 15 ++++++++++++++-
+ drivers/media/platform/qcom/venus/dbgfs.c        |  9 +++++++++
+ drivers/media/platform/qcom/venus/dbgfs.h        | 13 +++++++++++++
+ drivers/media/platform/qcom/venus/hfi_parser.c   |  6 ++++--
+ drivers/media/platform/qcom/venus/hfi_platform.c | 22 ++++++++++++++++++++++
+ drivers/media/platform/qcom/venus/hfi_platform.h |  2 ++
+ 6 files changed, 64 insertions(+), 3 deletions(-)
