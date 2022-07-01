@@ -2,102 +2,232 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DAEECCA479
-	for <linux-media@archiver.kernel.org>; Fri,  1 Jul 2022 09:03:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A22F3C43334
+	for <linux-media@archiver.kernel.org>; Fri,  1 Jul 2022 09:19:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234582AbiGAJDZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 1 Jul 2022 05:03:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46364 "EHLO
+        id S229680AbiGAJTW convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 1 Jul 2022 05:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233522AbiGAJDY (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 1 Jul 2022 05:03:24 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3CA1571A;
-        Fri,  1 Jul 2022 02:03:23 -0700 (PDT)
-Received: from [IPV6:2a01:e0a:120:3210:2a18:eef7:517c:3467] (unknown [IPv6:2a01:e0a:120:3210:2a18:eef7:517c:3467])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 099BA66015B2;
-        Fri,  1 Jul 2022 10:03:21 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656666201;
-        bh=HeVABiQifDKZmsejKzWKuWsrRSudGKBJZ7pqrByEerQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=nwQ+wI922KmSe3X33SneWndU3TbI/sjRvPQJ8Dr5Xx5e+O3qg5hog/1NfrfSZLLa+
-         uiofarX6QER7SRj2Socni4uPTSAQWRCqvBlpKKJW9qGo5lGcEk2o08vW2y1EogP2yf
-         Er5jCtdTUH1iSLSOQe/5IZo2K3fmdvkTD8DY16m2Bto4fPs3QeAcL2Otxzd/KusWTh
-         +5WhbyviowG4guFPNMai5QO1z1hlQI4fVdmiSKw2/rCJl+CsdHNDVuFp5LAVwrEHsh
-         QhTDO0SZt/zk+9K5tTKjKTU+cWKKVLKpaDNBmWwyxA41gdiPS+vybDFYccNgp4oEzr
-         H6JM/1lzE99Gw==
-Message-ID: <37145626-1a7e-2aba-4f3c-4d0574729a41@collabora.com>
-Date:   Fri, 1 Jul 2022 11:03:18 +0200
+        with ESMTP id S231727AbiGAJTT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 1 Jul 2022 05:19:19 -0400
+Received: from www.linuxtv.org (www.linuxtv.org [130.149.80.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5296B53EFF
+        for <linux-media@vger.kernel.org>; Fri,  1 Jul 2022 02:19:18 -0700 (PDT)
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1o7Co0-009vDg-Li; Fri, 01 Jul 2022 09:19:16 +0000
+Received: from localhost ([127.0.0.1] helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.94.2)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1o7Cnz-00G76P-Bt; Fri, 01 Jul 2022 09:19:14 +0000
+Date:   Fri, 1 Jul 2022 09:19:14 +0000 (UTC)
+From:   Jenkins Builder Robot <jenkins@linuxtv.org>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org
+Message-ID: <1687316076.0.1656667154724@builder.linuxtv.org>
+In-Reply-To: <5751795.11.1656580756643@builder.linuxtv.org>
+References: <5751795.11.1656580756643@builder.linuxtv.org>
+Subject: Build failed in Jenkins: media-build #3946
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 3/7] media: hantro: HEVC: Fix chroma offset computation
-Content-Language: en-US
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     mchehab@kernel.org, hverkuil@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, mripard@kernel.org, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, andrzej.p@collabora.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com
-References: <20220617115802.396442-1-benjamin.gaignard@collabora.com>
- <20220617115802.396442-4-benjamin.gaignard@collabora.com>
- <Yr60jj4OOAM6plWC@aptenodytes>
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <Yr60jj4OOAM6plWC@aptenodytes>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
+X-Jenkins-Job: media-build
+X-Jenkins-Result: FAILURE
+Auto-submitted: auto-generated
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+See <https://builder.linuxtv.org/job/media-build/3946/display/redirect>
 
-Le 01/07/2022 à 10:47, Paul Kocialkowski a écrit :
-> Hi Benjamin,
->
-> On Fri 17 Jun 22, 13:57, Benjamin Gaignard wrote:
->> The chroma offset depends of the bitstream depth.
->> Make sure that ctx->bit_depth is used to compute it.
->>
->> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->> ---
->>   drivers/staging/media/hantro/hantro_g2_hevc_dec.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
->> index 9eac133bda68..8407ad45b7b7 100644
->> --- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
->> +++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
->> @@ -12,7 +12,7 @@
->>   
->>   static size_t hantro_hevc_chroma_offset(struct hantro_ctx *ctx)
->>   {
->> -	return ctx->dst_fmt.width * ctx->dst_fmt.height;
->> +	return ctx->dst_fmt.width * ctx->dst_fmt.height * ctx->bit_depth / 8;
-> Is this a case for DIV_ROUND_UP or are you sure the rounded-down size is always
-> sufficient?
+Changes:
 
-No need of DIV_ROUND_UP here because it could affect the chroma offset when
-using decoder tiled format and add extra bytes between luma and chroma planes.
 
-Regards,
-Benjamin
+------------------------------------------
+Started by timer
+Running as SYSTEM
+Building remotely on slave2 in workspace <https://builder.linuxtv.org/job/media-build/ws/>
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir <https://builder.linuxtv.org/job/media-build/ws/.git> # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url git://linuxtv.org/media_build.git # timeout=10
+Fetching upstream changes from git://linuxtv.org/media_build.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.30.2'
+ > git fetch --tags --force --progress -- git://linuxtv.org/media_build.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+Checking out Revision 0fe857b86addf382f6fd383948bd7736a3201403 (refs/remotes/origin/master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 0fe857b86addf382f6fd383948bd7736a3201403 # timeout=10
+Commit message: "versions.txt: IMON builds for 4.11 and up only"
+ > git rev-list --no-walk 0fe857b86addf382f6fd383948bd7736a3201403 # timeout=10
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse 0fe857b86addf382f6fd383948bd7736a3201403^{commit} # timeout=10
+The recommended git tool is: NONE
+No credentials specified
+[GitCheckoutListener] Recording commits of 'git git://linuxtv.org/media_build.git'
+[GitCheckoutListener] Found previous build 'media-build #3945' that contains recorded Git commits
+[GitCheckoutListener] -> Starting recording of new commits since '0fe857b'
+[GitCheckoutListener] -> Using head commit '0fe857b' as starting point
+[GitCheckoutListener] -> Git commit decorator could not be created for SCM 'hudson.plugins.git.GitSCM@3f4b4482'
+[GitCheckoutListener] -> No new commits found
+[media-build] $ /bin/sh -xe /tmp/jenkins15660443931970261510.sh
++ make distclean
+make -C <https://builder.linuxtv.org/job/media-build/ws/v4l> distclean
+make[1]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+rm -f *~ *.o *.ko .*.o.cmd .*.ko.cmd *.mod.c av7110_firm.h fdump \
+	config-compat.h Module.symvers Module.markers modules.order \
+	*.unsigned .*.ko.unsigned.cmd
+rm -f .version .*.o.flags .*.o.d *.mod.gcno Makefile.media \
+	Kconfig Kconfig.kern .config .config.cmd .myconfig \
+	.kconfig.dep config-mycompat.h
+rm -rf .tmp_versions .tmp*.ver .tmp*.o .*.gcno .cache.mk
+rm -f scripts/lxdialog scripts/kconfig
+make[1]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
++ ./build
+Checking if the needed tools for Debian GNU/Linux 11 (bullseye) are available
+Needed package dependencies are met.
 
-> Cheers,
->
-> Paul
->
->>   }
->>   
->>   static size_t hantro_hevc_motion_vectors_offset(struct hantro_ctx *ctx)
->> -- 
->> 2.32.0
->>
+************************************************************
+* This script will download the latest tarball and build it*
+* Assuming that your kernel is compatible with the latest  *
+* drivers. If not, you'll need to add some extra backports,*
+* ./backports/<kernel> directory.                          *
+* It will also update this tree to be sure that all compat *
+* bits are there, to avoid compilation failures            *
+************************************************************
+************************************************************
+* All drivers and build system are under GPLv2 License     *
+* Firmware files are under the license terms found at:     *
+* http://www.linuxtv.org/downloads/firmware/               *
+* Please abort in the next 5 secs if you don't agree with  *
+* the license                                              *
+************************************************************
+
+Not aborted. It means that the licence was agreed. Proceeding...
+
+****************************
+Updating the building system
+****************************
+hint: Pulling without specifying how to reconcile divergent branches is
+hint: discouraged. You can squelch this message by running one of the following
+hint: commands sometime before your next pull:
+hint: 
+hint:   git config pull.rebase false  # merge (the default strategy)
+hint:   git config pull.rebase true   # rebase
+hint:   git config pull.ff only       # fast-forward only
+hint: 
+hint: You can replace "git config" with "git config --global" to set a default
+hint: preference for all repositories. You can also pass --rebase, --no-rebase,
+hint: or --ff-only on the command line to override the configured default per
+hint: invocation.
+From git://linuxtv.org/media_build
+ * branch                      master     -> FETCH_HEAD
+Already up to date.
+make: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+wget http://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5 -O linux-media.tar.bz2.md5.tmp
+--2022-07-01 09:19:09--  http://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5
+Resolving linuxtv.org (linuxtv.org)... 130.149.80.248
+Connecting to linuxtv.org (linuxtv.org)|130.149.80.248|:80... connected.
+HTTP request sent, awaiting response... 301 Moved Permanently
+Location: https://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5 [following]
+--2022-07-01 09:19:09--  https://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5
+Connecting to linuxtv.org (linuxtv.org)|130.149.80.248|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 105 [application/x-bzip2]
+Saving to: ‘linux-media.tar.bz2.md5.tmp’
+
+     0K                                                       100%  105M=0s
+
+2022-07-01 09:19:10 (105 MB/s) - ‘linux-media.tar.bz2.md5.tmp’ saved [105/105]
+
+make: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+make: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+tar xfj linux-media.tar.bz2
+rm -f .patches_applied .linked_dir .git_log.md5
+make: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+**********************************************************
+* Downloading firmwares from linuxtv.org.                *
+**********************************************************
+firmware/dvb-usb-vp702x-01.fw
+firmware/dvb-usb-vp7045-01.fw
+firmware/dvb-fe-bcm3510-01.fw
+firmware/as102_data2_st.hex
+firmware/dvb-usb-terratec-h7-drxk.fw
+firmware/isdbt_nova_12mhz.inp
+firmware/Boot.S
+firmware/dvb_nova_12mhz_b0.inp
+firmware/dvb-fe-xc4000-1.4.1.fw
+firmware/sms1xxx-hcw-55xxx-isdbt-02.fw
+firmware/sms1xxx-nova-a-dvbt-01.fw
+firmware/dvb-usb-avertv-a800-02.fw
+firmware/cmmb_venice_12mhz.inp
+firmware/dvb-fe-xc5000c-4.1.30.7.fw
+firmware/v4l-cx23418-cpu.fw
+firmware/v4l-cx23885-enc-broken.fw
+firmware/dvb-fe-drxj-mc-vsb-1.0.8.fw
+firmware/dvb_nova_12mhz.inp
+firmware/dvb-usb-dib0700-1.20.fw
+firmware/tdmb_nova_12mhz.inp
+firmware/as102_data1_st.hex
+firmware/dvb-fe-or51132-vsb.fw
+firmware/dvb-usb-it9135-02.fw
+firmware/v4l-cx23418-apu.fw
+firmware/dvb-ttpci-01.fw-261f
+firmware/v4l-cx23418-dig.fw
+firmware/dvb-ttpci-01.fw-261c
+firmware/dvb-usb-bluebird-01.fw
+firmware/dvb-fe-or51211.fw
+firmware/dvb-fe-or51132-qam.fw
+firmware/sms1xxx-stellar-dvbt-01.fw
+firmware/dvb-usb-dibusb-5.0.0.11.fw
+firmware/dvb-fe-drxj-mc-vsb-qam-1.0.8.fw
+firmware/dvb-usb-terratec-h5-drxk.fw
+firmware/dvb-usb-wt220u-02.fw
+firmware/v4l-cx23885-enc.fw
+firmware/dvb-ttpci-01.fw-2622
+firmware/dvb-usb-wt220u-01.fw
+firmware/v4l-cx25840.fw
+firmware/dvb-fe-drxj-mc-1.0.8.fw
+firmware/v4l-cx231xx-avcore-01.fw
+firmware/dvb-usb-dtt200u-01.fw
+firmware/dvb-usb-dibusb-6.0.0.8.fw
+firmware/sms1xxx-nova-b-dvbt-01.fw
+firmware/dvb-fe-xc5000-1.6.114.fw
+firmware/cmmb_vega_12mhz.inp
+firmware/dvb-usb-it9135-01.fw
+firmware/isdbt_nova_12mhz_b0.inp
+firmware/dvb-ttpci-01.fw-261a
+firmware/dvb-ttpci-01.fw-261b
+firmware/dvb-ttpci-01.fw-261d
+firmware/README
+firmware/isdbt_rio.inp
+firmware/dvb-usb-umt-010-02.fw
+firmware/sms1xxx-hcw-55xxx-dvbt-02.fw
+firmware/dvb-usb-terratec-h7-az6007.fw
+firmware/v4l-cx23885-avcore-01.fw
+******************
+* Start building *
+******************
+make -C <https://builder.linuxtv.org/job/media-build/ws/v4l> allyesconfig
+make[1]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+No version yet, using 5.10.0-14-amd64
+make[2]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+Applying patches for kernel 5.10.0-14-amd64
+patch -s -f -N -p1 -i ../backports/api_version.patch
+patch -s -f -N -p1 -i ../backports/pr_fmt.patch
+1 out of 1 hunk FAILED
+1 out of 1 hunk FAILED
+make[2]: *** [Makefile:132: apply_patches] Error 1
+make[2]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+make[1]: *** [Makefile:366: allyesconfig] Error 2
+make[1]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+make: *** [Makefile:26: allyesconfig] Error 2
+can't select all drivers at ./build line 531
+Build step 'Execute shell' marked build as failure
