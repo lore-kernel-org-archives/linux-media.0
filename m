@@ -2,73 +2,149 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 014BCC43334
-	for <linux-media@archiver.kernel.org>; Fri,  1 Jul 2022 11:31:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57598C43334
+	for <linux-media@archiver.kernel.org>; Fri,  1 Jul 2022 13:10:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235138AbiGALbj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 1 Jul 2022 07:31:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
+        id S235090AbiGANK3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 1 Jul 2022 09:10:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231261AbiGALbi (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 1 Jul 2022 07:31:38 -0400
-Received: from jari.cn (unknown [218.92.28.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C49B8814BF;
-        Fri,  1 Jul 2022 04:31:37 -0700 (PDT)
-Received: by ajax-webmail-localhost.localdomain (Coremail) ; Fri, 1 Jul 2022
- 19:26:07 +0800 (GMT+08:00)
-X-Originating-IP: [182.148.13.66]
-Date:   Fri, 1 Jul 2022 19:26:07 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   "XueBing Chen" <chenxuebing@jari.cn>
-To:     sumit.semwal@linaro.org, christian.koenig@amd.com
-Cc:     gustavo@padovan.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org
-Subject:  [PATCH] dma-buf/sync_file: use strscpy to replace strlcpy
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT6.0.1 build 20210329(c53f3fee)
- Copyright (c) 2002-2022 www.mailtech.cn
- mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        with ESMTP id S229999AbiGANK1 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 1 Jul 2022 09:10:27 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7FD43ADF
+        for <linux-media@vger.kernel.org>; Fri,  1 Jul 2022 06:10:20 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id q132so3937276ybg.10
+        for <linux-media@vger.kernel.org>; Fri, 01 Jul 2022 06:10:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=93Mj4Iau0zpmP/JMwi/VFSHRM8pmBMuEnMbb4W4iqXI=;
+        b=UUCeOLLSa8JxepsV6kbA1FCpTxZVNNOcRM6cLxnQj7WL62ivtMfBPCez7Gpugi+NdL
+         VmxfTuKRVEf4VR4Wc6uhRq6c1ihOtEZ/3LpSNAXvMDWX6p6PoyUu2ZPGap3qBomly4UR
+         f5rPFPHk6kFebaxaGoDQHMzC8gVIcG9TkQOLk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=93Mj4Iau0zpmP/JMwi/VFSHRM8pmBMuEnMbb4W4iqXI=;
+        b=yOqVd2HA+649vAqEOGPu1R3U0i/eJAsIbNOALMfsH5/11dQYt1sTBWVFWsY3JK0Aq+
+         FiQ2DvzFB5HezWrcr/0PZPryMZNWwdnB6uaCxUKjwueocHk5VOUSymBdW+lBVEcuTSlw
+         ldMHtCyelGJkS/Vrr/TPq6KBA6wKILeseGdDyGaiZfyhogUYI3n2TJVIDgcgwK+wEW2s
+         jTw1QhLLck6HKA1fzDrvUEQCnv7A4H/14LCgqhgooM8FP6sZa6a9oLu03dun9Xu+e5p0
+         TcmUARuU0aLT/hknFYFxQ0EBE+H6OUMz+CsVfQlDFrWlbbGUE/KXLLyYH6LgCP4eSsEi
+         m88w==
+X-Gm-Message-State: AJIora+PZfoAkzaUSXYwa2fg0gugjT6oPcDoeu4L9LRlBt22gcSJOkWX
+        fgBDPL1YklvEPkA1G7CpsBQQqA2A/TDfdP7OuMwtPw==
+X-Google-Smtp-Source: AGRyM1uWKenMTsIZlQbeXynKt3mVEKH67yHcrh73gv2A0rWP5WfpVj+e/Wz0OfAPf2Dh6QAOgEjdx2kaTlA2uoioq8s=
+X-Received: by 2002:a25:81c5:0:b0:66d:55b5:d250 with SMTP id
+ n5-20020a2581c5000000b0066d55b5d250mr14906967ybm.501.1656681019536; Fri, 01
+ Jul 2022 06:10:19 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <6aad3bff.d1a.181b982d1b1.Coremail.chenxuebing@jari.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: AQAAfwD3AG_P2b5i5PdFAA--.865W
-X-CM-SenderInfo: hfkh05pxhex0nj6mt2flof0/1tbiAQAICmFEYxsvOAAQsZ
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VW7Jw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
+References: <20220701105237.932332-1-wenst@chromium.org> <e601a375-cc80-40cd-9791-e44e9d37cec0@email.android.com>
+In-Reply-To: <e601a375-cc80-40cd-9791-e44e9d37cec0@email.android.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 1 Jul 2022 21:10:08 +0800
+Message-ID: <CAGXv+5Hrc6RageAu1YMBCA22r0kz+-C+9qO=qdDEmn_QhSCB3w@mail.gmail.com>
+Subject: Re: [PATCH 0/6] media: mediatek-vcodec: Fix capability fields again
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc:     Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-ClRoZSBzdHJsY3B5IHNob3VsZCBub3QgYmUgdXNlZCBiZWNhdXNlIGl0IGRvZXNuJ3QgbGltaXQg
-dGhlIHNvdXJjZQpsZW5ndGguIFByZWZlcnJlZCBpcyBzdHJzY3B5LgoKU2lnbmVkLW9mZi1ieTog
-WHVlQmluZyBDaGVuIDxjaGVueHVlYmluZ0BqYXJpLmNuPgotLS0KIGRyaXZlcnMvZG1hLWJ1Zi9z
-eW5jX2ZpbGUuYyB8IDggKysrKy0tLS0KIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyks
-IDQgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9kbWEtYnVmL3N5bmNfZmlsZS5j
-IGIvZHJpdmVycy9kbWEtYnVmL3N5bmNfZmlsZS5jCmluZGV4IDNlYmVjMTlhOGUwMi4uYWY1Nzc5
-OWM4NmNlIDEwMDY0NAotLS0gYS9kcml2ZXJzL2RtYS1idWYvc3luY19maWxlLmMKKysrIGIvZHJp
-dmVycy9kbWEtYnVmL3N5bmNfZmlsZS5jCkBAIC0xMzIsNyArMTMyLDcgQEAgRVhQT1JUX1NZTUJP
-TChzeW5jX2ZpbGVfZ2V0X2ZlbmNlKTsKIGNoYXIgKnN5bmNfZmlsZV9nZXRfbmFtZShzdHJ1Y3Qg
-c3luY19maWxlICpzeW5jX2ZpbGUsIGNoYXIgKmJ1ZiwgaW50IGxlbikKIHsKIAlpZiAoc3luY19m
-aWxlLT51c2VyX25hbWVbMF0pIHsKLQkJc3RybGNweShidWYsIHN5bmNfZmlsZS0+dXNlcl9uYW1l
-LCBsZW4pOworCQlzdHJzY3B5KGJ1Ziwgc3luY19maWxlLT51c2VyX25hbWUsIGxlbik7CiAJfSBl
-bHNlIHsKIAkJc3RydWN0IGRtYV9mZW5jZSAqZmVuY2UgPSBzeW5jX2ZpbGUtPmZlbmNlOwogCkBA
-IC0xNzIsNyArMTcyLDcgQEAgc3RhdGljIHN0cnVjdCBzeW5jX2ZpbGUgKnN5bmNfZmlsZV9tZXJn
-ZShjb25zdCBjaGFyICpuYW1lLCBzdHJ1Y3Qgc3luY19maWxlICphLAogCQlyZXR1cm4gTlVMTDsK
-IAl9CiAJc3luY19maWxlLT5mZW5jZSA9IGZlbmNlOwotCXN0cmxjcHkoc3luY19maWxlLT51c2Vy
-X25hbWUsIG5hbWUsIHNpemVvZihzeW5jX2ZpbGUtPnVzZXJfbmFtZSkpOworCXN0cnNjcHkoc3lu
-Y19maWxlLT51c2VyX25hbWUsIG5hbWUsIHNpemVvZihzeW5jX2ZpbGUtPnVzZXJfbmFtZSkpOwog
-CXJldHVybiBzeW5jX2ZpbGU7CiB9CiAKQEAgLTI2Miw5ICsyNjIsOSBAQCBzdGF0aWMgbG9uZyBz
-eW5jX2ZpbGVfaW9jdGxfbWVyZ2Uoc3RydWN0IHN5bmNfZmlsZSAqc3luY19maWxlLAogc3RhdGlj
-IGludCBzeW5jX2ZpbGxfZmVuY2VfaW5mbyhzdHJ1Y3QgZG1hX2ZlbmNlICpmZW5jZSwKIAkJCQkg
-c3RydWN0IHN5bmNfZmVuY2VfaW5mbyAqaW5mbykKIHsKLQlzdHJsY3B5KGluZm8tPm9ial9uYW1l
-LCBmZW5jZS0+b3BzLT5nZXRfdGltZWxpbmVfbmFtZShmZW5jZSksCisJc3Ryc2NweShpbmZvLT5v
-YmpfbmFtZSwgZmVuY2UtPm9wcy0+Z2V0X3RpbWVsaW5lX25hbWUoZmVuY2UpLAogCQlzaXplb2Yo
-aW5mby0+b2JqX25hbWUpKTsKLQlzdHJsY3B5KGluZm8tPmRyaXZlcl9uYW1lLCBmZW5jZS0+b3Bz
-LT5nZXRfZHJpdmVyX25hbWUoZmVuY2UpLAorCXN0cnNjcHkoaW5mby0+ZHJpdmVyX25hbWUsIGZl
-bmNlLT5vcHMtPmdldF9kcml2ZXJfbmFtZShmZW5jZSksCiAJCXNpemVvZihpbmZvLT5kcml2ZXJf
-bmFtZSkpOwogCiAJaW5mby0+c3RhdHVzID0gZG1hX2ZlbmNlX2dldF9zdGF0dXMoZmVuY2UpOwot
-LSAKMi4yNS4xCg==
+On Fri, Jul 1, 2022 at 8:45 PM Nicolas Dufresne
+<nicolas.dufresne@collabora.com> wrote:
+>
+> Hi Chen,
+>
+> Le 1 juill. 2022 06 h 52, Chen-Yu Tsai <wenst@chromium.org> a =C3=A9crit =
+:
+>
+> Hi everyone,
+>
+> The previous round of changes to the mtk-vcodec driver's returned
+> capabilities caused some issues for ChromeOS. In particular, the
+> ChromeOS stateless video decoder uses the "Driver Name" field to
+> match a video device to its media device. As the field was only
+> changed for the video device and not the media device, a match
+> could no longer be found.
+>
+>
+> This match is not specified in the spec. If you feel like it should, perh=
+aps consider specifying it first. To me it's nice if they match, but it's f=
+or now just cosmetic.
+
+Right. Even for cosmetic reasons I think my changes make sense though.
+Fixing the matching is another thing.
+
+> Though this requires some discussion, as userland is expected to enumerat=
+e the media device and find the video device by walking the topology. This =
+is the only specified way to match both.
+
+AFAICT, v4l2-ctl does similar matching, though by bus_info. Maybe it's
+out of convenience?
+
+ChenYu
+
+>
+>
+> While fixing this, I found that the current info used for the fields
+> don't make a lot of sense, and tried to fix them in this series.
+>
+> Patch 1 reverts the driver name field change. It also makes it
+> explicit that the field really should match the driver name.
+>
+> Patch 2 changes the value for the card name, making it a free form
+> string that includes the SoC model.
+>
+> Patch 3 removes setting the bus_info field, instead using the default
+> value derived from the underlying |struct device| as set by the V4L2
+> core.
+>
+> Patches 4 through 6 do the same as 1 through 3 respectively, but for
+> the encoder side.
+>
+> This series is based on next-20220701, and was tested on mainline on
+> MT8183 Juniper, and on ChromeOS v5.10, on which we have a whole bunch
+> of backports pending, on MT8195 Tomato.
+>
+> Please have a look.
+>
+>
+> Thanks
+> ChenYu
+>
+> Chen-Yu Tsai (6):
+>   media: mediatek: vcodec: Revert driver name change in decoder
+>     capabilities
+>   media: mediatek: vcodec: Use meaningful decoder card name including
+>     chip name
+>   media: mediatek: vcodec: Use default bus_info for decoder capability
+>   media: mediatek: vcodec: Revert driver name change in encoder
+>     capabilities
+>   media: mediatek: vcodec: Use meaningful encoder card name including
+>     chip name
+>   media: mediatek: vcodec: Use default bus_info for encoder capability
+>
+> drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c | 7 ++++---
+> drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h | 1 +
+> drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c | 7 ++++---
+> 3 files changed, 9 insertions(+), 6 deletions(-)
+>
+> --
+> 2.37.0.rc0.161.g10f37bed90-goog
+>
+>
