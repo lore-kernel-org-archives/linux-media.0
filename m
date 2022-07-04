@@ -2,25 +2,25 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F027C43334
-	for <linux-media@archiver.kernel.org>; Mon,  4 Jul 2022 12:34:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02424C43334
+	for <linux-media@archiver.kernel.org>; Mon,  4 Jul 2022 12:48:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233728AbiGDMd6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 Jul 2022 08:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43382 "EHLO
+        id S233724AbiGDMsD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 Jul 2022 08:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233629AbiGDMdw (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Jul 2022 08:33:52 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609AC11445;
-        Mon,  4 Jul 2022 05:33:49 -0700 (PDT)
-Received: from dggpeml500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lc4tX0mVJzkWqL;
-        Mon,  4 Jul 2022 20:31:48 +0800 (CST)
+        with ESMTP id S233574AbiGDMsB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Jul 2022 08:48:01 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC785E0E9;
+        Mon,  4 Jul 2022 05:48:00 -0700 (PDT)
+Received: from dggpeml500022.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lc5BR5jwNzhZ2q;
+        Mon,  4 Jul 2022 20:45:35 +0800 (CST)
 Received: from huawei.com (10.175.112.208) by dggpeml500022.china.huawei.com
  (7.185.36.66) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 4 Jul
- 2022 20:33:46 +0800
+ 2022 20:47:58 +0800
 From:   Zhang Zekun <zhangzekun11@huawei.com>
 To:     <Larry.Finger@lwfinger.net>, <phil@philpotter.co.uk>,
         <paskripkin@gmail.com>, <gregkh@linuxfoundation.org>,
@@ -30,13 +30,13 @@ CC:     <linux-media@vger.kernel.org>,
         <linux-staging@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
         <xuqiang36@huawei.com>
 Subject: [PATCH -next] staging: r8188eu: use 'is_zero_ether_addr' to identify an empty address
-Date:   Mon, 4 Jul 2022 12:31:40 +0000
-Message-ID: <20220704123140.100128-1-zhangzekun11@huawei.com>
+Date:   Mon, 4 Jul 2022 12:45:53 +0000
+Message-ID: <20220704124553.101792-1-zhangzekun11@huawei.com>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.175.112.208]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
  dggpeml500022.china.huawei.com (7.185.36.66)
 X-CFilter-Loop: Reflected
 Precedence: bulk
