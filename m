@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC36CC433EF
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jul 2022 08:55:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E013C43334
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jul 2022 08:55:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231295AbiGEIzL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Jul 2022 04:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56120 "EHLO
+        id S231608AbiGEIzM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Jul 2022 04:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231231AbiGEIyw (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jul 2022 04:54:52 -0400
+        with ESMTP id S231310AbiGEIyj (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jul 2022 04:54:39 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5274101FA;
-        Tue,  5 Jul 2022 01:54:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AAA912AFE;
+        Tue,  5 Jul 2022 01:54:36 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:6610:ee84:2ba:7917])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id F03C266019CC;
-        Tue,  5 Jul 2022 09:54:37 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9A60466019BD;
+        Tue,  5 Jul 2022 09:54:34 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657011278;
-        bh=60EObOGZwT3P9v6RrlHFUz0Xd8KnprmUldi8YKMbzwI=;
+        s=mail; t=1657011275;
+        bh=EZw6mHZzsiIezh8qwhtNGu30+ZyPV9CPx5z12lifTP4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NdREazqvFs3Qp1R/hNRQbXC7KCuDrevoqhK0hRmxc7nDdUA1VpMeNMBDi0gd1rzb7
-         Ej1eaKpawZSNd/n3uAe6FYlAAL/kjTyl0cfkk96LWhTDBXch9RvhjHjKjxPuMIpx/G
-         qio7Ebk5uAuJYLY2qdZXpVR8J5GNqMpXqhnP3XLg0GtSyfO5bCXi9+PF9CjTQstSfD
-         hgTZdv/y1+0m4QDH6z00kEh112rlMNTL0vO8B++mtAsK9b/i07WDFaGu2kejddyzfB
-         QXFG91FqsOFnIRLUtdPao06SpB9xKV2qfLLwCl1/CBsvOfBUNgm5pzTUpvB6kEuqOn
-         5pxIN2ezKt4qA==
+        b=oXpPaU7ALV3Oh2NGxI36d5AZ7ueI2OFMN9CE7R1mg9A4HqpZi7QVjjSdHDUlJ4oxq
+         HjELz0QgbgC1QQ50ABVZejhdZXJ9eLIlQcdac/a1CbCjvO26NimKZaGHyx2lxQO1oM
+         4Ddudws6rYrfpg4+QLCF4F5d1v+xc+yi8WN1MDlyaKD2SqHpma5chie3cwpJEPLY7v
+         YFPRWgN4iA8ORoCONavPYJaXqp3XJyoNCmxoQKc/vcN03Smnp6S7l7N7z+f2ziB2oJ
+         nDyyDPooCoY/G290p8Z8OTwVLCpdYbYSaj+wwbibyidtnD6dWoYlhBCsH1w0yW+Pge
+         infB3jF/EyZGg==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, hverkuil@xs4all.nl,
         ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
@@ -43,9 +43,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v10 15/17] media: uapi: HEVC: fix padding in v4l2 control structures
-Date:   Tue,  5 Jul 2022 10:54:18 +0200
-Message-Id: <20220705085420.272912-16-benjamin.gaignard@collabora.com>
+Subject: [PATCH v10 10/17] media: uapi: Move parsed HEVC pixel format out of staging
+Date:   Tue,  5 Jul 2022 10:54:13 +0200
+Message-Id: <20220705085420.272912-11-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220705085420.272912-1-benjamin.gaignard@collabora.com>
 References: <20220705085420.272912-1-benjamin.gaignard@collabora.com>
@@ -55,221 +55,59 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix padding where needed to remove holes and stay aligned on cache boundaries
+Move HEVC pixel format since we are ready to stabilize the uAPI
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 Tested-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 ---
-version 9:
-- Fix commit message
-- Remove useless padding at the end of hevc structures
+ Documentation/userspace-api/media/v4l/pixfmt-compressed.rst | 5 -----
+ include/media/hevc-ctrls.h                                  | 3 ---
+ include/uapi/linux/videodev2.h                              | 1 +
+ 3 files changed, 1 insertion(+), 8 deletions(-)
 
- .../media/v4l/ext-ctrls-codec.rst             |  6 ++---
- drivers/media/v4l2-core/v4l2-ctrls-core.c     | 15 -------------
- include/media/hevc-ctrls.h                    | 22 ++++++++++++-------
- 3 files changed, 17 insertions(+), 26 deletions(-)
-
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index 8df8d7fdfe70..889e2bcffde6 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -3509,9 +3509,6 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-     * - __u8
-       - ``num_active_dpb_entries``
-       - The number of entries in ``dpb``.
--    * - struct :c:type:`v4l2_hevc_dpb_entry`
--      - ``dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
--      - The decoded picture buffer, for meta-data about reference frames.
-     * - __u8
-       - ``num_poc_st_curr_before``
-       - The number of reference pictures in the short-term set that come before
-@@ -3535,6 +3532,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-       - ``poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
-       - PocLtCurr as described in section 8.3.2 "Decoding process for reference
-         picture set": provides the index of the long term references in DPB array.
-+    * - struct :c:type:`v4l2_hevc_dpb_entry`
-+      - ``dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
-+      - The decoded picture buffer, for meta-data about reference frames.
-     * - __u64
-       - ``flags``
-       - See :ref:`Decode Parameters Flags <hevc_decode_params_flags>`
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-index c5c5407584ff..1f85828d6694 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-@@ -536,7 +536,6 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 	struct v4l2_ctrl_h264_decode_params *p_h264_dec_params;
- 	struct v4l2_ctrl_hevc_sps *p_hevc_sps;
- 	struct v4l2_ctrl_hevc_pps *p_hevc_pps;
--	struct v4l2_ctrl_hevc_slice_params *p_hevc_slice_params;
- 	struct v4l2_ctrl_hdr10_mastering_display *p_hdr10_mastering;
- 	struct v4l2_ctrl_hevc_decode_params *p_hevc_decode_params;
- 	struct v4l2_area *area;
-@@ -814,8 +813,6 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 			p_hevc_pps->pps_beta_offset_div2 = 0;
- 			p_hevc_pps->pps_tc_offset_div2 = 0;
- 		}
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
+index 967fc803ef94..c352d91a73d8 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
+@@ -215,11 +215,6 @@ Compressed Formats
+ 	See the :ref:`associated Codec Control IDs <v4l2-mpeg-hevc>`.
+ 	Buffers associated with this pixel format must contain the appropriate
+ 	number of macroblocks to decode a full corresponding frame.
 -
--		zero_padding(*p_hevc_pps);
- 		break;
+-	.. note::
+-
+-	   This format is not yet part of the public kernel API and it
+-	   is expected to change.
+     * .. _V4L2-PIX-FMT-FWHT:
  
- 	case V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS:
-@@ -824,21 +821,9 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 		if (p_hevc_decode_params->num_active_dpb_entries >
- 		    V4L2_HEVC_DPB_ENTRIES_NUM_MAX)
- 			return -EINVAL;
--
--		for (i = 0; i < p_hevc_decode_params->num_active_dpb_entries;
--		     i++) {
--			struct v4l2_hevc_dpb_entry *dpb_entry =
--				&p_hevc_decode_params->dpb[i];
--
--			zero_padding(*dpb_entry);
--		}
- 		break;
- 
- 	case V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS:
--		p_hevc_slice_params = p;
--
--		zero_padding(p_hevc_slice_params->pred_weight_table);
--		zero_padding(*p_hevc_slice_params);
- 		break;
- 
- 	case V4L2_CTRL_TYPE_HDR10_CLL_INFO:
+       - ``V4L2_PIX_FMT_FWHT``
 diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-index 9239e8b649e0..7358cbfc3e4d 100644
+index 341fc795d550..a372c184689e 100644
 --- a/include/media/hevc-ctrls.h
 +++ b/include/media/hevc-ctrls.h
-@@ -105,6 +105,7 @@ enum v4l2_stateless_hevc_start_code {
-  * @chroma_format_idc: specifies the chroma sampling
-  * @sps_max_sub_layers_minus1: this value plus 1 specifies the maximum number
-  *                             of temporal sub-layers
-+ * @reserved: padding field. Should be zeroed by applications.
-  * @flags: see V4L2_HEVC_SPS_FLAG_{}
-  */
- struct v4l2_ctrl_hevc_sps {
-@@ -133,6 +134,7 @@ struct v4l2_ctrl_hevc_sps {
- 	__u8	chroma_format_idc;
- 	__u8	sps_max_sub_layers_minus1;
+@@ -13,9 +13,6 @@
  
-+	__u8	reserved[6];
- 	__u64	flags;
- };
+ #include <linux/videodev2.h>
  
-@@ -192,6 +194,7 @@ struct v4l2_ctrl_hevc_sps {
-  *			divided by 2
-  * @log2_parallel_merge_level_minus2: this value plus 2 specifies the value of
-  *                                    the variable Log2ParMrgLevel
-+ * @reserved: padding field. Should be zeroed by applications.
-  * @flags: see V4L2_HEVC_PPS_FLAG_{}
-  */
- struct v4l2_ctrl_hevc_pps {
-@@ -210,8 +213,7 @@ struct v4l2_ctrl_hevc_pps {
- 	__s8	pps_beta_offset_div2;
- 	__s8	pps_tc_offset_div2;
- 	__u8	log2_parallel_merge_level_minus2;
+-/* The pixel format isn't stable at the moment and will likely be renamed. */
+-#define V4L2_PIX_FMT_HEVC_SLICE v4l2_fourcc('S', '2', '6', '5') /* HEVC parsed slices */
 -
--	__u8	padding[4];
-+	__u8	reserved;
- 	__u64	flags;
- };
+ #define V4L2_CID_STATELESS_HEVC_SPS		(V4L2_CID_CODEC_BASE + 1008)
+ #define V4L2_CID_STATELESS_HEVC_PPS		(V4L2_CID_CODEC_BASE + 1009)
+ #define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS	(V4L2_CID_CODEC_BASE + 1010)
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 9018aa984db3..37f9f23a67fe 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -712,6 +712,7 @@ struct v4l2_pix_format {
+ #define V4L2_PIX_FMT_FWHT     v4l2_fourcc('F', 'W', 'H', 'T') /* Fast Walsh Hadamard Transform (vicodec) */
+ #define V4L2_PIX_FMT_FWHT_STATELESS     v4l2_fourcc('S', 'F', 'W', 'H') /* Stateless FWHT (vicodec) */
+ #define V4L2_PIX_FMT_H264_SLICE v4l2_fourcc('S', '2', '6', '4') /* H264 parsed slices */
++#define V4L2_PIX_FMT_HEVC_SLICE v4l2_fourcc('S', '2', '6', '5') /* HEVC parsed slices */
  
-@@ -239,14 +241,15 @@ struct v4l2_ctrl_hevc_pps {
-  * @timestamp: timestamp of the V4L2 capture buffer to use as reference.
-  * @flags: long term flag for the reference frame
-  * @field_pic: whether the reference is a field picture or a frame.
-+ * @reserved: padding field. Should be zeroed by applications.
-  * @pic_order_cnt_val: the picture order count of the reference.
-  */
- struct v4l2_hevc_dpb_entry {
- 	__u64	timestamp;
- 	__u8	flags;
- 	__u8	field_pic;
-+	__u16	reserved;
- 	__s32	pic_order_cnt_val;
--	__u8	padding[2];
- };
- 
- /**
-@@ -285,8 +288,6 @@ struct v4l2_hevc_pred_weight_table {
- 	__s8	delta_chroma_weight_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX][2];
- 	__s8	chroma_offset_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX][2];
- 
--	__u8	padding[6];
--
- 	__u8	luma_log2_weight_denom;
- 	__s8	delta_chroma_log2_weight_denom;
- };
-@@ -339,6 +340,7 @@ struct v4l2_hevc_pred_weight_table {
-  * @slice_tc_offset_div2: specify the deblocking parameter offsets for tC divided by 2
-  * @pic_struct: indicates whether a picture should be displayed as a frame or as one or
-  *		more fields
-+ * @reserved0: padding field. Should be zeroed by applications.
-  * @slice_segment_addr: specifies the address of the first coding tree block in
-  *			the slice segment
-  * @ref_idx_l0: the list of L0 reference elements as indices in the DPB
-@@ -349,6 +351,7 @@ struct v4l2_hevc_pred_weight_table {
-  *				picture include in the SPS
-  * @pred_weight_table: the prediction weight coefficients for inter-picture
-  *		       prediction
-+ * @reserved1: padding field. Should be zeroed by applications.
-  * @flags: see V4L2_HEVC_SLICE_PARAMS_FLAG_{}
-  */
- struct v4l2_ctrl_hevc_slice_params {
-@@ -379,17 +382,18 @@ struct v4l2_ctrl_hevc_slice_params {
- 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture timing SEI message */
- 	__u8	pic_struct;
- 
-+	__u8	reserved0[3];
- 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: General slice segment header */
- 	__u32	slice_segment_addr;
- 	__u8	ref_idx_l0[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
- 	__u8	ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
- 	__u16	short_term_ref_pic_set_size;
- 	__u16	long_term_ref_pic_set_size;
--	__u8	padding;
- 
- 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Weighted prediction parameter */
- 	struct v4l2_hevc_pred_weight_table pred_weight_table;
- 
-+	__u8	reserved1[2];
- 	__u64	flags;
- };
- 
-@@ -406,7 +410,6 @@ struct v4l2_ctrl_hevc_slice_params {
-  * @long_term_ref_pic_set_size: specifies the size of long-term reference
-  *				pictures set include in the SPS of the first slice
-  * @num_active_dpb_entries: the number of entries in dpb
-- * @dpb: the decoded picture buffer, for meta-data about reference frames
-  * @num_poc_st_curr_before: the number of reference pictures in the short-term
-  *			    set that come before the current frame
-  * @num_poc_st_curr_after: the number of reference pictures in the short-term
-@@ -417,6 +420,8 @@ struct v4l2_ctrl_hevc_slice_params {
-  * @poc_st_curr_after: provides the index of the short term after references
-  *		       in DPB array
-  * @poc_lt_curr: provides the index of the long term references in DPB array
-+ * @reserved: padding field. Should be zeroed by applications.
-+ * @dpb: the decoded picture buffer, for meta-data about reference frames
-  * @flags: see V4L2_HEVC_DECODE_PARAM_FLAG_{}
-  */
- struct v4l2_ctrl_hevc_decode_params {
-@@ -424,13 +429,14 @@ struct v4l2_ctrl_hevc_decode_params {
- 	__u16	short_term_ref_pic_set_size;
- 	__u16	long_term_ref_pic_set_size;
- 	__u8	num_active_dpb_entries;
--	struct	v4l2_hevc_dpb_entry dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
- 	__u8	num_poc_st_curr_before;
- 	__u8	num_poc_st_curr_after;
- 	__u8	num_poc_lt_curr;
- 	__u8	poc_st_curr_before[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
- 	__u8	poc_st_curr_after[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
- 	__u8	poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
-+	__u8	reserved[4];
-+	struct	v4l2_hevc_dpb_entry dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
- 	__u64	flags;
- };
- 
+ /*  Vendor-specific formats   */
+ #define V4L2_PIX_FMT_CPIA1    v4l2_fourcc('C', 'P', 'I', 'A') /* cpia1 YUV */
 -- 
 2.32.0
 
