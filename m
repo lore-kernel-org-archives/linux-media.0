@@ -2,57 +2,57 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EBD7C43334
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jul 2022 11:52:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1073AC43334
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jul 2022 11:52:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232546AbiGELwG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Jul 2022 07:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32988 "EHLO
+        id S232608AbiGELwV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Jul 2022 07:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232529AbiGELwD (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jul 2022 07:52:03 -0400
+        with ESMTP id S232591AbiGELwT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jul 2022 07:52:19 -0400
 Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA3A17A85
-        for <linux-media@vger.kernel.org>; Tue,  5 Jul 2022 04:52:01 -0700 (PDT)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220705115158epoutp026824e8e3e1a6962215948312fd011879~_7Ke8cV8k1217712177epoutp02m
-        for <linux-media@vger.kernel.org>; Tue,  5 Jul 2022 11:51:58 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220705115158epoutp026824e8e3e1a6962215948312fd011879~_7Ke8cV8k1217712177epoutp02m
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B2617A8D
+        for <linux-media@vger.kernel.org>; Tue,  5 Jul 2022 04:52:16 -0700 (PDT)
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220705115214epoutp0287c0ce35cf387af6849fbdbdd8c1a79e~_7Kun7-R81261812618epoutp02h
+        for <linux-media@vger.kernel.org>; Tue,  5 Jul 2022 11:52:14 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220705115214epoutp0287c0ce35cf387af6849fbdbdd8c1a79e~_7Kun7-R81261812618epoutp02h
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1657021918;
-        bh=aQM5uBlL93e9lf6ifFCxyJH0VnwhkEMvGGNnJbLQnWg=;
+        s=mail20170921; t=1657021934;
+        bh=wjriQhzcZfXBlRrZeCgQjj2Z4fqF32bEp4w0XU6NxTs=;
         h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=GvRc1vRBeQbRFBQLUJZaiIr1LQSmWoevTJ/KgnuFgEvIHPJkg536B9FzKUu7vpkQ4
-         qlo4aKtLmwaRmx5JvTCrj4Cp5RvhmwLIEwEfbusoKxcns5ejN8p6SN0s5UYwAnvT+c
-         wdDIRE8BEiktHK+TJC+SA5sCuMueKUbSq+Pz+wd8=
+        b=bx++9BVMlKua7+6jdm49sfepsS5M3iH63VwlyHeXmHD4P3Ls1DtK0BoI4Vl5XzA87
+         e7yrpMcOUZ1gzqVDXrxcRWtHNIjERCMcETSsE4jIXJDj0gcTYwtwj9oF8mO0CfZwBB
+         2LBqsIdS8FnxAZHrZfziC4a509HNBxXMP/UevjBo=
 Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20220705115156epcas5p141f6035de45fec44c0a4cda7c44b2880~_7KdsvBzB1357613576epcas5p1a;
-        Tue,  5 Jul 2022 11:51:56 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.182]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4Lcgy06Q4Tz4x9Pq; Tue,  5 Jul
-        2022 11:51:52 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        85.8C.09662.5D524C26; Tue,  5 Jul 2022 20:51:49 +0900 (KST)
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20220705115213epcas5p374716d394b47976928e77521f6ea1f17~_7KtnkxjX2172921729epcas5p3s;
+        Tue,  5 Jul 2022 11:52:13 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.179]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4LcgyM1ngjz4x9Q5; Tue,  5 Jul
+        2022 11:52:11 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        1C.B4.09639.BE524C26; Tue,  5 Jul 2022 20:52:11 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
         epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220705114450epcas5p1875db9d8984faa262283a1d0ebb24c2d~_7EQVoSi01630316303epcas5p1U;
-        Tue,  5 Jul 2022 11:44:50 +0000 (GMT)
+        20220705112643epcas5p1609a1dbce1c09969cd963483bbedf8da~_60chN3E01135111351epcas5p1U;
+        Tue,  5 Jul 2022 11:26:43 +0000 (GMT)
 Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
         epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220705114450epsmtrp1571c225588a93740433d29fa0fc6f416~_7EQUUPin2495724957epsmtrp1R;
-        Tue,  5 Jul 2022 11:44:50 +0000 (GMT)
-X-AuditID: b6c32a49-86fff700000025be-dd-62c425d5caff
+        20220705112643epsmtrp149e0fe5db0aa122c2e1d3c53bd129190~_60cgGmOB1342313423epsmtrp1J;
+        Tue,  5 Jul 2022 11:26:43 +0000 (GMT)
+X-AuditID: b6c32a4b-e83ff700000025a7-cf-62c425eb65da
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
         epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        2D.02.08802.13424C26; Tue,  5 Jul 2022 20:44:49 +0900 (KST)
+        2E.11.08802.3FF14C26; Tue,  5 Jul 2022 20:26:43 +0900 (KST)
 Received: from smithat07 (unknown [107.122.12.13]) by epsmtip1.samsung.com
         (KnoxPortal) with ESMTPA id
-        20220705114446epsmtip1d6e82f1c89a8114897695df6713ae732~_7ENWbc5n0196301963epsmtip1I;
-        Tue,  5 Jul 2022 11:44:46 +0000 (GMT)
+        20220705112640epsmtip1ccdc0c5d55a15aec9824917eb2a59dc1~_60Zg1DtE2670226702epsmtip1O;
+        Tue,  5 Jul 2022 11:26:40 +0000 (GMT)
 From:   "Smitha T Murthy" <smitha.t@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+To:     "'Nicolas Dufresne'" <nicolas@ndufresne.ca>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>
@@ -65,66 +65,65 @@ Cc:     <m.szyprowski@samsung.com>, <andrzej.hajda@intel.com>,
         <andi@etezian.org>, <alim.akhtar@samsung.com>,
         <aswani.reddy@samsung.com>, <pankaj.dubey@samsung.com>,
         <linux-fsd@tesla.com>
-In-Reply-To: <6c2ea5f7-3cc0-d43c-c667-18c25b64ff72@linaro.org>
-Subject: RE: [PATCH 02/20] dt-bindings: media: s5p-mfc: Convert s5p-mfc.txt
- to new DT schema
-Date:   Tue, 5 Jul 2022 17:14:45 +0530
-Message-ID: <01e601d89064$a212a590$e637f0b0$@samsung.com>
+In-Reply-To: <44a151e1cdbba8dcf3dfe7dfe00b6ee49c99bcfb.camel@ndufresne.ca>
+Subject: RE: [PATCH 06/20] Documention: v4l: Documentation for VP9 CIDs.
+Date:   Tue, 5 Jul 2022 16:56:38 +0530
+Message-ID: <01e401d89062$1a7e4ff0$4f7aefd0$@samsung.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Mailer: Microsoft Outlook 16.0
 Content-Language: en-us
-Thread-Index: AQJFyDoizuFNEw0PhIpG3eTqugJ4BwKJmPtNAYJVPjoBxmyvY6xmoZ7w
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Te1BUdRTH/d27LyTwumD8IrXtJgxgPNYW+FGglsDcMhRzHMdKcIHrwgB3
-        t92lNEfZSWRGNJAaQlZYg+UxbTxiZZE3QosQOBUTiKYbTyUgRmRTlnCYdlko//ucc77ndx6/
-        OTycn8915yUxSlrOiFNIznpW/Y/eXr6DHsa4gKcZAjSiqecgrWUSQ8NaMwt1XjNwUd3AFRxV
-        dN9go6vGn9noescYC9X+aY32F5hYaPJqNUBT6j84qHXGKtaP32aj0enD6LemQg66+IOBjaqM
-        Ji4qG+rHULn+GYZKDH9z0blWIxdlZBqx3W5UpaYSUA2mUkANlc7jVKPaxKW0LVMYpded51D3
-        b7dwqGul6dS5rn9YVHadDlDLXxRxqSzjEIcy67dSvU/M3GjnD5NDE2lxAi0X0Ey8NCGJkYSR
-        ew/G7okNDAoQ+gpDUDApYMSpdBgZ/n60b2RSinUDpOBTcUqa1RUtVihI/52hcmmakhYkShXK
-        MJKWJaTIRDI/hThVkcZI/Bha+aYwIGBHoFV4LDnReDZZ1nb4RM6IFqjA6NtZwIEHCRHMuvmI
-        lQXW8/hEM4DZMzUcuzEPYHGJCtgNM4B9I9+DtZS/ruSsBpoA7LE0cm0BPjEJ4GjPJzbmEH5w
-        2qhl20SuRBeAI3WjuM3AiQUcPmif4NhUDsRO2NNQs8IuRAysNRStlGAR2+Dv9Rrcxk5ECDTo
-        ejE7b4Q/FUywbIwT22F58Qxub0kAFx+Us+1+NzjVZVzpyJWIhC3tzzBbYUj0OkDz/NoM4TC7
-        aoxlZxc43V3HtbM7nMrJXGUJHDafXdXLYJGqDrPzLnhjoNCay7MW84Y1Tf529xaY11uN2Xtw
-        hl8uTazKnWCDZo1JWHKrZ/V5CAdnDexLgFQ/N5r6udHUz42j/r/at4ClAy/RMkWqhFYEyoQM
-        /dl/Px4vTdWDlQvxebcBmEbm/DoBxgOdAPJw0tVJ91VHHN8pQXzyc1oujZWnpdCKThBo3Xcu
-        7r4pXmo9MUYZKxSFBIiCgoJEIW8ECUk3p/cG9XF8QiJW0sk0LaPla3kYz8FdhR2aOzJU4lze
-        IbGkxwSvuxxoIbX3X3jyzTHtgc0b8ovPiC4cff3e3erme8OefkstS9mssr5bmtmFsm7H7vHz
-        wWZiXpiZ/es74l3bvw4XLXun75u4+3HUByK3x3uM6OKLEcsOpY/G6L6K+R6Xhy6HFoO9GGb2
-        rc3tr7UsIuYk7hlpSSvKzd/fmHdzoP+Sf8RHd5r5p3zmovTHmcbTbftVtRceZxRsGWyN+O7o
-        KwdCTy1EOYr8D27SVMYH3zme57HDa9IjOvKpSVe2wePVy2UPt+avg6qOml/ovSdEFl9ec/2R
-        0c6Xx5mEqm2zy+4xOk5u48bk6+nc+rjWin1nYk7PFI4Tnm2OHiRLkSgW+uByhfhfDqJrsaoE
-        AAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpgleLIzCtJLcpLzFFi42LZdlhJTtdQ5UiSwdNrlhYP5m1js1j84zmT
-        xf3Fn1ksDm3eym6x5cpsZovlxw+wWsw/co7VYvvBRywWG18AZS/OvMti8Xz+OkaLl7PusVns
-        fQ1UvOnxNVaLh6/CLS7vmsNm0bNhK6vF2iN32S2WXr/IZLFs0x8mi0Vbv7BbtO49wm7R0naE
-        yUHcY828NYweO+4uYfS4vuQTs8fOWXfZPRbvecnksWlVJ5vHnWt72Dw2L6n3aD36i8Wjb8sq
-        Ro9/TXPZPbqOXGfz+LxJzuPU18/sAXxRXDYpqTmZZalF+nYJXBm9M86yFewPrZh2PaeB8YF9
-        FyMnh4SAicSb2f2MXYxcHEICOxglLm9bxgyRkJBY+XsSI4QtLLHy33N2iKKnjBInZkxnA0mw
-        CehJvDqymBUkISJwklGi/0wLmMMs0M0i0fiqlQmi5TWjxOEl28DmcgrYSZzYsR6sXVggRuL/
-        wTVgcRYBFYlb2+aB2bwClhJbV51igrAFJU7OfMICYjMLaEv0PmxlhLGXLXwNdauCxM+ny1gh
-        4uISL48eYQexRQTcJPbs/8M0gVF4FpJRs5CMmoVk1Cwk7QsYWVYxSqYWFOem5xYbFhjlpZbr
-        FSfmFpfmpesl5+duYgQnEi2tHYx7Vn3QO8TIxMF4iFGCg1lJhHfVpINJQrwpiZVVqUX58UWl
-        OanFhxilOViUxHkvdJ2MFxJITyxJzU5NLUgtgskycXBKNTDpM9pLRi/PSOuJMr/BO0tbN/BU
-        S9HZxW7nvk58pCxry+jWrlSqkeYkfK7mouP72FvGCZo3tWyP7QgNlF21beV2V1Gbjlt+Cft5
-        AvjeZ+mvO/bgtkeio9vjXzvuf5yVtPKSbeXxNq17v6cfvNt53GzPkavlnLnJzlrz3fnzaj85
-        VYi6Ltfc4si/6tinbIn/Iolrln6eLLGwzN5F59JJjg06ku9aj0TOcnY49bDJqeJz7qGkGbUP
-        NmjtmfP57OalLNfPC6ueux95M+fIRo6lLJUqdqfu/phw7erKN/XN8ztWVzwTOqTXv5TfnXkJ
-        83lzM8ees32CXle2NE8KaNiSFKqt9kj6lv3UuM5sIR17m3AlluKMREMt5qLiRACU9UBEkwMA
-        AA==
-X-CMS-MailID: 20220705114450epcas5p1875db9d8984faa262283a1d0ebb24c2d
+Thread-Index: AQJFyDoizuFNEw0PhIpG3eTqugJ4BwHIOArfAW1wjA4CGbX466xqtrXw
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0xbZRT3673tLZC6uwLygS+8kTgwMDoKXghsGAi7DjYJZDL8AyxwUx6l
+        rS3gGETQDRLKEDZCJh0vKY8IjM1Cec7Jo1jAbY73RHAPYF2pGkLFMbcRSwvKf79zfuf8zvmd
+        Lx8b4VZhLuwUcQYtEwtEBMsW7Rp2d/c0umkTvFsv2ZD3a7pYpGpTzyDvqUwoOdShwcjO6csI
+        2awbYJK12ttMsnvwIUp+99jMTlQuoqS+th2QBuVvLFK9NMskH6zGkFN9VSzy/DUNk7yiXcTI
+        xrkJBtmkfs4g18d7EbJe8xdGFnyvxchzhVpGsBPVVtMGqJ7FBkDNNawjVK9yEaNU1w0MSt1S
+        xKIWZq+zqI6GPKrjcTFCFYz8g1JfdbYAauvLaoxSaOdYlEn9BjW+YcIi932cFphMC5JomSst
+        TpQkpYiFQUR4dHxIvK+fN8+T50++R7iKBel0EBEaEekZliIyn4FwzRKIMs2pSIFcThw8HCiT
+        ZGbQrskSeUYQQUuTRFK+1EsuSJdnioVeYjojgOftfcjXXPhJWvJPf6+iUkXi6YslZSAfbMQr
+        gA0b4ny4Mj6CKIAtm4v3A9gxWgSswTqA+vOXGNbABOCtjhes3ZaWhXLUSvSZicmvd/r1AE6V
+        dKPbVSzcC65qVcxtwgHvAdDUr8G2AwR/gsCVH5YtWjb4MdhcUG/B9jgFCxfbzVJsNoq/DR9N
+        hGynObg/vP3tHGbF++FY5bJlAIK/C5u+MSLWlVzh05UmpjXvBA0jWku9Ax4GqwYaLR4gPm8D
+        z9VtWvQhHgp/3Thg7bWHq7pOzIpdoKG0cAcL4T3TWWDFUlid38mw4iNwYLoK3ZZBcHd4te+g
+        Nf06rBhvZ1hXeBmWPFveKefAnppdTMD6m6M78hDO/KFhlgFCuceZco8z5R43yv+n1QG0BTjT
+        Unm6kJb7Sn3E9Gf/vXiiJF0NLN/EI7wHPLy/5jUEGGwwBCAbIRw4LRcHE7icJEH2GVomiZdl
+        imj5EPA1X/sC4uKYKDH/M3FGPI/v78338/Pj+/v48QgnzrEZdQIXFwoy6DSaltKy3T4G28Yl
+        nxGnH9Ybw4o+Lc26YrsaWpEXd7e/demlwwHPFd2vzEK+YDB1XW3QHkA0P6PLze2/V7FucJ/c
+        LTy5JW91OHVjOaZJ9L4dM/zI6bKJM4HddXYnChwVuVQl4eyUc+vys5HXPGPnTulejck5u6WR
+        Feub9i9FbY5FSNjt+7K59va1Pr06bvVo2PE7fZ+zFp6GpLohFQluXUbnrOmPSgLyVHrbC8YZ
+        x3ItR/oWcgdLUF27OYXGHt3Hn3xH8OJBxFhWY65tBA84FU9Eh9hFf1F7Asv581Dcj8G64aux
+        a8b58uC20mjmfCqG/mJYK9n6IHcpO0pY3qprPnm8Uwdd8oM+fBTl8eYkgcqTBTwPRCYX/AvX
+        W8n4rwQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmphleLIzCtJLcpLzFFi42LZdlhJTvez/JEkg1M35SwezNvGZrH4x3Mm
+        i/uLP7NYHNq8ld1iy5XZzBbLjx9gtZh/5ByrxfaDj1gsNr4Ayl6ceZfF4vn8dYwWL2fdY7PY
+        9Pgaq8XDV+EWl3fNYbPo2bCV1WLtkbvsFkuvX2SyWLbpD5PFp1M7mS0Wbf3CbtG69wi7RUvb
+        ESYHcY8189Yweuy4u4TR4/qST8weO2fdZfdYvOclk8emVZ1sHneu7WHz2Lyk3mPzi25mj9aj
+        v1g8+rasYvT41zSX3aPryHU2j8+b5DxOff3MHsAfxWWTkpqTWZZapG+XwJXx89R5loJJzhVX
+        +w8wNzC+N+li5OSQEDCRWHVnMksXIxeHkMAORok3Pc+YIRISEit/T2KEsIUlVv57zg5R9JRR
+        4uvsY2BFbAJ6Eq+OLGYFSYgI7GGUWL59FxuIwyzQzSLR+KqVCaRKSOA7o8TJXaEgNqeAl8Ty
+        1kVsILawgIdE2911QJM4OFgEVCSeXXQGCfMKWEqcW3mdHcIWlDg58wkLiM0soC3R+7CVEcZe
+        tvA11KUKEj+fLmOFiItLvDx6BKxXRMBNYs6BpUwTGIVnIRk1C8moWUhGzULSvoCRZRWjZGpB
+        cW56brFhgVFearlecWJucWleul5yfu4mRnBC0dLawbhn1Qe9Q4xMHIyHGCU4mJVEeFdNOpgk
+        xJuSWFmVWpQfX1Sak1p8iFGag0VJnPdC18l4IYH0xJLU7NTUgtQimCwTB6dUAxODFHNonuhT
+        rYbNp9tmSpW3eOf4JGu3pUlLFAnucv1sunD99g9JQRZ/eVauP+i27MESH+bXPBEPr9za0XZR
+        q3HSoY9MB7m6Q15zXZtVf/nT1tNrcnOe/F5xf9as/78slT6vlDKrWrZKJ6Gf5+AVxmOv10SG
+        egVYxe1SZNK5UL50mWK387Qz892u3kjaYWPQOOPgXak1+w/O+H96PUdV5+al/ru5G3nPRSR4
+        SRUYvv25RfXCpAa57gU7D8ubutkKx6wN8WC8O1GR3/OfWa63tJ77BrON/8yD/mbckZ5/zGOy
+        xZIlcYf7LwkXxC+rCdJp5MvR/yD3X08xVcZeemHm1Kv/lZJ5f65p7Q7ZpnzrxkklluKMREMt
+        5qLiRAAy1dailwMAAA==
+X-CMS-MailID: 20220705112643epcas5p1609a1dbce1c09969cd963483bbedf8da
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: REQ_APPROVE
 CMS-TYPE: 105P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220517125554epcas5p4e87a71471525056281f1578f4f80f760
+X-CMS-RootMailID: 20220517125608epcas5p48b5d2f91c711e5728f993169b1d4b9a1
 References: <20220517125548.14746-1-smitha.t@samsung.com>
-        <CGME20220517125554epcas5p4e87a71471525056281f1578f4f80f760@epcas5p4.samsung.com>
-        <20220517125548.14746-3-smitha.t@samsung.com>
-        <6c2ea5f7-3cc0-d43c-c667-18c25b64ff72@linaro.org>
+        <CGME20220517125608epcas5p48b5d2f91c711e5728f993169b1d4b9a1@epcas5p4.samsung.com>
+        <20220517125548.14746-7-smitha.t@samsung.com>
+        <44a151e1cdbba8dcf3dfe7dfe00b6ee49c99bcfb.camel@ndufresne.ca>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
@@ -132,8 +131,8 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 
 > -----Original Message-----
-> From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40linaro.org=5D
-> Sent: Tuesday, May 17, 2022 7:26 PM
+> From: Nicolas Dufresne =5Bmailto:nicolas=40ndufresne.ca=5D
+> Sent: Tuesday, May 17, 2022 6:44 PM
 > To: Smitha T Murthy <smitha.t=40samsung.com>; linux-arm-
 > kernel=40lists.infradead.org; linux-media=40vger.kernel.org; linux-
 > kernel=40vger.kernel.org; devicetree=40vger.kernel.org
@@ -146,353 +145,160 @@ X-Mailing-List: linux-media@vger.kernel.org
 > andi=40etezian.org; alim.akhtar=40samsung.com; aswani.reddy=40samsung.com=
 ;
 > pankaj.dubey=40samsung.com; linux-fsd=40tesla.com
-> Subject: Re: =5BPATCH 02/20=5D dt-bindings: media: s5p-mfc: Convert s5p-m=
-fc.txt
-> to new DT schema
+> Subject: Re: =5BPATCH 06/20=5D Documention: v4l: Documentation for VP9 CI=
+Ds.
 >=20
-> On 17/05/2022 14:55, Smitha T Murthy wrote:
-> > Adds DT schema for s5p-mfc in yaml format.
-> >
+> Hi Smitha,
 >=20
-> Thank you for your patch. There is something to discuss/improve.
->=20
-
-Thank you for the review.=20
-
-> > Cc: linux-fsd=40tesla.com
-> > Signed-off-by: Smitha T Murthy <smitha.t=40samsung.com>
-> > ---
-> >  .../devicetree/bindings/media/s5p-mfc.txt     =7C 77 +--------------
-> >  .../devicetree/bindings/media/s5p-mfc.yaml    =7C 98
-> +++++++++++++++++++
-> >  2 files changed, 99 insertions(+), 76 deletions(-)  create mode
-> > 100644 Documentation/devicetree/bindings/media/s5p-mfc.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/media/s5p-mfc.txt
-> > b/Documentation/devicetree/bindings/media/s5p-mfc.txt
-> > index aa54c8159d9f..f00241ed407f 100644
-> > --- a/Documentation/devicetree/bindings/media/s5p-mfc.txt
-> > +++ b/Documentation/devicetree/bindings/media/s5p-mfc.txt
-> > =40=40 -1,76 +1 =40=40
-> > -* Samsung Multi Format Codec (MFC)
-> > -
-> > -Multi Format Codec (MFC) is the IP present in Samsung SoCs which
-> > -supports high resolution decoding and encoding functionalities.
-> > -The MFC device driver is a v4l2 driver which can encode/decode -video
-> > raw/elementary streams and has support for all popular -video codecs.
-> > -
-> > -Required properties:
-> > -  - compatible : value should be either one among the following
-> > -	(a) =22samsung,mfc-v5=22 for MFC v5 present in Exynos4 SoCs
-> > -	(b) =22samsung,mfc-v6=22 for MFC v6 present in Exynos5 SoCs
-> > -	(c) =22samsung,mfc-v7=22 for MFC v7 present in Exynos5420 SoC
-> > -	(d) =22samsung,mfc-v8=22 for MFC v8 present in Exynos5800 SoC
-> > -	(e) =22samsung,exynos5433-mfc=22 for MFC v8 present in Exynos5433
-> SoC
-> > -	(f) =22samsung,mfc-v10=22 for MFC v10 present in Exynos7880 SoC
-> > -
-> > -  - reg : Physical base address of the IP registers and length of memo=
-ry
-> > -	  mapped region.
-> > -
-> > -  - interrupts : MFC interrupt number to the CPU.
-> > -  - clocks : from common clock binding: handle to mfc clock.
-> > -  - clock-names : from common clock binding: must contain =22mfc=22,
-> > -		  corresponding to entry in the clocks property.
-> > -
-> > -Optional properties:
-> > -  - power-domains : power-domain property defined with a phandle
-> > -			   to respective power domain.
-> > -  - memory-region : from reserved memory binding: phandles to two
-> reserved
-> > -	memory regions, first is for =22left=22 mfc memory bus interfaces,
-> > -	second if for the =22right=22 mfc memory bus, used when no SYSMMU
-> > -	support is available; used only by MFC v5 present in Exynos4 SoCs
-> > -
-> > -Obsolete properties:
-> > -  - samsung,mfc-r, samsung,mfc-l : support removed, please use memory-
-> region
-> > -	property instead
-> > -
-> > -
-> > -Example:
-> > -SoC specific DT entry:
-> > -
-> > -mfc: codec=4013400000 =7B
-> > -	compatible =3D =22samsung,mfc-v5=22;
-> > -	reg =3D <0x13400000 0x10000>;
-> > -	interrupts =3D <0 94 0>;
-> > -	power-domains =3D <&pd_mfc>;
-> > -	clocks =3D <&clock 273>;
-> > -	clock-names =3D =22mfc=22;
-> > -=7D;
-> > -
-> > -Reserved memory specific DT entry for given board (see reserved
-> > memory binding -for more information):
-> > -
-> > -reserved-memory =7B
-> > -	=23address-cells =3D <1>;
-> > -	=23size-cells =3D <1>;
-> > -	ranges;
-> > -
-> > -	mfc_left: region=4051000000 =7B
-> > -		compatible =3D =22shared-dma-pool=22;
-> > -		no-map;
-> > -		reg =3D <0x51000000 0x800000>;
-> > -	=7D;
-> > -
-> > -	mfc_right: region=4043000000 =7B
-> > -		compatible =3D =22shared-dma-pool=22;
-> > -		no-map;
-> > -		reg =3D <0x43000000 0x800000>;
-> > -	=7D;
-> > -=7D;
-> > -
-> > -Board specific DT entry:
-> > -
-> > -codec=4013400000 =7B
-> > -	memory-region =3D <&mfc_left>, <&mfc_right>;
-> > -=7D;
-> > +This file has moved to s5p-mfc.yaml
->=20
-> Instead entirely remove the file.
->=20
-
-Ok, I will remove this file.
-
-> > diff --git a/Documentation/devicetree/bindings/media/s5p-mfc.yaml
-> > b/Documentation/devicetree/bindings/media/s5p-mfc.yaml
-> > new file mode 100644
-> > index 000000000000..fff7c7e0d575
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/media/s5p-mfc.yaml
-> > =40=40 -0,0 +1,98 =40=40
-> > +=23 SPDX-License-Identifier: GPL-2.0
-> > +%YAML 1.2
-> > +---
-> > +=24id:
-> > +https://protect2.fireeye.com/v1/url?k=3D8b32845f-ea492ed7-8b330f10-
-> 74fe
-> > +4860018a-302429095d2fce6e&q=3D1&e=3D73087855-3649-4be8-a878-
-> d487e0ae58f4&
-> > +u=3Dhttp%3A%2F%2Fdevicetree.org%2Fschemas%2Fmedia%2Fs5p-
-> mfc.yaml%23
->=20
-> Let's convert the name as well, so =22samsung,s5p-mfc.yaml=22
->=20
-
-Ok, I will change the name in next series.
-
-> > +=24schema:
-> > +https://protect2.fireeye.com/v1/url?k=3Da01c09cc-c167a344-a01d8283-74f=
-e
-> > +4860018a-b8e3ca9e8a791d49&q=3D1&e=3D73087855-3649-4be8-a878-
-> d487e0ae58f4&
-> > +u=3Dhttp%3A%2F%2Fdevicetree.org%2Fmeta-schemas%2Fcore.yaml%23
-> > +
-> > +title: Samsung Exynos Multi Format Codec (MFC)
-> > +
-> > +maintainers:
-> > +  - Mauro Carvalho Chehab <mchehab=40kernel.org>
-> > +  - Rob Herring <robh+dt=40kernel.org>
-> > +  - Mark Rutland <mark.rutland=40arm.com>
-> > +  - Smitha T Murthy <smitha.t=40samsung.com>
->=20
-> Only people with access to HW, so you can put here Marek and yourself.
->=20
-
-Ok, I will change the authors list.
-
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - samsung,mfc-v5                  =23 Exynos4
-> > +      - samsung,mfc-v6                  =23 Exynos5
-> > +      - samsung,mfc-v7                  =23 Exynos5420
-> > +      - samsung,mfc-v8                  =23 Exynos5800
-> > +      - samsung,exynos5433-mfc          =23 Exynos5433
-> > +      - samsung,mfc-v10                 =23 Exynos7880
->=20
-> Ugh, how MFCv10 appeared here? Since 5433 we moved from versions to
-> Soc compatibles as recommended... eh, please follow this convention, don'=
-t
-> reverse it to other way.
->=20
-> I propose to deprecated this in next patch and instead use SoC-based
-> compatible.
->=20
-
-MFCv10 was already mainlined as mfc-v10, maybe for v10 I will add it post t=
-his series.
-For MFCv12 I will add SoC-based in the next series.
-
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    description:
-> > +      Phandle to MFC IP clock.
->=20
-> Here and other places: s/Phandle//
-> Instead describe what is it, e.g. =22MFC IP clock=22
->=20
->=20
-
-Ok noted.
-
-> > +    maxItems: 1
-> > +
-> > +  clock-names:
-> > +    description:
-> > +      Must contain clock name (mfc) matching phandle in clocks
-> > +      property.
->=20
-> Skip description, its obvious. Instead list the items.
->=20
-
-Ok
-
-> > +    maxItems: 1
->=20
-> No need, list the items.
->=20
-> > +
-> > +  interrupts:
-> > +    description:
-> > +      MFC interrupt number to the CPU.
->=20
-> Skip description, it's obvious.
->=20
-
-Ok
-
-> > +    maxItems: 1
-> > +
-> > +  memory-region:
-> > +    description:
-> > +      From reserved memory binding phandles to two reserved
-> > +      memory regions, first is for =22left=22 mfc memory bus interface=
-s,
-> > +      second if for the =22right=22 mfc memory bus, used when no SYSMM=
-U
-> > +      support is available; used only by MFC v5 present in Exynos4 SoC=
-s.
-> > +    minItems: 1
-> > +    maxItems: 2
->=20
-> This needs allOf:if:then restricting two items to specific compatible.
->=20
-
-Ok, I will make this change.
-
-> > +
-> > +  iommus:
-> > +    description:
-> > +      Include the IOMMU domain MFC belong to.
->=20
-> Skip description, it's obvious.
->=20
-
-Ok
-
-> > +    maxItems: 2
-> > +
->=20
-> What happened to power domains? You also removed them from the
-> example... Does this pass dtbs_check?
->=20
-
-This file passed the dtbs_check. For MFCv10 and v12 power domains are not r=
-equired.
-I will add in the example.
-
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - clocks
-> > +  - clock-names
-> > +  - interrupts
-> > +  - iommus
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - =7C
-> > +        /* Reserved memory specific DT entry for given board */
-> > +        reserved-memory =7B
->=20
-> Wrong indentation. Four spaces. See example schema.
->=20
-
-Ok
-
-> > +                =23address-cells =3D <1>;
-> > +                =23size-cells =3D <1>;
-> > +                ranges;
-> > +
-> > +                mfc_left: region=4084000000 =7B
-> > +                        compatible =3D =22shared-dma-pool=22;
-> > +                        no-map;
-> > +                        reg =3D <0x84000000 0x800000>;
-> > +                =7D;
-> > +
-> > +                mfc_right: region=40A9000000 =7B
->=20
-> lower case hex addresses, everywhere.
->=20
-
-Ok
-
-> > +                        compatible =3D =22shared-dma-pool=22;
-> > +                        no-map;
-> > +                        reg =3D <0xA9000000 0x800000>;
-> > +                =7D;
-> > +        =7D;
-> > +
-> > +        mfc_0: mfc0=4012880000 =7B
->=20
-> Generic node names, so mfc.
->=20
-
-Ok
-
-> > +                compatible =3D =22samsung,mfc-v12=22;
->=20
-> Does not look like you tested the bindings. Please run =60make
-> dt_binding_check=60 (see Documentation/devicetree/bindings/writing-
-> schema.rst for instructions).
-> Be sure to test your bindings before sending them.
->=20
-
-I did do make dtbs and dt_binding_check using v2022.3, I will recheck post =
-these changes.
-
-> > +                reg =3D <0x12880000 0x10000>;
-> > +                clock-names =3D =22mfc=22;
-> > +                interrupts =3D <0 137 4>;
->=20
-> Use interrupt defines.
->=20
-
-When I use interrupt defines I get errors as =221.	Syntax error: This was d=
-ue to interrupts field has some macro reference and needed to give absolute=
- value.=22, hence I gave absolute values.
-
-Regards,
-Smitha
-
-> > +                clocks =3D <&clock_mfc 1>;
-> > +                memory-region =3D <&mfc_left>, <&mfc_right>;
-> > +                /* If IOMMU is present use below instead of memory-reg=
-ion
-> property */
-> > +                iommus =3D <&smmu_isp 0x1000 0x0>, <&smmu_isp 0x1400 0=
-x0>;
-> > +        =7D;
->=20
->=20
-> Best regards,
-> Krzysztof
-
+> Le mardi 17 mai 2022 =C3=A0=2018:25=20+0530,=20Smitha=20T=20Murthy=20a=20=
+=C3=A9crit=20:=0D=0A>=20>=20Adds=20V4l2=20controls=20for=20VP9=20encoder=20=
+documention.=0D=0A>=20>=0D=0A>=20>=20Cc:=20linux-fsd=40tesla.com=0D=0A>=20>=
+=20Signed-off-by:=20Smitha=20T=20Murthy=20<smitha.t=40samsung.com>=0D=0A>=
+=20>=20---=0D=0A>=20>=20=20.../media/v4l/ext-ctrls-codec.rst=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=7C=20167=20++++++++++++++++++=0D=0A>=20>=20=201=20=
+file=20changed,=20167=20insertions(+)=0D=0A>=20>=0D=0A>=20>=20diff=20--git=
+=20a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst=0D=0A>=20>=
+=20b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst=0D=0A>=20>=
+=20index=204cd7c541fc30..1b617a08f973=20100644=0D=0A>=20>=20---=20a/Documen=
+tation/userspace-api/media/v4l/ext-ctrls-codec.rst=0D=0A>=20>=20+++=20b/Doc=
+umentation/userspace-api/media/v4l/ext-ctrls-codec.rst=0D=0A>=20>=20=40=40=
+=20-2165,6=20+2165,16=20=40=40=20enum=20v4l2_mpeg_video_vp8_profile=20-=0D=
+=0A>=20>=20=20=20=20=20=20*=20-=20=60=60V4L2_MPEG_VIDEO_VP8_PROFILE_3=60=60=
+=0D=0A>=20>=20=20=20=20=20=20=20=20-=20Profile=203=0D=0A>=20>=0D=0A>=20>=20=
++VP9=20Control=20Reference=0D=0A>=20>=20+---------------------=0D=0A>=20>=
+=20+=0D=0A>=20>=20+The=20VP9=20controls=20include=20controls=20for=20encodi=
+ng=20parameters=20of=20VP9=0D=0A>=20>=20+video=20codec.=0D=0A>=20>=20+=0D=
+=0A>=20>=20+..=20_vp9-control-id:=0D=0A>=20>=20+=0D=0A>=20>=20+VP9=20Contro=
+l=20IDs=0D=0A>=20>=20+=0D=0A>=20>=20=20..=20_v4l2-mpeg-video-vp9-profile:=
+=0D=0A>=20>=0D=0A>=20>=20=20=60=60V4L2_CID_MPEG_VIDEO_VP9_PROFILE=60=60=0D=
+=0A>=20>=20=40=40=20-2231,6=20+2241,163=20=40=40=20enum=20v4l2_mpeg_video_v=
+p9_level=20-=0D=0A>=20>=20=20=20=20=20=20*=20-=20=60=60V4L2_MPEG_VIDEO_VP9_=
+LEVEL_6_2=60=60=0D=0A>=20>=20=20=20=20=20=20=20=20-=20Level=206.2=0D=0A>=20=
+>=0D=0A>=20>=20+=60=60V4L2_CID_MPEG_VIDEO_VP9_I_FRAME_QP=60=60=0D=0A>=20=0D=
+=0A>=20The=20class=20was=20recently=20renamed=20V4L2_CID_CODEC...=20for=20a=
+=20reason,=20can=20you=0D=0A>=20rename=20MPEG_VIDEO=20with=20CODEC,=20speci=
+ally=20for=20VP9=20CODEC=20were=20MPEG=0D=0A>=20makes=20no=20sense.=20This=
+=20applies=20all=20the=20doc=20and=20the=20defines=20in=20the=20other=20pat=
+ch.=0D=0A>=20=0D=0A>=20thanks,=0D=0A>=20Nicolas=0D=0A>=20=0D=0AHi=20Nichola=
+s,=0D=0A=0D=0AThank=20you=20the=20review.=20I=20will=20make=20the=20change=
+=20and=20push=20in=20the=20next=20series.=0D=0A=0D=0ARegards,=0D=0ASmitha=
+=0D=0A>=20>=20+=20=20=20=20Quantization=20parameter=20for=20an=20I=20frame=
+=20for=20VP9.=20Valid=20range:=20from=201=20to=0D=0A>=20255.=0D=0A>=20>=20+=
+=0D=0A>=20>=20+=60=60V4L2_CID_MPEG_VIDEO_VP9_P_FRAME_QP=60=60=0D=0A>=20>=20=
++=20=20=20=20Quantization=20parameter=20for=20an=20P=20frame=20for=20VP9.=
+=20Valid=20range:=20from=201=20to=0D=0A>=20255.=0D=0A>=20>=20+=0D=0A>=20>=
+=20+=60=60V4L2_CID_MPEG_VIDEO_VP9_MAX_QP=60=60=0D=0A>=20>=20+=20=20=20=20Ma=
+ximum=20quantization=20parameter=20for=20VP9.=20Valid=20range:=20from=201=
+=20to=20255.=0D=0A>=20>=20+=20=20=20=20Recommended=20range=20for=20MFC=20is=
+=20from=20230=20to=20255.=0D=0A>=20>=20+=0D=0A>=20>=20+=60=60V4L2_CID_MPEG_=
+VIDEO_VP9_MIN_QP=60=60=0D=0A>=20>=20+=20=20=20=20Minimum=20quantization=20p=
+arameter=20for=20VP9.=20Valid=20range:=20from=201=20to=20255.=0D=0A>=20>=20=
++=20=20=20=20Recommended=20range=20for=20MFC=20is=20from=201=20to=2024.=0D=
+=0A>=20>=20+=0D=0A>=20>=20+=60=60V4L2_CID_MPEG_VIDEO_VP9_RC_FRAME_RATE=60=
+=60=0D=0A>=20>=20+=20=20=20=20Indicates=20the=20number=20of=20evenly=20spac=
+ed=20subintervals,=20called=20ticks,=20within=0D=0A>=20>=20+=20=20=20=20one=
+=20second.=20This=20is=20a=2016=20bit=20unsigned=20integer=20and=20has=20a=
+=20maximum=20value=0D=0A>=20up=20to=0D=0A>=20>=20+=20=20=20=200xffff=20and=
+=20a=20minimum=20value=20of=201.=0D=0A>=20>=20+=0D=0A>=20>=20+=60=60V4L2_CI=
+D_MPEG_VIDEO_VP9_GF_REFRESH_PERIOD=60=60=0D=0A>=20>=20+=20=20=20=20Indicate=
+s=20the=20refresh=20period=20of=20the=20golden=20frame=20for=20VP9=20encode=
+r.=0D=0A>=20>=20+=0D=0A>=20>=20+..=20_v4l2-vp9-golden-frame-sel:=0D=0A>=20>=
+=20+=0D=0A>=20>=20+=60=60V4L2_CID_MPEG_VIDEO_VP9_GOLDEN_FRAMESEL=60=60=0D=
+=0A>=20>=20+=20=20=20=20(enum)=0D=0A>=20>=20+=0D=0A>=20>=20+enum=20v4l2_mpe=
+g_vp9_golden_framesel=20-=0D=0A>=20>=20+=20=20=20=20Selects=20the=20golden=
+=20frame=20for=20encoding.=20Valid=20when=20NUM_OF_REF=20is=202.=0D=0A>=20>=
+=20+=20=20=20=20Possible=20values=20are:=0D=0A>=20>=20+=0D=0A>=20>=20+..=20=
+raw::=20latex=0D=0A>=20>=20+=0D=0A>=20>=20+=20=20=20=20=5Cfootnotesize=0D=
+=0A>=20>=20+=0D=0A>=20>=20+..=20tabularcolumns::=20=7Cp=7B9.0cm=7D=7Cp=7B8.=
+0cm=7D=7C=0D=0A>=20>=20+=0D=0A>=20>=20+..=20flat-table::=0D=0A>=20>=20+=20=
+=20=20=20:header-rows:=20=200=0D=0A>=20>=20+=20=20=20=20:stub-columns:=200=
+=0D=0A>=20>=20+=0D=0A>=20>=20+=20=20=20=20*=20-=20=60=60V4L2_CID_MPEG_VIDEO=
+_VP9_GOLDEN_FRAME_USE_PREV=60=60=0D=0A>=20>=20+=20=20=20=20=20=20-=20Use=20=
+the=20(n-2)th=20frame=20as=20a=20golden=20frame,=20current=20frame=20index=
+=20being=0D=0A>=20>=20+=20=20=20=20=20=20=20=20'n'.=0D=0A>=20>=20+=20=20=20=
+=20*=20-=0D=0A>=20=60=60V4L2_CID_MPEG_VIDEO_VP9_GOLDEN_FRAME_USE_REF_PERIOD=
+=60=60=0D=0A>=20>=20+=20=20=20=20=20=20-=20Use=20the=20previous=20specific=
+=20frame=20indicated=20by=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=60=60V4L2_=
+CID_MPEG_VIDEO_VP9_GF_REFRESH_PERIOD=60=60=20as=20a=0D=0A>=20>=20+=20=20=20=
+=20=20=20=20=20golden=20frame.=0D=0A>=20>=20+=0D=0A>=20>=20+..=20raw::=20la=
+tex=0D=0A>=20>=20+=0D=0A>=20>=20+=20=20=20=20=5Cnormalsize=0D=0A>=20>=20+=
+=0D=0A>=20>=20+=0D=0A>=20>=20+=60=60V4L2_CID_MPEG_VIDEO_VP9_HIERARCHY_QP_EN=
+ABLE=60=60=0D=0A>=20>=20+=20=20=20=20Allows=20host=20to=20specify=20the=20q=
+uantization=20parameter=20values=20for=20each=0D=0A>=20>=20+=20=20=20=20tem=
+poral=20layer=20through=20HIERARCHICAL_QP_LAYER.=20This=20is=20valid=20only=
+=0D=0A>=20>=20+=20=20=20=20if=20HIERARCHICAL_CODING_LAYER=20is=20greater=20=
+than=201.=20Setting=20the=20control=0D=0A>=20>=20+=20=20=20=20value=20to=20=
+1=20enables=20setting=20of=20the=20QP=20values=20for=20the=20layers.=0D=0A>=
+=20>=20+=0D=0A>=20>=20+..=20_v4l2-vp9-ref-number-of-pframes:=0D=0A>=20>=20+=
+=0D=0A>=20>=20+=60=60V4L2_CID_MPEG_VIDEO_VP9_REF_NUMBER_FOR_PFRAMES=60=60=
+=0D=0A>=20>=20+=20=20=20=20(enum)=0D=0A>=20>=20+=0D=0A>=20>=20+enum=20v4l2_=
+mpeg_vp9_ref_num_for_pframes=20-=0D=0A>=20>=20+=20=20=20=20Number=20of=20re=
+ference=20pictures=20for=20encoding=20P=20frames.=0D=0A>=20>=20+=0D=0A>=20>=
+=20+..=20raw::=20latex=0D=0A>=20>=20+=0D=0A>=20>=20+=20=20=20=20=5Cfootnote=
+size=0D=0A>=20>=20+=0D=0A>=20>=20+..=20tabularcolumns::=20=7Cp=7B9.0cm=7D=
+=7Cp=7B8.0cm=7D=7C=0D=0A>=20>=20+=0D=0A>=20>=20+..=20flat-table::=0D=0A>=20=
+>=20+=20=20=20=20:header-rows:=20=200=0D=0A>=20>=20+=20=20=20=20:stub-colum=
+ns:=200=0D=0A>=20>=20+=0D=0A>=20>=20+=20=20=20=20*=20-=20=60=60V4L2_CID_MPE=
+G_VIDEO_VP9_1_REF_PFRAME=60=60=0D=0A>=20>=20+=20=20=20=20=20=20-=20Indicate=
+s=20one=20reference=20frame,=20last=20encoded=20frame=20will=20be=20searche=
+d.=0D=0A>=20>=20+=20=20=20=20*=20-=0D=0A>=20=60=60V4L2_CID_MPEG_VIDEO_VP9_G=
+OLDEN_FRAME_USE_REF_PERIOD=60=60=0D=0A>=20>=20+=20=20=20=20=20=20-=20Indica=
+tes=202=20reference=20frames,=20last=20encoded=20frame=20and=20golden=20fra=
+me=0D=0A>=20>=20+=20=20=20=20=20=20=20=20will=20be=20searched.=0D=0A>=20>=
+=20+=0D=0A>=20>=20+..=20raw::=20latex=0D=0A>=20>=20+=0D=0A>=20>=20+=20=20=
+=20=20=5Cnormalsize=0D=0A>=20>=20+=0D=0A>=20>=20+=0D=0A>=20>=20+=60=60V4L2_=
+CID_MPEG_VIDEO_VP9_HIERARCHICAL_CODING_LAYER=60=60=0D=0A>=20>=20+=20=20=20=
+=20Indicates=20the=20number=20of=20hierarchial=20coding=20layer.=0D=0A>=20>=
+=20+=20=20=20=20In=20normal=20encoding=20(non-hierarchial=20coding),=20it=
+=20should=20be=20zero.=0D=0A>=20>=20+=20=20=20=20VP9=20has=20upto=203=20lay=
+er=20of=20encoder.=0D=0A>=20>=20+=0D=0A>=20>=20+=60=60V4L2_CID_MPEG_VIDEO_V=
+P9_HIERARCHY_RC_ENABLE=60=60=0D=0A>=20>=20+=20=20=20=20Indicates=20enabling=
+=20of=20bit=20rate=20for=20hierarchical=20coding=20layers=20VP9=20encoder.=
+=0D=0A>=20>=20+=0D=0A>=20>=20+=60=60V4L2_CID_MPEG_VIDEO_VP9_HIER_CODING_L0_=
+BR=60=60=0D=0A>=20>=20+=20=20=20=20Indicates=20bit=20rate=20for=20hierarchi=
+cal=20coding=20layer=200=20for=20VP9=20encoder.=0D=0A>=20>=20+=0D=0A>=20>=
+=20+=60=60V4L2_CID_MPEG_VIDEO_VP9_HIER_CODING_L1_BR=60=60=0D=0A>=20>=20+=20=
+=20=20=20Indicates=20bit=20rate=20for=20hierarchical=20coding=20layer=201=
+=20for=20VP9=20encoder.=0D=0A>=20>=20+=0D=0A>=20>=20+=60=60V4L2_CID_MPEG_VI=
+DEO_VP9_HIER_CODING_L2_BR=60=60=0D=0A>=20>=20+=20=20=20=20Indicates=20bit=
+=20rate=20for=20hierarchical=20coding=20layer=202=20for=20VP9=20encoder.=0D=
+=0A>=20>=20+=0D=0A>=20>=20+=60=60V4L2_CID_MPEG_VIDEO_VP9_HIER_CODING_L0_QP=
+=60=60=0D=0A>=20>=20+=20=20=20=20Indicates=20quantization=20parameter=20for=
+=20hierarchical=20coding=20layer=200.=0D=0A>=20>=20+=20=20=20=20Valid=20ran=
+ge:=20=5BV4L2_CID_MPEG_VIDEO_VP9_MIN_QP,=0D=0A>=20>=20+=20=20=20=20V4L2_CID=
+_MPEG_VIDEO_VP9_MAX_QP=5D.=0D=0A>=20>=20+=0D=0A>=20>=20+=60=60V4L2_CID_MPEG=
+_VIDEO_VP9_HIER_CODING_L1_QP=60=60=0D=0A>=20>=20+=20=20=20=20Indicates=20qu=
+antization=20parameter=20for=20hierarchical=20coding=20layer=201.=0D=0A>=20=
+>=20+=20=20=20=20Valid=20range:=20=5BV4L2_CID_MPEG_VIDEO_VP9_MIN_QP,=0D=0A>=
+=20>=20+=20=20=20=20V4L2_CID_MPEG_VIDEO_VP9_MAX_QP=5D.=0D=0A>=20>=20+=0D=0A=
+>=20>=20+=60=60V4L2_CID_MPEG_VIDEO_VP9_HIER_CODING_L2_QP=60=60=0D=0A>=20>=
+=20+=20=20=20=20Indicates=20quantization=20parameter=20for=20hierarchical=
+=20coding=20layer=202.=0D=0A>=20>=20+=20=20=20=20Valid=20range:=20=5BV4L2_C=
+ID_MPEG_VIDEO_VP9_MIN_QP,=0D=0A>=20>=20+=20=20=20=20V4L2_CID_MPEG_VIDEO_VP9=
+_MAX_QP=5D.=0D=0A>=20>=20+=0D=0A>=20>=20+..=20_v4l2-vp9-max-partition-depth=
+:=0D=0A>=20>=20+=0D=0A>=20>=20+=60=60V4L2_CID_MPEG_VIDEO_VP9_MAX_PARTITION_=
+DEPTH=60=60=0D=0A>=20>=20+=20=20=20=20(enum)=0D=0A>=20>=20+=0D=0A>=20>=20+e=
+num=20v4l2_mpeg_vp9_num_partitions=20-=0D=0A>=20>=20+=20=20=20=20Indicate=
+=20maximum=20coding=20unit=20depth.=0D=0A>=20>=20+=0D=0A>=20>=20+..=20raw::=
+=20latex=0D=0A>=20>=20+=0D=0A>=20>=20+=20=20=20=20=5Cfootnotesize=0D=0A>=20=
+>=20+=0D=0A>=20>=20+..=20tabularcolumns::=20=7Cp=7B9.0cm=7D=7Cp=7B8.0cm=7D=
+=7C=0D=0A>=20>=20+=0D=0A>=20>=20+..=20flat-table::=0D=0A>=20>=20+=20=20=20=
+=20:header-rows:=20=200=0D=0A>=20>=20+=20=20=20=20:stub-columns:=200=0D=0A>=
+=20>=20+=0D=0A>=20>=20+=20=20=20=20*=20-=20=60=60V4L2_CID_MPEG_VIDEO_VP9_0_=
+PARTITION=60=60=0D=0A>=20>=20+=20=20=20=20=20=20-=20No=20coding=20unit=20pa=
+rtition=20depth.=0D=0A>=20>=20+=20=20=20=20*=20-=20=60=60V4L2_CID_MPEG_VIDE=
+O_VP9_1_PARTITION=60=60=0D=0A>=20>=20+=20=20=20=20=20=20-=20Allows=20one=20=
+coding=20unit=20partition=20depth.=0D=0A>=20>=20+=0D=0A>=20>=20+..=20raw::=
+=20latex=0D=0A>=20>=20+=0D=0A>=20>=20+=20=20=20=20=5Cnormalsize=0D=0A>=20>=
+=20+=0D=0A>=20>=20+=0D=0A>=20>=20+=60=60V4L2_CID_MPEG_VIDEO_VP9_DISABLE_INT=
+RA_PU_SPLIT=60=60=0D=0A>=20>=20+=20=20=20=20Zero=20indicates=20enable=20int=
+ra=20NxN=20PU=20split.=0D=0A>=20>=20+=20=20=20=20One=20indicates=20disable=
+=20intra=20NxN=20PU=20split.=0D=0A>=20>=20+=0D=0A>=20>=20+=60=60V4L2_CID_MP=
+EG_VIDEO_VP9_DISABLE_IVF_HEADER=60=60=0D=0A>=20>=20+=20=20=20=20Indicates=
+=20IVF=20header=20generation.=20Zero=20indicates=20enable=20IVF=20format.=
+=0D=0A>=20>=20+=20=20=20=20One=20indicates=20disable=20IVF=20format.=0D=0A>=
+=20>=20+=0D=0A>=20>=0D=0A>=20>=20=20High=20Efficiency=20Video=20Coding=20(H=
+EVC/H.265)=20Control=20Reference=0D=0A>=20>=0D=0A>=20=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=0D=0A>=20=3D=0D=0A=0D=0A=0D=0A
