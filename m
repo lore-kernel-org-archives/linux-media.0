@@ -2,55 +2,55 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 108C7CCA482
-	for <linux-media@archiver.kernel.org>; Tue,  5 Jul 2022 11:54:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58907C433EF
+	for <linux-media@archiver.kernel.org>; Tue,  5 Jul 2022 11:54:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232809AbiGELxV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Jul 2022 07:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
+        id S230103AbiGELyW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Jul 2022 07:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232653AbiGELwb (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jul 2022 07:52:31 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A579175A8
-        for <linux-media@vger.kernel.org>; Tue,  5 Jul 2022 04:52:29 -0700 (PDT)
+        with ESMTP id S232677AbiGELwe (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Jul 2022 07:52:34 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BCA17A83
+        for <linux-media@vger.kernel.org>; Tue,  5 Jul 2022 04:52:32 -0700 (PDT)
 Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220705115226epoutp040f2bb37128036e945d98712bcad8066f~_7K5hui510536805368epoutp04h
-        for <linux-media@vger.kernel.org>; Tue,  5 Jul 2022 11:52:26 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220705115226epoutp040f2bb37128036e945d98712bcad8066f~_7K5hui510536805368epoutp04h
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220705115231epoutp01973c67405bdb9e589eae7982fee095ff~_7K_CbOZO0449104491epoutp01C
+        for <linux-media@vger.kernel.org>; Tue,  5 Jul 2022 11:52:31 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220705115231epoutp01973c67405bdb9e589eae7982fee095ff~_7K_CbOZO0449104491epoutp01C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1657021946;
-        bh=n5X07+dvSt5HPtQNR62Z9LfSjI7D7S8+f+4AI0jIlwc=;
+        s=mail20170921; t=1657021951;
+        bh=9ZkoIdUBGeiW5twsNBrNrXwy3/fi85w4/fvmYMTYrSs=;
         h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=rrAepX45cB3OsgDgBJPv9thzt2coL+EY0LLOfnv+TzVaOMRl8sELKpBa8/r5u/yRh
-         5pmPOwn+mUD7dhJfD0ms93rQM2cGTkOlRljwpgBBm4Lqde0uymgHUnY+ujvCjvjeWP
-         CrQRAGLq63LPhyO0F/k61cCmNJzHxp1KxmVNSj5k=
+        b=lmA3DXh1nIIoU2mkp/yW3hgT85G73YCdOlZvh+lLuoXtDM58zzrb147ZGrnSLYErn
+         4xshmavSC3Yxfe037wQpk6P1Cn2nz5pNXm25iBSmi1ruadvD5MIIL+Log4IQsseJJk
+         FdJe15SO58TK9QsNRrnKRjTrBILOMCck32wGxqgw=
 Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
         epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20220705115225epcas5p14e15ab4d33f5f970f7396e1aea50938f~_7K40gMUP1357613576epcas5p1N;
-        Tue,  5 Jul 2022 11:52:25 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.176]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4LcgyZ69s9z4x9Q6; Tue,  5 Jul
-        2022 11:52:22 +0000 (GMT)
+        20220705115230epcas5p17b47cfd19bdeb604ed1d9fed97e03216~_7K9U5Jse1357613576epcas5p1b;
+        Tue,  5 Jul 2022 11:52:30 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.176]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4Lcgyg4nQwz4x9Pw; Tue,  5 Jul
+        2022 11:52:27 +0000 (GMT)
 Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        20.00.09566.6F524C26; Tue,  5 Jul 2022 20:52:22 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F1.AC.09662.BF524C26; Tue,  5 Jul 2022 20:52:27 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
         epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220705114800epcas5p20ed5fbaa9d830f3f5838b4a244f05e18~_7HB7KDIu1536315363epcas5p2P;
-        Tue,  5 Jul 2022 11:48:00 +0000 (GMT)
+        20220705115216epcas5p25047d2627060526f0478dbc156f946ff~_7KwFTk7-1193811938epcas5p2T;
+        Tue,  5 Jul 2022 11:52:16 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220705114800epsmtrp2bbdafbe2f0a81aa04173a4c1c3ab6e2b~_7HB4siHe0967409674epsmtrp2Y;
-        Tue,  5 Jul 2022 11:48:00 +0000 (GMT)
-X-AuditID: b6c32a4a-ba3ff7000000255e-37-62c425f6950d
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220705115216epsmtrp15bfb8d977090ff08a59cd8586f186a86~_7KwEOAGB2905129051epsmtrp1k;
+        Tue,  5 Jul 2022 11:52:16 +0000 (GMT)
+X-AuditID: b6c32a49-86fff700000025be-4d-62c425fb79a6
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        8B.E4.08905.0F424C26; Tue,  5 Jul 2022 20:48:00 +0900 (KST)
+        A0.25.08905.0F524C26; Tue,  5 Jul 2022 20:52:16 +0900 (KST)
 Received: from smithat07 (unknown [107.122.12.13]) by epsmtip2.samsung.com
         (KnoxPortal) with ESMTPA id
-        20220705114757epsmtip2fb62d1413e8eaaefc5ac605fafdd8159~_7G_4XRl90746207462epsmtip2E;
-        Tue,  5 Jul 2022 11:47:57 +0000 (GMT)
+        20220705115213epsmtip236a6fa9a2b8be5ddb88837544a85964c~_7KtFKuY81775417754epsmtip2e;
+        Tue,  5 Jul 2022 11:52:13 +0000 (GMT)
 From:   "Smitha T Murthy" <smitha.t@samsung.com>
 To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
         <linux-arm-kernel@lists.infradead.org>,
@@ -65,66 +65,66 @@ Cc:     <m.szyprowski@samsung.com>, <andrzej.hajda@intel.com>,
         <andi@etezian.org>, <alim.akhtar@samsung.com>,
         <aswani.reddy@samsung.com>, <pankaj.dubey@samsung.com>,
         <linux-fsd@tesla.com>
-In-Reply-To: <08787027-4978-d03e-0d91-d70bb8e98f82@linaro.org>
-Subject: RE: [PATCH 15/20] media: s5p-mfc: DPB Count Independent of
- VIDIOC_REQBUF
-Date:   Tue, 5 Jul 2022 17:17:56 +0530
-Message-ID: <01e801d89065$13b14170$3b13c450$@samsung.com>
+In-Reply-To: <b7dc85c5-acaf-95f4-2409-3c25d9fd8274@linaro.org>
+Subject: RE: [PATCH 17/20] media: s5p-mfc: Clear workbit to handle error
+ condition
+Date:   Tue, 5 Jul 2022 17:22:12 +0530
+Message-ID: <01eb01d89065$ac278f40$0476adc0$@samsung.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-Mailer: Microsoft Outlook 16.0
 Content-Language: en-us
-Thread-Index: AQJFyDoizuFNEw0PhIpG3eTqugJ4BwGCSryRAm8k6zYBoQnu5qxopXpQ
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Ta0xTZxjed057WtzKjojySTLXnI1sECktFDxMKdvs5Eyd6eISzJaMFTgC
-        A9qmp+B0WSBcx0WROYwt5RJaULnpSqEoIMLKzSCLDEGnIAiOgdEgFDZlcWtp2fj3PM/7vHnf
-        5/3ycVEPLcebm6DQ0GqFPInANrFafvZ9x3/FxxotrKgWkJPlLRhp+GsWIR8Yllhkd1MzhzSP
-        lKLk+b7rbLLCOsQmLV0PWeRPf9irt7TjLHK2ohGQc7oJjOx4bDebpkfZ5NR8JPnrVT1GFl5u
-        ZpMN1nEOWT12CyFrTH8jZFWzjUNmd1g5ZFaOFXnfi6ovrwdU67gRUGPGRZS6ohvnUIb2OYQy
-        1eZh1P3RdoxqMqZR2T0vWNQpcy2gXmaUcah86xhGLZl2UDeWlzgy988T98TT8lhazacVMcrY
-        BEVcGHHgcNTeqOAQochfFEruIvgKeTIdRkgPyvz3JSTZL0DwU+VJKXZJJmcYIkCyR61M0dD8
-        eCWjCSNoVWySSqwSMPJkJkURJ1DQmvdEQmFgsN34VWK8resyUK289k3P98VYOjC8mg/cuBAX
-        wzu2DCQfbOJ64G0AVl4rcJFFAI1VOhdZAbA6p5O93jJv+YfjLHQAuDr4O8tJZgEsuPgj4nBh
-        uADOWw1sR8ET7wFw0jyFOgiK/4nCR50zmMPlhkvgtak81IG34IehwTjMcmAW/jY0pJ9fm8fD
-        Q+HgxEPMiTfDAe3MmgfF34SWJ3rUuRMfPn9Uw3bqXnCux8pxYE98HyzIaV4LAfFhN7jSZ+E4
-        G6SwprATceItcL7P7NK94dLTDsyJ4+CDpUzgxCpYlm52+cPh9RG9fQmufZgvvHQ1wCm/AUtu
-        NCLOHdzhydUZl50HW8vXMQGrBvtdoyC8/aSZfRoQug3RdBui6TbE0f0/rRKwasF2WsUkx9FM
-        sCpQQR/7781jlMkmsPZH/Pa3gqnJBUE3QLigG0AuSnjyan/oivbgxcqPn6DVyih1ShLNdINg
-        +72LUe+tMUr7J1NookTiUKE4JCREHBoUIiK8ePtvm6I98Di5hk6kaRWtXu9DuG7e6UjpzuWw
-        O8qPopLiv3QHw9TR7GkVc+DKya+zGxQDv2TjykLTOdO3w8KdJamS3R/MPzshvShDJ4svlARt
-        vyA7Wz87cs5rxJgKdvGyRC1HSk7lf6E58rwgJ3e1nFc353NPb4t+JWM6d6FOlleWhurfGtqx
-        nPayTDLAzvAt+LjqZu+QVKDNP7Q5D2M3eoTZjmaJIw6aP6u+uTdrqAj0F92VRYcvSHf4Hvpw
-        6+7wiNe97m17fOxuZEPdqohZsJS2+R3vlQRPFL1oH/OTvrtwaVufT0RvW3tFpDgwM6AyKLdb
-        gtzXnl78tP23wO/4MbVZ0wNnVE/HdYErlv4zZ5+NKj/ps2Vqm/QEi4mXi/xQNSP/F03Jm5Os
-        BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpgleLIzCtJLcpLzFFi42LZdlhJXveDypEkg6bFyhYP5m1js1j84zmT
+Thread-Index: AQJFyDoizuFNEw0PhIpG3eTqugJ4BwJR0/m2AnCATAgCiOlFA6xa4KWg
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Ta0xTZxjO13N6Yyk7RRY+Wca6E9AgAq0CO2wi23Ry3Mgku5lolBU4a0lL
+        27Wlyi4CTplFmWJGBgWLoXhZxSq1XMZEuZQhBFTkphmFghAoBCeXoQxhayls/Hue533e7718
+        eVmIVz7Tl5UsU1NKmVCKMzzQysbAjcELAdYEvqPBn7DrKxmE4fkojRgwzKBEw40KJmHpKkSI
+        S811dKLYepdOVNUPoUT5mDPaUWBDidFiEyAcun4GUTvhNJsf99CJwfG9RGdNEYM4db2CTly1
+        2pjEhd4OGnHR/IJGlFTMMonjtVYmcSzLSnvHhyzTlwGy2lYKyN7SaYT8VWdjkoabDhppNmoZ
+        ZF/PTQZ5ozSdPN70N0r+aDECcunoOSaZbe1lkDNmP7L1rxlmnOc+yTYxJUyilDxKlihPSpaJ
+        ovAPP4nfER8ewRcECyKJN3GeTJhCReE7Y+OCdyVLnRvAeRqhNNUpxQlVKjx0+zalPFVN8cRy
+        lToKpxRJUkWYIkQlTFGlykQhMkr9loDP3xLuNH4hEc833QOK/pcOHyu/DTJApkc2YLMgFgYL
+        K18ws4EHywv7DUD9w2GGm0wD2H3ZtELmAGybHUFXU860G4E7UAtg3thj1E1GASyeu4K4XAws
+        BI5bDXRXwBtrAtBuGURcBMGeIXDktqsKm8XGtsP8qszld9dhn8LKXO1yNor5w5qlRVo2YLE4
+        WCQssu9xyRyMC1sKhpftCPY6rJosQtwt8eD8yEW6W/eBjiYr04W9sV1w8fr55boQe8CGLWPV
+        dHfCTnj/dM/KPOvgeLOF6ca+0HE6awWL4MDM98CNFfBchoXmxtGwrqsIdfWGYIHwWk2oW34N
+        5rWaaO4ePGHOwvCKnQOr9asYhyVtd1aeh7B7soJ+BuC6NaPp1oymWzOO7v9q5wFqBOsphSpF
+        RKnCFQIZdei/L0+Up5jB8ols2l0NbPanIQ2AxgINALIQ3JtjPFuf4MVJEqZ9TSnl8cpUKaVq
+        AOHOdecivq8kyp03JlPHC8Ii+WERERFhkVsjBLgP54Nuc4IXJhKqKQlFKSjlah6NxfbNoF3w
+        PfiVlX/i6qDkcExBefWB6YdxGX/eEcxy76UHpcZMr/+s+4Bg35OE+3Rx9PxYTYBulnvoG0fK
+        G3zR3ey+rlbcpKxP2B307tKW/RX+v7SX2Iw/2bkh30mOvr/32yO5ICs89I/LZxdyTjK4Qy0/
+        RGmanzcG7DBsSOD1br1liX15Psg+kJemhxZJ/BHNxB7tQY9TWlSvYT+a42buP/nEW7q1T7mB
+        rtFeg43R/zwCgZpeq9iojtzMemArNpTppwZ98UQRfyOSe0VYJ0LbS7Wc/qcTHZ93+n2ZTi9v
+        m0rKWDSNx3z0+8+bLw3d+ljhKcl/1vn21HvZs+mmwtjJE9q0nLhX/XBUJRYKNiFKlfBfqmaY
+        AasEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpgleLIzCtJLcpLzFFi42LZdlhJXveD6pEkg64bohYP5m1js1j84zmT
         xf3Fn1ksDm3eym6x5cpsZovlxw+wWsw/co7VYvvBRywWG18AZS/OvMti8Xz+OkaLl7PusVns
         fQ1UvOnxNVaLh6/CLS7vmsNm0bNhK6vF2iN32S2WXr/IZLFs0x8mi0Vbv7BbtO49wm7R0naE
         yUHcY828NYweO+4uYfS4vuQTs8fOWXfZPRbvecnksWlVJ5vHnWt72Dw2L6n3aD36i8Wjb8sq
-        Ro9/TXPZPbqOXGfz+LxJzuPU18/sAXxRXDYpqTmZZalF+nYJXBlfDm5gLPjGU3G0YyJbA+Ni
-        7i5GTg4JAROJV9v/s3cxcnEICexmlGg83ccCkZCQWPl7EiOELSyx8t9zdhBbSOApo8SZ2UYg
-        NpuAnsSrI4tZQZpFBE4ySvSfaQFzmAW6WSQaX7UyQYx9wyhxaektsHZOATuJfQ87mUFsYYFA
-        iYV7e8BWsAioSCxuWM4KYvMKWEqcufeIDcIWlDg58wnYScwC2hK9D1sZIWx5ie1v5zBDnKcg
-        8fPpMlaIuLjEy6NHwHaJCLhJdLdtZZrAKDwLyahZSEbNQjJqFpL2BYwsqxglUwuKc9Nziw0L
-        DPNSy/WKE3OLS/PS9ZLzczcxghOJluYOxu2rPugdYmTiYDzEKMHBrCTCu2rSwSQh3pTEyqrU
-        ovz4otKc1OJDjNIcLErivBe6TsYLCaQnlqRmp6YWpBbBZJk4OKUamELFSj9U1lUt0eEX/7J6
-        6VLGN96a+055MXv3vltlpWjP7mk9q2eq94EFexao2Syb66vBc6HpcIlMX6Sn0RuxXN/jvEXT
-        J38xf7r3103/m4lLZmywsilvfuFkeGaN/0U7Lr1VKovLFi2zuNK1SFPjxLH4D7qmv/1nL9XS
-        WxcustJWOurF62VGDyUWL+34VqsosF64g+Xs1PWlXDd9k6Lsn2Zw929ZPPlJQ3/wzYMmB2sm
-        bOFuO/o5O6bIU/mg2/XNfDeuOz70KDmXtjJdL/4yt+JkLamTlsqLjj19vCgibJ+ObcrUH2rL
-        LBd/MVa+zTTRrG/qkcdVizT671xm4vvNcf9R83HprpBtfht7FyaqNiuxFGckGmoxFxUnAgCB
-        qZaNkwMAAA==
-X-CMS-MailID: 20220705114800epcas5p20ed5fbaa9d830f3f5838b4a244f05e18
+        Ro9/TXPZPbqOXGfz+LxJzuPU18/sAXxRXDYpqTmZZalF+nYJXBk/j55nLLjHXdGycT9jA2Mj
+        VxcjJ4eEgInEhLOrGLsYuTiEBHYzSlxZeZQRIiEhsfL3JChbWGLlv+fsEEVPGSXOHJjBApJg
+        E9CTeHVkMStIQkTgJKNE/5kWMIdZoJtFovFVKxNEyxtGiVX/brKBtHAK2EnM2N4I1i4sECTx
+        bc1PMJtFQEVi17+/QA0cHLwClhJzHviDhHkFBCVOznwCVsIsoC3R+7CVEcKWl9j+dg4zxHkK
+        Ej+fLmOFiItLvDx6hB3EFhFwk/i7YQHzBEbhWUhGzUIyahaSUbOQtC9gZFnFKJlaUJybnlts
+        WGCYl1quV5yYW1yal66XnJ+7iRGcSLQ0dzBuX/VB7xAjEwfjIUYJDmYlEd5Vkw4mCfGmJFZW
+        pRblxxeV5qQWH2KU5mBREue90HUyXkggPbEkNTs1tSC1CCbLxMEp1cDU5NvOk6YXWBTTplIw
+        Z83MI9elThWWJ1k9XnVN/bLB7y6Xi8bMG2vnMbeU7Y74uMvb8UXDhQ0ZqrryJ6oOBFfUvLAM
+        Dbiz5McBpusv+qxPaT3d/tZw9d/UfYtsjpf9V3I3yDG6f/FdxAaH1pTr/NemTnqSfTuSR3jq
+        I5adX6wCWpwcfnlIP9G2u+Xi7XJzTU95+4wkvp4l0g1dXVvLtixIvna1ZqH6lFtZbvHdblJz
+        WW7M2He11+alUKv+i2/++RtXHDJYOGOjP4NOT8h7gcl+K2Q5PlqsW7qj8KDOX09OAwlz03PF
+        spwVLAekbiht9ozvdll/c41NmdXtsOJerqW/jM8o37umb73cgI+36aASS3FGoqEWc1FxIgAV
+        A2aekwMAAA==
+X-CMS-MailID: 20220705115216epcas5p25047d2627060526f0478dbc156f946ff
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: REQ_APPROVE
 CMS-TYPE: 105P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220517125641epcas5p48fc3d48ad5e4a02879a1063da36c0063
+X-CMS-RootMailID: 20220517125648epcas5p22201053e8a71dcd5ccc8d0566511b635
 References: <20220517125548.14746-1-smitha.t@samsung.com>
-        <CGME20220517125641epcas5p48fc3d48ad5e4a02879a1063da36c0063@epcas5p4.samsung.com>
-        <20220517125548.14746-16-smitha.t@samsung.com>
-        <08787027-4978-d03e-0d91-d70bb8e98f82@linaro.org>
+        <CGME20220517125648epcas5p22201053e8a71dcd5ccc8d0566511b635@epcas5p2.samsung.com>
+        <20220517125548.14746-18-smitha.t@samsung.com>
+        <b7dc85c5-acaf-95f4-2409-3c25d9fd8274@linaro.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
@@ -133,7 +133,7 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 > -----Original Message-----
 > From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@linaro.org]
-> Sent: Tuesday, May 17, 2022 7:30 PM
+> Sent: Tuesday, May 17, 2022 7:34 PM
 > To: Smitha T Murthy <smitha.t@samsung.com>; linux-arm-
 > kernel@lists.infradead.org; linux-media@vger.kernel.org; linux-
 > kernel@vger.kernel.org; devicetree@vger.kernel.org
@@ -145,28 +145,27 @@ X-Mailing-List: linux-media@vger.kernel.org
 > mark.rutland@arm.com; robh+dt@kernel.org; krzk+dt@kernel.org;
 > andi@etezian.org; alim.akhtar@samsung.com; aswani.reddy@samsung.com;
 > pankaj.dubey@samsung.com; linux-fsd@tesla.com
-> Subject: Re: [PATCH 15/20] media: s5p-mfc: DPB Count Independent of
-> VIDIOC_REQBUF
+> Subject: Re: [PATCH 17/20] media: s5p-mfc: Clear workbit to handle error
+> condition
 > 
 > On 17/05/2022 14:55, Smitha T Murthy wrote:
-> > This patch allows allocation of DPB buffers based on MFC requirement
-> > so codec buffers allocations has been moved after state
-> > MFCINST_HEAD_PRODUCED.
-> > And it is taken care that codec buffer allocation is performed in
-> > process context from userspace IOCTL call.
+> > During error on CLOSE_INSTANCE command, ctx_work_bits was not getting
+> > cleared. During consequent mfc execution NULL pointer dereferencing of
+> > this context led to kernel panic. This patch fixes this issue by
+> > making sure to clear ctx_work_bits always.
+> >
+> > Cc: linux-fsd@tesla.com
+> > Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
 > 
-> Please wrap your commit messages according to Linux coding style:
-> https://protect2.fireeye.com/v1/url?k=7a17dde8-1b9cc8cd-7a1656a7-
-> 74fe485cbff6-4e2dc61728e47c8b&q=1&e=5c8a7957-5da6-466f-b2c7-
-> b905451fd24c&u=https%3A%2F%2Felixir.bootlin.com%2Flinux%2Fv5.18-
-> rc4%2Fsource%2FDocumentation%2Fprocess%2Fsubmitting-
-> patches.rst%23L586
-> 
+> This looks like a bugfix so:
+> 1. Send it separately please.
+> 2. Add Fixes tag.
+> 3. Add Cc stable tag.
 > 
 > Best regards,
 > Krzysztof
 
-Ok I will change this.
+Ok I will send this separately
 
 Regards,
 Smitha
