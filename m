@@ -2,98 +2,91 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65276C43334
-	for <linux-media@archiver.kernel.org>; Thu,  7 Jul 2022 00:20:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64D33C43334
+	for <linux-media@archiver.kernel.org>; Thu,  7 Jul 2022 00:24:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234731AbiGGAUn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 6 Jul 2022 20:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52302 "EHLO
+        id S234610AbiGGAYM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 6 Jul 2022 20:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234716AbiGGAUn (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Jul 2022 20:20:43 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B172B271
-        for <linux-media@vger.kernel.org>; Wed,  6 Jul 2022 17:20:42 -0700 (PDT)
-Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 62EBA526;
-        Thu,  7 Jul 2022 02:20:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1657153241;
-        bh=3PfEJENW5ygKkJGXs3i8npDA2PNsQSI3N0LSIUbYVq0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ElqIubS3svE2y0VSJotiHDFD0pm1RnZm3WypNRxn8zPKCpD6Acxu4zukJqh3Xz1Hm
-         /YVJhSRSC0CY1b0VvDIYzLfYrjtLJDrl+kGcm0+km4gkjem5tMsmf+Efq9BE9V2iyI
-         qnG7OE3NubXUenUJQT5q8OpLO4tqh9B2WWeYvf7Y=
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     linux-media@vger.kernel.org
-Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
-        kernel@pengutronix.de
-Subject: [PATCH v1.1 44/50] staging: media: imx: imx7-media-csi: Simplify default format in try_fmt
-Date:   Thu,  7 Jul 2022 03:20:12 +0300
-Message-Id: <20220707002012.3524-1-laurent.pinchart@ideasonboard.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220510115859.19777-45-laurent.pinchart@ideasonboard.com>
-References: <20220510115859.19777-45-laurent.pinchart@ideasonboard.com>
+        with ESMTP id S234274AbiGGAYM (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Jul 2022 20:24:12 -0400
+Received: from www.linuxtv.org (www.linuxtv.org [130.149.80.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C171EAE6
+        for <linux-media@vger.kernel.org>; Wed,  6 Jul 2022 17:24:10 -0700 (PDT)
+Received: from builder.linuxtv.org ([140.211.167.10] helo=slave0)
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1o9FJP-000875-Qg; Thu, 07 Jul 2022 00:24:07 +0000
+Received: from ip6-localhost ([::1] helo=localhost.localdomain)
+        by slave0 with esmtp (Exim 4.94.2)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1o9FJL-00DUIX-Fw; Thu, 07 Jul 2022 00:24:04 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL FOR v5.20] Miscellaneous fixes (#84623)
+Date:   Thu,  7 Jul 2022 00:24:02 +0000
+Message-Id: <20220707002402.3214683-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <YsYgd6mD34avoIKe@pendragon.ideasonboard.com>
+References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When trying a format on the video node, if the requested pixel format
-isn't supported, fallback to the default with a simpler logic.
+From: builder@linuxtv.org
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
----
-Changes since v1:
+Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/YsYgd6mD34avoIKe@pendragon.ideasonboard.com/
+Build log: https://builder.linuxtv.org/job/patchwork/222758/
+Build time: 00:24:52
+Link: https://lore.kernel.org/linux-media/YsYgd6mD34avoIKe@pendragon.ideasonboard.com
 
-- Add a comment to tell V4L2_PIX_FMT_UYVY must be first
----
- drivers/staging/media/imx/imx7-media-csi.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+gpg: Signature made Wed 06 Jul 2022 11:52:45 PM UTC
+gpg:                using RSA key CB9D6877529820CD53099B1B65F89C37BC54210D
+gpg:                issuer "laurent.pinchart@ideasonboard.com"
+gpg: Can't check signature: No public key
 
-diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-index 19aa8724f6c1..fd707a49be3f 100644
---- a/drivers/staging/media/imx/imx7-media-csi.c
-+++ b/drivers/staging/media/imx/imx7-media-csi.c
-@@ -168,6 +168,7 @@
- #define IMX7_CSI_VIDEO_EOF_TIMEOUT	2000
- 
- #define IMX7_CSI_DEF_MBUS_CODE		MEDIA_BUS_FMT_UYVY8_2X8
-+#define IMX7_CSI_DEF_PIX_FORMAT		V4L2_PIX_FMT_UYVY
- #define IMX7_CSI_DEF_PIX_WIDTH		640
- #define IMX7_CSI_DEF_PIX_HEIGHT		480
- 
-@@ -806,8 +807,9 @@ static irqreturn_t imx7_csi_irq_handler(int irq, void *data)
- #define IMX_BUS_FMTS(fmt...) (const u32[]) {fmt, 0}
- 
- /*
-- * List of supported pixel formats for the subdevs. Keep MEDIA_BUS_FMT_UYVY8_2X8
-- * first to match IMX7_CSI_DEF_MBUS_CODE.
-+ * List of supported pixel formats for the subdevs. Keep V4L2_PIX_FMT_UYVY and
-+ * MEDIA_BUS_FMT_UYVY8_2X8 first to match IMX7_CSI_DEF_PIX_FORMAT and
-+ * IMX7_CSI_DEF_MBUS_CODE.
-  */
- static const struct imx7_csi_pixfmt pixel_formats[] = {
- 	/*** YUV formats start here ***/
-@@ -1131,7 +1133,7 @@ __imx7_csi_video_try_fmt(struct v4l2_pix_format *pixfmt,
- 	 */
- 	cc = imx7_csi_find_pixel_format(pixfmt->pixelformat);
- 	if (!cc) {
--		imx7_csi_enum_pixel_formats(&pixfmt->pixelformat, 0, 0);
-+		pixfmt->pixelformat = IMX7_CSI_DEF_PIX_FORMAT;
- 		cc = imx7_csi_find_pixel_format(pixfmt->pixelformat);
- 	}
- 
--- 
-Regards,
+Summary: got 3/6 patches with issues, being 1 at build time, plus one error when buinding PDF document
 
-Laurent Pinchart
+Error/warnings:
+
+patches/0001-media-dt-bindings-mt9p031-Add-MT9P006-compatible-str.patch:
+
+    allyesconfig: return code #0:
+	../scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+	../scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+	../scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+	../drivers/staging/media/atomisp/pci/atomisp_cmd.c: ../drivers/staging/media/atomisp/pci/atomisp_cmd.c:3534 atomisp_cp_general_isp_parameters() parse error: OOM: 3000008Kb sm_state_count = 543759
+	../drivers/staging/media/atomisp/pci/atomisp_cmd.c: ../drivers/staging/media/atomisp/pci/atomisp_cmd.c:3534 atomisp_cp_general_isp_parameters() warn: Function too hairy.  No more merges.
+	../drivers/staging/media/atomisp/pci/atomisp_cmd.c: ../drivers/staging/media/atomisp/pci/atomisp_cmd.c:3534 atomisp_cp_general_isp_parameters() parse error: __split_smt: function too hairy.  Giving up after 8 seconds
+
+    allyesconfig: return code #0:
+	../drivers/media/i2c/cx25840/cx25840-core.c: ../drivers/media/i2c/cx25840/cx25840-core.c:5561 cx23885_dif_setup() parse error: turning off implications after 60 seconds
+	../drivers/media/platform/qcom/venus/helpers.c: ../drivers/media/platform/qcom/venus/helpers.c:678 venus_helper_get_bufreq() error: we previously assumed 'req' could be null (see line 674)
+	SMATCH:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: :warning: array of flexible structures
+	SPARSE:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
+	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2548 dvb_register() parse error: OOM: 3000024Kb sm_state_count = 1725875
+	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2548 dvb_register() warn: Function too hairy.  No more merges.
+	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2548 dvb_register() parse error: __split_smt: function too hairy.  Giving up after 47 seconds
+	../drivers/media/dvb-frontends/sp887x.c: ../drivers/media/dvb-frontends/sp887x.c:178 sp887x_initial_setup() error: __memcpy() '&buf[2]' too small (30 vs 16384)
+	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2864 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
+
+patches/0003-media-mt9p031-Move-open-subdev-op-init-code-into-ini.patch:
+
+   checkpatch.pl:
+	$ cat patches/0003-media-mt9p031-Move-open-subdev-op-init-code-into-ini.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:31: CHECK: Comparison to NULL could be written "!sd_state"
+
+patches/0005-media-Fix-incorrect-P010-chroma-order-description.patch:
+
+   checkpatch.pl:
+	$ cat patches/0005-media-Fix-incorrect-P010-chroma-order-description.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:27: ERROR: trailing statements should be on next line
+
+
+Error #512 when building PDF docs
 
