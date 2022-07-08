@@ -2,211 +2,99 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE185C43334
-	for <linux-media@archiver.kernel.org>; Fri,  8 Jul 2022 12:06:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CE27C433EF
+	for <linux-media@archiver.kernel.org>; Fri,  8 Jul 2022 13:32:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238355AbiGHMGb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Jul 2022 08:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60260 "EHLO
+        id S238215AbiGHNc2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Jul 2022 09:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238295AbiGHMGR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Jul 2022 08:06:17 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0DE9B1A4;
-        Fri,  8 Jul 2022 05:06:16 -0700 (PDT)
-Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:3cab:61a1:2b1f:896b])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AF56B66019DE;
-        Fri,  8 Jul 2022 13:06:14 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657281975;
-        bh=GGDFitLy58DfVh6zZbvuy2OUtuE/OIoUzaLyWW36kOw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SsvhHWGUmB54h5zHzLV5dRNWnwyNp2EFPBoX1vCeE+ZUrARmiGSZbXwJGPh6lfrJd
-         ylBpFmg0MvGBWAF23cTBfTPSR28fCHYiWc0WuBNL3/+QEthbO3hMBrWR8mYM5BQDjY
-         DOKGM8fd6gqvfRhXRwS5tApFeWk9QTyN00/NeyVLJk6g+NBmDKdEX74cPm+prlbFgp
-         Wss97SuB7q/yNtXrrmiRiYEs5/Di+ZCX1wE4i2q2fKoxa9oLzGDvtocy9NuQMFts77
-         d/CilP2tGd20bDAX7Bb7l4QjrCMysp7+0x9o/H1rF1f5gtLXUH7Ul9UJ7wg3OUhrNV
-         /XuCfLwqvI0IQ==
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     mchehab@kernel.org, hverkuil@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, andrzej.p@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v12 14/17] media: hantro: Stop using Hantro dedicated control
-Date:   Fri,  8 Jul 2022 14:05:51 +0200
-Message-Id: <20220708120554.495495-15-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220708120554.495495-1-benjamin.gaignard@collabora.com>
-References: <20220708120554.495495-1-benjamin.gaignard@collabora.com>
+        with ESMTP id S238197AbiGHNcY (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Jul 2022 09:32:24 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F362CE00
+        for <linux-media@vger.kernel.org>; Fri,  8 Jul 2022 06:32:23 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id i11so27199783qtr.4
+        for <linux-media@vger.kernel.org>; Fri, 08 Jul 2022 06:32:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=Yu8bKYHlHx+dbL+sw5q4ZRjn4fcee2CGtMmXinJvd+o=;
+        b=lY7hu066xUzcIPr5UD259wVv9tm24Aiv8xv3EQDHIa7pTX8DiAkoXNDgAydq0rTAU9
+         Cz9TuaHrjf2ikc6wmyiA9loansNDWN21rEMN6Ui+IvKWmhdNuGb9HiuiqoL5flj5/hso
+         CwgngzRxtPC6wfCBamtm6LzR9nxj5sqqw/4RtcV7461qSGIMGBeqnPw/DF4F1Av9eIRf
+         cqQ9356+V7IVsFw8iB7db4Q3WiOGoottS7uPymvy6FluV1b16WCV/zaWqBsM89d9dAEi
+         kjm1A5sS0LJA5yAQKngHzyVh6k2Wr0pxiP3bLeQ7OowW5O1keZEn6H+COK6Wfp22Fapc
+         ogHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=Yu8bKYHlHx+dbL+sw5q4ZRjn4fcee2CGtMmXinJvd+o=;
+        b=nypa2DtoE1um68fHHxlbZ09ek2GnEYZlUIUgT4Rj8J3onOBVIEF07NGRvNyxCGPZxx
+         XnZF3oWD0y2LguwBU9pLdJ32Eva0EmItuJmPURo2I0CFOoL5GHz7Bla6LD6V2SufuZma
+         P0eBid0xpRHzeIsdcDjf42uw7AcziB1/9aGy4diUySmz628Y/qBkJcGdbf988j+ITaKp
+         vCwAxcDR6Qx4RR/r8TDHZcLZLU1ZIj0ruHKjNtfsb03tG6o+E2qBk4aGpoyzDjicN+bp
+         101nJnihAmLW24EBLvS7BoQTYj3R4y53e8yj7yo+yCYm7qKZOokrmSmMc/uxSuqDTdLN
+         SiJg==
+X-Gm-Message-State: AJIora8ZY4OBAkRTZ6l3YxvVyS9bFoX3GD8ZqL45NFyKmfdrUlBzco+X
+        6izkUC4AeYMB8uTDArCre0J8VA==
+X-Google-Smtp-Source: AGRyM1uyuIWyl91hCY2bh60iyU9jBQdwPs2f+kbRSM+PSbqNROmEadcwNKqkO4tizj21zxRlydHeVw==
+X-Received: by 2002:a05:6214:1c89:b0:46e:4048:ca2c with SMTP id ib9-20020a0562141c8900b0046e4048ca2cmr2703474qvb.60.1657287142094;
+        Fri, 08 Jul 2022 06:32:22 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
+        by smtp.gmail.com with ESMTPSA id h16-20020a05620a401000b006a6a7b4e7besm39100667qko.109.2022.07.08.06.32.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 06:32:21 -0700 (PDT)
+Message-ID: <2f35d8250ce133e21eb3987977a92af583e32d0d.camel@ndufresne.ca>
+Subject: Re: [EXT] Re: [PATCH] media: amphion: only insert the first
+ sequence startcode for vc1l format
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Ming Qian <ming.qian@nxp.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>
+Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Fri, 08 Jul 2022 09:32:20 -0400
+In-Reply-To: <AM6PR04MB63416B4BA53E80123037AC8EE7809@AM6PR04MB6341.eurprd04.prod.outlook.com>
+References: <20220628052017.26979-1-ming.qian@nxp.com>
+         <6e54af5243d324c5df1c9ec18d4b091fbd52150f.camel@ndufresne.ca>
+         <AM6PR04MB6341F4EB028CAE9B61C85157E7819@AM6PR04MB6341.eurprd04.prod.outlook.com>
+         <AM6PR04MB634136824EC98EE804FAD0CEE7819@AM6PR04MB6341.eurprd04.prod.outlook.com>
+         <42ba6a9516f4359b757d2f94b16c1bb23cc41cb2.camel@ndufresne.ca>
+         <AM6PR04MB63416B4BA53E80123037AC8EE7809@AM6PR04MB6341.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The number of bits to skip in the slice header can be computed
-in the driver by using sps, pps and decode_params information.
-This makes it possible to remove Hantro dedicated control.
+Le mercredi 06 juillet 2022 =C3=A0 04:09 +0000, Ming Qian a =C3=A9crit=C2=
+=A0:
+> > Can't you save the slow copy by using data_offset then ? I think most o=
+f the
+> > confusion comes from this commit message, someone else then you should =
+be
+> > able to understand what it means.
+>=20
+> I'll modify the commit message that remove the unrelated vp8 description.
+> And unfortunately the amphion vpu only support the ring buffer mode, so
+> copying is inevitable.
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Tested-by: Jernej Skrabec <jernej.skrabec@gmail.com>
----
- drivers/staging/media/hantro/hantro_drv.c     | 36 ------------------
- .../staging/media/hantro/hantro_g2_hevc_dec.c | 37 ++++++++++++++++++-
- include/media/hevc-ctrls.h                    | 13 -------
- 3 files changed, 36 insertions(+), 50 deletions(-)
+Great thanks, I had forgotten that Amphion was based on a ring buffer. Inde=
+ed,
+this is the way to go, same applied to CODA driver.
 
-diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-index 536c8c374952..5aac3a090480 100644
---- a/drivers/staging/media/hantro/hantro_drv.c
-+++ b/drivers/staging/media/hantro/hantro_drv.c
-@@ -304,26 +304,6 @@ static int hantro_jpeg_s_ctrl(struct v4l2_ctrl *ctrl)
- 	return 0;
- }
- 
--static int hantro_hevc_s_ctrl(struct v4l2_ctrl *ctrl)
--{
--	struct hantro_ctx *ctx;
--
--	ctx = container_of(ctrl->handler,
--			   struct hantro_ctx, ctrl_handler);
--
--	vpu_debug(1, "s_ctrl: id = %d, val = %d\n", ctrl->id, ctrl->val);
--
--	switch (ctrl->id) {
--	case V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP:
--		ctx->hevc_dec.ctrls.hevc_hdr_skip_length = ctrl->val;
--		break;
--	default:
--		return -EINVAL;
--	}
--
--	return 0;
--}
--
- static const struct v4l2_ctrl_ops hantro_ctrl_ops = {
- 	.try_ctrl = hantro_try_ctrl,
- };
-@@ -332,10 +312,6 @@ static const struct v4l2_ctrl_ops hantro_jpeg_ctrl_ops = {
- 	.s_ctrl = hantro_jpeg_s_ctrl,
- };
- 
--static const struct v4l2_ctrl_ops hantro_hevc_ctrl_ops = {
--	.s_ctrl = hantro_hevc_s_ctrl,
--};
--
- #define HANTRO_JPEG_ACTIVE_MARKERS	(V4L2_JPEG_ACTIVE_MARKER_APP0 | \
- 					 V4L2_JPEG_ACTIVE_MARKER_COM | \
- 					 V4L2_JPEG_ACTIVE_MARKER_DQT | \
-@@ -487,18 +463,6 @@ static const struct hantro_ctrl controls[] = {
- 		.cfg = {
- 			.id = V4L2_CID_STATELESS_HEVC_SCALING_MATRIX,
- 		},
--	}, {
--		.codec = HANTRO_HEVC_DECODER,
--		.cfg = {
--			.id = V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP,
--			.name = "Hantro HEVC slice header skip bytes",
--			.type = V4L2_CTRL_TYPE_INTEGER,
--			.min = 0,
--			.def = 0,
--			.max = 0x100,
--			.step = 1,
--			.ops = &hantro_hevc_ctrl_ops,
--		},
- 	}, {
- 		.codec = HANTRO_VP9_DECODER,
- 		.cfg = {
-diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-index d28653d04d20..233ecd863d5f 100644
---- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-@@ -117,6 +117,41 @@ static void prepare_tile_info_buffer(struct hantro_ctx *ctx)
- 		vpu_debug(1, "%s: no chroma!\n", __func__);
- }
- 
-+static int compute_header_skip_length(struct hantro_ctx *ctx)
-+{
-+	const struct hantro_hevc_dec_ctrls *ctrls = &ctx->hevc_dec.ctrls;
-+	const struct v4l2_ctrl_hevc_decode_params *decode_params = ctrls->decode_params;
-+	const struct v4l2_ctrl_hevc_sps *sps = ctrls->sps;
-+	const struct v4l2_ctrl_hevc_pps *pps = ctrls->pps;
-+	int skip = 0;
-+
-+	if (pps->flags & V4L2_HEVC_PPS_FLAG_OUTPUT_FLAG_PRESENT)
-+		/* size of pic_output_flag */
-+		skip++;
-+
-+	if (sps->flags & V4L2_HEVC_SPS_FLAG_SEPARATE_COLOUR_PLANE)
-+		/* size of pic_order_cnt_lsb */
-+		skip += 2;
-+
-+	if (!(decode_params->flags & V4L2_HEVC_DECODE_PARAM_FLAG_IDR_PIC)) {
-+		/* size of pic_order_cnt_lsb */
-+		skip += sps->log2_max_pic_order_cnt_lsb_minus4 + 4;
-+
-+		/* size of short_term_ref_pic_set_sps_flag */
-+		skip++;
-+
-+		if (decode_params->short_term_ref_pic_set_size)
-+			/* size of st_ref_pic_set( num_short_term_ref_pic_sets ) */
-+			skip += decode_params->short_term_ref_pic_set_size;
-+		else if (sps->num_short_term_ref_pic_sets > 1)
-+			skip += fls(sps->num_short_term_ref_pic_sets - 1);
-+
-+		skip += decode_params->long_term_ref_pic_set_size;
-+	}
-+
-+	return skip;
-+}
-+
- static void set_params(struct hantro_ctx *ctx)
- {
- 	const struct hantro_hevc_dec_ctrls *ctrls = &ctx->hevc_dec.ctrls;
-@@ -134,7 +169,7 @@ static void set_params(struct hantro_ctx *ctx)
- 
- 	hantro_reg_write(vpu, &g2_output_8_bits, 0);
- 
--	hantro_reg_write(vpu, &g2_hdr_skip_length, ctrls->hevc_hdr_skip_length);
-+	hantro_reg_write(vpu, &g2_hdr_skip_length, compute_header_skip_length(ctx));
- 
- 	min_log2_cb_size = sps->log2_min_luma_coding_block_size_minus3 + 3;
- 	max_log2_ctb_size = min_log2_cb_size + sps->log2_diff_max_min_luma_coding_block_size;
-diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-index 42d16e8a1050..9239e8b649e0 100644
---- a/include/media/hevc-ctrls.h
-+++ b/include/media/hevc-ctrls.h
-@@ -465,17 +465,4 @@ struct v4l2_ctrl_hevc_scaling_matrix {
- 	__u8	scaling_list_dc_coef_32x32[2];
- };
- 
--/*  MPEG-class control IDs specific to the Hantro driver as defined by V4L2 */
--#define V4L2_CID_CODEC_HANTRO_BASE				(V4L2_CTRL_CLASS_CODEC | 0x1200)
--/*
-- * V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP -
-- * the number of data (in bits) to skip in the
-- * slice segment header.
-- * If non-IDR, the bits to be skipped go from syntax element "pic_output_flag"
-- * to before syntax element "slice_temporal_mvp_enabled_flag".
-- * If IDR, the skipped bits are just "pic_output_flag"
-- * (separate_colour_plane_flag is not supported).
-- */
--#define V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP	(V4L2_CID_CODEC_HANTRO_BASE + 0)
--
- #endif
--- 
-2.32.0
+Nicolas
 
