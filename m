@@ -2,163 +2,128 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D055C433EF
-	for <linux-media@archiver.kernel.org>; Sat,  9 Jul 2022 18:50:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48EF9C433EF
+	for <linux-media@archiver.kernel.org>; Sat,  9 Jul 2022 20:58:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbiGISuE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 9 Jul 2022 14:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58656 "EHLO
+        id S229566AbiGIU6R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 9 Jul 2022 16:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiGISuD (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 9 Jul 2022 14:50:03 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A5111479
-        for <linux-media@vger.kernel.org>; Sat,  9 Jul 2022 11:50:01 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4FABE47C;
-        Sat,  9 Jul 2022 20:49:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1657392599;
-        bh=9HHbUwSL+h2RgS9FN4hhw3wyTeWo+6vYu9kbvJ2z7D8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CTuetifGr8GRjlUKAiqRdrxp5UFZ2T6z/xV+yZlYW0HRXxRbZopgozoo6xzIqjL1h
-         j/5qD3pR/1XDy7VWRoTRck2A05qzodZFi9FZ5LRTIIRaMWEbp9WiFf+NFvx8Q+lZZU
-         SH3P5FX80Bfre4Wy5Pt9hfhRMEnfYM5FRRP2V54I=
-Date:   Sat, 9 Jul 2022 21:49:32 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, djrscally@gmail.com,
-        mchehab@kernel.org
-Subject: Re: [PATCH v2 1/1] v4l: async: Also match secondary fwnode endpoints
-Message-ID: <YsnNvKobdSRQxCKj@pendragon.ideasonboard.com>
-References: <20220709160123.3033324-1-sakari.ailus@linux.intel.com>
+        with ESMTP id S229459AbiGIU6Q (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 9 Jul 2022 16:58:16 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C527C2655D;
+        Sat,  9 Jul 2022 13:58:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657400295; x=1688936295;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DS7D/v/J9oCK3O5LcSqfTjUGDnZGc2qX4cJPUYDpDR0=;
+  b=ZtczWKYmYmgy4uw89i8s1C3x9r8mB+yl6lRctbAlXulALzSkXEcA02G6
+   b4k8qkJaOeoiEH+wu2BKPd62PGaSyfCdOfzmVuh/TXzJ3IrAhIw8tP+Cf
+   5MCel0PtbealYJxmcNPsWoA8Uba50ktzW41+k55n4eRBCLrSuOutLgMQg
+   pD+rDvz9yrd8Cd79Z2HLpuEMGcM0U/jDtJndl7rq+Ss+xk11TUupMO3EZ
+   25XCJrbzTD4lqjEzBYtlqoTWBpJY1BGamhT1PoFD/42yzXDgK1liQwLIB
+   EFHwSIYnbmr/NmaqMmn7iANi7q4/Qho2wY99es9XodXxRo9XuDFo7+UQM
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10403"; a="283214315"
+X-IronPort-AV: E=Sophos;i="5.92,259,1650956400"; 
+   d="scan'208";a="283214315"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2022 13:58:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,259,1650956400"; 
+   d="scan'208";a="651961099"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 09 Jul 2022 13:58:13 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oAHWn-000P5Q-3N;
+        Sat, 09 Jul 2022 20:58:13 +0000
+Date:   Sun, 10 Jul 2022 04:58:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: drivers/media/common/saa7146/saa7146_hlp.c:648:5: warning: stack
+ frame size (1072) exceeds limit (1024) in 'saa7146_enable_overlay'
+Message-ID: <202207100428.3iF2MNHQ-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220709160123.3033324-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari,
+Hi Mauro,
 
-Thank you for the patch.
+First bad commit (maybe != root cause):
 
-On Sat, Jul 09, 2022 at 07:01:23PM +0300, Sakari Ailus wrote:
-> For camera sensor devices the firmware information comes from non-DT (or
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b1c428b6c3684ee8ddf4137d68b3e8d51d2a700f
+commit: 989cf18ed08f8b6efd1d1592d1d0108fa09b98f5 media: av7110: move driver to staging
+date:   1 year, 1 month ago
+config: powerpc-randconfig-r031-20220710 (https://download.01.org/0day-ci/archive/20220710/202207100428.3iF2MNHQ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 77a38f6839980bfac61babb40d83772c51427011)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=989cf18ed08f8b6efd1d1592d1d0108fa09b98f5
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 989cf18ed08f8b6efd1d1592d1d0108fa09b98f5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/media/common/saa7146/
 
-Did you mean "camera sensor devices whose formation information comes
-from non-DT" ?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> some ACPI variants), the kernel makes the information visible to the
-> drivers in a form similar to DT. This takes place through device's
-> secondary fwnodes, in which case also the secondary fwnode needs to be
-> heterogenously (endpoint vs. device) matched.
-> 
-> Fixes: 1f391df44607 ("media: v4l2-async: Use endpoints in __v4l2_async_nf_add_fwnode_remote()")
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
-> With correct indentation this time.
-> 
->  drivers/media/v4l2-core/v4l2-async.c | 49 ++++++++++++++++------------
->  1 file changed, 28 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
-> index c6995718237a4..2db5d7a8af82b 100644
-> --- a/drivers/media/v4l2-core/v4l2-async.c
-> +++ b/drivers/media/v4l2-core/v4l2-async.c
-> @@ -66,8 +66,10 @@ static bool match_i2c(struct v4l2_async_notifier *notifier,
->  #endif
->  }
->  
-> -static bool match_fwnode(struct v4l2_async_notifier *notifier,
-> -			 struct v4l2_subdev *sd, struct v4l2_async_subdev *asd)
-> +static bool
-> +match_fwnode_one(struct v4l2_async_notifier *notifier,
-> +		 struct v4l2_subdev *sd, struct fwnode_handle *sd_fwnode,
-> +		 struct v4l2_async_subdev *asd)
->  {
->  	struct fwnode_handle *other_fwnode;
->  	struct fwnode_handle *dev_fwnode;
-> @@ -75,22 +77,6 @@ static bool match_fwnode(struct v4l2_async_notifier *notifier,
->  	bool sd_fwnode_is_ep;
->  	struct device *dev;
->  
-> -	/*
-> -	 * Both the subdev and the async subdev can provide either an endpoint
-> -	 * fwnode or a device fwnode. Start with the simple case of direct
-> -	 * fwnode matching.
-> -	 */
-> -	if (sd->fwnode == asd->match.fwnode)
-> -		return true;
-> -
-> -	/*
-> -	 * Check the same situation for any possible secondary assigned to the
-> -	 * subdev's fwnode
-> -	 */
-> -	if (!IS_ERR_OR_NULL(sd->fwnode->secondary) &&
-> -	    sd->fwnode->secondary == asd->match.fwnode)
-> -		return true;
+All warnings (new ones prefixed by >>):
 
-This check is now gone, is it not needed ?
+   In file included from drivers/media/common/saa7146/saa7146_hlp.c:4:
+   In file included from include/linux/kernel.h:12:
+   In file included from include/linux/bitops.h:32:
+   In file included from arch/powerpc/include/asm/bitops.h:62:
+   arch/powerpc/include/asm/barrier.h:49:9: warning: '__lwsync' macro redefined [-Wmacro-redefined]
+   #define __lwsync()      __asm__ __volatile__ (stringify_in_c(LWSYNC) : : :"memory")
+           ^
+   <built-in>:323:9: note: previous definition is here
+   #define __lwsync __builtin_ppc_lwsync
+           ^
+>> drivers/media/common/saa7146/saa7146_hlp.c:648:5: warning: stack frame size (1072) exceeds limit (1024) in 'saa7146_enable_overlay' [-Wframe-larger-than]
+   int saa7146_enable_overlay(struct saa7146_fh *fh)
+       ^
+   2 warnings generated.
 
-> -
->  	/*
->  	 * Otherwise, check if the sd fwnode and the asd fwnode refer to an
->  	 * endpoint or a device. If they're of the same type, there's no match.
-> @@ -99,7 +85,7 @@ static bool match_fwnode(struct v4l2_async_notifier *notifier,
->  	 * ACPI. This won't make a difference, as drivers should not try to
->  	 * match unconnected endpoints.
->  	 */
-> -	sd_fwnode_is_ep = fwnode_graph_is_endpoint(sd->fwnode);
-> +	sd_fwnode_is_ep = fwnode_graph_is_endpoint(sd_fwnode);
->  	asd_fwnode_is_ep = fwnode_graph_is_endpoint(asd->match.fwnode);
->  
->  	if (sd_fwnode_is_ep == asd_fwnode_is_ep)
-> @@ -110,11 +96,11 @@ static bool match_fwnode(struct v4l2_async_notifier *notifier,
->  	 * parent of the endpoint fwnode, and compare it with the other fwnode.
->  	 */
->  	if (sd_fwnode_is_ep) {
-> -		dev_fwnode = fwnode_graph_get_port_parent(sd->fwnode);
-> +		dev_fwnode = fwnode_graph_get_port_parent(sd_fwnode);
->  		other_fwnode = asd->match.fwnode;
->  	} else {
->  		dev_fwnode = fwnode_graph_get_port_parent(asd->match.fwnode);
-> -		other_fwnode = sd->fwnode;
-> +		other_fwnode = sd_fwnode;
->  	}
->  
->  	fwnode_handle_put(dev_fwnode);
-> @@ -143,6 +129,27 @@ static bool match_fwnode(struct v4l2_async_notifier *notifier,
->  	return true;
->  }
->  
-> +static bool match_fwnode(struct v4l2_async_notifier *notifier,
-> +			 struct v4l2_subdev *sd, struct v4l2_async_subdev *asd)
-> +{
-> +	/*
-> +	 * Both the subdev and the async subdev can provide either an endpoint
-> +	 * fwnode or a device fwnode. Start with the simple case of direct
-> +	 * fwnode matching.
-> +	 */
-> +	if (sd->fwnode == asd->match.fwnode)
-> +		return true;
-> +
-> +	if (match_fwnode_one(notifier, sd, sd->fwnode, asd))
-> +		return true;
-> +
-> +	/* Also check the secondary fwnode. */
-> +	if (IS_ERR_OR_NULL(sd->fwnode->secondary))
-> +		return false;
-> +
-> +	return match_fwnode_one(notifier, sd, sd->fwnode->secondary, asd);
-> +}
-> +
->  static LIST_HEAD(subdev_list);
->  static LIST_HEAD(notifier_list);
->  static DEFINE_MUTEX(list_lock);
+
+vim +/saa7146_enable_overlay +648 drivers/media/common/saa7146/saa7146_hlp.c
+
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  647  
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16 @648  int saa7146_enable_overlay(struct saa7146_fh *fh)
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  649  {
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  650  	struct saa7146_dev *dev = fh->dev;
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  651  	struct saa7146_vv *vv = dev->vv_data;
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  652  
+5da545ad08a3c6 drivers/media/common/saa7146_hlp.c Hans Verkuil   2012-05-01  653  	saa7146_set_window(dev, vv->ov.win.w.width, vv->ov.win.w.height, vv->ov.win.field);
+5da545ad08a3c6 drivers/media/common/saa7146_hlp.c Hans Verkuil   2012-05-01  654  	saa7146_set_position(dev, vv->ov.win.w.left, vv->ov.win.w.top, vv->ov.win.w.height, vv->ov.win.field, vv->ov_fmt->pixelformat);
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  655  	saa7146_set_output_format(dev, vv->ov_fmt->trans);
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  656  	saa7146_set_clipping_rect(fh);
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  657  
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  658  	/* enable video dma1 */
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  659  	saa7146_write(dev, MC1, (MASK_06 | MASK_22));
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  660  	return 0;
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  661  }
+^1da177e4c3f41 drivers/media/common/saa7146_hlp.c Linus Torvalds 2005-04-16  662  
+
+:::::: The code at line 648 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
 
 -- 
-Regards,
-
-Laurent Pinchart
+0-DAY CI Kernel Test Service
+https://01.org/lkp
