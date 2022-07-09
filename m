@@ -2,78 +2,92 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45D68C433EF
-	for <linux-media@archiver.kernel.org>; Sat,  9 Jul 2022 09:59:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 450C1C433EF
+	for <linux-media@archiver.kernel.org>; Sat,  9 Jul 2022 10:07:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbiGIJ7P (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 9 Jul 2022 05:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57270 "EHLO
+        id S229788AbiGIKHu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 9 Jul 2022 06:07:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiGIJ7O (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 9 Jul 2022 05:59:14 -0400
-Received: from www.linuxtv.org (www.linuxtv.org [130.149.80.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699264199D
-        for <linux-media@vger.kernel.org>; Sat,  9 Jul 2022 02:59:13 -0700 (PDT)
-Received: from builder.linuxtv.org ([140.211.167.10] helo=slave0)
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1oA7F1-003VwG-Rd; Sat, 09 Jul 2022 09:59:11 +0000
-Received: from ip6-localhost ([::1] helo=localhost.localdomain)
-        by slave0 with esmtp (Exim 4.94.2)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1oA7Ez-00BCsf-CS; Sat, 09 Jul 2022 09:59:09 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL FOR v5.20] Minor rc fixes (#84685)
-Date:   Sat,  9 Jul 2022 09:59:09 +0000
-Message-Id: <20220709095909.2671075-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <YslKvAd410HLKaGx@gofer.mess.org>
-References: 
+        with ESMTP id S229741AbiGIKHo (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 9 Jul 2022 06:07:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD5A4E601;
+        Sat,  9 Jul 2022 03:07:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 04D87B81BA5;
+        Sat,  9 Jul 2022 10:07:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83E85C341E4;
+        Sat,  9 Jul 2022 10:07:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657361258;
+        bh=qiRPr94AFRMOGdMAE4cJrf7t0rv+9IXQLXV79wY5o4s=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=FUrhBDV8qQ3BBmHXqnc/8ipJ4ijIhzVDDemntLvaD+ld6JNia3myDoK968lVQT/JF
+         777qXSX6Qv2PjJJhVV2o2E9tWWIDi4BQAwPhdGPILIE4Oo/k8JjN+1eOsn1Emy3uMB
+         qw1e3XET2y58XYWDuz0Iu6BJ6jb321aA0GC0GT6kUD1YPdxlT3SqRFgCCVB3ikR601
+         u0F2G8WS8ueJDx+sysVVEBz1iif53JLznhQngkj4Mu87YRPKBWEWKljrUNBTZJ/j4V
+         Q1fgEz5I3zCS6KOuXs1pk+Vw1MyPtzhQBr7aVzuDwylIhadsV0Ug2Pa252oHxnwANG
+         9DMDhL+eyM8uQ==
+Received: from mchehab by mail.kernel.org with local (Exim 4.95)
+        (envelope-from <mchehab@kernel.org>)
+        id 1oA7N9-004EGx-JK;
+        Sat, 09 Jul 2022 11:07:35 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Marco Elver <elver@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH v3 11/21] kfence: fix a kernel-doc parameter
+Date:   Sat,  9 Jul 2022 11:07:24 +0100
+Message-Id: <4e4f3c9fa6b379a82b9647d2f4152cfb520730ff.1657360984.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <cover.1657360984.git.mchehab@kernel.org>
+References: <cover.1657360984.git.mchehab@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+The kernel-doc markup is missing the slab pointer description:
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/YslKvAd410HLKaGx@gofer.mess.org/
-Build log: https://builder.linuxtv.org/job/patchwork/223378/
-Build time: 00:21:13
-Link: https://lore.kernel.org/linux-media/YslKvAd410HLKaGx@gofer.mess.org
+	include/linux/kfence.h:221: warning: Function parameter or member 'slab' not described in '__kfence_obj_info'
 
-gpg: Signature made Sat 09 Jul 2022 09:28:33 AM UTC
-gpg:                using RSA key A624251A26084A9ED9E4C8B6425F639D3960FA9E
-gpg:                issuer "sean@mess.org"
-gpg: Good signature from "Sean Young <sean@mess.org>" [full]
+Document it.
 
-Summary: got 1/3 patches with issues, being 1 at build time, plus one error when buinding PDF document
+Reviewed-by: Marco Elver <elver@google.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
 
-Error/warnings:
+To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+See [PATCH v3 00/21] at: https://lore.kernel.org/all/cover.1657360984.git.mchehab@kernel.org/
 
-patches/0001-media-igorplugusb-use-correct-size-pass-to-igorplugu.patch:
+ include/linux/kfence.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-    allyesconfig: return code #0:
-	../scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-	../scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-	../scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
-
-    allyesconfig: return code #0:
-	../drivers/media/i2c/cx25840/cx25840-core.c: ../drivers/media/i2c/cx25840/cx25840-core.c:5561 cx23885_dif_setup() parse error: turning off implications after 60 seconds
-	../drivers/media/platform/qcom/venus/helpers.c: ../drivers/media/platform/qcom/venus/helpers.c:678 venus_helper_get_bufreq() error: we previously assumed 'req' could be null (see line 674)
-	../drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c:193 sun6i_mipi_csi2_s_stream() warn: missing error code 'ret'
-	../drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c:225 sun8i_a83t_mipi_csi2_s_stream() warn: missing error code 'ret'
-	SMATCH:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: :warning: array of flexible structures
-	SPARSE:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
-	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2548 dvb_register() parse error: OOM: 3000028Kb sm_state_count = 1725875
-	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2548 dvb_register() warn: Function too hairy.  No more merges.
-	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2548 dvb_register() parse error: __split_smt: function too hairy.  Giving up after 50 seconds
-	../drivers/media/dvb-frontends/sp887x.c: ../drivers/media/dvb-frontends/sp887x.c:178 sp887x_initial_setup() error: __memcpy() '&buf[2]' too small (30 vs 16384)
-	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2858 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
-
-
-Error #512 when building PDF docs
+diff --git a/include/linux/kfence.h b/include/linux/kfence.h
+index 726857a4b680..9c242f4e9fab 100644
+--- a/include/linux/kfence.h
++++ b/include/linux/kfence.h
+@@ -210,6 +210,7 @@ struct kmem_obj_info;
+  * __kfence_obj_info() - fill kmem_obj_info struct
+  * @kpp: kmem_obj_info to be filled
+  * @object: the object
++ * @slab: pointer to slab
+  *
+  * Return:
+  * * false - not a KFENCE object
+-- 
+2.36.1
 
