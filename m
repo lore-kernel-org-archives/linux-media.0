@@ -2,154 +2,132 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CFF0CCA487
-	for <linux-media@archiver.kernel.org>; Sat,  9 Jul 2022 10:07:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DB86C433EF
+	for <linux-media@archiver.kernel.org>; Sat,  9 Jul 2022 10:15:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbiGIKHw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 9 Jul 2022 06:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32840 "EHLO
+        id S229477AbiGIKPA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 9 Jul 2022 06:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiGIKHo (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 9 Jul 2022 06:07:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509CF4B4B8;
-        Sat,  9 Jul 2022 03:07:41 -0700 (PDT)
+        with ESMTP id S229469AbiGIKO7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 9 Jul 2022 06:14:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40BA3CBF4;
+        Sat,  9 Jul 2022 03:14:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E898E60E84;
-        Sat,  9 Jul 2022 10:07:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EAE2C341C7;
-        Sat,  9 Jul 2022 10:07:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AC7AEB819C8;
+        Sat,  9 Jul 2022 10:14:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3137C3411C;
+        Sat,  9 Jul 2022 10:14:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657361259;
-        bh=KJtmXylkYfBUCP9nKw3ANSOdLovVVTpFPXktiDmYhX8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=LnWbmh+eLrmzEUuOUtwt1Zk7RPhAHxviv/xN1zz17DDCm7ZZ2jcjIeAUW4KTxMXed
-         KM6hlnyvwgcE/ucoKBLNi3lTI0HLQorkZBQKDriJ83QapG5TazYrBSO0s5jpBgI518
-         zjHSfekRlLlgNoH4pC8Bvx7SWcUhuyyANeCxHX9hJfkXhijte2QxQFmBhEqOt4NAki
-         WRxJiBGp9FbjYtPunI+ANm5ybjHbUrO7XEI2HfTHJrTDCbiOpxKJM0muKF/npo2L8i
-         8btVRvA0c3zQa7eBwzLXG2Hotce3pbtGp96wKaC+VQwn/aYfgAwZb7CnJrfDBP08B6
-         LAxmYYMrturXw==
-Received: from mchehab by mail.kernel.org with local (Exim 4.95)
-        (envelope-from <mchehab@kernel.org>)
-        id 1oA7N9-004EGQ-BD;
-        Sat, 09 Jul 2022 11:07:35 +0100
+        s=k20201202; t=1657361696;
+        bh=MaZXRxOK6UJq6NwF+fwB1/nqC7zlw5QYTccaa+9Ayaw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WsaGeSqiIL5eSPoZZjxC5QZezQPx9Sb47SKeE4YEgd3DsuDB9BJbBu9peP8MZkvrm
+         881Q2qPsk6lrzMghJszE9g24ys0Vn4hoESk/MqSwTba2foYSh4YxLO1VQTLiNGCfrx
+         DQEuc2snQ2fhq5zNkB+WOMZIsJPFB6fULphu6rAscDeKlBjOeAR0fh+po2G9+YKUHm
+         6kNEeqXzfst0hLnvY1VcIGyibDrqZKULauinZbOkpgOGxw8jAhbixZ1KZf9doop/yr
+         ddFSijafi/bbZTH+e4aodsY4GonqVfYayVhMWUybcJBAYMsADymAIfqVxkRecAUmwb
+         lvtey2U7SIpMA==
+Date:   Sat, 9 Jul 2022 11:14:50 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Alex Shi <alexs@kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>, Leo Yan <leo.yan@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Marco Elver <elver@google.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Max Staudt <max@enpas.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Yanteng Si <siyanteng@loongson.cn>, coresight@lists.linaro.org,
-        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
-        kvm@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-cachefs@redhat.com,
-        linux-can@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mm@kvack.org, linux-pci@vger.kernel.org,
-        linux-sgx@vger.kernel.org, netdev@vger.kernel.org, x86@kernel.org
-Subject: [PATCH v3 00/21] Update Documentation/ cross references and fix issues
-Date:   Sat,  9 Jul 2022 11:07:13 +0100
-Message-Id: <cover.1657360984.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.36.1
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        "Hans Verkuil" <hverkuil@xs4all.nl>
+Subject: Re: [GIT PULL] Linux Media vimc update for 5.20-rc1
+Message-ID: <20220709111450.12e1dd61@sal.lan>
+In-Reply-To: <7e719640-80e6-b3ab-751a-156b8e74d87b@linuxfoundation.org>
+References: <7e719640-80e6-b3ab-751a-156b8e74d87b@linuxfoundation.org>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series fix almost all fixable issues when building the html docs at
-linux-next (next-20220608):
+Hi Shuah,
 
-- Address some broken cross-references;
-- Fix kernel-doc warnings;
-- Fix bad tags on ReST files.
+Em Thu, 7 Jul 2022 10:28:37 -0600
+Shuah Khan <skhan@linuxfoundation.org> escreveu:
 
-With this series applied, plus other pending patches that should hopefully
-be merged in time for the next merge window, htmldocs build will produce
-just 4 warnings with Sphinx 2.4.4.
+> Hi Mauro,
+> 
+> Please pull the following vimc update for Linux 5.20-rc1.
+> 
+> This vimc update Linux Media 5.20-rc1 consists of enhancement and
+> cleanup patches:
+> 
+> - add lens to vimc driver and links it with sensors using ancillary
+>    links.
+> - add documentation for lens
+> - changes to make the code readable and maintainable.
+> 
+> diff is attached.
 
-Sphinx >=3 will produce some extra false-positive warnings due to conflicts
-between structs and functions sharing the same name. Hopefully this will
-be fixed either on a new Sphinx 5.x version or Sphinx 6.0.
+Please also send the patches individually to the media ML, as reviews
+happen using them.
 
-Mauro Carvalho Chehab (21):
-  docs: networking: update netdevices.rst reference
-  docs: update vmalloced-kernel-stacks.rst reference
-  docs: update vmemmap_dedup.rst reference
-  docs: zh_CN: page_migration: fix reference to mm index.rst
-  dt-bindings: arm: update arm,coresight-cpu-debug.yaml reference
-  x86/sgx: fix kernel-doc markups
-  fscache: fix kernel-doc documentation
-  fs: namei: address some kernel-doc issues
-  drm/scheduler: fix a kernel-doc warning
-  drm/scheduler: add a missing kernel-doc parameter
-  kfence: fix a kernel-doc parameter
-  genalloc: add a description for start_addr parameter
-  textsearch: document list inside struct ts_ops
-  dcache: fix a kernel-doc warning
-  docs: ext4: blockmap.rst: fix a broken table
-  docs: PCI: pci-vntb-function.rst: Properly include ascii artwork
-  docs: PCI: pci-vntb-howto.rst: fix a title markup
-  docs: virt: kvm: fix a title markup at api.rst
-  docs: ABI: sysfs-bus-nvdimm
-  docs: leds: index.rst: add leds-qcom-lpg to it
-  Documentation: coresight: fix binding wildcards
+Hans,
 
- Documentation/ABI/testing/sysfs-bus-nvdimm             |  2 ++
- Documentation/PCI/endpoint/pci-vntb-function.rst       |  2 +-
- Documentation/PCI/endpoint/pci-vntb-howto.rst          |  2 +-
- Documentation/filesystems/ext4/blockmap.rst            |  2 +-
- Documentation/leds/index.rst                           |  1 +
- Documentation/trace/coresight/coresight-cpu-debug.rst  |  2 +-
- Documentation/trace/coresight/coresight.rst            |  2 +-
- Documentation/translations/zh_CN/mm/page_migration.rst |  2 +-
- .../translations/zh_CN/mm/vmalloced-kernel-stacks.rst  |  2 +-
- Documentation/virt/kvm/api.rst                         |  6 +++---
- arch/x86/include/uapi/asm/sgx.h                        | 10 ++++++++--
- drivers/gpu/drm/scheduler/sched_main.c                 |  1 +
- drivers/net/can/can327.c                               |  2 +-
- fs/namei.c                                             |  3 +++
- include/drm/gpu_scheduler.h                            |  1 +
- include/linux/dcache.h                                 |  2 +-
- include/linux/fscache.h                                |  4 ++--
- include/linux/genalloc.h                               |  1 +
- include/linux/kfence.h                                 |  1 +
- include/linux/textsearch.h                             |  1 +
- mm/hugetlb_vmemmap.h                                   |  2 +-
- 21 files changed, 34 insertions(+), 17 deletions(-)
+Please let me know if you prefer to apply those on your tree, or if
+I should apply on mine a couple of days after Shuah post the patches
+at the ML.
 
--- 
-2.36.1
+Regards,
+Mauro
 
-
+> 
+> thanks,
+> -- Shuah
+> 
+> ----------------------------------------------------------------
+> The following changes since commit 03c765b0e3b4cb5063276b086c76f7a612856a9a:
+> 
+>    Linux 5.19-rc4 (2022-06-26 14:22:10 -0700)
+> 
+> are available in the Git repository at:
+> 
+>    git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux tags/linux-vimc-5.20-rc1
+> 
+> for you to fetch changes up to 55c592e9cff59e0d1c4069b7fe649b02ddf6c36b:
+> 
+>    media: vimc: documentation for lens (2022-06-29 12:58:21 -0600)
+> 
+> ----------------------------------------------------------------
+> linux-media-vimc-5.20-rc1
+> 
+> This vimc update Linux Media 5.20-rc1 consists of enhancement and
+> cleanup patches:
+> 
+> - add lens to vimc driver and links it with sensors using ancillary
+>    links.
+> - add documentation for lens
+> - changes to make the code readable and maintainable.
+> 
+> ----------------------------------------------------------------
+> Daniel Oakley (3):
+>        media: vimc: expand the names of vimc entity types
+>        media: vimc: enumerate data link entities for clarity
+>        media: vimc: use data link entities enum to index the ent_config array
+> 
+> Yunke Cao (2):
+>        media: vimc: add ancillary lens
+>        media: vimc: documentation for lens
+> 
+>   Documentation/admin-guide/media/vimc.dot       |   4 +
+>   Documentation/admin-guide/media/vimc.rst       |  19 ++
+>   drivers/media/test-drivers/vimc/Makefile       |   2 +-
+>   drivers/media/test-drivers/vimc/vimc-capture.c | 270 ++++++++---------
+>   drivers/media/test-drivers/vimc/vimc-common.h  |   9 +-
+>   drivers/media/test-drivers/vimc/vimc-core.c    | 142 ++++++---
+>   drivers/media/test-drivers/vimc/vimc-debayer.c | 393 +++++++++++++------------
+>   drivers/media/test-drivers/vimc/vimc-lens.c    | 102 +++++++
+>   drivers/media/test-drivers/vimc/vimc-scaler.c  | 216 +++++++-------
+>   drivers/media/test-drivers/vimc/vimc-sensor.c  | 307 +++++++++----------
+>   10 files changed, 830 insertions(+), 634 deletions(-)
+>   create mode 100644 drivers/media/test-drivers/vimc/vimc-lens.c
+> ----------------------------------------------------------------
