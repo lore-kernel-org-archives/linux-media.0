@@ -2,69 +2,192 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA59DCCA47C
-	for <linux-media@archiver.kernel.org>; Sun, 10 Jul 2022 01:50:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6760FC433EF
+	for <linux-media@archiver.kernel.org>; Sun, 10 Jul 2022 08:35:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbiGJBuk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 9 Jul 2022 21:50:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45774 "EHLO
+        id S229544AbiGJIf2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 10 Jul 2022 04:35:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiGJBuj (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 9 Jul 2022 21:50:39 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED28AE088
-        for <linux-media@vger.kernel.org>; Sat,  9 Jul 2022 18:50:36 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id A2502839CA;
-        Sun, 10 Jul 2022 03:50:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1657417834;
-        bh=H2BnMWyeuoJ901MU3ESY1dDqEDP/BFtHXZ+UxwBGqJA=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=BrOxVu2xAsUzee0BxABDQkCxfCHzjTnD5BmpdeZiNKvJBMf2FwVJnVBv+GV0wr9n+
-         0pt2P2VxKuzQHTMMqK8488x7VcxW8GBxFvdRU0bpncBOzGrpEjQ+50lvq5WWHupk7u
-         lIJ4iQ31c9MI2gYwEBvGfhZ5qc9TjLw5sxvPFpROd68stIPuxwHje/R+AvLuTRF3EF
-         q+Qd3cFMcpyJlV6a2aN+/aHD9bWrEJ4ZPnKWGf8/3a5INWJ555skHF6GBDoHKRzcwF
-         xV8cxDjRmmIG4mJTfbS1JlQhAmC8ii0WlRBRW7xwi441W5//WswMAElmhSzp9TucBk
-         YUMd7ew/hXeow==
-Message-ID: <b64bd14a-5a49-a8ea-0bdc-4fbba4f0c29d@denx.de>
-Date:   Sun, 10 Jul 2022 03:50:32 +0200
+        with ESMTP id S229514AbiGJIf1 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sun, 10 Jul 2022 04:35:27 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F66F13F19
+        for <linux-media@vger.kernel.org>; Sun, 10 Jul 2022 01:35:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657442127; x=1688978127;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=kzjDj5oysIgZ3Ih4736vVDJOBzXaP6SLPsucfJdqNwg=;
+  b=g/TIQ1BZWB1JXsat9NF2SIYiBnqlj6eaY2e8y3UypC5bY9iCfXDPI8t7
+   VbYg8xHKXkvaKz7A+oLrKwARVvNQt2omrnOYTm5g5IR/84m9weSuedZTN
+   bnfvq8p1AK+u4deZyw/Pci5DQoTlcvTaP8gF1zsUr1MmjM20RW65gRk1l
+   imI3ZGdYeLJXue4GzbIq5oabCfruLN/qKPX7mnI1hGkfNv9J6A3oZttrh
+   R3P0z3CLoQGWMQ/vT91Y+IP9Gzf7Ryaf3obxeOHiNdCRjv/RY/DcNcg9b
+   a48lLD2RwYH2kN+NTL7PO75WhGEquYkavFSJnSIFftGJAFAefZ7ye4VNv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10403"; a="282044118"
+X-IronPort-AV: E=Sophos;i="5.92,260,1650956400"; 
+   d="scan'208";a="282044118"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 01:35:26 -0700
+X-IronPort-AV: E=Sophos;i="5.92,260,1650956400"; 
+   d="scan'208";a="684074483"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 01:35:25 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 180A0201C5;
+        Sun, 10 Jul 2022 11:35:23 +0300 (EEST)
+Date:   Sun, 10 Jul 2022 11:35:23 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, djrscally@gmail.com,
+        mchehab@kernel.org
+Subject: Re: [PATCH v2 1/1] v4l: async: Also match secondary fwnode endpoints
+Message-ID: <YsqPS2ov9X/c4Ihd@paasikivi.fi.intel.com>
+References: <20220709160123.3033324-1-sakari.ailus@linux.intel.com>
+ <YsnNvKobdSRQxCKj@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/2] media: subdev: Add v4l2_subdev_call_state_try() macro
-Content-Language: en-US
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-media@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-References: <20220701131559.66715-1-tomi.valkeinen@ideasonboard.com>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <20220701131559.66715-1-tomi.valkeinen@ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YsnNvKobdSRQxCKj@pendragon.ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 7/1/22 15:15, Tomi Valkeinen wrote:
-> Add a helper macro for the situations where a non-MC driver needs to
-> call a state-operation (operation which takes a subdev state as a
-> parameter) in try-context in another subdev.
-> 
-> The macro allocates a new subdev state for the called subdev and frees
-> the state afterwards.
-> 
-> An example use case is a media platform driver testing if a
-> v4l2_subdev_format would be accepted by a source subdev.
-> 
-> This should not be used in MC drivers.
-> 
-> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Hyv‰‰ huomenta Laurent,
 
-Tested-by: Marek Vasut <marex@denx.de>
+On Sat, Jul 09, 2022 at 09:49:32PM +0300, Laurent Pinchart wrote:
+> Hi Sakari,
+> 
+> Thank you for the patch.
+> 
+> On Sat, Jul 09, 2022 at 07:01:23PM +0300, Sakari Ailus wrote:
+> > For camera sensor devices the firmware information comes from non-DT (or
+> 
+> Did you mean "camera sensor devices whose formation information comes
+> from non-DT" ?
+
+I'd say "of which", but yes.
+
+> 
+> > some ACPI variants), the kernel makes the information visible to the
+> > drivers in a form similar to DT. This takes place through device's
+> > secondary fwnodes, in which case also the secondary fwnode needs to be
+> > heterogenously (endpoint vs. device) matched.
+> > 
+> > Fixes: 1f391df44607 ("media: v4l2-async: Use endpoints in __v4l2_async_nf_add_fwnode_remote()")
+> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > ---
+> > With correct indentation this time.
+> > 
+> >  drivers/media/v4l2-core/v4l2-async.c | 49 ++++++++++++++++------------
+> >  1 file changed, 28 insertions(+), 21 deletions(-)
+> > 
+> > diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+> > index c6995718237a4..2db5d7a8af82b 100644
+> > --- a/drivers/media/v4l2-core/v4l2-async.c
+> > +++ b/drivers/media/v4l2-core/v4l2-async.c
+> > @@ -66,8 +66,10 @@ static bool match_i2c(struct v4l2_async_notifier *notifier,
+> >  #endif
+> >  }
+> >  
+> > -static bool match_fwnode(struct v4l2_async_notifier *notifier,
+> > -			 struct v4l2_subdev *sd, struct v4l2_async_subdev *asd)
+> > +static bool
+> > +match_fwnode_one(struct v4l2_async_notifier *notifier,
+> > +		 struct v4l2_subdev *sd, struct fwnode_handle *sd_fwnode,
+> > +		 struct v4l2_async_subdev *asd)
+> >  {
+> >  	struct fwnode_handle *other_fwnode;
+> >  	struct fwnode_handle *dev_fwnode;
+> > @@ -75,22 +77,6 @@ static bool match_fwnode(struct v4l2_async_notifier *notifier,
+> >  	bool sd_fwnode_is_ep;
+> >  	struct device *dev;
+> >  
+> > -	/*
+> > -	 * Both the subdev and the async subdev can provide either an endpoint
+> > -	 * fwnode or a device fwnode. Start with the simple case of direct
+> > -	 * fwnode matching.
+> > -	 */
+> > -	if (sd->fwnode == asd->match.fwnode)
+> > -		return true;
+> > -
+> > -	/*
+> > -	 * Check the same situation for any possible secondary assigned to the
+> > -	 * subdev's fwnode
+> > -	 */
+> > -	if (!IS_ERR_OR_NULL(sd->fwnode->secondary) &&
+> > -	    sd->fwnode->secondary == asd->match.fwnode)
+> > -		return true;
+> 
+> This check is now gone, is it not needed ?
+
+It is. I'll send v3, moving the direct check here.
+
+Thanks for the review!
+
+> 
+> > -
+> >  	/*
+> >  	 * Otherwise, check if the sd fwnode and the asd fwnode refer to an
+> >  	 * endpoint or a device. If they're of the same type, there's no match.
+> > @@ -99,7 +85,7 @@ static bool match_fwnode(struct v4l2_async_notifier *notifier,
+> >  	 * ACPI. This won't make a difference, as drivers should not try to
+> >  	 * match unconnected endpoints.
+> >  	 */
+> > -	sd_fwnode_is_ep = fwnode_graph_is_endpoint(sd->fwnode);
+> > +	sd_fwnode_is_ep = fwnode_graph_is_endpoint(sd_fwnode);
+> >  	asd_fwnode_is_ep = fwnode_graph_is_endpoint(asd->match.fwnode);
+> >  
+> >  	if (sd_fwnode_is_ep == asd_fwnode_is_ep)
+> > @@ -110,11 +96,11 @@ static bool match_fwnode(struct v4l2_async_notifier *notifier,
+> >  	 * parent of the endpoint fwnode, and compare it with the other fwnode.
+> >  	 */
+> >  	if (sd_fwnode_is_ep) {
+> > -		dev_fwnode = fwnode_graph_get_port_parent(sd->fwnode);
+> > +		dev_fwnode = fwnode_graph_get_port_parent(sd_fwnode);
+> >  		other_fwnode = asd->match.fwnode;
+> >  	} else {
+> >  		dev_fwnode = fwnode_graph_get_port_parent(asd->match.fwnode);
+> > -		other_fwnode = sd->fwnode;
+> > +		other_fwnode = sd_fwnode;
+> >  	}
+> >  
+> >  	fwnode_handle_put(dev_fwnode);
+> > @@ -143,6 +129,27 @@ static bool match_fwnode(struct v4l2_async_notifier *notifier,
+> >  	return true;
+> >  }
+> >  
+> > +static bool match_fwnode(struct v4l2_async_notifier *notifier,
+> > +			 struct v4l2_subdev *sd, struct v4l2_async_subdev *asd)
+> > +{
+> > +	/*
+> > +	 * Both the subdev and the async subdev can provide either an endpoint
+> > +	 * fwnode or a device fwnode. Start with the simple case of direct
+> > +	 * fwnode matching.
+> > +	 */
+> > +	if (sd->fwnode == asd->match.fwnode)
+> > +		return true;
+> > +
+> > +	if (match_fwnode_one(notifier, sd, sd->fwnode, asd))
+> > +		return true;
+> > +
+> > +	/* Also check the secondary fwnode. */
+> > +	if (IS_ERR_OR_NULL(sd->fwnode->secondary))
+> > +		return false;
+> > +
+> > +	return match_fwnode_one(notifier, sd, sd->fwnode->secondary, asd);
+> > +}
+> > +
+> >  static LIST_HEAD(subdev_list);
+> >  static LIST_HEAD(notifier_list);
+> >  static DEFINE_MUTEX(list_lock);
+
+-- 
+Terveisin,
+
+Sakari Ailus
