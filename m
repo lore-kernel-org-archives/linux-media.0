@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCA17CCA47B
-	for <linux-media@archiver.kernel.org>; Mon, 11 Jul 2022 12:45:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 179C7C433EF
+	for <linux-media@archiver.kernel.org>; Mon, 11 Jul 2022 12:45:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232085AbiGKMpe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Jul 2022 08:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
+        id S232003AbiGKMpl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Jul 2022 08:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232090AbiGKMow (ORCPT
+        with ESMTP id S231975AbiGKMpI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Jul 2022 08:44:52 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6E71BE97
-        for <linux-media@vger.kernel.org>; Mon, 11 Jul 2022 05:44:37 -0700 (PDT)
+        Mon, 11 Jul 2022 08:45:08 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA55E1CB12
+        for <linux-media@vger.kernel.org>; Mon, 11 Jul 2022 05:44:40 -0700 (PDT)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5437924A2;
-        Mon, 11 Jul 2022 14:43:39 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 945512715;
+        Mon, 11 Jul 2022 14:43:40 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1657543419;
-        bh=g+VQbu22RydDz1k2y56Fbj/kT2yoddMJbeKal+2mr/E=;
+        s=mail; t=1657543421;
+        bh=vM+Q5vUk3nCD2h953d/yNGgWUWEpVhZ4V2w1vUhHO6U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m6MpykJIL3JdH8wJ/RJpNja0HmaUkpuiOD2J/NSeUb10lPSGwi5ivT2UamNjpw99t
-         LJE46+SB2ddI9OsH49MdDBu8fjNNp2MynsG+cUCv2ImlYzHxK+sfKkT2GE50xkDewx
-         ElFMAIpv5Om6Yi1YGeVr7x4bGW9kVuSrYZzC7B2Y=
+        b=j493lDZFMiU3iadVec35lEYZG2pg4gDXZ+gG78BSMWHQt4fmbYBWL9El+fOHt4fl5
+         uYrvNGavg0wacFeIOU1wuQ4fFjiyOZSLQiVSVCtIT0VroNYIqV9OrRRQSfbgTT4Odb
+         r1OR0GY6y+8F2TkVpJ8y59aDhHbahm4s/UB/yFA0=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     linux-rockchip@lists.infradead.org,
@@ -32,9 +32,9 @@ Cc:     linux-rockchip@lists.infradead.org,
         Heiko Stuebner <heiko@sntech.de>,
         Helen Koike <helen.koike@collabora.com>,
         Paul Elder <paul.elder@ideasonboard.com>
-Subject: [PATCH v3 33/46] media: rkisp1: isp: Merge ISP_ACQ_PROP configuration in single variable
-Date:   Mon, 11 Jul 2022 15:42:35 +0300
-Message-Id: <20220711124248.2683-34-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v3 35/46] media: rkisp1: isp: Fix whitespace issues
+Date:   Mon, 11 Jul 2022 15:42:37 +0300
+Message-Id: <20220711124248.2683-36-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220711124248.2683-1-laurent.pinchart@ideasonboard.com>
 References: <20220711124248.2683-1-laurent.pinchart@ideasonboard.com>
@@ -44,72 +44,49 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The rkisp1_config_isp() function stores the value of the input selection
-and polarity configuration in two different local variables, OR'ed
-together when writing the register. Merge them into a single acq_prop
-variable.
+Add missing blank lines after variable declaration blocks, and fix
+indentation issues.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Reviewed-by: Dafna Hirschfeld <dafna@fastmail.com>
-Reviewed-by: Paul Elder <paul.elder@ideasonboard.com>
 ---
- .../media/platform/rockchip/rkisp1/rkisp1-isp.c  | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
-index 85c1995bb5c2..938541ce52ce 100644
+index 53f0516594ef..944d7bfa9b41 100644
 --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
 +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
-@@ -141,7 +141,7 @@ static int rkisp1_config_isp(struct rkisp1_isp *isp,
- 			     enum v4l2_mbus_type mbus_type, u32 mbus_flags)
+@@ -79,7 +79,8 @@ rkisp1_isp_get_pad_fmt(struct rkisp1_isp *isp,
  {
- 	struct rkisp1_device *rkisp1 = isp->rkisp1;
--	u32 isp_ctrl = 0, irq_mask = 0, acq_mult = 0, signal = 0, input_sel = 0;
-+	u32 isp_ctrl = 0, irq_mask = 0, acq_mult = 0, acq_prop = 0;
- 	const struct rkisp1_mbus_info *src_fmt, *sink_fmt;
- 	struct v4l2_mbus_framefmt *sink_frm;
- 	struct v4l2_rect *sink_crop;
-@@ -188,17 +188,17 @@ static int rkisp1_config_isp(struct rkisp1_isp *isp,
- 	/* Set up input acquisition properties */
- 	if (mbus_type == V4L2_MBUS_BT656 || mbus_type == V4L2_MBUS_PARALLEL) {
- 		if (mbus_flags & V4L2_MBUS_PCLK_SAMPLE_RISING)
--			signal = RKISP1_CIF_ISP_ACQ_PROP_POS_EDGE;
-+			acq_prop |= RKISP1_CIF_ISP_ACQ_PROP_POS_EDGE;
+ 	struct v4l2_subdev_state state = {
+ 		.pads = isp->pad_cfg
+-		};
++	};
++
+ 	if (which == V4L2_SUBDEV_FORMAT_TRY)
+ 		return v4l2_subdev_get_try_format(&isp->sd, sd_state, pad);
+ 	else
+@@ -93,7 +94,8 @@ rkisp1_isp_get_pad_crop(struct rkisp1_isp *isp,
+ {
+ 	struct v4l2_subdev_state state = {
+ 		.pads = isp->pad_cfg
+-		};
++	};
++
+ 	if (which == V4L2_SUBDEV_FORMAT_TRY)
+ 		return v4l2_subdev_get_try_crop(&isp->sd, sd_state, pad);
+ 	else
+@@ -893,8 +895,8 @@ static void rkisp1_isp_queue_event_sof(struct rkisp1_isp *isp)
+ 	struct v4l2_event event = {
+ 		.type = V4L2_EVENT_FRAME_SYNC,
+ 	};
++
+ 	event.u.frame_sync.frame_sequence = isp->frame_sequence;
+-
+ 	v4l2_event_queue(isp->sd.devnode, &event);
+ }
  
- 		switch (sink_fmt->bus_width) {
- 		case 8:
--			input_sel = RKISP1_CIF_ISP_ACQ_PROP_IN_SEL_8B_ZERO;
-+			acq_prop |= RKISP1_CIF_ISP_ACQ_PROP_IN_SEL_8B_ZERO;
- 			break;
- 		case 10:
--			input_sel = RKISP1_CIF_ISP_ACQ_PROP_IN_SEL_10B_ZERO;
-+			acq_prop |= RKISP1_CIF_ISP_ACQ_PROP_IN_SEL_10B_ZERO;
- 			break;
- 		case 12:
--			input_sel = RKISP1_CIF_ISP_ACQ_PROP_IN_SEL_12B;
-+			acq_prop |= RKISP1_CIF_ISP_ACQ_PROP_IN_SEL_12B;
- 			break;
- 		default:
- 			dev_err(rkisp1->dev, "Invalid bus width %u\n",
-@@ -209,15 +209,15 @@ static int rkisp1_config_isp(struct rkisp1_isp *isp,
- 
- 	if (mbus_type == V4L2_MBUS_PARALLEL) {
- 		if (mbus_flags & V4L2_MBUS_VSYNC_ACTIVE_LOW)
--			signal |= RKISP1_CIF_ISP_ACQ_PROP_VSYNC_LOW;
-+			acq_prop |= RKISP1_CIF_ISP_ACQ_PROP_VSYNC_LOW;
- 
- 		if (mbus_flags & V4L2_MBUS_HSYNC_ACTIVE_LOW)
--			signal |= RKISP1_CIF_ISP_ACQ_PROP_HSYNC_LOW;
-+			acq_prop |= RKISP1_CIF_ISP_ACQ_PROP_HSYNC_LOW;
- 	}
- 
- 	rkisp1_write(rkisp1, RKISP1_CIF_ISP_CTRL, isp_ctrl);
- 	rkisp1_write(rkisp1, RKISP1_CIF_ISP_ACQ_PROP,
--		     signal | sink_fmt->yuv_seq | input_sel |
-+		     acq_prop | sink_fmt->yuv_seq |
- 		     RKISP1_CIF_ISP_ACQ_PROP_BAYER_PAT(sink_fmt->bayer_pat) |
- 		     RKISP1_CIF_ISP_ACQ_PROP_FIELD_SEL_ALL);
- 	rkisp1_write(rkisp1, RKISP1_CIF_ISP_ACQ_NR_FRAMES, 0);
 -- 
 Regards,
 
