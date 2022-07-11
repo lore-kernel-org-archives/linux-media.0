@@ -2,35 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40ADBC43334
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7111CCA47F
 	for <linux-media@archiver.kernel.org>; Mon, 11 Jul 2022 11:12:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbiGKLMU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Jul 2022 07:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50382 "EHLO
+        id S229975AbiGKLMV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Jul 2022 07:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbiGKLMB (ORCPT
+        with ESMTP id S229665AbiGKLMC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Jul 2022 07:12:01 -0400
+        Mon, 11 Jul 2022 07:12:02 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B3F32D97
-        for <linux-media@vger.kernel.org>; Mon, 11 Jul 2022 03:21:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8588732DA7
+        for <linux-media@vger.kernel.org>; Mon, 11 Jul 2022 03:21:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6CEA4B80D77
-        for <linux-media@vger.kernel.org>; Mon, 11 Jul 2022 10:21:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DA06C34115;
-        Mon, 11 Jul 2022 10:21:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2CD28B80EA0
+        for <linux-media@vger.kernel.org>; Mon, 11 Jul 2022 10:21:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEE59C34115;
+        Mon, 11 Jul 2022 10:21:25 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: [PATCHv2 6/8] v4l2-ctrls: add v4l2_ctrl_modify_dimensions
-Date:   Mon, 11 Jul 2022 12:21:09 +0200
-Message-Id: <20220711102111.2688139-7-hverkuil-cisco@xs4all.nl>
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv2 8/8] vivid: add pixel_array test control
+Date:   Mon, 11 Jul 2022 12:21:11 +0200
+Message-Id: <20220711102111.2688139-9-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220711102111.2688139-1-hverkuil-cisco@xs4all.nl>
 References: <20220711102111.2688139-1-hverkuil-cisco@xs4all.nl>
@@ -40,129 +39,99 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a new function to modify the dimensions of an array control.
-
-This is typically used if the array size depends on e.g. the currently
-selected video format.
+This control will change dimensions according to the source resolution.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
- drivers/media/v4l2-core/v4l2-ctrls-api.c | 36 ++++++++++++++++
- include/media/v4l2-ctrls.h               | 53 ++++++++++++++++++++++++
- 2 files changed, 89 insertions(+)
+ drivers/media/test-drivers/vivid/vivid-core.h    |  5 ++++-
+ drivers/media/test-drivers/vivid/vivid-ctrls.c   | 14 ++++++++++++++
+ drivers/media/test-drivers/vivid/vivid-vid-cap.c |  4 ++++
+ 3 files changed, 22 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-api.c b/drivers/media/v4l2-core/v4l2-ctrls-api.c
-index 6f1b72c59e8e..878da8592106 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-api.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-api.c
-@@ -989,6 +989,42 @@ int __v4l2_ctrl_modify_range(struct v4l2_ctrl *ctrl,
- }
- EXPORT_SYMBOL(__v4l2_ctrl_modify_range);
+diff --git a/drivers/media/test-drivers/vivid/vivid-core.h b/drivers/media/test-drivers/vivid/vivid-core.h
+index 176b72cb143b..bfcfb3515901 100644
+--- a/drivers/media/test-drivers/vivid/vivid-core.h
++++ b/drivers/media/test-drivers/vivid/vivid-core.h
+@@ -35,7 +35,9 @@
+ #define MAX_HEIGHT 2160
+ /* The minimum image width/height */
+ #define MIN_WIDTH  16
+-#define MIN_HEIGHT 16
++#define MIN_HEIGHT MIN_WIDTH
++/* Pixel Array control divider */
++#define PIXEL_ARRAY_DIV MIN_WIDTH
+ /* The data_offset of plane 0 for the multiplanar formats */
+ #define PLANE0_DATA_OFFSET 128
  
-+int __v4l2_ctrl_modify_dimensions(struct v4l2_ctrl *ctrl,
-+				  u32 dims[V4L2_CTRL_MAX_DIMS])
-+{
-+	unsigned int elems = 1;
-+	unsigned int i;
-+	void *p_array;
+@@ -227,6 +229,7 @@ struct vivid_dev {
+ 	struct v4l2_ctrl		*bitmask;
+ 	struct v4l2_ctrl		*int_menu;
+ 	struct v4l2_ctrl		*ro_int32;
++	struct v4l2_ctrl		*pixel_array;
+ 	struct v4l2_ctrl		*test_pattern;
+ 	struct v4l2_ctrl		*colorspace;
+ 	struct v4l2_ctrl		*rgb_range_cap;
+diff --git a/drivers/media/test-drivers/vivid/vivid-ctrls.c b/drivers/media/test-drivers/vivid/vivid-ctrls.c
+index a78d676575bc..92b1a7598470 100644
+--- a/drivers/media/test-drivers/vivid/vivid-ctrls.c
++++ b/drivers/media/test-drivers/vivid/vivid-ctrls.c
+@@ -35,6 +35,7 @@
+ #define VIVID_CID_AREA			(VIVID_CID_CUSTOM_BASE + 11)
+ #define VIVID_CID_RO_INTEGER		(VIVID_CID_CUSTOM_BASE + 12)
+ #define VIVID_CID_U32_DYN_ARRAY		(VIVID_CID_CUSTOM_BASE + 13)
++#define VIVID_CID_U8_PIXEL_ARRAY	(VIVID_CID_CUSTOM_BASE + 14)
+ 
+ #define VIVID_CID_VIVID_BASE		(0x00f00000 | 0xf000)
+ #define VIVID_CID_VIVID_CLASS		(0x00f00000 | 1)
+@@ -228,6 +229,18 @@ static const struct v4l2_ctrl_config vivid_ctrl_u8_4d_array = {
+ 	.dims = { 2, 3, 4, 5 },
+ };
+ 
++static const struct v4l2_ctrl_config vivid_ctrl_u8_pixel_array = {
++	.ops = &vivid_user_gen_ctrl_ops,
++	.id = VIVID_CID_U8_PIXEL_ARRAY,
++	.name = "U8 Pixel Array",
++	.type = V4L2_CTRL_TYPE_U8,
++	.def = 0x80,
++	.min = 0x00,
++	.max = 0xff,
++	.step = 1,
++	.dims = { 640 / PIXEL_ARRAY_DIV, 360 / PIXEL_ARRAY_DIV },
++};
 +
-+	lockdep_assert_held(ctrl->handler->lock);
-+
-+	if (!ctrl->is_array || ctrl->is_dyn_array)
-+		return -EINVAL;
-+
-+	for (i = 0; i < ctrl->nr_of_dims; i++)
-+		elems *= dims[i];
-+	if (elems == 0)
-+		return -EINVAL;
-+	p_array = kvzalloc(2 * elems * ctrl->elem_size, GFP_KERNEL);
-+	if (!p_array)
-+		return -ENOMEM;
-+	kvfree(ctrl->p_array);
-+	ctrl->p_array_alloc_elems = elems;
-+	ctrl->elems = elems;
-+	ctrl->new_elems = elems;
-+	ctrl->p_array = p_array;
-+	ctrl->p_new.p = p_array;
-+	ctrl->p_cur.p = p_array + elems * ctrl->elem_size;
-+	for (i = 0; i < ctrl->nr_of_dims; i++)
-+		ctrl->dims[i] = dims[i];
-+	for (i = 0; i < elems; i++)
-+		ctrl->type_ops->init(ctrl, i, ctrl->p_cur);
-+	cur_to_new(ctrl);
-+	send_event(NULL, ctrl, V4L2_EVENT_CTRL_CH_VALUE);
-+	return 0;
-+}
-+EXPORT_SYMBOL(__v4l2_ctrl_modify_dimensions);
-+
- /* Implement VIDIOC_QUERY_EXT_CTRL */
- int v4l2_query_ext_ctrl(struct v4l2_ctrl_handler *hdl, struct v4l2_query_ext_ctrl *qc)
+ static const char * const vivid_ctrl_menu_strings[] = {
+ 	"Menu Item 0 (Skipped)",
+ 	"Menu Item 1",
+@@ -1642,6 +1655,7 @@ int vivid_create_controls(struct vivid_dev *dev, bool show_ccs_cap,
+ 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u32_dyn_array, NULL);
+ 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u16_matrix, NULL);
+ 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u8_4d_array, NULL);
++	dev->pixel_array = v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u8_pixel_array, NULL);
+ 
+ 	if (dev->has_vid_cap) {
+ 		/* Image Processing Controls */
+diff --git a/drivers/media/test-drivers/vivid/vivid-vid-cap.c b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+index b9caa4b26209..86b158eeb2d8 100644
+--- a/drivers/media/test-drivers/vivid/vivid-vid-cap.c
++++ b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+@@ -381,6 +381,7 @@ static enum tpg_pixel_aspect vivid_get_pixel_aspect(const struct vivid_dev *dev)
+ void vivid_update_format_cap(struct vivid_dev *dev, bool keep_controls)
  {
-diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
-index e0f32e8b886a..683e9903a6ea 100644
---- a/include/media/v4l2-ctrls.h
-+++ b/include/media/v4l2-ctrls.h
-@@ -963,6 +963,59 @@ static inline int v4l2_ctrl_modify_range(struct v4l2_ctrl *ctrl,
- 	return rval;
+ 	struct v4l2_bt_timings *bt = &dev->dv_timings_cap[dev->input].bt;
++	u32 dims[V4L2_CTRL_MAX_DIMS] = {};
+ 	unsigned size;
+ 	u64 pixelclock;
+ 
+@@ -459,6 +460,9 @@ void vivid_update_format_cap(struct vivid_dev *dev, bool keep_controls)
+ 	tpg_s_video_aspect(&dev->tpg, vivid_get_video_aspect(dev));
+ 	tpg_s_pixel_aspect(&dev->tpg, vivid_get_pixel_aspect(dev));
+ 	tpg_update_mv_step(&dev->tpg);
++	dims[0] = roundup(dev->src_rect.width, PIXEL_ARRAY_DIV);
++	dims[1] = roundup(dev->src_rect.height, PIXEL_ARRAY_DIV);
++	v4l2_ctrl_modify_dimensions(dev->pixel_array, dims);
  }
  
-+/**
-+ *__v4l2_ctrl_modify_dimensions() - Unlocked variant of v4l2_ctrl_modify_dimensions()
-+ *
-+ * @ctrl:	The control to update.
-+ * @dims:	The control's new dimensions.
-+ *
-+ * Update the dimensions of an array control on the fly. The elements of the
-+ * array are reset to their default value, even if the dimensions are
-+ * unchanged.
-+ *
-+ * An error is returned if @dims is invalid for this control.
-+ *
-+ * The caller is responsible for acquiring the control handler mutex on behalf
-+ * of __v4l2_ctrl_modify_dimensions().
-+ *
-+ * Note: calling this function when the same control is used in pending requests
-+ * is untested. It should work (a request with the wrong size of the control
-+ * will drop that control silently), but it will be very confusing.
-+ */
-+int __v4l2_ctrl_modify_dimensions(struct v4l2_ctrl *ctrl,
-+				  u32 dims[V4L2_CTRL_MAX_DIMS]);
-+
-+/**
-+ * v4l2_ctrl_modify_dimensions() - Update the dimensions of an array control.
-+ *
-+ * @ctrl:	The control to update.
-+ * @dims:	The control's new dimensions.
-+ *
-+ * Update the dimensions of an array control on the fly. The elements of the
-+ * array are reset to their default value, even if the dimensions are
-+ * unchanged.
-+ *
-+ * An error is returned if @dims is invalid for this control type.
-+ *
-+ * This function assumes that the control handler is not locked and will
-+ * take the lock itself.
-+ *
-+ * Note: calling this function when the same control is used in pending requests
-+ * is untested. It should work (a request with the wrong size of the control
-+ * will drop that control silently), but it will be very confusing.
-+ */
-+static inline int v4l2_ctrl_modify_dimensions(struct v4l2_ctrl *ctrl,
-+					      u32 dims[V4L2_CTRL_MAX_DIMS])
-+{
-+	int rval;
-+
-+	v4l2_ctrl_lock(ctrl);
-+	rval = __v4l2_ctrl_modify_dimensions(ctrl, dims);
-+	v4l2_ctrl_unlock(ctrl);
-+
-+	return rval;
-+}
-+
- /**
-  * v4l2_ctrl_notify() - Function to set a notify callback for a control.
-  *
+ /* Map the field to something that is valid for the current input */
 -- 
 2.35.1
 
