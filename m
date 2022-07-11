@@ -2,216 +2,233 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25C5FC43334
-	for <linux-media@archiver.kernel.org>; Mon, 11 Jul 2022 10:34:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0E5EC43334
+	for <linux-media@archiver.kernel.org>; Mon, 11 Jul 2022 10:40:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbiGKKeM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Jul 2022 06:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48842 "EHLO
+        id S229943AbiGKKkU convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Jul 2022 06:40:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbiGKKdp (ORCPT
+        with ESMTP id S230106AbiGKKjj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Jul 2022 06:33:45 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A29A0269
-        for <linux-media@vger.kernel.org>; Mon, 11 Jul 2022 02:44:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657532648; x=1689068648;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Oe/XODLv1UaxdK3Sbwj3NNq6O7UMtWycoDr8lsimQ5Y=;
-  b=CrgiBCVfFe7xITgKdhjxDyFT/e3YtQl1o9z/tUkeAt6e946zNCsnHy3+
-   0LNPC6gWIJn0m7nsj+rFGDPiLBWYf59FgLOAbvZlxKX4mhucX0/aYJq0s
-   f+MoAdbDh1iateez+DK7v3eNps7RRlooUQb7S5E3DIC9E6Q9C2RNaN+nQ
-   QsN/2vsyhGl80b6lNhYhDbYM0evpvElh5GIfFU+CSxdqFpN6dbsX3O0i8
-   WV1VNIThM68ZYdAXP18M6MYjdP0iN9Tq5iL+i+UyYTDeBuG2s+SGoQbra
-   16/gp7P9OEoUw2nhP6M0avibYaL7Kel9daBrSq8fiuhYg4NsNRJPXhZ/Q
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="310222195"
-X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="scan'208";a="310222195"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 02:44:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="scan'208";a="737032843"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Jul 2022 02:44:06 -0700
-Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Mon, 11 Jul 2022 02:44:06 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Mon, 11 Jul 2022 02:44:06 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.108)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Mon, 11 Jul 2022 02:44:06 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UdoVSPibK4p8fPsT05V8uhUueHUkpb37gqMbWholAXsLSVueI6YtC7KiBqcy3oNq/3mQ04yjES7xdJfs8zyIQMhAuQRIkZja0Y7tRqmHQcwIjkq7GruWrJCTWw8R1Uy9koDijwew21m/Z6gYbwgs1dBlXxc5Nql4fsR3jy9LqPke9sy328xZkYvs26jR325fIjyr+SiXG7woelSQq4fk+Z2AKRKe0IEcKZjHRtXlpLWpgAnHq+9QPKJz1cjywVo7F4Vu3/kctlOGyxgbEFan23iXK/7F+lqEVMiwVeQTMZSWqKQ7MfU0iibjtGh/Efi/KlHUm7u/qtA9QVBMNaSlcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=307eZTO2gMa6iqwCdOgV2YwpZY1M4wMqgMAkW9Y/oBU=;
- b=eFbF3Z6F5H6lJvpXwh4AmokuFcZVXjBZ5YYSBkziRw9+7WoocyGWSYJfCn1tvoLZK3gCpbrmuqHI0J3lhAZIjH9W0owLJh8fjkBQ5QBQwD+P3YpNRsSUL60baSbf5UjYk+MF5uXUtBpLGYgEKYA86SOT9q7dnyyVOSJAqGQsjYffuhU1qEeV7JGKNb/lKMusy6jIsO0UTWXxWg4CrLlhvmvbvMSmIflOFzen3bptsAUOUfIIkhMeb/lVCSckW9LfPsSfYssVpzvlVjmGEZpzoOGJvTsT8nvFn55JRkP/m9k3+ll2YyuXRLALN4xADfC28f4TQ4/RBSN3QeapGn1jdQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BY5PR11MB4243.namprd11.prod.outlook.com (2603:10b6:a03:1c8::16)
- by SN6PR11MB3280.namprd11.prod.outlook.com (2603:10b6:805:bb::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.21; Mon, 11 Jul
- 2022 09:44:05 +0000
-Received: from BY5PR11MB4243.namprd11.prod.outlook.com
- ([fe80::d84a:6462:d08d:d35a]) by BY5PR11MB4243.namprd11.prod.outlook.com
- ([fe80::d84a:6462:d08d:d35a%4]) with mapi id 15.20.5417.026; Mon, 11 Jul 2022
- 09:44:04 +0000
-Message-ID: <f67d23e2-3953-7717-9c41-65075929525c@intel.com>
-Date:   Mon, 11 Jul 2022 11:44:07 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 3/5] dma-buf: return only unsignaled fences in
- dma_fence_unwrap_for_each v3
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-CC:     <daniel@ffwll.ch>, <linaro-mm-sig@lists.linaro.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-media@vger.kernel.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-References: <20220506141009.18047-1-christian.koenig@amd.com>
- <20220506141009.18047-3-christian.koenig@amd.com>
-From:   Karolina Drobnik <karolina.drobnik@intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
- Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <20220506141009.18047-3-christian.koenig@amd.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AM6P195CA0065.EURP195.PROD.OUTLOOK.COM
- (2603:10a6:209:87::42) To BY5PR11MB4243.namprd11.prod.outlook.com
- (2603:10b6:a03:1c8::16)
+        Mon, 11 Jul 2022 06:39:39 -0400
+Received: from www.linuxtv.org (www.linuxtv.org [130.149.80.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB05620F7F
+        for <linux-media@vger.kernel.org>; Mon, 11 Jul 2022 02:48:44 -0700 (PDT)
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1oApZx-0069F8-MR; Mon, 11 Jul 2022 09:19:45 +0000
+Received: from localhost ([127.0.0.1] helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.94.2)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1oApZs-005Jnu-VB; Mon, 11 Jul 2022 09:19:40 +0000
+Date:   Mon, 11 Jul 2022 09:19:40 +0000 (UTC)
+From:   Jenkins Builder Robot <jenkins@linuxtv.org>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org
+Message-ID: <2026235155.0.1657531180284@builder.linuxtv.org>
+In-Reply-To: <1969408593.0.1657444755522@builder.linuxtv.org>
+References: <1969408593.0.1657444755522@builder.linuxtv.org>
+Subject: Build failed in Jenkins: media-build #3956
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: be77f56e-227b-4b3e-abbc-08da6321e49c
-X-MS-TrafficTypeDiagnostic: SN6PR11MB3280:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qBYn98tWkFrRsUp3pOpsqZqfPMypYxogcl5wK4H7Dudw1D5qOVX3BsUk66+ksaTGp9ZxfmPXScfaavjKr48CcwUo3gN9mrzdhM/Dh3ihI3NkMHbK6SzMaS2lwIBlrew/sal5N7QM7vuy7zzHgGLnxkIHWuqg1lnsVxaxgZz0elmxgBccaRrbWlwTquaH7Rd5et+bScO4gm3jUAaQiqSzyoIvRdbRsS9fxP2VTSM0yz7i1H1jGqi6ZJfoe5VMOpJUeVArctBsHENO6ApaMrkuiCF3Axn4XdWg5tde2FoJPuRGUibPXeeFkL3mxubYx1IDYwdPJgQwg/teQqSTcBU25eOnfu0o8QXLgCjohCks6MJKrztbIKCRci6f9Uv6IYOGpfOBfDI273JiMwxFYx3xtl15mj/ZrKmm9esr8M2aPpucVOZX/xaAfyHHBO/rvpgqkpL1fCGqbAvoohhn3dnebc44X/yfe3hE8XLFooRqW3MnsYDoAO6voqG7dcQwuXQCdV2Kv6JvTfKW0p0rJAwq/7pSOdBLjKT51bDlXUp/SyWBRgvMgrCtKMjoR4h1kNY+d5OngFy8ivzPGp4ruZerYi4faXxeszIunUSmBYxFgtjJ7Wxi6lu7k6k4E6oMj22N96hny8aJPS2/Q45L1KF82YUu2oDp4eQoTtKT15Mfjft2WnVvhgMjNtS8LrGkS4vLG4+vE2MM9pneVr5vO2hNPP0aO1MxMfUkmhldOMjv7Vd7CFylwwNcDg6R+wdU/ir0zScqFeyagNCdQHkYD53up1lvcJBZa+AwvbtItSFS9nic7F24JJ7KGUI+9jxjHZLZxHUDHh6i8RQAluBKvT6E/gX+8gkWqMFMFIR71gJ4dck=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR11MB4243.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(396003)(366004)(39860400002)(346002)(136003)(5660300002)(8936002)(478600001)(966005)(53546011)(186003)(26005)(6512007)(86362001)(2616005)(6486002)(66574015)(31696002)(2906002)(41300700001)(44832011)(6506007)(83380400001)(66946007)(36916002)(8676002)(4326008)(66556008)(38100700002)(36756003)(82960400001)(66476007)(6916009)(316002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?azc3cy96T0I0L3Z1UTQ2dzdVQTQxY1crdWRkZC9zckdmbVd6RWo2QWlVTG40?=
- =?utf-8?B?akl6WTZnbUptT0VlaFIybnhRUUl4ZEtqT2RYaGZIeHVHN3Nld3JEVERvSVl4?=
- =?utf-8?B?bm82M1lSVkd4YzhzN204MENTNWE0R2ZacVZsZDJYeElibUtOZWczb1Z0NTJH?=
- =?utf-8?B?WXdsek9yaVlObVZXN0xBZVMwVHF3dWhPdDZnTnZwRTdrQnRmK1JLMW5xR2dM?=
- =?utf-8?B?MUJsVE5RVmdNT0M5YjBiU3JrZmozNXh3T3lJZHNnT1B0MVNPajBGbWlBVUNM?=
- =?utf-8?B?aUd6YzBuKzdUbm9iS3BZZk9SZ1VkZ2RUNk04bXJHS0RsYnBrWTF4bW5OeXo4?=
- =?utf-8?B?Z1J6amsyVXJBZ3JYOG5IL09MR2poSEk1eFduTXpVd3NPUmI1WVBOem1KV201?=
- =?utf-8?B?OUZOMHA2Y1BSRVlQb05EMU1CUldoQUZ3RDE1eU1jVk0wdXZicVNQSFBqbHZH?=
- =?utf-8?B?R01ZYXZMelJlVTNiMkE1dUtJQzhhSzcxN0ZaMytHeXR4SSt2ZEt0YlNxK1or?=
- =?utf-8?B?ODl2dkVDVEliQ3NYMjVHemFUbW9mNXRhY1lFWVZkZGhmSHBDT1N0RHBSMXND?=
- =?utf-8?B?SlhyeHJvY0pybnhjRXdtSGxyK2VhbVRCaHRVeUNZejkyV2FTNTFxcGJ2OHIw?=
- =?utf-8?B?K2l0NFpMclEvSzJPL09zV01rNUpDaDVzREVUVEdFU3p0djJxcnFIWWxEWU9H?=
- =?utf-8?B?N3R5UTY4UzI0OTlLcGYvTmxCTFNVSHNHL2xDS2N1aVhOWUZzdW8zZDlOZXZZ?=
- =?utf-8?B?b2ZqZW14SENQV05EU0NTL1dPekZqOGhUcTlPM3VxVU9oMmxxVGhJWGR4d2Jj?=
- =?utf-8?B?eE1jb084OFp1bmJ3bGI4ajB0QTZmL2NtT2JHWWJvaUVPYW82Qk1mMk9LSG9r?=
- =?utf-8?B?STllZ0plVnZMNzkvcmQ4Sm9ONjhNNmRSUDVvaEZoSzByN1B5MGxHODhndTdZ?=
- =?utf-8?B?ZWJ0NVBGajNEaTYzdXFWTnI0YWlFazBoa2p3RmdBMkprSmZDM0lKOFlqZklV?=
- =?utf-8?B?TTg0V01FWkk1cXUybHM2UDdweW0ramVTNUFyaHdYeHRiOTZpZHJ2dGhaOThD?=
- =?utf-8?B?bWF6SlRXSWxZYTQ1dTl4TnU0K1EwczNxNE16L2ZpTG5EZDBzS2k5Z1Y2SnN2?=
- =?utf-8?B?dWY5dmhNSWpwUUl5ejVoMUVIVjBhRDVoblErS2dCa1VwVnRCOTFUTkZ3UGdC?=
- =?utf-8?B?cVVWMDBUQUZQRWhZMWZXN3oxUVQ2ME5NVURkZG5Pbm1iWFVraFpnTWlsdFhq?=
- =?utf-8?B?WmZDUkxjR3BHMituZUpaVnNacndFNWhBZUluYWMyaHpMc3JacjhhU0dUY3hx?=
- =?utf-8?B?eXFEOWswd1ZXNlMzNzcrQnJLaC8reU9LZ1VmNGp4MjRKeWx2bldQQktyT1JJ?=
- =?utf-8?B?Q21rQU1SSmFPYlhvSkFMNWxadEJ6anJ3ckFUcHRNTWdOeUVyanhRSXBZR3Fp?=
- =?utf-8?B?MFVqRTVBdWJneUxMTkhMcUZSTzFQKzFSMmJEUnhKZzdITmI0eEZweFdzZ1lH?=
- =?utf-8?B?aTJKb09TYkZnd1NDdGxTbzUrZU80T3hURGFtTzJKVHU2dWh1SkRna1YwZklD?=
- =?utf-8?B?blJCcXlxdDN2N3RoOEo4bkxNY1dUbllta3JqSUJNSjNHVnl0OFErZ2x5ay9M?=
- =?utf-8?B?aW1BUkJVY3NuNU1QUjNvdlM3dTMwd25PVE9VSWdpS0pFTlFxSmpteEdqMVBY?=
- =?utf-8?B?SUVzd2k1amwrblRYR1NxSExEQXcyV0ZqaDRVbi9ERzhPejBaWkw0dEpMOWZI?=
- =?utf-8?B?eDU3azlBekhteXBDd2tGczl0NDNTRGZ0N2RlNUU2RmxZNFZMVVRHaHo0aHlZ?=
- =?utf-8?B?Ym5zL25NK0oxa3lleXAzS29JcE00bkZoaEV6VFhwY0JkcVBQOEJWdWFkWWxn?=
- =?utf-8?B?U2pOVytpVzhBSUxHOWhRWG9FcFNFcFVuTHlHS09WMEY4dnJvRDBCRFNKS0Vh?=
- =?utf-8?B?QjlUUUZNdTRBTW05NnlOU3NOWGhoVEM2RUs0NFd3ZXFTSHpFdG1vQm94YXFn?=
- =?utf-8?B?OTFFaUE3dDd5YkJ3S3dBREtsbEhSdWdycUhWMWYwMUNqTldSdW9pNklSWDcr?=
- =?utf-8?B?cVV3eDdwMFRwbjF3RlYrTTZ2NmxSTTRtVXkwRkk4c0VLK1Q0UTc0S1FhQnFq?=
- =?utf-8?B?eVVwNVI5enJxTmVMMnRlMVdJTzF5T3ZvWTljYUU4dXIwanp2WWJ3S1hPU0h0?=
- =?utf-8?B?T0E9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: be77f56e-227b-4b3e-abbc-08da6321e49c
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR11MB4243.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2022 09:44:04.7827
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: e2NI99CCYc6rQNYx+Y+Zv3QTevCClPiaRH3AbAyXCFq4kW/g1o/zfQ6ebxUjbdi1JUyaklzXRmL1KAHnu4PWU+tNWt0n5INSl329Orf5ntA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3280
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
+X-Jenkins-Job: media-build
+X-Jenkins-Result: FAILURE
+Auto-submitted: auto-generated
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Christian,
+See <https://builder.linuxtv.org/job/media-build/3956/display/redirect>
 
-I'm sorry for digging this one out so late.
+Changes:
 
-On 06.05.2022 16:10, Christian König wrote:
-> dma_fence_chain containers cleanup signaled fences automatically, so
-> filter those out from arrays as well.
-> 
-> v2: fix missing walk over the array
-> v3: massively simplify the patch and actually update the description.
-> 
-> Signed-off-by: Christian König <christian.koenig@amd.com>
-> ---
->   include/linux/dma-fence-unwrap.h | 6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/dma-fence-unwrap.h b/include/linux/dma-fence-unwrap.h
-> index e7c219da4ed7..a4d342fef8e0 100644
-> --- a/include/linux/dma-fence-unwrap.h
-> +++ b/include/linux/dma-fence-unwrap.h
-> @@ -43,9 +43,13 @@ struct dma_fence *dma_fence_unwrap_next(struct dma_fence_unwrap *cursor);
->    * Unwrap dma_fence_chain and dma_fence_array containers and deep dive into all
->    * potential fences in them. If @head is just a normal fence only that one is
->    * returned.
-> + *
-> + * Note that signalled fences are opportunistically filtered out, which
-> + * means the iteration is potentially over no fence at all.
->    */
->   #define dma_fence_unwrap_for_each(fence, cursor, head)			\
->   	for (fence = dma_fence_unwrap_first(head, cursor); fence;	\
-> -	     fence = dma_fence_unwrap_next(cursor))
-> +	     fence = dma_fence_unwrap_next(cursor))			\
-> +		if (!dma_fence_is_signaled(fence))
->   
->   #endif
 
-It looks like this particular patch affects merging Sync Fences, which 
-is reflected by failing IGT test (igt@sw_sync)[1]. The failing subtests are:
-   - sync_merge - merging different fences on the same timeline, neither
-		 single nor merged fences are signaled
+------------------------------------------
+Started by timer
+Running as SYSTEM
+Building remotely on slave2 in workspace <https://builder.linuxtv.org/job/media-build/ws/>
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir <https://builder.linuxtv.org/job/media-build/ws/.git> # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url git://linuxtv.org/media_build.git # timeout=10
+Fetching upstream changes from git://linuxtv.org/media_build.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.30.2'
+ > git fetch --tags --force --progress -- git://linuxtv.org/media_build.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+Checking out Revision 0fe857b86addf382f6fd383948bd7736a3201403 (refs/remotes/origin/master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 0fe857b86addf382f6fd383948bd7736a3201403 # timeout=10
+Commit message: "versions.txt: IMON builds for 4.11 and up only"
+ > git rev-list --no-walk 0fe857b86addf382f6fd383948bd7736a3201403 # timeout=10
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse 0fe857b86addf382f6fd383948bd7736a3201403^{commit} # timeout=10
+The recommended git tool is: NONE
+No credentials specified
+[GitCheckoutListener] Recording commits of 'git git://linuxtv.org/media_build.git'
+[GitCheckoutListener] Found previous build 'media-build #3955' that contains recorded Git commits
+[GitCheckoutListener] -> Starting recording of new commits since '0fe857b'
+[GitCheckoutListener] -> Using head commit '0fe857b' as starting point
+[GitCheckoutListener] -> Git commit decorator could not be created for SCM 'hudson.plugins.git.GitSCM@7869758c'
+[GitCheckoutListener] -> No new commits found
+[media-build] $ /bin/sh -xe /tmp/jenkins11501716860220470109.sh
++ make distclean
+make -C <https://builder.linuxtv.org/job/media-build/ws/v4l> distclean
+make[1]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+rm -f *~ *.o *.ko .*.o.cmd .*.ko.cmd *.mod.c av7110_firm.h fdump \
+	config-compat.h Module.symvers Module.markers modules.order \
+	*.unsigned .*.ko.unsigned.cmd
+rm -f .version .*.o.flags .*.o.d *.mod.gcno Makefile.media \
+	Kconfig Kconfig.kern .config .config.cmd .myconfig \
+	.kconfig.dep config-mycompat.h
+rm -rf .tmp_versions .tmp*.ver .tmp*.o .*.gcno .cache.mk
+rm -f scripts/lxdialog scripts/kconfig
+make[1]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
++ ./build
+Checking if the needed tools for Debian GNU/Linux 11 (bullseye) are available
+Needed package dependencies are met.
 
-   - sync_merge_same - merging the fence with itself on the same
-		 timeline, the fence didn't signal at all
+************************************************************
+* This script will download the latest tarball and build it*
+* Assuming that your kernel is compatible with the latest  *
+* drivers. If not, you'll need to add some extra backports,*
+* ./backports/<kernel> directory.                          *
+* It will also update this tree to be sure that all compat *
+* bits are there, to avoid compilation failures            *
+************************************************************
+************************************************************
+* All drivers and build system are under GPLv2 License     *
+* Firmware files are under the license terms found at:     *
+* http://www.linuxtv.org/downloads/firmware/               *
+* Please abort in the next 5 secs if you don't agree with  *
+* the license                                              *
+************************************************************
 
-   - sync_multi_timeline_wait - merging different fences on different
-		 timelines; the subtest checks if counting fences of
-		 various states works. Currently, it can only see 2
-		 active fences, 0 signaling (should be 2 active,
-		 1 signaling)
+Not aborted. It means that the licence was agreed. Proceeding...
 
-Reverting this commit on the top of drm-tip fixes the issue, but I'm not 
-sure if it wouldn't impact other places in the code. Please let me know 
-if I can be of any help.
+****************************
+Updating the building system
+****************************
+hint: Pulling without specifying how to reconcile divergent branches is
+hint: discouraged. You can squelch this message by running one of the following
+hint: commands sometime before your next pull:
+hint: 
+hint:   git config pull.rebase false  # merge (the default strategy)
+hint:   git config pull.rebase true   # rebase
+hint:   git config pull.ff only       # fast-forward only
+hint: 
+hint: You can replace "git config" with "git config --global" to set a default
+hint: preference for all repositories. You can also pass --rebase, --no-rebase,
+hint: or --ff-only on the command line to override the configured default per
+hint: invocation.
+From git://linuxtv.org/media_build
+ * branch                      master     -> FETCH_HEAD
+Already up to date.
+make: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+wget http://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5 -O linux-media.tar.bz2.md5.tmp
+--2022-07-11 09:19:33--  http://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5
+Resolving linuxtv.org (linuxtv.org)... 130.149.80.248
+Connecting to linuxtv.org (linuxtv.org)|130.149.80.248|:80... connected.
+HTTP request sent, awaiting response... 301 Moved Permanently
+Location: https://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5 [following]
+--2022-07-11 09:19:34--  https://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5
+Connecting to linuxtv.org (linuxtv.org)|130.149.80.248|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 105 [application/x-bzip2]
+Saving to: ‘linux-media.tar.bz2.md5.tmp’
 
-All the best,
-Karolina
+     0K                                                       100% 82.3M=0s
 
----------------------
-[1] - reproducible locally, but can be also seen in the CI:
-https://intel-gfx-ci.01.org/tree/drm-tip/index.html?testfilter=igt@sw_sync
+2022-07-11 09:19:35 (82.3 MB/s) - ‘linux-media.tar.bz2.md5.tmp’ saved [105/105]
+
+make: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+make: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+tar xfj linux-media.tar.bz2
+rm -f .patches_applied .linked_dir .git_log.md5
+make: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+**********************************************************
+* Downloading firmwares from linuxtv.org.                *
+**********************************************************
+firmware/dvb-usb-vp702x-01.fw
+firmware/dvb-usb-vp7045-01.fw
+firmware/dvb-fe-bcm3510-01.fw
+firmware/as102_data2_st.hex
+firmware/dvb-usb-terratec-h7-drxk.fw
+firmware/isdbt_nova_12mhz.inp
+firmware/Boot.S
+firmware/dvb_nova_12mhz_b0.inp
+firmware/dvb-fe-xc4000-1.4.1.fw
+firmware/sms1xxx-hcw-55xxx-isdbt-02.fw
+firmware/sms1xxx-nova-a-dvbt-01.fw
+firmware/dvb-usb-avertv-a800-02.fw
+firmware/cmmb_venice_12mhz.inp
+firmware/dvb-fe-xc5000c-4.1.30.7.fw
+firmware/v4l-cx23418-cpu.fw
+firmware/v4l-cx23885-enc-broken.fw
+firmware/dvb-fe-drxj-mc-vsb-1.0.8.fw
+firmware/dvb_nova_12mhz.inp
+firmware/dvb-usb-dib0700-1.20.fw
+firmware/tdmb_nova_12mhz.inp
+firmware/as102_data1_st.hex
+firmware/dvb-fe-or51132-vsb.fw
+firmware/dvb-usb-it9135-02.fw
+firmware/v4l-cx23418-apu.fw
+firmware/dvb-ttpci-01.fw-261f
+firmware/v4l-cx23418-dig.fw
+firmware/dvb-ttpci-01.fw-261c
+firmware/dvb-usb-bluebird-01.fw
+firmware/dvb-fe-or51211.fw
+firmware/dvb-fe-or51132-qam.fw
+firmware/sms1xxx-stellar-dvbt-01.fw
+firmware/dvb-usb-dibusb-5.0.0.11.fw
+firmware/dvb-fe-drxj-mc-vsb-qam-1.0.8.fw
+firmware/dvb-usb-terratec-h5-drxk.fw
+firmware/dvb-usb-wt220u-02.fw
+firmware/v4l-cx23885-enc.fw
+firmware/dvb-ttpci-01.fw-2622
+firmware/dvb-usb-wt220u-01.fw
+firmware/v4l-cx25840.fw
+firmware/dvb-fe-drxj-mc-1.0.8.fw
+firmware/v4l-cx231xx-avcore-01.fw
+firmware/dvb-usb-dtt200u-01.fw
+firmware/dvb-usb-dibusb-6.0.0.8.fw
+firmware/sms1xxx-nova-b-dvbt-01.fw
+firmware/dvb-fe-xc5000-1.6.114.fw
+firmware/cmmb_vega_12mhz.inp
+firmware/dvb-usb-it9135-01.fw
+firmware/isdbt_nova_12mhz_b0.inp
+firmware/dvb-ttpci-01.fw-261a
+firmware/dvb-ttpci-01.fw-261b
+firmware/dvb-ttpci-01.fw-261d
+firmware/README
+firmware/isdbt_rio.inp
+firmware/dvb-usb-umt-010-02.fw
+firmware/sms1xxx-hcw-55xxx-dvbt-02.fw
+firmware/dvb-usb-terratec-h7-az6007.fw
+firmware/v4l-cx23885-avcore-01.fw
+******************
+* Start building *
+******************
+make -C <https://builder.linuxtv.org/job/media-build/ws/v4l> allyesconfig
+make[1]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+No version yet, using 5.10.0-14-amd64
+make[2]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+Applying patches for kernel 5.10.0-14-amd64
+patch -s -f -N -p1 -i ../backports/api_version.patch
+patch -s -f -N -p1 -i ../backports/pr_fmt.patch
+1 out of 1 hunk FAILED
+1 out of 1 hunk FAILED
+make[2]: *** [Makefile:132: apply_patches] Error 1
+make[2]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+make[1]: *** [Makefile:366: allyesconfig] Error 2
+make[1]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+make: *** [Makefile:26: allyesconfig] Error 2
+can't select all drivers at ./build line 531
+Build step 'Execute shell' marked build as failure
