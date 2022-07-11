@@ -2,35 +2,38 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F4CFCCA480
-	for <linux-media@archiver.kernel.org>; Mon, 11 Jul 2022 11:12:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7542C433EF
+	for <linux-media@archiver.kernel.org>; Mon, 11 Jul 2022 11:12:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbiGKLMR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Jul 2022 07:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
+        id S229685AbiGKLMT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Jul 2022 07:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiGKLMB (ORCPT
+        with ESMTP id S229599AbiGKLMA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Jul 2022 07:12:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D0E32D93
-        for <linux-media@vger.kernel.org>; Mon, 11 Jul 2022 03:21:23 -0700 (PDT)
+        Mon, 11 Jul 2022 07:12:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78F332D91
+        for <linux-media@vger.kernel.org>; Mon, 11 Jul 2022 03:21:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 60A6C61359
-        for <linux-media@vger.kernel.org>; Mon, 11 Jul 2022 10:21:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD5E7C341C0;
-        Mon, 11 Jul 2022 10:21:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68A8E61375
+        for <linux-media@vger.kernel.org>; Mon, 11 Jul 2022 10:21:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FE10C341C0;
+        Mon, 11 Jul 2022 10:21:18 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: [PATCHv2 5/8] v4l2-ctrls: alloc arrays in ctrl_ref
-Date:   Mon, 11 Jul 2022 12:21:08 +0200
-Message-Id: <20220711102111.2688139-6-hverkuil-cisco@xs4all.nl>
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv2 3/8] vivid: add dynamic array test control
+Date:   Mon, 11 Jul 2022 12:21:06 +0200
+Message-Id: <20220711102111.2688139-4-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220711102111.2688139-1-hverkuil-cisco@xs4all.nl>
 References: <20220711102111.2688139-1-hverkuil-cisco@xs4all.nl>
@@ -40,163 +43,59 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Also allocate space for arrays in struct ctrl_ref.
+Add a dynamic array test control to help test support for this
+feature.
 
-This is in preparation for allowing to change the array size from
-a driver.
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Acked-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Tested-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Tested-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/v4l2-core/v4l2-ctrls-api.c  |  2 +-
- drivers/media/v4l2-core/v4l2-ctrls-core.c | 31 ++++++++++++++---------
- include/media/v4l2-ctrls.h                | 16 ++++++------
- 3 files changed, 28 insertions(+), 21 deletions(-)
+ drivers/media/test-drivers/vivid/vivid-ctrls.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-api.c b/drivers/media/v4l2-core/v4l2-ctrls-api.c
-index 1b90bd7c4010..6f1b72c59e8e 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-api.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-api.c
-@@ -467,7 +467,7 @@ int v4l2_g_ext_ctrls_common(struct v4l2_ctrl_handler *hdl,
+diff --git a/drivers/media/test-drivers/vivid/vivid-ctrls.c b/drivers/media/test-drivers/vivid/vivid-ctrls.c
+index 7ff8fdfda28e..a78d676575bc 100644
+--- a/drivers/media/test-drivers/vivid/vivid-ctrls.c
++++ b/drivers/media/test-drivers/vivid/vivid-ctrls.c
+@@ -34,6 +34,7 @@
+ #define VIVID_CID_U8_4D_ARRAY		(VIVID_CID_CUSTOM_BASE + 10)
+ #define VIVID_CID_AREA			(VIVID_CID_CUSTOM_BASE + 11)
+ #define VIVID_CID_RO_INTEGER		(VIVID_CID_CUSTOM_BASE + 12)
++#define VIVID_CID_U32_DYN_ARRAY		(VIVID_CID_CUSTOM_BASE + 13)
  
- 			if (is_default)
- 				ret = def_to_user(cs->controls + idx, ref->ctrl);
--			else if (is_request && ref->p_req_dyn_enomem)
-+			else if (is_request && ref->p_req_array_enomem)
- 				ret = -ENOMEM;
- 			else if (is_request && ref->p_req_valid)
- 				ret = req_to_user(cs->controls + idx, ref);
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-index 1372b7b45681..38030a7cb233 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-@@ -1048,23 +1048,26 @@ void cur_to_new(struct v4l2_ctrl *ctrl)
- 	ptr_to_ptr(ctrl, ctrl->p_cur, ctrl->p_new, ctrl->new_elems);
- }
- 
--static bool req_alloc_dyn_array(struct v4l2_ctrl_ref *ref, u32 elems)
-+static bool req_alloc_array(struct v4l2_ctrl_ref *ref, u32 elems)
- {
- 	void *tmp;
- 
--	if (elems < ref->p_req_dyn_alloc_elems)
-+	if (elems == ref->p_req_array_alloc_elems)
-+		return true;
-+	if (ref->ctrl->is_dyn_array &&
-+	    elems < ref->p_req_array_alloc_elems)
- 		return true;
- 
- 	tmp = kvmalloc(elems * ref->ctrl->elem_size, GFP_KERNEL);
- 
- 	if (!tmp) {
--		ref->p_req_dyn_enomem = true;
-+		ref->p_req_array_enomem = true;
- 		return false;
- 	}
--	ref->p_req_dyn_enomem = false;
-+	ref->p_req_array_enomem = false;
- 	kvfree(ref->p_req.p);
- 	ref->p_req.p = tmp;
--	ref->p_req_dyn_alloc_elems = elems;
-+	ref->p_req_array_alloc_elems = elems;
- 	return true;
- }
- 
-@@ -1077,7 +1080,7 @@ void new_to_req(struct v4l2_ctrl_ref *ref)
- 		return;
- 
- 	ctrl = ref->ctrl;
--	if (ctrl->is_dyn_array && !req_alloc_dyn_array(ref, ctrl->new_elems))
-+	if (ctrl->is_array && !req_alloc_array(ref, ctrl->new_elems))
- 		return;
- 
- 	ref->p_req_elems = ctrl->new_elems;
-@@ -1094,7 +1097,7 @@ void cur_to_req(struct v4l2_ctrl_ref *ref)
- 		return;
- 
- 	ctrl = ref->ctrl;
--	if (ctrl->is_dyn_array && !req_alloc_dyn_array(ref, ctrl->elems))
-+	if (ctrl->is_array && !req_alloc_array(ref, ctrl->elems))
- 		return;
- 
- 	ref->p_req_elems = ctrl->elems;
-@@ -1123,14 +1126,18 @@ int req_to_new(struct v4l2_ctrl_ref *ref)
- 		return 0;
- 	}
- 
--	/* Not a dynamic array, so just copy the request value */
--	if (!ctrl->is_dyn_array) {
-+	/* Not an array, so just copy the request value */
-+	if (!ctrl->is_array) {
- 		ptr_to_ptr(ctrl, ref->p_req, ctrl->p_new, ctrl->new_elems);
- 		return 0;
- 	}
- 
- 	/* Sanity check, should never happen */
--	if (WARN_ON(!ref->p_req_dyn_alloc_elems))
-+	if (WARN_ON(!ref->p_req_array_alloc_elems))
-+		return -ENOMEM;
-+
-+	if (!ctrl->is_dyn_array &&
-+	    ref->p_req_elems != ctrl->p_array_alloc_elems)
- 		return -ENOMEM;
- 
- 	/*
-@@ -1243,7 +1250,7 @@ void v4l2_ctrl_handler_free(struct v4l2_ctrl_handler *hdl)
- 	/* Free all nodes */
- 	list_for_each_entry_safe(ref, next_ref, &hdl->ctrl_refs, node) {
- 		list_del(&ref->node);
--		if (ref->p_req_dyn_alloc_elems)
-+		if (ref->p_req_array_alloc_elems)
- 			kvfree(ref->p_req.p);
- 		kfree(ref);
- 	}
-@@ -1368,7 +1375,7 @@ int handler_new_ref(struct v4l2_ctrl_handler *hdl,
- 	if (hdl->error)
- 		return hdl->error;
- 
--	if (allocate_req && !ctrl->is_dyn_array)
-+	if (allocate_req && !ctrl->is_array)
- 		size_extra_req = ctrl->elems * ctrl->elem_size;
- 	new_ref = kzalloc(sizeof(*new_ref) + size_extra_req, GFP_KERNEL);
- 	if (!new_ref)
-diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
-index a2f147873265..e0f32e8b886a 100644
---- a/include/media/v4l2-ctrls.h
-+++ b/include/media/v4l2-ctrls.h
-@@ -324,15 +324,15 @@ struct v4l2_ctrl {
-  *		from a cluster with multiple controls twice (when the first
-  *		control of a cluster is applied, they all are).
-  * @p_req_valid: If set, then p_req contains the control value for the request.
-- * @p_req_dyn_enomem: If set, then p_req is invalid since allocating space for
-- *		a dynamic array failed. Attempting to read this value shall
-- *		result in ENOMEM. Only valid if ctrl->is_dyn_array is true.
-- * @p_req_dyn_alloc_elems: The number of elements allocated for the dynamic
-- *		array. Only valid if @p_req_valid and ctrl->is_dyn_array are
-+ * @p_req_array_enomem: If set, then p_req is invalid since allocating space for
-+ *		an array failed. Attempting to read this value shall
-+ *		result in ENOMEM. Only valid if ctrl->is_array is true.
-+ * @p_req_array_alloc_elems: The number of elements allocated for the
-+ *		array. Only valid if @p_req_valid and ctrl->is_array are
-  *		true.
-  * @p_req_elems: The number of elements in @p_req. This is the same as
-  *		ctrl->elems, except for dynamic arrays. In that case it is in
-- *		the range of 1 to @p_req_dyn_alloc_elems. Only valid if
-+ *		the range of 1 to @p_req_array_alloc_elems. Only valid if
-  *		@p_req_valid is true.
-  * @p_req:	If the control handler containing this control reference
-  *		is bound to a media request, then this points to the
-@@ -354,8 +354,8 @@ struct v4l2_ctrl_ref {
- 	bool from_other_dev;
- 	bool req_done;
- 	bool p_req_valid;
--	bool p_req_dyn_enomem;
--	u32 p_req_dyn_alloc_elems;
-+	bool p_req_array_enomem;
-+	u32 p_req_array_alloc_elems;
- 	u32 p_req_elems;
- 	union v4l2_ctrl_ptr p_req;
+ #define VIVID_CID_VIVID_BASE		(0x00f00000 | 0xf000)
+ #define VIVID_CID_VIVID_CLASS		(0x00f00000 | 1)
+@@ -190,6 +191,19 @@ static const struct v4l2_ctrl_config vivid_ctrl_u32_array = {
+ 	.dims = { 1 },
  };
+ 
++static const struct v4l2_ctrl_config vivid_ctrl_u32_dyn_array = {
++	.ops = &vivid_user_gen_ctrl_ops,
++	.id = VIVID_CID_U32_DYN_ARRAY,
++	.name = "U32 Dynamic Array",
++	.type = V4L2_CTRL_TYPE_U32,
++	.flags = V4L2_CTRL_FLAG_DYNAMIC_ARRAY,
++	.def = 50,
++	.min = 10,
++	.max = 90,
++	.step = 1,
++	.dims = { 100 },
++};
++
+ static const struct v4l2_ctrl_config vivid_ctrl_u16_matrix = {
+ 	.ops = &vivid_user_gen_ctrl_ops,
+ 	.id = VIVID_CID_U16_MATRIX,
+@@ -1625,6 +1639,7 @@ int vivid_create_controls(struct vivid_dev *dev, bool show_ccs_cap,
+ 	dev->ro_int32 = v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_ro_int32, NULL);
+ 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_area, NULL);
+ 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u32_array, NULL);
++	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u32_dyn_array, NULL);
+ 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u16_matrix, NULL);
+ 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u8_4d_array, NULL);
+ 
 -- 
 2.35.1
 
