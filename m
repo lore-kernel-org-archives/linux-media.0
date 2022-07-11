@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FB9CC43334
-	for <linux-media@archiver.kernel.org>; Mon, 11 Jul 2022 12:44:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EEC9C43334
+	for <linux-media@archiver.kernel.org>; Mon, 11 Jul 2022 12:44:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231947AbiGKMoV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Jul 2022 08:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
+        id S231949AbiGKMoZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Jul 2022 08:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiGKMn5 (ORCPT
+        with ESMTP id S231878AbiGKMoF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Jul 2022 08:43:57 -0400
+        Mon, 11 Jul 2022 08:44:05 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2037220BDF
-        for <linux-media@vger.kernel.org>; Mon, 11 Jul 2022 05:43:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1534E622
+        for <linux-media@vger.kernel.org>; Mon, 11 Jul 2022 05:43:59 -0700 (PDT)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 50E3811F0;
-        Mon, 11 Jul 2022 14:43:28 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 25624239D;
+        Mon, 11 Jul 2022 14:43:30 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1657543408;
-        bh=kWkLLGS53gqIKKyiDhPv1Xi07M4xf4u2hdkaOTTK98c=;
+        s=mail; t=1657543410;
+        bh=C2yxone/itSiP3pYYCL/doNsJ/bHKFtn+YNhW2DOea4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SLLjnKaRHAuwVh4bDMw1To4qweiFhYz29bw2T01g2aiUy+P/FMY1uSQJJu8MfdFZE
-         zu6nyyWYTnzR7kWaQBG6LmhwScH6w3Md8dJx/o/DFlyOKwhVRkM5u1Wmhft/7vaAkm
-         3B2VsYcP15ivJFiFnDuydsrHUj3a+Px7GdUw3jRM=
+        b=QLuk2X8X2nOTw24GH4MEuUde/HOMDxZDRIZoqlCKE6iY3/hS5m7IP58hv2t9GYIDs
+         AJGivD+2cM2zbju7YbWqDTMgHPtMUAL5GZ6V7X6MwmCoQIXuOg6eQZQrhcKxFViPza
+         dofR9Hn7vLxy0oNexHTZPNc3eQMsugw2XjbJSsEA=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     linux-rockchip@lists.infradead.org,
@@ -32,9 +32,9 @@ Cc:     linux-rockchip@lists.infradead.org,
         Heiko Stuebner <heiko@sntech.de>,
         Helen Koike <helen.koike@collabora.com>,
         Paul Elder <paul.elder@ideasonboard.com>
-Subject: [PATCH v3 15/46] media: rkisp1: Create link from sensor to ISP at notifier bound time
-Date:   Mon, 11 Jul 2022 15:42:17 +0300
-Message-Id: <20220711124248.2683-16-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v3 18/46] media: rkisp1: Fix sensor source pad retrieval at bound time
+Date:   Mon, 11 Jul 2022 15:42:20 +0300
+Message-Id: <20220711124248.2683-19-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220711124248.2683-1-laurent.pinchart@ideasonboard.com>
 References: <20220711124248.2683-1-laurent.pinchart@ideasonboard.com>
@@ -44,185 +44,120 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Links from sensors to the ISP can be created as sensors are bound. Move
-the link creation from rkisp1_create_links() to the bound notifier, and
-clean up the rkisp1_create_links() function while at it.
+When a sensor is bound, its source pad is retrieved in the .bound()
+operation with a call to media_entity_get_fwnode_pad(). The function
+should be called with the source endpoint fwnode of the sensor, but is
+instead called with the sensor's device fwnode.
+
+Fix this, which involves storing a reference to the source endpoint
+fwnode in the rkisp1_sensor_async structure, and thus implementing the
+subdev notifier .destroy() operation to release the reference.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Paul Elder <paul.elder@ideasonboard.com>
 Reviewed-by: Dafna Hirschfeld <dafna@fastmail.com>
 ---
-Changes since v1:
-
-- Fix double semicolon
----
- .../platform/rockchip/rkisp1/rkisp1-common.h  |  2 +
- .../platform/rockchip/rkisp1/rkisp1-dev.c     | 87 ++++++++-----------
- 2 files changed, 40 insertions(+), 49 deletions(-)
+ .../platform/rockchip/rkisp1/rkisp1-common.h  |  2 ++
+ .../platform/rockchip/rkisp1/rkisp1-dev.c     | 28 ++++++++++++++++---
+ 2 files changed, 26 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-index 63eb376d9913..b0896b508db3 100644
+index b0896b508db3..f08b3dec1465 100644
 --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
 +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-@@ -116,6 +116,7 @@ struct rkisp1_info {
-  *				of the v4l2-async API
+@@ -117,6 +117,7 @@ struct rkisp1_info {
   *
   * @asd:		async_subdev variable for the sensor
-+ * @index:		index of the sensor (counting sensor found in DT)
+  * @index:		index of the sensor (counting sensor found in DT)
++ * @source_ep:		fwnode for the sensor source endpoint
   * @lanes:		number of lanes
   * @mbus_type:		type of bus (currently only CSI2 is supported)
   * @mbus_flags:		media bus (V4L2_MBUS_*) flags
-@@ -125,6 +126,7 @@ struct rkisp1_info {
-  */
+@@ -127,6 +128,7 @@ struct rkisp1_info {
  struct rkisp1_sensor_async {
  	struct v4l2_async_subdev asd;
-+	unsigned int index;
+ 	unsigned int index;
++	struct fwnode_handle *source_ep;
  	unsigned int lanes;
  	enum v4l2_mbus_type mbus_type;
  	unsigned int mbus_flags;
 diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-index 7fc617d51f44..1b3c3881ca89 100644
+index 2e68f35e8ea5..813c013139ea 100644
 --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
 +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-@@ -111,72 +111,46 @@ struct rkisp1_isr_data {
- 
- static int rkisp1_create_links(struct rkisp1_device *rkisp1)
- {
--	struct media_entity *source, *sink;
--	unsigned int flags, source_pad;
--	struct v4l2_subdev *sd;
- 	unsigned int i;
- 	int ret;
- 
--	/* sensor links */
--	flags = MEDIA_LNK_FL_ENABLED;
--	list_for_each_entry(sd, &rkisp1->v4l2_dev.subdevs, list) {
--		if (sd == &rkisp1->isp.sd ||
--		    sd == &rkisp1->resizer_devs[RKISP1_MAINPATH].sd ||
--		    sd == &rkisp1->resizer_devs[RKISP1_SELFPATH].sd)
--			continue;
--
--		ret = media_entity_get_fwnode_pad(&sd->entity, sd->fwnode,
--						  MEDIA_PAD_FL_SOURCE);
--		if (ret < 0) {
--			dev_err(rkisp1->dev, "failed to find src pad for %s\n",
--				sd->name);
--			return ret;
--		}
--		source_pad = ret;
--
--		ret = media_create_pad_link(&sd->entity, source_pad,
--					    &rkisp1->isp.sd.entity,
--					    RKISP1_ISP_PAD_SINK_VIDEO,
--					    flags);
--		if (ret)
--			return ret;
--
--		flags = 0;
--	}
--
--	flags = MEDIA_LNK_FL_ENABLED | MEDIA_LNK_FL_IMMUTABLE;
--
- 	/* create ISP->RSZ->CAP links */
- 	for (i = 0; i < 2; i++) {
--		source = &rkisp1->isp.sd.entity;
--		sink = &rkisp1->resizer_devs[i].sd.entity;
--		ret = media_create_pad_link(source, RKISP1_ISP_PAD_SOURCE_VIDEO,
--					    sink, RKISP1_RSZ_PAD_SINK,
-+		struct media_entity *resizer =
-+			&rkisp1->resizer_devs[i].sd.entity;
-+		struct media_entity *capture =
-+			&rkisp1->capture_devs[i].vnode.vdev.entity;
-+
-+		ret = media_create_pad_link(&rkisp1->isp.sd.entity,
-+					    RKISP1_ISP_PAD_SOURCE_VIDEO,
-+					    resizer, RKISP1_RSZ_PAD_SINK,
- 					    MEDIA_LNK_FL_ENABLED);
- 		if (ret)
- 			return ret;
- 
--		source = sink;
--		sink = &rkisp1->capture_devs[i].vnode.vdev.entity;
--		ret = media_create_pad_link(source, RKISP1_RSZ_PAD_SRC,
--					    sink, 0, flags);
-+		ret = media_create_pad_link(resizer, RKISP1_RSZ_PAD_SRC,
-+					    capture, 0,
-+					    MEDIA_LNK_FL_ENABLED |
-+					    MEDIA_LNK_FL_IMMUTABLE);
- 		if (ret)
- 			return ret;
- 	}
- 
- 	/* params links */
--	source = &rkisp1->params.vnode.vdev.entity;
--	sink = &rkisp1->isp.sd.entity;
--	ret = media_create_pad_link(source, 0, sink,
--				    RKISP1_ISP_PAD_SINK_PARAMS, flags);
-+	ret = media_create_pad_link(&rkisp1->params.vnode.vdev.entity, 0,
-+				    &rkisp1->isp.sd.entity,
-+				    RKISP1_ISP_PAD_SINK_PARAMS,
-+				    MEDIA_LNK_FL_ENABLED |
-+				    MEDIA_LNK_FL_IMMUTABLE);
- 	if (ret)
- 		return ret;
- 
- 	/* 3A stats links */
--	source = &rkisp1->isp.sd.entity;
--	sink = &rkisp1->stats.vnode.vdev.entity;
--	return media_create_pad_link(source, RKISP1_ISP_PAD_SOURCE_STATS,
--				     sink, 0, flags);
-+	return media_create_pad_link(&rkisp1->isp.sd.entity,
-+				     RKISP1_ISP_PAD_SOURCE_STATS,
-+				     &rkisp1->stats.vnode.vdev.entity, 0,
-+				     MEDIA_LNK_FL_ENABLED |
-+				     MEDIA_LNK_FL_IMMUTABLE);
- }
- 
- static int rkisp1_subdev_notifier_bound(struct v4l2_async_notifier *notifier,
-@@ -187,6 +161,7 @@ static int rkisp1_subdev_notifier_bound(struct v4l2_async_notifier *notifier,
- 		container_of(notifier, struct rkisp1_device, notifier);
- 	struct rkisp1_sensor_async *s_asd =
- 		container_of(asd, struct rkisp1_sensor_async, asd);
-+	int source_pad;
- 
- 	s_asd->pixel_rate_ctrl = v4l2_ctrl_find(sd->ctrl_handler,
- 						V4L2_CID_PIXEL_RATE);
-@@ -206,7 +181,19 @@ static int rkisp1_subdev_notifier_bound(struct v4l2_async_notifier *notifier,
- 
+@@ -138,7 +138,7 @@ static int rkisp1_subdev_notifier_bound(struct v4l2_async_notifier *notifier,
  	phy_init(s_asd->dphy);
  
--	return 0;
-+	/* Create the link to the sensor. */
-+	source_pad = media_entity_get_fwnode_pad(&sd->entity, sd->fwnode,
-+						 MEDIA_PAD_FL_SOURCE);
-+	if (source_pad < 0) {
-+		dev_err(rkisp1->dev, "failed to find source pad for %s\n",
-+			sd->name);
-+		return source_pad;
-+	}
-+
-+	return media_create_pad_link(&sd->entity, source_pad,
-+				     &rkisp1->isp.sd.entity,
-+				     RKISP1_ISP_PAD_SINK_VIDEO,
-+				     !s_asd->index ? MEDIA_LNK_FL_ENABLED : 0);
+ 	/* Create the link to the sensor. */
+-	source_pad = media_entity_get_fwnode_pad(&sd->entity, sd->fwnode,
++	source_pad = media_entity_get_fwnode_pad(&sd->entity, s_asd->source_ep,
+ 						 MEDIA_PAD_FL_SOURCE);
+ 	if (source_pad < 0) {
+ 		dev_err(rkisp1->dev, "failed to find source pad for %s\n",
+@@ -170,10 +170,19 @@ static int rkisp1_subdev_notifier_complete(struct v4l2_async_notifier *notifier)
+ 	return v4l2_device_register_subdev_nodes(&rkisp1->v4l2_dev);
  }
  
- static void rkisp1_subdev_notifier_unbind(struct v4l2_async_notifier *notifier,
-@@ -248,6 +235,7 @@ static int rkisp1_subdev_notifier(struct rkisp1_device *rkisp1)
- {
- 	struct v4l2_async_notifier *ntf = &rkisp1->notifier;
- 	unsigned int next_id = 0;
-+	unsigned int index = 0;
- 	int ret;
++static void rkisp1_subdev_notifier_destroy(struct v4l2_async_subdev *asd)
++{
++	struct rkisp1_sensor_async *rk_asd =
++		container_of(asd, struct rkisp1_sensor_async, asd);
++
++	fwnode_handle_put(rk_asd->source_ep);
++}
++
+ static const struct v4l2_async_notifier_operations rkisp1_subdev_notifier_ops = {
+ 	.bound = rkisp1_subdev_notifier_bound,
+ 	.unbind = rkisp1_subdev_notifier_unbind,
+ 	.complete = rkisp1_subdev_notifier_complete,
++	.destroy = rkisp1_subdev_notifier_destroy,
+ };
  
- 	v4l2_async_nf_init(ntf);
-@@ -277,6 +265,7 @@ static int rkisp1_subdev_notifier(struct rkisp1_device *rkisp1)
+ static int rkisp1_subdev_notifier_register(struct rkisp1_device *rkisp1)
+@@ -190,6 +199,7 @@ static int rkisp1_subdev_notifier_register(struct rkisp1_device *rkisp1)
+ 			.bus_type = V4L2_MBUS_CSI2_DPHY
+ 		};
+ 		struct rkisp1_sensor_async *rk_asd;
++		struct fwnode_handle *source = NULL;
+ 		struct fwnode_handle *ep;
+ 
+ 		ep = fwnode_graph_get_endpoint_by_id(dev_fwnode(rkisp1->dev),
+@@ -202,15 +212,24 @@ static int rkisp1_subdev_notifier_register(struct rkisp1_device *rkisp1)
+ 		if (ret)
+ 			goto err_parse;
+ 
+-		rk_asd = v4l2_async_nf_add_fwnode_remote(ntf, ep,
+-							 struct
+-							 rkisp1_sensor_async);
++		source = fwnode_graph_get_remote_endpoint(ep);
++		if (!source) {
++			dev_err(rkisp1->dev,
++				"endpoint %pfw has no remote endpoint\n",
++				ep);
++			ret = -ENODEV;
++			goto err_parse;
++		}
++
++		rk_asd = v4l2_async_nf_add_fwnode(ntf, source,
++						  struct rkisp1_sensor_async);
+ 		if (IS_ERR(rk_asd)) {
+ 			ret = PTR_ERR(rk_asd);
  			goto err_parse;
  		}
  
-+		rk_asd->index = index++;
+ 		rk_asd->index = index++;
++		rk_asd->source_ep = source;
  		rk_asd->mbus_type = vep.bus_type;
  		rk_asd->mbus_flags = vep.bus.mipi_csi2.flags;
  		rk_asd->lanes = vep.bus.mipi_csi2.num_data_lanes;
+@@ -225,6 +244,7 @@ static int rkisp1_subdev_notifier_register(struct rkisp1_device *rkisp1)
+ 		continue;
+ err_parse:
+ 		fwnode_handle_put(ep);
++		fwnode_handle_put(source);
+ 		v4l2_async_nf_cleanup(ntf);
+ 		return ret;
+ 	}
 -- 
 Regards,
 
