@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF4AFCCA47B
-	for <linux-media@archiver.kernel.org>; Mon, 11 Jul 2022 12:45:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7402CCA47B
+	for <linux-media@archiver.kernel.org>; Mon, 11 Jul 2022 12:45:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231679AbiGKMpM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Jul 2022 08:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44092 "EHLO
+        id S232117AbiGKMpW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Jul 2022 08:45:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232018AbiGKMog (ORCPT
+        with ESMTP id S232052AbiGKMol (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Jul 2022 08:44:36 -0400
+        Mon, 11 Jul 2022 08:44:41 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA31465552
-        for <linux-media@vger.kernel.org>; Mon, 11 Jul 2022 05:44:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B6011C36
+        for <linux-media@vger.kernel.org>; Mon, 11 Jul 2022 05:44:30 -0700 (PDT)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A40D0440;
-        Mon, 11 Jul 2022 14:43:35 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D3457256E;
+        Mon, 11 Jul 2022 14:43:36 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1657543416;
-        bh=RlK4exWAqaRYJVUJdirlFjjAHNRwMV6rEZlQMI1az98=;
+        s=mail; t=1657543417;
+        bh=EGJRYXr/iwJn9j9cWZE4tZvFBGtzzsX/yK0fTVPTQoc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dVPM8NVoDz3w2UEDM8Pk4EeLiJh7QbvbPRUbLg5yyeHi9q/FYUHzsZv+oRceAHxBk
-         nYnPkWVGhM8k2PPTZVtulcyBieJicp3RTza5aDbdPmKG2LpkpD3r6Ysh7RWJ+R6tSa
-         9Rl8UCTKzxAcrVyOpyXwjoWCk7pqL/Jmw00gbw+w=
+        b=wft5YDfV+uDEcYq47rzyDIJkx/T8jPWlZ0/MPe9O8C+lvvKP+encKVfPZHc3VtaL0
+         llILWYxRzt+r32523TPZEvD/qJWs8kevDCW6VkuQEYkt9bMZuMADTT05ObP1YFtsfW
+         utaR9hk9mrzXh2ILbTwPcrMOzDj/jZQP4RRUV5IM=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     linux-rockchip@lists.infradead.org,
@@ -32,9 +32,9 @@ Cc:     linux-rockchip@lists.infradead.org,
         Heiko Stuebner <heiko@sntech.de>,
         Helen Koike <helen.koike@collabora.com>,
         Paul Elder <paul.elder@ideasonboard.com>
-Subject: [PATCH v3 27/46] media: rkisp1: isp: Pass mbus type and flags to rkisp1_config_cif()
-Date:   Mon, 11 Jul 2022 15:42:29 +0300
-Message-Id: <20220711124248.2683-28-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v3 29/46] media: rkisp1: isp: Add container_of wrapper to cast subdev to rkisp1_isp
+Date:   Mon, 11 Jul 2022 15:42:31 +0300
+Message-Id: <20220711124248.2683-30-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220711124248.2683-1-laurent.pinchart@ideasonboard.com>
 References: <20220711124248.2683-1-laurent.pinchart@ideasonboard.com>
@@ -44,143 +44,75 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-To prepare for the removal of the active_sensor field from the
-rkisp1_device structure, pass the media bus type of flag to the
-rkisp1_config_cif() function instead of accessing them through
-active_sensor.
+Replace manual container_of() calls with a static inline wrapper to
+increase readability.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Reviewed-by: Dafna Hirschfeld <dafna@fastmail.com>
 ---
- .../platform/rockchip/rkisp1/rkisp1-isp.c     | 44 +++++++++----------
- 1 file changed, 22 insertions(+), 22 deletions(-)
+ .../media/platform/rockchip/rkisp1/rkisp1-isp.c   | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
-index faf80197edbf..501996fffca0 100644
+index 944b6ea11853..9f4fb984194d 100644
 --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
 +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
-@@ -136,15 +136,14 @@ static void rkisp1_config_ism(struct rkisp1_device *rkisp1)
- /*
-  * configure ISP blocks with input format, size......
+@@ -370,6 +370,11 @@ static void rkisp1_isp_start(struct rkisp1_device *rkisp1)
+  * Subdev pad operations
   */
--static int rkisp1_config_isp(struct rkisp1_device *rkisp1)
-+static int rkisp1_config_isp(struct rkisp1_device *rkisp1,
-+			     enum v4l2_mbus_type mbus_type, u32 mbus_flags)
+ 
++static inline struct rkisp1_isp *to_rkisp1_isp(struct v4l2_subdev *sd)
++{
++	return container_of(sd, struct rkisp1_isp, sd);
++}
++
+ static int rkisp1_isp_enum_mbus_code(struct v4l2_subdev *sd,
+ 				     struct v4l2_subdev_state *sd_state,
+ 				     struct v4l2_subdev_mbus_code_enum *code)
+@@ -625,7 +630,7 @@ static int rkisp1_isp_get_fmt(struct v4l2_subdev *sd,
+ 			      struct v4l2_subdev_state *sd_state,
+ 			      struct v4l2_subdev_format *fmt)
  {
- 	u32 isp_ctrl = 0, irq_mask = 0, acq_mult = 0, signal = 0;
- 	const struct rkisp1_mbus_info *src_fmt, *sink_fmt;
--	struct rkisp1_sensor_async *sensor;
- 	struct v4l2_mbus_framefmt *sink_frm;
- 	struct v4l2_rect *sink_crop;
+-	struct rkisp1_isp *isp = container_of(sd, struct rkisp1_isp, sd);
++	struct rkisp1_isp *isp = to_rkisp1_isp(sd);
  
--	sensor = rkisp1->active_sensor;
- 	sink_fmt = rkisp1->isp.sink_fmt;
- 	src_fmt = rkisp1->isp.src_fmt;
- 	sink_frm = rkisp1_isp_get_pad_fmt(&rkisp1->isp, NULL,
-@@ -157,7 +156,7 @@ static int rkisp1_config_isp(struct rkisp1_device *rkisp1)
- 	if (sink_fmt->pixel_enc == V4L2_PIXEL_ENC_BAYER) {
- 		acq_mult = 1;
- 		if (src_fmt->pixel_enc == V4L2_PIXEL_ENC_BAYER) {
--			if (sensor->mbus_type == V4L2_MBUS_BT656)
-+			if (mbus_type == V4L2_MBUS_BT656)
- 				isp_ctrl = RKISP1_CIF_ISP_CTRL_ISP_MODE_RAW_PICT_ITU656;
- 			else
- 				isp_ctrl = RKISP1_CIF_ISP_CTRL_ISP_MODE_RAW_PICT;
-@@ -165,17 +164,17 @@ static int rkisp1_config_isp(struct rkisp1_device *rkisp1)
- 			rkisp1_write(rkisp1, RKISP1_CIF_ISP_DEMOSAIC,
- 				     RKISP1_CIF_ISP_DEMOSAIC_TH(0xc));
- 
--			if (sensor->mbus_type == V4L2_MBUS_BT656)
-+			if (mbus_type == V4L2_MBUS_BT656)
- 				isp_ctrl = RKISP1_CIF_ISP_CTRL_ISP_MODE_BAYER_ITU656;
- 			else
- 				isp_ctrl = RKISP1_CIF_ISP_CTRL_ISP_MODE_BAYER_ITU601;
- 		}
- 	} else if (sink_fmt->pixel_enc == V4L2_PIXEL_ENC_YUV) {
- 		acq_mult = 2;
--		if (sensor->mbus_type == V4L2_MBUS_CSI2_DPHY) {
-+		if (mbus_type == V4L2_MBUS_CSI2_DPHY) {
- 			isp_ctrl = RKISP1_CIF_ISP_CTRL_ISP_MODE_ITU601;
- 		} else {
--			if (sensor->mbus_type == V4L2_MBUS_BT656)
-+			if (mbus_type == V4L2_MBUS_BT656)
- 				isp_ctrl = RKISP1_CIF_ISP_CTRL_ISP_MODE_ITU656;
- 			else
- 				isp_ctrl = RKISP1_CIF_ISP_CTRL_ISP_MODE_ITU601;
-@@ -185,17 +184,16 @@ static int rkisp1_config_isp(struct rkisp1_device *rkisp1)
- 	}
- 
- 	/* Set up input acquisition properties */
--	if (sensor->mbus_type == V4L2_MBUS_BT656 ||
--	    sensor->mbus_type == V4L2_MBUS_PARALLEL) {
--		if (sensor->mbus_flags & V4L2_MBUS_PCLK_SAMPLE_RISING)
-+	if (mbus_type == V4L2_MBUS_BT656 || mbus_type == V4L2_MBUS_PARALLEL) {
-+		if (mbus_flags & V4L2_MBUS_PCLK_SAMPLE_RISING)
- 			signal = RKISP1_CIF_ISP_ACQ_PROP_POS_EDGE;
- 	}
- 
--	if (sensor->mbus_type == V4L2_MBUS_PARALLEL) {
--		if (sensor->mbus_flags & V4L2_MBUS_VSYNC_ACTIVE_LOW)
-+	if (mbus_type == V4L2_MBUS_PARALLEL) {
-+		if (mbus_flags & V4L2_MBUS_VSYNC_ACTIVE_LOW)
- 			signal |= RKISP1_CIF_ISP_ACQ_PROP_VSYNC_LOW;
- 
--		if (sensor->mbus_flags & V4L2_MBUS_HSYNC_ACTIVE_LOW)
-+		if (mbus_flags & V4L2_MBUS_HSYNC_ACTIVE_LOW)
- 			signal |= RKISP1_CIF_ISP_ACQ_PROP_HSYNC_LOW;
- 	}
- 
-@@ -265,17 +263,17 @@ static int rkisp1_config_dvp(struct rkisp1_device *rkisp1)
- }
- 
- /* Configure MUX */
--static int rkisp1_config_path(struct rkisp1_device *rkisp1)
-+static int rkisp1_config_path(struct rkisp1_device *rkisp1,
-+			      enum v4l2_mbus_type mbus_type)
+ 	mutex_lock(&isp->ops_lock);
+ 	fmt->format = *rkisp1_isp_get_pad_fmt(isp, sd_state, fmt->pad,
+@@ -638,7 +643,7 @@ static int rkisp1_isp_set_fmt(struct v4l2_subdev *sd,
+ 			      struct v4l2_subdev_state *sd_state,
+ 			      struct v4l2_subdev_format *fmt)
  {
--	struct rkisp1_sensor_async *sensor = rkisp1->active_sensor;
- 	u32 dpcl = rkisp1_read(rkisp1, RKISP1_CIF_VI_DPCL);
+-	struct rkisp1_isp *isp = container_of(sd, struct rkisp1_isp, sd);
++	struct rkisp1_isp *isp = to_rkisp1_isp(sd);
+ 
+ 	mutex_lock(&isp->ops_lock);
+ 	if (fmt->pad == RKISP1_ISP_PAD_SINK_VIDEO)
+@@ -659,7 +664,7 @@ static int rkisp1_isp_get_selection(struct v4l2_subdev *sd,
+ 				    struct v4l2_subdev_state *sd_state,
+ 				    struct v4l2_subdev_selection *sel)
+ {
+-	struct rkisp1_isp *isp = container_of(sd, struct rkisp1_isp, sd);
++	struct rkisp1_isp *isp = to_rkisp1_isp(sd);
  	int ret = 0;
  
--	if (sensor->mbus_type == V4L2_MBUS_BT656 ||
--	    sensor->mbus_type == V4L2_MBUS_PARALLEL) {
-+	if (mbus_type == V4L2_MBUS_BT656 ||
-+	    mbus_type == V4L2_MBUS_PARALLEL) {
- 		ret = rkisp1_config_dvp(rkisp1);
- 		dpcl |= RKISP1_CIF_VI_DPCL_IF_SEL_PARALLEL;
--	} else if (sensor->mbus_type == V4L2_MBUS_CSI2_DPHY) {
-+	} else if (mbus_type == V4L2_MBUS_CSI2_DPHY) {
- 		dpcl |= RKISP1_CIF_VI_DPCL_IF_SEL_MIPI;
- 	}
- 
-@@ -285,14 +283,15 @@ static int rkisp1_config_path(struct rkisp1_device *rkisp1)
- }
- 
- /* Hardware configure Entry */
--static int rkisp1_config_cif(struct rkisp1_device *rkisp1)
-+static int rkisp1_config_cif(struct rkisp1_device *rkisp1,
-+			     enum v4l2_mbus_type mbus_type, u32 mbus_flags)
+ 	if (sel->pad != RKISP1_ISP_PAD_SOURCE_VIDEO &&
+@@ -701,7 +706,7 @@ static int rkisp1_isp_set_selection(struct v4l2_subdev *sd,
  {
+ 	struct rkisp1_device *rkisp1 =
+ 		container_of(sd->v4l2_dev, struct rkisp1_device, v4l2_dev);
+-	struct rkisp1_isp *isp = container_of(sd, struct rkisp1_isp, sd);
++	struct rkisp1_isp *isp = to_rkisp1_isp(sd);
+ 	int ret = 0;
+ 
+ 	if (sel->target != V4L2_SEL_TGT_CROP)
+@@ -748,7 +753,7 @@ static int rkisp1_isp_s_stream(struct v4l2_subdev *sd, int enable)
+ {
+ 	struct rkisp1_device *rkisp1 =
+ 		container_of(sd->v4l2_dev, struct rkisp1_device, v4l2_dev);
+-	struct rkisp1_isp *isp = &rkisp1->isp;
++	struct rkisp1_isp *isp = to_rkisp1_isp(sd);
+ 	struct rkisp1_sensor_async *asd;
  	int ret;
- 
--	ret = rkisp1_config_isp(rkisp1);
-+	ret = rkisp1_config_isp(rkisp1, mbus_type, mbus_flags);
- 	if (ret)
- 		return ret;
--	ret = rkisp1_config_path(rkisp1);
-+	ret = rkisp1_config_path(rkisp1, mbus_type);
- 	if (ret)
- 		return ret;
- 	rkisp1_config_ism(rkisp1);
-@@ -777,7 +776,8 @@ static int rkisp1_isp_s_stream(struct v4l2_subdev *sd, int enable)
- 
- 	rkisp1->isp.frame_sequence = -1;
- 	mutex_lock(&isp->ops_lock);
--	ret = rkisp1_config_cif(rkisp1);
-+	ret = rkisp1_config_cif(rkisp1, rkisp1->active_sensor->mbus_type,
-+				rkisp1->active_sensor->mbus_flags);
- 	if (ret)
- 		goto mutex_unlock;
  
 -- 
 Regards,
