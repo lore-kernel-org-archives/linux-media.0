@@ -2,136 +2,69 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7111CCA47F
-	for <linux-media@archiver.kernel.org>; Mon, 11 Jul 2022 11:12:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 880C6C43334
+	for <linux-media@archiver.kernel.org>; Mon, 11 Jul 2022 11:13:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbiGKLMV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Jul 2022 07:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50130 "EHLO
+        id S230389AbiGKLNz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Jul 2022 07:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbiGKLMC (ORCPT
+        with ESMTP id S230058AbiGKLNa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Jul 2022 07:12:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8588732DA7
-        for <linux-media@vger.kernel.org>; Mon, 11 Jul 2022 03:21:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2CD28B80EA0
-        for <linux-media@vger.kernel.org>; Mon, 11 Jul 2022 10:21:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEE59C34115;
-        Mon, 11 Jul 2022 10:21:25 +0000 (UTC)
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Cc:     Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mon, 11 Jul 2022 07:13:30 -0400
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7668A15A05
+        for <linux-media@vger.kernel.org>; Mon, 11 Jul 2022 03:28:01 -0700 (PDT)
+Received: from ramsan.of.borg ([84.195.186.194])
+        by albert.telenet-ops.be with bizsmtp
+        id tmTz2700U4C55Sk06mTz3U; Mon, 11 Jul 2022 12:28:00 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oAqCw-0032if-Ql; Mon, 11 Jul 2022 12:00:02 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oAoPL-00270n-Fp; Mon, 11 Jul 2022 10:04:43 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCHv2 8/8] vivid: add pixel_array test control
-Date:   Mon, 11 Jul 2022 12:21:11 +0200
-Message-Id: <20220711102111.2688139-9-hverkuil-cisco@xs4all.nl>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220711102111.2688139-1-hverkuil-cisco@xs4all.nl>
-References: <20220711102111.2688139-1-hverkuil-cisco@xs4all.nl>
+Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] media: staging: stkwebcam: Restore MEDIA_{USB,CAMERA}_SUPPORT dependencies
+Date:   Mon, 11 Jul 2022 10:04:42 +0200
+Message-Id: <6cac293c66b2bf4f0b7ce12efbc988764b37a1af.1657526672.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This control will change dimensions according to the source resolution.
+By moving support for the USB Syntek DC1125 Camera to staging, the
+dependencies on MEDIA_USB_SUPPORT and MEDIA_CAMERA_SUPPORT were lost.
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Fixes: 56280c64ecacc971 ("media: stkwebcam: deprecate driver, move to staging")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- drivers/media/test-drivers/vivid/vivid-core.h    |  5 ++++-
- drivers/media/test-drivers/vivid/vivid-ctrls.c   | 14 ++++++++++++++
- drivers/media/test-drivers/vivid/vivid-vid-cap.c |  4 ++++
- 3 files changed, 22 insertions(+), 1 deletion(-)
+ drivers/staging/media/stkwebcam/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/test-drivers/vivid/vivid-core.h b/drivers/media/test-drivers/vivid/vivid-core.h
-index 176b72cb143b..bfcfb3515901 100644
---- a/drivers/media/test-drivers/vivid/vivid-core.h
-+++ b/drivers/media/test-drivers/vivid/vivid-core.h
-@@ -35,7 +35,9 @@
- #define MAX_HEIGHT 2160
- /* The minimum image width/height */
- #define MIN_WIDTH  16
--#define MIN_HEIGHT 16
-+#define MIN_HEIGHT MIN_WIDTH
-+/* Pixel Array control divider */
-+#define PIXEL_ARRAY_DIV MIN_WIDTH
- /* The data_offset of plane 0 for the multiplanar formats */
- #define PLANE0_DATA_OFFSET 128
- 
-@@ -227,6 +229,7 @@ struct vivid_dev {
- 	struct v4l2_ctrl		*bitmask;
- 	struct v4l2_ctrl		*int_menu;
- 	struct v4l2_ctrl		*ro_int32;
-+	struct v4l2_ctrl		*pixel_array;
- 	struct v4l2_ctrl		*test_pattern;
- 	struct v4l2_ctrl		*colorspace;
- 	struct v4l2_ctrl		*rgb_range_cap;
-diff --git a/drivers/media/test-drivers/vivid/vivid-ctrls.c b/drivers/media/test-drivers/vivid/vivid-ctrls.c
-index a78d676575bc..92b1a7598470 100644
---- a/drivers/media/test-drivers/vivid/vivid-ctrls.c
-+++ b/drivers/media/test-drivers/vivid/vivid-ctrls.c
-@@ -35,6 +35,7 @@
- #define VIVID_CID_AREA			(VIVID_CID_CUSTOM_BASE + 11)
- #define VIVID_CID_RO_INTEGER		(VIVID_CID_CUSTOM_BASE + 12)
- #define VIVID_CID_U32_DYN_ARRAY		(VIVID_CID_CUSTOM_BASE + 13)
-+#define VIVID_CID_U8_PIXEL_ARRAY	(VIVID_CID_CUSTOM_BASE + 14)
- 
- #define VIVID_CID_VIVID_BASE		(0x00f00000 | 0xf000)
- #define VIVID_CID_VIVID_CLASS		(0x00f00000 | 1)
-@@ -228,6 +229,18 @@ static const struct v4l2_ctrl_config vivid_ctrl_u8_4d_array = {
- 	.dims = { 2, 3, 4, 5 },
- };
- 
-+static const struct v4l2_ctrl_config vivid_ctrl_u8_pixel_array = {
-+	.ops = &vivid_user_gen_ctrl_ops,
-+	.id = VIVID_CID_U8_PIXEL_ARRAY,
-+	.name = "U8 Pixel Array",
-+	.type = V4L2_CTRL_TYPE_U8,
-+	.def = 0x80,
-+	.min = 0x00,
-+	.max = 0xff,
-+	.step = 1,
-+	.dims = { 640 / PIXEL_ARRAY_DIV, 360 / PIXEL_ARRAY_DIV },
-+};
-+
- static const char * const vivid_ctrl_menu_strings[] = {
- 	"Menu Item 0 (Skipped)",
- 	"Menu Item 1",
-@@ -1642,6 +1655,7 @@ int vivid_create_controls(struct vivid_dev *dev, bool show_ccs_cap,
- 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u32_dyn_array, NULL);
- 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u16_matrix, NULL);
- 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u8_4d_array, NULL);
-+	dev->pixel_array = v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u8_pixel_array, NULL);
- 
- 	if (dev->has_vid_cap) {
- 		/* Image Processing Controls */
-diff --git a/drivers/media/test-drivers/vivid/vivid-vid-cap.c b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
-index b9caa4b26209..86b158eeb2d8 100644
---- a/drivers/media/test-drivers/vivid/vivid-vid-cap.c
-+++ b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
-@@ -381,6 +381,7 @@ static enum tpg_pixel_aspect vivid_get_pixel_aspect(const struct vivid_dev *dev)
- void vivid_update_format_cap(struct vivid_dev *dev, bool keep_controls)
- {
- 	struct v4l2_bt_timings *bt = &dev->dv_timings_cap[dev->input].bt;
-+	u32 dims[V4L2_CTRL_MAX_DIMS] = {};
- 	unsigned size;
- 	u64 pixelclock;
- 
-@@ -459,6 +460,9 @@ void vivid_update_format_cap(struct vivid_dev *dev, bool keep_controls)
- 	tpg_s_video_aspect(&dev->tpg, vivid_get_video_aspect(dev));
- 	tpg_s_pixel_aspect(&dev->tpg, vivid_get_pixel_aspect(dev));
- 	tpg_update_mv_step(&dev->tpg);
-+	dims[0] = roundup(dev->src_rect.width, PIXEL_ARRAY_DIV);
-+	dims[1] = roundup(dev->src_rect.height, PIXEL_ARRAY_DIV);
-+	v4l2_ctrl_modify_dimensions(dev->pixel_array, dims);
- }
- 
- /* Map the field to something that is valid for the current input */
+diff --git a/drivers/staging/media/stkwebcam/Kconfig b/drivers/staging/media/stkwebcam/Kconfig
+index 4450403dff41fb64..7234498e634ac61c 100644
+--- a/drivers/staging/media/stkwebcam/Kconfig
++++ b/drivers/staging/media/stkwebcam/Kconfig
+@@ -2,7 +2,7 @@
+ config VIDEO_STKWEBCAM
+ 	tristate "USB Syntek DC1125 Camera support (DEPRECATED)"
+ 	depends on VIDEO_DEV
+-	depends on USB
++	depends on MEDIA_USB_SUPPORT && MEDIA_CAMERA_SUPPORT
+ 	help
+ 	  Say Y here if you want to use this type of camera.
+ 	  Supported devices are typically found in some Asus laptops,
 -- 
-2.35.1
+2.25.1
 
