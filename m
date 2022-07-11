@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7C7DC43334
-	for <linux-media@archiver.kernel.org>; Mon, 11 Jul 2022 12:43:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9856FC43334
+	for <linux-media@archiver.kernel.org>; Mon, 11 Jul 2022 12:43:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231840AbiGKMnx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Jul 2022 08:43:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
+        id S231941AbiGKMn4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Jul 2022 08:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbiGKMnk (ORCPT
+        with ESMTP id S231907AbiGKMnr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Jul 2022 08:43:40 -0400
+        Mon, 11 Jul 2022 08:43:47 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E72B6334
-        for <linux-media@vger.kernel.org>; Mon, 11 Jul 2022 05:43:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9094A1169
+        for <linux-media@vger.kernel.org>; Mon, 11 Jul 2022 05:43:43 -0700 (PDT)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2BBCE1AEF;
-        Mon, 11 Jul 2022 14:43:25 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7EBA887F;
+        Mon, 11 Jul 2022 14:43:26 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1657543405;
-        bh=DLY7EF7T+i9kYiXWcztp+nc0pFdp76RpS+5O8XFQwDc=;
+        s=mail; t=1657543406;
+        bh=7sbUkkye5+dYoWflQy1cdxxtC9s2TG0e40gp789YWv0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pGz99CnJg68iN9i/uE7zgVLgiHn74BEdqTGX5iQkhzHnMGAC2MHDBhkPkN3KrviG8
-         T71SBCkXfD/wX5iNfI2/uZgGxBYEJnGuQ8buMUaUt8sokMxYrXFXpKYVGuILi6xIwM
-         9s0GhkHmknkXdK/MgOHkiQD127SoD6Uz9keW2O7k=
+        b=OV/kOeTpx6t+7CtfjcErIff22f/jAu3dEZ63HDvHr/cYldOQ5HgHemzPERz7ZNesJ
+         5aGPNUfVkpQezW1V/eOLFYgQpUc+Bbyr0oapEBBYLb/VFDypket+rN4Mq5oF9UEFHR
+         HWoeMNQD9ujUcStxeVZa+NLOYGLt/5Csho/be05Y=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     linux-rockchip@lists.infradead.org,
@@ -32,9 +32,9 @@ Cc:     linux-rockchip@lists.infradead.org,
         Heiko Stuebner <heiko@sntech.de>,
         Helen Koike <helen.koike@collabora.com>,
         Paul Elder <paul.elder@ideasonboard.com>
-Subject: [PATCH v3 10/46] media: rkisp1: Access ISP version from info pointer
-Date:   Mon, 11 Jul 2022 15:42:12 +0300
-Message-Id: <20220711124248.2683-11-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v3 12/46] media: rkisp1: cap: Print debug message on failed link validation
+Date:   Mon, 11 Jul 2022 15:42:14 +0300
+Message-Id: <20220711124248.2683-13-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220711124248.2683-1-laurent.pinchart@ideasonboard.com>
 References: <20220711124248.2683-1-laurent.pinchart@ideasonboard.com>
@@ -44,68 +44,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The ISP version is stored in the media_device hw_revision field and
-access from there in the driver. Now that we store a pointer to the
-match data in the rkisp1_device structure, access the ISP version from
-there to make the code clearer and avoid depending on the media_device.
+When a link validation failure occurs, print a debug message to help
+diagnosing the cause.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Dafna Hirschfeld <dafna@fastmail.com>
 Reviewed-by: Paul Elder <paul.elder@ideasonboard.com>
+Reviewed-by: Dafna Hirschfeld <dafna@fastmail.com>
 ---
- drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c    | 4 ++--
- drivers/media/platform/rockchip/rkisp1/rkisp1-params.c | 2 +-
- drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c  | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+Changes since v1:
 
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
-index bc94a51124b0..69c60814ecc1 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
-@@ -417,7 +417,7 @@ static int rkisp1_config_mipi(struct rkisp1_device *rkisp1)
- 	rkisp1_write(rkisp1, RKISP1_CIF_MIPI_CTRL, mipi_ctrl);
+- Add missing \n
+---
+ .../media/platform/rockchip/rkisp1/rkisp1-capture.c    | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
+index 94819e6c23e2..fb14c8aa154c 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
+@@ -1294,8 +1294,16 @@ static int rkisp1_capture_link_validate(struct media_link *link)
  
- 	/* V12 could also use a newer csi2-host, but we don't want that yet */
--	if (rkisp1->media_dev.hw_revision == RKISP1_V12)
-+	if (rkisp1->info->isp_ver == RKISP1_V12)
- 		rkisp1_write(rkisp1, RKISP1_CIF_ISP_CSI0_CTRL0, 0);
+ 	if (sd_fmt.format.height != cap->pix.fmt.height ||
+ 	    sd_fmt.format.width != cap->pix.fmt.width ||
+-	    sd_fmt.format.code != fmt->mbus)
++	    sd_fmt.format.code != fmt->mbus) {
++		dev_dbg(cap->rkisp1->dev,
++			"link '%s':%u -> '%s':%u not valid: 0x%04x/%ux%u != 0x%04x/%ux%u\n",
++			link->source->entity->name, link->source->index,
++			link->sink->entity->name, link->sink->index,
++			sd_fmt.format.code, sd_fmt.format.width,
++			sd_fmt.format.height, fmt->mbus, cap->pix.fmt.width,
++			cap->pix.fmt.height);
+ 		return -EPIPE;
++	}
  
- 	/* Configure Data Type and Virtual Channel */
-@@ -535,7 +535,7 @@ static void rkisp1_config_clk(struct rkisp1_device *rkisp1)
- 	rkisp1_write(rkisp1, RKISP1_CIF_VI_ICCL, val);
- 
- 	/* ensure sp and mp can run at the same time in V12 */
--	if (rkisp1->media_dev.hw_revision == RKISP1_V12) {
-+	if (rkisp1->info->isp_ver == RKISP1_V12) {
- 		val = RKISP1_CIF_CLK_CTRL_MI_Y12 | RKISP1_CIF_CLK_CTRL_MI_SP |
- 		      RKISP1_CIF_CLK_CTRL_MI_RAW0 | RKISP1_CIF_CLK_CTRL_MI_RAW1 |
- 		      RKISP1_CIF_CLK_CTRL_MI_READ | RKISP1_CIF_CLK_CTRL_MI_RAWRD |
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
-index c88a9c0fa86e..9da7dc1bc690 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
-@@ -1801,7 +1801,7 @@ static void rkisp1_init_params(struct rkisp1_params *params)
- 	params->vdev_fmt.fmt.meta.buffersize =
- 		sizeof(struct rkisp1_params_cfg);
- 
--	if (params->rkisp1->media_dev.hw_revision == RKISP1_V12)
-+	if (params->rkisp1->info->isp_ver == RKISP1_V12)
- 		params->ops = &rkisp1_v12_params_ops;
- 	else
- 		params->ops = &rkisp1_v10_params_ops;
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c
-index b7ae9166c52f..7d82356b5345 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c
-@@ -427,7 +427,7 @@ static void rkisp1_init_stats(struct rkisp1_stats *stats)
- 	stats->vdev_fmt.fmt.meta.buffersize =
- 		sizeof(struct rkisp1_stat_buffer);
- 
--	if (stats->rkisp1->media_dev.hw_revision == RKISP1_V12)
-+	if (stats->rkisp1->info->isp_ver == RKISP1_V12)
- 		stats->ops = &rkisp1_v12_stats_ops;
- 	else
- 		stats->ops = &rkisp1_v10_stats_ops;
+ 	return 0;
+ }
 -- 
 Regards,
 
