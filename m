@@ -2,39 +2,39 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0C68CCA47C
-	for <linux-media@archiver.kernel.org>; Tue, 12 Jul 2022 12:24:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6511ECCA483
+	for <linux-media@archiver.kernel.org>; Tue, 12 Jul 2022 12:24:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232586AbiGLMYS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Jul 2022 08:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40600 "EHLO
+        id S232819AbiGLMYU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Jul 2022 08:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232706AbiGLMYP (ORCPT
+        with ESMTP id S232278AbiGLMYS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Jul 2022 08:24:15 -0400
+        Tue, 12 Jul 2022 08:24:18 -0400
 Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3F7A5E46;
-        Tue, 12 Jul 2022 05:24:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BEA5A5E52;
+        Tue, 12 Jul 2022 05:24:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657628654; x=1689164654;
+  t=1657628656; x=1689164656;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=kj0kBuJRKrJztfeW6tmf/UDwOX6Y3wrCB1UmnidfQ4A=;
-  b=gYfvoA5ykL+odve0mrXQQ5JzwlmVILM8bsedolmpx6iBtoXnT+BVw//L
-   xhJ+dgeWS8ofRRUiZjDYw/53t3p7HIMgpzNtDtXdBtI2vL9isGDlnIJ8I
-   3IFcRnkEYOOyXqJejrT17sOrao5rtdbfDWdQ+2mlmwIpXg7MTq4r1hL+8
-   Y=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 12 Jul 2022 05:24:14 -0700
+  bh=NZcIxal9HP23HwdA1OYoFpYvchF31b6+LHpnoM9W5FA=;
+  b=pmaJnJqG6JnmtfXgqPqYaN8mOG+7R5GHBUC6b2yY4fmyOeeBQPj+2f8Z
+   URKxgqFRKt5+hp9GSW2CZcRgIpEjo3QO6/u/rrbmwgqT860CoX4a2u9bh
+   qTeuvTIrokwwrArl7GmaInCCvZ/JS/ZoIcHmMmNWkXT/wOtwTA7nUnI7s
+   M=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 12 Jul 2022 05:24:16 -0700
 X-QCInternal: smtphost
 Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 12 Jul 2022 05:24:12 -0700
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 12 Jul 2022 05:24:14 -0700
 X-QCInternal: smtphost
 Received: from vboma-linux.qualcomm.com ([10.204.65.94])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 12 Jul 2022 17:54:04 +0530
+  by ironmsg01-blr.qualcomm.com with ESMTP; 12 Jul 2022 17:54:07 +0530
 Received: by vboma-linux.qualcomm.com (Postfix, from userid 72083)
-        id 36917900883; Tue, 12 Jul 2022 17:54:03 +0530 (IST)
+        id BEF5E900883; Tue, 12 Jul 2022 17:54:06 +0530 (IST)
 From:   Viswanath Boma <quic_vboma@quicinc.com>
 To:     video.upstream.external@qti.qualcomm.com,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>,
@@ -44,9 +44,9 @@ To:     video.upstream.external@qti.qualcomm.com,
         linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Viswanath Boma <quic_vboma@quicinc.com>
-Subject: [PATCH 2/7] venus : Addition of control support - V4L2_CID_MIN_BUFFERS_FOR_OUTPUT
-Date:   Tue, 12 Jul 2022 17:53:42 +0530
-Message-Id: <20220712122347.6781-2-quic_vboma@quicinc.com>
+Subject: [PATCH 4/7] venus : Addition of EOS Event support for Encoder
+Date:   Tue, 12 Jul 2022 17:53:44 +0530
+Message-Id: <20220712122347.6781-4-quic_vboma@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220712122347.6781-1-quic_vboma@quicinc.com>
 References: <20220712122347.6781-1-quic_vboma@quicinc.com>
@@ -54,38 +54,48 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-  V4l2 encoder compliance expecting minimum buffers support for the application to allocate
-  buffers as per the control support values.
+ V4l2 encoder compliance expecting End of sream  Event registration  support for Encoder.
 
-Change-Id: Idb41ff7dce8b8138f28df01d045eae6facf7e93d
+Change-Id: I85f7732a2ec08eba47c0d37181f739e90a7ab63a
 Signed-off-by: Viswanath Boma <quic_vboma@quicinc.com>
 ---
- drivers/media/platform/qcom/venus/venc_ctrls.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/media/platform/qcom/venus/venc.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/qcom/venus/venc_ctrls.c b/drivers/media/platform/qcom/venus/venc_ctrls.c
-index 37ba7d97f99b2..95fdad160732b 100644
---- a/drivers/media/platform/qcom/venus/venc_ctrls.c
-+++ b/drivers/media/platform/qcom/venus/venc_ctrls.c
-@@ -355,7 +355,7 @@ int venc_ctrl_init(struct venus_inst *inst)
- 	struct v4l2_ctrl_hdr10_mastering_display p_hdr10_mastering = { {34000, 13250, 7500 },
- 	{ 16000, 34500, 3000 }, 15635,	16450, 10000000, 500 };
+diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
+index b56960d7f6c89..30ddb84c24997 100644
+--- a/drivers/media/platform/qcom/venus/venc.c
++++ b/drivers/media/platform/qcom/venus/venc.c
+@@ -507,6 +507,20 @@ static int venc_enum_frameintervals(struct file *file, void *fh,
+ 	return 0;
+ }
  
--	ret = v4l2_ctrl_handler_init(&inst->ctrl_handler, 58);
-+	ret = v4l2_ctrl_handler_init(&inst->ctrl_handler, 59);
- 	if (ret)
- 		return ret;
- 
-@@ -435,6 +435,9 @@ int venc_ctrl_init(struct venus_inst *inst)
- 		V4L2_MPEG_VIDEO_VP8_PROFILE_3,
- 		0, V4L2_MPEG_VIDEO_VP8_PROFILE_0);
- 
-+	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
-+		V4L2_CID_MIN_BUFFERS_FOR_OUTPUT, 4, 11, 1, 4);
++static int venc_subscribe_event(struct v4l2_fh *fh,
++				const struct v4l2_event_subscription *sub)
++{
 +
- 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
- 		V4L2_CID_MPEG_VIDEO_BITRATE, BITRATE_MIN, BITRATE_MAX,
- 		BITRATE_STEP, BITRATE_DEFAULT);
++	switch (sub->type) {
++	case V4L2_EVENT_EOS:
++		return v4l2_event_subscribe(fh, sub, 2, NULL);
++	case V4L2_EVENT_CTRL:
++		return v4l2_ctrl_subscribe_event(fh, sub);
++	default:
++		return -EINVAL;
++	}
++}
++
+ static int
+ venc_encoder_cmd(struct file *file, void *fh, struct v4l2_encoder_cmd *cmd)
+ {
+@@ -572,7 +586,7 @@ static const struct v4l2_ioctl_ops venc_ioctl_ops = {
+ 	.vidioc_g_parm = venc_g_parm,
+ 	.vidioc_enum_framesizes = venc_enum_framesizes,
+ 	.vidioc_enum_frameintervals = venc_enum_frameintervals,
+-	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
++	.vidioc_subscribe_event = venc_subscribe_event,
+ 	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
+ 	.vidioc_encoder_cmd = venc_encoder_cmd,
+ };
 -- 
 2.17.1
 
