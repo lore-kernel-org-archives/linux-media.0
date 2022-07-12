@@ -2,49 +2,49 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23674C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 12 Jul 2022 16:34:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17879C43334
+	for <linux-media@archiver.kernel.org>; Tue, 12 Jul 2022 16:35:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233328AbiGLQel (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Jul 2022 12:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50046 "EHLO
+        id S232314AbiGLQfH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Jul 2022 12:35:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234458AbiGLQeY (ORCPT
+        with ESMTP id S234383AbiGLQeS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Jul 2022 12:34:24 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFFE25289
-        for <linux-media@vger.kernel.org>; Tue, 12 Jul 2022 09:34:23 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id f2so11931379wrr.6
-        for <linux-media@vger.kernel.org>; Tue, 12 Jul 2022 09:34:23 -0700 (PDT)
+        Tue, 12 Jul 2022 12:34:18 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E5F27FFF
+        for <linux-media@vger.kernel.org>; Tue, 12 Jul 2022 09:34:13 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id bk26so11913785wrb.11
+        for <linux-media@vger.kernel.org>; Tue, 12 Jul 2022 09:34:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=amarulasolutions.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=89nMQY6HYa205yz8a9PXVreqJnhbEp/5UjZ/0K+ojBk=;
-        b=Sbj3OenGDNgca8fxaKSwwSFWyjuRmCOQNHQsUJmiQ5hzLNGBtB5VD5qu3THqAUtZ9Y
-         WyOtO/ZU2yIesrCXN6g6Fa5e6Sgdqt/KoXgplKkXuLGt63KAraOSxBk6hQm2HGUQe3hx
-         jbfzYNUMS4IodFAzhJKmwS/eqtnmvsjUpRmXM=
+        bh=ctpa/T2vVk1WErHGmcuqVVZ1P5/ZM5PQkEWqW8vXr7A=;
+        b=CylXyQDI7NjZJJjGahP8/G+x1mwQdZyXU1fYlhjC5I+uzbIwEhCLjmEc+xJOEXf7Bc
+         tRW4CZ/BQCYEKwyTayBWm+c1YPePeednwnGU4AOuP9vhrJZzEB5u1OsyscE8sn2LuV8N
+         NcjprcgH3b8zWb+wimWqIP+Bpf7qFEm1gyCvQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=89nMQY6HYa205yz8a9PXVreqJnhbEp/5UjZ/0K+ojBk=;
-        b=g/C00esHEBHdGPge/MDZGtV7nD5qM2m40rR2GBIsCCJTAq/gY7Sv7r6br6W2OBwgCa
-         vyAhMQGTQaQMBwmNiHeDckuBQTb6EvAPXqXzo31uLdFTSKNodQt6HT/9rvGjtF91BfTz
-         IwYfaH6gi2r2gtgr0s93gig0THv+WF3QFS/Vgd9mSqAAf07kP6M7LGZ7/YA0xSASl1p6
-         0bMMipM80qnb/hc794BgQ2szu8QRLYx7ULe3e8EA5LNTSF6bJFODHxZsqUZfFXIGqK/e
-         9N6BvP2MomIG5LOrPmfYDuZSsL4X2XjpcwcOpKlm2xuPNL8hcCD+yR/BbYiGW7Vf706d
-         Ux2Q==
-X-Gm-Message-State: AJIora++rebwSS9Lqz2DfTb+vOtQYJuFwYIPxSnwVauecoxgQEOoKFwb
-        umvTa6SfM3GS0eIpLId26uao1Q==
-X-Google-Smtp-Source: AGRyM1vpE0g2EPdx1v6ZXFwl0FZwWK05OYeD6gB+mPU8ZvzyMwQc1WUVBry6G63zOCENCNZijoHsoQ==
-X-Received: by 2002:a5d:4c49:0:b0:21d:6df5:beb7 with SMTP id n9-20020a5d4c49000000b0021d6df5beb7mr23158622wrt.286.1657643661957;
-        Tue, 12 Jul 2022 09:34:21 -0700 (PDT)
+        bh=ctpa/T2vVk1WErHGmcuqVVZ1P5/ZM5PQkEWqW8vXr7A=;
+        b=sF0h9w1xw/SsUPYP4zQ4h+bDFPKJLR813bKRucZFI7f4HSHHsrUkESCVwwHRcGkHIZ
+         6pBN7/7IiLSipz+w7t7LeXPMLDHY3+50kXZiU1Hx87S8iagPr++587WnYaTfpXTDIy3o
+         SMbx9DrT7u9kB7DQ/h97x5kz+1L63UYPNpT3z334+9nAaYP5z+rWB3dVUyIpUOtVcs0N
+         ntdWoHKBvPVU7h1LJIA2TMqip+PVPkK91XybXX3ppSN6dRQYhRgBPnGvh7O6h9RzTFVl
+         5TqS7w6ms2ON7KLCHB6E5HHqSr8XzRLM7BYFVoBsANhF4dxD6982garZ4jB7yyfFoUL0
+         z7xw==
+X-Gm-Message-State: AJIora8zhvHa88iHFHMHu+WscqxPDnOEIpnso76jxyoYUOPDnbaS/HL8
+        IMMxY7R1PsQoKm7KIn2wrRrgtg==
+X-Google-Smtp-Source: AGRyM1u29k4IN2wgzOHnCdDeUpOtAD+K54m2KKU/q6uYaGIMJ+4h1Ier0c3zwV+m+j7TaLoaY4k7qQ==
+X-Received: by 2002:a5d:584e:0:b0:21c:ea0c:3734 with SMTP id i14-20020a5d584e000000b0021cea0c3734mr22283780wrf.420.1657643651827;
+        Tue, 12 Jul 2022 09:34:11 -0700 (PDT)
 Received: from tom-ThinkPad-T14s-Gen-2i.station (net-188-217-53-214.cust.vodafonedsl.it. [188.217.53.214])
-        by smtp.gmail.com with ESMTPSA id j16-20020a5d6050000000b0021db2dcd0aasm2321052wrt.108.2022.07.12.09.34.20
+        by smtp.gmail.com with ESMTPSA id j16-20020a5d6050000000b0021db2dcd0aasm2321052wrt.108.2022.07.12.09.34.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 09:34:21 -0700 (PDT)
+        Tue, 12 Jul 2022 09:34:11 -0700 (PDT)
 From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
 To:     tommaso.merciai@amarulasolutions.com
 Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
@@ -53,9 +53,9 @@ Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
         Daniel Scally <djrscally@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 6/6] media: ov5693: add ov5693_of_match, dts support
-Date:   Tue, 12 Jul 2022 18:33:49 +0200
-Message-Id: <20220712163349.1308540-7-tommaso.merciai@amarulasolutions.com>
+Subject: [PATCH v6 3/6] media: ov5693: rename clk into xvclk
+Date:   Tue, 12 Jul 2022 18:33:46 +0200
+Message-Id: <20220712163349.1308540-4-tommaso.merciai@amarulasolutions.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220712163349.1308540-1-tommaso.merciai@amarulasolutions.com>
 References: <20220712163349.1308540-1-tommaso.merciai@amarulasolutions.com>
@@ -65,48 +65,81 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add ov5693_of_match. Device tree support
+Rename clk pdata pointer into xvclk (system clock input).
+Same for clk_rate into xvclk_rate. This is more explicit
 
 Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
 Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
-Reviewed-by: Daniel Scally <djrscally@gmail.com>
 ---
-Changes since v2:
- - Change patch order 7 -> 6 as suggested by Sakari
- - Add missing signed-off as suggested by Jacopo
-
 Changes since v3:
- - Add reviewed-by tags, suggested by Jacopo, Krzysztof
+ - Add reviewed-by tag, suggested by Jacopo, Krzysztof
 
-Changes since v4:
- - Remove wrong Sakari reviewed-by tag, suggested by Krzysztof, Sakari
- - Add Daniel reviewed-by tag
-
- drivers/media/i2c/ov5693.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/media/i2c/ov5693.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/media/i2c/ov5693.c b/drivers/media/i2c/ov5693.c
-index 701468267f20..82a9b2de7735 100644
+index 9e84468d920e..d2adc5513a21 100644
 --- a/drivers/media/i2c/ov5693.c
 +++ b/drivers/media/i2c/ov5693.c
-@@ -1533,10 +1533,17 @@ static const struct acpi_device_id ov5693_acpi_match[] = {
- };
- MODULE_DEVICE_TABLE(acpi, ov5693_acpi_match);
+@@ -157,7 +157,7 @@ struct ov5693_device {
+ 	struct gpio_desc *reset;
+ 	struct gpio_desc *powerdown;
+ 	struct regulator_bulk_data supplies[OV5693_NUM_SUPPLIES];
+-	struct clk *clk;
++	struct clk *xvclk;
  
-+static const struct of_device_id ov5693_of_match[] = {
-+	{ .compatible = "ovti,ov5693", },
-+	{ /* sentinel */ },
-+};
-+MODULE_DEVICE_TABLE(of, ov5693_of_match);
-+
- static struct i2c_driver ov5693_driver = {
- 	.driver = {
- 		.name = "ov5693",
- 		.acpi_match_table = ov5693_acpi_match,
-+		.of_match_table = ov5693_of_match,
- 		.pm = &ov5693_pm_ops,
- 	},
- 	.probe_new = ov5693_probe,
+ 	struct ov5693_mode {
+ 		struct v4l2_rect crop;
+@@ -794,7 +794,7 @@ static void ov5693_sensor_powerdown(struct ov5693_device *ov5693)
+ 
+ 	regulator_bulk_disable(OV5693_NUM_SUPPLIES, ov5693->supplies);
+ 
+-	clk_disable_unprepare(ov5693->clk);
++	clk_disable_unprepare(ov5693->xvclk);
+ }
+ 
+ static int ov5693_sensor_powerup(struct ov5693_device *ov5693)
+@@ -804,7 +804,7 @@ static int ov5693_sensor_powerup(struct ov5693_device *ov5693)
+ 	gpiod_set_value_cansleep(ov5693->reset, 1);
+ 	gpiod_set_value_cansleep(ov5693->powerdown, 1);
+ 
+-	ret = clk_prepare_enable(ov5693->clk);
++	ret = clk_prepare_enable(ov5693->xvclk);
+ 	if (ret) {
+ 		dev_err(ov5693->dev, "Failed to enable clk\n");
+ 		goto fail_power;
+@@ -1390,7 +1390,7 @@ static int ov5693_check_hwcfg(struct ov5693_device *ov5693)
+ static int ov5693_probe(struct i2c_client *client)
+ {
+ 	struct ov5693_device *ov5693;
+-	u32 clk_rate;
++	u32 xvclk_rate;
+ 	int ret = 0;
+ 
+ 	ov5693 = devm_kzalloc(&client->dev, sizeof(*ov5693), GFP_KERNEL);
+@@ -1408,16 +1408,16 @@ static int ov5693_probe(struct i2c_client *client)
+ 
+ 	v4l2_i2c_subdev_init(&ov5693->sd, client, &ov5693_ops);
+ 
+-	ov5693->clk = devm_clk_get(&client->dev, "xvclk");
+-	if (IS_ERR(ov5693->clk)) {
++	ov5693->xvclk = devm_clk_get(&client->dev, "xvclk");
++	if (IS_ERR(ov5693->xvclk)) {
+ 		dev_err(&client->dev, "Error getting clock\n");
+-		return PTR_ERR(ov5693->clk);
++		return PTR_ERR(ov5693->xvclk);
+ 	}
+ 
+-	clk_rate = clk_get_rate(ov5693->clk);
+-	if (clk_rate != OV5693_XVCLK_FREQ)
++	xvclk_rate = clk_get_rate(ov5693->xvclk);
++	if (xvclk_rate != OV5693_XVCLK_FREQ)
+ 		dev_warn(&client->dev, "Found clk freq %u, expected %u\n",
+-			 clk_rate, OV5693_XVCLK_FREQ);
++			 xvclk_rate, OV5693_XVCLK_FREQ);
+ 
+ 	ret = ov5693_configure_gpios(ov5693);
+ 	if (ret)
 -- 
 2.25.1
 
