@@ -2,2015 +2,868 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66479CCA486
-	for <linux-media@archiver.kernel.org>; Fri, 15 Jul 2022 13:54:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3589DC43334
+	for <linux-media@archiver.kernel.org>; Fri, 15 Jul 2022 14:41:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234777AbiGONyH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Jul 2022 09:54:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53300 "EHLO
+        id S235125AbiGOOlz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Jul 2022 10:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234478AbiGONyF (ORCPT
+        with ESMTP id S231160AbiGOOly (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 15 Jul 2022 09:54:05 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80052.outbound.protection.outlook.com [40.107.8.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E1F2496F;
-        Fri, 15 Jul 2022 06:54:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q9OaOybL5mrctmz35sIAhSFrjajGvByhjZPGL3tft8yc4fzaFOU3Mz7hdL6//Mx+CN5qeDVtRkrpJJ5RBKxM6wg8BVLGfBnTtAEfhZjmaV+yhciB6RF2sh/MfLwpSt+WPxexjCrLnqi2mqzLOaJh84hnVU8yG1tCJ16XZOQJYA5GsuUmKT/B20bR4G6/RR4wTI+Wda8/ccwopgfTwdpUoGa2vDwLJl+B0rc89EFNiMi37QiVZh06ZnIYlSf5F+j88+U1VKFRXz2EYssk6+2OJh4iD661fLYDNJuocGD7j9gbAqqWAHtFKz6v7nspX2df841zgIak6RJe+UQOyKCNPA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dHW+4hXSGEN2WhlbVdnGpd/a1BsKRvBUSZRQROG2p8E=;
- b=K5+XLCPIGpL5aR1wvfhV5BbyK4AuJ36OahWjxnWtanHACNmmqnQqLbkG6SzUNQaCiTG7IzP8TC/KeLZxeO62pQzq4e1fxIpLIhRoOP1dY68I8b1tRc2kPep21SAySVweMH60V6GxtIPSevK257TFL6W6NWZRoa9CfsJIoA17gzO2p0PJYe3pTcmcFOYjmFEKlehp8MHsNRRB4a+tH6N1kcEYTh8iJ2a3iaLvB2ij141o77wkOCIQEbHskClzTWtpa8X8zllO0Lbzs8/0z6X4E+YfOrnDyQ4z3Fmh66EIZXRIzJFbNXWXzJVA1ZsNW9Smu3urOrmKmFPENNAR6fuA3A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dHW+4hXSGEN2WhlbVdnGpd/a1BsKRvBUSZRQROG2p8E=;
- b=ZZ/AqyhgzjEBW0O/y7FtmzUScR29N0etr1Yf2UEz19q0ebXCTtwN4ljJ+/U4Unujz2S3tkGMAdCnA8BXb831SlCIqmMjc1X4YBghrjagKI3zmQiLdadIyMo43Dyp8jlPqUJSgHU30Ev9FIU/U5uhYiwXC6TvJ3AWO8qqjwAYPrg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from PAXPR04MB8703.eurprd04.prod.outlook.com (2603:10a6:102:21e::22)
- by VE1PR04MB6640.eurprd04.prod.outlook.com (2603:10a6:803:122::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.12; Fri, 15 Jul
- 2022 13:53:50 +0000
-Received: from PAXPR04MB8703.eurprd04.prod.outlook.com
- ([fe80::d51c:319c:bf4:199f]) by PAXPR04MB8703.eurprd04.prod.outlook.com
- ([fe80::d51c:319c:bf4:199f%5]) with mapi id 15.20.5438.012; Fri, 15 Jul 2022
- 13:53:50 +0000
-From:   Xavier Roumegue <xavier.roumegue@oss.nxp.com>
-To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        stanimir.varbanov@linaro.org, laurent.pinchart@ideasonboard.com,
-        tomi.valkeinen@ideasonboard.com, robh+dt@kernel.org,
-        nicolas@ndufresne.ca, alexander.stein@ew.tq-group.com,
-        ezequiel@vanguardiasur.com.ar
-Cc:     Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v8 5/6] media: dw100: Add i.MX8MP dw100 dewarper driver
-Date:   Fri, 15 Jul 2022 15:53:28 +0200
-Message-Id: <20220715135329.975400-6-xavier.roumegue@oss.nxp.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220715135329.975400-1-xavier.roumegue@oss.nxp.com>
-References: <20220715135329.975400-1-xavier.roumegue@oss.nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: PR1P264CA0061.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:102:2ca::15) To PAXPR04MB8703.eurprd04.prod.outlook.com
- (2603:10a6:102:21e::22)
+        Fri, 15 Jul 2022 10:41:54 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A499B74DCB
+        for <linux-media@vger.kernel.org>; Fri, 15 Jul 2022 07:41:51 -0700 (PDT)
+Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 574B9993;
+        Fri, 15 Jul 2022 16:41:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1657896108;
+        bh=Qkag14e/H1ZXLStZwq41JJ6XGnLdgsUO1IXXVbw0sl8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=aKThQxhm73zgdpMmCKEzg0Q5D6R4XeecEbpNvwcdzM1+AvwH6jjcw9uY/IL43zvMu
+         y5SQ7eyXZJu6j4ud9sGWNNjSTmgWWCHQ2IgZyBten37CBv9vDv/UyWiqHOJNyPTmmD
+         R+WblUPnG3SgOzZZCcDEZFR1q1RHS2amh8WHV3ak=
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     linux-rockchip@lists.infradead.org,
+        Dafna Hirschfeld <dafna@fastmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Helen Koike <helen.koike@collabora.com>,
+        Paul Elder <paul.elder@ideasonboard.com>
+Subject: [PATCH v3.1 02/46] media: mc-entity: Rename media_entity_remote_pad() to media_pad_remote_pad_first()
+Date:   Fri, 15 Jul 2022 17:41:08 +0300
+Message-Id: <20220715144108.28034-1-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220711124248.2683-3-laurent.pinchart@ideasonboard.com>
+References: <20220711124248.2683-3-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f657371b-0c34-4a59-9057-08da66697210
-X-MS-TrafficTypeDiagnostic: VE1PR04MB6640:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PC0AWo4SomFTYcaW2ZY43/vAT4uhV1iMReq8uLKyeVjRf2RcaYMiNZE668AUO86oZkK0HL9GUsWMvwvHMaGoQu8qxx02M8wTEsYO9TDBo2MqIW2g26TExas8C/fU993HaT5sgDUX1ThTw7Q12H3BCtZWvMRvklAsA9naKP8OCQFDgdcMl5vLe3etShQvZJrojrvD6SadaWg/HdmpkdCl6dUjJ3nDO5n0mwlHH2r9JCRW9XgbmyFFnanKnfXDUjVbe+tZ02sxufZC3m8MEg8quWJ6LdI+K1mKfdpTQFatgWBzjXOvGf+mqNPmMB34ugYjkFE6QQADyJxGGejlaHSOqaqRHLEjR9IuzoVaBm+6kXgOUv4nZMDNsE/DaF/tM1m+k/wyIeTqF36i6Y9Xtlirwh5qQ4WiC2vz8GtdW2aiQiDumMUUt/qp+9Q5d4NAf8XDoc04+IeL4QwFkZvVM6K7oEiJtYiH8XDi550utHMpwPBmfS1UsJDe+6y0mZPdOQp7/tLdhMtdNUf7zf9hakNNGVqhIaX5lnW+V06Z9Vg1womAjCvbDAavoaJlfIVB0hx/DBXqAGIWo4JM332sd2aoDXjNL3MGXR13RF3fOQWcTfIpHyckj65kTaLe5Qe2bokvY3NonuhEG5ylUxiKynknmkdjQLNlD+/Fqc/eHBuQKa845PfNje2cZq5TTgQdEUHEU4nDE/TPYGsvzuXE+Vz8sRoISnLfV3/uOQtWkpW4K5n/fpMGl3zhUUlDerleeqc/
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8703.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(346002)(376002)(396003)(136003)(39860400002)(6506007)(52116002)(6486002)(86362001)(478600001)(6512007)(66556008)(66476007)(6666004)(5660300002)(41300700001)(38100700002)(66946007)(316002)(2616005)(1076003)(83380400001)(8676002)(2906002)(8936002)(44832011)(7416002)(4326008)(186003)(30864003)(579004)(559001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IFRzG0uPKEG46JrxNvbPvwrsOcA88ooUpme8dYaiGbFk/Vr6BKHGBcJwhB11?=
- =?us-ascii?Q?w0RvQQK1neNRZDlwv5XsJe4YR7ApTQtj3omUAtbdsmx0cEhgaNu107d33DFT?=
- =?us-ascii?Q?mSSWm/o3Ref8NgMf/TPZyFPxaYb4oovM8b3XJ/2vldDFTlE4SLplIaYF8qzP?=
- =?us-ascii?Q?wdPyaaCvCwEI+4M+GNCD/gQ3CS5jPRiJNGcHtLCtSqm3j4ML9h7QS3af4i8J?=
- =?us-ascii?Q?iDXva7U8T/w5PI9u8cjccrhuutnBH5Nr1GdjD1ZZZuL4YmrhL1GlgbHJftyu?=
- =?us-ascii?Q?b8JdecX7APV6hcE5UIPtUmDwIUyxE6YJUnq3gYRDAIc49KFz0MwC/G4JTngc?=
- =?us-ascii?Q?2NFyqV3EHxlqyo5v95D8gsXO3VSK8hpYxNy6t4ZxBK8UNTVCt03kOiE0V6PO?=
- =?us-ascii?Q?k6+gyaE50HtR9nfjO55vomuUaNHvkOKQ7Digt+ZaolKlQA5jAkqTME63RGMi?=
- =?us-ascii?Q?nfboLiUmZhBObLA0NH8T6VWeNiXzT0D+li9pW4dvfr7HdDKwcVDnJXtWn4RN?=
- =?us-ascii?Q?CCOoo4a6B9rQbmFBKS0DYxFzN1Oe2Q0gCj/P1xTfwLsWsYhcrfw7tfAfzH+8?=
- =?us-ascii?Q?6Q5dYoCBFfeYkR/iXv38A6i1529WVUEj48RpE2CytXo+GvazFSfZNYjbUYkJ?=
- =?us-ascii?Q?U7qh3y58mgh72R1qeW67tEQnAZwi0jqAdQ6U0GnsY92HArSNz97Zx6pkt6cY?=
- =?us-ascii?Q?JUMhGwW6P22orAfysCberpexyIRN+BxFZc9ZBIU8X5ubIQB6jc8FSjSVuSH8?=
- =?us-ascii?Q?LjIsO9CuvyMgcNYbJT0vjiMBHRD7LLn5LPCyicAC0iFi/Y1/fUiAYTcWJgM7?=
- =?us-ascii?Q?z6BpbjkOanCUBIRmhRkBV1NRKLlobTzEwcaode8o7NEAsOVDL4MtcbcwHY6S?=
- =?us-ascii?Q?sQzaQKiUSabNRsSuxRcNIlScNHDyGApX7Bskj5I5FeKDlvfZJOPxitD4eyJj?=
- =?us-ascii?Q?3NyqwF/E+E2ISPZSX1oxAFCcZ7BeIg/Q7uv2EYjVQGaqbCFVGZJYeem2Y9bz?=
- =?us-ascii?Q?iS+AI/HgLOEQ0yFR75s6NDlkG0bXsi5YqR1uhw254vSiyfB/q5TiF/pzJ27I?=
- =?us-ascii?Q?9BAlMqUI3+34QAD3b0ZCQIRC/DUtxwvdBOugd17OM6jM4s8OPQnDdY077XFv?=
- =?us-ascii?Q?CVti/MXMBG14Ce48GJB7N1Yzq3HjW/P3jCMKxX8ZTc5ngbHQiGM9bSu/nsRU?=
- =?us-ascii?Q?HJO3Rc5KNOC5BDBzUUwFhdMSe63C8Th8JsAw0ELogXd7+pBwInEcitQzgigN?=
- =?us-ascii?Q?GYT9vZWzfA5DBkVHcb3Nf3pR8komZ5xj98N6ts5JtCgOW/pTQ3zdIYX6HXEX?=
- =?us-ascii?Q?vwW00a+eV7djxXKbZAJ4CXv4hyXCEgjS6SCGB8uiNViOxAHJxqnnide4/v2o?=
- =?us-ascii?Q?aWMBeC9inkZ+abSimX+EauXXYv0Ogy1/971yTgY8gm63lpLtbB0KLvL9NVwV?=
- =?us-ascii?Q?pBAaXgD/VTuXWfS0xhVuEQpK1ZS1TJ7awkKIw8idVKi3OfdTy6Z0hgLC+Yo0?=
- =?us-ascii?Q?ezTPAo5WZ0B1ycuZFVgRP2fmB3jf/6BF9Hw4nvQ5u3b3kk1ClLLlTJbiDrp1?=
- =?us-ascii?Q?3pfBGDeI5S8OKfp4d2o+ZB2pQI9y/P8uWjWty9zbf3CSAj5DvBH4cGUoSf5k?=
- =?us-ascii?Q?jnds8qz4Fw3VQj51U4ZtWh0fj+XjU0BtNer7XUmOZBEzp7+GLvRCDz6jZeF4?=
- =?us-ascii?Q?0f5BEQ=3D=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f657371b-0c34-4a59-9057-08da66697210
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8703.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2022 13:53:49.9196
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2/XvDRdsabwbPltvsFcCKCouYItb2u8uazqumW41KHNu47ONfVnJswIMxathlLH6eCSR5X+yryUpXQPAQqC3fA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6640
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a V4L2 mem-to-mem driver for the Vivante DW100 Dewarp Processor IP
-core found on i.MX8MP SoC.
+The media_entity_remote_pad() is misnamed, as it operates on a pad and
+not an entity. Rename it to media_pad_remote_pad_first() to clarify its
+behaviour.
 
-The processor core applies a programmable geometrical transformation on
-input images to correct distorsion introduced by lenses.
-The transformation function is exposed as a grid map with 16x16 pixel
-macroblocks indexed using X, Y vertex coordinates.
-
-The dewarping map can be set from application through a dedicated v4l2
-control. If not set or invalid, the driver computes an identity map
-prior to starting the processing engine.
-
-The driver supports scaling, cropping and pixel format conversion.
-
-Signed-off-by: Xavier Roumegue <xavier.roumegue@oss.nxp.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/platform/nxp/Kconfig            |    1 +
- drivers/media/platform/nxp/Makefile           |    1 +
- drivers/media/platform/nxp/dw100/Kconfig      |   17 +
- drivers/media/platform/nxp/dw100/Makefile     |    3 +
- drivers/media/platform/nxp/dw100/dw100.c      | 1683 +++++++++++++++++
- drivers/media/platform/nxp/dw100/dw100_regs.h |  117 ++
- 6 files changed, 1822 insertions(+)
- create mode 100644 drivers/media/platform/nxp/dw100/Kconfig
- create mode 100644 drivers/media/platform/nxp/dw100/Makefile
- create mode 100644 drivers/media/platform/nxp/dw100/dw100.c
- create mode 100644 drivers/media/platform/nxp/dw100/dw100_regs.h
+Changes since v3:
 
-diff --git a/drivers/media/platform/nxp/Kconfig b/drivers/media/platform/nxp/Kconfig
-index 1ac0a6e91111..4c76656e353e 100644
---- a/drivers/media/platform/nxp/Kconfig
-+++ b/drivers/media/platform/nxp/Kconfig
-@@ -51,4 +51,5 @@ config VIDEO_MX2_EMMAPRP
- 	    memory to memory. Operations include resizing and format
- 	    conversion.
+- Fix build issue in imx7-media-csi.c
+---
+ Documentation/driver-api/media/mc-core.rst                 | 3 +--
+ drivers/media/i2c/adv748x/adv748x.h                        | 2 +-
+ drivers/media/i2c/tvp5150.c                                | 2 +-
+ drivers/media/mc/mc-entity.c                               | 4 ++--
+ drivers/media/pci/intel/ipu3/ipu3-cio2-main.c              | 2 +-
+ drivers/media/platform/qcom/camss/camss-csid.c             | 6 +++---
+ drivers/media/platform/qcom/camss/camss-csiphy.c           | 2 +-
+ drivers/media/platform/qcom/camss/camss-ispif.c            | 4 ++--
+ drivers/media/platform/qcom/camss/camss-vfe.c              | 2 +-
+ drivers/media/platform/qcom/camss/camss-video.c            | 6 +++---
+ drivers/media/platform/qcom/camss/camss.c                  | 2 +-
+ drivers/media/platform/renesas/rcar-vin/rcar-core.c        | 2 +-
+ drivers/media/platform/renesas/rcar-vin/rcar-csi2.c        | 2 +-
+ drivers/media/platform/renesas/rcar-vin/rcar-dma.c         | 2 +-
+ drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c        | 2 +-
+ drivers/media/platform/renesas/vsp1/vsp1_entity.c          | 4 ++--
+ drivers/media/platform/renesas/vsp1/vsp1_video.c           | 2 +-
+ drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c        | 2 +-
+ drivers/media/platform/samsung/exynos4-is/common.c         | 2 +-
+ drivers/media/platform/samsung/exynos4-is/fimc-capture.c   | 6 +++---
+ drivers/media/platform/samsung/exynos4-is/fimc-isp-video.c | 2 +-
+ drivers/media/platform/samsung/exynos4-is/fimc-lite.c      | 2 +-
+ drivers/media/platform/samsung/exynos4-is/media-dev.c      | 2 +-
+ drivers/media/platform/samsung/s3c-camif/camif-capture.c   | 2 +-
+ drivers/media/platform/st/stm32/stm32-dcmi.c               | 6 +++---
+ drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c       | 4 ++--
+ drivers/media/platform/ti/cal/cal-camerarx.c               | 2 +-
+ drivers/media/platform/ti/cal/cal-video.c                  | 2 +-
+ drivers/media/platform/ti/omap3isp/isp.c                   | 6 +++---
+ drivers/media/platform/ti/omap3isp/ispccdc.c               | 2 +-
+ drivers/media/platform/ti/omap3isp/ispccp2.c               | 2 +-
+ drivers/media/platform/ti/omap3isp/ispcsi2.c               | 2 +-
+ drivers/media/platform/ti/omap3isp/ispvideo.c              | 4 ++--
+ drivers/media/platform/video-mux.c                         | 2 +-
+ drivers/media/platform/xilinx/xilinx-csi2rxss.c            | 2 +-
+ drivers/media/platform/xilinx/xilinx-dma.c                 | 4 ++--
+ drivers/media/test-drivers/vimc/vimc-streamer.c            | 2 +-
+ drivers/staging/media/imx/imx-media-dev-common.c           | 2 +-
+ drivers/staging/media/imx/imx-media-utils.c                | 2 +-
+ drivers/staging/media/imx/imx7-media-csi.c                 | 2 +-
+ drivers/staging/media/omap4iss/iss.c                       | 6 +++---
+ drivers/staging/media/omap4iss/iss_csi2.c                  | 2 +-
+ drivers/staging/media/omap4iss/iss_video.c                 | 2 +-
+ drivers/staging/media/tegra-video/vi.c                     | 4 ++--
+ include/media/media-entity.h                               | 4 ++--
+ 45 files changed, 65 insertions(+), 66 deletions(-)
+
+diff --git a/Documentation/driver-api/media/mc-core.rst b/Documentation/driver-api/media/mc-core.rst
+index 02481a2513b9..6eea6a3b6441 100644
+--- a/Documentation/driver-api/media/mc-core.rst
++++ b/Documentation/driver-api/media/mc-core.rst
+@@ -186,8 +186,7 @@ is required and the graph structure can be freed normally.
  
-+source "drivers/media/platform/nxp/dw100/Kconfig"
- source "drivers/media/platform/nxp/imx-jpeg/Kconfig"
-diff --git a/drivers/media/platform/nxp/Makefile b/drivers/media/platform/nxp/Makefile
-index efc38c6578ce..22ba28ac6d63 100644
---- a/drivers/media/platform/nxp/Makefile
-+++ b/drivers/media/platform/nxp/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
+ Helper functions can be used to find a link between two given pads, or a pad
+ connected to another pad through an enabled link
+-:c:func:`media_entity_find_link()` and
+-:c:func:`media_entity_remote_pad()`.
++:c:func:`media_entity_find_link()` and :c:func:`media_pad_remote_pad_first()`.
  
-+obj-y += dw100/
- obj-y += imx-jpeg/
+ Use count and power handling
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+diff --git a/drivers/media/i2c/adv748x/adv748x.h b/drivers/media/i2c/adv748x/adv748x.h
+index 31bac06d46b5..d75eb3d8be5a 100644
+--- a/drivers/media/i2c/adv748x/adv748x.h
++++ b/drivers/media/i2c/adv748x/adv748x.h
+@@ -417,7 +417,7 @@ int adv748x_write_block(struct adv748x_state *state, int client_page,
  
- obj-$(CONFIG_VIDEO_IMX_MIPI_CSIS) += imx-mipi-csis.o
-diff --git a/drivers/media/platform/nxp/dw100/Kconfig b/drivers/media/platform/nxp/dw100/Kconfig
-new file mode 100644
-index 000000000000..45e01baf3b27
---- /dev/null
-+++ b/drivers/media/platform/nxp/dw100/Kconfig
-@@ -0,0 +1,17 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+config VIDEO_DW100
-+	tristate "NXP i.MX DW100 dewarper"
-+	depends on V4L_MEM2MEM_DRIVERS
-+	depends on VIDEO_DEV
-+	depends on ARCH_MXC || COMPILE_TEST
-+	select MEDIA_CONTROLLER
-+	select V4L2_MEM2MEM_DEV
-+	select VIDEOBUF2_DMA_CONTIG
-+	help
-+	  DW100 is a memory-to-memory engine performing geometrical
-+	  transformation on source images through a programmable dewarping map.
-+
-+	  To compile this driver as a module, choose M here: the module
-+	  will be called dw100.
-+
-diff --git a/drivers/media/platform/nxp/dw100/Makefile b/drivers/media/platform/nxp/dw100/Makefile
-new file mode 100644
-index 000000000000..49db80589e9a
---- /dev/null
-+++ b/drivers/media/platform/nxp/dw100/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0+
-+
-+obj-$(CONFIG_VIDEO_DW100) += dw100.o
-diff --git a/drivers/media/platform/nxp/dw100/dw100.c b/drivers/media/platform/nxp/dw100/dw100.c
-new file mode 100644
-index 000000000000..986ef1c9dfe3
---- /dev/null
-+++ b/drivers/media/platform/nxp/dw100/dw100.c
-@@ -0,0 +1,1683 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * DW100 Hardware dewarper
-+ *
-+ * Copyright 2022 NXP
-+ * Author: Xavier Roumegue (xavier.roumegue@oss.nxp.com)
-+ *
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/debugfs.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/minmax.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+
-+#include <media/v4l2-ctrls.h>
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-event.h>
-+#include <media/v4l2-ioctl.h>
-+#include <media/v4l2-mem2mem.h>
-+#include <media/videobuf2-dma-contig.h>
-+
-+#include <uapi/linux/dw100.h>
-+
-+#include "dw100_regs.h"
-+
-+#define DRV_NAME "dw100"
-+
-+#define DW100_MIN_W		176u
-+#define DW100_MIN_H		144u
-+#define DW100_MAX_W		4096u
-+#define DW100_MAX_H		3072u
-+#define DW100_ALIGN_W		3
-+#define DW100_ALIGN_H		3
-+
-+#define DW100_BLOCK_SIZE	16
-+
-+#define DW100_MAX_LUT_W		(DIV_ROUND_UP(DW100_MAX_W, DW100_BLOCK_SIZE) + 1)
-+#define DW100_MIN_LUT_W		(DIV_ROUND_UP(DW100_MIN_W, DW100_BLOCK_SIZE) + 1)
-+#define DW100_MAX_LUT_H		(DIV_ROUND_UP(DW100_MAX_H, DW100_BLOCK_SIZE) + 1)
-+#define DW100_MIN_LUT_H		(DIV_ROUND_UP(DW100_MIN_H, DW100_BLOCK_SIZE) + 1)
-+#define DW100_MAX_LUT_NELEMS	(DW100_MAX_LUT_W * DW100_MAX_LUT_H)
-+#define DW100_MIN_LUT_NELEMS	(DW100_MIN_LUT_W * DW100_MIN_LUT_H)
-+
-+/*
-+ * 16 controls have been reserved for this driver for future extension, but
-+ * let's limit the related driver allocation to the effective number of controls
-+ * in use.
-+ */
-+#define DW100_MAX_CTRLS			1
-+#define DW100_CTRL_DEWARPING_MAP	0
-+
-+enum {
-+	DW100_QUEUE_SRC = 0,
-+	DW100_QUEUE_DST = 1,
-+};
-+
-+enum {
-+	DW100_FMT_CAPTURE = BIT(0),
-+	DW100_FMT_OUTPUT = BIT(1),
-+};
-+
-+struct dw100_device {
-+	struct platform_device		*pdev;
-+	struct v4l2_m2m_dev		*m2m_dev;
-+	struct v4l2_device		v4l2_dev;
-+	struct video_device		vfd;
-+	struct media_device		mdev;
-+	/* Video device lock */
-+	struct mutex			vfd_mutex;
-+	void __iomem			*mmio;
-+	struct clk_bulk_data		*clks;
-+	int				num_clks;
-+	struct dentry			*debugfs_root;
-+};
-+
-+struct dw100_q_data {
-+	struct v4l2_pix_format_mplane	pix_fmt;
-+	unsigned int			sequence;
-+	const struct dw100_fmt		*fmt;
-+	struct v4l2_rect		crop;
-+};
-+
-+struct dw100_ctx {
-+	struct v4l2_fh			fh;
-+	struct dw100_device		*dw_dev;
-+	struct v4l2_ctrl_handler	hdl;
-+	struct v4l2_ctrl		*ctrls[DW100_MAX_CTRLS];
-+	/* per context m2m queue lock */
-+	struct mutex			vq_mutex;
-+
-+	/* Look Up Table for pixel remapping */
-+	unsigned int			*map;
-+	dma_addr_t			map_dma;
-+	size_t				map_size;
-+	unsigned int			map_width;
-+	unsigned int			map_height;
-+	bool				user_map_is_valid;
-+
-+	/* Source and destination queue data */
-+	struct dw100_q_data		q_data[2];
-+};
-+
-+static const struct v4l2_frmsize_stepwise dw100_frmsize_stepwise = {
-+	.min_width = DW100_MIN_W,
-+	.min_height = DW100_MIN_H,
-+	.max_width = DW100_MAX_W,
-+	.max_height = DW100_MAX_H,
-+	.step_width = 1UL << DW100_ALIGN_W,
-+	.step_height = 1UL << DW100_ALIGN_H,
-+};
-+
-+static const struct dw100_fmt {
-+	u32 fourcc;
-+	u32 types;
-+	u32 reg_format;
-+	bool reg_swap_uv;
-+} formats[] = {
-+	{
-+		.fourcc = V4L2_PIX_FMT_NV16,
-+		.types = DW100_FMT_OUTPUT | DW100_FMT_CAPTURE,
-+		.reg_format = DW100_DEWARP_CTRL_FORMAT_YUV422_SP,
-+		.reg_swap_uv = false,
-+	}, {
-+		.fourcc = V4L2_PIX_FMT_NV16M,
-+		.types = DW100_FMT_OUTPUT | DW100_FMT_CAPTURE,
-+		.reg_format = DW100_DEWARP_CTRL_FORMAT_YUV422_SP,
-+		.reg_swap_uv = false,
-+	}, {
-+		.fourcc = V4L2_PIX_FMT_NV61,
-+		.types = DW100_FMT_CAPTURE,
-+		.reg_format = DW100_DEWARP_CTRL_FORMAT_YUV422_SP,
-+		.reg_swap_uv = true,
-+	}, {
-+		.fourcc = V4L2_PIX_FMT_NV61M,
-+		.types = DW100_FMT_CAPTURE,
-+		.reg_format = DW100_DEWARP_CTRL_FORMAT_YUV422_SP,
-+		.reg_swap_uv = true,
-+	}, {
-+		.fourcc = V4L2_PIX_FMT_YUYV,
-+		.types = DW100_FMT_OUTPUT | DW100_FMT_CAPTURE,
-+		.reg_format = DW100_DEWARP_CTRL_FORMAT_YUV422_PACKED,
-+		.reg_swap_uv = false,
-+	}, {
-+		.fourcc = V4L2_PIX_FMT_UYVY,
-+		.types = DW100_FMT_OUTPUT | DW100_FMT_CAPTURE,
-+		.reg_format = DW100_DEWARP_CTRL_FORMAT_YUV422_PACKED,
-+		.reg_swap_uv = true,
-+	}, {
-+		.fourcc = V4L2_PIX_FMT_NV12,
-+		.types = DW100_FMT_OUTPUT | DW100_FMT_CAPTURE,
-+		.reg_format = DW100_DEWARP_CTRL_FORMAT_YUV420_SP,
-+		.reg_swap_uv = false,
-+	}, {
-+		.fourcc = V4L2_PIX_FMT_NV12M,
-+		.types = DW100_FMT_OUTPUT | DW100_FMT_CAPTURE,
-+		.reg_format = DW100_DEWARP_CTRL_FORMAT_YUV420_SP,
-+		.reg_swap_uv = false,
-+	}, {
-+		.fourcc = V4L2_PIX_FMT_NV21,
-+		.types = DW100_FMT_CAPTURE,
-+		.reg_format = DW100_DEWARP_CTRL_FORMAT_YUV420_SP,
-+		.reg_swap_uv = true,
-+	}, {
-+		.fourcc = V4L2_PIX_FMT_NV21M,
-+		.types = DW100_FMT_CAPTURE,
-+		.reg_format = DW100_DEWARP_CTRL_FORMAT_YUV420_SP,
-+		.reg_swap_uv = true,
-+	},
-+};
-+
-+static inline int to_dw100_fmt_type(enum v4l2_buf_type type)
-+{
-+	if (V4L2_TYPE_IS_OUTPUT(type))
-+		return DW100_FMT_OUTPUT;
-+	else
-+		return DW100_FMT_CAPTURE;
-+}
-+
-+static const struct dw100_fmt *dw100_find_pixel_format(u32 pixel_format,
-+						       int fmt_type)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(formats); i++) {
-+		const struct dw100_fmt *fmt = &formats[i];
-+
-+		if (fmt->fourcc == pixel_format && fmt->types & fmt_type)
-+			return fmt;
-+	}
-+
-+	return NULL;
-+}
-+
-+static const struct dw100_fmt *dw100_find_format(struct v4l2_format *f)
-+{
-+	return dw100_find_pixel_format(f->fmt.pix_mp.pixelformat,
-+				       to_dw100_fmt_type(f->type));
-+}
-+
-+static inline u32 dw100_read(struct dw100_device *dw_dev, u32 reg)
-+{
-+	return readl(dw_dev->mmio + reg);
-+}
-+
-+static inline void dw100_write(struct dw100_device *dw_dev, u32 reg, u32 val)
-+{
-+	writel(val, dw_dev->mmio + reg);
-+}
-+
-+static inline int dw100_dump_regs(struct seq_file *m)
-+{
-+	struct dw100_device *dw_dev = m->private;
-+#define __DECLARE_REG(x) { #x, x }
-+	unsigned int i;
-+	static const struct reg_desc {
-+		const char * const name;
-+		unsigned int addr;
-+	} dw100_regs[] = {
-+		__DECLARE_REG(DW100_DEWARP_ID),
-+		__DECLARE_REG(DW100_DEWARP_CTRL),
-+		__DECLARE_REG(DW100_MAP_LUT_ADDR),
-+		__DECLARE_REG(DW100_MAP_LUT_SIZE),
-+		__DECLARE_REG(DW100_MAP_LUT_ADDR2),
-+		__DECLARE_REG(DW100_MAP_LUT_SIZE2),
-+		__DECLARE_REG(DW100_SRC_IMG_Y_BASE),
-+		__DECLARE_REG(DW100_SRC_IMG_UV_BASE),
-+		__DECLARE_REG(DW100_SRC_IMG_SIZE),
-+		__DECLARE_REG(DW100_SRC_IMG_STRIDE),
-+		__DECLARE_REG(DW100_DST_IMG_Y_BASE),
-+		__DECLARE_REG(DW100_DST_IMG_UV_BASE),
-+		__DECLARE_REG(DW100_DST_IMG_SIZE),
-+		__DECLARE_REG(DW100_DST_IMG_STRIDE),
-+		__DECLARE_REG(DW100_DST_IMG_Y_SIZE1),
-+		__DECLARE_REG(DW100_DST_IMG_UV_SIZE1),
-+		__DECLARE_REG(DW100_SRC_IMG_Y_BASE2),
-+		__DECLARE_REG(DW100_SRC_IMG_UV_BASE2),
-+		__DECLARE_REG(DW100_SRC_IMG_SIZE2),
-+		__DECLARE_REG(DW100_SRC_IMG_STRIDE2),
-+		__DECLARE_REG(DW100_DST_IMG_Y_BASE2),
-+		__DECLARE_REG(DW100_DST_IMG_UV_BASE2),
-+		__DECLARE_REG(DW100_DST_IMG_SIZE2),
-+		__DECLARE_REG(DW100_DST_IMG_STRIDE2),
-+		__DECLARE_REG(DW100_DST_IMG_Y_SIZE2),
-+		__DECLARE_REG(DW100_DST_IMG_UV_SIZE2),
-+		__DECLARE_REG(DW100_SWAP_CONTROL),
-+		__DECLARE_REG(DW100_VERTICAL_SPLIT_LINE),
-+		__DECLARE_REG(DW100_HORIZON_SPLIT_LINE),
-+		__DECLARE_REG(DW100_SCALE_FACTOR),
-+		__DECLARE_REG(DW100_ROI_START),
-+		__DECLARE_REG(DW100_BOUNDARY_PIXEL),
-+		__DECLARE_REG(DW100_INTERRUPT_STATUS),
-+		__DECLARE_REG(DW100_BUS_CTRL),
-+		__DECLARE_REG(DW100_BUS_CTRL1),
-+		__DECLARE_REG(DW100_BUS_TIME_OUT_CYCLE),
-+	};
-+
-+	for (i = 0; i < ARRAY_SIZE(dw100_regs); i++)
-+		seq_printf(m, "%s: %#x\n", dw100_regs[i].name,
-+			   dw100_read(dw_dev, dw100_regs[i].addr));
-+
-+	return 0;
-+}
-+
-+static inline struct dw100_ctx *dw100_file2ctx(struct file *file)
-+{
-+	return container_of(file->private_data, struct dw100_ctx, fh);
-+}
-+
-+static struct dw100_q_data *dw100_get_q_data(struct dw100_ctx *ctx,
-+					     enum v4l2_buf_type type)
-+{
-+	if (type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE)
-+		return &ctx->q_data[DW100_QUEUE_SRC];
-+	else
-+		return &ctx->q_data[DW100_QUEUE_DST];
-+}
-+
-+static u32 dw100_get_n_vertices_from_length(u32 length)
-+{
-+	return DIV_ROUND_UP(length, DW100_BLOCK_SIZE) + 1;
-+}
-+
-+static u16 dw100_map_convert_to_uq12_4(u32 a)
-+{
-+	return (u16)((a & 0xfff) << 4);
-+}
-+
-+static u32 dw100_map_format_coordinates(u16 xq, u16 yq)
-+{
-+	return (u32)((yq << 16) | xq);
-+}
-+
-+static u32 *dw100_get_user_map(struct dw100_ctx *ctx)
-+{
-+	struct v4l2_ctrl *ctrl = ctx->ctrls[DW100_CTRL_DEWARPING_MAP];
-+
-+	if (!ctx->user_map_is_valid)
-+		return NULL;
-+
-+	return ctrl->p_cur.p_u32;
-+}
-+
-+/*
-+ * Create the dewarp map from the V4L2 control. If the control hasn't been set
-+ * by the application, generate an identity mapping.
-+ *
-+ * A 16 pixels cell size grid is mapped on the destination image.
-+ * The last cells width/height might be lesser than 16 if the destination image
-+ * width/height is not divisible by 16. This dewarping grid map specifies the
-+ * source image pixel location (x, y) on each grid intersection point.
-+ * Bilinear interpolation is used to compute inner cell points locations.
-+ *
-+ * The coordinates are saved in UQ12.4 fixed point format.
-+ */
-+static int dw100_create_mapping(struct dw100_ctx *ctx)
-+{
-+	u32 sw, sh, dw, dh, mw, mh, i, j;
-+	u16 qx, qy, qdx, qdy, qsh, qsw;
-+	bool is_user_map = false;
-+	u32 *user_map, *map;
-+
-+	sw = ctx->q_data[DW100_QUEUE_SRC].pix_fmt.width;
-+	dw = ctx->q_data[DW100_QUEUE_DST].pix_fmt.width;
-+	sh = ctx->q_data[DW100_QUEUE_SRC].pix_fmt.height;
-+	dh = ctx->q_data[DW100_QUEUE_DST].pix_fmt.height;
-+
-+	mw = dw100_get_n_vertices_from_length(dw);
-+	mh = dw100_get_n_vertices_from_length(dh);
-+
-+	qsw = dw100_map_convert_to_uq12_4(sw);
-+	qsh = dw100_map_convert_to_uq12_4(sh);
-+	qdx = qsw / (mw - 1);
-+	qdy = qsh / (mh - 1);
-+
-+	if (ctx->map)
-+		dma_free_coherent(&ctx->dw_dev->pdev->dev, ctx->map_size,
-+				  ctx->map, ctx->map_dma);
-+
-+	ctx->map_width = mw;
-+	ctx->map_height = mh;
-+	ctx->map_size = mh * mw * sizeof(u32);
-+
-+	ctx->map = dma_alloc_coherent(&ctx->dw_dev->pdev->dev, ctx->map_size,
-+				      &ctx->map_dma, GFP_KERNEL);
-+
-+	if (!ctx->map)
-+		return -ENOMEM;
-+
-+	user_map = dw100_get_user_map(ctx);
-+	if (user_map) {
-+		is_user_map = true;
-+		memcpy(ctx->map, user_map, ctx->map_size);
-+		goto out;
-+	}
-+
-+	map = ctx->map;
-+	for (i = 0, qy = 0; i < mh; i++, qy += qdy) {
-+		if (qy > qsh)
-+			qy = qsh;
-+		for (j = 0, qx = 0; j < mw; j++, qx += qdx) {
-+			if (qx > qsw)
-+				qx = qsw;
-+			*map++ = dw100_map_format_coordinates(qx, qy);
-+		}
-+	}
-+
-+out:
-+	dev_dbg(&ctx->dw_dev->pdev->dev,
-+		"%ux%u %s mapping created (d:%pad-c:%p) for stream %ux%u->%ux%u\n",
-+		mw, mh, is_user_map ? "user" : "identity",
-+		&ctx->map_dma, ctx->map, sw, sh, dw, dh);
-+
-+	return 0;
-+}
-+
-+static void dw100_destroy_mapping(struct dw100_ctx *ctx)
-+{
-+	if (ctx->map) {
-+		dma_free_coherent(&ctx->dw_dev->pdev->dev, ctx->map_size,
-+				  ctx->map, ctx->map_dma);
-+		ctx->map = NULL;
-+	}
-+}
-+
-+static int dw100_s_ctrl(struct v4l2_ctrl *ctrl)
-+{
-+	struct dw100_ctx *ctx =
-+		container_of(ctrl->handler, struct dw100_ctx, hdl);
-+
-+	switch (ctrl->id) {
-+	case V4L2_CID_DW100_DEWARPING_16x16_VERTEX_MAP:
-+		ctx->user_map_is_valid = true;
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct v4l2_ctrl_ops dw100_ctrl_ops = {
-+	.s_ctrl = dw100_s_ctrl,
-+};
-+
-+static const struct v4l2_ctrl_config controls[] = {
-+	[DW100_CTRL_DEWARPING_MAP] = {
-+		.ops = &dw100_ctrl_ops,
-+		.id = V4L2_CID_DW100_DEWARPING_16x16_VERTEX_MAP,
-+		.name = "Look-Up Table",
-+		.type = V4L2_CTRL_TYPE_U32,
-+		.min = 0x00000000,
-+		.max = 0xffffffff,
-+		.step = 1,
-+		.def = 0,
-+		.dims = { DW100_MAX_LUT_W, DW100_MAX_LUT_H },
-+	},
-+};
-+
-+static int dw100_queue_setup(struct vb2_queue *vq,
-+			     unsigned int *nbuffers, unsigned int *nplanes,
-+			     unsigned int sizes[], struct device *alloc_devs[])
-+{
-+	struct dw100_ctx *ctx = vb2_get_drv_priv(vq);
-+	const struct v4l2_pix_format_mplane *format;
-+	unsigned int i;
-+
-+	format = &dw100_get_q_data(ctx, vq->type)->pix_fmt;
-+
-+	if (*nplanes) {
-+		if (*nplanes != format->num_planes)
-+			return -EINVAL;
-+
-+		for (i = 0; i < *nplanes; ++i) {
-+			if (sizes[i] < format->plane_fmt[i].sizeimage)
-+				return -EINVAL;
-+		}
-+
-+		return 0;
-+	}
-+
-+	*nplanes = format->num_planes;
-+
-+	for (i = 0; i < format->num_planes; ++i)
-+		sizes[i] = format->plane_fmt[i].sizeimage;
-+
-+	return 0;
-+}
-+
-+static int dw100_buf_prepare(struct vb2_buffer *vb)
-+{
-+	unsigned int i;
-+	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-+	struct dw100_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
-+	struct dw100_device *dw_dev = ctx->dw_dev;
-+	const struct v4l2_pix_format_mplane *pix_fmt =
-+		&dw100_get_q_data(ctx, vb->vb2_queue->type)->pix_fmt;
-+
-+	if (V4L2_TYPE_IS_OUTPUT(vb->vb2_queue->type)) {
-+		if (vbuf->field != V4L2_FIELD_NONE) {
-+			dev_dbg(&dw_dev->pdev->dev, "%x field isn't supported\n",
-+				vbuf->field);
-+			return -EINVAL;
-+		}
-+	}
-+
-+	for (i = 0; i < pix_fmt->num_planes; i++) {
-+		unsigned long size = pix_fmt->plane_fmt[i].sizeimage;
-+
-+		if (vb2_plane_size(vb, i) < size) {
-+			dev_dbg(&dw_dev->pdev->dev,
-+				"User buffer too small (%lu < %lu)\n",
-+				vb2_plane_size(vb, i), size);
-+			return -EINVAL;
-+		}
-+
-+		vb2_set_plane_payload(vb, i, size);
-+	}
-+
-+	return 0;
-+}
-+
-+static void dw100_buf_queue(struct vb2_buffer *vb)
-+{
-+	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-+	struct dw100_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
-+
-+	v4l2_m2m_buf_queue(ctx->fh.m2m_ctx, vbuf);
-+}
-+
-+static int dw100_start_streaming(struct vb2_queue *q, unsigned int count)
-+{
-+	struct dw100_ctx *ctx = vb2_get_drv_priv(q);
-+	struct dw100_q_data *q_data = dw100_get_q_data(ctx, q->type);
-+	int ret;
-+
-+	q_data->sequence = 0;
-+
-+	ret = dw100_create_mapping(ctx);
-+	if (ret)
-+		return ret;
-+
-+	return pm_runtime_resume_and_get(&ctx->dw_dev->pdev->dev);
-+}
-+
-+static void dw100_stop_streaming(struct vb2_queue *q)
-+{
-+	struct dw100_ctx *ctx = vb2_get_drv_priv(q);
-+	struct vb2_v4l2_buffer *vbuf;
-+
-+	for (;;) {
-+		if (V4L2_TYPE_IS_OUTPUT(q->type))
-+			vbuf = v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
-+		else
-+			vbuf = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
-+		if (!vbuf)
-+			break;
-+		v4l2_m2m_buf_done(vbuf, VB2_BUF_STATE_ERROR);
-+	}
-+
-+	pm_runtime_put_sync(&ctx->dw_dev->pdev->dev);
-+
-+	dw100_destroy_mapping(ctx);
-+}
-+
-+static const struct vb2_ops dw100_qops = {
-+	.queue_setup	 = dw100_queue_setup,
-+	.buf_prepare	 = dw100_buf_prepare,
-+	.buf_queue	 = dw100_buf_queue,
-+	.start_streaming = dw100_start_streaming,
-+	.stop_streaming  = dw100_stop_streaming,
-+	.wait_prepare	 = vb2_ops_wait_prepare,
-+	.wait_finish	 = vb2_ops_wait_finish,
-+};
-+
-+static int dw100_m2m_queue_init(void *priv, struct vb2_queue *src_vq,
-+				struct vb2_queue *dst_vq)
-+{
-+	struct dw100_ctx *ctx = priv;
-+	int ret;
-+
-+	src_vq->type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-+	src_vq->io_modes = VB2_MMAP | VB2_DMABUF;
-+	src_vq->drv_priv = ctx;
-+	src_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
-+	src_vq->ops = &dw100_qops;
-+	src_vq->mem_ops = &vb2_dma_contig_memops;
-+	src_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
-+	src_vq->lock = &ctx->vq_mutex;
-+	src_vq->dev = ctx->dw_dev->v4l2_dev.dev;
-+
-+	ret = vb2_queue_init(src_vq);
-+	if (ret)
-+		return ret;
-+
-+	dst_vq->type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
-+	dst_vq->io_modes = VB2_MMAP | VB2_DMABUF;
-+	dst_vq->drv_priv = ctx;
-+	dst_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
-+	dst_vq->ops = &dw100_qops;
-+	dst_vq->mem_ops = &vb2_dma_contig_memops;
-+	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
-+	dst_vq->lock = &ctx->vq_mutex;
-+	dst_vq->dev = ctx->dw_dev->v4l2_dev.dev;
-+
-+	return vb2_queue_init(dst_vq);
-+}
-+
-+static int dw100_open(struct file *file)
-+{
-+	struct dw100_device *dw_dev = video_drvdata(file);
-+	struct dw100_ctx *ctx;
-+	struct v4l2_ctrl_handler *hdl;
-+	struct v4l2_pix_format_mplane *pix_fmt;
-+	int ret, i;
-+
-+	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
-+	if (!ctx)
-+		return -ENOMEM;
-+
-+	mutex_init(&ctx->vq_mutex);
-+	v4l2_fh_init(&ctx->fh, video_devdata(file));
-+	file->private_data = &ctx->fh;
-+	ctx->dw_dev = dw_dev;
-+
-+	hdl = &ctx->hdl;
-+	v4l2_ctrl_handler_init(hdl, ARRAY_SIZE(controls));
-+	for (i = 0; i < ARRAY_SIZE(controls); i++) {
-+		ctx->ctrls[i] = v4l2_ctrl_new_custom(hdl, &controls[i], NULL);
-+		if (hdl->error) {
-+			dev_err(&ctx->dw_dev->pdev->dev,
-+				"Adding control (%d) failed\n", i);
-+			ret = hdl->error;
-+			goto err;
-+		}
-+	}
-+	ctx->fh.ctrl_handler = hdl;
-+	ctx->user_map_is_valid = false;
-+
-+	ctx->q_data[DW100_QUEUE_SRC].fmt = &formats[0];
-+
-+	pix_fmt = &ctx->q_data[DW100_QUEUE_SRC].pix_fmt;
-+	pix_fmt->field = V4L2_FIELD_NONE;
-+	pix_fmt->colorspace = V4L2_COLORSPACE_REC709;
-+	pix_fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(pix_fmt->colorspace);
-+	pix_fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(pix_fmt->colorspace);
-+	pix_fmt->quantization =
-+		V4L2_MAP_QUANTIZATION_DEFAULT(false, pix_fmt->colorspace,
-+					      pix_fmt->ycbcr_enc);
-+
-+	v4l2_fill_pixfmt_mp(pix_fmt, formats[0].fourcc, 640, 480);
-+
-+	ctx->q_data[DW100_QUEUE_SRC].crop.top = 0;
-+	ctx->q_data[DW100_QUEUE_SRC].crop.left = 0;
-+	ctx->q_data[DW100_QUEUE_SRC].crop.width = 640;
-+	ctx->q_data[DW100_QUEUE_SRC].crop.height = 480;
-+
-+	ctx->q_data[DW100_QUEUE_DST] = ctx->q_data[DW100_QUEUE_SRC];
-+
-+	ctx->fh.m2m_ctx = v4l2_m2m_ctx_init(dw_dev->m2m_dev,
-+					    ctx, &dw100_m2m_queue_init);
-+
-+	if (IS_ERR(ctx->fh.m2m_ctx)) {
-+		ret = PTR_ERR(ctx->fh.m2m_ctx);
-+		goto err;
-+	}
-+
-+	v4l2_fh_add(&ctx->fh);
-+
-+	return 0;
-+
-+err:
-+	v4l2_ctrl_handler_free(hdl);
-+	v4l2_fh_exit(&ctx->fh);
-+	mutex_destroy(&ctx->vq_mutex);
-+	kfree(ctx);
-+
-+	return ret;
-+}
-+
-+static int dw100_release(struct file *file)
-+{
-+	struct dw100_ctx *ctx = dw100_file2ctx(file);
-+
-+	v4l2_fh_del(&ctx->fh);
-+	v4l2_fh_exit(&ctx->fh);
-+	v4l2_ctrl_handler_free(&ctx->hdl);
-+	v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
-+	mutex_destroy(&ctx->vq_mutex);
-+	kfree(ctx);
-+
-+	return 0;
-+}
-+
-+static const struct v4l2_file_operations dw100_fops = {
-+	.owner		= THIS_MODULE,
-+	.open		= dw100_open,
-+	.release	= dw100_release,
-+	.poll		= v4l2_m2m_fop_poll,
-+	.unlocked_ioctl	= video_ioctl2,
-+	.mmap		= v4l2_m2m_fop_mmap,
-+};
-+
-+static int dw100_querycap(struct file *file, void *priv,
-+			  struct v4l2_capability *cap)
-+{
-+	strscpy(cap->driver, DRV_NAME, sizeof(cap->driver));
-+	strscpy(cap->card, "DW100 dewarper", sizeof(cap->card));
-+
-+	return 0;
-+}
-+
-+static int dw100_enum_fmt_vid(struct file *file, void *priv,
-+			      struct v4l2_fmtdesc *f)
-+{
-+	int i, num = 0;
-+
-+	for (i = 0; i < ARRAY_SIZE(formats); i++) {
-+		if (formats[i].types & to_dw100_fmt_type(f->type)) {
-+			if (num == f->index) {
-+				f->pixelformat = formats[i].fourcc;
-+				return 0;
-+			}
-+			++num;
-+		}
-+	}
-+
-+	return -EINVAL;
-+}
-+
-+static int dw100_enum_framesizes(struct file *file, void *priv,
-+				 struct v4l2_frmsizeenum *fsize)
-+{
-+	const struct dw100_fmt *fmt;
-+
-+	if (fsize->index)
-+		return -EINVAL;
-+
-+	fmt = dw100_find_pixel_format(fsize->pixel_format,
-+				      DW100_FMT_OUTPUT | DW100_FMT_CAPTURE);
-+	if (!fmt)
-+		return -EINVAL;
-+
-+	fsize->type = V4L2_FRMSIZE_TYPE_STEPWISE;
-+	fsize->stepwise = dw100_frmsize_stepwise;
-+
-+	return 0;
-+}
-+
-+static int dw100_g_fmt_vid(struct file *file, void *priv, struct v4l2_format *f)
-+{
-+	struct dw100_ctx *ctx = dw100_file2ctx(file);
-+	struct vb2_queue *vq;
-+	struct dw100_q_data *q_data;
-+
-+	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type);
-+	if (!vq)
-+		return -EINVAL;
-+
-+	q_data = dw100_get_q_data(ctx, f->type);
-+
-+	f->fmt.pix_mp = q_data->pix_fmt;
-+
-+	return 0;
-+}
-+
-+static int dw100_try_fmt(struct file *file, struct v4l2_format *f)
-+{
-+	struct dw100_ctx *ctx = dw100_file2ctx(file);
-+	struct v4l2_pix_format_mplane *pix = &f->fmt.pix_mp;
-+	const struct dw100_fmt *fmt;
-+
-+	fmt = dw100_find_format(f);
-+	if (!fmt) {
-+		fmt = &formats[0];
-+		pix->pixelformat = fmt->fourcc;
-+	}
-+
-+	v4l2_apply_frmsize_constraints(&pix->width, &pix->height,
-+				       &dw100_frmsize_stepwise);
-+
-+	v4l2_fill_pixfmt_mp(pix, fmt->fourcc, pix->width, pix->height);
-+
-+	pix->field = V4L2_FIELD_NONE;
-+
-+	if (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
-+		if (pix->colorspace == V4L2_COLORSPACE_DEFAULT)
-+			pix->colorspace = V4L2_COLORSPACE_REC709;
-+		if (pix->xfer_func == V4L2_XFER_FUNC_DEFAULT)
-+			pix->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(pix->colorspace);
-+		if (pix->ycbcr_enc == V4L2_YCBCR_ENC_DEFAULT)
-+			pix->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(pix->colorspace);
-+		if (pix->quantization == V4L2_QUANTIZATION_DEFAULT)
-+			pix->quantization =
-+				V4L2_MAP_QUANTIZATION_DEFAULT(false,
-+							      pix->colorspace,
-+							      pix->ycbcr_enc);
-+	} else {
-+		/*
-+		 * The DW100 can't perform colorspace conversion, the colorspace
-+		 * on the capture queue must be identical to the output queue.
-+		 */
-+		const struct dw100_q_data *q_data =
-+			dw100_get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
-+
-+		pix->colorspace = q_data->pix_fmt.colorspace;
-+		pix->xfer_func = q_data->pix_fmt.xfer_func;
-+		pix->ycbcr_enc = q_data->pix_fmt.ycbcr_enc;
-+		pix->quantization = q_data->pix_fmt.quantization;
-+	}
-+
-+	return 0;
-+}
-+
-+static int dw100_s_fmt(struct dw100_ctx *ctx, struct v4l2_format *f)
-+{
-+	struct dw100_q_data *q_data;
-+	struct vb2_queue *vq;
-+
-+	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type);
-+	if (!vq)
-+		return -EINVAL;
-+
-+	q_data = dw100_get_q_data(ctx, f->type);
-+	if (!q_data)
-+		return -EINVAL;
-+
-+	if (vb2_is_busy(vq)) {
-+		dev_dbg(&ctx->dw_dev->pdev->dev, "%s queue busy\n", __func__);
-+		return -EBUSY;
-+	}
-+
-+	q_data->fmt = dw100_find_format(f);
-+	q_data->pix_fmt = f->fmt.pix_mp;
-+	q_data->crop.top = 0;
-+	q_data->crop.left = 0;
-+	q_data->crop.width = f->fmt.pix_mp.width;
-+	q_data->crop.height = f->fmt.pix_mp.height;
-+
-+	/* Propagate buffers encoding */
-+
-+	if (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
-+		struct dw100_q_data *dst_q_data =
-+			dw100_get_q_data(ctx,
-+					 V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
-+
-+		dst_q_data->pix_fmt.colorspace = q_data->pix_fmt.colorspace;
-+		dst_q_data->pix_fmt.ycbcr_enc = q_data->pix_fmt.ycbcr_enc;
-+		dst_q_data->pix_fmt.quantization = q_data->pix_fmt.quantization;
-+		dst_q_data->pix_fmt.xfer_func = q_data->pix_fmt.xfer_func;
-+	}
-+
-+	dev_dbg(&ctx->dw_dev->pdev->dev,
-+		"Setting format for type %u, wxh: %ux%u, fmt: %p4cc\n",
-+		f->type, q_data->pix_fmt.width, q_data->pix_fmt.height,
-+		&q_data->pix_fmt.pixelformat);
-+
-+	if (f->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) {
-+		int ret;
-+		u32 dims[V4L2_CTRL_MAX_DIMS] = {};
-+		struct v4l2_ctrl *ctrl = ctx->ctrls[DW100_CTRL_DEWARPING_MAP];
-+
-+		dims[0] = dw100_get_n_vertices_from_length(q_data->pix_fmt.width);
-+		dims[1] = dw100_get_n_vertices_from_length(q_data->pix_fmt.height);
-+
-+		v4l2_ctrl_lock(ctrl);
-+		ctx->user_map_is_valid = false;
-+		ret = __v4l2_ctrl_modify_dimensions(ctrl, dims);
-+		v4l2_ctrl_unlock(ctrl);
-+
-+		if (ret) {
-+			dev_err(&ctx->dw_dev->pdev->dev,
-+				"Modifying LUT dimensions failed with error %d\n",
-+				ret);
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int dw100_try_fmt_vid_cap(struct file *file, void *priv,
-+				 struct v4l2_format *f)
-+{
-+	if (f->type != V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
-+		return -EINVAL;
-+
-+	return dw100_try_fmt(file, f);
-+}
-+
-+static int dw100_s_fmt_vid_cap(struct file *file, void *priv,
-+			       struct v4l2_format *f)
-+{
-+	struct dw100_ctx *ctx = dw100_file2ctx(file);
-+	int ret;
-+
-+	ret = dw100_try_fmt_vid_cap(file, priv, f);
-+	if (ret)
-+		return ret;
-+
-+	ret = dw100_s_fmt(ctx, f);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static int dw100_try_fmt_vid_out(struct file *file, void *priv,
-+				 struct v4l2_format *f)
-+{
-+	if (f->type != V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE)
-+		return -EINVAL;
-+
-+	return dw100_try_fmt(file, f);
-+}
-+
-+static int dw100_s_fmt_vid_out(struct file *file, void *priv,
-+			       struct v4l2_format *f)
-+{
-+	struct dw100_ctx *ctx = dw100_file2ctx(file);
-+	int ret;
-+
-+	ret = dw100_try_fmt_vid_out(file, priv, f);
-+	if (ret)
-+		return ret;
-+
-+	ret = dw100_s_fmt(ctx, f);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static int dw100_g_selection(struct file *file, void *fh,
-+			     struct v4l2_selection *sel)
-+{
-+	struct dw100_ctx *ctx = dw100_file2ctx(file);
-+	struct dw100_q_data *src_q_data;
-+
-+	if (sel->type != V4L2_BUF_TYPE_VIDEO_OUTPUT)
-+		return -EINVAL;
-+
-+	src_q_data = dw100_get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
-+
-+	switch (sel->target) {
-+	case V4L2_SEL_TGT_CROP_DEFAULT:
-+	case V4L2_SEL_TGT_CROP_BOUNDS:
-+		sel->r.top = 0;
-+		sel->r.left = 0;
-+		sel->r.width = src_q_data->pix_fmt.width;
-+		sel->r.height = src_q_data->pix_fmt.height;
-+		break;
-+	case V4L2_SEL_TGT_CROP:
-+		sel->r.top = src_q_data->crop.top;
-+		sel->r.left = src_q_data->crop.left;
-+		sel->r.width = src_q_data->crop.width;
-+		sel->r.height = src_q_data->crop.height;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int dw100_s_selection(struct file *file, void *fh,
-+			     struct v4l2_selection *sel)
-+{
-+	struct dw100_ctx *ctx = dw100_file2ctx(file);
-+	struct dw100_q_data *src_q_data;
-+	u32 qscalex, qscaley, qscale;
-+	int x, y, w, h;
-+	unsigned int wframe, hframe;
-+
-+	if (sel->type != V4L2_BUF_TYPE_VIDEO_OUTPUT)
-+		return -EINVAL;
-+
-+	src_q_data = dw100_get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
-+
-+	dev_dbg(&ctx->dw_dev->pdev->dev,
-+		">>> Buffer Type: %u Target: %u Rect: %ux%u@%d.%d\n",
-+		sel->type, sel->target,
-+		sel->r.width, sel->r.height, sel->r.left, sel->r.top);
-+
-+	switch (sel->target) {
-+	case V4L2_SEL_TGT_CROP:
-+		wframe = src_q_data->pix_fmt.width;
-+		hframe = src_q_data->pix_fmt.height;
-+
-+		sel->r.top = clamp_t(int, sel->r.top, 0, hframe - DW100_MIN_H);
-+		sel->r.left = clamp_t(int, sel->r.left, 0, wframe - DW100_MIN_W);
-+		sel->r.height =
-+			clamp(sel->r.height, DW100_MIN_H, hframe - sel->r.top);
-+		sel->r.width =
-+			clamp(sel->r.width, DW100_MIN_W, wframe - sel->r.left);
-+
-+		/* UQ16.16 for float operations */
-+		qscalex = (sel->r.width << 16) / wframe;
-+		qscaley = (sel->r.height << 16) / hframe;
-+		y = sel->r.top;
-+		x = sel->r.left;
-+		if (qscalex == qscaley) {
-+			qscale = qscalex;
-+		} else {
-+			switch (sel->flags) {
-+			case 0:
-+				qscale = (qscalex + qscaley) / 2;
-+				break;
-+			case V4L2_SEL_FLAG_GE:
-+				qscale = max(qscaley, qscalex);
-+				break;
-+			case V4L2_SEL_FLAG_LE:
-+				qscale = min(qscaley, qscalex);
-+				break;
-+			case V4L2_SEL_FLAG_LE | V4L2_SEL_FLAG_GE:
-+				return -ERANGE;
-+			default:
-+				return -EINVAL;
-+			}
-+		}
-+
-+		w = (u32)((((u64)wframe << 16) * qscale) >> 32);
-+		h = (u32)((((u64)hframe << 16) * qscale) >> 32);
-+		x = x + (sel->r.width  - w) / 2;
-+		y = y + (sel->r.height  - h) / 2;
-+		x = min(wframe - w, (unsigned int)max(0, x));
-+		y = min(hframe - h, (unsigned int)max(0, y));
-+
-+		sel->r.top = y;
-+		sel->r.left = x;
-+		sel->r.width = w;
-+		sel->r.height = h;
-+
-+		src_q_data->crop.top = sel->r.top;
-+		src_q_data->crop.left = sel->r.left;
-+		src_q_data->crop.width = sel->r.width;
-+		src_q_data->crop.height = sel->r.height;
-+		break;
-+
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	dev_dbg(&ctx->dw_dev->pdev->dev,
-+		"<<< Buffer Type: %u Target: %u Rect: %ux%u@%d.%d\n",
-+		sel->type, sel->target,
-+		sel->r.width, sel->r.height, sel->r.left, sel->r.top);
-+
-+	return 0;
-+}
-+
-+static const struct v4l2_ioctl_ops dw100_ioctl_ops = {
-+	.vidioc_querycap		= dw100_querycap,
-+
-+	.vidioc_enum_fmt_vid_cap	= dw100_enum_fmt_vid,
-+	.vidioc_enum_framesizes		= dw100_enum_framesizes,
-+	.vidioc_g_fmt_vid_cap_mplane	= dw100_g_fmt_vid,
-+	.vidioc_try_fmt_vid_cap_mplane	= dw100_try_fmt_vid_cap,
-+	.vidioc_s_fmt_vid_cap_mplane	= dw100_s_fmt_vid_cap,
-+
-+	.vidioc_enum_fmt_vid_out	= dw100_enum_fmt_vid,
-+	.vidioc_g_fmt_vid_out_mplane	= dw100_g_fmt_vid,
-+	.vidioc_try_fmt_vid_out_mplane	= dw100_try_fmt_vid_out,
-+	.vidioc_s_fmt_vid_out_mplane	= dw100_s_fmt_vid_out,
-+
-+	.vidioc_g_selection		= dw100_g_selection,
-+	.vidioc_s_selection		= dw100_s_selection,
-+	.vidioc_reqbufs			= v4l2_m2m_ioctl_reqbufs,
-+	.vidioc_querybuf		= v4l2_m2m_ioctl_querybuf,
-+	.vidioc_qbuf			= v4l2_m2m_ioctl_qbuf,
-+	.vidioc_dqbuf			= v4l2_m2m_ioctl_dqbuf,
-+	.vidioc_prepare_buf		= v4l2_m2m_ioctl_prepare_buf,
-+	.vidioc_create_bufs		= v4l2_m2m_ioctl_create_bufs,
-+	.vidioc_expbuf			= v4l2_m2m_ioctl_expbuf,
-+
-+	.vidioc_streamon		= v4l2_m2m_ioctl_streamon,
-+	.vidioc_streamoff		= v4l2_m2m_ioctl_streamoff,
-+
-+	.vidioc_subscribe_event		= v4l2_ctrl_subscribe_event,
-+	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
-+};
-+
-+static void dw100_job_finish(struct dw100_device *dw_dev, bool with_error)
-+{
-+	struct dw100_ctx *curr_ctx;
-+	struct vb2_v4l2_buffer *src_vb, *dst_vb;
-+	enum vb2_buffer_state buf_state;
-+
-+	curr_ctx = v4l2_m2m_get_curr_priv(dw_dev->m2m_dev);
-+
-+	if (!curr_ctx) {
-+		dev_err(&dw_dev->pdev->dev,
-+			"Instance released before the end of transaction\n");
-+		return;
-+	}
-+
-+	src_vb = v4l2_m2m_src_buf_remove(curr_ctx->fh.m2m_ctx);
-+	dst_vb = v4l2_m2m_dst_buf_remove(curr_ctx->fh.m2m_ctx);
-+
-+	if (likely(!with_error))
-+		buf_state = VB2_BUF_STATE_DONE;
-+	else
-+		buf_state = VB2_BUF_STATE_ERROR;
-+
-+	v4l2_m2m_buf_done(src_vb, buf_state);
-+	v4l2_m2m_buf_done(dst_vb, buf_state);
-+
-+	dev_dbg(&dw_dev->pdev->dev, "Finishing transaction with%s error(s)\n",
-+		with_error ? "" : "out");
-+
-+	v4l2_m2m_job_finish(dw_dev->m2m_dev, curr_ctx->fh.m2m_ctx);
-+}
-+
-+static void dw100_hw_reset(struct dw100_device *dw_dev)
-+{
-+	u32 val;
-+
-+	val = dw100_read(dw_dev, DW100_DEWARP_CTRL);
-+	val |= DW100_DEWARP_CTRL_ENABLE;
-+	val |= DW100_DEWARP_CTRL_SOFT_RESET;
-+	dw100_write(dw_dev, DW100_DEWARP_CTRL, val);
-+	val &= ~DW100_DEWARP_CTRL_SOFT_RESET;
-+	dw100_write(dw_dev, DW100_DEWARP_CTRL, val);
-+}
-+
-+static void _dw100_hw_set_master_bus_enable(struct dw100_device *dw_dev,
-+					    unsigned int enable)
-+{
-+	u32 val;
-+
-+	dev_dbg(&dw_dev->pdev->dev, "%sable master bus\n",
-+		enable ? "En" : "Dis");
-+
-+	val = dw100_read(dw_dev, DW100_BUS_CTRL);
-+
-+	if (enable)
-+		val |= DW100_BUS_CTRL_AXI_MASTER_ENABLE;
-+	else
-+		val &= ~DW100_BUS_CTRL_AXI_MASTER_ENABLE;
-+
-+	dw100_write(dw_dev, DW100_BUS_CTRL, val);
-+}
-+
-+static void dw100_hw_master_bus_enable(struct dw100_device *dw_dev)
-+{
-+	_dw100_hw_set_master_bus_enable(dw_dev, 1);
-+}
-+
-+static void dw100_hw_master_bus_disable(struct dw100_device *dw_dev)
-+{
-+	_dw100_hw_set_master_bus_enable(dw_dev, 0);
-+}
-+
-+static void dw100_hw_dewarp_start(struct dw100_device *dw_dev)
-+{
-+	u32 val;
-+
-+	val = dw100_read(dw_dev, DW100_DEWARP_CTRL);
-+
-+	dev_dbg(&dw_dev->pdev->dev, "Starting Hardware CTRL:0x%08x\n", val);
-+	dw100_write(dw_dev, DW100_DEWARP_CTRL, val | DW100_DEWARP_CTRL_START);
-+	dw100_write(dw_dev, DW100_DEWARP_CTRL, val);
-+}
-+
-+static void dw100_hw_init_ctrl(struct dw100_device *dw_dev)
-+{
-+	u32 val;
-+	/*
-+	 * Input format YUV422_SP
-+	 * Output format YUV422_SP
-+	 * No hardware handshake (SW)
-+	 * No automatic double src buffering (Single)
-+	 * No automatic double dst buffering (Single)
-+	 * No Black Line
-+	 * Prefetch image pixel traversal
-+	 */
-+
-+	val = DW100_DEWARP_CTRL_ENABLE
-+	    /* Valid only for auto prefetch mode*/
-+	    | DW100_DEWARP_CTRL_PREFETCH_THRESHOLD(32);
-+
-+	/*
-+	 * Calculation mode required to support any scaling factor,
-+	 * but x4 slower than traversal mode.
-+	 *
-+	 * DW100_DEWARP_CTRL_PREFETCH_MODE_TRAVERSAL
-+	 * DW100_DEWARP_CTRL_PREFETCH_MODE_CALCULATION
-+	 * DW100_DEWARP_CTRL_PREFETCH_MODE_AUTO
-+	 *
-+	 * TODO: Find heuristics requiring calculation mode
-+	 */
-+	val |= DW100_DEWARP_CTRL_PREFETCH_MODE_CALCULATION;
-+
-+	dw100_write(dw_dev, DW100_DEWARP_CTRL, val);
-+}
-+
-+static void dw100_hw_set_pixel_boundary(struct dw100_device *dw_dev)
-+{
-+	u32 val;
-+
-+	val = DW100_BOUNDARY_PIXEL_V(128)
-+		| DW100_BOUNDARY_PIXEL_U(128)
-+		| DW100_BOUNDARY_PIXEL_Y(0);
-+
-+	dw100_write(dw_dev, DW100_BOUNDARY_PIXEL, val);
-+}
-+
-+static void dw100_hw_set_scale(struct dw100_device *dw_dev, u8 scale)
-+{
-+	dev_dbg(&dw_dev->pdev->dev, "Setting scale factor to %u\n", scale);
-+
-+	dw100_write(dw_dev, DW100_SCALE_FACTOR, scale);
-+}
-+
-+static void dw100_hw_set_roi(struct dw100_device *dw_dev, u32 x, u32 y)
-+{
-+	u32 val;
-+
-+	dev_dbg(&dw_dev->pdev->dev, "Setting ROI region to %u.%u\n", x, y);
-+
-+	val = DW100_ROI_START_X(x) | DW100_ROI_START_Y(y);
-+
-+	dw100_write(dw_dev, DW100_ROI_START, val);
-+}
-+
-+static void dw100_hw_set_src_crop(struct dw100_device *dw_dev,
-+				  const struct dw100_q_data *src_q_data,
-+				  const struct dw100_q_data *dst_q_data)
-+{
-+	const struct v4l2_rect *rect = &src_q_data->crop;
-+	u32 src_scale, qscale, left_scale, top_scale;
-+
-+	/* HW Scale is UQ1.7 encoded */
-+	src_scale = (rect->width << 7) / src_q_data->pix_fmt.width;
-+	dw100_hw_set_scale(dw_dev, src_scale);
-+
-+	qscale = (dst_q_data->pix_fmt.width << 7)  / src_q_data->pix_fmt.width;
-+
-+	left_scale = ((rect->left << 7) * qscale) >> 14;
-+	top_scale = ((rect->top << 7) * qscale) >> 14;
-+
-+	dw100_hw_set_roi(dw_dev, left_scale, top_scale);
-+}
-+
-+static void dw100_hw_set_source(struct dw100_device *dw_dev,
-+				const struct dw100_q_data *q_data,
-+				struct vb2_buffer *buffer)
-+{
-+	u32 width, height, stride, fourcc, val;
-+	const struct dw100_fmt *fmt = q_data->fmt;
-+	dma_addr_t addr_y = vb2_dma_contig_plane_dma_addr(buffer, 0);
-+	dma_addr_t addr_uv;
-+
-+	width =  q_data->pix_fmt.width;
-+	height = q_data->pix_fmt.height;
-+	stride = q_data->pix_fmt.plane_fmt[0].bytesperline;
-+	fourcc = q_data->fmt->fourcc;
-+
-+	if (q_data->pix_fmt.num_planes == 2)
-+		addr_uv = vb2_dma_contig_plane_dma_addr(buffer, 1);
-+	else
-+		addr_uv = addr_y + (stride * height);
-+
-+	dev_dbg(&dw_dev->pdev->dev,
-+		"Set HW source registers for %ux%u - stride %u, pixfmt: %p4cc, dma:%pad\n",
-+		width, height, stride, &fourcc, &addr_y);
-+
-+	/* Pixel Format */
-+	val = dw100_read(dw_dev, DW100_DEWARP_CTRL);
-+
-+	val &= ~DW100_DEWARP_CTRL_INPUT_FORMAT_MASK;
-+	val |= DW100_DEWARP_CTRL_INPUT_FORMAT(fmt->reg_format);
-+
-+	dw100_write(dw_dev, DW100_DEWARP_CTRL, val);
-+
-+	/* Swap */
-+	val = dw100_read(dw_dev, DW100_SWAP_CONTROL);
-+
-+	val &= ~DW100_SWAP_CONTROL_SRC_MASK;
-+	/*
-+	 * Data swapping is performed only on Y plane for source image.
-+	 */
-+	if (fmt->reg_swap_uv &&
-+	    fmt->reg_format == DW100_DEWARP_CTRL_FORMAT_YUV422_PACKED)
-+		val |= DW100_SWAP_CONTROL_SRC(DW100_SWAP_CONTROL_Y
-+					      (DW100_SWAP_CONTROL_BYTE));
-+
-+	dw100_write(dw_dev, DW100_SWAP_CONTROL, val);
-+
-+	/* Image resolution */
-+	dw100_write(dw_dev, DW100_SRC_IMG_SIZE,
-+		    DW100_IMG_SIZE_WIDTH(width) | DW100_IMG_SIZE_HEIGHT(height));
-+
-+	dw100_write(dw_dev,  DW100_SRC_IMG_STRIDE, stride);
-+
-+	/* Buffers */
-+	dw100_write(dw_dev, DW100_SRC_IMG_Y_BASE, DW100_IMG_Y_BASE(addr_y));
-+	dw100_write(dw_dev, DW100_SRC_IMG_UV_BASE, DW100_IMG_UV_BASE(addr_uv));
-+}
-+
-+static void dw100_hw_set_destination(struct dw100_device *dw_dev,
-+				     const struct dw100_q_data *q_data,
-+				     const struct dw100_fmt *ifmt,
-+				     struct vb2_buffer *buffer)
-+{
-+	u32 width, height, stride, fourcc, val, size_y, size_uv;
-+	const struct dw100_fmt *fmt = q_data->fmt;
-+	dma_addr_t addr_y, addr_uv;
-+
-+	width =  q_data->pix_fmt.width;
-+	height = q_data->pix_fmt.height;
-+	stride = q_data->pix_fmt.plane_fmt[0].bytesperline;
-+	fourcc = fmt->fourcc;
-+
-+	addr_y = vb2_dma_contig_plane_dma_addr(buffer, 0);
-+	size_y = q_data->pix_fmt.plane_fmt[0].sizeimage;
-+
-+	if (q_data->pix_fmt.num_planes == 2) {
-+		addr_uv = vb2_dma_contig_plane_dma_addr(buffer, 1);
-+		size_uv = q_data->pix_fmt.plane_fmt[1].sizeimage;
-+	} else {
-+		addr_uv = addr_y + ALIGN(stride * height, 16);
-+		size_uv = size_y;
-+		if (fmt->reg_format == DW100_DEWARP_CTRL_FORMAT_YUV420_SP)
-+			size_uv /= 2;
-+	}
-+
-+	dev_dbg(&dw_dev->pdev->dev,
-+		"Set HW source registers for %ux%u - stride %u, pixfmt: %p4cc, dma:%pad\n",
-+		width, height, stride, &fourcc, &addr_y);
-+
-+	/* Pixel Format */
-+	val = dw100_read(dw_dev, DW100_DEWARP_CTRL);
-+
-+	val &= ~DW100_DEWARP_CTRL_OUTPUT_FORMAT_MASK;
-+	val |= DW100_DEWARP_CTRL_OUTPUT_FORMAT(fmt->reg_format);
-+
-+	dw100_write(dw_dev, DW100_DEWARP_CTRL, val);
-+
-+	/* Swap */
-+	val = dw100_read(dw_dev, DW100_SWAP_CONTROL);
-+
-+	val &= ~DW100_SWAP_CONTROL_DST_MASK;
-+
-+	/*
-+	 * Avoid to swap twice
-+	 */
-+	if (fmt->reg_swap_uv ^
-+	    (ifmt->reg_swap_uv && ifmt->reg_format !=
-+	     DW100_DEWARP_CTRL_FORMAT_YUV422_PACKED)) {
-+		if (fmt->reg_format == DW100_DEWARP_CTRL_FORMAT_YUV422_PACKED)
-+			val |= DW100_SWAP_CONTROL_DST(DW100_SWAP_CONTROL_Y
-+						      (DW100_SWAP_CONTROL_BYTE));
-+		else
-+			val |= DW100_SWAP_CONTROL_DST(DW100_SWAP_CONTROL_UV
-+						      (DW100_SWAP_CONTROL_BYTE));
-+	}
-+
-+	dw100_write(dw_dev, DW100_SWAP_CONTROL, val);
-+
-+	/* Image resolution */
-+	dw100_write(dw_dev, DW100_DST_IMG_SIZE,
-+		    DW100_IMG_SIZE_WIDTH(width) | DW100_IMG_SIZE_HEIGHT(height));
-+	dw100_write(dw_dev, DW100_DST_IMG_STRIDE, stride);
-+	dw100_write(dw_dev, DW100_DST_IMG_Y_BASE, DW100_IMG_Y_BASE(addr_y));
-+	dw100_write(dw_dev, DW100_DST_IMG_UV_BASE, DW100_IMG_UV_BASE(addr_uv));
-+	dw100_write(dw_dev, DW100_DST_IMG_Y_SIZE1, DW100_DST_IMG_Y_SIZE(size_y));
-+	dw100_write(dw_dev, DW100_DST_IMG_UV_SIZE1,
-+		    DW100_DST_IMG_UV_SIZE(size_uv));
-+}
-+
-+static void dw100_hw_set_mapping(struct dw100_device *dw_dev, dma_addr_t addr,
-+				 u32 width, u32 height)
-+{
-+	dev_dbg(&dw_dev->pdev->dev,
-+		"Set HW mapping registers for %ux%u addr:%pad",
-+		width, height, &addr);
-+
-+	dw100_write(dw_dev, DW100_MAP_LUT_ADDR, DW100_MAP_LUT_ADDR_ADDR(addr));
-+	dw100_write(dw_dev, DW100_MAP_LUT_SIZE, DW100_MAP_LUT_SIZE_WIDTH(width)
-+		    | DW100_MAP_LUT_SIZE_HEIGHT(height));
-+}
-+
-+static void dw100_hw_clear_irq(struct dw100_device *dw_dev, unsigned int irq)
-+{
-+	dw100_write(dw_dev, DW100_INTERRUPT_STATUS,
-+		    DW100_INTERRUPT_STATUS_INT_CLEAR(irq));
-+}
-+
-+static void dw100_hw_enable_irq(struct dw100_device *dw_dev)
-+{
-+	dw100_write(dw_dev, DW100_INTERRUPT_STATUS,
-+		    DW100_INTERRUPT_STATUS_INT_ENABLE_MASK);
-+}
-+
-+static void dw100_hw_disable_irq(struct dw100_device *dw_dev)
-+{
-+	dw100_write(dw_dev, DW100_INTERRUPT_STATUS, 0);
-+}
-+
-+static u32 dw_hw_get_pending_irqs(struct dw100_device *dw_dev)
-+{
-+	u32 val;
-+
-+	val = dw100_read(dw_dev, DW100_INTERRUPT_STATUS);
-+
-+	return DW100_INTERRUPT_STATUS_INT_STATUS(val);
-+}
-+
-+static irqreturn_t dw100_irq_handler(int irq, void *dev_id)
-+{
-+	struct dw100_device *dw_dev = dev_id;
-+	u32 pending_irqs, err_irqs, frame_done_irq;
-+	bool with_error = true;
-+
-+	pending_irqs = dw_hw_get_pending_irqs(dw_dev);
-+	frame_done_irq = pending_irqs & DW100_INTERRUPT_STATUS_INT_FRAME_DONE;
-+	err_irqs = DW100_INTERRUPT_STATUS_INT_ERR_STATUS(pending_irqs);
-+
-+	if (frame_done_irq) {
-+		dev_dbg(&dw_dev->pdev->dev, "Frame done interrupt\n");
-+		with_error = false;
-+		err_irqs &= ~DW100_INTERRUPT_STATUS_INT_ERR_STATUS
-+			(DW100_INTERRUPT_STATUS_INT_ERR_FRAME_DONE);
-+	}
-+
-+	if (err_irqs)
-+		dev_err(&dw_dev->pdev->dev, "Interrupt error: %#x\n", err_irqs);
-+
-+	dw100_hw_disable_irq(dw_dev);
-+	dw100_hw_master_bus_disable(dw_dev);
-+	dw100_hw_clear_irq(dw_dev, pending_irqs |
-+			   DW100_INTERRUPT_STATUS_INT_ERR_TIME_OUT);
-+
-+	dw100_job_finish(dw_dev, with_error);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static void dw100_start(struct dw100_ctx *ctx, struct vb2_v4l2_buffer *in_vb,
-+			struct vb2_v4l2_buffer *out_vb)
-+{
-+	struct dw100_device *dw_dev = ctx->dw_dev;
-+
-+	out_vb->sequence =
-+		dw100_get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)->sequence++;
-+	in_vb->sequence =
-+		dw100_get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE)->sequence++;
-+
-+	dev_dbg(&ctx->dw_dev->pdev->dev,
-+		"Starting queues %p->%p, sequence %u->%u\n",
-+		v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
-+				V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE),
-+		v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
-+				V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE),
-+		in_vb->sequence, out_vb->sequence);
-+
-+	v4l2_m2m_buf_copy_metadata(in_vb, out_vb, true);
-+
-+	/* Now, let's deal with hardware ... */
-+	dw100_hw_master_bus_disable(dw_dev);
-+	dw100_hw_init_ctrl(dw_dev);
-+	dw100_hw_set_pixel_boundary(dw_dev);
-+	dw100_hw_set_src_crop(dw_dev, &ctx->q_data[DW100_QUEUE_SRC],
-+			      &ctx->q_data[DW100_QUEUE_DST]);
-+	dw100_hw_set_source(dw_dev, &ctx->q_data[DW100_QUEUE_SRC],
-+			    &in_vb->vb2_buf);
-+	dw100_hw_set_destination(dw_dev, &ctx->q_data[DW100_QUEUE_DST],
-+				 ctx->q_data[DW100_QUEUE_SRC].fmt,
-+				 &out_vb->vb2_buf);
-+	dw100_hw_set_mapping(dw_dev, ctx->map_dma,
-+			     ctx->map_width, ctx->map_height);
-+	dw100_hw_enable_irq(dw_dev);
-+	dw100_hw_dewarp_start(dw_dev);
-+
-+	/* Enable Bus */
-+	dw100_hw_master_bus_enable(dw_dev);
-+}
-+
-+static void dw100_device_run(void *priv)
-+{
-+	struct dw100_ctx *ctx = priv;
-+	struct vb2_v4l2_buffer *src_buf, *dst_buf;
-+
-+	src_buf = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
-+	dst_buf = v4l2_m2m_next_dst_buf(ctx->fh.m2m_ctx);
-+
-+	dw100_start(ctx, src_buf, dst_buf);
-+}
-+
-+static const struct v4l2_m2m_ops dw100_m2m_ops = {
-+	.device_run	= dw100_device_run,
-+};
-+
-+static struct video_device *dw100_init_video_device(struct dw100_device *dw_dev)
-+{
-+	struct video_device *vfd = &dw_dev->vfd;
-+
-+	vfd->vfl_dir = VFL_DIR_M2M;
-+	vfd->fops = &dw100_fops;
-+	vfd->device_caps = V4L2_CAP_VIDEO_M2M_MPLANE | V4L2_CAP_STREAMING;
-+	vfd->ioctl_ops = &dw100_ioctl_ops;
-+	vfd->minor = -1;
-+	vfd->release = video_device_release_empty;
-+	vfd->v4l2_dev = &dw_dev->v4l2_dev;
-+	vfd->lock = &dw_dev->vfd_mutex;
-+
-+	strscpy(vfd->name, DRV_NAME, sizeof(vfd->name));
-+	mutex_init(vfd->lock);
-+	video_set_drvdata(vfd, dw_dev);
-+
-+	return vfd;
-+}
-+
-+static int dw100_dump_regs_show(struct seq_file *m, void *private)
-+{
-+	struct dw100_device *dw_dev = m->private;
-+	int ret;
-+
-+	ret = pm_runtime_resume_and_get(&dw_dev->pdev->dev);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = dw100_dump_regs(m);
-+
-+	pm_runtime_put_sync(&dw_dev->pdev->dev);
-+
-+	return ret;
-+}
-+DEFINE_SHOW_ATTRIBUTE(dw100_dump_regs);
-+
-+static void dw100_debugfs_init(struct dw100_device *dw_dev)
-+{
-+	dw_dev->debugfs_root =
-+		debugfs_create_dir(dev_name(&dw_dev->pdev->dev), NULL);
-+
-+	debugfs_create_file("dump_regs", 0600, dw_dev->debugfs_root, dw_dev,
-+			    &dw100_dump_regs_fops);
-+}
-+
-+static void dw100_debugfs_exit(struct dw100_device *dw_dev)
-+{
-+	debugfs_remove_recursive(dw_dev->debugfs_root);
-+}
-+
-+static int dw100_probe(struct platform_device *pdev)
-+{
-+	struct dw100_device *dw_dev;
-+	struct video_device *vfd;
-+	struct resource *res;
-+	int ret, irq;
-+
-+	dw_dev = devm_kzalloc(&pdev->dev, sizeof(*dw_dev), GFP_KERNEL);
-+	if (!dw_dev)
-+		return -ENOMEM;
-+	dw_dev->pdev = pdev;
-+
-+	ret = devm_clk_bulk_get_all(&pdev->dev, &dw_dev->clks);
-+	if (ret < 0) {
-+		dev_err(&pdev->dev, "Unable to get clocks: %d\n", ret);
-+		return ret;
-+	}
-+	dw_dev->num_clks = ret;
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	dw_dev->mmio = devm_ioremap_resource(&pdev->dev, res);
-+	if (IS_ERR(dw_dev->mmio))
-+		return PTR_ERR(dw_dev->mmio);
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
-+
-+	platform_set_drvdata(pdev, dw_dev);
-+
-+	pm_runtime_enable(&pdev->dev);
-+	ret = pm_runtime_resume_and_get(&pdev->dev);
-+	if (ret < 0) {
-+		dev_err(&pdev->dev, "Unable to resume the device: %d\n", ret);
-+		goto err_pm;
-+	}
-+
-+	pm_runtime_put_sync(&pdev->dev);
-+
-+	ret = devm_request_irq(&pdev->dev, irq, dw100_irq_handler, IRQF_ONESHOT,
-+			       dev_name(&pdev->dev), dw_dev);
-+	if (ret < 0) {
-+		dev_err(&pdev->dev, "Failed to request irq: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = v4l2_device_register(&pdev->dev, &dw_dev->v4l2_dev);
-+	if (ret)
-+		goto err_pm;
-+
-+	vfd = dw100_init_video_device(dw_dev);
-+
-+	dw_dev->m2m_dev = v4l2_m2m_init(&dw100_m2m_ops);
-+	if (IS_ERR(dw_dev->m2m_dev)) {
-+		dev_err(&pdev->dev, "Failed to init mem2mem device\n");
-+		ret = PTR_ERR(dw_dev->m2m_dev);
-+		goto err_v4l2;
-+	}
-+
-+	dw_dev->mdev.dev = &pdev->dev;
-+	strscpy(dw_dev->mdev.model, "dw100", sizeof(dw_dev->mdev.model));
-+	media_device_init(&dw_dev->mdev);
-+	dw_dev->v4l2_dev.mdev = &dw_dev->mdev;
-+
-+	ret = video_register_device(vfd, VFL_TYPE_VIDEO, -1);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Failed to register video device\n");
-+		goto err_m2m;
-+	}
-+
-+	ret = v4l2_m2m_register_media_controller(dw_dev->m2m_dev, vfd,
-+						 MEDIA_ENT_F_PROC_VIDEO_SCALER);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Failed to init mem2mem media controller\n");
-+		goto error_v4l2;
-+	}
-+
-+	ret = media_device_register(&dw_dev->mdev);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Failed to register mem2mem media device\n");
-+		goto error_m2m_mc;
-+	}
-+
-+	dw100_debugfs_init(dw_dev);
-+
-+	dev_info(&pdev->dev,
-+		 "dw100 v4l2 m2m registered as /dev/video%u\n", vfd->num);
-+
-+	return 0;
-+
-+error_m2m_mc:
-+	v4l2_m2m_unregister_media_controller(dw_dev->m2m_dev);
-+error_v4l2:
-+	video_unregister_device(vfd);
-+err_m2m:
-+	v4l2_m2m_release(dw_dev->m2m_dev);
-+err_v4l2:
-+	v4l2_device_unregister(&dw_dev->v4l2_dev);
-+err_pm:
-+	pm_runtime_disable(&pdev->dev);
-+
-+	return ret;
-+}
-+
-+static int dw100_remove(struct platform_device *pdev)
-+{
-+	struct dw100_device *dw_dev = platform_get_drvdata(pdev);
-+
-+	dw100_debugfs_exit(dw_dev);
-+
-+	pm_runtime_disable(&pdev->dev);
-+
-+	media_device_unregister(&dw_dev->mdev);
-+	v4l2_m2m_unregister_media_controller(dw_dev->m2m_dev);
-+	media_device_cleanup(&dw_dev->mdev);
-+
-+	video_unregister_device(&dw_dev->vfd);
-+	mutex_destroy(dw_dev->vfd.lock);
-+	v4l2_m2m_release(dw_dev->m2m_dev);
-+	v4l2_device_unregister(&dw_dev->v4l2_dev);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused dw100_runtime_suspend(struct device *dev)
-+{
-+	struct dw100_device *dw_dev = dev_get_drvdata(dev);
-+
-+	clk_bulk_disable_unprepare(dw_dev->num_clks, dw_dev->clks);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused dw100_runtime_resume(struct device *dev)
-+{
-+	int ret;
-+	struct dw100_device *dw_dev = dev_get_drvdata(dev);
-+
-+	ret = clk_bulk_prepare_enable(dw_dev->num_clks, dw_dev->clks);
-+
-+	if (ret)
-+		return ret;
-+
-+	dw100_hw_reset(dw_dev);
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops dw100_pm = {
-+	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
-+				pm_runtime_force_resume)
-+	SET_RUNTIME_PM_OPS(dw100_runtime_suspend,
-+			   dw100_runtime_resume, NULL)
-+};
-+
-+static const struct of_device_id dw100_dt_ids[] = {
-+	{ .compatible = "nxp,imx8mp-dw100", .data = NULL },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, dw100_dt_ids);
-+
-+static struct platform_driver dw100_driver = {
-+	.probe		= dw100_probe,
-+	.remove		= dw100_remove,
-+	.driver		= {
-+		.name	= DRV_NAME,
-+		.pm = &dw100_pm,
-+		.of_match_table = dw100_dt_ids,
-+	},
-+};
-+
-+module_platform_driver(dw100_driver);
-+
-+MODULE_DESCRIPTION("DW100 Hardware dewarper");
-+MODULE_AUTHOR("Xavier Roumegue <Xavier.Roumegue@oss.nxp.com>");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/media/platform/nxp/dw100/dw100_regs.h b/drivers/media/platform/nxp/dw100/dw100_regs.h
-new file mode 100644
-index 000000000000..e85dfeff9056
---- /dev/null
-+++ b/drivers/media/platform/nxp/dw100/dw100_regs.h
-@@ -0,0 +1,117 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+/*
-+ * DW100 Hardware dewarper
-+ *
-+ * Copyright 2022 NXP
-+ * Author: Xavier Roumegue (xavier.roumegue@oss.nxp.com)
-+ */
-+
-+#ifndef _DW100_REGS_H_
-+#define _DW100_REGS_H_
-+
-+/* AHB register offset */
-+#define DW100_DEWARP_ID			0x00
-+#define DW100_DEWARP_CTRL		0x04
-+#define DW100_DEWARP_CTRL_ENABLE			BIT(0)
-+#define DW100_DEWARP_CTRL_START				BIT(1)
-+#define DW100_DEWARP_CTRL_SOFT_RESET			BIT(2)
-+#define DW100_DEWARP_CTRL_FORMAT_YUV422_SP		0UL
-+#define DW100_DEWARP_CTRL_FORMAT_YUV422_PACKED		1UL
-+#define DW100_DEWARP_CTRL_FORMAT_YUV420_SP		2UL
-+#define DW100_DEWARP_CTRL_INPUT_FORMAT_MASK		GENMASK(5, 4)
-+#define DW100_DEWARP_CTRL_INPUT_FORMAT(x)		((x) << 4)
-+#define DW100_DEWARP_CTRL_OUTPUT_FORMAT(x)		((x) << 6)
-+#define DW100_DEWARP_CTRL_OUTPUT_FORMAT_MASK		GENMASK(7, 6)
-+#define DW100_DEWARP_CTRL_SRC_AUTO_SHADOW		BIT(8)
-+#define DW100_DEWARP_CTRL_HW_HANDSHAKE			BIT(9)
-+#define DW100_DEWARP_CTRL_DST_AUTO_SHADOW		BIT(10)
-+#define DW100_DEWARP_CTRL_SPLIT_LINE			BIT(11)
-+#define DW100_DEWARP_CTRL_PREFETCH_MODE_MASK		GENMASK(17, 16)
-+#define DW100_DEWARP_CTRL_PREFETCH_MODE_TRAVERSAL	(0UL << 16)
-+#define DW100_DEWARP_CTRL_PREFETCH_MODE_CALCULATION	(1UL << 16)
-+#define DW100_DEWARP_CTRL_PREFETCH_MODE_AUTO		(2UL << 16)
-+#define DW100_DEWARP_CTRL_PREFETCH_THRESHOLD_MASK	GENMASK(24, 18)
-+#define DW100_DEWARP_CTRL_PREFETCH_THRESHOLD(x)		((x) << 18)
-+
-+#define DW100_MAP_LUT_ADDR		0x08
-+#define DW100_MAP_LUT_ADDR_ADDR(addr)	(((addr) >> 4) & GENMASK(29, 0))
-+#define DW100_MAP_LUT_SIZE		0x0c
-+#define DW100_MAP_LUT_SIZE_WIDTH(w)	(((w) & GENMASK(10, 0)) << 0)
-+#define DW100_MAP_LUT_SIZE_HEIGHT(h)	(((h) & GENMASK(10, 0)) << 16)
-+#define DW100_SRC_IMG_Y_BASE		0x10
-+#define DW100_IMG_Y_BASE(base)		(((base) >> 4) & GENMASK(29, 0))
-+#define DW100_SRC_IMG_UV_BASE		0x14
-+#define DW100_IMG_UV_BASE(base)		(((base) >> 4) & GENMASK(29, 0))
-+#define DW100_SRC_IMG_SIZE		0x18
-+#define DW100_IMG_SIZE_WIDTH(w)		(((w) & GENMASK(12, 0)) << 0)
-+#define DW100_IMG_SIZE_HEIGHT(h)	(((h) & GENMASK(12, 0)) << 16)
-+
-+#define DW100_SRC_IMG_STRIDE		0x1c
-+#define DW100_MAP_LUT_ADDR2		0x20
-+#define DW100_MAP_LUT_SIZE2		0x24
-+#define DW100_SRC_IMG_Y_BASE2		0x28
-+#define DW100_SRC_IMG_UV_BASE2		0x2c
-+#define DW100_SRC_IMG_SIZE2		0x30
-+#define DW100_SRC_IMG_STRIDE2		0x34
-+#define DW100_DST_IMG_Y_BASE		0x38
-+#define DW100_DST_IMG_UV_BASE		0x3c
-+#define DW100_DST_IMG_SIZE		0x40
-+#define DW100_DST_IMG_STRIDE		0x44
-+#define DW100_DST_IMG_Y_BASE2		0x48
-+#define DW100_DST_IMG_UV_BASE2		0x4c
-+#define DW100_DST_IMG_SIZE2		0x50
-+#define DW100_DST_IMG_STRIDE2		0x54
-+#define DW100_SWAP_CONTROL		0x58
-+#define DW100_SWAP_CONTROL_BYTE		BIT(0)
-+#define DW100_SWAP_CONTROL_SHORT	BIT(1)
-+#define DW100_SWAP_CONTROL_WORD		BIT(2)
-+#define DW100_SWAP_CONTROL_LONG		BIT(3)
-+#define DW100_SWAP_CONTROL_Y(x)		(((x) & GENMASK(3, 0)) << 0)
-+#define DW100_SWAP_CONTROL_UV(x)	(((x) & GENMASK(3, 0)) << 4)
-+#define DW100_SWAP_CONTROL_SRC(x)	(((x) & GENMASK(7, 0)) << 0)
-+#define DW100_SWAP_CONTROL_DST(x)	(((x) & GENMASK(7, 0)) << 8)
-+#define DW100_SWAP_CONTROL_SRC2(x)	(((x) & GENMASK(7, 0)) << 16)
-+#define DW100_SWAP_CONTROL_DST2(x)	(((x) & GENMASK(7, 0)) << 24)
-+#define DW100_SWAP_CONTROL_SRC_MASK	GENMASK(7, 0)
-+#define DW100_SWAP_CONTROL_DST_MASK	GENMASK(15, 8)
-+#define DW100_SWAP_CONTROL_SRC2_MASK	GENMASK(23, 16)
-+#define DW100_SWAP_CONTROL_DST2_MASK	GENMASK(31, 24)
-+#define DW100_VERTICAL_SPLIT_LINE	0x5c
-+#define DW100_HORIZON_SPLIT_LINE	0x60
-+#define DW100_SCALE_FACTOR		0x64
-+#define DW100_ROI_START			0x68
-+#define DW100_ROI_START_X(x)		(((x) & GENMASK(12, 0)) << 0)
-+#define DW100_ROI_START_Y(y)		(((y) & GENMASK(12, 0)) << 16)
-+#define DW100_BOUNDARY_PIXEL		0x6c
-+#define DW100_BOUNDARY_PIXEL_V(v)	(((v) & GENMASK(7, 0)) << 0)
-+#define DW100_BOUNDARY_PIXEL_U(u)	(((u) & GENMASK(7, 0)) << 8)
-+#define DW100_BOUNDARY_PIXEL_Y(y)	(((y) & GENMASK(7, 0)) << 16)
-+
-+#define DW100_INTERRUPT_STATUS		0x70
-+#define DW100_INTERRUPT_STATUS_INT_FRAME_DONE		BIT(0)
-+#define DW100_INTERRUPT_STATUS_INT_ERR_TIME_OUT		BIT(1)
-+#define DW100_INTERRUPT_STATUS_INT_ERR_AXI_RESP		BIT(2)
-+#define DW100_INTERRUPT_STATUS_INT_ERR_X		BIT(3)
-+#define DW100_INTERRUPT_STATUS_INT_ERR_MB_FETCH		BIT(4)
-+#define DW100_INTERRUPT_STATUS_INT_ERR_FRAME2		BIT(5)
-+#define DW100_INTERRUPT_STATUS_INT_ERR_FRAME3		BIT(6)
-+#define DW100_INTERRUPT_STATUS_INT_ERR_FRAME_DONE	BIT(7)
-+#define DW100_INTERRUPT_STATUS_INT_ERR_STATUS(x)	(((x) >> 1) & 0x7f)
-+#define DW100_INTERRUPT_STATUS_INT_STATUS(x)		((x) & 0xff)
-+
-+#define DW100_INTERRUPT_STATUS_INT_ENABLE_MASK		GENMASK(15, 8)
-+#define DW100_INTERRUPT_STATUS_INT_ENABLE(x)		(((x) & GENMASK(7, 0)) << 8)
-+#define DW100_INTERRUPT_STATUS_FRAME_BUSY		BIT(16)
-+#define DW100_INTERRUPT_STATUS_INT_CLEAR(x)		(((x) & GENMASK(7, 0)) << 24)
-+#define DW100_BUS_CTRL			0x74
-+#define DW100_BUS_CTRL_AXI_MASTER_ENABLE	BIT(31)
-+#define DW100_BUS_CTRL1			0x78
-+#define DW100_BUS_TIME_OUT_CYCLE	0x7c
-+#define DW100_DST_IMG_Y_SIZE1		0x80
-+#define DW100_DST_IMG_Y_SIZE(sz)	(((sz) >> 4) & GENMASK(29, 0))
-+#define DW100_DST_IMG_UV_SIZE(sz)	(((sz) >> 4) & GENMASK(29, 0))
-+#define DW100_DST_IMG_UV_SIZE1		0x84
-+#define DW100_DST_IMG_Y_SIZE2		0x88
-+#define DW100_DST_IMG_UV_SIZE2		0x8c
-+
-+#endif /* _DW100_REGS_H_ */
+ static inline struct v4l2_subdev *adv748x_get_remote_sd(struct media_pad *pad)
+ {
+-	pad = media_entity_remote_pad(pad);
++	pad = media_pad_remote_pad_first(pad);
+ 	if (!pad)
+ 		return NULL;
+ 
+diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
+index 65472438444b..93a980c4e899 100644
+--- a/drivers/media/i2c/tvp5150.c
++++ b/drivers/media/i2c/tvp5150.c
+@@ -1285,7 +1285,7 @@ static int tvp5150_disable_all_input_links(struct tvp5150 *decoder)
+ 	int err;
+ 
+ 	for (i = 0; i < TVP5150_NUM_PADS - 1; i++) {
+-		connector_pad = media_entity_remote_pad(&decoder->pads[i]);
++		connector_pad = media_pad_remote_pad_first(&decoder->pads[i]);
+ 		if (!connector_pad)
+ 			continue;
+ 
+diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+index 11f5207f73aa..55076fea7b58 100644
+--- a/drivers/media/mc/mc-entity.c
++++ b/drivers/media/mc/mc-entity.c
+@@ -900,7 +900,7 @@ media_entity_find_link(struct media_pad *source, struct media_pad *sink)
+ }
+ EXPORT_SYMBOL_GPL(media_entity_find_link);
+ 
+-struct media_pad *media_entity_remote_pad(const struct media_pad *pad)
++struct media_pad *media_pad_remote_pad_first(const struct media_pad *pad)
+ {
+ 	struct media_link *link;
+ 
+@@ -918,7 +918,7 @@ struct media_pad *media_entity_remote_pad(const struct media_pad *pad)
+ 	return NULL;
+ 
+ }
+-EXPORT_SYMBOL_GPL(media_entity_remote_pad);
++EXPORT_SYMBOL_GPL(media_pad_remote_pad_first);
+ 
+ static void media_interface_init(struct media_device *mdev,
+ 				 struct media_interface *intf,
+diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
+index dbdbdb648a0d..a3fe547b7fce 100644
+--- a/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
++++ b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
+@@ -1323,7 +1323,7 @@ static int cio2_video_link_validate(struct media_link *link)
+ 	struct v4l2_subdev_format source_fmt;
+ 	int ret;
+ 
+-	if (!media_entity_remote_pad(entity->pads)) {
++	if (!media_pad_remote_pad_first(entity->pads)) {
+ 		dev_info(dev, "video node %s pad not connected\n", vd->name);
+ 		return -ENOTCONN;
+ 	}
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
+index 80628801cf09..88f188e0f750 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid.c
++++ b/drivers/media/platform/qcom/camss/camss-csid.c
+@@ -245,7 +245,7 @@ static int csid_set_stream(struct v4l2_subdev *sd, int enable)
+ 		}
+ 
+ 		if (!csid->testgen.enabled &&
+-		    !media_entity_remote_pad(&csid->pads[MSM_CSID_PAD_SINK]))
++		    !media_pad_remote_pad_first(&csid->pads[MSM_CSID_PAD_SINK]))
+ 			return -ENOLINK;
+ 	}
+ 
+@@ -518,7 +518,7 @@ static int csid_set_test_pattern(struct csid_device *csid, s32 value)
+ 	struct csid_testgen_config *tg = &csid->testgen;
+ 
+ 	/* If CSID is linked to CSIPHY, do not allow to enable test generator */
+-	if (value && media_entity_remote_pad(&csid->pads[MSM_CSID_PAD_SINK]))
++	if (value && media_pad_remote_pad_first(&csid->pads[MSM_CSID_PAD_SINK]))
+ 		return -EBUSY;
+ 
+ 	tg->enabled = !!value;
+@@ -729,7 +729,7 @@ static int csid_link_setup(struct media_entity *entity,
+ 			   const struct media_pad *remote, u32 flags)
+ {
+ 	if (flags & MEDIA_LNK_FL_ENABLED)
+-		if (media_entity_remote_pad(local))
++		if (media_pad_remote_pad_first(local))
+ 			return -EBUSY;
+ 
+ 	if ((local->flags & MEDIA_PAD_FL_SINK) &&
+diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
+index 75fcfc627400..3f726a7237f5 100644
+--- a/drivers/media/platform/qcom/camss/camss-csiphy.c
++++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
+@@ -693,7 +693,7 @@ static int csiphy_link_setup(struct media_entity *entity,
+ 		struct csiphy_device *csiphy;
+ 		struct csid_device *csid;
+ 
+-		if (media_entity_remote_pad(local))
++		if (media_pad_remote_pad_first(local))
+ 			return -EBUSY;
+ 
+ 		sd = media_entity_to_v4l2_subdev(entity);
+diff --git a/drivers/media/platform/qcom/camss/camss-ispif.c b/drivers/media/platform/qcom/camss/camss-ispif.c
+index 91e6a2b9ac50..b713f5b86aba 100644
+--- a/drivers/media/platform/qcom/camss/camss-ispif.c
++++ b/drivers/media/platform/qcom/camss/camss-ispif.c
+@@ -812,7 +812,7 @@ static int ispif_set_stream(struct v4l2_subdev *sd, int enable)
+ 	int ret;
+ 
+ 	if (enable) {
+-		if (!media_entity_remote_pad(&line->pads[MSM_ISPIF_PAD_SINK]))
++		if (!media_pad_remote_pad_first(&line->pads[MSM_ISPIF_PAD_SINK]))
+ 			return -ENOLINK;
+ 
+ 		/* Config */
+@@ -1301,7 +1301,7 @@ static int ispif_link_setup(struct media_entity *entity,
+ 			    const struct media_pad *remote, u32 flags)
+ {
+ 	if (flags & MEDIA_LNK_FL_ENABLED) {
+-		if (media_entity_remote_pad(local))
++		if (media_pad_remote_pad_first(local))
+ 			return -EBUSY;
+ 
+ 		if (local->flags & MEDIA_PAD_FL_SINK) {
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+index 76e28b832568..a26e4a5d87b6 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+@@ -1436,7 +1436,7 @@ static int vfe_link_setup(struct media_entity *entity,
+ 			  const struct media_pad *remote, u32 flags)
+ {
+ 	if (flags & MEDIA_LNK_FL_ENABLED)
+-		if (media_entity_remote_pad(local))
++		if (media_pad_remote_pad_first(local))
+ 			return -EBUSY;
+ 
+ 	return 0;
+diff --git a/drivers/media/platform/qcom/camss/camss-video.c b/drivers/media/platform/qcom/camss/camss-video.c
+index 307bb1dc4589..290df04c4d02 100644
+--- a/drivers/media/platform/qcom/camss/camss-video.c
++++ b/drivers/media/platform/qcom/camss/camss-video.c
+@@ -328,7 +328,7 @@ static struct v4l2_subdev *video_remote_subdev(struct camss_video *video,
+ {
+ 	struct media_pad *remote;
+ 
+-	remote = media_entity_remote_pad(&video->pad);
++	remote = media_pad_remote_pad_first(&video->pad);
+ 
+ 	if (!remote || !is_media_entity_v4l2_subdev(remote->entity))
+ 		return NULL;
+@@ -507,7 +507,7 @@ static int video_start_streaming(struct vb2_queue *q, unsigned int count)
+ 		if (!(pad->flags & MEDIA_PAD_FL_SINK))
+ 			break;
+ 
+-		pad = media_entity_remote_pad(pad);
++		pad = media_pad_remote_pad_first(pad);
+ 		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
+ 			break;
+ 
+@@ -543,7 +543,7 @@ static void video_stop_streaming(struct vb2_queue *q)
+ 		if (!(pad->flags & MEDIA_PAD_FL_SINK))
+ 			break;
+ 
+-		pad = media_entity_remote_pad(pad);
++		pad = media_pad_remote_pad_first(pad);
+ 		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
+ 			break;
+ 
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index 932968e5f1e5..1118c40886d5 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -937,7 +937,7 @@ struct media_entity *camss_find_sensor(struct media_entity *entity)
+ 		if (!(pad->flags & MEDIA_PAD_FL_SINK))
+ 			return NULL;
+ 
+-		pad = media_entity_remote_pad(pad);
++		pad = media_pad_remote_pad_first(pad);
+ 		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
+ 			return NULL;
+ 
+diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-core.c b/drivers/media/platform/renesas/rcar-vin/rcar-core.c
+index 4b7a9743554a..968a74234e92 100644
+--- a/drivers/media/platform/renesas/rcar-vin/rcar-core.c
++++ b/drivers/media/platform/renesas/rcar-vin/rcar-core.c
+@@ -845,7 +845,7 @@ static int rvin_csi2_link_notify(struct media_link *link, u32 flags,
+ 				continue;
+ 
+ 			/* Get remote CSI-2, if any. */
+-			csi_pad = media_entity_remote_pad(
++			csi_pad = media_pad_remote_pad_first(
+ 					&group->vin[i]->vdev.entity.pads[0]);
+ 			if (!csi_pad)
+ 				continue;
+diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-csi2.c b/drivers/media/platform/renesas/rcar-vin/rcar-csi2.c
+index fea8f00a9152..174aa6176f54 100644
+--- a/drivers/media/platform/renesas/rcar-vin/rcar-csi2.c
++++ b/drivers/media/platform/renesas/rcar-vin/rcar-csi2.c
+@@ -1313,7 +1313,7 @@ static int rcsi2_link_setup(struct media_entity *entity,
+ 	channel = id % 4;
+ 
+ 	if (flags & MEDIA_LNK_FL_ENABLED) {
+-		if (media_entity_remote_pad(local)) {
++		if (media_pad_remote_pad_first(local)) {
+ 			dev_dbg(priv->dev,
+ 				"Each VC can only be routed to one output channel\n");
+ 			return -EINVAL;
+diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-dma.c b/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
+index 6644b498929d..8d37fbdc266a 100644
+--- a/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
++++ b/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
+@@ -1258,7 +1258,7 @@ static int rvin_set_stream(struct rvin_dev *vin, int on)
+ 		return ret == -ENOIOCTLCMD ? 0 : ret;
+ 	}
+ 
+-	pad = media_entity_remote_pad(&vin->pad);
++	pad = media_pad_remote_pad_first(&vin->pad);
+ 	if (!pad)
+ 		return -EPIPE;
+ 
+diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c b/drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c
+index 2e2aa9d746ee..576059f9bbe3 100644
+--- a/drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c
++++ b/drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c
+@@ -1032,7 +1032,7 @@ static void rvin_notify(struct v4l2_subdev *sd,
+ 		if (!vin)
+ 			continue;
+ 
+-		pad = media_entity_remote_pad(&vin->pad);
++		pad = media_pad_remote_pad_first(&vin->pad);
+ 		if (!pad)
+ 			continue;
+ 
+diff --git a/drivers/media/platform/renesas/vsp1/vsp1_entity.c b/drivers/media/platform/renesas/vsp1/vsp1_entity.c
+index a116a3362f9e..4c3bd2b1ca28 100644
+--- a/drivers/media/platform/renesas/vsp1/vsp1_entity.c
++++ b/drivers/media/platform/renesas/vsp1/vsp1_entity.c
+@@ -516,8 +516,8 @@ int vsp1_entity_link_setup(struct media_entity *entity,
+  * higher than one for the data pipelines, except for the links to the HGO and
+  * HGT that can be enabled in addition to a regular data link. When traversing
+  * outgoing links this function ignores HGO and HGT entities and should thus be
+- * used in place of the generic media_entity_remote_pad() function to traverse
+- * data pipelines.
++ * used in place of the generic media_pad_remote_pad_first() function to
++ * traverse data pipelines.
+  *
+  * Return a pointer to the pad at the remote end of the first found enabled
+  * link, or NULL if no enabled link has been found.
+diff --git a/drivers/media/platform/renesas/vsp1/vsp1_video.c b/drivers/media/platform/renesas/vsp1/vsp1_video.c
+index 51219b1b6ea9..e8e0ee5f2277 100644
+--- a/drivers/media/platform/renesas/vsp1/vsp1_video.c
++++ b/drivers/media/platform/renesas/vsp1/vsp1_video.c
+@@ -50,7 +50,7 @@ vsp1_video_remote_subdev(struct media_pad *local, u32 *pad)
+ {
+ 	struct media_pad *remote;
+ 
+-	remote = media_entity_remote_pad(local);
++	remote = media_pad_remote_pad_first(local);
+ 	if (!remote || !is_media_entity_v4l2_subdev(remote->entity))
+ 		return NULL;
+ 
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
+index 187d78075acb..a97c145bad98 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
+@@ -200,7 +200,7 @@ static struct v4l2_subdev *rkisp1_get_remote_sensor(struct v4l2_subdev *sd)
+ 	struct media_entity *sensor_me;
+ 
+ 	local = &sd->entity.pads[RKISP1_ISP_PAD_SINK_VIDEO];
+-	remote = media_entity_remote_pad(local);
++	remote = media_pad_remote_pad_first(local);
+ 	if (!remote)
+ 		return NULL;
+ 
+diff --git a/drivers/media/platform/samsung/exynos4-is/common.c b/drivers/media/platform/samsung/exynos4-is/common.c
+index 26ee2388edfd..e41333535eac 100644
+--- a/drivers/media/platform/samsung/exynos4-is/common.c
++++ b/drivers/media/platform/samsung/exynos4-is/common.c
+@@ -21,7 +21,7 @@ struct v4l2_subdev *fimc_find_remote_sensor(struct media_entity *entity)
+ 
+ 	while (pad->flags & MEDIA_PAD_FL_SINK) {
+ 		/* source pad */
+-		pad = media_entity_remote_pad(pad);
++		pad = media_pad_remote_pad_first(pad);
+ 		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
+ 			break;
+ 
+diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-capture.c b/drivers/media/platform/samsung/exynos4-is/fimc-capture.c
+index 7ff4024003f4..03638c8f772d 100644
+--- a/drivers/media/platform/samsung/exynos4-is/fimc-capture.c
++++ b/drivers/media/platform/samsung/exynos4-is/fimc-capture.c
+@@ -737,7 +737,7 @@ static struct media_entity *fimc_pipeline_get_head(struct media_entity *me)
+ 	struct media_pad *pad = &me->pads[0];
+ 
+ 	while (!(pad->flags & MEDIA_PAD_FL_SOURCE)) {
+-		pad = media_entity_remote_pad(pad);
++		pad = media_pad_remote_pad_first(pad);
+ 		if (!pad)
+ 			break;
+ 		me = pad->entity;
+@@ -810,7 +810,7 @@ static int fimc_pipeline_try_format(struct fimc_ctx *ctx,
+ 					return ret;
+ 			}
+ 
+-			pad = media_entity_remote_pad(&me->pads[sfmt.pad]);
++			pad = media_pad_remote_pad_first(&me->pads[sfmt.pad]);
+ 			if (!pad)
+ 				return -EINVAL;
+ 			me = pad->entity;
+@@ -1115,7 +1115,7 @@ static int fimc_pipeline_validate(struct fimc_dev *fimc)
+ 
+ 			if (p->flags & MEDIA_PAD_FL_SINK) {
+ 				sink_pad = p;
+-				src_pad = media_entity_remote_pad(sink_pad);
++				src_pad = media_pad_remote_pad_first(sink_pad);
+ 				if (src_pad)
+ 					break;
+ 			}
+diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-isp-video.c b/drivers/media/platform/samsung/exynos4-is/fimc-isp-video.c
+index 83688a7982f7..8f12240b0eb7 100644
+--- a/drivers/media/platform/samsung/exynos4-is/fimc-isp-video.c
++++ b/drivers/media/platform/samsung/exynos4-is/fimc-isp-video.c
+@@ -465,7 +465,7 @@ static int isp_video_pipeline_validate(struct fimc_isp *isp)
+ 			return -EPIPE;
+ 
+ 		/* Retrieve format at the source pad */
+-		pad = media_entity_remote_pad(pad);
++		pad = media_pad_remote_pad_first(pad);
+ 		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
+ 			break;
+ 
+diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-lite.c b/drivers/media/platform/samsung/exynos4-is/fimc-lite.c
+index 1a396b7cd9a9..41b0a4a5929a 100644
+--- a/drivers/media/platform/samsung/exynos4-is/fimc-lite.c
++++ b/drivers/media/platform/samsung/exynos4-is/fimc-lite.c
+@@ -789,7 +789,7 @@ static int fimc_pipeline_validate(struct fimc_lite *fimc)
+ 				return -EPIPE;
+ 		}
+ 		/* Retrieve format at the source pad */
+-		pad = media_entity_remote_pad(pad);
++		pad = media_pad_remote_pad_first(pad);
+ 		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
+ 			break;
+ 
+diff --git a/drivers/media/platform/samsung/exynos4-is/media-dev.c b/drivers/media/platform/samsung/exynos4-is/media-dev.c
+index 544b54e428c9..52b43ea04030 100644
+--- a/drivers/media/platform/samsung/exynos4-is/media-dev.c
++++ b/drivers/media/platform/samsung/exynos4-is/media-dev.c
+@@ -81,7 +81,7 @@ static void fimc_pipeline_prepare(struct fimc_pipeline *p,
+ 			struct media_pad *spad = &me->pads[i];
+ 			if (!(spad->flags & MEDIA_PAD_FL_SINK))
+ 				continue;
+-			pad = media_entity_remote_pad(spad);
++			pad = media_pad_remote_pad_first(spad);
+ 			if (pad)
+ 				break;
+ 		}
+diff --git a/drivers/media/platform/samsung/s3c-camif/camif-capture.c b/drivers/media/platform/samsung/s3c-camif/camif-capture.c
+index 140854ab4dd8..c2d8f1e425d8 100644
+--- a/drivers/media/platform/samsung/s3c-camif/camif-capture.c
++++ b/drivers/media/platform/samsung/s3c-camif/camif-capture.c
+@@ -811,7 +811,7 @@ static int camif_pipeline_validate(struct camif_dev *camif)
+ 	int ret;
+ 
+ 	/* Retrieve format at the sensor subdev source pad */
+-	pad = media_entity_remote_pad(&camif->pads[0]);
++	pad = media_pad_remote_pad_first(&camif->pads[0]);
+ 	if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
+ 		return -EPIPE;
+ 
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
+index d0e5f22a6192..e67c92359a4e 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmi.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
+@@ -611,7 +611,7 @@ static struct media_entity *dcmi_find_source(struct stm32_dcmi *dcmi)
+ 		if (!(pad->flags & MEDIA_PAD_FL_SINK))
+ 			break;
+ 
+-		pad = media_entity_remote_pad(pad);
++		pad = media_pad_remote_pad_first(pad);
+ 		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
+ 			break;
+ 
+@@ -681,7 +681,7 @@ static int dcmi_pipeline_s_fmt(struct stm32_dcmi *dcmi,
+ 		}
+ 
+ 		/* Walk to next entity */
+-		sink_pad = media_entity_remote_pad(src_pad);
++		sink_pad = media_pad_remote_pad_first(src_pad);
+ 		if (!sink_pad || !is_media_entity_v4l2_subdev(sink_pad->entity))
+ 			break;
+ 
+@@ -705,7 +705,7 @@ static int dcmi_pipeline_s_stream(struct stm32_dcmi *dcmi, int state)
+ 		if (!(pad->flags & MEDIA_PAD_FL_SINK))
+ 			break;
+ 
+-		pad = media_entity_remote_pad(pad);
++		pad = media_pad_remote_pad_first(pad);
+ 		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
+ 			break;
+ 
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
+index 682c26536034..1d46e113d01d 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
+@@ -77,7 +77,7 @@ sun6i_video_remote_subdev(struct sun6i_video *video, u32 *pad)
+ {
+ 	struct media_pad *remote;
+ 
+-	remote = media_entity_remote_pad(&video->pad);
++	remote = media_pad_remote_pad_first(&video->pad);
+ 
+ 	if (!remote || !is_media_entity_v4l2_subdev(remote->entity))
+ 		return NULL;
+@@ -560,7 +560,7 @@ static int sun6i_video_link_validate(struct media_link *link)
+ 
+ 	video->mbus_code = 0;
+ 
+-	if (!media_entity_remote_pad(link->sink->entity->pads)) {
++	if (!media_pad_remote_pad_first(link->sink->entity->pads)) {
+ 		dev_info(video->csi->dev,
+ 			 "video node %s pad not connected\n", vdev->name);
+ 		return -ENOLINK;
+diff --git a/drivers/media/platform/ti/cal/cal-camerarx.c b/drivers/media/platform/ti/cal/cal-camerarx.c
+index a0880f0091f7..e136d70b4048 100644
+--- a/drivers/media/platform/ti/cal/cal-camerarx.c
++++ b/drivers/media/platform/ti/cal/cal-camerarx.c
+@@ -592,7 +592,7 @@ int cal_camerarx_get_remote_frame_desc(struct cal_camerarx *phy,
+ 	if (!phy->source)
+ 		return -EPIPE;
+ 
+-	pad = media_entity_remote_pad(&phy->pads[CAL_CAMERARX_PAD_SINK]);
++	pad = media_pad_remote_pad_first(&phy->pads[CAL_CAMERARX_PAD_SINK]);
+ 	if (!pad)
+ 		return -EPIPE;
+ 
+diff --git a/drivers/media/platform/ti/cal/cal-video.c b/drivers/media/platform/ti/cal/cal-video.c
+index 07ae1a34e6b0..776da0cfcdbe 100644
+--- a/drivers/media/platform/ti/cal/cal-video.c
++++ b/drivers/media/platform/ti/cal/cal-video.c
+@@ -685,7 +685,7 @@ static int cal_video_check_format(struct cal_ctx *ctx)
+ 	const struct v4l2_mbus_framefmt *format;
+ 	struct media_pad *remote_pad;
+ 
+-	remote_pad = media_entity_remote_pad(&ctx->pad);
++	remote_pad = media_pad_remote_pad_first(&ctx->pad);
+ 	if (!remote_pad)
+ 		return -ENODEV;
+ 
+diff --git a/drivers/media/platform/ti/omap3isp/isp.c b/drivers/media/platform/ti/omap3isp/isp.c
+index 4c937f3f323e..d251736eb420 100644
+--- a/drivers/media/platform/ti/omap3isp/isp.c
++++ b/drivers/media/platform/ti/omap3isp/isp.c
+@@ -700,7 +700,7 @@ static int isp_pipeline_enable(struct isp_pipeline *pipe,
+ 		if (!(pad->flags & MEDIA_PAD_FL_SINK))
+ 			break;
+ 
+-		pad = media_entity_remote_pad(pad);
++		pad = media_pad_remote_pad_first(pad);
+ 		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
+ 			break;
+ 
+@@ -797,7 +797,7 @@ static int isp_pipeline_disable(struct isp_pipeline *pipe)
+ 		if (!(pad->flags & MEDIA_PAD_FL_SINK))
+ 			break;
+ 
+-		pad = media_entity_remote_pad(pad);
++		pad = media_pad_remote_pad_first(pad);
+ 		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
+ 			break;
+ 
+@@ -942,7 +942,7 @@ static int isp_pipeline_is_last(struct media_entity *me)
+ 	pipe = to_isp_pipeline(me);
+ 	if (pipe->stream_state == ISP_PIPELINE_STREAM_STOPPED)
+ 		return 0;
+-	pad = media_entity_remote_pad(&pipe->output->pad);
++	pad = media_pad_remote_pad_first(&pipe->output->pad);
+ 	return pad->entity == me;
+ }
+ 
+diff --git a/drivers/media/platform/ti/omap3isp/ispccdc.c b/drivers/media/platform/ti/omap3isp/ispccdc.c
+index 108b5e9f82cb..11afb8aec292 100644
+--- a/drivers/media/platform/ti/omap3isp/ispccdc.c
++++ b/drivers/media/platform/ti/omap3isp/ispccdc.c
+@@ -1133,7 +1133,7 @@ static void ccdc_configure(struct isp_ccdc_device *ccdc)
+ 	ccdc->bt656 = false;
+ 	ccdc->fields = 0;
+ 
+-	pad = media_entity_remote_pad(&ccdc->pads[CCDC_PAD_SINK]);
++	pad = media_pad_remote_pad_first(&ccdc->pads[CCDC_PAD_SINK]);
+ 	sensor = media_entity_to_v4l2_subdev(pad->entity);
+ 	if (ccdc->input == CCDC_INPUT_PARALLEL) {
+ 		struct v4l2_subdev *sd =
+diff --git a/drivers/media/platform/ti/omap3isp/ispccp2.c b/drivers/media/platform/ti/omap3isp/ispccp2.c
+index acb58b6ddba1..fc90ff88464f 100644
+--- a/drivers/media/platform/ti/omap3isp/ispccp2.c
++++ b/drivers/media/platform/ti/omap3isp/ispccp2.c
+@@ -357,7 +357,7 @@ static int ccp2_if_configure(struct isp_ccp2_device *ccp2)
+ 
+ 	ccp2_pwr_cfg(ccp2);
+ 
+-	pad = media_entity_remote_pad(&ccp2->pads[CCP2_PAD_SINK]);
++	pad = media_pad_remote_pad_first(&ccp2->pads[CCP2_PAD_SINK]);
+ 	sensor = media_entity_to_v4l2_subdev(pad->entity);
+ 	buscfg = v4l2_subdev_to_bus_cfg(pipe->external);
+ 
+diff --git a/drivers/media/platform/ti/omap3isp/ispcsi2.c b/drivers/media/platform/ti/omap3isp/ispcsi2.c
+index 6302e0c94034..6870980a2fa9 100644
+--- a/drivers/media/platform/ti/omap3isp/ispcsi2.c
++++ b/drivers/media/platform/ti/omap3isp/ispcsi2.c
+@@ -561,7 +561,7 @@ static int csi2_configure(struct isp_csi2_device *csi2)
+ 	if (csi2->contexts[0].enabled || csi2->ctrl.if_enable)
+ 		return -EBUSY;
+ 
+-	pad = media_entity_remote_pad(&csi2->pads[CSI2_PAD_SINK]);
++	pad = media_pad_remote_pad_first(&csi2->pads[CSI2_PAD_SINK]);
+ 	sensor = media_entity_to_v4l2_subdev(pad->entity);
+ 	buscfg = v4l2_subdev_to_bus_cfg(pipe->external);
+ 
+diff --git a/drivers/media/platform/ti/omap3isp/ispvideo.c b/drivers/media/platform/ti/omap3isp/ispvideo.c
+index 8811d6dd4ee7..d7059180e80e 100644
+--- a/drivers/media/platform/ti/omap3isp/ispvideo.c
++++ b/drivers/media/platform/ti/omap3isp/ispvideo.c
+@@ -206,7 +206,7 @@ isp_video_remote_subdev(struct isp_video *video, u32 *pad)
+ {
+ 	struct media_pad *remote;
+ 
+-	remote = media_entity_remote_pad(&video->pad);
++	remote = media_pad_remote_pad_first(&video->pad);
+ 
+ 	if (!remote || !is_media_entity_v4l2_subdev(remote->entity))
+ 		return NULL;
+@@ -981,7 +981,7 @@ static int isp_video_check_external_subdevs(struct isp_video *video,
+ 			continue;
+ 
+ 		/* ISP entities have always sink pad == 0. Find source. */
+-		source_pad = media_entity_remote_pad(&ents[i]->pads[0]);
++		source_pad = media_pad_remote_pad_first(&ents[i]->pads[0]);
+ 		if (source_pad == NULL)
+ 			continue;
+ 
+diff --git a/drivers/media/platform/video-mux.c b/drivers/media/platform/video-mux.c
+index b31e5913a4cd..71d97042a470 100644
+--- a/drivers/media/platform/video-mux.c
++++ b/drivers/media/platform/video-mux.c
+@@ -118,7 +118,7 @@ static int video_mux_s_stream(struct v4l2_subdev *sd, int enable)
+ 		return -EINVAL;
+ 	}
+ 
+-	pad = media_entity_remote_pad(&sd->entity.pads[vmux->active]);
++	pad = media_pad_remote_pad_first(&sd->entity.pads[vmux->active]);
+ 	if (!pad) {
+ 		dev_err(sd->dev, "Failed to find remote source pad\n");
+ 		return -ENOLINK;
+diff --git a/drivers/media/platform/xilinx/xilinx-csi2rxss.c b/drivers/media/platform/xilinx/xilinx-csi2rxss.c
+index 051c60cba1e0..cf8e892c47f0 100644
+--- a/drivers/media/platform/xilinx/xilinx-csi2rxss.c
++++ b/drivers/media/platform/xilinx/xilinx-csi2rxss.c
+@@ -474,7 +474,7 @@ static struct v4l2_subdev *xcsi2rxss_get_remote_subdev(struct media_pad *local)
+ {
+ 	struct media_pad *remote;
+ 
+-	remote = media_entity_remote_pad(local);
++	remote = media_pad_remote_pad_first(local);
+ 	if (!remote || !is_media_entity_v4l2_subdev(remote->entity))
+ 		return NULL;
+ 
+diff --git a/drivers/media/platform/xilinx/xilinx-dma.c b/drivers/media/platform/xilinx/xilinx-dma.c
+index 338c3661d809..2d1ef7a25c33 100644
+--- a/drivers/media/platform/xilinx/xilinx-dma.c
++++ b/drivers/media/platform/xilinx/xilinx-dma.c
+@@ -44,7 +44,7 @@ xvip_dma_remote_subdev(struct media_pad *local, u32 *pad)
+ {
+ 	struct media_pad *remote;
+ 
+-	remote = media_entity_remote_pad(local);
++	remote = media_pad_remote_pad_first(local);
+ 	if (!remote || !is_media_entity_v4l2_subdev(remote->entity))
+ 		return NULL;
+ 
+@@ -107,7 +107,7 @@ static int xvip_pipeline_start_stop(struct xvip_pipeline *pipe, bool start)
+ 		if (!(pad->flags & MEDIA_PAD_FL_SINK))
+ 			break;
+ 
+-		pad = media_entity_remote_pad(pad);
++		pad = media_pad_remote_pad_first(pad);
+ 		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
+ 			break;
+ 
+diff --git a/drivers/media/test-drivers/vimc/vimc-streamer.c b/drivers/media/test-drivers/vimc/vimc-streamer.c
+index 65feb3c596db..807551a5143b 100644
+--- a/drivers/media/test-drivers/vimc/vimc-streamer.c
++++ b/drivers/media/test-drivers/vimc/vimc-streamer.c
+@@ -30,7 +30,7 @@ static struct media_entity *vimc_get_source_entity(struct media_entity *ent)
+ 	for (i = 0; i < ent->num_pads; i++) {
+ 		if (ent->pads[i].flags & MEDIA_PAD_FL_SOURCE)
+ 			continue;
+-		pad = media_entity_remote_pad(&ent->pads[i]);
++		pad = media_pad_remote_pad_first(&ent->pads[i]);
+ 		return pad ? pad->entity : NULL;
+ 	}
+ 	return NULL;
+diff --git a/drivers/staging/media/imx/imx-media-dev-common.c b/drivers/staging/media/imx/imx-media-dev-common.c
+index 80b69a9a752c..e6d6ed3b1161 100644
+--- a/drivers/staging/media/imx/imx-media-dev-common.c
++++ b/drivers/staging/media/imx/imx-media-dev-common.c
+@@ -235,7 +235,7 @@ static int imx_media_inherit_controls(struct imx_media_dev *imxmd,
+ 		if (!(spad->flags & MEDIA_PAD_FL_SINK))
+ 			continue;
+ 
+-		pad = media_entity_remote_pad(spad);
++		pad = media_pad_remote_pad_first(spad);
+ 		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
+ 			continue;
+ 
+diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
+index 94bc866ca28c..294c808b2ebe 100644
+--- a/drivers/staging/media/imx/imx-media-utils.c
++++ b/drivers/staging/media/imx/imx-media-utils.c
+@@ -698,7 +698,7 @@ imx_media_pipeline_pad(struct media_entity *start_entity, u32 grp_id,
+ 		    (!upstream && !(spad->flags & MEDIA_PAD_FL_SOURCE)))
+ 			continue;
+ 
+-		pad = media_entity_remote_pad(spad);
++		pad = media_pad_remote_pad_first(spad);
+ 		if (!pad)
+ 			continue;
+ 
+diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+index 0066af8d111f..a0553c24cce4 100644
+--- a/drivers/staging/media/imx/imx7-media-csi.c
++++ b/drivers/staging/media/imx/imx7-media-csi.c
+@@ -1963,7 +1963,7 @@ static int imx7_csi_pad_link_validate(struct v4l2_subdev *sd,
+ 			if (!(spad->flags & MEDIA_PAD_FL_SINK))
+ 				continue;
+ 
+-			pad = media_entity_remote_pad(spad);
++			pad = media_pad_remote_pad_first(spad);
+ 			if (pad)
+ 				break;
+ 		}
+diff --git a/drivers/staging/media/omap4iss/iss.c b/drivers/staging/media/omap4iss/iss.c
+index 68588e9dab0b..28aacda0f5a7 100644
+--- a/drivers/staging/media/omap4iss/iss.c
++++ b/drivers/staging/media/omap4iss/iss.c
+@@ -395,7 +395,7 @@ static int iss_pipeline_disable(struct iss_pipeline *pipe,
+ 		if (!(pad->flags & MEDIA_PAD_FL_SINK))
+ 			break;
+ 
+-		pad = media_entity_remote_pad(pad);
++		pad = media_pad_remote_pad_first(pad);
+ 		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
+ 			break;
+ 
+@@ -464,7 +464,7 @@ static int iss_pipeline_enable(struct iss_pipeline *pipe,
+ 		if (!(pad->flags & MEDIA_PAD_FL_SINK))
+ 			break;
+ 
+-		pad = media_entity_remote_pad(pad);
++		pad = media_pad_remote_pad_first(pad);
+ 		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
+ 			break;
+ 
+@@ -553,7 +553,7 @@ static int iss_pipeline_is_last(struct media_entity *me)
+ 	pipe = to_iss_pipeline(me);
+ 	if (pipe->stream_state == ISS_PIPELINE_STREAM_STOPPED)
+ 		return 0;
+-	pad = media_entity_remote_pad(&pipe->output->pad);
++	pad = media_pad_remote_pad_first(&pipe->output->pad);
+ 	return pad->entity == me;
+ }
+ 
+diff --git a/drivers/staging/media/omap4iss/iss_csi2.c b/drivers/staging/media/omap4iss/iss_csi2.c
+index 124ab2f44fbf..04ce0e7eb557 100644
+--- a/drivers/staging/media/omap4iss/iss_csi2.c
++++ b/drivers/staging/media/omap4iss/iss_csi2.c
+@@ -538,7 +538,7 @@ static int csi2_configure(struct iss_csi2_device *csi2)
+ 	if (csi2->contexts[0].enabled || csi2->ctrl.if_enable)
+ 		return -EBUSY;
+ 
+-	pad = media_entity_remote_pad(&csi2->pads[CSI2_PAD_SINK]);
++	pad = media_pad_remote_pad_first(&csi2->pads[CSI2_PAD_SINK]);
+ 	sensor = media_entity_to_v4l2_subdev(pad->entity);
+ 	pdata = sensor->host_priv;
+ 
+diff --git a/drivers/staging/media/omap4iss/iss_video.c b/drivers/staging/media/omap4iss/iss_video.c
+index d0da083deed5..9512cd3314f2 100644
+--- a/drivers/staging/media/omap4iss/iss_video.c
++++ b/drivers/staging/media/omap4iss/iss_video.c
+@@ -190,7 +190,7 @@ iss_video_remote_subdev(struct iss_video *video, u32 *pad)
+ {
+ 	struct media_pad *remote;
+ 
+-	remote = media_entity_remote_pad(&video->pad);
++	remote = media_pad_remote_pad_first(&video->pad);
+ 
+ 	if (!remote || !is_media_entity_v4l2_subdev(remote->entity))
+ 		return NULL;
+diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
+index 8e184aa4c252..9d46a36cc014 100644
+--- a/drivers/staging/media/tegra-video/vi.c
++++ b/drivers/staging/media/tegra-video/vi.c
+@@ -157,7 +157,7 @@ tegra_channel_get_remote_csi_subdev(struct tegra_vi_channel *chan)
+ {
+ 	struct media_pad *pad;
+ 
+-	pad = media_entity_remote_pad(&chan->pad);
++	pad = media_pad_remote_pad_first(&chan->pad);
+ 	if (!pad)
+ 		return NULL;
+ 
+@@ -177,7 +177,7 @@ tegra_channel_get_remote_source_subdev(struct tegra_vi_channel *chan)
+ 
+ 	pad = &subdev->entity.pads[0];
+ 	while (!(pad->flags & MEDIA_PAD_FL_SOURCE)) {
+-		pad = media_entity_remote_pad(pad);
++		pad = media_pad_remote_pad_first(pad);
+ 		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
+ 			break;
+ 		entity = pad->entity;
+diff --git a/include/media/media-entity.h b/include/media/media-entity.h
+index a9a1c0ec5d1c..ab84476b25c8 100644
+--- a/include/media/media-entity.h
++++ b/include/media/media-entity.h
+@@ -848,7 +848,7 @@ struct media_link *media_entity_find_link(struct media_pad *source,
+ 		struct media_pad *sink);
+ 
+ /**
+- * media_entity_remote_pad - Find the pad at the remote end of a link
++ * media_pad_remote_pad_first - Find the first pad at the remote end of a link
+  * @pad: Pad at the local end of the link
+  *
+  * Search for a remote pad connected to the given pad by iterating over all
+@@ -857,7 +857,7 @@ struct media_link *media_entity_find_link(struct media_pad *source,
+  * Return: returns a pointer to the pad at the remote end of the first found
+  * enabled link, or %NULL if no enabled link has been found.
+  */
+-struct media_pad *media_entity_remote_pad(const struct media_pad *pad);
++struct media_pad *media_pad_remote_pad_first(const struct media_pad *pad);
+ 
+ /**
+  * media_entity_is_streaming - Test if an entity is part of a streaming pipeline
 -- 
-2.36.1
+Regards,
+
+Laurent Pinchart
 
