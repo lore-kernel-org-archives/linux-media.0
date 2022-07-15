@@ -2,45 +2,45 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89579CCA480
-	for <linux-media@archiver.kernel.org>; Fri, 15 Jul 2022 13:54:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77E1BC43334
+	for <linux-media@archiver.kernel.org>; Fri, 15 Jul 2022 13:54:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233497AbiGONx7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Jul 2022 09:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
+        id S233878AbiGONyA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Jul 2022 09:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233144AbiGONx5 (ORCPT
+        with ESMTP id S233335AbiGONx6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 15 Jul 2022 09:53:57 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80048.outbound.protection.outlook.com [40.107.8.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B211AF31;
-        Fri, 15 Jul 2022 06:53:55 -0700 (PDT)
+        Fri, 15 Jul 2022 09:53:58 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80052.outbound.protection.outlook.com [40.107.8.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AE91ADA4;
+        Fri, 15 Jul 2022 06:53:56 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IAwx7y1dze17iZdppYZvoR/p0b8RM2eGQ+R+/E5pIPSIInI8tUQEunVDpO9Y8Qb/IzvrP6oqeDdxVwFLBBpfpKbdYAFqRYkWNfH5ELHxsBcy7RJgbOpM5oixzn5Nahr7WKFcFvH25FlFs53Aas52N+ydEgAemVXkso5f2vc1DOpyly06Zfkt5nhcsz2qwOm8CEqjPFlnhSzxKsys7U8u5h1Cf8Iwr2XzjLb/J2a6F/5PgFIUG4Uk1kGmrAeq3Jjs30vOvy8uBlWNplEUpiUTmjuqHD0NIxduDRiaW3NmPxYJtlSkIIIGo1PUQQ9UKqRmRrXM71990NFboYsOio3KZg==
+ b=UNAM2sQolzC4wSMMFKk82ZvHzhrnxqKda9ZtvlyYjxsPPY3oOyOAPO4PgOLbUS7kay2cvOz5k/5WTTwaLSMa+A7WyGVM8tdF4I7GuMKqKbJpHhBkXLTUuXPpRqJKykZCqwurLVMZXGQ/YYzO49KeMuAaURyBk4Ueueik2UvHi7FxECM9BEKVc+5CzNcS3d6BQZj4Mforue7tj07DxC/5omVYFjOEyG8Q5bRhtp6N9a9IRFdXpVIAh/UUxVPqmozLg3gxAAcSxg1S70x+vW0yVGDSedEtvsei/5rK/Jn7XF489rDJfZ3yXUrN+d9jCvnAn714tYYVDpglJ8oAR0tkOQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Qo/HmeunH1NHG1XXb0xWwHqLuUBAYsnJzAwWvlhyq0U=;
- b=jenGvhcnOYi38ig/t6KsfnJg177R2+Hrd3OzULrkRRHkaYJcuL8NKx7YvEuGzOUxfF9UTrqWjev9z3oADXsspBCuKrFHz0t9x6lqzrxlzeFazrA3U/uetWRo4u8oEX0wlRdTzP6SMeHZbMrR9Y1AHXOsAQKoLnF3tEduFdfA3Mb22tmArErgAaBvTZzLmV9sIc8x9H2SQOfwtQzuY2GWb7VwpAIoZGq3K/tvi9sTPaJHL/nBhDMBuyZKnZZzJOrHsHe91NzNz90hX5Dowk7FN7MTcMdnDDoXSQizIYuSvmoc+HZEyimAmStebyKh06TWR6iyf7rLXnqrNPnY3umwcg==
+ bh=ervFkx/u73e7LNB5CzxBael72hFEpKh5geegkyMMdeY=;
+ b=nRcUw/XvHvxaWs+jjDMNajSENJ5Mie8ogtqVfvABQPeybGnDaJFNSfpJsg1N7fm/2AYNt6udX5Yq0D9T+OPyV308PBAAG/0Q/mIMl1zYCd9VFJYHubLSUPLBJC9fb4PpatkNaShmzJQkNQSrPkHrvz7J+iALsx4j2OtzCu5aaHVTQONvTlxGxvRmIihcOD8cZYBBfJ7nblKty8HyhKANMeTOjsPJg6XrSBwAuax+K9CKoJrsFNSMNde7tUZSp9F7TJ5otfZHveq8dHX3woxZSHiWJ7Ig4GmTcoUmY/JP4ozdonZMsrwZOCUZWgEbhI59QumFWAAdta+gAccE8L7Wjw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Qo/HmeunH1NHG1XXb0xWwHqLuUBAYsnJzAwWvlhyq0U=;
- b=C2eAXbzTWmTVgPoFFPbuXAD3lrsRv054avv3scFfy+QPp/TPuQHD3F4u1zlQjkA8SoMylBmIuO+h8v6RbN72gLTXUZYb8XV0Mo2Avnn0t7KVnUQ+V8nOztk9NcbtNN1Ch9wOs5D76CJM0rqa3SqfifFVdHiycAGA56BtKcjS0dk=
+ bh=ervFkx/u73e7LNB5CzxBael72hFEpKh5geegkyMMdeY=;
+ b=I0Pwmp6KYC1LkWjmYAl3Dpn7fKX4vJVAagEYCQ9izQ0xmTuLAoQ/I5aP0rMURRDfCCTrRJgoWEgNjInH2pBcQpuhoNwQBZwWKURWQmo2AfhUuqj5AQ4Qo3nV64x4iSe1ZpAOOY4l9O9xwfMAZBF1YQILB3Fa0miCfDt1DL1jGTs=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from PAXPR04MB8703.eurprd04.prod.outlook.com (2603:10a6:102:21e::22)
  by VE1PR04MB6640.eurprd04.prod.outlook.com (2603:10a6:803:122::32) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.12; Fri, 15 Jul
- 2022 13:53:48 +0000
+ 2022 13:53:49 +0000
 Received: from PAXPR04MB8703.eurprd04.prod.outlook.com
  ([fe80::d51c:319c:bf4:199f]) by PAXPR04MB8703.eurprd04.prod.outlook.com
  ([fe80::d51c:319c:bf4:199f%5]) with mapi id 15.20.5438.012; Fri, 15 Jul 2022
- 13:53:48 +0000
+ 13:53:49 +0000
 From:   Xavier Roumegue <xavier.roumegue@oss.nxp.com>
 To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
         stanimir.varbanov@linaro.org, laurent.pinchart@ideasonboard.com,
@@ -49,9 +49,9 @@ To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
         ezequiel@vanguardiasur.com.ar
 Cc:     Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
         linux-media@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v8 1/6] media: Documentation: dw100: Add user documentation for the DW100 driver
-Date:   Fri, 15 Jul 2022 15:53:24 +0200
-Message-Id: <20220715135329.975400-2-xavier.roumegue@oss.nxp.com>
+Subject: [PATCH v8 3/6] media: uapi: Add a control for DW100 driver
+Date:   Fri, 15 Jul 2022 15:53:26 +0200
+Message-Id: <20220715135329.975400-4-xavier.roumegue@oss.nxp.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220715135329.975400-1-xavier.roumegue@oss.nxp.com>
 References: <20220715135329.975400-1-xavier.roumegue@oss.nxp.com>
@@ -63,160 +63,116 @@ X-ClientProxiedBy: PR1P264CA0061.FRAP264.PROD.OUTLOOK.COM
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5a0bd0cd-f13c-4198-6bc8-08da666970c0
+X-MS-Office365-Filtering-Correlation-Id: c8ac96ae-6e76-4bc6-9f24-08da66697175
 X-MS-TrafficTypeDiagnostic: VE1PR04MB6640:EE_
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3F9IgbXWuWEc80QrUAt/UpcFJtIgn0ZWQHXn444tfwoPR2wuob+7FJdA/SV0cJnIWBeMmpNWft32oF18RKTa5oTycG0k7NUCJVNCF4g6HLg9F3FkU+gFwP2gUgDnP1n6QAJiNOmSlKjSofBPk66VbYHt0Wzq8t9dReu3EWySlBFFp+zvfs4OviyDtzTDxfApv9eF0qw1jgp+Xq6lJCBSeGTRHfywBEYPSaq3wojguO0Np+o6+zN0JOmtw+WOnAHyoL5o7emvDowKwnppfwartvkiHdjl6cCNPdghJYNQxv+hSU37BmEiB8p2+J8bq2Cbx1LG+n0OEI6fPaJFCSobGPh0MbzImVl5WQVw7ANiOkjRRn1lG6vp1glJKa4IvjrECmwn90GdOkMdzFaRvCC60R5eq9Mff5M5VAkuXZpGlNS2ux3qMUZmd2lqb6gk1LitMMa3QtiT0uQ6cCVhdLguGTWkyRhqnSmhQcHKsl6s3vyw58n5zOor7z3p5g2Lc3ObmP+bwINUC9dPOKG94C8vGLQP+4wF1G2lwznIS1CpMG/d73RwwkGPMex3iMNzJb/9u6+NyLDC6w3+g5hTQc2KeONX4bpKolZz7JD7BmfjhkDp6VwZrgDbJULA/AOVmbj/2qwnznLGsEOAPCIq6d+nNefpwhkpUclrUoYANQjaOZG8Z+3A2uhdiaP+pOo3wQuEvBhx8HSXdZ7ZYKBeA2jNedI8khoGwXjOJnyQzkRCRgMpu0S4a2slSXqXwBr2rReaJOkpgjb/YsaiTYrgiyGqpMmwZ1HkXHCRcBrDuAS6Pyg=
+X-Microsoft-Antispam-Message-Info: nHOqb+4DEcRy2ZfLJR4BpL6Baj1Uwz216m55rirRCWbGCeKXoNdBQ/tDR1e0Q+OGSKlfPxPN3YJWM0OpFzq6UA8x8w8iqZzwNypBTYP67/wYOp9ZcB3TbRQMdaIOey9yzEzjXzWdacXjuGPjWeGhG44cuQ7WDRmSwIf6J9zvtATt++IObm0C1n7kNUQK16P/qcunVnoU9pJx3j0lrkDePKr3UUXnQBGt78IwZvhW7o46jS+uhqaerH5UbW3iY13LvAwz3mO2f+Qkue4fzO5vfTxihNHq0icNMnUo6DjKDSsT1SP3/cZNRqxtauLj+l1pRwprMq4fOw23IHMdZGgWQqvrWHVbnEM9Azo89MmEE7X5L/nG0XjeATwM8XbYqpoO4yrRMQFR1muQcHycFb6DYqMZAQJt2ofVqUmvBOyKmTfRvDYPS+SQ97EmNm926S4dbxcNuI6CR3LayZ6p27PE2I3dqsgPxfKgHfaHy8p0BgS2OkUWsEp/Lywie8VgH6GRsTvfo89sot+WZy5C9zgFGBVugNb5nvKWnjasGi5wgtIWGQkZ/Fyoqqn9UKWa2drUCXPHH+mUKBLpdywF1MMoXOMCbVegWXjhSmrAYw9mmYTcAXAm8S8BvqN0phvXPygnnFVQ1qR5uPArO9XPVrbL2UpJAvYYdxlGaNZ+afwTGwsUF5r5BxrF0rQTRmNqXyzsfwvuaaNl4o7MjbrRCzMGLvSJBmTX0mXTqRp76htVoI4MCLWGKgU6dqmKRNhm/b5Yy45ruGmiDYh8Z8+mOzFaQHBJHzvrlhdIGIcppIOA4A0=
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8703.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(346002)(376002)(396003)(136003)(39860400002)(6506007)(52116002)(6486002)(86362001)(478600001)(966005)(6512007)(66556008)(66476007)(6666004)(5660300002)(41300700001)(38100700002)(66946007)(316002)(2616005)(1076003)(83380400001)(8676002)(2906002)(8936002)(44832011)(7416002)(4326008)(186003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HBV14PU0G/Rh6PV1MO1yozsZzL6bPdkW4ZDOPyA8mY+Bf9m7ADsPNcaQ/RKb?=
- =?us-ascii?Q?BEU6JY/HdtYLyZLHKUb5lNEzzuQCXB1sS/yAopO4q+As6H3RPK1v4bFFcIAC?=
- =?us-ascii?Q?KyXUeAf+tdO/xPBwsotnXDLmcSljcvpYQnOz7rXMsdXvLcGKsGlKVWCJsY11?=
- =?us-ascii?Q?6mQD/DjNrI654KfkJEcr6pEo2fRPnoReY/8s+MsrrMLPkCyMzcNAaKCcdaDv?=
- =?us-ascii?Q?irICVtyxUC19wV3fEag4N5O83Puf3iLz2kyMxJbMqAYGkDUkWkJk4QXsMWg8?=
- =?us-ascii?Q?dYgo6W1ScGhU2jP5ovvEycmvYBfQAyU/ae3SnX2x3vo+FzUdubWSPHgVIhtJ?=
- =?us-ascii?Q?MHLcB/Xv+a9z3Ilc+KCpbt+6Th4P0JM8hOAKrlX5xhDaW3jgRf8ua+j8ifAj?=
- =?us-ascii?Q?1K3bl/jbJzv/oKuWlrOSTOkTOqFdF4yBbwr8LrUcsD76PqH4XUpFkhpryUjY?=
- =?us-ascii?Q?DhG/j8XGX+FOwxoaDubv+EEHoY5x+HOVQ5mvPX1IQYiZ7ZTO2SqoroXb/xnc?=
- =?us-ascii?Q?3Gp5uVTSC0P+clwWvSx/ef/TC0fslKbGkoarAHKYmUYksze8u2+ueBlLtpAd?=
- =?us-ascii?Q?heVpqlzgIKIxB9x0xAas2BG3ZCLTSyofhTml6/EF5r9L8j0CEViii4tqnn16?=
- =?us-ascii?Q?qRRuP8PxoCe87mFwKpZ0AojicdVqczrvxb/WYnDIBwlHLviwl0OrEw9fUHg9?=
- =?us-ascii?Q?Ky1TVqEJR7+CRzGGFmBZy9DCjAawgigWGREIBBicIM4jOvSvIBTWTNIWlQZi?=
- =?us-ascii?Q?WDDA1IBxDwwBbstv0oN27I3+d95DWP4/h1aOZiCBOFOQLVZc/IlfG59p8uMz?=
- =?us-ascii?Q?4XmbY4brbc/vBPr8vXDbuYJiV8nlP+js12+HwUJq4PBy/YhQDIzQVtC58jP+?=
- =?us-ascii?Q?0qHypI2UaLs0P0OhWKHMAlgsF3xRMpTeJIMmjUoZTVIXG5jx0bo9v/qsrYKc?=
- =?us-ascii?Q?6oWcmGUOk0iUSYYMMe6F0O6yBA6KYiBIvIqqJSWA4GVnoGYczFQBR24G7Ri0?=
- =?us-ascii?Q?mr0UNYmo1z/Vdh2zzQ4HiwSw6JT4ijWT7hoMKi1cdUqn0EFpMz+I3AFSWuW+?=
- =?us-ascii?Q?YfVEMDZEKCDRdLfyapJ41FbqER8nyJuikX9d/2iL6qunUkVgyXxXnyrMJ53M?=
- =?us-ascii?Q?IsR9bOXEbUrLGarhwOaR10rlGdg4LisAYZsKWBm7S/ewV6XN3m+6z6gsFgwi?=
- =?us-ascii?Q?aAAf2hXJ6Yh9gvHZ1g444+jDjpFOPsG5aPxeYboSwp5q3JXpLy6gO9sr0b3U?=
- =?us-ascii?Q?v1VI0qOfgAxTFjPgo8JZn7BhbBsxSS5wzIZ+IJWomwr+BN8BTEV3/WzXnlui?=
- =?us-ascii?Q?f20hvIpgox6aj1sHNSgF6lLe29DPrmf74t9aU3jogi6V7h22gTNHmsezZLkg?=
- =?us-ascii?Q?yR+JM8TqkxQ2x4M2GrtDh6t1+xPQVab19KjXQURGietQrrijBkCT2zSqEBMK?=
- =?us-ascii?Q?QAsjkKVn4RBDeq658xlh9Sr9fVFZVdKffkOgv437DmXUkZ0kRhSLzp3PEbi0?=
- =?us-ascii?Q?3VFRPFHrn/AyMea6ykw/n/ldG7QYq/MMuw49YWwbVNtl3Oof2WpTwix1ndRv?=
- =?us-ascii?Q?hb175XE/jsGaVIgPwpUBYUriLz0BM+ySaQTCfW9SJzcVRfsk6nrFPl2SjOcV?=
- =?us-ascii?Q?xqT1wbRwBUZW+m63Ku2gyzhxw2JOmHxIbQAgWsYvW7MB8vMixzXWiWI8xU0t?=
- =?us-ascii?Q?mVbMlQ=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0cSz7R7mF8sE61aEjAXnnDHrNimWhOdmP+C0NcoCa/IH0o1qwZNQDXk7sK6B?=
+ =?us-ascii?Q?I5AC2eP8q827Neki5txu98T/aioGkUvlQrCVzTbOZKQyISAZ34izxu2H+Iyv?=
+ =?us-ascii?Q?3vfztNfdLSs9yu+IeT7q7BWMR7R947RWXrvLwL2OWzkFPoLdkH50U5igVsWo?=
+ =?us-ascii?Q?5hc4WdrhjcaBrxwhQV2vuKm0cidk9jfD/9s7ZFi/p3rYw4yxSAe9ADx32aT9?=
+ =?us-ascii?Q?c4gOkNCjm1XVdxjSvzLQuI+9t0XnzL6HLCTqhO/wu8aQjAC9UChKzwjl1u5C?=
+ =?us-ascii?Q?NNd9HiFU9daCxtMbw2jbEwfN9RxMJPu/kgwsoDIA8fIoD7RoXJVkXbfNAw66?=
+ =?us-ascii?Q?aKgiZJB3uZA7gMz2434lsM3bEGI9YcTDf6PudLnhQfzKPIAZ+7FUWxibdvfW?=
+ =?us-ascii?Q?PD/5+4LLPaPPQ5sjkVtNlOWq7ldds9tgJmNhLpiccqPADME8R7u8HLbM25pR?=
+ =?us-ascii?Q?OKmG88RkoOTu5+RMcDCiiya9o/EJ5OngprA/tJs2M97amZRGzjDCw5zvdNCU?=
+ =?us-ascii?Q?7gjodBujyiJIxtpmVei1ak8zvq9z8qA0YHa008e8wDPzJdVFIQ3XQJkP1Og7?=
+ =?us-ascii?Q?BGQmrg2BH3pmqzG0W8RhZj9BRlR6KVbOwskBX1VsyQJHOqeQc/AWb06+P3zD?=
+ =?us-ascii?Q?uS1wldYu1gPubEjsS3CIGfkMZDgOGGyvtkVQ37tO9Nruq1rGkI82IqjHt0u0?=
+ =?us-ascii?Q?3PZrkooEwm14iA9SAksEqmYKde9JELnQyP+XV4DUcYu3f3Mi4EbhOYwGbPWO?=
+ =?us-ascii?Q?7RHk3UfMsPwU2J58OenVWaU1cx0Ww0ysWavxuCjj1RekdV2avJcqMmDT+ox4?=
+ =?us-ascii?Q?2O0LuOCVD9psOv70+UKS04JN900IFHclwJ7bsTvZVe37/f6gQMAO0h9Zo9ht?=
+ =?us-ascii?Q?On2YM2EhX9mmHQDOkTGaBCrvI2ZnRvjJJ6ZwKFaIuOoatfwfQa4AHV4/+X1E?=
+ =?us-ascii?Q?5l3czg76m8Ess11/N+vOtOPMX3S96azQKoTYops5tOWlS6kN/stccp+jxcXV?=
+ =?us-ascii?Q?JW5hMNvFJEXT1ZBqgpduzmIHg9g2To+YJnqwPN5y7YRm36XNw7XAz68EcFx0?=
+ =?us-ascii?Q?wV6bIbhMSTtgUk3eEACLTt3LlrX0qm6pFKL23F8SyvNr0pmsogVQByXl0ii5?=
+ =?us-ascii?Q?fVhy8mUxkrf5JD/KJ7KxR6DWCk4zoeYWDZNBiqy/SZ0qexzst3KaNyec61IT?=
+ =?us-ascii?Q?YrCuTMG49CAYiZLHgADQ0axK64N5pCnUrAIXL7wd3tkB74bBBPVQpqgag+DS?=
+ =?us-ascii?Q?jdxyGYoR+Ed8RrtObsXn7WnT93EQYE92xCd5i0laNLE7V/zPIJ6tAuDM3lMJ?=
+ =?us-ascii?Q?cOATt+A+Da3ntSORRzO58QVCtEO9e0xuK8aQWDl2lkjwSPxeC7nxIGebqYHK?=
+ =?us-ascii?Q?oTj804pOrXY0VS+gqne/BW19tvJxIuIejQrZT/WM74f3fbQ7bH5AEQCt2qyh?=
+ =?us-ascii?Q?xuUKiQaa7V+jWu6IlB2WYrkUKdRjpogDaEwTqgKzL24YFLC7pILkVRcDfIir?=
+ =?us-ascii?Q?du0bCek8JF6OlRN2NtHYV9sitoR+NuUabSYy//DxNOoK3FQgW21cZcMsTd2X?=
+ =?us-ascii?Q?Nmgfq7/0f2Poj5HBXMcb31IU9GSQI70UAYTfZAUJwjtWsUwndZPzfWZCWmS7?=
+ =?us-ascii?Q?VT2rRELzboslwqInhlrg6X5cUNSE6jKDQLGnR1Ksgw9jEFlECDj12ZZMvXfR?=
+ =?us-ascii?Q?XYBWxA=3D=3D?=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5a0bd0cd-f13c-4198-6bc8-08da666970c0
+X-MS-Exchange-CrossTenant-Network-Message-Id: c8ac96ae-6e76-4bc6-9f24-08da66697175
 X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8703.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2022 13:53:47.7792
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2022 13:53:48.8573
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VwUjMoaKoyiVtLNLKr/J0NHS8QPsSujXFh7+slnW1QlUCDYLO8Dq0TL2+HsXydEpUEJznbfwE+CUZD6Hmvwrrg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: tfUYaOxyG8Qq4W7uvlkSQnXQ4/EXM0KOzg59p4uTQlXWIYziMc3mK8jVjewIMQUlNkzuUJTmBnrlAm/9D6senw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6640
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add user documentation for the DW100 driver.
-
-while at it, replace spaces with tab on drivers list.
+The DW100 driver gets the dewarping mapping as a binary blob from the
+userspace application through a custom control.
+The blob format is hardware specific so create a dedicated control for
+this purpose.
 
 Signed-off-by: Xavier Roumegue <xavier.roumegue@oss.nxp.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- .../userspace-api/media/drivers/dw100.rst     | 69 +++++++++++++++++++
- .../userspace-api/media/drivers/index.rst     |  3 +-
- 2 files changed, 71 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/userspace-api/media/drivers/dw100.rst
+ .../userspace-api/media/drivers/dw100.rst         | 15 +++++++++++++++
+ include/uapi/linux/dw100.h                        | 14 ++++++++++++++
+ 2 files changed, 29 insertions(+)
+ create mode 100644 include/uapi/linux/dw100.h
 
 diff --git a/Documentation/userspace-api/media/drivers/dw100.rst b/Documentation/userspace-api/media/drivers/dw100.rst
-new file mode 100644
-index 000000000000..1ca6fa55f539
---- /dev/null
+index 1ca6fa55f539..fceea6ece622 100644
+--- a/Documentation/userspace-api/media/drivers/dw100.rst
 +++ b/Documentation/userspace-api/media/drivers/dw100.rst
-@@ -0,0 +1,69 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+DW100 dewarp driver
-+===================
-+
-+The Vivante DW100 Dewarp Processor IP core found on i.MX8MP SoC applies a
-+programmable geometrical transformation on the input image to correct distortion
-+introduced by lenses.
-+
-+The transformation function is exposed by the hardware as a grid map with 16x16
-+pixel macroblocks indexed using X, Y vertex coordinates.
-+::
-+
-+                          Image width
-+           <--------------------------------------->
-+
-+      ^    .-------.-------.-------.-------.-------.
-+      |    | 16x16 |       |       |       |       |
-+   I  |    | pixel |       |       |       |       |
-+   m  |    | block |       |       |       |       |
-+   a  |    .-------.-------.-------.-------.-------.
-+   g  |    |       |       |       |       |       |
-+   e  |    |       |       |       |       |       |
-+      |    |       |       |       |       |       |
-+   h  |    .-------.-------.-------.-------.-------.
-+   e  |    |       |       |       |       |       |
-+   i  |    |       |       |       |       |       |
-+   g  |    |       |       |       |       |       |
-+   h  |    .-------.-------.-------.-------.-------.
-+   t  |    |       |       |       |       |       |
-+      |    |       |       |       |       |       |
-+      |    |       |       |       |       |       |
-+      v    '-------'-------'-------'-------'-------'
-+
-+            Grid of Image Blocks for Dewarping Map
-+
-+
-+Each x, y coordinate register uses 16 bits to record the coordinate address in
-+an unsigned 12.4 fixed point format (UQ12.4).
-+::
-+
-+    .----------------------.--------..----------------------.--------.
-+    |         31~20        | 19~16  ||         15~4         |  3~0   |
-+    |       (integer)      | (frac) ||       (integer)      | (frac) |
-+    '----------------------'--------''----------------------'--------'
-+    <-------------------------------><------------------------------->
-+                Y coordinate                     X coordinate
-+
-+                           Remap Register Layout
-+
-+The dewarping map is set from applications using the
-+V4L2_CID_DW100_DEWARPING_16x16_VERTEX_MAP control. The control contains
-+an array of u32 values storing (x, y) destination coordinates for each
-+vertex of the grid. The x coordinate is stored in the 16 LSBs and the y
-+coordinate in the 16 MSBs.
-+
-+The number of elements in the array must match the image size:
-+
-+.. code-block:: C
-+
-+    elems = (DIV_ROUND_UP(width, 16) + 1) * (DIV_ROUND_UP(height, 16) + 1);
-+
-+If the control has not been set by the application, the driver uses an identity
-+map.
-+
-+More details on the DW100 hardware operations can be found in
-+*chapter 13.15 DeWarp* of IMX8MP_ reference manual.
-+
-+.. _IMX8MP: https://www.nxp.com/webapp/Download?colCode=IMX8MPRM
-diff --git a/Documentation/userspace-api/media/drivers/index.rst b/Documentation/userspace-api/media/drivers/index.rst
-index 12e3c512d718..0c720ca1a27d 100644
---- a/Documentation/userspace-api/media/drivers/index.rst
-+++ b/Documentation/userspace-api/media/drivers/index.rst
-@@ -33,7 +33,8 @@ For more details see the file COPYING in the source distribution of Linux.
+@@ -66,4 +66,19 @@ map.
+ More details on the DW100 hardware operations can be found in
+ *chapter 13.15 DeWarp* of IMX8MP_ reference manual.
  
- 	ccs
- 	cx2341x-uapi
--        hantro
-+	dw100
-+	hantro
- 	imx-uapi
- 	max2175
- 	meye-uapi
++The Vivante DW100 m2m driver implements the following driver-specific control:
++
++``V4L2_CID_DW100_DEWARPING_16x16_VERTEX_MAP (__u32 array)``
++    Specifies to DW100 driver its dewarping map (aka LUT) blob as described in
++    *chapter 13.15.2.3 Dewarping Remap* of IMX8MP_ reference manual as an U32
++    dynamic array. The image is divided into many small 16x16 blocks. If the
++    width/height of the image is not divisible by 16, the size of the
++    rightmost/bottommost block is the remainder. The dewarping map only saves
++    the vertex coordinates of the block. The dewarping grid map is comprised of
++    vertex coordinates for x and y. Each x, y coordinate register uses 16 bits
++    (UQ12.4) to record the coordinate address, with the Y coordinate in the
++    upper bits and X in the lower bits. The driver modifies the dimensions of
++    this control when the sink format is changed, to reflect the new input
++    resolution.
++
+ .. _IMX8MP: https://www.nxp.com/webapp/Download?colCode=IMX8MPRM
+diff --git a/include/uapi/linux/dw100.h b/include/uapi/linux/dw100.h
+new file mode 100644
+index 000000000000..3356496edd6b
+--- /dev/null
++++ b/include/uapi/linux/dw100.h
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
++/* Copyright 2022 NXP */
++
++#ifndef __UAPI_DW100_H__
++#define __UAPI_DW100_H__
++
++#include <linux/v4l2-controls.h>
++
++/*
++ * Check Documentation/userspace-api/media/drivers/dw100.rst for control details.
++ */
++#define V4L2_CID_DW100_DEWARPING_16x16_VERTEX_MAP (V4L2_CID_USER_DW100_BASE + 1)
++
++#endif
 -- 
 2.36.1
 
