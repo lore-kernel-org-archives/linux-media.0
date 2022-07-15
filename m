@@ -2,70 +2,68 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D4C2CCA47F
-	for <linux-media@archiver.kernel.org>; Mon, 18 Jul 2022 12:24:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3E9CC433EF
+	for <linux-media@archiver.kernel.org>; Mon, 18 Jul 2022 13:17:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233690AbiGRMY5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 18 Jul 2022 08:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46174 "EHLO
+        id S234997AbiGRNRl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 18 Jul 2022 09:17:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235116AbiGRMYn (ORCPT
+        with ESMTP id S233233AbiGRNRj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 18 Jul 2022 08:24:43 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07ADA765D
-        for <linux-media@vger.kernel.org>; Mon, 18 Jul 2022 05:24:39 -0700 (PDT)
-Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E99BC6DC;
-        Mon, 18 Jul 2022 14:24:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1658147078;
-        bh=8GJxUO0sgiUTZ9Yvenn+5TX/f3PpytakZGHUhb5ztig=;
-        h=From:To:Cc:Subject:Date:From;
-        b=K8A6+YzilFkDe2wRr8Y5RwUPMWZk06F4jlJHhD0dvkLoaA1cMHk0Nr+JKfr6ptDJr
-         1i/CCBO4TstK1HD7i4ObNNbxUu3XwaSOMu9wCulCSoUBhrL0g1FDif++cAqGqLkR+U
-         znXNfQMAIH0ar86IZcWekJjTtK4c11PHcu5dilmw=
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH] media: Documentation: mc-core: Fix typo
-Date:   Mon, 18 Jul 2022 15:24:02 +0300
-Message-Id: <20220718122402.22183-1-laurent.pinchart@ideasonboard.com>
+        Mon, 18 Jul 2022 09:17:39 -0400
+Received: from smtpbg.qq.com (unknown [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812B027B19;
+        Mon, 18 Jul 2022 06:17:34 -0700 (PDT)
+X-QQ-mid: bizesmtp82t1658150250tw87x307
+Received: from localhost.localdomain ( [171.223.96.21])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 18 Jul 2022 21:17:28 +0800 (CST)
+X-QQ-SSF: 01000000002000E0U000C00A0000020
+X-QQ-FEAT: 0AHoP94G71VzoKZpzzxxsve7xx364+lfoULIkOFIcMwYZ9nhr7xcyRopGvLNL
+        WgDiIFIB/eLWwFSY8+foeJVHkGmXOIuOQE49+f2UBkzWpwGWmykWHqZIsHbwF0qlmKRwmuW
+        bQFVKRvSfAD46D5ZOGIuMPu0JE68pT/zz7kEKgQy+LDtSAENxXZ6rN/fY0LnqxOOxqw+ipZ
+        y6V9C4R5k7BWjtL8itJE/egyBD3Cbw4OMPsLxD8TVEA+JVksa8un0m6AkTIjZDcWL1UCsC1
+        tLPq+RPwFkmF55q3YkRNE8UCHxLUx2ShjSHvjTU93lzhWk5Xt8drsYbcw1Ct1lqdMz8N0xz
+        ajUg14iREmxevup9h+EhEX1PAVYmhbt5gHLWOaScQsE+pFF6dB8poqfGyqbP7j5XbhoSfgr
+        LyMgeR1ZJkY=
+X-QQ-GoodBg: 0
+From:   Jason Wang <wangborong@cdjrlc.com>
+To:     wangborong@cdjrlc.com
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] media: Fix comment typo
+Date:   Fri, 15 Jul 2022 13:15:32 +0800
+Message-Id: <20220715051532.29742-1-wangborong@cdjrlc.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix a typo in the mc-core.rst media driver API documentation. Due to its
-nature, the typo unfortunately caused a warning during documentation
-build.
+The double `the' is duplicated in line 1300, remove one.
 
-Fixes: 03b282861ca7 ("media: mc-entity: Add a new helper function to get a remote pad for a pad")
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
- Documentation/driver-api/media/mc-core.rst | 2 +-
+ drivers/media/usb/tm6000/tm6000-cards.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/driver-api/media/mc-core.rst b/Documentation/driver-api/media/mc-core.rst
-index 644911936ad9..84aa7cdb5341 100644
---- a/Documentation/driver-api/media/mc-core.rst
-+++ b/Documentation/driver-api/media/mc-core.rst
-@@ -186,7 +186,7 @@ is required and the graph structure can be freed normally.
+diff --git a/drivers/media/usb/tm6000/tm6000-cards.c b/drivers/media/usb/tm6000/tm6000-cards.c
+index 98f4a63adc2a..b7842cd6f9af 100644
+--- a/drivers/media/usb/tm6000/tm6000-cards.c
++++ b/drivers/media/usb/tm6000/tm6000-cards.c
+@@ -1297,7 +1297,7 @@ static int tm6000_usb_probe(struct usb_interface *interface,
+ 		le16_to_cpu(dev->udev->descriptor.idProduct),
+ 		interface->altsetting->desc.bInterfaceNumber);
  
- Helper functions can be used to find a link between two given pads, or a pad
- connected to another pad through an enabled link
--(:c:func:`media_entity_find_link()`, :c:func:`media_pad_remote_pad_first()`n
-+(:c:func:`media_entity_find_link()`, :c:func:`media_pad_remote_pad_first()`,
- :c:func:`media_entity_remote_source_pad_unique()` and
- :c:func:`media_pad_remote_pad_unique()`).
- 
-
-base-commit: 8bd1dbf8d580c425605fb8936309a4e9745a7a95
+-/* check if the the device has the iso in endpoint at the correct place */
++/* check if the device has the iso in endpoint at the correct place */
+ 	if (!dev->isoc_in.endp) {
+ 		printk(KERN_ERR "tm6000: probing error: no IN ISOC endpoint!\n");
+ 		rc = -ENODEV;
 -- 
-Regards,
-
-Laurent Pinchart
+2.35.1
 
