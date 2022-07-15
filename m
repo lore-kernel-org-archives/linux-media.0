@@ -2,111 +2,145 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6B25C433EF
-	for <linux-media@archiver.kernel.org>; Fri, 15 Jul 2022 13:42:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7191BC43334
+	for <linux-media@archiver.kernel.org>; Fri, 15 Jul 2022 13:53:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232048AbiGONmr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Jul 2022 09:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44712 "EHLO
+        id S233221AbiGONx6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Jul 2022 09:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiGONmq (ORCPT
+        with ESMTP id S233202AbiGONxz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 15 Jul 2022 09:42:46 -0400
-Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFC77D790;
-        Fri, 15 Jul 2022 06:42:45 -0700 (PDT)
-Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by hi1smtp01.de.adit-jv.com (Postfix) with ESMTPS id 5D2035202EB;
-        Fri, 15 Jul 2022 15:42:43 +0200 (CEST)
-Received: from vmlxhi-182.localdomain (10.72.92.119) by hi2exch02.adit-jv.com
- (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Fri, 15 Jul
- 2022 15:42:43 +0200
-Date:   Fri, 15 Jul 2022 15:42:37 +0200
-From:   Michael Rodin <mrodin@de.adit-jv.com>
-To:     Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-CC:     Michael Rodin <mrodin@de.adit-jv.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-renesas-soc@vger.kernel.org>, <michael@rodin.online>,
-        <erosca@de.adit-jv.com>
-Subject: Re: [PATCH v2 0/3] Improve error handling in the rcar-vin driver
-Message-ID: <20220715134237.GA1114456@vmlxhi-182.localdomain>
-References: <YqEO3/KekkZhVjW+@oden.dyn.berto.se>
- <20220628180024.451258-1-mrodin@de.adit-jv.com>
- <YsQIbr9QYGBDoIWT@oden.dyn.berto.se>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
+        Fri, 15 Jul 2022 09:53:55 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80048.outbound.protection.outlook.com [40.107.8.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD401055B;
+        Fri, 15 Jul 2022 06:53:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fUzBegl6NNk5/CsGrpnHWwFhPvhhk8jHxPb+EuvTmZ3ouvHvtEVLH0k5tD4BU/TvnHpUqduLvFai/GkEUXeKlAjLebxW3fgTgTIhSre0ODyNPBbrJqWK+k+OKKTSnJnp+mab1GK5NHPoXBGqGGykzctUmgiP9ykRYO7hMimYNkmbTLIuNq5ryQmsNk7QEY0lhk0iNXQpCW5530GgoB09A1TveZzPKphadVeNrUvD39hsXzZuWXMJbwPhFf6ltFWku2jH/JlAjVtKzSlFCcoJ/Tl6LeNX98GjNOwHp21eElo7eI74otD1LAgkCmrEmt7HOCvjpiU0jUbvQDewR0JSag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aXAAGNfrNiSMxe/ey4OTDpi0XLzQaqJVF9QrNOOgtV8=;
+ b=fuLcxFQkwm1Ms02FCFv8NBO/C0b7BadYL3IMbX2+dxeAGUqPiyFTNnYRUHDxItEpLO96qkoCqUBX5EspXGjdfLfuN2nNxiarh2vyzDZ2Tvy9f36YefIsqos46kAVhhNRQU4mrUNsiMulx/zf4waGkC+Pi/buUQkzLA45QoAr6nNrk42M5hBtfZlwu1rB/Gj4586+uQ/13Bs1KIQSoZpWrfhBFMGq6KgvYcXccS0aCKStnC8o9C3Ylzw+agHyxO1zbTXFZTxG6VpCw8g/ZWnlt+BJql+inX3oTUjdb/L3We5ArlikVitiyphGFSwNQQ8dfc9YUZ1YCpS15SZDc0dBHg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aXAAGNfrNiSMxe/ey4OTDpi0XLzQaqJVF9QrNOOgtV8=;
+ b=a1JOJBYRQj5vT6Joaft25KO5DMMUGYFxk5z5pdt/+UKvGsZ6+Cs6pjKZ6RRMHiQFjnGu83kCj7TwdWo57jh6lE+WDwcujyE6FsdhRH+Fl5eN2iaf0u3T7OXz/mck3ehUFOETronNp+It4EZwdWy+JP6AR9ESortftxLc989QNyw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from PAXPR04MB8703.eurprd04.prod.outlook.com (2603:10a6:102:21e::22)
+ by VE1PR04MB6640.eurprd04.prod.outlook.com (2603:10a6:803:122::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.12; Fri, 15 Jul
+ 2022 13:53:49 +0000
+Received: from PAXPR04MB8703.eurprd04.prod.outlook.com
+ ([fe80::d51c:319c:bf4:199f]) by PAXPR04MB8703.eurprd04.prod.outlook.com
+ ([fe80::d51c:319c:bf4:199f%5]) with mapi id 15.20.5438.012; Fri, 15 Jul 2022
+ 13:53:49 +0000
+From:   Xavier Roumegue <xavier.roumegue@oss.nxp.com>
+To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        stanimir.varbanov@linaro.org, laurent.pinchart@ideasonboard.com,
+        tomi.valkeinen@ideasonboard.com, robh+dt@kernel.org,
+        nicolas@ndufresne.ca, alexander.stein@ew.tq-group.com,
+        ezequiel@vanguardiasur.com.ar
+Cc:     Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v8 2/6] media: v4l: uapi: Add user control base for DW100 controls
+Date:   Fri, 15 Jul 2022 15:53:25 +0200
+Message-Id: <20220715135329.975400-3-xavier.roumegue@oss.nxp.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220715135329.975400-1-xavier.roumegue@oss.nxp.com>
+References: <20220715135329.975400-1-xavier.roumegue@oss.nxp.com>
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YsQIbr9QYGBDoIWT@oden.dyn.berto.se>
-X-Originating-IP: [10.72.92.119]
-X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
- hi2exch02.adit-jv.com (10.72.92.28)
+Content-Type: text/plain
+X-ClientProxiedBy: PR1P264CA0061.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:102:2ca::15) To PAXPR04MB8703.eurprd04.prod.outlook.com
+ (2603:10a6:102:21e::22)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c4675c8f-1540-4c0c-75b5-08da66697118
+X-MS-TrafficTypeDiagnostic: VE1PR04MB6640:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qMCS12ARGlj9OfjQC2U/Zo/9IUfXxY6P2SaqUTWXP6GzYEeQ9BDZcz6wgGy2/IHmGNJ0Ss3g7m4KL4SlcAFhUJDPhYuu4cYyMRlvKhMi33MbYTanCuZA/dKgHnNb2kL4ZgxIzC/8fzY4VFQx5NluxWtB2INx1y1xvHtGpLknhHFPDVlOhYVZDEajJ9iiwh0JH2hQL3mgJ72kJjnY+nc10+ImmMMXGZWpdTB8KwUm2bAvgijxSl3Mml0+KTMxh9QPUSMOV9obcRYpflwbhJ07KL/5zdRQ+vwlCfMmPOF7hCQ1gNRf48e/xSRajKRwQatsMH7CX1JyM4VLE6UpTtwYOa+vYB5hGaNL3YESXzkwisK6QKq35glyK6VfMvV/fJM4NfGMvfT8XabbHOpFtlq3udouX1lK4nYIvURDdKWwNuuy8KI+touK1zshC5iAEAfTxeep9kOf7kxfRtRpKIosc+QsU3qi7U+V9RnuOFoq3OTp8sfS87e/DBV/cUe7kicDXjBLFmkkPSYAZXAZgSDCiER0OUdVEzq9R0i0N31IMhhipg/TLtD+PJU7xAZ59AmTxQRvZIF4zGBxfpGBlOWWgIfeLvHepwT5khPwG2s1XaSXA7XtNJtmkHCn5UJUF6bdds7MRiBp88JqDcrH1PtQwHDSUIw5ZwGb2W8frHR9xSrm5vvxuLzVnimLEsgAwiVroJ5zRuiZakf7PNUWdgkt4b9rO+TJCz2pBGebErzW+wr2IuGX8HfHMsDxW4JHPEvo
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8703.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(346002)(376002)(396003)(136003)(39860400002)(6506007)(52116002)(6486002)(86362001)(478600001)(6512007)(66556008)(66476007)(6666004)(5660300002)(41300700001)(38100700002)(66946007)(316002)(2616005)(1076003)(8676002)(2906002)(8936002)(44832011)(7416002)(4326008)(186003)(4744005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Wp4g8v2qc66OrOmxncKR7ByQ9lprf2dTEQ7I97py6j67Wr2UT/fUGymaxFp+?=
+ =?us-ascii?Q?qRSdP7MCAbkrP8no2oh+GPAhkZX0nAe7nzjjHshO0DubPWbPqiccrAHm8mh1?=
+ =?us-ascii?Q?1ghX7AkNYNMPtT1Gtd5qndPTE8YBxIpyz+fo0OCnFtXyqJ5GO7mo509lPeTv?=
+ =?us-ascii?Q?6HWiFQ4JrPoOun+d5hjtnKdKU+9mvLfOUYG0n57ej17KqkfEyI622id+eakN?=
+ =?us-ascii?Q?NjyjIeaT13pqKY7CHjTZlfRiF8uCC9dh976z4Kxi0keAXUNJ39sJ17MCtQfC?=
+ =?us-ascii?Q?1OmhRa93o6+xyqju4MbbEa5+odkaBoIshVPUIbSkGVnznFuvEfQDQviiQE7Z?=
+ =?us-ascii?Q?amv49w/TIEi4RbO1Vs15aN3AKSenNzCYICFvyWE4ycGln5hF7EwjPJ7QD5/W?=
+ =?us-ascii?Q?AhRRQfgzCIMCbEnu5a7+WSWjmRV3OyLn+zfIk0gGcZksU63z54zLZMA2QLn+?=
+ =?us-ascii?Q?dSVNlKrSaPf4/pWMYbQQC3YhJF2ENSfaBMEyr8Bsf8NyV64QoG/uMvmxHXQ4?=
+ =?us-ascii?Q?p/s8+JUD0b5XbGiv8J3vwBHi0EvD2biI7NfZrdwJYic1hUFnIYEnV+pTkcTk?=
+ =?us-ascii?Q?CaLbBQvjBgwLbPZXcB+R2AJCKGq9U9lleO+GjIzeGa9qytrn1pBeQs9LBq4w?=
+ =?us-ascii?Q?JK1z5g/IFkqT0BS7XiGEWVVqoG4z5H6FOeIdQVZLK4kQ1WqjOTjI6onehGwM?=
+ =?us-ascii?Q?VlMhCU6BAEBdTIv3cyx1k/L7MDTNT9Yu4Mh0vBaiH0nNZj+Kfr2By9AAGfnM?=
+ =?us-ascii?Q?teoO8YrcOhMJ2UVfWzRf3juZsm5Sm5y+EQldP+xgqfBwcFSKkOZ8XpGimjzX?=
+ =?us-ascii?Q?334GB1QeSOHQW2dHY8FICivW0muQyxk3uao7Uo5Eld61NwWWTaD/uleMF6kY?=
+ =?us-ascii?Q?oiO1f86TV1ccSPIRkD8pPIdW5Mq+gN0gdPShAvbVxtZ42MoISMpFoBdoTSws?=
+ =?us-ascii?Q?KRL5hAqMM1Bq7Wk2jiPOqLZFIkuEGcR1aAJxmdqshn0zsMYgc4uKBVq6X8cZ?=
+ =?us-ascii?Q?wHvaYkF2HHk44DNzsli5XNqAhy8CenmiJ9CPrF7A8bAcw0VAGTqFOWW66Gaw?=
+ =?us-ascii?Q?ADlsiG3qtk6vYIDw5DAtPnsYOZCK4IN+hru5BAzJeHsCL7jIGTExP074QUIW?=
+ =?us-ascii?Q?CfxH2zmAZtGTzLrh5HY0EjKV1ezDOi66lfyWO6zLA2Ke9SLDHJKFYKFgbrwC?=
+ =?us-ascii?Q?FjGDB2N8Xi0hgG1Ii3WGQQLjfhBP/6k33AlV+H4Vm4mdOtC3x9mEpWJbRoTZ?=
+ =?us-ascii?Q?2ExDFW530FlcGP1An2BB7NpJvMWEWqAOf6xs2X4HOHCb4uVfvB4O5D3eMt4b?=
+ =?us-ascii?Q?jI8l/DO+hlSDl+CwUHKjhhgpwytvXwiQnPY5LL2U3s7nkIKK9TVt+x+pjeKD?=
+ =?us-ascii?Q?wP+kNhG9QGATJCxWqcSRgHg7pCr8/h9CoWN9GNOkoc5gWBmq7ozxs0TQ15pt?=
+ =?us-ascii?Q?9MM9/3EvN5T7Ig7oVJuj/UzMNDxWaqrFqMW4ootCid7/z7XVqzULbSrPNqnS?=
+ =?us-ascii?Q?MUOlncbGy532MJuj4Fh8M5lmftkQIUeHCcZO0Pkq4uZqfStDb9+kT0SObRa+?=
+ =?us-ascii?Q?0Oy9Jb8r00Aks9bVyEW5dcpLmKQISiVZSuMEnxfiSiKugRX95l7HVWJ2Jobh?=
+ =?us-ascii?Q?lGuBsWrxDfebJc40AcIGrpxaDXe/eftqbjCsO6RtYrEswKBQl1CltH1/HL3q?=
+ =?us-ascii?Q?93QhmQ=3D=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c4675c8f-1540-4c0c-75b5-08da66697118
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8703.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2022 13:53:48.3717
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: owbPMarOCkktp4FfQgZGd1O7Fk6BpYwj1kJWu/Q0Ef1C0InTL7eoug+v2YNpUWaBZb9O0yS9w96E3Qyu2XURNw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6640
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Niklas, Hans,
+Add a control base for DW100 driver controls, and reserve 16 controls.
 
-On Tue, Jul 05, 2022 at 11:46:22AM +0200, Niklas Söderlund wrote:
-> Hi Michael,
-> 
-> Thanks for your persistent work with this series.
+Signed-off-by: Xavier Roumegue <xavier.roumegue@oss.nxp.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ include/uapi/linux/v4l2-controls.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Thank you for the feedback!
-
-> On 2022-06-28 20:00:19 +0200, Michael Rodin wrote:
-> > Hello,
-> > 
-> > this series is a followup to the other series [1] started by Niklas Söderlund
-> > where only the first patch has been merged. The overall idea is to be more
-> > compliant with the Renesas hardware manual which requires a reset or stop
-> > of capture in the VIN module before reset of CSI2. Another goal is to be
-> > more resilient with respect to non-critical CSI2 errors so the driver does
-> > not end in an endless restart loop. Compared to the previous version [2] of
-> > this series the patch 3 is replaced based on the conclusion in [3] so now
-> > userspace has to take care of figuring out if a transfer error was harmless
-> > or unrecoverable. Other patches are adapted accordingly so no assumptions
-> > about criticality of transfer errors are made in the kernel and the
-> > decision is left up to userspace.
-> 
-> I like this solution as it truly pushes the decision to user-space. What 
-> bugs me a little bit is that we don't have a way to communicate errors 
-> that we know are unrecoverable (it was for this case the work in this 
-> area started) and ones that could be recoverable (the use-case added on 
-> top).
-
-Yes, it's not nice that V4L2_EVENT_XFER_ERROR does not tell userspace
-whether an error is recoverable (i.e. the event can be ignored) or not
-(i.e. a restart of streaming is required) but the other possible option
-would be (as concluded in [3]) to implement a frame timeout monitoring
-thread in v4l2 core. I am not sure if it is possible to implement this
-second option cleanly...
-
-> I would also like to hear what Hans thinks as he had good suggestions 
-> for how to handle the cases we know can't be recovers in [4].
-
-A a new function vb2_queue_error_with_event() suggested by Hans seems to be
-redundant now, since it would not be used by rcar-vin (unless we implement
-frame timeout monitoring in the v4l2 core). Or do you have an idea, which
-drivers could be the first users of it, e.g. staging/media/imx I mentioned
-before?
-
-> > 
-> > [1] https://urldefense.proofpoint.com/v2/url?u=https-3A__lore.kernel.org_linux-2Drenesas-2Dsoc_20211108160220.767586-2D1-2Dniklas.soderlund-2Brenesas-40ragnatech.se_&d=DwIDAw&c=euGZstcaTDllvimEN8b7jXrwqOf-v5A_CdpgnVfiiMM&r=sWsgk3pKkv5GeIDM2RZlPY8TjNFU2D0oBeOj6QNBadE&m=ecX7IwfatUO7SNPiyQ6x_8K9t2eWJf3y8GNuNHJ_0W0&s=Cli6jADEgMmCOLVoFekRRXzmty9WBXtoSF9utZJNMXY&e=
-> > [2] https://urldefense.proofpoint.com/v2/url?u=https-3A__lore.kernel.org_all_1652983210-2D1194-2D1-2Dgit-2Dsend-2Demail-2Dmrodin-40de.adit-2Djv.com_&d=DwIDAw&c=euGZstcaTDllvimEN8b7jXrwqOf-v5A_CdpgnVfiiMM&r=sWsgk3pKkv5GeIDM2RZlPY8TjNFU2D0oBeOj6QNBadE&m=ecX7IwfatUO7SNPiyQ6x_8K9t2eWJf3y8GNuNHJ_0W0&s=6CysfSY0OoAenEwCzigeyPOb8vyaa4GgzkJSR-ny83U&e=
-> > [3] https://urldefense.proofpoint.com/v2/url?u=https-3A__lore.kernel.org_all_YqEO3-252FKekkZhVjW-2B-40oden.dyn.berto.se_&d=DwIDAw&c=euGZstcaTDllvimEN8b7jXrwqOf-v5A_CdpgnVfiiMM&r=sWsgk3pKkv5GeIDM2RZlPY8TjNFU2D0oBeOj6QNBadE&m=ecX7IwfatUO7SNPiyQ6x_8K9t2eWJf3y8GNuNHJ_0W0&s=67JE_QR4x7omrtC7wzbpn2OgW75TAR80-R8WQyE-bVo&e=
-> 
-> 4. https://urldefense.proofpoint.com/v2/url?u=https-3A__lore.kernel.org_all_1fddc966-2D5a23-2D63b4-2D185e-2Dc17aa6d65b54-40xs4all.nl_&d=DwIDAw&c=euGZstcaTDllvimEN8b7jXrwqOf-v5A_CdpgnVfiiMM&r=sWsgk3pKkv5GeIDM2RZlPY8TjNFU2D0oBeOj6QNBadE&m=ecX7IwfatUO7SNPiyQ6x_8K9t2eWJf3y8GNuNHJ_0W0&s=I18yWgde2UKZY4AiwB5s-Lf12eebHOcHFZFOlTcO2oQ&e=
-> 
-> -- 
-> Kind Regards,
-> Niklas Söderlund
-
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index dfff69ed88f7..0b26ebd6ca78 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -225,6 +225,12 @@ enum v4l2_colorfx {
+  */
+ #define V4L2_CID_USER_ISL7998X_BASE		(V4L2_CID_USER_BASE + 0x1180)
+ 
++/*
++ * The base for DW100 driver controls.
++ * We reserve 16 controls for this driver.
++ */
++#define V4L2_CID_USER_DW100_BASE		(V4L2_CID_USER_BASE + 0x1190)
++
+ /* MPEG-class control IDs */
+ /* The MPEG controls are applicable to all codec controls
+  * and the 'MPEG' part of the define is historical */
 -- 
-Best Regards,
-Michael
+2.36.1
+
