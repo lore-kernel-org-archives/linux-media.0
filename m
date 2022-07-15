@@ -2,183 +2,233 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 815B0CCA47C
-	for <linux-media@archiver.kernel.org>; Fri, 15 Jul 2022 08:57:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F1EBC433EF
+	for <linux-media@archiver.kernel.org>; Fri, 15 Jul 2022 09:19:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232335AbiGOI5c (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Jul 2022 04:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50278 "EHLO
+        id S230288AbiGOJTX convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Jul 2022 05:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbiGOI5b (ORCPT
+        with ESMTP id S231168AbiGOJTW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 15 Jul 2022 04:57:31 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F5A2AE5
-        for <linux-media@vger.kernel.org>; Fri, 15 Jul 2022 01:57:30 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id r6so5453787edd.7
-        for <linux-media@vger.kernel.org>; Fri, 15 Jul 2022 01:57:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=melexis.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WF2/Rr6KDXGTe8c1nCnqFbYnoiF8afARgQTg3crt7JU=;
-        b=GsfCPaROVaRJ+seDbyy0SpUxQlEHMhLelELpPL0pL6NwaREarezj+bi8vvMIgW1iL2
-         ZuPW+jZDJicj6I494Wa1WskWWA79CB33tg8ITfIyw7vyvomnKJTSzZa8zyo1yGk9y2WO
-         QN/613HKc6QPv2OIVZ1XSakXtfLwu8wk2HHt0+v1fA4ILgIFMv1/OmbGLTWtsaOPDwbD
-         w7LZtPDoTn0o860WjS77WScMMkxcZpFAYBysSRdR+UvdU58HzWodl2ya5xK7f+lS8orY
-         2tGnFePy/Y01T1Ds7HnSJQsoK8ZJjLQDVwmFxg3mIaLwzNtgydvRQ+CVFy3b0X9boBMC
-         48Lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WF2/Rr6KDXGTe8c1nCnqFbYnoiF8afARgQTg3crt7JU=;
-        b=2qKeBQgjLpa+KjtiQ/EBNskIffFE0DOgTUPppb8vVitt9U3Kg0CDYf6Yfs8XT8c0FM
-         krd93xnk8ikWKOLyHZnW0l4C8Vl8DkBMJxc5lxQh8gRlXLaoZLYY5hJ01grqmP7OPjFX
-         HIwDZiOWHZ+fcbTZpChjIPVxLs2ZuN8ZtmfNmPcKCPUUR5idHr/U4RBIbY6ygmcEWrNk
-         b4haby5TMboG9x6piHn068PDwglznMNJBMz1rK4zvtz3TetYUZCE/qNyac06A6jwtSxu
-         U3jB7i9XtVgHh3wH3qQyrG88inT1EZ78u3pwkrneEFs6ouoR0PmTZeRfz6Y3oVL2LpBK
-         PfOA==
-X-Gm-Message-State: AJIora+/R+9hsZdmttjimSh5SVxM0PIVxHmojZOJICl5qdLSdKXUfpMi
-        JrP/2xyk8JimqmVdYx3KXlai4A==
-X-Google-Smtp-Source: AGRyM1sCFgH5MOXPoSFdU3zLqxTSMMdrJ1RPoDq85DBYMCeLh9PLHaYn7hND5sH7P0L4aoJjsw0aWQ==
-X-Received: by 2002:a05:6402:27cf:b0:43a:de0b:9a82 with SMTP id c15-20020a05640227cf00b0043ade0b9a82mr17374933ede.427.1657875448691;
-        Fri, 15 Jul 2022 01:57:28 -0700 (PDT)
-Received: from vkh-ThinkPad-T490 ([194.44.56.171])
-        by smtp.gmail.com with ESMTPSA id o7-20020aa7c507000000b0043ab81e4230sm2457797edq.50.2022.07.15.01.57.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 01:57:28 -0700 (PDT)
-Date:   Fri, 15 Jul 2022 11:57:20 +0300
-From:   Volodymyr Kharuk <vkh@melexis.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, Andrii Kyselov <ays@melexis.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hyun Kwon <hyun.kwon@xilinx.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 4/6] media: uapi: Add mlx7502x header file
-Message-ID: <20220715085720.GA2295@vkh-ThinkPad-T490>
-References: <cover.1657786765.git.vkh@melexis.com>
- <0765b2ef8eea43dce67232a109e9f8b338aa06bd.1657786765.git.vkh@melexis.com>
- <Ys/wh1wUvQlmpHrg@pendragon.ideasonboard.com>
+        Fri, 15 Jul 2022 05:19:22 -0400
+Received: from www.linuxtv.org (www.linuxtv.org [130.149.80.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5138060521
+        for <linux-media@vger.kernel.org>; Fri, 15 Jul 2022 02:19:21 -0700 (PDT)
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1oCHTj-00Bkzb-Ky; Fri, 15 Jul 2022 09:19:19 +0000
+Received: from localhost ([127.0.0.1] helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.94.2)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1oCHTi-009U7m-1B; Fri, 15 Jul 2022 09:19:17 +0000
+Date:   Fri, 15 Jul 2022 09:19:17 +0000 (UTC)
+From:   Jenkins Builder Robot <jenkins@linuxtv.org>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org
+Message-ID: <1438375724.0.1657876757338@builder.linuxtv.org>
+In-Reply-To: <596162587.0.1657790356879@builder.linuxtv.org>
+References: <596162587.0.1657790356879@builder.linuxtv.org>
+Subject: Build failed in Jenkins: media-build #3960
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ys/wh1wUvQlmpHrg@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
+X-Jenkins-Job: media-build
+X-Jenkins-Result: FAILURE
+Auto-submitted: auto-generated
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent,
+See <https://builder.linuxtv.org/job/media-build/3960/display/redirect>
 
-Thank you for your review.
+Changes:
 
-On Thu, Jul 14, 2022 at 01:31:35PM +0300, Laurent Pinchart wrote:
-> Hi Volodymyr,
-> 
-> Thank you for the patch.
-> 
-> On Thu, Jul 14, 2022 at 11:34:46AM +0300, Volodymyr Kharuk wrote:
-> > Define user controls for mlx7502x driver and update MAINTAINERS
-> > 
-> > Signed-off-by: Volodymyr Kharuk <vkh@melexis.com>
-> > ---
-> >  MAINTAINERS                   |  7 +++++++
-> >  include/uapi/linux/mlx7502x.h | 31 +++++++++++++++++++++++++++++++
-> >  2 files changed, 38 insertions(+)
-> >  create mode 100644 include/uapi/linux/mlx7502x.h
-> > 
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index ef3ec334fae9..1a68d888ee14 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -12673,6 +12673,13 @@ S:	Supported
-> >  W:	http://www.melexis.com
-> >  F:	drivers/iio/temperature/mlx90632.c
-> >  
-> > +MELEXIS MLX7502X DRIVER
-> > +M:	Volodymyr Kharuk <vkh@melexis.com>
-> > +L:	linux-media@vger.kernel.org
-> > +S:	Supported
-> > +W:	http://www.melexis.com
-> > +F:	include/uapi/linux/mlx7502x.h
-> > +
-> >  MELFAS MIP4 TOUCHSCREEN DRIVER
-> >  M:	Sangwon Jee <jeesw@melfas.com>
-> >  S:	Supported
-> > diff --git a/include/uapi/linux/mlx7502x.h b/include/uapi/linux/mlx7502x.h
-> > new file mode 100644
-> > index 000000000000..44386f3d6f5a
-> > --- /dev/null
-> > +++ b/include/uapi/linux/mlx7502x.h
-> > @@ -0,0 +1,31 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> > +/*
-> > + * Melexis 7502x ToF cameras driver.
-> > + *
-> > + * Copyright (C) 2021 Melexis N.V.
-> > + *
-> > + */
-> > +
-> > +#ifndef __UAPI_MLX7502X_H_
-> > +#define __UAPI_MLX7502X_H_
-> > +
-> > +#include <linux/v4l2-controls.h>
-> > +
-> 
-> These controls should be documented, in
-> Documentation/userspace-api/media/drivers/.
-Ok, will do in v3
-> 
-> > +/* number of phases per frame: 1..8 */
-> > +#define V4L2_CID_MLX7502X_PHASE_NUMBER  (V4L2_CID_USER_MLX7502X_BASE + 0)
-> > +/* shift of each phase in frame, this is an array of 8 elements, each 16bits */
-> > +#define V4L2_CID_MLX7502X_PHASE_SEQ	(V4L2_CID_USER_MLX7502X_BASE + 1)
-> > +/* frequency modulation in MHz */
-> > +#define V4L2_CID_MLX7502X_FMOD		(V4L2_CID_USER_MLX7502X_BASE + 2)
-> > +/* time integration of each phase in us */
-> > +#define V4L2_CID_MLX7502X_TINT		(V4L2_CID_USER_MLX7502X_BASE + 3)
-> 
-> Are these control very device-specific, or are they concept that apply
-> in general to ToF sensors ? Same for V4L2_CID_MLX7502X_OUTPUT_MODE.
-These controls(except V4L2_CID_MLX7502X_OUTPUT_MODE) are general for ToF
-sensors. Do you think we should standardize them?
 
-Note that the control V4L2_CID_MLX7502X_TINT is similar to
-V4L2_CID_EXPOSURE, but the way it is done in ToF is different. They don't
-have a shutter. So I gave a separate control name. Is it ok?
-> 
-> > +/* mode could sw(sending i2c packet), hw(pin triggering), and continuous(self triggering) */
-> > +#define V4L2_CID_MLX7502X_TRIGGER_MODE	(V4L2_CID_USER_MLX7502X_BASE + 4)
-> > +/* in case sw or hw trigger mode is used */
-> > +#define V4L2_CID_MLX7502X_TRIGGER	(V4L2_CID_USER_MLX7502X_BASE + 5)
-> 
-> Trigger control is likely something we need to standardize at the V4L2
-> level.
-Ok, then I'll remove these controls for now and I will back with this as
-a separate patch.
-> 
-> > +/* this is related to the taps in ToF cameras, usually A minus B is the best option */
-> > +#define V4L2_CID_MLX7502X_OUTPUT_MODE	(V4L2_CID_USER_MLX7502X_BASE + 6)
-> > +/* ToF camers has its own temperature sensor, which can be read out only during streaming */
-> > +#define V4L2_CID_MLX7502X_TEMPERATURE	(V4L2_CID_USER_MLX7502X_BASE + 7)
-> 
-> This should probably use the proposed temperature control from
-> https://lore.kernel.org/linux-media/20220415111845.27130-3-benjamin.mugnier@foss.st.com/
-Ok, then I'll remove these controls for now.
-> 
-> > +
-> > +#endif /* __UAPI_MLX7502X_H_ */
-> 
-> -- 
-> Regards,
-> 
-> Laurent Pinchart
+------------------------------------------
+Started by timer
+Running as SYSTEM
+Building remotely on slave2 in workspace <https://builder.linuxtv.org/job/media-build/ws/>
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir <https://builder.linuxtv.org/job/media-build/ws/.git> # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url git://linuxtv.org/media_build.git # timeout=10
+Fetching upstream changes from git://linuxtv.org/media_build.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.30.2'
+ > git fetch --tags --force --progress -- git://linuxtv.org/media_build.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+Checking out Revision 0fe857b86addf382f6fd383948bd7736a3201403 (refs/remotes/origin/master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 0fe857b86addf382f6fd383948bd7736a3201403 # timeout=10
+Commit message: "versions.txt: IMON builds for 4.11 and up only"
+ > git rev-list --no-walk 0fe857b86addf382f6fd383948bd7736a3201403 # timeout=10
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse 0fe857b86addf382f6fd383948bd7736a3201403^{commit} # timeout=10
+The recommended git tool is: NONE
+No credentials specified
+[GitCheckoutListener] Recording commits of 'git git://linuxtv.org/media_build.git'
+[GitCheckoutListener] Found previous build 'media-build #3959' that contains recorded Git commits
+[GitCheckoutListener] -> Starting recording of new commits since '0fe857b'
+[GitCheckoutListener] -> Using head commit '0fe857b' as starting point
+[GitCheckoutListener] -> Git commit decorator could not be created for SCM 'hudson.plugins.git.GitSCM@5978145d'
+[GitCheckoutListener] -> No new commits found
+[media-build] $ /bin/sh -xe /tmp/jenkins5618179915643199659.sh
++ make distclean
+make -C <https://builder.linuxtv.org/job/media-build/ws/v4l> distclean
+make[1]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+rm -f *~ *.o *.ko .*.o.cmd .*.ko.cmd *.mod.c av7110_firm.h fdump \
+	config-compat.h Module.symvers Module.markers modules.order \
+	*.unsigned .*.ko.unsigned.cmd
+rm -f .version .*.o.flags .*.o.d *.mod.gcno Makefile.media \
+	Kconfig Kconfig.kern .config .config.cmd .myconfig \
+	.kconfig.dep config-mycompat.h
+rm -rf .tmp_versions .tmp*.ver .tmp*.o .*.gcno .cache.mk
+rm -f scripts/lxdialog scripts/kconfig
+make[1]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
++ ./build
+Checking if the needed tools for Debian GNU/Linux 11 (bullseye) are available
+Needed package dependencies are met.
 
--- 
---
-Volodymyr Kharuk
+************************************************************
+* This script will download the latest tarball and build it*
+* Assuming that your kernel is compatible with the latest  *
+* drivers. If not, you'll need to add some extra backports,*
+* ./backports/<kernel> directory.                          *
+* It will also update this tree to be sure that all compat *
+* bits are there, to avoid compilation failures            *
+************************************************************
+************************************************************
+* All drivers and build system are under GPLv2 License     *
+* Firmware files are under the license terms found at:     *
+* http://www.linuxtv.org/downloads/firmware/               *
+* Please abort in the next 5 secs if you don't agree with  *
+* the license                                              *
+************************************************************
 
+Not aborted. It means that the licence was agreed. Proceeding...
+
+****************************
+Updating the building system
+****************************
+hint: Pulling without specifying how to reconcile divergent branches is
+hint: discouraged. You can squelch this message by running one of the following
+hint: commands sometime before your next pull:
+hint: 
+hint:   git config pull.rebase false  # merge (the default strategy)
+hint:   git config pull.rebase true   # rebase
+hint:   git config pull.ff only       # fast-forward only
+hint: 
+hint: You can replace "git config" with "git config --global" to set a default
+hint: preference for all repositories. You can also pass --rebase, --no-rebase,
+hint: or --ff-only on the command line to override the configured default per
+hint: invocation.
+From git://linuxtv.org/media_build
+ * branch                      master     -> FETCH_HEAD
+Already up to date.
+make: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+wget http://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5 -O linux-media.tar.bz2.md5.tmp
+--2022-07-15 09:19:11--  http://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5
+Resolving linuxtv.org (linuxtv.org)... 130.149.80.248
+Connecting to linuxtv.org (linuxtv.org)|130.149.80.248|:80... connected.
+HTTP request sent, awaiting response... 301 Moved Permanently
+Location: https://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5 [following]
+--2022-07-15 09:19:12--  https://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5
+Connecting to linuxtv.org (linuxtv.org)|130.149.80.248|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 105 [application/x-bzip2]
+Saving to: ‘linux-media.tar.bz2.md5.tmp’
+
+     0K                                                       100%  116M=0s
+
+2022-07-15 09:19:12 (116 MB/s) - ‘linux-media.tar.bz2.md5.tmp’ saved [105/105]
+
+make: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+make: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+tar xfj linux-media.tar.bz2
+rm -f .patches_applied .linked_dir .git_log.md5
+make: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+**********************************************************
+* Downloading firmwares from linuxtv.org.                *
+**********************************************************
+firmware/dvb-usb-vp702x-01.fw
+firmware/dvb-usb-vp7045-01.fw
+firmware/dvb-fe-bcm3510-01.fw
+firmware/as102_data2_st.hex
+firmware/dvb-usb-terratec-h7-drxk.fw
+firmware/isdbt_nova_12mhz.inp
+firmware/Boot.S
+firmware/dvb_nova_12mhz_b0.inp
+firmware/dvb-fe-xc4000-1.4.1.fw
+firmware/sms1xxx-hcw-55xxx-isdbt-02.fw
+firmware/sms1xxx-nova-a-dvbt-01.fw
+firmware/dvb-usb-avertv-a800-02.fw
+firmware/cmmb_venice_12mhz.inp
+firmware/dvb-fe-xc5000c-4.1.30.7.fw
+firmware/v4l-cx23418-cpu.fw
+firmware/v4l-cx23885-enc-broken.fw
+firmware/dvb-fe-drxj-mc-vsb-1.0.8.fw
+firmware/dvb_nova_12mhz.inp
+firmware/dvb-usb-dib0700-1.20.fw
+firmware/tdmb_nova_12mhz.inp
+firmware/as102_data1_st.hex
+firmware/dvb-fe-or51132-vsb.fw
+firmware/dvb-usb-it9135-02.fw
+firmware/v4l-cx23418-apu.fw
+firmware/dvb-ttpci-01.fw-261f
+firmware/v4l-cx23418-dig.fw
+firmware/dvb-ttpci-01.fw-261c
+firmware/dvb-usb-bluebird-01.fw
+firmware/dvb-fe-or51211.fw
+firmware/dvb-fe-or51132-qam.fw
+firmware/sms1xxx-stellar-dvbt-01.fw
+firmware/dvb-usb-dibusb-5.0.0.11.fw
+firmware/dvb-fe-drxj-mc-vsb-qam-1.0.8.fw
+firmware/dvb-usb-terratec-h5-drxk.fw
+firmware/dvb-usb-wt220u-02.fw
+firmware/v4l-cx23885-enc.fw
+firmware/dvb-ttpci-01.fw-2622
+firmware/dvb-usb-wt220u-01.fw
+firmware/v4l-cx25840.fw
+firmware/dvb-fe-drxj-mc-1.0.8.fw
+firmware/v4l-cx231xx-avcore-01.fw
+firmware/dvb-usb-dtt200u-01.fw
+firmware/dvb-usb-dibusb-6.0.0.8.fw
+firmware/sms1xxx-nova-b-dvbt-01.fw
+firmware/dvb-fe-xc5000-1.6.114.fw
+firmware/cmmb_vega_12mhz.inp
+firmware/dvb-usb-it9135-01.fw
+firmware/isdbt_nova_12mhz_b0.inp
+firmware/dvb-ttpci-01.fw-261a
+firmware/dvb-ttpci-01.fw-261b
+firmware/dvb-ttpci-01.fw-261d
+firmware/README
+firmware/isdbt_rio.inp
+firmware/dvb-usb-umt-010-02.fw
+firmware/sms1xxx-hcw-55xxx-dvbt-02.fw
+firmware/dvb-usb-terratec-h7-az6007.fw
+firmware/v4l-cx23885-avcore-01.fw
+******************
+* Start building *
+******************
+make -C <https://builder.linuxtv.org/job/media-build/ws/v4l> allyesconfig
+make[1]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+No version yet, using 5.10.0-14-amd64
+make[2]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+Applying patches for kernel 5.10.0-14-amd64
+patch -s -f -N -p1 -i ../backports/api_version.patch
+patch -s -f -N -p1 -i ../backports/pr_fmt.patch
+1 out of 1 hunk FAILED
+1 out of 1 hunk FAILED
+make[2]: *** [Makefile:132: apply_patches] Error 1
+make[2]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+make[1]: *** [Makefile:366: allyesconfig] Error 2
+make[1]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+make: *** [Makefile:26: allyesconfig] Error 2
+can't select all drivers at ./build line 531
+Build step 'Execute shell' marked build as failure
