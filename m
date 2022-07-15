@@ -2,137 +2,72 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9709C433EF
-	for <linux-media@archiver.kernel.org>; Fri, 15 Jul 2022 08:47:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DE44C43334
+	for <linux-media@archiver.kernel.org>; Fri, 15 Jul 2022 08:50:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbiGOIrA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Jul 2022 04:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37186 "EHLO
+        id S232351AbiGOIui (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Jul 2022 04:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiGOIq7 (ORCPT
+        with ESMTP id S232157AbiGOIuh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 15 Jul 2022 04:46:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809EA814B4
-        for <linux-media@vger.kernel.org>; Fri, 15 Jul 2022 01:46:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3C643B82B4C
-        for <linux-media@vger.kernel.org>; Fri, 15 Jul 2022 08:46:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D03E7C3411E;
-        Fri, 15 Jul 2022 08:46:51 +0000 (UTC)
-Message-ID: <b01b33e8-7be8-dfb5-97e5-aae9fe404121@xs4all.nl>
-Date:   Fri, 15 Jul 2022 10:46:50 +0200
+        Fri, 15 Jul 2022 04:50:37 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2599820FB;
+        Fri, 15 Jul 2022 01:50:36 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LklR42Qs2zFpxk;
+        Fri, 15 Jul 2022 16:49:36 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 15 Jul 2022 16:50:04 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 15 Jul
+ 2022 16:50:03 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>
+CC:     <khalasa@piap.pl>, <mchehab@kernel.org>
+Subject: [PATCH -next] media: ar0521: fix error return code in ar0521_power_on()
+Date:   Fri, 15 Jul 2022 16:59:24 +0800
+Message-ID: <20220715085924.1881607-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [ANN] Media Summit at OSS Europe in Dublin: September 12
-Content-Language: en-US
-To:     Sebastian Fricke <sebastian.fricke@collabora.com>
-Cc:     linux-media@vger.kernel.org,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Sean Young <sean@mess.org>,
-        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-        =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        paul.kocialkowski@bootlin.com,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-References: <54d42d4e-5994-68a2-4a21-770167d5405a@xs4all.nl>
- <20220715083610.z42qixl576artetw@basti-XPS-13-9310>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220715083610.z42qixl576artetw@basti-XPS-13-9310>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sebastian,
+Return error code if ar0521_write_regs() fails in ar0521_power_on().
 
-I'll keep it in mind as an option, but probably not. However, we always create a
-meeting report of the summit (see e.g. https://linuxtv.org/news.php?entry=2019-05-24-1.sailus).
+Fixes: 852b50aeed15 ("media: On Semi AR0521 sensor driver")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/media/i2c/ar0521.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-That's probably a lot more useful than having to listen to endless talking :-)
+diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
+index c7bdfc69b9be..e850c92d847e 100644
+--- a/drivers/media/i2c/ar0521.c
++++ b/drivers/media/i2c/ar0521.c
+@@ -757,8 +757,9 @@ static int ar0521_power_on(struct device *dev)
+ 	usleep_range(4500, 5000); /* min 45000 clocks */
+ 
+ 	for (cnt = 0; cnt < ARRAY_SIZE(initial_regs); cnt++)
+-		if (ar0521_write_regs(sensor, initial_regs[cnt].data,
+-				      initial_regs[cnt].count))
++		ret = ar0521_write_regs(sensor, initial_regs[cnt].data,
++					initial_regs[cnt].count);
++		if (ret)
+ 			goto off;
+ 
+ 	ret = ar0521_write_reg(sensor, AR0521_REG_SERIAL_FORMAT,
+-- 
+2.25.1
 
-Regards,
-
-	Hans
-
-On 7/15/22 10:36, Sebastian Fricke wrote:
-> Hey Hans,
-> 
-> On 15.07.2022 10:15, Hans Verkuil wrote:
->> Hi all,
->>
->> The Linux Foundation organized a meeting room for us to use on Monday September 12
->> at the Convention Centre Dublin. It is co-located with the Open Source Summit Europe,
->> see https://events.linuxfoundation.org/open-source-summit-europe/ for more info.
->>
->> To attend this Media Summit no registration is required for the OSSE, but you do need
->> to register with me by sending me an email. There is a maximum of 20 participants.
->>
->> I send out a request for topics in May and got quite a few replies:
->>
->> https://lore.kernel.org/all/a7007268a65846674b82a108215992d39b430b38.camel@ndufresne.ca/T/
->>
->> If you have more ideas for topics, then reply either to that message (preferred) or this
->> one.
->>
->> See here for more details about the conference:
->>
->> https://events.linuxfoundation.org/open-source-summit-europe/
->>
->> It is primarily meant for media developers to meet face-to-face. Whether there will
->> be a possibility to participate remotely is not certain at this time. Past experience
->> shows that meetings like this are a poor fit for remote attendance, unless you have
->> a meeting room that is designed for such purposes, which we don't have.
-> 
-> Could it be possible to record the meetings? I think it might be
-> valuable for others to get an overview of what is happening in the
-> subsystem and in which direction certain parts are going.
-> I believe this is especially the case for developers like me that are
-> new in the subsystem and who wouldn't be able to contribute
-> constructively to a design discussion yet.
-> 
->>
->> The actual agenda will depend on who will attend, I hope to be able to put that
->> together around mid August. But the link above with the 'Request for Topics' thread
->> will give a good indication of what to expect.
->>
->> So, if you want to attend, then let me know by email. Please reply as soon as possible,
->> even if you are not entirely certain yet if you can attend.
->>
->> The health and safety regulations will be those of the OSSE LF:
->>
->> https://events.linuxfoundation.org/open-source-summit-europe/attend/health-and-safety/
->>
->> Code of conduct:
->>
->> https://events.linuxfoundation.org/open-source-summit-europe/attend/code-of-conduct/
->>
->> A final note: the total cost is at most $650 (depends on the number of people):
->> that's for a whiteboard, powerstrips and refreshments (coffee, tea, soda, water).
->>
->> It would be nice if this can be sponsored by one or more companies. I'll ask
->> my manager if Cisco can contribute to this (once he's back from vacation), but
->> if other companies want to contribute as well, then let me know and we can
->> split the bill. And start off the meeting with a nice slide saying: "Sponsored by:".
->>
->> Regards,
->>
->>     Hans
-> 
-> Greetings,
-> Sebastian
