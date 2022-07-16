@@ -2,51 +2,51 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0741BC43334
-	for <linux-media@archiver.kernel.org>; Sat, 16 Jul 2022 05:56:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E0A4C433EF
+	for <linux-media@archiver.kernel.org>; Sat, 16 Jul 2022 06:12:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231530AbiGPF45 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 16 Jul 2022 01:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
+        id S231313AbiGPGM4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 16 Jul 2022 02:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiGPF4z (ORCPT
+        with ESMTP id S229538AbiGPGM4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 16 Jul 2022 01:56:55 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39342481C8
-        for <linux-media@vger.kernel.org>; Fri, 15 Jul 2022 22:56:54 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 99E255C0097;
-        Sat, 16 Jul 2022 01:56:53 -0400 (EDT)
+        Sat, 16 Jul 2022 02:12:56 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6A63C178
+        for <linux-media@vger.kernel.org>; Fri, 15 Jul 2022 23:12:54 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2FB805C0049;
+        Sat, 16 Jul 2022 02:12:52 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sat, 16 Jul 2022 01:56:53 -0400
+  by compute2.internal (MEProxy); Sat, 16 Jul 2022 02:12:52 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
         cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1657951013; x=1658037413; bh=PW3mJzmicw
-        8UB2/rc8VrHQMws6ZIHtm00kQkfxdM83s=; b=o35o5HEJXvPFydQEOL0aXXJbt3
-        GSF7fTWckdhU9EZh8k2/5F94J6NfOBrThQ+kBAYNc58Iwn3N50iNlF5DsIpLH+Ug
-        qHrwp+1QdvKGnQWeG4Wb5Xp7bHx4wXGhJQ7TXEH60kOuL8whaFHi9OeuhG4DQvNW
-        zEJWYrfIluRfJiFYyGrSWw5WpglxQl5BJ4Je3rdIAgjd5bj0Ejo0n1lguULlJQu9
-        szpDyYt4NKZJr+czCR+AVXgpDtZEKFSR+OuTPjheOFwIYdHapngaKQ9KxdMTT3xz
-        yL3wrrHvLOZtqUb7TCjNFIT01iHthBPC5qpPbVa4bv9KIBY1ZGf/iMvzQAWQ==
+        :subject:to:to; s=fm3; t=1657951972; x=1658038372; bh=9aVaeCfojG
+        QgOfJ0P0V135IK2SdR9Yxo1/vx8xaYZtk=; b=jWUsPgF56hEbNe6YIxGUNKDQh9
+        uRuvESRIgHMAthUE+54piRjjOH1a3jfAHTnlsykKnFUbIzwdukX7QsuYBD0DHa9D
+        y6o/r5PsPxEVOtzBOzcBQOH8cK+oD/Il4FSPz87Xiu32MhP8wPNFpsFhY0EebC2r
+        p3bdpEFy2NiITKuzIOOWkaTje5cFALzXug8SKYh6P9fTTT4Qi03kQgEkh2SBXMRn
+        OgCNfCrnT3LJsEwPiIIut0KUUCLTW3Dmv+G8icnuz4xrpeFJStNj1JodBzdxXoeL
+        JsJkz1+GGOa+kJKpc2q1NpPZ+QmlspZ0LAPmLcwUZ7hCnuRHYEf9TB/b4VHQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
         :feedback-id:from:from:in-reply-to:in-reply-to:message-id
         :mime-version:references:reply-to:sender:subject:subject:to:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1657951013; x=1658037413; bh=PW3mJzmicw8UB2/rc8VrHQMws6ZI
-        Htm00kQkfxdM83s=; b=NmsbD88DQ5/6OSg8WzP7JGOUxVDtFyybM3qG7xiY7lii
-        jR3qJKCaEOP+g3Z8Uk37FTyrKu0AbuKI+OAKVFi8qEQky8Le1WILetNpR0FWAfPB
-        2yD9GDFCZvI3ymoXqe83//V8i8USjbU5tsBAZ5W77KeaOGWqDSqdBscUB1CLqEIB
-        UxtZ17t8RkXMtCypQPLKiFme55KbBUe1/w60iNfoe/DobSPUsJHMnGMNVYYlzqZc
-        3SYSDF6zh+HDOxufSGcBph3dm+gd8nO3pa589GUiK3qRkM/eGnx7QnHKr2/EknKK
-        9Y8G/iruyTiin7TMflsn8Xo3wQUEOx7U0yYPd67vrw==
-X-ME-Sender: <xms:JVPSYuJvm1Mm3x3ELmIt3tl4xgqEyew07qBYFmchvZ1Jf1TB-wNGpw>
-    <xme:JVPSYmLLAahy9S88P2erkHv2wCyns2dHpZdrTFU8RpJCee-n7D3z8hqG7y98vA9YE
-    D9k7WG08AYYaTonXa8>
-X-ME-Received: <xmr:JVPSYuv8NZfZJ-PGkVOLF2jPPoT0sLOsi-LsP76OViyOeM-KuKj9Iw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudekvddguddtvdcutefuodetggdotefrod
+        fm3; t=1657951972; x=1658038372; bh=9aVaeCfojGQgOfJ0P0V135IK2SdR
+        9Yxo1/vx8xaYZtk=; b=TvR5Pu6pYZv0LLssctvEo6GMeppScDwSbVXWqKeZc9iI
+        tNW1s1bk7OzV+tTldoG2xGXUpkZHzzBF2TQvv+LnHYKyok4TPOY6RtWbqC7tAdP2
+        pVRW3hX6LqDzIbai3q87EsTGbYL8CB1yRvbkvfpcm65iqo2iXQxvdZmKFOhc1Ifl
+        K7+C4GWg2U4cUvX7vz+RtSB5+VVW0R+4ZOZ8RpyyK3unrjej77aJ4c7hymie5Gng
+        O+vb6CKEVklHugziiRSRTicU612rrMKZp8xfdUmciiFvoy+D6N29FZZPmqaEyh7m
+        ywX9SItjggXfIyDg+sUd8YJ4Ocen00RkK1FJSVIZag==
+X-ME-Sender: <xms:41bSYmTYU1ovPbIwy_kEM6G6iiO57t3vFizN6nPNlhyWGyceORjyqw>
+    <xme:41bSYrwWQ0ZRWZvyJwdpY7-EX7FdzJZLmNghKZ7Ks5zcPy9cEJlyaqKi_WYwTun2w
+    zew2dun8HEijdNEylg>
+X-ME-Received: <xmr:41bSYj3urSUH6eoyZQIPa5HfzMk4RRVC8KPHtF_KVAIVhuNLhbLRBw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudekvddguddthecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
     enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttdejnecuhfhrohhmpeffrghf
@@ -54,14 +54,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudekvddguddtvdcutefuodetgg
     cuggftrfgrthhtvghrnhepvdehtdeludekgeevleefuedvudejieetheekvdfhteekffdu
     jefhfedtudehvdeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
     hfrhhomhepuggrfhhnrgesfhgrshhtmhgrihhlrdgtohhm
-X-ME-Proxy: <xmx:JVPSYjY-vxraZ1QZUz5Q1Lu7ZbG9AB4BmlZ7b4I0W8PcwKop14PZgg>
-    <xmx:JVPSYlbFXZ-tmVU3PpyKZYw0q5xI_hV1PLX5oyu2F4gpNGSvQZIttA>
-    <xmx:JVPSYvDlZho0nnZ5BsUc2dE0-QL04zi-nE4E6geGwepW-HLZm7WFIQ>
-    <xmx:JVPSYpEZbIE1I3dduHJ6MvPxfd8m5Sgs2o_w8UQ9KO7nogD1vNWT9A>
+X-ME-Proxy: <xmx:41bSYiCqOBraIZtSkqONZTIJyNDnFc78RHjwENAzpJi5HO8oozLtxg>
+    <xmx:41bSYvjzvOTMCbcwXGqc4lpfMEONd6Xr69DA-QSsRPJoAYYPaT9h_Q>
+    <xmx:41bSYupMK6F3gsekCE5XNDVu9UUx7G8YtBLHe_S-xrGr9wKJRz8ybA>
+    <xmx:5FbSYsul1AQlFUVyux1dOCkbG2Hg3YLP1xjZqfTlzTl86JUAElJr4A>
 Feedback-ID: i0e894699:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 16 Jul 2022 01:56:51 -0400 (EDT)
-Date:   Sat, 16 Jul 2022 08:56:48 +0300
+ 16 Jul 2022 02:12:50 -0400 (EDT)
+Date:   Sat, 16 Jul 2022 09:12:47 +0300
 From:   Dafna Hirschfeld <dafna@fastmail.com>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
@@ -69,7 +69,7 @@ Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         Florian Sylvestre <fsylvestre@baylibre.com>
 Subject: Re: [PATCH 2/3] media: rockchip: rkisp1: Mask invalid bits in DPCC
  parameters
-Message-ID: <20220716055648.unpih6bsy6cpj5ld@guri>
+Message-ID: <20220716061247.dil4rt6zac2jzu6y@guri>
 References: <20220616160456.21549-1-laurent.pinchart@ideasonboard.com>
  <20220616160456.21549-3-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
@@ -104,6 +104,14 @@ On 16.06.2022 19:04, Laurent Pinchart wrote:
 >+	 * The enable bit is controlled in rkisp1_isp_isr_other_config() and
 >+	 * must be preserved. The grayscale mode should be configured
 >+	 * automatically based on the media bus code on the ISP sink pad, so
+
+I see you add RKISP1_CIF_ISP_DPCC_MODE_GRAYSCALE_MODE in this patch.
+Shouldn't you add a patch that set/unset it according to the isp sink pad
+as this doc says?
+
+Thanks,
+Dafna
+
 >+	 * only the STAGE1_ENABLE bit can be set by userspace.
 >+	 */
 > 	mode = rkisp1_read(params->rkisp1, RKISP1_CIF_ISP_DPCC_MODE);
@@ -205,12 +213,6 @@ On 16.06.2022 19:04, Laurent Pinchart wrote:
 >+#define RKISP1_CIF_ISP_DPCC_MODE_STAGE1_ENABLE		BIT(2)
 >+#define RKISP1_CIF_ISP_DPCC_OUTPUT_MODE_MASK		GENMASK(3, 0)
 >+#define RKISP1_CIF_ISP_DPCC_SET_USE_MASK		GENMASK(3, 0)
-
-Why are these two masks use GENMASK and other don't?
-
-
-Reviewed-by: Dafna Hirschfeld <dafna@fastmail.com>
-
 >+#define RKISP1_CIF_ISP_DPCC_METHODS_SET_MASK		0x00001f1f
 >+#define RKISP1_CIF_ISP_DPCC_LINE_THRESH_MASK		0x0000ffff
 >+#define RKISP1_CIF_ISP_DPCC_LINE_MAD_FAC_MASK		0x00003f3f
