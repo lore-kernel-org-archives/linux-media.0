@@ -2,70 +2,131 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18942C433EF
-	for <linux-media@archiver.kernel.org>; Sat, 16 Jul 2022 05:00:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ACBBC43334
+	for <linux-media@archiver.kernel.org>; Sat, 16 Jul 2022 05:12:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbiGPFAm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 16 Jul 2022 01:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38864 "EHLO
+        id S229632AbiGPFMJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 16 Jul 2022 01:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiGPFAl (ORCPT
+        with ESMTP id S229448AbiGPFMI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 16 Jul 2022 01:00:41 -0400
-Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026A440BD6;
-        Fri, 15 Jul 2022 22:00:34 -0700 (PDT)
-X-QQ-mid: bizesmtp65t1657947577tegsdf7s
-Received: from localhost.localdomain ( [223.86.65.215])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 16 Jul 2022 12:59:35 +0800 (CST)
-X-QQ-SSF: 01000000002000E0U000B00A0000000
-X-QQ-FEAT: PXJK6C+SdL1zWBD2r1dwXVWoJNFGSxML4kNGB47Zd/vMvHzldRq1HCJXarKEW
-        UmWtuorVig3z4d2+/wTKtMKvNj38eVh7uKRzSWxxWhIN8pdJWXVvs95rwhrkFbkxdUceivp
-        GctfELb/61rM6FwAyZrxhnLps69L7fqO2d4oD7jY+b0d6J2/O1bHhx5lN9rum4kXrM4B5ql
-        ABb33lz1HSobucNDQQ4FsrHKBz3qjC76kpOoq6vQbWn0Hyh1aYuItGEyJIwV8C7bg0NsviS
-        hcqT4ij0mMYVC2/HmQLga0fL2/gRk2PNkqD7D+AJo6BJvAp8YxGR9vEq83pOxDbTuPxVNn6
-        GwigwVMdnYYW6xBQnAAfHJh22aF0g==
-X-QQ-GoodBg: 0
-From:   Jason Wang <wangborong@cdjrlc.com>
-To:     mchehab@kernel.org
-Cc:     mirela.rabulea@nxp.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, linux-imx@nxp.com, kernel@pengutronix.de,
-        festevam@gmail.com, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] media: imx-jpeg: Remove unnecessary memset() after dma_alloc_coherent()
-Date:   Sat, 16 Jul 2022 20:25:43 +0800
-Message-Id: <20220716122543.34218-1-wangborong@cdjrlc.com>
-X-Mailer: git-send-email 2.35.1
+        Sat, 16 Jul 2022 01:12:08 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697ED8BABB
+        for <linux-media@vger.kernel.org>; Fri, 15 Jul 2022 22:12:07 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 31CD15C00AE;
+        Sat, 16 Jul 2022 01:12:04 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Sat, 16 Jul 2022 01:12:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1657948324; x=1658034724; bh=ZBfAeKEn6t
+        7Bgbk2F4A3T0hcDOiY8SHauNE6FxnK6Po=; b=KTxa5hrXsvstpQKCR5je5km/p3
+        Ifszx/+z2KTQelNwlEw/bFVzcIzj3ucpcOW8xCE6D6y98gmon733zYtFnKzfOr44
+        p2j1OMfKkl0+ZOljyIo62hpozzNjtEdljomYQRuD4CY+WXRF+CstkkODjVLXY8Zn
+        Go7BHgRS7paivjH3c0nO0X5xHOzcWAsEn3069zZ+wYggS4HeqsOTcgTYdiDcnDnP
+        ni344+S6IJ16vntZ2MRoNimYlUaUbvvcgtrDGW5IP27xAIK1rVFHVrXNRXdG+l72
+        BafJ/IlLDeUu7gpoUb7PSNXGRblwMnrVFa+/U8j3Mo1BNV+Kf8XJExUsF7lA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1657948324; x=1658034724; bh=ZBfAeKEn6t7Bgbk2F4A3T0hcDOiY
+        8SHauNE6FxnK6Po=; b=FUzKFCMhkvaqn+mioG6tJ7imcVqDUdtoCmmqakdvB8XS
+        VNWpNmTz8hK7nk9HIvYEmTBidOSwm9JNszMdCPUEnvEnGUMJA14+EwmTYv/7q6ih
+        MqWed7a4HJqltZrfKgUSQ5vmXDsOym4d7StX1X6HYj6uol906q95CRN6Kw48w3e7
+        YQlqCopRmcQQuD41ODTu487XVXfzKmdrdZteyhTs2eEKZeu9bV5lrKgaf0XmPKuf
+        XV7Av7zD0725/KVM5AYPoeJZSgPl7yvVrwWICJYkuOu1SSWhJGIbMaMsfzwISZux
+        Rg8ZKGoVbyKZtm135+wYtdMOLcOLr6aYkC1D5p9CbA==
+X-ME-Sender: <xms:o0jSYs51UWUWCoqjKoU7SjOMAYWgCah6znVHY8WaK92FcAMjHIRGOQ>
+    <xme:o0jSYt5YZNnaMqkdL-FM4EYdEQvpZly5Sj6zr8bAerQuOPonXJICCE7exyQ-2ASyA
+    HxmmYYoLDECc1ZZUig>
+X-ME-Received: <xmr:o0jSYreimR_qd2xD8sPZNveKvCgu6-_O9pQjSLPxB67Fq-OD2Cie7A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudekvddgleefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomhepffgrfhhn
+    rgcujfhirhhstghhfhgvlhguuceouggrfhhnrgesfhgrshhtmhgrihhlrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpedvhedtledukeegveelfeeuvddujeeiteehkedvhfetkeffudej
+    hfeftdduhedvkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpegurghfnhgrsehfrghsthhmrghilhdrtghomh
+X-ME-Proxy: <xmx:o0jSYhIeMnSUdvVZjA7f_3fFhtwqJ7APqLiuRpAhNvWsZiDtpXshEg>
+    <xmx:o0jSYgK-NhGMy_xz3aFAJxqvOEg4c-Rjx509hDCv2W92fK6M6kwJSg>
+    <xmx:o0jSYixPw-mXCaOiRaag0XXshQpgBwBLydyzuQh9bSGu9JrXNuj1kA>
+    <xmx:pEjSYk3uXRu3tgHvZNyZLRRhH9xZsyTVZhg7tVI4Gyq8Nzg2o34nxA>
+Feedback-ID: i0e894699:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 16 Jul 2022 01:12:02 -0400 (EDT)
+Date:   Sat, 16 Jul 2022 08:11:59 +0300
+From:   Dafna Hirschfeld <dafna@fastmail.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        Paul Elder <paul.elder@ideasonboard.com>,
+        Florian Sylvestre <fsylvestre@baylibre.com>
+Subject: Re: [PATCH 1/3] media: rockchip: rkisp1: Set DPCC methods enable
+ bits inside loop
+Message-ID: <20220716051159.uif74xaq2xtpen3y@guri>
+References: <20220616160456.21549-1-laurent.pinchart@ideasonboard.com>
+ <20220616160456.21549-2-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220616160456.21549-2-laurent.pinchart@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The `dma_alloc_coherent()' already zeroes out memory for us, so we don't
-need the redundant memset().
+hi,
 
-Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
----
- drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c | 1 -
- 1 file changed, 1 deletion(-)
+On 16.06.2022 19:04, Laurent Pinchart wrote:
+>The rkisp1_dpcc_config() function looks over methods sets to configure
+>them, but sets the RKISP1_CIF_ISP_DPCC_METHODS_SET_* registers outside
+>of the loop with hand-unrolled code. Move this to the loop to simplify
+>the code.
+>
+>Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-index 32fd04a3d8bb..482177ee01b6 100644
---- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-+++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-@@ -519,7 +519,6 @@ static bool mxc_jpeg_alloc_slot_data(struct mxc_jpeg_dev *jpeg,
- 				     GFP_ATOMIC);
- 	if (!cfg_stm)
- 		goto err;
--	memset(cfg_stm, 0, MXC_JPEG_MAX_CFG_STREAM);
- 	jpeg->slot_data[slot].cfg_stream_vaddr = cfg_stm;
- 
- skip_alloc:
--- 
-2.35.1
+Reviewed-by: Dafna Hirschfeld <dafna@fastmail.com>
 
+>---
+> drivers/media/platform/rockchip/rkisp1/rkisp1-params.c | 10 ++++------
+> 1 file changed, 4 insertions(+), 6 deletions(-)
+>
+>diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
+>index c88a9c0fa86e..140012fa18f0 100644
+>--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
+>+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
+>@@ -18,6 +18,8 @@
+> #define RKISP1_ISP_PARAMS_REQ_BUFS_MIN	2
+> #define RKISP1_ISP_PARAMS_REQ_BUFS_MAX	8
+>
+>+#define RKISP1_ISP_DPCC_METHODS_SET(n) \
+>+			(RKISP1_CIF_ISP_DPCC_METHODS_SET_1 + 0x4 * (n))
+> #define RKISP1_ISP_DPCC_LINE_THRESH(n) \
+> 			(RKISP1_CIF_ISP_DPCC_LINE_THRESH_1 + 0x14 * (n))
+> #define RKISP1_ISP_DPCC_LINE_MAD_FAC(n) \
+>@@ -66,13 +68,9 @@ static void rkisp1_dpcc_config(struct rkisp1_params *params,
+> 	rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_DPCC_SET_USE,
+> 		     arg->set_use);
+>
+>-	rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_DPCC_METHODS_SET_1,
+>-		     arg->methods[0].method);
+>-	rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_DPCC_METHODS_SET_2,
+>-		     arg->methods[1].method);
+>-	rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_DPCC_METHODS_SET_3,
+>-		     arg->methods[2].method);
+> 	for (i = 0; i < RKISP1_CIF_ISP_DPCC_METHODS_MAX; i++) {
+>+		rkisp1_write(params->rkisp1, RKISP1_ISP_DPCC_METHODS_SET(i),
+>+			     arg->methods[i].method);
+> 		rkisp1_write(params->rkisp1, RKISP1_ISP_DPCC_LINE_THRESH(i),
+> 			     arg->methods[i].line_thresh);
+> 		rkisp1_write(params->rkisp1, RKISP1_ISP_DPCC_LINE_MAD_FAC(i),
+>-- 
+>Regards,
+>
+>Laurent Pinchart
+>
