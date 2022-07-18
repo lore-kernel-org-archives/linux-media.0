@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3197EC433EF
-	for <linux-media@archiver.kernel.org>; Mon, 18 Jul 2022 10:22:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39CD2CCA485
+	for <linux-media@archiver.kernel.org>; Mon, 18 Jul 2022 10:33:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234182AbiGRKWd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 18 Jul 2022 06:22:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35822 "EHLO
+        id S234331AbiGRKdk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 18 Jul 2022 06:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234071AbiGRKWZ (ORCPT
+        with ESMTP id S234327AbiGRKdk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 18 Jul 2022 06:22:25 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2841CFD5;
-        Mon, 18 Jul 2022 03:22:23 -0700 (PDT)
+        Mon, 18 Jul 2022 06:33:40 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5FE1E3C2;
+        Mon, 18 Jul 2022 03:33:38 -0700 (PDT)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 973C66601A05;
-        Mon, 18 Jul 2022 11:22:20 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A4C4B6601A05;
+        Mon, 18 Jul 2022 11:33:35 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658139741;
-        bh=MBfaA4l7s9JZSP3+F+mJre4x0mO0iWTWc7gCQfQH6R4=;
+        s=mail; t=1658140416;
+        bh=wFbi6UCGoTtmKBC9q/jLYRHp+xvE/2amm1VXtH0cozI=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bgKQqeZ3BSO/JrSFq+us7gOSiaS9QQL/nZTgdDc4xU8jGJ0dJmRNikSXK4TmbX+Uz
-         TnfbQetMKhMfBw1xftjD7PcseM2CVl3zSs4wLmJW62qtZEvQtjckQ6NEZFyad5ch20
-         /QPjynMzbLT7nIgxIzsSPkJXUL5wr2uxjEu+poJFShYOVXeHKhUyslIBQW1stXP9Vq
-         SGorPakSM4X2nlNM6/DUUwpm/DaZoWoIxxqUa7ftVkHhhPpsumAfMMaSd9nP3j3vw/
-         8LJVKVM0VhX12KGP5DLBiBsHPHei28IUtxug2Dawy+KjCpS1Kzy2lBClQdNFR8I/ea
-         lepl1nve+GCiA==
-Message-ID: <00dc6bff-d87a-0d80-fe20-ae70e5ad0c4f@collabora.com>
-Date:   Mon, 18 Jul 2022 12:22:17 +0200
+        b=TbOuiDcvpKCaM6ZnCSsqJ+FLLEBIa0fc6RWySI8akBItP60L8kpUXsmislNoFazob
+         6EjVk1CKKMsJjbA9O7nxOj3B/R/rh/xDNubTsbctYwbueVVWLhymswKvTez+B/9wQd
+         HzA17mwLU5u8bTL0wOStfS7miiVjCPWymS1fOldqf+Hk+TxpWLgNw/S9RLalHXbOmj
+         GxvFwOPKr6x1jzQxJ/dMgKMkkqn2vX09uTGWkndtLzGU1v1CGu1r9G5ZxK7htLAPo6
+         zTcNQn0zbmzJqK2uN8WP5oRMLf1ZXnaMj/WRfIwXbsdpxtJ415/CeawBRrWdVvgQVd
+         rzU4CFmOTcDAw==
+Message-ID: <499968a2-fbc6-230d-2ed4-cac2b9a98a17@collabora.com>
+Date:   Mon, 18 Jul 2022 12:33:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [V5,3/8] media: mtk-jpegdec: manage jpegdec multi-hardware
+Subject: Re: [V5,5/8] media: mtk-jpegdec: add jpeg decode worker interface
 Content-Language: en-US
 To:     Irui Wang <irui.wang@mediatek.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -54,10 +54,10 @@ Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
         Tomasz Figa <tfiga@chromium.org>, xia.jiang@mediatek.com,
         maoguang.meng@mediatek.com, srv_heupstream@mediatek.com
 References: <20220716093408.29734-1-irui.wang@mediatek.com>
- <20220716093408.29734-4-irui.wang@mediatek.com>
+ <20220716093408.29734-6-irui.wang@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220716093408.29734-4-irui.wang@mediatek.com>
+In-Reply-To: <20220716093408.29734-6-irui.wang@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -67,158 +67,236 @@ X-Mailing-List: linux-media@vger.kernel.org
 Il 16/07/22 11:34, Irui Wang ha scritto:
 > From: kyrie wu <kyrie.wu@mediatek.com>
 > 
-> manage each hardware information, including irq/clk/power.
-> the hardware includes HW0/HW1/HW2.
+> Add jpeg decoding worker to ensure that three HWs
+> run in parallel in MT8195.
 > 
 > Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
 > Signed-off-by: irui wang <irui.wang@mediatek.com>
 > 
 > ---
->   drivers/media/platform/mediatek/jpeg/Makefile |   5 +-
->   .../platform/mediatek/jpeg/mtk_jpeg_core.c    |  23 +++
->   .../platform/mediatek/jpeg/mtk_jpeg_core.h    |  37 ++++
->   .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.c  | 172 ++++++++++++++++++
->   4 files changed, 235 insertions(+), 2 deletions(-)
+>   .../platform/mediatek/jpeg/mtk_jpeg_core.c    | 172 ++++++++++++++++++
+>   .../platform/mediatek/jpeg/mtk_jpeg_core.h    |   6 +
+>   .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.c  |  39 ++--
+>   3 files changed, 205 insertions(+), 12 deletions(-)
 > 
-> diff --git a/drivers/media/platform/mediatek/jpeg/Makefile b/drivers/media/platform/mediatek/jpeg/Makefile
-> index 69703db4b0a5..26e84852523e 100644
-> --- a/drivers/media/platform/mediatek/jpeg/Makefile
-> +++ b/drivers/media/platform/mediatek/jpeg/Makefile
-> @@ -1,9 +1,10 @@
->   # SPDX-License-Identifier: GPL-2.0-only
->   obj-$(CONFIG_VIDEO_MEDIATEK_JPEG) += mtk_jpeg.o \
-> -	mtk-jpeg-enc-hw.o
-> +	mtk-jpeg-enc-hw.o \
-> +	mtk-jpeg-dec-hw.o
->   
->   mtk_jpeg-y := mtk_jpeg_core.o \
-> -		 mtk_jpeg_dec_hw.o \
->   		 mtk_jpeg_dec_parse.o
->   
->   mtk-jpeg-enc-hw-y := mtk_jpeg_enc_hw.o
-> +mtk-jpeg-dec-hw-y := mtk_jpeg_dec_hw.o
 > diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-> index 386d48cc4f59..a9e8be976bb0 100644
+> index a9e8be976bb0..65b963ba0d6f 100644
 > --- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
 > +++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-> @@ -1100,6 +1100,10 @@ static void mtk_jpeg_multicore_enc_device_run(void *priv)
+> @@ -1100,8 +1100,177 @@ static void mtk_jpeg_multicore_enc_device_run(void *priv)
 >   	queue_work(jpeg->workqueue, &ctx->jpeg_work);
 >   }
 >   
-> +static void mtk_jpeg_multicore_dec_device_run(void *priv)
+> +static int mtk_jpegdec_get_hw(struct mtk_jpeg_ctx *ctx)
 > +{
-
-.... why is this function empty?!
-
+> +	struct mtk_jpegdec_comp_dev *comp_jpeg;
+> +	struct mtk_jpeg_dev *jpeg = ctx->jpeg;
+> +	unsigned long flags;
+> +	int hw_id = -1;
+> +	int i;
+> +
+> +	spin_lock_irqsave(&jpeg->hw_lock, flags);
+> +	for (i = 0; i < MTK_JPEGDEC_HW_MAX; i++) {
+> +		comp_jpeg = jpeg->dec_hw_dev[i];
+> +		if (comp_jpeg->hw_state == MTK_JPEG_HW_IDLE) {
+> +			hw_id = i;
+> +			comp_jpeg->hw_state = MTK_JPEG_HW_BUSY;
+> +			break;
+> +		}
+> +	}
+> +	spin_unlock_irqrestore(&jpeg->hw_lock, flags);
+> +
+> +	return hw_id;
 > +}
 > +
->   static void mtk_jpeg_dec_device_run(void *priv)
->   {
->   	struct mtk_jpeg_ctx *ctx = priv;
-> @@ -1166,6 +1170,10 @@ static const struct v4l2_m2m_ops mtk_jpeg_multicore_enc_m2m_ops = {
->   	.device_run = mtk_jpeg_multicore_enc_device_run,
->   };
->   
-> +static const struct v4l2_m2m_ops mtk_jpeg_multicore_dec_m2m_ops = {
-> +	.device_run = mtk_jpeg_multicore_dec_device_run,
-> +};
-> +
->   static const struct v4l2_m2m_ops mtk_jpeg_dec_m2m_ops = {
->   	.device_run = mtk_jpeg_dec_device_run,
->   	.job_ready  = mtk_jpeg_dec_job_ready,
-> @@ -1680,6 +1688,17 @@ static struct mtk_jpeg_variant mtk8195_jpegenc_drvdata = {
->   	.cap_q_default_fourcc = V4L2_PIX_FMT_JPEG,
->   };
->   
-> +static const struct mtk_jpeg_variant mtk8195_jpegdec_drvdata = {
-> +	.formats = mtk_jpeg_dec_formats,
-> +	.num_formats = MTK_JPEG_DEC_NUM_FORMATS,
-> +	.qops = &mtk_jpeg_dec_qops,
-> +	.m2m_ops = &mtk_jpeg_multicore_dec_m2m_ops,
-> +	.dev_name = "mtk-jpeg-dec",
-> +	.ioctl_ops = &mtk_jpeg_dec_ioctl_ops,
-> +	.out_q_default_fourcc = V4L2_PIX_FMT_JPEG,
-> +	.cap_q_default_fourcc = V4L2_PIX_FMT_YUV420M,
-> +};
-> +
->   #if defined(CONFIG_OF)
->   static const struct of_device_id mtk_jpeg_match[] = {
->   	{
-> @@ -1698,6 +1717,10 @@ static const struct of_device_id mtk_jpeg_match[] = {
->   		.compatible = "mediatek,mt8195-jpgenc",
->   		.data = &mtk8195_jpegenc_drvdata,
->   	},
-> +	{
-> +		.compatible = "mediatek,mt8195-jpgdec",
-> +		.data = &mtk8195_jpegdec_drvdata,
-> +	},
->   	{},
->   };
->   
-
-..snip..
-
-> diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-> index d2f25f43e852..232e81165dd3 100644
-> --- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-> +++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-
-..snip..
-
-> +
-> +static int mtk_jpegdec_hw_probe(struct platform_device *pdev)
+> +static int mtk_jpegdec_put_hw(struct mtk_jpeg_dev *jpeg, int hw_id)
 > +{
-> +	struct mtk_jpegdec_clk *jpegdec_clk;
-> +	struct mtk_jpeg_dev *master_dev;
-> +	struct mtk_jpegdec_comp_dev *dev;
-> +	int ret, i;
+> +	unsigned long flags;
 > +
-> +	struct device *decs = &pdev->dev;
+> +	spin_lock_irqsave(&jpeg->hw_lock, flags);
+> +	jpeg->dec_hw_dev[hw_id]->hw_state =
+> +		MTK_JPEG_HW_IDLE;
+> +	spin_unlock_irqrestore(&jpeg->hw_lock, flags);
 > +
-> +	if (!decs->parent)
-> +		return -EPROBE_DEFER;
+> +	return 0;
+> +}
 > +
-> +	master_dev = dev_get_drvdata(decs->parent);
-> +	if (!master_dev)
-> +		return -EPROBE_DEFER;
+> +static int mtk_jpegdec_set_hw_param(struct mtk_jpeg_ctx *ctx,
+> +				    int hw_id,
+> +				    struct vb2_v4l2_buffer *src_buf,
+> +				    struct vb2_v4l2_buffer *dst_buf)
+> +{
+> +	struct mtk_jpegdec_comp_dev *jpeg =
+> +		ctx->jpeg->dec_hw_dev[hw_id];
 > +
-> +	dev = devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
-> +	if (!dev)
-> +		return -ENOMEM;
+> +	jpeg->hw_param.curr_ctx = ctx;
+> +	jpeg->hw_param.src_buffer = src_buf;
+> +	jpeg->hw_param.dst_buffer = dst_buf;
 > +
-> +	dev->plat_dev = pdev;
-> +	dev->dev = &pdev->dev;
+> +	return 0;
+> +}
 > +
-> +	if (!master_dev->is_jpgdec_multihw) {
-> +		master_dev->is_jpgdec_multihw = true;
-> +		for (i = 0; i < MTK_JPEGDEC_HW_MAX; i++)
-> +			master_dev->dec_hw_dev[i] = NULL;
+> +static void mtk_jpegdec_worker(struct work_struct *work)
+> +{
+> +	struct mtk_jpeg_ctx *ctx = container_of(work, struct mtk_jpeg_ctx,
+> +		jpeg_work);
+> +	struct mtk_jpegdec_comp_dev *comp_jpeg[MTK_JPEGDEC_HW_MAX];
+> +	enum vb2_buffer_state buf_state = VB2_BUF_STATE_ERROR;
+> +	struct mtk_jpeg_src_buf *jpeg_src_buf, *jpeg_dst_buf;
+> +	struct vb2_v4l2_buffer *src_buf, *dst_buf;
+> +	struct mtk_jpeg_dev *jpeg = ctx->jpeg;
+> +	int ret, i, hw_id = 0;
+> +	struct mtk_jpeg_bs bs;
+> +	struct mtk_jpeg_fb fb;
+> +	unsigned long flags;
+> +
+> +	for (i = 0; i < MTK_JPEGDEC_HW_MAX; i++)
+> +		comp_jpeg[i] = jpeg->dec_hw_dev[i];
+> +
+> +retry_select:
+
+Please ensure that we have a max retries limit to avoid an infinite loop.
+
+> +	hw_id = mtk_jpegdec_get_hw(ctx);
+> +	if (hw_id < 0) {
+> +		ret = wait_event_interruptible_timeout(jpeg->dec_hw_wq,
+> +						       atomic_read(&jpeg->dechw_rdy) > 0,
+> +						       MTK_JPEG_HW_TIMEOUT_MSEC);
+> +		if (ret != 0) {
+> +			dev_err(jpeg->dev, "%s : %d, all HW are busy\n",
+> +				__func__, __LINE__);
+> +			v4l2_m2m_job_finish(jpeg->m2m_dev, ctx->fh.m2m_ctx);
+> +			return;
+> +		}
+> + > +		goto retry_select;
 > +	}
 > +
-> +	jpegdec_clk = &dev->jdec_clk;
+> +	atomic_dec(&jpeg->dechw_rdy);
+> +	src_buf = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
+> +	if (!src_buf)
+> +		goto getbuf_fail;
 > +
-> +	jpegdec_clk->clk_num = devm_clk_bulk_get_all(&pdev->dev,
-> +						     &jpegdec_clk->clks);
-> +	if (jpegdec_clk->clk_num < 0)
-> +		return dev_err_probe(&pdev->dev,
-> +				      jpegdec_clk->clk_num,
-> +				      "Failed to get jpegdec clock count.\n");
+> +	dst_buf = v4l2_m2m_next_dst_buf(ctx->fh.m2m_ctx);
+> +	if (!dst_buf)
+> +		goto getbuf_fail;
 > +
-> +	dev->reg_base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(dev->reg_base))
-> +		return PTR_ERR(dev->reg_base);
+> +	v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
+> +	v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
 > +
-> +	ret = mtk_jpegdec_hw_init_irq(dev);
-> +	if (ret)
-> +		return dev_err_probe(&pdev->dev,
-> +				     ret,
-> +				     "Failed to register JPEGDEC irq handler.\n");
+> +	v4l2_m2m_buf_copy_metadata(src_buf, dst_buf, true);
+> +	jpeg_src_buf = mtk_jpeg_vb2_to_srcbuf(&src_buf->vb2_buf);
+> +	jpeg_dst_buf = mtk_jpeg_vb2_to_srcbuf(&dst_buf->vb2_buf);
+> +
+> +	if (mtk_jpeg_check_resolution_change(ctx,
+> +					     &jpeg_src_buf->dec_param)) {
+> +		mtk_jpeg_queue_src_chg_event(ctx);
+> +		ctx->state = MTK_JPEG_SOURCE_CHANGE;
+> +		goto dec_end;
+> +	}
+> +
+> +	jpeg_src_buf->curr_ctx = ctx;
+> +	jpeg_src_buf->frame_num = ctx->total_frame_num;
+> +	jpeg_dst_buf->curr_ctx = ctx;
+> +	jpeg_dst_buf->frame_num = ctx->total_frame_num;
+> +	ctx->total_frame_num++;
+> +
+> +	mtk_jpegdec_set_hw_param(ctx, hw_id, src_buf, dst_buf);
+> +	ret = pm_runtime_get_sync(comp_jpeg[hw_id]->dev);
+> +	if (ret < 0) {
+> +		dev_err(jpeg->dev, "%s : %d, pm_runtime_get_sync fail !!!\n",
+> +			__func__, __LINE__);
+> +		goto dec_end;
+> +	}
+> +
+> +	ret = clk_prepare_enable(comp_jpeg[hw_id]->jdec_clk.clks->clk);
+> +	if (ret) {
+> +		dev_err(jpeg->dev, "%s : %d, jpegdec clk_prepare_enable fail\n",
+> +			__func__, __LINE__);
+> +		goto clk_end;
+> +	}
+> +
+> +	schedule_delayed_work(&comp_jpeg[hw_id]->job_timeout_work,
+> +			      msecs_to_jiffies(MTK_JPEG_HW_TIMEOUT_MSEC));
+> +
+> +	mtk_jpeg_set_dec_src(ctx, &src_buf->vb2_buf, &bs);
+> +	if (mtk_jpeg_set_dec_dst(ctx,
+> +				 &jpeg_src_buf->dec_param,
+> +				 &dst_buf->vb2_buf, &fb)) {
+> +		dev_err(jpeg->dev, "%s : %d, mtk_jpeg_set_dec_dst fail\n",
+> +			__func__, __LINE__);
+> +		goto setdst_end;
+> +	}
+> +
+> +	spin_lock_irqsave(&comp_jpeg[hw_id]->hw_lock, flags);
+> +	mtk_jpeg_dec_reset(comp_jpeg[hw_id]->reg_base);
+> +	mtk_jpeg_dec_set_config(jpeg->reg_base,
+> +				&jpeg_src_buf->dec_param,
+> +				&bs,
+> +				&fb);
+> +	mtk_jpeg_dec_start(comp_jpeg[hw_id]->reg_base);
+> +	v4l2_m2m_job_finish(jpeg->m2m_dev, ctx->fh.m2m_ctx);
+> +	spin_unlock_irqrestore(&comp_jpeg[hw_id]->hw_lock, flags);
+> +
+> +	return;
+> +
+> +setdst_end:
+> +	clk_disable_unprepare(comp_jpeg[hw_id]->jdec_clk.clks->clk);
+> +clk_end:
+> +	pm_runtime_put(comp_jpeg[hw_id]->dev);
+> +dec_end:
+> +	v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
+> +	v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
+> +	v4l2_m2m_buf_done(src_buf, buf_state);
+> +	v4l2_m2m_buf_done(dst_buf, buf_state);
+> +getbuf_fail:
+> +	atomic_inc(&jpeg->dechw_rdy);
+> +	mtk_jpegdec_put_hw(jpeg, hw_id);
+> +	v4l2_m2m_job_finish(jpeg->m2m_dev, ctx->fh.m2m_ctx);
+> +}
+> +
+>   static void mtk_jpeg_multicore_dec_device_run(void *priv)
+>   {
+> +	struct mtk_jpeg_ctx *ctx = priv;
+> +	struct mtk_jpeg_dev *jpeg = ctx->jpeg;
+> +
+> +	queue_work(jpeg->workqueue, &ctx->jpeg_work);
 
-Fix:
-		return dev_err_probe(&pdev->dev, ret,
 
-				     "Failed to register JPEGDEC irq handler.\n");
+In the previous commit, I asked why this function was empty: I see you're
+filling it in right now, so please add the MT8195 compatibles after this
+commit, or later.
 
+>   }
+>   
+>   static void mtk_jpeg_dec_device_run(void *priv)
+> @@ -1377,6 +1546,9 @@ static int mtk_jpeg_open(struct file *file)
+>   	if (jpeg->is_jpgenc_multihw)
+>   		INIT_WORK(&ctx->jpeg_work, mtk_jpegenc_worker);
+>   
+> +	if (jpeg->is_jpgdec_multihw)
+> +		INIT_WORK(&ctx->jpeg_work, mtk_jpegdec_worker);
+> +
+>   	INIT_LIST_HEAD(&ctx->dst_done_queue);
+>   	spin_lock_init(&ctx->done_queue_lock);
+>   	v4l2_fh_init(&ctx->fh, vfd);
+> diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
+> index ddfe2b4c48b3..ef9a3e1fdf60 100644
+> --- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
+> +++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
+> @@ -171,6 +171,9 @@ struct mtk_jpegdec_comp_dev {
+>   	int jpegdec_irq;
+>   	struct delayed_work job_timeout_work;
+>   	struct mtk_jpeg_hw_param hw_param;
+> +	enum mtk_jpeg_hw_state hw_state;
+> +	//spinlock protecting the hw device resource
+
+C-style comments please.
+
+> +	spinlock_t hw_lock;
+>   };
+>   
+>   /**
 
 Regards,
 Angelo
+
