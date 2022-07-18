@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9ED4C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 18 Jul 2022 08:40:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3F86CCA481
+	for <linux-media@archiver.kernel.org>; Mon, 18 Jul 2022 08:40:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233951AbiGRIkG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 18 Jul 2022 04:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
+        id S233954AbiGRIkH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 18 Jul 2022 04:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233916AbiGRIj7 (ORCPT
+        with ESMTP id S233920AbiGRIkA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 18 Jul 2022 04:39:59 -0400
+        Mon, 18 Jul 2022 04:40:00 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65139BC92;
-        Mon, 18 Jul 2022 01:39:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47C3DEF0;
+        Mon, 18 Jul 2022 01:39:59 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:4754:89ee:32c6:e620])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B4A7A6601A2F;
-        Mon, 18 Jul 2022 09:39:56 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 13B6A6601A63;
+        Mon, 18 Jul 2022 09:39:58 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658133597;
-        bh=CC2ZoWOCrylXUT5toiF6692TYp44s2QcLVUR0tOz+sE=;
+        s=mail; t=1658133598;
+        bh=ZRxJT5OR9oDych6+2qH0vxPCcILDhySxzLTelLRoAwU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OzBh3ZLuLlS/qkuBDVdX9P1EdoLkmA+Q1mz93CGP12bNJZBBInesA79MVMt/BqKEm
-         LJYTwn0ElubIeELbb775laWHgDnQOkPidDjBv+5/N2i1FiZZyFWS8P3eZLnJ2b6BF5
-         UDrg5Vu4yV3CoTltPiJ9Ot1TNR2CxfdyJCmuenTdEkMsw1fd9+rJ8AhINlF55b63nt
-         WAtSVVXVBEHG7nMhNuLFW7LCiaWQ7wX3kYBpCMrnnFcxQFUEEY+5+wr4HKxR7W7jnA
-         OXM1GXWanJ5M1MpDQo38cub+ieaKhSPnnZ0NrVU2AXIQRIEiicF+Zmxu8X1Ni8YU3O
-         /W24jvjZGhtkQ==
+        b=Zll13bFJCLG7pIqNCqZHOlUpBI1QHuA6xg6tkdZ0D9nzMC20aEf01juzLIGaea7f2
+         4dcPf9gc2T+P3owNTXfuJlMI6Jb0CN0V4oLGMZIZSYeCos6K9iJR/el5fbdxIzbIS2
+         T2+XkSxLPGbe8x2a1679XwOq3lv9wDmqcoUQK/IjI02iPXsVNXUlAn2PKF72Z8e24t
+         y1TYWIrNBdI2/2IZWmPC4UKSjqpsJ3RpoR+BXdmJ/DfXxnYigZkLYKBHOh4z80G5KO
+         uvJxbmtNJPo6mye9X5l0oQlKQNEe4mt6VL9nwzhnU82jbPRFh5puFyhbPF+Hvr2wiu
+         eWAFa1Swk4tFA==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, hverkuil@xs4all.nl,
         ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
@@ -44,9 +44,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v2 5/7] media: Hantro: HEVC: Allows 10-bit bitstream
-Date:   Mon, 18 Jul 2022 10:39:43 +0200
-Message-Id: <20220718083945.200845-6-benjamin.gaignard@collabora.com>
+Subject: [PATCH v2 7/7] media: hantro: Allows luma and chroma depth to be different
+Date:   Mon, 18 Jul 2022 10:39:45 +0200
+Message-Id: <20220718083945.200845-8-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220718083945.200845-1-benjamin.gaignard@collabora.com>
 References: <20220718083945.200845-1-benjamin.gaignard@collabora.com>
@@ -56,30 +56,33 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Stop limiting HEVC support to 8-bits bitstreams also
-accept 10-bits bitstreams.
+Luma and chroma depth are set on different hardware registers.
+Even if they aren't identical the bitstream can be compliant
+to HEVC specifications and decoded by the hardware.
+
+With this patch TSUNEQBD_A_MAIN10_Technicolor_2 conformance test
+is successfully decoded.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 ---
- drivers/staging/media/hantro/hantro_hevc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/staging/media/hantro/hantro_hevc.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/drivers/staging/media/hantro/hantro_hevc.c b/drivers/staging/media/hantro/hantro_hevc.c
-index e06837108a09..85688a4df166 100644
+index 85688a4df166..26b1329893f7 100644
 --- a/drivers/staging/media/hantro/hantro_hevc.c
 +++ b/drivers/staging/media/hantro/hantro_hevc.c
-@@ -159,8 +159,8 @@ int hantro_hevc_validate_sps(struct hantro_ctx *ctx, const struct v4l2_ctrl_hevc
- 	if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
- 		/* Luma and chroma bit depth mismatch */
- 		return -EINVAL;
--	if (sps->bit_depth_luma_minus8 != 0)
--		/* Only 8-bit is supported */
-+	if (sps->bit_depth_luma_minus8 != 0 && sps->bit_depth_luma_minus8 != 2)
-+		/* Only 8-bit and 10-bit is supported */
- 		return -EINVAL;
+@@ -156,9 +156,6 @@ static int tile_buffer_reallocate(struct hantro_ctx *ctx)
  
- 	ctx->bit_depth = sps->bit_depth_luma_minus8 + 8;
+ int hantro_hevc_validate_sps(struct hantro_ctx *ctx, const struct v4l2_ctrl_hevc_sps *sps)
+ {
+-	if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
+-		/* Luma and chroma bit depth mismatch */
+-		return -EINVAL;
+ 	if (sps->bit_depth_luma_minus8 != 0 && sps->bit_depth_luma_minus8 != 2)
+ 		/* Only 8-bit and 10-bit is supported */
+ 		return -EINVAL;
 -- 
 2.32.0
 
