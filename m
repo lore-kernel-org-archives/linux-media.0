@@ -2,100 +2,73 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85EF3C43334
-	for <linux-media@archiver.kernel.org>; Mon, 18 Jul 2022 18:39:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4315BC43334
+	for <linux-media@archiver.kernel.org>; Mon, 18 Jul 2022 19:16:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234934AbiGRSjd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 18 Jul 2022 14:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40788 "EHLO
+        id S234107AbiGRTQs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 18 Jul 2022 15:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbiGRSjb (ORCPT
+        with ESMTP id S230317AbiGRTQr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 18 Jul 2022 14:39:31 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7ACE2CDF7
-        for <linux-media@vger.kernel.org>; Mon, 18 Jul 2022 11:39:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658169571; x=1689705571;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=yeGKLQ+N++cvbrFF38iJ/xk16Rh4E4c7WhZ0gsNMsaU=;
-  b=YCzl6T3LBg3BRPT5IWeR00voczbng7Xn6szTY6S4de82+loMP/jJO4Jd
-   qcFy0yTKUdzL0sds9Xn9eYbthBxoNBtEjvGlrFl1WNanu7uX4bLq1Z9MS
-   mZJmlLnGAkbtEdfMJmBxmT//ztqqzEk6SGzNMNYLBsPrmQ+ZI6rCh036Z
-   xz37Gv39wy5127TeVsYkzFB9V4fsWgdUipyvPWPLx4i36+zdiq1eHJL54
-   jgUy68FBBMtxCAfjpgOJgEXOmOuU+D9E3dnr8ROXoVnOMtmJvgFQzFUwA
-   n4pWAGwx3nxDIWx3j2WZm5Hoz2wLZR2nBq+3vCbscxZaW13l04l5gGbw/
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="347983245"
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="347983245"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 11:39:31 -0700
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="686835394"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 11:39:29 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id 1775C20462;
-        Mon, 18 Jul 2022 21:39:27 +0300 (EEST)
-Date:   Mon, 18 Jul 2022 18:39:27 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH 1/1] media: v4l2-core: v4l2-i2c: Fix default device name
-Message-ID: <YtWo33+6J9DBtG0z@paasikivi.fi.intel.com>
-References: <20220718120151.425388-1-alexander.stein@ew.tq-group.com>
+        Mon, 18 Jul 2022 15:16:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7382F675
+        for <linux-media@vger.kernel.org>; Mon, 18 Jul 2022 12:16:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2425E616AF
+        for <linux-media@vger.kernel.org>; Mon, 18 Jul 2022 19:16:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 177B8C341C0
+        for <linux-media@vger.kernel.org>; Mon, 18 Jul 2022 19:16:44 +0000 (UTC)
+Message-ID: <6d662034-3a80-7217-6603-93b9e222e7a8@xs4all.nl>
+Date:   Mon, 18 Jul 2022 21:16:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220718120151.425388-1-alexander.stein@ew.tq-group.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Content-Language: en-US
+To:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [GIT PULL FOR v5.20] Various daily build fixes
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Alexander,
+These patches fix various daily build issues: documentation warnings and
+smatch warnings and errors.
 
-Thanks for the patch.
+The following changes since commit 8bd1dbf8d580c425605fb8936309a4e9745a7a95:
 
-On Mon, Jul 18, 2022 at 02:01:51PM +0200, Alexander Stein wrote:
-> Documentation to v4l2_i2c_subdev_set_name says I²C device name if
-> devname parameter is NULL. But instead the I²C driver name is assigned.
-> Fix this by actually using the i2c_client->name for the subdev name.
-> 
-> Fixes: 0658293012af ("media: v4l: subdev: Add a function to set an I²C sub-device's name")
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> ---
-> Having a sensor node in DT with compatible = "ovti,ov9281" the subdev
-> name is "ov9282" without this patch. With this patch applied it is
-> "ov9281". The i2c_client->name is "ov9281" in every case.
-> 
->  drivers/media/v4l2-core/v4l2-i2c.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/v4l2-core/v4l2-i2c.c b/drivers/media/v4l2-core/v4l2-i2c.c
-> index b4acca75644b..90c3c799317a 100644
-> --- a/drivers/media/v4l2-core/v4l2-i2c.c
-> +++ b/drivers/media/v4l2-core/v4l2-i2c.c
-> @@ -33,7 +33,7 @@ void v4l2_i2c_subdev_set_name(struct v4l2_subdev *sd,
->  			      const char *devname, const char *postfix)
->  {
->  	if (!devname)
-> -		devname = client->dev.driver->name;
-> +		devname = client->name;
+  media: rkisp1: debug: Add dump file in debugfs for MI main path registers (2022-07-17 12:34:43 +0100)
 
-This would work OF somehow but not on ACPI. At the moment, at least, I think
-this information needs to come from the driver itself.
+are available in the Git repository at:
 
->  	if (!postfix)
->  		postfix = "";
->  
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.20l
 
--- 
-Kind regards,
+for you to fetch changes up to 2c5a90cde295463ff9e7771a6c833eb3adcff6a7:
 
-Sakari Ailus
+  media: sunxi: sun6i_mipi_csi2.c/sun8i_a83t_mipi_csi2.c: clarify error handling (2022-07-18 18:10:22 +0200)
+
+----------------------------------------------------------------
+Tag branch
+
+----------------------------------------------------------------
+Hans Verkuil (3):
+      vimc: wrong pointer is used with PTR_ERR
+      media: videodev2.h.rst.exceptions: add missing exceptions
+      media: sunxi: sun6i_mipi_csi2.c/sun8i_a83t_mipi_csi2.c: clarify error handling
+
+Laurent Pinchart (2):
+      media: Documentation: mc-core: Fix typo
+      media: uvcvideo: Fix invalid pointer in uvc_ctrl_init_ctrl()
+
+ Documentation/driver-api/media/mc-core.rst                               | 2 +-
+ Documentation/userspace-api/media/videodev2.h.rst.exceptions             | 3 +++
+ drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c           | 7 ++++---
+ drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c | 7 ++++---
+ drivers/media/test-drivers/vimc/vimc-core.c                              | 2 +-
+ drivers/media/usb/uvc/uvc_ctrl.c                                         | 8 +++++---
+ 6 files changed, 18 insertions(+), 11 deletions(-)
