@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0728CC43334
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9ED4C433EF
 	for <linux-media@archiver.kernel.org>; Mon, 18 Jul 2022 08:40:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233872AbiGRIkE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 18 Jul 2022 04:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45738 "EHLO
+        id S233951AbiGRIkG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 18 Jul 2022 04:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233917AbiGRIj7 (ORCPT
+        with ESMTP id S233916AbiGRIj7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 18 Jul 2022 04:39:59 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DACCE14;
-        Mon, 18 Jul 2022 01:39:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65139BC92;
+        Mon, 18 Jul 2022 01:39:58 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:4754:89ee:32c6:e620])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 653516601A60;
-        Mon, 18 Jul 2022 09:39:57 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B4A7A6601A2F;
+        Mon, 18 Jul 2022 09:39:56 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1658133597;
-        bh=jZmGvkb7n+75B0nt2mIj34v/6KyHMctIRA+CFwtwDYo=;
+        bh=CC2ZoWOCrylXUT5toiF6692TYp44s2QcLVUR0tOz+sE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VScNcZFoTG5VOL7VDsA8nOf3rzUVyHxKCx5HKNUzXsNqz8zsiUAUw5g2rfboc3Cqm
-         v9+hrV8y1u9J6KvigdVt9aBTnTGW3vUKrK4mvWvHDmgoDy7ELR1VwhyeHwhZaa+oJd
-         1ss0Qj2VAc3zWqYtrIy5UmqJwNTPkDVCqmXyE69T0gzb68lucPH2zNVN1ZpCYXdEr8
-         Epu5O4usA4pTk4GsGr/kfeciML0pnL2LIcdGrtLAulUl0jOgCEPe1U6vEIVyZiMwkn
-         lJwtOmWpiNC/D9VbdzfFKyp4aGYtFiiBW/I2ck4ObeEQ5d6+f22wvWro/ZC+ZsUUeY
-         6z0PmuKVPoRRA==
+        b=OzBh3ZLuLlS/qkuBDVdX9P1EdoLkmA+Q1mz93CGP12bNJZBBInesA79MVMt/BqKEm
+         LJYTwn0ElubIeELbb775laWHgDnQOkPidDjBv+5/N2i1FiZZyFWS8P3eZLnJ2b6BF5
+         UDrg5Vu4yV3CoTltPiJ9Ot1TNR2CxfdyJCmuenTdEkMsw1fd9+rJ8AhINlF55b63nt
+         WAtSVVXVBEHG7nMhNuLFW7LCiaWQ7wX3kYBpCMrnnFcxQFUEEY+5+wr4HKxR7W7jnA
+         OXM1GXWanJ5M1MpDQo38cub+ieaKhSPnnZ0NrVU2AXIQRIEiicF+Zmxu8X1Ni8YU3O
+         /W24jvjZGhtkQ==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, hverkuil@xs4all.nl,
         ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
@@ -44,9 +44,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v2 6/7] media: hantro: imx8m: Enable 10bit decoding
-Date:   Mon, 18 Jul 2022 10:39:44 +0200
-Message-Id: <20220718083945.200845-7-benjamin.gaignard@collabora.com>
+Subject: [PATCH v2 5/7] media: Hantro: HEVC: Allows 10-bit bitstream
+Date:   Mon, 18 Jul 2022 10:39:43 +0200
+Message-Id: <20220718083945.200845-6-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220718083945.200845-1-benjamin.gaignard@collabora.com>
 References: <20220718083945.200845-1-benjamin.gaignard@collabora.com>
@@ -56,58 +56,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Expose 10bit pixel formats to enable 10bit decoding in IMX8M SoCs.
+Stop limiting HEVC support to 8-bits bitstreams also
+accept 10-bits bitstreams.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 ---
- drivers/staging/media/hantro/imx8m_vpu_hw.c | 27 +++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ drivers/staging/media/hantro/hantro_hevc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-index 77f574fdfa77..b390228fd3b4 100644
---- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
-+++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-@@ -162,12 +162,39 @@ static const struct hantro_fmt imx8m_vpu_g2_postproc_fmts[] = {
- 			.step_height = MB_DIM,
- 		},
- 	},
-+	{
-+		.fourcc = V4L2_PIX_FMT_P010,
-+		.codec_mode = HANTRO_MODE_NONE,
-+		.postprocessed = true,
-+		.frmsize = {
-+			.min_width = FMT_MIN_WIDTH,
-+			.max_width = FMT_UHD_WIDTH,
-+			.step_width = MB_DIM,
-+			.min_height = FMT_MIN_HEIGHT,
-+			.max_height = FMT_UHD_HEIGHT,
-+			.step_height = MB_DIM,
-+		},
-+	},
- };
+diff --git a/drivers/staging/media/hantro/hantro_hevc.c b/drivers/staging/media/hantro/hantro_hevc.c
+index e06837108a09..85688a4df166 100644
+--- a/drivers/staging/media/hantro/hantro_hevc.c
++++ b/drivers/staging/media/hantro/hantro_hevc.c
+@@ -159,8 +159,8 @@ int hantro_hevc_validate_sps(struct hantro_ctx *ctx, const struct v4l2_ctrl_hevc
+ 	if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
+ 		/* Luma and chroma bit depth mismatch */
+ 		return -EINVAL;
+-	if (sps->bit_depth_luma_minus8 != 0)
+-		/* Only 8-bit is supported */
++	if (sps->bit_depth_luma_minus8 != 0 && sps->bit_depth_luma_minus8 != 2)
++		/* Only 8-bit and 10-bit is supported */
+ 		return -EINVAL;
  
- static const struct hantro_fmt imx8m_vpu_g2_dec_fmts[] = {
- 	{
- 		.fourcc = V4L2_PIX_FMT_NV12_4L4,
- 		.codec_mode = HANTRO_MODE_NONE,
-+		.match_depth = true,
-+		.frmsize = {
-+			.min_width = FMT_MIN_WIDTH,
-+			.max_width = FMT_UHD_WIDTH,
-+			.step_width = TILE_MB_DIM,
-+			.min_height = FMT_MIN_HEIGHT,
-+			.max_height = FMT_UHD_HEIGHT,
-+			.step_height = TILE_MB_DIM,
-+		},
-+	},
-+	{
-+		.fourcc = V4L2_PIX_FMT_P010_4L4,
-+		.codec_mode = HANTRO_MODE_NONE,
-+		.match_depth = true,
- 		.frmsize = {
- 			.min_width = FMT_MIN_WIDTH,
- 			.max_width = FMT_UHD_WIDTH,
+ 	ctx->bit_depth = sps->bit_depth_luma_minus8 + 8;
 -- 
 2.32.0
 
