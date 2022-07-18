@@ -2,214 +2,400 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 086DEC43334
-	for <linux-media@archiver.kernel.org>; Mon, 18 Jul 2022 10:52:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15C0AC43334
+	for <linux-media@archiver.kernel.org>; Mon, 18 Jul 2022 11:32:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234073AbiGRKwU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 18 Jul 2022 06:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58832 "EHLO
+        id S233736AbiGRLcG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 18 Jul 2022 07:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234070AbiGRKwS (ORCPT
+        with ESMTP id S232593AbiGRLcF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 18 Jul 2022 06:52:18 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ACC120BE5;
-        Mon, 18 Jul 2022 03:52:13 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26I9tEQM020588;
-        Mon, 18 Jul 2022 10:31:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qti.qualcomm.com; h=from : to : cc
- : subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=qcppdkim1;
- bh=oO8mCOi3GHxyqa+PwO+8maxCl4d533X3fwy4Hsn02Z0=;
- b=ggKBEMBDlsX16BqrdYVwCC5L1HO3g3DVsuD9XNXKXy82WSiv+qYNr/bFVlfVoey+8wUN
- zgGxpU4LwrrhoN0NiAqh+vxCUdHb/khhDqNZCez28xqt9/Iq/ZmDn9enWvdTTgv15vhM
- yQVpw9z3yrmN1Gqa3OsZ6MRlC1hRm8q67g7/WNMyo7YeMzWHvwxy68DyMoHqlDRJny5S
- D7+iUkYhHsmjiwfPHLIaeIo1UskcQjSUFgk/RvIeWo55se0+G4ILDwnAQxeC9hkqpB63
- uxLeVJhrB86so1w7948G3dO9jGnEDNmw/pFOvksaDGHayLaXExHQyxYfud+Y7Z/6ZgPI OQ== 
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2048.outbound.protection.outlook.com [104.47.66.48])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hbnrv43u4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Jul 2022 10:31:41 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g6M5YsWRR4uqkfzYEpmdPHluhe6ApDbPak/yKUA46hVZn14LmMdSRCuEhCXt/sG755ZAj10Spu3TYEygO8UCycHAT7rHG9pYMAqV/lIJHlsTJI9l6Um93ic0+7wFFDxq2upbFsi5pYPwY0DdKbirSLsFHftDRsdTdTntenNetlh48dtP5oXpMEXR0x3qm9QWI57yBeq/FpWAoXdeb+A1fiEVyFt5Q9bk6GpzMjmz9y99/Qzp1jGgwJ1ngwcQ4TOPgwxXJDCb1cCztIDl7ub/np4+x9+FtnqBInlt62hlQDENbiFVMLpXJnOXHsF6FkQM3Npo7lDmTw9TIvByGvHbxQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oO8mCOi3GHxyqa+PwO+8maxCl4d533X3fwy4Hsn02Z0=;
- b=i+6l3KLOVKqdccQRAuCK4fZS5695EnvhFMmw3fA0RDqpNFYlnoHriFmquO7whthfgAZnUdsCmGbJoOjShgvcE7w3HxJuyvaP2O4cWuf25Z/UXP0VGDRkCFgeEN5BRklz43ovTMNZIF89hqaB03R4eqKqYEkZ3apE1wMqBFKbw45ZhzWVB+qT677Wvn7YNVLEtHnHpRLOh9UXVxyssxiPu/0BGs5Ji9jHQDLEcVleS1XNJnTGBarmKgb8tjvTa6uSxY3AvxGLIjRKN8vLgy3u3HDJuJS2CFjD8SlVSYvFxXwg8HtPoyJQ2U4jZVHy1Q+/6EBh9lAImDwv5m9NRRLFlw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=qti.qualcomm.com; dmarc=pass action=none
- header.from=qti.qualcomm.com; dkim=pass header.d=qti.qualcomm.com; arc=none
-Received: from SJ0PR02MB8848.namprd02.prod.outlook.com (2603:10b6:a03:3dc::5)
- by DM6PR02MB4089.namprd02.prod.outlook.com (2603:10b6:5:9d::31) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.17; Mon, 18 Jul
- 2022 10:31:36 +0000
-Received: from SJ0PR02MB8848.namprd02.prod.outlook.com
- ([fe80::4891:a5e3:92c:29ab]) by SJ0PR02MB8848.namprd02.prod.outlook.com
- ([fe80::4891:a5e3:92c:29ab%5]) with mapi id 15.20.5417.026; Mon, 18 Jul 2022
- 10:31:36 +0000
-From:   "Viswanath Boma (Temp)" <vboma@qti.qualcomm.com>
-To:     "manivannan.sadhasivam@linaro.org" <manivannan.sadhasivam@linaro.org>,
-        "Viswanath Boma (Temp) (QUIC)" <quic_vboma@quicinc.com>
-CC:     "stanimir.varbanov@linaro.org" <stanimir.varbanov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        Mon, 18 Jul 2022 07:32:05 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31C51F623;
+        Mon, 18 Jul 2022 04:31:58 -0700 (PDT)
+X-UUID: 01ff983e96244e6f9108450886d66057-20220718
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:65230eb4-3ba3-4a49-9e51-2c67be9766d9,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:0f94e32,CLOUDID:b2539864-0b3f-4b2c-b3a6-ed5c044366a0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 01ff983e96244e6f9108450886d66057-20220718
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <irui.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1194593640; Mon, 18 Jul 2022 19:31:53 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 18 Jul 2022 19:31:51 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Mon, 18 Jul 2022 19:31:50 +0800
+Message-ID: <3f01cd582049611894f62ea3c27024687df96005.camel@mediatek.com>
+Subject: Re: [PATCH 1/5] media: mediatek: vcodec: Add encoder driver support
+ for 34-bit iova
+From:   Irui Wang <irui.wang@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 1/7] venus : Add default values for the control
- V4L2_CID_COLORIMETRY_HDR10_MASTERING_DISPLAY
-Thread-Topic: [PATCH 1/7] venus : Add default values for the control
- V4L2_CID_COLORIMETRY_HDR10_MASTERING_DISPLAY
-Thread-Index: AQHYlepOQnzhUypSuEKIITnLM9ogAq16q+GAgAlK7DA=
-Date:   Mon, 18 Jul 2022 10:31:36 +0000
-Message-ID: <SJ0PR02MB88488C32CD93DB22C56FC008858C9@SJ0PR02MB8848.namprd02.prod.outlook.com>
-References: <20220712122347.6781-1-quic_vboma@quicinc.com>
- <20220712123523.GB21746@workstation>
-In-Reply-To: <20220712123523.GB21746@workstation>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f1172eb8-e2a8-4b72-3118-08da68a8b125
-x-ms-traffictypediagnostic: DM6PR02MB4089:EE_
-x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: yYw+uyUEOlrS4jVNbfBE+FQLDqSbREp8bLbAEk+f6ZIvWgRHDh3B2Im4RSxQSMVq0s8gUReiqbZz6s+1b0+PfJXjgGNBWm1vGYQjys+jb1LC+8DD29gyA2iHINSeUpusUrNqCqmLfU6a2kjFtvDIc2fPKhFwvguzRMFbb0tUE/P7abS/4A/9Ula0zUQfQUqVXXZDE9OVQJROgeiWW1yXcewF8QrdfRTHGhegPEV4gcx2q3V5dQdXrnt+mcqALsapvl3T9SQSikmKSlhjf5/NcJOwpJGnRJGZL5XPvwZg7KzHrM759hcXRf1b0uKidsjUIse9ra1TKdLEU+D29IJN1+ym3MxBq2KvgCHzRCTItwOP8CCxTap/8fZQ3ydfReOh1KalHpvTY5S7Fz4aTmixX0UPoCCoOKolc8cZLaWNbT2IRPSO9NwL7q0+nLWOV2Q38l0oSewlWrGT9yNz6G8nScnICqVEiWT88z2rBI6ze3MmH7UIukIscHpwN7umh9K6ATKQSo0V8AKFknaQowWIrOOY2VJ75SSBaru76+b19QTod4dkksV2tgbbpwmIgVfN8u17tqQrmbtuQdOr8MSCiWfx5jK+T3RPG84J/rwrsIhyaf/6zgbMKky90+YV9m/oCvNveOTHkwnQr53cmspTAynqI0IeWuD+iwZVFvUEAvpTLSy7qeP+ItwhPcxoQUyfVIfnZclMlZdXIetaVwwRVXjU55r3OPGHTfvyV5YaCDWskgsNFWAaD2SPBsORb6x218ImtWFnR6REW6fusLfd2lMv7WAD4JVovsC33hPe8w7+HKgRYYEcJ2lbg9pETEg0
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR02MB8848.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(376002)(366004)(39860400002)(396003)(122000001)(55016003)(316002)(83380400001)(38070700005)(186003)(38100700002)(66946007)(52536014)(33656002)(5660300002)(76116006)(71200400001)(4326008)(66556008)(66476007)(2906002)(41300700001)(478600001)(66446008)(64756008)(8676002)(26005)(9686003)(7696005)(6506007)(8936002)(53546011)(86362001)(54906003)(110136005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?wlGr1xhTwcfRagbwGHchZjgrkQELzOWOqbcWaZa641IdDy9BlTN1rV9/nZII?=
- =?us-ascii?Q?Uz2ycT1xjbHLqZtN9iESb6+O4Efh6xLlNjV/5DiieJun/LN2YkQPsJxMJLBC?=
- =?us-ascii?Q?zD+0d/nYrr6+qaKsTWtNjkd5jYCcBxwUDE2gweAAHAxI5RJuJtKy8IZxRuba?=
- =?us-ascii?Q?RvImqzJK+MgfPbTFPkOv7iotCL1rv0xOYy5Rq9GGrQyUxePs/t6bk2Gy9w10?=
- =?us-ascii?Q?90aJHK/XGMWlSwJ1gDqoNcyiSmHq/OpNGq2rQ6YdF2kJd2ljKaxyNC/Arlbb?=
- =?us-ascii?Q?oeR0Batt71+kt211Fh1IzUH1JQiVzhqN7k+Ek/gxnRxvDLERgdSYE6Mj2+Mn?=
- =?us-ascii?Q?tA6GCxaESEf6rUV485fDSXCSX6yiqjzO3QM9VmZGfJr/ZcGZxul+0lfjmE5J?=
- =?us-ascii?Q?GGWsIF0EYJr9aVeFX8xStceBZczJRPid9vfATCPyikSBk5zg0vNPWa04bLEc?=
- =?us-ascii?Q?Idt2UBaOyUFCUUCj1uBKzNW9sv+STeLj9qDRtSrv5qUim/mY0vY0ithGxea0?=
- =?us-ascii?Q?9GVRfMiLeqb0oIGbqcZL3ga3ECkV+YSlHBwyIG4JjeO5bJ+1jRcOYKbUAD0v?=
- =?us-ascii?Q?DwVuUMqrE5g3qHMfhuMys5xXe5VG6q4pswSKsxHkvqNfYr8eZhR7o5+hbMXs?=
- =?us-ascii?Q?KhIhTs2NBusL/SmU0jD8wkH/1r5UjvQljT6VX+mFEhS6xPNu1X9wCYFNU1PG?=
- =?us-ascii?Q?PZNI6pl83yO1CgFiIxbPnNRqXntb/JI5WqOksUM6gVzeMDkeqJXSi9vaPqsu?=
- =?us-ascii?Q?wW7Dh8Q3ZxyXPBNcvSbtCYw3svmt0b/7dvymqDCJzieEix2Sf1AeHF1sMP7R?=
- =?us-ascii?Q?rgtouaWWOjHBGnSpHhkiumwtx+8fDoSVCU5PoWTaQ/JTXun3YNjDPjIPW36O?=
- =?us-ascii?Q?1qQpGaLaelTjZDMcvec7Gnhs+icU57lF+P41aVjJsy6vXXGjpxy4Y9z7JueU?=
- =?us-ascii?Q?Ld7fWo1qSAbakswtRGCFCeL7PRuT/8Tia1dYRNNg+iSyc5Bl5ykMg4J5o15y?=
- =?us-ascii?Q?QBVDoLCoRTzPpT0i27DvVI5r5r629N5q1OB0t+0HGHE095ugviWs88eXs4UY?=
- =?us-ascii?Q?yl4X0gRkY3NYv/sf9cSWRevCGpbKB5J/MA8Yw+tGKUYtyls6/YaZlE3uzKnf?=
- =?us-ascii?Q?t3Wm4mdCMy3Zr2fircaHmsvSFFUT2Ade9UH7NPCoOeOKPR8envJc7cFpJy2d?=
- =?us-ascii?Q?c5QgwMYKPhSA+mIPqzRnfCVQfXSxi0VjSyMubf8F4OilwZK3M+Lv1MBY+x9W?=
- =?us-ascii?Q?r47TST/zSAS3f93+UAQKWI/mrilGxet4GKCXHb85gRmGvvx9B539bxus1OCy?=
- =?us-ascii?Q?AES+862tNduaUfmtZeb/60y4CcKkevCxK4xDiSLqHti6Qzz0KHZ7n+my1ZTI?=
- =?us-ascii?Q?Y+r7WWvkejiwyNlZpL9CtOsBNNdEje98qUABfnlNRuywGAC3u/f/2/WCWEo4?=
- =?us-ascii?Q?Xj431VVIEzBOXAwAag56FRkz2WxdZkcOCh6b3ehvQuDvRkoVE6xPw9Uj2Lf8?=
- =?us-ascii?Q?nHZBJYYKFMEWyo8Ile86pByFbjEUdNbsiANhjnHwkv7E0lQttpJ/ujy4kwHB?=
- =?us-ascii?Q?tAoeWkkTFju8bgoJjwqongW2SkaHlbFQu7Ql47ZB?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>
+CC:     Yong Wu <yong.wu@mediatek.com>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        Longfei Wang <longfei.wang@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Mon, 18 Jul 2022 19:31:50 +0800
+In-Reply-To: <7967c1df-ec41-e5ee-021d-d671021bc779@collabora.com>
+References: <20220716093808.29894-1-irui.wang@mediatek.com>
+         <20220716093808.29894-2-irui.wang@mediatek.com>
+         <7967c1df-ec41-e5ee-021d-d671021bc779@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-X-OriginatorOrg: qti.qualcomm.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR02MB8848.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1172eb8-e2a8-4b72-3118-08da68a8b125
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jul 2022 10:31:36.1678
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 1X0s3qm9YtUePAM+4tQKflod9vmsnDZJPKr9xkJPTBEVfL1ROl1PKJuOPhd981hDsFjvqzCcOGe1Wuk5vqNa8A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB4089
-X-Proofpoint-ORIG-GUID: 9cY9bndN5Iasnf5mz6N8O2zgDPHKL9S9
-X-Proofpoint-GUID: 9cY9bndN5Iasnf5mz6N8O2zgDPHKL9S9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-18_10,2022-07-15_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 adultscore=0 phishscore=0 suspectscore=0 mlxlogscore=999
- lowpriorityscore=0 malwarescore=0 impostorscore=0 mlxscore=0 bulkscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207180044
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Dear Angelo,
 
+Thanks for your reviewing.
 
------Original Message-----
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>=20
-Sent: Tuesday, July 12, 2022 6:05 PM
-To: Viswanath Boma (Temp) (QUIC) <quic_vboma@quicinc.com>
-Cc: video.upstream.external <video.upstream.external@qti.qualcomm.com>; sta=
-nimir.varbanov@linaro.org; Andy Gross <agross@kernel.org>; bjorn.andersson@=
-linaro.org; Mauro Carvalho Chehab <mchehab@kernel.org>; linux-media@vger.ke=
-rnel.org; linux-arm-msm@vger.kernel.org; linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/7] venus : Add default values for the control V4L2_CI=
-D_COLORIMETRY_HDR10_MASTERING_DISPLAY
+On Mon, 2022-07-18 at 11:51 +0200, AngeloGioacchino Del Regno wrote:
+> Il 16/07/22 11:38, Irui Wang ha scritto:
+> > Encoder driver got iova from IOMMU is 34-bit, for example:
+> > 
+> > Here is the sample code:
+> > encoder input frame buffer dma address is:
+> > frm_buf =
+> >      vb2_dma_contig_plane_dma_addr(&vb2_v4l2_buffer->vb2_buf, 0);
+> > the value of frm_buf is 0x1_ff30_0000.
+> > 
+> > encoder driver got the frm_buf and send the iova to SCP firmware
+> > through SCP IPI message, then write to encoder hardware in SCP.
+> > The iova is stored in IPI message as uint32_t data type, so the
+> > value will be truncated from *0x1_ff30_0000* to *0xff30_0000*,
+> > and then *0xff30_0000* will be written to encoder hardware, but
+> > IOMMU will help to add the high *0x1_* bit back, so IOMMU can
+> > translate the iova to PA correctly, encoder hardware can access
+> > the correct memory for encoding.
+> > Another reason to do this is the encoder hardware can't access
+> > the 34-bit iova, IOMMU will help to add the remaining high bits
+> > of iova. But for mt8188, encoder hardware can access 34-bit iova
+> > directly, and encoder driver need write all 34-bit iova because
+> > IOMMU can't help driver do this if the hardware support access
+> > 34-bit iova.
+> > For the reasons above, this patch is added to support transfer
+> > 34-bit iova between kernel and SCP encoder driver. Use uint64_t
+> > data type to store the iova, for compatibility with old chipsets,
+> > add some new struct definitions for 34-bit.
+> > 
+> > Signed-off-by: Irui Wang <irui.wang@mediatek.com>
+> > ---
+> >   .../platform/mediatek/vcodec/mtk_vcodec_drv.h |   3 +
+> >   .../mediatek/vcodec/venc/venc_h264_if.c       | 200
+> > +++++++++++++++---
+> >   .../platform/mediatek/vcodec/venc_ipi_msg.h   |  24 +++
+> >   .../platform/mediatek/vcodec/venc_vpu_if.c    |  34 ++-
+> >   4 files changed, 227 insertions(+), 34 deletions(-)
+> > 
+> > diff --git
+> > a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+> > b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+> > index ef4584a46417..ab80e1b1979e 100644
+> > --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+> > +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+> > @@ -401,6 +401,7 @@ struct mtk_vcodec_dec_pdata {
+> >    * @output_formats: array of supported output formats
+> >    * @num_output_formats: number of entries in output_formats
+> >    * @core_id: stand for h264 or vp8 encode index
+> > + * @is_34bit: whether the encoder uses 34bit iova
+> >    */
+> >   struct mtk_vcodec_enc_pdata {
+> >   	bool uses_ext;
+> > @@ -411,9 +412,11 @@ struct mtk_vcodec_enc_pdata {
+> >   	const struct mtk_video_fmt *output_formats;
+> >   	size_t num_output_formats;
+> >   	int core_id;
+> > +	bool is_34bit;
+> >   };
+> >   
+> >   #define MTK_ENC_CTX_IS_EXT(ctx) ((ctx)->dev->venc_pdata-
+> > >uses_ext)
+> > +#define MTK_ENC_IOVA_IS_34BIT(ctx) ((ctx)->dev->venc_pdata-
+> > >is_34bit)
+> >   
+> >   /**
+> >    * struct mtk_vcodec_dev - driver data
+> > diff --git
+> > a/drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c
+> > b/drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c
+> > index 4d9b8798dffe..3a5af6cca040 100644
+> > --- a/drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c
+> > +++ b/drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c
+> > @@ -127,6 +127,72 @@ struct venc_h264_vsi {
+> >   	struct venc_h264_vpu_buf work_bufs[VENC_H264_VPU_WORK_BUF_MAX];
+> >   };
+> >   
+> > +/**
+> > + * struct venc_h264_vpu_config_ext - Structure for h264 encoder
+> > configuration
+> > + *                                   AP-W/R : AP is writer/reader
+> > on this item
+> > + *                                   VPU-W/R: VPU is write/reader
+> > on this item
+> > + * @input_fourcc: input fourcc
+> > + * @bitrate: target bitrate (in bps)
+> > + * @pic_w: picture width. Picture size is visible stream
+> > resolution, in pixels,
+> > + *         to be used for display purposes; must be smaller or
+> > equal to buffer
+> > + *         size.
+> > + * @pic_h: picture height
+> > + * @buf_w: buffer width. Buffer size is stream resolution in
+> > pixels aligned to
+> > + *         hardware requirements.
+> > + * @buf_h: buffer height
+> > + * @gop_size: group of picture size (idr frame)
+> > + * @intra_period: intra frame period
+> > + * @framerate: frame rate in fps
+> > + * @profile: as specified in standard
+> > + * @level: as specified in standard
+> > + * @wfd: WFD mode 1:on, 0:off
+> > + * @max_qp: max quant parameter
+> > + * @min_qp: min quant parameter
+> > + * @reserved: reserved configs
+> > + */
+> > +struct venc_h264_vpu_config_ext {
+> > +	u32 input_fourcc;
+> > +	u32 bitrate;
+> > +	u32 pic_w;
+> > +	u32 pic_h;
+> > +	u32 buf_w;
+> > +	u32 buf_h;
+> > +	u32 gop_size;
+> > +	u32 intra_period;
+> > +	u32 framerate;
+> > +	u32 profile;
+> > +	u32 level;
+> > +	u32 wfd;
+> > +	u32 max_qp;
+> > +	u32 min_qp;
+> > +	u32 reserved[8];
+> > +};
+> > +
+> > +/**
+> > + * struct venc_h264_vpu_buf_34 - Structure for 34 bit buffer
+> > information
+> > + *                               AP-W/R : AP is writer/reader on
+> > this item
+> > + *                               VPU-W/R: VPU is write/reader on
+> > this item
+> > + * @iova: 34 bit IO virtual address
+> > + * @vpua: VPU side memory addr which is used by RC_CODE
+> > + * @size: buffer size (in bytes)
+> > + */
+> > +struct venc_h264_vpu_buf_34 {
+> > +	u64 iova;
+> > +	u32 vpua;
+> > +	u32 size;
+> > +};
+> > +
+> > +/**
+> > + * struct venc_h264_vsi_64 - Structure for VPU driver control and
+> > info share
+> 
+> Typo here --------------  ^^^^
+Fix it in next version.
+> 
+> > + *                           Used for 64 bit iova sharing
+> > + * @config: h264 encoder configuration
+> > + * @work_bufs: working buffer information in VPU side
+> > + */
+> > +struct venc_h264_vsi_34 {
+> > +	struct venc_h264_vpu_config_ext config;
+> > +	struct venc_h264_vpu_buf_34
+> > work_bufs[VENC_H264_VPU_WORK_BUF_MAX];
+> > +};
+> > +
+> >   /*
+> >    * struct venc_h264_inst - h264 encoder AP driver instance
+> >    * @hw_base: h264 encoder hardware register base
+> > @@ -140,6 +206,8 @@ struct venc_h264_vsi {
+> 
+> ..snip..
+> 
+> > diff --git a/drivers/media/platform/mediatek/vcodec/venc_vpu_if.c
+> > b/drivers/media/platform/mediatek/vcodec/venc_vpu_if.c
+> > index d3570c4c177d..25c1b13559c9 100644
+> > --- a/drivers/media/platform/mediatek/vcodec/venc_vpu_if.c
+> > +++ b/drivers/media/platform/mediatek/vcodec/venc_vpu_if.c
+> > @@ -228,17 +228,28 @@ int vpu_enc_encode(struct venc_vpu_inst *vpu,
+> > unsigned int bs_mode,
+> >   		   struct venc_frame_info *frame_info)
+> >   {
+> 
+> That's practically 75% flow differences (or more, actually)... and
+> there's going
+> to always be a useless memzero, because a platform will always use
+> either 34, or 32
+> bits code.
+> 
+> At this point I think that for both performance and readability
+> purposes, you
+> should simply create another function.
+> 
+> Perhaps something like
+> 
+> static int vpu_enc_encode_32bits(struct venc_vpu_inst *vpu, unsigned
+> int bs_mode,
+> 				 struct venc_frm_buf *frm_buf,
+> 				 struct mtk_vcodec_mem *bs_buf,
+> 				 struct venc_frame_info *frame_info)
+> {
+> 	..... function .....
+> }
+> 
+> static int vpu_enc_encode_34bits(struct venc_vpu_inst *vpu, unsigned
+> int bs_mode,
+> 
+> 				 struct venc_frm_buf *frm_buf,
+> 
+> 				 struct mtk_vcodec_mem *bs_buf,
+> 
+> 				 struct venc_frame_info *frame_info)
+> 
+> {
+> 	...... function ......
+> }
+Will add such function in next version, thank you.
 
-WARNING: This email originated from outside of Qualcomm. Please be wary of =
-any links or attachments, and do not enable macros.
+Thanks
+Best Regards
+> 
+> int vpu_enc_encode(struct venc_vpu_inst *vpu, unsigned int bs_mode,
+> 
+> 		   struct venc_frm_buf *frm_buf,
+> 
+> 		   struct mtk_vcodec_mem *bs_buf,
+> 
+> 		   struct venc_frame_info *frame_info)
+> 
+> {
+> 	int ret;
+> 
+> 	if (MTK_ENC_IOVA_IS_34BIT(vpu->ctx))
+> 		ret = vpu_enc_encode_34bits(......);
+> 	else
+> 		ret = vpu_enc_encode_32bits(....);
+> 
+> 	if (ret)
+> 		return ret;
+> 
+> 	mtk_vcodec_debug(vpu, "bs_mode %d state %d size %d key_frm %d
+> <-",
+> 
+> 			 bs_mode, vpu->state, vpu->bs_size, vpu-
+> >is_key_frm);
+> 
+> 	return 0;
+> }
+> 
+> 
+> >   	const bool is_ext = MTK_ENC_CTX_IS_EXT(vpu->ctx);
+> > +	const bool is_34bit = MTK_ENC_IOVA_IS_34BIT(vpu->ctx);
+> > +
+> >   	size_t msg_size = is_ext ?
+> >   		sizeof(struct venc_ap_ipi_msg_enc_ext) :
+> >   		sizeof(struct venc_ap_ipi_msg_enc);
+> > +	int status;
+> >   	struct venc_ap_ipi_msg_enc_ext out;
+> > +	struct venc_ap_ipi_msg_enc_ext_34 out_34;
+> >   
+> >   	mtk_vcodec_debug(vpu, "bs_mode %d ->", bs_mode);
+> >   
+> >   	memset(&out, 0, sizeof(out));
+> > +	memset(&out_34, 0, sizeof(out_34));
+> > +
+> >   	out.base.msg_id = AP_IPIMSG_ENC_ENCODE;
+> >   	out.base.vpu_inst_addr = vpu->inst_addr;
+> >   	out.base.bs_mode = bs_mode;
+> > +
+> > +	out_34.msg_id = AP_IPIMSG_ENC_ENCODE;
+> > +	out_34.vpu_inst_addr = vpu->inst_addr;
+> > +	out_34.bs_mode = bs_mode;
+> > +
+> >   	if (frm_buf) {
+> >   		if ((frm_buf->fb_addr[0].dma_addr % 16 == 0) &&
+> >   		    (frm_buf->fb_addr[1].dma_addr % 16 == 0) &&
+> > @@ -246,6 +257,10 @@ int vpu_enc_encode(struct venc_vpu_inst *vpu,
+> > unsigned int bs_mode,
+> >   			out.base.input_addr[0] = frm_buf-
+> > >fb_addr[0].dma_addr;
+> >   			out.base.input_addr[1] = frm_buf-
+> > >fb_addr[1].dma_addr;
+> >   			out.base.input_addr[2] = frm_buf-
+> > >fb_addr[2].dma_addr;
+> > +
+> > +			out_34.input_addr[0] = frm_buf-
+> > >fb_addr[0].dma_addr;
+> > +			out_34.input_addr[1] = frm_buf-
+> > >fb_addr[1].dma_addr;
+> > +			out_34.input_addr[2] = frm_buf-
+> > >fb_addr[2].dma_addr;
+> >   		} else {
+> >   			mtk_vcodec_err(vpu, "dma_addr not align to
+> > 16");
+> >   			return -EINVAL;
+> > @@ -254,14 +269,31 @@ int vpu_enc_encode(struct venc_vpu_inst *vpu,
+> > unsigned int bs_mode,
+> >   	if (bs_buf) {
+> >   		out.base.bs_addr = bs_buf->dma_addr;
+> >   		out.base.bs_size = bs_buf->size;
+> > +
+> > +		out_34.bs_addr = bs_buf->dma_addr;
+> > +		out_34.bs_size = bs_buf->size;
+> >   	}
+> > +
+> >   	if (is_ext && frame_info) {
+> >   		out.data_item = 3;
+> >   		out.data[0] = frame_info->frm_count;
+> >   		out.data[1] = frame_info->skip_frm_count;
+> >   		out.data[2] = frame_info->frm_type;
+> > +
+> > +		out_34.data_item = 3;
+> > +		out_34.data[0] = frame_info->frm_count;
+> > +		out_34.data[1] = frame_info->skip_frm_count;
+> > +		out_34.data[2] = frame_info->frm_type;
+> >   	}
+> > -	if (vpu_enc_send_msg(vpu, &out, msg_size)) {
+> > +
+> > +	if (is_34bit) {
+> > +		msg_size = sizeof(struct venc_ap_ipi_msg_enc_ext_34);
+> > +		status = vpu_enc_send_msg(vpu, &out_34, msg_size);
+> > +	} else {
+> > +		status = vpu_enc_send_msg(vpu, &out, msg_size);
+> > +	}
+> > +
+> > +	if (status) {
+> >   		mtk_vcodec_err(vpu, "AP_IPIMSG_ENC_ENCODE %d fail",
+> >   			       bs_mode);
+> >   		return -EINVAL;
+> 
+> 
 
-On Tue, Jul 12, 2022 at 05:53:41PM +0530, Viswanath Boma wrote:
-> From: Stanimir Varbanov <stanimir.varbanov@linaro.org>
->
->  V4l2 encoder compliance expecting default values of colormetry for the c=
-ontrol.
->
-> Change-Id: I1db0d4940b54e033d646ce39d60dc488afba8d58
-
-What does this represent here? I'm pretty sure it is meaningless to the ups=
-tream kernel, so please get rid of it.
-[vboma]
-Will ensure with next patch set
-
-> Signed-off-by: Viswanath Boma <quic_vboma@quicinc.com>
-
-Since Stan is the original author of this and following patches, there shou=
-ld be a s-o-b tag from him. After that you should add yours indicating that=
- you are carrying the patches from Stan.
-
-Also, please add a cover letter stating the purpose of this series, how it =
-is tested, and with any other relevant information.
-
-Thanks,
-Mani
-[vboma]
-Will ensure with next patch set
-> ---
->  drivers/media/platform/qcom/venus/venc_ctrls.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/media/platform/qcom/venus/venc_ctrls.c=20
-> b/drivers/media/platform/qcom/venus/venc_ctrls.c
-> index ea5805e71c143..37ba7d97f99b2 100644
-> --- a/drivers/media/platform/qcom/venus/venc_ctrls.c
-> +++ b/drivers/media/platform/qcom/venus/venc_ctrls.c
-> @@ -352,6 +352,8 @@ static const struct v4l2_ctrl_ops venc_ctrl_ops =3D=20
-> {  int venc_ctrl_init(struct venus_inst *inst)  {
->       int ret;
-> +     struct v4l2_ctrl_hdr10_mastering_display p_hdr10_mastering =3D { {3=
-4000, 13250, 7500 },
-> +     { 16000, 34500, 3000 }, 15635,  16450, 10000000, 500 };
->
->       ret =3D v4l2_ctrl_handler_init(&inst->ctrl_handler, 58);
->       if (ret)
-> @@ -580,7 +582,7 @@ int venc_ctrl_init(struct venus_inst *inst)
->
->       v4l2_ctrl_new_std_compound(&inst->ctrl_handler, &venc_ctrl_ops,
->                                  V4L2_CID_COLORIMETRY_HDR10_MASTERING_DIS=
-PLAY,
-> -                                v4l2_ctrl_ptr_create(NULL));
-> +                                v4l2_ctrl_ptr_create((void=20
-> + *)&p_hdr10_mastering));
->
->       v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
->                         V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD, 0,
-> --
-> 2.17.1
->
