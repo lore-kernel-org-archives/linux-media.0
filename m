@@ -2,182 +2,256 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43145C43334
-	for <linux-media@archiver.kernel.org>; Mon, 18 Jul 2022 07:26:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78D81C43334
+	for <linux-media@archiver.kernel.org>; Mon, 18 Jul 2022 07:40:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233817AbiGRH00 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 18 Jul 2022 03:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54156 "EHLO
+        id S233487AbiGRHkc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 18 Jul 2022 03:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233791AbiGRH00 (ORCPT
+        with ESMTP id S233227AbiGRHkc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 18 Jul 2022 03:26:26 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27307E0C0
-        for <linux-media@vger.kernel.org>; Mon, 18 Jul 2022 00:26:23 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26HKKLqO022411;
-        Mon, 18 Jul 2022 09:26:08 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : from : to
- : cc : references : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=GL6TKRorNoavtwpxss6e1PU72+YrbmMHwwJcTnQTmd0=;
- b=vH5/Kwaq/NUWaaO/Rpd70KCBazhdxVSOgnlxuGhyUkffsSsrfxWub39VLgGC4l+SwrRx
- uWIcTYkKVaZZl4YNq6EoIh/q9Xsv/GI0UH23Arw0Kc+Ux1vlniOG8mcUOirWNMydHpNu
- jP3+uWCR6e0zSXt0KLkrf+sVpcCg1qQOuJC0ZbkB3eGWac1GgZCTKDmHoD8gfL0dZUkd
- g9oRi/RktCjHNyRcwL1fzzw3lcV1E/WAbp4pKy2jLRz5bLFtxWCNd3LHWLg+FVbE3IS4
- vm8QvG5dUwN7odJK/f85Z+fCqA3BQ7i2yA/Bp+OP95QDz45kln32vfuFrxfvcu3K1da1 Ig== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3hbnkfykgp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Jul 2022 09:26:08 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 80F9410002A;
-        Mon, 18 Jul 2022 09:26:06 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 70DF3211F33;
-        Mon, 18 Jul 2022 09:26:06 +0200 (CEST)
-Received: from [10.0.2.15] (10.75.127.46) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 18 Jul
- 2022 09:26:06 +0200
-Subject: Re: [PATCH v3 0/5] media: Add ST VGXY61 camera sensor driver
-From:   Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-To:     <linux-media@vger.kernel.org>
-CC:     <alain.volmat@foss.st.com>, <hugues.fruchet@foss.st.com>,
-        <sylvain.petinot@foss.st.com>, <dave.stevenson@raspberrypi.com>,
-        <sakari.ailus@linux.intel.com>,
-        <laurent.pinchart@ideasonboard.com>,
-        <kieran.bingham@ideasonboard.com>
-References: <20220512074037.3829926-1-benjamin.mugnier@foss.st.com>
- <e920c5e2-dba1-bcf7-7d83-ee797ca51b49@foss.st.com>
- <5a4cbabe-c701-6ab3-adec-592289b7b52b@foss.st.com>
-Message-ID: <7ae752d9-f7a5-a95a-79b3-437ef9aeeb74@foss.st.com>
-Date:   Mon, 18 Jul 2022 09:26:01 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Mon, 18 Jul 2022 03:40:32 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9608D140A2;
+        Mon, 18 Jul 2022 00:40:24 -0700 (PDT)
+X-UUID: e8e28c93cd1c426993ab11566ff83588-20220718
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:81644c5b-1bd9-4722-84f9-b26a3b35d18b,OB:0,LO
+        B:0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:25
+X-CID-META: VersionHash:0f94e32,CLOUDID:35fec4d7-5d6d-4eaf-a635-828a3ee48b7c,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: e8e28c93cd1c426993ab11566ff83588-20220718
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1591784905; Mon, 18 Jul 2022 15:40:19 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 18 Jul 2022 15:40:19 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 18 Jul 2022 15:40:18 +0800
+From:   Moudy Ho <moudy.ho@mediatek.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        <tfiga@chromium.org>, <drinkcat@chromium.org>,
+        <pihsun@chromium.org>, <hsinyi@google.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        <allen-kh.cheng@mediatek.com>, <xiandong.wang@mediatek.com>,
+        <randy.wu@mediatek.com>, <moudy.ho@mediatek.com>,
+        <jason-jh.lin@mediatek.com>, <roy-cw.yeh@mediatek.com>,
+        <river.cheng@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <cellopoint.kai@gmail.com>
+Subject: [PATCH v23 2/4] dt-binding: mediatek: add bindings for MediaTek CCORR and WDMA
+Date:   Mon, 18 Jul 2022 15:40:15 +0800
+Message-ID: <20220718074017.1617-3-moudy.ho@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220718074017.1617-1-moudy.ho@mediatek.com>
+References: <20220718074017.1617-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
-In-Reply-To: <5a4cbabe-c701-6ab3-adec-592289b7b52b@foss.st.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-18_04,2022-07-15_01,2022-06-22_01
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Gentle ping :)
+This patch adds DT binding documentation for MediaTek's CCORR and
+WDMA components.
+These components exist in both MediaTek's Media Data Path 3(MDP3) and DRM,
+and the bindings are placed under the folder "./soc/mediatek" to prevent
+duplicate builds.
 
-On 20/06/2022 09:30, Benjamin Mugnier wrote:
-> Hi everyone,
-> 
-> Can somebody have a look at this series?
-> Thank you.
-> 
-> Benjamin
-> 
-> On 01/06/2022 09:20, Benjamin Mugnier wrote:
->> Hey,
->>
->> Gentle ping, so that you don't forget about me ;)
->>
->> Benjamin
->>
->> On 12/05/2022 09:40, Benjamin Mugnier wrote:
->>> Hey,
->>>
->>> This series adds a driver for the ST VGXY61 camera sensor. This camera sensor is using the i2c bus
->>> for control and the csi-2 bus for data.
->>> These commits introduce the MEDIA_BUS_FMT_Y16_1X16 as a media bus format (1/5), reserve 16 user
->>> controls for the driver (2/5), add a uapi header file to declare a control for the hdr mode (3/5),
->>> dt bindings (3/5), and finally the driver (5/5).
->>> Tested on DragonBoard 410c and on Raspberry Pi 4.
->>>
->>> Unfortunately, I was not able to do the freely configurable frame size as advised by Laurent, and
->>> I'm stuck. I tried to mimic the ov5693 driver as it seems to work mostly the same but was not
->>> successful.
->>> I managed to implement the get_selection to set the sensor crop, and set the set_format call to the
->>> same frame size. By doing that my captured frame has black lines appearing if I don't use the sensor
->>> native resolution, and seem to have issues with matching the sensor internal frame size and the one
->>> I want to display (as lines appear wider than they should be).
->>> If anyone has an example driver for this please tell me. Any help is appreciated.
->>> I hope this fixed frame sizes will be ok, and I could come back to it later once I figure it out.
->>>
->>> Thanks,
->>>
->>> Benjamin
->>>
->>> v2->v3:
->>> - Fix errors in dt bindings
->>> - Use alphabetical order where applicable
->>> - Remove US_PER_MS macro
->>> - Rename device specific macros
->>> - Fix some control grabs not releasing
->>> - Move user controls to public header and add documentation
->>> - Rename set_framerate to set_framelength
->>> - Rework i2c access
->>> - Remove branchings that should never happen
->>> - Rework pattern generator setting
->>> - Update information on sensor rules of thumb
->>> - Remove temperature control
->>> - Remove suspend and resume
->>> - Move mutex init to probe
->>> - Move detect to probe
->>> - Fix async_subdev_register order
->>> - Support autosuspend
->>> - Add init_cfg
->>> - Fix controls not updating when sensor was off
->>> - Various cleaning
->>> - Rebase on master
->>>
->>> v1->v2:
->>> - Move temperature control to v4l2-controls.h as a standard control
->>> - Reserve controls in v4l2-controls.h for HDR control
->>> - Remove GPIO strobbing controls
->>> - Remove references to unused controls in sensor struct
->>> - Use v4l2_find_nearest_size
->>> - Use V4L2_COLORSPACE_RAW instead of V4L2_COLORSPACE_SRGB
->>> - Fill ycbcr_enc, quantization, and xfer_func in v4l2_mbus_framefmt
->>> - Change gain from formula to a register RAW write
->>> - Change temperature control value directly
->>> - Remove clock-name and clock-lanes from device tree bindings
->>> - Declare crop zones in mode_info structure
->>> - Remove frame_interval functions and add hblank and vblank instead
->>> - Update controls dependencies on change
->>> - Fix first exposure rule of thumb being too restrictive
->>> - Disable hflip and vflip controls while streaming
->>> - Change RGB media bus code to Y as the sensor is monochrome
->>> - Add Y16 format to v4l2 media bus formats
->>> - Add get_selection API
->>> - Fix timeout errors while disabling streaming on high framerates
->>> - Support pm_runtime
->>> - Rebase on master
->>>
->>> Benjamin Mugnier (5):
->>>   media: v4l: Add 1X16 16-bit greyscale media bus code definition
->>>   media: v4l: ctrls: Add user control base for st-vgxy61 controls
->>>   media: uapi: Add ST VGXY61 header file
->>>   media: dt-bindings: media: i2c: Add ST VGXY61 camera sensor binding
->>>   media: i2c: Add driver for ST VGXY61 camera sensor
->>>
->>>  .../bindings/media/i2c/st,st-vgxy61.yaml      |  117 +
->>>  .../userspace-api/media/drivers/st-vgxy61.rst |   23 +
->>>  .../media/v4l/subdev-formats.rst              |   37 +
->>>  MAINTAINERS                                   |    9 +
->>>  drivers/media/i2c/Kconfig                     |   10 +
->>>  drivers/media/i2c/Makefile                    |    1 +
->>>  drivers/media/i2c/st-vgxy61.c                 | 1940 +++++++++++++++++
->>>  include/uapi/linux/media-bus-format.h         |    3 +-
->>>  include/uapi/linux/st-vgxy61.h                |   15 +
->>>  include/uapi/linux/v4l2-controls.h            |    5 +
->>>  10 files changed, 2159 insertions(+), 1 deletion(-)
->>>  create mode 100644 Documentation/devicetree/bindings/media/i2c/st,st-vgxy61.yaml
->>>  create mode 100644 Documentation/userspace-api/media/drivers/st-vgxy61.rst
->>>  create mode 100644 drivers/media/i2c/st-vgxy61.c
->>>  create mode 100644 include/uapi/linux/st-vgxy61.h
->>>
+Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ .../bindings/soc/mediatek/mediatek,ccorr.yaml | 68 ++++++++++++++++
+ .../bindings/soc/mediatek/mediatek,wdma.yaml  | 81 +++++++++++++++++++
+ 2 files changed, 149 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mediatek,ccorr.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mediatek,wdma.yaml
+
+diff --git a/Documentation/devicetree/bindings/soc/mediatek/mediatek,ccorr.yaml b/Documentation/devicetree/bindings/soc/mediatek/mediatek,ccorr.yaml
+new file mode 100644
+index 000000000000..8677a3f58487
+--- /dev/null
++++ b/Documentation/devicetree/bindings/soc/mediatek/mediatek,ccorr.yaml
+@@ -0,0 +1,68 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/soc/mediatek/mediatek,ccorr.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Mediatek color correction
++
++maintainers:
++  - Matthias Brugger <matthias.bgg@gmail.com>
++  - Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
++
++description: |
++  Mediatek color correction with 3X3 matrix.
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - mediatek,mt8183-mdp3-ccorr
++
++  reg:
++    maxItems: 1
++
++  mediatek,gce-client-reg:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    items:
++      items:
++        - description: phandle of GCE
++        - description: GCE subsys id
++        - description: register offset
++        - description: register size
++    description: The register of client driver can be configured by gce with
++      4 arguments defined in this property. Each GCE subsys id is mapping to
++      a client defined in the header include/dt-bindings/gce/<chip>-gce.h.
++
++  mediatek,gce-events:
++    description:
++      The event id which is mapping to the specific hardware event signal
++      to gce. The event id is defined in the gce header
++      include/dt-bindings/gce/<chip>-gce.h of each chips.
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++
++  clocks:
++    minItems: 1
++
++required:
++  - compatible
++  - reg
++  - mediatek,gce-client-reg
++  - mediatek,gce-events
++  - clocks
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/mt8183-clk.h>
++    #include <dt-bindings/gce/mt8183-gce.h>
++
++    mdp3_ccorr: mdp3-ccorr@1401c000 {
++      compatible = "mediatek,mt8183-mdp3-ccorr";
++      reg = <0x1401c000 0x1000>;
++      mediatek,gce-client-reg = <&gce SUBSYS_1401XXXX 0xc000 0x1000>;
++      mediatek,gce-events = <CMDQ_EVENT_MDP_CCORR_SOF>,
++                            <CMDQ_EVENT_MDP_CCORR_EOF>;
++      clocks = <&mmsys CLK_MM_MDP_CCORR>;
++    };
+diff --git a/Documentation/devicetree/bindings/soc/mediatek/mediatek,wdma.yaml b/Documentation/devicetree/bindings/soc/mediatek/mediatek,wdma.yaml
+new file mode 100644
+index 000000000000..7b01724f21c3
+--- /dev/null
++++ b/Documentation/devicetree/bindings/soc/mediatek/mediatek,wdma.yaml
+@@ -0,0 +1,81 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/soc/mediatek/mediatek,wdma.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Mediatek Write Direct Memory Access
++
++maintainers:
++  - Matthias Brugger <matthias.bgg@gmail.com>
++  - Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
++
++description: |
++  Mediatek Write Direct Memory Access(WDMA) component used to write
++  the data into DMA.
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - mediatek,mt8183-mdp3-wdma
++
++  reg:
++    maxItems: 1
++
++  mediatek,gce-client-reg:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    items:
++      items:
++        - description: phandle of GCE
++        - description: GCE subsys id
++        - description: register offset
++        - description: register size
++    description: The register of client driver can be configured by gce with
++      4 arguments defined in this property. Each GCE subsys id is mapping to
++      a client defined in the header include/dt-bindings/gce/<chip>-gce.h.
++
++  mediatek,gce-events:
++    description:
++      The event id which is mapping to the specific hardware event signal
++      to gce. The event id is defined in the gce header
++      include/dt-bindings/gce/<chip>-gce.h of each chips.
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++
++  power-domains:
++    maxItems: 1
++
++  clocks:
++    minItems: 1
++
++  iommus:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - mediatek,gce-client-reg
++  - mediatek,gce-events
++  - power-domains
++  - clocks
++  - iommus
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/mt8183-clk.h>
++    #include <dt-bindings/gce/mt8183-gce.h>
++    #include <dt-bindings/power/mt8183-power.h>
++    #include <dt-bindings/memory/mt8183-larb-port.h>
++
++    mdp3_wdma: mdp3-wdma@14006000 {
++      compatible = "mediatek,mt8183-mdp3-wdma";
++      reg = <0x14006000 0x1000>;
++      mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x6000 0x1000>;
++      mediatek,gce-events = <CMDQ_EVENT_MDP_WDMA0_SOF>,
++                            <CMDQ_EVENT_MDP_WDMA0_EOF>;
++      power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
++      clocks = <&mmsys CLK_MM_MDP_WDMA0>;
++      iommus = <&iommu>;
++    };
+-- 
+2.18.0
+
