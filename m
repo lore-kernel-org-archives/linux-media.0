@@ -2,106 +2,136 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 326BDC43334
-	for <linux-media@archiver.kernel.org>; Tue, 19 Jul 2022 11:28:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88B5FC43334
+	for <linux-media@archiver.kernel.org>; Tue, 19 Jul 2022 12:24:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236756AbiGSL2B (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Jul 2022 07:28:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
+        id S237775AbiGSMY5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Jul 2022 08:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236587AbiGSL1x (ORCPT
+        with ESMTP id S239958AbiGSMYZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 19 Jul 2022 07:27:53 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC22C31202
-        for <linux-media@vger.kernel.org>; Tue, 19 Jul 2022 04:27:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658230072; x=1689766072;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WNpsdeGzmNHi1I+QFd1Ulc+RjSswlm9Nsn3hOwsgo8Y=;
-  b=IPtLdDIwJnQMo1URBscrcioEnQ3BRBhZsdgDeRgKJmkK1XMBw7vLMAaQ
-   xOKQlsAgRomoHiSSSJcmO3aNh9AR3f9DXkbLdGQW+QOinc/KMkUCKKnc0
-   AfNir9s0j2rRj34W9HjlDggmR7jKecJtRm46HVt5tsDYnpC72v+ILrwJf
-   Lll80OjRhl3flqEoHu5yXbV0ORoLtF9coo+r18Y1mnszwkK1wHKdX4X8p
-   PD0LbmlIQYxuYNxV+9XKPFnG2yLBz2X+Vn0EoSfI7/Z7RnAvb1HJ4gL3/
-   jk3pLzFmdjZcXLLYCP8KPBk2LK34zVXm7ORh06aw0UBRTXvExTN5CC9Zl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="266866309"
-X-IronPort-AV: E=Sophos;i="5.92,283,1650956400"; 
-   d="scan'208";a="266866309"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 04:27:52 -0700
-X-IronPort-AV: E=Sophos;i="5.92,283,1650956400"; 
-   d="scan'208";a="739832608"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 04:27:51 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 630BE202EA;
-        Tue, 19 Jul 2022 14:27:49 +0300 (EEST)
-Date:   Tue, 19 Jul 2022 11:27:49 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+        Tue, 19 Jul 2022 08:24:25 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D33261B25
+        for <linux-media@vger.kernel.org>; Tue, 19 Jul 2022 05:09:15 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id D4E64C000B;
+        Tue, 19 Jul 2022 12:08:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1658232525;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8eTcaBSzPUr6JTCtERryqaIQYBbQkLVl+Df9RXZTMXI=;
+        b=TBQTsVIxzhAUjemSk3MO2X7TpDQeTh4kDajrD+SQy28nUftuGJ0NzUGTSxVbFOUZ/PKZkO
+        vDj8D6nsv8YMYNpVezDQ3NqWF1G00kWBBMcP6mBXgPD3yoxh3OaykbTt8NLUcUjEQ09vEv
+        sdZLA5Uw4jb/Qw5asgdbqvh0j74iXayYMyCXGiJs9KGkCmY/Wm3GxRVxnDA3jbefYADrSW
+        WLGIJqlx+cKlJlwfDzpdcCiB02YliOVqSzrbZUKFSQSAr5SGqH1zWnpXmc+bYP/Fsec1PU
+        v3iZqg8va3WZKCzjGKGxXmsq+96kx9yjEM5cCp6y+m1/sehSs+n85CcxAhkBag==
+Date:   Tue, 19 Jul 2022 14:08:44 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
 Cc:     linux-media@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Samuel Holland <samuel@sholland.org>
 Subject: Re: [PATCH 1/1] media: sunxi: Depend on GENERIC_PHY_MIPI_DPHY
-Message-ID: <YtaVNVMxVnlr64dm@paasikivi.fi.intel.com>
+Message-ID: <YtaezNvlhZ+FX4Ek@aptenodytes>
 References: <20220713192540.222794-1-sakari.ailus@linux.intel.com>
  <YtZxajlS5FFFnfgf@aptenodytes>
+ <YtaVNVMxVnlr64dm@paasikivi.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="QSXCiTIi6FhPhlQ/"
 Content-Disposition: inline
-In-Reply-To: <YtZxajlS5FFFnfgf@aptenodytes>
+In-Reply-To: <YtaVNVMxVnlr64dm@paasikivi.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Paul,
 
-On Tue, Jul 19, 2022 at 10:55:06AM +0200, Paul Kocialkowski wrote:
-> Hi Sakari,
-> 
-> On Wed 13 Jul 22, 22:25, Sakari Ailus wrote:
-> > The sun6i-mipi-csi2 and sun6i-a83t-mipi-csi2 drivers depend on the generic
-> > MIPI D-PHY support. Select it. This fixes a linking problem when either of
-> > these drivers is enabled and GENERIC_PHY_MIPI_DPHY is disabled.
-> > 
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> 
-> Looks good to me but I have one question below.
-> 
-> Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> 
-> Cheers,
-> 
-> Paul
-> 
-> > ---
-> >  drivers/media/platform/sunxi/sun6i-mipi-csi2/Kconfig      | 1 +
-> >  drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/Kconfig | 1 +
-> >  2 files changed, 2 insertions(+)
-> > 
-> > diff --git a/drivers/media/platform/sunxi/sun6i-mipi-csi2/Kconfig b/drivers/media/platform/sunxi/sun6i-mipi-csi2/Kconfig
-> > index b1712f5873fd9..eb982466abd30 100644
-> > --- a/drivers/media/platform/sunxi/sun6i-mipi-csi2/Kconfig
-> > +++ b/drivers/media/platform/sunxi/sun6i-mipi-csi2/Kconfig
-> > @@ -8,6 +8,7 @@ config VIDEO_SUN6I_MIPI_CSI2
-> >  	select VIDEO_V4L2_SUBDEV_API
-> >  	select V4L2_FWNODE
-> >  	select PHY_SUN6I_MIPI_DPHY
-> > +	select GENERIC_PHY_MIPI_DPHY
-> 
-> Since we select PHY_SUN6I_MIPI_DPHY here which also selects
-> GENERIC_PHY_MIPI_DPHY, I suppose this is not strictly needed?
+--QSXCiTIi6FhPhlQ/
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-In that case the symbols won't be present in modpost and that causes a build
-failure.
+Hi Sakari,
 
-Thanks for the review. The patch is already merged though.
+On Tue 19 Jul 22, 11:27, Sakari Ailus wrote:
+> Hi Paul,
+>=20
+> On Tue, Jul 19, 2022 at 10:55:06AM +0200, Paul Kocialkowski wrote:
+> > Hi Sakari,
+> >=20
+> > On Wed 13 Jul 22, 22:25, Sakari Ailus wrote:
+> > > The sun6i-mipi-csi2 and sun6i-a83t-mipi-csi2 drivers depend on the ge=
+neric
+> > > MIPI D-PHY support. Select it. This fixes a linking problem when eith=
+er of
+> > > these drivers is enabled and GENERIC_PHY_MIPI_DPHY is disabled.
+> > >=20
+> > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> >=20
+> > Looks good to me but I have one question below.
+> >=20
+> > Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> >=20
+> > Cheers,
+> >=20
+> > Paul
+> >=20
+> > > ---
+> > >  drivers/media/platform/sunxi/sun6i-mipi-csi2/Kconfig      | 1 +
+> > >  drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/Kconfig | 1 +
+> > >  2 files changed, 2 insertions(+)
+> > >=20
+> > > diff --git a/drivers/media/platform/sunxi/sun6i-mipi-csi2/Kconfig b/d=
+rivers/media/platform/sunxi/sun6i-mipi-csi2/Kconfig
+> > > index b1712f5873fd9..eb982466abd30 100644
+> > > --- a/drivers/media/platform/sunxi/sun6i-mipi-csi2/Kconfig
+> > > +++ b/drivers/media/platform/sunxi/sun6i-mipi-csi2/Kconfig
+> > > @@ -8,6 +8,7 @@ config VIDEO_SUN6I_MIPI_CSI2
+> > >  	select VIDEO_V4L2_SUBDEV_API
+> > >  	select V4L2_FWNODE
+> > >  	select PHY_SUN6I_MIPI_DPHY
+> > > +	select GENERIC_PHY_MIPI_DPHY
+> >=20
+> > Since we select PHY_SUN6I_MIPI_DPHY here which also selects
+> > GENERIC_PHY_MIPI_DPHY, I suppose this is not strictly needed?
+>=20
+> In that case the symbols won't be present in modpost and that causes a bu=
+ild
+> failure.
 
--- 
-Kind regards,
+Oh interesting, thanks!
 
-Sakari Ailus
+> Thanks for the review. The patch is already merged though.
+
+Ah, I had a quick look at https://git.linuxtv.org/media_tree.git/
+but forgot to check your own tree.
+
+Cheers,
+
+Paul
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--QSXCiTIi6FhPhlQ/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmLWnswACgkQ3cLmz3+f
+v9E6+gf+Pmr8jgJ+T+HGJPsOjGTFGLV/pyqP2cYTElTbvxbzV79VCDOk9vto62fo
+ahOnQH0Q2aQMVfEsQg550UExbPVszOeL2fi+Mrl/PUG8fuhQiwTmbijRzeiUYKiM
+3jEjSlnkEmt/lAG5VgVLPHfZeUMybmDpko7vdIpBGuN01DZggAphh/OV+PX62Gbw
+djW4jp7Jqr1boZOJEkQ/TSK1nM21u9XkjbRN3CGOT12bonO4hItSVNcIUl99tPSI
+C9JdUE6bPYRxYA5nAtV2/0jOP7Q8nTk1w6/P3V+1ZCWs8b4hvcgYRHGBbzxm/nib
+97Ydq+hDsDDdcH9+PIM0DCylicqYvA==
+=C8gi
+-----END PGP SIGNATURE-----
+
+--QSXCiTIi6FhPhlQ/--
