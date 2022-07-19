@@ -2,68 +2,89 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B4D1C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 19 Jul 2022 13:20:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94585C43334
+	for <linux-media@archiver.kernel.org>; Tue, 19 Jul 2022 13:47:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236906AbiGSNUK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Jul 2022 09:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41300 "EHLO
+        id S237344AbiGSNrL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Jul 2022 09:47:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243859AbiGSNTq (ORCPT
+        with ESMTP id S237316AbiGSNrA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:19:46 -0400
-Received: from smtpbg.qq.com (unknown [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E01CC90BF;
-        Tue, 19 Jul 2022 05:36:35 -0700 (PDT)
-X-QQ-mid: bizesmtp75t1658234186trre1prl
-Received: from localhost.localdomain ( [171.223.96.21])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 19 Jul 2022 20:36:25 +0800 (CST)
-X-QQ-SSF: 01000000002000F0U000C00A0000020
-X-QQ-FEAT: Hom130/y8pnBi2MWREI/wm9kFTumZRyQK0pfDLmVHi0b+m5uLzoiPy7aigSYK
-        GQGr5Z2pMP54Sqr84mdR5ex9LybuVvj7EAlR9Hc8bKuHN7sbwYps0KjlLhI0aCO/02PxdHV
-        NOHnZRB6wWEZEPZuTY1h437Q4fvEGSRSeqBBlb+SJH/a42enKhaEdA28qOqWFXZ1OdiAp50
-        gZ8AmAujfl6u8qd7f39fO0eO6n+ajwHkYrQ+muX2u7cmaVlw8anElOZUQ/fT2y8TgKebpyu
-        NC1kdHOnK7hNwsLlQhFrSFXzucOpDFfba3m0xYw8JX2mruG8vLNCiXY6JNNcKJDK3a8XZFG
-        FrG7dREyjziUPmpxGe/2tbREv5zpJZ4q9AsDn632ybBP0F31PKUzrZYiingf14InL7A6Q/g
-        k3HTUPbR/WA=
-X-QQ-GoodBg: 0
-From:   Jason Wang <wangborong@cdjrlc.com>
-To:     mchehab@kernel.org
-Cc:     laurent.pinchart@ideasonboard.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] media: omap3isp: Fix comment typo
-Date:   Sat, 16 Jul 2022 12:34:17 +0800
-Message-Id: <20220716043417.41455-1-wangborong@cdjrlc.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 19 Jul 2022 09:47:00 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19E83B957;
+        Tue, 19 Jul 2022 06:00:54 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BDD0D6EE;
+        Tue, 19 Jul 2022 15:00:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1658235651;
+        bh=NaOscEIHC5O24TXksqWYtEboYMXHlx2oB97W0F6IY8w=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=dFWoS2rZVpHFtVt7rIYOMrlYIRQuyc5o9bz8WI5Nawbw1STQsLY3tEFFp+Ty5+TtU
+         59FcNYbXCQdmhhJLy+QWYUTr06zhYISeVHTBXGXtAnoXXMg9wf3AcMHWRYqbXynn0J
+         W9L3JwsVaqBoPSU+IYmEHp1mPEGj4SPS8jRAkHTg=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220719071721.703986-1-yangyingliang@huawei.com>
+References: <20220719071721.703986-1-yangyingliang@huawei.com>
+Subject: Re: [PATCH -next] media: vimc: fix wrong pointer passed to PTR_ERR() in vimc_create_links()
+From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     mchehab@kernel.org, yunkec@google.com, skhan@linuxfoundation.org
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Date:   Tue, 19 Jul 2022 14:00:48 +0100
+Message-ID: <165823564899.2228597.7310111477254228194@Monstersaurus>
+User-Agent: alot/0.10
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The double `the' is duplicated in the comment, remove one.
+Hi Yang,
 
-Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
----
- drivers/media/platform/ti/omap3isp/isp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Quoting Yang Yingliang (2022-07-19 08:17:21)
+> It should be 'ret_link' passed to PTR_ERR().
+>=20
+> Fixes: d534b9520a12 ("media: vimc: add ancillary lens")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 
-diff --git a/drivers/media/platform/ti/omap3isp/isp.c b/drivers/media/platform/ti/omap3isp/isp.c
-index d251736eb420..a6052df9bb19 100644
---- a/drivers/media/platform/ti/omap3isp/isp.c
-+++ b/drivers/media/platform/ti/omap3isp/isp.c
-@@ -1528,7 +1528,7 @@ void omap3isp_print_status(struct isp_device *isp)
-  * To solve this problem power management support is split into prepare/complete
-  * and suspend/resume operations. The pipelines are stopped in prepare() and the
-  * ISP clocks get disabled in suspend(). Similarly, the clocks are re-enabled in
-- * resume(), and the the pipelines are restarted in complete().
-+ * resume(), and the pipelines are restarted in complete().
-  *
-  * TODO: PM dependencies between the ISP and sensors are not modelled explicitly
-  * yet.
--- 
-2.35.1
+I believe this patch is correct, and it even has a fixes tag, which is
+perhaps one up on the previous one [0] from Hans, though I think he
+perhaps sent that before d534b9520a12 was even pushed
 
+But Hans' patch was sent first, so it might be ahead of the race.
+
+[0] https://lore.kernel.org/linux-media/4fd23b1c-8a0a-1691-a4f9-526ec99bd19=
+3@xs4all.nl/
+
+
+But for which ever one gets chosen:
+
+Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+
+
+> ---
+>  drivers/media/test-drivers/vimc/vimc-core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/media/test-drivers/vimc/vimc-core.c b/drivers/media/=
+test-drivers/vimc/vimc-core.c
+> index c73f91947f44..2ae7a0f11ebf 100644
+> --- a/drivers/media/test-drivers/vimc/vimc-core.c
+> +++ b/drivers/media/test-drivers/vimc/vimc-core.c
+> @@ -211,7 +211,7 @@ static int vimc_create_links(struct vimc_device *vimc)
+>                         media_create_ancillary_link(ved_primary->ent, ved=
+_ancillary->ent);
+> =20
+>                 if (IS_ERR(ret_link)) {
+> -                       ret =3D PTR_ERR(link);
+> +                       ret =3D PTR_ERR(ret_link);
+>                         goto err_rm_links;
+>                 }
+>         }
+> --=20
+> 2.25.1
+>
