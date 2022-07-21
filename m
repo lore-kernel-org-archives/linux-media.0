@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64D5AC433EF
-	for <linux-media@archiver.kernel.org>; Thu, 21 Jul 2022 08:35:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96AC1C433EF
+	for <linux-media@archiver.kernel.org>; Thu, 21 Jul 2022 08:35:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbiGUIfy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 21 Jul 2022 04:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34818 "EHLO
+        id S231566AbiGUIf6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 21 Jul 2022 04:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbiGUIfx (ORCPT
+        with ESMTP id S230198AbiGUIfz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 21 Jul 2022 04:35:53 -0400
+        Thu, 21 Jul 2022 04:35:55 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB4012AA2
-        for <linux-media@vger.kernel.org>; Thu, 21 Jul 2022 01:35:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A3913D62
+        for <linux-media@vger.kernel.org>; Thu, 21 Jul 2022 01:35:55 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DA16B13B9;
-        Thu, 21 Jul 2022 10:35:50 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A458B496;
+        Thu, 21 Jul 2022 10:35:53 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1658392551;
-        bh=P++K1SGk+NHOnNVxrp8rGib6GBb6I3b2vyI6W91OFqA=;
+        s=mail; t=1658392553;
+        bh=J930+6ig15RXxeSPhQtaOA2PY3fGWc4PIgdWmQ4ZDbA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y6g9eRloP9UM3pUIh8xwuUn+KbyS+PjnqOPzaV0WGzI+xehUZ7Dtzm2aNDJPRBDZf
-         i3ezdMXqYrNLYt+USZWg60o/0XQx7idNM/BqpInfHC6yq+UVs/gq6w7QMb/o9QF6BB
-         kwgXLRP+qA6M1qbTJfrAefU87II2Pc/mtJ9p1W+U=
+        b=o4SU7zqRmHDiKjpqOn/L4frkidUFQ8UxvihjUBoCsfOAJ8GWZtLBjNxbSsMn4Rc6o
+         blco8ssYtdEj2CmDTNJ0x732mgFsXfUS+JJctRSZhA/YyqjRX29sDeVX2Fpi6hZLvN
+         SEZnNoOW5wnX/QYYR7rdgUiWDmdmeRc+IwLchMjI=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Manivannan Sadhasivam <mani@kernel.org>,
         Sakari Ailus <sakari.ailus@iki.fi>
-Subject: [PATCH 06/19] media: i2c: imx290: Drop regmap cache
-Date:   Thu, 21 Jul 2022 11:35:27 +0300
-Message-Id: <20220721083540.1525-7-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 08/19] media: i2c: imx290: Correct register sizes
+Date:   Thu, 21 Jul 2022 11:35:29 +0300
+Message-Id: <20220721083540.1525-9-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220721083540.1525-1-laurent.pinchart@ideasonboard.com>
 References: <20220721083540.1525-1-laurent.pinchart@ideasonboard.com>
@@ -41,26 +41,98 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Only two registers are ever read, and once only. There's no need to
-cache values.
+Define registers with the appropriate size, using the variable-size
+register access mechanism that has just been introduced. This simplifies
+the code.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/i2c/imx290.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/media/i2c/imx290.c | 39 +++++++++-----------------------------
+ 1 file changed, 9 insertions(+), 30 deletions(-)
 
 diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-index f280ded2dac3..711282126c34 100644
+index ac58bfe6db7f..3f67c4d2417f 100644
 --- a/drivers/media/i2c/imx290.c
 +++ b/drivers/media/i2c/imx290.c
-@@ -97,7 +97,6 @@ static const struct imx290_pixfmt imx290_formats[] = {
- static const struct regmap_config imx290_regmap_config = {
- 	.reg_bits = 16,
- 	.val_bits = 8,
--	.cache_type = REGCACHE_RBTREE,
- };
+@@ -32,12 +32,11 @@
+ #define IMX290_REGHOLD					IMX290_REG_8BIT(0x3001)
+ #define IMX290_XMSTA					IMX290_REG_8BIT(0x3002)
+ #define IMX290_FR_FDG_SEL				IMX290_REG_8BIT(0x3009)
+-#define IMX290_BLKLEVEL_LOW				IMX290_REG_8BIT(0x300a)
+-#define IMX290_BLKLEVEL_HIGH				IMX290_REG_8BIT(0x300b)
++#define IMX290_BLKLEVEL					IMX290_REG_16BIT(0x300a)
+ #define IMX290_GAIN					IMX290_REG_8BIT(0x3014)
+-#define IMX290_HMAX_LOW					IMX290_REG_8BIT(0x301c)
+-#define IMX290_HMAX_HIGH				IMX290_REG_8BIT(0x301d)
++#define IMX290_HMAX					IMX290_REG_16BIT(0x301c)
+ #define IMX290_PGCTRL					IMX290_REG_8BIT(0x308c)
++#define IMX290_CHIP_ID					IMX290_REG_16BIT(0x319a)
+ #define IMX290_PHY_LANE_NUM				IMX290_REG_8BIT(0x3407)
+ #define IMX290_CSI_LANE_MODE				IMX290_REG_8BIT(0x3443)
  
- static const char * const imx290_test_pattern_menu[] = {
+@@ -461,8 +460,7 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
+ 		break;
+ 	case V4L2_CID_TEST_PATTERN:
+ 		if (ctrl->val) {
+-			imx290_write_reg(imx290, IMX290_BLKLEVEL_LOW, 0x00);
+-			imx290_write_reg(imx290, IMX290_BLKLEVEL_HIGH, 0x00);
++			imx290_write_reg(imx290, IMX290_BLKLEVEL, 0);
+ 			usleep_range(10000, 11000);
+ 			imx290_write_reg(imx290, IMX290_PGCTRL,
+ 					 (u8)(IMX290_PGCTRL_REGEN |
+@@ -472,12 +470,11 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
+ 			imx290_write_reg(imx290, IMX290_PGCTRL, 0x00);
+ 			usleep_range(10000, 11000);
+ 			if (imx290->bpp == 10)
+-				imx290_write_reg(imx290, IMX290_BLKLEVEL_LOW,
++				imx290_write_reg(imx290, IMX290_BLKLEVEL,
+ 						 0x3c);
+ 			else /* 12 bits per pixel */
+-				imx290_write_reg(imx290, IMX290_BLKLEVEL_LOW,
++				imx290_write_reg(imx290, IMX290_BLKLEVEL,
+ 						 0xf0);
+-			imx290_write_reg(imx290, IMX290_BLKLEVEL_HIGH, 0x00);
+ 		}
+ 		break;
+ 	default:
+@@ -669,25 +666,6 @@ static int imx290_write_current_format(struct imx290 *imx290)
+ 	return 0;
+ }
+ 
+-static int imx290_set_hmax(struct imx290 *imx290, u32 val)
+-{
+-	int ret;
+-
+-	ret = imx290_write_reg(imx290, IMX290_HMAX_LOW, (val & 0xff));
+-	if (ret) {
+-		dev_err(imx290->dev, "Error setting HMAX register\n");
+-		return ret;
+-	}
+-
+-	ret = imx290_write_reg(imx290, IMX290_HMAX_HIGH, ((val >> 8) & 0xff));
+-	if (ret) {
+-		dev_err(imx290->dev, "Error setting HMAX register\n");
+-		return ret;
+-	}
+-
+-	return 0;
+-}
+-
+ /* Start streaming */
+ static int imx290_start_streaming(struct imx290 *imx290)
+ {
+@@ -716,8 +694,9 @@ static int imx290_start_streaming(struct imx290 *imx290)
+ 		dev_err(imx290->dev, "Could not set current mode\n");
+ 		return ret;
+ 	}
+-	ret = imx290_set_hmax(imx290, imx290->current_mode->hmax);
+-	if (ret < 0)
++
++	ret = imx290_write_reg(imx290, IMX290_HMAX, imx290->current_mode->hmax);
++	if (ret)
+ 		return ret;
+ 
+ 	/* Apply customized values from user */
 -- 
 Regards,
 
