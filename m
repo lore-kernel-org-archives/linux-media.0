@@ -2,34 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE726CCA48D
-	for <linux-media@archiver.kernel.org>; Fri, 22 Jul 2022 13:20:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7565CCA489
+	for <linux-media@archiver.kernel.org>; Fri, 22 Jul 2022 13:20:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234830AbiGVNUD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S235144AbiGVNUD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Fri, 22 Jul 2022 09:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35792 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234763AbiGVNUA (ORCPT
+        with ESMTP id S234583AbiGVNUA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 22 Jul 2022 09:20:00 -0400
 Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B01A0B90;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C64A0B84;
         Fri, 22 Jul 2022 06:19:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
   t=1658495999; x=1690031999;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=mo4CG3rrxyUa5AtMRikbley8JX0pQHZDQRhOhS6nJfI=;
-  b=PjbgtDO+k5Y+2UEnZhO/kdiDYkY74rhO/FQq1CHOcJNQTuotz8XsMvfl
-   z2C7NDCeVSG6Dq3qpGvXR0OmT5/Ilb3e6/46fNXfbcQDXXRl6rLPcsOW0
-   V3wLhetyMJjU5/BTM7rPuZwnNHpecg4Njy9IfiYtNpypmJwZmpItqa90k
-   maR1y16Aqz6uL9QajD2knIzrN1RNkN3SYV4tUYRqiVKvf/fKeVYQEsRyB
-   AVHknoFrledzCxAmc796NtKO8iI0F/wNvd+HqEXsOS4iQzffBqyc+Vs3t
-   xlyB0H86hF+/51Te1gllCwVBsUJdp9LQgegdMG5tH/GS2NxPn1PmT0uAD
-   w==;
+  bh=DZEpBns6FBLrwGth9N0WA8nJfnM4oXu/eo0E3+I9z84=;
+  b=dH/IBolaeR/8zZ274+TsW5bw84lbH4JWJFGRF9V46BC8hj7FL6tkKUi+
+   vi4bPNrqD4+aEPYG/EGcvE3OchIhqH/j1kWu+OQSPx/doeLkbHiMUgfT5
+   dJXYvdSntjtDZ54Lt3MdWgT+osmZKH1gqjpnsQ/EWdQqZzJaIIn9cYT9O
+   m9gtPM0TL/hiNxM5mXhNdkqupGCoQcb5FvMQ+4DgdtOeccK2ETTR+PDpb
+   t6iTAcMqK0PytTmKHpD/P15fuiV9aAwYBpr4KhN3QiZMOj0+JgIBPCLkU
+   zkQnh6N/D/U4qWNxFRucGBHscyaMb4r3YMq7F3F4xkj58hnr3Xb8KKqie
+   g==;
 X-IronPort-AV: E=Sophos;i="5.93,185,1654552800"; 
-   d="scan'208";a="25212310"
+   d="scan'208";a="25212306"
 Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
   by mx1-pgp.tq-group.com with ESMTP; 22 Jul 2022 15:19:53 +0200
 Received: from mx1.tq-group.com ([192.168.6.7])
@@ -42,23 +42,23 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   t=1658495993; x=1690031993;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=mo4CG3rrxyUa5AtMRikbley8JX0pQHZDQRhOhS6nJfI=;
-  b=BGfY63xFf5eoPLoq7w3Kj/ac9oycBMH9XdGrrHYRlldT0+c53tIigO1M
-   JkD3RKnwst1pQ9ngZgvvZDIl9j4nvKgkqa9zi/TVaRaX7klpmEuslXy+y
-   gG9y8C0mRhJiWiBFBrc0zkPqSYB2sQkE53N2cbYNxKd4UgwBXssf4ouhI
-   s+9twrKSaaC9T6kuLztyBEJGU+28TxdWBRGbPU1C+eTu2GpHfvC4MCq12
-   tRdgZ766B/ui0i2FsP5hxKPAfoGMMzuOBon1ZSC+/xVKjs/wpm2w+yoaR
-   hvBJCBsxXbHX5ElmrVFG5/t0TieRG/xKIeesrGP5ou4uWn/mX8GXRsaoJ
+  bh=DZEpBns6FBLrwGth9N0WA8nJfnM4oXu/eo0E3+I9z84=;
+  b=QWkRifcYxQF7WPfqLo4WVGAvByMFJXSqO4qdigMcoV8BUtV0lOkhtb5K
+   MO9AkG850NC35E3fjfFFUIRHBFNXvIfCB0b8nBPoa4CwAn5cidU+uewRp
+   ES6JkFBZPZPGx/hgfhZWjQMrqRKydIHjfYh91aR6VnNuuvfjeIPCzH5EL
+   DHP0DcIoysQUtaucbqTqbiIHBtYPAzwA4zcU8E3yzddOPhndpi2H0uT79
+   PzxxAehFuA1A0OOLSCGeNK6Iq6c2SLPJfiEuXlgoD4kwevD466jgWw2AJ
+   vzOneqgkQXgFb9xI/RXCi5V7+OiW/VmG2a6W0PtGjjbKwecqx84BQ7hJS
    A==;
 X-IronPort-AV: E=Sophos;i="5.93,185,1654552800"; 
-   d="scan'208";a="25212309"
+   d="scan'208";a="25212305"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 22 Jul 2022 15:19:53 +0200
+  by mx1.tq-group.com with ESMTP; 22 Jul 2022 15:19:52 +0200
 Received: from steina-w.tq-net.de (unknown [10.123.49.12])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 1FB60280056;
-        Fri, 22 Jul 2022 15:19:53 +0200 (CEST)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id BFD78280056;
+        Fri, 22 Jul 2022 15:19:52 +0200 (CEST)
 From:   Alexander Stein <alexander.stein@ew.tq-group.com>
 To:     "Paul J . Murphy" <paul.j.murphy@intel.com>,
         Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
@@ -67,10 +67,11 @@ To:     "Paul J . Murphy" <paul.j.murphy@intel.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
         linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@iki.fi>
-Subject: [PATCH v3 6/7] media: i2c: ov9282: Set v4l2 subdev name according to sensor model
-Date:   Fri, 22 Jul 2022 15:19:46 +0200
-Message-Id: <20220722131947.2456988-7-alexander.stein@ew.tq-group.com>
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 4/7] media: dt-bindings: media: ov9282: Add power supply properties
+Date:   Fri, 22 Jul 2022 15:19:44 +0200
+Message-Id: <20220722131947.2456988-5-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220722131947.2456988-1-alexander.stein@ew.tq-group.com>
 References: <20220722131947.2456988-1-alexander.stein@ew.tq-group.com>
@@ -80,26 +81,34 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-To distinguish ov9281 & ov9282 the name has to be explicitly set.
-i2c_client already has the name parsed from the compatible.
+Add regulators for each power domain.
 
 Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/media/i2c/ov9282.c | 1 +
- 1 file changed, 1 insertion(+)
+ .../devicetree/bindings/media/i2c/ovti,ov9282.yaml       | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/media/i2c/ov9282.c b/drivers/media/i2c/ov9282.c
-index 352dbe21a902..dbc0a4cd060f 100644
---- a/drivers/media/i2c/ov9282.c
-+++ b/drivers/media/i2c/ov9282.c
-@@ -1047,6 +1047,7 @@ static int ov9282_probe(struct i2c_client *client)
+diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov9282.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov9282.yaml
+index 285f8c85f253..9abfaabd373a 100644
+--- a/Documentation/devicetree/bindings/media/i2c/ovti,ov9282.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov9282.yaml
+@@ -39,6 +39,15 @@ properties:
+     description: Reference to the GPIO connected to the XCLR pin, if any.
+     maxItems: 1
  
- 	/* Initialize subdev */
- 	v4l2_i2c_subdev_init(&ov9282->sd, client, &ov9282_subdev_ops);
-+	v4l2_i2c_subdev_set_name(&ov9282->sd, client, client->name, NULL);
- 
- 	ret = ov9282_parse_hw_config(ov9282);
- 	if (ret) {
++  avdd-supply:
++    description: Analog power supply
++
++  dovdd-supply:
++    description: Digital I/O power supply
++
++  dvdd-supply:
++    description: Digital core supply
++
+   port:
+     additionalProperties: false
+     $ref: /schemas/graph.yaml#/$defs/port-base
 -- 
 2.25.1
 
