@@ -2,82 +2,154 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DEE2C433EF
-	for <linux-media@archiver.kernel.org>; Fri, 22 Jul 2022 06:34:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08E41C43334
+	for <linux-media@archiver.kernel.org>; Fri, 22 Jul 2022 06:34:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234247AbiGVGez (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 22 Jul 2022 02:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
+        id S234249AbiGVGe5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 22 Jul 2022 02:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234110AbiGVGex (ORCPT
+        with ESMTP id S233387AbiGVGe4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 22 Jul 2022 02:34:53 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8157465587
-        for <linux-media@vger.kernel.org>; Thu, 21 Jul 2022 23:34:52 -0700 (PDT)
+        Fri, 22 Jul 2022 02:34:56 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A731565587
+        for <linux-media@vger.kernel.org>; Thu, 21 Jul 2022 23:34:55 -0700 (PDT)
 Received: from deskari.lan (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4AE9C6D5;
-        Fri, 22 Jul 2022 08:34:50 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9AB97BC4;
+        Fri, 22 Jul 2022 08:34:51 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1658471690;
-        bh=LONPrpHOZTqcagfC+nmyMlusOSsY/hWMJ+o47b5Zyzw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cgZSV3OUKRU7EM2pNCpiyxGhGY+GeZbrwduK21PaWIBOClQtKOgF8oLFL6d9e3g29
-         5YWYsM999Jd8NEkQjNGolYjZKWTGxVeSBFEf/AJ6oE6fzWNGPl4nsbFwKNdEQc4Fjq
-         bD5QqbDJoHlYSnaRDwv47NnCgoOmDsEK7TnIDc7A=
+        s=mail; t=1658471691;
+        bh=Ngw5KRVBpH/x4zOB+H7YVI2Ma5B0eQp5V9Px1M3VYt4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=W8B8dvzTfjYOEr300+ZPxM8q4rJXkDEx0rBEBhvlh1RxzsgVlWXK1eDxr0j/3J8An
+         2IJzUlWnKqtFH7N62qinH+g9Pc34wqzo/YM/gyPzRylkfWAwa+Pv+vGHDnc2llDuCr
+         AGZXl8kiV0PilP2q0EeG3RmvY40ZOjJ+qYU7p0XA=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, Benoit Parrot <bparrot@ti.com>
 Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Pratyush Yadav <p.yadav@ti.com>,
         Kishon Vijay Abraham I <kishon@ti.com>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH 1/5] media: ti: cal: fix useless variable init
-Date:   Fri, 22 Jul 2022 09:34:20 +0300
-Message-Id: <20220722063424.174288-1-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH 4/5] media: ti: cal: combine wdma irq handling
+Date:   Fri, 22 Jul 2022 09:34:23 +0300
+Message-Id: <20220722063424.174288-4-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220722063424.174288-1-tomi.valkeinen@ideasonboard.com>
+References: <20220722063424.174288-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-'ret' is initialized needlessly in cal_legacy_try_fmt_vid_cap(). We can
-also move the variable to the for block, which is the only place where
-it is used.
+Instead of handling the WDMA START and END interrupts separately, we
+need to handle both at the same time to better manage the inherent race
+conditions related to CAL interrupts.
+
+Change the code so that we have a single function,
+cal_irq_handle_wdma(), which gets two booleans, start and end, as
+parameters, which allows us to manage the race conditions in the
+following patch.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- drivers/media/platform/ti/cal/cal-video.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/media/platform/ti/cal/cal.c | 59 ++++++++++++-----------------
+ 1 file changed, 25 insertions(+), 34 deletions(-)
 
-diff --git a/drivers/media/platform/ti/cal/cal-video.c b/drivers/media/platform/ti/cal/cal-video.c
-index 07ae1a34e6b0..a4d764c96a90 100644
---- a/drivers/media/platform/ti/cal/cal-video.c
-+++ b/drivers/media/platform/ti/cal/cal-video.c
-@@ -191,7 +191,7 @@ static int cal_legacy_try_fmt_vid_cap(struct file *file, void *priv,
- 	struct cal_ctx *ctx = video_drvdata(file);
- 	const struct cal_format_info *fmtinfo;
- 	struct v4l2_subdev_frame_size_enum fse;
--	int ret, found;
-+	int found;
+diff --git a/drivers/media/platform/ti/cal/cal.c b/drivers/media/platform/ti/cal/cal.c
+index afba0b72a68c..910ff179e597 100644
+--- a/drivers/media/platform/ti/cal/cal.c
++++ b/drivers/media/platform/ti/cal/cal.c
+@@ -715,22 +715,33 @@ static inline void cal_irq_wdma_end(struct cal_ctx *ctx)
+ 	}
+ }
  
- 	fmtinfo = find_format_by_pix(ctx, f->fmt.pix.pixelformat);
- 	if (!fmtinfo) {
-@@ -206,12 +206,13 @@ static int cal_legacy_try_fmt_vid_cap(struct file *file, void *priv,
- 	f->fmt.pix.field = ctx->v_fmt.fmt.pix.field;
- 
- 	/* check for/find a valid width/height */
--	ret = 0;
- 	found = false;
- 	fse.pad = 0;
- 	fse.code = fmtinfo->code;
- 	fse.which = V4L2_SUBDEV_FORMAT_ACTIVE;
- 	for (fse.index = 0; ; fse.index++) {
-+		int ret;
++static void cal_irq_handle_wdma(struct cal_ctx *ctx, bool start, bool end)
++{
++	if (end)
++		cal_irq_wdma_end(ctx);
 +
- 		ret = v4l2_subdev_call(ctx->phy->source, pad, enum_frame_size,
- 				       NULL, &fse);
- 		if (ret)
++	if (start)
++		cal_irq_wdma_start(ctx);
++}
++
+ static irqreturn_t cal_irq(int irq_cal, void *data)
+ {
+ 	struct cal_dev *cal = data;
+-	u32 status;
+-
+-	status = cal_read(cal, CAL_HL_IRQSTATUS(0));
+-	if (status) {
+-		unsigned int i;
++	u32 status[3];
++	unsigned int i;
+ 
+-		cal_write(cal, CAL_HL_IRQSTATUS(0), status);
++	for (i = 0; i < 3; ++i) {
++		status[i] = cal_read(cal, CAL_HL_IRQSTATUS(i));
++		if (status[i])
++			cal_write(cal, CAL_HL_IRQSTATUS(i), status[i]);
++	}
+ 
+-		if (status & CAL_HL_IRQ_OCPO_ERR_MASK)
++	if (status[0]) {
++		if (status[0] & CAL_HL_IRQ_OCPO_ERR_MASK)
+ 			dev_err_ratelimited(cal->dev, "OCPO ERROR\n");
+ 
+ 		for (i = 0; i < cal->data->num_csi2_phy; ++i) {
+-			if (status & CAL_HL_IRQ_CIO_MASK(i)) {
++			if (status[0] & CAL_HL_IRQ_CIO_MASK(i)) {
+ 				u32 cio_stat = cal_read(cal,
+ 							CAL_CSI2_COMPLEXIO_IRQSTATUS(i));
+ 
+@@ -741,7 +752,7 @@ static irqreturn_t cal_irq(int irq_cal, void *data)
+ 					  cio_stat);
+ 			}
+ 
+-			if (status & CAL_HL_IRQ_VC_MASK(i)) {
++			if (status[0] & CAL_HL_IRQ_VC_MASK(i)) {
+ 				u32 vc_stat = cal_read(cal, CAL_CSI2_VC_IRQSTATUS(i));
+ 
+ 				dev_err_ratelimited(cal->dev,
+@@ -753,32 +764,12 @@ static irqreturn_t cal_irq(int irq_cal, void *data)
+ 		}
+ 	}
+ 
+-	/* Check which DMA just finished */
+-	status = cal_read(cal, CAL_HL_IRQSTATUS(1));
+-	if (status) {
+-		unsigned int i;
+-
+-		/* Clear Interrupt status */
+-		cal_write(cal, CAL_HL_IRQSTATUS(1), status);
+-
+-		for (i = 0; i < cal->num_contexts; ++i) {
+-			if (status & CAL_HL_IRQ_WDMA_END_MASK(i))
+-				cal_irq_wdma_end(cal->ctx[i]);
+-		}
+-	}
+-
+-	/* Check which DMA just started */
+-	status = cal_read(cal, CAL_HL_IRQSTATUS(2));
+-	if (status) {
+-		unsigned int i;
+-
+-		/* Clear Interrupt status */
+-		cal_write(cal, CAL_HL_IRQSTATUS(2), status);
++	for (i = 0; i < cal->num_contexts; ++i) {
++		bool end = !!(status[1] & CAL_HL_IRQ_WDMA_END_MASK(i));
++		bool start = !!(status[2] & CAL_HL_IRQ_WDMA_START_MASK(i));
+ 
+-		for (i = 0; i < cal->num_contexts; ++i) {
+-			if (status & CAL_HL_IRQ_WDMA_START_MASK(i))
+-				cal_irq_wdma_start(cal->ctx[i]);
+-		}
++		if (start || end)
++			cal_irq_handle_wdma(cal->ctx[i], start, end);
+ 	}
+ 
+ 	return IRQ_HANDLED;
 -- 
 2.34.1
 
