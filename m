@@ -2,84 +2,182 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B8FFC433EF
-	for <linux-media@archiver.kernel.org>; Fri, 22 Jul 2022 06:34:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0AB1C43334
+	for <linux-media@archiver.kernel.org>; Fri, 22 Jul 2022 06:34:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbiGVGeG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 22 Jul 2022 02:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40260 "EHLO
+        id S234243AbiGVGez (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 22 Jul 2022 02:34:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234243AbiGVGeB (ORCPT
+        with ESMTP id S233387AbiGVGex (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 22 Jul 2022 02:34:01 -0400
-Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FF784D4E5;
-        Thu, 21 Jul 2022 23:33:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=QSsw+
-        n12VZ5Mt9M8vjVWAmnvanUDHuoSYkmFZCbq7AY=; b=hRouYzf4/ggxwt5AfsHZV
-        cFQluoPp/JOWo9U+Bf4Vf7JrALvukRL9CuJbAR2AsatDcxcydNyQGtsfTBX4JUNQ
-        KEKRrqt6sRGrvtZP+x9w4Wg8Cz7RlSGxLLgcFb3t/9V2IyjmaovpvtY5rPJ6T6KF
-        /ZsXbm6LcTGyRwIr6+ubec=
-Received: from localhost.localdomain (unknown [112.97.59.29])
-        by smtp4 (Coremail) with SMTP id HNxpCgD3L3DGRNpigOxlQA--.19561S2;
-        Fri, 22 Jul 2022 14:33:44 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     prabhakar.csengg@gmail.com, mchehab@kernel.org,
-        laurent.pinchart@ideasonboard.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH] media: platform: ti: Fix typo 'the the' in comment
-Date:   Fri, 22 Jul 2022 14:33:41 +0800
-Message-Id: <20220722063341.69913-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 22 Jul 2022 02:34:53 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFF067593
+        for <linux-media@vger.kernel.org>; Thu, 21 Jul 2022 23:34:52 -0700 (PDT)
+Received: from deskari.lan (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BA88E80A;
+        Fri, 22 Jul 2022 08:34:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1658471691;
+        bh=dIc2wdnvt/KLtV1ttJfcPZh+XjQa655XRdnHvBLUfK0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=GBe05GCluIxxAdb9ldw2+8cdHB/QVVWb8bqINs/GqIDZRQN5ViM1+UNNw0irx7M6V
+         ULKO4TL7jP86kcaQ9SukyZ8LaRsDTY6GtjLuEXuPcH8LtZQ2FTJvdswvUtW9IuWTf0
+         BbcT9O8GDl6pacYHHl+Qw+LYCH2LmbFE8fPPF49g=
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+To:     linux-media@vger.kernel.org, Benoit Parrot <bparrot@ti.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH 2/5] media: ti: cal: rename sd_state to state
+Date:   Fri, 22 Jul 2022 09:34:21 +0300
+Message-Id: <20220722063424.174288-2-tomi.valkeinen@ideasonboard.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220722063424.174288-1-tomi.valkeinen@ideasonboard.com>
+References: <20220722063424.174288-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HNxpCgD3L3DGRNpigOxlQA--.19561S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ZFyDXFy8ZFyUJrWxWr4xXrb_yoW8WFWUpF
-        WDK3yxArWqgr1qqw4DAw1kuFW3Aw1SvFWjkry3u3s3uan8ZFWqyr18tFySyF9rXFWfZFy3
-        JF1rtw13WFs5ur7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEyxRnUUUUU=
-X-Originating-IP: [112.97.59.29]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbivwhGZFWB0jrEuAAAsV
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Replace 'the the' with 'the' in the comment.
+Rename sd_state variable to state.
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- drivers/media/platform/ti/davinci/vpbe.c | 2 +-
- drivers/media/platform/ti/omap3isp/isp.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/platform/ti/cal/cal-camerarx.c | 30 ++++++++++----------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/media/platform/ti/davinci/vpbe.c b/drivers/media/platform/ti/davinci/vpbe.c
-index 5f0aeb744e81..509ecc84624e 100644
---- a/drivers/media/platform/ti/davinci/vpbe.c
-+++ b/drivers/media/platform/ti/davinci/vpbe.c
-@@ -280,7 +280,7 @@ static int vpbe_set_default_output(struct vpbe_device *vpbe_dev)
-  * vpbe_get_output - Get output
-  * @vpbe_dev: vpbe device ptr
-  *
-- * return current vpbe output to the the index
-+ * return current vpbe output to the index
-  */
- static unsigned int vpbe_get_output(struct vpbe_device *vpbe_dev)
+diff --git a/drivers/media/platform/ti/cal/cal-camerarx.c b/drivers/media/platform/ti/cal/cal-camerarx.c
+index e69fed117fea..6faf716c7814 100644
+--- a/drivers/media/platform/ti/cal/cal-camerarx.c
++++ b/drivers/media/platform/ti/cal/cal-camerarx.c
+@@ -622,12 +622,12 @@ static inline struct cal_camerarx *to_cal_camerarx(struct v4l2_subdev *sd)
+ 
+ static struct v4l2_mbus_framefmt *
+ cal_camerarx_get_pad_format(struct cal_camerarx *phy,
+-			    struct v4l2_subdev_state *sd_state,
++			    struct v4l2_subdev_state *state,
+ 			    unsigned int pad, u32 which)
  {
-diff --git a/drivers/media/platform/ti/omap3isp/isp.c b/drivers/media/platform/ti/omap3isp/isp.c
-index 4c937f3f323e..f99dda7337b9 100644
---- a/drivers/media/platform/ti/omap3isp/isp.c
-+++ b/drivers/media/platform/ti/omap3isp/isp.c
-@@ -1528,7 +1528,7 @@ void omap3isp_print_status(struct isp_device *isp)
-  * To solve this problem power management support is split into prepare/complete
-  * and suspend/resume operations. The pipelines are stopped in prepare() and the
-  * ISP clocks get disabled in suspend(). Similarly, the clocks are re-enabled in
-- * resume(), and the the pipelines are restarted in complete().
-+ * resume(), and the pipelines are restarted in complete().
-  *
-  * TODO: PM dependencies between the ISP and sensors are not modelled explicitly
-  * yet.
+ 	switch (which) {
+ 	case V4L2_SUBDEV_FORMAT_TRY:
+-		return v4l2_subdev_get_try_format(&phy->subdev, sd_state, pad);
++		return v4l2_subdev_get_try_format(&phy->subdev, state, pad);
+ 	case V4L2_SUBDEV_FORMAT_ACTIVE:
+ 		return &phy->formats[pad];
+ 	default:
+@@ -653,7 +653,7 @@ static int cal_camerarx_sd_s_stream(struct v4l2_subdev *sd, int enable)
+ }
+ 
+ static int cal_camerarx_sd_enum_mbus_code(struct v4l2_subdev *sd,
+-					  struct v4l2_subdev_state *sd_state,
++					  struct v4l2_subdev_state *state,
+ 					  struct v4l2_subdev_mbus_code_enum *code)
+ {
+ 	struct cal_camerarx *phy = to_cal_camerarx(sd);
+@@ -670,7 +670,7 @@ static int cal_camerarx_sd_enum_mbus_code(struct v4l2_subdev *sd,
+ 			goto out;
+ 		}
+ 
+-		fmt = cal_camerarx_get_pad_format(phy, sd_state,
++		fmt = cal_camerarx_get_pad_format(phy, state,
+ 						  CAL_CAMERARX_PAD_SINK,
+ 						  code->which);
+ 		code->code = fmt->code;
+@@ -690,7 +690,7 @@ static int cal_camerarx_sd_enum_mbus_code(struct v4l2_subdev *sd,
+ }
+ 
+ static int cal_camerarx_sd_enum_frame_size(struct v4l2_subdev *sd,
+-					   struct v4l2_subdev_state *sd_state,
++					   struct v4l2_subdev_state *state,
+ 					   struct v4l2_subdev_frame_size_enum *fse)
+ {
+ 	struct cal_camerarx *phy = to_cal_camerarx(sd);
+@@ -706,7 +706,7 @@ static int cal_camerarx_sd_enum_frame_size(struct v4l2_subdev *sd,
+ 	if (cal_rx_pad_is_source(fse->pad)) {
+ 		struct v4l2_mbus_framefmt *fmt;
+ 
+-		fmt = cal_camerarx_get_pad_format(phy, sd_state,
++		fmt = cal_camerarx_get_pad_format(phy, state,
+ 						  CAL_CAMERARX_PAD_SINK,
+ 						  fse->which);
+ 		if (fse->code != fmt->code) {
+@@ -738,7 +738,7 @@ static int cal_camerarx_sd_enum_frame_size(struct v4l2_subdev *sd,
+ }
+ 
+ static int cal_camerarx_sd_get_fmt(struct v4l2_subdev *sd,
+-				   struct v4l2_subdev_state *sd_state,
++				   struct v4l2_subdev_state *state,
+ 				   struct v4l2_subdev_format *format)
+ {
+ 	struct cal_camerarx *phy = to_cal_camerarx(sd);
+@@ -746,7 +746,7 @@ static int cal_camerarx_sd_get_fmt(struct v4l2_subdev *sd,
+ 
+ 	mutex_lock(&phy->mutex);
+ 
+-	fmt = cal_camerarx_get_pad_format(phy, sd_state, format->pad,
++	fmt = cal_camerarx_get_pad_format(phy, state, format->pad,
+ 					  format->which);
+ 	format->format = *fmt;
+ 
+@@ -756,7 +756,7 @@ static int cal_camerarx_sd_get_fmt(struct v4l2_subdev *sd,
+ }
+ 
+ static int cal_camerarx_sd_set_fmt(struct v4l2_subdev *sd,
+-				   struct v4l2_subdev_state *sd_state,
++				   struct v4l2_subdev_state *state,
+ 				   struct v4l2_subdev_format *format)
+ {
+ 	struct cal_camerarx *phy = to_cal_camerarx(sd);
+@@ -766,7 +766,7 @@ static int cal_camerarx_sd_set_fmt(struct v4l2_subdev *sd,
+ 
+ 	/* No transcoding, source and sink formats must match. */
+ 	if (cal_rx_pad_is_source(format->pad))
+-		return cal_camerarx_sd_get_fmt(sd, sd_state, format);
++		return cal_camerarx_sd_get_fmt(sd, state, format);
+ 
+ 	/*
+ 	 * Default to the first format if the requested media bus code isn't
+@@ -792,12 +792,12 @@ static int cal_camerarx_sd_set_fmt(struct v4l2_subdev *sd,
+ 
+ 	mutex_lock(&phy->mutex);
+ 
+-	fmt = cal_camerarx_get_pad_format(phy, sd_state,
++	fmt = cal_camerarx_get_pad_format(phy, state,
+ 					  CAL_CAMERARX_PAD_SINK,
+ 					  format->which);
+ 	*fmt = format->format;
+ 
+-	fmt = cal_camerarx_get_pad_format(phy, sd_state,
++	fmt = cal_camerarx_get_pad_format(phy, state,
+ 					  CAL_CAMERARX_PAD_FIRST_SOURCE,
+ 					  format->which);
+ 	*fmt = format->format;
+@@ -808,10 +808,10 @@ static int cal_camerarx_sd_set_fmt(struct v4l2_subdev *sd,
+ }
+ 
+ static int cal_camerarx_sd_init_cfg(struct v4l2_subdev *sd,
+-				    struct v4l2_subdev_state *sd_state)
++				    struct v4l2_subdev_state *state)
+ {
+ 	struct v4l2_subdev_format format = {
+-		.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY
++		.which = state ? V4L2_SUBDEV_FORMAT_TRY
+ 		: V4L2_SUBDEV_FORMAT_ACTIVE,
+ 		.pad = CAL_CAMERARX_PAD_SINK,
+ 		.format = {
+@@ -826,7 +826,7 @@ static int cal_camerarx_sd_init_cfg(struct v4l2_subdev *sd,
+ 		},
+ 	};
+ 
+-	return cal_camerarx_sd_set_fmt(sd, sd_state, &format);
++	return cal_camerarx_sd_set_fmt(sd, state, &format);
+ }
+ 
+ static const struct v4l2_subdev_video_ops cal_camerarx_video_ops = {
 -- 
-2.25.1
+2.34.1
 
