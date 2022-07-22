@@ -2,45 +2,45 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F625C433EF
-	for <linux-media@archiver.kernel.org>; Fri, 22 Jul 2022 01:57:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9C45C43334
+	for <linux-media@archiver.kernel.org>; Fri, 22 Jul 2022 02:19:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231521AbiGVB5Y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 21 Jul 2022 21:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44970 "EHLO
+        id S234027AbiGVCTe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 21 Jul 2022 22:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiGVB5Y (ORCPT
+        with ESMTP id S234034AbiGVCTc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 21 Jul 2022 21:57:24 -0400
+        Thu, 21 Jul 2022 22:19:32 -0400
 Received: from m12-14.163.com (m12-14.163.com [220.181.12.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A159972ED;
-        Thu, 21 Jul 2022 18:57:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CFAD413CDB;
+        Thu, 21 Jul 2022 19:19:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=3Ol0r
-        ff/GUMKl7XwibwqqtI8YmVtFsmdMG5owhIgdzM=; b=Okw94CJLf5GQoLb75cQEg
-        o4Mp/ZxlEvsZomC7uUU0he3PqYAtlMr9bhu1ozM/L1DyPKW1HAqVMXIkzTxbR+3h
-        fHyAu/R3GVasXHOMK/kiOi8dXxy7ZPQONqWHk3eQuL4oG8bT+mB8n5mqFNVzZqLl
-        W4QI8ExHVIOpH9KHgQrZGI=
-Received: from localhost.localdomain (unknown [223.104.68.59])
-        by smtp10 (Coremail) with SMTP id DsCowADHjqf2A9piq4GDOg--.8820S2;
-        Fri, 22 Jul 2022 09:57:14 +0800 (CST)
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=/0XkG
+        Fs+FCFX0sqA6J0AfVmSz9Si3P6MzDBYURSGPow=; b=jlOH1H/SqnYS+AroUQ+xH
+        YKjMWVKLXrnaQTWLqbRgx4GMUyh6tiPDkVKRigl3ag0QGzqWSMEKrg6l9Lcq3/oZ
+        mjylRONb7tZ7VhBbCTkVViLMybSz3LOWPe2kqaPGvdFW2ACOOIsjKPaTO1p91ayi
+        uRKqGsLIFwp5JZF0h7TroM=
+Received: from localhost.localdomain (unknown [223.104.63.34])
+        by smtp10 (Coremail) with SMTP id DsCowAD3ISQpCdpi5mSGOg--.603S2;
+        Fri, 22 Jul 2022 10:19:24 +0800 (CST)
 From:   Slark Xiao <slark_xiao@163.com>
 To:     mchehab@kernel.org
 Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH] media: cx88: Fix typo 'the the' in comment
-Date:   Fri, 22 Jul 2022 09:57:07 +0800
-Message-Id: <20220722015707.63916-1-slark_xiao@163.com>
+Subject: [PATCH] media: saa7164: Fix typo 'the the' in comment
+Date:   Fri, 22 Jul 2022 10:19:18 +0800
+Message-Id: <20220722021918.64636-1-slark_xiao@163.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DsCowADHjqf2A9piq4GDOg--.8820S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrZFWUWr15WFW8CrWDXFWrXwb_yoWxtrg_Wr
-        1kuFWxXa1Y9F4UKr42vF1ru3y3t3ykur1xCr1fta43KFyYkF4UGa4DAF1UJFnxGrW3AF98
-        Cry5X3W3CwnxWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRiAwIUUUUUU==
-X-Originating-IP: [223.104.68.59]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbBAwZGZGB0Ln+iOQAAs5
+X-CM-TRANSID: DsCowAD3ISQpCdpi5mSGOg--.603S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZFWUWr1ftw4UJF18Cr4DJwb_yoW3Krg_Wr
+        1DZ3yxZ343Jr1ayF4Yv3WfZry8K3y8uFWrA3Z3tryrt348ur1UXryYywn8Xw1UJFW3u3sr
+        WrZxWa1xZw1rKjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sREbAFPUUUUU==
+X-Originating-IP: [223.104.63.34]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiGRBGZFyPdmgJAgABss
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
@@ -49,22 +49,22 @@ Replace 'the the' with 'the' in the comment.
 
 Signed-off-by: Slark Xiao <slark_xiao@163.com>
 ---
- drivers/media/pci/cx88/cx88-dsp.c | 2 +-
+ drivers/media/pci/saa7164/saa7164-core.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/pci/cx88/cx88-dsp.c b/drivers/media/pci/cx88/cx88-dsp.c
-index f1e1fc1cb4bd..e378f3b215c7 100644
---- a/drivers/media/pci/cx88/cx88-dsp.c
-+++ b/drivers/media/pci/cx88/cx88-dsp.c
-@@ -24,7 +24,7 @@
+diff --git a/drivers/media/pci/saa7164/saa7164-core.c b/drivers/media/pci/saa7164/saa7164-core.c
+index 7973ae42873a..d5f32e3ff544 100644
+--- a/drivers/media/pci/saa7164/saa7164-core.c
++++ b/drivers/media/pci/saa7164/saa7164-core.c
+@@ -626,7 +626,7 @@ static irqreturn_t saa7164_irq(int irq, void *dev_id)
+ 	portf = &dev->ports[SAA7164_PORT_VBI2];
  
- /*
-  * We calculate the baseband frequencies of the carrier and the pilot tones
-- * based on the the sampling rate of the audio rds fifo.
-+ * based on the sampling rate of the audio rds fifo.
-  */
- 
- #define FREQ_A2_CARRIER         baseband_freq(54687.5, 2689.36, 0.0)
+ 	/* Check that the hardware is accessible. If the status bytes are
+-	 * 0xFF then the device is not accessible, the the IRQ belongs
++	 * 0xFF then the device is not accessible, the IRQ belongs
+ 	 * to another driver.
+ 	 * 4 x u32 interrupt registers.
+ 	 */
 -- 
 2.25.1
 
