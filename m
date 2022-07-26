@@ -2,128 +2,184 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1E22C3F6B0
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jul 2022 14:05:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0F03C00140
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jul 2022 15:15:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233180AbiGZOFZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Jul 2022 10:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
+        id S233883AbiGZPPj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Jul 2022 11:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbiGZOFY (ORCPT
+        with ESMTP id S229582AbiGZPPi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 Jul 2022 10:05:24 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A0615FF6
-        for <linux-media@vger.kernel.org>; Tue, 26 Jul 2022 07:05:22 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 786E0735;
-        Tue, 26 Jul 2022 16:05:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1658844320;
-        bh=BjrxfjD0Oh8Ii96Cfaz3qVc1XM5xBSREBxRy4ate+zM=;
+        Tue, 26 Jul 2022 11:15:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E957317E37;
+        Tue, 26 Jul 2022 08:15:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86EFE6069B;
+        Tue, 26 Jul 2022 15:15:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06B62C433C1;
+        Tue, 26 Jul 2022 15:15:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1658848536;
+        bh=JdYLPvm15DCGWDloUpXmxYYLmSi+V/FEw3vBEoaF+Jw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KAOr3i55VQU4Pw1oA8HrELEu7yMfmI38+z9O4FbFkY87VtlU/I225/3v3OYzz95M0
-         RiI5bJsRRKTsvpJJjr4xh2+yxblMBP0ogZUC25BIcdQPSqCBukV3z0spkAHl21U3kE
-         NN5rhFv6Zp+/xoacdx8YkMfqx7wd4unNYEclcXmE=
-Date:   Tue, 26 Jul 2022 17:05:15 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: Re: [PATCH] media: uvcvideo: Fix invalid pointer in
- uvc_ctrl_init_ctrl()
-Message-ID: <Yt/0m0eNvr6n86qu@pendragon.ideasonboard.com>
-References: <20220718121219.16079-1-laurent.pinchart@ideasonboard.com>
- <CANiDSCuSW4et50rjNi33z4mwhy6fAnub1cXZFJ2wUKaOObTD8Q@mail.gmail.com>
- <CANiDSCvh0Zy8PbMW5yFWfExjEzPTdvWGjYmGCw=eychHFs0sAw@mail.gmail.com>
+        b=xBokB72rddFLxtHSosxuv3alJqsdn0oyulNn4jSAaE2unHKS0UIM1wLxL2J8T16L0
+         k39NRaycdo4vXVxUP4FOVG+nE53iMehPLaex58j9lRVfL0OQ2uKPiGgF5dJfnEg16i
+         sBHsTSPvke7L3MCKx6Puv+grQDjTJVYq56eH/DFk=
+Date:   Tue, 26 Jul 2022 17:15:30 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     yuji2.ishikawa@toshiba.co.jp
+Cc:     robh+dt@kernel.org, hverkuil@xs4all.nl,
+        nobuhiro1.iwamatsu@toshiba.co.jp, corbet@lwn.net,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH v2 3/5] soc: visconti: Add Toshiba Visconti DNN image
+ processing accelerator
+Message-ID: <YuAFEvKLnavheZMn@kroah.com>
+References: <20220722082858.17880-1-yuji2.ishikawa@toshiba.co.jp>
+ <20220722082858.17880-4-yuji2.ishikawa@toshiba.co.jp>
+ <Yt6Rryi4SHVc4DR4@kroah.com>
+ <TYAPR01MB62013C42CB26FD456929C0D592949@TYAPR01MB6201.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CANiDSCvh0Zy8PbMW5yFWfExjEzPTdvWGjYmGCw=eychHFs0sAw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <TYAPR01MB62013C42CB26FD456929C0D592949@TYAPR01MB6201.jpnprd01.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Ricardo,
-
-On Tue, Jul 26, 2022 at 02:11:07PM +0200, Ricardo Ribalda wrote:
-> Arghh
+On Tue, Jul 26, 2022 at 06:10:37AM +0000, yuji2.ishikawa@toshiba.co.jp wrote:
+> Hi Greg
 > 
-> it seems like the merged version was not the latest version, so yes,
-> this patch is needed.
-
-Sorry about that :-S
-
-> Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
-
-Mauro, this is a fix for v5.20, could you apply it to your tree ?
-
-> By the way, are you still interested in this:
+> Thank you for your comments.
 > 
-> https://patchwork.linuxtv.org/project/linux-media/patch/20220617235610.321917-5-ribalda@chromium.org/
-> 
-> So I prepare a new version for it.
-
-Thank you :-)
-
-> On Tue, 26 Jul 2022 at 14:00, Ricardo Ribalda <ribalda@chromium.org> wrote:
-> >
-> > Hi Laurent
-> >
-> > Is this needed?
-> >
-> > It is already part of v8
-> >
-> > https://patchwork.linuxtv.org/project/linux-media/patch/20220617235610.321917-3-ribalda@chromium.org/
-> >
-> > On Mon, 18 Jul 2022 at 14:12, Laurent Pinchart
-> > <laurent.pinchart@ideasonboard.com> wrote:
-> > >
-> > > The handling of per-device mappings introduced in commit 86f7ef773156
-> > > ("media: uvcvideo: Add support for per-device control mapping
-> > > overrides") overwrote the mapping variable after it was initialized and
-> > > before it was used, leading to usage of an invalid pointer for devices
-> > > with per-device mappings. Fix it.
-> > >
-> > > Fixes: 86f7ef773156 ("media: uvcvideo: Add support for per-device control mapping overrides")
-> > > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > > ---
-> > >  drivers/media/usb/uvc/uvc_ctrl.c | 8 +++++---
-> > >  1 file changed, 5 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-> > > index e4826a846861..8c208db9600b 100644
-> > > --- a/drivers/media/usb/uvc/uvc_ctrl.c
-> > > +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-> > > @@ -2413,9 +2413,8 @@ static void uvc_ctrl_init_ctrl(struct uvc_video_chain *chain,
-> > >  {
-> > >         const struct uvc_control_info *info = uvc_ctrls;
-> > >         const struct uvc_control_info *iend = info + ARRAY_SIZE(uvc_ctrls);
-> > > -       const struct uvc_control_mapping *mapping = uvc_ctrl_mappings;
-> > > -       const struct uvc_control_mapping *mend =
-> > > -               mapping + ARRAY_SIZE(uvc_ctrl_mappings);
-> > > +       const struct uvc_control_mapping *mapping;
-> > > +       const struct uvc_control_mapping *mend;
-> > >
-> > >         /*
-> > >          * XU controls initialization requires querying the device for control
-> > > @@ -2468,6 +2467,9 @@ static void uvc_ctrl_init_ctrl(struct uvc_video_chain *chain,
-> > >         }
-> > >
-> > >         /* Process common mappings next. */
-> > > +       mapping = uvc_ctrl_mappings;
-> > > +       mend = mapping + ARRAY_SIZE(uvc_ctrl_mappings);
+> > -----Original Message-----
+> > From: Greg KH <gregkh@linuxfoundation.org>
+> > Sent: Monday, July 25, 2022 9:51 PM
+> > To: ishikawa yuji(石川 悠司 ○ＲＤＣ□ＡＩＴＣ○ＥＡ開)
+> > <yuji2.ishikawa@toshiba.co.jp>
+> > Cc: Rob Herring <robh+dt@kernel.org>; Hans Verkuil <hverkuil@xs4all.nl>;
+> > iwamatsu nobuhiro(岩松 信洋 □ＳＷＣ◯ＡＣＴ)
+> > <nobuhiro1.iwamatsu@toshiba.co.jp>; Jonathan Corbet <corbet@lwn.net>;
+> > Sumit Semwal <sumit.semwal@linaro.org>; Christian König
+> > <christian.koenig@amd.com>; linux-arm-kernel@lists.infradead.org;
+> > linux-kernel@vger.kernel.org; linux-media@vger.kernel.org;
+> > dri-devel@lists.freedesktop.org; linaro-mm-sig@lists.linaro.org
+> > Subject: Re: [PATCH v2 3/5] soc: visconti: Add Toshiba Visconti DNN image
+> > processing accelerator
+> > 
+> > On Fri, Jul 22, 2022 at 05:28:56PM +0900, Yuji Ishikawa wrote:
+> > > --- /dev/null
+> > > +++ b/drivers/soc/visconti/uapi/dnn.h
+> > > @@ -0,0 +1,77 @@
+> > > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> > > +/* Toshiba Visconti DNN Accelerator Support
+> > > + *
+> > > + * (C) Copyright 2022 TOSHIBA CORPORATION
+> > > + * (C) Copyright 2022 Toshiba Electronic Devices & Storage
+> > > +Corporation  */
 > > > +
-> > >         for (; mapping < mend; ++mapping) {
-> > >                 if (uvc_entity_match_guid(ctrl->entity, mapping->entity) &&
-> > >                     ctrl->info.selector == mapping->selector)
-> > >
-> > > base-commit: 8bd1dbf8d580c425605fb8936309a4e9745a7a95
-> > > prerequisite-patch-id: 89d2dc61eb83afb89fb075a63e161ea0b87fdcc7
-> > > prerequisite-patch-id: 01354ee4b874fea1acc040a23badff034588362f
-> > > prerequisite-patch-id: 7ae47f109892b89675acbdc0c6bcc1487436ec78
+> > > +#ifndef _UAPI_LINUX_DNN_H
+> > > +#define _UAPI_LINUX_DNN_H
+> > > +
+> > > +#include <linux/ioctl.h>
+> > > +#include <linux/types.h>
+> > > +#include "ipa.h"
+> > > +
+> > > +#define DRV_DNN_BIT_CONFIG_DESC_FINAL (0x8000U)
+> > > +#define DRV_DNN_BUFFER_INDEX_MAX      (15)
+> > > +
+> > > +#define DRV_DNN_BASE_ADDR_NUM (8U) /* DNN number of base
+> > address */
+> > > +
+> > > +#define DRV_DNN_BASE_ADDR_PURPOSE_INPUT	    (1U)
+> > > +#define DRV_DNN_BASE_ADDR_PURPOSE_OUTPUT    (2U)
+> > > +#define DRV_DNN_BASE_ADDR_PURPOSE_AWB	    (3U)
+> > > +#define DRV_DNN_BASE_ADDR_PURPOSE_TEMPORARY (4U)
+> > > +
+> > > +/**
+> > > + * struct drv_dnn_status - DNN IPA status for IOC_IPA_GET_STATUS
+> > > + *
+> > > + * @state:     State of driver
+> > > + * @eer_cmd:   Execution error command
+> > > + * @eer:       Execution error
+> > > + * @reserved:  Padding
+> > > + * @eer_flags: Execution error flags
+> > > + */
+> > > +struct drv_dnn_status {
+> > > +	enum drv_ipa_state state;
+> > > +	__u32 eer_cmd;
+> > > +	__u32 eer : 1;
+> > > +	__u32 reserved : 31;
+> > 
+> > bitfields will not work like this for uapi files, sorry.
+> 
+> I'll change the type of the member eer from bitfield to bool.
 
--- 
-Regards,
+bool will not work for a user/kernel api structure at all, sorry.
 
-Laurent Pinchart
+> > > +	__u32 eer_flags[32];
+> > 
+> > What endian is all of these?  Big?  Little?  Unknown?
+> 
+> The processors and accelerators are little endian in Visconti SoC.
+> Do I have to use more specific type such as __le32 ?
+
+Of course, this has to be defined as to how the hardware sees it.  Why
+wouldn't you specify this?
+
+> > > +};
+> > > +
+> > > +struct drv_dnn_base_addr {
+> > > +	__u32 purpose;
+> > > +	union {
+> > > +		struct drv_ipa_addr ipa_addr;
+> > > +		uintptr_t list_addr;
+> > 
+> > You really do not ever want a uintptr_t in a uapi file, that's not going to be
+> > portable at all.  It's also not a valid kernel type :(
+> 
+> I understand. The member list_addr should be typed "struct drv_ipa_addr*".
+
+No, not at all, that too will not work and is not portable.  Please read
+the documentation in the kernel for how to write correct user/kernel
+apis with ioctl structures.  It is all documented there, please do not
+ignore it and create an api that will be broken.
+
+> > > + * @config_done:          Flags of called configuration
+> > > + * @buffer_info:          Table of buffer information
+> > > + * @buffer_info_num:      Number of buffer_info
+> > > + */
+> > > +struct drv_dnn_descriptor {
+> > > +	struct drv_ipa_addr configuration;
+> > > +	__u32 configuration_offset;
+> > 
+> > What endian are any of these?
+> 
+> They are little endian as processors and accelerators are LE.
+> Do I have to use specific type such as __le32?
+
+Yes, as that is defined by your hardware, not the processor the kernel
+is running as.
+
+> Do we need special care for endianness	when userland and kernel are sharing data (a drv_dnn_descriptor instance) ?
+
+Yes, why wouldn't you?
+
+> I thought there're no endianness problem when the driver is reading/writing HW's 32bit registers.
+
+Is that what you are doing here?  It's impossible to tell.
+
+For data that only crosses the user/kernel boundry, you can use the
+native processor endian, but when it crosses the kernel/hardware
+boundry, you HAVE to specify it as to what the hardware expects.
+
+thanks,
+
+greg k-h
