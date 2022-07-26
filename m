@@ -2,44 +2,44 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A3D1C43334
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jul 2022 12:06:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D042CCCA47E
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jul 2022 12:06:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239057AbiGZMGA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Jul 2022 08:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
+        id S239063AbiGZMGB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Jul 2022 08:06:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238994AbiGZMF4 (ORCPT
+        with ESMTP id S239039AbiGZMF6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 Jul 2022 08:05:56 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82F814008;
-        Tue, 26 Jul 2022 05:05:55 -0700 (PDT)
+        Tue, 26 Jul 2022 08:05:58 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7182B187;
+        Tue, 26 Jul 2022 05:05:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658837155; x=1690373155;
+  t=1658837157; x=1690373157;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=IUSEatphJXrxHtFATG8DqV4oMhLluYvQE60yRglB11c=;
-  b=Ylpe4xrJ2Y1aRdS1iHvguK5GOO8nhco7acZOMn8/AQ01jolQ2EbHDs2Y
-   a0Jtp2BQ8iV4KeyZHWJZRj+TGZUk2KX7a9HC4FFrp8PbjU4a31kZWxsfY
-   VdwqfJpJL+zcBnD+mbFshdCHmICUpOFZRFsvE/TOWvxnCDyYNQxIN7XKz
-   WfJHMTuRmACvkeicv8/2CBqfOiYmlqZvT3m9quyB3c/8uxjc4n4Ku+gPE
-   Z0+TMupC/Px+e4+9tW2gUQ24u4/uGukYxl+3MLMSuH5TBYpiULa6b4q3y
-   S4O4mh1lWzRSGsvZjQBKm4OfnJVS24c6PXFkLZdOK3ABDZsz7Ow2wLIWE
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="270971289"
+  bh=y/yDmo7qbXEh70Kz4ZNEYtLjd9Z7AKLADZUFGnXR7fs=;
+  b=Pmjaw6aXbeWGQn0ZW+ZVBkzAVJQmpYwdrVP/dksc7Kv7YuFW0KxMbnb3
+   7eQj8aae1Pir6CwHS8KlnalHBXRwx+AeUJmppjP/vd/rWYoh5lMpuTpzA
+   oqPno4W1zKKOxfeg11lvZdV/2p9DUgV62kXC7Ex3SCPcgJNHLkPMi5LSw
+   Ex992IyDnlF8RTM1s4UCp8v4JEgoiyo7uffNzG4gOVjd/Owwj7btFyCEe
+   LWyf6SUNOnSxxTkr963dtwY7hyDvwunijp51wt34hitBwPh+X83I1HqB8
+   u1qQP25wqO64lk9Ael/wJgLVTa4OAzAO4fRRsTkHzPqmH4jjBdb0uDcEG
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="285485867"
 X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="270971289"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 05:05:54 -0700
+   d="scan'208";a="285485867"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 05:05:57 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="702871733"
+   d="scan'208";a="658656518"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 26 Jul 2022 05:05:52 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 26 Jul 2022 05:05:55 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 64AC511C; Tue, 26 Jul 2022 15:06:02 +0300 (EEST)
+        id 7F270303; Tue, 26 Jul 2022 15:06:02 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
@@ -47,9 +47,9 @@ Cc:     Tianshu Qiu <tian.shu.qiu@intel.com>,
         Shawn Tu <shawnx.tu@intel.com>,
         Bingbu Cao <bingbu.cao@intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH v1 3/8] media: ov2740: Switch from __maybe_unused to pm_sleep_ptr() etc
-Date:   Tue, 26 Jul 2022 15:05:51 +0300
-Message-Id: <20220726120556.2881-3-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 6/8] media: ov2740: Switch to use dev_err_probe()
+Date:   Tue, 26 Jul 2022 15:05:54 +0300
+Message-Id: <20220726120556.2881-6-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220726120556.2881-1-andriy.shevchenko@linux.intel.com>
 References: <20220726120556.2881-1-andriy.shevchenko@linux.intel.com>
@@ -59,57 +59,126 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Letting the compiler remove these functions when the kernel is built
-without CONFIG_PM_SLEEP support is simpler and less heavier for builds
-than the use of __maybe_unused attributes.
+Switch to use dev_err_probe() to simpify error path and unify message
+template.
+
+While at it, add missed \n to the end of the messages.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/media/i2c/ov2740.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/media/i2c/ov2740.c | 44 ++++++++++++++++----------------------
+ 1 file changed, 19 insertions(+), 25 deletions(-)
 
 diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
-index 81c0ab220339..9420258c6073 100644
+index 212190cb14e4..7271e3d011c9 100644
 --- a/drivers/media/i2c/ov2740.c
 +++ b/drivers/media/i2c/ov2740.c
-@@ -838,7 +838,7 @@ static int ov2740_set_stream(struct v4l2_subdev *sd, int enable)
- 	return ret;
- }
+@@ -1013,10 +1013,10 @@ static int ov2740_check_hwcfg(struct device *dev)
+ 	if (ret)
+ 		return ret;
  
--static int __maybe_unused ov2740_suspend(struct device *dev)
-+static int ov2740_suspend(struct device *dev)
+-	if (mclk != OV2740_MCLK) {
+-		dev_err(dev, "external clock %d is not supported", mclk);
+-		return -EINVAL;
+-	}
++	if (mclk != OV2740_MCLK)
++		return dev_err_probe(dev, -EINVAL,
++				     "external clock %d is not supported\n",
++				     mclk);
+ 
+ 	ep = fwnode_graph_get_next_endpoint(fwnode, NULL);
+ 	if (!ep)
+@@ -1028,15 +1028,14 @@ static int ov2740_check_hwcfg(struct device *dev)
+ 		return ret;
+ 
+ 	if (bus_cfg.bus.mipi_csi2.num_data_lanes != OV2740_DATA_LANES) {
+-		dev_err(dev, "number of CSI2 data lanes %d is not supported",
+-			bus_cfg.bus.mipi_csi2.num_data_lanes);
+-		ret = -EINVAL;
++		ret = dev_err_probe(dev, -EINVAL,
++				    "number of CSI2 data lanes %d is not supported\n",
++				    bus_cfg.bus.mipi_csi2.num_data_lanes);
+ 		goto check_hwcfg_error;
+ 	}
+ 
+ 	if (!bus_cfg.nr_of_link_frequencies) {
+-		dev_err(dev, "no link frequencies defined");
+-		ret = -EINVAL;
++		ret = dev_err_probe(dev, -EINVAL, "no link frequencies defined\n");
+ 		goto check_hwcfg_error;
+ 	}
+ 
+@@ -1048,9 +1047,9 @@ static int ov2740_check_hwcfg(struct device *dev)
+ 		}
+ 
+ 		if (j == bus_cfg.nr_of_link_frequencies) {
+-			dev_err(dev, "no link frequency %lld supported",
+-				link_freq_menu_items[i]);
+-			ret = -EINVAL;
++			ret = dev_err_probe(dev, -EINVAL,
++					    "no link frequency %lld supported\n",
++					    link_freq_menu_items[i]);
+ 			goto check_hwcfg_error;
+ 		}
+ 	}
+@@ -1153,16 +1152,14 @@ static int ov2740_register_nvmem(struct i2c_client *client,
+ 
+ static int ov2740_probe(struct i2c_client *client)
  {
- 	struct v4l2_subdev *sd = dev_get_drvdata(dev);
- 	struct ov2740 *ov2740 = to_ov2740(sd);
-@@ -852,7 +852,7 @@ static int __maybe_unused ov2740_suspend(struct device *dev)
- 	return 0;
- }
++	struct device *dev = &client->dev;
+ 	struct ov2740 *ov2740;
+ 	bool full_power;
+ 	int ret;
  
--static int __maybe_unused ov2740_resume(struct device *dev)
-+static int ov2740_resume(struct device *dev)
- {
- 	struct v4l2_subdev *sd = dev_get_drvdata(dev);
- 	struct ov2740 *ov2740 = to_ov2740(sd);
-@@ -1229,9 +1229,7 @@ static int ov2740_probe(struct i2c_client *client)
- 	return ret;
- }
+ 	ret = ov2740_check_hwcfg(&client->dev);
+-	if (ret) {
+-		dev_err(&client->dev, "failed to check HW configuration: %d",
+-			ret);
+-		return ret;
+-	}
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to check HW configuration\n");
  
--static const struct dev_pm_ops ov2740_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(ov2740_suspend, ov2740_resume)
--};
-+static DEFINE_SIMPLE_DEV_PM_OPS(ov2740_pm_ops, ov2740_suspend, ov2740_resume);
+ 	ov2740 = devm_kzalloc(&client->dev, sizeof(*ov2740), GFP_KERNEL);
+ 	if (!ov2740)
+@@ -1172,17 +1169,15 @@ static int ov2740_probe(struct i2c_client *client)
+ 	full_power = acpi_dev_state_d0(&client->dev);
+ 	if (full_power) {
+ 		ret = ov2740_identify_module(ov2740);
+-		if (ret) {
+-			dev_err(&client->dev, "failed to find sensor: %d", ret);
+-			return ret;
+-		}
++		if (ret)
++			return dev_err_probe(dev, ret, "failed to find sensor\n");
+ 	}
  
- static const struct acpi_device_id ov2740_acpi_ids[] = {
- 	{"INT3474"},
-@@ -1243,7 +1241,7 @@ MODULE_DEVICE_TABLE(acpi, ov2740_acpi_ids);
- static struct i2c_driver ov2740_i2c_driver = {
- 	.driver = {
- 		.name = "ov2740",
--		.pm = &ov2740_pm_ops,
-+		.pm = pm_sleep_ptr(&ov2740_pm_ops),
- 		.acpi_match_table = ov2740_acpi_ids,
- 	},
- 	.probe_new = ov2740_probe,
+ 	mutex_init(&ov2740->mutex);
+ 	ov2740->cur_mode = &supported_modes[0];
+ 	ret = ov2740_init_controls(ov2740);
+ 	if (ret) {
+-		dev_err(&client->dev, "failed to init controls: %d", ret);
++		dev_err_probe(dev, ret, "failed to init controls\n");
+ 		goto probe_error_v4l2_ctrl_handler_free;
+ 	}
+ 
+@@ -1193,14 +1188,13 @@ static int ov2740_probe(struct i2c_client *client)
+ 	ov2740->pad.flags = MEDIA_PAD_FL_SOURCE;
+ 	ret = media_entity_pads_init(&ov2740->sd.entity, 1, &ov2740->pad);
+ 	if (ret) {
+-		dev_err(&client->dev, "failed to init entity pads: %d", ret);
++		dev_err_probe(dev, ret, "failed to init entity pads\n");
+ 		goto probe_error_v4l2_ctrl_handler_free;
+ 	}
+ 
+ 	ret = v4l2_async_register_subdev_sensor(&ov2740->sd);
+ 	if (ret < 0) {
+-		dev_err(&client->dev, "failed to register V4L2 subdev: %d",
+-			ret);
++		dev_err_probe(dev, ret, "failed to register V4L2 subdev\n");
+ 		goto probe_error_media_entity_cleanup;
+ 	}
+ 
 -- 
 2.35.1
 
