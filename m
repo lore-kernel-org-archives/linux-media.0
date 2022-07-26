@@ -2,44 +2,44 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0097CCA489
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jul 2022 12:06:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31FB0C43334
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jul 2022 12:06:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239070AbiGZMGC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Jul 2022 08:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
+        id S239074AbiGZMGD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Jul 2022 08:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239045AbiGZMF6 (ORCPT
+        with ESMTP id S239042AbiGZMF6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 26 Jul 2022 08:05:58 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7072B19D;
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7B22B194;
         Tue, 26 Jul 2022 05:05:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1658837157; x=1690373157;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=/pMpcO4DRoaktxrLUp1GwMzfi5O0xvdqzoWKuaXXOB0=;
-  b=DI+Q+3/+VmtzEnzEKjZCs5X4M91ZH26cM27g3mxVopmj73suNRWRxdLP
-   A6SblMEiiREHXdQR55DLwmVVHGuvleHqw6ibkucKuw6efqLnfhsTEJ3NO
-   xXL3Ck6tvhqW9+RBG+sgYJr7PmPMoCNa39dTZuTpit2AD4NaPpf8BKYtP
-   qNbzzI/Ba/PAsDOOLDb4glM3IG5onrm2QRAtbPMfaRsSQV2d2W9NhpFmY
-   fya1NuXJjz6049/btPYKEUuQV+o2F+E+z9QIn87Teu1iTBEBouiSoozRP
-   dkLGRfwRM/2jaHNPJaFmrXUnHzYcelOmL0JED+unteLxRw4WNgfj1p78y
+  bh=V/y17cHBQ5iVwv3J6QidD4ZeKYLL1WEzsEMjhIU10dI=;
+  b=JLe7BCjsLJ4nmxe9Tu9sMJAj2TtEsZIOgHRmyu5S3I+dOLBohxiSCUSC
+   lOUn3pDy4E5vLfmynYOmhWZARdePZYuo6WstxODesBzyJWjNCPWM4I00M
+   i7IesY6lH4/tZaoNOx1NTgf5J7Lt3Z9Rn4JAkBX//IgViVEZmfmvSy+bw
+   TX/NdA0E0nXzbVQCSflusJyWAc3INtvi/tUQ33X3YUTfW/5NBTbsqu3vt
+   4gtI2co6KZ9OQ2joS+r95/YSqGZC2J06p50ss0ACXxCyy5ZQagPPl+q0n
+   bUNDtyrB4uD5dKq8v+Aun7cD4xErtrqSg+HhfuFXOTBzsakZxWFpg5hif
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="270971295"
+X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="289125412"
 X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="270971295"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 05:05:57 -0700
+   d="scan'208";a="289125412"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 05:05:57 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="702871738"
+   d="scan'208";a="726514858"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 26 Jul 2022 05:05:55 -0700
+  by orsmga004.jf.intel.com with ESMTP; 26 Jul 2022 05:05:55 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 8CD68347; Tue, 26 Jul 2022 15:06:02 +0300 (EEST)
+        id 8414C1DF; Tue, 26 Jul 2022 15:06:02 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
@@ -47,9 +47,9 @@ Cc:     Tianshu Qiu <tian.shu.qiu@intel.com>,
         Shawn Tu <shawnx.tu@intel.com>,
         Bingbu Cao <bingbu.cao@intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH v1 8/8] media: ov2740: Use traditional pattern when checking error codes
-Date:   Tue, 26 Jul 2022 15:05:56 +0300
-Message-Id: <20220726120556.2881-8-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 7/8] media: ov2740: Add missed \n to the end of the messages
+Date:   Tue, 26 Jul 2022 15:05:55 +0300
+Message-Id: <20220726120556.2881-7-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220726120556.2881-1-andriy.shevchenko@linux.intel.com>
 References: <20220726120556.2881-1-andriy.shevchenko@linux.intel.com>
@@ -59,42 +59,70 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Instead of 'if (!ret)' switch to "check for the error first" rule.
+Add missed \n to the end of the messages.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/media/i2c/ov2740.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/media/i2c/ov2740.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
-index c4c511f90257..afd591be6526 100644
+index 7271e3d011c9..c4c511f90257 100644
 --- a/drivers/media/i2c/ov2740.c
 +++ b/drivers/media/i2c/ov2740.c
-@@ -1112,7 +1112,6 @@ static int ov2740_register_nvmem(struct i2c_client *client,
- 	struct nvmem_config nvmem_config = { };
- 	struct regmap *regmap;
- 	struct device *dev = &client->dev;
--	int ret;
+@@ -451,7 +451,7 @@ static int ov2740_write_reg_list(struct ov2740 *ov2740,
+ 				       r_list->regs[i].val);
+ 		if (ret) {
+ 			dev_err_ratelimited(&client->dev,
+-					    "write reg 0x%4.4x return err = %d",
++					    "write reg 0x%4.4x return err = %d\n",
+ 					    r_list->regs[i].address, ret);
+ 			return ret;
+ 		}
+@@ -474,7 +474,7 @@ static int ov2740_identify_module(struct ov2740 *ov2740)
+ 		return ret;
  
- 	nvm = devm_kzalloc(dev, sizeof(*nvm), GFP_KERNEL);
- 	if (!nvm)
-@@ -1142,12 +1141,11 @@ static int ov2740_register_nvmem(struct i2c_client *client,
- 	nvmem_config.size = CUSTOMER_USE_OTP_SIZE;
+ 	if (val != OV2740_CHIP_ID) {
+-		dev_err(&client->dev, "chip id mismatch: %x!=%x",
++		dev_err(&client->dev, "chip id mismatch: %x != %x\n",
+ 			OV2740_CHIP_ID, val);
+ 		return -ENXIO;
+ 	}
+@@ -772,14 +772,14 @@ static int ov2740_start_streaming(struct ov2740 *ov2740)
+ 	reg_list = &link_freq_configs[link_freq_index].reg_list;
+ 	ret = ov2740_write_reg_list(ov2740, reg_list);
+ 	if (ret) {
+-		dev_err(&client->dev, "failed to set plls");
++		dev_err(&client->dev, "failed to set plls\n");
+ 		return ret;
+ 	}
  
- 	nvm->nvmem = devm_nvmem_register(dev, &nvmem_config);
-+	if (IS_ERR(nvm->nvmem))
-+		return PTR_ERR(nvm->nvmem);
+ 	reg_list = &ov2740->cur_mode->reg_list;
+ 	ret = ov2740_write_reg_list(ov2740, reg_list);
+ 	if (ret) {
+-		dev_err(&client->dev, "failed to set mode");
++		dev_err(&client->dev, "failed to set mode\n");
+ 		return ret;
+ 	}
  
--	ret = PTR_ERR_OR_ZERO(nvm->nvmem);
--	if (!ret)
--		ov2740->nvm = nvm;
--
--	return ret;
-+	ov2740->nvm = nvm;
-+	return 0;
+@@ -790,7 +790,7 @@ static int ov2740_start_streaming(struct ov2740 *ov2740)
+ 	ret = ov2740_write_reg(ov2740, OV2740_REG_MODE_SELECT, 1,
+ 			       OV2740_MODE_STREAMING);
+ 	if (ret)
+-		dev_err(&client->dev, "failed to start streaming");
++		dev_err(&client->dev, "failed to start streaming\n");
+ 
+ 	return ret;
+ }
+@@ -801,7 +801,7 @@ static void ov2740_stop_streaming(struct ov2740 *ov2740)
+ 
+ 	if (ov2740_write_reg(ov2740, OV2740_REG_MODE_SELECT, 1,
+ 			     OV2740_MODE_STANDBY))
+-		dev_err(&client->dev, "failed to stop streaming");
++		dev_err(&client->dev, "failed to stop streaming\n");
  }
  
- static int ov2740_probe(struct i2c_client *client)
+ static int ov2740_set_stream(struct v4l2_subdev *sd, int enable)
 -- 
 2.35.1
 
