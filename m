@@ -2,130 +2,148 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FDBBC43334
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jul 2022 12:01:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AD0DC43334
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jul 2022 12:05:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238105AbiGZMBP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Jul 2022 08:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38426 "EHLO
+        id S238983AbiGZMF4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Jul 2022 08:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232819AbiGZMBN (ORCPT
+        with ESMTP id S229945AbiGZMFz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 Jul 2022 08:01:13 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F2332EC3
-        for <linux-media@vger.kernel.org>; Tue, 26 Jul 2022 05:01:11 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id z15so5632558edc.7
-        for <linux-media@vger.kernel.org>; Tue, 26 Jul 2022 05:01:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7j64NYTxwVHL5vg1hXNiMGW5cPlriIyDBY+ss11GeUM=;
-        b=Ap5IfhZAgO8SUQ68kofCHLuAj6mxQBXWZ0J0LQVkGgq/ORiEQElEW13wlTz9bGn+1L
-         BJTm6Ysr3c8Ti/f7CRNgdizHAB2NLN3GUVzGn9uRd6Wiw0tHQWb7aN4roSp+y5qEjqeG
-         U5lnYy1+tRh/bdAAQYfI4J+BosQdTSF91/sGM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7j64NYTxwVHL5vg1hXNiMGW5cPlriIyDBY+ss11GeUM=;
-        b=RZbvfUHyCfuPTUMnhP4TbX8bdc2KC15Kxikp+CyAe4eT0uJLtGzpGEFXhj904sNFyj
-         DlUb6NI/v0AtVfAjLVhsD1VZ6EYp+n46szKJEycynwSlWplroELejKvzxdcRJKxtm3p6
-         wnOXE3mnLG68WOUH8h4XOPMBxnRcksVAA0pmP992Auoodp9R7+JPjBTsXGTOCmPUnviW
-         cZ7eagmB3xJpFCaZ8Ae4ixpq0Sdc3us78Z6ATG5dQGmkbtfYbjJPtoulisPE4f3LSczP
-         MKVGq/f3zzDBC9Ravnho/i2r25oArK3m1vY/6DhrZGALk3AXDh8DueKZy+tviLMX9mPQ
-         klPQ==
-X-Gm-Message-State: AJIora/unV8p2IM9dsQX0s3DD50RhXu5r8gOQ+MNDn9ev2exir30njTb
-        Z+ss+9gPCL8YLxL2lPSyxysn2D/Gzq+gOw==
-X-Google-Smtp-Source: AGRyM1vInhba+b3BYMcxW3sPBT2w9Ek6qcPs+ERmm2tAV3wVD8lmLGPEpigkEgS1yx7wa4WC7pZNyw==
-X-Received: by 2002:a05:6402:3481:b0:43c:460:731c with SMTP id v1-20020a056402348100b0043c0460731cmr9428673edc.413.1658836869725;
-        Tue, 26 Jul 2022 05:01:09 -0700 (PDT)
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
-        by smtp.gmail.com with ESMTPSA id jw7-20020a170906e94700b00715705dd23asm6400337ejb.89.2022.07.26.05.01.09
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 05:01:09 -0700 (PDT)
-Received: by mail-ed1-f53.google.com with SMTP id m8so17412246edd.9
-        for <linux-media@vger.kernel.org>; Tue, 26 Jul 2022 05:01:09 -0700 (PDT)
-X-Received: by 2002:a05:6402:248f:b0:43a:b89c:20e3 with SMTP id
- q15-20020a056402248f00b0043ab89c20e3mr18232125eda.335.1658836868838; Tue, 26
- Jul 2022 05:01:08 -0700 (PDT)
+        Tue, 26 Jul 2022 08:05:55 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20F623BC7;
+        Tue, 26 Jul 2022 05:05:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658837154; x=1690373154;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=c8qJbgX+bkOR5QAtm73Za+GslKiRmJrk9Ct5rxSUFyw=;
+  b=Vk9XlZoQPGo5w3KEfJSkEpxQJl96A8y0AHLUNS2yLO5fv9jdwqcnKLDW
+   F/y/Qodfq4Dgx+7vxdWeeAHu8iXjkdZ8J+UmOrErJz076XY7wOklUk6NR
+   M/qK6OGmXx8HB0YcCS3BJDd/+7EarQUGKL/6pimKg6VnQyHG/T4JQyHBC
+   V9lyDQNZW/JVhn2QKZMDGWhyT5NJ1of79N2h1EPtIhdUqmH6JIhoy70Na
+   dcZmHf7NhLQGGDtHxff0Igg935egX4NYju8VCTNZdmo92ePB0GqTGa59a
+   5pvD29tN4vy1OphfzRo+8wGK6JL14XkM58z9iWVsqpQltD1i19vGVxjCG
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="287948612"
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="287948612"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 05:05:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="689417853"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 26 Jul 2022 05:05:52 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 70C6DF7; Tue, 26 Jul 2022 15:06:02 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH v1 5/8] media: ov2740: Drop redundant assignments of ret = 0
+Date:   Tue, 26 Jul 2022 15:05:53 +0300
+Message-Id: <20220726120556.2881-5-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220726120556.2881-1-andriy.shevchenko@linux.intel.com>
+References: <20220726120556.2881-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-References: <20220718121219.16079-1-laurent.pinchart@ideasonboard.com>
-In-Reply-To: <20220718121219.16079-1-laurent.pinchart@ideasonboard.com>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Tue, 26 Jul 2022 14:00:57 +0200
-X-Gmail-Original-Message-ID: <CANiDSCuSW4et50rjNi33z4mwhy6fAnub1cXZFJ2wUKaOObTD8Q@mail.gmail.com>
-Message-ID: <CANiDSCuSW4et50rjNi33z4mwhy6fAnub1cXZFJ2wUKaOObTD8Q@mail.gmail.com>
-Subject: Re: [PATCH] media: uvcvideo: Fix invalid pointer in uvc_ctrl_init_ctrl()
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent
+In some cases it might hide real bugs, in most cases here it's just
+redundant as it's being reassigned immediately after initial assignment.
 
-Is this needed?
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/media/i2c/ov2740.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-It is already part of v8
-
-https://patchwork.linuxtv.org/project/linux-media/patch/20220617235610.321917-3-ribalda@chromium.org/
-
-On Mon, 18 Jul 2022 at 14:12, Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> The handling of per-device mappings introduced in commit 86f7ef773156
-> ("media: uvcvideo: Add support for per-device control mapping
-> overrides") overwrote the mapping variable after it was initialized and
-> before it was used, leading to usage of an invalid pointer for devices
-> with per-device mappings. Fix it.
->
-> Fixes: 86f7ef773156 ("media: uvcvideo: Add support for per-device control mapping overrides")
-> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> ---
->  drivers/media/usb/uvc/uvc_ctrl.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-> index e4826a846861..8c208db9600b 100644
-> --- a/drivers/media/usb/uvc/uvc_ctrl.c
-> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-> @@ -2413,9 +2413,8 @@ static void uvc_ctrl_init_ctrl(struct uvc_video_chain *chain,
->  {
->         const struct uvc_control_info *info = uvc_ctrls;
->         const struct uvc_control_info *iend = info + ARRAY_SIZE(uvc_ctrls);
-> -       const struct uvc_control_mapping *mapping = uvc_ctrl_mappings;
-> -       const struct uvc_control_mapping *mend =
-> -               mapping + ARRAY_SIZE(uvc_ctrl_mappings);
-> +       const struct uvc_control_mapping *mapping;
-> +       const struct uvc_control_mapping *mend;
->
->         /*
->          * XU controls initialization requires querying the device for control
-> @@ -2468,6 +2467,9 @@ static void uvc_ctrl_init_ctrl(struct uvc_video_chain *chain,
->         }
->
->         /* Process common mappings next. */
-> +       mapping = uvc_ctrl_mappings;
-> +       mend = mapping + ARRAY_SIZE(uvc_ctrl_mappings);
-> +
->         for (; mapping < mend; ++mapping) {
->                 if (uvc_entity_match_guid(ctrl->entity, mapping->entity) &&
->                     ctrl->info.selector == mapping->selector)
->
-> base-commit: 8bd1dbf8d580c425605fb8936309a4e9745a7a95
-> prerequisite-patch-id: 89d2dc61eb83afb89fb075a63e161ea0b87fdcc7
-> prerequisite-patch-id: 01354ee4b874fea1acc040a23badff034588362f
-> prerequisite-patch-id: 7ae47f109892b89675acbdc0c6bcc1487436ec78
-> --
-> Regards,
->
-> Laurent Pinchart
->
-
-
+diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
+index 07fe8fda274e..212190cb14e4 100644
+--- a/drivers/media/i2c/ov2740.c
++++ b/drivers/media/i2c/ov2740.c
+@@ -378,7 +378,7 @@ static int ov2740_read_reg(struct ov2740 *ov2740, u16 reg, u16 len, u32 *val)
+ 	struct i2c_msg msgs[2];
+ 	u8 addr_buf[2];
+ 	u8 data_buf[4];
+-	int ret = 0;
++	int ret;
+ 
+ 	if (len > 4)
+ 		return -EINVAL;
+@@ -415,7 +415,7 @@ static int ov2740_write_reg(struct ov2740 *ov2740, u16 reg, u16 len, u32 val)
+ {
+ 	struct i2c_client *client = v4l2_get_subdevdata(&ov2740->sd);
+ 	u8 buf[6];
+-	int ret = 0;
++	int ret;
+ 
+ 	if (len > 4)
+ 		return -EINVAL;
+@@ -444,7 +444,7 @@ static int ov2740_write_reg_list(struct ov2740 *ov2740,
+ {
+ 	struct i2c_client *client = v4l2_get_subdevdata(&ov2740->sd);
+ 	unsigned int i;
+-	int ret = 0;
++	int ret;
+ 
+ 	for (i = 0; i < r_list->num_of_regs; i++) {
+ 		ret = ov2740_write_reg(ov2740, r_list->regs[i].address, 1,
+@@ -486,7 +486,7 @@ static int ov2740_identify_module(struct ov2740 *ov2740)
+ 
+ static int ov2740_update_digital_gain(struct ov2740 *ov2740, u32 d_gain)
+ {
+-	int ret = 0;
++	int ret;
+ 
+ 	ret = ov2740_write_reg(ov2740, OV2740_REG_GROUP_ACCESS, 1,
+ 			       OV2740_GROUP_HOLD_START);
+@@ -530,7 +530,7 @@ static int ov2740_set_ctrl(struct v4l2_ctrl *ctrl)
+ 					     struct ov2740, ctrl_handler);
+ 	struct i2c_client *client = v4l2_get_subdevdata(&ov2740->sd);
+ 	s64 exposure_max;
+-	int ret = 0;
++	int ret;
+ 
+ 	/* Propagate change of current control to all related controls */
+ 	if (ctrl->id == V4L2_CID_VBLANK) {
+@@ -593,7 +593,7 @@ static int ov2740_init_controls(struct ov2740 *ov2740)
+ 	s64 exposure_max, h_blank, pixel_rate;
+ 	u32 vblank_min, vblank_max, vblank_default;
+ 	int size;
+-	int ret = 0;
++	int ret;
+ 
+ 	ctrl_hdlr = &ov2740->ctrl_handler;
+ 	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 8);
+@@ -759,7 +759,7 @@ static int ov2740_start_streaming(struct ov2740 *ov2740)
+ 	struct i2c_client *client = v4l2_get_subdevdata(&ov2740->sd);
+ 	const struct ov2740_reg_list *reg_list;
+ 	int link_freq_index;
+-	int ret = 0;
++	int ret;
+ 
+ 	ret = ov2740_identify_module(ov2740);
+ 	if (ret)
+@@ -1154,8 +1154,8 @@ static int ov2740_register_nvmem(struct i2c_client *client,
+ static int ov2740_probe(struct i2c_client *client)
+ {
+ 	struct ov2740 *ov2740;
+-	int ret = 0;
+ 	bool full_power;
++	int ret;
+ 
+ 	ret = ov2740_check_hwcfg(&client->dev);
+ 	if (ret) {
 -- 
-Ricardo Ribalda
+2.35.1
+
