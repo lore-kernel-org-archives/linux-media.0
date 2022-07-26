@@ -2,127 +2,99 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31FB0C43334
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jul 2022 12:06:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBA04C433EF
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jul 2022 12:11:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239074AbiGZMGD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Jul 2022 08:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46290 "EHLO
+        id S238657AbiGZMLS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Jul 2022 08:11:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239042AbiGZMF6 (ORCPT
+        with ESMTP id S238672AbiGZMLS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 Jul 2022 08:05:58 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7B22B194;
-        Tue, 26 Jul 2022 05:05:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658837157; x=1690373157;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=V/y17cHBQ5iVwv3J6QidD4ZeKYLL1WEzsEMjhIU10dI=;
-  b=JLe7BCjsLJ4nmxe9Tu9sMJAj2TtEsZIOgHRmyu5S3I+dOLBohxiSCUSC
-   lOUn3pDy4E5vLfmynYOmhWZARdePZYuo6WstxODesBzyJWjNCPWM4I00M
-   i7IesY6lH4/tZaoNOx1NTgf5J7Lt3Z9Rn4JAkBX//IgViVEZmfmvSy+bw
-   TX/NdA0E0nXzbVQCSflusJyWAc3INtvi/tUQ33X3YUTfW/5NBTbsqu3vt
-   4gtI2co6KZ9OQ2joS+r95/YSqGZC2J06p50ss0ACXxCyy5ZQagPPl+q0n
-   bUNDtyrB4uD5dKq8v+Aun7cD4xErtrqSg+HhfuFXOTBzsakZxWFpg5hif
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="289125412"
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="289125412"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 05:05:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="726514858"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 26 Jul 2022 05:05:55 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 8414C1DF; Tue, 26 Jul 2022 15:06:02 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Tianshu Qiu <tian.shu.qiu@intel.com>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH v1 7/8] media: ov2740: Add missed \n to the end of the messages
-Date:   Tue, 26 Jul 2022 15:05:55 +0300
-Message-Id: <20220726120556.2881-7-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220726120556.2881-1-andriy.shevchenko@linux.intel.com>
-References: <20220726120556.2881-1-andriy.shevchenko@linux.intel.com>
+        Tue, 26 Jul 2022 08:11:18 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4172DD9
+        for <linux-media@vger.kernel.org>; Tue, 26 Jul 2022 05:11:16 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id q18so9441584wrx.8
+        for <linux-media@vger.kernel.org>; Tue, 26 Jul 2022 05:11:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nexus-software-ie.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Ho5DlxVbtPE4xqHB8U7OSblTYt6T62dXAInLoexUb7c=;
+        b=td+ZMO9vaTOjHcShANKmdrEG3ohGjJWhz0ubUGOiKseIwRAYBB9Tufnfw6slyPxKRd
+         va5OA6gOsUAb6hCUCjDV+U2VkbDY1XXOTNFZML78VVBXgkEOMQD+C0NyrDi+Wg+nrK+O
+         W+z0n3LJ9Wfp4CgVPK43lsaG2JtddaDnlK6kL+SYNHsR1f7bBANFuUn7OhMw2gdDjEvs
+         Yg3lXVqv/H92roLKk3kM7zVQesgpPX9anwHenhgvLqpPETj7iT6g1rWcIz+xpVqzT8dU
+         u3KimG7VmsrfvlJQjGlhbcMXy06rY2hZfqoMk846LS5r2fqHGLBitGKTpWDZgNt6eyzb
+         oFGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Ho5DlxVbtPE4xqHB8U7OSblTYt6T62dXAInLoexUb7c=;
+        b=eBtiyCsFmbwoJQl6q9M8wjZCdZyvEgGgRSW0hvgw51lndwUuIHL0kq7LLNA5c+RD3+
+         Ggb6vvERJcfpap5dU+qFsFyYTW+sf3hrBhRBFYYLX6WcyM/mI+RH0CR6JZschLnPuHoT
+         RXZDlWSamkbVj+zjhvq8y1fpu9MyCKoUXrZRzsOgbVvC3F6rvGDsEkQ9IGnBggaQ5vcp
+         cVTAeIXWbHm3uY6oh3bzM9IRvnhbIgPEcwpPJTgJhD3H1JHJ3ERfBapj17tu+LEmofF/
+         BR9XnfmvyOJTUKuYy+km7UqC3vo9h/a+XyVtVJDtuXwGnTqnERfkErg2Ob2kEpu2qMPA
+         Kcrw==
+X-Gm-Message-State: AJIora/Vfd35O3Xsh55QR1ZJa0amSVdnIKcEpv8nOzMMOSDqQtDsscwh
+        lpo0lk+FirwDNycC/FDOEjDo+Q==
+X-Google-Smtp-Source: AGRyM1vydTkqV6+v+KByHbdetz5QCnlkt2zBBZAI+fERpOrH+XCPyzLyz5qb5qa1djSNITMh6ToUtw==
+X-Received: by 2002:adf:e70e:0:b0:21d:7f90:7501 with SMTP id c14-20020adfe70e000000b0021d7f907501mr10100395wrm.447.1658837475428;
+        Tue, 26 Jul 2022 05:11:15 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id m15-20020a7bcb8f000000b003a2e27fc275sm16953875wmi.12.2022.07.26.05.11.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Jul 2022 05:11:14 -0700 (PDT)
+Message-ID: <faeaab3a-503c-ed14-bed0-e897b1f94662@nexus-software.ie>
+Date:   Tue, 26 Jul 2022 13:11:13 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 0/2] media: venus: Fix up buffer handling for
+ HFI_VERSION_1XX
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        stanimir.varbanov@linaro.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20220726021455.1814096-1-bryan.odonoghue@linaro.org>
+From:   Bryan O'Donoghue <pure.logic@nexus-software.ie>
+In-Reply-To: <20220726021455.1814096-1-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add missed \n to the end of the messages.
+On 26/07/2022 03:14, Bryan O'Donoghue wrote:
+> This series fixes two buffer handling bugs. The first bug is trivial and
+> ~impossible to hit without the second bug but with fixing anyway. Its a
+> simple NULL pointer handling issue.
+> 
+> The second bug relates to HFI_VERSION_1XX output buffers. Unfortunately
+> these have been broken since
+> 
+> Commit: 9593126dae3e ("media: venus: Add a handling of QC08C compressed format")
+> 
+> A bit of bisecting the commits in venus found it handily enough. Once the
+> fix is applied we have I have decode working again on db410c.
+> 
+> Bryan O'Donoghue (2):
+>    media: venus: dec: Handle the case where find_format fails
+>    media: venus: Fix NV12 decoder buffer discovery on HFI_VERSION_1XX
+> 
+>   drivers/media/platform/qcom/venus/helpers.c | 13 +++++++------
+>   drivers/media/platform/qcom/venus/vdec.c    |  2 ++
+>   2 files changed, 9 insertions(+), 6 deletions(-)
+> 
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Not withstanding my 3am misspelled text above, I've also just validated 
+this changes on RB5/HFI_VERSION_6xx.
+
 ---
- drivers/media/i2c/ov2740.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
-index 7271e3d011c9..c4c511f90257 100644
---- a/drivers/media/i2c/ov2740.c
-+++ b/drivers/media/i2c/ov2740.c
-@@ -451,7 +451,7 @@ static int ov2740_write_reg_list(struct ov2740 *ov2740,
- 				       r_list->regs[i].val);
- 		if (ret) {
- 			dev_err_ratelimited(&client->dev,
--					    "write reg 0x%4.4x return err = %d",
-+					    "write reg 0x%4.4x return err = %d\n",
- 					    r_list->regs[i].address, ret);
- 			return ret;
- 		}
-@@ -474,7 +474,7 @@ static int ov2740_identify_module(struct ov2740 *ov2740)
- 		return ret;
- 
- 	if (val != OV2740_CHIP_ID) {
--		dev_err(&client->dev, "chip id mismatch: %x!=%x",
-+		dev_err(&client->dev, "chip id mismatch: %x != %x\n",
- 			OV2740_CHIP_ID, val);
- 		return -ENXIO;
- 	}
-@@ -772,14 +772,14 @@ static int ov2740_start_streaming(struct ov2740 *ov2740)
- 	reg_list = &link_freq_configs[link_freq_index].reg_list;
- 	ret = ov2740_write_reg_list(ov2740, reg_list);
- 	if (ret) {
--		dev_err(&client->dev, "failed to set plls");
-+		dev_err(&client->dev, "failed to set plls\n");
- 		return ret;
- 	}
- 
- 	reg_list = &ov2740->cur_mode->reg_list;
- 	ret = ov2740_write_reg_list(ov2740, reg_list);
- 	if (ret) {
--		dev_err(&client->dev, "failed to set mode");
-+		dev_err(&client->dev, "failed to set mode\n");
- 		return ret;
- 	}
- 
-@@ -790,7 +790,7 @@ static int ov2740_start_streaming(struct ov2740 *ov2740)
- 	ret = ov2740_write_reg(ov2740, OV2740_REG_MODE_SELECT, 1,
- 			       OV2740_MODE_STREAMING);
- 	if (ret)
--		dev_err(&client->dev, "failed to start streaming");
-+		dev_err(&client->dev, "failed to start streaming\n");
- 
- 	return ret;
- }
-@@ -801,7 +801,7 @@ static void ov2740_stop_streaming(struct ov2740 *ov2740)
- 
- 	if (ov2740_write_reg(ov2740, OV2740_REG_MODE_SELECT, 1,
- 			     OV2740_MODE_STANDBY))
--		dev_err(&client->dev, "failed to stop streaming");
-+		dev_err(&client->dev, "failed to stop streaming\n");
- }
- 
- static int ov2740_set_stream(struct v4l2_subdev *sd, int enable)
--- 
-2.35.1
-
+bod
