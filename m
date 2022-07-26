@@ -2,44 +2,44 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A75DCCA47E
-	for <linux-media@archiver.kernel.org>; Tue, 26 Jul 2022 12:05:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42AB3C43334
+	for <linux-media@archiver.kernel.org>; Tue, 26 Jul 2022 12:05:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239024AbiGZMF4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Jul 2022 08:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46198 "EHLO
+        id S229945AbiGZMF6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Jul 2022 08:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232678AbiGZMFz (ORCPT
+        with ESMTP id S232953AbiGZMFz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 26 Jul 2022 08:05:55 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7F714008;
-        Tue, 26 Jul 2022 05:05:54 -0700 (PDT)
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 542F72AE08;
+        Tue, 26 Jul 2022 05:05:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658837154; x=1690373154;
+  t=1658837155; x=1690373155;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=jMC2wNGyqJFQfBamjOwEaaiV4YpyT3KOmIURe2y6h6U=;
-  b=X8AmgrsL3mix3YyCOk3YocMksYLpgJ05+peM1yymXF8ccswIHE3cTIGe
-   L95njfrNpIgTbPdWC2rA6akUYT1wQqihKGwVwfFnUeIuZEtpWG98u70yp
-   Al3/soEYF48RYPEvpR9jJS4bS64lOJ1bfDhQ7TxaiLUTlo2tQ4N5I4Sqb
-   W8gLIf04Fbwf9Dkr2pcRkD5v7du85ZIiJM3dPDEAdR4lRaIbKp05zJWrd
-   RknMDML3J9zAa/rm7Qz9WiPHmggC5NtBL4FECQyfGOdbrq/TSro5TruVE
-   PZkEfiZih7v9ksvJtUneRQ/z08Y8Jw4cOLGnsCkCvcGmXLUeM3RT6oqca
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="267703529"
+  bh=dErGB4TIKDepZJW1i+iaXrBp16cjYh5ghvqazNtEIuM=;
+  b=ThAJQc1V671PPDzSSd7RTI/Yn1RpvpD8KhFii4/YurGBOegskw9rOsn2
+   3ISK3nWueUqkBnu5GZ8NwfH3QumyB0FBay9voa0O0iwIxW4TKnLjVtiT/
+   3XvhDhboH0OSsUaO5egpJ0f/AdNTMaoD0X99Cb50a3zgzop2Xja/+CdMI
+   LV+wHdemf4qwZRK/4tACeESPwSB2R/YoDUgDv5b7dzdS3WFnhyv5p6SWL
+   uV1urYE88HmyvBVHhu/L903Esh0wznT98YJCV8xm9B7XlUFu8nXUzZsn+
+   Qlcj4heICAXyloCTOgSlUYt5I4hRsQXf7OgHwatizSaRxmilfI1b+Z8n0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="274804291"
 X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="267703529"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 05:05:54 -0700
+   d="scan'208";a="274804291"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 05:05:54 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="845854992"
+   d="scan'208";a="667879823"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 26 Jul 2022 05:05:52 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 26 Jul 2022 05:05:52 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 5DBAB86; Tue, 26 Jul 2022 15:06:02 +0300 (EEST)
+        id 6BCAC1D0; Tue, 26 Jul 2022 15:06:02 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
@@ -47,9 +47,9 @@ Cc:     Tianshu Qiu <tian.shu.qiu@intel.com>,
         Shawn Tu <shawnx.tu@intel.com>,
         Bingbu Cao <bingbu.cao@intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH v1 2/8] media: ov2740: Replace voodoo coding with understandle flow
-Date:   Tue, 26 Jul 2022 15:05:50 +0300
-Message-Id: <20220726120556.2881-2-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 4/8] media: ov2740: Remove duplicate check for NULL fwnode
+Date:   Tue, 26 Jul 2022 15:05:52 +0300
+Message-Id: <20220726120556.2881-4-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220726120556.2881-1-andriy.shevchenko@linux.intel.com>
 References: <20220726120556.2881-1-andriy.shevchenko@linux.intel.com>
@@ -59,77 +59,28 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Besides not being understandable at the first glance, the code
-might provoke a compiler or a static analyser tool to warn about
-out-of-bound access (when len == 0).
-
-Replace it with clear flow an understandable intention.
+fwnode API does proper checks and returns correct codes, no need
+to repeat it in the caller.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/media/i2c/ov2740.c | 28 +++++++++++++++++++++++-----
- 1 file changed, 23 insertions(+), 5 deletions(-)
+ drivers/media/i2c/ov2740.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
-index c975db1bbe8c..81c0ab220339 100644
+index 9420258c6073..07fe8fda274e 100644
 --- a/drivers/media/i2c/ov2740.c
 +++ b/drivers/media/i2c/ov2740.c
-@@ -377,10 +377,10 @@ static int ov2740_read_reg(struct ov2740 *ov2740, u16 reg, u16 len, u32 *val)
- 	struct i2c_client *client = v4l2_get_subdevdata(&ov2740->sd);
- 	struct i2c_msg msgs[2];
- 	u8 addr_buf[2];
--	u8 data_buf[4] = {0};
-+	u8 data_buf[4];
- 	int ret = 0;
+@@ -1009,9 +1009,6 @@ static int ov2740_check_hwcfg(struct device *dev)
+ 	int ret;
+ 	unsigned int i, j;
  
--	if (len > sizeof(data_buf))
-+	if (len > 4)
- 		return -EINVAL;
- 
- 	put_unaligned_be16(reg, addr_buf);
-@@ -391,13 +391,22 @@ static int ov2740_read_reg(struct ov2740 *ov2740, u16 reg, u16 len, u32 *val)
- 	msgs[1].addr = client->addr;
- 	msgs[1].flags = I2C_M_RD;
- 	msgs[1].len = len;
--	msgs[1].buf = &data_buf[sizeof(data_buf) - len];
-+	msgs[1].buf = data_buf;
- 
- 	ret = i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
- 	if (ret != ARRAY_SIZE(msgs))
- 		return ret < 0 ? ret : -EIO;
- 
--	*val = get_unaligned_be32(data_buf);
-+	if (len == 4)
-+		*val = get_unaligned_be32(data_buf);
-+	else if (len == 3)
-+		*val = get_unaligned_be24(data_buf);
-+	else if (len == 2)
-+		*val = get_unaligned_be16(data_buf);
-+	else if (len == 1)
-+		*val = data_buf[0];
-+	else
-+		return -EINVAL;
- 
- 	return 0;
- }
-@@ -412,7 +421,16 @@ static int ov2740_write_reg(struct ov2740 *ov2740, u16 reg, u16 len, u32 val)
- 		return -EINVAL;
- 
- 	put_unaligned_be16(reg, buf);
--	put_unaligned_be32(val << 8 * (4 - len), buf + 2);
-+	if (len == 4)
-+		put_unaligned_be32(val, buf + 2);
-+	else if (len == 3)
-+		put_unaligned_be24(val, buf + 2);
-+	else if (len == 2)
-+		put_unaligned_be16(val, buf + 2);
-+	else if (len == 1)
-+		buf[2] = val;
-+	else
-+		return -EINVAL;
- 
- 	ret = i2c_master_send(client, buf, len + 2);
- 	if (ret != len + 2)
+-	if (!fwnode)
+-		return -ENXIO;
+-
+ 	ret = fwnode_property_read_u32(fwnode, "clock-frequency", &mclk);
+ 	if (ret)
+ 		return ret;
 -- 
 2.35.1
 
