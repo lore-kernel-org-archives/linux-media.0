@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE7A0C19F29
-	for <linux-media@archiver.kernel.org>; Wed, 27 Jul 2022 10:37:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3936C04A68
+	for <linux-media@archiver.kernel.org>; Wed, 27 Jul 2022 10:37:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231967AbiG0KhK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 Jul 2022 06:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40190 "EHLO
+        id S231953AbiG0KhP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Jul 2022 06:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbiG0KhJ (ORCPT
+        with ESMTP id S231977AbiG0KhO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 27 Jul 2022 06:37:09 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA3C46DBB
-        for <linux-media@vger.kernel.org>; Wed, 27 Jul 2022 03:37:08 -0700 (PDT)
+        Wed, 27 Jul 2022 06:37:14 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0916474D1
+        for <linux-media@vger.kernel.org>; Wed, 27 Jul 2022 03:37:10 -0700 (PDT)
 Received: from deskari.lan (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1680FDF7;
-        Wed, 27 Jul 2022 12:37:02 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9144811C7;
+        Wed, 27 Jul 2022 12:37:03 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1658918222;
-        bh=952/K15WWh8qeRzuNvXwBHZ+Y/gk1Hn7dLApGzZ+A7Q=;
+        s=mail; t=1658918224;
+        bh=gmGSh5DlClE7ANTxVhSvjXsLMIfEFXhaeMrPpQMsgto=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ktW77wigaK/uwIIWGO02i4EQ/cRRdjkYMMusQnPxV6oR/W+9QS1sKxeRLTG96ijsI
-         jbhzQUTLrPF+hHD4hPrgqTfRCaVJfowB4NjseM1NIbnBzfhb9+xLj0uhCP5nWEfHv3
-         PSkZ4zaCK8ZDfEeHq6de3v/sSA2KH4zxtRCrd+M4=
+        b=uWDofgjc2kbqlX8P3HEkT3CFRFzAE8bcInmfiIobpR1eXZK7tnvjJh8j56duUl6B1
+         SjQsNP+D6zsjudDhmLaxPZUwqgCYukvL355Ait15tP0d+go+YhMO+rs/Shp8e4vCmq
+         hfNP8qSreQMDvNRK+bU/FSXrTxSXaX5NfcI7f74o=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -36,9 +36,9 @@ To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Kishon Vijay Abraham <kishon@ti.com>,
         satish.nagireddy@getcruise.com, Tomasz Figa <tfiga@chromium.org>
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v12 08/30] media: mc: entity: add media_pipeline_alloc_start & media_pipeline_stop_free
-Date:   Wed, 27 Jul 2022 13:36:17 +0300
-Message-Id: <20220727103639.581567-9-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v12 10/30] media: add V4L2_SUBDEV_FL_STREAMS
+Date:   Wed, 27 Jul 2022 13:36:19 +0300
+Message-Id: <20220727103639.581567-11-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220727103639.581567-1-tomi.valkeinen@ideasonboard.com>
 References: <20220727103639.581567-1-tomi.valkeinen@ideasonboard.com>
@@ -48,110 +48,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add new versions of media_pipeline_start() and media_pipeline_stop().
-The new functions can be used by drivers that do not need to extend the
-media_pipeline with their own structs, and the new functions will handle
-allocating and freeing the media_pipeline as needed.
+Add subdev flag V4L2_SUBDEV_FL_STREAMS. It is used to indicate that the
+subdev supports the new API with multiplexed streams (routing, stream
+configs).
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- drivers/media/mc/mc-entity.c | 49 ++++++++++++++++++++++++++++++++++++
- include/media/media-entity.h | 22 ++++++++++++++++
- 2 files changed, 71 insertions(+)
+ include/media/v4l2-subdev.h | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-index 0d0d6c0dda16..b7b6c6411aa7 100644
---- a/drivers/media/mc/mc-entity.c
-+++ b/drivers/media/mc/mc-entity.c
-@@ -579,6 +579,55 @@ void media_pipeline_stop(struct media_entity *entity)
- }
- EXPORT_SYMBOL_GPL(media_pipeline_stop);
- 
-+__must_check int media_pipeline_alloc_start(struct media_entity *entity)
-+{
-+	struct media_device *mdev = entity->graph_obj.mdev;
-+	struct media_pipeline *pipe;
-+	int ret;
-+	bool new_pipe = false;
-+
-+	mutex_lock(&mdev->graph_mutex);
-+
-+	/*
-+	 * Is the entity already part of a pipeline? If not, we need to allocate
-+	 * a pipe.
-+	 */
-+	pipe = media_entity_pipeline(entity);
-+	if (!pipe) {
-+		pipe = kzalloc(sizeof(*pipe), GFP_KERNEL);
-+		new_pipe = true;
-+	}
-+
-+	ret = __media_pipeline_start(entity, pipe);
-+	if (ret) {
-+		if (new_pipe)
-+			kfree(pipe);
-+	}
-+
-+	mutex_unlock(&mdev->graph_mutex);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(media_pipeline_alloc_start);
-+
-+void media_pipeline_stop_free(struct media_entity *entity)
-+{
-+	struct media_device *mdev = entity->graph_obj.mdev;
-+	struct media_pipeline *pipe;
-+
-+	mutex_lock(&mdev->graph_mutex);
-+
-+	pipe = media_entity_pipeline(entity);
-+
-+	__media_pipeline_stop(entity);
-+
-+	if (pipe && pipe->start_count == 0)
-+		kfree(pipe);
-+
-+	mutex_unlock(&mdev->graph_mutex);
-+}
-+EXPORT_SYMBOL_GPL(media_pipeline_stop_free);
-+
- /* -----------------------------------------------------------------------------
-  * Links management
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index b661e1817470..56735dfbb6b5 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -875,6 +875,17 @@ struct v4l2_subdev_internal_ops {
+  * should set this flag.
   */
-diff --git a/include/media/media-entity.h b/include/media/media-entity.h
-index 6c0d0a00d58e..13a882a7839c 100644
---- a/include/media/media-entity.h
-+++ b/include/media/media-entity.h
-@@ -1035,6 +1035,28 @@ void media_pipeline_stop(struct media_entity *entity);
-  */
- void __media_pipeline_stop(struct media_entity *entity);
+ #define V4L2_SUBDEV_FL_HAS_EVENTS		(1U << 3)
++/*
++ * Set this flag if this subdev supports multiplexed streams. This means
++ * that the driver supports routing and handles the stream parameter in its
++ * v4l2_subdev_pad_ops handlers. More specifically, this means:
++ *
++ * - Centrally managed subdev active state is enabled
++ * - Legacy pad config is _not_ supported (state->pads is NULL)
++ * - Routing ioctls are available
++ * - Multiple streams per pad are supported
++ */
++#define V4L2_SUBDEV_FL_STREAMS			(1U << 4)
  
-+/**
-+ * media_pipeline_alloc_start - Mark a pipeline as streaming
-+ * @entity: Starting entity
-+ *
-+ * media_pipeline_alloc_start() is similar to media_pipeline_start() but
-+ * instead of working on a given pipeline the function will allocate a new
-+ * pipeline if needed.
-+ *
-+ * Calls to media_pipeline_alloc_start() must be matched with
-+ * media_pipeline_stop_free().
-+ */
-+__must_check int media_pipeline_alloc_start(struct media_entity *entity);
-+
-+/**
-+ * media_pipeline_stop_free - Mark a pipeline as not streaming
-+ * @entity: Starting entity
-+ *
-+ * media_pipeline_stop_free() is similar to media_pipeline_stop() but will
-+ * also free the pipeline when the start_count drops to 0.
-+ */
-+void media_pipeline_stop_free(struct media_entity *entity);
-+
- /**
-  * media_devnode_create() - creates and initializes a device node interface
-  *
+ struct regulator_bulk_data;
+ 
 -- 
 2.34.1
 
