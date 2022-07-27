@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B32FC19F21
-	for <linux-media@archiver.kernel.org>; Wed, 27 Jul 2022 10:37:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FE03C19F29
+	for <linux-media@archiver.kernel.org>; Wed, 27 Jul 2022 10:37:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231890AbiG0KhR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 Jul 2022 06:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40296 "EHLO
+        id S231985AbiG0KhS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Jul 2022 06:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231983AbiG0KhO (ORCPT
+        with ESMTP id S231979AbiG0KhQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 27 Jul 2022 06:37:14 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100E146DAB
-        for <linux-media@vger.kernel.org>; Wed, 27 Jul 2022 03:37:09 -0700 (PDT)
+        Wed, 27 Jul 2022 06:37:16 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD4F474D1
+        for <linux-media@vger.kernel.org>; Wed, 27 Jul 2022 03:37:14 -0700 (PDT)
 Received: from deskari.lan (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C7F39835;
-        Wed, 27 Jul 2022 12:37:02 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7922C1287;
+        Wed, 27 Jul 2022 12:37:06 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1658918223;
-        bh=RvQVoEfNt1qL5Wo8Mc+ktJ+boysV1yxoB3IV4lPOaYo=;
+        s=mail; t=1658918227;
+        bh=guF4hNch/67QFRb9T0j6z9TWEWqsg64i1VdiPf1GWnA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PC/5yAqP59gZuP8/5nMfnncAGb3vx/g+Z3vV4YvPbPPOcQg+rDM1+B6/MTBXVTgkg
-         ludw1XcjMFH8mrciTMEUj7ob9gH1urkff0ifL/ei8V5ADa5cw3MnefK22WRFi3LeuB
-         Nn0ME27EqpeY0T6R6SOwYGhp6ksfUU4MvGMQ3YCw=
+        b=nbwgBFfys+/2hAsb4xOZjpIRwP1fm7i1N99rBz/JW5bOejMGPHZUmpqaO+AE+5sMC
+         G2EBDzF8XwVBAfvhruCAQZjt5xyNExRlQjT6ESH693TSv14oJlAnwXwppIp9SDCKA5
+         dIWPYpq0ilhxtrinEmvBmY6m1DqxemcZbOxJk/6Y=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -35,10 +35,11 @@ To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Pratyush Yadav <p.yadav@ti.com>,
         Kishon Vijay Abraham <kishon@ti.com>,
         satish.nagireddy@getcruise.com, Tomasz Figa <tfiga@chromium.org>
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v12 09/30] media: mc: entity: Rewrite media_pipeline_start() to support routes
-Date:   Wed, 27 Jul 2022 13:36:18 +0300
-Message-Id: <20220727103639.581567-10-tomi.valkeinen@ideasonboard.com>
+Cc:     Michal Simek <michal.simek@xilinx.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v12 13/30] media: subdev: Add [GS]_ROUTING subdev ioctls and operations
+Date:   Wed, 27 Jul 2022 13:36:22 +0300
+Message-Id: <20220727103639.581567-14-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220727103639.581567-1-tomi.valkeinen@ideasonboard.com>
 References: <20220727103639.581567-1-tomi.valkeinen@ideasonboard.com>
@@ -50,776 +51,345 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-[Note: the code is mostly from Laurent but the patch description is from Tomi]
+Add support for subdev internal routing. A route is defined as a single
+stream from a sink pad to a source pad.
 
-The media_pipeline_start() and media_pipeline_stop() functions use the
-media graph walk API to traverse the graph and validate the pipeline.
-The graph walk traverses the media graph following links between the
-entities.
-
-Also, while the pipeline can't change between the start and stop calls,
-the graph is walked again from scratch at stop time, or any time a
-driver needs to inspect the pipeline.
-
-With the upcoming multiplexed streams support we will need a bit more
-intelligent pipeline construction, as e.g. an entity may be passing
-through two independent streams via separate pads, in which case those
-pads should not be part of the same pipeline.
-
-This patch essentially rewrites the media_pipeline_start/stop so that
-a pipeline is defined as a set of pads instead of entities and the media
-graph traversal uses the newly introduced has_route operation.
-
-If an entity does not define has_route operation, all the entity's pads
-are considered as connected. This means that the behavior with all the
-current drivers stays the same, but new drivers can define a more
-fine-grained pipeline construction.
-
-Additionally the media pipeline's pads are cached at
-media_pipeline_start() time, and re-used at media_pipeline_stop() which
-avoid the need to re-walk the whole graph as the previous implementation
-did.
-
-Additionally, caching pads in the pipeline can serve in the future as
-the foundation to provide a better API than the media graph walk to
-drivers to iterate over pads and entities in the pipeline.
-
-Note that the old media_pipeline_start/stop used the media graph walk
-API. The new version does not use the media graph walk API, but instead
-a new implementation.
-
-There are two reason for not changing the graph walk: it proved to be
-rather difficult to change the graph walk to have the features
-implemented in this patch, and second, this keeps the backward
-compatibility of the graph walk as there are users of the graph walk API
-
-The long term plan is that all the existing code would be converted to
-use the new cached pipeline, thus allowing us to remove the graph walk.
+The userspace can configure the routing via two new ioctls,
+VIDIOC_SUBDEV_G_ROUTING and VIDIOC_SUBDEV_S_ROUTING, and subdevs can
+implement the functionality with v4l2_subdev_pad_ops.set_routing().
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+
+- Add sink and source streams for multiplexed links
+- Copy the argument back in case of an error. This is needed to let the
+  caller know the number of routes.
+
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+
+- Expand and refine documentation.
+- Make the 'routes' pointer a __u64 __user pointer so that a compat32
+  version of the ioctl is not required.
+- Add struct v4l2_subdev_krouting to be used for subdevice operations.
+
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+
+- Fix typecasing warnings
+- Check sink & source pad types
+- Add 'which' field
+- Add V4L2_SUBDEV_ROUTE_FL_SOURCE
+- Routing to subdev state
+- Dropped get_routing subdev op
+
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- Documentation/driver-api/media/mc-core.rst |   7 +-
- drivers/media/mc/mc-entity.c               | 483 +++++++++++++++++----
- include/media/media-entity.h               |  56 ++-
- 3 files changed, 460 insertions(+), 86 deletions(-)
+ drivers/media/v4l2-core/v4l2-ioctl.c  | 25 +++++++-
+ drivers/media/v4l2-core/v4l2-subdev.c | 83 +++++++++++++++++++++++++++
+ include/media/v4l2-subdev.h           | 22 +++++++
+ include/uapi/linux/v4l2-subdev.h      | 57 ++++++++++++++++++
+ 4 files changed, 186 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/driver-api/media/mc-core.rst b/Documentation/driver-api/media/mc-core.rst
-index 2a0c0aeec5f2..9c0b09745c0a 100644
---- a/Documentation/driver-api/media/mc-core.rst
-+++ b/Documentation/driver-api/media/mc-core.rst
-@@ -229,14 +229,13 @@ When starting streaming, drivers must notify all entities in the pipeline to
- prevent link states from being modified during streaming by calling
- :c:func:`media_pipeline_start()`.
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 21470de62d72..f42f7ffcc247 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -16,6 +16,7 @@
+ #include <linux/kernel.h>
+ #include <linux/version.h>
  
--The function will mark all entities connected to the given entity through
--enabled links, either directly or indirectly, as streaming.
-+The function will mark all the pads which are part of the pipeline as streaming.
++#include <linux/v4l2-subdev.h>
+ #include <linux/videodev2.h>
  
- The struct media_pipeline instance pointed to by
--the pipe argument will be stored in every entity in the pipeline.
-+the pipe argument will be stored in every pad in the pipeline.
- Drivers should embed the struct media_pipeline
- in higher-level pipeline structures and can then access the
--pipeline through the struct media_entity
-+pipeline through the struct media_pad
- pipe field.
- 
- Calls to :c:func:`media_pipeline_start()` can be nested.
-diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-index b7b6c6411aa7..ca8845bf8d48 100644
---- a/drivers/media/mc/mc-entity.c
-+++ b/drivers/media/mc/mc-entity.c
-@@ -410,97 +410,436 @@ EXPORT_SYMBOL_GPL(media_graph_walk_next);
-  * Pipeline management
-  */
- 
-+/*
-+ * The pipeline traversal stack stores pads that are reached during graph
-+ * traversal, with a list of links to be visited to continue the traversal.
-+ * When a new pad is reached, an entry is pushed on the top of the stack and
-+ * points to the incoming pad and the first link of the entity.
-+ *
-+ * To find further pads in the pipeline, the traversal algorithm follows
-+ * internal routes in the entity, and then links in the graph. It does so by
-+ * iterating over all links of the entity, and following enabled links that
-+ * originate from a pad that is internally connected to the incoming pad, as
-+ * reported by the media_entity_has_route() function.
-+ */
-+
-+/**
-+ * struct media_pipeline_walk_entry - Entry in the pipeline traversal stack
-+ *
-+ * @pad: The media pad being visited
-+ * @links: Links left to be visited
-+ */
-+struct media_pipeline_walk_entry {
-+	struct media_pad *pad;
-+	struct list_head *links;
-+};
-+
-+/**
-+ * struct media_pipeline_walk - State used by the media pipeline traversal
-+ * 				algorithm
-+ *
-+ * @mdev: The media device
-+ * @stack: Depth-first search stack
-+ * @stack.size: Number of allocated entries in @stack.entries
-+ * @stack.top: Index of the top stack entry (-1 if the stack is empty)
-+ * @stack.entries: Stack entries
-+ */
-+struct media_pipeline_walk {
-+	struct media_device *mdev;
-+
-+	struct {
-+		unsigned int size;
-+		int top;
-+		struct media_pipeline_walk_entry *entries;
-+	} stack;
-+};
-+
-+#define MEDIA_PIPELINE_STACK_GROW_STEP		16
-+
-+static struct media_pipeline_walk_entry *
-+media_pipeline_walk_top(struct media_pipeline_walk *walk)
-+{
-+	return &walk->stack.entries[walk->stack.top];
-+}
-+
-+static bool media_pipeline_walk_empty(struct media_pipeline_walk *walk)
-+{
-+	return walk->stack.top == -1;
-+}
-+
-+/* Increase the stack size by MEDIA_PIPELINE_STACK_GROW_STEP elements. */
-+static int media_pipeline_walk_resize(struct media_pipeline_walk *walk)
-+{
-+	struct media_pipeline_walk_entry *entries;
-+	unsigned int new_size;
-+
-+	/* Safety check, to avoid stack overflows in case of bugs. */
-+	if (walk->stack.size >= 256)
-+		return -E2BIG;
-+
-+	new_size = walk->stack.size + MEDIA_PIPELINE_STACK_GROW_STEP;
-+
-+	entries = krealloc(walk->stack.entries,
-+			   new_size * sizeof(*walk->stack.entries),
-+			   GFP_KERNEL);
-+	if (!entries)
-+		return -ENOMEM;
-+
-+	walk->stack.entries = entries;
-+	walk->stack.size = new_size;
-+
-+	return 0;
-+}
-+
-+/* Push a new entry on the stack. */
-+static int media_pipeline_walk_push(struct media_pipeline_walk *walk,
-+				    struct media_pad *pad)
-+{
-+	struct media_pipeline_walk_entry *entry;
-+	int ret;
-+
-+	if (walk->stack.top + 1 >= walk->stack.size) {
-+		ret = media_pipeline_walk_resize(walk);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	walk->stack.top++;
-+	entry = media_pipeline_walk_top(walk);
-+	entry->pad = pad;
-+	entry->links = pad->entity->links.next;
-+
-+	dev_dbg(walk->mdev->dev,
-+		"media pipeline: pushed entry %u: '%s':%u\n",
-+		walk->stack.top, pad->entity->name, pad->index);
-+
-+	return 0;
-+}
-+
-+/*
-+ * Move the top entry link cursor to the next link. If all links of the entry
-+ * have been visited, pop the entry itself.
-+ */
-+static void media_pipeline_walk_pop(struct media_pipeline_walk *walk)
-+{
-+	struct media_pipeline_walk_entry *entry;
-+
-+	if (WARN_ON(walk->stack.top < 0))
-+		return;
-+
-+	entry = media_pipeline_walk_top(walk);
-+
-+	if (entry->links->next == &entry->pad->entity->links) {
-+		dev_dbg(walk->mdev->dev,
-+			"media pipeline: entry %u has no more links, popping\n",
-+			walk->stack.top);
-+
-+		walk->stack.top--;
-+		return;
-+	}
-+
-+	entry->links = entry->links->next;
-+
-+	dev_dbg(walk->mdev->dev,
-+		"media pipeline: moved entry %u to next link\n",
-+		walk->stack.top);
-+}
-+
-+/* Free all memory allocated while walking the pipeline. */
-+static void media_pipeline_walk_destroy(struct media_pipeline_walk *walk)
-+{
-+	kfree(walk->stack.entries);
-+}
-+
-+/* Add a pad to the pipeline and push it to the stack. */
-+static int media_pipeline_add_pad(struct media_pipeline *pipe,
-+				  struct media_pipeline_walk *walk,
-+				  struct media_pad *pad)
-+{
-+	struct media_pipeline_pad *ppad;
-+
-+	list_for_each_entry(ppad, &pipe->pads, list) {
-+		if (ppad->pad == pad) {
-+			dev_dbg(pad->graph_obj.mdev->dev,
-+				"media pipeline: already contains pad '%s':%u\n",
-+				pad->entity->name, pad->index);
-+			return 0;
-+		}
-+	}
-+
-+	ppad = kzalloc(sizeof(*ppad), GFP_KERNEL);
-+	if (!ppad)
-+		return -ENOMEM;
-+
-+	ppad->pipe = pipe;
-+	ppad->pad = pad;
-+
-+	list_add_tail(&ppad->list, &pipe->pads);
-+
-+	dev_dbg(pad->graph_obj.mdev->dev,
-+		"media pipeline: added pad '%s':%u\n",
-+		pad->entity->name, pad->index);
-+
-+	return media_pipeline_walk_push(walk, pad);
-+}
-+
-+/* Explore the next link of the entity at the top of the stack. */
-+static int media_pipeline_explore_next_link(struct media_pipeline *pipe,
-+					    struct media_pipeline_walk *walk)
-+{
-+	struct media_pipeline_walk_entry *entry = media_pipeline_walk_top(walk);
-+	struct media_pad *pad;
-+	struct media_link *link;
-+	struct media_pad *local;
-+	struct media_pad *remote;
-+	int ret;
-+
-+	pad = entry->pad;
-+	link = list_entry(entry->links, typeof(*link), list);
-+	media_pipeline_walk_pop(walk);
-+
-+	dev_dbg(walk->mdev->dev,
-+		"media pipeline: exploring link '%s':%u -> '%s':%u\n",
-+		link->source->entity->name, link->source->index,
-+		link->sink->entity->name, link->sink->index);
-+
-+	/* Skip links that are not enabled. */
-+	if (!(link->flags & MEDIA_LNK_FL_ENABLED)) {
-+		dev_dbg(walk->mdev->dev,
-+			"media pipeline: skipping link (disabled)\n");
-+		return 0;
-+	}
-+
-+	/* Get the local pad and remote pad. */
-+	if (link->source->entity == pad->entity) {
-+		local = link->source;
-+		remote = link->sink;
-+	} else {
-+		local = link->sink;
-+		remote = link->source;
-+	}
-+
-+	/*
-+	 * Skip links that originate from a different pad than the incoming pad
-+	 * that is not connected internally in the entity to the incoming pad.
-+	 */
-+	if (pad != local &&
-+	    !media_entity_has_route(pad->entity, pad->index, local->index)) {
-+		dev_dbg(walk->mdev->dev,
-+			"media pipeline: skipping link (no route)\n");
-+		return 0;
-+	}
-+
-+	/*
-+	 * Add the local and remote pads of the link to the pipeline and push
-+	 * them to the stack, if they're not already present.
-+	 */
-+	ret = media_pipeline_add_pad(pipe, walk, local);
-+	if (ret)
-+		return ret;
-+
-+	ret = media_pipeline_add_pad(pipe, walk, remote);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static void media_pipeline_cleanup(struct media_pipeline *pipe)
-+{
-+	while (!list_empty(&pipe->pads)) {
-+		struct media_pipeline_pad *ppad;
-+
-+		ppad = list_first_entry(&pipe->pads, typeof(*ppad), list);
-+		list_del(&ppad->list);
-+		kfree(ppad);
-+	}
-+}
-+
-+static int media_pipeline_populate(struct media_pipeline *pipe,
-+				   struct media_pad *pad)
-+{
-+	struct media_pipeline_walk walk = { };
-+	struct media_pipeline_pad *ppad;
-+	int ret;
-+
-+	/*
-+	 * Populate the media pipeline by walking the media graph, starting
-+	 * from @pad.
-+	 */
-+	INIT_LIST_HEAD(&pipe->pads);
-+	pipe->mdev = pad->graph_obj.mdev;
-+
-+	walk.mdev = pipe->mdev;
-+	walk.stack.top = -1;
-+	ret = media_pipeline_add_pad(pipe, &walk, pad);
-+	if (ret)
-+		goto done;
-+
-+	/*
-+	 * Use a depth-first search algorithm: as long as the stack is not
-+	 * empty, explore the next link of the top entry. The
-+	 * media_pipeline_explore_next_link() function will either move to the
-+	 * next link, pop the entry if fully visited, or add new entries on
-+	 * top.
-+	 */
-+	while (!media_pipeline_walk_empty(&walk)) {
-+		ret = media_pipeline_explore_next_link(pipe, &walk);
-+		if (ret)
-+			goto done;
-+	}
-+
-+	dev_dbg(pad->graph_obj.mdev->dev,
-+		"media pipeline populated, found pads:\n");
-+
-+	list_for_each_entry(ppad, &pipe->pads, list)
-+		dev_dbg(pad->graph_obj.mdev->dev, "- '%s':%u\n",
-+			ppad->pad->entity->name, ppad->pad->index);
-+
-+	WARN_ON(walk.stack.top != -1);
-+
-+	ret = 0;
-+
-+done:
-+	media_pipeline_walk_destroy(&walk);
-+
-+	if (ret)
-+		media_pipeline_cleanup(pipe);
-+
-+	return ret;
-+}
-+
- __must_check int __media_pipeline_start(struct media_entity *entity,
- 					struct media_pipeline *pipe)
- {
- 	struct media_device *mdev = entity->graph_obj.mdev;
--	struct media_graph *graph = &pipe->graph;
--	struct media_entity *entity_err = entity;
--	struct media_link *link;
-+	struct media_pipeline_pad *err_ppad;
-+	struct media_pipeline_pad *ppad;
- 	int ret;
- 
-+	lockdep_assert_held(&mdev->graph_mutex);
-+
-+	/*
-+	 * media_pipeline_start(entity) only makes sense with entities that have
-+	 * a single pad.
-+	 */
-+
-+	if (WARN_ON(entity->num_pads != 1))
-+		return -EINVAL;
-+
-+	/*
-+	 * If the entity is already part of a pipeline, that pipeline must
-+	 * be the same as the pipe given to media_pipeline_start().
-+	 */
-+	if (WARN_ON(entity->pads->pipe && entity->pads->pipe != pipe))
-+		return -EINVAL;
-+
-+	/*
-+	 * If the pipeline has already been started, it is guaranteed to be
-+	 * valid, so just increase the start count.
-+	 */
- 	if (pipe->start_count) {
- 		pipe->start_count++;
- 		return 0;
+ #include <media/media-device.h> /* for media_set_bus_info() */
+@@ -3102,6 +3103,21 @@ static int check_array_args(unsigned int cmd, void *parg, size_t *array_size,
+ 		ret = 1;
+ 		break;
  	}
- 
--	ret = media_graph_walk_init(&pipe->graph, mdev);
-+	/*
-+	 * Populate the pipeline. This populates the media_pipeline pads list
-+	 * with media_pipeline_pad instances for each pad found during graph
-+	 * walk.
-+	 */
-+	ret = media_pipeline_populate(pipe, entity->pads);
- 	if (ret)
- 		return ret;
- 
--	media_graph_walk_start(&pipe->graph, entity);
-+	/*
-+	 * Now that all the pads in the pipeline have been gathered, perform
-+	 * the validation steps.
-+	 */
- 
--	while ((entity = media_graph_walk_next(graph))) {
--		DECLARE_BITMAP(active, MEDIA_ENTITY_MAX_PADS);
--		DECLARE_BITMAP(has_no_links, MEDIA_ENTITY_MAX_PADS);
-+	list_for_each_entry(ppad, &pipe->pads, list) {
-+		struct media_pad *pad = ppad->pad;
-+		struct media_entity *entity = pad->entity;
-+		bool has_enabled_link = false;
-+		bool has_link = false;
-+		struct media_link *link;
- 
--		if (entity->pipe && entity->pipe != pipe) {
--			pr_err("Pipe active for %s. Can't start for %s\n",
--				entity->name,
--				entity_err->name);
-+		dev_dbg(mdev->dev, "Validating pad '%s':%u\n", pad->entity->name,
-+			pad->index);
 +
-+		/*
-+		 * 1. Ensure that the pad doesn't already belong to a different
-+		 * pipeline.
-+		 */
-+		if (pad->pipe) {
-+			dev_dbg(mdev->dev, "Failed to start pipeline: pad '%s':%u busy\n",
-+				pad->entity->name, pad->index);
- 			ret = -EBUSY;
- 			goto error;
- 		}
- 
--		/* Already streaming --- no need to check. */
--		if (entity->pipe)
--			continue;
--
--		entity->pipe = pipe;
--
--		if (!entity->ops || !entity->ops->link_validate)
--			continue;
--
--		bitmap_zero(active, entity->num_pads);
--		bitmap_fill(has_no_links, entity->num_pads);
--
-+		/*
-+		 * 2. Validate all active links whose sink is the current pad.
-+		 * Validation of the source pads is performed in the context of
-+		 * the connected sink pad to avoid duplicating checks.
-+		 */
- 		list_for_each_entry(link, &entity->links, list) {
--			struct media_pad *pad = link->sink->entity == entity
--						? link->sink : link->source;
-+			/* Skip links unrelated to the current pad. */
-+			if (link->sink != pad && link->source != pad)
-+				continue;
- 
--			/* Mark that a pad is connected by a link. */
--			bitmap_clear(has_no_links, pad->index, 1);
-+			/* Record if the pad has links and enabled links. */
-+			if (link->flags & MEDIA_LNK_FL_ENABLED)
-+				has_enabled_link = true;
-+			has_link = true;
- 
- 			/*
--			 * Pads that either do not need to connect or
--			 * are connected through an enabled link are
--			 * fine.
-+			 * Validate the link if it's enabled and has the
-+			 * current pad as its sink.
- 			 */
--			if (!(pad->flags & MEDIA_PAD_FL_MUST_CONNECT) ||
--			    link->flags & MEDIA_LNK_FL_ENABLED)
--				bitmap_set(active, pad->index, 1);
-+			if (!(link->flags & MEDIA_LNK_FL_ENABLED))
-+				continue;
- 
--			/*
--			 * Link validation will only take place for
--			 * sink ends of the link that are enabled.
--			 */
--			if (link->sink != pad ||
--			    !(link->flags & MEDIA_LNK_FL_ENABLED))
-+			if (link->sink != pad)
-+				continue;
++	case VIDIOC_SUBDEV_G_ROUTING:
++	case VIDIOC_SUBDEV_S_ROUTING: {
++		struct v4l2_subdev_routing *routing = parg;
 +
-+			if (!entity->ops || !entity->ops->link_validate)
- 				continue;
- 
- 			ret = entity->ops->link_validate(link);
--			if (ret < 0 && ret != -ENOIOCTLCMD) {
--				dev_dbg(entity->graph_obj.mdev->dev,
--					"link validation failed for '%s':%u -> '%s':%u, error %d\n",
-+			if (ret) {
-+				dev_dbg(mdev->dev,
-+					"Link '%s':%u -> '%s':%u failed validation: %d\n",
- 					link->source->entity->name,
- 					link->source->index,
--					entity->name, link->sink->index, ret);
-+					link->sink->entity->name,
-+					link->sink->index, ret);
- 				goto error;
- 			}
--		}
- 
--		/* Either no links or validated links are fine. */
--		bitmap_or(active, active, has_no_links, entity->num_pads);
-+			dev_dbg(mdev->dev,
-+				"Link '%s':%u -> '%s':%u is valid\n",
-+				link->source->entity->name,
-+				link->source->index,
-+				link->sink->entity->name,
-+				link->sink->index);
-+		}
- 
--		if (!bitmap_full(active, entity->num_pads)) {
-+		/*
-+		 * 3. If the pad has the MEDIA_PAD_FL_MUST_CONNECT flag set,
-+		 * ensure that it has either no link or an enabled link.
-+		 */
-+		if ((pad->flags & MEDIA_PAD_FL_MUST_CONNECT) && has_link &&
-+		    !has_enabled_link) {
-+			dev_dbg(mdev->dev,
-+				"Pad '%s':%u must be connected by an enabled link\n",
-+				pad->entity->name, pad->index);
- 			ret = -ENOLINK;
--			dev_dbg(entity->graph_obj.mdev->dev,
--				"'%s':%u must be connected by an enabled link\n",
--				entity->name,
--				(unsigned)find_first_zero_bit(
--					active, entity->num_pads));
- 			goto error;
- 		}
++		if (routing->num_routes > 256)
++			return -EINVAL;
 +
-+		/* Validation passed, store the pipe pointer in the pad. */
-+		pad->pipe = pipe;
++		*user_ptr = u64_to_user_ptr(routing->routes);
++		*kernel_ptr = (void **)&routing->routes;
++		*array_size = sizeof(struct v4l2_subdev_route)
++			    * routing->num_routes;
++		ret = 1;
++		break;
++	}
  	}
- 
- 	pipe->start_count++;
-@@ -512,20 +851,15 @@ __must_check int __media_pipeline_start(struct media_entity *entity,
- 	 * Link validation on graph failed. We revert what we did and
- 	 * return the error.
- 	 */
--	media_graph_walk_start(graph, entity_err);
- 
--	while ((entity_err = media_graph_walk_next(graph))) {
--		entity_err->pipe = NULL;
--
--		/*
--		 * We haven't started entities further than this so we quit
--		 * here.
--		 */
--		if (entity_err == entity)
-+	list_for_each_entry(err_ppad, &pipe->pads, list) {
-+		if (err_ppad == ppad)
- 			break;
-+
-+		err_ppad->pad->pipe = NULL;
- 	}
- 
--	media_graph_walk_cleanup(graph);
-+	media_pipeline_cleanup(pipe);
  
  	return ret;
- }
-@@ -546,8 +880,8 @@ EXPORT_SYMBOL_GPL(media_pipeline_start);
- 
- void __media_pipeline_stop(struct media_entity *entity)
- {
--	struct media_graph *graph = &entity->pipe->graph;
--	struct media_pipeline *pipe = entity->pipe;
-+	struct media_pipeline *pipe = entity->pads->pipe;
-+	struct media_pipeline_pad *ppad;
- 
+@@ -3365,8 +3381,15 @@ video_usercopy(struct file *file, unsigned int orig_cmd, unsigned long arg,
  	/*
- 	 * If the following check fails, the driver has performed an
-@@ -559,12 +893,10 @@ void __media_pipeline_stop(struct media_entity *entity)
- 	if (--pipe->start_count)
- 		return;
+ 	 * Some ioctls can return an error, but still have valid
+ 	 * results that must be returned.
++	 *
++	 * FIXME: subdev IOCTLS are partially handled here and partially in
++	 * v4l2-subdev.c and the 'always_copy' flag can only be set for IOCTLS
++	 * defined here as part of the 'v4l2_ioctls' array. As
++	 * VIDIOC_SUBDEV_G_ROUTING needs to return results to applications even
++	 * in case of failure, but it is not defined here as part of the
++	 * 'v4l2_ioctls' array, insert an ad-hoc check to address that.
+ 	 */
+-	if (err < 0 && !always_copy)
++	if (err < 0 && !always_copy && cmd != VIDIOC_SUBDEV_G_ROUTING)
+ 		goto out;
  
--	media_graph_walk_start(graph, entity);
--
--	while ((entity = media_graph_walk_next(graph)))
--		entity->pipe = NULL;
-+	list_for_each_entry(ppad, &pipe->pads, list)
-+		ppad->pad->pipe = NULL;
+ out_array_args:
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index 90826b956693..7badd693f36c 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -23,6 +23,12 @@
+ #include <media/v4l2-fh.h>
+ #include <media/v4l2-event.h>
  
--	media_graph_walk_cleanup(graph);
-+	media_pipeline_cleanup(pipe);
- 
- }
- EXPORT_SYMBOL_GPL(__media_pipeline_stop);
-@@ -882,7 +1214,7 @@ int __media_entity_setup_link(struct media_link *link, u32 flags)
++/*
++ * Maximum stream ID is 63 for now, as we use u64 bitmask to represent a set
++ * of streams.
++ */
++#define V4L2_SUBDEV_MAX_STREAM_ID 63
++
+ #if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
+ static int subdev_fh_init(struct v4l2_subdev_fh *fh, struct v4l2_subdev *sd)
  {
- 	const u32 mask = MEDIA_LNK_FL_ENABLED;
- 	struct media_device *mdev;
--	struct media_entity *source, *sink;
-+	struct media_pad *source, *sink;
- 	int ret = -EBUSY;
+@@ -417,6 +423,10 @@ subdev_ioctl_get_state(struct v4l2_subdev *sd, struct v4l2_subdev_fh *subdev_fh,
+ 	case VIDIOC_SUBDEV_S_SELECTION:
+ 		which = ((struct v4l2_subdev_selection *)arg)->which;
+ 		break;
++	case VIDIOC_SUBDEV_G_ROUTING:
++	case VIDIOC_SUBDEV_S_ROUTING:
++		which = ((struct v4l2_subdev_routing *)arg)->which;
++		break;
+ 	}
  
- 	if (link == NULL)
-@@ -898,12 +1230,11 @@ int __media_entity_setup_link(struct media_link *link, u32 flags)
- 	if (link->flags == flags)
- 		return 0;
+ 	return which == V4L2_SUBDEV_FORMAT_TRY ?
+@@ -732,6 +742,78 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
+ 	case VIDIOC_SUBDEV_QUERYSTD:
+ 		return v4l2_subdev_call(sd, video, querystd, arg);
  
--	source = link->source->entity;
--	sink = link->sink->entity;
-+	source = link->source;
-+	sink = link->sink;
++	case VIDIOC_SUBDEV_G_ROUTING: {
++		struct v4l2_subdev_routing *routing = arg;
++		struct v4l2_subdev_krouting *krouting;
++
++		if (!(sd->flags & V4L2_SUBDEV_FL_STREAMS))
++			return -ENOIOCTLCMD;
++
++		memset(routing->reserved, 0, sizeof(routing->reserved));
++
++		krouting = &state->routing;
++
++		if (routing->num_routes < krouting->num_routes) {
++			routing->num_routes = krouting->num_routes;
++			return -ENOSPC;
++		}
++
++		memcpy((struct v4l2_subdev_route *)(uintptr_t)routing->routes,
++		       krouting->routes,
++		       krouting->num_routes * sizeof(*krouting->routes));
++		routing->num_routes = krouting->num_routes;
++
++		return 0;
++	}
++
++	case VIDIOC_SUBDEV_S_ROUTING: {
++		struct v4l2_subdev_routing *routing = arg;
++		struct v4l2_subdev_route *routes =
++			(struct v4l2_subdev_route *)(uintptr_t)routing->routes;
++		struct v4l2_subdev_krouting krouting = {};
++		unsigned int i;
++
++		if (!(sd->flags & V4L2_SUBDEV_FL_STREAMS))
++			return -ENOIOCTLCMD;
++
++		if (routing->which != V4L2_SUBDEV_FORMAT_TRY && ro_subdev)
++			return -EPERM;
++
++		memset(routing->reserved, 0, sizeof(routing->reserved));
++
++		for (i = 0; i < routing->num_routes; ++i) {
++			const struct v4l2_subdev_route *route = &routes[i];
++			const struct media_pad *pads = sd->entity.pads;
++
++			if (route->sink_stream > V4L2_SUBDEV_MAX_STREAM_ID ||
++			    route->source_stream > V4L2_SUBDEV_MAX_STREAM_ID)
++				return -EINVAL;
++
++			/* Do not check sink pad for source routes */
++			if (!(route->flags & V4L2_SUBDEV_ROUTE_FL_SOURCE)) {
++				if (route->sink_pad >= sd->entity.num_pads)
++					return -EINVAL;
++
++				if (!(pads[route->sink_pad].flags &
++				      MEDIA_PAD_FL_SINK))
++					return -EINVAL;
++			}
++
++			if (route->source_pad >= sd->entity.num_pads)
++				return -EINVAL;
++
++			if (!(pads[route->source_pad].flags &
++			      MEDIA_PAD_FL_SOURCE))
++				return -EINVAL;
++		}
++
++		krouting.num_routes = routing->num_routes;
++		krouting.routes = routes;
++
++		return v4l2_subdev_call(sd, pad, set_routing, state,
++					routing->which, &krouting);
++	}
++
+ 	default:
+ 		return v4l2_subdev_call(sd, core, ioctl, cmd, arg);
+ 	}
+@@ -1015,6 +1097,7 @@ void __v4l2_subdev_state_free(struct v4l2_subdev_state *state)
  
- 	if (!(link->flags & MEDIA_LNK_FL_DYNAMIC) &&
--	    (media_entity_is_streaming(source) ||
--	     media_entity_is_streaming(sink)))
-+	    (media_pad_is_streaming(source) || media_pad_is_streaming(sink)))
- 		return -EBUSY;
+ 	mutex_destroy(&state->_lock);
  
- 	mdev = source->graph_obj.mdev;
-@@ -1011,7 +1342,7 @@ EXPORT_SYMBOL_GPL(media_entity_get_fwnode_pad);
- 
- struct media_pipeline *media_entity_pipeline(struct media_entity *entity)
- {
--	return entity->pipe;
-+	return entity->pads->pipe;
++	kfree(state->routing.routes);
+ 	kvfree(state->pads);
+ 	kfree(state);
  }
- EXPORT_SYMBOL_GPL(media_entity_pipeline);
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index 56735dfbb6b5..a683d911e44c 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -691,12 +691,26 @@ struct v4l2_subdev_pad_config {
+ 	struct v4l2_rect try_compose;
+ };
  
-diff --git a/include/media/media-entity.h b/include/media/media-entity.h
-index 13a882a7839c..c50c3980201e 100644
---- a/include/media/media-entity.h
-+++ b/include/media/media-entity.h
-@@ -99,12 +99,32 @@ struct media_graph {
++/**
++ * struct v4l2_subdev_krouting - subdev routing table
++ *
++ * @num_routes: number of routes
++ * @routes: &struct v4l2_subdev_route
++ *
++ * This structure contains the routing table for a subdev.
++ */
++struct v4l2_subdev_krouting {
++	unsigned int num_routes;
++	struct v4l2_subdev_route *routes;
++};
++
  /**
-  * struct media_pipeline - Media pipeline related information
+  * struct v4l2_subdev_state - Used for storing subdev state information.
   *
-+ * @mdev:		The media device the pipeline is part of
-+ * @pads:		List of media_pipeline_pad
-  * @start_count:	Media pipeline start - stop count
-- * @graph:		Media graph walk during pipeline start / stop
+  * @_lock: default for 'lock'
+  * @lock: mutex for the state. May be replaced by the user.
+  * @pads: &struct v4l2_subdev_pad_config array
++ * @routing: routing table for the subdev
+  *
+  * This structure only needs to be passed to the pad op if the 'which' field
+  * of the main argument is set to %V4L2_SUBDEV_FORMAT_TRY. For
+@@ -707,6 +721,7 @@ struct v4l2_subdev_state {
+ 	struct mutex _lock;
+ 	struct mutex *lock;
+ 	struct v4l2_subdev_pad_config *pads;
++	struct v4l2_subdev_krouting routing;
+ };
+ 
+ /**
+@@ -759,6 +774,9 @@ struct v4l2_subdev_state {
+  *		     this operation as close as possible to stream on time. The
+  *		     operation shall fail if the pad index it has been called on
+  *		     is not valid or in case of unrecoverable failures.
++ *
++ * @set_routing: enable or disable data connection routes described in the
++ *		 subdevice routing table.
   */
- struct media_pipeline {
-+	struct media_device *mdev;
-+	struct list_head pads;
- 	int start_count;
--	struct media_graph graph;
+ struct v4l2_subdev_pad_ops {
+ 	int (*init_cfg)(struct v4l2_subdev *sd,
+@@ -801,6 +819,10 @@ struct v4l2_subdev_pad_ops {
+ 			      struct v4l2_mbus_frame_desc *fd);
+ 	int (*get_mbus_config)(struct v4l2_subdev *sd, unsigned int pad,
+ 			       struct v4l2_mbus_config *config);
++	int (*set_routing)(struct v4l2_subdev *sd,
++			   struct v4l2_subdev_state *state,
++			   enum v4l2_subdev_format_whence which,
++			   struct v4l2_subdev_krouting *route);
+ };
+ 
+ /**
+diff --git a/include/uapi/linux/v4l2-subdev.h b/include/uapi/linux/v4l2-subdev.h
+index 89af27f50a41..ae393f9f17c1 100644
+--- a/include/uapi/linux/v4l2-subdev.h
++++ b/include/uapi/linux/v4l2-subdev.h
+@@ -191,6 +191,61 @@ struct v4l2_subdev_capability {
+ /* The v4l2 sub-device supports routing and multiplexed streams. */
+ #define V4L2_SUBDEV_CAP_STREAMS			0x00000002
+ 
++/*
++ * Is the route active? An active route will start when streaming is enabled
++ * on a video node.
++ */
++#define V4L2_SUBDEV_ROUTE_FL_ACTIVE		_BITUL(0)
++
++/*
++ * Is the route immutable, i.e. can it be activated and inactivated?
++ * Set by the driver.
++ */
++#define V4L2_SUBDEV_ROUTE_FL_IMMUTABLE		_BITUL(1)
++
++/*
++ * Is the route a source endpoint? A source endpoint route refers to a stream
++ * generated internally by the subdevice (usually a sensor), and thus there
++ * is no sink-side endpoint for the route. The sink_pad and sink_stream
++ * fields are unused.
++ * Set by the driver.
++ */
++#define V4L2_SUBDEV_ROUTE_FL_SOURCE		_BITUL(2)
++
++/**
++ * struct v4l2_subdev_route - A route inside a subdev
++ *
++ * @sink_pad: the sink pad index
++ * @sink_stream: the sink stream identifier
++ * @source_pad: the source pad index
++ * @source_stream: the source stream identifier
++ * @flags: route flags V4L2_SUBDEV_ROUTE_FL_*
++ * @reserved: drivers and applications must zero this array
++ */
++struct v4l2_subdev_route {
++	__u32 sink_pad;
++	__u32 sink_stream;
++	__u32 source_pad;
++	__u32 source_stream;
++	__u32 flags;
++	__u32 reserved[5];
 +};
 +
 +/**
-+ * struct media_pipeline_pad - A pad part of a media pipeline
++ * struct v4l2_subdev_routing - Subdev routing information
 + *
-+ * @list:		Entry in the media_pad pads list
-+ * @pipe:		The media_pipeline that the pad is part of
-+ * @pad:		The media pad
-+ *
-+ * This structure associate a pad with a media pipeline. Instances of
-+ * media_pipeline_pad are created by media_pipeline_start() when it builds the
-+ * pipeline, and stored in the &media_pad.pads list. media_pipeline_stop()
-+ * removes the entries from the list and deletes them.
++ * @which: configuration type (from enum v4l2_subdev_format_whence)
++ * @num_routes: the total number of routes in the routes array
++ * @routes: pointer to the routes array
++ * @reserved: drivers and applications must zero this array
 + */
-+struct media_pipeline_pad {
-+	struct list_head list;
-+	struct media_pipeline *pipe;
-+	struct media_pad *pad;
- };
- 
- /**
-@@ -186,6 +206,8 @@ enum media_pad_signal_type {
-  * @flags:	Pad flags, as defined in
-  *		:ref:`include/uapi/linux/media.h <media_header>`
-  *		(seek for ``MEDIA_PAD_FL_*``)
-+ * @pipe:	Pipeline this pad belongs to. Use media_entity_pipeline() to
-+ *		access this field.
-  */
- struct media_pad {
- 	struct media_gobj graph_obj;	/* must be first field in struct */
-@@ -193,6 +215,12 @@ struct media_pad {
- 	u16 index;
- 	enum media_pad_signal_type sig_type;
- 	unsigned long flags;
++struct v4l2_subdev_routing {
++	__u32 which;
++	__u32 num_routes;
++	__u64 routes;
++	__u32 reserved[6];
++};
 +
-+	/*
-+	 * The fields below are private, and should only be accessed via
-+	 * appropriate functions.
-+	 */
-+	struct media_pipeline *pipe;
- };
+ /* Backwards compatibility define --- to be removed */
+ #define v4l2_subdev_edid v4l2_edid
  
- /**
-@@ -277,7 +305,6 @@ enum media_entity_type {
-  * @links:	List of data links.
-  * @ops:	Entity operations.
-  * @use_count:	Use count for the entity.
-- * @pipe:	Pipeline this entity belongs to.
-  * @info:	Union with devnode information.  Kept just for backward
-  *		compatibility.
-  * @info.dev:	Contains device major and minor info.
-@@ -313,8 +340,6 @@ struct media_entity {
- 
- 	int use_count;
- 
--	struct media_pipeline *pipe;
--
- 	union {
- 		struct {
- 			u32 major;
-@@ -879,6 +904,18 @@ struct media_link *media_entity_find_link(struct media_pad *source,
-  */
- struct media_pad *media_entity_remote_pad(const struct media_pad *pad);
- 
-+/**
-+ * media_pad_is_streaming - Test if a pad is part of a streaming pipeline
-+ * @pad: The pad
-+ *
-+ * Return: True if the pad is part of a pipeline started with the
-+ * media_pipeline_start() function, false otherwise.
-+ */
-+static inline bool media_pad_is_streaming(const struct media_pad *pad)
-+{
-+	return pad->pipe;
-+}
-+
- /**
-  * media_entity_is_streaming - Test if an entity is part of a streaming pipeline
-  * @entity: The entity
-@@ -888,7 +925,14 @@ struct media_pad *media_entity_remote_pad(const struct media_pad *pad);
-  */
- static inline bool media_entity_is_streaming(const struct media_entity *entity)
- {
--	return entity->pipe;
-+	struct media_pad *pad;
-+
-+	media_entity_for_each_pad(entity, pad) {
-+		if (media_pad_is_streaming(pad))
-+			return true;
-+	}
-+
-+	return false;
- }
- 
- /**
+@@ -206,6 +261,8 @@ struct v4l2_subdev_capability {
+ #define VIDIOC_SUBDEV_S_CROP			_IOWR('V', 60, struct v4l2_subdev_crop)
+ #define VIDIOC_SUBDEV_G_SELECTION		_IOWR('V', 61, struct v4l2_subdev_selection)
+ #define VIDIOC_SUBDEV_S_SELECTION		_IOWR('V', 62, struct v4l2_subdev_selection)
++#define VIDIOC_SUBDEV_G_ROUTING			_IOWR('V', 38, struct v4l2_subdev_routing)
++#define VIDIOC_SUBDEV_S_ROUTING			_IOWR('V', 39, struct v4l2_subdev_routing)
+ /* The following ioctls are identical to the ioctls in videodev2.h */
+ #define VIDIOC_SUBDEV_G_STD			_IOR('V', 23, v4l2_std_id)
+ #define VIDIOC_SUBDEV_S_STD			_IOW('V', 24, v4l2_std_id)
 -- 
 2.34.1
 
