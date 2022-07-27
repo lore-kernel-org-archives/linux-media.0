@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C5A4C19F29
-	for <linux-media@archiver.kernel.org>; Wed, 27 Jul 2022 10:37:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D32A0C04A68
+	for <linux-media@archiver.kernel.org>; Wed, 27 Jul 2022 10:37:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231607AbiG0KhC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 Jul 2022 06:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39992 "EHLO
+        id S231872AbiG0KhD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Jul 2022 06:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbiG0KhA (ORCPT
+        with ESMTP id S231680AbiG0KhC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 27 Jul 2022 06:37:00 -0400
+        Wed, 27 Jul 2022 06:37:02 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21FC422D8
-        for <linux-media@vger.kernel.org>; Wed, 27 Jul 2022 03:36:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D230F422D8
+        for <linux-media@vger.kernel.org>; Wed, 27 Jul 2022 03:37:01 -0700 (PDT)
 Received: from deskari.lan (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5ECCD835;
-        Wed, 27 Jul 2022 12:36:56 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C7FD0AD0;
+        Wed, 27 Jul 2022 12:36:57 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1658918216;
-        bh=FmvaPbyH3XdTWbZH+lfl++qBf2Tbw6qhMTZt7iirmv8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FvZcXGGefz0EP1l60zpECzA6dYUGxOCSdHGYfoz1ug7so2QAoQ55Xuzl+pYvdz1J3
-         5Pxg4Ow6biy29nrpwI9FotlDJHRZ2gekB92zGxhCQQ1dyhknnNLNwWM3rV48c91o8N
-         XMwdjlpbwtQ4Yo00iBQdGm0t1l6yfrDw142FivxY=
+        s=mail; t=1658918218;
+        bh=SMh/Ywx0RD4hXosrD6b8wkVNPqnMqhOFEz2o75ymdgM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=sNSu+XDWjQhEm4yYqfDn95vCJsYhVJ0lpmKBvFTRppm4S1jtEEfqAitXoG5r+9lkk
+         Sm1dJwsuA6Mha3p5xPyjRqbfTkj35Kv1z5SLFwYoiLESWq344kEE7y96CYAJhitIBw
+         zGVFG2ZAEltkm3WleJXKT9A4dJc/S/PGdzpYoiWc=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -36,146 +36,131 @@ To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Kishon Vijay Abraham <kishon@ti.com>,
         satish.nagireddy@getcruise.com, Tomasz Figa <tfiga@chromium.org>
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v12 00/30] v4l: routing and streams support
-Date:   Wed, 27 Jul 2022 13:36:09 +0300
-Message-Id: <20220727103639.581567-1-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v12 02/30] media: mc: entity: Add iterator helper for entity pads
+Date:   Wed, 27 Jul 2022 13:36:11 +0300
+Message-Id: <20220727103639.581567-3-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220727103639.581567-1-tomi.valkeinen@ideasonboard.com>
+References: <20220727103639.581567-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+From: Jacopo Mondi <jacopo+renesas@jmondi.org>
 
-This is v12 of the streams series. The v11 can be found from:
+Add an iterator helper to easily cycle through all pads in an entity and
+use it in media-entity and media-device code where appropriate.
 
-https://lore.kernel.org/all/20220301161156.1119557-1-tomi.valkeinen@ideasonboard.com/
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+---
+ drivers/media/mc/mc-device.c | 13 ++++++-------
+ drivers/media/mc/mc-entity.c | 11 ++++++-----
+ include/media/media-entity.h | 12 ++++++++++++
+ 3 files changed, 24 insertions(+), 12 deletions(-)
 
-My work branch with additional drivers can be found from:
-
-git://git.kernel.org/pub/scm/linux/kernel/git/tomba/linux.git streams/work-v12
-
-And there's also the v4l-utils series v2 to add support to v4l2-ctl and
-media-ctl:
-
-https://lore.kernel.org/all/20220714132116.132498-1-tomi.valkeinen@ideasonboard.com/
-
-Changes in v12:
-
-- Rebased on top of upstream (media graph walk changes, subdev active
-  state changes)
-
-- V4L2_SUBDEV_FL_MULTIPLEXED renamed to V4L2_SUBDEV_FL_STREAMS
-
-- V4L2_SUBDEV_CAP_MPLEXED renamed to V4L2_SUBDEV_CAP_STREAMS
-
-- Limit Stream ID number to max 63
-
-- Added v4l2_subdev_state_get_stream_crop() and
-  v4l2_subdev_state_get_stream_compose()
-
-- Use BIT_ULL() instead of BIT() for 64bit masks.
-
-- Some documentation improvements
-
-- All the patches related to modifying the graph walk have been dropped
-  and there is a new implementation of the pipeline construction in
-  __media_pipeline_start.
-
-- The change which made media_pipeline_start() take a pad instead of an
-  entity has been dropped.
-
-- New pipeline start/stop functions, media_pipeline_alloc_start() &
-  media_pipeline_stop_free()
-
-There are still open discussion items wrt. the uAPI. I will post a mail
-in reply to this cover letter about those items.
-
- Tomi
-
-Jacopo Mondi (3):
-  media: mc: entity: Add iterator helper for entity pads
-  media: Documentation: Add GS_ROUTING documentation
-  media: subdev: Add for_each_active_route() macro
-
-Laurent Pinchart (10):
-  media: mc: entity: Merge media_entity_enum_init and
-    __media_entity_enum_init
-  media: mc: entity: Move media_entity_get_fwnode_pad() out of graph
-    walk section
-  media: mc: entity: Add media_entity_pipeline() to access the media
-    pipeline
-  media: mc: entity: Add has_route entity operation and
-    media_entity_has_route() helper
-  media: mc: entity: Rewrite media_pipeline_start() to support routes
-  media: subdev: Add [GS]_ROUTING subdev ioctls and operations
-  media: subdev: add v4l2_subdev_routing_validate() helper
-  media: v4l2-subdev: Add v4l2_subdev_state_xlate_streams() helper
-  media: v4l2-subdev: Add subdev .(enable|disable)_streams() operations
-  media: v4l2-subdev: Add v4l2_subdev_s_stream_helper() function
-
-Sakari Ailus (1):
-  media: Add stream to frame descriptor
-
-Tomi Valkeinen (16):
-  media: Documentation: mc: add definitions for stream and pipeline
-  media: mc: entity: Rename streaming_count -> start_count
-  media: mc: entity: add media_pipeline_alloc_start &
-    media_pipeline_stop_free
-  media: add V4L2_SUBDEV_FL_STREAMS
-  media: add V4L2_SUBDEV_CAP_MPLEXED
-  media: subdev: add v4l2_subdev_has_route()
-  media: subdev: add v4l2_subdev_set_routing helper()
-  media: Documentation: add multiplexed streams documentation
-  media: subdev: add stream based configuration
-  media: subdev: use streams in v4l2_subdev_link_validate()
-  media: subdev: add "opposite" stream helper funcs
-  media: subdev: add streams to v4l2_subdev_get_fmt() helper function
-  media: subdev: add v4l2_subdev_set_routing_with_fmt() helper
-  media: subdev: use for_each_active_route() in
-    v4l2_subdev_init_stream_configs()
-  media: subdev: use for_each_active_route() in
-    v4l2_link_validate_get_streams()
-  media: subdev: increase V4L2_FRAME_DESC_ENTRY_MAX to 8
-
- .clang-format                                 |    1 +
- Documentation/driver-api/media/mc-core.rst    |   19 +-
- .../driver-api/media/v4l2-subdev.rst          |    8 +
- .../userspace-api/media/v4l/dev-subdev.rst    |  175 +++
- .../userspace-api/media/v4l/user-func.rst     |    1 +
- .../v4l/vidioc-subdev-enum-frame-interval.rst |    5 +-
- .../v4l/vidioc-subdev-enum-frame-size.rst     |    5 +-
- .../v4l/vidioc-subdev-enum-mbus-code.rst      |    5 +-
- .../media/v4l/vidioc-subdev-g-crop.rst        |    5 +-
- .../media/v4l/vidioc-subdev-g-fmt.rst         |    5 +-
- .../v4l/vidioc-subdev-g-frame-interval.rst    |    5 +-
- .../media/v4l/vidioc-subdev-g-routing.rst     |  150 +++
- .../media/v4l/vidioc-subdev-g-selection.rst   |    5 +-
- drivers/media/mc/mc-device.c                  |   13 +-
- drivers/media/mc/mc-entity.c                  |  646 +++++++++--
- .../platform/renesas/rcar-vin/rcar-core.c     |    5 +-
- .../platform/renesas/rcar-vin/rcar-dma.c      |    2 +-
- .../platform/rockchip/rkisp1/rkisp1-capture.c |    4 +-
- drivers/media/platform/ti/omap3isp/isp.c      |    4 +-
- drivers/media/platform/ti/omap3isp/ispvideo.c |    3 +-
- drivers/media/platform/ti/omap3isp/ispvideo.h |   11 +-
- drivers/media/platform/xilinx/xilinx-dma.c    |    3 +-
- drivers/media/platform/xilinx/xilinx-dma.h    |    7 +-
- drivers/media/v4l2-core/v4l2-ioctl.c          |   25 +-
- drivers/media/v4l2-core/v4l2-subdev.c         | 1033 ++++++++++++++++-
- drivers/staging/media/imx/imx-media-utils.c   |    2 +-
- drivers/staging/media/omap4iss/iss.c          |    4 +-
- drivers/staging/media/omap4iss/iss_video.c    |    3 +-
- drivers/staging/media/omap4iss/iss_video.h    |   11 +-
- include/media/media-device.h                  |   15 -
- include/media/media-entity.h                  |  130 ++-
- include/media/v4l2-subdev.h                   |  381 +++++-
- include/uapi/linux/v4l2-subdev.h              |   88 +-
- 33 files changed, 2559 insertions(+), 220 deletions(-)
- create mode 100644 Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
-
+diff --git a/drivers/media/mc/mc-device.c b/drivers/media/mc/mc-device.c
+index b8176a3b76d3..25020d58eb06 100644
+--- a/drivers/media/mc/mc-device.c
++++ b/drivers/media/mc/mc-device.c
+@@ -581,7 +581,7 @@ static void __media_device_unregister_entity(struct media_entity *entity)
+ 	struct media_device *mdev = entity->graph_obj.mdev;
+ 	struct media_link *link, *tmp;
+ 	struct media_interface *intf;
+-	unsigned int i;
++	struct media_pad *iter;
+ 
+ 	ida_free(&mdev->entity_internal_idx, entity->internal_idx);
+ 
+@@ -597,8 +597,8 @@ static void __media_device_unregister_entity(struct media_entity *entity)
+ 	__media_entity_remove_links(entity);
+ 
+ 	/* Remove all pads that belong to this entity */
+-	for (i = 0; i < entity->num_pads; i++)
+-		media_gobj_destroy(&entity->pads[i].graph_obj);
++	media_entity_for_each_pad(entity, iter)
++		media_gobj_destroy(&iter->graph_obj);
+ 
+ 	/* Remove the entity */
+ 	media_gobj_destroy(&entity->graph_obj);
+@@ -610,7 +610,7 @@ int __must_check media_device_register_entity(struct media_device *mdev,
+ 					      struct media_entity *entity)
+ {
+ 	struct media_entity_notify *notify, *next;
+-	unsigned int i;
++	struct media_pad *iter;
+ 	int ret;
+ 
+ 	if (entity->function == MEDIA_ENT_F_V4L2_SUBDEV_UNKNOWN ||
+@@ -639,9 +639,8 @@ int __must_check media_device_register_entity(struct media_device *mdev,
+ 	media_gobj_create(mdev, MEDIA_GRAPH_ENTITY, &entity->graph_obj);
+ 
+ 	/* Initialize objects at the pads */
+-	for (i = 0; i < entity->num_pads; i++)
+-		media_gobj_create(mdev, MEDIA_GRAPH_PAD,
+-			       &entity->pads[i].graph_obj);
++	media_entity_for_each_pad(entity, iter)
++		media_gobj_create(mdev, MEDIA_GRAPH_PAD, &iter->graph_obj);
+ 
+ 	/* invoke entity_notify callbacks */
+ 	list_for_each_entry_safe(notify, next, &mdev->entity_notify, list)
+diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+index 11f5207f73aa..35a1aa218c51 100644
+--- a/drivers/media/mc/mc-entity.c
++++ b/drivers/media/mc/mc-entity.c
+@@ -192,7 +192,8 @@ int media_entity_pads_init(struct media_entity *entity, u16 num_pads,
+ 			   struct media_pad *pads)
+ {
+ 	struct media_device *mdev = entity->graph_obj.mdev;
+-	unsigned int i;
++	struct media_pad *iter;
++	unsigned int i = 0;
+ 
+ 	if (num_pads >= MEDIA_ENTITY_MAX_PADS)
+ 		return -E2BIG;
+@@ -203,12 +204,12 @@ int media_entity_pads_init(struct media_entity *entity, u16 num_pads,
+ 	if (mdev)
+ 		mutex_lock(&mdev->graph_mutex);
+ 
+-	for (i = 0; i < num_pads; i++) {
+-		pads[i].entity = entity;
+-		pads[i].index = i;
++	media_entity_for_each_pad(entity, iter) {
++		iter->entity = entity;
++		iter->index = i++;
+ 		if (mdev)
+ 			media_gobj_create(mdev, MEDIA_GRAPH_PAD,
+-					&entity->pads[i].graph_obj);
++					&iter->graph_obj);
+ 	}
+ 
+ 	if (mdev)
+diff --git a/include/media/media-entity.h b/include/media/media-entity.h
+index a9a1c0ec5d1c..6b6fea6a713e 100644
+--- a/include/media/media-entity.h
++++ b/include/media/media-entity.h
+@@ -315,6 +315,18 @@ struct media_entity {
+ 	} info;
+ };
+ 
++/**
++ * media_entity_for_each_pad - Iterate on all pads in an entity
++ * @entity: The entity the pads belong to
++ * @iter: The iterator pad
++ *
++ * Iterate on all pads in a media entity.
++ */
++#define media_entity_for_each_pad(entity, iter)			\
++	for (iter = (entity)->pads;				\
++	     iter < &(entity)->pads[(entity)->num_pads];	\
++	     ++iter)
++
+ /**
+  * struct media_interface - A media interface graph object.
+  *
 -- 
 2.34.1
 
