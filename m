@@ -2,132 +2,67 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D68A3C19F29
-	for <linux-media@archiver.kernel.org>; Thu, 28 Jul 2022 13:02:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD3BEC04A68
+	for <linux-media@archiver.kernel.org>; Thu, 28 Jul 2022 13:05:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238844AbiG1NCz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Jul 2022 09:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41340 "EHLO
+        id S238621AbiG1NFX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Jul 2022 09:05:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238837AbiG1NCw (ORCPT
+        with ESMTP id S237806AbiG1NFV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Jul 2022 09:02:52 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EEA746D81;
-        Thu, 28 Jul 2022 06:02:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1659013370; x=1690549370;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=CGHyMONZ2wrKJUIuy4ZNGqJusCkm0oXUk4BvqHTAOwU=;
-  b=MNTBc7Fbln2ij6NNxC7QJ5oUlU4mYb8Ctl61cp+hWhYZTeOf8wBpvXKf
-   muWAo5EiFXIiSdNDArfglqHT1x8u3hJYV3B9bZ6eqAig5OcRDOBoi8ZVr
-   F+U04F90c5dO1DmVxL/+HwzS6U252CLfS9jXqiFuO2G38GTWfnYnMrEZp
-   a2V4tWYPIUcYncbXPwOnE9XZ3en02jf93upFZs7/vW1+I7AT4x3BDi1MZ
-   ncs3GAhpamRl0DGjitRVDTD6SM1qvpwFuWmkMph7VR7hmX/T7UHSjUU/6
-   Qk0Y235Ddgr+hW8rqK5Kcs1eoRtyzulbrxA0he2Ck6shTISSmDEe4GIs7
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,198,1654552800"; 
-   d="scan'208";a="25321375"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 28 Jul 2022 15:02:44 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Thu, 28 Jul 2022 15:02:44 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Thu, 28 Jul 2022 15:02:44 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1659013364; x=1690549364;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=CGHyMONZ2wrKJUIuy4ZNGqJusCkm0oXUk4BvqHTAOwU=;
-  b=Ka5mZJhxRXR4V9p/9rpGyYb8Gww8tSV0sSccCKFuQR/lr/BR71t0s9Jn
-   KqLsMsYfixhjR3I9/t6bnmaQCP2nE9xx5p1oOxtCbDk7kbG9f23UY4M6U
-   WvMYJ8Yd+23iUgFzxem+1xwsEIEtMZoJN4amGgx5mTQvntpYaYbipql4L
-   T8Hn01vXuwAvKm9kZH3xqPwJ3j2340V26CRNpZwJC56tOw2o8zfgJZOLl
-   NkXbWRkNnDHBwhOheI/tF8EzJWjoLvYHojWboQNA2HieCTPaSifNk4NyI
-   n377YMLZ3/+FoRq/mkSu+Vb+8q4xJWJ0L302WK9kPWIkByTzx9GKPyAwF
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,198,1654552800"; 
-   d="scan'208";a="25321374"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 28 Jul 2022 15:02:44 +0200
-Received: from steina-w.tq-net.de (unknown [10.123.49.12])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 3B440280072;
-        Thu, 28 Jul 2022 15:02:44 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     "Paul J . Murphy" <paul.j.murphy@intel.com>,
-        Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
+        Thu, 28 Jul 2022 09:05:21 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E92E41D11;
+        Thu, 28 Jul 2022 06:05:20 -0700 (PDT)
+Received: from pyrite.rasen.tech (h175-177-042-159.catv02.itscom.jp [175.177.42.159])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B245556D;
+        Thu, 28 Jul 2022 15:05:15 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1659013518;
+        bh=JEmOw0Vyk+XDbX3u+/p8dfRLUILJaGP7HXoicnF/1D0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DXcIO3rXXjb+r77sLtxhZqRYaIiJLPkJywLCFq4zEEqY73p+RYLB+VduC48swjD94
+         rB+NU3cR0WDeP9uExu1Pfzkc5vwsMuVb7b0/cn9Ez3eTm/c9huFOF3Sn+Yr65jHYuE
+         7zwF7PIi6hZepO8bVQNWHE651GRwdJY+1UqqFNoM=
+From:   Paul Elder <paul.elder@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     Paul Elder <paul.elder@ideasonboard.com>,
+        Dafna Hirschfeld <dafna@fastmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@iki.fi>
-Subject: [PATCH v4 6/7] media: i2c: ov9282: Set v4l2 subdev name according to sensor model
-Date:   Thu, 28 Jul 2022 15:02:36 +0200
-Message-Id: <20220728130237.3396663-7-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220728130237.3396663-1-alexander.stein@ew.tq-group.com>
-References: <20220728130237.3396663-1-alexander.stein@ew.tq-group.com>
+        Heiko Stuebner <heiko@sntech.de>,
+        laurent.pinchart@ideasonboard.com,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] media: rkisp1: Add support for UYVY output
+Date:   Thu, 28 Jul 2022 22:05:03 +0900
+Message-Id: <20220728130505.2077842-1-paul.elder@ideasonboard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-To distinguish ov9281 & ov9282 the name has to be explicitly set.
-Provide a fixed string using platform data.
+This series adds support for UYVY as an output format in the rkisp1
+driver, for devices that support it. Notably, the i.MX8MP supports it,
+while the rk3399 does not.
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
----
-Changes in v4:
-* Replaced v4l2_i2c_subdev_set_name with device_get_match_data and added
-  platform data containing the sensor name
+This series is based on branch pinchartl/v5.19/isp/1 [1] at this repo [2].
 
- drivers/media/i2c/ov9282.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+[1] https://gitlab.com/ideasonboard/nxp/linux/-/commits/pinchartl/v5.19/isp/1
+[2] https://gitlab.com/ideasonboard/nxp/linux
 
-diff --git a/drivers/media/i2c/ov9282.c b/drivers/media/i2c/ov9282.c
-index 352dbe21a902..f79bdfa821e8 100644
---- a/drivers/media/i2c/ov9282.c
-+++ b/drivers/media/i2c/ov9282.c
-@@ -1037,6 +1037,7 @@ static int ov9282_get_regulators(struct ov9282 *ov9282)
- static int ov9282_probe(struct i2c_client *client)
- {
- 	struct ov9282 *ov9282;
-+	const char *sensor_name;
- 	int ret;
- 
- 	ov9282 = devm_kzalloc(&client->dev, sizeof(*ov9282), GFP_KERNEL);
-@@ -1047,6 +1048,12 @@ static int ov9282_probe(struct i2c_client *client)
- 
- 	/* Initialize subdev */
- 	v4l2_i2c_subdev_init(&ov9282->sd, client, &ov9282_subdev_ops);
-+	sensor_name = device_get_match_data(ov9282->dev);
-+	if (!sensor_name) {
-+		dev_err(ov9282->dev, "Sensor name is missing");
-+		return ret;
-+	}
-+	v4l2_i2c_subdev_set_name(&ov9282->sd, client, sensor_name, NULL);
- 
- 	ret = ov9282_parse_hw_config(ov9282);
- 	if (ret) {
-@@ -1152,8 +1159,8 @@ static const struct dev_pm_ops ov9282_pm_ops = {
- };
- 
- static const struct of_device_id ov9282_of_match[] = {
--	{ .compatible = "ovti,ov9281" },
--	{ .compatible = "ovti,ov9282" },
-+	{ .compatible = "ovti,ov9281", .data = "ov9281" },
-+	{ .compatible = "ovti,ov9282", .data = "ov9282" },
- 	{ }
- };
- 
+
+Paul Elder (2):
+  media: rkisp1: Add YC swap capability
+  media: rkisp1: Add UYVY as an output format
+
+ .../platform/rockchip/rkisp1/rkisp1-capture.c | 67 +++++++++++++++++--
+ .../platform/rockchip/rkisp1/rkisp1-common.h  |  2 +
+ .../platform/rockchip/rkisp1/rkisp1-dev.c     |  3 +-
+ 3 files changed, 64 insertions(+), 8 deletions(-)
+
 -- 
-2.25.1
+2.30.2
 
