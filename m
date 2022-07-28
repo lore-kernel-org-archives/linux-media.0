@@ -2,34 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5D7CC25B07
-	for <linux-media@archiver.kernel.org>; Thu, 28 Jul 2022 13:02:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4116CC3F6B0
+	for <linux-media@archiver.kernel.org>; Thu, 28 Jul 2022 13:02:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238871AbiG1NCz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Jul 2022 09:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
+        id S238876AbiG1NCy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Jul 2022 09:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238857AbiG1NCx (ORCPT
+        with ESMTP id S238655AbiG1NCv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Jul 2022 09:02:53 -0400
+        Thu, 28 Jul 2022 09:02:51 -0400
 Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6CE120AD;
-        Thu, 28 Jul 2022 06:02:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CDE40BF8;
+        Thu, 28 Jul 2022 06:02:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1659013372; x=1690549372;
+  t=1659013370; x=1690549370;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=NHRBrcQiwCmbc51NNix9lvaPQkQhf1coVWgrxlz9mFg=;
-  b=d46QorvCaDjixQw1SpQ9gKVU+OtcKQkwW5byG87EwmcJLPIrlJtEgMCp
-   9KJFbQMtMWqgKytKX+VYsSLIz3QvHAQMzN7kbFMdD6mUm2i27C2KWYZyT
-   gBpniuWKG5VgoCvnRSKyAYYlvR90g8I3vJgIml2RNCdo8rHemto2TvkCK
-   AmOQoWNuPqdW9WQC6PEIW/PRM30hzNa49/ttT+RCFB3u9yYThlCAtTm9C
-   GsuVNiY6TBONxBA2X1m4j9K/UtUMThdjeGpHAF2qitnAcdQBsAKP9poPC
-   u3X72jOjOWa4FkV9y5qwuA9SF1hObPgFPIx8cILCgStqQbOZ9tD6CvJSw
+  bh=eUVoM8eILSRtiJWPnfEMpUTwJ5DdzPLtU9RvqhESVtc=;
+  b=mgKv2/jhBf+FU4p2CY0+/kj+H9M49yi3LWTIUlLK7CI4ngQuu/3LsYub
+   2cWVCMI6Aq4jS2Zfk/WSh/wNESoVVFhbAp6LMLD+9Iv2LssIfQ8iyABcn
+   Yrkjhbbo042LTTfOGeYWsqCvN/vkSJJaShn1w1pHdR1sFKGxHxaPjvAEe
+   ZnAxb8leT7/CUO3N20z5gLtfAdOvwRzLceCrGwqSJ13UxoGcJFt8LBeL8
+   IZcv6rk7SKU/RqChR48Kgs1+Xmq7DUzXStJKZfopUBnZ/uRweBQgF3Tjo
+   tedN3fZnp9gw56VJMnz5muH6suQc0fnsoffnWqvD6eolYuS7QwO45KiMS
    A==;
 X-IronPort-AV: E=Sophos;i="5.93,198,1654552800"; 
-   d="scan'208";a="25321377"
+   d="scan'208";a="25321373"
 Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
   by mx1-pgp.tq-group.com with ESMTP; 28 Jul 2022 15:02:44 +0200
 Received: from mx1.tq-group.com ([192.168.6.7])
@@ -42,22 +42,22 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   t=1659013364; x=1690549364;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=NHRBrcQiwCmbc51NNix9lvaPQkQhf1coVWgrxlz9mFg=;
-  b=IDko2Xa5etYpWovoMgHydnHY77roCRTfJiG+mKo+p6cFadFDF0McFCz9
-   aiOsLwbRPAcTIzEAzWQLRob8Q3hbWBelx30vqH3VO9XfgHQgCY7BuFqCf
-   CS8KDVPMoaXP9hfMkd9pR8oAQe8YSaUg7S9O7yQl8HMbOiFAV+YXTvBjs
-   ZHSxNWGsFilrF8VgH6BAbCs+UvlgPVu1MmlOn2jSBKZ1uQIl8bALxdOWC
-   WSGJIwSpCKfOf6zrOrCyWWdd8g+D1XViwNGDTBK4ZizJWmoJfg2sx2eJ0
-   gkmm4dBWNlmcegwOkgUUyGLV0AXYhi6twayRXcZMUg2rNwDK7O5bqjQl4
-   g==;
+  bh=eUVoM8eILSRtiJWPnfEMpUTwJ5DdzPLtU9RvqhESVtc=;
+  b=YOdtc5+BX264kYfXAYnzbuyq2GV6rqWe+yY23UlhE3vQRMbRE6cGp3jG
+   fEH6KDyefpBciSMKxDZbbf98LEVtIHVfN6qYCkNjqOf7WrB9TBcSR+E6u
+   bTyf7bQhbH/vIfqSncOeZARvgMH5Izf05EWLuhfDkiD9lg2lbzcOF8Ty0
+   DGOjE4Hicvd91EQI3e/winH0YErI83sGSSMszDFr0JZNhKpkU2MgRGzlS
+   5AVl5IxF0jqjD/rlj1ow+OA0A4AAf8Sox1WjjEfRjJp9g9BQYokHUx1NN
+   WiMxQjKiAeujXAqH0/kEeagnElPDekSThnaTSMxxdl4hj4Ici4QL+gvUM
+   A==;
 X-IronPort-AV: E=Sophos;i="5.93,198,1654552800"; 
-   d="scan'208";a="25321376"
+   d="scan'208";a="25321372"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
   by mx1.tq-group.com with ESMTP; 28 Jul 2022 15:02:44 +0200
 Received: from steina-w.tq-net.de (unknown [10.123.49.12])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 63F9E280056;
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 138A2280056;
         Thu, 28 Jul 2022 15:02:44 +0200 (CEST)
 From:   Alexander Stein <alexander.stein@ew.tq-group.com>
 To:     "Paul J . Murphy" <paul.j.murphy@intel.com>,
@@ -68,9 +68,9 @@ To:     "Paul J . Murphy" <paul.j.murphy@intel.com>,
 Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
         linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         Sakari Ailus <sakari.ailus@iki.fi>
-Subject: [PATCH v4 7/7] media: i2c: ov9282: Add regmap support
-Date:   Thu, 28 Jul 2022 15:02:37 +0200
-Message-Id: <20220728130237.3396663-8-alexander.stein@ew.tq-group.com>
+Subject: [PATCH v4 5/7] media: i2c: ov9282: Add regulator support
+Date:   Thu, 28 Jul 2022 15:02:35 +0200
+Message-Id: <20220728130237.3396663-6-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220728130237.3396663-1-alexander.stein@ew.tq-group.com>
 References: <20220728130237.3396663-1-alexander.stein@ew.tq-group.com>
@@ -80,139 +80,109 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Register values apparently are stored in MSB format, hence the manual
-swap when reading/writing.
-regmap's endianness swapping is not applied when reading with val_bits = 8.
+Need in case the sensors is supplied by a switchable regulator.
 
 Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 ---
-Changes in v4:
-* Removed superfluous line break
-* Shortened variable initialization
-
- drivers/media/i2c/ov9282.c | 57 +++++++++++++++++++-------------------
- 1 file changed, 28 insertions(+), 29 deletions(-)
+ drivers/media/i2c/ov9282.c | 39 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
 diff --git a/drivers/media/i2c/ov9282.c b/drivers/media/i2c/ov9282.c
-index f79bdfa821e8..e9e595df187b 100644
+index c8d83a29f9bb..352dbe21a902 100644
 --- a/drivers/media/i2c/ov9282.c
 +++ b/drivers/media/i2c/ov9282.c
-@@ -10,6 +10,7 @@
- #include <linux/delay.h>
+@@ -11,6 +11,7 @@
  #include <linux/i2c.h>
  #include <linux/module.h>
-+#include <linux/regmap.h>
  #include <linux/pm_runtime.h>
- #include <linux/regulator/consumer.h>
++#include <linux/regulator/consumer.h>
  
-@@ -113,6 +114,7 @@ struct ov9282_mode {
- /**
-  * struct ov9282 - ov9282 sensor device structure
-  * @dev: Pointer to generic device
-+ * @regmap: sensor's regmap
-  * @sd: V4L2 sub-device
-  * @pad: Media pad. Only one pad supported
-  * @reset_gpio: Sensor reset gpio
-@@ -131,6 +133,7 @@ struct ov9282_mode {
-  */
- struct ov9282 {
- 	struct device *dev;
-+	struct regmap *regmap;
- 	struct v4l2_subdev sd;
- 	struct media_pad pad;
- 	struct gpio_desc *reset_gpio;
-@@ -151,6 +154,11 @@ struct ov9282 {
- 	bool streaming;
- };
+ #include <media/v4l2-ctrls.h>
+ #include <media/v4l2-fwnode.h>
+@@ -55,6 +56,14 @@
+ #define OV9282_REG_MIN		0x00
+ #define OV9282_REG_MAX		0xfffff
  
-+static const struct regmap_config ov9282_regmap_config = {
-+	.reg_bits = 16,
-+	.val_bits = 8,
++static const char * const ov9282_supply_names[] = {
++	"avdd",		/* Analog power */
++	"dovdd",	/* Digital I/O power */
++	"dvdd",		/* Digital core power */
 +};
 +
- static const s64 link_freq[] = {
- 	OV9282_LINK_FREQ,
- };
-@@ -297,35 +305,20 @@ static inline struct ov9282 *to_ov9282(struct v4l2_subdev *subdev)
-  */
- static int ov9282_read_reg(struct ov9282 *ov9282, u16 reg, u32 len, u32 *val)
- {
--	struct i2c_client *client = v4l2_get_subdevdata(&ov9282->sd);
--	struct i2c_msg msgs[2] = {0};
--	u8 addr_buf[2] = {0};
--	u8 data_buf[4] = {0};
-+	u8 data[4] = {0};
- 	int ret;
++#define OV9282_NUM_SUPPLIES ARRAY_SIZE(ov9282_supply_names)
++
+ /**
+  * struct ov9282_reg - ov9282 sensor register
+  * @address: Register address
+@@ -126,6 +135,7 @@ struct ov9282 {
+ 	struct media_pad pad;
+ 	struct gpio_desc *reset_gpio;
+ 	struct clk *inclk;
++	struct regulator_bulk_data supplies[OV9282_NUM_SUPPLIES];
+ 	struct v4l2_ctrl_handler ctrl_handler;
+ 	struct v4l2_ctrl *link_freq_ctrl;
+ 	struct v4l2_ctrl *pclk_ctrl;
+@@ -882,10 +892,19 @@ static int ov9282_power_on(struct device *dev)
+ 		goto error_reset;
+ 	}
  
- 	if (WARN_ON(len > 4))
- 		return -EINVAL;
++	ret = regulator_bulk_enable(ARRAY_SIZE(ov9282->supplies),
++				    ov9282->supplies);
++	if (ret) {
++		dev_err(dev, "Failed to enable regulators\n");
++		goto disable_clk;
++	}
++
+ 	usleep_range(400, 600);
  
--	put_unaligned_be16(reg, addr_buf);
--
--	/* Write register address */
--	msgs[0].addr = client->addr;
--	msgs[0].flags = 0;
--	msgs[0].len = ARRAY_SIZE(addr_buf);
--	msgs[0].buf = addr_buf;
--
--	/* Read data from register */
--	msgs[1].addr = client->addr;
--	msgs[1].flags = I2C_M_RD;
--	msgs[1].len = len;
--	msgs[1].buf = &data_buf[4 - len];
--
--	ret = i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
--	if (ret != ARRAY_SIZE(msgs))
--		return -EIO;
--
--	*val = get_unaligned_be32(data_buf);
-+	ret = regmap_raw_read(ov9282->regmap, reg, &data[4 - len], len);
-+	if (ret < 0) {
-+		dev_err(ov9282->dev, "read from 0x%04x failed: %d\n",
-+			reg, ret);
+ 	return 0;
+ 
++disable_clk:
++	clk_disable_unprepare(ov9282->inclk);
+ error_reset:
+ 	gpiod_set_value_cansleep(ov9282->reset_gpio, 0);
+ 
+@@ -903,6 +922,8 @@ static int ov9282_power_off(struct device *dev)
+ 	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+ 	struct ov9282 *ov9282 = to_ov9282(sd);
+ 
++	regulator_bulk_disable(ARRAY_SIZE(ov9282->supplies), ov9282->supplies);
++
+ 	gpiod_set_value_cansleep(ov9282->reset_gpio, 0);
+ 
+ 	clk_disable_unprepare(ov9282->inclk);
+@@ -995,6 +1016,18 @@ static int ov9282_init_controls(struct ov9282 *ov9282)
+ 	return 0;
+ }
+ 
++static int ov9282_get_regulators(struct ov9282 *ov9282)
++{
++	unsigned int i;
++
++	for (i = 0; i < ARRAY_SIZE(ov9282->supplies); i++)
++		ov9282->supplies[i].supply = ov9282_supply_names[i];
++
++	return devm_regulator_bulk_get(ov9282->dev,
++				       ARRAY_SIZE(ov9282->supplies),
++				       ov9282->supplies);
++}
++
+ /**
+  * ov9282_probe() - I2C client device binding
+  * @client: pointer to i2c client device
+@@ -1021,6 +1054,12 @@ static int ov9282_probe(struct i2c_client *client)
+ 		return ret;
+ 	}
+ 
++	ret = ov9282_get_regulators(ov9282);
++	if (ret) {
++		dev_err(&client->dev, "Failed to get power regulators\n");
 +		return ret;
 +	}
- 
-+	*val = get_unaligned_be32(data);
- 	return 0;
- }
- 
-@@ -340,16 +333,17 @@ static int ov9282_read_reg(struct ov9282 *ov9282, u16 reg, u32 len, u32 *val)
-  */
- static int ov9282_write_reg(struct ov9282 *ov9282, u16 reg, u32 len, u32 val)
- {
--	struct i2c_client *client = v4l2_get_subdevdata(&ov9282->sd);
--	u8 buf[6] = {0};
-+	u8 data[4] = {0};
-+	int ret;
- 
- 	if (WARN_ON(len > 4))
- 		return -EINVAL;
- 
--	put_unaligned_be16(reg, buf);
--	put_unaligned_be32(val << (8 * (4 - len)), buf + 2);
--	if (i2c_master_send(client, buf, len + 2) != len + 2)
--		return -EIO;
-+	put_unaligned_be32(val << (8 * (4 - len)), data);
 +
-+	ret = regmap_raw_write(ov9282->regmap, reg, data, len);
-+	if (ret < 0)
-+		dev_err(ov9282->dev, "write to 0x%04x failed: %d\n", reg, ret);
+ 	mutex_init(&ov9282->mutex);
  
- 	return 0;
- }
-@@ -1045,6 +1039,11 @@ static int ov9282_probe(struct i2c_client *client)
- 		return -ENOMEM;
- 
- 	ov9282->dev = &client->dev;
-+	ov9282->regmap = devm_regmap_init_i2c(client, &ov9282_regmap_config);
-+	if (IS_ERR(ov9282->regmap)) {
-+		dev_err(ov9282->dev, "Unable to initialize I2C\n");
-+		return -ENODEV;
-+	}
- 
- 	/* Initialize subdev */
- 	v4l2_i2c_subdev_init(&ov9282->sd, client, &ov9282_subdev_ops);
+ 	ret = ov9282_power_on(ov9282->dev);
 -- 
 2.25.1
 
