@@ -2,259 +2,130 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F5B2C19F2A
-	for <linux-media@archiver.kernel.org>; Fri, 29 Jul 2022 06:27:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CF12C19F2B
+	for <linux-media@archiver.kernel.org>; Fri, 29 Jul 2022 07:07:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234300AbiG2G1A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 Jul 2022 02:27:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
+        id S234663AbiG2HHq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 Jul 2022 03:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234866AbiG2G0x (ORCPT
+        with ESMTP id S232555AbiG2HHp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 Jul 2022 02:26:53 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906E779EF6;
-        Thu, 28 Jul 2022 23:26:47 -0700 (PDT)
-X-UUID: 6fb365780c0848079a526ad18a690b1e-20220729
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:58a1931e-0a30-4eb1-a10b-9fa3cd9a2cb6,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:0
-X-CID-META: VersionHash:0f94e32,CLOUDID:fa38b9cf-a6cf-4fb6-be1b-c60094821ca2,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 6fb365780c0848079a526ad18a690b1e-20220729
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 890765878; Fri, 29 Jul 2022 14:26:42 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 29 Jul 2022 14:26:41 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Fri, 29 Jul 2022 14:26:39 +0800
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Fri, 29 Jul 2022 03:07:45 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14375BC31;
+        Fri, 29 Jul 2022 00:07:44 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (89-27-103-169.bb.dnainternet.fi [89.27.103.169])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id C72721B002C9;
+        Fri, 29 Jul 2022 10:07:39 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1659078460;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GLHwRWD8w65TnHLEVtLlTx9NDMVLYEkO0F6RFMeR+IY=;
+        b=G7yoncEnfQRIJmkGrI/xeC0bYXWSDyhdcq92q6ArEcrB/1jkZMw8m8TnMT6VGyGQ/kPfjt
+        qe6b3Hy2MDqc66R4mv2rzPWcaz+SKDNswExH6jdfHguRAx07kAceosTrrS5BvdSDFoox6f
+        JLgEvSZSLl0N9qYJRHilQ2xGELSO2Jblr9hRAt2nBn/ESs3zdREg9Ad71jBoVR8d4u24YE
+        a4iGrkV4Xyv+Y8P69/8+wqlNptiE9MwkBliZ9lTwG1934/hDDa4Z2LQ3gNYR7PFLTq4sXu
+        FFmylPlyWBo6crJ2lOzCy5BL6TF/9t0rkjqiJCM6DQVgCUpzyMg9o1BYroFbaQ==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 43A97634C97;
+        Fri, 29 Jul 2022 10:07:36 +0300 (EEST)
+Date:   Fri, 29 Jul 2022 10:07:36 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        "Paul J . Murphy" <paul.j.murphy@intel.com>,
+        Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <nicolas.dufresne@collabora.com>, <wenst@chromium.org>,
-        kyrie wu <kyrie.wu@mediatek.com>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
-        <maoguang.meng@mediatek.com>, irui wang <irui.wang@mediatek.com>
-Subject: [V12,6/7] mtk-jpegenc: add output pic reorder interface
-Date:   Fri, 29 Jul 2022 14:26:29 +0800
-Message-ID: <20220729062630.5592-7-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220729062630.5592-1-irui.wang@mediatek.com>
-References: <20220729062630.5592-1-irui.wang@mediatek.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH v4 3/7] media: i2c: ov9282: Add ov9281 compatible
+Message-ID: <YuOHOEUk+znzump5@valkosipuli.retiisi.eu>
+References: <20220728130237.3396663-1-alexander.stein@ew.tq-group.com>
+ <20220728130237.3396663-4-alexander.stein@ew.tq-group.com>
+ <4e89e55b-9312-5525-974b-0a1dbe0b3dd1@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4e89e55b-9312-5525-974b-0a1dbe0b3dd1@linaro.org>
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1659078460; a=rsa-sha256;
+        cv=none;
+        b=P+1gUNu7FHb44zhrppmS/d+DVSoNMGESY8AknH3gxUVgPALpG5FmpbUkdkJlM8ipaS2e0B
+        90YrWqp4eX1rQsp1Fd1qFzvPJgfBGCty/7s8lYU4JmWFZeJSP0zIHxTzegIlG/Qnbgz57Q
+        jGadX+jqgjvfPQIws/IsqOUOg6ST4YtrtYc1bByfFb6e5fKFwIh7uqcSDhCk/WtRRC+uTL
+        Hewq3BPtopuUAbTOAf9OWz8qfcXxAohOXJoFi8+mKUnUINvig0q2KN7T5P39iJqnpp0H/f
+        rBqNwdWM+Tk/pZGL4zgdbFHnDHYy0I9AFFWNSZMcvRay+9ywp0hljO2dgK38GQ==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1659078460;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GLHwRWD8w65TnHLEVtLlTx9NDMVLYEkO0F6RFMeR+IY=;
+        b=A7iFlK8IZS/vdjvYkAFOcJQVEhAThTpHGD2nQDzWgIrun97HXAqZI9DmR0oqLlib7NhD0L
+        4TBudi+MPru008sq5PkF837n88/9Q0fYDBb91PIqpTuAZASZHfo0+0ynkEBp57lvWrTOBT
+        f0Ca6U2ocPLUKggFLIMrf5Fom3whSJ7WtJzCVLZ8eyM6NsG9bhk56LsbqoEcXpEoxxgajz
+        xm0f1vvNUB2wdvWakE/QLH4zjEVfqeZZpsRqmcJDMMnQGwsmLwy3IPX6mAYIAE5QGUFAXJ
+        NB6C/2Q+ELvR+6Esm94uSo8MPaXyJDxKE4KaYp2cn5z9TToDzqJJpCMPAewWbA==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: kyrie wu <kyrie.wu@mediatek.com>
+Hi Krzysztof,
 
-There are two HWs in mt8195. Since the two HWs run
-in parallel, it is necessary to reorder the output images
-to ensure that the order is consistent with the input images.
+On Thu, Jul 28, 2022 at 03:13:11PM +0200, Krzysztof Kozlowski wrote:
+> On 28/07/2022 15:02, Alexander Stein wrote:
+> > According to product brief they are identical from software point of view.
+> > Differences are a different chief ray angle (CRA) and the package.
+> > 
+> > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > Acked-by: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
+> > ---
+> >  drivers/media/i2c/ov9282.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/media/i2c/ov9282.c b/drivers/media/i2c/ov9282.c
+> > index 8a252bf3b59f..c8d83a29f9bb 100644
+> > --- a/drivers/media/i2c/ov9282.c
+> > +++ b/drivers/media/i2c/ov9282.c
+> > @@ -1113,6 +1113,7 @@ static const struct dev_pm_ops ov9282_pm_ops = {
+> >  };
+> >  
+> >  static const struct of_device_id ov9282_of_match[] = {
+> > +	{ .compatible = "ovti,ov9281" },
+> 
+> The devices seem entirely compatible, so why you add a new compatible
+> and not re-use existing?
+> 
+> The difference in lens does not explain this.
 
-Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
-Signed-off-by: irui wang <irui.wang@mediatek.com>
----
- .../platform/mediatek/jpeg/mtk_jpeg_core.c    | 11 +----
- .../platform/mediatek/jpeg/mtk_jpeg_core.h    | 18 ++++++-
- .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.c  |  1 +
- .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.h  |  3 +-
- .../platform/mediatek/jpeg/mtk_jpeg_enc_hw.c  | 47 ++++++++++++++++++-
- 5 files changed, 67 insertions(+), 13 deletions(-)
+It is typically necessary to know what kind of related hardware can be
+found in the system, beyond just the device's register interface. Apart
+from USB cameras, less integrated cameras require low-level software
+control in which specific device properties are important. In this case it
+could be the lens shading table, among other things.
 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-index 88e3ac098a7c..65beb9ed4884 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-@@ -111,15 +111,6 @@ enum {
- 	MTK_JPEG_BUF_FLAGS_LAST_FRAME		= 1,
- };
- 
--struct mtk_jpeg_src_buf {
--	u32 frame_num;
--	struct vb2_v4l2_buffer b;
--	struct list_head list;
--	struct mtk_jpeg_dec_param dec_param;
--
--	struct mtk_jpeg_ctx *curr_ctx;
--};
--
- static int debug;
- module_param(debug, int, 0644);
- 
-@@ -1377,6 +1368,8 @@ static int mtk_jpeg_open(struct file *file)
- 	if (jpeg->is_jpgenc_multihw)
- 		INIT_WORK(&ctx->jpeg_work, mtk_jpegenc_worker);
- 
-+	INIT_LIST_HEAD(&ctx->dst_done_queue);
-+	spin_lock_init(&ctx->done_queue_lock);
- 	v4l2_fh_init(&ctx->fh, vfd);
- 	file->private_data = &ctx->fh;
- 	v4l2_fh_add(&ctx->fh);
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-index 36bdcd0f1cf9..716a04a1d397 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-@@ -14,10 +14,11 @@
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-device.h>
- #include <media/v4l2-fh.h>
-+#include <media/videobuf2-v4l2.h>
- 
--#define MTK_JPEG_NAME		"mtk-jpeg"
-+#include "mtk_jpeg_dec_hw.h"
- 
--#define MTK_JPEG_COMP_MAX		3
-+#define MTK_JPEG_NAME		"mtk-jpeg"
- 
- #define MTK_JPEG_FMT_FLAG_OUTPUT	BIT(0)
- #define MTK_JPEG_FMT_FLAG_CAPTURE	BIT(1)
-@@ -75,6 +76,15 @@ struct mtk_jpeg_variant {
- 	u32 cap_q_default_fourcc;
- };
- 
-+struct mtk_jpeg_src_buf {
-+	u32 frame_num;
-+	struct vb2_v4l2_buffer b;
-+	struct list_head list;
-+	struct mtk_jpeg_dec_param dec_param;
-+
-+	struct mtk_jpeg_ctx *curr_ctx;
-+};
-+
- enum mtk_jpeg_hw_state {
- 	MTK_JPEG_HW_IDLE = 0,
- 	MTK_JPEG_HW_BUSY = 1,
-@@ -221,6 +231,10 @@ struct mtk_jpeg_ctx {
- 
- 	struct work_struct jpeg_work;
- 	u32 total_frame_num;
-+	struct list_head dst_done_queue;
-+	/* spinlock protecting the encode done buffer */
-+	spinlock_t done_queue_lock;
-+	u32 last_done_frame_num;
- };
- 
- #endif /* _MTK_JPEG_CORE_H */
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-index afbbfd5d02bc..1e3852295f2f 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-@@ -9,6 +9,7 @@
- #include <linux/kernel.h>
- #include <media/videobuf2-core.h>
- 
-+#include "mtk_jpeg_core.h"
- #include "mtk_jpeg_dec_hw.h"
- 
- #define MTK_JPEG_DUNUM_MASK(val)	(((val) - 1) & 0x3)
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.h b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.h
-index fa0d45fd7c34..87aaa5c9082b 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.h
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.h
-@@ -11,9 +11,10 @@
- 
- #include <media/videobuf2-core.h>
- 
--#include "mtk_jpeg_core.h"
- #include "mtk_jpeg_dec_reg.h"
- 
-+#define MTK_JPEG_COMP_MAX		3
-+
- enum {
- 	MTK_JPEG_DEC_RESULT_EOF_DONE		= 0,
- 	MTK_JPEG_DEC_RESULT_PAUSE		= 1,
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-index f7e40c010ec4..90747908718c 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-@@ -185,6 +185,50 @@ void mtk_jpeg_set_enc_params(struct mtk_jpeg_ctx *ctx,  void __iomem *base)
- }
- EXPORT_SYMBOL_GPL(mtk_jpeg_set_enc_params);
- 
-+static void mtk_jpegenc_put_buf(struct mtk_jpegenc_comp_dev *jpeg)
-+{
-+	struct mtk_jpeg_ctx *ctx;
-+	struct vb2_v4l2_buffer *dst_buffer;
-+	struct list_head *temp_entry;
-+	struct list_head *pos = NULL;
-+	struct mtk_jpeg_src_buf *dst_done_buf, *tmp_dst_done_buf;
-+	unsigned long flags;
-+
-+	ctx = jpeg->hw_param.curr_ctx;
-+	if (!ctx) {
-+		dev_err(jpeg->dev, "comp_jpeg ctx fail !!!\n");
-+		return;
-+	}
-+
-+	dst_buffer = jpeg->hw_param.dst_buffer;
-+	if (!dst_buffer) {
-+		dev_err(jpeg->dev, "comp_jpeg dst_buffer fail !!!\n");
-+		return;
-+	}
-+
-+	dst_done_buf = container_of(dst_buffer,
-+				    struct mtk_jpeg_src_buf, b);
-+
-+	spin_lock_irqsave(&ctx->done_queue_lock, flags);
-+	list_add_tail(&dst_done_buf->list, &ctx->dst_done_queue);
-+	while (!list_empty(&ctx->dst_done_queue) &&
-+	       (pos != &ctx->dst_done_queue)) {
-+		list_for_each_prev_safe(pos, temp_entry, &ctx->dst_done_queue) {
-+			tmp_dst_done_buf = list_entry(pos,
-+						      struct mtk_jpeg_src_buf,
-+						      list);
-+			if (tmp_dst_done_buf->frame_num ==
-+				ctx->last_done_frame_num) {
-+				list_del(&tmp_dst_done_buf->list);
-+				v4l2_m2m_buf_done(&tmp_dst_done_buf->b,
-+						  VB2_BUF_STATE_DONE);
-+				ctx->last_done_frame_num++;
-+			}
-+		}
-+	}
-+	spin_unlock_irqrestore(&ctx->done_queue_lock, flags);
-+}
-+
- static void mtk_jpegenc_timeout_work(struct work_struct *work)
- {
- 	struct delayed_work *dly_work = to_delayed_work(work);
-@@ -207,6 +251,7 @@ static void mtk_jpegenc_timeout_work(struct work_struct *work)
- 	atomic_inc(&master_jpeg->enchw_rdy);
- 	wake_up(&master_jpeg->enc_hw_wq);
- 	v4l2_m2m_buf_done(src_buf, buf_state);
-+	mtk_jpegenc_put_buf(cjpeg);
- }
- 
- static irqreturn_t mtk_jpegenc_hw_irq_handler(int irq, void *priv)
-@@ -238,7 +283,7 @@ static irqreturn_t mtk_jpegenc_hw_irq_handler(int irq, void *priv)
- 	vb2_set_plane_payload(&dst_buf->vb2_buf, 0, result_size);
- 	buf_state = VB2_BUF_STATE_DONE;
- 	v4l2_m2m_buf_done(src_buf, buf_state);
--	v4l2_m2m_buf_done(dst_buf, buf_state);
-+	mtk_jpegenc_put_buf(jpeg);
- 	pm_runtime_put(ctx->jpeg->dev);
- 	clk_disable_unprepare(jpeg->venc_clk.clks->clk);
- 	if (!list_empty(&ctx->fh.m2m_ctx->out_q_ctx.rdy_queue) ||
+	https://www.ovt.com/sensor/ov9282/
+
+Therefore I think adding a specific compatible string for this one is
+justified.
+
+Also cc Laurent.
+
 -- 
-2.18.0
+Kind regards,
 
+Sakari Ailus
