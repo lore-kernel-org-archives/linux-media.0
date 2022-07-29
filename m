@@ -2,120 +2,94 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10F59C00144
-	for <linux-media@archiver.kernel.org>; Fri, 29 Jul 2022 17:02:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BFE8CC3F6B0
+	for <linux-media@archiver.kernel.org>; Fri, 29 Jul 2022 17:07:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238247AbiG2RCE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 Jul 2022 13:02:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49902 "EHLO
+        id S229700AbiG2RHR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 Jul 2022 13:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238186AbiG2RCC (ORCPT
+        with ESMTP id S236684AbiG2RHQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 Jul 2022 13:02:02 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267535C36F
-        for <linux-media@vger.kernel.org>; Fri, 29 Jul 2022 10:02:02 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-3238de26fb1so38865947b3.8
-        for <linux-media@vger.kernel.org>; Fri, 29 Jul 2022 10:02:02 -0700 (PDT)
+        Fri, 29 Jul 2022 13:07:16 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0806E2F6;
+        Fri, 29 Jul 2022 10:07:16 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id q16so4468115pgq.6;
+        Fri, 29 Jul 2022 10:07:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=getcruise.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=hwpIg+MnulsggLQzSIG+0NM0rkaz9Ox4TaytrNEyCYg=;
-        b=VWyt6dcjqXBzho1EscTayG6lDOHmNtNV1t+Hz1I61wSNouD367+DmUQsOXNw73mom4
-         b9dVIDe8/v0BXJp5i32LNSJZM1U5RcFFgAGffu7RvT2IXLFBKlrRnsYxdWH3Ih5raQwt
-         WYxwzhsCUN/gVpQFyIK4M348X9m7Kl7qoRRFEk/GIDtSyUlBn9+ackuRo2QlmJSa6i88
-         3tcQqPBeLxu0wCYEZulw8RPCA3mEOphnzXm1jfPugqkV2CU3co4YrhS0dgTlqo+HWnZN
-         rOh7FlX/qNTLv7E+o4x70ZeyX88kHHmR1jSD+H/x6OJeWpSNmHRPiainOLI1qOLbJw7S
-         dJoA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=xOX9chVYPROOGAwdmaGgZcPW07GxLyOUqTmIVsiyRrY=;
+        b=MRLwlAUouciI2C7C4GlFSSMaiCgUFvFJHEtdHFSFik2hSiv0VP8gL4ZSfprY2hsTK1
+         71DIYxBGrwqXFBScOnqP+VzlVWE/yF7/4yB3mDGe+vThJBq8uPvmws21UEmirDlolpMy
+         x549Jju9p8IU2GkZyiWgwKVdtIHXMUNPMhzRBu+dYou1+wt+08d0lBPCrTdJXwzkiDN6
+         JGHGbeMh9SUdLwzzK3x2hd2GyvGvJjuGYxepwaCRt1WmmePQgRRw+KTKKuRl+7PDrYbw
+         HFD4qHEQTMrxQPUwhb11Op/lv6vtakCbR4692upCeChRxW01QL5PORt1xeQ8tBNUL24N
+         4sXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=hwpIg+MnulsggLQzSIG+0NM0rkaz9Ox4TaytrNEyCYg=;
-        b=WikR74IX18MYDp579hFUe7qXR+Me4INDL/SlLSMf++lsHNHspHO3DbrVSE8h2ZjAvL
-         IkuvgoJKAorQjnxokJnSL8wkEDnPWyeQxDDi825lGu4h+lQ6Oys8pPlJ/4feYZtvYIh1
-         mdHtJRSRSUVSD+OasI1IoFzmmGO18wDIiNba6L65fqYvfRXYLFqYXAGJOexZad0yvR4b
-         SJZTMnWi0nrbCS3p0HVo3rJ5bxc+xm2oxbsKtH9Lokbg5AGpd27ecMnCEZcAtdsxpxLe
-         /Z9abnsRGxJJSSlIDAjtjVaZNzD4d3jJRJ+IrcJ5z/kOtMTcW7T4Fj38927/Bv2Uu4e7
-         VqQg==
-X-Gm-Message-State: ACgBeo1pGOiIxN6BlLBWTe/Ew4tO0fhRMqZq2rXYyWJIo1Va1PW+EsQm
-        Lr1wNgB9KKiRtXAVzaUqPac9n/6xdkfVogueI5PHSQ==
-X-Google-Smtp-Source: AA6agR5SE/kpgluWABBxQIUlg2Hg6h05Ns0nsn0R5mzM197eRd/SbeGzJBVIBylPqaxbqUkReFtcYPsey31+EjLrFA0=
-X-Received: by 2002:a81:6744:0:b0:31f:5850:8a95 with SMTP id
- b65-20020a816744000000b0031f58508a95mr3820033ywc.40.1659114121125; Fri, 29
- Jul 2022 10:02:01 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=xOX9chVYPROOGAwdmaGgZcPW07GxLyOUqTmIVsiyRrY=;
+        b=djydbztGHXHBVun7LQFGeDSv4F8O1hGkLCilgo2P1rnLKapzFXjA7ImEJzMwDDqEWU
+         HdZ+mDcRQ2kfDpBj5WnPmcIoAUnWGHPy7Z+3MNHvbMIZZDlYmD5dJ4rpj+TdHa4xT6fB
+         ner89lx5gywO6XswhAeyB+QL8mmU8mPa9/0WgrSd/snyyJ1wXgVNig3IdejBeXxzQUDp
+         yXwplHUdjXoX5mWb0T5WANTBeluulvcKWiKJYdNS6WdGt8DhHwi2fSA/aW3bdrEUW+4m
+         QI2z2vFo2b8isOE0tz7DEngeYXCwSP65EvzIseKMT52OCiyQ6TvZfGYvMxwSrSageYfE
+         xSZA==
+X-Gm-Message-State: AJIora8yKJl4NJr/lDCdVpN0QHcmg2QSkxUgTJXYOpcRqyouzzZxsXU8
+        JNND5PZFzzdfLpiDMmE2IYc=
+X-Google-Smtp-Source: AGRyM1uGBuQ9vqrdjA1iXWiRUZ+wtLiHx4OPCFlykBcsRNNxwJRC70pXFBsgRPqQ7gjXtfmlRSztjQ==
+X-Received: by 2002:a63:4546:0:b0:41a:5e8f:508a with SMTP id u6-20020a634546000000b0041a5e8f508amr3767050pgk.419.1659114435380;
+        Fri, 29 Jul 2022 10:07:15 -0700 (PDT)
+Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
+        by smtp.gmail.com with ESMTPSA id bg1-20020a056a02010100b00419a6f3c8f5sm2778376pgb.19.2022.07.29.10.07.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jul 2022 10:07:14 -0700 (PDT)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= 
+        <jerome.pouiller@silabs.com>,
+        linaro-mm-sig@lists.linaro.org (moderated list:DMA BUFFER SHARING
+        FRAMEWORK),
+        linux-arm-msm@vger.kernel.org (open list:DRM DRIVER FOR MSM ADRENO GPU),
+        linux-kernel@vger.kernel.org (open list),
+        linux-media@vger.kernel.org (open list:DMA BUFFER SHARING FRAMEWORK),
+        Sean Paul <sean@poorly.run>
+Subject: [PATCH 0/3] dma-buf: map-info support
+Date:   Fri, 29 Jul 2022 10:07:39 -0700
+Message-Id: <20220729170744.1301044-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220727103639.581567-1-tomi.valkeinen@ideasonboard.com>
- <20220727103639.581567-21-tomi.valkeinen@ideasonboard.com>
- <CAG0LG94pP4=ifCqt_swta2Av6hx9uMGizmOpwq_g7zKFtt2G=A@mail.gmail.com> <44c3a308-8755-dcb6-b8c4-dc1c36c724aa@ideasonboard.com>
-In-Reply-To: <44c3a308-8755-dcb6-b8c4-dc1c36c724aa@ideasonboard.com>
-From:   Satish Nagireddy <satish.nagireddy@getcruise.com>
-Date:   Fri, 29 Jul 2022 10:01:50 -0700
-Message-ID: <CAG0LG94zCaA0T1CKGEk556Bzm83E5q3HYdAV-0+3j6CfTEtspw@mail.gmail.com>
-Subject: Re: [EXT] Re: [EXT] [PATCH v12 20/30] media: subdev: add streams to
- v4l2_subdev_get_fmt() helper function
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        niklas.soderlund+renesas@ragnatech.se,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Kishon Vijay Abraham <kishon@ti.com>,
-        Tomasz Figa <tfiga@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 3:30 AM Tomi Valkeinen
-<tomi.valkeinen@ideasonboard.com> wrote:
->
-> On 29/07/2022 12:16, Satish Nagireddy wrote:
-> > Hi Tomi,
-> >
-> > Thanks for the patch.
-> >
-> > On Wed, Jul 27, 2022 at 3:37 AM Tomi Valkeinen
-> > <tomi.valkeinen@ideasonboard.com> wrote:
-> >>
-> >> Add streams support to v4l2_subdev_get_fmt() helper function. Subdev
-> >> drivers that do not need to do anything special in their get_fmt op can
-> >> use this helper directly for v4l2_subdev_pad_ops.get_fmt.
-> >>
-> >> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> >> ---
-> >>   drivers/media/v4l2-core/v4l2-subdev.c | 10 +++++++---
-> >>   1 file changed, 7 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-> >> index 0dd612f09f35..95fd2e07d69f 100644
-> >> --- a/drivers/media/v4l2-core/v4l2-subdev.c
-> >> +++ b/drivers/media/v4l2-core/v4l2-subdev.c
-> >> @@ -1455,10 +1455,14 @@ int v4l2_subdev_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_state *state,
-> >>   {
-> >>          struct v4l2_mbus_framefmt *fmt;
-> >>
-> >> -       if (format->pad >= sd->entity.num_pads)
-> >> -               return -EINVAL;
-> >> +       if (sd->flags & V4L2_SUBDEV_FL_STREAMS)
-> >> +               fmt = v4l2_subdev_state_get_stream_format(state, format->pad,
-> >> +                                                         format->stream);
-> >> +       else if (format->pad < sd->entity.num_pads && format->stream == 0)
-> >> +               fmt = v4l2_subdev_get_pad_format(sd, state, format->pad);
-> >> +       else
-> >> +               fmt = NULL;
-> >
-> > fmt can be initialized to NULL at the declaration, so that the above 2
-> > lines can be removed.
->
-> That is true, but I personally like the above better, as it handles all
-> the cases in the same if-else-sequence.
->
->   Tomi
+From: Rob Clark <robdclark@chromium.org>
 
-Sure.
+See 1/3 for motivation.
 
-- Satish
+Rob Clark (3):
+  dma-buf: Add ioctl to query mmap info
+  drm/prime: Wire up mmap_info support
+  drm/msm/prime: Add mmap_info support
+
+ drivers/dma-buf/dma-buf.c           | 26 ++++++++++++++++++++++++++
+ drivers/gpu/drm/drm_prime.c         | 12 ++++++++++++
+ drivers/gpu/drm/msm/msm_drv.c       |  1 +
+ drivers/gpu/drm/msm/msm_drv.h       |  1 +
+ drivers/gpu/drm/msm/msm_gem_prime.c | 11 +++++++++++
+ include/drm/drm_drv.h               |  7 +++++++
+ include/linux/dma-buf.h             |  7 +++++++
+ include/uapi/linux/dma-buf.h        | 28 ++++++++++++++++++++++++++++
+ 8 files changed, 93 insertions(+)
+
+-- 
+2.36.1
+
