@@ -2,263 +2,233 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F569C3F6B0
-	for <linux-media@archiver.kernel.org>; Fri, 29 Jul 2022 19:57:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E82B2C04A68
+	for <linux-media@archiver.kernel.org>; Sat, 30 Jul 2022 09:19:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238857AbiG2T53 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 Jul 2022 15:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38596 "EHLO
+        id S233936AbiG3JTY convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 30 Jul 2022 05:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232154AbiG2T52 (ORCPT
+        with ESMTP id S233690AbiG3JTV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 Jul 2022 15:57:28 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC5F88747;
-        Fri, 29 Jul 2022 12:57:26 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 568CC6D4;
-        Fri, 29 Jul 2022 21:57:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1659124644;
-        bh=Fnn3BsSY+9Y0ZoK8j2r8OJ5JPOWen6rkhc4Jc5JKggI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t1Lt2uMFpxcd4uIXRIX0TC89Zw3JE8NFq5pMJSoXqbYk7ITBdt3FAJ2peWzbDJIUx
-         q20OXY0NtRlT5NrSfeIFpEJFoCI/Wjjb4XV4f67o1mzQtYuefih16R5KNlBws+HBZC
-         9yObX8+qwjtXDhGDwrj+8SyBq4NgxZNl6tn3UaRo=
-Date:   Fri, 29 Jul 2022 22:57:21 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Xavier Roumegue <xavier.roumegue@oss.nxp.com>, mchehab@kernel.org,
-        stanimir.varbanov@linaro.org, tomi.valkeinen@ideasonboard.com,
-        robh+dt@kernel.org, nicolas@ndufresne.ca,
-        alexander.stein@ew.tq-group.com, ezequiel@vanguardiasur.com.ar,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v8 5/6] media: dw100: Add i.MX8MP dw100 dewarper driver
-Message-ID: <YuQ7oeLLAo9QCt91@pendragon.ideasonboard.com>
-References: <20220715135329.975400-1-xavier.roumegue@oss.nxp.com>
- <20220715135329.975400-6-xavier.roumegue@oss.nxp.com>
- <4f7eb28b-f14e-00bd-b96c-3fe9f12b8deb@xs4all.nl>
- <YuJKSLBvoXEMt1T5@pendragon.ideasonboard.com>
- <75fdb576-0985-c93a-1711-1ccf032d5f29@xs4all.nl>
+        Sat, 30 Jul 2022 05:19:21 -0400
+Received: from www.linuxtv.org (www.linuxtv.org [130.149.80.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C190241985
+        for <linux-media@vger.kernel.org>; Sat, 30 Jul 2022 02:19:18 -0700 (PDT)
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1oHicu-00EAfi-Nt; Sat, 30 Jul 2022 09:19:16 +0000
+Received: from localhost ([127.0.0.1] helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.94.2)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1oHict-0024Xg-El; Sat, 30 Jul 2022 09:19:14 +0000
+Date:   Sat, 30 Jul 2022 09:19:14 +0000 (UTC)
+From:   Jenkins Builder Robot <jenkins@linuxtv.org>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org
+Message-ID: <916340541.0.1659172754798@builder.linuxtv.org>
+In-Reply-To: <1993200093.0.1659086355773@builder.linuxtv.org>
+References: <1993200093.0.1659086355773@builder.linuxtv.org>
+Subject: Build failed in Jenkins: media-build #3975
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <75fdb576-0985-c93a-1711-1ccf032d5f29@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
+X-Jenkins-Job: media-build
+X-Jenkins-Result: FAILURE
+Auto-submitted: auto-generated
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+See <https://builder.linuxtv.org/job/media-build/3975/display/redirect>
 
-On Thu, Jul 28, 2022 at 11:08:27AM +0200, Hans Verkuil wrote:
-> On 7/28/22 10:35, Laurent Pinchart wrote:
-> > On Thu, Jul 28, 2022 at 10:17:32AM +0200, Hans Verkuil wrote:
-> >> On 7/15/22 15:53, Xavier Roumegue wrote:
-> >>> Add a V4L2 mem-to-mem driver for the Vivante DW100 Dewarp Processor IP
-> >>> core found on i.MX8MP SoC.
-> >>>
-> >>> The processor core applies a programmable geometrical transformation on
-> >>> input images to correct distorsion introduced by lenses.
-> >>> The transformation function is exposed as a grid map with 16x16 pixel
-> >>> macroblocks indexed using X, Y vertex coordinates.
-> >>>
-> >>> The dewarping map can be set from application through a dedicated v4l2
-> >>> control. If not set or invalid, the driver computes an identity map
-> >>> prior to starting the processing engine.
-> >>>
-> >>> The driver supports scaling, cropping and pixel format conversion.
-> >>>
-> >>> Signed-off-by: Xavier Roumegue <xavier.roumegue@oss.nxp.com>
-> >>> Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-> >>> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> >>> ---
-> >>>  drivers/media/platform/nxp/Kconfig            |    1 +
-> >>>  drivers/media/platform/nxp/Makefile           |    1 +
-> >>>  drivers/media/platform/nxp/dw100/Kconfig      |   17 +
-> >>>  drivers/media/platform/nxp/dw100/Makefile     |    3 +
-> >>>  drivers/media/platform/nxp/dw100/dw100.c      | 1683 +++++++++++++++++
-> >>>  drivers/media/platform/nxp/dw100/dw100_regs.h |  117 ++
-> >>>  6 files changed, 1822 insertions(+)
-> >>>  create mode 100644 drivers/media/platform/nxp/dw100/Kconfig
-> >>>  create mode 100644 drivers/media/platform/nxp/dw100/Makefile
-> >>>  create mode 100644 drivers/media/platform/nxp/dw100/dw100.c
-> >>>  create mode 100644 drivers/media/platform/nxp/dw100/dw100_regs.h
+Changes:
 
-[snip]
 
-> >>> diff --git a/drivers/media/platform/nxp/dw100/dw100.c b/drivers/media/platform/nxp/dw100/dw100.c
-> >>> new file mode 100644
-> >>> index 000000000000..986ef1c9dfe3
-> >>> --- /dev/null
-> >>> +++ b/drivers/media/platform/nxp/dw100/dw100.c
-> >>> @@ -0,0 +1,1683 @@
+------------------------------------------
+Started by timer
+Running as SYSTEM
+Building remotely on slave2 in workspace <https://builder.linuxtv.org/job/media-build/ws/>
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir <https://builder.linuxtv.org/job/media-build/ws/.git> # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url git://linuxtv.org/media_build.git # timeout=10
+Fetching upstream changes from git://linuxtv.org/media_build.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.30.2'
+ > git fetch --tags --force --progress -- git://linuxtv.org/media_build.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+Checking out Revision 0fe857b86addf382f6fd383948bd7736a3201403 (refs/remotes/origin/master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 0fe857b86addf382f6fd383948bd7736a3201403 # timeout=10
+Commit message: "versions.txt: IMON builds for 4.11 and up only"
+ > git rev-list --no-walk 0fe857b86addf382f6fd383948bd7736a3201403 # timeout=10
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse 0fe857b86addf382f6fd383948bd7736a3201403^{commit} # timeout=10
+The recommended git tool is: NONE
+No credentials specified
+[GitCheckoutListener] Recording commits of 'git git://linuxtv.org/media_build.git'
+[GitCheckoutListener] Found previous build 'media-build #3974' that contains recorded Git commits
+[GitCheckoutListener] -> Starting recording of new commits since '0fe857b'
+[GitCheckoutListener] -> Using head commit '0fe857b' as starting point
+[GitCheckoutListener] -> Git commit decorator could not be created for SCM 'hudson.plugins.git.GitSCM@177f27b9'
+[GitCheckoutListener] -> No new commits found
+[media-build] $ /bin/sh -xe /tmp/jenkins5900635191058166519.sh
++ make distclean
+make -C <https://builder.linuxtv.org/job/media-build/ws/v4l> distclean
+make[1]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+rm -f *~ *.o *.ko .*.o.cmd .*.ko.cmd *.mod.c av7110_firm.h fdump \
+	config-compat.h Module.symvers Module.markers modules.order \
+	*.unsigned .*.ko.unsigned.cmd
+rm -f .version .*.o.flags .*.o.d *.mod.gcno Makefile.media \
+	Kconfig Kconfig.kern .config .config.cmd .myconfig \
+	.kconfig.dep config-mycompat.h
+rm -rf .tmp_versions .tmp*.ver .tmp*.o .*.gcno .cache.mk
+rm -f scripts/lxdialog scripts/kconfig
+make[1]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
++ ./build
+Checking if the needed tools for Debian GNU/Linux 11 (bullseye) are available
+Needed package dependencies are met.
 
-[snip]
+************************************************************
+* This script will download the latest tarball and build it*
+* Assuming that your kernel is compatible with the latest  *
+* drivers. If not, you'll need to add some extra backports,*
+* ./backports/<kernel> directory.                          *
+* It will also update this tree to be sure that all compat *
+* bits are there, to avoid compilation failures            *
+************************************************************
+************************************************************
+* All drivers and build system are under GPLv2 License     *
+* Firmware files are under the license terms found at:     *
+* http://www.linuxtv.org/downloads/firmware/               *
+* Please abort in the next 5 secs if you don't agree with  *
+* the license                                              *
+************************************************************
 
-> >>> +static int dw100_s_ctrl(struct v4l2_ctrl *ctrl)
-> >>> +{
-> >>> +	struct dw100_ctx *ctx =
-> >>> +		container_of(ctrl->handler, struct dw100_ctx, hdl);
-> >>> +
-> >>> +	switch (ctrl->id) {
-> >>> +	case V4L2_CID_DW100_DEWARPING_16x16_VERTEX_MAP:
-> >>> +		ctx->user_map_is_valid = true;
-> >>
-> >> Ah, no. You don't want to do this.
-> >>
-> >> The control should always be valid.
-> > 
-> > This is meant to indicate if the control value has been set after a
-> > S_FMT call. If the resolution changes, the control value isn't valid
-> > anymore.
-> > 
-> > We could change the control value from within the driver in the S_FMT
-> > handler, but frankly that's completely overkill. I'd rather ditch
-> > control support and use a custom ioctl then if the control framework
-> > and/or the API requirements are not well suited for this purpose.
-> 
-> It's a general V4L2 design rule that you shouldn't have invalid values.
-> If changing one parameter (the format in this case) would cause other
-> values to become invalid, then it is the driver that has to fix things
-> so the state is once more consistent.
+Not aborted. It means that the licence was agreed. Proceeding...
 
-The only thing the driver can do is to reset the control to an identity
-map. It seems quite inefficient to do so, compared to creating the map
-when needed, as an identity map if the control hasn't been set since the
-last S_FMT, or from the control value otherwise.
+****************************
+Updating the building system
+****************************
+hint: Pulling without specifying how to reconcile divergent branches is
+hint: discouraged. You can squelch this message by running one of the following
+hint: commands sometime before your next pull:
+hint: 
+hint:   git config pull.rebase false  # merge (the default strategy)
+hint:   git config pull.rebase true   # rebase
+hint:   git config pull.ff only       # fast-forward only
+hint: 
+hint: You can replace "git config" with "git config --global" to set a default
+hint: preference for all repositories. You can also pass --rebase, --no-rebase,
+hint: or --ff-only on the command line to override the configured default per
+hint: invocation.
+From git://linuxtv.org/media_build
+ * branch                      master     -> FETCH_HEAD
+Already up to date.
+make: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+wget http://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5 -O linux-media.tar.bz2.md5.tmp
+--2022-07-30 09:19:09--  http://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5
+Resolving linuxtv.org (linuxtv.org)... 130.149.80.248
+Connecting to linuxtv.org (linuxtv.org)|130.149.80.248|:80... connected.
+HTTP request sent, awaiting response... 301 Moved Permanently
+Location: https://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5 [following]
+--2022-07-30 09:19:09--  https://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5
+Connecting to linuxtv.org (linuxtv.org)|130.149.80.248|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 105 [application/x-bzip2]
+Saving to: ‘linux-media.tar.bz2.md5.tmp’
 
-> Note that v4l2_ctrl_modify_dimensions calls init() already, so adding
-> your own init op that fills it with a sane value doesn't add overhead.
+     0K                                                       100% 83.1M=0s
 
-Right. I would have gone for a custom ioctl, but it's not my driver so I
-don't mind a control :-)
+2022-07-30 09:19:10 (83.1 MB/s) - ‘linux-media.tar.bz2.md5.tmp’ saved [105/105]
 
-> >> See the next comment...
-> >>
-> >>> +		break;
-> >>> +	}
-> >>> +
-> >>> +	return 0;
-> >>> +}
-> >>> +
-> >>> +static const struct v4l2_ctrl_ops dw100_ctrl_ops = {
-> >>> +	.s_ctrl = dw100_s_ctrl,
-> >>> +};
-> >>> +
-> >>> +static const struct v4l2_ctrl_config controls[] = {
-> >>> +	[DW100_CTRL_DEWARPING_MAP] = {
-> >>> +		.ops = &dw100_ctrl_ops,
-> >>
-> >> What you want to do here is set .type_ops as well and override the init
-> >> function.
-> > 
-> > Not a blocker for this, but I think the init function of type_ops is
-> > really ineffecient for large arrays. Something better is needed.
-> 
-> I agree, and after looking at the code I think this is quite easy to do.
-> Instead of initing each element in turn, it would just be called once
-> for the whole array. It's a good optimization.
-> 
-> The main reason that wasn't done before is that arrays were a late addition
-> and are still quite rare and typically are initialized only once. So there
-> was never a real need to optimize the code. But for this it makes sense to
-> do the work.
-> 
-> Let me know if you want me to do this.
-
-Thanks for posting a patch already.
-
-> >> This init function should be used to fill in the initial values for the
-> >> array, which would be just the x/y coordinates of the vertices, i.e. no
-> >> warping.
-> >>
-> >> This will ensure that the contents of the array is always valid.
-> >>
-> >>> +		.id = V4L2_CID_DW100_DEWARPING_16x16_VERTEX_MAP,
-> >>> +		.name = "Look-Up Table",
-> >>
-> >> That's a poor name, I think. How about "Dewarping Vertex Map" or something
-> >> along those lines? That at least explains what it does.
-> >>
-> >>> +		.type = V4L2_CTRL_TYPE_U32,
-> >>> +		.min = 0x00000000,
-> >>> +		.max = 0xffffffff,
-> >>> +		.step = 1,
-> >>> +		.def = 0,
-> >>> +		.dims = { DW100_MAX_LUT_W, DW100_MAX_LUT_H },
-> >>> +	},
-> >>> +};
-
-[snip]
-
-> >>> +static int dw100_s_fmt(struct dw100_ctx *ctx, struct v4l2_format *f)
-> >>> +{
-> >>> +	struct dw100_q_data *q_data;
-> >>> +	struct vb2_queue *vq;
-> >>> +
-> >>> +	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type);
-> >>> +	if (!vq)
-> >>> +		return -EINVAL;
-> >>> +
-> >>> +	q_data = dw100_get_q_data(ctx, f->type);
-> >>> +	if (!q_data)
-> >>> +		return -EINVAL;
-> >>> +
-> >>> +	if (vb2_is_busy(vq)) {
-> >>> +		dev_dbg(&ctx->dw_dev->pdev->dev, "%s queue busy\n", __func__);
-> >>> +		return -EBUSY;
-> >>> +	}
-> >>> +
-> >>> +	q_data->fmt = dw100_find_format(f);
-> >>> +	q_data->pix_fmt = f->fmt.pix_mp;
-> >>> +	q_data->crop.top = 0;
-> >>> +	q_data->crop.left = 0;
-> >>> +	q_data->crop.width = f->fmt.pix_mp.width;
-> >>> +	q_data->crop.height = f->fmt.pix_mp.height;
-> >>> +
-> >>> +	/* Propagate buffers encoding */
-> >>> +
-> >>> +	if (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
-> >>> +		struct dw100_q_data *dst_q_data =
-> >>> +			dw100_get_q_data(ctx,
-> >>> +					 V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
-> >>> +
-> >>> +		dst_q_data->pix_fmt.colorspace = q_data->pix_fmt.colorspace;
-> >>> +		dst_q_data->pix_fmt.ycbcr_enc = q_data->pix_fmt.ycbcr_enc;
-> >>> +		dst_q_data->pix_fmt.quantization = q_data->pix_fmt.quantization;
-> >>> +		dst_q_data->pix_fmt.xfer_func = q_data->pix_fmt.xfer_func;
-> >>> +	}
-> >>> +
-> >>> +	dev_dbg(&ctx->dw_dev->pdev->dev,
-> >>> +		"Setting format for type %u, wxh: %ux%u, fmt: %p4cc\n",
-> >>> +		f->type, q_data->pix_fmt.width, q_data->pix_fmt.height,
-> >>> +		&q_data->pix_fmt.pixelformat);
-> >>> +
-> >>> +	if (f->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) {
-> >>> +		int ret;
-> >>> +		u32 dims[V4L2_CTRL_MAX_DIMS] = {};
-> >>> +		struct v4l2_ctrl *ctrl = ctx->ctrls[DW100_CTRL_DEWARPING_MAP];
-> >>> +
-> >>> +		dims[0] = dw100_get_n_vertices_from_length(q_data->pix_fmt.width);
-> >>> +		dims[1] = dw100_get_n_vertices_from_length(q_data->pix_fmt.height);
-> >>> +
-> >>> +		v4l2_ctrl_lock(ctrl);
-> >>> +		ctx->user_map_is_valid = false;
-> >>> +		ret = __v4l2_ctrl_modify_dimensions(ctrl, dims);
-> >>> +		v4l2_ctrl_unlock(ctrl);
-> >>> +
-> >>> +		if (ret) {
-> >>> +			dev_err(&ctx->dw_dev->pdev->dev,
-> >>> +				"Modifying LUT dimensions failed with error %d\n",
-> >>> +				ret);
-> >>> +			return ret;
-> >>> +		}
-> >>> +	}
-> >>> +
-> >>> +	return 0;
-> >>> +}
-
--- 
-Regards,
-
-Laurent Pinchart
+make: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+make: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+tar xfj linux-media.tar.bz2
+rm -f .patches_applied .linked_dir .git_log.md5
+make: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+**********************************************************
+* Downloading firmwares from linuxtv.org.                *
+**********************************************************
+firmware/dvb-usb-vp702x-01.fw
+firmware/dvb-usb-vp7045-01.fw
+firmware/dvb-fe-bcm3510-01.fw
+firmware/as102_data2_st.hex
+firmware/dvb-usb-terratec-h7-drxk.fw
+firmware/isdbt_nova_12mhz.inp
+firmware/Boot.S
+firmware/dvb_nova_12mhz_b0.inp
+firmware/dvb-fe-xc4000-1.4.1.fw
+firmware/sms1xxx-hcw-55xxx-isdbt-02.fw
+firmware/sms1xxx-nova-a-dvbt-01.fw
+firmware/dvb-usb-avertv-a800-02.fw
+firmware/cmmb_venice_12mhz.inp
+firmware/dvb-fe-xc5000c-4.1.30.7.fw
+firmware/v4l-cx23418-cpu.fw
+firmware/v4l-cx23885-enc-broken.fw
+firmware/dvb-fe-drxj-mc-vsb-1.0.8.fw
+firmware/dvb_nova_12mhz.inp
+firmware/dvb-usb-dib0700-1.20.fw
+firmware/tdmb_nova_12mhz.inp
+firmware/as102_data1_st.hex
+firmware/dvb-fe-or51132-vsb.fw
+firmware/dvb-usb-it9135-02.fw
+firmware/v4l-cx23418-apu.fw
+firmware/dvb-ttpci-01.fw-261f
+firmware/v4l-cx23418-dig.fw
+firmware/dvb-ttpci-01.fw-261c
+firmware/dvb-usb-bluebird-01.fw
+firmware/dvb-fe-or51211.fw
+firmware/dvb-fe-or51132-qam.fw
+firmware/sms1xxx-stellar-dvbt-01.fw
+firmware/dvb-usb-dibusb-5.0.0.11.fw
+firmware/dvb-fe-drxj-mc-vsb-qam-1.0.8.fw
+firmware/dvb-usb-terratec-h5-drxk.fw
+firmware/dvb-usb-wt220u-02.fw
+firmware/v4l-cx23885-enc.fw
+firmware/dvb-ttpci-01.fw-2622
+firmware/dvb-usb-wt220u-01.fw
+firmware/v4l-cx25840.fw
+firmware/dvb-fe-drxj-mc-1.0.8.fw
+firmware/v4l-cx231xx-avcore-01.fw
+firmware/dvb-usb-dtt200u-01.fw
+firmware/dvb-usb-dibusb-6.0.0.8.fw
+firmware/sms1xxx-nova-b-dvbt-01.fw
+firmware/dvb-fe-xc5000-1.6.114.fw
+firmware/cmmb_vega_12mhz.inp
+firmware/dvb-usb-it9135-01.fw
+firmware/isdbt_nova_12mhz_b0.inp
+firmware/dvb-ttpci-01.fw-261a
+firmware/dvb-ttpci-01.fw-261b
+firmware/dvb-ttpci-01.fw-261d
+firmware/README
+firmware/isdbt_rio.inp
+firmware/dvb-usb-umt-010-02.fw
+firmware/sms1xxx-hcw-55xxx-dvbt-02.fw
+firmware/dvb-usb-terratec-h7-az6007.fw
+firmware/v4l-cx23885-avcore-01.fw
+******************
+* Start building *
+******************
+make -C <https://builder.linuxtv.org/job/media-build/ws/v4l> allyesconfig
+make[1]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+No version yet, using 5.10.0-14-amd64
+make[2]: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+Applying patches for kernel 5.10.0-14-amd64
+patch -s -f -N -p1 -i ../backports/api_version.patch
+patch -s -f -N -p1 -i ../backports/pr_fmt.patch
+1 out of 1 hunk FAILED
+1 out of 1 hunk FAILED
+make[2]: *** [Makefile:132: apply_patches] Error 1
+make[2]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
+make[1]: *** [Makefile:366: allyesconfig] Error 2
+make[1]: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/v4l'>
+make: *** [Makefile:26: allyesconfig] Error 2
+can't select all drivers at ./build line 531
+Build step 'Execute shell' marked build as failure
