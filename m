@@ -2,153 +2,178 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 186CFC19F29
-	for <linux-media@archiver.kernel.org>; Sat, 30 Jul 2022 15:59:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25269C04A68
+	for <linux-media@archiver.kernel.org>; Sat, 30 Jul 2022 16:20:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235137AbiG3P7C (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 30 Jul 2022 11:59:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38078 "EHLO
+        id S234647AbiG3QUY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 30 Jul 2022 12:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234991AbiG3P7B (ORCPT
+        with ESMTP id S229742AbiG3QUW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 30 Jul 2022 11:59:01 -0400
-Received: from static.213-239-213-133.clients.your-server.de (luckmann.name [213.239.213.133])
-        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 0F061DF5E
-        for <linux-media@vger.kernel.org>; Sat, 30 Jul 2022 08:58:58 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-  (uid 502)
-  by static.213-239-213-133.clients.your-server.de with local
-  id 0000000000E62056.0000000062E55540.00004CCC; Sat, 30 Jul 2022 17:58:56 +0200
-Date:   Sat, 30 Jul 2022 17:58:56 +0200
-From:   Helge Kreutzmann <debian@helgefjell.de>
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-Cc:     linux-media@vger.kernel.org
-Subject: Re: DVB: Unable to find symbol m88ds3103_attach() [Kernel 5.18.13]
-Message-ID: <20220730155856.GA15746@Debian-50-lenny-64-minimal>
-Mail-Followup-To: Helge Kreutzmann <debian@helgefjell.de>,
-        Sakari Ailus <sakari.ailus@iki.fi>, linux-media@vger.kernel.org
-References: <20220723155707.GA17564@Debian-50-lenny-64-minimal>
- <YuBDIEUokV5vxD6n@valkosipuli.retiisi.eu>
-Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256; protocol="application/pgp-signature"; boundary="=_luckmann.name-19660-1659196736-0001-2"
-Content-Disposition: inline
-In-Reply-To: <YuBDIEUokV5vxD6n@valkosipuli.retiisi.eu>
-X-Public-Key-URL: http://www.helgefjell.de/data/debian_neu.asc
-X-homepage: http://www.helgefjell.de/debian
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        Sat, 30 Jul 2022 12:20:22 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBEA6EE12;
+        Sat, 30 Jul 2022 09:20:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659198020; x=1690734020;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=KMxqD33OIAG5+LVA9hLBAgj59Xmw6ck7YXvwZ5dHDn4=;
+  b=ctKrE4vfxeBEgG0qz23nDSVPfoqL91aTrgZZc4p3jJhgDXwg4SGEbYqj
+   rjZbtdURxhTPWULOhdb9pPJdJJBx6Kk6Szlkyc7zUGQV5Lr0XqdrfLFql
+   UR0A3Fz+TdpGKYP0RsV67LGdxR4MtnqkoEtWgfOgl0VMOSdPBnfvvPoOa
+   o1Yd2gGLj2jvNfdPpUxX6K0f32TA3BZFdKhfgt4Pv92S7MyhdvVO4/upJ
+   LPpuAXalhFUfK270crRy33IA0RWz4iOtMLYPKop3yVpszwpiIM8dxg68B
+   uOXQatAhRsC/oudrXKclqRftGdsBQ5lst9uxQqh4BMw+/JHZIcYQ9sokH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="375231589"
+X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
+   d="scan'208";a="375231589"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 09:20:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
+   d="scan'208";a="691026007"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 30 Jul 2022 09:20:18 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 075A4F1; Sat, 30 Jul 2022 19:20:28 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v1 1/1] media: atomisp_gmin_platform: Unexport and split camera_sensor_csi()
+Date:   Sat, 30 Jul 2022 19:20:27 +0300
+Message-Id: <20220730162027.1011-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is a MIME-formatted message.  If you see this text it means that your
-E-mail software does not support MIME-formatted messages.
+The camera_sensor_csi() is not used outside the module, hence make it
+static. While at it, split it to _alloc() and _free() to clearly show
+the idea behind the last parameter @flag that is passed to
+gmin_csi_cfg().
 
---=_luckmann.name-19660-1659196736-0001-2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ .../include/linux/atomisp_gmin_platform.h     |  2 -
+ .../media/atomisp/pci/atomisp_gmin_platform.c | 68 ++++++++++---------
+ 2 files changed, 37 insertions(+), 33 deletions(-)
 
-Hello Sakari,
-thanks for the reply and sorry for the delay in answering.
+diff --git a/drivers/staging/media/atomisp/include/linux/atomisp_gmin_platform.h b/drivers/staging/media/atomisp/include/linux/atomisp_gmin_platform.h
+index 58e0ea5355a3..5463d11d4295 100644
+--- a/drivers/staging/media/atomisp/include/linux/atomisp_gmin_platform.h
++++ b/drivers/staging/media/atomisp/include/linux/atomisp_gmin_platform.h
+@@ -26,8 +26,6 @@ struct v4l2_subdev *atomisp_gmin_find_subdev(struct i2c_adapter *adapter,
+ int atomisp_gmin_remove_subdev(struct v4l2_subdev *sd);
+ int gmin_get_var_int(struct device *dev, bool is_gmin,
+ 		     const char *var, int def);
+-int camera_sensor_csi(struct v4l2_subdev *sd, u32 port,
+-		      u32 lanes, u32 format, u32 bayer_order, int flag);
+ struct camera_sensor_platform_data *
+ gmin_camera_platform_data(
+     struct v4l2_subdev *subdev,
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
+index f7fc5137199c..4032239fcb86 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
+@@ -1066,6 +1066,38 @@ static int gmin_flisclk_ctrl(struct v4l2_subdev *subdev, int on)
+ 	return ret;
+ }
+ 
++static int camera_sensor_csi_alloc(struct v4l2_subdev *sd, u32 port, u32 lanes,
++				   u32 format, u32 bayer_order)
++{
++	struct i2c_client *client = v4l2_get_subdevdata(sd);
++	struct camera_mipi_info *csi;
++
++	csi = kzalloc(sizeof(*csi), GFP_KERNEL);
++	if (!csi)
++		return -ENOMEM;
++
++	csi->port = port;
++	csi->num_lanes = lanes;
++	csi->input_format = format;
++	csi->raw_bayer_order = bayer_order;
++	v4l2_set_subdev_hostdata(sd, csi);
++	csi->metadata_format = ATOMISP_INPUT_FORMAT_EMBEDDED;
++	csi->metadata_effective_width = NULL;
++	dev_info(&client->dev,
++		 "camera pdata: port: %d lanes: %d order: %8.8x\n",
++		 port, lanes, bayer_order);
++
++	return 0;
++}
++
++static void camera_sensor_csi_free(struct v4l2_subdev *sd)
++{
++	struct camera_mipi_info *csi;
++
++	csi = v4l2_get_subdev_hostdata(sd);
++	kfree(csi);
++}
++
+ static int gmin_csi_cfg(struct v4l2_subdev *sd, int flag)
+ {
+ 	struct i2c_client *client = v4l2_get_subdevdata(sd);
+@@ -1074,8 +1106,11 @@ static int gmin_csi_cfg(struct v4l2_subdev *sd, int flag)
+ 	if (!client || !gs)
+ 		return -ENODEV;
+ 
+-	return camera_sensor_csi(sd, gs->csi_port, gs->csi_lanes,
+-				 gs->csi_fmt, gs->csi_bayer, flag);
++	if (flag)
++		return camera_sensor_csi_alloc(sd, gs->csi_port, gs->csi_lanes,
++					       gs->csi_fmt, gs->csi_bayer);
++	camera_sensor_csi_free(sd);
++	return 0;
+ }
+ 
+ static struct camera_vcm_control *gmin_get_vcm_ctrl(struct v4l2_subdev *subdev,
+@@ -1358,35 +1393,6 @@ int gmin_get_var_int(struct device *dev, bool is_gmin, const char *var, int def)
+ }
+ EXPORT_SYMBOL_GPL(gmin_get_var_int);
+ 
+-int camera_sensor_csi(struct v4l2_subdev *sd, u32 port,
+-		      u32 lanes, u32 format, u32 bayer_order, int flag)
+-{
+-	struct i2c_client *client = v4l2_get_subdevdata(sd);
+-	struct camera_mipi_info *csi = NULL;
+-
+-	if (flag) {
+-		csi = kzalloc(sizeof(*csi), GFP_KERNEL);
+-		if (!csi)
+-			return -ENOMEM;
+-		csi->port = port;
+-		csi->num_lanes = lanes;
+-		csi->input_format = format;
+-		csi->raw_bayer_order = bayer_order;
+-		v4l2_set_subdev_hostdata(sd, (void *)csi);
+-		csi->metadata_format = ATOMISP_INPUT_FORMAT_EMBEDDED;
+-		csi->metadata_effective_width = NULL;
+-		dev_info(&client->dev,
+-			 "camera pdata: port: %d lanes: %d order: %8.8x\n",
+-			 port, lanes, bayer_order);
+-	} else {
+-		csi = v4l2_get_subdev_hostdata(sd);
+-		kfree(csi);
+-	}
+-
+-	return 0;
+-}
+-EXPORT_SYMBOL_GPL(camera_sensor_csi);
+-
+ /* PCI quirk: The BYT ISP advertises PCI runtime PM but it doesn't
+  * work.  Disable so the kernel framework doesn't hang the device
+  * trying.  The driver itself does direct calls to the PUNIT to manage
+-- 
+2.35.1
 
-On Tue, Jul 26, 2022 at 10:40:16PM +0300, Sakari Ailus wrote:
-> On Sat, Jul 23, 2022 at 05:57:07PM +0200, Helge Kreutzmann wrote:
-> > I want to operate a Hauppauge WinTV-HR-5524 HD [1]. Despite numerous
-> > attempts / searches /trials, I'm unable to get the sattelite part
-> > operating, I always get (during boot):
-> >=20
-> > Jul 23 08:37:19 twentytwo kernel: [    6.632755] DVB: Unable to find sy=
-mbol m88ds3103_attach()
-> >=20
-> > The full related boot log is below [2], I can provide more additional=
-=20
-> > lines as necessary of course.
-> >=20
-> > I listed the (related) loaded modules below [3], again I can provide
-> > the full list of course.
-> >=20
-> > Based on grep'ing through the kernel sources[4], I also modprobed =E2=
-=80=A6
-> > but this did not improve the satellite detection[5].
-> >=20
-> > According to the vendor satellite should work.
-> >=20
-> > I can provide more details (also tried applications, ..) as needed.
-> >=20
-> > Thanks for any pointer to get the satellite tuner working!
->=20
-> Looking at the problem, I guess this looks like something that shouldn't
-> generally happen.
->=20
-> Have you tried removing cx23885 module and loading it again? It would seem
-> lake in lsmod listing the module is there but somehow the symbol isn't
-> found. I can't immediately think what else could cause this, than not bei=
-ng
-> able to load the needed module when the symbol is looked up.
-
-root@twentytwo:~# modprobe -r cx23885
-modprobe: FATAL: Module cx23885 is in use.
-
-root@twentytwo:~# lsmod | grep cx23885
-cx23885               278528  1
-altera_ci              28672  1 cx23885
-altera_stapl           36864  1 cx23885
-videobuf2_dvb          16384  1 cx23885
-m88ds3103              40960  1 cx23885
-cx2341x                36864  1 cx23885
-tveeprom               28672  1 cx23885
-rc_core                53248  1 cx23885
-videobuf2_dma_sg       20480  1 cx23885
-videobuf2_v4l2         40960  1 cx23885
-videobuf2_common       77824  5
-videobuf2_v4l2,videobuf2_dma_sg,cx23885,videobuf2_dvb,videobuf2_memops
-snd_pcm               151552  6
-snd_hda_codec_hdmi,snd_hda_intel,snd_hda_codec,snd_pcm_oss,cx23885,snd_hda_=
-core
-snd                   118784  21
-snd_hda_codec_generic,snd_hda_codec_hdmi,snd_hwdep,snd_hda_intel,snd_hda_co=
-dec,snd_hda_codec_realtek,snd_timer,snd_pcm_oss,cx23885,snd_pcm,snd_mixer_o=
-ss
-
-However, I cannot see any open file which might be related:
-root@twentytwo:~# lsof | grep dev|grep video
-root@twentytwo:~# lsof | grep dev|grep v4l
-root@twentytwo:~# lsof | grep dev|grep vbi
-
-So I'm unable to unload cx23885.
-
-I searched around, but I could not find any other idea to unload this
-module.
-
-Greetings
-
-         Helge
-
---=20
-      Dr. Helge Kreutzmann                     debian@helgefjell.de
-           Dipl.-Phys.                   http://www.helgefjell.de/debian.php
-        64bit GNU powered                     gpg signed mail preferred
-           Help keep free software "libre": http://www.ffii.de/
-
---=_luckmann.name-19660-1659196736-0001-2
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEbZZfteMW0gNUynuwQbqlJmgq5nAFAmLlVTcACgkQQbqlJmgq
-5nAbpQ//Y+eD7oVSFGGUbOzrIvHGOdoKmxUq/5akRUjgSI4HhaHP6hCRvxyZQOxe
-xtyQptNfdyeanQWXmKkJM2jC5m4gipe1m/+YwsqLscGVJk10IN52U5WMZgaT/vGD
-TOPZSf25ej7jz+ZVBT9mWrLLW3Ouhzxlb+rQbhkbTLnC0tqQEQXcDnnZk345s93s
-iGRGaCmWjBkYc35mvynwdkYMqsn/ee7PNgkkphAwJ41lx7UPlF07FaFKpMnGeXtL
-QmXZ06qEtk5V9s4Pj/aK+nErJTHvNxbmKDv45BpHz//2IoKiXZw1jcaNu8eGpK2v
-TrFwiY5yfwcNVAsspc+duLfDk+o0ImA1UItnDMRby79GX7nVV7Fv0Z6hNVrpfMyO
-ql3ezOLx5hUvZw74NdLX8SJfz18RZ7OQFv6xNpV47ouiMVNFYFifRNkouFL5bMLp
-fckLKhHTh4gVAX77w935vEqnP/4iAfdNPGPHzd/NAwCUh78wnW90QHws+7BB/1QZ
-7YYf8itDxCa5ukTr4uy47flyeOKZ8+VrT+H7KOIxdffmXl7KOAv99iX/v/n9yFnO
-N/SQrrENJoB9j+/8BNwxOAqw6EbyI5ZVWBHb+bY3z3+bJrC+TyZ8Gluj72+LezLF
-fFWoYN/0QGnpX7fBeXlbhi7kGoQeaMcryREkowQ6cpHd4qEInpc=
-=/ASI
------END PGP SIGNATURE-----
-
---=_luckmann.name-19660-1659196736-0001-2--
