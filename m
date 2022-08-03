@@ -2,133 +2,182 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56AC6C00140
-	for <linux-media@archiver.kernel.org>; Tue,  2 Aug 2022 16:28:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7918C00140
+	for <linux-media@archiver.kernel.org>; Wed,  3 Aug 2022 01:42:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237463AbiHBQ2x (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Aug 2022 12:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37634 "EHLO
+        id S235470AbiHCBhr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Aug 2022 21:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237224AbiHBQ2v (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Aug 2022 12:28:51 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D6433E0E
-        for <linux-media@vger.kernel.org>; Tue,  2 Aug 2022 09:28:51 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id r4so10578294edi.8
-        for <linux-media@vger.kernel.org>; Tue, 02 Aug 2022 09:28:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=wckayKxqp8c89/BeJuWRQW46lUUDjZtvzfYjnDkVDwQ=;
-        b=Dgst/FlCULPjB7WQx7NBOzFLCm72Jxa70V34htwey8mZ45jM9YF1XLtI2T9JcyiH1O
-         QwoDXrYV9sRgXriVWvn2AXmhjON7hnsz6t0ZDmRaPMNSqiKdTNFpgt5zo2EP4MEwY9vK
-         olXUHBJcr4kh5mqR+8bwCccecPczdD2K0SnwBeVtUYZ/63TRYD/TVyZG8bs0VTNrNDL4
-         67p3cNnImPJfNIcyssEvFar3JjXzkTRGvqj6vXB54IS6svuU1qyxrlIR679/NnIY7pIa
-         IAXaee0KQ3/HnVPSVn+5H4jCOHtecL43Xps4hIbSwR/jxFnHO/869/mIoMNU2AfDmC3F
-         nW4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=wckayKxqp8c89/BeJuWRQW46lUUDjZtvzfYjnDkVDwQ=;
-        b=M7ww64DR0D46kc0Bk6AVIU0PNFZaxS+ur+xtIu5a+4caLPHGiETeMFCbzaa63UwC0+
-         J5dnjnVEC+6fsSUJcEo+gv0L8q5keQOSxv6TgrfQw/EyzNc7IkK4Ls0ZZVy8FR8F2ulU
-         HCRS2RwFN/FidAO9JiA/n3wxMkcD2KnBHHGVF07D1IAT1qI39NpR32HxnloAQYv2l+vF
-         MtgRBxnoZ7XWwbeam5eBwjR1W1G4218hKmmbGhx2NIyfA8dqjzY3Pnr6k8tvjmUdwKSY
-         RApbmGZ05DGJS6ahDzX+vDLst0yLpA1Hp7F+p52zdyRmoiY0GBCckJz58psx/EAP3+xO
-         P5hw==
-X-Gm-Message-State: AJIora+3MGVf/OjoaeWFeZS+mzGRNadln/Pf+LD1C5U9/Jt34mTmp//5
-        p5El3si6NuRufIwN42KZErI5kw+dv6J0bziVucQ=
-X-Google-Smtp-Source: AGRyM1v7u0sTdvxQgOQAjOMf7FZZOGseoOFFalR21S9XRrawWCYNqmEH+fStF3wYUTyVYVFcF+zBb8pUAv0r8QOD8kw=
-X-Received: by 2002:a05:6402:40c3:b0:43b:d65a:cbf7 with SMTP id
- z3-20020a05640240c300b0043bd65acbf7mr21971862edb.380.1659457729533; Tue, 02
- Aug 2022 09:28:49 -0700 (PDT)
+        with ESMTP id S232077AbiHCBhq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Aug 2022 21:37:46 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592EABF47
+        for <linux-media@vger.kernel.org>; Tue,  2 Aug 2022 18:37:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659490665; x=1691026665;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=R1XnHP9VZc1t6FNufDD0Ro2KkfbYmIQOGwG8zw5Pbas=;
+  b=KmYuhmz196G76ahJ4T4M3TP9ZuV25WlFyqsp1mG16Row4LiKwVbwjis0
+   pFNxRlrBZZhd8jh5ULWRENDO1NIeBlSiEkLwC3mlwrUZ+u1Q0gcMFg5MF
+   ETmxY3UZat9LXt1pqLk6/cM3ksVOFv4YgnZ2L7SsTKoWzRDfS8SWWujQD
+   Rct8Dr2+gLb6TdQOcyuWAxuN2FJ8MF8cJbCPxQSysmJcHORbq53uTtJ6/
+   rbO5N6swhAdodbo9i3CqiI0JkcP2x1WZrs/p7X1Lt3dGmkQUM4ZV/b9CD
+   CsHo4e5dOjSBOOGZorAJT6VjF/gy/y79ERgb/fojKyoQEqWfHCDUodDqr
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="289569467"
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="289569467"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 18:37:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="635500969"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 02 Aug 2022 18:37:42 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJ3KP-000GfD-2h;
+        Wed, 03 Aug 2022 01:37:41 +0000
+Date:   Wed, 3 Aug 2022 09:36:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Erling Ljunggren <hljunggr@cisco.com>, linux-media@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Jonathan Selnes <jonathansb1@gmail.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Erling Ljunggren <hljunggr@cisco.com>
+Subject: Re: [PATCH 4/5] media: i2c: cat24c208: driver for the cat24c208 EDID
+ EEPROM
+Message-ID: <202208030925.bp514QvB-lkp@intel.com>
+References: <20220728114050.2400475-5-hljunggr@cisco.com>
 MIME-Version: 1.0
-References: <20220728114050.2400475-1-hljunggr@cisco.com> <20220728114050.2400475-5-hljunggr@cisco.com>
- <CAHp75Ve6-BQ_Ajst96cr=XvJGV247_FYLTHTz=nvTCC3NhQa1A@mail.gmail.com>
- <db2d74d0ab17b407223092c8e0e01784d36bbda1.camel@cisco.com>
- <CAHp75Vc2qWQXk-+0ath8zuTaGHmSG_ZiUYih=4rGeKx3_nmtsQ@mail.gmail.com>
- <b426bd08-6c52-3891-9319-b6cc52bdfbab@xs4all.nl> <CAHp75Vdtv6qtjxACA+nET2wyzHpHqxvPeZ-KhRWSByGtH4T5TQ@mail.gmail.com>
- <5d3fe43f-5615-137d-b712-f6c9079460cd@xs4all.nl> <CAHp75VfWhzz4jzyQAD4UYTN8dBWiKsvimKOPiKozGyNd2_oj=A@mail.gmail.com>
- <CAHp75Vd60urVv5R+fE+xxqMNJhJSmXZnfJJwU5t-m3E_T+pcWA@mail.gmail.com>
- <CAHp75Ve87Pvh-ZGHA=wK+ex9kq58FusA-p1EtVzdwKO_3MRyOw@mail.gmail.com>
- <390ab4ac-ad6a-5bef-349b-379ef772afa1@xs4all.nl> <CAHp75Vfqn0oUUvFGu2SegRBRPLpxazXVT5_pNmcD8FUi2_fjuw@mail.gmail.com>
- <403e5055-81dd-7426-a3cd-f3c3bbf24179@xs4all.nl> <CAHp75VeAKbJYB0pQOR9oVXFTaQm+G_R14zrzRe9qEPDqK1ttNw@mail.gmail.com>
-In-Reply-To: <CAHp75VeAKbJYB0pQOR9oVXFTaQm+G_R14zrzRe9qEPDqK1ttNw@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 2 Aug 2022 18:28:12 +0200
-Message-ID: <CAHp75VezzNifHTYHOkaQZubdotL8VGwog1--GR_7OSJR8bNGww@mail.gmail.com>
-Subject: Re: [PATCH 4/5] media: i2c: cat24c208: driver for the cat24c208 EDID EEPROM
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     "Erling Ljunggren (hljunggr)" <hljunggr@cisco.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "jonathansb1@gmail.com" <jonathansb1@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220728114050.2400475-5-hljunggr@cisco.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 6:26 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Tue, Aug 2, 2022 at 2:58 PM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
-> > On 8/2/22 14:49, Andy Shevchenko wrote:
-> > > On Tue, Aug 2, 2022 at 2:45 PM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
-> > >> On 8/2/22 14:26, Andy Shevchenko wrote:
-> > >>> On Tue, Aug 2, 2022 at 2:23 PM Andy Shevchenko
-> > >>> <andy.shevchenko@gmail.com> wrote:
-> > >>>> On Tue, Aug 2, 2022 at 2:21 PM Andy Shevchenko
-> > >>>> <andy.shevchenko@gmail.com> wrote:
->
-> ...
->
-> > >>>>> You are blaming the wrong man here, i.e. devm. The problem as I stated
-> > >>>>> above is developers who do not understand (pay attention to) the
-> > >>>>> lifetime of the objects.
-> > >>>>
-> > >>>> That said, the devm has nothing to do with the driver still being
-> > >>>> problematic for the scenario you described, no?
-> > >>>
-> > >>> And the cleanest (at the first glance) solution is to make v4l2 to fix
-> > >>> this bug by suppressing unbind attributes when the device is opened
-> > >>> for all v4l2 subdev drivers, and restore it back when it's closed.
-> > >>
-> > >> Why would we do that? The patch works in the scenario that I described:
-> > >> the memory is freed in the struct video_device release() callback, which
-> > >> is called when the last reference to the video node goes away. This is
-> > >> standard V4L2 framework behavior that works great in the case of a unbind.
-> > >>
-> > >> Without devm_kzalloc it works fine, even when unbind is called. With
-> > >> devm_kzalloc the unbind attributes would have to be suppressed. I see no
-> > >> reason for that as media maintainer.
-> > >
-> > > I'm not sure anymore that we are talking about the same thing.
-> > >
-> > > Your driver allocates memory with kzalloc() in ->probe() and frees it
-> > > in ->remove(). How is this different from the lifetime of a devm:ed
-> > > object? If what you said is true, than driver is still problematic,
-> > > since ->remove() frees this memory the very same way at unbind call.
-> >
-> > No, it is not freed in remove(). remove() calls video_unregister_device(),
-> > and that calls cat24c208_release() when the last user of /dev/videoX closes
-> > its filehandle. And it is cat24c208_release() that finally frees the memory.
->
-> Okay, I got it.
->
-> So, if you unbind the driver the state will be stale and still being
-> accessible by the user (with outdated info). Now, what happens if you
-> unbind and try to bind back, while the user is slow enough to close
-> the device file?
->
-> Also it's still racy against any i2c calls done via IOCTLs, because
-> you have unregistered I2C devices.
+Hi Erling,
 
-As far as I understand current design, you may not call anything but
-video_device_unregister() in the subdevice's ->remove(), or be very
-careful on what resources can be used via IOCTLs.
+Thank you for the patch! Perhaps something to improve:
 
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on linus/master v5.19]
+[cannot apply to next-20220728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Erling-Ljunggren/Add-the-cat24c208-EDID-EEPROM-driver-new-EDID-capability/20220728-194524
+base:   git://linuxtv.org/media_tree.git master
+config: s390-randconfig-c005-20220802 (https://download.01.org/0day-ci/archive/20220803/202208030925.bp514QvB-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/94ba9bb463937ad05b92c6be56a552894b386774
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Erling-Ljunggren/Add-the-cat24c208-EDID-EEPROM-driver-new-EDID-capability/20220728-194524
+        git checkout 94ba9bb463937ad05b92c6be56a552894b386774
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/gpu/drm/ drivers/media/i2c/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/media/i2c/cat24c208.c:19:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/media/i2c/cat24c208.c:19:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/media/i2c/cat24c208.c:19:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/media/i2c/cat24c208.c:407:34: warning: unused variable 'cat24c208_of_match' [-Wunused-const-variable]
+   static const struct of_device_id cat24c208_of_match[] = {
+                                    ^
+   13 warnings generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DRM_DP_AUX_BUS
+   Depends on [n]: HAS_IOMEM [=y] && DRM [=y] && OF [=n]
+   Selected by [y]:
+   - DRM_MSM [=y] && HAS_IOMEM [=y] && DRM [=y] && (ARCH_QCOM || SOC_IMX5 || COMPILE_TEST [=y]) && COMMON_CLK [=y] && IOMMU_SUPPORT [=y] && (QCOM_OCMEM [=n] || QCOM_OCMEM [=n]=n) && (QCOM_LLCC [=y] || QCOM_LLCC [=y]=n) && (QCOM_COMMAND_DB [=n] || QCOM_COMMAND_DB [=n]=n)
+
+
+vim +/cat24c208_of_match +407 drivers/media/i2c/cat24c208.c
+
+   406	
+ > 407	static const struct of_device_id cat24c208_of_match[] = {
+   408		{ .compatible = "onnn,cat24c208"},
+   409		{}
+   410	};
+   411	MODULE_DEVICE_TABLE(of, cat24c208_of_match);
+   412	
 
 -- 
-With Best Regards,
-Andy Shevchenko
+0-DAY CI Kernel Test Service
+https://01.org/lkp
