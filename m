@@ -2,548 +2,175 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7CECC19F2A
-	for <linux-media@archiver.kernel.org>; Wed,  3 Aug 2022 07:58:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B8F3C19F28
+	for <linux-media@archiver.kernel.org>; Wed,  3 Aug 2022 08:39:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237378AbiHCH6N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Aug 2022 03:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45974 "EHLO
+        id S234427AbiHCIjI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Aug 2022 04:39:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237349AbiHCH6L (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Aug 2022 03:58:11 -0400
-Received: from aer-iport-4.cisco.com (aer-iport-4.cisco.com [173.38.203.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F6929C90
-        for <linux-media@vger.kernel.org>; Wed,  3 Aug 2022 00:58:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=13891; q=dns/txt;
-  s=iport; t=1659513489; x=1660723089;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=74EtLHLZLE1UwZHLY0cTGZqf1y5uqWZjDRZ5p7DJS64=;
-  b=ag8xLP9ZT5Wi4uqnnP5QrbPWUJd8rJoySO0DLfa29RvawD7tEiy3Wer5
-   lAGi66VvLgvgZuSoa7lBxp6SzaeXtSwWg3kNsJDlOBiVLGqdd8fGijX0v
-   E5WRUnCYV9alDUufFLSODTxP1Y+FenHnZ/vWueDsUhuuoOHhQcLT4c/SC
-   8=;
-X-IronPort-AV: E=Sophos;i="5.93,213,1654560000"; 
-   d="scan'208";a="3323770"
-Received: from aer-iport-nat.cisco.com (HELO aer-core-1.cisco.com) ([173.38.203.22])
-  by aer-iport-4.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 03 Aug 2022 07:58:07 +0000
-Received: from office-260.rd.cisco.com ([10.47.77.162])
-        by aer-core-1.cisco.com (8.15.2/8.15.2) with ESMTP id 2737w5SC024084;
-        Wed, 3 Aug 2022 07:58:07 GMT
-From:   Erling Ljunggren <hljunggr@cisco.com>
-To:     linux-media@vger.kernel.org
-Cc:     Jonathan Selnes <jonathansb1@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Erling Ljunggren <hljunggr@cisco.com>
-Subject: [PATCH v2 4/5] media: i2c: cat24c208: driver for the cat24c208 EDID EEPROM
-Date:   Wed,  3 Aug 2022 09:58:49 +0200
-Message-Id: <20220803075850.1196988-5-hljunggr@cisco.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220803075850.1196988-1-hljunggr@cisco.com>
-References: <20220803075850.1196988-1-hljunggr@cisco.com>
+        with ESMTP id S233354AbiHCIjH (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Aug 2022 04:39:07 -0400
+Received: from mail-m11885.qiye.163.com (mail-m11885.qiye.163.com [115.236.118.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE7E1ADB7;
+        Wed,  3 Aug 2022 01:39:05 -0700 (PDT)
+Received: from localhost (unknown [103.29.142.67])
+        by mail-m11885.qiye.163.com (Hmail) with ESMTPA id C3C424C0847;
+        Wed,  3 Aug 2022 16:39:02 +0800 (CST)
+From:   Jeffy Chen <jeffy.chen@rock-chips.com>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     Andy Yan <andy.yan@rock-chips.com>,
+        Jianqun Xu <jay.xu@rock-chips.com>,
+        Jeffy Chen <jeffy.chen@rock-chips.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        linux-media@vger.kernel.org,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Subject: [PATCH v2] drm/gem: Fix GEM handle release errors
+Date:   Wed,  3 Aug 2022 16:32:37 +0800
+Message-Id: <20220803083237.3701-1-jeffy.chen@rock-chips.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Outbound-SMTP-Client: 10.47.77.162, [10.47.77.162]
-X-Outbound-Node: aer-core-1.cisco.com
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZGR1PVkhDTh0fGU9LGh5MHVUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUpLSFVJQlVKT0lVTUxZV1kWGg8SFR0UWUFZT0tIVUpKS0hKQ1VLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NRw6PAw*Dj02IzARHgg1OQtO
+        UQMwCzVVSlVKTU5CTkpOQk9ISE9DVTMWGhIXVREeHR0CVRgTHhU7CRQYEFYYExILCFUYFBZFWVdZ
+        EgtZQVlKS0hVSUJVSk9JVU1MWVdZCAFZQU1LTUI3Bg++
+X-HM-Tid: 0a8262dbb7b72eb9kusnc3c424c0847
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jonathan Selnes <jonathansb1@gmail.com>
+Currently we are assuming a one to one mapping between dmabuf and handle
+when releasing GEM handles.
 
-Support reading and writing the EDID EEPROM through the
-v4l2 API.
+But that is not always true, since we would create extra handles for the
+GEM obj in cases like gem_open() and getfb{,2}().
 
-Signed-off-by: Jonathan Selnes <jonathansb1@gmail.com>
-Co-developed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Erling Ljunggren <hljunggr@cisco.com>
+A similar issue was reported at:
+https://lore.kernel.org/all/20211105083308.392156-1-jay.xu@rock-chips.com/
+
+Another problem is that the drm_gem_remove_prime_handles() now only
+remove handle to the exported dmabuf (gem_obj->dma_buf), so the imported
+ones would leak:
+WARNING: CPU: 2 PID: 236 at drivers/gpu/drm/drm_prime.c:228 drm_prime_destroy_file_private+0x18/0x24
+
+Let's fix these by using handle to find the exact map to remove.
+
+Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
 ---
- MAINTAINERS                   |   7 +
- drivers/media/i2c/Kconfig     |   9 +
- drivers/media/i2c/Makefile    |   1 +
- drivers/media/i2c/cat24c208.c | 421 ++++++++++++++++++++++++++++++++++
- 4 files changed, 438 insertions(+)
- create mode 100644 drivers/media/i2c/cat24c208.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7d9490a5c15a..407d76c42bab 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14912,6 +14912,13 @@ S:	Maintained
- T:	git git://linuxtv.org/media_tree.git
- F:	drivers/media/i2c/ov9734.c
+Changes in v2:
+Fix a typo of rbtree.
+
+ drivers/gpu/drm/drm_gem.c      | 17 +----------------
+ drivers/gpu/drm/drm_internal.h |  4 ++--
+ drivers/gpu/drm/drm_prime.c    | 20 ++++++++++++--------
+ 3 files changed, 15 insertions(+), 26 deletions(-)
+
+diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+index eb0c2d041f13..ed39da383570 100644
+--- a/drivers/gpu/drm/drm_gem.c
++++ b/drivers/gpu/drm/drm_gem.c
+@@ -168,21 +168,6 @@ void drm_gem_private_object_init(struct drm_device *dev,
+ }
+ EXPORT_SYMBOL(drm_gem_private_object_init);
  
-+ON SEMICONDUCTOR CAT24C208 EDID EEPROM DRIVER
-+M:	Hans Verkuil <hverkuil-cisco@xs4all.nl>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/media/i2c/onnn,cat24c208.yaml
-+F:	drivers/media/i2c/cat24c208*
-+
- ONENAND FLASH DRIVER
- M:	Kyungmin Park <kyungmin.park@samsung.com>
- L:	linux-mtd@lists.infradead.org
-diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index 2b20aa6c37b1..2f5f9f058b48 100644
---- a/drivers/media/i2c/Kconfig
-+++ b/drivers/media/i2c/Kconfig
-@@ -1530,6 +1530,15 @@ endmenu
- menu "Miscellaneous helper chips"
- 	visible if !MEDIA_HIDE_ANCILLARY_SUBDRV
+-static void
+-drm_gem_remove_prime_handles(struct drm_gem_object *obj, struct drm_file *filp)
+-{
+-	/*
+-	 * Note: obj->dma_buf can't disappear as long as we still hold a
+-	 * handle reference in obj->handle_count.
+-	 */
+-	mutex_lock(&filp->prime.lock);
+-	if (obj->dma_buf) {
+-		drm_prime_remove_buf_handle_locked(&filp->prime,
+-						   obj->dma_buf);
+-	}
+-	mutex_unlock(&filp->prime.lock);
+-}
+-
+ /**
+  * drm_gem_object_handle_free - release resources bound to userspace handles
+  * @obj: GEM object to clean up.
+@@ -253,7 +238,7 @@ drm_gem_object_release_handle(int id, void *ptr, void *data)
+ 	if (obj->funcs->close)
+ 		obj->funcs->close(obj, file_priv);
  
-+config VIDEO_CAT24C208
-+	tristate "ON Semiconductor cat24c208 EDID EEPROM"
-+	depends on VIDEO_DEV && I2C && OF
-+	help
-+	  Support for the ON Semiconductor CAT24C208 Dual Port EDID EEPROM.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called cat24c208.
-+
- config VIDEO_I2C
- 	tristate "I2C transport video support"
- 	depends on VIDEO_DEV && I2C
-diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-index 3e1696963e7f..70e4360a21ba 100644
---- a/drivers/media/i2c/Makefile
-+++ b/drivers/media/i2c/Makefile
-@@ -22,6 +22,7 @@ obj-$(CONFIG_VIDEO_APTINA_PLL) += aptina-pll.o
- obj-$(CONFIG_VIDEO_BT819) += bt819.o
- obj-$(CONFIG_VIDEO_BT856) += bt856.o
- obj-$(CONFIG_VIDEO_BT866) += bt866.o
-+obj-$(CONFIG_VIDEO_CAT24C208) += cat24c208.o
- obj-$(CONFIG_VIDEO_CCS) += ccs/
- obj-$(CONFIG_VIDEO_CCS_PLL) += ccs-pll.o
- obj-$(CONFIG_VIDEO_CS3308) += cs3308.o
-diff --git a/drivers/media/i2c/cat24c208.c b/drivers/media/i2c/cat24c208.c
-new file mode 100644
-index 000000000000..9e4e146cdeff
---- /dev/null
-+++ b/drivers/media/i2c/cat24c208.c
-@@ -0,0 +1,421 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * HDMI i2c controlled EEPROM from ON Semiconductor or Catalyst Semiconductor
-+ *
-+ * Support for i2c based DDC EEPROM
-+ *
-+ * Copyright (C) 2021-2022 Cisco Systems, Inc. and/or its affiliates. All rights reserved.
-+ */
-+
-+/*
-+ * REF_01 - ON Semiconductor, cat24c208, Datasheet, URL : https://www.onsemi.com/pdf/datasheet/cat24c208-d.pdf
-+ *	Revision 7, May 2018
-+ */
-+
-+#include <linux/delay.h>
-+#include <linux/i2c.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/slab.h>
-+#include <linux/videodev2.h>
-+
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-fh.h>
-+#include <media/v4l2-ioctl.h>
-+
-+MODULE_DESCRIPTION("cat24c208 EDID EEPROM driver");
-+MODULE_AUTHOR("Jonathan Selnes Bognaes <jonathansb1@gmail.com>");
-+MODULE_LICENSE("GPL");
-+
-+/*
-+ * CAT24C208 setup
-+ */
-+#define BYTES_PER_BLOCK		128
-+#define EDID_OFFSET_EXT_FLAG	126
-+#define MAX_WRITE_BYTES		16
-+#define NUM_BLOCKS		4
-+#define NUM_CLIENTS		3
-+#define CONFIG_NB_BIT		BIT(0)
-+#define CONFIG_AB0_BIT		BIT(1)
-+#define CONFIG_AB1_BIT		BIT(2)
-+#define CONFIG_WE_BIT		BIT(3)
-+
-+/*
-+ * From the datasheet: REF_01
-+ *
-+ * The write cycle time is the time from a valid stop condition of a write
-+ * sequence to the end of the internal program/erase cycle. During the write
-+ * cycle, the bus interface circuits are disabled, SDA is allowed to remain
-+ * high, and the device does not respond to its slave address.
-+ */
-+#define WRITE_CYCLE_TIME_US	5000
-+
-+/*
-+ * CAT24C208 addresses
-+ */
-+#define CONFIG_I2C_ADDR		0x31
-+#define EEPROM_I2C_ADDR		0x50
-+#define SEGMENT_I2C_ADDR	0x30
-+
-+struct cat24c208_state {
-+	struct i2c_client *dev_client;
-+	struct i2c_client *data_client;
-+	struct i2c_client *seg_client;
-+	// V4L2 ioctl serialization
-+	struct mutex lock;
-+
-+	struct v4l2_device v4l2_dev;
-+	struct video_device vdev;
-+
-+	u8 edid_blocks;		// edid length can vary, one block = 128 bytes
-+	u8 edid[BYTES_PER_BLOCK * NUM_BLOCKS]; // actual active edid data
-+};
-+
-+static const struct v4l2_file_operations cat24c208_fops = {
-+	.owner		= THIS_MODULE,
-+	.open		= v4l2_fh_open,
-+	.release	= v4l2_fh_release,
-+	.unlocked_ioctl = video_ioctl2,
-+};
-+
-+static int cat24c208_seg_write(struct cat24c208_state *state, u8 *data, u16 len, u8 seg)
-+{
-+	struct i2c_msg msg[] = {
-+		{
-+			.addr = state->seg_client->addr,	// Segment
-+			.buf = &seg,
-+			.len = 1,
-+			.flags = 0,
-+		},
-+		{
-+			.addr = state->data_client->addr,	// write data
-+			.buf = data,
-+			.len = len,
-+			.flags = 0,
-+		},
-+	};
-+	int err;
-+
-+	if (seg)
-+		err = i2c_transfer(state->dev_client->adapter, msg, ARRAY_SIZE(msg));
-+	else
-+		err = i2c_transfer(state->dev_client->adapter, &msg[1], 1);
-+
-+	if (err < 0)
-+		dev_err(&state->dev_client->dev, "Writing to 0x%x failed (segment %d)\n",
-+			state->data_client->addr, seg);
-+
-+	usleep_range(WRITE_CYCLE_TIME_US, 2 * WRITE_CYCLE_TIME_US);
-+	return err < 0 ? err : 0;
-+}
-+
-+static int cat24c208_edid_read(struct cat24c208_state *state, u8 *data, u8 seg, u8 offset, u16 len)
-+{
-+	int err;
-+
-+	len *= BYTES_PER_BLOCK;
-+	if (seg) {
-+		struct i2c_msg msg[] = {
-+			{
-+				.addr = state->seg_client->addr,	// Segment
-+				.buf = &seg,
-+				.len = 1,
-+				.flags = 0,
-+			},
-+			{
-+				.addr = state->data_client->addr,	// read data
-+				.buf = data,
-+				.len = len,
-+				.flags = I2C_M_RD,
-+			},
-+		};
-+		err = i2c_transfer(state->dev_client->adapter, msg, ARRAY_SIZE(msg));
-+	} else {
-+		struct i2c_msg msg[] = {
-+			{
-+				.addr = state->data_client->addr,	// set offset
-+				.buf = &offset,
-+				.len = 1,
-+				.flags = 0,
-+			},
-+			{
-+				.addr = state->data_client->addr,	// read data
-+				.buf = data,
-+				.len = len,
-+				.flags = I2C_M_RD,
-+			},
-+		};
-+		err = i2c_transfer(state->dev_client->adapter, msg, ARRAY_SIZE(msg));
-+	}
-+
-+	if (err < 0)
-+		dev_err(&state->dev_client->dev, "Reading of EDID failed\n");
-+	return err < 0 ? err : 0;
-+}
-+
-+static int cat24c208_set_config(struct i2c_client *client)
-+{
-+	u8 buf[2] = { 0, CONFIG_NB_BIT };
-+	struct i2c_msg msg = {
-+		.addr = client->addr,
-+		.buf = buf,
-+		.len = sizeof(buf),
-+		.flags = 0,
-+	};
-+	int err;
-+
-+	err = i2c_transfer(client->adapter, &msg, 1);
-+	if (err < 0)
-+		dev_err(&client->dev, "Could not set config register\n");
-+
-+	usleep_range(WRITE_CYCLE_TIME_US, 2 * WRITE_CYCLE_TIME_US);
-+	return err < 0 ? err : 0;
-+}
-+
-+static bool cat24c208_is_valid_edid(const u8 *block)
-+{
-+	static const u8 header_pattern[] = {
-+		0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00
-+	};
-+
-+	return !memcmp(block, header_pattern, sizeof(header_pattern));
-+}
-+
-+static int cat24c208_set_edid(struct file *file, void *fh, struct v4l2_edid *edid)
-+{
-+	struct cat24c208_state *state = video_drvdata(file);
-+	u8 buf[MAX_WRITE_BYTES + 1];
-+	int err;
-+	int seg;
-+	int i;
-+
-+	memset(edid->reserved, 0, sizeof(edid->reserved));
-+
-+	if (edid->pad)
-+		return -EINVAL;
-+
-+	if (edid->blocks > NUM_BLOCKS) {
-+		edid->blocks = NUM_BLOCKS;
-+		return -E2BIG;
-+	}
-+
-+	if (edid->start_block)
-+		return -EINVAL;
-+
-+	state->edid_blocks = edid->blocks;
-+	memcpy(state->edid, edid->edid, state->edid_blocks * BYTES_PER_BLOCK);
-+
-+	/* Write EDID to EEPROM */
-+	for (i = 0; i < edid->blocks * BYTES_PER_BLOCK; i = i + MAX_WRITE_BYTES) {
-+		if (i >= 2 * BYTES_PER_BLOCK) {
-+			seg = 1;
-+			buf[0] = i - BYTES_PER_BLOCK * 2;
-+		} else {
-+			seg = 0;
-+			buf[0] = i;
-+		}
-+
-+		memcpy(buf + 1, &edid->edid[i], MAX_WRITE_BYTES);
-+		err = cat24c208_seg_write(state, buf, MAX_WRITE_BYTES + 1, seg);
-+		if (err) {
-+			dev_err(&state->dev_client->dev,
-+				"Could not write EDID to EEPROM, i: %d\n", i);
-+			return err;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int cat24c208_get_edid(struct file *file, void *fh, struct v4l2_edid *edid)
-+{
-+	struct cat24c208_state *state = video_drvdata(file);
-+
-+	memset(edid->reserved, 0, sizeof(edid->reserved));
-+
-+	if (edid->pad != 0)
-+		return -EINVAL;
-+
-+	if (edid->start_block == 0 && edid->blocks == 0) {
-+		edid->blocks = state->edid_blocks;
-+		return 0;
-+	}
-+
-+	if (state->edid_blocks == 0)
-+		return -ENODATA;
-+
-+	if (edid->start_block >= state->edid_blocks)
-+		return -EINVAL;
-+
-+	if (edid->start_block + edid->blocks > state->edid_blocks)
-+		edid->blocks = state->edid_blocks - edid->start_block;
-+
-+	memcpy(edid->edid, state->edid + edid->start_block * BYTES_PER_BLOCK,
-+	       edid->blocks * BYTES_PER_BLOCK);
-+
-+	return 0;
-+}
-+
-+static int cat24c208_get_input(struct file *file, void *priv, unsigned int *i)
-+{
-+	*i = 0;
-+	return 0;
-+}
-+
-+static int cat24c208_set_input(struct file *file, void *priv, unsigned int i)
-+{
-+	return i > 0 ? -EINVAL : 0;
-+}
-+
-+static int cat24c208_enum_input(struct file *file, void *priv,
-+				struct v4l2_input *inp)
-+{
-+	if (inp->index)
-+		return -EINVAL;
-+	strscpy(inp->name, "HDMI", sizeof(inp->name));
-+	inp->capabilities = 0;
-+	inp->type = V4L2_INPUT_TYPE_CAMERA;
-+	return 0;
-+}
-+
-+static int cat24c208_querycap(struct file *file,
-+			      void *priv, struct v4l2_capability *cap)
-+{
-+	struct cat24c208_state *state = video_drvdata(file);
-+	struct i2c_client *client = state->dev_client;
-+
-+	strscpy(cap->driver, "cat24c208", sizeof(cap->driver));
-+	strscpy(cap->card, "cat24c208 EDID EEPROM", sizeof(cap->card));
-+	snprintf(cap->bus_info, sizeof(cap->bus_info),
-+		 "I2C:%d-%04x", client->adapter->nr, client->addr);
-+	return 0;
-+}
-+
-+static const struct v4l2_ioctl_ops cat24c208_ioctl_ops = {
-+	.vidioc_querycap	= cat24c208_querycap,
-+	.vidioc_g_edid		= cat24c208_get_edid,
-+	.vidioc_s_edid		= cat24c208_set_edid,
-+	.vidioc_g_input		= cat24c208_get_input,
-+	.vidioc_s_input		= cat24c208_set_input,
-+	.vidioc_enum_input	= cat24c208_enum_input,
-+};
-+
-+static void cat24c208_release(struct video_device *vdev)
-+{
-+	struct cat24c208_state *state = video_get_drvdata(vdev);
-+
-+	v4l2_device_unregister(&state->v4l2_dev);
-+	mutex_destroy(&state->lock);
-+	kfree(state);
-+}
-+
-+static int cat24c208_probe(struct i2c_client *client)
-+{
-+	struct cat24c208_state *state;
-+	struct v4l2_device *v4l2_dev;
-+	int blocks;
-+	int ret;
-+
-+	state = kzalloc(sizeof(*state), GFP_KERNEL);
-+	if (!state)
-+		return -ENOMEM;
-+
-+	state->dev_client = client;
-+	state->data_client = i2c_new_ancillary_device(client, "eeprom", EEPROM_I2C_ADDR);
-+	if (IS_ERR(state->data_client)) {
-+		ret = PTR_ERR(state->data_client);
-+		goto free_state;
-+	}
-+	state->seg_client = i2c_new_ancillary_device(client, "segment", SEGMENT_I2C_ADDR);
-+	if (IS_ERR(state->seg_client)) {
-+		ret = PTR_ERR(state->seg_client);
-+		goto unreg_i2c_first;
-+	}
-+
-+	ret = cat24c208_set_config(client);
-+	if (ret)
-+		goto unreg_i2c_all;
-+
-+	if (cat24c208_edid_read(state, state->edid, 0, 0, 2) >= 0 &&
-+	    cat24c208_is_valid_edid(state->edid)) {
-+		unsigned int i;
-+
-+		blocks = 1 + state->edid[EDID_OFFSET_EXT_FLAG];
-+		state->edid_blocks = blocks;
-+		for (i = 2; i < blocks; i += 2) {
-+			if (cat24c208_edid_read(state, state->edid + i * BYTES_PER_BLOCK,
-+						i / 2, 0, (i + 1 >= blocks ? 1 : 2))) {
-+				state->edid_blocks = i;
-+				break;
-+			}
-+		}
-+	}
-+
-+	v4l2_dev = &state->v4l2_dev;
-+	strscpy(v4l2_dev->name, "cat24c208", sizeof(v4l2_dev->name));
-+	ret = v4l2_device_register(&client->dev, v4l2_dev);
-+	if (ret) {
-+		dev_err(&client->dev, "v4l2_device_register failed: %d\n", ret);
-+		goto unreg_i2c_all;
-+	}
-+
-+	mutex_init(&state->lock);
-+
-+	snprintf(state->vdev.name, sizeof(state->vdev.name),
-+		 "cat24c208 %d-%d", client->adapter->nr, client->addr);
-+
-+	state->vdev.v4l2_dev = v4l2_dev;
-+	state->vdev.fops = &cat24c208_fops;
-+	state->vdev.ioctl_ops = &cat24c208_ioctl_ops;
-+	state->vdev.lock = &state->lock;
-+	state->vdev.release = cat24c208_release;
-+	state->vdev.device_caps = V4L2_CAP_EDID_MEMORY;
-+
-+	video_set_drvdata(&state->vdev, state);
-+	i2c_set_clientdata(client, state);
-+	ret = video_register_device(&state->vdev, VFL_TYPE_VIDEO, -1);
-+	if (ret != 0) {
-+		dev_err(&client->dev, "Video registering failed: %d\n", ret);
-+		goto unreg_v4l2_dev;
-+	}
-+	return 0;
-+
-+unreg_v4l2_dev:
-+	v4l2_device_unregister(&state->v4l2_dev);
-+unreg_i2c_all:
-+	i2c_unregister_device(state->seg_client);
-+unreg_i2c_first:
-+	i2c_unregister_device(state->data_client);
-+free_state:
-+	kfree(state);
-+	return ret;
-+}
-+
-+static int cat24c208_remove(struct i2c_client *client)
-+{
-+	struct cat24c208_state *state = i2c_get_clientdata(client);
-+
-+	i2c_unregister_device(state->data_client);
-+	i2c_unregister_device(state->seg_client);
-+	video_unregister_device(&state->vdev);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id cat24c208_of_match[] = {
-+	{ .compatible = "onnn,cat24c208"},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, cat24c208_of_match);
-+
-+static struct i2c_driver cat24c208_driver = {
-+	.driver = {
-+		.name	= "cat24c208",
-+		.of_match_table = cat24c208_of_match,
-+	},
-+	.probe_new	= cat24c208_probe,
-+	.remove		= cat24c208_remove,
-+};
-+module_i2c_driver(cat24c208_driver);
+-	drm_gem_remove_prime_handles(obj, file_priv);
++	drm_prime_remove_buf_handle(&file_priv->prime, id);
+ 	drm_vma_node_revoke(&obj->vma_node, file_priv);
+ 
+ 	drm_gem_object_handle_put_unlocked(obj);
+diff --git a/drivers/gpu/drm/drm_internal.h b/drivers/gpu/drm/drm_internal.h
+index 1fbbc19f1ac0..7bb98e6a446d 100644
+--- a/drivers/gpu/drm/drm_internal.h
++++ b/drivers/gpu/drm/drm_internal.h
+@@ -74,8 +74,8 @@ int drm_prime_fd_to_handle_ioctl(struct drm_device *dev, void *data,
+ 
+ void drm_prime_init_file_private(struct drm_prime_file_private *prime_fpriv);
+ void drm_prime_destroy_file_private(struct drm_prime_file_private *prime_fpriv);
+-void drm_prime_remove_buf_handle_locked(struct drm_prime_file_private *prime_fpriv,
+-					struct dma_buf *dma_buf);
++void drm_prime_remove_buf_handle(struct drm_prime_file_private *prime_fpriv,
++				 uint32_t handle);
+ 
+ /* drm_drv.c */
+ struct drm_minor *drm_minor_acquire(unsigned int minor_id);
+diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
+index e3f09f18110c..bd5366b16381 100644
+--- a/drivers/gpu/drm/drm_prime.c
++++ b/drivers/gpu/drm/drm_prime.c
+@@ -190,29 +190,33 @@ static int drm_prime_lookup_buf_handle(struct drm_prime_file_private *prime_fpri
+ 	return -ENOENT;
+ }
+ 
+-void drm_prime_remove_buf_handle_locked(struct drm_prime_file_private *prime_fpriv,
+-					struct dma_buf *dma_buf)
++void drm_prime_remove_buf_handle(struct drm_prime_file_private *prime_fpriv,
++				 uint32_t handle)
+ {
+ 	struct rb_node *rb;
+ 
+-	rb = prime_fpriv->dmabufs.rb_node;
++	mutex_lock(&prime_fpriv->lock);
++
++	rb = prime_fpriv->handles.rb_node;
+ 	while (rb) {
+ 		struct drm_prime_member *member;
+ 
+-		member = rb_entry(rb, struct drm_prime_member, dmabuf_rb);
+-		if (member->dma_buf == dma_buf) {
++		member = rb_entry(rb, struct drm_prime_member, handle_rb);
++		if (member->handle == handle) {
+ 			rb_erase(&member->handle_rb, &prime_fpriv->handles);
+ 			rb_erase(&member->dmabuf_rb, &prime_fpriv->dmabufs);
+ 
+-			dma_buf_put(dma_buf);
++			dma_buf_put(member->dma_buf);
+ 			kfree(member);
+-			return;
+-		} else if (member->dma_buf < dma_buf) {
++			break;
++		} else if (member->handle < handle) {
+ 			rb = rb->rb_right;
+ 		} else {
+ 			rb = rb->rb_left;
+ 		}
+ 	}
++
++	mutex_unlock(&prime_fpriv->lock);
+ }
+ 
+ void drm_prime_init_file_private(struct drm_prime_file_private *prime_fpriv)
 -- 
-2.37.1
+2.20.1
 
