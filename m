@@ -2,41 +2,41 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4586EC19F28
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5B72C19F2C
 	for <linux-media@archiver.kernel.org>; Wed,  3 Aug 2022 07:58:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237360AbiHCH6M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Aug 2022 03:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45956 "EHLO
+        id S237371AbiHCH6N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Aug 2022 03:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237324AbiHCH6K (ORCPT
+        with ESMTP id S235626AbiHCH6K (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Wed, 3 Aug 2022 03:58:10 -0400
-Received: from aer-iport-1.cisco.com (aer-iport-1.cisco.com [173.38.203.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9963120F;
-        Wed,  3 Aug 2022 00:58:08 -0700 (PDT)
+Received: from aer-iport-8.cisco.com (aer-iport-8.cisco.com [173.38.203.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596ED2A273
+        for <linux-media@vger.kernel.org>; Wed,  3 Aug 2022 00:58:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=1442; q=dns/txt; s=iport;
+  d=cisco.com; i=@cisco.com; l=1478; q=dns/txt; s=iport;
   t=1659513489; x=1660723089;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=y0WnfnASAaSNWqN6hhhY0Go5IWPq3oMhskgNHoWb0YE=;
-  b=lKI5gb4w5236j9/9IzMppTOGmKAZWheoFdquOJfwcXB/nWtE/XziT2K/
-   vdBMo3Ly3Yimxq3MtJq3mf5jA2ydEFtVFhiKIV+96nax5UNnheiOvZ/mn
-   SF3t4Z9Yd+nuYewoERJX7dKejVdUsTg8TlSLlpXDRpfg6LYFJir0D7wYZ
-   U=;
+  bh=ZV27oEQ0c4Bf39zyMjYO91SIh+6idpUgvNeumAP+Kwc=;
+  b=l7tpznPxxT9jKGMffrvXxcrC6TTDa/W4tkkizdWA89Jco6MIT8xMhUtM
+   E75F91QtgftVJxQY9qP8us3hP6nGodENDGfumXfSO/0S5H9cK0MsPkul7
+   C5dJjWz1zCPjMr6u2dIgqE21u+g0R2YyDgZG5+YUVv1d3qimXhG1MId0q
+   c=;
 X-IronPort-AV: E=Sophos;i="5.93,213,1654560000"; 
-   d="scan'208";a="3358740"
+   d="scan'208";a="692986"
 Received: from aer-iport-nat.cisco.com (HELO aer-core-1.cisco.com) ([173.38.203.22])
-  by aer-iport-1.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 03 Aug 2022 07:58:07 +0000
+  by aer-iport-8.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 03 Aug 2022 07:58:07 +0000
 Received: from office-260.rd.cisco.com ([10.47.77.162])
-        by aer-core-1.cisco.com (8.15.2/8.15.2) with ESMTP id 2737w5SB024084;
-        Wed, 3 Aug 2022 07:58:06 GMT
+        by aer-core-1.cisco.com (8.15.2/8.15.2) with ESMTP id 2737w5SD024084;
+        Wed, 3 Aug 2022 07:58:07 GMT
 From:   Erling Ljunggren <hljunggr@cisco.com>
 To:     linux-media@vger.kernel.org
-Cc:     Erling Ljunggren <hljunggr@cisco.com>, devicetree@vger.kernel.org
-Subject: [PATCH v2 3/5] dt-bindings: media: add cat24c208 bindings
-Date:   Wed,  3 Aug 2022 09:58:48 +0200
-Message-Id: <20220803075850.1196988-4-hljunggr@cisco.com>
+Cc:     Erling Ljunggren <hljunggr@cisco.com>
+Subject: [PATCH v2 5/5] media: v4l2-dev: handle V4L2_CAP_EDID_MEMORY
+Date:   Wed,  3 Aug 2022 09:58:50 +0200
+Message-Id: <20220803075850.1196988-6-hljunggr@cisco.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220803075850.1196988-1-hljunggr@cisco.com>
 References: <20220803075850.1196988-1-hljunggr@cisco.com>
@@ -48,60 +48,40 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add devicetree bindings for new cat24c208 EDID EEPROM driver.
+When the V4L2_CAP_EDID_MEMORY capability flag is set,
+ioctls for enum inputs and get/set edid are automatically set.
 
 Signed-off-by: Erling Ljunggren <hljunggr@cisco.com>
 ---
- .../bindings/media/i2c/onnn,cat24c208.yaml    | 40 +++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/onnn,cat24c208.yaml
+ drivers/media/v4l2-core/v4l2-dev.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/onnn,cat24c208.yaml b/Documentation/devicetree/bindings/media/i2c/onnn,cat24c208.yaml
-new file mode 100644
-index 000000000000..590cdf0cbdc1
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/onnn,cat24c208.yaml
-@@ -0,0 +1,40 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/onnn,cat24c208.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: ON Semiconductor CAT24C208 EDID EEPROM driver
-+
-+maintainers:
-+  - Hans Verkuil <hverkuil-cisco@xs4all.nl>
-+
-+description: |
-+  CAT24C208 is a dual port i2c EEPROM designed for EDID storage.
-+
-+
-+properties:
-+  compatible:
-+    const: onnn,cat24c208
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        cat24c208@31 {
-+            compatible = "onnn,cat24c208";
-+            reg = <0x31>;
-+        };
-+    };
-+...
+diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
+index d00237ee4cae..39437911edcc 100644
+--- a/drivers/media/v4l2-core/v4l2-dev.c
++++ b/drivers/media/v4l2-core/v4l2-dev.c
+@@ -556,6 +556,7 @@ static void determine_valid_ioctls(struct video_device *vdev)
+ 	bool is_rx = vdev->vfl_dir != VFL_DIR_TX;
+ 	bool is_tx = vdev->vfl_dir != VFL_DIR_RX;
+ 	bool is_io_mc = vdev->device_caps & V4L2_CAP_IO_MC;
++	bool is_edid_mem =  vdev->device_caps & V4L2_CAP_EDID_MEMORY;
+ 
+ 	bitmap_zero(valid_ioctls, BASE_VIDIOC_PRIVATE);
+ 
+@@ -778,6 +779,13 @@ static void determine_valid_ioctls(struct video_device *vdev)
+ 		SET_VALID_IOCTL(ops, VIDIOC_S_TUNER, vidioc_s_tuner);
+ 		SET_VALID_IOCTL(ops, VIDIOC_S_HW_FREQ_SEEK, vidioc_s_hw_freq_seek);
+ 	}
++	if (is_edid_mem) {
++		SET_VALID_IOCTL(ops, VIDIOC_G_EDID, vidioc_g_edid);
++		SET_VALID_IOCTL(ops, VIDIOC_S_EDID, vidioc_s_edid);
++		SET_VALID_IOCTL(ops, VIDIOC_ENUMINPUT, vidioc_enum_input);
++		SET_VALID_IOCTL(ops, VIDIOC_G_INPUT, vidioc_g_input);
++		SET_VALID_IOCTL(ops, VIDIOC_S_INPUT, vidioc_s_input);
++	}
+ 
+ 	bitmap_andnot(vdev->valid_ioctls, valid_ioctls, vdev->valid_ioctls,
+ 			BASE_VIDIOC_PRIVATE);
 -- 
 2.37.1
 
