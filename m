@@ -2,229 +2,66 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DFCBC19F2C
-	for <linux-media@archiver.kernel.org>; Wed,  3 Aug 2022 13:38:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7F58C19F2D
+	for <linux-media@archiver.kernel.org>; Wed,  3 Aug 2022 23:41:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237535AbiHCNiI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Aug 2022 09:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52706 "EHLO
+        id S238498AbiHCXlH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Aug 2022 19:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233926AbiHCNiF (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Aug 2022 09:38:05 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3771186C4;
-        Wed,  3 Aug 2022 06:38:04 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-32194238c77so171759347b3.4;
-        Wed, 03 Aug 2022 06:38:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qEmnRhUglwgaMG2x8XfL+UPh5kqurYSbdexAPUQtz+g=;
-        b=irhK4yngUwEW391KpWw9RU4kcByAludlJD+Xq561IHNOdtLNiRzmLarGUmdFj/cXxj
-         p+l/n9g3lgGxuUhxdtlBWklJnFAcQZUwBh+2q3bNv4foibskugl2lDqcml9IF8rAlO+W
-         aEcNRZNP1k8xIBQQ32MAt7Rr8ageEeGf8nnNpVqkSsRF1v5PrGlX0bzL2mXg6XhBzTsB
-         PKHVAbg/FOeaDno5+Hr719lY7Ii4YdQlNPDfpq5zsIZ4WKfOwV0+vZxREMUvj/+oS0Q4
-         2zzDYP68T2nCFvWls+6HETS0/LmW3k1L7o1DwvAFyf9RK5y/Gv1cA3bkcZ3CapsI8+uF
-         dwtA==
+        with ESMTP id S233883AbiHCXlF (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Aug 2022 19:41:05 -0400
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE24D65C0;
+        Wed,  3 Aug 2022 16:41:04 -0700 (PDT)
+Received: by mail-io1-f49.google.com with SMTP id h138so99424iof.12;
+        Wed, 03 Aug 2022 16:41:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qEmnRhUglwgaMG2x8XfL+UPh5kqurYSbdexAPUQtz+g=;
-        b=y/PUp5cszsaThgRAGNvlPmODlieD407K90mbI5PGq88CectZ7k6QOChcUxNWwDaYk6
-         aUxiksvVUJyWmz6mDztGra/un6h9CceLKLZ51EAc7LXbU4dKwWIecNZw0gNnqLjip/o0
-         N/M+2qFVuRDfyfw8nTefXUuNPEY51GZZuDs/xGlQCKmQcvT+3Mie5Xt6puR1yrD6xDYW
-         eZFNYPaOBvlcnypf73CP2qaEVlCLBCnqFLECEf2UEW/mWw2YZUA6Pt6nrxeVirocjx3o
-         rLuYWGu4aZLkvjTqebYonl0rUVP3FVQMpbX8Oq3xPgq5BKSYM+VRXpfgmkXayc6mCmTC
-         smGg==
-X-Gm-Message-State: ACgBeo2y+KYWdQpHZj6SD2dM6hrZtKfWOpdthTZb8xn06PHms4cF2Fcq
-        DRcpsFy3fw7g3wqbdQHpbNUPbl01xav4fek4JkY=
-X-Google-Smtp-Source: AA6agR47J72Y4rSQyi/AtMa1SmS5iMh5fVLkME8ZjIfk5YKGyblzQNzEq/Vqn97R7+3KEImCOQbKTXePX5YHdgl8QHc=
-X-Received: by 2002:a81:1d09:0:b0:31d:a40:8332 with SMTP id
- d9-20020a811d09000000b0031d0a408332mr24629133ywd.138.1659533884058; Wed, 03
- Aug 2022 06:38:04 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=5+coTZDduovtGeGUAQiY1KZPZyVV//yq+dtkqtwvr+M=;
+        b=IGbbkXI9NLnViTv6XQ5mgO2wM+OqGWL1rDmE+5vMAPUsKh/QVGrPvJmB3PMDHJt1Lm
+         vWx261n/B5FJG6V3Q+/H8PHordWwN///jP1U9edd5ajdhizWoLvOvA167j7bsCuO3fiw
+         6hu2pSHDNADAOR/LVyeH7xIPZzOCwxtc19eXSmkT83pOyqQMiIpp2aTrWRyH1j+Nhlv6
+         1OU5gAcEcUYOX4FE1RtWVpOrrb8fiu0kPJMty2/0K1qMGf2nQ4SR+Hmvu1Ppu3O8Kz2Z
+         Fjyqy7jsZv/FPOCcHweSjcZ5Zk4uOuQnF/M0g1Fc0EqSKqg2hDJHU1rNC0PRQUgf3Dss
+         IKrg==
+X-Gm-Message-State: AJIora8ojuVH1pR3NHKPfDCqJXiJPq0dxXWFj0EnMji0D+eZ+eFZ7DYz
+        C2nWCZvQeXcSyNYoNjfH7A==
+X-Google-Smtp-Source: AGRyM1tmA+XpuxcqCJHNx9Oy06r+C85vPLF2CqHp9NgXLB1se8UYv3+2vvfJvGjtO2m4WNI3tTpmsA==
+X-Received: by 2002:a6b:c301:0:b0:67c:5d64:ba13 with SMTP id t1-20020a6bc301000000b0067c5d64ba13mr9684068iof.126.1659570063905;
+        Wed, 03 Aug 2022 16:41:03 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id t26-20020a02ccba000000b0034276516a5asm4257790jap.9.2022.08.03.16.41.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 16:41:03 -0700 (PDT)
+Received: (nullmailer pid 2827776 invoked by uid 1000);
+        Wed, 03 Aug 2022 23:41:01 -0000
+Date:   Wed, 3 Aug 2022 17:41:01 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Erling Ljunggren <hljunggr@cisco.com>
+Cc:     devicetree@vger.kernel.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH v2 3/5] dt-bindings: media: add cat24c208 bindings
+Message-ID: <20220803234101.GA2827721-robh@kernel.org>
+References: <20220803075850.1196988-1-hljunggr@cisco.com>
+ <20220803075850.1196988-4-hljunggr@cisco.com>
 MIME-Version: 1.0
-References: <20220801214718.16943-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220801214718.16943-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <4ff10b73-d04b-cda8-6603-f6f342f5ce9a@linaro.org>
-In-Reply-To: <4ff10b73-d04b-cda8-6603-f6f342f5ce9a@linaro.org>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 3 Aug 2022 14:37:37 +0100
-Message-ID: <CA+V-a8utnf6EBCia5zNcLHgpJikWcB3csT=82EV_ekSse6xyQg@mail.gmail.com>
-Subject: Re: [PATCH 2/4] media: dt-bindings: media: Document RZ/G2L CRU
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-media <linux-media@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220803075850.1196988-4-hljunggr@cisco.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Krzysztof,
+On Wed, 03 Aug 2022 09:58:48 +0200, Erling Ljunggren wrote:
+> Add devicetree bindings for new cat24c208 EDID EEPROM driver.
+> 
+> Signed-off-by: Erling Ljunggren <hljunggr@cisco.com>
+> ---
+>  .../bindings/media/i2c/onnn,cat24c208.yaml    | 40 +++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/onnn,cat24c208.yaml
+> 
 
-Thank you for the review.
-
-On Tue, Aug 2, 2022 at 8:37 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 01/08/2022 23:47, Lad Prabhakar wrote:
-> > Document the CRU block found on Renesas RZ/G2L SoC's.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> > RFC v2 -> v1
-> > * Dropped endpoint stuff from port1 as suggested by Rob
-> > * Updated description for endpoint
-> >
-> > RFC v1 -> RFC v2
-> > * Dropped CSI
-> > ---
-> >  .../bindings/media/renesas,rzg2l-cru.yaml     | 142 ++++++++++++++++++
-> >  1 file changed, 142 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml b/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
-> > new file mode 100644
-> > index 000000000000..d7389693dae9
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
-> > @@ -0,0 +1,142 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +# Copyright (C) 2022 Renesas Electronics Corp.
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/media/renesas,rzg2l-cru.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Renesas RZ/G2L (and alike SoC's) Camera Data Receiving Unit (CRU) Image processing
-> > +
-> > +maintainers:
-> > +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > +
-> > +description:
-> > +  The CRU image processing module is a data conversion module equipped with pixel
-> > +  color space conversion, LUT, pixel format conversion, etc. An MIPI CSI-2 input and
-> > +  parallel (including ITU-R BT.656) input are provided as the image sensor interface.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    oneOf:
->
-> No need for oneOf, unless you already have a patch adding second case to
-> oneOf.
->
-Agreed, I will drop that.
-
-> > +      - items:
-> > +          - enum:
-> > +              - renesas,r9a07g044-cru     # RZ/G2{L,LC}
-> > +              - renesas,r9a07g054-cru     # RZ/V2L
-> > +          - const: renesas,rzg2l-cru
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 3
-> > +
-> > +  interrupt-names:
-> > +    items:
-> > +      - const: image_conv
-> > +      - const: image_conv_err
-> > +      - const: axi_mst_err
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: CRU Main clock
-> > +      - description: CPU Register access clock
-> > +      - description: CRU image transfer clock
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: vclk
-> > +      - const: pclk
-> > +      - const: aclk
-> > +
-> > +  power-domains:
-> > +    maxItems: 1
-> > +
-> > +  resets:
-> > +    items:
-> > +      - description: CRU_PRESETN reset terminal
-> > +      - description: CRU_ARESETN reset terminal
-> > +
-> > +  reset-names:
-> > +    items:
-> > +      - const: presetn
-> > +      - const: aresetn
-> > +
-> > +  ports:
-> > +    $ref: /schemas/graph.yaml#/properties/ports
-> > +
-> > +    properties:
-> > +      port@0:
-> > +        $ref: /schemas/graph.yaml#/$defs/port-base
-> > +        unevaluatedProperties: false
-> > +        description:
-> > +          Input port node, single endpoint describing a parallel input source.
-> > +
-> > +        properties:
-> > +          endpoint:
-> > +            $ref: video-interfaces.yaml#
-> > +            unevaluatedProperties: false
-> > +
-> > +            properties:
-> > +              hsync-active: true
-> > +              vsync-active: true
-> > +              bus-width: true
-> > +              data-shift: true
-> > +
-> > +      port@1:
-> > +        $ref: /schemas/graph.yaml#/properties/port
-> > +        description:
-> > +          Input port node, describing the Image Processing module connected to the
-> > +          CSI-2 receiver.
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +  - interrupt-names
-> > +  - clocks
-> > +  - clock-names
-> > +  - resets
-> > +  - reset-names
-> > +  - power-domains
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  # Device node example with CSI-2
-> > +  - |
-> > +    #include <dt-bindings/clock/r9a07g044-cpg.h>
-> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +
-> > +    cru: video@10830000 {
-> > +            compatible = "renesas,r9a07g044-cru", "renesas,rzg2l-cru";
->
-> Also 4-space for DTS example, please.
->
-Agreed.
-
-Cheers,
-Prabhakar
+Reviewed-by: Rob Herring <robh@kernel.org>
