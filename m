@@ -2,89 +2,224 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81073C00144
-	for <linux-media@archiver.kernel.org>; Thu,  4 Aug 2022 04:41:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49A5CC19F2C
+	for <linux-media@archiver.kernel.org>; Thu,  4 Aug 2022 07:30:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238433AbiHDElx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Aug 2022 00:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
+        id S238967AbiHDHaU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Aug 2022 03:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiHDElw (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Aug 2022 00:41:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DA627145
-        for <linux-media@vger.kernel.org>; Wed,  3 Aug 2022 21:41:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E43DB8248D
-        for <linux-media@vger.kernel.org>; Thu,  4 Aug 2022 04:41:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 059BBC433D6
-        for <linux-media@vger.kernel.org>; Thu,  4 Aug 2022 04:41:47 +0000 (UTC)
-Date:   Thu, 04 Aug 2022 06:41:46 +0200
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: OK
-Message-Id: <20220804044148.059BBC433D6@smtp.kernel.org>
+        with ESMTP id S232987AbiHDHaS (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Aug 2022 03:30:18 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DF06175
+        for <linux-media@vger.kernel.org>; Thu,  4 Aug 2022 00:30:16 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id f22so13213685edc.7
+        for <linux-media@vger.kernel.org>; Thu, 04 Aug 2022 00:30:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc;
+        bh=xiNxGwoDzvLinzDbDRaMJgjXa9JQzG8Dc9gxLOBuJuU=;
+        b=cpWr79oyvPTe7pTAQoSOIlrJpWuartFa58khJHqgQpcpYmo6cdxwQwPJTj2/WVyFsY
+         9gJXzc9rgxfe+8OBwU4BuApx+AemI4BZdVYeP6GLr5vkRkt7rsHzUl9SaoD9gtzBl/IL
+         vUncY8oFtJjy4AjRoNIPxWnUc/vMf4zOx9dX4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=xiNxGwoDzvLinzDbDRaMJgjXa9JQzG8Dc9gxLOBuJuU=;
+        b=YrJ4qfoFs7Isdh1+8rQAwS8/C0z/aOEM+mzC77EP8i1dSm9lACg5Gx6IwEq8IDN8wA
+         wh5UrpZqqpaktW3aacXcnCUeu1F3u8O/8Kq5yhJ60SsGavYCpN0cQ7bKNCYJW2uysWU9
+         wzy9YS2sSErcyoF7h47kHFlyG1tRJtSHd5/hJquB5UpDU6lvVehmkECSvnRRPPCtYGck
+         lxlw4ZQvALQjBxTfceXFDNFTkt+thjUUlcr1XErjuaLyiSTn6qtvZY8LvokvHmCoOJnx
+         6H3wpO59cV6FOdZMySXugt0WODiBjrFw3iaIq6Eyrms3V5eY0pnEr0NkI7tjydntqav+
+         aFRw==
+X-Gm-Message-State: ACgBeo0RXz+VY8QSq3tuK06MJ68uX6KGqp4x+YjUxeLOUk9DTzog9uD0
+        veBtZWLHhMlML43xdkPJqHrIy067lUuvxw==
+X-Google-Smtp-Source: AA6agR4Ch8CwOc36xRTg/LTzZToX0ATnju9Ha2D15X1Lq30aUgKtj/dSTUo68ua8/Ldzs+zm4hfEhg==
+X-Received: by 2002:a05:6402:2387:b0:43d:3e0:4daf with SMTP id j7-20020a056402238700b0043d03e04dafmr699910eda.208.1659598215328;
+        Thu, 04 Aug 2022 00:30:15 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-51-7.cust.vodafonedsl.it. [188.217.51.7])
+        by smtp.gmail.com with ESMTPSA id i8-20020a170906250800b0072ecef772acsm60171ejb.2.2022.08.04.00.30.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Aug 2022 00:30:15 -0700 (PDT)
+Date:   Thu, 4 Aug 2022 09:30:13 +0200
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     hverkuil@xs4all.nl
+Cc:     linux-media <linux-media@vger.kernel.org>
+Subject: vivid, vivid-kthread-touch.c migration to hrtimer
+Message-ID: <20220804073013.GA9180@tom-ThinkPad-T14s-Gen-2i>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+Hi All,
+I try to handle "V4L2: vivid: improve timestamping" task in
+https://www.linuxtv.org/wiki/index.php/Media_Open_Source_Projects:_Looking_for_Volunteers
 
-Results of the daily build of media_tree:
+I do a first try on using hrtimer on vivi-kthread-touch.c
+I have some doubt on my things :'(
 
-date:			Thu Aug  4 05:00:14 CEST 2022
-media-tree git hash:	485ade76c95ac5ccaa52fee9d712471c9211b989
-media_build git hash:	0fe857b86addf382f6fd383948bd7736a3201403
-v4l-utils git hash:	4cf258c24026895c74675a8c55efa7a14edb5ef3
-edid-decode git hash:	6816e6a691f40e6fbb64e6d40f012d7727c6315f
-gcc version:		i686-linux-gcc (GCC) 11.2.0
-sparse repo:            git://git.kernel.org/pub/scm/devel/sparse/sparse.git
-sparse version:		v0.6.4-39-gce1a6720-dirty
-smatch repo:            git://repo.or.cz/smatch.git
-smatch version:		v0.5.0-8107-gefca24df-dirty
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 2566a5ba93cb728b610d9390608e9edbe589b4ec
-host hardware:		x86_64
-host os:		5.18.0-2-amd64
+In particular on the following formulas:
 
-linux-git-sh: OK
-linux-git-mips: OK
-linux-git-arm-stm32: OK
-linux-git-arm-at91: OK
-linux-git-arm-multi: OK
-linux-git-arm-davinci: OK
-linux-git-arm-pxa: OK
-linux-git-powerpc64: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-x86_64: OK
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-apps: OK
-spec-git: OK
-virtme: OK: Final Summary: 3077, Succeeded: 3077, Failed: 0, Warnings: 0
-virtme-32: OK: Final Summary: 3190, Succeeded: 3190, Failed: 0, Warnings: 0
-sparse: OK
-smatch: OK
-kerneldoc: OK
+buffers_since_start =
+                 denominator * time_since_start / NSEC_PER_SEC;
 
-Detailed results are available here:
 
-https://hverkuil.home.xs4all.nl/logs/Thursday.log
+next_time_buf_start =
+                 time_since_start / buffers_since_start;
 
-Detailed regression test results are available here:
 
-https://hverkuil.home.xs4all.nl/logs/Thursday-test-media.log
-https://hverkuil.home.xs4all.nl/logs/Thursday-test-media-32.log
-https://hverkuil.home.xs4all.nl/logs/Thursday-test-media-dmesg.log
+I post also the entire hrtimer func:
 
-Full logs are available here:
+static enum hrtimer_restart vivid_hrtimer_touch_cap(struct hrtimer *hrtimer)
+{
+	struct vivid_dev *dev = container_of(hrtimer,
+							struct vivid_dev, hrtimer_touch_cap);
+	unsigned int numerator, denominator;
+	ktime_t now;
+	s64 time_since_start, next_time_buf_start;
+	u64 buffers_since_start, numerators_since_start;
+	int dropped_bufs;
 
-https://hverkuil.home.xs4all.nl/logs/Thursday.tar.bz2
+	/* Resets frame counters first time */
+	if (!dev->hrtimer_touch_cap_started) {
 
-The Media Infrastructure API from this daily build is here:
+		dprintk(dev, 1, "Touch Capture Thread Start\n");
 
-https://hverkuil.home.xs4all.nl/spec/index.html
+		dev->touch_cap_seq_offset = 0;
+		dev->touch_cap_seq_count = 0;
+		dev->touch_cap_seq_resync = false;
+		dev->time_touch_cap = hrtimer_cb_get_time(hrtimer);
+
+		if (dev->time_wrap)
+			dev->time_wrap_offset = dev->time_wrap - ktime_get_ns();
+		else
+			dev->time_wrap_offset = 0;
+
+		dev->hrtimer_touch_cap_started = true;
+	}
+
+	now = hrtimer_cb_get_time(hrtimer);
+
+	if (dev->touch_cap_seq_resync) {
+		dev->time_touch_cap = hrtimer_cb_get_time(hrtimer);
+		dev->touch_cap_seq_offset = dev->touch_cap_seq_count + 1;
+		dev->touch_cap_seq_count = 0;
+		dev->cap_seq_resync = false;
+	}
+
+	denominator = dev->timeperframe_tch_cap.denominator;
+	numerator = dev->timeperframe_tch_cap.numerator;
+
+	time_since_start =
+		ktime_to_ns(now) - ktime_to_ns(dev->time_touch_cap);
+
+	// printk("ktime_to_ms(now) = %lld", ktime_to_ms(now));
+	// printk("ktime_to_ms(dev->time_touch_cap) = %lld", ktime_to_ms(dev->time_touch_cap));
+	// printk("time_since_start = %lld\n",time_since_start);
+
+	buffers_since_start =
+		denominator * time_since_start / NSEC_PER_SEC;
+
+	// printk("buffer_since_start = %lld\n",buffers_since_start);
+
+	dropped_bufs =
+		buffers_since_start + dev->touch_cap_seq_offset - dev->touch_cap_seq_count;
+	dev->touch_cap_seq_count =
+		buffers_since_start + dev->touch_cap_seq_offset;
+	dev->touch_cap_with_seq_wrap_count =
+		dev->touch_cap_seq_count - dev->touch_cap_seq_start;
+
+	vivid_thread_tch_cap_tick(dev, dropped_bufs);
+
+	numerators_since_start = ++buffers_since_start * numerator;
+
+	now = hrtimer_cb_get_time(hrtimer);
+	time_since_start =
+		ktime_to_ns(now) - ktime_to_ns(dev->time_touch_cap);
+
+	// printk("time_since_start = %lld\n",time_since_start);
+	mutex_unlock(&dev->mutex);
+
+	next_time_buf_start =
+		time_since_start / buffers_since_start;
+
+	// printk("next_time_buf_start = %lld", next_time_buf_start);
+
+	hrtimer_forward_now(hrtimer, ns_to_ktime(next_time_buf_start));
+	return HRTIMER_RESTART;
+}
+
+References:
+ - https://github.com/Scott31393/linux/commit/b0e7b7eea1921ab3faad46c8ad8538c083cac2b4
+
+During test I got the following result, delta is quite costant but
+sometimes I got some delay of 2 time the, let me say "nice to have
+delay". 
+
+/usr/bin/v4l2-ctl -d /dev/v4l-touch0 --stream-mmap --verbose
+
+cap dqbuf: 1 seq:   3839 bytesused: 504 ts: 628.527612 delta: 99.995 ms fps: 10.00 (ts-monotonic, ts-src-eof)
+TD16:    0   1   0   0   0   0   0   0   0   0   0   0  -3  -1   0   0   0   0   0   0   0
+TD16:    0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   1   0
+TD16:    0   3   0   0   0   0   0   0   0   0   0   0   0   0   3   0   0   0   0   0   0
+TD16:    0   0   0   1   0   0   0   0   0   0   0   0   3   0   0   0   0   0   0  -1   0
+TD16:    0   0   0   0  -1   0   0   0   0   2   0   0   0   0   0   0   0   0   0   0   0
+TD16:    0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+TD16:    0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+TD16:    0   0   0   0   0   0   0   0   0   0   1   0   0   0   0   0   0   0   0   0   0
+TD16:    0   0   0   0   0   0   0   0   0   0   0   0   0   3   0   2   0   0   0   0   0
+TD16:    3   0  -1   0   0   0   0   0   0   0   0   0   0   0   0   0   3   0   0   3   0
+TD16:    0   0   1   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+TD16:    0   0   0   0   0   0   0   3   0   0   0   0   0   0   0   0   0   0   0   0   3
+cap dqbuf: 2 seq:   3840 bytesused: 504 ts: 628.627602 delta: 99.990 ms fps: 10.00 (ts-monotonic, ts-src-eof)
+TD16:    0   0   0   0   0   0   0   0   0   0   0   1   0   0   0   0   0   0   2   0   0
+TD16:    0   0   0   0   0   0   0   0   1   0   0   0   0   0   0   0   0   0   0   0   0
+TD16:    0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   3   0   0   0
+TD16:    0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+TD16:    0  -2   0   2   0   0   0   0   0   0   0   0   0   0   2   0   0   0   0   0   0
+TD16:    0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+TD16:    0   0   0   0   0   2   0   0   0   0   0   3   0   0   0   0   0   0   0   0   0
+TD16:    0   0   0  -2   0   0   0  -3   0   0   0  -1   0   0   0   1   0   0   0   0   0
+TD16:   -1   0   0   0   0   0   0   0   0   0   0   0   0   0   0  -3   0   0   0   0   0
+TD16:    0   3   0  -3   1   0   0  -3   0   0   0   0   0   0   0   0   0   0   0   0   0
+TD16:    1   0   0   0   0   0   0  -3   0   0   0   0   0   0   0   0   0   0   0   0   3
+TD16:    0   1   0   0   0   2   0   0   0   0   0   0   0   0  -1   0   0   0   0   0   0
+cap dqbuf: 3 seq:   3841 bytesused: 504 ts: 628.727597 delta: 99.995 ms fps: 10.00 (ts-monotonic, ts-src-eof)
+TD16:    0   1   0   0  -1   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+TD16:    0   0   0   0   0   0   0   0   0  -1   0  -1  -3   0   0  -1   0   0  -3   0   0
+TD16:    0   0   0   0  -1   3   0   0   0   0   0   0   0  -1   0   0   0   0  -2   0   0
+TD16:    0   0   0  -1   0   0   0   0   1   0   0   0   0   0   0   0   0   0   0   0   0
+TD16:    0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  -2   0   0   0   0   0
+TD16:    0   0   0   0   0   0   2   0   0   0   2   0   0   0   0   0   0   0   0   0   0
+TD16:    0   0   0   0   0  -3   0   0   0   0   1   0   0   0   0   0   0  -3   0   0   0
+TD16:    0   0   0   0   0   0   0   0   0  -2   0   0   0   0   3   0  -3   0   0   0   0
+TD16:    0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  -2   0   0
+TD16:    0   0   0   0   0   0   0   0  -1   0   3   0   0   0   0   2   0   0   0   1   0
+TD16:    0   0   0   0   0   0   0   0  -1   0   0   0   0   0  -1   0   0   0   0   0   0
+TD16:    0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+cap dqbuf: 0 seq:   3843 bytesused: 504 ts: 628.927577 delta: 199.980 ms fps: 10.00 dropped: 1 (ts-monotonic, ts-src-eof)
+
+This is just a work in progress. For this reason I don't post the entire patch.
+But if we need I can post it too :)
+
+Let me know. What do you think about.
+Thanks in advance.
+
+Tommaso
+-- 
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
+
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com
