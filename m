@@ -2,47 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 566E3C00140
-	for <linux-media@archiver.kernel.org>; Mon,  8 Aug 2022 09:31:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ECA5EC25B06
+	for <linux-media@archiver.kernel.org>; Mon,  8 Aug 2022 09:31:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236544AbiHHJbr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Aug 2022 05:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35832 "EHLO
+        id S242448AbiHHJbw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Aug 2022 05:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242534AbiHHJbI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Aug 2022 05:31:08 -0400
+        with ESMTP id S242515AbiHHJbH (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Aug 2022 05:31:07 -0400
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98F6120AB;
-        Mon,  8 Aug 2022 02:31:07 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2787vJLD025525;
-        Mon, 8 Aug 2022 09:31:03 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8894D1022;
+        Mon,  8 Aug 2022 02:31:05 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2787vSja029651;
+        Mon, 8 Aug 2022 09:30:57 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=zl3irBg/z4QGb3+uNSvVLIDcLrd8/VEmoZftPBxEvME=;
- b=HPFb2ZjMhRtVnSV7Jc63IwgXafJeC0L3Xv1i33lBkSSe4mZi+HPYy7mje9LUG+JegVQ/
- 2CPixXk7da1ule21/X8Z2y6N5TUnJsaT3+l6c+JiB/ndj5rkcAhjv+QFxtYGPcLSOqj9
- OhZ+Dsx6qsUdKUwEtUZkf8erqOlL3nnrP+ijNwhukl8mw682ENmBmDYm0f+ZWkLFvpBk
- WhVvBNzAj8k0XHfFg8U1Kl7/b9rqbBkaopXbCjhuFrfEk8MT7fBSRFYNMYvjB1aC7H4v
- g7Ih/SadWsbKmImkefyoGJv/Fyp4W0WSJucpRwJTnFhhdFh60CTx5VKMQ4s2jn4hKXyn rA== 
+ bh=EqjUu1ViC86S24Shu/oJ19D1224dS9VXRPGlfKc5Zrw=;
+ b=egDkynNz+D+3BBxSpgGLmTuq1NI+WKpCgV7Qi7tX+C1VXGrHFZFYYolt18MIfP10OuVi
+ cKHwVFXkQpIN7g9OXLOif+3ARbBNypNUhw4VRQp0pV+bOBZF4pEbXK2Dh5ue307ll3m9
+ 3/t2J3QIhiUy0b6YX6hjM1UIfABSEA1FCFngnj9V49JpCcG6Sa3Q04B8XRG+G2vlS3W6
+ a6WVKXAZthqlD64mmF5plDExz5o7WcOSUlSix8eN6emGx5zkAOblermu+U/XdfVHMVde
+ ZqpK/Jg+YqeuCJ1dasLyb3bzcB32PdS6mrmSSwiqTqfpUDlZpQtZ8TseYNEZNMrx0ZfR wg== 
 Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hsh2n31ax-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hshfttysy-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 08 Aug 2022 09:31:02 +0000
+        Mon, 08 Aug 2022 09:30:57 +0000
 Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2789UsJj018419;
-        Mon, 8 Aug 2022 09:30:59 GMT
+        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2789UsJi018419;
+        Mon, 8 Aug 2022 09:30:54 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3hshckgpmn-1;
-        Mon, 08 Aug 2022 09:30:59 +0000
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3hshckgpkw-1;
+        Mon, 08 Aug 2022 09:30:54 +0000
 Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2789Uxtl018470;
-        Mon, 8 Aug 2022 09:30:59 GMT
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2789UspP018414;
+        Mon, 8 Aug 2022 09:30:54 GMT
 Received: from vboma-linux.qualcomm.com (vboma-linux.qualcomm.com [10.204.65.94])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 2789Ux2n018469;
-        Mon, 08 Aug 2022 09:30:59 +0000
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 2789Usc9018413;
+        Mon, 08 Aug 2022 09:30:54 +0000
 Received: by vboma-linux.qualcomm.com (Postfix, from userid 72083)
-        id 69CA3900883; Mon,  8 Aug 2022 15:00:58 +0530 (IST)
+        id 3D221900883; Mon,  8 Aug 2022 15:00:53 +0530 (IST)
 From:   quic_vboma@quicinc.com
 To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
         Andy Gross <agross@kernel.org>,
@@ -50,12 +50,11 @@ To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        Viswanath Boma <quic_vboma@quicinc.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>
-Subject: [PATCH V2 5/7] venus : Addition of support for VIDIOC_TRY_ENCODER_CMD
-Date:   Mon,  8 Aug 2022 14:58:32 +0530
-Message-Id: <20220808092834.29775-6-quic_vboma@quicinc.com>
+Cc:     Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Viswanath Boma <quic_vboma@quicinc.com>
+Subject: [PATCH V2 1/7] venus : Add default values for the control
+Date:   Mon,  8 Aug 2022 14:58:28 +0530
+Message-Id: <20220808092834.29775-2-quic_vboma@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220808092834.29775-1-quic_vboma@quicinc.com>
 References: <20220712122347.6781-1-quic_vboma@quicinc.com>
@@ -64,46 +63,57 @@ X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _7phCRHd4R5DvCsqv5BfHST2P1a7TR3x
-X-Proofpoint-ORIG-GUID: _7phCRHd4R5DvCsqv5BfHST2P1a7TR3x
+X-Proofpoint-ORIG-GUID: S704NM2gPJCcP8CQroQbf-QdkxKmILcR
+X-Proofpoint-GUID: S704NM2gPJCcP8CQroQbf-QdkxKmILcR
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-08_05,2022-08-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 suspectscore=0 phishscore=0 mlxlogscore=999 spamscore=0
- mlxscore=0 priorityscore=1501 malwarescore=0 adultscore=0 impostorscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2208080047
+ definitions=2022-08-08_06,2022-08-05_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ priorityscore=1501 impostorscore=0 bulkscore=0 mlxlogscore=832 mlxscore=0
+ adultscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2208080047
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dikshita Agarwal <quic_dikshita@quicinc.com>
+From: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 
-v4l2 compliance expecting support for vidioc_try_encoder_cmd .
-
-error details : test VIDIOC_(TRY_)ENCODER_CMD: FAIL
+V4l2 encoder compliance expecting default values of colorimetry 
+for the control.
 
 Acked-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Signed-off-by: Viswanath Boma <quic_vboma@quicinc.com>
-Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
+Signed-off-by: Viswanath Boma <quic_vboma@quicinc.com>
 ---
- drivers/media/platform/qcom/venus/venc.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/platform/qcom/venus/venc_ctrls.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
-index 17312d316f93d..966f41f3603ec 100644
---- a/drivers/media/platform/qcom/venus/venc.c
-+++ b/drivers/media/platform/qcom/venus/venc.c
-@@ -588,6 +588,7 @@ static const struct v4l2_ioctl_ops venc_ioctl_ops = {
- 	.vidioc_subscribe_event = venc_subscribe_event,
- 	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
- 	.vidioc_encoder_cmd = venc_encoder_cmd,
-+	.vidioc_try_encoder_cmd = v4l2_m2m_ioctl_try_encoder_cmd,
- };
+diff --git a/drivers/media/platform/qcom/venus/venc_ctrls.c b/drivers/media/platform/qcom/venus/venc_ctrls.c
+index ea5805e71c143..aa44c0b3ceb57 100644
+--- a/drivers/media/platform/qcom/venus/venc_ctrls.c
++++ b/drivers/media/platform/qcom/venus/venc_ctrls.c
+@@ -352,6 +352,10 @@ static const struct v4l2_ctrl_ops venc_ctrl_ops = {
+ int venc_ctrl_init(struct venus_inst *inst)
+ {
+ 	int ret;
++	struct v4l2_ctrl_hdr10_mastering_display p_hdr10_mastering = {
++		{ 34000, 13250, 7500 },
++		{ 16000, 34500, 3000 }, 15635, 16450, 10000000, 500,
++	};
  
- static int venc_pm_get(struct venus_inst *inst)
+ 	ret = v4l2_ctrl_handler_init(&inst->ctrl_handler, 58);
+ 	if (ret)
+@@ -580,7 +584,7 @@ int venc_ctrl_init(struct venus_inst *inst)
+ 
+ 	v4l2_ctrl_new_std_compound(&inst->ctrl_handler, &venc_ctrl_ops,
+ 				   V4L2_CID_COLORIMETRY_HDR10_MASTERING_DISPLAY,
+-				   v4l2_ctrl_ptr_create(NULL));
++				   v4l2_ctrl_ptr_create((void *)&p_hdr10_mastering));
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+ 			  V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD, 0,
 -- 
 2.17.1
 
