@@ -2,205 +2,211 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D18CBC00140
-	for <linux-media@archiver.kernel.org>; Mon,  8 Aug 2022 16:29:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04E10C25B0C
+	for <linux-media@archiver.kernel.org>; Mon,  8 Aug 2022 17:04:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244008AbiHHQ32 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Aug 2022 12:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57528 "EHLO
+        id S237349AbiHHREE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Aug 2022 13:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243519AbiHHQ31 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Aug 2022 12:29:27 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A7026E8
-        for <linux-media@vger.kernel.org>; Mon,  8 Aug 2022 09:29:26 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 123so14459055ybv.7
-        for <linux-media@vger.kernel.org>; Mon, 08 Aug 2022 09:29:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Y2IMNWPIjkzwaAM4UvkDC79np/PUW3X2sEbAT/ct8M4=;
-        b=LxmDtRGZHfImjROQcKCDQgGiXe9nnrACKjUj1qQ1Oo5w8W1sVppkiIaStTZalM3DXn
-         d4fg1VCCvKly9zyZDlAlOBTDConQkbR6pYotSN97XAEEa3G6Ci/dkjE2SlkeewTK2qS/
-         +LZD9TM6jhdfJet5x28hBgUlGGgDvlR0Axijg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Y2IMNWPIjkzwaAM4UvkDC79np/PUW3X2sEbAT/ct8M4=;
-        b=NGv94Y+axopu1g4F9WkkbOo/8UxMPYAWQwe3rwXeRXeIq5ufZJod2QLv3Lxmny2K7R
-         i5gPMXM4GUDPvAKSgrbAbNwJXJQqbbpJgSbazvgH5jXxtGWgQecwc/Y9S4c7gSTZRhjC
-         MH2rJksqI5AtUE+VOmytEpQ3n4IBDyTb30BSLShkTh8XblzLMVp/f0aqO+RMMS4XUQ0/
-         NNiC59V9G0wMtmNiea2F6GAnQ5YF/rfQq4m/h3N1+Jqgdm8UlYJXMtsp/dwhM+94owqE
-         20UHSJigm3YzH/zETdGQ0jQye6DTDcw8AvX5yFacFPNSo3rZoZAOui7xZqe73J7MmgLC
-         oNTg==
-X-Gm-Message-State: ACgBeo2bniVAsC3VvcCJbsvD9KLg1fNv0/i4A9YR0iwpewFPtUTdU8Fk
-        /Nzgw9Y2KGMSr1Oyh63edVMOiPfZf8ApNDOeAi3iXw==
-X-Google-Smtp-Source: AA6agR6kDyxRT7WvypBMOU0kjVKYcER2bG2K/ZyDSG0YHpOdaiMnykM2TuLH0P9zUQOyjlN1ElXY6sY14LDXcz0HYCw=
-X-Received: by 2002:a25:b68b:0:b0:673:df99:5838 with SMTP id
- s11-20020a25b68b000000b00673df995838mr17329517ybj.157.1659976165690; Mon, 08
- Aug 2022 09:29:25 -0700 (PDT)
+        with ESMTP id S233053AbiHHREB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Aug 2022 13:04:01 -0400
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6BF13F20;
+        Mon,  8 Aug 2022 10:04:00 -0700 (PDT)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by hi1smtp01.de.adit-jv.com (Postfix) with ESMTPS id 3D9CC52044D;
+        Mon,  8 Aug 2022 19:03:58 +0200 (CEST)
+Received: from vmlxhi-182 (10.72.92.119) by hi2exch02.adit-jv.com
+ (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Mon, 8 Aug
+ 2022 19:03:57 +0200
+Date:   Mon, 8 Aug 2022 19:03:53 +0200
+From:   Michael Rodin <mrodin@de.adit-jv.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+CC:     Michael Rodin <mrodin@de.adit-jv.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>, <michael@rodin.online>,
+        <erosca@de.adit-jv.com>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Subject: Re: [PATCH 1/3] media: videobuf2: Add a transfer error event
+Message-ID: <20220808170353.GA2536032@vmlxhi-182>
+References: <YqEO3/KekkZhVjW+@oden.dyn.berto.se>
+ <20220628180024.451258-1-mrodin@de.adit-jv.com>
+ <20220628180024.451258-2-mrodin@de.adit-jv.com>
+ <5e8c50cdc031bffd96b19929508f034d1263c8b7.camel@ndufresne.ca>
+ <20220715161346.GA1116690@vmlxhi-182>
+ <f035cdea-934c-3bd9-f685-47e5e9ff3f49@xs4all.nl>
 MIME-Version: 1.0
-References: <20220729170744.1301044-1-robdclark@gmail.com> <20220729170744.1301044-2-robdclark@gmail.com>
- <3d2083aa-fc6c-6875-3daf-e5abe45fb762@gmail.com> <CAF6AEGvKdM3vyCvBZK=ZcdGmak7tsrP1b8ANyyaMjVfNDViqyw@mail.gmail.com>
- <973de2f8-75e4-d4c7-a13a-c541a6cf7c77@amd.com> <CAF6AEGuhQT6A_jh8kLWh5xMoUGc1osdewyBk-8NoprtWOHseaQ@mail.gmail.com>
- <2fc74efe-220f-b57a-e804-7d2b3880d14f@gmail.com> <CAF6AEGv9H+fSFKPNqwPxYUjkgj05AimpXbp-p_JL8nKLnzON=w@mail.gmail.com>
- <e2423bd7-ef73-8d43-c661-a19c80ad1a26@gmail.com> <CAF6AEGsoYaXe2+qug_TfT99KXuXh9Ez2L2HjQZroE6c6GSW4SQ@mail.gmail.com>
- <e90caaaa-cae9-c6d1-bfb6-dc56aa559681@amd.com> <CAF6AEGtWjtF7_uCYAH4uARVXgnOnX3DZ3KQahxTdAi_9Myvw0w@mail.gmail.com>
- <4e7448d2-7b26-e260-3d6c-7aa263a75250@amd.com>
-In-Reply-To: <4e7448d2-7b26-e260-3d6c-7aa263a75250@amd.com>
-From:   Rob Clark <robdclark@chromium.org>
-Date:   Mon, 8 Aug 2022 09:29:52 -0700
-Message-ID: <CAJs_Fx7vf7RyGqBrQHySyG4zr31O_j8GyQeWTCjxZ3R2VDnE9Q@mail.gmail.com>
-Subject: Re: [Linaro-mm-sig] [PATCH 1/3] dma-buf: Add ioctl to query mmap info
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        freedreno@lists.freedesktop.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f035cdea-934c-3bd9-f685-47e5e9ff3f49@xs4all.nl>
+X-Originating-IP: [10.72.92.119]
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Aug 8, 2022 at 7:56 AM Christian K=C3=B6nig <christian.koenig@amd.c=
-om> wrote:
->
-> Am 08.08.22 um 15:26 schrieb Rob Clark:
-> > On Mon, Aug 8, 2022 at 4:22 AM Christian K=C3=B6nig <christian.koenig@a=
-md.com> wrote:
-> >
-> > [SNIP]
-> >>>> If the virtio/virtgpu UAPI was build around the idea that this is
-> >>>> possible then it is most likely fundamental broken.
-> >>> How else can you envision mmap'ing to guest userspace working?
-> >> Well long story short: You can't.
-> >>
-> >> See userspace mappings are not persistent, but rather faulted in on
-> >> demand. The exporter is responsible for setting those up to be able to
-> >> add reverse tracking and so can invalidate those mappings when the
-> >> backing store changes.
-> > I think that is not actually a problem.  At least for how it works on
-> > arm64 but I'm almost positive x86 is similar.. I'm not sure how else
-> > you could virtualize mmu/iommu/etc in a way that didn't have horrible
-> > performance.
-> >
-> > There are two levels of pagetable translation, the first controlled by
-> > the host kernel, the second by the guest.  From the PoV of host
-> > kernel, it is just memory mapped to userspace, getting faulted in on
-> > demand, just as normal.  First the guest controlled translation
-> > triggers a fault in the guest which sets up guest mapping.  And then
-> > the second level of translation to translate from what guest sees as
-> > PA (but host sees as VA) to actual PA triggers a fault in the host.
->
-> Ok, that's calming.
->
-> At least that's not the approach talked about the last time this came up
-> and it doesn't rip a massive security hole somewhere.
+Hi Hans,
 
-Hmm, tbh I'm not sure which thread/discussion this was.. it could have
-been before I was paying much attention to the vm use-case
+On Tue, Aug 02, 2022 at 11:32:03AM +0200, Hans Verkuil wrote:
+> Hi Michael,
+> 
+> Apologies for the late reply...
 
-> The question is why is the guest then not using the caching attributes
-> setup by the host page tables when the translation is forwarded anyway?
+Thank you very much for your feedback, very appreciated!
 
-The guest kernel itself doesn't know.  AFAICT, at least on arm, the hw
-will combine the attributes of the mapping in S1 and S2 pagetables and
-use the most restrictive.  So if S1 (host) is cached but S2 (guest) is
-WC, you'll end up w/ WC.
-
-That said, at least on aarch64, it seems like we could always tell the
-guest it is cached, and if mapped WC in S1 you'll end up with WC
-access.  But this seems to depend on an optional feature, FWB, which
-allows S2 to override S1 attributes, not being enabled.  And not
-entirely sure how it works on x86.
-
-BR,
--R
-
-> > [SNIP]
-> > This is basically what happens, although via the two levels of pgtable
-> > translation.  This patch provides the missing piece, the caching
-> > attributes.
->
-> Yeah, but that won't work like this. See the backing store migrates all
-> the time and when it is backed by PCIe/VRAM/local memory you need to use
-> write combine while system memory is usually cached.
->
-> >>       Because otherwise you can't accommodate that the exporter is
-> >> changing those caching attributes.
-> > Changing the attributes dynamically isn't going to work.. or at least
-> > not easily.  If you had some sort of synchronous notification to host
-> > userspace, it could trigger an irq to the guest, I suppose.  But it
-> > would mean host kernel has to block waiting for host userspace to
-> > interrupt the guest, then wait for guest vgpu process to be scheduled
-> > and handle the irq.
->
-> We basically change that on every page flip on APUs and that doesn't
-> sound like something fast.
->
-> Thanks for the explanation how this works,
-> Christian.
->
-> >
-> > At least in the case of msm, the cache attributes are static for the
-> > life of the buffer, so this scenario isn't a problem.  AFAICT this
-> > should work fine for at least all UMA hw.. I'm a bit less sure when it
-> > comes to TTM, but shouldn't you at least be able to use worst-cache
-> > cache attributes for buffers that are allowed to be mapped to guest?
-> >
-> > BR,
-> > -R
-> >
-> >>> But more seriously, let's take a step back here.. what scenarios are
-> >>> you seeing this being problematic for?  Then we can see how to come u=
-p
-> >>> with solutions.  The current situation of host userspace VMM just
-> >>> guessing isn't great.
-> >> Well "isn't great" is a complete understatement. When KVM/virtio/virtg=
-pu
-> >> is doing what I guess they are doing here then that is a really major
-> >> security hole.
+> On 7/15/22 18:15, Michael Rodin wrote:
+> > Hi Nicolas,
+> > 
+> > On Mon, Jul 04, 2022 at 11:59:58AM -0400, Nicolas Dufresne wrote:
+> >> Hi Micheal,
 > >>
-> >>>     And sticking our heads in the sand and
-> >>> pretending VMs don't exist isn't great.  So what can we do?  I can
-> >>> instead add a msm ioctl to return this info and solve the problem eve=
-n
-> >>> more narrowly for a single platform.  But then the problem still
-> >>> remains on other platforms.
-> >> Well once more: This is *not* MSM specific, you just absolutely *can't
-> >> do that* for any driver!
-> >>
-> >> I'm just really wondering what the heck is going on here, because all =
-of
-> >> this was discussed in lengthy before on the mailing list and very
-> >> bluntly rejected.
-> >>
-> >> Either I'm missing something (that's certainly possible) or we have a
-> >> strong case of somebody implementing something without thinking about
-> >> all the consequences.
-> >>
-> >> Regards,
-> >> Christian.
-> >>
-> >>
-> >>> Slightly implicit in this is that mapping dma-bufs to the guest won't
-> >>> work for anything that requires DMA_BUF_IOCTL_SYNC for coherency.. we
-> >>> could add a possible return value for DMA_BUF_INFO_VM_PROT indicating
-> >>> that the buffer does not support mapping to guest or CPU access
-> >>> without DMA_BUF_IOCTL_SYNC.  Then at least the VMM can fail gracefull=
-y
-> >>> instead of subtly.
+> >> thanks for your work, I have some questions below ...
+> > 
+> > Thank you for your feedback!
+> > 
+> >> Le mardi 28 juin 2022 à 20:00 +0200, Michael Rodin a écrit :
+> >>> From: Niklas Söderlund <https://urldefense.proofpoint.com/v2/url?u=http-3A__niklas.soderlund-2Brenesas-40ragnatech.se&d=DwIFaQ&c=euGZstcaTDllvimEN8b7jXrwqOf-v5A_CdpgnVfiiMM&r=sWsgk3pKkv5GeIDM2RZlPY8TjNFU2D0oBeOj6QNBadE&m=7ktiIpDjee6bMSPLXXR7KVvJ_y234VytWEydKF2TWEo&s=-GUWUbGDkkrTAXiF_75xnL13cn3HYL2r2ZN0XwlG41U&e=>
 > >>>
-> >>> BR,
-> >>> -R
->
+> >>> Add a new V4L2_EVENT_XFER_ERROR event to signal if an error happens during
+> >>> video transfer.
+> >>>
+> >>> The use-case that sparked this new event is to signal to the video
+> >>> device driver that an error has happen on the CSI-2 bus from the CSI-2
+> >>> receiver subdevice.
+> >>>
+> >>> Signed-off-by: Niklas Söderlund <https://urldefense.proofpoint.com/v2/url?u=http-3A__niklas.soderlund-2Brenesas-40ragnatech.se&d=DwIFaQ&c=euGZstcaTDllvimEN8b7jXrwqOf-v5A_CdpgnVfiiMM&r=sWsgk3pKkv5GeIDM2RZlPY8TjNFU2D0oBeOj6QNBadE&m=7ktiIpDjee6bMSPLXXR7KVvJ_y234VytWEydKF2TWEo&s=-GUWUbGDkkrTAXiF_75xnL13cn3HYL2r2ZN0XwlG41U&e=>
+> >>> [mrodin@de.adit-jv.com: adapted information what to do if this new event is received]
+> >>> Signed-off-by: Michael Rodin <mrodin@de.adit-jv.com>
+> >>> ---
+> >>>  .../userspace-api/media/v4l/vidioc-dqevent.rst         | 10 ++++++++++
+> >>>  .../userspace-api/media/videodev2.h.rst.exceptions     |  1 +
+> >>>  include/uapi/linux/videodev2.h                         |  1 +
+> >>>  3 files changed, 12 insertions(+)
+> >>>
+> >>> diff --git a/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst b/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst
+> >>> index 6eb40073c906..3cf0b4859784 100644
+> >>> --- a/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst
+> >>> +++ b/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst
+> >>> @@ -182,6 +182,16 @@ call.
+> >>>  	the regions changes. This event has a struct
+> >>>  	:c:type:`v4l2_event_motion_det`
+> >>>  	associated with it.
+> >>> +    * - ``V4L2_EVENT_XFER_ERROR``
+> >>
+> >> I'm not sure why this event is specific to XFER. Is there uses cases were a
+> >> future implementation would have both XFER and RECEIVER error ?
+> > 
+> > I am not sure whether I understand you correctly, do you mean that there is
+> > already a method to signal a receiver error? Or that we should name it
+> > V4L2_EVENT_RECEIVER_ERROR? I think that "transfer error" is a good name for
+> > this event, because it could be sent by receiver or by transmitter drivers,
+> > depending on their hardware error detection capabilities. We could have
+> > e.g. a video transmitter which can detect an error coupled with a video
+> > receiver which can not detect any errors.
+> > 
+> >>> +      - 7
+> >>> +      - This event is triggered when an transfer error is detected while
+> >>> +	streaming. For example if an error is detected on a video bus in
+> >>> +	the pipeline. If a driver receives this event from an upstream
+> >>> +	subdevice, it has to forward the event to userspace. The streaming
+> >>> +	application has to check if the transfer error is unrecoverable,
+> >>> +	i.e. no new buffers can be dequeued from the kernel after the
+> >>> +	expected time. If the error is unrecoverable, the streaming
+> >>> +	application should restart streaming if it wants to continue.
+> >>
+> >> The process to determine if an error is recoverable or not isn't clear to me. As
+> >> an application developer, I would not know what to do here. Recoverable error
+> >> already have a designed mechanism, it consist of marking done a buffer with the
+> >> flag V4L2_BUF_FLAG_ERROR. I would like to understand what the existing mechanism
+> >> needed to be replaced, and the placement should be documented.
+> > 
+> > "Recoverable" means in this context that kernel space continues to capture
+> > video buffers (which do not necessarily have the flag V4L2_BUF_FLAG_ERROR).
+> > So probably we should not say "recoverable" or "unrecoverable" in the
+> > context of this event to avoid confusion. V4L2_EVENT_XFER_ERROR just tells
+> > userspace that it should restart streaming if the buffer flow stops after
+> > this event. So would it be sufficient for an application developer if we
+> > drop all statements about "recoverability" from the event description?
+> 
+> Here you touch on the core problem of this patch: you are basically saying
+> that userspace has to 1) subscribe to this event, 2) poll for it, 3) if it
+> arrives start a timer, 4) if the timer triggers and no new buffers have been
+> received in the meantime, then 5) restart streaming.
+> 
+> So in other words, you are just too lazy to do this in the driver and want
+> to hand it off to userspace.
+> 
+> That's not how it works. Usually the driver will know if the error is
+> recoverable or not (i.e. if an HDMI receiver loses signal, that's definitely
+> unrecoverable, and it's something the driver can know and call vb2_queue_error).
+> 
+> If it is really unknown, then you indeed need some monitoring thread. And
+> that's fine. Even better if you can make some helper things in the V4L2 core.
+> 
+> But you can't just kick that to userspace IMHO. I can guarantee that almost
+> no userspace application will do this and it is really not the job of userspace
+> to deal with such issues.
+
+From my understanding this means that my previous patch [1] already went in
+the right direction by implementing a monitoring thread in rcar-vin. But on
+the other hand Niklas has pointed out that it's not good to have this in a
+driver [2]. Therefore it sounds like the only acceptable solution would be to
+move this monitoring thread to the V4L2/VB2 core, which would then monitor
+capture drivers for frame timeouts and maybe also notify userspace based
+on this. What do you think? If you already have a solution in mind, I would
+very appreciate if you could give me a few hints for an implementation!
+
+[1] https://lore.kernel.org/lkml/1652983210-1194-4-git-send-email-mrodin@de.adit-jv.com/
+[2] https://lore.kernel.org/lkml/YqEO3%2FKekkZhVjW+@oden.dyn.berto.se/
+
+> Regards,
+> 
+> 	Hans
+> 
+> > 
+> >> Nicolas
+> >>
+> >>>      * - ``V4L2_EVENT_PRIVATE_START``
+> >>>        - 0x08000000
+> >>>        - Base event number for driver-private events.
+> >>> diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+> >>> index 9cbb7a0c354a..25bde61a1519 100644
+> >>> --- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+> >>> +++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+> >>> @@ -500,6 +500,7 @@ replace define V4L2_EVENT_CTRL event-type
+> >>>  replace define V4L2_EVENT_FRAME_SYNC event-type
+> >>>  replace define V4L2_EVENT_SOURCE_CHANGE event-type
+> >>>  replace define V4L2_EVENT_MOTION_DET event-type
+> >>> +replace define V4L2_EVENT_XFER_ERROR event-type
+> >>>  replace define V4L2_EVENT_PRIVATE_START event-type
+> >>>  
+> >>>  replace define V4L2_EVENT_CTRL_CH_VALUE ctrl-changes-flags
+> >>> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> >>> index 5311ac4fde35..44db724d4541 100644
+> >>> --- a/include/uapi/linux/videodev2.h
+> >>> +++ b/include/uapi/linux/videodev2.h
+> >>> @@ -2385,6 +2385,7 @@ struct v4l2_streamparm {
+> >>>  #define V4L2_EVENT_FRAME_SYNC			4
+> >>>  #define V4L2_EVENT_SOURCE_CHANGE		5
+> >>>  #define V4L2_EVENT_MOTION_DET			6
+> >>> +#define V4L2_EVENT_XFER_ERROR			7
+> >>>  #define V4L2_EVENT_PRIVATE_START		0x08000000
+> >>>  
+> >>>  /* Payload for V4L2_EVENT_VSYNC */
+> >>
+> > 
+> 
+
+-- 
+Best Regards,
+Michael
