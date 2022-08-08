@@ -2,47 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A87A2C25B06
-	for <linux-media@archiver.kernel.org>; Mon,  8 Aug 2022 09:32:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18452C00140
+	for <linux-media@archiver.kernel.org>; Mon,  8 Aug 2022 09:32:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242505AbiHHJcA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Aug 2022 05:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
+        id S242513AbiHHJcC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Aug 2022 05:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236299AbiHHJbK (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Aug 2022 05:31:10 -0400
+        with ESMTP id S242523AbiHHJbH (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Aug 2022 05:31:07 -0400
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CAC212D36;
-        Mon,  8 Aug 2022 02:31:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF57F2AEA;
+        Mon,  8 Aug 2022 02:31:06 -0700 (PDT)
 Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27870KnK005136;
-        Mon, 8 Aug 2022 09:31:00 GMT
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2789SNTm018149;
+        Mon, 8 Aug 2022 09:30:57 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=Z64gEbXhIUyJB1i41m/0rpOjV+n3dszOGykx64QPz98=;
- b=iOyv3+EN4SLpOy4y9vNJcEb0o+XQ9IrrSGsaAIQwLeDTzScmSBq60RK8vD3TxGWW1YeZ
- Kjvik78/oEGm8p/P6fZ1MGX1NxaiqMUIc+89rhC6ueLuncFHjlsUSWjgpBJiuSPjtdhk
- wsHKJBFBncpbl/VtaOD0mpr5UFClOBl01pFon9qfXPhCmlugKsvNUIpfPTUY3MZlmqoi
- OQhS7T4N9KpfEurD4KVO5GD6Yb6hOM8P3WWY+A2tcvIXhzDC5JuxE3fD6gkbTQw1QUTw
- 65AHZjnUdTJ6eRMczDTnB4PoG5k7WnzKwkT0CPDUw3eXUFFpCwe0nnraieLfLIed5xOo EQ== 
+ bh=XBOEaXslQ/ov0WLTHJmjpnPH5ylY2kyXViGO9O2x9Jo=;
+ b=M3I6VRPBq87Gdserp2BkArkcYQLXlyUm73wy4LvXuG/6OShIL/91oD0DzP3Z2dpFRSzz
+ o1M1VzTnm84fiOOkeRWTe/jf/ljq1tybSe9JTa20ho7F0eL5iXxlArZDXbVXvqFsETiL
+ IdtpOoKCVOgaauymsOfee53Psch97U0yN4Q+yAWckYubbQd4zxAA+tV3Ce+H1iUdKvQi
+ o22E5YvYP2EdpiR/uYo1rG+8VG7NfzD0jD3OY43VwE+sHiBogUC8w1n7F2bZgXDZA+Ds
+ ZJ3eA6Tnr6M4B5MTentsWRppgArUXeQiEmKUpaHmLxDhm9UDGSftMaq+3YXWJB7sRj1H uQ== 
 Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hshfttyt2-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hshfttysx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 08 Aug 2022 09:31:00 +0000
+        Mon, 08 Aug 2022 09:30:56 +0000
 Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2789Uuu0018445;
-        Mon, 8 Aug 2022 09:30:56 GMT
+        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2789UqTX017987;
+        Mon, 8 Aug 2022 09:30:52 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3hshckgpm7-1;
-        Mon, 08 Aug 2022 09:30:56 +0000
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3hshckgpkn-1;
+        Mon, 08 Aug 2022 09:30:52 +0000
 Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2789UuAr018438;
-        Mon, 8 Aug 2022 09:30:56 GMT
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2789Uqmw017982;
+        Mon, 8 Aug 2022 09:30:52 GMT
 Received: from vboma-linux.qualcomm.com (vboma-linux.qualcomm.com [10.204.65.94])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 2789UuZN018437;
-        Mon, 08 Aug 2022 09:30:56 +0000
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 2789Uq8n017965;
+        Mon, 08 Aug 2022 09:30:52 +0000
 Received: by vboma-linux.qualcomm.com (Postfix, from userid 72083)
-        id D38D2900883; Mon,  8 Aug 2022 15:00:55 +0530 (IST)
+        id 61FB0900883; Mon,  8 Aug 2022 15:00:51 +0530 (IST)
 From:   quic_vboma@quicinc.com
 To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
         Andy Gross <agross@kernel.org>,
@@ -50,27 +50,24 @@ To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Viswanath Boma <quic_vboma@quicinc.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>
-Subject: [PATCH V2 3/7] venus : CAPTURE Plane width/height alignment with OUT plane.
-Date:   Mon,  8 Aug 2022 14:58:30 +0530
-Message-Id: <20220808092834.29775-4-quic_vboma@quicinc.com>
+Cc:     Viswanath Boma <quic_vboma@quicinc.com>
+Subject: [PATCH V2 0/7] Fixes for Encoder Compliance issues.
+Date:   Mon,  8 Aug 2022 14:58:27 +0530
+Message-Id: <20220808092834.29775-1-quic_vboma@quicinc.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220808092834.29775-1-quic_vboma@quicinc.com>
+In-Reply-To: <20220712122347.6781-1-quic_vboma@quicinc.com>
 References: <20220712122347.6781-1-quic_vboma@quicinc.com>
- <20220808092834.29775-1-quic_vboma@quicinc.com>
 X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Jj5hsZA_lNWyAmfVpN0zdlHKPvjSJrvg
-X-Proofpoint-GUID: Jj5hsZA_lNWyAmfVpN0zdlHKPvjSJrvg
+X-Proofpoint-ORIG-GUID: wiKhS9YaeYDuSRuDqr-bQXKaVTjxqiq6
+X-Proofpoint-GUID: wiKhS9YaeYDuSRuDqr-bQXKaVTjxqiq6
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-08_06,2022-08-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
- priorityscore=1501 impostorscore=0 bulkscore=0 mlxlogscore=748 mlxscore=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1011
+ priorityscore=1501 impostorscore=0 bulkscore=0 mlxlogscore=958 mlxscore=0
  adultscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0 phishscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
  definitions=main-2208080047
@@ -78,37 +75,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+From: Viswanath Boma <quic_vboma@quicinc.com>
 
-V4l2 encoder compliance set-format test cases failing as Capture plane
-width/height not aligned to OUT plane .
+Fixes for Video Encoder complaince issues .
+Tested on v5.15 kernel and the chrome/client binary details -
+				 v4l2-compliance 1.22.1
 
-Acked-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Signed-off-by: Viswanath Boma <quic_vboma@quicinc.com>
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
-Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
----
- drivers/media/platform/qcom/venus/venc.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
-index 21bff25e3f814..b56960d7f6c89 100644
---- a/drivers/media/platform/qcom/venus/venc.c
-+++ b/drivers/media/platform/qcom/venus/venc.c
-@@ -192,10 +192,8 @@ venc_try_fmt_common(struct venus_inst *inst, struct v4l2_format *f)
- 	pixmp->height = clamp(pixmp->height, frame_height_min(inst),
- 			      frame_height_max(inst));
- 
--	if (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
--		pixmp->width = ALIGN(pixmp->width, 128);
--		pixmp->height = ALIGN(pixmp->height, 32);
--	}
-+	pixmp->width = ALIGN(pixmp->width, 128);
-+	pixmp->height = ALIGN(pixmp->height, 32);
- 
- 	pixmp->width = ALIGN(pixmp->width, 2);
- 	pixmp->height = ALIGN(pixmp->height, 2);
+
+Dikshita Agarwal (1):
+  venus : Addition of support for VIDIOC_TRY_ENCODER_CMD
+
+Stanimir Varbanov (2):
+  venus : Add default values for the control
+    V4L2_CID_COLORIMETRY_HDR10_MASTERING_DISPLAY
+  venus : CAPTURE Plane width/height alignment with OUT plane.
+
+Vikash Garodia (1):
+  venus : Allow MIN/MAX settings for the v4l2 encoder controls defined
+    range.
+
+Viswanath Boma (3):
+  venus : Addition of control support - V4L2_CID_MIN_BUFFERS_FOR_OUTPUT
+  venus : Addition of EOS Event support for Encoder
+  venus : Remove the capture plane settings for venc_g_parm/venc_s_parm
+
+ drivers/media/platform/qcom/venus/venc.c      | 26 ++++++++++----
+ .../media/platform/qcom/venus/venc_ctrls.c    | 35 ++++++++++++++++---
+ 2 files changed, 50 insertions(+), 11 deletions(-)
+
 -- 
 2.17.1
 
