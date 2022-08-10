@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13608C25B08
-	for <linux-media@archiver.kernel.org>; Wed, 10 Aug 2022 12:11:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91E78C00140
+	for <linux-media@archiver.kernel.org>; Wed, 10 Aug 2022 12:11:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232141AbiHJML4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 Aug 2022 08:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40694 "EHLO
+        id S232159AbiHJML6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Aug 2022 08:11:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231869AbiHJMLz (ORCPT
+        with ESMTP id S232149AbiHJML5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 10 Aug 2022 08:11:55 -0400
+        Wed, 10 Aug 2022 08:11:57 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8318A6AA0B
-        for <linux-media@vger.kernel.org>; Wed, 10 Aug 2022 05:11:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66656AA30
+        for <linux-media@vger.kernel.org>; Wed, 10 Aug 2022 05:11:56 -0700 (PDT)
 Received: from deskari.lan (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 398A43A6F;
-        Wed, 10 Aug 2022 14:11:45 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9AA7446E6;
+        Wed, 10 Aug 2022 14:11:46 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1660133505;
-        bh=zf4IeXb5+eZ6inCynnlOiU/AciC7gDPolN9nY5nzc+s=;
+        s=mail; t=1660133507;
+        bh=wEQD4ld3NphSnp8HSQNRCscGWZaR2OjYMTx2jCv23gg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v4mZ7N/Y+iQe7qm2hN5XjDKqypLadlgoFlmoShrnQmMabR1MBk5LD5Ez0yWy/llVM
-         7wUAGGHno8j58uiB3xLVRzlEJgEN070gGMKHRe1cJhEYca+STV3ekIbOXLS1/rWBsu
-         Nt52X6yWgquxDv6/tipkc09uZlceqLJDvLXn1/ZI=
+        b=Tz17wcRo2WswRrSUMxbAavyp0zXToUYPyu60crLfy/i6XDrLMBi9PnrVYZXwcvAE3
+         Z3j3QUrPo8vBJ1jei1pkt82l0/TlpQSFSnoqWzEUP3KEFbXu2vg/R3c27eworKhm2m
+         nE5o3xr1bY2CGrqE7WWDpOko4Tsz63HGpjC7JlZk=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -36,9 +36,9 @@ To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Kishon Vijay Abraham <kishon@ti.com>,
         satish.nagireddy@getcruise.com, Tomasz Figa <tfiga@chromium.org>
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v13 13/34] media: drivers: use video_device_pipeline_alloc_start()
-Date:   Wed, 10 Aug 2022 15:11:01 +0300
-Message-Id: <20220810121122.3149086-14-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v13 15/34] media: mc: entity: Add has_pad_interdep entity operation
+Date:   Wed, 10 Aug 2022 15:11:03 +0300
+Message-Id: <20220810121122.3149086-16-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220810121122.3149086-1-tomi.valkeinen@ideasonboard.com>
 References: <20220810121122.3149086-1-tomi.valkeinen@ideasonboard.com>
@@ -48,101 +48,72 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use video_device_pipeline_alloc_start() instead of manually
-allocating/managing the media pipeline storage.
+Add a new media entity operation, has_pad_interdep. The optional op is
+used to discover the pad interdependencies inside an entity during the
+pipeline construction.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- drivers/media/platform/renesas/rcar-vin/rcar-dma.c | 14 +-------------
- drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c |  2 +-
- .../media/platform/sunxi/sun6i-csi/sun6i_video.c   |  2 +-
- drivers/media/platform/ti/cal/cal-video.c          |  2 +-
- drivers/media/platform/ti/cal/cal.h                |  1 -
- 5 files changed, 4 insertions(+), 17 deletions(-)
+ drivers/media/mc/mc-entity.c | 10 ++++++++--
+ include/media/media-entity.h | 10 ++++++++++
+ 2 files changed, 18 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-dma.c b/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
-index 548067f19576..884875600231 100644
---- a/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
-+++ b/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
-@@ -1244,8 +1244,6 @@ static int rvin_mc_validate_format(struct rvin_dev *vin, struct v4l2_subdev *sd,
+diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+index df8e82be2bcc..c89dc782840a 100644
+--- a/drivers/media/mc/mc-entity.c
++++ b/drivers/media/mc/mc-entity.c
+@@ -231,7 +231,10 @@ EXPORT_SYMBOL_GPL(media_entity_pads_init);
+  * and enabling one of the pads means that the other pad will become "locked"
+  * and doesn't allow configuration changes.
+  *
+- * For the time being all pads are considered interdependent.
++ * This function uses the &media_entity_operations.has_pad_interdep() operation
++ * to check the dependency inside the entity between @pad0 and @pad1. If the
++ * has_pad_interdep operation is not implemented, all pads of the entity are
++ * considered to be interdependent.
+  */
+ static bool media_entity_has_pad_interdep(struct media_entity *entity,
+ 					  unsigned int pad0, unsigned int pad1)
+@@ -243,7 +246,10 @@ static bool media_entity_has_pad_interdep(struct media_entity *entity,
+ 	    (MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_SOURCE))
+ 		return false;
  
- static int rvin_set_stream(struct rvin_dev *vin, int on)
- {
--	struct media_pipeline *pipe;
--	struct media_device *mdev;
- 	struct v4l2_subdev *sd;
- 	struct media_pad *pad;
- 	int ret;
-@@ -1273,17 +1271,7 @@ static int rvin_set_stream(struct rvin_dev *vin, int on)
- 	if (ret)
- 		return ret;
+-	return true;
++	if (!entity->ops || !entity->ops->has_pad_interdep)
++		return true;
++
++	return entity->ops->has_pad_interdep(entity, pad0, pad1);
+ }
  
--	/*
--	 * The graph lock needs to be taken to protect concurrent
--	 * starts of multiple VIN instances as they might share
--	 * a common subdevice down the line and then should use
--	 * the same pipe.
--	 */
--	mdev = vin->vdev.entity.graph_obj.mdev;
--	mutex_lock(&mdev->graph_mutex);
--	pipe = media_entity_pipeline(&sd->entity) ? : &vin->vdev.pipe;
--	ret = __video_device_pipeline_start(&vin->vdev, pipe);
--	mutex_unlock(&mdev->graph_mutex);
-+	ret = video_device_pipeline_alloc_start(&vin->vdev);
- 	if (ret)
- 		return ret;
+ static struct media_entity *
+diff --git a/include/media/media-entity.h b/include/media/media-entity.h
+index 107e2d8025bd..beea3f6f12b8 100644
+--- a/include/media/media-entity.h
++++ b/include/media/media-entity.h
+@@ -236,6 +236,14 @@ struct media_pad {
+  * @link_validate:	Return whether a link is valid from the entity point of
+  *			view. The media_pipeline_start() function
+  *			validates all links by calling this operation. Optional.
++ * @has_pad_interdep:	Return whether a two pads inside the entity are
++ *			interdependent. If two pads are interdependent they are
++ *			part of the same pipeline and enabling one of the pads
++ *			means that the other pad will become "locked" and
++ *			doesn't allow configuration changes. pad0 and pad1 are
++ *			guaranteed to not both be sinks or sources.
++ *			Optional: If the operation isn't implemented all pads
++ *			will be considered as interdependent.
+  *
+  * .. note::
+  *
+@@ -249,6 +257,8 @@ struct media_entity_operations {
+ 			  const struct media_pad *local,
+ 			  const struct media_pad *remote, u32 flags);
+ 	int (*link_validate)(struct media_link *link);
++	bool (*has_pad_interdep)(struct media_entity *entity, unsigned int pad0,
++				 unsigned int pad1);
+ };
  
-diff --git a/drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c b/drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c
-index 17ad9a3caaa5..a3e826a755fc 100644
---- a/drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c
-+++ b/drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c
-@@ -266,7 +266,7 @@ static int sun4i_csi_start_streaming(struct vb2_queue *vq, unsigned int count)
- 		goto err_clear_dma_queue;
- 	}
- 
--	ret = video_device_pipeline_start(&csi->vdev, &csi->vdev.pipe);
-+	ret = video_device_pipeline_alloc_start(&csi->vdev);
- 	if (ret < 0)
- 		goto err_free_scratch_buffer;
- 
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
-index de4c0d47240f..436922503ece 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
-@@ -141,7 +141,7 @@ static int sun6i_video_start_streaming(struct vb2_queue *vq, unsigned int count)
- 
- 	video->sequence = 0;
- 
--	ret = video_device_pipeline_start(&video->vdev, &video->vdev.pipe);
-+	ret = video_device_pipeline_alloc_start(&video->vdev);
- 	if (ret < 0)
- 		goto clear_dma_queue;
- 
-diff --git a/drivers/media/platform/ti/cal/cal-video.c b/drivers/media/platform/ti/cal/cal-video.c
-index ae29130df819..e8122e7ec944 100644
---- a/drivers/media/platform/ti/cal/cal-video.c
-+++ b/drivers/media/platform/ti/cal/cal-video.c
-@@ -707,7 +707,7 @@ static int cal_start_streaming(struct vb2_queue *vq, unsigned int count)
- 	dma_addr_t addr;
- 	int ret;
- 
--	ret = video_device_pipeline_start(&ctx->vdev, &ctx->phy->pipe);
-+	ret = video_device_pipeline_alloc_start(&ctx->vdev);
- 	if (ret < 0) {
- 		ctx_err(ctx, "Failed to start media pipeline: %d\n", ret);
- 		goto error_release_buffers;
-diff --git a/drivers/media/platform/ti/cal/cal.h b/drivers/media/platform/ti/cal/cal.h
-index 61409ddced98..648cec43c3fc 100644
---- a/drivers/media/platform/ti/cal/cal.h
-+++ b/drivers/media/platform/ti/cal/cal.h
-@@ -174,7 +174,6 @@ struct cal_camerarx {
- 	struct device_node	*source_ep_node;
- 	struct device_node	*source_node;
- 	struct v4l2_subdev	*source;
--	struct media_pipeline	pipe;
- 
- 	struct v4l2_subdev	subdev;
- 	struct media_pad	pads[CAL_CAMERARX_NUM_PADS];
+ /**
 -- 
 2.34.1
 
