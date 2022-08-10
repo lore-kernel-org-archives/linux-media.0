@@ -2,32 +2,32 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FB87C25B06
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FE3DC3F6B0
 	for <linux-media@archiver.kernel.org>; Wed, 10 Aug 2022 13:02:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232461AbiHJNCO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 Aug 2022 09:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60360 "EHLO
+        id S232493AbiHJNCL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Aug 2022 09:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232458AbiHJNBl (ORCPT
+        with ESMTP id S232454AbiHJNBg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 10 Aug 2022 09:01:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198C56B16E
-        for <linux-media@vger.kernel.org>; Wed, 10 Aug 2022 06:01:39 -0700 (PDT)
+        Wed, 10 Aug 2022 09:01:36 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49A766A63
+        for <linux-media@vger.kernel.org>; Wed, 10 Aug 2022 06:01:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 496F8B81C54
-        for <linux-media@vger.kernel.org>; Wed, 10 Aug 2022 13:01:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53571C433C1;
-        Wed, 10 Aug 2022 13:01:35 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 51281CE1D0E
+        for <linux-media@vger.kernel.org>; Wed, 10 Aug 2022 13:01:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04E35C433D6;
+        Wed, 10 Aug 2022 13:01:30 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 6/6] media: avoid use of 'videobuf'
-Date:   Wed, 10 Aug 2022 15:01:27 +0200
-Message-Id: <20220810130127.2707169-7-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 2/6] vb2: videobuf -> videobuf2
+Date:   Wed, 10 Aug 2022 15:01:23 +0200
+Message-Id: <20220810130127.2707169-3-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220810130127.2707169-1-hverkuil-cisco@xs4all.nl>
 References: <20220810130127.2707169-1-hverkuil-cisco@xs4all.nl>
@@ -37,283 +37,200 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The term 'videobuf' typically refers to the old videobuf version 1
-framework. Avoid using this word in drivers that are converted to
-vb2.
+It is confusing to use the term 'videobuf' or 'video-buf' since that
+usually refers to the old videobuf version 1 framework. Rename to
+'videobuf2' or vb2.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- Documentation/driver-api/media/drivers/pxa_camera.rst | 2 +-
- drivers/media/dvb-frontends/rtl2832_sdr.c             | 2 +-
- drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c        | 2 +-
- drivers/media/platform/intel/pxa_camera.c             | 8 ++++----
- drivers/media/platform/marvell/mcam-core.h            | 2 +-
- drivers/media/platform/renesas/vsp1/vsp1_video.c      | 2 +-
- drivers/media/platform/samsung/exynos4-is/fimc-core.h | 2 +-
- drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c      | 2 +-
- drivers/media/test-drivers/vim2m.c                    | 2 +-
- drivers/media/usb/airspy/airspy.c                     | 2 +-
- drivers/media/usb/au0828/au0828-video.c               | 4 ++--
- drivers/media/usb/cx231xx/cx231xx-vbi.c               | 2 +-
- drivers/media/usb/cx231xx/cx231xx-video.c             | 2 +-
- drivers/media/usb/em28xx/em28xx-video.c               | 4 ++--
- drivers/media/usb/msi2500/msi2500.c                   | 2 +-
- drivers/media/usb/pvrusb2/pvrusb2-dvb.c               | 2 +-
- 16 files changed, 21 insertions(+), 21 deletions(-)
+ drivers/media/common/videobuf2/videobuf2-core.c | 14 +++++++-------
+ drivers/media/common/videobuf2/videobuf2-dvb.c  |  4 ++--
+ drivers/media/common/videobuf2/videobuf2-v4l2.c |  4 ++--
+ include/media/videobuf2-core.h                  | 16 ++++++++--------
+ include/media/videobuf2-dvb.h                   |  2 +-
+ 5 files changed, 20 insertions(+), 20 deletions(-)
 
-diff --git a/Documentation/driver-api/media/drivers/pxa_camera.rst b/Documentation/driver-api/media/drivers/pxa_camera.rst
-index ee1bd96b66dd..46919919baac 100644
---- a/Documentation/driver-api/media/drivers/pxa_camera.rst
-+++ b/Documentation/driver-api/media/drivers/pxa_camera.rst
-@@ -19,7 +19,7 @@ Global video workflow
- 
- a) QCI stopped
-    Initially, the QCI interface is stopped.
--   When a buffer is queued (pxa_videobuf_ops->buf_queue), the QCI starts.
-+   When a buffer is queued, start_streaming is called and the QCI starts.
- 
- b) QCI started
-    More buffers can be queued while the QCI is started without halting the
-diff --git a/drivers/media/dvb-frontends/rtl2832_sdr.c b/drivers/media/dvb-frontends/rtl2832_sdr.c
-index 6a4f2997d6f5..05f71d169726 100644
---- a/drivers/media/dvb-frontends/rtl2832_sdr.c
-+++ b/drivers/media/dvb-frontends/rtl2832_sdr.c
-@@ -245,7 +245,7 @@ static void rtl2832_sdr_urb_complete(struct urb *urb)
- 		if (unlikely(fbuf == NULL)) {
- 			dev->vb_full++;
- 			dev_notice_ratelimited(&pdev->dev,
--					       "videobuf is full, %d packets dropped\n",
-+					       "video buffer is full, %d packets dropped\n",
- 					       dev->vb_full);
- 			goto skip;
- 		}
-diff --git a/drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c b/drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c
-index 80d20e2a2099..0adf3d80f248 100644
---- a/drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c
-+++ b/drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c
-@@ -1020,7 +1020,7 @@ static int solo_g_parm(struct file *file, void *priv,
- 	cp->timeperframe.numerator = solo_enc->interval;
- 	cp->timeperframe.denominator = solo_enc->solo_dev->fps;
- 	cp->capturemode = 0;
--	/* XXX: Shouldn't we be able to get/set this from videobuf? */
-+	/* XXX: Shouldn't we be able to get/set this from vb2? */
- 	cp->readbuffers = 2;
- 
- 	return 0;
-diff --git a/drivers/media/platform/intel/pxa_camera.c b/drivers/media/platform/intel/pxa_camera.c
-index 35145e3348f0..54270d6b6f50 100644
---- a/drivers/media/platform/intel/pxa_camera.c
-+++ b/drivers/media/platform/intel/pxa_camera.c
-@@ -854,7 +854,7 @@ static int pxa_init_dma_channel(struct pxa_camera_dev *pcdev,
- 	return -ENOMEM;
+diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+index b203c1e26353..ab9697f3b5f1 100644
+--- a/drivers/media/common/videobuf2/videobuf2-core.c
++++ b/drivers/media/common/videobuf2/videobuf2-core.c
+@@ -398,7 +398,7 @@ static void init_buffer_cache_hints(struct vb2_queue *q, struct vb2_buffer *vb)
  }
  
--static void pxa_videobuf_set_actdma(struct pxa_camera_dev *pcdev,
-+static void pxa_video_buf_set_actdma(struct pxa_camera_dev *pcdev,
- 				    struct pxa_buffer *buf)
- {
- 	buf->active_dma = DMA_Y;
-@@ -973,7 +973,7 @@ static void pxa_camera_wakeup(struct pxa_camera_dev *pcdev,
-  * stopped. This means the tailed buffer would never be transferred by DMA.
-  * This function restarts the capture for this corner case, where :
-  *  - DADR() == DADDR_STOP
-- *  - a videobuffer is queued on the pcdev->capture list
-+ *  - a video buffer is queued on the pcdev->capture list
+ /*
+- * __vb2_queue_alloc() - allocate videobuf buffer structures and (for MMAP type)
++ * __vb2_queue_alloc() - allocate vb2 buffer structures and (for MMAP type)
+  * video buffer memory for all buffers/planes on the queue and initializes the
+  * queue
   *
-  * Please check the "DMA hot chaining timeslice issue" in
-  *   Documentation/driver-api/media/drivers/pxa_camera.rst
-@@ -1163,7 +1163,7 @@ static void pxa_camera_eof(struct tasklet_struct *t)
- 	pcdev->active = list_first_entry(&pcdev->capture,
- 					 struct pxa_buffer, queue);
- 	buf = pcdev->active;
--	pxa_videobuf_set_actdma(pcdev, buf);
-+	pxa_video_buf_set_actdma(pcdev, buf);
+@@ -417,7 +417,7 @@ static int __vb2_queue_alloc(struct vb2_queue *q, enum vb2_memory memory,
+ 			    VB2_MAX_FRAME - q->num_buffers);
  
- 	pxa_dma_start_channels(pcdev);
- }
-@@ -1416,7 +1416,7 @@ static int pxac_vb2_prepare(struct vb2_buffer *vb)
- 	 * the actual buffer is yours
- 	 */
- 	buf->inwork = 0;
--	pxa_videobuf_set_actdma(pcdev, buf);
-+	pxa_video_buf_set_actdma(pcdev, buf);
- 
- 	return ret;
- }
-diff --git a/drivers/media/platform/marvell/mcam-core.h b/drivers/media/platform/marvell/mcam-core.h
-index f324d808d737..51e66db45af6 100644
---- a/drivers/media/platform/marvell/mcam-core.h
-+++ b/drivers/media/platform/marvell/mcam-core.h
-@@ -32,7 +32,7 @@
- 
- #if !defined(MCAM_MODE_VMALLOC) && !defined(MCAM_MODE_DMA_CONTIG) && \
- 	!defined(MCAM_MODE_DMA_SG)
--#error One of the videobuf buffer modes must be selected in the config
-+#error One of the vb2 buffer modes must be selected in the config
+ 	for (buffer = 0; buffer < num_buffers; ++buffer) {
+-		/* Allocate videobuf buffer structures */
++		/* Allocate vb2 buffer structures */
+ 		vb = kzalloc(q->buf_struct_size, GFP_KERNEL);
+ 		if (!vb) {
+ 			dprintk(q, 1, "memory alloc for buffer struct failed\n");
+@@ -599,7 +599,7 @@ static int __vb2_queue_free(struct vb2_queue *q, unsigned int buffers)
+ 	}
  #endif
  
+-	/* Free videobuf buffers */
++	/* Free vb2 buffers */
+ 	for (buffer = q->num_buffers - buffers; buffer < q->num_buffers;
+ 	     ++buffer) {
+ 		kfree(q->bufs[buffer]);
+@@ -1949,7 +1949,7 @@ int vb2_core_dqbuf(struct vb2_queue *q, unsigned int *pindex, void *pb,
+ 	if (pb)
+ 		call_void_bufop(q, fill_user_buffer, vb, pb);
  
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_video.c b/drivers/media/platform/renesas/vsp1/vsp1_video.c
-index e8e0ee5f2277..df1606b49d77 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_video.c
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_video.c
-@@ -305,7 +305,7 @@ static int vsp1_video_pipeline_setup_partitions(struct vsp1_pipeline *pipe)
-  * @video: the video node
+-	/* Remove from videobuf queue */
++	/* Remove from vb2 queue */
+ 	list_del(&vb->queued_entry);
+ 	q->queued_count--;
+ 
+@@ -1978,7 +1978,7 @@ EXPORT_SYMBOL_GPL(vb2_core_dqbuf);
+  * __vb2_queue_cancel() - cancel and stop (pause) streaming
   *
-  * This function completes the current buffer by filling its sequence number,
-- * time stamp and payload size, and hands it back to the videobuf core.
-+ * time stamp and payload size, and hands it back to the vb2 core.
-  *
-  * Return the next queued buffer or NULL if the queue is empty.
+  * Removes all queued buffers from driver's queue and all buffers queued by
+- * userspace from videobuf's queue. Returns to state after reqbufs.
++ * userspace from vb2's queue. Returns to state after reqbufs.
   */
-diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-core.h b/drivers/media/platform/samsung/exynos4-is/fimc-core.h
-index 7a058f3e6298..2b0760add092 100644
---- a/drivers/media/platform/samsung/exynos4-is/fimc-core.h
-+++ b/drivers/media/platform/samsung/exynos4-is/fimc-core.h
-@@ -215,7 +215,7 @@ struct fimc_addr {
+ static void __vb2_queue_cancel(struct vb2_queue *q)
+ {
+@@ -2016,7 +2016,7 @@ static void __vb2_queue_cancel(struct vb2_queue *q)
+ 	q->uses_qbuf = 0;
+ 
+ 	/*
+-	 * Remove all buffers from videobuf's list...
++	 * Remove all buffers from vb2's list...
+ 	 */
+ 	INIT_LIST_HEAD(&q->queued_list);
+ 	/*
+@@ -2139,7 +2139,7 @@ int vb2_core_streamoff(struct vb2_queue *q, unsigned int type)
+ 
+ 	/*
+ 	 * Cancel will pause streaming and remove all buffers from the driver
+-	 * and videobuf, effectively returning control over them to userspace.
++	 * and vb2, effectively returning control over them to userspace.
+ 	 *
+ 	 * Note that we do this even if q->streaming == 0: if you prepare or
+ 	 * queue buffers, and then call streamoff without ever having called
+diff --git a/drivers/media/common/videobuf2/videobuf2-dvb.c b/drivers/media/common/videobuf2/videobuf2-dvb.c
+index 9d571c9d31e9..8c15bcd07eef 100644
+--- a/drivers/media/common/videobuf2/videobuf2-dvb.c
++++ b/drivers/media/common/videobuf2/videobuf2-dvb.c
+@@ -3,8 +3,8 @@
+  *
+  * some helper function for simple DVB cards which simply DMA the
+  * complete transport stream and let the computer sort everything else
+- * (i.e. we are using the software demux, ...).  Also uses the
+- * video-buf to manage DMA buffers.
++ * (i.e. we are using the software demux, ...).  Also uses vb2
++ * to manage DMA buffers.
+  *
+  * (c) 2004 Gerd Knorr <kraxel@bytesex.org> [SUSE Labs]
+  */
+diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+index f26cb8586bd4..2ecd4483e139 100644
+--- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
++++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+@@ -268,7 +268,7 @@ static int vb2_fill_vb2_v4l2_buffer(struct vb2_buffer *vb, struct v4l2_buffer *b
+ 		/*
+ 		 * Single-planar buffers do not use planes array,
+ 		 * so fill in relevant v4l2_buffer struct fields instead.
+-		 * In videobuf we use our internal V4l2_planes struct for
++		 * In vb2 we use our internal V4l2_planes struct for
+ 		 * single-planar buffers as well, for simplicity.
+ 		 *
+ 		 * If bytesused == 0 for the output buffer, then fall back
+@@ -652,7 +652,7 @@ EXPORT_SYMBOL_GPL(vb2_find_buffer);
+ 
+ /*
+  * vb2_querybuf() - query video buffer information
+- * @q:		videobuf queue
++ * @q:		vb2 queue
+  * @b:		buffer struct passed from userspace to vidioc_querybuf handler
+  *		in driver
+  *
+diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
+index 5468b633b9d2..3253bd2f6fee 100644
+--- a/include/media/videobuf2-core.h
++++ b/include/media/videobuf2-core.h
+@@ -65,7 +65,7 @@ struct vb2_buffer;
+  *		 DMABUF memory types.
+  * @get_userptr: acquire userspace memory for a hardware operation; used for
+  *		 USERPTR memory types; vaddr is the address passed to the
+- *		 videobuf layer when queuing a video buffer of USERPTR type;
++ *		 videobuf2 layer when queuing a video buffer of USERPTR type;
+  *		 should return an allocator private per-buffer structure
+  *		 associated with the buffer on success, ERR_PTR() on failure;
+  *		 the returned private structure will then be passed as @buf_priv
+@@ -97,7 +97,7 @@ struct vb2_buffer;
+  *		associated with the passed private structure or NULL if not
+  *		available.
+  * @num_users:	return the current number of users of a memory buffer;
+- *		return 1 if the videobuf layer (or actually the driver using
++ *		return 1 if the videobuf2 layer (or actually the driver using
+  *		it) is the only user.
+  * @mmap:	setup a userspace mapping for a given memory buffer under
+  *		the provided virtual memory region.
+@@ -210,11 +210,11 @@ enum vb2_io_modes {
+  * enum vb2_buffer_state - current video buffer state.
+  * @VB2_BUF_STATE_DEQUEUED:	buffer under userspace control.
+  * @VB2_BUF_STATE_IN_REQUEST:	buffer is queued in media request.
+- * @VB2_BUF_STATE_PREPARING:	buffer is being prepared in videobuf.
+- * @VB2_BUF_STATE_QUEUED:	buffer queued in videobuf, but not in driver.
++ * @VB2_BUF_STATE_PREPARING:	buffer is being prepared in videobuf2.
++ * @VB2_BUF_STATE_QUEUED:	buffer queued in videobuf2, but not in driver.
+  * @VB2_BUF_STATE_ACTIVE:	buffer queued in driver and possibly used
+  *				in a hardware operation.
+- * @VB2_BUF_STATE_DONE:		buffer returned from driver to videobuf, but
++ * @VB2_BUF_STATE_DONE:		buffer returned from driver to videobuf2, but
+  *				not yet dequeued to userspace.
+  * @VB2_BUF_STATE_ERROR:	same as above, but the operation on the buffer
+  *				has ended with an error, which will be reported
+@@ -466,7 +466,7 @@ struct vb2_buf_ops {
+ };
  
  /**
-  * struct fimc_vid_buffer - the driver's video buffer
-- * @vb:    v4l videobuf buffer
-+ * @vb:    v4l vb2 buffer
-  * @list:  linked list structure for buffer queue
-  * @addr: precalculated DMA address set
-  * @index: buffer index for the output DMA engine
-diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
-index 761341934925..219fc0235b69 100644
---- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
-@@ -323,7 +323,7 @@ static void s5p_mfc_handle_frame_new(struct s5p_mfc_ctx *ctx, unsigned int err)
- 	}
- 	ctx->sequence++;
- 	/* The MFC returns address of the buffer, now we have to
--	 * check which videobuf does it correspond to */
-+	 * check which vb2_buffer does it correspond to */
- 	list_for_each_entry(dst_buf, &ctx->dst_queue, list) {
- 		u32 addr = (u32)vb2_dma_contig_plane_dma_addr(&dst_buf->b->vb2_buf, 0);
- 
-diff --git a/drivers/media/test-drivers/vim2m.c b/drivers/media/test-drivers/vim2m.c
-index 47575490e74a..7964426bf2f7 100644
---- a/drivers/media/test-drivers/vim2m.c
-+++ b/drivers/media/test-drivers/vim2m.c
-@@ -2,7 +2,7 @@
- /*
-  * A virtual v4l2-mem2mem example device.
+- * struct vb2_queue - a videobuf queue.
++ * struct vb2_queue - a videobuf2 queue.
   *
-- * This is a virtual device driver for testing mem-to-mem videobuf framework.
-+ * This is a virtual device driver for testing mem-to-mem vb2 framework.
-  * It simulates a device that uses memory buffers for both source and
-  * destination, processes the data and issues an "irq" (simulated by a delayed
-  * workqueue).
-diff --git a/drivers/media/usb/airspy/airspy.c b/drivers/media/usb/airspy/airspy.c
-index 240a7cc56777..b8b88244f963 100644
---- a/drivers/media/usb/airspy/airspy.c
-+++ b/drivers/media/usb/airspy/airspy.c
-@@ -294,7 +294,7 @@ static void airspy_urb_complete(struct urb *urb)
- 		if (unlikely(fbuf == NULL)) {
- 			s->vb_full++;
- 			dev_notice_ratelimited(s->dev,
--					"videobuf is full, %d packets dropped\n",
-+					"video buffer is full, %d packets dropped\n",
- 					s->vb_full);
- 			goto skip;
- 		}
-diff --git a/drivers/media/usb/au0828/au0828-video.c b/drivers/media/usb/au0828/au0828-video.c
-index c0f118563c7d..eb303e94cceb 100644
---- a/drivers/media/usb/au0828/au0828-video.c
-+++ b/drivers/media/usb/au0828/au0828-video.c
-@@ -384,7 +384,7 @@ static void au0828_copy_video(struct au0828_dev *dev,
- }
+  * @type:	private buffer type whose content is defined by the vb2-core
+  *		caller. For example, for V4L2, it should match
+@@ -544,7 +544,7 @@ struct vb2_buf_ops {
+  * @mmap_lock:	private mutex used when buffers are allocated/freed/mmapped
+  * @memory:	current memory type used
+  * @dma_dir:	DMA mapping direction.
+- * @bufs:	videobuf buffer structures
++ * @bufs:	videobuf2 buffer structures
+  * @num_buffers: number of allocated/used buffers
+  * @queued_list: list of buffers currently queued from userspace
+  * @queued_count: number of buffers queued and ready for streaming.
+@@ -683,7 +683,7 @@ void *vb2_plane_vaddr(struct vb2_buffer *vb, unsigned int plane_no);
+ void *vb2_plane_cookie(struct vb2_buffer *vb, unsigned int plane_no);
  
- /*
-- * video-buf generic routine to get the next available buffer
-+ * generic routine to get the next available buffer
-  */
- static inline void get_next_buf(struct au0828_dmaqueue *dma_q,
- 				struct au0828_buffer **buf)
-@@ -459,7 +459,7 @@ static void au0828_copy_vbi(struct au0828_dev *dev,
+ /**
+- * vb2_buffer_done() - inform videobuf that an operation on a buffer
++ * vb2_buffer_done() - inform videobuf2 that an operation on a buffer
+  *	is finished.
+  * @vb:		pointer to &struct vb2_buffer to be used.
+  * @state:	state of the buffer, as defined by &enum vb2_buffer_state.
+diff --git a/include/media/videobuf2-dvb.h b/include/media/videobuf2-dvb.h
+index 8605366ec87c..2d577b945637 100644
+--- a/include/media/videobuf2-dvb.h
++++ b/include/media/videobuf2-dvb.h
+@@ -24,7 +24,7 @@ struct vb2_dvb {
+ 	struct dvb_frontend	*frontend;
+ 	struct vb2_queue	dvbq;
  
+-	/* video-buf-dvb state info */
++	/* vb2-dvb state info */
+ 	struct mutex		lock;
+ 	int			nfeeds;
  
- /*
-- * video-buf generic routine to get the next available VBI buffer
-+ * generic routine to get the next available VBI buffer
-  */
- static inline void vbi_get_next_buf(struct au0828_dmaqueue *dma_q,
- 				    struct au0828_buffer **buf)
-diff --git a/drivers/media/usb/cx231xx/cx231xx-vbi.c b/drivers/media/usb/cx231xx/cx231xx-vbi.c
-index fdc8b7f7b0c1..33431d9f54c2 100644
---- a/drivers/media/usb/cx231xx/cx231xx-vbi.c
-+++ b/drivers/media/usb/cx231xx/cx231xx-vbi.c
-@@ -558,7 +558,7 @@ u32 cx231xx_copy_vbi_line(struct cx231xx *dev, struct cx231xx_dmaqueue *dma_q,
- }
- 
- /*
-- * video-buf generic routine to get the next available buffer
-+ * generic routine to get the next available buffer
-  */
- static inline void get_next_vbi_buf(struct cx231xx_dmaqueue *dma_q,
- 				    struct cx231xx_buffer **buf)
-diff --git a/drivers/media/usb/cx231xx/cx231xx-video.c b/drivers/media/usb/cx231xx/cx231xx-video.c
-index 425e470b0fd3..e23b8ccd79d4 100644
---- a/drivers/media/usb/cx231xx/cx231xx-video.c
-+++ b/drivers/media/usb/cx231xx/cx231xx-video.c
-@@ -220,7 +220,7 @@ static inline void print_err_status(struct cx231xx *dev, int packet, int status)
- }
- 
- /*
-- * video-buf generic routine to get the next available buffer
-+ * generic routine to get the next available buffer
-  */
- static inline void get_next_buf(struct cx231xx_dmaqueue *dma_q,
- 				struct cx231xx_buffer **buf)
-diff --git a/drivers/media/usb/em28xx/em28xx-video.c b/drivers/media/usb/em28xx/em28xx-video.c
-index 8181c0e6a25b..25e0620deff1 100644
---- a/drivers/media/usb/em28xx/em28xx-video.c
-+++ b/drivers/media/usb/em28xx/em28xx-video.c
-@@ -440,7 +440,7 @@ static inline void finish_buffer(struct em28xx *dev,
- }
- 
- /*
-- * Copy picture data from USB buffer to videobuf buffer
-+ * Copy picture data from USB buffer to video buffer
-  */
- static void em28xx_copy_video(struct em28xx *dev,
- 			      struct em28xx_buffer *buf,
-@@ -521,7 +521,7 @@ static void em28xx_copy_video(struct em28xx *dev,
- }
- 
- /*
-- * Copy VBI data from USB buffer to videobuf buffer
-+ * Copy VBI data from USB buffer to video buffer
-  */
- static void em28xx_copy_vbi(struct em28xx *dev,
- 			    struct em28xx_buffer *buf,
-diff --git a/drivers/media/usb/msi2500/msi2500.c b/drivers/media/usb/msi2500/msi2500.c
-index 71de6b4c4e4c..5a1f2698efb7 100644
---- a/drivers/media/usb/msi2500/msi2500.c
-+++ b/drivers/media/usb/msi2500/msi2500.c
-@@ -411,7 +411,7 @@ static void msi2500_isoc_handler(struct urb *urb)
- 		if (unlikely(fbuf == NULL)) {
- 			dev->vb_full++;
- 			dev_dbg_ratelimited(dev->dev,
--					    "videobuf is full, %d packets dropped\n",
-+					    "video buffer is full, %d packets dropped\n",
- 					    dev->vb_full);
- 			continue;
- 		}
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-dvb.c b/drivers/media/usb/pvrusb2/pvrusb2-dvb.c
-index 6954584526a3..26811efe0fb5 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-dvb.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-dvb.c
-@@ -80,7 +80,7 @@ static int pvr2_dvb_feed_func(struct pvr2_dvb_adapter *adap)
- static int pvr2_dvb_feed_thread(void *data)
- {
- 	int stat = pvr2_dvb_feed_func(data);
--	/* from videobuf-dvb.c: */
-+
- 	while (!kthread_should_stop()) {
- 		set_current_state(TASK_INTERRUPTIBLE);
- 		schedule();
 -- 
 2.35.1
 
