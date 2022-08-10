@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D25FDC3F6B0
-	for <linux-media@archiver.kernel.org>; Wed, 10 Aug 2022 12:11:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A65A7C25B06
+	for <linux-media@archiver.kernel.org>; Wed, 10 Aug 2022 12:11:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231617AbiHJMLp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 Aug 2022 08:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40296 "EHLO
+        id S231506AbiHJMLo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Aug 2022 08:11:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbiHJMLm (ORCPT
+        with ESMTP id S229928AbiHJMLm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 10 Aug 2022 08:11:42 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B4C6AA11
-        for <linux-media@vger.kernel.org>; Wed, 10 Aug 2022 05:11:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C516AA0B
+        for <linux-media@vger.kernel.org>; Wed, 10 Aug 2022 05:11:41 -0700 (PDT)
 Received: from deskari.lan (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 76063593;
-        Wed, 10 Aug 2022 14:11:38 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C023A576;
+        Wed, 10 Aug 2022 14:11:37 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1660133499;
-        bh=fe2HDYGvP1Wx7sIYEynPNCIeBQZYWH3spcisvRGJydc=;
+        s=mail; t=1660133498;
+        bh=96jozUYbU2FtZp4+Kiv5v+4o9WhSyX5tkfq5XS8jzlc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e9TFvJ0I5CQsxBk4o2diowtuFn+V4PofGmDDUuKw61FVkqMZdEZrToXq/GMfXlnbC
-         8MILXRNG0feqkZTzymVi6IrSOLhhSIt54+5m/ayAdTRUKkYJP0FNFT5JALHpkfO2V7
-         92lum3DDzzy/TbpeAOaquPIW3bLHLEREsEzxgKtg=
+        b=R9z+XuuUO/gZnnjTkkslcYmouq//rovPnwXjiME8wz1Z+4IPCNUMuVSRU/FtjxurT
+         vIgL7ifkk4ezcAbvb0J/M7K//LNQ8f8yvF0e3FB9G3TGGVNzAaWrlaiJf6o7ZJIM9h
+         xAj8OSaG87aQ3F7v6TOxX5W9SXMN9OLBnqMoQcMM=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -36,50 +36,40 @@ To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Kishon Vijay Abraham <kishon@ti.com>,
         satish.nagireddy@getcruise.com, Tomasz Figa <tfiga@chromium.org>
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v13 03/34] media: subdev: increase V4L2_FRAME_DESC_ENTRY_MAX to 8
-Date:   Wed, 10 Aug 2022 15:10:51 +0300
-Message-Id: <20220810121122.3149086-4-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v13 02/34] media: media-entity.h: add include for min()
+Date:   Wed, 10 Aug 2022 15:10:50 +0300
+Message-Id: <20220810121122.3149086-3-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220810121122.3149086-1-tomi.valkeinen@ideasonboard.com>
 References: <20220810121122.3149086-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-V4L2_FRAME_DESC_ENTRY_MAX is currently set to 4. In theory it's possible
-to have an arbitrary amount of streams in a single pad, so preferably
-there should be no hardcoded maximum number.
+./include/media/media-entity.h:595:34: error: implicit declaration of function ‘min’
 
-However, I believe a reasonable max is 8, which would cover a CSI-2 pad
-with 4 streams of pixel data and 4 streams of metadata.
+Include kernel.h to get the definition for min().
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- include/media/v4l2-subdev.h | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ include/media/media-entity.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index b661e1817470..dbab00f79527 100644
---- a/include/media/v4l2-subdev.h
-+++ b/include/media/v4l2-subdev.h
-@@ -358,7 +358,11 @@ struct v4l2_mbus_frame_desc_entry {
- 	} bus;
- };
- 
--#define V4L2_FRAME_DESC_ENTRY_MAX	4
-+ /*
-+  * If this number is too small, it should be dropped altogether and the
-+  * API switched to a dynamic number of frame descriptor entries.
-+  */
-+#define V4L2_FRAME_DESC_ENTRY_MAX	8
- 
- /**
-  * enum v4l2_mbus_frame_desc_type - media bus frame description type
+diff --git a/include/media/media-entity.h b/include/media/media-entity.h
+index a9a1c0ec5d1c..3e3d06c1ec36 100644
+--- a/include/media/media-entity.h
++++ b/include/media/media-entity.h
+@@ -15,6 +15,7 @@
+ #include <linux/bug.h>
+ #include <linux/container_of.h>
+ #include <linux/fwnode.h>
++#include <linux/kernel.h>
+ #include <linux/list.h>
+ #include <linux/media.h>
+ #include <linux/types.h>
 -- 
 2.34.1
 
