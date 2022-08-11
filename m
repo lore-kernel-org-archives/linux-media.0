@@ -2,47 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 758CBC25B0C
-	for <linux-media@archiver.kernel.org>; Thu, 11 Aug 2022 15:57:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7764C2BB41
+	for <linux-media@archiver.kernel.org>; Thu, 11 Aug 2022 15:57:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236925AbiHKP51 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Aug 2022 11:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49056 "EHLO
+        id S237005AbiHKP53 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Aug 2022 11:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237355AbiHKP4U (ORCPT
+        with ESMTP id S236896AbiHKPzG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Aug 2022 11:56:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59A6A0609;
-        Thu, 11 Aug 2022 08:47:07 -0700 (PDT)
+        Thu, 11 Aug 2022 11:55:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A65225CA;
+        Thu, 11 Aug 2022 08:46:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D6A7E616E4;
-        Thu, 11 Aug 2022 15:47:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA0D5C43470;
-        Thu, 11 Aug 2022 15:47:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9921B82160;
+        Thu, 11 Aug 2022 15:46:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BC4FC433D7;
+        Thu, 11 Aug 2022 15:46:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660232824;
-        bh=OeMg4a/pR6P2uG64JhkuHV+oop0WsQ1wlASz8/VVvbk=;
+        s=k20201202; t=1660232772;
+        bh=aVDfoQXhnCJz3FkHiF1y08f1OF1Zx0Iw4ujPQBH0Bik=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m7rDuQoUsOF3KJFog53YzH0/C0V0XmYBKV4aZzaYkvTKn6ET8qffterarGUS7T3q6
-         03OREh1nTrHC6bE7A5oWqAuv6SpnZNpQ4E7MtgNQRUlXTMOMbmvBAiksIB873T5vJD
-         A2uQ7jKwxwqEDxbE52M/1RY5n6Ox6lyLOZbiB7m1TB6IeR9gxGPKNc8nPHH/RtAreK
-         8+82JA3+G5lTq/cYsDRQ2k0I/uuKkKYfbGIItI4n7vtM7AOO4f71mdOMwOP6Y3lYU4
-         voc3cUJ1kfelWid4ITgu6KwYDSxOpSQTfJ8pGtWANuloU5z+KKYWO1f515fitjlLAz
-         7zJgJIYzgv3ow==
+        b=nBJofwpvqDbrPO3QTuvpCkIw4cbqP1jDBXvfu560pNgic4pwApUuBTdqKRd8zz475
+         LytJXfQ7BfO5vQOORCh4H4UPoUWtnf6BT4hVRG7k++APLzFxuJJuXyZhAfdDN8QHzI
+         Aza93GPqYdmCNIvT/mmgsCzELwexL3BXlDRcakY6rw2AQJpeJevMtL/sCjYU21odjQ
+         XXHdrYo/mI5JSe/pZGQEXIx2LS0Z0Fq35OUDKzZCyjrfogWZ2z9P+EFXpsxYFKvYxd
+         mSfVqMVrDPcCNJ8TOoJrhPqigHkb19llW2UKtzm3Y6RhGWFBVxI125l/+D9eGiQZy0
+         UacpisbTshg9w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Eugen Hristev <eugen.hristev@microchip.com>,
+Cc:     Yang Yingliang <yangyingliang@huawei.com>,
+        Hulk Robot <hulkci@huawei.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.18 43/93] media: atmel: atmel-isc-base: allow wb ctrls to be changed when isc is not configured
-Date:   Thu, 11 Aug 2022 11:41:37 -0400
-Message-Id: <20220811154237.1531313-43-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, prabhakar.csengg@gmail.com,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.18 30/93] media: davinci: vpif: add missing of_node_put() in vpif_probe()
+Date:   Thu, 11 Aug 2022 11:41:24 -0400
+Message-Id: <20220811154237.1531313-30-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220811154237.1531313-1-sashal@kernel.org>
 References: <20220811154237.1531313-1-sashal@kernel.org>
@@ -54,66 +54,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Eugen Hristev <eugen.hristev@microchip.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit aa63c5eaf7f7d2d3a4b1cc5782e7151b8ae3079f ]
+[ Upstream commit bb45f5433f23cf103ba29c9692ee553e061f2cb4 ]
 
-When attempting to change the white balance (WB) ctrls before starting
-streaming, e.g.:
+of_graph_get_next_endpoint() returns an 'endpoint' node pointer
+with refcount incremented. The refcount should be decremented
+before returning from vpif_probe().
 
- # v4l2-ctl -L
-
-User Controls
-..
-            blue_component_gain 0x009819c1 (int)    : min=0 max=8191 step=1 default=512 value=512 flags=slider
-..
- # v4l2-ctl --set-ctrl=blue_component_gain=500
- # v4l2-ctl -L
-..
-            blue_component_gain 0x009819c1 (int)    : min=0 max=8191 step=1 default=512 value=500 flags=slider
-..
-
-These will not be written to the internal data struct and will not be
-written to the WB hardware module.
-Thus, after starting streaming, they will be reset to default:
-
- # v4l2-ctl -L
-..
-            blue_component_gain 0x009819c1 (int)    : min=0 max=8191 step=1 default=512 value=512 flags=slider
-..
-
-It does not make much sense to not be able to configure the WB controls
-at all times. Even if the sensor would not be RAW Bayer (and in this case the
-WB module is unavailable), the user could configure the ISC itself, as the
-ISC should not care about the sensor format.
-Thus, when WB module is available (if the sensor changes format e.g.) it will
-be already configured as be user's desires.
-In consequence, remove the check in isc_s_awb_ctrl that will return if ISC
-does not know the sensor format.
-
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/atmel/atmel-isc-base.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/media/platform/ti/davinci/vpif.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
-index db15770d5b88..968b505f40e8 100644
---- a/drivers/media/platform/atmel/atmel-isc-base.c
-+++ b/drivers/media/platform/atmel/atmel-isc-base.c
-@@ -1509,10 +1509,6 @@ static int isc_s_awb_ctrl(struct v4l2_ctrl *ctrl)
- 		else
- 			ctrls->awb = ISC_WB_NONE;
+diff --git a/drivers/media/platform/ti/davinci/vpif.c b/drivers/media/platform/ti/davinci/vpif.c
+index 97ef770266af..da27da4c165a 100644
+--- a/drivers/media/platform/ti/davinci/vpif.c
++++ b/drivers/media/platform/ti/davinci/vpif.c
+@@ -469,6 +469,7 @@ static int vpif_probe(struct platform_device *pdev)
+ 					      endpoint);
+ 	if (!endpoint)
+ 		return 0;
++	of_node_put(endpoint);
  
--		/* we did not configure ISC yet */
--		if (!isc->config.sd_format)
--			break;
--
- 		/* configure the controls with new values from v4l2 */
- 		if (ctrl->cluster[ISC_CTRL_R_GAIN]->is_new)
- 			ctrls->gain[ISC_HIS_CFG_MODE_R] = isc->r_gain_ctrl->val;
+ 	/*
+ 	 * For DT platforms, manually create platform_devices for
 -- 
 2.35.1
 
