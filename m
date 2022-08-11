@@ -2,385 +2,162 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 650DEC25B0C
-	for <linux-media@archiver.kernel.org>; Thu, 11 Aug 2022 09:18:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B11FC19F2D
+	for <linux-media@archiver.kernel.org>; Thu, 11 Aug 2022 09:18:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234970AbiHKJSG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Aug 2022 05:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59910 "EHLO
+        id S234977AbiHKJSH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Aug 2022 05:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234987AbiHKJR6 (ORCPT
+        with ESMTP id S234956AbiHKJR6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 11 Aug 2022 05:17:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B71793536
-        for <linux-media@vger.kernel.org>; Thu, 11 Aug 2022 02:17:54 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173F7923E9
+        for <linux-media@vger.kernel.org>; Thu, 11 Aug 2022 02:17:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A9ABDB81F99
-        for <linux-media@vger.kernel.org>; Thu, 11 Aug 2022 09:17:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFC8DC433C1;
-        Thu, 11 Aug 2022 09:17:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A8461615D7
+        for <linux-media@vger.kernel.org>; Thu, 11 Aug 2022 09:17:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49DF3C433D6;
+        Thu, 11 Aug 2022 09:17:54 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 0/9] Deprecate old non-vb2 drivers
-Date:   Thu, 11 Aug 2022 11:17:40 +0200
-Message-Id: <20220811091749.3956641-1-hverkuil-cisco@xs4all.nl>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 3/9] meye: deprecate this driver
+Date:   Thu, 11 Aug 2022 11:17:43 +0200
+Message-Id: <20220811091749.3956641-4-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220811091749.3956641-1-hverkuil-cisco@xs4all.nl>
+References: <20220811091749.3956641-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch series deprecates the cpia2, meye, zr364xx, tm6000,
-fsl-viu, dm644x_ccdc, dm355_cddc, dm365_isif, hexium_gemini/orion,
-mxb and ttpci drivers.
+Deprecate the meye driver. This driver does not use the vb2 framework
+for video streaming, instead it implements its own version.
 
-The cpia2 and meye drivers do not use either vb2 or vb1, and the
-other drivers use vb1 instead of vb2.
+We want to get rid of these old drivers, so deprecated it for future
+removal.
 
-Note: the DVB ttpci driver (saa7146 based) can probably be kept
-if someone would be willing to disentangle it from the saa7146
-common code that's shared between DVB and V4L2 drivers. But it
-is such old hardware that I am not sure it is worth the effort.
-
-After this series the only remaining drivers in mainline that
-still use vb1 are cx18 and bt8xx.
-
-Regards,
-
-	Hans
-
-Hans Verkuil (9):
-  staging/media: add a STAGING_MEDIA_DEPRECATED option
-  cpia2: deprecate this driver
-  meye: deprecate this driver
-  zr364xx: deprecate this driver
-  tm6000: deprecate this driver
-  fsl-viu: deprecate this driver
-  davinci: deprecate dm644x_ccdc, dm355_cddc and dm365_isif
-  saa7146: deprecate hexium_gemini/orion, mxb and ttpci
-  av7110: move to staging/media/deprecated/saa7146
-
- drivers/media/common/Kconfig                  |  1 -
- drivers/media/common/Makefile                 |  2 +-
- drivers/media/pci/Kconfig                     |  3 -
- drivers/media/pci/Makefile                    |  5 +-
- drivers/media/platform/nxp/Kconfig            | 12 ----
- drivers/media/platform/nxp/Makefile           |  1 -
- drivers/media/platform/ti/davinci/Kconfig     | 49 ----------------
- drivers/media/platform/ti/davinci/Makefile    |  4 --
- drivers/media/usb/Kconfig                     |  3 -
- drivers/media/usb/Makefile                    |  3 -
- drivers/staging/media/Kconfig                 | 27 +++++++--
- drivers/staging/media/Makefile                | 10 +++-
- drivers/staging/media/av7110/TODO             |  3 -
- .../media/deprecated}/cpia2/Kconfig           |  5 +-
- .../media/deprecated}/cpia2/Makefile          |  0
- drivers/staging/media/deprecated/cpia2/TODO   |  6 ++
- .../media/deprecated}/cpia2/cpia2.h           |  0
- .../media/deprecated}/cpia2/cpia2_core.c      |  0
- .../media/deprecated}/cpia2/cpia2_registers.h |  0
- .../media/deprecated}/cpia2/cpia2_usb.c       |  0
- .../media/deprecated}/cpia2/cpia2_v4l.c       |  0
- .../staging/media/deprecated/fsl-viu/Kconfig  | 17 ++++++
- .../staging/media/deprecated/fsl-viu/Makefile |  2 +
- drivers/staging/media/deprecated/fsl-viu/TODO |  8 +++
- .../media/deprecated/fsl-viu}/fsl-viu.c       |  0
- .../media/deprecated}/meye/Kconfig            |  5 +-
- .../media/deprecated}/meye/Makefile           |  0
- drivers/staging/media/deprecated/meye/TODO    |  6 ++
- .../media/deprecated}/meye/meye.c             |  0
- .../media/deprecated}/meye/meye.h             |  0
- .../staging/media/deprecated/saa7146/Kconfig  |  5 ++
- .../staging/media/deprecated/saa7146/Makefile |  2 +
- .../{ => deprecated/saa7146}/av7110/Kconfig   | 20 +++++--
- .../{ => deprecated/saa7146}/av7110/Makefile  |  3 +-
- .../media/deprecated/saa7146/av7110/TODO      |  9 +++
- .../av7110/audio-bilingual-channel-select.rst |  0
- .../saa7146}/av7110/audio-channel-select.rst  |  0
- .../saa7146}/av7110/audio-clear-buffer.rst    |  0
- .../saa7146}/av7110/audio-continue.rst        |  0
- .../saa7146}/av7110/audio-fclose.rst          |  0
- .../saa7146}/av7110/audio-fopen.rst           |  0
- .../saa7146}/av7110/audio-fwrite.rst          |  0
- .../av7110/audio-get-capabilities.rst         |  0
- .../saa7146}/av7110/audio-get-status.rst      |  0
- .../saa7146}/av7110/audio-pause.rst           |  0
- .../saa7146}/av7110/audio-play.rst            |  0
- .../saa7146}/av7110/audio-select-source.rst   |  0
- .../saa7146}/av7110/audio-set-av-sync.rst     |  0
- .../saa7146}/av7110/audio-set-bypass-mode.rst |  0
- .../saa7146}/av7110/audio-set-id.rst          |  0
- .../saa7146}/av7110/audio-set-mixer.rst       |  0
- .../saa7146}/av7110/audio-set-mute.rst        |  0
- .../saa7146}/av7110/audio-set-streamtype.rst  |  0
- .../saa7146}/av7110/audio-stop.rst            |  0
- .../{ => deprecated/saa7146}/av7110/audio.rst |  0
- .../saa7146}/av7110/audio_data_types.rst      |  0
- .../saa7146}/av7110/audio_function_calls.rst  |  0
- .../{ => deprecated/saa7146}/av7110/av7110.c  |  0
- .../{ => deprecated/saa7146}/av7110/av7110.h  |  2 +-
- .../saa7146}/av7110/av7110_av.c               |  0
- .../saa7146}/av7110/av7110_av.h               |  0
- .../saa7146}/av7110/av7110_ca.c               |  0
- .../saa7146}/av7110/av7110_ca.h               |  0
- .../saa7146}/av7110/av7110_hw.c               |  0
- .../saa7146}/av7110/av7110_hw.h               |  0
- .../saa7146}/av7110/av7110_ipack.c            |  0
- .../saa7146}/av7110/av7110_ipack.h            |  0
- .../saa7146}/av7110/av7110_ir.c               |  0
- .../saa7146}/av7110/av7110_v4l.c              |  0
- .../saa7146}/av7110/budget-patch.c            |  0
- .../saa7146}/av7110/dvb_filter.c              |  0
- .../saa7146}/av7110/dvb_filter.h              |  0
- .../{ => deprecated/saa7146}/av7110/sp8870.c  |  0
- .../{ => deprecated/saa7146}/av7110/sp8870.h  |  0
- .../saa7146}/av7110/video-clear-buffer.rst    |  0
- .../saa7146}/av7110/video-command.rst         |  0
- .../saa7146}/av7110/video-continue.rst        |  0
- .../saa7146}/av7110/video-fast-forward.rst    |  0
- .../saa7146}/av7110/video-fclose.rst          |  0
- .../saa7146}/av7110/video-fopen.rst           |  0
- .../saa7146}/av7110/video-freeze.rst          |  0
- .../saa7146}/av7110/video-fwrite.rst          |  0
- .../av7110/video-get-capabilities.rst         |  0
- .../saa7146}/av7110/video-get-event.rst       |  0
- .../saa7146}/av7110/video-get-frame-count.rst |  0
- .../saa7146}/av7110/video-get-pts.rst         |  0
- .../saa7146}/av7110/video-get-size.rst        |  0
- .../saa7146}/av7110/video-get-status.rst      |  0
- .../saa7146}/av7110/video-play.rst            |  0
- .../saa7146}/av7110/video-select-source.rst   |  0
- .../saa7146}/av7110/video-set-blank.rst       |  0
- .../av7110/video-set-display-format.rst       |  0
- .../saa7146}/av7110/video-set-format.rst      |  0
- .../saa7146}/av7110/video-set-streamtype.rst  |  0
- .../saa7146}/av7110/video-slowmotion.rst      |  0
- .../saa7146}/av7110/video-stillpicture.rst    |  0
- .../saa7146}/av7110/video-stop.rst            |  0
- .../saa7146}/av7110/video-try-command.rst     |  0
- .../{ => deprecated/saa7146}/av7110/video.rst |  0
- .../saa7146}/av7110/video_function_calls.rst  |  0
- .../saa7146}/av7110/video_types.rst           |  0
- .../media/deprecated/saa7146/common}/Kconfig  |  0
- .../media/deprecated/saa7146/common}/Makefile |  0
- .../deprecated/saa7146/common}/saa7146.h      |  0
- .../deprecated/saa7146/common}/saa7146_core.c |  2 +-
- .../deprecated/saa7146/common}/saa7146_fops.c |  2 +-
- .../deprecated/saa7146/common}/saa7146_hlp.c  |  2 +-
- .../deprecated/saa7146/common}/saa7146_i2c.c  |  2 +-
- .../deprecated/saa7146/common}/saa7146_vbi.c  |  2 +-
- .../saa7146/common}/saa7146_video.c           |  2 +-
- .../deprecated/saa7146/common}/saa7146_vv.h   |  2 +-
- .../media/deprecated/saa7146}/saa7146/Kconfig | 15 ++++-
- .../deprecated/saa7146}/saa7146/Makefile      |  0
- .../media/deprecated/saa7146/saa7146/TODO     |  7 +++
- .../saa7146}/saa7146/hexium_gemini.c          |  2 +-
- .../saa7146}/saa7146/hexium_orion.c           |  2 +-
- .../media/deprecated/saa7146}/saa7146/mxb.c   |  2 +-
- .../media/deprecated/saa7146}/ttpci/Kconfig   | 17 ++++--
- .../media/deprecated/saa7146}/ttpci/Makefile  |  0
- .../media/deprecated/saa7146/ttpci/TODO       |  7 +++
- .../deprecated/saa7146}/ttpci/budget-av.c     |  2 +-
- .../deprecated/saa7146}/ttpci/budget-ci.c     |  0
- .../deprecated/saa7146}/ttpci/budget-core.c   |  0
- .../media/deprecated/saa7146}/ttpci/budget.c  |  0
- .../media/deprecated/saa7146}/ttpci/budget.h  |  2 +-
- .../media/{ => deprecated}/stkwebcam/Kconfig  |  0
- .../media/{ => deprecated}/stkwebcam/Makefile |  0
- .../media/{ => deprecated}/stkwebcam/TODO     |  0
- .../{ => deprecated}/stkwebcam/stk-sensor.c   |  0
- .../{ => deprecated}/stkwebcam/stk-webcam.c   |  0
- .../{ => deprecated}/stkwebcam/stk-webcam.h   |  0
- .../media/deprecated}/tm6000/Kconfig          |  5 +-
- .../media/deprecated}/tm6000/Makefile         |  0
- drivers/staging/media/deprecated/tm6000/TODO  |  8 +++
- .../media/deprecated}/tm6000/tm6000-alsa.c    |  0
- .../media/deprecated}/tm6000/tm6000-cards.c   |  0
- .../media/deprecated}/tm6000/tm6000-core.c    |  0
- .../media/deprecated}/tm6000/tm6000-dvb.c     |  0
- .../media/deprecated}/tm6000/tm6000-i2c.c     |  0
- .../media/deprecated}/tm6000/tm6000-input.c   |  0
- .../media/deprecated}/tm6000/tm6000-regs.h    |  0
- .../media/deprecated}/tm6000/tm6000-stds.c    |  0
- .../deprecated}/tm6000/tm6000-usb-isoc.h      |  0
- .../media/deprecated}/tm6000/tm6000-video.c   |  0
- .../media/deprecated}/tm6000/tm6000.h         |  0
- .../media/deprecated/vpfe_capture/Kconfig     | 58 +++++++++++++++++++
- .../media/deprecated/vpfe_capture/Makefile    |  4 ++
- .../media/deprecated/vpfe_capture/TODO        |  8 +++
- .../deprecated/vpfe_capture}/ccdc_hw_device.h |  0
- .../deprecated/vpfe_capture}/dm355_ccdc.c     |  2 +-
- .../deprecated/vpfe_capture}/dm355_ccdc.h     |  0
- .../vpfe_capture}/dm355_ccdc_regs.h           |  0
- .../deprecated/vpfe_capture}/dm644x_ccdc.c    |  2 +-
- .../deprecated/vpfe_capture}/dm644x_ccdc.h    |  0
- .../vpfe_capture}/dm644x_ccdc_regs.h          |  0
- .../media/deprecated/vpfe_capture}/isif.c     |  2 +-
- .../media/deprecated/vpfe_capture}/isif.h     |  0
- .../deprecated/vpfe_capture}/isif_regs.h      |  0
- .../deprecated/vpfe_capture}/vpfe_capture.c   |  0
- .../media/deprecated}/zr364xx/Kconfig         |  7 ++-
- .../media/deprecated}/zr364xx/Makefile        |  0
- drivers/staging/media/deprecated/zr364xx/TODO |  8 +++
- .../media/deprecated}/zr364xx/zr364xx.c       |  0
- 163 files changed, 264 insertions(+), 123 deletions(-)
- delete mode 100644 drivers/staging/media/av7110/TODO
- rename drivers/{media/usb => staging/media/deprecated}/cpia2/Kconfig (66%)
- rename drivers/{media/usb => staging/media/deprecated}/cpia2/Makefile (100%)
- create mode 100644 drivers/staging/media/deprecated/cpia2/TODO
- rename drivers/{media/usb => staging/media/deprecated}/cpia2/cpia2.h (100%)
- rename drivers/{media/usb => staging/media/deprecated}/cpia2/cpia2_core.c (100%)
- rename drivers/{media/usb => staging/media/deprecated}/cpia2/cpia2_registers.h (100%)
- rename drivers/{media/usb => staging/media/deprecated}/cpia2/cpia2_usb.c (100%)
- rename drivers/{media/usb => staging/media/deprecated}/cpia2/cpia2_v4l.c (100%)
- create mode 100644 drivers/staging/media/deprecated/fsl-viu/Kconfig
- create mode 100644 drivers/staging/media/deprecated/fsl-viu/Makefile
- create mode 100644 drivers/staging/media/deprecated/fsl-viu/TODO
- rename drivers/{media/platform/nxp => staging/media/deprecated/fsl-viu}/fsl-viu.c (100%)
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ drivers/media/pci/Kconfig                                   | 1 -
+ drivers/media/pci/Makefile                                  | 1 -
+ drivers/staging/media/Kconfig                               | 1 +
+ drivers/staging/media/Makefile                              | 1 +
+ .../{media/pci => staging/media/deprecated}/meye/Kconfig    | 5 ++++-
+ .../{media/pci => staging/media/deprecated}/meye/Makefile   | 0
+ drivers/staging/media/deprecated/meye/TODO                  | 6 ++++++
+ drivers/{media/pci => staging/media/deprecated}/meye/meye.c | 0
+ drivers/{media/pci => staging/media/deprecated}/meye/meye.h | 0
+ 9 files changed, 12 insertions(+), 3 deletions(-)
  rename drivers/{media/pci => staging/media/deprecated}/meye/Kconfig (73%)
  rename drivers/{media/pci => staging/media/deprecated}/meye/Makefile (100%)
  create mode 100644 drivers/staging/media/deprecated/meye/TODO
  rename drivers/{media/pci => staging/media/deprecated}/meye/meye.c (100%)
  rename drivers/{media/pci => staging/media/deprecated}/meye/meye.h (100%)
- create mode 100644 drivers/staging/media/deprecated/saa7146/Kconfig
- create mode 100644 drivers/staging/media/deprecated/saa7146/Makefile
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/Kconfig (82%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/Makefile (78%)
- create mode 100644 drivers/staging/media/deprecated/saa7146/av7110/TODO
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/audio-bilingual-channel-select.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/audio-channel-select.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/audio-clear-buffer.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/audio-continue.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/audio-fclose.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/audio-fopen.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/audio-fwrite.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/audio-get-capabilities.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/audio-get-status.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/audio-pause.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/audio-play.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/audio-select-source.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/audio-set-av-sync.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/audio-set-bypass-mode.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/audio-set-id.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/audio-set-mixer.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/audio-set-mute.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/audio-set-streamtype.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/audio-stop.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/audio.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/audio_data_types.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/audio_function_calls.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/av7110.c (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/av7110.h (99%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/av7110_av.c (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/av7110_av.h (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/av7110_ca.c (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/av7110_ca.h (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/av7110_hw.c (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/av7110_hw.h (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/av7110_ipack.c (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/av7110_ipack.h (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/av7110_ir.c (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/av7110_v4l.c (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/budget-patch.c (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/dvb_filter.c (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/dvb_filter.h (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/sp8870.c (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/sp8870.h (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-clear-buffer.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-command.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-continue.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-fast-forward.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-fclose.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-fopen.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-freeze.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-fwrite.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-get-capabilities.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-get-event.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-get-frame-count.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-get-pts.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-get-size.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-get-status.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-play.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-select-source.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-set-blank.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-set-display-format.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-set-format.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-set-streamtype.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-slowmotion.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-stillpicture.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-stop.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video-try-command.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video_function_calls.rst (100%)
- rename drivers/staging/media/{ => deprecated/saa7146}/av7110/video_types.rst (100%)
- rename drivers/{media/common/saa7146 => staging/media/deprecated/saa7146/common}/Kconfig (100%)
- rename drivers/{media/common/saa7146 => staging/media/deprecated/saa7146/common}/Makefile (100%)
- rename {include/media/drv-intf => drivers/staging/media/deprecated/saa7146/common}/saa7146.h (100%)
- rename drivers/{media/common/saa7146 => staging/media/deprecated/saa7146/common}/saa7146_core.c (99%)
- rename drivers/{media/common/saa7146 => staging/media/deprecated/saa7146/common}/saa7146_fops.c (99%)
- rename drivers/{media/common/saa7146 => staging/media/deprecated/saa7146/common}/saa7146_hlp.c (99%)
- rename drivers/{media/common/saa7146 => staging/media/deprecated/saa7146/common}/saa7146_i2c.c (99%)
- rename drivers/{media/common/saa7146 => staging/media/deprecated/saa7146/common}/saa7146_vbi.c (99%)
- rename drivers/{media/common/saa7146 => staging/media/deprecated/saa7146/common}/saa7146_video.c (99%)
- rename {include/media/drv-intf => drivers/staging/media/deprecated/saa7146/common}/saa7146_vv.h (99%)
- rename drivers/{media/pci => staging/media/deprecated/saa7146}/saa7146/Kconfig (67%)
- rename drivers/{media/pci => staging/media/deprecated/saa7146}/saa7146/Makefile (100%)
- create mode 100644 drivers/staging/media/deprecated/saa7146/saa7146/TODO
- rename drivers/{media/pci => staging/media/deprecated/saa7146}/saa7146/hexium_gemini.c (99%)
- rename drivers/{media/pci => staging/media/deprecated/saa7146}/saa7146/hexium_orion.c (99%)
- rename drivers/{media/pci => staging/media/deprecated/saa7146}/saa7146/mxb.c (99%)
- rename drivers/{media/pci => staging/media/deprecated/saa7146}/ttpci/Kconfig (83%)
- rename drivers/{media/pci => staging/media/deprecated/saa7146}/ttpci/Makefile (100%)
- create mode 100644 drivers/staging/media/deprecated/saa7146/ttpci/TODO
- rename drivers/{media/pci => staging/media/deprecated/saa7146}/ttpci/budget-av.c (99%)
- rename drivers/{media/pci => staging/media/deprecated/saa7146}/ttpci/budget-ci.c (100%)
- rename drivers/{media/pci => staging/media/deprecated/saa7146}/ttpci/budget-core.c (100%)
- rename drivers/{media/pci => staging/media/deprecated/saa7146}/ttpci/budget.c (100%)
- rename drivers/{media/pci => staging/media/deprecated/saa7146}/ttpci/budget.h (98%)
- rename drivers/staging/media/{ => deprecated}/stkwebcam/Kconfig (100%)
- rename drivers/staging/media/{ => deprecated}/stkwebcam/Makefile (100%)
- rename drivers/staging/media/{ => deprecated}/stkwebcam/TODO (100%)
- rename drivers/staging/media/{ => deprecated}/stkwebcam/stk-sensor.c (100%)
- rename drivers/staging/media/{ => deprecated}/stkwebcam/stk-webcam.c (100%)
- rename drivers/staging/media/{ => deprecated}/stkwebcam/stk-webcam.h (100%)
- rename drivers/{media/usb => staging/media/deprecated}/tm6000/Kconfig (84%)
- rename drivers/{media/usb => staging/media/deprecated}/tm6000/Makefile (100%)
- create mode 100644 drivers/staging/media/deprecated/tm6000/TODO
- rename drivers/{media/usb => staging/media/deprecated}/tm6000/tm6000-alsa.c (100%)
- rename drivers/{media/usb => staging/media/deprecated}/tm6000/tm6000-cards.c (100%)
- rename drivers/{media/usb => staging/media/deprecated}/tm6000/tm6000-core.c (100%)
- rename drivers/{media/usb => staging/media/deprecated}/tm6000/tm6000-dvb.c (100%)
- rename drivers/{media/usb => staging/media/deprecated}/tm6000/tm6000-i2c.c (100%)
- rename drivers/{media/usb => staging/media/deprecated}/tm6000/tm6000-input.c (100%)
- rename drivers/{media/usb => staging/media/deprecated}/tm6000/tm6000-regs.h (100%)
- rename drivers/{media/usb => staging/media/deprecated}/tm6000/tm6000-stds.c (100%)
- rename drivers/{media/usb => staging/media/deprecated}/tm6000/tm6000-usb-isoc.h (100%)
- rename drivers/{media/usb => staging/media/deprecated}/tm6000/tm6000-video.c (100%)
- rename drivers/{media/usb => staging/media/deprecated}/tm6000/tm6000.h (100%)
- create mode 100644 drivers/staging/media/deprecated/vpfe_capture/Kconfig
- create mode 100644 drivers/staging/media/deprecated/vpfe_capture/Makefile
- create mode 100644 drivers/staging/media/deprecated/vpfe_capture/TODO
- rename drivers/{media/platform/ti/davinci => staging/media/deprecated/vpfe_capture}/ccdc_hw_device.h (100%)
- rename drivers/{media/platform/ti/davinci => staging/media/deprecated/vpfe_capture}/dm355_ccdc.c (99%)
- rename {include/media/davinci => drivers/staging/media/deprecated/vpfe_capture}/dm355_ccdc.h (100%)
- rename drivers/{media/platform/ti/davinci => staging/media/deprecated/vpfe_capture}/dm355_ccdc_regs.h (100%)
- rename drivers/{media/platform/ti/davinci => staging/media/deprecated/vpfe_capture}/dm644x_ccdc.c (99%)
- rename {include/media/davinci => drivers/staging/media/deprecated/vpfe_capture}/dm644x_ccdc.h (100%)
- rename drivers/{media/platform/ti/davinci => staging/media/deprecated/vpfe_capture}/dm644x_ccdc_regs.h (100%)
- rename drivers/{media/platform/ti/davinci => staging/media/deprecated/vpfe_capture}/isif.c (99%)
- rename {include/media/davinci => drivers/staging/media/deprecated/vpfe_capture}/isif.h (100%)
- rename drivers/{media/platform/ti/davinci => staging/media/deprecated/vpfe_capture}/isif_regs.h (100%)
- rename drivers/{media/platform/ti/davinci => staging/media/deprecated/vpfe_capture}/vpfe_capture.c (100%)
- rename drivers/{media/usb => staging/media/deprecated}/zr364xx/Kconfig (65%)
- rename drivers/{media/usb => staging/media/deprecated}/zr364xx/Makefile (100%)
- create mode 100644 drivers/staging/media/deprecated/zr364xx/TODO
- rename drivers/{media/usb => staging/media/deprecated}/zr364xx/zr364xx.c (100%)
 
+diff --git a/drivers/media/pci/Kconfig b/drivers/media/pci/Kconfig
+index 1224d908713a..84c927516c11 100644
+--- a/drivers/media/pci/Kconfig
++++ b/drivers/media/pci/Kconfig
+@@ -13,7 +13,6 @@ if MEDIA_PCI_SUPPORT
+ if MEDIA_CAMERA_SUPPORT
+ 	comment "Media capture support"
+ 
+-source "drivers/media/pci/meye/Kconfig"
+ source "drivers/media/pci/solo6x10/Kconfig"
+ source "drivers/media/pci/sta2x11/Kconfig"
+ source "drivers/media/pci/tw5864/Kconfig"
+diff --git a/drivers/media/pci/Makefile b/drivers/media/pci/Makefile
+index 551169a3e434..6ad7c4dff021 100644
+--- a/drivers/media/pci/Makefile
++++ b/drivers/media/pci/Makefile
+@@ -32,7 +32,6 @@ obj-$(CONFIG_VIDEO_CX25821) += cx25821/
+ obj-$(CONFIG_VIDEO_CX88) += cx88/
+ obj-$(CONFIG_VIDEO_DT3155) += dt3155/
+ obj-$(CONFIG_VIDEO_IVTV) += ivtv/
+-obj-$(CONFIG_VIDEO_MEYE) += meye/
+ obj-$(CONFIG_VIDEO_SAA7134) += saa7134/
+ obj-$(CONFIG_VIDEO_SAA7164) += saa7164/
+ obj-$(CONFIG_VIDEO_SOLO6X10) += solo6x10/
+diff --git a/drivers/staging/media/Kconfig b/drivers/staging/media/Kconfig
+index 360220ad9ffd..180f450f9e27 100644
+--- a/drivers/staging/media/Kconfig
++++ b/drivers/staging/media/Kconfig
+@@ -58,6 +58,7 @@ menuconfig STAGING_MEDIA_DEPRECATED
+ 
+ if STAGING_MEDIA_DEPRECATED
+ source "drivers/staging/media/deprecated/cpia2/Kconfig"
++source "drivers/staging/media/deprecated/meye/Kconfig"
+ source "drivers/staging/media/deprecated/stkwebcam/Kconfig"
+ endif
+ 
+diff --git a/drivers/staging/media/Makefile b/drivers/staging/media/Makefile
+index 12e0cbbeaad1..f10f6613a443 100644
+--- a/drivers/staging/media/Makefile
++++ b/drivers/staging/media/Makefile
+@@ -4,6 +4,7 @@ obj-$(CONFIG_VIDEO_CPIA2)	+= deprecated/cpia2/
+ obj-$(CONFIG_VIDEO_IMX_MEDIA)	+= imx/
+ obj-$(CONFIG_VIDEO_MAX96712)	+= max96712/
+ obj-$(CONFIG_VIDEO_MESON_VDEC)	+= meson/vdec/
++obj-$(CONFIG_VIDEO_MEYE)	+= deprecated/meye/
+ obj-$(CONFIG_VIDEO_OMAP4)	+= omap4iss/
+ obj-$(CONFIG_VIDEO_ROCKCHIP_VDEC)	+= rkvdec/
+ obj-$(CONFIG_VIDEO_STKWEBCAM)	+= deprecated/stkwebcam/
+diff --git a/drivers/media/pci/meye/Kconfig b/drivers/staging/media/deprecated/meye/Kconfig
+similarity index 73%
+rename from drivers/media/pci/meye/Kconfig
+rename to drivers/staging/media/deprecated/meye/Kconfig
+index 3e69b66f1a5b..f135f8568c85 100644
+--- a/drivers/media/pci/meye/Kconfig
++++ b/drivers/staging/media/deprecated/meye/Kconfig
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ config VIDEO_MEYE
+-	tristate "Sony Vaio Picturebook Motion Eye Video For Linux"
++	tristate "Sony Vaio Picturebook Motion Eye Video For Linux (DEPRECATED)"
+ 	depends on PCI && VIDEO_DEV
+ 	depends on SONY_LAPTOP
+ 	depends on X86 || COMPILE_TEST
+@@ -12,5 +12,8 @@ config VIDEO_MEYE
+ 	  If you say Y or M here, you need to say Y or M to "Sony Laptop
+ 	  Extras" in the misc device section.
+ 
++	  This driver is deprecated and is scheduled for removal by
++	  the beginning of 2023. See the TODO file for more information.
++
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called meye.
+diff --git a/drivers/media/pci/meye/Makefile b/drivers/staging/media/deprecated/meye/Makefile
+similarity index 100%
+rename from drivers/media/pci/meye/Makefile
+rename to drivers/staging/media/deprecated/meye/Makefile
+diff --git a/drivers/staging/media/deprecated/meye/TODO b/drivers/staging/media/deprecated/meye/TODO
+new file mode 100644
+index 000000000000..6d1d1433d5a0
+--- /dev/null
++++ b/drivers/staging/media/deprecated/meye/TODO
+@@ -0,0 +1,6 @@
++The meye driver does not use the vb2 framework for streaming
++video, instead it implements this in the driver.
++
++To prevent removal of this driver early 2023 it has to be
++converted to use vb2. Contact the linux-media@vger.kernel.org
++mailing list if you want to do this.
+diff --git a/drivers/media/pci/meye/meye.c b/drivers/staging/media/deprecated/meye/meye.c
+similarity index 100%
+rename from drivers/media/pci/meye/meye.c
+rename to drivers/staging/media/deprecated/meye/meye.c
+diff --git a/drivers/media/pci/meye/meye.h b/drivers/staging/media/deprecated/meye/meye.h
+similarity index 100%
+rename from drivers/media/pci/meye/meye.h
+rename to drivers/staging/media/deprecated/meye/meye.h
 -- 
 2.35.1
 
