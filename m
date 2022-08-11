@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39741C19F2A
-	for <linux-media@archiver.kernel.org>; Thu, 11 Aug 2022 16:30:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E525C25B06
+	for <linux-media@archiver.kernel.org>; Thu, 11 Aug 2022 16:32:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238416AbiHKQaI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Aug 2022 12:30:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57172 "EHLO
+        id S238572AbiHKQck (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Aug 2022 12:32:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237410AbiHKQ3E (ORCPT
+        with ESMTP id S238908AbiHKQbf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Aug 2022 12:29:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D78A0263;
-        Thu, 11 Aug 2022 09:08:53 -0700 (PDT)
+        Thu, 11 Aug 2022 12:31:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38171BB01F;
+        Thu, 11 Aug 2022 09:10:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D3776144D;
-        Thu, 11 Aug 2022 16:08:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6A6CC433B5;
-        Thu, 11 Aug 2022 16:08:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 92216B821B1;
+        Thu, 11 Aug 2022 16:10:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73C95C433D6;
+        Thu, 11 Aug 2022 16:10:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660234132;
-        bh=Kj5q74Qy2aZX54PmtScsZ+Zvch9i/A7Kp8Bi2wcTWjw=;
+        s=k20201202; t=1660234205;
+        bh=Xpr/rnGQQaHG9dOD8BYDruHGXokuH1u2GU461YavMCo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pElhgtjjay5S1YJOdgZZWRmIW5G7uBPqIpavngwfS4vuP40O8xgbZy8BGw7pYDf1d
-         GnjP23CTovieRhjrI7s7fIkxGkhAxeAyyAvalmHrYzuJqc/9X7V8yZRQljCIcYrPYS
-         Z4GEfYq0zMSQV9VWHFGI3yYjrfJxjf0odUhOsNNhp3k+AT/BKDPgQQWOvbLQKgRA/B
-         /IxpIxyfE+JCro49/rM3iSgP64L8j9VTrYvMtPK6DE2UsWtbgjdtLUVP0V9TgJ9qWy
-         HBteAGH+BxRh/q8X9HxLKgvBPWANF8pMul4QXeFu3hbx0m455VzSKA6hvfqd/phlyO
-         xcmjeuWCF5oTg==
+        b=oBF1Vo4NIW/c50L57S5g6SVgB+/U+im9LtBlXMFE/6oOplWdK/zWPTUoIyjLb3XfX
+         KUsdurWdnwg3vgqxw58yif26d6CaO+AF573ZBX0eQltbet1QwaljnFPw4UghTZDRfs
+         1vJiAbkrPRn+OmWnkAVfDPzxIbBoAPWSlEtmA4EU4RnJlFzDSp1gUDE0W/mOAamb0b
+         vcw8zPy+3OicqwG2F8NsAMr2PdDdgmIC7Uap7/TRABSzMo7z8ybBNYMuOVQ2vj4Jzf
+         PbuL0X2GSAD8d6FTdSa0kWmNpKP49GER4mxlTocNycapFeV4ECD4Ef28LZo7JlPhD4
+         wredKKWuhBz1Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Oliver Neukum <oneukum@suse.com>,
@@ -39,12 +39,12 @@ Cc:     Oliver Neukum <oneukum@suse.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, crope@iki.fi,
         linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 12/25] media: airspy: respect the DMA coherency rules
-Date:   Thu, 11 Aug 2022 12:08:07 -0400
-Message-Id: <20220811160826.1541971-12-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 05/14] media: airspy: respect the DMA coherency rules
+Date:   Thu, 11 Aug 2022 12:09:33 -0400
+Message-Id: <20220811160948.1542842-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220811160826.1541971-1-sashal@kernel.org>
-References: <20220811160826.1541971-1-sashal@kernel.org>
+In-Reply-To: <20220811160948.1542842-1-sashal@kernel.org>
+References: <20220811160948.1542842-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -76,10 +76,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 15 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/usb/airspy/airspy.c b/drivers/media/usb/airspy/airspy.c
-index 751703db06f5..c7499787bffe 100644
+index e70c9e2f3798..681753934948 100644
 --- a/drivers/media/usb/airspy/airspy.c
 +++ b/drivers/media/usb/airspy/airspy.c
-@@ -123,7 +123,7 @@ struct airspy {
+@@ -134,7 +134,7 @@ struct airspy {
  
  	/* USB control message buffer */
  	#define BUF_SIZE 128
@@ -88,7 +88,7 @@ index 751703db06f5..c7499787bffe 100644
  
  	/* Current configuration */
  	unsigned int f_adc;
-@@ -856,6 +856,7 @@ static void airspy_video_release(struct v4l2_device *v)
+@@ -872,6 +872,7 @@ static void airspy_video_release(struct v4l2_device *v)
  
  	v4l2_ctrl_handler_free(&s->hdl);
  	v4l2_device_unregister(&s->v4l2_dev);
@@ -96,7 +96,7 @@ index 751703db06f5..c7499787bffe 100644
  	kfree(s);
  }
  
-@@ -963,7 +964,10 @@ static int airspy_probe(struct usb_interface *intf,
+@@ -979,7 +980,10 @@ static int airspy_probe(struct usb_interface *intf,
  {
  	struct airspy *s;
  	int ret;
@@ -108,7 +108,7 @@ index 751703db06f5..c7499787bffe 100644
  
  	s = kzalloc(sizeof(struct airspy), GFP_KERNEL);
  	if (s == NULL) {
-@@ -971,6 +975,13 @@ static int airspy_probe(struct usb_interface *intf,
+@@ -987,6 +991,13 @@ static int airspy_probe(struct usb_interface *intf,
  		return -ENOMEM;
  	}
  
@@ -122,7 +122,7 @@ index 751703db06f5..c7499787bffe 100644
  	mutex_init(&s->v4l2_lock);
  	mutex_init(&s->vb_queue_lock);
  	spin_lock_init(&s->queued_bufs_lock);
-@@ -1068,6 +1079,8 @@ static int airspy_probe(struct usb_interface *intf,
+@@ -1082,6 +1093,8 @@ static int airspy_probe(struct usb_interface *intf,
  	v4l2_ctrl_handler_free(&s->hdl);
  	v4l2_device_unregister(&s->v4l2_dev);
  err_free_mem:
