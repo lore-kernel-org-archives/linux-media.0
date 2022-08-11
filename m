@@ -2,50 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D3E7C25B06
-	for <linux-media@archiver.kernel.org>; Thu, 11 Aug 2022 15:36:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61F61C25B0E
+	for <linux-media@archiver.kernel.org>; Thu, 11 Aug 2022 15:36:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235890AbiHKPgD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Aug 2022 11:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58850 "EHLO
+        id S235935AbiHKPgG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Aug 2022 11:36:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236076AbiHKPfI (ORCPT
+        with ESMTP id S235462AbiHKPfZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Aug 2022 11:35:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7589C236;
-        Thu, 11 Aug 2022 08:32:48 -0700 (PDT)
+        Thu, 11 Aug 2022 11:35:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61749C8D4;
+        Thu, 11 Aug 2022 08:32:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B891B8216A;
-        Thu, 11 Aug 2022 15:32:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5389EC433B5;
-        Thu, 11 Aug 2022 15:32:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFD71B82167;
+        Thu, 11 Aug 2022 15:32:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 854FEC433D7;
+        Thu, 11 Aug 2022 15:32:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660231965;
-        bh=hg8FFJwuC7EWpywPrnvE71qsCZTP7vCgi/JUOjgj43o=;
+        s=k20201202; t=1660231970;
+        bh=j4a/PfP+pRSpIzjqaSM4Hx3iCpAMQApk+tKDdQNUBqI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lwEcZE2xFT9AjJ4Bpp4M0IGbWDO5b8CVtbLcM+yyH1W5vwOng5AL4kRslOHYEk2ZO
-         ic8OAciXYpbD8VmXj5CG0XKmP7ORJOXG+qH1Jy2Vc7GVjdysVP4hyxJDVz6KGaVfs9
-         wEmrubWwLj0Bpniwm9bQtkfcD929M32tyKDEhUL5xT/H01+fjM7seIeWPLzzxs6MVb
-         Js+ZrrU8vNjJb/JId5rchCbrzVkOOtuzQokSiVVSLu7jI7gKOwiVbzTSC1m1fqztgB
-         t/hyiYVhkWLYp/vlKOguAMnHZhDjhpSOv+pFB2QLQtjgobtrx+ZFxj2DtU3FMc8GIF
-         a53wW/Jpso8kw==
+        b=SAZwgyQ03ocJ/NZg6lBrBrVpNFXPTkj5ARyp9BkhkJfT0oQw9LGObXSTeVUReUEg1
+         3MpLXhlFN7UAiAwaDsAJqnq3rc9kb76TUyA0kaJL1Yk3Dnm7YdU+i3Iv6I0xmlUIrw
+         81IVNjh2PB7AyNhjFTxyz/Guaq+ww60Th0uUegN32SpbWX+2ty7IRt6bxN+Acx7Dk/
+         hiJ9wcfYl53QgDUMPVoZBnuERVmSJYwLZerxibw/D9uAi4IrVkbKON4CpVqfR5JOEb
+         RMiqToLTKEmrglBMl7IS1rCMyfVOds91iT8pdAOFJkcMYvvgP98udA995nwyZm6ePX
+         hBgk8rxLLtNxg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        syzbot+77b432d57c4791183ed4@syzkaller.appspotmail.com,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, tiffany.lin@mediatek.com,
-        andrew-ct.chen@mediatek.com, matthias.bgg@gmail.com,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.19 032/105] media: mediatek: vcodec: prevent kernel crash when scp ipi timeout
-Date:   Thu, 11 Aug 2022 11:27:16 -0400
-Message-Id: <20220811152851.1520029-32-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, isely@pobox.com,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.19 034/105] media: pvrusb2: fix memory leak in pvr_probe
+Date:   Thu, 11 Aug 2022 11:27:18 -0400
+Message-Id: <20220811152851.1520029-34-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220811152851.1520029-1-sashal@kernel.org>
 References: <20220811152851.1520029-1-sashal@kernel.org>
@@ -57,79 +54,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Yunfei Dong <yunfei.dong@mediatek.com>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-[ Upstream commit 9223415d47e1efe939fcc791870db8ce5bb6cc03 ]
+[ Upstream commit 945a9a8e448b65bec055d37eba58f711b39f66f0 ]
 
-When SCP timeout during playing video, kernel crashes with following
-message. It's caused by accessing NULL pointer in vpu_dec_ipi_handler.
-This patch doesn't solve the root cause of NULL pointer, but merely
-prevent kernel crashed when encounter the NULL pointer.
+The error handling code in pvr2_hdw_create forgets to unregister the
+v4l2 device. When pvr2_hdw_create returns back to pvr2_context_create,
+it calls pvr2_context_destroy to destroy context, but mp->hdw is NULL,
+which leads to that pvr2_hdw_destroy directly returns.
 
-After applied this patch, kernel keeps alive, only the video player turns
-to green screen.
+Fix this by adding v4l2_device_unregister to decrease the refcount of
+usb interface.
 
-[67242.065474] pc : vpu_dec_ipi_handler+0xa0/0xb20 [mtk_vcodec_dec]
-[67242.065485] [MTK_V4L2] level=0 fops_vcodec_open(),334:
-18000000.vcodec_dec decoder [135]
-[67242.065523] lr : scp_ipi_handler+0x11c/0x244 [mtk_scp]
-[67242.065540] sp : ffffffbb4207fb10
-[67242.065557] x29: ffffffbb4207fb30 x28: ffffffd00a1d5000
-[67242.065592] x27: 1ffffffa0143aa24 x26: 0000000000000000
-[67242.065625] x25: dfffffd000000000 x24: ffffffd0168bfdb0
-[67242.065659] x23: 1ffffff76840ff74 x22: ffffffbb41fa8a88
-[67242.065692] x21: ffffffbb4207fb9c x20: ffffffbb4207fba0
-[67242.065725] x19: ffffffbb4207fb98 x18: 0000000000000000
-[67242.065758] x17: 0000000000000000 x16: ffffffd042022094
-[67242.065791] x15: 1ffffff77ed4b71a x14: 1ffffff77ed4b719
-[67242.065824] x13: 0000000000000000 x12: 0000000000000000
-[67242.065857] x11: 0000000000000000 x10: dfffffd000000001
-[67242.065890] x9 : 0000000000000000 x8 : 0000000000000002
-[67242.065923] x7 : 0000000000000000 x6 : 000000000000003f
-[67242.065956] x5 : 0000000000000040 x4 : ffffffffffffffe0
-[67242.065989] x3 : ffffffd043b841b8 x2 : 0000000000000000
-[67242.066021] x1 : 0000000000000010 x0 : 0000000000000010
-[67242.066055] Call trace:
-[67242.066092]  vpu_dec_ipi_handler+0xa0/0xb20 [mtk_vcodec_dec
-12220d230d83a7426fc38c56b3e7bc6066955bae]
-[67242.066119]  scp_ipi_handler+0x11c/0x244 [mtk_scp
-8fb69c2ef141dd3192518b952b65aba35627b8bf]
-[67242.066145]  mt8192_scp_irq_handler+0x70/0x128 [mtk_scp
-8fb69c2ef141dd3192518b952b65aba35627b8bf]
-[67242.066172]  scp_irq_handler+0xa0/0x114 [mtk_scp
-8fb69c2ef141dd3192518b952b65aba35627b8bf]
-[67242.066200]  irq_thread_fn+0x84/0xf8
-[67242.066220]  irq_thread+0x170/0x1ec
-[67242.066242]  kthread+0x2f8/0x3b8
-[67242.066264]  ret_from_fork+0x10/0x30
-[67242.066292] Code: 38f96908 35003628 91004340 d343fc08 (38f96908)
-
-Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-Reviewed-by: Macpaul Lin <macpaul.lin@mediatek.com>
+Reported-by: syzbot+77b432d57c4791183ed4@syzkaller.appspotmail.com
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/media/usb/pvrusb2/pvrusb2-hdw.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c b/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c
-index 35f4d5583084..df309e8e9379 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c
-@@ -91,6 +91,11 @@ static void vpu_dec_ipi_handler(void *data, unsigned int len, void *priv)
- 	struct vdec_vpu_inst *vpu = (struct vdec_vpu_inst *)
- 					(unsigned long)msg->ap_inst_addr;
- 
-+	if (!vpu) {
-+		mtk_v4l2_err("ap_inst_addr is NULL, did the SCP hang or crash?");
-+		return;
-+	}
-+
- 	mtk_vcodec_debug(vpu, "+ id=%X", msg->msg_id);
- 
- 	vpu->failure = msg->status;
+diff --git a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
+index a9666373af6b..92d6db1ad00f 100644
+--- a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
++++ b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
+@@ -2610,6 +2610,7 @@ struct pvr2_hdw *pvr2_hdw_create(struct usb_interface *intf,
+ 		del_timer_sync(&hdw->encoder_run_timer);
+ 		del_timer_sync(&hdw->encoder_wait_timer);
+ 		flush_work(&hdw->workpoll);
++		v4l2_device_unregister(&hdw->v4l2_dev);
+ 		usb_free_urb(hdw->ctl_read_urb);
+ 		usb_free_urb(hdw->ctl_write_urb);
+ 		kfree(hdw->ctl_read_buffer);
 -- 
 2.35.1
 
