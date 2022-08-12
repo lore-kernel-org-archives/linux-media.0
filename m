@@ -2,33 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A99DCC25B0F
-	for <linux-media@archiver.kernel.org>; Fri, 12 Aug 2022 22:01:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3548FC25B08
+	for <linux-media@archiver.kernel.org>; Fri, 12 Aug 2022 22:01:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233793AbiHLWBL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 12 Aug 2022 18:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45730 "EHLO
+        id S234263AbiHLWBN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 12 Aug 2022 18:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbiHLWBJ (ORCPT
+        with ESMTP id S231698AbiHLWBK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 12 Aug 2022 18:01:09 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AE6956A4;
-        Fri, 12 Aug 2022 15:01:05 -0700 (PDT)
+        Fri, 12 Aug 2022 18:01:10 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9658FAED99;
+        Fri, 12 Aug 2022 15:01:07 -0700 (PDT)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id DF510C0004;
-        Fri, 12 Aug 2022 22:01:01 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5EE15C0008;
+        Fri, 12 Aug 2022 22:01:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1660341664;
+        t=1660341666;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ZlYxwLn8BCuOHhcyEk3i5OHV1OgOgHODOKUv8gxNgJE=;
-        b=NFaR4Ksj/03MwKbhnTaimIQNmc2W7vcsgMHdCfgmO5ylb69QWSxEHeR9EnHf1ONDo02YXx
-        opIm4M/LMt3a8bOKgHfMA+6Ykvyr3p3UOKjeedcrnykFXbP0Dp+yj75Ia+EEEITMHoo77y
-        ibouFWBWLDzBeWuJRJl/IgSRvXblC9PYgxEUY0F8Te7LMe9IKIKPIz1OpxdLm2XYK88QtO
-        S9sv4B6G+PigdNboxQrJ7OlzzrzvpnyJS9Psb3Oj2eoPGk31jCDsgDYgKd4j7e3MACHjfW
-        dT6NHTRu7CsCLvFy98yOoSpAjIkDo2dRmLil9EqzU6KziEb8HirB4S+xOIiFAw==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pkkmH0/3sf9eOoPx4blV5GuzlighARz4MFuQjynFE1U=;
+        b=F5zi3tyWcZPnPBoMCc0zQvC/WthP2mJhvGQ8Lr1T2tywTJVWQpjNYEzppwV/RrSLaB8y66
+        9m2TigV+0Wvh4b/yYmtIn9lRSpE1fet7h3z2bkSICoV7OaAcmBQZ1tyIflgx5dMvtx4FvM
+        atEyYdUtxzCMXYX8DRjOGFaiK33mXwMUrJM9CDIxMaaMIGYa+vezjJ++lytRF3+Bo6ySTc
+        mLEbiR2YG1/JlHu6es7Fo05PfsYJBqnimX98ElcqZc7+G4sdKV4bbAYMfZ0Qp3pI4AVXwH
+        zSW1izZH3yQk7EqThJgXJjwcF6Y7eX3VLX8Guq2mDIFjnWF7j6zRMOLzrzU8kA==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
@@ -39,12 +40,13 @@ Cc:     Maxime Ripard <mripard@kernel.org>,
         Samuel Holland <samuel@sholland.org>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH 1/6] media: sun6i-mipi-csi2: Add a Kconfig dependency on RESET_CONTROLLER
-Date:   Sat, 13 Aug 2022 00:00:40 +0200
-Message-Id: <20220812220045.800820-1-paul.kocialkowski@bootlin.com>
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH 3/6] media: sun6i-csi: Add a Kconfig dependency on RESET_CONTROLLER
+Date:   Sat, 13 Aug 2022 00:00:42 +0200
+Message-Id: <20220812220045.800820-3-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220812220045.800820-1-paul.kocialkowski@bootlin.com>
+References: <20220812220045.800820-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -54,28 +56,24 @@ X-Mailing-List: linux-media@vger.kernel.org
 The driver relies on the reset controller API to work, so add
 RESET_CONTROLLER as one of its Kconfig dependencies.
 
-It also selects PHY_SUN6I_MIPI_DPHY, which depends on RESET_CONTROLLER.
-
-Fixes: af54b4f4c17f ("media: sunxi: Add support for the A31 MIPI CSI-2 controller")
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Reported-by: kernel test robot <lkp@intel.com>
 ---
- drivers/media/platform/sunxi/sun6i-mipi-csi2/Kconfig | 2 +-
+ drivers/media/platform/sunxi/sun6i-csi/Kconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/sunxi/sun6i-mipi-csi2/Kconfig b/drivers/media/platform/sunxi/sun6i-mipi-csi2/Kconfig
-index eb982466abd3..781aedbe1e30 100644
---- a/drivers/media/platform/sunxi/sun6i-mipi-csi2/Kconfig
-+++ b/drivers/media/platform/sunxi/sun6i-mipi-csi2/Kconfig
-@@ -3,7 +3,7 @@ config VIDEO_SUN6I_MIPI_CSI2
- 	tristate "Allwinner A31 MIPI CSI-2 Controller Driver"
- 	depends on V4L_PLATFORM_DRIVERS && VIDEO_DEV
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/Kconfig b/drivers/media/platform/sunxi/sun6i-csi/Kconfig
+index 0345901617d4..e5b6991ce7f0 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/Kconfig
++++ b/drivers/media/platform/sunxi/sun6i-csi/Kconfig
+@@ -2,7 +2,7 @@
+ config VIDEO_SUN6I_CSI
+ 	tristate "Allwinner V3s Camera Sensor Interface driver"
+ 	depends on V4L_PLATFORM_DRIVERS
+-	depends on VIDEO_DEV && COMMON_CLK  && HAS_DMA
++	depends on VIDEO_DEV && COMMON_CLK && RESET_CONTROLLER && HAS_DMA
  	depends on ARCH_SUNXI || COMPILE_TEST
--	depends on PM && COMMON_CLK
-+	depends on PM && COMMON_CLK && RESET_CONTROLLER
  	select MEDIA_CONTROLLER
  	select VIDEO_V4L2_SUBDEV_API
- 	select V4L2_FWNODE
 -- 
 2.37.1
 
