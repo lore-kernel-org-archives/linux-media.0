@@ -2,258 +2,111 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 407FEC00140
-	for <linux-media@archiver.kernel.org>; Mon, 15 Aug 2022 09:49:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4628C25B0E
+	for <linux-media@archiver.kernel.org>; Mon, 15 Aug 2022 10:38:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232291AbiHOJtT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Aug 2022 05:49:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40672 "EHLO
+        id S241773AbiHOKie (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Aug 2022 06:38:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiHOJtR (ORCPT
+        with ESMTP id S229752AbiHOKic (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Aug 2022 05:49:17 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE651CFE8
-        for <linux-media@vger.kernel.org>; Mon, 15 Aug 2022 02:49:13 -0700 (PDT)
-X-UUID: 3f618f1b57eb4e66bf4b267ffaa0b010-20220815
-X-GW-Reason: 13103
-X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HMTDkurrpnIDopoHlrqHmoLg=
-X-Content-Feature: ica/max.line-size 103
-        audit/email.address 2
-        dict/adv 1
-        dict/notice 2
-        meta/cnt.alert 1
-X-UUID: 3f618f1b57eb4e66bf4b267ffaa0b010-20220815
-X-User: oushixiong@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by mailgw
-        (envelope-from <oushixiong@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 1275458966; Mon, 15 Aug 2022 16:14:47 +0800
-From:   oushixiong <oushixiong@kylinos.cn>
-To:     Dave Airlie <airlied@redhat.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, oushixiong <oushixiong@kylinos.cn>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] drm/ast: add dmabuf/prime buffer sharing support
-Date:   Mon, 15 Aug 2022 16:14:30 +0800
-Message-Id: <20220815081430.2919066-1-oushixiong@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 15 Aug 2022 06:38:32 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3D21117E;
+        Mon, 15 Aug 2022 03:38:32 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id ACD865C00A1;
+        Mon, 15 Aug 2022 06:38:31 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Mon, 15 Aug 2022 06:38:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=undef.tools; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm1; t=1660559911; x=1660646311; bh=l7tzxS11gKHrXKaS8T9yXyMkE
+        8x+VVDK1NsLzxeV1wI=; b=kIXBtljSQPTxfbpnr5ETctb/X6WOiJlnD4gd9hjEw
+        OKl0ToDc3D71s7jvH57GssWiHJgPMFEOubFKODK4Wv0j9GJmbl4FGsHsjCxWMP/m
+        F8/NX678CEWMC9RtPrqNe0b+ClOTm61gGiVr79kDBhshx73Myoi/xtd7Gnnms1MK
+        91G67rxsdbw++uGeqm5APDsejfnUkShaozn1g+4PrdcN8BiL60e/uVC4FBJ5wgb2
+        yIMFUY2kK90lTSY2S+ut73gjguULZ0SgQIsWG0FUkCbdU41xqpplNxiqlNInOCUN
+        2B1bmMXVe67etzKC2hoKIivc3oS0fpKXtFxX3zJOJgluQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1660559911; x=1660646311; bh=l7tzxS11gKHrXKaS8T9yXyMkE8x+VVDK1Ns
+        LzxeV1wI=; b=qaVQGMPI94iPnqpZxLkN1o5MblWmMOZxwgqP6D1JQLYPVuF4jQp
+        9HM02Ep5mu/irrTMDcSRJPc+y8xAMqXkPQC8+NXGwUNoUUvdGVYtU5cZ+blEX6Xf
+        Gl3p70SP7IDVi5yDRhvsUnkuC1Wnzb9JqTvcTeGLNh9z0KWdB9KCX2D8ckvadlsV
+        EGKwDaXeu3P7yrh9emNHmXdcC1fAxMDGOvqJ94NeXlprr643e9NjPMmb8uWKeMEK
+        SZrZx9HZlvJEVAVaaUq1Akb0MR+vS3i268Nwdd2HNryzb3qjMcdhZ0S5ImA/oR/7
+        niO4NCINL1/6svi7cJ2AsbT1VZBax0JErDQ==
+X-ME-Sender: <xms:JiL6YlQGdttFvqPnpKgJwVFt2oJ0HzZtxjn9B442w0uK5Z_B9JRfzg>
+    <xme:JiL6YuxFVnAa4dAM_xsX2ZK8M92SE-3lkL2RJMh5wSklNhgpkLjx_O0IAKhl-GjWs
+    gThyH7IpoUHixgqnxU>
+X-ME-Received: <xmr:JiL6Yq0lfmxUZQ3VOr2fo8wm7cU3UKrPOD5yGFoZ5uxWLfzBIiaIn3oSfxt-avK_T7R_dgV1uHDe_YMMULWSGPb8pozY_ZnCzObPY0-E-YxLN66Hw9sMdTYlgQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehvddgfedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheplfgrrhhrrghh
+    ucfiohhssggvlhhluceokhgvrhhnvghlsehunhguvghfrdhtohholhhsqeenucggtffrrg
+    htthgvrhhnpeejueevgfejfeeghffhfeehvdffleetheekkedvfeehieetuedtheevgefh
+    geekhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hkvghrnhgvlhesuhhnuggvfhdrthhoohhlsh
+X-ME-Proxy: <xmx:JiL6YtDk7o0FclxYF3M3-heuBfLlR8ewnFWUwu36iAW0AauqPtEuoQ>
+    <xmx:JiL6YugQTpwBo9WWoWrfORrTiMwMnMhSbIHnvn-b0Ob4uRAlBBriBw>
+    <xmx:JiL6Yho_NPdA54dkOdOsJR0-D0Mm0pV__NN39kshRbLsQCSIEyYu7g>
+    <xmx:JyL6YpPZxrLshMykFemM7UJtSTDLc8lorJWG9z80RJF8TyljzQLKTw>
+Feedback-ID: id76147eb:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 15 Aug 2022 06:38:27 -0400 (EDT)
+From:   Jarrah Gosbell <kernel@undef.tools>
+To:     Jacob Chen <jacob-chen@iotwrt.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     phone-devel@vger.kernel.org, Ondrej Jirman <megi@xff.cz>,
+        Jarrah Gosbell <kernel@undef.tools>
+Subject: [PATCH v2] media: rockchip: rga: Fix probe rga_parse_dt bugs
+Date:   Mon, 15 Aug 2022 10:36:22 +0000
+Message-Id: <20220815103621.86509-1-kernel@undef.tools>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch adds ast specific codes for DRM prime feature.
-Add the prime function to solve the xorg conflict problem when AST
-and AMD are in place at the same time, so that both can be displayed.
+From: Ondrej Jirman <megi@xff.cz>
 
-Signed-off-by: oushixiong <oushixiong@kylinos.cn>
-Reported-by: kernel test robot <lkp@intel.com>
+rga_parse_dt is missing a error return, so if some of the resources
+return DEFER_PROBE, probe will succeed without these resources.
+
+Signed-off-by: Ondrej Jirman <megi@xff.cz>
+Co-developed-by: Jarrah Gosbell <kernel@undef.tools>
+Signed-off-by: Jarrah Gosbell <kernel@undef.tools>
 ---
- drivers/gpu/drm/ast/ast_drv.c  |  22 ++++++
- drivers/gpu/drm/ast/ast_mode.c | 125 ++++++++++++++++++++++++++++++++-
- 2 files changed, 146 insertions(+), 1 deletion(-)
+v1 -> v2: use dev_err_probe to handle -EPROBE_DEFER.
 
-diff --git a/drivers/gpu/drm/ast/ast_drv.c b/drivers/gpu/drm/ast/ast_drv.c
-index 7465c4f0156a..6c1f75174368 100644
---- a/drivers/gpu/drm/ast/ast_drv.c
-+++ b/drivers/gpu/drm/ast/ast_drv.c
-@@ -28,6 +28,7 @@
+ drivers/media/platform/rockchip/rga/rga.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
+index 2f8df74ad0fd..61b25fcf826e 100644
+--- a/drivers/media/platform/rockchip/rga/rga.c
++++ b/drivers/media/platform/rockchip/rga/rga.c
+@@ -816,7 +816,7 @@ static int rga_probe(struct platform_device *pdev)
  
- #include <linux/module.h>
- #include <linux/pci.h>
-+#include <linux/dma-buf.h>
+ 	ret = rga_parse_dt(rga);
+ 	if (ret)
+-		dev_err(&pdev->dev, "Unable to parse OF data\n");
++		return dev_err_probe(&pdev->dev, ret, "Unable to parse OF data\n");
  
- #include <drm/drm_aperture.h>
- #include <drm/drm_atomic_helper.h>
-@@ -50,6 +51,23 @@ module_param_named(modeset, ast_modeset, int, 0400);
+ 	pm_runtime_enable(rga->dev);
  
- DEFINE_DRM_GEM_FOPS(ast_fops);
- 
-+static struct drm_gem_object *ast_gem_prime_import_sg_table(struct drm_device *dev,
-+					struct dma_buf_attachment *attach,
-+					struct sg_table *sg)
-+{
-+	struct drm_gem_vram_object *gbo;
-+	struct dma_resv *resv = attach->dmabuf->resv;
-+
-+	ww_mutex_lock(&resv->lock, NULL);
-+	gbo = drm_gem_vram_create(dev, attach->dmabuf->size, 0);
-+	ww_mutex_unlock(&resv->lock);
-+
-+	if (IS_ERR(gbo))
-+		return NULL;
-+
-+	return &gbo->bo.base;
-+}
-+
- static const struct drm_driver ast_driver = {
- 	.driver_features = DRIVER_ATOMIC |
- 			   DRIVER_GEM |
-@@ -63,6 +81,10 @@ static const struct drm_driver ast_driver = {
- 	.minor = DRIVER_MINOR,
- 	.patchlevel = DRIVER_PATCHLEVEL,
- 
-+	.prime_handle_to_fd = drm_gem_prime_handle_to_fd,
-+	.prime_fd_to_handle = drm_gem_prime_fd_to_handle,
-+	.gem_prime_import_sg_table = ast_gem_prime_import_sg_table,
-+
- 	DRM_GEM_VRAM_DRIVER
- };
- 
-diff --git a/drivers/gpu/drm/ast/ast_mode.c b/drivers/gpu/drm/ast/ast_mode.c
-index 45b56b39ad47..ebe732705e34 100644
---- a/drivers/gpu/drm/ast/ast_mode.c
-+++ b/drivers/gpu/drm/ast/ast_mode.c
-@@ -48,6 +48,8 @@
- #include "ast_drv.h"
- #include "ast_tables.h"
- 
-+MODULE_IMPORT_NS(DMA_BUF);
-+
- static inline void ast_load_palette_index(struct ast_private *ast,
- 				     u8 index, u8 red, u8 green,
- 				     u8 blue)
-@@ -1535,8 +1537,129 @@ static const struct drm_mode_config_helper_funcs ast_mode_config_helper_funcs =
- 	.atomic_commit_tail = drm_atomic_helper_commit_tail_rpm,
- };
- 
-+static int ast_handle_damage(struct drm_framebuffer *fb, int x, int y,
-+					int width, int height)
-+{
-+	struct drm_gem_vram_object *dst_bo = NULL;
-+	void *dst = NULL;
-+	int ret = 0, i;
-+	unsigned long offset = 0;
-+	bool unmap = false;
-+	unsigned int bytesPerPixel;
-+	struct iosys_map map;
-+	struct iosys_map dmabuf_map;
-+
-+	bytesPerPixel = fb->format->cpp[0];
-+
-+	if (!fb->obj[0]->import_attach)
-+		return -EINVAL;
-+
-+	if (!fb->obj[0]->import_attach->dmabuf->vmap_ptr.vaddr) {
-+		ret = dma_buf_vmap(fb->obj[0]->import_attach->dmabuf, &dmabuf_map);
-+		if (ret)
-+			return 0;
-+	} else
-+		dmabuf_map.vaddr = fb->obj[0]->import_attach->dmabuf->vmap_ptr.vaddr;
-+
-+	dst_bo = drm_gem_vram_of_gem(fb->obj[0]);
-+
-+	ret = drm_gem_vram_pin(dst_bo, 0);
-+	if (ret) {
-+		DRM_ERROR("ast_bo_pin failed\n");
-+		goto error;
-+	}
-+
-+	if (!dst_bo->map.vaddr) {
-+		ret = drm_gem_vram_vmap(dst_bo, &map);
-+		if (ret) {
-+			DRM_ERROR("failed to vmap fbcon\n");
-+			drm_gem_vram_unpin(dst_bo);
-+			goto error;
-+		}
-+		unmap = true;
-+	}
-+	dst = dst_bo->map.vaddr;
-+
-+	for (i = y; i < y + height; i++) {
-+		offset = i * fb->pitches[0] + (x * bytesPerPixel);
-+		memcpy_toio(dst + offset, dmabuf_map.vaddr + offset,
-+			width * bytesPerPixel);
-+	}
-+
-+	if (unmap)
-+		drm_gem_vram_vunmap(dst_bo, &map);
-+
-+	drm_gem_vram_unpin(dst_bo);
-+error:
-+	return 0;
-+}
-+
-+
-+static int ast_user_framebuffer_dirty(struct drm_framebuffer *fb,
-+				struct drm_file *file,
-+				unsigned int flags,
-+				unsigned int color,
-+				struct drm_clip_rect *clips,
-+				unsigned int num_clips)
-+{
-+	int i, ret = 0;
-+
-+	drm_modeset_lock_all(fb->dev);
-+	if (fb->obj[0]->import_attach) {
-+		ret = dma_buf_begin_cpu_access(fb->obj[0]->import_attach->dmabuf,
-+				DMA_FROM_DEVICE);
-+		if (ret)
-+			goto unlock;
-+	}
-+
-+	for (i = 0; i < num_clips; i++) {
-+		ret = ast_handle_damage(fb, clips[i].x1, clips[i].y1,
-+				clips[i].x2 - clips[i].x1, clips[i].y2 - clips[i].y1);
-+		if (ret)
-+			break;
-+	}
-+
-+	if (fb->obj[0]->import_attach) {
-+		dma_buf_end_cpu_access(fb->obj[0]->import_attach->dmabuf,
-+				DMA_FROM_DEVICE);
-+	}
-+
-+unlock:
-+	drm_modeset_unlock_all(fb->dev);
-+
-+	return ret;
-+}
-+
-+static void ast_user_framebuffer_destroy(struct drm_framebuffer *fb)
-+{
-+	struct iosys_map dmabuf_map;
-+
-+	if (fb->obj[0]->import_attach) {
-+		dmabuf_map.vaddr = fb->obj[0]->import_attach->dmabuf->vmap_ptr.vaddr;
-+		if (dmabuf_map.vaddr)
-+			dma_buf_vunmap(fb->obj[0]->import_attach->dmabuf,
-+					&dmabuf_map);
-+	}
-+
-+	drm_gem_fb_destroy(fb);
-+}
-+
-+static const struct drm_framebuffer_funcs ast_gem_fb_funcs_dirtyfb = {
-+	.destroy	= ast_user_framebuffer_destroy,
-+	.create_handle	= drm_gem_fb_create_handle,
-+	.dirty		= ast_user_framebuffer_dirty,
-+};
-+
-+static struct drm_framebuffer *
-+ast_gem_fb_create_with_dirty(struct drm_device *dev, struct drm_file *file,
-+				const struct drm_mode_fb_cmd2 *mode_cmd)
-+{
-+	return drm_gem_fb_create_with_funcs(dev, file, mode_cmd,
-+					&ast_gem_fb_funcs_dirtyfb);
-+}
-+
- static const struct drm_mode_config_funcs ast_mode_config_funcs = {
--	.fb_create = drm_gem_fb_create,
-+	.fb_create = ast_gem_fb_create_with_dirty,
- 	.mode_valid = drm_vram_helper_mode_valid,
- 	.atomic_check = drm_atomic_helper_check,
- 	.atomic_commit = drm_atomic_helper_commit,
 -- 
-2.17.1
+2.35.1
 
-
-No virus found
-		Checked by Hillstone Network AntiVirus
