@@ -2,96 +2,125 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E48ECC32793
-	for <linux-media@archiver.kernel.org>; Tue, 16 Aug 2022 10:20:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C972C2BB41
+	for <linux-media@archiver.kernel.org>; Tue, 16 Aug 2022 10:37:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233767AbiHPKUz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Aug 2022 06:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45466 "EHLO
+        id S234873AbiHPKhh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Aug 2022 06:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234330AbiHPKUT (ORCPT
+        with ESMTP id S234704AbiHPKgf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Aug 2022 06:20:19 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9CFD8
-        for <linux-media@vger.kernel.org>; Tue, 16 Aug 2022 01:18:07 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id f192so8730179pfa.9
-        for <linux-media@vger.kernel.org>; Tue, 16 Aug 2022 01:18:07 -0700 (PDT)
+        Tue, 16 Aug 2022 06:36:35 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BC3BC96;
+        Tue, 16 Aug 2022 01:58:56 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id t22so9197050pjy.1;
+        Tue, 16 Aug 2022 01:58:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=yiBicl/xtck+sUvDa6HbwVr3KCpBiQ3kP9sWsGd0v+M=;
-        b=uT3jiYPYFRn7lq9viYTDzroDVdXL8pYjwBzK6ZhdPWJ3ales5ct7XINz7ercxdfD7Y
-         rvax/AK/RPxyH9Qyvj6cKGyu5Z9eSVcZeTL3ghWM02DMNeRTu1dNZ7beU/wveqK5kb+b
-         cgTDsiraqeHQID8d9ZRhhEi710zRj0h9tNoJIy/ZIZdDiEU/5Tq3uSnDDCMR184RYyCg
-         LVWxI+KwzGdKQ6ji/qPZRP+nel4pcCCfqXweiR63F69BqC+Nt+6QIM31Ab1sSdW2FTPk
-         LjcGqOsRMi5qhAbnOjRjnE/4ICeEvzLIfRc/1JoVKPEsJ2GoYjX+SmVkYwcf+ocJax8W
-         K0eQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=UV497+nq9aRZ6EHD8/12Y71WbNxm7+fRZfBRKqrBQwM=;
+        b=CQoQ8WFq7aduitDEdmjUkyykiF1V1Q40rxJ6zyuzNCuJ7Xu0CDc+RMhO1m3ehYAgdy
+         wVMlVAakJKiadX6VSivL79hJriVdtS8XHoTHYi4DZeh3Aqla1eiO6Os0BejcmJ+xJC93
+         lrw0gEC8B1HHQOxGSMBoD2IXv0LjmUzT8l3vrhF7aYLs0F+XB0Kj2TAWj6qz23l4zZ/T
+         7mC+i1TTPI4/EVDVjtW3HtETDG/jOjk1kp+m1tdCaHUqMN7zu6hy7PNzfsvyuTZEEpJe
+         6Wz8Hjae39X2ErNk38HqXXftFUeIZHlSCVrrbZQh5za9q9/wzEKCSP4oWhNo0eh8eL0Z
+         QN2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=yiBicl/xtck+sUvDa6HbwVr3KCpBiQ3kP9sWsGd0v+M=;
-        b=yvf5DnomuBXwAaYPY5WEmsUb6g3RLToM+q2CNj8t0EHybnpQYLAozArYnm4bVj5Yzp
-         4eGQj4JqTXYJx0I5EWrZbSVXxapt0tJ125N1k63wVA+ZT86R3peSnPIg3RhbpugYzlhq
-         T25n72TlUNvgIwQpwvSKgqZSJyDHVvPxw2DQdB0sT/ck8080mSm1VhB5KuadHiZgtcrU
-         dA184rQTjx1ywhsZlqJLITeh+LIgy5djPVU11YWRAL5xEWPd7Xk9kuGnJWVmi6XOLBwj
-         Eq4QVqR3hLapqFo2dwo7+vRvXuzXlw956mUdPKNNz4Zovq5NFPXo9j7ImVprV0SRTy/K
-         0/wQ==
-X-Gm-Message-State: ACgBeo0k5NsMLH5nA+k0c2a/1+KWIIy0bW8jiFV2py2vrxM8qH30+sCJ
-        AV4xdYjs17KorJUaGCYvf9ZxAPUpWjrCLCPWfrU53g==
-X-Google-Smtp-Source: AA6agR7a2co2/3EHjLJWWfyl0Y9FC9Qup8Vvr947CQmLmaKAXgb15xFZYz1xNiLfRaHjV9zeEjmoSBme+mzy7PUZf/A=
-X-Received: by 2002:a63:e217:0:b0:41a:69b1:a68e with SMTP id
- q23-20020a63e217000000b0041a69b1a68emr16488504pgh.428.1660637887011; Tue, 16
- Aug 2022 01:18:07 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=UV497+nq9aRZ6EHD8/12Y71WbNxm7+fRZfBRKqrBQwM=;
+        b=VH9Jd8vUCXE/BH0Tu5lT3Nohxj+iWDJLeOiS5zNt06O4fQQ3P55Ksj2BrGu/zyrfyR
+         umiHMGWDUrwlwegz6K8X1XamGGCHAhCppCb9ORVYk7Jtu6Wq/BtbbdUK30/yD04uDDUV
+         Le54BeRW2cfKXiVCajEdC9rMrImcGQoQ459ro7Dk4IRebgWdBiNaKCklPPNPj+j6CZfa
+         XhJw/nU5n8Ys8F4h68gwJGk8AIEMM9PwdRpaoVgew973MNx9k/xeyUDg8naf8/bYKLT0
+         7lXK9lwk9NSLtel8+7hdBNFh9Jtyj/PY3wdXJ6Ifgquq2W5LRPCEx0b4sEN3rf5f/5Q+
+         N0xA==
+X-Gm-Message-State: ACgBeo31+e8U/TMmZOUTXrAIx2A0RWDaXO0VSZb3ZgBR+e2pChcWJOgR
+        WSD/MkyWco8DLQ+/B8tIjn8=
+X-Google-Smtp-Source: AA6agR6h4VsRwPE0IQM4jMyBWSUeeD40gs80UzAbpro2X2WbTUDtRikbrK3DGxrU6kDvw7MrxB0zsw==
+X-Received: by 2002:a17:90b:390c:b0:1f5:5bbc:2e8 with SMTP id ob12-20020a17090b390c00b001f55bbc02e8mr32891611pjb.233.1660640336247;
+        Tue, 16 Aug 2022 01:58:56 -0700 (PDT)
+Received: from localhost.localdomain ([129.227.148.126])
+        by smtp.gmail.com with ESMTPSA id x1-20020a17090300c100b00170a8973137sm8446285plc.17.2022.08.16.01.58.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 01:58:55 -0700 (PDT)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     narmstrong@baylibre.com, mchehab@kernel.org, khilman@baylibre.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+        bin.liu@mediatek.com, matthias.bgg@gmail.com,
+        m.szyprowski@samsung.com, andrzej.hajda@intel.com
+Cc:     linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH] media: platform: fix some double free in meson-ge2d and mtk-jpeg and s5p-mfc
+Date:   Tue, 16 Aug 2022 16:58:19 +0800
+Message-Id: <20220816085819.39108-1-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220812143055.12938-1-olivier.masse@nxp.com>
-In-Reply-To: <20220812143055.12938-1-olivier.masse@nxp.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Tue, 16 Aug 2022 10:17:56 +0200
-Message-ID: <CAHUa44EgA1btRyj2ByooyLr9Q+8AmW=9EfjtQFxyr7DuCXASvA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/1] tee: Add tee_shm_register_fd
-To:     Olivier Masse <olivier.masse@nxp.com>
-Cc:     etienne.carriere@linaro.org, sumit.garg@linaro.org,
-        sumit.semwal@linaro.org, christian.koenig@amd.com,
-        op-tee@lists.trustedfirmware.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, clement.faure@nxp.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Olivier,
+video_unregister_device will release device internally. There is no need to
+call video_device_release after video_unregister_device.
 
-On Fri, Aug 12, 2022 at 4:31 PM Olivier Masse <olivier.masse@nxp.com> wrote:
->
-> Add a new ioctl called TEE_IOC_SHM_REGISTER_FD to register a
-> shared memory from a dmabuf file descriptor.
-> This new ioctl will allow the Linux Kernel to register a buffer
-> to be used by the Secure Data Path OPTEE OS feature.
->
-> Please find more information here:
-> https://static.linaro.org/connect/san19/presentations/san19-107.pdf
->
-> Patch tested on Hikey 6220.
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+---
+ drivers/media/platform/amlogic/meson-ge2d/ge2d.c     | 1 -
+ drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 1 -
+ drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c     | 3 +--
+ 3 files changed, 1 insertion(+), 4 deletions(-)
 
-What's new in this V2?
+diff --git a/drivers/media/platform/amlogic/meson-ge2d/ge2d.c b/drivers/media/platform/amlogic/meson-ge2d/ge2d.c
+index 5e7b319f300d..142d421a8d76 100644
+--- a/drivers/media/platform/amlogic/meson-ge2d/ge2d.c
++++ b/drivers/media/platform/amlogic/meson-ge2d/ge2d.c
+@@ -1030,7 +1030,6 @@ static int ge2d_remove(struct platform_device *pdev)
+ 
+ 	video_unregister_device(ge2d->vfd);
+ 	v4l2_m2m_release(ge2d->m2m_dev);
+-	video_device_release(ge2d->vfd);
+ 	v4l2_device_unregister(&ge2d->v4l2_dev);
+ 	clk_disable_unprepare(ge2d->clk);
+ 
+diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+index 87685a62a5c2..3071b61946c3 100644
+--- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
++++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+@@ -1414,7 +1414,6 @@ static int mtk_jpeg_remove(struct platform_device *pdev)
+ 
+ 	pm_runtime_disable(&pdev->dev);
+ 	video_unregister_device(jpeg->vdev);
+-	video_device_release(jpeg->vdev);
+ 	v4l2_m2m_release(jpeg->m2m_dev);
+ 	v4l2_device_unregister(&jpeg->v4l2_dev);
+ 
+diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
+index 761341934925..f85d1eebafac 100644
+--- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
++++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
+@@ -1399,6 +1399,7 @@ static int s5p_mfc_probe(struct platform_device *pdev)
+ /* Deinit MFC if probe had failed */
+ err_enc_reg:
+ 	video_unregister_device(dev->vfd_dec);
++	dev->vfd_dec = NULL;
+ err_dec_reg:
+ 	video_device_release(dev->vfd_enc);
+ err_enc_alloc:
+@@ -1444,8 +1445,6 @@ static int s5p_mfc_remove(struct platform_device *pdev)
+ 
+ 	video_unregister_device(dev->vfd_enc);
+ 	video_unregister_device(dev->vfd_dec);
+-	video_device_release(dev->vfd_enc);
+-	video_device_release(dev->vfd_dec);
+ 	v4l2_device_unregister(&dev->v4l2_dev);
+ 	s5p_mfc_unconfigure_dma_memory(dev);
+ 
+-- 
+2.25.1
 
-Thanks,
-Jens
-
->
-> Etienne Carriere (1):
->   tee: new ioctl to a register tee_shm from a dmabuf file descriptor
->
->  drivers/tee/tee_core.c   | 38 +++++++++++++++
->  drivers/tee/tee_shm.c    | 99 +++++++++++++++++++++++++++++++++++++++-
->  include/linux/tee_drv.h  | 11 +++++
->  include/uapi/linux/tee.h | 29 ++++++++++++
->  4 files changed, 175 insertions(+), 2 deletions(-)
->
-> --
-> 2.25.0
->
