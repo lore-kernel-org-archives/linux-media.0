@@ -2,198 +2,125 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6FEBC32771
-	for <linux-media@archiver.kernel.org>; Wed, 17 Aug 2022 16:12:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3660EC25B08
+	for <linux-media@archiver.kernel.org>; Wed, 17 Aug 2022 16:13:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241028AbiHQQMx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Aug 2022 12:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59168 "EHLO
+        id S241087AbiHQQNF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Aug 2022 12:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241019AbiHQQMc (ORCPT
+        with ESMTP id S240935AbiHQQMt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Aug 2022 12:12:32 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2085.outbound.protection.outlook.com [40.107.244.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E94CA033B;
-        Wed, 17 Aug 2022 09:11:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V9RM6OPkIrv/QrUlQ16WasNKIbSAh0EdO4CzobJKJ7GhZf+4TOD3VKf/S8NlL/lROtaXe+F7PCxln7Aq1g7cwUNoHjKOnO92Ts/06z8AkRo5c8XZQ4JXbK3aBTxOv/+Ynqp7b9wvNBk1vbXsrKA9/7BKcc0ny+14SuyaXamz53jMGr5d/siZIz/49IphPIrEIK8zJ296OY2gOKQ7RFK7zx1ikXREkpF9lN+bJ/J0nxlbZwU2yhiTPdwd54urb/l2rS7FeeBcmOsJ89BM/zCSqgjDY1OsDYoCk13HO1E5oYSLazj1fQoDHZ1s5rY32mIkgJOcQxeNl67I6fMnHNAZkA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PZc4Za0nuGWHAVHcE6SCuKfrxwZpP9evnPTLOJU+Luw=;
- b=QNPRvfGlXqVEJtuIHIMa+AS05UfTUyw4+rnBqgmguZQWu1Ic008xBSFbftuCy2OyaWSCbjeiOoXzRygA23ROxf/bFCGLY0zj0RL3lkD/XungOOZnb9EXbJzEa+RFSlw07pQXaeZ8+qkyw9PHa0pzuF+KTVGG+AWCuxPbNi5IuvPdzUtwKMZ+4oWxMpDNGO0jWJzmDDy3Stlqr/WvBz+NXQUKRCfccIkQcuUVh8z1VDOAbx955csMJWbz4HuEeDR1RUV6wccbII1emWrmh5mAyNuOwdr3yTbpKFp8VaY2LQ1WH/XaLa8JNTUy8bIcbKvdGbPyzD3zyLFZcbcilM1iew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PZc4Za0nuGWHAVHcE6SCuKfrxwZpP9evnPTLOJU+Luw=;
- b=a0OohiVI3Gaxg5KnG9R7DzAA+KH45JGjx6XEMMadS/+6n0cYlW0c1E+T1mFhJZUoBcSjjif9R3JJlRfmqatfv/c3Dku/hTmxxZoMPAzXgMSo9aebVDZqUtZ1ALZwv8zWNFkhrElbcAiF15PIb+RUAK1x44EYQsBmF6g33t+u4ENogI9ZoTU17zLG0/J//GlK97KcNCse2ZdrcAyjg7FWkbLu+m30aEuQ9i0nqlYuNDYzO3vsvTvNKpewGOtna6AvcoxoRIxD0pipkJZdobLhxfoc5Lg+zXss13ImAKOSswHephkcY4umbTDje6OV5YvsmJjGlnqlNN7mtfcy/M2Opw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by CO6PR12MB5458.namprd12.prod.outlook.com (2603:10b6:5:35b::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Wed, 17 Aug
- 2022 16:11:46 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5%6]) with mapi id 15.20.5525.019; Wed, 17 Aug 2022
- 16:11:46 +0000
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Alex Williamson <alex.williamson@redhat.com>,
-        =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, linux-media@vger.kernel.org,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
-        Maor Gottlieb <maorg@nvidia.com>,
-        Oded Gabbay <ogabbay@kernel.org>
-Subject: [PATCH 3/4] vfio_pci: Do not open code pci_try_reset_function()
-Date:   Wed, 17 Aug 2022 13:11:41 -0300
-Message-Id: <3-v1-9e6e1739ed95+5fa-vfio_dma_buf_jgg@nvidia.com>
-In-Reply-To: <0-v1-9e6e1739ed95+5fa-vfio_dma_buf_jgg@nvidia.com>
-References: 
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MN2PR05CA0015.namprd05.prod.outlook.com
- (2603:10b6:208:c0::28) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Wed, 17 Aug 2022 12:12:49 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0AFA0608
+        for <linux-media@vger.kernel.org>; Wed, 17 Aug 2022 09:12:13 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1oOLeF-0004Ag-27; Wed, 17 Aug 2022 18:12:03 +0200
+Message-ID: <f4483d7d55f1f1f4dcd0ad020840561481aa2fd8.camel@pengutronix.de>
+Subject: Re: [EXT] Re: [PATCH 1/3] dma-buf: heaps: add Linaro secure dmabuf
+ heap support
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Olivier Masse <olivier.masse@nxp.com>,
+        "brian.starkey@arm.com" <brian.starkey@arm.com>
+Cc:     =?ISO-8859-1?Q?Cl=E9ment?= Faure <clement.faure@nxp.com>,
+        "benjamin.gaignard@collabora.com" <benjamin.gaignard@collabora.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
+        "nd@arm.com" <nd@arm.com>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
+Date:   Wed, 17 Aug 2022 18:12:01 +0200
+In-Reply-To: <eef2fc413695cb96a5071627bfe44830f80cfe9e.camel@ndufresne.ca>
+References: <20220805135330.970-1-olivier.masse@nxp.com>
+         <20220805135330.970-2-olivier.masse@nxp.com>
+         <20220805154139.2qkqxwklufjpsfdx@000377403353>
+         <7e61668164f8bf02f6c4ee166e85abc42b5ee958.camel@nxp.com>
+         <20220812163922.v7sf3havi5dpgi5u@000377403353>
+         <de46324d8fa8fb6a8dda4641e531d30842410744.camel@nxp.com>
+         <eef2fc413695cb96a5071627bfe44830f80cfe9e.camel@ndufresne.ca>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c840418f-65a4-4bb9-c9ee-08da806b2e0e
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5458:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MGJai6iVF8uRmcJsW3tR78xg9wKhA800BummeGj4Q/6422OpsKb4nkycKMHXLys2TEBzQsU4NNVJyFwPAjyqGuMUf2tGRmLkoyx8HyUuoLw5KBQt0NxThOy7mp16zLocAUOTAwcfS5ReyJzqXlTqnLa4MQXx1gCwMIy9nstrde7mfPgs6xHPZuHMFSHIeER2UvTTYIw2urXlKus3a2/yLTzfoDj/k4BB02tY6TtS9kLbMcV5wXlC8jJcdHz4F3+4picvfwndtZHW1tQKZqaQ7lGWGdfQK1uawhAbMsaOD6ZkZTzwc7ZhG3xTq6/Emq7WGjSXzK9GkU5gb9l6kght4+1QQJBhI4LeY7eWD/aDEtxc9PSvlAQ858WHd8KLn7Rxzss2MvPiikg4XtSEss3CS12VuOTsr/Jhffl3qqt5hu8+At11Bukq1AmsQsEBuAtdxwp3/ItEXjr1UTpfnkfclw37LJhOu0rh9Th9yO9hjWHVMElkq5xncFBdN489rZrLTX3OO3AYFXlBLmUlB/som1i859+NdqMIsAIVVm9EbkaDHV3eh/Z5/+mBWVQuZ72UVaZi0sYkCiYMsO4Kev6eKDtfn9ENTwN6j+GlDkmOoahC7IGSptcLHFOHRyGnG4eRshLx3bYkJpuoCIwuCEVq+3uveOayr91jcIq+96sgHnJHUwtE1L6wV2xTR7dkvUfyz/qwn5EY20K1mDoCpZjdvkEKLT06aqtV174SinCNz6Vxz9ncJtye9OV8tJVgJHA85AEDOt6X6lO+ll75rsj71fn775QSckM/CsRPRkcL/nQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(376002)(136003)(346002)(366004)(26005)(316002)(41300700001)(2616005)(7416002)(6666004)(6512007)(2906002)(66476007)(66946007)(8676002)(4326008)(38100700002)(66556008)(186003)(5660300002)(478600001)(54906003)(83380400001)(8936002)(110136005)(86362001)(36756003)(6486002)(6506007)(4216001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cVJkfEkC92Q4s/p9PXi5PSAoZtLot9zPCDUCjKMWu/9cpvwIX4eJNSwETSJO?=
- =?us-ascii?Q?+bMBJX306Q4nH0SM3kBeQmunDcFyVx5VXRa4yirYHTx2xmpJCwL+6PMhGsPv?=
- =?us-ascii?Q?SMA658nYOoYqREfvVtJMd3oU8J5NwuuH50vqT4HuKJZb4FXxA1VyfVvrRDLp?=
- =?us-ascii?Q?YrcE0pPt74egTcBp1w0lx3jXaaX07eBRGE2krAM0FaYKIs4/vQZKFdLPo77y?=
- =?us-ascii?Q?xk9Xl2sFFa4uSDqPcfFWTLbDCRz4M5s9vVMzKvzFNsmBsckVGV7yWoPyY9p2?=
- =?us-ascii?Q?z1tWqMWOpkj0SndfoH+ivAGSkygpJYbcFBasVctEK6ubhDXEfAXpxQQ/YGJQ?=
- =?us-ascii?Q?RkEB5zjWp74BxSUdA0CWoLctNwrZr46kjbGg9u7BQHZWlx1WpIrfAKD5m2k5?=
- =?us-ascii?Q?HtHO2nFIFoxDL6YnTo000VNqgTToucjbN5/5NFSmCtNvxjE02TH/YK7KXnOl?=
- =?us-ascii?Q?2AoJIMibj7IGy85WVAa0b4Fei2IVnYzmHi4LhnL595j5VzIF9ot0cV1BuZeu?=
- =?us-ascii?Q?kdMN85V4dfm1RlCrecl1xPjUr4x0uL3oZ8vr25xraqIQHcR31NhQ2VZvFIyK?=
- =?us-ascii?Q?8LBdkFgQ/qxPHGo49/nbGTFGeKe9LTOUmvKqkbJ7YZc3irp4vougxR1sucdN?=
- =?us-ascii?Q?h2jIR1Y6sOLE0ICkJ+2yRDscMKf20aMy2/YKed1Q87ThAFlgLwRnQy3yrIl4?=
- =?us-ascii?Q?Ei387sgEgzLoEgun5chzH9MmJ0OeLbIp/HAvBKOIczFiEQu3O978zvyL+8g2?=
- =?us-ascii?Q?iQ1K1outYGxn2qiLzd1GJvdpSw5PHfj531+IIblXqgSqRRkdCMv29cOFQmSN?=
- =?us-ascii?Q?NYZBbN+cBA05wDFt4GkHGfKTEaT/hlhOQSoMwji3V/BVa+zoQIWqLAlLvYsm?=
- =?us-ascii?Q?AFkGNQdT3qVnAiyfZMhnt4Age7n9t5ZmHSm6vwyD/3T9rdFS6qvlhSmhHtlG?=
- =?us-ascii?Q?pqafyuGC53CpbWQdvQE6NLrnAhedVv9OZDvm0dF6eQ6RwSra05H8j9ftZgkp?=
- =?us-ascii?Q?aMZ5rNnICb5GDVbSSUsiC/Bm6ZoKQyvTGW1j3tpKb1p4tpFBL8DbjKRLvJ7c?=
- =?us-ascii?Q?EiKl0gYPqBoxbzBR/wpQALksQIa02urIzYzQERMd9sycU0kSSh2M9vrhL5ly?=
- =?us-ascii?Q?LEQOaDveto0S0H1c5/Jfin9UHzp8jd1xnG3RqEotvqZmyz8vWDCcQ1TdS32f?=
- =?us-ascii?Q?2crl7y7QNcmxZicZb+s5Db5eYhp62bxcIw1mVCcPLLxXbjeJkdSjs+vwim1G?=
- =?us-ascii?Q?3Yp3MG/DFQMm19g+wOBM7jRYK9u/mSe//hKAl73DhhoTsFMKfbzCyKPka+Is?=
- =?us-ascii?Q?D/AAXxZLyq0DA8y9hX7GPrHj95j0rB2GYlCs6E52n6Ta0ck/9nBASbdDr8Pr?=
- =?us-ascii?Q?dCn18HEWLZW1xmR/PJ88XtN5CudICvQB6j9R3PmPFb7PjM7E+f3+WU1dXf5B?=
- =?us-ascii?Q?G6sHwpEQnTJxXmB9tZQ0xIPekeQSdifbFTYIsT/ZdyQnNy+UycR2YqVyckY9?=
- =?us-ascii?Q?3MSvd3InfYp5AVJpF2FmcBzyQA8c2rqzGlsSQSyBmbqzA7CZ/5Gk0zZokrxJ?=
- =?us-ascii?Q?/V09j8EFEqtD9V1VF1rNDksJWzqSsOwKU9hf1D+Y?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c840418f-65a4-4bb9-c9ee-08da806b2e0e
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2022 16:11:44.9860
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8jTajYxvSwR2fBpRrIfY49hJLcQCBwUvj5DBO6CTj/+8qbD0x0Ob/Ar4WAPSRxX3
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5458
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-FLR triggered by an emulated config space write should not behave
-differently from a FLR triggered by VFIO_DEVICE_RESET, currently the
-config space path misses the power management.
+Am Mittwoch, dem 17.08.2022 um 10:29 -0400 schrieb Nicolas Dufresne:
+> Hi Folks,
+> 
+> Le mardi 16 août 2022 à 11:20 +0000, Olivier Masse a écrit :
+> > Hi Brian,
+> > 
+> > 
+> > On ven., 2022-08-12 at 17:39 +0100, Brian Starkey wrote:
+> > > Caution: EXT Ema
+> > > 
+> 
+> [...]
+> 
+> > > 
+> > > Interesting, that's not how the devices I've worked on operated.
+> > > 
+> > > Are you saying that you have to have a display controller driver
+> > > running in the TEE to display one of these buffers?
+> > 
+> > In fact the display controller is managing 3 plans : UI, PiP and
+> > video. The video plan is protected in secure as you can see on slide
+> > 11:
+> > https://static.linaro.org/connect/san19/presentations/san19-107.pdf
+> 
+> 
+> 
+> just wanted to highlight that all the WPE/GStreamer bit in this presentation is
+> based on NXP Vendor Media CODEC design, which rely on their own i.MX VPU API. I
+> don't see any effort to extend this to a wider audience. It is not explaining
+> how this can work with a mainline kernel with v4l2 stateful or stateless drivers
+> and generic GStreamer/FFMPEG/Chromium support.
+> 
+> I'm raising this, since I'm worried that no one cares of solving that high level
+> problem from a generic point of view. In that context, any additions to the
+> mainline Linux kernel can only be flawed and will only serves specific vendors
+> and not the larger audience.
+> 
+> Another aspect, is that this design might be bound to a specific (NXP ?)
+> security design. I've learn recently that newer HW is going to use multiple
+> level of MMU (like virtual machines do) to protect the memory rather then
+> marking pages. Will all this work for that too ?
+> 
+I have not looked in any of this for quite a while, but IIRC the plan
+was something like that:
 
-Consolidate all the call sites to invoke a single function.
+The NXP RDC hardware is able to segment the DDR memory into sections
+and define access policies for all masters in the system. So for
+example for the secure VPU to display controller path you would define
+such a section, where only the VPU is able to write and DCSS is able to
+read from. CPU or other masters are not allowed to use this section.
+This then gets exposed to Linux as a DMA heap. The VPU driver could
+then allocate capture buffers from this heap and share them via dma-buf
+to the DCSS driver.
+Both drivers can live in non-trusted userspace and even the address
+allocation for the DMA heap can be done from Linux. Non-trusted Linux
+kernel/userspace just has no way to access the buffers directly.
 
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
----
- drivers/vfio/pci/vfio_pci_config.c | 14 ++++----------
- drivers/vfio/pci/vfio_pci_core.c   |  5 ++---
- drivers/vfio/pci/vfio_pci_priv.h   |  1 +
- 3 files changed, 7 insertions(+), 13 deletions(-)
+The more interesting question is on the VPU side: how do you make sure
+that the capture buffer is located in secure memory when the output
+buffer containing the secret bitstream is also in a secure heap? I
+guess you need some kind of TEE application to validate those settings,
+which means you can't give the non-trusted driver direct MMIO access to
+the VPU.
 
-diff --git a/drivers/vfio/pci/vfio_pci_config.c b/drivers/vfio/pci/vfio_pci_config.c
-index 4a350421c5f62a..d22921efa25987 100644
---- a/drivers/vfio/pci/vfio_pci_config.c
-+++ b/drivers/vfio/pci/vfio_pci_config.c
-@@ -893,11 +893,8 @@ static int vfio_exp_config_write(struct vfio_pci_core_device *vdev, int pos,
- 						 pos - offset + PCI_EXP_DEVCAP,
- 						 &cap);
- 
--		if (!ret && (cap & PCI_EXP_DEVCAP_FLR)) {
--			vfio_pci_zap_and_down_write_memory_lock(vdev);
--			pci_try_reset_function(vdev->pdev);
--			up_write(&vdev->memory_lock);
--		}
-+		if (!ret && (cap & PCI_EXP_DEVCAP_FLR))
-+			vfio_pci_try_reset_function(vdev);
- 	}
- 
- 	/*
-@@ -975,11 +972,8 @@ static int vfio_af_config_write(struct vfio_pci_core_device *vdev, int pos,
- 						pos - offset + PCI_AF_CAP,
- 						&cap);
- 
--		if (!ret && (cap & PCI_AF_CAP_FLR) && (cap & PCI_AF_CAP_TP)) {
--			vfio_pci_zap_and_down_write_memory_lock(vdev);
--			pci_try_reset_function(vdev->pdev);
--			up_write(&vdev->memory_lock);
--		}
-+		if (!ret && (cap & PCI_AF_CAP_FLR) && (cap & PCI_AF_CAP_TP))
-+			vfio_pci_try_reset_function(vdev);
- 	}
- 
- 	return count;
-diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
-index 050b9d4b8c290c..d13e22021860cc 100644
---- a/drivers/vfio/pci/vfio_pci_core.c
-+++ b/drivers/vfio/pci/vfio_pci_core.c
-@@ -960,8 +960,7 @@ static int vfio_pci_ioctl_set_irqs(struct vfio_pci_core_device *vdev,
- 	return ret;
- }
- 
--static int vfio_pci_ioctl_reset(struct vfio_pci_core_device *vdev,
--				void __user *arg)
-+int vfio_pci_try_reset_function(struct vfio_pci_core_device *vdev)
- {
- 	int ret;
- 
-@@ -1202,7 +1201,7 @@ long vfio_pci_core_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
- 	case VFIO_DEVICE_PCI_HOT_RESET:
- 		return vfio_pci_ioctl_pci_hot_reset(vdev, uarg);
- 	case VFIO_DEVICE_RESET:
--		return vfio_pci_ioctl_reset(vdev, uarg);
-+		return vfio_pci_try_reset_function(vdev);
- 	case VFIO_DEVICE_SET_IRQS:
- 		return vfio_pci_ioctl_set_irqs(vdev, uarg);
- 	default:
-diff --git a/drivers/vfio/pci/vfio_pci_priv.h b/drivers/vfio/pci/vfio_pci_priv.h
-index 58b8d34c162cd6..5b1cb9a9838442 100644
---- a/drivers/vfio/pci/vfio_pci_priv.h
-+++ b/drivers/vfio/pci/vfio_pci_priv.h
-@@ -60,6 +60,7 @@ void vfio_config_free(struct vfio_pci_core_device *vdev);
- int vfio_pci_set_power_state(struct vfio_pci_core_device *vdev,
- 			     pci_power_t state);
- 
-+int vfio_pci_try_reset_function(struct vfio_pci_core_device *vdev);
- bool __vfio_pci_memory_enabled(struct vfio_pci_core_device *vdev);
- void vfio_pci_zap_and_down_write_memory_lock(struct vfio_pci_core_device *vdev);
- u16 vfio_pci_memory_lock_and_enable(struct vfio_pci_core_device *vdev);
--- 
-2.37.2
+Regards,
+Lucas
 
