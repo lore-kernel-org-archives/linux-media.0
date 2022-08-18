@@ -2,127 +2,256 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEEAFC32772
-	for <linux-media@archiver.kernel.org>; Thu, 18 Aug 2022 11:02:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AD99C00140
+	for <linux-media@archiver.kernel.org>; Thu, 18 Aug 2022 11:05:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244230AbiHRLCh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Aug 2022 07:02:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
+        id S241951AbiHRLFI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Aug 2022 07:05:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239816AbiHRLCg (ORCPT
+        with ESMTP id S239909AbiHRLFH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Aug 2022 07:02:36 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6368E98C9E;
-        Thu, 18 Aug 2022 04:02:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7F34CCE2034;
-        Thu, 18 Aug 2022 11:02:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66FFFC433D6;
-        Thu, 18 Aug 2022 11:02:24 +0000 (UTC)
-Message-ID: <b0b4ff87-355e-1910-c6d2-a9690f3d7543@xs4all.nl>
-Date:   Thu, 18 Aug 2022 13:02:23 +0200
+        Thu, 18 Aug 2022 07:05:07 -0400
+Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74EB9D67D;
+        Thu, 18 Aug 2022 04:05:00 -0700 (PDT)
+X-UUID: 8f7625e34bd946ab971afd30d2c71a9e-20220818
+X-GW-Reason: 11109
+X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HMTDkurrpnIDopoHlrqHmoLg=
+X-Content-Feature: ica/max.line-size 103
+        audit/email.address 1
+        dict/adv 1
+        dict/notice 1
+        meta/cnt.alert 1
+X-UUID: 8f7625e34bd946ab971afd30d2c71a9e-20220818
+X-User: oushixiong@kylinos.cn
+Received: from localhost.localdomain [(116.128.244.169)] by mailgw
+        (envelope-from <oushixiong@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 1436180143; Thu, 18 Aug 2022 17:45:31 +0800
+From:   oushixiong <oushixiong@kylinos.cn>
+To:     Dave Airlie <airlied@redhat.com>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        oushixiong <oushixiong@kylinos.cn>
+Subject: [PATCH v2] drm/ast: add dmabuf/prime buffer sharing support
+Date:   Thu, 18 Aug 2022 17:45:17 +0800
+Message-Id: <20220818094517.214421-1-oushixiong@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v25 4/4] media: platform: mtk-mdp3: add MediaTek MDP3
- driver
-Content-Language: en-US
-To:     Moudy Ho <moudy.ho@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Alexandre Courbot <acourbot@chromium.org>, tfiga@chromium.org,
-        drinkcat@chromium.org, pihsun@chromium.org, hsinyi@google.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        cellopoint.kai@gmail.com, Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>
-References: <20220817095629.29911-1-moudy.ho@mediatek.com>
- <20220817095629.29911-5-moudy.ho@mediatek.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20220817095629.29911-5-moudy.ho@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Moudy,
+This patch adds ast specific codes for DRM prime feature, this is to
+allow for offloading of rending in one direction and outputs in other.
 
-I noticed one more thing (and it is probably better to post a v26 after all):
+v1->v2:
+  - Fix the comment.
 
-On 17/08/2022 11:56, Moudy Ho wrote:
-> This patch adds driver for MediaTek's Media Data Path ver.3 (MDP3).
-> It provides the following functions:
->   color transform, format conversion, resize, crop, rotate, flip
->   and additional image quality enhancement.
-> 
-> The MDP3 driver is mainly used for Google Chromebook products to
-> import the new architecture to set the HW settings as shown below:
->   User -> V4L2 framework
->     -> MDP3 driver -> SCP (setting calculations)
->       -> MDP3 driver -> CMDQ (GCE driver) -> HW
-> 
-> Each modules' related operation control is sited in mtk-mdp3-comp.c
-> Each modules' register table is defined in file with "mdp_reg_" prefix
-> GCE related API, operation control  sited in mtk-mdp3-cmdq.c
-> V4L2 m2m device functions are implemented in mtk-mdp3-m2m.c
-> Probe, power, suspend/resume, system level functions are defined in
-> mtk-mdp3-core.c
-> 
-> v4l2-compliance 1.22.1, 32 bits, 32-bit time_t
+Signed-off-by: oushixiong <oushixiong@kylinos.cn>
+---
+ drivers/gpu/drm/ast/ast_drv.c  |  22 ++++++
+ drivers/gpu/drm/ast/ast_mode.c | 125 ++++++++++++++++++++++++++++++++-
+ 2 files changed, 146 insertions(+), 1 deletion(-)
 
-First of all, the v4l2-compliance output belongs to the cover letter, not
-to a commit log for a patch.
-
-More importantly, I can tell that v4l2-compliance was a prepackaged version,
-but you need to compile it from the git repo yourself:
-
-git clone git://linuxtv.org/v4l-utils.git
-cd v4l-utils
-./bootstrap.sh
-./configure
-make
-sudo make install
-
-Running v4l2-compliance should start with this (or something close):
-
-v4l2-compliance 1.23.0-4941, 64 bits, 64-bit time_t
-v4l2-compliance SHA: 71112d214762 2022-07-28 15:31:13
-
-I need to see the SHA to confirm that you tested with a sufficiently new
-v4l2-compliance version. Prepackaged v4l2-compliance binaries tend to
-be too old, at least for the purpose of compliance checking a new driver.
-
-Regards,
-
-	Hans
-
-> Compliance test for mtk-mdp3 device /dev/video0:
-> Driver Info:
-> 	Driver name      : mtk-mdp3
-> 	Card type        : MediaTek MDP3
-> 	Bus info         : platform:14001000.mdp3-rdma0
-> 	Driver version   : 6.0.0
-> 	Capabilities     : 0x84204000
-> 		Video Memory-to-Memory Multiplanar
-> 		Streaming
-> 		Extended Pix Format
-> 		Device Capabilities
-> 	Device Caps      : 0x04204000
-> 		Video Memory-to-Memory Multiplanar
-> 		Streaming
-> 		Extended Pix Format
+diff --git a/drivers/gpu/drm/ast/ast_drv.c b/drivers/gpu/drm/ast/ast_drv.c
+index 7465c4f0156a..6c1f75174368 100644
+--- a/drivers/gpu/drm/ast/ast_drv.c
++++ b/drivers/gpu/drm/ast/ast_drv.c
+@@ -28,6 +28,7 @@
+ 
+ #include <linux/module.h>
+ #include <linux/pci.h>
++#include <linux/dma-buf.h>
+ 
+ #include <drm/drm_aperture.h>
+ #include <drm/drm_atomic_helper.h>
+@@ -50,6 +51,23 @@ module_param_named(modeset, ast_modeset, int, 0400);
+ 
+ DEFINE_DRM_GEM_FOPS(ast_fops);
+ 
++static struct drm_gem_object *ast_gem_prime_import_sg_table(struct drm_device *dev,
++					struct dma_buf_attachment *attach,
++					struct sg_table *sg)
++{
++	struct drm_gem_vram_object *gbo;
++	struct dma_resv *resv = attach->dmabuf->resv;
++
++	ww_mutex_lock(&resv->lock, NULL);
++	gbo = drm_gem_vram_create(dev, attach->dmabuf->size, 0);
++	ww_mutex_unlock(&resv->lock);
++
++	if (IS_ERR(gbo))
++		return NULL;
++
++	return &gbo->bo.base;
++}
++
+ static const struct drm_driver ast_driver = {
+ 	.driver_features = DRIVER_ATOMIC |
+ 			   DRIVER_GEM |
+@@ -63,6 +81,10 @@ static const struct drm_driver ast_driver = {
+ 	.minor = DRIVER_MINOR,
+ 	.patchlevel = DRIVER_PATCHLEVEL,
+ 
++	.prime_handle_to_fd = drm_gem_prime_handle_to_fd,
++	.prime_fd_to_handle = drm_gem_prime_fd_to_handle,
++	.gem_prime_import_sg_table = ast_gem_prime_import_sg_table,
++
+ 	DRM_GEM_VRAM_DRIVER
+ };
+ 
+diff --git a/drivers/gpu/drm/ast/ast_mode.c b/drivers/gpu/drm/ast/ast_mode.c
+index 45b56b39ad47..ebe732705e34 100644
+--- a/drivers/gpu/drm/ast/ast_mode.c
++++ b/drivers/gpu/drm/ast/ast_mode.c
+@@ -48,6 +48,8 @@
+ #include "ast_drv.h"
+ #include "ast_tables.h"
+ 
++MODULE_IMPORT_NS(DMA_BUF);
++
+ static inline void ast_load_palette_index(struct ast_private *ast,
+ 				     u8 index, u8 red, u8 green,
+ 				     u8 blue)
+@@ -1535,8 +1537,129 @@ static const struct drm_mode_config_helper_funcs ast_mode_config_helper_funcs =
+ 	.atomic_commit_tail = drm_atomic_helper_commit_tail_rpm,
+ };
+ 
++static int ast_handle_damage(struct drm_framebuffer *fb, int x, int y,
++					int width, int height)
++{
++	struct drm_gem_vram_object *dst_bo = NULL;
++	void *dst = NULL;
++	int ret = 0, i;
++	unsigned long offset = 0;
++	bool unmap = false;
++	unsigned int bytesPerPixel;
++	struct iosys_map map;
++	struct iosys_map dmabuf_map;
++
++	bytesPerPixel = fb->format->cpp[0];
++
++	if (!fb->obj[0]->import_attach)
++		return -EINVAL;
++
++	if (!fb->obj[0]->import_attach->dmabuf->vmap_ptr.vaddr) {
++		ret = dma_buf_vmap(fb->obj[0]->import_attach->dmabuf, &dmabuf_map);
++		if (ret)
++			return 0;
++	} else
++		dmabuf_map.vaddr = fb->obj[0]->import_attach->dmabuf->vmap_ptr.vaddr;
++
++	dst_bo = drm_gem_vram_of_gem(fb->obj[0]);
++
++	ret = drm_gem_vram_pin(dst_bo, 0);
++	if (ret) {
++		DRM_ERROR("ast_bo_pin failed\n");
++		goto error;
++	}
++
++	if (!dst_bo->map.vaddr) {
++		ret = drm_gem_vram_vmap(dst_bo, &map);
++		if (ret) {
++			DRM_ERROR("failed to vmap fbcon\n");
++			drm_gem_vram_unpin(dst_bo);
++			goto error;
++		}
++		unmap = true;
++	}
++	dst = dst_bo->map.vaddr;
++
++	for (i = y; i < y + height; i++) {
++		offset = i * fb->pitches[0] + (x * bytesPerPixel);
++		memcpy_toio(dst + offset, dmabuf_map.vaddr + offset,
++			width * bytesPerPixel);
++	}
++
++	if (unmap)
++		drm_gem_vram_vunmap(dst_bo, &map);
++
++	drm_gem_vram_unpin(dst_bo);
++error:
++	return 0;
++}
++
++
++static int ast_user_framebuffer_dirty(struct drm_framebuffer *fb,
++				struct drm_file *file,
++				unsigned int flags,
++				unsigned int color,
++				struct drm_clip_rect *clips,
++				unsigned int num_clips)
++{
++	int i, ret = 0;
++
++	drm_modeset_lock_all(fb->dev);
++	if (fb->obj[0]->import_attach) {
++		ret = dma_buf_begin_cpu_access(fb->obj[0]->import_attach->dmabuf,
++				DMA_FROM_DEVICE);
++		if (ret)
++			goto unlock;
++	}
++
++	for (i = 0; i < num_clips; i++) {
++		ret = ast_handle_damage(fb, clips[i].x1, clips[i].y1,
++				clips[i].x2 - clips[i].x1, clips[i].y2 - clips[i].y1);
++		if (ret)
++			break;
++	}
++
++	if (fb->obj[0]->import_attach) {
++		dma_buf_end_cpu_access(fb->obj[0]->import_attach->dmabuf,
++				DMA_FROM_DEVICE);
++	}
++
++unlock:
++	drm_modeset_unlock_all(fb->dev);
++
++	return ret;
++}
++
++static void ast_user_framebuffer_destroy(struct drm_framebuffer *fb)
++{
++	struct iosys_map dmabuf_map;
++
++	if (fb->obj[0]->import_attach) {
++		dmabuf_map.vaddr = fb->obj[0]->import_attach->dmabuf->vmap_ptr.vaddr;
++		if (dmabuf_map.vaddr)
++			dma_buf_vunmap(fb->obj[0]->import_attach->dmabuf,
++					&dmabuf_map);
++	}
++
++	drm_gem_fb_destroy(fb);
++}
++
++static const struct drm_framebuffer_funcs ast_gem_fb_funcs_dirtyfb = {
++	.destroy	= ast_user_framebuffer_destroy,
++	.create_handle	= drm_gem_fb_create_handle,
++	.dirty		= ast_user_framebuffer_dirty,
++};
++
++static struct drm_framebuffer *
++ast_gem_fb_create_with_dirty(struct drm_device *dev, struct drm_file *file,
++				const struct drm_mode_fb_cmd2 *mode_cmd)
++{
++	return drm_gem_fb_create_with_funcs(dev, file, mode_cmd,
++					&ast_gem_fb_funcs_dirtyfb);
++}
++
+ static const struct drm_mode_config_funcs ast_mode_config_funcs = {
+-	.fb_create = drm_gem_fb_create,
++	.fb_create = ast_gem_fb_create_with_dirty,
+ 	.mode_valid = drm_vram_helper_mode_valid,
+ 	.atomic_check = drm_atomic_helper_check,
+ 	.atomic_commit = drm_atomic_helper_commit,
+-- 
+2.17.1
 
