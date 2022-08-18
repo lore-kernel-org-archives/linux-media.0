@@ -2,41 +2,43 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64F32C32772
-	for <linux-media@archiver.kernel.org>; Thu, 18 Aug 2022 14:47:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F146BC32789
+	for <linux-media@archiver.kernel.org>; Thu, 18 Aug 2022 14:47:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245707AbiHROr3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Aug 2022 10:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50544 "EHLO
+        id S1343699AbiHROrd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Aug 2022 10:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245595AbiHROrX (ORCPT
+        with ESMTP id S1343547AbiHROrZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Aug 2022 10:47:23 -0400
+        Thu, 18 Aug 2022 10:47:25 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA30995E70
-        for <linux-media@vger.kernel.org>; Thu, 18 Aug 2022 07:47:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FDFBBA48
+        for <linux-media@vger.kernel.org>; Thu, 18 Aug 2022 07:47:22 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1oOgnk-0008KN-3d; Thu, 18 Aug 2022 16:47:16 +0200
+        id 1oOgnk-0008KO-4c; Thu, 18 Aug 2022 16:47:16 +0200
 Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <mfe@pengutronix.de>)
-        id 1oOgnj-000X2u-DQ; Thu, 18 Aug 2022 16:47:15 +0200
+        id 1oOgnj-000X2y-EF; Thu, 18 Aug 2022 16:47:15 +0200
 Received: from mfe by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <mfe@pengutronix.de>)
-        id 1oOgni-004BVV-4i; Thu, 18 Aug 2022 16:47:14 +0200
+        id 1oOgni-004BVa-6E; Thu, 18 Aug 2022 16:47:14 +0200
 From:   Marco Felsch <m.felsch@pengutronix.de>
 To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         laurent.pinchart+renesas@ideasonboard.com,
         jacopo+renesas@jmondi.org, akinobu.mita@gmail.com
 Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         kernel@pengutronix.de
-Subject: [PATCH 1/4] media: mt9m111: add V4L2_CID_PIXEL_RATE support
-Date:   Thu, 18 Aug 2022 16:47:09 +0200
-Message-Id: <20220818144712.997477-1-m.felsch@pengutronix.de>
+Subject: [PATCH 3/4] media: mt9m111: fix device power usage
+Date:   Thu, 18 Aug 2022 16:47:11 +0200
+Message-Id: <20220818144712.997477-3-m.felsch@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220818144712.997477-1-m.felsch@pengutronix.de>
+References: <20220818144712.997477-1-m.felsch@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -47,68 +49,106 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support to report the PIXEL_RATE so a host or bridge device can ask
-the sensor.
+Currently the driver turn off the power after probe and toggle it during
+.stream by using the .s_power callback. This is problematic since other
+callbacks like .set_fmt accessing the hardware as well which will fail.
+So in the end the default format is the only supported format.
+
+Remove the hardware register access from the callbacks and instead sync
+the state once right before the stream gets enabled to fix this.
 
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 ---
- drivers/media/i2c/mt9m111.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ drivers/media/i2c/mt9m111.c | 20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/media/i2c/mt9m111.c b/drivers/media/i2c/mt9m111.c
-index afc86efa9e3e..cdaf283e1309 100644
+index 53c4dac4e4bd..cd74c408e110 100644
 --- a/drivers/media/i2c/mt9m111.c
 +++ b/drivers/media/i2c/mt9m111.c
-@@ -908,6 +908,8 @@ static int mt9m111_s_ctrl(struct v4l2_ctrl *ctrl)
- 		return mt9m111_set_test_pattern(mt9m111, ctrl->val);
- 	case V4L2_CID_COLORFX:
- 		return mt9m111_set_colorfx(mt9m111, ctrl->val);
-+	case V4L2_CID_PIXEL_RATE:
-+		return 0;
+@@ -481,8 +481,6 @@ static int mt9m111_set_selection(struct v4l2_subdev *sd,
+ 	width = min(mt9m111->width, rect.width);
+ 	height = min(mt9m111->height, rect.height);
+ 
+-
+-	mt9m111_setup_geometry(mt9m111, &rect, width, height, mt9m111->fmt->code);
+ 	mt9m111->rect = rect;
+ 	mt9m111->width = width;
+ 	mt9m111->height = height;
+@@ -611,7 +609,6 @@ static int mt9m111_set_pixfmt(struct mt9m111 *mt9m111,
+ 	if (mt9m111->pclk_sample == 0)
+ 		mask_outfmt2 |= MT9M111_OUTFMT_INV_PIX_CLOCK;
+ 
+-
+ 	mt9m111_reg_mask(client, context_a.output_fmt_ctrl2,
+ 			 data_outfmt2, mask_outfmt2);
+ 	mt9m111_reg_mask(client, context_b.output_fmt_ctrl2,
+@@ -678,9 +675,6 @@ static int mt9m111_set_fmt(struct v4l2_subdev *sd,
+ 		return 0;
  	}
  
- 	return -EINVAL;
-@@ -1249,6 +1251,7 @@ static int mt9m111_probe(struct i2c_client *client)
- {
- 	struct mt9m111 *mt9m111;
- 	struct i2c_adapter *adapter = client->adapter;
-+	unsigned long mclk_rate;
+-
+-	mt9m111_setup_geometry(mt9m111, rect, mf->width, mf->height, mf->code);
+-	mt9m111_set_pixfmt(mt9m111, mf->code);
+ 	mt9m111->width	= mf->width;
+ 	mt9m111->height	= mf->height;
+ 	mt9m111->fmt	= fmt;
+@@ -743,6 +737,8 @@ mt9m111_find_mode(struct mt9m111 *mt9m111, unsigned int req_fps,
+ 	return mode;
+ }
+ 
++static int mt9m111_s_power(struct v4l2_subdev *sd, int on);
++
+ #ifdef CONFIG_VIDEO_ADV_DEBUG
+ static int mt9m111_g_register(struct v4l2_subdev *sd,
+ 			      struct v4l2_dbg_register *reg)
+@@ -753,10 +749,14 @@ static int mt9m111_g_register(struct v4l2_subdev *sd,
+ 	if (reg->reg > 0x2ff)
+ 		return -EINVAL;
+ 
++	mt9m111_s_power(sd, 1);
++
+ 	val = mt9m111_reg_read(client, reg->reg);
+ 	reg->size = 2;
+ 	reg->val = (u64)val;
+ 
++	mt9m111_s_power(sd, 0);
++
+ 	if (reg->val > 0xffff)
+ 		return -EIO;
+ 
+@@ -771,9 +771,13 @@ static int mt9m111_s_register(struct v4l2_subdev *sd,
+ 	if (reg->reg > 0x2ff)
+ 		return -EINVAL;
+ 
++	mt9m111_s_power(sd, 1);
++
+ 	if (mt9m111_reg_write(client, reg->reg, reg->val) < 0)
+ 		return -EIO;
+ 
++	mt9m111_s_power(sd, 0);
++
+ 	return 0;
+ }
+ #endif
+@@ -896,6 +900,9 @@ static int mt9m111_s_ctrl(struct v4l2_ctrl *ctrl)
+ 					       struct mt9m111, hdl);
  	int ret;
  
- 	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_WORD_DATA)) {
-@@ -1271,6 +1274,13 @@ static int mt9m111_probe(struct i2c_client *client)
- 	if (IS_ERR(mt9m111->clk))
- 		return PTR_ERR(mt9m111->clk);
++	if (!mt9m111->is_streaming)
++		return 0;
++
+ 	switch (ctrl->id) {
+ 	case V4L2_CID_VFLIP:
+ 		ret = mt9m111_set_flip(mt9m111, ctrl->val,
+@@ -927,7 +934,6 @@ static int mt9m111_s_ctrl(struct v4l2_ctrl *ctrl)
+ 		ret = -EINVAL;
+ 	}
  
-+	ret = clk_prepare_enable(mt9m111->clk);
-+	if (ret < 0)
-+		return ret;
-+
-+	mclk_rate = clk_get_rate(mt9m111->clk);
-+	clk_disable_unprepare(mt9m111->clk);
-+
- 	mt9m111->regulator = devm_regulator_get(&client->dev, "vdd");
- 	if (IS_ERR(mt9m111->regulator)) {
- 		dev_err(&client->dev, "regulator not found: %ld\n",
-@@ -1285,7 +1295,7 @@ static int mt9m111_probe(struct i2c_client *client)
- 	mt9m111->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
- 				 V4L2_SUBDEV_FL_HAS_EVENTS;
+-
+ 	return ret;
+ }
  
--	v4l2_ctrl_handler_init(&mt9m111->hdl, 7);
-+	v4l2_ctrl_handler_init(&mt9m111->hdl, 8);
- 	v4l2_ctrl_new_std(&mt9m111->hdl, &mt9m111_ctrl_ops,
- 			V4L2_CID_VFLIP, 0, 1, 1, 0);
- 	v4l2_ctrl_new_std(&mt9m111->hdl, &mt9m111_ctrl_ops,
-@@ -1309,6 +1319,9 @@ static int mt9m111_probe(struct i2c_client *client)
- 				BIT(V4L2_COLORFX_NEGATIVE) |
- 				BIT(V4L2_COLORFX_SOLARIZATION)),
- 			V4L2_COLORFX_NONE);
-+	v4l2_ctrl_new_std(&mt9m111->hdl, &mt9m111_ctrl_ops, V4L2_CID_PIXEL_RATE,
-+			  mclk_rate, mclk_rate, 1, mclk_rate);
-+
- 	mt9m111->subdev.ctrl_handler = &mt9m111->hdl;
- 	if (mt9m111->hdl.error) {
- 		ret = mt9m111->hdl.error;
 -- 
 2.30.2
 
