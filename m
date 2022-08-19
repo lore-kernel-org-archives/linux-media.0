@@ -2,190 +2,193 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FB8BC32772
-	for <linux-media@archiver.kernel.org>; Fri, 19 Aug 2022 15:28:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B51EC32773
+	for <linux-media@archiver.kernel.org>; Fri, 19 Aug 2022 15:37:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349607AbiHSP2P (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 19 Aug 2022 11:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
+        id S1349811AbiHSPhf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 19 Aug 2022 11:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349429AbiHSP2J (ORCPT
+        with ESMTP id S1349592AbiHSPhe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 19 Aug 2022 11:28:09 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0EE101C45
-        for <linux-media@vger.kernel.org>; Fri, 19 Aug 2022 08:28:07 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id h21so3583025qta.3
-        for <linux-media@vger.kernel.org>; Fri, 19 Aug 2022 08:28:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc;
-        bh=iA9FPyd1nVi+5ANzlnbkk2becmIxzDV5Vq9MszOeMik=;
-        b=BR81CJRUyoDiW6jn9a7JfCde43ZAfHclIbU+KinvYPofdBD0gEF2AhhMPdqGT1Vj5X
-         5nErMs6lUjEStZhPblbRZ7VqtQp2SetHyO8Ys9EB756PmvtIEIUuKhvQ11FX1dRvsY8V
-         iEVMl64per07X5+eNjU20MCm0AFjphbawvNxTpvkpvgVuqpNdimPa28fQORsIAP3T9xL
-         f+dj9/KhvHPICwjMCTr+RfTxkKLQuNOaXOMwWiInOMNYSbo5W1VAAFbKTzzpRVxaYHwH
-         WnQZCAAQMzrScA9hVdQNFgRG8NtfQgfdCr2XYtbjwxia+iTONOWMq/znu5v2C+ii8FTU
-         kHeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc;
-        bh=iA9FPyd1nVi+5ANzlnbkk2becmIxzDV5Vq9MszOeMik=;
-        b=jQJaFr4/WhfvOG0hlTlPDz1UhsTySkyA5sPUDBrKkpuxkfOhqdGJ+UMS+JJoQvcwpP
-         DFLrqQeHnXkYQDZAnADNIT4VYEpjpk64sdbFerTbuyHVN/j55k7gWpzGZNRZcHcuaQP/
-         blkuJ3ng9T4f2uWTvLRmntJqvArhZrvXZ56hFIRtEX5UxZhB9fyChPqBiR4Nmc6Y2WAz
-         n7asbhPPk06s5oMTWQfD7DCIj0ntE5MOaaHCfYJHQxUNyTT75+rSr9lPZrg4kbbmdLUg
-         UDvWxwJ3t1ef06lCyTLW3oiHqaUU5j0hG4t4O8jkPsMkRWlVENKQdHIIh2CIEk/7FER9
-         f8Yw==
-X-Gm-Message-State: ACgBeo28YkbPq8+YGE0n6ypXZXIoHYjMTGDcxIYE0EUU2pScbwl9xyg0
-        Ps3ZxMAStXqDgvOMLQR0kMKvBg==
-X-Google-Smtp-Source: AA6agR78yg020o3BQrSjbyOHf2K23nLFedXybdJ5R96QMH31H/Um1bHSOfOeF4uB98Jhlhnwd5sW7w==
-X-Received: by 2002:ac8:59c6:0:b0:344:6f73:da07 with SMTP id f6-20020ac859c6000000b003446f73da07mr6813160qtf.199.1660922886865;
-        Fri, 19 Aug 2022 08:28:06 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
-        by smtp.gmail.com with ESMTPSA id w4-20020a05620a424400b006b6757a11fcsm3976599qko.36.2022.08.19.08.28.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 08:28:06 -0700 (PDT)
-Message-ID: <6da7faf329128312f0862f555d1a855437ae99f3.camel@ndufresne.ca>
-Subject: Re: [PATCH 2/2] [WIP]: media: Add Synaptics compressed tiled format
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hsia-Jun Li <Randy.Li@synaptics.com>
-Cc:     Tomasz Figa <tfiga@chromium.org>, dri-devel@lists.freedesktop.org,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, sakari.ailus@linux.intel.com,
-        ribalda@chromium.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sebastian.hesselbarth@gmail.com,
-        jszhang@kernel.org, linux-arm-kernel@lists.infradead.org
-Date:   Fri, 19 Aug 2022 11:28:04 -0400
-In-Reply-To: <Yv7HnHE7bLmgq5D0@pendragon.ideasonboard.com>
-References: <20220808162750.828001-1-randy.li@synaptics.com>
-         <20220808162750.828001-3-randy.li@synaptics.com>
-         <CAAFQd5AKjpJ+fPAeCqdNnJbS4R7SdaHkfyW4qG1xXr-sE801pQ@mail.gmail.com>
-         <13d37c15-79f3-4e16-8cf4-fc37846f4a04@synaptics.com>
-         <Yv7HnHE7bLmgq5D0@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Fri, 19 Aug 2022 11:37:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5885E8307;
+        Fri, 19 Aug 2022 08:37:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31F58615F3;
+        Fri, 19 Aug 2022 15:37:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F96AC433D6;
+        Fri, 19 Aug 2022 15:37:28 +0000 (UTC)
+Message-ID: <46436973-0de0-f810-5851-6f26bdf460aa@xs4all.nl>
+Date:   Fri, 19 Aug 2022 17:37:27 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v26 4/4] media: platform: mtk-mdp3: add MediaTek MDP3
+ driver
+Content-Language: en-US
+To:     Moudy Ho <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Alexandre Courbot <acourbot@chromium.org>, tfiga@chromium.org,
+        drinkcat@chromium.org, pihsun@chromium.org, hsinyi@google.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        cellopoint.kai@gmail.com, Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>
+References: <20220819085423.17023-1-moudy.ho@mediatek.com>
+ <20220819085423.17023-5-moudy.ho@mediatek.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20220819085423.17023-5-moudy.ho@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Le vendredi 19 ao=C3=BBt 2022 =C3=A0 02:13 +0300, Laurent Pinchart a =C3=A9=
-crit=C2=A0:
-> On Thu, Aug 18, 2022 at 02:33:42PM +0800, Hsia-Jun Li wrote:
-> > On 8/18/22 14:06, Tomasz Figa wrote:
-> > > On Tue, Aug 9, 2022 at 1:28 AM Hsia-Jun Li <randy.li@synaptics.com> w=
-rote:
-> > > >=20
-> > > > From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
-> > > >=20
-> > > > The most of detail has been written in the drm.
->=20
-> This patch still needs a description of the format, which should go to
-> Documentation/userspace-api/media/v4l/.
->=20
-> > > > Please notice that the tiled formats here request
-> > > > one more plane for storing the motion vector metadata.
-> > > > This buffer won't be compressed, so you can't append
-> > > > it to luma or chroma plane.
-> > >=20
-> > > Does the motion vector buffer need to be exposed to userspace? Is the
-> > > decoder stateless (requires userspace to specify the reference frames=
-)
-> > > or stateful (manages the entire decoding process internally)?
-> >=20
-> > No, users don't need to access them at all. Just they need a different=
-=20
-> > dma-heap.
-> >=20
-> > You would only get the stateful version of both encoder and decoder.
->=20
-> Shouldn't the motion vectors be stored in a separate V4L2 buffer,
-> submitted through a different queue then ?
+Hi Moudy,
 
-Imho, I believe these should be invisible to users and pooled separately to
-reduce the overhead. The number of reference is usually lower then the numb=
-er of
-allocated display buffers.
+On 19/08/2022 10:54, Moudy Ho wrote:
+> This patch adds driver for MediaTek's Media Data Path ver.3 (MDP3).
+> It provides the following functions:
+>   color transform, format conversion, resize, crop, rotate, flip
+>   and additional image quality enhancement.
+> 
+> The MDP3 driver is mainly used for Google Chromebook products to
+> import the new architecture to set the HW settings as shown below:
+>   User -> V4L2 framework
+>     -> MDP3 driver -> SCP (setting calculations)
+>       -> MDP3 driver -> CMDQ (GCE driver) -> HW
+> 
+> Each modules' related operation control is sited in mtk-mdp3-comp.c
+> Each modules' register table is defined in file with "mdp_reg_" prefix
+> GCE related API, operation control  sited in mtk-mdp3-cmdq.c
+> V4L2 m2m device functions are implemented in mtk-mdp3-m2m.c
+> Probe, power, suspend/resume, system level functions are defined in
+> mtk-mdp3-core.c
+> 
+> Signed-off-by: Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
+> Signed-off-by: daoyuan huang <daoyuan.huang@mediatek.com>
+> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+> Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/media/platform/mediatek/Kconfig       |    1 +
+>  drivers/media/platform/mediatek/Makefile      |    1 +
+>  drivers/media/platform/mediatek/mdp3/Kconfig  |   20 +
+>  drivers/media/platform/mediatek/mdp3/Makefile |    6 +
+>  .../platform/mediatek/mdp3/mdp_reg_ccorr.h    |   19 +
+>  .../platform/mediatek/mdp3/mdp_reg_rdma.h     |   65 ++
+>  .../platform/mediatek/mdp3/mdp_reg_rsz.h      |   39 +
+>  .../platform/mediatek/mdp3/mdp_reg_wdma.h     |   47 +
+>  .../platform/mediatek/mdp3/mdp_reg_wrot.h     |   55 +
+>  .../platform/mediatek/mdp3/mtk-img-ipi.h      |  290 +++++
+>  .../platform/mediatek/mdp3/mtk-mdp3-cmdq.c    |  466 ++++++++
+>  .../platform/mediatek/mdp3/mtk-mdp3-cmdq.h    |   43 +
+>  .../platform/mediatek/mdp3/mtk-mdp3-comp.c    | 1031 +++++++++++++++++
+>  .../platform/mediatek/mdp3/mtk-mdp3-comp.h    |  186 +++
+>  .../platform/mediatek/mdp3/mtk-mdp3-core.c    |  357 ++++++
+>  .../platform/mediatek/mdp3/mtk-mdp3-core.h    |   94 ++
+>  .../platform/mediatek/mdp3/mtk-mdp3-m2m.c     |  724 ++++++++++++
+>  .../platform/mediatek/mdp3/mtk-mdp3-m2m.h     |   48 +
+>  .../platform/mediatek/mdp3/mtk-mdp3-regs.c    |  733 ++++++++++++
+>  .../platform/mediatek/mdp3/mtk-mdp3-regs.h    |  373 ++++++
+>  .../platform/mediatek/mdp3/mtk-mdp3-vpu.c     |  313 +++++
+>  .../platform/mediatek/mdp3/mtk-mdp3-vpu.h     |   78 ++
+>  22 files changed, 4989 insertions(+)
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/Kconfig
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/Makefile
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_ccorr.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_rdma.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_rsz.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_wdma.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_wrot.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.c
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.c
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.h
+> 
+> diff --git a/drivers/media/platform/mediatek/Kconfig b/drivers/media/platform/mediatek/Kconfig
+> index af47d9888552..84104e2cd024 100644
+> --- a/drivers/media/platform/mediatek/Kconfig
+> +++ b/drivers/media/platform/mediatek/Kconfig
+> @@ -6,3 +6,4 @@ source "drivers/media/platform/mediatek/jpeg/Kconfig"
+>  source "drivers/media/platform/mediatek/mdp/Kconfig"
+>  source "drivers/media/platform/mediatek/vcodec/Kconfig"
+>  source "drivers/media/platform/mediatek/vpu/Kconfig"
+> +source "drivers/media/platform/mediatek/mdp3/Kconfig"
+> diff --git a/drivers/media/platform/mediatek/Makefile b/drivers/media/platform/mediatek/Makefile
+> index d3850a13f128..38e6ba917fe5 100644
+> --- a/drivers/media/platform/mediatek/Makefile
+> +++ b/drivers/media/platform/mediatek/Makefile
+> @@ -3,3 +3,4 @@ obj-y += jpeg/
+>  obj-y += mdp/
+>  obj-y += vcodec/
+>  obj-y += vpu/
+> +obj-y += mdp3/
+> diff --git a/drivers/media/platform/mediatek/mdp3/Kconfig b/drivers/media/platform/mediatek/mdp3/Kconfig
+> new file mode 100644
+> index 000000000000..8c8e59687417
+> --- /dev/null
+> +++ b/drivers/media/platform/mediatek/mdp3/Kconfig
+> @@ -0,0 +1,20 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +config VIDEO_MEDIATEK_MDP3
+> +	tristate "MediaTek MDP v3 driver"
+> +	depends on MTK_IOMMU || COMPILE_TEST
+> +	depends on VIDEO_DEV
+> +	depends on ARCH_MEDIATEK || COMPILE_TEST
+> +	depends on MTK_MMSYS || COMPILE_TEST
 
->=20
-> > > > Signed-off-by: Hsia-Jun(Randy) Li <randy.li@synaptics.com>
-> > > > ---
-> > > >   drivers/media/v4l2-core/v4l2-common.c | 1 +
-> > > >   drivers/media/v4l2-core/v4l2-ioctl.c  | 2 ++
-> > > >   include/uapi/linux/videodev2.h        | 2 ++
-> > > >   3 files changed, 5 insertions(+)
-> > > >=20
-> > > > diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/=
-v4l2-core/v4l2-common.c
-> > > > index e0fbe6ba4b6c..f645278b3055 100644
-> > > > --- a/drivers/media/v4l2-core/v4l2-common.c
-> > > > +++ b/drivers/media/v4l2-core/v4l2-common.c
-> > > > @@ -314,6 +314,7 @@ const struct v4l2_format_info *v4l2_format_info=
-(u32 format)
-> > > >                  { .format =3D V4L2_PIX_FMT_SGBRG12,       .pixel_e=
-nc =3D V4L2_PIXEL_ENC_BAYER, .mem_planes =3D 1, .comp_planes =3D 1, .bpp =
-=3D { 2, 0, 0, 0 }, .hdiv =3D 1, .vdiv =3D 1 },
-> > > >                  { .format =3D V4L2_PIX_FMT_SGRBG12,       .pixel_e=
-nc =3D V4L2_PIXEL_ENC_BAYER, .mem_planes =3D 1, .comp_planes =3D 1, .bpp =
-=3D { 2, 0, 0, 0 }, .hdiv =3D 1, .vdiv =3D 1 },
-> > > >                  { .format =3D V4L2_PIX_FMT_SRGGB12,       .pixel_e=
-nc =3D V4L2_PIXEL_ENC_BAYER, .mem_planes =3D 1, .comp_planes =3D 1, .bpp =
-=3D { 2, 0, 0, 0 }, .hdiv =3D 1, .vdiv =3D 1 },
-> > > > +               { .format =3D V4L2_PIX_FMT_NV12M_V4H1C, .pixel_enc =
-=3D V4L2_PIXEL_ENC_YUV, .mem_planes =3D 5, .comp_planes =3D 2, .bpp =3D { 1=
-, 2, 0, 0 }, .hdiv =3D 2, .vdiv =3D 2, .block_w =3D { 128, 128 }, .block_h =
-=3D { 128, 128 } },
-> > > >          };
-> > > >          unsigned int i;
-> > > >=20
-> > > > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v=
-4l2-core/v4l2-ioctl.c
-> > > > index e6fd355a2e92..8f65964aff08 100644
-> > > > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > > @@ -1497,6 +1497,8 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtd=
-esc *fmt)
-> > > >                  case V4L2_PIX_FMT_MT21C:        descr =3D "Mediate=
-k Compressed Format"; break;
-> > > >                  case V4L2_PIX_FMT_QC08C:        descr =3D "QCOM Co=
-mpressed 8-bit Format"; break;
-> > > >                  case V4L2_PIX_FMT_QC10C:        descr =3D "QCOM Co=
-mpressed 10-bit Format"; break;
-> > > > +               case V4L2_PIX_FMT_NV12M_V4H1C:  descr =3D "Synaptic=
-s Compressed 8-bit tiled Format";break;
-> > > > +               case V4L2_PIX_FMT_NV12M_10_V4H3P8C:     descr =3D "=
-Synaptics Compressed 10-bit tiled Format";break;
-> > > >                  default:
-> > > >                          if (fmt->description[0])
-> > > >                                  return;
-> > > > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/vi=
-deodev2.h
-> > > > index 01e630f2ec78..7e928cb69e7c 100644
-> > > > --- a/include/uapi/linux/videodev2.h
-> > > > +++ b/include/uapi/linux/videodev2.h
-> > > > @@ -661,6 +661,8 @@ struct v4l2_pix_format {
-> > > >   #define V4L2_PIX_FMT_NV12MT_16X16 v4l2_fourcc('V', 'M', '1', '2')=
- /* 12  Y/CbCr 4:2:0 16x16 tiles */
-> > > >   #define V4L2_PIX_FMT_NV12M_8L128      v4l2_fourcc('N', 'A', '1', =
-'2') /* Y/CbCr 4:2:0 8x128 tiles */
-> > > >   #define V4L2_PIX_FMT_NV12M_10BE_8L128 v4l2_fourcc_be('N', 'T', '1=
-', '2') /* Y/CbCr 4:2:0 10-bit 8x128 tiles */
-> > > > +#define V4L2_PIX_FMT_NV12M_V4H1C v4l2_fourcc('S', 'Y', '1', '2')  =
- /* 12  Y/CbCr 4:2:0 tiles */
-> > > > +#define V4L2_PIX_FMT_NV12M_10_V4H3P8C v4l2_fourcc('S', 'Y', '1', '=
-0')   /* 12  Y/CbCr 4:2:0 10-bits tiles */
-> > > >=20
-> > > >   /* Bayer formats - see http://www.siliconimaging.com/RGB%20Bayer.=
-htm */
-> > > >   #define V4L2_PIX_FMT_SBGGR8  v4l2_fourcc('B', 'A', '8', '1') /*  =
-8  BGBG.. GRGR.. */
->=20
+It turned out that this will cause link errors if MTK_MMSYS is not set:
 
+ERROR: modpost: "mtk_mutex_write_sof" [drivers/media/platform/mediatek/mdp3/mtk-mdp3.ko] undefined!
+ERROR: modpost: "mtk_mutex_enable_by_cmdq" [drivers/media/platform/mediatek/mdp3/mtk-mdp3.ko] undefined!
+ERROR: modpost: "mtk_mutex_put" [drivers/media/platform/mediatek/mdp3/mtk-mdp3.ko] undefined!
+ERROR: modpost: "mtk_mutex_write_mod" [drivers/media/platform/mediatek/mdp3/mtk-mdp3.ko] undefined!
+ERROR: modpost: "mtk_mutex_unprepare" [drivers/media/platform/mediatek/mdp3/mtk-mdp3.ko] undefined!
+ERROR: modpost: "mtk_mutex_get" [drivers/media/platform/mediatek/mdp3/mtk-mdp3.ko] undefined!
+ERROR: modpost: "mtk_mutex_prepare" [drivers/media/platform/mediatek/mdp3/mtk-mdp3.ko] undefined!
+
+I wonder if it isn't better to do 'select MTK_MMSYS': that seems to work fine.
+
+What do you think?
+
+Regards,
+
+	Hans
+
+> +	depends on HAS_DMA
+> +	select VIDEOBUF2_DMA_CONTIG
+> +	select V4L2_MEM2MEM_DEV
+> +	select VIDEO_MEDIATEK_VPU
+> +	select MTK_CMDQ
+> +	select MTK_SCP
+> +	default n
+> +	help
+> +	    It is a v4l2 driver and present in MediaTek MT8183 SoC.
+> +	    The driver supports scaling and color space conversion.
+> +
+> +	    To compile this driver as a module, choose M here: the
+> +	    module will be called mtk-mdp3.
