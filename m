@@ -2,180 +2,139 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C56B6C25B0E
-	for <linux-media@archiver.kernel.org>; Fri, 19 Aug 2022 07:33:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C36BEC25B0E
+	for <linux-media@archiver.kernel.org>; Fri, 19 Aug 2022 07:35:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346201AbiHSHd6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 19 Aug 2022 03:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
+        id S1346097AbiHSHfr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 19 Aug 2022 03:35:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242638AbiHSHd5 (ORCPT
+        with ESMTP id S1346683AbiHSHfV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 19 Aug 2022 03:33:57 -0400
-Received: from mail-m11885.qiye.163.com (mail-m11885.qiye.163.com [115.236.118.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8976BCF3;
-        Fri, 19 Aug 2022 00:33:53 -0700 (PDT)
-Received: from localhost (unknown [103.29.142.67])
-        by mail-m11885.qiye.163.com (Hmail) with ESMTPA id 5AF324C02BD;
-        Fri, 19 Aug 2022 15:33:51 +0800 (CST)
-From:   Jeffy Chen <jeffy.chen@rock-chips.com>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     Andy Yan <andy.yan@rock-chips.com>,
-        Jianqun Xu <jay.xu@rock-chips.com>,
-        Jeffy Chen <jeffy.chen@rock-chips.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        linux-media@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>
-Subject: [PATCH v3] drm/gem: Fix GEM handle release errors
-Date:   Fri, 19 Aug 2022 15:28:34 +0800
-Message-Id: <20220819072834.17888-1-jeffy.chen@rock-chips.com>
-X-Mailer: git-send-email 2.20.1
+        Fri, 19 Aug 2022 03:35:21 -0400
+X-Greylist: delayed 1133 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 19 Aug 2022 00:35:19 PDT
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806F982FB8;
+        Fri, 19 Aug 2022 00:35:19 -0700 (PDT)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 9667A20002;
+        Fri, 19 Aug 2022 07:35:14 +0000 (UTC)
+Date:   Fri, 19 Aug 2022 09:35:12 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        laurent.pinchart+renesas@ideasonboard.com,
+        jacopo+renesas@jmondi.org, akinobu.mita@gmail.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH 4/4] media: mt9m111: remove .s_power callback
+Message-ID: <20220819073512.ulud7ppnrudxewdn@uno.localdomain>
+References: <20220818144712.997477-1-m.felsch@pengutronix.de>
+ <20220818144712.997477-4-m.felsch@pengutronix.de>
+ <20220818161408.76ofg2rjvp5whtof@uno.localdomain>
+ <20220819071832.3mr7u7jhp2ud4fv6@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZTh4fVk9MHk4fQxlKGE9DS1UTARMWGhIXJBQOD1
-        lXWRgSC1lBWUpLSFVJQlVKT0lVTUxZV1kWGg8SFR0UWUFZT0tIVUpKS0hKQ1VLWQY+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OQw6Hgw*IT0wCRYyFh9NEEMj
-        DCswFDNVSlVKTU1LQ0JPT0hKQk9IVTMWGhIXVREeHR0CVRgTHhU7CRQYEFYYExILCFUYFBZFWVdZ
-        EgtZQVlKS0hVSUJVSk9JVU1MWVdZCAFZQU1KT043Bg++
-X-HM-Tid: 0a82b505c8ac2eb9kusn5af324c02bd
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220819071832.3mr7u7jhp2ud4fv6@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Currently we are assuming a one to one mapping between dmabuf and
-GEM handle when releasing GEM handles.
+Hi Marco
 
-But that is not always true, since we would create extra handles for the
-GEM obj in cases like gem_open() and getfb{,2}().
+On Fri, Aug 19, 2022 at 09:18:32AM +0200, Marco Felsch wrote:
+> Hi Jacopo,
+>
+> thanks for your fast feedback :)
+>
+> On 22-08-18, Jacopo Mondi wrote:
+> > Hi Marco
+> >
+> > On Thu, Aug 18, 2022 at 04:47:12PM +0200, Marco Felsch wrote:
+> > > This is in preparation of switching to the generic dev PM mechanism.
+> > > Since the .s_power callback will be removed in the near future move the
+> > > powering into the .s_stream callback. So this driver no longer depends
+> > > on the .s_power mechanism.
+> > >
+> > > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> >
+> > If you want to move to runtime_pm, I would implement it first and have
+> > s_power call the _resume and _suspend routines, as some platform
+> > drivers still use s_power() and some of them might depend on it.
+>
+> Do we really have platforms which depend on this? IMHO if that is the
 
-A similar issue was reported at:
-https://lore.kernel.org/all/20211105083308.392156-1-jay.xu@rock-chips.com/
+$ git grep "v4l2_subdev_call(.*, s_power" drivers/media/platform/  | cut -d : -f1 | uniq  | wc -l
+8
 
-Another problem is that the imported dmabuf might not always have
-gem_obj->dma_buf set, which would cause leaks in
-drm_gem_remove_prime_handles().
+> case than we should fix those platfoms. Since new drivers shouldn't use
+> this callback anymore.
 
-Let's fix these for now by using handle to find the exact map to remove.
+Patches are clearly welcome I guess..
 
-Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
-Reviewed-by: Christian König <christian.koenig@amd.com>
+>
+> In my case, I worked on [1] and wondered why the sensor was enabled
+> before I told him to do so. Since I didn't implement the s_power()
+> callback, I had no chance to get enabled before.
+>
 
----
+I'm not sure I got this part
 
-Changes in v3:
-Rewrite commit message a bit.
+> Can we please decide:
+>  - Do we wanna get rid of the s_power() callback?
 
-Changes in v2:
-Fix a typo of rbtree.
+I think that would be everyone's desire, but drivers have to be moved
+away from it
 
- drivers/gpu/drm/drm_gem.c      | 17 +----------------
- drivers/gpu/drm/drm_internal.h |  4 ++--
- drivers/gpu/drm/drm_prime.c    | 20 ++++++++++++--------
- 3 files changed, 15 insertions(+), 26 deletions(-)
+>  - If not, how do we handle those devices then with drivers not
+>    implementing this callback?
 
-diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
-index eb0c2d041f13..ed39da383570 100644
---- a/drivers/gpu/drm/drm_gem.c
-+++ b/drivers/gpu/drm/drm_gem.c
-@@ -168,21 +168,6 @@ void drm_gem_private_object_init(struct drm_device *dev,
- }
- EXPORT_SYMBOL(drm_gem_private_object_init);
- 
--static void
--drm_gem_remove_prime_handles(struct drm_gem_object *obj, struct drm_file *filp)
--{
--	/*
--	 * Note: obj->dma_buf can't disappear as long as we still hold a
--	 * handle reference in obj->handle_count.
--	 */
--	mutex_lock(&filp->prime.lock);
--	if (obj->dma_buf) {
--		drm_prime_remove_buf_handle_locked(&filp->prime,
--						   obj->dma_buf);
--	}
--	mutex_unlock(&filp->prime.lock);
--}
--
- /**
-  * drm_gem_object_handle_free - release resources bound to userspace handles
-  * @obj: GEM object to clean up.
-@@ -253,7 +238,7 @@ drm_gem_object_release_handle(int id, void *ptr, void *data)
- 	if (obj->funcs->close)
- 		obj->funcs->close(obj, file_priv);
- 
--	drm_gem_remove_prime_handles(obj, file_priv);
-+	drm_prime_remove_buf_handle(&file_priv->prime, id);
- 	drm_vma_node_revoke(&obj->vma_node, file_priv);
- 
- 	drm_gem_object_handle_put_unlocked(obj);
-diff --git a/drivers/gpu/drm/drm_internal.h b/drivers/gpu/drm/drm_internal.h
-index 1fbbc19f1ac0..7bb98e6a446d 100644
---- a/drivers/gpu/drm/drm_internal.h
-+++ b/drivers/gpu/drm/drm_internal.h
-@@ -74,8 +74,8 @@ int drm_prime_fd_to_handle_ioctl(struct drm_device *dev, void *data,
- 
- void drm_prime_init_file_private(struct drm_prime_file_private *prime_fpriv);
- void drm_prime_destroy_file_private(struct drm_prime_file_private *prime_fpriv);
--void drm_prime_remove_buf_handle_locked(struct drm_prime_file_private *prime_fpriv,
--					struct dma_buf *dma_buf);
-+void drm_prime_remove_buf_handle(struct drm_prime_file_private *prime_fpriv,
-+				 uint32_t handle);
- 
- /* drm_drv.c */
- struct drm_minor *drm_minor_acquire(unsigned int minor_id);
-diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
-index e3f09f18110c..bd5366b16381 100644
---- a/drivers/gpu/drm/drm_prime.c
-+++ b/drivers/gpu/drm/drm_prime.c
-@@ -190,29 +190,33 @@ static int drm_prime_lookup_buf_handle(struct drm_prime_file_private *prime_fpri
- 	return -ENOENT;
- }
- 
--void drm_prime_remove_buf_handle_locked(struct drm_prime_file_private *prime_fpriv,
--					struct dma_buf *dma_buf)
-+void drm_prime_remove_buf_handle(struct drm_prime_file_private *prime_fpriv,
-+				 uint32_t handle)
- {
- 	struct rb_node *rb;
- 
--	rb = prime_fpriv->dmabufs.rb_node;
-+	mutex_lock(&prime_fpriv->lock);
-+
-+	rb = prime_fpriv->handles.rb_node;
- 	while (rb) {
- 		struct drm_prime_member *member;
- 
--		member = rb_entry(rb, struct drm_prime_member, dmabuf_rb);
--		if (member->dma_buf == dma_buf) {
-+		member = rb_entry(rb, struct drm_prime_member, handle_rb);
-+		if (member->handle == handle) {
- 			rb_erase(&member->handle_rb, &prime_fpriv->handles);
- 			rb_erase(&member->dmabuf_rb, &prime_fpriv->dmabufs);
- 
--			dma_buf_put(dma_buf);
-+			dma_buf_put(member->dma_buf);
- 			kfree(member);
--			return;
--		} else if (member->dma_buf < dma_buf) {
-+			break;
-+		} else if (member->handle < handle) {
- 			rb = rb->rb_right;
- 		} else {
- 			rb = rb->rb_left;
- 		}
- 	}
-+
-+	mutex_unlock(&prime_fpriv->lock);
- }
- 
- void drm_prime_init_file_private(struct drm_prime_file_private *prime_fpriv)
--- 
-2.20.1
+By maintaining compatibility. I suggested to move to runtime_pm() and
+wrap _resume/_suspend in s_power(). My understanding is that the two
+(runtime_pm/s_power) are mutually exclusive, but even if that was not
+the case, runtime_pm is reference counted, hence as long as calls are
+balanced this should work, right ?
 
+>
+> [1] https://lore.kernel.org/all/20220818143307.967150-1-m.felsch@pengutronix.de/
+>
+> > It's a slippery slope.. I would love to get rid of s_power() but if
+> > any platform uses it with this sensor, it would stop working after
+> > this change.
+> >
+> > > ---
+> > >  drivers/media/i2c/mt9m111.c | 7 ++++++-
+> > >  1 file changed, 6 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/media/i2c/mt9m111.c b/drivers/media/i2c/mt9m111.c
+> > > index cd74c408e110..8e8ba5a8e6ea 100644
+> > > --- a/drivers/media/i2c/mt9m111.c
+> > > +++ b/drivers/media/i2c/mt9m111.c
+> > > @@ -1065,7 +1065,6 @@ static const struct v4l2_ctrl_ops mt9m111_ctrl_ops = {
+> > >  };
+> > >
+> > >  static const struct v4l2_subdev_core_ops mt9m111_subdev_core_ops = {
+> > > -	.s_power	= mt9m111_s_power,
+> > >  	.log_status = v4l2_ctrl_subdev_log_status,
+> > >  	.subscribe_event = v4l2_ctrl_subdev_subscribe_event,
+> > >  	.unsubscribe_event = v4l2_event_subdev_unsubscribe,
+> > > @@ -1136,8 +1135,14 @@ static int mt9m111_enum_mbus_code(struct v4l2_subdev *sd,
+> > >  static int mt9m111_s_stream(struct v4l2_subdev *sd, int enable)
+> > >  {
+> > >  	struct mt9m111 *mt9m111 = container_of(sd, struct mt9m111, subdev);
+> > > +	int ret;
+> > >
+> > >  	mt9m111->is_streaming = !!enable;
+> > > +
+> > > +	ret = mt9m111_s_power(sd, enable);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > >  	return 0;
+> > >  }
+> > >
+> > > --
+> > > 2.30.2
+> > >
+> >
