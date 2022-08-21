@@ -2,38 +2,38 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38F35C00140
-	for <linux-media@archiver.kernel.org>; Sun, 21 Aug 2022 15:16:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63187C00140
+	for <linux-media@archiver.kernel.org>; Sun, 21 Aug 2022 15:18:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231371AbiHUPQI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 21 Aug 2022 11:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
+        id S231443AbiHUPSr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 21 Aug 2022 11:18:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbiHUPQH (ORCPT
+        with ESMTP id S231186AbiHUPSq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 21 Aug 2022 11:16:07 -0400
+        Sun, 21 Aug 2022 11:18:46 -0400
 Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D38822BE2;
-        Sun, 21 Aug 2022 08:16:05 -0700 (PDT)
-X-QQ-mid: bizesmtp81t1661094960tuyj8oye
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA82C1262F;
+        Sun, 21 Aug 2022 08:18:43 -0700 (PDT)
+X-QQ-mid: bizesmtp86t1661095069tc954e3m
 Received: from localhost.localdomain ( [182.148.14.124])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 21 Aug 2022 23:15:59 +0800 (CST)
+        id ; Sun, 21 Aug 2022 23:17:47 +0800 (CST)
 X-QQ-SSF: 0100000000200020B000B00A0000000
-X-QQ-FEAT: uGhnJwy6xZJX01K/LbZyqMYpBBnOjubtMfasGJ5PC2oBqcDuF54HwwQotXyyf
-        Y0KVlIOubZQvZfCfgqDj7Vjc1RUn9GgjnPPH56br6y5WIIk/zn3pke+/oc7XnOmEt6yQurX
-        PYoBtGSxDn1NNyTvm49zhpVwIFZytV1qlDLLQA5YJkgtGxvnjQNFzxIGUR1SJoPacncVcmZ
-        ANiXecLvQv2vyUsnlMp/Uey8rz3WtwBTSzl+77wn3xWqO+8T8Nkh6JZg7uUYzOKKyMsINSS
-        WRsjX7fbsxYzMw7ctBCvJq0LVrzEcoIdjsHNWArW9DHWWrHXS40QccBQWsSX+HU8b5t+awY
-        gKQyA8/6ZYI0Dur2kOYAJwkUozcNSG4hQlBedVBnvQlphGo1x4=
+X-QQ-FEAT: izenvNSMpb3gtRz8+W5DAvZl10fG1gGBitJeiiRFwcysCI39olkCmNxFNcFss
+        zK21zWomF2tDfNNk/DyVCVLXGPtGqq9BSQxA6OrVAqaORlIxBHkr3K7nXHro4eNVT04OCcl
+        OAuwH9aaBBuZeYeprEnVzNgnBZGFqGMtOfYnYiEDyJrziB7Dt/3JEiH2JDqV1EKXwuAswiG
+        Aok4cfvJJcYJSKZSlH34vyXpMCQG9BOkgquCUuWI8rt+0jAIh6DBRNZIY7CBdYwUufLh0IB
+        00HjO0qMugdR6dMmhdbUq8V5m+OubbrvTNrq/+jPtjWQi462LR9eyqet40W5o1mbygZy6Rg
+        GyaI3KyKlJoIBj6kdCIR5FO8UrSBBuGbBSZ/hzyiG5bqvaCmBs=
 X-QQ-GoodBg: 0
 From:   wangjianli <wangjianli@cdjrlc.com>
-To:     mchehab@kernel.org
+To:     awalls@md.metrocast.net, mchehab@kernel.org
 Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         wangjianli <wangjianli@cdjrlc.com>
-Subject: [PATCH] i2c/cx25840: fix repeated words in comments
-Date:   Sun, 21 Aug 2022 23:15:52 +0800
-Message-Id: <20220821151552.58514-1-wangjianli@cdjrlc.com>
+Subject: [PATCH] pci/cx18: fix repeated words in comments
+Date:   Sun, 21 Aug 2022 23:17:41 +0800
+Message-Id: <20220821151741.59550-1-wangjianli@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -47,22 +47,22 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
 ---
- drivers/media/i2c/cx25840/cx25840-ir.c | 2 +-
+ drivers/media/pci/cx18/cx18-firmware.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/cx25840/cx25840-ir.c b/drivers/media/i2c/cx25840/cx25840-ir.c
-index 9d7d1d149f1a..8cef9656c612 100644
---- a/drivers/media/i2c/cx25840/cx25840-ir.c
-+++ b/drivers/media/i2c/cx25840/cx25840-ir.c
-@@ -196,7 +196,7 @@ static u32 clock_divider_to_resolution(u16 divider)
- {
- 	/*
- 	 * Resolution is the duration of 1 tick of the readable portion of
--	 * of the pulse width counter as read from the FIFO.  The two lsb's are
-+	 * the pulse width counter as read from the FIFO.  The two lsb's are
- 	 * not readable, hence the << 2.  This function returns ns.
+diff --git a/drivers/media/pci/cx18/cx18-firmware.c b/drivers/media/pci/cx18/cx18-firmware.c
+index fdac310d7477..1b038b2802bf 100644
+--- a/drivers/media/pci/cx18/cx18-firmware.c
++++ b/drivers/media/pci/cx18/cx18-firmware.c
+@@ -248,7 +248,7 @@ void cx18_init_power(struct cx18 *cx, int lowpwr)
+ 	 *
+ 	 * Many thanks to Jeff Campbell and Mike Bradley for their extensive
+ 	 * investigation, experimentation, testing, and suggested solutions of
+-	 * of audio/video sync problems with SVideo and CVBS captures.
++	 * audio/video sync problems with SVideo and CVBS captures.
  	 */
- 	return DIV_ROUND_CLOSEST((1 << 2)  * ((u32) divider + 1) * 1000,
+ 
+ 	/* the fast clock is at 200/245 MHz */
 -- 
 2.36.1
 
