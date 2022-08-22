@@ -2,72 +2,74 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AA54C3814E
-	for <linux-media@archiver.kernel.org>; Mon, 22 Aug 2022 06:32:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFCF3C32774
+	for <linux-media@archiver.kernel.org>; Mon, 22 Aug 2022 06:49:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233175AbiHVGcT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Aug 2022 02:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52200 "EHLO
+        id S232615AbiHVGtD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Aug 2022 02:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233143AbiHVGcO (ORCPT
+        with ESMTP id S232202AbiHVGtA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Aug 2022 02:32:14 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32690286DA;
-        Sun, 21 Aug 2022 23:32:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661149930; x=1692685930;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QGOOUVY1UttGpoh4fn64fD2DCKVeoaHT6Wdx5UQslNc=;
-  b=YnhQ1XXnzelEJyCWykCpvpmCBhi27gWKcC8On3xzOcxlueCNnI0Kwh39
-   BQdjCGBWo/9ob6iQPJYMLE306JESLUL+B6j6rh9VE6wDnSSTH0VhDWCjP
-   DPzXKYNlgQDWuqHllwtyo4vEUqtzYskAhZETQ0BuEkbhhfvR1ErisXROA
-   BOOyXb64tdmnAfRKqHhXZKDmvD+uUQEKUE/H8Lr1RWN/MFs7RSv2kVPHH
-   v3DMIuIEZQCbmoieEiq/A8GvYNY57xyFz31zqi9R6Kga4zGcdd56ZkABR
-   OhfcURrdgKflpVng1+SiDUyz+RgRGDxnOLJOTMdzvE//3Wj7J+xFG2ulj
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="319366786"
-X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
-   d="scan'208";a="319366786"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2022 23:32:09 -0700
-X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
-   d="scan'208";a="712056636"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2022 23:32:07 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id BF63A20656;
-        Mon, 22 Aug 2022 09:31:35 +0300 (EEST)
-Date:   Mon, 22 Aug 2022 06:31:35 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     mchehab@kernel.org, laurent.pinchart+renesas@ideasonboard.com,
-        jacopo+renesas@jmondi.org, akinobu.mita@gmail.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH 3/4] media: mt9m111: fix device power usage
-Message-ID: <YwMix1+Bm1jEbWqv@paasikivi.fi.intel.com>
-References: <20220818144712.997477-1-m.felsch@pengutronix.de>
- <20220818144712.997477-3-m.felsch@pengutronix.de>
+        Mon, 22 Aug 2022 02:49:00 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE251902C;
+        Sun, 21 Aug 2022 23:48:56 -0700 (PDT)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 7C40AFF804;
+        Mon, 22 Aug 2022 06:48:53 +0000 (UTC)
+Date:   Mon, 22 Aug 2022 08:48:51 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     wangjianli <wangjianli@cdjrlc.com>
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] platform/renesas: fix repeated words in comments
+Message-ID: <20220822064851.hkspsfw47etr4ovq@uno.localdomain>
+References: <20220821145435.49842-1-wangjianli@cdjrlc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220818144712.997477-3-m.felsch@pengutronix.de>
+In-Reply-To: <20220821145435.49842-1-wangjianli@cdjrlc.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Marco,
+Hello wangjianli
 
-On Thu, Aug 18, 2022 at 04:47:11PM +0200, Marco Felsch wrote:
-> Currently the driver turn off the power after probe and toggle it during
-> .stream by using the .s_power callback. This is problematic since other
-> callbacks like .set_fmt accessing the hardware as well which will fail.
-> So in the end the default format is the only supported format.
+On Sun, Aug 21, 2022 at 10:54:35PM +0800, wangjianli wrote:
+>  Delete the redundant word 'on'.
+ ^ unecessary space, can be fixed when applying maybe ?
 
-It'd be much better to add runtime PM support to the driver instead.
+>
+> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
 
--- 
-Sakari Ailus
+Is this your full name ? Should it be spelled with spaces ?
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html#developer-s-certificate-of-origin-1-1
+
+I'm sorry to ask, but I'm actually not sure if the signature here
+counts as your full name or not
+
+The patch is obviously fine
+Acked-by: Jacopo Mondi <jacopo@jmondi.org>
+
+
+> ---
+>  drivers/media/platform/renesas/renesas-ceu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/media/platform/renesas/renesas-ceu.c b/drivers/media/platform/renesas/renesas-ceu.c
+> index f70f91b006b7..69723b51e4dc 100644
+> --- a/drivers/media/platform/renesas/renesas-ceu.c
+> +++ b/drivers/media/platform/renesas/renesas-ceu.c
+> @@ -1101,7 +1101,7 @@ static int ceu_open(struct file *file)
+>  		return ret;
+>
+>  	mutex_lock(&ceudev->mlock);
+> -	/* Causes soft-reset and sensor power on on first open */
+> +	/* Causes soft-reset and sensor power on first open */
+>  	ret = pm_runtime_resume_and_get(ceudev->dev);
+>  	mutex_unlock(&ceudev->mlock);
+>
+> --
+> 2.36.1
+>
