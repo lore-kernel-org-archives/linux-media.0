@@ -2,118 +2,102 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C136DC28D13
-	for <linux-media@archiver.kernel.org>; Mon, 22 Aug 2022 08:04:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 915DDC32789
+	for <linux-media@archiver.kernel.org>; Mon, 22 Aug 2022 08:07:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233490AbiHVIET (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Aug 2022 04:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55160 "EHLO
+        id S233814AbiHVIHB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Aug 2022 04:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233393AbiHVIEE (ORCPT
+        with ESMTP id S233817AbiHVIGk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Aug 2022 04:04:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452092CDEA
-        for <linux-media@vger.kernel.org>; Mon, 22 Aug 2022 01:03:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661155379;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OcGMrHwXxery3fNfqLaGaKLxZkus6uNZDMgbem/2nFM=;
-        b=dA3XccPXmfYle+H/uVi4TRYVbWTZgR75Og9Uc9D7IJcaLPbxrA4sL1hsi7SnapNfQ/tXic
-        NZFqCPmRh2gt4AVkeg89uAYAxrw/Y6aQdtQE0/a0wyVzkTWHwSgom4pXtu1QEMgHDqOxWG
-        HnWvXQeBZWzbdyYxhjECLJ1LwnEKCFU=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-661-R3vWdyELPCiVO3d--YEVig-1; Mon, 22 Aug 2022 04:02:58 -0400
-X-MC-Unique: R3vWdyELPCiVO3d--YEVig-1
-Received: by mail-ed1-f71.google.com with SMTP id z20-20020a05640235d400b0043e1e74a495so6578196edc.11
-        for <linux-media@vger.kernel.org>; Mon, 22 Aug 2022 01:02:58 -0700 (PDT)
+        Mon, 22 Aug 2022 04:06:40 -0400
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A9ADEDB;
+        Mon, 22 Aug 2022 01:06:17 -0700 (PDT)
+Received: by mail-qt1-f173.google.com with SMTP id cr9so7297165qtb.13;
+        Mon, 22 Aug 2022 01:06:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=OcGMrHwXxery3fNfqLaGaKLxZkus6uNZDMgbem/2nFM=;
-        b=htU4p79ZYGhleWIOdtl3RxvFZ9K2bzUMj7ABKbY6Vhb85zWgAgQrQNPI1ZQmLqNBkX
-         kvxdKlR/EduZbnF68+4GvLzoyrpjKlh0BrFrv4npQSNhfZ7b4McOQL33S5Xwjjre4lnR
-         S5K9JciEamiYeypsuXdgANTjC9xYvZRYP4ftJ9s8LNmkblwne8uH4gpL8oLB/+fSv5CH
-         WMZFwUfo5gP9MDlc46kGI/7GG9nAEk84qi2F0AQ5H6vK+dxBF89hxPRYjRodSzXDmmC2
-         C1zojic+MRUdlj/mcaNlP03ggEvxNokbNnWFosQwF9qtHQllYdyuMAn1sksntrFBopCX
-         WDBw==
-X-Gm-Message-State: ACgBeo25fasnspudFBafQ+u4SNj7bl8vM/mirFMNy2CFzpOuComYRIV3
-        n9oQNQ/1gL1QOWMqPc4SmgrqIHDR5/lyNWTW21UNo+KApD07NUfjRPCK0TZuxMbdOU0vyFQTOin
-        9tvyEsSY368eZyI39cySe3p0=
-X-Received: by 2002:a05:6402:3681:b0:446:ba68:573f with SMTP id ej1-20020a056402368100b00446ba68573fmr3719941edb.137.1661155377267;
-        Mon, 22 Aug 2022 01:02:57 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6Gfim5h1SgIV/zy7BtMc/ezzHDZEzqwL1iP/GBBwg4aVt3oJszr8kbB08Z744PGCKfrL9F3A==
-X-Received: by 2002:a05:6402:3681:b0:446:ba68:573f with SMTP id ej1-20020a056402368100b00446ba68573fmr3719931edb.137.1661155377126;
-        Mon, 22 Aug 2022 01:02:57 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id o26-20020a170906289a00b0071cbc7487e1sm5784243ejd.69.2022.08.22.01.02.56
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=BZuv70St0sfOAw+lBqzRl+fUBQWph+V4RqtW+LWAJXE=;
+        b=HpCMa5q0BkC8C6NA7QON4b4dwUPm6vJObWQTWTcXsGnVVOxeOF19mR3YDnK+jRmbmT
+         dnIsRhOKt8oxttFWj1sKWO/C1Hhlfm1mdvaLslRTo9QTy4AipTjbe0t8S0iPfR1+wx0Y
+         iO687VPfF9HxH9cS2MFhA+KYHl6nbnGHuS/atql0Dc/nXnVpT5jeF8ysJZKZweB7yQxk
+         n+dIDlGCoGRAVafesKTUDBiyz7jpLxm6nbHBwK+oQ55HTNDXTsMnhXDz4X8BLQdCC5qY
+         R8AySjmroAwGCFCIBqqEu1rQkgOBWc5qECCh4MKpH945vDUtQLNiwajcmQg6OOufBohA
+         ATXQ==
+X-Gm-Message-State: ACgBeo3H8bkl8lxQrxO9KEhIYH/KpzY25jR9hEIkJxuF3L+EqRBX9vjX
+        44AZquT9bQfWSoGXY7sZo90xRnw8iXvzAA==
+X-Google-Smtp-Source: AA6agR4Lz7xnFu8617hLfifGepI/cBlsg6L4EdUGzbKwBzxcUkrB/7bb1SsSbLQ/qR8JteQ9j6+aHA==
+X-Received: by 2002:a05:622a:95:b0:343:66b1:d32a with SMTP id o21-20020a05622a009500b0034366b1d32amr14111455qtw.32.1661155576434;
+        Mon, 22 Aug 2022 01:06:16 -0700 (PDT)
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
+        by smtp.gmail.com with ESMTPSA id t13-20020a05620a450d00b006bb6c63114fsm10930354qkp.110.2022.08.22.01.06.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Aug 2022 01:02:56 -0700 (PDT)
-Message-ID: <3834201e-95a3-02e7-c549-e5630fb64892@redhat.com>
-Date:   Mon, 22 Aug 2022 10:02:55 +0200
+        Mon, 22 Aug 2022 01:06:16 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-33365a01f29so271503647b3.2;
+        Mon, 22 Aug 2022 01:06:15 -0700 (PDT)
+X-Received: by 2002:a25:e004:0:b0:695:d8b6:57e7 with SMTP id
+ x4-20020a25e004000000b00695d8b657e7mr3698ybg.380.1661155575524; Mon, 22 Aug
+ 2022 01:06:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 01/13] media: atomisp_gmin_platform: Switch to use
- acpi_evaluate_dsm_typed()
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Yury Luneff <yury.lunev@gmail.com>,
-        Nable <nable.maininbox@googlemail.com>,
-        "andrey.i.trufanov" <andrey.i.trufanov@gmail.com>,
-        Fabio Aiuto <fabioaiuto83@gmail.com>,
+References: <20220821145435.49842-1-wangjianli@cdjrlc.com>
+In-Reply-To: <20220821145435.49842-1-wangjianli@cdjrlc.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 22 Aug 2022 10:06:03 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWCJCcs4thnjuwa9ZpLCdtFgptLUd9eo_gAvuKwGhG-jw@mail.gmail.com>
+Message-ID: <CAMuHMdWCJCcs4thnjuwa9ZpLCdtFgptLUd9eo_gAvuKwGhG-jw@mail.gmail.com>
+Subject: Re: [PATCH] platform/renesas: fix repeated words in comments
+To:     wangjianli <wangjianli@cdjrlc.com>
+Cc:     Jacopo Mondi <jacopo@jmondi.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-staging@lists.linux.dev,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20220821215027.461344-1-hdegoede@redhat.com>
- <CAHp75VfV-goir434sZfwLhoCZbu48uZ0pcwdjfG7WzX_-eVuPw@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAHp75VfV-goir434sZfwLhoCZbu48uZ0pcwdjfG7WzX_-eVuPw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Hi Wangjianli,
 
-On 8/22/22 00:31, Andy Shevchenko wrote:
-> On Mon, Aug 22, 2022 at 12:50 AM Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->>
->> The acpi_evaluate_dsm_typed() provides a way to check the type of the
->> object evaluated by _DSM call. Use it instead of open coded variant.
->>
->> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->> Link: https://lore.kernel.org/r/20220730155905.90091-1-andriy.shevchenko@linux.intel.com
->> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
->> Tested-by: Hans de Goede <hdegoede@redhat.com>
->> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> 
-> Thanks!
-> I believe the v2 of this patch (when it was sent standalone) has been
-> Acked by Sakari. But I might be wrong.
+On Sun, Aug 21, 2022 at 4:58 PM wangjianli <wangjianli@cdjrlc.com> wrote:
+>  Delete the redundant word 'on'.
+>
+> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
 
-You are right:
-https://lore.kernel.org/linux-media/Yud2hzq3JQBzf+oK@paasikivi.fi.intel.com/
+Thanks for your patch!
 
-So let me add that here, then patchwork should pick it up:
+> --- a/drivers/media/platform/renesas/renesas-ceu.c
+> +++ b/drivers/media/platform/renesas/renesas-ceu.c
+> @@ -1101,7 +1101,7 @@ static int ceu_open(struct file *file)
+>                 return ret;
+>
+>         mutex_lock(&ceudev->mlock);
+> -       /* Causes soft-reset and sensor power on on first open */
+> +       /* Causes soft-reset and sensor power on first open */
 
-Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+The double "on" is actually correct.  Please ask yourself the question:
+"When should the sensor be powered on?".
+Answer: "On first open".
 
-Regards,
+Personally, I would have written "power-on" instead of "power on"
+(cfr. "soft-reset"), so perhaps it's a good idea to make that change,
+to prevent the next person looking for double words falling for
+this again?
 
-Hans
+>         ret = pm_runtime_resume_and_get(ceudev->dev);
+>         mutex_unlock(&ceudev->mlock);
 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
