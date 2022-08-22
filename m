@@ -2,88 +2,78 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60F9BC32772
-	for <linux-media@archiver.kernel.org>; Mon, 22 Aug 2022 15:22:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F45BC28D13
+	for <linux-media@archiver.kernel.org>; Mon, 22 Aug 2022 15:23:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236560AbiHVPWS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Aug 2022 11:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55606 "EHLO
+        id S236574AbiHVPXU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Aug 2022 11:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235607AbiHVPWD (ORCPT
+        with ESMTP id S236488AbiHVPV7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Aug 2022 11:22:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC7B3DBE3;
-        Mon, 22 Aug 2022 08:15:13 -0700 (PDT)
+        Mon, 22 Aug 2022 11:21:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3348E419AF;
+        Mon, 22 Aug 2022 08:15:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D855D610A3;
-        Mon, 22 Aug 2022 15:15:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 411D6C433C1;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88AD7B8124B;
+        Mon, 22 Aug 2022 15:15:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45B43C433D7;
         Mon, 22 Aug 2022 15:15:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1661181312;
-        bh=/TNMqXAFkzzbD2nFZOZ+zBMA3FkHrzThtNSNS4wQTRo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=anMmDAU/uld9xgko3X5FETrFRedS3WY/nROOoODI38BxFOZfWl40rHDS3kkQT8wAD
-         fTihu/DAVOjYjHmNpiae4Xif4oMdiUybw7RzYodfu7HoE9Ge036smsOl0Et9Tfsimq
-         hTUaaZgwaOGWp06MuVG/r5l1VBZTymVP6xVfo2qFYdGh92Yw+C4ajtIslQ5jYzXvYs
-         cvoTg5KUiegWlYqmYdwVQRijF+lInrKN6DFOLubDBKVLgSvO/Bj4DQ9n8ItQWEZPXY
-         +6TW3s0Mskezycy8t2biLpisyzAyja+sBMb6s0Fv23nI0UfWt/BjgBeYiYrUMkAlT5
-         ypCVM6g3ECDuQ==
+        bh=oOBpV+kQLcdiRCH072jVwXy/v1KyShAjHL22oLdvKHA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HsrBkCQWygotKWt7en6snLQp4SqotmjCROvU3SBDUbETbDylHfFwl7Hr+k0FWJepv
+         7ENSIdVG19jlULLzwf5i0Etae9QAT5rAxG2B0Iz0wdJgDr+hRZdGhSkwFLIr7yD33R
+         /1FtusFInldvFnVWqwhmOn4UZG/Tjpn9CNnN4GfzefpbV0xbjH+b/gyQf25j4/ci0i
+         D+5M9JAlNqGtaRwdKHK4qOdAHwbzGq9M5pTIFKlJipuOiGN4H0vWzHjqZVsqQpZDd8
+         8+kGq07VcgqPha0SfwBRngp6u9yccyiN7rUUSTTKMLikE5spiTWoTMK26Lp1eOD5w1
+         4oOXWUEPmqLSw==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1oQ98w-00074j-EV; Mon, 22 Aug 2022 17:15:10 +0200
+        id 1oQ98w-00074f-7o; Mon, 22 Aug 2022 17:15:10 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan@kernel.org>
-Subject: [PATCH RESEND 2/3] media: flexcop-usb: clean up URB initialisation
-Date:   Mon, 22 Aug 2022 17:14:55 +0200
-Message-Id: <20220822151456.27178-3-johan@kernel.org>
+Subject: [PATCH RESEND 0/3] media: flexcop-usb: probe cleanups
+Date:   Mon, 22 Aug 2022 17:14:53 +0200
+Message-Id: <20220822151456.27178-1-johan@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220822151456.27178-1-johan@kernel.org>
-References: <20220822151456.27178-1-johan@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Clean up URB initialisation somewhat by introducing a temporary variable
-and separating declaration and non-trivial initialisation.
+This series cleans up the probe helper functions a bit to make the code
+more readable.
 
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/media/usb/b2c2/flexcop-usb.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+It has been two months and two completely ignored reminders since this
+was first posted so resending.
 
-diff --git a/drivers/media/usb/b2c2/flexcop-usb.c b/drivers/media/usb/b2c2/flexcop-usb.c
-index 31dd37d8236c..7102b346db05 100644
---- a/drivers/media/usb/b2c2/flexcop-usb.c
-+++ b/drivers/media/usb/b2c2/flexcop-usb.c
-@@ -425,12 +425,14 @@ static void flexcop_usb_transfer_exit(struct flexcop_usb *fc_usb)
- 
- static int flexcop_usb_transfer_init(struct flexcop_usb *fc_usb)
- {
--	u16 frame_size = le16_to_cpu(
--		fc_usb->uintf->cur_altsetting->endpoint[0].desc.wMaxPacketSize);
--	int bufsize = B2C2_USB_NUM_ISO_URB * B2C2_USB_FRAMES_PER_ISO *
--		frame_size, i, j, ret;
-+	struct usb_host_interface *alt = fc_usb->uintf->cur_altsetting;
-+	u16 frame_size;
-+	int bufsize, i, j, ret;
- 	int buffer_offset = 0;
- 
-+	frame_size = le16_to_cpu(alt->endpoint[0].desc.wMaxPacketSize);
-+	bufsize = B2C2_USB_NUM_ISO_URB * B2C2_USB_FRAMES_PER_ISO * frame_size;
-+
- 	deb_ts("creating %d iso-urbs with %d frames each of %d bytes size = %d.\n",
- 	       B2C2_USB_NUM_ISO_URB,
- 			B2C2_USB_FRAMES_PER_ISO, frame_size, bufsize);
+Can someone please pick this up and let me know when that has been done?
+
+Note that these apply on top of the fix resent here:
+
+	https://lore.kernel.org/r/20220822151027.27026-1-johan@kernel.org
+
+Johan
+
+
+Johan Hovold (3):
+  media: flexcop-usb: clean up endpoint sanity checks
+  media: flexcop-usb: clean up URB initialisation
+  media: flexcop-usb: use usb_endpoint_maxp()
+
+ drivers/media/usb/b2c2/flexcop-usb.c | 22 ++++++++++++++--------
+ 1 file changed, 14 insertions(+), 8 deletions(-)
+
 -- 
 2.35.1
 
