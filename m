@@ -2,195 +2,154 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A8DFC32772
-	for <linux-media@archiver.kernel.org>; Tue, 23 Aug 2022 17:22:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B761C32774
+	for <linux-media@archiver.kernel.org>; Tue, 23 Aug 2022 17:22:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbiHWRWF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Aug 2022 13:22:05 -0400
+        id S229728AbiHWRWN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Aug 2022 13:22:13 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237849AbiHWRUn (ORCPT
+        with ESMTP id S233780AbiHWRU1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:20:43 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B2F48C85;
-        Tue, 23 Aug 2022 07:57:10 -0700 (PDT)
-Received: by mail-oi1-f170.google.com with SMTP id r124so767423oig.11;
-        Tue, 23 Aug 2022 07:57:10 -0700 (PDT)
+        Tue, 23 Aug 2022 13:20:27 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB1A86B51
+        for <linux-media@vger.kernel.org>; Tue, 23 Aug 2022 06:44:25 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id h22so10360418qtu.2
+        for <linux-media@vger.kernel.org>; Tue, 23 Aug 2022 06:44:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc;
+        bh=HYUWsAYXjW2i318BjbGbbKb+gkXQpUmwzmEIHMqDu5I=;
+        b=e4JErC0om1kvlDhOah9NQNcK+mXjibntNm23OS49JJRMoTF5yVIe6jgHxK1+mhwkan
+         CO91j95hoO+ZUqzvsHtB+vnZLWg5cZJTdAZd/KyriCrgfWZdH7J4b2bD2+oxHYpW5Ynh
+         bkfus5PrWDnnJai7yYslwwf0RJuvDjfZaW+T0ptWq1/uK1BfD0hq28qJyA5EosXuFBwl
+         LkroYPa5I6Jo56BQ5J86APmQj3fL+ojhLy+K7MEeJcpl/hMMdk9E+NQb6kTG1BmUr1Im
+         sChiFOU8KqdQH94ddHL7Teh5gp6YtpdjEWwaUUOb6/Dvss/yiCnPdZp8HNkmZgcmZZ5n
+         Xyhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=4YuS4HI68dpdCocwhLeIeeGS4ftqZiziN5EXiO7crA0=;
-        b=tDyXzN1+v55nD7xSXwVFQB2PVhjT45q8RiCIieSqCyCPMm9SO7lDTD0F9J+VS1q1JW
-         uS2ox8ArzMTbGpd9OZaenxIIOK2XnYQrcoqhmqW2DQurAzryYtcTJje5HKd3PqU9NYcF
-         XewvG9xDo6wSmS1qjnMCFprVstb9B6VXKe+H0Sj4Zt+D459bfYyq05vZI97GJFgG4Npu
-         9qBEjRyfhIx1CbLqV42GjvA6NKwBifaseXUDdYtvPnLZM5lqOvMJoeJ1F8KXNogERnUx
-         oFZEQ4ymZRhDMNkw4VR08qHkA/aoiT+vWAx1D8dL9cNGd5BZtkO2R92WwWxHMnGyOrOp
-         fxGg==
-X-Gm-Message-State: ACgBeo20xpvEW6Tsc+7cNzpNWcKRqMcuRz0PnY8hFJpzGoykZ06sscB+
-        tlH4363jm4msIa8Dq2w9XQ==
-X-Google-Smtp-Source: AA6agR6aV+kVQQS+QoS0wLg0mn5D1XAbCDSdtcW45YblNWzO71PigaVr4fBZd/f7/NyH9C0q+MQ7AA==
-X-Received: by 2002:aca:a8c5:0:b0:343:8774:d82 with SMTP id r188-20020acaa8c5000000b0034387740d82mr1563122oie.249.1661266630078;
-        Tue, 23 Aug 2022 07:57:10 -0700 (PDT)
-Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.googlemail.com with ESMTPSA id t1-20020a056870600100b0011c65559b04sm3840637oaa.34.2022.08.23.07.57.08
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc;
+        bh=HYUWsAYXjW2i318BjbGbbKb+gkXQpUmwzmEIHMqDu5I=;
+        b=w7AZ936JhRz9ZHekEtaXiRL91NdsNdciq0BFoMOMyLk9RfD9hHqBL4kk8y/81dlyUL
+         KZk/W1BoZINv06CFbGhLnIatGno2OnQLnspJ2bhgew2a19Q+PICwVChdiOefBsyOFzfS
+         5j3yZXZ+Ap0ZeH4sD9G4evOBankxD0RUi3f5O/bpFrmJo/UnD0heuVnqgMjB+MpNeZOz
+         JJdc81oYvUTBLOzCUCe+ZKlA2qK+4pcXniUg9i2KDNx7IGuUMv0mK5jRFIVi/z3Z15aU
+         4T2VyPC+a/tS7kKysGlEVwlngQEdqP3YZEFlmyhr7vEIHNshhy9BwCEGJF6kTSgML2n0
+         73Eg==
+X-Gm-Message-State: ACgBeo216flj/HD3wRgFFU4yq54WPaIxl2Nk8CYocJyWQWS7GuWshUJ9
+        hJ5DCm7rxoJXR5Buggt2Wk8OVA==
+X-Google-Smtp-Source: AA6agR4t4vEazDNxYLh6eNEskT0+EKTIuQlsSu8YV3eXOkr/7tQ7UIDxzDgxf4QyRfzrcYAMvvoZeg==
+X-Received: by 2002:ac8:7e83:0:b0:344:7ee0:1241 with SMTP id w3-20020ac87e83000000b003447ee01241mr19324435qtj.587.1661262264917;
+        Tue, 23 Aug 2022 06:44:24 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
+        by smtp.gmail.com with ESMTPSA id v16-20020a05620a0f1000b006b97151d2b3sm13198030qkl.67.2022.08.23.06.44.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 07:57:09 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     Eugen Hristev <eugen.hristev@microchip.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Del Regno <angelogioacchino.delregno@collabora.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH] media: dt-bindings: Add missing (unevaluated|additional)Properties on child nodes
-Date:   Tue, 23 Aug 2022 09:56:34 -0500
-Message-Id: <20220823145649.3118479-3-robh@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 23 Aug 2022 06:44:24 -0700 (PDT)
+Message-ID: <ede840d10677041d2c8d0a07b81b3cd55a6c92ba.camel@ndufresne.ca>
+Subject: Re: [PATCH 2/2] [WIP]: media: Add Synaptics compressed tiled format
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Hsia-Jun Li <Randy.Li@synaptics.com>
+Cc:     Tomasz Figa <tfiga@chromium.org>, dri-devel@lists.freedesktop.org,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, sakari.ailus@linux.intel.com,
+        ribalda@chromium.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sebastian.hesselbarth@gmail.com, jszhang@kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Date:   Tue, 23 Aug 2022 09:44:22 -0400
+In-Reply-To: <2f3c8f6d-fc01-353e-fb74-b7f9af1ed2c4@synaptics.com>
+References: <20220808162750.828001-1-randy.li@synaptics.com>
+         <20220808162750.828001-3-randy.li@synaptics.com>
+         <CAAFQd5AKjpJ+fPAeCqdNnJbS4R7SdaHkfyW4qG1xXr-sE801pQ@mail.gmail.com>
+         <13d37c15-79f3-4e16-8cf4-fc37846f4a04@synaptics.com>
+         <Yv7HnHE7bLmgq5D0@pendragon.ideasonboard.com>
+         <6da7faf329128312f0862f555d1a855437ae99f3.camel@ndufresne.ca>
+         <50dd9b7a-8f48-0799-57f6-048d20de8dcc@synaptics.com>
+         <2662ac698898f71f60b9b7e0ad4703854de1d012.camel@ndufresne.ca>
+         <1f926989-eb13-14ee-e30d-ac6d01b86c52@synaptics.com>
+         <e15165f60ce801dd502bfe1992ea430fe37c5a91.camel@ndufresne.ca>
+         <2f3c8f6d-fc01-353e-fb74-b7f9af1ed2c4@synaptics.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In order to ensure only documented properties are present, node schemas
-must have unevaluatedProperties or additionalProperties set to false
-(typically).
+Le mardi 23 ao=C3=BBt 2022 =C3=A0 15:40 +0800, Hsia-Jun Li a =C3=A9crit=C2=
+=A0:
+> > In current state, If your driver can support it, userland does not stri=
+ctly
+> > need
+> > to re-allocate if the resolution is changed to smaller. In most SVC
+> > scenarios,
+> > the largest resolution is known in advance, so pre-allocation can happe=
+n to
+> > the
+> When you play a video from Youtube, you may notice that starting=20
+> resolution is low, then after it received more data knowning the=20
+> bandwidth is enough, it would switch to a higher resolution. I don't=20
+> think it would inform the codecs2 or OMX there is a higher target=20
+> resolution.
+>=20
+> Besides, for the case of SVC in a conference system, the remote(gatway)=
+=20
+> would not tell you there is a higer resolution or frame rate because you=
+=20
+> can't receive it in negotiate stage, it could be permanently(device=20
+> capability) or just bandwidth problem. Whether we know there is a higher=
+=20
+> requirement video depends on the transport protocols used here.
+>=20
+> The basic idea of SVC is that the low layer didn't depends on the upper=
+=20
+> layer, we can't tell how the bitstream usually.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/media/microchip,csi2dc.yaml   | 2 ++
- Documentation/devicetree/bindings/media/qcom,msm8916-venus.yaml | 1 +
- Documentation/devicetree/bindings/media/qcom,msm8996-venus.yaml | 1 +
- Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml  | 1 +
- Documentation/devicetree/bindings/media/qcom,sc7280-venus.yaml  | 1 +
- Documentation/devicetree/bindings/media/qcom,sdm660-venus.yaml  | 1 +
- .../devicetree/bindings/media/qcom,sdm845-venus-v2.yaml         | 1 +
- Documentation/devicetree/bindings/media/qcom,sdm845-venus.yaml  | 1 +
- Documentation/devicetree/bindings/media/qcom,sm8250-venus.yaml  | 1 +
- 9 files changed, 10 insertions(+)
+I'm not saying against the fact the for drivers without IOMMU (hitting dire=
+ctly
+into the CMA allocator), allocation latency is massive challenge, and a
+mechanism to smoothly reallocate (rather then mass-reallocation) is needed =
+in
+the long run. This is what I'm referring to when saying that folks have
+considered extending CREATE_BUFS() with a DELETE_BUFS() ioctl.
 
-diff --git a/Documentation/devicetree/bindings/media/microchip,csi2dc.yaml b/Documentation/devicetree/bindings/media/microchip,csi2dc.yaml
-index e8544fb2d034..b3a345fc6464 100644
---- a/Documentation/devicetree/bindings/media/microchip,csi2dc.yaml
-+++ b/Documentation/devicetree/bindings/media/microchip,csi2dc.yaml
-@@ -75,6 +75,7 @@ properties:
-     properties:
-       port@0:
-         $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-         description:
-           Input port node, single endpoint describing the input port.
- 
-@@ -103,6 +104,7 @@ properties:
- 
-       port@1:
-         $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-         description:
-           Output port node, single endpoint describing the output port.
- 
-diff --git a/Documentation/devicetree/bindings/media/qcom,msm8916-venus.yaml b/Documentation/devicetree/bindings/media/qcom,msm8916-venus.yaml
-index 59ab16ad12f1..2abb7d21c0d1 100644
---- a/Documentation/devicetree/bindings/media/qcom,msm8916-venus.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,msm8916-venus.yaml
-@@ -68,6 +68,7 @@ properties:
- 
-   video-firmware:
-     type: object
-+    additionalProperties: false
- 
-     description: |
-       Firmware subnode is needed when the platform does not
-diff --git a/Documentation/devicetree/bindings/media/qcom,msm8996-venus.yaml b/Documentation/devicetree/bindings/media/qcom,msm8996-venus.yaml
-index 199f45217b4a..29d0cb6c6ebe 100644
---- a/Documentation/devicetree/bindings/media/qcom,msm8996-venus.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,msm8996-venus.yaml
-@@ -95,6 +95,7 @@ properties:
- 
-   video-firmware:
-     type: object
-+    additionalProperties: false
- 
-     description: |
-       Firmware subnode is needed when the platform does not
-diff --git a/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml b/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml
-index 90b4af2c9724..42ee3f06c6be 100644
---- a/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml
-@@ -86,6 +86,7 @@ properties:
- 
-   video-firmware:
-     type: object
-+    additionalProperties: false
- 
-     description: |
-       Firmware subnode is needed when the platform does not
-diff --git a/Documentation/devicetree/bindings/media/qcom,sc7280-venus.yaml b/Documentation/devicetree/bindings/media/qcom,sc7280-venus.yaml
-index e2874683b4d5..cf361dd9de08 100644
---- a/Documentation/devicetree/bindings/media/qcom,sc7280-venus.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,sc7280-venus.yaml
-@@ -86,6 +86,7 @@ properties:
- 
-   video-firmware:
-     type: object
-+    additionalProperties: false
- 
-     description: |
-       Firmware subnode is needed when the platform does not
-diff --git a/Documentation/devicetree/bindings/media/qcom,sdm660-venus.yaml b/Documentation/devicetree/bindings/media/qcom,sdm660-venus.yaml
-index 33da7d3cfd38..45e3f58f52bd 100644
---- a/Documentation/devicetree/bindings/media/qcom,sdm660-venus.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,sdm660-venus.yaml
-@@ -104,6 +104,7 @@ properties:
- 
-   video-firmware:
-     type: object
-+    additionalProperties: false
- 
-     description: |
-       Firmware subnode is needed when the platform does not
-diff --git a/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml b/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml
-index 177bf81544b1..8edc8a2f43a5 100644
---- a/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml
-@@ -81,6 +81,7 @@ properties:
- 
-   video-firmware:
-     type: object
-+    additionalProperties: false
- 
-     description: |
-       Firmware subnode is needed when the platform does not
-diff --git a/Documentation/devicetree/bindings/media/qcom,sdm845-venus.yaml b/Documentation/devicetree/bindings/media/qcom,sdm845-venus.yaml
-index 680f37726fdf..57d503373efe 100644
---- a/Documentation/devicetree/bindings/media/qcom,sdm845-venus.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,sdm845-venus.yaml
-@@ -96,6 +96,7 @@ properties:
- 
-   video-firmware:
-     type: object
-+    additionalProperties: false
- 
-     description: |
-       Firmware subnode is needed when the platform does not
-diff --git a/Documentation/devicetree/bindings/media/qcom,sm8250-venus.yaml b/Documentation/devicetree/bindings/media/qcom,sm8250-venus.yaml
-index ebf8f3d866a5..4b7a12523dcf 100644
---- a/Documentation/devicetree/bindings/media/qcom,sm8250-venus.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,sm8250-venus.yaml
-@@ -92,6 +92,7 @@ properties:
- 
-   video-firmware:
-     type: object
-+    additionalProperties: false
- 
-     description: |
-       Firmware subnode is needed when the platform does not
--- 
-2.34.1
+Note that there is tones of software trickery you can use to mitigate this.=
+ The
+most simple one is to use CREATE_BUFS() instead of REQBUFS(). Instead of
+reallocating all the buffers you need in one go, you would allocate them on=
+e by
+one. This will distribute allocation latency. For stateful CODEC, most OMX
+focused firmware needs to be modified for that, since they stick with the o=
+ld
+OMX spec which did not allow run-time allocation.
+
+Another trick is to use a second codec session. Both stateful/stateless COD=
+EC
+have support for concurrent decoding. On the MSE requirement, is that the s=
+tream
+transition happens only on keyframe boundary. Meaning, there is no need to =
+reuse
+the same session, you can create a new decoder in parallel, and that before=
+ the
+drain is complete (after the event, before the last buffer). This will comp=
+ress
+the "setup" latency, to the cost of some extra memory usage. Specially in t=
+he
+MSE case, this is nearly always possible since browsers do require support =
+for
+more then 1 concurrent decode. This method also works with OMX style CODEC
+without any modification.
+
+regards,
+Nicolas
+
+
 
