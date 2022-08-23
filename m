@@ -2,101 +2,104 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CABC1C32772
-	for <linux-media@archiver.kernel.org>; Tue, 23 Aug 2022 18:35:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 915F0C32789
+	for <linux-media@archiver.kernel.org>; Tue, 23 Aug 2022 18:54:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbiHWSfe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Aug 2022 14:35:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38038 "EHLO
+        id S233001AbiHWSyD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Aug 2022 14:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232509AbiHWSfP (ORCPT
+        with ESMTP id S233288AbiHWSxp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Aug 2022 14:35:15 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA5B110566
-        for <linux-media@vger.kernel.org>; Tue, 23 Aug 2022 09:57:39 -0700 (PDT)
-Received: from tr.lan (ip-86-49-12-201.bb.vodafone.cz [86.49.12.201])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id A21768026A;
-        Tue, 23 Aug 2022 18:57:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1661273857;
-        bh=BDeCVftnuCgXaxiPhFize3amFk9iVRmyIRCcJbNw7+s=;
-        h=From:To:Cc:Subject:Date:From;
-        b=w+JeclIMDwK+Re3Hes/O0DK8sJWCPyQyqVZ7r1WTbBm1UD/l+5hp1VptnigrnoTXU
-         QsY50mU2u0OGYcarGHZEOikiNzb/n4zXLcFK4w8HmnYHp5fug1l6qe7nMw35KrI/jk
-         MSySeiDRJX2gLTr1Js9hDbXOG+CcKPAA8rnmd407rC9kA5BybECzR00+rLlbI0CbLx
-         uQV0GvTPajN579lTPzVUG+ng6xmpnAhHwajQgsf0ncVWnCvze1tmHGrzFDwcAacFum
-         VgtDNIhHG3uuVhPU1nzX0m1vIe9Le5EJe9EscYBqhDtuUIDR1XAxQ4fCYruFz1jjMq
-         Q06fHgDGtxoHQ==
-From:   Marek Vasut <marex@denx.de>
+        Tue, 23 Aug 2022 14:53:45 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D377205D8
+        for <linux-media@vger.kernel.org>; Tue, 23 Aug 2022 10:18:49 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E430B484;
+        Tue, 23 Aug 2022 19:18:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1661275127;
+        bh=qc4dX5X6pcswRfuYM0u0Kk5nQTzPLRvQQ3wiK+TRz2g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=jm/670bQrEC9gfWreLhXIviKU0Q3dz7ikUl+rxizGDmJIE6C4W7wVvlD53NaXThxB
+         BSCeafu7i0BGJFJYSKIv9nh5D3IMA6gRBxFXf5waTwYxlhwY0ztYRKUvVoiImsjyVF
+         1uxyXj1zDkdXLQyLpnyEBih3mINTT4ULdRR48jbM=
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
-Cc:     Marek Vasut <marex@denx.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Stefan Riedmueller <s.riedmueller@phytec.de>
-Subject: [PATCH] media: mt9p031: Increase post-reset delay
-Date:   Tue, 23 Aug 2022 18:57:23 +0200
-Message-Id: <20220823165723.276156-1-marex@denx.de>
+Cc:     Dafna Hirschfeld <dafna@fastmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Florian Sylvestre <fsylvestre@baylibre.com>,
+        Paul Elder <paul.elder@ideasonboard.com>
+Subject: [PATCH v2 1/9] media: rkisp1: Initialize color space on ISP sink and source pads
+Date:   Tue, 23 Aug 2022 20:18:32 +0300
+Message-Id: <20220823171840.8958-2-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220823171840.8958-1-laurent.pinchart@ideasonboard.com>
+References: <20220823171840.8958-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The MT9P006 sensor driver sporadically fails to probe because the sensor
-responds with a NACK condition to I2C address on the bus during an attempt
-to read the sensor MT9P031_CHIP_VERSION register in mt9p031_registered().
+Initialize the four color space fields on the sink and source video pads
+of the ISP in the .init_cfg() operation. As the main use case for the
+ISP is to convert Bayer data to YUV, select a raw color space on the
+sink pad and a limited range quantization of SYCC on the source pad by
+default.
 
-Neither the MT9P006 nor MT9P031 datasheets are clear on reset signal timing.
-Older MT9M034 [1] datasheet provides those timing figures in Appendix-A and
-indicates it is necessary to wait 850000 EXTCLK cycles before starting any
-I2C communication.
-
-Add such a delay, which does make the sporadic I2C NACK go away, so it is
-likely similar constraint applies to this sensor.
-
-[1] https://www.onsemi.com/pdf/datasheet/mt9m034-d.pdf
-
-Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Dafna Hirschfeld <dafna@fastmail.com>
 ---
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Stefan Riedmueller <s.riedmueller@phytec.de>
----
- drivers/media/i2c/mt9p031.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Changes since v1:
 
-diff --git a/drivers/media/i2c/mt9p031.c b/drivers/media/i2c/mt9p031.c
-index 45f7b5e52bc39..7c83be5b9ec9d 100644
---- a/drivers/media/i2c/mt9p031.c
-+++ b/drivers/media/i2c/mt9p031.c
-@@ -307,6 +307,7 @@ static inline int mt9p031_pll_disable(struct mt9p031 *mt9p031)
+- Mention ISP in the subject line
+---
+ drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
+index a3c7d4d88387..a52b22824739 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
+@@ -553,12 +553,17 @@ static int rkisp1_isp_init_config(struct v4l2_subdev *sd,
+ 	struct v4l2_mbus_framefmt *sink_fmt, *src_fmt;
+ 	struct v4l2_rect *sink_crop, *src_crop;
  
- static int mt9p031_power_on(struct mt9p031 *mt9p031)
- {
-+	unsigned long delay;
- 	int ret;
++	/* Video. */
+ 	sink_fmt = v4l2_subdev_get_try_format(sd, sd_state,
+ 					      RKISP1_ISP_PAD_SINK_VIDEO);
+ 	sink_fmt->width = RKISP1_DEFAULT_WIDTH;
+ 	sink_fmt->height = RKISP1_DEFAULT_HEIGHT;
+ 	sink_fmt->field = V4L2_FIELD_NONE;
+ 	sink_fmt->code = RKISP1_DEF_SINK_PAD_FMT;
++	sink_fmt->colorspace = V4L2_COLORSPACE_RAW;
++	sink_fmt->xfer_func = V4L2_XFER_FUNC_NONE;
++	sink_fmt->ycbcr_enc = V4L2_YCBCR_ENC_601;
++	sink_fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
  
- 	/* Ensure RESET_BAR is active */
-@@ -334,7 +335,9 @@ static int mt9p031_power_on(struct mt9p031 *mt9p031)
- 	/* Now RESET_BAR must be high */
- 	if (mt9p031->reset) {
- 		gpiod_set_value(mt9p031->reset, 0);
--		usleep_range(1000, 2000);
-+		/* Wait 850000 EXTCLK cycles before de-asserting reset. */
-+		delay = DIV_ROUND_UP(850000 * 1000, clk_get_rate(mt9p031->clk));
-+		msleep(delay);
- 	}
+ 	sink_crop = v4l2_subdev_get_try_crop(sd, sd_state,
+ 					     RKISP1_ISP_PAD_SINK_VIDEO);
+@@ -571,11 +576,16 @@ static int rkisp1_isp_init_config(struct v4l2_subdev *sd,
+ 					     RKISP1_ISP_PAD_SOURCE_VIDEO);
+ 	*src_fmt = *sink_fmt;
+ 	src_fmt->code = RKISP1_DEF_SRC_PAD_FMT;
++	src_fmt->colorspace = V4L2_COLORSPACE_SRGB;
++	src_fmt->xfer_func = V4L2_XFER_FUNC_SRGB;
++	src_fmt->ycbcr_enc = V4L2_YCBCR_ENC_601;
++	src_fmt->quantization = V4L2_QUANTIZATION_LIM_RANGE;
  
- 	return 0;
+ 	src_crop = v4l2_subdev_get_try_crop(sd, sd_state,
+ 					    RKISP1_ISP_PAD_SOURCE_VIDEO);
+ 	*src_crop = *sink_crop;
+ 
++	/* Parameters and statistics. */
+ 	sink_fmt = v4l2_subdev_get_try_format(sd, sd_state,
+ 					      RKISP1_ISP_PAD_SINK_PARAMS);
+ 	src_fmt = v4l2_subdev_get_try_format(sd, sd_state,
 -- 
-2.35.1
+Regards,
+
+Laurent Pinchart
 
