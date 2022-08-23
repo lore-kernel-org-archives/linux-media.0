@@ -2,38 +2,38 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6E9EC32772
-	for <linux-media@archiver.kernel.org>; Tue, 23 Aug 2022 16:39:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DCF1C32789
+	for <linux-media@archiver.kernel.org>; Tue, 23 Aug 2022 16:40:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245265AbiHWQjj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Aug 2022 12:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53892 "EHLO
+        id S245134AbiHWQkT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Aug 2022 12:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243647AbiHWQjA (ORCPT
+        with ESMTP id S245117AbiHWQjf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:39:00 -0400
+        Tue, 23 Aug 2022 12:39:35 -0400
 Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E7094EF2
-        for <linux-media@vger.kernel.org>; Tue, 23 Aug 2022 07:43:44 -0700 (PDT)
-X-QQ-mid: bizesmtp83t1661265747tekdczxu
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FBE8980F;
+        Tue, 23 Aug 2022 07:40:15 -0700 (PDT)
+X-QQ-mid: bizesmtp85t1661265608tf31jrqk
 Received: from localhost.localdomain ( [182.148.14.124])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 23 Aug 2022 22:42:26 +0800 (CST)
+        id ; Tue, 23 Aug 2022 22:40:06 +0800 (CST)
 X-QQ-SSF: 0100000000200040B000B00A0000000
-X-QQ-FEAT: XBN7tc9DADLs2cWmlMMHERuY/4kGu39ow3FoW3pTTJNMOMh1dmzmH5e3TMtEi
-        Fi2gaXKCT2Vv6tSwMVJE237q81IsjE5S/GRXvuL3iZRDfY5Cl1wZuy+esE8l5f+tDdve8oL
-        mfZsZJh8LTrko9NI0b3Gbpemu9Ke7oCIGzDdYRz8sz4bwzmEbEROU0aUgzCPQvQcjEJAxlo
-        A0mBPMp7G7vbbfK1tP2Y2PdzUb08rE8J7AjNJlkAofNMeIIvP0HUGzqUyE+9SUcc9Vjf3vr
-        fWVhO7Y9ViwsgbGj4IPoChBtfu1ULbBe5Bad3zuIonUQofdrv3EdUBSg6Y7GHVv8ZGciwE3
-        N8Wawy2n7Xl3lbNFReRtirpuIANLrbjCITEDLpgb5VJOSSUPWahUwO6ZTWjXQ==
+X-QQ-FEAT: ILHsT53NKPhh1JcB21Zo5hbOeQlvmw+DRAowyExZ9pBnBkOF0Y6qBA1QuzaLJ
+        YbKpnVftSbO1gX1nH3AfrPyi3PHtbnYxMHg+m5aJyroYCid8wM47BGlN2n/8TPn6c+VM6II
+        4DGguhtrP/6uozRnH/K639R0zyHVt8L5JvPe6ckkPTlQ9+vlaEjP2/njjLx1V4iy7kpibGs
+        iOfR/zmbWCVedlU7/VXKYVvpZbjCSEk9XKM/7SN1csPm0lg9qCrWFT1rB/kqa6iFU4TLDRR
+        /xEVJbGKOKwn+Rgs936RJG4BuVjlgSXw/hurMEGL3aW8dLoTPJIZgLVOB15vzlY+XCB6oSZ
+        z/ispCG707g1g5fH09aHU2ldhSnsd4MiHRoVI/gn63bgNOk9GqDTbB4Kp1TVw==
 X-QQ-GoodBg: 0
 From:   wangjianli <wangjianli@cdjrlc.com>
-To:     mchehab@kernel.org, peter.ujfalusi@gmail.com
+To:     laurent.pinchart@ideasonboard.com, mchehab@kernel.org
 Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         wangjianli <wangjianli@cdjrlc.com>
-Subject: [PATCH] ti/omap: fix repeated words in comments
-Date:   Tue, 23 Aug 2022 22:42:19 +0800
-Message-Id: <20220823144219.32381-1-wangjianli@cdjrlc.com>
+Subject: [PATCH] ti/omap3isp: fix repeated words in comments
+Date:   Tue, 23 Aug 2022 22:40:00 +0800
+Message-Id: <20220823144000.30876-1-wangjianli@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -47,22 +47,22 @@ Delete the redundant word 'the'.
 
 Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
 ---
- drivers/media/platform/ti/omap/omap_voutlib.c | 2 +-
+ drivers/media/platform/ti/omap3isp/isp.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/ti/omap/omap_voutlib.c b/drivers/media/platform/ti/omap/omap_voutlib.c
-index 480a7e95533d..9b4aa5d84873 100644
---- a/drivers/media/platform/ti/omap/omap_voutlib.c
-+++ b/drivers/media/platform/ti/omap/omap_voutlib.c
-@@ -107,7 +107,7 @@ EXPORT_SYMBOL_GPL(omap_vout_try_window);
- /* Given a new render window in new_win, adjust the window to the
-  * nearest supported configuration.  The image cropping window in crop
-  * will also be adjusted if necessary.  Preference is given to keeping the
-- * the window as close to the requested configuration as possible.  If
-+ * window as close to the requested configuration as possible.  If
-  * successful, new_win, vout->win, and crop are updated.
-  * Returns zero if successful, or -EINVAL if the requested preview window is
-  * impossible and cannot reasonably be adjusted.
+diff --git a/drivers/media/platform/ti/omap3isp/isp.c b/drivers/media/platform/ti/omap3isp/isp.c
+index 4c937f3f323e..f99dda7337b9 100644
+--- a/drivers/media/platform/ti/omap3isp/isp.c
++++ b/drivers/media/platform/ti/omap3isp/isp.c
+@@ -1528,7 +1528,7 @@ void omap3isp_print_status(struct isp_device *isp)
+  * To solve this problem power management support is split into prepare/complete
+  * and suspend/resume operations. The pipelines are stopped in prepare() and the
+  * ISP clocks get disabled in suspend(). Similarly, the clocks are re-enabled in
+- * resume(), and the the pipelines are restarted in complete().
++ * resume(), and the pipelines are restarted in complete().
+  *
+  * TODO: PM dependencies between the ISP and sensors are not modelled explicitly
+  * yet.
 -- 
 2.36.1
 
