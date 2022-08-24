@@ -2,38 +2,38 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACB2FC00140
-	for <linux-media@archiver.kernel.org>; Wed, 24 Aug 2022 13:17:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5700AC00140
+	for <linux-media@archiver.kernel.org>; Wed, 24 Aug 2022 13:18:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237083AbiHXNRZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Aug 2022 09:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55256 "EHLO
+        id S238078AbiHXNST (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Aug 2022 09:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238118AbiHXNP3 (ORCPT
+        with ESMTP id S235001AbiHXNSR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Aug 2022 09:15:29 -0400
+        Wed, 24 Aug 2022 09:18:17 -0400
 Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C29812AA3;
-        Wed, 24 Aug 2022 06:15:25 -0700 (PDT)
-X-QQ-mid: bizesmtp65t1661346917t5e5vbjn
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB5D2A40C;
+        Wed, 24 Aug 2022 06:18:14 -0700 (PDT)
+X-QQ-mid: bizesmtp86t1661347090tuvqf2o7
 Received: from localhost.localdomain ( [182.148.14.124])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 24 Aug 2022 21:15:16 +0800 (CST)
+        id ; Wed, 24 Aug 2022 21:18:09 +0800 (CST)
 X-QQ-SSF: 01000000002000C0E000B00A0000000
-X-QQ-FEAT: YHTLUubWl26tp8Z1kHwyK8GiWRigRpaD+E6roL+Jtd8kwrkzL97IzqQ4t+ik2
-        qIciubcTOBwQvzoFSvlazQWCWexZ5+2zXpDJXMQh+CKPpQIv9xtlelH24LMN+N7dS4g7iNU
-        QukydE7dsrE8spMYsB/VHIuvMNCdqbJja0EH3rcjQG1X9/k/by9jgGj798ZRhKXCL2IhGfG
-        SMOzPBgca2kNLwXa2/+3meS+uNQyUrwHlBoCTacJ/JchpX9BwgD3EuAdBR+wsP1CvSaAbbG
-        x7D2lJGdRuxC+eVsrXkXsBVEX5RsyKM7YlnBXs3RZNoGZEOZhUx62VDddZ0IQZ4ecmNWcsm
-        aB/wjo+SHb9rFhUGciCPjLXfnviptdVSWePdxPk0KqYQCqfPqCze5duX3R0ybpcSVMv8fD/
+X-QQ-FEAT: XBN7tc9DADLOJLOkzIjPrJGin0Y6XlQgWlrzwRTI9urtB7gUGTTlehFTLjXWV
+        UWmSZi3u6UkWXTs8HpPtH57FlRQgqwI4F0V2LQMNb7hjyVOmuWEC1Zmce1wJ29/PmP4hBN+
+        ed8Qk00f1pxMEZ7iWBPE/0EesQCVH+iejGCkpGZyePgp/lQBdS/69FJUzPOX0nOb4d9MOXJ
+        PCknhh6PmiGXMuZux4kBsdpaLZroSRLB7Y8k5q7o70VGR+ncqHZs8n41fSEWAHUTyIxYe+v
+        R2DIqbk6mrSgqa4w1vZ77yk60gMIcp4CiIkN0HkL4JdHYidL21t3VUBgYlqStZX8pNQcnAO
+        DjMU7TUaYXW7Ff/KmrDWcuMG2tvyoH8HkhOmPQ94kN6u6FLi/UXlrr8lg7pQw==
 X-QQ-GoodBg: 0
 From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     jacopo@jmondi.org, mchehab@kernel.org
+To:     mchehab@kernel.org
 Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jilin Yuan <yuanjilin@cdjrlc.com>
 Subject: [PATCH] media/i2c: fix repeated words in comments
-Date:   Wed, 24 Aug 2022 21:14:59 +0800
-Message-Id: <20220824131459.52485-1-yuanjilin@cdjrlc.com>
+Date:   Wed, 24 Aug 2022 21:18:03 +0800
+Message-Id: <20220824131803.55374-1-yuanjilin@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -43,26 +43,26 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
- Delete the redundant word 'the'.
+ Delete the redundant word 'in'.
 
 Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 ---
- drivers/media/i2c/mt9v111.c | 2 +-
+ drivers/media/i2c/adv7175.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/mt9v111.c b/drivers/media/i2c/mt9v111.c
-index 2dc4a0f24ce8..7beca0b70b72 100644
---- a/drivers/media/i2c/mt9v111.c
-+++ b/drivers/media/i2c/mt9v111.c
-@@ -633,7 +633,7 @@ static int mt9v111_hw_config(struct mt9v111_dev *mt9v111)
- 
- 	/*
- 	 * Set pixel integration time to the whole frame time.
--	 * This value controls the the shutter delay when running with AE
-+	 * This value controls the shutter delay when running with AE
- 	 * disabled. If longer than frame time, it affects the output
- 	 * frame rate.
- 	 */
+diff --git a/drivers/media/i2c/adv7175.c b/drivers/media/i2c/adv7175.c
+index 1813f67f0fe1..945068c12763 100644
+--- a/drivers/media/i2c/adv7175.c
++++ b/drivers/media/i2c/adv7175.c
+@@ -209,7 +209,7 @@ static int adv7175_s_std_output(struct v4l2_subdev *sd, v4l2_std_id std)
+ 		/* This is an attempt to convert
+ 		 * SECAM->PAL (typically it does not work
+ 		 * due to genlock: when decoder is in SECAM
+-		 * and encoder in in PAL the subcarrier can
++		 * and encoder in PAL the subcarrier can
+ 		 * not be synchronized with horizontal
+ 		 * quency) */
+ 		adv7175_write_block(sd, init_pal, sizeof(init_pal));
 -- 
 2.36.1
 
