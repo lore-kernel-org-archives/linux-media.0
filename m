@@ -2,38 +2,38 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B19EC00140
-	for <linux-media@archiver.kernel.org>; Wed, 24 Aug 2022 13:14:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CB02C00140
+	for <linux-media@archiver.kernel.org>; Wed, 24 Aug 2022 13:16:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234085AbiHXNOO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Aug 2022 09:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52208 "EHLO
+        id S236939AbiHXNQf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Aug 2022 09:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232570AbiHXNOM (ORCPT
+        with ESMTP id S236653AbiHXNQd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Aug 2022 09:14:12 -0400
+        Wed, 24 Aug 2022 09:16:33 -0400
 Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0AB626AE6;
-        Wed, 24 Aug 2022 06:14:09 -0700 (PDT)
-X-QQ-mid: bizesmtp62t1661346837tzdevp6l
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E74B4AD59;
+        Wed, 24 Aug 2022 06:16:31 -0700 (PDT)
+X-QQ-mid: bizesmtp81t1661346987tx6hvkun
 Received: from localhost.localdomain ( [182.148.14.124])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 24 Aug 2022 21:13:56 +0800 (CST)
+        id ; Wed, 24 Aug 2022 21:16:26 +0800 (CST)
 X-QQ-SSF: 01000000002000C0E000B00A0000000
-X-QQ-FEAT: XlKBH1Cks66hVGf5IHF0wX9e+JV7B9E8UsslHLvaTzKLmLVIupy7tsCnA9+hK
-        OEe1S7qT/e/5VdIPXOOg3NMCfi2vsGw7G6x9FaY9n2vsrwQ5VdtZR3zxrZLf5zUqVEJULJM
-        jGGtW7sE0YHrJ5dlbqbwtf4/2SypSsYyl1cRjDQ4k5atiitWMTBxlM+D6oqWFpq+2aSA4eF
-        p0hU+zj67i1BFY2qoA2wuHMioqwbICLuZw1nu6RCykCe84TpPR/e/Dl1GIwcYla7kME1luF
-        wNosf8WJ/Uvquv+o1hf5RottkrZhxjjRYPzW5TlOIbnfwVKkUpOd+iSu+Za3bOPmuj3lCQf
-        A1Crx5tFevDmsqc05kRD3RvO2y2+AKunop2NYNkzgcvAs0e2ptCRSuLAc3haQ==
+X-QQ-FEAT: oGOjGSUjcuDZNQgLkW0dLLOtF/z5UCrxHPKXlZNwiYCxmgehcUdT9X02kelcD
+        +KKVmfbNmxkhcYTUQtN6AcDaphC89F4Kb+0ASptbO012Hk0IT6EOSRg+Afdi19x/z0N9+GH
+        NN6ObcxprvF4BaO7qBcPlzoOAwdiebHz5UojOJIH0eZS04lmQ7CihcRlBc9FtOL70pPyWWF
+        F23Pp739oYdt3iA5mOwFqz9lqMcw9pnTEifUEENGa7IFeWZ76l1auEGVX4AGk6frAgrwpRd
+        mTQKXa8Ki0ndc3CKNMPEy5cISM7t26vZd8w1/Zlk0FLppLL+76byHEeLb13H4OzcpW4yenf
+        mo7t3nnNCRpIToZPlUI/dmvjRd55N7x5oecR3zMGuT44j3/8SmS5soYPeUBNC1WXrmfWJCA
 X-QQ-GoodBg: 0
 From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     crope@iki.fi, mchehab@kernel.org
+To:     mchehab@kernel.org
 Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] usb/dvb-usb-v2: fix repeated words in comments
-Date:   Wed, 24 Aug 2022 21:13:50 +0800
-Message-Id: <20220824131350.50984-1-yuanjilin@cdjrlc.com>
+Subject: [PATCH] i2c/cx25840: fix repeated words in comments
+Date:   Wed, 24 Aug 2022 21:16:19 +0800
+Message-Id: <20220824131619.54027-1-yuanjilin@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -43,26 +43,26 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
- Delete the redundant word 'my'.
+ Delete the redundant word 'of'.
 
 Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 ---
- drivers/media/usb/dvb-usb-v2/af9035.c | 2 +-
+ drivers/media/i2c/cx25840/cx25840-ir.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/dvb-usb-v2/af9035.c b/drivers/media/usb/dvb-usb-v2/af9035.c
-index 5eef37b00a52..1e9c8d01523b 100644
---- a/drivers/media/usb/dvb-usb-v2/af9035.c
-+++ b/drivers/media/usb/dvb-usb-v2/af9035.c
-@@ -1497,7 +1497,7 @@ static int af9035_tuner_attach(struct dvb_usb_adapter *adap)
- 		/*
- 		 * AF9035 gpiot2 = FC0012 enable
- 		 * XXX: there seems to be something on gpioh8 too, but on my
--		 * my test I didn't find any difference.
-+		 * test I didn't find any difference.
- 		 */
- 
- 		if (adap->id == 0) {
+diff --git a/drivers/media/i2c/cx25840/cx25840-ir.c b/drivers/media/i2c/cx25840/cx25840-ir.c
+index 9d7d1d149f1a..8cef9656c612 100644
+--- a/drivers/media/i2c/cx25840/cx25840-ir.c
++++ b/drivers/media/i2c/cx25840/cx25840-ir.c
+@@ -196,7 +196,7 @@ static u32 clock_divider_to_resolution(u16 divider)
+ {
+ 	/*
+ 	 * Resolution is the duration of 1 tick of the readable portion of
+-	 * of the pulse width counter as read from the FIFO.  The two lsb's are
++	 * the pulse width counter as read from the FIFO.  The two lsb's are
+ 	 * not readable, hence the << 2.  This function returns ns.
+ 	 */
+ 	return DIV_ROUND_CLOSEST((1 << 2)  * ((u32) divider + 1) * 1000,
 -- 
 2.36.1
 
