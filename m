@@ -2,65 +2,65 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE2FCECAAD7
-	for <linux-media@archiver.kernel.org>; Fri, 26 Aug 2022 10:07:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57888ECAAD6
+	for <linux-media@archiver.kernel.org>; Fri, 26 Aug 2022 10:07:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244236AbiHZKHX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Aug 2022 06:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49860 "EHLO
+        id S245405AbiHZKHY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Aug 2022 06:07:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343525AbiHZKGk (ORCPT
+        with ESMTP id S244937AbiHZKGk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 26 Aug 2022 06:06:40 -0400
 Received: from smtpout140.security-mail.net (smtpout140.security-mail.net [85.31.212.149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9137D9EBE
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94E2DA3C7
         for <linux-media@vger.kernel.org>; Fri, 26 Aug 2022 03:05:23 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by fx409.security-mail.net (Postfix) with ESMTP id 25C003238E9
-        for <linux-media@vger.kernel.org>; Fri, 26 Aug 2022 12:01:30 +0200 (CEST)
+        by fx409.security-mail.net (Postfix) with ESMTP id 585B9323722
+        for <linux-media@vger.kernel.org>; Fri, 26 Aug 2022 12:01:25 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1661508090;
-        bh=4bC1M/PS4HWRMG+9tQOUbpWEXqqJeGvjy13WJUKSUJA=;
+        s=sec-sig-email; t=1661508085;
+        bh=vvFfyIzVOt+FBtDJHEyLUs+N/uAy6HQNA/KHZSgA5D8=;
         h=From:To:Cc:Subject:Date;
-        b=tkzgjD6MgeX792FB9Vv9hw3nYqJl6CeXEACrJkoHZtfWBnHeFSVrMkUtL0ervwb2i
-         +H3TfPWCqG+PZUndeEGob1B2eMi71IslQGKt4dy4ZM5bV37lHYwUt/FxagZ4ZIIi4v
-         BZQF0+nFYJerAhwuUPrLZOosCTHBzNV3tHA8f/DQ=
+        b=CgwopXANpNqyg6YtzA3SripPIjrvnzTiWBwNLhmQi1z17QQipQAAN0OOnGqotm9vM
+         qZIEfaXtms72/nlexVIA1VfhqJR1TU2onBpUWChj97llbhBVP1xxl/K2sgiy1McZVT
+         vjkTtdRQftjGmZTikoDKP8QAr0j9ewyhWFjBzysQ=
 Received: from fx409 (localhost [127.0.0.1])
-        by fx409.security-mail.net (Postfix) with ESMTP id A351D3238BF;
-        Fri, 26 Aug 2022 12:01:29 +0200 (CEST)
+        by fx409.security-mail.net (Postfix) with ESMTP id B3E8032363E;
+        Fri, 26 Aug 2022 12:01:24 +0200 (CEST)
 X-Virus-Scanned: E-securemail
-Secumail-id: <5f96.630899f7.96ab6.0>
+Secumail-id: <5a32.630899f3.d3b51.0>
 Received: from zimbra2.kalray.eu (unknown [217.181.231.53])
-        by fx409.security-mail.net (Postfix) with ESMTPS id 98D5C3238DC;
-        Fri, 26 Aug 2022 12:01:27 +0200 (CEST)
+        by fx409.security-mail.net (Postfix) with ESMTPS id D5B9B3238AC;
+        Fri, 26 Aug 2022 12:01:23 +0200 (CEST)
 Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTPS id 64A9227E0396;
-        Fri, 26 Aug 2022 12:01:27 +0200 (CEST)
+        by zimbra2.kalray.eu (Postfix) with ESMTPS id B5F5827E02FA;
+        Fri, 26 Aug 2022 12:01:23 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id 4E6D627E0392;
-        Fri, 26 Aug 2022 12:01:27 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 4E6D627E0392
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 9E51827E0392;
+        Fri, 26 Aug 2022 12:01:23 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 9E51827E0392
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
-        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1661508087;
-        bh=dJ9IP1YX/f4PTjh2ZawYjIO6VFebYMNL6zIzAO/NNFo=;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1661508083;
+        bh=M/RfIAISD7kAlTMJPp9AUX7+0n4u8J4cxKaRTfK45Jk=;
         h=From:To:Date:Message-Id;
-        b=MNDZdVBw7jB2yXvolhpZqeY82IuEuWy4FcQsjF3KSo+qdsN9ncfHLQtKgPlFusfkp
-         xWEIWaNDsW24g5Gh/PSXI1G2pwnlrJaQ/H19ZMBcJxRZhjVAuefPdMMO6ZL+KBL2y5
-         t1+wv7sdKVs15LqucDot9Y/hq3f2cKcyENi8BjuQ=
+        b=gGI6sadZ5EwB55pMsAHuFLe/ZLEWEaWS4jmEeGy0Rmcwx+BoKeK03zXymXKatxl1k
+         fRH59Y5+Lr3wmydZI3NheomjaQMBJ6lnxwbltN2ev4tkacOWA2dbES6H3oi0aN9Aq4
+         6uv9RGDeLEML9faz7OvFYcqcrgPRhvuN+sGXtlnA=
 Received: from zimbra2.kalray.eu ([127.0.0.1])
         by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id RqJShZBeD5xR; Fri, 26 Aug 2022 12:01:27 +0200 (CEST)
+        with ESMTP id wanPIDXbM-ba; Fri, 26 Aug 2022 12:01:23 +0200 (CEST)
 Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206])
-        by zimbra2.kalray.eu (Postfix) with ESMTPSA id 3EC4B27E02FA;
-        Fri, 26 Aug 2022 12:01:27 +0200 (CEST)
+        by zimbra2.kalray.eu (Postfix) with ESMTPSA id 8CED527E02FA;
+        Fri, 26 Aug 2022 12:01:23 +0200 (CEST)
 From:   Jules Maselbas <jmaselbas@kalray.eu>
 To:     linux-kernel@vger.kernel.org
 Cc:     Jules Maselbas <jmaselbas@kalray.eu>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH] media: v4l2: Fix repeated word in comments
-Date:   Fri, 26 Aug 2022 12:00:51 +0200
-Message-Id: <20220826100052.22945-23-jmaselbas@kalray.eu>
+Subject: [PATCH] media: platform: ti: Fix repeated word in comments
+Date:   Fri, 26 Aug 2022 12:00:46 +0200
+Message-Id: <20220826100052.22945-18-jmaselbas@kalray.eu>
 X-Mailer: git-send-email 2.17.1
 X-Virus-Scanned: by Secumail
 Precedence: bulk
@@ -69,26 +69,40 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Remove redundant word `the`.
 
-CC: Mauro Carvalho Chehab <mchehab@kernel.org>
+CC: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
 CC: linux-media@vger.kernel.org
 Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
 ---
- drivers/media/v4l2-core/v4l2-ioctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/ti/davinci/vpbe.c | 2 +-
+ drivers/media/platform/ti/omap3isp/isp.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index c314025d977e..96793dacb08f 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1045,7 +1045,7 @@ static void v4l_sanitize_format(struct v4l2_format *fmt)
- 	/*
- 	 * The v4l2_pix_format structure has been extended with fields that were
- 	 * not previously required to be set to zero by applications. The priv
--	 * field, when set to a magic value, indicates the the extended fields
-+	 * field, when set to a magic value, indicates the extended fields
- 	 * are valid. Otherwise they will contain undefined values. To simplify
- 	 * the API towards drivers zero the extended fields and set the priv
- 	 * field to the magic value when the extended pixel format structure
+diff --git a/drivers/media/platform/ti/davinci/vpbe.c b/drivers/media/platform/ti/davinci/vpbe.c
+index 5f0aeb744e81..509ecc84624e 100644
+--- a/drivers/media/platform/ti/davinci/vpbe.c
++++ b/drivers/media/platform/ti/davinci/vpbe.c
+@@ -280,7 +280,7 @@ static int vpbe_set_default_output(struct vpbe_device *vpbe_dev)
+  * vpbe_get_output - Get output
+  * @vpbe_dev: vpbe device ptr
+  *
+- * return current vpbe output to the the index
++ * return current vpbe output to the index
+  */
+ static unsigned int vpbe_get_output(struct vpbe_device *vpbe_dev)
+ {
+diff --git a/drivers/media/platform/ti/omap3isp/isp.c b/drivers/media/platform/ti/omap3isp/isp.c
+index d251736eb420..a6052df9bb19 100644
+--- a/drivers/media/platform/ti/omap3isp/isp.c
++++ b/drivers/media/platform/ti/omap3isp/isp.c
+@@ -1528,7 +1528,7 @@ void omap3isp_print_status(struct isp_device *isp)
+  * To solve this problem power management support is split into prepare/complete
+  * and suspend/resume operations. The pipelines are stopped in prepare() and the
+  * ISP clocks get disabled in suspend(). Similarly, the clocks are re-enabled in
+- * resume(), and the the pipelines are restarted in complete().
++ * resume(), and the pipelines are restarted in complete().
+  *
+  * TODO: PM dependencies between the ISP and sensors are not modelled explicitly
+  * yet.
 -- 
 2.17.1
 
