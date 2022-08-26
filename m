@@ -2,93 +2,121 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE409ECAAA3
-	for <linux-media@archiver.kernel.org>; Fri, 26 Aug 2022 10:07:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08EBFECAAA3
+	for <linux-media@archiver.kernel.org>; Fri, 26 Aug 2022 10:07:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245215AbiHZKHS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Aug 2022 06:07:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51162 "EHLO
+        id S245278AbiHZKHU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Aug 2022 06:07:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241505AbiHZKGj (ORCPT
+        with ESMTP id S1343507AbiHZKGk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Aug 2022 06:06:39 -0400
-X-Greylist: delayed 235 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 26 Aug 2022 03:05:22 PDT
+        Fri, 26 Aug 2022 06:06:40 -0400
 Received: from smtpout140.security-mail.net (smtpout140.security-mail.net [85.31.212.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F0AD9E81
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4769ED9E9E
         for <linux-media@vger.kernel.org>; Fri, 26 Aug 2022 03:05:21 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by fx601.security-mail.net (Postfix) with ESMTP id 43BBC3ACED9
-        for <linux-media@vger.kernel.org>; Fri, 26 Aug 2022 12:01:28 +0200 (CEST)
+        by fx601.security-mail.net (Postfix) with ESMTP id 2BAD73ACC30
+        for <linux-media@vger.kernel.org>; Fri, 26 Aug 2022 12:01:26 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1661508088;
-        bh=SCDpeIxVyYrv4kQNpVeu9eSc75msKnazn+ZKlH00Qhs=;
+        s=sec-sig-email; t=1661508086;
+        bh=FL2kL4VkOcbIIUP2+DJXexnRiRjPgLGKb2H7npN08ME=;
         h=From:To:Cc:Subject:Date;
-        b=ntkYtSdvKd2e/vfTvdKnWB8GqJvlxkzB/PJvcZmEx+VzRD2TEMeMBMU76UUzCXP3n
-         VxklrdrXEz5RURA8yyZ3qPsMouMtF2BmoX9u1wxT9L8QoMDxZbYe5erQX3xtijmAPY
-         h/K7wMTSb2+53p4CT3UcGdBAjL0B/DHNCQkuOFjQ=
+        b=TvaOt7OA3K9FyOOposSPENC9vKGCsJDIaRzZdAvwvr1hdi0MWCDtAmgEfeHegJOzL
+         dBLagupYNN8DTCWYKAOzd1lsCdsUOk7+GO7hgxMh4yL4TX3oAJuK9Vr+T6NO/+Kuna
+         zjy3Z/2dbC0cKUDn7pNxC/+rpdNf6E7FGW3Qj1Kk=
 Received: from fx601 (localhost [127.0.0.1])
-        by fx601.security-mail.net (Postfix) with ESMTP id 950463ACEB9;
-        Fri, 26 Aug 2022 12:01:27 +0200 (CEST)
+        by fx601.security-mail.net (Postfix) with ESMTP id 751563ACEC2;
+        Fri, 26 Aug 2022 12:01:25 +0200 (CEST)
 X-Virus-Scanned: E-securemail
-Secumail-id: <5f8a.630899f6.c2f5d.0>
+Secumail-id: <598d.630899f4.90da8.0>
 Received: from zimbra2.kalray.eu (unknown [217.181.231.53])
-        by fx601.security-mail.net (Postfix) with ESMTPS id C46AF3ACEA3;
-        Fri, 26 Aug 2022 12:01:26 +0200 (CEST)
+        by fx601.security-mail.net (Postfix) with ESMTPS id 9236E3ACC21;
+        Fri, 26 Aug 2022 12:01:24 +0200 (CEST)
 Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTPS id A718A27E02FA;
-        Fri, 26 Aug 2022 12:01:26 +0200 (CEST)
+        by zimbra2.kalray.eu (Postfix) with ESMTPS id 730A327E0396;
+        Fri, 26 Aug 2022 12:01:24 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id 90AAD27E0392;
-        Fri, 26 Aug 2022 12:01:26 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 90AAD27E0392
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 5C3AC27E0392;
+        Fri, 26 Aug 2022 12:01:24 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 5C3AC27E0392
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
-        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1661508086;
-        bh=NaiqwpRbXRdjsNpz1W2XnsBstSv/EPGUYAQ6UVixNRI=;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1661508084;
+        bh=ZLOui77VJF4L/AKDWT1oLYTzZXXPuvwmiFMUZzsMKvs=;
         h=From:To:Date:Message-Id;
-        b=CrvT1Yda4Cy03jf7mLVYm3A34sAUXbvdJdiZ6S9TKuhCxm8vouJ+kpZngmBuUkDOc
-         YhcTcfGlNvBV2p7UJnbwAG5O2JmRwJ2v5L8WUzjUNgGrq1a1Z+1ZyOk950oLICzNiw
-         kSstF6EKR8/gSIkUgMmoWXrQjdQyz1AudI15K4mc=
+        b=By68bO5vWjYlzD3JnnLoRhl1dphlaJ27E4JIwa4yF9VCycgxjaekVF76xEOCdp5nu
+         Yh+u4mfI+ybN6hYEt/fxQtAdE+KxfXBBPImU8A0JsHRQFtYXyonz+OrbiYH2oSjcls
+         psxfge5b2+O+fcxTpONDKB13LBiPM6Tpw4aTvSec=
 Received: from zimbra2.kalray.eu ([127.0.0.1])
         by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 9n1S3QpK0Pxj; Fri, 26 Aug 2022 12:01:26 +0200 (CEST)
+        with ESMTP id e5VH8Q9L9fKg; Fri, 26 Aug 2022 12:01:24 +0200 (CEST)
 Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206])
-        by zimbra2.kalray.eu (Postfix) with ESMTPSA id 7766127E02FA;
-        Fri, 26 Aug 2022 12:01:26 +0200 (CEST)
+        by zimbra2.kalray.eu (Postfix) with ESMTPSA id 4CB1227E02FA;
+        Fri, 26 Aug 2022 12:01:24 +0200 (CEST)
 From:   Jules Maselbas <jmaselbas@kalray.eu>
 To:     linux-kernel@vger.kernel.org
 Cc:     Jules Maselbas <jmaselbas@kalray.eu>,
-        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org
-Subject: [PATCH] media: i2c: Fix repeated word in comments
-Date:   Fri, 26 Aug 2022 12:00:50 +0200
-Message-Id: <20220826100052.22945-22-jmaselbas@kalray.eu>
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+Subject: [PATCH] media: dvb-frontends: Fix repeated word in comments
+Date:   Fri, 26 Aug 2022 12:00:47 +0200
+Message-Id: <20220826100052.22945-19-jmaselbas@kalray.eu>
 X-Mailer: git-send-email 2.17.1
 X-Virus-Scanned: by Secumail
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Remove redundant word `the`.
+Remove redundant words `the` and `this`.
 
-CC: Jacopo Mondi <jacopo@jmondi.org>
+CC: Mauro Carvalho Chehab <mchehab@kernel.org>
 CC: linux-media@vger.kernel.org
 Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
 ---
- drivers/media/i2c/mt9v111.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/dvb-frontends/dib8000.c  | 2 +-
+ drivers/media/dvb-frontends/tda1002x.h | 2 +-
+ drivers/media/dvb-frontends/tda10048.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/i2c/mt9v111.c b/drivers/media/i2c/mt9v111.c
-index 2dc4a0f24ce8..7beca0b70b72 100644
---- a/drivers/media/i2c/mt9v111.c
-+++ b/drivers/media/i2c/mt9v111.c
-@@ -633,7 +633,7 @@ static int mt9v111_hw_config(struct mt9v111_dev *mt9v111)
+diff --git a/drivers/media/dvb-frontends/dib8000.c b/drivers/media/dvb-frontends/dib8000.c
+index d67f2dd997d0..25980e90d6bf 100644
+--- a/drivers/media/dvb-frontends/dib8000.c
++++ b/drivers/media/dvb-frontends/dib8000.c
+@@ -3212,7 +3212,7 @@ static int dib8000_tune(struct dvb_frontend *fe)
  
- 	/*
- 	 * Set pixel integration time to the whole frame time.
--	 * This value controls the the shutter delay when running with AE
-+	 * This value controls the shutter delay when running with AE
- 	 * disabled. If longer than frame time, it affects the output
- 	 * frame rate.
- 	 */
+ 	case CT_DEMOD_STEP_6: /* (36)  if there is an input (diversity) */
+ 		if ((state->fe[1] != NULL) && (state->output_mode != OUTMODE_DIVERSITY)) {
+-			/* if there is a diversity fe in input and this fe is has not already failed : wait here until this this fe has succedeed or failed */
++			/* if there is a diversity fe in input and this fe is has not already failed : wait here until this fe has succedeed or failed */
+ 			if (dib8000_get_status(state->fe[1]) <= FE_STATUS_STD_SUCCESS) /* Something is locked on the input fe */
+ 				*tune_state = CT_DEMOD_STEP_8; /* go for mpeg */
+ 			else if (dib8000_get_status(state->fe[1]) >= FE_STATUS_TUNE_TIME_TOO_SHORT) { /* fe in input failed also, break the current one */
+diff --git a/drivers/media/dvb-frontends/tda1002x.h b/drivers/media/dvb-frontends/tda1002x.h
+index 60a0952c1bca..00491bea9975 100644
+--- a/drivers/media/dvb-frontends/tda1002x.h
++++ b/drivers/media/dvb-frontends/tda1002x.h
+@@ -1,7 +1,7 @@
+ /* SPDX-License-Identifier: GPL-2.0-or-later */
+ /*
+     TDA10021/TDA10023  - Single Chip Cable Channel Receiver driver module
+-			 used on the the Siemens DVB-C cards
++			 used on the Siemens DVB-C cards
+ 
+     Copyright (C) 1999 Convergence Integrated Media GmbH <ralph@convergence.de>
+     Copyright (C) 2004 Markus Schulz <msc@antzsystem.de>
+diff --git a/drivers/media/dvb-frontends/tda10048.c b/drivers/media/dvb-frontends/tda10048.c
+index d1d206ebdedd..0b3f6999515e 100644
+--- a/drivers/media/dvb-frontends/tda10048.c
++++ b/drivers/media/dvb-frontends/tda10048.c
+@@ -1118,7 +1118,7 @@ struct dvb_frontend *tda10048_attach(const struct tda10048_config *config,
+ 		state->pll_pfactor = 0;
+ 	}
+ 
+-	/* Establish any defaults the the user didn't pass */
++	/* Establish any defaults the user didn't pass */
+ 	tda10048_establish_defaults(&state->frontend);
+ 
+ 	/* Set the xtal and freq defaults */
 -- 
 2.17.1
 
