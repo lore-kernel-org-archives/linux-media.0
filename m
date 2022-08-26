@@ -2,34 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DB40ECAAD8
-	for <linux-media@archiver.kernel.org>; Fri, 26 Aug 2022 18:46:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F4099ECAAA3
+	for <linux-media@archiver.kernel.org>; Fri, 26 Aug 2022 18:46:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345249AbiHZSqT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Aug 2022 14:46:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
+        id S1345291AbiHZSq3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Aug 2022 14:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345377AbiHZSpp (ORCPT
+        with ESMTP id S1345401AbiHZSps (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Aug 2022 14:45:45 -0400
+        Fri, 26 Aug 2022 14:45:48 -0400
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465C913CEF;
-        Fri, 26 Aug 2022 11:42:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF556EEC5E;
+        Fri, 26 Aug 2022 11:42:12 -0700 (PDT)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id BA6B44000A;
-        Fri, 26 Aug 2022 18:42:04 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 1553240013;
+        Fri, 26 Aug 2022 18:42:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1661539326;
+        t=1661539331;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/MXrdVl7L/i1QBWDGAE+NU/cU+1Tnb5ghFEbKkLGG6U=;
-        b=Q3zsRGG+BijxApv5EpVANWHGKrXez9Teq+TtIDzDgTGpsJ1XjaU2nkTQ+fC9hddSMEr/pu
-        9oSiB/kfbEq0iE8yrvwBeFBlUgWeCSU1n8BJBUjrEzDeDnt2pE/GkoFzgM2eZ6vbzzjWS/
-        gV85dj9C81ofKxPqPRxUpDIhUSWO5p3XJS1Iln1xo/Mh+sUzxFuRuIAfBIhAt5brZNy6UP
-        KLvVGL0K0eDTswrJS1H2HIFRcTXfvJ7RrvnqhvLcT2u50+2GtsMxv3xQ3kkq4Uyv3qP+vx
-        fvumLlsVrAvhPViGBUtcf7lTlEHJN17USGEk1ukPYRclgE+65HketljKNFXTJg==
+        bh=Z0Rhyw8PldAh/zTvTm9JRxvDnK521uZT+v0lYic6QvU=;
+        b=JQiAPPTeuXlUMNT67Nq3KEb+CanvVp+UZfPl9vGmFMWkwqjT/y+heI1gbYgHh0VoaYAUSz
+        gP2S87X99fbgSmdi8GfZu1/XP7bZOdBZrk/cfKxUy9Lbv8uGLrVCCMwdGay+QP81YJUJ6L
+        z/gcb+/o5d5qxeZYnjjSZaHm9lE6T31YYVsn5xwohON4AWeoAhLJPvZIN64Zjp3uYb0Kmw
+        cD765qQIa2gStbIO+0uSlDgNdOZMCLxvgWkGUk0NOKWHaCF37A0MdnVkqkjSCSj6GGDUDr
+        fpjUe0ZPOQ/u5zOWPv4MuY8P1UKIbA3vl4SW5wJfbw6p0bHW0UmPlnR6UTlfEg==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
@@ -45,11 +45,10 @@ Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Hans Verkuil <hans.verkuil@cisco.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v6 1/6] dt-bindings: media: Add Allwinner A31 ISP bindings documentation
-Date:   Fri, 26 Aug 2022 20:41:39 +0200
-Message-Id: <20220826184144.605605-2-paul.kocialkowski@bootlin.com>
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH v6 5/6] media: sun6i-csi: Detect the availability of the ISP
+Date:   Fri, 26 Aug 2022 20:41:43 +0200
+Message-Id: <20220826184144.605605-6-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220826184144.605605-1-paul.kocialkowski@bootlin.com>
 References: <20220826184144.605605-1-paul.kocialkowski@bootlin.com>
@@ -59,119 +58,87 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This introduces YAML bindings documentation for the Allwinner A31 Image
-Signal Processor (ISP).
+Add a helper to detect whether the ISP is available and connected
+and store the indication in a driver-wide variable.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- .../media/allwinner,sun6i-a31-isp.yaml        | 97 +++++++++++++++++++
- 1 file changed, 97 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+ .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 33 +++++++++++++++++++
+ .../platform/sunxi/sun6i-csi/sun6i_csi.h      |  3 ++
+ 2 files changed, 36 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
-new file mode 100644
-index 000000000000..2fda6e05e16c
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
-@@ -0,0 +1,97 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/allwinner,sun6i-a31-isp.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+index 00521f966cee..b16166cba2ef 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+@@ -24,6 +24,35 @@
+ #include "sun6i_csi_capture.h"
+ #include "sun6i_csi_reg.h"
+ 
++/* ISP */
 +
-+title: Allwinner A31 Image Signal Processor Driver (ISP) Device Tree Bindings
++static bool sun6i_csi_isp_detect(struct sun6i_csi_device *csi_dev)
++{
++	struct device *dev = csi_dev->dev;
++	struct fwnode_handle *handle = NULL;
 +
-+maintainers:
-+  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
++	/* ISP is not available if disabled in kernel config. */
++	if (!IS_ENABLED(CONFIG_VIDEO_SUN6I_ISP))
++		return 0;
 +
-+properties:
-+  compatible:
-+    enum:
-+      - allwinner,sun6i-a31-isp
-+      - allwinner,sun8i-v3s-isp
++	/*
++	 * ISP is not available if not connected via fwnode graph.
++	 * This weill also check that the remote parent node is available.
++	 */
++	handle = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev),
++						 SUN6I_CSI_PORT_ISP, 0,
++						 FWNODE_GRAPH_ENDPOINT_NEXT);
++	if (!handle)
++		return 0;
 +
-+  reg:
-+    maxItems: 1
++	fwnode_handle_put(handle);
 +
-+  interrupts:
-+    maxItems: 1
++	dev_info(dev, "ISP link is available\n");
++	csi_dev->isp_available = true;
 +
-+  clocks:
-+    items:
-+      - description: Bus Clock
-+      - description: Module Clock
-+      - description: DRAM Clock
++	return 0;
++}
 +
-+  clock-names:
-+    items:
-+      - const: bus
-+      - const: mod
-+      - const: ram
+ /* Media */
+ 
+ static const struct media_device_ops sun6i_csi_media_ops = {
+@@ -290,6 +319,10 @@ static int sun6i_csi_probe(struct platform_device *platform_dev)
+ 	if (ret)
+ 		return ret;
+ 
++	ret = sun6i_csi_isp_detect(csi_dev);
++	if (ret)
++		goto error_resources;
 +
-+  resets:
-+    maxItems: 1
+ 	ret = sun6i_csi_v4l2_setup(csi_dev);
+ 	if (ret)
+ 		goto error_resources;
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+index e611bdd6e9b2..8e232cd91ebe 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+@@ -21,6 +21,7 @@
+ enum sun6i_csi_port {
+ 	SUN6I_CSI_PORT_PARALLEL		= 0,
+ 	SUN6I_CSI_PORT_MIPI_CSI2	= 1,
++	SUN6I_CSI_PORT_ISP		= 2,
+ };
+ 
+ struct sun6i_csi_buffer {
+@@ -44,6 +45,8 @@ struct sun6i_csi_device {
+ 	struct clk			*clock_mod;
+ 	struct clk			*clock_ram;
+ 	struct reset_control		*reset;
 +
-+  ports:
-+    $ref: /schemas/graph.yaml#/properties/ports
-+
-+    properties:
-+      port@0:
-+        $ref: /schemas/graph.yaml#/properties/port
-+        description: CSI0 input port
-+
-+      port@1:
-+        $ref: /schemas/graph.yaml#/properties/port
-+        description: CSI1 input port
-+
-+    anyOf:
-+      - required:
-+          - port@0
-+      - required:
-+          - port@1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - resets
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
-+    #include <dt-bindings/reset/sun8i-v3s-ccu.h>
-+
-+    isp: isp@1cb8000 {
-+        compatible = "allwinner,sun8i-v3s-isp";
-+        reg = <0x01cb8000 0x1000>;
-+        interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&ccu CLK_BUS_CSI>,
-+             <&ccu CLK_CSI1_SCLK>,
-+             <&ccu CLK_DRAM_CSI>;
-+        clock-names = "bus", "mod", "ram";
-+        resets = <&ccu RST_BUS_CSI>;
-+
-+        ports {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            port@0 {
-+                reg = <0>;
-+
-+                isp_in_csi0: endpoint {
-+                    remote-endpoint = <&csi0_out_isp>;
-+                };
-+            };
-+        };
-+    };
-+
-+...
++	bool				isp_available;
+ };
+ 
+ struct sun6i_csi_variant {
 -- 
 2.37.1
 
