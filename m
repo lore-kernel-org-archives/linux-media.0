@@ -2,65 +2,65 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57888ECAAD6
-	for <linux-media@archiver.kernel.org>; Fri, 26 Aug 2022 10:07:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65107ECAAD6
+	for <linux-media@archiver.kernel.org>; Fri, 26 Aug 2022 10:07:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245405AbiHZKHY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Aug 2022 06:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
+        id S245484AbiHZKH1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Aug 2022 06:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244937AbiHZKGk (ORCPT
+        with ESMTP id S245353AbiHZKGr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Aug 2022 06:06:40 -0400
+        Fri, 26 Aug 2022 06:06:47 -0400
 Received: from smtpout140.security-mail.net (smtpout140.security-mail.net [85.31.212.149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94E2DA3C7
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13871DA3E1
         for <linux-media@vger.kernel.org>; Fri, 26 Aug 2022 03:05:23 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by fx409.security-mail.net (Postfix) with ESMTP id 585B9323722
-        for <linux-media@vger.kernel.org>; Fri, 26 Aug 2022 12:01:25 +0200 (CEST)
+        by fx409.security-mail.net (Postfix) with ESMTP id CE27D32365A
+        for <linux-media@vger.kernel.org>; Fri, 26 Aug 2022 12:01:27 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1661508085;
-        bh=vvFfyIzVOt+FBtDJHEyLUs+N/uAy6HQNA/KHZSgA5D8=;
+        s=sec-sig-email; t=1661508088;
+        bh=IWqwVsdazSfv41xKDS9xL+X3jJ1zkSqWxIzmy0IJtU0=;
         h=From:To:Cc:Subject:Date;
-        b=CgwopXANpNqyg6YtzA3SripPIjrvnzTiWBwNLhmQi1z17QQipQAAN0OOnGqotm9vM
-         qZIEfaXtms72/nlexVIA1VfhqJR1TU2onBpUWChj97llbhBVP1xxl/K2sgiy1McZVT
-         vjkTtdRQftjGmZTikoDKP8QAr0j9ewyhWFjBzysQ=
+        b=FpIWwnQtmokiZ9JDbJvGH5XdgsI/4qXwmyndsHzkfiilkGzLYFxXZBD8Hw2dCGVob
+         Q8WrwlAf1k5qEBQKaW2c3Ad6Or9d0Rc+bjrwVsCUKCOdLc44+EsQ0AKR0t67HCGRcL
+         DOZIYtinPQ8aU9v5WWK80PkzC53BcbGbt/PkMCFo=
 Received: from fx409 (localhost [127.0.0.1])
-        by fx409.security-mail.net (Postfix) with ESMTP id B3E8032363E;
-        Fri, 26 Aug 2022 12:01:24 +0200 (CEST)
+        by fx409.security-mail.net (Postfix) with ESMTP id 683A73238BF;
+        Fri, 26 Aug 2022 12:01:27 +0200 (CEST)
 X-Virus-Scanned: E-securemail
-Secumail-id: <5a32.630899f3.d3b51.0>
+Secumail-id: <62b1.630899f5.6646e.0>
 Received: from zimbra2.kalray.eu (unknown [217.181.231.53])
-        by fx409.security-mail.net (Postfix) with ESMTPS id D5B9B3238AC;
-        Fri, 26 Aug 2022 12:01:23 +0200 (CEST)
+        by fx409.security-mail.net (Postfix) with ESMTPS id 67E98323834;
+        Fri, 26 Aug 2022 12:01:25 +0200 (CEST)
 Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTPS id B5F5827E02FA;
-        Fri, 26 Aug 2022 12:01:23 +0200 (CEST)
+        by zimbra2.kalray.eu (Postfix) with ESMTPS id 1F6F527E0396;
+        Fri, 26 Aug 2022 12:01:25 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id 9E51827E0392;
-        Fri, 26 Aug 2022 12:01:23 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 9E51827E0392
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 08E8927E0392;
+        Fri, 26 Aug 2022 12:01:25 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 08E8927E0392
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
-        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1661508083;
-        bh=M/RfIAISD7kAlTMJPp9AUX7+0n4u8J4cxKaRTfK45Jk=;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1661508085;
+        bh=zs73o10H7uL434cqdBywD/xopWvN+dDf0lK4XbaWJlA=;
         h=From:To:Date:Message-Id;
-        b=gGI6sadZ5EwB55pMsAHuFLe/ZLEWEaWS4jmEeGy0Rmcwx+BoKeK03zXymXKatxl1k
-         fRH59Y5+Lr3wmydZI3NheomjaQMBJ6lnxwbltN2ev4tkacOWA2dbES6H3oi0aN9Aq4
-         6uv9RGDeLEML9faz7OvFYcqcrgPRhvuN+sGXtlnA=
+        b=MelV7xl6I+ru/XdI5FyAnGvO+LJei5N3ueyNNaWngRm+8JpYHdcrEkFLnyT/5ERTf
+         xzZVrgymf0UjQAtQEhV/am55p8of1oD3GPO+LzqVEWaOE6PrhyErijLAVgQiGjBMvT
+         Ge1rwRFS1Ef8zB2xZVb/PTuLTS/IaY0eGuUFk2vc=
 Received: from zimbra2.kalray.eu ([127.0.0.1])
         by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id wanPIDXbM-ba; Fri, 26 Aug 2022 12:01:23 +0200 (CEST)
+        with ESMTP id Eq5uE6gaEYWi; Fri, 26 Aug 2022 12:01:24 +0200 (CEST)
 Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206])
-        by zimbra2.kalray.eu (Postfix) with ESMTPSA id 8CED527E02FA;
-        Fri, 26 Aug 2022 12:01:23 +0200 (CEST)
+        by zimbra2.kalray.eu (Postfix) with ESMTPSA id EC92527E02FA;
+        Fri, 26 Aug 2022 12:01:24 +0200 (CEST)
 From:   Jules Maselbas <jmaselbas@kalray.eu>
 To:     linux-kernel@vger.kernel.org
 Cc:     Jules Maselbas <jmaselbas@kalray.eu>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Andy Walls <awalls@md.metrocast.net>,
         linux-media@vger.kernel.org
-Subject: [PATCH] media: platform: ti: Fix repeated word in comments
-Date:   Fri, 26 Aug 2022 12:00:46 +0200
-Message-Id: <20220826100052.22945-18-jmaselbas@kalray.eu>
+Subject: [PATCH] media: pci: Fix repeated word in comments
+Date:   Fri, 26 Aug 2022 12:00:48 +0200
+Message-Id: <20220826100052.22945-20-jmaselbas@kalray.eu>
 X-Mailer: git-send-email 2.17.1
 X-Virus-Scanned: by Secumail
 Precedence: bulk
@@ -69,40 +69,54 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Remove redundant word `the`.
 
-CC: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+CC: Andy Walls <awalls@md.metrocast.net>
 CC: linux-media@vger.kernel.org
 Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
 ---
- drivers/media/platform/ti/davinci/vpbe.c | 2 +-
- drivers/media/platform/ti/omap3isp/isp.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/pci/cx88/cx88-dsp.c        | 2 +-
+ drivers/media/pci/ivtv/ivtv-yuv.c        | 2 +-
+ drivers/media/pci/saa7164/saa7164-core.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/ti/davinci/vpbe.c b/drivers/media/platform/ti/davinci/vpbe.c
-index 5f0aeb744e81..509ecc84624e 100644
---- a/drivers/media/platform/ti/davinci/vpbe.c
-+++ b/drivers/media/platform/ti/davinci/vpbe.c
-@@ -280,7 +280,7 @@ static int vpbe_set_default_output(struct vpbe_device *vpbe_dev)
-  * vpbe_get_output - Get output
-  * @vpbe_dev: vpbe device ptr
-  *
-- * return current vpbe output to the the index
-+ * return current vpbe output to the index
+diff --git a/drivers/media/pci/cx88/cx88-dsp.c b/drivers/media/pci/cx88/cx88-dsp.c
+index f1e1fc1cb4bd..e378f3b215c7 100644
+--- a/drivers/media/pci/cx88/cx88-dsp.c
++++ b/drivers/media/pci/cx88/cx88-dsp.c
+@@ -24,7 +24,7 @@
+ 
+ /*
+  * We calculate the baseband frequencies of the carrier and the pilot tones
+- * based on the the sampling rate of the audio rds fifo.
++ * based on the sampling rate of the audio rds fifo.
   */
- static unsigned int vpbe_get_output(struct vpbe_device *vpbe_dev)
- {
-diff --git a/drivers/media/platform/ti/omap3isp/isp.c b/drivers/media/platform/ti/omap3isp/isp.c
-index d251736eb420..a6052df9bb19 100644
---- a/drivers/media/platform/ti/omap3isp/isp.c
-+++ b/drivers/media/platform/ti/omap3isp/isp.c
-@@ -1528,7 +1528,7 @@ void omap3isp_print_status(struct isp_device *isp)
-  * To solve this problem power management support is split into prepare/complete
-  * and suspend/resume operations. The pipelines are stopped in prepare() and the
-  * ISP clocks get disabled in suspend(). Similarly, the clocks are re-enabled in
-- * resume(), and the the pipelines are restarted in complete().
-+ * resume(), and the pipelines are restarted in complete().
-  *
-  * TODO: PM dependencies between the ISP and sensors are not modelled explicitly
-  * yet.
+ 
+ #define FREQ_A2_CARRIER         baseband_freq(54687.5, 2689.36, 0.0)
+diff --git a/drivers/media/pci/ivtv/ivtv-yuv.c b/drivers/media/pci/ivtv/ivtv-yuv.c
+index e79e8a5a744a..4ba10c34a16a 100644
+--- a/drivers/media/pci/ivtv/ivtv-yuv.c
++++ b/drivers/media/pci/ivtv/ivtv-yuv.c
+@@ -538,7 +538,7 @@ static void ivtv_yuv_handle_vertical(struct ivtv *itv, struct yuv_frame_info *f)
+ 	reg_2964 = (reg_2964 << 16) + reg_2964 + (reg_2964 * 46 / 94);
+ 
+ 	/* Okay, we've wasted time working out the correct value,
+-	   but if we use it, it fouls the the window alignment.
++	   but if we use it, it fouls the window alignment.
+ 	   Fudge it to what we want... */
+ 	reg_2964 = 0x00010001 + ((reg_2964 & 0x0000FFFF) - (reg_2964 >> 16));
+ 	reg_2968 = 0x00010001 + ((reg_2968 & 0x0000FFFF) - (reg_2968 >> 16));
+diff --git a/drivers/media/pci/saa7164/saa7164-core.c b/drivers/media/pci/saa7164/saa7164-core.c
+index 7973ae42873a..d5f32e3ff544 100644
+--- a/drivers/media/pci/saa7164/saa7164-core.c
++++ b/drivers/media/pci/saa7164/saa7164-core.c
+@@ -626,7 +626,7 @@ static irqreturn_t saa7164_irq(int irq, void *dev_id)
+ 	portf = &dev->ports[SAA7164_PORT_VBI2];
+ 
+ 	/* Check that the hardware is accessible. If the status bytes are
+-	 * 0xFF then the device is not accessible, the the IRQ belongs
++	 * 0xFF then the device is not accessible, the IRQ belongs
+ 	 * to another driver.
+ 	 * 4 x u32 interrupt registers.
+ 	 */
 -- 
 2.17.1
 
