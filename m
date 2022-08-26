@@ -2,34 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3C98ECAAD6
-	for <linux-media@archiver.kernel.org>; Fri, 26 Aug 2022 18:36:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DEE7ECAAD7
+	for <linux-media@archiver.kernel.org>; Fri, 26 Aug 2022 18:36:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344895AbiHZSgP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Aug 2022 14:36:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56090 "EHLO
+        id S1344917AbiHZSgR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Aug 2022 14:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344902AbiHZSed (ORCPT
+        with ESMTP id S244314AbiHZSej (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Aug 2022 14:34:33 -0400
+        Fri, 26 Aug 2022 14:34:39 -0400
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137E6E68E7;
-        Fri, 26 Aug 2022 11:33:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E76DE68F0;
+        Fri, 26 Aug 2022 11:33:52 -0700 (PDT)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D652AFF806;
-        Fri, 26 Aug 2022 18:33:47 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 18471FF803;
+        Fri, 26 Aug 2022 18:33:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1661538828;
+        t=1661538831;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=pUOeK8NRqYGWG1WB+kPp8ElVE/Y8mU4DpqbqQ8VMyDA=;
-        b=eH4Cdq8hwKAta+F76Hzj8gliyUVh1TeQq9brQOWrKXR781WAQO3v5Hcm3W6NqRBW05WNgH
-        +kRrVB0HYjRD3lpr7R/izR+Q6IYrbqZUj40JGnI3C/fmcVc0PzmIz7tC1TvBgeayIvLgRb
-        onFMvIYfCHD0/Cwqe3nDN2HMBFODShljoL0LXp95hQUdkyrLM0S+1OqOhiv8vveZUjencc
-        3kc0usToRn7ta8spuMZivpiRCnmxgjwygsiQwB1pRInLdmETQF3PVwMVi/BwDHAI/f74Lc
-        7AtmlpqlIA3NEGTuq2coKLNipH/pGc5d/p99R38hmIEywbu3+QnU+Ktr0P4zQg==
+        bh=m5EvBLGJvk13r27+B5Bp9lTfiXDO1r+hzddDKFPCfQg=;
+        b=eANSHNH06rQDMP4OY4GaySXyNMVT5Wkh9jcvAGye0DpJIlycLlAlTVQcz8YGDoDRExdebU
+        aNY+PjZOuJM8e1bHh0chazK4Lvkqhg8a21vqkh1fhH4PP+Dm829ubo+sk3P8wWrz412nIM
+        hLO+XYO1J6dnPo4UL+Qy9TXozx26VCaS95qrP9Y7dT/lr/A5/oIQ6iwJuzXz/poC/+jWmz
+        PLOwNcylgI3YEbHFSrLH6SY0JttTUz4WAV6siKi5wnErzvrFfQCBU0nfgoFDMRlCdPZhNX
+        40dCMH/4MAJKD6kloeqDkttMsRoIc9WnB+f64RVgNJIldJKtSKR6i53NhCFC8w==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
@@ -42,9 +42,9 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v6 38/43] media: sun6i-csi: Cleanup headers and includes, update copyright lines
-Date:   Fri, 26 Aug 2022 20:32:35 +0200
-Message-Id: <20220826183240.604834-39-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v6 40/43] media: sun6i-csi: Only configure capture when streaming
+Date:   Fri, 26 Aug 2022 20:32:37 +0200
+Message-Id: <20220826183240.604834-41-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220826183240.604834-1-paul.kocialkowski@bootlin.com>
 References: <20220826183240.604834-1-paul.kocialkowski@bootlin.com>
@@ -54,200 +54,173 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Cleanup includes, update copyright lines and some cosmetic changes.
+Add a streaming element to the capture state structure to know if the
+capture device is used or not. Only configure things related to output
+when streaming, including the output format, irq, state (dma buffer)
+and window configuration registers.
+
+After this change, it becomes possible to use the bridge without the
+capture device, which will be the case in the isp media flow.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 ---
- .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 15 +++++--------
- .../platform/sunxi/sun6i-csi/sun6i_csi.h      | 10 ++++-----
- .../sunxi/sun6i-csi/sun6i_csi_capture.c       |  4 ++--
- .../sunxi/sun6i-csi/sun6i_csi_capture.h       | 22 ++++++++++++++-----
- .../platform/sunxi/sun6i-csi/sun6i_csi_reg.h  |  9 ++++----
- 5 files changed, 34 insertions(+), 26 deletions(-)
+ .../sunxi/sun6i-csi/sun6i_csi_bridge.c        | 50 ++++++++++++-------
+ .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 11 +++-
+ .../sunxi/sun6i-csi/sun6i_csi_capture.h       |  1 +
+ 3 files changed, 41 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-index 75d9f7edf828..eaf62cab0b64 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-@@ -1,18 +1,14 @@
- // SPDX-License-Identifier: GPL-2.0+
- /*
-  * Copyright (c) 2011-2018 Magewell Electronics Co., Ltd. (Nanjing)
-- * All rights reserved.
-  * Author: Yong Deng <yong.deng@magewell.com>
-+ * Copyright 2021-2022 Bootlin
-+ * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-  */
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
+index 69c1fa7151d9..492f93b0db28 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
+@@ -338,6 +338,7 @@ sun6i_csi_bridge_configure_mipi_csi2(struct sun6i_csi_device *csi_dev)
+ static void sun6i_csi_bridge_configure_format(struct sun6i_csi_device *csi_dev)
+ {
+ 	struct regmap *regmap = csi_dev->regmap;
++	bool capture_streaming = csi_dev->capture.state.streaming;
+ 	const struct sun6i_csi_bridge_format *bridge_format;
+ 	const struct sun6i_csi_capture_format *capture_format;
+ 	u32 mbus_code, field, pixelformat;
+@@ -353,26 +354,29 @@ static void sun6i_csi_bridge_configure_format(struct sun6i_csi_device *csi_dev)
+ 	input_format = bridge_format->input_format;
+ 	input_yuv_seq = bridge_format->input_yuv_seq;
  
- #include <linux/clk.h>
--#include <linux/delay.h>
--#include <linux/dma-mapping.h>
- #include <linux/err.h>
--#include <linux/fs.h>
- #include <linux/interrupt.h>
--#include <linux/io.h>
--#include <linux/ioctl.h>
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
-@@ -20,12 +16,12 @@
- #include <linux/pm_runtime.h>
- #include <linux/regmap.h>
- #include <linux/reset.h>
--#include <linux/sched.h>
--#include <linux/sizes.h>
--#include <linux/slab.h>
-+#include <media/v4l2-device.h>
- #include <media/v4l2-mc.h>
+-	sun6i_csi_capture_format(csi_dev, &pixelformat, NULL);
++	if (capture_streaming) {
++		sun6i_csi_capture_format(csi_dev, &pixelformat, NULL);
  
- #include "sun6i_csi.h"
-+#include "sun6i_csi_bridge.h"
-+#include "sun6i_csi_capture.h"
- #include "sun6i_csi_reg.h"
+-	capture_format = sun6i_csi_capture_format_find(pixelformat);
+-	if (WARN_ON(!capture_format))
+-		return;
++		capture_format = sun6i_csi_capture_format_find(pixelformat);
++		if (WARN_ON(!capture_format))
++			return;
  
- /* Media */
-@@ -375,4 +371,5 @@ module_platform_driver(sun6i_csi_platform_driver);
+-	if (capture_format->input_format_raw)
+-		input_format = SUN6I_CSI_INPUT_FMT_RAW;
++		if (capture_format->input_format_raw)
++			input_format = SUN6I_CSI_INPUT_FMT_RAW;
  
- MODULE_DESCRIPTION("Allwinner A31 Camera Sensor Interface driver");
- MODULE_AUTHOR("Yong Deng <yong.deng@magewell.com>");
-+MODULE_AUTHOR("Paul Kocialkowski <paul.kocialkowski@bootlin.com>");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-index e3f9c49bb829..fd6e98b66f12 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-@@ -1,15 +1,15 @@
- /* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Copyright (c) 2011-2018 Magewell Electronics Co., Ltd. (Nanjing)
-- * All rights reserved.
-  * Author: Yong Deng <yong.deng@magewell.com>
-+ * Copyright 2021-2022 Bootlin
-+ * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-  */
+-	if (capture_format->input_yuv_seq_invert)
+-		input_yuv_seq = bridge_format->input_yuv_seq_invert;
++		if (capture_format->input_yuv_seq_invert)
++			input_yuv_seq = bridge_format->input_yuv_seq_invert;
  
--#ifndef __SUN6I_CSI_H__
--#define __SUN6I_CSI_H__
-+#ifndef _SUN6I_CSI_H_
-+#define _SUN6I_CSI_H_
+-	if (field == V4L2_FIELD_INTERLACED ||
+-	    field == V4L2_FIELD_INTERLACED_TB ||
+-	    field == V4L2_FIELD_INTERLACED_BT)
+-		output_format = capture_format->output_format_field;
+-	else
+-		output_format = capture_format->output_format_frame;
++		if (field == V4L2_FIELD_INTERLACED ||
++		    field == V4L2_FIELD_INTERLACED_TB ||
++		    field == V4L2_FIELD_INTERLACED_BT)
++			output_format = capture_format->output_format_field;
++		else
++			output_format = capture_format->output_format_frame;
++
++		value |= SUN6I_CSI_CH_CFG_OUTPUT_FMT(output_format);
++	}
  
- #include <media/v4l2-device.h>
--#include <media/v4l2-fwnode.h>
- #include <media/videobuf2-v4l2.h>
+-	value |= SUN6I_CSI_CH_CFG_OUTPUT_FMT(output_format);
+ 	value |= SUN6I_CSI_CH_CFG_INPUT_FMT(input_format);
+ 	value |= SUN6I_CSI_CH_CFG_INPUT_YUV_SEQ(input_yuv_seq);
  
- #include "sun6i_csi_bridge.h"
-@@ -49,4 +49,4 @@ struct sun6i_csi_variant {
- 	unsigned long	clock_mod_rate;
- };
+@@ -406,6 +410,7 @@ static int sun6i_csi_bridge_s_stream(struct v4l2_subdev *subdev, int on)
+ 	struct sun6i_csi_device *csi_dev = v4l2_get_subdevdata(subdev);
+ 	struct sun6i_csi_bridge *bridge = &csi_dev->bridge;
+ 	struct media_pad *local_pad = &bridge->pads[SUN6I_CSI_BRIDGE_PAD_SINK];
++	bool capture_streaming = csi_dev->capture.state.streaming;
+ 	struct device *dev = csi_dev->dev;
+ 	struct sun6i_csi_bridge_source *source;
+ 	struct v4l2_subdev *source_subdev;
+@@ -447,15 +452,20 @@ static int sun6i_csi_bridge_s_stream(struct v4l2_subdev *subdev, int on)
+ 	/* Configure */
  
--#endif /* __SUN6I_CSI_H__ */
-+#endif
+ 	sun6i_csi_bridge_configure(csi_dev, source);
+-	sun6i_csi_capture_configure(csi_dev);
++
++	if (capture_streaming)
++		sun6i_csi_capture_configure(csi_dev);
+ 
+ 	/* State Update */
+ 
+-	sun6i_csi_capture_state_update(csi_dev);
++	if (capture_streaming)
++		sun6i_csi_capture_state_update(csi_dev);
+ 
+ 	/* Enable */
+ 
+-	sun6i_csi_bridge_irq_enable(csi_dev);
++	if (capture_streaming)
++		sun6i_csi_bridge_irq_enable(csi_dev);
++
+ 	sun6i_csi_bridge_enable(csi_dev);
+ 
+ 	ret = v4l2_subdev_call(source_subdev, video, s_stream, 1);
+@@ -465,7 +475,9 @@ static int sun6i_csi_bridge_s_stream(struct v4l2_subdev *subdev, int on)
+ 	return 0;
+ 
+ disable:
+-	sun6i_csi_bridge_irq_disable(csi_dev);
++	if (capture_streaming)
++		sun6i_csi_bridge_irq_disable(csi_dev);
++
+ 	sun6i_csi_bridge_disable(csi_dev);
+ 
+ 	pm_runtime_put(dev);
 diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-index e5ebe7a50c6f..36ddc190a919 100644
+index 36ddc190a919..c9e7526b84c4 100644
 --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
 +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-@@ -1,13 +1,13 @@
- // SPDX-License-Identifier: GPL-2.0+
- /*
-  * Copyright (c) 2011-2018 Magewell Electronics Co., Ltd. (Nanjing)
-- * All rights reserved.
-  * Author: Yong Deng <yong.deng@magewell.com>
-+ * Copyright 2021-2022 Bootlin
-+ * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-  */
+@@ -616,13 +616,17 @@ static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
+ 	if (ret < 0)
+ 		goto error_state;
  
- #include <linux/of.h>
- #include <linux/regmap.h>
--
- #include <media/v4l2-device.h>
- #include <media/v4l2-event.h>
- #include <media/v4l2-ioctl.h>
++	state->streaming = true;
++
+ 	ret = v4l2_subdev_call(subdev, video, s_stream, 1);
+ 	if (ret && ret != -ENOIOCTLCMD)
+-		goto error_media_pipeline;
++		goto error_streaming;
+ 
+ 	return 0;
+ 
+-error_media_pipeline:
++error_streaming:
++	state->streaming = false;
++
+ 	media_pipeline_stop(&video_dev->entity);
+ 
+ error_state:
+@@ -634,11 +638,14 @@ static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
+ static void sun6i_csi_capture_stop_streaming(struct vb2_queue *queue)
+ {
+ 	struct sun6i_csi_device *csi_dev = vb2_get_drv_priv(queue);
++	struct sun6i_csi_capture_state *state = &csi_dev->capture.state;
+ 	struct video_device *video_dev = &csi_dev->capture.video_dev;
+ 	struct v4l2_subdev *subdev = &csi_dev->bridge.subdev;
+ 
+ 	v4l2_subdev_call(subdev, video, s_stream, 0);
+ 
++	state->streaming = false;
++
+ 	media_pipeline_stop(&video_dev->entity);
+ 
+ 	sun6i_csi_capture_state_cleanup(csi_dev, true);
 diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-index 59c57bcefeec..ceceb030aef6 100644
+index ceceb030aef6..29893cf96f6b 100644
 --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
 +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-@@ -1,15 +1,15 @@
- /* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Copyright (c) 2011-2018 Magewell Electronics Co., Ltd. (Nanjing)
-- * All rights reserved.
-  * Author: Yong Deng <yong.deng@magewell.com>
-+ * Copyright 2021-2022 Bootlin
-+ * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-  */
+@@ -44,6 +44,7 @@ struct sun6i_csi_capture_state {
+ 	struct sun6i_csi_buffer		*complete;
  
--#ifndef __SUN6I_CAPTURE_H__
--#define __SUN6I_CAPTURE_H__
-+#ifndef _SUN6I_CAPTURE_H_
-+#define _SUN6I_CAPTURE_H_
- 
--#include <media/v4l2-dev.h>
--#include <media/videobuf2-core.h>
-+#include <media/v4l2-device.h>
- 
- #define SUN6I_CSI_CAPTURE_NAME	"sun6i-csi-capture"
- 
-@@ -57,21 +57,31 @@ struct sun6i_csi_capture {
- 	struct v4l2_format		format;
+ 	unsigned int			sequence;
++	bool				streaming;
  };
  
-+/* Helpers */
-+
- void sun6i_csi_capture_dimensions(struct sun6i_csi_device *csi_dev,
- 				  unsigned int *width, unsigned int *height);
- void sun6i_csi_capture_format(struct sun6i_csi_device *csi_dev,
- 			      u32 *pixelformat, u32 *field);
- 
-+/* Format */
-+
- const
- struct sun6i_csi_capture_format *sun6i_csi_capture_format_find(u32 pixelformat);
- 
-+/* Capture */
-+
- void sun6i_csi_capture_configure(struct sun6i_csi_device *csi_dev);
- void sun6i_csi_capture_state_update(struct sun6i_csi_device *csi_dev);
- 
-+/* State */
-+
- void sun6i_csi_capture_sync(struct sun6i_csi_device *csi_dev);
- void sun6i_csi_capture_frame_done(struct sun6i_csi_device *csi_dev);
- 
-+/* Capture */
-+
- int sun6i_csi_capture_setup(struct sun6i_csi_device *csi_dev);
- void sun6i_csi_capture_cleanup(struct sun6i_csi_device *csi_dev);
- 
--#endif /* __SUN6I_CAPTURE_H__ */
-+#endif
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_reg.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_reg.h
-index 1e4a07f26d1d..e01c5b9c2d60 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_reg.h
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_reg.h
-@@ -1,12 +1,13 @@
- /* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Copyright (c) 2011-2018 Magewell Electronics Co., Ltd. (Nanjing)
-- * All rights reserved.
-  * Author: Yong Deng <yong.deng@magewell.com>
-+ * Copyright 2021-2022 Bootlin
-+ * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-  */
- 
--#ifndef __SUN6I_CSI_REG_H__
--#define __SUN6I_CSI_REG_H__
-+#ifndef _SUN6I_CSI_REG_H_
-+#define _SUN6I_CSI_REG_H_
- 
- #include <linux/kernel.h>
- 
-@@ -180,4 +181,4 @@
- #define SUN6I_CSI_CH_FIFO_STAT_REG		0x98
- #define SUN6I_CSI_CH_PCLK_STAT_REG		0x9c
- 
--#endif /* __SUN6I_CSI_REG_H__ */
-+#endif
+ struct sun6i_csi_capture {
 -- 
 2.37.1
 
