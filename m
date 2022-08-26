@@ -2,34 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F4099ECAAA3
-	for <linux-media@archiver.kernel.org>; Fri, 26 Aug 2022 18:46:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5700CECAAD8
+	for <linux-media@archiver.kernel.org>; Fri, 26 Aug 2022 18:46:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345291AbiHZSq3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Aug 2022 14:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
+        id S1345306AbiHZSqa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Aug 2022 14:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345401AbiHZSps (ORCPT
+        with ESMTP id S1345411AbiHZSpt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Aug 2022 14:45:48 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF556EEC5E;
-        Fri, 26 Aug 2022 11:42:12 -0700 (PDT)
+        Fri, 26 Aug 2022 14:45:49 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26231E9256;
+        Fri, 26 Aug 2022 11:42:15 -0700 (PDT)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 1553240013;
-        Fri, 26 Aug 2022 18:42:10 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 14D824000C;
+        Fri, 26 Aug 2022 18:42:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1661539331;
+        t=1661539327;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Z0Rhyw8PldAh/zTvTm9JRxvDnK521uZT+v0lYic6QvU=;
-        b=JQiAPPTeuXlUMNT67Nq3KEb+CanvVp+UZfPl9vGmFMWkwqjT/y+heI1gbYgHh0VoaYAUSz
-        gP2S87X99fbgSmdi8GfZu1/XP7bZOdBZrk/cfKxUy9Lbv8uGLrVCCMwdGay+QP81YJUJ6L
-        z/gcb+/o5d5qxeZYnjjSZaHm9lE6T31YYVsn5xwohON4AWeoAhLJPvZIN64Zjp3uYb0Kmw
-        cD765qQIa2gStbIO+0uSlDgNdOZMCLxvgWkGUk0NOKWHaCF37A0MdnVkqkjSCSj6GGDUDr
-        fpjUe0ZPOQ/u5zOWPv4MuY8P1UKIbA3vl4SW5wJfbw6p0bHW0UmPlnR6UTlfEg==
+        bh=yq9qCs8d0+gMGAhESkCWOrYcrw3Z2Gzpyql4CYmayvQ=;
+        b=l4d6ET+LUWrsYQ/0lQVRiAsqJTeS7CD+lOxGZnjtGsOuASsV/AEDlCcjcF7VK8uNc75wPU
+        0t59lNErbtwqA16CxiYfo8zmTnWxOTFpjNtMj257ILumRdEoIt2nUHmvkNY2C3FPmDUG85
+        7toafyRLIQDEF0fA09JkopRefPv5HCPoauv45uURfgwA/+GHb45UZeiyw4aZxlMwsl9IED
+        hqXDqNBqXD6FzOojiqUIPb2DQY1g2HNUa8jioeb6WvdzGEi+mM1+ez1UISogg8iTsry4yC
+        po5Bfz272kMKTBrhKRs/2JWjRnFyjOWNHBrBgIxgi/bSSjZ2UdPCmBt+nDQTLQ==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
@@ -45,10 +45,11 @@ Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Hans Verkuil <hans.verkuil@cisco.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v6 5/6] media: sun6i-csi: Detect the availability of the ISP
-Date:   Fri, 26 Aug 2022 20:41:43 +0200
-Message-Id: <20220826184144.605605-6-paul.kocialkowski@bootlin.com>
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v6 2/6] dt-bindings: media: sun6i-a31-csi: Add ISP output port
+Date:   Fri, 26 Aug 2022 20:41:40 +0200
+Message-Id: <20220826184144.605605-3-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220826184144.605605-1-paul.kocialkowski@bootlin.com>
 References: <20220826184144.605605-1-paul.kocialkowski@bootlin.com>
@@ -58,87 +59,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a helper to detect whether the ISP is available and connected
-and store the indication in a driver-wide variable.
+Some Allwinner devices come with an Image Signal Processor (ISP) that
+allows processing camera data to produce good-looking images,
+especially from raw bayer representations.
+
+The ISP does not have a dedicated capture path: it is fed directly by
+one of the CSI controllers, which can be selected at run-time.
+
+Represent this possibility as a graph connection between the CSI
+controller and the ISP in the device-tree bindings.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Acked-by: Rob Herring <robh@kernel.org>
 ---
- .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 33 +++++++++++++++++++
- .../platform/sunxi/sun6i-csi/sun6i_csi.h      |  3 ++
- 2 files changed, 36 insertions(+)
+ .../devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml    | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-index 00521f966cee..b16166cba2ef 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-@@ -24,6 +24,35 @@
- #include "sun6i_csi_capture.h"
- #include "sun6i_csi_reg.h"
+diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
+index 8551c4a711dc..54eb80e517e3 100644
+--- a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
++++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
+@@ -73,6 +73,10 @@ properties:
+         $ref: /schemas/graph.yaml#/properties/port
+         description: MIPI CSI-2 bridge input port
  
-+/* ISP */
++      port@2:
++        $ref: /schemas/graph.yaml#/properties/port
++        description: ISP output port
 +
-+static bool sun6i_csi_isp_detect(struct sun6i_csi_device *csi_dev)
-+{
-+	struct device *dev = csi_dev->dev;
-+	struct fwnode_handle *handle = NULL;
-+
-+	/* ISP is not available if disabled in kernel config. */
-+	if (!IS_ENABLED(CONFIG_VIDEO_SUN6I_ISP))
-+		return 0;
-+
-+	/*
-+	 * ISP is not available if not connected via fwnode graph.
-+	 * This weill also check that the remote parent node is available.
-+	 */
-+	handle = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev),
-+						 SUN6I_CSI_PORT_ISP, 0,
-+						 FWNODE_GRAPH_ENDPOINT_NEXT);
-+	if (!handle)
-+		return 0;
-+
-+	fwnode_handle_put(handle);
-+
-+	dev_info(dev, "ISP link is available\n");
-+	csi_dev->isp_available = true;
-+
-+	return 0;
-+}
-+
- /* Media */
- 
- static const struct media_device_ops sun6i_csi_media_ops = {
-@@ -290,6 +319,10 @@ static int sun6i_csi_probe(struct platform_device *platform_dev)
- 	if (ret)
- 		return ret;
- 
-+	ret = sun6i_csi_isp_detect(csi_dev);
-+	if (ret)
-+		goto error_resources;
-+
- 	ret = sun6i_csi_v4l2_setup(csi_dev);
- 	if (ret)
- 		goto error_resources;
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-index e611bdd6e9b2..8e232cd91ebe 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-@@ -21,6 +21,7 @@
- enum sun6i_csi_port {
- 	SUN6I_CSI_PORT_PARALLEL		= 0,
- 	SUN6I_CSI_PORT_MIPI_CSI2	= 1,
-+	SUN6I_CSI_PORT_ISP		= 2,
- };
- 
- struct sun6i_csi_buffer {
-@@ -44,6 +45,8 @@ struct sun6i_csi_device {
- 	struct clk			*clock_mod;
- 	struct clk			*clock_ram;
- 	struct reset_control		*reset;
-+
-+	bool				isp_available;
- };
- 
- struct sun6i_csi_variant {
+     anyOf:
+       - required:
+           - port@0
 -- 
 2.37.1
 
