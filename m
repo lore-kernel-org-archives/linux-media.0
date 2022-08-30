@@ -2,396 +2,152 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E8A5ECAAA1
-	for <linux-media@archiver.kernel.org>; Tue, 30 Aug 2022 12:07:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 420BAC0502A
+	for <linux-media@archiver.kernel.org>; Tue, 30 Aug 2022 12:16:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbiH3MHA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 30 Aug 2022 08:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39936 "EHLO
+        id S229767AbiH3MQm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 30 Aug 2022 08:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiH3MGo (ORCPT
+        with ESMTP id S229686AbiH3MQl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 30 Aug 2022 08:06:44 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADAF1E68FC
-        for <linux-media@vger.kernel.org>; Tue, 30 Aug 2022 05:06:02 -0700 (PDT)
-Received: from [192.168.1.111] (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 47E50481;
-        Tue, 30 Aug 2022 14:05:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1661861109;
-        bh=ro3gIqyYyCHY7uxjGuSZzNt1is49RtYES/VbCLQsOIc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Koatk/5Cy0zzA9cgvWepLs9f/JQ3SWx3dNhhsFYJ4pdaRXiF7SZCKIcMEd/rUHMV7
-         F3952DkRrpDG2MBR9sd9K8W4x9jI/9Tg9Fl3sFUEVZ4hT6Pq7FW9aFQVy7SGUAg0K1
-         9jzN6GcPdsCXEOcduaqx6RlznzQ/fJ6jmVgDyl/0=
-Message-ID: <860accd1-4dda-8206-a035-1fb166e0a956@ideasonboard.com>
-Date:   Tue, 30 Aug 2022 15:05:06 +0300
+        Tue, 30 Aug 2022 08:16:41 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90FEFAA3F1
+        for <linux-media@vger.kernel.org>; Tue, 30 Aug 2022 05:16:40 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27U97DK5028390;
+        Tue, 30 Aug 2022 14:16:35 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=selector1;
+ bh=fKnYzdrEABWZO37keqOg6jgonNVQMe1IhdZRYRDZPCk=;
+ b=qOgUC3PYRMpYC/NSCRV5kq3Cibhe2/gVL6aHZVaHWJQy1ZXbuWjMpGKx0VGQA8uHKJCL
+ m+ZC0yLoTWMsuXw5/sz1wcLkkXgIJFzzp6vN1cnGttcDBYOMqrMz4yVTb8psuyrmiOQB
+ iVXP6RyLe7LAgpPb9IWqu9G81pbCPoEcS5zdYy3OQ0Y21MGsgSc3ngT9vdGj2XnQISdD
+ jvdlPzYao/Q6JT6/L7e8svIjYPoTQ1Lc4nE6G+3u8AtNeyJejyMEtVP3+VERw2jG914I
+ ijEZLXOL52hUE/pyiQyVASQjob6fu6U/x+wOT/WIhdud54EOdT5k5oQcZfj16gCsl7RH Tg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3j9fmy1303-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Aug 2022 14:16:35 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3A1FF100034;
+        Tue, 30 Aug 2022 14:16:30 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 338FB226FDC;
+        Tue, 30 Aug 2022 14:16:30 +0200 (CEST)
+Received: from localhost (10.75.127.47) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.7; Tue, 30 Aug
+ 2022 14:16:29 +0200
+From:   Benjamin Mugnier <benjamin.mugnier@foss.st.com>
+To:     <linux-media@vger.kernel.org>
+CC:     <alain.volmat@foss.st.com>, <hugues.fruchet@foss.st.com>,
+        <sylvain.petinot@foss.st.com>, <dave.stevenson@raspberrypi.com>,
+        <sakari.ailus@linux.intel.com>,
+        <laurent.pinchart@ideasonboard.com>,
+        <kieran.bingham@ideasonboard.com>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>
+Subject: [PATCH v4 1/4] media: v4l: Add 1X16 16-bit greyscale media bus code definition
+Date:   Tue, 30 Aug 2022 14:16:05 +0200
+Message-ID: <20220830121608.12047-2-benjamin.mugnier@foss.st.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220830121608.12047-1-benjamin.mugnier@foss.st.com>
+References: <20220830121608.12047-1-benjamin.mugnier@foss.st.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v13 16/34] media: mc: convert pipeline funcs to take
- media_pad
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        niklas.soderlund+renesas@ragnatech.se,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Kishon Vijay Abraham <kishon@ti.com>,
-        satish.nagireddy@getcruise.com, Tomasz Figa <tfiga@chromium.org>
-References: <20220810121122.3149086-1-tomi.valkeinen@ideasonboard.com>
- <20220810121122.3149086-17-tomi.valkeinen@ideasonboard.com>
- <Ywz1kiDmrm0HWeBQ@pendragon.ideasonboard.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <Ywz1kiDmrm0HWeBQ@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-30_06,2022-08-30_01,2022-06-22_01
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 29/08/2022 20:21, Laurent Pinchart wrote:
-> Hi Tomi,
-> 
-> Thank you for the patch.
-> 
-> On Wed, Aug 10, 2022 at 03:11:04PM +0300, Tomi Valkeinen wrote:
->> Now that the pipeline is stored into pads instead of entities, we can
->> change the relevant functions to take pads instead of entities.
->>
->> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
->> ---
->>   drivers/media/mc/mc-entity.c                  | 40 ++++++++-----------
->>   .../samsung/s3c-camif/camif-capture.c         |  6 +--
->>   drivers/media/usb/au0828/au0828-core.c        |  8 ++--
->>   drivers/media/v4l2-core/v4l2-dev.c            | 12 +++---
->>   drivers/staging/media/imx/imx-media-utils.c   |  6 +--
->>   include/media/media-entity.h                  | 28 ++++++-------
->>   6 files changed, 46 insertions(+), 54 deletions(-)
->>
->> diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
->> index c89dc782840a..ce72ee749fe6 100644
->> --- a/drivers/media/mc/mc-entity.c
->> +++ b/drivers/media/mc/mc-entity.c
->> @@ -699,29 +699,21 @@ static int media_pipeline_populate(struct media_pipeline *pipe,
->>   	return ret;
->>   }
->>   
->> -__must_check int __media_pipeline_start(struct media_entity *entity,
->> +__must_check int __media_pipeline_start(struct media_pad *pad,
->>   					struct media_pipeline *pipe)
->>   {
->> -	struct media_device *mdev = entity->graph_obj.mdev;
->> +	struct media_device *mdev = pad->entity->graph_obj.mdev;
->>   	struct media_pipeline_pad *err_ppad;
->>   	struct media_pipeline_pad *ppad;
->>   	int ret;
->>   
->>   	lockdep_assert_held(&mdev->graph_mutex);
->>   
->> -	/*
->> -	 * media_pipeline_start(entity) only makes sense with entities that have
->> -	 * a single pad.
->> -	 */
->> -
->> -	if (WARN_ON(entity->num_pads != 1))
->> -		return -EINVAL;
->> -
->>   	/*
->>   	 * If the entity is already part of a pipeline, that pipeline must
->>   	 * be the same as the pipe given to media_pipeline_start().
->>   	 */
->> -	if (WARN_ON(entity->pads->pipe && entity->pads->pipe != pipe))
->> +	if (WARN_ON(pad->pipe && pad->pipe != pipe))
->>   		return -EINVAL;
->>   
->>   	/*
->> @@ -738,7 +730,7 @@ __must_check int __media_pipeline_start(struct media_entity *entity,
->>   	 * with media_pipeline_pad instances for each pad found during graph
->>   	 * walk.
->>   	 */
->> -	ret = media_pipeline_populate(pipe, entity->pads);
->> +	ret = media_pipeline_populate(pipe, pad);
->>   	if (ret)
->>   		return ret;
->>   
->> @@ -855,22 +847,22 @@ __must_check int __media_pipeline_start(struct media_entity *entity,
->>   }
->>   EXPORT_SYMBOL_GPL(__media_pipeline_start);
->>   
->> -__must_check int media_pipeline_start(struct media_entity *entity,
->> +__must_check int media_pipeline_start(struct media_pad *pad,
->>   				      struct media_pipeline *pipe)
->>   {
->> -	struct media_device *mdev = entity->graph_obj.mdev;
->> +	struct media_device *mdev = pad->entity->graph_obj.mdev;
->>   	int ret;
->>   
->>   	mutex_lock(&mdev->graph_mutex);
->> -	ret = __media_pipeline_start(entity, pipe);
->> +	ret = __media_pipeline_start(pad, pipe);
->>   	mutex_unlock(&mdev->graph_mutex);
->>   	return ret;
->>   }
->>   EXPORT_SYMBOL_GPL(media_pipeline_start);
->>   
->> -void __media_pipeline_stop(struct media_entity *entity)
->> +void __media_pipeline_stop(struct media_pad *pad)
->>   {
->> -	struct media_pipeline *pipe = entity->pads->pipe;
->> +	struct media_pipeline *pipe = pad->pipe;
->>   	struct media_pipeline_pad *ppad;
->>   
->>   	/*
->> @@ -893,19 +885,19 @@ void __media_pipeline_stop(struct media_entity *entity)
->>   }
->>   EXPORT_SYMBOL_GPL(__media_pipeline_stop);
->>   
->> -void media_pipeline_stop(struct media_entity *entity)
->> +void media_pipeline_stop(struct media_pad *pad)
->>   {
->> -	struct media_device *mdev = entity->graph_obj.mdev;
->> +	struct media_device *mdev = pad->entity->graph_obj.mdev;
->>   
->>   	mutex_lock(&mdev->graph_mutex);
->> -	__media_pipeline_stop(entity);
->> +	__media_pipeline_stop(pad);
->>   	mutex_unlock(&mdev->graph_mutex);
->>   }
->>   EXPORT_SYMBOL_GPL(media_pipeline_stop);
->>   
->> -__must_check int media_pipeline_alloc_start(struct media_entity *entity)
->> +__must_check int media_pipeline_alloc_start(struct media_pad *pad)
->>   {
->> -	struct media_device *mdev = entity->graph_obj.mdev;
->> +	struct media_device *mdev = pad->entity->graph_obj.mdev;
->>   	struct media_pipeline *pipe;
->>   	int ret;
->>   	bool new_pipe = false;
->> @@ -916,7 +908,7 @@ __must_check int media_pipeline_alloc_start(struct media_entity *entity)
->>   	 * Is the entity already part of a pipeline? If not, we need to allocate
->>   	 * a pipe.
->>   	 */
->> -	pipe = media_entity_pipeline(entity);
->> +	pipe = media_pad_pipeline(pad);
->>   	if (!pipe) {
->>   		pipe = kzalloc(sizeof(*pipe), GFP_KERNEL);
->>   
->> @@ -929,7 +921,7 @@ __must_check int media_pipeline_alloc_start(struct media_entity *entity)
->>   		pipe->allocated = true;
->>   	}
->>   
->> -	ret = __media_pipeline_start(entity, pipe);
->> +	ret = __media_pipeline_start(pad, pipe);
->>   	if (ret) {
->>   		if (new_pipe)
->>   			kfree(pipe);
->> diff --git a/drivers/media/platform/samsung/s3c-camif/camif-capture.c b/drivers/media/platform/samsung/s3c-camif/camif-capture.c
->> index 140854ab4dd8..0189b8a33032 100644
->> --- a/drivers/media/platform/samsung/s3c-camif/camif-capture.c
->> +++ b/drivers/media/platform/samsung/s3c-camif/camif-capture.c
->> @@ -848,13 +848,13 @@ static int s3c_camif_streamon(struct file *file, void *priv,
->>   	if (s3c_vp_active(vp))
->>   		return 0;
->>   
->> -	ret = media_pipeline_start(sensor, camif->m_pipeline);
->> +	ret = media_pipeline_start(sensor->pads, camif->m_pipeline);
->>   	if (ret < 0)
->>   		return ret;
->>   
->>   	ret = camif_pipeline_validate(camif);
->>   	if (ret < 0) {
->> -		media_pipeline_stop(sensor);
->> +		media_pipeline_stop(sensor->pads);
->>   		return ret;
->>   	}
->>   
->> @@ -878,7 +878,7 @@ static int s3c_camif_streamoff(struct file *file, void *priv,
->>   
->>   	ret = vb2_streamoff(&vp->vb_queue, type);
->>   	if (ret == 0)
->> -		media_pipeline_stop(&camif->sensor.sd->entity);
->> +		media_pipeline_stop(camif->sensor.sd->entity.pads);
->>   	return ret;
->>   }
->>   
->> diff --git a/drivers/media/usb/au0828/au0828-core.c b/drivers/media/usb/au0828/au0828-core.c
->> index caefac07af92..877e85a451cb 100644
->> --- a/drivers/media/usb/au0828/au0828-core.c
->> +++ b/drivers/media/usb/au0828/au0828-core.c
->> @@ -410,7 +410,7 @@ static int au0828_enable_source(struct media_entity *entity,
->>   		goto end;
->>   	}
->>   
->> -	ret = __media_pipeline_start(entity, pipe);
->> +	ret = __media_pipeline_start(entity->pads, pipe);
->>   	if (ret) {
->>   		pr_err("Start Pipeline: %s->%s Error %d\n",
->>   			source->name, entity->name, ret);
->> @@ -501,12 +501,12 @@ static void au0828_disable_source(struct media_entity *entity)
->>   				return;
->>   
->>   			/* stop pipeline */
->> -			__media_pipeline_stop(dev->active_link_owner);
->> +			__media_pipeline_stop(dev->active_link_owner->pads);
->>   			pr_debug("Pipeline stop for %s\n",
->>   				dev->active_link_owner->name);
->>   
->>   			ret = __media_pipeline_start(
->> -					dev->active_link_user,
->> +					dev->active_link_user->pads,
->>   					dev->active_link_user_pipe);
->>   			if (ret) {
->>   				pr_err("Start Pipeline: %s->%s %d\n",
->> @@ -532,7 +532,7 @@ static void au0828_disable_source(struct media_entity *entity)
->>   			return;
->>   
->>   		/* stop pipeline */
->> -		__media_pipeline_stop(dev->active_link_owner);
->> +		__media_pipeline_stop(dev->active_link_owner->pads);
->>   		pr_debug("Pipeline stop for %s\n",
->>   			dev->active_link_owner->name);
->>   
->> diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
->> index 945bb867a4c1..397d553177fa 100644
->> --- a/drivers/media/v4l2-core/v4l2-dev.c
->> +++ b/drivers/media/v4l2-core/v4l2-dev.c
->> @@ -1105,7 +1105,7 @@ __must_check int video_device_pipeline_start(struct video_device *vdev,
->>   	if (entity->num_pads != 1)
->>   		return -ENODEV;
->>   
->> -	return media_pipeline_start(entity, pipe);
->> +	return media_pipeline_start(&entity->pads[0], pipe);
->>   }
->>   EXPORT_SYMBOL_GPL(video_device_pipeline_start);
->>   
->> @@ -1117,7 +1117,7 @@ __must_check int __video_device_pipeline_start(struct video_device *vdev,
->>   	if (entity->num_pads != 1)
->>   		return -ENODEV;
->>   
->> -	return __media_pipeline_start(entity, pipe);
->> +	return __media_pipeline_start(&entity->pads[0], pipe);
->>   }
->>   EXPORT_SYMBOL_GPL(__video_device_pipeline_start);
->>   
->> @@ -1128,7 +1128,7 @@ void video_device_pipeline_stop(struct video_device *vdev)
->>   	if (WARN_ON(entity->num_pads != 1))
->>   		return;
->>   
->> -	return media_pipeline_stop(entity);
->> +	return media_pipeline_stop(&entity->pads[0]);
->>   }
->>   EXPORT_SYMBOL_GPL(video_device_pipeline_stop);
->>   
->> @@ -1139,7 +1139,7 @@ void __video_device_pipeline_stop(struct video_device *vdev)
->>   	if (WARN_ON(entity->num_pads != 1))
->>   		return;
->>   
->> -	return __media_pipeline_stop(entity);
->> +	return __media_pipeline_stop(&entity->pads[0]);
->>   }
->>   EXPORT_SYMBOL_GPL(__video_device_pipeline_stop);
->>   
->> @@ -1150,7 +1150,7 @@ __must_check int video_device_pipeline_alloc_start(struct video_device *vdev)
->>   	if (entity->num_pads != 1)
->>   		return -ENODEV;
->>   
->> -	return media_pipeline_alloc_start(entity);
->> +	return media_pipeline_alloc_start(&entity->pads[0]);
->>   }
->>   EXPORT_SYMBOL_GPL(video_device_pipeline_alloc_start);
->>   
->> @@ -1161,7 +1161,7 @@ struct media_pipeline *video_device_pipeline(struct video_device *vdev)
->>   	if (WARN_ON(entity->num_pads != 1))
->>   		return NULL;
->>   
->> -	return media_entity_pipeline(entity);
->> +	return media_pad_pipeline(&entity->pads[0]);
->>   }
->>   EXPORT_SYMBOL_GPL(video_device_pipeline);
->>   
->> diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
->> index 5d9c6fc6f2e0..3d785b4e8fe7 100644
->> --- a/drivers/staging/media/imx/imx-media-utils.c
->> +++ b/drivers/staging/media/imx/imx-media-utils.c
->> @@ -863,16 +863,16 @@ int imx_media_pipeline_set_stream(struct imx_media_dev *imxmd,
->>   	mutex_lock(&imxmd->md.graph_mutex);
->>   
->>   	if (on) {
->> -		ret = __media_pipeline_start(entity, &imxmd->pipe);
->> +		ret = __media_pipeline_start(entity->pads, &imxmd->pipe);
->>   		if (ret)
->>   			goto out;
->>   		ret = v4l2_subdev_call(sd, video, s_stream, 1);
->>   		if (ret)
->> -			__media_pipeline_stop(entity);
->> +			__media_pipeline_stop(entity->pads);
->>   	} else {
->>   		v4l2_subdev_call(sd, video, s_stream, 0);
->>   		if (media_entity_pipeline(entity))
->> -			__media_pipeline_stop(entity);
->> +			__media_pipeline_stop(entity->pads);
->>   	}
->>   
->>   out:
->> diff --git a/include/media/media-entity.h b/include/media/media-entity.h
->> index beea3f6f12b8..f738d0d81194 100644
->> --- a/include/media/media-entity.h
->> +++ b/include/media/media-entity.h
->> @@ -1048,10 +1048,10 @@ struct media_entity *media_graph_walk_next(struct media_graph *graph);
->>   
->>   /**
->>    * media_pipeline_start - Mark a pipeline as streaming
->> - * @entity: Starting entity
->> - * @pipe: Media pipeline to be assigned to all entities in the pipeline.
->> + * @pad: Starting pad
->> + * @pipe: Media pipeline to be assigned to all pads in the pipeline.
->>    *
->> - * Mark all entities connected to a given entity through enabled links, either
->> + * Mark all pads connected to a given pad through enabled links, either
->>    * directly or indirectly, as streaming. The given pipeline object is assigned
->>    * to every entity in the pipeline and stored in the media_entity pipe field.
-> 
-> s/entity/pad/
-> 
->>    *
->> @@ -1060,24 +1060,24 @@ struct media_entity *media_graph_walk_next(struct media_graph *graph);
->>    * pipeline pointer must be identical for all nested calls to
->>    * media_pipeline_start().
->>    */
->> -__must_check int media_pipeline_start(struct media_entity *entity,
->> +__must_check int media_pipeline_start(struct media_pad *pad,
->>   				      struct media_pipeline *pipe);
->>   /**
->>    * __media_pipeline_start - Mark a pipeline as streaming
->>    *
->> - * @entity: Starting entity
->> - * @pipe: Media pipeline to be assigned to all entities in the pipeline.
->> + * @pad: Starting pad
->> + * @pipe: Media pipeline to be assigned to all pads in the pipeline.
->>    *
->>    * ..note:: This is the non-locking version of media_pipeline_start()
->>    */
->> -__must_check int __media_pipeline_start(struct media_entity *entity,
->> +__must_check int __media_pipeline_start(struct media_pad *pad,
->>   					struct media_pipeline *pipe);
->>   
->>   /**
->>    * media_pipeline_stop - Mark a pipeline as not streaming
->> - * @entity: Starting entity
->> + * @pad: Starting pad
->>    *
->> - * Mark all entities connected to a given entity through enabled links, either
->> + * Mark all pads connected to a given pads through enabled links, either
->>    * directly or indirectly, as not streaming. The media_entity pipe field is
-> 
-> This needs to be updated too. Please check the other functions to verify
-> there's no leftover.
+This extends the greyscale media bus family originally from
+MEDIA_BUS_FMT_Y8_1X8 up to MEDIA_BUS_FMT_Y14_1X14 by adding
+MEDIA_BUS_FMT_Y16_1X16, and behaves the same way with 16 bits.
+Add its documentation in subdev-formats.rst
 
-Thanks. I found a bit more, also in the vdev versions. I hope I caught 
-them all...
+Signed-off-by: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
+---
+ .../media/v4l/subdev-formats.rst              | 37 +++++++++++++++++++
+ include/uapi/linux/media-bus-format.h         |  3 +-
+ 2 files changed, 39 insertions(+), 1 deletion(-)
 
-  Tomi
+diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+index d21d532eee15..19025e9ba447 100644
+--- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
++++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+@@ -7355,6 +7355,43 @@ the following codes.
+       - v\ :sub:`2`
+       - v\ :sub:`1`
+       - v\ :sub:`0`
++    * .. _MEDIA-BUS-FMT-Y16-1X16:
++
++      - MEDIA_BUS_FMT_Y16_1X16
++      - 0x202e
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      - y\ :sub:`15`
++      - y\ :sub:`14`
++      - y\ :sub:`13`
++      - y\ :sub:`12`
++      - y\ :sub:`11`
++      - y\ :sub:`10`
++      - y\ :sub:`9`
++      - y\ :sub:`8`
++      - y\ :sub:`7`
++      - y\ :sub:`6`
++      - y\ :sub:`5`
++      - y\ :sub:`4`
++      - y\ :sub:`3`
++      - y\ :sub:`2`
++      - y\ :sub:`1`
++      - y\ :sub:`0`
+ 
+ 
+ .. raw:: latex
+diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
+index ec3323dbb927..b078dd125e57 100644
+--- a/include/uapi/linux/media-bus-format.h
++++ b/include/uapi/linux/media-bus-format.h
+@@ -69,7 +69,7 @@
+ #define MEDIA_BUS_FMT_RGB121212_1X36		0x1019
+ #define MEDIA_BUS_FMT_RGB161616_1X48		0x101a
+ 
+-/* YUV (including grey) - next is	0x202e */
++/* YUV (including grey) - next is	0x202f */
+ #define MEDIA_BUS_FMT_Y8_1X8			0x2001
+ #define MEDIA_BUS_FMT_UV8_1X8			0x2015
+ #define MEDIA_BUS_FMT_UYVY8_1_5X8		0x2002
+@@ -115,6 +115,7 @@
+ #define MEDIA_BUS_FMT_YUV12_1X36		0x2029
+ #define MEDIA_BUS_FMT_YUV16_1X48		0x202a
+ #define MEDIA_BUS_FMT_UYYVYY16_0_5X48		0x202b
++#define MEDIA_BUS_FMT_Y16_1X16			0x202e
+ 
+ /* Bayer - next is	0x3021 */
+ #define MEDIA_BUS_FMT_SBGGR8_1X8		0x3001
+-- 
+2.25.1
+
