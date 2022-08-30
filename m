@@ -2,45 +2,45 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 125EAC0502C
-	for <linux-media@archiver.kernel.org>; Tue, 30 Aug 2022 12:16:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08752ECAAD4
+	for <linux-media@archiver.kernel.org>; Tue, 30 Aug 2022 12:16:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbiH3MQo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 30 Aug 2022 08:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
+        id S229817AbiH3MQn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 30 Aug 2022 08:16:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiH3MQm (ORCPT
+        with ESMTP id S229510AbiH3MQl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 30 Aug 2022 08:16:42 -0400
+        Tue, 30 Aug 2022 08:16:41 -0400
 Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BD1AB188
-        for <linux-media@vger.kernel.org>; Tue, 30 Aug 2022 05:16:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94824AA4D7
+        for <linux-media@vger.kernel.org>; Tue, 30 Aug 2022 05:16:40 -0700 (PDT)
 Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27U97Ujs028671;
-        Tue, 30 Aug 2022 14:16:36 +0200
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27U97Vvs028687;
+        Tue, 30 Aug 2022 14:16:35 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=ABaUSPMcGFQRZBlJJ8VLV4LzmOa70Z6qC2E0EUutZxE=;
- b=HEuaF3kaB7LsUCGRDIwXUd7q39atVqmFPRw1gAA7cIMqcJ72oYAQVnEmN/9dRaWAERPS
- rYYLYxlwpvF12DLMicqhahN/UuCcwzjz75H7cZ3P9TS3/p1nFy5lrkDaK7ynfAFYiOtX
- +l08GkRmrfYZc+N4dOcyhuDjvRmHwKdz4xIzw0W7MBgR2fUJ/utkJNtkiA4z4L5Qz2/s
- WVIRNbpjhiId2gVlHcG2YRA6sssUJrQerj/C+ivnTH4G/zZ76FbFS/SIe9f+jeBfgeJy
- jUJV0LQBVZ1YCbWeQtdR68eg9iMT3hqrL7aXnku646wEbVA/C7iqMTYseyN5sQdiW3Iq MA== 
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=5cKKGVOqgEp8YjojIyMkFq6JUGvX3GuY1mpzxri0AQ0=;
+ b=Mwilor07k9WraIsKlNoYr7ZjPqqldM1OkO9LCow9aYZyKktmX1su576+lV/gd+4+sTcE
+ uLqA9rjpLmuxyyGFC2JbVKUCwhuOncyf/FgeHXWygR414yMPWw7lrjPz1HBfNEOK08TL
+ N+GgcPW4RLghn3yhsOUqgtHM6cjFLMaKXcWJ4aF99UcopVLtQCpxkRlBYiA2jrQJ1VRi
+ j1XOGCjLK3qYoIy7j595mljYbe78OYUAX4e8I4srQSLIp+UOF/uoZEHBPXjcOti0Q+CU
+ +p19HwVGpIcfPCzDeF8fFbDh4CFBHq7tBL9Zy6q81V9OyDOxSuaedZG2ER3DOj/zLiud YQ== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3j9fmy130k-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3j9fmy12yx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Tue, 30 Aug 2022 14:16:35 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6D29F10002A;
-        Tue, 30 Aug 2022 14:16:35 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E79CB10002A;
+        Tue, 30 Aug 2022 14:16:26 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 68C1C226FDC;
-        Tue, 30 Aug 2022 14:16:35 +0200 (CEST)
-Received: from localhost (10.75.127.44) by SHFDAG1NODE1.st.com (10.75.129.69)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CAB7C226FDC;
+        Tue, 30 Aug 2022 14:16:26 +0200 (CEST)
+Received: from localhost (10.75.127.118) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.7; Tue, 30 Aug
- 2022 14:16:35 +0200
+ 2022 14:16:26 +0200
 From:   Benjamin Mugnier <benjamin.mugnier@foss.st.com>
 To:     <linux-media@vger.kernel.org>
 CC:     <alain.volmat@foss.st.com>, <hugues.fruchet@foss.st.com>,
@@ -49,17 +49,15 @@ CC:     <alain.volmat@foss.st.com>, <hugues.fruchet@foss.st.com>,
         <laurent.pinchart@ideasonboard.com>,
         <kieran.bingham@ideasonboard.com>,
         Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-Subject: [PATCH v4 2/4] media: v4l: ctrls: Add a control for HDR mode
-Date:   Tue, 30 Aug 2022 14:16:06 +0200
-Message-ID: <20220830121608.12047-3-benjamin.mugnier@foss.st.com>
+Subject: [PATCH v4 0/4] media: Add ST VGXY61 camera sensor driver
+Date:   Tue, 30 Aug 2022 14:16:04 +0200
+Message-ID: <20220830121608.12047-1-benjamin.mugnier@foss.st.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220830121608.12047-1-benjamin.mugnier@foss.st.com>
-References: <20220830121608.12047-1-benjamin.mugnier@foss.st.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+X-Originating-IP: [10.75.127.118]
+X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To SHFDAG1NODE1.st.com
  (10.75.129.69)
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
@@ -68,66 +66,92 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add V4L2_CID_HDR_MODE as a menu item control to set the HDR mode of the
-sensor, and its documentation.
-Menu items are not standardized as they differ for each sensors.
+Hi,
 
-Signed-off-by: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
----
- .../userspace-api/media/v4l/ext-ctrls-camera.rst          | 8 ++++++++
- drivers/media/v4l2-core/v4l2-ctrls-defs.c                 | 2 ++
- include/uapi/linux/v4l2-controls.h                        | 2 ++
- 3 files changed, 12 insertions(+)
+This series adds a driver for the ST VGXY61 camera sensor. This camera sensor is
+using the i2c bus for control and the csi-2 bus for data.
+These commits introduce the MEDIA_BUS_FMT_Y16_1X16 as a media bus format (1/4),
+a standard control in V4L2 for the hdr mode (2/4), dt bindings (3/4), and the
+driver (4/4).
+Tested on DragonBoard 410c, Raspberry Pi 4, and Qualcomm Robotics RB5.
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-index 4c5061aa9cd4..0ee09ff250e7 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-@@ -661,3 +661,11 @@ enum v4l2_scene_mode -
- .. [#f1]
-    This control may be changed to a menu control in the future, if more
-    options are required.
-+
-+``V4L2_CID_HDR_MODE (menu)``
-+    Change the sensor HDR mode. A HDR picture is obtained by merging two
-+    captures of the same scene using two different exposure periods. HDR mode
-+    describes the way these two captures are merged in the sensor.
-+
-+    As modes differ for each sensor, menu items are not standardized by this
-+    control and are left to the programmer.
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-index e22921e7ea61..0854de1ef1a5 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-@@ -1043,6 +1043,7 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_UNIT_CELL_SIZE:		return "Unit Cell Size";
- 	case V4L2_CID_CAMERA_ORIENTATION:	return "Camera Orientation";
- 	case V4L2_CID_CAMERA_SENSOR_ROTATION:	return "Camera Sensor Rotation";
-+	case V4L2_CID_HDR_MODE:			return "HDR mode";
- 
- 	/* FM Radio Modulator controls */
- 	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
-@@ -1370,6 +1371,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 	case V4L2_CID_STATELESS_H264_START_CODE:
- 	case V4L2_CID_CAMERA_ORIENTATION:
- 	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE:
-+	case V4L2_CID_HDR_MODE:
- 		*type = V4L2_CTRL_TYPE_MENU;
- 		break;
- 	case V4L2_CID_LINK_FREQ:
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 5f46bf4a570c..5dfd38b09768 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -1013,6 +1013,8 @@ enum v4l2_auto_focus_range {
- 
- #define V4L2_CID_CAMERA_SENSOR_ROTATION		(V4L2_CID_CAMERA_CLASS_BASE+35)
- 
-+#define V4L2_CID_HDR_MODE			(V4L2_CID_CAMERA_CLASS_BASE+36)
-+
- /* FM Modulator class control IDs */
- 
- #define V4L2_CID_FM_TX_CLASS_BASE		(V4L2_CTRL_CLASS_FM_TX | 0x900)
+Thanks,
+
+Benjamin
+
+v3->v4:
+- Standardize V4L2_CID_HDR_MODE
+- Refactor to 80 characters limit
+- Better types handling
+- Various others
+- Rebase on master
+
+v2->v3:
+- Fix errors in dt bindings
+- Use alphabetical order where applicable
+- Remove US_PER_MS macro
+- Rename device specific macros
+- Fix some control grabs not releasing
+- Move user controls to public header and add documentation
+- Rename set_framerate to set_framelength
+- Rework i2c access
+- Remove branchings that should never happen
+- Rework pattern generator setting
+- Update information on sensor rules of thumb
+- Remove temperature control
+- Remove suspend and resume
+- Move mutex init to probe
+- Move detect to probe
+- Fix async_subdev_register order
+- Support autosuspend
+- Add init_cfg
+- Fix controls not updating when sensor was off
+- Various cleaning
+- Rebase on master
+
+v1->v2:
+- Move temperature control to v4l2-controls.h as a standard control
+- Reserve controls in v4l2-controls.h for HDR control
+- Remove GPIO strobbing controls
+- Remove references to unused controls in sensor struct
+- Use v4l2_find_nearest_size
+- Use V4L2_COLORSPACE_RAW instead of V4L2_COLORSPACE_SRGB
+- Fill ycbcr_enc, quantization, and xfer_func in v4l2_mbus_framefmt
+- Change gain from formula to a register RAW write
+- Change temperature control value directly
+- Remove clock-name and clock-lanes from device tree bindings
+- Declare crop zones in mode_info structure
+- Remove frame_interval functions and add hblank and vblank instead
+- Update controls dependencies on change
+- Fix first exposure rule of thumb being too restrictive
+- Disable hflip and vflip controls while streaming
+- Change RGB media bus code to Y as the sensor is monochrome
+- Add Y16 format to v4l2 media bus formats
+- Add get_selection API
+- Fix timeout errors while disabling streaming on high framerates
+- Support pm_runtime
+- Rebase on master
+
+Benjamin Mugnier (4):
+  media: v4l: Add 1X16 16-bit greyscale media bus code definition
+  media: v4l: ctrls: Add a control for HDR mode
+  media: dt-bindings: media: i2c: Add ST VGXY61 camera sensor binding
+  media: i2c: Add driver for ST VGXY61 camera sensor
+
+ .../bindings/media/i2c/st,st-vgxy61.yaml      |  117 +
+ .../media/v4l/ext-ctrls-camera.rst            |    8 +
+ .../media/v4l/subdev-formats.rst              |   37 +
+ MAINTAINERS                                   |    9 +
+ drivers/media/i2c/Kconfig                     |   10 +
+ drivers/media/i2c/Makefile                    |    1 +
+ drivers/media/i2c/st-vgxy61.c                 | 1967 +++++++++++++++++
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c     |    2 +
+ include/uapi/linux/media-bus-format.h         |    3 +-
+ include/uapi/linux/v4l2-controls.h            |    2 +
+ 10 files changed, 2155 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/st,st-vgxy61.yaml
+ create mode 100644 drivers/media/i2c/st-vgxy61.c
+
 -- 
 2.25.1
 
