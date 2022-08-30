@@ -2,45 +2,45 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08752ECAAD4
-	for <linux-media@archiver.kernel.org>; Tue, 30 Aug 2022 12:16:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA85DECAAA1
+	for <linux-media@archiver.kernel.org>; Tue, 30 Aug 2022 12:16:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbiH3MQn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 30 Aug 2022 08:16:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
+        id S230107AbiH3MQv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 30 Aug 2022 08:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiH3MQl (ORCPT
+        with ESMTP id S229781AbiH3MQt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 30 Aug 2022 08:16:41 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94824AA4D7
-        for <linux-media@vger.kernel.org>; Tue, 30 Aug 2022 05:16:40 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27U97Vvs028687;
-        Tue, 30 Aug 2022 14:16:35 +0200
+        Tue, 30 Aug 2022 08:16:49 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61868AA4D7
+        for <linux-media@vger.kernel.org>; Tue, 30 Aug 2022 05:16:48 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27U9KNPw017626;
+        Tue, 30 Aug 2022 14:16:41 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=5cKKGVOqgEp8YjojIyMkFq6JUGvX3GuY1mpzxri0AQ0=;
- b=Mwilor07k9WraIsKlNoYr7ZjPqqldM1OkO9LCow9aYZyKktmX1su576+lV/gd+4+sTcE
- uLqA9rjpLmuxyyGFC2JbVKUCwhuOncyf/FgeHXWygR414yMPWw7lrjPz1HBfNEOK08TL
- N+GgcPW4RLghn3yhsOUqgtHM6cjFLMaKXcWJ4aF99UcopVLtQCpxkRlBYiA2jrQJ1VRi
- j1XOGCjLK3qYoIy7j595mljYbe78OYUAX4e8I4srQSLIp+UOF/uoZEHBPXjcOti0Q+CU
- +p19HwVGpIcfPCzDeF8fFbDh4CFBHq7tBL9Zy6q81V9OyDOxSuaedZG2ER3DOj/zLiud YQ== 
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=selector1;
+ bh=K89M53ywXxZBCZWjHAFPo6PUtvcFH97h5CT3w5vjM88=;
+ b=AYxCowG/PIiFrhbNdKbk+kAsJLJ5BFTZq8y1ZryOcIcgHetNvUGHFRXpTRjhGj1//+Sa
+ fulhi1LdHiEnApF/ZIwVJY4cR+yUjO9ykwp6+c2QkPnefAWdFcsXK8k0UQ7meWU8/HWm
+ kdQPXhRaMMulQpV5J32J/X1RQey/ByXz26gTHYioWyundIh5oz7u5VxKAna0geu07sDF
+ FzhfqoijMm3zlevqgLcUEDEwEMfowGKZH58ZtwAcu3M8Xd+gf7QDhlpjyZ5LEsiqup9Z
+ 4DFqjo9WGsf9YbRt9TBx2/NFZLmwtOR173gBqx3iUmKY56LD6Yj163Rp7NJA2US1pez3 Bw== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3j9fmy12yx-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3j78pk7yus-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Aug 2022 14:16:35 +0200
+        Tue, 30 Aug 2022 14:16:41 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E79CB10002A;
-        Tue, 30 Aug 2022 14:16:26 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 37D12100034;
+        Tue, 30 Aug 2022 14:16:41 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CAB7C226FDC;
-        Tue, 30 Aug 2022 14:16:26 +0200 (CEST)
-Received: from localhost (10.75.127.118) by SHFDAG1NODE1.st.com (10.75.129.69)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 32D17226FDC;
+        Tue, 30 Aug 2022 14:16:41 +0200 (CEST)
+Received: from localhost (10.75.127.46) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.7; Tue, 30 Aug
- 2022 14:16:26 +0200
+ 2022 14:16:40 +0200
 From:   Benjamin Mugnier <benjamin.mugnier@foss.st.com>
 To:     <linux-media@vger.kernel.org>
 CC:     <alain.volmat@foss.st.com>, <hugues.fruchet@foss.st.com>,
@@ -49,15 +49,17 @@ CC:     <alain.volmat@foss.st.com>, <hugues.fruchet@foss.st.com>,
         <laurent.pinchart@ideasonboard.com>,
         <kieran.bingham@ideasonboard.com>,
         Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-Subject: [PATCH v4 0/4] media: Add ST VGXY61 camera sensor driver
-Date:   Tue, 30 Aug 2022 14:16:04 +0200
-Message-ID: <20220830121608.12047-1-benjamin.mugnier@foss.st.com>
+Subject: [PATCH v4 3/4] media: dt-bindings: media: i2c: Add ST VGXY61 camera sensor binding
+Date:   Tue, 30 Aug 2022 14:16:07 +0200
+Message-ID: <20220830121608.12047-4-benjamin.mugnier@foss.st.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220830121608.12047-1-benjamin.mugnier@foss.st.com>
+References: <20220830121608.12047-1-benjamin.mugnier@foss.st.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.75.127.118]
-X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To SHFDAG1NODE1.st.com
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
  (10.75.129.69)
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
@@ -66,92 +68,159 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Add device tree binding for the ST VGXY61 camera sensor, and update
+MAINTAINERS file.
 
-This series adds a driver for the ST VGXY61 camera sensor. This camera sensor is
-using the i2c bus for control and the csi-2 bus for data.
-These commits introduce the MEDIA_BUS_FMT_Y16_1X16 as a media bus format (1/4),
-a standard control in V4L2 for the hdr mode (2/4), dt bindings (3/4), and the
-driver (4/4).
-Tested on DragonBoard 410c, Raspberry Pi 4, and Qualcomm Robotics RB5.
-
-Thanks,
-
-Benjamin
-
-v3->v4:
-- Standardize V4L2_CID_HDR_MODE
-- Refactor to 80 characters limit
-- Better types handling
-- Various others
-- Rebase on master
-
-v2->v3:
-- Fix errors in dt bindings
-- Use alphabetical order where applicable
-- Remove US_PER_MS macro
-- Rename device specific macros
-- Fix some control grabs not releasing
-- Move user controls to public header and add documentation
-- Rename set_framerate to set_framelength
-- Rework i2c access
-- Remove branchings that should never happen
-- Rework pattern generator setting
-- Update information on sensor rules of thumb
-- Remove temperature control
-- Remove suspend and resume
-- Move mutex init to probe
-- Move detect to probe
-- Fix async_subdev_register order
-- Support autosuspend
-- Add init_cfg
-- Fix controls not updating when sensor was off
-- Various cleaning
-- Rebase on master
-
-v1->v2:
-- Move temperature control to v4l2-controls.h as a standard control
-- Reserve controls in v4l2-controls.h for HDR control
-- Remove GPIO strobbing controls
-- Remove references to unused controls in sensor struct
-- Use v4l2_find_nearest_size
-- Use V4L2_COLORSPACE_RAW instead of V4L2_COLORSPACE_SRGB
-- Fill ycbcr_enc, quantization, and xfer_func in v4l2_mbus_framefmt
-- Change gain from formula to a register RAW write
-- Change temperature control value directly
-- Remove clock-name and clock-lanes from device tree bindings
-- Declare crop zones in mode_info structure
-- Remove frame_interval functions and add hblank and vblank instead
-- Update controls dependencies on change
-- Fix first exposure rule of thumb being too restrictive
-- Disable hflip and vflip controls while streaming
-- Change RGB media bus code to Y as the sensor is monochrome
-- Add Y16 format to v4l2 media bus formats
-- Add get_selection API
-- Fix timeout errors while disabling streaming on high framerates
-- Support pm_runtime
-- Rebase on master
-
-Benjamin Mugnier (4):
-  media: v4l: Add 1X16 16-bit greyscale media bus code definition
-  media: v4l: ctrls: Add a control for HDR mode
-  media: dt-bindings: media: i2c: Add ST VGXY61 camera sensor binding
-  media: i2c: Add driver for ST VGXY61 camera sensor
-
- .../bindings/media/i2c/st,st-vgxy61.yaml      |  117 +
- .../media/v4l/ext-ctrls-camera.rst            |    8 +
- .../media/v4l/subdev-formats.rst              |   37 +
- MAINTAINERS                                   |    9 +
- drivers/media/i2c/Kconfig                     |   10 +
- drivers/media/i2c/Makefile                    |    1 +
- drivers/media/i2c/st-vgxy61.c                 | 1967 +++++++++++++++++
- drivers/media/v4l2-core/v4l2-ctrls-defs.c     |    2 +
- include/uapi/linux/media-bus-format.h         |    3 +-
- include/uapi/linux/v4l2-controls.h            |    2 +
- 10 files changed, 2155 insertions(+), 1 deletion(-)
+Signed-off-by: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
+---
+ .../bindings/media/i2c/st,st-vgxy61.yaml      | 117 ++++++++++++++++++
+ MAINTAINERS                                   |   9 ++
+ 2 files changed, 126 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/media/i2c/st,st-vgxy61.yaml
- create mode 100644 drivers/media/i2c/st-vgxy61.c
 
+diff --git a/Documentation/devicetree/bindings/media/i2c/st,st-vgxy61.yaml b/Documentation/devicetree/bindings/media/i2c/st,st-vgxy61.yaml
+new file mode 100644
+index 000000000000..4bc9a945b001
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/st,st-vgxy61.yaml
+@@ -0,0 +1,117 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++# Copyright (c) 2022 STMicroelectronics SA.
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/st,st-vgxy61.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: STMicroelectronics VGxy61 HDR Global Shutter Sensor Family Device Tree Bindings
++
++maintainers:
++  - Benjamin Mugnier <benjamin.mugnier@foss.st.com>
++  - Sylvain Petinot <sylvain.petinot@foss.st.com>
++
++description: |-
++  STMicroelectronics VGxy61 family has a CSI-2 output port. CSI-2 output is a
++  quad lanes 800Mbps per lane.
++  Supported formats are RAW8, RAW10, RAW12, RAW14 and RAW16.
++  Following part number are supported
++  - VG5661 and VG6661 are 1.6 Mpx (1464 x 1104) monochrome and color sensors.
++  Maximum frame rate is 75 fps.
++  - VG5761 and VG6761 are 2.3 Mpx (1944 x 1204) monochrome and color sensors.
++  Maximum frame rate is 60 fps.
++
++properties:
++  compatible:
++    const: st,st-vgxy61
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  VCORE-supply:
++    description:
++      Sensor digital core supply. Must be 1.2 volts.
++
++  VDDIO-supply:
++    description:
++      Sensor digital IO supply. Must be 1.8 volts.
++
++  VANA-supply:
++    description:
++      Sensor analog supply. Must be 2.8 volts.
++
++  reset-gpios:
++    description:
++      Reference to the GPIO connected to the reset pin, if any.
++      This is an active low signal to the vgxy61.
++
++  st,strobe-gpios-polarity:
++    description:
++      Invert polarity of strobe GPIOs.
++    type: boolean
++
++  st,slave-mode:
++    description:
++      If the sensor operates in slave mode
++    type: boolean
++
++  port:
++    $ref: /schemas/graph.yaml#/$defs/port-base
++    additionalProperties: false
++
++    properties:
++      endpoint:
++        $ref: /schemas/media/video-interfaces.yaml#
++        unevaluatedProperties: false
++
++        properties:
++          data-lanes:
++            description:
++              CSI lanes to use
++            items:
++              - const: 1
++              - const: 2
++              - const: 3
++              - const: 4
++
++          remote-endpoint: true
++
++        required:
++          - data-lanes
++
++required:
++  - compatible
++  - clocks
++  - VCORE-supply
++  - VDDIO-supply
++  - VANA-supply
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        vgxy61: csi2tx@10 {
++            compatible = "st,st-vgxy61";
++            reg = <0x10>;
++            clocks = <&clk_ext_camera>;
++            VCORE-supply = <&v1v2>;
++            VDDIO-supply = <&v1v8>;
++            VANA-supply = <&v2v8>;
++            reset-gpios = <&mfxgpio 18 GPIO_ACTIVE_LOW>;
++            port {
++                ep0: endpoint {
++                    data-lanes = <1 2 3 4>;
++                    remote-endpoint = <&mipi_csi2_out>;
++                };
++            };
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8a5012ba6ff9..9c1fe13a9366 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19270,6 +19270,15 @@ S:	Maintained
+ F:	Documentation/hwmon/stpddc60.rst
+ F:	drivers/hwmon/pmbus/stpddc60.c
+ 
++ST VGXY61 DRIVER
++M:	Benjamin Mugnier <benjamin.mugnier@foss.st.com>
++M:	Sylvain Petinot <sylvain.petinot@foss.st.com>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++T:	git git://linuxtv.org/media_tree.git
++F:	Documentation/devicetree/bindings/media/i2c/st,st-vgxy61.txt
++F:	drivers/media/i2c/st-vgxy61.c
++
+ ST VL53L0X ToF RANGER(I2C) IIO DRIVER
+ M:	Song Qiang <songqiang1304521@gmail.com>
+ L:	linux-iio@vger.kernel.org
 -- 
 2.25.1
 
