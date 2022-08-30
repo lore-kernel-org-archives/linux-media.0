@@ -2,297 +2,127 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACC6EECAAD1
-	for <linux-media@archiver.kernel.org>; Tue, 30 Aug 2022 18:17:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D369DECAAD1
+	for <linux-media@archiver.kernel.org>; Tue, 30 Aug 2022 18:17:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbiH3SRF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 30 Aug 2022 14:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59028 "EHLO
+        id S231569AbiH3SR2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 30 Aug 2022 14:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbiH3SRE (ORCPT
+        with ESMTP id S229781AbiH3SR0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 30 Aug 2022 14:17:04 -0400
-Received: from www.linuxtv.org (www.linuxtv.org [130.149.80.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6174CA33
-        for <linux-media@vger.kernel.org>; Tue, 30 Aug 2022 11:17:02 -0700 (PDT)
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1oT558-005qxi-0V; Tue, 30 Aug 2022 17:31:22 +0000
-Received: from localhost ([127.0.0.1] helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.94.2)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1oT54w-00CdCw-3I; Tue, 30 Aug 2022 17:31:11 +0000
-Date:   Tue, 30 Aug 2022 17:31:07 +0000 (UTC)
-From:   Jenkins Builder Robot <jenkins@linuxtv.org>
-To:     mchehab@kernel.org, linux-media@vger.kernel.org
-Message-ID: <1425823412.0.1661880668375@builder.linuxtv.org>
-Subject: Build failed in Jenkins: linux-media #290
+        Tue, 30 Aug 2022 14:17:26 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11EED53036
+        for <linux-media@vger.kernel.org>; Tue, 30 Aug 2022 11:17:24 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-11f0fa892aeso10431363fac.7
+        for <linux-media@vger.kernel.org>; Tue, 30 Aug 2022 11:17:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=/oobhOGqi42449FzVMt/oGmisZwCvSy7BW4jgCCfch0=;
+        b=VpcBG8Kr9vdsWOXvnH/lxth7STxi7dPMe1S74WAQ0tsnMozC2LRIB+dqX1liq81G2Y
+         yyPmtCE49iIH9Fhy/cwlPemm2EGu9uniW2KsQuiF7MX+MYVFMBaMOjvwx46TrqqqRbGl
+         8XBzxZUSiHCaXKTvBxmFYuUo6Zwb1pFbLMRXsm4k7H9NogSa0vxs+LhF5EvK3e7gR2//
+         bZeUNISUliBPshw1v7PEqeHOzBzk/dUbVf5KyKBqPjWgrajFewGmNDFNb7w+KbjxQWhZ
+         UeDcBrELMkpX3E1DzJ9aovTWQ9WWdwofMXXyXTNFaT6J86/MkQfqpmI/54EVY9g1Ia6R
+         3SwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=/oobhOGqi42449FzVMt/oGmisZwCvSy7BW4jgCCfch0=;
+        b=l5oZhGJUyGgSsfTD1gJXBhSfC9gqw7UqdNtCspbaPddU09yp9K4SkXKLASVpXC6e6Z
+         iZ1+s2KDCpx4cRxDViFUY4SFXLxvt1kbIT+pAZRMasctm4kSYCjniqm6F9Cr28PImpKu
+         hF00HsnSXqGbItD/qKc2jlDa8HAsjG4YDqLFhrOsYxvnzKrCu1giQ0+Ftjga7BXNfLgT
+         eZKr2YBmugIIR9V20VfwUie/YfRxztRbpgQnQu6ZvSd+4jwvPYZk33eL5qXQRiqE724u
+         1vT7hnlPB3o2mS6/OBToD1D7C8BKxuB48Kct4WhTYO1yXJ1GPwlYuszRBKwFQn463s4D
+         lpoQ==
+X-Gm-Message-State: ACgBeo2JOCGinAt4JWWzVr3vuumHj73QhXU5ZSpfHdVhNzVFHaadX0Mj
+        ym7TIMwNOIf0EaYV5gA/O5h9gw==
+X-Google-Smtp-Source: AA6agR4PjkWk+Bc8nvP17VYGP14YkKDkOOcw6aw7cjJ213TLpMFs5PvxMnyRL7Ny9EsqHgqfqYsRJg==
+X-Received: by 2002:a05:6870:328d:b0:10d:ce86:ceee with SMTP id q13-20020a056870328d00b0010dce86ceeemr10941976oac.80.1661883443167;
+        Tue, 30 Aug 2022 11:17:23 -0700 (PDT)
+Received: from eze-laptop ([190.190.187.68])
+        by smtp.gmail.com with ESMTPSA id p7-20020a056830130700b006396521c804sm7532039otq.55.2022.08.30.11.17.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 11:17:22 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 15:17:16 -0300
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     mchehab@kernel.org, hverkuil@xs4all.nl, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, andrzej.p@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com
+Subject: Re: [PATCH v3 1/7] media: hantro: Store HEVC bit depth in context
+Message-ID: <Yw5ULOEDLWaHQav7@eze-laptop>
+References: <20220829162159.881588-1-benjamin.gaignard@collabora.com>
+ <20220829162159.881588-2-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
-X-Jenkins-Job: linux-media
-X-Jenkins-Result: FAILURE
-Auto-submitted: auto-generated
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220829162159.881588-2-benjamin.gaignard@collabora.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-See <https://builder.linuxtv.org/job/linux-media/290/display/redirect>
+Hi Benjamin,
 
-Changes:
+On Mon, Aug 29, 2022 at 06:21:53PM +0200, Benjamin Gaignard wrote:
+> Store HEVC bit depth in context.
+> Bit depth is equal to hevc sps bit_depth_luma_minus8 + 8.
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
-------------------------------------------
-[...truncated 119293 lines...]
-  CC      drivers/nvmem/qcom-spmi-sdam.o
-  CC [M]  drivers/staging/r8188eu/hal/rtl8188e_phycfg.o
-  CC      drivers/fpga/zynq-fpga.o
-  CC [M]  drivers/staging/r8188eu/hal/rtl8188e_rf6052.o
-  CC [M]  drivers/staging/rtl8723bs/core/rtw_sta_mgt.o
-  AR      drivers/fsi/built-in.a
-  CC [M]  drivers/staging/vt6655/channel.o
-  CC [M]  drivers/staging/rtl8723bs/core/rtw_wlan_util.o
-  CC      drivers/mux/gpio.o
-  CC [M]  drivers/staging/rtl8723bs/core/rtw_xmit.o
-  CC      drivers/nvmem/rockchip-efuse.o
-  CC [M]  drivers/staging/r8188eu/hal/rtl8188e_rxdesc.o
-  CC [M]  drivers/staging/gdm724x/gdm_lte.o
-  CC [M]  drivers/staging/vt6655/mac.o
-  CC [M]  drivers/staging/vt6655/baseband.o
-  CC      drivers/fpga/zynqmp-fpga.o
-  CC [M]  drivers/staging/r8188eu/hal/rtl8188e_xmit.o
-  CC [M]  drivers/staging/vt6656/main_usb.o
-  CC      drivers/mux/mmio.o
-  CC [M]  drivers/staging/rtl8723bs/hal/hal_intf.o
-  CC [M]  drivers/staging/vt6656/card.o
-  CC [M]  drivers/staging/vt6655/rxtx.o
-  CC      drivers/nvmem/rockchip-otp.o
-  CC [M]  drivers/staging/r8188eu/hal/rtl8188eu_recv.o
-  CC [M]  drivers/staging/r8188eu/hal/rtl8188eu_xmit.o
-  CC [M]  drivers/staging/rtl8723bs/hal/hal_com.o
-  CC [M]  drivers/staging/vt6656/mac.o
-  CC      drivers/fpga/versal-fpga.o
-  AR      drivers/mux/built-in.a
-  CC [M]  drivers/staging/rtl8723bs/hal/hal_com_phycfg.o
-  CC [M]  drivers/staging/vt6655/dpc.o
-  CC [M]  drivers/staging/rtl8723bs/hal/hal_btcoex.o
-  CC [M]  drivers/staging/rtl8723bs/hal/hal_sdio.o
-  CC [M]  drivers/staging/r8188eu/hal/usb_halinit.o
-  CC      drivers/nvmem/stm32-romem.o
-  CC [M]  drivers/staging/gdm724x/netlink_k.o
-  CC [M]  drivers/staging/vt6656/baseband.o
-  CC [M]  drivers/staging/vt6656/wcmd.o
-  CC [M]  drivers/staging/r8188eu/hal/usb_ops_linux.o
-  CC [M]  drivers/staging/vt6655/power.o
-  CC [M]  drivers/staging/r8188eu/os_dep/ioctl_linux.o
-  CC [M]  drivers/staging/rtl8723bs/hal/hal_pwr_seq.o
-  CC      drivers/nvmem/uniphier-efuse.o
-  CC [M]  drivers/staging/rtl8723bs/hal/HalPhyRf.o
-  CC [M]  drivers/staging/vt6655/srom.o
-  CC [M]  drivers/staging/vt6656/rxtx.o
-  CC      drivers/fpga/altera-pr-ip-core.o
-  CC [M]  drivers/staging/vt6656/power.o
-  CC [M]  drivers/staging/r8188eu/os_dep/mlme_linux.o
-  CC [M]  drivers/staging/r8188eu/os_dep/os_intfs.o
-  CC [M]  drivers/staging/gdm724x/gdm_usb.o
-  CC [M]  drivers/staging/rtl8723bs/hal/HalPwrSeqCmd.o
-  CC [M]  drivers/staging/r8188eu/os_dep/osdep_service.o
-  CC [M]  drivers/staging/vt6656/key.o
-  CC [M]  drivers/staging/vt6655/key.o
-  CC      drivers/nvmem/vf610-ocotp.o
-  CC      drivers/nvmem/meson-mx-efuse.o
-  CC      drivers/fpga/altera-pr-ip-core-plat.o
-  CC      drivers/nvmem/snvs_lpgpr.o
-  CC [M]  drivers/staging/gdm724x/gdm_endian.o
-  CC [M]  drivers/staging/rtl8723bs/hal/odm.o
-  CC [M]  drivers/staging/r8188eu/os_dep/recv_linux.o
-  CC [M]  drivers/staging/vt6655/rf.o
-  CC [M]  drivers/staging/vt6656/rf.o
-  CC [M]  drivers/staging/gdm724x/gdm_tty.o
-  CC      drivers/fpga/fpga-bridge.o
-  CC [M]  drivers/staging/gdm724x/gdm_mux.o
-  CC [M]  drivers/staging/vt6656/usbpipe.o
-  CC [M]  drivers/staging/r8188eu/os_dep/usb_intf.o
-  CC      drivers/nvmem/rave-sp-eeprom.o
-  CC      drivers/fpga/altera-freeze-bridge.o
-  LD [M]  drivers/staging/vt6655/vt6655_stage.o
-  CC      drivers/fpga/xilinx-pr-decoupler.o
-  CC [M]  drivers/staging/rtl8723bs/hal/odm_CfoTracking.o
-  CC [M]  drivers/staging/vt6656/channel.o
-  LD [M]  drivers/staging/gdm724x/gdmulte.o
-  LD [M]  drivers/staging/gdm724x/gdmtty.o
-  AR      drivers/staging/built-in.a
-  CC      drivers/fpga/fpga-region.o
-  CC [M]  drivers/staging/rtl8723bs/hal/odm_DIG.o
-  CC      drivers/nvmem/sc27xx-efuse.o
-  CC [M]  drivers/staging/r8188eu/os_dep/usb_ops_linux.o
-  CC      drivers/fpga/of-fpga-region.o
-  LD [M]  drivers/staging/vt6656/vt6656_stage.o
-  CC      drivers/nvmem/sprd-efuse.o
-  CC [M]  drivers/staging/r8188eu/os_dep/xmit_linux.o
-  CC      drivers/siox/siox-core.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_ap.o
-  CC [M]  drivers/staging/rtl8723bs/hal/odm_DynamicBBPowerSaving.o
-  CC      drivers/fpga/dfl.o
-  CC      drivers/nvmem/rmem.o
-  CC      drivers/siox/siox-bus-gpio.o
-  CC      drivers/nvmem/brcm_nvram.o
-  CC      drivers/nvmem/layerscape-sfp.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_br_ext.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_cmd.o
-  CC [M]  drivers/staging/rtl8723bs/hal/odm_DynamicTxPower.o
-  CC [M]  drivers/staging/rtl8723bs/hal/odm_EdcaTurboCheck.o
-  CC [M]  drivers/staging/rtl8723bs/hal/odm_HWConfig.o
-  AR      drivers/siox/built-in.a
-  CC [M]  drivers/staging/rtl8723bs/hal/odm_NoiseMonitor.o
-  CC      drivers/nvmem/sunplus-ocotp.o
-  CC      drivers/nvmem/apple-efuses.o
-  CC      drivers/fpga/dfl-fme-main.o
-  CC [M]  drivers/staging/rtl8723bs/hal/odm_RegConfig8723B.o
-  CC      drivers/fpga/dfl-fme-pr.o
-  CC      drivers/fpga/dfl-fme-error.o
-  CC      drivers/gnss/core.o
-  CC      drivers/fpga/dfl-fme-perf.o
-  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723b_cmd.o
-  CC      drivers/fpga/dfl-fme-mgr.o
-  CC      drivers/nvmem/microchip-otpc.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_efuse.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_fw.o
-  CC      drivers/fpga/dfl-fme-br.o
-  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723b_dm.o
-  CC      drivers/gnss/serial.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_ieee80211.o
-  CC      drivers/fpga/dfl-fme-region.o
-  CC      drivers/fpga/dfl-afu-main.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_ioctl_set.o
-  AR      drivers/nvmem/built-in.a
-  CC [M]  drivers/staging/r8188eu/core/rtw_iol.o
-  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_led.o
-  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723b_phycfg.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_mlme.o
-  CC      drivers/fpga/dfl-afu-region.o
-  CC      drivers/fpga/dfl-afu-dma-region.o
-  CC      drivers/gnss/mtk.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_mlme_ext.o
-  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723b_rf6052.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_pwrctrl.o
-  CC      drivers/gnss/sirf.o
-  CC      drivers/gnss/ubx.o
-  CC      drivers/fpga/dfl-afu-error.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_p2p.o
-  CC      drivers/fpga/dfl-n3000-nios.o
-  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723b_rxdesc.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_recv.o
-  CC      drivers/fpga/dfl-pci.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_rf.o
-  CC      drivers/fpga/microchip-spi.o
-  CC      drivers/fpga/intel-m10-bmc-sec-update.o
-  CC      drivers/gnss/usb.o
-  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723bs_recv.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_security.o
-  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.o
-  CC      drivers/interconnect/core.o
-  CC [M]  drivers/staging/rtl8723bs/hal/sdio_halinit.o
-  CC      drivers/interconnect/bulk.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_sta_mgt.o
-  CC [M]  drivers/staging/rtl8723bs/hal/sdio_ops.o
-  AR      drivers/fpga/built-in.a
-  CC      drivers/interconnect/imx/imx.o
-  CC      drivers/interconnect/samsung/exynos.o
-  AR      drivers/gnss/built-in.a
-  CC      drivers/interconnect/imx/imx8mm.o
-  CC      drivers/interconnect/imx/imx8mq.o
-  CC      drivers/interconnect/imx/imx8mn.o
-  CC      drivers/most/core.o
-  CC [M]  drivers/staging/rtl8723bs/hal/HalBtc8723b1Ant.o
-  CC      drivers/counter/counter-core.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_wlan_util.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_xmit.o
-  CC      drivers/most/configfs.o
-  CC      drivers/most/most_usb.o
-  CC      drivers/interconnect/imx/imx8mp.o
-  AR      drivers/interconnect/samsung/built-in.a
-  CC [M]  drivers/staging/rtl8723bs/hal/HalBtc8723b2Ant.o
-  CC      drivers/most/most_cdev.o
-  CC      drivers/most/most_snd.o
-  LD [M]  drivers/staging/r8188eu/r8188eu.o
-  CC [M]  drivers/staging/rtl8723bs/hal/HalHWImg8723B_BB.o
-  CC      drivers/counter/counter-sysfs.o
-  CC      drivers/counter/counter-chrdev.o
-  AR      drivers/interconnect/imx/built-in.a
-  AR      drivers/interconnect/built-in.a
-  CC      drivers/counter/104-quad-8.o
-  CC      drivers/hte/hte.o
-  CC [M]  drivers/staging/rtl8723bs/hal/HalHWImg8723B_MAC.o
-  CC      drivers/peci/core.o
-  CC [M]  drivers/staging/rtl8723bs/hal/HalHWImg8723B_RF.o
-  CC      drivers/peci/request.o
-  AR      drivers/most/built-in.a
-  CC      drivers/peci/device.o
-  CC      drivers/counter/interrupt-cnt.o
-  AR      drivers/hte/built-in.a
-  CC      drivers/peci/sysfs.o
-  CC      drivers/counter/stm32-timer-cnt.o
-  CC      drivers/peci/cpu.o
-  CC [M]  drivers/staging/rtl8723bs/hal/HalPhyRf_8723B.o
-  CC      drivers/counter/stm32-lptimer-cnt.o
-  CC [M]  drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.o
-  CC      drivers/peci/controller/peci-aspeed.o
-  CC      drivers/counter/ti-eqep.o
-  CC [M]  drivers/staging/rtl8723bs/os_dep/ioctl_linux.o
-  CC      drivers/counter/ftm-quaddec.o
-  CC [M]  drivers/staging/rtl8723bs/os_dep/mlme_linux.o
-  CC      drivers/counter/microchip-tcb-capture.o
-  CC      drivers/counter/intel-qep.o
-  CC [M]  drivers/staging/rtl8723bs/os_dep/osdep_service.o
-  CC [M]  drivers/staging/rtl8723bs/os_dep/os_intfs.o
-  CC [M]  drivers/staging/rtl8723bs/os_dep/recv_linux.o
-  CC [M]  drivers/staging/rtl8723bs/os_dep/sdio_intf.o
-  AR      drivers/peci/controller/built-in.a
-  AR      drivers/peci/built-in.a
-  CC [M]  drivers/staging/rtl8723bs/os_dep/sdio_ops_linux.o
-  CC [M]  drivers/staging/rtl8723bs/os_dep/wifi_regd.o
-  CC [M]  drivers/staging/rtl8723bs/os_dep/xmit_linux.o
-  AR      drivers/counter/built-in.a
-  LD [M]  drivers/staging/rtl8723bs/r8723bs.o
-  AR      drivers/built-in.a
-  GEN     .version
-  CHK     include/generated/compile.h
-  UPD     include/generated/compile.h
-  CC      init/version.o
-  AR      init/built-in.a
-  LD      vmlinux.o
-Killed
-make[2]: *** [../scripts/Makefile.vmlinux_o:68: vmlinux.o] Error 137
-make[2]: *** Deleting file 'vmlinux.o'
-make[1]: *** [/var/lib/jenkins/workspace/linux-media/Makefile:1171: vmlinux] Error 2
-make[1]: Leaving directory '/var/lib/jenkins/workspace/linux-media/x86_64_yes'
-make: *** [Makefile:222: __sub-make] Error 2
-[Pipeline] }
-[Pipeline] // node
-[Pipeline] }
-[Pipeline] // stage
-[Pipeline] }
-Failed in branch x86_64 (builtin/mod)
-Killed
-make[2]: *** [../scripts/Makefile.vmlinux_o:68: vmlinux.o] Error 137
-make[2]: *** Deleting file 'vmlinux.o'
-make[1]: *** [/var/lib/jenkins/workspace/linux-media@2/Makefile:1171: vmlinux] Error 2
-make[1]: Leaving directory '/var/lib/jenkins/workspace/linux-media@2/arm_yes'
-make: *** [Makefile:222: __sub-make] Error 2
-[Pipeline] }
-[Pipeline] // node
-[Pipeline] }
-[Pipeline] // stage
-[Pipeline] }
-Failed in branch arm/aarch64 (builtin)
-[Pipeline] // parallel
-[Pipeline] }
-[Pipeline] // stage
-[Pipeline] stage
-[Pipeline] { (Declarative: Post Actions)
-[Pipeline] step
+Looks good!
+
+I have limited access to the hardware at the moment.
+
+Can you make sure things look good not only for HEVC
+but also for the other codecs?
+
+Thanks!
+Ezequiel
+
+> ---
+> version 3:
+> - Based on top of Ezequiel's patch "media: destage Hantro VPU driver"
+>  drivers/media/platform/verisilicon/hantro_drv.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
+> index 2036f72eeb4a..1dd8312d824c 100644
+> --- a/drivers/media/platform/verisilicon/hantro_drv.c
+> +++ b/drivers/media/platform/verisilicon/hantro_drv.c
+> @@ -251,6 +251,11 @@ queue_init(void *priv, struct vb2_queue *src_vq, struct vb2_queue *dst_vq)
+>  
+>  static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
+>  {
+> +	struct hantro_ctx *ctx;
+> +
+> +	ctx = container_of(ctrl->handler,
+> +			   struct hantro_ctx, ctrl_handler);
+> +
+>  	if (ctrl->id == V4L2_CID_STATELESS_H264_SPS) {
+>  		const struct v4l2_ctrl_h264_sps *sps = ctrl->p_new.p_h264_sps;
+>  
+> @@ -272,6 +277,8 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
+>  		if (sps->bit_depth_luma_minus8 != 0)
+>  			/* Only 8-bit is supported */
+>  			return -EINVAL;
+> +
+> +		ctx->bit_depth = sps->bit_depth_luma_minus8 + 8;
+>  	} else if (ctrl->id == V4L2_CID_STATELESS_VP9_FRAME) {
+>  		const struct v4l2_ctrl_vp9_frame *dec_params = ctrl->p_new.p_vp9_frame;
+>  
+> -- 
+> 2.32.0
+> 
