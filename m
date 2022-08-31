@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82C85ECAAD1
-	for <linux-media@archiver.kernel.org>; Wed, 31 Aug 2022 14:16:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 916FEC0502A
+	for <linux-media@archiver.kernel.org>; Wed, 31 Aug 2022 14:16:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232170AbiHaOQQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 31 Aug 2022 10:16:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59762 "EHLO
+        id S232215AbiHaOQS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 31 Aug 2022 10:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232106AbiHaOPw (ORCPT
+        with ESMTP id S232075AbiHaOPw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 31 Aug 2022 10:15:52 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C4D18E3E
-        for <linux-media@vger.kernel.org>; Wed, 31 Aug 2022 07:15:05 -0700 (PDT)
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1201A831
+        for <linux-media@vger.kernel.org>; Wed, 31 Aug 2022 07:15:02 -0700 (PDT)
 Received: from deskari.lan (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1F39A11C1;
-        Wed, 31 Aug 2022 16:14:26 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5AE96E0C;
+        Wed, 31 Aug 2022 16:14:24 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1661955266;
-        bh=DgkhYPHPWn2oE7PFRNLDP9hCGk08L1t2zu0UhESr1rY=;
+        s=mail; t=1661955265;
+        bh=5EiWKLCgQzbEjFYDJ+il7x7v66k5JtGWcpDlzFxC8Lg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CC0uglzC6DbDYhrP/B194JO3ap/5bJIyNQ9QvyAxYNqyJwMMIeTNonAAjyVeAEMrv
-         SwvkBDR7vsRRdEJAZoNtHonwtt/HGDWeVglOscNMnjG6EXd6ntSVyJf9HTQsZ3D+zM
-         9FRfwNVmSNsjMzanhIlBH/CYE7AxrCpMzSwviU4M=
+        b=VBt5upEqn+GxST31WqBPtPl5QIEQ8gDWgjT7QIn+HclkhYzhDJOu8Osk3ISZhOqM2
+         qyr9j/lzlsL8yp13tW4v5qELswcPEClFAHlAv86YrldmvC1eR7ZR+ecUFe2eHTYVVe
+         RefwJT+HbH6zwBpWaHB16rFmFc6aadKPMLmlO6AQ=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -34,10 +34,11 @@ To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Kishon Vijay Abraham <kishon@ti.com>,
         satish.nagireddy@getcruise.com, Tomasz Figa <tfiga@chromium.org>
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v14 13/34] media: drivers: use video_device_pipeline_alloc_start()
-Date:   Wed, 31 Aug 2022 17:13:36 +0300
-Message-Id: <20220831141357.1396081-14-tomi.valkeinen@ideasonboard.com>
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Subject: [PATCH v14 11/34] media: drivers: use video_device_pipeline()
+Date:   Wed, 31 Aug 2022 17:13:34 +0300
+Message-Id: <20220831141357.1396081-12-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220831141357.1396081-1-tomi.valkeinen@ideasonboard.com>
 References: <20220831141357.1396081-1-tomi.valkeinen@ideasonboard.com>
@@ -47,101 +48,54 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use video_device_pipeline_alloc_start() instead of manually
-allocating/managing the media pipeline storage.
+Use video_device_pipeline() in the drivers instead of
+media_entity_pipeline().
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
- drivers/media/platform/renesas/rcar-vin/rcar-dma.c | 14 +-------------
- drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c |  2 +-
- .../media/platform/sunxi/sun6i-csi/sun6i_video.c   |  2 +-
- drivers/media/platform/ti/cal/cal-video.c          |  2 +-
- drivers/media/platform/ti/cal/cal.h                |  1 -
- 5 files changed, 4 insertions(+), 17 deletions(-)
+ drivers/media/platform/xilinx/xilinx-dma.c | 4 ++--
+ drivers/media/platform/xilinx/xilinx-dma.h | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-dma.c b/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
-index 879dd02bbb55..3aea96d85165 100644
---- a/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
-+++ b/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
-@@ -1244,8 +1244,6 @@ static int rvin_mc_validate_format(struct rvin_dev *vin, struct v4l2_subdev *sd,
+diff --git a/drivers/media/platform/xilinx/xilinx-dma.c b/drivers/media/platform/xilinx/xilinx-dma.c
+index 9a177337e934..0a7fd8642a65 100644
+--- a/drivers/media/platform/xilinx/xilinx-dma.c
++++ b/drivers/media/platform/xilinx/xilinx-dma.c
+@@ -402,7 +402,7 @@ static int xvip_dma_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 	 * Use the pipeline object embedded in the first DMA object that starts
+ 	 * streaming.
+ 	 */
+-	pipe = to_xvip_pipeline(&dma->video.entity) ? : &dma->pipe;
++	pipe = to_xvip_pipeline(&dma->video) ? : &dma->pipe;
  
- static int rvin_set_stream(struct rvin_dev *vin, int on)
+ 	ret = video_device_pipeline_start(&dma->video, &pipe->pipe);
+ 	if (ret < 0)
+@@ -447,7 +447,7 @@ static int xvip_dma_start_streaming(struct vb2_queue *vq, unsigned int count)
+ static void xvip_dma_stop_streaming(struct vb2_queue *vq)
  {
--	struct media_pipeline *pipe;
--	struct media_device *mdev;
- 	struct v4l2_subdev *sd;
- 	struct media_pad *pad;
- 	int ret;
-@@ -1273,17 +1271,7 @@ static int rvin_set_stream(struct rvin_dev *vin, int on)
- 	if (ret)
- 		return ret;
+ 	struct xvip_dma *dma = vb2_get_drv_priv(vq);
+-	struct xvip_pipeline *pipe = to_xvip_pipeline(&dma->video.entity);
++	struct xvip_pipeline *pipe = to_xvip_pipeline(&dma->video);
+ 	struct xvip_dma_buffer *buf, *nbuf;
  
--	/*
--	 * The graph lock needs to be taken to protect concurrent
--	 * starts of multiple VIN instances as they might share
--	 * a common subdevice down the line and then should use
--	 * the same pipe.
--	 */
--	mdev = vin->vdev.entity.graph_obj.mdev;
--	mutex_lock(&mdev->graph_mutex);
--	pipe = media_entity_pipeline(&sd->entity) ? : &vin->vdev.pipe;
--	ret = __video_device_pipeline_start(&vin->vdev, pipe);
--	mutex_unlock(&mdev->graph_mutex);
-+	ret = video_device_pipeline_alloc_start(&vin->vdev);
- 	if (ret)
- 		return ret;
+ 	/* Stop the pipeline. */
+diff --git a/drivers/media/platform/xilinx/xilinx-dma.h b/drivers/media/platform/xilinx/xilinx-dma.h
+index 3ea10f6b0bb9..9c6d4c18d1a9 100644
+--- a/drivers/media/platform/xilinx/xilinx-dma.h
++++ b/drivers/media/platform/xilinx/xilinx-dma.h
+@@ -45,9 +45,9 @@ struct xvip_pipeline {
+ 	struct xvip_dma *output;
+ };
  
-diff --git a/drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c b/drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c
-index 17ad9a3caaa5..a3e826a755fc 100644
---- a/drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c
-+++ b/drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c
-@@ -266,7 +266,7 @@ static int sun4i_csi_start_streaming(struct vb2_queue *vq, unsigned int count)
- 		goto err_clear_dma_queue;
- 	}
+-static inline struct xvip_pipeline *to_xvip_pipeline(struct media_entity *e)
++static inline struct xvip_pipeline *to_xvip_pipeline(struct video_device *vdev)
+ {
+-	struct media_pipeline *pipe = media_entity_pipeline(e);
++	struct media_pipeline *pipe = video_device_pipeline(vdev);
  
--	ret = video_device_pipeline_start(&csi->vdev, &csi->vdev.pipe);
-+	ret = video_device_pipeline_alloc_start(&csi->vdev);
- 	if (ret < 0)
- 		goto err_free_scratch_buffer;
- 
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
-index 21a6b92494ba..7d39cbbf6a88 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
-@@ -141,7 +141,7 @@ static int sun6i_video_start_streaming(struct vb2_queue *vq, unsigned int count)
- 
- 	video->sequence = 0;
- 
--	ret = video_device_pipeline_start(&video->vdev, &video->vdev.pipe);
-+	ret = video_device_pipeline_alloc_start(&video->vdev);
- 	if (ret < 0)
- 		goto clear_dma_queue;
- 
-diff --git a/drivers/media/platform/ti/cal/cal-video.c b/drivers/media/platform/ti/cal/cal-video.c
-index 6a57efb0ed91..5813345656af 100644
---- a/drivers/media/platform/ti/cal/cal-video.c
-+++ b/drivers/media/platform/ti/cal/cal-video.c
-@@ -707,7 +707,7 @@ static int cal_start_streaming(struct vb2_queue *vq, unsigned int count)
- 	dma_addr_t addr;
- 	int ret;
- 
--	ret = video_device_pipeline_start(&ctx->vdev, &ctx->phy->pipe);
-+	ret = video_device_pipeline_alloc_start(&ctx->vdev);
- 	if (ret < 0) {
- 		ctx_err(ctx, "Failed to start media pipeline: %d\n", ret);
- 		goto error_release_buffers;
-diff --git a/drivers/media/platform/ti/cal/cal.h b/drivers/media/platform/ti/cal/cal.h
-index 61409ddced98..648cec43c3fc 100644
---- a/drivers/media/platform/ti/cal/cal.h
-+++ b/drivers/media/platform/ti/cal/cal.h
-@@ -174,7 +174,6 @@ struct cal_camerarx {
- 	struct device_node	*source_ep_node;
- 	struct device_node	*source_node;
- 	struct v4l2_subdev	*source;
--	struct media_pipeline	pipe;
- 
- 	struct v4l2_subdev	subdev;
- 	struct media_pad	pads[CAL_CAMERARX_NUM_PADS];
+ 	if (!pipe)
+ 		return NULL;
 -- 
 2.34.1
 
