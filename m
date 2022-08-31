@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27390ECAAD4
-	for <linux-media@archiver.kernel.org>; Wed, 31 Aug 2022 14:15:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0971BECAAD1
+	for <linux-media@archiver.kernel.org>; Wed, 31 Aug 2022 14:15:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232128AbiHaOPg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 31 Aug 2022 10:15:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59056 "EHLO
+        id S231991AbiHaOPq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 31 Aug 2022 10:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232125AbiHaOPM (ORCPT
+        with ESMTP id S232031AbiHaOPZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 31 Aug 2022 10:15:12 -0400
+        Wed, 31 Aug 2022 10:15:25 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1C5D91D3
-        for <linux-media@vger.kernel.org>; Wed, 31 Aug 2022 07:14:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07522D9D40
+        for <linux-media@vger.kernel.org>; Wed, 31 Aug 2022 07:14:31 -0700 (PDT)
 Received: from deskari.lan (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 996A551E;
-        Wed, 31 Aug 2022 16:14:15 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 69F31749;
+        Wed, 31 Aug 2022 16:14:17 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1661955256;
-        bh=s0LCe1PrWPzBxwRkDeZlr5rhAbjSRcKWNeC1/JQnB0Y=;
+        s=mail; t=1661955258;
+        bh=bxT/xqWUXKuMItMBRPe7APOWqyVLMlQyX/40UB025IQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HIcJaQw2e7SlALU6wYK7fCjwaCcbVfqaL7Wc3v+L4A+q/rTYLngxKcm3eX6YpzM7M
-         IQ3RrxOrJ6BqnWMQ75G7MvjNcSqH9W02ellHH0ccYq2XPgbgjiv2YhARxZKF2ga4sj
-         zNJfpNuOwDvnovQpHu0skIM67BPUBqpQTR1vW15A=
+        b=Vk3hcfAfluhYUtLZDidm/mKZZ+oySjQvsKMOMhD+Mv0Cwy5dApwbOYVAv1uF59FPS
+         b0fDNkzmIuJPGgtoTI0if0eDBuyoc9yasK+l1n4mSzD2SumZGn/494cAlgaMAMeLST
+         sLGjXfvrg/cfyTwilOjn5iZJqj+oMqJNzMBIK8SY=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -34,11 +34,10 @@ To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Kishon Vijay Abraham <kishon@ti.com>,
         satish.nagireddy@getcruise.com, Tomasz Figa <tfiga@chromium.org>
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: [PATCH v14 01/34] media: Documentation: mc: add definitions for stream and pipeline
-Date:   Wed, 31 Aug 2022 17:13:24 +0300
-Message-Id: <20220831141357.1396081-2-tomi.valkeinen@ideasonboard.com>
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v14 03/34] media: subdev: increase V4L2_FRAME_DESC_ENTRY_MAX to 8
+Date:   Wed, 31 Aug 2022 17:13:26 +0300
+Message-Id: <20220831141357.1396081-4-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220831141357.1396081-1-tomi.valkeinen@ideasonboard.com>
 References: <20220831141357.1396081-1-tomi.valkeinen@ideasonboard.com>
@@ -48,38 +47,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The doc talks about streams and pipelines, but doesn't really define
-them. This is an attempt to define them according to my understanding.
+V4L2_FRAME_DESC_ENTRY_MAX is currently set to 4. In theory it's possible
+to have an arbitrary amount of streams in a single pad, so preferably
+there should be no hardcoded maximum number.
+
+However, I believe a reasonable max is 8, which would cover a CSI-2 pad
+with 4 streams of pixel data and 4 streams of metadata.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- Documentation/driver-api/media/mc-core.rst | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ include/media/v4l2-subdev.h | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/driver-api/media/mc-core.rst b/Documentation/driver-api/media/mc-core.rst
-index 84aa7cdb5341..4bb062d5c2e7 100644
---- a/Documentation/driver-api/media/mc-core.rst
-+++ b/Documentation/driver-api/media/mc-core.rst
-@@ -214,6 +214,18 @@ Link properties can be modified at runtime by calling
- Pipelines and media streams
- ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index 9689f38a0af1..3797b99bb408 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -358,7 +358,11 @@ struct v4l2_mbus_frame_desc_entry {
+ 	} bus;
+ };
  
-+A media stream is a stream of pixels or metadata originating from one or more
-+source devices (such as a sensors) and flowing through media entity pads
-+towards the final sinks. The stream can be modified on the route by the
-+devices (e.g. scaling or pixel format conversions), or it can be split into
-+multiple branches, or multiple branches can be merged.
-+
-+A media pipeline is a set of media streams which are interdependent. This
-+interdependency can be caused by the hardware (e.g. configuration of a second
-+stream cannot be changed if the first stream has been enabled) or by the driver
-+due to the software design. Most commonly a media pipeline consists of a single
-+stream which does not branch.
-+
- When starting streaming, drivers must notify all entities in the pipeline to
- prevent link states from being modified during streaming by calling
- :c:func:`media_pipeline_start()`.
+-#define V4L2_FRAME_DESC_ENTRY_MAX	4
++ /*
++  * If this number is too small, it should be dropped altogether and the
++  * API switched to a dynamic number of frame descriptor entries.
++  */
++#define V4L2_FRAME_DESC_ENTRY_MAX	8
+ 
+ /**
+  * enum v4l2_mbus_frame_desc_type - media bus frame description type
 -- 
 2.34.1
 
