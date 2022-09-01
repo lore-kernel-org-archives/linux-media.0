@@ -2,41 +2,41 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 437A8ECAAD1
-	for <linux-media@archiver.kernel.org>; Thu,  1 Sep 2022 09:47:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B938ECAAD3
+	for <linux-media@archiver.kernel.org>; Thu,  1 Sep 2022 09:47:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233890AbiIAJrY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 1 Sep 2022 05:47:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
+        id S233834AbiIAJrZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 1 Sep 2022 05:47:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233928AbiIAJrR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Sep 2022 05:47:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3416F128573
-        for <linux-media@vger.kernel.org>; Thu,  1 Sep 2022 02:47:16 -0700 (PDT)
+        with ESMTP id S233925AbiIAJrQ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Sep 2022 05:47:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D7112487F
+        for <linux-media@vger.kernel.org>; Thu,  1 Sep 2022 02:47:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1662025635;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BBZNQN20GJ5gJTsV+zOCii6EVt4/u4E3xjRjECI9efQ=;
-        b=bE47PN2tRZBq6pbjhaxzMzSJ4ZRlPvSwelGKLahWObWvolKHKxv2tzQIeNlasHqBBaV3Ud
-        XlBqjJBYEYNweySkjldK9LSpSa56yZBWUaesxybarkeeNiQilmoOu/pgtD6TtL1ccRCBtp
-        O39K4vbNIJd58nalm/OdBvZui9MYG/k=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=IEAI9KHfek7RN/C4xU1FNFkJEMFJUTHd1T9ANa6t+P0=;
+        b=YSpl1ZztqPnQMT1FlrMidC5rsvknZ9/B1CYHcnQ5rTbevSQe7wCpt41dpuvZB3sSCXcCKb
+        BKfcWk3JglDLFx/KE0QSneB0p/poHnUY0DayrRScsd5iMtFhLzq4qSbMXJ3OWJ53c5FEQY
+        4NvGpfDIN5U87X4jbnE2PZa9pvOdsP0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-37-r6uzPst8N5qj6zp0u4cMMQ-1; Thu, 01 Sep 2022 05:47:14 -0400
-X-MC-Unique: r6uzPst8N5qj6zp0u4cMMQ-1
+ us-mta-288-X3Pw-QBdPoSuTphM19D-Vg-1; Thu, 01 Sep 2022 05:47:10 -0400
+X-MC-Unique: X3Pw-QBdPoSuTphM19D-Vg-1
 Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7E6452803BC9;
-        Thu,  1 Sep 2022 09:47:02 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.39.195.90])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CF896403344;
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9ACC690F94C;
         Thu,  1 Sep 2022 09:47:00 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.39.195.90])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E4B9D492C3B;
+        Thu,  1 Sep 2022 09:46:58 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -46,11 +46,10 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Yury Luneff <yury.lunev@gmail.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH 14/14] media: atomisp: prevent integer overflow in sh_css_set_black_frame()
-Date:   Thu,  1 Sep 2022 11:46:26 +0200
-Message-Id: <20220901094626.11513-15-hdegoede@redhat.com>
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: [PATCH 13/14] media: atomisp: Simplify v4l2_fh_open() error handling
+Date:   Thu,  1 Sep 2022 11:46:25 +0200
+Message-Id: <20220901094626.11513-14-hdegoede@redhat.com>
 In-Reply-To: <20220901094626.11513-1-hdegoede@redhat.com>
 References: <20220901094626.11513-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,35 +59,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+v4l2_fh_open() can only fail with -ENOMEM and as a generic rule drivers
+do not log their own errors for -ENOMEM since the kernel will already
+have complained loudly about this before the -ENOMEM return.
 
-The "height" and "width" values come from the user so the "height * width"
-multiplication can overflow.
+Remove the unnecessary error logging from atomisp_open().
 
-Fixes: a49d25364dfb ("staging/atomisp: Add support for the Intel IPU v2")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/YxBBCRnm3mmvaiuR@kili
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/staging/media/atomisp/pci/sh_css_params.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/staging/media/atomisp/pci/atomisp_fops.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_params.c b/drivers/staging/media/atomisp/pci/sh_css_params.c
-index 0e7c38b2bfe3..67915d76a87f 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_params.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_params.c
-@@ -950,8 +950,8 @@ sh_css_set_black_frame(struct ia_css_stream *stream,
- 		params->fpn_config.data = NULL;
- 	}
- 	if (!params->fpn_config.data) {
--		params->fpn_config.data = kvmalloc(height * width *
--						   sizeof(short), GFP_KERNEL);
-+		params->fpn_config.data = kvmalloc(array3_size(height, width, sizeof(short)),
-+						   GFP_KERNEL);
- 		if (!params->fpn_config.data) {
- 			IA_CSS_ERROR("out of memory");
- 			IA_CSS_LEAVE_ERR_PRIVATE(-ENOMEM);
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
+index 61571f3fb060..fa37defa5ecc 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
+@@ -708,12 +708,8 @@ static int atomisp_open(struct file *file)
+ 	dev_dbg(isp->dev, "open device %s\n", vdev->name);
+ 
+ 	ret = v4l2_fh_open(file);
+-	if (ret) {
+-		dev_err(isp->dev,
+-			"%s: v4l2_fh_open() returned error %d\n",
+-		       __func__, ret);
++	if (ret)
+ 		return ret;
+-	}
+ 
+ 	rt_mutex_lock(&isp->mutex);
+ 
 -- 
 2.37.2
 
