@@ -2,92 +2,137 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B938ECAAD3
-	for <linux-media@archiver.kernel.org>; Thu,  1 Sep 2022 09:47:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4232ECAAD3
+	for <linux-media@archiver.kernel.org>; Thu,  1 Sep 2022 10:42:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233834AbiIAJrZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 1 Sep 2022 05:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
+        id S234314AbiIAKmD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 1 Sep 2022 06:42:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233925AbiIAJrQ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Sep 2022 05:47:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D7112487F
-        for <linux-media@vger.kernel.org>; Thu,  1 Sep 2022 02:47:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662025635;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IEAI9KHfek7RN/C4xU1FNFkJEMFJUTHd1T9ANa6t+P0=;
-        b=YSpl1ZztqPnQMT1FlrMidC5rsvknZ9/B1CYHcnQ5rTbevSQe7wCpt41dpuvZB3sSCXcCKb
-        BKfcWk3JglDLFx/KE0QSneB0p/poHnUY0DayrRScsd5iMtFhLzq4qSbMXJ3OWJ53c5FEQY
-        4NvGpfDIN5U87X4jbnE2PZa9pvOdsP0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-288-X3Pw-QBdPoSuTphM19D-Vg-1; Thu, 01 Sep 2022 05:47:10 -0400
-X-MC-Unique: X3Pw-QBdPoSuTphM19D-Vg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S234312AbiIAKld (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Sep 2022 06:41:33 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DBAA50E2;
+        Thu,  1 Sep 2022 03:41:29 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-119-13.nat.spd-mgts.ru [109.252.119.13])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9ACC690F94C;
-        Thu,  1 Sep 2022 09:47:00 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.39.195.90])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E4B9D492C3B;
-        Thu,  1 Sep 2022 09:46:58 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Yury Luneff <yury.lunev@gmail.com>,
-        Nable <nable.maininbox@googlemail.com>,
-        andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 13/14] media: atomisp: Simplify v4l2_fh_open() error handling
-Date:   Thu,  1 Sep 2022 11:46:25 +0200
-Message-Id: <20220901094626.11513-14-hdegoede@redhat.com>
-In-Reply-To: <20220901094626.11513-1-hdegoede@redhat.com>
-References: <20220901094626.11513-1-hdegoede@redhat.com>
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0EC286601DF7;
+        Thu,  1 Sep 2022 11:41:24 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1662028888;
+        bh=4gRwEeQrpCCNInUGu4Wkln9ZnVQKU6fbLc+GiIs/ids=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=oAi2rxSwcnG0bXjo2QlMDHpLcITXazqjTc0dBalx+xOeHafTkvkjyLjXi6A6OOyur
+         z7pbNTKLqD/VkqICHbjajAS8k3mrAX9GZO4wHzC1QonWNPPsB+Yz/xNrNkGHiYNqkW
+         KkTeNffA7kOX5RP0brCKXhs5fgLYvkel3UkZEKV4IsG5BuPE8jfFljWb4zRoqwCW4G
+         seQ5HIQoKzjXqwqMOZEyy+r7MpCNGUMFwnjvSCAObVKOgjJcGMutTDAsM5pfKtEEMm
+         0OqK6C+DTZS/pjJwK1O6NhqMYskfUmdtIsJv4b93vGTms4LgyHT3lMm/bHN76TIS0u
+         g+wfJ91stbLBw==
+Message-ID: <b6d96128-7558-8111-71b0-5fe5502ddf4b@collabora.com>
+Date:   Thu, 1 Sep 2022 13:41:21 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v4 09/21] drm/etnaviv: Prepare to dynamic dma-buf locking
+ specification
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org,
+        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Clark <robdclark@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
+        Qiang Yu <yuq825@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Tomi Valkeinen <tomba@kernel.org>
+References: <20220831153757.97381-1-dmitry.osipenko@collabora.com>
+ <20220831153757.97381-10-dmitry.osipenko@collabora.com>
+ <641f372f-4a30-72bb-ec8b-4fd6ff825594@amd.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <641f372f-4a30-72bb-ec8b-4fd6ff825594@amd.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-v4l2_fh_open() can only fail with -ENOMEM and as a generic rule drivers
-do not log their own errors for -ENOMEM since the kernel will already
-have complained loudly about this before the -ENOMEM return.
+On 9/1/22 09:50, Christian König wrote:
+> Am 31.08.22 um 17:37 schrieb Dmitry Osipenko:
+>> Prepare Etnaviv driver to the common dynamic dma-buf locking convention
+>> by starting to use the unlocked versions of dma-buf API functions.
+>>
+>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> 
+> Interesting, where is the matching vmap()?
+> 
+> Anyway, this patch is Acked-by: Christian König <christian.koenig@amd.com>
 
-Remove the unnecessary error logging from atomisp_open().
+Etnaviv maps GEM only once and then unmaps it when GEM is destroyed. The
+dma-buf vmapping should happen under the reservation lock, hence only
+the release function needs to be changed to the unlocked variant.
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/staging/media/atomisp/pci/atomisp_fops.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+Lucas/Christian(Gmeiner), could you please check that I haven't missed
+anything?
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-index 61571f3fb060..fa37defa5ecc 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-@@ -708,12 +708,8 @@ static int atomisp_open(struct file *file)
- 	dev_dbg(isp->dev, "open device %s\n", vdev->name);
- 
- 	ret = v4l2_fh_open(file);
--	if (ret) {
--		dev_err(isp->dev,
--			"%s: v4l2_fh_open() returned error %d\n",
--		       __func__, ret);
-+	if (ret)
- 		return ret;
--	}
- 
- 	rt_mutex_lock(&isp->mutex);
- 
+>> ---
+>>   drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
+>> b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
+>> index 3fa2da149639..7031db145a77 100644
+>> --- a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
+>> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
+>> @@ -65,7 +65,7 @@ static void etnaviv_gem_prime_release(struct
+>> etnaviv_gem_object *etnaviv_obj)
+>>       struct iosys_map map = IOSYS_MAP_INIT_VADDR(etnaviv_obj->vaddr);
+>>         if (etnaviv_obj->vaddr)
+>> -        dma_buf_vunmap(etnaviv_obj->base.import_attach->dmabuf, &map);
+>> +       
+>> dma_buf_vunmap_unlocked(etnaviv_obj->base.import_attach->dmabuf, &map);
+>>         /* Don't drop the pages for imported dmabuf, as they are not
+>>        * ours, just free the array we allocated:
+> 
+
+
 -- 
-2.37.2
-
+Best regards,
+Dmitry
