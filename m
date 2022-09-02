@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10473C54EE9
-	for <linux-media@archiver.kernel.org>; Fri,  2 Sep 2022 09:09:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2149CECAAD5
+	for <linux-media@archiver.kernel.org>; Fri,  2 Sep 2022 09:10:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235358AbiIBJJE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 2 Sep 2022 05:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52830 "EHLO
+        id S235282AbiIBJKw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 2 Sep 2022 05:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230317AbiIBJJC (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 2 Sep 2022 05:09:02 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BCEAA4CD;
-        Fri,  2 Sep 2022 02:09:02 -0700 (PDT)
+        with ESMTP id S234776AbiIBJKu (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 2 Sep 2022 05:10:50 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AFA65F132;
+        Fri,  2 Sep 2022 02:10:49 -0700 (PDT)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4DA086601F04;
-        Fri,  2 Sep 2022 10:09:00 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6D44A6601F04;
+        Fri,  2 Sep 2022 10:10:47 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1662109740;
-        bh=me5bwAelKcyFGZPLRPYw5VKaBsEgHRaZdTst+izZfuU=;
+        s=mail; t=1662109848;
+        bh=lDJ9dZRK9MgMljtZl2+U/+k0zbMoLNgyT3MdX+UUElE=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=EOaGpB91B1iotFwQ5oFBUUoPinLhioyJNTo9eCwD4GGwoQkfLXxtCGdtlxO7tC6pl
-         tJPxMohoawjrnc0ql2wvZGuCD+KdtMKoJL+stVNdW2s3dxbw5IBLpUVERXEADT0PtQ
-         VJ5/2t31KpDHe9igYh23GC5lNRogOyC5f0a7b/eiWOaq9MHv2xxQNmC80KF5Fj0F2H
-         Dp3157s1LqH1uQVxfT9Vz7ppyFI15qh2EaP32cYLZ2RXdt8VgLpipz9vmcmb/rzNBI
-         25AxEzSADd2+QENa9KFUqGqB96fhB0uZclbCyMvDugMwtyJJ4/AfhUpkcVr53h9GK/
-         tLjLaS8P0jzYA==
-Message-ID: <9c10dac6-bb24-976a-f207-fc70603d4586@collabora.com>
-Date:   Fri, 2 Sep 2022 11:08:58 +0200
+        b=RYKJ4rmIkBKJ2y0peq0CDqlputlhNbpNUSAKuCxM7tyuMEXWz+AGEpEBpoM5phane
+         QFy/faz1o2AOPz1NFQUJ5SoEniZizj5rdVd4mKszXzBVyfTp8Ii66PaGz+PLitkYbq
+         qepVJTYeMLNzmt9du+amJeji8HPfRRbqxzmBUyCCAmIXlMKn2Xu5Rshk5jWrL0u/UM
+         KL7gmOO3ZBvBWW6BAdDXffcWb2QYrftkEsVFwUBlw1t6vNzgm1o8OeJCHIG0dg6Yjn
+         GMlZP7KHhyQwUuggnacXvBLtUqtv5j2Gqsv1sMhPMqQQHazBF9+HqrNfplYNLr1hUS
+         qtbyY6gdjJCNA==
+Message-ID: <ee6221e1-8ce6-9fe0-6094-1cd156fdaae3@collabora.com>
+Date:   Fri, 2 Sep 2022 11:10:45 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.0
-Subject: Re: [PATCH 1/3] media: platform: mtk-mdp3: use devm_kfree to free
- memory allocated with devm_kmalloc()
+Subject: Re: [PATCH 3/3] media: platform: mtk-mdp3: fix error return code in
+ mdp_vpu_dev_init()
 Content-Language: en-US
 To:     Sun Ke <sunke32@huawei.com>, mchehab@kernel.org,
         matthias.bgg@gmail.com, hverkuil-cisco@xs4all.nl,
@@ -46,10 +46,10 @@ To:     Sun Ke <sunke32@huawei.com>, mchehab@kernel.org,
 Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, kernel-janitors@vger.kernel.org
 References: <20220902085820.3777360-1-sunke32@huawei.com>
- <20220902085820.3777360-2-sunke32@huawei.com>
+ <20220902085820.3777360-4-sunke32@huawei.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220902085820.3777360-2-sunke32@huawei.com>
+In-Reply-To: <20220902085820.3777360-4-sunke32@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -57,11 +57,36 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Il 02/09/22 10:58, Sun Ke ha scritto:
-> comp is allocated with devm_kmalloc(), use devm_kfree to free it.
+> If mdp_vpu_shared_mem_alloc failed, mdp_vpu_dev_init should return -ENOMEM.
 > 
 > Fixes: 61890ccaefaf ("media: platform: mtk-mdp3: add MediaTek MDP3 driver")
 > Signed-off-by: Sun Ke <sunke32@huawei.com>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Hello Sun,
+thanks for the patch! However, someone else already sent the same fix and it's
+in a better shape. Please look at [1].
+
+Thanks,
+Angelo
+
+[1]: https://patchwork.kernel.org/project/linux-mediatek/patch/YxDGFMwyeNXFPaig@kili/
+
+> ---
+>   drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.c
+> index 9f5844385c8f..078040b7f65e 100644
+> --- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.c
+> +++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.c
+> @@ -175,6 +175,7 @@ int mdp_vpu_dev_init(struct mdp_vpu_dev *vpu, struct mtk_scp *scp,
+>   	mem_size = vpu_alloc_size;
+>   	if (mdp_vpu_shared_mem_alloc(vpu)) {
+>   		dev_err(&mdp->pdev->dev, "VPU memory alloc fail!");
+> +		err = -ENOMEM;
+>   		goto err_mem_alloc;
+>   	}
+>   
+> 
 
 
