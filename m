@@ -2,243 +2,125 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ADD7C38145
-	for <linux-media@archiver.kernel.org>; Tue,  6 Sep 2022 19:47:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6C05ECAAA1
+	for <linux-media@archiver.kernel.org>; Tue,  6 Sep 2022 20:05:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiIFTrD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 6 Sep 2022 15:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33426 "EHLO
+        id S230357AbiIFUFj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 6 Sep 2022 16:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiIFTrA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Sep 2022 15:47:00 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179D280EB7
-        for <linux-media@vger.kernel.org>; Tue,  6 Sep 2022 12:46:52 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id az27so17009409wrb.6
-        for <linux-media@vger.kernel.org>; Tue, 06 Sep 2022 12:46:51 -0700 (PDT)
+        with ESMTP id S230332AbiIFUFL (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Sep 2022 16:05:11 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C351BD147
+        for <linux-media@vger.kernel.org>; Tue,  6 Sep 2022 13:00:42 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id d5so7438376wms.5
+        for <linux-media@vger.kernel.org>; Tue, 06 Sep 2022 13:00:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=in-reply-to:content-disposition:mime-version:references
          :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
          :subject:date;
-        bh=bqv4iAd1mha/jCj0gsDylHCagZEixO6XwXeJh7bhmjc=;
-        b=NOyba92itqhhR/PpT3mpwNTiRuKPnJapzGo69+6nqHs39ugWnmJIcQdoc8PxAppiEe
-         Nhqo0BS1I2PQjWxAv660Zg3oA2AeRIsQXadSeWz8/QN+hKxVKwerxPyju8jl7Tf1WzGl
-         cAlMn1PiLddYyVHh0KGDxNdvkyeMTC7j4JKXE=
+        bh=VrcGAAHAFPBkHhppiEmlpx+VdwyrqvH6/RbOsQratUo=;
+        b=M5h3saQs6F1UBXdjXnvlynP0tALp22uVJtMAUE8iSwB+bkrHqEOrpeStA2fQe0HZLG
+         YdZDuD8LI9dc62w8cGcwf2yNtMGV2kRoFK6GdKfUXRceSGpRnCR0rRV3DTzNfjVFjuJU
+         dg17JdrVDQJfVv8mYhJu6NQhnD6rI1ItsBHd8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references
          :mail-followup-to:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=bqv4iAd1mha/jCj0gsDylHCagZEixO6XwXeJh7bhmjc=;
-        b=iyi/4+iiul5cggugSOqp7rb8CVxGrjliKm/0kWj3viAkhWhRkME/FNbVAEqyaCstIn
-         Z++gIYy+5PJbfaKp8YoOk4hpuL0KI60PWWk/Id2KHsAY1oS1P2IFKjTRx2HPFvH9vmJ0
-         itPc81k9N8Ey8LUo3RVsnkTZzCYAG3LEqcQ8/UaZJNKo7k3wDF/zw9+0VrtGQUAH+7s+
-         kOfajxU+xU8uJb0qAQTYztA5a5IeFeVNua/skqG4x50LgEklF0hBg/ZgxQl2lUCDIqeX
-         wxUQgORIVq1hVOU6wKT63hZMSZNogPStZM/2q0rQ/pPGUsnTwPZrIUf4+BL0+lH4tkmC
-         x2uQ==
-X-Gm-Message-State: ACgBeo0Hi0uxTIXDE152Ao0iYgTbDDKoa1GpvvJCY32geLvLC+vE37lh
-        QnAF++yNHdfxV+xk/nRXrgWWWA==
-X-Google-Smtp-Source: AA6agR6T7vwwOwFPSx9Y+6VkmPyGEeXPD3TVawQvk4BRuNrP/PJ8qNADqn/aJdfgkNiIYFdT3OynxQ==
-X-Received: by 2002:a5d:5a06:0:b0:226:d25e:b4ee with SMTP id bq6-20020a5d5a06000000b00226d25eb4eemr47055wrb.280.1662493610556;
-        Tue, 06 Sep 2022 12:46:50 -0700 (PDT)
+        bh=VrcGAAHAFPBkHhppiEmlpx+VdwyrqvH6/RbOsQratUo=;
+        b=COlTRwHpK9vKnDu18uSriheutnIfteaswbz3/pUnFk9/Ku9q98wjJhGAu/nHwsn4kn
+         bnffYp9HBGayny9QSgx73V1nFe38aN0u5j9nVp3r0yC3kP3V5B6SREwo34QIOgY5Z29A
+         +p2ldVtrq8emy08dwRM1HZo6NfPfVOCoS/E6nlEocZinO/Sj6doxCMqNIcFfjONohsQe
+         aQQR0Z9o/5QlMTIkzxQVDuom4xRJXjJaePE+X81uKEoSq5cANSET4d6N4MhVId5PHZqP
+         RB3/cvbxCjCgxDeJVK/ErVClhxkGPnfhwC5wtK7KLDtpogSQLpd2FUT/1fn26CaJyqV8
+         8d+Q==
+X-Gm-Message-State: ACgBeo0tlXYSR9zIHHtVRPx9ApfmpanIGe6I5JlbArN8cY12F8q+hvIc
+        Ri2NwMF5URT8mfQb+nuQDoDYYQ==
+X-Google-Smtp-Source: AA6agR70xNvhnTUF/14KkJLm8rVw//b90FT680b1H6RZc3w8FRaOhwakoWInvlm1LH/O+Z8Yz4H0qw==
+X-Received: by 2002:a05:600c:34c2:b0:3a5:d2f5:9d02 with SMTP id d2-20020a05600c34c200b003a5d2f59d02mr37123wmq.153.1662494364404;
+        Tue, 06 Sep 2022 12:59:24 -0700 (PDT)
 Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id z15-20020a5d654f000000b002211fc70174sm16324064wrv.99.2022.09.06.12.46.49
+        by smtp.gmail.com with ESMTPSA id l9-20020adfe9c9000000b00228d94931dcsm4199922wrn.116.2022.09.06.12.59.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 12:46:50 -0700 (PDT)
-Date:   Tue, 6 Sep 2022 21:46:48 +0200
+        Tue, 06 Sep 2022 12:59:23 -0700 (PDT)
+Date:   Tue, 6 Sep 2022 21:59:21 +0200
 From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        =?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [Linaro-mm-sig] [PATCH v2 1/3] dma-buf: Add ioctl to query mmap
- info
-Message-ID: <YxejqOuHTjoO/iXg@phenom.ffwll.local>
-Mail-Followup-To: Rob Clark <robdclark@gmail.com>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        =?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" <linaro-mm-sig@lists.linaro.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220801170459.1593706-1-robdclark@gmail.com>
- <20220801170459.1593706-2-robdclark@gmail.com>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     Olivier Masse <olivier.masse@nxp.com>, clement.faure@nxp.com,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        jens.wiklander@linaro.org, linaro-mm-sig@lists.linaro.org,
+        op-tee@lists.trustedfirmware.org, etienne.carriere@linaro.org,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH v2 0/1] tee: Add tee_shm_register_fd
+Message-ID: <YxemmVxh5F0fXEPJ@phenom.ffwll.local>
+Mail-Followup-To: Sumit Garg <sumit.garg@linaro.org>,
+        Olivier Masse <olivier.masse@nxp.com>, clement.faure@nxp.com,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        jens.wiklander@linaro.org, linaro-mm-sig@lists.linaro.org,
+        op-tee@lists.trustedfirmware.org, etienne.carriere@linaro.org,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        linux-media@vger.kernel.org
+References: <20220812143055.12938-1-olivier.masse@nxp.com>
+ <CAFA6WYM89+SrW2Br-fnFke4djt4GgGHXn7JS3=rxvAa7dAAY7w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220801170459.1593706-2-robdclark@gmail.com>
+In-Reply-To: <CAFA6WYM89+SrW2Br-fnFke4djt4GgGHXn7JS3=rxvAa7dAAY7w@mail.gmail.com>
 X-Operating-System: Linux phenom 5.18.0-4-amd64 
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 10:04:55AM -0700, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
+On Fri, Aug 19, 2022 at 01:54:31PM +0530, Sumit Garg wrote:
+> Hi Olivier,
 > 
-> This is a fairly narrowly focused interface, providing a way for a VMM
-> in userspace to tell the guest kernel what pgprot settings to use when
-> mapping a buffer to guest userspace.
+> On Fri, 12 Aug 2022 at 20:01, Olivier Masse <olivier.masse@nxp.com> wrote:
+> >
+> > Add a new ioctl called TEE_IOC_SHM_REGISTER_FD to register a
+> > shared memory from a dmabuf file descriptor.
+> > This new ioctl will allow the Linux Kernel to register a buffer
+> > to be used by the Secure Data Path OPTEE OS feature.
+> >
+> > Please find more information here:
+> > https://static.linaro.org/connect/san19/presentations/san19-107.pdf
+> >
+> > Patch tested on Hikey 6220.
+> >
 > 
-> For buffers that get mapped into guest userspace, virglrenderer returns
-> a dma-buf fd to the VMM (crosvm or qemu).  In addition to mapping the
-> pages into the guest VM, it needs to report to drm/virtio in the guest
-> the cache settings to use for guest userspace.  In particular, on some
-> architectures, creating aliased mappings with different cache attributes
-> is frowned upon, so it is important that the guest mappings have the
-> same cache attributes as any potential host mappings.
+> AFAIU, for the OP-TEE SDP feature to work you need to have a DMA-BUF
+> heap driver for allocating secure buffers through exposed chardev:
+> "/dev/dma_heap/sdp". Have you tested it with some out-of-tree driver
+> as I can't find it upstream? Also, do you plan to push that upstream
+> as well?
 > 
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
-> v2. fix compiler warning
+> BTW, please add a changelog while sending newer patch-set versions.
 
-I think I bikeshedded this on irc already, here for the record too.
+Also after the huge discussion last year dma-buf are agreed to be under
+the "you need an open source userspace for any new uapi using them" rule
+that all gpu drivers are under.
 
-- this wont work for buffers which do change the mapping when they move
-  (ttm can do that). And cros does make noises about discrete gpus I've
-  heard, this matters even for you :-)
-- I'm pretty sure this will put is even more onto the nasty people list
-  that dma-api folks maintain, especially with passing this all to
-  userspace
-- follow_pte() can figure this out internally in the kernel and kvm is
-  already using this, and I think doing this all internally with mmu
-  notifier and what not to make sure it all stays in sync is the right
-  approach. So your kvm/whatever combo should be able to figure out wth
-  it's supposed to be doing.
-
-I think if you make this a virtio special case like we've done with the
-magic uuid stuff, then that would make sense. Making it a full dma-buf
-interface doesn't imo.
-
-Cheers, Daniel
+Does this exist here?
+-Daniel
 
 > 
->  drivers/dma-buf/dma-buf.c    | 26 ++++++++++++++++++++++++++
->  include/linux/dma-buf.h      |  7 +++++++
->  include/uapi/linux/dma-buf.h | 28 ++++++++++++++++++++++++++++
->  3 files changed, 61 insertions(+)
+> -Sumit
 > 
-> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-> index 32f55640890c..87c52f080274 100644
-> --- a/drivers/dma-buf/dma-buf.c
-> +++ b/drivers/dma-buf/dma-buf.c
-> @@ -326,6 +326,29 @@ static long dma_buf_set_name(struct dma_buf *dmabuf, const char __user *buf)
->  	return 0;
->  }
->  
-> +static long dma_buf_info(struct dma_buf *dmabuf, void __user *uarg)
-> +{
-> +	struct dma_buf_info arg;
-> +
-> +	if (copy_from_user(&arg, uarg, sizeof(arg)))
-> +		return -EFAULT;
-> +
-> +	switch (arg.param) {
-> +	case DMA_BUF_INFO_VM_PROT:
-> +		if (!dmabuf->ops->mmap_info)
-> +			return -ENOSYS;
-> +		arg.value = dmabuf->ops->mmap_info(dmabuf);
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (copy_to_user(uarg, &arg, sizeof(arg)))
-> +		return -EFAULT;
-> +
-> +	return 0;
-> +}
-> +
->  static long dma_buf_ioctl(struct file *file,
->  			  unsigned int cmd, unsigned long arg)
->  {
-> @@ -369,6 +392,9 @@ static long dma_buf_ioctl(struct file *file,
->  	case DMA_BUF_SET_NAME_B:
->  		return dma_buf_set_name(dmabuf, (const char __user *)arg);
->  
-> +	case DMA_BUF_IOCTL_INFO:
-> +		return dma_buf_info(dmabuf, (void __user *)arg);
-> +
->  	default:
->  		return -ENOTTY;
->  	}
-> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-> index 71731796c8c3..6f4de64a5937 100644
-> --- a/include/linux/dma-buf.h
-> +++ b/include/linux/dma-buf.h
-> @@ -283,6 +283,13 @@ struct dma_buf_ops {
->  	 */
->  	int (*mmap)(struct dma_buf *, struct vm_area_struct *vma);
->  
-> +	/**
-> +	 * @mmap_info:
-> +	 *
-> +	 * Return mmapping info for the buffer.  See DMA_BUF_INFO_VM_PROT.
-> +	 */
-> +	int (*mmap_info)(struct dma_buf *);
-> +
->  	int (*vmap)(struct dma_buf *dmabuf, struct iosys_map *map);
->  	void (*vunmap)(struct dma_buf *dmabuf, struct iosys_map *map);
->  };
-> diff --git a/include/uapi/linux/dma-buf.h b/include/uapi/linux/dma-buf.h
-> index b1523cb8ab30..a41adac0f46a 100644
-> --- a/include/uapi/linux/dma-buf.h
-> +++ b/include/uapi/linux/dma-buf.h
-> @@ -85,6 +85,32 @@ struct dma_buf_sync {
->  
->  #define DMA_BUF_NAME_LEN	32
->  
-> +
-> +/**
-> + * struct dma_buf_info - Query info about the buffer.
-> + */
-> +struct dma_buf_info {
-> +
-> +#define DMA_BUF_INFO_VM_PROT      1
-> +#  define DMA_BUF_VM_PROT_WC      0
-> +#  define DMA_BUF_VM_PROT_CACHED  1
-> +
-> +	/**
-> +	 * @param: Which param to query
-> +	 *
-> +	 * DMA_BUF_INFO_BM_PROT:
-> +	 *     Query the access permissions of userspace mmap's of this buffer.
-> +	 *     Returns one of DMA_BUF_VM_PROT_x
-> +	 */
-> +	__u32 param;
-> +	__u32 pad;
-> +
-> +	/**
-> +	 * @value: Return value of the query.
-> +	 */
-> +	__u64 value;
-> +};
-> +
->  #define DMA_BUF_BASE		'b'
->  #define DMA_BUF_IOCTL_SYNC	_IOW(DMA_BUF_BASE, 0, struct dma_buf_sync)
->  
-> @@ -95,4 +121,6 @@ struct dma_buf_sync {
->  #define DMA_BUF_SET_NAME_A	_IOW(DMA_BUF_BASE, 1, __u32)
->  #define DMA_BUF_SET_NAME_B	_IOW(DMA_BUF_BASE, 1, __u64)
->  
-> +#define DMA_BUF_IOCTL_INFO	_IOWR(DMA_BUF_BASE, 2, struct dma_buf_info)
-> +
->  #endif
-> -- 
-> 2.36.1
-> 
-> _______________________________________________
-> Linaro-mm-sig mailing list -- linaro-mm-sig@lists.linaro.org
-> To unsubscribe send an email to linaro-mm-sig-leave@lists.linaro.org
+> > Etienne Carriere (1):
+> >   tee: new ioctl to a register tee_shm from a dmabuf file descriptor
+> >
+> >  drivers/tee/tee_core.c   | 38 +++++++++++++++
+> >  drivers/tee/tee_shm.c    | 99 +++++++++++++++++++++++++++++++++++++++-
+> >  include/linux/tee_drv.h  | 11 +++++
+> >  include/uapi/linux/tee.h | 29 ++++++++++++
+> >  4 files changed, 175 insertions(+), 2 deletions(-)
+> >
+> > --
+> > 2.25.0
+> >
 
 -- 
 Daniel Vetter
