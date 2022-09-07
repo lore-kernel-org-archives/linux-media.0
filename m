@@ -2,169 +2,149 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58D95C54EE9
-	for <linux-media@archiver.kernel.org>; Wed,  7 Sep 2022 13:44:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 009F7C54EE9
+	for <linux-media@archiver.kernel.org>; Wed,  7 Sep 2022 13:45:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229979AbiIGNoU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Sep 2022 09:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45740 "EHLO
+        id S229814AbiIGNpx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Sep 2022 09:45:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiIGNnd (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Sep 2022 09:43:33 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800BB7F112
-        for <linux-media@vger.kernel.org>; Wed,  7 Sep 2022 06:42:42 -0700 (PDT)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220907134241epoutp023a4294c918e082b79624c1d58f75f11d~Sl9a9p9gh1739917399epoutp021
-        for <linux-media@vger.kernel.org>; Wed,  7 Sep 2022 13:42:41 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220907134241epoutp023a4294c918e082b79624c1d58f75f11d~Sl9a9p9gh1739917399epoutp021
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1662558161;
-        bh=gSif8NMM6wosPp4czbq6ghp4X8l/PNF06f6zjCg20J4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AtZFBnhCReAdCTRt5xLswLQ40+P5Ozgj4oom1DD7qSPxxrbcnBrMg406vXJpVvHvx
-         7al+O09Jw+DgSopsn3VwY5SyT60tjZ2p7LBajjtbKzAwum4vWH38MCqOv+Bbxwcft3
-         NJzLx5ExTS7fqqARh6h8R3DKUW2QzJzytc8FI4UI=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20220907134240epcas5p28b2f86dd0e4f0da92c4e47ffd09a1eba~Sl9aPlwok0998509985epcas5p2c;
-        Wed,  7 Sep 2022 13:42:40 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.175]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4MN3NF5gpLz4x9Pp; Wed,  7 Sep
-        2022 13:42:37 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        5E.69.53458.DCF98136; Wed,  7 Sep 2022 22:42:37 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220907101827epcas5p2afa088ce5a591040094d2b49b928f3c2~SjLHHpNUm2030720307epcas5p20;
-        Wed,  7 Sep 2022 10:18:27 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220907101827epsmtrp1e3eff56e01088162beff031f9e566d64~SjLHGv0t40915809158epsmtrp1s;
-        Wed,  7 Sep 2022 10:18:27 +0000 (GMT)
-X-AuditID: b6c32a4a-a5bff7000000d0d2-e3-63189fcd52b7
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        9C.B8.18644.3FF68136; Wed,  7 Sep 2022 19:18:27 +0900 (KST)
-Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
-        [107.109.115.6]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220907101825epsmtip154204b88be3cf7dd290da6f4ee1397bd~SjLFJqolx3175831758epsmtip1p;
-        Wed,  7 Sep 2022 10:18:25 +0000 (GMT)
-From:   Smitha T Murthy <smitha.t@samsung.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
-        mchehab@kernel.org, alim.akhtar@samsung.com,
-        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
-        linux-fsd@tesla.com, aakarsh.jain@samsung.com,
-        Smitha T Murthy <smitha.t@samsung.com>,
-        stable@vger.kernel.org
-Subject: [PATCH 3/3] media: s5p-mfc: Fix to handle reference queue during
- finishing
-Date:   Wed,  7 Sep 2022 16:02:27 +0530
-Message-Id: <20220907103227.61088-3-smitha.t@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220907103227.61088-1-smitha.t@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpgk+LIzCtJLcpLzFFi42LZdlhTQ/fsfIlkg2/XtCye7pjJavFg3jY2
-        i/uLP7NYHNq8ld1i0+NrrBYPX4VbXN41h82iZ8NWVou1R+6yWyzb9IfJYtHWL+wWd/dsY7RY
-        sPERowOvx+I9L5k8Nq3qZPPYvKTeo2/LKkaPf01z2T0+b5ILYIvKtslITUxJLVJIzUvOT8nM
-        S7dV8g6Od443NTMw1DW0tDBXUshLzE21VXLxCdB1y8wBulNJoSwxpxQoFJBYXKykb2dTlF9a
-        kqqQkV9cYquUWpCSU2BSoFecmFtcmpeul5daYmVoYGBkClSYkJ3xv3ERc8EtwYodF96zNjB+
-        4Oti5OSQEDCRWLduPWsXIxeHkMBuRonLO7cwQzifGCXObD/OBOF8ZpT4NmcbUBkHWMu+B6UQ
-        8V2MEuc73kIVNTNJTPrzkQlkLpuAjsS396fZQGwRgVSJV+vWgu1gFuhmkrg7fz0zSEJYIFTi
-        zd73rCA2i4CqxOydb8CaeQUsJd5/3sAEcaC8xOoNB8DqOQWsJN4dmQ8V/8su8f1REITtIvHp
-        20VmCFtY4tXxLewQtpTEy/42KDtd4v7nZkYIu0BibsMWqDn2EgeuzGEB+YxZQFNi/S59iLCs
-        xNRT68BKmAX4JHp/P4Eq55XYMQ/GVpJYdOYE1HgJiatvt7JC2B4SJ5dMArOFBHoZJdZPFp3A
-        KDcLYcMCRsZVjJKpBcW56anFpgVGeanl8EhLzs/dxAhOilpeOxgfPvigd4iRiYPxEKMEB7OS
-        CG/KDpFkId6UxMqq1KL8+KLSnNTiQ4ymwOCbyCwlmpwPTMt5JfGGJpYGJmZmZiaWxmaGSuK8
-        U7QZk4UE0hNLUrNTUwtSi2D6mDg4pRqYLLhmRW/VZ3rZZMTKqPblvY+V47PjxgxrXxkUKRd7
-        b+HVXiRcGH4hxOe9zPxgc+NwGzFW9sl3/xxcz9XitT3Z9JD2ijeeB4L8Yt4eZb+so39w1Ywn
-        KbxHn5Z1JCS3SV8s5lHR/3NN5JPs6tVyc8X1WcO6zBszTb403BPYIxNQekbj0zd2xg0T79R+
-        nTr3wp6Pms9uqlbcbgz4+0VtsRgn4+rnt69dKevbw7ui/bRokGuKuP4p67u96eqXEk9odv5n
-        rVsda62ob1R1zfdo/e4l1aLPHnktqOo3b13w9sKP5vceNS+55ldFnXXS/F5/loujXSDgxJnk
-        dTNDIwrjbt2M4bi2wWT3I5XYNU4uv2SUWIozEg21mIuKEwFaJPM7EwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrGLMWRmVeSWpSXmKPExsWy7bCSnO7nfIlkg9a9chZPd8xktXgwbxub
-        xf3Fn1ksDm3eym6x6fE1VouHr8ItLu+aw2bRs2Erq8XaI3fZLZZt+sNksWjrF3aLu3u2MVos
-        2PiI0YHXY/Gel0wem1Z1snlsXlLv0bdlFaPHv6a57B6fN8kFsEVx2aSk5mSWpRbp2yVwZfxv
-        XMRccEuwYseF96wNjB/4uhg5OCQETCT2PSjtYuTiEBLYwSjRuuQSWxcjJ1BcQmLl70mMELaw
-        xMp/z9khihqZJH717AYrYhPQkfj2/jSYLSKQLjHpzlcWkCJmgelMEntWPWEH2SAsECxx+rwj
-        SA2LgKrE7J1vmEBsXgFLifefNzBBLJCXWL3hADOIzSlgJfHuyHwmkFYhoJrjF6smMPItYGRY
-        xSiZWlCcm55bbFhglJdarlecmFtcmpeul5yfu4kRHLRaWjsY96z6oHeIkYmD8RCjBAezkghv
-        yg6RZCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8F7pOxgsJpCeWpGanphakFsFkmTg4pRqY0kXN
-        LETuqP/8X3D9ru6RbvOpX2tYpihNOfZ2quMzhpkNe5N5HFZZqcV1ds87yRD4far7nKctj9a4
-        eTD/OP1Eo96QpcY39t3+ExaiIqu2LnPTD+hVZT19bk0d35KlNn8c9N+WXU4/oTnjkmTavn77
-        9NWhcu2LGm69tvDPYdryNa/V8hrP1N+PvY32pvGXSSnUyC+vUXu04ex2xmNS5lNvLbXL2Xaq
-        pJidf8nnmBLTjTuKXvGqZXy4Jf+v75ZmZ5z2pw2N55SnqcxePyXu2szmO5/CW7PPv+UXmWpW
-        xebzvP31Ub3XeQJ7PNkMhacI+Uc+CNj8ON3YcpKQLsOLNV1PbV93Fsxad8vqW/9zsSP5SizF
-        GYmGWsxFxYkA1MJTBMkCAAA=
-X-CMS-MailID: 20220907101827epcas5p2afa088ce5a591040094d2b49b928f3c2
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220907101827epcas5p2afa088ce5a591040094d2b49b928f3c2
-References: <20220907103227.61088-1-smitha.t@samsung.com>
-        <CGME20220907101827epcas5p2afa088ce5a591040094d2b49b928f3c2@epcas5p2.samsung.com>
+        with ESMTP id S229803AbiIGNpg (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Sep 2022 09:45:36 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B394D3A482
+        for <linux-media@vger.kernel.org>; Wed,  7 Sep 2022 06:44:47 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id e20so20443688wri.13
+        for <linux-media@vger.kernel.org>; Wed, 07 Sep 2022 06:44:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date;
+        bh=qvMkdXxB9XF3BP/V27nkxV6dEnEowp0IO7DwwY/3xg4=;
+        b=f+dXohNJTKXYhlI7kZ1MfrfqvryuCHJk/RKM91G7vMKPNJT735c+ZIo5Eetx5y1RmM
+         RYWfHJ7M5OQFQHrc5fX5UKj6VpkMRMrk57jxj3xH232ced2+qpF4X1no/+84w321FJQa
+         T/bFXBNnH3O/szhIe4wTVqbHA4aTUWZ+80HEhgnTVHsbVOBXWUO+Umqt7kSfjvNxCam2
+         2ufqd71ENQIOFF8bAajxCaPTaA3l03n/Gw94T8N3AYbiNNAi+SDZoKRQDkUeRARFbchd
+         m5Jc5ic6mfrq93BjMxapZuQrJDy/Nxj8SIxJQRea6YlB1LTxvWRsnBjXfkB1D1eKkx8x
+         IWEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=qvMkdXxB9XF3BP/V27nkxV6dEnEowp0IO7DwwY/3xg4=;
+        b=C23VYlApkQjf1D8WOfgysiQruUIburvLKrUaGpSzzkQhqEBEJPtRHHT7y2JttugxuQ
+         WapnBj3PryXWn4djYhjdird/jaD94GVBd4av/FwBHIdkN/c9Sc3mYEx7NirVxZz9LW/0
+         D4Piw2XawpMptKGvW5qknQxfWTGICZvWcnY8VcQxSJjNvb1/aHpue/lmipLsJLH774m3
+         9ZfLl2k8QMXAk+G+4netF80oJDz9rWkVv6BlALMYNuLZsNcXuTk/spiGnoz0n2XhV2+a
+         iPOXKFphfL4Re0nhojZsfYGgzGyEj5orgjtdXV2Ex66SjE3yZzg4gei0gMPwN4Lps4PQ
+         8KeA==
+X-Gm-Message-State: ACgBeo1GCnq3hhIh7I4yUmAjDA6Bq5nnBL3uQK7BXw+8UTtKmBFjEy2U
+        ACOaVbDEa6N3ghNozywctx9gWDN2G6s=
+X-Google-Smtp-Source: AA6agR4JyiISLqfeL51lBIuv0wJZILQbLlelh/hbi8/bLlH0xVKK9BiWyDQv7My1cYml3IiQ5QcKcw==
+X-Received: by 2002:a5d:6088:0:b0:228:e0c5:da5f with SMTP id w8-20020a5d6088000000b00228e0c5da5fmr2078254wrt.221.1662558286090;
+        Wed, 07 Sep 2022 06:44:46 -0700 (PDT)
+Received: from [192.168.2.202] (pd9ea37fb.dip0.t-ipconnect.de. [217.234.55.251])
+        by smtp.gmail.com with ESMTPSA id w10-20020a05600c474a00b003a608d69a64sm26816797wmo.21.2022.09.07.06.44.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Sep 2022 06:44:45 -0700 (PDT)
+Message-ID: <db44a24b-2a9a-6682-4825-eedc4ecb1340@gmail.com>
+Date:   Wed, 7 Sep 2022 15:44:44 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+To:     sakari.ailus@linux.intel.com
+Cc:     bingbu.cao@intel.com, linux-media@vger.kernel.org,
+        tian.shu.qiu@intel.com, tomi.valkeinen@ideasonboard.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+References: <20220825190351.3241444-1-sakari.ailus@linux.intel.com>
+Subject: Re: [PATCH 1/1] ipu3-imgu: Fix NULL pointer dereference in active
+ selection access
+Content-Language: en-US
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <20220825190351.3241444-1-sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On receiving last buffer driver puts MFC to MFCINST_FINISHING state which in
-turn skips transferring of frame from SRC to REF queue. This causes driver to
-stop MFC encoding and last frame is lost.
+Hi,
 
-This patch guarantees safe handling of frames during MFCINST_FINISHING and
-correct clearing of workbit to avoid early stopping of encoding.
+On Thu, 25 Aug 2022 22:03:51 +0300, Sakari Ailus  wrote:
+> What the IMGU driver did was that it first acquired the pointers to active
+> and try V4L2 subdev state, and only then figured out which one to use.
+> 
+> The problem with that approach and a later patch (see Fixes: tag) is that
+> as sd_state argument to v4l2_subdev_get_try_crop() et al is NULL, there is
+> now an attempt to dereference that.
+> 
+> Fix this.
 
-Fixes: af93574678108 ("[media] MFC: Add MFC 5.1 V4L2 driver")
+Thank you for this fix, this however only addresses
+imgu_subdev_get_selection(), but the issue is also present in
+imgu_subdev_set_selection(). I assume that a similar fix is needed for that.
+I've added a diff for that below. Feel free to squash that into your patch or
+let me know if I should submit this separately.
 
-Cc: stable@vger.kernel.org
-Cc: linux-fsd@tesla.com
-Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
+Regards,
+Max
+
 ---
- drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+  drivers/staging/media/ipu3/ipu3-v4l2.c | 25 ++++++++++++-------------
+  1 file changed, 12 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c
-index b65e506665af..e064bdd74f2e 100644
---- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c
-@@ -1218,6 +1218,7 @@ static int enc_post_frame_start(struct s5p_mfc_ctx *ctx)
- 	unsigned long mb_y_addr, mb_c_addr;
- 	int slice_type;
- 	unsigned int strm_size;
-+	bool src_ready;
- 
- 	slice_type = s5p_mfc_hw_call(dev->mfc_ops, get_enc_slice_type, dev);
- 	strm_size = s5p_mfc_hw_call(dev->mfc_ops, get_enc_strm_size, dev);
-@@ -1257,7 +1258,8 @@ static int enc_post_frame_start(struct s5p_mfc_ctx *ctx)
- 			}
- 		}
- 	}
--	if ((ctx->src_queue_cnt > 0) && (ctx->state == MFCINST_RUNNING)) {
-+	if ((ctx->src_queue_cnt > 0) && (ctx->state == MFCINST_RUNNING ||
-+				ctx->state == MFCINST_FINISHING)) {
- 		mb_entry = list_entry(ctx->src_queue.next, struct s5p_mfc_buf,
- 									list);
- 		if (mb_entry->flags & MFC_BUF_FLAG_USED) {
-@@ -1288,7 +1290,13 @@ static int enc_post_frame_start(struct s5p_mfc_ctx *ctx)
- 		vb2_set_plane_payload(&mb_entry->b->vb2_buf, 0, strm_size);
- 		vb2_buffer_done(&mb_entry->b->vb2_buf, VB2_BUF_STATE_DONE);
- 	}
--	if ((ctx->src_queue_cnt == 0) || (ctx->dst_queue_cnt == 0))
-+
-+	src_ready = true;
-+	if ((ctx->state == MFCINST_RUNNING) && (ctx->src_queue_cnt == 0))
-+		src_ready = false;
-+	if ((ctx->state == MFCINST_FINISHING) && (ctx->ref_queue_cnt == 0))
-+		src_ready = false;
-+	if ((!src_ready) || (ctx->dst_queue_cnt == 0))
- 		clear_work_bit(ctx);
- 
- 	return 0;
--- 
-2.17.1
+diff --git a/drivers/staging/media/ipu3/ipu3-v4l2.c b/drivers/staging/media/ipu3/ipu3-v4l2.c
+index 2234bb8d48b3..079f2635c70d 100644
+--- a/drivers/staging/media/ipu3/ipu3-v4l2.c
++++ b/drivers/staging/media/ipu3/ipu3-v4l2.c
+@@ -223,10 +223,9 @@ static int imgu_subdev_set_selection(struct v4l2_subdev *sd,
+                                      struct v4l2_subdev_selection *sel)
+  {
+         struct imgu_device *imgu = v4l2_get_subdevdata(sd);
+-       struct imgu_v4l2_subdev *imgu_sd = container_of(sd,
+-                                                       struct imgu_v4l2_subdev,
+-                                                       subdev);
+-       struct v4l2_rect *rect, *try_sel;
++       struct imgu_v4l2_subdev *imgu_sd =
++               container_of(sd, struct imgu_v4l2_subdev, subdev);
++       struct v4l2_rect *rect;
+
+         dev_dbg(&imgu->pci_dev->dev,
+                  "set subdev %u sel which %u target 0x%4x rect [%ux%u]",
+@@ -238,22 +237,22 @@ static int imgu_subdev_set_selection(struct v4l2_subdev *sd,
+
+         switch (sel->target) {
+         case V4L2_SEL_TGT_CROP:
+-               try_sel = v4l2_subdev_get_try_crop(sd, sd_state, sel->pad);
+-               rect = &imgu_sd->rect.eff;
++               if (sel->which == V4L2_SUBDEV_FORMAT_TRY)
++                       rect = v4l2_subdev_get_try_crop(sd, sd_state, sel->pad);
++               else
++                       rect = &imgu_sd->rect.eff;
+                 break;
+         case V4L2_SEL_TGT_COMPOSE:
+-               try_sel = v4l2_subdev_get_try_compose(sd, sd_state, sel->pad);
+-               rect = &imgu_sd->rect.bds;
++               if (sel->which == V4L2_SUBDEV_FORMAT_TRY)
++                       rect = v4l2_subdev_get_try_compose(sd, sd_state, sel->pad);
++               else
++                       rect = &imgu_sd->rect.bds;
+                 break;
+         default:
+                 return -EINVAL;
+         }
+
+-       if (sel->which == V4L2_SUBDEV_FORMAT_TRY)
+-               *try_sel = sel->r;
+-       else
+-               *rect = sel->r;
+-
++       *rect = sel->r;
+         return 0;
+  }
+
+--
+2.37.3
 
