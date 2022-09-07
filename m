@@ -2,206 +2,185 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A6E7C38145
-	for <linux-media@archiver.kernel.org>; Wed,  7 Sep 2022 06:17:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3686C38145
+	for <linux-media@archiver.kernel.org>; Wed,  7 Sep 2022 06:35:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbiIGGRC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Sep 2022 02:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
+        id S229792AbiIGGf0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Sep 2022 02:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiIGGRA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Sep 2022 02:17:00 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8557F94ECE
-        for <linux-media@vger.kernel.org>; Tue,  6 Sep 2022 23:16:59 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (dkwl20tj04snw15cjtflt-3.rev.dnainternet.fi [IPv6:2001:14ba:4493:6f40:fec3:d72a:e447:8113])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 620F11B00330
-        for <linux-media@vger.kernel.org>; Wed,  7 Sep 2022 09:16:56 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1662531416;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=jMpdaSxiT55iVf9594CsH86JhIm3DDu98Q+xD9w6Suw=;
-        b=BsKzB3RaJC/5UTKvEaCcsayD5KwuijiISS/DHw1sFIwg0iHE5bQxs0DfjNiZDFE2FHj0rN
-        ABHVGQO7bKeTPBZ4OTgLnrAgb7bepmdT7gY3U29Ca4qzd2uW4VUIbSR+r7OGkSklq265Ce
-        lmBEiLo/H38ITNrnrqTKATB4uV7W2lijPdFnT9yefupfPui9ZYcpCg24rv5rEIgPE7bbZ7
-        hfyomAK+Q1jtuDGDXF35aNF4Xky3/TlGoHhcQJ49B2PpZDWnB0+pWaZr3IHIYsXJU3VipQ
-        /QUyWlus+lTUP5RPXBBV/c8Nr6sU0g+PHV6W7ngUFI6wJbrJLbdIjP8vw8KSAw==
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 553B7634C91
-        for <linux-media@vger.kernel.org>; Wed,  7 Sep 2022 09:16:53 +0300 (EEST)
-Date:   Wed, 7 Sep 2022 09:16:53 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     linux-media@vger.kernel.org
-Subject: [GIT PULL FOR 6.1] V4L2 camera patches
-Message-ID: <Yxg3VXLv49tgYqsD@valkosipuli.retiisi.eu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1662531416; a=rsa-sha256;
-        cv=none;
-        b=T6Vzwyrw2PKRvezBEvWuKEsJW69iLcmF/YUmUdDLXyNgTl61cHBFoCZVFwpRZo93zqAJI3
-        8x5qiHhTrZ3QOBv8wGyhxB8wg2Z5+OPZ2tpED48V+cWBJUbY6DkYMfHst+/LLnG+W83Vml
-        2kLpNYRiuSNdwUN/cqjrbKIo6YStauLDLHstgVM9gukjQ2zpBnSEKEDLfUbB7I+FiyB1/Q
-        DLrRy4spLhW31QO/x1cM7oTEFv1gkxlHdK6aQvc4TGscXaG+qfVbFK5mZtKwQKw0JodY6L
-        poLvP0Y7hVDQZBWqIK8E/q7kOOiOlwQBKeauwCdc1GtPu5HBf7i0SIKcnq2IPQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1662531416;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=jMpdaSxiT55iVf9594CsH86JhIm3DDu98Q+xD9w6Suw=;
-        b=e6RMuqh5BEowCn0SLkHlXWlWllhzT5rxFnJa++hAhgZbScUOXt5xC1/BGIVq4Ik9nOV0e3
-        IKri7hF+tSrnke+sjAwTJ8bvvmeMQ87Yv/YSDE2N2J+YIGMLS72gU+moSeed7XSuyXe/5c
-        wsmA0ktARNBCjNOUcIU4z2iG5OxmWUTIpOtwfvNlTvxLD8v2iNPouMe+LyEQUKJ+WbLeA8
-        sVcGDZVH6oStrxBCZ/U2KFza00eKJ8/ZEwFNFxIWHdcGb2ery1V+ooNNRdEXjkN3QWyTmc
-        KQsx4aoqHEuJPN3zfNModvpE6f2wwGt6Jlb0hAKmypI9O79Y1Mbupn0Ru739Qg==
+        with ESMTP id S229686AbiIGGfZ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Sep 2022 02:35:25 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D824D4F8
+        for <linux-media@vger.kernel.org>; Tue,  6 Sep 2022 23:35:22 -0700 (PDT)
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220907063518epoutp011de77923521d3e1d020fd48e60a8c477~SgIRMb_110538505385epoutp01S
+        for <linux-media@vger.kernel.org>; Wed,  7 Sep 2022 06:35:18 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220907063518epoutp011de77923521d3e1d020fd48e60a8c477~SgIRMb_110538505385epoutp01S
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1662532518;
+        bh=6tlsYqS4FLhOPvwqcoaVoNfhPy7sDrJGnZbGq7969rk=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=M2X4Y/aqyHJ46nKWdNoKNOasejhBmkfd+3SxWtB+USD/xEjx0wS5oPfM33Zy0Fi53
+         6Zu4QqClgK6KhF7uE5LbB1ewfyzTmhtCpy99aCp+gHsoMGyWOAzJQdHy8HkOJ2mZgG
+         Ew6n2vZPDNuPSmV2ZUm8o/YfrQjuxaHht3R8qp/I=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20220907063517epcas5p314b95ca7eb6d4257f3b5b8e319bacb58~SgIQgIX0y1809618096epcas5p3n;
+        Wed,  7 Sep 2022 06:35:17 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.182]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4MMsv571gJz4x9Pw; Wed,  7 Sep
+        2022 06:35:13 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        55.40.54060.0AB38136; Wed,  7 Sep 2022 15:35:12 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220907063309epcas5p1793555c0747fd7a11997e97649924552~SgGZzZgk32639926399epcas5p1G;
+        Wed,  7 Sep 2022 06:33:09 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220907063309epsmtrp10cd486fdf01e1662194effac553ae508~SgGZx_n800506905069epsmtrp1p;
+        Wed,  7 Sep 2022 06:33:09 +0000 (GMT)
+X-AuditID: b6c32a4b-e33fb7000000d32c-be-63183ba060e2
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        C5.CC.14392.52B38136; Wed,  7 Sep 2022 15:33:09 +0900 (KST)
+Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
+        [107.109.115.6]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220907063306epsmtip12af350a2d66ed8d22dd308b9ae2de9e8~SgGWoAfxe2637926379epsmtip1t;
+        Wed,  7 Sep 2022 06:33:06 +0000 (GMT)
+From:   Smitha T Murthy <smitha.t@samsung.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
+        benjamin.gaignard@collabora.com, stanimir.varbanov@linaro.org,
+        dillon.minfei@gmail.com, david.plowman@raspberrypi.com,
+        mark.rutland@arm.com, robh+dt@kernel.org, krzk+dt@kernel.org,
+        andi@etezian.org, alim.akhtar@samsung.com,
+        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
+        linux-fsd@tesla.com, smitha.t@samsung.com, aakarsh.jain@samsung.com
+Subject: [Patch v2 00/15] Add MFC v12 support.
+Date:   Wed,  7 Sep 2022 12:17:00 +0530
+Message-Id: <20220907064715.55778-1-smitha.t@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA0VTbUxbVRj23Ht7W9DCtWN6JA7ZTYzCgLVQ6ukGIgLbTZiTZGYajWJXroUB
+        bW0Loxi0gmwKbjCVH4NRGF/Ojg0sFCuCIKtgkM0hDGZYXRkyPjIY40syiNjSTv897/s8z3ue
+        vOccHi74nfTnpSl1rEYpy6BJb6LtclBwaPVeKBc6avagSesZDnIY20hUuzaFoVu1SwTqabFw
+        UetwBY6+7uvmoCrbVQ767qfbBPp22skOnrETaKrqEkAz5X+SyDwxwkHjs6+jofazJPq82cJB
+        F212LqofHcRQg3kDQzWWZS4q7LRxkb2jDaBPjtuwlyDTaGwEjNVeB5jRukWc+b7czmVqO2Yw
+        xmz6jGRujnSQTEvdR0zhzw8I5lSrCTD/5FdymSLbKMksmQOY/pUlbpLPm+lRqawshdUEskq5
+        KiVNqYimEw8lxyVHSoSiUJEUvUAHKmWZbDQdfyApdF9ahnMNdGC2LCPL2UqSabX07hejNKos
+        HRuYqtLqomlWnZKhFqvDtLJMbZZSEaZkdXtEQmF4pFP4bnpq4fh5rvoPmGNZ7uUYQLFfEfDi
+        QUoMT7WcB0XAmyegfgAwv7mS4y4WAVwyVJPuYhXALlOxs+BtWa5cjnC5BVQngBvWfW5NAQZv
+        NC2SLoKkQuDqvV+3sB/1MYATn+pcIpwqIKB9YJ3rGrSNCoNFxq0YBPUsnO8wcV2YT0nhYn4L
+        5o73DLzQ3I27vJBa4MGelXqOm4iHjvUfgRtvg7N9rVw39oczJcc9WAFvLRV4NGpYaWj1DI2B
+        3cNnCVcGnAqCTe273e0dsKz/0pYEp3zgyfW/PHI+tBofYhrWDPziGQ/h9TmLJw4Dhw1Gwr2U
+        t+HAdD1RCnaU/39CNQAm8BSr1mYqWG2kOkLJHvvvnuSqTDPYetzBiVZw27EQ1gMwHugBkIfT
+        fvwUq59cwE+R6XNZjSpZk5XBantApHNnp3H/7XKV83codckisVQolkgkYmmEREQ/yf9qF5AL
+        KIVMx6azrJrVPPRhPC9/A5ZX803paVgVfWdz8oQ+pH8YVESMt0nGsqVjy2Ppew+eIFebDbbh
+        D0u8Eiavdz/3RFkFPpiX4Ng+e3FWmnc4L/vY/I3Bud7i2Gn788XFliHR4WXq6buJMaL3R76s
+        cszd3fmIj5gfn6Pfv/GBuiK0RHiIDPettXS3D6ptO9/pWshLK+1/tWi+K458MCt5zTe8NGkj
+        Fj+q+m2tdCOgc2Uzdk0vqLqWgB3ZZbIblNNXsH79hDhH3HTk7972oXtXFfpgRe6dc75f3DfG
+        nAug4paF81GVr1gv3FwoeflRuXdzdHjD0cnR93KCHqsreOvg42WN1xy5JwOCOTmb1SFvRCjv
+        TzWYsT6a0KbKRMG4Riv7F4VcCxZlBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWRfUzMcRzH+/7u9+S4+rnO+iZi1zKajmR8rbJs6FdsLDM7Zpz6iemuc1e4
+        zCRFzuNiNiTUka5S7lxdVJfrPOVZdLU6KpLzkPS0W0U6zX/v9+f1/uz9x5vmCUd5U+mdimRO
+        pZAlikk+Xl4n9g8ODINx800loajTfIFAbbnlJMp3dWHoQ34fjqxGE4XuvL3EQwWPagl0xfaC
+        QBX3O3B0+8sYfX3BgaOuK7cAcl58TyLDx0YCtX/dgBru5pDoRJmJQCU2B4Wu219j6IZhBEN5
+        pn4KZVbbKOSoKgco44gNi4RscW4xYM0OHWDtul4eW3nRQbH5VU6MNeiPkWxrYxXJGnUH2cwH
+        Qzh76o4esH/SL1Os1mYn2T6DP1s/0Eet9dzID4/nEnfu4VTzlm7l78hsv0kpm+E+U/9DIg0c
+        F2kBTUNmIXxeF6oFfFrI3AOw3plDaMGEsTuEhcPZYFx7w8I/XdR46BAGLZ2n/wGSmQsHfz4l
+        3UDEZAJoLzyGuQ2PuYRDV3Yt4a7wZiRQmytyP+BMIOyu0lNuLWCWwN50IzbeMAMWldXyzoBJ
+        V4GHHvhySrU8Qa4OUYYouL0StUyuTlEkSOKS5Abwb6OgOWZQoe+RWAFGAyuANE8sEsSbRXFC
+        QbxMk8qpkraoUhI5tRX40bjYR/BK+2SLkEmQJXO7OE7Jqf5TjJ4wNQ2bPTi0J4tZUTO8ftS7
+        6OmuFtcg9vjaioObaV/UstjRuOykZVFqVExBdnKE6PbQr4EY3+l1weZr6yzvQCwNl0sHLQ1y
+        L35ktU4Jk65zA9RMe15N6ZrIJL1X9YzVD84Rpez5/ft+r3kmrVxQnK452/2l/4e39tPKN6UV
+        AZ8zerYJm+/N6rcc9jK2+h1YpTvaTWXMfVgSFAleulZCcaz/iPS79Mhww+fVHjOLij7GZoWF
+        a5ZO+9YWLSnePrm+sbPAmjcvqikwZ0qMZ91j6fbos88ZEcw11awiUXlbwG6XT7BxYlCUOmKa
+        n8ecTTZnh8bnQ0DqxLa9n5o0lQanQNGeUtYkxtU7ZCFBPJVa9hfszN75EgMAAA==
+X-CMS-MailID: 20220907063309epcas5p1793555c0747fd7a11997e97649924552
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220907063309epcas5p1793555c0747fd7a11997e97649924552
+References: <CGME20220907063309epcas5p1793555c0747fd7a11997e97649924552@epcas5p1.samsung.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+From: aakarsh jain <aakarsh.jain@samsung.com>
 
-Here's a big bunch of patches for Linux 6.1. It includes a number of fixes
-and improvements here and there. It also begins merging the streams
-patchset by Tomi (16 first patches) of which the rest needs more review
-(but not necessarily too many changes).
+This patch series adds MFC v12 support. MFC v12 is used in
+Tesla FSD SoC.
 
-Please pull.
+This adds support for following:
 
+* Add support for VP9 encoder
+* Add support for YV12 and I420 format (3-plane)
+* Add support for Rate Control, UHD and DMABUF for encoder
+* Add support for DPB buffers allocation based on MFC requirement
+* Update documentation for control id definitions
 
-The following changes since commit 61890ccaefaff89f5babd2c8412fd222c3f5fe38:
+Changes since v1:
+ - Addressed review comments by Andrzej Hajda.
+ - Addressed review comments by Rob Herring.
+ - Addressed review comments by Krzysztof Kozlowski.
+ - Addressed review comments by Hans Verkuil.
+ - Addressed review comments by Nicolas Dufresne.
+ - Rebased on latest krzk/for-next tree.
 
-  media: platform: mtk-mdp3: add MediaTek MDP3 driver (2022-08-30 16:25:51 +0200)
+v4l2-complaince:
+Total for s5p-mfc device /dev/video0: 45, Succeeded: 39, Failed: 6, Warnings: 0
+Total for s5p-mfc device /dev/video1: 45, Succeeded: 34, Failed: 11, Warnings: 3
 
-are available in the Git repository at:
+Smitha T Murthy (15):
+  dt-bindings: media: s5p-mfc: Add new DT schema for MFC
+  dt-bindings: media: s5p-mfc: Add mfcv12 variant
+  media: s5p-mfc: Rename IS_MFCV10 macro
+  media: s5p-mfc: Add initial support for MFCv12
+  Documention: v4l: Documentation for VP9 CIDs.
+  media: v4l2: Add v4l2 control IDs for VP9 encoder.
+  media: s5p-mfc: Add support for VP9 encoder.
+  media: s5p-mfc: Add YV12 and I420 multiplanar format support
+  media: s5p-mfc: Add support for rate controls in MFCv12
+  media: s5p-mfc: Add support for UHD encoding.
+  media: s5p-mfc: Add support for DMABUF for encoder
+  media: s5p-mfc: Set context for valid case before calling try_run
+  media: s5p-mfc: Load firmware for each run in MFCv12.
+  media: s5p-mfc: DPB Count Independent of VIDIOC_REQBUF
+  arm64: dts: fsd: Add MFC related DT enteries
 
-  git://linuxtv.org/sailus/media_tree.git tags/for-6.1-1-signed
-
-for you to fetch changes up to ceec7a7d80918aad1fcbd4a4744baf74c70526e8:
-
-  dt-bindings: media: samsung,exynos5250-gsc: convert to dtschema (2022-09-06 10:11:38 +0300)
-
-----------------------------------------------------------------
-V4L2 patches for 6.1
-
-----------------------------------------------------------------
-Alexander Stein (1):
-      media: v4l2: Fix v4l2_i2c_subdev_set_name function documentation
-
-Christophe JAILLET (1):
-      media: ov8865: Fix an error handling path in ov8865_probe()
-
-Jacopo Mondi (1):
-      media: mc: entity: Add iterator helper for entity pads
-
-Jean-Michel Hautbois (1):
-      media: staging: ipu3-imgu: Fix BNR wb gain documentation
-
-Krzysztof Kozlowski (2):
-      media: dt-bindings: dongwoon,dw9714: convert to dtschema
-      dt-bindings: media: samsung,exynos5250-gsc: convert to dtschema
-
-Laurent Pinchart (4):
-      media: mc: entity: Merge media_entity_enum_init and __media_entity_enum_init
-      media: mc: entity: Move media_entity_get_fwnode_pad() out of graph walk section
-      media: mc: entity: Add media_entity_pipeline() to access the media pipeline
-      media: mc: entity: Rewrite media_pipeline_start()
-
-Paul Elder (1):
-      media: ov5640: Use runtime PM
-
-Sakari Ailus (6):
-      ar0521: Remove redundant variable ret
-      ipu3-imgu: Fix NULL pointer dereference in active selection access
-      v4l: subdev: Fail graciously when getting try data for NULL state
-      ar0521: Fix return value check in writing initial registers
-      sun6i-mipi-csi2: Depend on PHY_SUN6I_MIPI_DPHY
-      media: Remove incorrect comment from struct v4l2_fwnode_endpoint
-
-Slark Xiao (1):
-      media: i2c: mt9v111: Fix typo 'the the' in comment
-
-Tomi Valkeinen (11):
-      media: Documentation: mc: add definitions for stream and pipeline
-      media: media-entity.h: add include for min()
-      media: subdev: increase V4L2_FRAME_DESC_ENTRY_MAX to 8
-      media: mc: entity: Rename streaming_count -> start_count
-      media: v4l2-dev: Add videodev wrappers for media pipelines
-      media: drivers: use video device pipeline start/stop
-      media: drivers: use video_device_pipeline()
-      media: mc: entity: add alloc variant of pipeline_start
-      media: drivers: use video_device_pipeline_alloc_start()
-      media: mc: entity: Add has_pad_interdep entity operation
-      media: mc: convert pipeline funcs to take media_pad
-
-Yang Yingliang (1):
-      media: ar0521: fix error return code in ar0521_power_on()
-
- .../devicetree/bindings/media/exynos5-gsc.txt      |  38 --
- .../bindings/media/i2c/dongwoon,dw9714.txt         |   9 -
- .../bindings/media/i2c/dongwoon,dw9714.yaml        |  47 ++
- .../bindings/media/samsung,exynos5250-gsc.yaml     | 109 ++++
- Documentation/driver-api/media/mc-core.rst         |  19 +-
- MAINTAINERS                                        |   2 +-
- drivers/media/i2c/ar0521.c                         |  11 +-
- drivers/media/i2c/mt9v111.c                        |   2 +-
- drivers/media/i2c/ov5640.c                         | 123 ++--
- drivers/media/i2c/ov8865.c                         |  10 +-
- drivers/media/mc/mc-device.c                       |  13 +-
- drivers/media/mc/mc-entity.c                       | 648 +++++++++++++++++----
- drivers/media/pci/intel/ipu3/ipu3-cio2-main.c      |   6 +-
- drivers/media/platform/qcom/camss/camss-video.c    |   6 +-
- .../media/platform/renesas/rcar-vin/rcar-core.c    |   5 +-
- drivers/media/platform/renesas/rcar-vin/rcar-dma.c |  18 +-
- drivers/media/platform/renesas/vsp1/vsp1_video.c   |   6 +-
- .../platform/rockchip/rkisp1/rkisp1-capture.c      |  14 +-
- .../platform/samsung/exynos4-is/fimc-capture.c     |   9 +-
- .../platform/samsung/exynos4-is/fimc-isp-video.c   |   9 +-
- .../media/platform/samsung/exynos4-is/fimc-lite.c  |   9 +-
- .../platform/samsung/s3c-camif/camif-capture.c     |   6 +-
- drivers/media/platform/st/stm32/stm32-dcmi.c       |   6 +-
- drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c |   6 +-
- .../media/platform/sunxi/sun6i-csi/sun6i_video.c   |   6 +-
- .../media/platform/sunxi/sun6i-mipi-csi2/Kconfig   |   2 +-
- drivers/media/platform/ti/cal/cal-video.c          |   6 +-
- drivers/media/platform/ti/cal/cal.h                |   1 -
- drivers/media/platform/ti/omap3isp/isp.c           |   4 +-
- drivers/media/platform/ti/omap3isp/ispvideo.c      |   9 +-
- drivers/media/platform/ti/omap3isp/ispvideo.h      |  11 +-
- drivers/media/platform/xilinx/xilinx-dma.c         |  11 +-
- drivers/media/platform/xilinx/xilinx-dma.h         |   9 +-
- drivers/media/test-drivers/vimc/vimc-capture.c     |   7 +-
- drivers/media/usb/au0828/au0828-core.c             |   8 +-
- drivers/media/v4l2-core/v4l2-dev.c                 |  72 +++
- drivers/staging/media/imx/imx-media-utils.c        |   8 +-
- drivers/staging/media/imx/imx7-media-csi.c         |   6 +-
- .../staging/media/ipu3/include/uapi/intel-ipu3.h   |   7 +-
- drivers/staging/media/ipu3/ipu3-v4l2.c             |  37 +-
- drivers/staging/media/omap4iss/iss.c               |   4 +-
- drivers/staging/media/omap4iss/iss_video.c         |   9 +-
- drivers/staging/media/omap4iss/iss_video.h         |  11 +-
- drivers/staging/media/tegra-video/tegra210.c       |   6 +-
- include/media/media-device.h                       |  15 -
- include/media/media-entity.h                       | 169 +++++-
- include/media/v4l2-common.h                        |   3 +-
- include/media/v4l2-dev.h                           | 102 ++++
- include/media/v4l2-fwnode.h                        |   4 -
- include/media/v4l2-subdev.h                        |  12 +-
- 50 files changed, 1253 insertions(+), 417 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/media/exynos5-gsc.txt
- delete mode 100644 Documentation/devicetree/bindings/media/i2c/dongwoon,dw9714.txt
- create mode 100644 Documentation/devicetree/bindings/media/i2c/dongwoon,dw9714.yaml
- create mode 100644 Documentation/devicetree/bindings/media/samsung,exynos5250-gsc.yaml
+ .../devicetree/bindings/media/s5p-mfc.txt     |  77 +---
+ .../bindings/media/samsung,s5p-mfc.yaml       | 110 +++++
+ .../media/v4l/ext-ctrls-codec.rst             | 167 +++++++
+ arch/arm64/boot/dts/tesla/fsd-evb.dts         |   4 +
+ arch/arm64/boot/dts/tesla/fsd.dtsi            |  22 +
+ .../platform/samsung/s5p-mfc/regs-mfc-v12.h   |  60 +++
+ .../platform/samsung/s5p-mfc/regs-mfc-v7.h    |   1 +
+ .../platform/samsung/s5p-mfc/regs-mfc-v8.h    |   3 +
+ .../media/platform/samsung/s5p-mfc/s5p_mfc.c  |  36 +-
+ .../platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c |   3 +
+ .../platform/samsung/s5p-mfc/s5p_mfc_common.h |  54 ++-
+ .../platform/samsung/s5p-mfc/s5p_mfc_ctrl.c   |   9 +-
+ .../platform/samsung/s5p-mfc/s5p_mfc_dec.c    |  51 ++-
+ .../platform/samsung/s5p-mfc/s5p_mfc_enc.c    | 410 +++++++++++++++--
+ .../platform/samsung/s5p-mfc/s5p_mfc_opr.h    |  16 +-
+ .../platform/samsung/s5p-mfc/s5p_mfc_opr_v5.c |  12 +-
+ .../platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c | 433 ++++++++++++++++--
+ .../platform/samsung/s5p-mfc/s5p_mfc_opr_v6.h |   7 +-
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  44 ++
+ include/uapi/linux/v4l2-controls.h            |  33 ++
+ 20 files changed, 1349 insertions(+), 203 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/samsung,s5p-mfc.yaml
+ create mode 100644 drivers/media/platform/samsung/s5p-mfc/regs-mfc-v12.h
 
 -- 
-Sakari Ailus
+2.17.1
+
