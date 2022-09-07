@@ -2,102 +2,74 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 059A8C54EE9
-	for <linux-media@archiver.kernel.org>; Wed,  7 Sep 2022 12:01:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A427C6FA83
+	for <linux-media@archiver.kernel.org>; Wed,  7 Sep 2022 12:03:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbiIGMBS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Sep 2022 08:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58988 "EHLO
+        id S229436AbiIGMDi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Sep 2022 08:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiIGMBR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Sep 2022 08:01:17 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587A380F45
-        for <linux-media@vger.kernel.org>; Wed,  7 Sep 2022 05:01:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662552076; x=1694088076;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=u4NMVIieRqWcx5jdkBYimgeBbSoC7PlvvYjRz96Kx78=;
-  b=QsiMPqNtSHh6FlBAe78fUpSw/aN3Vlpi539ONWZDJnCXUUo477j8Kx6o
-   RqzQn0TS5YK5CKi0+Sop2niYtUsTsm9xKysmHdI7SKRbczcJgrRSuOdG4
-   bJQqybkFlgcyGCZzveuEgxbRjHB7U3slCKch42HnpIet4RlNf0/4iw0X4
-   WQOKiCOKSURoCNdgCGJrw2aFAbaIZgtnLauwar/DOTAl4QUbOZKbBBy/a
-   CnObkU3zQWEJe27JhGn0SNXxsJGtx5lKlqbI3oOE71ZwRJHcGQ++Pqobe
-   vt0HO15dE9zJIWQe9ADxY23mAt+lS9j4FGhbA8SPL87SkjWDI9wly8pgX
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="360798103"
-X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="360798103"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 05:01:16 -0700
-X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="790023316"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 05:01:12 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 0DE8C2017A;
-        Wed,  7 Sep 2022 15:01:10 +0300 (EEST)
-Date:   Wed, 7 Sep 2022 12:01:10 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Hidenori Kobayashi <hidenorik@chromium.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Daniel Scally <djrscally@gmail.com>,
-        Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [ANN] Media Summit at ELCE Dublin, September 12: Draft Agenda V2
-Message-ID: <YxiIBoaLEjtqIpk1@paasikivi.fi.intel.com>
-References: <3840c3cc-00fb-45dd-cb89-39b36fb6d733@xs4all.nl>
- <YxX8dzSsquJmO5hP@paasikivi.fi.intel.com>
- <YxYLSk2pKdGnNDP3@pendragon.ideasonboard.com>
- <YxhKCtYC3vq5vTro@paasikivi.fi.intel.com>
- <YxhLz6veSZgsZj9f@pendragon.ideasonboard.com>
+        with ESMTP id S229446AbiIGMDe (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Sep 2022 08:03:34 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669ED86B4E;
+        Wed,  7 Sep 2022 05:03:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Transfer-Encoding
+        :Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=yDyhZ5ZtH6BaK6n5derVRRnPFzzPHmtJ3IeUVWjkRg4=; b=aVUwJ4rmcWxuQGrOJim80hnOG2
+        15duQkRbJ+Ac+C1t4Es+eDo1Qw3kcnSku5oZwhkCC3nosICQWACsC0+o1VjiH/HEVMQAyODWTq3mj
+        9cIxAOqY1P/dP1DvM9tB5m72rPJ5D/EYHOJdvOvy8eNesxRBsomLuXmOXjXdbf+Re17xqGWBkjWwt
+        8A1IMDCO+I/iVn7Y5nQ1qt1cDiNNAyUjLKSAMFxTEEjlktfP7AMpwTlNDoC50FP4MzVbJ7Zlx1qQk
+        AQsvtn+HLNkb9+QCHkyk9ObVFnllwa0rA/o38+T6eJp3nAcGQOsyrPGQ/zoEBEI6H/EtHN8riDv0f
+        azgbKM4g==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oVtmE-005wDS-Rl; Wed, 07 Sep 2022 12:03:30 +0000
+Date:   Wed, 7 Sep 2022 05:03:30 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, linux-media@vger.kernel.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
+        Maor Gottlieb <maorg@nvidia.com>,
+        Oded Gabbay <ogabbay@kernel.org>
+Subject: Re: [PATCH v2 4/4] vfio/pci: Allow MMIO regions to be exported
+ through dma-buf
+Message-ID: <YxiIkh/yeWQkZ54x@infradead.org>
+References: <0-v2-472615b3877e+28f7-vfio_dma_buf_jgg@nvidia.com>
+ <4-v2-472615b3877e+28f7-vfio_dma_buf_jgg@nvidia.com>
+ <YxcYGzPv022G2vLm@infradead.org>
+ <b6b5d236-c089-7428-4cc9-a08fe4f6b4a3@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <YxhLz6veSZgsZj9f@pendragon.ideasonboard.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b6b5d236-c089-7428-4cc9-a08fe4f6b4a3@amd.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 10:44:15AM +0300, Laurent Pinchart wrote:
-> On Wed, Sep 07, 2022 at 07:36:42AM +0000, Sakari Ailus wrote:
-> > On Mon, Sep 05, 2022 at 05:44:26PM +0300, Laurent Pinchart wrote:
-> > > On Mon, Sep 05, 2022 at 01:41:11PM +0000, Sakari Ailus wrote:
-> > > > On Tue, Aug 23, 2022 at 12:53:44PM +0200, Hans Verkuil wrote:
-> > > > > 16:45-18:00 Anything else?
-> > > > 
-> > > > I think it'd be great to have a GPG key signing party at the end of the
-> > > > meeting.
-> > > 
-> > > It's a good idea. Could everybody please send their GPG key fingerprint
-> > > in an e-mail reply to prepare for that ? It can easily be retrieved with
-> > > 'gpg -K' (make sure to pick the right key if you have multiple of them).
-> > > I'll start:
-> > > 
-> > > sec   rsa4096/0xF045C2B96991256E 2014-10-09 [C]
-> > >       94231B980100EC619AC10E10F045C2B96991256E
-> > > uid                   [ultimate] Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > 
-> > Maybe we could put the keys here for easier access?
-> 
-> I was planning to consolidate the list and send it to all attendees
-> before the workshop.
+On Tue, Sep 06, 2022 at 12:38:44PM +0200, Christian König wrote:
+> The problem is once more that this is MMIO space, in other words register
+> BARs which needs to be exported/imported.
 
-That would work, too. It's probably still about as easy to put them on that
-page.
+Everything used for P2P is bar space.
 
-> > <URL:https://pilvi.retiisi.eu/s/CYZp6Bz4yj4Ak2e>
+> Adding struct pages for it generally sounds like the wrong approach here.
+> You can't even access this with the CPU or would trigger potentially
+> unwanted hardware actions.
 
--- 
-Sakari Ailus
+How would an access from the CPU vs anther device make any difference?
+
+> Would you mind if I start to tackle this problem?
+
+Yes, I've been waiting forever for someone to tacke how the scatterlist
+is abused in dma-buf..
