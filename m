@@ -2,81 +2,183 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2379C38145
-	for <linux-media@archiver.kernel.org>; Wed,  7 Sep 2022 13:29:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BFCA9C6FA86
+	for <linux-media@archiver.kernel.org>; Wed,  7 Sep 2022 13:44:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbiIGN3B (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Sep 2022 09:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43554 "EHLO
+        id S229821AbiIGNoE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Sep 2022 09:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiIGN3A (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Sep 2022 09:29:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B533693517;
-        Wed,  7 Sep 2022 06:28:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB61D618CF;
-        Wed,  7 Sep 2022 13:28:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B57D8C433D6;
-        Wed,  7 Sep 2022 13:28:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662557337;
-        bh=otJVLv3qO4PkH+KqReDdkKwCk5b9TW8h7qt02TkzLWs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vTBrhGmTEc0CXKOlmvgFCl8CiLuE1kD6N10JzIOX8vRHIMJwCY6EraY/JfBGo61am
-         8ROfLyYfHZDq8hdXePpmvGDzNfIj7btzs6yATBSXv4L6lATvXEn6sQJUGk5rc4Pt2j
-         SI7O9M4YH9KBzCojGZzUsxBoeHFa9d7T4FA2uyAc=
-Date:   Wed, 7 Sep 2022 15:28:54 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-        balbi@kernel.org, laurent.pinchart@ideasonboard.com,
-        paul.elder@ideasonboard.com, kernel@pengutronix.de,
-        nicolas@ndufresne.ca, kieran.bingham@ideasonboard.com
-Subject: Re: [RESEND v7 0/4] usb: gadget: uvc: use configfs entries for
- negotiation and v4l2 VIDIOCS
-Message-ID: <YxiclqKkPDQR8qMM@kroah.com>
-References: <20220608105748.139922-1-m.grzeschik@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220608105748.139922-1-m.grzeschik@pengutronix.de>
+        with ESMTP id S229686AbiIGNn3 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Sep 2022 09:43:29 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0A7A262D
+        for <linux-media@vger.kernel.org>; Wed,  7 Sep 2022 06:42:34 -0700 (PDT)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220907134230epoutp047f3a36e0a7df5b0b5783b16addbaa858~Sl9Q6XS1Z2404224042epoutp04W
+        for <linux-media@vger.kernel.org>; Wed,  7 Sep 2022 13:42:30 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220907134230epoutp047f3a36e0a7df5b0b5783b16addbaa858~Sl9Q6XS1Z2404224042epoutp04W
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1662558150;
+        bh=ANdL1iNQslYKX0O7F+SUtWXTCE68cYMhgQFXj3+NFRM=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=iVA2UcLYS6RVNpl+vdRpa/cdLieGL9k7WE6psTA13ZQsSoxXLMVJ/Z55UeL0AWwsn
+         WfGW5HFVzsaXmvL0KZhJdNi5STjBvyX8ioftYSZ3ANdhW013CtFK3DrMpLaiDv1iNL
+         5HVeYXJVrUYsa8ZhOkQaTgaAITjNSU08Y/dMGyHs=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20220907134229epcas5p25dddca5096ab3e487c0687e607395e6d~Sl9QPIzoA3275732757epcas5p2M;
+        Wed,  7 Sep 2022 13:42:29 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.183]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4MN3N319rFz4x9Pv; Wed,  7 Sep
+        2022 13:42:27 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        3F.8D.59633.2CF98136; Wed,  7 Sep 2022 22:42:27 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220907101823epcas5p22148836690ecf1d8e0e7ab81fd9aee28~SjLDBDE2o2030720307epcas5p2s;
+        Wed,  7 Sep 2022 10:18:23 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220907101823epsmtrp1110f571454dca32c497880f174410d28~SjLDAFP_30915809158epsmtrp1o;
+        Wed,  7 Sep 2022 10:18:23 +0000 (GMT)
+X-AuditID: b6c32a49-dfdff7000000e8f1-8d-63189fc28adf
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        D7.B5.14392.FEF68136; Wed,  7 Sep 2022 19:18:23 +0900 (KST)
+Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
+        [107.109.115.6]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220907101821epsmtip15bcc546cd6fb245d2ce800bc465375f9~SjLBD6oKc3253232532epsmtip1r;
+        Wed,  7 Sep 2022 10:18:21 +0000 (GMT)
+From:   Smitha T Murthy <smitha.t@samsung.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
+        mchehab@kernel.org, alim.akhtar@samsung.com,
+        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
+        linux-fsd@tesla.com, aakarsh.jain@samsung.com,
+        Smitha T Murthy <smitha.t@samsung.com>,
+        stable@vger.kernel.org
+Subject: [PATCH 1/3] media: s5p-mfc: Fix in register read and write for H264
+Date:   Wed,  7 Sep 2022 16:02:25 +0530
+Message-Id: <20220907103227.61088-1-smitha.t@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrEKsWRmVeSWpSXmKPExsWy7bCmpu7h+RLJBi//M1o83TGT1eLBvG1s
+        FvcXf2axOLR5K7vFpsfXWC0evgq3uLxrDptFz4atrBZrj9xlt1i26Q+TxaKtX9gt7u7Zxmix
+        YOMjRgdej8V7XjJ5bFrVyeaxeUm9R9+WVYwe/5rmsnt83iQXwBaVbZORmpiSWqSQmpecn5KZ
+        l26r5B0c7xxvamZgqGtoaWGupJCXmJtqq+TiE6DrlpkDdKeSQlliTilQKCCxuFhJ386mKL+0
+        JFUhI7+4xFYptSAlp8CkQK84Mbe4NC9dLy+1xMrQwMDIFKgwITvj2JrnLAV/RCqurP7E1MB4
+        SrCLkZNDQsBE4vGJV6wgtpDAbkaJSzfLuhi5gOxPjBKv53YzQjjfGCV+NR9hg+lYcfw5E0Ri
+        L6PEzwXboaqamSRONJ5kAaliE9CR+Pb+NFiHiECqxKt1a1lBipgFupkk7s5fzwySEBbwkfgw
+        ZT4TiM0ioCrxsG8mexcjBwevgKXE++PVENvkJVZvOMAMYT9il3hygQnCdpF4/HQr1EXCEq+O
+        b2GHsKUkXva3QdnpEvc/NzNC2AUScxu2QPXaSxy4MocFZBWzgKbE+l36EGFZiamn1oGVMAvw
+        SfT+fgJVziuxYx6MrSSx6MwJqPESElffbmWFsD0kWp/eBxspJBArcXh13QRG2VkICxYwMq5i
+        lEwtKM5NTy02LTDMSy2HR1Nyfu4mRnDi0/LcwXj3wQe9Q4xMHIyHGCU4mJVEeFN2iCQL8aYk
+        VlalFuXHF5XmpBYfYjQFBthEZinR5Hxg6s0riTc0sTQwMTMzM7E0NjNUEuedos2YLCSQnliS
+        mp2aWpBaBNPHxMEp1cBkX3dxUsPV9S//bw0JZPAJnDsvQoRHYpfJYctnV2ZndZ+skSmwWphQ
+        y7DU+FJdwIyr9w44lBy58SD5bty02/lh0t9ce/VP/2DokDi/ekHeiSuqXTNfX3u7YfLCO1rH
+        mzaeXyyr0rz3bdPkH7Yle2+/7DZwS4nfx79fvb5RopepYtWEkh07Fk+6Ml1pnUoYZ05KVJ14
+        lNuUfCm9Yyvnu8/49aH1bb6R/8nKHI6Z4m7X9jvoZYZEJT1Yejyzc2qo5dUDj55u6RPefP/d
+        u8cO6S5/+zZbVyvWsoV9FzuVbrgq00Cw6b/gr4a6oGc3g50jOSeGbJvrd9fv0vTKFAnpc86H
+        C9oDvjo/iVSZc+bIeyY2JZbijERDLeai4kQAn/LSAQUEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrALMWRmVeSWpSXmKPExsWy7bCSnO77fIlkg8M7OSye7pjJavFg3jY2
+        i/uLP7NYHNq8ld1i0+NrrBYPX4VbXN41h82iZ8NWVou1R+6yWyzb9IfJYtHWL+wWd/dsY7RY
+        sPERowOvx+I9L5k8Nq3qZPPYvKTeo2/LKkaPf01z2T0+b5ILYIvisklJzcksSy3St0vgyji2
+        5jlLwR+RiiurPzE1MJ4S7GLk5JAQMJFYcfw5UxcjF4eQwG5GiSWPp7NDJCQkVv6exAhhC0us
+        /PecHaKokUnixvHHrCAJNgEdiW/vT7OB2CIC6RKT7nxlASliFpjOJLFn1ROwScICPhIfpsxn
+        ArFZBFQlHvbNBIpzcPAKWEq8P14NsUBeYvWGA8wTGHkWMDKsYpRMLSjOTc8tNiwwzEst1ytO
+        zC0uzUvXS87P3cQIDkQtzR2M21d90DvEyMTBeIhRgoNZSYQ3ZYdIshBvSmJlVWpRfnxRaU5q
+        8SFGaQ4WJXHeC10n44UE0hNLUrNTUwtSi2CyTBycUg1Mlh+PJKyY+1JLdnfJuzd2HcL+r5tr
+        mJNVX7DNPZZuWybYMLP/hfnH6aK1k9atm7y4/tbr4xWzxO3UtlcrWGmp7DyXaXf8yKnXDPm3
+        tsrJlLkJ5X/qOWYg5CNtc8mqf3urFUtSaLNAdQI7o9i1id9X8x1ZySd3nWtCYVWhtdaSF+L2
+        rAsPhCp3ZO7b8i+6z/Tsd81JN5OvVm2JN6n+/sBnkdfhU2ddLkx/s13lWt2fIzLr/1UdPSug
+        7nFqorD47DoX2Re33745v9HgmkHXaQfrLav27qo5zxi0U0ptyZebP0qPb9ety1u9e0NB7L4T
+        5xtMFb3yjCX3GJ+5WJkZdDH4u3jPp+Q6fhuHteeq3rfYK7EUZyQaajEXFScCAKKuiDqzAgAA
+X-CMS-MailID: 20220907101823epcas5p22148836690ecf1d8e0e7ab81fd9aee28
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220907101823epcas5p22148836690ecf1d8e0e7ab81fd9aee28
+References: <CGME20220907101823epcas5p22148836690ecf1d8e0e7ab81fd9aee28@epcas5p2.samsung.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 12:57:44PM +0200, Michael Grzeschik wrote:
-> This series improves the uvc video gadget by parsing the configfs
-> entries. With the configfs data, the driver now is able to negotiate the
-> format with the usb host in the kernel and also exports the supported
-> frames/formats/intervals via the v4l2 VIDIOC interface.
-> 
-> The uvc userspace stack is also under development. One example is an generic
-> v4l2uvcsink gstreamer elemnt, which is currently under discussion. [1]
-> 
-> [1] https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/1304
-> 
-> With the libusbgx library [1] used by the gadget-tool [2] it is now also
-> possible to fully describe the configfs layout of the uvc gadget with scheme
-> files.
-> 
-> [2] https://github.com/linux-usb-gadgets/libusbgx/pull/61/commits/53231c76f9d512f59fdc23b65cd5c46b7fb09eb4
-> 
-> [3] https://github.com/linux-usb-gadgets/gt/tree/master/examples/systemd
-> 
-> The bigger picture of these patches is to provide a more versatile interface to
-> the uvc gadget. The goal is to simply start a uvc-gadget with the following
-> commands:
-> 
-> $ gt load uvc.scheme
-> $ gst-launch v4l2src ! v4l2uvcsink
+Few of the H264 encoder registers written were not getting reflected
+since the read values was not stored and getting overwritten.
 
-v4l developers, given a lack of review response to this series, I'm
-assuming that you all have no objection to this series and I can take it
-through my usb-next tree.
+Fixes: 6a9c6f6812579 ("[media] s5p-mfc: Add variants to access mfc registers")
 
-thanks,
+Cc: stable@vger.kernel.org
+Cc: linux-fsd@tesla.com
+Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
+---
+ .../platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c      | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-greg k-h
+diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c
+index 8227004f6746..c0df5ac9fcff 100644
+--- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c
++++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c
+@@ -1060,7 +1060,7 @@ static int s5p_mfc_set_enc_params_h264(struct s5p_mfc_ctx *ctx)
+ 	}
+ 
+ 	/* aspect ratio VUI */
+-	readl(mfc_regs->e_h264_options);
++	reg = readl(mfc_regs->e_h264_options);
+ 	reg &= ~(0x1 << 5);
+ 	reg |= ((p_h264->vui_sar & 0x1) << 5);
+ 	writel(reg, mfc_regs->e_h264_options);
+@@ -1083,7 +1083,7 @@ static int s5p_mfc_set_enc_params_h264(struct s5p_mfc_ctx *ctx)
+ 
+ 	/* intra picture period for H.264 open GOP */
+ 	/* control */
+-	readl(mfc_regs->e_h264_options);
++	reg = readl(mfc_regs->e_h264_options);
+ 	reg &= ~(0x1 << 4);
+ 	reg |= ((p_h264->open_gop & 0x1) << 4);
+ 	writel(reg, mfc_regs->e_h264_options);
+@@ -1097,23 +1097,23 @@ static int s5p_mfc_set_enc_params_h264(struct s5p_mfc_ctx *ctx)
+ 	}
+ 
+ 	/* 'WEIGHTED_BI_PREDICTION' for B is disable */
+-	readl(mfc_regs->e_h264_options);
++	reg = readl(mfc_regs->e_h264_options);
+ 	reg &= ~(0x3 << 9);
+ 	writel(reg, mfc_regs->e_h264_options);
+ 
+ 	/* 'CONSTRAINED_INTRA_PRED_ENABLE' is disable */
+-	readl(mfc_regs->e_h264_options);
++	reg = readl(mfc_regs->e_h264_options);
+ 	reg &= ~(0x1 << 14);
+ 	writel(reg, mfc_regs->e_h264_options);
+ 
+ 	/* ASO */
+-	readl(mfc_regs->e_h264_options);
++	reg = readl(mfc_regs->e_h264_options);
+ 	reg &= ~(0x1 << 6);
+ 	reg |= ((p_h264->aso & 0x1) << 6);
+ 	writel(reg, mfc_regs->e_h264_options);
+ 
+ 	/* hier qp enable */
+-	readl(mfc_regs->e_h264_options);
++	reg = readl(mfc_regs->e_h264_options);
+ 	reg &= ~(0x1 << 8);
+ 	reg |= ((p_h264->open_gop & 0x1) << 8);
+ 	writel(reg, mfc_regs->e_h264_options);
+@@ -1134,7 +1134,7 @@ static int s5p_mfc_set_enc_params_h264(struct s5p_mfc_ctx *ctx)
+ 	writel(reg, mfc_regs->e_h264_num_t_layer);
+ 
+ 	/* frame packing SEI generation */
+-	readl(mfc_regs->e_h264_options);
++	reg = readl(mfc_regs->e_h264_options);
+ 	reg &= ~(0x1 << 25);
+ 	reg |= ((p_h264->sei_frame_packing & 0x1) << 25);
+ 	writel(reg, mfc_regs->e_h264_options);
+-- 
+2.17.1
+
