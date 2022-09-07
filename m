@@ -2,186 +2,200 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7861DC38145
-	for <linux-media@archiver.kernel.org>; Wed,  7 Sep 2022 06:39:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C409DECAAD3
+	for <linux-media@archiver.kernel.org>; Wed,  7 Sep 2022 06:39:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbiIGGjA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Sep 2022 02:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
+        id S230026AbiIGGjB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Sep 2022 02:39:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiIGGiv (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Sep 2022 02:38:51 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B16CA060B
-        for <linux-media@vger.kernel.org>; Tue,  6 Sep 2022 23:38:43 -0700 (PDT)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220907063742epoutp04e15a4df04c6807b10e9c26b33ade3bcb~SgKXqImeP1096110961epoutp04M
-        for <linux-media@vger.kernel.org>; Wed,  7 Sep 2022 06:37:42 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220907063742epoutp04e15a4df04c6807b10e9c26b33ade3bcb~SgKXqImeP1096110961epoutp04M
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1662532662;
-        bh=6yt+N8iPUl32rFmi5+XKgUtEt+N0VugFgBaNsDXRf74=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pf0D1gs8A0X5SbJOb209ZgVBSsSD6NpNMJ/LjdpVS27InEY1uEeUVzxd8HP2EZBz6
-         AAuTiQd+w17XKgZi7qynoo+RZq8OPSo/jYzFvCxWHFDijwhW5f97w3bwgnk0C7vvdp
-         j/xl1CZ2pNPe9kyM9xJG1f17Oc17rrVQMszL9aiw=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20220907063741epcas5p4ce243879838344c3f41682998be86456~SgKW_gts-0714407144epcas5p4f;
-        Wed,  7 Sep 2022 06:37:41 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.183]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4MMsxt21gRz4x9Q3; Wed,  7 Sep
-        2022 06:37:38 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        1F.21.54060.23C38136; Wed,  7 Sep 2022 15:37:38 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220907063413epcas5p3df6d22933ba2884730c52b6a3af2cb09~SgHVEePVl1696316963epcas5p3h;
-        Wed,  7 Sep 2022 06:34:13 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220907063413epsmtrp294ad38d744af8ff7c1c0f6c50c4eaf61~SgHVDOqV-1916619166epsmtrp2i;
-        Wed,  7 Sep 2022 06:34:13 +0000 (GMT)
-X-AuditID: b6c32a4b-e33fb7000000d32c-64-63183c32e320
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        0F.EC.14392.56B38136; Wed,  7 Sep 2022 15:34:13 +0900 (KST)
-Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
-        [107.109.115.6]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220907063408epsmtip15547283937c1689104357106ff63f807~SgHQiWsxF2482924829epsmtip16;
-        Wed,  7 Sep 2022 06:34:08 +0000 (GMT)
-From:   Smitha T Murthy <smitha.t@samsung.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
-        benjamin.gaignard@collabora.com, stanimir.varbanov@linaro.org,
-        dillon.minfei@gmail.com, david.plowman@raspberrypi.com,
-        mark.rutland@arm.com, robh+dt@kernel.org, krzk+dt@kernel.org,
-        andi@etezian.org, alim.akhtar@samsung.com,
-        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
-        linux-fsd@tesla.com, smitha.t@samsung.com, aakarsh.jain@samsung.com
-Subject: [Patch v2 15/15] arm64: dts: fsd: Add MFC related DT enteries
-Date:   Wed,  7 Sep 2022 12:17:15 +0530
-Message-Id: <20220907064715.55778-16-smitha.t@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220907064715.55778-1-smitha.t@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA0WTfUxTVxjGc27b28JSvCsgB7bxcZN9yASptOWgICQYdjc2wjTZ4kxkN+0N
-        MEpb2yLqYkABYQgTooKAIqM4GV+D2kJ1sAF2QhxhIWBhjiJfg4HOddYRgY2tpbD995zn/N7z
-        nPOec3gswRTux0tTaBm1gpaTuDu7486ON0J2R0Fp2PSCO/rFVMlBUzUdONI9X8DQQ52djfpu
-        GrnIMFrNQjf6ezjomnmIgzp7Z9io/VfH7HCllY0WrrUCtFg1iSP9rIWDppc+RCO3r+CouM3I
-        QS1mKxddHxvG0Jf6vzBUZ3zGRfndZi6ydnUAlHfWjMVCqrmmGVAmaz2gxuqfsqhbVVYupeta
-        xCh942c4NWHpwqmb9dlU/verbOpzQyOg1s9c5VJF5jGcsuv9qXt/2rlJHh+lR6UytIxRBzIK
-        qVKWpkiJJhMOJscliyVhwhBhJIogAxV0BhNN7n83KSQ+Te5oAxl4jJZnOqwkWqMhd+2LUisz
-        tUxgqlKjjSYZlUyuEqlCNXSGJlOREqpgtHuEYWG7xQ7w4/TU7uoklZ5//LTuLp4Dxt2LgBsP
-        EiL4x+R1rAi48wTENwC2D9jYrsFTAB+Pf4c5KQGxDODdptitipn6cY4L6gawbHJhszwXgzOj
-        RVwnhRM74fLvP+BO7UWcBnC2UOuEWEQuG1oH1zYgTyIeFs7+CJyaTbwKa01rLKfmE3ugubID
-        d8UFwKa2ng3fzeEPXxzYiIZEgRucn5pguaD9sMLSAlzaEy71G7gu7QftT7o3F0qBD+25m4wK
-        Xs0xYC4dA3tGrzgOzXPsbgf8+vYul/0KvHSvdQNhER6wZG1uE+dDU82WJmHd4MBmFIT3fzNy
-        XJqC3463466ulABoaNRhpcC/6v+IWgAagS+j0mSkMBqxKlzBZP13a1Jlhh5sPPXgBBOYmbKF
-        9gGMB/oA5LFIL77M5CUV8GX0iZOMWpmszpQzmj4gdjSwjOXnLVU6/opCmywURYaJJBKJKDJc
-        IiR9+BffBFIBkUJrmXSGUTHqrTqM5+aXg52y+St8S+n0ZfnyeepcBUPJCuPPaAe3v5e46vvS
-        yfcln4yeGzasf2pst8FDbRcqzdkXUtlzpSsHQ8sC1jsviVfmaxtsIyt5DUHeQ8PZI3xlYF2W
-        pOcdefHK0cR/SH53zIP7r32xrVLVM/SzTwhPTD5OlgZPHAuXZk17zhBvl9v31pZAy7o85tS2
-        Ry15ZK/nC7omwYtxAb7PLbGeOYdHDvx0a3S/8XDwUpIJ1+Gz+6QRY69r9S97UxZQXXHkGe+s
-        2+Xc/A98xBknGkQ7C7YHxUUcb9X9ndj/1uyBCL2wc/WJ3w1d8x3J5SNH5/caij3KD/Wen2td
-        XwyCD74q8HhUnmCTkGxNKi0MZqk19L8T2faMcwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBIsWRmVeSWpSXmKPExsWy7bCSnG6qtUSywfS3EhZPd8xktXgwbxub
-        xeIfz5ks7i/+zGJxaPNWdostV2YzWyw/foDVYv6Rc6wW2w8+YrHY+AIoe3HmXRaL5/PXMVq8
-        nHWPzWLT42usFg9fhVtc3jWHzaJnw1ZWi7VH7rJbLL1+kcli2aY/TBaLtn5ht2jde4Td4u6e
-        bYwWLW1HmBwkPNbMW8PosePuEkaP60s+MXvsnHWX3WPxnpdMHptWdbJ53Lm2h81j85J6j9aj
-        v1g8+rasYvT41zSX3aPryHU2j8+b5DxOff3MHsAXxWWTkpqTWZZapG+XwJWxd3ZAwSbeisbF
-        x9gaGG9wdTFyckgImEg8WnKDtYuRi0NIYDejxJqNLYwQCQmJlb8nQdnCEiv/PWeHKGpkklh1
-        t5sNJMEmoCPx7f1pNpCEiEAro8T1lZ1MIA6zwGwWiR+TDrCCVAkLuEl0PD4PNopFQFViwY7f
-        zCA2r4CVxJGZ29ggVshLrN5wACzOCRS/OOUEWK+QgKXE4xnb2Ccw8i1gZFjFKJlaUJybnlts
-        WGCYl1quV5yYW1yal66XnJ+7iREceVqaOxi3r/qgd4iRiYPxEKMEB7OSCG/KDpFkId6UxMqq
-        1KL8+KLSnNTiQ4zSHCxK4rwXuk7GCwmkJ5akZqemFqQWwWSZODilGpgillc92qb25UlnQ+rk
-        Kq0ir/2NIpy/OqJf9C/VvXgrpPTOChettUdOndxRM+HsP/PGZVPfbHu7+lL/x6Rw4aNnGlX+
-        LIvY8S/l98XQJR0vDT+9ccn8e8x0Wtr51bcuP17lX7Qmzbfc4r7n1zqLY7E3/hlujWD63a7t
-        03Pj3IL78bNfrxT3EYuSlwx5Y2xzcUZGbO6x14IHnvIeWHpYseLtZoHLGWe3Rh21aeeybE2p
-        Pa+wrZrpzXax7Yk3jQKXnT8zqVz/0Y0/LJ8WJdivqp3UmLn73U1t+dsvFdPKJ1pW34xlLTnF
-        o7zCMPdw1J2+uOrgm8Z5q+Md1rZwx67cPOdWo2+F//3n516XTG5nEe5KVGIpzkg01GIuKk4E
-        AD/hQlwrAwAA
-X-CMS-MailID: 20220907063413epcas5p3df6d22933ba2884730c52b6a3af2cb09
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220907063413epcas5p3df6d22933ba2884730c52b6a3af2cb09
-References: <20220907064715.55778-1-smitha.t@samsung.com>
-        <CGME20220907063413epcas5p3df6d22933ba2884730c52b6a3af2cb09@epcas5p3.samsung.com>
+        with ESMTP id S230059AbiIGGiy (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Sep 2022 02:38:54 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2049.outbound.protection.outlook.com [40.107.237.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741E383BEA;
+        Tue,  6 Sep 2022 23:38:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CRml5kptsSdfspDvgjHvqQttbeOBewQM3IaYrAgtYgwiqOkzJHPbpfjzQ8aJkrCAZl69IGdLAFxIldI7sPUBI1BbZbgXqUyYrGj8vwU1Moz2WdaLKAsG3eTnD6LmsUZRqnTXDWfV/uVI0x9IOXZpU98m+yyh4ulbrd+9RYqxJjss8vXlIeHU3EPwLWnbNUlleJug5deZUSWxwXypp0ziCxREsvLAMWpzQ86Yee56vIpO1Uw7wEHUJ1Y7poYdIdqo2TA1FPBmInTSHL6FT989DZ2n+YK4mqONb6Hp2Be62/S+hmBpK9EB4uDceDIDLh7kEHn7MDy9V+ec82m7mETH/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2Do9sQBtPj0vzAqccJAjkUSR799gq4PfpGgx8uRRxKc=;
+ b=nemImdd+IZRIKwK3TqPBSboOejfQ/Uyw9yQFAikHUkq0oaKmpCrY7QqP+gaF/u0HVnBQL0bJCOPejUiAuh4oSfFkoabj3VGIOUX8+ljYtacB7HJgthJZGwCsaZSX7nWpNHMFFfZTA1e+byBP6OcHRVd7nboVjiSkL8oGahMnu5OVTKCuoW7icDUsA8DtyIxJMnpkuC+7Bm8SD/7J2FNhZ6a84ZopJWW2rV0EyjKTl4IsrMkiS1C/jdFtKJHGe9kvtHZiuUt2B5gxwNLvt3ovnLGLOWxGZpQicxGe7Vab+koiXxMLnPmeoJigGX3HxImq8nHBwzgaQK2UQzgaNqV53g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2Do9sQBtPj0vzAqccJAjkUSR799gq4PfpGgx8uRRxKc=;
+ b=SZKE4PN5rmXKzXXjPC7BvV78WEouzHoD5vXJOObz8QNR4mFZ4AD1SYOhZWxjxw14Mnqnwi1sd260BZWTb7HcWa/bzhxs8D26KdWPvQhBpD8abTbFoHjMpuLA9Z8yiP20CFAey/tD6fjEfwEnp4Le74wlmVGMByfC7BGP7LZiO3g=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by LV2PR12MB5943.namprd12.prod.outlook.com (2603:10b6:408:170::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.12; Wed, 7 Sep
+ 2022 06:37:53 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::653f:e59b:3f40:8fed]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::653f:e59b:3f40:8fed%6]) with mapi id 15.20.5612.012; Wed, 7 Sep 2022
+ 06:37:53 +0000
+Message-ID: <9b57b254-8d67-9937-5cec-783e7a4d8f56@amd.com>
+Date:   Wed, 7 Sep 2022 08:37:46 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/4] drm/sched: Enable signaling for finished fence
+Content-Language: en-US
+To:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Arvind Yadav <Arvind.Yadav@amd.com>, shashank.sharma@amd.com,
+        amaranath.somalapuram@amd.com, Arunpravin.PaneerSelvam@amd.com,
+        sumit.semwal@linaro.org, gustavo@padovan.org, airlied@linux.ie,
+        daniel@ffwll.ch, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org
+References: <20220905163502.4032-1-Arvind.Yadav@amd.com>
+ <20220905163502.4032-2-Arvind.Yadav@amd.com>
+ <5568fad0-1503-a0f3-222e-c238fd4eefdd@amd.com>
+ <ffb5acca-7c20-4497-d7d0-25508a6566d2@amd.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <ffb5acca-7c20-4497-d7d0-25508a6566d2@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AS9PR06CA0750.eurprd06.prod.outlook.com
+ (2603:10a6:20b:487::29) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|LV2PR12MB5943:EE_
+X-MS-Office365-Filtering-Correlation-Id: bae217ee-bd27-4c0f-5997-08da909b7d85
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hXaakCuK4dfOJfXQZzbdiYy0CMD9idCTBvPOUCclfoOE0q/ScApJpGSKf6Ytyoi9yXHSkCmXQx4E1tkYlvz16QG+bPFldrhglsDt6IMG0ADdqRZtDHEgAWrRM8K/nL44eI1rzXT5OSi3sBzy9xl7/4lOoaU32mVYImXvLw/1jg+tM3jQ/Su4M+sbTZTFhYyWJyE1Kxp0nct2kDk9oJ7rBPhre8WkFWhWCA4LHWtkDZy02MugxZomvq4OCtJ6a4jRWDOvJkpztABR+GWRXNVhr0mB7ekKX5ejk9QN+e4r5dr9xcW/VhPf/XpJIBki0hRfKt5BE3xaBfeimO4cYo0etAMnjbYpqr3diUXMo28B8jSi2GXz27EI1GcNmfNI60YJAal2bm6Pjju80uUW0Z7SJFpl+/JPBfOZWwtEMGq+E49TvEb6E39tO1YdgSjXHACeWaWfjEPsCoee0ExKG3I2M92Dtwl6dq6g4KMLmDLwmH2jXqZ0Db5uPOGWjzYBPooEQev1rGU6DO+iHQdtS+7n/G5b1NPK0jhMXgBbHp+vyQSyDlBAhz8+KdrClbGq2Dy7YXSFKr4NeJKX/QLxIbOZMCCmRq5VN2Ov391yYr6afnt7uf1lc0TYJEXI3Ew5zZVC/U0fBWZeil8Im29+XgIC3n43LpbPHARS1wjCrphbjeK/jwfe3rfeNSgV4cIt+UNf6JIlwd6W3TrW5RJmRi8qi6feUP77oXaqsMlSVC2IeuBUwZ/uCivODJBedGHjRMw365OKCpP3DZMwyAgkSTJ+tXpgX3QlyGtzYLSijNA0IDyz3xKUAt3+VpNaWYEN/nuw
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(346002)(366004)(376002)(136003)(6666004)(36756003)(26005)(2616005)(6506007)(53546011)(86362001)(41300700001)(6512007)(921005)(66574015)(38100700002)(31696002)(186003)(5660300002)(8936002)(66556008)(66946007)(478600001)(66476007)(6486002)(2906002)(110136005)(8676002)(31686004)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bE5XYTFJY3hMM1RFUG9oSUJ3VVZOWHl2MlRtOFhaR3NwU0xqMFlQVG1PU04r?=
+ =?utf-8?B?YlhRUlQzYUhOZGJNUWV0VUpCdzB2Z083RWpIV1oxT09ldFB2VzBxaXdtTlFF?=
+ =?utf-8?B?Mm8zTnJiaUhFcGd2SStERTJrSlhrcEJnakJtQ2gvRU5ERkhWNWdLZURkSE1x?=
+ =?utf-8?B?VEh2M0VIbUJZMmsvVzNjcXJURnFXMTVMdkxrWTRVc29PMGhzdUF1VlFoWEo2?=
+ =?utf-8?B?dUIyL2VuTm9ENXdHUVd0MHVLNnRwN1Y3Nitaa08xOWVKaTFTTGJ6QzI5RUht?=
+ =?utf-8?B?RnAzRnl1TFRBUjBuaVJFcy9zbVVpd1Z6b2hvekNReFFLSUJXSGJZaXZoeXYy?=
+ =?utf-8?B?QWZwTkNJQVVYbHQ4eTcvM3RpOXFPMWZTek5EYXk3dXd6RUJKQUlrWE82bS8x?=
+ =?utf-8?B?ZG9lczFBdEVCWTIzeU9POERHdCtPNG4rWFYvclJlY01qQXg0N21VUmFJd2Fa?=
+ =?utf-8?B?S1hpa1puLy9RdTFOQlgvYWVKNEg5R0wvaGZFUTJSYXpUcHZqcHA4eDExdlc3?=
+ =?utf-8?B?NzBmU0lUcDgvcER3YnJhVWQrY0FXU1hxOFlua2EvcENzMHV2M2ZoL0tBRlJp?=
+ =?utf-8?B?cEZhS1FDZjlrWUhZU3NXbTc3NE0zQkNXVHp2OEtUK1FhQjc5ekloNE80ZlFY?=
+ =?utf-8?B?Qnozc0V2Znd3citDQko0dEpBNWdXMjJWU3phVHlCbExPTHlPUzlPeklUekNi?=
+ =?utf-8?B?U3hxWW9KMjVRZWZOYkg4amMveTZTdjRNK1hPSm04UVg5MVdyalR0czNHYzZX?=
+ =?utf-8?B?YldIL3JUcllzaWIrWjNSSCtSM0RDdzZkK0ZXdE1jU2dmVlJnSktCNzdUcVZR?=
+ =?utf-8?B?RXZscFV6UEk2WXRmNUlqNHNQandqdnEwVVJEb3RDd3JydWt1WkNIck9QUm95?=
+ =?utf-8?B?bTg3WHZ4b2JuNDZZU1c4K0U4ZTVEMVZuTFFKUkJQRlNOUDlaTTN2dFI4UElB?=
+ =?utf-8?B?clYxenM5OXJtUzRLRVJncmd0ajNEZGo1MlFwemQxQnMxTCtxZ0ZtaXErcHFK?=
+ =?utf-8?B?bDFPdGlwZzJWNWJqYWN5VjVJVUpLMkltZnJoMW1wem4zcTVkMmsyT2pFaWtu?=
+ =?utf-8?B?MHhOUVoyZ1UxWXkwQkNZbDJnTU5FT2crOFo1UVNjQ002QnROYVFVZTU0U1RK?=
+ =?utf-8?B?WkUxZCtubGZ1TWZFZmpZaDFnREJxaDJHT0o0bFNWMjV4NmRDVkNRYWt6OUNQ?=
+ =?utf-8?B?NTd3NlgyU2l5QjIrVFpwT29GQWM1d1J6bHNzOE5xSHptL2RnVitlK2tvTVlS?=
+ =?utf-8?B?ZGRtUWkwci8xUUcwN3NEOG9BcnJJMERNOTNuVDRTdUNzS05WM2FaQUZIbThx?=
+ =?utf-8?B?dG0waFdxcHU2YWR3NVlmb0RwYkg5TkZpQ0JUdlpyS3MxamdIb1NVTFVGNEhM?=
+ =?utf-8?B?c09QRlgrdldIMmlPaEY5SkUwL0x2bVlGTFpyOGsyb0JoZmFQR082Z3oxSEpC?=
+ =?utf-8?B?NTlpQnZMbG9EVTl3djlIQWtlRm90RjlDUmNzSnBEYzltL1drd0hSdDZ5SjVD?=
+ =?utf-8?B?bS9oeThNSUI2OGFiTlFQaTFnYldHNVFUeHd2MElBLzFNZXpYTjluam5nZXRo?=
+ =?utf-8?B?eHRrOHM4ZDA3dWZhZER0aGRLS3Mzb2Zjenhqd2pXRm9SVVFsUnA3a3FvQU1D?=
+ =?utf-8?B?dkJPMmM1empubGhoS0lFUE5lMWtnWVc0ZE8zTVJCM1k1WnVoUlRFYWo5N3hW?=
+ =?utf-8?B?TWltWmNzUGh6L0YvcmhRL3RKeDl3ZXRtbkYwVHRtVnc1U0Q4Y0U5dXlCSUdT?=
+ =?utf-8?B?TENSWTNRU3hGMlc4cU00MGc1NTdUYVg4cGRkQjdtVXg4eE1RNUtCQm1TcTZJ?=
+ =?utf-8?B?QVpJNjhRZzNBaXh4ZDdFWlIvRVZBVit2d3N4WVFzZ1ZVajN6K2JpaXdUUTFM?=
+ =?utf-8?B?ak1BTUxlZU82N2RtelJkbHZtT0dWU2I0SmkrZTlIYWNLRVZMSkh0N3RLUzNa?=
+ =?utf-8?B?NTgzb2lTc09LakpybGFsK1ZyQ0NRYWFCSDFZNW1CZE0zNkpnTWlLQmMwSVlw?=
+ =?utf-8?B?YkZkdVpYdldJQmpUem5FRHRsOVZOY2VlOVM4R254R0ZxUlJYWEZWOWNNTWw2?=
+ =?utf-8?B?em5rbHhFS0FhaGhVTzQvOHBOOWhIclkrYTMzRUJ5YVpuQjA0MC96YmhJVlBx?=
+ =?utf-8?Q?A4Of4lqrVzZdLgn6t39Wl+MFm?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bae217ee-bd27-4c0f-5997-08da909b7d85
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2022 06:37:52.9224
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5F5Ib0uJS7ftRxbVPEK2m99Pwq4UsrJPs/9+0pEhtWIYZqC/jlOYuuiFUz4n6O7e
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5943
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add MFC DT node and reserve memory node for MFC usage.
+Am 06.09.22 um 21:55 schrieb Andrey Grodzovsky:
+>
+> On 2022-09-06 02:34, Christian König wrote:
+>> Am 05.09.22 um 18:34 schrieb Arvind Yadav:
+>>> Here's enabling software signaling for finished fence.
+>>>
+>>> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
+>>> ---
+>>>
+>>> Changes in v1 :
+>>> 1- Addressing Christian's comment to remove CONFIG_DEBUG_FS check from
+>>> this patch.
+>>> 2- The version of this patch is also changed and previously
+>>> it was [PATCH 2/4]
+>>>
+>>> ---
+>>>   drivers/gpu/drm/scheduler/sched_main.c | 2 ++
+>>>   1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/drivers/gpu/drm/scheduler/sched_main.c 
+>>> b/drivers/gpu/drm/scheduler/sched_main.c
+>>> index e0ab14e0fb6b..fe72de0e2911 100644
+>>> --- a/drivers/gpu/drm/scheduler/sched_main.c
+>>> +++ b/drivers/gpu/drm/scheduler/sched_main.c
+>>> @@ -962,6 +962,8 @@ static int drm_sched_main(void *param)
+>>>               /* Drop for original kref_init of the fence */
+>>>               dma_fence_put(fence);
+>>>   + dma_fence_enable_sw_signaling(&s_fence->finished);
+>>
+>> Ok, this makes it a lot clearer. Previously I though that we have 
+>> some bug in dma_fence_add_callback().
+>>
+>> This is essentially the wrong place to call this, the finished fence 
+>> should be enabled by the caller and not here.
+>>
+>> There is also another problem in dma_fence_enable_sw_signaling(), it 
+>> returns early when the fence is already signaled:
+>>
+>>         if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
+>>                 return;
+>>
+>> Please remove that one first.
+>
+>
+> Why we even need this explicit call if dma_fence_add_callback calls 
+> __dma_fence_enable_signaling anyway ?
 
-Cc: linux-fsd@tesla.com
-Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
----
- arch/arm64/boot/dts/tesla/fsd-evb.dts |  4 ++++
- arch/arm64/boot/dts/tesla/fsd.dtsi    | 22 ++++++++++++++++++++++
- 2 files changed, 26 insertions(+)
+Two different fence objects.
 
-diff --git a/arch/arm64/boot/dts/tesla/fsd-evb.dts b/arch/arm64/boot/dts/tesla/fsd-evb.dts
-index 1db6ddf03f01..17bb048f9d47 100644
---- a/arch/arm64/boot/dts/tesla/fsd-evb.dts
-+++ b/arch/arm64/boot/dts/tesla/fsd-evb.dts
-@@ -30,6 +30,10 @@
- 	};
- };
- 
-+&clock_mfc {
-+	status = "okay";
-+};
-+
- &fin_pll {
- 	clock-frequency = <24000000>;
- };
-diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi b/arch/arm64/boot/dts/tesla/fsd.dtsi
-index f35bc5a288c2..bca0ba030ee7 100644
---- a/arch/arm64/boot/dts/tesla/fsd.dtsi
-+++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
-@@ -340,6 +340,18 @@
- 		#clock-cells = <0>;
- 	};
- 
-+	reserved-memory {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		mfc_left: region@84000000 {
-+			compatible = "shared-dma-pool";
-+			no-map;
-+			reg = <0 0x84000000 0 0x8000000>;
-+		};
-+	};
-+
- 	soc: soc@0 {
- 		compatible = "simple-bus";
- 		#address-cells = <2>;
-@@ -832,6 +844,16 @@
- 			clock-names = "fin_pll", "mct";
- 		};
- 
-+		mfc: mfc@12880000 {
-+			compatible = "samsung,fsd-mfc";
-+			reg = <0x0 0x12880000 0x0 0x10000>;
-+			interrupts = <GIC_SPI 137 IRQ_TYPE_LEVEL_HIGH>;
-+			clock-names = "mfc";
-+			clocks = <&clock_mfc MFC_MFC_IPCLKPORT_ACLK>;
-+			memory-region = <&mfc_left>;
-+			status = "okay";
-+		};
-+
- 		ufs: ufs@15120000 {
- 			compatible = "tesla,fsd-ufs";
- 			reg = <0x0 0x15120000 0x0 0x200>,  /* 0: HCI standard */
--- 
-2.17.1
+The dma_fence_add_callback() is done on the hw fence we get in return of 
+submitting the job.
+
+The dma_fence_enable_sw_signaling() here is done on the finished fence 
+we use to signal the completion externally.
+
+Key point is the finished fence should be used by the frontend drivers 
+which uses the scheduler and not by the scheduler itself.
+
+Christian.
+
+>
+> Andrey
+>
+>
+>>
+>> Thanks,
+>> Christian.
+>>
+>>
+>>> +
+>>>               r = dma_fence_add_callback(fence, &sched_job->cb,
+>>>                              drm_sched_job_done_cb);
+>>>               if (r == -ENOENT)
+>>
 
