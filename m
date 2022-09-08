@@ -2,213 +2,202 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 603FEC6FA86
-	for <linux-media@archiver.kernel.org>; Thu,  8 Sep 2022 14:26:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E4CEC54EE9
+	for <linux-media@archiver.kernel.org>; Thu,  8 Sep 2022 14:59:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232488AbiIHO0b (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 8 Sep 2022 10:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
+        id S232760AbiIHO70 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 8 Sep 2022 10:59:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232401AbiIHO0X (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Sep 2022 10:26:23 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE85FE6BBF
-        for <linux-media@vger.kernel.org>; Thu,  8 Sep 2022 07:26:19 -0700 (PDT)
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220908142618epoutp02055a31ade3f35a8d27df4c1413a0a44c~S6MyfkRmZ0481104811epoutp02S
-        for <linux-media@vger.kernel.org>; Thu,  8 Sep 2022 14:26:18 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220908142618epoutp02055a31ade3f35a8d27df4c1413a0a44c~S6MyfkRmZ0481104811epoutp02S
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1662647178;
-        bh=Io22rULyfccH9NtVY5N2y7sibfxe21ks9Am3qm9P/3w=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=aswkH4fgLCj96/9dPUNRSpOWlSDtvEZM3IMppIPKJ7XFoxZkgolXE+HRFN+BKUW8Z
-         hSVuAIkDvmSu/zkrB7jkF+4uTlkGglTr74U/xubDr9CIRbvSB8PwdgecPOV4oY5leb
-         mJ25iiYNtiOhTeYRW8fbc7AKm5NXTzu/qaXQO9ME=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20220908142617epcas5p44ed01028cf776d59db23ab5bedbce6d3~S6Mx1GnCQ1580015800epcas5p4x;
-        Thu,  8 Sep 2022 14:26:17 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.177]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4MNhJ66J3Pz4x9Pw; Thu,  8 Sep
-        2022 14:26:14 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F0.C0.59633.68BF9136; Thu,  8 Sep 2022 23:26:14 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220908115432epcas5p419e6aff5e3bc53932a867c31d8d8789a~S4ISqTc673027930279epcas5p4s;
-        Thu,  8 Sep 2022 11:54:32 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220908115432epsmtrp11df4ac1a86d6ec11d4a4a48ec792e840~S4ISo5TxP1477414774epsmtrp1d;
-        Thu,  8 Sep 2022 11:54:32 +0000 (GMT)
-X-AuditID: b6c32a49-dfdff7000000e8f1-77-6319fb86ca1b
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        CA.D3.14392.8F7D9136; Thu,  8 Sep 2022 20:54:32 +0900 (KST)
-Received: from FDSFTE308 (unknown [107.122.81.79]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220908115429epsmtip24ee6e0bb066ec5405c5ed7221e145a67~S4IPUKUX30257402574epsmtip2z;
-        Thu,  8 Sep 2022 11:54:29 +0000 (GMT)
-From:   "Aakarsh Jain" <aakarsh.jain@samsung.com>
-To:     "'Rob Herring'" <robh@kernel.org>,
-        "'Smitha T Murthy'" <smitha.t@samsung.com>
-Cc:     <linux-kernel@vger.kernel.org>, <andi@etezian.org>,
-        <david.plowman@raspberrypi.com>, <dillon.minfei@gmail.com>,
-        <stanimir.varbanov@linaro.org>, <jernej.skrabec@gmail.com>,
-        <andrzej.hajda@intel.com>, <hverkuil-cisco@xs4all.nl>,
-        <mark.rutland@arm.com>, <linux-arm-kernel@lists.infradead.org>,
-        <robh+dt@kernel.org>, <aswani.reddy@samsung.com>,
-        <benjamin.gaignard@collabora.com>, <m.szyprowski@samsung.com>,
-        <ezequiel@vanguardiasur.com.ar>, <pankaj.dubey@samsung.com>,
-        <krzk+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <mchehab@kernel.org>,
-        <linux-fsd@tesla.com>, <alim.akhtar@samsung.com>,
-        <aakarsh.jain@samsung.com>
-In-Reply-To: <1662563606.630951.3457340.nullmailer@robh.at.kernel.org>
-Subject: RE: [Patch v2 01/15] dt-bindings: media: s5p-mfc: Add new DT schema
- for MFC
-Date:   Thu, 8 Sep 2022 17:24:18 +0530
-Message-ID: <000001d8c379$c232d500$46987f00$@samsung.com>
+        with ESMTP id S232723AbiIHO7T (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Sep 2022 10:59:19 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE401223AF
+        for <linux-media@vger.kernel.org>; Thu,  8 Sep 2022 07:59:11 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 70F90320099C;
+        Thu,  8 Sep 2022 10:59:09 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 08 Sep 2022 10:59:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1662649148; x=1662735548; bh=B83rY98fIK
+        xNhBkujjfkIZwGKf/oisxIRy9bUQfBWE0=; b=gGzRVKIUbGDuZ7OMi0T3v9d8F6
+        6kTJlzirE3zcFfK1wXDO+Ker+XZIjYA8kGrJ/fB90fE36owWTwzpNncPBSBNro3q
+        Q+OpGkZJuZyI2NgOhf48kEuqh4hO+VhepgKyTJOFZGruVoXRk/s1IcnRlAB4NT5v
+        Sm6DLZ/2G1xTEqobggJelkBehh7tNJ5nr+h2ulvng7FqNph9lrR5/uTrwFLaN3Mt
+        fB24RS1lwTaL0g+/o3x9Dd6Azs0mOZhcggeeE7dtyyvOsaKHnz8f2qKV+dU6CPGO
+        5jGJre/kCKLcsLy/QQrsHv23SVKOKEtji/QSMG5Je6gu+pkJrQrF3vDXrehA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1662649148; x=1662735548; bh=B83rY98fIKxNhBkujjfkIZwGKf/o
+        isxIRy9bUQfBWE0=; b=EHoin6PZH9Bpc4iE/Tjdj36ZKtQ3yvm28f34JB1+kE/4
+        EI4rCnzWYAcFC/bf1iO+BGPSJ7VEfYTKz1t5c4nD76+IJBzHW/GUic9466cBHFcH
+        GOX4cIPAhrkSphS3HfGkRZJUWvrM15vLNerGNPIRblbkNbiJwlGUavu0W5ggAv/R
+        cZiCZFseyNKRAqU56YSzCJ09pfkEHXxn2A+Oe3almAUfCylyo3UMjzI8K4ztNjTA
+        DN7/ESkE7LdvBLKXpBLJyyh1qiL3up/wXTPObeVD/915b4VCrvrbjzZHASIYtyny
+        qDAt0wGSzxrACmZwmsTi4Zdr70v/PtzJ9TE43WpQeQ==
+X-ME-Sender: <xms:PAMaY4t4mSLHJUq85AhZskIHWQhg8quwpuOZjne1j3DNq0JaxE_ssw>
+    <xme:PAMaY1dRv4-USrtAT8C3yO4hfnw-LrhYKBeOcc2FnSKaDGulrUeGSU-CpWsuuRKml
+    q0HBwDfW3JbTOy4uzI>
+X-ME-Received: <xmr:PAMaYzwkHn0Fn90iMP1XFzxBCb-vTymnomInuHvg93ubJAc1YSfFmaDS2w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtfedgvdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
+    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:PAMaY7PBlg7hlIu-BljZQGpxaqql7hGRDmKZKe6yKlsxCFc5Ykx7Fg>
+    <xmx:PAMaY48Pf68DMU-aqdilvE9YGLr06ShwGutjTQZ7WyfVlp_84ysPcw>
+    <xmx:PAMaYzW2zrvRt2OQVmo_FBOaSSJDp59mnhYP9j8Zv1AbeB3gxB4WRQ>
+    <xmx:PAMaY72LPfgPhtcYCKD7fzdX8N7RzM-rO0_OBEwE4lpY-k5llVywAQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 8 Sep 2022 10:59:07 -0400 (EDT)
+Date:   Thu, 8 Sep 2022 16:59:05 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Hidenori Kobayashi <hidenorik@chromium.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Michael Olbrich <m.olbrich@pengutronix.de>,
+        Daniel Scally <djrscally@gmail.com>,
+        Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Benjamin MUGNIER <benjamin.mugnier@foss.st.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+Subject: Re: [Media Summit] ChromeOS Kernel CAM
+Message-ID: <20220908145905.avq73a3hmt266o4a@houat>
+References: <CANiDSCvqJegYDqsSL5PKvyAM-+HY3ve-Vs2=3cFS4kSRKzd3_Q@mail.gmail.com>
+ <Yxh3ksdjuTVIRJWk@pendragon.ideasonboard.com>
+ <CANiDSCt_KXX0Cn+WH7johLrgiZLd6ZzWmC9D-u=O3L6879cWVA@mail.gmail.com>
+ <20220908080846.wursajjtc3mbja4u@houat>
+ <Yxn40Y5HDzXHITwP@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQIwYET59QqMDNmfP0SYfUTdtmHMHgGIcczBAeDI2w8CHT/w+6z5+ybQ
-Content-Language: en-in
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0zTVxTHd9tfH7hVfzyclyKK1ZkBAq3yuHWCS3DNz80tZBqXsDHoym8F
-        KW3XFlEWI8PBQlN1JGxIV8rTsqHIhNIWqCDYjsgIk8zZhVEeA3nNLTxEEJe5QsvGf59zzvec
-        c8+5OUyqTwWDzUyXqkiFVCjh0DdhpjvBIWEFz/xF3AlHOHpoKaWhEb2JjqqXJylouHoBQ11N
-        zQxkvP8NFdV236ahclsfDZk7f8fQzSlXtL/UiaHJ8hsATWuH6Khx7AENjc68h35u1dGR5vtm
-        Gqq3ORnoqqOfggyNf1NQVfNjBsq/ZWOg51YLAzmtJoA+L7BRXvcnruuvA8LirAGEo2aeSrRo
-        nQyi2jpNIRrrCunE4AMrnWiqOU/k21cw4pKxDhD/5JUxCLXNQScWGncQPYsLjITNiRmH0khh
-        KqkIIqUiWWq6VBzLeet4cnxyVDSXF8bjoxhOkFSYScZyjhxLCBOkS1y74ASdFkqyXK4EoVLJ
-        iYg7pJBlqcigNJlSFcsh5akSeaQ8XCnMVGZJxeFSUnWQx+Xuj3IJUzLSjJ1jNHnry2eKWs2M
-        XPCZrxp4MSEeCdW/LmFqsInpg7cBOK8po7mNeQAHLlbQ3cYTAEdurtDXU4bUGk/gFoC/tedR
-        3MYkgK1llYxVFR2PgMM9Gtoq++HH4aWfWtbqUnE9Dd5tmV8TeeECOJo7tybyxU/Cb6dqqauM
-        4XvghbaiNQ0L58OhgSUPe8O7pePYKlPxndD8p47qflIQfPrQ4GkmgHmPiuhuzTZof6rxaAa8
-        4OwMqQZMFx+Bc7mn3G5fONNtZLiZDacvF3hYBMeqpj2pEthgLcbcfBjevq/DVstQ8WDY0Brh
-        dgfCr3puUNxdN8OLz8Ypbj8LWvTrvBfqBpdpbt4O71y7Cr4EHO2GwbQbBtNuGED7f7cKgNUB
-        f1KuzBSTyig5T0pm//fhIllmI1g7lZCjFuAcmQ3vAhQm6AKQSeX4sbbWQ5EPK1V4NodUyJIV
-        WRJS2QWiXNsuorK3imSuW5OqknmRfG5kdHR0JP9ANI+zjVUcCkQ+uFioIjNIUk4q1vMoTC92
-        LiUwWzWlXhgJ3bO8y7r7Te+AM3jfQYOw5PwCq+HKJ5+aeX7x+sf7qg0luV/0SN45faXkETfH
-        /nUVf4mWFPyCbcdsc1PAaP3gluJ3szsu/6U9Szfv6x4uZw2WW2J4eT0Ge+9UgLh2jp3Trkvc
-        vtJSfI3yml+i5LBpZ1O8aXfvuTkWs7OlkroI9r9EmmS7rBMdfwjetod6x/vfO1f5wcdNenzp
-        lyllSrn5w5PGtP5CjThlbEtA3/OSuAtJb2iOFaY7TvX1xrBK7v2ocLQlCjrsA+/HTQhe7M9J
-        1rSzjaTwO61BNzaYzzQsntj8ZKnohyTe+CvSo2UfhRqxqpG5vVGB/BOvHuBgyjQhL4SqUAr/
-        BYMGuZ+zBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpjleLIzCtJLcpLzFFi42LZdlhJXvfHdclkg75PmhZPd8xktXgwbxub
-        xeIfz5ks7i/+zGJxaPNWdostV2YzWyw/foDVYv6Rc6wW2w8+YrHY+AIoe3HmXRaL5/PXMVq8
-        nHWPzWLT42usFg9fhVtc3jWHzaJnw1ZWi7VH7rJbLL1+kcli2aY/TBaLtn5ht2jde4Td4v+e
-        HewWd/dsY7RoaTvC5CDpsWbeGkaPHXeXMHpcX/KJ2WPnrLvsHov3vGTy2LSqk83jzrU9bB6b
-        l9R7tB79xeLRt2UVo8e/prnsHl1HrrN5fN4k53Hq62f2AL4oLpuU1JzMstQifbsErowtBx+z
-        FuwSq5i4azt7A2OjcBcjJ4eEgInEva4eNhBbSGA3o0RXkyJEXEbif9sxdghbWGLlv+fsEDVP
-        GSW+TAwAsdkE9CXun+phBbFFBIIl1qz7D1TDxcEssI1VYu7DlSwgjpDAZ0aJSRe2s4BUcQq4
-        STxs+AjWISwQInHi+gKwzSwCKhLNuyeCbeAVsJS4d+s7lC0ocXLmE6BeDqCpehJtGxlBwswC
-        8hLb385hhjhOQeLn02VQR7hJNL2ZyAZRIy5x9GcP8wRG4VlIJs1CmDQLyaRZSDoWMLKsYpRM
-        LSjOTc8tNiwwzEst1ytOzC0uzUvXS87P3cQITipamjsYt6/6oHeIkYmD8RCjBAezkgiv6FqJ
-        ZCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8F7pOxgsJpCeWpGanphakFsFkmTg4pRqYTALcdr5f
-        2dPhLD770CpGmyJl/1el/4NnCT1ccHSNwvnX5ww7MrI9+GLz1TXZ7dzEVHn/7TEqUrv7JLE7
-        RnXF3ZAtZXnRq2f88K+QKMnQ4d1lqX558YKd70LM+jccnTphyZopsieeblCzOfLCJ+T9jvyv
-        b/J/v0mLmW42x3pp4MxfHBw73XfxVGY9/ciqqOMbW+wtnd8XqFOZULNx4dF12SyvLFznX9to
-        d3zCp8MKZx7+XuFcMOWQmeXTVXlPur8axT58pCvNLnbxuqpG+PP3hUIt83U2x87+zDiLSV3m
-        5oR7/AdUp3Tc3jutZEJZ1qHtlQLmhzV/+V45YX3a8f91UVYZbsvotyvZFhxSPNVVqsRSnJFo
-        qMVcVJwIADeovwiZAwAA
-X-CMS-MailID: 20220908115432epcas5p419e6aff5e3bc53932a867c31d8d8789a
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220907063313epcas5p114f793010fd0f2797e93bd83ed18a1d7
-References: <20220907064715.55778-1-smitha.t@samsung.com>
-        <CGME20220907063313epcas5p114f793010fd0f2797e93bd83ed18a1d7@epcas5p1.samsung.com>
-        <20220907064715.55778-2-smitha.t@samsung.com>
-        <1662563606.630951.3457340.nullmailer@robh.at.kernel.org>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hi4muk45oyxj6fyn"
+Content-Disposition: inline
+In-Reply-To: <Yxn40Y5HDzXHITwP@pendragon.ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 
+--hi4muk45oyxj6fyn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> -----Original Message-----
-> From: Rob Herring [mailto:robh@kernel.org]
-> Sent: 07 September 2022 20:43
-> To: Smitha T Murthy <smitha.t@samsung.com>
-> Cc: linux-kernel@vger.kernel.org; aakarsh.jain@samsung.com;
-> andi@etezian.org; david.plowman@raspberrypi.com;
-> dillon.minfei@gmail.com; stanimir.varbanov@linaro.org;
-> jernej.skrabec@gmail.com; andrzej.hajda@intel.com; hverkuil-
-> cisco@xs4all.nl; mark.rutland@arm.com; linux-arm-
-> kernel@lists.infradead.org; robh+dt@kernel.org;
-> aswani.reddy@samsung.com; benjamin.gaignard@collabora.com;
-> m.szyprowski@samsung.com; ezequiel@vanguardiasur.com.ar;
-> pankaj.dubey@samsung.com; krzk+dt@kernel.org;
-> devicetree@vger.kernel.org; linux-media@vger.kernel.org;
-> mchehab@kernel.org; linux-fsd@tesla.com; alim.akhtar@samsung.com
-> Subject: Re: [Patch v2 01/15] dt-bindings: media: s5p-mfc: Add new DT
-> schema for MFC
-> 
-> On Wed, 07 Sep 2022 12:17:01 +0530, Smitha T Murthy wrote:
-> > Adds DT schema for s5p-mfc in yaml format
-> >
-> > Signed-off-by: Aakarsh Jain <aakarsh.jain@samsung.com>
-> > Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
-> > ---
-> >  .../devicetree/bindings/media/s5p-mfc.txt     |  77 +------------
-> >  .../bindings/media/samsung,s5p-mfc.yaml       | 109
-> ++++++++++++++++++
-> >  2 files changed, 110 insertions(+), 76 deletions(-)  create mode
-> > 100644 Documentation/devicetree/bindings/media/samsung,s5p-mfc.yaml
-> >
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m
-> dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> Error: Documentation/devicetree/bindings/media/samsung,s5p-
-> mfc.example.dts:21.11-12 syntax error FATAL ERROR: Unable to parse input
-> tree
-> make[1]: *** [scripts/Makefile.lib:384:
-> Documentation/devicetree/bindings/media/samsung,s5p-mfc.example.dtb]
-> Error 1
-> make[1]: *** Waiting for unfinished jobs....
-> make: *** [Makefile:1420: dt_binding_check] Error 2
-> 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://protect2.fireeye.com/v1/url?k=88c9803a-e9429571-88c80b75-
-> 74fe485fb305-6955573d9da6ae9f&q=1&e=4823af8c-cd6a-4171-9c03-
-> cf0e37ae544b&u=https%3A%2F%2Fpatchwork.ozlabs.org%2Fpatch%2F
-> 
-> This check can fail if there are any dependencies. The base for a patch
-series
-> is generally the most recent rc1.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-error(s),
-> then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit.
+On Thu, Sep 08, 2022 at 05:14:41PM +0300, Laurent Pinchart wrote:
+> On Thu, Sep 08, 2022 at 10:08:46AM +0200, Maxime Ripard wrote:
+> > Hi Ricardo,
+> >=20
+> > On Thu, Sep 08, 2022 at 09:11:11AM +0200, Ricardo Ribalda wrote:
+> > > > - Still on slide 16, V4L2 as an API is usable without disclosing ve=
+ndor
+> > > >   IP. What is not possible is upstreaming a driver. I don't see thi=
+s as
+> > > >   significantly different between V4L2 and the new API proposal. I
+> > > >   expect this to be discussed on Monday.
+> > >=20
+> > > I am only considering upstream drivers. There is not much to discuss
+> > > for downstream or closed drivers :)
+> >=20
+> > Are we really discussing upstream *drivers*? If anything, it looks like
+> > the Kcam proposal moves most of the drivers out of upstream.
+>=20
+> Given that the API proposal sets at a significant lower level than V4L2
+> in the stack, the concept of "userspace driver" (I meant it in the sense
+> of GPU support in mesa) plays a bigger role. It would be good to clarify
+> what is meant by "driver" and maybe use the term "kernel driver" when
+> only the kernel part is covered, to avoid misunderstandings.
 
-we didn't got any errors while running dt_binding_check with path to the
-yaml file but we are seeing errors while running  dt_binding_check without
-path.
-we will fix it in next series.
+I think there's a bit of a misunderstanding about what exactly is in a
+DRM driver, and what is in Mesa.
 
-Thanks for the review.
+Mesa doesn't program the hardware at all, it's merely a glorified
+compiler. It's not more of a driver than GCC is an OS. Most importantly
+for our discussion, Mesa doesn't perform any kind of register access (or
+register access request), only the (kernel) driver does that.
 
+What would be relevant to the discussion though was the userspace mode
+setting, where X11 would have most of the logic to drive the hardware
+directly.
 
-Thanks,
-Aakarsh 
+That ended up being a mistake, and got superseded by KMS more than a
+decade ago because it wasn't working.
 
+> > > > - Slide 31 mentions that entities can send operations internally and
+> > > >   listen to each other events. I'd like to better understand how th=
+at
+> > > >   will work without any abstraction in the API (as that is one of t=
+he
+> > > >   main design decision behind this new API) when those entities are=
+ from
+> > > >   different vendors, and handled by different drivers that are deve=
+loped
+> > > >   independently (for instance, the camera sensor and the CSI-2 rece=
+iver,
+> > > >   or even the CSI-2 receiver and the ISP).
+> > >=20
+> > > It is still under work.
+> > >=20
+> > > Hardware, specially for standard buses,  should be resilient (not
+> > > crash) to format mismatches. Otherwise a mal-functionling sensor or
+> > > too much noise could crash the system (with or without kcam).
+> > >=20
+> > > Drivers developed together should know about the rest of the system,
+> > > so that is not the issue here.
+> > >=20
+> > > For drivers developed by different vendors for a standard bus, on
+> > > hardware that is not resilient (that was a mouthful), then we need to
+> > > prepare a set of read-only standard registers.
+> >=20
+> > I'm not even sure that read-only registers would be enough. I've
+> > experienced first-hand DMA controllers that, when the camera has its
+> > timings completely off, end up completely confused and write way outside
+> > of its assigned buffer creating big chunks of corrupted memory in the
+> > system.
+> >=20
+> > And that was by writing fairly legit values to registers that were meant
+> > for that, so we wouldn't be able to defend against it even with the
+> > smartest whitelist.
+> >=20
+> > And we were in a "good faith" situation. Giving an attacker basically
+> > programmable access to DMA engines that might not be sitting behind an
+> > IOMMU seems like a very dangerous idea to me.
+>=20
+> Do we need to preassign a range of CVE numbers ? :-)
 
+We can do that, but I'd rather have some way to defend against that.
 
+Maxime
 
+--hi4muk45oyxj6fyn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYxoDOQAKCRDj7w1vZxhR
+xShVAQCpBhYEe0nn7sx6R1ttlX9Pa3RB6EaOUvpm2LldTExfKAD9FYqIC/ydgjf+
+kLNm2rYZ/uEdstFpTNzcD8AeRt0AzQo=
+=eqzE
+-----END PGP SIGNATURE-----
+
+--hi4muk45oyxj6fyn--
