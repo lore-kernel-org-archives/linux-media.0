@@ -2,117 +2,66 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 058D2C6FA82
-	for <linux-media@archiver.kernel.org>; Thu,  8 Sep 2022 12:08:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE900C54EE9
+	for <linux-media@archiver.kernel.org>; Thu,  8 Sep 2022 12:31:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbiIHMIg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 8 Sep 2022 08:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
+        id S231841AbiIHMbz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 8 Sep 2022 08:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231553AbiIHMIe (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Sep 2022 08:08:34 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56533F5C6F;
-        Thu,  8 Sep 2022 05:08:33 -0700 (PDT)
-Received: from [192.168.1.111] (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 90137888;
-        Thu,  8 Sep 2022 14:08:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1662638910;
-        bh=CkG/MazVFplR8mYzQrftiKr7OKNvPkPqMPac0VAkq94=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=CGVdRO08SxMJyaJrSafYnAPBd6fMzPWt3e8RmFAVovNvy3bPJdtkmMtWaS9k1/MjT
-         egVDt55JlacdzaulDZdS6pWpDvWtx4UPEFPb9dsu0+LAa49L+J1kCk8piv9Hg1oXEL
-         tyUR45KODpQH9CfRTxOMvELUS90U8SAm3o5QtjLs=
-Message-ID: <c0ad65c5-818d-da5c-178a-dfaf685f8d24@ideasonboard.com>
-Date:   Thu, 8 Sep 2022 15:08:27 +0300
+        with ESMTP id S231273AbiIHMby (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Sep 2022 08:31:54 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2649F11C153;
+        Thu,  8 Sep 2022 05:31:50 -0700 (PDT)
+X-QQ-mid: bizesmtp81t1662640286tmzdpusk
+Received: from localhost.localdomain ( [182.148.14.0])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 08 Sep 2022 20:31:25 +0800 (CST)
+X-QQ-SSF: 0100000000200090C000B00A0000000
+X-QQ-FEAT: +Fw3Sd5mYDVlx+ksV8IMGjrZ/aENIQf6kU4EawKVS+f87DHDkXX30B0nre6/0
+        YO0gmJDgmj/KbFaa8J0OuLgHLv2nn8g0SWFbvgwMTc0NIISISOzwid27NYU+Dc8UA71hXXc
+        WWE6Qbms5zkqc9QRKuYMCSCn+lEjslHdIVbCy77o7/JuVShc+4+EzhsTzHequjF1IOXoxpR
+        L4j4aAJ5SbFvuwFPh4jzffw2UFX0UxsaMBLa+W/t8tFfA4GIs7vl4CMVdNgrC7qyj8vgOeo
+        ZBF/dZLJQAXh6hWq3m2CHje2eszcMVwaptP0XvEgiOoVAdLUfNBKiPFCfhF/+sXRFyGifNj
+        tJ4biqSKzaf1/vqtX939cJZl7+4G+Go9yBYGrluP/kfbrMjC/k=
+X-QQ-GoodBg: 0
+From:   wangjianli <wangjianli@cdjrlc.com>
+To:     crope@iki.fi, mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, inux-kernel@vger.kernel.org,
+        wangjianli <wangjianli@cdjrlc.com>
+Subject: [PATCH] media/dvb-frontends: fix repeated words in comments
+Date:   Thu,  8 Sep 2022 20:31:18 +0800
+Message-Id: <20220908123118.15951-1-wangjianli@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] ipu3-imgu: Fix NULL pointer dereference in
- imgu_subdev_set_selection()
-Content-Language: en-US
-To:     Maximilian Luz <luzmaximilian@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Bingbu Cao <bingbu.cao@intel.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20220907224409.3187482-1-luzmaximilian@gmail.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <20220907224409.3187482-1-luzmaximilian@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 08/09/2022 01:44, Maximilian Luz wrote:
-> Calling v4l2_subdev_get_try_crop() and v4l2_subdev_get_try_compose()
-> with a subdev state of NULL leads to a NULL pointer dereference. This
-> can currently happen in imgu_subdev_set_selection() when the state
-> passed in is NULL, as this method first gets pointers to both the "try"
-> and "active" states and only then decides which to use.
-> 
-> The same issue has been addressed for imgu_subdev_get_selection() with
-> commit 30d03a0de650 ("ipu3-imgu: Fix NULL pointer dereference in active
-> selection access"). However the issue still persists in
-> imgu_subdev_set_selection().
-> 
-> Therefore, apply a similar fix as done in the aforementioned commit to
-> imgu_subdev_set_selection(). To keep things a bit cleaner, introduce
-> helper functions for "crop" and "compose" access and use them in both
-> imgu_subdev_set_selection() and imgu_subdev_get_selection().
-> 
-> Fixes: 0d346d2a6f54 ("media: v4l2-subdev: add subdev-wide state struct")
-> Cc: stable@vger.kernel.org # for v5.14 and later
-> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
-> ---
->   drivers/staging/media/ipu3/ipu3-v4l2.c | 57 +++++++++++++++-----------
->   1 file changed, 34 insertions(+), 23 deletions(-)
-> 
-> diff --git a/drivers/staging/media/ipu3/ipu3-v4l2.c b/drivers/staging/media/ipu3/ipu3-v4l2.c
-> index ce13e746c15f..e530767e80a5 100644
-> --- a/drivers/staging/media/ipu3/ipu3-v4l2.c
-> +++ b/drivers/staging/media/ipu3/ipu3-v4l2.c
-> @@ -188,6 +188,28 @@ static int imgu_subdev_set_fmt(struct v4l2_subdev *sd,
->   	return 0;
->   }
->   
-> +static struct v4l2_rect *
-> +imgu_subdev_get_crop(struct imgu_v4l2_subdev *sd,
-> +		     struct v4l2_subdev_state *sd_state, unsigned int pad,
-> +		     enum v4l2_subdev_format_whence which)
-> +{
-> +	if (which == V4L2_SUBDEV_FORMAT_TRY)
-> +		return v4l2_subdev_get_try_crop(&sd->subdev, sd_state, pad);
-> +	else
-> +		return &sd->rect.eff;
-> +}
-> +
-> +static struct v4l2_rect *
-> +imgu_subdev_get_compose(struct imgu_v4l2_subdev *sd,
-> +			struct v4l2_subdev_state *sd_state, unsigned int pad,
-> +			enum v4l2_subdev_format_whence which)
-> +{
-> +	if (which == V4L2_SUBDEV_FORMAT_TRY)
-> +		return v4l2_subdev_get_try_compose(&sd->subdev, sd_state, pad);
-> +	else
-> +		return &sd->rect.bds;
-> +}
+Delete the redundant word 'in'.
 
+Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+---
+ drivers/media/dvb-frontends/cxd2820r_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If I understand right, these functions are only called with pad 0 
-(IMGU_NODE_IN). I would drop the pad argument here and use IMGU_NODE_IN. 
-Otherwise it gives a false idea that other pads could be used with these 
-functions, and that would fail for the V4L2_SUBDEV_FORMAT_ACTIVE case.
+diff --git a/drivers/media/dvb-frontends/cxd2820r_core.c b/drivers/media/dvb-frontends/cxd2820r_core.c
+index 5d98222f9df0..e329e15df9fd 100644
+--- a/drivers/media/dvb-frontends/cxd2820r_core.c
++++ b/drivers/media/dvb-frontends/cxd2820r_core.c
+@@ -629,7 +629,7 @@ static int cxd2820r_probe(struct i2c_client *client,
+ 
+ 	/*
+ 	 * Chip has two I2C addresses for different register banks. We register
+-	 * one dummy I2C client in in order to get own I2C client for each
++	 * one dummy I2C client in order to get own I2C client for each
+ 	 * register bank.
+ 	 */
+ 	priv->client[1] = i2c_new_dummy_device(client->adapter, client->addr | (1 << 1));
+-- 
+2.36.1
 
-However, that's not a big issue. With or without the change:
-
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-
-  Tomi
