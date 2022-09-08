@@ -2,51 +2,51 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 028EFC6FA82
-	for <linux-media@archiver.kernel.org>; Thu,  8 Sep 2022 10:44:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF76BECAAD5
+	for <linux-media@archiver.kernel.org>; Thu,  8 Sep 2022 10:44:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231474AbiIHKoQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 8 Sep 2022 06:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
+        id S231263AbiIHKoF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 8 Sep 2022 06:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231377AbiIHKoI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Sep 2022 06:44:08 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE4CE1272;
-        Thu,  8 Sep 2022 03:44:00 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id t14so18053922wrx.8;
-        Thu, 08 Sep 2022 03:43:59 -0700 (PDT)
+        with ESMTP id S231144AbiIHKny (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Sep 2022 06:43:54 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F85E9D8ED;
+        Thu,  8 Sep 2022 03:43:52 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 186-20020a1c02c3000000b003b26feb5c6bso1352196wmc.5;
+        Thu, 08 Sep 2022 03:43:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
          :cc:subject:date;
-        bh=ItPI0MR3NN2HvuVuI/7ScAvDP5QuDEGNBgMAv6on+2k=;
-        b=Qwl9qXCtUZAEXBRAr7K21sULv09wLNrYWhe7Tqgxdgq8iCs2UNVpXTmHLSihAYrMFB
-         xqPp1w6KiUfXyae1qXE7yYG9/WlBAVSqzQfBQppoR0nPN8/NZV1q0qC81qPEpT25B8j9
-         lv7K1Tpd3eqjlYr9uZR05QBI+Ee4WyqYEiDi9gEeYKP1NfX30ewVC9KM6uc+aeFNKGAU
-         Vhb4Z4anKzyJmunTqHDt5RrnC6twaekPXm8GT/lUid5tNmlUGLYLN5l7IWiShbEWuYJt
-         7sMZoOZOaRVd/OzmXh+IhauAAXAbWstN4pdCv0Z2S02OqUX22yUA5TSbAYhrseEmfD1z
-         jEaA==
+        bh=YcRQWeHsNHudXowYxhzrFSu3g61QameARaQdQJb5lU8=;
+        b=g3G7qs40MLQJX14/onOdc/vwEuCiGg3qlXRS98ERCemYZhBI59bvkmMyGLr09yHXS/
+         yFosfFbqEKXH3p/CfgCOl/rnQhKEtFaDJTjdwAl2E9NoJNZ8YIVubxdleDB/f0g4+3oo
+         JIeGMlGuo3uFUW4fDwCEy9M1RHT2k/t4jVo48Ln/eFseeN1oVe9bh0vMtHB5XTVOMXlQ
+         BfukHii/KG8jzkRD5yeoihVnAl+O4D3cCY+SL/5O/X6oM9T0JNIC31tvygvv5sDkdBMp
+         C81T8fKmjXFOmCxs6csbtglXCTBnAX8JxPtOwKgLbEgviTauwuYqLNDYQ4p+gnFdpP+i
+         HV8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=references:in-reply-to:message-id:date:subject:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=ItPI0MR3NN2HvuVuI/7ScAvDP5QuDEGNBgMAv6on+2k=;
-        b=WrDMYHZPbZQpVzRumXYHgVqarESs3HXnEMn1rKthqMJwFiM/LpT6s/yzeOvMuVdMm+
-         mraf4r6mYlVRSvN0DszBQGuXqChTU3SZR9e18DDp74w6aZFdVQkqMryRcpR/5770u0a+
-         xJOz/+81GwVVep9WUPBY4GtRgNMj0uofOqOhW5x41bLKnb1oTD/UyHZijhvx3bXAgWD3
-         Zw742b2ujLYthBDClxJB75PCsCEX2Ap74lJAmrjgOQ9VZLhRkwRfokFeu/UDoAOZCK7I
-         Svoy2I6H7HaNhsGhHRZPt1C8F5QgH//rkeRFpYvh1rr9gB7RNkrzFZeYk0+qNrZHZC9h
-         K5sw==
-X-Gm-Message-State: ACgBeo1kxTzyj2aRf8raxcFw/2lnGIA4maPCt/Bm8rkKCzOnkFfw0rH8
-        ojfzxeBfg3VISLUww6aUMSQ=
-X-Google-Smtp-Source: AA6agR6RYLcqVQoPCUZV9g02cRKPZpdef5LX5qakouTpz1Mv2m826gHTOyz4Ytc64G6rdcluoww9GA==
-X-Received: by 2002:adf:ee89:0:b0:228:7bdf:47d with SMTP id b9-20020adfee89000000b002287bdf047dmr4535843wro.641.1662633838474;
-        Thu, 08 Sep 2022 03:43:58 -0700 (PDT)
+        bh=YcRQWeHsNHudXowYxhzrFSu3g61QameARaQdQJb5lU8=;
+        b=bLws0u7gqf5mdU/P7joaZoL+Tc8iE2IyPybnfHndtMVDtAGKDG02GrhQXwqwZhYS3l
+         ybzhxp2oxNYDCDKKCzNwlUDcAxAZF0GvOy+1OOQ1gF6sDkGc5X8FxHkGGcLQmsIV63qc
+         KOzQ+PPdpFLvHsFtcoYut2AZe/pDxL+mIan75rSxHGm/bA65x3VJrGxk9bhD2ilTDL+k
+         hRU7b61Dz+513VLqtbuYVqJPUjOKiXL7fexDBLQx5pIEC9xq0Q3S2ohNcDsXqT5UMjRn
+         OjPDeBRLbL76iVNQ/gM0MHSoezU5qmvXHRWsfdil+jYakONWGcJYruXVbXTrF/E/xpfa
+         tPOg==
+X-Gm-Message-State: ACgBeo1uV2URTjeEcRe9aP1ptyXX75t9/P9131Nqdtj18p+pXDvZryvv
+        tti0TXq8xcjn+5YUzh9W0Sk=
+X-Google-Smtp-Source: AA6agR6ynOlAaxihPYz+CdT04VP+VpGksNMzS5VFetSq0N8fvehilNxf41zef99BhDZbNdGwjrNtVg==
+X-Received: by 2002:a05:600c:4f10:b0:3a5:f8c8:a5b5 with SMTP id l16-20020a05600c4f1000b003a5f8c8a5b5mr1835323wmq.34.1662633830474;
+        Thu, 08 Sep 2022 03:43:50 -0700 (PDT)
 Received: from felia.fritz.box (200116b826f77600d0640cc051af4288.dip.versatel-1u1.de. [2001:16b8:26f7:7600:d064:cc0:51af:4288])
-        by smtp.gmail.com with ESMTPSA id bu3-20020a056000078300b0022863395912sm17227486wrb.53.2022.09.08.03.43.57
+        by smtp.gmail.com with ESMTPSA id bu3-20020a056000078300b0022863395912sm17227486wrb.53.2022.09.08.03.43.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 03:43:58 -0700 (PDT)
+        Thu, 08 Sep 2022 03:43:50 -0700 (PDT)
 From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
 To:     Russell King <linux@armlinux.org.uk>,
         linux-arm-kernel@lists.infradead.org,
@@ -63,9 +63,9 @@ To:     Russell King <linux@armlinux.org.uk>,
         linux-kbuild@vger.kernel.org
 Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
         Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH 6/6] init/Kconfig: remove confusing config EMBEDDED
-Date:   Thu,  8 Sep 2022 12:43:37 +0200
-Message-Id: <20220908104337.11940-7-lukas.bulwahn@gmail.com>
+Subject: [PATCH 2/6] x86: make config X86_FEATURE_NAMES visible with EXPERT
+Date:   Thu,  8 Sep 2022 12:43:33 +0200
+Message-Id: <20220908104337.11940-3-lukas.bulwahn@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220908104337.11940-1-lukas.bulwahn@gmail.com>
 References: <20220908104337.11940-1-lukas.bulwahn@gmail.com>
@@ -130,57 +130,26 @@ CONFIG_EMBEDDED. If anyone spends significant effort in structuring the
 visibility of config options, they may re-introduce suitable new config
 options simply as they see fit.
 
-Hence, all uses of CONFIG_EMBEDDED have been replaced with CONFIG_EXPERT.
-
-Considering the second purpose, note that already probably arguing that a
-kernel build for an embedded system would choose some values differently is
-already tricky: the set of embedded systems with Linux kernels is already
-quite diverse. Many embedded system have powerful CPUs and it would not be
-clear that all embedded systems just optimize towards one specific aspect,
-e.g., a smaller kernel image size. So, it is unclear if starting with "one
-set of default configuration" that is induced by CONFIG_EMBEDDED is a good
-offer for developers configuring their kernels.
-
-Also, the differences of needed user-space features in an embedded system
-compared to a non-embedded system are probably difficult or even impossible
-to name in some generic way.
-
-So it is not surprising that in the last decade hardly anyone has
-contributed changes to make something default differently in case of
-CONFIG_EMBEDDED=y.
-
-In v6.0-rc4, SECRETMEM is the only config switched off if
-CONFIG_EMBEDDED=y. That one use was removed as well, SECRETMEM was made
-configurable at build time by experts using menuconfig instead.
-
-As there are no further uses of CONFIG_EMBEDDED and CONFIG_EMBEDDED never
-lived up to its intended purpose defined above, simply delete this
-confusing CONFIG_EMBEDDED.
+Make the config X86_FEATURE_NAMES visible when CONFIG_EXPERT is enabled.
 
 Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- init/Kconfig | 8 --------
- 1 file changed, 8 deletions(-)
+ arch/x86/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/init/Kconfig b/init/Kconfig
-index 9e3fd79b089c..d7429e0b8cae 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1818,14 +1818,6 @@ config DEBUG_RSEQ
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 2ec0b1eabe86..7807eb1c8df8 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -438,7 +438,7 @@ config SMP
+ 	  If you don't know what to do here, say N.
  
- 	  If unsure, say N.
- 
--config EMBEDDED
--	bool "Embedded system"
--	select EXPERT
--	help
--	  This option should be enabled if compiling the kernel for
--	  an embedded system so certain expert options are available
--	  for configuration.
--
- config HAVE_PERF_EVENTS
- 	bool
+ config X86_FEATURE_NAMES
+-	bool "Processor feature human-readable names" if EMBEDDED
++	bool "Processor feature human-readable names" if EXPERT
+ 	default y
  	help
+ 	  This option compiles in a table of x86 feature bits and corresponding
 -- 
 2.17.1
 
