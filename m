@@ -2,170 +2,343 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23AD0C54EE9
-	for <linux-media@archiver.kernel.org>; Thu,  8 Sep 2022 19:31:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17663C54EE9
+	for <linux-media@archiver.kernel.org>; Thu,  8 Sep 2022 19:48:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232097AbiIHTbX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 8 Sep 2022 15:31:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49228 "EHLO
+        id S229838AbiIHTsC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 8 Sep 2022 15:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232011AbiIHTbV (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Sep 2022 15:31:21 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0D9C229B
-        for <linux-media@vger.kernel.org>; Thu,  8 Sep 2022 12:31:18 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0459B8F1;
-        Thu,  8 Sep 2022 21:31:15 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1662665476;
-        bh=9BL9jR8EAN2zB2jWsGQBnB4mLa6FGxs/ypVA6pMHAx8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MBUFmegG8owB3YW2kwMML5HsnhHfbWMeOdMOYyvmaNIaaeeu6+NdONAVZ69pht9Jh
-         oAdlZncKCH/QWgwqYzDmC0QaFXxr6n+BxJ0jPAfiMIJViWcCaCAELoMyHAPHcAxbqR
-         wvsF2lQZLT1V8FMHNt2GjD21YR9I1VGEECJIfOGQ=
-Date:   Thu, 8 Sep 2022 22:30:59 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Hidenori Kobayashi <hidenorik@chromium.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Michael Olbrich <m.olbrich@pengutronix.de>,
-        Daniel Scally <djrscally@gmail.com>,
-        Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Benjamin MUGNIER <benjamin.mugnier@foss.st.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: Re: [Media Summit] ChromeOS Kernel CAM
-Message-ID: <YxpC80eZzusR3doI@pendragon.ideasonboard.com>
-References: <CANiDSCvqJegYDqsSL5PKvyAM-+HY3ve-Vs2=3cFS4kSRKzd3_Q@mail.gmail.com>
- <Yxh3ksdjuTVIRJWk@pendragon.ideasonboard.com>
- <CANiDSCt_KXX0Cn+WH7johLrgiZLd6ZzWmC9D-u=O3L6879cWVA@mail.gmail.com>
- <20220908080846.wursajjtc3mbja4u@houat>
- <Yxn40Y5HDzXHITwP@pendragon.ideasonboard.com>
- <20220908145905.avq73a3hmt266o4a@houat>
- <YxoHWNusFEuVdOha@pendragon.ideasonboard.com>
- <20220908153430.fctitaofbj6hqot3@houat>
- <CANiDSCs=Jga0NgnhPPiJ_EZA5=3cNFfztmrVxzPO32TO_pKnXg@mail.gmail.com>
- <CANiDSCuVj6kU9i24wVXqF5Kwr=Dbq56exKEJn9JyeEFUYe9xuw@mail.gmail.com>
+        with ESMTP id S229738AbiIHTsA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Sep 2022 15:48:00 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386FA5A80A
+        for <linux-media@vger.kernel.org>; Thu,  8 Sep 2022 12:47:57 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1oWNVE-0001MI-0r; Thu, 08 Sep 2022 21:47:56 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1oWNVB-004gY5-6o; Thu, 08 Sep 2022 21:47:55 +0200
+Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1oWNVC-00Fjow-7c; Thu, 08 Sep 2022 21:47:54 +0200
+From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-media@vger.kernel.org, balbi@kernel.org,
+        laurent.pinchart@ideasonboard.com, paul.elder@ideasonboard.com,
+        kernel@pengutronix.de, nicolas@ndufresne.ca,
+        kieran.bingham@ideasonboard.com
+Subject: [PATCH v13 1/6] media: v4l: move helper functions for fractions from uvc to v4l2-common
+Date:   Thu,  8 Sep 2022 21:47:45 +0200
+Message-Id: <20220908194750.3750310-2-m.grzeschik@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220908194750.3750310-1-m.grzeschik@pengutronix.de>
+References: <20220908194750.3750310-1-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CANiDSCuVj6kU9i24wVXqF5Kwr=Dbq56exKEJn9JyeEFUYe9xuw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Ricardo,
+The functions uvc_simplify_fraction and uvc_fraction_to_interval are
+generic helpers which are also useful for other v4l2 drivers. This patch
+moves them to v4l2-common.
 
-On Thu, Sep 08, 2022 at 08:13:57PM +0200, Ricardo Ribalda wrote:
-> On Thu, 8 Sept 2022 at 20:13, Ricardo Ribalda wrote:
-> > On Thu, 8 Sept 2022 at 17:34, Maxime Ripard wrote:
-> > > On Thu, Sep 08, 2022 at 06:16:40PM +0300, Laurent Pinchart wrote:
-> > > > On Thu, Sep 08, 2022 at 04:59:05PM +0200, Maxime Ripard wrote:
-> > > > > On Thu, Sep 08, 2022 at 05:14:41PM +0300, Laurent Pinchart wrote:
-> > > > > > On Thu, Sep 08, 2022 at 10:08:46AM +0200, Maxime Ripard wrote:
-> > > > > > > Hi Ricardo,
-> > > > > > >
-> > > > > > > On Thu, Sep 08, 2022 at 09:11:11AM +0200, Ricardo Ribalda wrote:
-> > > > > > > > > - Still on slide 16, V4L2 as an API is usable without disclosing vendor
-> > > > > > > > >   IP. What is not possible is upstreaming a driver. I don't see this as
-> > > > > > > > >   significantly different between V4L2 and the new API proposal. I
-> > > > > > > > >   expect this to be discussed on Monday.
-> > > > > > > >
-> > > > > > > > I am only considering upstream drivers. There is not much to discuss
-> > > > > > > > for downstream or closed drivers :)
-> > > > > > >
-> > > > > > > Are we really discussing upstream *drivers*? If anything, it looks like
-> > > > > > > the Kcam proposal moves most of the drivers out of upstream.
-> > > > > >
-> > > > > > Given that the API proposal sets at a significant lower level than V4L2
-> > > > > > in the stack, the concept of "userspace driver" (I meant it in the sense
-> > > > > > of GPU support in mesa) plays a bigger role. It would be good to clarify
-> > > > > > what is meant by "driver" and maybe use the term "kernel driver" when
-> > > > > > only the kernel part is covered, to avoid misunderstandings.
-> > > > >
-> > > > > I think there's a bit of a misunderstanding about what exactly is in a
-> > > > > DRM driver, and what is in Mesa.
-> > > > >
-> > > > > Mesa doesn't program the hardware at all, it's merely a glorified
-> > > > > compiler. It's not more of a driver than GCC is an OS. Most importantly
-> > > > > for our discussion, Mesa doesn't perform any kind of register access (or
-> > > > > register access request), only the (kernel) driver does that.
-> > > >
-> > > > Mesa compiles shaders, but also more generally produces command streams
-> > > > that are passed as blobs to the DRM driver, which then forwards them to
-> > > > the device with as little processing and validation as possible (when
-> > > > the device is designed with multi-clients in mind, that processing and
-> > > > validation can be reduced a lot).
-> > >
-> > > That's true, but at no point in time is the CPU ever touches that
-> > > command stream blob in the case of DRM...
-> >
-> > As Laurent says, the latest hardware is very similar to GPUs, you pass
-> > a set of commands to a firmware that does the actual R/W to the
-> > hardware.
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 
-*Some* of the latest hardware. There are new SoCs getting to the market
-today with GPUs that are fully programmed from the kernel, and even more
-that are fully programmable from the kernel even if the stack provided
-by the SoC vendor has a firmware that takes care of programming the ISP.
+---
+v1 -> v7: -
+v7 -> v8: - ported all style fixes and broken links from latest version on rebase
+v8 -> v13: -
 
-One thing that isn't clear in your proposal is where the line is drawn.
-Passing a blob to the ISP firmware involves some kind of communication
-mechanism, which ultimately deals with hardware registers somewhere.
-It's not clear if those registers are part of the blob that userspace
-passes to the kernel. I'd assume not, but clarifying where the line is
-would be useful.
+ drivers/media/usb/uvc/uvc_driver.c    | 84 --------------------------
+ drivers/media/usb/uvc/uvc_v4l2.c      | 14 ++---
+ drivers/media/usb/uvc/uvcvideo.h      |  3 -
+ drivers/media/v4l2-core/v4l2-common.c | 86 +++++++++++++++++++++++++++
+ include/media/v4l2-common.h           |  4 ++
+ 5 files changed, 97 insertions(+), 94 deletions(-)
 
-> > For hardware that is a register set, the vendor should have a good
-> > idea about what kind of validation should be needed: raw access (deny
-> > list) or more abstracted (allow list).
-> >
-> > The most critical part is the DMA, and that will always be abstracted.
-> > Also I doubt that we will have new hardware without an IOMMU, so we
-> > have the same layers of security as today.
-
-I know of SoCs in the making that have ISPs and no IOMMU.
-
-> > > > Recent ISPs have a similar architecture, with a set of registers used
-> > > > to communicate with the ISP firmware, and then most of the hardware
-> > > > registers for the actual image processing blocks being programmed
-> > > > based from the command stream. "Command stream" may not be a very good
-> > > > term for ISPs as it's not really a stream of commands, but
-> > > > conceptually, we're dealing with a blob that is computed by userspace.
-> > >
-> > > ... while in Kcam, the CPU knows and will interpret that command stream.
-> > > Maybe not in all cases, but it's still a significant difference.
-> > >
-> > > If we had to draw a parallel with something else in the kernel, it looks
-> > > way more like eBPF or the discussion we had on where to parse the
-> > > bitstreams for stateless codecs.
-> > >
-> > > The first one has been severely constrained to avoid the issues we've
-> > > raised, and we all know how the second one went.
-> >
-> > In eBPF, you are moving some user code to the kernel, with an unstable API.
-> >
-> > In KCAM, (and in DRM), you let the user build a set of operations,
-> > that you pass to the kernel via a stable API, then it is validated and
-> > scheduled by the kernel.
-> >
-> > X11 was much more bizarre, the GPIO iomem was remapped into userspace.
-> 
-> s/GPIO/GPU/ ;)
-
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 9c05776f11d1f0..0f14dee4b6d794 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -329,90 +329,6 @@ static enum v4l2_ycbcr_encoding uvc_ycbcr_enc(const u8 matrix_coefficients)
+ 	return V4L2_YCBCR_ENC_DEFAULT;  /* Reserved */
+ }
+ 
+-/*
+- * Simplify a fraction using a simple continued fraction decomposition. The
+- * idea here is to convert fractions such as 333333/10000000 to 1/30 using
+- * 32 bit arithmetic only. The algorithm is not perfect and relies upon two
+- * arbitrary parameters to remove non-significative terms from the simple
+- * continued fraction decomposition. Using 8 and 333 for n_terms and threshold
+- * respectively seems to give nice results.
+- */
+-void uvc_simplify_fraction(u32 *numerator, u32 *denominator,
+-		unsigned int n_terms, unsigned int threshold)
+-{
+-	u32 *an;
+-	u32 x, y, r;
+-	unsigned int i, n;
+-
+-	an = kmalloc_array(n_terms, sizeof(*an), GFP_KERNEL);
+-	if (an == NULL)
+-		return;
+-
+-	/*
+-	 * Convert the fraction to a simple continued fraction. See
+-	 * https://en.wikipedia.org/wiki/Continued_fraction
+-	 * Stop if the current term is bigger than or equal to the given
+-	 * threshold.
+-	 */
+-	x = *numerator;
+-	y = *denominator;
+-
+-	for (n = 0; n < n_terms && y != 0; ++n) {
+-		an[n] = x / y;
+-		if (an[n] >= threshold) {
+-			if (n < 2)
+-				n++;
+-			break;
+-		}
+-
+-		r = x - an[n] * y;
+-		x = y;
+-		y = r;
+-	}
+-
+-	/* Expand the simple continued fraction back to an integer fraction. */
+-	x = 0;
+-	y = 1;
+-
+-	for (i = n; i > 0; --i) {
+-		r = y;
+-		y = an[i-1] * y + x;
+-		x = r;
+-	}
+-
+-	*numerator = y;
+-	*denominator = x;
+-	kfree(an);
+-}
+-
+-/*
+- * Convert a fraction to a frame interval in 100ns multiples. The idea here is
+- * to compute numerator / denominator * 10000000 using 32 bit fixed point
+- * arithmetic only.
+- */
+-u32 uvc_fraction_to_interval(u32 numerator, u32 denominator)
+-{
+-	u32 multiplier;
+-
+-	/* Saturate the result if the operation would overflow. */
+-	if (denominator == 0 ||
+-	    numerator/denominator >= ((u32)-1)/10000000)
+-		return (u32)-1;
+-
+-	/*
+-	 * Divide both the denominator and the multiplier by two until
+-	 * numerator * multiplier doesn't overflow. If anyone knows a better
+-	 * algorithm please let me know.
+-	 */
+-	multiplier = 10000000;
+-	while (numerator > ((u32)-1)/multiplier) {
+-		multiplier /= 2;
+-		denominator /= 2;
+-	}
+-
+-	return denominator ? numerator * multiplier / denominator : 0;
+-}
+-
+ /* ------------------------------------------------------------------------
+  * Terminal and unit management
+  */
+diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+index 4cc3fa6b8c9812..f4d4c33b6dfbd7 100644
+--- a/drivers/media/usb/uvc/uvc_v4l2.c
++++ b/drivers/media/usb/uvc/uvc_v4l2.c
+@@ -386,7 +386,7 @@ static int uvc_v4l2_get_streamparm(struct uvc_streaming *stream,
+ 	mutex_unlock(&stream->mutex);
+ 
+ 	denominator = 10000000;
+-	uvc_simplify_fraction(&numerator, &denominator, 8, 333);
++	v4l2_simplify_fraction(&numerator, &denominator, 8, 333);
+ 
+ 	memset(parm, 0, sizeof(*parm));
+ 	parm->type = stream->type;
+@@ -427,7 +427,7 @@ static int uvc_v4l2_set_streamparm(struct uvc_streaming *stream,
+ 	else
+ 		timeperframe = parm->parm.output.timeperframe;
+ 
+-	interval = uvc_fraction_to_interval(timeperframe.numerator,
++	interval = v4l2_fraction_to_interval(timeperframe.numerator,
+ 		timeperframe.denominator);
+ 	uvc_dbg(stream->dev, FORMAT, "Setting frame interval to %u/%u (%u)\n",
+ 		timeperframe.numerator, timeperframe.denominator, interval);
+@@ -481,7 +481,7 @@ static int uvc_v4l2_set_streamparm(struct uvc_streaming *stream,
+ 	/* Return the actual frame period. */
+ 	timeperframe.numerator = probe.dwFrameInterval;
+ 	timeperframe.denominator = 10000000;
+-	uvc_simplify_fraction(&timeperframe.numerator,
++	v4l2_simplify_fraction(&timeperframe.numerator,
+ 		&timeperframe.denominator, 8, 333);
+ 
+ 	if (parm->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) {
+@@ -1275,7 +1275,7 @@ static int uvc_ioctl_enum_frameintervals(struct file *file, void *fh,
+ 		fival->discrete.numerator =
+ 			frame->dwFrameInterval[index];
+ 		fival->discrete.denominator = 10000000;
+-		uvc_simplify_fraction(&fival->discrete.numerator,
++		v4l2_simplify_fraction(&fival->discrete.numerator,
+ 			&fival->discrete.denominator, 8, 333);
+ 	} else {
+ 		fival->type = V4L2_FRMIVAL_TYPE_STEPWISE;
+@@ -1285,11 +1285,11 @@ static int uvc_ioctl_enum_frameintervals(struct file *file, void *fh,
+ 		fival->stepwise.max.denominator = 10000000;
+ 		fival->stepwise.step.numerator = frame->dwFrameInterval[2];
+ 		fival->stepwise.step.denominator = 10000000;
+-		uvc_simplify_fraction(&fival->stepwise.min.numerator,
++		v4l2_simplify_fraction(&fival->stepwise.min.numerator,
+ 			&fival->stepwise.min.denominator, 8, 333);
+-		uvc_simplify_fraction(&fival->stepwise.max.numerator,
++		v4l2_simplify_fraction(&fival->stepwise.max.numerator,
+ 			&fival->stepwise.max.denominator, 8, 333);
+-		uvc_simplify_fraction(&fival->stepwise.step.numerator,
++		v4l2_simplify_fraction(&fival->stepwise.step.numerator,
+ 			&fival->stepwise.step.denominator, 8, 333);
+ 	}
+ 
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index 24c911aeebce56..ff710bdd38b3fd 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -911,9 +911,6 @@ int uvc_xu_ctrl_query(struct uvc_video_chain *chain,
+ 		      struct uvc_xu_control_query *xqry);
+ 
+ /* Utility functions */
+-void uvc_simplify_fraction(u32 *numerator, u32 *denominator,
+-			   unsigned int n_terms, unsigned int threshold);
+-u32 uvc_fraction_to_interval(u32 numerator, u32 denominator);
+ struct usb_host_endpoint *uvc_find_endpoint(struct usb_host_interface *alts,
+ 					    u8 epaddr);
+ u16 uvc_endpoint_max_bpi(struct usb_device *dev, struct usb_host_endpoint *ep);
+diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+index e0fbe6ba4b6c49..40f56e044640d7 100644
+--- a/drivers/media/v4l2-core/v4l2-common.c
++++ b/drivers/media/v4l2-core/v4l2-common.c
+@@ -484,3 +484,89 @@ s64 v4l2_get_link_freq(struct v4l2_ctrl_handler *handler, unsigned int mul,
+ 	return freq > 0 ? freq : -EINVAL;
+ }
+ EXPORT_SYMBOL_GPL(v4l2_get_link_freq);
++
++/*
++ * Simplify a fraction using a simple continued fraction decomposition. The
++ * idea here is to convert fractions such as 333333/10000000 to 1/30 using
++ * 32 bit arithmetic only. The algorithm is not perfect and relies upon two
++ * arbitrary parameters to remove non-significative terms from the simple
++ * continued fraction decomposition. Using 8 and 333 for n_terms and threshold
++ * respectively seems to give nice results.
++ */
++void v4l2_simplify_fraction(u32 *numerator, u32 *denominator,
++		unsigned int n_terms, unsigned int threshold)
++{
++	u32 *an;
++	u32 x, y, r;
++	unsigned int i, n;
++
++	an = kmalloc_array(n_terms, sizeof(*an), GFP_KERNEL);
++	if (an == NULL)
++		return;
++
++	/*
++	 * Convert the fraction to a simple continued fraction. See
++	 * https://en.wikipedia.org/wiki/Continued_fraction
++	 * Stop if the current term is bigger than or equal to the given
++	 * threshold.
++	 */
++	x = *numerator;
++	y = *denominator;
++
++	for (n = 0; n < n_terms && y != 0; ++n) {
++		an[n] = x / y;
++		if (an[n] >= threshold) {
++			if (n < 2)
++				n++;
++			break;
++		}
++
++		r = x - an[n] * y;
++		x = y;
++		y = r;
++	}
++
++	/* Expand the simple continued fraction back to an integer fraction. */
++	x = 0;
++	y = 1;
++
++	for (i = n; i > 0; --i) {
++		r = y;
++		y = an[i-1] * y + x;
++		x = r;
++	}
++
++	*numerator = y;
++	*denominator = x;
++	kfree(an);
++}
++EXPORT_SYMBOL_GPL(v4l2_simplify_fraction);
++
++/*
++ * Convert a fraction to a frame interval in 100ns multiples. The idea here is
++ * to compute numerator / denominator * 10000000 using 32 bit fixed point
++ * arithmetic only.
++ */
++u32 v4l2_fraction_to_interval(u32 numerator, u32 denominator)
++{
++	u32 multiplier;
++
++	/* Saturate the result if the operation would overflow. */
++	if (denominator == 0 ||
++	    numerator/denominator >= ((u32)-1)/10000000)
++		return (u32)-1;
++
++	/*
++	 * Divide both the denominator and the multiplier by two until
++	 * numerator * multiplier doesn't overflow. If anyone knows a better
++	 * algorithm please let me know.
++	 */
++	multiplier = 10000000;
++	while (numerator > ((u32)-1)/multiplier) {
++		multiplier /= 2;
++		denominator /= 2;
++	}
++
++	return denominator ? numerator * multiplier / denominator : 0;
++}
++EXPORT_SYMBOL_GPL(v4l2_fraction_to_interval);
+diff --git a/include/media/v4l2-common.h b/include/media/v4l2-common.h
+index b708d63995f458..725ff91b26e063 100644
+--- a/include/media/v4l2-common.h
++++ b/include/media/v4l2-common.h
+@@ -540,6 +540,10 @@ int v4l2_fill_pixfmt_mp(struct v4l2_pix_format_mplane *pixfmt, u32 pixelformat,
+ s64 v4l2_get_link_freq(struct v4l2_ctrl_handler *handler, unsigned int mul,
+ 		       unsigned int div);
+ 
++void v4l2_simplify_fraction(u32 *numerator, u32 *denominator,
++		unsigned int n_terms, unsigned int threshold);
++u32 v4l2_fraction_to_interval(u32 numerator, u32 denominator);
++
+ static inline u64 v4l2_buffer_get_timestamp(const struct v4l2_buffer *buf)
+ {
+ 	/*
 -- 
-Regards,
+2.30.2
 
-Laurent Pinchart
