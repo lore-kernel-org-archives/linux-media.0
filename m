@@ -2,843 +2,190 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50C1CECAAD5
-	for <linux-media@archiver.kernel.org>; Fri,  9 Sep 2022 19:16:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E510ECAAA1
+	for <linux-media@archiver.kernel.org>; Fri,  9 Sep 2022 20:32:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbiIITQl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 9 Sep 2022 15:16:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49394 "EHLO
+        id S231444AbiIIUcX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 9 Sep 2022 16:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbiIITQg (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Sep 2022 15:16:36 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25DE813B54D
-        for <linux-media@vger.kernel.org>; Fri,  9 Sep 2022 12:16:33 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1oWjUM-0005j0-Ux; Fri, 09 Sep 2022 21:16:31 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1oWjUK-004sQR-AX; Fri, 09 Sep 2022 21:16:30 +0200
-Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1oWjUK-00HZkI-UO; Fri, 09 Sep 2022 21:16:28 +0200
-From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
-To:     linux-usb@vger.kernel.org
-Cc:     linux-media@vger.kernel.org, balbi@kernel.org,
-        laurent.pinchart@ideasonboard.com, paul.elder@ideasonboard.com,
-        kernel@pengutronix.de, nicolas@ndufresne.ca,
-        kieran.bingham@ideasonboard.com,
-        Daniel Scally <dan.scally@ideasonboard.com>
-Subject: [PATCH v1 2/4] media: uvcvideo: move uvc_format_desc to common header
-Date:   Fri,  9 Sep 2022 21:16:25 +0200
-Message-Id: <20220909191627.4188908-3-m.grzeschik@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220909191627.4188908-1-m.grzeschik@pengutronix.de>
-References: <20220909191627.4188908-1-m.grzeschik@pengutronix.de>
-MIME-Version: 1.0
+        with ESMTP id S231342AbiIIUcG (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Sep 2022 16:32:06 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2081.outbound.protection.outlook.com [40.107.93.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35BF979A7D;
+        Fri,  9 Sep 2022 13:31:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DuMf1QipLUoRLwdHSjENxCrjcmbn/XBjxl9O53GZTk2BUyRacnG955SI/BWWDSOrru3nGgnAG6gjVU5yuFAwn35uuyDYQ2yYvttYtrpMQBjS2h3zk1+h3L32PKMxI1PjFEJx2FYbhguD6zaYjOCf4CuQ2KmiMIEp6e1+c4R+y0wLY0C7BycSY9nqLpKnh9qsX1A4F7gowIN7nPAThFnHHX5EJOJun/VU+U3KMZ4ZFeXGkab/QsWvQtExlbNSrannZhvarl7rTpUC3xdQajrrzpGtq6JJA9NsuvmUjcA8edCh4YQq4SImbPuo/gFC1dQKv/8hA4PnuTwE3FoVjqL7vQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MN7HxcVYGzgmHDNlw/HKW7hxcKSMULlKBDyZFllRvJo=;
+ b=fRWCjCm+/+gnKk4mVccHhQ3BvF0M1q/zRkDmWZ1X3D2fpTH8709f2S0w38/Gtppj8+73F8wG5e0hneHSXh7oOn7d2HcfEGhu+HHOFcp/2A7IkvjfhrOOsH+fVABALaq78irdkfcBEhkTIKd/ae/ogHMx3zZU53+h2dF00XOD20M4H8IosYDx2esE/Fadr9hWTrOlcTDvQPLgR1eCfp2us7C/mIGQhzsi58qyxdfB6GvwBzjpT674B9jLVGcvyd+EoQp+5o21Z6TEJS9uPdqvfh4LMQeVIcgwEN5MZJNw2OLU7+CRz11EfihokPWtD1QDrbTZooUeRSj9rYp2dQmwVQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MN7HxcVYGzgmHDNlw/HKW7hxcKSMULlKBDyZFllRvJo=;
+ b=MsVIyxUIkHs4VuyaTKhfVnC5F1t8CkzMlfVpsJJFHZ8OHUJzsW1sM7OA6OGI4iBjxpsXUgwNrANk4k1azmrSCIS+3u/zp7rSgh6yCvKUyy7rxHUenVHJswMuVnwL7Or16oZFt0YalRb9rPG08UAqQhgN7tMY2d+exrcPyO1Lekk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6000.namprd12.prod.outlook.com (2603:10b6:510:1dc::15)
+ by SA1PR12MB6726.namprd12.prod.outlook.com (2603:10b6:806:255::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.20; Fri, 9 Sep
+ 2022 20:31:07 +0000
+Received: from PH7PR12MB6000.namprd12.prod.outlook.com
+ ([fe80::19c9:3fb4:80b9:cd4d]) by PH7PR12MB6000.namprd12.prod.outlook.com
+ ([fe80::19c9:3fb4:80b9:cd4d%5]) with mapi id 15.20.5612.019; Fri, 9 Sep 2022
+ 20:31:07 +0000
+Message-ID: <b0b81d03-840d-bcf2-3593-5fc0079f1e6a@amd.com>
+Date:   Sat, 10 Sep 2022 02:00:54 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v3 5/6] drm/sched: Use parent fence instead of finished
+Content-Language: en-US
+To:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Arvind Yadav <Arvind.Yadav@amd.com>, Christian.Koenig@amd.com,
+        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
+        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
+        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20220909170845.4946-1-Arvind.Yadav@amd.com>
+ <20220909170845.4946-6-Arvind.Yadav@amd.com>
+ <2937dc45-0b62-7c71-b846-942fa91cbb4e@amd.com>
+From:   "Yadav, Arvind" <arvyadav@amd.com>
+In-Reply-To: <2937dc45-0b62-7c71-b846-942fa91cbb4e@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+X-ClientProxiedBy: PN3PR01CA0063.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:99::23) To PH7PR12MB6000.namprd12.prod.outlook.com
+ (2603:10b6:510:1dc::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB6000:EE_|SA1PR12MB6726:EE_
+X-MS-Office365-Filtering-Correlation-Id: ec168d43-f41f-4e05-651d-08da92a23952
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oDsWkSVdSwz5H+ublCff3P01zIXfyFyUkUi+FccE319DaqIJxd9ZaMb0rbP5PIg87HSPaAm1fBgFXbffQdwRV+EnxFIxLCBq8mjSaazhNghR6ley5vmJ4U+20qlS5fIUcAGncElaxlwjAyRs1261bsAUT2+2cbToWIY4Zpir6OIz+sK8zU8RFrlzdrE0VS2UPJioglmuGPoHe3ag7UIbVxJFIi8FLxEa7J/jXosDjlAIRdLuEPGQyvmyuiFooehVzqF1y2DVnPuIl8HfQDwT9H5VQKH4k/1jr5yd3TVku2m34mGEUtbk/U4HgR+DWt4hgZZqitfFM+uRDEFO9jVE+fXqR4R8Y53PxLE8TrQgci9K002d1jcBPDn6Paey+RVxdls7bin8EKa4yPeK99/aCG484L/kuAB8QBLH2vIDUOHxxYMyJsmZ6Mp7CJ2bGzRkUuqxdb3UAXjeMl9rK2od7OPlIculBpCvY1Y+UBmiDfc1VNwzREWRZckhilPYwsAlda5h15xtrl7JavM5gIYqojV8r/8Qmn7dSaf+/iDIDNSdzeOuosYeJxUdt0H7Zrn4zDFXF30HTiNe9eKhmBPeVYaAPLM8mnhpOMljAq4IwHBO7eER2x+nMpErMrFPy8HX3qxm4zFFzlU9Bsw9Pc4ScTvxq/GxcVS051hO1ZdgJAomzI6cnt8VpOEISu5a2KzGlM5y3OrC5OTzi2XCTu3XhcbFrX7+saew6Myq2EvQMwwiYj5rw/a7K1+/in7R+VDEtCuojPo5yeHQF258+B503utzBPZ0XsSJ+pH2ccO2PjS8pQ91iiCopE9uJd3m19GA
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6000.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(346002)(396003)(366004)(39860400002)(8676002)(36756003)(55236004)(38100700002)(6666004)(41300700001)(53546011)(6486002)(6506007)(921005)(110136005)(316002)(478600001)(8936002)(2906002)(31686004)(31696002)(2616005)(5660300002)(83380400001)(66556008)(66476007)(6512007)(26005)(66946007)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QUZoOWo5U3hhYUhjdEUrc3k1R2NCZWRWUUg5ZlBVZjh2d2t4R1BKOWhkcWpI?=
+ =?utf-8?B?OVk4d0I2TnEvL0gzSmQyRmtZbENKdzRwMmFIQ2NnS2thMjh3aDNrcENRL29l?=
+ =?utf-8?B?STB2OWpkV2hLdXpadm5lN2xmTTJIbTVPVzdacVZZY1VrYWdnMVFTdTFSUWNB?=
+ =?utf-8?B?M0V2UE1CMHBoTWx2WFp3aWJIcVU4ZFRzaTM5WHp5K0M5VWFYS0k2Q0RjUy8x?=
+ =?utf-8?B?Vm1RTmRQWmNBN09oaGgyQ0Nyd3UvVDNSZm1lbExCYmptRlJ0WDR2ZDVTelFS?=
+ =?utf-8?B?SC81dCtoU1htNTA5RHVydmxhM2x5b3QvTHZUMm9yZUdpWUNoTUo4UmlqWjNy?=
+ =?utf-8?B?N3UxR0czdnU3dnpuaFJTeVlvRjd2L1Q5QmRJMVQ3M2RZUzhKd1BkWTZRYnpQ?=
+ =?utf-8?B?RTUwZWZvVTA5Q0VDRGp2WXJmR2toK05DQ2pXZXNmaXFFbHZBV0RWMEpFRWhX?=
+ =?utf-8?B?Wkl3aFVYRmFXQmVZQmtoYjVRTXlOT29aMDgzSUI3Z2dpVjRXWEZFZXMvVWJY?=
+ =?utf-8?B?N1plOGZqb0tQdG51ZjhtSFY3SFhVUEdmSVh6dFVLNTlOS0dVbytiNnJkc2Rq?=
+ =?utf-8?B?OGR4T2J2NEJqZG1OZlhVRXZLQU1WekFpd0lpTHVHdlY2dTBkdmZmSWtHeTlu?=
+ =?utf-8?B?VXoyOVNHbnFoTnptTCtQQkwwQlJQaGxYdWRGS253K0dxT25Qd0p5czRyZ1lF?=
+ =?utf-8?B?NWExYXd5RkEyV0VINDR6S1cwY2lFcUtJWC9ONkVZMHlYZ1JBR1ladTVkaE5J?=
+ =?utf-8?B?RytuY2xSMkh0R3ZWc0NycXBHNVdVNWRGSVIwdytNbzdZSFpEcUVET0d5V0FQ?=
+ =?utf-8?B?bFVMQUljbzM3cEhDeUJYWU5YRFFyM00xSDZXQTNrbFNSVWRWdW03MGkyUGJK?=
+ =?utf-8?B?dmhYaXBlRDI5dFRlVFl2L0gwaU9kMC84ZzlhS1dkVnM0ZGxnNTZZbUFpTnUz?=
+ =?utf-8?B?eDAwZXhVdTZBWlJQMTl4VmNmcmxzRE5WbSt4NERPSWozVG8rV015Rk9HQUNE?=
+ =?utf-8?B?V1JKVG5tdkM0VWlDVGR3dVhERUZtL2JRSHNkdE1DaDRmTTloZXBFZTZBM0cr?=
+ =?utf-8?B?QkdVVGZXY243YlBGN0V5WWEwR1k5MEhsd1BmaEt5bWpxQzVCYkxVRVZDZXlp?=
+ =?utf-8?B?bkRPV2VCbVJTZ3ZBRWE4blRYMHVsUnlsY2UxRlluNGhHOW9QV0NSMzdMdmJN?=
+ =?utf-8?B?NkRZc1dmd1dqRHFXRGJMaldRa0lRTFJtNWFKWUd5d2c1di9yeTF6TVY0bXZi?=
+ =?utf-8?B?Y0FkTFprSEppOFR3QWtvcGJMM1ppOHhTN1ZpdUV1dmh1RXVDcUtnVmxJTVpz?=
+ =?utf-8?B?L2Z2ZmIwcis0VVJwR2l4di9hL01EYnhuUmhrb0Fmb0MzNjhBSjFxVTdTRHdU?=
+ =?utf-8?B?NHV2cHJqN3NhRmNCQnlkdXlzdVZFMDVJb0NzY0w0M3paUlRObE5Wc3BWRHhx?=
+ =?utf-8?B?L2dxWGo2aEdnOXNDQzlIOUFsWFlhaXp5R3NmOHFWbmZpQ05QeFRBbUc0Y1F1?=
+ =?utf-8?B?Rk1panRveFFpMGxmdVRvNk1ERnZHQ3Jub2h4NnhNRXhYQ2RDZCs2djRBSWha?=
+ =?utf-8?B?bHZtQ091dys4Uk1RVXZ4SlZyNzBQSEU5WEc3QjFkYTFQa3grd0J2VUdBelg4?=
+ =?utf-8?B?R0pHRW1icm82eGlLcEJFQXpsZ0xxYS9MakR4TEtkQjZ4Q09ENFFEMDFpNUJQ?=
+ =?utf-8?B?QTd1MExYWnZ2QmF5SkNTTUVLWkpBZ3J6YlJicWdpclhtSm9DUzk1MjBEcHhn?=
+ =?utf-8?B?SWNpTDdFNzVPbUpzNjJxeXlaVjVoNkRBaFNtd00xSDV2OGJxTU9FNjVzdHFU?=
+ =?utf-8?B?ckFKNlpMbWExZUdKeEZUR0UrU0wzVm1UN1dJVkVBSjRvYXpoZi9QQVFzSUhX?=
+ =?utf-8?B?eGtYWDQ4YUg3WEs4RjlsN0pKNlh3UitORUNIQTg4cmJ1VjNKWGJrUGt1NXJo?=
+ =?utf-8?B?MVR6anYyMlBjeWd1bXc5SHlDcVdya2lsTWlqT2hzTVZvNkFUcGlpZEt0L1N4?=
+ =?utf-8?B?R3RHMUVscGVBTU5qVW1ZT2xkYzRTNHA4VVpCRENtL0ZnMC8yeVRQRW9Ic2xv?=
+ =?utf-8?B?eXVobEVPV0U3Vm9vdzNJL2g5SEVmZGdRbE9iSFIzbTl0b1RIV1IxbjUwQ2lk?=
+ =?utf-8?Q?hLsjjrOzQu8EwnUTlnRPtXBVk?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec168d43-f41f-4e05-651d-08da92a23952
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6000.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2022 20:31:07.4322
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UXD373CwCM7gG8yKQnN5EGDHMCE/gCCYsZMAwBvuU3SVmestcOBuNFNpOGbLkAJEKuFnQKk0NEKr/eI6Rx4KMw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6726
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The uvc_format_desc, GUID defines and the uvc_format_by_guid helper is
-also useful for the uvc gadget stack. This patch moves them to a common
-header.
 
-Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
-Tested-by: Daniel Scally <dan.scally@ideasonboard.com>
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+On 9/9/2022 11:02 PM, Andrey Grodzovsky wrote:
+> What exactly is the scenario which this patch fixes in more detail 
+> please  ?
+>
+GPU reset issue started after adding [PATCH 6/6].
 
----
-v13 -> v1:
-    - added Reviewed-by and Tested-by from Dan
-    - moved to this smaller patch series
+Root cause -> In drm_sched_get_cleanup_job(), We use the finished fence 
+status bit to check the job status dma_fence_is_signaled(). If a job is 
+signaled (DMA_FENCE_FLAG_SIGNALED_BIT is set), then we cancel the reset 
+worker thread.
 
- drivers/media/usb/uvc/uvc_ctrl.c   |   1 +
- drivers/media/usb/uvc/uvc_driver.c | 206 +----------------
- drivers/media/usb/uvc/uvcvideo.h   | 144 ------------
- include/media/v4l2-uvc.h           | 359 +++++++++++++++++++++++++++++
- 4 files changed, 361 insertions(+), 349 deletions(-)
- create mode 100644 include/media/v4l2-uvc.h
+After applying [patch 6] now we are checking enable signaling in 
+dma_fence_is_signaled() by checking DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT 
+bit. but signaling is not enabled for the finished fence. As a result, 
+dma_fence_is_signaled() always returns false, and 
+drm_sched_get_cleanup_job() will not cancel the reset worker thread, 
+resulting in the GPU reset.
 
-diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index 8c208db9600b46..b8a00a51679f6d 100644
---- a/drivers/media/usb/uvc/uvc_ctrl.c
-+++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -18,6 +18,7 @@
- #include <linux/workqueue.h>
- #include <linux/atomic.h>
- #include <media/v4l2-ctrls.h>
-+#include <media/v4l2-uvc.h>
- 
- #include "uvcvideo.h"
- 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 0f14dee4b6d794..2891bc9d319280 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -20,6 +20,7 @@
- 
- #include <media/v4l2-common.h>
- #include <media/v4l2-ioctl.h>
-+#include <media/v4l2-uvc.h>
- 
- #include "uvcvideo.h"
- 
-@@ -34,198 +35,6 @@ static unsigned int uvc_quirks_param = -1;
- unsigned int uvc_dbg_param;
- unsigned int uvc_timeout_param = UVC_CTRL_STREAMING_TIMEOUT;
- 
--/* ------------------------------------------------------------------------
-- * Video formats
-- */
--
--static struct uvc_format_desc uvc_fmts[] = {
--	{
--		.name		= "YUV 4:2:2 (YUYV)",
--		.guid		= UVC_GUID_FORMAT_YUY2,
--		.fcc		= V4L2_PIX_FMT_YUYV,
--	},
--	{
--		.name		= "YUV 4:2:2 (YUYV)",
--		.guid		= UVC_GUID_FORMAT_YUY2_ISIGHT,
--		.fcc		= V4L2_PIX_FMT_YUYV,
--	},
--	{
--		.name		= "YUV 4:2:0 (NV12)",
--		.guid		= UVC_GUID_FORMAT_NV12,
--		.fcc		= V4L2_PIX_FMT_NV12,
--	},
--	{
--		.name		= "MJPEG",
--		.guid		= UVC_GUID_FORMAT_MJPEG,
--		.fcc		= V4L2_PIX_FMT_MJPEG,
--	},
--	{
--		.name		= "YVU 4:2:0 (YV12)",
--		.guid		= UVC_GUID_FORMAT_YV12,
--		.fcc		= V4L2_PIX_FMT_YVU420,
--	},
--	{
--		.name		= "YUV 4:2:0 (I420)",
--		.guid		= UVC_GUID_FORMAT_I420,
--		.fcc		= V4L2_PIX_FMT_YUV420,
--	},
--	{
--		.name		= "YUV 4:2:0 (M420)",
--		.guid		= UVC_GUID_FORMAT_M420,
--		.fcc		= V4L2_PIX_FMT_M420,
--	},
--	{
--		.name		= "YUV 4:2:2 (UYVY)",
--		.guid		= UVC_GUID_FORMAT_UYVY,
--		.fcc		= V4L2_PIX_FMT_UYVY,
--	},
--	{
--		.name		= "Greyscale 8-bit (Y800)",
--		.guid		= UVC_GUID_FORMAT_Y800,
--		.fcc		= V4L2_PIX_FMT_GREY,
--	},
--	{
--		.name		= "Greyscale 8-bit (Y8  )",
--		.guid		= UVC_GUID_FORMAT_Y8,
--		.fcc		= V4L2_PIX_FMT_GREY,
--	},
--	{
--		.name		= "Greyscale 8-bit (D3DFMT_L8)",
--		.guid		= UVC_GUID_FORMAT_D3DFMT_L8,
--		.fcc		= V4L2_PIX_FMT_GREY,
--	},
--	{
--		.name		= "IR 8-bit (L8_IR)",
--		.guid		= UVC_GUID_FORMAT_KSMEDIA_L8_IR,
--		.fcc		= V4L2_PIX_FMT_GREY,
--	},
--	{
--		.name		= "Greyscale 10-bit (Y10 )",
--		.guid		= UVC_GUID_FORMAT_Y10,
--		.fcc		= V4L2_PIX_FMT_Y10,
--	},
--	{
--		.name		= "Greyscale 12-bit (Y12 )",
--		.guid		= UVC_GUID_FORMAT_Y12,
--		.fcc		= V4L2_PIX_FMT_Y12,
--	},
--	{
--		.name		= "Greyscale 16-bit (Y16 )",
--		.guid		= UVC_GUID_FORMAT_Y16,
--		.fcc		= V4L2_PIX_FMT_Y16,
--	},
--	{
--		.name		= "BGGR Bayer (BY8 )",
--		.guid		= UVC_GUID_FORMAT_BY8,
--		.fcc		= V4L2_PIX_FMT_SBGGR8,
--	},
--	{
--		.name		= "BGGR Bayer (BA81)",
--		.guid		= UVC_GUID_FORMAT_BA81,
--		.fcc		= V4L2_PIX_FMT_SBGGR8,
--	},
--	{
--		.name		= "GBRG Bayer (GBRG)",
--		.guid		= UVC_GUID_FORMAT_GBRG,
--		.fcc		= V4L2_PIX_FMT_SGBRG8,
--	},
--	{
--		.name		= "GRBG Bayer (GRBG)",
--		.guid		= UVC_GUID_FORMAT_GRBG,
--		.fcc		= V4L2_PIX_FMT_SGRBG8,
--	},
--	{
--		.name		= "RGGB Bayer (RGGB)",
--		.guid		= UVC_GUID_FORMAT_RGGB,
--		.fcc		= V4L2_PIX_FMT_SRGGB8,
--	},
--	{
--		.name		= "RGB565",
--		.guid		= UVC_GUID_FORMAT_RGBP,
--		.fcc		= V4L2_PIX_FMT_RGB565,
--	},
--	{
--		.name		= "BGR 8:8:8 (BGR3)",
--		.guid		= UVC_GUID_FORMAT_BGR3,
--		.fcc		= V4L2_PIX_FMT_BGR24,
--	},
--	{
--		.name		= "H.264",
--		.guid		= UVC_GUID_FORMAT_H264,
--		.fcc		= V4L2_PIX_FMT_H264,
--	},
--	{
--		.name		= "H.265",
--		.guid		= UVC_GUID_FORMAT_H265,
--		.fcc		= V4L2_PIX_FMT_HEVC,
--	},
--	{
--		.name		= "Greyscale 8 L/R (Y8I)",
--		.guid		= UVC_GUID_FORMAT_Y8I,
--		.fcc		= V4L2_PIX_FMT_Y8I,
--	},
--	{
--		.name		= "Greyscale 12 L/R (Y12I)",
--		.guid		= UVC_GUID_FORMAT_Y12I,
--		.fcc		= V4L2_PIX_FMT_Y12I,
--	},
--	{
--		.name		= "Depth data 16-bit (Z16)",
--		.guid		= UVC_GUID_FORMAT_Z16,
--		.fcc		= V4L2_PIX_FMT_Z16,
--	},
--	{
--		.name		= "Bayer 10-bit (SRGGB10P)",
--		.guid		= UVC_GUID_FORMAT_RW10,
--		.fcc		= V4L2_PIX_FMT_SRGGB10P,
--	},
--	{
--		.name		= "Bayer 16-bit (SBGGR16)",
--		.guid		= UVC_GUID_FORMAT_BG16,
--		.fcc		= V4L2_PIX_FMT_SBGGR16,
--	},
--	{
--		.name		= "Bayer 16-bit (SGBRG16)",
--		.guid		= UVC_GUID_FORMAT_GB16,
--		.fcc		= V4L2_PIX_FMT_SGBRG16,
--	},
--	{
--		.name		= "Bayer 16-bit (SRGGB16)",
--		.guid		= UVC_GUID_FORMAT_RG16,
--		.fcc		= V4L2_PIX_FMT_SRGGB16,
--	},
--	{
--		.name		= "Bayer 16-bit (SGRBG16)",
--		.guid		= UVC_GUID_FORMAT_GR16,
--		.fcc		= V4L2_PIX_FMT_SGRBG16,
--	},
--	{
--		.name		= "Depth data 16-bit (Z16)",
--		.guid		= UVC_GUID_FORMAT_INVZ,
--		.fcc		= V4L2_PIX_FMT_Z16,
--	},
--	{
--		.name		= "Greyscale 10-bit (Y10 )",
--		.guid		= UVC_GUID_FORMAT_INVI,
--		.fcc		= V4L2_PIX_FMT_Y10,
--	},
--	{
--		.name		= "IR:Depth 26-bit (INZI)",
--		.guid		= UVC_GUID_FORMAT_INZI,
--		.fcc		= V4L2_PIX_FMT_INZI,
--	},
--	{
--		.name		= "4-bit Depth Confidence (Packed)",
--		.guid		= UVC_GUID_FORMAT_CNF4,
--		.fcc		= V4L2_PIX_FMT_CNF4,
--	},
--	{
--		.name		= "HEVC",
--		.guid		= UVC_GUID_FORMAT_HEVC,
--		.fcc		= V4L2_PIX_FMT_HEVC,
--	},
--};
--
- /* ------------------------------------------------------------------------
-  * Utility functions
-  */
-@@ -245,19 +54,6 @@ struct usb_host_endpoint *uvc_find_endpoint(struct usb_host_interface *alts,
- 	return NULL;
- }
- 
--static struct uvc_format_desc *uvc_format_by_guid(const u8 guid[16])
--{
--	unsigned int len = ARRAY_SIZE(uvc_fmts);
--	unsigned int i;
--
--	for (i = 0; i < len; ++i) {
--		if (memcmp(guid, uvc_fmts[i].guid, 16) == 0)
--			return &uvc_fmts[i];
--	}
--
--	return NULL;
--}
--
- static enum v4l2_colorspace uvc_colorspace(const u8 primaries)
- {
- 	static const enum v4l2_colorspace colorprimaries[] = {
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index ff710bdd38b3fd..df93db259312e7 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -41,144 +41,6 @@
- #define UVC_EXT_GPIO_UNIT		0x7ffe
- #define UVC_EXT_GPIO_UNIT_ID		0x100
- 
--/* ------------------------------------------------------------------------
-- * GUIDs
-- */
--#define UVC_GUID_UVC_CAMERA \
--	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
--	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01}
--#define UVC_GUID_UVC_OUTPUT \
--	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
--	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02}
--#define UVC_GUID_UVC_MEDIA_TRANSPORT_INPUT \
--	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
--	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03}
--#define UVC_GUID_UVC_PROCESSING \
--	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
--	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01}
--#define UVC_GUID_UVC_SELECTOR \
--	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
--	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x02}
--#define UVC_GUID_EXT_GPIO_CONTROLLER \
--	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
--	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03}
--
--#define UVC_GUID_FORMAT_MJPEG \
--	{ 'M',  'J',  'P',  'G', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_YUY2 \
--	{ 'Y',  'U',  'Y',  '2', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_YUY2_ISIGHT \
--	{ 'Y',  'U',  'Y',  '2', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0x00, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_NV12 \
--	{ 'N',  'V',  '1',  '2', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_YV12 \
--	{ 'Y',  'V',  '1',  '2', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_I420 \
--	{ 'I',  '4',  '2',  '0', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_UYVY \
--	{ 'U',  'Y',  'V',  'Y', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_Y800 \
--	{ 'Y',  '8',  '0',  '0', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_Y8 \
--	{ 'Y',  '8',  ' ',  ' ', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_Y10 \
--	{ 'Y',  '1',  '0',  ' ', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_Y12 \
--	{ 'Y',  '1',  '2',  ' ', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_Y16 \
--	{ 'Y',  '1',  '6',  ' ', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_BY8 \
--	{ 'B',  'Y',  '8',  ' ', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_BA81 \
--	{ 'B',  'A',  '8',  '1', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_GBRG \
--	{ 'G',  'B',  'R',  'G', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_GRBG \
--	{ 'G',  'R',  'B',  'G', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_RGGB \
--	{ 'R',  'G',  'G',  'B', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_BG16 \
--	{ 'B',  'G',  '1',  '6', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_GB16 \
--	{ 'G',  'B',  '1',  '6', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_RG16 \
--	{ 'R',  'G',  '1',  '6', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_GR16 \
--	{ 'G',  'R',  '1',  '6', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_RGBP \
--	{ 'R',  'G',  'B',  'P', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_BGR3 \
--	{ 0x7d, 0xeb, 0x36, 0xe4, 0x4f, 0x52, 0xce, 0x11, \
--	 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70}
--#define UVC_GUID_FORMAT_M420 \
--	{ 'M',  '4',  '2',  '0', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--
--#define UVC_GUID_FORMAT_H264 \
--	{ 'H',  '2',  '6',  '4', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_H265 \
--	{ 'H',  '2',  '6',  '5', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_Y8I \
--	{ 'Y',  '8',  'I',  ' ', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_Y12I \
--	{ 'Y',  '1',  '2',  'I', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_Z16 \
--	{ 'Z',  '1',  '6',  ' ', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_RW10 \
--	{ 'R',  'W',  '1',  '0', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_INVZ \
--	{ 'I',  'N',  'V',  'Z', 0x90, 0x2d, 0x58, 0x4a, \
--	 0x92, 0x0b, 0x77, 0x3f, 0x1f, 0x2c, 0x55, 0x6b}
--#define UVC_GUID_FORMAT_INZI \
--	{ 'I',  'N',  'Z',  'I', 0x66, 0x1a, 0x42, 0xa2, \
--	 0x90, 0x65, 0xd0, 0x18, 0x14, 0xa8, 0xef, 0x8a}
--#define UVC_GUID_FORMAT_INVI \
--	{ 'I',  'N',  'V',  'I', 0xdb, 0x57, 0x49, 0x5e, \
--	 0x8e, 0x3f, 0xf4, 0x79, 0x53, 0x2b, 0x94, 0x6f}
--#define UVC_GUID_FORMAT_CNF4 \
--	{ 'C',  ' ',  ' ',  ' ', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--
--#define UVC_GUID_FORMAT_D3DFMT_L8 \
--	{0x32, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--#define UVC_GUID_FORMAT_KSMEDIA_L8_IR \
--	{0x32, 0x00, 0x00, 0x00, 0x02, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--
--#define UVC_GUID_FORMAT_HEVC \
--	{ 'H',  'E',  'V',  'C', 0x00, 0x00, 0x10, 0x00, \
--	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
--
--
- /* ------------------------------------------------------------------------
-  * Driver specific constants.
-  */
-@@ -283,12 +145,6 @@ struct uvc_control {
- 	struct uvc_fh *handle;	/* File handle that last changed the control. */
- };
- 
--struct uvc_format_desc {
--	char *name;
--	u8 guid[16];
--	u32 fcc;
--};
--
- /*
-  * The term 'entity' refers to both UVC units and UVC terminals.
-  *
-diff --git a/include/media/v4l2-uvc.h b/include/media/v4l2-uvc.h
-new file mode 100644
-index 00000000000000..f83e31661333bb
---- /dev/null
-+++ b/include/media/v4l2-uvc.h
-@@ -0,0 +1,359 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ *  v4l2 uvc internal API header
-+ *
-+ *  Some commonly needed functions for uvc drivers
-+ */
-+
-+#ifndef __LINUX_V4L2_UVC_H
-+#define __LINUX_V4L2_UVC_H
-+
-+/* ------------------------------------------------------------------------
-+ * GUIDs
-+ */
-+#define UVC_GUID_UVC_CAMERA \
-+	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
-+	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01}
-+#define UVC_GUID_UVC_OUTPUT \
-+	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
-+	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02}
-+#define UVC_GUID_UVC_MEDIA_TRANSPORT_INPUT \
-+	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
-+	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03}
-+#define UVC_GUID_UVC_PROCESSING \
-+	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
-+	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01}
-+#define UVC_GUID_UVC_SELECTOR \
-+	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
-+	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x02}
-+#define UVC_GUID_EXT_GPIO_CONTROLLER \
-+	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
-+	 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03}
-+
-+#define UVC_GUID_FORMAT_MJPEG \
-+	{ 'M',  'J',  'P',  'G', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_YUY2 \
-+	{ 'Y',  'U',  'Y',  '2', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_YUY2_ISIGHT \
-+	{ 'Y',  'U',  'Y',  '2', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0x00, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_NV12 \
-+	{ 'N',  'V',  '1',  '2', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_YV12 \
-+	{ 'Y',  'V',  '1',  '2', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_I420 \
-+	{ 'I',  '4',  '2',  '0', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_UYVY \
-+	{ 'U',  'Y',  'V',  'Y', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_Y800 \
-+	{ 'Y',  '8',  '0',  '0', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_Y8 \
-+	{ 'Y',  '8',  ' ',  ' ', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_Y10 \
-+	{ 'Y',  '1',  '0',  ' ', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_Y12 \
-+	{ 'Y',  '1',  '2',  ' ', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_Y16 \
-+	{ 'Y',  '1',  '6',  ' ', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_BY8 \
-+	{ 'B',  'Y',  '8',  ' ', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_BA81 \
-+	{ 'B',  'A',  '8',  '1', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_GBRG \
-+	{ 'G',  'B',  'R',  'G', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_GRBG \
-+	{ 'G',  'R',  'B',  'G', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_RGGB \
-+	{ 'R',  'G',  'G',  'B', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_BG16 \
-+	{ 'B',  'G',  '1',  '6', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_GB16 \
-+	{ 'G',  'B',  '1',  '6', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_RG16 \
-+	{ 'R',  'G',  '1',  '6', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_GR16 \
-+	{ 'G',  'R',  '1',  '6', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_RGBP \
-+	{ 'R',  'G',  'B',  'P', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_BGR3 \
-+	{ 0x7d, 0xeb, 0x36, 0xe4, 0x4f, 0x52, 0xce, 0x11, \
-+	 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70}
-+#define UVC_GUID_FORMAT_M420 \
-+	{ 'M',  '4',  '2',  '0', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+
-+#define UVC_GUID_FORMAT_H264 \
-+	{ 'H',  '2',  '6',  '4', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_H265 \
-+	{ 'H',  '2',  '6',  '5', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_Y8I \
-+	{ 'Y',  '8',  'I',  ' ', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_Y12I \
-+	{ 'Y',  '1',  '2',  'I', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_Z16 \
-+	{ 'Z',  '1',  '6',  ' ', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_RW10 \
-+	{ 'R',  'W',  '1',  '0', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_INVZ \
-+	{ 'I',  'N',  'V',  'Z', 0x90, 0x2d, 0x58, 0x4a, \
-+	 0x92, 0x0b, 0x77, 0x3f, 0x1f, 0x2c, 0x55, 0x6b}
-+#define UVC_GUID_FORMAT_INZI \
-+	{ 'I',  'N',  'Z',  'I', 0x66, 0x1a, 0x42, 0xa2, \
-+	 0x90, 0x65, 0xd0, 0x18, 0x14, 0xa8, 0xef, 0x8a}
-+#define UVC_GUID_FORMAT_INVI \
-+	{ 'I',  'N',  'V',  'I', 0xdb, 0x57, 0x49, 0x5e, \
-+	 0x8e, 0x3f, 0xf4, 0x79, 0x53, 0x2b, 0x94, 0x6f}
-+#define UVC_GUID_FORMAT_CNF4 \
-+	{ 'C',  ' ',  ' ',  ' ', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+
-+#define UVC_GUID_FORMAT_D3DFMT_L8 \
-+	{0x32, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+#define UVC_GUID_FORMAT_KSMEDIA_L8_IR \
-+	{0x32, 0x00, 0x00, 0x00, 0x02, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+
-+#define UVC_GUID_FORMAT_HEVC \
-+	{ 'H',  'E',  'V',  'C', 0x00, 0x00, 0x10, 0x00, \
-+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-+
-+/* ------------------------------------------------------------------------
-+ * Video formats
-+ */
-+
-+struct uvc_format_desc {
-+	char *name;
-+	u8 guid[16];
-+	u32 fcc;
-+};
-+
-+static struct uvc_format_desc uvc_fmts[] = {
-+	{
-+		.name		= "YUV 4:2:2 (YUYV)",
-+		.guid		= UVC_GUID_FORMAT_YUY2,
-+		.fcc		= V4L2_PIX_FMT_YUYV,
-+	},
-+	{
-+		.name		= "YUV 4:2:2 (YUYV)",
-+		.guid		= UVC_GUID_FORMAT_YUY2_ISIGHT,
-+		.fcc		= V4L2_PIX_FMT_YUYV,
-+	},
-+	{
-+		.name		= "YUV 4:2:0 (NV12)",
-+		.guid		= UVC_GUID_FORMAT_NV12,
-+		.fcc		= V4L2_PIX_FMT_NV12,
-+	},
-+	{
-+		.name		= "MJPEG",
-+		.guid		= UVC_GUID_FORMAT_MJPEG,
-+		.fcc		= V4L2_PIX_FMT_MJPEG,
-+	},
-+	{
-+		.name		= "YVU 4:2:0 (YV12)",
-+		.guid		= UVC_GUID_FORMAT_YV12,
-+		.fcc		= V4L2_PIX_FMT_YVU420,
-+	},
-+	{
-+		.name		= "YUV 4:2:0 (I420)",
-+		.guid		= UVC_GUID_FORMAT_I420,
-+		.fcc		= V4L2_PIX_FMT_YUV420,
-+	},
-+	{
-+		.name		= "YUV 4:2:0 (M420)",
-+		.guid		= UVC_GUID_FORMAT_M420,
-+		.fcc		= V4L2_PIX_FMT_M420,
-+	},
-+	{
-+		.name		= "YUV 4:2:2 (UYVY)",
-+		.guid		= UVC_GUID_FORMAT_UYVY,
-+		.fcc		= V4L2_PIX_FMT_UYVY,
-+	},
-+	{
-+		.name		= "Greyscale 8-bit (Y800)",
-+		.guid		= UVC_GUID_FORMAT_Y800,
-+		.fcc		= V4L2_PIX_FMT_GREY,
-+	},
-+	{
-+		.name		= "Greyscale 8-bit (Y8  )",
-+		.guid		= UVC_GUID_FORMAT_Y8,
-+		.fcc		= V4L2_PIX_FMT_GREY,
-+	},
-+	{
-+		.name		= "Greyscale 8-bit (D3DFMT_L8)",
-+		.guid		= UVC_GUID_FORMAT_D3DFMT_L8,
-+		.fcc		= V4L2_PIX_FMT_GREY,
-+	},
-+	{
-+		.name		= "IR 8-bit (L8_IR)",
-+		.guid		= UVC_GUID_FORMAT_KSMEDIA_L8_IR,
-+		.fcc		= V4L2_PIX_FMT_GREY,
-+	},
-+	{
-+		.name		= "Greyscale 10-bit (Y10 )",
-+		.guid		= UVC_GUID_FORMAT_Y10,
-+		.fcc		= V4L2_PIX_FMT_Y10,
-+	},
-+	{
-+		.name		= "Greyscale 12-bit (Y12 )",
-+		.guid		= UVC_GUID_FORMAT_Y12,
-+		.fcc		= V4L2_PIX_FMT_Y12,
-+	},
-+	{
-+		.name		= "Greyscale 16-bit (Y16 )",
-+		.guid		= UVC_GUID_FORMAT_Y16,
-+		.fcc		= V4L2_PIX_FMT_Y16,
-+	},
-+	{
-+		.name		= "BGGR Bayer (BY8 )",
-+		.guid		= UVC_GUID_FORMAT_BY8,
-+		.fcc		= V4L2_PIX_FMT_SBGGR8,
-+	},
-+	{
-+		.name		= "BGGR Bayer (BA81)",
-+		.guid		= UVC_GUID_FORMAT_BA81,
-+		.fcc		= V4L2_PIX_FMT_SBGGR8,
-+	},
-+	{
-+		.name		= "GBRG Bayer (GBRG)",
-+		.guid		= UVC_GUID_FORMAT_GBRG,
-+		.fcc		= V4L2_PIX_FMT_SGBRG8,
-+	},
-+	{
-+		.name		= "GRBG Bayer (GRBG)",
-+		.guid		= UVC_GUID_FORMAT_GRBG,
-+		.fcc		= V4L2_PIX_FMT_SGRBG8,
-+	},
-+	{
-+		.name		= "RGGB Bayer (RGGB)",
-+		.guid		= UVC_GUID_FORMAT_RGGB,
-+		.fcc		= V4L2_PIX_FMT_SRGGB8,
-+	},
-+	{
-+		.name		= "RGB565",
-+		.guid		= UVC_GUID_FORMAT_RGBP,
-+		.fcc		= V4L2_PIX_FMT_RGB565,
-+	},
-+	{
-+		.name		= "BGR 8:8:8 (BGR3)",
-+		.guid		= UVC_GUID_FORMAT_BGR3,
-+		.fcc		= V4L2_PIX_FMT_BGR24,
-+	},
-+	{
-+		.name		= "H.264",
-+		.guid		= UVC_GUID_FORMAT_H264,
-+		.fcc		= V4L2_PIX_FMT_H264,
-+	},
-+	{
-+		.name		= "H.265",
-+		.guid		= UVC_GUID_FORMAT_H265,
-+		.fcc		= V4L2_PIX_FMT_HEVC,
-+	},
-+	{
-+		.name		= "Greyscale 8 L/R (Y8I)",
-+		.guid		= UVC_GUID_FORMAT_Y8I,
-+		.fcc		= V4L2_PIX_FMT_Y8I,
-+	},
-+	{
-+		.name		= "Greyscale 12 L/R (Y12I)",
-+		.guid		= UVC_GUID_FORMAT_Y12I,
-+		.fcc		= V4L2_PIX_FMT_Y12I,
-+	},
-+	{
-+		.name		= "Depth data 16-bit (Z16)",
-+		.guid		= UVC_GUID_FORMAT_Z16,
-+		.fcc		= V4L2_PIX_FMT_Z16,
-+	},
-+	{
-+		.name		= "Bayer 10-bit (SRGGB10P)",
-+		.guid		= UVC_GUID_FORMAT_RW10,
-+		.fcc		= V4L2_PIX_FMT_SRGGB10P,
-+	},
-+	{
-+		.name		= "Bayer 16-bit (SBGGR16)",
-+		.guid		= UVC_GUID_FORMAT_BG16,
-+		.fcc		= V4L2_PIX_FMT_SBGGR16,
-+	},
-+	{
-+		.name		= "Bayer 16-bit (SGBRG16)",
-+		.guid		= UVC_GUID_FORMAT_GB16,
-+		.fcc		= V4L2_PIX_FMT_SGBRG16,
-+	},
-+	{
-+		.name		= "Bayer 16-bit (SRGGB16)",
-+		.guid		= UVC_GUID_FORMAT_RG16,
-+		.fcc		= V4L2_PIX_FMT_SRGGB16,
-+	},
-+	{
-+		.name		= "Bayer 16-bit (SGRBG16)",
-+		.guid		= UVC_GUID_FORMAT_GR16,
-+		.fcc		= V4L2_PIX_FMT_SGRBG16,
-+	},
-+	{
-+		.name		= "Depth data 16-bit (Z16)",
-+		.guid		= UVC_GUID_FORMAT_INVZ,
-+		.fcc		= V4L2_PIX_FMT_Z16,
-+	},
-+	{
-+		.name		= "Greyscale 10-bit (Y10 )",
-+		.guid		= UVC_GUID_FORMAT_INVI,
-+		.fcc		= V4L2_PIX_FMT_Y10,
-+	},
-+	{
-+		.name		= "IR:Depth 26-bit (INZI)",
-+		.guid		= UVC_GUID_FORMAT_INZI,
-+		.fcc		= V4L2_PIX_FMT_INZI,
-+	},
-+	{
-+		.name		= "4-bit Depth Confidence (Packed)",
-+		.guid		= UVC_GUID_FORMAT_CNF4,
-+		.fcc		= V4L2_PIX_FMT_CNF4,
-+	},
-+	{
-+		.name		= "HEVC",
-+		.guid		= UVC_GUID_FORMAT_HEVC,
-+		.fcc		= V4L2_PIX_FMT_HEVC,
-+	},
-+};
-+
-+static inline struct uvc_format_desc *uvc_format_by_guid(const u8 guid[16])
-+{
-+	unsigned int len = ARRAY_SIZE(uvc_fmts);
-+	unsigned int i;
-+
-+	for (i = 0; i < len; ++i) {
-+		if (memcmp(guid, uvc_fmts[i].guid, 16) == 0)
-+			return &uvc_fmts[i];
-+	}
-+
-+	return NULL;
-+}
-+
-+#endif /* __LINUX_V4L2_UVC_H */
--- 
-2.30.2
+To Fix the above issue  Christian suggested that we can use 
+parent(hardware) fence instead of finished fence because signaling 
+enabled by the calling of dma_fence_add_callback() for parent fence. As 
+a result, dma_fence_is_signaled() will return the correct fence status 
+and reset worker thread can be cancelled in drm_sched_get_cleanup_job().
 
+~arvind
+
+> Andrey
+>
+> On 2022-09-09 13:08, Arvind Yadav wrote:
+>> Using the parent fence instead of the finished fence
+>> to get the job status. This change is to avoid GPU
+>> scheduler timeout error which can cause GPU reset.
+>>
+>> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
+>> ---
+>>
+>> changes in v1,v2 - Enable signaling for finished fence in sche_main()
+>> is removed
+>>
+>> ---
+>>   drivers/gpu/drm/scheduler/sched_main.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/scheduler/sched_main.c 
+>> b/drivers/gpu/drm/scheduler/sched_main.c
+>> index e0ab14e0fb6b..2ac28ad11432 100644
+>> --- a/drivers/gpu/drm/scheduler/sched_main.c
+>> +++ b/drivers/gpu/drm/scheduler/sched_main.c
+>> @@ -829,7 +829,7 @@ drm_sched_get_cleanup_job(struct 
+>> drm_gpu_scheduler *sched)
+>>       job = list_first_entry_or_null(&sched->pending_list,
+>>                          struct drm_sched_job, list);
+>>   -    if (job && dma_fence_is_signaled(&job->s_fence->finished)) {
+>> +    if (job && dma_fence_is_signaled(job->s_fence->parent)) {
+>>           /* remove job from pending_list */
+>>           list_del_init(&job->list);
+>>   @@ -841,7 +841,7 @@ drm_sched_get_cleanup_job(struct 
+>> drm_gpu_scheduler *sched)
+>>             if (next) {
+>>               next->s_fence->scheduled.timestamp =
+>> -                job->s_fence->finished.timestamp;
+>> +                job->s_fence->parent->timestamp;
+>>               /* start TO timer for next job */
+>>               drm_sched_start_timeout(sched);
+>>           }
