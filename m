@@ -2,190 +2,106 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7A8FECAAD3
-	for <linux-media@archiver.kernel.org>; Fri,  9 Sep 2022 16:32:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF847ECAAD5
+	for <linux-media@archiver.kernel.org>; Fri,  9 Sep 2022 17:01:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231563AbiIIQcw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 9 Sep 2022 12:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
+        id S231347AbiIIRBW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 9 Sep 2022 13:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbiIIQcv (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Sep 2022 12:32:51 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2049.outbound.protection.outlook.com [40.107.92.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5153C9353D;
-        Fri,  9 Sep 2022 09:32:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nrbqs0T1cBPAejskMmPKtcZpLLepjYd7FLqIfjL0OKqoJycoFPPnpz6si9SHWspRG30saFLO7jl1yGBD2uZEErhcOItXydwTeWoQJGDlFVmhz6n8Qc/9hjf1EPAj/D/VVce1BOVVt0fnkqvKGDFw4f9pA9ArosZl9ywTZbRztzO1R9Rqao6RO4F9hEvpqRzeQYGzKHqiaYM6Ys+E+MRFHHDBq9OcoUIZUJkCv99IeeZXoTvFHxBXIUU+NC8RsRSsyNssUC3/rpAGzuWPkW7ps5IWcTyOSvnQWrvKK6SS42sra/hkvkHbCOg/X0afo+gSgWSEZ1tSOBkiCb4+a/EbhQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pVUZAI7C2bLM9TYH9EK9EtboHX20wB6RMYuOnBlJylM=;
- b=mIzaNqdM+xLWKrkLSl4Jw6qAsoGzLULh7ShjXtNk23mDNzctf3T/7GVspezYkoX2wemj+sp5LN4Nh/8JbMEhnULeljxg1qnN5lnWQrFONu6QWRmO8zpa9kLftwvLhtOLt45uUL0hR5TcYg7Hq0N/5hnUbxUS+P3ooXEdp043UR+j3Qp6pDCZizfO3XfxQHJXbms69PXeQ8KYxqK2zdVYbdp0nyzIW1hzvTF7LK997+VodhMVXKryOCPMEv1Geejtg0drK0LeBS/lbhWvuw2HlTB7H08P/fPlGBIhQQW+0xgulCZZPUKfltYjyd2WCjybsMxVLP6Nxh2KN3Kz/VOegw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pVUZAI7C2bLM9TYH9EK9EtboHX20wB6RMYuOnBlJylM=;
- b=DWCSvfd5ReuP8JAkbyCnKQKMexc1BNuXFxvHtp5pag3ExElxaQKoYGpz1mlbPk1J1aqTosmRMPjOP1Gv5dSJm9TtQmxfZI4b1XlIQTp7NX7J74D4V0kvfnTG1LvHY5jbu80Lu2lRMMu3PZ2hZgiI2lKptB7BvvuyGxamBtfeN6k=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB6000.namprd12.prod.outlook.com (2603:10b6:510:1dc::15)
- by IA1PR12MB6210.namprd12.prod.outlook.com (2603:10b6:208:3e6::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.19; Fri, 9 Sep
- 2022 16:32:48 +0000
-Received: from PH7PR12MB6000.namprd12.prod.outlook.com
- ([fe80::19c9:3fb4:80b9:cd4d]) by PH7PR12MB6000.namprd12.prod.outlook.com
- ([fe80::19c9:3fb4:80b9:cd4d%5]) with mapi id 15.20.5612.019; Fri, 9 Sep 2022
- 16:32:47 +0000
-Message-ID: <d88185fb-0c8c-f379-a6ea-856c00a4e5c9@amd.com>
-Date:   Fri, 9 Sep 2022 22:02:34 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v2 2/4] dma-buf: enable signaling for the stub fence on
- debug
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
-        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
-        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
-        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-References: <20220905163502.4032-1-Arvind.Yadav@amd.com>
- <20220905163502.4032-3-Arvind.Yadav@amd.com>
- <37ec6f1d-a3f4-6fa3-6d5c-fe89bb958d87@amd.com>
-From:   "Yadav, Arvind" <arvyadav@amd.com>
-In-Reply-To: <37ec6f1d-a3f4-6fa3-6d5c-fe89bb958d87@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN2PR01CA0009.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:25::14) To PH7PR12MB6000.namprd12.prod.outlook.com
- (2603:10b6:510:1dc::15)
+        with ESMTP id S231146AbiIIRBU (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Sep 2022 13:01:20 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78DEE3D42;
+        Fri,  9 Sep 2022 10:01:15 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 289FZ7Xx031498;
+        Fri, 9 Sep 2022 19:00:51 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=selector1;
+ bh=Gid0SJMDIjGfJ5o7+2Vo2+dM66g08Y+kR1spMDEUU/8=;
+ b=DP9rPmevzWS6E37Dat9nePg3ftn4EUdXm76gGei+wCb8eFWzmbCJ7B59Zo7SYw8H9tS0
+ EeEuvYLiZtdOhuRuc9/WnprvBfaQ+CX5fujgHq7JJKT6bxscZrHrjv1uHJ4DcKVHcy0r
+ DBT+tMAfv62jWvYNqFJEY0UaCcicr17NIpBKUX0/GQmEi/nycTnRtlt5C0MUUZAHE83T
+ Y1cT+EoUsvD2yZgmnTdFf3xl7oGZvf069b8kQLFhW0u7HPebg3rXZF1wEeJjwYjVgKcN
+ ww4EX+rBkD/2s5KQWTUSWSl8ov31JuZiYIlADly58O/p7RzvrBhOi6TzTVKUTRYQ2rlu yQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jergbjcu4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Sep 2022 19:00:51 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9A2A6100038;
+        Fri,  9 Sep 2022 19:00:50 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9594D24551C;
+        Fri,  9 Sep 2022 19:00:50 +0200 (CEST)
+Received: from localhost (10.75.127.120) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.7; Fri, 9 Sep 2022
+ 19:00:50 +0200
+From:   Hugues Fruchet <hugues.fruchet@foss.st.com>
+To:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Philippe CORNU <philippe.cornu@foss.st.com>
+Subject: [PATCH 2/5] media: MAINTAINERS: add entry for STM32 DCMIPP driver
+Date:   Fri, 9 Sep 2022 18:59:56 +0200
+Message-ID: <20220909165959.5899-3-hugues.fruchet@foss.st.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220909165959.5899-1-hugues.fruchet@foss.st.com>
+References: <20220909165959.5899-1-hugues.fruchet@foss.st.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB6000:EE_|IA1PR12MB6210:EE_
-X-MS-Office365-Filtering-Correlation-Id: a0c87008-84c4-4719-c8de-08da9280ee05
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Yh4tgc0myuxqV1Sw5BVMM8TV65RplmWSdHUXGI5BecEuPsERdHzh0r06UJ4TtewIyI1z2sKPbeeZ6RGyQNT9IOymqNX0qIFv2qOn+YZoCwKXCWm83tHDUOSEHSuOFeCb0Djox6FDGkesCuSvUYiX1+EY+1Z1yf3axjb1pfK087hytIEYLIVSo/5nK6XBYBuIvkd9R+Sl1nTr3Apc941FTK3snOrs48kqqQhQ91C89o+Jhv51V+m3GCrXNeneEKiOcMr0bRQGGkPH3EtfHSmYJ7YpUbxETdb3oa4VXpz8i02gf9bFphWHDnLapEBc5WQtFcF9q05r9broHNI6X8DTRLXCOGvVkjQhygmKWWBIe4JDBOHFjSLYKDwElAiXpuppVgfrCAQTOZZPM2hmnZWQndQfB5WtCOLMWpo9I6KqxmdHh0ygHQiwYyZov7kIEfSU7xLlY5fw8ZntDqYVnKinNGDumQOmzLkVDV0DcEU1MzsT3J/zC520EqMV/1NEsBv/VmqS6JQNnMHMa8phQQHuou9y2gHZoNFyNbGe1oXqoZKVeiGf2YehumP0SDI2B+IL0+EKNqra7V36lGlWkLkl7KjZ0O8Sl9I6NAi9w3CCLRAN38uhVj3TWJ619tReV37xqr6PkiZMeSsuF1LFydQIntqrGymcJVwv1tlaYQw3/4vwllniCqzaTxkmZ1BZRsEJoiTNrVYMGEagYukA9bqEN8fP4u8sPKjjQAijtlRt1c4ox8WWBxxtx5vkkH6G8q5jMC9DIMD8qwc2nkhxfTzZxVqw+Lor12L0w0+HKD9/LMlks4bTNZt82Kz3T3ZM8+pt
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6000.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(346002)(366004)(396003)(39860400002)(6666004)(41300700001)(36756003)(53546011)(6506007)(6512007)(26005)(478600001)(2906002)(31686004)(31696002)(316002)(6486002)(66946007)(110136005)(38100700002)(921005)(2616005)(186003)(66574015)(66556008)(8676002)(8936002)(5660300002)(66476007)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aS8yRVpEWlQ4OFpDYWxvVWREUXdGbjArY3A4WkgzZUZDaTI1eEZrbXRUS1M3?=
- =?utf-8?B?YW5pVGEvVDdRS2VOTy83Qk9xTldQL0RXdWlubWI5MlhHVXE0amp2WnpNNXhi?=
- =?utf-8?B?a2lWZHJYUUxKVjUyS0dtKytia2piM3NTb2pwRFBSZ3J5b3Q1bloyNEZGa1R4?=
- =?utf-8?B?WmpYN3NEZVJqZDN0dE5DSzlUQXc3Z2ZIS05OY2xEUWROR2tWWHNjUU9ZNkQ4?=
- =?utf-8?B?bHZWNDAvTWIzSlhPbG5VbmI0M2pJVDRsSGM5S3laM0VsVEE5K3Z5dDJKejVj?=
- =?utf-8?B?YzZ3aTdwcjNta2haaEMxQWtHU2s4YnZDMEZmUTE4UnpqNk1mdTNwUjVzWTc5?=
- =?utf-8?B?MmtCU2ZKRjBiVHpqRmEzdEYzbHZzWGNYOWFFY01DRHQvVHRnekE4cnRjZ081?=
- =?utf-8?B?Q0ZjQkFYTDd5cGNKcnNnSVBTbHZVUHQxRG9tRkhIcVdFVm5RT2xXeHEwU0hh?=
- =?utf-8?B?T0ZzTjJuaVZKd2RTS0dQalhNN0FDT0RNM3Q1RzFtS2JJS0lNVUxqNDFrMHhs?=
- =?utf-8?B?YmdPbkJhQXJ0eEZWY09iTlNnOGJGSnpLSU9uSEYwbEt2WkIrTlNGd2pwcGVo?=
- =?utf-8?B?ZVduMHErMzBpNHo2cGZ3cDdaWFRPZDBGQXlGWjg4aVVaQldEVEpOeDB0NVBq?=
- =?utf-8?B?cG5PaGYrSzhmOVVVcUo2Z2lXL2NvQlJ1ZlRDU0g1NkdRWXZiaVZCd3pZUk5Q?=
- =?utf-8?B?cmpidThYOWJLdWNEMjZpTTlPZEc0eXM0WmFIYU9oekV3NGNOQTdlRTc3ZUR2?=
- =?utf-8?B?YnRvT3VBaGo4ZUtIZW5CZ0JFRVM1YkFnZS96eWdaaHU4T20wYkh0OURtcEVF?=
- =?utf-8?B?R0pmM2F5cUczMWNqYlNhWW5YalJVM0k2UFRUZDVvZVFVUWlDNlVsQ1V2RVBj?=
- =?utf-8?B?NFFvRVN6djFIejZNOVhqUDlqdEdqVmtCR1k0MHhxc09JSEYzRXFwRWRqdXAy?=
- =?utf-8?B?UjFzZllRRGNtelYyczlHVkNOWHRoUDVsVE1UUGkxYWpZSDdTd1FxZDcvNUY3?=
- =?utf-8?B?QzBCcEQxcDF1U2craVhwUG9IbjhucnJjUEV6ZU9udFMxRE1adjdIa2dwTlNo?=
- =?utf-8?B?cEIvaDI4amh4YTUzQXM5SVN5dGU2SmhvWCtrd0ZDeCt6cEw5elJsZ1FHR2tZ?=
- =?utf-8?B?SnhYYk1Fc2EyL1htWmtId1dSSFEvUklqSFNZOWhPVGMwTG5yVUxyQnlTTTB0?=
- =?utf-8?B?bnNOY3JNM3VWQmNjQ21yK2xyOE82WGp4TVBzQzd0eGxBQkZyaXZZY21yQmcv?=
- =?utf-8?B?L3pFZzdxWk9Ya1FuN1pSWnRhUWdYT1ArekJWN2ZtQzNVNHlVMW55dlhBNWtx?=
- =?utf-8?B?NmlKQVVZcENvRllyelNaNWNBeHJ5dzRtMjlUY2lScmp3YndraVNpVmd1V1FV?=
- =?utf-8?B?VXd6RVJ3M0dDMTY2YnI1d0JFY2lHMWVPZDJ5bVN1K0NmZ2RpWU16dFVuZlBt?=
- =?utf-8?B?U2NMSU5xUS96WUZwSmo1K2I5Tkt5NzRiUnpwdFZlOFNEbE1oV3owektkbzM2?=
- =?utf-8?B?Rkkva3duVVhQS1AwUjhBdjBaNGdzdTlEZDNHMitWMDRaanJ1Ui9MZ2VON0ZZ?=
- =?utf-8?B?amRuRDVkY2NqblRmZXh1RlVrUDd1c0QvQmhMNEp6YjZ1SHZadWJ0TGRxZ0tp?=
- =?utf-8?B?TXpEcW5LZWFobDBweE1HY1lsSi9BRERSbzdUVjVYdDA3RUM2NmFtV3FwdzZi?=
- =?utf-8?B?UzZBUWkybXJaT2lzYUp0MGxFTWhva0NSc1poa3lEWDZwU2E1TlJuN1MvUXNy?=
- =?utf-8?B?aXE1b1ZwRFBQSVltdEZKLzJNMFM0ZEhEdjJ5RUVjb0FjZUFIUGpvdVFmaDk5?=
- =?utf-8?B?d1kwMTdPaStEM1dlZlpJTC95R01GS1U2dlp2VzQwSmJuMDNCZzJvT1BQT0lv?=
- =?utf-8?B?Smk3cUdqU015OHVESnhjS1E2UjJTQkwya2hnbjFHbXZSUDNIRnpENmYrL05l?=
- =?utf-8?B?NmkrZG9JMHBaVGlOdG5McGlJbGIyeHVudUJ5NVlsY3Bxd1F6OGsyZk5OQmx4?=
- =?utf-8?B?S29nQko4NnRkNXVTanZDN0RtOFlPdG16SjhCWTBvL1dMK1ZuSWJXY3lQUGU0?=
- =?utf-8?B?U0FKR1dEQnNESEZqRGhuNi9QWXNZRU9hdlhJdWNaOXM5cTk1akVkR3NSdDRD?=
- =?utf-8?Q?SAgAbAZklDZhuGZVJUzjkdJKI?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a0c87008-84c4-4719-c8de-08da9280ee05
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6000.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2022 16:32:47.7702
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mHJRgWcGsQ5WC3SkO0h9/9suwF3Aq/VMnQJ/cVlJQcv6Hhi9wvfeC67ki5vyVLv66nXno5sxEq4CLEtcQRGGBQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6210
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.120]
+X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-09_08,2022-09-09_01,2022-06-22_01
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+From: Alain Volmat <alain.volmat@foss.st.com>
 
-On 9/6/2022 12:39 PM, Christian König wrote:
->
->
-> Am 05.09.22 um 18:35 schrieb Arvind Yadav:
->> Here's on debug enabling software signaling for the stub fence
->> which is always signaled. This fence should enable software
->> signaling otherwise the AMD GPU scheduler will cause a GPU reset
->> due to a GPU scheduler cleanup activity timeout.
->>
->> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
->> ---
->>
->> Changes in v1 :
->> 1- Addressing Christian's comment to remove unnecessary callback.
->> 2- Replacing CONFIG_DEBUG_WW_MUTEX_SLOWPATH instead of CONFIG_DEBUG_FS.
->> 3- The version of this patch is also changed and previously
->> it was [PATCH 3/4]
->>
->> ---
->>   drivers/dma-buf/dma-fence.c | 7 +++++++
->>   1 file changed, 7 insertions(+)
->>
->> diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
->> index 066400ed8841..2378b12538c4 100644
->> --- a/drivers/dma-buf/dma-fence.c
->> +++ b/drivers/dma-buf/dma-fence.c
->> @@ -27,6 +27,10 @@ EXPORT_TRACEPOINT_SYMBOL(dma_fence_signaled);
->>   static DEFINE_SPINLOCK(dma_fence_stub_lock);
->>   static struct dma_fence dma_fence_stub;
->>   +#ifdef CONFIG_DEBUG_WW_MUTEX_SLOWPATH
->> +static bool __dma_fence_enable_signaling(struct dma_fence *fence);
->> +#endif
->> +
->
-> I would rename the function to something like 
-> dma_fence_enable_signaling_locked().
->
-> And please don't add any #ifdef if it isn't absolutely necessary. This 
-> makes the code pretty fragile.
->
->>   /*
->>    * fence context counter: each execution context should have its own
->>    * fence context, this allows checking if fences belong to the same
->> @@ -136,6 +140,9 @@ struct dma_fence *dma_fence_get_stub(void)
->>                      &dma_fence_stub_ops,
->>                      &dma_fence_stub_lock,
->>                      0, 0);
->> +#ifdef CONFIG_DEBUG_WW_MUTEX_SLOWPATH
->> +        __dma_fence_enable_signaling(&dma_fence_stub);
->> +#endif
->
-> Alternatively in this particular case you could just set the bit 
-> manually here since this is part of the dma_fence code anyway.
->
-> Christian.
->
-As per per review comment. I will set the bit manually.
+Add the entry related to the STM32 MEDIA DCMIPP driver within the
+MAINTAINERS file.
 
-~arvind
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+---
+ MAINTAINERS | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
->> dma_fence_signal_locked(&dma_fence_stub);
->>       }
->>       spin_unlock(&dma_fence_stub_lock);
->
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fee641d10847..269ffe3c6f66 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12729,6 +12729,15 @@ T:	git git://linuxtv.org/media_tree.git
+ F:	Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
+ F:	drivers/media/platform/st/stm32/stm32-dcmi.c
+ 
++MEDIA DRIVERS FOR STM32 - DCMIPP
++M:	Hugues Fruchet <hugues.fruchet@foss.st.com>
++M:	Alain Volmat <alain.volmat@foss.st.com>
++L:	linux-media@vger.kernel.org
++S:	Supported
++T:	git git://linuxtv.org/media_tree.git
++F:	Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
++F:	drivers/media/platform/st/stm32/stm32-dcmipp/*
++
+ MEDIA INPUT INFRASTRUCTURE (V4L/DVB)
+ M:	Mauro Carvalho Chehab <mchehab@kernel.org>
+ L:	linux-media@vger.kernel.org
+-- 
+2.25.1
+
