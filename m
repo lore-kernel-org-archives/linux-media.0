@@ -2,39 +2,40 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54B77C6FA8A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B681CC6FA8D
 	for <linux-media@archiver.kernel.org>; Fri,  9 Sep 2022 22:13:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbiIIWNr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 9 Sep 2022 18:13:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43202 "EHLO
+        id S231730AbiIIWNs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 9 Sep 2022 18:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbiIIWNo (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Sep 2022 18:13:44 -0400
+        with ESMTP id S231157AbiIIWNp (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Sep 2022 18:13:45 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1A186B6D
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F54D8E0D7
         for <linux-media@vger.kernel.org>; Fri,  9 Sep 2022 15:13:41 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mgr@pengutronix.de>)
-        id 1oWmFn-000176-8x; Sat, 10 Sep 2022 00:13:39 +0200
+        id 1oWmFn-000178-91; Sat, 10 Sep 2022 00:13:39 +0200
 Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <mgr@pengutronix.de>)
-        id 1oWmFk-004tqu-Bh; Sat, 10 Sep 2022 00:13:38 +0200
+        id 1oWmFk-004tr0-GB; Sat, 10 Sep 2022 00:13:38 +0200
 Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <mgr@pengutronix.de>)
-        id 1oWmFl-0005tZ-5a; Sat, 10 Sep 2022 00:13:37 +0200
+        id 1oWmFl-0005tR-3T; Sat, 10 Sep 2022 00:13:37 +0200
 From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
 To:     linux-usb@vger.kernel.org
 Cc:     linux-media@vger.kernel.org, balbi@kernel.org,
         laurent.pinchart@ideasonboard.com, paul.elder@ideasonboard.com,
         kernel@pengutronix.de, nicolas@ndufresne.ca,
-        kieran.bingham@ideasonboard.com
-Subject: [PATCH v2 4/4] usb: gadget: uvc: add v4l2 try_format api call
-Date:   Sat, 10 Sep 2022 00:13:35 +0200
-Message-Id: <20220909221335.15033-5-m.grzeschik@pengutronix.de>
+        kieran.bingham@ideasonboard.com,
+        Daniel Scally <dan.scally@ideasonboard.com>
+Subject: [PATCH v2 1/4] media: v4l: move helper functions for fractions from uvc to v4l2-common
+Date:   Sat, 10 Sep 2022 00:13:32 +0200
+Message-Id: <20220909221335.15033-2-m.grzeschik@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220909221335.15033-1-m.grzeschik@pengutronix.de>
 References: <20220909221335.15033-1-m.grzeschik@pengutronix.de>
@@ -48,163 +49,301 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch adds the uvc_v4l2_try_format api call to validate
-the setting of v4l2_format. It will fallback to the nearest
-allowed framesize.
+The functions uvc_simplify_fraction and uvc_fraction_to_interval are
+generic helpers which are also useful for other v4l2 drivers. This patch
+moves them to v4l2-common.
 
+Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
+Tested-by: Daniel Scally <dan.scally@ideasonboard.com>
 Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 
 ---
 v13 -> v1:
+    - added Reviewed-by and Tested-by from Dan
     - moved to this smaller patch series
-v1  -> v2:
-    - declaring all helper functions as static
+v1 -> v2:
+    -
 
- drivers/usb/gadget/function/uvc_v4l2.c | 110 +++++++++++++++++++++++++
- 1 file changed, 110 insertions(+)
+ drivers/media/usb/uvc/uvc_driver.c    | 84 --------------------------
+ drivers/media/usb/uvc/uvc_v4l2.c      | 14 ++---
+ drivers/media/usb/uvc/uvcvideo.h      |  3 -
+ drivers/media/v4l2-core/v4l2-common.c | 86 +++++++++++++++++++++++++++
+ include/media/v4l2-common.h           |  4 ++
+ 5 files changed, 97 insertions(+), 94 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index 417655e4a83dd7..c4ed48d6b8a407 100644
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -48,6 +48,31 @@ static struct uvc_format_desc *to_uvc_format(struct uvcg_format *uformat)
- 	return format;
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 9c05776f11d1f0..0f14dee4b6d794 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -329,90 +329,6 @@ static enum v4l2_ycbcr_encoding uvc_ycbcr_enc(const u8 matrix_coefficients)
+ 	return V4L2_YCBCR_ENC_DEFAULT;  /* Reserved */
  }
  
-+static int uvc_v4l2_get_bytesperline(struct uvcg_format *uformat,
-+			      struct uvcg_frame *uframe)
-+{
-+	struct uvcg_uncompressed *u;
-+
-+	if (uformat->type == UVCG_UNCOMPRESSED) {
-+		u = to_uvcg_uncompressed(&uformat->group.cg_item);
-+		if (!u)
-+			return 0;
-+
-+		return u->desc.bBitsPerPixel * uframe->frame.w_width / 8;
-+	}
-+
-+	return 0;
-+}
-+
-+static int uvc_get_frame_size(struct uvcg_format *uformat,
-+		       struct uvcg_frame *uframe)
-+{
-+	unsigned int bpl = uvc_v4l2_get_bytesperline(uformat, uframe);
-+
-+	return bpl ? bpl * uframe->frame.w_height :
-+		uframe->frame.dw_max_video_frame_buffer_size;
-+}
-+
- static struct uvcg_format *find_format_by_index(struct uvc_device *uvc, int index)
- {
- 	struct uvcg_format_ptr *format;
-@@ -105,6 +130,50 @@ static struct uvcg_format *find_format_by_pix(struct uvc_device *uvc,
- 	return uformat;
- }
- 
-+static struct uvcg_frame *find_closest_frame_by_size(struct uvc_device *uvc,
-+					   struct uvcg_format *uformat,
-+					   u16 rw, u16 rh)
-+{
-+	struct uvc_video *video = &uvc->video;
-+	struct uvcg_format_ptr *format;
-+	struct uvcg_frame_ptr *frame;
-+	struct uvcg_frame *uframe = NULL;
-+	unsigned int d, maxd;
-+
-+	/* Find the closest image size. The distance between image sizes is
-+	 * the size in pixels of the non-overlapping regions between the
-+	 * requested size and the frame-specified size.
-+	 */
-+	maxd = (unsigned int)-1;
-+
-+	list_for_each_entry(format, &uvc->header->formats, entry) {
-+		if (format->fmt->type != uformat->type)
-+			continue;
-+
-+		list_for_each_entry(frame, &format->fmt->frames, entry) {
-+			u16 w, h;
-+
-+			w = frame->frm->frame.w_width;
-+			h = frame->frm->frame.w_height;
-+
-+			d = min(w, rw) * min(h, rh);
-+			d = w*h + rw*rh - 2*d;
-+			if (d < maxd) {
-+				maxd = d;
-+				uframe = frame->frm;
-+			}
-+
-+			if (maxd == 0)
-+				break;
-+		}
-+	}
-+
-+	if (!uframe)
-+		uvcg_dbg(&video->uvc->func, "Unsupported size %ux%u\n", rw, rh);
-+
-+	return uframe;
-+}
-+
- /* --------------------------------------------------------------------------
-  * Requests handling
+-/*
+- * Simplify a fraction using a simple continued fraction decomposition. The
+- * idea here is to convert fractions such as 333333/10000000 to 1/30 using
+- * 32 bit arithmetic only. The algorithm is not perfect and relies upon two
+- * arbitrary parameters to remove non-significative terms from the simple
+- * continued fraction decomposition. Using 8 and 333 for n_terms and threshold
+- * respectively seems to give nice results.
+- */
+-void uvc_simplify_fraction(u32 *numerator, u32 *denominator,
+-		unsigned int n_terms, unsigned int threshold)
+-{
+-	u32 *an;
+-	u32 x, y, r;
+-	unsigned int i, n;
+-
+-	an = kmalloc_array(n_terms, sizeof(*an), GFP_KERNEL);
+-	if (an == NULL)
+-		return;
+-
+-	/*
+-	 * Convert the fraction to a simple continued fraction. See
+-	 * https://en.wikipedia.org/wiki/Continued_fraction
+-	 * Stop if the current term is bigger than or equal to the given
+-	 * threshold.
+-	 */
+-	x = *numerator;
+-	y = *denominator;
+-
+-	for (n = 0; n < n_terms && y != 0; ++n) {
+-		an[n] = x / y;
+-		if (an[n] >= threshold) {
+-			if (n < 2)
+-				n++;
+-			break;
+-		}
+-
+-		r = x - an[n] * y;
+-		x = y;
+-		y = r;
+-	}
+-
+-	/* Expand the simple continued fraction back to an integer fraction. */
+-	x = 0;
+-	y = 1;
+-
+-	for (i = n; i > 0; --i) {
+-		r = y;
+-		y = an[i-1] * y + x;
+-		x = r;
+-	}
+-
+-	*numerator = y;
+-	*denominator = x;
+-	kfree(an);
+-}
+-
+-/*
+- * Convert a fraction to a frame interval in 100ns multiples. The idea here is
+- * to compute numerator / denominator * 10000000 using 32 bit fixed point
+- * arithmetic only.
+- */
+-u32 uvc_fraction_to_interval(u32 numerator, u32 denominator)
+-{
+-	u32 multiplier;
+-
+-	/* Saturate the result if the operation would overflow. */
+-	if (denominator == 0 ||
+-	    numerator/denominator >= ((u32)-1)/10000000)
+-		return (u32)-1;
+-
+-	/*
+-	 * Divide both the denominator and the multiplier by two until
+-	 * numerator * multiplier doesn't overflow. If anyone knows a better
+-	 * algorithm please let me know.
+-	 */
+-	multiplier = 10000000;
+-	while (numerator > ((u32)-1)/multiplier) {
+-		multiplier /= 2;
+-		denominator /= 2;
+-	}
+-
+-	return denominator ? numerator * multiplier / denominator : 0;
+-}
+-
+ /* ------------------------------------------------------------------------
+  * Terminal and unit management
   */
-@@ -214,6 +283,46 @@ uvc_v4l2_set_format(struct file *file, void *fh, struct v4l2_format *fmt)
- 	return 0;
+diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+index 4cc3fa6b8c9812..f4d4c33b6dfbd7 100644
+--- a/drivers/media/usb/uvc/uvc_v4l2.c
++++ b/drivers/media/usb/uvc/uvc_v4l2.c
+@@ -386,7 +386,7 @@ static int uvc_v4l2_get_streamparm(struct uvc_streaming *stream,
+ 	mutex_unlock(&stream->mutex);
+ 
+ 	denominator = 10000000;
+-	uvc_simplify_fraction(&numerator, &denominator, 8, 333);
++	v4l2_simplify_fraction(&numerator, &denominator, 8, 333);
+ 
+ 	memset(parm, 0, sizeof(*parm));
+ 	parm->type = stream->type;
+@@ -427,7 +427,7 @@ static int uvc_v4l2_set_streamparm(struct uvc_streaming *stream,
+ 	else
+ 		timeperframe = parm->parm.output.timeperframe;
+ 
+-	interval = uvc_fraction_to_interval(timeperframe.numerator,
++	interval = v4l2_fraction_to_interval(timeperframe.numerator,
+ 		timeperframe.denominator);
+ 	uvc_dbg(stream->dev, FORMAT, "Setting frame interval to %u/%u (%u)\n",
+ 		timeperframe.numerator, timeperframe.denominator, interval);
+@@ -481,7 +481,7 @@ static int uvc_v4l2_set_streamparm(struct uvc_streaming *stream,
+ 	/* Return the actual frame period. */
+ 	timeperframe.numerator = probe.dwFrameInterval;
+ 	timeperframe.denominator = 10000000;
+-	uvc_simplify_fraction(&timeperframe.numerator,
++	v4l2_simplify_fraction(&timeperframe.numerator,
+ 		&timeperframe.denominator, 8, 333);
+ 
+ 	if (parm->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) {
+@@ -1275,7 +1275,7 @@ static int uvc_ioctl_enum_frameintervals(struct file *file, void *fh,
+ 		fival->discrete.numerator =
+ 			frame->dwFrameInterval[index];
+ 		fival->discrete.denominator = 10000000;
+-		uvc_simplify_fraction(&fival->discrete.numerator,
++		v4l2_simplify_fraction(&fival->discrete.numerator,
+ 			&fival->discrete.denominator, 8, 333);
+ 	} else {
+ 		fival->type = V4L2_FRMIVAL_TYPE_STEPWISE;
+@@ -1285,11 +1285,11 @@ static int uvc_ioctl_enum_frameintervals(struct file *file, void *fh,
+ 		fival->stepwise.max.denominator = 10000000;
+ 		fival->stepwise.step.numerator = frame->dwFrameInterval[2];
+ 		fival->stepwise.step.denominator = 10000000;
+-		uvc_simplify_fraction(&fival->stepwise.min.numerator,
++		v4l2_simplify_fraction(&fival->stepwise.min.numerator,
+ 			&fival->stepwise.min.denominator, 8, 333);
+-		uvc_simplify_fraction(&fival->stepwise.max.numerator,
++		v4l2_simplify_fraction(&fival->stepwise.max.numerator,
+ 			&fival->stepwise.max.denominator, 8, 333);
+-		uvc_simplify_fraction(&fival->stepwise.step.numerator,
++		v4l2_simplify_fraction(&fival->stepwise.step.numerator,
+ 			&fival->stepwise.step.denominator, 8, 333);
+ 	}
+ 
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index 24c911aeebce56..ff710bdd38b3fd 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -911,9 +911,6 @@ int uvc_xu_ctrl_query(struct uvc_video_chain *chain,
+ 		      struct uvc_xu_control_query *xqry);
+ 
+ /* Utility functions */
+-void uvc_simplify_fraction(u32 *numerator, u32 *denominator,
+-			   unsigned int n_terms, unsigned int threshold);
+-u32 uvc_fraction_to_interval(u32 numerator, u32 denominator);
+ struct usb_host_endpoint *uvc_find_endpoint(struct usb_host_interface *alts,
+ 					    u8 epaddr);
+ u16 uvc_endpoint_max_bpi(struct usb_device *dev, struct usb_host_endpoint *ep);
+diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+index e0fbe6ba4b6c49..40f56e044640d7 100644
+--- a/drivers/media/v4l2-core/v4l2-common.c
++++ b/drivers/media/v4l2-core/v4l2-common.c
+@@ -484,3 +484,89 @@ s64 v4l2_get_link_freq(struct v4l2_ctrl_handler *handler, unsigned int mul,
+ 	return freq > 0 ? freq : -EINVAL;
  }
- 
-+static int
-+uvc_v4l2_try_format(struct file *file, void *fh, struct v4l2_format *fmt)
+ EXPORT_SYMBOL_GPL(v4l2_get_link_freq);
++
++/*
++ * Simplify a fraction using a simple continued fraction decomposition. The
++ * idea here is to convert fractions such as 333333/10000000 to 1/30 using
++ * 32 bit arithmetic only. The algorithm is not perfect and relies upon two
++ * arbitrary parameters to remove non-significative terms from the simple
++ * continued fraction decomposition. Using 8 and 333 for n_terms and threshold
++ * respectively seems to give nice results.
++ */
++void v4l2_simplify_fraction(u32 *numerator, u32 *denominator,
++		unsigned int n_terms, unsigned int threshold)
 +{
-+	struct video_device *vdev = video_devdata(file);
-+	struct uvc_device *uvc = video_get_drvdata(vdev);
-+	struct uvc_video *video = &uvc->video;
-+	struct uvcg_format *uformat;
-+	struct uvcg_frame *uframe;
-+	u8 *fcc;
++	u32 *an;
++	u32 x, y, r;
++	unsigned int i, n;
 +
-+	if (fmt->type != video->queue.queue.type)
-+		return -EINVAL;
++	an = kmalloc_array(n_terms, sizeof(*an), GFP_KERNEL);
++	if (an == NULL)
++		return;
 +
-+	fcc = (u8 *)&fmt->fmt.pix.pixelformat;
-+	uvcg_dbg(&uvc->func, "Trying format 0x%08x (%c%c%c%c): %ux%u\n",
-+		fmt->fmt.pix.pixelformat,
-+		fcc[0], fcc[1], fcc[2], fcc[3],
-+		fmt->fmt.pix.width, fmt->fmt.pix.height);
++	/*
++	 * Convert the fraction to a simple continued fraction. See
++	 * https://en.wikipedia.org/wiki/Continued_fraction
++	 * Stop if the current term is bigger than or equal to the given
++	 * threshold.
++	 */
++	x = *numerator;
++	y = *denominator;
 +
-+	uformat = find_format_by_pix(uvc, fmt->fmt.pix.pixelformat);
-+	if (!uformat)
-+		return -EINVAL;
++	for (n = 0; n < n_terms && y != 0; ++n) {
++		an[n] = x / y;
++		if (an[n] >= threshold) {
++			if (n < 2)
++				n++;
++			break;
++		}
 +
-+	uframe = find_closest_frame_by_size(uvc, uformat,
-+				fmt->fmt.pix.width, fmt->fmt.pix.height);
-+	if (!uframe)
-+		return -EINVAL;
++		r = x - an[n] * y;
++		x = y;
++		y = r;
++	}
 +
-+	fmt->fmt.pix.width = uframe->frame.w_width;
-+	fmt->fmt.pix.height = uframe->frame.w_height;
-+	fmt->fmt.pix.field = V4L2_FIELD_NONE;
-+	fmt->fmt.pix.bytesperline = uvc_v4l2_get_bytesperline(uformat, uframe);
-+	fmt->fmt.pix.sizeimage = uvc_get_frame_size(uformat, uframe);
-+	fmt->fmt.pix.pixelformat = to_uvc_format(uformat)->fcc;
-+	fmt->fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
-+	fmt->fmt.pix.priv = 0;
++	/* Expand the simple continued fraction back to an integer fraction. */
++	x = 0;
++	y = 1;
 +
-+	return 0;
++	for (i = n; i > 0; --i) {
++		r = y;
++		y = an[i-1] * y + x;
++		x = r;
++	}
++
++	*numerator = y;
++	*denominator = x;
++	kfree(an);
 +}
++EXPORT_SYMBOL_GPL(v4l2_simplify_fraction);
 +
- static int
- uvc_v4l2_enum_frameintervals(struct file *file, void *fh,
- 		struct v4l2_frmivalenum *fival)
-@@ -471,6 +580,7 @@ uvc_v4l2_ioctl_default(struct file *file, void *fh, bool valid_prio,
++/*
++ * Convert a fraction to a frame interval in 100ns multiples. The idea here is
++ * to compute numerator / denominator * 10000000 using 32 bit fixed point
++ * arithmetic only.
++ */
++u32 v4l2_fraction_to_interval(u32 numerator, u32 denominator)
++{
++	u32 multiplier;
++
++	/* Saturate the result if the operation would overflow. */
++	if (denominator == 0 ||
++	    numerator/denominator >= ((u32)-1)/10000000)
++		return (u32)-1;
++
++	/*
++	 * Divide both the denominator and the multiplier by two until
++	 * numerator * multiplier doesn't overflow. If anyone knows a better
++	 * algorithm please let me know.
++	 */
++	multiplier = 10000000;
++	while (numerator > ((u32)-1)/multiplier) {
++		multiplier /= 2;
++		denominator /= 2;
++	}
++
++	return denominator ? numerator * multiplier / denominator : 0;
++}
++EXPORT_SYMBOL_GPL(v4l2_fraction_to_interval);
+diff --git a/include/media/v4l2-common.h b/include/media/v4l2-common.h
+index b708d63995f458..725ff91b26e063 100644
+--- a/include/media/v4l2-common.h
++++ b/include/media/v4l2-common.h
+@@ -540,6 +540,10 @@ int v4l2_fill_pixfmt_mp(struct v4l2_pix_format_mplane *pixfmt, u32 pixelformat,
+ s64 v4l2_get_link_freq(struct v4l2_ctrl_handler *handler, unsigned int mul,
+ 		       unsigned int div);
  
- const struct v4l2_ioctl_ops uvc_v4l2_ioctl_ops = {
- 	.vidioc_querycap = uvc_v4l2_querycap,
-+	.vidioc_try_fmt_vid_out = uvc_v4l2_try_format,
- 	.vidioc_g_fmt_vid_out = uvc_v4l2_get_format,
- 	.vidioc_s_fmt_vid_out = uvc_v4l2_set_format,
- 	.vidioc_enum_frameintervals = uvc_v4l2_enum_frameintervals,
++void v4l2_simplify_fraction(u32 *numerator, u32 *denominator,
++		unsigned int n_terms, unsigned int threshold);
++u32 v4l2_fraction_to_interval(u32 numerator, u32 denominator);
++
+ static inline u64 v4l2_buffer_get_timestamp(const struct v4l2_buffer *buf)
+ {
+ 	/*
 -- 
 2.30.2
 
