@@ -2,84 +2,173 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75D3AECAAD3
-	for <linux-media@archiver.kernel.org>; Fri,  9 Sep 2022 03:31:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 931B3C6FA89
+	for <linux-media@archiver.kernel.org>; Fri,  9 Sep 2022 06:29:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiIIDbE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 8 Sep 2022 23:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33032 "EHLO
+        id S230490AbiIIG3A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 9 Sep 2022 02:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiIIDbC (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Sep 2022 23:31:02 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E0783BEB
-        for <linux-media@vger.kernel.org>; Thu,  8 Sep 2022 20:31:01 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 147A487F;
-        Fri,  9 Sep 2022 05:30:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1662694258;
-        bh=f20O3rZyaowG0YdmhEgTIqGv7+GSqWlXZDw2y4akimg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=rCQrSJi7XYM1b910LIooGCI/tja5XoMtxrZVm2LAUVF7ZEc0aLSYZ2eUplKwq0jlJ
-         FpaHZIBEtA3lD4GcUfXOPG8KgPZoSyy5XN8+ysOULZluOOMP3bmiXr8rjCHkUSUQRp
-         BsPFfrbAw7FH3D4mdkbcO8dmObgNNRlxuZ9HBXEU=
-Date:   Fri, 9 Sep 2022 06:30:41 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     linux-media@vger.kernel.org
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Daniel Scally <djrscally@gmail.com>,
-        Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Hugues Fruchet <hugues.fruchet@st.com>,
-        Michael Olbrich <m.olbrich@pengutronix.de>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Benjamin MUGNIER <benjamin.mugnier@foss.st.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [Media Summit] V4L2 streams support
-Message-ID: <YxqzYS4U7qpGyjSX@pendragon.ideasonboard.com>
+        with ESMTP id S230483AbiIIG26 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Sep 2022 02:28:58 -0400
+X-Greylist: delayed 100 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 08 Sep 2022 23:28:57 PDT
+Received: from condef-07.nifty.com (condef-07.nifty.com [202.248.20.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15D912ACD9;
+        Thu,  8 Sep 2022 23:28:56 -0700 (PDT)
+Received: from conssluserg-04.nifty.com ([10.126.8.83])by condef-07.nifty.com with ESMTP id 2896NZ7G010861;
+        Fri, 9 Sep 2022 15:23:35 +0900
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 2896NJ2b016840;
+        Fri, 9 Sep 2022 15:23:20 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 2896NJ2b016840
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1662704600;
+        bh=M8RU77rFPgb9iCDZlcgmp1AIsNWV2fZAChJbFjqGEXM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=z9ef8H04q8ejPMDdTZVr2QgANUJssDpWr44P8Mqs6YSyAgIK/FjPofKCpmo9coGPW
+         UztnJvygPDhKFnFQ7TjuZJb17kQ4OgKsqc2iGGfJPdUa6kiAjIVQI70gQrYhzRBqnZ
+         j8o3SHCjh1eNQWEVlDKeU1Z5kGq6rvdE1caB6Q9DcucNDrvoVBDQ3afvZ64llg1+ZX
+         Tp50MfrCK62W2PAZInSRCuQZ8+OK2DZYcNmX4bmyHr1VGuvTCxQIMb9Lbxpb76TZmt
+         WIsjVDjdNYYF/LyJWnlQUgHnK+FzjA2gwHEXeFC88qEz78AeYwZIVq24kOnU6uWMzs
+         e8+sL5U3ME5RA==
+X-Nifty-SrcIP: [209.85.160.42]
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-1225219ee46so1556100fac.2;
+        Thu, 08 Sep 2022 23:23:20 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1Xuq79pN+VlE0AGlko35nGnLZEEM7oPJ/T8rZlhIEVlN4xRp/t
+        PbbJq3v1I6thI6vt8Zts09y07wtwvwVchu194w4=
+X-Google-Smtp-Source: AA6agR6TkF3ZCXHdyUVvKfeexJcA6/iUO15vrP/nUMylWe8sfgvSiu+88R6kp9AHz26LHLW2L4i7YtsZ/0OFNLM4DXc=
+X-Received: by 2002:a05:6870:f626:b0:10d:a798:f3aa with SMTP id
+ ek38-20020a056870f62600b0010da798f3aamr3955805oab.194.1662704599250; Thu, 08
+ Sep 2022 23:23:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20220908104337.11940-1-lukas.bulwahn@gmail.com>
+ <20220908104337.11940-6-lukas.bulwahn@gmail.com> <YxnQ3+0BfbmUbBnH@linux.ibm.com>
+In-Reply-To: <YxnQ3+0BfbmUbBnH@linux.ibm.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 9 Sep 2022 15:22:43 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAS_u_BkcQ4A34ENdSy=J9KOpgzHS6NSXkGBiVy_7CqPFQ@mail.gmail.com>
+Message-ID: <CAK7LNAS_u_BkcQ4A34ENdSy=J9KOpgzHS6NSXkGBiVy_7CqPFQ@mail.gmail.com>
+Subject: Re: [PATCH 5/6] mm: Kconfig: make config SECRETMEM visible with EXPERT
+To:     Mike Rapoport <rppt@linux.ibm.com>
+Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+On Thu, Sep 8, 2022 at 8:24 PM Mike Rapoport <rppt@linux.ibm.com> wrote:
+>
+> On Thu, Sep 08, 2022 at 12:43:36PM +0200, Lukas Bulwahn wrote:
+> > Commit 6a108a14fa35 ("kconfig: rename CONFIG_EMBEDDED to CONFIG_EXPERT")
+> > introduces CONFIG_EXPERT to carry the previous intent of CONFIG_EMBEDDED
+> > and just gives that intent a much better name. That has been clearly a good
+> > and long overdue renaming, and it is clearly an improvement to the kernel
+> > build configuration that has shown to help managing the kernel build
+> > configuration in the last decade.
+> >
+> > However, rather than bravely and radically just deleting CONFIG_EMBEDDED,
+> > this commit gives CONFIG_EMBEDDED a new intended semantics, but keeps it
+> > open for future contributors to implement that intended semantics:
+> >
+> >     A new CONFIG_EMBEDDED option is added that automatically selects
+> >     CONFIG_EXPERT when enabled and can be used in the future to isolate
+> >     options that should only be considered for embedded systems (RISC
+> >     architectures, SLOB, etc).
+> >
+> > Since then, this CONFIG_EMBEDDED implicitly had two purposes:
+> >
+> >   - It can make even more options visible beyond what CONFIG_EXPERT makes
+> >     visible. In other words, it may introduce another level of enabling the
+> >     visibility of configuration options: always visible, visible with
+> >     CONFIG_EXPERT and visible with CONFIG_EMBEDDED.
+> >
+> >   - Set certain default values of some configurations differently,
+> >     following the assumption that configuring a kernel build for an
+> >     embedded system generally starts with a different set of default values
+> >     compared to kernel builds for all other kind of systems.
+> >
+> > Considering the second purpose, note that already probably arguing that a
+> > kernel build for an embedded system would choose some values differently is
+> > already tricky: the set of embedded systems with Linux kernels is already
+> > quite diverse. Many embedded system have powerful CPUs and it would not be
+> > clear that all embedded systems just optimize towards one specific aspect,
+> > e.g., a smaller kernel image size. So, it is unclear if starting with "one
+> > set of default configuration" that is induced by CONFIG_EMBEDDED is a good
+> > offer for developers configuring their kernels.
+> >
+> > Also, the differences of needed user-space features in an embedded system
+> > compared to a non-embedded system are probably difficult or even impossible
+> > to name in some generic way.
+> >
+> > So it is not surprising that in the last decade hardly anyone has
+> > contributed changes to make something default differently in case of
+> > CONFIG_EMBEDDED=y.
+> >
+> > Currently, in v6.0-rc4, SECRETMEM is the only config switched off if
+> > CONFIG_EMBEDDED=y.
+> >
+> > As long as that is actually the only option that currently is selected or
+> > deselected, it is better to just make SECRETMEM configurable at build time
+> > by experts using menuconfig instead.
+> >
+> > Make SECRETMEM configurable when EXPERT is set and otherwise default to
+> > yes. Further, SECRETMEM needs ARCH_HAS_SET_DIRECT_MAP.
+> >
+> > This allows us to remove CONFIG_EMBEDDED in the close future.
+> >
+> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+>
+> Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+>
+> > ---
+> >  mm/Kconfig | 8 +++++++-
+> >  1 file changed, 7 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/mm/Kconfig b/mm/Kconfig
+> > index ceec438c0741..aa154c20b129 100644
+> > --- a/mm/Kconfig
+> > +++ b/mm/Kconfig
+> > @@ -1068,7 +1068,13 @@ config IO_MAPPING
+> >       bool
+> >
+> >  config SECRETMEM
+> > -     def_bool ARCH_HAS_SET_DIRECT_MAP && !EMBEDDED
+> > +     default y
+> > +     bool "Enable memfd_secret() system call" if EXPERT
+> > +     depends on ARCH_HAS_SET_DIRECT_MAP
+> > +     help
+> > +       Enable the memfd_secret() system call with the ability to create
+> > +       memory areas visible only in the context of the owning process and
+> > +       not mapped to other processes and other kernel page tables.
+> >
+> >  config ANON_VMA_NAME
+> >       bool "Anonymous VMA name support"
+> > --
+> > 2.17.1
+> >
+>
+> --
+> Sincerely yours,
+> Mike.
 
-In preparation for the discussion regarding V4L2 streams support ([1])
-during the media summit, I've prepared a slide deck that explains the
-API proposal. You can download it from [2].
-
-I tried to go through the whole API, including the userspace API, the
-in-kernel API and the in-kernel helpers, with enough details to allow at
-least a basic understanding of the proposal. If anyone has time to
-provide feedback on what lacks clarity, I will try to find time to
-update the slides before Monday.
-
-There is also a set of questions in the slides, covering points that I'm
-either unsure or not very happy about. Those will need to be sorted out
-in order to merge this API. Additional questions are welcome, possibly
-by e-mail already.
-
-Tomi, I would appreciate if you could have a look, and let me know if
-I've missed something, made obvious mistakes, or if you have other open
-questions about the userspace API that need to be addressed and should
-be discussed during the media summit.
-
-[1] https://lore.kernel.org/linux-media/20220831141357.1396081-1-tomi.valkeinen@ideasonboard.com
-[2] https://ideasonboard.org/talks/20220912-media-summit-streams.pdf
+Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
 
 -- 
-Regards,
-
-Laurent Pinchart
+Best Regards
+Masahiro Yamada
