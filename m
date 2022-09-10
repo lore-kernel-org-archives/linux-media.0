@@ -2,123 +2,103 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76DDAC6FA82
-	for <linux-media@archiver.kernel.org>; Sat, 10 Sep 2022 12:50:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84D5AECAAD3
+	for <linux-media@archiver.kernel.org>; Sat, 10 Sep 2022 14:40:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbiIJMuS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 10 Sep 2022 08:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43050 "EHLO
+        id S229637AbiIJOku (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 10 Sep 2022 10:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiIJMuS (ORCPT
+        with ESMTP id S229491AbiIJOkr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 10 Sep 2022 08:50:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6772FFDD
-        for <linux-media@vger.kernel.org>; Sat, 10 Sep 2022 05:50:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FE1A60C38
-        for <linux-media@vger.kernel.org>; Sat, 10 Sep 2022 12:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70223C433C1;
-        Sat, 10 Sep 2022 12:50:12 +0000 (UTC)
-Message-ID: <29b69b01-15c9-28dc-4e21-7e54be171059@xs4all.nl>
-Date:   Sat, 10 Sep 2022 14:50:10 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [Media Summit] Imaging Sensor functionality
-Content-Language: en-US
-To:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Hidenori Kobayashi <hidenorik@chromium.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Michael Olbrich <m.olbrich@pengutronix.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Daniel Scally <djrscally@gmail.com>,
-        =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sat, 10 Sep 2022 10:40:47 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996DD28E34;
+        Sat, 10 Sep 2022 07:40:37 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28ACu4iO026809;
+        Sat, 10 Sep 2022 16:40:20 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=selector1;
+ bh=I8iLxoJxgLWgVMiLGsUDh1d+t3CJSTgq9exY9ZcW1Ko=;
+ b=Dz0aT+U60j7Q2tx83ij/hD8wYKJPxuctH2xPpIZDDPrPg+JZ8CJY4GtITqiuwBTlwiuH
+ LEjbS96Lt768u4Qyqt+URiMiiaAk78OPbcmslZ6NjUyeh/bolptjsDsyWeQpK+hxzi16
+ YvpMuu8FDv2JYyVLu4wmRtqnjIdGXOYcGECrSbrcqV0+9P867n03GkA2xcgYzDWQGF/V
+ KlKI23ig0rpt8ZGEFLtunmoWVrPW0DGE1Xrs4KKw1/0oJdEpzvV/LQhSKlopjZBTsAqb
+ Lq35CbMiG395flkarH3d/6NqdI4aMHmC5GaEb9RdxTs/F8+6ADWhXmr9lZRy+BDUCLtV Yw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jgjtt1uuu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 10 Sep 2022 16:40:20 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 17474100034;
+        Sat, 10 Sep 2022 16:40:20 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0E91922D164;
+        Sat, 10 Sep 2022 16:40:20 +0200 (CEST)
+Received: from localhost (10.75.127.120) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Sat, 10 Sep
+ 2022 16:40:19 +0200
+From:   Hugues Fruchet <hugues.fruchet@foss.st.com>
+To:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Benjamin MUGNIER <benjamin.mugnier@foss.st.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-References: <CAPY8ntBGKkg=KOXaP9bBv6Y8c7Mgut0=w-LTsvKHZac=zzdJDQ@mail.gmail.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <CAPY8ntBGKkg=KOXaP9bBv6Y8c7Mgut0=w-LTsvKHZac=zzdJDQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Philippe CORNU <philippe.cornu@foss.st.com>
+Subject: [PATCH v1 4/5] ARM: dts: stm32: add dcmipp support to stm32mp135
+Date:   Sat, 10 Sep 2022 16:40:09 +0200
+Message-ID: <20220910144010.34272-5-hugues.fruchet@foss.st.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220910144010.34272-1-hugues.fruchet@foss.st.com>
+References: <20220910144010.34272-1-hugues.fruchet@foss.st.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.120]
+X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-10_06,2022-09-09_01,2022-06-22_01
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dave,
+Add dcmipp support to STM32MP135.
 
-On 06/09/2022 18:14, Dave Stevenson wrote:
-> Hi All.
-> 
-> I realise that I'm in a slightly different position from many mainline
-> Linux-media developers in that I see multiple use cases for the same
-> sensor, rather than a driver predominantly being for one
-> product/platform. I'm therefore wanting to look at generic solutions
-> and fully featured drivers. Users get to decide the use cases, not the
-> hardware designers.
-> 
-> The issues I've raised are things that I've encountered and would
-> benefit from a discussion to get views as to the direction that is
-> perceived to be workable. I appreciate that some can not be solved
-> immediately, but want to avoid too much bikeshedding in the first
-> round of patches.
-> What's realistic, and what pitfalls/limitations immediately jump out at people.
-> 
-> Slides are at https://drive.google.com/file/d/1vjYJjTNRL1P3j6G4Nx2ZpjFtTBTNdeFG/view?usp=sharing
-> 
-> See you on Monday.
-> 
->   Dave
+Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+---
+ arch/arm/boot/dts/stm32mp135.dtsi | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Some comments for the meeting on Monday:
+diff --git a/arch/arm/boot/dts/stm32mp135.dtsi b/arch/arm/boot/dts/stm32mp135.dtsi
+index abf2acd37b4e..fcf0592c01fd 100644
+--- a/arch/arm/boot/dts/stm32mp135.dtsi
++++ b/arch/arm/boot/dts/stm32mp135.dtsi
+@@ -8,5 +8,14 @@
+ 
+ / {
+ 	soc {
++		dcmipp: dcmipp@5a000000 {
++			compatible = "st,stm32mp13-dcmipp";
++			reg = <0x5a000000 0x400>;
++			interrupts = <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
++			resets = <&rcc DCMIPP_R>;
++			clocks = <&rcc DCMIPP_K>;
++			clock-names = "kclk";
++			status = "disabled";
++		};
+ 	};
+ };
+-- 
+2.25.1
 
-- On-sensor temperature sensing:
-
-If a control is used to read this, but the value is
-not available yet, then -EACCES can be returned. That's already defined as a valid return
-code in the API, it would just need to be extended for this use-case.
-
-- Sync sensors:
-
-Should it be part of the DT? That depends, I think, on whether this is a pure sw mechanism,
-or whether the wiring dictates which sensor can be master and which can be slaves. I assume
-that at the very least there has to be a way to group sensors that are/can be connected to
-the same master sync signal.
-
-- Lens assemblies:
-
-For what it is worth, Cisco uses motor controlled lenses and irises. We extended the camera
-controls with these new controls:
-
-#define V4L2_CID_FOCUS_CURRENT                  (V4L2_CID_CAMERA_CLASS_BASE+36)
-#define V4L2_CID_IRIS_CURRENT                   (V4L2_CID_CAMERA_CLASS_BASE+38)
-#define V4L2_CID_FOCUS_MOTOR_STATUS             (V4L2_CID_CAMERA_CLASS_BASE+41)
-#define V4L2_CID_IRIS_MOTOR_STATUS              (V4L2_CID_CAMERA_CLASS_BASE+43)
-enum v4l2_motor_status {
-        V4L2_MOTOR_STATUS_IDLE                  = (0),
-        V4L2_MOTOR_STATUS_MOVING                = (1 << 0),
-        V4L2_MOTOR_STATUS_FAILED                = (1 << 1),
-        V4L2_MOTOR_STATUS_NOTCALIBRATED         = (1 << 2),
-};
-#define V4L2_CID_FOCUS_MOTOR_SPEED              (V4L2_CID_CAMERA_CLASS_BASE+46)
-#define V4L2_CID_IRIS_MOTOR_SPEED               (V4L2_CID_CAMERA_CLASS_BASE+48)
-
-This worked well for our use-case, but for us userspace has complete knowledge about
-the camera assembly properties.
-
-Regards,
-
-	Hans
