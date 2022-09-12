@@ -2,137 +2,253 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D202C6FA83
-	for <linux-media@archiver.kernel.org>; Mon, 12 Sep 2022 22:26:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B21FC6FA8E
+	for <linux-media@archiver.kernel.org>; Mon, 12 Sep 2022 22:27:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbiILW0y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Sep 2022 18:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
+        id S230285AbiILW1m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Sep 2022 18:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiILW0x (ORCPT
+        with ESMTP id S229945AbiILW1j (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Sep 2022 18:26:53 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6D1205D2
-        for <linux-media@vger.kernel.org>; Mon, 12 Sep 2022 15:26:52 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (85-76-79-70-nat.elisa-mobile.fi [85.76.79.70])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0B4A7415;
-        Tue, 13 Sep 2022 00:26:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1663021609;
-        bh=W7BfMKJVW+kGLt0fQJsaWwkKiTclRbMaG7+jctDyxKU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nmhyU2RuOiCaDHvHFa/J2fS6Sv+1K0tMQUEVCV229vkmBo7oxNcvhvrp8M4PyaAxO
-         5W6cFeyqfjLCePt9Gvs15tn4oBgwUrkupKRTpPLQkXpxAD1wmVyyNn95C4NIj+P2JZ
-         LKBXDDutiLVN3KdK+q/L3Fb7ydOur6UeEBnf1Df8=
-Date:   Tue, 13 Sep 2022 01:26:31 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, ezequiel@collabora.com,
-        gjasny@googlemail.com, hverkuil@xs4all.nl,
-        kieran.bingham@ideasonboard.com, nicolas@ndufresne.ca,
-        p.zabel@pengutronix.de, rosenp@gmail.com, sakari.ailus@iki.fi,
-        sean@mess.org, user.vdr@gmail.com, xavier.claessens@collabora.com
-Subject: Re: [PATCH v7 0/5] Switch build system to meson
-Message-ID: <Yx+yF3/9Q+cICUdD@pendragon.ideasonboard.com>
-References: <20220909134412.21934-1-laurent.pinchart@ideasonboard.com>
- <20220912180454.1b956a3d@coco.lan>
+        Mon, 12 Sep 2022 18:27:39 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C53921E20;
+        Mon, 12 Sep 2022 15:27:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663021658; x=1694557658;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=EBpU68xsLpcCQoQ5Ydg1RH2aVA+reCYJEVoDTaANPPA=;
+  b=nl9VE//yxBqesvPVzsL245xruckL6l9slG3PmZlQWwB/tjDLNvxwW5Gj
+   Z4+5bwPSUXBK5atrkGz26fKS8FKcorREsRJqPpYW3AQKc8es+xOylulY9
+   xzwyhNCCnjN/G4MrB2ALl5lAuvHiawZXWbthq3sq44+FZpcNS7jmQ5c4z
+   wo1HxmUIp9lZTif6wtBhaqG6epHHpRsQ5f5ZQxpJ2ZEFa09/TRVXk/g2b
+   Cb+AinTRupqjEGY8vsDwFO51VjxPKOSi+a80f7rrnQSiH2MzmMz0DmW4E
+   b8U5hF+iL0KaS4yaTY5S7OXJeFBqFv6xSSuY9S3ykHK5UTuDBIiJmV6EE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="384281027"
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="384281027"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 15:27:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="646659772"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 12 Sep 2022 15:27:33 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oXrts-0002w5-1D;
+        Mon, 12 Sep 2022 22:27:32 +0000
+Date:   Tue, 13 Sep 2022 06:26:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        bpf@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        alsa-devel@alsa-project.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master] BUILD REGRESSION
+ 044b771be9c5de9d817dfafb829d2f049c71c3b4
+Message-ID: <631fb230.qcoZqD19biA2J50w%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220912180454.1b956a3d@coco.lan>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: 044b771be9c5de9d817dfafb829d2f049c71c3b4  Add linux-next specific files for 20220912
 
-On Mon, Sep 12, 2022 at 06:04:54PM +0200, Mauro Carvalho Chehab wrote:
-> Em Fri,  9 Sep 2022 16:44:07 +0300 Laurent Pinchart escreveu:
-> 
-> > Hello everybody,
-> > 
-> > This series is the latest (and greatest) attempt to switch v4l-utils
-> > from autotools to meson.
-> > 
-> > Compared to v6, the first noticeable change is that fixups have been
-> > squashed into their corresponding commit. Detailed changelogs are now
-> > included in individual patches.
-> > 
-> > The second big change is that the last patch from v6 ("Makefile.am:
-> > Distribute meson related files") got replaced by 5/5 which drops
-> > autotools support, completing the switch from autotools to meson.
-> > 
-> > A branch that includes this series can be found at
-> > 
-> >         git://linuxtv.org/pinchartl/v4l-utils.git meson
-> > 
-> > Ariel D'Alessandro (4):
-> >   Move README to markdown syntax
-> >   Add support for meson building
-> >   Copy Doxygen configuration file to doc/
-> >   meson: Add support for doxygen documentation
-> > 
-> > Laurent Pinchart (1):
-> >   Drop autoconf/automake support
-> 
-> With the risk or repeating myself a couple of times, I have no
-> idea what was built with meson, when using the version from
-> your repository:
-> 
-> 	git://linuxtv.org/pinchartl/v4l-utils.git meson
-> 
-> (which btw seems to have some patches that are different
-> from the 5 ones you submitted) 
+Error/Warning reports:
 
-I think I've already pushed some fixes on that branch. There will be a
-v8 on the list, I'll push a tag with the version number to avoid
-confusion.
+https://lore.kernel.org/linux-media/202209020437.eXEOdmfe-lkp@intel.com
+https://lore.kernel.org/linux-mm/202209042337.FQi69rLV-lkp@intel.com
+https://lore.kernel.org/linux-mm/202209060229.dVuyxjBv-lkp@intel.com
+https://lore.kernel.org/linux-mm/202209080718.y5QmlNKH-lkp@intel.com
 
-> as it doesn't provide anything similar to what current 
-> autotools-based support provides:
+Error/Warning: (recently discovered and may have been fixed)
 
-Sorry for missing your comment before. Meson has a summary() function
-that can generate similar output, I'll enable it in the next version.
+ERROR: modpost: "ioread64" [drivers/pci/switch/switchtec.ko] undefined!
+drivers/gpu/drm/amd/amdgpu/imu_v11_0_3.c:139:6: warning: no previous prototype for 'imu_v11_0_3_program_rlc_ram' [-Wmissing-prototypes]
+drivers/gpu/drm/drm_atomic_helper.c:802: warning: expecting prototype for drm_atomic_helper_check_wb_connector_state(). Prototype was for drm_atomic_helper_check_wb_encoder_state() instead
+drivers/pinctrl/pinctrl-amd.c:288 amd_gpio_dbg_show() warn: format string contains non-ascii character '\x9a'
+drivers/pinctrl/pinctrl-amd.c:288 amd_gpio_dbg_show() warn: format string contains non-ascii character '\xa1'
+drivers/pinctrl/pinctrl-amd.c:370 amd_gpio_dbg_show() warn: format string contains non-ascii character '\x95'
+drivers/scsi/qla2xxx/qla_os.c:2854:23: warning: assignment to 'struct trace_array *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+drivers/scsi/qla2xxx/qla_os.c:2854:25: error: implicit declaration of function 'trace_array_get_by_name'; did you mean 'trace_array_set_clr_event'? [-Werror=implicit-function-declaration]
+drivers/scsi/qla2xxx/qla_os.c:2869:9: error: implicit declaration of function 'trace_array_put' [-Werror=implicit-function-declaration]
+kernel/bpf/memalloc.c:499 bpf_mem_alloc_destroy() error: potentially dereferencing uninitialized 'c'.
+sound/soc/codecs/tas2562.c:442:13: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
 
-> $ ./configure
-> ...
-> compile time options summary
-> ============================
-> 
->     Host OS                    : linux-gnu
->     X11                        : yes
->     GL                         : yes
->     glu                        : yes
->     libelf		       : yes
->     libjpeg                    : yes
->     libudev                    : yes
->     pthread                    : yes
->     QT version                 : v5.4 with QtGL
->     ALSA support               : yes
->     SDL support		       : yes
-> 
->     build dynamic libs         : yes
->     build static libs          : yes
-> 
->     gconv                      : no
-> 
->     dynamic libv4l             : yes
->     v4l_plugins                : yes
->     v4l_wrappers               : yes
->     libdvbv5                   : yes
->     dvbv5-daemon               : yes
->     v4lutils                   : yes
->     qv4l2                      : yes
->     qvidcap                    : yes
->     v4l2-ctl uses libv4l       : yes
->     v4l2-ctl-32                : no
->     v4l2-compliance            : yes
->     v4l2-compliance uses libv4l: yes
->     v4l2-compliance-32         : no
->     BPF IR Decoders:           : no
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
+|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|   |-- drivers-scsi-qla2xxx-qla_os.c:error:implicit-declaration-of-function-trace_array_get_by_name
+|   |-- drivers-scsi-qla2xxx-qla_os.c:error:implicit-declaration-of-function-trace_array_put
+|   |-- drivers-scsi-qla2xxx-qla_os.c:warning:assignment-to-struct-trace_array-from-int-makes-pointer-from-integer-without-a-cast
+|   `-- sound-soc-codecs-tas2562.c:warning:variable-ret-set-but-not-used
+|-- alpha-randconfig-r005-20220911
+|   |-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
+|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|-- alpha-randconfig-r033-20220911
+|   |-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
+|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|-- alpha-randconfig-r035-20220911
+|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|   `-- sound-soc-codecs-tas2562.c:warning:variable-ret-set-but-not-used
+|-- arc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
+|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|   `-- sound-soc-codecs-tas2562.c:warning:variable-ret-set-but-not-used
+|-- arc-axs101_defconfig
+|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|-- arc-randconfig-r016-20220912
+|   |-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
+|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|-- arc-randconfig-r032-20220912
+|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|-- arc-randconfig-r043-20220911
+|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|-- arc-randconfig-r043-20220912
+|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|-- arm-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
+|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|   `-- sound-soc-codecs-tas2562.c:warning:variable-ret-set-but-not-used
+|-- arm-defconfig
+|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|-- arm-randconfig-c034-20220911
+|   `-- net-bluetooth-mgmt.c:WARNING:kzalloc-should-be-used-for-rp-instead-of-kmalloc-memset
+|-- arm-randconfig-r032-20220911
+|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|   `-- sound-soc-codecs-tas2562.c:warning:variable-ret-set-but-not-used
+|-- arm64-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
+|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|   `-- sound-soc-codecs-tas2562.c:warning:variable-ret-set-but-not-used
+|-- arm64-buildonly-randconfig-r002-20220912
+|   |-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
+|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|   `-- sound-soc-codecs-tas2562.c:warning:variable-ret-set-but-not-used
+clang_recent_errors
+|-- arm64-randconfig-r011-20220912
+|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
+|-- hexagon-allyesconfig
+|   |-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
+|   `-- drivers-staging-media-deprecated-cpia2-cpia2_usb.c:warning:variable-frame_count-set-but-not-used
+|-- i386-randconfig-a012-20220912
+|   `-- sound-soc-intel-skylake-skl.c:warning:unused-variable-skl
+|-- i386-randconfig-a015-20220912
+|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
+|-- mips-randconfig-r021-20220911
+|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
+|-- powerpc-randconfig-r002-20220911
+|   `-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-function-imu_v11_0_3_program_rlc_ram
+|-- riscv-randconfig-r015-20220912
+|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
+`-- riscv-randconfig-r042-20220912
+    `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
+
+elapsed time: 724m
+
+configs tested: 82
+configs skipped: 2
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64               randconfig-a001-20220912
+arc                          axs101_defconfig
+x86_64               randconfig-a002-20220912
+i386                 randconfig-a001-20220912
+x86_64                               rhel-8.3
+x86_64               randconfig-a003-20220912
+x86_64                          rhel-8.3-func
+arm                           stm32_defconfig
+alpha                            allyesconfig
+sh                           se7724_defconfig
+x86_64                           allyesconfig
+arm                                 defconfig
+alpha                             allnoconfig
+i386                 randconfig-a002-20220912
+x86_64                         rhel-8.3-kunit
+riscv                             allnoconfig
+m68k                             allmodconfig
+x86_64                           rhel-8.3-kvm
+x86_64               randconfig-a006-20220912
+i386                 randconfig-a004-20220912
+x86_64               randconfig-a004-20220912
+csky                              allnoconfig
+arc                               allnoconfig
+sh                           se7705_defconfig
+i386                                defconfig
+i386                             allyesconfig
+m68k                            q40_defconfig
+i386                 randconfig-a003-20220912
+arc                              allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+arm                          iop32x_defconfig
+x86_64               randconfig-a005-20220912
+powerpc                           allnoconfig
+m68k                             allyesconfig
+riscv                randconfig-r042-20220911
+arm                        trizeps4_defconfig
+i386                 randconfig-a006-20220912
+arc                  randconfig-r043-20220912
+mips                             allyesconfig
+sparc64                             defconfig
+i386                 randconfig-a005-20220912
+powerpc                          allmodconfig
+arm64                            allyesconfig
+sh                               allmodconfig
+s390                          debug_defconfig
+arm                              allyesconfig
+arc                  randconfig-r043-20220911
+s390                 randconfig-r044-20220911
+ia64                             allmodconfig
+sh                           sh2007_defconfig
+sh                         ecovec24_defconfig
+sh                               alldefconfig
+sh                          rsk7269_defconfig
+
+clang tested configs:
+x86_64               randconfig-a011-20220912
+x86_64               randconfig-a012-20220912
+i386                 randconfig-a013-20220912
+x86_64               randconfig-a013-20220912
+i386                 randconfig-a011-20220912
+x86_64               randconfig-a014-20220912
+mips                           rs90_defconfig
+arm                          pcm027_defconfig
+x86_64               randconfig-a016-20220912
+i386                 randconfig-a012-20220912
+arm                          ixp4xx_defconfig
+x86_64               randconfig-a015-20220912
+i386                 randconfig-a014-20220912
+arm                        vexpress_defconfig
+i386                 randconfig-a015-20220912
+riscv                randconfig-r042-20220912
+hexagon              randconfig-r041-20220912
+i386                 randconfig-a016-20220912
+hexagon              randconfig-r045-20220911
+hexagon              randconfig-r041-20220911
+hexagon              randconfig-r045-20220912
+s390                 randconfig-r044-20220912
+mips                malta_qemu_32r6_defconfig
+powerpc                    gamecube_defconfig
+x86_64                          rhel-8.3-rust
 
 -- 
-Regards,
-
-Laurent Pinchart
+0-DAY CI Kernel Test Service
+https://01.org/lkp
