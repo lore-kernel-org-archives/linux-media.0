@@ -2,77 +2,148 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D46CEC6FA82
-	for <linux-media@archiver.kernel.org>; Mon, 12 Sep 2022 22:29:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2CDFC6FA82
+	for <linux-media@archiver.kernel.org>; Mon, 12 Sep 2022 22:43:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiILW3n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Sep 2022 18:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58016 "EHLO
+        id S229689AbiILWn2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Sep 2022 18:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiILW3l (ORCPT
+        with ESMTP id S229698AbiILWn1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Sep 2022 18:29:41 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01F55F65
-        for <linux-media@vger.kernel.org>; Mon, 12 Sep 2022 15:29:38 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (85-76-79-70-nat.elisa-mobile.fi [85.76.79.70])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 24471415;
-        Tue, 13 Sep 2022 00:29:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1663021775;
-        bh=l+QHyscqviNpubsxXNDDpSXjg8Acgfsl0fLkmQrFQE0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YtOeZEz/233z4MRHX9ogEt0hQsIKR8qFxTkyjEjYgJNvtPe9zXXdB+0S8XQNkxxpn
-         czmM9BofuyQkkGB/TxGZaIHRgsHHut0mfGvFjIkqbJPcI1IqcO9vrKz8lX3lxWGnjC
-         X1T0ROat8lGS0GPnwLEE3QAE/3gYfPnWqq8bBw0I=
-Date:   Tue, 13 Sep 2022 01:29:19 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Gregor Jasny <gjasny@googlemail.com>
-Cc:     linux-media@vger.kernel.org, ezequiel@collabora.com,
-        hverkuil@xs4all.nl, kieran.bingham@ideasonboard.com,
-        mchehab@kernel.org, nicolas@ndufresne.ca, p.zabel@pengutronix.de,
-        rosenp@gmail.com, sakari.ailus@iki.fi, sean@mess.org,
-        user.vdr@gmail.com, xavier.claessens@collabora.com
-Subject: Re: [PATCH v7 0/5] Switch build system to meson
-Message-ID: <Yx+yv8l7EFbIniup@pendragon.ideasonboard.com>
-References: <20220909134412.21934-1-laurent.pinchart@ideasonboard.com>
- <c96f4806-13ec-335f-68ab-10194411da43@googlemail.com>
+        Mon, 12 Sep 2022 18:43:27 -0400
+X-Greylist: delayed 976 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 12 Sep 2022 15:43:25 PDT
+Received: from 17.mo584.mail-out.ovh.net (17.mo584.mail-out.ovh.net [46.105.41.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471E840BC1
+        for <linux-media@vger.kernel.org>; Mon, 12 Sep 2022 15:43:25 -0700 (PDT)
+Received: from player750.ha.ovh.net (unknown [10.111.208.23])
+        by mo584.mail-out.ovh.net (Postfix) with ESMTP id 1294622D03
+        for <linux-media@vger.kernel.org>; Mon, 12 Sep 2022 22:27:08 +0000 (UTC)
+Received: from etezian.org (bbcs-175-223.cust.wingo.ch [178.238.175.223])
+        (Authenticated sender: andi@etezian.org)
+        by player750.ha.ovh.net (Postfix) with ESMTPSA id 4B5682E6847BB;
+        Mon, 12 Sep 2022 22:26:39 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-95G0013efd0b66-a73e-45c9-bb98-e25c7815fbbb,
+                    3B4E35B332874A0F69C0154FD1AC24ACCE6C8C6C) smtp.auth=andi@etezian.org
+X-OVh-ClientIp: 178.238.175.223
+Date:   Tue, 13 Sep 2022 00:26:36 +0200
+From:   Andi Shyti <andi@etezian.org>
+To:     Smitha T Murthy <smitha.t@samsung.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        m.szyprowski@samsung.com, andrzej.hajda@intel.com,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
+        benjamin.gaignard@collabora.com, stanimir.varbanov@linaro.org,
+        dillon.minfei@gmail.com, david.plowman@raspberrypi.com,
+        mark.rutland@arm.com, robh+dt@kernel.org, krzk+dt@kernel.org,
+        andi@etezian.org, alim.akhtar@samsung.com,
+        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
+        linux-fsd@tesla.com, aakarsh.jain@samsung.com
+Subject: Re: [Patch v2 04/15] media: s5p-mfc: Add initial support for MFCv12
+Message-ID: <Yx+yHPFhLbaaSCAw@intel.intel>
+References: <20220907064715.55778-1-smitha.t@samsung.com>
+ <CGME20220907063328epcas5p12c01eb755e3ddfa4fdaee8e4c3bc9527@epcas5p1.samsung.com>
+ <20220907064715.55778-5-smitha.t@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c96f4806-13ec-335f-68ab-10194411da43@googlemail.com>
+In-Reply-To: <20220907064715.55778-5-smitha.t@samsung.com>
+X-Ovh-Tracer-Id: 12842858766094371346
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfedufedgudduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehnughiucfuhhihthhiuceorghnughisegvthgviihirghnrdhorhhgqeenucggtffrrghtthgvrhhnpeejgfelgeekieffjeegveeuvdehgeelveetveejudffvedvleehvdefleehudelueenucfkpheptddrtddrtddrtddpudejkedrvdefkedrudejhedrvddvfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeehtddrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegrnhguihesvghtvgiiihgrnhdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhmvgguihgrsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkeeg
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Gregor,
+Hi Smitha,
 
-On Mon, Sep 12, 2022 at 04:41:33PM +0200, Gregor Jasny wrote:
-> Hello Laurent and all the other helping hands,
-> 
-> On 9/9/22 3:44 PM, Laurent Pinchart wrote:
-> > This series is the latest (and greatest) attempt to switch v4l-utils
-> > from autotools to meson.
-> > 
-> > Compared to v6, the first noticeable change is that fixups have been
-> > squashed into their corresponding commit. Detailed changelogs are now
-> > included in individual patches.
-> 
-> Tested-by: Gregor Jasny <gjasny@googlemail.com>
-> 
-> v7 is still working as expected with my Debian and Ubuntu packaging scripts.
+just a fast look here
 
-Thanks for testing. I'll post a v8 with the improvements suggested in
-the review comments. I will also include updates to the
-v4l-utils.spec.in file, and would appreciate help testing it.
+[...]
 
-> What would you think would be a good time to release these changes? 
-> Should I do a release shortly after the this change has landed?
+> +/* Encoder buffer size for MFCv12 */
+> +#define ENC_V120_BASE_SIZE(x, y) \
+> +	(((x + 3) * (y + 3) * 8) \
+> +	+ (((y * 64) + 2304) * (x + 7) / 8))
 
-I think that would be a good idea. Once v8 is out, if there are no more
-issues, I think it could be merged.
+do we need any overflow control here?
 
--- 
-Regards,
+[...]
 
-Laurent Pinchart
+>  #define MFC_V7_BIT	BIT(2)
+>  #define MFC_V8_BIT	BIT(3)
+>  #define MFC_V10_BIT	BIT(5)
+> +#define MFC_V12_BIT	BIT(7)
+>  
+>  #define MFC_V5PLUS_BITS		(MFC_V5_BIT | MFC_V6_BIT | MFC_V7_BIT | \
+> -					MFC_V8_BIT | MFC_V10_BIT)
+> +					MFC_V8_BIT | MFC_V10_BIT | MFC_V12_BIT)
+>  #define MFC_V6PLUS_BITS		(MFC_V6_BIT | MFC_V7_BIT | MFC_V8_BIT | \
+> -					MFC_V10_BIT)
+> -#define MFC_V7PLUS_BITS		(MFC_V7_BIT | MFC_V8_BIT | MFC_V10_BIT)
+> +					MFC_V10_BIT | MFC_V12_BIT)
+> +#define MFC_V7PLUS_BITS		(MFC_V7_BIT | MFC_V8_BIT | MFC_V10_BIT | \
+> +					MFC_V12_BIT)
+
+why not MFC_V10PLUS_BITS ?
+
+[...]
+
+> @@ -146,7 +146,7 @@ static struct s5p_mfc_fmt formats[] = {
+>  		.codec_mode	= S5P_FIMV_CODEC_HEVC_DEC,
+>  		.type		= MFC_FMT_DEC,
+>  		.num_planes	= 1,
+> -		.versions	= MFC_V10_BIT,
+> +		.versions	= MFC_V10_BIT | MFC_V12_BIT,
+
+we could just yse MFC_V10PLUS_BITS here
+
+[...]
+
+> +		if (IS_MFCV12(dev)) {
+> +			lcu_width = S5P_MFC_LCU_WIDTH(ctx->img_width);
+> +			lcu_height = S5P_MFC_LCU_HEIGHT(ctx->img_height);
+> +			if (ctx->codec_mode == S5P_FIMV_CODEC_HEVC_ENC &&
+> +								ctx->is_10bit) {
+> +				ctx->luma_dpb_size =
+> +					width64 * height32 +
+> +					ALIGN(DIV_ROUND_UP(lcu_width * 32, 4),
+> +							16) * height32 + 128;
+> +				if (ctx->is_422) {
+> +					ctx->chroma_dpb_size =
+> +						ctx->luma_dpb_size;
+> +				} else {
+> +					ctx->chroma_dpb_size =
+> +						width64 * height32 / 2 +
+> +						ALIGN(DIV_ROUND_UP(lcu_width *
+> +						32, 4), 16) * height32 / 2 + 128;
+> +				}
+
+You don't need the brackets here.
+
+> +			} else if (ctx->codec_mode == S5P_FIMV_CODEC_VP9_ENC &&
+> +					ctx->is_10bit) {
+> +				ctx->luma_dpb_size =
+> +					ALIGN(ctx->img_width * 2, 128) *
+> +					height32 + 64;
+> +				ctx->chroma_dpb_size =
+> +					ALIGN(ctx->img_width * 2, 128) *
+> +					height32 / 2 + 64;
+> +			} else {
+> +				ctx->luma_dpb_size =
+> +					width64 * height32 + 64;
+> +				if (ctx->is_422) {
+> +					ctx->chroma_dpb_size =
+> +						ctx->luma_dpb_size;
+> +				} else {
+> +					ctx->chroma_dpb_size =
+> +						width64 * height32 / 2 + 64;
+> +				}
+
+You don't need the brackets here.
+
+[...]
+
+Andi
