@@ -2,148 +2,101 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2CDFC6FA82
-	for <linux-media@archiver.kernel.org>; Mon, 12 Sep 2022 22:43:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BEB1C6FA82
+	for <linux-media@archiver.kernel.org>; Tue, 13 Sep 2022 06:30:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbiILWn2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Sep 2022 18:43:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45342 "EHLO
+        id S230345AbiIMGas (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 13 Sep 2022 02:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiILWn1 (ORCPT
+        with ESMTP id S230384AbiIMGaq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Sep 2022 18:43:27 -0400
-X-Greylist: delayed 976 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 12 Sep 2022 15:43:25 PDT
-Received: from 17.mo584.mail-out.ovh.net (17.mo584.mail-out.ovh.net [46.105.41.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471E840BC1
-        for <linux-media@vger.kernel.org>; Mon, 12 Sep 2022 15:43:25 -0700 (PDT)
-Received: from player750.ha.ovh.net (unknown [10.111.208.23])
-        by mo584.mail-out.ovh.net (Postfix) with ESMTP id 1294622D03
-        for <linux-media@vger.kernel.org>; Mon, 12 Sep 2022 22:27:08 +0000 (UTC)
-Received: from etezian.org (bbcs-175-223.cust.wingo.ch [178.238.175.223])
-        (Authenticated sender: andi@etezian.org)
-        by player750.ha.ovh.net (Postfix) with ESMTPSA id 4B5682E6847BB;
-        Mon, 12 Sep 2022 22:26:39 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-95G0013efd0b66-a73e-45c9-bb98-e25c7815fbbb,
-                    3B4E35B332874A0F69C0154FD1AC24ACCE6C8C6C) smtp.auth=andi@etezian.org
-X-OVh-ClientIp: 178.238.175.223
-Date:   Tue, 13 Sep 2022 00:26:36 +0200
-From:   Andi Shyti <andi@etezian.org>
-To:     Smitha T Murthy <smitha.t@samsung.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        m.szyprowski@samsung.com, andrzej.hajda@intel.com,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
-        benjamin.gaignard@collabora.com, stanimir.varbanov@linaro.org,
-        dillon.minfei@gmail.com, david.plowman@raspberrypi.com,
-        mark.rutland@arm.com, robh+dt@kernel.org, krzk+dt@kernel.org,
-        andi@etezian.org, alim.akhtar@samsung.com,
-        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
-        linux-fsd@tesla.com, aakarsh.jain@samsung.com
-Subject: Re: [Patch v2 04/15] media: s5p-mfc: Add initial support for MFCv12
-Message-ID: <Yx+yHPFhLbaaSCAw@intel.intel>
-References: <20220907064715.55778-1-smitha.t@samsung.com>
- <CGME20220907063328epcas5p12c01eb755e3ddfa4fdaee8e4c3bc9527@epcas5p1.samsung.com>
- <20220907064715.55778-5-smitha.t@samsung.com>
+        Tue, 13 Sep 2022 02:30:46 -0400
+Received: from www.linuxtv.org (www.linuxtv.org [130.149.80.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463831260F
+        for <linux-media@vger.kernel.org>; Mon, 12 Sep 2022 23:30:45 -0700 (PDT)
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1oXzRS-007Qd8-Ki; Tue, 13 Sep 2022 06:30:42 +0000
+Received: from [127.0.0.1] (helo=localhost)
+        by builder.linuxtv.org with esmtp (Exim 4.94.2)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1oXz9x-00DeTO-De; Tue, 13 Sep 2022 06:12:38 +0000
+Date:   Tue, 13 Sep 2022 06:12:36 +0000 (UTC)
+From:   Jenkins Builder Robot <jenkins@linuxtv.org>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org
+Message-ID: <1578099267.2.1663049556803@localhost>
+Subject: Build failed in Jenkins: media_stage_clang #490
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220907064715.55778-5-smitha.t@samsung.com>
-X-Ovh-Tracer-Id: 12842858766094371346
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfedufedgudduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehnughiucfuhhihthhiuceorghnughisegvthgviihirghnrdhorhhgqeenucggtffrrghtthgvrhhnpeejgfelgeekieffjeegveeuvdehgeelveetveejudffvedvleehvdefleehudelueenucfkpheptddrtddrtddrtddpudejkedrvdefkedrudejhedrvddvfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeehtddrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegrnhguihesvghtvgiiihgrnhdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhmvgguihgrsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkeeg
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
+X-Jenkins-Job: media_stage_clang
+X-Jenkins-Result: FAILURE
+Auto-submitted: auto-generated
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Smitha,
+See <https://builder.linuxtv.org/job/media_stage_clang/490/display/redirect>
 
-just a fast look here
+Changes:
 
-[...]
 
-> +/* Encoder buffer size for MFCv12 */
-> +#define ENC_V120_BASE_SIZE(x, y) \
-> +	(((x + 3) * (y + 3) * 8) \
-> +	+ (((y * 64) + 2304) * (x + 7) / 8))
+------------------------------------------
+Started by an SCM change
+Running as SYSTEM
+Building remotely on slave0 in workspace <https://builder.linuxtv.org/job/media_stage_clang/ws/>
+The recommended git tool is: NONE
+No credentials specified
+Cloning the remote Git repository
+Cloning repository git://linuxtv.org/media_stage.git
+ > git init <https://builder.linuxtv.org/job/media_stage_clang/ws/> # timeout=10
+Fetching upstream changes from git://linuxtv.org/media_stage.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.30.2'
+ > git fetch --tags --force --progress -- git://linuxtv.org/media_stage.git +refs/heads/*:refs/remotes/origin/* # timeout=30
+ERROR: Error cloning remote repo 'origin'
+hudson.plugins.git.GitException: Command "git fetch --tags --force --progress -- git://linuxtv.org/media_stage.git +refs/heads/*:refs/remotes/origin/*" returned status code 128:
+stdout: 
+stderr: fatal: unable to look up linuxtv.org (port 9418) (Name or service not known)
 
-do we need any overflow control here?
-
-[...]
-
->  #define MFC_V7_BIT	BIT(2)
->  #define MFC_V8_BIT	BIT(3)
->  #define MFC_V10_BIT	BIT(5)
-> +#define MFC_V12_BIT	BIT(7)
->  
->  #define MFC_V5PLUS_BITS		(MFC_V5_BIT | MFC_V6_BIT | MFC_V7_BIT | \
-> -					MFC_V8_BIT | MFC_V10_BIT)
-> +					MFC_V8_BIT | MFC_V10_BIT | MFC_V12_BIT)
->  #define MFC_V6PLUS_BITS		(MFC_V6_BIT | MFC_V7_BIT | MFC_V8_BIT | \
-> -					MFC_V10_BIT)
-> -#define MFC_V7PLUS_BITS		(MFC_V7_BIT | MFC_V8_BIT | MFC_V10_BIT)
-> +					MFC_V10_BIT | MFC_V12_BIT)
-> +#define MFC_V7PLUS_BITS		(MFC_V7_BIT | MFC_V8_BIT | MFC_V10_BIT | \
-> +					MFC_V12_BIT)
-
-why not MFC_V10PLUS_BITS ?
-
-[...]
-
-> @@ -146,7 +146,7 @@ static struct s5p_mfc_fmt formats[] = {
->  		.codec_mode	= S5P_FIMV_CODEC_HEVC_DEC,
->  		.type		= MFC_FMT_DEC,
->  		.num_planes	= 1,
-> -		.versions	= MFC_V10_BIT,
-> +		.versions	= MFC_V10_BIT | MFC_V12_BIT,
-
-we could just yse MFC_V10PLUS_BITS here
-
-[...]
-
-> +		if (IS_MFCV12(dev)) {
-> +			lcu_width = S5P_MFC_LCU_WIDTH(ctx->img_width);
-> +			lcu_height = S5P_MFC_LCU_HEIGHT(ctx->img_height);
-> +			if (ctx->codec_mode == S5P_FIMV_CODEC_HEVC_ENC &&
-> +								ctx->is_10bit) {
-> +				ctx->luma_dpb_size =
-> +					width64 * height32 +
-> +					ALIGN(DIV_ROUND_UP(lcu_width * 32, 4),
-> +							16) * height32 + 128;
-> +				if (ctx->is_422) {
-> +					ctx->chroma_dpb_size =
-> +						ctx->luma_dpb_size;
-> +				} else {
-> +					ctx->chroma_dpb_size =
-> +						width64 * height32 / 2 +
-> +						ALIGN(DIV_ROUND_UP(lcu_width *
-> +						32, 4), 16) * height32 / 2 + 128;
-> +				}
-
-You don't need the brackets here.
-
-> +			} else if (ctx->codec_mode == S5P_FIMV_CODEC_VP9_ENC &&
-> +					ctx->is_10bit) {
-> +				ctx->luma_dpb_size =
-> +					ALIGN(ctx->img_width * 2, 128) *
-> +					height32 + 64;
-> +				ctx->chroma_dpb_size =
-> +					ALIGN(ctx->img_width * 2, 128) *
-> +					height32 / 2 + 64;
-> +			} else {
-> +				ctx->luma_dpb_size =
-> +					width64 * height32 + 64;
-> +				if (ctx->is_422) {
-> +					ctx->chroma_dpb_size =
-> +						ctx->luma_dpb_size;
-> +				} else {
-> +					ctx->chroma_dpb_size =
-> +						width64 * height32 / 2 + 64;
-> +				}
-
-You don't need the brackets here.
-
-[...]
-
-Andi
+	at org.jenkinsci.plugins.gitclient.CliGitAPIImpl.launchCommandIn(CliGitAPIImpl.java:2675)
+	at org.jenkinsci.plugins.gitclient.CliGitAPIImpl.launchCommandWithCredentials(CliGitAPIImpl.java:2099)
+	at org.jenkinsci.plugins.gitclient.CliGitAPIImpl.access$500(CliGitAPIImpl.java:85)
+	at org.jenkinsci.plugins.gitclient.CliGitAPIImpl$1.execute(CliGitAPIImpl.java:619)
+	at org.jenkinsci.plugins.gitclient.CliGitAPIImpl$2.execute(CliGitAPIImpl.java:848)
+	at org.jenkinsci.plugins.gitclient.RemoteGitImpl$CommandInvocationHandler$GitCommandMasterToSlaveCallable.call(RemoteGitImpl.java:158)
+	at org.jenkinsci.plugins.gitclient.RemoteGitImpl$CommandInvocationHandler$GitCommandMasterToSlaveCallable.call(RemoteGitImpl.java:151)
+	at hudson.remoting.UserRequest.perform(UserRequest.java:211)
+	at hudson.remoting.UserRequest.perform(UserRequest.java:54)
+	at hudson.remoting.Request$2.run(Request.java:376)
+	at hudson.remoting.InterceptingExecutorService.lambda$wrap$0(InterceptingExecutorService.java:78)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+	Suppressed: hudson.remoting.Channel$CallSiteStackTrace: Remote call to slave0
+		at hudson.remoting.Channel.attachCallSiteStackTrace(Channel.java:1784)
+		at hudson.remoting.UserRequest$ExceptionResponse.retrieve(UserRequest.java:356)
+		at hudson.remoting.Channel.call(Channel.java:1000)
+		at org.jenkinsci.plugins.gitclient.RemoteGitImpl$CommandInvocationHandler.execute(RemoteGitImpl.java:143)
+		at jdk.internal.reflect.GeneratedMethodAccessor101.invoke(Unknown Source)
+		at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+		at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+		at org.jenkinsci.plugins.gitclient.RemoteGitImpl$CommandInvocationHandler.invoke(RemoteGitImpl.java:129)
+		at com.sun.proxy.$Proxy84.execute(Unknown Source)
+		at hudson.plugins.git.GitSCM.retrieveChanges(GitSCM.java:1226)
+		at hudson.plugins.git.GitSCM.checkout(GitSCM.java:1308)
+		at hudson.scm.SCM.checkout(SCM.java:540)
+		at hudson.model.AbstractProject.checkout(AbstractProject.java:1217)
+		at hudson.model.AbstractBuild$AbstractBuildExecution.defaultCheckout(AbstractBuild.java:647)
+		at jenkins.scm.SCMCheckoutStrategy.checkout(SCMCheckoutStrategy.java:85)
+		at hudson.model.AbstractBuild$AbstractBuildExecution.run(AbstractBuild.java:519)
+		at hudson.model.Run.execute(Run.java:1897)
+		at hudson.model.FreeStyleBuild.run(FreeStyleBuild.java:44)
+		at hudson.model.ResourceController.execute(ResourceController.java:101)
+		at hudson.model.Executor.run(Executor.java:442)
+ERROR: Error cloning remote repo 'origin'
