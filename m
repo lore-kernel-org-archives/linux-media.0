@@ -2,168 +2,120 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BC19ECAAD8
-	for <linux-media@archiver.kernel.org>; Wed, 14 Sep 2022 09:59:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 180BBECAAD3
+	for <linux-media@archiver.kernel.org>; Wed, 14 Sep 2022 11:59:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231133AbiINJ7P (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 14 Sep 2022 05:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39814 "EHLO
+        id S229725AbiINL7B (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 14 Sep 2022 07:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiINJ7N (ORCPT
+        with ESMTP id S230022AbiINL6z (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 14 Sep 2022 05:59:13 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74303134D
-        for <linux-media@vger.kernel.org>; Wed, 14 Sep 2022 02:59:10 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id z13so7452940edb.13
-        for <linux-media@vger.kernel.org>; Wed, 14 Sep 2022 02:59:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=V4RrDQnfr6xSnGZ3KzxlQ6mHzQiczZDyhIA9gD9qjUI=;
-        b=nQZMRHPg2UTgOxDP7JSRo8akFJA5IkWIkvKU/1DUSeRzAJwMhp+z8o9Y8Di6Ye0CzC
-         0gDfbJhHCN+MCF2W5gB0gH3NFXe+V/QJtSzi7Nb1pvvUQ0tHDBPVfO99kDYUKnJK+hTF
-         dOI4eUohJ2YyQeCL6z9m0hRCLbUVfgHFnq0u1/+jSxKebBLrsrzSxkLng3Qn3gV7kh0k
-         zdfM0BgYLbh3NbMh5OKtLut2ZMpUYztGpTzd/RciYzGPSIb+yL/F2Kh7qJ1TOORs0WPG
-         Dg1/CW2NLDCjLdpIsEBoIsfrjOOnrgoSJ+0Z3hMo9K9xsQipdaXZXfX5hTJbCQsGOj4t
-         WaIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=V4RrDQnfr6xSnGZ3KzxlQ6mHzQiczZDyhIA9gD9qjUI=;
-        b=yITPnGFV8QXW7Bzi2XvPVLZNYmmLUOJe1bVrUkHMT87TaNvFPO8OKFUysqL1v3HZ8P
-         xKZY3J4NlPUHdeNVMYdWZFR/S9c8Np1s65Tw8kowc/EnBkK2WkMmTnGmjD9Y7DEkmp2l
-         r+mcVN7HOcpJFcYfxhsb9RDfIJJuy9usPJv3cBKdnO5EUiZr6Vxp4ao6dKPa/nmXztyY
-         O1GB0nBHe0Q56+IUWHZJZk4Z4xu37OjkoBNUF51w6uoHzv5ijlfg1PVe6a7YsbtqqJ1r
-         uWeVxXZt4BlBdOGyKCO5Lo8TaOIym3WziVTUSmEv6bLoDT56MND9qhcuoUj5+LW1i2IT
-         RQMA==
-X-Gm-Message-State: ACgBeo0r8LEfojeGS6+A2CQZdEQnHEjf+fbVzmDBRqfmeanIFF/5oE2E
-        s7MKjL7CXbn/x0cVddz1aktTmNlNRQ3ixCq2XvC4Wg==
-X-Google-Smtp-Source: AA6agR5k1IWUTu/5qFMdsnP1uc+73La/xSsDFRk24vZ/WeRm4VC6W66Q8nrVvaW0tIVvF+1KB77wGcU5FxxBabIHWMk=
-X-Received: by 2002:a05:6402:43cc:b0:451:129e:1b1e with SMTP id
- p12-20020a05640243cc00b00451129e1b1emr20773700edc.258.1663149548597; Wed, 14
- Sep 2022 02:59:08 -0700 (PDT)
+        Wed, 14 Sep 2022 07:58:55 -0400
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6BC7E01A;
+        Wed, 14 Sep 2022 04:58:54 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id D3C06E0F93;
+        Wed, 14 Sep 2022 04:58:23 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id R02vuMtXWq3E; Wed, 14 Sep 2022 04:58:23 -0700 (PDT)
+Date:   Wed, 14 Sep 2022 13:58:15 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1663156703; bh=6Cy4wlXEsbh2KFaV8g1LkVJeWFmWKSLXGZ3+KMzj9/E=;
+        h=Date:From:To:Subject:In-Reply-To:References:From;
+        b=QDPB+0GUoQT6b2OU+Tx/dvo9BVZ31KGGsNRwgagbjVDxPcd/WBlQdThsL+Zai111T
+         7KwsZduhHuyFM/ONcfgHJS8w7my0Bb/j21/GuUWyT0/OjO/BBzICzN/4ZwY2ekmn47
+         hNAjteW2j4P//W1sWXGyJV98BM0tHpDBIFaglecRWweDNtwFgWkbvSeMaWS2/Yw3E2
+         HhAQNfln++pkknKfUdyY/t03a9fPhA1xJ3iJTCQ7w6hJjI+sz1YtopXPwSsNyy7T7x
+         XxK7/1NFwTg/KK1L4GFmziWuHnyCoH67qbi34sa5AEkvyPm8Z6nfk18DZYQ8XFX2ZU
+         xIzCwBiK34sjA==
+From:   Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+To:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@puri.sm, phone-devel@vger.kernel.org
+Subject: [PATCH 2/2] Revert "media: imx: Round line size to 4 bytes"
+Message-ID: <20220914113436.1503790-2-dorota.czaplejewicz@puri.sm>
+In-Reply-To: <20220914113436.1503790-1-dorota.czaplejewicz@puri.sm>
+References: <20220914113436.1503790-1-dorota.czaplejewicz@puri.sm>
+Organization: Purism
 MIME-Version: 1.0
-References: <20220911200147.375198-1-mike.rudenko@gmail.com>
-In-Reply-To: <20220911200147.375198-1-mike.rudenko@gmail.com>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Wed, 14 Sep 2022 10:58:52 +0100
-Message-ID: <CAPY8ntCA3jbpBOiNfoft58sHPeTFSLoLop0VUmkOCWP3cX_rdw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] Add Omnivision OV4689 image sensor driver
-To:     Mikhail Rudenko <mike.rudenko@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Shawn Tu <shawnx.tu@intel.com>, Jimmy Su <jimmy.su@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, Arec Kao <arec.kao@intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Marek Vasut <marex@denx.de>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/YX3pqtpGeBOz/ycx14pb+iH";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mikhail
+--Sig_/YX3pqtpGeBOz/ycx14pb+iH
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 11 Sept 2022 at 21:02, Mikhail Rudenko <mike.rudenko@gmail.com> wrote:
->
-> Hello,
->
-> this series implements support for Omnivision OV4689 image
-> sensor. The Omnivision OV4689 is a high performance, 1/3-inch, 4
-> megapixel image sensor. Ihis chip supports high frame rate speeds up
-> to 90 fps at 2688x1520 resolution. It is programmable through an I2C
-> interface, and sensor output is sent via 1/2/4 lane MIPI CSI-2
-> connection.
->
-> The driver is based on Rockchip BSP kernel [1]. It implements 4-lane CSI-2
-> and single 2688x1520 @ 30 fps mode. The driver was tested on Rockchip
-> 3399-based FriendlyElec NanoPi M4 board with MCAM400 camera module.
->
-> While porting the driver, I stumbled upon two issues:
->
-> (1) In the original driver, horizontal total size (HTS) was set to a
-> value (2584) lower then the frame width (2688), resulting in negative
-> hblank. In this driver, I increased HTS to 2688, but fps dropped from
-> 29.88 to 28.73. What is the preferred way to handle this?
+This reverts commit 056f9af9fbebb81ebc972540122fb3bdad81d8b1.
 
-This is one of the joys of sensors - they don't all work in the same way.
+The method is no longer getting called on the i.MX8, meaning that
+the responsibility for this functionality has been moved entirely to
+imx7_csi_mbus_fmt_to_pix_fmt.
 
-I don't have an official datasheet for OV4689 from Omnivision, but
-found one on the internet [1]. That should allow you to reverse the
-PLL configuration to confirm that the pixel rate is the value you've
-computed based on link frequency (they aren't necessarily related). Do
-the frame rate calculations work using width + HBLANK, height +
-VBLANK, and pixel rate?
-The datasheet claims the sensor supports 2688x1520 @ 90 fps, so
-something doesn't hold true between 4 data lanes at 500MHz/1Gbit/s per
-lane when your default hts/vts is 2688x1554 and it only gives
-28.73fps.
+Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+---
+ drivers/staging/media/imx/imx-media-utils.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I have seen modes in sensors where the HTS register is in units of 2
-pixels, so what range of HTS (and VTS) values actually works on this
-sensor? (I don't see it documented, but I'm not surprised).
+diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/=
+media/imx/imx-media-utils.c
+index 73cf0d855967..294c808b2ebe 100644
+--- a/drivers/staging/media/imx/imx-media-utils.c
++++ b/drivers/staging/media/imx/imx-media-utils.c
+@@ -545,13 +545,13 @@ int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_for=
+mat *pix,
+ 	}
+=20
+ 	/* Round up width for minimum burst size */
+-	width =3D round_up(mbus->width, 4);
++	width =3D round_up(mbus->width, 8);
+=20
+ 	/* Round up stride for IDMAC line start address alignment */
+ 	if (cc->planar)
+ 		stride =3D round_up(width, 16);
+ 	else
+-		stride =3D round_up((width * cc->bpp) >> 3, 4);
++		stride =3D round_up((width * cc->bpp) >> 3, 8);
+=20
+ 	pix->width =3D width;
+ 	pix->height =3D mbus->height;
+--=20
+2.37.3
 
-[1] https://cdn.hackaday.io/files/19354828041536/OV4689-OmniVision.pdf
 
-> (2) The original driver exposes analog gain range 0x0 - 0x7ff, but the
-> gain is not linear across that range. Instead, it is piecewise linear
-> (and discontinuous). 0x0-0xff register values result in 0x-2x gain,
-> 0x100-0x1ff to 0x-4x, 0x300-0x3ff to 0x-8x, and 0x700-0x7ff to 0x-16x,
-> with more linear segments in between. Rockchip's camera engine code
-> chooses one of the above segments depenging on the desired gain
-> value. The question is, how should we proceed keeping in mind
-> libcamera use case? Should the whole 0x0-0x7ff be exposed as-is and
-> libcamera will do the mapping, or the driver will do the mapping
-> itself and expose some logical gain units not tied to the actual gain
-> register value? Meanwhile, this driver conservatively exposes only
-> 0x0-0xf8 gain register range.
+--Sig_/YX3pqtpGeBOz/ycx14pb+iH
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-The datasheet linked above says "for the gain formula, please contact
-your local OmniVision FAE" :-(
-I would assume that the range is from 1x rather than 0x - people
-rarely want a totally black image that 0x would give. Or is it ranges
-of 1x - 2x, 2x - 4x, 4x - 8x, and 8x - 16x?
+-----BEGIN PGP SIGNATURE-----
 
-Other sensors expose the full range of the register via
-V4L2_CID_ANALOGUE_GAIN, and require userspace (mainly libcamera now)
-to know how to convert a gain into the register value. If the gain
-range goes up to x16, then exposing that would be useful. I'd advocate
-just exposing the full range of 0x000 - 0x7ff, as then you can have
-the accuracy of 256 values between x1 to x2, but also the full range.
+iQIzBAEBCAAdFiEExKRqtqfFqmh+lu1oADBpX4S8ZncFAmMhwdcACgkQADBpX4S8
+ZncOlRAAnYd6aqRm9Jxu3Yt/QBLmrQKMKDg0MkwZaudSnDtCQCGuPnQihWEuCFvK
+3V1CKH6MjmrJ5Aj22YzpnX5hmtBZ3qJJMLPErKejc29ppK5jqmYmMx6FpAGZHwtV
+lhUUQ5/cEtbbDtx3eYJi8c8niu3rzHhn6y6UOrtHs/UYQKVMVdT/bYwp1qtd9OuI
+k+mDMR2raxwdCe5GaQhCgAe/YoaenPyqTXYBtrpG3KFVBHrBY2cShy9ZRyRwXIw3
+YiZZ5l23eKgQsnrHZuwj+fNQ5e+MDxdmxj3WjBrt5UfxYKzZv2TaeFQgrcxrbQ4S
+cYCkeCOJpuXiCPTv6xZhFaAsli9E55Pn+J+vEC/VY79UUJnrB88oE+p1US7Z6H+V
+5F0duTfUdAslzURhMHfra0wvZ9vPQadQawa29a4pMayqnz1mZeBED+5dDt32l82e
+HlbKL1M2+uvanrXF1twmdXZmByrTv1F4pGv44MTutAobWsoKkM5kc+B3Mwi5wfeR
+q98ErStCNb1Xf2W5nWrS3qlE/dYsjjABG/k6R9dioeJyX20ms3pXT2JUia8aP2bJ
+xDNknxeCmBm83eKyIr2KyVQzUS/UZPsYOtsWGV6L5dRLVpW9flxJqKGdf/WROlWv
+5EZss2gXY3Q7KrmTkF4BK+UIfMk3InUebrPrN/bAA6Yf2oKigVc=
+=vqCl
+-----END PGP SIGNATURE-----
 
-I might see if I can pick up one of these sensors and see if I can get
-it running on a Raspberry Pi. Thanks for trying to upstream this -
-it's nice to have such a range of sensor drivers to choose from.
-
-  Dave
-
-> [1] https://github.com/rockchip-linux/kernel/blob/develop-4.19/drivers/media/i2c/ov4689.c
->
-> changes in v2:
-> - bindings: reword descriptions
-> - bindings: move clock description to clocks property
-> - bindings: add data-lanes and link-frequencies properties to port
-> - driver: validate media bus configuration when probing
->
-> Mikhail Rudenko (2):
->   media: dt-bindings: media: i2c: document OV4689 DT bindings
->   media: i2c: add support for ov4689
->
->  .../bindings/media/i2c/ovti,ov4689.yaml       | 141 +++
->  MAINTAINERS                                   |   8 +
->  drivers/media/i2c/Kconfig                     |  14 +
->  drivers/media/i2c/Makefile                    |   1 +
->  drivers/media/i2c/ov4689.c                    | 951 ++++++++++++++++++
->  5 files changed, 1115 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
->  create mode 100644 drivers/media/i2c/ov4689.c
->
-> --
-> 2.37.3
+--Sig_/YX3pqtpGeBOz/ycx14pb+iH--
