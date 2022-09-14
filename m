@@ -2,269 +2,237 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32B0BC6FA82
-	for <linux-media@archiver.kernel.org>; Wed, 14 Sep 2022 13:36:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44DB0ECAAD3
+	for <linux-media@archiver.kernel.org>; Wed, 14 Sep 2022 14:17:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbiINNgl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 14 Sep 2022 09:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50550 "EHLO
+        id S229588AbiINORA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 14 Sep 2022 10:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiINNgi (ORCPT
+        with ESMTP id S229533AbiINOQ7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 14 Sep 2022 09:36:38 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2F54F6BA
-        for <linux-media@vger.kernel.org>; Wed, 14 Sep 2022 06:36:34 -0700 (PDT)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220914133630epoutp01f89e27cda8895c1ee2129fd703fc8443~UvZCJWbDV1388013880epoutp01b
-        for <linux-media@vger.kernel.org>; Wed, 14 Sep 2022 13:36:30 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220914133630epoutp01f89e27cda8895c1ee2129fd703fc8443~UvZCJWbDV1388013880epoutp01b
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1663162590;
-        bh=jxdQn9sKNQMpQidlDXQKLu/i+Z/Yw0lTnHctr22NF88=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=Zhl9kD/UrW0Ppm4XgIPUTflYi0iC0LVnh0dkdUgJ6r6vdRDM7pEAuBOyzDjQ6qqAK
-         xZtVyaDDdbmmm/Mijn/lbv+LiEpdYLNejfjyy+Mda+kbZ7E4Sr7JKS8Z6xKlwp4BPC
-         6Rcqg3yK+vu4MfeRX6hBqpas4viEu4DiwJZ7uFB8=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20220914133630epcas5p229133ad282c8b03f551bc85336168070~UvZBZnOv72014920149epcas5p2Y;
-        Wed, 14 Sep 2022 13:36:30 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.183]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4MSLvv4gnsz4x9Pt; Wed, 14 Sep
-        2022 13:36:27 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        7D.DD.54060.BD8D1236; Wed, 14 Sep 2022 22:36:27 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220914124818epcas5p4bb7e56887102928c29b2f475cc7008a5~Uuu8AwyvI2316423164epcas5p4V;
-        Wed, 14 Sep 2022 12:48:18 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220914124818epsmtrp26706a2683f35114d48bb5c5f17845889~Uuu7-lfPl2435224352epsmtrp2d;
-        Wed, 14 Sep 2022 12:48:18 +0000 (GMT)
-X-AuditID: b6c32a4b-e33fb7000000d32c-35-6321d8dbab05
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A6.18.18644.19DC1236; Wed, 14 Sep 2022 21:48:17 +0900 (KST)
-Received: from FDSFTE308 (unknown [107.122.81.79]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220914124814epsmtip12f888ca94a1710628813e5181e042c14~Uuu4uiG3l0608306083epsmtip1k;
-        Wed, 14 Sep 2022 12:48:14 +0000 (GMT)
-From:   "Aakarsh Jain" <aakarsh.jain@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
-        "'Smitha T Murthy'" <smitha.t@samsung.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Cc:     <m.szyprowski@samsung.com>, <andrzej.hajda@intel.com>,
-        <mchehab@kernel.org>, <hverkuil-cisco@xs4all.nl>,
-        <ezequiel@vanguardiasur.com.ar>, <jernej.skrabec@gmail.com>,
-        <benjamin.gaignard@collabora.com>, <stanimir.varbanov@linaro.org>,
-        <dillon.minfei@gmail.com>, <david.plowman@raspberrypi.com>,
-        <mark.rutland@arm.com>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
-        <andi@etezian.org>, <alim.akhtar@samsung.com>,
-        <aswani.reddy@samsung.com>, <pankaj.dubey@samsung.com>,
-        <linux-fsd@tesla.com>, <aakarsh.jain@samsung.com>
-In-Reply-To: <7a164961-5b32-8d80-a6f6-8c9f64622085@linaro.org>
-Subject: RE: [Patch v2 01/15] dt-bindings: media: s5p-mfc: Add new DT schema
- for MFC
-Date:   Wed, 14 Sep 2022 18:18:13 +0530
-Message-ID: <011f01d8c838$43234ba0$c969e2e0$@samsung.com>
+        Wed, 14 Sep 2022 10:16:59 -0400
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0C111461;
+        Wed, 14 Sep 2022 07:16:57 -0700 (PDT)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1274ec87ad5so41421747fac.0;
+        Wed, 14 Sep 2022 07:16:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=LqWwwMgkG7q5ptOWydu1eZtOteFgp2ChgqWkwJBq1/Y=;
+        b=QyRcxR/1I67iRc4JOMrM1UHyd9ELBkgR2k5LY1Vwa277XUMq9wY9ugUsw1qdwSEZhN
+         Pu5s+07Yo67EPyU3fknadJKfAe/Evrb5ibhkpyzSKauJUbyfUIPYa1+7EcOvvoti/D3W
+         tLlM3yGRrD6Fz9K8mLvqG3mkFG1+rsqr4LxN3Nd1nSHzS/quucz1LCPwdVShHqYkNkdr
+         UVuLKGKWfMXQfJ7mfomzUUcqvOqikFsaW9CadJTWZU4j8Oo7LZmCI6uGFXMKI8SrcgSE
+         CjPlaeQcDbuJDr3YlDcGljLFaU4U30YfmIQhI5SCPTvKFMy6r7IappuHDXeTFDhOGSmc
+         J7dQ==
+X-Gm-Message-State: ACgBeo3JSXUaFRtRrk3eL561sDmL8yI26ZMZ2WQYx5zqc3C0qQ+UTDGL
+        MfrsOqDt8QhmEFC8sZc1QQ==
+X-Google-Smtp-Source: AA6agR7phoLpgx1eeplqQalugb9TIpdhbmJA6tTFog1tvBunzcuMFods958BQm82BxYmhHzdK6ybAg==
+X-Received: by 2002:a05:6808:bca:b0:344:ef42:930f with SMTP id o10-20020a0568080bca00b00344ef42930fmr1919902oik.0.1663165017098;
+        Wed, 14 Sep 2022 07:16:57 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 59-20020a9d0141000000b0063695ad0cbesm7221742otu.66.2022.09.14.07.16.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Sep 2022 07:16:56 -0700 (PDT)
+Received: (nullmailer pid 2138104 invoked by uid 1000);
+        Wed, 14 Sep 2022 14:16:55 -0000
+Date:   Wed, 14 Sep 2022 09:16:55 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH] media: dt-bindings: ov5645: Convert OV5645 binding to a
+ schema
+Message-ID: <20220914141655.GA2131586-robh@kernel.org>
+References: <20220913160224.14951-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQIwYET59QqMDNmfP0SYfUTdtmHMHgGIcczBAeDI2w8CVnGc/wIQr8+8ApxhNais3ElrcA==
-Content-Language: en-in
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0zTVxTHc/v7tb/CrHbI4oWIq01kIim0o9QLA7dsuPwMLjTDbXEbYFN+
-        AUJpuz6cThOB4WOIhClstkPeUAMORmmBIRCEMiJZ5pgdMLA8FFIoQpDHFDRzLS0b/33ueX3P
-        OTeHifmUEf7MNLmGUsklMi7DG2/uCdrPGx3eK+U/ztqLplt1dDRR0sxAlc/sNDReuYyj7iYz
-        gUzWHzBk6Ouio1LLb3TUcuchjhpnnN4BnQ1H9tJ6gGb1YwzUMecMNj4apKNJxyfoflsxA+X9
-        ZKajHy02AlUPDdBQjfEFDVWYVwh0vsNCIFt7M0A5Fyy0d/zIWyW3ANlqqwLkUNUSRv6stxFk
-        ZfssjTTWfsMgHwy2M8imqnPk+d51nMw31QLyn+wbBJlrGWKQy8Y9ZP/qMiHe/ml6VColSaZU
-        HEouVSSnyVOiubHxSe8lhYv4Ap4gAh3kcuSSDCqaG3NUzHs/TebcBZdzUiLTOk1iiVrNDT0U
-        pVJoNRQnVaHWRHMpZbJMKVSGqCUZaq08JUROaSIFfP6b4c7AE+mploa/MKWNd6r0+V0iE3wf
-        mAu8mJAthNca6xku9mHfBrDhRXIu8HbyEoAXMw2E+7EM4JX1x7TNDIPhKnA72gCcKrrkibID
-        eG+kaCOKwQ6F4/15dJfD15V+obF5w4Gxi3B4Z9DPxV7sQ9AwqdsQ38n+GN6cMWC5gMnE2fvg
-        mp3pMrPYEfBaVi5w86vwrm4Kd5cJhjXlc5i7Iw5cm66hu9jXWWbWOuGR2gV71/IwVw+QPeIF
-        Wyb7CHdCDKwtvgjcvBM6+kweuz9cXuhguFkKH1XMegRksKG9EHfz27DLWoy7+sTYQbChLdRt
-        DoBF/fUe3e3wyvMpz7ZYsLVkkwNh8YNndDfvhj111aAAcPVbRtNvGU2/ZQT9/2plAK8FfpRS
-        nZFCqcOVYXLqy/8+XKrIMIKNUzkQ2woeTiyGdAMaE3QDyMS4vqz8YxypDytZcvorSqVIUmll
-        lLobhDvX/S3m/5pU4bw1uSZJIIzgC0UikTAiTCTg7mIVBgOpDztFoqHSKUpJqTbzaEwv/0za
-        mfizvzgWCn2fFiyYo+Nymr8Y86dVZ7fw7doI69EB2Y4Eqz24vCaovLJeEHZ1/cZqgbqp8YM/
-        grQf7Ut5Eju88i5nQlxKG2V9fvv+74nzndbDh0+P/Z2z+8zqPGIMhFn74nknTWRb1fzaXphz
-        kDQfLy4J5B9bTKyNNl/S1ZCWl9rqnm3h84npRxx/9k5/d/PDbP0c4RMQsNJ+uezs/sgc8Vid
-        b1ycqSv9cuzgnpHee+tvSBPKY0p5YlkU3YaW7X7jddenZkaHkoyvmxciJdueDC897aw4V677
-        OkuUUOh4+daOfKFyLPWz652/eh+fO7WuMDQJXok5UTbsUCzajxj8TFFcXJ0qERzAVGrJv6Uz
-        VRmzBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupgleLIzCtJLcpLzFFi42LZdlhJTnfiWcVkg4MfrCye7pjJavFg3jY2
-        i8U/njNZ3F/8mcXi0Oat7BZbrsxmtlh+/ACrxfwj51gtth98xGKx8QVQ9uLMuywWz+evY7R4
-        Oesem8Xe10DFmx5fY7V4+Crc4vKuOWwWPRu2slqsPXKX3WLp9YtMFss2/WGyWLT1C7tF694j
-        7BZ392xjtGhpO8LkIOmxZt4aRo8dd5cwelxf8onZY+esu+wei/e8ZPLYtKqTzePOtT1sHpuX
-        1Hu0Hv3F4tG3ZRWjx7+mueweXUeus3l83iTncerrZ/YAvigum5TUnMyy1CJ9uwSujM9vcgq2
-        6VR8PXCevYHxnUoXIyeHhICJxPLlkxi7GLk4hAR2MEp8eLmKBSIhI/G/7Rg7hC0ssfLfczBb
-        SOApo8SGDl0Qm01AX+L+qR5WkGYRge+MEo3nbrCAOMwCK1kk7t7qYoEYe5pJ4v/9JWwgLZwC
-        dhLLH84Es4UFQiROXF8AZHNwsAioSvx8zgES5hWwlJjc2MUIYQtKnJz5BOwiZgFtiac3n8LZ
-        yxa+Zoa4TkHi59NlrCC2iECYxMsrD5ggasQljv7sYZ7AKDwLyahZSEbNQjJqFpKWBYwsqxgl
-        UwuKc9Nziw0LjPJSy/WKE3OLS/PS9ZLzczcxghOLltYOxj2rPugdYmTiYDzEKMHBrCTC2xei
-        kCzEm5JYWZValB9fVJqTWnyIUZqDRUmc90LXyXghgfTEktTs1NSC1CKYLBMHp1QDk0be/Av9
-        WUb+B8rVrhY9bz7Sv0T5OO/5ulnP/fyMUg5c7Tt3Nbp6zxTeosWTDd/nK1s2BB3c6b7pa+Xq
-        SKalZTzrmkw2P59uHK2wq850o73kVtkcEWeO2cK9UhfTV//mPF3y5dkxFY3LPi2Fa24X/yy6
-        Lnk/0+FUYOaH2uif6exuFX9enOqtE5oTsz7pxl7L/abmVdKREbwp7etTm/lPT75rLbdE8tW9
-        SoHEFZsnLbSwX3hf6vV/8/DdCttnRe2f88HhKfNWpbwrj32bp+kHNl5SjtIqKvQ7FVExlWmX
-        +uHN3Tr/LuuueaTfUFgRGjaveHXpRRVjLqNUww1Hr5v/+165a861vt37TM/Pehp0RYmlOCPR
-        UIu5qDgRAIExCsqbAwAA
-X-CMS-MailID: 20220914124818epcas5p4bb7e56887102928c29b2f475cc7008a5
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220907063313epcas5p114f793010fd0f2797e93bd83ed18a1d7
-References: <20220907064715.55778-1-smitha.t@samsung.com>
-        <CGME20220907063313epcas5p114f793010fd0f2797e93bd83ed18a1d7@epcas5p1.samsung.com>
-        <20220907064715.55778-2-smitha.t@samsung.com>
-        <08168057-853c-5b17-7d88-dc6c30e82f14@linaro.org>
-        <000101d8c382$75750e00$605f2a00$@samsung.com>
-        <7a164961-5b32-8d80-a6f6-8c9f64622085@linaro.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220913160224.14951-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+On Tue, Sep 13, 2022 at 05:02:24PM +0100, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> 
+> Convert the simple OV5645 Device Tree binding to json-schema.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  .../devicetree/bindings/media/i2c/ov5645.txt  |  54 --------
+>  .../bindings/media/i2c/ovti,ov5645.yaml       | 119 ++++++++++++++++++
+>  2 files changed, 119 insertions(+), 54 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/media/i2c/ov5645.txt
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/i2c/ov5645.txt b/Documentation/devicetree/bindings/media/i2c/ov5645.txt
+> deleted file mode 100644
+> index 72ad992f77be..000000000000
+> --- a/Documentation/devicetree/bindings/media/i2c/ov5645.txt
+> +++ /dev/null
+> @@ -1,54 +0,0 @@
+> -* Omnivision 1/4-Inch 5Mp CMOS Digital Image Sensor
+> -
+> -The Omnivision OV5645 is a 1/4-Inch CMOS active pixel digital image sensor with
+> -an active array size of 2592H x 1944V. It is programmable through a serial I2C
+> -interface.
+> -
+> -Required Properties:
+> -- compatible: Value should be "ovti,ov5645".
+> -- clocks: Reference to the xclk clock.
+> -- clock-names: Should be "xclk".
+> -- clock-frequency: Frequency of the xclk clock.
+> -- enable-gpios: Chip enable GPIO. Polarity is GPIO_ACTIVE_HIGH. This corresponds
+> -  to the hardware pin PWDNB which is physically active low.
+> -- reset-gpios: Chip reset GPIO. Polarity is GPIO_ACTIVE_LOW. This corresponds to
+> -  the hardware pin RESETB.
+> -- vdddo-supply: Chip digital IO regulator.
+> -- vdda-supply: Chip analog regulator.
+> -- vddd-supply: Chip digital core regulator.
+> -
+> -The device node must contain one 'port' child node for its digital output
+> -video port, in accordance with the video interface bindings defined in
+> -Documentation/devicetree/bindings/media/video-interfaces.txt.
+> -
+> -Example:
+> -
+> -	&i2c1 {
+> -		...
+> -
+> -		ov5645: ov5645@3c {
+> -			compatible = "ovti,ov5645";
+> -			reg = <0x3c>;
+> -
+> -			enable-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
+> -			reset-gpios = <&gpio5 20 GPIO_ACTIVE_LOW>;
+> -			pinctrl-names = "default";
+> -			pinctrl-0 = <&camera_rear_default>;
+> -
+> -			clocks = <&clks 200>;
+> -			clock-names = "xclk";
+> -			clock-frequency = <24000000>;
+> -
+> -			vdddo-supply = <&camera_dovdd_1v8>;
+> -			vdda-supply = <&camera_avdd_2v8>;
+> -			vddd-supply = <&camera_dvdd_1v2>;
+> -
+> -			port {
+> -				ov5645_ep: endpoint {
+> -					clock-lanes = <1>;
+> -					data-lanes = <0 2>;
+> -					remote-endpoint = <&csi0_ep>;
+> -				};
+> -			};
+> -		};
+> -	};
+> diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml
+> new file mode 100644
+> index 000000000000..7f407c988f87
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml
+> @@ -0,0 +1,119 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/i2c/ovti,ov5645.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: OmniVision OV5645 Image Sensor Device Tree Bindings
+> +
+> +maintainers:
+> +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> +
+> +allOf:
+> +  - $ref: /schemas/media/video-interface-devices.yaml#
 
+What are you using from here?
 
-> -----Original Message-----
-> From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40linaro.org=5D
-> Sent: 08 September 2022 20:41
-> To: Aakarsh Jain <aakarsh.jain=40samsung.com>; 'Krzysztof Kozlowski'
-> <krzysztof.kozlowski=40linaro.org>; 'Smitha T Murthy'
-> <smitha.t=40samsung.com>; linux-arm-kernel=40lists.infradead.org; linux-
-> media=40vger.kernel.org; linux-kernel=40vger.kernel.org;
-> devicetree=40vger.kernel.org
-> Cc: m.szyprowski=40samsung.com; andrzej.hajda=40intel.com;
-> mchehab=40kernel.org; hverkuil-cisco=40xs4all.nl;
-> ezequiel=40vanguardiasur.com.ar; jernej.skrabec=40gmail.com;
-> benjamin.gaignard=40collabora.com; stanimir.varbanov=40linaro.org;
-> dillon.minfei=40gmail.com; david.plowman=40raspberrypi.com;
-> mark.rutland=40arm.com; robh+dt=40kernel.org; krzk+dt=40kernel.org;
-> andi=40etezian.org; alim.akhtar=40samsung.com; aswani.reddy=40samsung.com=
-;
-> pankaj.dubey=40samsung.com; linux-fsd=40tesla.com
-> Subject: Re: =5BPatch v2 01/15=5D dt-bindings: media: s5p-mfc: Add new DT
-> schema for MFC
->=20
-> On 08/09/2022 14:56, Aakarsh Jain wrote:
-> >
-> >
-> >> -----Original Message-----
-> >> From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40linaro.org=
-=5D
-> >> Sent: 07 September 2022 16:52
-> >> To: Smitha T Murthy <smitha.t=40samsung.com>; linux-arm-
-> >> kernel=40lists.infradead.org; linux-media=40vger.kernel.org; linux-
-> >> kernel=40vger.kernel.org; devicetree=40vger.kernel.org
-> >> Cc: m.szyprowski=40samsung.com; andrzej.hajda=40intel.com;
-> >> mchehab=40kernel.org; hverkuil-cisco=40xs4all.nl;
-> >> ezequiel=40vanguardiasur.com.ar; jernej.skrabec=40gmail.com;
-> >> benjamin.gaignard=40collabora.com; stanimir.varbanov=40linaro.org;
-> >> dillon.minfei=40gmail.com; david.plowman=40raspberrypi.com;
-> >> mark.rutland=40arm.com; robh+dt=40kernel.org; krzk+dt=40kernel.org;
-> >> andi=40etezian.org; alim.akhtar=40samsung.com;
-> aswani.reddy=40samsung.com;
-> >> pankaj.dubey=40samsung.com; linux-fsd=40tesla.com;
-> >> aakarsh.jain=40samsung.com
-> >> Subject: Re: =5BPatch v2 01/15=5D dt-bindings: media: s5p-mfc: Add new=
- DT
-> >> schema for MFC
-> >>
-> >> On 07/09/2022 08:47, Smitha T Murthy wrote:
-> >>> Adds DT schema for s5p-mfc in yaml format
-> >>
-> >> s/Adds/Convert/
-> >> (as convert to DT schema)
-> >>
-> > ok, I will change.
-> >
-> >> Please mention here changes to original binding (I see at least
-> >> adding iommus and dropping some properties).
-> >>
-> > ok. I will make this changes.
-> >>>
-> >>> Signed-off-by: Aakarsh Jain <aakarsh.jain=40samsung.com>
-> >>> Signed-off-by: Smitha T Murthy <smitha.t=40samsung.com>
-> >>> ---
-> >>>  .../devicetree/bindings/media/s5p-mfc.txt     =7C  77 +------------
-> >>>  .../bindings/media/samsung,s5p-mfc.yaml       =7C 109
-> >> ++++++++++++++++++
-> >>>  2 files changed, 110 insertions(+), 76 deletions(-)  create mode
-> >>> 100644 Documentation/devicetree/bindings/media/samsung,s5p-
-> mfc.yaml
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/media/s5p-mfc.txt
-> >>> b/Documentation/devicetree/bindings/media/s5p-mfc.txt
-> >>> index aa54c8159d9f..0b7c4dd40095 100644
-> >>> --- a/Documentation/devicetree/bindings/media/s5p-mfc.txt
-> >>> +++ b/Documentation/devicetree/bindings/media/s5p-mfc.txt
-> >>> =40=40 -1,76 +1 =40=40
-> >>> -* Samsung Multi Format Codec (MFC)
-> >>> -
-> >>> -Multi Format Codec (MFC) is the IP present in Samsung SoCs which
-> >>> -supports high resolution decoding and encoding functionalities.
-> >>> -The MFC device driver is a v4l2 driver which can encode/decode
-> >>> -video raw/elementary streams and has support for all popular -video
-> codecs.
-> >>> -
-> >>> -Required properties:
-> >>> -  - compatible : value should be either one among the following
-> >>> -	(a) =22samsung,mfc-v5=22 for MFC v5 present in Exynos4 SoCs
-> >>> -	(b) =22samsung,mfc-v6=22 for MFC v6 present in Exynos5 SoCs
-> >>> -	(c) =22samsung,mfc-v7=22 for MFC v7 present in Exynos5420 SoC
-> >>> -	(d) =22samsung,mfc-v8=22 for MFC v8 present in Exynos5800 SoC
-> >>> -	(e) =22samsung,exynos5433-mfc=22 for MFC v8 present in Exynos5433
-> >> SoC
-> >>> -	(f) =22samsung,mfc-v10=22 for MFC v10 present in Exynos7880 SoC
-> >>> -
-> >>> -  - reg : Physical base address of the IP registers and length of me=
-mory
-> >>> -	  mapped region.
-> >>> -
-> >>> -  - interrupts : MFC interrupt number to the CPU.
-> >>> -  - clocks : from common clock binding: handle to mfc clock.
-> >>> -  - clock-names : from common clock binding: must contain =22mfc=22,
-> >>> -		  corresponding to entry in the clocks property.
-> >>> -
-> >>> -Optional properties:
-> >>> -  - power-domains : power-domain property defined with a phandle
-> >>> -			   to respective power domain.
-> >>> -  - memory-region : from reserved memory binding: phandles to two
-> >> reserved
-> >>> -	memory regions, first is for =22left=22 mfc memory bus interfaces,
-> >>> -	second if for the =22right=22 mfc memory bus, used when no SYSMMU
-> >>> -	support is available; used only by MFC v5 present in Exynos4 SoCs
-> >>> -
-> >>> -Obsolete properties:
-> >>> -  - samsung,mfc-r, samsung,mfc-l : support removed, please use
-> >>> memory-
-> >> region
-> >>> -	property instead
-> >>
-> >> When did they become obsolete? Is it enough of time to remove them?
-> >
-> > these properties were there earlier, we didn't added them in obsolete
-> properties.
->=20
-> This is not the answer to my question. Is it enough of time to remove
-> deprecated properties?
->=20
-sorry I misunderstood. These two mfc-l and mfc-r are still used in mfcv5 ve=
-rsion as they use MFC_NUM_PORTS as 2, so we cannot make them obsolete yet. =
-In next patch series we will add allOf: if: else: conditions for all the pr=
-operties of each compatible string.
-Thanks for the review.
->=20
->=20
-> Best regards,
-> Krzysztof
+(Answer below)
 
+> +
+> +properties:
+> +  compatible:
+> +    const: ovti,ov5645
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description: XCLK Input Clock
+> +
+> +  clock-names:
+> +    const: xclk
+> +
+> +  clock-frequency:
+> +    description: Frequency of the xclk clock in Hz.
+> +
+> +  vdda-supply:
+> +    description: Analog voltage supply, 2.8 volts
+> +
+> +  vddd-supply:
+> +    description: Digital core voltage supply, 1.5 volts
+> +
+> +  vdddo-supply:
+> +    description: Digital I/O voltage supply, 1.8 volts
+> +
+> +  enable-gpios:
+> +    maxItems: 1
+> +    description:
+> +      Reference to the GPIO connected to the PWDNB pin, if any.
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +    description:
+> +      Reference to the GPIO connected to the RESETB pin, if any.
+> +
+> +  port:
+> +    description: Digital Output Port
+> +    $ref: /schemas/graph.yaml#/$defs/port-base
+> +    additionalProperties: false
+> +
+> +    properties:
+> +      endpoint:
+> +        $ref: /schemas/media/video-interfaces.yaml#
+> +        unevaluatedProperties: false
+> +
+> +        properties:
+> +          clock-lanes:
+> +            const: 0
+> +
+> +          bus-type:
+> +            const: 4
+> +
+> +          data-lanes:
+> +            minItems: 1
+> +            maxItems: 2
+> +            items:
+> +              enum: [1, 2]
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - clock-frequency
+> +  - vdda-supply
+> +  - vddd-supply
+> +  - vdddo-supply
+> +  - enable-gpios
+> +  - reset-gpios
+> +  - port
+> +
+> +additionalProperties: false
+
+You are not because this prevents it. Either remove the ref or use 
+unevaluatedProperties.
+
+Rob
