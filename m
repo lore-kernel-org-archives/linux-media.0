@@ -2,119 +2,127 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1D77ECAAA1
-	for <linux-media@archiver.kernel.org>; Thu, 15 Sep 2022 22:04:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC763C32771
+	for <linux-media@archiver.kernel.org>; Thu, 15 Sep 2022 22:04:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbiIOWEH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Sep 2022 18:04:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60320 "EHLO
+        id S229577AbiIOWEe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Sep 2022 18:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiIOWEG (ORCPT
+        with ESMTP id S229479AbiIOWEc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Sep 2022 18:04:06 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238BD53D05
-        for <linux-media@vger.kernel.org>; Thu, 15 Sep 2022 15:04:03 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id l14so45205620eja.7
-        for <linux-media@vger.kernel.org>; Thu, 15 Sep 2022 15:04:03 -0700 (PDT)
+        Thu, 15 Sep 2022 18:04:32 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524522635;
+        Thu, 15 Sep 2022 15:04:31 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id u18so32561347lfo.8;
+        Thu, 15 Sep 2022 15:04:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=tALU3ngGuccY89kW5gd4JGorZltgFUamSuX4Gf4e2t8=;
-        b=tFd4I4QPu0Dc9TgYFcm9IjMi1lbLPg8f5IFq4ZRs/3N75wMqxe4qw74H6WiffrI9FA
-         lmSBMCdkSU86m9CdKiXWql/9GwDLo9PdwcSzYW2BppEFObjtPIYJ+HIFVAatx/Mt6yDT
-         RrShoRFzo0ECfhF8qxF8ZRfwFHJcG17r1qxKdTUOa8cf+lj+HCYyVdf2CdRBtkhbXxw8
-         3Czvl4menwOP778cnz7+46bkt+AuVFdfT5O4tgtkw+zh/2fM9Oz1pC/FC6Ywrm34VNjj
-         hvWmZkaK/ACBGwS5uJZi+S44LdL++rRhW9IH+Vq2bNCylgFooUVw2t3ddDecz+fD9wvM
-         6CXA==
+        d=gmail.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date;
+        bh=xlT85NiSss8JUeEPEAh4JqoYnygSarUD1xdRUwkFSgE=;
+        b=XJMCDQ1QiOt/r4Wg4MMl3gKCKc2j5ZXPWsE4Mj4u3mh190cP5dycmSVpuYxRsNerdh
+         Mmc5ZmLtOBeaDgu0zAyrM3mA7//X3+2fzRCbWALFUqIH7c9gzIt5M5Q6POkEfVTh8ZoM
+         UjC0Ouzei/3w5r3B6Calb52klBtKX4hp8B1pW4922kyEC/tG7cHvOmsF5vqn89OOfU9/
+         NKZxUjZGK5ddRyfgq2Nd0WzNyfPQiO92YlWooV2MYchCpx5qdCii0oqVjOxtQ2jUHunr
+         Loyo3hAaLuj3yUaYs9tSfQky1dMAWJ2uXgZ32cMobs4CXRhqWgRMFJsjz5dPgMJOvWYM
+         aXpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=tALU3ngGuccY89kW5gd4JGorZltgFUamSuX4Gf4e2t8=;
-        b=X3rqJIsbWq/qwe9Ql9K7mk70kYSprtCnxu1HUx0TXONRAcV5lZV5dp71wOXadz4KS2
-         ThwM5GUaNmpkItuqTkd6Vo7H7G6ePn535aDHN2+hWOXfwI9uZJcIS6aMfXCW2/I9jpdA
-         ySuqDrC8UQFvyXJE957O83/O5E7vm8+Wpu7fOLD6/j610s47NGU1HzozO9ys92Gq1WM6
-         F4ZxMLaYg+xyNeg1YnCqQtLBN6K7LFZJRRpDtga5wkrbYmTLuRq1zqGfl5T2+WmOFy1K
-         iH/snbGKSgzLXBrxT0111+VR6tw29YS1rYV2x7w+Dq/ae0OhnZ3QhUN5lybmtgaakHP7
-         /CIA==
-X-Gm-Message-State: ACrzQf1yLRP9q78FNRJgsxh+7cDoGtNAfswUXm0m/7zIoY0RYSI71GRa
-        78lbwdMEjug4r1bZCaR7UdVRC4xvmwIz0vJ8eIeEfQ==
-X-Google-Smtp-Source: AMsMyM4DNqRCOy/6dqrGBzM4j9BVWGmfnai5LHvFQPu8fFgc3wgc+Yna1J7qYsfXvOy8PxzJD6YGH5OazrNBcsCeGMw=
-X-Received: by 2002:a17:907:80b:b0:77a:86a1:db52 with SMTP id
- wv11-20020a170907080b00b0077a86a1db52mr1379611ejb.294.1663279441712; Thu, 15
- Sep 2022 15:04:01 -0700 (PDT)
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date;
+        bh=xlT85NiSss8JUeEPEAh4JqoYnygSarUD1xdRUwkFSgE=;
+        b=BUitepbWEBDuP2+43EJIGIDDv44wCVXJQMKVG8/ydc1Ua4AZAb13JKcipjxtz7UdYx
+         2wz6vWrfuaByoWzzuTUgXHGA7i1ZVUkJpUoiE4WNEi+WobHOrFQc/60knsb3LAwZEjzK
+         DzZ/ewW648MaBvLE/YFqmE3gP9pPkccvN8sMVZN/ltBanlFniakiNEW1O/nBMqY38zoY
+         HQiMiNGHaJwzB58jVdTNir+ZPiSFySsxpIWhCYr8hQYC1hfGfBTRLS7wo9iFY6eCwNdI
+         OvCNjas3nm2JpqHXeSXKe22ncqbdrahchJAwzJBTj5TXNEVWtn9t4flOR1ktgs8/q5Fl
+         WRWQ==
+X-Gm-Message-State: ACrzQf3QSTXubeM/D4QsS6R0qLNO/c2d3D6CcjRqTxIOk5FGUD1MUXZ0
+        cbSP4xzSI1tngEdIOGCQDLlu+R9Tf7xIIQ==
+X-Google-Smtp-Source: AMsMyM6CQeNfOyg73Royjnt9ZvVZW+kflVtHIjP4gyJnLtdgFK1fbX90pHvLTpc1x4ktD6h308xXqw==
+X-Received: by 2002:ac2:464b:0:b0:49e:b29c:2b04 with SMTP id s11-20020ac2464b000000b0049eb29c2b04mr632486lfo.127.1663279469388;
+        Thu, 15 Sep 2022 15:04:29 -0700 (PDT)
+Received: from razdolb (95-31-185-216.broadband.corbina.ru. [95.31.185.216])
+        by smtp.gmail.com with ESMTPSA id d21-20020a056512369500b00499f700430fsm2943325lfs.224.2022.09.15.15.04.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Sep 2022 15:04:28 -0700 (PDT)
+References: <20220911200147.375198-1-mike.rudenko@gmail.com>
+ <20220911200147.375198-3-mike.rudenko@gmail.com>
+ <e3c0bafe-394c-e8cc-aba0-6eb480dc5b43@linaro.org>
+User-agent: mu4e 1.9.0; emacs 28.1
+From:   Mikhail Rudenko <mike.rudenko@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Christian Hemp <c.hemp@phytec.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Marek Vasut <marex@denx.de>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] media: i2c: add support for ov4689
+Date:   Thu, 15 Sep 2022 23:40:00 +0300
+In-reply-to: <e3c0bafe-394c-e8cc-aba0-6eb480dc5b43@linaro.org>
+Message-ID: <87o7vgpa50.fsf@gmail.com>
 MIME-Version: 1.0
-References: <20220915003522.1227073-1-bryan.odonoghue@linaro.org> <20220915003522.1227073-5-bryan.odonoghue@linaro.org>
-In-Reply-To: <20220915003522.1227073-5-bryan.odonoghue@linaro.org>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Thu, 15 Sep 2022 23:03:45 +0100
-Message-ID: <CAPY8ntCmRy_BSQW6QajrRMLpQBzMimcQPvZw1ocazxhr2dOd0A@mail.gmail.com>
-Subject: Re: [PATCH v3 4/5] media: i2c: imx412: Add imx477 compatible string
-To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
-Cc:     sakari.ailus@iki.fi, jacopo@jmondi.org, paul.j.murphy@intel.com,
-        daniele.alessandrelli@intel.com, mchehab@kernel.org,
-        linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Bryan
 
-On Thu, 15 Sept 2022 at 01:36, Bryan O'Donoghue
-<bryan.odonoghue@linaro.org> wrote:
+Hi Krzysztof,
+
+On 2022-09-12 at 12:56 +02, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> On 11/09/2022 22:01, Mikhail Rudenko wrote:
+>> +static const struct i2c_device_id ov4689_id[] = {
+>> +	{ "ov4689", 0 },
+>> +	{},
+>> +};
+>> +MODULE_DEVICE_TABLE(i2c, ov4689_id);
+>> +
+>> +static const struct of_device_id ov4689_of_match[] = {
+>> +	{ .compatible = "ovti,ov4689" },
+>> +	{},
+>> +};
+>> +MODULE_DEVICE_TABLE(of, ov4689_of_match);
+>> +
+>> +static struct i2c_driver ov4689_i2c_driver = {
+>> +	.driver = {
+>> +		.name = "ov4689",
+>> +		.pm = &ov4689_pm_ops,
+>> +		.of_match_table = of_match_ptr(ov4689_of_match),
 >
-> The Sony imx477 uses the same silicon enabling reference code from Sony in
-> the available examples provided.
+> of_match_ptr is usually paired with maybe_unused, otherwise you will
+> have compile test warnings.
 
-Have you had any conversations with Sony on whether the same register
-settings are genuinely valid for all of these sensors?
+I see. I think we could also use `#if IS_ENABLED(CONFIG_OF)` around
+`ov4689_of_match` and the corresponding `MODULE_DEVICE_TABLE`. Is it
+appropriate here?
 
-IMX477 is the sensor in the Raspberry Pi HQ camera, but the register
-set that we have from Sony has many undocumented (to us at least)
-registers for image quality tuning that aren't in the imx412 driver -
-we're up at 417 registers vs imx412's 231 [1].
-
-Raspberry Pi has previously had discussions with Sony regarding IMX378
-vs IMX477, which is also in the same family. Whilst nearly identical
-in register setup, they gave us 3 additional registers that have to be
-set for IMX378 to avoid image quality issues. I wouldn't be surprised
-if something similar weren't true for IMX412 and IMX577.
-
-I'm not saying it's impossible to remove a load of duplicated register
-settings by combining these sensors into one driver, but this current
-patch looks a little simplistic, and probably needs to be looking to
-have a struct for sensor specific registers, not just changing the
-compatible string and advertised name. Or perhaps we extend that later
-once the compatible string has been added?
-Merging them does bring issues with regard to testing as it is
-unlikely to be practical to test any new features across all variants.
-
-  Dave
-
-[1] https://github.com/raspberrypi/linux/blob/rpi-5.15.y/drivers/media/i2c/imx477.c
-
-> Add an imx477 compatible string and re-use the existing imx412 code.
+>> +	},
+>> +	.probe = ov4689_probe,
+>> +	.remove	= ov4689_remove,
+>> +	.id_table = ov4689_id,
+>> +};
+>> +
+>> +module_i2c_driver(ov4689_i2c_driver);
+>> +
+>> +MODULE_DESCRIPTION("OmniVision ov4689 sensor driver");
+>> +MODULE_LICENSE("GPL");
 >
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  drivers/media/i2c/imx412.c | 1 +
->  1 file changed, 1 insertion(+)
 >
-> diff --git a/drivers/media/i2c/imx412.c b/drivers/media/i2c/imx412.c
-> index bc7fdb24235f..1013a5afc85f 100644
-> --- a/drivers/media/i2c/imx412.c
-> +++ b/drivers/media/i2c/imx412.c
-> @@ -1289,6 +1289,7 @@ static const struct dev_pm_ops imx412_pm_ops = {
->
->  static const struct of_device_id imx412_of_match[] = {
->         { .compatible = "sony,imx412", .data = "imx412" },
-> +       { .compatible = "sony,imx477", .data = "imx477" },
->         { }
->  };
->
-> --
-> 2.34.1
->
+> Best regards,
+> Krzysztof
+
+
+--
+Best regards,
+Mikhail Rudenko
