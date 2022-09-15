@@ -2,226 +2,119 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CE55C6FA82
-	for <linux-media@archiver.kernel.org>; Thu, 15 Sep 2022 22:03:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1D77ECAAA1
+	for <linux-media@archiver.kernel.org>; Thu, 15 Sep 2022 22:04:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbiIOWDr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Sep 2022 18:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
+        id S229459AbiIOWEH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Sep 2022 18:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiIOWDq (ORCPT
+        with ESMTP id S229479AbiIOWEG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Sep 2022 18:03:46 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2DC459A6;
-        Thu, 15 Sep 2022 15:03:45 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id l12so23856088ljg.9;
-        Thu, 15 Sep 2022 15:03:45 -0700 (PDT)
+        Thu, 15 Sep 2022 18:04:06 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238BD53D05
+        for <linux-media@vger.kernel.org>; Thu, 15 Sep 2022 15:04:03 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id l14so45205620eja.7
+        for <linux-media@vger.kernel.org>; Thu, 15 Sep 2022 15:04:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date;
-        bh=TFtx1KDgtTM0guPlXqDPIbAnzqs4tdXSSSFU0BK0QIk=;
-        b=eQaqn3UIwD/aaMwup1N1iDKN9tv4h4gzHYmvGWpPS+xJ7Dqpr5ECPmzuBXNUyZDQd2
-         v+WVEQRsGPV+LYpLrb4psQDKPgxsUFE9zTle5miaKDF8qs0orJFst6wcjsC3ewgmg9s2
-         0zsA0npFZcsGTh+1dwiJKi0OUR/JCmYyYUo6lE89u559BCfvX63Wf0NDQ0tqVFkcdyzY
-         mlvegw2InqU31U0yPKXWyfuTSjPAdIG/6ugFjM4TX2bVQY5sub8WXW22GxTExQyJxBvy
-         ujhtkifuc2JCOyeJIRyZ4dz3Dcksa3vBxork8+FtPUEl9yHZ4Atx4h64xAMyvyDzIHKs
-         h0rQ==
+        d=raspberrypi.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=tALU3ngGuccY89kW5gd4JGorZltgFUamSuX4Gf4e2t8=;
+        b=tFd4I4QPu0Dc9TgYFcm9IjMi1lbLPg8f5IFq4ZRs/3N75wMqxe4qw74H6WiffrI9FA
+         lmSBMCdkSU86m9CdKiXWql/9GwDLo9PdwcSzYW2BppEFObjtPIYJ+HIFVAatx/Mt6yDT
+         RrShoRFzo0ECfhF8qxF8ZRfwFHJcG17r1qxKdTUOa8cf+lj+HCYyVdf2CdRBtkhbXxw8
+         3Czvl4menwOP778cnz7+46bkt+AuVFdfT5O4tgtkw+zh/2fM9Oz1pC/FC6Ywrm34VNjj
+         hvWmZkaK/ACBGwS5uJZi+S44LdL++rRhW9IH+Vq2bNCylgFooUVw2t3ddDecz+fD9wvM
+         6CXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date;
-        bh=TFtx1KDgtTM0guPlXqDPIbAnzqs4tdXSSSFU0BK0QIk=;
-        b=TRqBrohc7CUtK9EYiI+wdS9vKQLgH8xUEvh5EDOj/spxPkAeamc5rhSJPhhYIOnpEs
-         B+9sOXRA3kCy5P47GUQozgtDghnMMk5DfWlkVM5OLMAUqKlqLQTbX2mGhqZvnW0hbX97
-         zkwy0+GkNj2FgYr0R8uhYZCkYMnslUqorTftDEzAoaSPLdKeRmJnHJ8dAIO5sfAlJ05f
-         9dax8Sn9u/xfF18LQsDa7dcN1YHtcOp2dfshwNwnhE+o8fMMNUI1SiLQXKMs0Lss4Ro7
-         9oqeVM3wGw9Jzg8KtXEbIIlq0ODRw3oZ+2VAlkVo5W481BRf30rlKWhCA6i2LT460+P2
-         4Prg==
-X-Gm-Message-State: ACrzQf3qy8Vh9mXAVVlbwItE+VASNgx/ASpSHq4V7O/RBRc0+KGMoMmP
-        uGDyVThCokRZ+8+2GSgR6z/PLZPrKM5Mnw==
-X-Google-Smtp-Source: AMsMyM5RDu0Pj3rd8qFwmSRkhUvB4T7QYx+2GZe1R24VPtpEQcLqtINoA1CSln1aA/U1I+mDZ8cJiw==
-X-Received: by 2002:a2e:86c9:0:b0:26c:2f32:e4fa with SMTP id n9-20020a2e86c9000000b0026c2f32e4famr533418ljj.389.1663279423110;
-        Thu, 15 Sep 2022 15:03:43 -0700 (PDT)
-Received: from razdolb (95-31-185-216.broadband.corbina.ru. [95.31.185.216])
-        by smtp.gmail.com with ESMTPSA id 11-20020a05651c128b00b0026c34bed71csm371203ljc.87.2022.09.15.15.03.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 15:03:42 -0700 (PDT)
-References: <20220911200147.375198-1-mike.rudenko@gmail.com>
- <20220911200147.375198-2-mike.rudenko@gmail.com>
- <20220913140553.GA2735@tom-ThinkPad-T14s-Gen-2i>
-User-agent: mu4e 1.9.0; emacs 28.1
-From:   Mikhail Rudenko <mike.rudenko@gmail.com>
-To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Christian Hemp <c.hemp@phytec.de>,
-        Arec Kao <arec.kao@intel.com>, Arnd Bergmann <arnd@arndb.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Jimmy Su <jimmy.su@intel.com>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] media: dt-bindings: media: i2c: document OV4689
- DT bindings
-Date:   Thu, 15 Sep 2022 23:11:57 +0300
-In-reply-to: <20220913140553.GA2735@tom-ThinkPad-T14s-Gen-2i>
-Message-ID: <87sfkspa6b.fsf@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=tALU3ngGuccY89kW5gd4JGorZltgFUamSuX4Gf4e2t8=;
+        b=X3rqJIsbWq/qwe9Ql9K7mk70kYSprtCnxu1HUx0TXONRAcV5lZV5dp71wOXadz4KS2
+         ThwM5GUaNmpkItuqTkd6Vo7H7G6ePn535aDHN2+hWOXfwI9uZJcIS6aMfXCW2/I9jpdA
+         ySuqDrC8UQFvyXJE957O83/O5E7vm8+Wpu7fOLD6/j610s47NGU1HzozO9ys92Gq1WM6
+         F4ZxMLaYg+xyNeg1YnCqQtLBN6K7LFZJRRpDtga5wkrbYmTLuRq1zqGfl5T2+WmOFy1K
+         iH/snbGKSgzLXBrxT0111+VR6tw29YS1rYV2x7w+Dq/ae0OhnZ3QhUN5lybmtgaakHP7
+         /CIA==
+X-Gm-Message-State: ACrzQf1yLRP9q78FNRJgsxh+7cDoGtNAfswUXm0m/7zIoY0RYSI71GRa
+        78lbwdMEjug4r1bZCaR7UdVRC4xvmwIz0vJ8eIeEfQ==
+X-Google-Smtp-Source: AMsMyM4DNqRCOy/6dqrGBzM4j9BVWGmfnai5LHvFQPu8fFgc3wgc+Yna1J7qYsfXvOy8PxzJD6YGH5OazrNBcsCeGMw=
+X-Received: by 2002:a17:907:80b:b0:77a:86a1:db52 with SMTP id
+ wv11-20020a170907080b00b0077a86a1db52mr1379611ejb.294.1663279441712; Thu, 15
+ Sep 2022 15:04:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20220915003522.1227073-1-bryan.odonoghue@linaro.org> <20220915003522.1227073-5-bryan.odonoghue@linaro.org>
+In-Reply-To: <20220915003522.1227073-5-bryan.odonoghue@linaro.org>
+From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date:   Thu, 15 Sep 2022 23:03:45 +0100
+Message-ID: <CAPY8ntCmRy_BSQW6QajrRMLpQBzMimcQPvZw1ocazxhr2dOd0A@mail.gmail.com>
+Subject: Re: [PATCH v3 4/5] media: i2c: imx412: Add imx477 compatible string
+To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
+Cc:     sakari.ailus@iki.fi, jacopo@jmondi.org, paul.j.murphy@intel.com,
+        daniele.alessandrelli@intel.com, mchehab@kernel.org,
+        linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Bryan
 
-Hi Tommaso,
-
-On 2022-09-13 at 16:05 +02, Tommaso Merciai <tommaso.merciai@amarulasolutions.com> wrote:
-> Hi Mikhail,
+On Thu, 15 Sept 2022 at 01:36, Bryan O'Donoghue
+<bryan.odonoghue@linaro.org> wrote:
 >
-> On Sun, Sep 11, 2022 at 11:01:34PM +0300, Mikhail Rudenko wrote:
->> Add device-tree binding documentation for OV4689 image sensor driver,
->> and the relevant MAINTAINERS entries.
->>
->> Signed-off-by: Mikhail Rudenko <mike.rudenko@gmail.com>
->> ---
->>  .../bindings/media/i2c/ovti,ov4689.yaml       | 141 ++++++++++++++++++
->>  MAINTAINERS                                   |   7 +
->>  2 files changed, 148 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
->> new file mode 100644
->> index 000000000000..376330b5572a
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
->> @@ -0,0 +1,141 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/media/i2c/ovti,ov4689.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Omnivision OV4689 CMOS
->> +
->> +maintainers:
->> +  - Mikhail Rudenko <mike.rudenko@gmail.com>
->> +
->> +description: |
->> +  The Omnivision OV4689 is a high performance, 1/3-inch, 4 megapixel
->> +  image sensor. Ihis chip supports high frame rate speeds up to 90 fps
->> +  at 2688x1520 resolution. It is programmable through an I2C
->> +  interface, and sensor output is sent via 1/2/4 lane MIPI CSI-2
->> +  connection.
->> +
->> +allOf:
->> +  - $ref: /schemas/media/video-interface-devices.yaml#
->> +
->> +properties:
->> +  compatible:
->> +    const: ovti,ov4689
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    description:
->> +      External clock (XVCLK) for the sensor, 6-64 MHz
->> +    maxItems: 1
->> +
->> +  clock-names: true
->> +
->> +  dovdd-supply:
->> +    description:
->> +      Digital I/O voltage supply, 1.7-3.0 V
->> +
->> +  avdd-supply:
->> +    description:
->> +      Analog voltage supply, 2.6-3.0 V
->> +
->> +  dvdd-supply:
->> +    description:
->> +      Digital core voltage supply, 1.1-1.3 V
->> +
->> +  powerdown-gpios:
->> +    maxItems: 1
->> +    description:
->> +      GPIO connected to the powerdown pin (active low)
->> +
->> +  reset-gpios:
->> +    maxItems: 1
->> +    description:
->> +      GPIO connected to the reset pin (active low)
->> +
->> +  orientation: true
->> +
->> +  rotation: true
->> +
->> +  port:
->> +    $ref: /schemas/graph.yaml#/$defs/port-base
->> +    additionalProperties: false
->> +    description:
->> +      Output port node, single endpoint describing the CSI-2 transmitter
->> +
->> +    properties:
->> +      endpoint:
->> +        $ref: /schemas/media/video-interfaces.yaml#
->> +        unevaluatedProperties: false
->> +
->> +        properties:
->> +          data-lanes:
->> +            oneOf:
->> +              - items:
->> +                  - const: 1
->> +                  - const: 2
->> +                  - const: 3
->> +                  - const: 4
->> +              - items:
->> +                  - const: 1
->> +                  - const: 2
->> +              - items:
->> +                  - const: 1
->> +          link-frequencies: true
->> +
->> +        required:
->> +          - data-lanes
->> +          - link-frequencies
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - clocks
->> +  - clock-names
->> +  - dovdd-supply
->> +  - avdd-supply
->> +  - dvdd-supply
->> +  - powerdown-gpios
->> +  - reset-gpios
->> +  - port
+> The Sony imx477 uses the same silicon enabling reference code from Sony in
+> the available examples provided.
+
+Have you had any conversations with Sony on whether the same register
+settings are genuinely valid for all of these sensors?
+
+IMX477 is the sensor in the Raspberry Pi HQ camera, but the register
+set that we have from Sony has many undocumented (to us at least)
+registers for image quality tuning that aren't in the imx412 driver -
+we're up at 417 registers vs imx412's 231 [1].
+
+Raspberry Pi has previously had discussions with Sony regarding IMX378
+vs IMX477, which is also in the same family. Whilst nearly identical
+in register setup, they gave us 3 additional registers that have to be
+set for IMX378 to avoid image quality issues. I wouldn't be surprised
+if something similar weren't true for IMX412 and IMX577.
+
+I'm not saying it's impossible to remove a load of duplicated register
+settings by combining these sensors into one driver, but this current
+patch looks a little simplistic, and probably needs to be looking to
+have a struct for sensor specific registers, not just changing the
+compatible string and advertised name. Or perhaps we extend that later
+once the compatible string has been added?
+Merging them does bring issues with regard to testing as it is
+unlikely to be practical to test any new features across all variants.
+
+  Dave
+
+[1] https://github.com/raspberrypi/linux/blob/rpi-5.15.y/drivers/media/i2c/imx477.c
+
+> Add an imx477 compatible string and re-use the existing imx412 code.
 >
-> I think we don't need all of these entries as required.
-> The only let me say "really" required are:
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+>  drivers/media/i2c/imx412.c | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> - compatible
-> - reg
-> - clocks
-> - port
-
-Thanks for the review! I agree that the driver may be modified to work
-without powerdown and reset gpios and they are not required for sensor
-operation. On contrary, supplies are obviously required. Of course, linux
-provides dummy regulators if supplies are missing from device tree, but
-I though the intention was to document hardware, not implementation
-details. What do think of this?
-
-> Regards,
-> Tommaso
-
---
-Best regards,
-Mikhail Rudenko
+> diff --git a/drivers/media/i2c/imx412.c b/drivers/media/i2c/imx412.c
+> index bc7fdb24235f..1013a5afc85f 100644
+> --- a/drivers/media/i2c/imx412.c
+> +++ b/drivers/media/i2c/imx412.c
+> @@ -1289,6 +1289,7 @@ static const struct dev_pm_ops imx412_pm_ops = {
+>
+>  static const struct of_device_id imx412_of_match[] = {
+>         { .compatible = "sony,imx412", .data = "imx412" },
+> +       { .compatible = "sony,imx477", .data = "imx477" },
+>         { }
+>  };
+>
+> --
+> 2.34.1
+>
