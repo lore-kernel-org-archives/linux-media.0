@@ -2,39 +2,41 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F072ECAAA1
-	for <linux-media@archiver.kernel.org>; Thu, 15 Sep 2022 14:56:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CAEBAC6FA8A
+	for <linux-media@archiver.kernel.org>; Thu, 15 Sep 2022 14:56:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbiIOO4U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Sep 2022 10:56:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34376 "EHLO
+        id S230356AbiIOO4V (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Sep 2022 10:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiIOO4Q (ORCPT
+        with ESMTP id S229864AbiIOO4R (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Sep 2022 10:56:16 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBA6861D5
-        for <linux-media@vger.kernel.org>; Thu, 15 Sep 2022 07:56:13 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MT0Xr2fbLz14QMZ;
-        Thu, 15 Sep 2022 22:52:12 +0800 (CST)
+        Thu, 15 Sep 2022 10:56:17 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294BD86C05
+        for <linux-media@vger.kernel.org>; Thu, 15 Sep 2022 07:56:16 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MT0X86qByzNmFG;
+        Thu, 15 Sep 2022 22:51:36 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
  dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 15 Sep 2022 22:56:11 +0800
+ 15.1.2375.24; Thu, 15 Sep 2022 22:56:13 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
  (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 15 Sep
- 2022 22:56:10 +0800
+ 2022 22:56:13 +0800
 From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-media@vger.kernel.org>
 CC:     <mchehab@kernel.org>, <hverkuil-cisco@xs4all.nl>, <pavel@ucw.cz>,
         <sakari.ailus@linux.intel.com>, <sean@mess.org>,
         <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH -next 00/13] media: Switch to use dev_err_probe() helper
-Date:   Thu, 15 Sep 2022 23:03:11 +0800
-Message-ID: <20220915150324.688062-1-yangyingliang@huawei.com>
+Subject: [PATCH -next 05/13] media: platform: mtk_mdp_comp: Switch to use dev_err_probe() helper
+Date:   Thu, 15 Sep 2022 23:03:16 +0800
+Message-ID: <20220915150324.688062-6-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220915150324.688062-1-yangyingliang@huawei.com>
+References: <20220915150324.688062-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -47,39 +49,29 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 In the probe path, dev_err() can be replace with dev_err_probe()
-which will check if error code is -EPROBE_DEFER. It will print
-error code in a human readable way and simplify the code.
+which will check if error code is -EPROBE_DEFER.
 
-Yang Yingliang (13):
-  media: platform: stm32-cec: Switch to use dev_err_probe() helper
-  media: i2c: ad5820: Switch to use dev_err_probe() helper
-  media: i2c: imx274: Switch to use dev_err_probe() helper
-  media: i2c: tc358743: Switch to use dev_err_probe() helper
-  media: platform: mtk_mdp_comp: Switch to use dev_err_probe() helper
-  media: platform: exynos4-is: Switch to use dev_err_probe() helper
-  media: stm32-dcmi: Switch to use dev_err_probe() helper
-  media: omap3isp: Switch to use dev_err_probe() helper
-  media: xilinx: csi2rxss: Switch to use dev_err_probe() helper
-  media: rc: gpio-ir-recv: Switch to use dev_err_probe() helper
-  media: rc: gpio-ir-tx: Switch to use dev_err_probe() helper
-  media: rc: ir-rx51: Switch to use dev_err_probe() helper
-  media: uvcvideo: Switch to use dev_err_probe() helper
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/media/platform/mediatek/mdp/mtk_mdp_comp.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
- drivers/media/cec/platform/stm32/stm32-cec.c  |  9 +++----
- drivers/media/i2c/ad5820.c                    | 18 +++++--------
- drivers/media/i2c/imx274.c                    |  5 ++--
- drivers/media/i2c/tc358743.c                  |  9 +++----
- .../platform/mediatek/mdp/mtk_mdp_comp.c      |  5 ++--
- .../platform/samsung/exynos4-is/media-dev.c   |  4 +--
- drivers/media/platform/st/stm32/stm32-dcmi.c  | 27 +++++++------------
- drivers/media/platform/ti/omap3isp/isp.c      |  3 +--
- .../media/platform/xilinx/xilinx-csi2rxss.c   |  8 +++---
- drivers/media/rc/gpio-ir-recv.c               | 10 +++----
- drivers/media/rc/gpio-ir-tx.c                 |  9 +++----
- drivers/media/rc/ir-rx51.c                    |  9 ++-----
- drivers/media/usb/uvc/uvc_driver.c            |  9 +++----
- 13 files changed, 41 insertions(+), 84 deletions(-)
-
+diff --git a/drivers/media/platform/mediatek/mdp/mtk_mdp_comp.c b/drivers/media/platform/mediatek/mdp/mtk_mdp_comp.c
+index 1e3833f1c9ae..ad5fab2d8bfa 100644
+--- a/drivers/media/platform/mediatek/mdp/mtk_mdp_comp.c
++++ b/drivers/media/platform/mediatek/mdp/mtk_mdp_comp.c
+@@ -52,9 +52,8 @@ int mtk_mdp_comp_init(struct device *dev, struct device_node *node,
+ 	for (i = 0; i < ARRAY_SIZE(comp->clk); i++) {
+ 		comp->clk[i] = of_clk_get(node, i);
+ 		if (IS_ERR(comp->clk[i])) {
+-			if (PTR_ERR(comp->clk[i]) != -EPROBE_DEFER)
+-				dev_err(dev, "Failed to get clock\n");
+-			ret = PTR_ERR(comp->clk[i]);
++			ret = dev_err_probe(dev, PTR_ERR(comp->clk[i]),
++					    "Failed to get clock\n");
+ 			goto put_dev;
+ 		}
+ 
 -- 
 2.25.1
 
