@@ -2,213 +2,196 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFD2FC54EE9
-	for <linux-media@archiver.kernel.org>; Mon, 19 Sep 2022 10:43:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C2B9C6FA92
+	for <linux-media@archiver.kernel.org>; Mon, 19 Sep 2022 10:47:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbiISKnj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Sep 2022 06:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34356 "EHLO
+        id S230097AbiISKrO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Sep 2022 06:47:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbiISKnO (ORCPT
+        with ESMTP id S229885AbiISKqu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Sep 2022 06:43:14 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4454D33E00;
-        Mon, 19 Sep 2022 03:25:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663583131; x=1695119131;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Q3k5NxbdpA9DLEGbySGsywAVLtIr0421Jxutctvx2NE=;
-  b=AwkIXiU/4V0FClIQ7SFK42LAli8Du1LNfCfUXAFDO5MoS7Z8ZVkjrH0r
-   X6x5ebJVg1FLw2zNtsmwhG0NttSATaRs2B8N5MRxrm71bGdSrRS0gGIHD
-   tEkpVE6+6We0MO6mxI5VR1UwH0tW5+Rpfvu1tB+XTIwmL5QirCDA8RY0t
-   6pNrLzp/VOhTnFTXXkVIbIYBe9Bptn8LYMmxPH3hh45Exy8UhPTXjWcZ7
-   hoJq21OQvUx2q25B+vcOPVdaWjjPrb53JPBQ/QJj7i/z03sCbBmrgZ+qH
-   7d7V3Cp/n7VqX5IpAA4uPgmihxhIdhbT56R9hI5Ua/Yg428iZo0VTJVaN
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="282388556"
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="282388556"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 03:24:01 -0700
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="618436710"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 03:23:57 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id 94F3B202D2;
-        Mon, 19 Sep 2022 13:23:55 +0300 (EEST)
-Date:   Mon, 19 Sep 2022 10:23:55 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, kishon@ti.com, vkoul@kernel.org,
-        hverkuil@xs4all.nl, jacopo@jmondi.org,
-        kieran.bingham+renesas@ideasonboard.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH v2 3/4] media: dt-bindings: add bindings for Toshiba
- TC358746
-Message-ID: <YyhDO4ohv47uIij2@paasikivi.fi.intel.com>
-References: <20220916134535.128131-1-m.felsch@pengutronix.de>
- <20220916134535.128131-4-m.felsch@pengutronix.de>
- <YyZTCsflWtUbo2ld@pendragon.ideasonboard.com>
- <20220919100844.bb7tzbql2vpk76xz@pengutronix.de>
+        Mon, 19 Sep 2022 06:46:50 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF82DF1;
+        Mon, 19 Sep 2022 03:33:47 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EF22D9BA;
+        Mon, 19 Sep 2022 12:33:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1663583625;
+        bh=SuwW1EyzgQFtHXnkLYtahgvyBMXNK3cFjQnbN2kJ/jA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N4/O/wcAZ+qraUEiBbOU/rymCJTkkfQ4cAj+iNBfH/hk0vtd/vp3c0CHepb84lLYv
+         MkQGfJEqwQvg0rPtCLTmmq56WhZwXqnJoe4rNZ/DZ/bc5YScDJo+ghsBW4XGBAasPk
+         +IiPU0AgyHrjBGQXvCYb3GgRgMFnj7Bz3zO36TmA=
+Date:   Mon, 19 Sep 2022 13:33:31 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH] media: dt-bindings: i2c: ovti,ov5640: Drop ref to
+ video-interface-devices.yaml
+Message-ID: <YyhFe+FW2C+R7nQg@pendragon.ideasonboard.com>
+References: <20220916133521.73183-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <YyZS38Wo7rDsNRm2@pendragon.ideasonboard.com>
+ <CA+V-a8vvNHFt818wryyuhWxPtay4czjWXiH=AWEKiJ1AzB46mA@mail.gmail.com>
+ <fc1c075d-e20d-9395-d168-8cfe530f77ad@linaro.org>
+ <CA+V-a8uMyU89rufmqWiGFqpVjFPvHBeVeSd1Wt07eWZo1X+Bgw@mail.gmail.com>
+ <Yyg4SU7D5mClOvP/@pendragon.ideasonboard.com>
+ <CA+V-a8uM=33jw_BE7S1G3DsvbUdvxUhkBty6VCWdAprQ288haw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220919100844.bb7tzbql2vpk76xz@pengutronix.de>
+In-Reply-To: <CA+V-a8uM=33jw_BE7S1G3DsvbUdvxUhkBty6VCWdAprQ288haw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Marco,
-
-On Mon, Sep 19, 2022 at 12:08:44PM +0200, Marco Felsch wrote:
-> Hi Laurent,
+On Mon, Sep 19, 2022 at 10:41:00AM +0100, Lad, Prabhakar wrote:
+> On Mon, Sep 19, 2022 at 10:37 AM Laurent Pinchart wrote:
+> > On Mon, Sep 19, 2022 at 10:35:21AM +0100, Lad, Prabhakar wrote:
+> > > On Mon, Sep 19, 2022 at 9:19 AM Krzysztof Kozlowski wrote:
+> > > > On 19/09/2022 10:08, Lad, Prabhakar wrote:
+> > > > > On Sun, Sep 18, 2022 at 12:06 AM Laurent Pinchart wrote:
+> > > > >> On Fri, Sep 16, 2022 at 02:35:21PM +0100, Prabhakar wrote:
+> > > > >>> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > >>>
+> > > > >>> video-interface-devices.yaml isn't used so just drop it from the
+> > > > >>> DT binding doc.
+> > > > >>>
+> > > > >>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > >>> ---
+> > > > >>>  Documentation/devicetree/bindings/media/i2c/ovti,ov5640.yaml | 3 ---
+> > > > >>>  1 file changed, 3 deletions(-)
+> > > > >>>
+> > > > >>> diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5640.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5640.yaml
+> > > > >>> index 540fd69ac39f..ce99aada75ad 100644
+> > > > >>> --- a/Documentation/devicetree/bindings/media/i2c/ovti,ov5640.yaml
+> > > > >>> +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5640.yaml
+> > > > >>> @@ -9,9 +9,6 @@ title: OmniVision OV5640 Image Sensor Device Tree Bindings
+> > > > >>>  maintainers:
+> > > > >>>    - Steve Longerbeam <slongerbeam@gmail.com>
+> > > > >>>
+> > > > >>> -allOf:
+> > > > >>> -  - $ref: /schemas/media/video-interface-devices.yaml#
+> > > > >>> -
+> > > > >>
+> > > > >> The rotation property listed in this binding uses the definition from
+> > > > >> video-interface-devices.yaml. I don't think just dropping this is the
+> > > > >> right solution. Changing additionaProperties to unevaluatedProperties
+> > > > >> seems a better option.
+> > > > >
+> > > > > Agreed, I missed rotation was used from video-interface-devices.yaml.
+> > > > > Agreed the changing additionaProperties to unevaluatedProperties seems
+> > > > > a better option.
+> > > >
+> > > > The meaning of unevaluatedProperties:false would be here - accept other
+> > > > properties (not mentioned here explicitly) from referenced schema. If
+> > > > this is your actual intention for this binding, it makes sense. But if
+> > > > the intention in this binding was to disallow these other properties,
+> > > > then it would be wrong to change to unevaluatedProperties.
+> > > >
+> > > Thank you for the clarification. The intention is to disallow the property.
+> >
+> > Why should they be disallowed ?
 > 
-> On 22-09-18, Laurent Pinchart wrote:
-> > Hi Marco,
-> > 
-> > Thank you for the patch.
-> > 
-> > On Fri, Sep 16, 2022 at 03:45:34PM +0200, Marco Felsch wrote:
-> > > Add the bindings for the Toshiba TC358746 Parallel <-> MIPI-CSI bridge
-> > > driver.
-> > > 
-> > > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> > > Reviewed-by: Rob Herring <robh@kernel.org>
-> > > ---
-> > > Changelog:
-> > > 
-> > > v2:
-> > > - addded Robs r-b
-> > > - s/than/then/
-> > > - added hsync/vsync/bus-type, make hsync/vsync required
-> > > - fix example indent
-> > > 
-> > >  .../bindings/media/i2c/toshiba,tc358746.yaml  | 179 ++++++++++++++++++
-> > >  1 file changed, 179 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/media/i2c/toshiba,tc358746.yaml
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/media/i2c/toshiba,tc358746.yaml b/Documentation/devicetree/bindings/media/i2c/toshiba,tc358746.yaml
-> > > new file mode 100644
-> > > index 000000000000..1fa574400bc2
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/media/i2c/toshiba,tc358746.yaml
-> > > @@ -0,0 +1,179 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/media/i2c/toshiba,tc358746.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Toshiba TC358746 Parallel to MIPI CSI2 Bridge
-> > > +
-> > > +maintainers:
-> > > +  - Marco Felsch <kernel@pengutronix.de>
-> > > +
-> > > +description: |-
-> > > +  The Toshiba TC358746 converts a parallel video stream into a MIPI CSI-2
-> > > +  stream. The direction can be either parallel-in -> csi-out or csi-in ->
-> > > +  parallel-out The chip is programmable trough I2C and SPI but the SPI
-> > > +  interface is only supported in parallel-in -> csi-out mode.
-> > > +
-> > > +  Note that the current device tree bindings only support the
-> > > +  parallel-in -> csi-out path.
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    const: toshiba,tc358746
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  clocks:
-> > > +    description:
-> > > +      The phandle to the reference clock source. This corresponds to the
-> > > +      hardware pin REFCLK.
-> > > +    maxItems: 1
-> > > +
-> > > +  clock-names:
-> > > +    const: refclk
-> > > +
-> > > +# The bridge can act as clock provider for the sensor. To enable this support
-> > > +# #clock-cells must be specified. Attention if this feature is used then the
-> > > +# mclk rate must be at least: (2 * link-frequency) / 8
-> > > +#                             `------------------´   ^
-> > > +#                             internal PLL rate   smallest possible mclk-div
-> > > +  "#clock-cells":
-> > > +    const: 0
-> > > +
-> > > +  clock-output-names:
-> > > +    description:
-> > > +      The clock name of the MCLK output, the default name is tc358746-mclk.
-> > > +    maxItems: 1
-> > > +
-> > > +  vddc-supply:
-> > > +    description: Digital core voltage supply, 1.2 volts
-> > > +
-> > > +  vddio-supply:
-> > > +    description: Digital I/O voltage supply, 1.8 volts
-> > > +
-> > > +  vddmipi-supply:
-> > > +    description: MIPI CSI phy voltage supply, 1.2 volts
-> > > +
-> > > +  reset-gpios:
-> > > +    description:
-> > > +      The phandle and specifier for the GPIO that controls the chip reset.
-> > > +      This corresponds to the hardware pin RESX which is physically active low.
-> > > +    maxItems: 1
-> > > +
-> > > +  ports:
-> > > +    $ref: /schemas/graph.yaml#/properties/ports
-> > > +    properties:
-> > > +      port@0:
-> > > +        $ref: /schemas/graph.yaml#/$defs/port-base
-> > > +        description: Input port
-> > > +
-> > > +        properties:
-> > > +          endpoint:
-> > > +            $ref: /schemas/media/video-interfaces.yaml#
-> > > +            unevaluatedProperties: false
-> > > +
-> > > +            properties:
-> > > +              hsync-active:
-> > > +                enum:
-> > > +                  - 0 # Hvalid active high
-> > > +              vsync-active:
-> > > +                enum:
-> > > +                  - 0 # Vvalid active high
-> > > +              bus-type:
-> > > +                enum:
-> > > +                  - 5 # Parallel
-> > > +
-> > > +            required:
-> > > +              - hsync-active
-> > > +              - vsync-active
-> > 
-> > Let's make bus-type required too, to prepare for BT.656 support.
-> 
-> I would have done it when the BT.656 support is added. Since the BT.656
-> don't require the sync signals I would have made a descision:
->  - either: hsync/vsync present -> parallel with external syncs, or
->  - bus-type present -> parallel bus with embedded syncs.
-> 
-> So we don't bother the system-integrator with specifying unnecessary
-> properties. Also having v/hsync required in place with the bus-type (set
-> to bt.656) can cause confusion about the final used mode.
+> my bad! "rotation" property is supposed to be allowed so the earlier
+> comment to change to unevaluatedProperties holds good.
 
-The V4L2 fwnode framework can guess the type of the bus but it's not
-recommended to use the feature.
+It's not just the rotation. The other properties are allowed too. For
+the rotation property you need to list it explicitly in ovti,ov5640.yaml
+if you want to restrict the values it can take, but other properties
+from video-interface-devices.yaml for which no additional constraints
+are needed don't need to be listed in ovti,ov5640.yaml.
 
-Why do you have hsync-active and vsync-active if both are always zero? Can
-the hardware not support other configuration?
+additionalProperties and unevaluatedProperties are often misunderstood.
+DT bindings are a set of rules, and validation will pass *only* if *all*
+rules are valid. Let's consider the following:
+
+allOf:
+  - $ref: /schemas/media/video-interface-devices.yaml#
+
+The allOf is valid if all of the elements in the list are valid. The
+$ref will essentially work as if the contents of
+video-interface-devices.yaml were copied in ovti,ov5640.yaml, under the
+corresponding allOf list entry (with a small but important difference,
+noted below). The file contains
+
+  rotation:
+    $ref: /schemas/types.yaml#/definitions/uint32
+    enum: [ 0, 90, 180, 270 ]
+
+so any "rotation" property in the device tree will be validated against
+this. ovti,ov5640.yaml also has
+
+properties:
+  rotation:
+    enum:
+      - 0
+      - 180
+
+which is a separate rule from the previous one. Both must be valid for
+validation to succeed, so this second rule essentially restricts the
+possible rotation values.
+
+The additionalProperties and unevaluatedProperties affect how properties
+that have no validation rule will be treated.
+
+With additionalProperties set to false, a property that has no
+validation rule in *this* schema will be considered invalid, even if it
+has a validation rule in another schema (either selected automatically
+through a "select" property in the other schema, or imported through an
+explicit $ref). So, in this particular example, even though
+video-interface-devices.yaml has, for instance, a rule for the
+lens-focus property, a DT that contains lens-focus will be considered as
+invalid as lens-focus is not validated by this schema. One way to allow
+the property would be to add
+
+properties:
+  lens-focus: true
+
+in this schema. The contents of lens-focus would be validated by the
+rule in video-interface-devices.yaml, and the rule in this schema would
+always be valid ("true" is always valid).
+
+Another way to allow the property would be to replace
+additionalProperties with unevaluatedProperties. When set to false,
+unevaluatedProperties makes validation fail if any property has not been
+evaluated by *any* rule in this schema or any other schema. As
+lens-focus would be evaluated by video-interface-devices.yaml, that
+would be enough to consider it valid. This also means that *all*
+properties listed in video-interface-devices.yaml would then be valid.
+If you wanted that behaviour, but also wanted to reject specific
+properties, you could add
+
+properties:
+  lens-focus: false
+
+in this schema. A lens-focus property in a DT would be valid when
+evaluated with the corresponding rule in video-interface-devices.yaml,
+but would be invalidated by the rule in this schema as "false" is always
+invalid.
+
+To conclude, setting additionalProperties to false creates a white
+listing mechanism that requires you to explicitly list in this schema
+all the properties you consider as valid with "foo: true", while setting
+unevaluatedProperties to false creates a black listing mechanism that
+requires you to explicitly list in this schema all the properties you
+consider as invalid with "foo: false". If multiple schemas that apply to
+the same device tree include rules for the same property, all those
+rules need to be valid for validation to pass, regardless of the value
+of additionalProperties and unevaluatedProperties.
 
 -- 
-Sakari Ailus
+Regards,
+
+Laurent Pinchart
