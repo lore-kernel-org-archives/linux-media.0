@@ -2,188 +2,178 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB528C6FA86
-	for <linux-media@archiver.kernel.org>; Mon, 19 Sep 2022 06:40:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAB02C54EE9
+	for <linux-media@archiver.kernel.org>; Mon, 19 Sep 2022 07:08:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbiISGkX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Sep 2022 02:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46350 "EHLO
+        id S229719AbiISHIV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Sep 2022 03:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiISGkV (ORCPT
+        with ESMTP id S229679AbiISHIT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Sep 2022 02:40:21 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3FFDFF5;
-        Sun, 18 Sep 2022 23:40:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663569620; x=1695105620;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MGdzPuF+v42yf4zDqtPQbfbq7myqGLMKpQb0RUChj4o=;
-  b=fL2DfV8ar0StJiGUsHCNINxpXR/7C7Dpa3Z1gzTFdDrWaUK9WSfAs4fG
-   AReeJutHFRl8YYYidbjEHQQlPOpdWhFexSx/M6CC/+R1x8pvRQ2FsmZQw
-   NmM7QlfwdxfoA98O/WHifsmDLXD37O1ITMfPB+juNd4yrQX4c5XUbH6b4
-   2axtIYXw1NjrPirntFJEh3/0vXFnqliFGpaY+RfacCTwLjucE29xVxaXC
-   kGD4fyH0y48qF+ZicFGu/yiLWOtnkD2Lr0QZ01vHnYd06eDf6lV6iXvg5
-   f48ux/Wm8Nuie2dNStVeu73mXMNA03lz5ocxHjnk66VsS4uH3xN/e5fhg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="296911154"
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="296911154"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2022 23:40:19 -0700
-X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="620739375"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2022 23:40:15 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 0791020078;
-        Mon, 19 Sep 2022 09:40:13 +0300 (EEST)
-Date:   Mon, 19 Sep 2022 06:40:13 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+        Mon, 19 Sep 2022 03:08:19 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E45E14D0D
+        for <linux-media@vger.kernel.org>; Mon, 19 Sep 2022 00:08:18 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id z6so13514636wrq.1
+        for <linux-media@vger.kernel.org>; Mon, 19 Sep 2022 00:08:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=wEdLDJgFEyr3Rx0kdQrhspWlZowoghD3V/H8ktxN3TY=;
+        b=OgBqv3IZzdUFqvuLhn6EFV4R9bDvxhESon8U4vW40j+TSLmigg9qsdpoGxMi5BPLLg
+         0unGK3NEoyGanilR3J1V/VKvExTq6SrFYMDXmYaiIPnSEozEMMSwmhzdYDM+gIrOaaMg
+         Ji3IDXFgdCSA73EiM4w021yuoCXfNAJVAHRUc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=wEdLDJgFEyr3Rx0kdQrhspWlZowoghD3V/H8ktxN3TY=;
+        b=bEZ3Ug+xHwJEwO/Y6K+Nq/mPgeS9cXfeO499REBfB4OJC0Bnl3uGZOhcac6hT3oPXA
+         7irsLKxJ83NhSNmpdbHhyItaau7+c+ZdWvIk8hm2hRB9lRf0mJfaNEvP19MyzjwX7OAO
+         FNFfIdswM5/NLt+s6Dz3TG/JRaR7ReN5M+RiSsdjV1odJoGhQ4JXmuKjl/fUfhAbmAPs
+         viZbvh/PAbg+g/SXyDw82bRORf8NfRsnE416Adaw2gVS8Hi/2WW/2Ztv204wLgJM9nSm
+         XbQPPPx4P3j62/gPIg+cltA0chpXX6JS84W1fGjkIiImNNN+vnjNT3DCjeN48reQR48w
+         UteA==
+X-Gm-Message-State: ACrzQf28tje17uvZRibOcrLdQMtoQzMVhq+ptPqf1qIU4cSOhwyJ76FL
+        Jul07wBar5HGObOxG44UrXCYMl3fm0xdsg==
+X-Google-Smtp-Source: AMsMyM5WuE0u/PpMDPiqFT5hqYfJFSqTAYnpfKtBn+3NHLlEFItVukIyZebdE5bJbyYXtyGz31yIfg==
+X-Received: by 2002:adf:f3d2:0:b0:22a:e5d2:5c with SMTP id g18-20020adff3d2000000b0022ae5d2005cmr6872977wrp.131.1663571296615;
+        Mon, 19 Sep 2022 00:08:16 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-56-12.cust.vodafonedsl.it. [188.217.56.12])
+        by smtp.gmail.com with ESMTPSA id bk23-20020a0560001d9700b0022b014fb0b7sm2088897wrb.110.2022.09.19.00.08.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 00:08:16 -0700 (PDT)
+Date:   Mon, 19 Sep 2022 09:08:13 +0200
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
 To:     Mikhail Rudenko <mike.rudenko@gmail.com>
-Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Jacopo Mondi <jacopo@jmondi.org>,
-        Shawn Tu <shawnx.tu@intel.com>, Jimmy Su <jimmy.su@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, Arec Kao <arec.kao@intel.com>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Christian Hemp <c.hemp@phytec.de>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Marek Vasut <marex@denx.de>, linux-media@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] Add Omnivision OV4689 image sensor driver
-Message-ID: <YygOzWAHyoP+KwTv@paasikivi.fi.intel.com>
+Subject: Re: [PATCH v2 2/2] media: i2c: add support for ov4689
+Message-ID: <20220919070813.GA3958@tom-ThinkPad-T14s-Gen-2i>
 References: <20220911200147.375198-1-mike.rudenko@gmail.com>
- <CAPY8ntCA3jbpBOiNfoft58sHPeTFSLoLop0VUmkOCWP3cX_rdw@mail.gmail.com>
- <87czbwp9xx.fsf@gmail.com>
+ <20220911200147.375198-3-mike.rudenko@gmail.com>
+ <20220914155122.GA9874@tom-ThinkPad-T14s-Gen-2i>
+ <87k064pa2v.fsf@gmail.com>
+ <20220916133401.GB2701@tom-ThinkPad-T14s-Gen-2i>
+ <87r10bo1k5.fsf@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87czbwp9xx.fsf@gmail.com>
+In-Reply-To: <87r10bo1k5.fsf@gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Hi Mikhail,
 
-On Fri, Sep 16, 2022 at 12:27:42AM +0300, Mikhail Rudenko wrote:
+On Fri, Sep 16, 2022 at 04:44:31PM +0300, Mikhail Rudenko wrote:
 > 
-> Hi Dave,
+> On 2022-09-16 at 15:34 +02, Tommaso Merciai <tommaso.merciai@amarulasolutions.com> wrote:
+> > Hi Mikhail,
+> >
+> > On Thu, Sep 15, 2022 at 11:50:23PM +0300, Mikhail Rudenko wrote:
+> >>
+> >> Hi Tommaso,
+> >>
+> >> On 2022-09-14 at 17:51 +02, Tommaso Merciai <tommaso.merciai@amarulasolutions.com> wrote:
+> >> > Hi Mikhail,
+> >> > I do a first round on reviewing your driver :)
+> >> >
+> >> > On Sun, Sep 11, 2022 at 11:01:35PM +0300, Mikhail Rudenko wrote:
 > 
-> On 2022-09-14 at 10:58 +01, Dave Stevenson <dave.stevenson@raspberrypi.com> wrote:
-> > Hi Mikhail
-> >
-> > On Sun, 11 Sept 2022 at 21:02, Mikhail Rudenko <mike.rudenko@gmail.com> wrote:
-> >>
-> >> Hello,
-> >>
-> >> this series implements support for Omnivision OV4689 image
-> >> sensor. The Omnivision OV4689 is a high performance, 1/3-inch, 4
-> >> megapixel image sensor. Ihis chip supports high frame rate speeds up
-> >> to 90 fps at 2688x1520 resolution. It is programmable through an I2C
-> >> interface, and sensor output is sent via 1/2/4 lane MIPI CSI-2
-> >> connection.
-> >>
-> >> The driver is based on Rockchip BSP kernel [1]. It implements 4-lane CSI-2
-> >> and single 2688x1520 @ 30 fps mode. The driver was tested on Rockchip
-> >> 3399-based FriendlyElec NanoPi M4 board with MCAM400 camera module.
-> >>
-> >> While porting the driver, I stumbled upon two issues:
-> >>
-> >> (1) In the original driver, horizontal total size (HTS) was set to a
-> >> value (2584) lower then the frame width (2688), resulting in negative
-> >> hblank. In this driver, I increased HTS to 2688, but fps dropped from
-> >> 29.88 to 28.73. What is the preferred way to handle this?
-> >
-> > This is one of the joys of sensors - they don't all work in the same way.
-> >
-> > I don't have an official datasheet for OV4689 from Omnivision, but
-> > found one on the internet [1]. That should allow you to reverse the
-> > PLL configuration to confirm that the pixel rate is the value you've
-> > computed based on link frequency (they aren't necessarily related). Do
-> > the frame rate calculations work using width + HBLANK, height +
-> > VBLANK, and pixel rate?
-> > The datasheet claims the sensor supports 2688x1520 @ 90 fps, so
-> > something doesn't hold true between 4 data lanes at 500MHz/1Gbit/s per
-> > lane when your default hts/vts is 2688x1554 and it only gives
-> > 28.73fps.
+> <snip>
 > 
-> Seems like those 90 fps is about CSI throughput, not actual sensor
-> performance. I've checked the datasheet and the register values, and it
-> seems like the pixel clock is 126 Mhz in this configuration (the maximum
-> is 150 MHz according to the datasheet). This corresponds to a
-> theoretical fps of 30.16 at hts=2688 and vts=1554. At the same time the
-> observed fps is 28.73. I'm not sure where those 1.43 frames are lost,
-> hope to do more experimentation with VTS and HTS over the weekend.
+> >> >> +
+> >> >> +	ov4689->xvclk = devm_clk_get(dev, "xvclk");
+> >> >> +	if (IS_ERR(ov4689->xvclk)) {
+> >> >> +		dev_err(dev, "Failed to get xvclk\n");
+> >> >> +		return -EINVAL;
+> >> >> +	}
+> >> >
+> >> > ^ I think is better to use devm_clk_get_optional instead of clck_get.
+> >> > clck_get can fail in CPU's that use ACPI
+> >> >
+> >> >> +
+> >> >> +	ret = clk_set_rate(ov4689->xvclk, OV4689_XVCLK_FREQ);
+> >> >> +	if (ret < 0) {
+> >> >> +		dev_err(dev, "Failed to set xvclk rate (24MHz)\n");
+> >> >> +		return ret;
+> >> >> +	}
+> >> >> +	if (clk_get_rate(ov4689->xvclk) != OV4689_XVCLK_FREQ)
+> >> >> +		dev_warn(dev, "xvclk mismatched, modes are based on 24MHz\n");
+> >> >
+> >> >
+> >> > What do you think about?
+> >> > Thanks.
+> >>
+> >> Unfortunately, I have no experience with ACPI-based devices. :(
+> >>
+> >> Do you mean that in the case of an ACPI device and devm_clk_get_optional
+> >> returning NULL we should assume that the clock is already enabled and
+> >> will stay enabled during sensor operation? How should we distinguish it
+> >> from the case of an OF-based system and clock just missing from device
+> >> tree?
+> >
+> > Not exaclty :)
+> >
+> > I copy comment from [1]
+> >
+> > if you use ov5693->xvclk to identify the ACPI vs OF use case shouldn't
+> > you use the get_optionl() version ? Otherwise in the ACPI case you will have
+> > -ENOENT if there's not 'xvclk' property and bail out.
+> >
+> > Unless my understanding is wrong on ACPI we have "clock-frequency" and
+> > on OF "xvclk" with an "assigned-clock-rates",
+> >
+> > [1] https://patchwork.linuxtv.org/project/linux-media/patch/20220627150453.220292-5-tommaso.merciai@amarulasolutions.com/
+> >
+> > Let me know if you need more details.
 > 
-> > I have seen modes in sensors where the HTS register is in units of 2
-> > pixels, so what range of HTS (and VTS) values actually works on this
-> > sensor? (I don't see it documented, but I'm not surprised).
-> >
-> > [1] https://cdn.hackaday.io/files/19354828041536/OV4689-OmniVision.pdf
-> >
-> >> (2) The original driver exposes analog gain range 0x0 - 0x7ff, but the
-> >> gain is not linear across that range. Instead, it is piecewise linear
-> >> (and discontinuous). 0x0-0xff register values result in 0x-2x gain,
-> >> 0x100-0x1ff to 0x-4x, 0x300-0x3ff to 0x-8x, and 0x700-0x7ff to 0x-16x,
-> >> with more linear segments in between. Rockchip's camera engine code
-> >> chooses one of the above segments depenging on the desired gain
-> >> value. The question is, how should we proceed keeping in mind
-> >> libcamera use case? Should the whole 0x0-0x7ff be exposed as-is and
-> >> libcamera will do the mapping, or the driver will do the mapping
-> >> itself and expose some logical gain units not tied to the actual gain
-> >> register value? Meanwhile, this driver conservatively exposes only
-> >> 0x0-0xf8 gain register range.
-> >
-> > The datasheet linked above says "for the gain formula, please contact
-> > your local OmniVision FAE" :-(
-> > I would assume that the range is from 1x rather than 0x - people
-> > rarely want a totally black image that 0x would give. Or is it ranges
-> > of 1x - 2x, 2x - 4x, 4x - 8x, and 8x - 16x?
+> Thanks for the pointer! I'll try to implement something along the lines
+> of your ov5693 series.
 > 
-> A picture is worth a thousand words, so I've attached the results of my
-> experimentation with the gain register. They were obtained with Rockchip
-> 3399, with AEC, AGC and black level subtraction disabled. The image was
-> converted from 10-bit RGGB to 8-bit YUV 4:2:0 by the Rockchip ISP.
+> But I'm not sure that will be enough to support ACPI systems
+> correctly. What about lanes number and link frequency checks? Should
+> they be made conditional on CONFIG_OF? Anything else I don't know?
 
-Based on that it looks like their medication may have been a little too
-strong.
+In my opinion, lanes number and link frequency checks are ok :)
+We don't need conditional CONFIG_OF.
 
-Could this be implemented so that the control value would be linear linear
-but its range would correspond 1x--16x values?
+fwnode* function support both ACPI and dts.
 
-libcamera will be able to cope with that.
+Thanks,
+Tommaso
 
 > 
-> > Other sensors expose the full range of the register via
-> > V4L2_CID_ANALOGUE_GAIN, and require userspace (mainly libcamera now)
-> > to know how to convert a gain into the register value. If the gain
-> > range goes up to x16, then exposing that would be useful. I'd advocate
-> > just exposing the full range of 0x000 - 0x7ff, as then you can have
-> > the accuracy of 256 values between x1 to x2, but also the full range.
-> 
-> I also like this approach, although libcamera's CameraSensorHelper
-> doesn't support piecewise-linear gain code mapping yet. Nevertheless,
-> I believe exposing the full range is a good idea and will do so in v3.
-> 
-> > I might see if I can pick up one of these sensors and see if I can get
-> > it running on a Raspberry Pi. Thanks for trying to upstream this -
-> > it's nice to have such a range of sensor drivers to choose from.
 > >
-> >   Dave
+> > Regards,
+> > Tommaso
 > >
-> 
-> Thanks for your elucidating tips!
-> 
 > --
 > Best regards,
 > Mikhail Rudenko
-> 
-
-
 
 -- 
-Sakari Ailus
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
+
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com
