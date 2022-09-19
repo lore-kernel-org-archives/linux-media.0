@@ -2,160 +2,103 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC965C6FA94
-	for <linux-media@archiver.kernel.org>; Mon, 19 Sep 2022 10:48:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D44CDECAAD3
+	for <linux-media@archiver.kernel.org>; Mon, 19 Sep 2022 10:56:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbiISKss (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Sep 2022 06:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
+        id S230181AbiISK4p (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Sep 2022 06:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiISKsS (ORCPT
+        with ESMTP id S229586AbiISK40 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Sep 2022 06:48:18 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFA82BB22;
-        Mon, 19 Sep 2022 03:38:13 -0700 (PDT)
+        Mon, 19 Sep 2022 06:56:26 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F323A7
+        for <linux-media@vger.kernel.org>; Mon, 19 Sep 2022 03:53:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663583893; x=1695119893;
+  t=1663584805; x=1695120805;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=QUXNODpHWWXFuaNAMOBGNqeZoPBldKbO43TQb66rI7E=;
-  b=QJf+AzsXVK0+Bz2DViPkEClklvc5AVCQjgyi6QGDu//lF+wxb//Cfvcg
-   pzC2FGS+LwitX7L/EQrT+zBe/gEWWqMYNLFHR7RxDhZFJYyeUHP77q/qT
-   p3tSfNaY8LeLTAtHKKdg4YfNBqrsXR//uUEaBpvSBcEKsqwrcLCa9AUdB
-   MGOXOyGsan9SJPoiBFIOnHJye1E/2A3E1qFvk7LNcOPWm3gZr1rBreReq
-   lo6au7BqGBQyK2IGniKowwXTYCvUAXpocBDTErqIfQWoTfne/3/O06JsM
-   gDqpO24eQtVynKy6vWY0kJ492exfm6h9nW3vQXrzkokdQogt4xcVlnyvL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="300736655"
+  bh=TvTmyEcrrifzm1REerMLzNofxDBSQjPoZa+4YBHnRI8=;
+  b=XTw+QQWfzekj1api0mmlmdRQS5HQex1MR1C7xVyX7PVRyf3LrimVLZKM
+   6mTrnMUk/5laDe/XfFc4nAsUVFL28n75ostBDgmrgzyS284DWTv2RnXcT
+   fm2vCukxxx0E9pTmAkpFpwSEVnD7GVB+A4mBNjnU8sJUt0e8agx/uLhMn
+   sGuQjwgO1K0gecLNC/txpmkY2+kR9Gb0tQz034hoTCKAuXVX2Qnhbx1Kr
+   kAhO8+qesT5aUpbD+xBMbHRiqeHxK6O9ZqBGq+QLyv9KAC6pKOASWJj7/
+   59XLYnAnSiCRflzmQe9kuI2c6we+0gLED1JLNmynMt1JLGmyLWWHw7ec1
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="325657511"
 X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="300736655"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 03:38:12 -0700
+   d="scan'208";a="325657511"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 03:53:24 -0700
 X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="649093245"
+   d="scan'208";a="620813853"
 Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 03:38:09 -0700
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 03:53:23 -0700
 Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 2AFB920238;
-        Mon, 19 Sep 2022 13:31:02 +0300 (EEST)
-Date:   Mon, 19 Sep 2022 10:31:02 +0000
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 1BAE720238;
+        Mon, 19 Sep 2022 13:53:21 +0300 (EEST)
+Date:   Mon, 19 Sep 2022 10:53:21 +0000
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Mikhail Rudenko <mike.rudenko@gmail.com>
-Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Shawn Tu <shawnx.tu@intel.com>, Jimmy Su <jimmy.su@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, Arec Kao <arec.kao@intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Marek Vasut <marex@denx.de>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] Add Omnivision OV4689 image sensor driver
-Message-ID: <YyhE5voxRz7gEYHY@paasikivi.fi.intel.com>
-References: <20220911200147.375198-1-mike.rudenko@gmail.com>
- <CAPY8ntCA3jbpBOiNfoft58sHPeTFSLoLop0VUmkOCWP3cX_rdw@mail.gmail.com>
- <87czbwp9xx.fsf@gmail.com>
- <YygOzWAHyoP+KwTv@paasikivi.fi.intel.com>
- <87wn9zreic.fsf@gmail.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org
+Subject: Re: [PATCH 1/1] media: v4l: subdev: Document s_power() callback is
+ deprecated
+Message-ID: <YyhKIbWaYfjwveNT@paasikivi.fi.intel.com>
+References: <20220919101004.3799904-1-sakari.ailus@linux.intel.com>
+ <YyhGT476cNV32ZJN@pendragon.ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87wn9zreic.fsf@gmail.com>
+In-Reply-To: <YyhGT476cNV32ZJN@pendragon.ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mikhail,
+Hi Laurent,
 
-On Mon, Sep 19, 2022 at 10:01:06AM +0300, Mikhail Rudenko wrote:
-> 
+On Mon, Sep 19, 2022 at 01:37:03PM +0300, Laurent Pinchart wrote:
 > Hi Sakari,
 > 
-> On 2022-09-19 at 06:40 GMT, Sakari Ailus <sakari.ailus@linux.intel.com> wrote:
+> Thank you for the patch.
 > 
-> > Hi Mikhail,
-> >
-> > On Fri, Sep 16, 2022 at 12:27:42AM +0300, Mikhail Rudenko wrote:
-> >>
-> >> Hi Dave,
-> >>
-> >> On 2022-09-14 at 10:58 +01, Dave Stevenson <dave.stevenson@raspberrypi.com> wrote:
-> >> > Hi Mikhail
-> >> >
-> >> > On Sun, 11 Sept 2022 at 21:02, Mikhail Rudenko <mike.rudenko@gmail.com> wrote:
-> >> >>
-> >> >> Hello,
-> >> >>
-> >> >> this series implements support for Omnivision OV4689 image
-> >> >> sensor. The Omnivision OV4689 is a high performance, 1/3-inch, 4
-> >> >> megapixel image sensor. Ihis chip supports high frame rate speeds up
-> >> >> to 90 fps at 2688x1520 resolution. It is programmable through an I2C
-> >> >> interface, and sensor output is sent via 1/2/4 lane MIPI CSI-2
-> >> >> connection.
-> >> >>
-> >> >> The driver is based on Rockchip BSP kernel [1]. It implements 4-lane CSI-2
-> >> >> and single 2688x1520 @ 30 fps mode. The driver was tested on Rockchip
-> >> >> 3399-based FriendlyElec NanoPi M4 board with MCAM400 camera
-> >> >> module.
-> >> >> While porting the driver, I stumbled upon two issues:
-> [snip]
-> >> >> (2) The original driver exposes analog gain range 0x0 - 0x7ff, but the
-> >> >> gain is not linear across that range. Instead, it is piecewise linear
-> >> >> (and discontinuous). 0x0-0xff register values result in 0x-2x gain,
-> >> >> 0x100-0x1ff to 0x-4x, 0x300-0x3ff to 0x-8x, and 0x700-0x7ff to 0x-16x,
-> >> >> with more linear segments in between. Rockchip's camera engine code
-> >> >> chooses one of the above segments depenging on the desired gain
-> >> >> value. The question is, how should we proceed keeping in mind
-> >> >> libcamera use case? Should the whole 0x0-0x7ff be exposed as-is and
-> >> >> libcamera will do the mapping, or the driver will do the mapping
-> >> >> itself and expose some logical gain units not tied to the actual gain
-> >> >> register value? Meanwhile, this driver conservatively exposes only
-> >> >> 0x0-0xf8 gain register range.
-> >> >
-> >> > The datasheet linked above says "for the gain formula, please contact
-> >> > your local OmniVision FAE" :-(
-> >> > I would assume that the range is from 1x rather than 0x - people
-> >> > rarely want a totally black image that 0x would give. Or is it ranges
-> >> > of 1x - 2x, 2x - 4x, 4x - 8x, and 8x - 16x?
-> >>
-> >> A picture is worth a thousand words, so I've attached the results of my
-> >> experimentation with the gain register. They were obtained with Rockchip
-> >> 3399, with AEC, AGC and black level subtraction disabled. The image was
-> >> converted from 10-bit RGGB to 8-bit YUV 4:2:0 by the Rockchip ISP.
-> >
-> > Based on that it looks like their medication may have been a little too
-> > strong.
-> >
-> > Could this be implemented so that the control value would be linear linear
-> > but its range would correspond 1x--16x values?
-> >
-> > libcamera will be able to cope with that.
-> >
+> On Mon, Sep 19, 2022 at 01:10:04PM +0300, Sakari Ailus wrote:
+> > Runtime PM has been around for a decade or more, there's hardly a need to
+> > use the V4L2 specific s_power() callback in drivers anymore. Document this
+> > in s_power() callback documentation as well.
+> > 
+> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > ---
+> >  include/media/v4l2-subdev.h | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+> > index 2f80c9c818ed0..ed14ce5864cac 100644
+> > --- a/include/media/v4l2-subdev.h
+> > +++ b/include/media/v4l2-subdev.h
+> > @@ -176,7 +176,8 @@ struct v4l2_subdev_io_pin_config {
+> >   * @s_register: callback for VIDIOC_DBG_S_REGISTER() ioctl handler code.
+> >   *
+> >   * @s_power: puts subdevice in power saving mode (on == 0) or normal operation
+> > - *	mode (on == 1).
+> > + *	mode (on == 1). DEPRECATED. See
+> > + *	Documentation/driver-api/media/camera-sensor.rst .
 > 
-> According to the following fragment of the Rockchip camera engine sensor
-> configuration file for ov4689 [1]
-> 
->     <Linear index="1" type="double" size="[4 7]">
->        [1 2 128 0 1 128 255
->         2 4 64 -248 1 376 504
->         4 8 32 -756 1 884 1012
->         8 16 16 -1784 1 1912 2040]
->     </Linear>,
-> 
-> it uses gain register value range 128-255 for gain 1x-2x, 376-504 for
-> gain 2x-4x, 884-1024 for 4x-8x, and 1912-2040 for 8x-16x. Do you suggest
-> to implement this calculation in the sensor driver and expose some
-> linear "logical" gain to userspace (ranging, e.g., 128-2048 for gains
-> 1x-16x)?
+> Could you mention that pre_streamon/post_streamoff cover the use case of
+> bus initialization ? s_stream is commonly used for that purpose. With
+> that,
 
-Yes. This way the user space can somehow work without knowing this special
-implementation, even though the granularity changes over the range. I guess
-the granularity would need to be known in libcamera but that's a separate
-issue.
+I'll add:
+
+pre_streamon and post_streamoff callbacks can be used for e.g. setting the
+bus to LP-11 mode before s_stream is called.
+
+> 
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+Thanks!
 
 -- 
 Sakari Ailus
