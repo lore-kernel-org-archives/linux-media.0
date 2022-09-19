@@ -2,88 +2,64 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E299ECAAA1
-	for <linux-media@archiver.kernel.org>; Mon, 19 Sep 2022 17:58:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 430D3C6FA86
+	for <linux-media@archiver.kernel.org>; Mon, 19 Sep 2022 18:15:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbiISR66 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Sep 2022 13:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50206 "EHLO
+        id S229732AbiISSP4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Sep 2022 14:15:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231483AbiISR6u (ORCPT
+        with ESMTP id S229519AbiISSPw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Sep 2022 13:58:50 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F8F459BD
-        for <linux-media@vger.kernel.org>; Mon, 19 Sep 2022 10:58:49 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 49A3E499;
-        Mon, 19 Sep 2022 19:58:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1663610327;
-        bh=2EAFH9EshzLSJw7g3UMnKYXw/K2r4PJl2+R6cE8s7gk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W9TYiO+GUf1BuuYguDs+Fp+B+R/0owYzsCAjddhy4Z4RKR6In+eeFk0LBUGl6/wNL
-         drT1njK86UyxDnk/Zl4R4vGlZ4jrjFP+i/H4wDlzNG1BrLn/ItPWU5jhCgCtNa5hFC
-         Y3z8XOE/QCtZGnt8usefrX3jS1GUEpnlFHrqbjXo=
-Date:   Mon, 19 Sep 2022 20:58:34 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     bunk@kernel.org, clabbe@baylibre.com, crope@iki.fi,
-        cuigaosheng1@huawei.com, elezegarcia@gmail.com,
-        hans.verkuil@cisco.com, hverkuil-cisco@xs4all.nl,
-        linux@rainbow-software.org, logans@cottsay.net,
-        m.chehab@samsung.com, mchehab@kernel.org,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH 2/8] media: platform: remove unused
- vsp1_subdev_internal_ops declaration
-Message-ID: <YyitytHHZPNYa5Gr@pendragon.ideasonboard.com>
-References: <20220911091519.3212868-1-cuigaosheng1@huawei.com>
- <20220911091519.3212868-3-cuigaosheng1@huawei.com>
- <166290349932.1189409.12318656202607870912@Monstersaurus>
+        Mon, 19 Sep 2022 14:15:52 -0400
+Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D71446203;
+        Mon, 19 Sep 2022 11:15:50 -0700 (PDT)
+Received: from mgb4.digiteq.red (unknown [62.77.71.229])
+        by mx.gpxsee.org (Postfix) with ESMTPSA id 696DF4236E;
+        Mon, 19 Sep 2022 18:56:21 +0200 (CEST)
+From:   tumic@gpxsee.org
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        =?UTF-8?q?Martin=20T=C5=AFma?= <martin.tuma@digiteqautomotive.com>
+Subject: [PATCH v2 1/3] Added platform module alias for the xiic I2C driver
+Date:   Mon, 19 Sep 2022 20:55:54 +0200
+Message-Id: <20220919185556.5215-2-tumic@gpxsee.org>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220919185556.5215-1-tumic@gpxsee.org>
+References: <20220919185556.5215-1-tumic@gpxsee.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <166290349932.1189409.12318656202607870912@Monstersaurus>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sun, Sep 11, 2022 at 02:38:19PM +0100, Kieran Bingham wrote:
-> Quoting Gaosheng Cui (2022-09-11 10:15:13)
-> > vsp1_subdev_internal_ops has been removed since
-> > commit 0efdf0f5eaaf ("[media] v4l: vsp1: Implement and use the
-> > subdev pad::init_cfg configuration"), so remove it.
-> > 
-> > Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
-> 
-> It does look lonely indeed.
-> 
-> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+From: Martin Tůma <martin.tuma@digiteqautomotive.com>
 
-The subject line should start with "media: platform: vsp1:". I'll fix
-this when applying.
+The missing "platform" alias is required for the mgb4 v4l2 driver to load
+the i2c controller driver when probing the HW.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Martin Tůma <martin.tuma@digiteqautomotive.com>
+---
+ drivers/i2c/busses/i2c-xiic.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> > ---
-> >  drivers/media/platform/renesas/vsp1/vsp1_entity.h | 2 --
-> >  1 file changed, 2 deletions(-)
-> > 
-> > diff --git a/drivers/media/platform/renesas/vsp1/vsp1_entity.h b/drivers/media/platform/renesas/vsp1/vsp1_entity.h
-> > index f22724439cdc..17f98a6a972e 100644
-> > --- a/drivers/media/platform/renesas/vsp1/vsp1_entity.h
-> > +++ b/drivers/media/platform/renesas/vsp1/vsp1_entity.h
-> > @@ -130,8 +130,6 @@ int vsp1_entity_init(struct vsp1_device *vsp1, struct vsp1_entity *entity,
-> >                      const struct v4l2_subdev_ops *ops, u32 function);
-> >  void vsp1_entity_destroy(struct vsp1_entity *entity);
-> >  
-> > -extern const struct v4l2_subdev_internal_ops vsp1_subdev_internal_ops;
-> > -
-> >  int vsp1_entity_link_setup(struct media_entity *entity,
-> >                            const struct media_pad *local,
-> >                            const struct media_pad *remote, u32 flags);
-
+diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
+index b3fe6b2aa3ca..277a02455cdd 100644
+--- a/drivers/i2c/busses/i2c-xiic.c
++++ b/drivers/i2c/busses/i2c-xiic.c
+@@ -920,6 +920,7 @@ static struct platform_driver xiic_i2c_driver = {
+ 
+ module_platform_driver(xiic_i2c_driver);
+ 
++MODULE_ALIAS("platform:" DRIVER_NAME);
+ MODULE_AUTHOR("info@mocean-labs.com");
+ MODULE_DESCRIPTION("Xilinx I2C bus driver");
+ MODULE_LICENSE("GPL v2");
 -- 
-Regards,
+2.37.2
 
-Laurent Pinchart
