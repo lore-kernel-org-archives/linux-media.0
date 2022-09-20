@@ -2,179 +2,139 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52F37C54EE9
-	for <linux-media@archiver.kernel.org>; Tue, 20 Sep 2022 14:37:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A8C9C6FA90
+	for <linux-media@archiver.kernel.org>; Tue, 20 Sep 2022 14:42:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiITOhq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Sep 2022 10:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39914 "EHLO
+        id S229978AbiITOiU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Sep 2022 10:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiITOho (ORCPT
+        with ESMTP id S229647AbiITOiT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Sep 2022 10:37:44 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F24532DA6
-        for <linux-media@vger.kernel.org>; Tue, 20 Sep 2022 07:37:44 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oaeNQ-0006PH-W1; Tue, 20 Sep 2022 16:37:32 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oaeNQ-0004PE-4B; Tue, 20 Sep 2022 16:37:32 +0200
-Date:   Tue, 20 Sep 2022 16:37:32 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Jacopo Mondi <jacopo@jmondi.org>, mchehab@kernel.org,
-        sakari.ailus@linux.intel.com, akinobu.mita@gmail.com,
-        jacopo+renesas@jmondi.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] media: mt9m111: add V4L2_CID_LINK_FREQ support
-Message-ID: <20220920143732.o5zu4e23a26rjlsn@pengutronix.de>
-References: <20220916135713.143890-1-m.felsch@pengutronix.de>
- <20220920094337.qyvvjakmygocfcwj@lati>
- <YymMdRV0XvXAfh8e@pendragon.ideasonboard.com>
+        Tue, 20 Sep 2022 10:38:19 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C91732DA6
+        for <linux-media@vger.kernel.org>; Tue, 20 Sep 2022 07:38:18 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28KEFkRa005929
+        for <linux-media@vger.kernel.org>; Tue, 20 Sep 2022 14:38:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=6h0iKYIiSsxenl8UggmVK4unc6auSaDDe25EdGqcXjc=;
+ b=CpU8xKwA26Cr6VRdMdzi5RCUApeo5FPOuTvTwGnDtKw+G6aB78Qvb1GeZjJWM5RBOTMl
+ 570/3Ncbf5UNMTpIYnvMuNVCu0aXlbej/zTo3xtjBl8tIbH32OLrYj9n3FaRFU29+l96
+ q6BBH0kUE9cSTdrfDXdbFNHp8PQLS1XwKLWxZ+5IpUbwfzlTigjwuWHd+C2k13Qyvnel
+ fzWHl8LxKCfSt3Yv4IEdEcABSfrQwiDTzY28tRcjBgqXRW6VVyz+1dcZeLyglUm1LlZy
+ OtBydcCVMhEezy0PfGpF3pnICU2U956QbIFABkG5cxyEcSkzm0pxCwrzO/21+uTT+96G dg== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jq04y3102-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-media@vger.kernel.org>; Tue, 20 Sep 2022 14:38:18 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28KEXHZw024036
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-media@vger.kernel.org>; Tue, 20 Sep 2022 14:33:17 GMT
+Received: from mmitkov.eu.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Tue, 20 Sep 2022 07:33:16 -0700
+From:   <quic_mmitkov@quicinc.com>
+To:     <linux-media@vger.kernel.org>
+CC:     <akapatra@quicinc.com>, <jzala@quicinc.com>,
+        Milen Mitkov <quic_mmitkov@quicinc.com>
+Subject: [PATCH 0/4] media: camss: sm8250: Virtual channels support for SM8250
+Date:   Tue, 20 Sep 2022 17:32:56 +0300
+Message-ID: <20220920143300.1633-1-quic_mmitkov@quicinc.com>
+X-Mailer: git-send-email 2.37.3.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YymMdRV0XvXAfh8e@pendragon.ideasonboard.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: umbeCyMigNZMy6gaw7BQlgXXZVLJz3RR
+X-Proofpoint-GUID: umbeCyMigNZMy6gaw7BQlgXXZVLJz3RR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-20_06,2022-09-20_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 spamscore=0 clxscore=1015 mlxscore=0 malwarescore=0
+ bulkscore=0 phishscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209200086
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 22-09-20, Laurent Pinchart wrote:
-> On Tue, Sep 20, 2022 at 11:43:37AM +0200, Jacopo Mondi wrote:
-> > On Fri, Sep 16, 2022 at 03:57:11PM +0200, Marco Felsch wrote:
-> > > Add support to report the link frequency.
-> > >
-> > > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> > > ---
-> > > The v1 of this small series can be found here:
-> > > https://lore.kernel.org/all/20220818144712.997477-1-m.felsch@pengutronix.de/
-> > >
-> > > Thanks a lot to Jacopo for the review feedback on my v1.
-> > >
-> > > Changelog:
-> > >
-> > > v2:
-> > > - use V4L2_CID_LINK_FREQ instead of V4L2_CID_PIXEL_RATE
-> > > ---
-> > >  drivers/media/i2c/mt9m111.c | 21 ++++++++++++++++++++-
-> > >  1 file changed, 20 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/media/i2c/mt9m111.c b/drivers/media/i2c/mt9m111.c
-> > > index afc86efa9e3e..52be1c310455 100644
-> > > --- a/drivers/media/i2c/mt9m111.c
-> > > +++ b/drivers/media/i2c/mt9m111.c
-> > > @@ -1249,6 +1249,8 @@ static int mt9m111_probe(struct i2c_client *client)
-> > >  {
-> > >  	struct mt9m111 *mt9m111;
-> > >  	struct i2c_adapter *adapter = client->adapter;
-> > > +	static s64 extclk_rate;
-> > 
-> > Why static ?
-> 
-> I missed that one indeed. I assume it's static because the pointer is
-> stored in the v4l2_ctrl structure by v4l2_ctrl_new_int_menu(), but
-> that's wrong. The data should be in the mt9m111 structure instead,
-> otherwise it won't work right when using multiple sensors.
+From: Milen Mitkov <quic_mmitkov@quicinc.com>
 
-Yes, thats the reason. Didn't had in mind, the fact of using multiple
-sensor of the same type. Sry. I will move it to the driver struct of
-course.
+These patches add support for multiple CSID virtual channels for Qualcomm's SM8250
+platform.
 
-> > Also clk_get_rate() returns an unsigned long
-> 
-> v4l2_ctrl_new_int_menu() requires an s64 pointer.
+NOTE: These changes depend on the multistream series that as of yet is
+still not merged officially upstream. The multistream changes
+allow for multiple clients on the same pipeline, which is otherwise not
+possible. For development and testing multistream series v14 was used:
 
-Yes.
+https://patchwork.kernel.org/project/linux-media/patch/20220831141357.1396081-2-tomi.valkeinen@ideasonboard.com/
 
-Regards,
-  Marco
+The CSID hardware on SM8250 can demux the input data stream into
+maximum of 4 multiple streams depending on virtual channel (vc)
+or data type (dt) configuration.
 
-> > > +	struct v4l2_ctrl *ctrl;
-> > >  	int ret;
-> > >
-> > >  	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_WORD_DATA)) {
-> > > @@ -1271,6 +1273,13 @@ static int mt9m111_probe(struct i2c_client *client)
-> > >  	if (IS_ERR(mt9m111->clk))
-> > >  		return PTR_ERR(mt9m111->clk);
-> > >
-> > > +	ret = clk_prepare_enable(mt9m111->clk);
-> > > +	if (ret < 0)
-> > > +		return ret;
-> > > +
-> > > +	extclk_rate = clk_get_rate(mt9m111->clk);
-> > > +	clk_disable_unprepare(mt9m111->clk);
-> > > +
-> > >  	mt9m111->regulator = devm_regulator_get(&client->dev, "vdd");
-> > >  	if (IS_ERR(mt9m111->regulator)) {
-> > >  		dev_err(&client->dev, "regulator not found: %ld\n",
-> > > @@ -1285,7 +1294,7 @@ static int mt9m111_probe(struct i2c_client *client)
-> > >  	mt9m111->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
-> > >  				 V4L2_SUBDEV_FL_HAS_EVENTS;
-> > >
-> > > -	v4l2_ctrl_handler_init(&mt9m111->hdl, 7);
-> > > +	v4l2_ctrl_handler_init(&mt9m111->hdl, 8);
-> > >  	v4l2_ctrl_new_std(&mt9m111->hdl, &mt9m111_ctrl_ops,
-> > >  			V4L2_CID_VFLIP, 0, 1, 1, 0);
-> > >  	v4l2_ctrl_new_std(&mt9m111->hdl, &mt9m111_ctrl_ops,
-> > > @@ -1309,6 +1318,16 @@ static int mt9m111_probe(struct i2c_client *client)
-> > >  				BIT(V4L2_COLORFX_NEGATIVE) |
-> > >  				BIT(V4L2_COLORFX_SOLARIZATION)),
-> > >  			V4L2_COLORFX_NONE);
-> > 
-> > Empty line maybe ?
-> > 
-> > > +	/*
-> > > +	 * The extclk rate equals the link freq. if reg default values are used,
-> > > +	 * which is the case. This must be adapted as soon as we don't use the
-> > > +	 * default values anymore.
-> > > +	 */
-> > > +	ctrl = v4l2_ctrl_new_int_menu(&mt9m111->hdl, &mt9m111_ctrl_ops,
-> > > +				      V4L2_CID_LINK_FREQ, 0, 0, &extclk_rate);
-> > > +	if (ctrl)
-> > > +		ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> > > +
-> > 
-> > I'm sorry I have not replied to your previous email about using
-> > LINK_FREQ for parallel busses.. I see it mentioned in ext-ctrls-image-process.rst
-> > as you said:
-> > 
-> > ``V4L2_CID_LINK_FREQ (integer menu)``
-> >     The frequency of the data bus (e.g. parallel or CSI-2).
-> > 
-> > I still have a bit of troubles seeing it apply nicely on a parallel
-> > bus. Isn't PIXEL_RATE more appropriate ?
-> 
-> They are different. When transmitting YUYV_2X8 for instance, the link
-> frequency is twice the pixel clock rate.
-> 
-> > You said you need to know the
-> > overall bus bandwidth in bytes , and pixel_rate * bpp / 8 is equally
-> > valid and easy as link_freq / num_lanes, which requires the receiver
-> > to fetch the remote subdev media bus configuration instead of relying
-> > on the input format. Also LINK_FREQ is a menu control, something nasty
-> > already for CSI-2 busses, which requires to pre-calculate the link
-> > freqs based on the input mclk. It is also meant to be changed by
-> > userspace, while PIXEL_RATE is RO by default.
-> > 
-> > Sakari, Laurent, what's your take here ?
-> 
-> Ideally both should be implemented by the driver.
-> 
-> > >  	mt9m111->subdev.ctrl_handler = &mt9m111->hdl;
-> > >  	if (mt9m111->hdl.error) {
-> > >  		ret = mt9m111->hdl.error;
-> 
-> -- 
-> Regards,
-> 
-> Laurent Pinchart
-> 
+Situations in which this is useful:
+- HDR sensors that produce a 2-frame HDR output, e.g. a light and a dark frame
+  (the setup we used  for testing, with the imx412 sensor),
+  or a 3-frame HDR output - light, medium-lit, dark frame.
+- sensors with additional metadata that is streamed over a different
+  virtual channel/datatype.
+- sensors that stream frames with multiple resolutions in the same pixel
+  data stream
+
+With these changes, the CSID entity has, as it did previously, a single
+sink port (0), and always exposes 4 source ports (1, 2,3, 4). The
+virtual channel configuration is determined by which of the source ports
+are linked to an output VFE line. For example, the link below will
+configure the CSID driver to enable vc 0 and vc 1:
+
+media-ctl -l '"msm_csid0":1->"msm_vfe0_rdi0":0[1]'
+media-ctl -l '"msm_csid0":2->"msm_vfe0_rdi1":0[1]'
+
+which will be demuxed and propagated into /dev/video0
+and /dev/video1 respectively. With this, the userspace can use
+any normal V4L2 client app to start/stop/queue/dequeue from these
+video nodes. Tested with the yavta app.
+
+Note also that implicit format propagation has been removed, so format
+for the linked source ports has to be set manually, e.g.:
+
+media-ctl -V '"msm_csid0":1[fmt:SRGGB10/3840x2160]'
+media-ctl -V '"msm_csid0":2[fmt:SRGGB10/3840x2160]'
+
+Previously setting the format on the sink port of the CSID entity would
+set the same format on the source port. However, with CSID demuxing there's
+no guarantee that the format on the source ports should be the same,
+in fact it can be different for each source port.
+
+Milen Mitkov (4):
+  media: camss: sm8250: Virtual channels for CSID
+  media: camss: vfe: Reserve VFE lines on stream start and link to CSID
+  media: camss: vfe-480: Multiple outputs support for SM8250
+  media: camss: sm8250: Pipeline starting and stopping for multiple
+    virtual channels
+
+ .../platform/qcom/camss/camss-csid-gen2.c     | 55 ++++++++++-------
+ .../media/platform/qcom/camss/camss-csid.c    | 41 +++++++------
+ .../media/platform/qcom/camss/camss-csid.h    | 11 +++-
+ .../media/platform/qcom/camss/camss-vfe-480.c | 60 ++++++++++++-------
+ drivers/media/platform/qcom/camss/camss-vfe.c |  7 +++
+ .../media/platform/qcom/camss/camss-video.c   | 21 ++++++-
+ drivers/media/platform/qcom/camss/camss.c     |  2 +-
+ 7 files changed, 133 insertions(+), 64 deletions(-)
+
+-- 
+2.37.3
+
