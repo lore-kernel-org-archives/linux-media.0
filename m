@@ -2,57 +2,57 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B944BECAAD8
-	for <linux-media@archiver.kernel.org>; Tue, 20 Sep 2022 14:14:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B7BDECAAD8
+	for <linux-media@archiver.kernel.org>; Tue, 20 Sep 2022 14:14:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbiITOOE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Sep 2022 10:14:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45236 "EHLO
+        id S230497AbiITOOH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Sep 2022 10:14:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231503AbiITONM (ORCPT
+        with ESMTP id S231553AbiITONM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 20 Sep 2022 10:13:12 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625342CC87
-        for <linux-media@vger.kernel.org>; Tue, 20 Sep 2022 07:11:24 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a26so6508000ejc.4
-        for <linux-media@vger.kernel.org>; Tue, 20 Sep 2022 07:11:24 -0700 (PDT)
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926161B78F
+        for <linux-media@vger.kernel.org>; Tue, 20 Sep 2022 07:11:26 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 29so4061803edv.2
+        for <linux-media@vger.kernel.org>; Tue, 20 Sep 2022 07:11:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date;
-        bh=fZx/rWrR7bth2k3zX90922HeFwXDXF4+XRCwzM0uxDU=;
-        b=hNs3RX9xQGVD65f7QO8VzrP4znwu+FGcrbo6ocv7O/05gKBZ1wH41NfT1tMoB9JKK+
-         fCnEJGtdMDBVBXb1GRcqA66h+89xj3KHTLcreDEUobgVWQilew9i+jzjGMKG1tG/c+ds
-         QX40CW1oeB2mxfZTxSz0tD36imknHdZUK16b0=
+        bh=UQpZaYJCKWK0Pu7l712TNk2BJuL6CIWDc5YrLh30wjs=;
+        b=GY4dKTSFJ0aG7Ehgy1MQE6tDuKby5zBXGij1uk7Qd+/Dk2wp7f6GqmcDMLAP869lbk
+         /vHkLEpGb9aQvj/GmqYFqHRw27BHxBWPurpptweyXnhdi9bSkGa6MeOMW+Ac3MHRWQHa
+         f/p86/iDC3Txt5zk/EDhzUwc5XlLWFwMG4a2o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=fZx/rWrR7bth2k3zX90922HeFwXDXF4+XRCwzM0uxDU=;
-        b=nDZSelDQSxatjwo5M3dAw8LYHmc1K1vpGWfW+/4Se2hGH6LNWxEH9mIDF27SbChfs+
-         jFThOuTXFhqY7EpsqzOa2jBZfuqPZP1oNeCcB5cm2fYHftGaf86qbzjI8UXwLRyyscbg
-         JPon8PyQdDWrSs2ZuF4Rm25CDk5aGhFOVuILl4JKdnKWBD85Cb3cQZCyq+us2TOB/tWm
-         7nAlmkc/3VMdNIhkfsrECRV8VXFjKXbiJF3wC724qDtooEpg9TofVwq2mCTejcfyAx0f
-         HoD9dnhoMED4X/vijCaMTjQwhgNPrOVvuUmVy19MULpZ4Gxckp9lLB4jPDSYNsZaWnFc
-         vjOA==
-X-Gm-Message-State: ACrzQf3gtJX7dzB+mXHAI34WyUOaPLirzKWjPzXds7uWNIyO98kszW5S
-        U3EfogdfV/vSchVegW8YIj0cQ+67/5qlvPAvK6E=
-X-Google-Smtp-Source: AMsMyM49va1rmcsPaDlAugeRoY+PzfADCzIDSwOMykHAqiCqO0+W2W/625FQvzvQ7U8cpRoUv2xFOQ==
-X-Received: by 2002:a17:906:8a6b:b0:780:ab37:b63 with SMTP id hy11-20020a1709068a6b00b00780ab370b63mr15122776ejc.365.1663683082739;
-        Tue, 20 Sep 2022 07:11:22 -0700 (PDT)
+        bh=UQpZaYJCKWK0Pu7l712TNk2BJuL6CIWDc5YrLh30wjs=;
+        b=2x7YULSneZ2b+ZfWhRWuLJ7P2Jp5R+sF4TZ47uVWu+qdznhjT3VqIdAdklaWhun6tG
+         MwfgD81wr8Zh1G3GuK3KNgB5Xfs3Gj1PzImMRmXumTC6sOV6brnsSHAyJ0wwQtRo0fu6
+         XcyzYeHqjO8ohff+8dLi1htJ8Q/BoGFm4oOrlgnSEMZabWh0N9zVQ6PXfe5HkNXmcwhS
+         lE3ctwPrRWzUMj7mx0qshIbqr96RJHXdx0orJIXW4TVWXLxqY9jdd/JUdr7U5ddqN/ui
+         n39riQNPhCIhdFtPPINdbTloybYPJUfPqO9FE3foQiDtWLsIb4F3d8sScA7A/wpmzwTY
+         zTBQ==
+X-Gm-Message-State: ACrzQf3Re9uy6CyR7pKLhZkncr0OsxfM/sXdZC8fG2nQXtDBTtmDr2yt
+        SKsm8tJTBEPf5vBpbf98XlFNdA==
+X-Google-Smtp-Source: AMsMyM4Ls0dzBeoa3LjXsd2FcBrpl+vb18hTbIVmQX2kbkqiq5AXBRiNryvGL2FN2Y2L8jMkJjLSIA==
+X-Received: by 2002:a05:6402:26d6:b0:451:24da:f8cf with SMTP id x22-20020a05640226d600b0045124daf8cfmr20723773edd.385.1663683084906;
+        Tue, 20 Sep 2022 07:11:24 -0700 (PDT)
 Received: from alco.roam.corp.google.com ([2620:0:1059:10:935d:52b0:7461:88e1])
-        by smtp.gmail.com with ESMTPSA id b24-20020aa7c918000000b004518ee90b4dsm129668edt.1.2022.09.20.07.11.21
+        by smtp.gmail.com with ESMTPSA id b24-20020aa7c918000000b004518ee90b4dsm129668edt.1.2022.09.20.07.11.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 07:11:21 -0700 (PDT)
+        Tue, 20 Sep 2022 07:11:24 -0700 (PDT)
 From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Tue, 20 Sep 2022 16:11:06 +0200
-Subject: [PATCH v1 3/5] media: uvcvideo: Return -EACCES for Wrong state error
+Date:   Tue, 20 Sep 2022 16:11:08 +0200
+Subject: [PATCH v1 5/5] media: uvcvideo: Fix handling on Bitmask controls
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20220920-resend-v4l2-compliance-v1-3-81364c15229b@chromium.org>
+Message-Id: <20220920-resend-v4l2-compliance-v1-5-81364c15229b@chromium.org>
 References: <20220920-resend-v4l2-compliance-v1-0-81364c15229b@chromium.org>
 In-Reply-To: <20220920-resend-v4l2-compliance-v1-0-81364c15229b@chromium.org>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -61,46 +61,146 @@ Cc:     Hans Verkuil <hans.verkuil@cisco.com>,
         Ricardo Ribalda <ribalda@chromium.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Mailer: b4 0.11.0-dev-d93f8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=854; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=l3Tve8hGJ5W5tTbag9O5QNFnAI00qvVi1fN45JRNTAM=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjKcn/J5h+0gj3RkVXT+F2wF6DERtyqXPbiyyPS7Lq
- 01rqx+2JAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCYynJ/wAKCRDRN9E+zzrEiHQTD/
- 9ZBbIC//geY3g3ywDr6Lg3j0lkU5m5cFuiwGpZL3bDLnUZKL3tB9cmqFZQ/7+/DdRcS1r4tAb0rsWq
- 1XHhHIc+sM7TEzcdm57ZzhYfopuV/68vfB6OJCwS92xPqfL162Ra/Hw75GVS0MNrF+xX6US6MnnUYX
- BD8XtqNgRvMb878fj3jVT1cpI7wqY5wYEGOh5hg672qjO5lnXBiJJDNJ9dFxA5Y32sqBqPdjde+d4x
- 317Wit7YVtGnscLOwtnJquHVHK1mlclPv17aZXGiT5ja23aONAmSilXyZ9gIq1SSYOD5b9mLl7/Fx9
- B49LiMIqk/Bu0pgLxrfG7lWNJDpjwoosiCKyMjwDemlX4IH2xutfvtoJbE9C5X1FnR0Z/k5WgLXG1n
- Gi/qwNnme0/qaxzH8LtckCv03PgDdT8F0Z7hCXHH/kHIlkbJxfbz4PYloO0xVKyrAzB/28t90eylny
- xX7q5sDFzaEGFATiPrPHgxRbMNG5JO9BadznggBkBEHsPqMEfPVvAkOTNxyyKxLpg1dKVluB+dgUDw
- b6BPlBIUw9vE5vdRn2Soq7bVPLR+DffaYnFgF75zjjWTZrurbo2BKwvRjxJkfLQKfmbmYC7FD6JrvK
- sorGg3tmm1lsqmx2Eqki3JvDotU44SzDJgR9u6d61m2hvOpy7ypTvYvG/CEw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3891; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=/j8z6PN7/Plr9CdgjDkkTYHlK0/ZUdYfEEIDx5PJha0=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjKcoDcJy26EznzdSST9G5q2VOlkTv+RVQAJ67x7J6
+ FAxG4U+JAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCYynKAwAKCRDRN9E+zzrEiC08D/
+ 9xxiRVxqttcN9YCHY0dq93HYXrt7mGQ2+zQWqPRCnkWRdXCJwJt8JJcGrTxH1ChIPw1dnojnhvuJNQ
+ hcOiiyViyLqLq5nhN/BhdBuqjUINPXW2ypaG5WtFkXS0gECDxFBCuA4gFdDSB8CUR1P2ITK9E0xlia
+ 2WV527A3O8t8D+bOxV5pjmE4M+9tKizYf6U52PHAJRUWcBongM3uOC0dKXp5QP5L4JrRlr/5P1JHVR
+ KlMX4QevuMLB4mEfLcogVzxvNLtA91t666zOJCHdprXOphDqGMpP88b1O6zkNgJaeh4hy9mdJpd//H
+ uLZHLLAdhacL/rj7RIGOckstDmquiY4yvqG/tPjm6O9c3bK25EjaQHeXq9A+LEZqzobVTTuyd+00AD
+ Z92kPrJpnhvMvOKfxRN5cU81w354TXRXy8/qd6DQpTr/uvX8S8JhYav99vY4PsVGXGdfeO71eiPeTR
+ gKsAax7PL+izxg/+aK8HUw4tset+qZXbdAAihSeYf2TDHJNu79eY9/Wt+NBcYolSak+J9NlU5q4zBZ
+ QHTkCNZaXy77EPbQigTJLctpOX13DDSbYyv5z2HXCQeAJfiHE0svWUhhsrf9o2rgbc5H9W4HG9KzK8
+ XQCy0lnz12AiuQUw6cBJyBGXlMIdoKnI1WQSc2aDb3DSwcZs/vcGwWozNwkQ==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-For error 2 (Wrong state) return -EACCES instead of -EILSEQ.
-EACCES is a much more appropriate error code. EILSEQ will return
-"Invalid or incomplete multibyte or wide character." in strerror(),
-which is a *very* confusing message.
+Minimum and step values for V4L2_CTRL_TYPE_BITMASK controls should be 0.
+There is no need to query the camera firmware about this and maybe get
+invalid results.
 
-Suggested-by: Hans Verkuil <hans.verkuil@cisco.com>
+Also value should be masked to the max value advertised by the
+hardware.
+
+Finally, handle uvc 1.5 mask controls that use MAX instead of RES to
+describe the valid bits.
+
+Fixes v4l2-compliane:
+Control ioctls (Input 0):
+                fail: v4l2-test-controls.cpp(97): minimum must be 0 for a bitmask control
+	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: FAIL
+
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index 2cf7f692c0bb..497073a50194 100644
---- a/drivers/media/usb/uvc/uvc_video.c
-+++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -108,7 +108,7 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
- 	case 1: /* Not ready */
- 		return -EBUSY;
- 	case 2: /* Wrong state */
--		return -EILSEQ;
-+		return -EACCES;
- 	case 3: /* Power */
- 		return -EREMOTE;
- 	case 4: /* Out of range */
+diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+index 7153ee5aabb1..526572044e82 100644
+--- a/drivers/media/usb/uvc/uvc_ctrl.c
++++ b/drivers/media/usb/uvc/uvc_ctrl.c
+@@ -1145,6 +1145,25 @@ static const char *uvc_map_get_name(const struct uvc_control_mapping *map)
+ 	return "Unknown Control";
+ }
+ 
++static u32 uvc_get_ctrl_bitmap(struct uvc_control *ctrl,
++			       struct uvc_control_mapping *mapping)
++{
++	/*
++	 * Some controls, like CT_AE_MODE_CONTROL use GET_RES to
++	 * represent the number of bits supported, those controls
++	 * do not list GET_MAX as supported.
++	 */
++	if (ctrl->info.flags & UVC_CTRL_FLAG_GET_MAX)
++		return mapping->get(mapping, UVC_GET_MAX,
++				    uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MAX));
++
++	if (ctrl->info.flags & UVC_CTRL_FLAG_GET_RES)
++		return mapping->get(mapping, UVC_GET_RES,
++				    uvc_ctrl_data(ctrl, UVC_CTRL_DATA_RES));
++
++	return ~0;
++}
++
+ static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
+ 	struct uvc_control *ctrl,
+ 	struct uvc_control_mapping *mapping,
+@@ -1219,6 +1238,12 @@ static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
+ 		v4l2_ctrl->step = 0;
+ 		return 0;
+ 
++	case V4L2_CTRL_TYPE_BITMASK:
++		v4l2_ctrl->minimum = 0;
++		v4l2_ctrl->maximum = uvc_get_ctrl_bitmap(ctrl, mapping);
++		v4l2_ctrl->step = 0;
++		return 0;
++
+ 	default:
+ 		break;
+ 	}
+@@ -1320,19 +1345,14 @@ int uvc_query_v4l2_menu(struct uvc_video_chain *chain,
+ 
+ 	menu_info = &mapping->menu_info[query_menu->index];
+ 
+-	if (mapping->data_type == UVC_CTRL_DATA_TYPE_BITMASK &&
+-	    (ctrl->info.flags & UVC_CTRL_FLAG_GET_RES)) {
+-		s32 bitmap;
+-
++	if (mapping->data_type == UVC_CTRL_DATA_TYPE_BITMASK) {
+ 		if (!ctrl->cached) {
+ 			ret = uvc_ctrl_populate_cache(chain, ctrl);
+ 			if (ret < 0)
+ 				goto done;
+ 		}
+ 
+-		bitmap = mapping->get(mapping, UVC_GET_RES,
+-				      uvc_ctrl_data(ctrl, UVC_CTRL_DATA_RES));
+-		if (!(bitmap & menu_info->value)) {
++		if (!(uvc_get_ctrl_bitmap(ctrl, mapping) & menu_info->value)) {
+ 			ret = -EINVAL;
+ 			goto done;
+ 		}
+@@ -1815,6 +1835,18 @@ int uvc_ctrl_set(struct uvc_fh *handle,
+ 		value = xctrl->value;
+ 		break;
+ 
++	case V4L2_CTRL_TYPE_BITMASK:
++		if (!ctrl->cached) {
++			ret = uvc_ctrl_populate_cache(chain, ctrl);
++			if (ret < 0)
++				return ret;
++		}
++
++		xctrl->value = max(0, xctrl->value);
++		xctrl->value &= uvc_get_ctrl_bitmap(ctrl, mapping);
++		value = xctrl->value;
++		break;
++
+ 	case V4L2_CTRL_TYPE_BOOLEAN:
+ 		xctrl->value = clamp(xctrl->value, 0, 1);
+ 		value = xctrl->value;
+@@ -1829,17 +1861,14 @@ int uvc_ctrl_set(struct uvc_fh *handle,
+ 		 * Valid menu indices are reported by the GET_RES request for
+ 		 * UVC controls that support it.
+ 		 */
+-		if (mapping->data_type == UVC_CTRL_DATA_TYPE_BITMASK &&
+-		    (ctrl->info.flags & UVC_CTRL_FLAG_GET_RES)) {
++		if (mapping->data_type == UVC_CTRL_DATA_TYPE_BITMASK) {
+ 			if (!ctrl->cached) {
+ 				ret = uvc_ctrl_populate_cache(chain, ctrl);
+ 				if (ret < 0)
+ 					return ret;
+ 			}
+ 
+-			step = mapping->get(mapping, UVC_GET_RES,
+-					uvc_ctrl_data(ctrl, UVC_CTRL_DATA_RES));
+-			if (!(step & value))
++			if (!(uvc_get_ctrl_bitmap(ctrl, mapping) & value))
+ 				return -EINVAL;
+ 		}
+ 
 
 -- 
 b4 0.11.0-dev-d93f8
