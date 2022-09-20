@@ -2,139 +2,153 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A8C9C6FA90
-	for <linux-media@archiver.kernel.org>; Tue, 20 Sep 2022 14:42:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 888D2ECAAD8
+	for <linux-media@archiver.kernel.org>; Tue, 20 Sep 2022 14:47:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiITOiU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Sep 2022 10:38:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40532 "EHLO
+        id S230506AbiITOrH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Sep 2022 10:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiITOiT (ORCPT
+        with ESMTP id S231145AbiITOq6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Sep 2022 10:38:19 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C91732DA6
-        for <linux-media@vger.kernel.org>; Tue, 20 Sep 2022 07:38:18 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28KEFkRa005929
-        for <linux-media@vger.kernel.org>; Tue, 20 Sep 2022 14:38:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=6h0iKYIiSsxenl8UggmVK4unc6auSaDDe25EdGqcXjc=;
- b=CpU8xKwA26Cr6VRdMdzi5RCUApeo5FPOuTvTwGnDtKw+G6aB78Qvb1GeZjJWM5RBOTMl
- 570/3Ncbf5UNMTpIYnvMuNVCu0aXlbej/zTo3xtjBl8tIbH32OLrYj9n3FaRFU29+l96
- q6BBH0kUE9cSTdrfDXdbFNHp8PQLS1XwKLWxZ+5IpUbwfzlTigjwuWHd+C2k13Qyvnel
- fzWHl8LxKCfSt3Yv4IEdEcABSfrQwiDTzY28tRcjBgqXRW6VVyz+1dcZeLyglUm1LlZy
- OtBydcCVMhEezy0PfGpF3pnICU2U956QbIFABkG5cxyEcSkzm0pxCwrzO/21+uTT+96G dg== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jq04y3102-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-media@vger.kernel.org>; Tue, 20 Sep 2022 14:38:18 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28KEXHZw024036
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-media@vger.kernel.org>; Tue, 20 Sep 2022 14:33:17 GMT
-Received: from mmitkov.eu.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Tue, 20 Sep 2022 07:33:16 -0700
-From:   <quic_mmitkov@quicinc.com>
-To:     <linux-media@vger.kernel.org>
-CC:     <akapatra@quicinc.com>, <jzala@quicinc.com>,
-        Milen Mitkov <quic_mmitkov@quicinc.com>
-Subject: [PATCH 0/4] media: camss: sm8250: Virtual channels support for SM8250
-Date:   Tue, 20 Sep 2022 17:32:56 +0300
-Message-ID: <20220920143300.1633-1-quic_mmitkov@quicinc.com>
-X-Mailer: git-send-email 2.37.3.windows.1
+        Tue, 20 Sep 2022 10:46:58 -0400
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95DDB58B79;
+        Tue, 20 Sep 2022 07:46:57 -0700 (PDT)
+Received: by mail-vs1-xe2b.google.com with SMTP id p4so3334821vsa.9;
+        Tue, 20 Sep 2022 07:46:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date;
+        bh=Fj6dboJTb8QVBM7b90QPIoepjKNIqv8f0qJ6KlT424g=;
+        b=RzPeb+NLewrB2638saBiOcjXWm8GX05H4D5beoiBDptP7n7P56EN05kgLBRHSMhbFY
+         1/FgWeNvl4a0y5mNUD516ghnPzdVE+Ap2PNFZt1mJEKY92CHRypzRldkwdMZuFYV/zZp
+         n6010D9crgUmGNCj8JbDN7EM5g/RoaJYbKGVO/2Nvft1vXv97rz3vIwLCVkFdfv3XLA1
+         fGrJSTWK3WkpbQF+knSD0K8JNbzeBshScibW6igOV5u8kdp4VHoRkUXEcp6fZ4nxe/jn
+         K66C5lk3lpSk3Sh1qwJNdU7pYt45hXZndGdKYlepZyWp75uZOvx8g1Wi4k9TAsNoEPkZ
+         O87w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=Fj6dboJTb8QVBM7b90QPIoepjKNIqv8f0qJ6KlT424g=;
+        b=Wr9K/ADvzv18oGyqw250moNBWY6JiN5hPwRzHYSjjHblwdbYJe0yh/cl5MXwVTuix8
+         MeK/55gK5pIVU3Lj2WdcQEOW6RclEjHiNCvtq38tJJFH3ZwBMFYquP4z7xgaxTH8npSu
+         Dl8kYEdFYYXDvcon3tND8GvDy46PQ3+1zRZKzGEsRbvxLQzdQR2ydlaW0wb9MJb4UsOB
+         z4Ws0eNn9V3OfkvkuCdur71ZCDPPEwgsRBX1dP27pxZ7GQofixq78kbbC/a5wtpFBvMt
+         efYKOPuXaDkgOVMMG8EG+67Wu200nIbfj8Wpj9Tp7V2nIxJKutGZ0KoXOcBTQyDpgq3Q
+         5vrw==
+X-Gm-Message-State: ACrzQf3U4Mt3TxfFkdallO7fyiRag3/aWTCCfvKT+twU62Jmpl2AcCG9
+        8K0Ba292rKLAoBSCNx4rmuh0WFfCr56gTM4tgTY=
+X-Google-Smtp-Source: AMsMyM4DY56uSJuv1OB3XA4+/NChNXQO6s7gM+ANW7XylJ7yZgmVY6nurvifY1QhaJcbKdgY/8UtSw4p6gJsr1rerU0=
+X-Received: by 2002:a67:be16:0:b0:398:c2e4:e01f with SMTP id
+ x22-20020a67be16000000b00398c2e4e01fmr8206428vsq.33.1663685216652; Tue, 20
+ Sep 2022 07:46:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: umbeCyMigNZMy6gaw7BQlgXXZVLJz3RR
-X-Proofpoint-GUID: umbeCyMigNZMy6gaw7BQlgXXZVLJz3RR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-20_06,2022-09-20_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 spamscore=0 clxscore=1015 mlxscore=0 malwarescore=0
- bulkscore=0 phishscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209200086
+From:   Rondreis <linhaoguo86@gmail.com>
+Date:   Tue, 20 Sep 2022 22:46:45 +0800
+Message-ID: <CAB7eexL-RMqozuX43uCTwzs7V9Vdk+kQzqnn_X4YR78mcH-+Ww@mail.gmail.com>
+Subject: general protection fault in su3000_i2c_transfer
+To:     mchehab@kernel.org, vasilyev@ispras.ru,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Milen Mitkov <quic_mmitkov@quicinc.com>
+Hello,
 
-These patches add support for multiple CSID virtual channels for Qualcomm's SM8250
-platform.
+When fuzzing the Linux kernel driver v6.0-rc6, the following crash was
+triggered.
 
-NOTE: These changes depend on the multistream series that as of yet is
-still not merged officially upstream. The multistream changes
-allow for multiple clients on the same pipeline, which is otherwise not
-possible. For development and testing multistream series v14 was used:
+HEAD commit: 521a547ced6477c54b4b0cc206000406c221b4d6
+git tree: upstream
 
-https://patchwork.kernel.org/project/linux-media/patch/20220831141357.1396081-2-tomi.valkeinen@ideasonboard.com/
+kernel config: https://pastebin.com/raw/hekxU61F
+console output: https://pastebin.com/raw/rNPrPV51
 
-The CSID hardware on SM8250 can demux the input data stream into
-maximum of 4 multiple streams depending on virtual channel (vc)
-or data type (dt) configuration.
+Sorry for failing to extract the reproducer. But on other versions of
+Linux, I also triggered this crash.
 
-Situations in which this is useful:
-- HDR sensors that produce a 2-frame HDR output, e.g. a light and a dark frame
-  (the setup we used  for testing, with the imx412 sensor),
-  or a 3-frame HDR output - light, medium-lit, dark frame.
-- sensors with additional metadata that is streamed over a different
-  virtual channel/datatype.
-- sensors that stream frames with multiple resolutions in the same pixel
-  data stream
+I would appreciate it if you have any idea how to solve this bug.
 
-With these changes, the CSID entity has, as it did previously, a single
-sink port (0), and always exposes 4 source ports (1, 2,3, 4). The
-virtual channel configuration is determined by which of the source ports
-are linked to an output VFE line. For example, the link below will
-configure the CSID driver to enable vc 0 and vc 1:
-
-media-ctl -l '"msm_csid0":1->"msm_vfe0_rdi0":0[1]'
-media-ctl -l '"msm_csid0":2->"msm_vfe0_rdi1":0[1]'
-
-which will be demuxed and propagated into /dev/video0
-and /dev/video1 respectively. With this, the userspace can use
-any normal V4L2 client app to start/stop/queue/dequeue from these
-video nodes. Tested with the yavta app.
-
-Note also that implicit format propagation has been removed, so format
-for the linked source ports has to be set manually, e.g.:
-
-media-ctl -V '"msm_csid0":1[fmt:SRGGB10/3840x2160]'
-media-ctl -V '"msm_csid0":2[fmt:SRGGB10/3840x2160]'
-
-Previously setting the format on the sink port of the CSID entity would
-set the same format on the source port. However, with CSID demuxing there's
-no guarantee that the format on the source ports should be the same,
-in fact it can be different for each source port.
-
-Milen Mitkov (4):
-  media: camss: sm8250: Virtual channels for CSID
-  media: camss: vfe: Reserve VFE lines on stream start and link to CSID
-  media: camss: vfe-480: Multiple outputs support for SM8250
-  media: camss: sm8250: Pipeline starting and stopping for multiple
-    virtual channels
-
- .../platform/qcom/camss/camss-csid-gen2.c     | 55 ++++++++++-------
- .../media/platform/qcom/camss/camss-csid.c    | 41 +++++++------
- .../media/platform/qcom/camss/camss-csid.h    | 11 +++-
- .../media/platform/qcom/camss/camss-vfe-480.c | 60 ++++++++++++-------
- drivers/media/platform/qcom/camss/camss-vfe.c |  7 +++
- .../media/platform/qcom/camss/camss-video.c   | 21 ++++++-
- drivers/media/platform/qcom/camss/camss.c     |  2 +-
- 7 files changed, 133 insertions(+), 64 deletions(-)
-
--- 
-2.37.3
-
+The crash report is as follows:
+general protection fault, probably for non-canonical address
+0xdffffc0000000002: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000010-0x0000000000000017]
+CPU: 1 PID: 16814 Comm: syz-executor.1 Not tainted 6.0.0-rc4+ #20
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+RIP: 0010:su3000_i2c_transfer+0x796/0xb00 drivers/media/usb/dvb-usb/dw2102.c:712
+Code: 00 fc ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 5b 03 00 00
+48 b8 00 00 00 00 00 fc ff df 48 8b 5b 08 48 89 da 48 c1 ea 03 <0f> b6
+04 02 48 89 da 83 e2 07 38 d0 7f 08 84 c0 0f 85 38 02 00 00
+RSP: 0018:ffffc90018c8fcd8 EFLAGS: 00010212
+RAX: dffffc0000000000 RBX: 0000000000000010 RCX: 0000000000040000
+RDX: 0000000000000002 RSI: ffff888017691d40 RDI: ffff888064450f08
+RBP: ffff88802429bd00 R08: ffffffff861e5272 R09: 0000000000001a00
+R10: 0000000000000003 R11: fffffbfff1d34742 R12: ffff888024534000
+R13: ffff888024534fc0 R14: ffff888024534ea0 R15: 0000000000001900
+FS: 00007f4a477eb700(0000) GS:ffff88807ec00000(0000) knlGS:0000000000000000
+CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f4a4719d060 CR3: 0000000064626000 CR4: 0000000000350ee0
+Call Trace:
+<TASK>
+__i2c_transfer drivers/i2c/i2c-core-base.c:2109 [inline]
+__i2c_transfer+0x4c2/0x16a0 drivers/i2c/i2c-core-base.c:2074
+i2c_transfer+0x1e6/0x3e0 drivers/i2c/i2c-core-base.c:2170
+i2cdev_ioctl_rdwr.isra.0+0x2ea/0x6a0 drivers/i2c/i2c-dev.c:297
+i2cdev_ioctl+0x488/0x7b0 drivers/i2c/i2c-dev.c:458
+vfs_ioctl fs/ioctl.c:51 [inline]
+__do_sys_ioctl fs/ioctl.c:870 [inline]
+__se_sys_ioctl fs/ioctl.c:856 [inline]
+__x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
+entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f4a470a80fd
+Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
+89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f4a477eabf8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f4a4719c340 RCX: 00007f4a470a80fd
+RDX: 0000000020002180 RSI: 0000000000000707 RDI: 0000000000000003
+RBP: 00007f4a4710b606 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fff0c6db6ff R14: 00007fff0c6db8a0 R15: 00007f4a477ead80
+</TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:su3000_i2c_transfer+0x796/0xb00 drivers/media/usb/dvb-usb/dw2102.c:712
+Code: 00 fc ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 5b 03 00 00
+48 b8 00 00 00 00 00 fc ff df 48 8b 5b 08 48 89 da 48 c1 ea 03 <0f> b6
+04 02 48 89 da 83 e2 07 38 d0 7f 08 84 c0 0f 85 38 02 00 00
+RSP: 0018:ffffc90018c8fcd8 EFLAGS: 00010212
+RAX: dffffc0000000000 RBX: 0000000000000010 RCX: 0000000000040000
+RDX: 0000000000000002 RSI: ffff888017691d40 RDI: ffff888064450f08
+RBP: ffff88802429bd00 R08: ffffffff861e5272 R09: 0000000000001a00
+R10: 0000000000000003 R11: fffffbfff1d34742 R12: ffff888024534000
+R13: ffff888024534fc0 R14: ffff888024534ea0 R15: 0000000000001900
+FS: 00007f4a477eb700(0000) GS:ffff88807ec00000(0000) knlGS:0000000000000000
+CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f18040450a8 CR3: 0000000064626000 CR4: 0000000000350ee0
+----------------
+Code disassembly (best guess), 3 bytes skipped:
+0: df 48 89 fisttps -0x77(%rax)
+3: fa cli
+4: 48 c1 ea 03 shr $0x3,%rdx
+8: 80 3c 02 00 cmpb $0x0,(%rdx,%rax,1)
+c: 0f 85 5b 03 00 00 jne 0x36d
+12: 48 b8 00 00 00 00 00 movabs $0xdffffc0000000000,%rax
+19: fc ff df
+1c: 48 8b 5b 08 mov 0x8(%rbx),%rbx
+20: 48 89 da mov %rbx,%rdx
+23: 48 c1 ea 03 shr $0x3,%rdx
+* 27: 0f b6 04 02 movzbl (%rdx,%rax,1),%eax <-- trapping instruction
+2b: 48 89 da mov %rbx,%rdx
+2e: 83 e2 07 and $0x7,%edx
+31: 38 d0 cmp %dl,%al
+33: 7f 08 jg 0x3d
+35: 84 c0 test %al,%al
+37: 0f 85 38 02 00 00 jne 0x275
