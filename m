@@ -2,122 +2,158 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B1CCECAAD8
-	for <linux-media@archiver.kernel.org>; Tue, 20 Sep 2022 10:39:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 047E3ECAAD8
+	for <linux-media@archiver.kernel.org>; Tue, 20 Sep 2022 10:41:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbiITKjH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Sep 2022 06:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
+        id S231393AbiITKlW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Sep 2022 06:41:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230461AbiITKiY (ORCPT
+        with ESMTP id S231391AbiITKk7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Sep 2022 06:38:24 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE9A72EE7;
-        Tue, 20 Sep 2022 03:36:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663670212; x=1695206212;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ESeT68QBp14fZse7on7nqGxb5SnUIDEmkBvolLY55Fo=;
-  b=j8nABKC8JEeI8yE58udQZGCNWm/32kxyW8vENwYH7V9pu274EsMsPWNS
-   zsZXVfNiWNlaRyNO0WKj5ORHiLULkFmMOVY0z2x9+BTgNJrBTTzjmUOC1
-   Mm9Ik0lLSUPSy6vKrxo3jh+RVdD+epmXAayl2F9SGzjC8lU5ZTAFd0QeB
-   7xRXRiPWZblsMIFAgS9Uc/8LXBlLLhLBmvLf2snvharCsMzsQXfCrPPu3
-   oWTS5+71aNqEmXPCp0/SarJQITFUQW1DPbgEzlFx57McKDhmsNgbs7gMh
-   z3AF0YKWSS46d1OFsSk8JA8j/Dh6/WEK8cz7W8DwYSyuVvrIrIxIZ4ajS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="361398152"
-X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
-   d="scan'208";a="361398152"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 03:36:51 -0700
-X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
-   d="scan'208";a="618865967"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 03:36:48 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 3F528200DA;
-        Tue, 20 Sep 2022 13:36:46 +0300 (EEST)
-Date:   Tue, 20 Sep 2022 10:36:46 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Marco Felsch <m.felsch@pengutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        mchehab@kernel.org, laurent.pinchart+renesas@ideasonboard.com,
-        akinobu.mita@gmail.com, jacopo+renesas@jmondi.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] media: mt9m111: add V4L2_CID_LINK_FREQ support
-Message-ID: <YymXviWNg/bi/HVr@paasikivi.fi.intel.com>
+        Tue, 20 Sep 2022 06:40:59 -0400
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5546C6DAE5;
+        Tue, 20 Sep 2022 03:40:05 -0700 (PDT)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5FEAA200017;
+        Tue, 20 Sep 2022 10:40:00 +0000 (UTC)
+Date:   Tue, 20 Sep 2022 12:39:57 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        laurent.pinchart+renesas@ideasonboard.com, akinobu.mita@gmail.com,
+        jacopo+renesas@jmondi.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] media: mt9m111: don't turn on the output while
+ powering it
+Message-ID: <20220920103957.l746t3nqe3xozkbw@lati>
 References: <20220916135713.143890-1-m.felsch@pengutronix.de>
- <YyhjpxHHFR4u+k+X@paasikivi.fi.intel.com>
- <20220919130829.ddoe2ajnrarkywgy@pengutronix.de>
- <YyhsQ+l1Sls00F0M@paasikivi.fi.intel.com>
- <20220920085617.7cfflloegh7en4mj@pengutronix.de>
- <20220920091933.kokk4le3cxpw4hvp@lati>
+ <20220916135713.143890-3-m.felsch@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220920091933.kokk4le3cxpw4hvp@lati>
+In-Reply-To: <20220916135713.143890-3-m.felsch@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
+Hi Marco
 
-On Tue, Sep 20, 2022 at 11:19:33AM +0200, Jacopo Mondi wrote:
-> Hello
-> 
-> On Tue, Sep 20, 2022 at 10:56:17AM +0200, Marco Felsch wrote:
-> > Hi Sakari,
-> >
-> > On 22-09-19, Sakari Ailus wrote:
-> >
-> > ...
-> >
-> > > > > > +	ret = clk_prepare_enable(mt9m111->clk);
-> > > > > > +	if (ret < 0)
-> > > > > > +		return ret;
-> > > > > > +
-> > > > > > +	extclk_rate = clk_get_rate(mt9m111->clk);
-> > > > > > +	clk_disable_unprepare(mt9m111->clk);
-> > > > >
-> > > > > I don't think you'll need to enable a clock to just get its frequency.
-> > > >
-> > > > The official API states that you need to turn on the clk before
-> > > > requesting it and it makes sense. Also there is a new helper
-> > > > devm_clk_get_enabled() which addresses simple clk usage since most of
-> > > > drivers don't enable it before requesting the rate.
-> 
-> Had the same question on v1 and Marco pointed me to the clk_get_rate()
-> documentation
-> https://elixir.bootlin.com/linux/v6.0-rc1/source/include/linux/clk.h#L682
-> 
-> which indeed specifies
-> "This is only valid once the clock source has been enabled."
-> 
-> However none (or very few) of the linux-media i2c drivers actually do
-> that.
+On Fri, Sep 16, 2022 at 03:57:13PM +0200, Marco Felsch wrote:
+> Currently the .s_power() turn on/off the device and enables/disables the
+> sensor output. This is wrong since it should only handle the power not
+> not the sensor output behaviour. Enabling the sensor output should be
+> part of the .s_stream() callback.
+>
+> Fix this by adding mt9m111_set_output() which gets called by the
+> .s_stream() callback and remove the output register bits from
+> mt9m111_resume/suspend.
+>
+> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 
-I'm not aware of any. That's indeed what the documentation says. Also
-clk_enable() documentation says that "If the clock can not be
-enabled/disabled, this should return success". So I wonder how much can
-you trust it. ;-)
+I can't say the driver is nice to read (it has been around since a
+long time and comes from the soc_camera times) but this makes it nicer
+and fixes an issue
 
-> 
-> I have added in cc the clk framework maintainer to see if he can help
-> shed some light on this
+With Laurent's comment on the disabling order clarified:
 
-Thanks.
+Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
 
-But yes, to make this work in general case, one would need a way to ensure
-the frequency is the one assigned in DT and that it won't change.
+Thanks
+   j
 
-Getting the frequency (in an unreliable way?) isn't perfect but better than
-nothing. So far I haven't heard of issues in practice though.
-
--- 
-Regards,
-
-Sakari Ailus
+> ---
+> Changelog:
+>
+> v2:
+> - new patch, replaces: "media: mt9m111: remove .s_power callback"
+> ---
+>  drivers/media/i2c/mt9m111.c | 38 ++++++++++++++++++++++++++-----------
+>  1 file changed, 27 insertions(+), 11 deletions(-)
+>
+> diff --git a/drivers/media/i2c/mt9m111.c b/drivers/media/i2c/mt9m111.c
+> index 8de93ab99cbc..2cc0b0da7636 100644
+> --- a/drivers/media/i2c/mt9m111.c
+> +++ b/drivers/media/i2c/mt9m111.c
+> @@ -426,10 +426,25 @@ static int mt9m111_setup_geometry(struct mt9m111 *mt9m111, struct v4l2_rect *rec
+>  	return ret;
+>  }
+>
+> -static int mt9m111_enable(struct mt9m111 *mt9m111)
+> +static int mt9m111_set_output(struct mt9m111 *mt9m111, int on)
+>  {
+>  	struct i2c_client *client = v4l2_get_subdevdata(&mt9m111->subdev);
+> -	return reg_write(RESET, MT9M111_RESET_CHIP_ENABLE);
+> +	int ret;
+> +
+> +	if (on) {
+> +		ret = reg_clear(RESET, MT9M111_RESET_OUTPUT_DISABLE);
+> +		if (ret)
+> +			return ret;
+> +
+> +		return reg_set(RESET, MT9M111_RESET_CHIP_ENABLE);
+> +	}
+> +
+> +	/* disable */
+> +	ret = reg_set(RESET, MT9M111_RESET_OUTPUT_DISABLE);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return reg_clear(RESET, MT9M111_RESET_CHIP_ENABLE);
+>  }
+>
+>  static int mt9m111_reset(struct mt9m111 *mt9m111)
+> @@ -927,10 +942,7 @@ static int mt9m111_suspend(struct mt9m111 *mt9m111)
+>  	ret = reg_set(RESET, MT9M111_RESET_RESET_MODE);
+>  	if (!ret)
+>  		ret = reg_set(RESET, MT9M111_RESET_RESET_SOC |
+> -			      MT9M111_RESET_OUTPUT_DISABLE |
+>  			      MT9M111_RESET_ANALOG_STANDBY);
+> -	if (!ret)
+> -		ret = reg_clear(RESET, MT9M111_RESET_CHIP_ENABLE);
+>
+>  	return ret;
+>  }
+> @@ -951,9 +963,9 @@ static void mt9m111_restore_state(struct mt9m111 *mt9m111)
+>
+>  static int mt9m111_resume(struct mt9m111 *mt9m111)
+>  {
+> -	int ret = mt9m111_enable(mt9m111);
+> -	if (!ret)
+> -		ret = mt9m111_reset(mt9m111);
+> +	int ret;
+> +
+> +	ret = mt9m111_reset(mt9m111);
+>  	if (!ret)
+>  		mt9m111_restore_state(mt9m111);
+>
+> @@ -965,9 +977,7 @@ static int mt9m111_init(struct mt9m111 *mt9m111)
+>  	struct i2c_client *client = v4l2_get_subdevdata(&mt9m111->subdev);
+>  	int ret;
+>
+> -	ret = mt9m111_enable(mt9m111);
+> -	if (!ret)
+> -		ret = mt9m111_reset(mt9m111);
+> +	ret = mt9m111_reset(mt9m111);
+>  	if (!ret)
+>  		ret = mt9m111_set_context(mt9m111, mt9m111->ctx);
+>  	if (ret)
+> @@ -1116,8 +1126,14 @@ static int mt9m111_enum_mbus_code(struct v4l2_subdev *sd,
+>  static int mt9m111_s_stream(struct v4l2_subdev *sd, int enable)
+>  {
+>  	struct mt9m111 *mt9m111 = container_of(sd, struct mt9m111, subdev);
+> +	int ret;
+> +
+> +	ret = mt9m111_set_output(mt9m111, enable);
+> +	if (ret)
+> +		return ret;
+>
+>  	mt9m111->is_streaming = !!enable;
+> +
+>  	return 0;
+>  }
+>
+> --
+> 2.30.2
+>
