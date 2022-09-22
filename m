@@ -2,53 +2,55 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24137C6FA90
-	for <linux-media@archiver.kernel.org>; Thu, 22 Sep 2022 03:12:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64B26C32771
+	for <linux-media@archiver.kernel.org>; Thu, 22 Sep 2022 03:13:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231387AbiIVDMu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 21 Sep 2022 23:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47018 "EHLO
+        id S231393AbiIVDNQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 21 Sep 2022 23:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231235AbiIVDLh (ORCPT
+        with ESMTP id S231162AbiIVDLm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 21 Sep 2022 23:11:37 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CAA193200
+        Wed, 21 Sep 2022 23:11:42 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B18F915CA
         for <linux-media@vger.kernel.org>; Wed, 21 Sep 2022 20:10:29 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 3so7861789pga.1
+Received: by mail-pj1-x1035.google.com with SMTP id y11so8415988pjv.4
         for <linux-media@vger.kernel.org>; Wed, 21 Sep 2022 20:10:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=8ihjvmU6X32IA3g0n6Ob0CbMhk1X+mcnfaE/5Wfmhd8=;
-        b=YKrPYMNBSJFFHg571lPm5+W8CN7DnIcMIRdXREqQlAZ+eLEk9A8maJxy/vrjrQP/eu
-         TYffJ29H5vDdp6sidFBvQbhMXABopPXRk6i9GT1lOsVVh5dTUpn3JKlyT+VRKM4PpYM3
-         aDSZJo/bWB/q00QaHXbLQBN7xuQW5YNdYkiuA=
+        bh=nllmYacJVnWYWyMDuOWg+UhFJID/1u9fgEUSXV9a/I0=;
+        b=ObVBgj10USdxX2qau03B/fvKSrj9pfzNX++HX3pR1Ku6Ct/c+Mn8B6TC2gGByEksOv
+         ftM/dSMzexkJk0pSadbJzyromjdrIDks1988E0vt92N7zZIkoEa3uLvIJsqtFfZmvRDx
+         8dl5wBNFG6y2ajB8JRxgoslRMstHrNUREimgg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=8ihjvmU6X32IA3g0n6Ob0CbMhk1X+mcnfaE/5Wfmhd8=;
-        b=i4/V4sIK/vRZR5FRq8Ha9CRyXFdDS49w9MKrHgmiFhje/UjZvL495y5bTp9hI0yhOQ
-         mKfuFLRMnL20JCh4x7yQfYp2641qONrnCd/5g7lI1Vreme+SFo+8qoqPu/+B+T+gz1rr
-         9a8ORtI/bOPF7OnzJSGypjr17ygPFu7MiW9Y58vd4PIvCkcgmySq/zqjj3rnoIQ3VJ4f
-         n+6O5pXhcrPaQyLhGN02c1r78Xt/vcBckXuapFEBfYrA2MQ3pPMivccA6vT7/jlg8d8P
-         tzLaVqV6gxnpP5nxmyDBsdvkIRCjw+i/UqUwE2gGAU2fMI3X34+TJHDVav1GKWXzb7xI
-         Oq4w==
-X-Gm-Message-State: ACrzQf1K+GM17glgct7tE1uhWMiX9VYW4xudhIc+oiU2Nkdi7gG7DmSm
-        VDUfvmHRtOff3fUuX5u5axPGrQ==
-X-Google-Smtp-Source: AMsMyM76eF8+VNznj7IzekXG0QSV+my0aV1DgaIJkS6htzHMwsh1R3Wrb+39lk5TYLYW7ESUsWFZBQ==
-X-Received: by 2002:a63:e305:0:b0:439:6e0c:f81e with SMTP id f5-20020a63e305000000b004396e0cf81emr1277721pgh.50.1663816228246;
+        bh=nllmYacJVnWYWyMDuOWg+UhFJID/1u9fgEUSXV9a/I0=;
+        b=2mXErRxdQXJQZD61NnopOqMsypARt6b6qEj4cyJhL+ZgUia9R+K/fH+K1gzyUUyUS9
+         g/Jlj5wjp6VWGlBT+kxf0bOiZdUKDiGTh+WRL1T+t4cQuaa/4C3WnoLntQRe60edRKr4
+         YQvb5I/wUncMmMbpD8Bfw/0CediFTpjI9G226m/L2GgcW5OyKkeMbrOiIr8QJxABqYmP
+         v6+fD4fLFako0pQN3nFXIgYDn3QLLNtuVK3nJtVrVDr4LjNB/S+mKxzUIVaj4TSTT16A
+         tfaWlVHT4oRt31VDVHiyiN9oHaV6a5++91JL9NVhKJh9cc7hN/wdmVTz5qfI7I2nUUjZ
+         x3DA==
+X-Gm-Message-State: ACrzQf2vysmE4Ce/qLFfDSzOWIA15n0hbevpOJYbYk/GUDy8/gOJ2OX9
+        P/S46jhw6a0IF/aygkZSViZH4Q==
+X-Google-Smtp-Source: AMsMyM49XhohtYBkjYXAytE2XFYLdWSstHIvAKOydHl9P7CLdwWaHlEa/nts1aXdGwMJ6p2JjPZrLw==
+X-Received: by 2002:a17:90b:180a:b0:202:ae1f:328a with SMTP id lw10-20020a17090b180a00b00202ae1f328amr13239578pjb.78.1663816228865;
         Wed, 21 Sep 2022 20:10:28 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i62-20020a17090a3dc400b001facf455c91sm2649631pjc.21.2022.09.21.20.10.24
+        by smtp.gmail.com with ESMTPSA id d18-20020a170902ced200b001783f964fe3sm2766723plg.113.2022.09.21.20.10.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 21 Sep 2022 20:10:26 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Kees Cook <keescook@chromium.org>, linux-fsdevel@vger.kernel.org,
+Cc:     Kees Cook <keescook@chromium.org>,
+        Daniel Micay <danielmicay@gmail.com>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
         Pekka Enberg <penberg@kernel.org>,
         David Rientjes <rientjes@google.com>,
         Joonsoo Kim <iamjoonsoo.kim@lge.com>,
@@ -65,65 +67,79 @@ Cc:     Kees Cook <keescook@chromium.org>, linux-fsdevel@vger.kernel.org,
         Sumit Semwal <sumit.semwal@linaro.org>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
         Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Daniel Micay <danielmicay@gmail.com>,
         Yonghong Song <yhs@fb.com>, Marco Elver <elver@google.com>,
         Miguel Ojeda <ojeda@kernel.org>,
         Jacob Shin <jacob.shin@amd.com>, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, netdev@vger.kernel.org,
         linux-btrfs@vger.kernel.org, linux-media@vger.kernel.org,
         dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        intel-wired-lan@lists.osuosl.org, dev@openvswitch.org,
-        x86@kernel.org, linux-wireless@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        dev@openvswitch.org, linux-wireless@vger.kernel.org,
         llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: [PATCH 06/12] coredump: Proactively round up to kmalloc bucket size
-Date:   Wed, 21 Sep 2022 20:10:07 -0700
-Message-Id: <20220922031013.2150682-7-keescook@chromium.org>
+Subject: [PATCH 09/12] x86/microcode/AMD: Track patch allocation size explicitly
+Date:   Wed, 21 Sep 2022 20:10:10 -0700
+Message-Id: <20220922031013.2150682-10-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220922031013.2150682-1-keescook@chromium.org>
 References: <20220922031013.2150682-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1167; h=from:subject; bh=pDNvsGLyQA8RpBfkkqJxHruRXSdA8gdZalovRqbX85w=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjK9IT/n4E1MQAIRbO7TQnliesxT9vRRUjnB997VqU NfNmMx2JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYyvSEwAKCRCJcvTf3G3AJv1uD/ 0UeTRzC7PYbrNFpo0erBLhfyq0OXI7KWJPUznMmMf+cAop1hoIyAS6RCvOy3P43EFrYY2LvmcGU3Aj SICc7baXEFvYdMhDJ8d101AolLKruLzinzUGntwccPS2dZe2w/x8T733W5uMnEOoDIW14/zr4IUtRh Vlx7PoTaeYeaEQPZwbWSdxU7qtxeqxD9LsQu+HlBYfR1k5rQ/OwJUa0VLmxQS3VuLxNzcqUFIRrz3E N9wSWjXJ1fpBM5rUyeWWd8dLef4aKwvQUrxvsQ2VWqLB5t57NofX/QpwkS3ypabCJnUg2eUl37eba5 OV6vc8FtBSMSsXXhnZ0qRfqcqAOpIlqc5fvFIq+bl3f4xCiJNeEM7atqS3LN6ZEK9rF9EWiIyjfIU1 rFgqaXZ47QKcNt6D+tThDEVTDgBDzW+/xD6gFm/gAUYLMU55Xrc41oHohWX310hGuJ4uQfMnkpzfJD l7QDNBoaF6Eo/aHjjnO/L/2LHxrNen15gNgss8f3Pbl5cYUEIwKYQTUHz4t+WuflfhJ72ydBaVxPhi nvK5XI8oXLZUTCjvvJ0NvdCQbKmYhFiTddotTbfTvs9VyXcsa4oRA58e65OY4nlgV9+2HJHYaTy3u4 CX+OyRwkHX1tSGbw74SSBv0sSXX5LiEItWNDNN9XJyygxijXQxQ7uWbdLfNg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2149; h=from:subject; bh=LRLPHeutQvsvCqROzEs3/rr/P6uPQnPuMyr/7IE9r2g=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjK9IUgfEF5Q67qoI3XgFPEX8J4smU+peBuyPzdpCc nIEpFpaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYyvSFAAKCRCJcvTf3G3AJsUGD/ 4jiZQIVRjbRNvUVUl7QhNkO/5LbO1QHELDOu9VeAlksbBy6XuO+qlBw7CoqEHO44r9YLdeZFAssNud wYDnzHSwrmpVT9VOZKujYIXUu4jVQeSmpRL+/zi2WAX5dpAscIDYzhoFkFQuW/aQn9nvVlwwWv2G5A GfumYAURZ8BP94NLhlaTRLKHc10AEhWJ08FZCbBy/NXE7LT5VZa1H9zYppFy1ulRzYa4xiX1Weubkg o7PsRtqxx2jPKi9ywlm4JL33MLhQ7Hl1dObUN2bhp8DRTalPx6Bc6SUbteYJPbwKYEr7+5pD3iT+ek 78esKD6WsOGfBLAZ8pf8lCldD0XPYRApJVGasz+zBeg9LCqumUaDwNzE9GNpHfaorgWXNBuXeuKFif 5rYMN95t+ygRdOvQdNJlCJ0JlPfMcJajLzKyYKCvSlICPcTlaGpjjCGXtVFMSUZgvkbvhOZnwoRTfP LCMqYLu+xX8m1YKOnipcqlhorAe+A8u41dR2tlI0HUW4UYrUIZQ5O+CQqG80Ge713Eg5bk43crrhKD YsmBHTsJ/g7EuL/mG/+BltzwRQSF9KUT12J1eO+hSib+I+7XiE4mW8dN4M4JLJmSxvAa5G/pJSmhKH 6ZKIBAfSeBqo6VbAeV28Lkl0KnRiBwVDbQ08NwltR1YuONRBkYjOqYRx4S+w==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Instead of discovering the kmalloc bucket size _after_ allocation, round
-up proactively so the allocation is explicitly made for the full size,
-allowing the compiler to correctly reason about the resulting size of
-the buffer through the existing __alloc_size() hint.
+In preparation for reducing the use of ksize(), record the actual
+allocation size for later memcpy(). This avoids copying extra
+(uninitialized!) bytes into the patch buffer when the requested allocation
+size isn't exactly the size of a kmalloc bucket. Additionally fixes
+potential future issues where runtime bounds checking will notice that
+the buffer was allocated to a smaller value than returned by ksize().
 
-Cc: linux-fsdevel@vger.kernel.org
+Suggested-by: Daniel Micay <danielmicay@gmail.com>
+Link: https://lore.kernel.org/lkml/CA+DvKQ+bp7Y7gmaVhacjv9uF6Ar-o4tet872h4Q8RPYPJjcJQA@mail.gmail.com/
+Fixes: 757885e94a22 ("x86, microcode, amd: Early microcode patch loading support for AMD")
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: x86@kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- fs/coredump.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/microcode.h    | 1 +
+ arch/x86/kernel/cpu/microcode/amd.c | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/fs/coredump.c b/fs/coredump.c
-index 9f4aae202109..0894b2c35d98 100644
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -68,7 +68,10 @@ struct core_name {
+diff --git a/arch/x86/include/asm/microcode.h b/arch/x86/include/asm/microcode.h
+index 0c3d3440fe27..aa675783412f 100644
+--- a/arch/x86/include/asm/microcode.h
++++ b/arch/x86/include/asm/microcode.h
+@@ -9,6 +9,7 @@
+ struct ucode_patch {
+ 	struct list_head plist;
+ 	void *data;		/* Intel uses only this one */
++	unsigned int size;
+ 	u32 patch_id;
+ 	u16 equiv_cpu;
+ };
+diff --git a/arch/x86/kernel/cpu/microcode/amd.c b/arch/x86/kernel/cpu/microcode/amd.c
+index 8b2fcdfa6d31..615bc6efa1dd 100644
+--- a/arch/x86/kernel/cpu/microcode/amd.c
++++ b/arch/x86/kernel/cpu/microcode/amd.c
+@@ -788,6 +788,7 @@ static int verify_and_add_patch(u8 family, u8 *fw, unsigned int leftover,
+ 		kfree(patch);
+ 		return -EINVAL;
+ 	}
++	patch->size = *patch_size;
  
- static int expand_corename(struct core_name *cn, int size)
- {
--	char *corename = krealloc(cn->corename, size, GFP_KERNEL);
-+	char *corename;
-+
-+	size = kmalloc_size_roundup(size);
-+	corename = krealloc(cn->corename, size, GFP_KERNEL);
+ 	mc_hdr      = (struct microcode_header_amd *)(fw + SECTION_HDR_SIZE);
+ 	proc_id     = mc_hdr->processor_rev_id;
+@@ -869,7 +870,7 @@ load_microcode_amd(bool save, u8 family, const u8 *data, size_t size)
+ 		return ret;
  
- 	if (!corename)
- 		return -ENOMEM;
-@@ -76,7 +79,7 @@ static int expand_corename(struct core_name *cn, int size)
- 	if (size > core_name_size) /* racy but harmless */
- 		core_name_size = size;
+ 	memset(amd_ucode_patch, 0, PATCH_MAX_SIZE);
+-	memcpy(amd_ucode_patch, p->data, min_t(u32, ksize(p->data), PATCH_MAX_SIZE));
++	memcpy(amd_ucode_patch, p->data, min_t(u32, p->size, PATCH_MAX_SIZE));
  
--	cn->size = ksize(corename);
-+	cn->size = size;
- 	cn->corename = corename;
- 	return 0;
+ 	return ret;
  }
 -- 
 2.34.1
