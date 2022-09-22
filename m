@@ -2,172 +2,86 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4742C6FA8B
-	for <linux-media@archiver.kernel.org>; Thu, 22 Sep 2022 08:20:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC410C6FA91
+	for <linux-media@archiver.kernel.org>; Thu, 22 Sep 2022 08:41:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbiIVIUk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 22 Sep 2022 04:20:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38012 "EHLO
+        id S230309AbiIVIlw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 22 Sep 2022 04:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiIVIUe (ORCPT
+        with ESMTP id S229717AbiIVIlt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 22 Sep 2022 04:20:34 -0400
+        Thu, 22 Sep 2022 04:41:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37A897B2C
-        for <linux-media@vger.kernel.org>; Thu, 22 Sep 2022 01:20:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFAB5CDCCF;
+        Thu, 22 Sep 2022 01:41:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7448463468
-        for <linux-media@vger.kernel.org>; Thu, 22 Sep 2022 08:20:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE49BC433C1;
-        Thu, 22 Sep 2022 08:20:26 +0000 (UTC)
-Message-ID: <6a0b8be9-7486-3f22-1181-af61f6559f30@xs4all.nl>
-Date:   Thu, 22 Sep 2022 10:20:25 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 11F0D611DF;
+        Thu, 22 Sep 2022 08:41:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B4DBC433C1;
+        Thu, 22 Sep 2022 08:41:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663836106;
+        bh=0eoFjcQopkDVXGcndNRjQDg5nJ3lKUmDPXyMxFGOeHo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iX6RKUvT1p92sezDzPubezh1aonVxG6Swuk58miPNcurs6dHVCCYWP2RuGqh8HQaj
+         UGn1AfTG1Bn5Gx2ukwC64vlAWHwOh9BVYg83bh2AuAnosLatGqCrYAZLwZxYU8lBKy
+         FfjJS/enFgr6FKW43CxE+XjK/YH3vnuYmhAxtj0o=
+Date:   Thu, 22 Sep 2022 10:41:43 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Oliver Neukum <oneukum@suse.com>, stable@vger.kernel.org,
+        Dongliang Mu <mudongliangabcd@gmail.com>
+Subject: Re: [PATCH RESEND] media: flexcop-usb: fix endpoint type check
+Message-ID: <YywfxwBmdmvQ0i21@kroah.com>
+References: <20220822151027.27026-1-johan@kernel.org>
+ <YymBM1wJLAsBDU4E@hovoldconsulting.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] utils: add v4l2-tracer utility
-Content-Language: en-US
-To:     Deborah Brouwer <deborah.brouwer@collabora.com>,
-        linux-media@vger.kernel.org
-Cc:     daniel.almeida@collabora.com, nfraprado@collabora.com,
-        nicolas.dufresne@collabora.com, deborahbrouwer3563@gmail.com
-References: <20220917022947.141330-1-deborah.brouwer@collabora.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20220917022947.141330-1-deborah.brouwer@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YymBM1wJLAsBDU4E@hovoldconsulting.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Deb,
+On Tue, Sep 20, 2022 at 11:00:35AM +0200, Johan Hovold wrote:
+> Mauro and Hans,
+> 
+> On Mon, Aug 22, 2022 at 05:10:27PM +0200, Johan Hovold wrote:
+> > Commit d725d20e81c2 ("media: flexcop-usb: sanity checking of endpoint
+> > type") tried to add an endpoint type sanity check for the single
+> > isochronous endpoint but instead broke the driver by checking the wrong
+> > descriptor or random data beyond the last endpoint descriptor.
+> > 
+> > Make sure to check the right endpoint descriptor.
+> > 
+> > Fixes: d725d20e81c2 ("media: flexcop-usb: sanity checking of endpoint type")
+> > Cc: Oliver Neukum <oneukum@suse.com>
+> > Cc: stable@vger.kernel.org	# 5.9
+> > Reported-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> > Signed-off-by: Johan Hovold <johan@kernel.org>
+> > ---
+> > 
+> > It's been two months and two completely ignored reminders so resending.
+> > 
+> > Can someone please pick this fix up and let me know when that has been
+> > done?
+> 
+> It's been another month so sending yet another reminder. This driver as
+> been broken since 5.9 and I posted this fix almost four months ago and
+> have sent multiple reminders since.
+> 
+> Can someone please pick this one and the follow-up cleanups up?
 
-On 17/09/2022 04:29, Deborah Brouwer wrote:
-> The v4l2-tracer utility traces, records and replays userspace applications
-> that implement the v4l2 memory-to-memory stateless video decoder
-> interface. The trace function intercepts and copies all system calls,
-> stateless codec controls and encoded data to a json-formatted trace file.
-> The retrace function independently reads and replays the json trace file.
-> The json trace file can be retraced independently from its original
-> userspace environment and can be edited to inject errors to test a
-> driver's error handling abilities.
-> 
-> The v4l2-tracer currently supports VP8, H264 and FWHT formats.
+I've taken this one in my tree now.  Which one were the "follow-up"
+cleanups?
 
-Thank you for working on this, very nice!
+thanks,
 
-A more in-depth review will follow (hopefully next week), but I
-did have one high-level naming question:
-
-> 
-> Signed-off-by: Deborah Brouwer <deborah.brouwer@collabora.com>
-> ---
-> This patch supercedes:
-> [RFC,1/2] utils: add stateless tracer utility
-> [RFC,2/2] utils: add stateless retracer utility
-> 
-> Changes since RFC:
-> - combined tracer/retracer into one utility
-> - added h264 and fwht formats
-> - removed hard-coded link to shared library
-> - added help options and man page
-> - reduced json-c version requirements to 0.15
-> 
-> Examples:
-> 
-> Trace VP8 decoding:
-> 
->   v4l2-tracer trace -- gst-launch-1.0 -- filesrc
->   location=test-25fps.vp8 ! parsebin ! v4l2slvp8dec !
->   videocodectestsink
-> 
-> Trace H264 decoding:
-> 
->   v4l2-tracer trace -y -- gst-launch-1.0 -- filesrc
->   location=test-25fps.h264 ! parsebin ! v4l2slh264dec !
->   videocodectestsink
-> 
-> Trace FWHT decoding:
-> 
->   v4l2-tracer trace -- v4l2-ctl -d9 --stream-mmap
->   --stream-out-mmap --stream-from-hdr test-25fps.fwht
->   --stream-to out.yuv
-> 
-> Retrace:
->   v4l2-tracer retrace 79568_trace.json
-> 
->  configure.ac                         |   12 +
->  utils/Makefile.am                    |    5 +
->  utils/common/v4l2-info.cpp           |    7 +-
->  utils/common/v4l2-info.h             |    8 +
->  utils/v4l2-tracer/.gitignore         |   12 +
->  utils/v4l2-tracer/Makefile.am        |   23 +
->  utils/v4l2-tracer/libtracer.cpp      |  209 +++++
->  utils/v4l2-tracer/libtracer.h        |   35 +
-
-If I understood it right, this will install a libtracer library?
-
-In that case, the library name is much too generic, it should be renamed
-to libv4l2tracer.
-
-Regards,
-
-	Hans
-
->  utils/v4l2-tracer/retrace-fwht.cpp   |   54 ++
->  utils/v4l2-tracer/retrace-fwht.h     |   11 +
->  utils/v4l2-tracer/retrace-h264.cpp   |  446 +++++++++
->  utils/v4l2-tracer/retrace-h264.h     |   16 +
->  utils/v4l2-tracer/retrace-helper.cpp |  157 ++++
->  utils/v4l2-tracer/retrace-helper.h   |   44 +
->  utils/v4l2-tracer/retrace-vp8.cpp    |  288 ++++++
->  utils/v4l2-tracer/retrace-vp8.h      |   11 +
->  utils/v4l2-tracer/retracer.cpp       | 1281 ++++++++++++++++++++++++++
->  utils/v4l2-tracer/trace-fwht.cpp     |   24 +
->  utils/v4l2-tracer/trace-fwht.h       |   11 +
->  utils/v4l2-tracer/trace-h264.cpp     |  281 ++++++
->  utils/v4l2-tracer/trace-h264.h       |   18 +
->  utils/v4l2-tracer/trace-helper.cpp   |  667 ++++++++++++++
->  utils/v4l2-tracer/trace-helper.h     |   81 ++
->  utils/v4l2-tracer/trace-info.cpp     |  460 +++++++++
->  utils/v4l2-tracer/trace-info.h       |   93 ++
->  utils/v4l2-tracer/trace-vp8.cpp      |  183 ++++
->  utils/v4l2-tracer/trace-vp8.h        |   11 +
->  utils/v4l2-tracer/trace.cpp          |  582 ++++++++++++
->  utils/v4l2-tracer/trace.h            |   17 +
->  utils/v4l2-tracer/v4l2-tracer.1.in   |  109 +++
->  utils/v4l2-tracer/v4l2-tracer.cpp    |  181 ++++
->  utils/v4l2-tracer/v4l2-tracer.h      |   39 +
->  32 files changed, 5370 insertions(+), 6 deletions(-)
->  create mode 100644 utils/v4l2-tracer/.gitignore
->  create mode 100644 utils/v4l2-tracer/Makefile.am
->  create mode 100644 utils/v4l2-tracer/libtracer.cpp
->  create mode 100644 utils/v4l2-tracer/libtracer.h
->  create mode 100644 utils/v4l2-tracer/retrace-fwht.cpp
->  create mode 100644 utils/v4l2-tracer/retrace-fwht.h
->  create mode 100644 utils/v4l2-tracer/retrace-h264.cpp
->  create mode 100644 utils/v4l2-tracer/retrace-h264.h
->  create mode 100644 utils/v4l2-tracer/retrace-helper.cpp
->  create mode 100644 utils/v4l2-tracer/retrace-helper.h
->  create mode 100644 utils/v4l2-tracer/retrace-vp8.cpp
->  create mode 100644 utils/v4l2-tracer/retrace-vp8.h
->  create mode 100644 utils/v4l2-tracer/retracer.cpp
->  create mode 100644 utils/v4l2-tracer/trace-fwht.cpp
->  create mode 100644 utils/v4l2-tracer/trace-fwht.h
->  create mode 100644 utils/v4l2-tracer/trace-h264.cpp
->  create mode 100644 utils/v4l2-tracer/trace-h264.h
->  create mode 100644 utils/v4l2-tracer/trace-helper.cpp
->  create mode 100644 utils/v4l2-tracer/trace-helper.h
->  create mode 100644 utils/v4l2-tracer/trace-info.cpp
->  create mode 100644 utils/v4l2-tracer/trace-info.h
->  create mode 100644 utils/v4l2-tracer/trace-vp8.cpp
->  create mode 100644 utils/v4l2-tracer/trace-vp8.h
->  create mode 100644 utils/v4l2-tracer/trace.cpp
->  create mode 100644 utils/v4l2-tracer/trace.h
->  create mode 100644 utils/v4l2-tracer/v4l2-tracer.1.in
->  create mode 100644 utils/v4l2-tracer/v4l2-tracer.cpp
->  create mode 100644 utils/v4l2-tracer/v4l2-tracer.h
-> 
-
+greg k-h
