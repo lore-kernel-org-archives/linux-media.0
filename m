@@ -2,325 +2,139 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97769C6FA86
-	for <linux-media@archiver.kernel.org>; Fri, 23 Sep 2022 20:34:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2EC2C04A95
+	for <linux-media@archiver.kernel.org>; Fri, 23 Sep 2022 20:34:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233011AbiIWUeC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 23 Sep 2022 16:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49204 "EHLO
+        id S233003AbiIWUeF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 23 Sep 2022 16:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232999AbiIWUcd (ORCPT
+        with ESMTP id S233042AbiIWUcd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 23 Sep 2022 16:32:33 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B91E149D2F
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2801145961
         for <linux-media@vger.kernel.org>; Fri, 23 Sep 2022 13:28:29 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d11so1160711pll.8
-        for <linux-media@vger.kernel.org>; Fri, 23 Sep 2022 13:28:28 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id j6-20020a17090a694600b00200bba67dadso1232275pjm.5
+        for <linux-media@vger.kernel.org>; Fri, 23 Sep 2022 13:28:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=WvdKcFRqdjuCQfT0JD0gE0+SmtwNOrU+Pg1jOBHe3u4=;
-        b=HrEaRqblEiynLI80qIODRxODwTegHwanOC+vBRaT+N4CuyIyDnT1Ka3u4nfVp9IIHd
-         diT0lWeZvMtZhxZoszDpodW+IF3HNONiVLb+u/CcrtF0chbqY7ZgfyXXY3bccBOo8VEU
-         9aWzIy88EGpAGDtPIK6TJqjioaB1k1Ced9PHo=
+        bh=G7kCAYdmee+RZ/2FVUhmFmKba16DTFtB/qncTXfqL0g=;
+        b=Y6E7L9J9UR374oBO9JTlj0UyLXz47O6O/vrwsT4xNx7MOToGuF3Haek94epLF2gKFc
+         YHBgJXmOtfririgUsUdUJ7cJUEJhj34PvSPp7NewDy4HIxUbfstnz0HwtTKsvV+jUdM9
+         ewYTBmIsL92mb0z3umh2K5ZPB3wBhsrYJr07w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=WvdKcFRqdjuCQfT0JD0gE0+SmtwNOrU+Pg1jOBHe3u4=;
-        b=N5+lRhC8cREpq2ONpJPm824jObFwdabpmEVNjq4SZop1WAVDI2a+EX3Vbl7Frxpg5b
-         ZPJMaWM5dr1CqjZDkzApHCoaz3lAmBRP1Lfq3uVA8bT5Z8vCDdYP76wJn2BpqiGjoYJ+
-         WEUjFzri4+g8hkQDac5nTqHqzsf/OsK1oaxvpAZ+rSc3slFSNybr9e6Y1GcosmmOccbS
-         ujJsoAOd1fiYbMFaz2eLjRwwEkxIUMjERn5N5+1mFRaB8zNTdfgCnAACcJe3EAAAw1fe
-         HrN7SQohzbWmlzrvrRaz7kQHmIkRA4p+ph5KEG6t1aAOmJbxmOoum/0esjLFVIpcKmub
-         TyPw==
-X-Gm-Message-State: ACrzQf1qiYmGXg62tEBQupBTBZT48LXzqmMOMjXW/BP8quKaVU3nKYuO
-        1uOPZa3J/+f1zaV4CNjYRMxR8g==
-X-Google-Smtp-Source: AMsMyM4ngI9FRR1eL+yZ6uwD2KKL58Y//80JdSNI55TW3osObzJLJuYdaOAbceb8ExT348oeslycRw==
-X-Received: by 2002:a17:90b:1d12:b0:200:461c:fa7d with SMTP id on18-20020a17090b1d1200b00200461cfa7dmr11526582pjb.38.1663964907877;
-        Fri, 23 Sep 2022 13:28:27 -0700 (PDT)
+        bh=G7kCAYdmee+RZ/2FVUhmFmKba16DTFtB/qncTXfqL0g=;
+        b=Z3+ob6YOPacqm7OE0IqbWDo5OwzKiLgnsL1PMDPlJdQFKi7eqDEmC2xiVbdtuuAwFD
+         FneQJRxZQxeQ2GGMfXSguK4JJdoXxNdcwXFjjLr1OayAXj6VXG/1wBRlCVzO8qyCsgDX
+         oeOLKIE8pnQqecl4UpQQm4j6XD078DZFtakCwCy31463qFNMTy+hjwn8yQYM6sYuNGry
+         X+G4G2+FjlUs/gC3gkIa+ApscL9u4lQu2ZGTtzKKmRGdB8TZEusTNurZpYp/NhTfi/UR
+         UDXp3kRBvOzUCyuBvK5eZMO6irXeGMJJqAcupToZIhfLQ58M69j3+G6ytjNvO+1R61W3
+         OCKQ==
+X-Gm-Message-State: ACrzQf3hXqZ7agxHsROTiiqWo1axbNhbCwW15QO6axv6zNvbRF4jFmfJ
+        PbJGr3rvy7us+58gggiDn68Brw==
+X-Google-Smtp-Source: AMsMyM4OIH2Kbz3W/dS5nJOpu2wzufZOda+7SbBQGOF/tLPl7Mw1AUJglcwrNduXNP5ZLvyQaDEecg==
+X-Received: by 2002:a17:90b:1942:b0:202:cf66:f37f with SMTP id nk2-20020a17090b194200b00202cf66f37fmr22638049pjb.15.1663964909318;
+        Fri, 23 Sep 2022 13:28:29 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l11-20020a170902f68b00b0017832c8cc85sm6427549plg.292.2022.09.23.13.28.25
+        by smtp.gmail.com with ESMTPSA id z12-20020a6553cc000000b0041d6d37deb5sm6016364pgr.81.2022.09.23.13.28.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 13:28:25 -0700 (PDT)
+        Fri, 23 Sep 2022 13:28:28 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Vlastimil Babka <vbabka@suse.cz>
 Cc:     Kees Cook <keescook@chromium.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        David Rientjes <rientjes@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
         "Ruhl, Michael J" <michael.j.ruhl@intel.com>,
         Hyeonggon Yoo <42.hyeyoo@gmail.com>,
         Christoph Lameter <cl@linux.com>,
         Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
         Joonsoo Kim <iamjoonsoo.kim@lge.com>,
         Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
         Alex Elder <elder@kernel.org>,
         Josef Bacik <josef@toxicpanda.com>,
         David Sterba <dsterba@suse.com>,
         Sumit Semwal <sumit.semwal@linaro.org>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
         Daniel Micay <danielmicay@gmail.com>,
         Yonghong Song <yhs@fb.com>, Marco Elver <elver@google.com>,
         Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linux-btrfs@vger.kernel.org,
         linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linaro-mm-sig@lists.linaro.org, linux-fsdevel@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, dev@openvswitch.org,
-        x86@kernel.org, llvm@lists.linux.dev,
+        dev@openvswitch.org, x86@kernel.org, llvm@lists.linux.dev,
         linux-hardening@vger.kernel.org
-Subject: [PATCH v2 03/16] skbuff: Proactively round up to kmalloc bucket size
-Date:   Fri, 23 Sep 2022 13:28:09 -0700
-Message-Id: <20220923202822.2667581-4-keescook@chromium.org>
+Subject: [PATCH v2 06/16] igb: Proactively round up to kmalloc bucket size
+Date:   Fri, 23 Sep 2022 13:28:12 -0700
+Message-Id: <20220923202822.2667581-7-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220923202822.2667581-1-keescook@chromium.org>
 References: <20220923202822.2667581-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8786; h=from:subject; bh=/55In49mcQKg/1B/2W03m4b/pZThn3d5JbnnA49Rm6I=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjLhbkHxh06F0h70CVmnqi/5BazOvRlOHWM3KgI6U5 EH+6FCyJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYy4W5AAKCRCJcvTf3G3AJhURD/ 9I6XEF+He0Ww+60DOgfxrHQg5rlWLQ0kqhBM44ODly9CeGSh3lhyoVQ/h9WpsVZNuLWimeIaArOgsM IAW1lVoADGZnBF9ATBVtZo64La+i6ahcPdQ7LBs/s6pDjZeopNi7al0Bt1YzlRe0VOSUjYGy82cVtY WOaobW8pTWoyLTjo3iTpHKyFaKQN1MKp1Y3EqG0/B05W8mFeqsmuQ0qy6EIiP8Zs4iEfvR/7UrSGb0 BVshxfoJapBmV7hlF/1qXAMi4Nva19VNb6+8aYgQRWD6SHG43lz++GxcOt3rERzf1S1B61G/WpKdPE OmQF4aoA0KyjqK6KPG9b+IKbK9H4qTgxuIMqrcyFVniVxLQqm8OZeZ7G8Sc/RmyqeiIp4dcT2wfHlo 9rn+/pIzx3dZkhHIt1dBi6oGIYcft5FhSjoTBRNpDCbB3q6t7Z6v+2tx9BprHS7rO3CCsH36HQEZ7B UKU1zH31UqO/iWiGbvto4ioPgRV91yQV1fmC9MAvO70ri2/E2LfLPOhO5Ie/MQ1W6dyCRLrTbXBryi qvuZGLPA690eYRPxm2oVZ54qQE6SU2XdbPMDsuG9ONR6QSv2mTERQ9OgeKQnOPu3Yznrzyd99lObTv OIpbLfaEVj2GDT+fQjDKwgYif/bE416Ch2kM90zcPNidPn2ZZH/+EY2ye6/A==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1691; h=from:subject; bh=laYkgTmsp2Dcg0WHHOT6ZPL9V6mSc2dOwctf45ZQYvY=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjLhbkDJzHnX+sI3Vo1Qv14V482wiYBuOHMxTmnIBU huucnceJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYy4W5AAKCRCJcvTf3G3AJiyLEA CGMES+fC6ye1bGeS3O38IPkN3IQzERShfic80XY4a30XyimxkLkJSmvXpj+ewPNbHKoiUJTxKgZb/K XnxJDpvuDtFtz8bmbN5m2Yd+S7u9U0FJix4D0Bjc65bO2BLZ1p4skZ00ujWbdyLS1BgmyosrJ9xVP9 Jeb1iFSNfgRZVKqrPKkicjNZr+6mjZxTYoH7c+LPVPfoyyMsulrIGhvF9VSVGvkUMxknLO8TmnWGGL YXw+DzIp3KOAD7McaSE+ctkuIt/4FqAoG9rJOaNF0THgqKo9qaiN3ta16/oNWQocOWuZiKKVTKaDQl ec8EwXmI83Hw0xcmg1Pk7Nyaa5u6CNYuOr6/QPIyHM/G9zTOgaQKJDjVdTfOWZueQU0z56sMQd76h2 EgoHovJDkExXKzaR3tSExdysEeji5cAz5MTF6B5PhevY//J2SrfmsF3Umuqd3PdQ8Z+4FkekBNeaIt Wpzdj496etMeazF2E/aottRll8HUp1QXtMIraqM7WAgkIUg557ze4RTKXXeQvpWrgT6a464S9QSBKF D28gqdBRRs+c1X8XxNNTSpIWgjw0U1bUDku7eV4GRnqprMwn16uXdgttSoB7bVSJibtA6uv2jYfhpW HJE8ECmRl+W/2kM5Fz/2+NW1rofopoBc5f5LUPED2ZPHjOI5nqOO7GaJaF1w==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Instead of discovering the kmalloc bucket size _after_ allocation, round
-up proactively so the allocation is explicitly made for the full size,
-allowing the compiler to correctly reason about the resulting size of
-the buffer through the existing __alloc_size() hint.
+In preparation for removing the "silently change allocation size"
+users of ksize(), explicitly round up all q_vector allocations so that
+allocations can be correctly compared to ksize().
 
-This will allow for kernels built with CONFIG_UBSAN_BOUNDS or the
-coming dynamic bounds checking under CONFIG_FORTIFY_SOURCE to gain
-back the __alloc_size() hints that were temporarily reverted in commit
-93dd04ab0b2b ("slab: remove __alloc_size attribute from __kmalloc_track_caller")
+Additionally fix potential use-after-free in the case of new allocation
+failure: only free memory if the replacement allocation succeeds.
 
-Additionally tries to normalize size variables to u32 from int. Most
-interfaces are using "int", but notably __alloc_skb uses unsigned int.
-
-Also fix some reverse Christmas tree and comments while touching nearby
-code.
-
+Cc: Jesse Brandeburg <jesse.brandeburg@intel.com>
+Cc: Tony Nguyen <anthony.l.nguyen@intel.com>
 Cc: "David S. Miller" <davem@davemloft.net>
 Cc: Eric Dumazet <edumazet@google.com>
 Cc: Jakub Kicinski <kuba@kernel.org>
 Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: intel-wired-lan@lists.osuosl.org
 Cc: netdev@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- include/linux/skbuff.h |  5 +---
- net/core/skbuff.c      | 64 +++++++++++++++++++++---------------------
- 2 files changed, 33 insertions(+), 36 deletions(-)
+ drivers/net/ethernet/intel/igb/igb_main.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index ca8afa382bf2..5a16177f38b5 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -1234,7 +1234,7 @@ void kfree_skb_partial(struct sk_buff *skb, bool head_stolen);
- bool skb_try_coalesce(struct sk_buff *to, struct sk_buff *from,
- 		      bool *fragstolen, int *delta_truesize);
- 
--struct sk_buff *__alloc_skb(unsigned int size, gfp_t priority, int flags,
-+struct sk_buff *__alloc_skb(unsigned int bytes, gfp_t priority, int flags,
- 			    int node);
- struct sk_buff *__build_skb(void *data, unsigned int frag_size);
- struct sk_buff *build_skb(void *data, unsigned int frag_size);
-@@ -1870,9 +1870,6 @@ static inline int skb_unclone(struct sk_buff *skb, gfp_t pri)
- 
- /* This variant of skb_unclone() makes sure skb->truesize
-  * and skb_end_offset() are not changed, whenever a new skb->head is needed.
-- *
-- * Indeed there is no guarantee that ksize(kmalloc(X)) == ksize(kmalloc(X))
-- * when various debugging features are in place.
-  */
- int __skb_unclone_keeptruesize(struct sk_buff *skb, gfp_t pri);
- static inline int skb_unclone_keeptruesize(struct sk_buff *skb, gfp_t pri)
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 974bbbbe7138..0b30fbdbd0d0 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -343,19 +343,23 @@ EXPORT_SYMBOL(napi_build_skb);
-  * the caller if emergency pfmemalloc reserves are being used. If it is and
-  * the socket is later found to be SOCK_MEMALLOC then PFMEMALLOC reserves
-  * may be used. Otherwise, the packet data may be discarded until enough
-- * memory is free
-+ * memory is free.
-  */
--static void *kmalloc_reserve(size_t size, gfp_t flags, int node,
-+static void *kmalloc_reserve(u32 *size, gfp_t flags, int node,
- 			     bool *pfmemalloc)
- {
- 	void *obj;
- 	bool ret_pfmemalloc = false;
- 
-+	/* kmalloc(size) might give us more room than requested, so
-+	 * allocate the true bucket size up front.
-+	 */
-+	*size = kmalloc_size_roundup(*size);
- 	/*
- 	 * Try a regular allocation, when that fails and we're not entitled
- 	 * to the reserves, fail.
- 	 */
--	obj = kmalloc_node_track_caller(size,
-+	obj = kmalloc_node_track_caller(*size,
- 					flags | __GFP_NOMEMALLOC | __GFP_NOWARN,
- 					node);
- 	if (obj || !(gfp_pfmemalloc_allowed(flags)))
-@@ -363,7 +367,7 @@ static void *kmalloc_reserve(size_t size, gfp_t flags, int node,
- 
- 	/* Try again but now we are using pfmemalloc reserves */
- 	ret_pfmemalloc = true;
--	obj = kmalloc_node_track_caller(size, flags, node);
-+	obj = kmalloc_node_track_caller(*size, flags, node);
- 
- out:
- 	if (pfmemalloc)
-@@ -380,7 +384,7 @@ static void *kmalloc_reserve(size_t size, gfp_t flags, int node,
- 
- /**
-  *	__alloc_skb	-	allocate a network buffer
-- *	@size: size to allocate
-+ *	@bytes: minimum bytes to allocate
-  *	@gfp_mask: allocation mask
-  *	@flags: If SKB_ALLOC_FCLONE is set, allocate from fclone cache
-  *		instead of head cache and allocate a cloned (child) skb.
-@@ -395,12 +399,12 @@ static void *kmalloc_reserve(size_t size, gfp_t flags, int node,
-  *	Buffers may only be allocated from interrupts using a @gfp_mask of
-  *	%GFP_ATOMIC.
-  */
--struct sk_buff *__alloc_skb(unsigned int size, gfp_t gfp_mask,
-+struct sk_buff *__alloc_skb(unsigned int bytes, gfp_t gfp_mask,
- 			    int flags, int node)
- {
- 	struct kmem_cache *cache;
- 	struct sk_buff *skb;
--	unsigned int osize;
-+	u32 size = bytes;
- 	bool pfmemalloc;
- 	u8 *data;
- 
-@@ -427,15 +431,13 @@ struct sk_buff *__alloc_skb(unsigned int size, gfp_t gfp_mask,
- 	 */
- 	size = SKB_DATA_ALIGN(size);
- 	size += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
--	data = kmalloc_reserve(size, gfp_mask, node, &pfmemalloc);
--	if (unlikely(!data))
--		goto nodata;
--	/* kmalloc(size) might give us more room than requested.
--	 * Put skb_shared_info exactly at the end of allocated zone,
-+	/* Put skb_shared_info exactly at the end of allocated zone,
- 	 * to allow max possible filling before reallocation.
- 	 */
--	osize = ksize(data);
--	size = SKB_WITH_OVERHEAD(osize);
-+	data = kmalloc_reserve(&size, gfp_mask, node, &pfmemalloc);
-+	if (unlikely(!data))
-+		goto nodata;
-+	size = SKB_WITH_OVERHEAD(size);
- 	prefetchw(data + size);
- 
- 	/*
-@@ -444,7 +446,7 @@ struct sk_buff *__alloc_skb(unsigned int size, gfp_t gfp_mask,
- 	 * the tail pointer in struct sk_buff!
- 	 */
- 	memset(skb, 0, offsetof(struct sk_buff, tail));
--	__build_skb_around(skb, data, osize);
-+	__build_skb_around(skb, data, size);
- 	skb->pfmemalloc = pfmemalloc;
- 
- 	if (flags & SKB_ALLOC_FCLONE) {
-@@ -1708,7 +1710,7 @@ int pskb_expand_head(struct sk_buff *skb, int nhead, int ntail,
- 		     gfp_t gfp_mask)
- {
- 	int i, osize = skb_end_offset(skb);
--	int size = osize + nhead + ntail;
-+	u32 size = osize + nhead + ntail;
- 	long off;
- 	u8 *data;
- 
-@@ -1722,11 +1724,11 @@ int pskb_expand_head(struct sk_buff *skb, int nhead, int ntail,
- 
- 	if (skb_pfmemalloc(skb))
- 		gfp_mask |= __GFP_MEMALLOC;
--	data = kmalloc_reserve(size + SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
--			       gfp_mask, NUMA_NO_NODE, NULL);
-+	size += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
-+	data = kmalloc_reserve(&size, gfp_mask, NUMA_NO_NODE, NULL);
- 	if (!data)
- 		goto nodata;
--	size = SKB_WITH_OVERHEAD(ksize(data));
-+	size = SKB_WITH_OVERHEAD(size);
- 
- 	/* Copy only real data... and, alas, header. This should be
- 	 * optimized for the cases when header is void.
-@@ -6060,22 +6062,21 @@ EXPORT_SYMBOL(alloc_skb_with_frags);
- static int pskb_carve_inside_header(struct sk_buff *skb, const u32 off,
- 				    const int headlen, gfp_t gfp_mask)
- {
--	int i;
--	int size = skb_end_offset(skb);
-+	u32 size = skb_end_offset(skb);
- 	int new_hlen = headlen - off;
- 	u8 *data;
-+	int i;
- 
- 	size = SKB_DATA_ALIGN(size);
- 
- 	if (skb_pfmemalloc(skb))
- 		gfp_mask |= __GFP_MEMALLOC;
--	data = kmalloc_reserve(size +
--			       SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
--			       gfp_mask, NUMA_NO_NODE, NULL);
-+	size += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
-+	data = kmalloc_reserve(&size, gfp_mask, NUMA_NO_NODE, NULL);
- 	if (!data)
+diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
+index 2796e81d2726..eb51e531c096 100644
+--- a/drivers/net/ethernet/intel/igb/igb_main.c
++++ b/drivers/net/ethernet/intel/igb/igb_main.c
+@@ -1195,15 +1195,16 @@ static int igb_alloc_q_vector(struct igb_adapter *adapter,
  		return -ENOMEM;
  
--	size = SKB_WITH_OVERHEAD(ksize(data));
-+	size = SKB_WITH_OVERHEAD(size);
+ 	ring_count = txr_count + rxr_count;
+-	size = struct_size(q_vector, ring, ring_count);
++	size = kmalloc_size_roundup(struct_size(q_vector, ring, ring_count));
  
- 	/* Copy real data, and all frags */
- 	skb_copy_from_linear_data_offset(skb, off, data, new_hlen);
-@@ -6179,23 +6180,22 @@ static int pskb_carve_frag_list(struct sk_buff *skb,
- static int pskb_carve_inside_nonlinear(struct sk_buff *skb, const u32 off,
- 				       int pos, gfp_t gfp_mask)
- {
--	int i, k = 0;
--	int size = skb_end_offset(skb);
--	u8 *data;
- 	const int nfrags = skb_shinfo(skb)->nr_frags;
- 	struct skb_shared_info *shinfo;
-+	u32 size = skb_end_offset(skb);
-+	int i, k = 0;
-+	u8 *data;
- 
- 	size = SKB_DATA_ALIGN(size);
- 
- 	if (skb_pfmemalloc(skb))
- 		gfp_mask |= __GFP_MEMALLOC;
--	data = kmalloc_reserve(size +
--			       SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
--			       gfp_mask, NUMA_NO_NODE, NULL);
-+	size += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
-+	data = kmalloc_reserve(&size, gfp_mask, NUMA_NO_NODE, NULL);
- 	if (!data)
- 		return -ENOMEM;
- 
--	size = SKB_WITH_OVERHEAD(ksize(data));
-+	size = SKB_WITH_OVERHEAD(size);
- 
- 	memcpy((struct skb_shared_info *)(data + size),
- 	       skb_shinfo(skb), offsetof(struct skb_shared_info, frags[0]));
+ 	/* allocate q_vector and rings */
+ 	q_vector = adapter->q_vector[v_idx];
+ 	if (!q_vector) {
+ 		q_vector = kzalloc(size, GFP_KERNEL);
+ 	} else if (size > ksize(q_vector)) {
+-		kfree_rcu(q_vector, rcu);
+ 		q_vector = kzalloc(size, GFP_KERNEL);
++		if (q_vector)
++			kfree_rcu(q_vector, rcu);
+ 	} else {
+ 		memset(q_vector, 0, size);
+ 	}
 -- 
 2.34.1
 
