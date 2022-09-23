@@ -2,124 +2,136 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E578C6FA92
-	for <linux-media@archiver.kernel.org>; Fri, 23 Sep 2022 20:34:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA2A2C6FA86
+	for <linux-media@archiver.kernel.org>; Fri, 23 Sep 2022 20:34:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233072AbiIWUem (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 23 Sep 2022 16:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52376 "EHLO
+        id S232575AbiIWUeo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 23 Sep 2022 16:34:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbiIWUck (ORCPT
+        with ESMTP id S231255AbiIWUcj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 23 Sep 2022 16:32:40 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8257514B872
+        Fri, 23 Sep 2022 16:32:39 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F6214B860
         for <linux-media@vger.kernel.org>; Fri, 23 Sep 2022 13:28:32 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id v186so1153612pfv.11
+Received: by mail-pl1-x62f.google.com with SMTP id jm5so1141219plb.13
         for <linux-media@vger.kernel.org>; Fri, 23 Sep 2022 13:28:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=X/Yo0q+LJh3/rts6UXiCkFsErG60vpqgZ/L53wodJpE=;
-        b=ZUb4dJcl9kyY0JCMIbSxhNelqg+q4A2wjd4CgDikdt5aQnXIoCAm64UQW+1n3wlzIC
-         pAnpD7T83tfvNJ+uFbkJeFi1y8cQ0gxyzoEmIemLuV7nFZspJ2KQU5mmAB4gcKBwfFdP
-         Er1yFNuC2cHt2der8y8JOYqcnXvTsxoObkuAY=
+        bh=9WHW9dcNJ7USo93XbepCTz52gEB8RJhZFTCAgOxjaWE=;
+        b=MCrThrcpHBXTtrPTMUDahiOxJ8D8ml0adnc2b/ZnUpLhKCWbzkicjK7DVQ0Out5WOD
+         FREFmdsJO4H0m9nZW5aGp3kZr8NyuDEg+cjmHSd2PFaU5B93FD7J4xKRdTkOt4VgUbKn
+         UMInxMGoGT3uNhBnpORcuWbRNV0aijKsC637c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=X/Yo0q+LJh3/rts6UXiCkFsErG60vpqgZ/L53wodJpE=;
-        b=POfyfevaDtjzEVXa2SQq9XKy0kwPJjB1azNx39W9AaEks+AA0sr/XbPZIlno4WOAx4
-         +hPApEnekshMXe5JWwL8X2nzEYOcbWaaVs22SclX44ieDEZ2jclTFuq1pbelr63TTlGt
-         EduU83CyewTlrqAPO+ab6SP6dF2BwJbZuTZSUttYsu+cq5LS7LJTM/J7/1mYhWv78FzJ
-         SftOQFutF41GQd+9htSbBjY/WpU4v3QeTcffD5D9ymVuPJhQSJQBGdhy2zn3H09twoVJ
-         hmC1ZU93D4B4xP+7s9Ns39KTZfcbge3MuO1brNIqeYVA6YCxIibKlbK8JV6PnsQDz48n
-         3vwQ==
-X-Gm-Message-State: ACrzQf1hLeaq/ths0QiKRZDiAOUkG6Pk4Hd+bNTBG0mo0/HQj9CvX/bV
-        3gmXZGCONH9NI/BUFSO+o7C4Cw==
-X-Google-Smtp-Source: AMsMyM56PrOnj3O75SoOzdxaUyKZ0YbIXH0yPGDqg6UOnADEm1wpBRmS/rl1dQfty4+94PufpVyEyg==
-X-Received: by 2002:a63:4b1d:0:b0:439:e6a4:e902 with SMTP id y29-20020a634b1d000000b00439e6a4e902mr9335669pga.212.1663964911544;
-        Fri, 23 Sep 2022 13:28:31 -0700 (PDT)
+        bh=9WHW9dcNJ7USo93XbepCTz52gEB8RJhZFTCAgOxjaWE=;
+        b=oQH5jfMrIxD1ZmP1e7hlAAq0dLOMP7d4JlwjqPVqLSoNvfn34kDAoQEzZoQhS/eg1m
+         u9PiHw5qEAYFLaN0Bx6VMF03aZI3tlEplYv/swVIlRlsJXdufSBTJ50n542SYtjcrx4v
+         a5Uuxit4DZdFyA32+QHCbW2SXrvZogGArpN1TEMMH7tfYbTSt5/OpxRqujIQp5GqIk6I
+         egCYfsRojgs/Jf1zx+Ia/2JJqZHbm4fnb5Nh3/sCYW1mRSemieJWDPNkezk+On81mvym
+         1BOApUEy6NKOvaPxF6ucnbl6ORSnq2lMLc8uBuZyy4KUl3b+WHQfcK0OKgBC6TSQXetY
+         q1NQ==
+X-Gm-Message-State: ACrzQf1VPC0VS5tTiDTUd9+cN9ffGzAhBmWqHOAX0b9ni4CaNJXvL+CO
+        ATO6bZ3P7qDyQg0BPkNEUY2oGA==
+X-Google-Smtp-Source: AMsMyM5oK9MYI8mIo+EhF+H1NGRpmeDN3XTs1GMolX8M2ezSAV2Ua89sZ12ya0mBIXqqAy1a/ohl1A==
+X-Received: by 2002:a17:902:ce85:b0:178:2402:1f7d with SMTP id f5-20020a170902ce8500b0017824021f7dmr10208022plg.81.1663964912148;
+        Fri, 23 Sep 2022 13:28:32 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 22-20020a17090a0d5600b001ef81574355sm2000341pju.12.2022.09.23.13.28.27
+        by smtp.gmail.com with ESMTPSA id n8-20020a170902d2c800b00174d9bbeda4sm6514749plc.197.2022.09.23.13.28.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 23 Sep 2022 13:28:28 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Vlastimil Babka <vbabka@suse.cz>
 Cc:     Kees Cook <keescook@chromium.org>,
-        Pravin B Shelar <pshelar@ovn.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        dev@openvswitch.org, "Ruhl, Michael J" <michael.j.ruhl@intel.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org,
+        "Ruhl, Michael J" <michael.j.ruhl@intel.com>,
         Hyeonggon Yoo <42.hyeyoo@gmail.com>,
         Christoph Lameter <cl@linux.com>,
         Pekka Enberg <penberg@kernel.org>,
         David Rientjes <rientjes@google.com>,
         Joonsoo Kim <iamjoonsoo.kim@lge.com>,
         Andrew Morton <akpm@linux-foundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Alex Elder <elder@kernel.org>,
         Josef Bacik <josef@toxicpanda.com>,
         David Sterba <dsterba@suse.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
         Jesse Brandeburg <jesse.brandeburg@intel.com>,
         Daniel Micay <danielmicay@gmail.com>,
         Yonghong Song <yhs@fb.com>, Marco Elver <elver@google.com>,
         Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-btrfs@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-fsdevel@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, x86@kernel.org,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: [PATCH v2 10/16] openvswitch: Use kmalloc_size_roundup() to match ksize() usage
-Date:   Fri, 23 Sep 2022 13:28:16 -0700
-Message-Id: <20220923202822.2667581-11-keescook@chromium.org>
+        linux-mm@kvack.org, netdev@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, dev@openvswitch.org,
+        x86@kernel.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v2 08/16] dma-buf: Proactively round up to kmalloc bucket size
+Date:   Fri, 23 Sep 2022 13:28:14 -0700
+Message-Id: <20220923202822.2667581-9-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220923202822.2667581-1-keescook@chromium.org>
 References: <20220923202822.2667581-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1114; h=from:subject; bh=34QBkIPlID/8bnVmUZjxBAD5CQnxKEZULyryTOgjniU=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjLhblCci+wGv8iOvuMA8kL10auMgCdSAnR8YUMoXu podrrfKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYy4W5QAKCRCJcvTf3G3AJqB8D/ 4wCq8GoLp593BnoMNdwJoYvf4etLZwZGsXZQsb2VBiy0skIZlwiVr3PlOgTBYZgIzLvlvUxdUJ5nlX Bi7PnNee9K0Li5LxtO1cZdKiafC2g2Bwno2il0Lo40rZNh8zuXtHkOL9Ch6MatzIqZvHirzYXgdFYa kL+5yKCw2OQwWbSzxN2JM/vbJJUQqWo3IuvGbHZNr3neCmsRvYQL9SENnZqNlmEN0oWzba5MOArXOo /gL8NjrYcXMqpUjBsVYY3y9nJYmkYPHuf/2GpJoU3H8aNnc9kL8Pnb6DwPQil/tk64OQkt0b7ZcjrC G0P1WN75ngaL4hyDGzvdTSyhbfeaPY233mJqTfNH5oCljXV1jN8j7JHWKIlijEpvh+rgmsD8oUU7cT LaZlaPifCbnZzop1KYF9cjTfQ6B1FwHfcaDukW/X9RDudAeKfjA6FDVNBvMvz6dQzkfSaJU4YlVLat mUOaeTfq4RLXR/1FfCnYLeQzvwlAmM6D2JIyw+FADeIZXNcc0kh8AWEtFVPrlaFoC7ofIyB/PaclI7 AeUp4jht1HTcepzxMUGZ3tJxRqUFmKdqW/dmu2F5hihUeoxfrDraNFqeBygde5JGfInhtRyFE314eo nj0zrS6Q1+iCwTFGvr/2/6qclufX48XSB7HUF/kPBPaTwX4S6IGvnRi92exg==
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1536; h=from:subject; bh=1k9cluqwH+m+5FA9iHjyZRl7ltBBZL1qz3WU+O4eJDg=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjLhbkkQMIyxW+p5Yq+8oZ2wcfayyBNx+y5dQbw2fi AE/i2oWJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYy4W5AAKCRCJcvTf3G3AJs+QD/ sFhRuVLRx0nMn49LZ3LgzAUGJu/OCv8HKw/plbSsv+vpxeMZ5Y4Z2yz+8pOjvg3cX6lD5EGOFnhfDh AkybvgBPzOD3UBEmc2+orSVNWeDOnYXG/2dyEL7KYashVN5HVyJ+SxZeRk177uhTjBzjbNRkAQ/SVs Oxp1fa8tJlAzSNr4khPvRqKxudlyHIfws9eHam1m+xu9Yx4IaRjlpv73TPFSCF3B4R61s5d9qdqmI6 QtxsboSAw9VmMnwtQ92JY/zE3XF4HhRRzOwCGtrvQkJf7xWir9bHo5kODtv29MGnYSHOD7MNuLNHvy yT9yMlcMCSUI01Gqw83MyXuzCvvbGT8fRIxDuE0OLV8AuytMSMYtLLvmi8aqicaaH1P85zLrbxJ7VQ ibgpFBaDwYITAulUo26Uezs0cpbObE4vDsRPIMUwW8KNHI4PXEY3ej4CfYwEi05WAoQDnHjsKiI3mw NgRo1Knltm0LSiFomNDPAPC2bLhoNZ5ap0NV7jcfaCdq1s+e8i6UWoxTNuvUmvNZIO/WymKW5MaK0w VFLb8zJYoMtYLSQQRa1twKC/oiHyzfBWzmy0upGh1vD2LcXJMTsecq1f9iPUzq0AYRDLPe3zIIPTo5 8qm3uJJ1hdyE1VeTF4mKkOhP+oujwwLKoB9fQmxF1d5+YH73zekSnLGtymEw==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Round up allocations with kmalloc_size_roundup() so that openvswitch's
-use of ksize() is always accurate and no special handling of the memory
-is needed by KASAN, UBSAN_BOUNDS, nor FORTIFY_SOURCE.
+Instead of discovering the kmalloc bucket size _after_ allocation, round
+up proactively so the allocation is explicitly made for the full size,
+allowing the compiler to correctly reason about the resulting size of
+the buffer through the existing __alloc_size() hint.
 
-Cc: Pravin B Shelar <pshelar@ovn.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org
-Cc: dev@openvswitch.org
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: "Christian König" <christian.koenig@amd.com>
+Cc: linux-media@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: linaro-mm-sig@lists.linaro.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- net/openvswitch/flow_netlink.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/dma-buf/dma-resv.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/net/openvswitch/flow_netlink.c b/net/openvswitch/flow_netlink.c
-index 4c09cf8a0ab2..6621873abde2 100644
---- a/net/openvswitch/flow_netlink.c
-+++ b/net/openvswitch/flow_netlink.c
-@@ -2309,7 +2309,7 @@ static struct sw_flow_actions *nla_alloc_flow_actions(int size)
+diff --git a/drivers/dma-buf/dma-resv.c b/drivers/dma-buf/dma-resv.c
+index 205acb2c744d..5b0a4b8830ff 100644
+--- a/drivers/dma-buf/dma-resv.c
++++ b/drivers/dma-buf/dma-resv.c
+@@ -98,12 +98,17 @@ static void dma_resv_list_set(struct dma_resv_list *list,
+ static struct dma_resv_list *dma_resv_list_alloc(unsigned int max_fences)
+ {
+ 	struct dma_resv_list *list;
++	size_t size;
  
- 	WARN_ON_ONCE(size > MAX_ACTIONS_BUFSIZE);
+-	list = kmalloc(struct_size(list, table, max_fences), GFP_KERNEL);
++	/* Round up to the next kmalloc bucket size. */
++	size = kmalloc_size_roundup(struct_size(list, table, max_fences));
++
++	list = kmalloc(size, GFP_KERNEL);
+ 	if (!list)
+ 		return NULL;
  
--	sfa = kmalloc(sizeof(*sfa) + size, GFP_KERNEL);
-+	sfa = kmalloc(kmalloc_size_roundup(sizeof(*sfa) + size), GFP_KERNEL);
- 	if (!sfa)
- 		return ERR_PTR(-ENOMEM);
+-	list->max_fences = (ksize(list) - offsetof(typeof(*list), table)) /
++	/* Given the resulting bucket size, recalculated max_fences. */
++	list->max_fences = (size - offsetof(typeof(*list), table)) /
+ 		sizeof(*list->table);
  
+ 	return list;
 -- 
 2.34.1
 
