@@ -2,132 +2,156 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CEB4FC04A95
-	for <linux-media@archiver.kernel.org>; Fri, 23 Sep 2022 20:41:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 305E8C07E9D
+	for <linux-media@archiver.kernel.org>; Fri, 23 Sep 2022 20:47:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233294AbiIWUlM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 23 Sep 2022 16:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34052 "EHLO
+        id S231379AbiIWUrr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 23 Sep 2022 16:47:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231879AbiIWUkc (ORCPT
+        with ESMTP id S232990AbiIWUr0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 23 Sep 2022 16:40:32 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A82151B23
-        for <linux-media@vger.kernel.org>; Fri, 23 Sep 2022 13:35:45 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id u69so1291240pgd.2
-        for <linux-media@vger.kernel.org>; Fri, 23 Sep 2022 13:35:45 -0700 (PDT)
+        Fri, 23 Sep 2022 16:47:26 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 191A718369
+        for <linux-media@vger.kernel.org>; Fri, 23 Sep 2022 13:46:54 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id 13so3076011ejn.3
+        for <linux-media@vger.kernel.org>; Fri, 23 Sep 2022 13:46:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=+2laYBdgjwT7rG4W5AHSQduuvkvGMevdVubQImW4gKw=;
-        b=nbTXxoItIcoLMSX/37BnKPPw/3YlEPQi9RGa22B4OfB3Mw3rQ7fVLlIBZDFWhU6SQB
-         iQQy0oVdOCW9DPex5gUVO+9CVPiYxCD2RX7jYGmew9mYG9nePUONwhOxImpJpLdtHO3I
-         +RIWIsZx79HIw7FNWO7gsYSXx6hJ7HZJNUkfA=
+        d=raspberrypi.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=slTUmWywshYzLtG2iCBd9xAuNqIYxN1NHjNERM9HWOI=;
+        b=NZBfMfEXL6nxAofaTMev2jV6g2dzgjVY2A2bCvZ81pfLx9gmR0NrNgYoikKQuJ+wMu
+         pcqcEX89NfCw9E0SXwlg7Q92uQCdY62OTcvLD4CdalzB/hEYyLCLB9WpuvFvV03p8AVm
+         TKCWN+df1OxLA+qJNpjHZVvkzUKRyRWoI91kSdYg78c7ngBc8C98QqjgXY/UKMMs9j/d
+         PROmrESRL2r8Ug0Rt0yqlRakwakNDPJEFCBdukJ1rrDYCWRekk9yQD6IzyNUQDRrP15A
+         cDJ+qFJitirqjduxCLbehI6I4fbszFPrKyvR2RfV7Vvhf9f+jNkC9iZwc7155WkUk4pl
+         wd+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=+2laYBdgjwT7rG4W5AHSQduuvkvGMevdVubQImW4gKw=;
-        b=zS2H41w3haYXxADgjObglJOvUbv7alcC7NhsaLB+yj7a4oh8IjnbjNL1OcrRkWsqcv
-         pb+/aCFdGzm06X1HUEh3z3FXrruM0rM8B7MIVmWr+/9Ch2+TcAjB5o0YHhHPwAjM3GiX
-         mGt/gRHJCnoXNh9G2JD1x6+BaNaVjz4tZKsJzwVq5O36YVMcTPQuyYj1rB4Ih0CGVuHo
-         Ragf/F4++5Y6DljbRdMONIxcbcfHO6cXLCN72xscTeyCqvsLkSdmZlJpyW5R8dolKlu0
-         py5q34st3yJTPCLFbrTrOW2KDHE72/Mb0lf/wflKfSOWsEmNUqkjj8THI3OOlKTGKBWe
-         ViPA==
-X-Gm-Message-State: ACrzQf1KjIzfpHhhxVDWVNBt8JHfGghAssRmCRRncMWvXY9NcJES6e+v
-        gpowrwzHDZazDQPB3uOB8ssE4g==
-X-Google-Smtp-Source: AMsMyM5bm7zGXJ9d50JTGsymxB/VLZYV8oPS2I+E2tFMZpMAmvrfAs1/p+X8f9kZo4aKjt6+zvlMFg==
-X-Received: by 2002:a63:8649:0:b0:43a:d230:d3b5 with SMTP id x70-20020a638649000000b0043ad230d3b5mr9208334pgd.493.1663965329910;
-        Fri, 23 Sep 2022 13:35:29 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w7-20020a170902e88700b0017685f53537sm6450933plg.186.2022.09.23.13.35.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 13:35:28 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
-        "Ruhl, Michael J" <michael.j.ruhl@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Alex Elder <elder@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Daniel Micay <danielmicay@gmail.com>,
-        Yonghong Song <yhs@fb.com>, Marco Elver <elver@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-fsdevel@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, dev@openvswitch.org,
-        x86@kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH v2 16/16] slab: Restore __alloc_size attribute to __kmalloc_track_caller
-Date:   Fri, 23 Sep 2022 13:28:22 -0700
-Message-Id: <20220923202822.2667581-17-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220923202822.2667581-1-keescook@chromium.org>
-References: <20220923202822.2667581-1-keescook@chromium.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=slTUmWywshYzLtG2iCBd9xAuNqIYxN1NHjNERM9HWOI=;
+        b=Uiv9tB5Oy8yvXIsnADhaCzsrO7S7e1GCgL9v18hiLF2lT32M8pcwijw94dDOV1I4O4
+         6SJ+4DzXHSEYKk8oFCPQAFaPvJZz15MZmjjmbrj3ACRkFmFs6fSSUXJXMwgrw9F+UQE6
+         886632ZN87qypSzMCqKsjRObWNWdxyqmMh9tGtLvM7MDAH/EMdkQZvjHlamVGSuxu2nf
+         9rKlrQswir2oe1t9anyav7Hlhzt7Z0vQn7im7KaYCNCCd3hyvewBkPuTozeJHrQ4IbdI
+         HFzxcgSKEIE+qpFHUjK5AoES0yVMf540xkN7IBY9oYMR9Ztdz3aoDqvyAAzPZ1ui++Ck
+         UD0A==
+X-Gm-Message-State: ACrzQf0IGdrDvcSGlderMo2yZWDfDQfPbEFeFhUMcizuxbSETceCThZF
+        w8Y0F2IhJWK7Kb/N6HFuHJElHuRqrSU8T8sAsstdZg==
+X-Google-Smtp-Source: AMsMyM5x3qxug33wcPiKbncHL81emmYaxd45w41yRgxl2k2kd9ZpBddHrfqQmAtgmx+oqBYG4KX2GC79zKBVJY2sKEg=
+X-Received: by 2002:a17:907:72cd:b0:782:287f:d21c with SMTP id
+ du13-20020a17090772cd00b00782287fd21cmr8766684ejc.200.1663966012563; Fri, 23
+ Sep 2022 13:46:52 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1650; h=from:subject; bh=/OaZMueZzIe84chcaXjPmGvBh3Vl4n1WZ7Et98TCic4=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjLhbmpXV27OdVCurixM5mD3YL9FeIo8HzPKP6kKFZ 0hj84SaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYy4W5gAKCRCJcvTf3G3AJrk1D/ 9suh4VQDWJhn6CjYJdrIyeIOje+kXnxuVQ4rZWxcfisvcOa9LBG3AeDjRuKI4VpUdYD37IwPPRov57 7ySYIwMkjVqKZEa/PzjhXiMhpeo5c/FR+mC/2/7gf0vf6wqxRDni79+/q13dY5meEj/JSCQ/VnxZRe gjJepCGBakVJaJJpuemoCwsjm59sySqVEfoXZQ3j8FvjLzn3UEHguFLm71uFRvZJYaFRgcZYER/6SM gtzHNWGWaCNhF8dkKOnwzFjb9Rnzxv996CnMgQ48xhu33oEvFn/qv87UNwxYH5nu+eGAj6AOn0942n o/n7ecuvzIw73BhNbAqSHTiF/7CH2P1ACFMXogDcRbmseRTH9IxMtimtJP4ycB5H3BlirHH62OwXYW HcNSihxuIstBMI+dXzPUAePdpDw9zFpCkThJFB3HawrMyY1xWxrUir3MaIirOiGPAaNsQ2phrSDz2q 89SyrvWcLNxNEqTTWGHN3J4vSrnAPQTLDJgx+qlchawQhrFpywa38+u+aGHG0NL7zPvmR7xoWq31Bj MvQuhlk8RDsuhGN+mFYxlipeK0PD5eo1yTnzSxnawr2guLYHLoh5ZATYEPsnWaJ23aiXDLUrWeSOx6 ihxdUdxuZS6AB+vqV1rDpWb7cFU4nZ6MydrAXZN1cwWnC866PyTB2WT4EREg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+References: <166392656967.56880.6892202016312600929@Monstersaurus>
+ <Yy2EZ4JwG01UKLhX@paasikivi.fi.intel.com> <Yy233GUnCgEXuVyP@pendragon.ideasonboard.com>
+In-Reply-To: <Yy233GUnCgEXuVyP@pendragon.ideasonboard.com>
+From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date:   Fri, 23 Sep 2022 21:46:36 +0100
+Message-ID: <CAPY8ntCh0eu7BeBOTivba-Ff+PegGDBnmemY7wx6r_tMo-h0bw@mail.gmail.com>
+Subject: Re: [libcamera-devel] RFC: Arducam 64 MP (Hawkeye)
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        libcamera-devel@lists.libcamera.org, linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-With skbuff's post-allocation use of ksize() rearranged to use
-kmalloc_size_round() prior to allocation, the compiler can correctly
-reason about the size of these allocations. The prior mismatch had caused
-buffer overflow mitigations to erroneously fire under CONFIG_UBSAN_BOUNDS,
-requiring a partial revert of the __alloc_size attributes. Restore the
-attribute that had been removed in commit 93dd04ab0b2b ("slab: remove
-__alloc_size attribute from __kmalloc_track_caller").
+Hi All.
 
-Cc: Christoph Lameter <cl@linux.com>
-Cc: Pekka Enberg <penberg@kernel.org>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc: linux-mm@kvack.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- include/linux/slab.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On Fri, 23 Sept 2022 at 14:43, Laurent Pinchart via libcamera-devel
+<libcamera-devel@lists.libcamera.org> wrote:
+>
+> Hello,
+>
+> On Fri, Sep 23, 2022 at 10:03:19AM +0000, Sakari Ailus wrote:
+> > On Fri, Sep 23, 2022 at 10:49:29AM +0100, Kieran Bingham wrote:
+> > > Hi Sakari, Laurent,
+> > >
+> > > Last night I hooked up the Arducam 64 MP Hawkeye camera [0], to an RPi4,
+> > > and added the camera helper for the RaspberryPi IPA to libcamera, and
+> > > was able to use the camera directly with dtoverlay=arducam_64mp in the
+> > > Raspberry Pi /boot/config.txt using the latest release from Raspberry
+> > > Pi.
+> > >
+> > > Raspberry Pi have already added the driver for this camera [1] to their
+> > > tree, and I have been given the tuning files from Arducam.
 
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index 727640173568..297b85ed2c29 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -693,7 +693,8 @@ static inline __alloc_size(1, 2) void *kcalloc(size_t n, size_t size, gfp_t flag
-  * allocator where we care about the real place the memory allocation
-  * request comes from.
-  */
--extern void *__kmalloc_track_caller(size_t size, gfp_t flags, unsigned long caller);
-+extern void *__kmalloc_track_caller(size_t size, gfp_t flags, unsigned long caller)
-+				   __alloc_size(1);
- #define kmalloc_track_caller(size, flags) \
- 	__kmalloc_track_caller(size, flags, _RET_IP_)
- 
--- 
-2.34.1
+I accepted the driver on the basis that Arducam upstream it, based on
+libcamera's requirement of nominally running against mainline kernels.
+Merging tuning files for libcamera should wait until they've made good
+on that.
 
+Raspberry Pi are not providing any level of support for it, that's all
+deferred to Arducam.
+
+> > > This has allowed me to capture an image with pretty good response to
+> > > changing lighting conditions, and colours. [2] ... The AF isn't yet
+> > > enabled, so that shot is out of focus a little. (That's for later).
+> > >
+> > > Arducam do not wish to name the sensor used in the module, and have
+> > > called it the 'arducam_64mp'. But attempting to upstreaming this with
+> > > that name worries me.
+> > >
+> > > Furthermore, we would like to maintain libcamera as supporting cameras
+> > > that have 'upstream' drivers (or drivers that are on their way
+> > > upstream), so I'm keen to identify how we can upstream the drivers to
+> > > create a better experience for users who are currently finding that they
+> > > need to run a fork of libcamera to operate the module.
+> > >
+> > > So ultimately - my open question is ... Is it acceptable to have camera
+> > > drivers that are named by their 'module/integration' rather than their
+> > > sensor?
+> >
+> > A lot of users (especially the existing ones) depend on the entity name
+> > currently. I don't think we could change it. For new ones I guess that
+> > would be possible.
+> >
+> > Alternatively this could be a string control I think. That could be added
+> > to existing drivers as well.
+>
+> The question here, as far as I understand, isn't about the entity name
+> exposed to userspace, but about the driver name. The entity name
+> certainly matters too.
+>
+> Camera sensor drivers we have in the mainline kernel are named after the
+> camera sensor model, and I think we should continue that. If this were a
+> custom silicon made by Arducam they could name it any way they want, but
+> if it's a sensor from a known sensor manufacturer, I don't think the
+> name should be hidden. I wouldn't be surprised if it would be possible
+> to identify the camera sensor relatively easily from the register set
+> anyway, which would render this whole game pointless.
+>
+> One of the major advantages of upstreaming driver is the community
+> maintenance that you get from free, including improvements to the driver
+> from other developers who use the same camera sensor in a different
+> product. We don't want to have multiple drivers for the same hardware in
+> the mainline kernel, there are precedents for that due to historical
+> reasons (mostly people not realizing that the same IP core was used in
+> different SoCs), and there are efforts to fix that. I don't see a reason
+> to go the opposite way.
+>
+> TL;DR: Unless there's a very compeling reason not to follow the usual
+> practice, I don't see why we should make an exception in this case.
+
+Arducam have done a pretty good marketing campaign based on this
+sensor, hence not wanting to publicly declare what it is.
+
+Jeff Geerling suggested it might be an IMX686 [1], but it's not.
+It is a Sony sensor. Read the ID register (0x0016 IIRC) and all will
+be revealed. Cross reference to https://en.wikipedia.org/wiki/Exmor.
+
+If mainline accepts a driver with an alternate name I'll be delighted
+to revert the downstream driver.
+Likewise I'll be happy to merge a PR renaming the driver if someone
+else identifies it - Arducam have asked me not to identify it. (The DT
+overlay needs to keep using the same name, but that is identifying the
+overall module instead of just the sensor)
+
+  Dave
+
+[1] https://www.youtube.com/watch?v=0mYRHrLYmLU&t=1s
