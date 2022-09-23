@@ -2,346 +2,219 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80A15C6FA86
-	for <linux-media@archiver.kernel.org>; Fri, 23 Sep 2022 09:18:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1AC9C6FA82
+	for <linux-media@archiver.kernel.org>; Fri, 23 Sep 2022 09:28:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbiIWJSU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 23 Sep 2022 05:18:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49856 "EHLO
+        id S230005AbiIWJ2y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 23 Sep 2022 05:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbiIWJST (ORCPT
+        with ESMTP id S231836AbiIWJ2A (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 23 Sep 2022 05:18:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1897FAC5
-        for <linux-media@vger.kernel.org>; Fri, 23 Sep 2022 02:18:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B7CDB825BC
-        for <linux-media@vger.kernel.org>; Fri, 23 Sep 2022 09:18:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6E15C433D6;
-        Fri, 23 Sep 2022 09:18:10 +0000 (UTC)
-Message-ID: <2a9d1481-d25e-cfdb-3ce1-5d1b7ceefac5@xs4all.nl>
-Date:   Fri, 23 Sep 2022 11:18:09 +0200
+        Fri, 23 Sep 2022 05:28:00 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30CD9EE676
+        for <linux-media@vger.kernel.org>; Fri, 23 Sep 2022 02:27:46 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220923092739euoutp01f3af0534f9d1192ef393a77de91d6414~XczUaAk4Z0777707777euoutp01s
+        for <linux-media@vger.kernel.org>; Fri, 23 Sep 2022 09:27:39 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220923092739euoutp01f3af0534f9d1192ef393a77de91d6414~XczUaAk4Z0777707777euoutp01s
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1663925259;
+        bh=82EQ6GPHeu6LPnChCSOgTByDLw/uWQknxhbPMUSanbg=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=jB7tzzG0yVBNYUEN4O2P0F7WE5kbbL1j2XjwVHxC/szWVAZwgwcyhDMehXgVPXEgf
+         LEVLFavbb9fmYMwkddnpy66sOWbAN4YaZFdC3QVmh85FS3B5CicyXmgkSFeAkrU1nZ
+         xl14ZE7gJzcoCJOJr10JB9TPP/Of6A4E0LPvYxS0=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220923092738eucas1p1b16a992ec7a180343730c91c2d2783bd~XczT9cakd2061520615eucas1p1V;
+        Fri, 23 Sep 2022 09:27:38 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id AB.7D.29727.A0C7D236; Fri, 23
+        Sep 2022 10:27:38 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220923092738eucas1p2941e4f4018d2060859e276faeb660e86~XczTeAvKt1248612486eucas1p2J;
+        Fri, 23 Sep 2022 09:27:38 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220923092738eusmtrp2893d1c72242e2a7fe9ab2a1e3e69e8fa~XczTdSESj1401814018eusmtrp2G;
+        Fri, 23 Sep 2022 09:27:38 +0000 (GMT)
+X-AuditID: cbfec7f2-205ff7000001741f-54-632d7c0a193c
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 80.2D.07473.A0C7D236; Fri, 23
+        Sep 2022 10:27:38 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220923092737eusmtip149fd76318d9722f218ab08479476898b~XczS18eqX0481904819eusmtip1h;
+        Fri, 23 Sep 2022 09:27:37 +0000 (GMT)
+Message-ID: <bb0400d3-0018-0d2f-6631-127effc2e380@samsung.com>
+Date:   Fri, 23 Sep 2022 11:27:37 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH] media: v4l2-async: Use endpoints in
+ __v4l2_async_nf_add_fwnode_remote()
 Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+To:     Daniel Scally <djrscally@gmail.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org,
+        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>,
+        Jacopo Mondi <jacopo@jmondi.org>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Daniel Scally <djrscally@gmail.com>,
-        =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Hugues Fruchet <hugues.fruchet@st.com>,
-        Michael Olbrich <m.olbrich@pengutronix.de>,
         =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Benjamin MUGNIER <benjamin.mugnier@foss.st.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-References: <3ff46b2d-eb01-1ce9-8647-19447c82283b@xs4all.nl>
- <20220921084357.mtj6ptckcxrxghwe@lati>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: Re: [ANN] Media Summit at ELCE Dublin, September 12: Final (?) Agenda
- V3
-In-Reply-To: <20220921084357.mtj6ptckcxrxghwe@lati>
-Content-Type: text/plain; charset=UTF-8
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <5764c9f8-c335-9c73-07fb-f44def8a0be8@gmail.com>
 Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOKsWRmVeSWpSXmKPExsWy7djP87pcNbrJBgcvqVlsO/yO1eLu8xZG
+        i22nf7NaTGy6w2LROXEJu0XPhq2sFjPO72OyOD6tj9Xi8Jt2Vosz+1eyOXB57Jx1l91jdsdM
+        Vo/DXxeyePy/8YjZ4/nl72wefVtWMXp83iQXwB7FZZOSmpNZllqkb5fAlfHrpEJBg0LFluaV
+        LA2M86W6GDk5JARMJO6938PcxcjFISSwglFizcSbLBDOF0aJ7ttboZzPjBIzn/9gh2n5vWop
+        O0RiOaNEy7TLrBDOR0aJA08vsoFU8QrYSdy61w5mswioSrRuesYIEReUODnzCQuILSqQLDHr
+        2DGwuLBAnMTj7h1gG5gFxCVuPZnP1MXIwSEi4C3xbmImyHxmgTnMEoffTALrZRMwlOh62wU2
+        n1PAVmLh/EOMEL3yEs1bZ4M9JCHQzikx9cgjqLNdJObMPcYEYQtLvDq+BSouI/F/J8gysAZG
+        iQW/70M5ExglGp7fYoSospa4c+4XG8hJzAKaEut36UOEHSV2LznDChKWEOCTuPFWEOIIPolJ
+        26YzQ4R5JTrahCCq1SRmHV8Ht/bghUvMExiVZiEFyywk789C8s4shL0LGFlWMYqnlhbnpqcW
+        G+allusVJ+YWl+al6yXn525iBKat0/+Of9rBOPfVR71DjEwcjIcYJTiYlUR4Z9/RTBbiTUms
+        rEotyo8vKs1JLT7EKM3BoiTOyzZDK1lIID2xJDU7NbUgtQgmy8TBKdXAFLT63JU/J4v/ym7+
+        fPHP1STN3aZ7l3x+f2b+6hQJub+1vyUkGLL+nPh2T+ncvuer525Ym73wdw6/lNVHjakH60WC
+        tosp3JL4X6Rh9EfxzuZ1mWqG2hsrklkcHX5P8jl/pHLb5tIvv9jUmlJPKwldn9mXkV0kl7G8
+        e9rR3oWc33M61B3v+rWtZFA8r6Xd8Wffqvrk6ieV9gs/a4mdfrmieLrY+RtaNXcFv6mtT9Xf
+        LFC2coNd97rXrtKXZ1zVuGY1P4vh1+dri6TE106LXay+duUca9ZJq2bdMwg5cnr/poWnNaxu
+        exTtu7Xr8JqS+LUW/lyGCbxLDr8V+H73TWvzv+5jX942HUxgZHNbFu+f3TVNiaU4I9FQi7mo
+        OBEAE4V8E8oDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrJIsWRmVeSWpSXmKPExsVy+t/xu7pcNbrJBpNXcFpsO/yO1eLu8xZG
+        i22nf7NaTGy6w2LROXEJu0XPhq2sFjPO72OyOD6tj9Xi8Jt2Vosz+1eyOXB57Jx1l91jdsdM
+        Vo/DXxeyePy/8YjZ4/nl72wefVtWMXp83iQXwB6lZ1OUX1qSqpCRX1xiqxRtaGGkZ2hpoWdk
+        YqlnaGwea2VkqqRvZ5OSmpNZllqkb5egl/HrpEJBg0LFluaVLA2M86W6GDk5JARMJH6vWsre
+        xcjFISSwlFHix5vp7BAJGYmT0xpYIWxhiT/Xutggit4zSkxt2c8IkuAVsJO4da+dDcRmEVCV
+        aN30DCouKHFy5hMWEFtUIFliScN9sEHCAnESj7t3gC1gFhCXuPVkPlMXIweHiIC3xLuJmSDz
+        mQXmMUtcnX2REWLZOiaJp2f7wZrZBAwlut52gS3jFLCVWDj/ECPEIDOJrq1dULa8RPPW2cwT
+        GIVmIbljFpJ9s5C0zELSsoCRZRWjSGppcW56brGhXnFibnFpXrpecn7uJkZgnG479nPzDsZ5
+        rz7qHWJk4mA8xCjBwawkwjv7jmayEG9KYmVValF+fFFpTmrxIUZTYGBMZJYSTc4HJoq8knhD
+        MwNTQxMzSwNTSzNjJXFez4KORCGB9MSS1OzU1ILUIpg+Jg5OqQYmq4m9IY9OfLZKL36gwL1h
+        e9Dpre67rhU63eXY+jlXauu5F4uXiea72P+b05T6/enKCbsW1BR7PeKQ3Oj6gWnmpNkbFVY7
+        PsuReHzhr2Ok1NJmobsHbU1KnuyZ0Cm26NLj5Nx2pfmbQq69C2ku/fJl+71Cq9c7/9y+eUjK
+        IfHdvqT2mf9XWn79wvBEqNZYPPrxp7v3Dj5uqtHWUhf5f2f2ocNipcs/vZJfl3Dl435ll08u
+        U+97rvp7qctrCjc3Q3PWlGuHXlzjaXe8xcZ1TX2/Z6VvSpD+xsfujHbHNlzSm2F4qPRpsESh
+        /QVvdaEVqsnv2p+9Mvy77vK9nWvfTTV42qVZyOZ06HCu9cen3q/FvP4rsRRnJBpqMRcVJwIA
+        gg7FsVwDAAA=
+X-CMS-MailID: 20220923092738eucas1p2941e4f4018d2060859e276faeb660e86
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220922140658eucas1p29f9d609e795ed064e51694c0e7be80d3
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220922140658eucas1p29f9d609e795ed064e51694c0e7be80d3
+References: <20220321145134.29820-1-laurent.pinchart@ideasonboard.com>
+        <CGME20220922140658eucas1p29f9d609e795ed064e51694c0e7be80d3@eucas1p2.samsung.com>
+        <083edac1-8a8f-d842-e496-b657b4e4014e@samsung.com>
+        <YyzmPWQ7vtigUxBI@valkosipuli.retiisi.eu>
+        <5764c9f8-c335-9c73-07fb-f44def8a0be8@gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi all,
+Hi Daniel,
 
-On 21/09/2022 10:43, Jacopo Mondi wrote:
-> Hello and thanks everyone for attending the media summit. The meeting
-> and the discussion were good, let's now try to move forward on the many
-> points that has been discussed.
-> 
-> Can I ask participants to go over the etherpad notes to check if
-> there's anything to change or add there, and once done have the notes
-> circulate on the list (or be stored on linuxtv.org where the notes
-> from previous meetings are ?)
+On 23.09.2022 01:19, Daniel Scally wrote:
+> On 22/09/2022 23:48, Sakari Ailus wrote:
+>> Good to hear from you! And it's so nice you're testing the Samsung 
+>> Exynos
+>> drivers! :-)
+>>
+>> On Thu, Sep 22, 2022 at 04:06:58PM +0200, Marek Szyprowski wrote:
+>>> On 21.03.2022 15:51, Laurent Pinchart wrote:
+>>>> From: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+>>>>
+>>>> Matching on device fwnode handles is deprecated in favour of endpoint
+>>>> fwnode handles. Switch the __v4l2_async_nf_add_fwnode_remote() 
+>>>> function
+>>>> to use the latter. The match code handles backward compatibility by
+>>>> falling by to the device fwnode handle, so this shouldn't introduce 
+>>>> any
+>>>> regression.
+>>>>
+>>>> Signed-off-by: Laurent Pinchart 
+>>>> <laurent.pinchart+renesas@ideasonboard.com>
+>>> I love the last sentence of the patch description. :)
+>>>
+>>> Unfortunately, recently I found that this patch breaks Exynos4 IS 
+>>> (FIMC)
+>>> driver operation on Trats2 board (exynos4412-trats2.dts). After merging
+>>> this patch I see the following errors related to the camera sensors:
+>>>
+>>> [   16.038705] S5C73M3: S5C73M3 SPI probed successfully
+>>> [   16.097399] S5C73M3: Sensor type: CML0801-M017, FW version: GDFD01
+>>> [   16.106842] S5C73M3 0-003c: Consider updating driver S5C73M3 to 
+>>> match
+>>> on endpoints
+>>> [   16.298323] S5C73M3: probe of 0-003c failed with error -22
+>>> [   16.343173] S5K6A3 15-0010: Consider updating driver S5K6A3 to match
+>>> on endpoints
+>>> [   16.434968] S5K6A3: probe of 15-0010 failed with error -22
+>> Have you checked what exactly caused the probe to fail? Laurent's patch
+>> changes how matching works but if that fails, the result should be a 
+>> bunch
+>> of waiting async sub-devices and notifier(s), not a failure on probe.
+>
+>
+> Might be some other effects too...I can't test it but in 
+> subdev_notifier_bound() in 
+> drivers/media/platform/samsung/exynos4-is/media-dev.c there's the 
+> following check:
+>
+>
+>     /* Find platform data for this sensor subdev */
+>     for (i = 0; i < ARRAY_SIZE(fmd->sensor); i++)
+>         if (fmd->sensor[i].asd &&
+>             fmd->sensor[i].asd->match.fwnode ==
+>             of_fwnode_handle(subdev->dev->of_node))
+>             si = &fmd->sensor[i];
+>
+>     if (si == NULL)
+>         return -EINVAL;
+>
+>
+> And I think following that patch of Laurent's asd->match.fwnode will 
+> never be the dev->of_node anymore, because it's now the endpoint 
+> that's assigned as asd->match.fwnode rather than that of the device. 
+> That will return -EINVAL for the notifier's .bound() callback...I'm 
+> not sure if that would cause the whole probe to fail, but thought it 
+> might be worth mentioning :)
 
-Indeed, please check the notes!
+Good catch, thanks!
 
-I tentatively plan to make a summit report by the end of next week or the
-week after, so it's good to have the notes verified beforehand.
+I have no idea why that loop compared the asd->match.fwnode and 
+subdev->dev->of_node, maybe it some kind of historical left-over or 
+cargo-cult. The asd pointer is already available there and can be used 
+to find the proper sensor. This loop works both with the new and old 
+version:
 
-They are here: https://pad.systemli.org/p/media-summit-2022
+         /* Find platform data for this sensor subdev */
+         for (i = 0; i < ARRAY_SIZE(fmd->sensor); i++)
+                 if (fmd->sensor[i].asd == asd)
+                         si = &fmd->sensor[i];
 
-Laurent, I think it is a good idea to split off the Kernel CAM discussion
-from the summit report and instead combine it with the discussions on
-Tuesday morning and put it in a separate report. If you agree, could you
-perhaps create such a report?
+I will prepare a patch in a few minutes.
 
-Regards,
-
-	Hans
-
-> 
-> Thanks
->    j
-> 
-> On Thu, Sep 08, 2022 at 10:58:21AM +0200, Hans Verkuil wrote:
->> Hi all,
->>
->> Here is some more information about the Media Summit:
->>
->> Date: Monday September 12
->> Time: 8:45-18:00
->> Location: Convention Centre Dublin
->> Room: The Liffey B - Part 1
->> Sponsored by: Cisco Systems Norway, Collabora and the Kodi Foundation
->>
->> We will have a projector or display to show presentations, power strips,
->> a whiteboard and beverages. Lunch is sponsored by the Kodi Foundation.
->>
->> It's co-located with the OSS Europe conference:
->>
->> https://events.linuxfoundation.org/open-source-summit-europe/
->>
->> Attendees:
->>
->> Sakari Ailus <sakari.ailus@linux.intel.com>
->> Kieran Bingham <kieran.bingham@ideasonboard.com>
->> Nicolas Dufresne <nicolas@ndufresne.ca>
->> Hugues FRUCHET <hugues.fruchet@st.com>
->> Benjamin Gaignard <benjamin.gaignard@collabora.com>
->> Jacopo Mondi <jacopo@jmondi.org>
->> Michael Olbrich <m.olbrich@pengutronix.de>
->> Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->> Ricardo Ribalda <ribalda@chromium.org>
->> Maxime Ripard <maxime@cerno.tech>
->> Daniel Scally <djrscally@gmail.com>
->> Jernej Škrabec <jernej.skrabec@gmail.com>
->> Niklas Söderlund <niklas.soderlund@ragnatech.se> (afternoon only)
->> Dave Stevenson <dave.stevenson@raspberrypi.com> (from 11 am approx.)
->> Michael Tretter <m.tretter@pengutronix.de>
->> Hans Verkuil <hverkuil@xs4all.nl>
->> Philipp Zabel <p.zabel@pengutronix.de>
->>
->> Remote attendees:
->>
->> Mauro Carvalho Chehab <mchehab@kernel.org>
->> Benjamin MUGNIER <benjamin.mugnier@foss.st.com>
->>
->> Regarding remote attendance: I will a second laptop with me and a good webcam.
->> But whether this will work is not at all certain, esp. audio is often very poor. It very
->> much depends on the room. I mailed Mauro and Benjamin instructions on how to join.
->> We'll see if it works or not.
->>
->> We'll be using etherpad to keep notes. I created one here:
->>
->> https://pad.systemli.org/p/media-summit-2022
->>
->>
->> The health and safety regulations will be those of the OSSE LF (updated on August 22):
->>
->> https://events.linuxfoundation.org/open-source-summit-europe/attend/health-and-safety/
->>
->> As you can read above masks are needed for this event, so make sure you bring them!
->> You also need to be fully vaccinated (Duh!), or show a negative test. See the details
->> in the link.
->>
->> We also strongly recommend that you do a self-test before going to the Conference Centre
->> for this meeting.
->>
->>
->> Code of conduct:
->>
->> https://events.linuxfoundation.org/open-source-summit-europe/attend/code-of-conduct/
->>
->>
->> Agenda:
->>
->> Below is the final (?) version of the agenda. I have tried to keep the sensor-related
->> topics to after 11:00 since Dave comes in later in the day.
->>
->> Changes since V2:
->> - Updated attendees list.
->> - Dropped my presentation since I'll be presenting the same thing at the ELCE on Friday
->>   9:50.
->> - Added keysigning party at the end of the day.
->> - Added links to slides.
->>
->> I am also making the (reasonable) assumption that most attendees will be attending
->> the ELCE/OSSE conference Tue-Fri as well. While it is nice if we can come to a
->> conclusion in the time allotted for each topic, it's also OK if we can set up
->> a small group that can discuss it further in the following days.
->>
->> I added a guesstimate of the time needed for each topic. Please note that it is
->> fine if we decide to discuss it further in the following days in a smaller group,
->> or continue discussions on the mailing list.
->>
->> If you present a topic, then please make a presentation. And if you have material you
->> can share beforehand, then that would be great.
->>
->> We have the room from 8:30-18:00, so I moved a few things around since V1, in particular
->> please come in a bit earlier so you can set everything up (power, internet, etc.) so
->> we can begin at 9 AM sharp.
->>
->> Don't expect that the times below are precise (esp. after 11:00): past experience tells
->> us that it can vary wildly.
->>
->> Links to slides:
->>
->> Ricardo: https://drive.google.com/file/d/1Tew21xeKmFlQ7dQxMcIYqybVuQL7La1a/view
->> Dave: https://drive.google.com/file/d/1vjYJjTNRL1P3j6G4Nx2ZpjFtTBTNdeFG/view?usp=sharing
->> Jacopo: https://nc.nibble.pw/s/oib8jzNjjtgB9c6
->>
->> Agenda V3:
->>
->>  8:40 Getting settled
->>  9:00 Introduction
->>  9:10 Nicolas: Stateless encoder progress
->>  9:45 Ricardo: Introduce ChromeOS camera project: slides posted!
->>
->> 11:00 Break
->>
->> 11:15 Kieran: Fault tolerance
->>
->>   I raised this in the past when we first started hitting the issue on
->>   Renesas platforms with multiple cameras in a single media graph, but now
->>   I think it's become more critical with desktop / laptop devices that are
->>   hitting the issue (i.e. the IPU3).
->>
->>   Summary of issue:
->>
->>   - Multiple cameras that can function independently successfully, are
->>     prevented from functioning or fully probing by V4L2 if one component
->>     of another camera fails to load or probe.
->>
->>     If Camera A has a VCM, and Camera B does not, Camera B will not be
->>     available at all if Camera A's VCM is not fully probed, even though
->>     Camera B can be fully functional and complete.
->>
->>     Even if Camera A does not have the VCM probed, it may still function
->>     successfully (with a fixed focal position) - but our current
->>     implementation will mean that it will not even be available to
->>     capture images.
->>
->>   We talked about this quite a long time ago, and I believe the general
->>   consensus was that we can have events on the media graph. But
->>   unfortunately at the time, there was no development scheduled on that,
->>   and it wasn't something I was able to continue at the time.
->>
->>   I'd like to bring it up to refresh the topic, and see if we can make
->>   some progress as it's now affecting more general devices.
->>
->> 11:45 Jacopo: Representing addition sensor processing stages.
->>
->>   How to represent additional processing stages that happens
->>   on the sensor side, mostly additional subsampling/cropping that happen
->>   between the analogue cropping on the full pixel array and the final
->>   image sent on the wire.
->>
->>   https://lore.kernel.org/linux-media/CAPY8ntA06L1Xsph79sv9t7MiDSNeSO2vADevuXZdXQdhWpSmow@mail.gmail.com/
->>
->>   Dave made a good introduction of the issue his email which got
->>   largely unanswered.
->>
->>   The issue is particularly relevant for RAW sensors, where applying
->>   subsampling has an impact on the sensor's sensitivity and requires
->>   to adjust the gains and exposure accordingly.
->>
->>   The V4L2 selection API falls short on this and the only other
->>   solution I am aware of is registering additional subdevices as the
->>   CCS driver does.
->>
->> 12:30 Lunch
->>
->> 13:30 Dave: On-sensor temperature reporting.
->>
->>   Thread started by Benjamin at
->>   https://lore.kernel.org/linux-media/20220415111845.27130-3-benjamin.mugnier@foss.st.com/
->>   but no resolution over using hwmon API or V4L2 control. If hwmon
->>   then we need Media Controller framework to tie the sensor and thermal
->>   device together.
->>
->>   It's recently been queried for IMX477 with the Pi
->>   (https://github.com/raspberrypi/libcamera/issues/19), but it will
->>   apply to many sensors.
->>
->> 13:50 Dave: Synchronising sensors for stereoscopic operation.
->>
->>   How should that be configured? Allowing configuration from userspace
->>   would allow sensors to be operated independently which can be useful for
->>   test purposes, or should it be enforced from DT/ACPI? Do we set a default
->>   configuration for each sensor from DT/ACPI and then allow userspace to
->>   override should it wish?
->>
->> 14:10 Dave: Lens drivers.
->>
->>   Each driver will have a "useful" range which is effectively dictated by
->>   the overall module. Should that be defined via DT as it is a feature of
->>   the platform, or leave the driver totally generic and expect userspace
->>   to do something sensible?
->>
->>   In the case of simple systems without libcamera, do we set default for
->>   V4L2_CID_FOCUS_ABSOLUTE to a sensible hyperfocal distance, and can
->>   that again be defined in DT as it is defining the hardware?
->>
->> 14:30 Dave: Controlling sensor GPIO outputs.
->>
->>   Controlling sensor GPIO outputs for things such as flash triggers,
->>   vsync, frame start/end, exposure start/end, etc.
->>
->>   There is a huge range of features available so do we have any hope of
->>   standardising some of it, or do we end up hiding these away in the
->>   drivers with custom DT bindings to configure them? If we accept that
->>   there will be variation, can we vaguely standardise what those
->>   bindings look like? Or should these be V4L2 controls as things like
->>   pulse widths may want to be adjusted by userspace?
->>
->> 15:00 Break
->>
->> 15:30 Jacopo: Reconcile handling of regulator, gpios and clock on OF and ACPI platforms.
->>
->>   We recently got a few series trying to reconcile handling of regulators,
->>   gpios and clocks on OF and ACPI platforms all of them doing the usual
->>   "similar but slightly different" thing:
->>
->>   https://lore.kernel.org/linux-media/20220425061022.1569480-1-paul.elder@ideasonboard.com/
->>   https://lore.kernel.org/linux-media/20220329090133.338073-1-jacopo@jmondi.org/
->>   https://lore.kernel.org/linux-media/20220509143226.531117-1-foss+kernel@0leil.net/
->>   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0c2c7a1e0d69221b9d489bfd8cf53262d6f82446
->>
->>   ACPI and OF handles clocks slightly differently, and it is not clear
->>   to me if ACPI based platform need explicit handling of
->>   clocks/regulator or ACPI does "the right thing" by itself (I'm
->>   afraid the answer is actually "it depends"). I'm ACPI illiterate
->>   so I cannot propose anything meaningful but if anyone is interested
->>   in discussing this further this might be a good time to do so ?
->>
->>
->> 16:00 Laurent: V4L2 streams series.
->>
->>   I'd like to discuss the V4L2 streams series, in particular how to
->>   upstream the parts that won't be upstream yet by mid-September.
->>   Discussing the next steps would also be useful, as there's lots we could
->>   build on top.
->>
->> 16:30 Laurent: How can we finalize conversion of v4l-utils to meson?
->>
->> 16:45 Key signing party
->>
->>       See: https://lore.kernel.org/linux-media/YxhplLKtRAQzlSK%2F@pendragon.ideasonboard.com/
->>
->>       I'm really not sure where the 'party' aspect comes in, since while necessary,
->>       it is all terribly boring :-)
->>
->> 17:15-18:00 Anything else?
->>
->> Regards,
->>
->> 	Hans
+>>> I'm a bit puzzled, because I don't see anything related to endpoint
+>>> matching in the sensor drivers. Instead I only found that
+>>> v4l2_async_nf_add_fwnode_remote() function (which is modified by this
+>>> patch) is called from the
+>>> drivers/media/platform/samsung/exynos4-is/media-dev.c code. Do you have
+>>> any idea what is broken after this change? Could you help fixing 
+>>> this issue?
+>> You can assign the endpoint node to subdev->fwnode instead of the device
+>> fwnode. No regular sensor driver appears to be doing that though.
+>>
+>
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
