@@ -2,58 +2,53 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1C35C07E9D
-	for <linux-media@archiver.kernel.org>; Fri, 23 Sep 2022 20:34:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DCAEC07E9D
+	for <linux-media@archiver.kernel.org>; Fri, 23 Sep 2022 20:34:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233163AbiIWUeb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 23 Sep 2022 16:34:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47126 "EHLO
+        id S233172AbiIWUej (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 23 Sep 2022 16:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233061AbiIWUch (ORCPT
+        with ESMTP id S233064AbiIWUch (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 23 Sep 2022 16:32:37 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F18714AD69
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AA314AD7B
+        for <linux-media@vger.kernel.org>; Fri, 23 Sep 2022 13:28:32 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id s26so1254495pgv.7
         for <linux-media@vger.kernel.org>; Fri, 23 Sep 2022 13:28:31 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id y11so1062238pjv.4
-        for <linux-media@vger.kernel.org>; Fri, 23 Sep 2022 13:28:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=k0IswvXpcAvdiLZPIXN3c5DjnsYKqakODd7BbfXTQEI=;
-        b=QrmiCQX9GiyAvK9+mKup1boveHjE9itEI0YZkgCTiluR2mt+7uynIg0wgHzS0fo3Kt
-         s8lgk0G0b7iFD6G/bf8SXd7GtoYB2il63LkywVZCSQDCieP6Y6mrV2z2ASYtCsyN6DKS
-         xeEqLxywxC671K6eBmRXgIzL8IhhLMZaUYHMc=
+        bh=8ihjvmU6X32IA3g0n6Ob0CbMhk1X+mcnfaE/5Wfmhd8=;
+        b=LPhVNeH7/j6XoYSyZU8Fbh//laqcTzvu//J4Iy04p1XS4de+UJKinl09GFu2JyMlZM
+         OiqIFGFrD5z7VUB8De1Lo4L81RAcz4hJEUvZG4jbI7uvuCZ21WW6CkLOkKLLpki0ZPPj
+         ptuTYFeO3yYhD48tSYI8BF3HO3FHnDA3HFKOc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=k0IswvXpcAvdiLZPIXN3c5DjnsYKqakODd7BbfXTQEI=;
-        b=y6/Fy2rOIop460188b8AuKE8jNt+B7LmQKH9Uz7JIu9hBPMFjU/1+hraCtxJLV6NlT
-         l0VrLTFKRNRrPnF9X8dRWP2NrjU6YjyMAJjr6OGWt+42AiLF5zaSYBMkMy3qcUZGtvAn
-         WTS4yMuDg+kBKxviT5zmaEsAWsmrO/WXefZ5iD2K6UX8ih5rl9gU4KTsR3xAkmSYGtIZ
-         wU+66ySxrwK9T35FzApzlKttmehkiNzgYgyHV5ff25bas+zvWSwY5D/9+6lOWi/++AzT
-         /dJqYZgFQLY997e+cEjF8Z4Hrrwr/PED0GJ2cAkdCG1OlVrrccS+9A+ItznYbRimbqHG
-         WFaA==
-X-Gm-Message-State: ACrzQf1Wk1NMjE181RAim7KFBIAkZiFBskzVc9mKAa/yKkdTQJBqv/mh
-        GW/gPhh7sGWSfX5x6IGKKnSpHQ==
-X-Google-Smtp-Source: AMsMyM5hUgD6utpVMAl6ShfvZOmvi4K16Slmi0TDE2X8XGDljCU6xLMJTIptVSCg6vqu21Nf0Aqn/w==
-X-Received: by 2002:a17:90b:1c09:b0:203:af4d:ed6 with SMTP id oc9-20020a17090b1c0900b00203af4d0ed6mr22702155pjb.243.1663964910372;
+        bh=8ihjvmU6X32IA3g0n6Ob0CbMhk1X+mcnfaE/5Wfmhd8=;
+        b=W0UrJXbqla6FDNYq1IhsX4V61IX/uXw6ixo4M+opfMxHN8QFov0s6F17X823CnQx/A
+         wO0GlJcDRj7pLm5vhqBEw652EFwch91OUo4YLPGZytM6HhXnjZvKLXWR3QBsbu39snRE
+         m1qUg/KxfF8CEYwsZKb0CGiYu9YMWpujr9ZTjUuCciiFAjLoSiWZ3Bbl8O4ts6AQpHnp
+         6QGpbKXROFzhM3cVzy6qvlwWGUOw4S5QpEsbctWBRcCLN+gUVDzmZV0rqsTFd1kprSq/
+         DQ3tacONYYW3f5R3MMjvTscfCph5HLG5cJEOmwUXq7sbeg07/Pk8yN0aUncKZnD4R+Kl
+         JzgQ==
+X-Gm-Message-State: ACrzQf3PWdqKDLm972WWaxInWyn87cow/RUGb+PL+IvSNmDqro64sVnO
+        vS5kmcBWujW0ZV/KPvTqT1lsAQ==
+X-Google-Smtp-Source: AMsMyM7hhwlwgGRqkrSlb8k8bTqhsy6m3L3BTgcy2EFgVZwJvbZTev1f0ePX9YiutVAIEpKxIDEauA==
+X-Received: by 2002:a05:6a00:2185:b0:520:7276:6570 with SMTP id h5-20020a056a00218500b0052072766570mr10823472pfi.84.1663964910977;
         Fri, 23 Sep 2022 13:28:30 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id v11-20020a17090ad58b00b001fd77933fb3sm2032999pju.17.2022.09.23.13.28.26
+        by smtp.gmail.com with ESMTPSA id a7-20020a170902710700b00176ae5c0f38sm6420511pll.178.2022.09.23.13.28.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 23 Sep 2022 13:28:28 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Alex Elder <elder@linaro.org>,
+Cc:     Kees Cook <keescook@chromium.org>, linux-fsdevel@vger.kernel.org,
         "Ruhl, Michael J" <michael.j.ruhl@intel.com>,
         Hyeonggon Yoo <42.hyeyoo@gmail.com>,
         Christoph Lameter <cl@linux.com>,
@@ -61,6 +56,10 @@ Cc:     Kees Cook <keescook@chromium.org>,
         David Rientjes <rientjes@google.com>,
         Joonsoo Kim <iamjoonsoo.kim@lge.com>,
         Andrew Morton <akpm@linux-foundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Alex Elder <elder@kernel.org>,
@@ -72,20 +71,20 @@ Cc:     Kees Cook <keescook@chromium.org>,
         Daniel Micay <danielmicay@gmail.com>,
         Yonghong Song <yhs@fb.com>, Marco Elver <elver@google.com>,
         Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-btrfs@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, netdev@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
         intel-wired-lan@lists.osuosl.org, dev@openvswitch.org,
         x86@kernel.org, llvm@lists.linux.dev,
         linux-hardening@vger.kernel.org
-Subject: [PATCH v2 05/16] net: ipa: Proactively round up to kmalloc bucket size
-Date:   Fri, 23 Sep 2022 13:28:11 -0700
-Message-Id: <20220923202822.2667581-6-keescook@chromium.org>
+Subject: [PATCH v2 09/16] coredump: Proactively round up to kmalloc bucket size
+Date:   Fri, 23 Sep 2022 13:28:15 -0700
+Message-Id: <20220923202822.2667581-10-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220923202822.2667581-1-keescook@chromium.org>
 References: <20220923202822.2667581-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1843; h=from:subject; bh=IY1ALzn2CwEEDJeKMCN2d2RSu1qSDYHH3sl/8qGPuY0=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjLhbk0/S4oiPoPLUr2gK0zbu5nD58CBtVyli7/b9z b2gIR0qJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYy4W5AAKCRCJcvTf3G3AJg5DD/ 49Q+Vbxd75ylphO0zAoxF1E8P7/YQRC083ZhpstciRAvjCqnpLi5zdF920rTUU+1hjspMRJaMkLZZ5 bK5uDN9URaJ1VBwYD+6+cHrxZwypqnLzdn14wwH8UG1QuBQhNDvUuCFwvkUBf9/Bp+0g8k8JGKzhTu 6eWxuatrO7c1lHLgNshKa4CHOwSIXGl1Q8U+crVj889yJ+3vaBJUKAFLpG7i9/BXIbxLtC96UzXJeG NpqcAteIRbx3lZMeVrME7GvP1FKrpZi+5WLpqgRlT3zHEnEjOfHgoh+/WIeqHjr5vo7twX5652tP2N Mx8LmRcy1QGFOC7cJrUAt1lxtEm2xDE0DDTWbtrLD/urw/SDcZInXg9OaQJScBgPEF5EimBTanoAdX npz666oA+SsIyft7lopXirXDXC9dc2tpNbbWXNbUbi/8SOXb4M64nUSj261gX1dFmmdiMTVkMJi6k9 jkjF4KkszF50l/ZyuXITZfH/g97qx+FCiVCme/NzouQsbRqcFRQc4aqwS5nAJR5semKAPwFBzi4o8K IAGeXk3wxbSLA2xKLlfWqmWPjgqVVs0+TV5yEo1uzFYRf9/vtUmqFEKouB6fcB43xqHMU/prp6VRKO cZ5pTG4vUmHBldHcHEO1sFYR/POcX3tBkkrlcVrJzjuOaTUmZSZ3vpMsCr9Q==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1167; h=from:subject; bh=pDNvsGLyQA8RpBfkkqJxHruRXSdA8gdZalovRqbX85w=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjLhbl/n4E1MQAIRbO7TQnliesxT9vRRUjnB997VqU NfNmMx2JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYy4W5QAKCRCJcvTf3G3AJpnPD/ 9wQBqpy8w8j9Te2wEo0D0Hjxhxo55M1tuhtvCVgvJfQ/ry5sJ8eH8KM6rA1+i5+yyravM0DuBRah4g uhrc77nIoJb2kV7c8d7t1g4x8ALFz6XhAPkRpZqDiQcQBAvW8O9x3Cx08jWpK7nAg3/Y43225OKOB6 tVTYN27JCpBxTSSIqc4UFTMXN2IAlMQ5Ob/Zqv/+83XGkTWlJ6QhWxs83ZN6cbP38BNiVxIU8R4X4q w2vVsmNS7RSYF8P5DQihlKqCqmUoYEHbPbwmJ7+PuzAaQl9B925ePSW3sWLgeYKees47F1AL85pjZc FvVYlWbV8TxR5ah3RwNTZ38Wn7CZrVxE9cLyRCKZf3k1yiSPL97A/a4HIYBpAtaCVUIze1SOb44gG5 AeD/OBUhZfYjCqNQUMcrXaVEETtQEQyYObvDbWpjZMSgelJPeNBFTw4EHffM7FA71KwkU2YjesRYnu oDThnDhHv4KriQ3B5f+kESZJ2BjJePfLpOXMGt9bH1GXYnTKm2ZjNYVGmhOLx9jqiq7V9DNRZ8gtzJ iP1adulU4jNHuzcGVGv1REEmZUqTzrvgs4oy3VrE+j7gZBdT6IsTqQy5TPFC3tl2xHFdDR3KPEPqVf jCvjUcb44rcHyPLMelC6K/nXZ7kIHy17/M3xfiCKeCwJLqv86xQvXPgVl2QA==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -97,48 +96,37 @@ up proactively so the allocation is explicitly made for the full size,
 allowing the compiler to correctly reason about the resulting size of
 the buffer through the existing __alloc_size() hint.
 
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org
-Reviewed-by: Alex Elder <elder@linaro.org>
-Link: https://lore.kernel.org/lkml/4d75a9fd-1b94-7208-9de8-5a0102223e68@ieee.org
+Cc: linux-fsdevel@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/net/ipa/gsi_trans.c | 7 +++++--
+ fs/coredump.c | 7 +++++--
  1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ipa/gsi_trans.c b/drivers/net/ipa/gsi_trans.c
-index 18e7e8c405be..eeec149b5d89 100644
---- a/drivers/net/ipa/gsi_trans.c
-+++ b/drivers/net/ipa/gsi_trans.c
-@@ -88,6 +88,7 @@ struct gsi_tre {
- int gsi_trans_pool_init(struct gsi_trans_pool *pool, size_t size, u32 count,
- 			u32 max_alloc)
+diff --git a/fs/coredump.c b/fs/coredump.c
+index 9f4aae202109..0894b2c35d98 100644
+--- a/fs/coredump.c
++++ b/fs/coredump.c
+@@ -68,7 +68,10 @@ struct core_name {
+ 
+ static int expand_corename(struct core_name *cn, int size)
  {
-+	size_t alloc_size;
- 	void *virt;
+-	char *corename = krealloc(cn->corename, size, GFP_KERNEL);
++	char *corename;
++
++	size = kmalloc_size_roundup(size);
++	corename = krealloc(cn->corename, size, GFP_KERNEL);
  
- 	if (!size)
-@@ -104,13 +105,15 @@ int gsi_trans_pool_init(struct gsi_trans_pool *pool, size_t size, u32 count,
- 	 * If there aren't enough entries starting at the free index,
- 	 * we just allocate free entries from the beginning of the pool.
- 	 */
--	virt = kcalloc(count + max_alloc - 1, size, GFP_KERNEL);
-+	alloc_size = size_mul(count + max_alloc - 1, size);
-+	alloc_size = kmalloc_size_roundup(alloc_size);
-+	virt = kzalloc(alloc_size, GFP_KERNEL);
- 	if (!virt)
+ 	if (!corename)
  		return -ENOMEM;
+@@ -76,7 +79,7 @@ static int expand_corename(struct core_name *cn, int size)
+ 	if (size > core_name_size) /* racy but harmless */
+ 		core_name_size = size;
  
- 	pool->base = virt;
- 	/* If the allocator gave us any extra memory, use it */
--	pool->count = ksize(pool->base) / size;
-+	pool->count = alloc_size / size;
- 	pool->free = 0;
- 	pool->max_alloc = max_alloc;
- 	pool->size = size;
+-	cn->size = ksize(corename);
++	cn->size = size;
+ 	cn->corename = corename;
+ 	return 0;
+ }
 -- 
 2.34.1
 
