@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D83DCC6FA90
-	for <linux-media@archiver.kernel.org>; Mon, 26 Sep 2022 09:16:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EDC8BC07E9D
+	for <linux-media@archiver.kernel.org>; Mon, 26 Sep 2022 09:16:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234778AbiIZJQD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 26 Sep 2022 05:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51676 "EHLO
+        id S234678AbiIZJQW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 26 Sep 2022 05:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234777AbiIZJPI (ORCPT
+        with ESMTP id S234853AbiIZJPI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 26 Sep 2022 05:15:08 -0400
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E18410578;
-        Mon, 26 Sep 2022 02:14:55 -0700 (PDT)
-X-UUID: 9057d1fbc4334d13a6ca0330ef99dcb8-20220926
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D72FFD25;
+        Mon, 26 Sep 2022 02:14:52 -0700 (PDT)
+X-UUID: cb627817b5614d0b84e0cc4d64da1ca1-20220926
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=4RayBIx8fpgv/JRMfqcE3Iv+08TaIj0FKXAYZOJDnL4=;
-        b=UvTXssTC13XaCcvdmg3HKG7ENsSYq7S0FPMe9jg801dOtjtJsqrEjoQPSWc70YFH737VThbNiaABiEzTRXcIpf1oILf4llUtnPD3OY+04vLdBTpqMUrTo8lB1d3BoxpnqWInbouUHy+8ooEBhUQqxPL44i+MXjTOHlx8zr7pj1U=;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=Q4wLYBW96Tx7o8A1V5stxuh2HtcfnqFvSW9gYmXrIWg=;
+        b=Z9riln7Y3UKjqrWqrvFAF4QJSd8cAtvrabfvYnmFXtdE0AUffmorDdK/XxBFPhnFATvGpLlZc+fK1uBWewUqQk26OO/UIdj44la1XoGwzQ//4z+jJijvm7FT5Vl35CqN46t557vA0PH8rYq5vdEVLNPJ3c4PncEwVrowhWuPtpE=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:3eef90f4-28db-4a64-b860-5fc4bd1cca68,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:39a5ff1,CLOUDID:dae20707-1cee-4c38-b21b-a45f9682fdc0,B
+X-CID-O-INFO: VERSION:1.1.11,REQID:84ee23b8-28b9-4c1e-bd97-90ea1ecda69b,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-META: VersionHash:39a5ff1,CLOUDID:678815a3-dc04-435c-b19b-71e131a5fc35,B
         ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
         RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 9057d1fbc4334d13a6ca0330ef99dcb8-20220926
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+X-UUID: cb627817b5614d0b84e0cc4d64da1ca1-20220926
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
         (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 393900606; Mon, 26 Sep 2022 17:14:49 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1537042739; Mon, 26 Sep 2022 17:14:47 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 26 Sep 2022 17:14:48 +0800
+ 15.2.792.15; Mon, 26 Sep 2022 17:14:45 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Mon, 26 Sep 2022 17:14:47 +0800
+ Transport; Mon, 26 Sep 2022 17:14:44 +0800
 From:   Irui Wang <irui.wang@mediatek.com>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -55,9 +55,9 @@ CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
         <maoguang.meng@mediatek.com>, irui wang <irui.wang@mediatek.com>
-Subject: [V15,09/15] media: mtk-jpegdec: export jpeg decoder functions
-Date:   Mon, 26 Sep 2022 17:14:27 +0800
-Message-ID: <20220926091433.18633-10-irui.wang@mediatek.com>
+Subject: [V15,07/15] mtk-jpegenc: add stop cmd interface for jpgenc
+Date:   Mon, 26 Sep 2022 17:14:25 +0800
+Message-ID: <20220926091433.18633-8-irui.wang@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220926091433.18633-1-irui.wang@mediatek.com>
 References: <20220926091433.18633-1-irui.wang@mediatek.com>
@@ -71,62 +71,36 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: kyrie wu <kyrie.wu@mediatek.com>
 
-mtk jpeg decoder is built as a module, export some functions to make them
-visible by other modules.
+Add stop cmd interface for jpgenc to stop stream
 
 Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
 Signed-off-by: irui wang <irui.wang@mediatek.com>
 ---
- drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-index 1e3852295f2f..d2f25f43e852 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-@@ -189,6 +189,7 @@ int mtk_jpeg_dec_fill_param(struct mtk_jpeg_dec_param *param)
+diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+index 0d4e7220e509..e60363e38a90 100644
+--- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
++++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+@@ -613,6 +613,9 @@ static const struct v4l2_ioctl_ops mtk_jpeg_enc_ioctl_ops = {
+ 	.vidioc_streamoff               = v4l2_m2m_ioctl_streamoff,
  
+ 	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
++
++	.vidioc_encoder_cmd		= v4l2_m2m_ioctl_encoder_cmd,
++	.vidioc_try_encoder_cmd		= v4l2_m2m_ioctl_try_encoder_cmd,
+ };
+ 
+ static const struct v4l2_ioctl_ops mtk_jpeg_dec_ioctl_ops = {
+@@ -1391,6 +1394,7 @@ static int mtk_jpeg_open(struct file *file)
+ 	} else {
+ 		v4l2_ctrl_handler_init(&ctx->ctrl_hdl, 0);
+ 	}
++
+ 	mtk_jpeg_set_default_params(ctx);
+ 	mutex_unlock(&jpeg->lock);
  	return 0;
- }
-+EXPORT_SYMBOL_GPL(mtk_jpeg_dec_fill_param);
- 
- u32 mtk_jpeg_dec_get_int_status(void __iomem *base)
- {
-@@ -200,6 +201,7 @@ u32 mtk_jpeg_dec_get_int_status(void __iomem *base)
- 
- 	return ret;
- }
-+EXPORT_SYMBOL_GPL(mtk_jpeg_dec_get_int_status);
- 
- u32 mtk_jpeg_dec_enum_result(u32 irq_result)
- {
-@@ -216,11 +218,13 @@ u32 mtk_jpeg_dec_enum_result(u32 irq_result)
- 
- 	return MTK_JPEG_DEC_RESULT_ERROR_UNKNOWN;
- }
-+EXPORT_SYMBOL_GPL(mtk_jpeg_dec_enum_result);
- 
- void mtk_jpeg_dec_start(void __iomem *base)
- {
- 	writel(0, base + JPGDEC_REG_TRIG);
- }
-+EXPORT_SYMBOL_GPL(mtk_jpeg_dec_start);
- 
- static void mtk_jpeg_dec_soft_reset(void __iomem *base)
- {
-@@ -240,6 +244,7 @@ void mtk_jpeg_dec_reset(void __iomem *base)
- 	mtk_jpeg_dec_soft_reset(base);
- 	mtk_jpeg_dec_hard_reset(base);
- }
-+EXPORT_SYMBOL_GPL(mtk_jpeg_dec_reset);
- 
- static void mtk_jpeg_dec_set_brz_factor(void __iomem *base, u8 yscale_w,
- 					u8 yscale_h, u8 uvscale_w, u8 uvscale_h)
-@@ -408,3 +413,4 @@ void mtk_jpeg_dec_set_config(void __iomem *base,
- 				   config->dma_last_mcu);
- 	mtk_jpeg_dec_set_pause_mcu_idx(base, config->total_mcu);
- }
-+EXPORT_SYMBOL_GPL(mtk_jpeg_dec_set_config);
 -- 
 2.18.0
 
