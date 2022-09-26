@@ -2,87 +2,116 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22D15C07E9D
-	for <linux-media@archiver.kernel.org>; Mon, 26 Sep 2022 15:22:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F28BC07E9D
+	for <linux-media@archiver.kernel.org>; Mon, 26 Sep 2022 15:43:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236293AbiIZPWM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 26 Sep 2022 11:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49246 "EHLO
+        id S234894AbiIZPnW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 26 Sep 2022 11:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236284AbiIZPVB (ORCPT
+        with ESMTP id S235189AbiIZPmB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 26 Sep 2022 11:21:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD04E49;
-        Mon, 26 Sep 2022 07:07:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 35F0FB80A4A;
-        Mon, 26 Sep 2022 14:07:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3383BC433C1;
-        Mon, 26 Sep 2022 14:07:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664201249;
-        bh=4yu64h7afppe4HawaBZDNUNqopaG8iMFWkzcqeDw+LI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Cy5WZoa97DwR0yz45KeAou/18GyOuEQ0uevuHZ2lbksiItz1CO7OqDhTWTcDNktAd
-         kDZQJtVvf8Z27NflqcwAxbhbAfSZER45TheMyNy99T/UVnt7vvd93gNIs7Pw6pVr4T
-         SEuW2keil7opRw47lqyRO9MAMbRIEkql2ZoAW/7ezR+GaCI3j8asg6hi6zDkhKnLQv
-         5r3cf2EMP7Y+rAopktDoYiww5vMKE04CDYJDrY6CH3u3WLB18LUr7/1bPi/BwprQhK
-         SFGmPeVZqu1gr+Z6IspQ7BH/k0abnE35rC1FBJKl13VCSJs5dx3zSh+RoTydjuLzk8
-         RUEV+k6vAaB2A==
-Message-ID: <05261a77-0412-d333-96fe-53c4238d4ea1@kernel.org>
-Date:   Mon, 26 Sep 2022 16:07:22 +0200
+        Mon, 26 Sep 2022 11:42:01 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C6A6FA1F;
+        Mon, 26 Sep 2022 07:25:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1664202330; x=1695738330;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=pfuINd9PgYmZ/yt4oNdMKOBVEklukDVuARBHpgZiRaw=;
+  b=ke6cnIS+nfzGsH0FvlB3A56yF8KdWt2f2NUagJ0MRoRhjA6MBF8dP04j
+   IxepopSE+OaY1PEGkWoxrqzIM+VXDDGksRsZ0vcDc7KpcD8I3A+HxWYRH
+   Lqt6rGFJkGka1hCrSIyqQmCwlAJ0S+TdX+z6arFIJYeKHYLw5L/B3bmbb
+   w=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 26 Sep 2022 07:25:29 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 07:25:28 -0700
+Received: from mmitkov.eu.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Mon, 26 Sep 2022 07:25:25 -0700
+From:   <quic_mmitkov@quicinc.com>
+To:     <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <robert.foss@linaro.org>, <akapatra@quicinc.com>,
+        <jzala@quicinc.com>, <todor.too@gmail.com>
+CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <konrad.dybcio@somainline.org>, <mchehab@kernel.org>,
+        <bryan.odonoghue@linaro.org>,
+        Milen Mitkov <quic_mmitkov@quicinc.com>
+Subject: [PATCH 2/4] media: camss: vfe: Reserve VFE lines on stream start and link to CSID
+Date:   Mon, 26 Sep 2022 17:25:02 +0300
+Message-ID: <20220926142505.1827-3-quic_mmitkov@quicinc.com>
+X-Mailer: git-send-email 2.37.3.windows.1
+In-Reply-To: <20220926142505.1827-1-quic_mmitkov@quicinc.com>
+References: <20220926142505.1827-1-quic_mmitkov@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [V15,08/15] dt-bindings: mediatek: Add mediatek,mt8195-jpgdec
- compatible
-Content-Language: en-US
-To:     Irui Wang <irui.wang@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        angelogioacchino.delregno@collabora.com,
-        nicolas.dufresne@collabora.com, wenst@chromium.org,
-        kyrie wu <kyrie.wu@mediatek.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Tomasz Figa <tfiga@chromium.org>, xia.jiang@mediatek.com,
-        maoguang.meng@mediatek.com, Rob Herring <robh@kernel.org>
-References: <20220926091433.18633-1-irui.wang@mediatek.com>
- <20220926091433.18633-9-irui.wang@mediatek.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220926091433.18633-9-irui.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 26/09/2022 11:14, Irui Wang wrote:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/memory/mt8195-memory-port.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/clock/mt8195-clk.h>
-> +    #include <dt-bindings/power/mt8195-power.h>
-> +
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        jpgdec-master {
-> +                compatible = "mediatek,mt8195-jpgdec";
+From: Milen Mitkov <quic_mmitkov@quicinc.com>
 
-Same problem.
+For multiple virtual channels support, each VFE line can be in either
+ON, RESERVED or OFF states. This allows the starting and stopping
+of a VFE line independently of other active VFE lines.
 
-Best regards,
-Krzysztof
+Also, link the CSID entity's source ports to corresponding VFE lines.
+
+Signed-off-by: Milen Mitkov <quic_mmitkov@quicinc.com>
+---
+ drivers/media/platform/qcom/camss/camss-vfe.c | 7 +++++++
+ drivers/media/platform/qcom/camss/camss.c     | 2 +-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+index a26e4a5d87b6..cd8ac0478cf1 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+@@ -738,8 +738,10 @@ static int vfe_set_stream(struct v4l2_subdev *sd, int enable)
+ 	struct vfe_line *line = v4l2_get_subdevdata(sd);
+ 	struct vfe_device *vfe = to_vfe(line);
+ 	int ret;
++	int i;
+ 
+ 	if (enable) {
++		line->output.state = VFE_OUTPUT_RESERVED;
+ 		ret = vfe->ops->vfe_enable(line);
+ 		if (ret < 0)
+ 			dev_err(vfe->camss->dev,
+@@ -749,6 +751,11 @@ static int vfe_set_stream(struct v4l2_subdev *sd, int enable)
+ 		if (ret < 0)
+ 			dev_err(vfe->camss->dev,
+ 				"Failed to disable vfe outputs\n");
++
++		/* At least one VFE line remains, return -EBUSY to avoid premature pipeline stop */
++		for (i = 0; i < vfe->line_num; i++)
++			if (vfe->line[i].output.state != VFE_OUTPUT_OFF)
++				return -EBUSY;
+ 	}
+ 
+ 	return ret;
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index 1118c40886d5..63653ac3e056 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -1320,7 +1320,7 @@ static int camss_register_entities(struct camss *camss)
+ 					struct v4l2_subdev *vfe = &camss->vfe[k].line[j].subdev;
+ 
+ 					ret = media_create_pad_link(&csid->entity,
+-								    MSM_CSID_PAD_SRC,
++								    MSM_CSID_PAD_FIRST_SRC + j,
+ 								    &vfe->entity,
+ 								    MSM_VFE_PAD_SINK,
+ 								    0);
+-- 
+2.37.3
 
