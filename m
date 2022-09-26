@@ -2,103 +2,98 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85ACBC6FA82
-	for <linux-media@archiver.kernel.org>; Mon, 26 Sep 2022 07:33:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DD92C6FA8E
+	for <linux-media@archiver.kernel.org>; Mon, 26 Sep 2022 09:00:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233279AbiIZHdr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 26 Sep 2022 03:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56986 "EHLO
+        id S234614AbiIZJAH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 26 Sep 2022 05:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234059AbiIZHdq (ORCPT
+        with ESMTP id S234628AbiIZI7t (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 26 Sep 2022 03:33:46 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0B02228E
-        for <linux-media@vger.kernel.org>; Mon, 26 Sep 2022 00:33:44 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28Q6ksf7032222;
-        Mon, 26 Sep 2022 09:33:13 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=o+WCWXJ3wYtxfO3LMeD4n9d9ZzgtuglPGuw1G9gA0Rc=;
- b=EFW+HHT7f4CSHCtY9dqIeqLbbnhj+LOm+/Di3oBdGNDTRmkA34R53RBATc/sH7HD09Ye
- +hmIhE46OhC9RKY6Fs6hgypHDUiIWT8O+hOUJRWBGZxZnbOrBm3OYge7Eufx3F2RIPoc
- HDPVAjlNhN2Rneuglx732UplWVBUt9t1KUWZSlPVb5uwqP9gyASQPN9GCscutgHd6b9R
- nmhVdZIkUCfRmH9RZQx9Hn0OFxETmlHt19vUvcBwaZ6uYFumnRvXYAnHJVfDJTRxEp5d
- sa4/pha05b60GM9UPQimyrxB97HEg+cSveHqZez7mTNXGcfP9JudleJH9rNKbF+D3JLG YA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jsq1asyj8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Sep 2022 09:33:13 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1BDDC100034;
-        Mon, 26 Sep 2022 09:33:11 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 143AA215134;
-        Mon, 26 Sep 2022 09:33:11 +0200 (CEST)
-Received: from [10.201.21.143] (10.75.127.121) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Mon, 26 Sep
- 2022 09:33:10 +0200
-Message-ID: <0c8c3878-6d4f-e01b-f614-3cdb0c9f25ff@foss.st.com>
-Date:   Mon, 26 Sep 2022 09:33:10 +0200
+        Mon, 26 Sep 2022 04:59:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AEBDC4;
+        Mon, 26 Sep 2022 01:59:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1632F60918;
+        Mon, 26 Sep 2022 08:59:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DE62C433D6;
+        Mon, 26 Sep 2022 08:59:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664182787;
+        bh=+28qcCzIMz/Gaw8Kst2Zj3gwvYJ9LcyT/RtE49WdY/U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XyzYWwdYmkQApQYxM754SgE+A2RbMtN6y53TbjfHLcsvFnKeUTmIQ7jYnx1MzzFri
+         uRwQfgiXKDewbjffLmDyKrjVathFv3xniBUffYr4Z0rdUdyzoMulHe8+EQ4YGhnb5v
+         Fw12ojfqQeuImLDnH1jwi2ZHywpVKep5BsyHejqU=
+Date:   Mon, 26 Sep 2022 10:59:45 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Oliver Neukum <oneukum@suse.com>, stable@vger.kernel.org,
+        Dongliang Mu <mudongliangabcd@gmail.com>
+Subject: Re: [PATCH RESEND] media: flexcop-usb: fix endpoint type check
+Message-ID: <YzFqARJe+Msvm/QI@kroah.com>
+References: <20220822151027.27026-1-johan@kernel.org>
+ <YymBM1wJLAsBDU4E@hovoldconsulting.com>
+ <YywfxwBmdmvQ0i21@kroah.com>
+ <Yyws4Pd4bAl3iq2e@hovoldconsulting.com>
+ <Yyw1CJgv6nreCtB9@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH -next] media: stm32: dcmi: Remove redundant dev_err call
-Content-Language: en-US
-To:     Shang XiaoJing <shangxiaojing@huawei.com>, <mchehab@kernel.org>,
-        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
-        <linux-media@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220923100708.17392-1-shangxiaojing@huawei.com>
-From:   Hugues FRUCHET <hugues.fruchet@foss.st.com>
-In-Reply-To: <20220923100708.17392-1-shangxiaojing@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.121]
-X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-26_04,2022-09-22_02,2022-06-22_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yyw1CJgv6nreCtB9@kroah.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Shang,
-
-Thanks for the patch:
-
-Acked-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
-
-BR,
-Hugues.
-
-On 9/23/22 12:07, Shang XiaoJing wrote:
-> devm_ioremap_resource() prints error message in itself. Remove the
-> dev_err call to avoid redundant error message.
+On Thu, Sep 22, 2022 at 12:12:24PM +0200, Greg Kroah-Hartman wrote:
+> On Thu, Sep 22, 2022 at 11:37:36AM +0200, Johan Hovold wrote:
+> > On Thu, Sep 22, 2022 at 10:41:43AM +0200, Greg Kroah-Hartman wrote:
+> > > On Tue, Sep 20, 2022 at 11:00:35AM +0200, Johan Hovold wrote:
+> > > > Mauro and Hans,
+> > > > 
+> > > > On Mon, Aug 22, 2022 at 05:10:27PM +0200, Johan Hovold wrote:
+> > > > > Commit d725d20e81c2 ("media: flexcop-usb: sanity checking of endpoint
+> > > > > type") tried to add an endpoint type sanity check for the single
+> > > > > isochronous endpoint but instead broke the driver by checking the wrong
+> > > > > descriptor or random data beyond the last endpoint descriptor.
+> > > > > 
+> > > > > Make sure to check the right endpoint descriptor.
+> > > > > 
+> > > > > Fixes: d725d20e81c2 ("media: flexcop-usb: sanity checking of endpoint type")
+> > > > > Cc: Oliver Neukum <oneukum@suse.com>
+> > > > > Cc: stable@vger.kernel.org	# 5.9
+> > > > > Reported-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> > > > > Signed-off-by: Johan Hovold <johan@kernel.org>
+> > > > > ---
+> > > > > 
+> > > > > It's been two months and two completely ignored reminders so resending.
+> > > > > 
+> > > > > Can someone please pick this fix up and let me know when that has been
+> > > > > done?
+> > > > 
+> > > > It's been another month so sending yet another reminder. This driver as
+> > > > been broken since 5.9 and I posted this fix almost four months ago and
+> > > > have sent multiple reminders since.
+> > > > 
+> > > > Can someone please pick this one and the follow-up cleanups up?
+> > > 
+> > > I've taken this one in my tree now.  Which one were the "follow-up"
+> > > cleanups?
+> > 
+> > Thanks. These are the follow-up cleanups:
+> > 
+> > 	https://lore.kernel.org/lkml/20220822151456.27178-1-johan@kernel.org/
 > 
-> Signed-off-by: Shang XiaoJing <shangxiaojing@huawei.com>
-> ---
->   drivers/media/platform/st/stm32/stm32-dcmi.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
-> index 2ca95ab2b0fe..70e1b6af0448 100644
-> --- a/drivers/media/platform/st/stm32/stm32-dcmi.c
-> +++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
-> @@ -1997,10 +1997,8 @@ static int dcmi_probe(struct platform_device *pdev)
->   	}
->   
->   	dcmi->regs = devm_ioremap_resource(&pdev->dev, dcmi->res);
-> -	if (IS_ERR(dcmi->regs)) {
-> -		dev_err(&pdev->dev, "Could not map registers\n");
-> +	if (IS_ERR(dcmi->regs))
->   		return PTR_ERR(dcmi->regs);
-> -	}
->   
->   	mclk = devm_clk_get(&pdev->dev, "mclk");
->   	if (IS_ERR(mclk)) {
+> Thanks, I'll take them after the first one was merged into Linus's tree.
+
+All now queued up, thanks.
+
+greg k-h
