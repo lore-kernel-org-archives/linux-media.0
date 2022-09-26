@@ -2,156 +2,199 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB76AC32771
-	for <linux-media@archiver.kernel.org>; Mon, 26 Sep 2022 09:16:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E679C07E9D
+	for <linux-media@archiver.kernel.org>; Mon, 26 Sep 2022 09:30:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234895AbiIZJQz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 26 Sep 2022 05:16:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52424 "EHLO
+        id S234942AbiIZJat (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 26 Sep 2022 05:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234825AbiIZJP2 (ORCPT
+        with ESMTP id S234410AbiIZJa0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 26 Sep 2022 05:15:28 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7090639F;
-        Mon, 26 Sep 2022 02:14:58 -0700 (PDT)
-X-UUID: c7af8119acc44903b01b5fc2dab35c59-20220926
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=FI7+yDqRFMQfsNaMu5RNXN0C32bQYEyedygDQDDVruE=;
-        b=nbwqZEwAIeMgxxeKdwMZTcB5e283fVX0cgAjQSJiEzYAcn6jj+XjXrJmo1PgoDyrt3F3i0/JP9yEYGaMPQQz3p03WZKkQmPMvDd4FsZQT+L9t3urfpd3NvEgsWFmlVuU8Q5VfaKGN5oXP7WERQiaZMaG36GxiHycvQcjqXy5eg0=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:e0d2db73-ea06-4429-b320-311cced9abe8,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:39a5ff1,CLOUDID:6c513ce4-87f9-4bb0-97b6-34957dc0fbbe,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: c7af8119acc44903b01b5fc2dab35c59-20220926
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 2087951507; Mon, 26 Sep 2022 17:14:54 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 26 Sep 2022 17:14:53 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Mon, 26 Sep 2022 17:14:52 +0800
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        "Tzung-Bi Shih" <tzungbi@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <nicolas.dufresne@collabora.com>, <wenst@chromium.org>,
-        kyrie wu <kyrie.wu@mediatek.com>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
-        <maoguang.meng@mediatek.com>, irui wang <irui.wang@mediatek.com>
-Subject: [V15,13/15] media: mtk-jpegdec: add output pic reorder interface
-Date:   Mon, 26 Sep 2022 17:14:31 +0800
-Message-ID: <20220926091433.18633-14-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220926091433.18633-1-irui.wang@mediatek.com>
-References: <20220926091433.18633-1-irui.wang@mediatek.com>
+        Mon, 26 Sep 2022 05:30:26 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290DB12A8A
+        for <linux-media@vger.kernel.org>; Mon, 26 Sep 2022 02:29:23 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28Q8PGU4023543;
+        Mon, 26 Sep 2022 11:29:01 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=MAw1rY5fv734JgrrTTHJ4ZIOyDidIOTLxXIGPjQGTyA=;
+ b=GWRnmG8uMvItUguj8rVfbrf1O5P7prNA2stNTjEQBeJ4ts4optoYqDWid9BXQANX8dyp
+ BLW8l0Ao7iHg1qOazzG7fhuAaNRLx47o+8sZ2kmRNQJkwp+61wZ1/6lUadA+ci9DfSRB
+ QYZCWHT9IJYEE0PdIWh2mUvwn147aieyCmX6M6lt/ngt5MdeEZ3j2rp/rMvUIhcCiTGB
+ KGBc1XZ3Dw9PEn17CwM95K5Rqq1mYwccNr0+eZ+vVv0msr2/pxkMRdVYHT6fLw937kVo
+ mvVOChDnJTejdXsxpxHrXVodi4kVxSprX7blaSZpZb7pwvSS7e6d0eH8stJ/lW7wujcg VQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jsq1atsjn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Sep 2022 11:29:01 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 545CC10002A;
+        Mon, 26 Sep 2022 11:29:00 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 447E121B51F;
+        Mon, 26 Sep 2022 11:29:00 +0200 (CEST)
+Received: from [10.129.167.120] (10.75.127.116) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Mon, 26 Sep
+ 2022 11:28:59 +0200
+Message-ID: <0e00e072-93e7-66b2-446e-ea793c38bd0c@foss.st.com>
+Date:   Mon, 26 Sep 2022 11:28:59 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 5/5] media: i2c: Add driver for ST VGXY61 camera sensor
+Content-Language: en-US
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+CC:     <linux-media@vger.kernel.org>, <alain.volmat@foss.st.com>,
+        <hugues.fruchet@foss.st.com>, <sylvain.petinot@foss.st.com>,
+        <dave.stevenson@raspberrypi.com>,
+        <laurent.pinchart@ideasonboard.com>,
+        <kieran.bingham@ideasonboard.com>
+References: <20220512074037.3829926-1-benjamin.mugnier@foss.st.com>
+ <20220512074037.3829926-6-benjamin.mugnier@foss.st.com>
+ <YwNUqE0f0hSOh0ul@paasikivi.fi.intel.com>
+ <52dc65fd-6120-286c-1314-d7af1e8360df@foss.st.com>
+ <YzA8QEBXmwlwpHqV@paasikivi.fi.intel.com>
+From:   Benjamin MUGNIER <benjamin.mugnier@foss.st.com>
+In-Reply-To: <YzA8QEBXmwlwpHqV@paasikivi.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.116]
+X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-26_06,2022-09-22_02,2022-06-22_01
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: kyrie wu <kyrie.wu@mediatek.com>
+Hi Sakari,
 
-add output reorder func to reorder the output images
-to ensure the output pic is consistent with the input images.
+Thanks a lot for your answer.
 
-Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
-Signed-off-by: irui wang <irui.wang@mediatek.com>
----
- .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.c  | 47 ++++++++++++++++++-
- 1 file changed, 45 insertions(+), 2 deletions(-)
+On 9/25/22 13:32, Sakari Ailus wrote:
+> Hi Benjamin,
+> 
+> On Fri, Aug 26, 2022 at 04:12:22PM +0200, Benjamin MUGNIER wrote:
+>>>> +	int rot_term;
+>>>
+>>> rot_term value is always the same. No need for a field here for that.
+>>>
+>>
+>> It changes according to the sensor's model id and could be either
+>> VGX761_SHORT_ROT_TERM or VGX661_SHORT_ROT_TERM. See the
+>> vgxy61_fill_sensor_param function.
+> 
+> Ah, thanks for the explanation. I somehow had missed that earlier.
+> 
+>>>> +	struct i2c_client *client = sensor->i2c_client;
+>>>> +	/* Correction factor for time required between 2 lines */
+>>>> +	const int mipi_margin = 1056;
+>>>
+>>> What does this value signify? Is it really constant or somehow dependent by
+>>> the configuration set by the driver?
+>>
+>> It is a simplification of time needed to send short packets and for the MIPI
+>> to add transition times (EoT, LPS, and SoT packet delimiters) needed by the
+>> protocol to go in low power between 2 packets of data. This is a mipi IP
+>> constant for the sensor.
+> 
+> Ok. A comment elaborating this as above would be nice.
+> 
 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-index f7e3013234d3..95fce3f3c0c6 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-@@ -440,6 +440,49 @@ void mtk_jpeg_dec_set_config(void __iomem *base,
- }
- EXPORT_SYMBOL_GPL(mtk_jpeg_dec_set_config);
- 
-+static void mtk_jpegdec_put_buf(struct mtk_jpegdec_comp_dev *jpeg)
-+{
-+	struct mtk_jpeg_src_buf *dst_done_buf, *tmp_dst_done_buf;
-+	struct vb2_v4l2_buffer *dst_buffer;
-+	struct list_head *temp_entry;
-+	struct list_head *pos = NULL;
-+	struct mtk_jpeg_ctx *ctx;
-+	unsigned long flags;
-+
-+	ctx = jpeg->hw_param.curr_ctx;
-+	if (unlikely(!ctx)) {
-+		dev_err(jpeg->dev, "comp_jpeg ctx fail !!!\n");
-+		return;
-+	}
-+
-+	dst_buffer = jpeg->hw_param.dst_buffer;
-+	if (!dst_buffer) {
-+		dev_err(jpeg->dev, "comp_jpeg dst_buffer fail !!!\n");
-+		return;
-+	}
-+
-+	dst_done_buf = container_of(dst_buffer, struct mtk_jpeg_src_buf, b);
-+
-+	spin_lock_irqsave(&ctx->done_queue_lock, flags);
-+	list_add_tail(&dst_done_buf->list, &ctx->dst_done_queue);
-+	while (!list_empty(&ctx->dst_done_queue) &&
-+	       (pos != &ctx->dst_done_queue)) {
-+		list_for_each_prev_safe(pos, temp_entry, &ctx->dst_done_queue) {
-+			tmp_dst_done_buf = list_entry(pos,
-+						      struct mtk_jpeg_src_buf,
-+						      list);
-+			if (tmp_dst_done_buf->frame_num ==
-+				ctx->last_done_frame_num) {
-+				list_del(&tmp_dst_done_buf->list);
-+				v4l2_m2m_buf_done(&tmp_dst_done_buf->b,
-+						  VB2_BUF_STATE_DONE);
-+				ctx->last_done_frame_num++;
-+			}
-+		}
-+	}
-+	spin_unlock_irqrestore(&ctx->done_queue_lock, flags);
-+}
-+
- static void mtk_jpegdec_timeout_work(struct work_struct *work)
- {
- 	enum vb2_buffer_state buf_state = VB2_BUF_STATE_ERROR;
-@@ -460,7 +503,7 @@ static void mtk_jpegdec_timeout_work(struct work_struct *work)
- 	atomic_inc(&master_jpeg->dechw_rdy);
- 	wake_up(&master_jpeg->dec_hw_wq);
- 	v4l2_m2m_buf_done(src_buf, buf_state);
--	v4l2_m2m_buf_done(dst_buf, buf_state);
-+	mtk_jpegdec_put_buf(cjpeg);
- }
- 
- static irqreturn_t mtk_jpegdec_hw_irq_handler(int irq, void *priv)
-@@ -500,7 +543,7 @@ static irqreturn_t mtk_jpegdec_hw_irq_handler(int irq, void *priv)
- 
- 	buf_state = VB2_BUF_STATE_DONE;
- 	v4l2_m2m_buf_done(src_buf, buf_state);
--	v4l2_m2m_buf_done(dst_buf, buf_state);
-+	mtk_jpegdec_put_buf(jpeg);
- 	pm_runtime_put(ctx->jpeg->dev);
- 	clk_disable_unprepare(jpeg->jdec_clk.clks->clk);
- 
--- 
-2.18.0
+No problem, queued for v6.
 
+>>>> +	ctrl = v4l2_ctrl_new_int_menu(hdl, ops, V4L2_CID_LINK_FREQ, ARRAY_SIZE(link_freq) - 1, 0,
+>>>> +				      link_freq);
+>>>> +	ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+>>>> +	/* Custom controls */
+>>>> +	v4l2_ctrl_new_custom(hdl, &vgxy61_hdr_ctrl, NULL);
+>>>> +	/* Keep a pointer to these controls as we need to update them when setting the format */
+>>>> +	sensor->pixel_rate_ctrl = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_PIXEL_RATE, 1, INT_MAX, 1,
+>>>> +						    get_pixel_rate(sensor));
+>>>> +	sensor->pixel_rate_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+>>>> +	sensor->expo_ctrl = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_EXPOSURE, sensor->expo_min,
+>>>> +					      sensor->expo_max, 1, sensor->expo_long);
+>>>> +	sensor->vblank_ctrl = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_VBLANK, sensor->vblank_min,
+>>>> +						0xffff - sensor->current_mode->crop.height, 1,
+>>>> +						sensor->vblank);
+>>>> +	sensor->vflip_ctrl = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_VFLIP, 0, 1, 1, sensor->vflip);
+>>>> +	sensor->hflip_ctrl = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_HFLIP, 0, 1, 1, sensor->hflip);
+>>>
+>>> You don't seem to have the link frequency control. I suppose you should, as
+>>> well as have it in DT.
+>>>
+>>> <URL:https://hverkuil.home.xs4all.nl/spec/driver-api/camera-sensor.html#handling-clocks>
+>>>
+>>
+>> Are you referring to V4L2_CID_LINK_FREQ? I defined it above as a read only
+>> control as it is fixed for this sensor.
+> 
+> Ah, it was of course the first control.
+> 
+> Anyway, in general case, the frequencies that can be used on the board
+> should come from DT, as using other frequencies may interfere with other
+> devices in the same system.
+
+Ah I just remembered we talked about this with Laurent on v2:
+
+https://lore.kernel.org/linux-media/YmA5eTOoGNEbMyKB@pendragon.ideasonboard.com/
+
+Here is the relevant part:
+>>> The link frequencies should come from DT.
+>>
+>> This is a hard requirement for this sensor. This value can not be
+>> modified and must be 402MHz.
+>>
+>> I see the ov9734.c does something similar. Is adding this value to the
+>> device tree really mandatory?
+> 
+> I suppose it's fine then. Sakari, what do you think ?
+
+With this extra information, should I move the link frequency to the device tree or is it fine this way?
+
+> 
+> ...
+> 
+>>>> +	sensor->slave_mode = of_property_read_bool(dev->of_node, "slave-mode");
+>>>
+>>> What does this actually do?
+>>>
+>>> On parallel bus the slave mode tells the synchronisation signals originate
+>>> from the receiver. On CSI-2 there are no specific synchronisation signals.
+>>>
+>>
+>> We discussed about this on v1 a while ago:
+>>
+>> https://lore.kernel.org/all/c610a2c9-31b1-1950-00fa-a6b3fd3517a1@foss.st.com/
+>>
+>> Tell me if there is any changes to be made, or maybe some documentation to
+>> clarify?
+> 
+> Ah, yes, I hadn't had time to read that reply yet. :-(
+> 
+> I think we should have a generic solution for this. You may not have two
+> similar kinds of sensors you're synchronising this way. One option could be
+> to drop this functionality from the driver now to get it in sooner.
+> 
+> Something to consider:
+> 
+> - how to convey where the signal comes from (phandle),
+> 
+> - capture start signal polarity,
+> 
+> - whether it's input/output and
+> 
+> - pull-down / pull-up configuration?
+> 
+> These are similar to what GPIOs have. Hardware support may vary of course.
+> 
+
+Yes, we discussed this in the media summit.
+I'll drop this for now.
+I'll come back to this once the first version of the driver is accepted, and if Dave is not faster than me on this topic ;)
