@@ -2,374 +2,366 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17BDEC6FA83
-	for <linux-media@archiver.kernel.org>; Tue, 27 Sep 2022 18:47:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD2BBC6FA82
+	for <linux-media@archiver.kernel.org>; Tue, 27 Sep 2022 19:23:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbiI0SrP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Sep 2022 14:47:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56958 "EHLO
+        id S231394AbiI0TXh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Sep 2022 15:23:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiI0SrN (ORCPT
+        with ESMTP id S231642AbiI0TXd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Sep 2022 14:47:13 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FA110C78D;
-        Tue, 27 Sep 2022 11:47:12 -0700 (PDT)
-Received: from tr.lan (ip-86-49-12-201.bb.vodafone.cz [86.49.12.201])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id D5B7884DB4;
-        Tue, 27 Sep 2022 20:47:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1664304431;
-        bh=MStsKfuSAbG4zEzR8vVKXOrUx/FT6qSF5cjS7bAGm24=;
-        h=From:To:Cc:Subject:Date:From;
-        b=fTS5TpQl0/yJAI0LARYpZJ84hbh1yhCY8VrUlyPDjG6Y2uj0DZtg0dnjX6EvanRkE
-         /jGepS8OiVQVGvaASLqC4LAEZmGZ+Cuk1ne9jIKyrhoEZe8MoQLs5Ho2SgyjzVRW9G
-         vnjK0VYnVJQxguvd5uhncorv/9326TBPZgJa5kpQS5zPvJqbX4Fvt+q2ggHg0eF0Gx
-         0xjHvTs6/gODlT+UwxklkSgZeIV7l0FjhTXef1AdSEfSBmmIFnRJB/r8VmJHXyjzoX
-         nvIw8CRqMwpM2MgUQDbQP8cVi/GqnLoaf1b410lL6rNcq/8XP9yy5LcvMfQfgjr+H2
-         fZC8Be8saBNKg==
-From:   Marek Vasut <marex@denx.de>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Marek Vasut <marex@denx.de>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sylvain Petinot <sylvain.petinot@foss.st.com>,
-        devicetree@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH v2] dt-bindings: media: st,stmipid02: Convert the text bindings to YAML
-Date:   Tue, 27 Sep 2022 20:46:57 +0200
-Message-Id: <20220927184657.291714-1-marex@denx.de>
-X-Mailer: git-send-email 2.35.1
+        Tue, 27 Sep 2022 15:23:33 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94BAD74E7;
+        Tue, 27 Sep 2022 12:23:29 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id bj12so22721166ejb.13;
+        Tue, 27 Sep 2022 12:23:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=hACMWnwt9I4/gy3jWqjAynyLTozDnWLj9x1Svd4BJn0=;
+        b=NUZ3UVSeG/XHAZwJw8/bzwk1n8QJGooa6aLnPD7RHEmu5JN7ADy2far/5gAAI2OIQL
+         Zfxiq2VHXbkYG4w26xmpY1NUhgxUzYvA0DwohRDSdJu66UtD43csQzsnXpssf1lWf55C
+         c4ZCSYxK56hvERvIwcc48kF00H+1N9ItAzBbPmA98A2atBqOz06BqefXalEofZxG19pq
+         IjJOCwy/YD3Dv+IHQIAEv5FoASkwxbKVKuuPnjm8N4HrJHhizYgSkI80SWEEGtiPy7r5
+         0Xo0h/FRiTm+WTTaTSJuF69o9fEWnNM8zLLseHZQwIsG7xLZeI+7eF5llA+XXrvaLwGU
+         vgNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=hACMWnwt9I4/gy3jWqjAynyLTozDnWLj9x1Svd4BJn0=;
+        b=p/vgj9ayrEfivnQLjoJDe72UUCWxdTlveuc+qfvspT452Jl8pF5WMJtNC17ZurbWSz
+         reTtNfRgw/4/QHk9kXnZJPE++kZeZ8hWrhk80D+CYK69nv7rrK5QKzmvStFniJivmK0q
+         w1u35GjNm2b4QD0FUh2xWgM4W8fsBdDvmOJqT9Tt7ctrPwWiSR6Aw/ph5txg9rLijzMD
+         CoK1RZkjoDjqxXuIxHIJvJRMZ3N6afj/cqeNNMRca71m/uwEspn3g+zMClAxpUMvGDLI
+         eGBcwOr42C0bVBO6I51T/OSZsqD3e4Q/rVZigjltQr9Azz2AfU+k3vZmdYbL/C+p9zMw
+         m6LQ==
+X-Gm-Message-State: ACrzQf3TR3tuDKLIPDmklf6qPlZPYTmqGaRCTLSGyPqO2Qc7BWbU8Zu0
+        sEob4lnq3SfRAJT2Z5ETV/v7RBqfsQoabeZZN4U=
+X-Google-Smtp-Source: AMsMyM4a2L+apq7K2CD0K17GiUaRVUlR9BeZ1Eo0rjlkg8ARFPdNlCcIS9wkQrs+1zT7nnrmvVwaAJjZVoGCNj4VCvE=
+X-Received: by 2002:a17:907:6e14:b0:782:4659:14c1 with SMTP id
+ sd20-20020a1709076e1400b00782465914c1mr23508855ejc.196.1664306608129; Tue, 27
+ Sep 2022 12:23:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
+References: <20220905230406.30801-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220905230406.30801-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <Yyx/NI8sew4hpFAc@pendragon.ideasonboard.com> <CA+V-a8u9DqzN_dDxU74F1wCZpJeODQet-aF7sd6j2=jk545x7Q@mail.gmail.com>
+ <YzFp8x78/HJ/Yf2Y@pendragon.ideasonboard.com> <CA+V-a8tcj1iun1-9qcCP5649S___JfD_rL46v0_1HCcnEXnNVg@mail.gmail.com>
+ <YzHTcuThQgNTo/HS@pendragon.ideasonboard.com> <CA+V-a8sGzAC1M8hxgbizKFnCbAGXzr0FXFzmsfnfEgMz_H_hxg@mail.gmail.com>
+ <YzHrSU4RK/QFx9Xs@pendragon.ideasonboard.com>
+In-Reply-To: <YzHrSU4RK/QFx9Xs@pendragon.ideasonboard.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Tue, 27 Sep 2022 20:23:00 +0100
+Message-ID: <CA+V-a8t3y9kU+D4E_n-d8ZJm2foSn3dCirL+HDnHhfSNoODv-g@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] media: platform: Add Renesas RZ/G2L CRU driver
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convert the text STMIPID02 DT bindings to YAML DT format to permit
-validation of DTs using this I2C CSI-2 to CPI bridge.
+Hi Laurent,
 
-Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Sylvain Petinot <sylvain.petinot@foss.st.com>
-Cc: devicetree@vger.kernel.org
-Cc: linux-media@vger.kernel.org
-Cc: linux-stm32@st-md-mailman.stormreply.com
-To: linux-arm-kernel@lists.infradead.org
----
-V2: - Update YAML DT schema maintainers, add Benjamin and Sylvain, drop myself
-    - Update MAINTAINERS file, replace st,st-mipid02.txt to st,st-mipid02.yaml
-    - Fix bus-width to be 6,7,8,10,12 and drop default:
-    - Require port@2 and either or both port@0 or port@1
----
- .../bindings/media/i2c/st,st-mipid02.txt      |  82 --------
- .../bindings/media/i2c/st,st-mipid02.yaml     | 179 ++++++++++++++++++
- MAINTAINERS                                   |   2 +-
- 3 files changed, 180 insertions(+), 83 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/media/i2c/st,st-mipid02.txt
- create mode 100644 Documentation/devicetree/bindings/media/i2c/st,st-mipid02.yaml
+On Mon, Sep 26, 2022 at 7:11 PM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hi Prabhakar,
+>
+> On Mon, Sep 26, 2022 at 06:27:40PM +0100, Lad, Prabhakar wrote:
+> > On Mon, Sep 26, 2022 at 5:29 PM Laurent Pinchart wrote:
+> > > On Mon, Sep 26, 2022 at 05:24:47PM +0100, Lad, Prabhakar wrote:
+> > > > On Mon, Sep 26, 2022 at 9:59 AM Laurent Pinchart wrote:
+> > > > > On Fri, Sep 23, 2022 at 08:02:12PM +0100, Lad, Prabhakar wrote:
+> > > > > > On Thu, Sep 22, 2022 at 4:29 PM Laurent Pinchart wrote:
+> > > > > > > On Tue, Sep 06, 2022 at 12:04:06AM +0100, Lad Prabhakar wrote:
+> > > > > > > > Add v4l driver for Renesas RZ/G2L Camera data Receiving Unit.
+> > > > > > > >
+> > > > > > > > Based on a patch in the BSP by Hien Huynh
+> > > > > > > > <hien.huynh.px@renesas.com>
+> > > > > > > >
+> > > > > > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > > > > > ---
+> > > > > > > > v1 -> v2
+> > > > > > > > * No change
+> > > > > > > >
+> > > > > > > > RFC v2 -> v1
+> > > > > > > > * Moved the driver to renesas folder
+> > > > > > > > * Fixed review comments pointed by Jacopo
+> > > > > > > >
+> > > > > > > > RFC v1 -> RFC v2
+> > > > > > > > * Dropped group
+> > > > > > > > * Dropped CSI subdev and implemented as new driver
+> > > > > > > > * Dropped "mc_" from function names
+> > > > > > > > * Moved the driver to renesas folder
+> > > > > > > > ---
+> > > > > > > >  .../media/platform/renesas/rzg2l-cru/Kconfig  |  17 +
+> > > > > > > >  .../media/platform/renesas/rzg2l-cru/Makefile |   3 +
+> > > > > > > >  .../platform/renesas/rzg2l-cru/rzg2l-core.c   | 395 ++++++++++
+> > > > > > > >  .../platform/renesas/rzg2l-cru/rzg2l-cru.h    | 152 ++++
+> > > > > > > >  .../platform/renesas/rzg2l-cru/rzg2l-dma.c    | 734 ++++++++++++++++++
+> > > > > > > >  .../platform/renesas/rzg2l-cru/rzg2l-v4l2.c   | 368 +++++++++
+> > > > > > >
+> > > > > > > I'd merge those two files together, they both handle the video node.
+> > > > > > > There's a comment below that recommends adding a subdev, that should
+> > > > > > > then go to a separate file.
+> > > > > >
+> > > > > > OK, I'll merge these files into rzg2l-video.c.
+> > > > > >
+> > > > > > > >  6 files changed, 1669 insertions(+)
+> > > > > > > >  create mode 100644 drivers/media/platform/renesas/rzg2l-cru/rzg2l-core.c
+> > > > > > > >  create mode 100644 drivers/media/platform/renesas/rzg2l-cru/rzg2l-cru.h
+> > > > > > > >  create mode 100644 drivers/media/platform/renesas/rzg2l-cru/rzg2l-dma.c
+> > > > > > > >  create mode 100644 drivers/media/platform/renesas/rzg2l-cru/rzg2l-v4l2.c
+> > > > > > > >
+> > > > > > > > diff --git a/drivers/media/platform/renesas/rzg2l-cru/Kconfig b/drivers/media/platform/renesas/rzg2l-cru/Kconfig
+> > > > > > > > index 57c40bb499df..08ff0e96b3f5 100644
+> > > > > > > > --- a/drivers/media/platform/renesas/rzg2l-cru/Kconfig
+> > > > > > > > +++ b/drivers/media/platform/renesas/rzg2l-cru/Kconfig
+> > > > > > > > @@ -15,3 +15,20 @@ config VIDEO_RZG2L_CSI2
+> > > > > > > >
+> > > > > > > >         To compile this driver as a module, choose M here: the
+> > > > > > > >         module will be called rzg2l-csi2.
+> > > > > > > > +
+> > > > > > > > +config VIDEO_RZG2L_CRU
+> > > > > > > > +     tristate "RZ/G2L Camera Receiving Unit (CRU) Driver"
+> > > > > > > > +     depends on ARCH_RENESAS || COMPILE_TEST
+> > > > > > > > +     depends on V4L_PLATFORM_DRIVERS
+> > > > > > > > +     depends on VIDEO_DEV && OF
+> > > > > > > > +     select MEDIA_CONTROLLER
+> > > > > > > > +     select V4L2_FWNODE
+> > > > > > > > +     select VIDEOBUF2_DMA_CONTIG
+> > > > > > > > +     select VIDEO_RZG2L_CSI2
+> > > > > > >
+> > > > > > > Is this required, can't the CRU be used with a parallel sensor without
+> > > > > > > the CSI-2 receiver ?
+> > > > > >
+> > > > > > Yes the CRU can be used with parallel sensors, I'll drop the above select.
+> > > > > >
+> > > > > > > > +     select VIDEO_V4L2_SUBDEV_API
+> > > > > > > > +     help
+> > > > > > > > +       Support for Renesas RZ/G2L (and alike SoC's) Camera Receiving
+> > > > > > > > +       Unit (CRU) driver.
+> > > > > > > > +
+> > > > > > > > +       To compile this driver as a module, choose M here: the
+> > > > > > > > +       module will be called rzg2l-cru.
+> > > > > > > > diff --git a/drivers/media/platform/renesas/rzg2l-cru/Makefile b/drivers/media/platform/renesas/rzg2l-cru/Makefile
+> > > > > > > > index 91ea97a944e6..7628809e953f 100644
+> > > > > > > > --- a/drivers/media/platform/renesas/rzg2l-cru/Makefile
+> > > > > > > > +++ b/drivers/media/platform/renesas/rzg2l-cru/Makefile
+> > > > > > > > @@ -1,3 +1,6 @@
+> > > > > > > >  # SPDX-License-Identifier: GPL-2.0
+> > > > > > > >
+> > > > > > > >  obj-$(CONFIG_VIDEO_RZG2L_CSI2) += rzg2l-csi2.o
+> > > > > > > > +
+> > > > > > > > +rzg2l-cru-objs = rzg2l-core.o rzg2l-dma.o rzg2l-v4l2.o
+> > > > > > > > +obj-$(CONFIG_VIDEO_RZG2L_CRU) += rzg2l-cru.o
+> > > > > > > > diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-core.c b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-core.c
+> > > > > > > > new file mode 100644
+> > > > > > > > index 000000000000..b5d4110b1913
+> > > > > > > > --- /dev/null
+> > > > > > > > +++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-core.c
+> > > > > > > > @@ -0,0 +1,395 @@
+> > > > > > > > +// SPDX-License-Identifier: GPL-2.0+
+> > > > > > > > +/*
+> > > > > > > > + * Driver for Renesas RZ/G2L CRU
+> > > > > > > > + *
+> > > > > > > > + * Copyright (C) 2022 Renesas Electronics Corp.
+> > > > > > > > + *
+> > > > > > > > + * Based on Renesas R-Car VIN
+> > > > > > > > + * Copyright (C) 2011-2013 Renesas Solutions Corp.
+> > > > > > > > + * Copyright (C) 2013 Cogent Embedded, Inc., <source@cogentembedded.com>
+> > > > > > > > + * Copyright (C) 2008 Magnus Damm
+> > > > > > > > + */
+> > > > > > > > +
+> > > > > > > > +#include <linux/clk.h>
+> > > > > > > > +#include <linux/module.h>
+> > > > > > > > +#include <linux/mod_devicetable.h>
+> > > > > > > > +#include <linux/of.h>
+> > > > > > > > +#include <linux/of_device.h>
+> > > > > > > > +#include <linux/of_graph.h>
+> > > > > > > > +#include <linux/platform_device.h>
+> > > > > > > > +#include <linux/pm_runtime.h>
+> > > > > > > > +
+> > > > > > > > +#include <media/v4l2-fwnode.h>
+> > > > > > > > +#include <media/v4l2-mc.h>
+> > > > > > > > +
+> > > > > > > > +#include "rzg2l-cru.h"
+> > > > > > > > +
+> > > > > > > > +#define v4l2_dev_to_cru(d)   container_of(d, struct rzg2l_cru_dev, v4l2_dev)
+> > > > > > >
+> > > > > > > As this macro is only used to get the rzg2l_cru_dev pointer from the
+> > > > > > > v4l2_async_notifier pointer, you can replace it with
+> > > > > > >
+> > > > > > > #define notifier_to_cru(n)      container_of(n, struct rzg2l_cru_dev, notifier)
+> > > > > > >
+> > > > > > > I would also turn it into a static inline function for additional
+> > > > > > > compile-time type safety.
+> > > > > >
+> > > > > > OK, I will do it as mentioned above.
+> > > > > >
+> > > > > > > > +
+> > > > > > > > +static int rzg2l_cru_csi2_link_notify(struct media_link *link, u32 flags,
+> > > > > > > > +                                   unsigned int notification)
+> > > > > > > > +{
+> > > > > > > > +     struct media_entity *entity;
+> > > > > > > > +     struct rzg2l_cru_dev *cru;
+> > > > > > > > +     struct media_pad *csi_pad;
+> > > > > > > > +     struct v4l2_subdev *sd;
+> > > > > > > > +     int ret;
+> > > > > > > > +
+> > > > > > > > +     ret = v4l2_pipeline_link_notify(link, flags, notification);
+> > > > > > > > +     if (ret)
+> > > > > > > > +             return ret;
+> > > > > > > > +
+> > > > > > > > +     /* Only care about link enablement for CRU nodes. */
+> > > > > > > > +     if (!(flags & MEDIA_LNK_FL_ENABLED))
+> > > > > > > > +             return 0;
+> > > > > > > > +
+> > > > > > > > +     cru = container_of(link->graph_obj.mdev, struct rzg2l_cru_dev, mdev);
+> > > > > > > > +     /*
+> > > > > > > > +      * Don't allow link changes if any entity in the graph is
+> > > > > > > > +      * streaming, modifying the CHSEL register fields can disrupt
+> > > > > > > > +      * running streams.
+> > > > > > > > +      */
+> > > > > > > > +     media_device_for_each_entity(entity, &cru->mdev)
+> > > > > > > > +             if (media_entity_is_streaming(entity))
+> > > > > > > > +                     return -EBUSY;
+> > > > > > > > +
+> > > > > > > > +     mutex_lock(&cru->mdev_lock);
+> > > > > > > > +
+> > > > > > > > +     csi_pad = media_pad_remote_pad_first(&cru->vdev.entity.pads[0]);
+> > > > > > > > +     if (csi_pad) {
+> > > > > > > > +             ret = -EMLINK;
+> > > > > > > > +             goto out;
+> > > > > > > > +     }
+> > > > > > > > +
+> > > > > > > > +     sd = media_entity_to_v4l2_subdev(link->source->entity);
+> > > > > > > > +     if (cru->csi.subdev == sd) {
+> > > > > > > > +             cru->csi.channel = link->source->index - 1;
+> > > > > > > > +             cru->is_csi = true;
+> > > > > > > > +     } else {
+> > > > > > > > +             ret = -ENODEV;
+> > > > > > > > +     }
+> > > > > > > > +
+> > > > > > > > +out:
+> > > > > > > > +     mutex_unlock(&cru->mdev_lock);
+> > > > > > > > +
+> > > > > > > > +     return ret;
+> > > > > > > > +}
+> > > > > > > > +
+> > > > > > > > +static const struct media_device_ops rzg2l_cru_media_ops = {
+> > > > > > > > +     .link_notify = rzg2l_cru_csi2_link_notify,
+> > > > > > > > +};
+> > > > > > > > +
+> > > > > > > > +/* -----------------------------------------------------------------------------
+> > > > > > > > + * Group async notifier
+> > > > > > > > + */
+> > > > > > > > +
+> > > > > > > > +static int rzg2l_cru_group_notify_complete(struct v4l2_async_notifier *notifier)
+> > > > > > > > +{
+> > > > > > > > +     struct rzg2l_cru_dev *cru = v4l2_dev_to_cru(notifier->v4l2_dev);
+> > > > > > > > +     unsigned int i;
+> > > > > > > > +     int ret;
+> > > > > > > > +
+> > > > > > > > +     ret = media_device_register(&cru->mdev);
+> > > > > > > > +     if (ret)
+> > > > > > > > +             return ret;
+> > > > > > >
+> > > > > > > I'd move the v4l2_device_register() call here, as it's the V4L2
+> > > > > > > counterpart of the media device, and handling them together would be
+> > > > > > > best.
+> > > > > >
+> > > > > > OK.
+> > > > > >
+> > > > > > > > +
+> > > > > > > > +     ret = v4l2_device_register_subdev_nodes(&cru->v4l2_dev);
+> > > > > > > > +     if (ret) {
+> > > > > > > > +             dev_err(cru->dev, "Failed to register subdev nodes\n");
+> > > > > > > > +             return ret;
+> > > > > > > > +     }
+> > > > > > > > +
+> > > > > > > > +     if (!video_is_registered(&cru->vdev)) {
+> > > > > > >
+> > > > > > > Can this happen ?
+> > > > > >
+> > > > > > No, I'll drop this check.
+> > > > > >
+> > > > > > > > +             ret = rzg2l_cru_v4l2_register(cru);
+> > > > > > > > +             if (ret)
+> > > > > > > > +                     return ret;
+> > > > > > > > +     }
+> > > > > > > > +
+> > > > > > > > +     /* Create all media device links between CRU and CSI-2's. */
+> > > > > > > > +     /*
+> > > > > > > > +      * TODO: RZ/G2L supports 4 VC0, as support for virtual channels
+> > > > > > > > +      * should be implemented by streams API which is under development
+> > > > > > > > +      * so for now just link it to VC0
+> > > > > > > > +      */
+> > > > > > >
+> > > > > > > The streams API won't require more links, so I'd drop the comment and
+> > > > > > > the loop and create a single link.
+> > > > > >
+> > > > > > OK.
+> > > > > >
+> > > > > > > > +     for (i = 1; i <= 1; i++) {
+> > > > > > > > +             struct media_entity *source, *sink;
+> > > > > > > > +
+> > > > > > > > +             source = &cru->csi.subdev->entity;
+> > > > > > > > +             sink = &cru->vdev.entity;
+> > > > > > >
+> > > > > > > Hmmm... I'd recommend adding a subdev to model the image processing
+> > > > > > > pipeline of the CRU, between the CSI-2 receiver and the video node. That
+> > > > > > > will help when you'll add support for parallel sensors, and it will also
+> > > > > > > be needed by the streams API to select which virtual channel to capture.
+> > > > > >/
+> > > > > > just model as a dummy subdev for now (MEDIA_ENT_F_VID_MUX)?
+> > > > >
+> > > > > I think MEDIA_ENT_F_PROC_VIDEO_PIXEL_FORMATTER would be more
+> > > > > appropriate.
+> > > >
+> > > > OK I will use MEDIA_ENT_F_PROC_VIDEO_PIXEL_FORMATTER. As this will be
+> > > > just like a switch should I be implementing the get_fmt/set_fmt
+> > > > callbacks?
+> > >
+> > > Yes, subdev operations need to be implemented, especially given that the
+> > > CRU implements color space conversion, so the input and output formats
+> > > of the subdev can be different.
+> >
+> > OK, the reason I asked as, for the sink pad the format of IP subdev
+> > will be the same as remote source pad (i.e. either from CSI/parallel
+> > subdev) and for the source pad this will be the same as format on the
+> > video node (ie CRU output).
+> >
+> > get_fmt -> we get the subdev pad fmt of the remote source and return it.
+> > set_fmt -> we just pass through, as the fmt is set on the video dev node.
+> >
+> > Does the above sound good?
+>
+> No, subdevs must not query each other to implement those operations.
+> Subdevs are configured by userspace separately from each other, so a
+> subdev set_fmt handler must accept any format that is valid for the
+> subdev, regardless of how the connected subdevs or video nodes are
+> configured. get_fmt just returns the format that has been set on the
+> subdev. Validation of the pipeline, to check that connected pads have a
+> compatible format, is done when starting the stream.
+>
+Thanks for reminding me of this ;) . It's the essence of the MC framework.
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/st,st-mipid02.txt b/Documentation/devicetree/bindings/media/i2c/st,st-mipid02.txt
-deleted file mode 100644
-index 7976e6c40a80a..0000000000000
---- a/Documentation/devicetree/bindings/media/i2c/st,st-mipid02.txt
-+++ /dev/null
-@@ -1,82 +0,0 @@
--STMicroelectronics MIPID02 CSI-2 to PARALLEL bridge
--
--MIPID02 has two CSI-2 input ports, only one of those ports can be active at a
--time. Active port input stream will be de-serialized and its content outputted
--through PARALLEL output port.
--CSI-2 first input port is a dual lane 800Mbps per lane whereas CSI-2 second
--input port is a single lane 800Mbps. Both ports support clock and data lane
--polarity swap. First port also supports data lane swap.
--PARALLEL output port has a maximum width of 12 bits.
--Supported formats are RAW6, RAW7, RAW8, RAW10, RAW12, RGB565, RGB888, RGB444,
--YUV420 8-bit, YUV422 8-bit and YUV420 10-bit.
--
--Required Properties:
--- compatible: shall be "st,st-mipid02"
--- clocks: reference to the xclk input clock.
--- clock-names: shall be "xclk".
--- VDDE-supply: sensor digital IO supply. Must be 1.8 volts.
--- VDDIN-supply: sensor internal regulator supply. Must be 1.8 volts.
--
--Optional Properties:
--- reset-gpios: reference to the GPIO connected to the xsdn pin, if any.
--	       This is an active low signal to the mipid02.
--
--Required subnodes:
--  - ports: A ports node with one port child node per device input and output
--	   port, in accordance with the video interface bindings defined in
--	   Documentation/devicetree/bindings/media/video-interfaces.txt. The
--	   port nodes are numbered as follows:
--
--	   Port Description
--	   -----------------------------
--	   0    CSI-2 first input port
--	   1    CSI-2 second input port
--	   2    PARALLEL output
--
--Endpoint node required property for CSI-2 connection is:
--- data-lanes: shall be <1> for Port 1. for Port 0 dual-lane operation shall be
--<1 2> or <2 1>. For Port 0 single-lane operation shall be <1> or <2>.
--Endpoint node optional property for CSI-2 connection is:
--- lane-polarities: any lane can be inverted or not.
--
--Endpoint node required property for PARALLEL connection is:
--- bus-width: shall be set to <6>, <7>, <8>, <10> or <12>.
--Endpoint node optional properties for PARALLEL connection are:
--- hsync-active: active state of the HSYNC signal, 0/1 for LOW/HIGH respectively.
--LOW being the default.
--- vsync-active: active state of the VSYNC signal, 0/1 for LOW/HIGH respectively.
--LOW being the default.
--
--Example:
--
--mipid02: csi2rx@14 {
--	compatible = "st,st-mipid02";
--	reg = <0x14>;
--	status = "okay";
--	clocks = <&clk_ext_camera_12>;
--	clock-names = "xclk";
--	VDDE-supply = <&vdd>;
--	VDDIN-supply = <&vdd>;
--	ports {
--		#address-cells = <1>;
--		#size-cells = <0>;
--		port@0 {
--			reg = <0>;
--
--			ep0: endpoint {
--				data-lanes = <1 2>;
--				remote-endpoint = <&mipi_csi2_in>;
--			};
--		};
--		port@2 {
--			reg = <2>;
--
--			ep2: endpoint {
--				bus-width = <8>;
--				hsync-active = <0>;
--				vsync-active = <0>;
--				remote-endpoint = <&parallel_out>;
--			};
--		};
--	};
--};
-diff --git a/Documentation/devicetree/bindings/media/i2c/st,st-mipid02.yaml b/Documentation/devicetree/bindings/media/i2c/st,st-mipid02.yaml
-new file mode 100644
-index 0000000000000..367f054fc5cb6
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/st,st-mipid02.yaml
-@@ -0,0 +1,179 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/st,st-mipid02.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: STMicroelectronics MIPID02 CSI-2 to PARALLEL bridge
-+
-+maintainers:
-+  - Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-+  - Sylvain Petinot <sylvain.petinot@foss.st.com>
-+
-+description:
-+  MIPID02 has two CSI-2 input ports, only one of those ports can be
-+  active at a time. Active port input stream will be de-serialized
-+  and its content outputted through PARALLEL output port.
-+  CSI-2 first input port is a dual lane 800Mbps per lane whereas CSI-2
-+  second input port is a single lane 800Mbps. Both ports support clock
-+  and data lane polarity swap. First port also supports data lane swap.
-+  PARALLEL output port has a maximum width of 12 bits.
-+  Supported formats are RAW6, RAW7, RAW8, RAW10, RAW12, RGB565, RGB888,
-+  RGB444, YUV420 8-bit, YUV422 8-bit and YUV420 10-bit.
-+
-+properties:
-+  compatible:
-+    const: st,st-mipid02
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    description:
-+      Reference to the xclk input clock.
-+    items:
-+      - const: xclk
-+
-+  VDDE-supply:
-+    description:
-+      Sensor digital IO supply. Must be 1.8 volts.
-+
-+  VDDIN-supply:
-+    description:
-+      Sensor internal regulator supply. Must be 1.8 volts.
-+
-+  reset-gpios:
-+    description:
-+      Reference to the GPIO connected to the xsdn pin, if any.
-+      This is an active low signal to the mipid02.
-+
-+  ports:
-+    $ref: /schemas/graph.yaml#/properties/ports
-+    properties:
-+      port@0:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description: CSI-2 first input port
-+        properties:
-+          endpoint:
-+            $ref: /schemas/media/video-interfaces.yaml#
-+            unevaluatedProperties: false
-+
-+            properties:
-+              data-lanes:
-+                description:
-+                  Single-lane operation shall be <1> or <2> .
-+                  Dual-lane operation shall be <1 2> or <2 1> .
-+                minItems: 1
-+                maxItems: 2
-+              lane-polarity:
-+                description:
-+                  Any lane can be inverted or not.
-+                minItems: 1
-+                maxItems: 2
-+
-+            required:
-+              - data-lanes
-+
-+      port@1:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description: CSI-2 second input port
-+        properties:
-+          endpoint:
-+            $ref: /schemas/media/video-interfaces.yaml#
-+            unevaluatedProperties: false
-+
-+            properties:
-+              data-lanes:
-+                description:
-+                  Single-lane operation shall be <1> or <2> .
-+                maxItems: 1
-+              lane-polarity:
-+                description:
-+                  Any lane can be inverted or not.
-+                maxItems: 1
-+
-+            required:
-+              - data-lanes
-+
-+      port@2:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description: Output port
-+        properties:
-+          endpoint:
-+            $ref: /schemas/media/video-interfaces.yaml#
-+            unevaluatedProperties: false
-+
-+            properties:
-+              bus-width:
-+                enum: [6, 7, 8, 10, 12]
-+              hsync-active: true
-+              vsync-active: true
-+
-+            required:
-+              - bus-width
-+
-+    anyOf:
-+      - required:
-+          - port@0
-+      - required:
-+          - port@1
-+
-+    required:
-+      - port@2
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - VDDE-supply
-+  - VDDIN-supply
-+  - ports
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        mipid02: csi2rx@14 {
-+            compatible = "st,st-mipid02";
-+            reg = <0x14>;
-+            status = "okay";
-+            clocks = <&clk_ext_camera_12>;
-+            clock-names = "xclk";
-+            VDDE-supply = <&vdd>;
-+            VDDIN-supply = <&vdd>;
-+            ports {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+                port@0 {
-+                    reg = <0>;
-+
-+                    ep0: endpoint {
-+                        data-lanes = <1 2>;
-+                        remote-endpoint = <&mipi_csi2_in>;
-+                    };
-+                };
-+                port@2 {
-+                    reg = <2>;
-+
-+                    ep2: endpoint {
-+                        bus-width = <8>;
-+                        hsync-active = <0>;
-+                        vsync-active = <0>;
-+                        remote-endpoint = <&parallel_out>;
-+                    };
-+                };
-+            };
-+        };
-+    };
-+
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a34ec41fbf7a9..0133f746fdf80 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19439,7 +19439,7 @@ M:	Sylvain Petinot <sylvain.petinot@foss.st.com>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- T:	git git://linuxtv.org/media_tree.git
--F:	Documentation/devicetree/bindings/media/i2c/st,st-mipid02.txt
-+F:	Documentation/devicetree/bindings/media/i2c/st,st-mipid02.yaml
- F:	drivers/media/i2c/st-mipid02.c
- 
- ST STM32 I2C/SMBUS DRIVER
--- 
-2.35.1
-
+Cheers,
+Prabhakar
