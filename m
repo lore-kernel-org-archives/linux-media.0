@@ -2,96 +2,90 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05C0DC07E9D
-	for <linux-media@archiver.kernel.org>; Thu, 29 Sep 2022 09:15:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45199C433FE
+	for <linux-media@archiver.kernel.org>; Thu, 29 Sep 2022 13:13:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231949AbiI2JP3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 29 Sep 2022 05:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47672 "EHLO
+        id S235229AbiI2NNa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 29 Sep 2022 09:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235115AbiI2JPY (ORCPT
+        with ESMTP id S231340AbiI2NN2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 29 Sep 2022 05:15:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FAA87AC2F
-        for <linux-media@vger.kernel.org>; Thu, 29 Sep 2022 02:15:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0295560B79
-        for <linux-media@vger.kernel.org>; Thu, 29 Sep 2022 09:15:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5763C433C1;
-        Thu, 29 Sep 2022 09:15:21 +0000 (UTC)
-Message-ID: <96d36ae8-148b-04c0-df73-5ca0f1f1b043@xs4all.nl>
-Date:   Thu, 29 Sep 2022 11:15:20 +0200
+        Thu, 29 Sep 2022 09:13:28 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD76DF694;
+        Thu, 29 Sep 2022 06:13:22 -0700 (PDT)
+X-UUID: 09c17d8be2424325a166fc471c26ca30-20220929
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=STCDn5QB+UXKv417LvXk9TQm3f2P+5X47QlKUCTyQiE=;
+        b=qIkK7wA89/pwvKvho/+JHpsAPatm1nxC4qkZ1fK7NbRO1PAsCSQQattw5ppV1SwO0+GrpfULiNgv9ZXVWlpQradwAfXl1ZE24NM5xLjRXa2CL8tN+7/8JW5reGUXm5A+4bbevH/xhHjz6qzet+Qw4sKQpFst2hF1Eu/8YfHd/4Y=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:2ffe6ed5-7cad-440a-9089-edd560b9036f,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.11,REQID:2ffe6ed5-7cad-440a-9089-edd560b9036f,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:39a5ff1,CLOUDID:a1ee7407-1cee-4c38-b21b-a45f9682fdc0,B
+        ulkID:220929211317CMUFBLT7,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48|823|
+        824,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,
+        COL:0
+X-UUID: 09c17d8be2424325a166fc471c26ca30-20220929
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 975782009; Thu, 29 Sep 2022 21:13:15 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 29 Sep 2022 21:13:14 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Thu, 29 Sep 2022 21:13:14 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH v3 0/2] Add vcodec lat and core nodes for mt8192
+Date:   Thu, 29 Sep 2022 21:13:07 +0800
+Message-ID: <20220929131309.18337-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Content-Language: en-US
-To:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
-Cc:     Daniel Gomez <daniel@qtec.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH] vivid: add INTEGER and INTEGER64 test control arrays
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add INTEGER and INTEGER64 control arrays to test support for such controls.
+This series are based on linux-next, tag: next-20220928.
+We update the child node names from "vcodec" to "video-codec" based on
+the discussion in [1].
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
-diff --git a/drivers/media/test-drivers/vivid/vivid-ctrls.c b/drivers/media/test-drivers/vivid/vivid-ctrls.c
-index 92b1a7598470..5337ae679e8f 100644
---- a/drivers/media/test-drivers/vivid/vivid-ctrls.c
-+++ b/drivers/media/test-drivers/vivid/vivid-ctrls.c
-@@ -36,6 +36,8 @@
- #define VIVID_CID_RO_INTEGER		(VIVID_CID_CUSTOM_BASE + 12)
- #define VIVID_CID_U32_DYN_ARRAY		(VIVID_CID_CUSTOM_BASE + 13)
- #define VIVID_CID_U8_PIXEL_ARRAY	(VIVID_CID_CUSTOM_BASE + 14)
-+#define VIVID_CID_S32_ARRAY		(VIVID_CID_CUSTOM_BASE + 15)
-+#define VIVID_CID_S64_ARRAY		(VIVID_CID_CUSTOM_BASE + 16)
- 
- #define VIVID_CID_VIVID_BASE		(0x00f00000 | 0xf000)
- #define VIVID_CID_VIVID_CLASS		(0x00f00000 | 1)
-@@ -241,6 +243,30 @@ static const struct v4l2_ctrl_config vivid_ctrl_u8_pixel_array = {
- 	.dims = { 640 / PIXEL_ARRAY_DIV, 360 / PIXEL_ARRAY_DIV },
- };
- 
-+static const struct v4l2_ctrl_config vivid_ctrl_s32_array = {
-+	.ops = &vivid_user_gen_ctrl_ops,
-+	.id = VIVID_CID_S32_ARRAY,
-+	.name = "S32 2 Element Array",
-+	.type = V4L2_CTRL_TYPE_INTEGER,
-+	.def = 2,
-+	.min = -10,
-+	.max = 10,
-+	.step = 1,
-+	.dims = { 2 },
-+};
-+
-+static const struct v4l2_ctrl_config vivid_ctrl_s64_array = {
-+	.ops = &vivid_user_gen_ctrl_ops,
-+	.id = VIVID_CID_S64_ARRAY,
-+	.name = "S64 5 Element Array",
-+	.type = V4L2_CTRL_TYPE_INTEGER64,
-+	.def = 4,
-+	.min = -10,
-+	.max = 10,
-+	.step = 1,
-+	.dims = { 5 },
-+};
-+
- static const char * const vivid_ctrl_menu_strings[] = {
- 	"Menu Item 0 (Skipped)",
- 	"Menu Item 1",
-@@ -1656,6 +1682,8 @@ int vivid_create_controls(struct vivid_dev *dev, bool show_ccs_cap,
- 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u16_matrix, NULL);
- 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u8_4d_array, NULL);
- 	dev->pixel_array = v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u8_pixel_array, NULL);
-+	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_s32_array, NULL);
-+	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_s64_array, NULL);
- 
- 	if (dev->has_vid_cap) {
- 		/* Image Processing Controls */
+[1] https://patchwork.kernel.org/project/linux-mediatek/patch/20220926105047.19419-1-allen-kh.cheng@mediatek.com/
+
+Change in v2:
+  - Add a dt-bindings patch for changing "vcodec" to "video-codec"
+  - Rename child names for vcodec lat and core nodes
+
+Change in v1:
+  - Replace node names with video-codec
+    [Allen-KH Cheng <allen-kh.cheng@mediatek.com>]
+
+Allen-KH Cheng (2):
+  media: dt-bindings: mediatek: Rename child node names for decoder
+  arm64: dts: mt8192: Add vcodec lat and core nodes
+
+ .../media/mediatek,vcodec-subdev-decoder.yaml |  8 +--
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi      | 60 +++++++++++++++++++
+ 2 files changed, 64 insertions(+), 4 deletions(-)
+
+-- 
+2.18.0
+
