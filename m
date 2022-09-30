@@ -2,83 +2,88 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F66AC4321E
-	for <linux-media@archiver.kernel.org>; Fri, 30 Sep 2022 11:32:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42DA3C433F5
+	for <linux-media@archiver.kernel.org>; Fri, 30 Sep 2022 11:32:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231564AbiI3Lcb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Sep 2022 07:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42114 "EHLO
+        id S231579AbiI3Lcc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Sep 2022 07:32:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231190AbiI3Lb6 (ORCPT
+        with ESMTP id S230211AbiI3Lb7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Sep 2022 07:31:58 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E62527B18
-        for <linux-media@vger.kernel.org>; Fri, 30 Sep 2022 04:22:46 -0700 (PDT)
-Received: from [192.168.1.15] (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id AE23C47C;
-        Fri, 30 Sep 2022 13:22:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1664536963;
-        bh=AzC5EGxg1Nvq5SJ4Ye8WR1ZCXNy3i2FOS/PevPioNKw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=J7N9JXHdYBhbbEFJN2EU5bNNAZyzR9g/d1OjC5e2lsBgYcMNtgupLahV/hugsvMG6
-         81Ja23TaJb6x+FHfFpzs7xB8Dmj3rexJeUecetWhrZuzO5VvtqqZCSWhUQe5CKgc1d
-         2S04JI7axfdMp3QLKBk/VMNVm7lgStQW6Mr+im/M=
-Message-ID: <28f60fbb-f994-b6c6-63ff-f78b7015861f@ideasonboard.com>
-Date:   Fri, 30 Sep 2022 14:22:40 +0300
+        Fri, 30 Sep 2022 07:31:59 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB723E768;
+        Fri, 30 Sep 2022 04:22:47 -0700 (PDT)
+X-UUID: f8810dc3ec9d47d6b3ec8b7228470ac8-20220930
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=3oUSdorY1iUy0g7JUWPQIoK/saXauUwkw9QgJJn51gM=;
+        b=AnIxh0i6BED1Xr+tbiV8FV31sNHmJ1yiBxpS7tTCCwldOKz8cnyAkjhg+KmJt5W1Eqqw5MdgzW2AvILQ8cG9pi8HMDpMh9RMszNVhbx5c8PO8pO9jBQt8RpgHy6f+ghCiqEMV5TsKzoY2Vt/rl3qCLmInRSusifiRdeSVWl5Upo=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:b13ed560-4c2f-4775-ae0c-383afa6594a2,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.11,REQID:b13ed560-4c2f-4775-ae0c-383afa6594a2,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:39a5ff1,CLOUDID:4ac4a2a3-dc04-435c-b19b-71e131a5fc35,B
+        ulkID:220930192243JZD2MB26,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: f8810dc3ec9d47d6b3ec8b7228470ac8-20220930
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 2054658982; Fri, 30 Sep 2022 19:22:41 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 30 Sep 2022 19:22:40 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Fri, 30 Sep 2022 19:22:40 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH v4 0/2] Add vcodec lat and core nodes for mt8192
+Date:   Fri, 30 Sep 2022 19:22:35 +0800
+Message-ID: <20220930112237.14411-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v14 20/34] media: subdev: Add [GS]_ROUTING subdev ioctls
- and operations
-Content-Language: en-US
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        niklas.soderlund+renesas@ragnatech.se,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Kishon Vijay Abraham <kishon@ti.com>,
-        satish.nagireddy@getcruise.com, Tomasz Figa <tfiga@chromium.org>,
-        Michal Simek <michal.simek@xilinx.com>
-References: <20220831141357.1396081-1-tomi.valkeinen@ideasonboard.com>
- <20220831141357.1396081-21-tomi.valkeinen@ideasonboard.com>
- <YzbNjzENgJ9PZsiJ@paasikivi.fi.intel.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <YzbNjzENgJ9PZsiJ@paasikivi.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hei,
+This series is based on linux-next, tag: next-20220929.
 
-On 30/09/2022 14:05, Sakari Ailus wrote:
+Change in v3:
+  - Drop `vcodec_lat:` and `vcodec_core:`
 
->> @@ -191,6 +192,55 @@ struct v4l2_subdev_capability {
->>   /* The v4l2 sub-device supports routing and multiplexed streams. */
->>   #define V4L2_SUBDEV_CAP_STREAMS			0x00000002
->>   
->> +/*
->> + * Is the route active? An active route will start when streaming is enabled
->> + * on a video node.
->> + */
->> +#define V4L2_SUBDEV_ROUTE_FL_ACTIVE		_BITUL(0)
-> 
-> _BITUL() will produce an unsigned long. This isn't necessary.
-> 
-> Please use (1U << 0) instead. Same below.
+Change in v2:
+  - Add a dt-bindings patch for changing "vcodec" to "video-codec"
+  - Rename child names for vcodec lat and core nodes
 
-Ok. I used BIT() originally, but that, of course, isn't available in 
-userspace...
+Change in v1:
+  - Replace node names with video-codec
+    [Allen-KH Cheng <allen-kh.cheng@mediatek.com>]
 
-You might also have noticed that the next flag is bit 2, not bit 1. Bit 
-1 was immutable route, which I dropped, but for the time being I kept 
-the numbering to keep the ABI compatibility with my already compiled 
-tools. I'll change that one to bit 1 in the next series, or if we decide 
-to add a static flag, I'll add the static flag as bit 1.
+Allen-KH Cheng (2):
+  media: dt-bindings: mediatek: Rename child node names for decoder
+  arm64: dts: mt8192: Add vcodec lat and core nodes
 
-  Tomi
+ .../media/mediatek,vcodec-subdev-decoder.yaml |  8 +--
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi      | 60 +++++++++++++++++++
+ 2 files changed, 64 insertions(+), 4 deletions(-)
+
+-- 
+2.18.0
+
