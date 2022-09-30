@@ -2,223 +2,182 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65433C433F5
-	for <linux-media@archiver.kernel.org>; Fri, 30 Sep 2022 06:41:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D546C433FE
+	for <linux-media@archiver.kernel.org>; Fri, 30 Sep 2022 06:41:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbiI3GlM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Sep 2022 02:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58316 "EHLO
+        id S230381AbiI3GlR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Sep 2022 02:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbiI3GlL (ORCPT
+        with ESMTP id S230368AbiI3GlP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Sep 2022 02:41:11 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57054139BF7
-        for <linux-media@vger.kernel.org>; Thu, 29 Sep 2022 23:41:10 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 126-20020a630284000000b0043942ef3ac7so2354848pgc.11
-        for <linux-media@vger.kernel.org>; Thu, 29 Sep 2022 23:41:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=QxRBxeUdkP7owPn9aDd8SxfcQVioza6pfIsxs3vXeag=;
-        b=V89U2NfOl+PKA/P2q0ztFiY2pX+HxBbrls62pGxu5IAFwxA8bvFArAHkUieDQ3OW0j
-         TUi4dMsmLVey1CikU3Fwj5RoV5k89g+caXUzqk3F+LpVKuPw5kTSBDOuNedUMv/yAuQR
-         EiW/alodp0fLWhQU+x7iPmM7ywsliU8RSo2sFp9kYbK6bQ9agLb2a9rqiij/zH91wi1Y
-         pzfD5Qk0DLL1E+70aK5fLhv3jfuomcy/mPjtdJW3Hyb/OXgFBqChTANxLTY57QkR8dkn
-         He95yWIDK7KqYfyEpcKI39ITAM0nOGycTUmaKcqJ3HYoHrufACUpl0x9FThIjGZCiTOx
-         RIRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=QxRBxeUdkP7owPn9aDd8SxfcQVioza6pfIsxs3vXeag=;
-        b=vSgjJUgp9CRZjWIlCgkiAG1SZYtOkOgF/BuC5vMCRWJ+r8nbDSyfB9rL3LTvqtD6Xr
-         N0LQ3rUob8pXqHeLq7SXzbuzH+22b/iEUv0fAkkTtsmb25eNbIUN1zdVbARkU4r7j8Wq
-         ZYas9Fdk2y4rqK8TjucBuNxQswIPMTIHLeInnYmBYC8YSX/mVYGN3YEL+7kzUOytER1c
-         PAm6a6IAL1ppeLLCo+FrgaaQSUK0fita+/Ac18JTeOUATWJKQ7KPDxwHmhAEYulq0oow
-         6rHz0SBo2PICsdpWs0N+Ler65larMpQrb9JSkH0bE1vZ+7o/YNVDLOftetg1SKkn7BvX
-         Dk0A==
-X-Gm-Message-State: ACrzQf0BZmsTdmbmuyAf+O+fmZ0/8hv9hPqozfgfgCzG+x8wbqxpWQFj
-        /boxV77cf6EI5BK5hffJjLaOMF1Zxpg=
-X-Google-Smtp-Source: AMsMyM5xlpyodJ2xKtfH59XhK1j3EOWdjkbuBjUEnv/U/HkKkPOyGTSh9NsChGXziJFlwSTYlLILerBAuY4=
-X-Received: from yunkec1.tok.corp.google.com ([2401:fa00:8f:203:d86:8b01:88ae:86c1])
- (user=yunkec job=sendgmr) by 2002:a17:903:22c7:b0:176:cdde:c2bf with SMTP id
- y7-20020a17090322c700b00176cddec2bfmr7416480plg.26.1664520069860; Thu, 29 Sep
- 2022 23:41:09 -0700 (PDT)
-Date:   Fri, 30 Sep 2022 15:40:50 +0900
-In-Reply-To: <20220930064059.3633710-1-yunkec@google.com>
-Mime-Version: 1.0
-References: <20220930064059.3633710-1-yunkec@google.com>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20220930064059.3633710-2-yunkec@google.com>
-Subject: [PATCH v8 01/10] media: v4l2_ctrl: Add V4L2_CTRL_TYPE_RECT
-From:   Yunke Cao <yunkec@google.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        linux-media@vger.kernel.org, Yunke Cao <yunkec@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 30 Sep 2022 02:41:15 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2048.outbound.protection.outlook.com [40.107.21.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDF213DDB4;
+        Thu, 29 Sep 2022 23:41:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GXZRXpuiqKN9NfHcrpBu4D5dggJec92ccqY8jQPpS5AgHntPoSzCm8g6HWsa8wTe6/rk8wCvC/fUfckGIv6NxEHC20WJ58h8UPMKgB/yDzq9+j5Ztg/DPCXoGRdIxNn3DWd1veS2hiMJIEaTNtuYqFweaZSwfzi/F4sqYW5caSBwTCBjpFdvepOmoLGrR4MRb84obFcEcBVy3CzN/oALex2VFHxQI4SDUBovv1dBR///Jeu28xqb2PTvP6GMOBhnIp4aWAH8o8cUcKtu0vL3Avl+LDtbYtgCUXp7k38Mt+ttZQ/l7AOJzooFrmKUZJqwX8JqmSaO8FR9+VEE06PynQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7M/JtMp792+OsSFh6igLnhCjxWEygIu6JqcVO6GK53c=;
+ b=I7XVqKQBYpCPTbFgc1eK5yflAklLWYihg2f8ea/YwBrxq+HEr3nElsyQSWLUuxA5Q3ezvOsFM1Bgw/doqNmb/+hLpRxpQOT6RJVuK1fkTTBjDsQnUYJ+VlB4iK3zYcwm+HxaexzUIA8s9w210D8yplY+T0LZ1lSXzhihsSwkQwdLzWPtb732oY+AGatfBpguguGLtUqCIWrqljuSA352D89hwtgUkb3Ym+k4liei4JqRZvgh2an0l2G9nvKnszpdZO2HKiJs5kXCwunx4pcOJFn3bn0ibfPs0ktLbDz9dNnQdpKBwqoivuzsSNWZmhNC3U87YPkHJN0kmnAIpBEGMA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7M/JtMp792+OsSFh6igLnhCjxWEygIu6JqcVO6GK53c=;
+ b=IKL5TlRRspcIqpO6RYocg7OWdfRbVLxwi8nSy0QySTQlU5rCg/dcw4dPHLKTUCblPeHKnR0Dvn1PA5/XalE4IPg1LZKY1efb9YRToqkgrcTcT80uxXnqwi8CZPcNxeaxKzFtRhgpLpLpOC/OOpG3aFT9MrFgJu6z9JwBYy6NUVk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
+ by DU2PR04MB8998.eurprd04.prod.outlook.com (2603:10a6:10:2e1::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26; Fri, 30 Sep
+ 2022 06:41:10 +0000
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::4550:e439:2389:be53]) by AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::4550:e439:2389:be53%5]) with mapi id 15.20.5676.023; Fri, 30 Sep 2022
+ 06:41:10 +0000
+From:   Ming Qian <ming.qian@nxp.com>
+To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl
+Cc:     shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        xiahong.bao@nxp.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] media: amphion: reset instance if it's aborted before codec header parsed
+Date:   Fri, 30 Sep 2022 14:40:47 +0800
+Message-Id: <20220930064047.19759-1-ming.qian@nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0039.apcprd02.prod.outlook.com
+ (2603:1096:4:196::9) To AM6PR04MB6341.eurprd04.prod.outlook.com
+ (2603:10a6:20b:d8::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6PR04MB6341:EE_|DU2PR04MB8998:EE_
+X-MS-Office365-Filtering-Correlation-Id: af07d2a7-8c11-4f62-3466-08daa2aec2fe
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bSjarGprVSRO6XRmUVjTL5O+gy1maIFCZgMMLHXjJR35oYzrdln3QHB2w4O9hg0X4kAVKOF07ZUT5sJg+VVFlncjo7wOxZ7wtdIqBZMzYH79SSt+0EwfXvuAbpqcp264pJGZbhtzyZiIMFPMOQgbvHhm8UfRZVBe3TljW1J3C8CNe1eXkjAU17oq5NmS6xi9ya52nzHE83I0rdHXVAUYoewVypMF5tbsfXWgFhKCCvDQkPhSGbYX/CTxp9poxYNuu+nDCT44Lig7bjehMktfa873Yfw7GzaabADPk6VS3KIceb8EcyF3VGHPorRMkkP85a7krxWOyIbt9VN0zg8I8wOX+G1uOVhQM9djJA9si3rT4mU6qO1ra+hrwBKjn8VlNKb1O4/rU6+hhRKkBEw3iPpKH4VTfSA/RqnQyeM3+PyHxUQIMj+5WNKn2HlGhg5xJy9bpLUC6KcYk8iFhOIUQuKWy9nDjWaIJA9qwap5Olc3piQ1o02avlQFixM8NyBjd7aCTho3ZOXlxdooxdv1i0xaHb2Q+MzF95G6m49l9iWg7gsDY1uIRdIVIH9tMkrQxk8/iYWTTJeDzoBhd/OHSEgys3gDWVFiaAsJmDZxDlFkAtcQZJqodNLRJLGnuZKDsilLIEil2ww8F4vMYv+6yUOrFfrf5zeSTz6wNYjqKMmB7c86H6nRgI/S8xL6HiE8uuHAbvSvow9oZp4TzjG+E2Bv1v3YlPTRbqvebPIBNb+1oduR0g1akSxLZyLG5c1PemsKH+2W5kQA85KiD2AlOw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(376002)(136003)(396003)(346002)(451199015)(6486002)(6666004)(2616005)(38100700002)(38350700002)(2906002)(41300700001)(8936002)(4326008)(86362001)(66556008)(8676002)(316002)(26005)(66946007)(52116002)(6506007)(7416002)(36756003)(478600001)(5660300002)(44832011)(6512007)(66476007)(186003)(83380400001)(1076003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wSgbllEOZ8ih8Yp7VXOm93HlEfbxEUI9D2lPSd+HWRC8G8SpKEgPUYym/UXn?=
+ =?us-ascii?Q?C238m9BhNILi+8aVRD79wChtiGOOr1pOi49HNU1VkbC50nXcgzhO0/wP6kmJ?=
+ =?us-ascii?Q?Oont4kMv3NgDVRDRjbtvuely6ZRGsSW97F4qoXcU0+Bv0KMFb8NtXeWtoCpF?=
+ =?us-ascii?Q?lYtfY5Orqf6eqNYA4u5UEKSDfFmnD0JUW8CqF1xgnDosJfm1FxKDWAH3i8xk?=
+ =?us-ascii?Q?zExh9LEho1Z+QqaVsdyMjAWbr7fDQGi7+7yyaBjGeAHG/sw46j5rk3asDKHS?=
+ =?us-ascii?Q?TUvDhcF9vBjjE/zfX/bu/FugBlbniEsrDsUkCMQRzMDXMK41fp145xwT8tuC?=
+ =?us-ascii?Q?02gIrWTjpCe7FjhuqEtIb1s1yE/rGoFGk6dkP3VU1Ceut9i/qIBKxbEmB/7T?=
+ =?us-ascii?Q?bSgiagX5rqqkDIGZujqE0a2ZiAFZ15N39M524fkpZoQ6aqMW745ajpkr31vk?=
+ =?us-ascii?Q?BbOSqFYfnDLQsRmV6/Kg6mnLYLzDxybfQqlaUPn9IshM1tMgBjUlER1fxPBk?=
+ =?us-ascii?Q?guHpDoQ8hdQkRMvXhyLmG4Ul53Dfk6Y05kNE8w8PlhDFFuiyWbEwt+CYSRGY?=
+ =?us-ascii?Q?TZ5VCfAu4UjVEKaQUKzaIMcWOTOnhYqRU9uWZzIfVaJEeK+kUsvXwLITnk+v?=
+ =?us-ascii?Q?TT4rCB7OX1Ag0AOwoxsKRh+d/BKZcnZAKq7CAsqfaYHOTDEI1fwOmXB5tIHK?=
+ =?us-ascii?Q?+c4BsWzrNokou0kKg79x8/6B2BKnNJIFxasCM+uyaIe2pxwxsJAFv3JYpY+j?=
+ =?us-ascii?Q?ji0Wylee3JnZzfZtFXO0yt45B9REkOY6Lnm1kgnlTpgFtdD9QFf1CRLrOoxO?=
+ =?us-ascii?Q?LILQte1npLqa/5R6ux9SV4Alx/a2KFWRqqTV3ykp8W2WHkYS+G8dONNIZoq7?=
+ =?us-ascii?Q?gxR3VHBXRntaIbstH+4DcoRBMhnls7Lr44z/Z7AIHcr7r9/FIvj78Jns//6T?=
+ =?us-ascii?Q?Kfh+NxSBf718dxPX4E4gf8KgxlS46abmcPqN1ykeiO1Uaec8356KsgaCvLIn?=
+ =?us-ascii?Q?T4aXfDxK4s1m72xg6sGekzyxRK21jYPXoUNMOKRbZ5v5A453p751ApZ/3yVY?=
+ =?us-ascii?Q?fCaWIdPYPfZV/TSqo0nkdQyv/gb4bDA1V+qAHGqDd+Erd0SlJdtRL7q4lPzv?=
+ =?us-ascii?Q?k4+tFc6AGLclj39+an+6aDn09qPuV981mHCqn86KnA9wfeR1D9nevY1SG1TX?=
+ =?us-ascii?Q?gOEHklyRREVpROIEhVYpWVYKfzzhTk1SToUROU4FCVU0zFo7UzlvvOYklkPo?=
+ =?us-ascii?Q?7Dzh50UwbTSBss0WwE83GMJQDwyD2GFA3BHdr4D3/gNeDj1j4SXMHNIORs12?=
+ =?us-ascii?Q?I+VpLheHdSWn35Kzpi9vb6++YBy+xgiWpY6vRQQscZZ1jDZjmKVdDnX28khU?=
+ =?us-ascii?Q?atDy4Coh6dZYwm/7O1tWzmvMkwxOjEnxjj/4yIaqjM+QgKK8zaEslesKkI/i?=
+ =?us-ascii?Q?s+xzL+sujnYzX146r7hMd5PEJgvtpI4P8ViaeRBOAU94GSwSPt7GVL1O+HI7?=
+ =?us-ascii?Q?LNlEyS40wqX2BMZuQefx5//DEf9ZQBYfpydvc6vqncWjiGxThVfAEDFbNFdF?=
+ =?us-ascii?Q?DALNoLlWLEHuWlSh8D0+hIyGveR8VwFtssJHavfS?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: af07d2a7-8c11-4f62-3466-08daa2aec2fe
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2022 06:41:10.7826
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: l93UeRXKBIEnClTaclSSx3XpFIjIODEiFXi/2Zu3ZuJaIh6xuBLVWiJifRgBzNDF66ewJHOi1vbCxs5afbpv5g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8998
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add p_rect to struct v4l2_ext_control with basic support in
-v4l2-ctrls.
+there is hardware limitation that if it's aborted before
+the first codec header parsed, the codec may be stalled
+unless we do reset codec.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
-Signed-off-by: Yunke Cao <yunkec@google.com>
+and drop the source change event if it's triggered after reset.
+
+Fixes: 6de8d628df6e ("media: amphion: add v4l2 m2m vpu decoder stateful driver")
+Signed-off-by: Ming Qian <ming.qian@nxp.com>
 ---
-Changelog since v7:
-- Document V4L2_CTRL_TYPE_RECT in vidioc-queryctrl.rst.
-- Rebased to media-stage master.
-- Do not assign each field in std_equal.
+ drivers/media/platform/amphion/vdec.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
- .../media/v4l/vidioc-g-ext-ctrls.rst              |  4 ++++
- .../userspace-api/media/v4l/vidioc-queryctrl.rst  |  7 +++++++
- .../media/videodev2.h.rst.exceptions              |  1 +
- drivers/media/v4l2-core/v4l2-ctrls-core.c         | 15 +++++++++++++++
- include/media/v4l2-ctrls.h                        |  2 ++
- include/uapi/linux/videodev2.h                    |  2 ++
- 6 files changed, 31 insertions(+)
-
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
-index 892cfeb8b988..927ef397f1ce 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
-@@ -189,6 +189,10 @@ still cause this situation.
-       - ``p_area``
-       - A pointer to a struct :c:type:`v4l2_area`. Valid if this control is
-         of type ``V4L2_CTRL_TYPE_AREA``.
-+    * - struct :c:type:`v4l2_rect` *
-+      - ``p_rect``
-+      - A pointer to a struct :c:type:`v4l2_rect`. Valid if this control is
-+        of type ``V4L2_CTRL_TYPE_RECT``.
-     * - struct :c:type:`v4l2_ctrl_h264_sps` *
-       - ``p_h264_sps``
-       - A pointer to a struct :c:type:`v4l2_ctrl_h264_sps`. Valid if this control is
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-index a20dfa2a933b..77c00c39b678 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-@@ -441,6 +441,13 @@ See also the examples in :ref:`control`.
-       - n/a
-       - A struct :c:type:`v4l2_area`, containing the width and the height
-         of a rectangular area. Units depend on the use case.
-+    * - ``V4L2_CTRL_TYPE_RECT``
-+      - n/a
-+      - n/a
-+      - n/a
-+      - A struct :c:type:`v4l2_rect`, containing a rectangle described by
-+        the position of its top-left corner, the width and the height. Units
-+        depend on the use case.
-     * - ``V4L2_CTRL_TYPE_H264_SPS``
-       - n/a
-       - n/a
-diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-index 2a589d34b80e..828cca8e2daa 100644
---- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-+++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-@@ -150,6 +150,7 @@ replace symbol V4L2_CTRL_TYPE_HEVC_SPS :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_HEVC_PPS :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_AREA :c:type:`v4l2_ctrl_type`
-+replace symbol V4L2_CTRL_TYPE_RECT :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_FWHT_PARAMS :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_VP8_FRAME :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR :c:type:`v4l2_ctrl_type`
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-index 0dab1d7b90f0..0ac36ebc45dd 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-@@ -350,6 +350,11 @@ void v4l2_ctrl_type_op_log(const struct v4l2_ctrl *ctrl)
- 	case V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS:
- 		pr_cont("HEVC_DECODE_PARAMS");
- 		break;
-+	case V4L2_CTRL_TYPE_RECT:
-+		pr_cont("%ux%u@%dx%d",
-+			ptr.p_rect->width, ptr.p_rect->height,
-+			ptr.p_rect->left, ptr.p_rect->top);
-+		break;
- 	default:
- 		pr_cont("unknown type %d", ctrl->type);
- 		break;
-@@ -569,6 +574,7 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 	struct v4l2_ctrl_hdr10_mastering_display *p_hdr10_mastering;
- 	struct v4l2_ctrl_hevc_decode_params *p_hevc_decode_params;
- 	struct v4l2_area *area;
-+	struct v4l2_rect *rect;
- 	void *p = ptr.p + idx * ctrl->elem_size;
- 	unsigned int i;
+diff --git a/drivers/media/platform/amphion/vdec.c b/drivers/media/platform/amphion/vdec.c
+index 9c3324717cbc..0d7676eee5ea 100644
+--- a/drivers/media/platform/amphion/vdec.c
++++ b/drivers/media/platform/amphion/vdec.c
+@@ -786,6 +786,9 @@ static bool vdec_check_source_change(struct vpu_inst *inst)
+ 	if (!inst->fh.m2m_ctx)
+ 		return false;
  
-@@ -918,6 +924,12 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 			return -EINVAL;
- 		break;
- 
-+	case V4L2_CTRL_TYPE_RECT:
-+		rect = p;
-+		if (!rect->width || !rect->height)
-+			return -EINVAL;
-+		break;
++	if (vdec->reset_codec)
++		return false;
 +
- 	default:
- 		return -EINVAL;
+ 	sibling = vpu_helper_find_sibling(inst, inst->cap_format.type, inst->cap_format.pixfmt);
+ 	if (sibling && vdec->codec_info.pixfmt == sibling->pixfmt)
+ 		vdec->codec_info.pixfmt = inst->cap_format.pixfmt;
+@@ -1113,7 +1116,8 @@ static void vdec_event_seq_hdr(struct vpu_inst *inst, struct vpu_dec_codec_info
+ 		vdec->seq_tag = vdec->codec_info.tag;
+ 		if (vdec->is_source_changed) {
+ 			vdec_update_state(inst, VPU_CODEC_STATE_DYAMIC_RESOLUTION_CHANGE, 0);
+-			vpu_notify_source_change(inst);
++			vdec->source_change++;
++			vdec_handle_resolution_change(inst);
+ 			vdec->is_source_changed = false;
+ 		}
  	}
-@@ -1605,6 +1617,9 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
- 	case V4L2_CTRL_TYPE_AREA:
- 		elem_size = sizeof(struct v4l2_area);
- 		break;
-+	case V4L2_CTRL_TYPE_RECT:
-+		elem_size = sizeof(struct v4l2_rect);
-+		break;
- 	default:
- 		if (type < V4L2_CTRL_COMPOUND_TYPES)
- 			elem_size = sizeof(s32);
-diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
-index e59d9a234631..1846caf9dd53 100644
---- a/include/media/v4l2-ctrls.h
-+++ b/include/media/v4l2-ctrls.h
-@@ -52,6 +52,7 @@ struct video_device;
-  * @p_hdr10_cll:		Pointer to an HDR10 Content Light Level structure.
-  * @p_hdr10_mastering:		Pointer to an HDR10 Mastering Display structure.
-  * @p_area:			Pointer to an area.
-+ * @p_rect:			Pointer to a rectangle.
-  * @p:				Pointer to a compound value.
-  * @p_const:			Pointer to a constant compound value.
-  */
-@@ -81,6 +82,7 @@ union v4l2_ctrl_ptr {
- 	struct v4l2_ctrl_hdr10_cll_info *p_hdr10_cll;
- 	struct v4l2_ctrl_hdr10_mastering_display *p_hdr10_mastering;
- 	struct v4l2_area *p_area;
-+	struct v4l2_rect *p_rect;
- 	void *p;
- 	const void *p_const;
- };
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 86cae23cc446..a81951c51325 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -1780,6 +1780,7 @@ struct v4l2_ext_control {
- 		__u16 __user *p_u16;
- 		__u32 __user *p_u32;
- 		struct v4l2_area __user *p_area;
-+		struct v4l2_rect __user *p_rect;
- 		struct v4l2_ctrl_h264_sps __user *p_h264_sps;
- 		struct v4l2_ctrl_h264_pps *p_h264_pps;
- 		struct v4l2_ctrl_h264_scaling_matrix __user *p_h264_scaling_matrix;
-@@ -1844,6 +1845,7 @@ enum v4l2_ctrl_type {
- 	V4L2_CTRL_TYPE_U16	     = 0x0101,
- 	V4L2_CTRL_TYPE_U32	     = 0x0102,
- 	V4L2_CTRL_TYPE_AREA          = 0x0106,
-+	V4L2_CTRL_TYPE_RECT	     = 0x0107,
+@@ -1360,6 +1364,8 @@ static void vdec_abort(struct vpu_inst *inst)
+ 		  vdec->decoded_frame_count,
+ 		  vdec->display_frame_count,
+ 		  vdec->sequence);
++	if (!vdec->seq_hdr_found)
++		vdec->reset_codec = true;
+ 	vdec->params.end_flag = 0;
+ 	vdec->drain = 0;
+ 	vdec->params.frame_count = 0;
+@@ -1367,6 +1373,7 @@ static void vdec_abort(struct vpu_inst *inst)
+ 	vdec->display_frame_count = 0;
+ 	vdec->sequence = 0;
+ 	vdec->aborting = false;
++	inst->extra_size = 0;
+ }
  
- 	V4L2_CTRL_TYPE_HDR10_CLL_INFO		= 0x0110,
- 	V4L2_CTRL_TYPE_HDR10_MASTERING_DISPLAY	= 0x0111,
+ static void vdec_stop(struct vpu_inst *inst, bool free)
+@@ -1489,8 +1496,7 @@ static int vdec_start_session(struct vpu_inst *inst, u32 type)
+ 	}
+ 
+ 	if (V4L2_TYPE_IS_OUTPUT(type)) {
+-		if (inst->state == VPU_CODEC_STATE_SEEK)
+-			vdec_update_state(inst, vdec->state, 1);
++		vdec_update_state(inst, vdec->state, 1);
+ 		vdec->eos_received = 0;
+ 		vpu_process_output_buffer(inst);
+ 	} else {
+@@ -1654,6 +1660,7 @@ static int vdec_open(struct file *file)
+ 		return ret;
+ 
+ 	vdec->fixed_fmt = false;
++	vdec->state = VPU_CODEC_STATE_ACTIVE;
+ 	inst->min_buffer_cap = VDEC_MIN_BUFFER_CAP;
+ 	inst->min_buffer_out = VDEC_MIN_BUFFER_OUT;
+ 	vdec_init(file);
 -- 
-2.38.0.rc1.362.ged0d419d3c-goog
+2.37.1
 
