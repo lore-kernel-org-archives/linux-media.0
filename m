@@ -2,296 +2,132 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19A2AC433FE
-	for <linux-media@archiver.kernel.org>; Fri, 30 Sep 2022 06:19:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F0B3C433FE
+	for <linux-media@archiver.kernel.org>; Fri, 30 Sep 2022 06:41:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbiI3GTs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Sep 2022 02:19:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59740 "EHLO
+        id S230365AbiI3GlJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Sep 2022 02:41:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbiI3GTq (ORCPT
+        with ESMTP id S230236AbiI3GlI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Sep 2022 02:19:46 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A1210F9;
-        Thu, 29 Sep 2022 23:19:35 -0700 (PDT)
-X-UUID: 229bf0281b14485a85ef06c19501762a-20220930
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=Of3F+7sPVVjfsHtBLdfkKfBmX3fY1czHUbh00fJZAUE=;
-        b=bDo2qFqa/2Ci1EsPqzdagbjS1wcInvYNSPmaxh0qb6XhQCi/Soh0H+uQKepV7HR87lw81D6l/LYV+pNC5aNBnyonH75DdDwelSijxWQsz8WVOAkO+rmE8F4fIl7Md92dNv6IE3lJM9QTyBemfZrPJpjDTxfP9ZA8JoJXDJw3ndU=;
-X-CID-UNFAMILIAR: 1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:ef91c13f-c991-421a-ac2b-fd2f76bbf4e2,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:54,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:49
-X-CID-INFO: VERSION:1.1.11,REQID:ef91c13f-c991-421a-ac2b-fd2f76bbf4e2,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:54,FILE:0,BULK:0,RULE:Release_HamU,ACTION
-        :release,TS:49
-X-CID-META: VersionHash:39a5ff1,CLOUDID:cd4098a3-dc04-435c-b19b-71e131a5fc35,B
-        ulkID:220930141931YWE3718G,BulkQuantity:0,Recheck:0,SF:38|28|16|19|48|823|
-        824|102,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil,Bulk:nil,QS:nil,BEC:
-        nil,COL:0
-X-UUID: 229bf0281b14485a85ef06c19501762a-20220930
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <xiaoyong.lu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 2007110508; Fri, 30 Sep 2022 14:19:29 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 30 Sep 2022 14:19:28 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Fri, 30 Sep 2022 14:19:27 +0800
-Message-ID: <75bbf320eb1c54d2834012c1aafcc87105204e8d.camel@mediatek.com>
-Subject: Re: [RFC PATCH v3] media: mediatek: vcodec: support stateless AV1
- decoder
-From:   "xiaoyong.lu@mediatek.com" <xiaoyong.lu@mediatek.com>
-To:     Daniel Almeida <daniel.almeida@collabora.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Fri, 30 Sep 2022 02:41:08 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D0827FDF
+        for <linux-media@vger.kernel.org>; Thu, 29 Sep 2022 23:41:05 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 189-20020a2516c6000000b006bbbcc3dd9bso3075443ybw.15
+        for <linux-media@vger.kernel.org>; Thu, 29 Sep 2022 23:41:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=ILzMj/J4nia5UE47hXmz/B5F5iCaFpwvX8EOe6Wkx5M=;
+        b=cFwUin5FtAWrfHDZBEtYOoDpoy62MCkY66JWxlDT1/dAdjo/zM+uLjLiy0PIJvpHP0
+         ie6+zNmbMNbv32qLWZXpMgflJEVWqwqtXSS7Fw2R4gPucoG0AdA+FU3EjHxFsv+xHG8P
+         MYrlYH3LPg3b+v94IfQQxYILdpBN+SUHD0RZTJS7W2gb3AffKtL1eF422KSVFycIzFR3
+         hTO9lrMbgjt14GFIdBRl89Q3WH43qoOLv56HL2nyYABploXuLn3JH6FkP7rTWi6mmhQM
+         7u/NAtfIoSdhYnSAyDYmlzmgNFVMRbL0C2eMbmO9xznel/GxSnHplS3/Y5qVLbWd6Anb
+         A2IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=ILzMj/J4nia5UE47hXmz/B5F5iCaFpwvX8EOe6Wkx5M=;
+        b=gLCR9KxPaHAI9frFsc1nVXgIPPPPVgXlsZFaELUhGZkJFKH/FuoayTv/rk3L1rdTLe
+         OoJQHhRGRAjBIHhMIzgLG624mpyiJhY7WieojjMeAIRm3EXR5ZjZo/RghuWzp10sb/RW
+         5zKxdcYJAwhEbaq7Cs538vHypi1DFYXQNmGAlBFc0ycbpIOV+5svGEcVPy1dyYdOpdG8
+         XcJU337j5NlGvjcn6y68SWKI2lWEE0HvPDdSts713UVoSr4b/GT8HC1HhZ6DW7F66MFN
+         WSUQjlkFt8QTci6n87mWwvUtvnpnvshglcvOmeRxL5R4VhCS2McTwky7tTTEUDeGJMH/
+         pWZA==
+X-Gm-Message-State: ACrzQf3w5OrPdJZ1cz7K7C9Zl2fB6m6Wq8UuNwhZQLMIOI/dCeGKzrce
+        8WzM8/7SRC3aMOMCxH/L7rOSRJ/sB30=
+X-Google-Smtp-Source: AMsMyM7QHXn49u8NmkP6UtK7F8gH44oplJjQAwp9q4nwXWdUy2fgWFCDPidMBkZ3TE2OPzhw6mewWu4ZrU8=
+X-Received: from yunkec1.tok.corp.google.com ([2401:fa00:8f:203:d86:8b01:88ae:86c1])
+ (user=yunkec job=sendgmr) by 2002:a0d:e744:0:b0:34c:e2b1:950d with SMTP id
+ q65-20020a0de744000000b0034ce2b1950dmr7483675ywe.56.1664520064809; Thu, 29
+ Sep 2022 23:41:04 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 15:40:49 +0900
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+Message-ID: <20220930064059.3633710-1-yunkec@google.com>
+Subject: [PATCH v8 00/10] media: Implement UVC v1.5 ROI
+From:   Yunke Cao <yunkec@google.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     Irui Wang <irui.wang@mediatek.com>,
-        George Sun <george.sun@mediatek.com>,
-        Steve Cho <stevecho@chromium.org>,
-        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-media@vger.kernel.org>
-Date:   Fri, 30 Sep 2022 14:19:26 +0800
-In-Reply-To: <927f95dd-283a-a3c0-6c2f-41a36bcc42ef@collabora.com>
-References: <20220901110416.21191-1-xiaoyong.lu@mediatek.com>
-         <927f95dd-283a-a3c0-6c2f-41a36bcc42ef@collabora.com>
+        Tomasz Figa <tfiga@chromium.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-media@vger.kernel.org, Yunke Cao <yunkec@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dear Daniel,
-Thanks for your good suggestion!
+This patch set implements UVC v1.5 region of interest using V4L2
+control API.
 
-I have updated v4 to fix
-your comment.
+ROI control is consisted two uvc specific controls.
+1. A rectangle control with a newly added type V4L2_CTRL_TYPE_RECT.
+2. An auto control with type bitmask.
 
-Changes from v3:
+V4L2_CTRL_WHICH_MIN/MAX_VAL is added to support the rectangle control.
 
-- modify comment for struct vdec_av1_slice_slot
-- add define SEG_LVL_ALT_Q
-- change use_lr/use_chroma_lr parse from av1 spec
-- use ARRAY_SIZE to replace size for loop_filter_level and
-loop_filter_mode_deltas
-- change array size of loop_filter_mode_deltas from 4 to 2
-- add define SECONDARY_FILTER_STRENGTH_NUM_BITS
-- change some hex values from upper case to lower case
-- change *dpb_sz equal to V4L2_AV1_TOTAL_REFS_PER_FRAME + 1
-- convert vb2_find_timestamp to vb2_find_buffer
-- test by av1 fluster, result is 173/239
+Tested on two different usb cameras using v4l2-compliance, v4l2-ctl
+and calling ioctls.
 
-detail in link:
+1/10 adds V4L2_CTRL_TYPE_RECT.
+2/10, 3/10, 4/10 refactors uvc_ctrl.c.
+5/10 adds support for compound controls.
+6/10 implements ROI in UVC.
+7/10 initializes ROI control to default value.
+8/10 is a cherry-pick for Hans' implementation of
+V4L2_CTRL_WHICH_MIN/MAX_VAL in v4l2-core.
+9/10 supports MIN/MAX in UVC.
+10/10 documents the changes.
 
-https://patchwork.kernel.org/project/linux-mediatek/patch/20220930033000.22579-1-xiaoyong.lu@mediatek.com/
+Changelog since v7:
+- Rebased onto media-stage master.
+- Move the factoring logic from 5/10 to 2/10 and 3/10 (new patch in v8).
+- In patch 4/10, split uvc_control_mapping.size to v4l2 and data size.
+- Move initializing ROI control from 5/10 into its own patch 7/10.
+- Address some comments. Changelogs are in patches.
 
+Hans Verkuil (1):
+  v4l2-ctrls: add support for V4L2_CTRL_WHICH_MIN/MAX_VAL
 
-thanks !
-Xiaoyong Lu
+Yunke Cao (9):
+  media: v4l2_ctrl: Add V4L2_CTRL_TYPE_RECT
+  media: uvcvideo: add uvc_ctrl_get_boundary for getting default value
+  media: uvcvideo: introduce __uvc_ctrl_get_std()
+  media: uvcvideo: Split uvc_control_mapping.size to v4l2 and data size
+  media: uvcvideo: Add support for compound controls
+  media: uvcvideo: implement UVC v1.5 ROI
+  media: uvcvideo: initilaize ROI control to default value
+  media: uvcvideo: support V4L2_CTRL_WHICH_MIN/MAX_VAL
+  media: uvcvideo: document UVC v1.5 ROI
 
-On Thu, 2022-09-22 at 13:36 -0300, Daniel Almeida wrote:
-> Hi Xiaoyong.
-> 
-> Comments below (other code removed for brevity)
-> 
-> +/**
-> + * struct vdec_av1_slice_slot - slot info need save in global
-> instance
-> + * @frame_info: frame info for each slot
-> + * @timestamp:  time stamp info
-> + */
-> +struct vdec_av1_slice_slot {
-> +	struct vdec_av1_slice_frame_info
-> frame_info[AV1_MAX_FRAME_BUF_COUNT];
-> +	u64 timestamp[AV1_MAX_FRAME_BUF_COUNT];
-> +};
-> 
-> nit: slot info that needs to be saved in the global instance
-> 
-> +static int vdec_av1_slice_get_qindex(struct 
-> vdec_av1_slice_uncompressed_header *uh,
-> +				     int segmentation_id)
-> +{
-> +	struct vdec_av1_slice_seg *seg = &uh->seg;
-> +	struct vdec_av1_slice_quantization *quant = &uh->quant;
-> +	int data = 0, qindex = 0;
-> +
-> +	if (seg->segmentation_enabled &&
-> +	    (seg->feature_enabled_mask[segmentation_id] & BIT(0))) {
-> +		data = seg->feature_data[segmentation_id][0];
-> 
-> 
-> Maybe you should replace the 0 above by SEG_LVL_ALT_Q to be more 
-> explicit. Same goes for BIT(0).
-> 
-> +static void vdec_av1_slice_setup_lr(struct vdec_av1_slice_lr *lr,
-> +				    struct
-> v4l2_av1_loop_restoration  *ctrl_lr)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < V4L2_AV1_NUM_PLANES_MAX; i++) {
-> +		lr->frame_restoration_type[i] = ctrl_lr-
-> >frame_restoration_type[i];
-> +		lr->loop_restoration_size[i] = ctrl_lr-
-> >loop_restoration_size[i];
-> +	}
-> +	lr->use_lr = !!lr->frame_restoration_type[0];
-> +	lr->use_chroma_lr = !!lr->frame_restoration_type[1];
-> +}
-> 
->  From a first glance, this looks a bit divergent from the spec?
-> 
-> for ( i = 0; i < NumPlanes; i++ ) {
->      lr_type
->      FrameRestorationType[i] = Remap_Lr_Type[lr_type]
->      if ( FrameRestorationType[i] != RESTORE_NONE ) {
->          UsesLr = 1
->          if ( i > 0 ) {
->              usesChromaLr = 1
->          }
->      }
-> }
-> 
-> I will include these two variables in the next iteration of the uapi
-> if 
-> computing them in the driver is problematic.
-> 
-> +static void vdec_av1_slice_setup_lf(struct
-> vdec_av1_slice_loop_filter *lf,
-> +				    struct v4l2_av1_loop_filter
-> *ctrl_lf)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < 4; i++)
-> +		lf->loop_filter_level[i] = ctrl_lf->level[i];
-> +
-> +	for (i = 0; i < V4L2_AV1_TOTAL_REFS_PER_FRAME; i++)
-> +		lf->loop_filter_ref_deltas[i] = ctrl_lf->ref_deltas[i];
-> +
-> +	for (i = 0; i < 2; i++)
-> +		lf->loop_filter_mode_deltas[i] = ctrl_lf-
-> >mode_deltas[i];
-> +
-> +	lf->loop_filter_sharpness = ctrl_lf->sharpness;
-> +	lf->loop_filter_delta_enabled =
-> +		   BIT_FLAG(ctrl_lf,
-> V4L2_AV1_LOOP_FILTER_FLAG_DELTA_ENABLED);
-> +}
-> 
-> Maybe ARRAY_SIZE can be of use in the loop indices here?
-> 
-> +static void vdec_av1_slice_setup_cdef(struct vdec_av1_slice_cdef
-> *cdef,
-> +				      struct v4l2_av1_cdef *ctrl_cdef)
-> +{
-> +	int i;
-> +
-> +	cdef->cdef_damping = ctrl_cdef->damping_minus_3 + 3;
-> +	cdef->cdef_bits = ctrl_cdef->bits;
-> +
-> +	for (i = 0; i < V4L2_AV1_CDEF_MAX; i++) {
-> +		if (ctrl_cdef->y_sec_strength[i] == 4)
-> +			ctrl_cdef->y_sec_strength[i] -= 1;
-> +
-> +		if (ctrl_cdef->uv_sec_strength[i] == 4)
-> +			ctrl_cdef->uv_sec_strength[i] -= 1;
-> +
-> +		cdef->cdef_y_strength[i] = ctrl_cdef->y_pri_strength[i] 
-> << 2 |
-> +					   ctrl_cdef-
-> >y_sec_strength[i];
-> +		cdef->cdef_uv_strength[i] = ctrl_cdef-
-> >uv_pri_strength[i] << 2 |
-> +					    ctrl_cdef-
-> >uv_sec_strength[i];
-> +	}
-> +}
-> 
-> Maybe:
-> 
-> #define SECONDARY_FILTER_STRENGTH_NUM_BITS 2
-> 
-> +		cdef->cdef_y_strength[i] = ctrl_cdef->y_pri_strength[i] 
-> << 
-> SECONDARY_FILTER_STRENGTH_NUM_BITS |
-> +					   ctrl_cdef-
-> >y_sec_strength[i];
-> +		cdef->cdef_uv_strength[i] = ctrl_cdef-
-> >uv_pri_strength[i] << 
-> SECONDARY_FILTER_STRENGTH_NUM_BITS |
-> +					    ctrl_cdef-
-> >uv_sec_strength[i];
-> 
-> This should make it clearer.
-> 
-> +		sb_boundary_x_m1 =
-> +			(tile->mi_col_starts[tile_col + 1] - tile-
-> >mi_col_starts[tile_col] - 
-> 1) &
-> +			0x3F;
-> +		sb_boundary_y_m1 =
-> +			(tile->mi_row_starts[tile_row + 1] - tile-
-> >mi_row_starts[tile_row] - 
-> 1) &
-> +			0x1FF;
-> +
-> 
-> IIRC there's a preference for lower case hex values in the media
-> subsystem.
-> 
-> +static void vdec_av1_slice_get_dpb_size(struct
-> vdec_av1_slice_instance 
-> *instance, u32 *dpb_sz)
-> +{
-> +	/* refer av1 specification */
-> +	*dpb_sz = 9;
-> +}
-> 
-> That's actually defined as 8 in the spec, i.e.:
-> 
-> NUM_REF_FRAMES 8 Number of frames that can be stored for future
-> reference.
-> 
-> It's helpful to indicate the section if you reference the
-> specification, 
-> as it makes it easier for the reviewer to cross check.
-> 
-> +	/* get buffer address from vb2buf */
-> +	for (i = 0; i < V4L2_AV1_REFS_PER_FRAME; i++) {
-> +		struct vdec_av1_slice_fb *vref = &vsi->ref[i];
-> +		int idx = vb2_find_timestamp(vq, pfc->ref_idx[i], 0);
-> 
-> Needs to be converted to vb2_find_buffer in light of 
-> 
-https://lore.kernel.org/lkml/20220706182657.210650-3-ezequiel@vanguardiasur.com.ar/T/
-> 
-> -- Daniel
-> 
+ .../userspace-api/media/drivers/uvcvideo.rst  |  64 +-
+ .../media/v4l/vidioc-g-ext-ctrls.rst          |  13 +-
+ .../media/v4l/vidioc-queryctrl.rst            |   7 +
+ .../media/videodev2.h.rst.exceptions          |   3 +
+ drivers/media/i2c/imx214.c                    |   5 +-
+ .../media/platform/qcom/venus/venc_ctrls.c    |   9 +-
+ drivers/media/usb/uvc/uvc_ctrl.c              | 676 ++++++++++++++----
+ drivers/media/usb/uvc/uvc_driver.c            |   2 +-
+ drivers/media/usb/uvc/uvc_v4l2.c              |  22 +-
+ drivers/media/usb/uvc/uvcvideo.h              |  23 +-
+ drivers/media/v4l2-core/v4l2-ctrls-api.c      |  57 +-
+ drivers/media/v4l2-core/v4l2-ctrls-core.c     | 166 ++++-
+ drivers/media/v4l2-core/v4l2-ioctl.c          |   4 +-
+ include/media/v4l2-ctrls.h                    |  36 +-
+ include/uapi/linux/usb/video.h                |   1 +
+ include/uapi/linux/uvcvideo.h                 |  13 +
+ include/uapi/linux/v4l2-controls.h            |   9 +
+ include/uapi/linux/videodev2.h                |   4 +
+ 18 files changed, 926 insertions(+), 188 deletions(-)
+
+-- 
+2.38.0.rc1.362.ged0d419d3c-goog
 
