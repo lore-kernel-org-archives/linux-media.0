@@ -2,182 +2,196 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D546C433FE
-	for <linux-media@archiver.kernel.org>; Fri, 30 Sep 2022 06:41:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87F9FC4332F
+	for <linux-media@archiver.kernel.org>; Fri, 30 Sep 2022 06:41:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbiI3GlR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Sep 2022 02:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58728 "EHLO
+        id S230337AbiI3GlS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Sep 2022 02:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbiI3GlP (ORCPT
+        with ESMTP id S230376AbiI3GlQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Sep 2022 02:41:15 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2048.outbound.protection.outlook.com [40.107.21.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDF213DDB4;
-        Thu, 29 Sep 2022 23:41:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GXZRXpuiqKN9NfHcrpBu4D5dggJec92ccqY8jQPpS5AgHntPoSzCm8g6HWsa8wTe6/rk8wCvC/fUfckGIv6NxEHC20WJ58h8UPMKgB/yDzq9+j5Ztg/DPCXoGRdIxNn3DWd1veS2hiMJIEaTNtuYqFweaZSwfzi/F4sqYW5caSBwTCBjpFdvepOmoLGrR4MRb84obFcEcBVy3CzN/oALex2VFHxQI4SDUBovv1dBR///Jeu28xqb2PTvP6GMOBhnIp4aWAH8o8cUcKtu0vL3Avl+LDtbYtgCUXp7k38Mt+ttZQ/l7AOJzooFrmKUZJqwX8JqmSaO8FR9+VEE06PynQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7M/JtMp792+OsSFh6igLnhCjxWEygIu6JqcVO6GK53c=;
- b=I7XVqKQBYpCPTbFgc1eK5yflAklLWYihg2f8ea/YwBrxq+HEr3nElsyQSWLUuxA5Q3ezvOsFM1Bgw/doqNmb/+hLpRxpQOT6RJVuK1fkTTBjDsQnUYJ+VlB4iK3zYcwm+HxaexzUIA8s9w210D8yplY+T0LZ1lSXzhihsSwkQwdLzWPtb732oY+AGatfBpguguGLtUqCIWrqljuSA352D89hwtgUkb3Ym+k4liei4JqRZvgh2an0l2G9nvKnszpdZO2HKiJs5kXCwunx4pcOJFn3bn0ibfPs0ktLbDz9dNnQdpKBwqoivuzsSNWZmhNC3U87YPkHJN0kmnAIpBEGMA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7M/JtMp792+OsSFh6igLnhCjxWEygIu6JqcVO6GK53c=;
- b=IKL5TlRRspcIqpO6RYocg7OWdfRbVLxwi8nSy0QySTQlU5rCg/dcw4dPHLKTUCblPeHKnR0Dvn1PA5/XalE4IPg1LZKY1efb9YRToqkgrcTcT80uxXnqwi8CZPcNxeaxKzFtRhgpLpLpOC/OOpG3aFT9MrFgJu6z9JwBYy6NUVk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
- by DU2PR04MB8998.eurprd04.prod.outlook.com (2603:10a6:10:2e1::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26; Fri, 30 Sep
- 2022 06:41:10 +0000
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::4550:e439:2389:be53]) by AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::4550:e439:2389:be53%5]) with mapi id 15.20.5676.023; Fri, 30 Sep 2022
- 06:41:10 +0000
-From:   Ming Qian <ming.qian@nxp.com>
-To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl
-Cc:     shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        xiahong.bao@nxp.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] media: amphion: reset instance if it's aborted before codec header parsed
-Date:   Fri, 30 Sep 2022 14:40:47 +0800
-Message-Id: <20220930064047.19759-1-ming.qian@nxp.com>
-X-Mailer: git-send-email 2.37.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0039.apcprd02.prod.outlook.com
- (2603:1096:4:196::9) To AM6PR04MB6341.eurprd04.prod.outlook.com
- (2603:10a6:20b:d8::14)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR04MB6341:EE_|DU2PR04MB8998:EE_
-X-MS-Office365-Filtering-Correlation-Id: af07d2a7-8c11-4f62-3466-08daa2aec2fe
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bSjarGprVSRO6XRmUVjTL5O+gy1maIFCZgMMLHXjJR35oYzrdln3QHB2w4O9hg0X4kAVKOF07ZUT5sJg+VVFlncjo7wOxZ7wtdIqBZMzYH79SSt+0EwfXvuAbpqcp264pJGZbhtzyZiIMFPMOQgbvHhm8UfRZVBe3TljW1J3C8CNe1eXkjAU17oq5NmS6xi9ya52nzHE83I0rdHXVAUYoewVypMF5tbsfXWgFhKCCvDQkPhSGbYX/CTxp9poxYNuu+nDCT44Lig7bjehMktfa873Yfw7GzaabADPk6VS3KIceb8EcyF3VGHPorRMkkP85a7krxWOyIbt9VN0zg8I8wOX+G1uOVhQM9djJA9si3rT4mU6qO1ra+hrwBKjn8VlNKb1O4/rU6+hhRKkBEw3iPpKH4VTfSA/RqnQyeM3+PyHxUQIMj+5WNKn2HlGhg5xJy9bpLUC6KcYk8iFhOIUQuKWy9nDjWaIJA9qwap5Olc3piQ1o02avlQFixM8NyBjd7aCTho3ZOXlxdooxdv1i0xaHb2Q+MzF95G6m49l9iWg7gsDY1uIRdIVIH9tMkrQxk8/iYWTTJeDzoBhd/OHSEgys3gDWVFiaAsJmDZxDlFkAtcQZJqodNLRJLGnuZKDsilLIEil2ww8F4vMYv+6yUOrFfrf5zeSTz6wNYjqKMmB7c86H6nRgI/S8xL6HiE8uuHAbvSvow9oZp4TzjG+E2Bv1v3YlPTRbqvebPIBNb+1oduR0g1akSxLZyLG5c1PemsKH+2W5kQA85KiD2AlOw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(376002)(136003)(396003)(346002)(451199015)(6486002)(6666004)(2616005)(38100700002)(38350700002)(2906002)(41300700001)(8936002)(4326008)(86362001)(66556008)(8676002)(316002)(26005)(66946007)(52116002)(6506007)(7416002)(36756003)(478600001)(5660300002)(44832011)(6512007)(66476007)(186003)(83380400001)(1076003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wSgbllEOZ8ih8Yp7VXOm93HlEfbxEUI9D2lPSd+HWRC8G8SpKEgPUYym/UXn?=
- =?us-ascii?Q?C238m9BhNILi+8aVRD79wChtiGOOr1pOi49HNU1VkbC50nXcgzhO0/wP6kmJ?=
- =?us-ascii?Q?Oont4kMv3NgDVRDRjbtvuely6ZRGsSW97F4qoXcU0+Bv0KMFb8NtXeWtoCpF?=
- =?us-ascii?Q?lYtfY5Orqf6eqNYA4u5UEKSDfFmnD0JUW8CqF1xgnDosJfm1FxKDWAH3i8xk?=
- =?us-ascii?Q?zExh9LEho1Z+QqaVsdyMjAWbr7fDQGi7+7yyaBjGeAHG/sw46j5rk3asDKHS?=
- =?us-ascii?Q?TUvDhcF9vBjjE/zfX/bu/FugBlbniEsrDsUkCMQRzMDXMK41fp145xwT8tuC?=
- =?us-ascii?Q?02gIrWTjpCe7FjhuqEtIb1s1yE/rGoFGk6dkP3VU1Ceut9i/qIBKxbEmB/7T?=
- =?us-ascii?Q?bSgiagX5rqqkDIGZujqE0a2ZiAFZ15N39M524fkpZoQ6aqMW745ajpkr31vk?=
- =?us-ascii?Q?BbOSqFYfnDLQsRmV6/Kg6mnLYLzDxybfQqlaUPn9IshM1tMgBjUlER1fxPBk?=
- =?us-ascii?Q?guHpDoQ8hdQkRMvXhyLmG4Ul53Dfk6Y05kNE8w8PlhDFFuiyWbEwt+CYSRGY?=
- =?us-ascii?Q?TZ5VCfAu4UjVEKaQUKzaIMcWOTOnhYqRU9uWZzIfVaJEeK+kUsvXwLITnk+v?=
- =?us-ascii?Q?TT4rCB7OX1Ag0AOwoxsKRh+d/BKZcnZAKq7CAsqfaYHOTDEI1fwOmXB5tIHK?=
- =?us-ascii?Q?+c4BsWzrNokou0kKg79x8/6B2BKnNJIFxasCM+uyaIe2pxwxsJAFv3JYpY+j?=
- =?us-ascii?Q?ji0Wylee3JnZzfZtFXO0yt45B9REkOY6Lnm1kgnlTpgFtdD9QFf1CRLrOoxO?=
- =?us-ascii?Q?LILQte1npLqa/5R6ux9SV4Alx/a2KFWRqqTV3ykp8W2WHkYS+G8dONNIZoq7?=
- =?us-ascii?Q?gxR3VHBXRntaIbstH+4DcoRBMhnls7Lr44z/Z7AIHcr7r9/FIvj78Jns//6T?=
- =?us-ascii?Q?Kfh+NxSBf718dxPX4E4gf8KgxlS46abmcPqN1ykeiO1Uaec8356KsgaCvLIn?=
- =?us-ascii?Q?T4aXfDxK4s1m72xg6sGekzyxRK21jYPXoUNMOKRbZ5v5A453p751ApZ/3yVY?=
- =?us-ascii?Q?fCaWIdPYPfZV/TSqo0nkdQyv/gb4bDA1V+qAHGqDd+Erd0SlJdtRL7q4lPzv?=
- =?us-ascii?Q?k4+tFc6AGLclj39+an+6aDn09qPuV981mHCqn86KnA9wfeR1D9nevY1SG1TX?=
- =?us-ascii?Q?gOEHklyRREVpROIEhVYpWVYKfzzhTk1SToUROU4FCVU0zFo7UzlvvOYklkPo?=
- =?us-ascii?Q?7Dzh50UwbTSBss0WwE83GMJQDwyD2GFA3BHdr4D3/gNeDj1j4SXMHNIORs12?=
- =?us-ascii?Q?I+VpLheHdSWn35Kzpi9vb6++YBy+xgiWpY6vRQQscZZ1jDZjmKVdDnX28khU?=
- =?us-ascii?Q?atDy4Coh6dZYwm/7O1tWzmvMkwxOjEnxjj/4yIaqjM+QgKK8zaEslesKkI/i?=
- =?us-ascii?Q?s+xzL+sujnYzX146r7hMd5PEJgvtpI4P8ViaeRBOAU94GSwSPt7GVL1O+HI7?=
- =?us-ascii?Q?LNlEyS40wqX2BMZuQefx5//DEf9ZQBYfpydvc6vqncWjiGxThVfAEDFbNFdF?=
- =?us-ascii?Q?DALNoLlWLEHuWlSh8D0+hIyGveR8VwFtssJHavfS?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: af07d2a7-8c11-4f62-3466-08daa2aec2fe
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2022 06:41:10.7826
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: l93UeRXKBIEnClTaclSSx3XpFIjIODEiFXi/2Zu3ZuJaIh6xuBLVWiJifRgBzNDF66ewJHOi1vbCxs5afbpv5g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8998
+        Fri, 30 Sep 2022 02:41:16 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693051A06E
+        for <linux-media@vger.kernel.org>; Thu, 29 Sep 2022 23:41:15 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id h11-20020a170902f54b00b001780f0f7ea7so2613394plf.9
+        for <linux-media@vger.kernel.org>; Thu, 29 Sep 2022 23:41:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date;
+        bh=hsKpGR6ZAwwrbPQSkvSMIn3H2D248KIeuadqPOigFCY=;
+        b=e0tGMWIEgzQJBygDwbStFuAEr6L1PVLhFLjoKnT7ZEneInY7Z8YzIan6klDoqS/DMT
+         ZEXmNSPjmMR1+SYVoPjupaU8950utqIEL/e33/6BbNdM1cBj6kcp2KApfTv2hf3A+2Ed
+         2GfNv5MluH4Chvcuf1vaiO0wx/CH+j1CF0csDTAnwlU2hbMdlEGGg8LbruKm9C6bXmj0
+         bYBwxs95SOzfaPAO69N/x9VhiMOWAxzOmmfxVdfAtwNEYAuymtJpRsJWkdgywuFOZlX1
+         E+bk2xO5sWTuwWr4By/qqQb7gdqAIWgP8rl0ErgCNHyC2DAILXGhX5UyA+vS0SxeMHjC
+         zaSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=hsKpGR6ZAwwrbPQSkvSMIn3H2D248KIeuadqPOigFCY=;
+        b=nyuv2gVNAM1BdzAxL0wnEd+YX7MmT5vvWGW5qdESj8+Oyas6u7rD4lDcPFcLTOudX8
+         F/4czmdETcY8HMEa2e7Ot2XuTLfu4VPCoGWZ7QTHffflW4n3N5d7gxjXZnIgNujIeeF8
+         nSLbfiLcQJHHKfnCjVpCcFPqEpmZdokFNDIMeDpg+c1vU63ByUfoWaW3EL4JhT6Fk6RK
+         WTm9ipoR55snOvQCGiMmxUkpdOcEDjIIaMBRM/lz3mYvNMRy+1PEPv/quqGMKgAidUzR
+         3excmxzkMGtEgTAP3qRl2EDfb7L2qDiTA7PkT9CGZ4VU62AgGdw2Y3i2UEhZF2ngyfjI
+         jQkQ==
+X-Gm-Message-State: ACrzQf1HZ3JBmyNuY1IZK2TUuC7XxQdV0bQIcwr7Jg1nokN+xK4dxcne
+        IUrACv1lKH0PWoIIg91iAlwaAkBu1nI=
+X-Google-Smtp-Source: AMsMyM4AMQjD91gSWwMAeTyvsj9y1SNNUeUDzu2s3sswNAB3fZ9ZwWD73I6sPZsxJg2GKD0WoHcqw4OWz14=
+X-Received: from yunkec1.tok.corp.google.com ([2401:fa00:8f:203:d86:8b01:88ae:86c1])
+ (user=yunkec job=sendgmr) by 2002:a17:902:b601:b0:17a:695:b5bf with SMTP id
+ b1-20020a170902b60100b0017a0695b5bfmr7148166pls.35.1664520074980; Thu, 29 Sep
+ 2022 23:41:14 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 15:40:51 +0900
+In-Reply-To: <20220930064059.3633710-1-yunkec@google.com>
+Mime-Version: 1.0
+References: <20220930064059.3633710-1-yunkec@google.com>
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+Message-ID: <20220930064059.3633710-3-yunkec@google.com>
+Subject: [PATCH v8 02/10] media: uvcvideo: add uvc_ctrl_get_boundary for
+ getting default value
+From:   Yunke Cao <yunkec@google.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-media@vger.kernel.org, Yunke Cao <yunkec@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-there is hardware limitation that if it's aborted before
-the first codec header parsed, the codec may be stalled
-unless we do reset codec.
+Introduce uvc_ctrl_get_boundary(), making it easier to extend to
+support compound controls and V4L2_CTRL_WHICH_MIN/MAX_VAL in the
+following patches.
 
-and drop the source change event if it's triggered after reset.
+For now, it simply returns EINVAL for compound controls and calls
+__query_v4l2_ctrl() for non-compound controls.
 
-Fixes: 6de8d628df6e ("media: amphion: add v4l2 m2m vpu decoder stateful driver")
-Signed-off-by: Ming Qian <ming.qian@nxp.com>
+Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
+Signed-off-by: Yunke Cao <yunkec@google.com>
 ---
- drivers/media/platform/amphion/vdec.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+Changelog since v7:
+- Rename uvc_ctrl_get_fixed() to uvc_ctrl_get_boundary().
+- Move refactor (introduce  __uvc_ctrl_get_boundary_std()) in this patch
+  instead of in the patch where we implement compound control.
+- Fix locking. uvc_ctrl_get_boundary() now acquires ctrl_mutex.
+  __uvc_ctrl_get_boundary_std() calls __uvc_query_v4l2_ctrl() while
+  holding the mutex.
+- Define a uvc_ctrl_mapping_is_compound() for readability.
 
-diff --git a/drivers/media/platform/amphion/vdec.c b/drivers/media/platform/amphion/vdec.c
-index 9c3324717cbc..0d7676eee5ea 100644
---- a/drivers/media/platform/amphion/vdec.c
-+++ b/drivers/media/platform/amphion/vdec.c
-@@ -786,6 +786,9 @@ static bool vdec_check_source_change(struct vpu_inst *inst)
- 	if (!inst->fh.m2m_ctx)
- 		return false;
- 
-+	if (vdec->reset_codec)
-+		return false;
-+
- 	sibling = vpu_helper_find_sibling(inst, inst->cap_format.type, inst->cap_format.pixfmt);
- 	if (sibling && vdec->codec_info.pixfmt == sibling->pixfmt)
- 		vdec->codec_info.pixfmt = inst->cap_format.pixfmt;
-@@ -1113,7 +1116,8 @@ static void vdec_event_seq_hdr(struct vpu_inst *inst, struct vpu_dec_codec_info
- 		vdec->seq_tag = vdec->codec_info.tag;
- 		if (vdec->is_source_changed) {
- 			vdec_update_state(inst, VPU_CODEC_STATE_DYAMIC_RESOLUTION_CHANGE, 0);
--			vpu_notify_source_change(inst);
-+			vdec->source_change++;
-+			vdec_handle_resolution_change(inst);
- 			vdec->is_source_changed = false;
- 		}
+ drivers/media/usb/uvc/uvc_ctrl.c | 48 ++++++++++++++++++++++++++++++++
+ drivers/media/usb/uvc/uvc_v4l2.c |  6 +---
+ drivers/media/usb/uvc/uvcvideo.h |  2 ++
+ 3 files changed, 51 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+index 97f312020516..40a47e9a93a8 100644
+--- a/drivers/media/usb/uvc/uvc_ctrl.c
++++ b/drivers/media/usb/uvc/uvc_ctrl.c
+@@ -836,6 +836,12 @@ static void uvc_set_le_value(struct uvc_control_mapping *mapping,
  	}
-@@ -1360,6 +1364,8 @@ static void vdec_abort(struct vpu_inst *inst)
- 		  vdec->decoded_frame_count,
- 		  vdec->display_frame_count,
- 		  vdec->sequence);
-+	if (!vdec->seq_hdr_found)
-+		vdec->reset_codec = true;
- 	vdec->params.end_flag = 0;
- 	vdec->drain = 0;
- 	vdec->params.frame_count = 0;
-@@ -1367,6 +1373,7 @@ static void vdec_abort(struct vpu_inst *inst)
- 	vdec->display_frame_count = 0;
- 	vdec->sequence = 0;
- 	vdec->aborting = false;
-+	inst->extra_size = 0;
  }
  
- static void vdec_stop(struct vpu_inst *inst, bool free)
-@@ -1489,8 +1496,7 @@ static int vdec_start_session(struct vpu_inst *inst, u32 type)
- 	}
++static bool
++uvc_ctrl_mapping_is_compound(const struct uvc_control_mapping *mapping)
++{
++	return mapping->v4l2_type >= V4L2_CTRL_COMPOUND_TYPES;
++}
++
+ /* ------------------------------------------------------------------------
+  * Terminal and unit management
+  */
+@@ -1742,6 +1748,48 @@ int uvc_ctrl_get(struct uvc_video_chain *chain,
+ 	return __uvc_ctrl_get(chain, ctrl, mapping, &xctrl->value);
+ }
  
- 	if (V4L2_TYPE_IS_OUTPUT(type)) {
--		if (inst->state == VPU_CODEC_STATE_SEEK)
--			vdec_update_state(inst, vdec->state, 1);
-+		vdec_update_state(inst, vdec->state, 1);
- 		vdec->eos_received = 0;
- 		vpu_process_output_buffer(inst);
- 	} else {
-@@ -1654,6 +1660,7 @@ static int vdec_open(struct file *file)
- 		return ret;
++int __uvc_ctrl_get_boundary_std(struct uvc_video_chain *chain,
++				struct uvc_control *ctrl,
++				struct uvc_control_mapping *mapping,
++				struct v4l2_ext_control *xctrl)
++{
++	struct v4l2_queryctrl qc = { .id = xctrl->id };
++
++	int ret = __uvc_query_v4l2_ctrl(chain, ctrl, mapping, &qc);
++
++	if (ret < 0)
++		return ret;
++
++	xctrl->value = qc.default_value;
++	return 0;
++}
++
++int uvc_ctrl_get_boundary(struct uvc_video_chain *chain,
++			  struct v4l2_ext_control *xctrl)
++{
++	struct uvc_control *ctrl;
++	struct uvc_control_mapping *mapping;
++	int ret;
++
++	if (mutex_lock_interruptible(&chain->ctrl_mutex))
++		return -ERESTARTSYS;
++
++	ctrl = uvc_find_control(chain, xctrl->id, &mapping);
++	if (!ctrl) {
++		ret = -EINVAL;
++		goto done;
++	}
++
++	if (uvc_ctrl_mapping_is_compound(mapping))
++		ret = -EINVAL;
++	else
++		ret = __uvc_ctrl_get_boundary_std(chain, ctrl, mapping, xctrl);
++
++done:
++	mutex_unlock(&chain->ctrl_mutex);
++	return ret;
++}
++
+ int uvc_ctrl_set(struct uvc_fh *handle,
+ 	struct v4l2_ext_control *xctrl)
+ {
+diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+index 4cc3fa6b8c98..d844da6f307c 100644
+--- a/drivers/media/usb/uvc/uvc_v4l2.c
++++ b/drivers/media/usb/uvc/uvc_v4l2.c
+@@ -1046,15 +1046,11 @@ static int uvc_ioctl_g_ext_ctrls(struct file *file, void *fh,
  
- 	vdec->fixed_fmt = false;
-+	vdec->state = VPU_CODEC_STATE_ACTIVE;
- 	inst->min_buffer_cap = VDEC_MIN_BUFFER_CAP;
- 	inst->min_buffer_out = VDEC_MIN_BUFFER_OUT;
- 	vdec_init(file);
+ 	if (ctrls->which == V4L2_CTRL_WHICH_DEF_VAL) {
+ 		for (i = 0; i < ctrls->count; ++ctrl, ++i) {
+-			struct v4l2_queryctrl qc = { .id = ctrl->id };
+-
+-			ret = uvc_query_v4l2_ctrl(chain, &qc);
++			ret = uvc_ctrl_get_boundary(chain, ctrl);
+ 			if (ret < 0) {
+ 				ctrls->error_idx = i;
+ 				return ret;
+ 			}
+-
+-			ctrl->value = qc.default_value;
+ 		}
+ 
+ 		return 0;
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index 24c911aeebce..dce9e3ca764d 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -903,6 +903,8 @@ static inline int uvc_ctrl_rollback(struct uvc_fh *handle)
+ }
+ 
+ int uvc_ctrl_get(struct uvc_video_chain *chain, struct v4l2_ext_control *xctrl);
++int uvc_ctrl_get_boundary(struct uvc_video_chain *chain,
++			  struct v4l2_ext_control *xctrl);
+ int uvc_ctrl_set(struct uvc_fh *handle, struct v4l2_ext_control *xctrl);
+ int uvc_ctrl_is_accessible(struct uvc_video_chain *chain, u32 v4l2_id,
+ 			   bool read);
 -- 
-2.37.1
+2.38.0.rc1.362.ged0d419d3c-goog
 
