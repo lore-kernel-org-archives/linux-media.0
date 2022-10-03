@@ -2,28 +2,28 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 384D1C433F5
-	for <linux-media@archiver.kernel.org>; Mon,  3 Oct 2022 12:19:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 167DFC433F5
+	for <linux-media@archiver.kernel.org>; Mon,  3 Oct 2022 12:19:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiJCMTu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 Oct 2022 08:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
+        id S229967AbiJCMTy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 Oct 2022 08:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbiJCMTp (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Oct 2022 08:19:45 -0400
+        with ESMTP id S229985AbiJCMTw (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Oct 2022 08:19:52 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA9AAE4D
-        for <linux-media@vger.kernel.org>; Mon,  3 Oct 2022 05:19:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE8BDF06
+        for <linux-media@vger.kernel.org>; Mon,  3 Oct 2022 05:19:47 -0700 (PDT)
 Received: from desky.lan (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 18169E35;
-        Mon,  3 Oct 2022 14:19:30 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D09E3E03;
+        Mon,  3 Oct 2022 14:19:31 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1664799570;
-        bh=99Z/66rTIxXWABmzHnR3UQyuUv55YnbAyOgTzUTaJFk=;
+        s=mail; t=1664799572;
+        bh=hnkXpw4860fNjJcGu7iV0qJubaW69doHYY8Rsi7EZ/s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rsAjLBZlEP2x4I1ur9/JsoFALq57tl5nHpmogy0ZPO9nfz1fjIb+jZDnfMw2Onrbg
-         gTxGBfR08JNM6eRlYYypAnTUjkSfmdVCRUvPLc0Chm2Qqwva0zfDCdqVCDxEH64Pbz
-         IS8DEQwkyo4sHQhv9YFyCOnp/Vm0ugsG7xuahowU=
+        b=wHcLP736JOsUImbVwVd3HHg8IMVeuIu/1TZmep3tk7i5jHX/o7E8lysZSQqeDg81k
+         /AfHuFHY1Zlo6DsJsjjGZArWIBeAbWsVGUnrvIiPa1qk4J1PkGpkvStV6HIbhhOkvX
+         KmnTtVLZneP1f+aAk0Mqg52pPqb2Ntk1l6M/2wQI=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -33,11 +33,10 @@ To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Kishon Vijay Abraham <kishon@ti.com>,
         satish.nagireddy@getcruise.com, Tomasz Figa <tfiga@chromium.org>
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH v15 14/19] media: subdev: add v4l2_subdev_set_routing_with_fmt() helper
-Date:   Mon,  3 Oct 2022 15:18:47 +0300
-Message-Id: <20221003121852.616745-15-tomi.valkeinen@ideasonboard.com>
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v15 16/19] media: v4l2-subdev: Add v4l2_subdev_state_xlate_streams() helper
+Date:   Mon,  3 Oct 2022 15:18:49 +0300
+Message-Id: <20221003121852.616745-17-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221003121852.616745-1-tomi.valkeinen@ideasonboard.com>
 References: <20221003121852.616745-1-tomi.valkeinen@ideasonboard.com>
@@ -47,78 +46,89 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-v4l2_subdev_set_routing_with_fmt() is the same as
-v4l2_subdev_set_routing(), but additionally initializes all the streams
-with the given format.
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
+Add a helper function to translate streams between two pads of a subdev,
+using the subdev's internal routing table.
+
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/v4l2-core/v4l2-subdev.c | 22 ++++++++++++++++++++++
- include/media/v4l2-subdev.h           | 16 ++++++++++++++++
- 2 files changed, 38 insertions(+)
+ drivers/media/v4l2-core/v4l2-subdev.c | 26 ++++++++++++++++++++++++++
+ include/media/v4l2-subdev.h           | 23 +++++++++++++++++++++++
+ 2 files changed, 49 insertions(+)
 
 diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index 2f2ede00e60f..42cd95488f97 100644
+index 7fabb2079b3f..cc8666c5069b 100644
 --- a/drivers/media/v4l2-core/v4l2-subdev.c
 +++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -1455,6 +1455,28 @@ __v4l2_subdev_next_active_route(const struct v4l2_subdev_krouting *routing,
+@@ -1589,6 +1589,32 @@ v4l2_subdev_state_get_opposite_stream_format(struct v4l2_subdev_state *state,
  }
- EXPORT_SYMBOL_GPL(__v4l2_subdev_next_active_route);
+ EXPORT_SYMBOL_GPL(v4l2_subdev_state_get_opposite_stream_format);
  
-+int v4l2_subdev_set_routing_with_fmt(struct v4l2_subdev *sd,
-+				     struct v4l2_subdev_state *state,
-+				     struct v4l2_subdev_krouting *routing,
-+				     const struct v4l2_mbus_framefmt *fmt)
++u64 v4l2_subdev_state_xlate_streams(const struct v4l2_subdev_state *state,
++				    u32 pad0, u32 pad1, u64 *streams)
 +{
-+	struct v4l2_subdev_stream_configs *stream_configs;
-+	unsigned int i;
-+	int ret;
++	const struct v4l2_subdev_krouting *routing = &state->routing;
++	struct v4l2_subdev_route *route;
++	u64 streams0 = 0;
++	u64 streams1 = 0;
 +
-+	ret = v4l2_subdev_set_routing(sd, state, routing);
-+	if (ret)
-+		return ret;
++	for_each_active_route(routing, route) {
++		if (route->sink_pad == pad0 && route->source_pad == pad1 &&
++		    (*streams & BIT_ULL(route->sink_stream))) {
++			streams0 |= BIT_ULL(route->sink_stream);
++			streams1 |= BIT_ULL(route->source_stream);
++		}
++		if (route->source_pad == pad0 && route->sink_pad == pad1 &&
++		    (*streams & BIT_ULL(route->source_stream))) {
++			streams0 |= BIT_ULL(route->source_stream);
++			streams1 |= BIT_ULL(route->sink_stream);
++		}
++	}
 +
-+	stream_configs = &state->stream_configs;
-+
-+	for (i = 0; i < stream_configs->num_configs; ++i)
-+		stream_configs->configs[i].fmt = *fmt;
-+
-+	return 0;
++	*streams = streams0;
++	return streams1;
 +}
-+EXPORT_SYMBOL_GPL(v4l2_subdev_set_routing_with_fmt);
++EXPORT_SYMBOL_GPL(v4l2_subdev_state_xlate_streams);
 +
- struct v4l2_mbus_framefmt *
- v4l2_subdev_state_get_stream_format(struct v4l2_subdev_state *state,
- 				    unsigned int pad, u32 stream)
+ int v4l2_subdev_routing_validate(struct v4l2_subdev *sd,
+ 				 const struct v4l2_subdev_krouting *routing,
+ 				 enum v4l2_subdev_routing_restriction disallow)
 diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index 6f4719e28ad1..020ad79182cc 100644
+index 6661887536bf..8c002d65e08e 100644
 --- a/include/media/v4l2-subdev.h
 +++ b/include/media/v4l2-subdev.h
-@@ -1481,6 +1481,22 @@ __v4l2_subdev_next_active_route(const struct v4l2_subdev_krouting *routing,
- 	for ((route) = NULL;                  \
- 	     ((route) = __v4l2_subdev_next_active_route((routing), (route)));)
+@@ -1579,6 +1579,29 @@ struct v4l2_mbus_framefmt *
+ v4l2_subdev_state_get_opposite_stream_format(struct v4l2_subdev_state *state,
+ 					     u32 pad, u32 stream);
  
 +/**
-+ * v4l2_subdev_set_routing_with_fmt() - Set given routing and format to subdev
-+ *					state
-+ * @sd: The subdevice
-+ * @state: The subdevice state
-+ * @routing: Routing that will be copied to subdev state
-+ * @fmt: Format used to initialize all the streams
++ * v4l2_subdev_state_xlate_streams() - Translate streams from one pad to another
 + *
-+ * This is the same as v4l2_subdev_set_routing, but additionally initializes
-+ * all the streams using the given format.
++ * @state: Subdevice state
++ * @pad0: The first pad
++ * @pad1: The second pad
++ * @streams: Streams bitmask on the first pad
++ *
++ * Streams on sink pads of a subdev are routed to source pads as expressed in
++ * the subdev state routing table. Stream numbers don't necessarily match on
++ * the sink and source side of a route. This function translates stream numbers
++ * on @pad0, expressed as a bitmask in @streams, to the corresponding streams
++ * on @pad1 using the routing table from the @state. It returns the stream mask
++ * on @pad1, and updates @streams with the streams that have been found in the
++ * routing table.
++ *
++ * @pad0 and @pad1 must be a sink and a source, in any order.
++ *
++ * Return: The bitmask of streams of @pad1 that are routed to @streams on @pad0.
 + */
-+int v4l2_subdev_set_routing_with_fmt(struct v4l2_subdev *sd,
-+				     struct v4l2_subdev_state *state,
-+				     struct v4l2_subdev_krouting *routing,
-+				     const struct v4l2_mbus_framefmt *fmt);
++u64 v4l2_subdev_state_xlate_streams(const struct v4l2_subdev_state *state,
++				    u32 pad0, u32 pad1, u64 *streams);
 +
  /**
-  * v4l2_subdev_state_get_stream_format() - Get pointer to a stream format
-  * @state: subdevice state
+  * enum v4l2_subdev_routing_restriction - Subdevice internal routing restrictions
+  *
 -- 
 2.34.1
 
