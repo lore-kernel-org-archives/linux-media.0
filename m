@@ -2,145 +2,71 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B36D9C433F5
-	for <linux-media@archiver.kernel.org>; Mon,  3 Oct 2022 12:20:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2CE2C433FE
+	for <linux-media@archiver.kernel.org>; Mon,  3 Oct 2022 12:37:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiJCMUB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 Oct 2022 08:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57732 "EHLO
+        id S229539AbiJCMh2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 Oct 2022 08:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbiJCMTz (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Oct 2022 08:19:55 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CE5D129
-        for <linux-media@vger.kernel.org>; Mon,  3 Oct 2022 05:19:54 -0700 (PDT)
-Received: from desky.lan (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 822713348;
-        Mon,  3 Oct 2022 14:19:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1664799574;
-        bh=XScRqlaeL1pW29PF1766oou6QNyF3d6sBY1HloxuIOU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mW2LQD8rlFAOjIdgiOOZIYIQYSDvlMkkQCv7hnO4H2Rci0vTtW2SGBiwoVz7Z5T1a
-         Zr2o3KoWs/lxtrZw4UmqASMQlx8JFVcUCaBAza/VUCmS3K1G64ziAQfIaLwn9mYReQ
-         FlDZcVq943sbZmuuh3m+eB13T3F8sACybYBdqJa4=
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        niklas.soderlund+renesas@ragnatech.se,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Kishon Vijay Abraham <kishon@ti.com>,
-        satish.nagireddy@getcruise.com, Tomasz Figa <tfiga@chromium.org>
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH v15 18/19] media: v4l2-subdev: Add v4l2_subdev_s_stream_helper() function
-Date:   Mon,  3 Oct 2022 15:18:51 +0300
-Message-Id: <20221003121852.616745-19-tomi.valkeinen@ideasonboard.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221003121852.616745-1-tomi.valkeinen@ideasonboard.com>
-References: <20221003121852.616745-1-tomi.valkeinen@ideasonboard.com>
+        with ESMTP id S229469AbiJCMh0 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Oct 2022 08:37:26 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615602AC49;
+        Mon,  3 Oct 2022 05:37:25 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E08D16602266;
+        Mon,  3 Oct 2022 13:37:22 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1664800643;
+        bh=mUEUSYdWSHm5PqjemMFwDRgFrWK0rEzlRVBCVzPa5AY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=km4rRLgJ9osYdiqu021ka1hijqBvRELrqXVrNphErcGXJf2zBbfRY1f2tkmMWfyHc
+         gUxymPh4hVGr5UR8DTCr42sYLeY/C0He98FoPef3luP+fCeQ2sJ1usZPwGS2rv6MWo
+         +x1Q5FHRq34wpebYpk7+qH6tYRxDNwq6kun/odnwIk5ag/VTcoKtsiZAjPus77efAh
+         5sf+n5TXzBZz5d5kNcm6ElR3A1JzUd4z9GpceJG7c73H5AChPcAJYmiWkjYMBaXw91
+         bF0DmZI35LPfBAa4poewYnQ6pF2xNpxqzS2HwOsLqucWU1+h0l23eGbevqOUHaw2Q3
+         vqREkgRZPNbIg==
+Message-ID: <b86ae975-30b7-5e3c-805b-0332f241db74@collabora.com>
+Date:   Mon, 3 Oct 2022 14:37:19 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2 2/2] media: platform: mtk-mdp3: fix error handling
+ about components clock_on
+Content-Language: en-US
+To:     Moudy Ho <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20221003070830.23697-1-moudy.ho@mediatek.com>
+ <20221003070830.23697-3-moudy.ho@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221003070830.23697-3-moudy.ho@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Il 03/10/22 09:08, Moudy Ho ha scritto:
+> Add goto statement in mdp_comp_clock_on() to avoid error code not being
+> propagated or returning positive values.
+> This change also performs a well-timed clock_off when an error occurs, and
+> reduces unnecessary error logging in mdp_cmdq_send().
+> 
+> Fixes: 61890ccaefaf ("media: platform: mtk-mdp3: add MediaTek MDP3 driver")
+> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 
-The v4l2_subdev_s_stream_helper() helper can be used by subdevs that
-implement the stream-aware .enable_streams() and .disable_streams()
-operations to implement .s_stream(). This is limited to subdevs that
-have a single source pad.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
----
- drivers/media/v4l2-core/v4l2-subdev.c | 40 +++++++++++++++++++++++++++
- include/media/v4l2-subdev.h           | 17 ++++++++++++
- 2 files changed, 57 insertions(+)
-
-diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index 101c1cfc0123..1da35bf9af01 100644
---- a/drivers/media/v4l2-core/v4l2-subdev.c
-+++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -1941,6 +1941,46 @@ int v4l2_subdev_disable_streams(struct v4l2_subdev *sd, u32 pad,
- }
- EXPORT_SYMBOL_GPL(v4l2_subdev_disable_streams);
- 
-+int v4l2_subdev_s_stream_helper(struct v4l2_subdev *sd, int enable)
-+{
-+	struct v4l2_subdev_state *state;
-+	struct v4l2_subdev_route *route;
-+	struct media_pad *pad;
-+	u64 source_mask = 0;
-+	int pad_index = -1;
-+
-+	/*
-+	 * Find the source pad. This helper is meant for subdevs that have a
-+	 * single source pad, so failures shouldn't happen, but catch them
-+	 * loudly nonetheless as they indicate a driver bug.
-+	 */
-+	media_entity_for_each_pad(&sd->entity, pad) {
-+		if (pad->flags & MEDIA_PAD_FL_SOURCE) {
-+			pad_index = pad->index;
-+			break;
-+		}
-+	}
-+
-+	if (WARN_ON(pad_index == -1))
-+		return -EINVAL;
-+
-+	/*
-+	 * As there's a single source pad, just collect all the source streams.
-+	 */
-+	state = v4l2_subdev_lock_and_get_active_state(sd);
-+
-+	for_each_active_route(&state->routing, route)
-+		source_mask |= BIT_ULL(route->source_stream);
-+
-+	v4l2_subdev_unlock_state(state);
-+
-+	if (enable)
-+		return v4l2_subdev_enable_streams(sd, pad_index, source_mask);
-+	else
-+		return v4l2_subdev_disable_streams(sd, pad_index, source_mask);
-+}
-+EXPORT_SYMBOL_GPL(v4l2_subdev_s_stream_helper);
-+
- #endif /* CONFIG_VIDEO_V4L2_SUBDEV_API */
- 
- #endif /* CONFIG_MEDIA_CONTROLLER */
-diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index bff824367e0b..b21af00b1884 100644
---- a/include/media/v4l2-subdev.h
-+++ b/include/media/v4l2-subdev.h
-@@ -1726,6 +1726,23 @@ int v4l2_subdev_enable_streams(struct v4l2_subdev *sd, u32 pad,
- int v4l2_subdev_disable_streams(struct v4l2_subdev *sd, u32 pad,
- 				u64 streams_mask);
- 
-+/**
-+ * v4l2_subdev_s_stream_helper() - Helper to implement the subdev s_stream
-+ *	operation using enable_streams and disable_streams
-+ * @sd: The subdevice
-+ * @enable: Enable or disable streaming
-+ *
-+ * Subdevice drivers that implement the streams-aware
-+ * &v4l2_subdev_pad_ops.enable_streams and &v4l2_subdev_pad_ops.disable_streams
-+ * operations can use this helper to implement the legacy
-+ * &v4l2_subdev_video_ops.s_stream operation.
-+ *
-+ * This helper can only be used by subdevs that have a single source pad.
-+ *
-+ * Return: 0 on success, or a negative error code otherwise.
-+ */
-+int v4l2_subdev_s_stream_helper(struct v4l2_subdev *sd, int enable);
-+
- #endif /* CONFIG_VIDEO_V4L2_SUBDEV_API */
- 
- #endif /* CONFIG_MEDIA_CONTROLLER */
--- 
-2.34.1
 
