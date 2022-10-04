@@ -2,110 +2,138 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE4DDC433F5
-	for <linux-media@archiver.kernel.org>; Tue,  4 Oct 2022 10:15:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B64E8C433FE
+	for <linux-media@archiver.kernel.org>; Tue,  4 Oct 2022 10:22:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbiJDKP3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 4 Oct 2022 06:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
+        id S229662AbiJDKWI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 4 Oct 2022 06:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiJDKP1 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Oct 2022 06:15:27 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412332AC79
-        for <linux-media@vger.kernel.org>; Tue,  4 Oct 2022 03:15:24 -0700 (PDT)
+        with ESMTP id S229701AbiJDKWD (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Oct 2022 06:22:03 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B1D31DF3;
+        Tue,  4 Oct 2022 03:22:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664878524; x=1696414524;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/K7M43Dyqv7vXQZYikKA1OEQCt+nrxqM2mVGqErgGOU=;
-  b=eyciK0AhBOOu2wCmMUmNIzdSYbarJprxhkhKjSFJVPsxUZxlvOiqYwtx
-   MWcEZMPXCwCZyuBqUnt97PAjpJiNXg/Co/2Ko7gtY5qnWXYsjQ9q9P8Si
-   752sHs+8RTwhh1h2GRx8evhb3ES22L9JUVgOCh9SgaM2rAJFv6+FwctLp
-   uMBQeIYmUNHt2AF5IUsWMev1z4oIu5XL1chYQ6Edi/poSSRYZYt0YEkPx
-   YJciifCo4GWNwZZ8rf4V4xIo7YgptI8CwiZvK3bHcWMIOAB3OgtS1wSpN
-   Gbpx7T9wWeceb3taM5OzV0dn5Int5PUEjdl21FGGBlWoNZIVur/nb1AgK
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="302852874"
+  t=1664878921; x=1696414921;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=tYiX0livaZV54Tpug1MQVrKJH6mQ7IQHkmnz80pYNMc=;
+  b=Lx5ecCpvJADqj4mBwKve/+zRtT8lrCSHkScQay4RtXTFEuj0ElXeZumR
+   mBnLziFdN8WFsqbdKUbm18Zl1b6ZM9+ecBpe4YYxONlzXafxDju3YM0q4
+   UM+HLpkOuVgLp/53bQlp1qjlONGwlDkdrO99fknFpWBzGmoQdBtNuKJkb
+   fM3JAn57/iwwWyQ1ex8shEuO3u3K+8ftpholn5j3EnR+W0Otp45ecz231
+   A8jNcZ5vjgzGNiIRtwM9QAfflN24NtAQtJ08JKJSesp9gQeNNcJfRGkHY
+   B3PgIwQL7+a/Ust9rf9lxXeGRgaKxW8vPy8n2kpSBISrTD8dX0vRDdlR/
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="389167470"
 X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
-   d="scan'208";a="302852874"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 03:15:23 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="728163858"
+   d="scan'208";a="389167470"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 03:22:00 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="657081017"
 X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
-   d="scan'208";a="728163858"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 03:15:21 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id D27AE20321;
-        Tue,  4 Oct 2022 13:05:57 +0300 (EEST)
-Date:   Tue, 4 Oct 2022 10:05:57 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-media@vger.kernel.org,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        niklas.soderlund+renesas@ragnatech.se,
+   d="scan'208";a="657081017"
+Received: from kmreisi-mobl.ger.corp.intel.com ([10.252.39.196])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 03:21:55 -0700
+Date:   Tue, 4 Oct 2022 13:21:52 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Irui Wang <irui.wang@mediatek.com>
+cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Kishon Vijay Abraham <kishon@ti.com>,
-        satish.nagireddy@getcruise.com, Tomasz Figa <tfiga@chromium.org>,
-        Michal Simek <michal.simek@xilinx.com>
-Subject: Re: [PATCH v15 05/19] media: subdev: Add [GS]_ROUTING subdev ioctls
- and operations
-Message-ID: <YzwFhYtzh8hPoAYv@paasikivi.fi.intel.com>
-References: <20221003121852.616745-1-tomi.valkeinen@ideasonboard.com>
- <20221003121852.616745-6-tomi.valkeinen@ideasonboard.com>
- <7b56d565-5358-67be-84b8-101a97f97f2b@xs4all.nl>
- <Yztb06LVmPBKf8J2@paasikivi.fi.intel.com>
- <eea402df-7468-f9fc-ed05-8581ea67f5d3@xs4all.nl>
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        angelogioacchino.delregno@collabora.com,
+        nicolas.dufresne@collabora.com,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        Longfei Wang <longfei.wang@mediatek.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v6, 6/8] media: mediatek: vcodec: Refactor encoder clock
+ on/off function
+In-Reply-To: <20221001031737.18266-7-irui.wang@mediatek.com>
+Message-ID: <3645b24f-436e-d6a5-27cd-287712eab22@linux.intel.com>
+References: <20221001031737.18266-1-irui.wang@mediatek.com> <20221001031737.18266-7-irui.wang@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <eea402df-7468-f9fc-ed05-8581ea67f5d3@xs4all.nl>
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+On Sat, 1 Oct 2022, Irui Wang wrote:
 
-On Tue, Oct 04, 2022 at 10:43:55AM +0200, Hans Verkuil wrote:
-> Hi Sakari,
+> when enable multi-core encoding, encoder cores use their own clock,
+> refactor clock management functions with used encoder hardware id.
 > 
-> On 10/4/22 00:01, Sakari Ailus wrote:
-> > Hi Hans,
-> > 
-> > On Mon, Oct 03, 2022 at 04:26:32PM +0200, Hans Verkuil wrote:
-> >>> +#define V4L2_SUBDEV_ROUTE_FL_SOURCE		(1U << 1)
-> >>
-> >> Can we rename this to _FL_INTERNAL_SOURCE? Just 'SOURCE' is very confusing
-> >> IMHO. The name 'INTERNAL_SOURCE' makes it clear that it is generated internally,
-> >> and so does not come from an external sink-side endpoint.
-> >>
-> >> I also think that the documentation for this flag in patch 04/19 is very vague,
-> >> I'll comment on that patch as well.
-> > 
-> > Having descriptive names is important but I think "SOURCE" as such is fine
-> > for the purpose. Adding "INTERNAL_" adds 9 characters to what is already a
-> > very long name, making the flag very clumsy to use in code. That's why I
-> > would prefer to keep it as-is.
-> > 
+> Signed-off-by: Irui Wang <irui.wang@mediatek.com>
+> ---
+>  .../mediatek/vcodec/mtk_vcodec_enc_pm.c       | 89 ++++++++++++++++---
+>  .../mediatek/vcodec/mtk_vcodec_enc_pm.h       |  6 +-
+>  .../platform/mediatek/vcodec/venc_drv_if.c    |  4 +-
+>  3 files changed, 84 insertions(+), 15 deletions(-)
 > 
-> _FL_SOURCE is meaningless (at least to me): there are so many 'source' and 'sink'
-> references, that just plain 'SOURCE' doesn't help me understand what the flag
-> means. I did consider INT_SOURCE, but I thought 'INT' is too close to 'interrupt'.
-> I'm OK with that, though.
-> 
-> Another alternative would be _FL_NO_SINK: that clearly conveys that 1) there is
-> no sink, and implies that 2) the source is internally generated.
-> 
-> Or perhaps: _FL_SOURCE_ONLY?
+> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.c
+> index 213c3f50e9eb..2f83aade779a 100644
+> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.c
+> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.c
+> @@ -60,7 +60,9 @@ EXPORT_SYMBOL_GPL(mtk_vcodec_init_enc_clk);
+>  static int mtk_enc_core_power_on(struct mtk_vcodec_ctx *ctx)
+>  {
+>  	struct mtk_venc_hw_dev *sub_core;
+> +	struct mtk_vcodec_clk *clk;
+>  	int ret, i;
+> +	int j = 0;
+>  
+>  	/* multi-core encoding need power on all available cores */
+>  	for (i = 0; i < MTK_VENC_HW_MAX; i++) {
+> @@ -73,12 +75,27 @@ static int mtk_enc_core_power_on(struct mtk_vcodec_ctx *ctx)
+>  			mtk_v4l2_err("power on sub_core[%d] fail %d", i, ret);
+>  			goto pm_on_fail;
+>  		}
+> +
+> +		clk = &sub_core->pm.venc_clk;
+> +		for (j = 0; j < clk->clk_num; j++) {
+> +			ret = clk_prepare(clk->clk_info[j].vcodec_clk);
+> +			if (ret) {
+> +				mtk_v4l2_err("prepare clk [%s] fail %d",
+> +					     clk->clk_info[j].clk_name, ret);
+> +				goto pm_on_fail;
+> +			}
+> +		}
+>  	}
+>  	return ret;
+>  
+>  pm_on_fail:
+>  	for (i -= 1; i >= 0; i--) {
+>  		sub_core = (struct mtk_venc_hw_dev *)ctx->dev->enc_hw_dev[i];
+> +
+> +		clk = &sub_core->pm.venc_clk;
+> +		for (j -= 1; j >= 0; j--)
+> +			clk_unprepare(clk->clk_info[j].vcodec_clk);
+> +
+>  		pm_runtime_put_sync(&sub_core->plat_dev->dev);
 
-This appears as the best compromise IMO. NO_SINK is shorter but conveying
-the meaning through negation is what I don't like too much.
+There's more than one thing wrong here.
+
+pm_runtime_put_sync() won't be called for the ith entry when the later 
+goto pm_on_fail is taken because the loop decrements i right at the 
+start.
+
+Similarly, i and j will mismatch for the ith entry because i was 
+decremented.
+
+Third, j does not start from clk->clk_num - 1 for the other entries 
+(for those lower "i"s).
+
 
 -- 
-Kind regards,
+ i.
 
-Sakari Ailus
