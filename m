@@ -2,88 +2,88 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69E1DC433F5
-	for <linux-media@archiver.kernel.org>; Mon,  3 Oct 2022 22:02:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D78CC433FE
+	for <linux-media@archiver.kernel.org>; Tue,  4 Oct 2022 01:37:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiJCWCD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 Oct 2022 18:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
+        id S229529AbiJDBhl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 Oct 2022 21:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiJCWCB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Oct 2022 18:02:01 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFB131DC6
-        for <linux-media@vger.kernel.org>; Mon,  3 Oct 2022 15:02:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664834521; x=1696370521;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rDkd5y4stzSKUTv6NyzilIRAU9N4qor8SP9sNSJ97F8=;
-  b=PgN6dEssGHUKK5zQsLP8WDpWbuFY/8kkTTtiIXfZuFO5SW1u7+0f7U+P
-   52y5BZGGbAiPwoWM1N0ltbqCXSwf98UOulpSue4pEFnZ4ecU6Sky1V517
-   mnr92Ze/BPy7OQPOlkCmVOQUGytFolwjcQsYyGp5g5Gr6l6vDcoYNjGpC
-   1h/dIsriB7Lc90knoJa3yme/B28/2Hf7NDPiPEQ9BYtNKCekD3S3YSv9L
-   Yl9O7pya5OBvAdAulC48q/fuqeP32vFWqjF+3T94v3csLUoMAZC24+QbR
-   R771nHmSQZWbKaaJwlPYukcYlYvbVQbLMg21nwRluahRdGCxVoYBJwozx
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="282481473"
-X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="282481473"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 15:02:00 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="686309436"
-X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="686309436"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 15:01:58 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id E841E20316;
-        Tue,  4 Oct 2022 01:01:55 +0300 (EEST)
-Date:   Mon, 3 Oct 2022 22:01:55 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-media@vger.kernel.org,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        niklas.soderlund+renesas@ragnatech.se,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Kishon Vijay Abraham <kishon@ti.com>,
-        satish.nagireddy@getcruise.com, Tomasz Figa <tfiga@chromium.org>,
-        Michal Simek <michal.simek@xilinx.com>
-Subject: Re: [PATCH v15 05/19] media: subdev: Add [GS]_ROUTING subdev ioctls
- and operations
-Message-ID: <Yztb06LVmPBKf8J2@paasikivi.fi.intel.com>
-References: <20221003121852.616745-1-tomi.valkeinen@ideasonboard.com>
- <20221003121852.616745-6-tomi.valkeinen@ideasonboard.com>
- <7b56d565-5358-67be-84b8-101a97f97f2b@xs4all.nl>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7b56d565-5358-67be-84b8-101a97f97f2b@xs4all.nl>
+        with ESMTP id S229462AbiJDBhk (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Oct 2022 21:37:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA10D275DE
+        for <linux-media@vger.kernel.org>; Mon,  3 Oct 2022 18:37:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 09CBEB811A3
+        for <linux-media@vger.kernel.org>; Tue,  4 Oct 2022 01:37:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FC46C433C1
+        for <linux-media@vger.kernel.org>; Tue,  4 Oct 2022 01:37:35 +0000 (UTC)
+Date:   Tue, 04 Oct 2022 03:37:33 +0200
+From:   "Hans Verkuil" <hverkuil-cisco@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
+Message-Id: <20221004013735.3FC46C433C1@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-On Mon, Oct 03, 2022 at 04:26:32PM +0200, Hans Verkuil wrote:
-> > +#define V4L2_SUBDEV_ROUTE_FL_SOURCE		(1U << 1)
-> 
-> Can we rename this to _FL_INTERNAL_SOURCE? Just 'SOURCE' is very confusing
-> IMHO. The name 'INTERNAL_SOURCE' makes it clear that it is generated internally,
-> and so does not come from an external sink-side endpoint.
-> 
-> I also think that the documentation for this flag in patch 04/19 is very vague,
-> I'll comment on that patch as well.
+Results of the daily build of media_tree:
 
-Having descriptive names is important but I think "SOURCE" as such is fine
-for the purpose. Adding "INTERNAL_" adds 9 characters to what is already a
-very long name, making the flag very clumsy to use in code. That's why I
-would prefer to keep it as-is.
+date:			Tue Oct  4 03:00:12 CEST 2022
+media-tree git hash:	d67614f276c1499ad939fa5c1aadd35498cc6b34
+media_build git hash:	0fe857b86addf382f6fd383948bd7736a3201403
+v4l-utils git hash:	fd544473800d02e90bc289434cc44e5aa8fadd0f
+edid-decode git hash:	9ba4e90f3c0705351d32f526653e3e765fa2cf64
+gcc version:		i686-linux-gcc (GCC) 12.2.0
+sparse repo:            git://git.kernel.org/pub/scm/devel/sparse/sparse.git
+sparse version:		v0.6.4-39-gce1a6720-dirty
+smatch repo:            git://repo.or.cz/smatch.git
+smatch version:		v0.5.0-8146-g91e779fd-dirty
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: ee91e2d56dfee1cb2ebeea1455e5e6934b8fec6d
+host hardware:		x86_64
+host os:		5.19.0-2-amd64
 
--- 
-Kind regards,
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-pxa: OK
+linux-git-powerpc64: OK
+linux-git-mips: OK
+linux-git-arm-stm32: OK
+linux-git-arm-multi: WARNINGS
+linux-git-arm64: WARNINGS
+linux-git-i686: WARNINGS
+linux-git-x86_64: WARNINGS
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+apps: OK
+spec-git: OK
+virtme: WARNINGS: VM was not running
+sparse: WARNINGS
+smatch: WARNINGS
+kerneldoc: OK
 
-Sakari Ailus
+Detailed results are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Tuesday.log
+
+Detailed regression test results are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media.log
+https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media-32.log
+https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media-dmesg.log
+
+Full logs are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Tuesday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+https://hverkuil.home.xs4all.nl/spec/index.html
