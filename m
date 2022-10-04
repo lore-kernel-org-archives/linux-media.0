@@ -2,99 +2,129 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01E67C433FE
-	for <linux-media@archiver.kernel.org>; Tue,  4 Oct 2022 09:51:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79971C433F5
+	for <linux-media@archiver.kernel.org>; Tue,  4 Oct 2022 10:13:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbiJDJvl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 4 Oct 2022 05:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57384 "EHLO
+        id S229724AbiJDKNV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 4 Oct 2022 06:13:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiJDJvN (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Oct 2022 05:51:13 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0255D81;
-        Tue,  4 Oct 2022 02:49:35 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3CE686601595;
-        Tue,  4 Oct 2022 10:49:33 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664876973;
-        bh=0JAossrh1s1hdIruCobtP1yntPLtj2cheG0ilCpKD4g=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=iNMFa0r/mUkXcpDHLcGnQXzL5H/YCfCOFDr7/zwbiDZQwxLsS1PaxgsKhaMno6kqG
-         MuzvN5z+biFI64Q8cQ50/LNSOzmfiql0cBClk7Rwk71MVD4Lye27Kn+KjQxZQ4QMDd
-         WnsmIF6vB0O7M79Jd1NwgfZursYLILfxIfR0gU8LTYfO+oUwGz72lamFmgRudlVrdI
-         X81kL9mA8SAgNn3zcsh3UL1uQ6wGu/lcHwM+oh7d83Dx5fGGGBKt6cGpSTRZpM6IRl
-         qsn7f1XmzRVhlMcXmBgyjvj/ibLklrqc8B4bg4YIFEjNnw96gqq8Tt5o8q6DgkvokI
-         TS2TRfsWm59Bw==
-Message-ID: <699e33a2-9498-9a84-47c9-419c952e75cf@collabora.com>
-Date:   Tue, 4 Oct 2022 11:49:30 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] media: platform: mtk-mdp3: remove unused
- VIDEO_MEDIATEK_VPU config
-Content-Language: en-US
-To:     Moudy Ho <moudy.ho@mediatek.com>,
+        with ESMTP id S229672AbiJDKNT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Oct 2022 06:13:19 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED9228E02;
+        Tue,  4 Oct 2022 03:13:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664878398; x=1696414398;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=unSBrfZWWQiaWR5VmWYGXL4IstFzYLo18uQjnoBzJyQ=;
+  b=ScrgRUdrsA4otFfZ6Jyu/mtiH4FZ0NqkBAc6zMRRp98cyHKkbWKans9Q
+   QHjKQxjcLPka78qbH1HkMQ5X5kxZbi6CGlkp7izW5oH7V2c3Z6Z06nt21
+   uCBPJmnBdznIXeyHfe4EfYCYrRPp4mlHDyVFVHR4tt3LPtJq6TNvo/6iS
+   l9nh3zlRYCAj0m9CEXFX1zeTzq4kgVsMaC1Fl29iYB3U7cq795n3ZdtcG
+   zgvLCzD8YeG/kHs1Wkb3JpgOQAalOAQnD70jjFAtnKQIMjp4U7HNXVhJ5
+   A3GoaRDBZrMreJ82owWapeshukLxXWxj9biN/QZkuk43pd+bGAoDiQaOo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="303833888"
+X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
+   d="scan'208";a="303833888"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 03:13:18 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="619053782"
+X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
+   d="scan'208";a="619053782"
+Received: from kmreisi-mobl.ger.corp.intel.com ([10.252.39.196])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 03:13:13 -0700
+Date:   Tue, 4 Oct 2022 13:13:10 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Irui Wang <irui.wang@mediatek.com>
+cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20221004023727.28946-1-moudy.ho@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221004023727.28946-1-moudy.ho@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        angelogioacchino.delregno@collabora.com,
+        nicolas.dufresne@collabora.com,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        Longfei Wang <longfei.wang@mediatek.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v6, 5/8] media: mediatek: vcodec: Add venc power on/off
+ function
+In-Reply-To: <20221001031737.18266-6-irui.wang@mediatek.com>
+Message-ID: <8a19febc-8662-b9f7-8250-44c23af06f91@linux.intel.com>
+References: <20221001031737.18266-1-irui.wang@mediatek.com> <20221001031737.18266-6-irui.wang@mediatek.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Il 04/10/22 04:37, Moudy Ho ha scritto:
-> Since remoteproc completely replaces the VPU in MDP3, unused config
-> should be removed to avoid compilation warnings reported on i386 or x86_64.
+On Sat, 1 Oct 2022, Irui Wang wrote:
+
+> when enable multi-core encoding, all available encoder cores' power need
+> to be on/off, add new functions for encoder cores' power management.
 > 
-
-MTK_SCP replaces VIDEO_MEDIATEK_VPU... but your description is not wrong, anyway.
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-> Warning messages:
->      WARNING: unmet direct dependencies detected for VIDEO_MEDIATEK_VPU
->            Depends on [n]: MEDIA_SUPPORT [=y] && MEDIA_PLATFORM_SUPPORT [=y]
->          && MEDIA_PLATFORM_DRIVERS [=y] && V4L_MEM2MEM_DRIVERS [=n] &&
->          VIDEO_DEV [=y] && (ARCH_MEDIATEK || COMPILE_TEST [=y])
->            Selected by [y]:
->            - VIDEO_MEDIATEK_MDP3 [=y] && MEDIA_SUPPORT [=y] &&
->          MEDIA_PLATFORM_SUPPORT [=y] && MEDIA_PLATFORM_DRIVERS [=y] &&
->          (MTK_IOMMU [=n] || COMPILE_TEST [=y]) && VIDEO_DEV [=y] &&
->          (ARCH_MEDIATEK || COMPILE_TEST [=y]) && HAS_DMA [=y] && REMOTEPROC
->          [=y]
-> 
-> Fixes: 61890ccaefaf ("media: platform: mtk-mdp3: add MediaTek MDP3 driver")
-> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+> Signed-off-by: Irui Wang <irui.wang@mediatek.com>
 > ---
->   drivers/media/platform/mediatek/mdp3/Kconfig | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/media/platform/mediatek/mdp3/Kconfig b/drivers/media/platform/mediatek/mdp3/Kconfig
-> index 50ae07b75b5f..846e759a8f6a 100644
-> --- a/drivers/media/platform/mediatek/mdp3/Kconfig
-> +++ b/drivers/media/platform/mediatek/mdp3/Kconfig
-> @@ -9,7 +9,6 @@ config VIDEO_MEDIATEK_MDP3
->   	select VIDEOBUF2_DMA_CONTIG
->   	select V4L2_MEM2MEM_DEV
->   	select MTK_MMSYS
-> -	select VIDEO_MEDIATEK_VPU
->   	select MTK_CMDQ
->   	select MTK_SCP
->   	default n
-> 
+
+> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.c
+> index 75de5031d292..213c3f50e9eb 100644
+> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.c
+> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.c
+> @@ -9,6 +9,7 @@
+>  #include <linux/of_platform.h>
+>  #include <linux/pm_runtime.h>
+>  
+> +#include "mtk_vcodec_enc_hw.h"
+>  #include "mtk_vcodec_enc_pm.h"
+>  #include "mtk_vcodec_util.h"
+>  
+> @@ -56,6 +57,88 @@ int mtk_vcodec_init_enc_clk(struct platform_device *pdev,
+>  }
+>  EXPORT_SYMBOL_GPL(mtk_vcodec_init_enc_clk);
+>  
+> +static int mtk_enc_core_power_on(struct mtk_vcodec_ctx *ctx)
+> +{
+> +	struct mtk_venc_hw_dev *sub_core;
+> +	int ret, i;
+> +
+> +	/* multi-core encoding need power on all available cores */
+> +	for (i = 0; i < MTK_VENC_HW_MAX; i++) {
+> +		sub_core = (struct mtk_venc_hw_dev *)ctx->dev->enc_hw_dev[i];
+> +		if (!sub_core)
+> +			continue;
+> +
+> +		ret = pm_runtime_resume_and_get(&sub_core->plat_dev->dev);
+> +		if (ret) {
+> +			mtk_v4l2_err("power on sub_core[%d] fail %d", i, ret);
+> +			goto pm_on_fail;
+> +		}
+> +	}
+> +	return ret;
+> +
+> +pm_on_fail:
+> +	for (i -= 1; i >= 0; i--) {
+
+while (i--) {
+
+achieves the same.
+
+> +		sub_core = (struct mtk_venc_hw_dev *)ctx->dev->enc_hw_dev[i];
+> +		pm_runtime_put_sync(&sub_core->plat_dev->dev);
+> +	}
+> +	return ret;
+> +}
+
+
+-- 
+ i.
 
