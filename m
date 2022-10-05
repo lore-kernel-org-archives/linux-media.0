@@ -2,87 +2,95 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B463C433F5
-	for <linux-media@archiver.kernel.org>; Wed,  5 Oct 2022 16:06:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C49BC433FE
+	for <linux-media@archiver.kernel.org>; Wed,  5 Oct 2022 19:06:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbiJEQGH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 Oct 2022 12:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39952 "EHLO
+        id S231363AbiJETG5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 Oct 2022 15:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiJEQGH (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Oct 2022 12:06:07 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB985C35E;
-        Wed,  5 Oct 2022 09:06:06 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id e10-20020a05600c4e4a00b003b4eff4ab2cso1277245wmq.4;
-        Wed, 05 Oct 2022 09:06:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=pwSoe76/9sXHlthLlGvZI3z8LwisXO4XEQ5zMXLYIi4=;
-        b=BpiZOY5qoInatS2yLzXnvi6Pjkam8b8Z1vfnW8uDgXuqxF1Yp2XN8rMYz/2v2VorHj
-         Zw/KcYt7iPALUfJ2Bt78PA/UeYQMQiG4OVqRboIlrl4Pto9pTknD6ed0GmcFU4L7kS0c
-         xHGzeFo50d2hMRm8X+LurDsaQPdd0LKnp8yBEnYNXttGKfeMJpoNsUv8rjjiYJKEvn8U
-         tcaSbYUItsIi2Icq0LmjptCvK9Bwir7Z3W+5rxW682zSFFMnvNXPF0YYLAhEErZVx5fK
-         Ls7A+uNThcC5siK7vi1hIGv16R+YRyvroBzXl3wjFp/IcboqwSZMFNL22tqbyXWzUD29
-         GbKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=pwSoe76/9sXHlthLlGvZI3z8LwisXO4XEQ5zMXLYIi4=;
-        b=RTmkCqJL9dgbpdA1IrKsotBa5fnIu7sIRj4iYFanLfZhwRCAl5GaYGAn349R0Dja8b
-         3HMaTj9rjYibXUjtH71yggQMypOhbBuAfhX0tXeU32jSDbAApOEnz+oFocsPs1JqVkpo
-         L3BYpdX3tAMFZAoTMKeuU2WnPlnucJxK2EBGiw/aD7G/lO/gQnSFycMYdHxEbWU6264j
-         xTWgm/LyZZK+/LvtPglRRqVCJjK14KFrau+ejnuY1iY2y335ASkJG2KXENANtfXOv8yg
-         7c2lOuKNlAJ+Me8n0xDqM8L8W9P5Ub+BFdsywn5Be+3Pyv/gW9tM0UElsnqPZ8Ng7J7s
-         r+iA==
-X-Gm-Message-State: ACrzQf0UXSafWOmuY9FAgIxFzqcaC1mV58Q0Fdwl2Bc6UwPyDArdrgXr
-        uQOBW6qE+GPBi7AfSzdQaGE6yD7UGcn70RxX
-X-Google-Smtp-Source: AMsMyM4UWs5s2tWICWcVCZmWsRQhUm89CoHX5AtLtAuCy42s8VJcnOgfEvPdmSE736f/zFWukd4Llg==
-X-Received: by 2002:a05:600c:1e23:b0:3c0:2cb4:49cd with SMTP id ay35-20020a05600c1e2300b003c02cb449cdmr1214556wmb.95.1664985964636;
-        Wed, 05 Oct 2022 09:06:04 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id o11-20020a05600c510b00b003a83ca67f73sm2469448wms.3.2022.10.05.09.06.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 09:06:03 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: mxl5005s: Make array RegAddr static const
-Date:   Wed,  5 Oct 2022 17:06:03 +0100
-Message-Id: <20221005160603.321421-1-colin.i.king@gmail.com>
+        with ESMTP id S231206AbiJETG4 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Oct 2022 15:06:56 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55037FFA4
+        for <linux-media@vger.kernel.org>; Wed,  5 Oct 2022 12:06:48 -0700 (PDT)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0A979FF80B;
+        Wed,  5 Oct 2022 19:06:42 +0000 (UTC)
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org
+Subject: [PATCH 03/10] media: ar0521: Set maximum resolution to 2592x1944
+Date:   Wed,  5 Oct 2022 21:06:06 +0200
+Message-Id: <20221005190613.394277-4-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20221005190613.394277-1-jacopo@jmondi.org>
+References: <20221005190613.394277-1-jacopo@jmondi.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Don't populate the read-only array RegAddr on the stack but instead
-make it static const. Also makes the object code a little smaller.
+Change the largest visibile resolution to 2592x1944, which corresponds
+to the active pixel array area size. Take into account the horizontal
+and vertical limits when programming the visible sizes to skip
+dummy/inactive pixels.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/tuners/mxl5005s.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/ar0521.c | 23 +++++++++++++++++------
+ 1 file changed, 17 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/tuners/mxl5005s.c b/drivers/media/tuners/mxl5005s.c
-index ab4c43df9d18..cd9f225ca26c 100644
---- a/drivers/media/tuners/mxl5005s.c
-+++ b/drivers/media/tuners/mxl5005s.c
-@@ -3637,7 +3637,7 @@ static u16 MXL_GetCHRegister_ZeroIF(struct dvb_frontend *fe, u8 *RegNum,
- 	u16 status = 0;
- 	int i;
+diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
+index 581f5e42994d..2b19ba898ce8 100644
+--- a/drivers/media/i2c/ar0521.c
++++ b/drivers/media/i2c/ar0521.c
+@@ -28,10 +28,17 @@
+ #define AR0521_PIXEL_CLOCK_MIN	 (168 * 1000 * 1000)
+ #define AR0521_PIXEL_CLOCK_MAX	 (414 * 1000 * 1000)
  
--	u8 RegAddr[] = {43, 136};
-+	static const u8 RegAddr[] = {43, 136};
++#define AR0521_NATIVE_WIDTH		2604u
++#define AR0521_NATIVE_HEIGHT		1964u
++#define AR0521_MIN_X_ADDR_START		4u
++#define AR0521_MIN_Y_ADDR_START		4u
++#define AR0521_MAX_X_ADDR_END		2603u
++#define AR0521_MAX_Y_ADDR_END		1963u
++
+ #define AR0521_WIDTH_MIN	       8u
+-#define AR0521_WIDTH_MAX	    2608u
++#define AR0521_WIDTH_MAX	    2592u
+ #define AR0521_HEIGHT_MIN	       8u
+-#define AR0521_HEIGHT_MAX	    1958u
++#define AR0521_HEIGHT_MAX	    1944u
  
- 	*count = ARRAY_SIZE(RegAddr);
+ #define AR0521_WIDTH_BLANKING_MIN     572u
+ #define AR0521_HEIGHT_BLANKING_MIN     38u /* must be even */
+@@ -208,13 +215,17 @@ static int ar0521_read_reg(struct ar0521_dev *sensor, u16 reg, u16 *val)
  
+ static int ar0521_set_geometry(struct ar0521_dev *sensor)
+ {
++	/* Center the image in the visible ouput window. */
++	u16 x = clamp((AR0521_WIDTH_MAX - sensor->fmt.width) / 2,
++		       AR0521_MIN_X_ADDR_START, AR0521_MAX_X_ADDR_END);
++	u16 y = clamp(((AR0521_HEIGHT_MAX - sensor->fmt.height) / 2) & ~1,
++		       AR0521_MIN_Y_ADDR_START, AR0521_MAX_Y_ADDR_END);
++
+ 	/* All dimensions are unsigned 12-bit integers */
+-	u16 x = (AR0521_WIDTH_MAX - sensor->fmt.width) / 2;
+-	u16 y = ((AR0521_HEIGHT_MAX - sensor->fmt.height) / 2) & ~1;
+ 	__be16 regs[] = {
+ 		be(AR0521_REG_FRAME_LENGTH_LINES),
+-		be(sensor->total_height),
+-		be(sensor->total_width),
++		be(sensor->fmt.height + sensor->ctrls.vblank->val),
++		be(sensor->fmt.width + sensor->ctrls.hblank->val),
+ 		be(x),
+ 		be(y),
+ 		be(x + sensor->fmt.width - 1),
 -- 
 2.37.3
 
