@@ -2,30 +2,30 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C49BC433FE
-	for <linux-media@archiver.kernel.org>; Wed,  5 Oct 2022 19:06:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9F3BC4332F
+	for <linux-media@archiver.kernel.org>; Wed,  5 Oct 2022 19:06:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231363AbiJETG5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 Oct 2022 15:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
+        id S231359AbiJETG6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 Oct 2022 15:06:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231206AbiJETG4 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Oct 2022 15:06:56 -0400
+        with ESMTP id S231325AbiJETG5 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Oct 2022 15:06:57 -0400
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55037FFA4
-        for <linux-media@vger.kernel.org>; Wed,  5 Oct 2022 12:06:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DE47FFB9
+        for <linux-media@vger.kernel.org>; Wed,  5 Oct 2022 12:06:52 -0700 (PDT)
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0A979FF80B;
-        Wed,  5 Oct 2022 19:06:42 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 6E924FF805;
+        Wed,  5 Oct 2022 19:06:49 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@iki.fi>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org
-Subject: [PATCH 03/10] media: ar0521: Set maximum resolution to 2592x1944
-Date:   Wed,  5 Oct 2022 21:06:06 +0200
-Message-Id: <20221005190613.394277-4-jacopo@jmondi.org>
+Subject: [PATCH 06/10] media: ar0521: Configure pixel rate using LINK_FREQ
+Date:   Wed,  5 Oct 2022 21:06:09 +0200
+Message-Id: <20221005190613.394277-7-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221005190613.394277-1-jacopo@jmondi.org>
 References: <20221005190613.394277-1-jacopo@jmondi.org>
@@ -35,62 +35,90 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Change the largest visibile resolution to 2592x1944, which corresponds
-to the active pixel array area size. Take into account the horizontal
-and vertical limits when programming the visible sizes to skip
-dummy/inactive pixels.
+Now that the V4L2_LINK_FREQUENCY control is available, use it to
+configure the sensor pixel rate.
+
+Adjust the default pixel rate to match the first listed link_frequency.
+
+Validated with:
+
+$ v4l2-ctl -l -d /dev/v4l-subdev3
+ link_frequency 0x009f0901 (intmenu): min=0 max=1 default=0 value=0
+ pixel_rate 0x009f0902 (int64)  : min=168000000 max=414000000 step=1 default=414000000 value=207000000 flags=read-only
+
+26.493166 (30.78 fps) cam0-stream0 seq: 000008 bytesused: 1843200
+26.525629 (30.80 fps) cam0-stream0 seq: 000009 bytesused: 1843200
+
+$ yavta -w "0x009f0901 1" /dev/v4l-subdev3
+$ v4l2-ctl -l -d /dev/v4l-subdev3
+ link_frequency 0x009f0901 (intmenu): min=0 max=1 default=0 value=1
+ pixel_rate 0x009f0902 (int64)  : min=168000000 max=414000000 step=1 default=414000000 value=414000000 flags=read-only
+
+54.700859 (61.37 fps) cam0-stream0 seq: 000039 bytesused: 1843200
+54.717192 (61.23 fps) cam0-stream0 seq: 000040 bytesused: 1843200
 
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/i2c/ar0521.c | 23 +++++++++++++++++------
- 1 file changed, 17 insertions(+), 6 deletions(-)
+ drivers/media/i2c/ar0521.c | 21 +++++++++++++++++----
+ 1 file changed, 17 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
-index 581f5e42994d..2b19ba898ce8 100644
+index c5410b091654..b1580c99f5e3 100644
 --- a/drivers/media/i2c/ar0521.c
 +++ b/drivers/media/i2c/ar0521.c
-@@ -28,10 +28,17 @@
+@@ -24,7 +24,7 @@
+ #define AR0521_PLL_MAX		(1280 * 1000 * 1000)
+ 
+ /* Effective pixel sample rate on the pixel array. */
+-#define AR0521_PIXEL_CLOCK_RATE	 (184 * 1000 * 1000)
++#define AR0521_PIXEL_CLOCK_RATE	 (207 * 1000 * 1000)
  #define AR0521_PIXEL_CLOCK_MIN	 (168 * 1000 * 1000)
  #define AR0521_PIXEL_CLOCK_MAX	 (414 * 1000 * 1000)
  
-+#define AR0521_NATIVE_WIDTH		2604u
-+#define AR0521_NATIVE_HEIGHT		1964u
-+#define AR0521_MIN_X_ADDR_START		4u
-+#define AR0521_MIN_Y_ADDR_START		4u
-+#define AR0521_MAX_X_ADDR_END		2603u
-+#define AR0521_MAX_Y_ADDR_END		1963u
-+
- #define AR0521_WIDTH_MIN	       8u
--#define AR0521_WIDTH_MAX	    2608u
-+#define AR0521_WIDTH_MAX	    2592u
- #define AR0521_HEIGHT_MIN	       8u
--#define AR0521_HEIGHT_MAX	    1958u
-+#define AR0521_HEIGHT_MAX	    1944u
+@@ -91,7 +91,10 @@ static const char * const ar0521_supply_names[] = {
+ };
  
- #define AR0521_WIDTH_BLANKING_MIN     572u
- #define AR0521_HEIGHT_BLANKING_MIN     38u /* must be even */
-@@ -208,13 +215,17 @@ static int ar0521_read_reg(struct ar0521_dev *sensor, u16 reg, u16 *val)
+ static const s64 ar0521_link_frequencies[] = {
+-	184000000,
++	/* 30 FPS at full resolution */
++	207000000,
++	/* 60 FPS at full resolution */
++	414000000,
+ };
  
- static int ar0521_set_geometry(struct ar0521_dev *sensor)
+ struct ar0521_ctrls {
+@@ -330,10 +333,21 @@ static u32 calc_pll(struct ar0521_dev *sensor, u32 freq, u16 *pre_ptr, u16 *mult
+ static void ar0521_calc_mode(struct ar0521_dev *sensor)
  {
-+	/* Center the image in the visible ouput window. */
-+	u16 x = clamp((AR0521_WIDTH_MAX - sensor->fmt.width) / 2,
-+		       AR0521_MIN_X_ADDR_START, AR0521_MAX_X_ADDR_END);
-+	u16 y = clamp(((AR0521_HEIGHT_MAX - sensor->fmt.height) / 2) & ~1,
-+		       AR0521_MIN_Y_ADDR_START, AR0521_MAX_Y_ADDR_END);
+ 	unsigned int pixel_clock;
++	unsigned int link_freq;
++	s64 frequency;
++	u32 pixel_rate;
+ 	u16 pre, mult;
+ 	u32 vco;
+ 	int bpp;
+ 
++	/* Update the PIXEL_RATE value using the desired link_frequency. */
++	bpp = ar0521_code_to_bpp(sensor);
++	link_freq = sensor->ctrls.link_freq->val;
++	frequency = ar0521_link_frequencies[link_freq];
++	pixel_rate = frequency * sensor->lane_count * 2 / bpp;
 +
- 	/* All dimensions are unsigned 12-bit integers */
--	u16 x = (AR0521_WIDTH_MAX - sensor->fmt.width) / 2;
--	u16 y = ((AR0521_HEIGHT_MAX - sensor->fmt.height) / 2) & ~1;
- 	__be16 regs[] = {
- 		be(AR0521_REG_FRAME_LENGTH_LINES),
--		be(sensor->total_height),
--		be(sensor->total_width),
-+		be(sensor->fmt.height + sensor->ctrls.vblank->val),
-+		be(sensor->fmt.width + sensor->ctrls.hblank->val),
- 		be(x),
- 		be(y),
- 		be(x + sensor->fmt.width - 1),
++	__v4l2_ctrl_s_ctrl_int64(sensor->ctrls.pixrate, pixel_rate);
++
+ 	/*
+ 	 * PLL1 and PLL2 are computed equally even if the application note
+ 	 * suggests a slower PLL1 clock. Maintain pll1 and pll2 divider and
+@@ -380,8 +394,7 @@ static void ar0521_calc_mode(struct ar0521_dev *sensor)
+ 	 * VCO not to exceed the limits specified by the datasheet and
+ 	 * consequentially reduce the obtained pixel clock.
+ 	 */
+-	pixel_clock = AR0521_PIXEL_CLOCK_RATE * 2 / sensor->lane_count;
+-	bpp = ar0521_code_to_bpp(sensor);
++	pixel_clock = pixel_rate * 2 / sensor->lane_count;
+ 	sensor->pll.vt_pix = bpp / 2;
+ 	vco = pixel_clock * sensor->pll.vt_pix;
+ 
 -- 
 2.37.3
 
