@@ -2,56 +2,56 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7435C4332F
-	for <linux-media@archiver.kernel.org>; Thu,  6 Oct 2022 15:43:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73486C433F5
+	for <linux-media@archiver.kernel.org>; Thu,  6 Oct 2022 15:46:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbiJFPns (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Oct 2022 11:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
+        id S231952AbiJFPqG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Oct 2022 11:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231863AbiJFPnf (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Oct 2022 11:43:35 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85E3C149D
-        for <linux-media@vger.kernel.org>; Thu,  6 Oct 2022 08:43:32 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id s2so3435440edd.2
-        for <linux-media@vger.kernel.org>; Thu, 06 Oct 2022 08:43:32 -0700 (PDT)
+        with ESMTP id S231963AbiJFPp4 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Oct 2022 11:45:56 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6497BC14B9
+        for <linux-media@vger.kernel.org>; Thu,  6 Oct 2022 08:45:49 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a2so5416359ejx.10
+        for <linux-media@vger.kernel.org>; Thu, 06 Oct 2022 08:45:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=raspberrypi.com; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=stEbLWnXww37Yj0WLFn4pZj8xwBQXA4WUz8umMlZHhs=;
-        b=QDINWQuMZNV9SOsspMp/dfIcMkPqBVJPtQ1fvfk7S+YOf+OBxZeZdi74fSZ+dv74n6
-         8htruoY4zuSrKvqTrGl87xXBesxKwXc2aDGNvX0XvBV2Gr5XsUhfhk3UUsMuSOTTPGU8
-         Kks1789FZfU3xn85YBXqPA63YCZNZtWkT3aTZwrLPHPyBuO+ch3AAbVOBwTFHOzy6qXn
-         syGszCsr7gzSqPWMQugX30nB8hsddnrSI7taVLa7x8P2irHlOucb9zGUOdHse+Gx+Zc3
-         SwK9xnNjQqf8+Xf3C9KkivavcFQD6GZTrEfcUq9mbh50sv62cQoCLDPg/3W26onLsoCW
-         x1Yg==
+        bh=fmWg90VyNJ0/WDlZumIDyKrOe0jhHs2hmJfpjx1jR38=;
+        b=H8f1+SBkGxdpMWTwjZsXRZYOunOI2iUf8jpryBUWA8LEavjxuisM68BsevJdO0pGSQ
+         d5rAC0wKuxbd7n0yP7uZgiMFy2amMmAiX/FQiIhSClM0BYrvZtn8dPKASWTeCPKV40DH
+         wqEtzwZydjfX3zyqCRn9VlqdZfR4WS7hHk/f4Y1PbI/h/cIULoHu8ixrRzlpmWE4uIU2
+         8Xkfn00TvCNu3uJAZ9WQSfkM+lOaxANKP0PCtkFuEvN8vRT1ss5z1rmbkUHpQIb6AfCA
+         5lj5X9ve7DRaNHVvruHMdrl9wkU5gko59LIAS9yQz5T9TK1ObdL3kf7pOWo4GTjj5Jx5
+         bgxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=stEbLWnXww37Yj0WLFn4pZj8xwBQXA4WUz8umMlZHhs=;
-        b=TGrFOtmh6PLJryOW1TFAyh5DaWhOUYrmU9xtZQOTO9XjZ5X2jR+ROxmt2dlME2SGTY
-         Oan/bal8WrkDB5oawUJuw0WBRzi9fAhErm0XK/2ZYFqbCRIHkgdyuhObMNZa3J9idbob
-         tIUtG8MnsV3EmeFQtjXQdYE5jW+O1leLV/nyL5tbUI+uh7oiJeo6BBqncKg50ormSt9T
-         QdRnZZp2tEJCq+Rpfp+3LuLnV344dcet9fZvdleeZOVuHNnheS7oIEOKB8C5008JEbem
-         faUcjF8CMiRCBUjhNh4zGW6GGyUq7n/kI2pDA171G/Hzvvtcw549czFZh3mrdYLqDFXy
-         ed4w==
-X-Gm-Message-State: ACrzQf3JjoteObNGvQjnqWq35FhlXV0CA6EtsxvM6svYRJpC4f4MTC7v
-        xfAxyR9Pe7iJKBc4QzBBxSZGscii+kdUryCsYdqlTQ==
-X-Google-Smtp-Source: AMsMyM6gTiviabHwKDZSkH8y3iErBcGsS+GrBNSnhABvyo3h7hgJuawu0uJ3G1vOO80OpPkLRt1z804SjQWSMQhxAvk=
-X-Received: by 2002:a05:6402:520e:b0:459:c11c:ea38 with SMTP id
- s14-20020a056402520e00b00459c11cea38mr348975edd.345.1665071010690; Thu, 06
- Oct 2022 08:43:30 -0700 (PDT)
+        bh=fmWg90VyNJ0/WDlZumIDyKrOe0jhHs2hmJfpjx1jR38=;
+        b=kcV0F4T3ZKtJS2TcOmD4LbsCNOdf5yzKw+cQ2IeOVorESy1bWd6GfDBeROVYyCzcnM
+         ccbYzd7E2EDWGvZRHBWPJEMLh+6c6KI82eSeezU4t5sPM3pqfB9KdaOoSfcHF0g5aD4H
+         8EFY/qyMswa+7gietq326PAxIzGUEnDNoDKIcJI0PIN60l4Gro96OSphtc5PbrxdlTJ4
+         AgJk/PXqonXiKGL3L8rdkYoiu8+0fK9dmkyGX2ogWanLBCr9IUQUpPsWg3Io9HFwIhv6
+         ukeWSNKbPDTNRGUxS86pCR3D+xipr9FVZVwxoyeog185VuNOdFBDVOjTWAKcNffaPJhh
+         s5jQ==
+X-Gm-Message-State: ACrzQf0KDlNOMNc/b0j+37zDydVElJ5y7DlI+v1nMmFM6gJbAm9iSw20
+        WUKSOez9NGnpM6wfBEtzOE7CEHMPu3pynKp0hWlmma6IR8U=
+X-Google-Smtp-Source: AMsMyM5+TkNRmPGoHB2b6P0Gu7AOHe8gTTuTZENRMJx0U7utOlD13e+wkHKtMTWJelK+MB75TLVFZxZDeMhtP+/wBDs=
+X-Received: by 2002:a17:907:8b0f:b0:783:6169:5bc5 with SMTP id
+ sz15-20020a1709078b0f00b0078361695bc5mr435698ejc.200.1665071147193; Thu, 06
+ Oct 2022 08:45:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221005190613.394277-1-jacopo@jmondi.org> <20221005190613.394277-9-jacopo@jmondi.org>
-In-Reply-To: <20221005190613.394277-9-jacopo@jmondi.org>
+References: <20221005190613.394277-1-jacopo@jmondi.org> <20221005190613.394277-10-jacopo@jmondi.org>
+In-Reply-To: <20221005190613.394277-10-jacopo@jmondi.org>
 From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Thu, 6 Oct 2022 16:43:14 +0100
-Message-ID: <CAPY8ntDk1WqDwFRg9jt01tEvpGwpxiCRkP7pw4H6Qwxxz3Fgng@mail.gmail.com>
-Subject: Re: [PATCH 08/10] media: ar0521: Setup controls at s_stream time
+Date:   Thu, 6 Oct 2022 16:45:30 +0100
+Message-ID: <CAPY8ntCOR7CnhL7JXpA-MNij8o9uK856bbf2_eC0-mj+B-3dkA@mail.gmail.com>
+Subject: Re: [PATCH 09/10] media: ar0521: Rework startup sequence
 To:     Jacopo Mondi <jacopo@jmondi.org>
 Cc:     =?UTF-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -65,33 +65,119 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 On Wed, 5 Oct 2022 at 20:07, Jacopo Mondi <jacopo@jmondi.org> wrote:
 >
-> Setup all the registered controls at s_stream(1) time instead of
-> manually configure gains.
+> The ar0521_write_mode() function explicitly programs the exposure time
+> register and the test pattern register, which are now setup by the call
+> to __v4l2_ctrl_handler_setup() in ar0521_set_stream().
+>
+> Removing those register writes from ar0521_write_mode() reduces the
+> function to two operations: geometry configuration and pll
+> configuration.
+>
+> Move those operations in the ar0521_set_stream() caller and remove
+> ar0521_write_mode(). However maintain the ar0521_calc_pll() function
+> separated as it is used during pad format configuration to update the
+> PIXEL_RATE control value.
 >
 > Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 
-Ah, lovely. I'm surprised it doesn't error out with no s_ctrl handler
-for link_freq when r/w though.
+Looks good.
 
 Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
 > ---
->  drivers/media/i2c/ar0521.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/media/i2c/ar0521.c | 50 ++++++++++++--------------------------
+>  1 file changed, 16 insertions(+), 34 deletions(-)
 >
 > diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
-> index 26bb1b8f7453..d46a51332964 100644
+> index d46a51332964..670fa33acc6f 100644
 > --- a/drivers/media/i2c/ar0521.c
 > +++ b/drivers/media/i2c/ar0521.c
-> @@ -460,7 +460,7 @@ static int ar0521_set_stream(struct ar0521_dev *sensor, bool on)
+> @@ -329,7 +329,7 @@ static u32 calc_pll(struct ar0521_dev *sensor, u32 freq, u16 *pre_ptr, u16 *mult
+>         return pll;
+>  }
+>
+> -static void ar0521_calc_mode(struct ar0521_dev *sensor)
+> +static void ar0521_calc_pll(struct ar0521_dev *sensor)
+>  {
+>         unsigned int pixel_clock;
+>         unsigned int link_freq;
+> @@ -403,7 +403,7 @@ static void ar0521_calc_mode(struct ar0521_dev *sensor)
+>         sensor->pll.mult = sensor->pll.mult2 = mult;
+>  }
+>
+> -static int ar0521_write_mode(struct ar0521_dev *sensor)
+> +static int ar0521_pll_config(struct ar0521_dev *sensor)
+>  {
+>         __be16 pll_regs[] = {
+>                 be(AR0521_REG_VT_PIX_CLK_DIV),
+> @@ -414,36 +414,9 @@ static int ar0521_write_mode(struct ar0521_dev *sensor)
+>                 /* 0x308 */ be(sensor->pll.vt_pix * 2), /* op_pix_clk_div = 2 * vt_pix_clk_div */
+>                 /* 0x30A */ be(1)  /* op_sys_clk_div */
+>         };
+> -       int ret;
+> -
+> -       /* Stop streaming for just a moment */
+> -       ret = ar0521_write_reg(sensor, AR0521_REG_RESET,
+> -                              AR0521_REG_RESET_DEFAULTS);
+> -       if (ret)
+> -               return ret;
+> -
+> -       ret = ar0521_set_geometry(sensor);
+> -       if (ret)
+> -               return ret;
+> -
+> -       ret = ar0521_write_regs(sensor, pll_regs, ARRAY_SIZE(pll_regs));
+> -       if (ret)
+> -               return ret;
+> -
+> -       ret = ar0521_write_reg(sensor, AR0521_REG_COARSE_INTEGRATION_TIME,
+> -                              sensor->ctrls.exposure->val);
+> -       if (ret)
+> -               return ret;
+> -
+> -       ret = ar0521_write_reg(sensor, AR0521_REG_RESET,
+> -                              AR0521_REG_RESET_DEFAULTS |
+> -                              AR0521_REG_RESET_STREAM);
+> -       if (ret)
+> -               return ret;
+>
+> -       ret = ar0521_write_reg(sensor, AR0521_REG_TEST_PATTERN_MODE,
+> -                              sensor->ctrls.test_pattern->val);
+> -       return ret;
+> +       ar0521_calc_pll(sensor);
+> +       return ar0521_write_regs(sensor, pll_regs, ARRAY_SIZE(pll_regs));
+>  }
+>
+>  static int ar0521_set_stream(struct ar0521_dev *sensor, bool on)
+> @@ -455,8 +428,17 @@ static int ar0521_set_stream(struct ar0521_dev *sensor, bool on)
+>                 if (ret < 0)
+>                         return ret;
+>
+> -               ar0521_calc_mode(sensor);
+> -               ret = ar0521_write_mode(sensor);
+> +               /* Stop streaming for just a moment */
+> +               ret = ar0521_write_reg(sensor, AR0521_REG_RESET,
+> +                                      AR0521_REG_RESET_DEFAULTS);
+> +               if (ret)
+> +                       return ret;
+> +
+> +               ret = ar0521_set_geometry(sensor);
+> +               if (ret)
+> +                       return ret;
+> +
+> +               ret = ar0521_pll_config(sensor);
 >                 if (ret)
 >                         goto err;
 >
-> -               ret = ar0521_set_gains(sensor);
-> +               ret =  __v4l2_ctrl_handler_setup(&sensor->ctrls.handler);
->                 if (ret)
->                         goto err;
+> @@ -562,7 +544,7 @@ static int ar0521_set_fmt(struct v4l2_subdev *sd,
+>         }
 >
+>         sensor->fmt = format->format;
+> -       ar0521_calc_mode(sensor);
+> +       ar0521_calc_pll(sensor);
+>
+>         /*
+>          * Update the exposure and blankings limits. Blankings are also reset
 > --
 > 2.37.3
 >
