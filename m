@@ -2,388 +2,117 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25B59C433F5
-	for <linux-media@archiver.kernel.org>; Fri,  7 Oct 2022 13:20:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A926CC433F5
+	for <linux-media@archiver.kernel.org>; Fri,  7 Oct 2022 13:20:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbiJGNUC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 7 Oct 2022 09:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
+        id S229701AbiJGNUk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 7 Oct 2022 09:20:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiJGNUA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 7 Oct 2022 09:20:00 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6CA5FA8
-        for <linux-media@vger.kernel.org>; Fri,  7 Oct 2022 06:19:57 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CECA5BBE;
-        Fri,  7 Oct 2022 15:19:54 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1665148795;
-        bh=RD3H3JFBLN5WbXbWby04Cs813JJBxlD/bAF4pcDaaBk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=REuxXHfmY52h7e4HniEE6bgGNkXaPVk2A9huQ1PJS0svIWCX6jg3LQ1eKbQfwZHvC
-         umyi7fbHXIg+dvalOHP8PYVzuGYQQ4cXcmLPW5guWLmu5Uz3s5zE0dHuUWz4DnBAKR
-         qoAHX4rz5RYLQc2X6Gp0EuF/Vk3hYHvc+P662l4A=
-Date:   Fri, 7 Oct 2022 16:19:50 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Benjamin MUGNIER <benjamin.mugnier@foss.st.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org, alain.volmat@foss.st.com,
-        hugues.fruchet@foss.st.com, sylvain.petinot@foss.st.com,
-        dave.stevenson@raspberrypi.com, kieran.bingham@ideasonboard.com,
-        nicolas@ndufresne.ca, hverkuil@xs4all.nl
-Subject: Re: [PATCH v6 4/4] media: i2c: Add driver for ST VGXY61 camera sensor
-Message-ID: <Y0AndkhzhA7fLZC+@pendragon.ideasonboard.com>
-References: <20220927083702.14138-1-benjamin.mugnier@foss.st.com>
- <20220927083702.14138-5-benjamin.mugnier@foss.st.com>
- <Yz8pE15/9tDf6Tjy@paasikivi.fi.intel.com>
- <af876e81-9105-9a0f-4dd1-47bc17886536@foss.st.com>
- <Y0AcRntvOlouAs8+@pendragon.ideasonboard.com>
- <1ad96ce2-9d25-14e8-9475-70fa58ce7a94@foss.st.com>
+        with ESMTP id S229527AbiJGNUi (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 7 Oct 2022 09:20:38 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A59276745;
+        Fri,  7 Oct 2022 06:20:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1665148837; x=1696684837;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=LzJ5AnU8KIaIpzYDWipeQelOn0D6aKSXwsxm4gvi9Vk=;
+  b=Q3loK3foTfqySULeCTvgl81ySxxUlPPKrW4V60GX4sJivx/aR0/VyvyM
+   6z33iD6yeSUM2fRNMc2ib9QTagUt7+tlRJKl4AJh9KUbqYzXB2ayV4+eW
+   WlSnt9czXoKsfG3gqIhIVDJwcG5/o0QP9JR/jFXcGviDuZy0YjsHwrShr
+   s=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 07 Oct 2022 06:20:36 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2022 06:20:36 -0700
+Received: from mmitkov.eu.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Fri, 7 Oct 2022 06:20:31 -0700
+From:   <quic_mmitkov@quicinc.com>
+To:     <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <robert.foss@linaro.org>, <akapatra@quicinc.com>,
+        <jzala@quicinc.com>, <todor.too@gmail.com>
+CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <konrad.dybcio@somainline.org>, <mchehab@kernel.org>,
+        <bryan.odonoghue@linaro.org>, <cgera@qti.qualcomm.com>,
+        <gchinnab@quicinc.com>, <ayasan@qti.qualcomm.com>,
+        Milen Mitkov <quic_mmitkov@quicinc.com>
+Subject: [PATCH v3 2/4] media: camss: vfe: Reserve VFE lines on stream start and link to CSID
+Date:   Fri, 7 Oct 2022 16:20:07 +0300
+Message-ID: <20221007132009.1886-3-quic_mmitkov@quicinc.com>
+X-Mailer: git-send-email 2.37.3.windows.1
+In-Reply-To: <20221007132009.1886-1-quic_mmitkov@quicinc.com>
+References: <20221007132009.1886-1-quic_mmitkov@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1ad96ce2-9d25-14e8-9475-70fa58ce7a94@foss.st.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Benjamin,
+From: Milen Mitkov <quic_mmitkov@quicinc.com>
 
-On Fri, Oct 07, 2022 at 02:38:33PM +0200, Benjamin MUGNIER wrote:
-> On 10/7/22 14:32, Laurent Pinchart wrote:
-> > On Fri, Oct 07, 2022 at 02:24:16PM +0200, Benjamin MUGNIER wrote:
-> >> Hi Sakari,
-> >>
-> >> Thank you for your review.
-> >> Please consider everything not commented as queued for v7.
-> >>
-> >> On 10/6/22 21:14, Sakari Ailus wrote:
-> >>> Hi Benjamin,
-> >>>
-> >>> Thanks for the update. A few more comments below...
-> >>>
-> >>> On Tue, Sep 27, 2022 at 10:37:02AM +0200, Benjamin Mugnier wrote:
-> >>>> +static const char * const vgxy61_hdr_mode_menu[] = {
-> >>>> +	"HDR linearize",
-> >>>> +	"HDR substraction",
-> >>>> +	"No HDR",
-> >>>> +};
-> >>>
-> >>> I think more documentation is needed on the HDR modes. What do these mean?
-> >>> For instance, are they something that requires further processing or is the
-> >>> result e.g. a ready HDR image?
-> >>>
-> >>> This should probably make it to driver specific documentation.
-> >>
-> >> Sure, in fact I did something like this in v3:
-> >> https://lore.kernel.org/linux-media/20220512074037.3829926-4-benjamin.mugnier@foss.st.com/
-> >>
-> >> Since I standardized the control I was unsure what to do with this
-> >> documentation, and dropped it.
-> >>
-> >> I will add back the
-> >> Documentation/userspace-api/media/drivers/st-vgxy61.rst file from this
-> >> commit to the patchset, while changing the control name to the new
-> >> one.
-> > 
-> > The documentation there is about modes for HDR merge on the sensor side.
-> > Can the sensor also output the unmerged images, for instance
-> > line-interleaved ?
-> 
-> The sensor can not output unmerged images. It can only output a single
-> image and frame merging as to be done sensor side.
+For multiple virtual channels support, each VFE line can be in either
+ON, RESERVED or OFF states. This allows the starting and stopping
+of a VFE line independently of other active VFE lines.
 
-I wonder then, should we have two HDR mode controls, one for sensor-side
-HDR, and one to control the interleaving of images for host-side HDR ?
-The latter would need some standardization I think, as the ISP
-configuration needs to match, so there must be some industry de-facto
-standards.
+Also, link the CSID entity's source ports to corresponding VFE lines.
 
-> >>>> +
-> >>>> +static const char * const vgxy61_supply_name[] = {
-> >>>> +	"VCORE",
-> >>>> +	"VDDIO",
-> >>>> +	"VANA",
-> >>>> +};
-> >>>> +
-> >>>> +#define VGXY61_NUM_SUPPLIES		ARRAY_SIZE(vgxy61_supply_name)
-> >>>
-> >>> Please use plain ARRAY_SIZE() instead.
-> >>>
-> >>> ...
-> >>>
-> >>>> +static int vgxy61_poll_reg(struct vgxy61_dev *sensor, u32 reg, u8 poll_val,
-> >>>> +			   unsigned int timeout_ms)
-> >>>> +{
-> >>>> +	const unsigned int loop_delay_ms = 10;
-> >>>> +	int ret, timeout;
-> >>>> +
-> >>>> +	timeout = read_poll_timeout(vgxy61_read_reg, ret,
-> >>>> +				    ((ret < 0) || (ret == poll_val)),
-> >>>> +				    loop_delay_ms * 1000, timeout_ms * 1000,
-> >>>> +				    false, sensor, reg);
-> >>>> +	if (timeout)
-> >>>> +		return timeout;
-> >>>> +
-> >>>> +	return 0;
-> >>>
-> >>> "timeout" here is entirely pointless.
-> >>>
-> >>>> +}
-> >>>
-> >>> ...
-> >>>
-> >>>> +static int vgxy61_apply_exposure(struct vgxy61_dev *sensor)
-> >>>> +{
-> >>>> +	int ret = 0;
-> >>>> +
-> >>>> +	 /* We first set expo to zero to avoid forbidden parameters couple */
-> >>>> +	ret = vgxy61_write_reg(sensor, VGXY61_REG_COARSE_EXPOSURE_SHORT,
-> >>>> +			       0, &ret);
-> >>>> +	ret = vgxy61_write_reg(sensor, VGXY61_REG_COARSE_EXPOSURE_LONG,
-> >>>> +			       sensor->expo_long, &ret);
-> >>>> +	ret = vgxy61_write_reg(sensor, VGXY61_REG_COARSE_EXPOSURE_SHORT,
-> >>>> +			       sensor->expo_short, &ret);
-> >>>
-> >>> return vgxy61_write_reg(...);
-> >>>
-> >>>> +	if (ret)
-> >>>> +		return ret;
-> >>>> +
-> >>>> +	return 0;
-> >>>> +}
-> >>>
-> >>> ...
-> >>>
-> >>>> +static int vgxy61_init_controls(struct vgxy61_dev *sensor)
-> >>>> +{
-> >>>> +	const struct v4l2_ctrl_ops *ops = &vgxy61_ctrl_ops;
-> >>>> +	struct v4l2_ctrl_handler *hdl = &sensor->ctrl_handler;
-> >>>> +	const struct vgxy61_mode_info *cur_mode = sensor->current_mode;
-> >>>> +	struct v4l2_ctrl *ctrl;
-> >>>> +	int ret;
-> >>>> +
-> >>>> +	v4l2_ctrl_handler_init(hdl, 16);
-> >>>> +	/* We can use our own mutex for the ctrl lock */
-> >>>> +	hdl->lock = &sensor->lock;
-> >>>> +	v4l2_ctrl_new_std(hdl, ops, V4L2_CID_ANALOGUE_GAIN, 0, 0x1c, 1,
-> >>>> +			  sensor->analog_gain);
-> >>>> +	v4l2_ctrl_new_std(hdl, ops, V4L2_CID_DIGITAL_GAIN, 0, 0xfff, 1,
-> >>>> +			  sensor->digital_gain);
-> >>>> +	v4l2_ctrl_new_std_menu_items(hdl, ops, V4L2_CID_TEST_PATTERN,
-> >>>> +				     ARRAY_SIZE(vgxy61_test_pattern_menu) - 1,
-> >>>> +				     0, 0, vgxy61_test_pattern_menu);
-> >>>> +	ctrl = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_HBLANK, 0,
-> >>>> +				 sensor->line_length, 1,
-> >>>> +				 sensor->line_length - cur_mode->width);
-> >>>> +	if (ctrl)
-> >>>> +		ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> >>>> +	ctrl = v4l2_ctrl_new_int_menu(hdl, ops, V4L2_CID_LINK_FREQ,
-> >>>> +				      ARRAY_SIZE(link_freq) - 1, 0, link_freq);
-> >>>> +	if (ctrl)
-> >>>> +		ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> >>>> +	v4l2_ctrl_new_std_menu_items(hdl, ops, V4L2_CID_HDR_MODE,
-> >>>> +				     ARRAY_SIZE(vgxy61_hdr_mode_menu) - 1, 0,
-> >>>> +				     VGXY61_NO_HDR, vgxy61_hdr_mode_menu);
-> >>>> +
-> >>>> +	/*
-> >>>> +	 * Keep a pointer to these controls as we need to update them when
-> >>>> +	 * setting the format
-> >>>> +	 */
-> >>>> +	sensor->pixel_rate_ctrl = v4l2_ctrl_new_std(hdl, ops,
-> >>>> +						    V4L2_CID_PIXEL_RATE, 1,
-> >>>> +						    INT_MAX, 1,
-> >>>> +						    get_pixel_rate(sensor));
-> >>>> +	sensor->pixel_rate_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> >>>
-> >>> Also sensor->pixel_rate_ctrl may be NULL here.
-> >>>
-> >>>> +	sensor->expo_ctrl = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_EXPOSURE,
-> >>>> +					      sensor->expo_min,
-> >>>> +					      sensor->expo_max, 1,
-> >>>> +					      sensor->expo_long);
-> >>>> +	sensor->vblank_ctrl = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_VBLANK,
-> >>>> +						sensor->vblank_min,
-> >>>> +						0xffff - cur_mode->crop.height,
-> >>>> +						1, sensor->vblank);
-> >>>> +	sensor->vflip_ctrl = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_VFLIP,
-> >>>> +					       0, 1, 1, sensor->vflip);
-> >>>> +	sensor->hflip_ctrl = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_HFLIP,
-> >>>> +					       0, 1, 1, sensor->hflip);
-> >>>> +
-> >>>> +	if (hdl->error) {
-> >>>> +		ret = hdl->error;
-> >>>> +		goto free_ctrls;
-> >>>> +	}
-> >>>> +
-> >>>> +	sensor->sd.ctrl_handler = hdl;
-> >>>> +	return 0;
-> >>>> +
-> >>>> +free_ctrls:
-> >>>> +	v4l2_ctrl_handler_free(hdl);
-> >>>> +	return ret;
-> >>>> +}
-> >>>
-> >>> ...
-> >>>
-> >>>> +static int vgxy61_probe(struct i2c_client *client)
-> >>>> +{
-> >>>> +	struct device *dev = &client->dev;
-> >>>> +	struct fwnode_handle *handle;
-> >>>> +	struct vgxy61_dev *sensor;
-> >>>> +	int ret;
-> >>>> +
-> >>>> +	sensor = devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
-> >>>> +	if (!sensor)
-> >>>> +		return -ENOMEM;
-> >>>> +
-> >>>> +	sensor->i2c_client = client;
-> >>>> +	sensor->streaming = false;
-> >>>> +	sensor->hdr = VGXY61_NO_HDR;
-> >>>> +	sensor->expo_long = 200;
-> >>>> +	sensor->expo_short = 0;
-> >>>> +	sensor->hflip = false;
-> >>>> +	sensor->vflip = false;
-> >>>> +	sensor->analog_gain = 0;
-> >>>> +	sensor->digital_gain = 256;
-> >>>> +
-> >>>> +	handle = fwnode_graph_get_next_endpoint(of_fwnode_handle(dev->of_node),
-> >>>> +						NULL);
-> >>>
-> >>> handle = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev), 0, 0, 0);
-> >>>
-> >>>> +	if (!handle) {
-> >>>> +		dev_err(dev, "handle node not found\n");
-> >>>> +		return -EINVAL;
-> >>>> +	}
-> >>>> +
-> >>>> +	ret = vgxy61_tx_from_ep(sensor, handle);
-> >>>> +	fwnode_handle_put(handle);
-> >>>> +	if (ret) {
-> >>>> +		dev_err(dev, "Failed to parse handle %d\n", ret);
-> >>>> +		return ret;
-> >>>> +	}
-> >>>> +
-> >>>> +	sensor->xclk = devm_clk_get(dev, NULL);
-> >>>> +	if (IS_ERR(sensor->xclk)) {
-> >>>> +		dev_err(dev, "failed to get xclk\n");
-> >>>> +		return PTR_ERR(sensor->xclk);
-> >>>> +	}
-> >>>> +	sensor->clk_freq = clk_get_rate(sensor->xclk);
-> >>>> +	if (sensor->clk_freq < 6 * HZ_PER_MHZ ||
-> >>>> +	    sensor->clk_freq > 27 * HZ_PER_MHZ) {
-> >>>> +		dev_err(dev, "Only 6Mhz-27Mhz clock range supported. provide %lu MHz\n",
-> >>>> +			sensor->clk_freq / HZ_PER_MHZ);
-> >>>> +		return -EINVAL;
-> >>>> +	}
-> >>>> +	sensor->gpios_polarity = of_property_read_bool(dev->of_node,
-> >>>> +						       "invert-gpios-polarity");
-> >>>
-> >>> I thought we did discuss dropping support for sensor synchronisation in
-> >>> this version?
-> >>
-> >> This properties affects strobing lights gpios polarities as you can
-> >> see in vgxy61_update_gpios_strobe_polarity. If set to '1' all strobing
-> >> gpios are inverted. This has nothing to do with the sensor
-> >> synchronization.
-> >>
-> >> Now I realize this is poorly named, and I even forgot to document it
-> >> in the device tree bindings file. I apologize.
-> >>
-> >> I would like to rename it to 'st,strobe-polarity' since this is vendor
-> >> specific and to better reflect that it affects strobing gpios.
-> >> I'll make this change for v7 and document this in the bindings file
-> >> too. Tell me if there is any issues with that.
-> >>
-> >>>> +
-> >>>> +	v4l2_i2c_subdev_init(&sensor->sd, client, &vgxy61_subdev_ops);
-> >>>> +	sensor->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-> >>>> +	sensor->pad.flags = MEDIA_PAD_FL_SOURCE;
-> >>>> +	sensor->sd.entity.ops = &vgxy61_subdev_entity_ops;
-> >>>> +	sensor->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-> >>>> +
-> >>>> +	sensor->reset_gpio = devm_gpiod_get_optional(dev, "reset",
-> >>>> +						     GPIOD_OUT_HIGH);
-> >>>> +
-> >>>> +	ret = vgxy61_get_regulators(sensor);
-> >>>> +	if (ret) {
-> >>>> +		dev_err(&client->dev, "failed to get regulators %d\n", ret);
-> >>>> +		return ret;
-> >>>> +	}
-> >>>> +
-> >>>> +	ret = regulator_bulk_enable(VGXY61_NUM_SUPPLIES, sensor->supplies);
-> >>>> +	if (ret) {
-> >>>> +		dev_err(&client->dev, "failed to enable regulators %d\n", ret);
-> >>>> +		return ret;
-> >>>> +	}
-> >>>> +
-> >>>> +	ret = vgxy61_power_on(dev);
-> >>>> +	if (ret)
-> >>>> +		return ret;
-> >>>> +
-> >>>> +	ret = vgxy61_detect(sensor);
-> >>>> +	if (ret) {
-> >>>> +		dev_err(&client->dev, "sensor detect failed %d\n", ret);
-> >>>> +		return ret;
-> >>>> +	}
-> >>>> +
-> >>>> +	vgxy61_fill_sensor_param(sensor);
-> >>>> +	vgxy61_fill_framefmt(sensor, sensor->current_mode, &sensor->fmt,
-> >>>> +			     VGXY61_MEDIA_BUS_FMT_DEF);
-> >>>> +
-> >>>> +	ret = vgxy61_update_hdr(sensor, sensor->hdr);
-> >>>> +	if (ret)
-> >>>> +		return ret;
-> >>>> +
-> >>>> +	mutex_init(&sensor->lock);
-> >>>> +
-> >>>> +	ret = vgxy61_init_controls(sensor);
-> >>>> +	if (ret) {
-> >>>> +		dev_err(&client->dev, "controls initialization failed %d\n",
-> >>>> +			ret);
-> >>>> +		goto error_power_off;
-> >>>> +	}
-> >>>> +
-> >>>> +	ret = media_entity_pads_init(&sensor->sd.entity, 1, &sensor->pad);
-> >>>> +	if (ret) {
-> >>>> +		dev_err(&client->dev, "pads init failed %d\n", ret);
-> >>>> +		goto error_handler_free;
-> >>>> +	}
-> >>>> +
-> >>>> +	/* Enable runtime PM and turn off the device */
-> >>>> +	pm_runtime_set_active(dev);
-> >>>> +	pm_runtime_enable(dev);
-> >>>> +	pm_runtime_idle(dev);
-> >>>> +
-> >>>> +	ret = v4l2_async_register_subdev(&sensor->sd);
-> >>>> +	if (ret) {
-> >>>> +		dev_err(&client->dev, "async subdev register failed %d\n", ret);
-> >>>> +		goto error_pm_runtime;
-> >>>> +	}
-> >>>> +
-> >>>> +	pm_runtime_set_autosuspend_delay(&client->dev, 1000);
-> >>>> +	pm_runtime_use_autosuspend(&client->dev);
-> >>>> +
-> >>>> +	dev_dbg(&client->dev, "vgxy61 probe successfully\n");
-> >>>> +
-> >>>> +	return 0;
-> >>>> +
-> >>>> +error_pm_runtime:
-> >>>> +	pm_runtime_disable(&client->dev);
-> >>>> +	pm_runtime_set_suspended(&client->dev);
-> >>>> +	media_entity_cleanup(&sensor->sd.entity);
-> >>>> +error_handler_free:
-> >>>> +	v4l2_ctrl_handler_free(sensor->sd.ctrl_handler);
-> >>>> +	mutex_destroy(&sensor->lock);
-> >>>> +error_power_off:
-> >>>> +	vgxy61_power_off(dev);
-> >>>> +
-> >>>> +	return ret;
-> >>>> +}
-> > 
+Signed-off-by: Milen Mitkov <quic_mmitkov@quicinc.com>
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
+---
+ drivers/media/platform/qcom/camss/camss-vfe.c | 7 +++++++
+ drivers/media/platform/qcom/camss/camss.c     | 2 +-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+index a26e4a5d87b6..cd8ac0478cf1 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+@@ -738,8 +738,10 @@ static int vfe_set_stream(struct v4l2_subdev *sd, int enable)
+ 	struct vfe_line *line = v4l2_get_subdevdata(sd);
+ 	struct vfe_device *vfe = to_vfe(line);
+ 	int ret;
++	int i;
+ 
+ 	if (enable) {
++		line->output.state = VFE_OUTPUT_RESERVED;
+ 		ret = vfe->ops->vfe_enable(line);
+ 		if (ret < 0)
+ 			dev_err(vfe->camss->dev,
+@@ -749,6 +751,11 @@ static int vfe_set_stream(struct v4l2_subdev *sd, int enable)
+ 		if (ret < 0)
+ 			dev_err(vfe->camss->dev,
+ 				"Failed to disable vfe outputs\n");
++
++		/* At least one VFE line remains, return -EBUSY to avoid premature pipeline stop */
++		for (i = 0; i < vfe->line_num; i++)
++			if (vfe->line[i].output.state != VFE_OUTPUT_OFF)
++				return -EBUSY;
+ 	}
+ 
+ 	return ret;
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index 1118c40886d5..63653ac3e056 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -1320,7 +1320,7 @@ static int camss_register_entities(struct camss *camss)
+ 					struct v4l2_subdev *vfe = &camss->vfe[k].line[j].subdev;
+ 
+ 					ret = media_create_pad_link(&csid->entity,
+-								    MSM_CSID_PAD_SRC,
++								    MSM_CSID_PAD_FIRST_SRC + j,
+ 								    &vfe->entity,
+ 								    MSM_VFE_PAD_SINK,
+ 								    0);
 -- 
-Regards,
+2.37.3
 
-Laurent Pinchart
