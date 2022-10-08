@@ -2,219 +2,108 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11D52C04A95
-	for <linux-media@archiver.kernel.org>; Sat,  8 Oct 2022 21:42:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 379BFC433FE
+	for <linux-media@archiver.kernel.org>; Sat,  8 Oct 2022 21:54:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbiJHVmg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 8 Oct 2022 17:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32790 "EHLO
+        id S229563AbiJHVx6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 8 Oct 2022 17:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiJHVme (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 8 Oct 2022 17:42:34 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A533D33843;
-        Sat,  8 Oct 2022 14:42:32 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id s7so883581qkj.1;
-        Sat, 08 Oct 2022 14:42:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=XB90Z1qj3kPK5TTwJuNvzg1Gu7i5Rnz3wWrq9Xc3CzQ=;
-        b=EumsjgKwMc2Jw8Mczz4R6dcA2SGR+dlJiih8Ckk15eXQbl1ssNNcUUrPo+6xLg3PJJ
-         ACJZlZtsMQ8qHF+g94jmQvqwnd0JN02OtmaV0630S04pQ33UTiRtB3d/9RZxV3IEWRUS
-         2r7jZGZp8PRabENWrLu/RcNXt+h8W/EQbCXY+rIwGHkU8CMyznzvzkw9HGkZzTxMPx8w
-         xr6afYXFnKmA95gCiWV/Ff4HwGyaoBIjl31rvLZlakhTDvtM9Lwa0DyWxf0sryHaK1o0
-         LvM2pyhtabu/3Ucoe1BChll32HfoeeOvRbBxpmidXxDJ1YSjQ/R5moFvf8yAnsYhmD4z
-         nBbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XB90Z1qj3kPK5TTwJuNvzg1Gu7i5Rnz3wWrq9Xc3CzQ=;
-        b=pnqBt2PAvQobAd6828jURmlj1TOl6sNv+XtbKNnpUJGdYyy5OITP5vbqVQ/sOEy3Rv
-         bW4JNa+6+CXr2EGgiaI5wrb0/InqKzsu0hoRPtNcdX6UoITptRmSUN+zZR9ro4rO4hdJ
-         pviwGNBtLydG9Tt3ukhPFMn9L/tKFz5BTK/vjTkWXeowCp4qyW/4HxVgxocLA8O6tpp3
-         8SNVU6Q1M7EzFPexYErM2Rfh75GgOUJcJwSzL6ZiDqA6nWufdtoFGKAK0DvwZaePMlyK
-         WRSNwx+OISx6aGCKCAtNNnmR6F5rJqYXNyH7g6bKIay72zCehuutE2Qy341AxVKpbtDP
-         tWxg==
-X-Gm-Message-State: ACrzQf06Hk4xpinfxatCOAJzWII7AJi9kOILVAsTr9jTE0nVjicJFdwC
-        9BgLU2SsjLrZ7Qys29AyoBY=
-X-Google-Smtp-Source: AMsMyM7nAvlv/cx8tIjuG0BzVtQBP7E1oOPDn/AxmQr3oNkBQsYkcM4WMSw6/AtojLZMWFu7HL2rZw==
-X-Received: by 2002:a05:620a:46a4:b0:6ce:c4af:5a54 with SMTP id bq36-20020a05620a46a400b006cec4af5a54mr8239989qkb.377.1665265351668;
-        Sat, 08 Oct 2022 14:42:31 -0700 (PDT)
-Received: from localhost ([2601:4c1:c100:2270:4fea:6b67:9485:addd])
-        by smtp.gmail.com with ESMTPSA id j1-20020a05620a410100b006cfaee39ccesm5821626qko.114.2022.10.08.14.42.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Oct 2022 14:42:31 -0700 (PDT)
-Date:   Sat, 8 Oct 2022 14:42:30 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>, Christoph Hellwig <hch@lst.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Dave Airlie <airlied@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Westphal <fw@strlen.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Jan Kara <jack@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Russell King <linux@armlinux.org.uk>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Graf <tgraf@suug.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
-        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
-        kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-nvme@lists.infradead.org, linux-parisc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        loongarch@lists.linux.dev, netdev@vger.kernel.org,
-        sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v5 0/7] treewide cleanup of random integer usage
-Message-ID: <Y0HuxsLysThhsaTl@yury-laptop>
-References: <20221008055359.286426-1-Jason@zx2c4.com>
+        with ESMTP id S229379AbiJHVx5 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 8 Oct 2022 17:53:57 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B86232063
+        for <linux-media@vger.kernel.org>; Sat,  8 Oct 2022 14:53:56 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id D874A5C00E4;
+        Sat,  8 Oct 2022 17:53:53 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sat, 08 Oct 2022 17:53:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1665266033; x=1665352433; bh=uHw6FLeKrnDjbGOBPPzfIewGF
+        Vy5B/VI4oql5ep7vBc=; b=cbf8Qd6Dv0AElGyc1PbGMtz49/npyoX3QblVuYq2h
+        KaBHK/wBE36gZeIj37rWRqkBJsyW1qkI1EwfieIBsOVjq3e3G8BCQ02j43RZJq3W
+        f1BjO92lNKNN59WDDLa49/ErG5U9sPdO5/iUJ+LiOasFMdwakFm9jryHSvvtdMUr
+        s5aSh74MYvbrwZ+9xP4XBVc/yMYRJnl45CwxFsvMZ4L5BNucXFuWh91fppEAMSeb
+        G62WYWSzF/sub7H3rRBYQCfpzSAtJu/pT9Qip8ZWwb7UmcckIQctJkGEiNqbgB2B
+        2LuO8JGR4Fz6wi/PFrgxnQUR9zpN2jOAFLXhovKRLugJw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1665266033; x=1665352433; bh=uHw6FLeKrnDjbGOBPPzfIewGFVy5B/VI4oq
+        l5ep7vBc=; b=dqg/NlFVmQysQuNxnolxUeM7nT39OtuVE3ArfXnP+C8PwFPW+DE
+        CJoRH807WIhXHUQAUOQI9Z97V4NAy2yId9MhPnSZoCPfT4VaNwtaulRROzbQm3Hq
+        AB5WQnAby5Yj7sLS66Eix4KLhMQFIkf8qc/fiP/6kwQe8v75twBRKG34yfp2HiBw
+        Di6PDufcMCJdYJwTkza8e9p3vye90oWHDsZ0ibDkdpBojqpjUFBW2XaGplDaoDPm
+        yk7+3zOHf1KjjdwaMSAD/w4JFIU6jZT8cJFS+sSEACkH0jzwJR5rjg8RtGRQL59t
+        6UJ8G7qT37DrbQrZe5W2CxhsupVQ4tzv8vQ==
+X-ME-Sender: <xms:cfFBY1NO8gyiV5mWAD6aIMO2qOA9nn77Y9AZzkX1mjYFaysonC1abQ>
+    <xme:cfFBY38HBKx-32pGT2liRfZPJBl0d6QH_lQoI8CZMO31UWV509HA_cOkkWusyEFPi
+    lZNQHjLvEHpV3CvxL4>
+X-ME-Received: <xmr:cfFBY0Sj594wr69GI_YCBgKiTLuAeljZf1dWxXaS5mE-QNzVhTTnQfo2uX1csxtzvxpPkqKQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejtddgtdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeffrghfnhgrucfjihhrshgthhhfvghlugcuoegurghfnhgrsehf
+    rghsthhmrghilhdrtghomheqnecuggftrfgrthhtvghrnhepveeuhfejgffhkeekleelhe
+    etkeevveffgfdvfeeffeefvdelffeliedtvddvgfeknecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepuggrfhhnrgesfhgrshhtmhgrihhlrdgtoh
+    hm
+X-ME-Proxy: <xmx:cfFBYxsI48Sov3NR-gp5drLCff_nZuCHKFAQdzaDRlKGB210eLFWHg>
+    <xmx:cfFBY9d5Gu15babKmNiepFosyt9_EKGJ-inu32GcD6GhZn2nBAnj4A>
+    <xmx:cfFBY92m1wK25Id9LYFrIKUi3VktkCAOIP9uRM8ZZVX-fTJjMbbOzg>
+    <xmx:cfFBY-pK9ONcR3706Zomg21ZpUnMZipIONN1CUQ_AeL7bSagqtMRWA>
+Feedback-ID: i0e894699:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 8 Oct 2022 17:53:52 -0400 (EDT)
+From:   Dafna Hirschfeld <dafna@fastmail.com>
+To:     skhan@linuxfoundation.org, kieran.bingham@ideasonboard.com,
+        linux-media@vger.kernel.org
+Cc:     Dafna Hirschfeld <dafna@fastmail.com>
+Subject: [PATCH] media: vimc: Update device configuration in the documentation
+Date:   Sun,  9 Oct 2022 00:53:46 +0300
+Message-Id: <20221008215346.172559-1-dafna@fastmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221008055359.286426-1-Jason@zx2c4.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 11:53:52PM -0600, Jason A. Donenfeld wrote:
-> Changes v4->v5:
-> - Coccinelle is now used for as much mechanical aspects as possible,
->   with mechanical parts split off from non-mechanical parts. This should
->   drastically reduce the amount of code that needs to be reviewed
->   carefully. Each commit mentions now if it was done by hand or is
->   mechanical.
-> 
-> Hi folks,
-> 
-> This is a five part treewide cleanup of random integer handling. The
-> rules for random integers are:
-> 
-> - If you want a secure or an insecure random u64, use get_random_u64().
-> - If you want a secure or an insecure random u32, use get_random_u32().
->   * The old function prandom_u32() has been deprecated for a while now
->     and is just a wrapper around get_random_u32(). Same for
->     get_random_int().
-> - If you want a secure or an insecure random u16, use get_random_u16().
-> - If you want a secure or an insecure random u8, use get_random_u8().
-> - If you want secure or insecure random bytes, use get_random_bytes().
->   * The old function prandom_bytes() has been deprecated for a while now
->     and has long been a wrapper around get_random_bytes().
-> - If you want a non-uniform random u32, u16, or u8 bounded by a certain
->   open interval maximum, use prandom_u32_max().
->   * I say "non-uniform", because it doesn't do any rejection sampling or
->     divisions. Hence, it stays within the prandom_* namespace.
-> 
-> These rules ought to be applied uniformly, so that we can clean up the
-> deprecated functions, and earn the benefits of using the modern
-> functions. In particular, in addition to the boring substitutions, this
-> patchset accomplishes a few nice effects:
-> 
-> - By using prandom_u32_max() with an upper-bound that the compiler can
->   prove at compile-time is ≤65536 or ≤256, internally get_random_u16()
->   or get_random_u8() is used, which wastes fewer batched random bytes,
->   and hence has higher throughput.
-> 
-> - By using prandom_u32_max() instead of %, when the upper-bound is not a
->   constant, division is still avoided, because prandom_u32_max() uses
->   a faster multiplication-based trick instead.
-> 
-> - By using get_random_u16() or get_random_u8() in cases where the return
->   value is intended to indeed be a u16 or a u8, we waste fewer batched
->   random bytes, and hence have higher throughput.
-> 
-> So, based on those rules and benefits from following them, this patchset
-> breaks down into the following five steps:
-> 
-> 1) Replace `prandom_u32() % max` and variants thereof with
->    prandom_u32_max(max).
-> 
->    * Part 1 is done with Coccinelle. Part 2 is done by hand.
-> 
-> 2) Replace `(type)get_random_u32()` and variants thereof with
->    get_random_u16() or get_random_u8(). I took the pains to actually
->    look and see what every lvalue type was across the entire tree.
-> 
->    * Part 1 is done with Coccinelle. Part 2 is done by hand.
-> 
-> 3) Replace remaining deprecated uses of prandom_u32() and
->    get_random_int() with get_random_u32(). 
-> 
->    * A boring search and replace operation.
-> 
-> 4) Replace remaining deprecated uses of prandom_bytes() with
->    get_random_bytes().
-> 
->    * A boring search and replace operation.
-> 
-> 5) Remove the deprecated and now-unused prandom_u32() and
->    prandom_bytes() inline wrapper functions.
-> 
->    * Just deleting code and updating comments.
-> 
-> I was thinking of taking this through my random.git tree (on which this
-> series is currently based) and submitting it near the end of the merge
-> window, or waiting for the very end of the 6.1 cycle when there will be
-> the fewest new patches brewing. If somebody with some treewide-cleanup
-> experience might share some wisdom about what the best timing usually
-> winds up being, I'm all ears.
-> 
-> Please take a look! The number of lines touched is quite small, so this
-> should be reviewable, and as much as is possible has been pushed into
-> Coccinelle scripts.
+Since commit 9b4a9b31b9ae ("media: vimc: Enable set resolution at the scaler src pad")
+the configuration in the documentation does
+not work. Replace it with the configuration
+described in commit 9b4a9b31b9ae
 
-For the series:
-Reviewed-by: Yury Norov <yury.norov@gmail.com>
+Signed-off-by: Dafna Hirschfeld <dafna@fastmail.com>
+---
+ Documentation/admin-guide/media/vimc.rst | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Although, looking at it, I have a feeling that kernel needs to drop all
-fixed-size random APIs like get_random_uXX() or get_random_int(), because
-people will continue using the 'get_random_int() % num' carelessly.
+diff --git a/Documentation/admin-guide/media/vimc.rst b/Documentation/admin-guide/media/vimc.rst
+index 3b4d2b36b4f3..29d843a8ddb1 100644
+--- a/Documentation/admin-guide/media/vimc.rst
++++ b/Documentation/admin-guide/media/vimc.rst
+@@ -35,11 +35,11 @@ of commands fits for the default topology:
+ 
+         media-ctl -d platform:vimc -V '"Sensor A":0[fmt:SBGGR8_1X8/640x480]'
+         media-ctl -d platform:vimc -V '"Debayer A":0[fmt:SBGGR8_1X8/640x480]'
+-        media-ctl -d platform:vimc -V '"Sensor B":0[fmt:SBGGR8_1X8/640x480]'
+-        media-ctl -d platform:vimc -V '"Debayer B":0[fmt:SBGGR8_1X8/640x480]'
+-        v4l2-ctl -z platform:vimc -d "RGB/YUV Capture" -v width=1920,height=1440
++        media-ctl -d platform:vimc -V '"Scaler":0[fmt:RGB888_1X24/640x480]'
++        media-ctl -d platform:vimc -V '"Scaler":0[crop:(100,50)/400x150]'
++        media-ctl -d platform:vimc -V '"Scaler":1[fmt:RGB888_1X24/300x700]'
++        v4l2-ctl -z platform:vimc -d "RGB/YUV Capture" -v width=300,height=700
+         v4l2-ctl -z platform:vimc -d "Raw Capture 0" -v pixelformat=BA81
+-        v4l2-ctl -z platform:vimc -d "Raw Capture 1" -v pixelformat=BA81
+ 
+ Subdevices
+ ----------
+-- 
+2.25.1
 
-Thanks,
-Yury
