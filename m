@@ -2,221 +2,296 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9714C433FE
-	for <linux-media@archiver.kernel.org>; Sun,  9 Oct 2022 07:06:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B70E2C433F5
+	for <linux-media@archiver.kernel.org>; Sun,  9 Oct 2022 10:36:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbiJIHGZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 9 Oct 2022 03:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
+        id S230010AbiJIKg0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 9 Oct 2022 06:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiJIHGY (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 9 Oct 2022 03:06:24 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA202CE28
-        for <linux-media@vger.kernel.org>; Sun,  9 Oct 2022 00:06:22 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 5CF1332000E5;
-        Sun,  9 Oct 2022 03:06:21 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Sun, 09 Oct 2022 03:06:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
-        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1665299180; x=1665385580; bh=Cim2Khjo6+
-        AR4Puga4yNASZM93Ogejn8jc547BVKXho=; b=RGTPW1QYkS+k4t1i1bxy9AesUT
-        kXYT2eY7KMLbAynXyJvnfa2vNglOXHb1BrYn/aYcAdYxHJap6st7hFyuv5TgdjcC
-        pyOYauvtMv53PYqrgl9rT5r5e0/+rFIIvRhXLSgUDOqkEyHqFiV8o0YAzSRf+s0/
-        SWiXjYLHZMhlW6TqX+K0NEFIfNjHYaDehI5O29h/vQktDzzzB+DUEc0y2GTv2Lax
-        kKHVEkIiwlhb4g6UqAy6sPB0yM0PwvCYODkRhgxBXXe8wRoWd9wdt8FZmpcc1Dgy
-        Mu/wzlkfdz6WGd85vU62i9Y1hoq54XD61oKABzK+RIGKLnhdT13lw/puQEbQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1665299180; x=1665385580; bh=Cim2Khjo6+AR4Puga4yNASZM93Og
-        ejn8jc547BVKXho=; b=bmijUCxyF3lgRnN9DzrvH/i4IAehVxEzqudmL7aSdoyl
-        rXdFV+4pKXU8qVxyywnD8Xtpdi37TNQ8pylcenSRU1Mlw/Qs0BsLnR69LBHBbLkO
-        9/Lmu6D2IOsYr+8N/j1QchHuu4IfxkyX91QKgeRuR9A03n+kb1lKKkAFvaCMv1s+
-        qlzssGGcmd82lNzKgqN/FPUwuTWgfybVofuzmKA2un/vMDLxcj7+Tb6l8VkdB63D
-        yQ9dpmA/I7BHLR548pF4DpRMJjJDonJ4hPR3r1cpvi94rJUxG8YYD6Uu9f+qeBtO
-        taDnIRGQ8O2IDfYU8N8lUxkHwqcVm2K77lzeLqr8sg==
-X-ME-Sender: <xms:7HJCYxZoQarpLLzBWwivINHNGSDlRzOKP0dulFOw3f6YyqmSjwJViw>
-    <xme:7HJCY4Yxm5EE4cw0sMct9nNRFX4Q1U7i--elcOefEWW1UDSWHq0DE90n-r00wVuSw
-    BjThkQrB76EkLSq53w>
-X-ME-Received: <xmr:7HJCYz_SekBYRFX9xF7oPYGfUucTTTiqH-T6Z8A6ZqMYju6rbV8--w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejtddgudduiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttdejnecuhfhrohhmpeffrghf
-    nhgrucfjihhrshgthhhfvghlugcuoegurghfnhgrsehfrghsthhmrghilhdrtghomheqne
-    cuggftrfgrthhtvghrnhepvdehtdeludekgeevleefuedvudejieetheekvdfhteekffdu
-    jefhfedtudehvdeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepuggrfhhnrgesfhgrshhtmhgrihhlrdgtohhm
-X-ME-Proxy: <xmx:7HJCY_qKJ4bqcvv8v_ATALQx84_VaosDCQ2jc9EScJmr_BYlWWQnyQ>
-    <xmx:7HJCY8qMbsxw8N0WFSQFTb7mGvSTUmr_uLyS8Jt-zw7SKJ-sa8TxDw>
-    <xmx:7HJCY1QKrtQpfyCoTF74G3H9m-e4crlpx_MVNsDwcjqtr6bYmyQH4Q>
-    <xmx:7HJCY5jlGeFGtkIHWIwEvZYIIOHYU9rU6ePQVK9pZdOvi-RrM19TMQ>
-Feedback-ID: i0e894699:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 9 Oct 2022 03:06:16 -0400 (EDT)
-Date:   Sun, 9 Oct 2022 10:06:14 +0300
-From:   Dafna Hirschfeld <dafna@fastmail.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        niklas.soderlund+renesas@ragnatech.se,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Kishon Vijay Abraham <kishon@ti.com>,
-        satish.nagireddy@getcruise.com, Tomasz Figa <tfiga@chromium.org>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Subject: Re: [PATCH v15 12/19] media: subdev: add "opposite" stream helper
- funcs
-Message-ID: <20221009070614.rud3yx6acsxwt6kl@guri>
-References: <20221003121852.616745-1-tomi.valkeinen@ideasonboard.com>
- <20221003121852.616745-13-tomi.valkeinen@ideasonboard.com>
+        with ESMTP id S229985AbiJIKf7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 9 Oct 2022 06:35:59 -0400
+Received: from www.linuxtv.org (www.linuxtv.org [130.149.80.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1CE8248F1
+        for <linux-media@vger.kernel.org>; Sun,  9 Oct 2022 03:35:06 -0700 (PDT)
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1ohTeB-002YWH-JI; Sun, 09 Oct 2022 10:35:03 +0000
+Received: from localhost ([127.0.0.1] helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.94.2)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1ohTe8-00FOxO-Jn; Sun, 09 Oct 2022 10:35:00 +0000
+Date:   Sun, 9 Oct 2022 10:34:58 +0000 (UTC)
+From:   Jenkins Builder Robot <jenkins@linuxtv.org>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org
+Message-ID: <608148551.0.1665311699951@builder.linuxtv.org>
+Subject: Build failed in Jenkins: linux-media #295
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20221003121852.616745-13-tomi.valkeinen@ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
+X-Jenkins-Job: linux-media
+X-Jenkins-Result: FAILURE
+Auto-submitted: auto-generated
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 03.10.2022 15:18, Tomi Valkeinen wrote:
->Add two helper functions to make dealing with streams easier:
->
->v4l2_subdev_routing_find_opposite_end - given a routing table and a pad
->+ stream, return the pad + stream on the opposite side of the subdev.
->
->v4l2_subdev_state_get_opposite_stream_format - return a pointer to the
->format on the pad + stream on the opposite side from the given pad +
->stream.
->
->Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
->Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
->Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
->---
-> drivers/media/v4l2-core/v4l2-subdev.c | 49 +++++++++++++++++++++++++++
-> include/media/v4l2-subdev.h           | 36 ++++++++++++++++++++
-> 2 files changed, 85 insertions(+)
->
->diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
->index 1cea6ec750c0..7d2d8e8d3aea 100644
->--- a/drivers/media/v4l2-core/v4l2-subdev.c
->+++ b/drivers/media/v4l2-core/v4l2-subdev.c
->@@ -1514,6 +1514,55 @@ v4l2_subdev_state_get_stream_compose(struct v4l2_subdev_state *state,
-> }
-> EXPORT_SYMBOL_GPL(v4l2_subdev_state_get_stream_compose);
->
->+int v4l2_subdev_routing_find_opposite_end(const struct v4l2_subdev_krouting *routing,
->+					  u32 pad, u32 stream, u32 *other_pad,
->+					  u32 *other_stream)
->+{
->+	unsigned int i;
->+
->+	for (i = 0; i < routing->num_routes; ++i) {
->+		struct v4l2_subdev_route *route = &routing->routes[i];
->+
->+		if (route->source_pad == pad &&
->+		    route->source_stream == stream) {
->+			if (other_pad)
->+				*other_pad = route->sink_pad;
->+			if (other_stream)
->+				*other_stream = route->sink_stream;
->+			return 0;
->+		}
->+
->+		if (route->sink_pad == pad && route->sink_stream == stream) {
+See <https://builder.linuxtv.org/job/linux-media/295/display/redirect>
 
-Hi, I think here you should also check that the FL_SOURCE flag is not set to make sure
-that sink_pad/stream are used
+Changes:
 
-Thanks,
-Dafna
 
->+			if (other_pad)
->+				*other_pad = route->source_pad;
->+			if (other_stream)
->+				*other_stream = route->source_stream;
->+			return 0;
->+		}
->+	}
->+
->+	return -EINVAL;
->+}
->+EXPORT_SYMBOL_GPL(v4l2_subdev_routing_find_opposite_end);
->+
->+struct v4l2_mbus_framefmt *
->+v4l2_subdev_state_get_opposite_stream_format(struct v4l2_subdev_state *state,
->+					     u32 pad, u32 stream)
->+{
->+	u32 other_pad, other_stream;
->+	int ret;
->+
->+	ret = v4l2_subdev_routing_find_opposite_end(&state->routing,
->+						    pad, stream,
->+						    &other_pad, &other_stream);
->+	if (ret)
->+		return NULL;
->+
->+	return v4l2_subdev_state_get_stream_format(state, other_pad,
->+						   other_stream);
->+}
->+EXPORT_SYMBOL_GPL(v4l2_subdev_state_get_opposite_stream_format);
->+
-> #endif /* CONFIG_VIDEO_V4L2_SUBDEV_API */
->
-> #endif /* CONFIG_MEDIA_CONTROLLER */
->diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
->index d6273ad2eea8..6f4719e28ad1 100644
->--- a/include/media/v4l2-subdev.h
->+++ b/include/media/v4l2-subdev.h
->@@ -1527,6 +1527,42 @@ struct v4l2_rect *
-> v4l2_subdev_state_get_stream_compose(struct v4l2_subdev_state *state,
-> 				     unsigned int pad, u32 stream);
->
->+/**
->+ * v4l2_subdev_routing_find_opposite_end() - Find the opposite stream
->+ * @routing: routing used to find the opposite side
->+ * @pad: pad id
->+ * @stream: stream id
->+ * @other_pad: pointer used to return the opposite pad
->+ * @other_stream: pointer used to return the opposite stream
->+ *
->+ * This function uses the routing table to find the pad + stream which is
->+ * opposite the given pad + stream.
->+ *
->+ * @other_pad and/or @other_stream can be NULL if the caller does not need the
->+ * value.
->+ *
->+ * Returns 0 on success, or -EINVAL if no matching route is found.
->+ */
->+int v4l2_subdev_routing_find_opposite_end(const struct v4l2_subdev_krouting *routing,
->+					  u32 pad, u32 stream, u32 *other_pad,
->+					  u32 *other_stream);
->+
->+/**
->+ * v4l2_subdev_state_get_opposite_stream_format() - Get pointer to opposite
->+ *                                                  stream format
->+ * @state: subdevice state
->+ * @pad: pad id
->+ * @stream: stream id
->+ *
->+ * This returns a pointer to &struct v4l2_mbus_framefmt for the pad + stream
->+ * that is opposite the given pad + stream in the subdev state.
->+ *
->+ * If the state does not contain the given pad + stream, NULL is returned.
->+ */
->+struct v4l2_mbus_framefmt *
->+v4l2_subdev_state_get_opposite_stream_format(struct v4l2_subdev_state *state,
->+					     u32 pad, u32 stream);
->+
-> #endif /* CONFIG_VIDEO_V4L2_SUBDEV_API */
->
-> #endif /* CONFIG_MEDIA_CONTROLLER */
->-- 
->2.34.1
->
+------------------------------------------
+[...truncated 98194 lines...]
+  CC [M]  drivers/staging/r8188eu/hal/rtl8188e_dm.o
+  CC      drivers/staging/fbtft/fb_tls8204.o
+  CC [M]  drivers/staging/rtl8723bs/hal/odm_DIG.o
+  CC [M]  drivers/staging/rtl8192e/rtl819x_BAProc.o
+  CC [M]  drivers/staging/rtl8723bs/hal/odm_DynamicBBPowerSaving.o
+  CC [M]  drivers/staging/rtl8723bs/hal/odm_DynamicTxPower.o
+  CC [M]  drivers/staging/rtl8192u/ieee80211/rtl819x_BAProc.o
+  CC [M]  drivers/staging/rtl8192e/rtl819x_HTProc.o
+  CC [M]  drivers/staging/rtl8192e/rtl819x_TSProc.o
+  CC [M]  drivers/staging/r8188eu/hal/rtl8188e_hal_init.o
+  CC      drivers/staging/fbtft/fb_uc1611.o
+  CC [M]  drivers/staging/rtl8192e/rtllib_crypt_ccmp.o
+  CC [M]  drivers/staging/rtl8192e/rtllib_crypt_tkip.o
+  CC [M]  drivers/staging/rtl8192u/ieee80211/dot11d.o
+  CC [M]  drivers/staging/rtl8723bs/hal/odm_EdcaTurboCheck.o
+  CC [M]  drivers/staging/rtl8723bs/hal/odm_HWConfig.o
+  CC [M]  drivers/staging/rtl8723bs/hal/odm_NoiseMonitor.o
+  CC [M]  drivers/staging/rtl8723bs/hal/odm_RegConfig8723B.o
+  LD [M]  drivers/staging/rtl8192u/r8192u_usb.o
+  CC [M]  drivers/staging/rtl8192e/rtllib_crypt_wep.o
+  CC      drivers/staging/fbtft/fb_uc1701.o
+  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723b_cmd.o
+  CC [M]  drivers/staging/r8188eu/hal/rtl8188e_phycfg.o
+  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723b_dm.o
+  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.o
+  CC      drivers/staging/fbtft/fb_upd161704.o
+  LD [M]  drivers/staging/rtl8192e/rtllib.o
+  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723b_phycfg.o
+  CC [M]  drivers/staging/r8188eu/hal/rtl8188e_rf6052.o
+  CC [M]  drivers/staging/vt6655/device_main.o
+  CC [M]  drivers/staging/vt6655/card.o
+  CC [M]  drivers/staging/vt6655/channel.o
+  CC [M]  drivers/staging/vt6655/mac.o
+  CC [M]  drivers/staging/vt6655/baseband.o
+  CC [M]  drivers/staging/vt6655/rxtx.o
+  AR      drivers/staging/fbtft/built-in.a
+  CC [M]  drivers/staging/vt6656/main_usb.o
+  CC [M]  drivers/staging/r8188eu/hal/rtl8188e_rxdesc.o
+  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723b_rf6052.o
+  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723b_rxdesc.o
+  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723bs_recv.o
+  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.o
+  CC [M]  drivers/staging/rtl8723bs/hal/sdio_halinit.o
+  CC [M]  drivers/staging/rtl8723bs/hal/sdio_ops.o
+  CC [M]  drivers/staging/vt6655/dpc.o
+  CC [M]  drivers/staging/r8188eu/hal/rtl8188e_xmit.o
+  CC [M]  drivers/staging/vt6655/power.o
+  CC [M]  drivers/staging/vt6655/srom.o
+  CC [M]  drivers/staging/vt6656/card.o
+  CC [M]  drivers/staging/rtl8723bs/hal/HalBtc8723b1Ant.o
+  CC [M]  drivers/staging/r8188eu/hal/rtl8188eu_recv.o
+  CC [M]  drivers/staging/rtl8723bs/hal/HalBtc8723b2Ant.o
+  CC [M]  drivers/staging/vt6655/key.o
+  CC [M]  drivers/staging/vt6655/rf.o
+  CC [M]  drivers/staging/rtl8723bs/hal/HalHWImg8723B_BB.o
+  CC [M]  drivers/staging/rtl8723bs/hal/HalHWImg8723B_MAC.o
+  CC [M]  drivers/staging/r8188eu/hal/rtl8188eu_xmit.o
+  CC [M]  drivers/staging/rtl8723bs/hal/HalHWImg8723B_RF.o
+  CC [M]  drivers/staging/r8188eu/hal/usb_halinit.o
+  CC [M]  drivers/staging/vt6656/mac.o
+  CC [M]  drivers/staging/rtl8723bs/hal/HalPhyRf_8723B.o
+  CC [M]  drivers/staging/r8188eu/hal/usb_ops_linux.o
+  CC [M]  drivers/staging/r8188eu/os_dep/ioctl_linux.o
+  LD [M]  drivers/staging/vt6655/vt6655_stage.o
+  CC [M]  drivers/staging/r8188eu/os_dep/mlme_linux.o
+  CC [M]  drivers/staging/r8188eu/os_dep/os_intfs.o
+  CC [M]  drivers/staging/r8188eu/os_dep/osdep_service.o
+  CC [M]  drivers/staging/r8188eu/os_dep/recv_linux.o
+  CC [M]  drivers/staging/r8188eu/os_dep/usb_intf.o
+  CC [M]  drivers/staging/r8188eu/os_dep/usb_ops_linux.o
+  CC [M]  drivers/staging/r8188eu/os_dep/xmit_linux.o
+  CC [M]  drivers/staging/vt6656/baseband.o
+  CC [M]  drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.o
+  CC [M]  drivers/staging/r8188eu/core/rtw_ap.o
+  CC [M]  drivers/staging/rtl8723bs/os_dep/ioctl_linux.o
+  CC [M]  drivers/staging/r8188eu/core/rtw_br_ext.o
+  CC [M]  drivers/staging/r8188eu/core/rtw_cmd.o
+  CC [M]  drivers/staging/rtl8723bs/os_dep/mlme_linux.o
+  CC [M]  drivers/staging/rtl8723bs/os_dep/osdep_service.o
+  CC [M]  drivers/staging/r8188eu/core/rtw_efuse.o
+  CC [M]  drivers/staging/vt6656/wcmd.o
+  CC [M]  drivers/staging/vt6656/rxtx.o
+  CC [M]  drivers/staging/rtl8723bs/os_dep/os_intfs.o
+  CC [M]  drivers/staging/rtl8723bs/os_dep/recv_linux.o
+  CC [M]  drivers/staging/rtl8723bs/os_dep/sdio_intf.o
+  CC [M]  drivers/staging/rtl8723bs/os_dep/sdio_ops_linux.o
+  CC [M]  drivers/staging/r8188eu/core/rtw_fw.o
+  CC [M]  drivers/staging/rtl8723bs/os_dep/wifi_regd.o
+  CC [M]  drivers/staging/r8188eu/core/rtw_ieee80211.o
+  CC [M]  drivers/staging/vt6656/power.o
+  CC [M]  drivers/staging/vt6656/key.o
+  CC      drivers/fpga/fpga-mgr.o
+  CC [M]  drivers/staging/vt6656/rf.o
+  CC [M]  drivers/staging/gdm724x/gdm_lte.o
+  CC [M]  drivers/staging/r8188eu/core/rtw_ioctl_set.o
+  CC [M]  drivers/staging/rtl8723bs/os_dep/xmit_linux.o
+  CC      drivers/fpga/altera-cvp.o
+  CC [M]  drivers/staging/r8188eu/core/rtw_iol.o
+  AR      drivers/staging/built-in.a
+  CC [M]  drivers/staging/gdm724x/netlink_k.o
+  CC [M]  drivers/staging/vt6656/usbpipe.o
+  CC [M]  drivers/staging/r8188eu/core/rtw_led.o
+  CC [M]  drivers/staging/r8188eu/core/rtw_mlme.o
+  CC [M]  drivers/staging/r8188eu/core/rtw_mlme_ext.o
+  CC      drivers/fpga/altera-ps-spi.o
+  CC [M]  drivers/staging/gdm724x/gdm_usb.o
+  CC [M]  drivers/staging/gdm724x/gdm_endian.o
+  CC [M]  drivers/staging/r8188eu/core/rtw_pwrctrl.o
+  CC [M]  drivers/staging/vt6656/channel.o
+  CC [M]  drivers/staging/r8188eu/core/rtw_p2p.o
+  LD [M]  drivers/staging/rtl8723bs/r8723bs.o
+  CC [M]  drivers/staging/gdm724x/gdm_tty.o
+  CC      drivers/fpga/ice40-spi.o
+  CC      drivers/fpga/machxo2-spi.o
+  CC [M]  drivers/staging/r8188eu/core/rtw_recv.o
+  CC      drivers/fpga/socfpga.o
+  CC [M]  drivers/staging/gdm724x/gdm_mux.o
+  CC [M]  drivers/staging/r8188eu/core/rtw_rf.o
+  LD [M]  drivers/staging/gdm724x/gdmulte.o
+  CC      drivers/fpga/socfpga-a10.o
+  LD [M]  drivers/staging/vt6656/vt6656_stage.o
+  CC      drivers/fpga/xilinx-spi.o
+  CC [M]  drivers/staging/r8188eu/core/rtw_security.o
+  CC      drivers/fpga/zynq-fpga.o
+  CC [M]  drivers/staging/r8188eu/core/rtw_sta_mgt.o
+  CC [M]  drivers/staging/r8188eu/core/rtw_wlan_util.o
+  CC      drivers/fpga/zynqmp-fpga.o
+  CC [M]  drivers/staging/r8188eu/core/rtw_xmit.o
+  CC      drivers/fpga/versal-fpga.o
+  CC      drivers/fpga/microchip-spi.o
+  LD [M]  drivers/staging/gdm724x/gdmtty.o
+  CC      drivers/fpga/altera-pr-ip-core.o
+  CC      drivers/fpga/altera-pr-ip-core-plat.o
+  CC      drivers/fpga/intel-m10-bmc-sec-update.o
+  CC      drivers/fpga/fpga-bridge.o
+  CC      drivers/fpga/altera-freeze-bridge.o
+  CC      drivers/fpga/xilinx-pr-decoupler.o
+  CC      drivers/fpga/fpga-region.o
+  CC      drivers/fsi/fsi-core.o
+  LD [M]  drivers/staging/r8188eu/r8188eu.o
+  CC      drivers/fsi/fsi-master-hub.o
+  CC      drivers/fsi/fsi-master-aspeed.o
+  CC      drivers/fsi/fsi-master-gpio.o
+  CC      drivers/fsi/fsi-master-ast-cf.o
+  CC      drivers/fpga/of-fpga-region.o
+  CC      drivers/mux/core.o
+  CC      drivers/tee/amdtee/core.o
+  CC      drivers/mux/adg792a.o
+  CC      drivers/mux/adgs1408.o
+  CC      drivers/mux/gpio.o
+  CC      drivers/fpga/dfl.o
+  CC      drivers/fpga/dfl-fme-main.o
+  CC      drivers/fpga/dfl-fme-pr.o
+  CC      drivers/tee/amdtee/call.o
+  CC      drivers/fpga/dfl-fme-error.o
+  CC      drivers/fsi/fsi-scom.o
+  CC      drivers/fsi/fsi-sbefifo.o
+  CC      drivers/fsi/fsi-occ.o
+  CC      drivers/mux/mmio.o
+  CC      drivers/fpga/dfl-fme-perf.o
+  CC      drivers/fpga/dfl-fme-mgr.o
+  CC      drivers/tee/amdtee/shm_pool.o
+  CC      drivers/fpga/dfl-fme-br.o
+  CC      drivers/fpga/dfl-fme-region.o
+  CC      drivers/fpga/dfl-afu-main.o
+  CC      drivers/fpga/dfl-afu-region.o
+  AR      drivers/fsi/built-in.a
+  AR      drivers/mux/built-in.a
+  CC      drivers/siox/siox-core.o
+  CC      drivers/gnss/core.o
+  AR      drivers/tee/amdtee/built-in.a
+  CC      drivers/tee/tee_core.o
+  CC      drivers/gnss/serial.o
+  CC      drivers/gnss/mtk.o
+  CC      drivers/fpga/dfl-afu-dma-region.o
+  CC      drivers/tee/tee_shm.o
+  CC      drivers/gnss/sirf.o
+  CC      drivers/gnss/ubx.o
+  CC      drivers/siox/siox-bus-gpio.o
+  CC      drivers/fpga/dfl-afu-error.o
+  CC      drivers/gnss/usb.o
+  CC      drivers/fpga/dfl-n3000-nios.o
+  CC      drivers/tee/tee_shm_pool.o
+  AR      drivers/siox/built-in.a
+  CC      drivers/fpga/dfl-pci.o
+  CC      drivers/counter/counter-core.o
+  CC      drivers/interconnect/imx/imx.o
+  CC      drivers/interconnect/samsung/exynos.o
+  CC      drivers/interconnect/imx/imx8mm.o
+  CC      drivers/counter/counter-sysfs.o
+  AR      drivers/gnss/built-in.a
+  CC      drivers/counter/counter-chrdev.o
+  AR      drivers/tee/built-in.a
+  CC      drivers/counter/104-quad-8.o
+  CC      drivers/counter/interrupt-cnt.o
+  CC      drivers/most/core.o
+  AR      drivers/interconnect/samsung/built-in.a
+  CC      drivers/interconnect/core.o
+  CC      drivers/interconnect/imx/imx8mq.o
+  CC      drivers/interconnect/imx/imx8mn.o
+  CC      drivers/interconnect/imx/imx8mp.o
+  AR      drivers/fpga/built-in.a
+  CC      drivers/counter/stm32-timer-cnt.o
+  CC      drivers/peci/controller/peci-aspeed.o
+  CC      drivers/counter/stm32-lptimer-cnt.o
+  CC      drivers/interconnect/bulk.o
+  CC      drivers/counter/ti-eqep.o
+  AR      drivers/interconnect/imx/built-in.a
+  CC      drivers/hte/hte.o
+  CC      drivers/counter/ftm-quaddec.o
+  CC      drivers/most/configfs.o
+  CC      drivers/most/most_usb.o
+  CC      drivers/most/most_cdev.o
+  AR      drivers/interconnect/built-in.a
+  AR      drivers/peci/controller/built-in.a
+  CC      drivers/most/most_snd.o
+  CC      drivers/peci/core.o
+  AR      drivers/hte/built-in.a
+  CC      drivers/counter/microchip-tcb-capture.o
+  CC      drivers/peci/request.o
+  CC      drivers/counter/intel-qep.o
+  CC      drivers/peci/device.o
+  CC      drivers/peci/sysfs.o
+  CC      drivers/peci/cpu.o
+  AR      drivers/most/built-in.a
+  AR      drivers/counter/built-in.a
+  AR      drivers/peci/built-in.a
+  AR      drivers/built-in.a
+  GEN     .version
+  CHK     include/generated/compile.h
+  LD      vmlinux.o
+Killed
+make[2]: *** [../scripts/Makefile.vmlinux_o:68: vmlinux.o] Error 137
+make[2]: *** Deleting file 'vmlinux.o'
+make[1]: *** [/var/lib/jenkins/workspace/linux-media/Makefile:1171: vmlinux] Error 2
+make[1]: Leaving directory '/var/lib/jenkins/workspace/linux-media/x86_64_yes'
+make: *** [Makefile:222: __sub-make] Error 2
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+Failed in branch x86_64 (builtin/mod)
+[Pipeline] // parallel
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] step
