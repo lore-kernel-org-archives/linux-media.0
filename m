@@ -2,45 +2,45 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2601BC4167D
-	for <linux-media@archiver.kernel.org>; Mon, 10 Oct 2022 20:17:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 863DBECAAD8
+	for <linux-media@archiver.kernel.org>; Mon, 10 Oct 2022 20:17:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbiJJURq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 Oct 2022 16:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52908 "EHLO
+        id S230210AbiJJURu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 Oct 2022 16:17:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiJJUQb (ORCPT
+        with ESMTP id S230014AbiJJUQ3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 10 Oct 2022 16:16:31 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B2C71730;
-        Mon, 10 Oct 2022 13:15:51 -0700 (PDT)
+        Mon, 10 Oct 2022 16:16:29 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC5F7A531;
+        Mon, 10 Oct 2022 13:15:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665432953; x=1696968953;
+  t=1665432951; x=1696968951;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=LMyddcBhxz6+trtgMyJ41Na0xLjaX4lOrKyKro8EzDM=;
-  b=mZk6li/lBVUIZR1z4z6iRLIxT2ESb/7OzacSKY7ZsKMBUSQE7+A6SSjy
-   U31SbCI+GNjztiyNA5YD748VTD0xR7EaevOIVKmLeZbGC4+T1+BYc+UvZ
-   427RtBczhbTiOiDG+zClCfep8psfuNlGiUjv5fcGXp3iaxERB1k+F52IO
-   3XTeTpaEVWqwUOTigdcShimBtQtOPxP+8TUmlSog0oXC493viDJ0rzO5s
-   pu3rsdb+yy/btQThEWOPjGBOe/JFiG7QvPER2thrSZUI5jZLDgdyrLmhm
-   yI8mkMb0C7Q94aHIg9hiAY1Go6htlUm+Z/wrYYSgoVq6bkN/Z7t043OYV
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="284706716"
+  bh=t1xRFnUPElYqDjMs4zdDsLQygWvuck9itzpGsx3MSs8=;
+  b=h5e8etAwb1xRasD3jjnoqme5D4o091tvYsGW0ONpJtlhgDj3eKjlYkR5
+   ++5GOF9WThi5xYMuyaJSZPKUp+kPQrtJW2C9/+7t8J3/T3FR4p3+9j85Z
+   ID0DjHAIdh8BvXJZpSeECrBeqxBXu9xtLsq0MZPeyb/625i9tm1FC4SRl
+   e3NaXS0Ln7vZDKCvThC+f3UqTO98xI5M7Kerf0FkiHzvFtuwszqwUWL4c
+   WiMGhXXqF45xyW5qvJc6rATWt47RY7/c7BdqhvizTRGCJR086PaXYD1yi
+   t5Vd4fa6CXngWWE4j/VH3qhjSMOwijNo8FI3JSyVk7dj0y9AWe7x+X7YT
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="303066218"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="284706716"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:46 -0700
+   d="scan'208";a="303066218"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:44 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="603863027"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="715240840"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="603863027"
+   d="scan'208";a="715240840"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 10 Oct 2022 13:15:35 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 10 Oct 2022 13:15:33 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 1CA98B68; Mon, 10 Oct 2022 23:15:14 +0300 (EEST)
+        id F17429F6; Mon, 10 Oct 2022 23:15:13 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Marc Zyngier <maz@kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -132,9 +132,9 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Emil Renner Berthing <kernel@esmil.dk>,
         Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
         Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v2 30/36] pinctrl: uniphier: Add missed header(s)
-Date:   Mon, 10 Oct 2022 23:14:46 +0300
-Message-Id: <20221010201453.77401-31-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 28/36] pinctrl: tegra: Add missed header(s)
+Date:   Mon, 10 Oct 2022 23:14:44 +0300
+Message-Id: <20221010201453.77401-29-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
 References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
@@ -151,28 +151,26 @@ While at it, sort headers alphabetically.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/uniphier/pinctrl-uniphier-core.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/pinctrl/tegra/pinctrl-tegra.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pinctrl/uniphier/pinctrl-uniphier-core.c b/drivers/pinctrl/uniphier/pinctrl-uniphier-core.c
-index ade348b49b31..18d3a4f69e63 100644
---- a/drivers/pinctrl/uniphier/pinctrl-uniphier-core.c
-+++ b/drivers/pinctrl/uniphier/pinctrl-uniphier-core.c
-@@ -6,12 +6,14 @@
- #include <linux/list.h>
- #include <linux/mfd/syscon.h>
+diff --git a/drivers/pinctrl/tegra/pinctrl-tegra.c b/drivers/pinctrl/tegra/pinctrl-tegra.c
+index 50bd26a30ac0..834a2d50f89b 100644
+--- a/drivers/pinctrl/tegra/pinctrl-tegra.c
++++ b/drivers/pinctrl/tegra/pinctrl-tegra.c
+@@ -15,11 +15,13 @@
+ #include <linux/io.h>
  #include <linux/of.h>
--#include <linux/pinctrl/pinconf.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
+ #include <linux/platform_device.h>
 +#include <linux/seq_file.h>
++#include <linux/slab.h>
 +
- #include <linux/pinctrl/pinconf-generic.h>
+ #include <linux/pinctrl/machine.h>
 +#include <linux/pinctrl/pinconf.h>
  #include <linux/pinctrl/pinctrl.h>
  #include <linux/pinctrl/pinmux.h>
--#include <linux/platform_device.h>
--#include <linux/regmap.h>
+-#include <linux/pinctrl/pinconf.h>
+-#include <linux/slab.h>
  
  #include "../core.h"
  #include "../pinctrl-utils.h"
