@@ -2,144 +2,166 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30FC2C433F5
-	for <linux-media@archiver.kernel.org>; Mon, 10 Oct 2022 12:52:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 596A8C4332F
+	for <linux-media@archiver.kernel.org>; Mon, 10 Oct 2022 12:58:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231157AbiJJMwd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 Oct 2022 08:52:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36278 "EHLO
+        id S230168AbiJJM6H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 Oct 2022 08:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231316AbiJJMwa (ORCPT
+        with ESMTP id S230021AbiJJM6F (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 10 Oct 2022 08:52:30 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8E052FC8
-        for <linux-media@vger.kernel.org>; Mon, 10 Oct 2022 05:52:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665406347; x=1696942347;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GR8VcM+hmDKeowWsbQ/bzo8HDoxVAziTCLnOUgECZ8M=;
-  b=W9xyFV+x4u7e8123mx1+AUsGhHu2T4pd7oEg1jdcayhc59PDjpnx+umL
-   863k1S6XnwqewahhQCqag5l7airsayzZfNj+vmq/FWdudiBupukDlvUqK
-   cYU6777UjCgq6yvWDFk6KjkN6nmp2IVfk0p/f5zXy0O+Amc+mYy1Fhj14
-   zvSanZF874RX81AFFUUvc/+BwKpivgZy5rQzJYvnJBpAMchQlDIwcD8u7
-   6/anwFJv4QnPtrRzmiKs+xjhBaVz+i6CI7hpetMK+zo1GfNo6yO1O+ZJu
-   z8ch9kFCHspWcJPQ+3i1uIibNR0g7drhqtfrNDOi7SH935Q2WIELEtnYB
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="390523685"
-X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="390523685"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 05:52:26 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="659137199"
-X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="659137199"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 05:52:23 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id A0D082022B;
-        Mon, 10 Oct 2022 15:52:21 +0300 (EEST)
-Date:   Mon, 10 Oct 2022 12:52:21 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Benjamin MUGNIER <benjamin.mugnier@foss.st.com>
-Cc:     linux-media@vger.kernel.org, alain.volmat@foss.st.com,
-        hugues.fruchet@foss.st.com, sylvain.petinot@foss.st.com,
-        dave.stevenson@raspberrypi.com, laurent.pinchart@ideasonboard.com,
-        kieran.bingham@ideasonboard.com, nicolas@ndufresne.ca,
-        hverkuil@xs4all.nl
-Subject: Re: [PATCH v6 4/4] media: i2c: Add driver for ST VGXY61 camera sensor
-Message-ID: <Y0QVhUIPZYJYZ1Sm@paasikivi.fi.intel.com>
-References: <20220927083702.14138-1-benjamin.mugnier@foss.st.com>
- <20220927083702.14138-5-benjamin.mugnier@foss.st.com>
- <Yz8pE15/9tDf6Tjy@paasikivi.fi.intel.com>
- <af876e81-9105-9a0f-4dd1-47bc17886536@foss.st.com>
- <Y0PX8SRn51FlOS5c@paasikivi.fi.intel.com>
- <7c36fdaf-fa2a-4581-5f16-02fbfc3b20fb@foss.st.com>
- <Y0Pm0WhZpWgKxDbD@paasikivi.fi.intel.com>
- <62b268df-3c9d-79b2-31a6-61770843ee66@foss.st.com>
- <Y0QITlCsMe0wdPam@paasikivi.fi.intel.com>
- <b5175106-cab0-4a6a-6ba5-20070940ccff@foss.st.com>
+        Mon, 10 Oct 2022 08:58:05 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBF057BD8
+        for <linux-media@vger.kernel.org>; Mon, 10 Oct 2022 05:58:04 -0700 (PDT)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id C3C69FF814;
+        Mon, 10 Oct 2022 12:57:59 +0000 (UTC)
+Date:   Mon, 10 Oct 2022 14:57:57 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Adam Ford <aford173@gmail.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
+        linux-imx@nxp.com, kernel@pengutronix.de,
+        Martin Vaklev <mvaklev@thermal.com>
+Subject: Re: [PATCH v2 7/7] media: nxp: Add i.MX8 ISI driver
+Message-ID: <20221010125757.7cvtdazl4fvgzibq@uno.localdomain>
+References: <20220712000251.13607-1-laurent.pinchart@ideasonboard.com>
+ <20220712000251.13607-8-laurent.pinchart@ideasonboard.com>
+ <CAHCN7xKq+a05P4RKtToLiCqW4ZCQEYjKBpuS6Q0hOv4y3i8n+g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <b5175106-cab0-4a6a-6ba5-20070940ccff@foss.st.com>
+In-Reply-To: <CAHCN7xKq+a05P4RKtToLiCqW4ZCQEYjKBpuS6Q0hOv4y3i8n+g@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Benjamin,
+Hi Adam,
 
-On Mon, Oct 10, 2022 at 02:11:46PM +0200, Benjamin MUGNIER wrote:
+On Mon, Oct 10, 2022 at 07:27:14AM -0500, Adam Ford wrote:
+> On Mon, Jul 11, 2022 at 7:06 PM Laurent Pinchart
+> <laurent.pinchart@ideasonboard.com> wrote:
+> >
+> > The Image Sensing Interface (ISI) combines image processing pipelines
+> > with DMA engines to process and capture frames originating from a
+> > variety of sources. The inputs to the ISI go through Pixel Link
+> > interfaces, and their number and nature is SoC-dependent. They cover
+> > both capture interfaces (MIPI CSI-2 RX, HDMI RX) and memory inputs.
+> >
+> > Signed-off-by: Christian Hemp <c.hemp@phytec.de>
+> > Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
+> > Signed-off-by: Guoniu Zhou <guoniu.zhou@nxp.com>
+> > Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+> > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > Signed-off-by: Stefan Riedmueller <s.riedmueller@phytec.de>
+>
+> I did some testing on the imx8m Nano using the code from Laurent's git
+> repo as a starting point using an OV5640 camera.  I was able to
+> capture an image, but there is a solid green line at the top of the
+> image.  I am attaching a screenshot of my ceiling fan.  It's a little
+> blurry since it was spinning, but I have taken other images and this
+> green line remains. It's unclear to me if it's a camera issue, CSIS
+> issue or an ISI issue, but I was curious to know if anyone has seen
+> this on an imx8m Plus?
 
-...
+It would be too easy for me to blame the ov5640, as it has been
+greatly re-worked in the latest kernel releases. What version of the
+sensor driver are you using ?
 
-> >>>>>>> I thought we did discuss dropping support for sensor synchronisation in
-> >>>>>>> this version?
-> >>>>>>>
-> >>>>>>
-> >>>>>> This properties affects strobing lights gpios polarities as you can see
-> >>>>>> in vgxy61_update_gpios_strobe_polarity. If set to '1' all strobing gpios
-> >>>>>> are inverted. This has nothing to do with the sensor synchronization.
-> >>>>>
-> >>>>> So this is for strobing a LED flash? It would be good to mention this in
-> >>>>> DT bindings.
-> >>>>>
-> >>>>>>
-> >>>>>> Now I realize this is poorly named, and I even forgot to document it in
-> >>>>>> the device tree bindings file. I apologize.
-> >>>>>
-> >>>>> No problem.
-> >>>>>
-> >>>>>>
-> >>>>>> I would like to rename it to 'st,strobe-polarity' since this is vendor
-> >>>>>> specific and to better reflect that it affects strobing gpios. I'll make
-> >>>>>> this change for v7 and document this in the bindings file too. Tell me if
-> >>>>>> there is any issues with that.
-> >>>>>
-> >>>>> That name seems reasonable to me. Although, *if* this is actually usable as
-> >>>>> a GPIO as the bindings suggest, then the GPIO flags would probably be a
-> >>>>> better alternative.
-> >>>>>
-> >>>>
-> >>>> If by GPIO flag you mean adding 'gpios' to the property, We could go with 'st,strobe-gpios-polarity', which in the end this leads to the same property name as it was in the dt bindings :)
-> >>>> I'll add a bit of comments on the bindings. It seems to be the best choice.
-> >>>
-> >>> Is this a GPIO or is it not (e.g. strobe signal only)?
-> >>>
-> >>> For the latter the this should be fine. And "flash-leds" property should be
-> >>> there as well I guess?
-> >>>
-> >>
-> > 
-> > Please wrap the lines at around 74. Rewrapped now...
-> > 
-> 
-> Done. Thank you.
-> 
-> >> This property controls the polarity of and output GPIO connected to the
-> >> sensor. This output GPIO is driven by the sensor firmware in order to
-> >> illuminate the scene whenever necessary. I'm not sure this goes under the
-> >> "flash-leds" category, as it only provides a signal with either "0"
-> >> (don't illuminate) or a 1 (illuminate) ? The sensor controls the signal
-> > 
-> > This is what sensors generally do.
-> > 
-> >> following the programmed "strobe-mode" as you can see in
-> >> vgxy61_strobe_mode according to the HDR mode. It does not have a
-> >> max-microamp or timeout values as a flash I suppose, it is really a
-> >> simple signal.
-> > 
-> > Those are usually configured for the flash driver, not on the sensor.
-> > 
-> 
-> Ok, I guess in this case there is no flash driver. Should I keep the
-> 'st,strobe-gpios-polarity' property or are you aware of an already
-> defined property for this behavior?
+I tested the ISI on an 8MP+ov5640 and didn't recall seeing any line so
+visibile, but I should check again.
 
-So the LED is directly connected to this pin (perhaps in series with a
-resistor)? That is an unusual solution.
+>
+> I'm going to try to run a similar test on an imx8m Mini when I get
+> some more time.  I don't recall seeing this before, but I know there
+> have been some updates to the OV5640 and CSIS drivers.  The same
+> camera works on the Mini, but it has a different capture part, but I
+> think the CSIS is the same, so I'm hoping it might narrow the issue
+> down to ISI or not.
 
--- 
-Sakari Ailus
+I admit I don't know what CSI-2 receiver the Nano uses, as the
+Q version in example integrates a different IP than the Mini and the
+Plus if memory doesn't fail me.
+
+But the fact I see the NXP BSP using this compatible for the MP CSI-2
+receiver:
+
+        compatible = "fsl,imx8mp-mipi-csi", "fsl,imx8mn-mipi-csi";
+
+Makes me think the Nano using CSIS as the Plus and the Mini?
+
+Thanks
+  j
+
+>
+> thanks,
+>
+> adam
+>
+> > ---
+> >  MAINTAINERS                                   |    7 +
+> >  drivers/media/platform/nxp/Kconfig            |    2 +
+> >  drivers/media/platform/nxp/Makefile           |    1 +
+> >  drivers/media/platform/nxp/imx8-isi/Kconfig   |   22 +
+> >  drivers/media/platform/nxp/imx8-isi/Makefile  |    9 +
+> >  .../platform/nxp/imx8-isi/imx8-isi-core.c     |  646 +++++++
+> >  .../platform/nxp/imx8-isi/imx8-isi-core.h     |  394 +++++
+> >  .../platform/nxp/imx8-isi/imx8-isi-crossbar.c |  529 ++++++
+> >  .../platform/nxp/imx8-isi/imx8-isi-debug.c    |  109 ++
+> >  .../media/platform/nxp/imx8-isi/imx8-isi-hw.c |  651 +++++++
+> >  .../platform/nxp/imx8-isi/imx8-isi-m2m.c      |  858 ++++++++++
+> >  .../platform/nxp/imx8-isi/imx8-isi-pipe.c     |  867 ++++++++++
+> >  .../platform/nxp/imx8-isi/imx8-isi-regs.h     |  418 +++++
+> >  .../platform/nxp/imx8-isi/imx8-isi-video.c    | 1513 +++++++++++++++++
+> >  14 files changed, 6026 insertions(+)
+> >  create mode 100644 drivers/media/platform/nxp/imx8-isi/Kconfig
+> >  create mode 100644 drivers/media/platform/nxp/imx8-isi/Makefile
+> >  create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-core.c
+> >  create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-core.h
+> >  create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-crossbar.c
+> >  create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-debug.c
+> >  create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-hw.c
+> >  create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-m2m.c
+> >  create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-pipe.c
+> >  create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-regs.h
+> >  create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-video.c
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 1fc9ead83d2a..02327b4d8c9f 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -14270,6 +14270,13 @@ F:     Documentation/devicetree/bindings/clock/imx*
+> >  F:     drivers/clk/imx/
+> >  F:     include/dt-bindings/clock/imx*
+> >
+> > +NXP i.MX 8M ISI DRIVER
+> > +M:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > +L:     linux-media@vger.kernel.org
+> > +S:     Maintained
+> > +F:     Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
+> > +F:     drivers/media/platform/nxp/imx8-isi/
+> > +
+> >  NXP i.MX 8MQ DCSS DRIVER
+> >  M:     Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
+> >  R:     Lucas Stach <l.stach@pengutronix.de>
+> > diff --git a/drivers/media/platform/nxp/Kconfig b/drivers/media/platform/nxp/Kconfig
+> > index 1ac0a6e91111..0f5f8976ae78 100644
+> > --- a/drivers/media/platform/nxp/Kconfig
+> > +++ b/drivers/media/platform/nxp/Kconfig
+> > @@ -27,6 +27,8 @@ config VIDEO_VIU
+> >           Say Y here if you want to enable VIU device on MPC5121e Rev2+.
+> >           In doubt, say N.
+> >
+>
+> <snip>
+>
+> > Regards,
+> >
+> > Laurent Pinchart
+> >
+
+
