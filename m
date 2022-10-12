@@ -2,122 +2,90 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8ED37C433FE
-	for <linux-media@archiver.kernel.org>; Wed, 12 Oct 2022 00:56:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1898EC4332F
+	for <linux-media@archiver.kernel.org>; Wed, 12 Oct 2022 03:13:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbiJLA4Y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 11 Oct 2022 20:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52974 "EHLO
+        id S229638AbiJLDNm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 11 Oct 2022 23:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiJLA4X (ORCPT
+        with ESMTP id S229511AbiJLDNh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 11 Oct 2022 20:56:23 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279516E2F4
-        for <linux-media@vger.kernel.org>; Tue, 11 Oct 2022 17:56:22 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id n9so4000932wms.1
-        for <linux-media@vger.kernel.org>; Tue, 11 Oct 2022 17:56:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WkqzanB1DDRnDxQamf+4bhkxHNhqIEh+Zu+CDjOM9rI=;
-        b=AyeQ6MhP5KkuynPLFQqDtngZDyKcxvO7s/PbYbM5FH8uYWBGlMzX8UMrswueTln/4y
-         21w/P27eWFw4alNNMDcM9E1v+wN4Zaw8ySDndOFviogcst2RXBdrztf/q30SHV8ax/rT
-         IyHpraIvEvEfFlBOem5fSQ+IreTgzYRshZ3p2l7DAKvoFNIQo4X24blEUxbFHM7nrOXC
-         +GXE4GxOil6ktqIabaXQ7MX02IscrZRBrTEBl3CjRXgBDBSvPkhKH0bv8z1+1f3RQJqu
-         UyMCdnIAtQxyAUvcGALQ5/4+XUryKdnyPoQbQ0hB7RKnWeLnySDqvw2AsIwQf/jb8QOD
-         886A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WkqzanB1DDRnDxQamf+4bhkxHNhqIEh+Zu+CDjOM9rI=;
-        b=0vx48TPBnRNCFBdEvPGca2xn59EBySl3efMuQKiDPdXNnersT7XJ0iXRt030CzF0Vq
-         Sp01cjzHPd+eBY7bSINls0I2olU9D1LWmmPhCk9e83vmmRNAto1GzeucqHOZYpgdAndr
-         JFoiz46M7VeosNtjb4kr5gJ1TYoHbLmIx0cixRKQ8HHJ/L3vDSiC+PsVcqsMsjS1oLx+
-         Xo1EPcrxHecgcyCqXTph67IqBrc7Zubt4gsj4Iseu3PEDR44KqBWhCC+JFV4wAEHuurg
-         9eC1LLSj9iCxPUf865YKeSQUL7KeZbdfvumYVMdeaWrtfpuf8baLwm+GNGpWyAHiIrte
-         tPog==
-X-Gm-Message-State: ACrzQf2lnTDhdzpz+N7v5eUVhc4gKDhopcU1ExGAx/vPsi3F9sDTSCPd
-        W/d20QllRfPOsjm3GD+7N9EdRA==
-X-Google-Smtp-Source: AMsMyM7NCvlMh/5issR4gqX9Yct/QwXNNJ7JhKg66RGQKNyMUkRdy5o/AmkMpXfA+AL6rRHs9nRb1Q==
-X-Received: by 2002:a05:600c:3d13:b0:3b4:be25:9236 with SMTP id bh19-20020a05600c3d1300b003b4be259236mr996443wmb.65.1665536180653;
-        Tue, 11 Oct 2022 17:56:20 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id f8-20020a05600c4e8800b003b4cba4ef71sm337450wmq.41.2022.10.11.17.56.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 17:56:20 -0700 (PDT)
-Message-ID: <1679970e-a1db-3b6b-7170-2296c32fdff1@linaro.org>
-Date:   Wed, 12 Oct 2022 01:56:19 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v4 RESEND 3/3] media: i2c: imx412: Add new compatible
- strings
-Content-Language: en-US
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc:     sakari.ailus@iki.fi, jacopo@jmondi.org, paul.j.murphy@intel.com,
-        daniele.alessandrelli@intel.com, mchehab@kernel.org,
-        linux-media@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org
-References: <20220922104225.1375331-1-bryan.odonoghue@linaro.org>
- <20220922104225.1375331-4-bryan.odonoghue@linaro.org>
- <CAPY8ntAAcbv0myL3F-OOOH_rUUF7q==DQFq1sCaYAY=+JapgcA@mail.gmail.com>
- <cc24035d-9a32-ff9e-bffa-a21a0f79f138@linaro.org>
-In-Reply-To: <cc24035d-9a32-ff9e-bffa-a21a0f79f138@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Tue, 11 Oct 2022 23:13:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29161A7AB4
+        for <linux-media@vger.kernel.org>; Tue, 11 Oct 2022 20:13:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 40B976134C
+        for <linux-media@vger.kernel.org>; Wed, 12 Oct 2022 03:13:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D0E5C433D6
+        for <linux-media@vger.kernel.org>; Wed, 12 Oct 2022 03:13:34 +0000 (UTC)
+Date:   Wed, 12 Oct 2022 05:13:32 +0200
+From:   "Hans Verkuil" <hverkuil-cisco@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
+Message-Id: <20221012031334.4D0E5C433D6@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 22/09/2022 12:19, Bryan O'Donoghue wrote:
-> On 22/09/2022 12:16, Dave Stevenson wrote:
->> It may*eventually*  work for all three parts, but isn't the time to
->> add the compatible string at the point where it is actually compatible
->> with the driver?
-> 
-> Yes. I forgot about the 0x477 chip id on your part.
-> 
-> I'm happy enough to drop 477 from the compat string or indeed to allow 
-> 0x0477 as a valid chip identifier in imx412.
-> 
-> Sakari, what would you like to do ?
-> 
-> ---
-> bod
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Right.
+Results of the daily build of media_tree:
 
-So I got myself the official rpi imx477 sensor and ran the imx412/imx577 
-driver on the rpi 5.19.y tree
+date:			Wed Oct 12 03:00:10 CEST 2022
+media-tree git hash:	d67614f276c1499ad939fa5c1aadd35498cc6b34
+media_build git hash:	0fe857b86addf382f6fd383948bd7736a3201403
+v4l-utils git hash:	fd544473800d02e90bc289434cc44e5aa8fadd0f
+edid-decode git hash:	f1ff7ad7bcb2fbb85017bbb2baa6bed37c412895
+gcc version:		i686-linux-gcc (GCC) 12.2.0
+sparse repo:            git://git.kernel.org/pub/scm/devel/sparse/sparse.git
+sparse version:		v0.6.4-39-gce1a6720-dirty
+smatch repo:            git://repo.or.cz/smatch.git
+smatch version:		v0.5.0-8146-g91e779fd-dirty
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: ee91e2d56dfee1cb2ebeea1455e5e6934b8fec6d
+host hardware:		x86_64
+host os:		5.19.0-2-amd64
 
-It looks like the rpi driver configures imx477 for two MIPI data-lanes, 
-whereas upstream imx412 wants four MIPI data-lanes.
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-pxa: OK
+linux-git-powerpc64: OK
+linux-git-arm-stm32: OK
+linux-git-mips: OK
+linux-git-arm-multi: WARNINGS
+linux-git-arm64: WARNINGS
+linux-git-i686: WARNINGS
+linux-git-x86_64: WARNINGS
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+apps: OK
+spec-git: OK
+virtme: ERRORS: Final Summary: 3080, Succeeded: 3069, Failed: 11, Warnings: 0
+virtme-32: ERRORS: Final Summary: 3193, Succeeded: 3170, Failed: 23, Warnings: 0
+sparse: WARNINGS
+smatch: WARNINGS
+kerneldoc: OK
 
-So already that means the imx412 config as-is won't work.
+Detailed results are available here:
 
-But, we do know these sensors are very very close.
+https://hverkuil.home.xs4all.nl/logs/Wednesday.log
 
-I think the right medium term thing to do is try take in the majority of 
-the imx477 code - including the various test modes, and resolutions and 
-support for different MIPI data-lane configurations.
+Detailed regression test results are available here:
 
-Its not clear to me that the imx412/imx577 and imx378/imx477 can 
-genuinely live in the same codebase though.
+https://hverkuil.home.xs4all.nl/logs/Wednesday-test-media.log
+https://hverkuil.home.xs4all.nl/logs/Wednesday-test-media-32.log
+https://hverkuil.home.xs4all.nl/logs/Wednesday-test-media-dmesg.log
 
-Anyway I think adding imx477 to the imx412 driver should be considered 
-out of scope pending answering most of those questions and getting the 
-code to work.
+Full logs are available here:
 
-Anyway that merging of rpi imx477 and upstream imx412/imx577 code feels 
-like an entirely different series.
+https://hverkuil.home.xs4all.nl/logs/Wednesday.tar.bz2
 
-So I'll resend this series minus the imx477 bits.
+The Media Infrastructure API from this daily build is here:
 
----
-bod
+https://hverkuil.home.xs4all.nl/spec/index.html
