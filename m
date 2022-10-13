@@ -2,49 +2,50 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 125D4C4321E
-	for <linux-media@archiver.kernel.org>; Thu, 13 Oct 2022 00:30:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DF61C433FE
+	for <linux-media@archiver.kernel.org>; Thu, 13 Oct 2022 00:32:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbiJMA37 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 12 Oct 2022 20:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47236 "EHLO
+        id S231591AbiJMAcW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 12 Oct 2022 20:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231482AbiJMA2m (ORCPT
+        with ESMTP id S231534AbiJMAad (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 12 Oct 2022 20:28:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01542197F8A;
-        Wed, 12 Oct 2022 17:25:35 -0700 (PDT)
+        Wed, 12 Oct 2022 20:30:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7AB178AE;
+        Wed, 12 Oct 2022 17:27:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C298F61707;
-        Thu, 13 Oct 2022 00:25:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A856C433C1;
-        Thu, 13 Oct 2022 00:25:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C13D2B81C48;
+        Thu, 13 Oct 2022 00:18:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CB17C433C1;
+        Thu, 13 Oct 2022 00:18:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665620710;
-        bh=taxUfp8kazFUkRPz0vnQPhk9pwyhF/QDE/9ci5+0rf8=;
+        s=k20201202; t=1665620335;
+        bh=u/bw0MPMS/QV/9IoNFCmnYBw0YZ8rHNhw+FhHjhGJJE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E724s1YINQ7q2u7Cn4rY/ZlWKzk0Xy+zegerQlX7H4CQc4C+d0A78SkI1hXPzb/B0
-         ucvByYMWT+/vzNSfcQlRfTyJ+nA03iIgEIDhivtznFJnMBifaC42lzB0XjDMermjWX
-         VTVIJfKhF4xqqAXun21pXs0ai+bPMPxFWMv+VoH9utciWJuNEGYBkVcWCsBXYJ+Ne3
-         njTl3dYc0EH80x70FsBsVNZWbfiEfjfyCfBKwEloYjMfuN44Iw2fgbDyl2BUeEAfhW
-         6tVhv+fjbUSmThBJXiN6B8Hpzyl/LBZQC0dPB+Pe1SPDjutA7RMQMtAd8aYb6GmXXS
-         SnVS4kGGoNnKw==
+        b=tf1fvs/SHkxlvp2tXzW536fbV1lxK35UCqcTGztGfHMKbYVzr97scel89tjVdlTC2
+         HwdXdRAIgyhbRyz4F0FHEnVKxbHYrLqcFl1E0Mt6NbdB44Vw03q+FZM0fC75sw9aGR
+         NqhmwfTQAq78F6CggQ730YVZUUV0VdB1eQPVGWCADs0GBuuMsiXhbmu96XNu9QJeho
+         8YAYsVzo6pTJiC0SS9+PiNtLAkhf9sS9CeSfzXmodhw+A3diXQYbV2nS2Nwlb0mYRq
+         vuavFieUqQFnvs/3XzBkow/rneN/ujQSkjOuDADuvS3wbal2K27xcnhoMKImwjRo3n
+         euykkVLyIalcA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Zheyu Ma <zheyuma97@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, sakari.ailus@linux.intel.com,
-        laurent.pinchart@ideasonboard.com, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 02/27] media: cx88: Fix a null-ptr-deref bug in buffer_prepare()
-Date:   Wed, 12 Oct 2022 20:24:34 -0400
-Message-Id: <20221013002501.1895204-2-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>,
+        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.19 03/63] media: cx88: Fix a null-ptr-deref bug in buffer_prepare()
+Date:   Wed, 12 Oct 2022 20:17:37 -0400
+Message-Id: <20221013001842.1893243-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221013002501.1895204-1-sashal@kernel.org>
-References: <20221013002501.1895204-1-sashal@kernel.org>
+In-Reply-To: <20221013001842.1893243-1-sashal@kernel.org>
+References: <20221013001842.1893243-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -90,7 +91,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 26 insertions(+), 26 deletions(-)
 
 diff --git a/drivers/media/pci/cx88/cx88-vbi.c b/drivers/media/pci/cx88/cx88-vbi.c
-index 58489ea0c1da..7cf2271866d0 100644
+index a075788c64d4..469aeaa725ad 100644
 --- a/drivers/media/pci/cx88/cx88-vbi.c
 +++ b/drivers/media/pci/cx88/cx88-vbi.c
 @@ -144,11 +144,10 @@ static int buffer_prepare(struct vb2_buffer *vb)
@@ -110,10 +111,10 @@ index 58489ea0c1da..7cf2271866d0 100644
  
  static void buffer_finish(struct vb2_buffer *vb)
 diff --git a/drivers/media/pci/cx88/cx88-video.c b/drivers/media/pci/cx88/cx88-video.c
-index b8abcd550604..547e18da1ad7 100644
+index d3729be89252..b509c2a03852 100644
 --- a/drivers/media/pci/cx88/cx88-video.c
 +++ b/drivers/media/pci/cx88/cx88-video.c
-@@ -433,6 +433,7 @@ static int queue_setup(struct vb2_queue *q,
+@@ -431,6 +431,7 @@ static int queue_setup(struct vb2_queue *q,
  
  static int buffer_prepare(struct vb2_buffer *vb)
  {
@@ -121,7 +122,7 @@ index b8abcd550604..547e18da1ad7 100644
  	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
  	struct cx8800_dev *dev = vb->vb2_queue->drv_priv;
  	struct cx88_core *core = dev->core;
-@@ -447,35 +448,35 @@ static int buffer_prepare(struct vb2_buffer *vb)
+@@ -445,35 +446,35 @@ static int buffer_prepare(struct vb2_buffer *vb)
  
  	switch (core->field) {
  	case V4L2_FIELD_TOP:
@@ -177,7 +178,7 @@ index b8abcd550604..547e18da1ad7 100644
  		break;
  	}
  	dprintk(2,
-@@ -483,7 +484,7 @@ static int buffer_prepare(struct vb2_buffer *vb)
+@@ -481,7 +482,7 @@ static int buffer_prepare(struct vb2_buffer *vb)
  		buf, buf->vb.vb2_buf.index, __func__,
  		core->width, core->height, dev->fmt->depth, dev->fmt->fourcc,
  		(unsigned long)buf->risc.dma);
