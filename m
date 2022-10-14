@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C66B3C433FE
-	for <linux-media@archiver.kernel.org>; Fri, 14 Oct 2022 18:35:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23B04C43219
+	for <linux-media@archiver.kernel.org>; Fri, 14 Oct 2022 18:35:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbiJNSfm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Oct 2022 14:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
+        id S230506AbiJNSfs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Oct 2022 14:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbiJNSfc (ORCPT
+        with ESMTP id S231134AbiJNSfb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Oct 2022 14:35:32 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85509A3ABA;
-        Fri, 14 Oct 2022 11:35:22 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id f11so8863244wrm.6;
-        Fri, 14 Oct 2022 11:35:22 -0700 (PDT)
+        Fri, 14 Oct 2022 14:35:31 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7E6AC3B8;
+        Fri, 14 Oct 2022 11:35:24 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id j16so8887087wrh.5;
+        Fri, 14 Oct 2022 11:35:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FJOMeXQc0Af23KUB04em2P8Wb6t/cXjCGBlz5qX5m2I=;
-        b=Blx6n6pTCzYuF2uFy4alGGau4/NnYP0o4vNBhGXWQRNsNrieWBhNlU5sXvUlt36deY
-         Up8KjVElZ9eJzp09elNQ7ohGy95b7beEFL6gq8JioodbGPmNNnOCtMFrOw2TaKWZ72tT
-         H/1engiV+OY1rQ8QZkPRYgS//0kuDuEofrv1CGegAelLJpjADbY4HaTAW5Mz8Rird3X1
-         Vqjr9eYKml6aC6FfmoIyiH4uC7zX4p0MKAh4CLZrj9vCTxA58QYUM7gfoy5blJe2AcBA
-         6vX2JBjEYXjXWDmnW3NHkAzOAmNYa76E0ILDhJHY2sXQy5Nr342NhIISTi82YMv0Di33
-         gajg==
+        bh=IBuenOFJAznaNzn5YDk4yF74Fdz4lVjclL9qQtkiwdo=;
+        b=DNvi+XkgFPURgg9h2yvF+OAQjfWCz4Q5bDAPd9AG/WVwO8S7/5tVvK/rOBk7iWahRz
+         qNO7hZHQkTw5ABNOn7X+7NhDN3dAO5oKM5+eDMdZHYAEwIwv1WS9UynqxSkgXMPSHm2W
+         Me8ySipXpk1kfAkglN9v5y09cNmhCHDCyyUgTN8VNdTPacax1aKqUoxnoJuvJ4TNzBKl
+         +Xm//krW7k7zBtkLw5zswNIzJ8mF9c9ToEegAqRtCaWeVw+3Dxt6Zn9561nqdO+KNzrO
+         xEi2azNDZldMksDWM3MoZRvnlCyRJ/sCitUeFEpBLGOtHLr7D3Gn0kbB3RrW6GjP4BAE
+         Qw7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FJOMeXQc0Af23KUB04em2P8Wb6t/cXjCGBlz5qX5m2I=;
-        b=NXNVpnFPXwD5XM4IN+Alm+70IdmAC216ULv0bR1G/dmiYOt1vVKsWtjh/Aeh78Mdqb
-         SfVsRCSHvnwac1B5oBuMSZ21E7V8/Nr3p/WiHe/vytiemHgisqzM2NPoTF1TenTp2295
-         /0apgnO7UY2vlr17o7W0WTeC6gqJSqTv+BDU0419bo/8It29BJ3+30asoT/xLqAkRuXH
-         Rm+0xexiDK0W7RVndeCe7LXPHdhSxXRgTxf4cpX1stviZq8gsiJ4RFN2U+e2jWF37M6N
-         jSVa989WNvaLpMY5STL7qW1UU394sUrXBHH45OGxdhiWubaBRe0ojNrnk3DJS/GwLh5R
-         vBtA==
-X-Gm-Message-State: ACrzQf0tm8v0LCGqU1lH0B6RNmcRg7SlC6hXdXc0cSCm4OFfTi/juABz
-        K5XBCLHyEt3IVKxalQ/vTfQ=
-X-Google-Smtp-Source: AMsMyM43W+6KucZ5pur5Y1vLY5wYeI4dvbIHXeyeR9lh5PeK8unsRnN2JgiYFN+dFo+cLtG1SorOog==
-X-Received: by 2002:a5d:674f:0:b0:22e:3d59:cf0f with SMTP id l15-20020a5d674f000000b0022e3d59cf0fmr4267687wrw.304.1665772520556;
-        Fri, 14 Oct 2022 11:35:20 -0700 (PDT)
+        bh=IBuenOFJAznaNzn5YDk4yF74Fdz4lVjclL9qQtkiwdo=;
+        b=o8lk8Jff6RYlZPNx2t7F82IAmpBuGIbbn5r+tHrGj8mmOm7YpPMYJUW12oa803NJPZ
+         kxUIbKp0x9Lpkm0p8Ky/x24uvBNA4E5KDhmKuRwGOAjOtXbUFsqbEFTRwWtvM0J2dOmQ
+         JPNZx6tGav/1JS/mrrwZRUKV89bkFW5gIgxQDBAH5RCL4gKrGeowpWG/qlYER8Y7ilAe
+         q8k4EiKQUfsLpdTriBLhwq1XKw8qp1BqHaXpQfI0f1BGx1nzZShtT0vkWTLNCyzNttov
+         XdmdzMFj6+9enmZ37yCXDz5xS73Ff3n2lGZFMvbJW3z+LBH5hjQAXJT+9Js2j/edH0uQ
+         SUeQ==
+X-Gm-Message-State: ACrzQf0TNpdaM/9PYSgJoz7G5bdUrrpkYkhDJWYVEO8DGOOiLoqfHBps
+        xrXSGI7l9hCAB8TM3GxNWTg=
+X-Google-Smtp-Source: AMsMyM7XpPKmXdE5Gd6pPKTU8aXsKQWn7XgcI6nts7AVcaFQvJM1U2k12MZkzZ6Z/ei2RRq229gm4g==
+X-Received: by 2002:a5d:428c:0:b0:22e:5d4e:c71e with SMTP id k12-20020a5d428c000000b0022e5d4ec71emr4154030wrq.19.1665772522695;
+        Fri, 14 Oct 2022 11:35:22 -0700 (PDT)
 Received: from prasmi.home ([2a00:23c8:2501:c701:fc4d:6548:d8bd:5bd])
-        by smtp.gmail.com with ESMTPSA id h10-20020a5d504a000000b0022a403954c3sm2485410wrt.42.2022.10.14.11.35.19
+        by smtp.gmail.com with ESMTPSA id h10-20020a5d504a000000b0022a403954c3sm2485410wrt.42.2022.10.14.11.35.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 11:35:19 -0700 (PDT)
+        Fri, 14 Oct 2022 11:35:22 -0700 (PDT)
 From:   Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -64,9 +64,9 @@ Cc:     Shawn Tu <shawnx.tu@intel.com>, Jacopo Mondi <jacopo@jmondi.org>,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v2 3/5] media: i2c: ov5645: Drop empty comment
-Date:   Fri, 14 Oct 2022 19:34:57 +0100
-Message-Id: <20221014183459.181567-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v2 5/5] media: i2c: ov5645: Call ov5645_entity_init_cfg() before registering the subdev
+Date:   Fri, 14 Oct 2022 19:34:59 +0100
+Message-Id: <20221014183459.181567-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221014183459.181567-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20221014183459.181567-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -78,30 +78,40 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Drop empty multiline comment.
+Make sure we call ov5645_entity_init_cfg() before registering the subdev
+to make sure default formats are set up.
 
+Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
 v1->v2
-* No change
+* New patch
 ---
- drivers/media/i2c/ov5645.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/media/i2c/ov5645.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/i2c/ov5645.c b/drivers/media/i2c/ov5645.c
-index 1551690a94e0..a0b9d0c43b78 100644
+index b3825294aaf1..14bcc6e42dd2 100644
 --- a/drivers/media/i2c/ov5645.c
 +++ b/drivers/media/i2c/ov5645.c
-@@ -14,9 +14,6 @@
-  *   https://www.mail-archive.com/linux-media%40vger.kernel.org/msg92671.html
-  */
+@@ -1212,6 +1212,8 @@ static int ov5645_probe(struct i2c_client *client)
+ 		goto err_pm_runtime;
+ 	}
  
--/*
-- */
++	ov5645_entity_init_cfg(&ov5645->sd, NULL);
++
+ 	ret = v4l2_async_register_subdev(&ov5645->sd);
+ 	if (ret < 0) {
+ 		dev_err(dev, "could not register v4l2 device\n");
+@@ -1224,8 +1226,6 @@ static int ov5645_probe(struct i2c_client *client)
+ 	pm_runtime_use_autosuspend(dev);
+ 	pm_runtime_put_autosuspend(dev);
+ 
+-	ov5645_entity_init_cfg(&ov5645->sd, NULL);
 -
- #include <linux/bitops.h>
- #include <linux/clk.h>
- #include <linux/delay.h>
+ 	return 0;
+ 
+ err_pm_runtime:
 -- 
 2.25.1
 
