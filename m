@@ -2,93 +2,216 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F046DC4332F
-	for <linux-media@archiver.kernel.org>; Sun, 16 Oct 2022 15:06:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B463EC4332F
+	for <linux-media@archiver.kernel.org>; Sun, 16 Oct 2022 17:57:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbiJPPGF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 16 Oct 2022 11:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48400 "EHLO
+        id S229748AbiJPR5r (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 16 Oct 2022 13:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbiJPPGD (ORCPT
+        with ESMTP id S229679AbiJPR5q (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 16 Oct 2022 11:06:03 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B9242AFE
-        for <linux-media@vger.kernel.org>; Sun, 16 Oct 2022 08:06:01 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id g16so1615260qtu.2
-        for <linux-media@vger.kernel.org>; Sun, 16 Oct 2022 08:06:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sZRp/fSwQq25KMpGhSZVmGnYNucuD6Tcnn49Kw1Ky48=;
-        b=TYHVsGCeK1huMx7iRcl5ZkR5iFfPLnDfD0Ay8IPxJFA7kMJ29tvnWr6edCMGUxPOho
-         xOwn0zn9STFngRPfDC+2Kzu/Fk4/S5N+cQXwoCCzW8YIcKm7VOPzSe0RZQmEgGeoRKrm
-         W9G9js11IGI8th2W6h1luDsMwdEH8pa8KXxpnovy07kSYctSA26d9Kql/0byEX46yh3P
-         E+CawSCBb+KnrKfqkxpcTK3qblJio+yYNPJ6pASsMPV0zJDePfdshiOp4bOqRG8niBPQ
-         dAEMl4fMkxUP1FbNTcZigE/Pmt91Dwmk2n3Y5JXIS8hJ8ye/lYKfinl8GwpYF3T+vkNj
-         rFSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sZRp/fSwQq25KMpGhSZVmGnYNucuD6Tcnn49Kw1Ky48=;
-        b=3/V5rkn6n/omzCHpfu13ASyobf0G8KTKrGHfiDYcDIBBcVJBOO9vfuv9LbcQR/JKb2
-         Qi/Qr472fh2JoS9/2TUPDZd7M28Y9S+m53NnKjtzeTYOlJQTZcpIQAI4M+1hS7QkiAu1
-         Z+NFqVxsmiOPFVfwNrQa1+lIN07wZ12cIklI0jL6YkbNBuj+6sgm3AFfzRTkxcJZE/W8
-         UQIsQsiW9vWRn2xKzClOspn4oaXuI3GbGDCNEBYXEVt5ZUzFdjY0uG18f/TbKATWme8a
-         TbVLNqpmWfSAuBVQnjd3wGiCDwziIYLTAvQOTDwauSL6642+yKIhgSBy7SbWcnicUyFw
-         MA8w==
-X-Gm-Message-State: ACrzQf3Efw2663ZUMErzTqxdXIaQQYB5amgr+A9Z/g6ScxRWfKpaHqNX
-        hlW3vwhkhQ9XwHreT/q64UUuPhj4JQxqHw==
-X-Google-Smtp-Source: AMsMyM40b617U3a6uGTVRT5RHjRhTstA6B9hRcf7vlbFDNy16XMMoRZlf5BOcXK97FsKax34nJms3Q==
-X-Received: by 2002:a05:622a:174b:b0:35d:1be5:c65e with SMTP id l11-20020a05622a174b00b0035d1be5c65emr5351950qtk.422.1665932759534;
-        Sun, 16 Oct 2022 08:05:59 -0700 (PDT)
-Received: from ?IPV6:2601:42:0:3450:9b13:d679:7b5b:6921? ([2601:42:0:3450:9b13:d679:7b5b:6921])
-        by smtp.gmail.com with ESMTPSA id bm11-20020a05620a198b00b006ee96d82188sm7245263qkb.1.2022.10.16.08.05.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Oct 2022 08:05:58 -0700 (PDT)
-Message-ID: <edc9e423-0aab-e0bf-8307-abbbcf68b1d9@linaro.org>
-Date:   Sun, 16 Oct 2022 11:05:57 -0400
+        Sun, 16 Oct 2022 13:57:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C8929355
+        for <linux-media@vger.kernel.org>; Sun, 16 Oct 2022 10:57:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665943063;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9S6KHRZorxW9iRfuype592okm6l1ei31+q0809xnIlU=;
+        b=Zq5buMDCyjC8q0xUBI4V2qm/UBtukuVcLpFQjzrM609VyTf2jXwU+x1L9sqIOGwEGHEqvt
+        Slxmh5N8w+dDHgo25Gg1Gu7jqcioDn5ImtsXJTxRF33nTGXQYdPV2LFmSUnznZf01h9If2
+        sc9LkWcVMOmO8e2idr81/m4Sag7v3Dk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-375-5FTx-dafMeuEYumGUAY1uA-1; Sun, 16 Oct 2022 13:57:41 -0400
+X-MC-Unique: 5FTx-dafMeuEYumGUAY1uA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8AA553803904;
+        Sun, 16 Oct 2022 17:57:41 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.39.192.97])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F0296414A815;
+        Sun, 16 Oct 2022 17:57:40 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH v4l-utils 1/4] libv4lconvert: Fix v4lconvert_yuv420_to_rgb/bgr24() not taking stride into account
+Date:   Sun, 16 Oct 2022 19:57:26 +0200
+Message-Id: <20221016175729.187258-2-hdegoede@redhat.com>
+In-Reply-To: <20221016175729.187258-1-hdegoede@redhat.com>
+References: <20221016175729.187258-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 01/20] media: dt-bindings: Convert imx290.txt to YAML
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org
-Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org
-References: <20221016061523.30127-1-laurent.pinchart@ideasonboard.com>
- <20221016061523.30127-2-laurent.pinchart@ideasonboard.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221016061523.30127-2-laurent.pinchart@ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 16/10/2022 02:15, Laurent Pinchart wrote:
-> Convert the Sony IMX290 DT binding from text to YAML. Add Manivannan as
-> a maintainer given that he is listed in MAINTAINERS for the file, as
-> volunteering myself.
-> 
-> The name of the input clock, "xclk", is wrong as the hardware manual
-> names it INCK. As the device has a single clock, the name could be
-> omitted, but that would require a corresponding change to the driver and
-> is thus a candidate for further patches.
-> 
+The atomisp driver can generate V4L2_PIX_FMT_YUV420 buffers where
+stride != width. Where as v4lconvert_yuv420_to_rgb/bgr24() assumed that
+stride == width is always true.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Add a stride argument to v4lconvert_yuv420_to_rgb/bgr24() to fix this.
 
-Best regards,
-Krzysztof
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ lib/libv4lconvert/libv4lconvert-priv.h |  4 ++--
+ lib/libv4lconvert/libv4lconvert.c      | 12 +++++------
+ lib/libv4lconvert/rgbyuv.c             | 30 ++++++++++++++++----------
+ 3 files changed, 27 insertions(+), 19 deletions(-)
+
+diff --git a/lib/libv4lconvert/libv4lconvert-priv.h b/lib/libv4lconvert/libv4lconvert-priv.h
+index 6b9128ce..495f726d 100644
+--- a/lib/libv4lconvert/libv4lconvert-priv.h
++++ b/lib/libv4lconvert/libv4lconvert-priv.h
+@@ -118,10 +118,10 @@ void v4lconvert_rgb24_to_yuv420(const unsigned char *src, unsigned char *dest,
+ 		const struct v4l2_format *src_fmt, int bgr, int yvu, int bpp);
+ 
+ void v4lconvert_yuv420_to_rgb24(const unsigned char *src, unsigned char *dst,
+-		int width, int height, int yvu);
++		int width, int height, int stride, int yvu);
+ 
+ void v4lconvert_yuv420_to_bgr24(const unsigned char *src, unsigned char *dst,
+-		int width, int height, int yvu);
++		int width, int height, int stride, int yvu);
+ 
+ void v4lconvert_yuyv_to_rgb24(const unsigned char *src, unsigned char *dst,
+ 		int width, int height, int stride);
+diff --git a/lib/libv4lconvert/libv4lconvert.c b/lib/libv4lconvert/libv4lconvert.c
+index e794ec00..e5d5ddde 100644
+--- a/lib/libv4lconvert/libv4lconvert.c
++++ b/lib/libv4lconvert/libv4lconvert.c
+@@ -905,11 +905,11 @@ static int v4lconvert_convert_pixfmt(struct v4lconvert_data *data,
+ 		switch (dest_pix_fmt) {
+ 		case V4L2_PIX_FMT_RGB24:
+ 			v4lconvert_yuv420_to_rgb24(data->convert_pixfmt_buf, dest, width,
+-					height, yvu);
++					height, bytesperline, yvu);
+ 			break;
+ 		case V4L2_PIX_FMT_BGR24:
+ 			v4lconvert_yuv420_to_bgr24(data->convert_pixfmt_buf, dest, width,
+-					height, yvu);
++					height, bytesperline, yvu);
+ 			break;
+ 		}
+ 		break;
+@@ -1398,11 +1398,11 @@ static int v4lconvert_convert_pixfmt(struct v4lconvert_data *data,
+ 		switch (dest_pix_fmt) {
+ 		case V4L2_PIX_FMT_RGB24:
+ 			v4lconvert_yuv420_to_rgb24(src, dest, width,
+-					height, 0);
++					height, bytesperline, 0);
+ 			break;
+ 		case V4L2_PIX_FMT_BGR24:
+ 			v4lconvert_yuv420_to_bgr24(src, dest, width,
+-					height, 0);
++					height, bytesperline, 0);
+ 			break;
+ 		case V4L2_PIX_FMT_YUV420:
+ 			memcpy(dest, src, width * height * 3 / 2);
+@@ -1422,11 +1422,11 @@ static int v4lconvert_convert_pixfmt(struct v4lconvert_data *data,
+ 		switch (dest_pix_fmt) {
+ 		case V4L2_PIX_FMT_RGB24:
+ 			v4lconvert_yuv420_to_rgb24(src, dest, width,
+-					height, 1);
++					height, bytesperline, 1);
+ 			break;
+ 		case V4L2_PIX_FMT_BGR24:
+ 			v4lconvert_yuv420_to_bgr24(src, dest, width,
+-					height, 1);
++					height, bytesperline, 1);
+ 			break;
+ 		case V4L2_PIX_FMT_YUV420:
+ 			v4lconvert_swap_uv(src, dest, fmt);
+diff --git a/lib/libv4lconvert/rgbyuv.c b/lib/libv4lconvert/rgbyuv.c
+index b54b4577..1ca821ab 100644
+--- a/lib/libv4lconvert/rgbyuv.c
++++ b/lib/libv4lconvert/rgbyuv.c
+@@ -93,7 +93,7 @@ void v4lconvert_rgb24_to_yuv420(const unsigned char *src, unsigned char *dest,
+ #define CLIP(color) (unsigned char)(((color) > 0xFF) ? 0xff : (((color) < 0) ? 0 : (color)))
+ 
+ void v4lconvert_yuv420_to_bgr24(const unsigned char *src, unsigned char *dest,
+-		int width, int height, int yvu)
++		int width, int height, int stride, int yvu)
+ {
+ 	int i, j;
+ 
+@@ -101,11 +101,11 @@ void v4lconvert_yuv420_to_bgr24(const unsigned char *src, unsigned char *dest,
+ 	const unsigned char *usrc, *vsrc;
+ 
+ 	if (yvu) {
+-		vsrc = src + width * height;
+-		usrc = vsrc + (width * height) / 4;
++		vsrc = src + stride * height;
++		usrc = vsrc + (stride * height) / 4;
+ 	} else {
+-		usrc = src + width * height;
+-		vsrc = usrc + (width * height) / 4;
++		usrc = src + stride * height;
++		vsrc = usrc + (stride * height) / 4;
+ 	}
+ 
+ 	for (i = 0; i < height; i++) {
+@@ -138,16 +138,20 @@ void v4lconvert_yuv420_to_bgr24(const unsigned char *src, unsigned char *dest,
+ 			usrc++;
+ 			vsrc++;
+ 		}
++		ysrc += stride - width;
+ 		/* Rewind u and v for next line */
+ 		if (!(i & 1)) {
+ 			usrc -= width / 2;
+ 			vsrc -= width / 2;
++		} else {
++			usrc += (stride - width) / 2;
++			vsrc += (stride - width) / 2;
+ 		}
+ 	}
+ }
+ 
+ void v4lconvert_yuv420_to_rgb24(const unsigned char *src, unsigned char *dest,
+-		int width, int height, int yvu)
++		int width, int height, int stride, int yvu)
+ {
+ 	int i, j;
+ 
+@@ -155,11 +159,11 @@ void v4lconvert_yuv420_to_rgb24(const unsigned char *src, unsigned char *dest,
+ 	const unsigned char *usrc, *vsrc;
+ 
+ 	if (yvu) {
+-		vsrc = src + width * height;
+-		usrc = vsrc + (width * height) / 4;
++		vsrc = src + stride * height;
++		usrc = vsrc + (stride * height) / 4;
+ 	} else {
+-		usrc = src + width * height;
+-		vsrc = usrc + (width * height) / 4;
++		usrc = src + stride * height;
++		vsrc = usrc + (stride * height) / 4;
+ 	}
+ 
+ 	for (i = 0; i < height; i++) {
+@@ -192,10 +196,14 @@ void v4lconvert_yuv420_to_rgb24(const unsigned char *src, unsigned char *dest,
+ 			usrc++;
+ 			vsrc++;
+ 		}
++		ysrc += stride - width;
+ 		/* Rewind u and v for next line */
+-		if (!(i&1)) {
++		if (!(i & 1)) {
+ 			usrc -= width / 2;
+ 			vsrc -= width / 2;
++		} else {
++			usrc += (stride - width) / 2;
++			vsrc += (stride - width) / 2;
+ 		}
+ 	}
+ }
+-- 
+2.37.3
 
