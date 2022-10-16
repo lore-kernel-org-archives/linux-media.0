@@ -2,38 +2,38 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22327C433FE
-	for <linux-media@archiver.kernel.org>; Sun, 16 Oct 2022 06:16:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9944C4332F
+	for <linux-media@archiver.kernel.org>; Sun, 16 Oct 2022 06:16:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbiJPGQA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 16 Oct 2022 02:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
+        id S229766AbiJPGQC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 16 Oct 2022 02:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiJPGP7 (ORCPT
+        with ESMTP id S229763AbiJPGQC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 16 Oct 2022 02:15:59 -0400
+        Sun, 16 Oct 2022 02:16:02 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF8436DF0
-        for <linux-media@vger.kernel.org>; Sat, 15 Oct 2022 23:15:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C4A386AE
+        for <linux-media@vger.kernel.org>; Sat, 15 Oct 2022 23:16:00 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 964D3E65;
-        Sun, 16 Oct 2022 08:15:56 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5BC8F987;
+        Sun, 16 Oct 2022 08:15:59 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1665900956;
-        bh=wGoPnD6bq0js73PR0yN/hApPnCYaUBESVytOiSJ7nJQ=;
+        s=mail; t=1665900959;
+        bh=S/Ez1qsQMBYRJxUatnmbHgvQgfLfY72NgUz09Ns4FSw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XTc68nssjkGeSsPs8S+H/IRGvxL1uuZcFAz0u7Gn21JwLQoNzCnHWQ82pFrfOI4v1
-         O/blekJnbb8xjwrMP8NpaBVakhstcEPz8vQvvd1IY9LiixlIbWiICV3yDcuR+4XqZj
-         6KnE2Esrpa4pFfKuRn3F1xR5Fdck//UEp5CI08G4=
+        b=KeMlOL0jXOfYkObter4Y5o3FV923rg/cubD1ujWki92FgapdfnL2wjp3IhL3t8s3k
+         O04mtA68x7lRXmLxjB/SKH7Z6fvoKCPlUyrnHa+Y9ygwPa8Clxii6zsjHA3gYV1B2d
+         X0TrdM3RXnXSAJiYEwAFghLsIJ66MXl8sQAT3bJw=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
         Manivannan Sadhasivam <mani@kernel.org>,
         Alexander Stein <alexander.stein@ew.tq-group.com>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH v2 05/20] media: i2c: imx290: Drop imx290_write_buffered_reg()
-Date:   Sun, 16 Oct 2022 09:15:08 +0300
-Message-Id: <20221016061523.30127-6-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 07/20] media: i2c: imx290: Specify HMAX values in decimal
+Date:   Sun, 16 Oct 2022 09:15:10 +0300
+Message-Id: <20221016061523.30127-8-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221016061523.30127-1-laurent.pinchart@ideasonboard.com>
 References: <20221016061523.30127-1-laurent.pinchart@ideasonboard.com>
@@ -43,67 +43,54 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The imx290_write_buffered_reg() function wraps a register write with
-register hold, to enable changing multiple registers synchronously. It
-is used for the gain only, which is an 8-bit register, defeating its
-purpose.
-
-The feature is useful, but should be implemented differently. Drop the
-function for now, to prepare for a rework of register access.
+The HMAX value specifies the total line length in pixels. It's thus more
+readable in decimal than hexadecimal. Fix it.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Acked-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 ---
- drivers/media/i2c/imx290.c | 32 +-------------------------------
- 1 file changed, 1 insertion(+), 31 deletions(-)
+ drivers/media/i2c/imx290.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-index 0f32f391b2e7..5646f1704a1e 100644
+index e1f91b4275c3..711282126c34 100644
 --- a/drivers/media/i2c/imx290.c
 +++ b/drivers/media/i2c/imx290.c
-@@ -413,41 +413,11 @@ static int imx290_set_register_array(struct imx290 *imx290,
- 	return 0;
- }
- 
--static int imx290_write_buffered_reg(struct imx290 *imx290, u16 address_low,
--				     u8 nr_regs, u32 value)
--{
--	unsigned int i;
--	int ret;
--
--	ret = imx290_write_reg(imx290, IMX290_REGHOLD, 0x01);
--	if (ret) {
--		dev_err(imx290->dev, "Error setting hold register\n");
--		return ret;
--	}
--
--	for (i = 0; i < nr_regs; i++) {
--		ret = imx290_write_reg(imx290, address_low + i,
--				       (u8)(value >> (i * 8)));
--		if (ret) {
--			dev_err(imx290->dev, "Error writing buffered registers\n");
--			return ret;
--		}
--	}
--
--	ret = imx290_write_reg(imx290, IMX290_REGHOLD, 0x00);
--	if (ret) {
--		dev_err(imx290->dev, "Error setting hold register\n");
--		return ret;
--	}
--
--	return ret;
--}
--
- static int imx290_set_gain(struct imx290 *imx290, u32 value)
- {
- 	int ret;
- 
--	ret = imx290_write_buffered_reg(imx290, IMX290_GAIN, 1, value);
-+	ret = imx290_write_reg(imx290, IMX290_GAIN, value);
- 	if (ret)
- 		dev_err(imx290->dev, "Unable to write gain\n");
- 
+@@ -307,7 +307,7 @@ static const struct imx290_mode imx290_modes_2lanes[] = {
+ 	{
+ 		.width = 1920,
+ 		.height = 1080,
+-		.hmax = 0x1130,
++		.hmax = 4400,
+ 		.link_freq_index = FREQ_INDEX_1080P,
+ 		.data = imx290_1080p_settings,
+ 		.data_size = ARRAY_SIZE(imx290_1080p_settings),
+@@ -315,7 +315,7 @@ static const struct imx290_mode imx290_modes_2lanes[] = {
+ 	{
+ 		.width = 1280,
+ 		.height = 720,
+-		.hmax = 0x19c8,
++		.hmax = 6600,
+ 		.link_freq_index = FREQ_INDEX_720P,
+ 		.data = imx290_720p_settings,
+ 		.data_size = ARRAY_SIZE(imx290_720p_settings),
+@@ -326,7 +326,7 @@ static const struct imx290_mode imx290_modes_4lanes[] = {
+ 	{
+ 		.width = 1920,
+ 		.height = 1080,
+-		.hmax = 0x0898,
++		.hmax = 2200,
+ 		.link_freq_index = FREQ_INDEX_1080P,
+ 		.data = imx290_1080p_settings,
+ 		.data_size = ARRAY_SIZE(imx290_1080p_settings),
+@@ -334,7 +334,7 @@ static const struct imx290_mode imx290_modes_4lanes[] = {
+ 	{
+ 		.width = 1280,
+ 		.height = 720,
+-		.hmax = 0x0ce4,
++		.hmax = 3300,
+ 		.link_freq_index = FREQ_INDEX_720P,
+ 		.data = imx290_720p_settings,
+ 		.data_size = ARRAY_SIZE(imx290_720p_settings),
 -- 
 Regards,
 
