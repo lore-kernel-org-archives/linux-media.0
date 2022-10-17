@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53F6FC4332F
-	for <linux-media@archiver.kernel.org>; Mon, 17 Oct 2022 08:52:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D722C4321E
+	for <linux-media@archiver.kernel.org>; Mon, 17 Oct 2022 08:52:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbiJQIwi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Oct 2022 04:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60068 "EHLO
+        id S230288AbiJQIwj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Oct 2022 04:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbiJQIwJ (ORCPT
+        with ESMTP id S229826AbiJQIwL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Oct 2022 04:52:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1271F606
-        for <linux-media@vger.kernel.org>; Mon, 17 Oct 2022 01:51:24 -0700 (PDT)
+        Mon, 17 Oct 2022 04:52:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEA93684E
+        for <linux-media@vger.kernel.org>; Mon, 17 Oct 2022 01:51:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665996680;
+        s=mimecast20190719; t=1665996687;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ilOvCV9hI+oLEULT7HJL/2M26nM1vm48TMXZUfrIkbc=;
-        b=Hh7CIcMdWaZ5DomNCqgPSBgFeK80IwzjjplerIoq8+RKYYu1IwfkXUZFec8jc+QMf4KD8W
-        DgpPLnommNg5i6DOT5OLz7UjDf9I83JEyOzTN259A4PseYa/7if3VrPuVBO4xfAZ9LzNk6
-        aJLeD6bvExAmiMFjYwhZjpRBSKdE1g0=
+        bh=kHkZGDy1XJOOgj7f1fVF+1HfsYg0np3Q+pIFo3Ko9m8=;
+        b=QAQB/srHUT1jW8Oe4xTYZOubJLtVskid0iWrmYi/IR5+UyVhbUU3IEcVODGlYprKBRYJa5
+        VDO9zsCkK0FAyDnh2ZW32HTvCAY5GGheCP2rs2aRGmSNC/gBpcb7dPyKk1iFec6FbMbWZq
+        fB++dunL8BecfO/e+pMxM4nsLNUzI3M=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-316-6SP6ynr8N6CpEA4Pn0Hycg-1; Mon, 17 Oct 2022 04:51:15 -0400
-X-MC-Unique: 6SP6ynr8N6CpEA4Pn0Hycg-1
+ us-mta-553-r6oRCHoeNEOL54poyP7sew-1; Mon, 17 Oct 2022 04:51:22 -0400
+X-MC-Unique: r6oRCHoeNEOL54poyP7sew-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6FAE41C05AAD;
-        Mon, 17 Oct 2022 08:51:14 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8358C3814946;
+        Mon, 17 Oct 2022 08:51:21 +0000 (UTC)
 Received: from x1.localdomain.com (unknown [10.39.194.44])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 93D1410A58CE;
-        Mon, 17 Oct 2022 08:51:12 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7387010A58CE;
+        Mon, 17 Oct 2022 08:51:19 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 05/17] media: atomisp: Remove unused atomisp_buffers_queued[_pipe] functions
-Date:   Mon, 17 Oct 2022 10:50:45 +0200
-Message-Id: <20221017085057.7483-6-hdegoede@redhat.com>
+Subject: [PATCH 08/17] media: atomisp: Use new atomisp_flush_video_pipe() helper in atomisp_streamoff()
+Date:   Mon, 17 Oct 2022 10:50:48 +0200
+Message-Id: <20221017085057.7483-9-hdegoede@redhat.com>
 In-Reply-To: <20221017085057.7483-1-hdegoede@redhat.com>
 References: <20221017085057.7483-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,56 +60,75 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The atomisp_buffers_queued[_pipe] functions are not used anywhere,
-remove them.
+Use the new atomisp_flush_video_pipe() helper instead of open-coding it.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/staging/media/atomisp/pci/atomisp_cmd.c | 15 ---------------
- drivers/staging/media/atomisp/pci/atomisp_cmd.h |  4 ----
- 2 files changed, 19 deletions(-)
+ .../staging/media/atomisp/pci/atomisp_ioctl.c | 40 +------------------
+ 1 file changed, 2 insertions(+), 38 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.c b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-index c72d0e344671..0d3a4ff99730 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-@@ -640,21 +640,6 @@ void atomisp_clear_css_buffer_counters(struct atomisp_sub_device *asd)
- 	asd->video_out_video_capture.buffers_in_css = 0;
- }
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+index 1fffe49cf578..7d5413981714 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+@@ -1734,11 +1734,6 @@ int atomisp_streamoff(struct file *file, void *fh, enum v4l2_buf_type type)
+ 	struct pci_dev *pdev = to_pci_dev(isp->dev);
+ 	struct atomisp_video_pipe *pipe = atomisp_to_video_pipe(vdev);
+ 	struct atomisp_sub_device *asd = pipe->asd;
+-	struct atomisp_video_pipe *capture_pipe = NULL;
+-	struct atomisp_video_pipe *vf_pipe = NULL;
+-	struct atomisp_video_pipe *preview_pipe = NULL;
+-	struct atomisp_video_pipe *video_pipe = NULL;
+-	struct videobuf_buffer *vb, *_vb;
+ 	enum ia_css_pipe_id css_pipe_id;
+ 	int ret;
+ 	unsigned long flags;
+@@ -1819,43 +1814,12 @@ int atomisp_streamoff(struct file *file, void *fh, enum v4l2_buf_type type)
+ 	css_pipe_id = atomisp_get_css_pipe_id(asd);
+ 	atomisp_css_stop(asd, css_pipe_id, false);
  
--/* ISP2400 */
--bool atomisp_buffers_queued(struct atomisp_sub_device *asd)
--{
--	return asd->video_out_capture.buffers_in_css ||
--	       asd->video_out_vf.buffers_in_css ||
--	       asd->video_out_preview.buffers_in_css ||
--	       asd->video_out_video_capture.buffers_in_css;
--}
+-	/* cancel work queue*/
+-	if (asd->video_out_capture.users) {
+-		capture_pipe = &asd->video_out_capture;
+-		wake_up_interruptible(&capture_pipe->capq.wait);
+-	}
+-	if (asd->video_out_vf.users) {
+-		vf_pipe = &asd->video_out_vf;
+-		wake_up_interruptible(&vf_pipe->capq.wait);
+-	}
+-	if (asd->video_out_preview.users) {
+-		preview_pipe = &asd->video_out_preview;
+-		wake_up_interruptible(&preview_pipe->capq.wait);
+-	}
+-	if (asd->video_out_video_capture.users) {
+-		video_pipe = &asd->video_out_video_capture;
+-		wake_up_interruptible(&video_pipe->capq.wait);
+-	}
++	atomisp_flush_video_pipe(pipe, true);
++
+ 	ret = videobuf_streamoff(&pipe->capq);
+ 	if (ret)
+ 		return ret;
+ 
+-	/* cleanup css here */
+-	/* no need for this, as ISP will be reset anyway */
+-	/*atomisp_flush_bufs_in_css(isp);*/
 -
--/* ISP2401 */
--bool atomisp_buffers_queued_pipe(struct atomisp_video_pipe *pipe)
--{
--	return pipe->buffers_in_css ? true : false;
--}
+-	spin_lock_irqsave(&pipe->irq_lock, flags);
+-	list_for_each_entry_safe(vb, _vb, &pipe->activeq, queue) {
+-		vb->state = VIDEOBUF_PREPARED;
+-		list_del(&vb->queue);
+-	}
+-	list_for_each_entry_safe(vb, _vb, &pipe->buffers_waiting_for_param, queue) {
+-		vb->state = VIDEOBUF_PREPARED;
+-		list_del(&vb->queue);
+-		pipe->frame_request_config_id[vb->i] = 0;
+-	}
+-	spin_unlock_irqrestore(&pipe->irq_lock, flags);
 -
- /* 0x100000 is the start of dmem inside SP */
- #define SP_DMEM_BASE	0x100000
- 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.h b/drivers/staging/media/atomisp/pci/atomisp_cmd.h
-index c9f92f1326b6..fc1cfda718e1 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_cmd.h
-+++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.h
-@@ -57,10 +57,6 @@ struct atomisp_video_pipe *atomisp_to_video_pipe(struct video_device *dev);
- int atomisp_reset(struct atomisp_device *isp);
- void atomisp_flush_bufs_and_wakeup(struct atomisp_sub_device *asd);
- void atomisp_clear_css_buffer_counters(struct atomisp_sub_device *asd);
--/* ISP2400 */
--bool atomisp_buffers_queued(struct atomisp_sub_device *asd);
--/* ISP2401 */
--bool atomisp_buffers_queued_pipe(struct atomisp_video_pipe *pipe);
- 
- /* Interrupt functions */
- void atomisp_msi_irq_init(struct atomisp_device *isp);
+ 	atomisp_subdev_cleanup_pending_events(asd);
+ stopsensor:
+ 	if (atomisp_subdev_streaming_count(asd) + 1
 -- 
 2.37.3
 
