@@ -2,125 +2,224 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABE1BC4332F
-	for <linux-media@archiver.kernel.org>; Mon, 17 Oct 2022 08:38:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A158C4332F
+	for <linux-media@archiver.kernel.org>; Mon, 17 Oct 2022 08:52:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbiJQIiM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Oct 2022 04:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52996 "EHLO
+        id S230342AbiJQIwK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Oct 2022 04:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbiJQIiL (ORCPT
+        with ESMTP id S230281AbiJQIvv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Oct 2022 04:38:11 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1A15FB6
-        for <linux-media@vger.kernel.org>; Mon, 17 Oct 2022 01:38:10 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5B5FBCCF;
-        Mon, 17 Oct 2022 10:38:08 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1665995888;
-        bh=n7WpIOHSvDVVaAlzCH207N7FIuOtrpRCi1sld5sdMiQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nRK6zJXyZZr/1GEJpTmlD91e/3hX+qVgv4bbJsqkHl80zQ4aigIhEj+2Uh53prvKe
-         qITyc1BjL0wTsr5YzAnV5GOrJT8vkBLEQjF1LwJpjLUIW486c3HuLHLYAsGU7V4Yst
-         9cmbC/x+IrTovydFNuhQIr8hLQNy5fpMbexopLYw=
-Date:   Mon, 17 Oct 2022 11:37:44 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     linux-media@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: Re: [PATCH v2 18/20] media: i2c: imx290: Factor out format retrieval
- to separate function
-Message-ID: <Y00UWMmPTnmEuaI3@pendragon.ideasonboard.com>
-References: <20221016061523.30127-1-laurent.pinchart@ideasonboard.com>
- <20221016061523.30127-19-laurent.pinchart@ideasonboard.com>
- <5869053.lOV4Wx5bFT@steina-w>
+        Mon, 17 Oct 2022 04:51:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E805A50FB0
+        for <linux-media@vger.kernel.org>; Mon, 17 Oct 2022 01:51:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665996668;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/4luUEan7kJYj4SgeWmlq0vs682vGqU9S7pG9/yzTSg=;
+        b=HbUmp0o6UQfbjlYy8U5Ql5mMdboArkRNYcp6268R1ywyuoa4lULmrWJPrB9be/6Xk16crB
+        5i8OQBBVkx1iuwC9yL29N+U1OkN0lUa7JNQUufuZXNCp3RMX/dEOEosCSHn0rI145f2W1F
+        txhpz8uOidOJ7RhTGULnsPUq9WOSFK8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-354-hPj31s4SPrac4qU9T0Hyxg-1; Mon, 17 Oct 2022 04:51:04 -0400
+X-MC-Unique: hPj31s4SPrac4qU9T0Hyxg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 681923C3050E;
+        Mon, 17 Oct 2022 08:51:04 +0000 (UTC)
+Received: from x1.localdomain.com (unknown [10.39.194.44])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0C96C10A58CE;
+        Mon, 17 Oct 2022 08:51:01 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Yury Luneff <yury.lunev@gmail.com>,
+        Nable <nable.maininbox@googlemail.com>,
+        andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: [PATCH 01/17] media: atomisp: Add hmm_create_from_vmalloc_buf() function
+Date:   Mon, 17 Oct 2022 10:50:41 +0200
+Message-Id: <20221017085057.7483-2-hdegoede@redhat.com>
+In-Reply-To: <20221017085057.7483-1-hdegoede@redhat.com>
+References: <20221017085057.7483-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <5869053.lOV4Wx5bFT@steina-w>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Alexander,
+Add a new hmm creating function to create a vmm object from a vmalloc-ed
+kernel buffer. This is a preparation patch for adding videobuf2 (and
+working MMAP mode) support.
 
-On Mon, Oct 17, 2022 at 07:55:28AM +0200, Alexander Stein wrote:
-> Am Sonntag, 16. Oktober 2022, 08:15:21 CEST schrieb Laurent Pinchart:
-> > The driver duplicates the same pattern to access the try or active
-> > format in multiple locations. Factor it out to a separate function.
-> > 
-> > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > ---
-> > Changes since v1:
-> > 
-> > - Avoid returning NULL from imx290_get_pad_format()
-> > ---
-> >  drivers/media/i2c/imx290.c | 24 ++++++++++++++----------
-> >  1 file changed, 14 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-> > index 0b34d60f8ce2..b0ff0e8ed45a 100644
-> > --- a/drivers/media/i2c/imx290.c
-> > +++ b/drivers/media/i2c/imx290.c
-> > @@ -519,6 +519,16 @@ static const struct v4l2_ctrl_ops imx290_ctrl_ops = {
-> >  	.s_ctrl = imx290_set_ctrl,
-> >  };
-> > 
-> > +static struct v4l2_mbus_framefmt *
-> > +imx290_get_pad_format(struct imx290 *imx290, struct v4l2_subdev_state *state,
-> > +		      u32 which)
-> > +{
-> > +	if (which == V4L2_SUBDEV_FORMAT_ACTIVE)
-> > +		return &imx290->current_format;
-> > +	else
-> > +		return v4l2_subdev_get_try_format(&imx290->sd, state, 0);
-> > +}
-> > +
-> 
-> v4l2_subdev_get_try_format can return NULL, which would be dereferenced later 
-> on. But this happens only if state is NULL itself, which will raise a WARN_ON 
-> anyway. So i guess this is fine.
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ .../staging/media/atomisp/include/hmm/hmm.h   |  2 ++
+ .../media/atomisp/include/hmm/hmm_bo.h        |  4 ++-
+ drivers/staging/media/atomisp/pci/hmm/hmm.c   | 15 ++++++---
+ .../staging/media/atomisp/pci/hmm/hmm_bo.c    | 32 +++++++++++++++----
+ 4 files changed, 42 insertions(+), 11 deletions(-)
 
-I'll add a patch on top of the series to convert the driver to the V4L2
-active state, that should simplify all this.
-
-> Acked-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> 
-> >  static int imx290_enum_mbus_code(struct v4l2_subdev *sd,
-> >  				 struct v4l2_subdev_state *sd_state,
-> >  				 struct v4l2_subdev_mbus_code_enum *code)
-> > @@ -562,12 +572,7 @@ static int imx290_get_fmt(struct v4l2_subdev *sd,
-> > 
-> >  	mutex_lock(&imx290->lock);
-> > 
-> > -	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
-> > -		framefmt = v4l2_subdev_get_try_format(&imx290->sd, sd_state,
-> > -						      fmt->pad);
-> > -	else
-> > -		framefmt = &imx290->current_format;
-> > -
-> > +	framefmt = imx290_get_pad_format(imx290, sd_state, fmt->which);
-> >  	fmt->format = *framefmt;
-> > 
-> >  	mutex_unlock(&imx290->lock);
-> > @@ -627,10 +632,9 @@ static int imx290_set_fmt(struct v4l2_subdev *sd,
-> >  	fmt->format.code = imx290_formats[i].code;
-> >  	fmt->format.field = V4L2_FIELD_NONE;
-> > 
-> > -	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
-> > -		format = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
-> > -	} else {
-> > -		format = &imx290->current_format;
-> > +	format = imx290_get_pad_format(imx290, sd_state, fmt->which);
-> > +
-> > +	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
-> >  		imx290->current_mode = mode;
-> >  		imx290->bpp = imx290_formats[i].bpp;
-
+diff --git a/drivers/staging/media/atomisp/include/hmm/hmm.h b/drivers/staging/media/atomisp/include/hmm/hmm.h
+index c0384bb0a762..b81b8580d405 100644
+--- a/drivers/staging/media/atomisp/include/hmm/hmm.h
++++ b/drivers/staging/media/atomisp/include/hmm/hmm.h
+@@ -38,6 +38,8 @@ void hmm_cleanup(void);
+ 
+ ia_css_ptr hmm_alloc(size_t bytes);
+ ia_css_ptr hmm_create_from_userdata(size_t bytes, const void __user *userptr);
++ia_css_ptr hmm_create_from_vmalloc_buf(size_t bytes, void *vmalloc_addr);
++
+ void hmm_free(ia_css_ptr ptr);
+ int hmm_load(ia_css_ptr virt, void *data, unsigned int bytes);
+ int hmm_store(ia_css_ptr virt, const void *data, unsigned int bytes);
+diff --git a/drivers/staging/media/atomisp/include/hmm/hmm_bo.h b/drivers/staging/media/atomisp/include/hmm/hmm_bo.h
+index c5cbae1d9cf9..a51d89f0b5cc 100644
+--- a/drivers/staging/media/atomisp/include/hmm/hmm_bo.h
++++ b/drivers/staging/media/atomisp/include/hmm/hmm_bo.h
+@@ -73,6 +73,7 @@
+ 
+ enum hmm_bo_type {
+ 	HMM_BO_PRIVATE,
++	HMM_BO_VMALLOC,
+ 	HMM_BO_USER,
+ 	HMM_BO_LAST,
+ };
+@@ -207,7 +208,8 @@ int hmm_bo_allocated(struct hmm_buffer_object *bo);
+  */
+ int hmm_bo_alloc_pages(struct hmm_buffer_object *bo,
+ 		       enum hmm_bo_type type,
+-		       const void __user *userptr);
++		       const void __user *userptr,
++		       void *vmalloc_addr);
+ void hmm_bo_free_pages(struct hmm_buffer_object *bo);
+ int hmm_bo_page_allocated(struct hmm_buffer_object *bo);
+ 
+diff --git a/drivers/staging/media/atomisp/pci/hmm/hmm.c b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+index fc6cfe9f7744..207a834e37bf 100644
+--- a/drivers/staging/media/atomisp/pci/hmm/hmm.c
++++ b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+@@ -168,7 +168,9 @@ void hmm_cleanup(void)
+ 	hmm_initialized = false;
+ }
+ 
+-static ia_css_ptr __hmm_alloc(size_t bytes, enum hmm_bo_type type, const void __user *userptr)
++static ia_css_ptr __hmm_alloc(size_t bytes, enum hmm_bo_type type,
++			      const void __user *userptr,
++			      void *vmalloc_addr)
+ {
+ 	unsigned int pgnr;
+ 	struct hmm_buffer_object *bo;
+@@ -192,7 +194,7 @@ static ia_css_ptr __hmm_alloc(size_t bytes, enum hmm_bo_type type, const void __
+ 	}
+ 
+ 	/* Allocate pages for memory */
+-	ret = hmm_bo_alloc_pages(bo, type, userptr);
++	ret = hmm_bo_alloc_pages(bo, type, userptr, vmalloc_addr);
+ 	if (ret) {
+ 		dev_err(atomisp_dev, "hmm_bo_alloc_pages failed.\n");
+ 		goto alloc_page_err;
+@@ -221,12 +223,17 @@ static ia_css_ptr __hmm_alloc(size_t bytes, enum hmm_bo_type type, const void __
+ 
+ ia_css_ptr hmm_alloc(size_t bytes)
+ {
+-	return __hmm_alloc(bytes, HMM_BO_PRIVATE, NULL);
++	return __hmm_alloc(bytes, HMM_BO_PRIVATE, NULL, NULL);
++}
++
++ia_css_ptr hmm_create_from_vmalloc_buf(size_t bytes, void *vmalloc_addr)
++{
++	return __hmm_alloc(bytes, HMM_BO_VMALLOC, NULL, vmalloc_addr);
+ }
+ 
+ ia_css_ptr hmm_create_from_userdata(size_t bytes, const void __user *userptr)
+ {
+-	return __hmm_alloc(bytes, HMM_BO_USER, userptr);
++	return __hmm_alloc(bytes, HMM_BO_USER, userptr, NULL);
+ }
+ 
+ void hmm_free(ia_css_ptr virt)
+diff --git a/drivers/staging/media/atomisp/pci/hmm/hmm_bo.c b/drivers/staging/media/atomisp/pci/hmm/hmm_bo.c
+index a5fd6d38d3c4..465ba837f2ed 100644
+--- a/drivers/staging/media/atomisp/pci/hmm/hmm_bo.c
++++ b/drivers/staging/media/atomisp/pci/hmm/hmm_bo.c
+@@ -694,18 +694,38 @@ static int alloc_user_pages(struct hmm_buffer_object *bo,
+ 	return -ENOMEM;
+ }
+ 
++static int alloc_vmalloc_pages(struct hmm_buffer_object *bo, void *vmalloc_addr)
++{
++	void *vaddr = vmalloc_addr;
++	int i;
++
++	for (i = 0; i < bo->pgnr; i++) {
++		bo->pages[i] = vmalloc_to_page(vaddr);
++		if (!bo->pages[i]) {
++			dev_err(atomisp_dev, "Error could not get page %d of vmalloc buf\n", i);
++			return -ENOMEM;
++		}
++		vaddr += PAGE_SIZE;
++	}
++
++	return 0;
++}
++
+ /*
+  * allocate/free physical pages for the bo.
+  *
+  * type indicate where are the pages from. currently we have 3 types
+- * of memory: HMM_BO_PRIVATE, HMM_BO_USER.
++ * of memory: HMM_BO_PRIVATE, HMM_BO_VMALLOC, HMM_BO_USER.
++ *
++ * vmalloc_addr is only valid when type is HMM_BO_VMALLOC.
+  *
+  * userptr is only valid when type is HMM_BO_USER, it indicates
+  * the start address from user space task.
+  */
+ int hmm_bo_alloc_pages(struct hmm_buffer_object *bo,
+ 		       enum hmm_bo_type type,
+-		       const void __user *userptr)
++		       const void __user *userptr,
++		       void *vmalloc_addr)
+ {
+ 	int ret = -EINVAL;
+ 
+@@ -720,12 +740,10 @@ int hmm_bo_alloc_pages(struct hmm_buffer_object *bo,
+ 		goto alloc_err;
+ 	}
+ 
+-	/*
+-	 * TO DO:
+-	 * add HMM_BO_USER type
+-	 */
+ 	if (type == HMM_BO_PRIVATE) {
+ 		ret = alloc_private_pages(bo);
++	} else if (type == HMM_BO_VMALLOC) {
++		ret = alloc_vmalloc_pages(bo, vmalloc_addr);
+ 	} else if (type == HMM_BO_USER) {
+ 		ret = alloc_user_pages(bo, userptr);
+ 	} else {
+@@ -771,6 +789,8 @@ void hmm_bo_free_pages(struct hmm_buffer_object *bo)
+ 
+ 	if (bo->type == HMM_BO_PRIVATE)
+ 		free_private_bo_pages(bo);
++	else if (bo->type == HMM_BO_VMALLOC)
++		; /* No-op, nothing to do */
+ 	else if (bo->type == HMM_BO_USER)
+ 		free_user_pages(bo, bo->pgnr);
+ 	else
 -- 
-Regards,
+2.37.3
 
-Laurent Pinchart
