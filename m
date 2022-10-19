@@ -2,167 +2,131 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E08AC43217
-	for <linux-media@archiver.kernel.org>; Wed, 19 Oct 2022 11:05:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E148C43219
+	for <linux-media@archiver.kernel.org>; Wed, 19 Oct 2022 11:08:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbiJSLFT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 19 Oct 2022 07:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53756 "EHLO
+        id S229997AbiJSLIB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 19 Oct 2022 07:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234963AbiJSLEY (ORCPT
+        with ESMTP id S233774AbiJSLH2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 19 Oct 2022 07:04:24 -0400
-Received: from meesny.iki.fi (meesny.iki.fi [195.140.195.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02BA171CDD
-        for <linux-media@vger.kernel.org>; Wed, 19 Oct 2022 03:33:51 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 341E620303;
-        Wed, 19 Oct 2022 13:33:01 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1666175581;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VtDO9xKMdp7Zc+J8StFyrYxsSYXv2NrrZhEQ+6abF60=;
-        b=WKrjBkYtq+c64YPkXB9syZdf1ediQ+HD4CZS848lQXAcMjrY79TSLBP4umvflssYawjjBW
-        ulKjHvYTDoVv/95mKJ+etpqHoLAmkhwMlhVUfYhhaimiG7q72QKznKqugVLmbA76Az8RVo
-        LDhcL5gB4ACuc3uqQ83gjLjkjAaGX5k=
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 55453634C95;
-        Wed, 19 Oct 2022 13:33:00 +0300 (EEST)
-Date:   Wed, 19 Oct 2022 13:33:00 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org,
-        Manivannan Sadhasivam <mani@kernel.org>
-Subject: Re: [PATCH 00/19] media: i2c: imx290: Miscellaneous improvements
-Message-ID: <Y0/SXOIXf3CGjNuv@valkosipuli.retiisi.eu>
-References: <20220721083540.1525-1-laurent.pinchart@ideasonboard.com>
- <YwQpT5JpyfXBEIVE@pendragon.ideasonboard.com>
- <CAPY8ntAsJNOAJ2te2vQSK6AeXj8LyB6Krepc88FL=6U6O9zb2g@mail.gmail.com>
- <Y0uYhiny89r9J8//@pendragon.ideasonboard.com>
- <CAPY8ntDJ0-hLSHWtX5+bHaDR9quu=usP1+gaHFcZupAHtQYAFg@mail.gmail.com>
- <CAPY8ntDm8VSDT1DhvdRmOjUbq3feQ61MN6XQ70p1ZX4d+JwA_g@mail.gmail.com>
+        Wed, 19 Oct 2022 07:07:28 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79854FBCE4
+        for <linux-media@vger.kernel.org>; Wed, 19 Oct 2022 03:36:22 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1ol6Q2-0005oI-9s; Wed, 19 Oct 2022 12:35:26 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1ol6Q1-0006FY-K0; Wed, 19 Oct 2022 12:35:25 +0200
+Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1ol6Q0-00COQ3-Jy; Wed, 19 Oct 2022 12:35:24 +0200
+From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-media@vger.kernel.org, balbi@kernel.org,
+        laurent.pinchart@ideasonboard.com, kernel@pengutronix.de
+Subject: [PATCH v4 1/2] usb: gadget: uvc: default the ctrl request interface offsets
+Date:   Wed, 19 Oct 2022 12:35:21 +0200
+Message-Id: <20221019103522.2925375-2-m.grzeschik@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221019103522.2925375-1-m.grzeschik@pengutronix.de>
+References: <20221019103522.2925375-1-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPY8ntDm8VSDT1DhvdRmOjUbq3feQ61MN6XQ70p1ZX4d+JwA_g@mail.gmail.com>
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1666175581; a=rsa-sha256; cv=none;
-        b=nzf8BFcZAebzJpkWczvFOsFn5N7y+tTNRbGBCMOVZIk+8vd1QL3rzCSe8dnre0g4ahOILa
-        TblkaqyhI1yWAeuY5GWTqxD4nb2u/UtDFbS/kpvbYFRPwWGxJB5kbvKBMm4qR9K6k9METF
-        qEKwsGx5SrIR+909NEgDY164mfro+HI=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1666175581;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VtDO9xKMdp7Zc+J8StFyrYxsSYXv2NrrZhEQ+6abF60=;
-        b=Dsd7mCD17nx/uqwfaHuOq50+X3P/hyVCKhP7agyKRezsrlXrJnY2Xmko35YJt40X+atB7h
-        Q/WC35kP3RPvZ+yAOLgErDdTmGtAB81JSDKyG0xHHtGSblO9uGAz7y2BREG4S1CNjeFE5k
-        g3du0aFKG61oSprhYmTyXatAzUbGS6k=
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dave,
+For the userspace it is needed to distinguish between requests for the
+control or streaming interface. The userspace would have to parse the
+configfs to know which interface index it has to compare the ctrl
+requests against. Since the interface numbers are not fixed, e.g. for
+composite gadgets, the interface offset depends on the setup.
 
-On Mon, Oct 17, 2022 at 07:07:20PM +0100, Dave Stevenson wrote:
-> Hi Laurent
-> 
-> On Sun, 16 Oct 2022 at 08:34, Dave Stevenson
-> <dave.stevenson@raspberrypi.com> wrote:
-> >
-> > Hi Laurent
-> >
-> > On Sun, 16 Oct 2022 at 06:37, Laurent Pinchart
-> > <laurent.pinchart@ideasonboard.com> wrote:
-> > >
-> > > Hi Dave,
-> > >
-> > > On Mon, Oct 10, 2022 at 11:31:33AM +0100, Dave Stevenson wrote:
-> > > > Hi Laurent
-> > > >
-> > > > Do you have plans for a v2 on this patch set? I also have a number of
-> > > > patches for imx290 and there's little point in causing grief to each
-> > > > other with conflicts.
-> > > > Or I could take the non-controversial patches from your set and send a
-> > > > combined patch set?
-> > >
-> > > I'm working on a v2, I'll send it shortly. Do I assume correctly you'll
-> > > submit IMX327 support on top ? :-)
-> >
-> > Thanks - I'll review it tomorrow and sort my patches on top again.
-> 
-> I've reworked my patches on top of yours. It gives r/w VBLANK and
-> HBLANK, and corrects PIXEL_RATE.
-> I'm testing on our 6.0 branch, but
-> https://github.com/6by9/linux/commits/linuxtv_imx290/drivers/media/i2c
-> is against the linux-media branch.
-> 
-> I've messed something up in the "media: i2c: imx290: Support 60fps in
-> 2 lane operation" patch at present - I'm looking into what has gone
-> wrong, as the earlier versions of that patch worked fine. The branch
-> will get force-pushed once I've fixed it.
-> 
-> > This driver is effectively IMX327 - max 1920x1080@60fps in 12 bit.
-> >
-> > IMX290 adds a 1920x1080@120fps 10bit only mode which isn't currently
-> > supported by the driver. I have patches to add 10bit support, but I
-> > don't increase the frame rate in them.
-> >
-> > IMX462 adds that 1920x1080@120fps mode in both 10 and 12 bit, but
-> > again I haven't looked at adding support, partly as I don't have a
-> > datasheet for that variant. I may see if the change for 120fps 10bit
-> > on imx290 works in 12 bit mode for IMX462.
-> > For IMX290, 1080p120 needs a link frequency of 445.5MHz on 4 lanes to
-> > be supported (2 lanes not permitted), so there will be more link
-> > frequency messing required to support it. The basic numbers say that
-> > is fast enough for 12bit as well, so there's hope.
-> 
-> I guess seeing as I'm messing with the clock setup, I may as well keep
-> going and look at the 120fps modes. It's a little trickier as the Pi
-> ISP will be on the edge at those rates, but it should be good enough.
-> 
-> There is an awkward question with regard link-frequencies. Is there a
-> need to support multiple sets of link-frequency, or do we support any
-> set of 2?
-> ie for imx290, on 4 lanes do we want:
-> - 891Mbit/s for 1080p120 10bit
-> - 445.5Mbit/s for 1080p60 10 or 12 bit
-> - 594Mbit/s for 720p120 10bit
-> - 297Mbit/s for 720p60 10 and 12 bit
-> all to be present in DT?
-> If only 891 and 594 then you're limited to 10 bit images, but
-> otherwise it should be fully functional. The max frame interval would
-> be half that of 445.5 and 297 though, so there are compromises, but
-> who/what then controls the link_frequency to switch between the
-> ranges?
+The kernel has this information when handing over the ctrl request to
+the userspace. This patch removes the offset from the interface numbers
+and expose the default interface defines in the uapi g_uvc.h.
 
-It's up to the user space to set that control in a general case. I guess
-there are no specific rules on how many you should put to DT, but generally
-those that are useful should be there.
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 
-I wonder why 12 bpp output isn't possible at the double frequency. Of
-course it is possible the sensor's clock tree makes that impossible but it
-is still unusual.
+---
+v1 - v2:
+- removed the extra variable in struct uvc_event
+- replacing the ctrl request interface bits in place
+- included the move of the default interface defines to g_uvc.h
+v2 - v3:
+- improced coding style
+v3 - v4:
+- no changes
 
-> 
-> I can see another can of worms being opened here!
+ drivers/usb/gadget/function/f_uvc.c | 15 ++++++++++++---
+ include/uapi/linux/usb/g_uvc.h      |  3 +++
+ 2 files changed, 15 insertions(+), 3 deletions(-)
 
-If this is what the sensor does, how else it should be operated?
-
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 6e196e06181ecf..6e131624011a5e 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -39,9 +39,6 @@ MODULE_PARM_DESC(trace, "Trace level bitmask");
+ 
+ /* string IDs are assigned dynamically */
+ 
+-#define UVC_STRING_CONTROL_IDX			0
+-#define UVC_STRING_STREAMING_IDX		1
+-
+ static struct usb_string uvc_en_us_strings[] = {
+ 	/* [UVC_STRING_CONTROL_IDX].s = DYNAMIC, */
+ 	[UVC_STRING_STREAMING_IDX].s = "Video Streaming",
+@@ -228,6 +225,8 @@ uvc_function_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
+ 	struct uvc_device *uvc = to_uvc(f);
+ 	struct v4l2_event v4l2_event;
+ 	struct uvc_event *uvc_event = (void *)&v4l2_event.u.data;
++	unsigned int interface = le16_to_cpu(ctrl->wIndex) & 0xff;
++	struct usb_ctrlrequest *mctrl;
+ 
+ 	if ((ctrl->bRequestType & USB_TYPE_MASK) != USB_TYPE_CLASS) {
+ 		uvcg_info(f, "invalid request type\n");
+@@ -248,6 +247,16 @@ uvc_function_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
+ 	memset(&v4l2_event, 0, sizeof(v4l2_event));
+ 	v4l2_event.type = UVC_EVENT_SETUP;
+ 	memcpy(&uvc_event->req, ctrl, sizeof(uvc_event->req));
++
++	/* check for the interface number, fixup the interface number in
++	 * the ctrl request so the userspace doesn't have to bother with
++	 * offset and configfs parsing
++	 */
++	mctrl = &uvc_event->req;
++	mctrl->wIndex &= ~cpu_to_le16(0xff);
++	if (interface == uvc->streaming_intf)
++		mctrl->wIndex = cpu_to_le16(UVC_STRING_STREAMING_IDX);
++
+ 	v4l2_event_queue(&uvc->vdev, &v4l2_event);
+ 
+ 	return 0;
+diff --git a/include/uapi/linux/usb/g_uvc.h b/include/uapi/linux/usb/g_uvc.h
+index 652f169a019e7d..8d7824dde1b2f9 100644
+--- a/include/uapi/linux/usb/g_uvc.h
++++ b/include/uapi/linux/usb/g_uvc.h
+@@ -21,6 +21,9 @@
+ #define UVC_EVENT_DATA			(V4L2_EVENT_PRIVATE_START + 5)
+ #define UVC_EVENT_LAST			(V4L2_EVENT_PRIVATE_START + 5)
+ 
++#define UVC_STRING_CONTROL_IDX			0
++#define UVC_STRING_STREAMING_IDX		1
++
+ struct uvc_request_data {
+ 	__s32 length;
+ 	__u8 data[60];
 -- 
-Kind regards,
+2.30.2
 
-Sakari Ailus
