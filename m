@@ -2,190 +2,225 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8140C4332F
-	for <linux-media@archiver.kernel.org>; Wed, 19 Oct 2022 11:08:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FA2CC433FE
+	for <linux-media@archiver.kernel.org>; Wed, 19 Oct 2022 12:04:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231350AbiJSLIL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 19 Oct 2022 07:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54512 "EHLO
+        id S231310AbiJSMEx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 19 Oct 2022 08:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231622AbiJSLH1 (ORCPT
+        with ESMTP id S232200AbiJSMDe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 19 Oct 2022 07:07:27 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBFEFFFB3
-        for <linux-media@vger.kernel.org>; Wed, 19 Oct 2022 03:36:22 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1ol6Q2-0005oG-9s; Wed, 19 Oct 2022 12:35:26 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1ol6Q1-0006FV-Eo; Wed, 19 Oct 2022 12:35:25 +0200
-Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1ol6Q0-00COQ6-KL; Wed, 19 Oct 2022 12:35:24 +0200
-From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
-To:     linux-usb@vger.kernel.org
-Cc:     linux-media@vger.kernel.org, balbi@kernel.org,
-        laurent.pinchart@ideasonboard.com, kernel@pengutronix.de
-Subject: [PATCH v4 2/2] usb: gadget: uvc: add validate and fix function for uvc response
-Date:   Wed, 19 Oct 2022 12:35:22 +0200
-Message-Id: <20221019103522.2925375-3-m.grzeschik@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221019103522.2925375-1-m.grzeschik@pengutronix.de>
-References: <20221019103522.2925375-1-m.grzeschik@pengutronix.de>
+        Wed, 19 Oct 2022 08:03:34 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C44550714
+        for <linux-media@vger.kernel.org>; Wed, 19 Oct 2022 04:39:48 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id d142so14156702iof.7
+        for <linux-media@vger.kernel.org>; Wed, 19 Oct 2022 04:39:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=raspberrypi.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GbOPw3JM1MwE0gKUTrIWgyJWfoLtVHcDbJMnzeP9Iog=;
+        b=eS4aVouqc4qAxQI8vyFfNfzyh+KvBYlrsfmPeoqLiiBW+yRkJPbdUPW8bZIYlnEnWq
+         81wzhJwDahTrrKVxWpPP7cO8FnP6KOAjlk5IUR92sfF3DbF9LhZC6KeGlSkrEW0bTbB6
+         XvE+p1aU0n+oT/mwtr+ypWuhfCvLyAV9BAEvJPoVdDzAHe3NNCnA6i6AyT3y4ASW0umz
+         +gVWjRc8jGsUayLikKXBNcLMkD0KtjViAuGIl8DEvnl3z+ONUsp0ChOOpe9A81a/ZdJc
+         7eNuO+cGF9zpoibZsRahHwgIgs/reFL0p/wnh3BvNxTdNfRZkQzewT9WQ2BOr9AhfASG
+         lobQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GbOPw3JM1MwE0gKUTrIWgyJWfoLtVHcDbJMnzeP9Iog=;
+        b=fl9Q5gZbLhDakhz/wFG3J/epXUi+B0h6JT+0NtRdLIy2A5m56dM2nalJUeTxVysZpD
+         eZlwR1WBrNdF+7c9pXv26bWXB6gbt4iE2eMPvtK5SeRY9+g/HlkMh/rUxKuy0u2YW54N
+         gZBj+8Il2pvIOC6mxpO5TrOKNNXy8oHFwuna+rKZNatJs8Sn/NUSc/Kc0FC9qeGeGMXV
+         zAnh/0j6T7yDYiuY67CVD3roOTnSd2ojN0vejahbOkKr1ZnIXMc7GhbHlBrfM7Tr0DoM
+         BvNoaYDxGz8omWvdZEh5na8LECTvvgjAuJPDPHaFLjISnnN75Sa2UOD78olSeBE0NUjk
+         6NpA==
+X-Gm-Message-State: ACrzQf1hGGyuTHH83QQhJFfdezuUx6m0WcaoLzH48MyiEDHGwb58a6tC
+        cJyLlb1WoCSmvm/Os6tLc++19YKWOSGUpxaLkXjkoQ==
+X-Google-Smtp-Source: AMsMyM4nmOpi42M3jYL7+FKvXIycMLYh3T/dQq3prXQimla+F99lXK7qcIwlxHs6PhRHRhm3VL+8yRpG+uguqf/YXKY=
+X-Received: by 2002:a02:9601:0:b0:363:74ca:bfda with SMTP id
+ c1-20020a029601000000b0036374cabfdamr5929894jai.8.1666179517748; Wed, 19 Oct
+ 2022 04:38:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+References: <20220721083540.1525-1-laurent.pinchart@ideasonboard.com>
+ <YwQpT5JpyfXBEIVE@pendragon.ideasonboard.com> <CAPY8ntAsJNOAJ2te2vQSK6AeXj8LyB6Krepc88FL=6U6O9zb2g@mail.gmail.com>
+ <Y0uYhiny89r9J8//@pendragon.ideasonboard.com> <CAPY8ntDJ0-hLSHWtX5+bHaDR9quu=usP1+gaHFcZupAHtQYAFg@mail.gmail.com>
+ <CAPY8ntDm8VSDT1DhvdRmOjUbq3feQ61MN6XQ70p1ZX4d+JwA_g@mail.gmail.com> <Y0/SXOIXf3CGjNuv@valkosipuli.retiisi.eu>
+In-Reply-To: <Y0/SXOIXf3CGjNuv@valkosipuli.retiisi.eu>
+From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date:   Wed, 19 Oct 2022 12:38:21 +0100
+Message-ID: <CAPY8ntBnKFj5eZJspEDE9S7TN9TLpJiQjdb-nQsQ=+JjQhxyXg@mail.gmail.com>
+Subject: Re: [PATCH 00/19] media: i2c: imx290: Miscellaneous improvements
+To:     Sakari Ailus <sakari.ailus@iki.fi>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org,
+        Manivannan Sadhasivam <mani@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When the userspace gets the setup requests for UVC_GET_CUR UVC_GET_MIN,
-UVC_GET_MAX, UVC_GET_DEF it will fill out the ctrl response. This data
-needs to be validated. Since the kernel also knows the limits for valid
-cases, it can fixup the values in case the userspace is setting invalid
-data.
+Hi Sakari
 
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Thanks for the response
 
----
-v1 -> v4:
-- new patch
+On Wed, 19 Oct 2022 at 11:33, Sakari Ailus <sakari.ailus@iki.fi> wrote:
+>
+> Hi Dave,
+>
+> On Mon, Oct 17, 2022 at 07:07:20PM +0100, Dave Stevenson wrote:
+> > Hi Laurent
+> >
+> > On Sun, 16 Oct 2022 at 08:34, Dave Stevenson
+> > <dave.stevenson@raspberrypi.com> wrote:
+> > >
+> > > Hi Laurent
+> > >
+> > > On Sun, 16 Oct 2022 at 06:37, Laurent Pinchart
+> > > <laurent.pinchart@ideasonboard.com> wrote:
+> > > >
+> > > > Hi Dave,
+> > > >
+> > > > On Mon, Oct 10, 2022 at 11:31:33AM +0100, Dave Stevenson wrote:
+> > > > > Hi Laurent
+> > > > >
+> > > > > Do you have plans for a v2 on this patch set? I also have a number of
+> > > > > patches for imx290 and there's little point in causing grief to each
+> > > > > other with conflicts.
+> > > > > Or I could take the non-controversial patches from your set and send a
+> > > > > combined patch set?
+> > > >
+> > > > I'm working on a v2, I'll send it shortly. Do I assume correctly you'll
+> > > > submit IMX327 support on top ? :-)
+> > >
+> > > Thanks - I'll review it tomorrow and sort my patches on top again.
+> >
+> > I've reworked my patches on top of yours. It gives r/w VBLANK and
+> > HBLANK, and corrects PIXEL_RATE.
+> > I'm testing on our 6.0 branch, but
+> > https://github.com/6by9/linux/commits/linuxtv_imx290/drivers/media/i2c
+> > is against the linux-media branch.
+> >
+> > I've messed something up in the "media: i2c: imx290: Support 60fps in
+> > 2 lane operation" patch at present - I'm looking into what has gone
+> > wrong, as the earlier versions of that patch worked fine. The branch
+> > will get force-pushed once I've fixed it.
+> >
+> > > This driver is effectively IMX327 - max 1920x1080@60fps in 12 bit.
+> > >
+> > > IMX290 adds a 1920x1080@120fps 10bit only mode which isn't currently
+> > > supported by the driver. I have patches to add 10bit support, but I
+> > > don't increase the frame rate in them.
+> > >
+> > > IMX462 adds that 1920x1080@120fps mode in both 10 and 12 bit, but
+> > > again I haven't looked at adding support, partly as I don't have a
+> > > datasheet for that variant. I may see if the change for 120fps 10bit
+> > > on imx290 works in 12 bit mode for IMX462.
+> > > For IMX290, 1080p120 needs a link frequency of 445.5MHz on 4 lanes to
+> > > be supported (2 lanes not permitted), so there will be more link
+> > > frequency messing required to support it. The basic numbers say that
+> > > is fast enough for 12bit as well, so there's hope.
+> >
+> > I guess seeing as I'm messing with the clock setup, I may as well keep
+> > going and look at the 120fps modes. It's a little trickier as the Pi
+> > ISP will be on the edge at those rates, but it should be good enough.
+> >
+> > There is an awkward question with regard link-frequencies. Is there a
+> > need to support multiple sets of link-frequency, or do we support any
+> > set of 2?
+> > ie for imx290, on 4 lanes do we want:
+> > - 891Mbit/s for 1080p120 10bit
+> > - 445.5Mbit/s for 1080p60 10 or 12 bit
+> > - 594Mbit/s for 720p120 10bit
+> > - 297Mbit/s for 720p60 10 and 12 bit
+> > all to be present in DT?
+> > If only 891 and 594 then you're limited to 10 bit images, but
+> > otherwise it should be fully functional. The max frame interval would
+> > be half that of 445.5 and 297 though, so there are compromises, but
+> > who/what then controls the link_frequency to switch between the
+> > ranges?
+>
+> It's up to the user space to set that control in a general case. I guess
+> there are no specific rules on how many you should put to DT, but generally
+> those that are useful should be there.
 
- drivers/usb/gadget/function/f_uvc.c    |  4 +-
- drivers/usb/gadget/function/uvc.h      |  1 +
- drivers/usb/gadget/function/uvc_v4l2.c | 76 ++++++++++++++++++++++++++
- 3 files changed, 80 insertions(+), 1 deletion(-)
+Does the driver have to support multiple sets of link frequencies
+simultaneously?
 
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 6e131624011a5e..098bd3c4e3c0b3 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -254,8 +254,10 @@ uvc_function_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
- 	 */
- 	mctrl = &uvc_event->req;
- 	mctrl->wIndex &= ~cpu_to_le16(0xff);
--	if (interface == uvc->streaming_intf)
-+	if (interface == uvc->streaming_intf) {
-+		uvc->streaming_request = ctrl->bRequest;
- 		mctrl->wIndex = cpu_to_le16(UVC_STRING_STREAMING_IDX);
-+	}
- 
- 	v4l2_event_queue(&uvc->vdev, &v4l2_event);
- 
-diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-index 40226b1f7e148a..1be4d5f24b46bf 100644
---- a/drivers/usb/gadget/function/uvc.h
-+++ b/drivers/usb/gadget/function/uvc.h
-@@ -151,6 +151,7 @@ struct uvc_device {
- 	void *control_buf;
- 
- 	unsigned int streaming_intf;
-+	unsigned char streaming_request;
- 
- 	/* Events */
- 	unsigned int event_length;
-diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index c4ed48d6b8a407..d67aef71f8afc3 100644
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -178,6 +178,67 @@ static struct uvcg_frame *find_closest_frame_by_size(struct uvc_device *uvc,
-  * Requests handling
-  */
- 
-+/* validate and fixup streaming ctrl request response data if possible */
-+static void
-+uvc_validate_streaming_ctrl(struct uvc_device *uvc,
-+			    struct uvc_streaming_control *ctrl)
-+{
-+	struct f_uvc_opts *opts = fi_to_f_uvc_opts(uvc->func.fi);
-+	unsigned int iformat, iframe;
-+	struct uvcg_format *uformat;
-+	struct uvcg_frame *uframe;
-+	bool ival_found = false;
-+	int i;
-+
-+	iformat = ctrl->bFormatIndex;
-+	iframe = ctrl->bFrameIndex;
-+
-+	/* Restrict the iformat, iframe and dwFrameInterval to valid values.
-+	 * Negative values for iformat and iframe will result in the maximum
-+	 * valid value being selected
-+	 */
-+	iformat = clamp((unsigned int)iformat, 1U,
-+			(unsigned int)uvc->header->num_fmt);
-+	if (iformat != ctrl->bFormatIndex) {
-+		uvcg_info(&uvc->func,
-+			  "Userspace set invalid Format Index - fixup\n");
-+		ctrl->bFormatIndex = iformat;
-+	}
-+	uformat = find_format_by_index(uvc, iformat);
-+
-+	iframe = clamp((unsigned int)iframe, 1U,
-+		       (unsigned int)uformat->num_frames);
-+	if (iframe != ctrl->bFrameIndex) {
-+		uvcg_info(&uvc->func,
-+			  "Userspace set invalid Frame Index - fixup\n");
-+		ctrl->bFrameIndex = iframe;
-+	}
-+	uframe = find_frame_by_index(uvc, uformat, iframe);
-+
-+	if (ctrl->dwFrameInterval) {
-+		for (i = 0; i < uframe->frame.b_frame_interval_type; i++) {
-+			if (ctrl->dwFrameInterval ==
-+				 uframe->dw_frame_interval[i])
-+				ival_found = true;
-+		}
-+	}
-+	if (!ival_found) {
-+		uvcg_info(&uvc->func,
-+			  "Userspace set invalid Frame Inteval - fixup\n");
-+		ctrl->dwFrameInterval = uframe->frame.dw_default_frame_interval;
-+	}
-+
-+	if (!ctrl->dwMaxPayloadTransferSize ||
-+			ctrl->dwMaxPayloadTransferSize >
-+				opts->streaming_maxpacket)
-+		ctrl->dwMaxPayloadTransferSize = opts->streaming_maxpacket;
-+
-+	if (!ctrl->dwMaxVideoFrameSize ||
-+			ctrl->dwMaxVideoFrameSize >
-+				uframe->frame.dw_max_video_frame_buffer_size)
-+		ctrl->dwMaxVideoFrameSize = uvc_get_frame_size(uformat, uframe);
-+}
-+
- static int
- uvc_send_response(struct uvc_device *uvc, struct uvc_request_data *data)
- {
-@@ -192,6 +253,21 @@ uvc_send_response(struct uvc_device *uvc, struct uvc_request_data *data)
- 
- 	memcpy(req->buf, data->data, req->length);
- 
-+	/* validate the ctrl content and fixup */
-+	if (!uvc->event_setup_out) {
-+		struct uvc_streaming_control *ctrl = req->buf;
-+
-+		switch (uvc->streaming_request) {
-+		case UVC_GET_CUR:
-+		case UVC_GET_MIN:
-+		case UVC_GET_MAX:
-+		case UVC_GET_DEF:
-+			uvc_validate_streaming_ctrl(uvc, ctrl);
-+		default:
-+			break;
-+		}
-+	}
-+
- 	return usb_ep_queue(cdev->gadget->ep0, req, GFP_KERNEL);
- }
- 
--- 
-2.30.2
+The way the driver is currently written you have one link freq for
+1080p and one for 720p (2/3rds the rate used for 1080p). You could
+retain using only 2 link frequencies at a time.
 
+If DT/ACPI gives us 222.75MHz and 148.5MHz on 4 lanes, or 445.5MHz and
+297MHz on 2 lanes, with IMX327, IMX290 or IMX462, then use the current
+configuration that can do 0.03 to 60fps as RAW10 or RAW12.
+If DT/ACPI gives us 445.5MHz and 297MHz on 4 lanes and are on an
+IMX290 (not IMX327), then use a new configuration that can do 0.06 to
+120fps as RAW10 only.
+If DT/ACPI gives us 445.5MHz and 297MHz on 4 lanes and are on an
+IMX462, then use a new configuration that can do 0.06 to 120fps as
+RAW10 or RAW12.
+If the configuration doesn't fall into any of these categories, then
+it is rejected.
+
+Whoever is putting together the DT/ACPI for the device can then choose
+whether they value the lower minimum frame rate and RAW12, or the
+higher frame rate but are prepared to sacrifice RAW12. (As we use
+dtoverlays, we can add overrides so that person is the end user).
+Trying to cram that lot in so that it can all be used simultaneously
+will get quite ugly - the register configuration is not quite as
+simple as one might hope, and you'd be filtering the permitted modes
+and bit depths all over the place.
+
+As I mentioned at the Media Summit in Dublin I've had users wanting
+IMX462 for astronomy use cases, so halving the max exposure time by
+dropping the current max 60fps configuration won't be popular. I guess
+you could incorrectly use an IMX327 compatible string in the DT when
+using an IMX290/462 to force the behaviour, but that feels even more
+of a hack.
+
+> I wonder why 12 bpp output isn't possible at the double frequency. Of
+> course it is possible the sensor's clock tree makes that impossible but it
+> is still unusual.
+
+It is a little weird. As noted in the later emails, I have put
+together settings to get 120fps running, and have tried it on both
+IMX462 and IMX290.
+
+720p120 RAW12 works fine on both, as do 720p120 and 1080p120 in RAW10.
+However 1080p120 RAW12 doesn't work on either, so I suspect it is
+something in the CSI2 block configuration that can't quite hit that
+data rate without further changes. I'll see if Sony wants to be
+friendly with datasheets for the IMX462.
+
+> >
+> > I can see another can of worms being opened here!
+>
+> If this is what the sensor does, how else it should be operated?
+
+As above, link frequency remains read only based on DT or ACPI, and
+that then restricts the configurations that are possible.
+
+I've never seen a good userspace example of using
+V4L2_CID_LINK_FREQUENCY, so without that it always seems to be a
+setting that is generally only used by the CSI-2 receiver to adapt
+appropriately to the data rate.
+To my mind it falls into the same category as binning and cropping -
+it's lovely to expose the full feature set, but that is just passing
+the buck to some heuristics in userspace. Generally the user of the
+camera doesn't care (they just want their camera to work) so
+realistically you're looking at libcamera, and it doesn't necessarily
+have sufficient information about the sensor or use case to make a
+good decision.
+
+  Dave
+
+> --
+> Kind regards,
+>
+> Sakari Ailus
