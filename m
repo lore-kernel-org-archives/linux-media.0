@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E80DC4332F
-	for <linux-media@archiver.kernel.org>; Thu, 20 Oct 2022 19:56:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 720F8C433FE
+	for <linux-media@archiver.kernel.org>; Thu, 20 Oct 2022 19:56:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiJTT4X (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 20 Oct 2022 15:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
+        id S230116AbiJTT4Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 20 Oct 2022 15:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbiJTT4N (ORCPT
+        with ESMTP id S230104AbiJTT4K (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 20 Oct 2022 15:56:13 -0400
+        Thu, 20 Oct 2022 15:56:10 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5305010CFB5
-        for <linux-media@vger.kernel.org>; Thu, 20 Oct 2022 12:56:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB98C1162F1
+        for <linux-media@vger.kernel.org>; Thu, 20 Oct 2022 12:56:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666295771;
+        s=mimecast20190719; t=1666295767;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5aJ4y9zXYN1XfvG7bXPRv0SXndeDWXlxS8RiKpUM6LI=;
-        b=OM0Knf2gADS7yIr6Pff2v3I/xnU4dLbBz8uOVwmSfI/qbZylrUCg4eGClNDZ8n6+XYP7SS
-        tQ1dBCzsixUdHBx6NDNijVF4Rm0CQtpt0t37h2Y34Hvhr+488qbkeAK+lwQ0Em2+tAZ2g5
-        NmV+NygWmGzGvlzioA3cU7KlAx99Ipk=
+        bh=aCuuX/h4r9KTJdbCAUEIMDBZu77zu+KUUR9gWC0O1vA=;
+        b=goAuulGlNqnjmAmyPiN679aNBRFs+q1E4kCXzgcBv5riIr1yqvy+zBrHFtheuavvpUTzfs
+        b9v4Mwf4l1KW6Ru6aan1egxrygeVzDf8yE7hr6gLZuMLIeokETX0Es0tosEZJaOGLWAQ/L
+        8cy2HBVbI3XrCwCuKKGtmK0E9yXIWBg=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-439-EotDZJeBPqWPXJc3UUzJhg-1; Thu, 20 Oct 2022 15:56:07 -0400
-X-MC-Unique: EotDZJeBPqWPXJc3UUzJhg-1
+ us-mta-17-EZ7Hjgo7NWi85fh0s0GATw-1; Thu, 20 Oct 2022 15:56:02 -0400
+X-MC-Unique: EZ7Hjgo7NWi85fh0s0GATw-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A23BD185A78B;
-        Thu, 20 Oct 2022 19:56:06 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 874BA185A794;
+        Thu, 20 Oct 2022 19:56:01 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.39.192.86])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2C80040C6EC2;
-        Thu, 20 Oct 2022 19:56:05 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0739340C6EC2;
+        Thu, 20 Oct 2022 19:55:59 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH v2 15/17] media: atomisp: Make atomisp_g_fmt_cap() default to YUV420
-Date:   Thu, 20 Oct 2022 21:55:31 +0200
-Message-Id: <20221020195533.114049-16-hdegoede@redhat.com>
+Subject: [PATCH v2 12/17] media: atomisp: Fix VIDIOC_REQBUFS failing when VIDIOC_S_FMT has not been called yet
+Date:   Thu, 20 Oct 2022 21:55:28 +0200
+Message-Id: <20221020195533.114049-13-hdegoede@redhat.com>
 In-Reply-To: <20221020195533.114049-1-hdegoede@redhat.com>
 References: <20221020195533.114049-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,27 +60,87 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Make atomisp_g_fmt_cap() default to YUV420 so that it matches with what
-atomisp_try_fmt_cap() and atomisp_queue_setup() do when they need to
-pick a default pixelformat.
+camorama calls VIDIOC_REQBUFS(V4L2_MEMORY_MMAP) to test if MMAP support
+works (this was added specifically because of the previously broken
+MMAP support in atomisp).
+
+Currently this fails because atomisp_get_css_frame_info() fails in this
+case. Although it is weird to call VIDIOC_REQBUFS before VIDIOC_S_FMT,
+it is allowed to do this.
+
+Fix this not working by doing a S_FMT to V4L2_PIX_FMT_YUV420 + the highest
+supported resolution.
+
+Note this will cause camorama to use mmap mode, which means it will also
+use libv4l2 to do format conversion. libv4l2 will pick V4L2_PIX_FMT_RGB565
+as input format and this will lead to a garbled video display. This is
+a libv4lconvert bug, the RGB565 -> RGB24 path in libv4lconvert assumes
+that stride == width which is not true on the atomisp.
+
+I've already send out a libv4lconvert fix for this. Also this can be worked
+around by passing --dont-use-libv4l2 as argument to camorama.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/staging/media/atomisp/pci/atomisp_ioctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../media/atomisp/pci/atomisp_compat_css20.c  |  2 +-
+ .../staging/media/atomisp/pci/atomisp_fops.c  | 25 +++++++++++++++++--
+ 2 files changed, 24 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-index 384b231de8bc..c8f6f0c2f368 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-@@ -959,7 +959,7 @@ static int atomisp_g_fmt_cap(struct file *file, void *fh,
- 	if (f->fmt.pix.sizeimage)
- 		return 0;
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
+index ea6114679c53..f282572d69da 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
+@@ -2688,7 +2688,7 @@ int atomisp_get_css_frame_info(struct atomisp_sub_device *asd,
  
--	f->fmt.pix.pixelformat = V4L2_PIX_FMT_YUYV;
-+	f->fmt.pix.pixelformat = V4L2_PIX_FMT_YUV420;
- 	f->fmt.pix.width = 10000;
- 	f->fmt.pix.height = 10000;
+ 	if (0 != ia_css_pipe_get_info(asd->stream_env[stream_index]
+ 		.pipes[pipe_index], &info)) {
+-		dev_err(isp->dev, "ia_css_pipe_get_info FAILED");
++		dev_dbg(isp->dev, "ia_css_pipe_get_info FAILED");
+ 		return -EINVAL;
+ 	}
+ 
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
+index bc47a092a8af..f539df09ebd9 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
+@@ -50,15 +50,36 @@ static int atomisp_queue_setup(struct vb2_queue *vq,
+ 	u16 source_pad = atomisp_subdev_source_pad(&pipe->vdev);
+ 	int ret;
+ 
++	mutex_lock(&pipe->asd->isp->mutex); /* for get_css_frame_info() / set_fmt() */
++
++	/*
++	 * When VIDIOC_S_FMT has not been called before VIDIOC_REQBUFS, then
++	 * this will fail. Call atomisp_set_fmt() ourselves and try again.
++	 */
+ 	ret = atomisp_get_css_frame_info(pipe->asd, source_pad, &pipe->frame_info);
+-	if (ret)
+-		return ret;
++	if (ret) {
++		struct v4l2_format f = {
++			.fmt.pix.pixelformat = V4L2_PIX_FMT_YUV420,
++			.fmt.pix.width = 10000,
++			.fmt.pix.height = 10000,
++		};
++
++		ret = atomisp_set_fmt(&pipe->vdev, &f);
++		if (ret)
++			goto out;
++
++		ret = atomisp_get_css_frame_info(pipe->asd, source_pad, &pipe->frame_info);
++		if (ret)
++			goto out;
++	}
+ 
+ 	atomisp_alloc_css_stat_bufs(pipe->asd, ATOMISP_INPUT_STREAM_GENERAL);
+ 
+ 	*nplanes = 1;
+ 	sizes[0] = PAGE_ALIGN(pipe->pix.sizeimage);
+ 
++out:
++	mutex_unlock(&pipe->asd->isp->mutex);
+ 	return 0;
+ }
  
 -- 
 2.37.3
