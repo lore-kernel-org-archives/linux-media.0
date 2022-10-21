@@ -2,102 +2,72 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E19BC43219
-	for <linux-media@archiver.kernel.org>; Fri, 21 Oct 2022 10:52:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6E6CC4332F
+	for <linux-media@archiver.kernel.org>; Fri, 21 Oct 2022 12:21:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbiJUKwq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 21 Oct 2022 06:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59448 "EHLO
+        id S230041AbiJUMVv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 21 Oct 2022 08:21:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiJUKwp (ORCPT
+        with ESMTP id S230083AbiJUMVg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 21 Oct 2022 06:52:45 -0400
+        Fri, 21 Oct 2022 08:21:36 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E771885A6;
-        Fri, 21 Oct 2022 03:52:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB5F10F886
+        for <linux-media@vger.kernel.org>; Fri, 21 Oct 2022 05:21:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1B0EB82B8F;
-        Fri, 21 Oct 2022 10:52:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AC6DC433D6;
-        Fri, 21 Oct 2022 10:52:33 +0000 (UTC)
-Date:   Fri, 21 Oct 2022 11:52:30 +0100
-From:   Mark Brown <broonie@debian.org>
-To:     Adam Borowski <kilobyte@angband.pl>
-Cc:     linux-kernel@lists.debian.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-mediatek@lists.infradead.org, alsa-devel@alsa-project.org,
-        David Howells <dhowells@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        Yong Zhi <yong.zhi@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Dan Scally <djrscally@gmail.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, Khalil Blaiech <kblaiech@nvidia.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Brent Lu <brent.lu@intel.com>
-Subject: Re: [PATCH 0/6] a pile of randconfig fixes
-Message-ID: <Y1J57jJ1+FTG7U9O@sirena.org.uk>
-References: <20221020221749.33746-1-kilobyte@angband.pl>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 882D5B82B1D
+        for <linux-media@vger.kernel.org>; Fri, 21 Oct 2022 12:21:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1734AC433C1
+        for <linux-media@vger.kernel.org>; Fri, 21 Oct 2022 12:21:26 +0000 (UTC)
+Message-ID: <7700c23b-ceac-c6e2-d004-98469a1ddad4@xs4all.nl>
+Date:   Fri, 21 Oct 2022 14:21:25 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wWcrkmaG6Bl+vyW8"
-Content-Disposition: inline
-In-Reply-To: <20221020221749.33746-1-kilobyte@angband.pl>
-X-Cookie: On the eighth day, God created FORTRAN.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Content-Language: en-US
+To:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH for v6.1] vivid: fix control handler mutex deadlock
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+vivid_update_format_cap() can be called from an s_ctrl callback.
+In that case (keep_controls == true) no control framework functions
+can be called that take the control handler mutex.
 
---wWcrkmaG6Bl+vyW8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The new call to v4l2_ctrl_modify_dimensions() did exactly that.
 
-On Fri, Oct 21, 2022 at 12:17:49AM +0200, Adam Borowski wrote:
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Fixes: 6bc7643d1b9c (media: vivid: add pixel_array test control)
+---
+ drivers/media/test-drivers/vivid/vivid-vid-cap.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-> I've been doing randconfig build tests for quite a while, here's a pile of
-> fixes.  I'm not sure what's the best way to submit these: do you folks
-> prefer a series like this, or a number of individual submissions?
+diff --git a/drivers/media/test-drivers/vivid/vivid-vid-cap.c b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+index 86b158eeb2d8..8ae43da9bfba 100644
+--- a/drivers/media/test-drivers/vivid/vivid-vid-cap.c
++++ b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+@@ -460,6 +460,14 @@ void vivid_update_format_cap(struct vivid_dev *dev, bool keep_controls)
+ 	tpg_s_video_aspect(&dev->tpg, vivid_get_video_aspect(dev));
+ 	tpg_s_pixel_aspect(&dev->tpg, vivid_get_pixel_aspect(dev));
+ 	tpg_update_mv_step(&dev->tpg);
++
++	/*
++	 * We can be called from within s_ctrl, in that case we can't
++	 * modify controls. Luckily we don't need to in that case.
++	 */
++	if (keep_controls)
++		return;
++
+ 	dims[0] = roundup(dev->src_rect.width, PIXEL_ARRAY_DIV);
+ 	dims[1] = roundup(dev->src_rect.height, PIXEL_ARRAY_DIV);
+ 	v4l2_ctrl_modify_dimensions(dev->pixel_array, dims);
+-- 
+2.35.1
 
-Individual submissions would cut down on the noise from the enormous CC
-list.  If you were going to send as a patch series it should be a single
-message per patch as covered in sumbitting-patches.rst.
-
---wWcrkmaG6Bl+vyW8
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNSee4ACgkQJNaLcl1U
-h9BDwgf+IkbiCFyXzVrO3F8yBx883iUJM3R8A5LPsrxScBUzS3Nu7PgzWmko3Bfa
-wm/rXizNrMQPDqUakrtR8duh+w/eL6Lz3YrZEQEaM2fd8+MayJt9tXB4o/qfcrBc
-B3o7lbqL9Hp0yqRKKG8orcvyiJDpOh2Z+zLAYqy+LuFLuiv6kSKu8h7c2vm7DKCw
-+wGkRN5blfrYPHGOoU/r6oqjT2qx6BFUsXpnILPw2XRtXlkYv37BLu4rRgZ7qc+D
-Afo+DwE5y6d9t9ebOL0UjvgveEysSY3VksxCcjtWru+wN/bjPbET1VFJUrfbMyGf
-y+JN6EsaYWeKmGsk5T5pZ5XczMBC+A==
-=kG7z
------END PGP SIGNATURE-----
-
---wWcrkmaG6Bl+vyW8--
