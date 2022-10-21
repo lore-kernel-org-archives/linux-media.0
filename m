@@ -2,1210 +2,1425 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 161D3FA3745
-	for <linux-media@archiver.kernel.org>; Fri, 21 Oct 2022 20:47:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDFC1C38A2D
+	for <linux-media@archiver.kernel.org>; Fri, 21 Oct 2022 21:08:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiJUUrL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 21 Oct 2022 16:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
+        id S230159AbiJUVIB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 21 Oct 2022 17:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbiJUUqr (ORCPT
+        with ESMTP id S230106AbiJUVIA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 21 Oct 2022 16:46:47 -0400
+        Fri, 21 Oct 2022 17:08:00 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5359B106A62;
-        Fri, 21 Oct 2022 13:46:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0EFD2A389E;
+        Fri, 21 Oct 2022 14:07:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00E36B82CB6;
-        Fri, 21 Oct 2022 20:37:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35804C433C1;
-        Fri, 21 Oct 2022 20:37:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39903B82D5F;
+        Fri, 21 Oct 2022 21:07:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6638FC433D6;
+        Fri, 21 Oct 2022 21:07:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666384648;
-        bh=aV2DNv9TC49AxiQN7ZdNvm+XVqbKUgRMSoHbvcGOrm0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NmDWEhvtqquG+L6M1Me7YJVuv+tIA+pXcFLQmwStJ3Q/0e9MYossQ/Q1hjv7d1MX9
-         p2mtMQbUGfZP2XbWhg9aIZeq7KbMJADx6Exbk1tFfmznuKnLrZM6bykbx60EqJtnsm
-         63OCri2Fp7Xa8o+958+QZauaRPEi1Lka9EDloIeBt5jY/xX82RG5aI5WtdbCx1VNyE
-         8LEodglv60eQIlAL4goLUJuHfxNR0Islq3SDJzU7zQQVa6c/ioQOivdlcTt82pAuZ0
-         FMlwp3dcBnHN0xXpfLRbPyQ4S6kQHv612rmceDqXH1ucWeHtpBMpnNU69r+63HEJN7
-         ZwL8RuOiXoiSg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH 02/21] ARM: s3c: remove s3c24xx specific hacks
-Date:   Fri, 21 Oct 2022 22:27:35 +0200
-Message-Id: <20221021203329.4143397-2-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20221021202254.4142411-1-arnd@kernel.org>
-References: <20221021202254.4142411-1-arnd@kernel.org>
+        s=k20201202; t=1666386474;
+        bh=jw19vJNAmA3X7/jTXA/51e9bwHETs0k1NDnHRMHRorQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=NJcTAs0dF243lkFm+v6qlVThRvUsIcAgMttFjyDL9x38rpE0F+js3q3UQ/efShq9h
+         FASjI0wco9CjxoP0j5I7waWl/iqywWwSmv91JyyMA14/TPFsLdR4Fv2wSTj0VZwq0d
+         KAeVeH+L7g6k2MmZJvL6O4Ca3R82IomGryM2OQ36Txjuiwo1PHOZOokOXFa3OqOXXc
+         59Qsejck+fUe3R9GhF+O3OZos3k5dyNxqvo4EisWSxckyBaobl9avP+20nJW6uq5EF
+         O7mW5yiCmkkoFBUccy/ztPQxCuMz5rayEDNgVJ0cqdVqAQXQmLK7ZzZPYy4qmcJbPv
+         TyolvLC/pBDMg==
+Date:   Fri, 21 Oct 2022 22:07:48 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL for v6.1-rc2] media updates
+Message-ID: <20221021220748.144ffe20@sal.lan>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hi Linus,
 
-A number of device drivers reference CONFIG_ARM_S3C24XX_CPUFREQ or
-similar symbols that are no longer available with the platform gone,
-though the drivers themselves are still used on newer platforms,
-so remove these hacks.
+It seems I screw-up with my previous pull request: it ends that only half of
+the media patches that are linux-next got merged on -rc1. Could you please
+accept a late PR? If so, please pull from:
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/me=
+dia/v6.1-2
+
+
+For:
+
+- a DVB core security fix;
+- lots of fixes and cleanups for atomisp staging driver;
+- old drivers that are VB1 are being moved to staging to be deprecated;
+- several driver updates - mostly for embedded systems, but there are
+  also some things addressing issues with some PC webcams, at the UVC
+  video driver.
+
+Regards,
+Mauro
+
 ---
- arch/arm/include/debug/s3c24xx.S              |  10 -
- arch/arm/mach-s3c/Makefile                    |   2 -
- arch/arm/mach-s3c/devs.c                      |   1 -
- arch/arm/mach-s3c/dma.h                       |   7 -
- arch/arm/mach-s3c/gpio-samsung.h              |   7 -
- arch/arm/mach-s3c/irqs.h                      |   7 -
- arch/arm/mach-s3c/map.h                       |   7 -
- arch/arm/mach-s3c/pm-core.h                   |   7 -
- arch/arm/mach-s3c/regs-clock.h                |   7 -
- arch/arm/mach-s3c/regs-gpio.h                 |   7 -
- arch/arm/mach-s3c/regs-irq.h                  |   7 -
- drivers/clocksource/Kconfig                   |   2 +-
- drivers/i2c/busses/Kconfig                    |   3 +-
- drivers/i2c/busses/i2c-s3c2410.c              |  72 -------
- drivers/iio/adc/Kconfig                       |   6 +-
- .../media/platform/samsung/s3c-camif/Kconfig  |   8 +-
- drivers/mmc/host/Kconfig                      |   5 +-
- drivers/mtd/nand/raw/Kconfig                  |   2 +-
- drivers/mtd/nand/raw/s3c2410.c                |  60 ------
- drivers/pinctrl/samsung/pinctrl-samsung.c     |  10 -
- drivers/rtc/Kconfig                           |   8 +-
- drivers/tty/serial/Kconfig                    |   8 +-
- drivers/tty/serial/samsung_tty.c              | 199 ------------------
- drivers/usb/host/Kconfig                      |   8 +-
- drivers/watchdog/Kconfig                      |   9 +-
- drivers/watchdog/s3c2410_wdt.c                |  84 +-------
- include/linux/clk/samsung.h                   |  32 ---
- include/linux/soc/samsung/s3c-pm.h            |  58 -----
- 28 files changed, 29 insertions(+), 614 deletions(-)
 
-diff --git a/arch/arm/include/debug/s3c24xx.S b/arch/arm/include/debug/s3c24xx.S
-index af873b526677..7ab5e577cd42 100644
---- a/arch/arm/include/debug/s3c24xx.S
-+++ b/arch/arm/include/debug/s3c24xx.S
-@@ -28,16 +28,6 @@
- 		and	\rd, \rd, #S3C2410_UFSTAT_TXMASK
- 	.endm
- 
--/* Select the correct implementation depending on the configuration. The
-- * S3C2440 will get selected by default, as these are the most widely
-- * used variants of these
--*/
--
--#if defined(CONFIG_DEBUG_S3C2410_UART)
--#define fifo_full  fifo_full_s3c2410
--#define fifo_level fifo_level_s3c2410
--#endif
--
- /* include the reset of the code which will do the work */
- 
- #include <debug/samsung.S>
-diff --git a/arch/arm/mach-s3c/Makefile b/arch/arm/mach-s3c/Makefile
-index e7f18039b149..a5135137e648 100644
---- a/arch/arm/mach-s3c/Makefile
-+++ b/arch/arm/mach-s3c/Makefile
-@@ -2,9 +2,7 @@
- #
- # Copyright 2009 Simtec Electronics
- 
--ifdef CONFIG_ARCH_S3C64XX
- include $(src)/Makefile.s3c64xx
--endif
- 
- # Objects we always build independent of SoC choice
- 
-diff --git a/arch/arm/mach-s3c/devs.c b/arch/arm/mach-s3c/devs.c
-index 9ac07c023adf..a31d1c3038e8 100644
---- a/arch/arm/mach-s3c/devs.c
-+++ b/arch/arm/mach-s3c/devs.c
-@@ -29,7 +29,6 @@
- #include <linux/sizes.h>
- #include <linux/platform_data/s3c-hsudc.h>
- #include <linux/platform_data/s3c-hsotg.h>
--#include <linux/platform_data/dma-s3c24xx.h>
- 
- #include <linux/platform_data/media/s5p_hdmi.h>
- 
-diff --git a/arch/arm/mach-s3c/dma.h b/arch/arm/mach-s3c/dma.h
-index 59a4578c5f00..48057cb90070 100644
---- a/arch/arm/mach-s3c/dma.h
-+++ b/arch/arm/mach-s3c/dma.h
-@@ -1,9 +1,2 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--
--#ifdef CONFIG_ARCH_S3C24XX
--#include "dma-s3c24xx.h"
--#endif
--
--#ifdef CONFIG_ARCH_S3C64XX
- #include "dma-s3c64xx.h"
--#endif
-diff --git a/arch/arm/mach-s3c/gpio-samsung.h b/arch/arm/mach-s3c/gpio-samsung.h
-index 02f6f4a96862..4233515eddaa 100644
---- a/arch/arm/mach-s3c/gpio-samsung.h
-+++ b/arch/arm/mach-s3c/gpio-samsung.h
-@@ -1,9 +1,2 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--
--#ifdef CONFIG_ARCH_S3C24XX
--#include "gpio-samsung-s3c24xx.h"
--#endif
--
--#ifdef CONFIG_ARCH_S3C64XX
- #include "gpio-samsung-s3c64xx.h"
--#endif
-diff --git a/arch/arm/mach-s3c/irqs.h b/arch/arm/mach-s3c/irqs.h
-index 0bff1c1c8eb0..3ff0e0963080 100644
---- a/arch/arm/mach-s3c/irqs.h
-+++ b/arch/arm/mach-s3c/irqs.h
-@@ -1,9 +1,2 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--
--#ifdef CONFIG_ARCH_S3C24XX
--#include "irqs-s3c24xx.h"
--#endif
--
--#ifdef CONFIG_ARCH_S3C64XX
- #include "irqs-s3c64xx.h"
--#endif
-diff --git a/arch/arm/mach-s3c/map.h b/arch/arm/mach-s3c/map.h
-index 7cfb517d4886..778d6f81cb2b 100644
---- a/arch/arm/mach-s3c/map.h
-+++ b/arch/arm/mach-s3c/map.h
-@@ -1,9 +1,2 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--
--#ifdef CONFIG_ARCH_S3C24XX
--#include "map-s3c24xx.h"
--#endif
--
--#ifdef CONFIG_ARCH_S3C64XX
- #include "map-s3c64xx.h"
--#endif
-diff --git a/arch/arm/mach-s3c/pm-core.h b/arch/arm/mach-s3c/pm-core.h
-index b0e1d277f599..3e0c2df79120 100644
---- a/arch/arm/mach-s3c/pm-core.h
-+++ b/arch/arm/mach-s3c/pm-core.h
-@@ -1,9 +1,2 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--
--#ifdef CONFIG_ARCH_S3C24XX
--#include "pm-core-s3c24xx.h"
--#endif
--
--#ifdef CONFIG_ARCH_S3C64XX
- #include "pm-core-s3c64xx.h"
--#endif
-diff --git a/arch/arm/mach-s3c/regs-clock.h b/arch/arm/mach-s3c/regs-clock.h
-index 7df31f203d28..fc7e3886b07c 100644
---- a/arch/arm/mach-s3c/regs-clock.h
-+++ b/arch/arm/mach-s3c/regs-clock.h
-@@ -1,9 +1,2 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--
--#ifdef CONFIG_ARCH_S3C24XX
--#include "regs-clock-s3c24xx.h"
--#endif
--
--#ifdef CONFIG_ARCH_S3C64XX
- #include "regs-clock-s3c64xx.h"
--#endif
-diff --git a/arch/arm/mach-s3c/regs-gpio.h b/arch/arm/mach-s3c/regs-gpio.h
-index 0d41cb76d440..4e08e8609663 100644
---- a/arch/arm/mach-s3c/regs-gpio.h
-+++ b/arch/arm/mach-s3c/regs-gpio.h
-@@ -1,9 +1,2 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--
--#ifdef CONFIG_ARCH_S3C24XX
--#include "regs-gpio-s3c24xx.h"
--#endif
--
--#ifdef CONFIG_ARCH_S3C64XX
- #include "regs-gpio-s3c64xx.h"
--#endif
-diff --git a/arch/arm/mach-s3c/regs-irq.h b/arch/arm/mach-s3c/regs-irq.h
-index 57f0dda8dbf5..4243daa54bd1 100644
---- a/arch/arm/mach-s3c/regs-irq.h
-+++ b/arch/arm/mach-s3c/regs-irq.h
-@@ -1,9 +1,2 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--
--#ifdef CONFIG_ARCH_S3C24XX
--#include "regs-irq-s3c24xx.h"
--#endif
--
--#ifdef CONFIG_ARCH_S3C64XX
- #include "regs-irq-s3c64xx.h"
--#endif
-diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
-index 4469e7f555e9..fc10ecc3602d 100644
---- a/drivers/clocksource/Kconfig
-+++ b/drivers/clocksource/Kconfig
-@@ -441,7 +441,7 @@ config CLKSRC_EXYNOS_MCT
- config CLKSRC_SAMSUNG_PWM
- 	bool "PWM timer driver for Samsung S3C, S5P" if COMPILE_TEST
- 	depends on HAS_IOMEM
--	depends on ARCH_EXYNOS || ARCH_S3C24XX || ARCH_S3C64XX || ARCH_S5PV210 || COMPILE_TEST
-+	depends on ARCH_EXYNOS || ARCH_S3C64XX || ARCH_S5PV210 || COMPILE_TEST
- 	help
- 	  This is a new clocksource driver for the PWM timer found in
- 	  Samsung S3C, S5P and Exynos SoCs, replacing an earlier driver
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index f427c8ea5c7b..84d21e0a7cdf 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -1009,8 +1009,7 @@ config I2C_RZV2M
- 
- config I2C_S3C2410
- 	tristate "S3C/Exynos I2C Driver"
--	depends on ARCH_EXYNOS || ARCH_S3C24XX || ARCH_S3C64XX || \
--		   ARCH_S5PV210 || COMPILE_TEST
-+	depends on ARCH_EXYNOS || ARCH_S3C64XX || ARCH_S5PV210 || COMPILE_TEST
- 	help
- 	  Say Y here to include support for I2C controller in the
- 	  Samsung SoCs (S3C, S5Pv210, Exynos).
-diff --git a/drivers/i2c/busses/i2c-s3c2410.c b/drivers/i2c/busses/i2c-s3c2410.c
-index 36dab9cd208c..45e9df81345a 100644
---- a/drivers/i2c/busses/i2c-s3c2410.c
-+++ b/drivers/i2c/busses/i2c-s3c2410.c
-@@ -116,9 +116,6 @@ struct s3c24xx_i2c {
- 	struct s3c2410_platform_i2c	*pdata;
- 	struct gpio_desc	*gpios[2];
- 	struct pinctrl          *pctrl;
--#if defined(CONFIG_ARM_S3C24XX_CPUFREQ)
--	struct notifier_block	freq_transition;
--#endif
- 	struct regmap		*sysreg;
- 	unsigned int		sys_i2c_cfg;
- };
-@@ -885,65 +882,6 @@ static int s3c24xx_i2c_clockrate(struct s3c24xx_i2c *i2c, unsigned int *got)
- 	return 0;
- }
- 
--#if defined(CONFIG_ARM_S3C24XX_CPUFREQ)
--
--#define freq_to_i2c(_n) container_of(_n, struct s3c24xx_i2c, freq_transition)
--
--static int s3c24xx_i2c_cpufreq_transition(struct notifier_block *nb,
--					  unsigned long val, void *data)
--{
--	struct s3c24xx_i2c *i2c = freq_to_i2c(nb);
--	unsigned int got;
--	int delta_f;
--	int ret;
--
--	delta_f = clk_get_rate(i2c->clk) - i2c->clkrate;
--
--	/* if we're post-change and the input clock has slowed down
--	 * or at pre-change and the clock is about to speed up, then
--	 * adjust our clock rate. <0 is slow, >0 speedup.
--	 */
--
--	if ((val == CPUFREQ_POSTCHANGE && delta_f < 0) ||
--	    (val == CPUFREQ_PRECHANGE && delta_f > 0)) {
--		i2c_lock_bus(&i2c->adap, I2C_LOCK_ROOT_ADAPTER);
--		ret = s3c24xx_i2c_clockrate(i2c, &got);
--		i2c_unlock_bus(&i2c->adap, I2C_LOCK_ROOT_ADAPTER);
--
--		if (ret < 0)
--			dev_err(i2c->dev, "cannot find frequency (%d)\n", ret);
--		else
--			dev_info(i2c->dev, "setting freq %d\n", got);
--	}
--
--	return 0;
--}
--
--static inline int s3c24xx_i2c_register_cpufreq(struct s3c24xx_i2c *i2c)
--{
--	i2c->freq_transition.notifier_call = s3c24xx_i2c_cpufreq_transition;
--
--	return cpufreq_register_notifier(&i2c->freq_transition,
--					 CPUFREQ_TRANSITION_NOTIFIER);
--}
--
--static inline void s3c24xx_i2c_deregister_cpufreq(struct s3c24xx_i2c *i2c)
--{
--	cpufreq_unregister_notifier(&i2c->freq_transition,
--				    CPUFREQ_TRANSITION_NOTIFIER);
--}
--
--#else
--static inline int s3c24xx_i2c_register_cpufreq(struct s3c24xx_i2c *i2c)
--{
--	return 0;
--}
--
--static inline void s3c24xx_i2c_deregister_cpufreq(struct s3c24xx_i2c *i2c)
--{
--}
--#endif
--
- #ifdef CONFIG_OF
- static int s3c24xx_i2c_parse_dt_gpio(struct s3c24xx_i2c *i2c)
- {
-@@ -1152,13 +1090,6 @@ static int s3c24xx_i2c_probe(struct platform_device *pdev)
- 		}
- 	}
- 
--	ret = s3c24xx_i2c_register_cpufreq(i2c);
--	if (ret < 0) {
--		dev_err(&pdev->dev, "failed to register cpufreq notifier\n");
--		clk_unprepare(i2c->clk);
--		return ret;
--	}
--
- 	/*
- 	 * Note, previous versions of the driver used i2c_add_adapter()
- 	 * to add the bus at any number. We now pass the bus number via
-@@ -1175,7 +1106,6 @@ static int s3c24xx_i2c_probe(struct platform_device *pdev)
- 	ret = i2c_add_numbered_adapter(&i2c->adap);
- 	if (ret < 0) {
- 		pm_runtime_disable(&pdev->dev);
--		s3c24xx_i2c_deregister_cpufreq(i2c);
- 		clk_unprepare(i2c->clk);
- 		return ret;
- 	}
-@@ -1192,8 +1122,6 @@ static int s3c24xx_i2c_remove(struct platform_device *pdev)
- 
- 	pm_runtime_disable(&pdev->dev);
- 
--	s3c24xx_i2c_deregister_cpufreq(i2c);
--
- 	i2c_del_adapter(&i2c->adap);
- 
- 	return 0;
-diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
-index 791612ca6012..9de7f05d40e2 100644
---- a/drivers/iio/adc/Kconfig
-+++ b/drivers/iio/adc/Kconfig
-@@ -437,11 +437,11 @@ config EP93XX_ADC
- 
- config EXYNOS_ADC
- 	tristate "Exynos ADC driver support"
--	depends on ARCH_EXYNOS || ARCH_S3C24XX || ARCH_S3C64XX || ARCH_S5PV210 || (OF && COMPILE_TEST)
-+	depends on ARCH_EXYNOS || ARCH_S3C64XX || ARCH_S5PV210 || (OF && COMPILE_TEST)
- 	depends on HAS_IOMEM
- 	help
--	  Driver for the ADC block found in the Samsung S3C (S3C2410, S3C2416,
--	  S3C2440, S3C2443, S3C6410), S5Pv210 and Exynos SoCs.
-+	  Driver for the ADC block found in the Samsung S3C6410, S5Pv210 and
-+	  Exynos SoCs.
- 	  Choose Y here only if you build for such Samsung SoC.
- 
- 	  To compile this driver as a module, choose M here: the module will be
-diff --git a/drivers/media/platform/samsung/s3c-camif/Kconfig b/drivers/media/platform/samsung/s3c-camif/Kconfig
-index 8cb8d1ac3edc..f359f6382fff 100644
---- a/drivers/media/platform/samsung/s3c-camif/Kconfig
-+++ b/drivers/media/platform/samsung/s3c-camif/Kconfig
-@@ -1,15 +1,15 @@
- # SPDX-License-Identifier: GPL-2.0-only
- config VIDEO_S3C_CAMIF
--	tristate "Samsung S3C24XX/S3C64XX SoC Camera Interface driver"
-+	tristate "Samsung 3C64XX SoC Camera Interface driver"
- 	depends on V4L_PLATFORM_DRIVERS
- 	depends on VIDEO_DEV && I2C && PM
--	depends on ARCH_S3C64XX || PLAT_S3C24XX || COMPILE_TEST
-+	depends on ARCH_S3C64XX || COMPILE_TEST
- 	select MEDIA_CONTROLLER
- 	select VIDEO_V4L2_SUBDEV_API
- 	select VIDEOBUF2_DMA_CONTIG
- 	help
--	  This is a v4l2 driver for s3c24xx and s3c64xx SoC series camera
--	  host interface (CAMIF).
-+	  This is a v4l2 driver for s3c64xx SoC series camera host interface
-+	  (CAMIF).
- 
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called s3c-camif.
-diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
-index 84dd37ff2735..79d8ddf1f616 100644
---- a/drivers/mmc/host/Kconfig
-+++ b/drivers/mmc/host/Kconfig
-@@ -312,9 +312,8 @@ config MMC_SDHCI_S3C
- 	depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
- 	help
- 	  This selects the Secure Digital Host Controller Interface (SDHCI)
--	  often referrered to as the HSMMC block in some of the Samsung S3C
--	  (S3C2416, S3C2443, S3C6410), S5Pv210 and Exynos (Exynso4210,
--	  Exynos4412) SoCs.
-+	  often referrered to as the HSMMC block in some of the Samsung
-+	  S3C6410, S5Pv210 and Exynos (Exynso4210, Exynos4412) SoCs.
- 
- 	  If you have a controller with this interface (thereforeyou build for
- 	  such Samsung SoC), say Y or M here.
-diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
-index 280a55139387..a347833b8f29 100644
---- a/drivers/mtd/nand/raw/Kconfig
-+++ b/drivers/mtd/nand/raw/Kconfig
-@@ -79,7 +79,7 @@ config MTD_NAND_NDFC
- 
- config MTD_NAND_S3C2410
- 	tristate "Samsung S3C NAND controller"
--	depends on ARCH_S3C24XX || ARCH_S3C64XX
-+	depends on ARCH_S3C64XX
- 	help
- 	  This enables the NAND flash controller on the S3C24xx and S3C64xx
- 	  SoCs
-diff --git a/drivers/mtd/nand/raw/s3c2410.c b/drivers/mtd/nand/raw/s3c2410.c
-index f0a4535c812a..80d96f94d6cb 100644
---- a/drivers/mtd/nand/raw/s3c2410.c
-+++ b/drivers/mtd/nand/raw/s3c2410.c
-@@ -166,10 +166,6 @@ struct s3c2410_nand_info {
- 	enum s3c_nand_clk_state		clk_state;
- 
- 	enum s3c_cpu_type		cpu_type;
--
--#ifdef CONFIG_ARM_S3C24XX_CPUFREQ
--	struct notifier_block	freq_transition;
--#endif
- };
- 
- struct s3c24XX_nand_devtype_data {
-@@ -711,54 +707,6 @@ static void s3c2440_nand_write_buf(struct nand_chip *this, const u_char *buf,
- 	}
- }
- 
--/* cpufreq driver support */
--
--#ifdef CONFIG_ARM_S3C24XX_CPUFREQ
--
--static int s3c2410_nand_cpufreq_transition(struct notifier_block *nb,
--					  unsigned long val, void *data)
--{
--	struct s3c2410_nand_info *info;
--	unsigned long newclk;
--
--	info = container_of(nb, struct s3c2410_nand_info, freq_transition);
--	newclk = clk_get_rate(info->clk);
--
--	if ((val == CPUFREQ_POSTCHANGE && newclk < info->clk_rate) ||
--	    (val == CPUFREQ_PRECHANGE && newclk > info->clk_rate)) {
--		s3c2410_nand_setrate(info);
--	}
--
--	return 0;
--}
--
--static inline int s3c2410_nand_cpufreq_register(struct s3c2410_nand_info *info)
--{
--	info->freq_transition.notifier_call = s3c2410_nand_cpufreq_transition;
--
--	return cpufreq_register_notifier(&info->freq_transition,
--					 CPUFREQ_TRANSITION_NOTIFIER);
--}
--
--static inline void
--s3c2410_nand_cpufreq_deregister(struct s3c2410_nand_info *info)
--{
--	cpufreq_unregister_notifier(&info->freq_transition,
--				    CPUFREQ_TRANSITION_NOTIFIER);
--}
--
--#else
--static inline int s3c2410_nand_cpufreq_register(struct s3c2410_nand_info *info)
--{
--	return 0;
--}
--
--static inline void
--s3c2410_nand_cpufreq_deregister(struct s3c2410_nand_info *info)
--{
--}
--#endif
--
- /* device management functions */
- 
- static int s3c24xx_nand_remove(struct platform_device *pdev)
-@@ -768,8 +716,6 @@ static int s3c24xx_nand_remove(struct platform_device *pdev)
- 	if (info == NULL)
- 		return 0;
- 
--	s3c2410_nand_cpufreq_deregister(info);
--
- 	/* Release all our mtds  and their partitions, then go through
- 	 * freeing the resources used
- 	 */
-@@ -1184,12 +1130,6 @@ static int s3c24xx_nand_probe(struct platform_device *pdev)
- 	if (err != 0)
- 		goto exit_error;
- 
--	err = s3c2410_nand_cpufreq_register(info);
--	if (err < 0) {
--		dev_err(&pdev->dev, "failed to init cpufreq support\n");
--		goto exit_error;
--	}
--
- 	if (allow_clk_suspend(info)) {
- 		dev_info(&pdev->dev, "clock idle support enabled\n");
- 		s3c2410_nand_clk_set_state(info, CLOCK_SUSPEND);
-diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.c b/drivers/pinctrl/samsung/pinctrl-samsung.c
-index bd13b5ef246d..1a478854293f 100644
---- a/drivers/pinctrl/samsung/pinctrl-samsung.c
-+++ b/drivers/pinctrl/samsung/pinctrl-samsung.c
-@@ -1322,16 +1322,6 @@ static const struct of_device_id samsung_pinctrl_dt_match[] = {
- #ifdef CONFIG_PINCTRL_S3C64XX
- 	{ .compatible = "samsung,s3c64xx-pinctrl",
- 		.data = &s3c64xx_of_data },
--#endif
--#ifdef CONFIG_PINCTRL_S3C24XX
--	{ .compatible = "samsung,s3c2412-pinctrl",
--		.data = &s3c2412_of_data },
--	{ .compatible = "samsung,s3c2416-pinctrl",
--		.data = &s3c2416_of_data },
--	{ .compatible = "samsung,s3c2440-pinctrl",
--		.data = &s3c2440_of_data },
--	{ .compatible = "samsung,s3c2450-pinctrl",
--		.data = &s3c2450_of_data },
- #endif
- 	{},
- };
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 312dccfa3f18..d13ca620ea5d 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -1406,18 +1406,14 @@ config RTC_DRV_OMAP
- 
- config RTC_DRV_S3C
- 	tristate "Samsung S3C series SoC RTC"
--	depends on ARCH_EXYNOS || ARCH_S3C64XX || ARCH_S3C24XX || ARCH_S5PV210 || \
-+	depends on ARCH_EXYNOS || ARCH_S3C64XX || ARCH_S5PV210 || \
- 		   COMPILE_TEST
- 	help
- 	  RTC (Realtime Clock) driver for the clock inbuilt into the
--	  Samsung S3C24XX series of SoCs. This can provide periodic
-+	  Samsung S3C64XX series of SoCs. This can provide periodic
- 	  interrupt rates from 1Hz to 64Hz for user programs, and
- 	  wakeup from Alarm.
- 
--	  The driver currently supports the common features on all the
--	  S3C24XX range, such as the S3C2410, S3C2412, S3C2413, S3C2440
--	  and S3C2442.
--
- 	  This driver can also be build as a module. If so, the module
- 	  will be called rtc-s3c.
- 
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index 434f83168546..3ba8a39655a3 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -242,23 +242,23 @@ config SERIAL_SAMSUNG
- 	select SERIAL_CORE
- 	help
- 	  Support for the on-chip UARTs on the Samsung
--	  S3C24xx/S3C64xx/S5Pv210/Exynos and Apple M1 SoCs, providing
-+	  S3C64xx/S5Pv210/Exynos and Apple M1 SoCs, providing
- 	  /dev/ttySAC0, 1 and 2 (note, some machines may not provide all of
- 	  these ports, depending on how the serial port pins are configured.
-+
- 	  Choose Y/M here only if you build for such SoC.
- 
- config SERIAL_SAMSUNG_UARTS_4
- 	bool
- 	depends on SERIAL_SAMSUNG
--	default y if !(CPU_S3C2410 || CPU_S3C2412 || CPU_S3C2440 || CPU_S3C2442)
-+	default y
- 	help
- 	  Internal node for the common case of 4 Samsung compatible UARTs
- 
- config SERIAL_SAMSUNG_UARTS
- 	int
- 	depends on SERIAL_SAMSUNG
--	default 4 if SERIAL_SAMSUNG_UARTS_4 || CPU_S3C2416
--	default 3
-+	default 4
- 	help
- 	  Select the number of available UART ports for the Samsung S3C
- 	  serial driver
-diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
-index 77d1363029f5..5adf3963b2f6 100644
---- a/drivers/tty/serial/samsung_tty.c
-+++ b/drivers/tty/serial/samsung_tty.c
-@@ -152,10 +152,6 @@ struct s3c24xx_uart_port {
- 	const struct s3c2410_uartcfg	*cfg;
- 
- 	struct s3c24xx_uart_dma		*dma;
--
--#ifdef CONFIG_ARM_S3C24XX_CPUFREQ
--	struct notifier_block		freq_transition;
--#endif
- };
- 
- static void s3c24xx_serial_tx_chars(struct s3c24xx_uart_port *ourport);
-@@ -1859,93 +1855,6 @@ static void s3c24xx_serial_resetport(struct uart_port *port,
- 	udelay(1);
- }
- 
--#ifdef CONFIG_ARM_S3C24XX_CPUFREQ
--
--static int s3c24xx_serial_cpufreq_transition(struct notifier_block *nb,
--					     unsigned long val, void *data)
--{
--	struct s3c24xx_uart_port *port;
--	struct uart_port *uport;
--
--	port = container_of(nb, struct s3c24xx_uart_port, freq_transition);
--	uport = &port->port;
--
--	/* check to see if port is enabled */
--
--	if (port->pm_level != 0)
--		return 0;
--
--	/* try and work out if the baudrate is changing, we can detect
--	 * a change in rate, but we do not have support for detecting
--	 * a disturbance in the clock-rate over the change.
--	 */
--
--	if (IS_ERR(port->baudclk))
--		goto exit;
--
--	if (port->baudclk_rate == clk_get_rate(port->baudclk))
--		goto exit;
--
--	if (val == CPUFREQ_PRECHANGE) {
--		/* we should really shut the port down whilst the
--		 * frequency change is in progress.
--		 */
--
--	} else if (val == CPUFREQ_POSTCHANGE) {
--		struct ktermios *termios;
--		struct tty_struct *tty;
--
--		if (uport->state == NULL)
--			goto exit;
--
--		tty = uport->state->port.tty;
--
--		if (tty == NULL)
--			goto exit;
--
--		termios = &tty->termios;
--
--		if (termios == NULL) {
--			dev_warn(uport->dev, "%s: no termios?\n", __func__);
--			goto exit;
--		}
--
--		s3c24xx_serial_set_termios(uport, termios, NULL);
--	}
--
--exit:
--	return 0;
--}
--
--static inline int
--s3c24xx_serial_cpufreq_register(struct s3c24xx_uart_port *port)
--{
--	port->freq_transition.notifier_call = s3c24xx_serial_cpufreq_transition;
--
--	return cpufreq_register_notifier(&port->freq_transition,
--					 CPUFREQ_TRANSITION_NOTIFIER);
--}
--
--static inline void
--s3c24xx_serial_cpufreq_deregister(struct s3c24xx_uart_port *port)
--{
--	cpufreq_unregister_notifier(&port->freq_transition,
--				    CPUFREQ_TRANSITION_NOTIFIER);
--}
--
--#else
--static inline int
--s3c24xx_serial_cpufreq_register(struct s3c24xx_uart_port *port)
--{
--	return 0;
--}
--
--static inline void
--s3c24xx_serial_cpufreq_deregister(struct s3c24xx_uart_port *port)
--{
--}
--#endif
--
- static int s3c24xx_serial_enable_baudclk(struct s3c24xx_uart_port *ourport)
- {
- 	struct device *dev = ourport->port.dev;
-@@ -2237,10 +2146,6 @@ static int s3c24xx_serial_probe(struct platform_device *pdev)
- 	if (!IS_ERR(ourport->baudclk))
- 		clk_disable_unprepare(ourport->baudclk);
- 
--	ret = s3c24xx_serial_cpufreq_register(ourport);
--	if (ret < 0)
--		dev_err(&pdev->dev, "failed to add cpufreq notifier\n");
--
- 	probe_index++;
- 
- 	return 0;
-@@ -2251,7 +2156,6 @@ static int s3c24xx_serial_remove(struct platform_device *dev)
- 	struct uart_port *port = s3c24xx_dev_to_port(&dev->dev);
- 
- 	if (port) {
--		s3c24xx_serial_cpufreq_deregister(to_ourport(port));
- 		uart_remove_one_port(&s3c24xx_uart_drv, port);
- 	}
- 
-@@ -2589,94 +2493,6 @@ static struct console s3c24xx_serial_console = {
- };
- #endif /* CONFIG_SERIAL_SAMSUNG_CONSOLE */
- 
--#ifdef CONFIG_CPU_S3C2410
--static const struct s3c24xx_serial_drv_data s3c2410_serial_drv_data = {
--	.info = {
--		.name		= "Samsung S3C2410 UART",
--		.type		= TYPE_S3C24XX,
--		.port_type	= PORT_S3C2410,
--		.fifosize	= 16,
--		.rx_fifomask	= S3C2410_UFSTAT_RXMASK,
--		.rx_fifoshift	= S3C2410_UFSTAT_RXSHIFT,
--		.rx_fifofull	= S3C2410_UFSTAT_RXFULL,
--		.tx_fifofull	= S3C2410_UFSTAT_TXFULL,
--		.tx_fifomask	= S3C2410_UFSTAT_TXMASK,
--		.tx_fifoshift	= S3C2410_UFSTAT_TXSHIFT,
--		.def_clk_sel	= S3C2410_UCON_CLKSEL0,
--		.num_clks	= 2,
--		.clksel_mask	= S3C2410_UCON_CLKMASK,
--		.clksel_shift	= S3C2410_UCON_CLKSHIFT,
--	},
--	.def_cfg = {
--		.ucon		= S3C2410_UCON_DEFAULT,
--		.ufcon		= S3C2410_UFCON_DEFAULT,
--	},
--};
--#define S3C2410_SERIAL_DRV_DATA (&s3c2410_serial_drv_data)
--#else
--#define S3C2410_SERIAL_DRV_DATA NULL
--#endif
--
--#ifdef CONFIG_CPU_S3C2412
--static const struct s3c24xx_serial_drv_data s3c2412_serial_drv_data = {
--	.info = {
--		.name		= "Samsung S3C2412 UART",
--		.type		= TYPE_S3C24XX,
--		.port_type	= PORT_S3C2412,
--		.fifosize	= 64,
--		.has_divslot	= 1,
--		.rx_fifomask	= S3C2440_UFSTAT_RXMASK,
--		.rx_fifoshift	= S3C2440_UFSTAT_RXSHIFT,
--		.rx_fifofull	= S3C2440_UFSTAT_RXFULL,
--		.tx_fifofull	= S3C2440_UFSTAT_TXFULL,
--		.tx_fifomask	= S3C2440_UFSTAT_TXMASK,
--		.tx_fifoshift	= S3C2440_UFSTAT_TXSHIFT,
--		.def_clk_sel	= S3C2410_UCON_CLKSEL2,
--		.num_clks	= 4,
--		.clksel_mask	= S3C2412_UCON_CLKMASK,
--		.clksel_shift	= S3C2412_UCON_CLKSHIFT,
--	},
--	.def_cfg = {
--		.ucon		= S3C2410_UCON_DEFAULT,
--		.ufcon		= S3C2410_UFCON_DEFAULT,
--	},
--};
--#define S3C2412_SERIAL_DRV_DATA (&s3c2412_serial_drv_data)
--#else
--#define S3C2412_SERIAL_DRV_DATA NULL
--#endif
--
--#if defined(CONFIG_CPU_S3C2440) || defined(CONFIG_CPU_S3C2416) || \
--	defined(CONFIG_CPU_S3C2443) || defined(CONFIG_CPU_S3C2442)
--static const struct s3c24xx_serial_drv_data s3c2440_serial_drv_data = {
--	.info = {
--		.name		= "Samsung S3C2440 UART",
--		.type		= TYPE_S3C24XX,
--		.port_type	= PORT_S3C2440,
--		.fifosize	= 64,
--		.has_divslot	= 1,
--		.rx_fifomask	= S3C2440_UFSTAT_RXMASK,
--		.rx_fifoshift	= S3C2440_UFSTAT_RXSHIFT,
--		.rx_fifofull	= S3C2440_UFSTAT_RXFULL,
--		.tx_fifofull	= S3C2440_UFSTAT_TXFULL,
--		.tx_fifomask	= S3C2440_UFSTAT_TXMASK,
--		.tx_fifoshift	= S3C2440_UFSTAT_TXSHIFT,
--		.def_clk_sel	= S3C2410_UCON_CLKSEL2,
--		.num_clks	= 4,
--		.clksel_mask	= S3C2412_UCON_CLKMASK,
--		.clksel_shift	= S3C2412_UCON_CLKSHIFT,
--		.ucon_mask	= S3C2440_UCON0_DIVMASK,
--	},
--	.def_cfg = {
--		.ucon		= S3C2410_UCON_DEFAULT,
--		.ufcon		= S3C2410_UFCON_DEFAULT,
--	},
--};
--#define S3C2440_SERIAL_DRV_DATA (&s3c2440_serial_drv_data)
--#else
--#define S3C2440_SERIAL_DRV_DATA NULL
--#endif
--
- #if defined(CONFIG_CPU_S3C6400) || defined(CONFIG_CPU_S3C6410)
- static const struct s3c24xx_serial_drv_data s3c6400_serial_drv_data = {
- 	.info = {
-@@ -2845,15 +2661,6 @@ static const struct s3c24xx_serial_drv_data artpec8_serial_drv_data = {
- 
- static const struct platform_device_id s3c24xx_serial_driver_ids[] = {
- 	{
--		.name		= "s3c2410-uart",
--		.driver_data	= (kernel_ulong_t)S3C2410_SERIAL_DRV_DATA,
--	}, {
--		.name		= "s3c2412-uart",
--		.driver_data	= (kernel_ulong_t)S3C2412_SERIAL_DRV_DATA,
--	}, {
--		.name		= "s3c2440-uart",
--		.driver_data	= (kernel_ulong_t)S3C2440_SERIAL_DRV_DATA,
--	}, {
- 		.name		= "s3c6400-uart",
- 		.driver_data	= (kernel_ulong_t)S3C6400_SERIAL_DRV_DATA,
- 	}, {
-@@ -2881,12 +2688,6 @@ MODULE_DEVICE_TABLE(platform, s3c24xx_serial_driver_ids);
- 
- #ifdef CONFIG_OF
- static const struct of_device_id s3c24xx_uart_dt_match[] = {
--	{ .compatible = "samsung,s3c2410-uart",
--		.data = S3C2410_SERIAL_DRV_DATA },
--	{ .compatible = "samsung,s3c2412-uart",
--		.data = S3C2412_SERIAL_DRV_DATA },
--	{ .compatible = "samsung,s3c2440-uart",
--		.data = S3C2440_SERIAL_DRV_DATA },
- 	{ .compatible = "samsung,s3c6400-uart",
- 		.data = S3C6400_SERIAL_DRV_DATA },
- 	{ .compatible = "samsung,s5pv210-uart",
-diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-index fb7b603dddf8..8ba4fe9364b1 100644
---- a/drivers/usb/host/Kconfig
-+++ b/drivers/usb/host/Kconfig
-@@ -443,12 +443,12 @@ config USB_OHCI_HCD_STI
- 	  STMicroelectronics consumer electronics SoC's.
- 
- config USB_OHCI_HCD_S3C2410
--	tristate "OHCI support for Samsung S3C24xx/S3C64xx SoC series"
--	depends on USB_OHCI_HCD && (ARCH_S3C24XX || ARCH_S3C64XX || COMPILE_TEST)
--	default y if (ARCH_S3C24XX || ARCH_S3C64XX)
-+	tristate "OHCI support for Samsung S3C64xx SoC series"
-+	depends on USB_OHCI_HCD && (ARCH_S3C64XX || COMPILE_TEST)
-+	default ARCH_S3C64XX
- 	help
- 	  Enables support for the on-chip OHCI controller on
--	  S3C24xx/S3C64xx chips.
-+	  S3C64xx chips.
- 
- config USB_OHCI_HCD_LPC32XX
- 	tristate "Support for LPC on-chip OHCI USB controller"
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index b64bc49c7f30..eee7df45347a 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -491,14 +491,13 @@ config IXP4XX_WATCHDOG
- 	  Say N if you are unsure.
- 
- config S3C2410_WATCHDOG
--	tristate "S3C2410 Watchdog"
--	depends on ARCH_S3C24XX || ARCH_S3C64XX || ARCH_S5PV210 || ARCH_EXYNOS || \
--		   COMPILE_TEST
-+	tristate "S3C6410/S5Pv210/Exynos Watchdog"
-+	depends on ARCH_S3C64XX || ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
- 	select WATCHDOG_CORE
- 	select MFD_SYSCON if ARCH_EXYNOS
- 	help
--	  Watchdog timer block in the Samsung S3C24xx, S3C64xx, S5Pv210 and
--	  Exynos SoCs. This will reboot the system when the timer expires with
-+	  Watchdog timer block in the Samsung S3C64xx, S5Pv210 and Exynos
-+	  SoCs. This will reboot the system when the timer expires with
- 	  the watchdog enabled.
- 
- 	  The driver is limited by the speed of the system's PCLK
-diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
-index d3fc8ed886ff..200ba236a72e 100644
---- a/drivers/watchdog/s3c2410_wdt.c
-+++ b/drivers/watchdog/s3c2410_wdt.c
-@@ -562,73 +562,6 @@ static irqreturn_t s3c2410wdt_irq(int irqno, void *param)
- 	return IRQ_HANDLED;
- }
- 
--#ifdef CONFIG_ARM_S3C24XX_CPUFREQ
--
--static int s3c2410wdt_cpufreq_transition(struct notifier_block *nb,
--					  unsigned long val, void *data)
--{
--	int ret;
--	struct s3c2410_wdt *wdt = freq_to_wdt(nb);
--
--	if (!s3c2410wdt_is_running(wdt))
--		goto done;
--
--	if (val == CPUFREQ_PRECHANGE) {
--		/* To ensure that over the change we don't cause the
--		 * watchdog to trigger, we perform an keep-alive if
--		 * the watchdog is running.
--		 */
--
--		s3c2410wdt_keepalive(&wdt->wdt_device);
--	} else if (val == CPUFREQ_POSTCHANGE) {
--		s3c2410wdt_stop(&wdt->wdt_device);
--
--		ret = s3c2410wdt_set_heartbeat(&wdt->wdt_device,
--						wdt->wdt_device.timeout);
--
--		if (ret >= 0)
--			s3c2410wdt_start(&wdt->wdt_device);
--		else
--			goto err;
--	}
--
--done:
--	return 0;
--
-- err:
--	dev_err(wdt->dev, "cannot set new value for timeout %d\n",
--				wdt->wdt_device.timeout);
--	return ret;
--}
--
--static inline int s3c2410wdt_cpufreq_register(struct s3c2410_wdt *wdt)
--{
--	wdt->freq_transition.notifier_call = s3c2410wdt_cpufreq_transition;
--
--	return cpufreq_register_notifier(&wdt->freq_transition,
--					 CPUFREQ_TRANSITION_NOTIFIER);
--}
--
--static inline void s3c2410wdt_cpufreq_deregister(struct s3c2410_wdt *wdt)
--{
--	wdt->freq_transition.notifier_call = s3c2410wdt_cpufreq_transition;
--
--	cpufreq_unregister_notifier(&wdt->freq_transition,
--				    CPUFREQ_TRANSITION_NOTIFIER);
--}
--
--#else
--
--static inline int s3c2410wdt_cpufreq_register(struct s3c2410_wdt *wdt)
--{
--	return 0;
--}
--
--static inline void s3c2410wdt_cpufreq_deregister(struct s3c2410_wdt *wdt)
--{
--}
--#endif
--
- static inline unsigned int s3c2410wdt_get_bootstatus(struct s3c2410_wdt *wdt)
- {
- 	unsigned int rst_stat;
-@@ -761,12 +694,6 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
- 	wdt->wdt_device.min_timeout = 1;
- 	wdt->wdt_device.max_timeout = s3c2410wdt_max_timeout(wdt);
- 
--	ret = s3c2410wdt_cpufreq_register(wdt);
--	if (ret < 0) {
--		dev_err(dev, "failed to register cpufreq\n");
--		goto err_src_clk;
--	}
--
- 	watchdog_set_drvdata(&wdt->wdt_device, wdt);
- 
- 	/* see if we can actually set the requested timer margin, and if
-@@ -783,7 +710,7 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
- 				 S3C2410_WATCHDOG_DEFAULT_TIME);
- 		} else {
- 			dev_err(dev, "failed to use default timeout\n");
--			goto err_cpufreq;
-+			goto err_src_clk;
- 		}
- 	}
- 
-@@ -791,7 +718,7 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
- 			       pdev->name, pdev);
- 	if (ret != 0) {
- 		dev_err(dev, "failed to install irq (%d)\n", ret);
--		goto err_cpufreq;
-+		goto err_src_clk;
- 	}
- 
- 	watchdog_set_nowayout(&wdt->wdt_device, nowayout);
-@@ -817,7 +744,7 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
- 
- 	ret = watchdog_register_device(&wdt->wdt_device);
- 	if (ret)
--		goto err_cpufreq;
-+		goto err_src_clk;
- 
- 	ret = s3c2410wdt_enable(wdt, true);
- 	if (ret < 0)
-@@ -839,9 +766,6 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
-  err_unregister:
- 	watchdog_unregister_device(&wdt->wdt_device);
- 
-- err_cpufreq:
--	s3c2410wdt_cpufreq_deregister(wdt);
--
-  err_src_clk:
- 	clk_disable_unprepare(wdt->src_clk);
- 
-@@ -862,8 +786,6 @@ static int s3c2410wdt_remove(struct platform_device *dev)
- 
- 	watchdog_unregister_device(&wdt->wdt_device);
- 
--	s3c2410wdt_cpufreq_deregister(wdt);
--
- 	clk_disable_unprepare(wdt->src_clk);
- 	clk_disable_unprepare(wdt->bus_clk);
- 
-diff --git a/include/linux/clk/samsung.h b/include/linux/clk/samsung.h
-index 38b774001712..0cf7aac83439 100644
---- a/include/linux/clk/samsung.h
-+++ b/include/linux/clk/samsung.h
-@@ -21,36 +21,4 @@ static inline void s3c64xx_clk_init(struct device_node *np,
- 				    bool s3c6400, void __iomem *base) { }
- #endif /* CONFIG_S3C64XX_COMMON_CLK */
- 
--#ifdef CONFIG_S3C2410_COMMON_CLK
--void s3c2410_common_clk_init(struct device_node *np, unsigned long xti_f,
--			     int current_soc,
--			     void __iomem *reg_base);
--#else
--static inline void s3c2410_common_clk_init(struct device_node *np,
--					   unsigned long xti_f,
--					   int current_soc,
--					   void __iomem *reg_base) { }
--#endif /* CONFIG_S3C2410_COMMON_CLK */
--
--#ifdef CONFIG_S3C2412_COMMON_CLK
--void s3c2412_common_clk_init(struct device_node *np, unsigned long xti_f,
--			     unsigned long ext_f, void __iomem *reg_base);
--#else
--static inline void s3c2412_common_clk_init(struct device_node *np,
--					   unsigned long xti_f,
--					   unsigned long ext_f,
--					   void __iomem *reg_base) { }
--#endif /* CONFIG_S3C2412_COMMON_CLK */
--
--#ifdef CONFIG_S3C2443_COMMON_CLK
--void s3c2443_common_clk_init(struct device_node *np, unsigned long xti_f,
--			     int current_soc,
--			     void __iomem *reg_base);
--#else
--static inline void s3c2443_common_clk_init(struct device_node *np,
--					   unsigned long xti_f,
--					   int current_soc,
--					   void __iomem *reg_base) { }
--#endif /* CONFIG_S3C2443_COMMON_CLK */
--
- #endif /* __LINUX_CLK_SAMSUNG_H_ */
-diff --git a/include/linux/soc/samsung/s3c-pm.h b/include/linux/soc/samsung/s3c-pm.h
-index f9164559c99f..5b23d85d20ab 100644
---- a/include/linux/soc/samsung/s3c-pm.h
-+++ b/include/linux/soc/samsung/s3c-pm.h
-@@ -14,58 +14,10 @@
- 
- /* PM debug functions */
- 
--/**
-- * struct pm_uart_save - save block for core UART
-- * @ulcon: Save value for S3C2410_ULCON
-- * @ucon: Save value for S3C2410_UCON
-- * @ufcon: Save value for S3C2410_UFCON
-- * @umcon: Save value for S3C2410_UMCON
-- * @ubrdiv: Save value for S3C2410_UBRDIV
-- *
-- * Save block for UART registers to be held over sleep and restored if they
-- * are needed (say by debug).
--*/
--struct pm_uart_save {
--	u32	ulcon;
--	u32	ucon;
--	u32	ufcon;
--	u32	umcon;
--	u32	ubrdiv;
--	u32	udivslot;
--};
--
--#ifdef CONFIG_SAMSUNG_PM_DEBUG
--/**
-- * s3c_pm_dbg() - low level debug function for use in suspend/resume.
-- * @msg: The message to print.
-- *
-- * This function is used mainly to debug the resume process before the system
-- * can rely on printk/console output. It uses the low-level debugging output
-- * routine printascii() to do its work.
-- */
--extern void s3c_pm_dbg(const char *msg, ...);
--
--#define S3C_PMDBG(fmt...) s3c_pm_dbg(fmt)
--
--extern void s3c_pm_save_uarts(bool is_s3c24xx);
--extern void s3c_pm_restore_uarts(bool is_s3c24xx);
--
--#ifdef CONFIG_ARCH_S3C64XX
--extern void s3c_pm_arch_update_uart(void __iomem *regs,
--				    struct pm_uart_save *save);
--#else
--static inline void
--s3c_pm_arch_update_uart(void __iomem *regs, struct pm_uart_save *save)
--{
--}
--#endif
--
--#else
- #define S3C_PMDBG(fmt...) pr_debug(fmt)
- 
- static inline void s3c_pm_save_uarts(bool is_s3c24xx) { }
- static inline void s3c_pm_restore_uarts(bool is_s3c24xx) { }
--#endif
- 
- /* suspend memory checking */
- 
-@@ -81,14 +33,4 @@ extern void s3c_pm_check_store(void);
- #define s3c_pm_check_store()   do { } while (0)
- #endif
- 
--/* system device subsystems */
--
--extern struct bus_type s3c2410_subsys;
--extern struct bus_type s3c2410a_subsys;
--extern struct bus_type s3c2412_subsys;
--extern struct bus_type s3c2416_subsys;
--extern struct bus_type s3c2440_subsys;
--extern struct bus_type s3c2442_subsys;
--extern struct bus_type s3c2443_subsys;
--
- #endif
--- 
-2.29.2
+The following changes since commit 3a99c4474112f49a5459933d8758614002ca0ddc:
+
+  media: rkvdec: Disable H.264 error detection (2022-09-27 10:24:44 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/me=
+dia/v6.1-2
+
+for you to fetch changes up to d67614f276c1499ad939fa5c1aadd35498cc6b34:
+
+  Merge fixes into media_stage (2022-09-27 10:27:56 +0200)
+
+----------------------------------------------------------------
+media fixes for v6.1-rc2
+
+----------------------------------------------------------------
+Alan Stern (1):
+      media: mceusb: Use new usb_control_msg_*() routines
+
+Alexander Stein (1):
+      media: v4l2: Fix v4l2_i2c_subdev_set_name function documentation
+
+Andy Shevchenko (2):
+      media: atomisp_gmin_platform: Switch to use acpi_evaluate_dsm_typed()
+      media: atomisp_gmin_platform: Unexport and split camera_sensor_csi()
+
+Benjamin Gaignard (7):
+      media: hantro: Store HEVC bit depth in context
+      media: hantro: HEVC: Fix auxilary buffer size calculation
+      media: hantro: HEVC: Fix chroma offset computation
+      media: hantro: postproc: Configure output regs to support 10bit
+      media: Hantro: HEVC: Allows 10-bit bitstream
+      media: hantro: imx8m: Enable 10bit decoding
+      media: hantro: Allows luma and chroma depth to be different
+
+Biju Das (5):
+      media: dt-bindings: media: renesas,vsp1: Document RZ/G2L VSPD bindings
+      media: renesas: vsp1: Add support to deassert/assert reset line
+      media: renesas: vsp1: Add support for VSP software version
+      media: renesas: vsp1: Add VSP1_HAS_NON_ZERO_LBA feature bit
+      media: renesas: vsp1: Add support for RZ/G2L VSPD
+
+Bryan O'Donoghue (2):
+      media: venus: dec: Handle the case where find_format fails
+      media: venus: Fix NV12 decoder buffer discovery on HFI_VERSION_1XX
+
+Christophe JAILLET (4):
+      media: dw100: Fix an error handling path in dw100_probe()
+      media: ov8865: Fix an error handling path in ov8865_probe()
+      media: sunxi: Fix some error handling path of sun8i_a83t_mipi_csi2_pr=
+obe()
+      media: sunxi: Fix some error handling path of sun6i_mipi_csi2_probe()
+
+Dan Carpenter (2):
+      media: platform: mtk-mdp3: fix error code in mdp_vpu_dev_init()
+      media: atomisp: prevent integer overflow in sh_css_set_black_frame()
+
+Daniel Gonz=C3=A1lez Cabanelas (1):
+      media: cx88: add IR remote support for NotOnlyTV LV3H
+
+Daniel Lee Kruse (1):
+      media: cx23885: reset DMA on AMD Renior/Cezanne IOMMU due to RiSC eng=
+ine stall
+
+Daniel Lundberg Pedersen (1):
+      media: docs: libv4l-introduction.rst: Fix function signature and link
+
+Deborah Brouwer (1):
+      media: v4l2-ctrls: Fix typo in VP8 comment
+
+Dikshita Agarwal (1):
+      media: venus : Addition of support for VIDIOC_TRY_ENCODER_CMD
+
+Dmitry Osipenko (2):
+      media: cedrus: Set the platform driver data earlier
+      media: cedrus: Fix endless loop in cedrus_h265_skip_bits()
+
+Dongliang Mu (1):
+      media: airspy: fix memory leak in airspy probe
+
+Ezequiel Garcia (3):
+      media: cedrus: Use vb2_find_buffer
+      media: videobuf2: Remove vb2_find_timestamp()
+      media: destage Hantro VPU driver
+
+Hangyu Hua (2):
+      media: platform: fix some double free in meson-ge2d and mtk-jpeg and =
+s5p-mfc
+      media: meson: vdec: fix possible refcount leak in vdec_probe()
+
+Hans Verkuil (34):
+      media: v4l2-ctrls: allocate space for arrays
+      media: v4l2-ctrls: alloc arrays in ctrl_ref
+      media: v4l2-ctrls: add v4l2_ctrl_modify_dimensions
+      media: v4l2-ctrls: add change flag for when dimensions change
+      media: vivid: add pixel_array test control
+      media: v4l2-ctrls: optimize type_ops for arrays
+      media: zoran: fix checkpatch --strict issues
+      media: zoran: the video device is video capture only, not M2M
+      media: zoran: from VB2_READ/WRITE: read/write isn't supported
+      media: zoran: move to mainline
+      media: media/pci/ngene/ngene.h: remove #ifdef NGENE_V4L
+      media: vb2: videobuf -> videobuf2
+      media: media/v4l2-mem2mem.h: rename 'videobuf' to 'vb2'
+      media: platform: ti: avoid using 'videobuf' or 'video-buf'
+      media: staging/media/omap4iss/iss_video.c: videobuf -> vb2
+      media: avoid use of 'videobuf'
+      media: staging/media: add a STAGING_MEDIA_DEPRECATED option
+      media: cpia2: deprecate this driver
+      media: meye: deprecate this driver
+      media: zr364xx: deprecate this driver
+      media: tm6000: deprecate this driver
+      media: fsl-viu: deprecate this driver
+      media: davinci: deprecate dm644x_ccdc, dm355_cddc and dm365_isif
+      media: saa7146: deprecate hexium_gemini/orion, mxb and ttpci
+      media: av7110: move to staging/media/deprecated/saa7146
+      media: videodev2.h: drop V4L2_CAP_ASYNCIO
+      media: MAINTAINERS: change tc358743 maintainer
+      media: media/cec: use CEC_MAX_MSG_SIZE instead of hardcoded 16
+      media: tc358743: limit msg.len to CEC_MAX_MSG_SIZE
+      media: s5p_cec: limit msg.len to CEC_MAX_MSG_SIZE
+      media: cros-ec-cec: limit msg.len to CEC_MAX_MSG_SIZE
+      media: v4l2-ctrls: drop 'elems' argument from control type ops.
+      media: dvb-frontends/drxk: initialize err to 0
+      media: cec: add support for Absolute Volume Control
+
+Hans de Goede (41):
+      media: atomisp-ov2680: Fix ov2680_set_fmt()
+      media: atomisp-ov2680: Don't take the input_lock for try_fmt calls.
+      media: atomisp-ov2680: Improve ov2680_set_fmt() error handling
+      media: atomisp-notes: Add info about sensors v4l2_get_subdev_hostdata=
+() use
+      media: atomisp: Fix VIDIOC_TRY_FMT
+      media: atomisp: Make atomisp_try_fmt_cap() take padding into account
+      media: atomisp: hmm_bo: Simplify alloc_private_pages()
+      media: atomisp: hmm_bo: Further simplify alloc_private_pages()
+      media: atomisp: hmm_bo: Rewrite alloc_private_pages() using pages_arr=
+ay helper funcs
+      media: atomisp: hmm_bo: Rewrite free_private_pages() using pages_arra=
+y helper funcs
+      media: atomisp: hmm_bo: Drop PFN code path from alloc_user_pages()
+      media: atomisp: Ensure that USERPTR pointers are page aligned
+      media: atomisp: Fix device_caps reporting of the registered video-devs
+      media: atomisp: Remove file-injection support
+      media: atomisp: Remove atomisp_file_fops and atomisp_file_ioctl_ops
+      media: atomisp: Remove the outq videobuf queue
+      media: atomisp: Remove never set file_input flag
+      media: atomisp: Remove the ACC device node
+      media: atomisp: Remove some further ATOMISP_ACC_* related dead code
+      media: atomisp: Remove empty atomisp_css_set_cont_prev_start_time() f=
+unction
+      media: atomisp: Split subdev and video-node registration into 2 steps
+      media: atomisp: Register /dev/* nodes at the end of atomisp_pci_probe=
+()
+      media: atomisp: Remove loading mutex
+      media: atomisp: Fix v4l2_fh resource leak on open errors
+      media: atomisp: Simplify v4l2_fh_open() error handling
+      media: atomisp: Use a normal mutex for the main lock
+      media: atomisp: Remove unused lock member from struct atomisp_sub_dev=
+ice
+      media: atomisp: Fix locking around asd->streaming read/write
+      media: atomisp: Remove asd =3D=3D NULL checks from ioctl handling
+      media: atomisp: Add atomisp_pipe_check() helper
+      media: atomisp: Remove watchdog timer
+      media: atomisp: Move atomisp_streaming_count() check into __atomisp_c=
+ss_recover()
+      media: atomisp: Rework asd->streaming state update in __atomisp_strea=
+moff()
+      media: atomisp: Drop streamoff_mutex
+      media: atomisp: Use video_dev.lock for ioctl locking
+      media: atomisp: Remove a couple of not useful function wrappers
+      media: atomisp: Drop unnecessary first_streamoff check
+      media: atomisp: Make atomisp_set_raw_buffer_bitmap() static
+      media: atomisp: Remove unused atomisp_css_get_dis_statistics()
+      media: atomisp: Remove const/fixed camera_caps
+      media: atomisp: Remove atomisp_source_pad_to_stream_id()
+
+Hirokazu Honda (1):
+      media: mediatek: vcodec: Skip non CBR bitrate mode
+
+Irui Wang (6):
+      media: mediatek: vcodec: Add encoder driver support for 34-bit iova
+      media: dt-bindings: media: mediatek: vcodec: Add encoder dt-bindings =
+for mt8188
+      media: mediatek: vcodec: Add mt8188 encoder driver
+      media: mediatek: vcodec: Remove encoder driver get IRQ resource
+      media: mediatek: vcodec: Fix bitstream crop information error
+      media: mediatek: vcodec: Use ctx vb2_queue mutex instead of device mu=
+tex
+
+Jacopo Mondi (1):
+      media: mc: entity: Add iterator helper for entity pads
+
+Jason Wang (5):
+      media: dib8000: Fix comment typo
+      media: sun6i-csi: Fix comment typo
+      media: drxk: Fix comment typo
+      media: technisat-usb2: Fix comment typo
+      media: v4l2-flash: Fix comment typo
+
+Jean-Michel Hautbois (1):
+      media: staging: ipu3-imgu: Fix BNR wb gain documentation
+
+Jilin Yuan (3):
+      media: usb/msi2500: fix repeated words in comments
+      media: usb/dvb-usb-v2: fix repeated words in comments
+      media: pci/cx18: fix repeated words in comments
+
+Jos=C3=A9 Exp=C3=B3sito (1):
+      media: uvcvideo: Fix memory leak in uvc_gpio_parse
+
+Krzysztof Kozlowski (2):
+      media: dt-bindings: dongwoon,dw9714: convert to dtschema
+      media: dt-bindings: media: samsung,exynos5250-gsc: convert to dtschema
+
+Laurent Pinchart (23):
+      media: uvcvideo: Use indexed loops in uvc_ctrl_init_ctrl()
+      media: rockchip: rkisp1: Set DPCC methods enable bits inside loop
+      media: rockchip: rkisp1: Mask invalid bits in DPCC parameters
+      media: rockchip: rkisp1: Define macros for DPCC configurations in UAPI
+      media: rkisp1: Initialize color space on ISP sink and source pads
+      media: rkisp1: Allow setting color space on ISP sink pad
+      media: rkisp1: Fix source pad format configuration
+      media: rkisp1: Allow setting all color space fields on ISP source pad
+      media: rkisp1: Configure quantization using ISP source pad
+      media: rkisp1: Don't pass the quantization to rkisp1_csm_config()
+      media: rkisp1: Configure CSM based on YCbCr encoding
+      media: rkisp1: Initialize color space on resizer sink and source pads
+      media: rkisp1: Allow setting color space on resizer sink pad
+      media: rkisp1: Clean up LSC configuration code
+      media: rkisp1: Store LSC register values in u32 variables
+      media: rkisp1: Simplify LSC x/y size and grad register macros
+      media: rkisp1: Use correct macro for gradient registers
+      media: rkisp1: Configure LSC after enabling the ISP
+      media: rkisp1: Zero v4l2_subdev_format fields in when validating links
+      media: mc: entity: Merge media_entity_enum_init and __media_entity_en=
+um_init
+      media: mc: entity: Move media_entity_get_fwnode_pad() out of graph wa=
+lk section
+      media: mc: entity: Add media_entity_pipeline() to access the media pi=
+peline
+      media: mc: entity: Rewrite media_pipeline_start()
+
+Li zeming (1):
+      media: staging/media/av7110/av7110: Fix typo in string
+
+Liang He (1):
+      media: exynos4-is: fimc-is: Add of_node_put() when breaking out of lo=
+op
+
+Linus Walleij (2):
+      media: i2c: isl7998x: Use right include
+      media: si4713: Use the right include
+
+Lukas Bulwahn (3):
+      media: remove reference to CONFIG_EMBEDDED in MEDIA_SUPPORT_FILTER
+      media: MAINTAINERS: adjust entry to zoran driver movement
+      media: MAINTAINERS: rectify entry in SAA7146 VIDEO4LINUX-2 DRIVER
+
+Mauro Carvalho Chehab (2):
+      media: atomisp: don't store an unused sink data on a var
+      Merge fixes into media_stage
+
+Miaoqian Lin (1):
+      media: xilinx: vipp: Fix refcount leak in xvip_graph_dma_init
+
+Ming Qian (5):
+      media: amphion: insert picture startcode after seek for vc1g format
+      media: amphion: adjust the encoder's value range of gop size
+      media: amphion: don't change the colorspace reported by decoder.
+      media: amphion: fix a bug that vpu core may not resume after suspend
+      media: amphion: release m2m ctx when releasing vpu instance
+
+Moudy Ho (4):
+      media: dt-binding: mediatek: add bindings for MediaTek MDP3 components
+      media: dt-binding: mediatek: add bindings for MediaTek CCORR and WDMA
+      media: platform: mtk-mdp3: add MediaTek MDP3 driver
+      media: platform: mtk-mdp3: add pointer checks and use devm_kfree
+
+Nicolas Dufresne (1):
+      media: cedrus: Fix watchdog race condition
+
+Ondrej Jirman (1):
+      media: rockchip: rga: Fix probe rga_parse_dt bugs
+
+Paul Elder (1):
+      media: ov5640: Use runtime PM
+
+Paul Kocialkowski (22):
+      media: sun6i-mipi-csi2: Add a Kconfig dependency on RESET_CONTROLLER
+      media: sun8i-a83t-mipi-csi2: Add a Kconfig dependency on RESET_CONTRO=
+LLER
+      media: sun6i-csi: Add a Kconfig dependency on RESET_CONTROLLER
+      media: sun4i-csi: Add a Kconfig dependency on RESET_CONTROLLER
+      media: sun8i-di: Add a Kconfig dependency on RESET_CONTROLLER
+      media: sun8i-rotate: Add a Kconfig dependency on RESET_CONTROLLER
+      media: cedrus: Add a Kconfig dependency on RESET_CONTROLLER
+      media: sun6i-csi: Define and use driver name and (reworked) descripti=
+on
+      media: sun6i-csi: Refactor main driver data structures
+      media: sun6i-csi: Tidy up platform code
+      media: sun6i-csi: Always set exclusive module clock rate
+      media: sun6i-csi: Define and use variant to get module clock rate
+      media: sun6i-csi: Use runtime pm for clocks and reset
+      media: sun6i-csi: Tidy up Kconfig
+      media: sun6i-csi: Tidy up v4l2 code
+      media: sun6i-csi: Tidy up video code
+      media: sun6i-csi: Pass and store csi device directly in video code
+      media: sun6i-csi: Register the media device after creation
+      media: sun6i-csi: Remove controls handler from the driver
+      media: sun6i-csi: Add media ops with link notify callback
+      media: sun6i-csi: Introduce and use video helper functions
+      media: sun6i-csi: Move csi buffer definition to main header file
+
+Petko Manolov (1):
+      media: staging: media: imx: imx7-media-csi: Increase video mem limit
+
+Philipp Zabel (1):
+      media: coda: jpeg: drop coda9_jpeg_dec_huff_setup() return value
+
+Rory Liu (1):
+      media: platform: cros-ec: Add Kuldax to the match table
+
+Sakari Ailus (6):
+      media: ar0521: Remove redundant variable ret
+      media: ipu3-imgu: Fix NULL pointer dereference in active selection ac=
+cess
+      media: v4l: subdev: Fail graciously when getting try data for NULL st=
+ate
+      media: ar0521: Fix return value check in writing initial registers
+      media: sun6i-mipi-csi2: Depend on PHY_SUN6I_MIPI_DPHY
+      media: Remove incorrect comment from struct v4l2_fwnode_endpoint
+
+Sean Young (1):
+      media: mceusb: set timeout to at least timeout provided
+
+Slark Xiao (10):
+      media: dvb-frontends: Fix typo 'the the' in comment
+      media: cx88: Fix typo 'the the' in comment
+      media: ivtv: Fix typo 'the the' in comment
+      media: saa7164: Fix typo 'the the' in comment
+      media: platform: ti: Fix typo 'the the' in comment
+      media: gspca: Fix typo 'the the' in comment
+      media: tm6000: Fix typo 'the the' in comment
+      media: v4l2-ioctl: Fix typo 'the the' in comment
+      media: uvcvideo: Fix typo 'the the' in comment
+      media: i2c: mt9v111: Fix typo 'the the' in comment
+
+Stanimir Varbanov (4):
+      media: venus : Add default values for the control
+      media: venus : CAPTURE Plane width/height alignment with OUT plane.
+      media: venus: venc_ctrls: Add default value for CLL info
+      media: venus: venc: Set HDR10 PQ SEI property only for MAIN10 profile
+
+Sun Ke (1):
+      media: platform: mtk-mdp3: fix PM reference leak in mdp_comp_clock_on=
+()
+
+Tomi Valkeinen (16):
+      media: ti: cal: fix useless variable init
+      media: ti: cal: rename sd_state to state
+      media: ti: cal: use CSI-2 frame number for seq number
+      media: ti: cal: combine wdma irq handling
+      media: ti: cal: fix wdma irq for metadata
+      media: Documentation: mc: add definitions for stream and pipeline
+      media: media-entity.h: add include for min()
+      media: subdev: increase V4L2_FRAME_DESC_ENTRY_MAX to 8
+      media: mc: entity: Rename streaming_count -> start_count
+      media: v4l2-dev: Add videodev wrappers for media pipelines
+      media: drivers: use video device pipeline start/stop
+      media: drivers: use video_device_pipeline()
+      media: mc: entity: add alloc variant of pipeline_start
+      media: drivers: use video_device_pipeline_alloc_start()
+      media: mc: entity: Add has_pad_interdep entity operation
+      media: mc: convert pipeline funcs to take media_pad
+
+Vikash Garodia (1):
+      media: venus : Allow MIN/MAX settings for the v4l2 encoder controls d=
+efined range.
+
+Viswanath Boma (3):
+      media: venus : Addition of control support - V4L2_CID_MIN_BUFFERS_FOR=
+_OUTPUT
+      media: venus : Addition of EOS Event support for Encoder
+      media: venus : Remove the capture plane settings for venc_g_parm/venc=
+_s_parm
+
+Volodymyr Kharuk (2):
+      media: xilinx: csi2rxss: Add 1X12 greyscale format
+      media: xilinx: video: Add 1X12 greyscale format
+
+Xavier Roumegue (7):
+      media: v4l2-ctrls: Export default v4l2_ctrl_type_ops callbacks
+      media: Documentation: dw100: Add user documentation for the DW100 dri=
+ver
+      media: v4l: uapi: Add user control base for DW100 controls
+      media: uapi: Add a control for DW100 driver
+      media: dt-bindings: media: Add i.MX8MP DW100 binding
+      media: dw100: Add i.MX8MP dw100 dewarper driver
+      media: MAINTAINERS: add entry for i.MX8MP DW100 v4l2 mem2mem driver
+
+Xu Qiang (1):
+      media: meson: vdec: add missing clk_disable_unprepare on error in vde=
+c_hevc_start()
+
+Yang Yingliang (1):
+      media: ar0521: fix error return code in ar0521_power_on()
+
+Yunfei Dong (3):
+      media: dt-bindings: media: mediatek: vcodec: add decoder dt-bindings =
+for mt8188
+      media: mediatek: vcodec: add decoder compatible to support mt8188
+      media: mediatek: vcodec: Add mt8188 encoder's chip name
+
+Yunke Cao (1):
+      media: uvcvideo: Use entity get_cur in uvc_ctrl_set
+
+Zeng Jingxiang (1):
+      media: tm6000: Fix unused value in vidioc_try_fmt_vid_cap()
+
+Zheyu Ma (1):
+      media: cx88: Fix a null-ptr-deref bug in buffer_prepare()
+
+huanglei (1):
+      media: uvcvideo: Limit power line control for Sonix Technology
+
+wangjianli (5):
+      media: i2c/cx25840: fix repeated words in comments
+      media: pci/cx18: fix repeated words in comments
+      media: pci/cx18: fix repeated words in comments
+      media: pci/cx23885: fix repeated words in comments
+      media: ti/omap: fix repeated words in comments
+
+ye xingchen (4):
+      media: imon: Remove the unneeded result variable
+      media: radio-si476x: Remove the unneeded result variable
+      media: tuners: Remove the unneeded result variable
+      media: venus: hfi: Remove the unneeded result variable
+
+ .../devicetree/bindings/media/exynos5-gsc.txt      |   38 -
+ .../bindings/media/i2c/dongwoon,dw9714.txt         |    9 -
+ .../bindings/media/i2c/dongwoon,dw9714.yaml        |   47 +
+ .../bindings/media/mediatek,mdp3-rdma.yaml         |   95 ++
+ .../bindings/media/mediatek,mdp3-rsz.yaml          |   77 +
+ .../bindings/media/mediatek,mdp3-wrot.yaml         |   80 +
+ .../bindings/media/mediatek,vcodec-encoder.yaml    |    1 +
+ .../media/mediatek,vcodec-subdev-decoder.yaml      |    1 +
+ .../devicetree/bindings/media/nxp,dw100.yaml       |   69 +
+ .../devicetree/bindings/media/renesas,vsp1.yaml    |   53 +-
+ .../bindings/media/samsung,exynos5250-gsc.yaml     |  109 ++
+ .../bindings/soc/mediatek/mediatek,ccorr.yaml      |   68 +
+ .../bindings/soc/mediatek/mediatek,wdma.yaml       |   81 +
+ .../driver-api/media/drivers/pxa_camera.rst        |    2 +-
+ Documentation/driver-api/media/mc-core.rst         |   19 +-
+ .../userspace-api/media/cec.h.rst.exceptions       |    2 +
+ .../userspace-api/media/drivers/dw100.rst          |   84 +
+ .../userspace-api/media/drivers/index.rst          |    1 +
+ Documentation/userspace-api/media/v4l/async.rst    |    9 -
+ .../userspace-api/media/v4l/dev-raw-vbi.rst        |    2 +-
+ Documentation/userspace-api/media/v4l/dev-sdr.rst  |    2 +-
+ .../userspace-api/media/v4l/dev-sliced-vbi.rst     |    2 +-
+ .../userspace-api/media/v4l/hist-v4l2.rst          |    2 +-
+ Documentation/userspace-api/media/v4l/io.rst       |    4 +-
+ .../media/v4l/libv4l-introduction.rst              |    4 +-
+ .../userspace-api/media/v4l/vidioc-dqevent.rst     |    5 +
+ .../userspace-api/media/v4l/vidioc-querycap.rst    |    3 -
+ .../userspace-api/media/videodev2.h.rst.exceptions |    1 +
+ MAINTAINERS                                        |   29 +-
+ drivers/media/Kconfig                              |    2 +-
+ drivers/media/cec/core/cec-adap.c                  |    1 +
+ drivers/media/cec/platform/cros-ec/cros-ec-cec.c   |    4 +
+ drivers/media/cec/platform/s5p/s5p_cec.c           |    2 +
+ drivers/media/cec/platform/sti/stih-cec.c          |    4 +-
+ drivers/media/common/Kconfig                       |    1 -
+ drivers/media/common/Makefile                      |    2 +-
+ drivers/media/common/videobuf2/videobuf2-core.c    |   14 +-
+ drivers/media/common/videobuf2/videobuf2-dvb.c     |    4 +-
+ drivers/media/common/videobuf2/videobuf2-v4l2.c    |   17 +-
+ drivers/media/dvb-frontends/dib8000.c              |    2 +-
+ drivers/media/dvb-frontends/drxk_hard.c            |    4 +-
+ drivers/media/dvb-frontends/rtl2832_sdr.c          |    2 +-
+ drivers/media/dvb-frontends/tda1002x.h             |    2 +-
+ drivers/media/dvb-frontends/tda10048.c             |    2 +-
+ drivers/media/i2c/adv7511-v4l2.c                   |    4 +-
+ drivers/media/i2c/adv7604.c                        |    4 +-
+ drivers/media/i2c/adv7842.c                        |    4 +-
+ drivers/media/i2c/ar0521.c                         |   11 +-
+ drivers/media/i2c/cx25840/cx25840-ir.c             |    2 +-
+ drivers/media/i2c/ir-kbd-i2c.c                     |   47 +
+ drivers/media/i2c/isl7998x.c                       |    2 +-
+ drivers/media/i2c/mt9v111.c                        |    2 +-
+ drivers/media/i2c/ov5640.c                         |  123 +-
+ drivers/media/i2c/ov8865.c                         |   10 +-
+ drivers/media/i2c/tc358743.c                       |    2 +
+ drivers/media/mc/mc-device.c                       |   13 +-
+ drivers/media/mc/mc-entity.c                       |  648 ++++++--
+ drivers/media/pci/Kconfig                          |    4 +-
+ drivers/media/pci/Makefile                         |    6 +-
+ drivers/media/pci/cx18/cx18-av-audio.c             |    2 +-
+ drivers/media/pci/cx18/cx18-av-core.c              |    4 +-
+ drivers/media/pci/cx18/cx18-firmware.c             |    2 +-
+ drivers/media/pci/cx23885/cx23885-core.c           |    3 +
+ drivers/media/pci/cx23885/cx23888-ir.c             |    2 +-
+ drivers/media/pci/cx88/cx88-dsp.c                  |    2 +-
+ drivers/media/pci/cx88/cx88-input.c                |    2 +-
+ drivers/media/pci/cx88/cx88-vbi.c                  |    9 +-
+ drivers/media/pci/cx88/cx88-video.c                |   44 +-
+ drivers/media/pci/intel/ipu3/ipu3-cio2-main.c      |    6 +-
+ drivers/media/pci/ivtv/ivtv-yuv.c                  |    2 +-
+ drivers/media/pci/ngene/ngene.h                    |   78 -
+ drivers/media/pci/saa7164/saa7164-core.c           |    2 +-
+ drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c     |    2 +-
+ drivers/{staging/media =3D> media/pci}/zoran/Kconfig |    0
+ .../{staging/media =3D> media/pci}/zoran/Makefile    |    0
+ .../media =3D> media/pci}/zoran/videocodec.c         |    7 +-
+ .../media =3D> media/pci}/zoran/videocodec.h         |  190 +--
+ drivers/{staging/media =3D> media/pci}/zoran/zoran.h |   30 +-
+ .../media =3D> media/pci}/zoran/zoran_card.c         |   56 +-
+ .../media =3D> media/pci}/zoran/zoran_card.h         |    9 +-
+ .../media =3D> media/pci}/zoran/zoran_device.c       |   37 +-
+ drivers/media/pci/zoran/zoran_device.h             |   60 +
+ .../media =3D> media/pci}/zoran/zoran_driver.c       |   59 +-
+ .../{staging/media =3D> media/pci}/zoran/zr36016.c   |  142 +-
+ .../{staging/media =3D> media/pci}/zoran/zr36016.h   |    0
+ .../{staging/media =3D> media/pci}/zoran/zr36050.c   |  182 +--
+ .../{staging/media =3D> media/pci}/zoran/zr36050.h   |    0
+ .../{staging/media =3D> media/pci}/zoran/zr36057.h   |  130 +-
+ .../{staging/media =3D> media/pci}/zoran/zr36060.c   |    7 +-
+ .../{staging/media =3D> media/pci}/zoran/zr36060.h   |   86 +-
+ drivers/media/platform/Kconfig                     |    1 +
+ drivers/media/platform/Makefile                    |    1 +
+ drivers/media/platform/amlogic/meson-ge2d/ge2d.c   |    1 -
+ drivers/media/platform/amphion/vdec.c              |   16 +-
+ drivers/media/platform/amphion/venc.c              |    2 +-
+ drivers/media/platform/amphion/vpu.h               |    1 -
+ drivers/media/platform/amphion/vpu_core.c          |   84 +-
+ drivers/media/platform/amphion/vpu_core.h          |    1 +
+ drivers/media/platform/amphion/vpu_dbg.c           |    9 +-
+ drivers/media/platform/amphion/vpu_malone.c        |    2 +-
+ drivers/media/platform/amphion/vpu_v4l2.c          |   11 +-
+ drivers/media/platform/chips-media/coda-jpeg.c     |   13 +-
+ drivers/media/platform/intel/pxa_camera.c          |    8 +-
+ drivers/media/platform/marvell/mcam-core.h         |    2 +-
+ drivers/media/platform/mediatek/Kconfig            |    1 +
+ drivers/media/platform/mediatek/Makefile           |    1 +
+ .../media/platform/mediatek/jpeg/mtk_jpeg_core.c   |    1 -
+ drivers/media/platform/mediatek/mdp3/Kconfig       |   21 +
+ drivers/media/platform/mediatek/mdp3/Makefile      |    6 +
+ .../media/platform/mediatek/mdp3/mdp_reg_ccorr.h   |   19 +
+ .../media/platform/mediatek/mdp3/mdp_reg_rdma.h    |   65 +
+ drivers/media/platform/mediatek/mdp3/mdp_reg_rsz.h |   39 +
+ .../media/platform/mediatek/mdp3/mdp_reg_wdma.h    |   47 +
+ .../media/platform/mediatek/mdp3/mdp_reg_wrot.h    |   55 +
+ drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h |  290 ++++
+ .../media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c   |  466 ++++++
+ .../media/platform/mediatek/mdp3/mtk-mdp3-cmdq.h   |   43 +
+ .../media/platform/mediatek/mdp3/mtk-mdp3-comp.c   | 1034 ++++++++++++
+ .../media/platform/mediatek/mdp3/mtk-mdp3-comp.h   |  186 +++
+ .../media/platform/mediatek/mdp3/mtk-mdp3-core.c   |  358 ++++
+ .../media/platform/mediatek/mdp3/mtk-mdp3-core.h   |   94 ++
+ .../media/platform/mediatek/mdp3/mtk-mdp3-m2m.c    |  724 +++++++++
+ .../media/platform/mediatek/mdp3/mtk-mdp3-m2m.h    |   48 +
+ .../media/platform/mediatek/mdp3/mtk-mdp3-regs.c   |  735 +++++++++
+ .../media/platform/mediatek/mdp3/mtk-mdp3-regs.h   |  373 +++++
+ .../media/platform/mediatek/mdp3/mtk-mdp3-vpu.c    |  314 ++++
+ .../media/platform/mediatek/mdp3/mtk-mdp3-vpu.h    |   78 +
+ .../platform/mediatek/vcodec/mtk_vcodec_dec.c      |    2 +
+ .../platform/mediatek/vcodec/mtk_vcodec_dec_drv.c  |    4 +
+ .../platform/mediatek/vcodec/mtk_vcodec_drv.h      |    6 +
+ .../platform/mediatek/vcodec/mtk_vcodec_enc.c      |   19 +-
+ .../platform/mediatek/vcodec/mtk_vcodec_enc_drv.c  |   14 +
+ .../platform/mediatek/vcodec/venc/venc_h264_if.c   |  200 ++-
+ .../media/platform/mediatek/vcodec/venc_ipi_msg.h  |   24 +
+ .../media/platform/mediatek/vcodec/venc_vpu_if.c   |   76 +-
+ drivers/media/platform/nxp/Kconfig                 |   13 +-
+ drivers/media/platform/nxp/Makefile                |    2 +-
+ drivers/media/platform/nxp/dw100/Kconfig           |   16 +
+ drivers/media/platform/nxp/dw100/Makefile          |    3 +
+ drivers/media/platform/nxp/dw100/dw100.c           | 1707 ++++++++++++++++=
+++++
+ drivers/media/platform/nxp/dw100/dw100_regs.h      |  117 ++
+ drivers/media/platform/qcom/camss/camss-video.c    |    6 +-
+ drivers/media/platform/qcom/venus/helpers.c        |   13 +-
+ drivers/media/platform/qcom/venus/hfi.c            |    5 +-
+ drivers/media/platform/qcom/venus/vdec.c           |    2 +
+ drivers/media/platform/qcom/venus/venc.c           |   29 +-
+ drivers/media/platform/qcom/venus/venc_ctrls.c     |   38 +-
+ .../media/platform/renesas/rcar-vin/rcar-core.c    |    5 +-
+ drivers/media/platform/renesas/rcar-vin/rcar-dma.c |   18 +-
+ drivers/media/platform/renesas/vsp1/vsp1.h         |    4 +
+ drivers/media/platform/renesas/vsp1/vsp1_drv.c     |  101 +-
+ drivers/media/platform/renesas/vsp1/vsp1_lif.c     |   12 +-
+ drivers/media/platform/renesas/vsp1/vsp1_regs.h    |    6 +
+ drivers/media/platform/renesas/vsp1/vsp1_video.c   |    8 +-
+ drivers/media/platform/rockchip/rga/rga.c          |    2 +-
+ .../platform/rockchip/rkisp1/rkisp1-capture.c      |   21 +-
+ .../media/platform/rockchip/rkisp1/rkisp1-common.h |   30 +-
+ .../media/platform/rockchip/rkisp1/rkisp1-isp.c    |  144 +-
+ .../media/platform/rockchip/rkisp1/rkisp1-params.c |  531 +++---
+ .../media/platform/rockchip/rkisp1/rkisp1-regs.h   |   47 +-
+ .../platform/rockchip/rkisp1/rkisp1-resizer.c      |   45 +-
+ .../platform/samsung/exynos4-is/fimc-capture.c     |    9 +-
+ .../media/platform/samsung/exynos4-is/fimc-core.h  |    2 +-
+ .../media/platform/samsung/exynos4-is/fimc-is.c    |    1 +
+ .../platform/samsung/exynos4-is/fimc-isp-video.c   |    9 +-
+ .../media/platform/samsung/exynos4-is/fimc-lite.c  |    9 +-
+ .../platform/samsung/s3c-camif/camif-capture.c     |    6 +-
+ drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c   |    5 +-
+ drivers/media/platform/st/stm32/stm32-dcmi.c       |    6 +-
+ drivers/media/platform/sunxi/sun4i-csi/Kconfig     |    2 +-
+ drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c |    6 +-
+ drivers/media/platform/sunxi/sun6i-csi/Kconfig     |   12 +-
+ drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c |  592 ++++---
+ drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h |   64 +-
+ .../media/platform/sunxi/sun6i-csi/sun6i_video.c   |  594 +++----
+ .../media/platform/sunxi/sun6i-csi/sun6i_video.h   |   23 +-
+ .../media/platform/sunxi/sun6i-mipi-csi2/Kconfig   |    4 +-
+ .../sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c        |   20 +-
+ .../platform/sunxi/sun8i-a83t-mipi-csi2/Kconfig    |    2 +-
+ .../sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c    |   23 +-
+ drivers/media/platform/sunxi/sun8i-di/Kconfig      |    2 +-
+ drivers/media/platform/sunxi/sun8i-rotate/Kconfig  |    2 +-
+ drivers/media/platform/ti/am437x/am437x-vpfe.h     |    2 +-
+ drivers/media/platform/ti/cal/cal-camerarx.c       |   31 +-
+ drivers/media/platform/ti/cal/cal-video.c          |   11 +-
+ drivers/media/platform/ti/cal/cal.c                |  139 +-
+ drivers/media/platform/ti/cal/cal.h                |    8 +-
+ drivers/media/platform/ti/davinci/Kconfig          |   49 -
+ drivers/media/platform/ti/davinci/Makefile         |    4 -
+ drivers/media/platform/ti/davinci/vpbe.c           |    2 +-
+ drivers/media/platform/ti/davinci/vpif.h           |   60 +-
+ drivers/media/platform/ti/davinci/vpif_capture.c   |    6 +-
+ drivers/media/platform/ti/davinci/vpif_capture.h   |    2 +-
+ drivers/media/platform/ti/davinci/vpif_display.c   |    6 +-
+ drivers/media/platform/ti/davinci/vpif_display.h   |    6 +-
+ drivers/media/platform/ti/omap/omap_voutlib.c      |    2 +-
+ drivers/media/platform/ti/omap3isp/isp.c           |    6 +-
+ drivers/media/platform/ti/omap3isp/ispvideo.c      |   11 +-
+ drivers/media/platform/ti/omap3isp/ispvideo.h      |   11 +-
+ .../hantro =3D> media/platform/verisilicon}/Kconfig  |    6 +-
+ .../hantro =3D> media/platform/verisilicon}/Makefile |    0
+ .../hantro =3D> media/platform/verisilicon}/hantro.h |    0
+ .../platform/verisilicon}/hantro_drv.c             |   14 +-
+ .../platform/verisilicon}/hantro_g1.c              |    0
+ .../platform/verisilicon}/hantro_g1_h264_dec.c     |    0
+ .../platform/verisilicon}/hantro_g1_mpeg2_dec.c    |    0
+ .../platform/verisilicon}/hantro_g1_regs.h         |    0
+ .../platform/verisilicon}/hantro_g1_vp8_dec.c      |    0
+ .../platform/verisilicon}/hantro_g2.c              |    0
+ .../platform/verisilicon}/hantro_g2_hevc_dec.c     |    4 +-
+ .../platform/verisilicon}/hantro_g2_regs.h         |    0
+ .../platform/verisilicon}/hantro_g2_vp9_dec.c      |    0
+ .../platform/verisilicon}/hantro_h1_jpeg_enc.c     |    0
+ .../platform/verisilicon}/hantro_h1_regs.h         |    0
+ .../platform/verisilicon}/hantro_h264.c            |    0
+ .../platform/verisilicon}/hantro_hevc.c            |    4 +-
+ .../platform/verisilicon}/hantro_hw.h              |    0
+ .../platform/verisilicon}/hantro_jpeg.c            |    0
+ .../platform/verisilicon}/hantro_jpeg.h            |    0
+ .../platform/verisilicon}/hantro_mpeg2.c           |    0
+ .../platform/verisilicon}/hantro_postproc.c        |    7 +-
+ .../platform/verisilicon}/hantro_v4l2.c            |    0
+ .../platform/verisilicon}/hantro_v4l2.h            |    0
+ .../platform/verisilicon}/hantro_vp8.c             |    0
+ .../platform/verisilicon}/hantro_vp9.c             |    0
+ .../platform/verisilicon}/hantro_vp9.h             |    0
+ .../platform/verisilicon}/imx8m_vpu_hw.c           |   27 +
+ .../verisilicon}/rockchip_vpu2_hw_h264_dec.c       |    0
+ .../verisilicon}/rockchip_vpu2_hw_jpeg_enc.c       |    0
+ .../verisilicon}/rockchip_vpu2_hw_mpeg2_dec.c      |    0
+ .../verisilicon}/rockchip_vpu2_hw_vp8_dec.c        |    0
+ .../platform/verisilicon}/rockchip_vpu2_regs.h     |    0
+ .../platform/verisilicon}/rockchip_vpu_hw.c        |    0
+ .../platform/verisilicon}/sama5d4_vdec_hw.c        |    0
+ .../platform/verisilicon}/sunxi_vpu_hw.c           |    0
+ drivers/media/platform/xilinx/xilinx-csi2rxss.c    |    1 +
+ drivers/media/platform/xilinx/xilinx-dma.c         |   11 +-
+ drivers/media/platform/xilinx/xilinx-dma.h         |    9 +-
+ drivers/media/platform/xilinx/xilinx-vip.c         |    2 +
+ drivers/media/platform/xilinx/xilinx-vipp.c        |    9 +-
+ drivers/media/radio/radio-si476x.c                 |    5 +-
+ drivers/media/radio/si4713/si4713.c                |    2 +-
+ drivers/media/rc/imon.c                            |    4 +-
+ drivers/media/rc/mceusb.c                          |   37 +-
+ drivers/media/test-drivers/vim2m.c                 |    2 +-
+ drivers/media/test-drivers/vimc/vimc-capture.c     |    7 +-
+ drivers/media/test-drivers/vivid/vivid-core.h      |    5 +-
+ drivers/media/test-drivers/vivid/vivid-ctrls.c     |   14 +
+ drivers/media/test-drivers/vivid/vivid-vid-cap.c   |    4 +
+ drivers/media/tuners/xc4000.c                      |    4 +-
+ drivers/media/usb/Kconfig                          |    3 -
+ drivers/media/usb/Makefile                         |    3 -
+ drivers/media/usb/airspy/airspy.c                  |    6 +-
+ drivers/media/usb/au0828/au0828-core.c             |    8 +-
+ drivers/media/usb/au0828/au0828-video.c            |    4 +-
+ drivers/media/usb/cx231xx/cx231xx-vbi.c            |    2 +-
+ drivers/media/usb/cx231xx/cx231xx-video.c          |    2 +-
+ drivers/media/usb/dvb-usb-v2/af9035.c              |    2 +-
+ drivers/media/usb/dvb-usb/technisat-usb2.c         |    2 +-
+ drivers/media/usb/em28xx/em28xx-video.c            |    4 +-
+ drivers/media/usb/gspca/finepix.c                  |    2 +-
+ drivers/media/usb/msi2500/msi2500.c                |    4 +-
+ drivers/media/usb/pvrusb2/pvrusb2-dvb.c            |    2 +-
+ drivers/media/usb/uvc/uvc_ctrl.c                   |  117 +-
+ drivers/media/usb/uvc/uvc_driver.c                 |   17 +-
+ drivers/media/usb/uvc/uvc_video.c                  |    2 +-
+ drivers/media/v4l2-core/v4l2-ctrls-api.c           |   62 +-
+ drivers/media/v4l2-core/v4l2-ctrls-core.c          |  217 ++-
+ drivers/media/v4l2-core/v4l2-dev.c                 |   72 +
+ drivers/media/v4l2-core/v4l2-flash-led-class.c     |    2 +-
+ drivers/media/v4l2-core/v4l2-ioctl.c               |    2 +-
+ drivers/media/v4l2-core/v4l2-mem2mem.c             |    6 +-
+ drivers/staging/media/Kconfig                      |   29 +-
+ drivers/staging/media/Makefile                     |   12 +-
+ drivers/staging/media/atomisp/Makefile             |    1 -
+ drivers/staging/media/atomisp/i2c/atomisp-ov2680.c |   19 +-
+ drivers/staging/media/atomisp/include/hmm/hmm_bo.h |    6 -
+ .../staging/media/atomisp/include/linux/atomisp.h  |   14 -
+ .../atomisp/include/linux/atomisp_gmin_platform.h  |    2 -
+ .../media/atomisp/include/linux/atomisp_platform.h |   18 -
+ drivers/staging/media/atomisp/notes.txt            |   19 +
+ drivers/staging/media/atomisp/pci/atomisp_cmd.c    |  715 +-------
+ drivers/staging/media/atomisp/pci/atomisp_cmd.h    |   11 +-
+ drivers/staging/media/atomisp/pci/atomisp_compat.h |   10 -
+ .../media/atomisp/pci/atomisp_compat_css20.c       |  100 +-
+ drivers/staging/media/atomisp/pci/atomisp_file.c   |  229 ---
+ drivers/staging/media/atomisp/pci/atomisp_file.h   |   44 -
+ drivers/staging/media/atomisp/pci/atomisp_fops.c   |  274 +---
+ .../media/atomisp/pci/atomisp_gmin_platform.c      |   94 +-
+ .../staging/media/atomisp/pci/atomisp_internal.h   |   55 +-
+ drivers/staging/media/atomisp/pci/atomisp_ioctl.c  |  776 ++-------
+ drivers/staging/media/atomisp/pci/atomisp_ioctl.h  |   14 +-
+ drivers/staging/media/atomisp/pci/atomisp_subdev.c |  133 +-
+ drivers/staging/media/atomisp/pci/atomisp_subdev.h |   71 +-
+ drivers/staging/media/atomisp/pci/atomisp_v4l2.c   |  164 +-
+ drivers/staging/media/atomisp/pci/atomisp_v4l2.h   |    3 -
+ drivers/staging/media/atomisp/pci/hmm/hmm_bo.c     |  198 +--
+ drivers/staging/media/atomisp/pci/sh_css_params.c  |    4 +-
+ drivers/staging/media/av7110/TODO                  |    3 -
+ .../usb =3D> staging/media/deprecated}/cpia2/Kconfig |    5 +-
+ .../media/deprecated}/cpia2/Makefile               |    0
+ drivers/staging/media/deprecated/cpia2/TODO        |    6 +
+ .../usb =3D> staging/media/deprecated}/cpia2/cpia2.h |    0
+ .../media/deprecated}/cpia2/cpia2_core.c           |    0
+ .../media/deprecated}/cpia2/cpia2_registers.h      |    0
+ .../media/deprecated}/cpia2/cpia2_usb.c            |    0
+ .../media/deprecated}/cpia2/cpia2_v4l.c            |    0
+ drivers/staging/media/deprecated/fsl-viu/Kconfig   |   15 +
+ drivers/staging/media/deprecated/fsl-viu/Makefile  |    2 +
+ drivers/staging/media/deprecated/fsl-viu/TODO      |    7 +
+ .../media/deprecated/fsl-viu}/fsl-viu.c            |    0
+ .../pci =3D> staging/media/deprecated}/meye/Kconfig  |    5 +-
+ .../pci =3D> staging/media/deprecated}/meye/Makefile |    0
+ drivers/staging/media/deprecated/meye/TODO         |    6 +
+ .../pci =3D> staging/media/deprecated}/meye/meye.c   |    0
+ .../pci =3D> staging/media/deprecated}/meye/meye.h   |    0
+ drivers/staging/media/deprecated/saa7146/Kconfig   |    5 +
+ drivers/staging/media/deprecated/saa7146/Makefile  |    2 +
+ .../media/{ =3D> deprecated/saa7146}/av7110/Kconfig  |   20 +-
+ .../media/{ =3D> deprecated/saa7146}/av7110/Makefile |    3 +-
+ .../staging/media/deprecated/saa7146/av7110/TODO   |    9 +
+ .../av7110/audio-bilingual-channel-select.rst      |    0
+ .../saa7146}/av7110/audio-channel-select.rst       |    0
+ .../saa7146}/av7110/audio-clear-buffer.rst         |    0
+ .../saa7146}/av7110/audio-continue.rst             |    0
+ .../saa7146}/av7110/audio-fclose.rst               |    0
+ .../saa7146}/av7110/audio-fopen.rst                |    0
+ .../saa7146}/av7110/audio-fwrite.rst               |    0
+ .../saa7146}/av7110/audio-get-capabilities.rst     |    0
+ .../saa7146}/av7110/audio-get-status.rst           |    0
+ .../saa7146}/av7110/audio-pause.rst                |    0
+ .../{ =3D> deprecated/saa7146}/av7110/audio-play.rst |    0
+ .../saa7146}/av7110/audio-select-source.rst        |    0
+ .../saa7146}/av7110/audio-set-av-sync.rst          |    0
+ .../saa7146}/av7110/audio-set-bypass-mode.rst      |    0
+ .../saa7146}/av7110/audio-set-id.rst               |    0
+ .../saa7146}/av7110/audio-set-mixer.rst            |    0
+ .../saa7146}/av7110/audio-set-mute.rst             |    0
+ .../saa7146}/av7110/audio-set-streamtype.rst       |    0
+ .../{ =3D> deprecated/saa7146}/av7110/audio-stop.rst |    0
+ .../{ =3D> deprecated/saa7146}/av7110/audio.rst      |    0
+ .../saa7146}/av7110/audio_data_types.rst           |    0
+ .../saa7146}/av7110/audio_function_calls.rst       |    0
+ .../media/{ =3D> deprecated/saa7146}/av7110/av7110.c |    0
+ .../media/{ =3D> deprecated/saa7146}/av7110/av7110.h |    2 +-
+ .../{ =3D> deprecated/saa7146}/av7110/av7110_av.c    |    2 +-
+ .../{ =3D> deprecated/saa7146}/av7110/av7110_av.h    |    0
+ .../{ =3D> deprecated/saa7146}/av7110/av7110_ca.c    |    0
+ .../{ =3D> deprecated/saa7146}/av7110/av7110_ca.h    |    0
+ .../{ =3D> deprecated/saa7146}/av7110/av7110_hw.c    |    0
+ .../{ =3D> deprecated/saa7146}/av7110/av7110_hw.h    |    0
+ .../{ =3D> deprecated/saa7146}/av7110/av7110_ipack.c |    0
+ .../{ =3D> deprecated/saa7146}/av7110/av7110_ipack.h |    0
+ .../{ =3D> deprecated/saa7146}/av7110/av7110_ir.c    |    0
+ .../{ =3D> deprecated/saa7146}/av7110/av7110_v4l.c   |    0
+ .../{ =3D> deprecated/saa7146}/av7110/budget-patch.c |    0
+ .../{ =3D> deprecated/saa7146}/av7110/dvb_filter.c   |    0
+ .../{ =3D> deprecated/saa7146}/av7110/dvb_filter.h   |    0
+ .../media/{ =3D> deprecated/saa7146}/av7110/sp8870.c |    0
+ .../media/{ =3D> deprecated/saa7146}/av7110/sp8870.h |    0
+ .../saa7146}/av7110/video-clear-buffer.rst         |    0
+ .../saa7146}/av7110/video-command.rst              |    0
+ .../saa7146}/av7110/video-continue.rst             |    0
+ .../saa7146}/av7110/video-fast-forward.rst         |    0
+ .../saa7146}/av7110/video-fclose.rst               |    0
+ .../saa7146}/av7110/video-fopen.rst                |    0
+ .../saa7146}/av7110/video-freeze.rst               |    0
+ .../saa7146}/av7110/video-fwrite.rst               |    0
+ .../saa7146}/av7110/video-get-capabilities.rst     |    0
+ .../saa7146}/av7110/video-get-event.rst            |    0
+ .../saa7146}/av7110/video-get-frame-count.rst      |    0
+ .../saa7146}/av7110/video-get-pts.rst              |    0
+ .../saa7146}/av7110/video-get-size.rst             |    0
+ .../saa7146}/av7110/video-get-status.rst           |    0
+ .../{ =3D> deprecated/saa7146}/av7110/video-play.rst |    0
+ .../saa7146}/av7110/video-select-source.rst        |    0
+ .../saa7146}/av7110/video-set-blank.rst            |    0
+ .../saa7146}/av7110/video-set-display-format.rst   |    0
+ .../saa7146}/av7110/video-set-format.rst           |    0
+ .../saa7146}/av7110/video-set-streamtype.rst       |    0
+ .../saa7146}/av7110/video-slowmotion.rst           |    0
+ .../saa7146}/av7110/video-stillpicture.rst         |    0
+ .../{ =3D> deprecated/saa7146}/av7110/video-stop.rst |    0
+ .../saa7146}/av7110/video-try-command.rst          |    0
+ .../{ =3D> deprecated/saa7146}/av7110/video.rst      |    0
+ .../saa7146}/av7110/video_function_calls.rst       |    0
+ .../saa7146}/av7110/video_types.rst                |    0
+ .../media/deprecated/saa7146/common}/Kconfig       |    0
+ .../media/deprecated/saa7146/common}/Makefile      |    0
+ .../media/deprecated/saa7146/common}/saa7146.h     |    0
+ .../deprecated/saa7146/common}/saa7146_core.c      |    2 +-
+ .../deprecated/saa7146/common}/saa7146_fops.c      |    2 +-
+ .../media/deprecated/saa7146/common}/saa7146_hlp.c |    2 +-
+ .../media/deprecated/saa7146/common}/saa7146_i2c.c |    2 +-
+ .../media/deprecated/saa7146/common}/saa7146_vbi.c |    2 +-
+ .../deprecated/saa7146/common}/saa7146_video.c     |    2 +-
+ .../media/deprecated/saa7146/common}/saa7146_vv.h  |    2 +-
+ .../media/deprecated/saa7146}/saa7146/Kconfig      |   15 +-
+ .../media/deprecated/saa7146}/saa7146/Makefile     |    0
+ .../staging/media/deprecated/saa7146/saa7146/TODO  |    7 +
+ .../deprecated/saa7146}/saa7146/hexium_gemini.c    |    2 +-
+ .../deprecated/saa7146}/saa7146/hexium_orion.c     |    2 +-
+ .../media/deprecated/saa7146}/saa7146/mxb.c        |    2 +-
+ .../media/deprecated/saa7146}/ttpci/Kconfig        |   17 +-
+ .../media/deprecated/saa7146}/ttpci/Makefile       |    0
+ .../staging/media/deprecated/saa7146/ttpci/TODO    |    7 +
+ .../media/deprecated/saa7146}/ttpci/budget-av.c    |    2 +-
+ .../media/deprecated/saa7146}/ttpci/budget-ci.c    |    0
+ .../media/deprecated/saa7146}/ttpci/budget-core.c  |    0
+ .../media/deprecated/saa7146}/ttpci/budget.c       |    0
+ .../media/deprecated/saa7146}/ttpci/budget.h       |    2 +-
+ .../media/{ =3D> deprecated}/stkwebcam/Kconfig       |    0
+ .../media/{ =3D> deprecated}/stkwebcam/Makefile      |    0
+ .../staging/media/{ =3D> deprecated}/stkwebcam/TODO  |    0
+ .../media/{ =3D> deprecated}/stkwebcam/stk-sensor.c  |    0
+ .../media/{ =3D> deprecated}/stkwebcam/stk-webcam.c  |    0
+ .../media/{ =3D> deprecated}/stkwebcam/stk-webcam.h  |    0
+ .../media/deprecated}/tm6000/Kconfig               |    5 +-
+ .../media/deprecated}/tm6000/Makefile              |    0
+ drivers/staging/media/deprecated/tm6000/TODO       |    7 +
+ .../media/deprecated}/tm6000/tm6000-alsa.c         |    0
+ .../media/deprecated}/tm6000/tm6000-cards.c        |    0
+ .../media/deprecated}/tm6000/tm6000-core.c         |    0
+ .../media/deprecated}/tm6000/tm6000-dvb.c          |    0
+ .../media/deprecated}/tm6000/tm6000-i2c.c          |    0
+ .../media/deprecated}/tm6000/tm6000-input.c        |    0
+ .../media/deprecated}/tm6000/tm6000-regs.h         |    0
+ .../media/deprecated}/tm6000/tm6000-stds.c         |    0
+ .../media/deprecated}/tm6000/tm6000-usb-isoc.h     |    0
+ .../media/deprecated}/tm6000/tm6000-video.c        |    2 -
+ .../media/deprecated}/tm6000/tm6000.h              |    0
+ .../staging/media/deprecated/vpfe_capture/Kconfig  |   58 +
+ .../staging/media/deprecated/vpfe_capture/Makefile |    4 +
+ drivers/staging/media/deprecated/vpfe_capture/TODO |    7 +
+ .../deprecated/vpfe_capture}/ccdc_hw_device.h      |    0
+ .../media/deprecated/vpfe_capture}/dm355_ccdc.c    |    2 +-
+ .../media/deprecated/vpfe_capture}/dm355_ccdc.h    |    0
+ .../deprecated/vpfe_capture}/dm355_ccdc_regs.h     |    0
+ .../media/deprecated/vpfe_capture}/dm644x_ccdc.c   |    2 +-
+ .../media/deprecated/vpfe_capture}/dm644x_ccdc.h   |    0
+ .../deprecated/vpfe_capture}/dm644x_ccdc_regs.h    |    0
+ .../media/deprecated/vpfe_capture}/isif.c          |    2 +-
+ .../staging/media/deprecated/vpfe_capture}/isif.h  |    0
+ .../media/deprecated/vpfe_capture}/isif_regs.h     |    0
+ .../media/deprecated/vpfe_capture}/vpfe_capture.c  |    0
+ .../media/deprecated}/zr364xx/Kconfig              |    7 +-
+ .../media/deprecated}/zr364xx/Makefile             |    0
+ drivers/staging/media/deprecated/zr364xx/TODO      |    7 +
+ .../media/deprecated}/zr364xx/zr364xx.c            |    0
+ drivers/staging/media/hantro/TODO                  |    2 -
+ drivers/staging/media/imx/imx-media-utils.c        |    8 +-
+ drivers/staging/media/imx/imx7-media-csi.c         |    8 +-
+ .../staging/media/ipu3/include/uapi/intel-ipu3.h   |    7 +-
+ drivers/staging/media/ipu3/ipu3-v4l2.c             |   37 +-
+ drivers/staging/media/meson/vdec/vdec.c            |    2 +
+ drivers/staging/media/meson/vdec/vdec_hevc.c       |    6 +-
+ drivers/staging/media/omap4iss/iss.c               |    4 +-
+ drivers/staging/media/omap4iss/iss_video.c         |   11 +-
+ drivers/staging/media/omap4iss/iss_video.h         |   11 +-
+ drivers/staging/media/sunxi/cedrus/Kconfig         |    1 +
+ drivers/staging/media/sunxi/cedrus/cedrus.c        |    4 +-
+ drivers/staging/media/sunxi/cedrus/cedrus.h        |   24 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_dec.c    |    4 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_h264.c   |   16 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_h265.c   |   23 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_mpeg2.c  |   28 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_vp8.c    |   43 +-
+ drivers/staging/media/tegra-video/tegra210.c       |    6 +-
+ drivers/staging/media/zoran/TODO                   |   19 -
+ drivers/staging/media/zoran/zoran_device.h         |   60 -
+ include/media/davinci/vpbe_display.h               |    6 +-
+ include/media/i2c/ir-kbd-i2c.h                     |    1 +
+ include/media/media-device.h                       |   15 -
+ include/media/media-entity.h                       |  169 +-
+ include/media/v4l2-common.h                        |    3 +-
+ include/media/v4l2-ctrls.h                         |  148 +-
+ include/media/v4l2-dev.h                           |  102 ++
+ include/media/v4l2-fwnode.h                        |    4 -
+ include/media/v4l2-mem2mem.h                       |   12 +-
+ include/media/v4l2-subdev.h                        |   12 +-
+ include/media/videobuf2-core.h                     |   16 +-
+ include/media/videobuf2-dvb.h                      |    2 +-
+ include/media/videobuf2-v4l2.h                     |   16 -
+ include/uapi/linux/cec-funcs.h                     |   14 +
+ include/uapi/linux/cec.h                           |    2 +
+ include/uapi/linux/dw100.h                         |   14 +
+ include/uapi/linux/rkisp1-config.h                 |   77 +-
+ include/uapi/linux/v4l2-controls.h                 |    8 +-
+ include/uapi/linux/videodev2.h                     |    7 +-
+ 489 files changed, 12756 insertions(+), 5363 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/media/exynos5-gsc.txt
+ delete mode 100644 Documentation/devicetree/bindings/media/i2c/dongwoon,dw=
+9714.txt
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/dongwoon,dw=
+9714.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-r=
+dma.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-r=
+sz.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-w=
+rot.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/nxp,dw100.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/samsung,exynos5=
+250-gsc.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mediatek=
+,ccorr.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mediatek=
+,wdma.yaml
+ create mode 100644 Documentation/userspace-api/media/drivers/dw100.rst
+ delete mode 100644 Documentation/userspace-api/media/v4l/async.rst
+ rename drivers/{staging/media =3D> media/pci}/zoran/Kconfig (100%)
+ rename drivers/{staging/media =3D> media/pci}/zoran/Makefile (100%)
+ rename drivers/{staging/media =3D> media/pci}/zoran/videocodec.c (97%)
+ rename drivers/{staging/media =3D> media/pci}/zoran/videocodec.h (65%)
+ rename drivers/{staging/media =3D> media/pci}/zoran/zoran.h (90%)
+ rename drivers/{staging/media =3D> media/pci}/zoran/zoran_card.c (97%)
+ rename drivers/{staging/media =3D> media/pci}/zoran/zoran_card.h (72%)
+ rename drivers/{staging/media =3D> media/pci}/zoran/zoran_device.c (96%)
+ create mode 100644 drivers/media/pci/zoran/zoran_device.h
+ rename drivers/{staging/media =3D> media/pci}/zoran/zoran_driver.c (94%)
+ rename drivers/{staging/media =3D> media/pci}/zoran/zr36016.c (73%)
+ rename drivers/{staging/media =3D> media/pci}/zoran/zr36016.h (100%)
+ rename drivers/{staging/media =3D> media/pci}/zoran/zr36050.c (82%)
+ rename drivers/{staging/media =3D> media/pci}/zoran/zr36050.h (100%)
+ rename drivers/{staging/media =3D> media/pci}/zoran/zr36057.h (50%)
+ rename drivers/{staging/media =3D> media/pci}/zoran/zr36060.c (99%)
+ rename drivers/{staging/media =3D> media/pci}/zoran/zr36060.h (72%)
+ create mode 100644 drivers/media/platform/mediatek/mdp3/Kconfig
+ create mode 100644 drivers/media/platform/mediatek/mdp3/Makefile
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_ccorr.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_rdma.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_rsz.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_wdma.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_wrot.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.c
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.c
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.h
+ create mode 100644 drivers/media/platform/nxp/dw100/Kconfig
+ create mode 100644 drivers/media/platform/nxp/dw100/Makefile
+ create mode 100644 drivers/media/platform/nxp/dw100/dw100.c
+ create mode 100644 drivers/media/platform/nxp/dw100/dw100_regs.h
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/Kcon=
+fig (91%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/Make=
+file (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro.h (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_drv.c (99%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_g1.c (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_g1_h264_dec.c (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_g1_mpeg2_dec.c (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_g1_regs.h (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_g1_vp8_dec.c (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_g2.c (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_g2_hevc_dec.c (99%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_g2_regs.h (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_g2_vp9_dec.c (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_h1_jpeg_enc.c (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_h1_regs.h (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_h264.c (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_hevc.c (97%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_hw.h (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_jpeg.c (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_jpeg.h (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_mpeg2.c (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_postproc.c (97%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_v4l2.c (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_v4l2.h (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_vp8.c (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_vp9.c (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/hant=
+ro_vp9.h (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/imx8=
+m_vpu_hw.c (93%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/rock=
+chip_vpu2_hw_h264_dec.c (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/rock=
+chip_vpu2_hw_jpeg_enc.c (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/rock=
+chip_vpu2_hw_mpeg2_dec.c (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/rock=
+chip_vpu2_hw_vp8_dec.c (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/rock=
+chip_vpu2_regs.h (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/rock=
+chip_vpu_hw.c (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/sama=
+5d4_vdec_hw.c (100%)
+ rename drivers/{staging/media/hantro =3D> media/platform/verisilicon}/sunx=
+i_vpu_hw.c (100%)
+ delete mode 100644 drivers/staging/media/atomisp/pci/atomisp_file.c
+ delete mode 100644 drivers/staging/media/atomisp/pci/atomisp_file.h
+ delete mode 100644 drivers/staging/media/av7110/TODO
+ rename drivers/{media/usb =3D> staging/media/deprecated}/cpia2/Kconfig (66=
+%)
+ rename drivers/{media/usb =3D> staging/media/deprecated}/cpia2/Makefile (1=
+00%)
+ create mode 100644 drivers/staging/media/deprecated/cpia2/TODO
+ rename drivers/{media/usb =3D> staging/media/deprecated}/cpia2/cpia2.h (10=
+0%)
+ rename drivers/{media/usb =3D> staging/media/deprecated}/cpia2/cpia2_core.=
+c (100%)
+ rename drivers/{media/usb =3D> staging/media/deprecated}/cpia2/cpia2_regis=
+ters.h (100%)
+ rename drivers/{media/usb =3D> staging/media/deprecated}/cpia2/cpia2_usb.c=
+ (100%)
+ rename drivers/{media/usb =3D> staging/media/deprecated}/cpia2/cpia2_v4l.c=
+ (100%)
+ create mode 100644 drivers/staging/media/deprecated/fsl-viu/Kconfig
+ create mode 100644 drivers/staging/media/deprecated/fsl-viu/Makefile
+ create mode 100644 drivers/staging/media/deprecated/fsl-viu/TODO
+ rename drivers/{media/platform/nxp =3D> staging/media/deprecated/fsl-viu}/=
+fsl-viu.c (100%)
+ rename drivers/{media/pci =3D> staging/media/deprecated}/meye/Kconfig (73%)
+ rename drivers/{media/pci =3D> staging/media/deprecated}/meye/Makefile (10=
+0%)
+ create mode 100644 drivers/staging/media/deprecated/meye/TODO
+ rename drivers/{media/pci =3D> staging/media/deprecated}/meye/meye.c (100%)
+ rename drivers/{media/pci =3D> staging/media/deprecated}/meye/meye.h (100%)
+ create mode 100644 drivers/staging/media/deprecated/saa7146/Kconfig
+ create mode 100644 drivers/staging/media/deprecated/saa7146/Makefile
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/Kconfig (82=
+%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/Makefile (7=
+8%)
+ create mode 100644 drivers/staging/media/deprecated/saa7146/av7110/TODO
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/audio-bilin=
+gual-channel-select.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/audio-chann=
+el-select.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/audio-clear=
+-buffer.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/audio-conti=
+nue.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/audio-fclos=
+e.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/audio-fopen=
+.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/audio-fwrit=
+e.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/audio-get-c=
+apabilities.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/audio-get-s=
+tatus.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/audio-pause=
+.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/audio-play.=
+rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/audio-selec=
+t-source.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/audio-set-a=
+v-sync.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/audio-set-b=
+ypass-mode.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/audio-set-i=
+d.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/audio-set-m=
+ixer.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/audio-set-m=
+ute.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/audio-set-s=
+treamtype.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/audio-stop.=
+rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/audio.rst (=
+100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/audio_data_=
+types.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/audio_funct=
+ion_calls.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/av7110.c (1=
+00%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/av7110.h (9=
+9%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/av7110_av.c=
+ (99%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/av7110_av.h=
+ (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/av7110_ca.c=
+ (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/av7110_ca.h=
+ (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/av7110_hw.c=
+ (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/av7110_hw.h=
+ (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/av7110_ipac=
+k.c (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/av7110_ipac=
+k.h (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/av7110_ir.c=
+ (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/av7110_v4l.=
+c (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/budget-patc=
+h.c (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/dvb_filter.=
+c (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/dvb_filter.=
+h (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/sp8870.c (1=
+00%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/sp8870.h (1=
+00%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-clear=
+-buffer.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-comma=
+nd.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-conti=
+nue.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-fast-=
+forward.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-fclos=
+e.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-fopen=
+.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-freez=
+e.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-fwrit=
+e.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-get-c=
+apabilities.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-get-e=
+vent.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-get-f=
+rame-count.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-get-p=
+ts.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-get-s=
+ize.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-get-s=
+tatus.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-play.=
+rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-selec=
+t-source.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-set-b=
+lank.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-set-d=
+isplay-format.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-set-f=
+ormat.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-set-s=
+treamtype.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-slowm=
+otion.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-still=
+picture.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-stop.=
+rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video-try-c=
+ommand.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video.rst (=
+100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video_funct=
+ion_calls.rst (100%)
+ rename drivers/staging/media/{ =3D> deprecated/saa7146}/av7110/video_types=
+.rst (100%)
+ rename drivers/{media/common/saa7146 =3D> staging/media/deprecated/saa7146=
+/common}/Kconfig (100%)
+ rename drivers/{media/common/saa7146 =3D> staging/media/deprecated/saa7146=
+/common}/Makefile (100%)
+ rename {include/media/drv-intf =3D> drivers/staging/media/deprecated/saa71=
+46/common}/saa7146.h (100%)
+ rename drivers/{media/common/saa7146 =3D> staging/media/deprecated/saa7146=
+/common}/saa7146_core.c (99%)
+ rename drivers/{media/common/saa7146 =3D> staging/media/deprecated/saa7146=
+/common}/saa7146_fops.c (99%)
+ rename drivers/{media/common/saa7146 =3D> staging/media/deprecated/saa7146=
+/common}/saa7146_hlp.c (99%)
+ rename drivers/{media/common/saa7146 =3D> staging/media/deprecated/saa7146=
+/common}/saa7146_i2c.c (99%)
+ rename drivers/{media/common/saa7146 =3D> staging/media/deprecated/saa7146=
+/common}/saa7146_vbi.c (99%)
+ rename drivers/{media/common/saa7146 =3D> staging/media/deprecated/saa7146=
+/common}/saa7146_video.c (99%)
+ rename {include/media/drv-intf =3D> drivers/staging/media/deprecated/saa71=
+46/common}/saa7146_vv.h (99%)
+ rename drivers/{media/pci =3D> staging/media/deprecated/saa7146}/saa7146/K=
+config (67%)
+ rename drivers/{media/pci =3D> staging/media/deprecated/saa7146}/saa7146/M=
+akefile (100%)
+ create mode 100644 drivers/staging/media/deprecated/saa7146/saa7146/TODO
+ rename drivers/{media/pci =3D> staging/media/deprecated/saa7146}/saa7146/h=
+exium_gemini.c (99%)
+ rename drivers/{media/pci =3D> staging/media/deprecated/saa7146}/saa7146/h=
+exium_orion.c (99%)
+ rename drivers/{media/pci =3D> staging/media/deprecated/saa7146}/saa7146/m=
+xb.c (99%)
+ rename drivers/{media/pci =3D> staging/media/deprecated/saa7146}/ttpci/Kco=
+nfig (83%)
+ rename drivers/{media/pci =3D> staging/media/deprecated/saa7146}/ttpci/Mak=
+efile (100%)
+ create mode 100644 drivers/staging/media/deprecated/saa7146/ttpci/TODO
+ rename drivers/{media/pci =3D> staging/media/deprecated/saa7146}/ttpci/bud=
+get-av.c (99%)
+ rename drivers/{media/pci =3D> staging/media/deprecated/saa7146}/ttpci/bud=
+get-ci.c (100%)
+ rename drivers/{media/pci =3D> staging/media/deprecated/saa7146}/ttpci/bud=
+get-core.c (100%)
+ rename drivers/{media/pci =3D> staging/media/deprecated/saa7146}/ttpci/bud=
+get.c (100%)
+ rename drivers/{media/pci =3D> staging/media/deprecated/saa7146}/ttpci/bud=
+get.h (98%)
+ rename drivers/staging/media/{ =3D> deprecated}/stkwebcam/Kconfig (100%)
+ rename drivers/staging/media/{ =3D> deprecated}/stkwebcam/Makefile (100%)
+ rename drivers/staging/media/{ =3D> deprecated}/stkwebcam/TODO (100%)
+ rename drivers/staging/media/{ =3D> deprecated}/stkwebcam/stk-sensor.c (10=
+0%)
+ rename drivers/staging/media/{ =3D> deprecated}/stkwebcam/stk-webcam.c (10=
+0%)
+ rename drivers/staging/media/{ =3D> deprecated}/stkwebcam/stk-webcam.h (10=
+0%)
+ rename drivers/{media/usb =3D> staging/media/deprecated}/tm6000/Kconfig (8=
+4%)
+ rename drivers/{media/usb =3D> staging/media/deprecated}/tm6000/Makefile (=
+100%)
+ create mode 100644 drivers/staging/media/deprecated/tm6000/TODO
+ rename drivers/{media/usb =3D> staging/media/deprecated}/tm6000/tm6000-als=
+a.c (100%)
+ rename drivers/{media/usb =3D> staging/media/deprecated}/tm6000/tm6000-car=
+ds.c (100%)
+ rename drivers/{media/usb =3D> staging/media/deprecated}/tm6000/tm6000-cor=
+e.c (100%)
+ rename drivers/{media/usb =3D> staging/media/deprecated}/tm6000/tm6000-dvb=
+.c (100%)
+ rename drivers/{media/usb =3D> staging/media/deprecated}/tm6000/tm6000-i2c=
+.c (100%)
+ rename drivers/{media/usb =3D> staging/media/deprecated}/tm6000/tm6000-inp=
+ut.c (100%)
+ rename drivers/{media/usb =3D> staging/media/deprecated}/tm6000/tm6000-reg=
+s.h (100%)
+ rename drivers/{media/usb =3D> staging/media/deprecated}/tm6000/tm6000-std=
+s.c (100%)
+ rename drivers/{media/usb =3D> staging/media/deprecated}/tm6000/tm6000-usb=
+-isoc.h (100%)
+ rename drivers/{media/usb =3D> staging/media/deprecated}/tm6000/tm6000-vid=
+eo.c (99%)
+ rename drivers/{media/usb =3D> staging/media/deprecated}/tm6000/tm6000.h (=
+100%)
+ create mode 100644 drivers/staging/media/deprecated/vpfe_capture/Kconfig
+ create mode 100644 drivers/staging/media/deprecated/vpfe_capture/Makefile
+ create mode 100644 drivers/staging/media/deprecated/vpfe_capture/TODO
+ rename drivers/{media/platform/ti/davinci =3D> staging/media/deprecated/vp=
+fe_capture}/ccdc_hw_device.h (100%)
+ rename drivers/{media/platform/ti/davinci =3D> staging/media/deprecated/vp=
+fe_capture}/dm355_ccdc.c (99%)
+ rename {include/media/davinci =3D> drivers/staging/media/deprecated/vpfe_c=
+apture}/dm355_ccdc.h (100%)
+ rename drivers/{media/platform/ti/davinci =3D> staging/media/deprecated/vp=
+fe_capture}/dm355_ccdc_regs.h (100%)
+ rename drivers/{media/platform/ti/davinci =3D> staging/media/deprecated/vp=
+fe_capture}/dm644x_ccdc.c (99%)
+ rename {include/media/davinci =3D> drivers/staging/media/deprecated/vpfe_c=
+apture}/dm644x_ccdc.h (100%)
+ rename drivers/{media/platform/ti/davinci =3D> staging/media/deprecated/vp=
+fe_capture}/dm644x_ccdc_regs.h (100%)
+ rename drivers/{media/platform/ti/davinci =3D> staging/media/deprecated/vp=
+fe_capture}/isif.c (99%)
+ rename {include/media/davinci =3D> drivers/staging/media/deprecated/vpfe_c=
+apture}/isif.h (100%)
+ rename drivers/{media/platform/ti/davinci =3D> staging/media/deprecated/vp=
+fe_capture}/isif_regs.h (100%)
+ rename drivers/{media/platform/ti/davinci =3D> staging/media/deprecated/vp=
+fe_capture}/vpfe_capture.c (100%)
+ rename drivers/{media/usb =3D> staging/media/deprecated}/zr364xx/Kconfig (=
+65%)
+ rename drivers/{media/usb =3D> staging/media/deprecated}/zr364xx/Makefile =
+(100%)
+ create mode 100644 drivers/staging/media/deprecated/zr364xx/TODO
+ rename drivers/{media/usb =3D> staging/media/deprecated}/zr364xx/zr364xx.c=
+ (100%)
+ delete mode 100644 drivers/staging/media/hantro/TODO
+ delete mode 100644 drivers/staging/media/zoran/TODO
+ delete mode 100644 drivers/staging/media/zoran/zoran_device.h
+ create mode 100644 include/uapi/linux/dw100.h
 
