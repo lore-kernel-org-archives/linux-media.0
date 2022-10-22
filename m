@@ -2,35 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 874E4C04A95
-	for <linux-media@archiver.kernel.org>; Sat, 22 Oct 2022 10:13:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D4F6C04A95
+	for <linux-media@archiver.kernel.org>; Sat, 22 Oct 2022 10:16:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbiJVKNo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 22 Oct 2022 06:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
+        id S230294AbiJVKQ4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 22 Oct 2022 06:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiJVKNW (ORCPT
+        with ESMTP id S230160AbiJVKQ2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 22 Oct 2022 06:13:22 -0400
+        Sat, 22 Oct 2022 06:16:28 -0400
 Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [IPv6:2001:4b98:dc4:8::240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1515B2D4534
-        for <linux-media@vger.kernel.org>; Sat, 22 Oct 2022 02:30:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DCA2E982B
+        for <linux-media@vger.kernel.org>; Sat, 22 Oct 2022 02:33:16 -0700 (PDT)
 Received: from relay10.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::230])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 760E9C906B
-        for <linux-media@vger.kernel.org>; Sat, 22 Oct 2022 09:21:24 +0000 (UTC)
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 913A1CCC36
+        for <linux-media@vger.kernel.org>; Sat, 22 Oct 2022 09:21:56 +0000 (UTC)
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id D782E240010;
-        Sat, 22 Oct 2022 09:20:42 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 2D68A24000A;
+        Sat, 22 Oct 2022 09:20:34 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@iki.fi>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH v2 09/10] media: ar0521: Rework startup sequence
-Date:   Sat, 22 Oct 2022 11:20:14 +0200
-Message-Id: <20221022092015.208592-10-jacopo@jmondi.org>
+Cc:     Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org
+Subject: [PATCH v2 03/10] media: ar0521: Set maximum resolution to 2592x1944
+Date:   Sat, 22 Oct 2022 11:20:08 +0200
+Message-Id: <20221022092015.208592-4-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221022092015.208592-1-jacopo@jmondi.org>
 References: <20221022092015.208592-1-jacopo@jmondi.org>
@@ -40,115 +39,62 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The ar0521_write_mode() function explicitly programs the exposure time
-register and the test pattern register, which are now setup by the call
-to __v4l2_ctrl_handler_setup() in ar0521_set_stream().
-
-Removing those register writes from ar0521_write_mode() reduces the
-function to two operations: geometry configuration and pll
-configuration.
-
-Move those operations in the ar0521_set_stream() caller and remove
-ar0521_write_mode(). However maintain the ar0521_calc_pll() function
-separated as it is used during pad format configuration to update the
-PIXEL_RATE control value.
+Change the largest visibile resolution to 2592x1944, which corresponds
+to the active pixel array area size. Take into account the horizontal
+and vertical limits when programming the visible sizes to skip
+dummy/inactive pixels.
 
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
-Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 ---
- drivers/media/i2c/ar0521.c | 50 ++++++++++++--------------------------
- 1 file changed, 16 insertions(+), 34 deletions(-)
+ drivers/media/i2c/ar0521.c | 23 +++++++++++++++++------
+ 1 file changed, 17 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
-index cf2d2746657e..5560dc3d6605 100644
+index ba169f0218a9..dfa4de0f4996 100644
 --- a/drivers/media/i2c/ar0521.c
 +++ b/drivers/media/i2c/ar0521.c
-@@ -278,7 +278,7 @@ static u32 calc_pll(struct ar0521_dev *sensor, u32 freq, u16 *pre_ptr, u16 *mult
- 	return pll;
- }
+@@ -26,10 +26,17 @@
+ #define AR0521_PIXEL_CLOCK_MIN	 (168 * 1000 * 1000)
+ #define AR0521_PIXEL_CLOCK_MAX	 (414 * 1000 * 1000)
  
--static void ar0521_calc_mode(struct ar0521_dev *sensor)
-+static void ar0521_calc_pll(struct ar0521_dev *sensor)
- {
- 	unsigned int pixel_clock;
- 	u16 pre, mult;
-@@ -342,7 +342,7 @@ static void ar0521_calc_mode(struct ar0521_dev *sensor)
- 	sensor->pll.mult = sensor->pll.mult2 = mult;
- }
- 
--static int ar0521_write_mode(struct ar0521_dev *sensor)
-+static int ar0521_pll_config(struct ar0521_dev *sensor)
- {
- 	__be16 pll_regs[] = {
- 		be(AR0521_REG_VT_PIX_CLK_DIV),
-@@ -353,36 +353,9 @@ static int ar0521_write_mode(struct ar0521_dev *sensor)
- 		/* 0x308 */ be(sensor->pll.vt_pix * 2), /* op_pix_clk_div = 2 * vt_pix_clk_div */
- 		/* 0x30A */ be(1)  /* op_sys_clk_div */
- 	};
--	int ret;
--
--	/* Stop streaming for just a moment */
--	ret = ar0521_write_reg(sensor, AR0521_REG_RESET,
--			       AR0521_REG_RESET_DEFAULTS);
--	if (ret)
--		return ret;
--
--	ret = ar0521_set_geometry(sensor);
--	if (ret)
--		return ret;
--
--	ret = ar0521_write_regs(sensor, pll_regs, ARRAY_SIZE(pll_regs));
--	if (ret)
--		return ret;
--
--	ret = ar0521_write_reg(sensor, AR0521_REG_COARSE_INTEGRATION_TIME,
--			       sensor->ctrls.exposure->val);
--	if (ret)
--		return ret;
--
--	ret = ar0521_write_reg(sensor, AR0521_REG_RESET,
--			       AR0521_REG_RESET_DEFAULTS |
--			       AR0521_REG_RESET_STREAM);
--	if (ret)
--		return ret;
- 
--	ret = ar0521_write_reg(sensor, AR0521_REG_TEST_PATTERN_MODE,
--			       sensor->ctrls.test_pattern->val);
--	return ret;
-+	ar0521_calc_pll(sensor);
-+	return ar0521_write_regs(sensor, pll_regs, ARRAY_SIZE(pll_regs));
- }
- 
- static int ar0521_set_stream(struct ar0521_dev *sensor, bool on)
-@@ -394,8 +367,17 @@ static int ar0521_set_stream(struct ar0521_dev *sensor, bool on)
- 		if (ret < 0)
- 			return ret;
- 
--		ar0521_calc_mode(sensor);
--		ret = ar0521_write_mode(sensor);
-+		/* Stop streaming for just a moment */
-+		ret = ar0521_write_reg(sensor, AR0521_REG_RESET,
-+				       AR0521_REG_RESET_DEFAULTS);
-+		if (ret)
-+			return ret;
++#define AR0521_NATIVE_WIDTH		2604u
++#define AR0521_NATIVE_HEIGHT		1964u
++#define AR0521_MIN_X_ADDR_START		0u
++#define AR0521_MIN_Y_ADDR_START		0u
++#define AR0521_MAX_X_ADDR_END		2603u
++#define AR0521_MAX_Y_ADDR_END		1955u
 +
-+		ret = ar0521_set_geometry(sensor);
-+		if (ret)
-+			return ret;
+ #define AR0521_WIDTH_MIN	       8u
+-#define AR0521_WIDTH_MAX	    2608u
++#define AR0521_WIDTH_MAX	    2592u
+ #define AR0521_HEIGHT_MIN	       8u
+-#define AR0521_HEIGHT_MAX	    1958u
++#define AR0521_HEIGHT_MAX	    1944u
+ 
+ #define AR0521_WIDTH_BLANKING_MIN     572u
+ #define AR0521_HEIGHT_BLANKING_MIN     38u /* must be even */
+@@ -176,13 +183,17 @@ static int ar0521_write_reg(struct ar0521_dev *sensor, u16 reg, u16 val)
+ 
+ static int ar0521_set_geometry(struct ar0521_dev *sensor)
+ {
++	/* Center the image in the visible output window. */
++	u16 x = clamp((AR0521_WIDTH_MAX - sensor->fmt.width) / 2,
++		       AR0521_MIN_X_ADDR_START, AR0521_MAX_X_ADDR_END);
++	u16 y = clamp(((AR0521_HEIGHT_MAX - sensor->fmt.height) / 2) & ~1,
++		       AR0521_MIN_Y_ADDR_START, AR0521_MAX_Y_ADDR_END);
 +
-+		ret = ar0521_pll_config(sensor);
- 		if (ret)
- 			goto err;
- 
-@@ -501,7 +483,7 @@ static int ar0521_set_fmt(struct v4l2_subdev *sd,
- 	}
- 
- 	sensor->fmt = format->format;
--	ar0521_calc_mode(sensor);
-+	ar0521_calc_pll(sensor);
- 
- 	/*
- 	 * Update the exposure and blankings limits. Blankings are also reset
+ 	/* All dimensions are unsigned 12-bit integers */
+-	u16 x = (AR0521_WIDTH_MAX - sensor->fmt.width) / 2;
+-	u16 y = ((AR0521_HEIGHT_MAX - sensor->fmt.height) / 2) & ~1;
+ 	__be16 regs[] = {
+ 		be(AR0521_REG_FRAME_LENGTH_LINES),
+-		be(sensor->total_height),
+-		be(sensor->total_width),
++		be(sensor->fmt.height + sensor->ctrls.vblank->val),
++		be(sensor->fmt.width + sensor->ctrls.hblank->val),
+ 		be(x),
+ 		be(y),
+ 		be(x + sensor->fmt.width - 1),
 -- 
 2.37.3
 
