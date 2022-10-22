@@ -2,424 +2,256 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD0BDC433FE
-	for <linux-media@archiver.kernel.org>; Sat, 22 Oct 2022 00:07:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25C61C38A2D
+	for <linux-media@archiver.kernel.org>; Sat, 22 Oct 2022 00:07:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiJVAG7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 21 Oct 2022 20:06:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
+        id S229956AbiJVAHC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 21 Oct 2022 20:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbiJVAGn (ORCPT
+        with ESMTP id S230171AbiJVAGn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 21 Oct 2022 20:06:43 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A39189513;
-        Fri, 21 Oct 2022 17:05:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A17297F21;
+        Fri, 21 Oct 2022 17:05:54 -0700 (PDT)
 Received: from localhost (89-26-75-29.goll.dyn.salzburg-online.at [89.26.75.29])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sebastianfricke)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 588C1660252D;
-        Sat, 22 Oct 2022 01:05:19 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BD79A6602379;
+        Sat, 22 Oct 2022 01:05:09 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666397119;
-        bh=qLSnXMNAQnDylElqwrYPQ1/9hp7S8xAIH+BFUxYcYrY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Gt12uo1Etlh0kzWprAMaeWhV6BcAkZMS3C43QmhII23fXCXSybA8BCiCh9pvNIRQa
-         3/qGP7pq88noU+qe+XgE6jNwAYsMMWaNFXPx6teyBZ9h8LcggxqcS4Z6BPLaMUqGUR
-         u00/20/uGXovrUlmR+Osvuzi3aOPljJZbonStvb4HZ677Jx3471aIk7/Gi/WIlq8ZC
-         uRkGeuivvh8dQEyBNwvCDt+W8N66PUnCuDysanHYsreqAyY2qFpU70viGnVDS5maZF
-         0GqpLdJh0vKyHZPZIaujuI2hngW1JE0A/YCJcCzVWa5d2OC3/6wFp2pXhCk06sNE58
-         S3W+A8n6LO1ZA==
+        s=mail; t=1666397109;
+        bh=a3iEJRRx2i0AYVW3m+KefcvY47eYOOMzFjASGdT7sJU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hLPZHRnVBtpxCNvQUcdl8lfUUcw1i2Jy2LA4EwDkAYyrYVnuI9N0+6NT4p+lQL58Z
+         3ex17ZYt6O0MtQi0jcxvUwqjPPwBKtIjuwicdjKMduqTYzzgqm5tcM8n4nrVuTAWmx
+         0lv6HjuuygLw9heI/zwBYg1LyFo0VN8egwMH8dR0bb8AZL0rwR1Mu+EbGGiuhHEcbT
+         SFTEhX5riFHDiYMQXNok/g7ljvJ8JzH24/YJRXKLem30+L4hQoxFhdgmRqVmq6CvQG
+         JLUp7vMfjhB39ga25X33Vh5qevWkvovyuKKyZhANG4QAsvAM5xUs1tONntUY0DgEec
+         qJTR4g8CHnTGQ==
 From:   Sebastian Fricke <sebastian.fricke@collabora.com>
 To:     linux-media@vger.kernel.org
 Cc:     kernel@collabora.com, nas.chung@chipsnmedia.com,
         hverkuil@xs4all.nl, ezequiel@vanguardiasur.com.ar,
         linux-kernel@vger.kernel.org, nicolas.dufresne@collabora.com,
         p.zabel@pengutronix.de, dafna@fastmail.com
-Subject: [PATCH v10 3/7] media: chips-media: wave5: Add the vdi layer
-Date:   Sat, 22 Oct 2022 02:05:02 +0200
-Message-Id: <20221022000506.221933-4-sebastian.fricke@collabora.com>
+Subject: [PATCH v10 0/7] Wave5 codec driver
+Date:   Sat, 22 Oct 2022 02:04:59 +0200
+Message-Id: <20221022000506.221933-1-sebastian.fricke@collabora.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221022000506.221933-1-sebastian.fricke@collabora.com>
-References: <20221022000506.221933-1-sebastian.fricke@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+The Wave5 codec driver is a stateful encoder/decoder.
+It is found on the J721S2 SoC, JH7100 SoC, ssd202d SoC. Etc.
+But current test report is based on J721S2 SoC and pre-silicon FPGA.
 
-Add the vdi part of the wave5 codec driver. The wave5-vdi.h header
-defines common helper functions such as writing/reading register and
-handling endianness.
+The driver currently supports V4L2_PIX_FMT_HEVC, V4L2_PIX_FMT_H264.
 
-Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
-Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
----
- .../platform/chips-media/wave5/wave5-vdi.c    | 261 ++++++++++++++++++
- .../platform/chips-media/wave5/wave5-vdi.h    |  67 +++++
- .../platform/chips-media/wave5/wave5-vpuapi.h |   2 +-
- 3 files changed, 329 insertions(+), 1 deletion(-)
+This driver has so far been tested on J721S2 EVM board and pre-silicon
+FPGA.
+
+Testing on J721S2 EVM board shows it working fine both decoder and
+encoder.
+The driver is successfully working with gstreamer v4l2 good-plugin
+without any modification.
+
+# v4l2-compliance -d0
+Total for wave5-dec device /dev/video0: 44, Succeeded: 44, Failed: 0, Warnings: 0
+
+# v4l2-compliance -d1
+Buffer ioctls:
+		fail: ../../../v4l-utils-1.18.1/utils/v4l2-compliance/v4l2-test-buffers.cpp(610): q.reqbufs(node, 1)
+	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: FAIL
+		fail: ../../../v4l-utils-1.18.1/utils/v4l2-compliance/v4l2-test-buffers.cpp(753): q.reqbufs(node, 2)
+	test VIDIOC_EXPBUF: FAIL
+	test Requests: OK (Not Supported)
+
+Total for wave5-enc device /dev/video1: 44, Succeeded: 42, Failed: 2, Warnings: 2
+
+changes since v9:
+
+* Move from staging to the media directory
+  * Move coda driver to sub-directory
+
+* Fixes:
+  * Use platform_get_irq instead of platform_get_resource to fetch the IRQ
+
+* General cleanups:
+  * Add missing error messages to error conditions
+  * Improve messages/variable names/comments, align parameter names across the driver
+  * Use macros instead of magic numbers in multiple occassions
+  * Reduce code duplication in multiple places
+  * Fix whitespace, newline and tab alignment issues
+  * Remove unused struct fields & commented out code
+  * Convert signed integers to unsigned if signed is not necessary
+  * Convert int/unsigned int to s32/u32, when the variable is assigned to the
+    return of a register read or provided as a parameter for a register write
+    (and vice versa)
+  * Fix incorrect bitwise operators where logical operators are appropriate
+  * Multiple smaller changes
+
+* Generalization:
+  * Add new helper file providing generalized routines for vpu-dec & vpu-enc
+  * Generalize luma & chroma table size calculation and stride calculation
+
+* Resource cleanup and error handling:
+  * Add error handling to all calls with ignored return codes
+  * Handle DMA resource cleanup properly
+  * Fix insufficient instance cleanup while opening dec/enc
+
+changes since v8:
+
+* add 'wave5' to DEV_NAME
+* update to support Multi-stream
+* update to support loop test/dynamic resolution change
+* remove unnecessary memset, g_volatile, old version option
+
+changes since v7:
+
+* update v4l2-compliance test report
+* fix build error on linux-kernel 5.18.0-rc4
+
+changes since v6:
+
+* update TODO file
+* get sram info from device tree
+
+changes since v5:
+
+* support NV12/NV21 pixelformat for encoder and decoder
+* handle adnormal exit and EOS
+
+changes since v4:
+
+* refactor functions in wave5-hw and fix bug reported by Daniel Palmer
+* rename functions and variables to better names
+* change variable types such as replacing s32 with u32 and int with bool
+* as appropriate
+
+changes since v3:
+
+* Fixing all issues commented by Dan Carpenter
+* Change file names to have wave5- prefix
+* In wave5_vpu_probe, enable the clocks before reading registers, as
+* commented from Daniel Palmer
+* Add more to the TODO list,
+
+changes since v2:
+
+Main fixes includes:
+* change the yaml and dirver code to support up to 4 clks (instead of
+* one)
+* fix Kconfig format
+* remove unneeded cast,
+* change var types
+* change var names, func names
+* checkpatch fixes
+
+changes since v1:
+
+Fix changes due to comments from Ezequiel and Dan Carpenter. Main fixes
+inclueds:
+* move all files to one dir 'wave5'
+* replace private error codes with standard error codes
+* fix extra spaces
+* various checkpatch fixes
+* replace private 'DPRINTK' macro with standard 'dev_err/dbg ..'
+* fix error handling
+* add more possible fixes to the TODO file
+
+Dafna Hirschfeld (1):
+  media: chips-media: wave5: Add the vdi layer
+
+Nas Chung (3):
+  media: chips-media: wave5: Add vpuapi layer
+  media: chips-media: wave5: Add the v4l2 layer
+  media: chips-media: wave5: Add TODO file
+
+Robert Beckett (2):
+  dt-bindings: media: wave5: add yaml devicetree bindings
+  media: chips-media: wave5: Add wave5 driver to maintainers file
+
+Sebastian Fricke (1):
+  media: platform: chips-media: Move Coda to separate folder
+
+ .../devicetree/bindings/media/wave5.yml       |   73 +
+ MAINTAINERS                                   |   11 +-
+ drivers/media/platform/chips-media/Kconfig    |   18 +-
+ drivers/media/platform/chips-media/Makefile   |    6 +-
+ .../media/platform/chips-media/coda/Kconfig   |   18 +
+ .../media/platform/chips-media/coda/Makefile  |    6 +
+ .../chips-media/{ => coda}/coda-bit.c         |    0
+ .../chips-media/{ => coda}/coda-common.c      |    0
+ .../chips-media/{ => coda}/coda-gdi.c         |    0
+ .../chips-media/{ => coda}/coda-h264.c        |    0
+ .../chips-media/{ => coda}/coda-jpeg.c        |    0
+ .../chips-media/{ => coda}/coda-mpeg2.c       |    0
+ .../chips-media/{ => coda}/coda-mpeg4.c       |    0
+ .../platform/chips-media/{ => coda}/coda.h    |    0
+ .../chips-media/{ => coda}/coda_regs.h        |    0
+ .../chips-media/{ => coda}/imx-vdoa.c         |    0
+ .../chips-media/{ => coda}/imx-vdoa.h         |    0
+ .../platform/chips-media/{ => coda}/trace.h   |    0
+ .../media/platform/chips-media/wave5/Kconfig  |   12 +
+ .../media/platform/chips-media/wave5/Makefile |   10 +
+ drivers/media/platform/chips-media/wave5/TODO |   25 +
+ .../platform/chips-media/wave5/wave5-helper.c |  175 +
+ .../platform/chips-media/wave5/wave5-helper.h |   28 +
+ .../platform/chips-media/wave5/wave5-hw.c     | 3459 +++++++++++++++++
+ .../chips-media/wave5/wave5-regdefine.h       |  654 ++++
+ .../platform/chips-media/wave5/wave5-vdi.c    |  261 ++
+ .../platform/chips-media/wave5/wave5-vdi.h    |   67 +
+ .../chips-media/wave5/wave5-vpu-dec.c         | 1399 +++++++
+ .../chips-media/wave5/wave5-vpu-enc.c         | 1454 +++++++
+ .../platform/chips-media/wave5/wave5-vpu.c    |  362 ++
+ .../platform/chips-media/wave5/wave5-vpu.h    |   72 +
+ .../platform/chips-media/wave5/wave5-vpuapi.c | 1115 ++++++
+ .../platform/chips-media/wave5/wave5-vpuapi.h | 1198 ++++++
+ .../chips-media/wave5/wave5-vpuconfig.h       |   90 +
+ .../chips-media/wave5/wave5-vpuerror.h        |  454 +++
+ .../media/platform/chips-media/wave5/wave5.h  |   94 +
+ 36 files changed, 11040 insertions(+), 21 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/wave5.yml
+ create mode 100644 drivers/media/platform/chips-media/coda/Kconfig
+ create mode 100644 drivers/media/platform/chips-media/coda/Makefile
+ rename drivers/media/platform/chips-media/{ => coda}/coda-bit.c (100%)
+ rename drivers/media/platform/chips-media/{ => coda}/coda-common.c (100%)
+ rename drivers/media/platform/chips-media/{ => coda}/coda-gdi.c (100%)
+ rename drivers/media/platform/chips-media/{ => coda}/coda-h264.c (100%)
+ rename drivers/media/platform/chips-media/{ => coda}/coda-jpeg.c (100%)
+ rename drivers/media/platform/chips-media/{ => coda}/coda-mpeg2.c (100%)
+ rename drivers/media/platform/chips-media/{ => coda}/coda-mpeg4.c (100%)
+ rename drivers/media/platform/chips-media/{ => coda}/coda.h (100%)
+ rename drivers/media/platform/chips-media/{ => coda}/coda_regs.h (100%)
+ rename drivers/media/platform/chips-media/{ => coda}/imx-vdoa.c (100%)
+ rename drivers/media/platform/chips-media/{ => coda}/imx-vdoa.h (100%)
+ rename drivers/media/platform/chips-media/{ => coda}/trace.h (100%)
+ create mode 100644 drivers/media/platform/chips-media/wave5/Kconfig
+ create mode 100644 drivers/media/platform/chips-media/wave5/Makefile
+ create mode 100644 drivers/media/platform/chips-media/wave5/TODO
+ create mode 100644 drivers/media/platform/chips-media/wave5/wave5-helper.c
+ create mode 100644 drivers/media/platform/chips-media/wave5/wave5-helper.h
+ create mode 100644 drivers/media/platform/chips-media/wave5/wave5-hw.c
+ create mode 100644 drivers/media/platform/chips-media/wave5/wave5-regdefine.h
  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vdi.c
  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vdi.h
+ create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpu-dec.c
+ create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpu-enc.c
+ create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpu.c
+ create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpu.h
+ create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpuapi.c
+ create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpuapi.h
+ create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpuconfig.h
+ create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpuerror.h
+ create mode 100644 drivers/media/platform/chips-media/wave5/wave5.h
 
-diff --git a/drivers/media/platform/chips-media/wave5/wave5-vdi.c b/drivers/media/platform/chips-media/wave5/wave5-vdi.c
-new file mode 100644
-index 000000000000..f85580dba294
---- /dev/null
-+++ b/drivers/media/platform/chips-media/wave5/wave5-vdi.c
-@@ -0,0 +1,261 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
-+/*
-+ * Wave5 series multi-standard codec IP - low level access functions
-+ *
-+ * Copyright (C) 2021 CHIPS&MEDIA INC
-+ */
-+
-+#include <linux/bug.h>
-+#include "wave5-vdi.h"
-+#include "wave5-vpu.h"
-+#include "wave5-regdefine.h"
-+#include <linux/delay.h>
-+
-+#define VDI_SRAM_BASE_ADDR		0x00
-+
-+#define VDI_SYSTEM_ENDIAN		VDI_LITTLE_ENDIAN
-+#define VDI_128BIT_BUS_SYSTEM_ENDIAN	VDI_128BIT_LITTLE_ENDIAN
-+
-+static int wave5_vdi_allocate_common_memory(struct device *dev)
-+{
-+	struct vpu_device *vpu_dev = dev_get_drvdata(dev);
-+
-+	if (!vpu_dev->common_mem.vaddr) {
-+		int ret;
-+
-+		vpu_dev->common_mem.size = SIZE_COMMON;
-+		ret = wave5_vdi_allocate_dma_memory(vpu_dev, &vpu_dev->common_mem);
-+		if (ret) {
-+			dev_err(dev, "unable to allocate common buffer\n");
-+			return ret;
-+		}
-+	}
-+
-+	dev_dbg(dev, "[VDI] common_mem: daddr=%pad size=%zu vaddr=0x%p\n",
-+		&vpu_dev->common_mem.daddr, vpu_dev->common_mem.size, vpu_dev->common_mem.vaddr);
-+
-+	return 0;
-+}
-+
-+int wave5_vdi_init(struct device *dev)
-+{
-+	struct vpu_device *vpu_dev = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = wave5_vdi_allocate_common_memory(dev);
-+	if (ret < 0) {
-+		dev_err(dev, "[VDI] failed to get vpu common buffer from driver\n");
-+		return ret;
-+	}
-+
-+	if (!PRODUCT_CODE_W_SERIES(vpu_dev->product_code)) {
-+		WARN_ONCE(1, "unsupported product code: 0x%x\n", vpu_dev->product_code);
-+		return 0;
-+	}
-+
-+	// if BIT processor is not running.
-+	if (wave5_vdi_readl(vpu_dev, W5_VCPU_CUR_PC) == 0) {
-+		int i;
-+
-+		for (i = 0; i < 64; i++)
-+			wave5_vdi_write_register(vpu_dev, (i * 4) + 0x100, 0x0);
-+	}
-+
-+	dev_dbg(dev, "[VDI] driver initialized successfully\n");
-+
-+	return 0;
-+}
-+
-+int wave5_vdi_release(struct device *dev)
-+{
-+	struct vpu_device *vpu_dev = dev_get_drvdata(dev);
-+
-+	vpu_dev->vdb_register = NULL;
-+	wave5_vdi_free_dma_memory(vpu_dev, &vpu_dev->common_mem);
-+
-+	return 0;
-+}
-+
-+void wave5_vdi_write_register(struct vpu_device *vpu_dev, u32 addr, u32 data)
-+{
-+	writel(data, vpu_dev->vdb_register + addr);
-+}
-+
-+unsigned int wave5_vdi_readl(struct vpu_device *vpu_dev, u32 addr)
-+{
-+	return readl(vpu_dev->vdb_register + addr);
-+}
-+
-+int wave5_vdi_clear_memory(struct vpu_device *vpu_dev, struct vpu_buf *vb)
-+{
-+	if (!vb || !vb->vaddr) {
-+		dev_err(vpu_dev->dev, "%s: unable to clear unmapped buffer\n", __func__);
-+		return -EINVAL;
-+	}
-+
-+	memset(vb->vaddr, 0, vb->size);
-+	return vb->size;
-+}
-+
-+static void wave5_swap_endian(struct vpu_device *vpu_dev, u8 *data, size_t len,
-+			      unsigned int endian);
-+
-+int wave5_vdi_write_memory(struct vpu_device *vpu_dev, struct vpu_buf *vb, size_t offset,
-+			   u8 *data, size_t len, unsigned int endian)
-+{
-+	if (!vb || !vb->vaddr) {
-+		dev_err(vpu_dev->dev, "%s: unable to write to unmapped buffer\n", __func__);
-+		return -EINVAL;
-+	}
-+
-+	if (offset > vb->size || len > vb->size || offset + len > vb->size) {
-+		dev_err(vpu_dev->dev, "%s: buffer too small\n", __func__);
-+		return -ENOSPC;
-+	}
-+
-+	wave5_swap_endian(vpu_dev, data, len, endian);
-+	memcpy(vb->vaddr + offset, data, len);
-+
-+	return len;
-+}
-+
-+int wave5_vdi_allocate_dma_memory(struct vpu_device *vpu_dev, struct vpu_buf *vb)
-+{
-+	void *vaddr;
-+	dma_addr_t daddr;
-+
-+	if (!vb->size) {
-+		dev_err(vpu_dev->dev, "%s: requested size==0\n", __func__);
-+		return -EINVAL;
-+	}
-+
-+	vaddr = dma_alloc_coherent(vpu_dev->dev, vb->size, &daddr, GFP_KERNEL);
-+	if (!vaddr)
-+		return -ENOMEM;
-+	vb->vaddr = vaddr;
-+	vb->daddr = daddr;
-+
-+	return 0;
-+}
-+
-+void wave5_vdi_free_dma_memory(struct vpu_device *vpu_dev, struct vpu_buf *vb)
-+{
-+	if (vb->size == 0)
-+		return;
-+
-+	if (!vb->vaddr)
-+		dev_err(vpu_dev->dev, "%s: requested free of unmapped buffer\n", __func__);
-+	else
-+		dma_free_coherent(vpu_dev->dev, vb->size, vb->vaddr, vb->daddr);
-+
-+	memset(vb, 0, sizeof(*vb));
-+}
-+
-+unsigned int wave5_vdi_convert_endian(struct vpu_device *vpu_dev, unsigned int endian)
-+{
-+	if (PRODUCT_CODE_W_SERIES(vpu_dev->product_code)) {
-+		switch (endian) {
-+		case VDI_LITTLE_ENDIAN:
-+			endian = 0x00;
-+			break;
-+		case VDI_BIG_ENDIAN:
-+			endian = 0x0f;
-+			break;
-+		case VDI_32BIT_LITTLE_ENDIAN:
-+			endian = 0x04;
-+			break;
-+		case VDI_32BIT_BIG_ENDIAN:
-+			endian = 0x03;
-+			break;
-+		}
-+	}
-+
-+	return (endian & 0x0f);
-+}
-+
-+static void byte_swap(unsigned char *data, size_t len)
-+{
-+	u8 temp;
-+	unsigned int i;
-+
-+	for (i = 0; i < len; i += 2) {
-+		temp = data[i];
-+		data[i] = data[i + 1];
-+		data[i + 1] = temp;
-+	}
-+}
-+
-+static void word_swap(unsigned char *data, size_t len)
-+{
-+	u16 temp;
-+	u16 *ptr = (u16 *)data;
-+	unsigned int i;
-+	size_t size = len / sizeof(uint16_t);
-+
-+	for (i = 0; i < size; i += 2) {
-+		temp = ptr[i];
-+		ptr[i] = ptr[i + 1];
-+		ptr[i + 1] = temp;
-+	}
-+}
-+
-+static void dword_swap(unsigned char *data, size_t len)
-+{
-+	u32 temp;
-+	u32 *ptr = (u32 *)data;
-+	size_t size = len / sizeof(u32);
-+	unsigned int i;
-+
-+	for (i = 0; i < size; i += 2) {
-+		temp = ptr[i];
-+		ptr[i] = ptr[i + 1];
-+		ptr[i + 1] = temp;
-+	}
-+}
-+
-+static void lword_swap(unsigned char *data, size_t len)
-+{
-+	u64 temp;
-+	u64 *ptr = (u64 *)data;
-+	size_t size = len / sizeof(uint64_t);
-+	unsigned int i;
-+
-+	for (i = 0; i < size; i += 2) {
-+		temp = ptr[i];
-+		ptr[i] = ptr[i + 1];
-+		ptr[i + 1] = temp;
-+	}
-+}
-+
-+static void wave5_swap_endian(struct vpu_device *vpu_dev, u8 *data, size_t len,
-+			      unsigned int endian)
-+{
-+	int changes;
-+	unsigned int sys_endian = VDI_128BIT_BUS_SYSTEM_ENDIAN;
-+	bool byte_change, word_change, dword_change, lword_change;
-+
-+	if (!PRODUCT_CODE_W_SERIES(vpu_dev->product_code)) {
-+		dev_err(vpu_dev->dev, "unknown product id: %08x\n", vpu_dev->product_code);
-+		return;
-+	}
-+
-+	endian = wave5_vdi_convert_endian(vpu_dev, endian);
-+	sys_endian = wave5_vdi_convert_endian(vpu_dev, sys_endian);
-+	if (endian == sys_endian)
-+		return;
-+
-+	changes = endian ^ sys_endian;
-+	byte_change = changes & 0x01;
-+	word_change = ((changes & 0x02) == 0x02);
-+	dword_change = ((changes & 0x04) == 0x04);
-+	lword_change = ((changes & 0x08) == 0x08);
-+
-+	if (byte_change)
-+		byte_swap(data, len);
-+	if (word_change)
-+		word_swap(data, len);
-+	if (dword_change)
-+		dword_swap(data, len);
-+	if (lword_change)
-+		lword_swap(data, len);
-+}
-diff --git a/drivers/media/platform/chips-media/wave5/wave5-vdi.h b/drivers/media/platform/chips-media/wave5/wave5-vdi.h
-new file mode 100644
-index 000000000000..8e1d09331d5c
---- /dev/null
-+++ b/drivers/media/platform/chips-media/wave5/wave5-vdi.h
-@@ -0,0 +1,67 @@
-+/* SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause) */
-+/*
-+ * Wave5 series multi-standard codec IP - low level access functions
-+ *
-+ * Copyright (C) 2021 CHIPS&MEDIA INC
-+ */
-+
-+#ifndef _VDI_H_
-+#define _VDI_H_
-+
-+#include "wave5-vpuconfig.h"
-+#include <linux/string.h>
-+#include <linux/slab.h>
-+#include <linux/device.h>
-+
-+/************************************************************************/
-+/* COMMON REGISTERS */
-+/************************************************************************/
-+#define VPU_PRODUCT_CODE_REGISTER 0x1044
-+
-+/* system register write */
-+#define vpu_write_reg(VPU_INST, ADDR, DATA) wave5_vdi_write_register(VPU_INST, ADDR, DATA)
-+// system register read
-+#define vpu_read_reg(CORE, ADDR) wave5_vdi_readl(CORE, ADDR)
-+
-+struct vpu_buf {
-+	size_t size;
-+	dma_addr_t daddr;
-+	void *vaddr;
-+};
-+
-+struct dma_vpu_buf {
-+	size_t size;
-+	dma_addr_t daddr;
-+};
-+
-+enum endian_mode {
-+	VDI_LITTLE_ENDIAN = 0, /* 64bit LE */
-+	VDI_BIG_ENDIAN, /* 64bit BE */
-+	VDI_32BIT_LITTLE_ENDIAN,
-+	VDI_32BIT_BIG_ENDIAN,
-+	/* WAVE PRODUCTS */
-+	VDI_128BIT_LITTLE_ENDIAN = 16,
-+	VDI_128BIT_LE_BYTE_SWAP,
-+	VDI_128BIT_LE_WORD_SWAP,
-+	VDI_128BIT_LE_WORD_BYTE_SWAP,
-+	VDI_128BIT_LE_DWORD_SWAP,
-+	VDI_128BIT_LE_DWORD_BYTE_SWAP,
-+	VDI_128BIT_LE_DWORD_WORD_SWAP,
-+	VDI_128BIT_LE_DWORD_WORD_BYTE_SWAP,
-+	VDI_128BIT_BE_DWORD_WORD_BYTE_SWAP,
-+	VDI_128BIT_BE_DWORD_WORD_SWAP,
-+	VDI_128BIT_BE_DWORD_BYTE_SWAP,
-+	VDI_128BIT_BE_DWORD_SWAP,
-+	VDI_128BIT_BE_WORD_BYTE_SWAP,
-+	VDI_128BIT_BE_WORD_SWAP,
-+	VDI_128BIT_BE_BYTE_SWAP,
-+	VDI_128BIT_BIG_ENDIAN = 31,
-+	VDI_ENDIAN_MAX
-+};
-+
-+#define VDI_128BIT_ENDIAN_MASK 0xf
-+
-+int wave5_vdi_init(struct device *dev);
-+int wave5_vdi_release(struct device *dev);	//this function may be called only at system off.
-+
-+#endif //#ifndef _VDI_H_
-diff --git a/drivers/media/platform/chips-media/wave5/wave5-vpuapi.h b/drivers/media/platform/chips-media/wave5/wave5-vpuapi.h
-index 8b36c7196526..ef930408d977 100644
---- a/drivers/media/platform/chips-media/wave5/wave5-vpuapi.h
-+++ b/drivers/media/platform/chips-media/wave5/wave5-vpuapi.h
-@@ -1159,7 +1159,7 @@ int wave5_vdi_clear_memory(struct vpu_device *vpu_dev, struct vpu_buf *vb);
- int wave5_vdi_allocate_dma_memory(struct vpu_device *vpu_dev, struct vpu_buf *vb);
- int wave5_vdi_write_memory(struct vpu_device *vpu_dev, struct vpu_buf *vb, size_t offset,
- 			   u8 *data, size_t len, unsigned int endian);
--int wave5_vdi_convert_endian(struct vpu_device *vpu_dev, unsigned int endian);
-+unsigned int wave5_vdi_convert_endian(struct vpu_device *vpu_dev, unsigned int endian);
- void wave5_vdi_free_dma_memory(struct vpu_device *vpu_dev, struct vpu_buf *vb);
- 
- int wave5_vpu_init_with_bitcode(struct device *dev, u8 *bitcode, size_t size);
 -- 
 2.25.1
 
