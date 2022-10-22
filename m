@@ -2,26 +2,25 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57D7DC04A95
-	for <linux-media@archiver.kernel.org>; Sat, 22 Oct 2022 10:18:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE45DC433FE
+	for <linux-media@archiver.kernel.org>; Sat, 22 Oct 2022 10:18:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiJVKSX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 22 Oct 2022 06:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55268 "EHLO
+        id S229728AbiJVKSh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 22 Oct 2022 06:18:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbiJVKSD (ORCPT
+        with ESMTP id S230303AbiJVKSM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 22 Oct 2022 06:18:03 -0400
-X-Greylist: delayed 342 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 22 Oct 2022 02:34:47 PDT
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B162A2CCB0
-        for <linux-media@vger.kernel.org>; Sat, 22 Oct 2022 02:34:45 -0700 (PDT)
+        Sat, 22 Oct 2022 06:18:12 -0400
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [IPv6:2001:4b98:dc4:8::240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9AD5A8A0
+        for <linux-media@vger.kernel.org>; Sat, 22 Oct 2022 02:35:00 -0700 (PDT)
 Received: from relay10.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::230])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 6A938CCDB1
-        for <linux-media@vger.kernel.org>; Sat, 22 Oct 2022 09:21:58 +0000 (UTC)
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id BDF5EC602C
+        for <linux-media@vger.kernel.org>; Sat, 22 Oct 2022 09:21:22 +0000 (UTC)
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7D655240012;
-        Sat, 22 Oct 2022 09:20:44 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 3B83424000E;
+        Sat, 22 Oct 2022 09:20:41 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -29,9 +28,9 @@ To:     =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
         Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH v2 10/10] media: ar0521: Tab-align definitions
-Date:   Sat, 22 Oct 2022 11:20:15 +0200
-Message-Id: <20221022092015.208592-11-jacopo@jmondi.org>
+Subject: [PATCH v2 08/10] media: ar0521: Setup controls at s_stream time
+Date:   Sat, 22 Oct 2022 11:20:13 +0200
+Message-Id: <20221022092015.208592-9-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221022092015.208592-1-jacopo@jmondi.org>
 References: <20221022092015.208592-1-jacopo@jmondi.org>
@@ -41,71 +40,28 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Align some register and constant definitions using tab in place of
-mixed tab+spaces.
-
-Cosmetic change only.
+Setup all the registered controls at s_stream(1) time instead of
+manually configure gains.
 
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/i2c/ar0521.c | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ drivers/media/i2c/ar0521.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
-index 5560dc3d6605..608d0795e98e 100644
+index 854f4ccd9c3d..cf2d2746657e 100644
 --- a/drivers/media/i2c/ar0521.c
 +++ b/drivers/media/i2c/ar0521.c
-@@ -14,17 +14,17 @@
- #include <media/v4l2-subdev.h>
+@@ -399,7 +399,7 @@ static int ar0521_set_stream(struct ar0521_dev *sensor, bool on)
+ 		if (ret)
+ 			goto err;
  
- /* External clock (extclk) frequencies */
--#define AR0521_EXTCLK_MIN	  (10 * 1000 * 1000)
--#define AR0521_EXTCLK_MAX	  (48 * 1000 * 1000)
-+#define AR0521_EXTCLK_MIN		(10 * 1000 * 1000)
-+#define AR0521_EXTCLK_MAX		(48 * 1000 * 1000)
+-		ret = ar0521_set_gains(sensor);
++		ret =  __v4l2_ctrl_handler_setup(&sensor->ctrls.handler);
+ 		if (ret)
+ 			goto err;
  
- /* PLL and PLL2 */
--#define AR0521_PLL_MIN		 (320 * 1000 * 1000)
--#define AR0521_PLL_MAX		(1280 * 1000 * 1000)
-+#define AR0521_PLL_MIN			(320 * 1000 * 1000)
-+#define AR0521_PLL_MAX			(1280 * 1000 * 1000)
- 
- /* Effective pixel sample rate on the pixel array. */
--#define AR0521_PIXEL_CLOCK_RATE	 (184 * 1000 * 1000)
--#define AR0521_PIXEL_CLOCK_MIN	 (168 * 1000 * 1000)
--#define AR0521_PIXEL_CLOCK_MAX	 (414 * 1000 * 1000)
-+#define AR0521_PIXEL_CLOCK_RATE		(184 * 1000 * 1000)
-+#define AR0521_PIXEL_CLOCK_MIN		(168 * 1000 * 1000)
-+#define AR0521_PIXEL_CLOCK_MAX		(414 * 1000 * 1000)
- 
- #define AR0521_NATIVE_WIDTH		2604u
- #define AR0521_NATIVE_HEIGHT		1964u
-@@ -33,15 +33,15 @@
- #define AR0521_MAX_X_ADDR_END		2603u
- #define AR0521_MAX_Y_ADDR_END		1955u
- 
--#define AR0521_WIDTH_MIN	       8u
--#define AR0521_WIDTH_MAX	    2592u
--#define AR0521_HEIGHT_MIN	       8u
--#define AR0521_HEIGHT_MAX	    1944u
-+#define AR0521_WIDTH_MIN		8u
-+#define AR0521_WIDTH_MAX		2592u
-+#define AR0521_HEIGHT_MIN		8u
-+#define AR0521_HEIGHT_MAX		1944u
- 
--#define AR0521_WIDTH_BLANKING_MIN     572u
--#define AR0521_HEIGHT_BLANKING_MIN     38u /* must be even */
--#define AR0521_TOTAL_HEIGHT_MAX     65535u /* max_frame_lenght_lines */
--#define AR0521_TOTAL_WIDTH_MAX      65532u /* max_line_lenght_pck */
-+#define AR0521_WIDTH_BLANKING_MIN	572u
-+#define AR0521_HEIGHT_BLANKING_MIN	38u /* must be even */
-+#define AR0521_TOTAL_HEIGHT_MAX		65535u /* max_frame_lenght_lines */
-+#define AR0521_TOTAL_WIDTH_MAX		65532u /* max_line_lenght_pck */
- 
- #define AR0521_ANA_GAIN_MIN		0x00
- #define AR0521_ANA_GAIN_MAX		0x3f
 -- 
 2.37.3
 
