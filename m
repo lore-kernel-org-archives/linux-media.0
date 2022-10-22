@@ -2,216 +2,108 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DE80C04A95
-	for <linux-media@archiver.kernel.org>; Sat, 22 Oct 2022 10:20:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F392AC3A59D
+	for <linux-media@archiver.kernel.org>; Sat, 22 Oct 2022 10:28:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbiJVKU2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 22 Oct 2022 06:20:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
+        id S230449AbiJVK2D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 22 Oct 2022 06:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbiJVKUE (ORCPT
+        with ESMTP id S230291AbiJVK1q (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 22 Oct 2022 06:20:04 -0400
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [IPv6:2001:4b98:dc4:8::240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAB831B6FB
-        for <linux-media@vger.kernel.org>; Sat, 22 Oct 2022 02:36:56 -0700 (PDT)
-Received: from relay10.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::230])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 4728CCC597
-        for <linux-media@vger.kernel.org>; Sat, 22 Oct 2022 09:22:04 +0000 (UTC)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 8DAD5240008;
-        Sat, 22 Oct 2022 09:20:35 +0000 (UTC)
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org
-Subject: [PATCH v2 04/10] media: ar0521: Rework PLL computation
-Date:   Sat, 22 Oct 2022 11:20:09 +0200
-Message-Id: <20221022092015.208592-5-jacopo@jmondi.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221022092015.208592-1-jacopo@jmondi.org>
-References: <20221022092015.208592-1-jacopo@jmondi.org>
+        Sat, 22 Oct 2022 06:27:46 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C43E3468C7;
+        Sat, 22 Oct 2022 02:42:41 -0700 (PDT)
+Received: from localhost (89-26-75-29.goll.dyn.salzburg-online.at [89.26.75.29])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sebastianfricke)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 79C0E660247B;
+        Sat, 22 Oct 2022 10:42:17 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666431737;
+        bh=9zWEmJ8nynpwf7MY4F3NB+pWBM0KjyaSIimX+SQ+i6M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AUuaj+XeQSZZtWcN0+zLn45zkLxRS2/K0CDBPb7VvOhc3UUyYtyCQQakT9ocraMYm
+         3sxZdpmnwbIAnRUZA288aRL+KdkKb8JL9RNTx/J7fl/r0i+PDqCHP1kDpmDN//5iDJ
+         rNrPOd/bJ/+m4o5yM4P/JfTPVLg68XUJnMWGXbosRjxKwNzkL4/+jTqTlZNndEHSUi
+         +0oAyUzWnmdLz6KQ45h2ljjSa4EXV+wxYodZ2OwHQtjRzS5KmpiJGc4X5ZQ3RHwPNc
+         bNSCPVGlKIdb1WKprK9R9vgPhZdV8tCEawtA8iyR+EoH5pBoGLk2FhaXDzYWjiWRyZ
+         6N/tJs5aC3pGg==
+Date:   Sat, 22 Oct 2022 11:42:14 +0200
+From:   Sebastian Fricke <sebastian.fricke@collabora.com>
+To:     linux-media@vger.kernel.org
+Cc:     kernel@collabora.com, nas.chung@chipsnmedia.com,
+        hverkuil@xs4all.nl, ezequiel@vanguardiasur.com.ar,
+        linux-kernel@vger.kernel.org, nicolas.dufresne@collabora.com,
+        p.zabel@pengutronix.de, dafna@fastmail.com
+Subject: Re: [PATCH v10 5/7] media: chips-media: wave5: Add TODO file
+Message-ID: <20221022094214.t7d36usgqk446t4q@basti-XPS-13-9310>
+References: <20221022000506.221933-1-sebastian.fricke@collabora.com>
+ <20221022000506.221933-6-sebastian.fricke@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20221022000506.221933-6-sebastian.fricke@collabora.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Rework the PLL computation procedure to take into account the currently
-configured format bpp and the number of data lanes.
+Hey all,
 
-Comment the PLL configuration procedure with information provided by the
-sensor chip manual and remove the hardcoded divider from the pixel clock
-calculation.
+sorry I noticed that the TODO file is still in the staging directory.
+Will be fixed in V11.
 
-Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
----
- drivers/media/i2c/ar0521.c | 113 +++++++++++++++++++++++++++----------
- 1 file changed, 84 insertions(+), 29 deletions(-)
+Greetings,
+Sebastian
 
-diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
-index dfa4de0f4996..e673424880ac 100644
---- a/drivers/media/i2c/ar0521.c
-+++ b/drivers/media/i2c/ar0521.c
-@@ -21,7 +21,7 @@
- #define AR0521_PLL_MIN		 (320 * 1000 * 1000)
- #define AR0521_PLL_MAX		(1280 * 1000 * 1000)
- 
--/* Effective pixel clocks, the registers may be DDR */
-+/* Effective pixel sample rate on the pixel array. */
- #define AR0521_PIXEL_CLOCK_RATE	 (184 * 1000 * 1000)
- #define AR0521_PIXEL_CLOCK_MIN	 (168 * 1000 * 1000)
- #define AR0521_PIXEL_CLOCK_MAX	 (414 * 1000 * 1000)
-@@ -123,10 +123,14 @@ struct ar0521_dev {
- 	unsigned int lane_count;
- 	u16 total_width;
- 	u16 total_height;
--	u16 pll_pre;
--	u16 pll_mult;
--	u16 pll_pre2;
--	u16 pll_mult2;
-+	struct {
-+		u16 pre;
-+		u16 mult;
-+		u16 pre2;
-+		u16 mult2;
-+		u16 vt_pix;
-+	} pll;
-+
- 	bool streaming;
- };
- 
-@@ -151,6 +155,16 @@ static u32 div64_round_up(u64 v, u32 d)
- 	return div_u64(v + d - 1, d);
- }
- 
-+static int ar0521_code_to_bpp(struct ar0521_dev *sensor)
-+{
-+	switch (sensor->fmt.code) {
-+	case MEDIA_BUS_FMT_SGRBG8_1X8:
-+		return 8;
-+	}
-+
-+	return -EINVAL;
-+}
-+
- /* Data must be BE16, the first value is the register address */
- static int ar0521_write_regs(struct ar0521_dev *sensor, const __be16 *data,
- 			     unsigned int count)
-@@ -226,8 +240,7 @@ static int ar0521_set_gains(struct ar0521_dev *sensor)
- 	return ar0521_write_regs(sensor, regs, ARRAY_SIZE(regs));
- }
- 
--static u32 calc_pll(struct ar0521_dev *sensor, int num, u32 freq, u16 *pre_ptr,
--		    u16 *mult_ptr)
-+static u32 calc_pll(struct ar0521_dev *sensor, u32 freq, u16 *pre_ptr, u16 *mult_ptr)
- {
- 	u16 pre = 1, mult = 1, new_pre;
- 	u32 pll = AR0521_PLL_MAX + 1;
-@@ -262,37 +275,79 @@ static u32 calc_pll(struct ar0521_dev *sensor, int num, u32 freq, u16 *pre_ptr,
- 	return pll;
- }
- 
--#define DIV 4
- static void ar0521_calc_mode(struct ar0521_dev *sensor)
- {
--	unsigned int speed_mod = 4 / sensor->lane_count; /* 1 with 4 DDR lanes */
--	u16 total_width = max(sensor->fmt.width + AR0521_WIDTH_BLANKING_MIN,
--			      AR0521_TOTAL_WIDTH_MIN);
--	u16 total_height = sensor->fmt.height + AR0521_HEIGHT_BLANKING_MIN;
--
--	/* Calculate approximate pixel clock first */
--	u64 pix_clk = AR0521_PIXEL_CLOCK_RATE;
--
--	/* PLL1 drives pixel clock - dual rate */
--	pix_clk = calc_pll(sensor, 1, pix_clk * (DIV / 2), &sensor->pll_pre,
--			   &sensor->pll_mult);
--	pix_clk = div64_round(pix_clk, (DIV / 2));
--	calc_pll(sensor, 2, pix_clk * (DIV / 2) * speed_mod, &sensor->pll_pre2,
--		 &sensor->pll_mult2);
--
--	sensor->total_width = total_width;
--	sensor->total_height = total_height;
-+	unsigned int pixel_clock;
-+	u16 pre, mult;
-+	u32 vco;
-+	int bpp;
-+
-+	/*
-+	 * PLL1 and PLL2 are computed equally even if the application note
-+	 * suggests a slower PLL1 clock. Maintain pll1 and pll2 divider and
-+	 * multiplier separated to later specialize the calculation procedure.
-+	 *
-+	 * PLL1:
-+	 * - mclk -> / pre_div1 * pre_mul1 = VCO1 = COUNTER_CLOCK
-+	 *
-+	 * PLL2:
-+	 * - mclk -> / pre_div * pre_mul = VCO
-+	 *
-+	 *   VCO -> / vt_pix = PIXEL_CLOCK
-+	 *   VCO -> / vt_pix / 2 = WORD_CLOCK
-+	 *   VCO -> / op_sys = SERIAL_CLOCK
-+	 *
-+	 * With:
-+	 * - vt_pix = bpp / 2
-+	 * - WORD_CLOCK = PIXEL_CLOCK / 2
-+	 * - SERIAL_CLOCK = MIPI data rate (Mbps / lane) = WORD_CLOCK * bpp
-+	 *   NOTE: this implies the MIPI clock is divided internally by 2
-+	 *         to account for DDR.
-+	 *
-+	 * As op_sys_div is fixed to 1:
-+	 *
-+	 * SERIAL_CLOCK = VCO
-+	 * VCO = 2 * MIPI_CLK
-+	 * VCO = PIXEL_CLOCK * bpp / 2
-+	 *
-+	 * In the clock tree:
-+	 * MIPI_CLK = PIXEL_CLOCK * bpp / 2 / 2
-+	 *
-+	 * Generic pixel_rate to bus clock frequencey equation:
-+	 * MIPI_CLK = V4L2_CID_PIXEL_RATE * bpp / lanes / 2
-+	 *
-+	 * From which we derive the PIXEL_CLOCK to use in the clock tree:
-+	 * PIXEL_CLOCK = V4L2_CID_PIXEL_RATE * 2 / lanes
-+	 *
-+	 * Documented clock ranges:
-+	 *   WORD_CLOCK = (35MHz - 120 MHz)
-+	 *   PIXEL_CLOCK = (84MHz - 207MHz)
-+	 *   VCO = (320MHz - 1280MHz)
-+	 *
-+	 * TODO: in case we have less data lanes we have to reduce the desired
-+	 * VCO not to exceed the limits specified by the datasheet and
-+	 * consequentially reduce the obtained pixel clock.
-+	 */
-+	pixel_clock = AR0521_PIXEL_CLOCK_RATE * 2 / sensor->lane_count;
-+	bpp = ar0521_code_to_bpp(sensor);
-+	sensor->pll.vt_pix = bpp / 2;
-+	vco = pixel_clock * sensor->pll.vt_pix;
-+
-+	calc_pll(sensor, vco, &pre, &mult);
-+
-+	sensor->pll.pre = sensor->pll.pre2 = pre;
-+	sensor->pll.mult = sensor->pll.mult2 = mult;
- }
- 
- static int ar0521_write_mode(struct ar0521_dev *sensor)
- {
- 	__be16 pll_regs[] = {
- 		be(AR0521_REG_VT_PIX_CLK_DIV),
--		/* 0x300 */ be(4), /* vt_pix_clk_div = number of bits / 2 */
-+		/* 0x300 */ be(sensor->pll.vt_pix), /* vt_pix_clk_div = bpp / 2 */
- 		/* 0x302 */ be(1), /* vt_sys_clk_div */
--		/* 0x304 */ be((sensor->pll_pre2 << 8) | sensor->pll_pre),
--		/* 0x306 */ be((sensor->pll_mult2 << 8) | sensor->pll_mult),
--		/* 0x308 */ be(8), /* op_pix_clk_div = 2 * vt_pix_clk_div */
-+		/* 0x304 */ be((sensor->pll.pre2 << 8) | sensor->pll.pre),
-+		/* 0x306 */ be((sensor->pll.mult2 << 8) | sensor->pll.mult),
-+		/* 0x308 */ be(sensor->pll.vt_pix * 2), /* op_pix_clk_div = 2 * vt_pix_clk_div */
- 		/* 0x30A */ be(1)  /* op_sys_clk_div */
- 	};
- 	int ret;
--- 
-2.37.3
-
+On 22.10.2022 02:05, Sebastian Fricke wrote:
+>From: Nas Chung <nas.chung@chipsnmedia.com>
+>
+>Add a TODO file with remaining elements to be improved/added.
+>
+>Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+>Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+>Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+>Signed-off-by: Nas Chung <nas.chung@chipsnmedia.com>
+>---
+> drivers/staging/media/wave5/TODO | 25 +++++++++++++++++++++++++
+> 1 file changed, 25 insertions(+)
+> create mode 100644 drivers/staging/media/wave5/TODO
+>
+>diff --git a/drivers/staging/media/wave5/TODO b/drivers/staging/media/wave5/TODO
+>new file mode 100644
+>index 000000000000..6cc38d4ccbc9
+>--- /dev/null
+>+++ b/drivers/staging/media/wave5/TODO
+>@@ -0,0 +1,25 @@
+>+* Handle interrupts better
+>+
+>+Currently the interrupt handling uses an unusual design employing a kfifo to
+>+transfer irq status to irq thread. This was done as a work around for dropped
+>+interrupts seen with IRQF_ONESHOT based handling.
+>+
+>+This needs further investigation and fixing properly, with the aid of
+>+C&M and StarFive engineers.
+>+
+>+* remove all struct fields, that are assigned to but not used in the code, add
+>+  documentation about each removed field at the macro for the register it is
+>+  related too.
+>+
+>+* power management handling - add (runtime_)suspen/resume cb where the clock is enabled
+>+
+>+* revise logic of wave5_vpu_(dec/enc)_register_framebuffer
+>+
+>+* check if the  normal kernel endianness/__swab32 routines are sufficient. (instead of the ones
+>+  implemented in the driver)
+>+
+>+* Extended Codec Controls for encoder.
+>+
+>+implement extended codec control for HEVC/H264 encoder.
+>+PROFILE/LEVEL/MIN_QP/MAX_QP/LOOP_FILTER/HFLIP/VFIIP/ROTATE/
+>+GOP_SIZE/RC_ENABLE/I_PERIOD/BITRATE.
+>-- 
+>2.25.1
+>
