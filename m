@@ -2,91 +2,109 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04057C433FE
-	for <linux-media@archiver.kernel.org>; Sat, 22 Oct 2022 10:50:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB46CFA3742
+	for <linux-media@archiver.kernel.org>; Sat, 22 Oct 2022 11:04:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbiJVKut (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 22 Oct 2022 06:50:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47012 "EHLO
+        id S230194AbiJVLEN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 22 Oct 2022 07:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbiJVKu3 (ORCPT
+        with ESMTP id S231145AbiJVLDZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 22 Oct 2022 06:50:29 -0400
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1DC2D286A
-        for <linux-media@vger.kernel.org>; Sat, 22 Oct 2022 03:07:31 -0700 (PDT)
-Received: from relay10.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::230])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 06666CCAE8
-        for <linux-media@vger.kernel.org>; Sat, 22 Oct 2022 09:21:52 +0000 (UTC)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2279C240005;
-        Sat, 22 Oct 2022 09:20:30 +0000 (UTC)
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH v2 01/10] media: ar0521: Implement enum_frame_sizes
-Date:   Sat, 22 Oct 2022 11:20:06 +0200
-Message-Id: <20221022092015.208592-2-jacopo@jmondi.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221022092015.208592-1-jacopo@jmondi.org>
-References: <20221022092015.208592-1-jacopo@jmondi.org>
+        Sat, 22 Oct 2022 07:03:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A6C140A6;
+        Sat, 22 Oct 2022 03:21:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE36760BBF;
+        Sat, 22 Oct 2022 10:21:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B97FEC433D6;
+        Sat, 22 Oct 2022 10:21:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666434090;
+        bh=4VayhwOVTKVAjPqqz97sF96LRLG+KRcajksLHZHtUxk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wOx3mp5ksWJtvhNhAOmZUG8X3+HuRkTdY9Nc7h6cWFEIxsW4svt4t9REDVX0plI4T
+         0jvG2TdFgRx98jdox1K2bPVjxSRKOYymF+6X8vmbsIcB0hIMeoD9P7/9qN6LIAT+Ko
+         fQekZTeUTocY/mdL9wRqCZaeHaw+pLcmNqIWDT+k=
+Date:   Sat, 22 Oct 2022 12:21:27 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        SeongJae Park <sj@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Helge Deller <deller@gmx.de>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mmc@vger.kernel.org, linux-parisc@vger.kernel.org
+Subject: Re: [PATCH v1 0/5] convert tree to
+ get_random_u32_{below,above,between}()
+Message-ID: <Y1PEJxnlY7dh4yK8@kroah.com>
+References: <20221022014403.3881893-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221022014403.3881893-1-Jason@zx2c4.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Implement the enum_frame_size pad operation.
+On Fri, Oct 21, 2022 at 09:43:58PM -0400, Jason A. Donenfeld wrote:
+> Hey everyone,
+> 
+> Here's the second and final tranche of tree-wide conversions to get
+> random integer handling a bit tamer. It's predominantly another
+> Coccinelle-based patchset.
+> 
+> First we s/prandom_u32_max/get_random_u32_below/, since the former is
+> just a deprecated alias for the latter. Then in the next commit we can
+> remove prandom_u32_max all together. I'm quite happy about finally being
+> able to do that. It means that prandom.h is now only for deterministic and 
+> repeatable randomness, not non-deterministic/cryptographic randomness.
+> That line is no longer blurred.
+> 
+> Then, in order to clean up a bunch of inefficient patterns, we introduce
+> two trivial static inline helper functions built on top of
+> get_random_u32_below: get_random_u32_above and get_random_u32_between.
+> These are pretty straight forward to use and understand. Then the final
+> two patches convert some gnarly open-coded number juggling to use these
+> helpers.
+> 
+> I've used Coccinelle for all the treewide patches, so hopefully review
+> is rather uneventful. I didn't accept all of the changes that Coccinelle
+> proposed, though, as these tend to be somewhat context-specific. I erred
+> on the side of just going with the most obvious cases, at least this
+> time through. And then we can address more complicated cases through
+> actual maintainer trees.
+> 
+> Since get_random_u32_below() sits in my random.git tree, these patches
+> too will flow through that same tree.
+> 
+> Regards,
+> Jason
 
-The sensor supports a continuous size range of resolutions.
 
-Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
-Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
----
- drivers/media/i2c/ar0521.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
-
-diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
-index c6ab531532be..0daa61df2603 100644
---- a/drivers/media/i2c/ar0521.c
-+++ b/drivers/media/i2c/ar0521.c
-@@ -798,6 +798,24 @@ static int ar0521_enum_mbus_code(struct v4l2_subdev *sd,
- 	return 0;
- }
- 
-+static int ar0521_enum_frame_size(struct v4l2_subdev *sd,
-+				  struct v4l2_subdev_state *sd_state,
-+				  struct v4l2_subdev_frame_size_enum *fse)
-+{
-+	if (fse->index)
-+		return -EINVAL;
-+
-+	if (fse->code != MEDIA_BUS_FMT_SGRBG8_1X8)
-+		return -EINVAL;
-+
-+	fse->min_width = AR0521_WIDTH_MIN;
-+	fse->max_width = AR0521_WIDTH_MAX;
-+	fse->min_height = AR0521_HEIGHT_MIN;
-+	fse->max_height = AR0521_HEIGHT_MAX;
-+
-+	return 0;
-+}
-+
- static int ar0521_pre_streamon(struct v4l2_subdev *sd, u32 flags)
- {
- 	struct ar0521_dev *sensor = to_ar0521_dev(sd);
-@@ -864,6 +882,7 @@ static const struct v4l2_subdev_video_ops ar0521_video_ops = {
- 
- static const struct v4l2_subdev_pad_ops ar0521_pad_ops = {
- 	.enum_mbus_code = ar0521_enum_mbus_code,
-+	.enum_frame_size = ar0521_enum_frame_size,
- 	.get_fmt = ar0521_get_fmt,
- 	.set_fmt = ar0521_set_fmt,
- };
--- 
-2.37.3
-
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
