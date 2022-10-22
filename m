@@ -2,145 +2,108 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C175CC3A59D
-	for <linux-media@archiver.kernel.org>; Sat, 22 Oct 2022 00:08:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE2C1FA3740
+	for <linux-media@archiver.kernel.org>; Sat, 22 Oct 2022 01:44:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbiJVAIG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 21 Oct 2022 20:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
+        id S229929AbiJVBoh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 21 Oct 2022 21:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbiJVAHN (ORCPT
+        with ESMTP id S229596AbiJVBod (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 21 Oct 2022 20:07:13 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7661373A3;
-        Fri, 21 Oct 2022 17:06:40 -0700 (PDT)
-Received: from localhost (89-26-75-29.goll.dyn.salzburg-online.at [89.26.75.29])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 21 Oct 2022 21:44:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685131F2FA;
+        Fri, 21 Oct 2022 18:44:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sebastianfricke)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 980676602820;
-        Sat, 22 Oct 2022 01:05:27 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666397127;
-        bh=M9jhghRNgf0eus9ZzOBzaxf6Pqwe1OVS+Ho5srdastA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X9w+pQ/YY7L/iS/K28OzhGpRsb8OImmS13/KCuAUu8T7SL4O2SkBrHWZo8o1E/DFC
-         l9ZXfZf0iTtf60eisn9+We5thfCadTVfa86/7Aams/lPmayG0qoA71JOC9kUo/8SAi
-         Rjd1ORD46LeGXqQRPrz+tVN3N/YMq/jaZHEMfp2o5aeM8YIlDj9WBAld8dRiRMk+vo
-         RHbWutFVBOzoCN36YGLPxrEW1r13oe4gDxAbSlq+PnhvC23e6PR6Rk7iA6n3B0YSyo
-         +6fWQYKcCUeeG1rL09RFd4oj7Jy/A2+UziU09ketkHf9fz11OZxDkTfOdbn/vdP2PQ
-         lbRg49d8A+K0w==
-From:   Sebastian Fricke <sebastian.fricke@collabora.com>
-To:     linux-media@vger.kernel.org
-Cc:     kernel@collabora.com, nas.chung@chipsnmedia.com,
-        hverkuil@xs4all.nl, ezequiel@vanguardiasur.com.ar,
-        linux-kernel@vger.kernel.org, nicolas.dufresne@collabora.com,
-        p.zabel@pengutronix.de, dafna@fastmail.com
-Subject: [PATCH v10 6/7] dt-bindings: media: wave5: add yaml devicetree bindings
-Date:   Sat, 22 Oct 2022 02:05:05 +0200
-Message-Id: <20221022000506.221933-7-sebastian.fricke@collabora.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221022000506.221933-1-sebastian.fricke@collabora.com>
-References: <20221022000506.221933-1-sebastian.fricke@collabora.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE6C361FB4;
+        Sat, 22 Oct 2022 01:44:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85F06C43148;
+        Sat, 22 Oct 2022 01:44:28 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZSLnssMM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1666403062;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=29Qx1OOG1bJVKU5nLBC6PT0Zulbd8r14TiIGy8T/ClE=;
+        b=ZSLnssMM0XXH+M9MGOvoehNy19YdOKzTX6iGl0UHOqI4RWMitRvRr1WskqdMj90Ml9VLrJ
+        IuhsEuEmVy8Qa+CESsXjAN4xPt6P8dHKXQt/9Pr9gQfngTcBY2HhGL5NsPrr+AQLmBIcrW
+        /z7HeLfTwAnxeups3mxxZjvOWG4zu2Y=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b3ec9f35 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Sat, 22 Oct 2022 01:44:22 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        SeongJae Park <sj@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Helge Deller <deller@gmx.de>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mmc@vger.kernel.org, linux-parisc@vger.kernel.org
+Subject: [PATCH v1 2/5] prandom: remove prandom_u32_max()
+Date:   Fri, 21 Oct 2022 21:44:00 -0400
+Message-Id: <20221022014403.3881893-3-Jason@zx2c4.com>
+In-Reply-To: <20221022014403.3881893-1-Jason@zx2c4.com>
+References: <20221022014403.3881893-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Robert Beckett <bob.beckett@collabora.com>
+With no more users left, we can finally remove this function. Its
+replacement is get_random_u32_below().
 
-Add bindings for the wave5 chips&media codec driver
-
-Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
-Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- .../devicetree/bindings/media/wave5.yml       | 73 +++++++++++++++++++
- 1 file changed, 73 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/wave5.yml
+ include/linux/prandom.h | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/wave5.yml b/Documentation/devicetree/bindings/media/wave5.yml
-new file mode 100644
-index 000000000000..85dc3c744876
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/wave5.yml
-@@ -0,0 +1,73 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/wave5.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Chips&Media Wave 5 Series multi-standard codec IP
-+
-+maintainers:
-+  - Nas Chung <nas.chung@chipsnmedia.com>
-+  - Robert Beckett <bob.beckett@collabora.com>
-+  - Sebastian Fricke <sebastian.fricke@collabora.com>
-+
-+description: |-
-+  The Chips&Media WAVE codec IP is a multi format video encoder/decoder
-+
-+properties:
-+  compatible:
-+    anyOf:
-+      - items:
-+        - enum:
-+            - cnm,cm511-vpu
-+            - cnm,cm517-vpu
-+            - cnm,cm521-vpu
-+            - cnm,cm521c-vpu
-+            - cnm,cm521c-dual-vpu
-+            - cnm,cm521e1-vpu
-+            - cnm,cm537-vpu
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 1
-+    maxItems: 4
-+
-+  clock-names:
-+    minItems: 1
-+    maxItems: 4
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  sram:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: phandle pointing to the SRAM device node
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    vpu: video-codec@12345678 {
-+        compatible = "cnm,cm521-vpu";
-+        reg = <0x12345678 0x1000>;
-+        interrupts = <42>;
-+        clocks = <&clks 42>;
-+        clock-names = "vcodec";
-+        sram = <&sram>;
-+    };
-+
+diff --git a/include/linux/prandom.h b/include/linux/prandom.h
+index 1f4a0de7b019..8272c08f3951 100644
+--- a/include/linux/prandom.h
++++ b/include/linux/prandom.h
+@@ -23,12 +23,6 @@ void prandom_seed_full_state(struct rnd_state __percpu *pcpu_state);
+ #define prandom_init_once(pcpu_state)			\
+ 	DO_ONCE(prandom_seed_full_state, (pcpu_state))
+ 
+-/* Deprecated: use get_random_u32_below() instead. */
+-static inline u32 prandom_u32_max(u32 ep_ro)
+-{
+-	return get_random_u32_below(ep_ro);
+-}
+-
+ /*
+  * Handle minimum values for seeds
+  */
 -- 
-2.25.1
+2.38.1
 
