@@ -2,34 +2,36 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D4F6C04A95
-	for <linux-media@archiver.kernel.org>; Sat, 22 Oct 2022 10:16:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57D7DC04A95
+	for <linux-media@archiver.kernel.org>; Sat, 22 Oct 2022 10:18:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbiJVKQ4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 22 Oct 2022 06:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49288 "EHLO
+        id S229819AbiJVKSX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 22 Oct 2022 06:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiJVKQ2 (ORCPT
+        with ESMTP id S230010AbiJVKSD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 22 Oct 2022 06:16:28 -0400
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [IPv6:2001:4b98:dc4:8::240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DCA2E982B
-        for <linux-media@vger.kernel.org>; Sat, 22 Oct 2022 02:33:16 -0700 (PDT)
+        Sat, 22 Oct 2022 06:18:03 -0400
+X-Greylist: delayed 342 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 22 Oct 2022 02:34:47 PDT
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B162A2CCB0
+        for <linux-media@vger.kernel.org>; Sat, 22 Oct 2022 02:34:45 -0700 (PDT)
 Received: from relay10.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::230])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 913A1CCC36
-        for <linux-media@vger.kernel.org>; Sat, 22 Oct 2022 09:21:56 +0000 (UTC)
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 6A938CCDB1
+        for <linux-media@vger.kernel.org>; Sat, 22 Oct 2022 09:21:58 +0000 (UTC)
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2D68A24000A;
-        Sat, 22 Oct 2022 09:20:34 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 7D655240012;
+        Sat, 22 Oct 2022 09:20:44 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@iki.fi>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org
-Subject: [PATCH v2 03/10] media: ar0521: Set maximum resolution to 2592x1944
-Date:   Sat, 22 Oct 2022 11:20:08 +0200
-Message-Id: <20221022092015.208592-4-jacopo@jmondi.org>
+Cc:     Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+Subject: [PATCH v2 10/10] media: ar0521: Tab-align definitions
+Date:   Sat, 22 Oct 2022 11:20:15 +0200
+Message-Id: <20221022092015.208592-11-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221022092015.208592-1-jacopo@jmondi.org>
 References: <20221022092015.208592-1-jacopo@jmondi.org>
@@ -39,62 +41,71 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Change the largest visibile resolution to 2592x1944, which corresponds
-to the active pixel array area size. Take into account the horizontal
-and vertical limits when programming the visible sizes to skip
-dummy/inactive pixels.
+Align some register and constant definitions using tab in place of
+mixed tab+spaces.
+
+Cosmetic change only.
 
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/i2c/ar0521.c | 23 +++++++++++++++++------
- 1 file changed, 17 insertions(+), 6 deletions(-)
+ drivers/media/i2c/ar0521.c | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
-index ba169f0218a9..dfa4de0f4996 100644
+index 5560dc3d6605..608d0795e98e 100644
 --- a/drivers/media/i2c/ar0521.c
 +++ b/drivers/media/i2c/ar0521.c
-@@ -26,10 +26,17 @@
- #define AR0521_PIXEL_CLOCK_MIN	 (168 * 1000 * 1000)
- #define AR0521_PIXEL_CLOCK_MAX	 (414 * 1000 * 1000)
+@@ -14,17 +14,17 @@
+ #include <media/v4l2-subdev.h>
  
-+#define AR0521_NATIVE_WIDTH		2604u
-+#define AR0521_NATIVE_HEIGHT		1964u
-+#define AR0521_MIN_X_ADDR_START		0u
-+#define AR0521_MIN_Y_ADDR_START		0u
-+#define AR0521_MAX_X_ADDR_END		2603u
-+#define AR0521_MAX_Y_ADDR_END		1955u
-+
- #define AR0521_WIDTH_MIN	       8u
--#define AR0521_WIDTH_MAX	    2608u
-+#define AR0521_WIDTH_MAX	    2592u
- #define AR0521_HEIGHT_MIN	       8u
--#define AR0521_HEIGHT_MAX	    1958u
-+#define AR0521_HEIGHT_MAX	    1944u
+ /* External clock (extclk) frequencies */
+-#define AR0521_EXTCLK_MIN	  (10 * 1000 * 1000)
+-#define AR0521_EXTCLK_MAX	  (48 * 1000 * 1000)
++#define AR0521_EXTCLK_MIN		(10 * 1000 * 1000)
++#define AR0521_EXTCLK_MAX		(48 * 1000 * 1000)
  
- #define AR0521_WIDTH_BLANKING_MIN     572u
- #define AR0521_HEIGHT_BLANKING_MIN     38u /* must be even */
-@@ -176,13 +183,17 @@ static int ar0521_write_reg(struct ar0521_dev *sensor, u16 reg, u16 val)
+ /* PLL and PLL2 */
+-#define AR0521_PLL_MIN		 (320 * 1000 * 1000)
+-#define AR0521_PLL_MAX		(1280 * 1000 * 1000)
++#define AR0521_PLL_MIN			(320 * 1000 * 1000)
++#define AR0521_PLL_MAX			(1280 * 1000 * 1000)
  
- static int ar0521_set_geometry(struct ar0521_dev *sensor)
- {
-+	/* Center the image in the visible output window. */
-+	u16 x = clamp((AR0521_WIDTH_MAX - sensor->fmt.width) / 2,
-+		       AR0521_MIN_X_ADDR_START, AR0521_MAX_X_ADDR_END);
-+	u16 y = clamp(((AR0521_HEIGHT_MAX - sensor->fmt.height) / 2) & ~1,
-+		       AR0521_MIN_Y_ADDR_START, AR0521_MAX_Y_ADDR_END);
-+
- 	/* All dimensions are unsigned 12-bit integers */
--	u16 x = (AR0521_WIDTH_MAX - sensor->fmt.width) / 2;
--	u16 y = ((AR0521_HEIGHT_MAX - sensor->fmt.height) / 2) & ~1;
- 	__be16 regs[] = {
- 		be(AR0521_REG_FRAME_LENGTH_LINES),
--		be(sensor->total_height),
--		be(sensor->total_width),
-+		be(sensor->fmt.height + sensor->ctrls.vblank->val),
-+		be(sensor->fmt.width + sensor->ctrls.hblank->val),
- 		be(x),
- 		be(y),
- 		be(x + sensor->fmt.width - 1),
+ /* Effective pixel sample rate on the pixel array. */
+-#define AR0521_PIXEL_CLOCK_RATE	 (184 * 1000 * 1000)
+-#define AR0521_PIXEL_CLOCK_MIN	 (168 * 1000 * 1000)
+-#define AR0521_PIXEL_CLOCK_MAX	 (414 * 1000 * 1000)
++#define AR0521_PIXEL_CLOCK_RATE		(184 * 1000 * 1000)
++#define AR0521_PIXEL_CLOCK_MIN		(168 * 1000 * 1000)
++#define AR0521_PIXEL_CLOCK_MAX		(414 * 1000 * 1000)
+ 
+ #define AR0521_NATIVE_WIDTH		2604u
+ #define AR0521_NATIVE_HEIGHT		1964u
+@@ -33,15 +33,15 @@
+ #define AR0521_MAX_X_ADDR_END		2603u
+ #define AR0521_MAX_Y_ADDR_END		1955u
+ 
+-#define AR0521_WIDTH_MIN	       8u
+-#define AR0521_WIDTH_MAX	    2592u
+-#define AR0521_HEIGHT_MIN	       8u
+-#define AR0521_HEIGHT_MAX	    1944u
++#define AR0521_WIDTH_MIN		8u
++#define AR0521_WIDTH_MAX		2592u
++#define AR0521_HEIGHT_MIN		8u
++#define AR0521_HEIGHT_MAX		1944u
+ 
+-#define AR0521_WIDTH_BLANKING_MIN     572u
+-#define AR0521_HEIGHT_BLANKING_MIN     38u /* must be even */
+-#define AR0521_TOTAL_HEIGHT_MAX     65535u /* max_frame_lenght_lines */
+-#define AR0521_TOTAL_WIDTH_MAX      65532u /* max_line_lenght_pck */
++#define AR0521_WIDTH_BLANKING_MIN	572u
++#define AR0521_HEIGHT_BLANKING_MIN	38u /* must be even */
++#define AR0521_TOTAL_HEIGHT_MAX		65535u /* max_frame_lenght_lines */
++#define AR0521_TOTAL_WIDTH_MAX		65532u /* max_line_lenght_pck */
+ 
+ #define AR0521_ANA_GAIN_MIN		0x00
+ #define AR0521_ANA_GAIN_MAX		0x3f
 -- 
 2.37.3
 
