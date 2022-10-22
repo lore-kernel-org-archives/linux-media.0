@@ -2,108 +2,91 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F392AC3A59D
-	for <linux-media@archiver.kernel.org>; Sat, 22 Oct 2022 10:28:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99FA9C433FE
+	for <linux-media@archiver.kernel.org>; Sat, 22 Oct 2022 10:38:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbiJVK2D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 22 Oct 2022 06:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39612 "EHLO
+        id S230144AbiJVKi1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 22 Oct 2022 06:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbiJVK1q (ORCPT
+        with ESMTP id S230262AbiJVKiL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 22 Oct 2022 06:27:46 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C43E3468C7;
-        Sat, 22 Oct 2022 02:42:41 -0700 (PDT)
-Received: from localhost (89-26-75-29.goll.dyn.salzburg-online.at [89.26.75.29])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sebastianfricke)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 79C0E660247B;
-        Sat, 22 Oct 2022 10:42:17 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666431737;
-        bh=9zWEmJ8nynpwf7MY4F3NB+pWBM0KjyaSIimX+SQ+i6M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AUuaj+XeQSZZtWcN0+zLn45zkLxRS2/K0CDBPb7VvOhc3UUyYtyCQQakT9ocraMYm
-         3sxZdpmnwbIAnRUZA288aRL+KdkKb8JL9RNTx/J7fl/r0i+PDqCHP1kDpmDN//5iDJ
-         rNrPOd/bJ/+m4o5yM4P/JfTPVLg68XUJnMWGXbosRjxKwNzkL4/+jTqTlZNndEHSUi
-         +0oAyUzWnmdLz6KQ45h2ljjSa4EXV+wxYodZ2OwHQtjRzS5KmpiJGc4X5ZQ3RHwPNc
-         bNSCPVGlKIdb1WKprK9R9vgPhZdV8tCEawtA8iyR+EoH5pBoGLk2FhaXDzYWjiWRyZ
-         6N/tJs5aC3pGg==
-Date:   Sat, 22 Oct 2022 11:42:14 +0200
-From:   Sebastian Fricke <sebastian.fricke@collabora.com>
-To:     linux-media@vger.kernel.org
-Cc:     kernel@collabora.com, nas.chung@chipsnmedia.com,
-        hverkuil@xs4all.nl, ezequiel@vanguardiasur.com.ar,
-        linux-kernel@vger.kernel.org, nicolas.dufresne@collabora.com,
-        p.zabel@pengutronix.de, dafna@fastmail.com
-Subject: Re: [PATCH v10 5/7] media: chips-media: wave5: Add TODO file
-Message-ID: <20221022094214.t7d36usgqk446t4q@basti-XPS-13-9310>
-References: <20221022000506.221933-1-sebastian.fricke@collabora.com>
- <20221022000506.221933-6-sebastian.fricke@collabora.com>
+        Sat, 22 Oct 2022 06:38:11 -0400
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [IPv6:2001:4b98:dc4:8::240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70DA25CE28
+        for <linux-media@vger.kernel.org>; Sat, 22 Oct 2022 02:55:22 -0700 (PDT)
+Received: from relay10.mail.gandi.net (unknown [217.70.178.230])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id A0602C3B82
+        for <linux-media@vger.kernel.org>; Sat, 22 Oct 2022 09:21:19 +0000 (UTC)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5DF5F24000C;
+        Sat, 22 Oct 2022 09:20:38 +0000 (UTC)
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org
+Subject: [PATCH v2 06/10] media: ar0521: Add LINK_FREQ control
+Date:   Sat, 22 Oct 2022 11:20:11 +0200
+Message-Id: <20221022092015.208592-7-jacopo@jmondi.org>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20221022092015.208592-1-jacopo@jmondi.org>
+References: <20221022092015.208592-1-jacopo@jmondi.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20221022000506.221933-6-sebastian.fricke@collabora.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hey all,
+Add support for V4L2_CID_LINK_FREQ which currently reports a single
+hard-coded frequency which depends on the fixed pixel clock.
 
-sorry I noticed that the TODO file is still in the staging directory.
-Will be fixed in V11.
+Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+---
+ drivers/media/i2c/ar0521.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-Greetings,
-Sebastian
+diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
+index fcd852760750..2310346f11d5 100644
+--- a/drivers/media/i2c/ar0521.c
++++ b/drivers/media/i2c/ar0521.c
+@@ -89,6 +89,10 @@ static const char * const ar0521_supply_names[] = {
+ 	"vaa",		/* Analog (2.7V) supply */
+ };
+ 
++static const s64 ar0521_link_frequencies[] = {
++	184000000,
++};
++
+ struct ar0521_ctrls {
+ 	struct v4l2_ctrl_handler handler;
+ 	struct {
+@@ -547,6 +551,13 @@ static int ar0521_s_ctrl(struct v4l2_ctrl *ctrl)
+ 		ret = ar0521_write_reg(sensor, AR0521_REG_TEST_PATTERN_MODE,
+ 				       ctrl->val);
+ 		break;
++	case V4L2_CID_LINK_FREQ:
++		/*
++		 * Link frequency index is used at PLL configuration time,
++		 * nothing to do here.
++		 */
++		ret = 0;
++		break;
+ 	default:
+ 		dev_err(&sensor->i2c_client->dev,
+ 			"Unsupported control %x\n", ctrl->id);
+@@ -611,6 +622,10 @@ static int ar0521_init_controls(struct ar0521_dev *sensor)
+ 	ctrls->exposure = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_EXPOSURE, 0,
+ 					    65535, 1, 360);
+ 
++	v4l2_ctrl_new_int_menu(hdl, ops, V4L2_CID_LINK_FREQ,
++			       ARRAY_SIZE(ar0521_link_frequencies) - 1,
++			       0, ar0521_link_frequencies);
++
+ 	ctrls->test_pattern = v4l2_ctrl_new_std_menu_items(hdl, ops,
+ 					V4L2_CID_TEST_PATTERN,
+ 					ARRAY_SIZE(test_pattern_menu) - 1,
+-- 
+2.37.3
 
-On 22.10.2022 02:05, Sebastian Fricke wrote:
->From: Nas Chung <nas.chung@chipsnmedia.com>
->
->Add a TODO file with remaining elements to be improved/added.
->
->Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
->Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
->Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
->Signed-off-by: Nas Chung <nas.chung@chipsnmedia.com>
->---
-> drivers/staging/media/wave5/TODO | 25 +++++++++++++++++++++++++
-> 1 file changed, 25 insertions(+)
-> create mode 100644 drivers/staging/media/wave5/TODO
->
->diff --git a/drivers/staging/media/wave5/TODO b/drivers/staging/media/wave5/TODO
->new file mode 100644
->index 000000000000..6cc38d4ccbc9
->--- /dev/null
->+++ b/drivers/staging/media/wave5/TODO
->@@ -0,0 +1,25 @@
->+* Handle interrupts better
->+
->+Currently the interrupt handling uses an unusual design employing a kfifo to
->+transfer irq status to irq thread. This was done as a work around for dropped
->+interrupts seen with IRQF_ONESHOT based handling.
->+
->+This needs further investigation and fixing properly, with the aid of
->+C&M and StarFive engineers.
->+
->+* remove all struct fields, that are assigned to but not used in the code, add
->+  documentation about each removed field at the macro for the register it is
->+  related too.
->+
->+* power management handling - add (runtime_)suspen/resume cb where the clock is enabled
->+
->+* revise logic of wave5_vpu_(dec/enc)_register_framebuffer
->+
->+* check if the  normal kernel endianness/__swab32 routines are sufficient. (instead of the ones
->+  implemented in the driver)
->+
->+* Extended Codec Controls for encoder.
->+
->+implement extended codec control for HEVC/H264 encoder.
->+PROFILE/LEVEL/MIN_QP/MAX_QP/LOOP_FILTER/HFLIP/VFIIP/ROTATE/
->+GOP_SIZE/RC_ENABLE/I_PERIOD/BITRATE.
->-- 
->2.25.1
->
