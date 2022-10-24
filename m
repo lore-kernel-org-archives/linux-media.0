@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBFABC67871
-	for <linux-media@archiver.kernel.org>; Mon, 24 Oct 2022 22:04:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6DF6C38A2D
+	for <linux-media@archiver.kernel.org>; Mon, 24 Oct 2022 22:04:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbiJXWEK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 Oct 2022 18:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35742 "EHLO
+        id S230494AbiJXWEL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 Oct 2022 18:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbiJXWDi (ORCPT
+        with ESMTP id S231586AbiJXWDj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 Oct 2022 18:03:38 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844DCC896D;
-        Mon, 24 Oct 2022 13:17:34 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id b2so7640920eja.6;
-        Mon, 24 Oct 2022 13:17:34 -0700 (PDT)
+        Mon, 24 Oct 2022 18:03:39 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEAE51D374A;
+        Mon, 24 Oct 2022 13:17:47 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id y14so7596468ejd.9;
+        Mon, 24 Oct 2022 13:17:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TCm+nwpQdSOn7t4hRCuqY5Xxb/T0BgOg5M1eXRCRU+o=;
-        b=f6naWv65smWskYD3+RwsOxR3AHdViC2myv5+IfMnG6D1Dt6XYeg7HfeaMkL93poPQL
-         2ViDSLas/oBsXUAw0uFGZ/Su7lZIBmuTfBE5fmWe7mM/pYunMmPjccClYW7bGFk8Nmop
-         1bHYNxrYiAszg11ugtyHUZekAkgk2Yxu3Eccvhx4PRu7mxehc7pgh1V/csXNHCYmcoH5
-         h80cKx+EDq+QL1Td35T1BpWEdg7F1TEFQgvlYpDd4xN04l7baH0gUF86ubDAVR1Sbpmt
-         vsIyRMg/9cLx5yj/9S8pmxCORjdbfkKB72dQBiHapZwNkFu0B3+C0Re7UDImZjX6X2Z8
-         oLRw==
+        bh=br85ZXo6PMYmOWPRWm1Lwu7e9xuitFs0s08ZOKz/bEw=;
+        b=mlFlARERiNpYjdF46Kjy8T2k8M5VqBqW+0lP/3ZaGdJdLyWr3eWrtj0AqiAmbWNmY5
+         mNJatXSjxSksNHCBcbS0M6aTlxc31B429GKIN6mfOm0h2uZrV/IZjg8LB+on5gOqe83g
+         qJA/CU8X4aqCaKb2/0SJlcdTucW+ABvLWVczuoFRiahl37pPCD+xgHVfB+E4GZBmJGoY
+         82Af+7hFZVPBW3hsYibOIz9KRt8aOvoXrqXSNMt4RfE+4rojr6T8n2/J01/03QsmippX
+         3+qV0m58wEgxhmO2PzzLoJsrBAPSaZvN4RDZXMuQKupmwKZ8k2xCeEu7tJzPfiJyNGO9
+         4d4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TCm+nwpQdSOn7t4hRCuqY5Xxb/T0BgOg5M1eXRCRU+o=;
-        b=2J2OaeDU82SMN743Gf9Sir+QGJujRivt68uI0hdVpbJSMBhCeJT22oxhznRfKQkcgE
-         C7b2phz3MokVQGa4bbawSDmEXY9kEQjEkr+BNJNmp3R+2wJ5dAuvvruuZ71ntK/0LrQm
-         m3JT7GFEdIvJi2uUaVTMcSrPXrZj26gc3IPKMcPkcN+YQOiboVqRfuDh1Kn+1sZYOXPv
-         SBmpn9z9Mvis3lJDW2y2MjWagXHs96h/4aEI09KwnSeuIupQoinG29kllmOb/VvwdzWX
-         ijOCEgulF0y/Zc1ViQZIl64UnFhKIDYXnKVIbwrW+HAcIEADL1cMVFMjmWsmLyiOFMNC
-         G5fg==
-X-Gm-Message-State: ACrzQf29QZoee3hZ9S1q6nBQdWDQgoK9IZoafdTx9sEq6ZYajJaLRyjD
-        Fe+zQFL89bPzkVLHpH4Hti4=
-X-Google-Smtp-Source: AMsMyM7cAnM2XbaZa1dqUDehRJoXysBUQ/UwZZ7cJs4j+x+QBC+B/Wn0ZTll2s9q63LOja8/xUp1tA==
-X-Received: by 2002:a17:906:5dce:b0:78d:ec48:6a58 with SMTP id p14-20020a1709065dce00b0078dec486a58mr29115013ejv.209.1666642533828;
-        Mon, 24 Oct 2022 13:15:33 -0700 (PDT)
+        bh=br85ZXo6PMYmOWPRWm1Lwu7e9xuitFs0s08ZOKz/bEw=;
+        b=k0GXCafShBUCuuk0mhactDVUC9D5V8XY+VKsA/Jms+2mOVW1wKMuL0F9mX1Aib0rlz
+         /FZ9it8nxOyNQRya1ut25aPlSaPEfhUP7o/PP+1w7bfAmslOTq4ZM2cwJP6T4Wk3Qx35
+         t3wCsJAMVISa+k8l56IuvAnIOoMFbcji78EzHObagMN2tbgQm2d2n4EhB6PnwZrfye2L
+         O3/T7XeuJ8d66Hk5eQuStMIJvJ1PbBrdVm4hmRR2mMKGJt2OCy5/EVUxe4PYk3ULlD6p
+         a+XFvWQpUGlxFraq1VPUGWUQ1RAgAu1iNLT1KWGDCnM3S1yvVZHiFsHzpswcjqz2CVuI
+         iu+Q==
+X-Gm-Message-State: ACrzQf1mauvyfX3QEFv+v2126rSzVA1F05/sR/18vmDxBPslZuZRW3dG
+        YUqa+1LLshQqmZzkarpavdg=
+X-Google-Smtp-Source: AMsMyM5KQZfPD1opR7zU+y0gTmmW2ZKeYjkvwDeB6NY2dSICdJVz7xLcoPyYJBVIOYotpP9scfi4aA==
+X-Received: by 2002:a17:906:9bca:b0:78d:bc5a:9137 with SMTP id de10-20020a1709069bca00b0078dbc5a9137mr30735316ejc.25.1666642541563;
+        Mon, 24 Oct 2022 13:15:41 -0700 (PDT)
 Received: from kista.localdomain (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id op7-20020a170906bce700b0073d638a7a89sm332023ejb.99.2022.10.24.13.15.32
+        by smtp.gmail.com with ESMTPSA id op7-20020a170906bce700b0073d638a7a89sm332023ejb.99.2022.10.24.13.15.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 13:15:33 -0700 (PDT)
+        Mon, 24 Oct 2022 13:15:41 -0700 (PDT)
 From:   Jernej Skrabec <jernej.skrabec@gmail.com>
 To:     mripard@kernel.org, paul.kocialkowski@bootlin.com
 Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
@@ -58,9 +58,9 @@ Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-kernel@vger.kernel.org,
         Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: [PATCH 04/11] media: cedrus: Add helper for checking capabilities
-Date:   Mon, 24 Oct 2022 22:15:08 +0200
-Message-Id: <20221024201515.34129-5-jernej.skrabec@gmail.com>
+Subject: [PATCH 11/11] media: cedrus: h265: Support decoding 10-bit frames
+Date:   Mon, 24 Oct 2022 22:15:15 +0200
+Message-Id: <20221024201515.34129-12-jernej.skrabec@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024201515.34129-1-jernej.skrabec@gmail.com>
 References: <20221024201515.34129-1-jernej.skrabec@gmail.com>
@@ -70,65 +70,139 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There is several different Cedrus cores with varying capabilities, so
-some operations like listing formats depends on checks if feature is
-supported or not.
-
-Currently check for capabilities is only in format enumeration helper,
-but it will be used also elsewhere later. Let's convert this check to
-helper and while at it, also simplify it. There is no need to check if
-capability mask is zero, condition will still work properly.
-
-No functional changes intended.
+10-bit frames needs extra buffer space when 8-bit capture format is
+used. Use previously prepared infrastructure to adjust buffer size.
 
 Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 ---
- drivers/staging/media/sunxi/cedrus/cedrus.h       | 6 ++++++
- drivers/staging/media/sunxi/cedrus/cedrus_video.c | 8 +-------
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ drivers/staging/media/sunxi/cedrus/cedrus.c   |  7 ++++
+ drivers/staging/media/sunxi/cedrus/cedrus.h   |  1 +
+ .../staging/media/sunxi/cedrus/cedrus_h265.c  | 35 +++++++++++++++++++
+ .../staging/media/sunxi/cedrus/cedrus_regs.h  | 16 +++++++++
+ 4 files changed, 59 insertions(+)
 
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
+index fbe3b2e7c1d4..1054528dbb32 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
+@@ -75,6 +75,13 @@ static int cedrus_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	struct vb2_queue *vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
+ 					       V4L2_BUF_TYPE_VIDEO_CAPTURE);
+ 
++	if (ctrl->id == V4L2_CID_STATELESS_HEVC_SPS) {
++		const struct v4l2_ctrl_hevc_sps *sps = ctrl->p_new.p_hevc_sps;
++
++		ctx->bit_depth = max(sps->bit_depth_luma_minus8,
++				     sps->bit_depth_chroma_minus8) + 8;
++	}
++
+ 	if (!vb2_is_busy(vq) && !vb2_is_streaming(vq))
+ 		cedrus_reset_cap_format(ctx);
+ 
 diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.h b/drivers/staging/media/sunxi/cedrus/cedrus.h
-index 9cffaf228422..1a98790a99af 100644
+index 774fe8048ce3..522c184e2afc 100644
 --- a/drivers/staging/media/sunxi/cedrus/cedrus.h
 +++ b/drivers/staging/media/sunxi/cedrus/cedrus.h
-@@ -268,6 +268,12 @@ vb2_to_cedrus_buffer(const struct vb2_buffer *p)
- 	return vb2_v4l2_to_cedrus_buffer(to_vb2_v4l2_buffer(p));
- }
+@@ -119,6 +119,7 @@ struct cedrus_ctx {
+ 	struct v4l2_pix_format		src_fmt;
+ 	struct v4l2_pix_format		dst_fmt;
+ 	struct cedrus_dec_ops		*current_codec;
++	unsigned int			bit_depth;
  
-+static inline bool
-+cedrus_is_capable(struct cedrus_ctx *ctx, unsigned int capabilities)
+ 	struct v4l2_ctrl_handler	hdl;
+ 	struct v4l2_ctrl		**ctrls;
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+index 5d3da50ce46a..fc9297232456 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+@@ -41,6 +41,19 @@ struct cedrus_h265_sram_pred_weight {
+ 	__s8	offset;
+ } __packed;
+ 
++static unsigned int cedrus_h265_2bit_size(unsigned int width,
++					  unsigned int height)
 +{
-+	return (ctx->dev->capabilities & capabilities) == capabilities;
++	/*
++	 * Vendor library additionally aligns width and height to 16,
++	 * but all capture formats are already aligned to that anyway,
++	 * so we can skip that here. All formats are also one form of
++	 * YUV 4:2:0 or another, so we can safely assume multiplication
++	 * factor of 1.5.
++	 */
++	return ALIGN(width / 4, 32) * height * 3 / 2;
 +}
 +
- void *cedrus_find_control_data(struct cedrus_ctx *ctx, u32 id);
- u32 cedrus_get_num_of_controls(struct cedrus_ctx *ctx, u32 id);
- 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_video.c b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-index 27a7120fa6fb..04b7b87ef0b7 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-@@ -177,19 +177,13 @@ static int cedrus_enum_fmt(struct file *file, struct v4l2_fmtdesc *f,
- 			   u32 direction)
+ static enum cedrus_irq_status cedrus_h265_irq_status(struct cedrus_ctx *ctx)
  {
- 	struct cedrus_ctx *ctx = cedrus_file2ctx(file);
--	struct cedrus_dev *dev = ctx->dev;
--	unsigned int capabilities = dev->capabilities;
--	struct cedrus_format *fmt;
- 	unsigned int i, index;
+ 	struct cedrus_dev *dev = ctx->dev;
+@@ -802,6 +815,18 @@ static int cedrus_h265_setup(struct cedrus_ctx *ctx, struct cedrus_run *run)
+ 						      VE_DEC_H265_SRAM_OFFSET_PRED_WEIGHT_CHROMA_L1);
+ 	}
  
- 	/* Index among formats that match the requested direction. */
- 	index = 0;
++	if (ctx->bit_depth > 8) {
++		unsigned int stride = ALIGN(ctx->dst_fmt.width / 4, 32);
++
++		reg = ctx->dst_fmt.sizeimage -
++		      cedrus_h265_2bit_size(ctx->dst_fmt.width,
++					    ctx->dst_fmt.height);
++		cedrus_write(dev, VE_DEC_H265_OFFSET_ADDR_FIRST_OUT, reg);
++
++		reg = VE_DEC_H265_10BIT_CONFIGURE_FIRST_2BIT_STRIDE(stride);
++		cedrus_write(dev, VE_DEC_H265_10BIT_CONFIGURE, reg);
++	}
++
+ 	/* Enable appropriate interruptions. */
+ 	cedrus_write(dev, VE_DEC_H265_CTRL, VE_DEC_H265_CTRL_IRQ_MASK);
  
- 	for (i = 0; i < CEDRUS_FORMATS_COUNT; i++) {
--		fmt = &cedrus_formats[i];
--
--		if (fmt->capabilities && (fmt->capabilities & capabilities) !=
--		    fmt->capabilities)
-+		if (!cedrus_is_capable(ctx, cedrus_formats[i].capabilities))
- 			continue;
+@@ -874,6 +899,15 @@ static void cedrus_h265_trigger(struct cedrus_ctx *ctx)
+ 	cedrus_write(dev, VE_DEC_H265_TRIGGER, VE_DEC_H265_TRIGGER_DEC_SLICE);
+ }
  
- 		if (!(cedrus_formats[i].directions & direction))
++static unsigned int cedrus_h265_extra_cap_size(struct cedrus_ctx *ctx,
++					       struct v4l2_pix_format *pix_fmt)
++{
++	if (ctx->bit_depth > 8)
++		return cedrus_h265_2bit_size(pix_fmt->width, pix_fmt->height);
++
++	return 0;
++}
++
+ struct cedrus_dec_ops cedrus_dec_ops_h265 = {
+ 	.irq_clear	= cedrus_h265_irq_clear,
+ 	.irq_disable	= cedrus_h265_irq_disable,
+@@ -882,4 +916,5 @@ struct cedrus_dec_ops cedrus_dec_ops_h265 = {
+ 	.start		= cedrus_h265_start,
+ 	.stop		= cedrus_h265_stop,
+ 	.trigger	= cedrus_h265_trigger,
++	.extra_cap_size	= cedrus_h265_extra_cap_size,
+ };
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_regs.h b/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
+index 655c05b389cf..05e6cbc548ab 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
+@@ -498,6 +498,22 @@
+ 
+ #define VE_DEC_H265_LOW_ADDR			(VE_ENGINE_DEC_H265 + 0x80)
+ 
++#define VE_DEC_H265_OFFSET_ADDR_FIRST_OUT	(VE_ENGINE_DEC_H265 + 0x84)
++#define VE_DEC_H265_OFFSET_ADDR_SECOND_OUT	(VE_ENGINE_DEC_H265 + 0x88)
++
++#define VE_DEC_H265_SECOND_OUT_FMT_8BIT_PLUS_2BIT	0
++#define VE_DEC_H265_SECOND_OUT_FMT_P010			1
++#define VE_DEC_H265_SECOND_OUT_FMT_10BIT_4x4_TILED	2
++
++#define VE_DEC_H265_10BIT_CONFIGURE_SECOND_OUT_FMT(v) \
++	SHIFT_AND_MASK_BITS(v, 24, 23)
++#define VE_DEC_H265_10BIT_CONFIGURE_SECOND_2BIT_ENABLE	BIT(22)
++#define VE_DEC_H265_10BIT_CONFIGURE_SECOND_2BIT_STRIDE(v) \
++	SHIFT_AND_MASK_BITS(v, 21, 11)
++#define VE_DEC_H265_10BIT_CONFIGURE_FIRST_2BIT_STRIDE(v) \
++	SHIFT_AND_MASK_BITS(v, 10, 0)
++#define VE_DEC_H265_10BIT_CONFIGURE		(VE_ENGINE_DEC_H265 + 0x8c)
++
+ #define VE_DEC_H265_LOW_ADDR_PRIMARY_CHROMA(a) \
+ 	SHIFT_AND_MASK_BITS(a, 31, 24)
+ #define VE_DEC_H265_LOW_ADDR_SECONDARY_CHROMA(a) \
 -- 
 2.38.1
 
