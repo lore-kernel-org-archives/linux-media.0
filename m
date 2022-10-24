@@ -2,244 +2,472 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D015C38A2D
-	for <linux-media@archiver.kernel.org>; Mon, 24 Oct 2022 15:02:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6527EECAAA1
+	for <linux-media@archiver.kernel.org>; Mon, 24 Oct 2022 15:14:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233467AbiJXPCC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 Oct 2022 11:02:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43756 "EHLO
+        id S231523AbiJXPOE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 Oct 2022 11:14:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232447AbiJXPBp (ORCPT
+        with ESMTP id S232666AbiJXPNe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 Oct 2022 11:01:45 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33671132EBE
-        for <linux-media@vger.kernel.org>; Mon, 24 Oct 2022 06:38:16 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso3931045pjg.5
-        for <linux-media@vger.kernel.org>; Mon, 24 Oct 2022 06:38:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wiP9jS952IZOWcL/pVtNm5S9NucWCd+fi6C3AHbXT/o=;
-        b=Wmjw+YBbfbQzr4P3mGJzdz86Pr1QTcS8Xx0ZDy3yQG5kMeVAWjvvzMAGPOlpqZA4Hd
-         nX1PTIKK4WGThZMRatkX7W62zknb05+sb435nbmW/m+zJk7RWBfqVK2DF2mzVAljEnvR
-         rJy9vg+9UyyOFUzXo6fx1spl+kxJv9k6cGosUCrIBvZf94YBh1Qu+yGBLHNXvXBJigmN
-         EZ608QbdhjYMG58PwJ4pLxhHEGP3UipSJbVjyf8GXoqop8AQEeoMTBl0p4DJnpL6XScw
-         IrkKjSCjjjuUf+z3yg8/i2NdD6cNllkY9ZilJBO0+7Gm9qc0MgS9D5gEHhiF+y3/QcXm
-         SLdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wiP9jS952IZOWcL/pVtNm5S9NucWCd+fi6C3AHbXT/o=;
-        b=XZRbAVEjpRYi3dgt4SFnP0YWxNUcIiLCf1XWJIcjiqNSUavHH2WZICwMhSnZtqpLOG
-         xQ/8VviiZLnPvuJbdvQN45TOTBBqrblyVqXdjc64mkRsbYMPHlunamuLMJqQalSgzlsN
-         pBWAQUCv04rrAwjUHC86iRAanxcH9L+QFxQbrRq47OZsEgJ55XoK6EjxKPJ1rsjrU39l
-         tAmRw3XgCo05IOP7W6kaTgcZsoXCi9PC5YMx4kYb5Aq95+ERpPP93fuIi18ipkt6LaSX
-         BLzMA6csVODh77xkUwmZBtV5C1sCFyAjBEy4hrS2mF9XBUXmiiqOsxzLlFU/xEY2j9zJ
-         2ucg==
-X-Gm-Message-State: ACrzQf3zsWOTum5Oobwz9WWzI87UVTq/Ti/pwsAr/4uCW66kQnyanrRr
-        8XVugvQv9eTrF0qjWQaK+9wyz3o0F91KmQ==
-X-Google-Smtp-Source: AMsMyM4B5Snj6u5GQrG1tZZFXhC/VAAEyUP1giWk5ju319EFibalR6g5PfblDQDPQyIyehJLwnKEYg==
-X-Received: by 2002:a05:6214:27ea:b0:4bb:6e71:7cc6 with SMTP id jt10-20020a05621427ea00b004bb6e717cc6mr4320206qvb.24.1666614599792;
-        Mon, 24 Oct 2022 05:29:59 -0700 (PDT)
-Received: from [192.168.1.8] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id 5-20020a370805000000b006ec09d7d357sm14636384qki.47.2022.10.24.05.29.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 05:29:59 -0700 (PDT)
-Message-ID: <fc923325-335d-e768-ea72-ba1712320d9d@linaro.org>
-Date:   Mon, 24 Oct 2022 08:29:57 -0400
+        Mon, 24 Oct 2022 11:13:34 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E724CE98D;
+        Mon, 24 Oct 2022 06:51:05 -0700 (PDT)
+Received: from localhost (89-26-75-29.goll.dyn.salzburg-online.at [89.26.75.29])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sebastianfricke)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 898D56602331;
+        Mon, 24 Oct 2022 14:41:08 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666618868;
+        bh=5sJz/mCE36R1t2dbZTJQM+pfSbheQWhw3FBzw/HNx5U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lM3owR3yCaeo1ajxGKxGH+OT/RqkrhiAfYMjQ/xL2vPCNzrGx8tUw+EJ72lGgCJ6z
+         ImIXrwLQaJnHn8w6V8KRkB7quKsKBDzF3pQVV/lDZLWAL4BsqSRHFSKQC2BUVJBdkX
+         Ryvz+EQFkAjwi92SgWwdAHlLOtiDT4iz3ancYe0+gdhMuEgh+i380wYtREU2gJyuwm
+         6UrM77XVc9OI3M/6KRWR2u0OY26DTfpwvLaIao1qJWEcuky9vvsEqOC/54TUBeMIAw
+         Yf/tTnWSPySufvPFhLaP0cUbZ6uhN+mgstk50CCggu/QX2+KxWdPX4RDaaZh1TEZYk
+         Dg6fm3BqpBJuQ==
+Date:   Mon, 24 Oct 2022 15:41:05 +0200
+From:   Sebastian Fricke <sebastian.fricke@collabora.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     linux-media@vger.kernel.org, kernel@collabora.com,
+        nas.chung@chipsnmedia.com, hverkuil@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, linux-kernel@vger.kernel.org,
+        nicolas.dufresne@collabora.com, p.zabel@pengutronix.de,
+        dafna@fastmail.com
+Subject: Re: [PATCH v10 3/7] media: chips-media: wave5: Add the vdi layer
+Message-ID: <20221024134105.y6q7izgvzbf3xh5q@basti-XPS-13-9310>
+References: <20221022000506.221933-1-sebastian.fricke@collabora.com>
+ <20221022000506.221933-4-sebastian.fricke@collabora.com>
+ <6a2e5dec-ab54-a156-98f0-a8bff6a24700@wanadoo.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 05/21] ARM: s3c: simplify platform code
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Mark Brown <broonie@kernel.org>,
-        Juerg Haefliger <juerg.haefliger@canonical.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org
-References: <20221021202254.4142411-1-arnd@kernel.org>
- <20221021203329.4143397-5-arnd@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221021203329.4143397-5-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6a2e5dec-ab54-a156-98f0-a8bff6a24700@wanadoo.fr>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 21/10/2022 16:27, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Following down the now unused symbols and header files, some additional
-> content can be dropped that is used by neither the s3c64xx DT support
-> nor the crag6410 board.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/arm/mach-s3c/Kconfig                    |  50 --
->  arch/arm/mach-s3c/Kconfig.s3c64xx            |   5 -
->  arch/arm/mach-s3c/Makefile                   |   2 -
->  arch/arm/mach-s3c/Makefile.s3c64xx           |   1 -
->  arch/arm/mach-s3c/adc-core.h                 |  24 -
->  arch/arm/mach-s3c/ata-core-s3c64xx.h         |  24 -
->  arch/arm/mach-s3c/backlight-s3c64xx.h        |  22 -
->  arch/arm/mach-s3c/cpu.h                      |  47 --
->  arch/arm/mach-s3c/dev-audio-s3c64xx.c        | 127 ----
->  arch/arm/mach-s3c/devs.c                     | 725 -------------------
->  arch/arm/mach-s3c/devs.h                     |  37 -
->  arch/arm/mach-s3c/dma-s3c64xx.h              |  57 --
->  arch/arm/mach-s3c/dma.h                      |   2 -
->  arch/arm/mach-s3c/gpio-cfg-helpers.h         | 124 ----
->  arch/arm/mach-s3c/gpio-cfg.h                 |  19 -
->  arch/arm/mach-s3c/gpio-core.h                |   3 -
->  arch/arm/mach-s3c/gpio-samsung.c             | 443 +----------
->  arch/arm/mach-s3c/iic-core.h                 |   7 -
->  arch/arm/mach-s3c/init.c                     |  26 +-
->  arch/arm/mach-s3c/map-s3c.h                  |  37 -
->  arch/arm/mach-s3c/onenand-core-s3c64xx.h     |  32 -
->  arch/arm/mach-s3c/otom.h                     |  25 -
->  arch/arm/mach-s3c/pm-core-s3c64xx.h          |  17 -
->  arch/arm/mach-s3c/pm-s3c64xx.c               |  83 ---
->  arch/arm/mach-s3c/pm.c                       |   7 +-
->  arch/arm/mach-s3c/pm.h                       |  12 -
->  arch/arm/mach-s3c/regs-srom-s3c64xx.h        |  55 --
->  arch/arm/mach-s3c/s3c6400.c                  |   6 -
->  arch/arm/mach-s3c/s3c6410.c                  |   9 -
->  arch/arm/mach-s3c/sdhci.h                    |  25 -
->  arch/arm/mach-s3c/setup-ide-s3c64xx.c        |  40 -
->  arch/arm/mach-s3c/sleep-s3c64xx.S            |  27 -
->  include/linux/platform_data/media/s5p_hdmi.h |  32 -
->  33 files changed, 6 insertions(+), 2146 deletions(-)
->  delete mode 100644 arch/arm/mach-s3c/adc-core.h
->  delete mode 100644 arch/arm/mach-s3c/ata-core-s3c64xx.h
->  delete mode 100644 arch/arm/mach-s3c/backlight-s3c64xx.h
->  delete mode 100644 arch/arm/mach-s3c/dma-s3c64xx.h
->  delete mode 100644 arch/arm/mach-s3c/dma.h
->  delete mode 100644 arch/arm/mach-s3c/onenand-core-s3c64xx.h
->  delete mode 100644 arch/arm/mach-s3c/otom.h
->  delete mode 100644 arch/arm/mach-s3c/regs-srom-s3c64xx.h
->  delete mode 100644 arch/arm/mach-s3c/setup-ide-s3c64xx.c
->  delete mode 100644 include/linux/platform_data/media/s5p_hdmi.h
-> 
-> diff --git a/arch/arm/mach-s3c/Kconfig b/arch/arm/mach-s3c/Kconfig
-> index 0dde4010aa64..b3656109f1f7 100644
-> --- a/arch/arm/mach-s3c/Kconfig
-> +++ b/arch/arm/mach-s3c/Kconfig
-> @@ -90,36 +90,6 @@ config S3C_DEV_I2C1
->  	help
->  	  Compile in platform device definitions for I2C channel 1
->  
-> -config S3C_DEV_I2C2
-> -	bool
-> -	help
-> -	  Compile in platform device definitions for I2C channel 2
-> -
-> -config S3C_DEV_I2C3
-> -	bool
-> -	help
-> -	  Compile in platform device definition for I2C controller 3
-> -
-> -config S3C_DEV_I2C4
-> -	bool
-> -	help
-> -	  Compile in platform device definition for I2C controller 4
-> -
-> -config S3C_DEV_I2C5
-> -	bool
-> -	help
-> -	  Compile in platform device definition for I2C controller 5
-> -
-> -config S3C_DEV_I2C6
-> -	bool
-> -	help
-> -	  Compile in platform device definition for I2C controller 6
-> -
-> -config S3C_DEV_I2C7
-> -	bool
-> -	help
-> -	  Compile in platform device definition for I2C controller 7
-> -
->  config S3C_DEV_FB
->  	bool
->  	help
-> @@ -135,26 +105,6 @@ config S3C_DEV_USB_HSOTG
->  	help
->  	  Compile in platform device definition for USB high-speed OtG
->  
-> -config S3C_DEV_WDT
-> -	bool
-> -	help
-> -	  Compile in platform device definition for Watchdog Timer
-> -
-> -config S3C_DEV_NAND
-> -	bool
-> -	help
-> -	  Compile in platform device definition for NAND controller
-> -
-> -config S3C_DEV_ONENAND
-> -	bool
-> -	help
-> -	  Compile in platform device definition for OneNAND controller
-> -
-> -config S3C_DEV_RTC
-> -	bool
-> -	help
-> -	  Compile in platform device definition for RTC
-> -
->  config S3C64XX_DEV_SPI0
->  	bool
->  	help
-> diff --git a/arch/arm/mach-s3c/Kconfig.s3c64xx b/arch/arm/mach-s3c/Kconfig.s3c64xx
-> index c403d7642f0a..c52c7ce1d8fa 100644
-> --- a/arch/arm/mach-s3c/Kconfig.s3c64xx
-> +++ b/arch/arm/mach-s3c/Kconfig.s3c64xx
-> @@ -15,12 +15,9 @@ menuconfig ARCH_S3C64XX
->  	select HAVE_TCM
->  	select PLAT_SAMSUNG
->  	select PM_GENERIC_DOMAINS if PM
-> -	select S3C_DEV_NAND if ATAGS
->  	select S3C_GPIO_TRACK if ATAGS
-> -	select S3C2410_WATCHDOG
+Hey Christophe,
 
-This does not seem right. S3C2410_WATCHDOG is a driver used by all
-(including Exynos) platforms.
+thank you for the review.
 
->  	select SAMSUNG_ATAGS if ATAGS
->  	select SAMSUNG_WAKEMASK if PM
-> -	select WATCHDOG
->  	help
->  	  Samsung S3C64XX series based systems
->  
-> @@ -121,10 +118,8 @@ config MACH_WLF_CRAGG_6410
->  	select S3C_DEV_HSMMC1
->  	select S3C_DEV_HSMMC2
->  	select S3C_DEV_I2C1
-> -	select S3C_DEV_RTC
+On 23.10.2022 11:28, Christophe JAILLET wrote:
+>Le 22/10/2022 à 02:05, Sebastian Fricke a écrit :
+>>From: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+>>
+>>Add the vdi part of the wave5 codec driver. The wave5-vdi.h header
+>>defines common helper functions such as writing/reading register and
+>>handling endianness.
+>>
+>>Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+>>Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+>>Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+>
+>Hi, a few nit below.
+>
+>CJ
+>
+>>---
+>>  .../platform/chips-media/wave5/wave5-vdi.c    | 261 ++++++++++++++++++
+>>  .../platform/chips-media/wave5/wave5-vdi.h    |  67 +++++
+>>  .../platform/chips-media/wave5/wave5-vpuapi.h |   2 +-
+>>  3 files changed, 329 insertions(+), 1 deletion(-)
+>>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vdi.c
+>>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vdi.h
+>>
+>>diff --git a/drivers/media/platform/chips-media/wave5/wave5-vdi.c b/drivers/media/platform/chips-media/wave5/wave5-vdi.c
+>>new file mode 100644
+>>index 000000000000..f85580dba294
+>>--- /dev/null
+>>+++ b/drivers/media/platform/chips-media/wave5/wave5-vdi.c
+>>@@ -0,0 +1,261 @@
+>>+// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
+>>+/*
+>>+ * Wave5 series multi-standard codec IP - low level access functions
+>>+ *
+>>+ * Copyright (C) 2021 CHIPS&MEDIA INC
+>>+ */
+>>+
+>>+#include <linux/bug.h>
+>>+#include "wave5-vdi.h"
+>>+#include "wave5-vpu.h"
+>>+#include "wave5-regdefine.h"
+>>+#include <linux/delay.h>
+>>+
+>>+#define VDI_SRAM_BASE_ADDR		0x00
+>>+
+>>+#define VDI_SYSTEM_ENDIAN		VDI_LITTLE_ENDIAN
+>>+#define VDI_128BIT_BUS_SYSTEM_ENDIAN	VDI_128BIT_LITTLE_ENDIAN
+>>+
+>>+static int wave5_vdi_allocate_common_memory(struct device *dev)
+>>+{
+>>+	struct vpu_device *vpu_dev = dev_get_drvdata(dev);
+>>+
+>>+	if (!vpu_dev->common_mem.vaddr) {
+>>+		int ret;
+>>+
+>>+		vpu_dev->common_mem.size = SIZE_COMMON;
+>>+		ret = wave5_vdi_allocate_dma_memory(vpu_dev, &vpu_dev->common_mem);
+>>+		if (ret) {
+>>+			dev_err(dev, "unable to allocate common buffer\n");
+>>+			return ret;
+>>+		}
+>>+	}
+>>+
+>>+	dev_dbg(dev, "[VDI] common_mem: daddr=%pad size=%zu vaddr=0x%p\n",
+>>+		&vpu_dev->common_mem.daddr, vpu_dev->common_mem.size, vpu_dev->common_mem.vaddr);
+>>+
+>>+	return 0;
+>>+}
+>>+
+>>+int wave5_vdi_init(struct device *dev)
+>>+{
+>>+	struct vpu_device *vpu_dev = dev_get_drvdata(dev);
+>>+	int ret;
+>>+
+>>+	ret = wave5_vdi_allocate_common_memory(dev);
+>>+	if (ret < 0) {
+>>+		dev_err(dev, "[VDI] failed to get vpu common buffer from driver\n");
+>>+		return ret;
+>>+	}
+>>+
+>>+	if (!PRODUCT_CODE_W_SERIES(vpu_dev->product_code)) {
+>>+		WARN_ONCE(1, "unsupported product code: 0x%x\n", vpu_dev->product_code);
+>>+		return 0;
+>>+	}
+>>+
+>>+	// if BIT processor is not running.
+>>+	if (wave5_vdi_readl(vpu_dev, W5_VCPU_CUR_PC) == 0) {
+>>+		int i;
+>>+
+>>+		for (i = 0; i < 64; i++)
+>>+			wave5_vdi_write_register(vpu_dev, (i * 4) + 0x100, 0x0);
+>>+	}
+>>+
+>>+	dev_dbg(dev, "[VDI] driver initialized successfully\n");
+>>+
+>>+	return 0;
+>>+}
+>>+
+>>+int wave5_vdi_release(struct device *dev)
+>>+{
+>>+	struct vpu_device *vpu_dev = dev_get_drvdata(dev);
+>>+
+>>+	vpu_dev->vdb_register = NULL;
+>>+	wave5_vdi_free_dma_memory(vpu_dev, &vpu_dev->common_mem);
+>>+
+>>+	return 0;
+>>+}
+>>+
+>>+void wave5_vdi_write_register(struct vpu_device *vpu_dev, u32 addr, u32 data)
+>>+{
+>>+	writel(data, vpu_dev->vdb_register + addr);
+>>+}
+>>+
+>>+unsigned int wave5_vdi_readl(struct vpu_device *vpu_dev, u32 addr)
+>>+{
+>>+	return readl(vpu_dev->vdb_register + addr);
+>>+}
+>>+
+>>+int wave5_vdi_clear_memory(struct vpu_device *vpu_dev, struct vpu_buf *vb)
+>>+{
+>>+	if (!vb || !vb->vaddr) {
+>>+		dev_err(vpu_dev->dev, "%s: unable to clear unmapped buffer\n", __func__);
+>>+		return -EINVAL;
+>>+	}
+>>+
+>>+	memset(vb->vaddr, 0, vb->size);
+>>+	return vb->size;
+>>+}
+>>+
+>>+static void wave5_swap_endian(struct vpu_device *vpu_dev, u8 *data, size_t len,
+>>+			      unsigned int endian);
+>>+
+>>+int wave5_vdi_write_memory(struct vpu_device *vpu_dev, struct vpu_buf *vb, size_t offset,
+>>+			   u8 *data, size_t len, unsigned int endian)
+>>+{
+>>+	if (!vb || !vb->vaddr) {
+>>+		dev_err(vpu_dev->dev, "%s: unable to write to unmapped buffer\n", __func__);
+>>+		return -EINVAL;
+>>+	}
+>>+
+>>+	if (offset > vb->size || len > vb->size || offset + len > vb->size) {
+>>+		dev_err(vpu_dev->dev, "%s: buffer too small\n", __func__);
+>>+		return -ENOSPC;
+>>+	}
+>>+
+>>+	wave5_swap_endian(vpu_dev, data, len, endian);
+>>+	memcpy(vb->vaddr + offset, data, len);
+>>+
+>>+	return len;
+>>+}
+>>+
+>>+int wave5_vdi_allocate_dma_memory(struct vpu_device *vpu_dev, struct vpu_buf *vb)
+>>+{
+>>+	void *vaddr;
+>>+	dma_addr_t daddr;
+>>+
+>>+	if (!vb->size) {
+>>+		dev_err(vpu_dev->dev, "%s: requested size==0\n", __func__);
+>>+		return -EINVAL;
+>>+	}
+>>+
+>>+	vaddr = dma_alloc_coherent(vpu_dev->dev, vb->size, &daddr, GFP_KERNEL);
+>>+	if (!vaddr)
+>>+		return -ENOMEM;
+>>+	vb->vaddr = vaddr;
+>>+	vb->daddr = daddr;
+>>+
+>>+	return 0;
+>>+}
+>>+
+>>+void wave5_vdi_free_dma_memory(struct vpu_device *vpu_dev, struct vpu_buf *vb)
+>>+{
+>>+	if (vb->size == 0)
+>>+		return;
+>>+
+>>+	if (!vb->vaddr)
+>>+		dev_err(vpu_dev->dev, "%s: requested free of unmapped buffer\n", __func__);
+>>+	else
+>>+		dma_free_coherent(vpu_dev->dev, vb->size, vb->vaddr, vb->daddr);
+>>+
+>>+	memset(vb, 0, sizeof(*vb));
+>>+}
+>>+
+>>+unsigned int wave5_vdi_convert_endian(struct vpu_device *vpu_dev, unsigned int endian)
+>>+{
+>>+	if (PRODUCT_CODE_W_SERIES(vpu_dev->product_code)) {
+>>+		switch (endian) {
+>>+		case VDI_LITTLE_ENDIAN:
+>>+			endian = 0x00;
+>>+			break;
+>>+		case VDI_BIG_ENDIAN:
+>>+			endian = 0x0f;
+>>+			break;
+>>+		case VDI_32BIT_LITTLE_ENDIAN:
+>>+			endian = 0x04;
+>>+			break;
+>>+		case VDI_32BIT_BIG_ENDIAN:
+>>+			endian = 0x03;
+>>+			break;
+>>+		}
+>>+	}
+>>+
+>>+	return (endian & 0x0f);
+>>+}
+>>+
+>>+static void byte_swap(unsigned char *data, size_t len)
+>>+{
+>>+	u8 temp;
+>>+	unsigned int i;
+>>+
+>>+	for (i = 0; i < len; i += 2) {
+>>+		temp = data[i];
+>>+		data[i] = data[i + 1];
+>>+		data[i + 1] = temp;
+>
+>swap(ptr[i], ptr[i + 1]);
+>?
 
-This as well.
+Yes good point, I forgot to add that change, thanks for pointing it out.
 
->  	select S3C_DEV_USB_HOST
->  	select S3C_DEV_USB_HSOTG
-> -	select S3C_DEV_WDT
->  	select SAMSUNG_DEV_KEYPAD
->  	select SAMSUNG_DEV_PWM
->  	help
+>
+>>+	}
+>>+}
+>>+
+>>+static void word_swap(unsigned char *data, size_t len)
+>>+{
+>>+	u16 temp;
+>>+	u16 *ptr = (u16 *)data;
+>>+	unsigned int i;
+>>+	size_t size = len / sizeof(uint16_t);
+>>+
+>>+	for (i = 0; i < size; i += 2) {
+>>+		temp = ptr[i];
+>>+		ptr[i] = ptr[i + 1];
+>>+		ptr[i + 1] = temp;
+>
+>swap(ptr[i], ptr[i + 1]);
+>?
+>
+>>+	}
+>>+}
+>>+
+>>+static void dword_swap(unsigned char *data, size_t len)
+>>+{
+>>+	u32 temp;
+>>+	u32 *ptr = (u32 *)data;
+>>+	size_t size = len / sizeof(u32);
+>>+	unsigned int i;
+>>+
+>>+	for (i = 0; i < size; i += 2) {
+>>+		temp = ptr[i];
+>>+		ptr[i] = ptr[i + 1];
+>>+		ptr[i + 1] = temp;
+>
+>swap(ptr[i], ptr[i + 1]);
+>?
+>
+>>+	}
+>>+}
+>>+
+>>+static void lword_swap(unsigned char *data, size_t len)
+>>+{
+>>+	u64 temp;
+>>+	u64 *ptr = (u64 *)data;
+>>+	size_t size = len / sizeof(uint64_t);
+>>+	unsigned int i;
+>>+
+>>+	for (i = 0; i < size; i += 2) {
+>>+		temp = ptr[i];
+>>+		ptr[i] = ptr[i + 1];
+>>+		ptr[i + 1] = temp;
+>
+>swap(ptr[i], ptr[i + 1]);
+>?
+>
+>>+	}
+>>+}
+>>+
+>>+static void wave5_swap_endian(struct vpu_device *vpu_dev, u8 *data, size_t len,
+>>+			      unsigned int endian)
+>>+{
+>>+	int changes;
+>>+	unsigned int sys_endian = VDI_128BIT_BUS_SYSTEM_ENDIAN;
+>>+	bool byte_change, word_change, dword_change, lword_change;
+>>+
+>>+	if (!PRODUCT_CODE_W_SERIES(vpu_dev->product_code)) {
+>>+		dev_err(vpu_dev->dev, "unknown product id: %08x\n", vpu_dev->product_code);
+>>+		return;
+>>+	}
+>>+
+>>+	endian = wave5_vdi_convert_endian(vpu_dev, endian);
+>>+	sys_endian = wave5_vdi_convert_endian(vpu_dev, sys_endian);
+>>+	if (endian == sys_endian)
+>>+		return;
+>>+
+>>+	changes = endian ^ sys_endian;
+>>+	byte_change = changes & 0x01;
+>>+	word_change = ((changes & 0x02) == 0x02);
+>>+	dword_change = ((changes & 0x04) == 0x04);
+>>+	lword_change = ((changes & 0x08) == 0x08);
+>>+
+>>+	if (byte_change)
+>>+		byte_swap(data, len);
+>>+	if (word_change)
+>>+		word_swap(data, len);
+>>+	if (dword_change)
+>>+		dword_swap(data, len);
+>>+	if (lword_change)
+>>+		lword_swap(data, len);
+>>+}
+>>diff --git a/drivers/media/platform/chips-media/wave5/wave5-vdi.h b/drivers/media/platform/chips-media/wave5/wave5-vdi.h
+>>new file mode 100644
+>>index 000000000000..8e1d09331d5c
+>>--- /dev/null
+>>+++ b/drivers/media/platform/chips-media/wave5/wave5-vdi.h
+>>@@ -0,0 +1,67 @@
+>>+/* SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause) */
+>>+/*
+>>+ * Wave5 series multi-standard codec IP - low level access functions
+>>+ *
+>>+ * Copyright (C) 2021 CHIPS&MEDIA INC
+>>+ */
+>>+
+>>+#ifndef _VDI_H_
+>>+#define _VDI_H_
+>>+
+>>+#include "wave5-vpuconfig.h"
+>>+#include <linux/string.h>
+>>+#include <linux/slab.h>
+>>+#include <linux/device.h>
+>>+
+>>+/************************************************************************/
+>>+/* COMMON REGISTERS */
+>>+/************************************************************************/
+>>+#define VPU_PRODUCT_CODE_REGISTER 0x1044
+>>+
+>>+/* system register write */
+>>+#define vpu_write_reg(VPU_INST, ADDR, DATA) wave5_vdi_write_register(VPU_INST, ADDR, DATA)
+>>+// system register read
+>
+>The style of comment is not the same as the line above.
 
+Also true, I check for more cases like this in the driver.
 
+>
+>>+#define vpu_read_reg(CORE, ADDR) wave5_vdi_readl(CORE, ADDR)
+>>+
+>>+struct vpu_buf {
+>>+	size_t size;
+>>+	dma_addr_t daddr;
+>>+	void *vaddr;
+>>+};
+>>+
+>>+struct dma_vpu_buf {
+>>+	size_t size;
+>>+	dma_addr_t daddr;
+>>+};
+>>+
+>>+enum endian_mode {
+>>+	VDI_LITTLE_ENDIAN = 0, /* 64bit LE */
+>>+	VDI_BIG_ENDIAN, /* 64bit BE */
+>>+	VDI_32BIT_LITTLE_ENDIAN,
+>>+	VDI_32BIT_BIG_ENDIAN,
+>>+	/* WAVE PRODUCTS */
+>>+	VDI_128BIT_LITTLE_ENDIAN = 16,
+>>+	VDI_128BIT_LE_BYTE_SWAP,
+>>+	VDI_128BIT_LE_WORD_SWAP,
+>>+	VDI_128BIT_LE_WORD_BYTE_SWAP,
+>>+	VDI_128BIT_LE_DWORD_SWAP,
+>>+	VDI_128BIT_LE_DWORD_BYTE_SWAP,
+>>+	VDI_128BIT_LE_DWORD_WORD_SWAP,
+>>+	VDI_128BIT_LE_DWORD_WORD_BYTE_SWAP,
+>>+	VDI_128BIT_BE_DWORD_WORD_BYTE_SWAP,
+>>+	VDI_128BIT_BE_DWORD_WORD_SWAP,
+>>+	VDI_128BIT_BE_DWORD_BYTE_SWAP,
+>>+	VDI_128BIT_BE_DWORD_SWAP,
+>>+	VDI_128BIT_BE_WORD_BYTE_SWAP,
+>>+	VDI_128BIT_BE_WORD_SWAP,
+>>+	VDI_128BIT_BE_BYTE_SWAP,
+>>+	VDI_128BIT_BIG_ENDIAN = 31,
+>>+	VDI_ENDIAN_MAX
+>>+};
+>>+
+>>+#define VDI_128BIT_ENDIAN_MASK 0xf
+>>+
+>>+int wave5_vdi_init(struct device *dev);
+>>+int wave5_vdi_release(struct device *dev);	//this function may be called only at system off.
+>>+
+>>+#endif //#ifndef _VDI_H_
+>>diff --git a/drivers/media/platform/chips-media/wave5/wave5-vpuapi.h b/drivers/media/platform/chips-media/wave5/wave5-vpuapi.h
+>>index 8b36c7196526..ef930408d977 100644
+>>--- a/drivers/media/platform/chips-media/wave5/wave5-vpuapi.h
+>>+++ b/drivers/media/platform/chips-media/wave5/wave5-vpuapi.h
+>>@@ -1159,7 +1159,7 @@ int wave5_vdi_clear_memory(struct vpu_device *vpu_dev, struct vpu_buf *vb);
+>>  int wave5_vdi_allocate_dma_memory(struct vpu_device *vpu_dev, struct vpu_buf *vb);
+>>  int wave5_vdi_write_memory(struct vpu_device *vpu_dev, struct vpu_buf *vb, size_t offset,
+>>  			   u8 *data, size_t len, unsigned int endian);
+>>-int wave5_vdi_convert_endian(struct vpu_device *vpu_dev, unsigned int endian);
+>>+unsigned int wave5_vdi_convert_endian(struct vpu_device *vpu_dev, unsigned int endian);
+>
+>wave5_vdi_convert_endian() seems to be already declared and used in 
+>patch 2, but not defined there.
 
-Best regards,
-Krzysztof
+Ah .. thanks for pointing this out, yes I notice that the two commits
+have cyclic dependencies. I will combine them into 1 commit.
 
+Greetings,
+Sebastian
+
+>
+>>  void wave5_vdi_free_dma_memory(struct vpu_device *vpu_dev, struct vpu_buf *vb);
+>>  int wave5_vpu_init_with_bitcode(struct device *dev, u8 *bitcode, size_t size);
+>
