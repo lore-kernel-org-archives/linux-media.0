@@ -2,134 +2,109 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3594AC38A2D
-	for <linux-media@archiver.kernel.org>; Mon, 24 Oct 2022 19:57:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CE50FA373F
+	for <linux-media@archiver.kernel.org>; Mon, 24 Oct 2022 20:06:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232638AbiJXT5U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 Oct 2022 15:57:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41744 "EHLO
+        id S231741AbiJXUG3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 Oct 2022 16:06:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233937AbiJXT4i (ORCPT
+        with ESMTP id S232209AbiJXUFt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 Oct 2022 15:56:38 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B6C4C620;
-        Mon, 24 Oct 2022 11:20:07 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A6AC8D4A;
-        Mon, 24 Oct 2022 20:19:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1666635553;
-        bh=Gly4ITRHNgC+lK/7z23I884y2D6QwGPH/WqoPbQ98QY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Vt4saPFC6wNfo8+iWZkLMul/P5qzhpi9ve5DaXkWgjoKShizrD3mpiltd4f9OlAF4
-         y/3OrMdaq0y7X7LcOwsTqxWH+UOr1q0Nhk8fb9Po25bUlORmcN7j5jbnIVBxvDCqdl
-         VKAGmGRNhaDw6vGiH+CFB0rXkPYfV6NSwNJ1b6Oc=
-Date:   Mon, 24 Oct 2022 21:18:48 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot <syzkaller@googlegroups.com>
-Subject: Re: [PATCH v1 1/1] media: uvc: Handle cameras with invalid
- descriptors
-Message-ID: <Y1bXCP2fzacDuZxE@pendragon.ideasonboard.com>
-References: <20220920-invalid-desc-v1-0-76a93174f3bc@chromium.org>
- <20220920-invalid-desc-v1-1-76a93174f3bc@chromium.org>
- <Yypgi6Jc9/tZLtIw@pendragon.ideasonboard.com>
- <CANiDSCsbwYfnqcWOjAJw2qvZnB-qE66LqGMhpD8youDj=f+U-g@mail.gmail.com>
- <Yyt/LhNoEEfjly54@pendragon.ideasonboard.com>
- <CANiDSCsSsKk37JtBZjQiuw6MoH+f-iCf47MqU9BH18gbd4EKAg@mail.gmail.com>
+        Mon, 24 Oct 2022 16:05:49 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721312958FF
+        for <linux-media@vger.kernel.org>; Mon, 24 Oct 2022 11:26:31 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id f9so4961440pgj.2
+        for <linux-media@vger.kernel.org>; Mon, 24 Oct 2022 11:26:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4oIVzfpMgaAT0HX4FWTthc6xrrun7ylc9/g6rsWhf08=;
+        b=1O1ZHqYiBlXY2fwJNdkh+vQ/VNUVsNL1SE/FLAfOhoxD5MPiaq4El7Qm3wHo+8cgb3
+         gl9aeVRIggYlqbyizkSb3bBtxGG+NDi5jQPFLC5t5vcs2zVF6v3XXS2LwIAxKpdiwggC
+         n0PBC2uHZpCn05uEfUStTvJ1YOjR10a1WhlYwJ1EMZXodMLzQ2LjYg7xigqwXSPkiO03
+         194iUFBYOfLlARIf+xoEZo/W0V34QwVqxfhOTk30UjgjuOg0gjGBGTFOiN2O2yCX/CJd
+         B7mqvd4VripHn5nnSvfz8dNOkV/MSTcHE9+6t9xVPrjJY5DORvB26GRhxou4kxGlK326
+         FM1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4oIVzfpMgaAT0HX4FWTthc6xrrun7ylc9/g6rsWhf08=;
+        b=KBp+M9RKyMWQfuReowbw1iXXFayDpr1afx4enEcOMJ9y/W6y4yITXjS8IqE0cJqFt1
+         WTKXRioLmYse0mpM5cACx+xLaYYy7H2nymt72dbX+ShOJnLU5yW0CTZfSNyTBz43B4X+
+         rLhx6sn1JkdTNbVkW3mK9XSNer8JxF6iWAFMSbjhOBTP958LvSlQ9gy70ejUhfGz7W3n
+         mkC/PJ9wcCwZPPnG1574SfN0ciY5xxD4WABgTt3tDNtT8vdbPjJTYa2G8hB9m/XY702d
+         D5cKBSSW1imx284ZoOgjkkuYvvnkUGW0kr3k0gnNa5AlY1FORur5aMYbUxQhUGT7Cd9c
+         Nkpg==
+X-Gm-Message-State: ACrzQf26TJmC9R8wuO7LWIXyJbYKmOKb3CZKR1rTes2neD6bCEOOLY2o
+        18eTH9yFIaDbP8XJJyTU8pneOg==
+X-Google-Smtp-Source: AMsMyM5NJO1kEdsQTHB/8tQPhUzIwVroAro5GyKcBeo3+9Tpkq+lfovTaDaocHC24z3Nm955Wr4NWg==
+X-Received: by 2002:aa7:81cc:0:b0:563:4e53:c08b with SMTP id c12-20020aa781cc000000b005634e53c08bmr34743652pfn.19.1666635958991;
+        Mon, 24 Oct 2022 11:25:58 -0700 (PDT)
+Received: from localhost ([75.172.140.17])
+        by smtp.gmail.com with ESMTPSA id z11-20020a170903018b00b00177f4ef7970sm72911plg.11.2022.10.24.11.25.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 11:25:58 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Arnd Bergmann <arnd@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        David Lechner <david@lechnology.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bin Liu <b-liu@ti.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        linux-media@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH 00/14] ARM: remove unused davinci board & drivers
+In-Reply-To: <20221019152947.3857217-1-arnd@kernel.org>
+References: <20221019152947.3857217-1-arnd@kernel.org>
+Date:   Mon, 24 Oct 2022 11:25:57 -0700
+Message-ID: <7h7d0phydm.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CANiDSCsSsKk37JtBZjQiuw6MoH+f-iCf47MqU9BH18gbd4EKAg@mail.gmail.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Ricardo,
+Arnd Bergmann <arnd@kernel.org> writes:
 
-On Wed, Sep 21, 2022 at 11:52:29PM +0200, Ricardo Ribalda wrote:
-> On Wed, 21 Sept 2022 at 23:16, Laurent Pinchart wrote:
-> > On Wed, Sep 21, 2022 at 09:51:44AM +0200, Ricardo Ribalda wrote:
-> > > Do you mean something like this?
-> > >
-> > > diff --git a/drivers/media/usb/uvc/uvc_entity.c
-> > > b/drivers/media/usb/uvc/uvc_entity.c
-> > > index 7c4d2f93d351..66d1f5da4ec7 100644
-> > > --- a/drivers/media/usb/uvc/uvc_entity.c
-> > > +++ b/drivers/media/usb/uvc/uvc_entity.c
-> > > @@ -37,7 +37,7 @@ static int uvc_mc_create_links(struct uvc_video_chain *chain,
-> > >                         continue;
-> > >
-> > >                 remote = uvc_entity_by_id(chain->dev, entity->baSourceID[i]);
-> > > -               if (remote == NULL)
-> > > +               if (remote == NULL || remote->num_pads == 0)
-> > >                         return -EINVAL;
-> >
-> > Yes.
-> >
-> > >
-> > >                 source = (UVC_ENTITY_TYPE(remote) == UVC_TT_STREAMING)
-> > > @@ -46,6 +46,9 @@ static int uvc_mc_create_links(struct uvc_video_chain *chain,
-> > >                 if (source == NULL)
-> > >                         continue;
-> > >
-> > > +               if (source->num_pads != remote->num_pads)
-> > > +                       return -EINVAL;
-> > > +
-> >
-> > But this I would have dropped, as the media_entity num_pads is
-> > initialized from uvc_entity num_pads and neither are changed after.
-> 
-> Works for me. Shall I send a v2 or you can take it?
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> As part of removing all board files that were previously marked as unused,
+> I looked through the davinci platform and recursively removed everything
+> that has now become unused.
+>
+> In particular, this is for all dm3xx support, in addition to the dm64xx
+> support removed previously. The remaining support is now for da8xx using
+> devicetree only, which means a lot of the da8xx specific device support
+> can also go away.
 
-I'm handling it locally, will be in the next pull request.
+Acked-by: Kevin Hilman <khilman@baylibre.com>
 
-> > >                 remote_pad = remote->num_pads - 1;
-> > >                 ret = media_create_pad_link(source, remote_pad,
-> > >                                                sink, i, flags);
-> > >
-> > > regarding making a new patch, whatever is easier for you ;)
-> > >
-> > >
-> > > On Wed, 21 Sept 2022 at 02:53, Laurent Pinchart wrote:
-> > > >
-> > > > Hi Ricardo,
-> > > >
-> > > > Thank you for the patch.
-> > > >
-> > > > On Tue, Sep 20, 2022 at 04:04:55PM +0200, Ricardo Ribalda wrote:
-> > > > > If the source entity does not contain any pads, do not create a link.
-> > > > >
-> > > > > Reported-by: syzbot <syzkaller@googlegroups.com>
-> > > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > > > >
-> > > > > diff --git a/drivers/media/usb/uvc/uvc_entity.c b/drivers/media/usb/uvc/uvc_entity.c
-> > > > > index 7c4d2f93d351..1f730cb72e58 100644
-> > > > > --- a/drivers/media/usb/uvc/uvc_entity.c
-> > > > > +++ b/drivers/media/usb/uvc/uvc_entity.c
-> > > > > @@ -43,7 +43,7 @@ static int uvc_mc_create_links(struct uvc_video_chain *chain,
-> > > > >               source = (UVC_ENTITY_TYPE(remote) == UVC_TT_STREAMING)
-> > > > >                      ? (remote->vdev ? &remote->vdev->entity : NULL)
-> > > > >                      : &remote->subdev.entity;
-> > > > > -             if (source == NULL)
-> > > > > +             if (source == NULL || source->num_pads == 0)
-> > > >
-> > > > source->num_pads and remote->num_pads should always be identical, but as
-> > > > the next line uses remote->num_pads, wouldn't it be better to test that
-> > > > variable ? If so, I'd move the test a file lines earlier, with the
-> > > > remote == NULL test.
-> > > >
-> > > > What do you think ? If you agree I can make that change when applying,
-> > > > there's no need for a new version. Otherwise I'll keep the patch as-is.
-> > > >
-> > > > >                       continue;
-> > > > >
-> > > > >               remote_pad = remote->num_pads - 1;
-
--- 
-Regards,
-
-Laurent Pinchart
+Kevin
