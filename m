@@ -2,140 +2,71 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 083B8C38A2D
-	for <linux-media@archiver.kernel.org>; Mon, 24 Oct 2022 23:11:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27876C67871
+	for <linux-media@archiver.kernel.org>; Tue, 25 Oct 2022 00:46:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbiJXXK6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 Oct 2022 19:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
+        id S230206AbiJYAqd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 Oct 2022 20:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231787AbiJXXD5 (ORCPT
+        with ESMTP id S230182AbiJYAqT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 Oct 2022 19:03:57 -0400
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5002932BB0F;
-        Mon, 24 Oct 2022 14:24:29 -0700 (PDT)
-Received: by mail-lf1-f51.google.com with SMTP id f37so18721147lfv.8;
-        Mon, 24 Oct 2022 14:24:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aG8/ur0Br/iI3XrRIjCBua/JFahdxthZWhXGPmYrCVY=;
-        b=b1VtBkfnMQzd5t4IFtX29bRFR2tFeeqSiyK+DgVMGnDMFkwI6Fdv3tQXaLqUfYRmBX
-         LABuRSOpX3tq1jb12FjHU6AONUrmAIm6UtCJVjMth3JbjWKSa8lEGJFMsqhoLucJRxJ7
-         1EQRVkRLurSwogDmO+oiR+aT3lFzKn3a4DnRIwKUet1oBYG6Fz4SbxU9i3VHYcZ06Uv1
-         mJuSDGEYeBY+obEFffp+jSUTOioH8ymB9/SYto+FH+LiZl2eYtJHI9+gtE1oFz6Gg+Hc
-         VX48riOkEnLyY1xyp2P1a+OZnxDJ+wZq8e6B6a3SiUZkzPuG8LBMUtruHPzNciDAdX1P
-         Lt3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aG8/ur0Br/iI3XrRIjCBua/JFahdxthZWhXGPmYrCVY=;
-        b=mixOW+fGieneYVbvhiWw574OufwzgS45i3+qjqC+FqgSbtN75XM+2PQ8hJZcCyRHz3
-         KlhLf+zkO++66fRqrYDD8XUUvsqMCiqs+PNzJy92nwQCcFKI4NNb/ms+PCpnmPWf9lIk
-         ks/IzzJXP7dVGQMn844AtF68ubXijNS2VOrsmTpf0HEcSmiRIMOzP0pfl5BRSO+KIvhg
-         vsEwASbeT8+jy+YTgGVnDoRihhN4DMTFeIZt2sAGKEcSalvVPy91MVeO5el/p1nMPdq5
-         kZ6Z6ajm2gXdLDyn2qGkY18TZ2iFDYeBN8xsEy9jnVKIXZAvMcxnz85X8IjbH2XQyMlK
-         GxKg==
-X-Gm-Message-State: ACrzQf0HhwBdWUrImV/WvMmIFAwCwk410nDuno7NeIaUtVEBVs5voG/m
-        4zMVtV6Hot1jRLok/4t2W1t0q2eTae1EtQ==
-X-Google-Smtp-Source: AMsMyM65bNrzmT64/XilaVG1H03z+PxYZa+GqmEWO472GD+ya7NEER3wo36+wnZrO7ByhQJFAsbxyQ==
-X-Received: by 2002:a17:907:7244:b0:78d:cedc:7a9e with SMTP id ds4-20020a170907724400b0078dcedc7a9emr28646077ejc.600.1666642540370;
-        Mon, 24 Oct 2022 13:15:40 -0700 (PDT)
-Received: from kista.localdomain (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id op7-20020a170906bce700b0073d638a7a89sm332023ejb.99.2022.10.24.13.15.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 13:15:40 -0700 (PDT)
-From:   Jernej Skrabec <jernej.skrabec@gmail.com>
-To:     mripard@kernel.org, paul.kocialkowski@bootlin.com
-Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
-        samuel@sholland.org, hverkuil-cisco@xs4all.nl,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: [PATCH 10/11] media: cedrus: Adjust buffer size based on control values
-Date:   Mon, 24 Oct 2022 22:15:14 +0200
-Message-Id: <20221024201515.34129-11-jernej.skrabec@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024201515.34129-1-jernej.skrabec@gmail.com>
-References: <20221024201515.34129-1-jernej.skrabec@gmail.com>
+        Mon, 24 Oct 2022 20:46:19 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B76CA895;
+        Mon, 24 Oct 2022 16:20:15 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MwxG62ZjyzHtt6;
+        Mon, 24 Oct 2022 21:47:26 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 24 Oct 2022 21:47:37 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 24 Oct
+ 2022 21:47:37 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-media@vger.kernel.org>, <linux-samsung-soc@vger.kernel.org>
+CC:     <s.nawrocki@samsung.com>, <kyungmin.park@samsung.com>,
+        <mchehab@kernel.org>, <yangyingliang@huawei.com>
+Subject: [PATCH] media: platform: exynos4-is: fix return value check in fimc_md_probe()
+Date:   Mon, 24 Oct 2022 21:46:50 +0800
+Message-ID: <20221024134650.2871287-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In some cases decoding engine needs extra space in capture buffers. This
-is the case for decoding 10-bit HEVC frames into 8-bit capture format.
-This commit only adds infrastructure for such cases.
+devm_pinctrl_get() may return ERR_PTR(-EPROBE_DEFER), add a minus sign
+to fix it.
 
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Fixes: 4163851f7b99 ("[media] s5p-fimc: Use pinctrl API for camera ports configuration")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/staging/media/sunxi/cedrus/cedrus.c       | 14 ++++++++++++++
- drivers/staging/media/sunxi/cedrus/cedrus.h       |  2 ++
- drivers/staging/media/sunxi/cedrus/cedrus_video.c |  4 ++++
- 3 files changed, 20 insertions(+)
+ drivers/media/platform/samsung/exynos4-is/media-dev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
-index 70b07d8bad2b..fbe3b2e7c1d4 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
-@@ -68,8 +68,22 @@ static int cedrus_try_ctrl(struct v4l2_ctrl *ctrl)
- 	return 0;
- }
- 
-+static int cedrus_s_ctrl(struct v4l2_ctrl *ctrl)
-+{
-+	struct cedrus_ctx *ctx = container_of(ctrl->handler,
-+					      struct cedrus_ctx, hdl);
-+	struct vb2_queue *vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
-+					       V4L2_BUF_TYPE_VIDEO_CAPTURE);
-+
-+	if (!vb2_is_busy(vq) && !vb2_is_streaming(vq))
-+		cedrus_reset_cap_format(ctx);
-+
-+	return 0;
-+}
-+
- static const struct v4l2_ctrl_ops cedrus_ctrl_ops = {
- 	.try_ctrl = cedrus_try_ctrl,
-+	.s_ctrl = cedrus_s_ctrl,
- };
- 
- static const struct cedrus_control cedrus_controls[] = {
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.h b/drivers/staging/media/sunxi/cedrus/cedrus.h
-index 5904294f3108..774fe8048ce3 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus.h
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus.h
-@@ -162,6 +162,8 @@ struct cedrus_dec_ops {
- 	int (*start)(struct cedrus_ctx *ctx);
- 	void (*stop)(struct cedrus_ctx *ctx);
- 	void (*trigger)(struct cedrus_ctx *ctx);
-+	unsigned int (*extra_cap_size)(struct cedrus_ctx *ctx,
-+				       struct v4l2_pix_format *pix_fmt);
- };
- 
- struct cedrus_variant {
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_video.c b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-index f9f723ea3f79..53e65f74046b 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-@@ -251,6 +251,10 @@ static int cedrus_try_fmt_vid_cap_p(struct cedrus_ctx *ctx,
- 	pix_fmt->height = ctx->src_fmt.height;
- 	cedrus_prepare_format(pix_fmt);
- 
-+	if (ctx->current_codec->extra_cap_size)
-+		pix_fmt->sizeimage +=
-+			ctx->current_codec->extra_cap_size(ctx, pix_fmt);
-+
- 	return 0;
- }
- 
+diff --git a/drivers/media/platform/samsung/exynos4-is/media-dev.c b/drivers/media/platform/samsung/exynos4-is/media-dev.c
+index 52b43ea04030..a0367f8cb9ec 100644
+--- a/drivers/media/platform/samsung/exynos4-is/media-dev.c
++++ b/drivers/media/platform/samsung/exynos4-is/media-dev.c
+@@ -1474,7 +1474,7 @@ static int fimc_md_probe(struct platform_device *pdev)
+ 	pinctrl = devm_pinctrl_get(dev);
+ 	if (IS_ERR(pinctrl)) {
+ 		ret = PTR_ERR(pinctrl);
+-		if (ret != EPROBE_DEFER)
++		if (ret != -EPROBE_DEFER)
+ 			dev_err(dev, "Failed to get pinctrl: %d\n", ret);
+ 		goto err_clk;
+ 	}
 -- 
-2.38.1
+2.25.1
 
