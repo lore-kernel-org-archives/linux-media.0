@@ -2,114 +2,144 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 288E8ECAAA1
-	for <linux-media@archiver.kernel.org>; Mon, 24 Oct 2022 15:34:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7860EECAAA1
+	for <linux-media@archiver.kernel.org>; Mon, 24 Oct 2022 15:51:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbiJXPe4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 Oct 2022 11:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
+        id S231326AbiJXPvI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 Oct 2022 11:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbiJXPe0 (ORCPT
+        with ESMTP id S231360AbiJXPuh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 Oct 2022 11:34:26 -0400
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C91D01B3
-        for <linux-media@vger.kernel.org>; Mon, 24 Oct 2022 07:21:27 -0700 (PDT)
-Received: by mail-pf1-f181.google.com with SMTP id y1so9081793pfr.3
-        for <linux-media@vger.kernel.org>; Mon, 24 Oct 2022 07:21:27 -0700 (PDT)
+        Mon, 24 Oct 2022 11:50:37 -0400
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975C22DAAD
+        for <linux-media@vger.kernel.org>; Mon, 24 Oct 2022 07:44:41 -0700 (PDT)
+Received: by mail-vs1-f41.google.com with SMTP id h4so8072027vsr.11
+        for <linux-media@vger.kernel.org>; Mon, 24 Oct 2022 07:44:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Jh8UQ4JmTZN9hL0/8CXAkNYRnuwMy/n4/v6mITjc4KY=;
-        b=y0W+zUyiBftSd0JgAGoPOqPtmV13guRpqzbMHskUNvLCEuQ6pihIc7oGP6TuC3oQt5
-         NjC6zT2GBgFpwt3TaO3sCktoTg2zHU1fTtWzfcwSmh6ykgmIp95Eot8a0sqsecpFyW7x
-         1HT6dR9s6lU9w8AQMYPhYLXd1Gu3x1edoP1WhBwFF/jIaERMSCG6bAABteTZbOS+Taz8
-         m7SCCh9de8RQXNTOTCxekuN5wUYGpUE+af/pdLsiLsH9H7ozUi1IJplIrGjD7sC4Tf7t
-         s+A+OHtLvPIWSHgE+4xzSs5FzW53+pzJ7Liv/i1SA0R2VvOs5lkPyZK2zhrwcwhQeqwz
-         cUfg==
+        bh=KiZKr4vVKiBAMCknSXKk7OaZnMVGhLrm0Fpb1/F76Ak=;
+        b=Pjqyjt8ciOBBxKf/tgqFyRvVj8YjqhDMxQtTt5Ecs2Eu5qhxq5NGCAG/oKNGao7VTa
+         JQxTHYdSOc6Ek/e2RfV2pFYzGPL2/SX7G9pZP+ZwLtWKOSyZ/OuazNTSL66XQnEJ+JAQ
+         FsB5f7AFkKVWTnZI3zzvMBnvpGSoMNIyigmNjJmDaYxkCJ+PrvIqg2DDtpQ3CkGym2xo
+         1/qgdeISTMhsSwnsKxvgLjfST0dKXBQUh4UmZCTH9K2IXOghkF2LwOg9HyjUnQCo+qbk
+         N4Qh+ysyWsBdJR9JKKnQXtyaEZYleTI4wyuQq8DtmjnlDl2no9LO8n+TilKetKXbtNFz
+         wipg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jh8UQ4JmTZN9hL0/8CXAkNYRnuwMy/n4/v6mITjc4KY=;
-        b=h2/5iNIv5cbezBgMsE4W+HGgypf1glz8ni8VlcYQplD7+B+3eu4LkBJcXyF8Rm02yz
-         xp0D5CdTiFFF0wJBX2agILLx4hj38Cj1wkXKxzUB5Z8kB0EIVYxA3ez0yoIhA+JkmrY7
-         flFjXNLdJswvrN6TtZnJA+ZXFMwQuhgFIeZBk/iw0uLPewrasre7sJx7vx13HOXYjcWc
-         Kj4mPIuBFr/4KBiFC0w8yhZLQrHGHKnM0QyjhkaDvFf1V19dWpb/yO11ehZ/t872JHTb
-         Mq1vLH1ht9KqF/IFqX3cM/y6qNxcgaXVwfZY4Fiv2ucVDSuki0RPSXmMJXgy171FVK6U
-         3lNw==
-X-Gm-Message-State: ACrzQf3LXBQNgEWopMkt3nWTSR/dtaQVf6fcg/M0URPtEYingn36Ayba
-        +HNlsXyoExtDjU7CTAhZb3RH1TCUg57N2Q==
-X-Google-Smtp-Source: AMsMyM64HS96JA+t5NegWTBhGoXrPmUTvN8S9j1oIuC6j5JnhVzd28Edhbio8VxlddWIvdR7T0/thQ==
-X-Received: by 2002:a0c:8ccc:0:b0:4b2:382e:ddaa with SMTP id q12-20020a0c8ccc000000b004b2382eddaamr27200510qvb.33.1666614368794;
-        Mon, 24 Oct 2022 05:26:08 -0700 (PDT)
+        bh=KiZKr4vVKiBAMCknSXKk7OaZnMVGhLrm0Fpb1/F76Ak=;
+        b=8AzGGQMshdssG23LnO9rJ6IcjYh1JG+ZgtF2UsXWlZQUZHCCMULe7ysRIjs/zQLHIL
+         akwwF4kPQSq2O3Gs7rbE2U6zgmP+GTaYcLY505IsR14r8wOOCKKl8YWn9vuuIYGdKsHL
+         RRQEyxmR+bjrVpcClRJyN7xc7B4QjDBV8hqGpSI0B9sGS2ZT3Wcwwue2Y7tez6WWvD8f
+         2nrnbCdr7wUhlKRRatGlI0UUwgsSe8ifHj7OOGKfLhaC6F97+TSN9EtzHj4pCl7LQvWA
+         0F5M7KqoSHAgL3KRtiT2BI0JUhxr4ZCGkaRRedMawNu04UKJdkcheZbuARqjaOPPTjdW
+         GnFg==
+X-Gm-Message-State: ACrzQf3TTIwaq9hLOgPwQsRER6MP1pCO0xV35UonTvHSS883MlNW3hfj
+        wLCXtuOeEJUI1mM6bgTrq9CXFNv0IzyaWg==
+X-Google-Smtp-Source: AMsMyM6QBU8we6whgGDieruOEgMwW/cTO2KHBX9O//ujatJzasoGEK+uPqOb8astjsF60GtF4W/nqQ==
+X-Received: by 2002:a05:6214:27e9:b0:4ac:a4b7:b688 with SMTP id jt9-20020a05621427e900b004aca4b7b688mr28877333qvb.75.1666620808554;
+        Mon, 24 Oct 2022 07:13:28 -0700 (PDT)
 Received: from [192.168.1.8] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id u30-20020a37ab1e000000b006ef0350db8asm9109052qke.128.2022.10.24.05.26.06
+        by smtp.gmail.com with ESMTPSA id dm10-20020a05620a1d4a00b006bb87c4833asm15084211qkb.109.2022.10.24.07.13.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 05:26:08 -0700 (PDT)
-Message-ID: <a354c24d-0355-7c9d-ad05-4c21561af4dc@linaro.org>
-Date:   Mon, 24 Oct 2022 08:26:05 -0400
+        Mon, 24 Oct 2022 07:13:27 -0700 (PDT)
+Message-ID: <186642c0-0417-9947-341c-a4c96257a84f@linaro.org>
+Date:   Mon, 24 Oct 2022 10:13:26 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.0
-Subject: Re: [PATCH 02/21] ARM: s3c: remove s3c24xx specific hacks
+Subject: Re: [PATCH 05/21] ARM: s3c: simplify platform code
 Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
+To:     Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
         Simtec Linux Team <linux@simtec.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
         Alim Akhtar <alim.akhtar@samsung.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
+        linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org
 References: <20221021202254.4142411-1-arnd@kernel.org>
- <20221021203329.4143397-2-arnd@kernel.org>
+ <20221021203329.4143397-5-arnd@kernel.org>
+ <fc923325-335d-e768-ea72-ba1712320d9d@linaro.org>
+ <9912a1eb-ad12-4608-bf48-d74ac5f5805a@app.fastmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221021203329.4143397-2-arnd@kernel.org>
+In-Reply-To: <9912a1eb-ad12-4608-bf48-d74ac5f5805a@app.fastmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 21/10/2022 16:27, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On 24/10/2022 09:32, Arnd Bergmann wrote:
+> On Mon, Oct 24, 2022, at 14:29, Krzysztof Kozlowski wrote:
 > 
-> A number of device drivers reference CONFIG_ARM_S3C24XX_CPUFREQ or
-> similar symbols that are no longer available with the platform gone,
-> though the drivers themselves are still used on newer platforms,
-> so remove these hacks.
+>>> diff --git a/arch/arm/mach-s3c/Kconfig.s3c64xx b/arch/arm/mach-s3c/Kconfig.s3c64xx
+>>> index c403d7642f0a..c52c7ce1d8fa 100644
+>>> --- a/arch/arm/mach-s3c/Kconfig.s3c64xx
+>>> +++ b/arch/arm/mach-s3c/Kconfig.s3c64xx
+>>> @@ -15,12 +15,9 @@ menuconfig ARCH_S3C64XX
+>>>  	select HAVE_TCM
+>>>  	select PLAT_SAMSUNG
+>>>  	select PM_GENERIC_DOMAINS if PM
+>>> -	select S3C_DEV_NAND if ATAGS
+>>>  	select S3C_GPIO_TRACK if ATAGS
+>>> -	select S3C2410_WATCHDOG
+>>
+>> This does not seem right. S3C2410_WATCHDOG is a driver used by all
+>> (including Exynos) platforms.
 > 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> I don't remember why I removed this line, probably because I
+> removed S3C_DEV_WDT after there are no references to that
+> symbol left in board files. The watchdog driver is now DT-only
+> with cragg6410 being the last remaining board file.
+> 
+> Ideally we should not 'select' it from here but instead have
+> it enabled in the defconfig file, but I agree that would
+> be something to do in a separate patch, while the patch here
+> should not change the behavior. I'll revert this part.
+> 
+>>> @@ -121,10 +118,8 @@ config MACH_WLF_CRAGG_6410
+>>>  	select S3C_DEV_HSMMC1
+>>>  	select S3C_DEV_HSMMC2
+>>>  	select S3C_DEV_I2C1
+>>> -	select S3C_DEV_RTC
+>>
+>> This as well.
+> 
+> I'm fairly sure this can be removed along with S3C_DEV_WDT,
+> S3C_DEV_I2C[2-7], S3C_DEV_NAND, and S3C_DEV_ONENAND
+> as I remove the symbols due to the lack of references
+> from cragg6410.
+
+Yes, you are right. This can be dropped.
+
+> 
+> I folded in this fixup now:
+> 
+> --- a/arch/arm/mach-s3c/Kconfig.s3c64xx
+> +++ b/arch/arm/mach-s3c/Kconfig.s3c64xx
+> @@ -16,8 +16,10 @@ menuconfig ARCH_S3C64XX
+>         select PLAT_SAMSUNG
+>         select PM_GENERIC_DOMAINS if PM
+>         select S3C_GPIO_TRACK if ATAGS
+> +       select S3C2410_WATCHDOG
+>         select SAMSUNG_ATAGS if ATAGS
+>         select SAMSUNG_WAKEMASK if PM
+> +       select WATCHDOG
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Looks ok.
 
 Best regards,
 Krzysztof
