@@ -2,108 +2,146 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33EA7C38A2D
-	for <linux-media@archiver.kernel.org>; Mon, 24 Oct 2022 16:28:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 471F7ECAAA1
+	for <linux-media@archiver.kernel.org>; Mon, 24 Oct 2022 16:32:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230497AbiJXQ2m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 Oct 2022 12:28:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48756 "EHLO
+        id S233241AbiJXQcW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 Oct 2022 12:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233598AbiJXQ1m (ORCPT
+        with ESMTP id S233506AbiJXQbj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:27:42 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7D645F6A
-        for <linux-media@vger.kernel.org>; Mon, 24 Oct 2022 08:14:40 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id k2so5795818ejr.2
-        for <linux-media@vger.kernel.org>; Mon, 24 Oct 2022 08:14:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uwQUztXgBVkXn22Djt2vccuvcgYoi7jKh5HH+Jxc7c4=;
-        b=EEvUQCpdOrCwrJ8voELEkDOYjTuxV/GQpIhHT8VCW/ueNa2ACsBec3XiIxiM5E8U2s
-         lWv2j+V4cTXfprSEPo7T8MZwgmEJveEgwWbBmk8cUUBq9HCuvRVuv8KddRhLZeXPpipH
-         rMRRzFfFNNcnaiIx0A/kZojwLcTVUi3okjCyS9TJLbwsFwuqSFZmn4G3U/a9umZSOfCQ
-         jL5TyP1wm2+jPXteDmtuaZd5fRl5ySN9g2ej94NxGckawudDEGUb0e4RJRMuQEa4bQqI
-         o0sUZFuw9Bp+ykY8oMmQ5E6w7omnmNeWfdugdY6yMZCcmzwpfEyyAvIa6bjdH0f6cnMs
-         4/6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uwQUztXgBVkXn22Djt2vccuvcgYoi7jKh5HH+Jxc7c4=;
-        b=naaDYcnRH/cBr6ORX2JOdZ5QiUaVUxFu5Mfwk7b27LhSSaeKtrJy5/rbh+Ay2CchMu
-         zi90z+d+asxXK0onI+xwrOSH0bN37EqVMTWmIeEC3ZzqZJ+cKznk3LT2RTg04A56Dldn
-         oj6+k/HdD8H8ls8ZUh8JeXIzg8KJ/fkq7lpTRtu/j9qcYi4gsVu+hqrosEK0ievQ80WD
-         xPE6dcocDAIFqnPmPCN4TbAe00V+cX3OG2C2pN45/xMfvkBEdp4kdeGRtphKa3/Cili/
-         bijLatoWuiHz/XrqtMOQPRYARpldShPe1h+1IlJwFu1uBOSIT4Ofnxo2rN4Be4gq9QAj
-         7vMg==
-X-Gm-Message-State: ACrzQf0sGtpik0/RaGISX8H0LWyhADIdZln1q4GxhfiOO0RpamcankHB
-        wFN2HiUQyv644HrXPej5m4UasDUzwyDJK4U1Fs28EUDB+zw/FA==
-X-Google-Smtp-Source: AMsMyM5oQgsbrmBbYOyVwpJ6ADarAe1sv9gXE19XY2My+OLnqXhhkJ+HGog4fNdv5YocmiJTP4G4prB9FmZ9Bkta7dE=
-X-Received: by 2002:a05:6402:c4d:b0:457:99ec:1837 with SMTP id
- cs13-20020a0564020c4d00b0045799ec1837mr30191906edb.86.1666616443757; Mon, 24
- Oct 2022 06:00:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221022092015.208592-1-jacopo@jmondi.org> <20221022092015.208592-6-jacopo@jmondi.org>
-In-Reply-To: <20221022092015.208592-6-jacopo@jmondi.org>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Mon, 24 Oct 2022 14:00:28 +0100
-Message-ID: <CAPY8ntBya1-rUkQH9wiERUof-01puoLej7t6BHKAr1ot-iHe9g@mail.gmail.com>
-Subject: Re: [PATCH v2 05/10] media: ar0521: Refuse unsupported controls
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     =?UTF-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 24 Oct 2022 12:31:39 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F081F611;
+        Mon, 24 Oct 2022 08:18:15 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id ABA773200956;
+        Mon, 24 Oct 2022 09:33:00 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Mon, 24 Oct 2022 09:33:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1666618380; x=1666704780; bh=yALotGF5gu
+        2PaCNV/egtd+i3//YX5Y+ckq5ZuUGJVS4=; b=CGcKm8uy7pXuNtC88a+pdrGRCB
+        k/M0r+ucQbVt2z7aNyBAR6pRBZw8NJs567YzTVed5NyNRhbcaXHwOuocNqvkUY1Q
+        a68YYRB/kKOAn6neyz323y+AY0jABRus/GKs6ZnMGGzadubtLbobFzYRkyDscYbS
+        vCDMVPpfg0mJkMo0dt3BPbxS9ISz4UETtXdTTqolJieAxJBZprtuBBFW7KWzQNwq
+        b5d2/2R5JPt36BEgIYG/7w5fVNQB93HfHaAuyuzY3F4k1bSM1mk78MlxBoq0794c
+        po8uCvWJYEsV2IuHpET+tTXFgicOU5us4NP4Qu4j6pJoahsQAacmTync8TwA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1666618380; x=1666704780; bh=yALotGF5gu2PaCNV/egtd+i3//YX
+        5Y+ckq5ZuUGJVS4=; b=EYkrsuKQaLFIHyQdtqIYcx3apZCF9wBdNRpj+GJSpPB9
+        JkwjAsVrrY+8/LBhMLw2UdwaSO1W0CtV3JXA0M1ZcZjmWYGiVLpHXQ4TQ/N+Bs9+
+        FMO23IyPIUW5t2ttBK83GiHdDUQP5TYkVh0mAUKrMNBwg+uTrfY41l4PYZOuUU58
+        CHYsg0MyFCHjagA3vA8/qECW16h3s6jqrbPHqZZQKa3MsWPDCBNYL2GD7bnWj0K7
+        q/AAuW1ScFgFNBDiCUt6QRr+K76NWAMXWw+C94t+Udq1ws+LB/KWr+RXltGOJrqY
+        EX9pCQ4ZjbGeCQ28d12waKezhvXypQmeT6IfOGlvlw==
+X-ME-Sender: <xms:C5RWYwArBfZ6a8VFgQq_VBQoQTB-1S-7NavM4BMPa88J9TlSQWY3Ow>
+    <xme:C5RWYyhry1D8X17PM3cBtEWkyYDX3hD1HgeoA8GLH4j5O_nJDNxIfYwO4Dp66GsDl
+    Gz0nSyOpNrHmAcFMnI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedtgedgiedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:C5RWYznoIpl1VK6WYw_vMuOUglG__xOiy9B--I8tpKZDrOp5WTrB4w>
+    <xmx:C5RWY2yC71fuGhbvF3TFTgSUvwX5ezK5pw78TU_-6IVRuQLR5a7_NA>
+    <xmx:C5RWY1RU-78At65GyTDfaOHMkNT2stYNgrmEUD6UEJfh6gu2TQeIHA>
+    <xmx:DJRWY0IsNfEI1saq1f9seCxaBlQlB3caBiKeZCPw6wBsipbJkidqZQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 81B7CB60086; Mon, 24 Oct 2022 09:32:59 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <9912a1eb-ad12-4608-bf48-d74ac5f5805a@app.fastmail.com>
+In-Reply-To: <fc923325-335d-e768-ea72-ba1712320d9d@linaro.org>
+References: <20221021202254.4142411-1-arnd@kernel.org>
+ <20221021203329.4143397-5-arnd@kernel.org>
+ <fc923325-335d-e768-ea72-ba1712320d9d@linaro.org>
+Date:   Mon, 24 Oct 2022 15:32:39 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, "Ben Dooks" <ben-linux@fluff.org>,
+        "Simtec Linux Team" <linux@simtec.co.uk>,
+        "Alim Akhtar" <alim.akhtar@samsung.com>,
+        "Mark Brown" <broonie@kernel.org>,
+        "Juerg Haefliger" <juerg.haefliger@canonical.com>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Tomasz Figa" <tomasz.figa@gmail.com>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH 05/21] ARM: s3c: simplify platform code
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo
+On Mon, Oct 24, 2022, at 14:29, Krzysztof Kozlowski wrote:
 
-On Sat, 22 Oct 2022 at 11:13, Jacopo Mondi <jacopo@jmondi.org> wrote:
+>> diff --git a/arch/arm/mach-s3c/Kconfig.s3c64xx b/arch/arm/mach-s3c/Kconfig.s3c64xx
+>> index c403d7642f0a..c52c7ce1d8fa 100644
+>> --- a/arch/arm/mach-s3c/Kconfig.s3c64xx
+>> +++ b/arch/arm/mach-s3c/Kconfig.s3c64xx
+>> @@ -15,12 +15,9 @@ menuconfig ARCH_S3C64XX
+>>  	select HAVE_TCM
+>>  	select PLAT_SAMSUNG
+>>  	select PM_GENERIC_DOMAINS if PM
+>> -	select S3C_DEV_NAND if ATAGS
+>>  	select S3C_GPIO_TRACK if ATAGS
+>> -	select S3C2410_WATCHDOG
 >
-> Refuse unsupported controls by returning -EINVAL in the s_ctrl
-> operation.
->
-> Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
->
-> ---
->  drivers/media/i2c/ar0521.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
-> index e673424880ac..fcd852760750 100644
-> --- a/drivers/media/i2c/ar0521.c
-> +++ b/drivers/media/i2c/ar0521.c
-> @@ -547,6 +547,10 @@ static int ar0521_s_ctrl(struct v4l2_ctrl *ctrl)
->                 ret = ar0521_write_reg(sensor, AR0521_REG_TEST_PATTERN_MODE,
->                                        ctrl->val);
->                 break;
-> +       default:
-> +               dev_err(&sensor->i2c_client->dev,
-> +                       "Unsupported control %x\n", ctrl->id);
-> +               return -EINVAL;
->         }
->
->         pm_runtime_put(&sensor->i2c_client->dev);
+> This does not seem right. S3C2410_WATCHDOG is a driver used by all
+> (including Exynos) platforms.
 
-In the default case you've returned without doing the pm_runtime_put,
-so pm is going to be unbalanced.
+I don't remember why I removed this line, probably because I
+removed S3C_DEV_WDT after there are no references to that
+symbol left in board files. The watchdog driver is now DT-only
+with cragg6410 being the last remaining board file.
 
-default:
-  dev_err(...)
-  ret = -EINVAL;
-  break;
-would avoid that.
+Ideally we should not 'select' it from here but instead have
+it enabled in the defconfig file, but I agree that would
+be something to do in a separate patch, while the patch here
+should not change the behavior. I'll revert this part.
 
-  Dave
-
-> --
-> 2.37.3
+>> @@ -121,10 +118,8 @@ config MACH_WLF_CRAGG_6410
+>>  	select S3C_DEV_HSMMC1
+>>  	select S3C_DEV_HSMMC2
+>>  	select S3C_DEV_I2C1
+>> -	select S3C_DEV_RTC
 >
+> This as well.
+
+I'm fairly sure this can be removed along with S3C_DEV_WDT,
+S3C_DEV_I2C[2-7], S3C_DEV_NAND, and S3C_DEV_ONENAND
+as I remove the symbols due to the lack of references
+from cragg6410.
+
+I folded in this fixup now:
+
+--- a/arch/arm/mach-s3c/Kconfig.s3c64xx
++++ b/arch/arm/mach-s3c/Kconfig.s3c64xx
+@@ -16,8 +16,10 @@ menuconfig ARCH_S3C64XX
+        select PLAT_SAMSUNG
+        select PM_GENERIC_DOMAINS if PM
+        select S3C_GPIO_TRACK if ATAGS
++       select S3C2410_WATCHDOG
+        select SAMSUNG_ATAGS if ATAGS
+        select SAMSUNG_WAKEMASK if PM
++       select WATCHDOG
+        help
+          Samsung S3C64XX series based systems
+ 
+      Arnd
