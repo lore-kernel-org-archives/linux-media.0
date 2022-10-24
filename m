@@ -2,53 +2,54 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F0D6C38A2D
-	for <linux-media@archiver.kernel.org>; Mon, 24 Oct 2022 22:03:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E596AC67871
+	for <linux-media@archiver.kernel.org>; Mon, 24 Oct 2022 22:03:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231596AbiJXWDj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 Oct 2022 18:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35742 "EHLO
+        id S231358AbiJXWDo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 Oct 2022 18:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231806AbiJXWDT (ORCPT
+        with ESMTP id S230274AbiJXWDX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 Oct 2022 18:03:19 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F342FACE3;
-        Mon, 24 Oct 2022 13:17:21 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id k2so7689186ejr.2;
-        Mon, 24 Oct 2022 13:17:21 -0700 (PDT)
+        Mon, 24 Oct 2022 18:03:23 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9521B8980A;
+        Mon, 24 Oct 2022 13:17:28 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id t25so2108089ejb.8;
+        Mon, 24 Oct 2022 13:17:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1fBlLJXdA6H7C7X3qALVt9OFqOQbonL8kspTcSbYe8A=;
-        b=YPJ3jwQsNmm9WLt/GBkLWWRa6lFn8eahlu81M8lp72RvYGLMe/rQjA2qPa5v1u4tT6
-         90ivSVYqP66OxTklswMOTjjr9ecvUkAP0NUIauygidG6sWAb1j1q05ALUBQxKfn0aTu5
-         2S3QwjiaKOaIMvBqG9wc3wTVwidG1wG8FEuhFE+iEE2VUjwRX7c+FY1I7Xdn55PK08z9
-         i2ufSZEQzWz2r7uSmuMUBEkFRjVqHQY1evrOLHZ5Fk2qSSqIk/Jn+sTiLw0wQLqe4tal
-         36VZBHwYk13cnxp/sU7GMLV7E/HHAvlWE1h6zbYbhyPiwxfyyLicgnWx9g4h+13XZg8z
-         xLMg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oYPY8eOn0zkxqUP4mUno/SYzJ1DIlxFXrIT859K9TgU=;
+        b=EJa3gJX9kpMHCgLySDmPpfU47pQabWL6PyiJcpU4NaqTOR7QqHeiCspctIO6x82Yl4
+         N87S3YjLt3Z10rirNDAv7RISUFTpqlQN1+amxqjyzKrwG3OB26uEzso5FhIZMkkz73yG
+         iXLo/0lKQ/Of/I6RilPU5vunfpHg3CweixhF9xKG+lUGyQ5UWrpI0LwxoIq1w93XipTd
+         CyfotY3hUJHustjs43cbxZ+9lgOTBErByMtqy20tYIA+VntaDriOGDAc74ChF0qK0nrl
+         Ch/swzSdOWk1udjpQQnJg+L5yd6g1xE7J0c4xWI56R0enWi31p6PdCvwmne9n1v+PwD4
+         LhHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1fBlLJXdA6H7C7X3qALVt9OFqOQbonL8kspTcSbYe8A=;
-        b=5aU6Nqu9jL2jf6ccP2zCWobbqPbgI4Xh9okWhY2/wvVbZ+puqBopY0J77wVjKjPrZ/
-         hPtvsoVpNPjk/RC6WPlL2+x3EC73wqc0TOgzFchspZL51fM+KqmebIb18DPnAsiDQvjF
-         KHq1Ovx3MvT7W1DKUk5dLTNHwvGYpykQznFKWCo2APdv94FxyspPAKUKe2RR746whQzS
-         6JRLjFWkD0My0b2d1nDK8rtPqQhODBYX9VqKCDFL/AUSrjiDtX2teOEPS0T0bsq/C5kl
-         PvJr8QsXGcG83+OPC8+69psBKjMYVPsvOMT7xZZWAHRv2nchBDlcQG/JXRvEP37aXuIJ
-         z77Q==
-X-Gm-Message-State: ACrzQf3kCxabPTfGqrQ6hiYbxf7pTrSI+X9a7yVaFktbdZl4aZ/kXVjh
-        fuT0LiP8BPMlXDmw9mNBdj0=
-X-Google-Smtp-Source: AMsMyM6Tfi2MudIbF6SuC3N6qkh7fPJgYp0ed+IaKSyzxHBs7xvcwSqolHobZJoh1xVju7+sSEmzxA==
-X-Received: by 2002:a17:907:7e87:b0:78e:2dc3:945 with SMTP id qb7-20020a1709077e8700b0078e2dc30945mr29430002ejc.326.1666642529414;
-        Mon, 24 Oct 2022 13:15:29 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oYPY8eOn0zkxqUP4mUno/SYzJ1DIlxFXrIT859K9TgU=;
+        b=kpsJmNFU3FjW7q3D3kY+Zedl08nJn7iE7htagAyno67KOnw423UFcxsjzljvD8r4z4
+         WE6blWzvA368SFX2pi6Lf3dOnAn1uOIiBtqGskA/sTQLqRdA0+ljwA9vL6xo8sJqFiII
+         t/rlU5GfJKYeMa4RGBoIFkhl41M9/I/rmomOTDJi9Qa2uQatoILSs/cp+XYYCXNuXga7
+         70SznZ9jVOGVVezTIfa9CXOAH/lSPq3J7GafcoBoAVJ/ehfzImsqNFjuSXAYt22fedWK
+         bNnmChzDns8pONI1bLwiCtlRlPyHmHC6CzNA0GnvNwzVItt8ex2AfvlZEqkqjxzaQMr/
+         EMLw==
+X-Gm-Message-State: ACrzQf2aLMvQvn0QvNRglUuyj3fIH1y/WsQ+RBfyPWhTuyCsjtcVXAgb
+        3dSYMyCttViVMEHkJxT3cXI=
+X-Google-Smtp-Source: AMsMyM4PvZf0jAyv0mttuEvx1QNQZNnkovUvS2t7IMk9if/3+tHnh6GVwn7xGI2X3dNHMUCCF/wmJQ==
+X-Received: by 2002:a17:907:2712:b0:78d:a223:729b with SMTP id w18-20020a170907271200b0078da223729bmr29546597ejk.443.1666642537061;
+        Mon, 24 Oct 2022 13:15:37 -0700 (PDT)
 Received: from kista.localdomain (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id op7-20020a170906bce700b0073d638a7a89sm332023ejb.99.2022.10.24.13.15.27
+        by smtp.gmail.com with ESMTPSA id op7-20020a170906bce700b0073d638a7a89sm332023ejb.99.2022.10.24.13.15.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 13:15:28 -0700 (PDT)
+        Mon, 24 Oct 2022 13:15:36 -0700 (PDT)
 From:   Jernej Skrabec <jernej.skrabec@gmail.com>
 To:     mripard@kernel.org, paul.kocialkowski@bootlin.com
 Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
@@ -57,60 +58,156 @@ Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-kernel@vger.kernel.org,
         Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: [PATCH 00/11] media: cedrus: Format handling improvements and 10-bit HEVC support
-Date:   Mon, 24 Oct 2022 22:15:04 +0200
-Message-Id: <20221024201515.34129-1-jernej.skrabec@gmail.com>
+Subject: [PATCH 07/11] media: cedrus: Remove cedrus_codec enum
+Date:   Mon, 24 Oct 2022 22:15:11 +0200
+Message-Id: <20221024201515.34129-8-jernej.skrabec@gmail.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221024201515.34129-1-jernej.skrabec@gmail.com>
+References: <20221024201515.34129-1-jernej.skrabec@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-While my first intention was to just add 10-bit HEVC handling, I noticed
-a few format handling issues and a bit of redundancy in some cases. Final
-result is that driver now sticks to stateless decoder rules better.
+Last user of cedrus_codec enum is cedrus_engine_enable() but this
+argument is completely redundant. Same information can be obtained via
+source pixel format. Let's remove this argument and enum.
 
-Format handling improvements:
-1. Default format selection is now based on HW capabilities. Before, MPEG2
-   was hardcoded but some Cedrus variants don't actually support it.
-2. Controls are registered only if related codec is supported by HW.
-3. Untiled output format is preferred, if supported, over tiled one. All
-   display engine cores support untiled format, but only first generation
-   supports tiled one.
+No functional changes intended.
 
-I hope this makes Cedrus eligible for destaging.
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+---
+ drivers/staging/media/sunxi/cedrus/cedrus.h       |  8 --------
+ drivers/staging/media/sunxi/cedrus/cedrus_h264.c  |  2 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_h265.c  |  2 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_hw.c    | 12 ++++++------
+ drivers/staging/media/sunxi/cedrus/cedrus_hw.h    |  2 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_mpeg2.c |  2 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_vp8.c   |  2 +-
+ 7 files changed, 11 insertions(+), 19 deletions(-)
 
-Best regards,
-Jernej
-
-Jernej Skrabec (11):
-  media: cedrus: remove superfluous call
-  media: cedrus: Add format reset helpers
-  media: cedrus: use helper to set default formats
-  media: cedrus: Add helper for checking capabilities
-  media: cedrus: Filter controls based on capability
-  media: cedrus: set codec ops immediately
-  media: cedrus: Remove cedrus_codec enum
-  media: cedrus: prefer untiled capture format
-  media: cedrus: initialize controls a bit later
-  media: cedrus: Adjust buffer size based on control values
-  media: cedrus: h265: Support decoding 10-bit frames
-
- drivers/staging/media/sunxi/cedrus/cedrus.c   |  97 +++++-----
- drivers/staging/media/sunxi/cedrus/cedrus.h   |  22 +--
- .../staging/media/sunxi/cedrus/cedrus_dec.c   |   4 +-
- .../staging/media/sunxi/cedrus/cedrus_h264.c  |   2 +-
- .../staging/media/sunxi/cedrus/cedrus_h265.c  |  37 +++-
- .../staging/media/sunxi/cedrus/cedrus_hw.c    |  18 +-
- .../staging/media/sunxi/cedrus/cedrus_hw.h    |   2 +-
- .../staging/media/sunxi/cedrus/cedrus_mpeg2.c |   2 +-
- .../staging/media/sunxi/cedrus/cedrus_regs.h  |  16 ++
- .../staging/media/sunxi/cedrus/cedrus_video.c | 166 ++++++++++--------
- .../staging/media/sunxi/cedrus/cedrus_video.h |   2 +
- .../staging/media/sunxi/cedrus/cedrus_vp8.c   |   2 +-
- 12 files changed, 225 insertions(+), 145 deletions(-)
-
---
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.h b/drivers/staging/media/sunxi/cedrus/cedrus.h
+index 0b082b1fae22..5904294f3108 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus.h
++++ b/drivers/staging/media/sunxi/cedrus/cedrus.h
+@@ -35,14 +35,6 @@
+ #define CEDRUS_CAPABILITY_VP8_DEC	BIT(4)
+ #define CEDRUS_CAPABILITY_H265_10_DEC	BIT(5)
+ 
+-enum cedrus_codec {
+-	CEDRUS_CODEC_MPEG2,
+-	CEDRUS_CODEC_H264,
+-	CEDRUS_CODEC_H265,
+-	CEDRUS_CODEC_VP8,
+-	CEDRUS_CODEC_LAST,
+-};
+-
+ enum cedrus_irq_status {
+ 	CEDRUS_IRQ_NONE,
+ 	CEDRUS_IRQ_ERROR,
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+index c92dec21c1ac..dfb401df138a 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+@@ -518,7 +518,7 @@ static int cedrus_h264_setup(struct cedrus_ctx *ctx, struct cedrus_run *run)
+ 	struct cedrus_dev *dev = ctx->dev;
+ 	int ret;
+ 
+-	cedrus_engine_enable(ctx, CEDRUS_CODEC_H264);
++	cedrus_engine_enable(ctx);
+ 
+ 	cedrus_write(dev, VE_H264_SDROT_CTRL, 0);
+ 	cedrus_write(dev, VE_H264_EXTRA_BUFFER1,
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+index 7a438cd22c34..5d3da50ce46a 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+@@ -471,7 +471,7 @@ static int cedrus_h265_setup(struct cedrus_ctx *ctx, struct cedrus_run *run)
+ 	}
+ 
+ 	/* Activate H265 engine. */
+-	cedrus_engine_enable(ctx, CEDRUS_CODEC_H265);
++	cedrus_engine_enable(ctx);
+ 
+ 	/* Source offset and length in bits. */
+ 
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_hw.c b/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
+index c3387cd1e80f..fa86a658fdc6 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
+@@ -31,7 +31,7 @@
+ #include "cedrus_hw.h"
+ #include "cedrus_regs.h"
+ 
+-int cedrus_engine_enable(struct cedrus_ctx *ctx, enum cedrus_codec codec)
++int cedrus_engine_enable(struct cedrus_ctx *ctx)
+ {
+ 	u32 reg = 0;
+ 
+@@ -42,18 +42,18 @@ int cedrus_engine_enable(struct cedrus_ctx *ctx, enum cedrus_codec codec)
+ 	reg |= VE_MODE_REC_WR_MODE_2MB;
+ 	reg |= VE_MODE_DDR_MODE_BW_128;
+ 
+-	switch (codec) {
+-	case CEDRUS_CODEC_MPEG2:
++	switch (ctx->src_fmt.pixelformat) {
++	case V4L2_PIX_FMT_MPEG2_SLICE:
+ 		reg |= VE_MODE_DEC_MPEG;
+ 		break;
+ 
+ 	/* H.264 and VP8 both use the same decoding mode bit. */
+-	case CEDRUS_CODEC_H264:
+-	case CEDRUS_CODEC_VP8:
++	case V4L2_PIX_FMT_H264_SLICE:
++	case V4L2_PIX_FMT_VP8_FRAME:
+ 		reg |= VE_MODE_DEC_H264;
+ 		break;
+ 
+-	case CEDRUS_CODEC_H265:
++	case V4L2_PIX_FMT_HEVC_SLICE:
+ 		reg |= VE_MODE_DEC_H265;
+ 		break;
+ 
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_hw.h b/drivers/staging/media/sunxi/cedrus/cedrus_hw.h
+index 7c92f00e36da..6f1e701b1ea8 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_hw.h
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_hw.h
+@@ -16,7 +16,7 @@
+ #ifndef _CEDRUS_HW_H_
+ #define _CEDRUS_HW_H_
+ 
+-int cedrus_engine_enable(struct cedrus_ctx *ctx, enum cedrus_codec codec);
++int cedrus_engine_enable(struct cedrus_ctx *ctx);
+ void cedrus_engine_disable(struct cedrus_dev *dev);
+ 
+ void cedrus_dst_format_set(struct cedrus_dev *dev,
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_mpeg2.c b/drivers/staging/media/sunxi/cedrus/cedrus_mpeg2.c
+index c1128d2cd555..10e98f08aafc 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_mpeg2.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_mpeg2.c
+@@ -66,7 +66,7 @@ static int cedrus_mpeg2_setup(struct cedrus_ctx *ctx, struct cedrus_run *run)
+ 	quantisation = run->mpeg2.quantisation;
+ 
+ 	/* Activate MPEG engine. */
+-	cedrus_engine_enable(ctx, CEDRUS_CODEC_MPEG2);
++	cedrus_engine_enable(ctx);
+ 
+ 	/* Set intra quantisation matrix. */
+ 	matrix = quantisation->intra_quantiser_matrix;
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_vp8.c b/drivers/staging/media/sunxi/cedrus/cedrus_vp8.c
+index f7714baae37d..969677a3bbf9 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_vp8.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_vp8.c
+@@ -662,7 +662,7 @@ static int cedrus_vp8_setup(struct cedrus_ctx *ctx, struct cedrus_run *run)
+ 	int header_size;
+ 	u32 reg;
+ 
+-	cedrus_engine_enable(ctx, CEDRUS_CODEC_VP8);
++	cedrus_engine_enable(ctx);
+ 
+ 	cedrus_write(dev, VE_H264_CTRL, VE_H264_CTRL_VP8);
+ 
+-- 
 2.38.1
 
