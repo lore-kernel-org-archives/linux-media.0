@@ -2,91 +2,101 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E824C38A2D
-	for <linux-media@archiver.kernel.org>; Mon, 24 Oct 2022 16:19:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F984ECAAA1
+	for <linux-media@archiver.kernel.org>; Mon, 24 Oct 2022 16:27:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234352AbiJXQSw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 Oct 2022 12:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57838 "EHLO
+        id S234227AbiJXQ1g (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 Oct 2022 12:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234220AbiJXQRI (ORCPT
+        with ESMTP id S233294AbiJXQ1B (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:17:08 -0400
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [IPv6:2001:4b98:dc4:8::240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070A1B18F0
-        for <linux-media@vger.kernel.org>; Mon, 24 Oct 2022 08:04:17 -0700 (PDT)
-Received: from relay9-d.mail.gandi.net (unknown [217.70.183.199])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id A2C9FC0F35
-        for <linux-media@vger.kernel.org>; Mon, 24 Oct 2022 13:11:29 +0000 (UTC)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 81AE5FF804;
-        Mon, 24 Oct 2022 13:10:47 +0000 (UTC)
-Date:   Mon, 24 Oct 2022 15:10:45 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc:     Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mon, 24 Oct 2022 12:27:01 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221F536784;
+        Mon, 24 Oct 2022 08:13:48 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id k8so8081408wrh.1;
+        Mon, 24 Oct 2022 08:13:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HLvEf6cgm6sbQwXMxy/K8YYDKY0VqrhdGwpIdzPVH88=;
+        b=BXqxvyJx37nuxTzExYLJzUYDjNDJHiRMEWZr5/N0KD/wXa3Z8nqCIAS8Ga5wJBhmjo
+         qernecX4jmVm1Hw4o9kqWvEljFarITLtcT9Pis97MIvK3PdSs78xp6pdeEADH3f4QvYB
+         RDGUJ3dJLj4YpWwFj+woEgB59vg0EcVSzVBYuUGsfxtj8P3QtxXNcjYO1g/R+pAGQRk2
+         yz53bTms6FtOaoW0uk692Rqgcc9zdK5qJf/KKce+qma2zbAzNeUZ+lpmFZMQ6f2BIfy8
+         FLdz0q0yduzNkrCZX7ncd/Fug8Vyb278JdRvc/U1S15QXjNskQEAla4lm6MiiKWo11pv
+         +X2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HLvEf6cgm6sbQwXMxy/K8YYDKY0VqrhdGwpIdzPVH88=;
+        b=eVG+KKN5KMBboB9azDd3jy/IJ2a3nTnyIOdeA8ucANEG11dwJ+DqPoaqMtL5FUg7pH
+         eRoJi9fHF+mGhTv35TFSIkYs/FfzZ6xtnXHAQc8m/dhd8v+YNPX2pPK3YBlbXTjQRq62
+         F6WsMQV5PIU0lZIY40rqE6wO2BJLtwv1kP+NnhReUSjFJe3gbm16547mf/HCscLIWIe0
+         /HA6HinBWN9FXw7dLGSyuWpqFpV9z964747ulM4F1JpveTZWtZy/NZgexJtd1ZPU+fEy
+         6aZdRizqKseCm1C39M/k5empoRKYvzx5YxiKUlK2yYa9vk6g4jLZ1Yh17mnU1/3p4+82
+         IL5Q==
+X-Gm-Message-State: ACrzQf0WzDCFAQwv0a8yuC8VQSDr5qac2+v2bVQ3dJAdICB92crVkS4Q
+        DjwEeWZ6r9pFAZWI+KSDu08oYBwct2yQdKDQ
+X-Google-Smtp-Source: AMsMyM5u1eInNT1r9xcmMJ5uXkwfkGtcne6ly9VzSeiUg9N5Tp/rAgzc+v1zRziRe+O4HB8npZ25Qw==
+X-Received: by 2002:a5d:5503:0:b0:236:1722:845d with SMTP id b3-20020a5d5503000000b002361722845dmr15307415wrv.351.1666621795315;
+        Mon, 24 Oct 2022 07:29:55 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id d12-20020adfa40c000000b0022ca921dc67sm26037895wra.88.2022.10.24.07.29.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 07:29:54 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
         linux-media@vger.kernel.org
-Subject: Re: [PATCH v2 05/10] media: ar0521: Refuse unsupported controls
-Message-ID: <20221024131045.jyi3yoqtmpvdaaga@uno.localdomain>
-References: <20221022092015.208592-1-jacopo@jmondi.org>
- <20221022092015.208592-6-jacopo@jmondi.org>
- <CAPY8ntBya1-rUkQH9wiERUof-01puoLej7t6BHKAr1ot-iHe9g@mail.gmail.com>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: dvb-core: remove variable n, turn for-loop to while-loop
+Date:   Mon, 24 Oct 2022 15:29:54 +0100
+Message-Id: <20221024142954.2162920-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAPY8ntBya1-rUkQH9wiERUof-01puoLej7t6BHKAr1ot-iHe9g@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Ups, trivial mistake sorry
+Variable n is just being incremented and it's never used
+anywhere else. The variable and the increment are redundant so
+remove it. This allows the for-loop to be replaced with a
+while-loop.
 
-Thanks for spotting
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/media/dvb-core/dvb_demux.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Mon, Oct 24, 2022 at 02:00:28PM +0100, Dave Stevenson wrote:
-> Hi Jacopo
->
-> On Sat, 22 Oct 2022 at 11:13, Jacopo Mondi <jacopo@jmondi.org> wrote:
-> >
-> > Refuse unsupported controls by returning -EINVAL in the s_ctrl
-> > operation.
-> >
-> > Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
-> >
-> > ---
-> >  drivers/media/i2c/ar0521.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
-> > index e673424880ac..fcd852760750 100644
-> > --- a/drivers/media/i2c/ar0521.c
-> > +++ b/drivers/media/i2c/ar0521.c
-> > @@ -547,6 +547,10 @@ static int ar0521_s_ctrl(struct v4l2_ctrl *ctrl)
-> >                 ret = ar0521_write_reg(sensor, AR0521_REG_TEST_PATTERN_MODE,
-> >                                        ctrl->val);
-> >                 break;
-> > +       default:
-> > +               dev_err(&sensor->i2c_client->dev,
-> > +                       "Unsupported control %x\n", ctrl->id);
-> > +               return -EINVAL;
-> >         }
-> >
-> >         pm_runtime_put(&sensor->i2c_client->dev);
->
-> In the default case you've returned without doing the pm_runtime_put,
-> so pm is going to be unbalanced.
->
-> default:
->   dev_err(...)
->   ret = -EINVAL;
->   break;
-> would avoid that.
->
->   Dave
->
-> > --
-> > 2.37.3
-> >
+diff --git a/drivers/media/dvb-core/dvb_demux.c b/drivers/media/dvb-core/dvb_demux.c
+index 83cc32ad7e12..398c86279b5b 100644
+--- a/drivers/media/dvb-core/dvb_demux.c
++++ b/drivers/media/dvb-core/dvb_demux.c
+@@ -233,7 +233,7 @@ static int dvb_dmx_swfilter_section_copy_dump(struct dvb_demux_feed *feed,
+ {
+ 	struct dvb_demux *demux = feed->demux;
+ 	struct dmx_section_feed *sec = &feed->feed.sec;
+-	u16 limit, seclen, n;
++	u16 limit, seclen;
+ 
+ 	if (sec->tsfeedp >= DMX_MAX_SECFEED_SIZE)
+ 		return 0;
+@@ -262,7 +262,7 @@ static int dvb_dmx_swfilter_section_copy_dump(struct dvb_demux_feed *feed,
+ 	/* to be sure always set secbuf */
+ 	sec->secbuf = sec->secbuf_base + sec->secbufp;
+ 
+-	for (n = 0; sec->secbufp + 2 < limit; n++) {
++	while (sec->secbufp + 2 < limit) {
+ 		seclen = section_length(sec->secbuf);
+ 		if (seclen <= 0 || seclen > DMX_MAX_SECTION_SIZE
+ 		    || seclen + sec->secbufp > limit)
+-- 
+2.37.3
+
