@@ -2,103 +2,84 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD9CAFA3745
-	for <linux-media@archiver.kernel.org>; Mon, 24 Oct 2022 17:05:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42E6BC38A2D
+	for <linux-media@archiver.kernel.org>; Mon, 24 Oct 2022 17:59:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233452AbiJXRFa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 Oct 2022 13:05:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42846 "EHLO
+        id S231417AbiJXR7U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 Oct 2022 13:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235441AbiJXREg (ORCPT
+        with ESMTP id S233287AbiJXR7E (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 Oct 2022 13:04:36 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC90CA8A0;
-        Mon, 24 Oct 2022 08:40:22 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1322fa1cf6fso12274660fac.6;
-        Mon, 24 Oct 2022 08:40:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xf1QpnlooM/EzBO71nDJaALY4Af30m+RUToV/sEcQc0=;
-        b=YWb/8dOxbdWFi4W7XwLCdMiy/5vsnQT8eIL9iFMK1j1zGHbcH8zlhIrf2maHvqZxWd
-         oXNooHcb+yWL1U45waazeowROIGQd7Opoztx9JkTr5CXm7YXwfkNq9uZxy19vgCpYoZc
-         +D6jAY30f5t9XUbRvHErE3uyr92pqndnuW3B+graI/nmQAZZzZtKSSo5ZeBdMEdJjnZa
-         IkqKtQ9YM2lhnJpZcwB6vcZpn0138OfBhnxoj9zBFEcnowyJ1GIHob6C7oUe8PAzCUOV
-         shDXtPOYUIy8/3fp5UcXXxnQbWXJhO81EVz0OLw9904X5s1+AQvgnFws0JLZjCJXOJD/
-         +FLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Xf1QpnlooM/EzBO71nDJaALY4Af30m+RUToV/sEcQc0=;
-        b=xC+aEI6jMN01pDb+ydbBfvleuZlw4x0Ez/M6l5q6GRMsvB4h6TVr/fnhHquhXZc3NA
-         2te+LBNTPLdexYcYqwLC+kyClqDS1y0tLqki4ZnqdgKiDZS2DeCnEQA2+YhfQTGVS9cA
-         vTUIUBUTneDLtOhk8jahIkXRfFSEMU5bKlnMwDnx4nnUJvrFzjzfoS0RppCvdUsWBG1i
-         59EdYTH1oTEdsdWutGHZ4UJEZqhtTqgYR8fnt7MlPI+wlwZ8EfPEN8K3Zw2z/9NIsyeA
-         lvvDRAv5Lp5JypwhWWDy9Qgd2Z4WW1KVQCXv4nys+AC3FrXkXT+q87G5w6R4M9NIXQqI
-         7mNA==
-X-Gm-Message-State: ACrzQf2yGSqm1EBiffF66g7mb8MXKE+vhYnf8wdxcFMXQq50Ad7KFmba
-        gI5tOEjzTB+HpDb0gofjon968UK6ChE=
-X-Google-Smtp-Source: AMsMyM5RpJNF3gJeZ9+k4mWvaTefhcNVEdR3otp/3VizCshKQP+5vqFHs/wyK0UugSqNcNfbJ+mZvg==
-X-Received: by 2002:a05:6871:112:b0:13b:99e0:2be3 with SMTP id y18-20020a056871011200b0013b99e02be3mr4297213oab.299.1666624105441;
-        Mon, 24 Oct 2022 08:08:25 -0700 (PDT)
-Received: from gabriel-Nitro-AN515-54.. (201-27-204-68.dsl.telesp.net.br. [201.27.204.68])
-        by smtp.gmail.com with ESMTPSA id e18-20020a056830201200b00661ad8741b4sm4532583otp.24.2022.10.24.08.08.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 08:08:24 -0700 (PDT)
-From:   Gabriel Lima Luz <lima.gabriel.luz@gmail.com>
-To:     Rui Miguel Silva <rmfrfs@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mon, 24 Oct 2022 13:59:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE7AEB74B;
+        Mon, 24 Oct 2022 09:39:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4141861489;
+        Mon, 24 Oct 2022 16:28:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27D52C433C1;
+        Mon, 24 Oct 2022 16:28:18 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="KLTUPYFc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1666628896;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=yXR2T4bKtKjydDynr+Vr9b65mU0cPS5K9cCzVDVGo90=;
+        b=KLTUPYFcu5JICSiD8S+dP8u+6i9CaL5swdpSgj5U2Fpqi2Foxt4n6/O9jR6xA7iHyqNpnb
+        184FkoH80FpqD52JA4RN8Pkns4bJiada6PkCePvYzmd3Z4dqnc7gfN43km2/UZOuCWqMKE
+        X5fCKOrH3OejTyACQTg5PWxCbikDOVg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c97529a7 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 24 Oct 2022 16:28:15 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Cc:     Gabriel Lima Luz <lima.gabriel.luz@gmail.com>
-Subject: [PATCH] staging: media: imx: imx7-media-csi: Fix parenthesis alignment
-Date:   Mon, 24 Oct 2022 12:07:44 -0300
-Message-Id: <20221024150744.72641-1-lima.gabriel.luz@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        linux-media@vger.kernel.org
+Subject: [PATCH] media: stv0288: use explicitly signed char
+Date:   Mon, 24 Oct 2022 18:27:56 +0200
+Message-Id: <20221024162756.535776-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Adhere to Linux kernel coding style.
+With char becoming unsigned by default, and with `char` alone being
+ambiguous and based on architecture, signed chars need to be marked
+explicitly as such. Use `s8` and `u8` types here, since that's what
+surrounding code does. This fixes:
 
-Reported by checkpatch:
+drivers/media/dvb-frontends/stv0288.c:471 stv0288_set_frontend() warn: assigning (-9) to unsigned variable 'tm'
+drivers/media/dvb-frontends/stv0288.c:471 stv0288_set_frontend() warn: we never enter this loop
 
-CHECK: Alignment should match open parenthesis
-
-Signed-off-by: Gabriel Lima Luz <lima.gabriel.luz@gmail.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- drivers/staging/media/imx/imx7-media-csi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/dvb-frontends/stv0288.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-index cbc66ef0eda8..9ad7205a3f2f 100644
---- a/drivers/staging/media/imx/imx7-media-csi.c
-+++ b/drivers/staging/media/imx/imx7-media-csi.c
-@@ -1704,7 +1704,7 @@ static int imx7_csi_init_cfg(struct v4l2_subdev *sd,
- 		mf->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(mf->colorspace);
- 		mf->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(mf->colorspace);
- 		mf->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(!cc->yuv,
--					mf->colorspace, mf->ycbcr_enc);
-+								 mf->colorspace, mf->ycbcr_enc);
+diff --git a/drivers/media/dvb-frontends/stv0288.c b/drivers/media/dvb-frontends/stv0288.c
+index 3d54a0ec86af..3ae1f3a2f142 100644
+--- a/drivers/media/dvb-frontends/stv0288.c
++++ b/drivers/media/dvb-frontends/stv0288.c
+@@ -440,9 +440,8 @@ static int stv0288_set_frontend(struct dvb_frontend *fe)
+ 	struct stv0288_state *state = fe->demodulator_priv;
+ 	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
  
- 		csi->cc[i] = cc;
- 	}
+-	char tm;
+-	unsigned char tda[3];
+-	u8 reg, time_out = 0;
++	u8 tda[3], reg, time_out = 0;
++	s8 tm;
+ 
+ 	dprintk("%s : FE_SET_FRONTEND\n", __func__);
+ 
 -- 
-2.34.1
+2.38.1
 
