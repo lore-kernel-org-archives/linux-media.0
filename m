@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91038C38A2D
-	for <linux-media@archiver.kernel.org>; Mon, 24 Oct 2022 22:04:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1A3EC38A2D
+	for <linux-media@archiver.kernel.org>; Mon, 24 Oct 2022 22:09:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231414AbiJXWEQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 Oct 2022 18:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
+        id S229886AbiJXWJL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 Oct 2022 18:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231785AbiJXWDx (ORCPT
+        with ESMTP id S232327AbiJXWIf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 Oct 2022 18:03:53 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F345FFD;
-        Mon, 24 Oct 2022 13:17:51 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id m15so33305250edb.13;
-        Mon, 24 Oct 2022 13:17:51 -0700 (PDT)
+        Mon, 24 Oct 2022 18:08:35 -0400
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17D8256D28;
+        Mon, 24 Oct 2022 13:22:10 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id m15so33305494edb.13;
+        Mon, 24 Oct 2022 13:22:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7jVp3CG27o9+HdXrqFxf0SW9oZkiMXAzJ2FPuuiQx3Y=;
-        b=AtN2GbQYKT6lPoTuMCBqyujg/iuyMiylMdjB+nkJ73us1MGbIG6V5NCEdtNN48a3Je
-         Z3QKpfNwo0N3X3fTZ8ijGu71yjluzrtZteqa+uIRMgxLCZ9n9+HhIPN5mE6sOdgAhuLk
-         BxNBaxlN5ghjjysmLNPNH4+29o5Kfb/t2IyqglOHA0eu0Ybkp7gmAa4qWFtwiXb6+Zf4
-         jVCCk50+1ermsEL3r1qkRWODvUsIySj0CDoiWmhm38Ov+El7TNFL9URXEShbQ3usuBYT
-         8ItrcYb8/hOaZq1bJlJfSK7QQqDiGQizSwtncL3umvhsz5WoA/khIMoP3zmzwmbHcLIg
-         bXaw==
+        bh=JN/xnHSP6Pihw6a6lZykPULIKG9MjkS5qFCv+jz3gxE=;
+        b=N+mfby8BkFCNhHQz7lyhNuAhDS+hrHknVOORsYO4JvozUCR/K0WBM3Gkg+waQhOIJU
+         ScQUzjqOj3QzhJsGYier6ZIGKS1frZcxct4YTR2WB2IR76EZtDACbTGZF8/6t0sLZgcE
+         zsCQlFhC1wwE/b8wxRBf+NGjmvb9ujEBStU9ZVNtEhULQhK4bCSIZqOpHKRNGNv+Klk7
+         c5Z5UwpUK9WvQnvtbgKFnH48IachlfG3LEgdh7U7zLAUF51XEU0Eo7HNa8KuuiEehQrT
+         VshVg1k6XWtl6UuAxRFdarT4wCFj3F2pjHuoR4ecbQs9vnZ5+kMd1RKj7kGVlNP9aPZ7
+         xf9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7jVp3CG27o9+HdXrqFxf0SW9oZkiMXAzJ2FPuuiQx3Y=;
-        b=MFRMLzSNlOrUwBXj6UE5eqrdiL083u/VZ1+2DD2juJf9G3GvLs3HsR96l4hNenVfbq
-         z2EIsM1wNVCFDF4HKxJK2xZF9dCa9eRhC/OtLknuxagp9lp9qAom/8Vi1D6clRaQSs0z
-         p+ohit2JgDyxYn9A8Nngfx0RBUSFSDArHv8X+gik4/wpr3F/W9MIUNrFKJNBPYBYZYgz
-         XDt3iPhQKps804tFeKQ2cfWEF7QrmyhQOcq2qw3aIdwc6pMTlSRCa8pja1Q9YWClNOr+
-         vPtvwqCaPc+zwHQ3+VaIZ9IDu9HJvaOB6b8X5ZXb0qgE39ukyBlmBQmVghyR7i23u/ae
-         heQw==
-X-Gm-Message-State: ACrzQf3920so5ztW5mxaX3JXaeGdOXpFCifUeT8PtLN1j6Qyf1W2Y905
-        OYMe2CxEn5inJreNqTLhbU4=
-X-Google-Smtp-Source: AMsMyM5TZlmeIOe3i3DfrLsflw3y8/P19jMGoXJVrhuDfy549fh1803BHPep9M2rsrPSNmpLQGVrXQ==
-X-Received: by 2002:a05:6402:b99:b0:461:afc3:9a02 with SMTP id cf25-20020a0564020b9900b00461afc39a02mr8405459edb.175.1666642534924;
-        Mon, 24 Oct 2022 13:15:34 -0700 (PDT)
+        bh=JN/xnHSP6Pihw6a6lZykPULIKG9MjkS5qFCv+jz3gxE=;
+        b=sPUI7lVbrGni/LDCs07jFdh6J5WEC/EVTy/QWqv0rHI9Xpsm8/P57bPSuq5MQPxHCw
+         dlSRRU3pj2DqQ0KVxvRrVIHyI9UNQ3VUOgPu3GNE+mrex4e4tHMU1Fy9/C/sIXe8wDPM
+         86D+CAC1hoIHHoIcsh+vTEozwmJJTOtnG2klDwuyZgpSV57d1VjtN+dqROB6BrEF1yl2
+         yQswl4rC/wBChpT8uCci/bEwtSnI6Er8vg0rjzs+DyPHV17M0sOnqEyZgbp3FPbp9cUh
+         UeOg82jKOkhnsQw01Vm7fPuQRictPxo8gxc/hmSfhjjP2GOVOG2gB/FXqA/840H/2w0l
+         kOlg==
+X-Gm-Message-State: ACrzQf0Yqr9PUEZyNNfF0Y55gMaRDg9jwfX5CO/yco4OBHMER9bu5yFo
+        9mTW2UEW0dV6yZp04CGqIqg=
+X-Google-Smtp-Source: AMsMyM5NCp8Ra8AQSeVxpj+GvLgPxRsEc1A1IvATEsJOerZ0+NbOQamGtZVb7tuTMUFX77oXzqaiww==
+X-Received: by 2002:a05:6402:1d4f:b0:461:d2ed:788c with SMTP id dz15-20020a0564021d4f00b00461d2ed788cmr5199794edb.418.1666642539269;
+        Mon, 24 Oct 2022 13:15:39 -0700 (PDT)
 Received: from kista.localdomain (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id op7-20020a170906bce700b0073d638a7a89sm332023ejb.99.2022.10.24.13.15.33
+        by smtp.gmail.com with ESMTPSA id op7-20020a170906bce700b0073d638a7a89sm332023ejb.99.2022.10.24.13.15.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 13:15:34 -0700 (PDT)
+        Mon, 24 Oct 2022 13:15:38 -0700 (PDT)
 From:   Jernej Skrabec <jernej.skrabec@gmail.com>
 To:     mripard@kernel.org, paul.kocialkowski@bootlin.com
 Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
@@ -58,9 +58,9 @@ Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-kernel@vger.kernel.org,
         Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: [PATCH 05/11] media: cedrus: Filter controls based on capability
-Date:   Mon, 24 Oct 2022 22:15:09 +0200
-Message-Id: <20221024201515.34129-6-jernej.skrabec@gmail.com>
+Subject: [PATCH 09/11] media: cedrus: initialize controls a bit later
+Date:   Mon, 24 Oct 2022 22:15:13 +0200
+Message-Id: <20221024201515.34129-10-jernej.skrabec@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024201515.34129-1-jernej.skrabec@gmail.com>
 References: <20221024201515.34129-1-jernej.skrabec@gmail.com>
@@ -70,211 +70,58 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Because not all Cedrus variants supports all codecs, controls should be
-registered only if codec related to individual control is supported by
-Cedrus.
+While it doesn't matter if controls are initialized before or after
+queues and formats from open handler standpoint, initializing them last
+helps keeping s_ctrl handler simpler, since everything has already valid
+values.
 
-Replace codec enum, which is not used at all, with capabilities flags
-and register control only if capabilities are met.
+This is just preparation for follow up changes. No functional change is
+intended.
 
 Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 ---
- drivers/staging/media/sunxi/cedrus/cedrus.c | 45 +++++++++++----------
- drivers/staging/media/sunxi/cedrus/cedrus.h |  2 +-
- 2 files changed, 25 insertions(+), 22 deletions(-)
+ drivers/staging/media/sunxi/cedrus/cedrus.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
-index 2f284a58d787..023566b02dc5 100644
+index 8cfe47574c39..70b07d8bad2b 100644
 --- a/drivers/staging/media/sunxi/cedrus/cedrus.c
 +++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
-@@ -77,56 +77,56 @@ static const struct cedrus_control cedrus_controls[] = {
- 		.cfg = {
- 			.id	= V4L2_CID_STATELESS_MPEG2_SEQUENCE,
- 		},
--		.codec		= CEDRUS_CODEC_MPEG2,
-+		.capabilities	= CEDRUS_CAPABILITY_MPEG2_DEC,
- 	},
- 	{
- 		.cfg = {
- 			.id	= V4L2_CID_STATELESS_MPEG2_PICTURE,
- 		},
--		.codec		= CEDRUS_CODEC_MPEG2,
-+		.capabilities	= CEDRUS_CAPABILITY_MPEG2_DEC,
- 	},
- 	{
- 		.cfg = {
- 			.id	= V4L2_CID_STATELESS_MPEG2_QUANTISATION,
- 		},
--		.codec		= CEDRUS_CODEC_MPEG2,
-+		.capabilities	= CEDRUS_CAPABILITY_MPEG2_DEC,
- 	},
- 	{
- 		.cfg = {
- 			.id	= V4L2_CID_STATELESS_H264_DECODE_PARAMS,
- 		},
--		.codec		= CEDRUS_CODEC_H264,
-+		.capabilities	= CEDRUS_CAPABILITY_H264_DEC,
- 	},
- 	{
- 		.cfg = {
- 			.id	= V4L2_CID_STATELESS_H264_SLICE_PARAMS,
- 		},
--		.codec		= CEDRUS_CODEC_H264,
-+		.capabilities	= CEDRUS_CAPABILITY_H264_DEC,
- 	},
- 	{
- 		.cfg = {
- 			.id	= V4L2_CID_STATELESS_H264_SPS,
- 			.ops	= &cedrus_ctrl_ops,
- 		},
--		.codec		= CEDRUS_CODEC_H264,
-+		.capabilities	= CEDRUS_CAPABILITY_H264_DEC,
- 	},
- 	{
- 		.cfg = {
- 			.id	= V4L2_CID_STATELESS_H264_PPS,
- 		},
--		.codec		= CEDRUS_CODEC_H264,
-+		.capabilities	= CEDRUS_CAPABILITY_H264_DEC,
- 	},
- 	{
- 		.cfg = {
- 			.id	= V4L2_CID_STATELESS_H264_SCALING_MATRIX,
- 		},
--		.codec		= CEDRUS_CODEC_H264,
-+		.capabilities	= CEDRUS_CAPABILITY_H264_DEC,
- 	},
- 	{
- 		.cfg = {
- 			.id	= V4L2_CID_STATELESS_H264_PRED_WEIGHTS,
- 		},
--		.codec		= CEDRUS_CODEC_H264,
-+		.capabilities	= CEDRUS_CAPABILITY_H264_DEC,
- 	},
- 	{
- 		.cfg = {
-@@ -134,7 +134,7 @@ static const struct cedrus_control cedrus_controls[] = {
- 			.max	= V4L2_STATELESS_H264_DECODE_MODE_SLICE_BASED,
- 			.def	= V4L2_STATELESS_H264_DECODE_MODE_SLICE_BASED,
- 		},
--		.codec		= CEDRUS_CODEC_H264,
-+		.capabilities	= CEDRUS_CAPABILITY_H264_DEC,
- 	},
- 	{
- 		.cfg = {
-@@ -142,7 +142,7 @@ static const struct cedrus_control cedrus_controls[] = {
- 			.max	= V4L2_STATELESS_H264_START_CODE_NONE,
- 			.def	= V4L2_STATELESS_H264_START_CODE_NONE,
- 		},
--		.codec		= CEDRUS_CODEC_H264,
-+		.capabilities	= CEDRUS_CAPABILITY_H264_DEC,
- 	},
- 	/*
- 	 * We only expose supported profiles information,
-@@ -160,20 +160,20 @@ static const struct cedrus_control cedrus_controls[] = {
- 			.menu_skip_mask =
- 				BIT(V4L2_MPEG_VIDEO_H264_PROFILE_EXTENDED),
- 		},
--		.codec		= CEDRUS_CODEC_H264,
-+		.capabilities	= CEDRUS_CAPABILITY_H264_DEC,
- 	},
- 	{
- 		.cfg = {
- 			.id	= V4L2_CID_STATELESS_HEVC_SPS,
- 			.ops	= &cedrus_ctrl_ops,
- 		},
--		.codec		= CEDRUS_CODEC_H265,
-+		.capabilities	= CEDRUS_CAPABILITY_H265_DEC,
- 	},
- 	{
- 		.cfg = {
- 			.id	= V4L2_CID_STATELESS_HEVC_PPS,
- 		},
--		.codec		= CEDRUS_CODEC_H265,
-+		.capabilities	= CEDRUS_CAPABILITY_H265_DEC,
- 	},
- 	{
- 		.cfg = {
-@@ -181,13 +181,13 @@ static const struct cedrus_control cedrus_controls[] = {
- 			/* The driver can only handle 1 entry per slice for now */
- 			.dims   = { 1 },
- 		},
--		.codec		= CEDRUS_CODEC_H265,
-+		.capabilities	= CEDRUS_CAPABILITY_H265_DEC,
- 	},
- 	{
- 		.cfg = {
- 			.id	= V4L2_CID_STATELESS_HEVC_SCALING_MATRIX,
- 		},
--		.codec		= CEDRUS_CODEC_H265,
-+		.capabilities	= CEDRUS_CAPABILITY_H265_DEC,
- 	},
- 	{
- 		.cfg = {
-@@ -197,7 +197,7 @@ static const struct cedrus_control cedrus_controls[] = {
- 			.max = 0xffffffff,
- 			.step = 1,
- 		},
--		.codec		= CEDRUS_CODEC_H265,
-+		.capabilities	= CEDRUS_CAPABILITY_H265_DEC,
- 	},
- 	{
- 		.cfg = {
-@@ -205,7 +205,7 @@ static const struct cedrus_control cedrus_controls[] = {
- 			.max	= V4L2_STATELESS_HEVC_DECODE_MODE_SLICE_BASED,
- 			.def	= V4L2_STATELESS_HEVC_DECODE_MODE_SLICE_BASED,
- 		},
--		.codec		= CEDRUS_CODEC_H265,
-+		.capabilities	= CEDRUS_CAPABILITY_H265_DEC,
- 	},
- 	{
- 		.cfg = {
-@@ -213,19 +213,19 @@ static const struct cedrus_control cedrus_controls[] = {
- 			.max	= V4L2_STATELESS_HEVC_START_CODE_NONE,
- 			.def	= V4L2_STATELESS_HEVC_START_CODE_NONE,
- 		},
--		.codec		= CEDRUS_CODEC_H265,
-+		.capabilities	= CEDRUS_CAPABILITY_H265_DEC,
- 	},
- 	{
- 		.cfg = {
- 			.id	= V4L2_CID_STATELESS_VP8_FRAME,
- 		},
--		.codec		= CEDRUS_CODEC_VP8,
-+		.capabilities	= CEDRUS_CAPABILITY_VP8_DEC,
- 	},
- 	{
- 		.cfg = {
- 			.id = V4L2_CID_STATELESS_HEVC_DECODE_PARAMS,
- 		},
--		.codec		= CEDRUS_CODEC_H265,
-+		.capabilities	= CEDRUS_CAPABILITY_H265_DEC,
- 	},
- };
+@@ -354,27 +354,27 @@ static int cedrus_open(struct file *file)
+ 	file->private_data = &ctx->fh;
+ 	ctx->dev = dev;
  
-@@ -275,6 +275,9 @@ static int cedrus_init_ctrls(struct cedrus_dev *dev, struct cedrus_ctx *ctx)
- 		return -ENOMEM;
+-	ret = cedrus_init_ctrls(dev, ctx);
+-	if (ret)
+-		goto err_free;
+-
+ 	ctx->fh.m2m_ctx = v4l2_m2m_ctx_init(dev->m2m_dev, ctx,
+ 					    &cedrus_queue_init);
+ 	if (IS_ERR(ctx->fh.m2m_ctx)) {
+ 		ret = PTR_ERR(ctx->fh.m2m_ctx);
+-		goto err_ctrls;
++		goto err_free;
+ 	}
  
- 	for (i = 0; i < CEDRUS_CONTROLS_COUNT; i++) {
-+		if (!cedrus_is_capable(ctx, cedrus_controls[i].capabilities))
-+			continue;
+ 	cedrus_reset_out_format(ctx);
+ 
++	ret = cedrus_init_ctrls(dev, ctx);
++	if (ret)
++		goto err_m2m_release;
 +
- 		ctrl = v4l2_ctrl_new_custom(hdl, &cedrus_controls[i].cfg,
- 					    NULL);
- 		if (hdl->error) {
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.h b/drivers/staging/media/sunxi/cedrus/cedrus.h
-index 1a98790a99af..7a1619967513 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus.h
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus.h
-@@ -57,7 +57,7 @@ enum cedrus_h264_pic_type {
+ 	v4l2_fh_add(&ctx->fh);
  
- struct cedrus_control {
- 	struct v4l2_ctrl_config cfg;
--	enum cedrus_codec	codec;
-+	unsigned int		capabilities;
- };
+ 	mutex_unlock(&dev->dev_mutex);
  
- struct cedrus_h264_run {
+ 	return 0;
+ 
+-err_ctrls:
+-	v4l2_ctrl_handler_free(&ctx->hdl);
++err_m2m_release:
++	v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
+ err_free:
+ 	kfree(ctx);
+ 	mutex_unlock(&dev->dev_mutex);
 -- 
 2.38.1
 
