@@ -2,116 +2,103 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A599FA373F
-	for <linux-media@archiver.kernel.org>; Mon, 24 Oct 2022 16:37:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD9CAFA3745
+	for <linux-media@archiver.kernel.org>; Mon, 24 Oct 2022 17:05:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233295AbiJXQhj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 Oct 2022 12:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
+        id S233452AbiJXRFa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 Oct 2022 13:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234306AbiJXQhL (ORCPT
+        with ESMTP id S235441AbiJXREg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:37:11 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A50636879;
-        Mon, 24 Oct 2022 08:24:55 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id bs21so922108wrb.4;
-        Mon, 24 Oct 2022 08:24:54 -0700 (PDT)
+        Mon, 24 Oct 2022 13:04:36 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC90CA8A0;
+        Mon, 24 Oct 2022 08:40:22 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1322fa1cf6fso12274660fac.6;
+        Mon, 24 Oct 2022 08:40:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OLgc4/4C8v2jDtY+kMWIa5ZzBrBS7jfMBU2/F5ZQ5SM=;
-        b=B71lktSNCiRFQJrKXCWCN4QxfX/TYZNdY8OxVIsKF7q3E08na25TFcl1p34nsMRMan
-         Us3Vg9+DeUik8y0zahnES1/+u2RtqhicAQ9uLYs6A7VS1Rflhq2tGs+V39ktJag6tmix
-         Hjl/dRwIcr6w1puXUndLfmDKFOsAXmQktEt9f/NRegSFnkwFg69NMaHO82yG2EBRllXn
-         Q9biOxW3QzoHrH7EvxtZGl1wfEukyYRxVvDSsYcmXf1NE13LajLCgYTIyZSC9R5mDCws
-         CrtL6pJ5wdUDD14R6XJMfcKF4dmKAZQHbX6BPyJgtbT3T45fk5A7li5ALLXhkaadIX5+
-         vpHg==
+        bh=Xf1QpnlooM/EzBO71nDJaALY4Af30m+RUToV/sEcQc0=;
+        b=YWb/8dOxbdWFi4W7XwLCdMiy/5vsnQT8eIL9iFMK1j1zGHbcH8zlhIrf2maHvqZxWd
+         oXNooHcb+yWL1U45waazeowROIGQd7Opoztx9JkTr5CXm7YXwfkNq9uZxy19vgCpYoZc
+         +D6jAY30f5t9XUbRvHErE3uyr92pqndnuW3B+graI/nmQAZZzZtKSSo5ZeBdMEdJjnZa
+         IkqKtQ9YM2lhnJpZcwB6vcZpn0138OfBhnxoj9zBFEcnowyJ1GIHob6C7oUe8PAzCUOV
+         shDXtPOYUIy8/3fp5UcXXxnQbWXJhO81EVz0OLw9904X5s1+AQvgnFws0JLZjCJXOJD/
+         +FLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=OLgc4/4C8v2jDtY+kMWIa5ZzBrBS7jfMBU2/F5ZQ5SM=;
-        b=AiXSEmtumLyTjFmGYKNAS3d98/fR7cxbzk4L1Cw9hooP5ivwNzUiB5Qdv+Uku7xgBQ
-         e8Ho6OOW2vBC2QrIXGcquJ3OlyO/QQqWUjX7AEvGwApJ2jCSPo3oqp8GAZU9gLwiRQw3
-         SBFkhtaptRX8UFWTQ0xnxyesdS517qG+JGQZRjYg42vpolGp1lAqAOSyw/MOZnjDc7hx
-         Yc1X1adjZ8HAAz+h1txmBdWi++sG5RlPpz6fgcUXSD5q0HfNscbzsVOgl5ibWcZPK/JA
-         DBFtwN7KI9fJSHZhvNFjYX2sWmJwzI1iXvCErqDSsgWLDKBIq7Gss8hKNbr6ei5rn2od
-         n4iQ==
-X-Gm-Message-State: ACrzQf2b6fJQHsCWVkGCVI0Odf6/RErU14WProTOmiEVMhrQs1COfB5D
-        OYIUR/09V0+HYNFUwy0V60eR3bVUuQnlr1ZU
-X-Google-Smtp-Source: AMsMyM74x8Xq7pcPJv3wMuHY0rzfdbCS1si0suzLihSkp26iytP0gSH5VGVeWMKinACC1WYjKtXVKA==
-X-Received: by 2002:adf:dc8a:0:b0:236:6372:551e with SMTP id r10-20020adfdc8a000000b002366372551emr7300862wrj.41.1666624436138;
-        Mon, 24 Oct 2022 08:13:56 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id az27-20020a05600c601b00b003c6c2ff7f25sm181093wmb.15.2022.10.24.08.13.55
+        bh=Xf1QpnlooM/EzBO71nDJaALY4Af30m+RUToV/sEcQc0=;
+        b=xC+aEI6jMN01pDb+ydbBfvleuZlw4x0Ez/M6l5q6GRMsvB4h6TVr/fnhHquhXZc3NA
+         2te+LBNTPLdexYcYqwLC+kyClqDS1y0tLqki4ZnqdgKiDZS2DeCnEQA2+YhfQTGVS9cA
+         vTUIUBUTneDLtOhk8jahIkXRfFSEMU5bKlnMwDnx4nnUJvrFzjzfoS0RppCvdUsWBG1i
+         59EdYTH1oTEdsdWutGHZ4UJEZqhtTqgYR8fnt7MlPI+wlwZ8EfPEN8K3Zw2z/9NIsyeA
+         lvvDRAv5Lp5JypwhWWDy9Qgd2Z4WW1KVQCXv4nys+AC3FrXkXT+q87G5w6R4M9NIXQqI
+         7mNA==
+X-Gm-Message-State: ACrzQf2yGSqm1EBiffF66g7mb8MXKE+vhYnf8wdxcFMXQq50Ad7KFmba
+        gI5tOEjzTB+HpDb0gofjon968UK6ChE=
+X-Google-Smtp-Source: AMsMyM5RpJNF3gJeZ9+k4mWvaTefhcNVEdR3otp/3VizCshKQP+5vqFHs/wyK0UugSqNcNfbJ+mZvg==
+X-Received: by 2002:a05:6871:112:b0:13b:99e0:2be3 with SMTP id y18-20020a056871011200b0013b99e02be3mr4297213oab.299.1666624105441;
+        Mon, 24 Oct 2022 08:08:25 -0700 (PDT)
+Received: from gabriel-Nitro-AN515-54.. (201-27-204-68.dsl.telesp.net.br. [201.27.204.68])
+        by smtp.gmail.com with ESMTPSA id e18-20020a056830201200b00661ad8741b4sm4532583otp.24.2022.10.24.08.08.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 08:13:55 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Slark Xiao <slark_xiao@163.com>, linux-media@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: saa7164: remove variable cnt
-Date:   Mon, 24 Oct 2022 16:13:54 +0100
-Message-Id: <20221024151354.2166343-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        Mon, 24 Oct 2022 08:08:24 -0700 (PDT)
+From:   Gabriel Lima Luz <lima.gabriel.luz@gmail.com>
+To:     Rui Miguel Silva <rmfrfs@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Cc:     Gabriel Lima Luz <lima.gabriel.luz@gmail.com>
+Subject: [PATCH] staging: media: imx: imx7-media-csi: Fix parenthesis alignment
+Date:   Mon, 24 Oct 2022 12:07:44 -0300
+Message-Id: <20221024150744.72641-1-lima.gabriel.luz@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Variable cnt is just being incremented and it's never used
-anywhere else. The variable and the increment are redundant so
-remove it.
+Adhere to Linux kernel coding style.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Reported by checkpatch:
+
+CHECK: Alignment should match open parenthesis
+
+Signed-off-by: Gabriel Lima Luz <lima.gabriel.luz@gmail.com>
 ---
- drivers/media/pci/saa7164/saa7164-core.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/staging/media/imx/imx7-media-csi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/pci/saa7164/saa7164-core.c b/drivers/media/pci/saa7164/saa7164-core.c
-index d5f32e3ff544..01d75ef2342d 100644
---- a/drivers/media/pci/saa7164/saa7164-core.c
-+++ b/drivers/media/pci/saa7164/saa7164-core.c
-@@ -352,7 +352,7 @@ static void saa7164_work_enchandler(struct work_struct *w)
- 		container_of(w, struct saa7164_port, workenc);
- 	struct saa7164_dev *dev = port->dev;
+diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+index cbc66ef0eda8..9ad7205a3f2f 100644
+--- a/drivers/staging/media/imx/imx7-media-csi.c
++++ b/drivers/staging/media/imx/imx7-media-csi.c
+@@ -1704,7 +1704,7 @@ static int imx7_csi_init_cfg(struct v4l2_subdev *sd,
+ 		mf->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(mf->colorspace);
+ 		mf->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(mf->colorspace);
+ 		mf->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(!cc->yuv,
+-					mf->colorspace, mf->ycbcr_enc);
++								 mf->colorspace, mf->ycbcr_enc);
  
--	u32 wp, mcb, rp, cnt = 0;
-+	u32 wp, mcb, rp;
- 
- 	port->last_svc_msecs_diff = port->last_svc_msecs;
- 	port->last_svc_msecs = jiffies_to_msecs(jiffies);
-@@ -405,7 +405,6 @@ static void saa7164_work_enchandler(struct work_struct *w)
- 
- 		saa7164_work_enchandler_helper(port, rp);
- 		port->last_svc_rp = rp;
--		cnt++;
- 
- 		if (rp == mcb)
- 			break;
-@@ -429,7 +428,7 @@ static void saa7164_work_vbihandler(struct work_struct *w)
- 		container_of(w, struct saa7164_port, workenc);
- 	struct saa7164_dev *dev = port->dev;
- 
--	u32 wp, mcb, rp, cnt = 0;
-+	u32 wp, mcb, rp;
- 
- 	port->last_svc_msecs_diff = port->last_svc_msecs;
- 	port->last_svc_msecs = jiffies_to_msecs(jiffies);
-@@ -481,7 +480,6 @@ static void saa7164_work_vbihandler(struct work_struct *w)
- 
- 		saa7164_work_enchandler_helper(port, rp);
- 		port->last_svc_rp = rp;
--		cnt++;
- 
- 		if (rp == mcb)
- 			break;
+ 		csi->cc[i] = cc;
+ 	}
 -- 
-2.37.3
+2.34.1
 
