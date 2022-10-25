@@ -2,58 +2,59 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5D73C04A95
-	for <linux-media@archiver.kernel.org>; Tue, 25 Oct 2022 14:35:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4D08C38A2D
+	for <linux-media@archiver.kernel.org>; Tue, 25 Oct 2022 14:35:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiJYOfY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Oct 2022 10:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38826 "EHLO
+        id S232467AbiJYOf0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Oct 2022 10:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232376AbiJYOfT (ORCPT
+        with ESMTP id S232330AbiJYOfV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 25 Oct 2022 10:35:19 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0B692CF0
-        for <linux-media@vger.kernel.org>; Tue, 25 Oct 2022 07:35:17 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id sc25so12944227ejc.12
-        for <linux-media@vger.kernel.org>; Tue, 25 Oct 2022 07:35:17 -0700 (PDT)
+        Tue, 25 Oct 2022 10:35:21 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533A58D20F
+        for <linux-media@vger.kernel.org>; Tue, 25 Oct 2022 07:35:18 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id 13so13048597ejn.3
+        for <linux-media@vger.kernel.org>; Tue, 25 Oct 2022 07:35:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KvGsjskLZRNKygMGJ72lSJUoo6AJ3rOQ6/7RzoglZg8=;
-        b=I4lq41owIEKs6FfUYkPvTw8hJ5RUkfEADXJCABfFBjTkDUumGSSbh87hiz1PZenvuG
-         o5KrsJCRigJshepcumssIl4Hgqt8TQ6wpenI89tYxdFsJn77X3HQiTGT3FdReqHmoPRO
-         j0tn18aDbDI1Z45O1D6Lgxa2qOl250o9EocGY=
+        bh=CBQi3G3Ym31IbBZKsntX/6j7yLQdhJIuZJ9n/O1WbSA=;
+        b=IjtjnaitqL4YWVUyckfhshIgXOqDSQJwVkL3vu2mQ4xLMHxL/dvldbBzC935krRQ11
+         ThoQfe/9ZmVJR9xGdVe49xD+ISZZz6kRFkaVl8VD77hG5C25AaD7EiilpJzTriHn38TK
+         h8Dpip8/8XY32l896EkV72KqhvKco/+1rFN8g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KvGsjskLZRNKygMGJ72lSJUoo6AJ3rOQ6/7RzoglZg8=;
-        b=kQ1w33ootYcqzVWGVhWsmjIZ8rWKCiWuDyRr6TMuvgiMMJZmTPigD1JSmS1k9b+Ovg
-         fKzr0nTij3yhFNqIDkHlwLbbG9fniZeK7yWp2GaKX3vFFE4QscQ6HFFDHLvBLDyGHIgx
-         rX26u/MfkyJb4Uqsw3Xre3OHQjfd7se+OOWhlFhk6/FEYBB2TmcwjLsvQnA4uVIMkuNc
-         pEq02YKbiJZ+zo+Py+IyZlE1FqA82Q6RzpMHcYBz7yBzjnNU6E4ymtL1fLA+mn8tiBko
-         DI9zl/Jcr/nEFqdGVT+V5GZxkbVyd13pSZQAV8lhl9a2V0V3yHHfpWVN12+VadmOu8jG
-         XSaw==
-X-Gm-Message-State: ACrzQf1BdwPhKNm7XSJw6deQhKsqwF2o8bqV4myNBxzKn0t5yuLdNWQo
-        D+Wo3ToDAPyoZCuwoC/Q4RJWaQ==
-X-Google-Smtp-Source: AMsMyM79SNVJINBvLnNZgH+FrZFXsGIcYR0CtMZbeaLNq2btEAvEEluL3w7s1VQ2Yt9ldaiuHfVL1Q==
-X-Received: by 2002:a17:907:b01:b0:78d:ce3d:905d with SMTP id h1-20020a1709070b0100b0078dce3d905dmr32380992ejl.45.1666708515627;
-        Tue, 25 Oct 2022 07:35:15 -0700 (PDT)
+        bh=CBQi3G3Ym31IbBZKsntX/6j7yLQdhJIuZJ9n/O1WbSA=;
+        b=Pu2r6Qd2PDINIh7rHNIgvt/HQlM9VfFoDkWAN0PpBNiA5HExENuTQBl16wKRdFC/Hj
+         UawAeUw6PebEnGWfk5e6eP1yI0gzTdKmphs0Rx93x7xmNt1w07wlqhivZH8rjeIetm1O
+         RkIFNPMR8golxoFWhogFxNmjBCJSAb7O7WRjeovov0nrU6ZHQFDML2r8nCyEGP/fWDbN
+         FjRaZZvJnTKKN4KpzD6lT17ZUCgxsabDNExm7+RE01HN0zWUmYcT1m4klKUd/VlR/TlS
+         htc9jmvsibHkw3Uy1m4M8ikFyoECmDMjResaW2CAXmw4yD9mlo6PjtaWyI5xoP3RE991
+         v44g==
+X-Gm-Message-State: ACrzQf03FWb+UqsU82mHHwPx3L+zfsiGSTzAxnOzFZ3ZCKhk8VmcWyu7
+        DtleDZbuETPPXV9AG5iV+yEehQ==
+X-Google-Smtp-Source: AMsMyM56iCvlaSjd6gTckL2lznGsHz+xLxt6FQFcShC9bAxTNItckDBO95rvBajAVRfKDgZqHqnUeA==
+X-Received: by 2002:a17:907:2672:b0:780:8bb5:25a3 with SMTP id ci18-20020a170907267200b007808bb525a3mr32505579ejc.281.1666708517878;
+        Tue, 25 Oct 2022 07:35:17 -0700 (PDT)
 Received: from alco.roam.corp.google.com ([2620:0:1059:10:e6ae:c7ac:c234:953c])
-        by smtp.gmail.com with ESMTPSA id e9-20020a170906314900b007acd04fcedcsm631021eje.46.2022.10.25.07.35.14
+        by smtp.gmail.com with ESMTPSA id e9-20020a170906314900b007acd04fcedcsm631021eje.46.2022.10.25.07.35.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 07:35:15 -0700 (PDT)
+        Tue, 25 Oct 2022 07:35:17 -0700 (PDT)
 From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Tue, 25 Oct 2022 16:34:25 +0200
-Subject: [PATCH v2 4/8] media: uvcvideo: Cancel async worker earlier
+Date:   Tue, 25 Oct 2022 16:34:27 +0200
+Subject: [PATCH v2 6/8] media: uvcvideo: Release stream queue when unregistering
+ video device
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20220920-resend-powersave-v2-4-5135d1bb1c38@chromium.org>
+Message-Id: <20220920-resend-powersave-v2-6-5135d1bb1c38@chromium.org>
 References: <20220920-resend-powersave-v2-0-5135d1bb1c38@chromium.org>
 In-Reply-To: <20220920-resend-powersave-v2-0-5135d1bb1c38@chromium.org>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -65,19 +66,19 @@ Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Ricardo Ribalda <ribalda@chromium.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
 X-Mailer: b4 0.11.0-dev-d93f8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3850; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=0l2KdHP21BwHh7O1kFOKoF3d4tIlj1BptCuhhZq8++g=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjV/QVaLHI+mQrPtakacw9hVvyePqZ+MWgIM8uJidM
- E8/BakCJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY1f0FQAKCRDRN9E+zzrEiECID/
- 0RWgzXkrL4a09vGFcPSax2yoszoL7vBaUlZQXK7vmTI6PDTe6GnCloeadCiIS31fThH+juyEWznqvL
- nwwKjB8lopBC6EjDOkoBPumWZ10CBPQtgOjffooREj6kR6IlflTeJ62XafEdHvyXwfsQlu0UgdHO12
- CF8Kb5RwXOpibO/wXCCTiTI9ZoFs4xPsY66Vp6SOUeMiFO3AjiCtwTgFD8NLgebhHdz+2kLsuHvHTx
- 1LcPxb96dXOHmLH6r/8JlzX8I16gQzej0uP5Kom+JJhUyluB56pWM/JAxrwM3Y1vDnNVP58p4d/Ttz
- jd7E2p/INm6kkFD8dFWozf71qTDwkq9P9Mmmi+k1x2U5B4fExdBtz7MCneVodXl2jJpIZOK3pjkOkC
- 2KQU2+KVQpd4vDx9VWQvsPSQIxgLKWmPfodRV9kbF8usACFYhfwFzUEV0j97LIjZWqVx/Aq95da7+O
- WVOknGfIBTJINPNgfMqx+pCaphuShOKdIK+CpyBINqnsCNbfl7Gc4ub1TUObOcvldp1cFMs2O1hj1l
- sHCmG0Ocv9tRAuDyEElUURLMgygz5wFfAzeIlOVamZuGVu7GINggogX4di/9fjKRN35ZgCmAdmjfhX
- 9ghrjilTPhpjnjgpStSxyUeEePvqZ2CsZFclqW9OGHsuKyTfF422+4+4PiMw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3485; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=lnR79aPbgxGWW1+CW9B6Zk1T+xgYfHfisqEZO2U/Www=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjV/QYDKMQuekATrtARrL80BycwWYzTmtrt+zsj9AD
+ Uhw4JSiJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY1f0GAAKCRDRN9E+zzrEiI6QD/
+ 0YKUZQY1+1WWOIAxk70HDqqWeaHrf/XJIMpizWgNm50/uF6FBK/Fj8hYdn+TwVNqn9lL7mYKzRxPag
+ wlWYgRgL/E2K9QuwwdkFTsC2OLArFbm3KVaH1mCIotDg9O/TLJh2f3o8rHEXFg8GWVhkkMHMoeaQOK
+ +UnpMs8fVCfDv9XOmOqP8T+tsHV7H21K5D5+6dA6ExzDQqFcU2X7fWkBwGgCA98YIOxTrlN4Ud5XWK
+ nCvGc2669t2c+J1u8ZON1MCRrPb3ihRJ3qWIFLCppFhcCV8eseRKkzAUIBIjUB1AtckDWG0mMPW4RH
+ Xd7iLVpcy95Leh1PlxfCDwntWwk4BX44btHUDu+MBaIxQQtQhnesSrLD9IJfQDat8gYfj1mYUaCL3F
+ u2tMmFZtLHfr0XwXa15Ir4oyyPwDDPGeXpIdAAa9PddzaHuio1DgSM/pLugytcvKIKwFcwvDYCHPvm
+ 2lmLqG1fr3duw+kxwbnjsiqMm7B1+0OqgY8CD2NL2k2MonWEsOQFjBYJxPzhQa9IPb/ldhUqERMcwK
+ YYO3w/vvBv3m5NaIBD/6MGPu7BXM/7qqu2ETJ5L2yWawxlxbQ7VdeQUwteDiVf7bByiS7xijIb+TKh
+ jdweYJRY/fQklPWZZBwnEm5a367xU50ftQ6S/BYPFmav6XIg1p6aBMDxJx7Q==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 Precedence: bulk
@@ -86,96 +87,84 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Guenter Roeck <linux@roeck-us.net>
 
-So far the asynchronous control worker was canceled only in
-uvc_ctrl_cleanup_device. This is much later than the call to
-uvc_disconnect. However, after the call to uvc_disconnect returns,
-there must be no more USB activity. This can result in all kinds
-of problems in the USB code. One observed example:
+The following traceback was observed when stress testing the uvcvideo
+driver.
 
-URB ffff993e83d0bc00 submitted while active
-WARNING: CPU: 0 PID: 4046 at drivers/usb/core/urb.c:364 usb_submit_urb+0x4ba/0x55e
+config->interface[0] is NULL
+WARNING: CPU: 0 PID: 2757 at drivers/usb/core/usb.c:285 usb_ifnum_to_if+0x81/0x85
+^^^ added log message and WARN() to prevent crash
 Modules linked in: <...>
-CPU: 0 PID: 4046 Comm: kworker/0:35 Not tainted 4.19.139 #18
+CPU: 0 PID: 2757 Comm: inotify_reader Not tainted 4.19.139 #20
 Hardware name: Google Phaser/Phaser, BIOS Google_Phaser.10952.0.0 08/09/2018
-Workqueue: events uvc_ctrl_status_event_work [uvcvideo]
-RIP: 0010:usb_submit_urb+0x4ba/0x55e
+RIP: 0010:usb_ifnum_to_if+0x81/0x85
 Code: <...>
-RSP: 0018:ffffb08d471ebde8 EFLAGS: 00010246
-RAX: a6da85d923ea5d00 RBX: ffff993e71985928 RCX: 0000000000000000
-RDX: ffff993f37a1de90 RSI: ffff993f37a153d0 RDI: ffff993f37a153d0
-RBP: ffffb08d471ebe28 R08: 000000000000003b R09: 001424bf85822e96
-R10: 0000001000000000 R11: ffffffff975a4398 R12: ffff993e83d0b000
-R13: ffff993e83d0bc00 R14: 0000000000000000 R15: 00000000fffffff0
-FS:  0000000000000000(0000) GS:ffff993f37a00000(0000) knlGS:0000000000000000
+RSP: 0018:ffff9ee20141fa58 EFLAGS: 00010246
+RAX: 438a0e5a525f1800 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff975477a1de90 RSI: ffff975477a153d0 RDI: ffff975477a153d0
+RBP: ffff9ee20141fa70 R08: 000000000000002c R09: 002daec189138d78
+R10: 0000001000000000 R11: ffffffffa7da42e6 R12: ffff975459594800
+R13: 0000000000000001 R14: 0000000000000001 R15: ffff975465376400
+FS:  00007ddebffd6700(0000) GS:ffff975477a00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000ec9c0000 CR3: 000000025b160000 CR4: 0000000000340ef0
+CR2: 0000000012c83000 CR3: 00000001bbaf8000 CR4: 0000000000340ef0
 Call Trace:
- uvc_ctrl_status_event_work+0xd6/0x107 [uvcvideo]
- process_one_work+0x19b/0x4c5
- worker_thread+0x10d/0x286
- kthread+0x138/0x140
- ? process_one_work+0x4c5/0x4c5
- ? kthread_associate_blkcg+0xc1/0xc1
- ret_from_fork+0x1f/0x40
+ usb_set_interface+0x3b/0x2f3
+ uvc_video_stop_streaming+0x38/0x81 [uvcvideo]
+ uvc_stop_streaming+0x21/0x49 [uvcvideo]
+ __vb2_queue_cancel+0x33/0x249 [videobuf2_common]
+ vb2_core_queue_release+0x1c/0x45 [videobuf2_common]
+ uvc_queue_release+0x26/0x32 [uvcvideo]
+ uvc_v4l2_release+0x41/0xdd [uvcvideo]
+ v4l2_release+0x99/0xed
+ __fput+0xf0/0x1ea
+ task_work_run+0x7f/0xa7
+ do_exit+0x1d1/0x6eb
+ do_group_exit+0x9d/0xac
+ get_signal+0x135/0x482
+ do_signal+0x4a/0x63c
+ exit_to_usermode_loop+0x86/0xa5
+ do_syscall_64+0x171/0x269
+ ? __do_page_fault+0x272/0x474
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x7ddec156dc26
+Code: Bad RIP value.
+RSP: 002b:00007ddebffd5c10 EFLAGS: 00000293 ORIG_RAX: 0000000000000017
+RAX: fffffffffffffdfe RBX: 000000000000000a RCX: 00007ddec156dc26
+RDX: 0000000000000000 RSI: 00007ddebffd5d28 RDI: 000000000000000a
+RBP: 00007ddebffd5c50 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000293 R12: 00007ddebffd5d28
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
 
-Introduce new function uvc_ctrl_stop_device() to cancel the worker
-and call it from uvc_unregister_video() to solve the problem.
+When this was observed, a USB disconnect was in progress, uvc_disconnect()
+had returned, but usb_disable_device() was still running.
+Drivers are not supposed to call any USB functions after the driver
+disconnect function has been called. The uvcvideo driver does not follow
+that convention and tries to write to the disconnected USB interface
+anyway. This results in a variety of race conditions.
+
+To solve this specific problem, release the uvc queue from
+uvc_unregister_video() after the associated video devices have been
+unregistered. Since the function already holds the uvc queue mutex,
+bypass uvc_queue_release() and call vb2_queue_release() directly.
 
 Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc: Alan Stern <stern@rowland.harvard.edu>
 Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
-diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index c95a2229f4fa..c7af3e08b2c6 100644
---- a/drivers/media/usb/uvc/uvc_ctrl.c
-+++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -2597,14 +2597,17 @@ static void uvc_ctrl_cleanup_mappings(struct uvc_device *dev,
- 	}
- }
- 
--void uvc_ctrl_cleanup_device(struct uvc_device *dev)
-+void uvc_ctrl_stop_device(struct uvc_device *dev)
- {
--	struct uvc_entity *entity;
--	unsigned int i;
--
- 	/* Can be uninitialized if we are aborting on probe error. */
- 	if (dev->async_ctrl.work.func)
- 		cancel_work_sync(&dev->async_ctrl.work);
-+}
-+
-+void uvc_ctrl_cleanup_device(struct uvc_device *dev)
-+{
-+	struct uvc_entity *entity;
-+	unsigned int i;
- 
- 	/* Free controls and control mappings for all entities. */
- 	list_for_each_entry(entity, &dev->entities, list) {
 diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 215fb483efb0..fb58f80f0b37 100644
+index 14b66019208d..f15fbdbcd8bb 100644
 --- a/drivers/media/usb/uvc/uvc_driver.c
 +++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -1909,6 +1909,7 @@ static void uvc_unregister_video(struct uvc_device *dev)
+@@ -1912,6 +1912,8 @@ static void uvc_unregister_video(struct uvc_device *dev)
+ 
+ 		uvc_debugfs_cleanup_stream(stream);
+ 
++		vb2_queue_release(&stream->queue.queue);
++
+ 		mutex_unlock(&stream->queue.mutex);
+ 		mutex_unlock(&stream->mutex);
  	}
- 
- 	uvc_status_unregister(dev);
-+	uvc_ctrl_stop_device(dev);
- 
- 	if (dev->vdev.dev)
- 		v4l2_device_unregister(&dev->vdev);
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index 45310f55475f..6b07abac7034 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -739,6 +739,7 @@ int uvc_query_v4l2_menu(struct uvc_video_chain *chain,
- int uvc_ctrl_add_mapping(struct uvc_video_chain *chain,
- 			 const struct uvc_control_mapping *mapping);
- int uvc_ctrl_init_device(struct uvc_device *dev);
-+void uvc_ctrl_stop_device(struct uvc_device *dev);
- void uvc_ctrl_cleanup_device(struct uvc_device *dev);
- int uvc_ctrl_restore_values(struct uvc_device *dev);
- bool uvc_ctrl_status_event_async(struct urb *urb, struct uvc_video_chain *chain,
 
 -- 
 b4 0.11.0-dev-d93f8
