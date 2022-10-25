@@ -2,106 +2,99 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEAAEFA373F
-	for <linux-media@archiver.kernel.org>; Tue, 25 Oct 2022 01:07:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BDAFC38A2D
+	for <linux-media@archiver.kernel.org>; Tue, 25 Oct 2022 01:43:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbiJYBHE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 Oct 2022 21:07:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60140 "EHLO
+        id S231624AbiJYBnZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 Oct 2022 21:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbiJYBGZ (ORCPT
+        with ESMTP id S231625AbiJYBm7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 Oct 2022 21:06:25 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF354A10C;
-        Mon, 24 Oct 2022 17:13:22 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-12c8312131fso13797337fac.4;
-        Mon, 24 Oct 2022 17:13:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IGPioqrvo9StUbHADKkHl19MNXlGRLsr8yyQyLq+9dw=;
-        b=fw426MFVi8E8FV5waIk4Oob4n7Z60FaIvxuxFizMZl0Bqjgu6QzlV08gF9kneZoYMm
-         aM3Nw2cEIDRftpvXafrojAp2ttB3ExekuZm6uEu/dkvjs/r5sEka0OeTmTHUR/G6vTZh
-         Ubcx2hEBP00PzwyTFlvbwPhRoV0WRxQkwcoknaqUDOHz2afOVF08TOaj8NF9pw4yvQbC
-         f4gge7qgH7clv0bv5m2IsWrdz0TYehwQr6r4CcSzgrcCL62nIXmmJwAlAvUAotzyPk/Q
-         nFhEU4//YOMAU+BxrcC/UKKbpafDL7QclxfAopSt+u4dxWj4PAAIZUTtPj4v+pjgS355
-         k5QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IGPioqrvo9StUbHADKkHl19MNXlGRLsr8yyQyLq+9dw=;
-        b=Pc8M8c0lEjqy3ruDFuGTLaC7ayd0VP/IhLucLsSuFV955PTrx7reaa1M6rwpEM19k0
-         JAYattwbK9ZOB1qs3RLP9/Lx9pOn83BJzg8EysyN+KY1i38Vr6i4fX8tkDzZCO7YH7XH
-         Iwj5vSDm9j2OBrEdTwRw9exds/wgbFCYLfVRuupgMnEk9uUf9ktJOWDbm3uMcesm1Fer
-         f/NlL287NHBtBsZ/rBaU6Cx5diDCsSm+KcuR6jKux/FRCB0WOA73g8PrfMJ/8Gliht/q
-         D9CEkB2kmqtxDlrcIa6HBKulgquFuZ7J39WnrPP19piongaCVzzCW+fwr7ynDo3ye3Cl
-         CQ0w==
-X-Gm-Message-State: ACrzQf0bceRsxydes4iyepHyzO4wRCqFiwhPvnRDAfL4nxKUYbZJEadP
-        sY5eFtPg65Q2irqKqGm0ZMU=
-X-Google-Smtp-Source: AMsMyM568uBoXBTKTQH5tI8SsoA5Gk98p6XETIY9iE85DbOALaC6GXX/8hoMHb4avmS4PetrB7QuuQ==
-X-Received: by 2002:a05:6870:4284:b0:13b:91b7:89a8 with SMTP id y4-20020a056870428400b0013b91b789a8mr5715289oah.284.1666656801702;
-        Mon, 24 Oct 2022 17:13:21 -0700 (PDT)
-Received: from gabriel-Nitro-AN515-54.. (201-27-204-68.dsl.telesp.net.br. [201.27.204.68])
-        by smtp.gmail.com with ESMTPSA id k41-20020a05687095a900b00131c3d4d38fsm757823oao.39.2022.10.24.17.13.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 17:13:20 -0700 (PDT)
-From:   Gabriel Lima Luz <lima.gabriel.luz@gmail.com>
-To:     Rui Miguel Silva <rmfrfs@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Cc:     Gabriel Lima Luz <lima.gabriel.luz@gmail.com>
-Subject: [PATCH v2] staging: media: imx: imx7-media-csi: Fix parenthesis alignment
-Date:   Mon, 24 Oct 2022 21:12:39 -0300
-Message-Id: <20221025001239.16345-1-lima.gabriel.luz@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 24 Oct 2022 21:42:59 -0400
+X-Greylist: delayed 1307 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Oct 2022 18:26:00 PDT
+Received: from gateway31.websitewelcome.com (gateway31.websitewelcome.com [192.185.144.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D913F317F3
+        for <linux-media@vger.kernel.org>; Mon, 24 Oct 2022 18:25:59 -0700 (PDT)
+Received: from atl1wswcm04.websitewelcome.com (unknown [50.6.129.165])
+        by atl3wswob02.websitewelcome.com (Postfix) with ESMTP id 0BDE23FB85
+        for <linux-media@vger.kernel.org>; Tue, 25 Oct 2022 01:04:11 +0000 (UTC)
+Received: from br984.hostgator.com.br ([162.241.203.37])
+        by cmsmtp with ESMTP
+        id n8MUoiKo9gEOMn8MUoAOZz; Tue, 25 Oct 2022 01:04:10 +0000
+X-Authority-Reason: nr=8
+Received: from [177.194.67.221] (port=43054 helo=arch-avell.meuintelbras.local)
+        by br984.hostgator.com.br with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <pedro.guilherme@espectro.eng.br>)
+        id 1on8MU-001BYl-6W;
+        Mon, 24 Oct 2022 22:04:10 -0300
+From:   Pedro Guilherme Siqueira Moreira <pedro.guilherme@espectro.eng.br>
+To:     laurent.pinchart@ideasonboard.com
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Pedro Guilherme Siqueira Moreira 
+        <pedro.guilherme@espectro.eng.br>
+Subject: [PATCH 2/3] media: uvc_driver: fix assignments inside if statements
+Date:   Mon, 24 Oct 2022 22:03:02 -0300
+Message-Id: <20221025010303.570815-2-pedro.guilherme@espectro.eng.br>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221025010303.570815-1-pedro.guilherme@espectro.eng.br>
+References: <20221025010303.570815-1-pedro.guilherme@espectro.eng.br>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - br984.hostgator.com.br
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - espectro.eng.br
+X-BWhitelist: no
+X-Source-IP: 177.194.67.221
+X-Source-L: No
+X-Exim-ID: 1on8MU-001BYl-6W
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (arch-avell.meuintelbras.local) [177.194.67.221]:43054
+X-Source-Auth: pedro.guilherme@espectro.eng.br
+X-Email-Count: 6
+X-Source-Cap: ZXNwZWN0ODU7ZXNwZWN0ODU7YnI5ODQuaG9zdGdhdG9yLmNvbS5icg==
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfN2P3ghtFrddQqpcNmj/eNAWIrSpTu3PFIdv+zP1iVTJTsx284x3ViM9lp61xGWo58h6Yg9OitPdjhMS4mSUQN0ptsv1d2M45iH0NbfYX6OwkIaVOU7q
+ prOEYs4VjPB8EXwY+7F+U9D4iPomKmH/nnBbz6WkIeKl6s/y3gmYZY6Q54eaX3wyc0NXzrH7z0MMIHTnky7+1WHAltCv1THxv2u1p7phTKB4C/RScIX4CVpj
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Adhere to Linux kernel coding style.
-
-Reported by checkpatch:
-
-CHECK: Alignment should match open parenthesis
-
-Signed-off-by: Gabriel Lima Luz <lima.gabriel.luz@gmail.com>
+Signed-off-by: Pedro Guilherme Siqueira Moreira <pedro.guilherme@espectro.eng.br>
 ---
-Altered changes acording to feedback for a more readable code
+ drivers/media/usb/uvc/uvc_driver.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
- drivers/staging/media/imx/imx7-media-csi.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-index cbc66ef0eda8..b241b68f456c 100644
---- a/drivers/staging/media/imx/imx7-media-csi.c
-+++ b/drivers/staging/media/imx/imx7-media-csi.c
-@@ -1704,7 +1704,8 @@ static int imx7_csi_init_cfg(struct v4l2_subdev *sd,
- 		mf->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(mf->colorspace);
- 		mf->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(mf->colorspace);
- 		mf->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(!cc->yuv,
--					mf->colorspace, mf->ycbcr_enc);
-+							mf->colorspace,
-+							mf->ycbcr_enc);
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index b591ad823c66..7b6c97ad3a41 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -1174,7 +1174,8 @@ static int uvc_parse_control(struct uvc_device *dev)
+ 		    buffer[1] != USB_DT_CS_INTERFACE)
+ 			goto next_descriptor;
  
- 		csi->cc[i] = cc;
- 	}
+-		if ((ret = uvc_parse_standard_control(dev, buffer, buflen)) < 0)
++		ret = uvc_parse_standard_control(dev, buffer, buflen);
++		if (ret < 0)
+ 			return ret;
+ 
+ next_descriptor:
+@@ -2213,7 +2214,8 @@ static int uvc_probe(struct usb_interface *intf,
+ 	usb_set_intfdata(intf, dev);
+ 
+ 	/* Initialize the interrupt URB. */
+-	if ((ret = uvc_status_init(dev)) < 0) {
++	ret = uvc_status_init(dev);
++	if (ret < 0) {
+ 		dev_info(&dev->udev->dev,
+ 			 "Unable to initialize the status endpoint (%d), status interrupt will not be supported.\n",
+ 			 ret);
 -- 
-2.34.1
+2.38.1
 
