@@ -2,104 +2,90 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDC4EC38A2D
-	for <linux-media@archiver.kernel.org>; Tue, 25 Oct 2022 02:43:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E52EC67871
+	for <linux-media@archiver.kernel.org>; Tue, 25 Oct 2022 03:16:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbiJYCnh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 Oct 2022 22:43:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37758 "EHLO
+        id S230327AbiJYDQ2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 Oct 2022 23:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231366AbiJYCng (ORCPT
+        with ESMTP id S230005AbiJYDQY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 Oct 2022 22:43:36 -0400
-X-Greylist: delayed 1447 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Oct 2022 19:43:35 PDT
-Received: from gateway32.websitewelcome.com (gateway32.websitewelcome.com [192.185.145.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60B263FC
-        for <linux-media@vger.kernel.org>; Mon, 24 Oct 2022 19:43:35 -0700 (PDT)
-Received: from atl1wswcm06.websitewelcome.com (unknown [50.6.129.167])
-        by atl3wswob03.websitewelcome.com (Postfix) with ESMTP id 8AC74439D1
-        for <linux-media@vger.kernel.org>; Tue, 25 Oct 2022 02:19:27 +0000 (UTC)
-Received: from br984.hostgator.com.br ([162.241.203.37])
-        by cmsmtp with ESMTP
-        id n9XLomLj8Pz0tn9XLo7uOK; Tue, 25 Oct 2022 02:19:27 +0000
-X-Authority-Reason: nr=8
-Received: from [177.194.67.221] (port=49966 helo=arch-avell.meuintelbras.local)
-        by br984.hostgator.com.br with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <pedro.guilherme@espectro.eng.br>)
-        id 1on9XK-002QdP-It;
-        Mon, 24 Oct 2022 23:19:26 -0300
-From:   Pedro Guilherme Siqueira Moreira <pedro.guilherme@espectro.eng.br>
-To:     laurent.pinchart@ideasonboard.com
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Pedro Guilherme Siqueira Moreira 
-        <pedro.guilherme@espectro.eng.br>
-Subject: [PATCH v2 2/3] media: uvc_driver: fix assignment inside if condition
-Date:   Mon, 24 Oct 2022 23:19:18 -0300
-Message-Id: <20221025021919.929910-2-pedro.guilherme@espectro.eng.br>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221025021919.929910-1-pedro.guilherme@espectro.eng.br>
-References: <Y1c9nS04fpoLqPVe@pendragon.ideasonboard.com>
- <20221025021919.929910-1-pedro.guilherme@espectro.eng.br>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - br984.hostgator.com.br
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - espectro.eng.br
-X-BWhitelist: no
-X-Source-IP: 177.194.67.221
-X-Source-L: No
-X-Exim-ID: 1on9XK-002QdP-It
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (arch-avell.meuintelbras.local) [177.194.67.221]:49966
-X-Source-Auth: pedro.guilherme@espectro.eng.br
-X-Email-Count: 6
-X-Source-Cap: ZXNwZWN0ODU7ZXNwZWN0ODU7YnI5ODQuaG9zdGdhdG9yLmNvbS5icg==
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfD7hml7K8scJxbXHJ5+kvPw+x5fU8bxH/SeCmXX5pP+vD1lU52nzUYo2jDbqYFNkF/spLX1hE9ZnXXyscgtJpuyAvNvDLaCqKQ3bxtbqhldytFuKhxrV
- mvKGM1y1jc8ri8DZcv2KkfjUai6gLptU9FLW1eKktfJwRQ9SJVEZ77ZKsEEaAdeab/nf7uOrMQ0rYUKK2ObM6K/ONjIWy6t+7a95lg/5BUKkHlAIQp9vfUaz
+        Mon, 24 Oct 2022 23:16:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2971229807
+        for <linux-media@vger.kernel.org>; Mon, 24 Oct 2022 20:16:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA076B819B8
+        for <linux-media@vger.kernel.org>; Tue, 25 Oct 2022 03:16:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26A53C433D6
+        for <linux-media@vger.kernel.org>; Tue, 25 Oct 2022 03:16:18 +0000 (UTC)
+Date:   Tue, 25 Oct 2022 05:16:17 +0200
+From:   "Hans Verkuil" <hverkuil-cisco@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
+Message-Id: <20221025031619.26A53C433D6@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fixes 'do not use assignment in if condition' errors issued by
-scripts/checkpatch.pl on lines 1464 and 2500 on
-drivers/media/usb/uvc/uvc_driver.c
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Signed-off-by: Pedro Guilherme Siqueira Moreira <pedro.guilherme@espectro.eng.br>
----
- drivers/media/usb/uvc/uvc_driver.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Results of the daily build of media_tree:
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index b591ad823c66..7b6c97ad3a41 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -1174,7 +1174,8 @@ static int uvc_parse_control(struct uvc_device *dev)
- 		    buffer[1] != USB_DT_CS_INTERFACE)
- 			goto next_descriptor;
- 
--		if ((ret = uvc_parse_standard_control(dev, buffer, buflen)) < 0)
-+		ret = uvc_parse_standard_control(dev, buffer, buflen);
-+		if (ret < 0)
- 			return ret;
- 
- next_descriptor:
-@@ -2213,7 +2214,8 @@ static int uvc_probe(struct usb_interface *intf,
- 	usb_set_intfdata(intf, dev);
- 
- 	/* Initialize the interrupt URB. */
--	if ((ret = uvc_status_init(dev)) < 0) {
-+	ret = uvc_status_init(dev);
-+	if (ret < 0) {
- 		dev_info(&dev->udev->dev,
- 			 "Unable to initialize the status endpoint (%d), status interrupt will not be supported.\n",
- 			 ret);
--- 
-2.38.1
+date:			Tue Oct 25 03:00:13 CEST 2022
+media-tree git hash:	247f34f7b80357943234f93f247a1ae6b6c3a740
+media_build git hash:	0fe857b86addf382f6fd383948bd7736a3201403
+v4l-utils git hash:	f86484524f326bbf5c16d4bb485bfb8bd22cb6d0
+edid-decode git hash:	f1ff7ad7bcb2fbb85017bbb2baa6bed37c412895
+gcc version:		i686-linux-gcc (GCC) 12.2.0
+sparse repo:            git://git.kernel.org/pub/scm/devel/sparse/sparse.git
+sparse version:		v0.6.4-39-gce1a6720-dirty
+smatch repo:            git://repo.or.cz/smatch.git
+smatch version:		v0.5.0-8162-g696da5a8-dirty
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 94af8c625f6730ceef6e3713c61217c31ee868dd
+host hardware:		x86_64
+host os:		5.19.0-2-amd64
 
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-powerpc64: OK
+linux-git-arm-pxa: OK
+linux-git-arm-davinci: OK
+linux-git-arm-stm32: OK
+linux-git-mips: OK
+linux-git-arm64: WARNINGS
+linux-git-arm-multi: WARNINGS
+linux-git-i686: WARNINGS
+linux-git-x86_64: WARNINGS
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+apps: OK
+spec-git: OK
+virtme: WARNINGS: Final Summary: 3080, Succeeded: 3080, Failed: 0, Warnings: 2
+virtme-32: OK: Final Summary: 3193, Succeeded: 3193, Failed: 0, Warnings: 0
+sparse: WARNINGS
+smatch: WARNINGS
+kerneldoc: OK
+
+Detailed results are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Tuesday.log
+
+Detailed regression test results are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media.log
+https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media-32.log
+https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media-dmesg.log
+
+Full logs are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Tuesday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+https://hverkuil.home.xs4all.nl/spec/index.html
