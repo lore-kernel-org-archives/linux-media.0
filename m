@@ -2,186 +2,104 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2980C433FE
-	for <linux-media@archiver.kernel.org>; Wed, 26 Oct 2022 07:22:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8ACCCC38A2D
+	for <linux-media@archiver.kernel.org>; Wed, 26 Oct 2022 08:30:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232530AbiJZHWt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 Oct 2022 03:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44200 "EHLO
+        id S233360AbiJZI37 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 26 Oct 2022 04:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232844AbiJZHWr (ORCPT
+        with ESMTP id S233328AbiJZI35 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 26 Oct 2022 03:22:47 -0400
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FBA76541
-        for <linux-media@vger.kernel.org>; Wed, 26 Oct 2022 00:22:46 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (dkxjnptf9d2bpn7gcmbty-3.rev.dnainternet.fi [IPv6:2001:14ba:44ce:b640:9d1d:82c5:eca2:5060])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 718E62018F;
-        Wed, 26 Oct 2022 10:22:43 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1666768963;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xykj1LMwsyZvHAz2xeG7Ix80ST1XRQOPWyuA6giI6r0=;
-        b=CtYoJF03TaLZgyRUYZCAPhsMRKtYMp+TBSzYv+3V4fhzKlVaP9gBnhIYxz8cNU/uw3Wwc8
-        KDoweElV5JSjtZDv4H2BerLHTOAt/R02lYwu5JcEDhFGFcQ8JPTUjqoN7K2YhpAttem6SN
-        xdlQkyZEGaeeiX2J6c0+sv7zJ9GxBGY=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1666768963;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xykj1LMwsyZvHAz2xeG7Ix80ST1XRQOPWyuA6giI6r0=;
-        b=wOpxfvUafJQpyi9Unnu6s1b2ai+5t7m2QrKnwuoZ8nF2nOCd0q6e4DXjBHuMEL/+Rcq4Hb
-        48J2lIIPohae0she2MLedNJmFILuwdmrF61zFvIdLa4UxG3rirHrzRJRHWdl/sh5eTTWoc
-        n7jRFGatv+orNMKh7itxqEzeRY/xKnw=
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1666768963; a=rsa-sha256; cv=none;
-        b=e37jN0UeJ//377fZ/rtO/tiNe6u0sRGy6dc6HVu11ZGYHv+UOOxHSVKHShRmERH4cbCX+A
-        nHk0fKTMNftsAYiVwG6qvPBKvarV2Vrpm443qEyLED5oFgamgscICMVxq4Ctaul0MX8fvG
-        ZpOfYyLp9n2uggkbvV4WkNmEV1xknY0=
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 089B0634DB0;
-        Wed, 26 Oct 2022 10:22:43 +0300 (EEST)
-Date:   Wed, 26 Oct 2022 10:22:42 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc:     paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH 05/16] media: i2c: ov9281: Support more than 1 mode.
-Message-ID: <Y1jgQufUcERIKyJP@valkosipuli.retiisi.eu>
-References: <20221005152809.3785786-1-dave.stevenson@raspberrypi.com>
- <20221005152809.3785786-6-dave.stevenson@raspberrypi.com>
+        Wed, 26 Oct 2022 04:29:57 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E634E120B8
+        for <linux-media@vger.kernel.org>; Wed, 26 Oct 2022 01:29:53 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id fy4so19285191ejc.5
+        for <linux-media@vger.kernel.org>; Wed, 26 Oct 2022 01:29:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tCDyYr72ZmIVgiaUFV2oaXbsmgokNr8cc7POh74ybFU=;
+        b=XbrfKn40bQZY1mijV4jjxYMkn3bB+FmO2f1LP0eirYPhnMUPd7dozYsMFQ+TDiavWZ
+         Ggvz8/gcMcoQQCCwllyiqifxBpANeJW2mTnDh2h2aqMZFltZSV1rKgdH8BSUgzFl8r0r
+         u4OBfxlLCE+K0UtGX+V7K6J8ldpJVOPPRCC7sfInpjjgheQA+rGtwWLTWlTPfFvPMZv1
+         nZACzReuKy0jm8wnmbBljI5CnXFnExU+8l4XhPW7RJqwFu6et2BgJnNvGf1FxPl3BECX
+         28TgK67lHqQ5JNWu/5dLrnurPf60wFoDt+W8vPUGgMzHyAgqAt9lv0fOCJWnMhB12FZz
+         IewA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tCDyYr72ZmIVgiaUFV2oaXbsmgokNr8cc7POh74ybFU=;
+        b=tsK0OnkvzQWboqexcvx9/6lWI3Y8IOuuXjP4t8q4YKj1xwY7ZglUL9eBJWyMuvI2KU
+         l9JNkDW7R9gJWn0WY4ILgv2ryAxJqqXeN6ORPkfCTdpjnJreS6sWQFikKNhOu196imGM
+         kGU2NadKtKlHWqgYjeK/JudNMJziStvEKDn5l5tqoRX6u7xv8fSwZdgQ23IcKf376nAC
+         VBbI+I/Aij6V+RyYxbJ4EFw1wo8ALX5V+ZXR+2c1X2dO5G8O8aCIS4//MPAsVhr6ibTk
+         LSkHXT92WvFZ3t+rBqYjUl24wGSqcT134DGGkQsF/McB+l5m6iOs5TKyA567MRvilcIA
+         h+7A==
+X-Gm-Message-State: ACrzQf0nQP77RNNcxluxJbKs4KNz4U3dvkTK0hgMBQENhMvMAifmvLyq
+        9dcvC2i7KoMoNgDVnmBuQ3RMMXqaxb1V3Q==
+X-Google-Smtp-Source: AMsMyM6ur+vLwZCr2m8z3lp2qWtx5MZsYhaKzDkGGxrxiZoDhmiwQPZVKCKqd+y/s7fInOT2IhO+PQ==
+X-Received: by 2002:a17:907:9625:b0:78d:bb06:9072 with SMTP id gb37-20020a170907962500b0078dbb069072mr36426520ejc.472.1666772992240;
+        Wed, 26 Oct 2022 01:29:52 -0700 (PDT)
+Received: from localhost.localdomain (hst-221-27.medicom.bg. [84.238.221.27])
+        by smtp.gmail.com with ESMTPSA id u9-20020a1709061da900b0078e0973d1f5sm2641886ejh.0.2022.10.26.01.29.50
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 01:29:51 -0700 (PDT)
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+To:     linux-media@vger.kernel.org
+Subject: [GIT PULL FOR v6.2] Venus updates
+Date:   Wed, 26 Oct 2022 11:29:33 +0300
+Message-Id: <20221026082933.2897216-1-stanimir.varbanov@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221005152809.3785786-6-dave.stevenson@raspberrypi.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dave,
+Hi Mauro,
 
-On Wed, Oct 05, 2022 at 04:27:58PM +0100, Dave Stevenson wrote:
-> The driver currently has multiple assumptions that there is
-> only one supported mode.
-> 
-> Convert supported_mode to an array, and fix up all references
-> to correctly look at that array.
-> 
-> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> ---
->  drivers/media/i2c/ov9282.c | 44 ++++++++++++++++++++++----------------
->  1 file changed, 26 insertions(+), 18 deletions(-)
-> 
-> diff --git a/drivers/media/i2c/ov9282.c b/drivers/media/i2c/ov9282.c
-> index 798ff8ba50bd..f7823d584522 100644
-> --- a/drivers/media/i2c/ov9282.c
-> +++ b/drivers/media/i2c/ov9282.c
-> @@ -262,20 +262,24 @@ static const struct ov9282_reg mode_1280x720_regs[] = {
->  };
->  
->  /* Supported sensor mode configurations */
-> -static const struct ov9282_mode supported_mode = {
-> -	.width = 1280,
-> -	.height = 720,
-> -	.hblank = 250,
-> -	.vblank = 1022,
-> -	.vblank_min = 151,
-> -	.vblank_max = 51540,
-> -	.link_freq_idx = 0,
-> -	.reg_list = {
-> -		.num_of_regs = ARRAY_SIZE(mode_1280x720_regs),
-> -		.regs = mode_1280x720_regs,
-> +static const struct ov9282_mode supported_modes[] = {
-> +	{
-> +		.width = 1280,
-> +		.height = 720,
-> +		.hblank = 250,
-> +		.vblank = 1022,
-> +		.vblank_min = 151,
-> +		.vblank_max = 51540,
-> +		.link_freq_idx = 0,
-> +		.reg_list = {
-> +			.num_of_regs = ARRAY_SIZE(mode_1280x720_regs),
-> +			.regs = mode_1280x720_regs,
-> +		},
->  	},
->  };
->  
-> +#define OV9282_NUM_MODES ARRAY_SIZE(supported_modes)
+This time the pull request includes Maintainers file changes in Venus
+description and few fixes.
 
-I think the code would be cleaner without the additional macro, i.e. always
-using ARRAY_SIZE(supported_modes).
+Please pull.
 
-> +
->  /**
->   * to_ov9282() - ov9282 V4L2 sub-device to ov9282 device.
->   * @subdev: pointer to ov9282 V4L2 sub-device
-> @@ -536,15 +540,15 @@ static int ov9282_enum_frame_size(struct v4l2_subdev *sd,
->  				  struct v4l2_subdev_state *sd_state,
->  				  struct v4l2_subdev_frame_size_enum *fsize)
->  {
-> -	if (fsize->index > 0)
-> +	if (fsize->index >= OV9282_NUM_MODES)
->  		return -EINVAL;
->  
->  	if (fsize->code != MEDIA_BUS_FMT_Y10_1X10)
->  		return -EINVAL;
->  
-> -	fsize->min_width = supported_mode.width;
-> +	fsize->min_width = supported_modes[fsize->index].width;
->  	fsize->max_width = fsize->min_width;
-> -	fsize->min_height = supported_mode.height;
-> +	fsize->min_height = supported_modes[fsize->index].height;
->  	fsize->max_height = fsize->min_height;
->  
->  	return 0;
-> @@ -619,7 +623,11 @@ static int ov9282_set_pad_format(struct v4l2_subdev *sd,
->  
->  	mutex_lock(&ov9282->mutex);
->  
-> -	mode = &supported_mode;
-> +	mode = v4l2_find_nearest_size(supported_modes,
-> +				      OV9282_NUM_MODES,
-> +				      width, height,
-> +				      fmt->format.width,
-> +				      fmt->format.height);
->  	ov9282_fill_pad_format(ov9282, mode, fmt);
->  
->  	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
-> @@ -652,7 +660,7 @@ static int ov9282_init_pad_cfg(struct v4l2_subdev *sd,
->  	struct v4l2_subdev_format fmt = { 0 };
->  
->  	fmt.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
-> -	ov9282_fill_pad_format(ov9282, &supported_mode, &fmt);
-> +	ov9282_fill_pad_format(ov9282, &supported_modes[0], &fmt);
->  
->  	return ov9282_set_pad_format(sd, sd_state, &fmt);
->  }
-> @@ -1081,8 +1089,8 @@ static int ov9282_probe(struct i2c_client *client)
->  		goto error_power_off;
->  	}
->  
-> -	/* Set default mode to max resolution */
-> -	ov9282->cur_mode = &supported_mode;
-> +	/* Set default mode to first mode */
-> +	ov9282->cur_mode = &supported_modes[0];
->  	ov9282->vblank = ov9282->cur_mode->vblank;
->  
->  	ret = ov9282_init_controls(ov9282);
+regards,
+Stan
 
--- 
-Kind regards,
+The following changes since commit 247f34f7b80357943234f93f247a1ae6b6c3a740:
 
-Sakari Ailus
+  Linux 6.1-rc2 (2022-10-23 15:27:33 -0700)
+
+are available in the Git repository at:
+
+  git://linuxtv.org/svarbanov/media_tree.git tags/tag-venus-for-v6.2
+
+for you to fetch changes up to 0f6e8d8c94a82e85e1b9b62a7671990740dc6f70:
+
+  venus: pm_helpers: Fix error check in vcodec_domains_get() (2022-10-25 10:38:56 +0300)
+
+----------------------------------------------------------------
+Venus updates for v6.2
+
+----------------------------------------------------------------
+Stanimir Varbanov (4):
+      MAINTAINERS: Change email for Venus driver
+      venus: firmware: Correct reset bit
+      venus: firmware: Correct non-pix start and end addresses
+      venus: firmware: Correct assertion of reset bit on remote processor
+
+Tang Bin (1):
+      venus: pm_helpers: Fix error check in vcodec_domains_get()
+
+Vikash Garodia (1):
+      MAINTAINERS: Add Vikash as VENUS video driver co-maintainer
+
+ MAINTAINERS                                    |  3 ++-
+ drivers/media/platform/qcom/venus/firmware.c   | 20 ++++++++++----------
+ drivers/media/platform/qcom/venus/pm_helpers.c |  4 ++--
+ 3 files changed, 14 insertions(+), 13 deletions(-)
