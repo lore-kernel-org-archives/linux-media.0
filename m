@@ -2,136 +2,123 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D123C433FE
-	for <linux-media@archiver.kernel.org>; Wed, 26 Oct 2022 12:46:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71DE0FA373E
+	for <linux-media@archiver.kernel.org>; Wed, 26 Oct 2022 13:07:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233640AbiJZMqB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 Oct 2022 08:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47988 "EHLO
+        id S233628AbiJZNHX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 26 Oct 2022 09:07:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233119AbiJZMqA (ORCPT
+        with ESMTP id S233044AbiJZNHV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 26 Oct 2022 08:46:00 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2972199381;
-        Wed, 26 Oct 2022 05:45:58 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id d6so28261443lfs.10;
-        Wed, 26 Oct 2022 05:45:58 -0700 (PDT)
+        Wed, 26 Oct 2022 09:07:21 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3718FAE21C;
+        Wed, 26 Oct 2022 06:07:18 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id bp11so25675177wrb.9;
+        Wed, 26 Oct 2022 06:07:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wCYS2MrhiyiJRqchJbvsfNWsp2c+i8O2FNVXcaDM2G4=;
-        b=OCrv7IpWNVUMh2AO7e6i1IyrvD4QBaDHl9M/25FYN8pyuGhpeRH6kYbzWzzSnceI0c
-         N4a2t56ENioRfRnjumaWnYNQen0MC47bXE3ZZVDFEuu2XWhWJdvJyU8AUDd3KsRcqlh+
-         kHjrSSIHAlKCafM4UYmdwMxf0qeDdf8EMmOFFQqRobtLhiKPcItmnudZvpSiS6cTc23k
-         +q/eRIT/IFKikBZBogYbxKkbGcesrxwg3SnVVJk/98giXNrMCdFm2qQg2Zp3/QOmmcbR
-         jwHE9uR86dqDDhXLmwMBh+pSNamlPxqpPtwqHFBSovR9xvrylqtUOIrC3yJ7jMFIdFM/
-         PnTg==
+        bh=nyVNISqKQi9jXd38wQpw8MDXfXd5f1BICV0pIG254pc=;
+        b=U/tL7gRoPuAUkGJ6rjM8DuHdAsQkYwzQ6cXMYcI1bN3yzkj4m7DrrkVuRNujMOWmP6
+         cky4BTcDrY4w8N7ExDcfz4pdyc+/ir9rcUZUPfkW3atK5e2/NxqksC4tuVG5ylJ5DNSm
+         Vg+W7KPYaPLk3oYsp8/+T34ReQ/w4itM5E9PQ+lVLArhrF58+g2QsMSsGwIKFTpzJe7W
+         CR1kMgtPLTLanukzhavxHsRAexhFCOPruKYxK8f351dO0Boqjm9MUCZuVsUAeXQ71N6k
+         G8+4gwGSKDlEM+m4Nonjj647CRiJzGW+x3wWq6FYln4NSQtZ8c6lKZVlMGXdAb2dE1sS
+         Yd1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wCYS2MrhiyiJRqchJbvsfNWsp2c+i8O2FNVXcaDM2G4=;
-        b=vMB9O1UKSuDOW4MbDRRhStiQTt5OjAB0e1oSjg28cEVgf5gttx0Jmkn/O950a2c/ZD
-         zr4Ix5ZTjogiqkLIuURKTMSfx1WFWETorGPSXHLWHFCrolf0aPDdmaNuF21Y10vOUi76
-         bt4L3s+Q01g+IpEGv3LHs0pOmAg+MKKy7LbJRd0JcWPnckDfSweQDwN4VzIvepNrgYoH
-         qOtvwqPZLu8u1u/v9EGHGPBQ7n+4QZjuWcNalE4GoKyO25dS9R5y5j2nI0gEahL9X/dR
-         FN2bXL5i5VPInrDazHVDxXzybt3MxJhvV+tXPws8W9gL38c2alGVU++3eWtpyxHXIbGT
-         p8YQ==
-X-Gm-Message-State: ACrzQf1GnRyPox6S4QaSDJOl3YFLuYxCSiZofVE3W/GkRk0cKZqZy4tW
-        nbQ+luVqJrb9tDBCS95mb0q8HDPr3Ted0Q==
-X-Google-Smtp-Source: AMsMyM7PmmfexehbTSLlEBJ85BUrVcVkxpZ12MjCwV8C0zdOptDhQ86sr76L1I0wSxNc5kzBjQ0OtA==
-X-Received: by 2002:ac2:4f03:0:b0:495:ec98:bcac with SMTP id k3-20020ac24f03000000b00495ec98bcacmr15638176lfr.339.1666788356422;
-        Wed, 26 Oct 2022 05:45:56 -0700 (PDT)
-Received: from localhost (95-31-187-187.broadband.corbina.ru. [95.31.187.187])
-        by smtp.gmail.com with ESMTPSA id k21-20020a2ea275000000b0026c35c4720esm932661ljm.24.2022.10.26.05.45.55
+        bh=nyVNISqKQi9jXd38wQpw8MDXfXd5f1BICV0pIG254pc=;
+        b=aUnSyTpD60+yMB7xEDFVmEcSPhCOcIJzz+kZxgPRHPg6hL1/BFdmyCK3VVSU7MwgDv
+         AI7HnBpvZza0Ie0Kw2zZbIyN369yJbZ3Ng1L1hEL0wNlwiTCO0NfNiWu8it7g13YpDmK
+         yeziIgAxgBbHduWo8rBW0c7m3OT8IxISSyQfgVK6IPaQgh4X/qySfqDxRSSKWbpmEqJ+
+         uNnQwZ/h5qQtxCv27seUyXcFK3ZYtYgrJb+gz6Q00v7K0jxHY82cXUr7AzU65geAZimE
+         nA6fdIHpLGgb3hxHhg6161eDBA5bisyVR0PUxcTobOZ8mYPSObZ9iLjdjrO/MJDTfG+P
+         mZrQ==
+X-Gm-Message-State: ACrzQf06N/5k2S0VBb83wMAFtxAAxF/BUPcmkiO3cPjDivAiSlQpJ8DP
+        UI0ehJjrHK3kvsDdC+sfoGs=
+X-Google-Smtp-Source: AMsMyM6dkyokXKAuIfga7S2q7xmvYNtJBmrXeJK+/bn7qRQKvEt6c1fmeUaVN2JXqblEZTrTjUdFlQ==
+X-Received: by 2002:adf:e785:0:b0:236:5998:67a0 with SMTP id n5-20020adfe785000000b00236599867a0mr17412045wrm.414.1666789636745;
+        Wed, 26 Oct 2022 06:07:16 -0700 (PDT)
+Received: from prasmi.home ([2a00:23c8:2501:c701:cc:c67c:46e:319e])
+        by smtp.gmail.com with ESMTPSA id l3-20020adfa383000000b002366eb01e07sm5245433wrb.114.2022.10.26.06.07.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 05:45:55 -0700 (PDT)
-From:   Mikhail Rudenko <mike.rudenko@gmail.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mikhail Rudenko <mike.rudenko@gmail.com>
-Subject: [PATCH] media: i2c: ov4689: code cleanup
-Date:   Wed, 26 Oct 2022 15:45:51 +0300
-Message-Id: <20221026124552.163172-1-mike.rudenko@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <Y1gl1FMAjhXCfCmk@paasikivi.fi.intel.com>
-References: <Y1gl1FMAjhXCfCmk@paasikivi.fi.intel.com>
+        Wed, 26 Oct 2022 06:07:16 -0700 (PDT)
+From:   Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Shawn Tu <shawnx.tu@intel.com>, Jacopo Mondi <jacopo@jmondi.org>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Subject: [PATCH v3 1/9] media: i2c: ov5645: Drop fetching the clk reference by name
+Date:   Wed, 26 Oct 2022 14:06:50 +0100
+Message-Id: <20221026130658.45601-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221026130658.45601-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20221026130658.45601-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix minor nits from the last review round: extra {}, temporary
-variables for ARRAYS_SIZE(), redundant check in ov4689_check_hwcfg.
-No functional change intended.
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Signed-off-by: Mikhail Rudenko <mike.rudenko@gmail.com>
+The OV5645 sensor has a single clock source, so just drop fetching the
+clk reference by name.
+
+This is in preparation to drop the "clock-names" property from the DT
+binding.
+
+Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
- drivers/media/i2c/ov4689.c | 18 +++++-------------
- 1 file changed, 5 insertions(+), 13 deletions(-)
+v1->v3
+* No change
 
-diff --git a/drivers/media/i2c/ov4689.c b/drivers/media/i2c/ov4689.c
-index 419ff7371ba8..c602e507d42b 100644
---- a/drivers/media/i2c/ov4689.c
-+++ b/drivers/media/i2c/ov4689.c
-@@ -623,9 +623,8 @@ static int ov4689_map_gain(struct ov4689 *ov4689, int logical_gain, int *result)
- 
- 	for (n = 0; n < ARRAY_SIZE(ov4689_gain_ranges); n++) {
- 		if (logical_gain >= ov4689_gain_ranges[n].logical_min &&
--		    logical_gain <= ov4689_gain_ranges[n].logical_max) {
-+		    logical_gain <= ov4689_gain_ranges[n].logical_max)
- 			break;
--		}
+v1:
+https://patchwork.kernel.org/project/linux-media/patch/20220919143350.176746-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+---
+ drivers/media/i2c/ov5645.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/i2c/ov5645.c b/drivers/media/i2c/ov5645.c
+index 81e4e87e1821..47451238ca05 100644
+--- a/drivers/media/i2c/ov5645.c
++++ b/drivers/media/i2c/ov5645.c
+@@ -1090,7 +1090,7 @@ static int ov5645_probe(struct i2c_client *client)
  	}
  
- 	if (n == ARRAY_SIZE(ov4689_gain_ranges)) {
-@@ -815,23 +814,22 @@ static int ov4689_check_sensor_id(struct ov4689 *ov4689,
- 
- static int ov4689_configure_regulators(struct ov4689 *ov4689)
- {
--	unsigned int supplies_count = ARRAY_SIZE(ov4689_supply_names);
- 	unsigned int i;
- 
--	for (i = 0; i < supplies_count; i++)
-+	for (i = 0; i < ARRAY_SIZE(ov4689_supply_names); i++)
- 		ov4689->supplies[i].supply = ov4689_supply_names[i];
- 
--	return devm_regulator_bulk_get(&ov4689->client->dev, supplies_count,
-+	return devm_regulator_bulk_get(&ov4689->client->dev,
-+				       ARRAY_SIZE(ov4689_supply_names),
- 				       ov4689->supplies);
- }
- 
- static u64 ov4689_check_link_frequency(struct v4l2_fwnode_endpoint *ep)
- {
--	unsigned int freqs_count = ARRAY_SIZE(link_freq_menu_items);
- 	const u64 *freqs = link_freq_menu_items;
- 	unsigned int i, j;
- 
--	for (i = 0; i < freqs_count; i++) {
-+	for (i = 0; i < ARRAY_SIZE(link_freq_menu_items); i++) {
- 		for (j = 0; j < ep->nr_of_link_frequencies; j++)
- 			if (freqs[i] == ep->link_frequencies[j])
- 				return freqs[i];
-@@ -864,12 +862,6 @@ static int ov4689_check_hwcfg(struct device *dev)
- 		goto out_free_bus_cfg;
- 	}
- 
--	if (!bus_cfg.nr_of_link_frequencies) {
--		dev_err(dev, "No link frequencies defined\n");
--		ret = -EINVAL;
--		goto out_free_bus_cfg;
--	}
--
- 	if (!ov4689_check_link_frequency(&bus_cfg)) {
- 		dev_err(dev, "No supported link frequency found\n");
- 		ret = -EINVAL;
+ 	/* get system clock (xclk) */
+-	ov5645->xclk = devm_clk_get(dev, "xclk");
++	ov5645->xclk = devm_clk_get(dev, NULL);
+ 	if (IS_ERR(ov5645->xclk)) {
+ 		dev_err(dev, "could not get xclk");
+ 		return PTR_ERR(ov5645->xclk);
 -- 
-2.38.1
+2.25.1
 
