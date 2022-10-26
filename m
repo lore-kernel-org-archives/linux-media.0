@@ -2,182 +2,79 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1943C38A2D
-	for <linux-media@archiver.kernel.org>; Wed, 26 Oct 2022 12:07:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69A1DC433FE
+	for <linux-media@archiver.kernel.org>; Wed, 26 Oct 2022 12:09:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233800AbiJZMHY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 Oct 2022 08:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48880 "EHLO
+        id S233509AbiJZMJI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 26 Oct 2022 08:09:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233750AbiJZMHP (ORCPT
+        with ESMTP id S233642AbiJZMIm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 26 Oct 2022 08:07:15 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01EEB2745
-        for <linux-media@vger.kernel.org>; Wed, 26 Oct 2022 05:06:49 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id b2so28090605lfp.6
-        for <linux-media@vger.kernel.org>; Wed, 26 Oct 2022 05:06:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dhCAhO1KizZsj2zV3Y1+5lSZUzxRxUUnW3l6ylAL+HQ=;
-        b=PariO7jBXkPxi7oaWf9UcPRM4x2uQhz0hxR0+FonRFFcZHjVos/FnvtjA2+bqitZ6o
-         W8/kGkD0W67rfGi3V2wQwXRqlDB/CCEXMOqp37fpXblzvOEeXtRY8uWGPnJ3905RNRtt
-         FVe8TFqdEUQ+heATy36Al/QFJSCaHzPcxD+u4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dhCAhO1KizZsj2zV3Y1+5lSZUzxRxUUnW3l6ylAL+HQ=;
-        b=YEZj4QOMsVhsBKEIyjaYceic0LcveAMnOkgnK1SJSqXiQSOnhaXAAKqUyuW55s+Gbn
-         GM7Tg8l4hywBp0iO3Fym5ZMeS3j6muqpgkRqHvAUhyLfPHItp3TfRbySHlLlaZNkjZEp
-         Mep0sh/oG3Gf1xdprEzvKlKNeZ1tg3dKu9MPP7rGnvgU8Hs2U/5xTY86YNKPRRcZoqhw
-         YnN4rc5IGUeobDlzkmLu7SeAw1h+yRluiBzLG58dyYAP9F59V0tGH7GhhpN08GICWWZ8
-         9zWMlmybVfyW3v5TxI1n/lu+pBuaGy8BF+JsIzMR6RTWy1k+ISuMQ3et1aV9xc5s2ZEk
-         p3uQ==
-X-Gm-Message-State: ACrzQf3Np0LVQ3n8AaILFnlDyYcwbafwpkFqOIO4aYVI6r/I/5E5ab3v
-        IDgEMIZ5uTNCxCDJRKNFx8zHp5dQEOLnyvyX
-X-Google-Smtp-Source: AMsMyM5LjzKcRywTls07k9t/YXG8rGkd19MTusoAXTQ+lJelo1ae3d4j3cRVczlardGMTGkyTaP7ig==
-X-Received: by 2002:a17:907:80d:b0:73d:a576:dfbd with SMTP id wv13-20020a170907080d00b0073da576dfbdmr36953678ejb.402.1666785997192;
-        Wed, 26 Oct 2022 05:06:37 -0700 (PDT)
-Received: from alco.roam.corp.google.com ([2620:0:1059:10:b47a:bedd:2941:1e3f])
-        by smtp.gmail.com with ESMTPSA id y18-20020a17090668d200b0079e11b8e891sm2892546ejr.125.2022.10.26.05.06.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 05:06:36 -0700 (PDT)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 26 Oct 2022 14:06:09 +0200
-Subject: [PATCH v3 4/7] media: uvcvideo: Cancel async worker earlier
+        Wed, 26 Oct 2022 08:08:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8EA900FE;
+        Wed, 26 Oct 2022 05:07:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5AF7B82036;
+        Wed, 26 Oct 2022 12:07:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12677C433C1;
+        Wed, 26 Oct 2022 12:07:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666786059;
+        bh=8B4417bfAzlbIu20KS6Ht8E703c8EoXbWuOdXnxpT2c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=t1M/IL1bkXI2W3Z/CXVYUCOlXHFrd8hHyqPh6I3BHtBddDE/jevNGy+1DjHfAU03O
+         5Q8/8/B7OHgECKl0f6yq+gAbeVEzPYcBDeJq7aubwgwbKS39mBWJb08jN6Fa1rF3an
+         B8VXpe0xfFXkUgsVhm3+dA0bqc66zFBlieA9lqY0=
+Date:   Wed, 26 Oct 2022 14:08:32 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Michael Grzeschik <mgr@pengutronix.de>
+Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        balbi@kernel.org, laurent.pinchart@ideasonboard.com,
+        kernel@pengutronix.de
+Subject: Re: [PATCH v2] usb: gadget: uvc: limit isoc_sg to super speed gadgets
+Message-ID: <Y1kjQNfQcI4Of5qS@kroah.com>
+References: <20221017221141.3134818-1-m.grzeschik@pengutronix.de>
+ <Y1PVhIGlh1uMR2i/@kroah.com>
+ <20221025192537.GA10842@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20220920-resend-powersave-v3-4-c47856d8757e@chromium.org>
-References: <20220920-resend-powersave-v3-0-c47856d8757e@chromium.org>
-In-Reply-To: <20220920-resend-powersave-v3-0-c47856d8757e@chromium.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Tomasz Figa <tfiga@chromium.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Max Staudt <mstaudt@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org
-X-Mailer: b4 0.11.0-dev-d93f8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3866; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=0D1+Lk6BVHUTakJMT2e6YiV+9G/COKgarhcWvdj4pyo=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjWSLCY04skufuVZ8dA70NgBOex3XNb/EB82CUsCFi
- nvBzkMiJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY1kiwgAKCRDRN9E+zzrEiOmwEA
- CVSrcddwfF6QWTufc7Ys/ruPXJl5EmAjMv7h8sDxHvj9MegMHgfSZqgyWun/Pj6dLp3g3Lu+zi60re
- 3BvXaQmQgHK5SWKh4GXoEvkJH8DbIgLnFrrmm6GHCyXjkMyewtRIh2TN240Or6OR4Oxz98kio4RXmb
- NvvAl4fmmxh25Qlbjl9vK+aAQdUfS0EaXKavTzixC90e+OhW/cRxU9jktvDCxgHgzHIsynBJjTaMso
- +GfKwnGgZc4OVrg9FqrEebuxWADjJ1jz2iwSunKet3J/vhbu58Qkq5b4KI/5l4VEybIfs4TapiwPef
- BBRq+a2f+DeHf3iM3UhNgGgMIZwauMV4ajRruokJTcEvfutqQMN26oqoH+GvuduZGdoyI+yGKSTNz9
- 694Xl6SfVTtiJjdHBdM9DlfXcg8Hr2UInKsQNJFHfCoQ7mRsHZNSqesyJymUgdrVdBraBLsHoZiSGP
- kw0uua07zdGDb/IenWWXIZCqg/LM7sLBIp80gLdxGF9hh+IvGwQodXiVojSOy7lTwSsk3ALgYC3lUf
- QNE/eyVU6259QNKStKDplBSI1ZZzizlcg1Wsq3NqjXgHL50QTpaDCEyCmjLdSPUVSS3JjV3bqs9/zY
- ZJ0ZZLIg6JJacaYsDiaz+UcCin2d5gUG4a0na0fOo/BETa5nm//aRRRu9TxQ==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221025192537.GA10842@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+On Tue, Oct 25, 2022 at 09:25:37PM +0200, Michael Grzeschik wrote:
+> Hi!
+> 
+> On Sat, Oct 22, 2022 at 01:35:32PM +0200, Greg KH wrote:
+> > On Tue, Oct 18, 2022 at 12:11:41AM +0200, Michael Grzeschik wrote:
+> > > The overhead of preparing sg data is high for transfers with limited
+> > > payload. When transferring isoc over high-speed usb the maximum payload
+> > > is rather small which is a good argument no to use sg. This patch is
+> > > changing the uvc_video_encode_isoc_sg encode function only to be used
+> > > for super speed gadgets.
+> > > 
+> > > Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> > > 
+> > > ---
+> > > v1 -> v2: - always setting mem and sg elements since now both is working in runtime
+> > 
+> > I'm guessing this is a "fix"?  If so, what commit id is this a fix for?
+> 
+> This is not a fix but a feature. I am working to improve it
+> also to work with dmabuf memory comming in as vaddr. This needs some
+> extra mapping. Since you already took this patch, I will send fix for
+> this one then.
 
-So far the asynchronous control worker was canceled only in
-uvc_ctrl_cleanup_device. This is much later than the call to
-uvc_disconnect. However, after the call to uvc_disconnect returns,
-there must be no more USB activity. This can result in all kinds
-of problems in the USB code. One observed example:
+As it's not a fix, and it needs a fixup, I'll drop this from my tree for
+now as it should not go into 6.1-final.  Please resend an updated, and
+fixed, patch instead.
 
-URB ffff993e83d0bc00 submitted while active
-WARNING: CPU: 0 PID: 4046 at drivers/usb/core/urb.c:364 usb_submit_urb+0x4ba/0x55e
-Modules linked in: <...>
-CPU: 0 PID: 4046 Comm: kworker/0:35 Not tainted 4.19.139 #18
-Hardware name: Google Phaser/Phaser, BIOS Google_Phaser.10952.0.0 08/09/2018
-Workqueue: events uvc_ctrl_status_event_work [uvcvideo]
-RIP: 0010:usb_submit_urb+0x4ba/0x55e
-Code: <...>
-RSP: 0018:ffffb08d471ebde8 EFLAGS: 00010246
-RAX: a6da85d923ea5d00 RBX: ffff993e71985928 RCX: 0000000000000000
-RDX: ffff993f37a1de90 RSI: ffff993f37a153d0 RDI: ffff993f37a153d0
-RBP: ffffb08d471ebe28 R08: 000000000000003b R09: 001424bf85822e96
-R10: 0000001000000000 R11: ffffffff975a4398 R12: ffff993e83d0b000
-R13: ffff993e83d0bc00 R14: 0000000000000000 R15: 00000000fffffff0
-FS:  0000000000000000(0000) GS:ffff993f37a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000ec9c0000 CR3: 000000025b160000 CR4: 0000000000340ef0
-Call Trace:
- uvc_ctrl_status_event_work+0xd6/0x107 [uvcvideo]
- process_one_work+0x19b/0x4c5
- worker_thread+0x10d/0x286
- kthread+0x138/0x140
- ? process_one_work+0x4c5/0x4c5
- ? kthread_associate_blkcg+0xc1/0xc1
- ret_from_fork+0x1f/0x40
+thanks,
 
-Introduce new function uvc_ctrl_stop_device() to cancel the worker
-and call it from uvc_unregister_video() to solve the problem.
-
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-
-diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index c95a2229f4fa..c7af3e08b2c6 100644
---- a/drivers/media/usb/uvc/uvc_ctrl.c
-+++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -2597,14 +2597,17 @@ static void uvc_ctrl_cleanup_mappings(struct uvc_device *dev,
- 	}
- }
- 
--void uvc_ctrl_cleanup_device(struct uvc_device *dev)
-+void uvc_ctrl_stop_device(struct uvc_device *dev)
- {
--	struct uvc_entity *entity;
--	unsigned int i;
--
- 	/* Can be uninitialized if we are aborting on probe error. */
- 	if (dev->async_ctrl.work.func)
- 		cancel_work_sync(&dev->async_ctrl.work);
-+}
-+
-+void uvc_ctrl_cleanup_device(struct uvc_device *dev)
-+{
-+	struct uvc_entity *entity;
-+	unsigned int i;
- 
- 	/* Free controls and control mappings for all entities. */
- 	list_for_each_entry(entity, &dev->entities, list) {
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index ac87dee77f44..70d081c9a9fe 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -1901,6 +1901,7 @@ static void uvc_unregister_video(struct uvc_device *dev)
- 
- 	if (dev->int_ep)
- 		uvc_status_unregister(dev);
-+	uvc_ctrl_stop_device(dev);
- 
- 	if (dev->vdev.dev)
- 		v4l2_device_unregister(&dev->vdev);
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index 45310f55475f..6b07abac7034 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -739,6 +739,7 @@ int uvc_query_v4l2_menu(struct uvc_video_chain *chain,
- int uvc_ctrl_add_mapping(struct uvc_video_chain *chain,
- 			 const struct uvc_control_mapping *mapping);
- int uvc_ctrl_init_device(struct uvc_device *dev);
-+void uvc_ctrl_stop_device(struct uvc_device *dev);
- void uvc_ctrl_cleanup_device(struct uvc_device *dev);
- int uvc_ctrl_restore_values(struct uvc_device *dev);
- bool uvc_ctrl_status_event_async(struct urb *urb, struct uvc_video_chain *chain,
-
--- 
-b4 0.11.0-dev-d93f8
+greg k-h
