@@ -2,145 +2,93 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CAD4FA3742
-	for <linux-media@archiver.kernel.org>; Thu, 27 Oct 2022 11:20:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07874FA3742
+	for <linux-media@archiver.kernel.org>; Thu, 27 Oct 2022 11:50:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229379AbiJ0LU6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Oct 2022 07:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36502 "EHLO
+        id S235372AbiJ0Lu1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Oct 2022 07:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233403AbiJ0LU4 (ORCPT
+        with ESMTP id S234111AbiJ0Lu0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Oct 2022 07:20:56 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876EB72FD8;
-        Thu, 27 Oct 2022 04:20:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666869655; x=1698405655;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=n+6l6M6A5lyLOnRfDL5yPnQAsnHZqojf7vW9iC3diEI=;
-  b=WAyglAx5a0eAhOsxGJacsiJjMtZ7+vjIdLepGY8gdAxFFSe1diIvOKTu
-   oNT/WfwpPoHEsTc/8ofSxsDPI6/FLYryY1DN8oCab1SqwWzmfdju7PG88
-   tIZMFQb+MviH92+SsiDImRGtugkymjlsuXxJaYfGerrerSYwVuDPY/li+
-   y50tigVZ/uUKhVoJpltIjIQx6MGAQP3rAr/qW9amms2Xye4BLX/Utc63q
-   A/24Ji9SW4ueeVIBW5uhAGDVRbTzmFrME3/oWdgevYRjDC9yVIz7HCp6L
-   KGHNC0sZEbf0TzcvnyFvdH9OK4PYIrK0t8TCgVnr+QJEHPDaFzEayxmx/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="309287701"
-X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
-   d="scan'208";a="309287701"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 04:20:55 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="634865973"
-X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
-   d="scan'208";a="634865973"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 04:20:42 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id E87862021B;
-        Thu, 27 Oct 2022 14:20:37 +0300 (EEST)
-Date:   Thu, 27 Oct 2022 11:20:37 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v2 2/5] media: i2c: ov5645: Use runtime PM
-Message-ID: <Y1pphVPw0J97AmW4@paasikivi.fi.intel.com>
-References: <20221014183459.181567-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221014183459.181567-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Thu, 27 Oct 2022 07:50:26 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6368A63353;
+        Thu, 27 Oct 2022 04:50:24 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MykQ000pQzmVVQ;
+        Thu, 27 Oct 2022 19:45:27 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 27 Oct 2022 19:50:22 +0800
+Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
+ (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 27 Oct
+ 2022 19:50:22 +0800
+From:   Liu Shixin <liushixin2@huawei.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Liu Shixin <liushixin2@huawei.com>
+Subject: [PATCH] media: vivid: fix compose size exceed boundary
+Date:   Thu, 27 Oct 2022 20:38:55 +0800
+Message-ID: <20221027123855.1054059-1-liushixin2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221014183459.181567-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.32]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Prabhakar,
+syzkaller found a bug:
 
-One more comment.
+ BUG: unable to handle page fault for address: ffffc9000a3b1000
+ #PF: supervisor write access in kernel mode
+ #PF: error_code(0x0002) - not-present page
+ PGD 100000067 P4D 100000067 PUD 10015f067 PMD 1121ca067 PTE 0
+ Oops: 0002 [#1] PREEMPT SMP
+ CPU: 0 PID: 23489 Comm: vivid-000-vid-c Not tainted 6.1.0-rc1+ #512
+ Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+ RIP: 0010:memcpy_erms+0x6/0x10
+[...]
+ Call Trace:
+  <TASK>
+  ? tpg_fill_plane_buffer+0x856/0x15b0
+  vivid_fillbuff+0x8ac/0x1110
+  vivid_thread_vid_cap_tick+0x361/0xc90
+  vivid_thread_vid_cap+0x21a/0x3a0
+  kthread+0x143/0x180
+  ret_from_fork+0x1f/0x30
+  </TASK>
 
-On Fri, Oct 14, 2022 at 07:34:56PM +0100, Prabhakar wrote:
-> @@ -1209,12 +1190,16 @@ static int ov5645_probe(struct i2c_client *client)
->  
->  	dev_info(dev, "OV5645 detected at address 0x%02x\n", client->addr);
->  
-> +	pm_runtime_set_active(dev);
-> +	pm_runtime_get_noresume(dev);
-> +	pm_runtime_enable(dev);
+This is because we forget to check boundary after adjust compose->height
+int V4L2_SEL_TGT_CROP case. Add v4l2_rect_map_inside() to fix this problem
+for this case.
 
-You won't gain anything by eanbling runtime PM here. Just move it to the
-end of the function before the rest of the calls. Error handling becomes
-more simple.
+Fixes: ef834f7836ec ("vivid: add the video capture and output parts")
+Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+---
+ drivers/media/test-drivers/vivid/vivid-vid-cap.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> +
->  	ret = ov5645_read_reg(ov5645, OV5645_AEC_PK_MANUAL,
->  			      &ov5645->aec_pk_manual);
->  	if (ret < 0) {
->  		dev_err(dev, "could not read AEC/AGC mode\n");
->  		ret = -ENODEV;
-> -		goto power_down;
-> +		goto err_pm_runtime;
->  	}
->  
->  	ret = ov5645_read_reg(ov5645, OV5645_TIMING_TC_REG20,
-> @@ -1222,7 +1207,7 @@ static int ov5645_probe(struct i2c_client *client)
->  	if (ret < 0) {
->  		dev_err(dev, "could not read vflip value\n");
->  		ret = -ENODEV;
-> -		goto power_down;
-> +		goto err_pm_runtime;
->  	}
->  
->  	ret = ov5645_read_reg(ov5645, OV5645_TIMING_TC_REG21,
-> @@ -1230,23 +1215,30 @@ static int ov5645_probe(struct i2c_client *client)
->  	if (ret < 0) {
->  		dev_err(dev, "could not read hflip value\n");
->  		ret = -ENODEV;
-> -		goto power_down;
-> +		goto err_pm_runtime;
->  	}
->  
-> -	ov5645_s_power(&ov5645->sd, false);
-> -
->  	ret = v4l2_async_register_subdev(&ov5645->sd);
->  	if (ret < 0) {
->  		dev_err(dev, "could not register v4l2 device\n");
-> +		pm_runtime_disable(dev);
-> +		pm_runtime_set_suspended(dev);
->  		goto free_entity;
->  	}
->  
-> +	pm_runtime_set_autosuspend_delay(dev, 1000);
-> +	pm_runtime_use_autosuspend(dev);
-> +	pm_runtime_put_autosuspend(dev);
-> +
->  	ov5645_entity_init_cfg(&ov5645->sd, NULL);
->  
->  	return 0;
->  
-> +err_pm_runtime:
-> +	pm_runtime_disable(dev);
-> +	pm_runtime_put_noidle(dev);
->  power_down:
-> -	ov5645_s_power(&ov5645->sd, false);
-> +	ov5645_set_power_off(dev);
->  free_entity:
->  	media_entity_cleanup(&ov5645->sd.entity);
->  free_ctrl:
-
+diff --git a/drivers/media/test-drivers/vivid/vivid-vid-cap.c b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+index 86b158eeb2d8..b0cee26b9089 100644
+--- a/drivers/media/test-drivers/vivid/vivid-vid-cap.c
++++ b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+@@ -957,6 +957,7 @@ int vivid_vid_cap_s_selection(struct file *file, void *fh, struct v4l2_selection
+ 			if (dev->has_compose_cap) {
+ 				v4l2_rect_set_min_size(compose, &min_rect);
+ 				v4l2_rect_set_max_size(compose, &max_rect);
++				v4l2_rect_map_inside(compose, &fmt);
+ 			}
+ 			dev->fmt_cap_rect = fmt;
+ 			tpg_s_buf_height(&dev->tpg, fmt.height);
 -- 
-Kind regards,
+2.25.1
 
-Sakari Ailus
