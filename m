@@ -2,105 +2,108 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E22E9ECAAA1
-	for <linux-media@archiver.kernel.org>; Thu, 27 Oct 2022 12:02:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E6B5FA3742
+	for <linux-media@archiver.kernel.org>; Thu, 27 Oct 2022 12:14:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235487AbiJ0MCW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Oct 2022 08:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47028 "EHLO
+        id S234184AbiJ0MOS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Oct 2022 08:14:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235465AbiJ0MCU (ORCPT
+        with ESMTP id S233986AbiJ0MOR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Oct 2022 08:02:20 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0442A7A779;
-        Thu, 27 Oct 2022 05:02:20 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id m15so2258384edb.13;
-        Thu, 27 Oct 2022 05:02:19 -0700 (PDT)
+        Thu, 27 Oct 2022 08:14:17 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92514D2587
+        for <linux-media@vger.kernel.org>; Thu, 27 Oct 2022 05:14:16 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id f27so3998696eje.1
+        for <linux-media@vger.kernel.org>; Thu, 27 Oct 2022 05:14:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nae3MTaQSLKYtpB9ujJglOZE8cA0/GC19l2/IFTBBNc=;
-        b=DBs6mLPPobcb3ZQ9TGha9oXMaB+EXK6Bf4FwHAy1XNUBiSwzxRAHTw7ec+jcTYB41N
-         PmUi7EQy4fwD1oo7GPcHR/LmK8IM9DEqT94ekRQCbdLwDST8LWjjOV33ZyILzkOWi8E9
-         CeqrQTeqqmXZt4G44iwRhCvOF3xqte9n2utdWvjfA9tmWH5dRFnK+EutKMY3yoqXg0TA
-         spPEaUWYMTpm1HfWuM1LoustamNC6SPkL/0BIQIWmOIkhk5ZEizN0w76K0KSPYk5F1i5
-         m2vE2w5ROP3tntMvj8w5wei75d2bOOcMGY1SFC7NzgnYJlgADqc+U2zNfS59GbAyOTaM
-         H+/A==
+        h=content-transfer-encoding:in-reply-to:references:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ozR3pFF6qvev8k9P0jdmPJjlIVCpHvZvFTrYrZyvlug=;
+        b=PZjRFX7hCJSMc+Y64bXTjS1Y0HjMKr7mBuRJEyhLjLFHCu86uE4HnLAuCExy6utvd1
+         FOgBhXiiAJSLrrUG20YbdRvbVsNsZwCbTOPXaDHJFE88JKd+2iypeS1yDOEDzE57VkjJ
+         UqWne/R3v2Wnj8Xa4C6S+5rj0k7XRgR9qoxXW4GzTzZDgcO+MzbvkuT1O61ovT/wJi+D
+         Ha3tj9vLaD9yQYMZ/8SkAKkNiZ/YgGPwpKyMnOgfHSbBlgl4run+/9wq3qhNRVlg17Ki
+         vDrwt6JEo/l/1NL27ZVsNuW2qV7SdZinurpZSn7BRkWNw1fV8rlE01TvkJBC9O4zTpDK
+         1seg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nae3MTaQSLKYtpB9ujJglOZE8cA0/GC19l2/IFTBBNc=;
-        b=E2Y/EaOsMS96TD4rnyKhqenchrzg4uCIcHAmofvBFpPlQjLsgShkyB+GEyf18bQVlI
-         vArTjwoAZiO6wMbOgLOYoDv+ZyzHna3cQIHECZD3VdfR0uaiC6PngNcg/CVuS1ZX2j7d
-         ip1WFl4q/iO60Ju7Rb/THwRCo/Z9KVBLpqH1l2DGCMlE/POuDBK2A8ivwSjnlpC3MgyJ
-         Sk9aIxyz6/wonMWJomjYs+AeaynbaAWPH7an7maeNxPmlGP5e6GVqMKMHT8NnWV9h0hz
-         VM7b3f2+G1ZELI55aj5D2q37nroskYPXxJtkOeMpj0YDUrEy8S9miuViIuzzBoZkNByE
-         xxIg==
-X-Gm-Message-State: ACrzQf1UcxpC7ltpsdL7V/L97PzMk2WJRh+i+O/3CiwDewS5qLvp2qMy
-        Awy7xs515Eal8vAgnaQzHOUibR+qxNjEk6SMc9gzMkK468sTRu+4
-X-Google-Smtp-Source: AMsMyM4EvkA5Xahm06ht/ZKpqzZTCPn07pdZDlFCtL/quOxAJxUSAVS95eNwvCzgaTflYdChjCVVftaeGqRq2wsDWDY=
-X-Received: by 2002:a05:6402:26cf:b0:45d:48d7:928e with SMTP id
- x15-20020a05640226cf00b0045d48d7928emr43709300edd.275.1666872138527; Thu, 27
- Oct 2022 05:02:18 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:references:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ozR3pFF6qvev8k9P0jdmPJjlIVCpHvZvFTrYrZyvlug=;
+        b=an9C3948CTDKlqA4cStciq1Qq5p/vufPDZfg3IeXINaJRRMSQUUTd/miW44UU7tdd6
+         m3X2tvtbiQOCBlAETenLX/nzJyPgfBM6RZGRHtlMq3RSlc2lnLJ1VU7YHhRAPumq15ma
+         csW1yBueGO9M1s7bKew2IVukzYkt/IlcolXxq4Q3Y4PRmTxXMn8VARbaU8OVTKBIij5m
+         SCD0HJLFx66ApjvrhJ6MYvuijy3LpohQXTVnLMZBV5TVKqu3+NuKuOE1XfKyMRgDXmMl
+         lKmV355bkPrtGwPnqsw6BMrGye8UMXr76tdy8Q+B4DhdoiHuShL2C1kChH8sWYb1cY0c
+         vF5g==
+X-Gm-Message-State: ACrzQf0dab/cdZgjai5xPGaNoAfzaWTu/TmH09acAt99428ViOkr20FY
+        L/2mHdN0cjVuZ2YPRCBbiDo=
+X-Google-Smtp-Source: AMsMyM4Sne+rY2Ji3vF5c/d7Ew6GneR38fuCK0QW1XQVz5EfmwMiRau9oJnErgKoc5ml8Y39s8E8kA==
+X-Received: by 2002:a17:907:1dda:b0:7a6:8ffc:7dc with SMTP id og26-20020a1709071dda00b007a68ffc07dcmr20109443ejc.163.1666872855035;
+        Thu, 27 Oct 2022 05:14:15 -0700 (PDT)
+Received: from [192.168.178.21] (p5b0ea229.dip0.t-ipconnect.de. [91.14.162.41])
+        by smtp.gmail.com with ESMTPSA id bm27-20020a0564020b1b00b004615f7495e0sm917790edb.8.2022.10.27.05.14.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 05:14:14 -0700 (PDT)
+Message-ID: <59ac9998-a838-abf8-124c-8fd98c4f0f7a@gmail.com>
+Date:   Thu, 27 Oct 2022 14:14:12 +0200
 MIME-Version: 1.0
-References: <20221014183459.181567-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221014183459.181567-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <Y1pphVPw0J97AmW4@paasikivi.fi.intel.com>
-In-Reply-To: <Y1pphVPw0J97AmW4@paasikivi.fi.intel.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Thu, 27 Oct 2022 13:01:52 +0100
-Message-ID: <CA+V-a8szaPjwumrBgOT9gzMKBjY7hk0zfP8RgzUUDfY+BAsogA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] media: i2c: ov5645: Use runtime PM
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: Try to address the DMA-buf coherency problem
+Content-Language: en-US
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+To:     l.stach@pengutronix.de, nicolas@ndufresne.ca, ppaalanen@gmail.com,
+        sumit.semwal@linaro.org, daniel@ffwll.ch, robdclark@gmail.com,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-media@vger.kernel.org
+References: <20221020121316.3946-1-christian.koenig@amd.com>
+In-Reply-To: <20221020121316.3946-1-christian.koenig@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari,
+Am 20.10.22 um 14:13 schrieb Christian König:
+> Hi guys,
+>
+> after finding that we essentially have two separate worlds for coherent sharing
+> of buffer through DMA-buf I thought I will tackle that problem a bit and at
+> least allow the framework to reject attachments which won't work.
+>
+> So those patches here add a new dma_coherent flag to each DMA-buf object
+> telling the framework that dev_is_dma_coherent() needs to return true for an
+> importing device to be able to attach. Since we should always have a fallback
+> path this should give userspace the chance to still keep the use case working,
+> either by doing a CPU copy instead or reversing the roles of exporter and
+> importer.
+>
+> For DRM and most V4L2 devices I then fill in the dma_coherent flag based on the
+> return value of dev_is_dma_coherent(). Exporting drivers are allowed to clear
+> the flag for their buffers if special handling like the USWC flag in amdgpu or
+> the uncached allocations for radeon/nouveau are in use.
+>
+> Additional to that importers can also check the flag if they have some
+> non-snooping operations like the special scanout case for amdgpu for example.
+>
+> The patches are only smoke tested and the solution isn't ideal, but as far as
+> I can see should at least keep things working.
 
-On Thu, Oct 27, 2022 at 12:20 PM Sakari Ailus
-<sakari.ailus@linux.intel.com> wrote:
->
-> Hi Prabhakar,
->
-> One more comment.
->
-> On Fri, Oct 14, 2022 at 07:34:56PM +0100, Prabhakar wrote:
-> > @@ -1209,12 +1190,16 @@ static int ov5645_probe(struct i2c_client *client)
-> >
-> >       dev_info(dev, "OV5645 detected at address 0x%02x\n", client->addr);
-> >
-> > +     pm_runtime_set_active(dev);
-> > +     pm_runtime_get_noresume(dev);
-> > +     pm_runtime_enable(dev);
->
-> You won't gain anything by eanbling runtime PM here. Just move it to the
-> end of the function before the rest of the calls. Error handling becomes
-> more simple.
->
-If I move the above calls below I get the below warning:
+Gentle ping on this. Lucas, Daniel and Nicolas you have been rather 
+active in the last discussion. Do you mind taking a look?
 
-[    2.633386] ov5645 0-003c: Runtime PM usage count underflow!
+Thanks,
+Christian.
 
-This is because of the last patch which moves ov5645_entity_init_cfg()
-before registering the subdev. ov5645_entity_init_cfg() calls s_ctrl
-due to which we are seeing the above message. Please let me know how
-to proceed on this.
+>
+> Please review and/or comment,
+> Christian.
+>
+>
 
-Cheers,
-Prabhakar
