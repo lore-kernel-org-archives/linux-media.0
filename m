@@ -2,98 +2,109 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01F94FA373D
-	for <linux-media@archiver.kernel.org>; Fri, 28 Oct 2022 02:38:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B19FDC38A02
+	for <linux-media@archiver.kernel.org>; Fri, 28 Oct 2022 03:54:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236443AbiJ1CiN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Oct 2022 22:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57196 "EHLO
+        id S236171AbiJ1DyK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Oct 2022 23:54:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236424AbiJ1Ch7 (ORCPT
+        with ESMTP id S235481AbiJ1DyH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Oct 2022 22:37:59 -0400
-Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB87940579;
-        Thu, 27 Oct 2022 19:37:53 -0700 (PDT)
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 29S2D5KE054600;
-        Fri, 28 Oct 2022 10:13:05 +0800 (GMT-8)
-        (envelope-from jammy_huang@aspeedtech.com)
-Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 28 Oct
- 2022 10:35:59 +0800
-From:   Jammy Huang <jammy_huang@aspeedtech.com>
-To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
-        <andrew@aj.id.au>, <hverkuil-cisco@xs4all.nl>,
-        <laurent.pinchart@ideasonboard.com>, <xavier.roumegue@oss.nxp.com>,
-        <ezequiel@vanguardiasur.com.ar>, <stanimir.varbanov@linaro.org>,
-        <nicolas.dufresne@collabora.com>, <sakari.ailus@linux.intel.com>,
-        <ming.qian@nxp.com>, <andrzej.p@collabora.com>,
-        <linux-media@vger.kernel.org>, <openbmc@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v11 2/5] media: v4l2-ctrls: Reserve controls for ASPEED
-Date:   Fri, 28 Oct 2022 10:35:51 +0800
-Message-ID: <20221028023554.928-3-jammy_huang@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221028023554.928-1-jammy_huang@aspeedtech.com>
-References: <20221028023554.928-1-jammy_huang@aspeedtech.com>
+        Thu, 27 Oct 2022 23:54:07 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D56C9B841;
+        Thu, 27 Oct 2022 20:54:06 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id f140so3810659pfa.1;
+        Thu, 27 Oct 2022 20:54:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SsqVuyl6BD6W3LOL9WC66L6RjSvAiVZfFFErAmVMHQE=;
+        b=dUYSa32+9bO+LCOLFp+rBQ0F5Pnx+isYGovlF40t2/P9vWnEiDG1Q8itO/+XkeTfSv
+         zeWWwwKbS7UPTj37mKzqvzWyo/9u79rMxtpNLZCnsQzGCKG4/XQEGI6rWazC+esHIrR9
+         btLXbLJDJGt0QWJbBzwMHmRSR3zavgOTLsv3dHhkf0LRDL8A+8mbGkgYFXyRzhuBME86
+         10p2gPkZHql6RgTLb1NnMmQGPGAKRLo8YbKihP4ZEHe9sgtbn0EsxUvy7e386JtBMfKD
+         5P2utkAPzf/afxV4NKBCtAnnAe9Xynyms7eS195Tln69ZL4ofRdB8AwNHZDVRwsk8AX9
+         RCDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SsqVuyl6BD6W3LOL9WC66L6RjSvAiVZfFFErAmVMHQE=;
+        b=RE6vu/1Mbnb5HwlPtEs1RfGIt4II7SL2AzX0SH6ef5tTpxin8e15RF62zBRI8z8ZwC
+         9qERpBLzJ2x+3SraGMZm9jMeQgJjohljJixMo+QC7EAOfSxCdEihAf9v12yRHswX+EDH
+         sjycGHW5+PLvtRqRjeYF9i7c+oqUiRRqtLSy1f54w3mXxqUD4Hp6o0+LNTyRhygekhK/
+         yfc9JR/MxSt9IDFvDA0r1n7DVK0HHJ7DXXNHMhZf/EMJDiFZAd3c1Tn2+n9hhDWUqQZG
+         wrhTVyWqUsLBGlVfmq/yf8pYH63M77cfNUIjxEppJH38dZVzEOyWLfgnHNcDbFF/pS5Z
+         /kBg==
+X-Gm-Message-State: ACrzQf3elJKJCQ13hizGJNMT05yEOPHIhR8q4mVCOd8n0j4PLSa+3EkW
+        APrLBw8v1S1k/r1memU3unw=
+X-Google-Smtp-Source: AMsMyM4bStqmnjlTlD7oXh4az3KTHKmmK9eUmdVgeh7CmFo5zsALPHcOUlMD7hSZndCAJD9JRpyh8A==
+X-Received: by 2002:a62:174a:0:b0:56b:9fc2:4ebd with SMTP id 71-20020a62174a000000b0056b9fc24ebdmr28907080pfx.21.1666929246176;
+        Thu, 27 Oct 2022 20:54:06 -0700 (PDT)
+Received: from debian.me (subs32-116-206-28-58.three.co.id. [116.206.28.58])
+        by smtp.gmail.com with ESMTPSA id b79-20020a621b52000000b005618189b0ffsm1888035pfb.104.2022.10.27.20.54.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 20:54:05 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 3F7BD10030A; Fri, 28 Oct 2022 10:54:02 +0700 (WIB)
+Date:   Fri, 28 Oct 2022 10:54:02 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <jstultz@google.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        yj.chiang@mediatek.com, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2] dma-buf: cma_heap: Fix typo in comment
+Message-ID: <Y1tSWo+eRvkVofbv@debian.me>
+References: <20221028014422.16422-1-mark-pk.tsai@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.2.115]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 29S2D5KE054600
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="9jroqsdkTIsPFvYm"
+Content-Disposition: inline
+In-Reply-To: <20221028014422.16422-1-mark-pk.tsai@mediatek.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Reserve controls for ASPEED video family. Aspeed video engine contains a
-few features which improve video quality, reduce amount of compressed
-data, and etc. Hence, 16 controls are reserved for these aspeed
-proprietary features.
 
-Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
----
-v11:
-  - no update
-v10:
-  - no update
-v9:
-  - Rebase on new kernel
-v8:
-  - no update
-v7:
-  - no update
-v6:
-  - no update
-v5:
-  - no update
-v4:
-  - new
----
- include/uapi/linux/v4l2-controls.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+--9jroqsdkTIsPFvYm
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index b5e7d082b8ad..60a6bed21c56 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -231,6 +231,12 @@ enum v4l2_colorfx {
-  */
- #define V4L2_CID_USER_DW100_BASE		(V4L2_CID_USER_BASE + 0x1190)
- 
-+/*
-+ * The base for Aspeed driver controls.
-+ * We reserve 16 controls for this driver.
-+ */
-+#define V4L2_CID_USER_ASPEED_BASE		(V4L2_CID_USER_BASE + 0x11A0)
-+
- /* MPEG-class control IDs */
- /* The MPEG controls are applicable to all codec controls
-  * and the 'MPEG' part of the define is historical */
--- 
-2.25.1
+On Fri, Oct 28, 2022 at 09:44:17AM +0800, Mark-PK Tsai wrote:
+> Remove duplicated "by" from comment in cma_heap_allocate().
+>=20
 
+This patch isn't typofix but duplicate word stripping, right? If so, the
+patch subject should be "dma-buf: cma_heap: Remove duplicated 'by'".
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--9jroqsdkTIsPFvYm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY1tSWgAKCRD2uYlJVVFO
+o7b5AP9yoSZf7rdWvcCNTl0/IR/t+dbwcnJqX/nlQZpEECxVKQD/Z3fAqDYIRA+n
+wGfL9LkOMEPw+7g5fFLl5BC/vBZFBgw=
+=krRN
+-----END PGP SIGNATURE-----
+
+--9jroqsdkTIsPFvYm--
