@@ -2,61 +2,61 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6E64FA3742
-	for <linux-media@archiver.kernel.org>; Fri, 28 Oct 2022 16:15:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 712D3ECAAA1
+	for <linux-media@archiver.kernel.org>; Fri, 28 Oct 2022 16:15:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbiJ1QPO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Oct 2022 12:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59356 "EHLO
+        id S230260AbiJ1QPR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Oct 2022 12:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbiJ1QOi (ORCPT
+        with ESMTP id S230261AbiJ1QOi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 28 Oct 2022 12:14:38 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B99D6DAE7
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A221EF070
         for <linux-media@vger.kernel.org>; Fri, 28 Oct 2022 09:12:52 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id g12so7186531wrs.10
+Received: by mail-wm1-x32d.google.com with SMTP id m29-20020a05600c3b1d00b003c6bf423c71so6915717wms.0
         for <linux-media@vger.kernel.org>; Fri, 28 Oct 2022 09:12:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=raspberrypi.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AsaHuu6Y31yjFurK0y6AWTkf6uxNbvk9C/GSLLGsJoc=;
-        b=lGdWb/I3CcRP1R6nbFZoquN/vaBmUsCHG8k+FKX1zG81FcWlHFF4prnCYx5tOkVhlK
-         3DG82AsnQg5r9qdUmAtg4eCKSKJTrFr/Vm6Jqa5CTgVFkxZp2TpwbTqP7JR6hZPr9cjH
-         NdYd0NXtPaNmvMJ0iF0xf++KB2/MDIylUYzc9rPdhAzCi38FXSeA8EalvKMQUrOhUAHb
-         bDlCW0ybEZFGu3mTgjYKAh+cP3aDIjW6EjKC+IwI+47MybJ862xLFrd3xyj36btyZ9pZ
-         Fo/EmfT2D5paADKxPCn10DecJJfKILVcaL0j+7P70d2QOuXNDF2fzB2yrIWIU5xsUwp9
-         hgEA==
+        bh=vlkXe+L2h1h18CiDtAzOilVW1h9zgoB/5M7/SaL9hQk=;
+        b=Ny8adNQ89MU6uQfuzEgWi323Wo3LwCB8VN9FJQFV6bAYLFdgHS1KfZ+AtWnCtFemfg
+         B14GJoPYQnMP8bmzJS0pWD4wmNBm8Su7FDgHkM98ioaLevFd15quUIhjD4uEgoK0EstF
+         LdaTZH+SmAXTiWgJFgkL980YFAG4pYLentQ8b1ibjcnstNIuti0VB8zj76DWfTz9ZnPC
+         2sctOZHSAhsmQsX2s7eoGQs/F+QsathwYWep8pADxar0modluIDWfAOK+2AbLEE3dLKc
+         oas5tkpAPbAQBl+6X4zuWMV8knVCGAQnyOJG+u45XAIQfNvjHlKRK5wnHNOs90RLusYo
+         LSAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AsaHuu6Y31yjFurK0y6AWTkf6uxNbvk9C/GSLLGsJoc=;
-        b=0QnqVQustzvKq8Da4QtEMyhPLlZwJpkB2Qig+JNgt8SFCfYaDZZKPrzarzcgNgp/pu
-         9Bt52Wprt8O/NElCeE5qcV941CLJgVBIjPBEfp0tT7Tu8JcRwmaBnTUk58sRy481l9Da
-         Ktk0vwN7hkRepAdTdsYgT+Vb9QcvIgi2mCptiKSHtufZ6jZ6gLZcZ9A7TyyY+dFzRdvz
-         tM60BpMlLqu8sFGZoTBQD7rJ1mcL6EQovXY8kXn6/v+eeQMC8/cT/SpIrCROP5ODWp05
-         F6Ej/46RIlQyWQx+/aWUHe7TEtJGK7Jnga8bxEnp0cvySXNkBYxVt4Y70G4IEsHitRrE
-         yg1w==
-X-Gm-Message-State: ACrzQf3daeVYEzR9eLkpvu+DnCekQCPjDzcuElfexKMz1/syQtinEYzE
-        Kdhu0ZaZ1Ac6aTE+iIEvzMFLZg==
-X-Google-Smtp-Source: AMsMyM5CTX3ib6azI4ARgsJeoIct8cZyrvBaj4tzddS8VTJox46ZXuv47xqrr5aIlFCb+FfTTuXn3A==
-X-Received: by 2002:a5d:5081:0:b0:236:75cc:be26 with SMTP id a1-20020a5d5081000000b0023675ccbe26mr63910wrt.379.1666973570754;
-        Fri, 28 Oct 2022 09:12:50 -0700 (PDT)
+        bh=vlkXe+L2h1h18CiDtAzOilVW1h9zgoB/5M7/SaL9hQk=;
+        b=u4UPAIzpyu/Gm1tK60HPIwmX9VX5olHFH/fnlVH4wMZjpyAXvNApJa/ECP5zGKuUU5
+         vRzfvu6whJT8/BEVwdOocQ4+V/0zBRVeMukc/gFdo+oF0AjPC+RNZueb1pdBO4+3F++u
+         dS+gJtT4+6Qlx8O8ilcDAJ7htGP3l/0CI0aN/c+aJh7FmHyMHaYWDMaYJoP0Fm7cqt7T
+         RRwu7svvuvknXw2Dd0i4JiTq6jzwKrL2yUZZ7/r5KKnaVVr+b9DdWUlhsEBNxHodyl3m
+         VZeyFY+25pYwcGlxYvnU5uKjZgto9CQtE7FoQ157+MtLc+beBpYynxEQ7O06adcADOt4
+         vBEQ==
+X-Gm-Message-State: ACrzQf0FUpBw/AJEZ0mk39AbPR2rAf3pQbqhUvzrXl9bdsgPjxDOKIO7
+        ck2Gpo4F0kuSjDYxUbUyrrXT/g==
+X-Google-Smtp-Source: AMsMyM7E+/a6RTLSKi+5zmlmUakYzPY/Dfdy8lk6HWgQWIDXQeWazo6Sz7YeePJoynJidOolXUZtIQ==
+X-Received: by 2002:a05:600c:3d8a:b0:3c6:f241:cb36 with SMTP id bi10-20020a05600c3d8a00b003c6f241cb36mr65746wmb.115.1666973572216;
+        Fri, 28 Oct 2022 09:12:52 -0700 (PDT)
 Received: from dave-Ubuntu2204.pitowers.org ([93.93.133.154])
-        by smtp.googlemail.com with ESMTPSA id bh17-20020a05600c3d1100b003cf47fdead5sm4731928wmb.30.2022.10.28.09.12.50
+        by smtp.googlemail.com with ESMTPSA id bh17-20020a05600c3d1100b003cf47fdead5sm4731928wmb.30.2022.10.28.09.12.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 09:12:50 -0700 (PDT)
+        Fri, 28 Oct 2022 09:12:51 -0700 (PDT)
 From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
 To:     paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
         linux-media@vger.kernel.org, sakari.ailus@iki.fi, jacopo@jmondi.org
 Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH v2 07/16] media: i2c: ov9282: Reduce vblank_min values based on testing
-Date:   Fri, 28 Oct 2022 17:08:53 +0100
-Message-Id: <20221028160902.2696973-8-dave.stevenson@raspberrypi.com>
+Subject: [PATCH v2 09/16] media: i2c: ov9282: Add the properties from fwnode
+Date:   Fri, 28 Oct 2022 17:08:55 +0100
+Message-Id: <20221028160902.2696973-10-dave.stevenson@raspberrypi.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221028160902.2696973-1-dave.stevenson@raspberrypi.com>
 References: <20221028160902.2696973-1-dave.stevenson@raspberrypi.com>
@@ -66,31 +66,48 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The configured vblank_min setting of 151 (meaning VTS of
-720 + 151 = 871) is far higher than the setting that works on
-the sensor, and there are no obvious restrictions stated in the
-datasheet.
-
-Reduce the vblank_min to allow for faster frame rates.
+Use v4l2_ctrl_new_fwnode_properties to add V4L2_CID_CAMERA_ORIENTATION
+and V4L2_CID_CAMERA_SENSOR_ROTATION.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/i2c/ov9282.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/ov9282.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/i2c/ov9282.c b/drivers/media/i2c/ov9282.c
-index 7e0b12b89655..35bc2b0438bc 100644
+index 1637cf1177c5..889db9d105a2 100644
 --- a/drivers/media/i2c/ov9282.c
 +++ b/drivers/media/i2c/ov9282.c
-@@ -262,7 +262,7 @@ static const struct ov9282_mode supported_modes[] = {
- 		.height = 720,
- 		.hblank = 250,
- 		.vblank = 1022,
--		.vblank_min = 151,
-+		.vblank_min = 41,
- 		.vblank_max = 51540,
- 		.link_freq_idx = 0,
- 		.reg_list = {
+@@ -959,10 +959,11 @@ static int ov9282_init_controls(struct ov9282 *ov9282)
+ {
+ 	struct v4l2_ctrl_handler *ctrl_hdlr = &ov9282->ctrl_handler;
+ 	const struct ov9282_mode *mode = ov9282->cur_mode;
++	struct v4l2_fwnode_device_properties props;
+ 	u32 lpfr;
+ 	int ret;
+ 
+-	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 6);
++	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 8);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -1020,7 +1021,14 @@ static int ov9282_init_controls(struct ov9282 *ov9282)
+ 	if (ov9282->hblank_ctrl)
+ 		ov9282->hblank_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ 
+-	if (ctrl_hdlr->error) {
++	ret = v4l2_fwnode_device_parse(ov9282->dev, &props);
++	if (!ret) {
++		/* Failure sets ctrl_hdlr->error, which we check afterwards anyway */
++		v4l2_ctrl_new_fwnode_properties(ctrl_hdlr, &ov9282_ctrl_ops,
++						&props);
++	}
++
++	if (ctrl_hdlr->error || ret) {
+ 		dev_err(ov9282->dev, "control init failed: %d",
+ 			ctrl_hdlr->error);
+ 		v4l2_ctrl_handler_free(ctrl_hdlr);
 -- 
 2.34.1
 
