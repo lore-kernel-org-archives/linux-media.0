@@ -2,61 +2,61 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEBD6ECAAA1
-	for <linux-media@archiver.kernel.org>; Fri, 28 Oct 2022 16:15:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34862ECAAA1
+	for <linux-media@archiver.kernel.org>; Fri, 28 Oct 2022 16:15:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbiJ1QP2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Oct 2022 12:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53076 "EHLO
+        id S229616AbiJ1QPc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Oct 2022 12:15:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbiJ1QOy (ORCPT
+        with ESMTP id S230287AbiJ1QOx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:14:54 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C14A1FB78F
-        for <linux-media@vger.kernel.org>; Fri, 28 Oct 2022 09:12:57 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so4172039wmb.0
-        for <linux-media@vger.kernel.org>; Fri, 28 Oct 2022 09:12:56 -0700 (PDT)
+        Fri, 28 Oct 2022 12:14:53 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE441DE3F2
+        for <linux-media@vger.kernel.org>; Fri, 28 Oct 2022 09:12:55 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id l16-20020a05600c4f1000b003c6c0d2a445so4149054wmq.4
+        for <linux-media@vger.kernel.org>; Fri, 28 Oct 2022 09:12:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=raspberrypi.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tLONcpe1wBJCaR5ji2PqPS5DxS7tp+cxzI4V/jr+aEU=;
-        b=qGVxZ0+OFzyPmVbOaWzWvXHZc+UGU71z+vVCzDhu8M8SAquqHzxzlBMIKz0e4XffiJ
-         6O0SzpgzJ+k6jLCLJ1Fda6fRgLpx7EdPFdaza3fwnpb7vmBA1vcr6XoBaCMkARevK1ks
-         K6hbhaFWjs6yXwDXnJHD2S+pLmJcIhlAR5bKcofQK7LDH/oljm5obGpGSjF8cbjh21Bh
-         s/v8+MNqqK+KaHr/fGR2BGa+GQpIHLSQcQxVRRHRnMQTQEQsvmx2ajYNIcbrYL9jTD9z
-         ulyjZ8hPK/i+Xdi8Hd2RsWCWCtY9qn1eixLwqU039g+RWYxNV21kKSzcmZ6oHwk4EOaI
-         PYqw==
+        bh=7PQieUrDD2lIc9ALkRj84U8GRwSZ71VOFhAis5UCITI=;
+        b=N3I8VHwEtz39IIV0134f1AMrP2yHLI6f9sYldNBuvXL7ewATsTd4K+UmtT9wlB2jNa
+         X61vX6tMb3NG71uMlmwQVZuvsmJC526oLVdEg7LtYhmPkvZpQCUdTADwYOokaiwlUnpa
+         SM/iclnK/rYJs//4cH6z9XSUpYxLLGs/o+2bbZMOP8MOcq/+TCIfuJnnq+vkfTtLbFk3
+         Cnn1F9k8e5QHicomw+vr9hY24sDsIno/fY9GiaqM9BydETN96yNMIEBP5ymfhUNPMMDV
+         5aXzZpKLQcEKA0FyJp41CAEBzK6wVlTPFYTU8oZwO8tMvArgcDj1PAE5Rz7RbFRuwwFE
+         5CLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tLONcpe1wBJCaR5ji2PqPS5DxS7tp+cxzI4V/jr+aEU=;
-        b=Crxkr0hqn/+3fl71siiFml8Fphs2lopjl8JmLqRDKXbL+cl14YiygMt2D7Vf5gMd/T
-         j+zth6Ji7yFWfarlKuPF9gfCqq6pu5Wbep1kknPH88LC6kZ3lM/LspJa/H3DEFbCsro6
-         MvlmV5o+xlM7KubXbbh6bvcrzsFJTnqJ6aSnDp08j1dasxKpsy2AXYAT4sp18a0PcmTK
-         9nnLMQTOg7Efwx9z8phN9HnMeoi0/N6MiMdTwi2eRkJlYolrZU1NdRGMj8zR1W9t6Hhn
-         7bNB5pdDno4vHV8feCIcNMcimPEXUMis5QCUAAdnHyFuGHNX7uZ2sin4As1VciGQKdwL
-         W/nQ==
-X-Gm-Message-State: ACrzQf2CSDvlAu8a81NukhpmoG+/opHdNYIkxjOcDZgNFa4/x8YC//BN
-        iF7noKjjO1WEE/sAFRgbwv2ulw==
-X-Google-Smtp-Source: AMsMyM5VO7rkpJaqUWXnWPQ215Z0U+w2yj9wM8eqHLoYdvWA+s+DNe/07CrcK0KgmVh5ahRIxzovTg==
-X-Received: by 2002:a05:600c:3d92:b0:3c7:12c6:a99f with SMTP id bi18-20020a05600c3d9200b003c712c6a99fmr11161wmb.136.1666973575506;
-        Fri, 28 Oct 2022 09:12:55 -0700 (PDT)
+        bh=7PQieUrDD2lIc9ALkRj84U8GRwSZ71VOFhAis5UCITI=;
+        b=4oYH/71sCfJuboxKb1SBpa9zUdv3jNTKKBuvXBd8/O38HsaIyE0K3QBRQxg/UlLlwM
+         K5QUGI9HI4m6AHy2j2N0Spv0xTdGj3SdDMpToFPMey43JTXy3zT37zwacDnUwkGxWKGF
+         BlrGcQCVlzQLuujBUmbvzFsbD+dL5bzybsoEMMC5kQPxT2nr6GXR/ts4lA4Z8OmfJdD0
+         SennS/4BTi6gTHKPwoJ8f/Y5NBl6V0KhB6xu6V6ZBN9R3z8bb+HRfYmAO7QCR1+q7G2s
+         +BGWpL74aKsKBgkPfxrxB6DubI1lW4eWV9YYJEIocZHLnE9NiLtTaNyj1lDEJJmPAot7
+         SxNQ==
+X-Gm-Message-State: ACrzQf12EjK0LvTGTyEXhlrC8FueejNjiHD/S9KrkI3gkBggs2bRyHrj
+        efU1gb3czExK/sWIbgOx/cYrIg==
+X-Google-Smtp-Source: AMsMyM7i5aQjs9/MkRiG+jEVxRHA9sgiCNhj1ZU4a5OsyLEoTwg5waaFjE8aV9xdqBwxJj43w5MYvg==
+X-Received: by 2002:a1c:f71a:0:b0:3cf:61fd:21f0 with SMTP id v26-20020a1cf71a000000b003cf61fd21f0mr935708wmh.40.1666973573843;
+        Fri, 28 Oct 2022 09:12:53 -0700 (PDT)
 Received: from dave-Ubuntu2204.pitowers.org ([93.93.133.154])
-        by smtp.googlemail.com with ESMTPSA id bh17-20020a05600c3d1100b003cf47fdead5sm4731928wmb.30.2022.10.28.09.12.54
+        by smtp.googlemail.com with ESMTPSA id bh17-20020a05600c3d1100b003cf47fdead5sm4731928wmb.30.2022.10.28.09.12.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 09:12:54 -0700 (PDT)
+        Fri, 28 Oct 2022 09:12:53 -0700 (PDT)
 From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
 To:     paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
         linux-media@vger.kernel.org, sakari.ailus@iki.fi, jacopo@jmondi.org
 Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH v2 13/16] media: i2c: ov9282: Add selection API calls for cropping info
-Date:   Fri, 28 Oct 2022 17:08:59 +0100
-Message-Id: <20221028160902.2696973-14-dave.stevenson@raspberrypi.com>
+Subject: [PATCH v2 11/16] media: i2c: ov9282: Add HFLIP and VFLIP support
+Date:   Fri, 28 Oct 2022 17:08:57 +0100
+Message-Id: <20221028160902.2696973-12-dave.stevenson@raspberrypi.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221028160902.2696973-1-dave.stevenson@raspberrypi.com>
 References: <20221028160902.2696973-1-dave.stevenson@raspberrypi.com>
@@ -66,130 +66,109 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-As required by libcamera, add the relevant cropping targets
-to report which portion of the sensor is being read out in
-any mode.
+Adds support for V4L2_CID_HFLIP and V4L2_CID_VFLIP to allow
+flipping the image.
+
+The driver previously enabled H & V flips in the register table,
+therefore the controls default to the same settings to avoid
+changing the behaviour.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/i2c/ov9282.c | 75 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+ drivers/media/i2c/ov9282.c | 52 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 51 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/i2c/ov9282.c b/drivers/media/i2c/ov9282.c
-index 2313d5e717f3..a520d9fef0cb 100644
+index e964461ff1d3..cfb6e72d8931 100644
 --- a/drivers/media/i2c/ov9282.c
 +++ b/drivers/media/i2c/ov9282.c
-@@ -66,6 +66,17 @@
- #define OV9282_PIXEL_RATE	(OV9282_LINK_FREQ * 2 * \
- 				 OV9282_NUM_DATA_LANES / 10)
+@@ -45,6 +45,10 @@
+ /* Group hold register */
+ #define OV9282_REG_HOLD		0x3308
  
-+/*
-+ * OV9282 native and active pixel array size.
-+ * 8 dummy rows/columns on each edge of a 1280x800 active array
-+ */
-+#define OV9282_NATIVE_WIDTH		1296U
-+#define OV9282_NATIVE_HEIGHT		816U
-+#define OV9282_PIXEL_ARRAY_LEFT		8U
-+#define OV9282_PIXEL_ARRAY_TOP		8U
-+#define OV9282_PIXEL_ARRAY_WIDTH	1280U
-+#define OV9282_PIXEL_ARRAY_HEIGHT	800U
++#define OV9282_REG_TIMING_FORMAT_1	0x3820
++#define OV9282_REG_TIMING_FORMAT_2	0x3821
++#define OV9282_FLIP_BIT			BIT(2)
 +
- #define OV9282_REG_MIN		0x00
- #define OV9282_REG_MAX		0xfffff
+ #define OV9282_REG_MIPI_CTRL00	0x4800
+ #define OV9282_GATED_CLOCK	BIT(5)
  
-@@ -109,6 +120,7 @@ struct ov9282_mode {
- 	u32 vblank_min;
- 	u32 vblank_max;
- 	u32 link_freq_idx;
-+	struct v4l2_rect crop;
- 	struct ov9282_reg_list reg_list;
- };
- 
-@@ -280,6 +292,16 @@ static const struct ov9282_mode supported_modes[] = {
- 		.vblank_min = 41,
- 		.vblank_max = 51540,
- 		.link_freq_idx = 0,
-+		.crop = {
-+			/*
-+			 * Note that this mode takes the top 720 lines from the
-+			 * 800 of the sensor. It does not take a middle crop.
-+			 */
-+			.left = OV9282_PIXEL_ARRAY_LEFT,
-+			.top = OV9282_PIXEL_ARRAY_TOP,
-+			.width = 1280,
-+			.height = 720
-+		},
- 		.reg_list = {
- 			.num_of_regs = ARRAY_SIZE(mode_1280x720_regs),
- 			.regs = mode_1280x720_regs,
-@@ -720,6 +742,58 @@ static int ov9282_init_pad_cfg(struct v4l2_subdev *sd,
- 	return ov9282_set_pad_format(sd, sd_state, &fmt);
+@@ -438,6 +442,40 @@ static int ov9282_update_exp_gain(struct ov9282 *ov9282, u32 exposure, u32 gain)
+ 	return ret;
  }
  
-+static const struct v4l2_rect *
-+__ov9282_get_pad_crop(struct ov9282 *ov9282,
-+		      struct v4l2_subdev_state *sd_state,
-+		      unsigned int pad, enum v4l2_subdev_format_whence which)
++static int ov9282_set_ctrl_hflip(struct ov9282 *ov9282, int value)
 +{
-+	switch (which) {
-+	case V4L2_SUBDEV_FORMAT_TRY:
-+		return v4l2_subdev_get_try_crop(&ov9282->sd, sd_state, pad);
-+	case V4L2_SUBDEV_FORMAT_ACTIVE:
-+		return &ov9282->cur_mode->crop;
-+	}
++	u32 current_val;
++	int ret = ov9282_read_reg(ov9282, OV9282_REG_TIMING_FORMAT_2, 1,
++				  &current_val);
++	if (ret)
++		return ret;
 +
-+	return NULL;
++	if (value)
++		current_val |= OV9282_FLIP_BIT;
++	else
++		current_val &= ~OV9282_FLIP_BIT;
++
++	return ov9282_write_reg(ov9282, OV9282_REG_TIMING_FORMAT_2, 1,
++				current_val);
 +}
 +
-+static int ov9282_get_selection(struct v4l2_subdev *sd,
-+				struct v4l2_subdev_state *sd_state,
-+				struct v4l2_subdev_selection *sel)
++static int ov9282_set_ctrl_vflip(struct ov9282 *ov9282, int value)
 +{
-+	switch (sel->target) {
-+	case V4L2_SEL_TGT_CROP: {
-+		struct ov9282 *ov9282 = to_ov9282(sd);
++	u32 current_val;
++	int ret = ov9282_read_reg(ov9282, OV9282_REG_TIMING_FORMAT_1, 1,
++				  &current_val);
++	if (ret)
++		return ret;
 +
-+		mutex_lock(&ov9282->mutex);
-+		sel->r = *__ov9282_get_pad_crop(ov9282, sd_state, sel->pad,
-+						sel->which);
-+		mutex_unlock(&ov9282->mutex);
++	if (value)
++		current_val |= OV9282_FLIP_BIT;
++	else
++		current_val &= ~OV9282_FLIP_BIT;
 +
-+		return 0;
-+	}
-+
-+	case V4L2_SEL_TGT_NATIVE_SIZE:
-+		sel->r.top = 0;
-+		sel->r.left = 0;
-+		sel->r.width = OV9282_NATIVE_WIDTH;
-+		sel->r.height = OV9282_NATIVE_HEIGHT;
-+
-+		return 0;
-+
-+	case V4L2_SEL_TGT_CROP_DEFAULT:
-+	case V4L2_SEL_TGT_CROP_BOUNDS:
-+		sel->r.top = OV9282_PIXEL_ARRAY_TOP;
-+		sel->r.left = OV9282_PIXEL_ARRAY_LEFT;
-+		sel->r.width = OV9282_PIXEL_ARRAY_WIDTH;
-+		sel->r.height = OV9282_PIXEL_ARRAY_HEIGHT;
-+
-+		return 0;
-+	}
-+
-+	return -EINVAL;
++	return ov9282_write_reg(ov9282, OV9282_REG_TIMING_FORMAT_1, 1,
++				current_val);
 +}
 +
  /**
-  * ov9282_start_streaming() - Start sensor stream
-  * @ov9282: pointer to ov9282 device
-@@ -938,6 +1012,7 @@ static const struct v4l2_subdev_pad_ops ov9282_pad_ops = {
- 	.enum_frame_size = ov9282_enum_frame_size,
- 	.get_fmt = ov9282_get_pad_format,
- 	.set_fmt = ov9282_set_pad_format,
-+	.get_selection = ov9282_get_selection,
- };
+  * ov9282_set_ctrl() - Set subdevice control
+  * @ctrl: pointer to v4l2_ctrl structure
+@@ -494,6 +532,12 @@ static int ov9282_set_ctrl(struct v4l2_ctrl *ctrl)
+ 		lpfr = ov9282->vblank + ov9282->cur_mode->height;
+ 		ret = ov9282_write_reg(ov9282, OV9282_REG_LPFR, 2, lpfr);
+ 		break;
++	case V4L2_CID_HFLIP:
++		ret = ov9282_set_ctrl_hflip(ov9282, ctrl->val);
++		break;
++	case V4L2_CID_VFLIP:
++		ret = ov9282_set_ctrl_vflip(ov9282, ctrl->val);
++		break;
+ 	default:
+ 		dev_err(ov9282->dev, "Invalid control %d", ctrl->id);
+ 		ret = -EINVAL;
+@@ -963,7 +1007,7 @@ static int ov9282_init_controls(struct ov9282 *ov9282)
+ 	u32 lpfr;
+ 	int ret;
  
- static const struct v4l2_subdev_ops ov9282_subdev_ops = {
+-	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 8);
++	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 10);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -997,6 +1041,12 @@ static int ov9282_init_controls(struct ov9282 *ov9282)
+ 						mode->vblank_max,
+ 						1, mode->vblank);
+ 
++	v4l2_ctrl_new_std(ctrl_hdlr, &ov9282_ctrl_ops, V4L2_CID_VFLIP,
++			  0, 1, 1, 1);
++
++	v4l2_ctrl_new_std(ctrl_hdlr, &ov9282_ctrl_ops, V4L2_CID_HFLIP,
++			  0, 1, 1, 1);
++
+ 	/* Read only controls */
+ 	v4l2_ctrl_new_std(ctrl_hdlr, &ov9282_ctrl_ops, V4L2_CID_PIXEL_RATE,
+ 			  OV9282_PIXEL_RATE, OV9282_PIXEL_RATE, 1,
 -- 
 2.34.1
 
