@@ -2,26 +2,26 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4712CFA3741
-	for <linux-media@archiver.kernel.org>; Fri, 28 Oct 2022 02:38:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEA9BECAAA1
+	for <linux-media@archiver.kernel.org>; Fri, 28 Oct 2022 02:38:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236482AbiJ1CiH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Oct 2022 22:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57170 "EHLO
+        id S236535AbiJ1CiK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Oct 2022 22:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236362AbiJ1Ch5 (ORCPT
+        with ESMTP id S236415AbiJ1Ch7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Oct 2022 22:37:57 -0400
+        Thu, 27 Oct 2022 22:37:59 -0400
 Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336E23D58B;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBC745202;
         Thu, 27 Oct 2022 19:37:53 -0700 (PDT)
 Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 29S2D5KD054600;
-        Fri, 28 Oct 2022 10:13:05 +0800 (GMT-8)
+        by twspam01.aspeedtech.com with ESMTP id 29S2D5KH054600;
+        Fri, 28 Oct 2022 10:13:06 +0800 (GMT-8)
         (envelope-from jammy_huang@aspeedtech.com)
 Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
  (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 28 Oct
- 2022 10:35:58 +0800
+ 2022 10:35:59 +0800
 From:   Jammy Huang <jammy_huang@aspeedtech.com>
 To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
         <andrew@aj.id.au>, <hverkuil-cisco@xs4all.nl>,
@@ -32,32 +32,46 @@ To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
         <linux-media@vger.kernel.org>, <openbmc@lists.ozlabs.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v11 1/5] media: v4l: Add definition for the Aspeed JPEG format
-Date:   Fri, 28 Oct 2022 10:35:50 +0800
-Message-ID: <20221028023554.928-2-jammy_huang@aspeedtech.com>
+Subject: [PATCH v11 5/5] media: aspeed: Extend debug message
+Date:   Fri, 28 Oct 2022 10:35:54 +0800
+Message-ID: <20221028023554.928-6-jammy_huang@aspeedtech.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221028023554.928-1-jammy_huang@aspeedtech.com>
 References: <20221028023554.928-1-jammy_huang@aspeedtech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [192.168.2.115]
 X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
  (192.168.0.24)
 X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 29S2D5KD054600
+X-MAIL: twspam01.aspeedtech.com 29S2D5KH054600
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This introduces support for the Aspeed JPEG format, where the new frame
-can refer to previous frame to reduce the amount of compressed data.
-The concept is similar to I/P frame of video compression. It will
-compare the new frame with previous one to decide which macroblock's
-data is changed, and only the changed macroblocks will be compressed.
+updated as below:
 
-This Aspeed JPEG format is used by the video engine on Aspeed platforms,
-which is generally adapted for remote KVM.
+Capture:
+  Mode                : Direct fetch
+  VGA bpp mode        : 32
+  Signal              : lock
+  Width               : 1920
+  Height              : 1080
+  FRC                 : 0
+
+Compression:
+  Format              : JPEG
+  Subsampling         : 444
+  Quality             : 4
+
+Performance:
+  Frame#              : 4
+  Frame Duration(ms)  :
+    Now               : 22
+    Min               : 21
+    Max               : 22
+  FPS                 : 45
 
 Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
 ---
@@ -66,75 +80,91 @@ v11:
 v10:
   - no update
 v9:
-  - Rebase on new kernel
+  - no update
 v8:
-  - Add decoder information for aspeed-jpeg
+  - no update
 v7:
-  - Add more information for aspeed-jpeg
+  - update debugfs message. Aspeed-jpeg's compression parameters only shown
+    if it's aspeed jpeg now
 v6:
-  - Update description for new format, aspeed-jpeg, in Documentation.
+  - no update
 v5:
   - no update
 v4:
-  - new
+  - update debugfs log
+v3:
+  - no update
+v2:
+  - update commit message
 ---
- .../userspace-api/media/v4l/pixfmt-reserved.rst | 17 +++++++++++++++++
- drivers/media/v4l2-core/v4l2-ioctl.c            |  1 +
- include/uapi/linux/videodev2.h                  |  1 +
- 3 files changed, 19 insertions(+)
+ drivers/media/platform/aspeed/aspeed-video.c | 38 +++++++++++++++++++-
+ 1 file changed, 37 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst b/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
-index 0ff68cd8cf62..73cd99828010 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
-@@ -258,6 +258,23 @@ please make a proposal on the linux-media mailing list.
-         and it is used by various multimedia hardware blocks like GPU, display
-         controllers, ISP and video accelerators.
-         It contains four planes for progressive video.
-+    * .. _V4L2-PIX-FMT-AJPG:
-+
-+      - ``V4L2_PIX_FMT_AJPG``
-+      - 'AJPG'
-+      - ASPEED JPEG format used by the aspeed-video driver on Aspeed platforms,
-+        which is generally adapted for remote KVM.
-+        On each frame compression, I will compare the new frame with previous
-+        one to decide which macroblock's data is changed, and only the changed
-+        macroblocks will be compressed.
-+
-+        The implementation is based on AST2600 A3 datasheet, revision 0.9, which
-+        is not publicly available. Or you can reference Video stream data format
-+        – ASPEED mode compression of SDK_User_Guide which available on
-+        AspeedTech-BMC/openbmc/releases.
-+
-+        Decoder's implementation can be found here,
-+        `aspeed_codec <https://github.com/AspeedTech-BMC/aspeed_codec/>`__
- .. raw:: latex
+diff --git a/drivers/media/platform/aspeed/aspeed-video.c b/drivers/media/platform/aspeed/aspeed-video.c
+index 0b3605ebefc3..cf76aeee8cb6 100644
+--- a/drivers/media/platform/aspeed/aspeed-video.c
++++ b/drivers/media/platform/aspeed/aspeed-video.c
+@@ -1905,9 +1905,29 @@ static const struct vb2_ops aspeed_video_vb2_ops = {
+ static int aspeed_video_debugfs_show(struct seq_file *s, void *data)
+ {
+ 	struct aspeed_video *v = s->private;
++	u32 val08;
  
-     \normalsize
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index fddba75d9074..8cb4b976064e 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1497,6 +1497,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
- 		case V4L2_PIX_FMT_MT21C:	descr = "Mediatek Compressed Format"; break;
- 		case V4L2_PIX_FMT_QC08C:	descr = "QCOM Compressed 8-bit Format"; break;
- 		case V4L2_PIX_FMT_QC10C:	descr = "QCOM Compressed 10-bit Format"; break;
-+		case V4L2_PIX_FMT_AJPG:		descr = "Aspeed JPEG"; break;
- 		default:
- 			if (fmt->description[0])
- 				return;
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 86cae23cc446..870a7e5ef8ca 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -775,6 +775,7 @@ struct v4l2_pix_format {
- #define V4L2_PIX_FMT_HI240    v4l2_fourcc('H', 'I', '2', '4') /* BTTV 8-bit dithered RGB */
- #define V4L2_PIX_FMT_QC08C    v4l2_fourcc('Q', '0', '8', 'C') /* Qualcomm 8-bit compressed */
- #define V4L2_PIX_FMT_QC10C    v4l2_fourcc('Q', '1', '0', 'C') /* Qualcomm 10-bit compressed */
-+#define V4L2_PIX_FMT_AJPG     v4l2_fourcc('A', 'J', 'P', 'G') /* Aspeed JPEG */
+ 	seq_puts(s, "\n");
  
- /* 10bit raw packed, 32 bytes for every 25 pixels, last LSB 6 bits unused */
- #define V4L2_PIX_FMT_IPU3_SBGGR10	v4l2_fourcc('i', 'p', '3', 'b') /* IPU3 packed 10-bit BGGR bayer */
++	seq_puts(s, "Capture:\n");
++	val08 = aspeed_video_read(v, VE_CTRL);
++	if (FIELD_GET(VE_CTRL_DIRECT_FETCH, val08)) {
++		seq_printf(s, "  %-20s:\tDirect fetch\n", "Mode");
++		seq_printf(s, "  %-20s:\t%s\n", "VGA bpp mode",
++			   FIELD_GET(VE_CTRL_INT_DE, val08) ? "16" : "32");
++	} else {
++		seq_printf(s, "  %-20s:\tSync\n", "Mode");
++		seq_printf(s, "  %-20s:\t%s\n", "Video source",
++			   FIELD_GET(VE_CTRL_SOURCE, val08) ?
++			   "external" : "internal");
++		seq_printf(s, "  %-20s:\t%s\n", "DE source",
++			   FIELD_GET(VE_CTRL_INT_DE, val08) ?
++			   "internal" : "external");
++		seq_printf(s, "  %-20s:\t%s\n", "Cursor overlay",
++			   FIELD_GET(VE_CTRL_AUTO_OR_CURSOR, val08) ?
++			   "Without" : "With");
++	}
++
+ 	seq_printf(s, "  %-20s:\t%s\n", "Signal",
+ 		   v->v4l2_input_status ? "Unlock" : "Lock");
+ 	seq_printf(s, "  %-20s:\t%d\n", "Width", v->pix_fmt.width);
+@@ -1916,13 +1936,29 @@ static int aspeed_video_debugfs_show(struct seq_file *s, void *data)
+ 
+ 	seq_puts(s, "\n");
+ 
++	seq_puts(s, "Compression:\n");
++	seq_printf(s, "  %-20s:\t%s\n", "Format", format_str[v->format]);
++	seq_printf(s, "  %-20s:\t%s\n", "Subsampling",
++		   v->yuv420 ? "420" : "444");
++	seq_printf(s, "  %-20s:\t%d\n", "Quality", v->jpeg_quality);
++	if (v->format == VIDEO_FMT_ASPEED) {
++		seq_printf(s, "  %-20s:\t%s\n", "HQ Mode",
++			   v->hq_mode ? "on" : "off");
++		seq_printf(s, "  %-20s:\t%d\n", "HQ Quality",
++			   v->hq_mode ? v->jpeg_hq_quality : 0);
++	}
++
++	seq_puts(s, "\n");
++
+ 	seq_puts(s, "Performance:\n");
+ 	seq_printf(s, "  %-20s:\t%d\n", "Frame#", v->sequence);
+ 	seq_printf(s, "  %-20s:\n", "Frame Duration(ms)");
+ 	seq_printf(s, "    %-18s:\t%d\n", "Now", v->perf.duration);
+ 	seq_printf(s, "    %-18s:\t%d\n", "Min", v->perf.duration_min);
+ 	seq_printf(s, "    %-18s:\t%d\n", "Max", v->perf.duration_max);
+-	seq_printf(s, "  %-20s:\t%d\n", "FPS", 1000 / (v->perf.totaltime / v->sequence));
++	seq_printf(s, "  %-20s:\t%d\n", "FPS",
++		   (v->perf.totaltime && v->sequence) ?
++		   1000/(v->perf.totaltime/v->sequence) : 0);
+ 
+ 	return 0;
+ }
 -- 
 2.25.1
 
