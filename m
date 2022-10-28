@@ -2,61 +2,61 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C115BFA3743
-	for <linux-media@archiver.kernel.org>; Fri, 28 Oct 2022 16:15:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16701FA3742
+	for <linux-media@archiver.kernel.org>; Fri, 28 Oct 2022 16:15:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbiJ1QPX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Oct 2022 12:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58622 "EHLO
+        id S230361AbiJ1QPY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Oct 2022 12:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230227AbiJ1QOg (ORCPT
+        with ESMTP id S230250AbiJ1QOx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:14:36 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A719C6562
-        for <linux-media@vger.kernel.org>; Fri, 28 Oct 2022 09:12:44 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id v130-20020a1cac88000000b003bcde03bd44so6881075wme.5
-        for <linux-media@vger.kernel.org>; Fri, 28 Oct 2022 09:12:44 -0700 (PDT)
+        Fri, 28 Oct 2022 12:14:53 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095C815729
+        for <linux-media@vger.kernel.org>; Fri, 28 Oct 2022 09:12:56 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id jb18so3490044wmb.4
+        for <linux-media@vger.kernel.org>; Fri, 28 Oct 2022 09:12:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=raspberrypi.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kYMzRFBY8rMeXFOhCy9Ay0b//t6qEd1yKgrgKU9jdLY=;
-        b=B0/jGMBzl+XqL3LfUglpUSpcwVgLPkdZJSW4A1KzEqq9eJw+PCWtbWAZ2OBQXOZwhS
-         UT0goyHsOnn6RAvFbAZ/7zLZnfiGkJ6AT86RhA9g5FgTctT4f4bKNgM7pDmnp6TL+Hz9
-         iuukXTaJQP0AhG/agf5Dbjr2iEPDnlWvtPuUfh7aUe3TOf2C1HxtFYy3kDNf76RY9JxH
-         LqJanWtaF1UI/SVM8syi6ceOSZA2W2HLrt3zby11FK3nwjsDMAx23BqrI4Aul7F27vXG
-         wO0a6KqOzN9q5L+TCUkR/q/iQgbLTUuczg2qKcYM4lAMRDEFj1zpN/D2FCxpoClcH0Hy
-         Nnkg==
+        bh=5FJ9mleB6XkLTEv65iMsussIL/SXB9Uukk3TmGWfOuw=;
+        b=LgWW38CHE6ju++7MHmXUCWerT5MQMdYh4+G4A1eDB1qx21fG/+0kOTcnsynF8YKMf7
+         IJ1LUw8y2eJ/KOeP21fgP4PNsdcvCI1Ag0ltjAh5oyyrmP1cjRuyarLfHirpEUeh/P/w
+         E++iRNKvBNaLJlLzFjQn5xOvT9Ks7wlrqn59YVYOzXy6VjTK/OKpex78t/s61jXKc8Rf
+         GXHrB/hU3u8E1rkeZWZWV4Zt1/HF/Ls3s2cL72l0Jvx0127FW4wLUQptTBJWWQTGqdny
+         GaGa9K54ey0ZdsxXlgUADFNm98VLGuXHSXhPT5jDV+LZlNJANWP8pvpBwFfQgCxLKxXy
+         snew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kYMzRFBY8rMeXFOhCy9Ay0b//t6qEd1yKgrgKU9jdLY=;
-        b=uO4G0X3VL56dPMYUoYafNBC1NTYVJtKRwfwUYjd6+/iuRtmBuG3u9ruxwOxpci2rEo
-         uv2CmRkpxUg1sAITDjX0Cr39MBXBUEJebqNVUPGyEIAwx6kEGMxmCo6ZWrgEXu9vPdwd
-         vZBFgLGFV3/X7jgRpTsPEVgds3AbKS2AvFsCqEBLxFsWigw9jEZzRZW6u6cCkVkY+9pr
-         5In/le5X0WDqK/oHfyECSvuylE3/w7ur9ncw2JaEWikha7/GpkiwKU9M+y9Ps3iLbTOJ
-         3uF1GIzO/7NWmwsgVPW6Rmb28jpc07zkB0wa0MGUoi5401s7GO6rPHy6xhSeYKIxl5or
-         1oNw==
-X-Gm-Message-State: ACrzQf1NDEJrvtxY8piRu0Zo4+KhS52EjnJ2IwKqxkEeR4tQJnJynNZF
-        8lpOJ6Iz6cyiq2zwY7aZYd1P1g==
-X-Google-Smtp-Source: AMsMyM7oHH6Jtios1Hn4idfmzyiuJSx9MAaQV9m6+vO1v6kK328onl/K0mBcfAexOHff907AU72KMQ==
-X-Received: by 2002:a05:600c:1d87:b0:3cf:543a:4d72 with SMTP id p7-20020a05600c1d8700b003cf543a4d72mr5850130wms.126.1666973563231;
-        Fri, 28 Oct 2022 09:12:43 -0700 (PDT)
+        bh=5FJ9mleB6XkLTEv65iMsussIL/SXB9Uukk3TmGWfOuw=;
+        b=uLkVEPUTRERqhsJUfBKCyHjZfjiNxzYqSkoTE63UYbM938atGbdTe0oqSfST5mc4ks
+         z2Cy0DTiaJpnsb4x+ePG0BFLV2dhjpGsKrBHICI3hN1hCK4l3rYeoesVqC71fm/k0C/X
+         4katwHUTUB5PwBiIm5Y+SCGkKvP9pMM/enVtcYzedj1EQuJlu4ih1HeB7/iczuEAc646
+         z2e0MrN3Fz4pzlX3gAxN7DrJZBH7H79SbLMPJTq24WjOoFV0z1AjlaD3krCUE4Qpy4fk
+         qqEuuiQPsnxo18YnhZwjr1Ysij/XMgJcJXTpjhjFdKV+00xHkrsK+QRoojvQ0pKz3odI
+         N0Hw==
+X-Gm-Message-State: ACrzQf1TkcFi72VNpcE2XW5XOj39AeGVInYAXTDM6LczYchBXBlKFXpp
+        1aNRNmM9ooYNNj9bHO/+9RqPNQ==
+X-Google-Smtp-Source: AMsMyM6z7rWNvJOzEvrkhbfu/ZGNo55xFYVEZ/j+bkQRsD3HaxV7HSutTelB3bL8hhBSgkCbl8AyaQ==
+X-Received: by 2002:a05:600c:34cc:b0:3c6:fb65:24cc with SMTP id d12-20020a05600c34cc00b003c6fb6524ccmr3523wmq.1.1666973574631;
+        Fri, 28 Oct 2022 09:12:54 -0700 (PDT)
 Received: from dave-Ubuntu2204.pitowers.org ([93.93.133.154])
-        by smtp.googlemail.com with ESMTPSA id bh17-20020a05600c3d1100b003cf47fdead5sm4731928wmb.30.2022.10.28.09.12.42
+        by smtp.googlemail.com with ESMTPSA id bh17-20020a05600c3d1100b003cf47fdead5sm4731928wmb.30.2022.10.28.09.12.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 09:12:42 -0700 (PDT)
+        Fri, 28 Oct 2022 09:12:54 -0700 (PDT)
 From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
 To:     paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
         linux-media@vger.kernel.org, sakari.ailus@iki.fi, jacopo@jmondi.org
 Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH v2 02/16] media: i2c: ov9282: Split registers into common and mode specific
-Date:   Fri, 28 Oct 2022 17:08:48 +0100
-Message-Id: <20221028160902.2696973-3-dave.stevenson@raspberrypi.com>
+Subject: [PATCH v2 12/16] media: i2c: ov9282: Make V4L2_CID_HBLANK r/w
+Date:   Fri, 28 Oct 2022 17:08:58 +0100
+Message-Id: <20221028160902.2696973-13-dave.stevenson@raspberrypi.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221028160902.2696973-1-dave.stevenson@raspberrypi.com>
 References: <20221028160902.2696973-1-dave.stevenson@raspberrypi.com>
@@ -66,139 +66,130 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Currently only one mode is supported, so all registers were
-dropped in one list.
-In preparation for adding more modes, split out the common registers
-from those which configure the mode.
+There's no reason why HBLANK has to be read-only as it
+only changes the TIMING_HTS register in the sensor.
+
+Remove the READ_ONLY flag, and add the relevant handling
+for it.
+
+The minimum value also varies based on whether continuous clock
+mode is being used or not, so allow hblank_min to depend on
+that.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/i2c/ov9282.c | 77 +++++++++++++++++++++++---------------
- 1 file changed, 47 insertions(+), 30 deletions(-)
+ drivers/media/i2c/ov9282.c | 32 +++++++++++++++++++++-----------
+ 1 file changed, 21 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/media/i2c/ov9282.c b/drivers/media/i2c/ov9282.c
-index 0c604050b4e5..6999ce869a1b 100644
+index cfb6e72d8931..2313d5e717f3 100644
 --- a/drivers/media/i2c/ov9282.c
 +++ b/drivers/media/i2c/ov9282.c
-@@ -147,8 +147,8 @@ static const s64 link_freq[] = {
- 	OV9282_LINK_FREQ,
- };
+@@ -21,6 +21,9 @@
+ #define OV9282_MODE_STANDBY	0x00
+ #define OV9282_MODE_STREAMING	0x01
  
--/* Sensor mode registers */
--static const struct ov9282_reg mode_1280x720_regs[] = {
-+/* Common registers */
-+static const struct ov9282_reg common_regs[] = {
- 	{0x0302, 0x32},
- 	{0x030d, 0x50},
- 	{0x030e, 0x02},
-@@ -179,13 +179,49 @@ static const struct ov9282_reg mode_1280x720_regs[] = {
- 	{0x372d, 0x22},
- 	{0x3731, 0x80},
- 	{0x3732, 0x30},
--	{0x3778, 0x00},
- 	{0x377d, 0x22},
- 	{0x3788, 0x02},
- 	{0x3789, 0xa4},
- 	{0x378a, 0x00},
- 	{0x378b, 0x4a},
- 	{0x3799, 0x20},
-+	{0x3881, 0x42},
-+	{0x38a8, 0x02},
-+	{0x38a9, 0x80},
-+	{0x38b1, 0x00},
-+	{0x38c4, 0x00},
-+	{0x38c5, 0xc0},
-+	{0x38c6, 0x04},
-+	{0x38c7, 0x80},
-+	{0x3920, 0xff},
-+	{0x4010, 0x40},
-+	{0x4043, 0x40},
-+	{0x4307, 0x30},
-+	{0x4317, 0x00},
-+	{0x4501, 0x00},
-+	{0x450a, 0x08},
-+	{0x4601, 0x04},
-+	{0x470f, 0x00},
-+	{0x4f07, 0x00},
-+	{0x4800, 0x20},
-+	{0x5000, 0x9f},
-+	{0x5001, 0x00},
-+	{0x5e00, 0x00},
-+	{0x5d00, 0x07},
-+	{0x5d01, 0x00},
-+	{0x0101, 0x01},
-+	{0x1000, 0x03},
-+	{0x5a08, 0x84},
-+};
++#define OV9282_REG_TIMING_HTS	0x380c
++#define OV9282_TIMING_HTS_MAX	0x7fff
 +
-+struct ov9282_reg_list common_regs_list = {
-+	.num_of_regs = ARRAY_SIZE(common_regs),
-+	.regs = common_regs,
-+};
-+
-+/* Sensor mode registers */
-+static const struct ov9282_reg mode_1280x720_regs[] = {
-+	{0x3778, 0x00},
- 	{0x3800, 0x00},
- 	{0x3801, 0x00},
- 	{0x3802, 0x00},
-@@ -208,40 +244,13 @@ static const struct ov9282_reg mode_1280x720_regs[] = {
- 	{0x3815, 0x11},
- 	{0x3820, 0x3c},
- 	{0x3821, 0x84},
--	{0x3881, 0x42},
--	{0x38a8, 0x02},
--	{0x38a9, 0x80},
--	{0x38b1, 0x00},
--	{0x38c4, 0x00},
--	{0x38c5, 0xc0},
--	{0x38c6, 0x04},
--	{0x38c7, 0x80},
--	{0x3920, 0xff},
- 	{0x4003, 0x40},
- 	{0x4008, 0x02},
- 	{0x4009, 0x05},
- 	{0x400c, 0x00},
- 	{0x400d, 0x03},
--	{0x4010, 0x40},
--	{0x4043, 0x40},
--	{0x4307, 0x30},
--	{0x4317, 0x00},
--	{0x4501, 0x00},
- 	{0x4507, 0x00},
- 	{0x4509, 0x80},
--	{0x450a, 0x08},
--	{0x4601, 0x04},
--	{0x470f, 0x00},
--	{0x4f07, 0x00},
--	{0x4800, 0x20},
--	{0x5000, 0x9f},
--	{0x5001, 0x00},
--	{0x5e00, 0x00},
--	{0x5d00, 0x07},
--	{0x5d01, 0x00},
--	{0x0101, 0x01},
--	{0x1000, 0x03},
--	{0x5a08, 0x84},
- };
+ /* Lines per frame */
+ #define OV9282_REG_LPFR		0x380e
  
- /* Supported sensor mode configurations */
-@@ -653,6 +662,14 @@ static int ov9282_start_streaming(struct ov9282 *ov9282)
- 	const struct ov9282_reg_list *reg_list;
+@@ -90,7 +93,8 @@ struct ov9282_reg_list {
+  * struct ov9282_mode - ov9282 sensor mode structure
+  * @width: Frame width
+  * @height: Frame height
+- * @hblank: Horizontal blanking in lines
++ * @hblank_min: Minimum horizontal blanking in lines for non-continuous[0] and
++ *		continuous[1] clock modes
+  * @vblank: Vertical blanking in lines
+  * @vblank_min: Minimum vertical blanking in lines
+  * @vblank_max: Maximum vertical blanking in lines
+@@ -100,7 +104,7 @@ struct ov9282_reg_list {
+ struct ov9282_mode {
+ 	u32 width;
+ 	u32 height;
+-	u32 hblank;
++	u32 hblank_min[2];
+ 	u32 vblank;
+ 	u32 vblank_min;
+ 	u32 vblank_max;
+@@ -249,8 +253,6 @@ static const struct ov9282_reg mode_1280x720_regs[] = {
+ 	{0x3809, 0x00},
+ 	{0x380a, 0x02},
+ 	{0x380b, 0xd0},
+-	{0x380c, 0x02},
+-	{0x380d, 0xfd},
+ 	{0x3810, 0x00},
+ 	{0x3811, 0x08},
+ 	{0x3812, 0x00},
+@@ -273,7 +275,7 @@ static const struct ov9282_mode supported_modes[] = {
+ 	[MODE_1280_720] = {
+ 		.width = 1280,
+ 		.height = 720,
+-		.hblank = 250,
++		.hblank_min = { 250, 176 },
+ 		.vblank = 1022,
+ 		.vblank_min = 41,
+ 		.vblank_max = 51540,
+@@ -397,13 +399,17 @@ static int ov9282_write_regs(struct ov9282 *ov9282,
+ static int ov9282_update_controls(struct ov9282 *ov9282,
+ 				  const struct ov9282_mode *mode)
+ {
++	u32 hblank_min;
  	int ret;
  
-+	/* Write common registers */
-+	ret = ov9282_write_regs(ov9282, common_regs_list.regs,
-+				common_regs_list.num_of_regs);
-+	if (ret) {
-+		dev_err(ov9282->dev, "fail to write common registers");
-+		return ret;
-+	}
-+
- 	/* Write sensor mode registers */
- 	reg_list = &ov9282->cur_mode->reg_list;
- 	ret = ov9282_write_regs(ov9282, reg_list->regs, reg_list->num_of_regs);
+ 	ret = __v4l2_ctrl_s_ctrl(ov9282->link_freq_ctrl, mode->link_freq_idx);
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = __v4l2_ctrl_s_ctrl(ov9282->hblank_ctrl, mode->hblank);
++	hblank_min = mode->hblank_min[ov9282->noncontinuous_clock ? 0 : 1];
++	ret =  __v4l2_ctrl_modify_range(ov9282->hblank_ctrl, hblank_min,
++					OV9282_TIMING_HTS_MAX - mode->width, 1,
++					hblank_min);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -538,6 +544,10 @@ static int ov9282_set_ctrl(struct v4l2_ctrl *ctrl)
+ 	case V4L2_CID_VFLIP:
+ 		ret = ov9282_set_ctrl_vflip(ov9282, ctrl->val);
+ 		break;
++	case V4L2_CID_HBLANK:
++		ret = ov9282_write_reg(ov9282, OV9282_REG_TIMING_HTS, 2,
++				       (ctrl->val + ov9282->cur_mode->width) >> 1);
++		break;
+ 	default:
+ 		dev_err(ov9282->dev, "Invalid control %d", ctrl->id);
+ 		ret = -EINVAL;
+@@ -1004,6 +1014,7 @@ static int ov9282_init_controls(struct ov9282 *ov9282)
+ 	struct v4l2_ctrl_handler *ctrl_hdlr = &ov9282->ctrl_handler;
+ 	const struct ov9282_mode *mode = ov9282->cur_mode;
+ 	struct v4l2_fwnode_device_properties props;
++	u32 hblank_min;
+ 	u32 lpfr;
+ 	int ret;
+ 
+@@ -1062,14 +1073,13 @@ static int ov9282_init_controls(struct ov9282 *ov9282)
+ 	if (ov9282->link_freq_ctrl)
+ 		ov9282->link_freq_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ 
++	hblank_min = mode->hblank_min[ov9282->noncontinuous_clock ? 0 : 1];
+ 	ov9282->hblank_ctrl = v4l2_ctrl_new_std(ctrl_hdlr,
+ 						&ov9282_ctrl_ops,
+ 						V4L2_CID_HBLANK,
+-						OV9282_REG_MIN,
+-						OV9282_REG_MAX,
+-						1, mode->hblank);
+-	if (ov9282->hblank_ctrl)
+-		ov9282->hblank_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
++						hblank_min,
++						OV9282_TIMING_HTS_MAX - mode->width,
++						1, hblank_min);
+ 
+ 	ret = v4l2_fwnode_device_parse(ov9282->dev, &props);
+ 	if (!ret) {
 -- 
 2.34.1
 
