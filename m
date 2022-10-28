@@ -2,61 +2,61 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AAF09FA3743
-	for <linux-media@archiver.kernel.org>; Fri, 28 Oct 2022 16:15:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D78D5FA3742
+	for <linux-media@archiver.kernel.org>; Fri, 28 Oct 2022 16:15:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbiJ1QPJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Oct 2022 12:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59334 "EHLO
+        id S230477AbiJ1QPK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Oct 2022 12:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbiJ1QOf (ORCPT
+        with ESMTP id S230229AbiJ1QOg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:14:35 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F3D22D5AE
-        for <linux-media@vger.kernel.org>; Fri, 28 Oct 2022 09:12:40 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id v1so7189724wrt.11
-        for <linux-media@vger.kernel.org>; Fri, 28 Oct 2022 09:12:40 -0700 (PDT)
+        Fri, 28 Oct 2022 12:14:36 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0230DFB6
+        for <linux-media@vger.kernel.org>; Fri, 28 Oct 2022 09:12:45 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id az22-20020a05600c601600b003c6b72797fdso4150446wmb.5
+        for <linux-media@vger.kernel.org>; Fri, 28 Oct 2022 09:12:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=raspberrypi.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JeWWFLsBMicTh8QbfZGIQ4Lyp/QBEmA1qJ8tNk4fA4w=;
-        b=l1w8Xz3nH73G79xP1RB7Zipo8S2iWY2GlxvqDwHuJdKDda5K7YljbB8xCMZYL6/vA8
-         zBoPUiqjXcqeDYByGsHJ3xqtBYfyRXpx7FW8b1jsthqnJtU1vhYRbGi3yltgeUCkENVQ
-         SKoeKaOYOGvigLWaU8eNs+vCjy1SPkbMKPk9vUa7CbVx8p4Xs+XjOVJVdiXsJOXnZgx0
-         agcUoqP0kVfSz6SHIW7ktXcKpC//7eCdwgBDCYLU8Buh+VHdFr40zEXtqHMBHXSv0GyA
-         vNdCBaNsTp7N9JODGAKWVcLCzAp2S/QiyXQgAJD5qYuApTzRcUvnIRpvzQAROX3m3aF7
-         ptow==
+        bh=/J1qiec3Yxt5b0ju8tgueYhZ2XcpMHPMQXJUPdcOjXQ=;
+        b=cjunyKNmcjzxozkCvnw59YyFJPhKvjnbaJGWVxaRMnufrd9It2H84kEzKtIOYsbnDT
+         iK8KBr0ltQs8+BS+8gPb5Gy51EUQbZEtQCQmunpvsnqrpadP5KEz8fVa217PoSfwA+6G
+         sht30UOQEACMtRjMtaETU8fn9boTKYu/3GYygChlqiAEgEUVs84PJ3vBB/3QmhJpvlbm
+         AJGq5Yzls4/VoBUl5CSZ+qaZE9vPh/CGWEkbnamOHTHJZnVqxyXiRRQwKkvMQvun4HTM
+         oBgleKQiYbDBlWcDBVO3aQG/zTh3ZoKOFrX/iTH2GyBeiGm5xdPNv7SjrvQtb2W/q37g
+         ZM1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JeWWFLsBMicTh8QbfZGIQ4Lyp/QBEmA1qJ8tNk4fA4w=;
-        b=gxBwJ8putRce4PWZyFyy4wrig6EN4tGejfGQttldV09HCwNlCeQUbQ4HKMDgxr/1H2
-         CJu+ba7IfylSkQ6pOVWl4EGz+O4Osq3lHedPvG7sbjhGheIWAAGnGWvq4rOvpEnicclo
-         79i4rYNIATuqWhhG1JJyxjpVqyAsHUScmjMW025Se6s3SJggareDQi7v1yH5PJTWH49J
-         eEZa2vzRS7xlUpSQYCw/ei9zVxjoL3Ea9++9EoFZjS8qCzSXmdauYuPSPS2CVd/eVY/f
-         4tFkMsaSt4qckWxlUbthOaYEdSc9yutf1mpV2L06x6i1B5JZooTulM1VkbNbCJyH039u
-         O6IA==
-X-Gm-Message-State: ACrzQf1aBowcosjmJWH7opn6E4pD7xfg/suEevtp7bVmCDNqbJNNj8Wl
-        eKNBrozsoCp3VBhAewTE8JKmIw==
-X-Google-Smtp-Source: AMsMyM5Y1j6d+FnPqZtaM+34P8eUYSvh6Gns/eWEqhPw6Ks557qCsOyjI7SKmtIzgcw8/J3nX80f2w==
-X-Received: by 2002:a05:6000:1b90:b0:236:9701:7ce5 with SMTP id r16-20020a0560001b9000b0023697017ce5mr52229wru.631.1666973558926;
-        Fri, 28 Oct 2022 09:12:38 -0700 (PDT)
+        bh=/J1qiec3Yxt5b0ju8tgueYhZ2XcpMHPMQXJUPdcOjXQ=;
+        b=y3Xa/a3vt0pSRkYpsYRlBnM8GB24JZ1UjC2Jfvk2ZXbUy6GKF1+yznKvO5nWexmcKm
+         aTvF66iGbJQzUK6ZvjkgQhqGMKRPZOQi87cZpeEcA9sfuDxdyIdRfuwBNsAv81s2K7Qj
+         ANypkXs3h1WVDWo9hZUYltBVlx51HiyCYlbVxycqtPMH09mMyakY73ZBWEDQAwmVNLGO
+         yi6ogNZ6MX7w3+TrorrEyAhi+oZEWMNGdcrIjD0jjivnugtlpCj/GRGHSeCaE/MUTQqq
+         CLD4p/4M3q4zLcpQSxRyHIpeFCbbsbfq2zsbo06jTGzFRc0lNMPZGNrgUtQL4Wj3saBh
+         JqCg==
+X-Gm-Message-State: ACrzQf2YRcGT2qIMcRRRaOTO0OxuANoSAYG+Q6byOy8fKtHP2Rx7v8L2
+        vnv7jWIeCH3N8jPiIWSIe5LYGI9/rO4q9Q==
+X-Google-Smtp-Source: AMsMyM6Fpu+WC51VP/erVsnag8C6QwoF2OqTrJujzihgWjwCtvGd6HJaQ9Ozb5ZnHIExAxnSOZ8cyw==
+X-Received: by 2002:a05:600c:34c1:b0:3cf:3921:ef22 with SMTP id d1-20020a05600c34c100b003cf3921ef22mr3244wmq.204.1666973564540;
+        Fri, 28 Oct 2022 09:12:44 -0700 (PDT)
 Received: from dave-Ubuntu2204.pitowers.org ([93.93.133.154])
-        by smtp.googlemail.com with ESMTPSA id bh17-20020a05600c3d1100b003cf47fdead5sm4731928wmb.30.2022.10.28.09.12.38
+        by smtp.googlemail.com with ESMTPSA id bh17-20020a05600c3d1100b003cf47fdead5sm4731928wmb.30.2022.10.28.09.12.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 09:12:38 -0700 (PDT)
+        Fri, 28 Oct 2022 09:12:44 -0700 (PDT)
 From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
 To:     paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
         linux-media@vger.kernel.org, sakari.ailus@iki.fi, jacopo@jmondi.org
 Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH v2 01/16] media: i2c: ov9282: Remove duplication of registers
-Date:   Fri, 28 Oct 2022 17:08:47 +0100
-Message-Id: <20221028160902.2696973-2-dave.stevenson@raspberrypi.com>
+Subject: [PATCH v2 03/16] media: i2c: ov9282: Remove format code from the mode
+Date:   Fri, 28 Oct 2022 17:08:49 +0100
+Message-Id: <20221028160902.2696973-4-dave.stevenson@raspberrypi.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221028160902.2696973-1-dave.stevenson@raspberrypi.com>
 References: <20221028160902.2696973-1-dave.stevenson@raspberrypi.com>
@@ -66,48 +66,71 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-TIMING_VTS (registers 0x380e/f), EXPOSURE (registers
-0x3500/1/2), and GAIN (0x3509) are all set from
-ov9282_update_exp_gain as part of the control handler,
-therefore they do not need to be in the main list of
-registers.
-
-Remove them.
+The format code is independent of mode, and each mode could
+support both Y10 and Y8, so disassociate the code from the
+mode.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/i2c/ov9282.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/media/i2c/ov9282.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/media/i2c/ov9282.c b/drivers/media/i2c/ov9282.c
-index df144a2f6eda..0c604050b4e5 100644
+index 6999ce869a1b..ead3a4f22ef8 100644
 --- a/drivers/media/i2c/ov9282.c
 +++ b/drivers/media/i2c/ov9282.c
-@@ -163,14 +163,10 @@ static const struct ov9282_reg mode_1280x720_regs[] = {
- 	{0x3030, 0x10},
- 	{0x3039, 0x32},
- 	{0x303a, 0x00},
--	{0x3500, 0x00},
--	{0x3501, 0x5f},
--	{0x3502, 0x1e},
- 	{0x3503, 0x08},
- 	{0x3505, 0x8c},
- 	{0x3507, 0x03},
- 	{0x3508, 0x00},
--	{0x3509, 0x10},
- 	{0x3610, 0x80},
- 	{0x3611, 0xa0},
- 	{0x3620, 0x6e},
-@@ -204,8 +200,6 @@ static const struct ov9282_reg mode_1280x720_regs[] = {
- 	{0x380b, 0xd0},
- 	{0x380c, 0x05},
- 	{0x380d, 0xfa},
--	{0x380e, 0x06},
--	{0x380f, 0xce},
- 	{0x3810, 0x00},
- 	{0x3811, 0x08},
- 	{0x3812, 0x00},
+@@ -79,7 +79,6 @@ struct ov9282_reg_list {
+  * struct ov9282_mode - ov9282 sensor mode structure
+  * @width: Frame width
+  * @height: Frame height
+- * @code: Format code
+  * @hblank: Horizontal blanking in lines
+  * @vblank: Vertical blanking in lines
+  * @vblank_min: Minimum vertical blanking in lines
+@@ -91,7 +90,6 @@ struct ov9282_reg_list {
+ struct ov9282_mode {
+ 	u32 width;
+ 	u32 height;
+-	u32 code;
+ 	u32 hblank;
+ 	u32 vblank;
+ 	u32 vblank_min;
+@@ -263,7 +261,6 @@ static const struct ov9282_mode supported_mode = {
+ 	.vblank_max = 51540,
+ 	.pclk = 160000000,
+ 	.link_freq_idx = 0,
+-	.code = MEDIA_BUS_FMT_Y10_1X10,
+ 	.reg_list = {
+ 		.num_of_regs = ARRAY_SIZE(mode_1280x720_regs),
+ 		.regs = mode_1280x720_regs,
+@@ -513,7 +510,7 @@ static int ov9282_enum_mbus_code(struct v4l2_subdev *sd,
+ 	if (code->index > 0)
+ 		return -EINVAL;
+ 
+-	code->code = supported_mode.code;
++	code->code = MEDIA_BUS_FMT_Y10_1X10;
+ 
+ 	return 0;
+ }
+@@ -533,7 +530,7 @@ static int ov9282_enum_frame_size(struct v4l2_subdev *sd,
+ 	if (fsize->index > 0)
+ 		return -EINVAL;
+ 
+-	if (fsize->code != supported_mode.code)
++	if (fsize->code != MEDIA_BUS_FMT_Y10_1X10)
+ 		return -EINVAL;
+ 
+ 	fsize->min_width = supported_mode.width;
+@@ -557,7 +554,7 @@ static void ov9282_fill_pad_format(struct ov9282 *ov9282,
+ {
+ 	fmt->format.width = mode->width;
+ 	fmt->format.height = mode->height;
+-	fmt->format.code = mode->code;
++	fmt->format.code = MEDIA_BUS_FMT_Y10_1X10;
+ 	fmt->format.field = V4L2_FIELD_NONE;
+ 	fmt->format.colorspace = V4L2_COLORSPACE_RAW;
+ 	fmt->format.ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
 -- 
 2.34.1
 
