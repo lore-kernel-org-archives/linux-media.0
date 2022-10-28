@@ -2,61 +2,61 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1C86FA3742
-	for <linux-media@archiver.kernel.org>; Fri, 28 Oct 2022 16:15:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D43FC38A02
+	for <linux-media@archiver.kernel.org>; Fri, 28 Oct 2022 16:15:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230503AbiJ1QPT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Oct 2022 12:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
+        id S230504AbiJ1QPV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Oct 2022 12:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbiJ1QOi (ORCPT
+        with ESMTP id S230245AbiJ1QOh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:14:38 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D351F810C
-        for <linux-media@vger.kernel.org>; Fri, 28 Oct 2022 09:12:52 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id bp11so7191113wrb.9
-        for <linux-media@vger.kernel.org>; Fri, 28 Oct 2022 09:12:52 -0700 (PDT)
+        Fri, 28 Oct 2022 12:14:37 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23129DF68
+        for <linux-media@vger.kernel.org>; Fri, 28 Oct 2022 09:12:49 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id y10so3518590wma.0
+        for <linux-media@vger.kernel.org>; Fri, 28 Oct 2022 09:12:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=raspberrypi.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WaKoQyrZ2yCkJsSr+WI5a4CPSDINEZrCRWoW1/EHfUg=;
-        b=K4BqX5ToEFU9Qt36Q47lZhVJH7zNHdzFIZyLaTttzpjW9zKD18Cn3ejn74VNlKkQYk
-         lGdYLrg/QV8vVPgmxYGcyexBMS4hTxWCliynb11WYXrqrsBKZheN7/2la8Z0IMB4+QkQ
-         DNoiH71Jfw3jaP0wm23dqVfrnBbmzwrVcNNntOXaJEtEdPYSB+ODjYHsT6u/+H1UCg44
-         2AYImkgLPZKxXtqGr8ZrYRVUIyhV2+d+3WlqS+j2vAsMmZ8olxPEyUviJ0Xwp8tnyMFf
-         qNt/nS6G96eFT2RW8pxTDrFk4CBFflny5ne94oFt3OtVMEPNHXz+Fo5rVAmW9HX00z8g
-         TsZA==
+        bh=/je66IiGVgC9A+utpVJnpRaQP1n7ybCAbgw5Pm2x/Wc=;
+        b=lquWS5WOwiyIohW8+EcJ46EZb+7Bg2wlVGPOFnAAQcQV5IE6cWm/IeJpQW1DZeEql3
+         QqZAhY22wiV7L/7t0jXfWQH84Thi8A+LYVwLbcrgc0uC7hziFFEjXy7S7ORiaRsqbkoj
+         4T5UiLfLGL6laTXfrSh2YVbnIHkub8bLr3Q7GVx1FFoVkKBCx/fTWox++4Eg0zMdbUiS
+         vKcXmlbGL+Dy+e9rR1VzLzqTSny17m5+aurjPDbHKrnxYrCpOhUesWqXmZI6nOq9wBKv
+         z8oVxU3MFjfFHcKnc6C2/RE13KPlaP3a+mMv2OjhImSlkTOzP1VzSPwLQyvVny82QVHc
+         uXsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WaKoQyrZ2yCkJsSr+WI5a4CPSDINEZrCRWoW1/EHfUg=;
-        b=GQUSAS4bi6CYbzrgrCkqA+mWmen5QuwmXjwFZRFFKUFCermfKG2GUjrmSaYq6zsy0W
-         uSNmIBd8VwFm/sltFjqaROCO3sUvn5AFovB+9Z/1o244o1W3RXm7zdexCUqeZsYA7Nso
-         XyjwdNEkzkcul5+mlkR5TqejE3VKYMM5J0zW8o6a4txaafnequTvE7vqPYUM44dQwUFh
-         0IVjP+IJY+5l12q5vt/g7EVBJqJWd8GUSGANA/2FJ4jkFH9xgdDHGCH1Np66kq99wDAh
-         AL3aOt7CTSdz1OrEUTWSdajaxqzGM+QOQLhFuHe9Ef8nnXDotJC8u+97zrJMLbyCHTy2
-         pwpg==
-X-Gm-Message-State: ACrzQf3i26JXdlYPErA49h/Je7hgJv5yeuxMAhpFf4nxxz9rSjewQIPf
-        9psGwaMgEt8WFYb8XAFoAzINJ4qwdplukA==
-X-Google-Smtp-Source: AMsMyM7S6+M0qXeyrc/LAHB/vuNo3NAeiqCJg1WqxzWKcsSsh5bFDAh03U5WaZsNgqJZFw5TzeXh2g==
-X-Received: by 2002:adf:fe85:0:b0:236:7cde:a95d with SMTP id l5-20020adffe85000000b002367cdea95dmr57182wrr.531.1666973571503;
-        Fri, 28 Oct 2022 09:12:51 -0700 (PDT)
+        bh=/je66IiGVgC9A+utpVJnpRaQP1n7ybCAbgw5Pm2x/Wc=;
+        b=tHqg72K9Q/A4RLc/MZH/+jXxjw7pMQov2kUhLOHYigtr0uLXc+rLsV/Ud8KzBfBb2U
+         kHyYe7fNn+1/PBzayTOO9xJU1HikyNZ2iqI2SYRIZA/ZU2WFeZ3aj86eL+MapiQH1bBJ
+         jy5hBM/SSYbdH5RFmIqVeWBQLYmLvHqfnJJzuBXmMatD2ukgDyQcBc/i8nCmy3kmx31B
+         2G4zmrK3O/N1dQQbPK9Bayn7/wMO1lUBbh+x//RQPLckqjORPpes14gqlVt0GsJucveJ
+         VA5stlxjkvi+Y7IqX5W6+LAsBMqPu9eguvgRp/SvowuSYESZO8JVmh9T+CZ6tnXobe2z
+         PxRQ==
+X-Gm-Message-State: ACrzQf2h7ZB6JuxiR2NYRPVlZ0jCDkUloJFnGKYCbJFVG+kmbTGaZzHE
+        UO5MQO63axphIyjQKJ+Bh8OMhQ==
+X-Google-Smtp-Source: AMsMyM4ul5pkMXo0h38HYfpA5laienDYpPszMB5HtBpaalJi0wSQP7l54u7f3wOzS43dm6EjwhziSg==
+X-Received: by 2002:a05:600c:3585:b0:3b4:a308:1581 with SMTP id p5-20020a05600c358500b003b4a3081581mr10281089wmq.77.1666973567670;
+        Fri, 28 Oct 2022 09:12:47 -0700 (PDT)
 Received: from dave-Ubuntu2204.pitowers.org ([93.93.133.154])
-        by smtp.googlemail.com with ESMTPSA id bh17-20020a05600c3d1100b003cf47fdead5sm4731928wmb.30.2022.10.28.09.12.50
+        by smtp.googlemail.com with ESMTPSA id bh17-20020a05600c3d1100b003cf47fdead5sm4731928wmb.30.2022.10.28.09.12.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 09:12:51 -0700 (PDT)
+        Fri, 28 Oct 2022 09:12:47 -0700 (PDT)
 From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
 To:     paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
         linux-media@vger.kernel.org, sakari.ailus@iki.fi, jacopo@jmondi.org
 Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH v2 08/16] media: i2c: ov9282: Add selection for CSI2 clock mode
-Date:   Fri, 28 Oct 2022 17:08:54 +0100
-Message-Id: <20221028160902.2696973-9-dave.stevenson@raspberrypi.com>
+Subject: [PATCH v2 05/16] media: i2c: ov9281: Support more than 1 mode.
+Date:   Fri, 28 Oct 2022 17:08:51 +0100
+Message-Id: <20221028160902.2696973-6-dave.stevenson@raspberrypi.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221028160902.2696973-1-dave.stevenson@raspberrypi.com>
 References: <20221028160902.2696973-1-dave.stevenson@raspberrypi.com>
@@ -66,89 +66,115 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The sensor supports either having the CSI2 clock lane free
-running, or gated when there is no packet to transmit.
-The driver only selected gated (non-continuous) clock mode.
+The driver currently has multiple assumptions that there is
+only one supported mode.
 
-Add code to allow fwnode to configure whether the clock is
-gated or free running.
+Convert supported_mode to an array, and fix up all references
+to correctly look at that array.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/i2c/ov9282.c | 24 ++++++++++++++++++++++--
- 1 file changed, 22 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ov9282.c | 46 +++++++++++++++++++++++---------------
+ 1 file changed, 28 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/media/i2c/ov9282.c b/drivers/media/i2c/ov9282.c
-index 35bc2b0438bc..1637cf1177c5 100644
+index 123aa20951b7..1524189cf3e5 100644
 --- a/drivers/media/i2c/ov9282.c
 +++ b/drivers/media/i2c/ov9282.c
-@@ -45,6 +45,9 @@
- /* Group hold register */
- #define OV9282_REG_HOLD		0x3308
- 
-+#define OV9282_REG_MIPI_CTRL00	0x4800
-+#define OV9282_GATED_CLOCK	BIT(5)
-+
- /* Input clock rate */
- #define OV9282_INCLK_RATE	24000000
- 
-@@ -136,6 +139,7 @@ struct ov9282 {
- 		struct v4l2_ctrl *again_ctrl;
- 	};
- 	u32 vblank;
-+	bool noncontinuous_clock;
- 	const struct ov9282_mode *cur_mode;
- 	struct mutex mutex;
- 	bool streaming;
-@@ -145,7 +149,13 @@ static const s64 link_freq[] = {
- 	OV9282_LINK_FREQ,
+@@ -217,6 +217,10 @@ struct ov9282_reg_list common_regs_list = {
+ 	.regs = common_regs,
  };
  
--/* Common registers */
-+/*
-+ * Common registers
-+ *
-+ * Note: Do NOT include a software reset (0x0103, 0x01) in any of these
-+ * register arrays as some settings are written as part of ov9282_power_on,
-+ * and the reset will clear them.
-+ */
- static const struct ov9282_reg common_regs[] = {
- 	{0x0302, 0x32},
- 	{0x030d, 0x50},
-@@ -201,7 +211,6 @@ static const struct ov9282_reg common_regs[] = {
- 	{0x4601, 0x04},
- 	{0x470f, 0x00},
- 	{0x4f07, 0x00},
--	{0x4800, 0x20},
- 	{0x5000, 0x9f},
- 	{0x5001, 0x00},
- 	{0x5e00, 0x00},
-@@ -835,6 +844,9 @@ static int ov9282_parse_hw_config(struct ov9282 *ov9282)
- 	if (ret)
- 		return ret;
- 
-+	ov9282->noncontinuous_clock =
-+		bus_cfg.bus.mipi_csi2.flags & V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK;
++#define MODE_1280_720		0
 +
- 	if (bus_cfg.bus.mipi_csi2.num_data_lanes != OV9282_NUM_DATA_LANES) {
- 		dev_err(ov9282->dev,
- 			"number of CSI2 data lanes %d is not supported",
-@@ -903,6 +915,14 @@ static int ov9282_power_on(struct device *dev)
- 
- 	usleep_range(400, 600);
- 
-+	ret = ov9282_write_reg(ov9282, OV9282_REG_MIPI_CTRL00, 1,
-+			       ov9282->noncontinuous_clock ?
-+					OV9282_GATED_CLOCK : 0);
-+	if (ret) {
-+		dev_err(ov9282->dev, "fail to write MIPI_CTRL00");
-+		return ret;
-+	}
++#define DEFAULT_MODE		MODE_1280_720
 +
+ /* Sensor mode registers */
+ static const struct ov9282_reg mode_1280x720_regs[] = {
+ 	{0x3778, 0x00},
+@@ -252,17 +256,19 @@ static const struct ov9282_reg mode_1280x720_regs[] = {
+ };
+ 
+ /* Supported sensor mode configurations */
+-static const struct ov9282_mode supported_mode = {
+-	.width = 1280,
+-	.height = 720,
+-	.hblank = 250,
+-	.vblank = 1022,
+-	.vblank_min = 151,
+-	.vblank_max = 51540,
+-	.link_freq_idx = 0,
+-	.reg_list = {
+-		.num_of_regs = ARRAY_SIZE(mode_1280x720_regs),
+-		.regs = mode_1280x720_regs,
++static const struct ov9282_mode supported_modes[] = {
++	[MODE_1280_720] = {
++		.width = 1280,
++		.height = 720,
++		.hblank = 250,
++		.vblank = 1022,
++		.vblank_min = 151,
++		.vblank_max = 51540,
++		.link_freq_idx = 0,
++		.reg_list = {
++			.num_of_regs = ARRAY_SIZE(mode_1280x720_regs),
++			.regs = mode_1280x720_regs,
++		},
+ 	},
+ };
+ 
+@@ -526,15 +532,15 @@ static int ov9282_enum_frame_size(struct v4l2_subdev *sd,
+ 				  struct v4l2_subdev_state *sd_state,
+ 				  struct v4l2_subdev_frame_size_enum *fsize)
+ {
+-	if (fsize->index > 0)
++	if (fsize->index >= ARRAY_SIZE(supported_modes))
+ 		return -EINVAL;
+ 
+ 	if (fsize->code != MEDIA_BUS_FMT_Y10_1X10)
+ 		return -EINVAL;
+ 
+-	fsize->min_width = supported_mode.width;
++	fsize->min_width = supported_modes[fsize->index].width;
+ 	fsize->max_width = fsize->min_width;
+-	fsize->min_height = supported_mode.height;
++	fsize->min_height = supported_modes[fsize->index].height;
+ 	fsize->max_height = fsize->min_height;
+ 
  	return 0;
+@@ -609,7 +615,11 @@ static int ov9282_set_pad_format(struct v4l2_subdev *sd,
  
- error_reset:
+ 	mutex_lock(&ov9282->mutex);
+ 
+-	mode = &supported_mode;
++	mode = v4l2_find_nearest_size(supported_modes,
++				      ARRAY_SIZE(supported_modes),
++				      width, height,
++				      fmt->format.width,
++				      fmt->format.height);
+ 	ov9282_fill_pad_format(ov9282, mode, fmt);
+ 
+ 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
+@@ -642,7 +652,7 @@ static int ov9282_init_pad_cfg(struct v4l2_subdev *sd,
+ 	struct v4l2_subdev_format fmt = { 0 };
+ 
+ 	fmt.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
+-	ov9282_fill_pad_format(ov9282, &supported_mode, &fmt);
++	ov9282_fill_pad_format(ov9282, &supported_modes[DEFAULT_MODE], &fmt);
+ 
+ 	return ov9282_set_pad_format(sd, sd_state, &fmt);
+ }
+@@ -1043,8 +1053,8 @@ static int ov9282_probe(struct i2c_client *client)
+ 		goto error_power_off;
+ 	}
+ 
+-	/* Set default mode to max resolution */
+-	ov9282->cur_mode = &supported_mode;
++	/* Set default mode to first mode */
++	ov9282->cur_mode = &supported_modes[DEFAULT_MODE];
+ 	ov9282->vblank = ov9282->cur_mode->vblank;
+ 
+ 	ret = ov9282_init_controls(ov9282);
 -- 
 2.34.1
 
