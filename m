@@ -2,127 +2,89 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C207BC38A02
-	for <linux-media@archiver.kernel.org>; Mon, 31 Oct 2022 10:02:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34306FA3740
+	for <linux-media@archiver.kernel.org>; Mon, 31 Oct 2022 10:12:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbiJaKCw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 31 Oct 2022 06:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59602 "EHLO
+        id S230349AbiJaKMs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 31 Oct 2022 06:12:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiJaKCv (ORCPT
+        with ESMTP id S230460AbiJaKMQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 31 Oct 2022 06:02:51 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB44DF1E;
-        Mon, 31 Oct 2022 03:02:50 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 2F3911F91D;
-        Mon, 31 Oct 2022 10:02:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1667210569; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=mG8miN6fTybhiCNoskosNwj4AqwBA6DZ0YczEenlttw=;
-        b=LxD0YS+Q59489qydjVUydT37nfwSsu2PMKlO05VJTKUKvSziP8+f6Yo9TnSKvixULtO4Dd
-        5PsHyBd98kspKs9E3h3GTvUHrKTLPA3BeTw63Qoy2jpmJsDXilZ8uXD4+K2CCuQOZEQL3Q
-        WtIFLiv/DryCXXX+HPBra3moLPoLZF8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1667210569;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=mG8miN6fTybhiCNoskosNwj4AqwBA6DZ0YczEenlttw=;
-        b=O2pdObOshKEXJoLcsOnHFkdkGcxdFLObcAXDgGdqTv+ine9oS5Rk0eeXbRwVVO16FSrZ9w
-        Vp1TOAmgUBAXFAAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0B2B013451;
-        Mon, 31 Oct 2022 10:02:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id BKkWAkmdX2PPbQAAMHmgww
-        (envelope-from <tiwai@suse.de>); Mon, 31 Oct 2022 10:02:49 +0000
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Hyunwoo Kim <imv4bel@gmail.com>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH RE-SEND] media: dvb-core: Fix UAF due to refcount races at releasing
-Date:   Mon, 31 Oct 2022 11:02:45 +0100
-Message-Id: <20221031100245.23702-1-tiwai@suse.de>
-X-Mailer: git-send-email 2.35.3
+        Mon, 31 Oct 2022 06:12:16 -0400
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEB7DF81
+        for <linux-media@vger.kernel.org>; Mon, 31 Oct 2022 03:12:13 -0700 (PDT)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 65FB7240002;
+        Mon, 31 Oct 2022 10:12:11 +0000 (UTC)
+Date:   Mon, 31 Oct 2022 11:12:09 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
+Cc:     paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
+        linux-media@vger.kernel.org, sakari.ailus@iki.fi
+Subject: Re: [PATCH v2 06/16] media: i2c: ov9282: Correct HTS register for
+ configured pixel rate
+Message-ID: <20221031101209.guqwlnegslap4ey4@uno.localdomain>
+References: <20221028160902.2696973-1-dave.stevenson@raspberrypi.com>
+ <20221028160902.2696973-7-dave.stevenson@raspberrypi.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221028160902.2696973-7-dave.stevenson@raspberrypi.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The dvb-core tries to sync the releases of opened files at
-dvb_dmxdev_release() with two refcounts: dvbdev->users and
-dvr_dvbdev->users.  A problem is present in those two syncs: when yet
-another dvb_demux_open() is called during those sync waits,
-dvb_demux_open() continues to process even if the device is being
-closed.  This includes the increment of the former refcount, resulting
-in the leftover refcount after the sync of the latter refcount at
-dvb_dmxdev_release().  It ends up with use-after-free, since the
-function believes that all usages were gone and releases the
-resources.
+Hi Dave
 
-This patch addresses the problem by adding the check of dmxdev->exit
-flag at dvb_demux_open(), just like dvb_dvr_open() already does.  With
-the exit flag check, the second call of dvb_demux_open() fails, hence
-the further corruption can be avoided.
+On Fri, Oct 28, 2022 at 05:08:52PM +0100, Dave Stevenson wrote:
+> The calculations from pixel rate, width+hblank, and height+vblank
+> do not give the correct framerate - it's half the speed it should
+> be.
+>
+> The datasheet lists the default for the TIMING_HTS registers (0x380c/d)
+> as being 0x2d8 (728) which is less than the width of the image, so
+> the units clearly can't be pixels.
+> If TIMING_HTS is considered to be units of 2-pixels, then the
+> resulting value of 0x5b0 (1456) makes all the calculations correct.
+>
+> This driver is reporting an HBLANK value of 250, with an image width
+> of 1280, so TIMING_HTS is 1530 (0x5fa) pixels. However it was also
+> setting the register to 0x5fa, thereby not taking into account it
+> being units of 2-pixels.
+>
+> Correct the register value to 0x2fd so that all the timing calculations
+> give the correct results.
+>
+> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-Also for avoiding the races of the dmxdev->exit flag reference, this
-patch serializes the dmxdev->exit set up and the sync waits with the
-dmxdev->mutex lock at dvb_dmxdev_release().  Without the mutex lock,
-dvb_demux_open() (or dvb_dvr_open()) may run concurrently with
-dvb_dmxdev_release(), which allows to skip the exit flag check and
-continue the open process that is being closed.
+Thanks, the commit message is now very clear
 
-CVE-2022-41218 is assigned to those bugs above.
+Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
 
-Reported-by: Hyunwoo Kim <imv4bel@gmail.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/20220908132754.30532-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
----
+Thanks
+  j
 
-Since the previous submission has been ignored, this is a resend.
-CVE number and the original submission link were added.
-
- drivers/media/dvb-core/dmxdev.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/drivers/media/dvb-core/dmxdev.c b/drivers/media/dvb-core/dmxdev.c
-index f6ee678107d3..9ce5f010de3f 100644
---- a/drivers/media/dvb-core/dmxdev.c
-+++ b/drivers/media/dvb-core/dmxdev.c
-@@ -790,6 +790,11 @@ static int dvb_demux_open(struct inode *inode, struct file *file)
- 	if (mutex_lock_interruptible(&dmxdev->mutex))
- 		return -ERESTARTSYS;
- 
-+	if (dmxdev->exit) {
-+		mutex_unlock(&dmxdev->mutex);
-+		return -ENODEV;
-+	}
-+
- 	for (i = 0; i < dmxdev->filternum; i++)
- 		if (dmxdev->filter[i].state == DMXDEV_STATE_FREE)
- 			break;
-@@ -1448,7 +1453,10 @@ EXPORT_SYMBOL(dvb_dmxdev_init);
- 
- void dvb_dmxdev_release(struct dmxdev *dmxdev)
- {
-+	mutex_lock(&dmxdev->mutex);
- 	dmxdev->exit = 1;
-+	mutex_unlock(&dmxdev->mutex);
-+
- 	if (dmxdev->dvbdev->users > 1) {
- 		wait_event(dmxdev->dvbdev->wait_queue,
- 				dmxdev->dvbdev->users == 1);
--- 
-2.35.3
-
+> ---
+>  drivers/media/i2c/ov9282.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/media/i2c/ov9282.c b/drivers/media/i2c/ov9282.c
+> index 1524189cf3e5..7e0b12b89655 100644
+> --- a/drivers/media/i2c/ov9282.c
+> +++ b/drivers/media/i2c/ov9282.c
+> @@ -236,8 +236,8 @@ static const struct ov9282_reg mode_1280x720_regs[] = {
+>  	{0x3809, 0x00},
+>  	{0x380a, 0x02},
+>  	{0x380b, 0xd0},
+> -	{0x380c, 0x05},
+> -	{0x380d, 0xfa},
+> +	{0x380c, 0x02},
+> +	{0x380d, 0xfd},
+>  	{0x3810, 0x00},
+>  	{0x3811, 0x08},
+>  	{0x3812, 0x00},
+> --
+> 2.34.1
+>
