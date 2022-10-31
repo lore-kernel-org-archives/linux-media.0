@@ -2,159 +2,98 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9576DFA3740
-	for <linux-media@archiver.kernel.org>; Mon, 31 Oct 2022 10:18:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B351FA3742
+	for <linux-media@archiver.kernel.org>; Mon, 31 Oct 2022 10:22:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbiJaKSG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 31 Oct 2022 06:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39744 "EHLO
+        id S229916AbiJaKWK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 31 Oct 2022 06:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiJaKSE (ORCPT
+        with ESMTP id S229846AbiJaKWJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 31 Oct 2022 06:18:04 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A4BD131
-        for <linux-media@vger.kernel.org>; Mon, 31 Oct 2022 03:18:02 -0700 (PDT)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0396B40006;
-        Mon, 31 Oct 2022 10:17:58 +0000 (UTC)
-Date:   Mon, 31 Oct 2022 11:17:57 +0100
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc:     paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
-        linux-media@vger.kernel.org, sakari.ailus@iki.fi
-Subject: Re: [PATCH v2 05/16] media: i2c: ov9281: Support more than 1 mode.
-Message-ID: <20221031101757.vzscokp7fywgjrg2@uno.localdomain>
-References: <20221028160902.2696973-1-dave.stevenson@raspberrypi.com>
- <20221028160902.2696973-6-dave.stevenson@raspberrypi.com>
+        Mon, 31 Oct 2022 06:22:09 -0400
+X-Greylist: delayed 485 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 31 Oct 2022 03:22:08 PDT
+Received: from butterbrot.org (butterbrot.org [176.9.106.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C081DF2C;
+        Mon, 31 Oct 2022 03:22:07 -0700 (PDT)
+Received: from [172.25.26.111] (h175.natout.aau.dk [130.225.198.175])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by butterbrot.org (Postfix) with ESMTPSA id A8CE56581361;
+        Mon, 31 Oct 2022 11:13:57 +0100 (CET)
+Message-ID: <d8ca5bd3-0498-853b-4101-02bfec216aaa@butterbrot.org>
+Date:   Mon, 31 Oct 2022 11:13:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221028160902.2696973-6-dave.stevenson@raspberrypi.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Content-Language: en-GB
+To:     linux-input <linux-input@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Martin Kaltenbrunner <modin@yuri.at>,
+        Raphael Wimmer <raphael.wimmer@ur.de>,
+        Hans Verkuil <hans.verkuil@cisco.com>
+From:   Florian Echtler <floe@butterbrot.org>
+Subject: (very old) regression in sur40.ko
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------6vYM0Km06glzuomhiRzJAEi3"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dave
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------6vYM0Km06glzuomhiRzJAEi3
+Content-Type: multipart/mixed; boundary="------------Uw5Lr1A2b3zkwk4rp0gdEn07";
+ protected-headers="v1"
+From: Florian Echtler <floe@butterbrot.org>
+To: linux-input <linux-input@vger.kernel.org>,
+ Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc: Martin Kaltenbrunner <modin@yuri.at>,
+ Raphael Wimmer <raphael.wimmer@ur.de>, Hans Verkuil <hans.verkuil@cisco.com>
+Message-ID: <d8ca5bd3-0498-853b-4101-02bfec216aaa@butterbrot.org>
+Subject: (very old) regression in sur40.ko
 
-On Fri, Oct 28, 2022 at 05:08:51PM +0100, Dave Stevenson wrote:
-> The driver currently has multiple assumptions that there is
-> only one supported mode.
->
-> Convert supported_mode to an array, and fix up all references
-> to correctly look at that array.
->
-> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> ---
->  drivers/media/i2c/ov9282.c | 46 +++++++++++++++++++++++---------------
->  1 file changed, 28 insertions(+), 18 deletions(-)
->
-> diff --git a/drivers/media/i2c/ov9282.c b/drivers/media/i2c/ov9282.c
-> index 123aa20951b7..1524189cf3e5 100644
-> --- a/drivers/media/i2c/ov9282.c
-> +++ b/drivers/media/i2c/ov9282.c
-> @@ -217,6 +217,10 @@ struct ov9282_reg_list common_regs_list = {
->  	.regs = common_regs,
->  };
->
-> +#define MODE_1280_720		0
-> +
-> +#define DEFAULT_MODE		MODE_1280_720
-> +
+--------------Uw5Lr1A2b3zkwk4rp0gdEn07
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-I don't mind this considering there will be multiple modes
+SGVsbG8gZXZlcnlvbmUsDQoNCkkgZGlkbid0IHVzZSBteSBzdXI0MCBmb3IgcXVpdGUgc29t
+ZSB0aW1lLCBidXQgcmVjZW50bHkgcGlja2VkIHVwIHdvcmsgb24gaXQgDQphZ2Fpbi4gQWZ0
+ZXIgYSBrZXJuZWwgdXBkYXRlIHRvIDUuMTUsIEkgbm90aWNlZCB0aGF0IHRoZSB2aWRlbyBj
+b21wb25lbnQgb2YgdGhlIA0KaW4tdHJlZSBzdXI0MCBkcml2ZXIgaGFkIGFwcGFyZW50bHkg
+c3RvcHBlZCB3b3JraW5nIGFmdGVyIDUuOSAodGhpcyB3YXMgYWN0dWFsbHkgDQpub3RpY2Vk
+IGJ5IEByd2ltbWVyIGEgeWVhciBhZ28sIGJ1dCBJIGRpZG4ndCBwcm9wZXJseSBmb2xsb3cg
+dXAgYXQgdGhlIHRpbWUpLg0KDQpUaGlzIHRpbWUsIEkgZGlkIGZpbmFsbHkgZ28gdGhyb3Vn
+aCB3aXRoIGEgdmVyeSB0ZWRpb3VzIDE0LXN0ZXAgYmlzZWN0aW9uIG9mIHRoZSANCmlzc3Vl
+IGFuZCBlbmRlZCB1cCBhdCB0aGlzIGNvbW1pdDoNCg0KaHR0cHM6Ly9naXRodWIuY29tL3Rv
+cnZhbGRzL2xpbnV4L2NvbW1pdC82ZWIwMjMzZWMyZDBkZjI4OGZlODUxNWQ1YjBiMmIxNTU2
+MmUwNWJiDQoNClRoZSBpc3N1ZSBtYW5pZmVzdHMgYXMgYSBrZXJuZWwgb29wcyBpbiB2YjJf
+ZG1hX3NnX2FsbG9jLCByZXN1bHRpbmcgaW4gYSBmYWlsZWQgDQp1c2Jfc2dfaW5pdCBjYWxs
+IChwcm9iYWJseSBiZWNhdXNlIGRtYV9tYXNrIGFuZCBkbWFfcGZuX29mZnNldCBhcmUgbm93
+IHVuc2V0KS4gDQpIb3cgd291bGQgSSBoYXZlIHRvIHVzZSB0aGUgKl9zZ18qIGZ1bmN0aW9u
+cyBpbiBteSBkcml2ZXIgdG8gZml4IHRoaXM/DQoNCkZvciByZWZlcmVuY2UsIHRoZSBjb2Rl
+IGluIHF1ZXN0aW9uIGlzOg0KDQoJcmVzdWx0ID0gdXNiX3NnX2luaXQoJnNnciwgc3VyNDAt
+PnVzYmRldiwNCgkJdXNiX3JjdmJ1bGtwaXBlKHN1cjQwLT51c2JkZXYsIFZJREVPX0VORFBP
+SU5UKSwgMCwNCgkJc2d0LT5zZ2wsIHNndC0+bmVudHMsIHN1cjQwLT5waXhfZm10LnNpemVp
+bWFnZSwgMCk7DQoNCiBGcm9tIGxvb2tpbmcgYXQgdGhlIG90aGVyIHVzZXMgb2YgdXNiX3Nn
+X2luaXQsIHdvdWxkIGl0IGJlIHN1ZmZpY2llbnQgdG8gY2hhbmdlIA0KdGhlIHZlcnkgbGFz
+dCBwYXJhbWV0ZXIgZnJvbSAwIHRvIGVpdGhlciBHRlBfS0VSTkVMIG9yIEdGUF9OT0lPPyBJ
+ZiB5ZXMsIHdoaWNoIA0Kb25lIGlzIGNvcnJlY3Q/DQoNCkJlc3QsIEZsb3JpYW4NCi0tIA0K
+U0VOVCBGUk9NIE1ZIERFQyBWVDUwIFRFUk1JTkFMDQo=
 
->  /* Sensor mode registers */
->  static const struct ov9282_reg mode_1280x720_regs[] = {
->  	{0x3778, 0x00},
-> @@ -252,17 +256,19 @@ static const struct ov9282_reg mode_1280x720_regs[] = {
->  };
->
->  /* Supported sensor mode configurations */
-> -static const struct ov9282_mode supported_mode = {
-> -	.width = 1280,
-> -	.height = 720,
-> -	.hblank = 250,
-> -	.vblank = 1022,
-> -	.vblank_min = 151,
-> -	.vblank_max = 51540,
-> -	.link_freq_idx = 0,
-> -	.reg_list = {
-> -		.num_of_regs = ARRAY_SIZE(mode_1280x720_regs),
-> -		.regs = mode_1280x720_regs,
-> +static const struct ov9282_mode supported_modes[] = {
-> +	[MODE_1280_720] = {
-> +		.width = 1280,
-> +		.height = 720,
-> +		.hblank = 250,
-> +		.vblank = 1022,
-> +		.vblank_min = 151,
-> +		.vblank_max = 51540,
-> +		.link_freq_idx = 0,
-> +		.reg_list = {
-> +			.num_of_regs = ARRAY_SIZE(mode_1280x720_regs),
-> +			.regs = mode_1280x720_regs,
-> +		},
->  	},
->  };
->
-> @@ -526,15 +532,15 @@ static int ov9282_enum_frame_size(struct v4l2_subdev *sd,
->  				  struct v4l2_subdev_state *sd_state,
->  				  struct v4l2_subdev_frame_size_enum *fsize)
->  {
-> -	if (fsize->index > 0)
-> +	if (fsize->index >= ARRAY_SIZE(supported_modes))
->  		return -EINVAL;
->
->  	if (fsize->code != MEDIA_BUS_FMT_Y10_1X10)
->  		return -EINVAL;
->
-> -	fsize->min_width = supported_mode.width;
-> +	fsize->min_width = supported_modes[fsize->index].width;
->  	fsize->max_width = fsize->min_width;
-> -	fsize->min_height = supported_mode.height;
-> +	fsize->min_height = supported_modes[fsize->index].height;
->  	fsize->max_height = fsize->min_height;
->
->  	return 0;
-> @@ -609,7 +615,11 @@ static int ov9282_set_pad_format(struct v4l2_subdev *sd,
->
->  	mutex_lock(&ov9282->mutex);
->
-> -	mode = &supported_mode;
-> +	mode = v4l2_find_nearest_size(supported_modes,
-> +				      ARRAY_SIZE(supported_modes),
-> +				      width, height,
-> +				      fmt->format.width,
-> +				      fmt->format.height);
->  	ov9282_fill_pad_format(ov9282, mode, fmt);
->
->  	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
-> @@ -642,7 +652,7 @@ static int ov9282_init_pad_cfg(struct v4l2_subdev *sd,
->  	struct v4l2_subdev_format fmt = { 0 };
->
->  	fmt.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
-> -	ov9282_fill_pad_format(ov9282, &supported_mode, &fmt);
-> +	ov9282_fill_pad_format(ov9282, &supported_modes[DEFAULT_MODE], &fmt);
->
->  	return ov9282_set_pad_format(sd, sd_state, &fmt);
->  }
-> @@ -1043,8 +1053,8 @@ static int ov9282_probe(struct i2c_client *client)
->  		goto error_power_off;
->  	}
->
-> -	/* Set default mode to max resolution */
-> -	ov9282->cur_mode = &supported_mode;
-> +	/* Set default mode to first mode */
-> +	ov9282->cur_mode = &supported_modes[DEFAULT_MODE];
+--------------Uw5Lr1A2b3zkwk4rp0gdEn07--
 
-Looks good
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+--------------6vYM0Km06glzuomhiRzJAEi3
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
 
->  	ov9282->vblank = ov9282->cur_mode->vblank;
->
->  	ret = ov9282_init_controls(ov9282);
-> --
-> 2.34.1
->
+wmMEABEIACMWIQST4FP0cQIAgRXjMjXsLPKyEa9q2AUCY1+f5QUDAAAAAAAKCRDsLPKyEa9q2Elk
+AJ9vkFC6rusFKgg6ctZ/6fki5Vi76gCfcd/hKCpg5AoN1nQsDI201TYwdZQ=
+=JJty
+-----END PGP SIGNATURE-----
+
+--------------6vYM0Km06glzuomhiRzJAEi3--
