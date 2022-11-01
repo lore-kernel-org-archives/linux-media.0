@@ -2,46 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD1F4FA373D
-	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:34:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67A8FC433FE
+	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:34:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbiKALeg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Nov 2022 07:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45754 "EHLO
+        id S231179AbiKALez (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Nov 2022 07:34:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231329AbiKALeH (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:34:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3AC1C414;
-        Tue,  1 Nov 2022 04:30:35 -0700 (PDT)
+        with ESMTP id S230249AbiKALed (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:34:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA2F1C435;
+        Tue,  1 Nov 2022 04:30:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3E065B81CC7;
-        Tue,  1 Nov 2022 11:30:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFB93C43145;
-        Tue,  1 Nov 2022 11:30:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5EA47615AC;
+        Tue,  1 Nov 2022 11:30:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DF75C433C1;
+        Tue,  1 Nov 2022 11:30:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667302218;
-        bh=Vje9gAoWu//vjHCQV2WQYJ3jC/VDrOWpj/Foi4eVcco=;
+        s=k20201202; t=1667302223;
+        bh=xF6SaqiHXRWHu13SpIZhjfbTsJONB7zD8WaO5tw8iAo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nTUk7npi9/HAZDHFF1sbc+HIavmZ88CSUHjAKo7DVZ9wIl+DT9OxzTz0Yj6UjvCAJ
-         raP07xae0d2pHs1YUjdVcb5w+IZ6fjYYwoqcUhO3C457eDVCuZJpEiE96pRrlKHZHW
-         rwsjA1uw88pB5gl1L2ALc5L6O2e+1azSDMzIFWy2COa8qaLiGcz6kXwz2DtgHgv4uo
-         dUZ5Nxsf3TKE5MjxkCd/PKKWJiKqr1UieWoRUyRJzFGOQtYqLj87KuLnE4YFzIKUL5
-         ptaYtxbp6vZnu81p/SgQ6YU1rTeBACk5uyodqdNdJ4R1lPPepAFLS2WGBxeZSPqJVZ
-         nglI66xJnO+wA==
+        b=NdJPxUkdwrptmBXnCF3hPHGCrdhAU0BRh9QLYkHBQ6Zfs/hrr65bxq44nYBzowLos
+         tI/+mDBtkz7h7RRyaG0RFnN/il4+q8Bz7ShyzkDxrFyQz+4xxsl9nkBlR+SGxZmoHH
+         tVIyiEBqSczWRPWEAHAQ6QgLkRiDeT9f9CWFP54JddgTtvx4bq+1Wic0QoN2hWhcqJ
+         4yJW3qSr4GWEMNdwanPkjBzrtiJS5cZlMROtnw7BPhHcMec5/1aNCLoKw2NilsrPAB
+         xHBsGVPrrA2l2iavuU9q1CqkkAOYcegwNK0TgGWappJcDoK2tE8BhmzAzwzvw5b5tZ
+         qqBq34okH6IBw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Paul Elder <paul.elder@ideasonboard.com>,
-        Dafna Hirschfeld <dafna@fastmail.com>,
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, gregkh@linuxfoundation.org,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 02/14] media: rkisp1: Zero v4l2_subdev_format fields in when validating links
-Date:   Tue,  1 Nov 2022 07:29:58 -0400
-Message-Id: <20221101113012.800271-2-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, bleung@chromium.org,
+        groeck@chromium.org, ajye_huang@compal.corp-partner.google.com,
+        hellojacky0226@hotmail.com, zhuohao@chromium.org,
+        scott_chao@wistron.corp-partner.google.com,
+        linux-media@vger.kernel.org, chrome-platform@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.10 04/14] media: cros-ec-cec: limit msg.len to CEC_MAX_MSG_SIZE
+Date:   Tue,  1 Nov 2022 07:30:00 -0400
+Message-Id: <20221101113012.800271-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221101113012.800271-1-sashal@kernel.org>
 References: <20221101113012.800271-1-sashal@kernel.org>
@@ -53,44 +54,33 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit c53e3a049f35978a150526671587fd46b1ae7ca1 ]
+[ Upstream commit 2dc73b48665411a08c4e5f0f823dea8510761603 ]
 
-The local sd_fmt variable in rkisp1_capture_link_validate() has
-uninitialized fields, which causes random failures when calling the
-subdev .get_fmt() operation. Fix it by initializing the variable when
-declaring it, which zeros all other fields.
+I expect that the hardware will have limited this to 16, but just in
+case it hasn't, check for this corner case.
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Paul Elder <paul.elder@ideasonboard.com>
-Reviewed-by: Dafna Hirschfeld <dafna@fastmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/rkisp1/rkisp1-capture.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/media/cec/platform/cros-ec/cros-ec-cec.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/staging/media/rkisp1/rkisp1-capture.c b/drivers/staging/media/rkisp1/rkisp1-capture.c
-index 0c934ca5adaa..8936f5a81680 100644
---- a/drivers/staging/media/rkisp1/rkisp1-capture.c
-+++ b/drivers/staging/media/rkisp1/rkisp1-capture.c
-@@ -1258,11 +1258,12 @@ static int rkisp1_capture_link_validate(struct media_link *link)
- 	struct rkisp1_capture *cap = video_get_drvdata(vdev);
- 	const struct rkisp1_capture_fmt_cfg *fmt =
- 		rkisp1_find_fmt_cfg(cap, cap->pix.fmt.pixelformat);
--	struct v4l2_subdev_format sd_fmt;
-+	struct v4l2_subdev_format sd_fmt = {
-+		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
-+		.pad = link->source->index,
-+	};
- 	int ret;
+diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+index 2d95e16cd248..f66699d5dc66 100644
+--- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
++++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+@@ -44,6 +44,8 @@ static void handle_cec_message(struct cros_ec_cec *cros_ec_cec)
+ 	uint8_t *cec_message = cros_ec->event_data.data.cec_message;
+ 	unsigned int len = cros_ec->event_size;
  
--	sd_fmt.which = V4L2_SUBDEV_FORMAT_ACTIVE;
--	sd_fmt.pad = link->source->index;
- 	ret = v4l2_subdev_call(sd, pad, get_fmt, NULL, &sd_fmt);
- 	if (ret)
- 		return ret;
++	if (len > CEC_MAX_MSG_SIZE)
++		len = CEC_MAX_MSG_SIZE;
+ 	cros_ec_cec->rx_msg.len = len;
+ 	memcpy(cros_ec_cec->rx_msg.msg, cec_message, len);
+ 
 -- 
 2.35.1
 
