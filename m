@@ -2,47 +2,46 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5DD4FA3748
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56AE8C433FE
 	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:29:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbiKAL3W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Nov 2022 07:29:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
+        id S229954AbiKAL3U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Nov 2022 07:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbiKAL21 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:28:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3019E1A056;
-        Tue,  1 Nov 2022 04:28:12 -0700 (PDT)
+        with ESMTP id S230306AbiKAL2P (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:28:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9412519C05;
+        Tue,  1 Nov 2022 04:28:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2107B81CC1;
-        Tue,  1 Nov 2022 11:28:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A8E0C433C1;
-        Tue,  1 Nov 2022 11:28:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1085615D4;
+        Tue,  1 Nov 2022 11:28:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43B0CC433C1;
+        Tue,  1 Nov 2022 11:28:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667302089;
-        bh=IQWnML7R5rhFY2oavhDQX27l1tZcyVC5nL2ZXOPK5tc=;
+        s=k20201202; t=1667302086;
+        bh=sFbRVrvnTUcWjQrPQOYG51/HG21tYtpyY/ElwlplYz0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t41498uOZCJ/Ax089/oKNvKpllDmE7HDEj7Hdw88iuzsnjVFbIKqfeMSixUi/ONZs
-         VxZp6XG0WcBsqD6N59XGp2By5b4lb5sGtBo272w8VcvxHOfUo4HlKgp2BneRdcEfO6
-         A0WWu6PResHLKOh7zXqP/RbspNKI5ltYa4t9TnPd3l9cl2SZb3edehff0j9cd0aKtd
-         DaOJB+UjlCLKy6VPUqWoiKE1Y6Mp20LBmSUs57+GWpkRRdfi+XH0JvMOKFOXKlMQmu
-         skKQ1jxpXPaQyBcACEnnyAfi3SXk84BffZLoxYM1gtJimzZTav1v0XS2/y6UFMMw21
-         YqLx5V5S1EreA==
+        b=lg2A7cxO4IwfOq/k7vfm38c9EDcoSFJ1pugxFEth/XlaSQFjLIaxoDXyUtpP+rB/L
+         WFUAjzdJpQb5X8yleRF6hWUooYeVj8VFeW5Y94MsRrKWQTk186xWq9zcvaPYylxaYb
+         7RMbeWqJgV1d83AILkmd1/fTHPPHnPxGatsGPrmWOmFVxS6MoMbuUeaXN53l1J2SV/
+         uBya6Qyi+wUFxxoAKS26h2T46YOdrWjhuafMTYEElsGfkZzaJQPCKTkc23lwtH6aXq
+         2jjF5DuKWGGRB+3RNkFRlhaZhhbklQab1qvDf5xd8Kop6ZBMFkoqQe9txsFmggAmOi
+         eMHcjdeZIe6Ww==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, gregkh@linuxfoundation.org,
         andriy.shevchenko@linux.intel.com, kitakar@gmail.com,
-        alan@linux.intel.com, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.0 18/34] media: atomisp: Fix v4l2_fh resource leak on open errors
-Date:   Tue,  1 Nov 2022 07:27:10 -0400
-Message-Id: <20221101112726.799368-18-sashal@kernel.org>
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.0 17/34] media: atomisp: Ensure that USERPTR pointers are page aligned
+Date:   Tue,  1 Nov 2022 07:27:09 -0400
+Message-Id: <20221101112726.799368-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221101112726.799368-1-sashal@kernel.org>
 References: <20221101112726.799368-1-sashal@kernel.org>
@@ -56,31 +55,40 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit 5b9853ad1329be49343a608d574eb232ff1273d0 ]
+[ Upstream commit 6e6c4ae0f0ba295dbf6cbd48d93bec169d6ce431 ]
 
-When atomisp_open() fails then it must call v4l2_fh_release() to undo
-the results of v4l2_fh_open().
+The atomisp code needs USERPTR pointers to be page aligned,
+otherwise bad things (scribbling over other parts of the
+process' RAM) happen.
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+Add a check to ensure this and exit VIDIOC_QBUF calls with
+unaligned pointers with -EINVAL.
+
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/atomisp/pci/atomisp_fops.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/staging/media/atomisp/pci/atomisp_ioctl.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-index 77150e4ae144..92cbc0e263e8 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-@@ -903,6 +903,7 @@ static int atomisp_open(struct file *file)
- 	pm_runtime_put(vdev->v4l2_dev->dev);
- error:
- 	rt_mutex_unlock(&isp->mutex);
-+	v4l2_fh_release(file);
- 	return ret;
- }
- 
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+index 459645c2e2a7..4de01aa28fe5 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+@@ -1338,6 +1338,12 @@ static int atomisp_qbuf(struct file *file, void *fh, struct v4l2_buffer *buf)
+ 	 * address and reprograme out page table properly
+ 	 */
+ 	if (buf->memory == V4L2_MEMORY_USERPTR) {
++		if (offset_in_page(buf->m.userptr)) {
++			dev_err(isp->dev, "Error userptr is not page aligned.\n");
++			ret = -EINVAL;
++			goto error;
++		}
++
+ 		vb = pipe->capq.bufs[buf->index];
+ 		vm_mem = vb->priv;
+ 		if (!vm_mem) {
 -- 
 2.35.1
 
