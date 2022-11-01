@@ -2,47 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB0E0FA373D
-	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:34:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDB8FFA3746
+	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:34:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231173AbiKALeJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Nov 2022 07:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45320 "EHLO
+        id S230401AbiKALeK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Nov 2022 07:34:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbiKALdX (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:33:23 -0400
+        with ESMTP id S229826AbiKALdx (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:33:53 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF641B1CF;
-        Tue,  1 Nov 2022 04:30:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0A11C13A;
+        Tue,  1 Nov 2022 04:30:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 930DAB81CCD;
-        Tue,  1 Nov 2022 11:30:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28FEFC433C1;
-        Tue,  1 Nov 2022 11:30:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6FD4CB81CD1;
+        Tue,  1 Nov 2022 11:30:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59A41C433D6;
+        Tue,  1 Nov 2022 11:30:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667302215;
-        bh=vLsWhaWfthnY1eDb3thOqafTKkz9DILQDMTO4Ks0ZkY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=reH42v+QZegfrULq45Tg3GKowzECfbwwXAU4RxnG9r5wnSmvSQAGsCiaRmIUffXto
-         x33Y+w/HzelUdcwdzgu96CYj+kqsFVKayv5nctOgqyLH/cTHFSQ85PBS0QmwgHvu1c
-         7BHW6vDpqsSVWxf0bXXuzHpoNyIRcABW5OySIz9mZ9VsF1arYblvwhvw7NFT56oZJJ
-         7oHnUWnIpWp2YZDCtApNrGPcgaMSGiCjru+E3LJUXu1l0b3cw9VBcEwXIn5Osa2vkX
-         pRbYfR4FGyBFHdQbikYeQwngKOSE3F1W+nbyJZCcMpn6si5N1X4K1LhV528avFwC79
-         KaV8SEO6Lh7YQ==
+        s=k20201202; t=1667302220;
+        bh=7PwGxb7r347LjxhB4O5/10fNOWAkErVJVpC0gzC3rw8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=kYU0Fq6YbW2MsnjzfByBwXjlD5FaldibabuYVZc2vLNvwDu5Or/EMcJhTRNyXyDTm
+         R+PYEsRxodCHewWXbqllVy6zBuVByU+9jamd7MtmRTFrV4xgIScFJQdJR1iv58ueAN
+         0mKP+qcj910S1q5CBf9rL73vZ7ZLnCqAFfUTB0EJTvpLzyEiBS5zyHD17+bP18nAid
+         IGeZyQH3lkDreilb7avmVaOSf56p19Lu6KB9oiEoa7eharv01eri58FVZUTf+jma6U
+         MxA9YqGb2TfFBNCWpokkLfduOKUT7i3+Bl02WdevZlyuJDH1jdwEzhcoYOdaPXcleJ
+         Ty2wQFral6rvw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Paul Elder <paul.elder@ideasonboard.com>,
-        Dafna Hirschfeld <dafna@fastmail.com>,
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, gregkh@linuxfoundation.org,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 01/14] media: rkisp1: Initialize color space on resizer sink and source pads
-Date:   Tue,  1 Nov 2022 07:29:57 -0400
-Message-Id: <20221101113012.800271-1-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, m.szyprowski@samsung.com,
+        linux-samsung-soc@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 03/14] media: s5p_cec: limit msg.len to CEC_MAX_MSG_SIZE
+Date:   Tue,  1 Nov 2022 07:29:59 -0400
+Message-Id: <20221101113012.800271-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221101113012.800271-1-sashal@kernel.org>
+References: <20221101113012.800271-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -51,39 +51,33 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 83b9296e399367862845d3b19984444fc756bd61 ]
+[ Upstream commit 93f65ce036863893c164ca410938e0968964b26c ]
 
-Initialize the four color space fields on the sink and source video pads
-of the resizer in the .init_cfg() operation. The resizer can't perform
-any color space conversion, so set the sink and source color spaces to
-the same defaults, which match the ISP source video pad default.
+I expect that the hardware will have limited this to 16, but just in
+case it hasn't, check for this corner case.
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Paul Elder <paul.elder@ideasonboard.com>
-Reviewed-by: Dafna Hirschfeld <dafna@fastmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/rkisp1/rkisp1-resizer.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/media/cec/platform/s5p/s5p_cec.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/staging/media/rkisp1/rkisp1-resizer.c b/drivers/staging/media/rkisp1/rkisp1-resizer.c
-index 4dcc342ac2b2..76f17dd7670f 100644
---- a/drivers/staging/media/rkisp1/rkisp1-resizer.c
-+++ b/drivers/staging/media/rkisp1/rkisp1-resizer.c
-@@ -500,6 +500,10 @@ static int rkisp1_rsz_init_config(struct v4l2_subdev *sd,
- 	sink_fmt->height = RKISP1_DEFAULT_HEIGHT;
- 	sink_fmt->field = V4L2_FIELD_NONE;
- 	sink_fmt->code = RKISP1_DEF_FMT;
-+	sink_fmt->colorspace = V4L2_COLORSPACE_SRGB;
-+	sink_fmt->xfer_func = V4L2_XFER_FUNC_SRGB;
-+	sink_fmt->ycbcr_enc = V4L2_YCBCR_ENC_601;
-+	sink_fmt->quantization = V4L2_QUANTIZATION_LIM_RANGE;
- 
- 	sink_crop = v4l2_subdev_get_try_crop(sd, cfg, RKISP1_RSZ_PAD_SINK);
- 	sink_crop->width = RKISP1_DEFAULT_WIDTH;
+diff --git a/drivers/media/cec/platform/s5p/s5p_cec.c b/drivers/media/cec/platform/s5p/s5p_cec.c
+index 028a09a7531e..102f1af01000 100644
+--- a/drivers/media/cec/platform/s5p/s5p_cec.c
++++ b/drivers/media/cec/platform/s5p/s5p_cec.c
+@@ -115,6 +115,8 @@ static irqreturn_t s5p_cec_irq_handler(int irq, void *priv)
+ 				dev_dbg(cec->dev, "Buffer overrun (worker did not process previous message)\n");
+ 			cec->rx = STATE_BUSY;
+ 			cec->msg.len = status >> 24;
++			if (cec->msg.len > CEC_MAX_MSG_SIZE)
++				cec->msg.len = CEC_MAX_MSG_SIZE;
+ 			cec->msg.rx_status = CEC_RX_STATUS_OK;
+ 			s5p_cec_get_rx_buf(cec, cec->msg.len,
+ 					cec->msg.msg);
 -- 
 2.35.1
 
