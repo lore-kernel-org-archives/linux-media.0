@@ -2,50 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59A35FA373D
-	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:35:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCBC8FA3743
+	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:35:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbiKALfR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Nov 2022 07:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
+        id S230432AbiKALfb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Nov 2022 07:35:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbiKALez (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:34:55 -0400
+        with ESMTP id S230199AbiKALfG (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:35:06 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E7C1CB01;
-        Tue,  1 Nov 2022 04:30:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E6A6397;
+        Tue,  1 Nov 2022 04:31:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36FE8B81CC1;
-        Tue,  1 Nov 2022 11:30:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A76EDC433C1;
-        Tue,  1 Nov 2022 11:30:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD5C5B81CCD;
+        Tue,  1 Nov 2022 11:31:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90A16C433C1;
+        Tue,  1 Nov 2022 11:31:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667302235;
-        bh=cmNTbBy0ITeyQAOWKJ1WhJquHtMEaGIfAStDm/zXi/g=;
+        s=k20201202; t=1667302264;
+        bh=pqxhOX89QC5Zrs00R7wOL/EwEMXmbVN0sPN00O3CMRA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FQW6zXZU2NQLpgsgZy4nmfayTOEIqFoK6ZudxvFuQcTkEL5ivtQK91xyLsniUwOdX
-         owMnwV95PJfTUv/efCrn3tQRI1DKx/HhN7lTe5BANfRcfdn+73vgvUStLh5JUMReDE
-         IU04oMYMdh3Q2XQtIzygF8GsGS7Ep4OraPLfdnCj1Fq3U2J5XK/LmzPuUiOH+y/iVQ
-         K+dE/NRnuyx+YMdwDIV98utJuQGhh3Z1gOALoTacrfqjlZgjJr+8aqOIoZesRaCrrO
-         1FkT2bro2GxCF00ypBi/Ka5PfPgSzpfRDPJgg/qYXupDNqni+dTrlE3H11aDpfCxra
-         PmyU2scCz6E/g==
+        b=qsberOuB/n1q4TqB8FHQy5GSWFRDIRDNnT0fRh7378IRdlkIRZsuRV3WNumSOkDBL
+         QsZhd1KRzR2vKFapX/HxH0ziz1vx7rst8kTUcvE7DF13m7Zzn3+VS2x1geg8jDXfce
+         HsxdCBs1mzJP6hffgGF0AKCY8RsGiO9RnM7u1qXBb6jrC9TyuEfMn/Xbwj+0B3xulH
+         ZC43K0U0uqApJxFw/YPWViidThQ12Z+/lW1Fw5tpZtPuvcWk/xiOo7G4gaOAd5yb2n
+         1dKqtbZC4eQI7A47lQvJ7FLUqaZ9KSqJmyk/Cn4eAanush41O3svZpr50v0tG8aDrI
+         xn+hDFFzr8S2g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, gregkh@linuxfoundation.org,
-        andriy.shevchenko@linux.intel.com, kitakar@gmail.com,
-        alan@linux.intel.com, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 08/14] media: atomisp: Fix v4l2_fh resource leak on open errors
-Date:   Tue,  1 Nov 2022 07:30:04 -0400
-Message-Id: <20221101113012.800271-8-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, bleung@chromium.org,
+        linux-media@vger.kernel.org, chrome-platform@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.4 2/8] media: cros-ec-cec: limit msg.len to CEC_MAX_MSG_SIZE
+Date:   Tue,  1 Nov 2022 07:30:51 -0400
+Message-Id: <20221101113059.800777-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221101113012.800271-1-sashal@kernel.org>
-References: <20221101113012.800271-1-sashal@kernel.org>
+In-Reply-To: <20221101113059.800777-1-sashal@kernel.org>
+References: <20221101113059.800777-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -54,32 +51,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 5b9853ad1329be49343a608d574eb232ff1273d0 ]
+[ Upstream commit 2dc73b48665411a08c4e5f0f823dea8510761603 ]
 
-When atomisp_open() fails then it must call v4l2_fh_release() to undo
-the results of v4l2_fh_open().
+I expect that the hardware will have limited this to 16, but just in
+case it hasn't, check for this corner case.
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/atomisp/pci/atomisp_fops.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/platform/cros-ec-cec/cros-ec-cec.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-index b751df31cc24..ccf398b42520 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-@@ -890,6 +890,7 @@ static int atomisp_open(struct file *file)
- 	hmm_pool_unregister(HMM_POOL_TYPE_DYNAMIC);
- 	pm_runtime_put(vdev->v4l2_dev->dev);
- 	rt_mutex_unlock(&isp->mutex);
-+	v4l2_fh_release(file);
- 	return ret;
- }
+diff --git a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
+index 31390ce2dbf2..ae274a7aa3a9 100644
+--- a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
++++ b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
+@@ -45,6 +45,8 @@ static void handle_cec_message(struct cros_ec_cec *cros_ec_cec)
+ 	uint8_t *cec_message = cros_ec->event_data.data.cec_message;
+ 	unsigned int len = cros_ec->event_size;
+ 
++	if (len > CEC_MAX_MSG_SIZE)
++		len = CEC_MAX_MSG_SIZE;
+ 	cros_ec_cec->rx_msg.len = len;
+ 	memcpy(cros_ec_cec->rx_msg.msg, cec_message, len);
  
 -- 
 2.35.1
