@@ -2,47 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCC94FA3743
-	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:29:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5DD4FA3748
+	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:29:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbiKAL3O (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Nov 2022 07:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35372 "EHLO
+        id S230381AbiKAL3W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Nov 2022 07:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbiKAL2L (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:28:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A1017E3A;
-        Tue,  1 Nov 2022 04:28:04 -0700 (PDT)
+        with ESMTP id S230268AbiKAL21 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:28:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3019E1A056;
+        Tue,  1 Nov 2022 04:28:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F52E615DC;
-        Tue,  1 Nov 2022 11:28:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3B55C433D6;
-        Tue,  1 Nov 2022 11:28:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E2107B81CC1;
+        Tue,  1 Nov 2022 11:28:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A8E0C433C1;
+        Tue,  1 Nov 2022 11:28:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667302083;
-        bh=GqCyl68jp6W45Z7qyoiVK7tivUVx/lo83ju5sog/iCg=;
+        s=k20201202; t=1667302089;
+        bh=IQWnML7R5rhFY2oavhDQX27l1tZcyVC5nL2ZXOPK5tc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PVeWWfFuCPVehdvrg8KPLDxdIgMK6UHCkw1aMQ+2EmhL1wjhGZJmWD52MqoYRx/+f
-         QRYC7WAx8pawY7yJgWfTX3IadUyI82yW2g0m4Db2OCMh1spnOfWEQ8tjUDyW3lHDWI
-         2nkWWofA3gOv1CJ2HA5TUQs5rt+wrzQYUZ9XStu5GsGH/WndeEtHvHIvy4A+3zAkLt
-         qGzDIWVgR3mAdQSAhNngyCAO4Au63ddopTnWMhiC80LTSyH2qJvAoZ4LEy9PsAu2Ok
-         BFqxlyu7Ny2dNdXM7efDItYRKMNBgztxo1I7YlqFs8urcwDuv0T7UYr4+b+QXsbAtW
-         UreXCb13Qgtyw==
+        b=t41498uOZCJ/Ax089/oKNvKpllDmE7HDEj7Hdw88iuzsnjVFbIKqfeMSixUi/ONZs
+         VxZp6XG0WcBsqD6N59XGp2By5b4lb5sGtBo272w8VcvxHOfUo4HlKgp2BneRdcEfO6
+         A0WWu6PResHLKOh7zXqP/RbspNKI5ltYa4t9TnPd3l9cl2SZb3edehff0j9cd0aKtd
+         DaOJB+UjlCLKy6VPUqWoiKE1Y6Mp20LBmSUs57+GWpkRRdfi+XH0JvMOKFOXKlMQmu
+         skKQ1jxpXPaQyBcACEnnyAfi3SXk84BffZLoxYM1gtJimzZTav1v0XS2/y6UFMMw21
+         YqLx5V5S1EreA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, gregkh@linuxfoundation.org,
         andriy.shevchenko@linux.intel.com, kitakar@gmail.com,
-        xiam0nd.tong@gmail.com, linux-media@vger.kernel.org,
+        alan@linux.intel.com, linux-media@vger.kernel.org,
         linux-staging@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.0 16/34] media: atomisp: Fix VIDIOC_TRY_FMT
-Date:   Tue,  1 Nov 2022 07:27:08 -0400
-Message-Id: <20221101112726.799368-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.0 18/34] media: atomisp: Fix v4l2_fh resource leak on open errors
+Date:   Tue,  1 Nov 2022 07:27:10 -0400
+Message-Id: <20221101112726.799368-18-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221101112726.799368-1-sashal@kernel.org>
 References: <20221101112726.799368-1-sashal@kernel.org>
@@ -56,49 +56,31 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit 4d3aafb9c9bba59c9b6f6df8ea6c89483bfed8d4 ]
+[ Upstream commit 5b9853ad1329be49343a608d574eb232ff1273d0 ]
 
-atomisp_try_fmt() calls the sensor's try_fmt handler but it does
-not copy the result back to the passed in v4l2_pix_format under
-some circumstances.
+When atomisp_open() fails then it must call v4l2_fh_release() to undo
+the results of v4l2_fh_open().
 
-Potentially returning an unsupported resolution to userspace,
-which VIDIOC_TRY_FMT is not supposed to do.
-
-atomisp_set_fmt() also uses atomisp_try_fmt() and relies
-on this wrong behavior. The VIDIOC_TRY_FMT call passes NULL for
-the res_overflow argument where as the atomisp_set_fmt() call
-passes non NULL.
-
-Use the res_overflow argument to differentiate between the 2 callers
-and always propagate the sensors result in the VIDIOC_TRY_FMT case.
-
-This fixes the resolution list in camorama showing resolutions like e.g.
-1584x1184 instead of 1600x1200.
-
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/atomisp/pci/atomisp_cmd.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/staging/media/atomisp/pci/atomisp_fops.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.c b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-index c932f340068f..db6465756e49 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-@@ -4886,8 +4886,8 @@ int atomisp_try_fmt(struct video_device *vdev, struct v4l2_pix_format *f,
- 		return 0;
- 	}
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
+index 77150e4ae144..92cbc0e263e8 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
+@@ -903,6 +903,7 @@ static int atomisp_open(struct file *file)
+ 	pm_runtime_put(vdev->v4l2_dev->dev);
+ error:
+ 	rt_mutex_unlock(&isp->mutex);
++	v4l2_fh_release(file);
+ 	return ret;
+ }
  
--	if (snr_mbus_fmt->width < f->width
--	    && snr_mbus_fmt->height < f->height) {
-+	if (!res_overflow || (snr_mbus_fmt->width < f->width &&
-+			      snr_mbus_fmt->height < f->height)) {
- 		f->width = snr_mbus_fmt->width;
- 		f->height = snr_mbus_fmt->height;
- 		/* Set the flag when resolution requested is
 -- 
 2.35.1
 
