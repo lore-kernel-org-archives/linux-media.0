@@ -2,47 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8048FC433FE
-	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:28:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 153EDFA3745
+	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:28:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbiKAL2X (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Nov 2022 07:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
+        id S230147AbiKAL21 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Nov 2022 07:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbiKAL2B (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:28:01 -0400
+        with ESMTP id S230323AbiKAL2E (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:28:04 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89ED4193EB;
-        Tue,  1 Nov 2022 04:27:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6301A22A;
+        Tue,  1 Nov 2022 04:27:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 20CF9615D7;
-        Tue,  1 Nov 2022 11:27:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D044C433D6;
-        Tue,  1 Nov 2022 11:27:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A3C76615DD;
+        Tue,  1 Nov 2022 11:27:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B69A4C433D7;
+        Tue,  1 Nov 2022 11:27:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667302069;
-        bh=vTVY2knQEcb7la2FRrJIXdoN6YYxxKU3nLVR9s6WBMQ=;
+        s=k20201202; t=1667302075;
+        bh=b+tOwlQfc42Ncz47RnuqxCIhFUSWfgZuPWXMdk9EOzI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ni93Maz6JHDiWoBCandlPuyZUAhvQegLi+xbDjrTZSM3DjSqlWhk9H07iRPhAG4u6
-         2PeZxAE7lAC4pq/waSXms4sBMI+tQkNc+Kh58ABl5dCGV6/KsFrnQhXqfgu/DDsqOC
-         eivAzQKzcRJfZ2lMRgQ668v9y8hQNorTfmBSuyi4UblPGGGsfQHwFVdd9bJiMaPMz8
-         FUM0m2f962K9cCRqIveFSo7y6papv+aJ1hcNQnUWJGuYrE/lb7Cs8fsOsKPvG5LHN3
-         senI2fpCpFfuYSCsIVmawxelEJMWnhT7bO4FD7/xXRiTsLIVdA/NwOlV0SufiI8igB
-         ibj6o+v6JLmWw==
+        b=K8x6Te07yn+54I5W0CN7L52abTQvozAySpzSqJWCCyrbdx9hSkS3WsCNFX40WRBHj
+         oNGgvsM/sanzknXwr0/ndG6RQzc+eHi/PcR/wc1ZrTEQrDbgTw1gcscrNl7PzHxsEB
+         a0iS2FTngGkEfLNW3NGUrgXTJ0DMH1fz2PQUS9OdUr+cFAW7YIfc1JxeW80XfykH8u
+         GzHw2kra/efqXtS8Ab1vKP2fxtiffjS6wgvZ38fArJ3XF/gUvhAT9csnMWXJTaEkdX
+         SwJE2kLfV0FbI21/Nd1diYDw4KlIXHVj/SvNzdBOcd6TKfCuTH8DBT7kyF40x1MLRR
+         6uRFCXcTyY6rQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hangyu Hua <hbh25y@gmail.com>,
+Cc:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, neil.armstrong@linaro.org,
-        gregkh@linuxfoundation.org, khilman@baylibre.com,
-        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.0 10/34] media: meson: vdec: fix possible refcount leak in vdec_probe()
-Date:   Tue,  1 Nov 2022 07:27:02 -0400
-Message-Id: <20221101112726.799368-10-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.0 13/34] media: hantro: HEVC: Fix chroma offset computation
+Date:   Tue,  1 Nov 2022 07:27:05 -0400
+Message-Id: <20221101112726.799368-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221101112726.799368-1-sashal@kernel.org>
 References: <20221101112726.799368-1-sashal@kernel.org>
@@ -54,41 +54,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 
-[ Upstream commit 7718999356234d9cc6a11b4641bb773928f1390f ]
+[ Upstream commit f64853ad7f964b3bf7c1d63b27ca7ef972797a1c ]
 
-v4l2_device_unregister need to be called to put the refcount got by
-v4l2_device_register when vdec_probe fails or vdec_remove is called.
+The chroma offset depends of the bitstream depth.
+Make sure that ctx->bit_depth is used to compute it.
 
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/meson/vdec/vdec.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/staging/media/hantro/hantro_g2_hevc_dec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/meson/vdec/vdec.c b/drivers/staging/media/meson/vdec/vdec.c
-index 8549d95be0f2..52f224d8def1 100644
---- a/drivers/staging/media/meson/vdec/vdec.c
-+++ b/drivers/staging/media/meson/vdec/vdec.c
-@@ -1102,6 +1102,7 @@ static int vdec_probe(struct platform_device *pdev)
+diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+index 233ecd863d5f..a917079a6ed3 100644
+--- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
++++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+@@ -12,7 +12,7 @@
  
- err_vdev_release:
- 	video_device_release(vdev);
-+	v4l2_device_unregister(&core->v4l2_dev);
- 	return ret;
+ static size_t hantro_hevc_chroma_offset(struct hantro_ctx *ctx)
+ {
+-	return ctx->dst_fmt.width * ctx->dst_fmt.height;
++	return ctx->dst_fmt.width * ctx->dst_fmt.height * ctx->bit_depth / 8;
  }
  
-@@ -1110,6 +1111,7 @@ static int vdec_remove(struct platform_device *pdev)
- 	struct amvdec_core *core = platform_get_drvdata(pdev);
- 
- 	video_unregister_device(core->vdev_dec);
-+	v4l2_device_unregister(&core->v4l2_dev);
- 
- 	return 0;
- }
+ static size_t hantro_hevc_motion_vectors_offset(struct hantro_ctx *ctx)
 -- 
 2.35.1
 
