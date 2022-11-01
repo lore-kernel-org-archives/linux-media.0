@@ -2,47 +2,46 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14EDBC433FE
-	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:38:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B210FA373D
+	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:41:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231406AbiKALil (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Nov 2022 07:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59034 "EHLO
+        id S230377AbiKALk4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Nov 2022 07:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231379AbiKALiV (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:38:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C0B1DF05;
-        Tue,  1 Nov 2022 04:32:30 -0700 (PDT)
+        with ESMTP id S231395AbiKALih (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:38:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92BF1E3E9;
+        Tue,  1 Nov 2022 04:32:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3BF8615FC;
-        Tue,  1 Nov 2022 11:31:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 580CCC433D6;
-        Tue,  1 Nov 2022 11:31:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 13417615FE;
+        Tue,  1 Nov 2022 11:31:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D82E7C433D7;
+        Tue,  1 Nov 2022 11:31:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667302284;
-        bh=UCC8lyDEoZajJOcyBilNX3fzGYsshdVzFMcs3OEstNw=;
+        s=k20201202; t=1667302312;
+        bh=pgEpeLqWWA/iYrLgMSS01/VSurWQ4R6k9M+CT2jmfRY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cazFgmPSyS/y4hdw9scYB7cDm91AKNw2xgptGQHNnyc7WJNXlr1ZlX9/Kvhp861xm
-         IDQGGsSs7FtG1D4vLoLMy2A8xz9gRfp7Ie351erqQ/tyS7l3FSr9XMSO1UZsA+pfHL
-         XphFP52DOYoaTZLcWf9hFqqsfrkpDuIcpuTmNMYYNiTacQrpbkROcXNaiiFdTJr8if
-         8THJhyvDf3FdkjTbQbEZUF5Hw0YVFTLMH6yioz7ZETxh0+ems9+dwLtWnjzEChW6ZJ
-         nMtGzE+wlOt2yIUUJQpjX6ZrjPK/hzOnm88LUP9Dky2skfbinOdLCsdHuyHPyporLg
-         W1VU5ejTsLswA==
+        b=N4xiX/oojOLK+pU5WbC3ebtg80NqHWzOtlh+L478i/LYL48TV5rcGp98EbzBwfXQe
+         cna7o4fn+QKjF1GZQrdMkzU23pIhW+BTuUjDv7QOCKxXz4Zlzdloo56r6Uq7m/HY/0
+         a/UhBIxdrhN485FxenxMnOaI5XDPg2OkegtL9TgAL0M7xeKWaQgIZSZQqF1tO40NDE
+         LCXnvfYRf0oMN7TZwChTB+oZL9DhBde8uz5aYB7SRckVv+LtOblSI6gCLbwM2gdjly
+         TjKuJ8FJgCcqbxYI8OnMQ9+SErEIqfPYUEvwLPFz9jem3QKr2XGGi167A+Po/8OpMh
+         owS2V8O4Uvpqg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, bleung@chromium.org,
-        linux-media@vger.kernel.org, chrome-platform@lists.linux.dev
-Subject: [PATCH AUTOSEL 4.19 2/6] media: cros-ec-cec: limit msg.len to CEC_MAX_MSG_SIZE
-Date:   Tue,  1 Nov 2022 07:31:12 -0400
-Message-Id: <20221101113118.800889-2-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 2/3] media: dvb-frontends/drxk: initialize err to 0
+Date:   Tue,  1 Nov 2022 07:31:44 -0400
+Message-Id: <20221101113147.801048-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221101113118.800889-1-sashal@kernel.org>
-References: <20221101113118.800889-1-sashal@kernel.org>
+In-Reply-To: <20221101113147.801048-1-sashal@kernel.org>
+References: <20221101113147.801048-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -53,30 +52,37 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 2dc73b48665411a08c4e5f0f823dea8510761603 ]
+[ Upstream commit 20694e96ca089ce6693c2348f8f628ee621e4e74 ]
 
-I expect that the hardware will have limited this to 16, but just in
-case it hasn't, check for this corner case.
+Fix a compiler warning:
+
+drivers/media/dvb-frontends/drxk_hard.c: In function 'drxk_read_ucblocks':
+drivers/media/dvb-frontends/drxk_hard.c:6673:21: warning: 'err' may be used uninitialized [-Wmaybe-uninitialized]
+ 6673 |         *ucblocks = (u32) err;
+      |                     ^~~~~~~~~
+drivers/media/dvb-frontends/drxk_hard.c:6663:13: note: 'err' was declared here
+ 6663 |         u16 err;
+      |             ^~~
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/cros-ec-cec/cros-ec-cec.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/dvb-frontends/drxk_hard.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-index 7bc4d8a9af28..1f35770245d1 100644
---- a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-+++ b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-@@ -44,6 +44,8 @@ static void handle_cec_message(struct cros_ec_cec *cros_ec_cec)
- 	uint8_t *cec_message = cros_ec->event_data.data.cec_message;
- 	unsigned int len = cros_ec->event_size;
+diff --git a/drivers/media/dvb-frontends/drxk_hard.c b/drivers/media/dvb-frontends/drxk_hard.c
+index c595adc61c6f..f6cf1b0b992c 100644
+--- a/drivers/media/dvb-frontends/drxk_hard.c
++++ b/drivers/media/dvb-frontends/drxk_hard.c
+@@ -6697,7 +6697,7 @@ static int drxk_read_snr(struct dvb_frontend *fe, u16 *snr)
+ static int drxk_read_ucblocks(struct dvb_frontend *fe, u32 *ucblocks)
+ {
+ 	struct drxk_state *state = fe->demodulator_priv;
+-	u16 err;
++	u16 err = 0;
  
-+	if (len > CEC_MAX_MSG_SIZE)
-+		len = CEC_MAX_MSG_SIZE;
- 	cros_ec_cec->rx_msg.len = len;
- 	memcpy(cros_ec_cec->rx_msg.msg, cec_message, len);
+ 	dprintk(1, "\n");
  
 -- 
 2.35.1
