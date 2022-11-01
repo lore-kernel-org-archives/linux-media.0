@@ -2,50 +2,46 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CC43FA3745
-	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:37:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE79FFA373D
+	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:37:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231179AbiKALhb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Nov 2022 07:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
+        id S231313AbiKALhf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Nov 2022 07:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiKALhL (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:37:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97181D0EF;
-        Tue,  1 Nov 2022 04:32:02 -0700 (PDT)
+        with ESMTP id S231285AbiKALhP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:37:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C001D337;
+        Tue,  1 Nov 2022 04:32:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 57281615FB;
-        Tue,  1 Nov 2022 11:31:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BC6BC43140;
-        Tue,  1 Nov 2022 11:31:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16CACB81CD2;
+        Tue,  1 Nov 2022 11:31:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EE35C433B5;
+        Tue,  1 Nov 2022 11:31:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667302268;
-        bh=LD0hUez/+4eQ/JcqQmqxn2cEjEtVgr9CXGubJIH/Jtg=;
+        s=k20201202; t=1667302286;
+        bh=g+cv/K2ZJ3kR1P1sjXVQV3NhC0JzyAn3UeI8gjk605o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lc1fFQmtZMJ5icOpHseNSqPWED6HhDZlhjctrN8SIkQKH736XGah+X5m0NGbunqwe
-         D2IJ5nAf8pMqyPzpYk/5e7RedhWERwYn8RcIQ2Byzy6aaGerSuauUO3C+da4SJr9VX
-         2AN67HJQnePNiRh/FSd7VXHJS997qxKOBCdDNcPQtupcGX57iS6ctr+JF+/YGkrJXu
-         1a0vPyeU6AII2giOIJBs3ksFH9CTzCh7PN50S2alp3+biYQYGX9gOCC346BKC3xulU
-         thwYzy7n/8Fw1fuNRQC5h4N75OCgQwiMZGBvrCq/G12PGFs7waDqJSWH0SzHk6W8MW
-         SHuSh/4RkFwrg==
+        b=JIsqRwpm4wXtBZIQ/QTINvLLBufTWNau2H/dt5VpUa1gnf9/HuvqQ/0Mbbj0yy+ZZ
+         /L+cdPoxNqLuKPf2t93KlFLKqAUF3Z1frxFubvc1Unki4472srh6CGE+8Yj0oWapXK
+         Xyev9OJ9mK1bY4HFceAZRm4uJlkncUXq9+lQUuIWTGt2rb/Yd+jm+xzklws6cS8V3F
+         0SudJcLgRcdjyMkUvXJ1TmPJ9lyBVs9153yPn/6fyd22fK9Q/Saet+qt4/npDKV5iC
+         JIgx4KVNU6ExA/ECvW5N1IVy90haE9e1uq4YD+xH/3Qy4f9jC3hjY9leBk+9usKvbB
+         yuw3cGCFymb/w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hangyu Hua <hbh25y@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, neil.armstrong@linaro.org,
-        gregkh@linuxfoundation.org, khilman@baylibre.com,
-        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 4/8] media: meson: vdec: fix possible refcount leak in vdec_probe()
-Date:   Tue,  1 Nov 2022 07:30:53 -0400
-Message-Id: <20221101113059.800777-4-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 3/6] media: dvb-frontends/drxk: initialize err to 0
+Date:   Tue,  1 Nov 2022 07:31:13 -0400
+Message-Id: <20221101113118.800889-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221101113059.800777-1-sashal@kernel.org>
-References: <20221101113059.800777-1-sashal@kernel.org>
+In-Reply-To: <20221101113118.800889-1-sashal@kernel.org>
+References: <20221101113118.800889-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -54,41 +50,40 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 7718999356234d9cc6a11b4641bb773928f1390f ]
+[ Upstream commit 20694e96ca089ce6693c2348f8f628ee621e4e74 ]
 
-v4l2_device_unregister need to be called to put the refcount got by
-v4l2_device_register when vdec_probe fails or vdec_remove is called.
+Fix a compiler warning:
 
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+drivers/media/dvb-frontends/drxk_hard.c: In function 'drxk_read_ucblocks':
+drivers/media/dvb-frontends/drxk_hard.c:6673:21: warning: 'err' may be used uninitialized [-Wmaybe-uninitialized]
+ 6673 |         *ucblocks = (u32) err;
+      |                     ^~~~~~~~~
+drivers/media/dvb-frontends/drxk_hard.c:6663:13: note: 'err' was declared here
+ 6663 |         u16 err;
+      |             ^~~
+
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/meson/vdec/vdec.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/dvb-frontends/drxk_hard.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/meson/vdec/vdec.c b/drivers/staging/media/meson/vdec/vdec.c
-index 8dd1396909d7..a242bbe23ba2 100644
---- a/drivers/staging/media/meson/vdec/vdec.c
-+++ b/drivers/staging/media/meson/vdec/vdec.c
-@@ -1074,6 +1074,7 @@ static int vdec_probe(struct platform_device *pdev)
+diff --git a/drivers/media/dvb-frontends/drxk_hard.c b/drivers/media/dvb-frontends/drxk_hard.c
+index 84ac3f73f8fe..100a3a0b2db3 100644
+--- a/drivers/media/dvb-frontends/drxk_hard.c
++++ b/drivers/media/dvb-frontends/drxk_hard.c
+@@ -6694,7 +6694,7 @@ static int drxk_read_snr(struct dvb_frontend *fe, u16 *snr)
+ static int drxk_read_ucblocks(struct dvb_frontend *fe, u32 *ucblocks)
+ {
+ 	struct drxk_state *state = fe->demodulator_priv;
+-	u16 err;
++	u16 err = 0;
  
- err_vdev_release:
- 	video_device_release(vdev);
-+	v4l2_device_unregister(&core->v4l2_dev);
- 	return ret;
- }
+ 	dprintk(1, "\n");
  
-@@ -1082,6 +1083,7 @@ static int vdec_remove(struct platform_device *pdev)
- 	struct amvdec_core *core = platform_get_drvdata(pdev);
- 
- 	video_unregister_device(core->vdev_dec);
-+	v4l2_device_unregister(&core->v4l2_dev);
- 
- 	return 0;
- }
 -- 
 2.35.1
 
