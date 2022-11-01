@@ -2,46 +2,44 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE79FFA373D
-	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:37:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6CB0FA373D
+	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:37:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbiKALhf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Nov 2022 07:37:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46476 "EHLO
+        id S231295AbiKALhj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Nov 2022 07:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231285AbiKALhP (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:37:15 -0400
+        with ESMTP id S231377AbiKALhV (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:37:21 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C001D337;
-        Tue,  1 Nov 2022 04:32:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B581D651;
+        Tue,  1 Nov 2022 04:32:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16CACB81CD2;
-        Tue,  1 Nov 2022 11:31:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EE35C433B5;
-        Tue,  1 Nov 2022 11:31:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0105B81CC7;
+        Tue,  1 Nov 2022 11:31:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6208C433C1;
+        Tue,  1 Nov 2022 11:31:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667302286;
-        bh=g+cv/K2ZJ3kR1P1sjXVQV3NhC0JzyAn3UeI8gjk605o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JIsqRwpm4wXtBZIQ/QTINvLLBufTWNau2H/dt5VpUa1gnf9/HuvqQ/0Mbbj0yy+ZZ
-         /L+cdPoxNqLuKPf2t93KlFLKqAUF3Z1frxFubvc1Unki4472srh6CGE+8Yj0oWapXK
-         Xyev9OJ9mK1bY4HFceAZRm4uJlkncUXq9+lQUuIWTGt2rb/Yd+jm+xzklws6cS8V3F
-         0SudJcLgRcdjyMkUvXJ1TmPJ9lyBVs9153yPn/6fyd22fK9Q/Saet+qt4/npDKV5iC
-         JIgx4KVNU6ExA/ECvW5N1IVy90haE9e1uq4YD+xH/3Qy4f9jC3hjY9leBk+9usKvbB
-         yuw3cGCFymb/w==
+        s=k20201202; t=1667302261;
+        bh=Kw4Nn01bzJRVrsHjMDBHatH2mY1/n9rmS1Khm+s9vkk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=vDwmwT7EeqTQduPCn1sd1X1H5u/izqIp9OXJidjWQ/aVDEQgJTGIx7YDO58FWvwK3
+         ANchDS7qLU6eWMs5YsmRRzxkq4QdZrA5s+S1TUgNjcRoAohZXgIChnej7M+j0E+6P2
+         3bSwX4XFBXtTZ7Il44BNkHSLwobBkJWCOaCFwCbTa5pTBlhJO3oO0jT1dcATNhXbFy
+         ISBADdhNJHRMIGuhf5YDtJ4DFqZbX3U2wQCvTNQ1x5z9NWW1vA0LTCzXpdJjzSWQQo
+         +2un1c2vDC8f5mR5Yl89QFOqwxZsAglP354ypPhE7OINg+RIdSp4rvTZM5oWLS1rrQ
+         GEyb0ZK4NwQwA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 3/6] media: dvb-frontends/drxk: initialize err to 0
-Date:   Tue,  1 Nov 2022 07:31:13 -0400
-Message-Id: <20221101113118.800889-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 1/8] media: s5p_cec: limit msg.len to CEC_MAX_MSG_SIZE
+Date:   Tue,  1 Nov 2022 07:30:50 -0400
+Message-Id: <20221101113059.800777-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221101113118.800889-1-sashal@kernel.org>
-References: <20221101113118.800889-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -52,38 +50,31 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 20694e96ca089ce6693c2348f8f628ee621e4e74 ]
+[ Upstream commit 93f65ce036863893c164ca410938e0968964b26c ]
 
-Fix a compiler warning:
-
-drivers/media/dvb-frontends/drxk_hard.c: In function 'drxk_read_ucblocks':
-drivers/media/dvb-frontends/drxk_hard.c:6673:21: warning: 'err' may be used uninitialized [-Wmaybe-uninitialized]
- 6673 |         *ucblocks = (u32) err;
-      |                     ^~~~~~~~~
-drivers/media/dvb-frontends/drxk_hard.c:6663:13: note: 'err' was declared here
- 6663 |         u16 err;
-      |             ^~~
+I expect that the hardware will have limited this to 16, but just in
+case it hasn't, check for this corner case.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-frontends/drxk_hard.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/s5p-cec/s5p_cec.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/dvb-frontends/drxk_hard.c b/drivers/media/dvb-frontends/drxk_hard.c
-index 84ac3f73f8fe..100a3a0b2db3 100644
---- a/drivers/media/dvb-frontends/drxk_hard.c
-+++ b/drivers/media/dvb-frontends/drxk_hard.c
-@@ -6694,7 +6694,7 @@ static int drxk_read_snr(struct dvb_frontend *fe, u16 *snr)
- static int drxk_read_ucblocks(struct dvb_frontend *fe, u32 *ucblocks)
- {
- 	struct drxk_state *state = fe->demodulator_priv;
--	u16 err;
-+	u16 err = 0;
- 
- 	dprintk(1, "\n");
- 
+diff --git a/drivers/media/platform/s5p-cec/s5p_cec.c b/drivers/media/platform/s5p-cec/s5p_cec.c
+index 828792b854f5..0c668d4a3daa 100644
+--- a/drivers/media/platform/s5p-cec/s5p_cec.c
++++ b/drivers/media/platform/s5p-cec/s5p_cec.c
+@@ -115,6 +115,8 @@ static irqreturn_t s5p_cec_irq_handler(int irq, void *priv)
+ 				dev_dbg(cec->dev, "Buffer overrun (worker did not process previous message)\n");
+ 			cec->rx = STATE_BUSY;
+ 			cec->msg.len = status >> 24;
++			if (cec->msg.len > CEC_MAX_MSG_SIZE)
++				cec->msg.len = CEC_MAX_MSG_SIZE;
+ 			cec->msg.rx_status = CEC_RX_STATUS_OK;
+ 			s5p_cec_get_rx_buf(cec, cec->msg.len,
+ 					cec->msg.msg);
 -- 
 2.35.1
 
