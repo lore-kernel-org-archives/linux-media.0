@@ -2,43 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CA26FA3745
-	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:35:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59A35FA373D
+	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:35:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbiKALfO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Nov 2022 07:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48636 "EHLO
+        id S231130AbiKALfR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Nov 2022 07:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiKALez (ORCPT
+        with ESMTP id S230302AbiKALez (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:34:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433521CB13;
-        Tue,  1 Nov 2022 04:31:01 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E7C1CB01;
+        Tue,  1 Nov 2022 04:30:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 25BD8B81CCC;
-        Tue,  1 Nov 2022 11:30:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B248C433B5;
-        Tue,  1 Nov 2022 11:30:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 36FE8B81CC1;
+        Tue,  1 Nov 2022 11:30:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A76EDC433C1;
+        Tue,  1 Nov 2022 11:30:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667302226;
-        bh=bCGwGWfkxqFfeUoRZcBIrTw7GLMqslGvE9WpxKhxs5I=;
+        s=k20201202; t=1667302235;
+        bh=cmNTbBy0ITeyQAOWKJ1WhJquHtMEaGIfAStDm/zXi/g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q3jUIb6wqnEcpIaTmvD5s8vFcGgszbkD4A17paVsR/KxXz0EV4DI9O25K++C14cCW
-         l2Wvovfmv/ndL1QVCa2jmleL9TXeSRC2g8+GssrMNhzUi0WY01GSmImnH3diJFZIOe
-         K4mt3x0dgPbRfjNRtqo3reBD6jTa2wf/GbOMwyI2DvAHav3ZNmov7FKBYKzEJ3S8Qj
-         e1Y9o7Nb8hDDtpLOROzWQiFGQ7vADAnZHh5S0txdYAbhRMI3pryavA0ci3O3YCYOTW
-         0S57np1CdoGR++1FTMr8WcOcA0+Pt/j5hnuQ6vUm32ooE6RZhvHIj0RolPsR0xtsbV
-         mudAUo3DAOmqA==
+        b=FQW6zXZU2NQLpgsgZy4nmfayTOEIqFoK6ZudxvFuQcTkEL5ivtQK91xyLsniUwOdX
+         owMnwV95PJfTUv/efCrn3tQRI1DKx/HhN7lTe5BANfRcfdn+73vgvUStLh5JUMReDE
+         IU04oMYMdh3Q2XQtIzygF8GsGS7Ep4OraPLfdnCj1Fq3U2J5XK/LmzPuUiOH+y/iVQ
+         K+dE/NRnuyx+YMdwDIV98utJuQGhh3Z1gOALoTacrfqjlZgjJr+8aqOIoZesRaCrrO
+         1FkT2bro2GxCF00ypBi/Ka5PfPgSzpfRDPJgg/qYXupDNqni+dTrlE3H11aDpfCxra
+         PmyU2scCz6E/g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 05/14] media: dvb-frontends/drxk: initialize err to 0
-Date:   Tue,  1 Nov 2022 07:30:01 -0400
-Message-Id: <20221101113012.800271-5-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, gregkh@linuxfoundation.org,
+        andriy.shevchenko@linux.intel.com, kitakar@gmail.com,
+        alan@linux.intel.com, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.10 08/14] media: atomisp: Fix v4l2_fh resource leak on open errors
+Date:   Tue,  1 Nov 2022 07:30:04 -0400
+Message-Id: <20221101113012.800271-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221101113012.800271-1-sashal@kernel.org>
 References: <20221101113012.800271-1-sashal@kernel.org>
@@ -50,39 +54,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit 20694e96ca089ce6693c2348f8f628ee621e4e74 ]
+[ Upstream commit 5b9853ad1329be49343a608d574eb232ff1273d0 ]
 
-Fix a compiler warning:
+When atomisp_open() fails then it must call v4l2_fh_release() to undo
+the results of v4l2_fh_open().
 
-drivers/media/dvb-frontends/drxk_hard.c: In function 'drxk_read_ucblocks':
-drivers/media/dvb-frontends/drxk_hard.c:6673:21: warning: 'err' may be used uninitialized [-Wmaybe-uninitialized]
- 6673 |         *ucblocks = (u32) err;
-      |                     ^~~~~~~~~
-drivers/media/dvb-frontends/drxk_hard.c:6663:13: note: 'err' was declared here
- 6663 |         u16 err;
-      |             ^~~
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-frontends/drxk_hard.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/media/atomisp/pci/atomisp_fops.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/dvb-frontends/drxk_hard.c b/drivers/media/dvb-frontends/drxk_hard.c
-index a57470bf71bf..2134e25096aa 100644
---- a/drivers/media/dvb-frontends/drxk_hard.c
-+++ b/drivers/media/dvb-frontends/drxk_hard.c
-@@ -6672,7 +6672,7 @@ static int drxk_read_snr(struct dvb_frontend *fe, u16 *snr)
- static int drxk_read_ucblocks(struct dvb_frontend *fe, u32 *ucblocks)
- {
- 	struct drxk_state *state = fe->demodulator_priv;
--	u16 err;
-+	u16 err = 0;
- 
- 	dprintk(1, "\n");
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
+index b751df31cc24..ccf398b42520 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
+@@ -890,6 +890,7 @@ static int atomisp_open(struct file *file)
+ 	hmm_pool_unregister(HMM_POOL_TYPE_DYNAMIC);
+ 	pm_runtime_put(vdev->v4l2_dev->dev);
+ 	rt_mutex_unlock(&isp->mutex);
++	v4l2_fh_release(file);
+ 	return ret;
+ }
  
 -- 
 2.35.1
