@@ -2,47 +2,49 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCBC8FA3743
-	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:35:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78940FA3743
+	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:35:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbiKALfb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Nov 2022 07:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45082 "EHLO
+        id S231266AbiKALfk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Nov 2022 07:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbiKALfG (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:35:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E6A6397;
-        Tue,  1 Nov 2022 04:31:06 -0700 (PDT)
+        with ESMTP id S230439AbiKALfK (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:35:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85AF6448;
+        Tue,  1 Nov 2022 04:31:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BD5C5B81CCD;
-        Tue,  1 Nov 2022 11:31:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90A16C433C1;
-        Tue,  1 Nov 2022 11:31:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D488A615EA;
+        Tue,  1 Nov 2022 11:30:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ACB6C433C1;
+        Tue,  1 Nov 2022 11:30:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667302264;
-        bh=pqxhOX89QC5Zrs00R7wOL/EwEMXmbVN0sPN00O3CMRA=;
+        s=k20201202; t=1667302232;
+        bh=iMtcZ2hgd/8o3eZRyC05fwrDGSMl1QLWd9ncN2TxP78=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qsberOuB/n1q4TqB8FHQy5GSWFRDIRDNnT0fRh7378IRdlkIRZsuRV3WNumSOkDBL
-         QsZhd1KRzR2vKFapX/HxH0ziz1vx7rst8kTUcvE7DF13m7Zzn3+VS2x1geg8jDXfce
-         HsxdCBs1mzJP6hffgGF0AKCY8RsGiO9RnM7u1qXBb6jrC9TyuEfMn/Xbwj+0B3xulH
-         ZC43K0U0uqApJxFw/YPWViidThQ12Z+/lW1Fw5tpZtPuvcWk/xiOo7G4gaOAd5yb2n
-         1dKqtbZC4eQI7A47lQvJ7FLUqaZ9KSqJmyk/Cn4eAanush41O3svZpr50v0tG8aDrI
-         xn+hDFFzr8S2g==
+        b=NrQBDsELl3mVQ5SpMh/ctW05BsDTaGyXhkp8RsrNHnKWyh/mOhrO0NIzE+Bn+zAg6
+         nT6/GTHa5rqliWOCkwDz1qhPx9YzHlKMs9kgfWd7C+du+E0ptcumHX+Z4lQ8hCpsVj
+         k8g0Vrgsaw/1AJQl10ILLhhbIbNUj34r0P+EMvI0GsJOJ/JBepfgueTvJ3gGjjLpxT
+         dcaewN7k/SsvKQHhV0bs/GBEYbv7hVlTQWXEcEPj9ufY+rCB5lzxyDDHw6CK2EW7kZ
+         T1uARhO/fX29bRlC+PnfaJ/slXVrxKQM8fcOUKiRuGd/KovFA325kYnmJU8snhImvI
+         OTzvsvB5NQ7uQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, bleung@chromium.org,
-        linux-media@vger.kernel.org, chrome-platform@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.4 2/8] media: cros-ec-cec: limit msg.len to CEC_MAX_MSG_SIZE
-Date:   Tue,  1 Nov 2022 07:30:51 -0400
-Message-Id: <20221101113059.800777-2-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, gregkh@linuxfoundation.org,
+        andriy.shevchenko@linux.intel.com, kitakar@gmail.com,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.10 07/14] media: atomisp: Ensure that USERPTR pointers are page aligned
+Date:   Tue,  1 Nov 2022 07:30:03 -0400
+Message-Id: <20221101113012.800271-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221101113059.800777-1-sashal@kernel.org>
-References: <20221101113059.800777-1-sashal@kernel.org>
+In-Reply-To: <20221101113012.800271-1-sashal@kernel.org>
+References: <20221101113012.800271-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -51,33 +53,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit 2dc73b48665411a08c4e5f0f823dea8510761603 ]
+[ Upstream commit 6e6c4ae0f0ba295dbf6cbd48d93bec169d6ce431 ]
 
-I expect that the hardware will have limited this to 16, but just in
-case it hasn't, check for this corner case.
+The atomisp code needs USERPTR pointers to be page aligned,
+otherwise bad things (scribbling over other parts of the
+process' RAM) happen.
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Add a check to ensure this and exit VIDIOC_QBUF calls with
+unaligned pointers with -EINVAL.
+
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/cros-ec-cec/cros-ec-cec.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/staging/media/atomisp/pci/atomisp_ioctl.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-index 31390ce2dbf2..ae274a7aa3a9 100644
---- a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-+++ b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-@@ -45,6 +45,8 @@ static void handle_cec_message(struct cros_ec_cec *cros_ec_cec)
- 	uint8_t *cec_message = cros_ec->event_data.data.cec_message;
- 	unsigned int len = cros_ec->event_size;
- 
-+	if (len > CEC_MAX_MSG_SIZE)
-+		len = CEC_MAX_MSG_SIZE;
- 	cros_ec_cec->rx_msg.len = len;
- 	memcpy(cros_ec_cec->rx_msg.msg, cec_message, len);
- 
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+index 8a0648fd7c81..317db11703e6 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+@@ -1290,6 +1290,12 @@ static int atomisp_qbuf(struct file *file, void *fh, struct v4l2_buffer *buf)
+ 	 * address and reprograme out page table properly
+ 	 */
+ 	if (buf->memory == V4L2_MEMORY_USERPTR) {
++		if (offset_in_page(buf->m.userptr)) {
++			dev_err(isp->dev, "Error userptr is not page aligned.\n");
++			ret = -EINVAL;
++			goto error;
++		}
++
+ 		vb = pipe->capq.bufs[buf->index];
+ 		vm_mem = vb->priv;
+ 		if (!vm_mem) {
 -- 
 2.35.1
 
