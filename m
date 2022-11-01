@@ -2,47 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 153EDFA3745
-	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:28:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F63CFA373D
+	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:28:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbiKAL21 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Nov 2022 07:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35376 "EHLO
+        id S229929AbiKAL2a (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Nov 2022 07:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbiKAL2E (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:28:04 -0400
+        with ESMTP id S230258AbiKAL2B (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:28:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6301A22A;
-        Tue,  1 Nov 2022 04:27:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94171A05F;
+        Tue,  1 Nov 2022 04:27:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3C76615DD;
-        Tue,  1 Nov 2022 11:27:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B69A4C433D7;
-        Tue,  1 Nov 2022 11:27:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FBD9615C3;
+        Tue,  1 Nov 2022 11:27:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C9F5C433C1;
+        Tue,  1 Nov 2022 11:27:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667302075;
-        bh=b+tOwlQfc42Ncz47RnuqxCIhFUSWfgZuPWXMdk9EOzI=;
+        s=k20201202; t=1667302067;
+        bh=gya0bJPhRIzVdB0g3VDNw7gd6/xMQzaHVCvDAQ7OOLo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K8x6Te07yn+54I5W0CN7L52abTQvozAySpzSqJWCCyrbdx9hSkS3WsCNFX40WRBHj
-         oNGgvsM/sanzknXwr0/ndG6RQzc+eHi/PcR/wc1ZrTEQrDbgTw1gcscrNl7PzHxsEB
-         a0iS2FTngGkEfLNW3NGUrgXTJ0DMH1fz2PQUS9OdUr+cFAW7YIfc1JxeW80XfykH8u
-         GzHw2kra/efqXtS8Ab1vKP2fxtiffjS6wgvZ38fArJ3XF/gUvhAT9csnMWXJTaEkdX
-         SwJE2kLfV0FbI21/Nd1diYDw4KlIXHVj/SvNzdBOcd6TKfCuTH8DBT7kyF40x1MLRR
-         6uRFCXcTyY6rQ==
+        b=cvtR+s92y+Bk+pbPtngKSfAZYpKO8PIelKj11l8lDysJq5qk5hnED46cqHtBNpvTP
+         6IN4pRB7xLGiXWugV/tO7NmN8VR5bqwz9wQfd1ao0fGojYfAg8uCTM+/NQS1feCFOs
+         XJoBcDIrkPjdS32iEYLDk9/ZA8caF4u+G1JqjJsXWQkrX4VidC+OHAjLGhvcNfYcXd
+         7XwejT9OyJC/nD8qVRo3ruFNzzU41W4Iz9uD+im8M24lxiMmTErsUsW1U1OkMzt5Vy
+         Odg3dwUp7jeC11bSWPfv//qNHowNlrfNm8IxyszX//qtHrRo4i0vpHM5k3sRK0SXpj
+         7bmfWIiiB7aNw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+Cc:     Rory Liu <hellojacky0226@hotmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.0 13/34] media: hantro: HEVC: Fix chroma offset computation
-Date:   Tue,  1 Nov 2022 07:27:05 -0400
-Message-Id: <20221101112726.799368-13-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, bleung@chromium.org,
+        groeck@chromium.org, scott_chao@wistron.corp-partner.google.com,
+        ajye_huang@compal.corp-partner.google.com, zhuohao@chromium.org,
+        linux-media@vger.kernel.org, chrome-platform@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.0 09/34] media: platform: cros-ec: Add Kuldax to the match table
+Date:   Tue,  1 Nov 2022 07:27:01 -0400
+Message-Id: <20221101112726.799368-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221101112726.799368-1-sashal@kernel.org>
 References: <20221101112726.799368-1-sashal@kernel.org>
@@ -54,35 +54,34 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+From: Rory Liu <hellojacky0226@hotmail.com>
 
-[ Upstream commit f64853ad7f964b3bf7c1d63b27ca7ef972797a1c ]
+[ Upstream commit 594b6bdde2e7833a56413de5092b6e4188d33ff7 ]
 
-The chroma offset depends of the bitstream depth.
-Make sure that ctx->bit_depth is used to compute it.
+The Google Kuldax device uses the same approach as the Google Brask
+which enables the HDMI CEC via the cros-ec-cec driver.
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Signed-off-by: Rory Liu <hellojacky0226@hotmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/hantro/hantro_g2_hevc_dec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/cec/platform/cros-ec/cros-ec-cec.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-index 233ecd863d5f..a917079a6ed3 100644
---- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-@@ -12,7 +12,7 @@
+diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+index e5ebaa58be45..6ebedc71d67d 100644
+--- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
++++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+@@ -223,6 +223,8 @@ static const struct cec_dmi_match cec_dmi_match_table[] = {
+ 	{ "Google", "Moli", "0000:00:02.0", "Port B" },
+ 	/* Google Kinox */
+ 	{ "Google", "Kinox", "0000:00:02.0", "Port B" },
++	/* Google Kuldax */
++	{ "Google", "Kuldax", "0000:00:02.0", "Port B" },
+ };
  
- static size_t hantro_hevc_chroma_offset(struct hantro_ctx *ctx)
- {
--	return ctx->dst_fmt.width * ctx->dst_fmt.height;
-+	return ctx->dst_fmt.width * ctx->dst_fmt.height * ctx->bit_depth / 8;
- }
- 
- static size_t hantro_hevc_motion_vectors_offset(struct hantro_ctx *ctx)
+ static struct device *cros_ec_cec_find_hdmi_dev(struct device *dev,
 -- 
 2.35.1
 
