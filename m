@@ -2,43 +2,45 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8717FA373D
-	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:28:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BB36FA373D
+	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:28:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbiKAL2k (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Nov 2022 07:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
+        id S230225AbiKAL2m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Nov 2022 07:28:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiKAL16 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:27:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5AC1A04F;
-        Tue,  1 Nov 2022 04:27:47 -0700 (PDT)
+        with ESMTP id S230264AbiKAL2H (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:28:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396D8192AE;
+        Tue,  1 Nov 2022 04:27:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CDC0BB81CA2;
-        Tue,  1 Nov 2022 11:27:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3ABCC433C1;
-        Tue,  1 Nov 2022 11:27:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D80D9B81CC6;
+        Tue,  1 Nov 2022 11:27:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94B3BC433C1;
+        Tue,  1 Nov 2022 11:27:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667302064;
-        bh=A6d2JNoA9DYikHGRF5DxVz6V76MKTd4bJHEwcxvgEQw=;
+        s=k20201202; t=1667302076;
+        bh=aWWKt+ul8OJyODn7hJWxMis7sxtGLPT1ptklxe2XRB4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fxfmKpCmKHnUwOUCceaQ5kdZ9QauxLCAe6qlXLtwZGrvDssh0SwFQsIhO5gERPJxX
-         rtXmt9IKAzlCrTiJis4xuwDeVDH2/LEJ96SeAxmtl4rkgXGAVXrrpKikfF79uZbuiQ
-         /+EAYIYRByNvzI6HM70bfFLAN0DX1ZrhU6o4HjA7EKVQAfcoF1hUeIvrJpMV9SetRw
-         1GUwBgA7Vx7csByMgW+p0w0Cwi50871khak61qYuNopke0aAC0uDwqKc6R3dzxVtZM
-         VtnhpHjLlJyA/+FlzGm7iUGaq8ASReoRcj8hd0qh+dGXvA1PLx5R6bzgvKm8bmN0Vp
-         Z5zlV7K9fHTVQ==
+        b=WTpEV75bOoriK477S73KlZPt2tlhgQAZjmFRs8Vf1ol//W1F8+NyGrLA7oIS8NXPk
+         gsqsYoUqTaXGYfmk7bmiyq1atDQKIbqRbgi8rmc/EpUXJgllLq2rhNetLpnN4eQ4Ia
+         ARkTCwlobxRy0rkDwc+v+I7wkalxKkGdeD/bzmU5/yaC0OovV8uBL9XLjyQlcL6rZK
+         YlYPsmuKHkamHyhg5vcOAffO8N9Gw2xYpKKYI9xPD0dE3J1QLnusiIUT47jYJfyctZ
+         FzNmddgLimRaQAUm6MJKPTvyuMyhuL+eCwlpveBUAB/oE5SzxiQpFUhYV1k3cj9/tv
+         sniq9QXODflCA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.0 08/34] media: dvb-frontends/drxk: initialize err to 0
-Date:   Tue,  1 Nov 2022 07:27:00 -0400
-Message-Id: <20221101112726.799368-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.0 14/34] media: v4l: subdev: Fail graciously when getting try data for NULL state
+Date:   Tue,  1 Nov 2022 07:27:06 -0400
+Message-Id: <20221101112726.799368-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221101112726.799368-1-sashal@kernel.org>
 References: <20221101112726.799368-1-sashal@kernel.org>
@@ -50,40 +52,54 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-[ Upstream commit 20694e96ca089ce6693c2348f8f628ee621e4e74 ]
+[ Upstream commit 2ba3e38517f5a4ebf9c997168079dca01b7f9fc6 ]
 
-Fix a compiler warning:
+The state argument for the functions for obtaining various parts of the
+state is NULL if it is called by drivers for active state. Fail graciously
+in that case instead of dereferencing a NULL pointer.
 
-drivers/media/dvb-frontends/drxk_hard.c: In function 'drxk_read_ucblocks':
-drivers/media/dvb-frontends/drxk_hard.c:6673:21: warning: 'err' may be used uninitialized [-Wmaybe-uninitialized]
- 6673 |         *ucblocks = (u32) err;
-      |                     ^~~~~~~~~
-drivers/media/dvb-frontends/drxk_hard.c:6663:13: note: 'err' was declared here
- 6663 |         u16 err;
-      |             ^~~
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Suggested-by: Bingbu Cao <bingbu.cao@intel.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-frontends/drxk_hard.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/media/v4l2-subdev.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/media/dvb-frontends/drxk_hard.c b/drivers/media/dvb-frontends/drxk_hard.c
-index 9430295a8175..ef0d063ec352 100644
---- a/drivers/media/dvb-frontends/drxk_hard.c
-+++ b/drivers/media/dvb-frontends/drxk_hard.c
-@@ -6660,7 +6660,7 @@ static int drxk_read_snr(struct dvb_frontend *fe, u16 *snr)
- static int drxk_read_ucblocks(struct dvb_frontend *fe, u32 *ucblocks)
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index 9689f38a0af1..ec1896886dbd 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -1046,6 +1046,8 @@ v4l2_subdev_get_pad_format(struct v4l2_subdev *sd,
+ 			   struct v4l2_subdev_state *state,
+ 			   unsigned int pad)
  {
- 	struct drxk_state *state = fe->demodulator_priv;
--	u16 err;
-+	u16 err = 0;
- 
- 	dprintk(1, "\n");
- 
++	if (WARN_ON(!state))
++		return NULL;
+ 	if (WARN_ON(pad >= sd->entity.num_pads))
+ 		pad = 0;
+ 	return &state->pads[pad].try_fmt;
+@@ -1064,6 +1066,8 @@ v4l2_subdev_get_pad_crop(struct v4l2_subdev *sd,
+ 			 struct v4l2_subdev_state *state,
+ 			 unsigned int pad)
+ {
++	if (WARN_ON(!state))
++		return NULL;
+ 	if (WARN_ON(pad >= sd->entity.num_pads))
+ 		pad = 0;
+ 	return &state->pads[pad].try_crop;
+@@ -1082,6 +1086,8 @@ v4l2_subdev_get_pad_compose(struct v4l2_subdev *sd,
+ 			    struct v4l2_subdev_state *state,
+ 			    unsigned int pad)
+ {
++	if (WARN_ON(!state))
++		return NULL;
+ 	if (WARN_ON(pad >= sd->entity.num_pads))
+ 		pad = 0;
+ 	return &state->pads[pad].try_compose;
 -- 
 2.35.1
 
