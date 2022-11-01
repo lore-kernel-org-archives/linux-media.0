@@ -2,47 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94CB2FA3745
-	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:28:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F506FA373D
+	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:28:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbiKAL2K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Nov 2022 07:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35200 "EHLO
+        id S230308AbiKAL2S (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Nov 2022 07:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbiKAL15 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:27:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B943192A9;
-        Tue,  1 Nov 2022 04:27:44 -0700 (PDT)
+        with ESMTP id S230304AbiKAL2D (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:28:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A171A21C;
+        Tue,  1 Nov 2022 04:27:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 191FDB81C9C;
-        Tue,  1 Nov 2022 11:27:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 933BAC433C1;
-        Tue,  1 Nov 2022 11:27:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD854615E0;
+        Tue,  1 Nov 2022 11:27:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8A12C433D6;
+        Tue,  1 Nov 2022 11:27:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667302061;
-        bh=0EKF43HEq8O5ijotbSuBiQhZ8XlCp3GAnSXEbb9WZ0U=;
+        s=k20201202; t=1667302073;
+        bh=ev0VM6Oimx9Zw4+Ukn4/pCJJiqGUwoJw4OAPFesTkmY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mk1oxr1jvoArgL+qtJqK5pPn1ipHPWdEKvOCsJkQ/fRYVtnM947I8A0/up3EY8i+l
-         eTyle6apXx70p13gGMbrcRQgWD2ZZ2iGPdcf8SBO4w3FjHBhg/bUEaTDbHNqJ97w5P
-         JAt//WHdzxgawCY27YwA66+5/Sdg73NbkOLMUkDcooii/mOg8vSLhnjU3RbixygIah
-         99oRdIAL2HdhzjGTTTnqjuZsTrYqxF8n0rTDy41wiT76ezgZesRBzN7ueNTjkqGTLJ
-         BCpnCUxfyoGaXkh8jvfBphlwcTSKNbbOWaT5EuU0XZRSqepvKOh0M/z/RUaJW80abK
-         ytY3hG4Mh1NNQ==
+        b=uupu94SFPGGUWoDTfi/C5/M1imqDVWmlSNMQU51J5lqNH8eidNHgosB4CGvHhkP78
+         pGt2zlprLd4hKR1tW2Vat2xmU40Z1WJysCwdsefOR4jcVLCXPZVttrdSgz6pIyF2JL
+         2DgQ6rJCFjxJf1XjSH67rvaemMLElU8MC33m9+aTpapXGf5G1mP9UMMOK4MA8oDidi
+         +6xlLb1XiPwA/r1vjDdZh3dspeEXhV9btMY2PYj0WnUP3zCUuONccIHbQG7P7Zhpqf
+         KdV5Tf0H0UrD/GIVEjgFjSr7izoWbyztN4cD/6SBhlaSTAvYRYGF+2bKRiyRPF6PWi
+         TRcuWdeszuYqQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, bleung@chromium.org,
-        groeck@chromium.org, ajye_huang@compal.corp-partner.google.com,
-        zhuohao@chromium.org, hellojacky0226@hotmail.com,
-        scott_chao@wistron.corp-partner.google.com,
-        linux-media@vger.kernel.org, chrome-platform@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.0 07/34] media: cros-ec-cec: limit msg.len to CEC_MAX_MSG_SIZE
-Date:   Tue,  1 Nov 2022 07:26:59 -0400
-Message-Id: <20221101112726.799368-7-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.0 12/34] media: hantro: HEVC: Fix auxilary buffer size calculation
+Date:   Tue,  1 Nov 2022 07:27:04 -0400
+Message-Id: <20221101112726.799368-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221101112726.799368-1-sashal@kernel.org>
 References: <20221101112726.799368-1-sashal@kernel.org>
@@ -54,33 +54,44 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 
-[ Upstream commit 2dc73b48665411a08c4e5f0f823dea8510761603 ]
+[ Upstream commit 8a438580a09ecef78cd6c5825d628b4d5ae1c127 ]
 
-I expect that the hardware will have limited this to 16, but just in
-case it hasn't, check for this corner case.
+SAO and FILTER buffers size depend of the bit depth.
+Make sure we have enough space for 10bit bitstreams.
 
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/cec/platform/cros-ec/cros-ec-cec.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/staging/media/hantro/hantro_hevc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-index 3b583ed4da9d..e5ebaa58be45 100644
---- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-+++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-@@ -44,6 +44,8 @@ static void handle_cec_message(struct cros_ec_cec *cros_ec_cec)
- 	uint8_t *cec_message = cros_ec->event_data.data.cec_message;
- 	unsigned int len = cros_ec->event_size;
+diff --git a/drivers/staging/media/hantro/hantro_hevc.c b/drivers/staging/media/hantro/hantro_hevc.c
+index b990bc98164c..9383fb7081f6 100644
+--- a/drivers/staging/media/hantro/hantro_hevc.c
++++ b/drivers/staging/media/hantro/hantro_hevc.c
+@@ -104,7 +104,7 @@ static int tile_buffer_reallocate(struct hantro_ctx *ctx)
+ 		hevc_dec->tile_bsd.cpu = NULL;
+ 	}
  
-+	if (len > CEC_MAX_MSG_SIZE)
-+		len = CEC_MAX_MSG_SIZE;
- 	cros_ec_cec->rx_msg.len = len;
- 	memcpy(cros_ec_cec->rx_msg.msg, cec_message, len);
+-	size = VERT_FILTER_RAM_SIZE * height64 * (num_tile_cols - 1);
++	size = (VERT_FILTER_RAM_SIZE * height64 * (num_tile_cols - 1) * ctx->bit_depth) / 8;
+ 	hevc_dec->tile_filter.cpu = dma_alloc_coherent(vpu->dev, size,
+ 						       &hevc_dec->tile_filter.dma,
+ 						       GFP_KERNEL);
+@@ -112,7 +112,7 @@ static int tile_buffer_reallocate(struct hantro_ctx *ctx)
+ 		goto err_free_tile_buffers;
+ 	hevc_dec->tile_filter.size = size;
  
+-	size = VERT_SAO_RAM_SIZE * height64 * (num_tile_cols - 1);
++	size = (VERT_SAO_RAM_SIZE * height64 * (num_tile_cols - 1) * ctx->bit_depth) / 8;
+ 	hevc_dec->tile_sao.cpu = dma_alloc_coherent(vpu->dev, size,
+ 						    &hevc_dec->tile_sao.dma,
+ 						    GFP_KERNEL);
 -- 
 2.35.1
 
