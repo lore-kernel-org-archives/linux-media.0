@@ -2,43 +2,43 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 180F1FA3745
-	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:36:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C9D0FA3743
+	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:36:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbiKALgK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Nov 2022 07:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
+        id S231311AbiKALgv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Nov 2022 07:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231285AbiKALfc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:35:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110A01CB27;
-        Tue,  1 Nov 2022 04:31:23 -0700 (PDT)
+        with ESMTP id S231255AbiKALgL (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:36:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14731D0DA;
+        Tue,  1 Nov 2022 04:31:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1B62B81CCC;
-        Tue,  1 Nov 2022 11:31:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A359FC433C1;
-        Tue,  1 Nov 2022 11:31:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E48FA615EA;
+        Tue,  1 Nov 2022 11:31:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3974C433C1;
+        Tue,  1 Nov 2022 11:31:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667302281;
+        s=k20201202; t=1667302297;
         bh=qau5o1gWNRT7hnU7BJTNSR3XmPp6afM6aLwWeSom3Jk=;
         h=From:To:Cc:Subject:Date:From;
-        b=iXi2VwaRR7e1dh8J7iwyaG9PAJSq3QMHlyds1iRcmUTHJIjzgYQ1VeucWWIC69I/C
-         oO4T2ylg7fY43p+KOqH/xLhna81ynb36RAK0Le7JmG0RwtwqrOZfXhKdtUQtEafaYz
-         7DWcPYzUAGf8R87ptg0CIkVP1tr42wMIXncjzt4AP9cJZEifB074IrUFarZjS/1dqc
-         byovLLrLSCn9ZzAl7vQnAmiuIqJrFq9VVSFyBBnvnB0Gguxo2Vol2GIcubCyQnzEOQ
-         Mg9FIPJeqCk5wRMHu1qhIB0X86d2xZSJOTQYoeVaJ1WkhrPt7RIrWJFNO1oo+JnZcI
-         /dbDdxG6s5QUg==
+        b=vG1n36Z+zfXms4XOszO4/dT7AzifDI4LKwXDQZIIM5ZedK+nQXEmxLpZQkv2bMCrU
+         b5ZYGe+HvJ6CqReMLkrB5QFkHlXb+jrihWjEGdcQtWxqSYy2gVGKU6cdmrMOu51CRJ
+         oqkZ8WokaHNKawC6ZpU4PsfFyByPvDAT50dahO3S0BVsF0QoVgYf+SRiaBWu+l7IsY
+         Fz87KQA2j+1PQoGS/ClxV0ibuBWM4y8LCe1fm3XErUUqXuoUmkdRVPEwtZDq2envEh
+         y71A/WuMOnaFytXYar4XH7xrK+7MhQ/43FQm8ALF6cZNRQntzaKK17X7ni5ZxkvGLs
+         VvRuA3/frZnGQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 1/6] media: s5p_cec: limit msg.len to CEC_MAX_MSG_SIZE
-Date:   Tue,  1 Nov 2022 07:31:11 -0400
-Message-Id: <20221101113118.800889-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 1/4] media: s5p_cec: limit msg.len to CEC_MAX_MSG_SIZE
+Date:   Tue,  1 Nov 2022 07:31:30 -0400
+Message-Id: <20221101113135.800983-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-stable: review
