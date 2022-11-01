@@ -2,91 +2,110 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E9E2C433FE
-	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 10:12:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ECEDFA3743
+	for <linux-media@archiver.kernel.org>; Tue,  1 Nov 2022 11:27:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbiKAKM2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Nov 2022 06:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46936 "EHLO
+        id S229997AbiKAL1e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Nov 2022 07:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbiKAKM1 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 06:12:27 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E73211C3D
-        for <linux-media@vger.kernel.org>; Tue,  1 Nov 2022 03:12:22 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (dkxjnptf9d2bpn7gcmbty-3.rev.dnainternet.fi [IPv6:2001:14ba:44ce:b640:9d1d:82c5:eca2:5060])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        with ESMTP id S229720AbiKAL1d (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Nov 2022 07:27:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9762C17E26;
+        Tue,  1 Nov 2022 04:27:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 49F4F1B0009C;
-        Tue,  1 Nov 2022 12:12:19 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1667297539;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3K0dj2dRtbT6jA7vFM+XmUaK88bJmB+xMDx7YSHWUOY=;
-        b=FWFOnYiSd/MXQx/2XUEp+BHcTRl+dGKhlyKlL23/xPEvOL0EGwj60macPR3cDSviyA8rbY
-        kAUgb6n2CoQfnizwLo5mjsrm4STXCOZDrM6HBrX1Y0AcYD2V4uO0XO9OvyppTAlR//dxac
-        zp1W9RfP4xdT1wCu355QpsbO+B2PkufKzA9c624H1fwaQuBK6brDGxpHLpWKOff4vJWOyp
-        FxWZ/RSIp122bIbupJ/xsftOH6ILo+Cxcb2S5CpSUkOUq9IcHHPJ9Bs+5VifbaoM4MkKkH
-        VaqYhdnjlxHUxC2Pbulrt98/v/KMu88HTO0aPYvvOVf5zGFncgExcnYSOpa54w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1667297539;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3K0dj2dRtbT6jA7vFM+XmUaK88bJmB+xMDx7YSHWUOY=;
-        b=mDWh+TkbajMMbs3aI8v3SktmmObJ5sbVylSC4Fl0hPMhIW8oKcPisvsF4m4tKJIJYDnpJt
-        ydUOTCVRvNO2r6PVcLlOeGBWhrVZnyhr6DLJALXt9lXTmssGZ3Eydlr3ul0fP5FYy2QBSC
-        ZuFPMvoVnegzwYqE6Qbj+UmGqxQbJSVe/Xvt0FBoFMU59oQKeUgNltwPBTmqeED/B3C734
-        AlJLtsUQv52LHT3i8aX6YgcAimgPFjcNEOAxWUaIWAoayLtnIuQ/y5XHvX0A36J5DGH9p9
-        3n5XxdDkISHlS3nMPO0HGq+rC9rMMGdWqSsJWsNuUjpY85pUgsR3frDWgMW1EA==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1667297539; a=rsa-sha256;
-        cv=none;
-        b=JAFQR+HiluLADh48P2W9pSXC3VUPgnme8OAYEvhxEtV3rk3edFmPxVWgeXCQ+EpNrbyj3h
-        WxBv8ik1Sy4zqH1qYPa/tqEQoHdFEatcxre3WCk42fqpHTemkNnkWgnBMwabzgDU9VFOxm
-        k7f1ap9t4xRCjxKkUu5UcEp2kVrDqJWY8Quyc1RXLOrGjkPpvFAqrq/flbwaxpkJ7u+BpU
-        VQWFzYf+IoS41TIjmM2BgfJ98IUS796tPmtkSi/SGerc04OqODP3U/+YZKFbZuCa1ipYwF
-        Xh8dbuvfchnLisutRyJkss9P8rF646LXHekE6hZEb9EsJ+kqxwDCOqDhozc9+A==
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id E7DC7634C92;
-        Tue,  1 Nov 2022 12:12:18 +0200 (EET)
-Date:   Tue, 1 Nov 2022 12:12:18 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc:     paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
-        linux-media@vger.kernel.org, jacopo@jmondi.org
-Subject: Re: [PATCH v2 05/16] media: i2c: ov9281: Support more than 1 mode.
-Message-ID: <Y2DxAsgEFeBUmzmc@valkosipuli.retiisi.eu>
-References: <20221028160902.2696973-1-dave.stevenson@raspberrypi.com>
- <20221028160902.2696973-6-dave.stevenson@raspberrypi.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3449C615D5;
+        Tue,  1 Nov 2022 11:27:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C56CC43470;
+        Tue,  1 Nov 2022 11:27:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667302051;
+        bh=Qs2YG4eZPcMB3J3UO5+oTFanUUSas1ZnrNeZRV6oHOs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Ure1YhvtWEYgZK4ZqqFMirkTQgWOWSUyHxiOYLS4g99aXYA7DMIbKhcA9OXHk5aXK
+         1b4SxGb/6RepJV/TIgvNHOSh8kYC4oge2tkFmR0lj3Oe1l+nvfZ8qC/ozFRDqGzGNW
+         8HMmD9ad+zAA4becE3KXOBni6fHBq3XKMTvu9oXcDNEmWsFj42jOEGzK8Xa91pZcIN
+         2kUvEzvG+exglQBIRe7Cq/Krb5hiNbdLf4ZNqwXJLx6YAxSLVYoeOHrWQnNWQTf7ji
+         JusSAQ7irl/H1lmtpGcp/cr3Z4UOdT5Ke22N5AxYNhiyVDheWJaAZAxuql6fHeEojo
+         MOn7/ZuZtu0kQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Dafna Hirschfeld <dafna@fastmail.com>,
+        Paul Elder <paul.elder@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, heiko@sntech.de,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.0 02/34] media: rkisp1: Don't pass the quantization to rkisp1_csm_config()
+Date:   Tue,  1 Nov 2022 07:26:54 -0400
+Message-Id: <20221101112726.799368-2-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221101112726.799368-1-sashal@kernel.org>
+References: <20221101112726.799368-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221028160902.2696973-6-dave.stevenson@raspberrypi.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 05:08:51PM +0100, Dave Stevenson wrote:
-> The driver currently has multiple assumptions that there is
-> only one supported mode.
-> 
-> Convert supported_mode to an array, and fix up all references
-> to correctly look at that array.
-> 
-> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-This probably should have been ov9282 and not ov9281? I'll fix that when
-applying it.
+[ Upstream commit 711d91497e203b058cf0a08c0f7d41c04efbde76 ]
 
+The rkisp1_csm_config() function takes a pointer to the rkisp1_params
+structure which contains the quantization value. There's no need to pass
+it separately to the function. Drop it from the function parameters.
+
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Dafna Hirschfeld <dafna@fastmail.com>
+Reviewed-by: Paul Elder <paul.elder@ideasonboard.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/media/platform/rockchip/rkisp1/rkisp1-params.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
+index 9da7dc1bc690..32485f7c79d5 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
+@@ -1066,7 +1066,7 @@ static void rkisp1_ie_enable(struct rkisp1_params *params, bool en)
+ 	}
+ }
+ 
+-static void rkisp1_csm_config(struct rkisp1_params *params, bool full_range)
++static void rkisp1_csm_config(struct rkisp1_params *params)
+ {
+ 	static const u16 full_range_coeff[] = {
+ 		0x0026, 0x004b, 0x000f,
+@@ -1080,7 +1080,7 @@ static void rkisp1_csm_config(struct rkisp1_params *params, bool full_range)
+ 	};
+ 	unsigned int i;
+ 
+-	if (full_range) {
++	if (params->quantization == V4L2_QUANTIZATION_FULL_RANGE) {
+ 		for (i = 0; i < ARRAY_SIZE(full_range_coeff); i++)
+ 			rkisp1_write(params->rkisp1,
+ 				     RKISP1_CIF_ISP_CC_COEFF_0 + i * 4,
+@@ -1552,11 +1552,7 @@ static void rkisp1_params_config_parameter(struct rkisp1_params *params)
+ 	rkisp1_param_set_bits(params, RKISP1_CIF_ISP_HIST_PROP_V10,
+ 			      rkisp1_hst_params_default_config.mode);
+ 
+-	/* set the  range */
+-	if (params->quantization == V4L2_QUANTIZATION_FULL_RANGE)
+-		rkisp1_csm_config(params, true);
+-	else
+-		rkisp1_csm_config(params, false);
++	rkisp1_csm_config(params);
+ 
+ 	spin_lock_irq(&params->config_lock);
+ 
 -- 
-Sakari Ailus
+2.35.1
+
