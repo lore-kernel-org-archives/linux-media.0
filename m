@@ -2,159 +2,191 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30CCCC4332F
-	for <linux-media@archiver.kernel.org>; Wed,  2 Nov 2022 12:56:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85495C433FE
+	for <linux-media@archiver.kernel.org>; Wed,  2 Nov 2022 13:15:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbiKBM4n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Nov 2022 08:56:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37708 "EHLO
+        id S231332AbiKBNPa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Nov 2022 09:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231225AbiKBM4k (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Nov 2022 08:56:40 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051DE27FED
-        for <linux-media@vger.kernel.org>; Wed,  2 Nov 2022 05:56:39 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id y14so45059628ejd.9
-        for <linux-media@vger.kernel.org>; Wed, 02 Nov 2022 05:56:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q2uaugI2bLKCRBQDyZF1zpLdxkje5gCBBYFZp43Wd6I=;
-        b=WUpjROp47DVLKE/YqCgRwVWs5Ba4KDwfOn2r8qsXcWESSqfu2BfoiODrYoEv32JK7D
-         Yq64ykOaCSc/StqteuzicKY2xX6TuvRx5jDQMW9u5KqEkvvv2RpEuZpfA43kyPwI2/kI
-         C/T5Gf69SJ7KwXPY0DPwUZydoqz2B7dOvTMf7TIb0SFGUnGHFjXeL2JJF66dlWqeAN8X
-         LS/DZIS7d/YjBIqCvN0F+BW3BtuGMl/h3ysA6/L4W+5HemG/GHZy98BTEmBL/TKt4TqS
-         VOwBryFxmUJSCr/WLHpbchAbIRKBK73idnzDvYtJ3MIDhAH/wTlqdxEDZAKaY6vnzNAI
-         Q7/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q2uaugI2bLKCRBQDyZF1zpLdxkje5gCBBYFZp43Wd6I=;
-        b=fJWfDhyihV9PQ/Rrq30kubeTJvaVcO6kSKkWWZels/xcnq87ZeUnM8R9iBOn/0BTk4
-         NdM/zk75ECwElPlj3nI5K5aiWySTqMMACUvte79yz6PEv/OXnUu8onYFCCs8ItSCxPrm
-         8yv+ucL/Wi7Zepfn2l2zwjUxm2YLsZQ3jVuSbtVU7HNjSiNZLJoT5H9b1Fp94cM1N1Cs
-         X+Pg1dBzAWN7GPhAEqGQYyiQPHAJy6kZDG6A8hfXyPtd0u2SC6x89UGXuel+3OQvBnre
-         tyWBaffU1o0KXL8ynf2L2zQQ11Uo1Ict6YL/kjv/0gICmlczTsWDzC98pQNR+ar9jkcY
-         lr+g==
-X-Gm-Message-State: ACrzQf1hfPK0k6yUDIR38FFpmRoxqkXwVLewtOx5DV/iEu3FNRhbIozb
-        XObzwBkqFzGOhE05/7xXj60=
-X-Google-Smtp-Source: AMsMyM5IIyHjuOylE5jH3gft4kmid2ugmwS2wPXe6BGGQMGneACXLozhaKbdbEpnNQo6DfccibWy3Q==
-X-Received: by 2002:a17:906:9510:b0:7ad:fd3e:124b with SMTP id u16-20020a170906951000b007adfd3e124bmr4478279ejx.502.1667393797560;
-        Wed, 02 Nov 2022 05:56:37 -0700 (PDT)
-Received: from ?IPV6:2a02:908:1256:79a0:576c:b102:647e:9ffd? ([2a02:908:1256:79a0:576c:b102:647e:9ffd])
-        by smtp.gmail.com with ESMTPSA id bo19-20020a170906d05300b007acbac07f07sm5413014ejb.51.2022.11.02.05.56.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 05:56:36 -0700 (PDT)
-Message-ID: <35eeda2b-4570-4871-73f2-18b880b84284@gmail.com>
-Date:   Wed, 2 Nov 2022 13:56:36 +0100
+        with ESMTP id S231331AbiKBNP2 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Nov 2022 09:15:28 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D32233B6;
+        Wed,  2 Nov 2022 06:15:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1667394927; x=1698930927;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6iK9mY5qqDaeZWS9d2Uy0TPR3A7tuD5t2+NlvJr7Z1A=;
+  b=QkZZGfrtm4ZOAhkOOY4OlevxqJmO6D4hAlSPCe1+u2FqRCqr3Tr9ufbP
+   PHOZWjuYDAAMqhUOradFJRaocO7XzDL9hf8eA0Fws20LjMcxFv54WFmxO
+   LWpfK4nknveJpt7TcpNFAD7E2NlB1ArmtV7CGwqI0mk5q79U7GwrTuV5+
+   Sh4sIA26PSA/KR5v7iWTF4xxjsqpNRceIB3fXns84SRqO3kEJZ/qcbHYB
+   il/ouYGkIGNGrocm5mHU+B7cGoIIzzl9V8tczl+DKg6vbt+Mcj5DQnzBH
+   rP6BV389d5sgetO5uBqlNX56l5pZECN0f10bTwEcdETVGrHysTQLC3q6N
+   w==;
+X-IronPort-AV: E=Sophos;i="5.95,234,1661842800"; 
+   d="scan'208";a="187289360"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Nov 2022 06:15:27 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 2 Nov 2022 06:15:25 -0700
+Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Wed, 2 Nov 2022 06:15:23 -0700
+From:   Eugen Hristev <eugen.hristev@microchip.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <hverkuil-cisco@xs4all.nl>, <jacopo@jmondi.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-staging@lists.linux.dev>,
+        Eugen Hristev <eugen.hristev@microchip.com>
+Subject: [PATCH v11 0/6] media: atmel: atmel-isc: driver redesign
+Date:   Wed, 2 Nov 2022 15:14:54 +0200
+Message-ID: <20221102131500.476024-1-eugen.hristev@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: Try to address the DMA-buf coherency problem
-Content-Language: en-US
-To:     Pekka Paalanen <ppaalanen@gmail.com>
-Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Lucas Stach <l.stach@pengutronix.de>, sumit.semwal@linaro.org,
-        daniel@ffwll.ch, robdclark@gmail.com,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-media@vger.kernel.org
-References: <20221020121316.3946-1-christian.koenig@amd.com>
- <3d7353f3fa5905ce18e5b2d92f758f098189bc5a.camel@pengutronix.de>
- <7f5eff36-6886-bb06-061a-dd4263b61605@gmail.com>
- <f5de84cfe81fee828bbe0d47d379028d28ef6ca6.camel@pengutronix.de>
- <e02cedc2-6741-8813-a7a5-f8769e301745@gmail.com>
- <a53e5df51ec0f2f9d4c2d377c0cc5ba85f2e58ff.camel@ndufresne.ca>
- <9d716641-55c6-1590-26c2-1c3b14a28226@gmail.com>
- <CAPj87rMPkmimR_RJHhxYZokH__TVpPArk0h6drOUSx7Z9+oAHA@mail.gmail.com>
- <11a6f97c-e45f-f24b-8a73-48d5a388a2cc@gmail.com>
- <caf4d6b82843788db97555a58bc9e33915e5b50a.camel@ndufresne.ca>
- <b422be59-4b4b-2d0d-8e8c-b19f27c6832e@gmail.com>
- <20221102141954.7d362068@eldfell>
- <cc470b3d-a611-044f-2b35-cc827c962f9b@gmail.com>
- <20221102145036.30c70134@eldfell>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <20221102145036.30c70134@eldfell>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Am 02.11.22 um 13:50 schrieb Pekka Paalanen:
-> On Wed, 2 Nov 2022 13:27:18 +0100
-> Christian König <ckoenig.leichtzumerken@gmail.com> wrote:
->
->> Am 02.11.22 um 13:19 schrieb Pekka Paalanen:
->>> On Wed, 2 Nov 2022 12:18:01 +0100
->>> Christian König <ckoenig.leichtzumerken@gmail.com> wrote:
->>>   
->>>> Am 01.11.22 um 22:09 schrieb Nicolas Dufresne:
->>>>> [SNIP]
->>>>>>> But the client is just a video player. It doesn't understand how to
->>>>>>> allocate BOs for Panfrost or AMD or etnaviv. So without a universal
->>>>>>> allocator (again ...), 'just allocate on the GPU' isn't a useful
->>>>>>> response to the client.
->>>>>> Well exactly that's the point I'm raising: The client *must* understand
->>>>>> that!
->>>>>>
->>>>>> See we need to be able to handle all restrictions here, coherency of the
->>>>>> data is just one of them.
->>>>>>
->>>>>> For example the much more important question is the location of the data
->>>>>> and for this allocating from the V4L2 device is in most cases just not
->>>>>> going to fly.
->>>>> It feels like this is a generic statement and there is no reason it could not be
->>>>> the other way around.
->>>> And exactly that's my point. You always need to look at both ways to
->>>> share the buffer and can't assume that one will always work.
->>>>
->>>> As far as I can see it you guys just allocate a buffer from a V4L2
->>>> device, fill it with data and send it to Wayland for displaying.
->>>>
->>>> To be honest I'm really surprised that the Wayland guys hasn't pushed
->>>> back on this practice already.
->>> What should we Wayland people be pushing back on exactly? And where is
->>> our authority and opportunity to do so?
->>>
->>> The Wayland protocol dmabuf extension allows a graceful failure if the
->>> Wayland compositor cannot use the given dmabuf at all, giving the
->>> client an opportunity to try something else.
->> That's exactly what I meant with pushing back :)
->>
->> I wasn't aware that this handling is already implemented.
-> Well... it's "optional". The Wayland dmabuf protocol has two cases for
-> a client/app:
->
-> a) you do the right thing and wait for the compositor to ack that the
->     dmabuf works (the reply should come pretty much immediately, not
->     needing the compositor to actually composite), or
->
-> b) you just send the dmabuf and continue as if it always worked. If it
->     doesn't, you might get a protocol error later and be disconnected.
->
-> Guess which one Mesa uses?
->
-> I've been told Mesa has no way to handle a failure there, so it
-> doesn't. I would not be surprised if others just copy that behaviour.
->
-> I recall personally being against adding option b) to begin with, but
-> there it is, added for Mesa IIRC.
 
-Well I'm not sure if those projects actually used X or Wayland, but we 
-did had cases where this was really used.
+This series is a continuation of the series that converts the atmel-isc driver
+to media controller paradigm:
+https://lore.kernel.org/lkml/20220503095127.48710-1-eugen.hristev@microchip.com/T/#mccad96a3122f2817bf1ae1db7eddf1a8cecb2749
 
-IIRC in the case of Prime offloading we now allocate a buffer from the 
-displaying device in Mesa and do the copy from the rendering GPU to the 
-displaying GPU on the client side.
+As discussed on ML, the current Atmel ISC driver is moved to staging to keep the
+existing users happy, and readded to platform/microchip under a different
+Kconfig symbol and with the new media controller support which was reviewed in
+v10.
+I kept the original v10 patches on top of the movement of the driver
+to make it more clear what the conversion to media controller brings.
 
-The background is that this gave us much better control which engine and 
-parameters where used for the copy resulting in a nice performance 
-improvement.
+Please let me know if this is okay or acceptable to take as it is,
+and if it complies with the requirements for the subsystem/ABI breakage, etc.
 
-Regards,
-Christian.
+Thanks to everyone for reviewing and helping in the discussions !
+
+PLEASE NOTE: the series depends on the patch:
+vb2: add support for (un)prepare_streaming queue ops
+by Hans Verkuil
+
+I have a different patch as the last in the series that uses the new callbacks
+(and only that patch is dependant on the
+vb2: add support for (un)prepare_streaming queue ops
+)
+
+Eugen
+
+Changes in v11:
+- moved atmel isc to staging
+- created platform/microchip to host the new MICROCHIP_ISC driver
+- it was natural to move the MICROCHIP_CSI2DC here
+- on top, add the patches that move to media controller
+
+Full series history:
+
+Changes in v10:
+-> split the series into this first fixes part.
+-> moved IO_MC addition from first patch to the second patch on the driver changes
+-> edited commit messages
+-> DT nodes now disabled by default.
+
+Changes in v9:
+-> kernel robot reported isc_link_validate is not static, changed to static.
+
+Changes in v8:
+-> scaler: modified crop bounds to have the exact source size
+
+Changes in v7:
+-> scaler: modified crop bounds to have maximum isc size
+-> format propagation: did small changes as per Jacopo review
+
+
+Changes in v6:
+-> worked a bit on scaler, added try crop and other changes as per Jacopo review
+-> worked on isc-base enum_fmt , reworked as per Jacopo review
+
+Changes in v5:
+-> removed patch that removed the 'stop' variable as it was still required
+-> added two new trivial patches
+-> reworked some parts of the scaler and format propagation after discussions with Jacopo
+
+
+Changes in v4:
+-> as reviewed by Hans, added new patch to remove the 'stop' variable and reworked
+one patch that was using it
+-> as reviewed by Jacopo, reworked some parts of the media controller implementation
+
+
+Changes in v3:
+- change in bindings, small fixes in csi2dc driver and conversion to mc
+for the isc-base.
+- removed some MAINTAINERS patches and used patterns in MAINTAINERS
+
+Changes in v2:
+- integrated many changes suggested by Jacopo in the review of the v1 series.
+- add a few new patches
+
+Eugen Hristev (6):
+  media: atmel: atmel-isc: move to staging
+  media: atmel: move microchip_csi2dc to dedicated microchip platform
+  media: microchip: re-add ISC driver as Microchip ISC
+  media: microchip: microchip-isc: prepare for media controller support
+  media: microchip: microchip-isc: implement media controller
+  media: microchip: microchip-isc: move media_pipeline_* to (un)prepare
+    cb
+
+ MAINTAINERS                                   |    8 +-
+ drivers/media/platform/Kconfig                |    1 +
+ drivers/media/platform/Makefile               |    1 +
+ drivers/media/platform/atmel/Kconfig          |   51 -
+ drivers/media/platform/atmel/Makefile         |    7 -
+ drivers/media/platform/microchip/Kconfig      |   61 +
+ drivers/media/platform/microchip/Makefile     |    9 +
+ .../{atmel => microchip}/microchip-csi2dc.c   |    0
+ .../platform/microchip/microchip-isc-base.c   | 2040 +++++++++++++++++
+ .../microchip-isc-clk.c}                      |    4 +-
+ .../platform/microchip/microchip-isc-regs.h   |  413 ++++
+ .../platform/microchip/microchip-isc-scaler.c |  267 +++
+ .../media/platform/microchip/microchip-isc.h  |  400 ++++
+ .../microchip/microchip-sama5d2-isc.c         |  683 ++++++
+ .../microchip/microchip-sama7g5-isc.c         |  646 ++++++
+ drivers/staging/media/Kconfig                 |    2 +
+ drivers/staging/media/Makefile                |    1 +
+ drivers/staging/media/atmel/Kconfig           |   40 +
+ drivers/staging/media/atmel/Makefile          |    8 +
+ .../media}/atmel/atmel-isc-base.c             |   20 +-
+ drivers/staging/media/atmel/atmel-isc-clk.c   |  311 +++
+ .../media}/atmel/atmel-isc-regs.h             |    0
+ .../media}/atmel/atmel-isc.h                  |   16 +-
+ .../media}/atmel/atmel-sama5d2-isc.c          |   18 +-
+ .../media}/atmel/atmel-sama7g5-isc.c          |   18 +-
+ 25 files changed, 4926 insertions(+), 99 deletions(-)
+ create mode 100644 drivers/media/platform/microchip/Kconfig
+ create mode 100644 drivers/media/platform/microchip/Makefile
+ rename drivers/media/platform/{atmel => microchip}/microchip-csi2dc.c (100%)
+ create mode 100644 drivers/media/platform/microchip/microchip-isc-base.c
+ rename drivers/media/platform/{atmel/atmel-isc-clk.c => microchip/microchip-isc-clk.c} (99%)
+ create mode 100644 drivers/media/platform/microchip/microchip-isc-regs.h
+ create mode 100644 drivers/media/platform/microchip/microchip-isc-scaler.c
+ create mode 100644 drivers/media/platform/microchip/microchip-isc.h
+ create mode 100644 drivers/media/platform/microchip/microchip-sama5d2-isc.c
+ create mode 100644 drivers/media/platform/microchip/microchip-sama7g5-isc.c
+ create mode 100644 drivers/staging/media/atmel/Kconfig
+ create mode 100644 drivers/staging/media/atmel/Makefile
+ rename drivers/{media/platform => staging/media}/atmel/atmel-isc-base.c (99%)
+ create mode 100644 drivers/staging/media/atmel/atmel-isc-clk.c
+ rename drivers/{media/platform => staging/media}/atmel/atmel-isc-regs.h (100%)
+ rename drivers/{media/platform => staging/media}/atmel/atmel-isc.h (96%)
+ rename drivers/{media/platform => staging/media}/atmel/atmel-sama5d2-isc.c (97%)
+ rename drivers/{media/platform => staging/media}/atmel/atmel-sama7g5-isc.c (97%)
+
+-- 
+2.25.1
+
