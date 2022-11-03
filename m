@@ -2,44 +2,41 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92701C4167B
-	for <linux-media@archiver.kernel.org>; Thu,  3 Nov 2022 06:49:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7773FC4332F
+	for <linux-media@archiver.kernel.org>; Thu,  3 Nov 2022 06:49:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbiKCGtK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Nov 2022 02:49:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
+        id S231192AbiKCGtN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Nov 2022 02:49:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiKCGtA (ORCPT
+        with ESMTP id S229733AbiKCGtA (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 3 Nov 2022 02:49:00 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7446428;
-        Wed,  2 Nov 2022 23:48:52 -0700 (PDT)
-X-UUID: 5da7e5455eac405dbe3400b80facd95c-20221103
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21B16341;
+        Wed,  2 Nov 2022 23:48:49 -0700 (PDT)
+X-UUID: 85d9a2b52f4e4b9f8da4debd556c1cc5-20221103
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=aQhqipRCrr84w/z1eE4tspqLs3t2vb07ckZcObeTgDw=;
-        b=hclR/yeX1iP4pJZ2BwaarNGyDb/qzXhDSf1fZ4BVOTTBG+ucEuPcOJJEHhjSir45HlLmNXMA13z0rUH5fuEePyJAXz9ZyR83oIQs71qoNxpwAa6k8DoViTVxP+qyzF4UW5H9pfV1TvtDGEfA55J2HApHVXR5x6gO2eEKs1b06fI=;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=pQLBAN6Ekkyzj5JynKqZFx9JfAH9zRw7RxBicSAJ82I=;
+        b=DcsCyo8FWriBd7znniVgffKXQZfH60QoNGDTjKx9X0bcpuz9EqIXDgqte3RDSNbFNPXDG3rz/21HcBto8iyvZxNXp7m+vfayERWSUG2j3aEHsDdjXorSWWkPYUg3aV67LDorGfvvpnaN3KBSAq3X+ftankFLyOdLjKd2MrCNSZk=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:7097ed35-fd83-44f6-98bc-a43961966855,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.12,REQID:7097ed35-fd83-44f6-98bc-a43961966855,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:62cd327,CLOUDID:1f554deb-84ac-4628-a416-bc50d5503da6,B
-        ulkID:22110314484794XEU8RY,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:1,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 5da7e5455eac405dbe3400b80facd95c-20221103
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+X-CID-O-INFO: VERSION:1.1.12,REQID:f1249165-7bb1-4ae5-ba02-cf22f2c65f3c,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:62cd327,CLOUDID:d4544deb-84ac-4628-a416-bc50d5503da6,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 85d9a2b52f4e4b9f8da4debd556c1cc5-20221103
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
         (envelope-from <moudy.ho@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1576497574; Thu, 03 Nov 2022 14:48:45 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 286456541; Thu, 03 Nov 2022 14:48:45 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 3 Nov 2022 14:48:45 +0800
+ 15.2.792.15; Thu, 3 Nov 2022 14:48:44 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 3 Nov 2022 14:48:45 +0800
+ 15.2.792.15 via Frontend Transport; Thu, 3 Nov 2022 14:48:44 +0800
 From:   Moudy Ho <moudy.ho@mediatek.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
@@ -50,9 +47,9 @@ CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         <linux-kernel@vger.kernel.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Moudy Ho <moudy.ho@mediatek.com>
-Subject: [PATCH v3 07/10] media: platform: mtk-mdp3: extend mdp_color format for compressed mode
-Date:   Thu, 3 Nov 2022 14:48:39 +0800
-Message-ID: <20221103064842.12042-8-moudy.ho@mediatek.com>
+Subject: [PATCH v3 04/10] media: platform: mtk-mdp3: chip config split about color format
+Date:   Thu, 3 Nov 2022 14:48:36 +0800
+Message-ID: <20221103064842.12042-5-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20221103064842.12042-1-moudy.ho@mediatek.com>
 References: <20221103064842.12042-1-moudy.ho@mediatek.com>
@@ -63,278 +60,689 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Due to future support for hardware compression formats, the MDP3
-internal color format expression needs to be extended.
+Due to differences in hardware design, the supported
+color formats will vary and should be moved and
+integrated into the chip configuration header file.
 
 Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 ---
- .../platform/mediatek/mdp3/mtk-mdp3-regs.h    | 205 +++++++++---------
- 1 file changed, 103 insertions(+), 102 deletions(-)
+ .../mediatek/mdp3/mt8183/mdp3-plat-mt8183.h   | 225 +++++++++++++++
+ .../platform/mediatek/mdp3/mtk-mdp3-core.c    |   2 +
+ .../platform/mediatek/mdp3/mtk-mdp3-core.h    |   2 +
+ .../platform/mediatek/mdp3/mtk-mdp3-m2m.c     |  10 +-
+ .../platform/mediatek/mdp3/mtk-mdp3-regs.c    | 262 ++----------------
+ .../platform/mediatek/mdp3/mtk-mdp3-regs.h    |   7 +-
+ 6 files changed, 259 insertions(+), 249 deletions(-)
 
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.h
-index 1a26c1bcfd8d..e81428737752 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.h
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.h
-@@ -18,11 +18,12 @@
-  * V-subsample: 0, 1
-  * Color group: 0-RGB, 1-YUV, 2-raw
-  */
--#define MDP_COLOR(PACKED, LOOSE, VIDEO, PLANE, HF, VF, BITS, GROUP, SWAP, ID)\
--	(((PACKED) << 27) | ((LOOSE) << 26) | ((VIDEO) << 23) |\
-+#define MDP_COLOR(COMPRESS, PACKED, LOOSE, VIDEO, PLANE, HF, VF, BITS, GROUP, SWAP, ID)\
-+	(((COMPRESS) << 29) | ((PACKED) << 27) | ((LOOSE) << 26) | ((VIDEO) << 23) |\
- 	 ((PLANE) << 21) | ((HF) << 19) | ((VF) << 18) | ((BITS) << 8) |\
- 	 ((GROUP) << 6) | ((SWAP) << 5) | ((ID) << 0))
- 
-+#define MDP_COLOR_IS_COMPRESS(c)        ((0x20000000 & (c)) >> 29)
- #define MDP_COLOR_IS_10BIT_PACKED(c)	((0x08000000 & (c)) >> 27)
- #define MDP_COLOR_IS_10BIT_LOOSE(c)	(((0x0c000000 & (c)) >> 26) == 1)
- #define MDP_COLOR_IS_10BIT_TILE(c)	(((0x0c000000 & (c)) >> 26) == 3)
-@@ -44,144 +45,144 @@
- enum mdp_color {
- 	MDP_COLOR_UNKNOWN	= 0,
- 
--	//MDP_COLOR_FULLG8,
--	MDP_COLOR_FULLG8_RGGB	= MDP_COLOR(0, 0, 0, 1, 0, 0,  8, 2,  0, 21),
--	MDP_COLOR_FULLG8_GRBG	= MDP_COLOR(0, 0, 0, 1, 0, 1,  8, 2,  0, 21),
--	MDP_COLOR_FULLG8_GBRG	= MDP_COLOR(0, 0, 0, 1, 1, 0,  8, 2,  0, 21),
--	MDP_COLOR_FULLG8_BGGR	= MDP_COLOR(0, 0, 0, 1, 1, 1,  8, 2,  0, 21),
-+	/* MDP_COLOR_FULLG8 */
-+	MDP_COLOR_FULLG8_RGGB	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0,  8, 2,  0, 21),
-+	MDP_COLOR_FULLG8_GRBG	= MDP_COLOR(0, 0, 0, 0, 1, 0, 1,  8, 2,  0, 21),
-+	MDP_COLOR_FULLG8_GBRG	= MDP_COLOR(0, 0, 0, 0, 1, 1, 0,  8, 2,  0, 21),
-+	MDP_COLOR_FULLG8_BGGR	= MDP_COLOR(0, 0, 0, 0, 1, 1, 1,  8, 2,  0, 21),
- 	MDP_COLOR_FULLG8	= MDP_COLOR_FULLG8_BGGR,
- 
--	//MDP_COLOR_FULLG10,
--	MDP_COLOR_FULLG10_RGGB	= MDP_COLOR(0, 0, 0, 1, 0, 0, 10, 2,  0, 21),
--	MDP_COLOR_FULLG10_GRBG	= MDP_COLOR(0, 0, 0, 1, 0, 1, 10, 2,  0, 21),
--	MDP_COLOR_FULLG10_GBRG	= MDP_COLOR(0, 0, 0, 1, 1, 0, 10, 2,  0, 21),
--	MDP_COLOR_FULLG10_BGGR	= MDP_COLOR(0, 0, 0, 1, 1, 1, 10, 2,  0, 21),
-+	/* MDP_COLOR_FULLG10 */
-+	MDP_COLOR_FULLG10_RGGB	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 10, 2,  0, 21),
-+	MDP_COLOR_FULLG10_GRBG	= MDP_COLOR(0, 0, 0, 0, 1, 0, 1, 10, 2,  0, 21),
-+	MDP_COLOR_FULLG10_GBRG	= MDP_COLOR(0, 0, 0, 0, 1, 1, 0, 10, 2,  0, 21),
-+	MDP_COLOR_FULLG10_BGGR	= MDP_COLOR(0, 0, 0, 0, 1, 1, 1, 10, 2,  0, 21),
- 	MDP_COLOR_FULLG10	= MDP_COLOR_FULLG10_BGGR,
- 
--	//MDP_COLOR_FULLG12,
--	MDP_COLOR_FULLG12_RGGB	= MDP_COLOR(0, 0, 0, 1, 0, 0, 12, 2,  0, 21),
--	MDP_COLOR_FULLG12_GRBG	= MDP_COLOR(0, 0, 0, 1, 0, 1, 12, 2,  0, 21),
--	MDP_COLOR_FULLG12_GBRG	= MDP_COLOR(0, 0, 0, 1, 1, 0, 12, 2,  0, 21),
--	MDP_COLOR_FULLG12_BGGR	= MDP_COLOR(0, 0, 0, 1, 1, 1, 12, 2,  0, 21),
-+	/* MDP_COLOR_FULLG12 */
-+	MDP_COLOR_FULLG12_RGGB	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 12, 2,  0, 21),
-+	MDP_COLOR_FULLG12_GRBG	= MDP_COLOR(0, 0, 0, 0, 1, 0, 1, 12, 2,  0, 21),
-+	MDP_COLOR_FULLG12_GBRG	= MDP_COLOR(0, 0, 0, 0, 1, 1, 0, 12, 2,  0, 21),
-+	MDP_COLOR_FULLG12_BGGR	= MDP_COLOR(0, 0, 0, 0, 1, 1, 1, 12, 2,  0, 21),
- 	MDP_COLOR_FULLG12	= MDP_COLOR_FULLG12_BGGR,
- 
--	//MDP_COLOR_FULLG14,
--	MDP_COLOR_FULLG14_RGGB	= MDP_COLOR(0, 0, 0, 1, 0, 0, 14, 2,  0, 21),
--	MDP_COLOR_FULLG14_GRBG	= MDP_COLOR(0, 0, 0, 1, 0, 1, 14, 2,  0, 21),
--	MDP_COLOR_FULLG14_GBRG	= MDP_COLOR(0, 0, 0, 1, 1, 0, 14, 2,  0, 21),
--	MDP_COLOR_FULLG14_BGGR	= MDP_COLOR(0, 0, 0, 1, 1, 1, 14, 2,  0, 21),
-+	/* MDP_COLOR_FULLG14 */
-+	MDP_COLOR_FULLG14_RGGB	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 14, 2,  0, 21),
-+	MDP_COLOR_FULLG14_GRBG	= MDP_COLOR(0, 0, 0, 0, 1, 0, 1, 14, 2,  0, 21),
-+	MDP_COLOR_FULLG14_GBRG	= MDP_COLOR(0, 0, 0, 0, 1, 1, 0, 14, 2,  0, 21),
-+	MDP_COLOR_FULLG14_BGGR	= MDP_COLOR(0, 0, 0, 0, 1, 1, 1, 14, 2,  0, 21),
- 	MDP_COLOR_FULLG14	= MDP_COLOR_FULLG14_BGGR,
- 
--	MDP_COLOR_UFO10		= MDP_COLOR(0, 0, 0, 1, 0, 0, 10, 2,  0, 24),
-+	MDP_COLOR_UFO10		= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 10, 2,  0, 24),
- 
--	//MDP_COLOR_BAYER8,
--	MDP_COLOR_BAYER8_RGGB	= MDP_COLOR(0, 0, 0, 1, 0, 0,  8, 2,  0, 20),
--	MDP_COLOR_BAYER8_GRBG	= MDP_COLOR(0, 0, 0, 1, 0, 1,  8, 2,  0, 20),
--	MDP_COLOR_BAYER8_GBRG	= MDP_COLOR(0, 0, 0, 1, 1, 0,  8, 2,  0, 20),
--	MDP_COLOR_BAYER8_BGGR	= MDP_COLOR(0, 0, 0, 1, 1, 1,  8, 2,  0, 20),
-+	/* MDP_COLOR_BAYER8 */
-+	MDP_COLOR_BAYER8_RGGB	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0,  8, 2,  0, 20),
-+	MDP_COLOR_BAYER8_GRBG	= MDP_COLOR(0, 0, 0, 0, 1, 0, 1,  8, 2,  0, 20),
-+	MDP_COLOR_BAYER8_GBRG	= MDP_COLOR(0, 0, 0, 0, 1, 1, 0,  8, 2,  0, 20),
-+	MDP_COLOR_BAYER8_BGGR	= MDP_COLOR(0, 0, 0, 0, 1, 1, 1,  8, 2,  0, 20),
- 	MDP_COLOR_BAYER8	= MDP_COLOR_BAYER8_BGGR,
- 
--	//MDP_COLOR_BAYER10,
--	MDP_COLOR_BAYER10_RGGB	= MDP_COLOR(0, 0, 0, 1, 0, 0, 10, 2,  0, 20),
--	MDP_COLOR_BAYER10_GRBG	= MDP_COLOR(0, 0, 0, 1, 0, 1, 10, 2,  0, 20),
--	MDP_COLOR_BAYER10_GBRG	= MDP_COLOR(0, 0, 0, 1, 1, 0, 10, 2,  0, 20),
--	MDP_COLOR_BAYER10_BGGR	= MDP_COLOR(0, 0, 0, 1, 1, 1, 10, 2,  0, 20),
-+	/* MDP_COLOR_BAYER10 */
-+	MDP_COLOR_BAYER10_RGGB	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 10, 2,  0, 20),
-+	MDP_COLOR_BAYER10_GRBG	= MDP_COLOR(0, 0, 0, 0, 1, 0, 1, 10, 2,  0, 20),
-+	MDP_COLOR_BAYER10_GBRG	= MDP_COLOR(0, 0, 0, 0, 1, 1, 0, 10, 2,  0, 20),
-+	MDP_COLOR_BAYER10_BGGR	= MDP_COLOR(0, 0, 0, 0, 1, 1, 1, 10, 2,  0, 20),
- 	MDP_COLOR_BAYER10	= MDP_COLOR_BAYER10_BGGR,
- 
--	//MDP_COLOR_BAYER12,
--	MDP_COLOR_BAYER12_RGGB	= MDP_COLOR(0, 0, 0, 1, 0, 0, 12, 2,  0, 20),
--	MDP_COLOR_BAYER12_GRBG	= MDP_COLOR(0, 0, 0, 1, 0, 1, 12, 2,  0, 20),
--	MDP_COLOR_BAYER12_GBRG	= MDP_COLOR(0, 0, 0, 1, 1, 0, 12, 2,  0, 20),
--	MDP_COLOR_BAYER12_BGGR	= MDP_COLOR(0, 0, 0, 1, 1, 1, 12, 2,  0, 20),
-+	/* MDP_COLOR_BAYER12 */
-+	MDP_COLOR_BAYER12_RGGB	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 12, 2,  0, 20),
-+	MDP_COLOR_BAYER12_GRBG	= MDP_COLOR(0, 0, 0, 0, 1, 0, 1, 12, 2,  0, 20),
-+	MDP_COLOR_BAYER12_GBRG	= MDP_COLOR(0, 0, 0, 0, 1, 1, 0, 12, 2,  0, 20),
-+	MDP_COLOR_BAYER12_BGGR	= MDP_COLOR(0, 0, 0, 0, 1, 1, 1, 12, 2,  0, 20),
- 	MDP_COLOR_BAYER12	= MDP_COLOR_BAYER12_BGGR,
- 
--	//MDP_COLOR_BAYER14,
--	MDP_COLOR_BAYER14_RGGB	= MDP_COLOR(0, 0, 0, 1, 0, 0, 14, 2,  0, 20),
--	MDP_COLOR_BAYER14_GRBG	= MDP_COLOR(0, 0, 0, 1, 0, 1, 14, 2,  0, 20),
--	MDP_COLOR_BAYER14_GBRG	= MDP_COLOR(0, 0, 0, 1, 1, 0, 14, 2,  0, 20),
--	MDP_COLOR_BAYER14_BGGR	= MDP_COLOR(0, 0, 0, 1, 1, 1, 14, 2,  0, 20),
-+	/* MDP_COLOR_BAYER14 */
-+	MDP_COLOR_BAYER14_RGGB	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 14, 2,  0, 20),
-+	MDP_COLOR_BAYER14_GRBG	= MDP_COLOR(0, 0, 0, 0, 1, 0, 1, 14, 2,  0, 20),
-+	MDP_COLOR_BAYER14_GBRG	= MDP_COLOR(0, 0, 0, 0, 1, 1, 0, 14, 2,  0, 20),
-+	MDP_COLOR_BAYER14_BGGR	= MDP_COLOR(0, 0, 0, 0, 1, 1, 1, 14, 2,  0, 20),
- 	MDP_COLOR_BAYER14	= MDP_COLOR_BAYER14_BGGR,
- 
--	MDP_COLOR_RGB48		= MDP_COLOR(0, 0, 0, 1, 0, 0, 48, 0,  0, 23),
-+	MDP_COLOR_RGB48		= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 48, 0,  0, 23),
- 	/* For bayer+mono raw-16 */
--	MDP_COLOR_RGB565_RAW	= MDP_COLOR(0, 0, 0, 1, 0, 0, 16, 2,  0, 0),
-+	MDP_COLOR_RGB565_RAW	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 16, 2,  0, 0),
- 
--	MDP_COLOR_BAYER8_UNPAK	= MDP_COLOR(0, 0, 0, 1, 0, 0,  8, 2,  0, 22),
--	MDP_COLOR_BAYER10_UNPAK	= MDP_COLOR(0, 0, 0, 1, 0, 0, 10, 2,  0, 22),
--	MDP_COLOR_BAYER12_UNPAK	= MDP_COLOR(0, 0, 0, 1, 0, 0, 12, 2,  0, 22),
--	MDP_COLOR_BAYER14_UNPAK	= MDP_COLOR(0, 0, 0, 1, 0, 0, 14, 2,  0, 22),
-+	MDP_COLOR_BAYER8_UNPAK	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0,  8, 2,  0, 22),
-+	MDP_COLOR_BAYER10_UNPAK	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 10, 2,  0, 22),
-+	MDP_COLOR_BAYER12_UNPAK	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 12, 2,  0, 22),
-+	MDP_COLOR_BAYER14_UNPAK	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 14, 2,  0, 22),
- 
- 	/* Unified formats */
--	MDP_COLOR_GREY		= MDP_COLOR(0, 0, 0, 1, 0, 0,  8, 1,  0, 7),
--
--	MDP_COLOR_RGB565	= MDP_COLOR(0, 0, 0, 1, 0, 0, 16, 0,  0, 0),
--	MDP_COLOR_BGR565	= MDP_COLOR(0, 0, 0, 1, 0, 0, 16, 0,  1, 0),
--	MDP_COLOR_RGB888	= MDP_COLOR(0, 0, 0, 1, 0, 0, 24, 0,  1, 1),
--	MDP_COLOR_BGR888	= MDP_COLOR(0, 0, 0, 1, 0, 0, 24, 0,  0, 1),
--	MDP_COLOR_RGBA8888	= MDP_COLOR(0, 0, 0, 1, 0, 0, 32, 0,  1, 2),
--	MDP_COLOR_BGRA8888	= MDP_COLOR(0, 0, 0, 1, 0, 0, 32, 0,  0, 2),
--	MDP_COLOR_ARGB8888	= MDP_COLOR(0, 0, 0, 1, 0, 0, 32, 0,  1, 3),
--	MDP_COLOR_ABGR8888	= MDP_COLOR(0, 0, 0, 1, 0, 0, 32, 0,  0, 3),
--
--	MDP_COLOR_UYVY		= MDP_COLOR(0, 0, 0, 1, 1, 0, 16, 1,  0, 4),
--	MDP_COLOR_VYUY		= MDP_COLOR(0, 0, 0, 1, 1, 0, 16, 1,  1, 4),
--	MDP_COLOR_YUYV		= MDP_COLOR(0, 0, 0, 1, 1, 0, 16, 1,  0, 5),
--	MDP_COLOR_YVYU		= MDP_COLOR(0, 0, 0, 1, 1, 0, 16, 1,  1, 5),
--
--	MDP_COLOR_I420		= MDP_COLOR(0, 0, 0, 3, 1, 1,  8, 1,  0, 8),
--	MDP_COLOR_YV12		= MDP_COLOR(0, 0, 0, 3, 1, 1,  8, 1,  1, 8),
--	MDP_COLOR_I422		= MDP_COLOR(0, 0, 0, 3, 1, 0,  8, 1,  0, 9),
--	MDP_COLOR_YV16		= MDP_COLOR(0, 0, 0, 3, 1, 0,  8, 1,  1, 9),
--	MDP_COLOR_I444		= MDP_COLOR(0, 0, 0, 3, 0, 0,  8, 1,  0, 10),
--	MDP_COLOR_YV24		= MDP_COLOR(0, 0, 0, 3, 0, 0,  8, 1,  1, 10),
--
--	MDP_COLOR_NV12		= MDP_COLOR(0, 0, 0, 2, 1, 1,  8, 1,  0, 12),
--	MDP_COLOR_NV21		= MDP_COLOR(0, 0, 0, 2, 1, 1,  8, 1,  1, 12),
--	MDP_COLOR_NV16		= MDP_COLOR(0, 0, 0, 2, 1, 0,  8, 1,  0, 13),
--	MDP_COLOR_NV61		= MDP_COLOR(0, 0, 0, 2, 1, 0,  8, 1,  1, 13),
--	MDP_COLOR_NV24		= MDP_COLOR(0, 0, 0, 2, 0, 0,  8, 1,  0, 14),
--	MDP_COLOR_NV42		= MDP_COLOR(0, 0, 0, 2, 0, 0,  8, 1,  1, 14),
-+	MDP_COLOR_GREY		= MDP_COLOR(0, 0, 0, 0, 1, 0, 0,  8, 1,  0, 7),
-+
-+	MDP_COLOR_RGB565	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 16, 0,  0, 0),
-+	MDP_COLOR_BGR565	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 16, 0,  1, 0),
-+	MDP_COLOR_RGB888	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 24, 0,  1, 1),
-+	MDP_COLOR_BGR888	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 24, 0,  0, 1),
-+	MDP_COLOR_RGBA8888	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 32, 0,  1, 2),
-+	MDP_COLOR_BGRA8888	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 32, 0,  0, 2),
-+	MDP_COLOR_ARGB8888	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 32, 0,  1, 3),
-+	MDP_COLOR_ABGR8888	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 32, 0,  0, 3),
-+
-+	MDP_COLOR_UYVY		= MDP_COLOR(0, 0, 0, 0, 1, 1, 0, 16, 1,  0, 4),
-+	MDP_COLOR_VYUY		= MDP_COLOR(0, 0, 0, 0, 1, 1, 0, 16, 1,  1, 4),
-+	MDP_COLOR_YUYV		= MDP_COLOR(0, 0, 0, 0, 1, 1, 0, 16, 1,  0, 5),
-+	MDP_COLOR_YVYU		= MDP_COLOR(0, 0, 0, 0, 1, 1, 0, 16, 1,  1, 5),
-+
-+	MDP_COLOR_I420		= MDP_COLOR(0, 0, 0, 0, 3, 1, 1,  8, 1,  0, 8),
-+	MDP_COLOR_YV12		= MDP_COLOR(0, 0, 0, 0, 3, 1, 1,  8, 1,  1, 8),
-+	MDP_COLOR_I422		= MDP_COLOR(0, 0, 0, 0, 3, 1, 0,  8, 1,  0, 9),
-+	MDP_COLOR_YV16		= MDP_COLOR(0, 0, 0, 0, 3, 1, 0,  8, 1,  1, 9),
-+	MDP_COLOR_I444		= MDP_COLOR(0, 0, 0, 0, 3, 0, 0,  8, 1,  0, 10),
-+	MDP_COLOR_YV24		= MDP_COLOR(0, 0, 0, 0, 3, 0, 0,  8, 1,  1, 10),
-+
-+	MDP_COLOR_NV12		= MDP_COLOR(0, 0, 0, 0, 2, 1, 1,  8, 1,  0, 12),
-+	MDP_COLOR_NV21		= MDP_COLOR(0, 0, 0, 0, 2, 1, 1,  8, 1,  1, 12),
-+	MDP_COLOR_NV16		= MDP_COLOR(0, 0, 0, 0, 2, 1, 0,  8, 1,  0, 13),
-+	MDP_COLOR_NV61		= MDP_COLOR(0, 0, 0, 0, 2, 1, 0,  8, 1,  1, 13),
-+	MDP_COLOR_NV24		= MDP_COLOR(0, 0, 0, 0, 2, 0, 0,  8, 1,  0, 14),
-+	MDP_COLOR_NV42		= MDP_COLOR(0, 0, 0, 0, 2, 0, 0,  8, 1,  1, 14),
- 
- 	/* MediaTek proprietary formats */
- 	/* UFO encoded block mode */
--	MDP_COLOR_420_BLK_UFO	= MDP_COLOR(0, 0, 5, 2, 1, 1, 256, 1, 0, 12),
-+	MDP_COLOR_420_BLK_UFO	= MDP_COLOR(0, 0, 0, 5, 2, 1, 1, 256, 1, 0, 12),
- 	/* Block mode */
--	MDP_COLOR_420_BLK	= MDP_COLOR(0, 0, 1, 2, 1, 1, 256, 1, 0, 12),
-+	MDP_COLOR_420_BLK	= MDP_COLOR(0, 0, 0, 1, 2, 1, 1, 256, 1, 0, 12),
- 	/* Block mode + field mode */
--	MDP_COLOR_420_BLKI	= MDP_COLOR(0, 0, 3, 2, 1, 1, 256, 1, 0, 12),
-+	MDP_COLOR_420_BLKI	= MDP_COLOR(0, 0, 0, 3, 2, 1, 1, 256, 1, 0, 12),
- 	/* Block mode */
--	MDP_COLOR_422_BLK	= MDP_COLOR(0, 0, 1, 1, 1, 0, 512, 1, 0, 4),
-+	MDP_COLOR_422_BLK	= MDP_COLOR(0, 0, 0, 1, 1, 1, 0, 512, 1, 0, 4),
- 
--	MDP_COLOR_IYU2		= MDP_COLOR(0, 0, 0, 1, 0, 0, 24,  1, 0, 25),
--	MDP_COLOR_YUV444	= MDP_COLOR(0, 0, 0, 1, 0, 0, 24,  1, 0, 30),
-+	MDP_COLOR_IYU2		= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 24,  1, 0, 25),
-+	MDP_COLOR_YUV444	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 24,  1, 0, 30),
- 
- 	/* Packed 10-bit formats */
--	MDP_COLOR_RGBA1010102	= MDP_COLOR(1, 0, 0, 1, 0, 0, 32,  0, 1, 2),
--	MDP_COLOR_BGRA1010102	= MDP_COLOR(1, 0, 0, 1, 0, 0, 32,  0, 0, 2),
-+	MDP_COLOR_RGBA1010102	= MDP_COLOR(0, 1, 0, 0, 1, 0, 0, 32,  0, 1, 2),
-+	MDP_COLOR_BGRA1010102	= MDP_COLOR(0, 1, 0, 0, 1, 0, 0, 32,  0, 0, 2),
- 	/* Packed 10-bit UYVY */
--	MDP_COLOR_UYVY_10P	= MDP_COLOR(1, 0, 0, 1, 1, 0, 20,  1, 0, 4),
-+	MDP_COLOR_UYVY_10P	= MDP_COLOR(0, 1, 0, 0, 1, 1, 0, 20,  1, 0, 4),
- 	/* Packed 10-bit NV21 */
--	MDP_COLOR_NV21_10P	= MDP_COLOR(1, 0, 0, 2, 1, 1, 10,  1, 1, 12),
-+	MDP_COLOR_NV21_10P	= MDP_COLOR(0, 1, 0, 0, 2, 1, 1, 10,  1, 1, 12),
- 	/* 10-bit block mode */
--	MDP_COLOR_420_BLK_10_H	= MDP_COLOR(1, 0, 1, 2, 1, 1, 320, 1, 0, 12),
-+	MDP_COLOR_420_BLK_10_H	= MDP_COLOR(0, 1, 0, 1, 2, 1, 1, 320, 1, 0, 12),
- 	/* 10-bit HEVC tile mode */
--	MDP_COLOR_420_BLK_10_V	= MDP_COLOR(1, 1, 1, 2, 1, 1, 320, 1, 0, 12),
-+	MDP_COLOR_420_BLK_10_V	= MDP_COLOR(0, 1, 1, 1, 2, 1, 1, 320, 1, 0, 12),
- 	/* UFO encoded 10-bit block mode */
--	MDP_COLOR_420_BLK_U10_H	= MDP_COLOR(1, 0, 5, 2, 1, 1, 320, 1, 0, 12),
-+	MDP_COLOR_420_BLK_U10_H	= MDP_COLOR(0, 1, 0, 5, 2, 1, 1, 320, 1, 0, 12),
- 	/* UFO encoded 10-bit HEVC tile mode */
--	MDP_COLOR_420_BLK_U10_V	= MDP_COLOR(1, 1, 5, 2, 1, 1, 320, 1, 0, 12),
-+	MDP_COLOR_420_BLK_U10_V	= MDP_COLOR(0, 1, 1, 5, 2, 1, 1, 320, 1, 0, 12),
- 
- 	/* Loose 10-bit formats */
--	MDP_COLOR_UYVY_10L	= MDP_COLOR(0, 1, 0, 1, 1, 0, 20,  1, 0, 4),
--	MDP_COLOR_VYUY_10L	= MDP_COLOR(0, 1, 0, 1, 1, 0, 20,  1, 1, 4),
--	MDP_COLOR_YUYV_10L	= MDP_COLOR(0, 1, 0, 1, 1, 0, 20,  1, 0, 5),
--	MDP_COLOR_YVYU_10L	= MDP_COLOR(0, 1, 0, 1, 1, 0, 20,  1, 1, 5),
--	MDP_COLOR_NV12_10L	= MDP_COLOR(0, 1, 0, 2, 1, 1, 10,  1, 0, 12),
--	MDP_COLOR_NV21_10L	= MDP_COLOR(0, 1, 0, 2, 1, 1, 10,  1, 1, 12),
--	MDP_COLOR_NV16_10L	= MDP_COLOR(0, 1, 0, 2, 1, 0, 10,  1, 0, 13),
--	MDP_COLOR_NV61_10L	= MDP_COLOR(0, 1, 0, 2, 1, 0, 10,  1, 1, 13),
--	MDP_COLOR_YV12_10L	= MDP_COLOR(0, 1, 0, 3, 1, 1, 10,  1, 1, 8),
--	MDP_COLOR_I420_10L	= MDP_COLOR(0, 1, 0, 3, 1, 1, 10,  1, 0, 8),
-+	MDP_COLOR_UYVY_10L	= MDP_COLOR(0, 0, 1, 0, 1, 1, 0, 20,  1, 0, 4),
-+	MDP_COLOR_VYUY_10L	= MDP_COLOR(0, 0, 1, 0, 1, 1, 0, 20,  1, 1, 4),
-+	MDP_COLOR_YUYV_10L	= MDP_COLOR(0, 0, 1, 0, 1, 1, 0, 20,  1, 0, 5),
-+	MDP_COLOR_YVYU_10L	= MDP_COLOR(0, 0, 1, 0, 1, 1, 0, 20,  1, 1, 5),
-+	MDP_COLOR_NV12_10L	= MDP_COLOR(0, 0, 1, 0, 2, 1, 1, 10,  1, 0, 12),
-+	MDP_COLOR_NV21_10L	= MDP_COLOR(0, 0, 1, 0, 2, 1, 1, 10,  1, 1, 12),
-+	MDP_COLOR_NV16_10L	= MDP_COLOR(0, 0, 1, 0, 2, 1, 0, 10,  1, 0, 13),
-+	MDP_COLOR_NV61_10L	= MDP_COLOR(0, 0, 1, 0, 2, 1, 0, 10,  1, 1, 13),
-+	MDP_COLOR_YV12_10L	= MDP_COLOR(0, 0, 1, 0, 3, 1, 1, 10,  1, 1, 8),
-+	MDP_COLOR_I420_10L	= MDP_COLOR(0, 0, 1, 0, 3, 1, 1, 10,  1, 0, 8),
+diff --git a/drivers/media/platform/mediatek/mdp3/mt8183/mdp3-plat-mt8183.h b/drivers/media/platform/mediatek/mdp3/mt8183/mdp3-plat-mt8183.h
+index a4bfde4a9e16..1be9cc55b9b5 100644
+--- a/drivers/media/platform/mediatek/mdp3/mt8183/mdp3-plat-mt8183.h
++++ b/drivers/media/platform/mediatek/mdp3/mt8183/mdp3-plat-mt8183.h
+@@ -155,4 +155,229 @@ static const struct mdp_comp_data mt8183_mdp_comp_data[MDP_MAX_COMP_COUNT] = {
+ 	},
  };
  
- static inline bool MDP_COLOR_IS_UV_COPLANE(enum mdp_color c)
++/*
++ * All 10-bit related formats are not added in the basic format list,
++ * please add the corresponding format settings before use.
++ */
++static const struct mdp_format mt8183_formats[] = {
++	{
++		.pixelformat	= V4L2_PIX_FMT_GREY,
++		.mdp_color	= MDP_COLOR_GREY,
++		.depth		= { 8 },
++		.row_depth	= { 8 },
++		.num_planes	= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_RGB565X,
++		.mdp_color	= MDP_COLOR_BGR565,
++		.depth		= { 16 },
++		.row_depth	= { 16 },
++		.num_planes	= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_RGB565,
++		.mdp_color	= MDP_COLOR_RGB565,
++		.depth		= { 16 },
++		.row_depth	= { 16 },
++		.num_planes	= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_RGB24,
++		.mdp_color	= MDP_COLOR_RGB888,
++		.depth		= { 24 },
++		.row_depth	= { 24 },
++		.num_planes	= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_BGR24,
++		.mdp_color	= MDP_COLOR_BGR888,
++		.depth		= { 24 },
++		.row_depth	= { 24 },
++		.num_planes	= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_ABGR32,
++		.mdp_color	= MDP_COLOR_BGRA8888,
++		.depth		= { 32 },
++		.row_depth	= { 32 },
++		.num_planes	= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_ARGB32,
++		.mdp_color	= MDP_COLOR_ARGB8888,
++		.depth		= { 32 },
++		.row_depth	= { 32 },
++		.num_planes	= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_UYVY,
++		.mdp_color	= MDP_COLOR_UYVY,
++		.depth		= { 16 },
++		.row_depth	= { 16 },
++		.num_planes	= 1,
++		.walign		= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_VYUY,
++		.mdp_color	= MDP_COLOR_VYUY,
++		.depth		= { 16 },
++		.row_depth	= { 16 },
++		.num_planes	= 1,
++		.walign		= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_YUYV,
++		.mdp_color	= MDP_COLOR_YUYV,
++		.depth		= { 16 },
++		.row_depth	= { 16 },
++		.num_planes	= 1,
++		.walign		= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_YVYU,
++		.mdp_color	= MDP_COLOR_YVYU,
++		.depth		= { 16 },
++		.row_depth	= { 16 },
++		.num_planes	= 1,
++		.walign		= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_YUV420,
++		.mdp_color	= MDP_COLOR_I420,
++		.depth		= { 12 },
++		.row_depth	= { 8 },
++		.num_planes	= 1,
++		.walign		= 1,
++		.halign		= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_YVU420,
++		.mdp_color	= MDP_COLOR_YV12,
++		.depth		= { 12 },
++		.row_depth	= { 8 },
++		.num_planes	= 1,
++		.walign		= 1,
++		.halign		= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_NV12,
++		.mdp_color	= MDP_COLOR_NV12,
++		.depth		= { 12 },
++		.row_depth	= { 8 },
++		.num_planes	= 1,
++		.walign		= 1,
++		.halign		= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_NV21,
++		.mdp_color	= MDP_COLOR_NV21,
++		.depth		= { 12 },
++		.row_depth	= { 8 },
++		.num_planes	= 1,
++		.walign		= 1,
++		.halign		= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_NV16,
++		.mdp_color	= MDP_COLOR_NV16,
++		.depth		= { 16 },
++		.row_depth	= { 8 },
++		.num_planes	= 1,
++		.walign		= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_NV61,
++		.mdp_color	= MDP_COLOR_NV61,
++		.depth		= { 16 },
++		.row_depth	= { 8 },
++		.num_planes	= 1,
++		.walign		= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_NV24,
++		.mdp_color	= MDP_COLOR_NV24,
++		.depth		= { 24 },
++		.row_depth	= { 8 },
++		.num_planes	= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_NV42,
++		.mdp_color	= MDP_COLOR_NV42,
++		.depth		= { 24 },
++		.row_depth	= { 8 },
++		.num_planes	= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_MT21C,
++		.mdp_color	= MDP_COLOR_420_BLK_UFO,
++		.depth		= { 8, 4 },
++		.row_depth	= { 8, 8 },
++		.num_planes	= 2,
++		.walign		= 4,
++		.halign		= 5,
++		.flags		= MDP_FMT_FLAG_OUTPUT,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_MM21,
++		.mdp_color	= MDP_COLOR_420_BLK,
++		.depth		= { 8, 4 },
++		.row_depth	= { 8, 8 },
++		.num_planes	= 2,
++		.walign		= 4,
++		.halign		= 5,
++		.flags		= MDP_FMT_FLAG_OUTPUT,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_NV12M,
++		.mdp_color	= MDP_COLOR_NV12,
++		.depth		= { 8, 4 },
++		.row_depth	= { 8, 8 },
++		.num_planes	= 2,
++		.walign		= 1,
++		.halign		= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_NV21M,
++		.mdp_color	= MDP_COLOR_NV21,
++		.depth		= { 8, 4 },
++		.row_depth	= { 8, 8 },
++		.num_planes	= 2,
++		.walign		= 1,
++		.halign		= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_NV16M,
++		.mdp_color	= MDP_COLOR_NV16,
++		.depth		= { 8, 8 },
++		.row_depth	= { 8, 8 },
++		.num_planes	= 2,
++		.walign		= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_NV61M,
++		.mdp_color	= MDP_COLOR_NV61,
++		.depth		= { 8, 8 },
++		.row_depth	= { 8, 8 },
++		.num_planes	= 2,
++		.walign		= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_YUV420M,
++		.mdp_color	= MDP_COLOR_I420,
++		.depth		= { 8, 2, 2 },
++		.row_depth	= { 8, 4, 4 },
++		.num_planes	= 3,
++		.walign		= 1,
++		.halign		= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
++	}, {
++		.pixelformat	= V4L2_PIX_FMT_YVU420M,
++		.mdp_color	= MDP_COLOR_YV12,
++		.depth		= { 8, 2, 2 },
++		.row_depth	= { 8, 4, 4 },
++		.num_planes	= 3,
++		.walign		= 1,
++		.halign		= 1,
++		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
++	}
++};
++
+ #endif  /* __MDP3_PLAT_MT8183_H__ */
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+index 277253c8c963..ce18cbf70e96 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+@@ -24,6 +24,8 @@ static const struct mtk_mdp_driver_data mt8183_mdp_driver_data = {
+ 	.mdp_mutex_table_idx = mt8183_mutex_idx,
+ 	.comp_data = mt8183_mdp_comp_data,
+ 	.comp_data_len = ARRAY_SIZE(mt8183_mdp_comp_data),
++	.format = mt8183_formats,
++	.format_len = ARRAY_SIZE(mt8183_formats),
+ };
+ 
+ static const struct of_device_id mdp_of_ids[] = {
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
+index b83b2c517730..982438a9ab02 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
+@@ -57,6 +57,8 @@ struct mtk_mdp_driver_data {
+ 	const u32 *mdp_mutex_table_idx;
+ 	const struct mdp_comp_data *comp_data;
+ 	unsigned int comp_data_len;
++	const struct mdp_format *format;
++	unsigned int format_len;
+ };
+ 
+ struct mdp_dev {
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
+index 5f74ea3b7a52..7c14679ffd78 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
+@@ -277,7 +277,9 @@ static int mdp_m2m_querycap(struct file *file, void *fh,
+ static int mdp_m2m_enum_fmt_mplane(struct file *file, void *fh,
+ 				   struct v4l2_fmtdesc *f)
+ {
+-	return mdp_enum_fmt_mplane(f);
++	struct mdp_m2m_ctx *ctx = fh_to_ctx(fh);
++
++	return mdp_enum_fmt_mplane(ctx->mdp_dev, f);
+ }
+ 
+ static int mdp_m2m_g_fmt_mplane(struct file *file, void *fh,
+@@ -307,7 +309,7 @@ static int mdp_m2m_s_fmt_mplane(struct file *file, void *fh,
+ 	const struct mdp_format *fmt;
+ 	struct vb2_queue *vq;
+ 
+-	fmt = mdp_try_fmt_mplane(f, &ctx->curr_param, ctx->id);
++	fmt = mdp_try_fmt_mplane(ctx->mdp_dev, f, &ctx->curr_param, ctx->id);
+ 	if (!fmt)
+ 		return -EINVAL;
+ 
+@@ -346,7 +348,7 @@ static int mdp_m2m_try_fmt_mplane(struct file *file, void *fh,
+ {
+ 	struct mdp_m2m_ctx *ctx = fh_to_ctx(fh);
+ 
+-	if (!mdp_try_fmt_mplane(f, &ctx->curr_param, ctx->id))
++	if (!mdp_try_fmt_mplane(ctx->mdp_dev, f, &ctx->curr_param, ctx->id))
+ 		return -EINVAL;
+ 
+ 	return 0;
+@@ -589,7 +591,7 @@ static int mdp_m2m_open(struct file *file)
+ 	ctx->fh.m2m_ctx = ctx->m2m_ctx;
+ 
+ 	ctx->curr_param.ctx = ctx;
+-	ret = mdp_frameparam_init(&ctx->curr_param);
++	ret = mdp_frameparam_init(mdp, &ctx->curr_param);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to initialize mdp parameter\n");
+ 		goto err_release_m2m_ctx;
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.c
+index 4e84a37ecdfc..cd6afbf53797 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.c
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.c
+@@ -11,231 +11,6 @@
+ #include "mtk-mdp3-regs.h"
+ #include "mtk-mdp3-m2m.h"
+ 
+-/*
+- * All 10-bit related formats are not added in the basic format list,
+- * please add the corresponding format settings before use.
+- */
+-static const struct mdp_format mdp_formats[] = {
+-	{
+-		.pixelformat	= V4L2_PIX_FMT_GREY,
+-		.mdp_color	= MDP_COLOR_GREY,
+-		.depth		= { 8 },
+-		.row_depth	= { 8 },
+-		.num_planes	= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_RGB565X,
+-		.mdp_color	= MDP_COLOR_BGR565,
+-		.depth		= { 16 },
+-		.row_depth	= { 16 },
+-		.num_planes	= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_RGB565,
+-		.mdp_color	= MDP_COLOR_RGB565,
+-		.depth		= { 16 },
+-		.row_depth	= { 16 },
+-		.num_planes	= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_RGB24,
+-		.mdp_color	= MDP_COLOR_RGB888,
+-		.depth		= { 24 },
+-		.row_depth	= { 24 },
+-		.num_planes	= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_BGR24,
+-		.mdp_color	= MDP_COLOR_BGR888,
+-		.depth		= { 24 },
+-		.row_depth	= { 24 },
+-		.num_planes	= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_ABGR32,
+-		.mdp_color	= MDP_COLOR_BGRA8888,
+-		.depth		= { 32 },
+-		.row_depth	= { 32 },
+-		.num_planes	= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_ARGB32,
+-		.mdp_color	= MDP_COLOR_ARGB8888,
+-		.depth		= { 32 },
+-		.row_depth	= { 32 },
+-		.num_planes	= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_UYVY,
+-		.mdp_color	= MDP_COLOR_UYVY,
+-		.depth		= { 16 },
+-		.row_depth	= { 16 },
+-		.num_planes	= 1,
+-		.walign		= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_VYUY,
+-		.mdp_color	= MDP_COLOR_VYUY,
+-		.depth		= { 16 },
+-		.row_depth	= { 16 },
+-		.num_planes	= 1,
+-		.walign		= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_YUYV,
+-		.mdp_color	= MDP_COLOR_YUYV,
+-		.depth		= { 16 },
+-		.row_depth	= { 16 },
+-		.num_planes	= 1,
+-		.walign		= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_YVYU,
+-		.mdp_color	= MDP_COLOR_YVYU,
+-		.depth		= { 16 },
+-		.row_depth	= { 16 },
+-		.num_planes	= 1,
+-		.walign		= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_YUV420,
+-		.mdp_color	= MDP_COLOR_I420,
+-		.depth		= { 12 },
+-		.row_depth	= { 8 },
+-		.num_planes	= 1,
+-		.walign		= 1,
+-		.halign		= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_YVU420,
+-		.mdp_color	= MDP_COLOR_YV12,
+-		.depth		= { 12 },
+-		.row_depth	= { 8 },
+-		.num_planes	= 1,
+-		.walign		= 1,
+-		.halign		= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_NV12,
+-		.mdp_color	= MDP_COLOR_NV12,
+-		.depth		= { 12 },
+-		.row_depth	= { 8 },
+-		.num_planes	= 1,
+-		.walign		= 1,
+-		.halign		= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_NV21,
+-		.mdp_color	= MDP_COLOR_NV21,
+-		.depth		= { 12 },
+-		.row_depth	= { 8 },
+-		.num_planes	= 1,
+-		.walign		= 1,
+-		.halign		= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_NV16,
+-		.mdp_color	= MDP_COLOR_NV16,
+-		.depth		= { 16 },
+-		.row_depth	= { 8 },
+-		.num_planes	= 1,
+-		.walign		= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_NV61,
+-		.mdp_color	= MDP_COLOR_NV61,
+-		.depth		= { 16 },
+-		.row_depth	= { 8 },
+-		.num_planes	= 1,
+-		.walign		= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_NV24,
+-		.mdp_color	= MDP_COLOR_NV24,
+-		.depth		= { 24 },
+-		.row_depth	= { 8 },
+-		.num_planes	= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_NV42,
+-		.mdp_color	= MDP_COLOR_NV42,
+-		.depth		= { 24 },
+-		.row_depth	= { 8 },
+-		.num_planes	= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_MT21C,
+-		.mdp_color	= MDP_COLOR_420_BLK_UFO,
+-		.depth		= { 8, 4 },
+-		.row_depth	= { 8, 8 },
+-		.num_planes	= 2,
+-		.walign		= 4,
+-		.halign		= 5,
+-		.flags		= MDP_FMT_FLAG_OUTPUT,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_MM21,
+-		.mdp_color	= MDP_COLOR_420_BLK,
+-		.depth		= { 8, 4 },
+-		.row_depth	= { 8, 8 },
+-		.num_planes	= 2,
+-		.walign		= 4,
+-		.halign		= 5,
+-		.flags		= MDP_FMT_FLAG_OUTPUT,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_NV12M,
+-		.mdp_color	= MDP_COLOR_NV12,
+-		.depth		= { 8, 4 },
+-		.row_depth	= { 8, 8 },
+-		.num_planes	= 2,
+-		.walign		= 1,
+-		.halign		= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_NV21M,
+-		.mdp_color	= MDP_COLOR_NV21,
+-		.depth		= { 8, 4 },
+-		.row_depth	= { 8, 8 },
+-		.num_planes	= 2,
+-		.walign		= 1,
+-		.halign		= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_NV16M,
+-		.mdp_color	= MDP_COLOR_NV16,
+-		.depth		= { 8, 8 },
+-		.row_depth	= { 8, 8 },
+-		.num_planes	= 2,
+-		.walign		= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_NV61M,
+-		.mdp_color	= MDP_COLOR_NV61,
+-		.depth		= { 8, 8 },
+-		.row_depth	= { 8, 8 },
+-		.num_planes	= 2,
+-		.walign		= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_YUV420M,
+-		.mdp_color	= MDP_COLOR_I420,
+-		.depth		= { 8, 2, 2 },
+-		.row_depth	= { 8, 4, 4 },
+-		.num_planes	= 3,
+-		.walign		= 1,
+-		.halign		= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_YVU420M,
+-		.mdp_color	= MDP_COLOR_YV12,
+-		.depth		= { 8, 2, 2 },
+-		.row_depth	= { 8, 4, 4 },
+-		.num_planes	= 3,
+-		.walign		= 1,
+-		.halign		= 1,
+-		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
+-	}
+-};
+-
+ static const struct mdp_limit mdp_def_limit = {
+ 	.out_limit = {
+ 		.wmin	= 16,
+@@ -255,32 +30,34 @@ static const struct mdp_limit mdp_def_limit = {
+ 	.v_scale_down_max = 128,
+ };
+ 
+-static const struct mdp_format *mdp_find_fmt(u32 pixelformat, u32 type)
++static const struct mdp_format *mdp_find_fmt(const struct mtk_mdp_driver_data *mdp_data,
++					     u32 pixelformat, u32 type)
+ {
+ 	u32 i, flag;
+ 
+ 	flag = V4L2_TYPE_IS_OUTPUT(type) ? MDP_FMT_FLAG_OUTPUT :
+ 					MDP_FMT_FLAG_CAPTURE;
+-	for (i = 0; i < ARRAY_SIZE(mdp_formats); ++i) {
+-		if (!(mdp_formats[i].flags & flag))
++	for (i = 0; i < mdp_data->format_len; ++i) {
++		if (!(mdp_data->format[i].flags & flag))
+ 			continue;
+-		if (mdp_formats[i].pixelformat == pixelformat)
+-			return &mdp_formats[i];
++		if (mdp_data->format[i].pixelformat == pixelformat)
++			return &mdp_data->format[i];
+ 	}
+ 	return NULL;
+ }
+ 
+-static const struct mdp_format *mdp_find_fmt_by_index(u32 index, u32 type)
++static const struct mdp_format *mdp_find_fmt_by_index(const struct mtk_mdp_driver_data *mdp_data,
++						      u32 index, u32 type)
+ {
+ 	u32 i, flag, num = 0;
+ 
+ 	flag = V4L2_TYPE_IS_OUTPUT(type) ? MDP_FMT_FLAG_OUTPUT :
+ 					MDP_FMT_FLAG_CAPTURE;
+-	for (i = 0; i < ARRAY_SIZE(mdp_formats); ++i) {
+-		if (!(mdp_formats[i].flags & flag))
++	for (i = 0; i < mdp_data->format_len; ++i) {
++		if (!(mdp_data->format[i].flags & flag))
+ 			continue;
+ 		if (index == num)
+-			return &mdp_formats[i];
++			return &mdp_data->format[i];
+ 		num++;
+ 	}
+ 	return NULL;
+@@ -354,11 +131,11 @@ static int mdp_clamp_align(s32 *x, int min, int max, unsigned int align)
+ 	return 0;
+ }
+ 
+-int mdp_enum_fmt_mplane(struct v4l2_fmtdesc *f)
++int mdp_enum_fmt_mplane(struct mdp_dev *mdp, struct v4l2_fmtdesc *f)
+ {
+ 	const struct mdp_format *fmt;
+ 
+-	fmt = mdp_find_fmt_by_index(f->index, f->type);
++	fmt = mdp_find_fmt_by_index(mdp->mdp_data, f->index, f->type);
+ 	if (!fmt)
+ 		return -EINVAL;
+ 
+@@ -366,7 +143,8 @@ int mdp_enum_fmt_mplane(struct v4l2_fmtdesc *f)
+ 	return 0;
+ }
+ 
+-const struct mdp_format *mdp_try_fmt_mplane(struct v4l2_format *f,
++const struct mdp_format *mdp_try_fmt_mplane(struct mdp_dev *mdp,
++					    struct v4l2_format *f,
+ 					    struct mdp_frameparam *param,
+ 					    u32 ctx_id)
+ {
+@@ -378,9 +156,9 @@ const struct mdp_format *mdp_try_fmt_mplane(struct v4l2_format *f,
+ 	u32 org_w, org_h;
+ 	unsigned int i;
+ 
+-	fmt = mdp_find_fmt(pix_mp->pixelformat, f->type);
++	fmt = mdp_find_fmt(mdp->mdp_data, pix_mp->pixelformat, f->type);
+ 	if (!fmt) {
+-		fmt = mdp_find_fmt_by_index(0, f->type);
++		fmt = mdp_find_fmt_by_index(mdp->mdp_data, 0, f->type);
+ 		if (!fmt) {
+ 			dev_dbg(dev, "%d: pixelformat %c%c%c%c invalid", ctx_id,
+ 				(pix_mp->pixelformat & 0xff),
+@@ -699,7 +477,7 @@ void mdp_set_dst_config(struct img_output *out,
+ 	mdp_set_orientation(out, frame->rotation, frame->hflip, frame->vflip);
+ }
+ 
+-int mdp_frameparam_init(struct mdp_frameparam *param)
++int mdp_frameparam_init(struct mdp_dev *mdp, struct mdp_frameparam *param)
+ {
+ 	struct mdp_frame *frame;
+ 
+@@ -712,7 +490,7 @@ int mdp_frameparam_init(struct mdp_frameparam *param)
+ 
+ 	frame = &param->output;
+ 	frame->format.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
+-	frame->mdp_fmt = mdp_try_fmt_mplane(&frame->format, param, 0);
++	frame->mdp_fmt = mdp_try_fmt_mplane(mdp, &frame->format, param, 0);
+ 	frame->ycbcr_prof =
+ 		mdp_map_ycbcr_prof_mplane(&frame->format,
+ 					  frame->mdp_fmt->mdp_color);
+@@ -721,7 +499,7 @@ int mdp_frameparam_init(struct mdp_frameparam *param)
+ 	param->num_captures = 1;
+ 	frame = &param->captures[0];
+ 	frame->format.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+-	frame->mdp_fmt = mdp_try_fmt_mplane(&frame->format, param, 0);
++	frame->mdp_fmt = mdp_try_fmt_mplane(mdp, &frame->format, param, 0);
+ 	frame->ycbcr_prof =
+ 		mdp_map_ycbcr_prof_mplane(&frame->format,
+ 					  frame->mdp_fmt->mdp_color);
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.h
+index f995e536d45f..1a26c1bcfd8d 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.h
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.h
+@@ -353,8 +353,9 @@ struct mdp_frameparam {
+ 	enum v4l2_quantization		quant;
+ };
+ 
+-int mdp_enum_fmt_mplane(struct v4l2_fmtdesc *f);
+-const struct mdp_format *mdp_try_fmt_mplane(struct v4l2_format *f,
++int mdp_enum_fmt_mplane(struct mdp_dev *mdp, struct v4l2_fmtdesc *f);
++const struct mdp_format *mdp_try_fmt_mplane(struct mdp_dev *mdp,
++					    struct v4l2_format *f,
+ 					    struct mdp_frameparam *param,
+ 					    u32 ctx_id);
+ enum mdp_ycbcr_profile mdp_map_ycbcr_prof_mplane(struct v4l2_format *f,
+@@ -368,6 +369,6 @@ void mdp_set_src_config(struct img_input *in,
+ 			struct mdp_frame *frame, struct vb2_buffer *vb);
+ void mdp_set_dst_config(struct img_output *out,
+ 			struct mdp_frame *frame, struct vb2_buffer *vb);
+-int mdp_frameparam_init(struct mdp_frameparam *param);
++int mdp_frameparam_init(struct mdp_dev *mdp, struct mdp_frameparam *param);
+ 
+ #endif  /* __MTK_MDP3_REGS_H__ */
 -- 
 2.18.0
 
