@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A060C4332F
-	for <linux-media@archiver.kernel.org>; Thu,  3 Nov 2022 16:32:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7CF3C433FE
+	for <linux-media@archiver.kernel.org>; Thu,  3 Nov 2022 16:32:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232112AbiKCQcT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Nov 2022 12:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56304 "EHLO
+        id S232149AbiKCQcU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Nov 2022 12:32:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231473AbiKCQbl (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Nov 2022 12:31:41 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C978D1B7A7;
-        Thu,  3 Nov 2022 09:31:40 -0700 (PDT)
+        with ESMTP id S232160AbiKCQbr (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Nov 2022 12:31:47 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6231BEB3;
+        Thu,  3 Nov 2022 09:31:43 -0700 (PDT)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id AD81524000A;
-        Thu,  3 Nov 2022 16:31:37 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 13113240015;
+        Thu,  3 Nov 2022 16:31:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1667493099;
+        t=1667493102;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+gjn4CD8PEYxh1M1akgEFv9mvf2oHc+8uaWsRYHxl84=;
-        b=pvYJQIGx2QupSCS01wnjgSVt80CjWnBxJARV6C2mVhEly/hkQlJKokvOwrFspvVLH7s57Z
-        jYNvDrssGdPQYP9m7D3JeXvZ3TVwktgIim2pFfR9nrH5ifU1u9yOW8RUMZChTvMHohF+Vz
-        JvwBAK/X8fJ5kXN7YzlrJy5ZInwxXcrZhPN50TFbRVGQU3NxZQfZJ32e2mYVpQa35+sYc3
-        BnLzXEgYwV3GuxjvpJ/UaIesRZ38+R/fdhySlo/v9iSfLyNA2g9WZE12x+t9ECM/oWy6Do
-        SY9gVsYXIu0gfL6tbvzMIVAx2/4WJO8x5mfwz4MseoHxRjsR9lWHj4HyEm+qdA==
+        bh=VS9l0xQ4Fcky+wBccL4iLRlN/70BCazK2voOcRBEp3s=;
+        b=Jxyt5s7IyITlfe9vs0Dvdot7n3Z0PFmcWZ47fGLvtGt//xswhz5GaNrRx6kcO5UfNwjoMo
+        BA+yXSn9iHKo2nmmfvM6+QEk4UzOfLYsv8SDAckgazpS+r8AXWiTFcP+zl9yizSsaHkmKi
+        lZzhGeO0Bm5g3GfzY70rDG/TRb///jReMGQeTh7DNp5HHKE3oyZ41sYR4cgxRV+ggcAH0f
+        lHx3BLZIzPimz1+dtJbAeqhCIeaGc1BD4AGJUzpZTST1uPY5bnzN5Dm4JnMOGVWdYRzZbd
+        Hqw3hTM6bg/sO3D4HuMdpmjx19q/T5iQ4NASgpJ5fmkwWT057x0QISZCfWhDog==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
@@ -41,9 +41,9 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v7 05/28] media: sun6i-csi: Add dimensions and format helpers to capture
-Date:   Thu,  3 Nov 2022 17:30:50 +0100
-Message-Id: <20221103163113.245462-6-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v7 07/28] media: sun6i-csi: Split stream sequences and irq code in capture
+Date:   Thu,  3 Nov 2022 17:30:52 +0100
+Message-Id: <20221103163113.245462-8-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221103163113.245462-1-paul.kocialkowski@bootlin.com>
 References: <20221103163113.245462-1-paul.kocialkowski@bootlin.com>
@@ -53,60 +53,171 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Define and export useful helpers to access dimensions and pixel format.
+Create minimal helpers that split the enable/disable flow, which will
+make it easier to move control over to the bridge later on.
+
+Generally speaking the goal is to move register configuration to
+the capture code and later split it with the bridge code.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 ---
- .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 19 +++++++++++++++++++
- .../sunxi/sun6i-csi/sun6i_csi_capture.h       |  5 +++++
- 2 files changed, 24 insertions(+)
+ .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 26 ---------
+ .../platform/sunxi/sun6i-csi/sun6i_csi.h      |  7 ---
+ .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 58 ++++++++++++++++++-
+ 3 files changed, 55 insertions(+), 36 deletions(-)
 
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+index 5e03069bd4c3..d5318e2b04df 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+@@ -535,32 +535,6 @@ int sun6i_csi_update_config(struct sun6i_csi_device *csi_dev,
+ 	return 0;
+ }
+ 
+-void sun6i_csi_set_stream(struct sun6i_csi_device *csi_dev, bool enable)
+-{
+-	struct regmap *regmap = csi_dev->regmap;
+-
+-	if (!enable) {
+-		regmap_update_bits(regmap, SUN6I_CSI_CAP_REG,
+-				   SUN6I_CSI_CAP_VCAP_ON, 0);
+-		regmap_write(regmap, SUN6I_CSI_CH_INT_EN_REG, 0);
+-		return;
+-	}
+-
+-	regmap_write(regmap, SUN6I_CSI_CH_INT_STA_REG,
+-		     SUN6I_CSI_CH_INT_STA_CLEAR);
+-	regmap_write(regmap, SUN6I_CSI_CH_INT_EN_REG,
+-		     SUN6I_CSI_CH_INT_EN_VS |
+-		     SUN6I_CSI_CH_INT_EN_HB_OF |
+-		     SUN6I_CSI_CH_INT_EN_FIFO2_OF |
+-		     SUN6I_CSI_CH_INT_EN_FIFO1_OF |
+-		     SUN6I_CSI_CH_INT_EN_FIFO0_OF |
+-		     SUN6I_CSI_CH_INT_EN_FD |
+-		     SUN6I_CSI_CH_INT_EN_CD);
+-
+-	regmap_update_bits(regmap, SUN6I_CSI_CAP_REG, SUN6I_CSI_CAP_VCAP_ON,
+-			   SUN6I_CSI_CAP_VCAP_ON);
+-}
+-
+ /* Media */
+ 
+ static const struct media_device_ops sun6i_csi_media_ops = {
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+index 75867cde7985..6fe40a56d6df 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+@@ -96,13 +96,6 @@ int sun6i_csi_set_power(struct sun6i_csi_device *csi_dev, bool enable);
+ int sun6i_csi_update_config(struct sun6i_csi_device *csi_dev,
+ 			    struct sun6i_csi_config *config);
+ 
+-/**
+- * sun6i_csi_set_stream() - start/stop csi streaming
+- * @csi_dev:	pointer to the csi device
+- * @enable:	start/stop
+- */
+-void sun6i_csi_set_stream(struct sun6i_csi_device *csi_dev, bool enable);
+-
+ /* get bpp form v4l2 pixformat */
+ static inline int sun6i_csi_get_bpp(unsigned int pixformat)
+ {
 diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-index bdc5465b68a2..a3c3bbf6a506 100644
+index cb23dcdf250f..e611f8c94d9d 100644
 --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
 +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-@@ -25,6 +25,25 @@
+@@ -107,6 +107,51 @@ static bool sun6i_csi_capture_format_check(u32 format)
  
- /* Helpers */
+ /* Capture */
  
-+void sun6i_csi_capture_dimensions(struct sun6i_csi_device *csi_dev,
-+				  unsigned int *width, unsigned int *height)
++static void sun6i_csi_capture_irq_enable(struct sun6i_csi_device *csi_dev)
 +{
-+	if (width)
-+		*width = csi_dev->capture.format.fmt.pix.width;
-+	if (height)
-+		*height = csi_dev->capture.format.fmt.pix.height;
++	struct regmap *regmap = csi_dev->regmap;
++
++	regmap_write(regmap, SUN6I_CSI_CH_INT_EN_REG,
++		     SUN6I_CSI_CH_INT_EN_VS |
++		     SUN6I_CSI_CH_INT_EN_HB_OF |
++		     SUN6I_CSI_CH_INT_EN_FIFO2_OF |
++		     SUN6I_CSI_CH_INT_EN_FIFO1_OF |
++		     SUN6I_CSI_CH_INT_EN_FIFO0_OF |
++		     SUN6I_CSI_CH_INT_EN_FD |
++		     SUN6I_CSI_CH_INT_EN_CD);
 +}
 +
-+void sun6i_csi_capture_format(struct sun6i_csi_device *csi_dev,
-+			      u32 *pixelformat, u32 *field)
++static void sun6i_csi_capture_irq_disable(struct sun6i_csi_device *csi_dev)
 +{
-+	if (pixelformat)
-+		*pixelformat = csi_dev->capture.format.fmt.pix.pixelformat;
++	struct regmap *regmap = csi_dev->regmap;
 +
-+	if (field)
-+		*field = csi_dev->capture.format.fmt.pix.field;
++	regmap_write(regmap, SUN6I_CSI_CH_INT_EN_REG, 0);
 +}
 +
- static struct v4l2_subdev *
- sun6i_csi_capture_remote_subdev(struct sun6i_csi_capture *capture, u32 *pad)
- {
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-index 7fa66a2af5ec..935f35b7049a 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-@@ -37,6 +37,11 @@ struct sun6i_csi_capture {
- 	u32				mbus_code;
- };
- 
-+void sun6i_csi_capture_dimensions(struct sun6i_csi_device *csi_dev,
-+				  unsigned int *width, unsigned int *height);
-+void sun6i_csi_capture_format(struct sun6i_csi_device *csi_dev,
-+			      u32 *pixelformat, u32 *field);
++static void sun6i_csi_capture_irq_clear(struct sun6i_csi_device *csi_dev)
++{
++	struct regmap *regmap = csi_dev->regmap;
 +
- void sun6i_csi_capture_sync(struct sun6i_csi_device *csi_dev);
- void sun6i_csi_capture_frame_done(struct sun6i_csi_device *csi_dev);
++	regmap_write(regmap, SUN6I_CSI_CH_INT_EN_REG, 0);
++	regmap_write(regmap, SUN6I_CSI_CH_INT_STA_REG,
++		     SUN6I_CSI_CH_INT_STA_CLEAR);
++}
++
++static void sun6i_csi_capture_enable(struct sun6i_csi_device *csi_dev)
++{
++	struct regmap *regmap = csi_dev->regmap;
++
++	regmap_update_bits(regmap, SUN6I_CSI_CAP_REG, SUN6I_CSI_CAP_VCAP_ON,
++			   SUN6I_CSI_CAP_VCAP_ON);
++}
++
++static void sun6i_csi_capture_disable(struct sun6i_csi_device *csi_dev)
++{
++	struct regmap *regmap = csi_dev->regmap;
++
++	regmap_update_bits(regmap, SUN6I_CSI_CAP_REG, SUN6I_CSI_CAP_VCAP_ON, 0);
++}
++
+ static void
+ sun6i_csi_capture_buffer_configure(struct sun6i_csi_device *csi_dev,
+ 				   struct sun6i_csi_buffer *csi_buffer)
+@@ -357,6 +402,10 @@ static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
+ 		goto error_media_pipeline;
+ 	}
+ 
++	/* Clear */
++
++	sun6i_csi_capture_irq_clear(csi_dev);
++
+ 	/* Configure */
+ 
+ 	sun6i_csi_capture_configure(csi_dev);
+@@ -367,7 +416,8 @@ static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
+ 
+ 	/* Enable */
+ 
+-	sun6i_csi_set_stream(csi_dev, true);
++	sun6i_csi_capture_irq_enable(csi_dev);
++	sun6i_csi_capture_enable(csi_dev);
+ 
+ 	ret = v4l2_subdev_call(subdev, video, s_stream, 1);
+ 	if (ret && ret != -ENOIOCTLCMD)
+@@ -376,7 +426,8 @@ static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
+ 	return 0;
+ 
+ error_stream:
+-	sun6i_csi_set_stream(csi_dev, false);
++	sun6i_csi_capture_disable(csi_dev);
++	sun6i_csi_capture_irq_disable(csi_dev);
+ 
+ error_media_pipeline:
+ 	video_device_pipeline_stop(video_dev);
+@@ -397,7 +448,8 @@ static void sun6i_csi_capture_stop_streaming(struct vb2_queue *queue)
+ 	if (subdev)
+ 		v4l2_subdev_call(subdev, video, s_stream, 0);
+ 
+-	sun6i_csi_set_stream(csi_dev, false);
++	sun6i_csi_capture_disable(csi_dev);
++	sun6i_csi_capture_irq_disable(csi_dev);
+ 
+ 	video_device_pipeline_stop(&capture->video_dev);
  
 -- 
 2.38.1
