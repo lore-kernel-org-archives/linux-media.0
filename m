@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C620C43217
-	for <linux-media@archiver.kernel.org>; Thu,  3 Nov 2022 16:32:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BCD3C43219
+	for <linux-media@archiver.kernel.org>; Thu,  3 Nov 2022 16:32:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232333AbiKCQcu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Nov 2022 12:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
+        id S231444AbiKCQcx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Nov 2022 12:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232124AbiKCQcT (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Nov 2022 12:32:19 -0400
+        with ESMTP id S232260AbiKCQch (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Nov 2022 12:32:37 -0400
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D527C65D9;
-        Thu,  3 Nov 2022 09:32:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CB31B1FE;
+        Thu,  3 Nov 2022 09:32:17 -0700 (PDT)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0956524000B;
-        Thu,  3 Nov 2022 16:32:10 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 3291A240004;
+        Thu,  3 Nov 2022 16:32:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1667493132;
+        t=1667493135;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZMFnks6Lu4FCxDlZAZxi2Is0Upoea35FrSEj6lLHdlk=;
-        b=mBCUBOB8cc0YfaNz7cYZcOWfJbYdt/5PcIcgL4/HBRoSUkvhMawZl55VJPCJbPn6vETPMQ
-        xaCNS3UwpEEgJ+v34IQoeHa4vooY1ZMk9zliOnI/z+Z1r3lYviYrZCl+XtzBWY79k2vGGl
-        W9BxWaNAAVb32bmGbOmNza9e1UpC2GXq2Ohp5ZuM9okA9OLoOOyyX2mys6FubnRw26g6dh
-        eDLBSX9sgKvGUEXAeItXm/78TAnTo2wvM52K8UQdFkPsSAk3U+Xe2jNxiPZkXjKqlztsWp
-        rYULHmi3Ybh7islqMLW2om4TMslQEzwG4xUiLJ/ZG1KL0ySRqDqslfEKeM257w==
+        bh=92BIwhr37phAu6zFjhrUh2a2nbnrbEyc1MsvZ589sKc=;
+        b=YH+vj+c7YkvyiMmM+LngYWdeRDG6LTpjQLPpo72IROtnEwM7BzDmKvTSNgFJ2vSPER8LQS
+        bFlznZ0sp/QwDQf5pHuOgWd5USHzcV1r1sLTji4Ekizem+6ysXu53rGe/zA0Ya8zokJFDX
+        EatOMGnsmgUU4JtxTWL4Ovjl7y3eUiMAqbIR3LRMOadeKJM5qRhxoNA6IEnBhuOIwvNBBJ
+        IIloxOR4oXt99P3E125ydm4ybz4zkympqL4m+7GORoPiIZOu8fUhej8VJnLeubm7s6SzcE
+        +Lz+lS6MB2daYKH7dRYSKkkTi5lnpnXBWAUcSl69iR2+S72dRoE9r/FA0jGZGg==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
@@ -41,9 +41,9 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v7 22/28] media: sun6i-csi: Rename the capture video device to sun6i-csi-capture
-Date:   Thu,  3 Nov 2022 17:31:07 +0100
-Message-Id: <20221103163113.245462-23-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v7 24/28] media: sun6i-csi: Add support for MIPI CSI-2 to the bridge code
+Date:   Thu,  3 Nov 2022 17:31:09 +0100
+Message-Id: <20221103163113.245462-25-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221103163113.245462-1-paul.kocialkowski@bootlin.com>
 References: <20221103163113.245462-1-paul.kocialkowski@bootlin.com>
@@ -53,44 +53,155 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Now that the driver is properly split between bridge and capture,
-rename the video device to highlight its role and be in line with
-the bridge entity naming.
+Introduce MIPI CSI-2 support to the bridge with a new port, source
+and hardware configuration helper.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 ---
- drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c | 3 ++-
- drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h | 2 ++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ .../platform/sunxi/sun6i-csi/sun6i_csi.h      |  1 +
+ .../sunxi/sun6i-csi/sun6i_csi_bridge.c        | 46 +++++++++++++++++--
+ .../sunxi/sun6i-csi/sun6i_csi_bridge.h        |  1 +
+ 3 files changed, 44 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-index 96a8e11fd55e..ec62442f778d 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-@@ -1023,7 +1023,8 @@ int sun6i_csi_capture_setup(struct sun6i_csi_device *csi_dev)
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+index fd6e98b66f12..e611bdd6e9b2 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+@@ -20,6 +20,7 @@
  
- 	/* Video Device */
+ enum sun6i_csi_port {
+ 	SUN6I_CSI_PORT_PARALLEL		= 0,
++	SUN6I_CSI_PORT_MIPI_CSI2	= 1,
+ };
  
--	strscpy(video_dev->name, SUN6I_CSI_NAME, sizeof(video_dev->name));
-+	strscpy(video_dev->name, SUN6I_CSI_CAPTURE_NAME,
-+		sizeof(video_dev->name));
- 	video_dev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
- 	video_dev->vfl_dir = VFL_DIR_RX;
- 	video_dev->release = video_device_release_empty;
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-index a61db3bc72e5..59c57bcefeec 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-@@ -11,6 +11,8 @@
- #include <media/v4l2-dev.h>
- #include <media/videobuf2-core.h>
+ struct sun6i_csi_buffer {
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
+index c82270ac8759..69c1fa7151d9 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
+@@ -226,7 +226,7 @@ static void sun6i_csi_bridge_disable(struct sun6i_csi_device *csi_dev)
+ }
  
-+#define SUN6I_CSI_CAPTURE_NAME	"sun6i-csi-capture"
+ static void
+-sun6i_csi_bridge_configure_interface(struct sun6i_csi_device *csi_dev)
++sun6i_csi_bridge_configure_parallel(struct sun6i_csi_device *csi_dev)
+ {
+ 	struct device *dev = csi_dev->dev;
+ 	struct regmap *regmap = csi_dev->regmap;
+@@ -316,6 +316,25 @@ sun6i_csi_bridge_configure_interface(struct sun6i_csi_device *csi_dev)
+ 	regmap_write(regmap, SUN6I_CSI_IF_CFG_REG, value);
+ }
+ 
++static void
++sun6i_csi_bridge_configure_mipi_csi2(struct sun6i_csi_device *csi_dev)
++{
++	struct regmap *regmap = csi_dev->regmap;
++	u32 value = SUN6I_CSI_IF_CFG_IF_MIPI;
++	u32 field;
 +
- #define SUN6I_CSI_CAPTURE_WIDTH_MIN	32
- #define SUN6I_CSI_CAPTURE_WIDTH_MAX	4800
- #define SUN6I_CSI_CAPTURE_HEIGHT_MIN	32
++	sun6i_csi_bridge_format(csi_dev, NULL, &field);
++
++	if (field == V4L2_FIELD_INTERLACED ||
++	    field == V4L2_FIELD_INTERLACED_TB ||
++	    field == V4L2_FIELD_INTERLACED_BT)
++		value |= SUN6I_CSI_IF_CFG_SRC_TYPE_INTERLACED;
++	else
++		value |= SUN6I_CSI_IF_CFG_SRC_TYPE_PROGRESSIVE;
++
++	regmap_write(regmap, SUN6I_CSI_IF_CFG_REG, value);
++}
++
+ static void sun6i_csi_bridge_configure_format(struct sun6i_csi_device *csi_dev)
+ {
+ 	struct regmap *regmap = csi_dev->regmap;
+@@ -367,9 +386,16 @@ static void sun6i_csi_bridge_configure_format(struct sun6i_csi_device *csi_dev)
+ 	regmap_write(regmap, SUN6I_CSI_CH_CFG_REG, value);
+ }
+ 
+-static void sun6i_csi_bridge_configure(struct sun6i_csi_device *csi_dev)
++static void sun6i_csi_bridge_configure(struct sun6i_csi_device *csi_dev,
++				       struct sun6i_csi_bridge_source *source)
+ {
+-	sun6i_csi_bridge_configure_interface(csi_dev);
++	struct sun6i_csi_bridge *bridge = &csi_dev->bridge;
++
++	if (source == &bridge->source_parallel)
++		sun6i_csi_bridge_configure_parallel(csi_dev);
++	else
++		sun6i_csi_bridge_configure_mipi_csi2(csi_dev);
++
+ 	sun6i_csi_bridge_configure_format(csi_dev);
+ }
+ 
+@@ -381,6 +407,7 @@ static int sun6i_csi_bridge_s_stream(struct v4l2_subdev *subdev, int on)
+ 	struct sun6i_csi_bridge *bridge = &csi_dev->bridge;
+ 	struct media_pad *local_pad = &bridge->pads[SUN6I_CSI_BRIDGE_PAD_SINK];
+ 	struct device *dev = csi_dev->dev;
++	struct sun6i_csi_bridge_source *source;
+ 	struct v4l2_subdev *source_subdev;
+ 	struct media_pad *remote_pad;
+ 	/* Initialize to 0 to use both in disable label (ret != 0) and off. */
+@@ -397,6 +424,11 @@ static int sun6i_csi_bridge_s_stream(struct v4l2_subdev *subdev, int on)
+ 
+ 	source_subdev = media_entity_to_v4l2_subdev(remote_pad->entity);
+ 
++	if (source_subdev == bridge->source_parallel.subdev)
++		source = &bridge->source_parallel;
++	else
++		source = &bridge->source_mipi_csi2;
++
+ 	if (!on) {
+ 		v4l2_subdev_call(source_subdev, video, s_stream, 0);
+ 		goto disable;
+@@ -414,7 +446,7 @@ static int sun6i_csi_bridge_s_stream(struct v4l2_subdev *subdev, int on)
+ 
+ 	/* Configure */
+ 
+-	sun6i_csi_bridge_configure(csi_dev);
++	sun6i_csi_bridge_configure(csi_dev, source);
+ 	sun6i_csi_capture_configure(csi_dev);
+ 
+ 	/* State Update */
+@@ -606,6 +638,7 @@ sun6i_csi_bridge_notifier_bound(struct v4l2_async_notifier *notifier,
+ 	struct sun6i_csi_bridge_async_subdev *bridge_async_subdev =
+ 		container_of(async_subdev, struct sun6i_csi_bridge_async_subdev,
+ 			     async_subdev);
++	struct sun6i_csi_bridge *bridge = &csi_dev->bridge;
+ 	struct sun6i_csi_bridge_source *source = bridge_async_subdev->source;
+ 	bool enabled;
+ 
+@@ -613,6 +646,9 @@ sun6i_csi_bridge_notifier_bound(struct v4l2_async_notifier *notifier,
+ 	case SUN6I_CSI_PORT_PARALLEL:
+ 		enabled = true;
+ 		break;
++	case SUN6I_CSI_PORT_MIPI_CSI2:
++		enabled = !bridge->source_parallel.expected;
++		break;
+ 	default:
+ 		break;
+ 	}
+@@ -759,6 +795,8 @@ int sun6i_csi_bridge_setup(struct sun6i_csi_device *csi_dev)
+ 	sun6i_csi_bridge_source_setup(csi_dev, &bridge->source_parallel,
+ 				      SUN6I_CSI_PORT_PARALLEL,
+ 				      parallel_mbus_types);
++	sun6i_csi_bridge_source_setup(csi_dev, &bridge->source_mipi_csi2,
++				      SUN6I_CSI_PORT_MIPI_CSI2, NULL);
+ 
+ 	ret = v4l2_async_nf_register(v4l2_dev, notifier);
+ 	if (ret) {
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h
+index cb3b27af4607..ee592a14b9c5 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h
+@@ -46,6 +46,7 @@ struct sun6i_csi_bridge {
+ 	struct mutex			lock; /* Mbus format lock. */
+ 
+ 	struct sun6i_csi_bridge_source	source_parallel;
++	struct sun6i_csi_bridge_source	source_mipi_csi2;
+ };
+ 
+ /* Helpers */
 -- 
 2.38.1
 
