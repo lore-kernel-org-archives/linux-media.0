@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1B3CC433FE
-	for <linux-media@archiver.kernel.org>; Thu,  3 Nov 2022 16:32:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46795C4332F
+	for <linux-media@archiver.kernel.org>; Thu,  3 Nov 2022 16:32:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232212AbiKCQcY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Nov 2022 12:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55456 "EHLO
+        id S232221AbiKCQc0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Nov 2022 12:32:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231829AbiKCQbs (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Nov 2022 12:31:48 -0400
+        with ESMTP id S231996AbiKCQbx (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Nov 2022 12:31:53 -0400
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705C71C11E;
-        Thu,  3 Nov 2022 09:31:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EABE41C430;
+        Thu,  3 Nov 2022 09:31:52 -0700 (PDT)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6931F24000C;
-        Thu,  3 Nov 2022 16:31:42 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id DD400240009;
+        Thu,  3 Nov 2022 16:31:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1667493104;
+        t=1667493111;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jF7cLa476FZmSVcSFQS9+IIBGhLvzC2+YaJiw4ZfLas=;
-        b=DNGK3HBZvUCcF4kIZPRHdNBhLzu2B6tAQeBZefF5499qz6lj9G/7eu0tGIp/Ni0YGbmJOW
-        3DO60M76luHTn4/+WWY/XnQgs7bSRSZFuC5u3TO5nTgje6cJ9p3zWIIMWOsu+1/Ta8lPNv
-        gtDMZhiy5Vzh8nNWWRoRhrPWcvzYDs/tRTZLgALGy1C9tRp2Mfsgu4b6VowZyUnVOnznjg
-        7ZPZXIW9STyBqBzU4u1JaUIzs4oH6SEEKlrVS3rLHZge/WD4vecJ8TMYacMwbzfJuFemUo
-        LKZcoP/wBFHtoHFE9XlDvTSDLkrZXjQ4kct4eQD78NwItCoT4eyM/yTt5xKvlw==
+        bh=DrwwHbobIIX6sa8FRVg9VNOkCqkmUmHNacccQQvVQhY=;
+        b=LCRKQKXjPkTmiORm/hqobINl7gHyP593/VfU97RBugMJnF7LUVdMCDcs6e4Gcta5QzxbOL
+        jDy7ozn4aDjk1a/rDyJxs5A7hrnucqZlSZ1ejnyp0uEdySZaAQILE1irSiaodWgtW7f0s0
+        tAZVOI5FxHyh+X8KTkX+3/YF3/zd2FK/mcEtOLKhr2NhUywZdh/EMIFCy1CvaszMh8jRO4
+        3WnohUH5/P+G613meSN6FBWU5yDvNo+e9NGZjzm4pvKvIM4rXuOOI9HriRKvU/wi/lwDBP
+        MrQLAoTwRmy8yKOARrE0D3zVg+FjoR+3/h2SJwG+Kt6tjtDHfLPlRW5Oh4X7ow==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
@@ -41,9 +41,9 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v7 08/28] media: sun6i-csi: Move power management to runtime pm in capture
-Date:   Thu,  3 Nov 2022 17:30:53 +0100
-Message-Id: <20221103163113.245462-9-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v7 12/28] media: sun6i-csi: Add bridge dimensions and format helpers
+Date:   Thu,  3 Nov 2022 17:30:57 +0100
+Message-Id: <20221103163113.245462-13-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221103163113.245462-1-paul.kocialkowski@bootlin.com>
 References: <20221103163113.245462-1-paul.kocialkowski@bootlin.com>
@@ -53,204 +53,64 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Let's just enable the module when we start using it (at stream on)
-and benefit from runtime pm instead of enabling it at first open.
-
-Also reorder the call to v4l2_pipeline_pm_get.
+Introduce new helpers to ease getting information about the bridge.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 ---
- .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 24 -----------
- .../platform/sunxi/sun6i-csi/sun6i_csi.h      |  9 ----
- .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 41 ++++++++++---------
- 3 files changed, 22 insertions(+), 52 deletions(-)
+ .../sunxi/sun6i-csi/sun6i_csi_bridge.c        | 20 +++++++++++++++++++
+ .../sunxi/sun6i-csi/sun6i_csi_bridge.h        |  7 +++++++
+ 2 files changed, 27 insertions(+)
 
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-index d5318e2b04df..9a12077ea03a 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-@@ -148,30 +148,6 @@ bool sun6i_csi_is_format_supported(struct sun6i_csi_device *csi_dev,
- 	return false;
- }
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
+index cac1b150e544..b98a1e18ddef 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
+@@ -12,6 +12,26 @@
+ #include "sun6i_csi.h"
+ #include "sun6i_csi_bridge.h"
  
--int sun6i_csi_set_power(struct sun6i_csi_device *csi_dev, bool enable)
--{
--	struct device *dev = csi_dev->dev;
--	struct regmap *regmap = csi_dev->regmap;
--	int ret;
--
--	if (!enable) {
--		regmap_update_bits(regmap, SUN6I_CSI_EN_REG,
--				   SUN6I_CSI_EN_CSI_EN, 0);
--		pm_runtime_put(dev);
--
--		return 0;
--	}
--
--	ret = pm_runtime_resume_and_get(dev);
--	if (ret < 0)
--		return ret;
--
--	regmap_update_bits(regmap, SUN6I_CSI_EN_REG, SUN6I_CSI_EN_CSI_EN,
--			   SUN6I_CSI_EN_CSI_EN);
--
--	return 0;
--}
--
- static enum csi_input_fmt get_csi_input_format(struct sun6i_csi_device *csi_dev,
- 					       u32 mbus_code, u32 pixformat)
- {
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-index 6fe40a56d6df..83180475e55b 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-@@ -77,15 +77,6 @@ struct sun6i_csi_variant {
- bool sun6i_csi_is_format_supported(struct sun6i_csi_device *csi_dev,
- 				   u32 pixformat, u32 mbus_code);
- 
--/**
-- * sun6i_csi_set_power() - power on/off the csi
-- * @csi_dev:	pointer to the csi device
-- * @enable:	on/off
-- *
-- * Return: 0 if successful, error code otherwise.
-- */
--int sun6i_csi_set_power(struct sun6i_csi_device *csi_dev, bool enable);
--
- /**
-  * sun6i_csi_update_config() - update the csi register settings
-  * @csi_dev:	pointer to the csi device
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-index e611f8c94d9d..4c8b18a256e8 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-@@ -6,6 +6,7 @@
-  */
- 
- #include <linux/of.h>
-+#include <linux/pm_runtime.h>
- #include <linux/regmap.h>
- 
- #include <media/v4l2-device.h>
-@@ -141,6 +142,9 @@ static void sun6i_csi_capture_enable(struct sun6i_csi_device *csi_dev)
- {
- 	struct regmap *regmap = csi_dev->regmap;
- 
-+	regmap_update_bits(regmap, SUN6I_CSI_EN_REG, SUN6I_CSI_EN_CSI_EN,
-+			   SUN6I_CSI_EN_CSI_EN);
++/* Helpers */
 +
- 	regmap_update_bits(regmap, SUN6I_CSI_CAP_REG, SUN6I_CSI_CAP_VCAP_ON,
- 			   SUN6I_CSI_CAP_VCAP_ON);
- }
-@@ -150,6 +154,7 @@ static void sun6i_csi_capture_disable(struct sun6i_csi_device *csi_dev)
- 	struct regmap *regmap = csi_dev->regmap;
- 
- 	regmap_update_bits(regmap, SUN6I_CSI_CAP_REG, SUN6I_CSI_CAP_VCAP_ON, 0);
-+	regmap_update_bits(regmap, SUN6I_CSI_EN_REG, SUN6I_CSI_EN_CSI_EN, 0);
- }
- 
- static void
-@@ -382,6 +387,7 @@ static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
- 	struct sun6i_csi_capture *capture = &csi_dev->capture;
- 	struct sun6i_csi_capture_state *state = &capture->state;
- 	struct video_device *video_dev = &capture->video_dev;
-+	struct device *dev = csi_dev->dev;
- 	struct v4l2_subdev *subdev;
- 	int ret;
- 
-@@ -402,6 +408,12 @@ static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
- 		goto error_media_pipeline;
- 	}
- 
-+	/* PM */
++void sun6i_csi_bridge_dimensions(struct sun6i_csi_device *csi_dev,
++				 unsigned int *width, unsigned int *height)
++{
++	if (width)
++		*width = csi_dev->bridge.mbus_format.width;
++	if (height)
++		*height = csi_dev->bridge.mbus_format.height;
++}
 +
-+	ret = pm_runtime_resume_and_get(dev);
-+	if (ret < 0)
-+		goto error_media_pipeline;
++void sun6i_csi_bridge_format(struct sun6i_csi_device *csi_dev,
++			     u32 *mbus_code, u32 *field)
++{
++	if (mbus_code)
++		*mbus_code = csi_dev->bridge.mbus_format.code;
++	if (field)
++		*field = csi_dev->bridge.mbus_format.field;
++}
 +
- 	/* Clear */
+ /* Format */
  
- 	sun6i_csi_capture_irq_clear(csi_dev);
-@@ -429,6 +441,8 @@ static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
- 	sun6i_csi_capture_disable(csi_dev);
- 	sun6i_csi_capture_irq_disable(csi_dev);
+ static const u32 sun6i_csi_bridge_mbus_codes[] = {
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h
+index f9bf87bf3667..5e6448aa522f 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h
+@@ -41,6 +41,13 @@ struct sun6i_csi_bridge {
+ 	struct sun6i_csi_bridge_source	source_parallel;
+ };
  
-+	pm_runtime_put(dev);
++/* Helpers */
 +
- error_media_pipeline:
- 	video_device_pipeline_stop(video_dev);
- 
-@@ -442,6 +456,7 @@ static void sun6i_csi_capture_stop_streaming(struct vb2_queue *queue)
- {
- 	struct sun6i_csi_device *csi_dev = vb2_get_drv_priv(queue);
- 	struct sun6i_csi_capture *capture = &csi_dev->capture;
-+	struct device *dev = csi_dev->dev;
- 	struct v4l2_subdev *subdev;
- 
- 	subdev = sun6i_csi_capture_remote_subdev(capture, NULL);
-@@ -451,6 +466,8 @@ static void sun6i_csi_capture_stop_streaming(struct vb2_queue *queue)
- 	sun6i_csi_capture_disable(csi_dev);
- 	sun6i_csi_capture_irq_disable(csi_dev);
- 
-+	pm_runtime_put(dev);
++void sun6i_csi_bridge_dimensions(struct sun6i_csi_device *csi_dev,
++				 unsigned int *width, unsigned int *height);
++void sun6i_csi_bridge_format(struct sun6i_csi_device *csi_dev,
++			     u32 *mbus_code, u32 *field);
 +
- 	video_device_pipeline_stop(&capture->video_dev);
+ /* Bridge */
  
- 	sun6i_csi_capture_state_cleanup(csi_dev, true);
-@@ -635,27 +652,20 @@ static int sun6i_csi_capture_open(struct file *file)
- 	if (mutex_lock_interruptible(&capture->lock))
- 		return -ERESTARTSYS;
- 
--	ret = v4l2_fh_open(file);
-+	ret = v4l2_pipeline_pm_get(&capture->video_dev.entity);
- 	if (ret < 0)
- 		goto error_lock;
- 
--	ret = v4l2_pipeline_pm_get(&capture->video_dev.entity);
-+	ret = v4l2_fh_open(file);
- 	if (ret < 0)
--		goto error_v4l2_fh;
--
--	/* Power on at first open. */
--	if (v4l2_fh_is_singular_file(file)) {
--		ret = sun6i_csi_set_power(csi_dev, true);
--		if (ret < 0)
--			goto error_v4l2_fh;
--	}
-+		goto error_pipeline;
- 
- 	mutex_unlock(&capture->lock);
- 
- 	return 0;
- 
--error_v4l2_fh:
--	v4l2_fh_release(file);
-+error_pipeline:
-+	v4l2_pipeline_pm_put(&capture->video_dev.entity);
- 
- error_lock:
- 	mutex_unlock(&capture->lock);
-@@ -667,19 +677,12 @@ static int sun6i_csi_capture_close(struct file *file)
- {
- 	struct sun6i_csi_device *csi_dev = video_drvdata(file);
- 	struct sun6i_csi_capture *capture = &csi_dev->capture;
--	bool last_close;
- 
- 	mutex_lock(&capture->lock);
- 
--	last_close = v4l2_fh_is_singular_file(file);
--
- 	_vb2_fop_release(file, NULL);
- 	v4l2_pipeline_pm_put(&capture->video_dev.entity);
- 
--	/* Power off at last close. */
--	if (last_close)
--		sun6i_csi_set_power(csi_dev, false);
--
- 	mutex_unlock(&capture->lock);
- 
- 	return 0;
+ int sun6i_csi_bridge_setup(struct sun6i_csi_device *csi_dev);
 -- 
 2.38.1
 
