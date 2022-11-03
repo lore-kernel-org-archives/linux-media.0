@@ -2,39 +2,36 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9195FC4332F
-	for <linux-media@archiver.kernel.org>; Thu,  3 Nov 2022 06:49:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1ACF9C43217
+	for <linux-media@archiver.kernel.org>; Thu,  3 Nov 2022 06:49:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbiKCGtD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Nov 2022 02:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60172 "EHLO
+        id S230415AbiKCGtE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Nov 2022 02:49:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiKCGs7 (ORCPT
+        with ESMTP id S229637AbiKCGs7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 3 Nov 2022 02:48:59 -0400
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19C96258;
-        Wed,  2 Nov 2022 23:48:48 -0700 (PDT)
-X-UUID: 53faa9c9f24e4559a5a93c78930000a4-20221103
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20316305;
+        Wed,  2 Nov 2022 23:48:49 -0700 (PDT)
+X-UUID: 87f1417c5d554c53b3df4012e80376b0-20221103
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=jyEudgx7WcgyCeL9KzWF01BbZwIXIznkx+/V9+/fATw=;
-        b=bfM3p/DP41+dmlxPMw9oFJ7eYjL2CJllIKsE95pxkVllgrK4vgOVA5bD4LyewZL0Sd0CxhJOyuYTbCAwSt4Y4GoMBM9eLTLdnEAY0br9+tCEVkhvcCFuTWgIa2siuMT023KrDyuiP5c6DO5KADoZ8GDhUif2V1k30vkIK4JDC68=;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=JHljVWBcr4b76+FxHdScLRgEn2EIZbrBU/VBOXgvySU=;
+        b=IIo87V0qtP+CSq17rIjsL2q4oViSexqgUXZAEqvjMa291yRekBJzGVGAkxLB6H+bPR8XhtX8xAuFUIFhrj97BQNXAHOPdpRozUvSFi3ZTMeP31x18nXqrsGlw5J53LJqKIPreuvU6ecHQOZTfO8wH/UK4pxVIRpsuJG/uAROwrQ=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:cf805be7-2585-48a9-8e9c-00a764f31531,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:70
-X-CID-INFO: VERSION:1.1.12,REQID:cf805be7-2585-48a9-8e9c-00a764f31531,IP:0,URL
-        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:70
-X-CID-META: VersionHash:62cd327,CLOUDID:3e957490-1a78-4832-bd08-74b1519dcfbf,B
-        ulkID:221103144847KI12NAHE,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 53faa9c9f24e4559a5a93c78930000a4-20221103
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+X-CID-O-INFO: VERSION:1.1.12,REQID:7177a2e1-ff03-489e-a970-1974ed962b6a,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:62cd327,CLOUDID:40957490-1a78-4832-bd08-74b1519dcfbf,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 87f1417c5d554c53b3df4012e80376b0-20221103
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
         (envelope-from <moudy.ho@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1591921370; Thu, 03 Nov 2022 14:48:45 +0800
+        with ESMTP id 1563477898; Thu, 03 Nov 2022 14:48:46 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.792.15; Thu, 3 Nov 2022 14:48:44 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
@@ -50,9 +47,9 @@ CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         <linux-kernel@vger.kernel.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Moudy Ho <moudy.ho@mediatek.com>
-Subject: [PATCH v3 03/10] media: platform: mtk-mdp3: chip config split about subcomponents
-Date:   Thu, 3 Nov 2022 14:48:35 +0800
-Message-ID: <20221103064842.12042-4-moudy.ho@mediatek.com>
+Subject: [PATCH v3 05/10] media: platform: mtk-mdp3: chip config split about resolution limitations
+Date:   Thu, 3 Nov 2022 14:48:37 +0800
+Message-ID: <20221103064842.12042-6-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20221103064842.12042-1-moudy.ho@mediatek.com>
 References: <20221103064842.12042-1-moudy.ho@mediatek.com>
@@ -63,102 +60,109 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Integrate and move subcomponent related information into
-the chip config header file for compatibility with multiple chips
+Due to differences in hardware design, the supported max and min
+resolutions and scaling capabilities will vary, and should be
+moved and integrated into the chip configuration header file.
 
 Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 ---
- .../mediatek/mdp3/mt8183/mdp3-plat-mt8183.h        | 11 +++++++++++
- .../media/platform/mediatek/mdp3/mtk-mdp3-comp.c   | 14 ++------------
- .../media/platform/mediatek/mdp3/mtk-mdp3-core.c   |  1 +
- .../media/platform/mediatek/mdp3/mtk-mdp3-core.h   |  1 +
- 4 files changed, 15 insertions(+), 12 deletions(-)
+ .../mediatek/mdp3/mt8183/mdp3-plat-mt8183.h   | 19 +++++++++++++++++
+ .../platform/mediatek/mdp3/mtk-mdp3-core.c    |  1 +
+ .../platform/mediatek/mdp3/mtk-mdp3-core.h    |  1 +
+ .../platform/mediatek/mdp3/mtk-mdp3-regs.c    | 21 +------------------
+ 4 files changed, 22 insertions(+), 20 deletions(-)
 
 diff --git a/drivers/media/platform/mediatek/mdp3/mt8183/mdp3-plat-mt8183.h b/drivers/media/platform/mediatek/mdp3/mt8183/mdp3-plat-mt8183.h
-index 81fb80ec8ac2..a4bfde4a9e16 100644
+index 1be9cc55b9b5..c541176780aa 100644
 --- a/drivers/media/platform/mediatek/mdp3/mt8183/mdp3-plat-mt8183.h
 +++ b/drivers/media/platform/mediatek/mdp3/mt8183/mdp3-plat-mt8183.h
-@@ -32,6 +32,17 @@ static const u32 mt8183_mutex_idx[MDP_MAX_COMP_COUNT] = {
- 	[MDP_COMP_CCORR0] = MUTEX_MOD_IDX_MDP_CCORR0,
+@@ -380,4 +380,23 @@ static const struct mdp_format mt8183_formats[] = {
+ 	}
  };
  
-+static const struct of_device_id mt8183_sub_comp_dt_ids[] = {
-+	{
-+		.compatible = "mediatek,mt8183-mdp3-wdma",
-+		.data = (void *)MDP_COMP_TYPE_PATH,
-+	}, {
-+		.compatible = "mediatek,mt8183-mdp3-wrot",
-+		.data = (void *)MDP_COMP_TYPE_PATH,
++static const struct mdp_limit mt8183_mdp_def_limit = {
++	.out_limit = {
++		.wmin	= 16,
++		.hmin	= 16,
++		.wmax	= 8176,
++		.hmax	= 8176,
 +	},
-+	{}
++	.cap_limit = {
++		.wmin	= 2,
++		.hmin	= 2,
++		.wmax	= 8176,
++		.hmax	= 8176,
++	},
++	.h_scale_up_max = 32,
++	.v_scale_up_max = 32,
++	.h_scale_down_max = 20,
++	.v_scale_down_max = 128,
 +};
 +
- enum mt8183_mdp_comp_id {
- 	/* MT8183 Comp id */
- 	/* ISP */
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-index 1ac9c46e27d4..8f4786cc4416 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-@@ -639,17 +639,6 @@ static const struct of_device_id mdp_comp_dt_ids[] = {
- 	{}
- };
- 
--static const struct of_device_id mdp_sub_comp_dt_ids[] = {
--	{
--		.compatible = "mediatek,mt8183-mdp3-wdma",
--		.data = (void *)MDP_COMP_TYPE_PATH,
--	}, {
--		.compatible = "mediatek,mt8183-mdp3-wrot",
--		.data = (void *)MDP_COMP_TYPE_PATH,
--	},
--	{}
--};
--
- static inline bool is_dma_capable(const enum mdp_comp_type type)
- {
- 	return (type == MDP_COMP_TYPE_RDMA ||
-@@ -900,6 +889,7 @@ static int mdp_comp_sub_create(struct mdp_dev *mdp)
- {
- 	struct device *dev = &mdp->pdev->dev;
- 	struct device_node *node, *parent;
-+	const struct mtk_mdp_driver_data *data = mdp->mdp_data;
- 
- 	parent = dev->of_node->parent;
- 
-@@ -909,7 +899,7 @@ static int mdp_comp_sub_create(struct mdp_dev *mdp)
- 		int id, alias_id;
- 		struct mdp_comp *comp;
- 
--		of_id = of_match_node(mdp_sub_comp_dt_ids, node);
-+		of_id = of_match_node(data->mdp_sub_comp_dt_ids, node);
- 		if (!of_id)
- 			continue;
- 		if (!of_device_is_available(node)) {
+ #endif  /* __MDP3_PLAT_MT8183_H__ */
 diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-index ee7b5a1bbc88..277253c8c963 100644
+index ce18cbf70e96..4b02c135b631 100644
 --- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
 +++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-@@ -19,6 +19,7 @@
+@@ -26,6 +26,7 @@ static const struct mtk_mdp_driver_data mt8183_mdp_driver_data = {
+ 	.comp_data_len = ARRAY_SIZE(mt8183_mdp_comp_data),
+ 	.format = mt8183_formats,
+ 	.format_len = ARRAY_SIZE(mt8183_formats),
++	.def_limit = &mt8183_mdp_def_limit,
+ };
  
- static const struct mtk_mdp_driver_data mt8183_mdp_driver_data = {
- 	.mdp_probe_infra = mt8183_mdp_probe_infra,
-+	.mdp_sub_comp_dt_ids = mt8183_sub_comp_dt_ids,
- 	.mdp_cfg = &mt8183_plat_cfg,
- 	.mdp_mutex_table_idx = mt8183_mutex_idx,
- 	.comp_data = mt8183_mdp_comp_data,
+ static const struct of_device_id mdp_of_ids[] = {
 diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
-index 0c398ef75616..b83b2c517730 100644
+index 982438a9ab02..52f87e59ba9e 100644
 --- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
 +++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
-@@ -52,6 +52,7 @@ enum mdp_pipe_id {
+@@ -59,6 +59,7 @@ struct mtk_mdp_driver_data {
+ 	unsigned int comp_data_len;
+ 	const struct mdp_format *format;
+ 	unsigned int format_len;
++	const struct mdp_limit *def_limit;
+ };
  
- struct mtk_mdp_driver_data {
- 	const struct of_device_id *mdp_probe_infra;
-+	const struct of_device_id *mdp_sub_comp_dt_ids;
- 	const struct mdp_platform_config *mdp_cfg;
- 	const u32 *mdp_mutex_table_idx;
- 	const struct mdp_comp_data *comp_data;
+ struct mdp_dev {
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.c
+index cd6afbf53797..bb833ae27531 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.c
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.c
+@@ -11,25 +11,6 @@
+ #include "mtk-mdp3-regs.h"
+ #include "mtk-mdp3-m2m.h"
+ 
+-static const struct mdp_limit mdp_def_limit = {
+-	.out_limit = {
+-		.wmin	= 16,
+-		.hmin	= 16,
+-		.wmax	= 8176,
+-		.hmax	= 8176,
+-	},
+-	.cap_limit = {
+-		.wmin	= 2,
+-		.hmin	= 2,
+-		.wmax	= 8176,
+-		.hmax	= 8176,
+-	},
+-	.h_scale_up_max = 32,
+-	.v_scale_up_max = 32,
+-	.h_scale_down_max = 20,
+-	.v_scale_down_max = 128,
+-};
+-
+ static const struct mdp_format *mdp_find_fmt(const struct mtk_mdp_driver_data *mdp_data,
+ 					     u32 pixelformat, u32 type)
+ {
+@@ -485,7 +466,7 @@ int mdp_frameparam_init(struct mdp_dev *mdp, struct mdp_frameparam *param)
+ 		return -EINVAL;
+ 
+ 	INIT_LIST_HEAD(&param->list);
+-	param->limit = &mdp_def_limit;
++	param->limit = mdp->mdp_data->def_limit;
+ 	param->type = MDP_STREAM_TYPE_BITBLT;
+ 
+ 	frame = &param->output;
 -- 
 2.18.0
 
