@@ -2,21 +2,21 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BA4CC43217
-	for <linux-media@archiver.kernel.org>; Fri,  4 Nov 2022 14:28:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B7CEC4332F
+	for <linux-media@archiver.kernel.org>; Fri,  4 Nov 2022 14:28:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232023AbiKDO2U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Nov 2022 10:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42736 "EHLO
+        id S232083AbiKDO2W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Nov 2022 10:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232449AbiKDO1c (ORCPT
+        with ESMTP id S232447AbiKDO1c (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Fri, 4 Nov 2022 10:27:32 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F2B31DC0
-        for <linux-media@vger.kernel.org>; Fri,  4 Nov 2022 07:25:23 -0700 (PDT)
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B19317E7
+        for <linux-media@vger.kernel.org>; Fri,  4 Nov 2022 07:25:20 -0700 (PDT)
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 82A5410000F;
-        Fri,  4 Nov 2022 14:25:19 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id EB58A100012;
+        Fri,  4 Nov 2022 14:25:17 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -24,9 +24,9 @@ To:     =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
         Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH v3 06/10] media: ar0521: Add LINK_FREQ control
-Date:   Fri,  4 Nov 2022 15:24:49 +0100
-Message-Id: <20221104142452.117135-7-jacopo@jmondi.org>
+Subject: [PATCH v3 05/10] media: ar0521: Refuse unsupported controls
+Date:   Fri,  4 Nov 2022 15:24:48 +0100
+Message-Id: <20221104142452.117135-6-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221104142452.117135-1-jacopo@jmondi.org>
 References: <20221104142452.117135-1-jacopo@jmondi.org>
@@ -36,50 +36,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support for V4L2_CID_LINK_FREQ which currently reports a single
-hard-coded frequency which depends on the fixed pixel clock.
+Refuse unsupported controls by returning -EINVAL in the s_ctrl
+operation. While at it, remove a the default switch case in the first
+switch as it effectively is now a no-op.
 
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/i2c/ar0521.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/media/i2c/ar0521.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
-index acb9509d7708..c9c578b223ef 100644
+index d30f7a1c7651..acb9509d7708 100644
 --- a/drivers/media/i2c/ar0521.c
 +++ b/drivers/media/i2c/ar0521.c
-@@ -89,6 +89,10 @@ static const char * const ar0521_supply_names[] = {
- 	"vaa",		/* Analog (2.7V) supply */
- };
+@@ -514,9 +514,6 @@ static int ar0521_s_ctrl(struct v4l2_ctrl *ctrl)
+ 		sensor->total_height = sensor->fmt.width +
+ 			sensor->ctrls.vblank->val;
+ 		break;
+-	default:
+-		ret = -EINVAL;
+-		break;
+ 	}
  
-+static const s64 ar0521_link_frequencies[] = {
-+	184000000,
-+};
-+
- struct ar0521_ctrls {
- 	struct v4l2_ctrl_handler handler;
- 	struct {
-@@ -570,6 +574,7 @@ static int ar0521_init_controls(struct ar0521_dev *sensor)
- 	const struct v4l2_ctrl_ops *ops = &ar0521_ctrl_ops;
- 	struct ar0521_ctrls *ctrls = &sensor->ctrls;
- 	struct v4l2_ctrl_handler *hdl = &ctrls->handler;
-+	struct v4l2_ctrl *link_freq;
- 	int ret;
+ 	/* access the sensor only if it's powered up */
+@@ -546,6 +543,11 @@ static int ar0521_s_ctrl(struct v4l2_ctrl *ctrl)
+ 		ret = ar0521_write_reg(sensor, AR0521_REG_TEST_PATTERN_MODE,
+ 				       ctrl->val);
+ 		break;
++	default:
++		dev_err(&sensor->i2c_client->dev,
++			"Unsupported control %x\n", ctrl->id);
++		ret = -EINVAL;
++		break;
+ 	}
  
- 	v4l2_ctrl_handler_init(hdl, 32);
-@@ -608,6 +613,12 @@ static int ar0521_init_controls(struct ar0521_dev *sensor)
- 	ctrls->exposure = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_EXPOSURE, 0,
- 					    65535, 1, 360);
- 
-+	link_freq = v4l2_ctrl_new_int_menu(hdl, ops, V4L2_CID_LINK_FREQ,
-+					ARRAY_SIZE(ar0521_link_frequencies) - 1,
-+					0, ar0521_link_frequencies);
-+	if (link_freq)
-+		link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-+
- 	ctrls->test_pattern = v4l2_ctrl_new_std_menu_items(hdl, ops,
- 					V4L2_CID_TEST_PATTERN,
- 					ARRAY_SIZE(test_pattern_menu) - 1,
+ 	pm_runtime_put(&sensor->i2c_client->dev);
 -- 
 2.38.1
 
