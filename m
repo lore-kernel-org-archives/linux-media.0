@@ -2,21 +2,21 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DF6BC433FE
-	for <linux-media@archiver.kernel.org>; Fri,  4 Nov 2022 14:28:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ECD41C4332F
+	for <linux-media@archiver.kernel.org>; Fri,  4 Nov 2022 14:28:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232095AbiKDO2Y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Nov 2022 10:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42674 "EHLO
+        id S232111AbiKDO2Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Nov 2022 10:28:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232432AbiKDO1a (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Nov 2022 10:27:30 -0400
+        with ESMTP id S232411AbiKDO12 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Nov 2022 10:27:28 -0400
 Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD336317FF
-        for <linux-media@vger.kernel.org>; Fri,  4 Nov 2022 07:25:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A3E317E1
+        for <linux-media@vger.kernel.org>; Fri,  4 Nov 2022 07:25:10 -0700 (PDT)
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 924FA100011;
-        Fri,  4 Nov 2022 14:25:13 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 2BCC5100013;
+        Fri,  4 Nov 2022 14:25:06 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -24,74 +24,59 @@ To:     =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
         Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH v3 03/10] media: ar0521: Set maximum resolution to 2592x1944
-Date:   Fri,  4 Nov 2022 15:24:46 +0100
-Message-Id: <20221104142452.117135-4-jacopo@jmondi.org>
+Subject: [PATCH v3 00/10] media: ar0521: Add analog gain, rework clock tree
+Date:   Fri,  4 Nov 2022 15:24:43 +0100
+Message-Id: <20221104142452.117135-1-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221104142452.117135-1-jacopo@jmondi.org>
-References: <20221104142452.117135-1-jacopo@jmondi.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Change the largest visibile resolution to 2592x1944, which corresponds
-to the active pixel array area size. Take into account the horizontal
-and vertical limits when programming the visible sizes to skip
-dummy/inactive pixels.
+Hello,
+  this series adds a few features to the ar0521 driver to enable its usage
+with libcamera.
 
-Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
----
- drivers/media/i2c/ar0521.c | 23 +++++++++++++++++------
- 1 file changed, 17 insertions(+), 6 deletions(-)
+In particular:
+- enum_frame_sizes
+- global analog gain control
+- LINK_FREQ
+- Rework blanking handligs
 
-diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
-index 20a87dde2289..bcbd6ffd8832 100644
---- a/drivers/media/i2c/ar0521.c
-+++ b/drivers/media/i2c/ar0521.c
-@@ -26,10 +26,17 @@
- #define AR0521_PIXEL_CLOCK_MIN	 (168 * 1000 * 1000)
- #define AR0521_PIXEL_CLOCK_MAX	 (414 * 1000 * 1000)
- 
-+#define AR0521_NATIVE_WIDTH		2604u
-+#define AR0521_NATIVE_HEIGHT		1964u
-+#define AR0521_MIN_X_ADDR_START		0u
-+#define AR0521_MIN_Y_ADDR_START		0u
-+#define AR0521_MAX_X_ADDR_END		2603u
-+#define AR0521_MAX_Y_ADDR_END		1955u
-+
- #define AR0521_WIDTH_MIN	       8u
--#define AR0521_WIDTH_MAX	    2608u
-+#define AR0521_WIDTH_MAX	    2592u
- #define AR0521_HEIGHT_MIN	       8u
--#define AR0521_HEIGHT_MAX	    1958u
-+#define AR0521_HEIGHT_MAX	    1944u
- 
- #define AR0521_WIDTH_BLANKING_MIN     572u
- #define AR0521_HEIGHT_BLANKING_MIN     38u /* must be even */
-@@ -176,13 +183,17 @@ static int ar0521_write_reg(struct ar0521_dev *sensor, u16 reg, u16 val)
- 
- static int ar0521_set_geometry(struct ar0521_dev *sensor)
- {
-+	/* Center the image in the visible output window. */
-+	u16 x = clamp((AR0521_WIDTH_MAX - sensor->fmt.width) / 2,
-+		       AR0521_MIN_X_ADDR_START, AR0521_MAX_X_ADDR_END);
-+	u16 y = clamp(((AR0521_HEIGHT_MAX - sensor->fmt.height) / 2) & ~1,
-+		       AR0521_MIN_Y_ADDR_START, AR0521_MAX_Y_ADDR_END);
-+
- 	/* All dimensions are unsigned 12-bit integers */
--	u16 x = (AR0521_WIDTH_MAX - sensor->fmt.width) / 2;
--	u16 y = ((AR0521_HEIGHT_MAX - sensor->fmt.height) / 2) & ~1;
- 	__be16 regs[] = {
- 		be(AR0521_REG_FRAME_LENGTH_LINES),
--		be(sensor->total_height),
--		be(sensor->total_width),
-+		be(sensor->fmt.height + sensor->ctrls.vblank->val),
-+		be(sensor->fmt.width + sensor->ctrls.hblank->val),
- 		be(x),
- 		be(y),
- 		be(x + sensor->fmt.width - 1),
--- 
+v3 (Dave)
+- Check __v4l2_ctrl_modify_range() return value
+- Make LINK_FREQ readonly to avoid additional churn in s_ctrl
+- Fix trivial early return in s_ctrl
+- Use exposure's default value when modifying the controls' limits
+- Change the exposure default to 0x70 to match the register default value
+
+v2:
+- I have dropped the most controverse part that allows to change the link
+  frequency to obtain 60FPS. It can be eventually be applied on top.
+- Use register 0x3028 to control analog gain not to overwrite the global digital
+  gain.
+- Fix the HBLANK/VBLANK max by using the values read from on-chip registers.
+- Fix handling of LINK_FREQ in s_cltr (but do not make the control read only).
+- Fix errors reported by 0-days:
+  - use do_div() for 64-bit division
+  - declare variables in function scope and not in case scope in s_ctrl
+
+Jacopo Mondi (10):
+  media: ar0521: Implement enum_frame_sizes
+  media: ar0521: Add V4L2_CID_ANALOG_GAIN
+  media: ar0521: Set maximum resolution to 2592x1944
+  media: ar0521: Rework PLL computation
+  media: ar0521: Refuse unsupported controls
+  media: ar0521: Add LINK_FREQ control
+  media: ar0521: Adjust exposure and blankings limits
+  media: ar0521: Setup controls at s_stream time
+  media: ar0521: Rework startup sequence
+  media: ar0521: Tab-align definitions
+
+ drivers/media/i2c/ar0521.c | 352 ++++++++++++++++++++++++++-----------
+ 1 file changed, 250 insertions(+), 102 deletions(-)
+
+--
 2.38.1
 
