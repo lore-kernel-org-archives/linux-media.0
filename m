@@ -2,21 +2,21 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1A51C433FE
-	for <linux-media@archiver.kernel.org>; Fri,  4 Nov 2022 14:28:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BA4CC43217
+	for <linux-media@archiver.kernel.org>; Fri,  4 Nov 2022 14:28:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231978AbiKDO2S (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Nov 2022 10:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43582 "EHLO
+        id S232023AbiKDO2U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Nov 2022 10:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231991AbiKDO1f (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Nov 2022 10:27:35 -0400
+        with ESMTP id S232449AbiKDO1c (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Nov 2022 10:27:32 -0400
 Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB3B31DC8
-        for <linux-media@vger.kernel.org>; Fri,  4 Nov 2022 07:25:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F2B31DC0
+        for <linux-media@vger.kernel.org>; Fri,  4 Nov 2022 07:25:23 -0700 (PDT)
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id D9A2E100011;
-        Fri,  4 Nov 2022 14:25:26 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 82A5410000F;
+        Fri,  4 Nov 2022 14:25:19 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -24,9 +24,9 @@ To:     =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
         Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH v3 09/10] media: ar0521: Rework startup sequence
-Date:   Fri,  4 Nov 2022 15:24:52 +0100
-Message-Id: <20221104142452.117135-10-jacopo@jmondi.org>
+Subject: [PATCH v3 06/10] media: ar0521: Add LINK_FREQ control
+Date:   Fri,  4 Nov 2022 15:24:49 +0100
+Message-Id: <20221104142452.117135-7-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221104142452.117135-1-jacopo@jmondi.org>
 References: <20221104142452.117135-1-jacopo@jmondi.org>
@@ -36,113 +36,50 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The ar0521_write_mode() function explicitly programs the exposure time
-register and the test pattern register, which are now setup by the call
-to __v4l2_ctrl_handler_setup() in ar0521_set_stream().
-
-Removing those register writes from ar0521_write_mode() reduces the
-function to two operations: geometry configuration and pll
-configuration.
-
-Move geomerty configuration in the ar0521_set_stream() caller and rename
-ar0521_write_mode() to ar0521_pll_config().
+Add support for V4L2_CID_LINK_FREQ which currently reports a single
+hard-coded frequency which depends on the fixed pixel clock.
 
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
-Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 ---
- drivers/media/i2c/ar0521.c | 50 ++++++++++++--------------------------
- 1 file changed, 16 insertions(+), 34 deletions(-)
+ drivers/media/i2c/ar0521.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
 diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
-index 323f583e2029..91fa4cba12f6 100644
+index acb9509d7708..c9c578b223ef 100644
 --- a/drivers/media/i2c/ar0521.c
 +++ b/drivers/media/i2c/ar0521.c
-@@ -278,7 +278,7 @@ static u32 calc_pll(struct ar0521_dev *sensor, u32 freq, u16 *pre_ptr, u16 *mult
- 	return pll;
- }
-
--static void ar0521_calc_mode(struct ar0521_dev *sensor)
-+static void ar0521_calc_pll(struct ar0521_dev *sensor)
- {
- 	unsigned int pixel_clock;
- 	u16 pre, mult;
-@@ -342,7 +342,7 @@ static void ar0521_calc_mode(struct ar0521_dev *sensor)
- 	sensor->pll.mult = sensor->pll.mult2 = mult;
- }
-
--static int ar0521_write_mode(struct ar0521_dev *sensor)
-+static int ar0521_pll_config(struct ar0521_dev *sensor)
- {
- 	__be16 pll_regs[] = {
- 		be(AR0521_REG_VT_PIX_CLK_DIV),
-@@ -353,36 +353,9 @@ static int ar0521_write_mode(struct ar0521_dev *sensor)
- 		/* 0x308 */ be(sensor->pll.vt_pix * 2), /* op_pix_clk_div = 2 * vt_pix_clk_div */
- 		/* 0x30A */ be(1)  /* op_sys_clk_div */
- 	};
--	int ret;
--
--	/* Stop streaming for just a moment */
--	ret = ar0521_write_reg(sensor, AR0521_REG_RESET,
--			       AR0521_REG_RESET_DEFAULTS);
--	if (ret)
--		return ret;
--
--	ret = ar0521_set_geometry(sensor);
--	if (ret)
--		return ret;
--
--	ret = ar0521_write_regs(sensor, pll_regs, ARRAY_SIZE(pll_regs));
--	if (ret)
--		return ret;
--
--	ret = ar0521_write_reg(sensor, AR0521_REG_COARSE_INTEGRATION_TIME,
--			       sensor->ctrls.exposure->val);
--	if (ret)
--		return ret;
--
--	ret = ar0521_write_reg(sensor, AR0521_REG_RESET,
--			       AR0521_REG_RESET_DEFAULTS |
--			       AR0521_REG_RESET_STREAM);
--	if (ret)
--		return ret;
-
--	ret = ar0521_write_reg(sensor, AR0521_REG_TEST_PATTERN_MODE,
--			       sensor->ctrls.test_pattern->val);
--	return ret;
-+	ar0521_calc_pll(sensor);
-+	return ar0521_write_regs(sensor, pll_regs, ARRAY_SIZE(pll_regs));
- }
-
- static int ar0521_set_stream(struct ar0521_dev *sensor, bool on)
-@@ -394,8 +367,17 @@ static int ar0521_set_stream(struct ar0521_dev *sensor, bool on)
- 		if (ret < 0)
- 			return ret;
-
--		ar0521_calc_mode(sensor);
--		ret = ar0521_write_mode(sensor);
-+		/* Stop streaming for just a moment */
-+		ret = ar0521_write_reg(sensor, AR0521_REG_RESET,
-+				       AR0521_REG_RESET_DEFAULTS);
-+		if (ret)
-+			return ret;
+@@ -89,6 +89,10 @@ static const char * const ar0521_supply_names[] = {
+ 	"vaa",		/* Analog (2.7V) supply */
+ };
+ 
++static const s64 ar0521_link_frequencies[] = {
++	184000000,
++};
 +
-+		ret = ar0521_set_geometry(sensor);
-+		if (ret)
-+			return ret;
+ struct ar0521_ctrls {
+ 	struct v4l2_ctrl_handler handler;
+ 	struct {
+@@ -570,6 +574,7 @@ static int ar0521_init_controls(struct ar0521_dev *sensor)
+ 	const struct v4l2_ctrl_ops *ops = &ar0521_ctrl_ops;
+ 	struct ar0521_ctrls *ctrls = &sensor->ctrls;
+ 	struct v4l2_ctrl_handler *hdl = &ctrls->handler;
++	struct v4l2_ctrl *link_freq;
+ 	int ret;
+ 
+ 	v4l2_ctrl_handler_init(hdl, 32);
+@@ -608,6 +613,12 @@ static int ar0521_init_controls(struct ar0521_dev *sensor)
+ 	ctrls->exposure = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_EXPOSURE, 0,
+ 					    65535, 1, 360);
+ 
++	link_freq = v4l2_ctrl_new_int_menu(hdl, ops, V4L2_CID_LINK_FREQ,
++					ARRAY_SIZE(ar0521_link_frequencies) - 1,
++					0, ar0521_link_frequencies);
++	if (link_freq)
++		link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
 +
-+		ret = ar0521_pll_config(sensor);
- 		if (ret)
- 			goto err;
-
-@@ -501,7 +483,7 @@ static int ar0521_set_fmt(struct v4l2_subdev *sd,
- 	}
-
- 	sensor->fmt = format->format;
--	ar0521_calc_mode(sensor);
-+	ar0521_calc_pll(sensor);
-
- 	/*
- 	 * Update the exposure and blankings limits. Blankings are also reset
---
+ 	ctrls->test_pattern = v4l2_ctrl_new_std_menu_items(hdl, ops,
+ 					V4L2_CID_TEST_PATTERN,
+ 					ARRAY_SIZE(test_pattern_menu) - 1,
+-- 
 2.38.1
 
