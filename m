@@ -2,74 +2,128 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36D7FC4332F
-	for <linux-media@archiver.kernel.org>; Mon,  7 Nov 2022 09:42:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 532FCC43219
+	for <linux-media@archiver.kernel.org>; Mon,  7 Nov 2022 10:25:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231736AbiKGJmb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Nov 2022 04:42:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36162 "EHLO
+        id S230516AbiKGKZn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Nov 2022 05:25:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbiKGJm1 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Nov 2022 04:42:27 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10F617077
-        for <linux-media@vger.kernel.org>; Mon,  7 Nov 2022 01:42:26 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1orye3-0007y8-Je; Mon, 07 Nov 2022 10:42:19 +0100
-Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1orye1-002pJu-W8; Mon, 07 Nov 2022 10:42:18 +0100
-Received: from mfe by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1orye2-0090fP-43; Mon, 07 Nov 2022 10:42:18 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        laurent.pinchart+renesas@ideasonboard.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH] media: tc358746: drop selecting COMMON_CLK
-Date:   Mon,  7 Nov 2022 10:42:12 +0100
-Message-Id: <20221107094212.2139488-1-m.felsch@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S232010AbiKGKZW (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Nov 2022 05:25:22 -0500
+Received: from out28-124.mail.aliyun.com (out28-124.mail.aliyun.com [115.124.28.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007EC193CF;
+        Mon,  7 Nov 2022 02:24:47 -0800 (PST)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.0846245|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_news_journal|0.0678466-0.00920196-0.922951;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047192;MF=lee@arducam.com;NM=1;PH=DS;RN=7;RT=7;SR=0;TI=SMTPD_---.Q1PAhQl_1667816684;
+Received: from localhost(mailfrom:lee@arducam.com fp:SMTPD_---.Q1PAhQl_1667816684)
+          by smtp.aliyun-inc.com;
+          Mon, 07 Nov 2022 18:24:45 +0800
+Date:   Mon, 7 Nov 2022 18:24:45 +0800
+From:   lee <lee@arducam.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-media@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: media: i2c: Add IMX519 CMOS sensor
+ binding
+Message-ID: <20221107182445.00003b43@arducam.com>
+In-Reply-To: <250e8acd-cf5d-f6f2-2d89-e0fd58a14424@linaro.org>
+References: <20221103110424.00007a48@arducam.com>
+        <4556aebd-1296-bb08-2cd7-3d92571ed71b@linaro.org>
+        <20221107104202.00002f0f@arducam.com>
+        <250e8acd-cf5d-f6f2-2d89-e0fd58a14424@linaro.org>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Still there are archs/platforms which do not support the common clk
-framework. If such a platform is used in combination with the module
-enabled the compiler will throw an error. Since the clock has stubs if
-not selected we can drop it, so it is up to the arch/platform to select
-the correct clock framework.
+On Mon, 7 Nov 2022 09:24:53 +0100
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-Fixes: 80a21da36051 ("media: tc358746: add Toshiba TC358746 Parallel to CSI-2 bridge driver")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
----
- drivers/media/i2c/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+> On 07/11/2022 03:42, lee wrote:
+> > On Thu, 3 Nov 2022 09:05:05 -0400
+> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> > 
+> > Hi,
+> > Thanks a lot for detailed comments and suggestions for
+> > revisions,there is one place where I have some doubts.  
+> >> On 02/11/2022 23:04, lee wrote:  
+> >>> Add YAML device tree binding for IMX519 CMOS image sensor, and
+> >>> the relevant MAINTAINERS entries.
+> >>>
+> >>> Signed-off-by: Lee Jackson <lee@arducam.com>    
+> >>
+> >> Your From does not match fully SoB.
+> >>  
+> >>> ---
+> >>>  .../bindings/media/i2c/sony,imx519.yaml       | 107
+> >>> ++++++++++++++++++ MAINTAINERS                                   |
+> >>>  9 ++ 2 files changed, 116 insertions(+)
+> >>>  create mode 100644
+> >>> Documentation/devicetree/bindings/media/i2c/sony,imx519.yaml
+> >>>
+> >>> diff --git
+> >>> a/Documentation/devicetree/bindings/media/i2c/sony,imx519.yaml
+> >>> b/Documentation/devicetree/bindings/media/i2c/sony,imx519.yaml new
+> >>> file mode 100644 index 000000000000..9b6cda96f613 --- /dev/null
+> >>> +++ b/Documentation/devicetree/bindings/media/i2c/sony,imx519.yaml
+> >>> @@ -0,0 +1,107 @@
+> >>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >>> +%YAML 1.2
+> >>> +---
+> >>> +$id: http://devicetree.org/schemas/media/i2c/sony,imx519.yaml#
+> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>> +
+> >>> +title: Sony 1/2.5-Inch 16Mpixel CMOS Digital Image Sensor
+> >>> +
+> >>> +maintainers:
+> >>> +  - Lee Jackson <lee@arducam.com>
+> >>> +
+> >>> +description: |-
+> >>> +  The Sony IMX519 is a 1/2.5-inch CMOS active pixel digital image
+> >>> sensor
+> >>> +  with an active array size of 4656H x 3496V. It is programmable
+> >>> through
+> >>> +  I2C interface. The I2C address is fixed to 0x1A as per sensor
+> >>> data sheet.
+> >>> +  Image data is sent through MIPI CSI-2, which is configured as
+> >>> either 2 or
+> >>> +  4 data lanes.
+> >>> +
+> >>> +properties:
+> >>> +  compatible:
+> >>> +    const: sony,imx519
+> >>> +
+> >>> +  reg:
+> >>> +    description: I2C device address    
+> >>
+> >> Skip description.
+> >>  
+> >>> +    maxItems: 1
+> >>> +
+> >>> +  clocks:
+> >>> +    maxItems: 1
+> >>> +
+> >>> +  VDIG-supply:    
+> >>
+> >> Use lower case names.  
+> > 
+> > Here we refer to other drivers (imx219), they are all uppercase, is
+> > lowercase mandatory?  
+> 
+> Lowercase is the convention. Just because some other driver used
+> uppercase is not really correct argument. If other driver has bug, you
+> also copy it?
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
 
-diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index 49c1c27afdc1..e2138d8630e8 100644
---- a/drivers/media/i2c/Kconfig
-+++ b/drivers/media/i2c/Kconfig
-@@ -1316,7 +1316,6 @@ config VIDEO_TC358746
- 	select V4L2_FWNODE
- 	select GENERIC_PHY_MIPI_DPHY
- 	select REGMAP_I2C
--	select COMMON_CLK
- 	help
- 	  Support for the Toshiba TC358746 parallel to MIPI CSI-2 bridge.
- 	  The bridge can work in both directions but currently only the
--- 
-2.30.2
-
+Hi,
+Thanks for your quick reply. 
+I just want to refer to the driver that has passed the review, as a template, is there anything I can refer to?
+Do you have any good suggestions?
