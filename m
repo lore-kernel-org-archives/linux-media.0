@@ -2,150 +2,101 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 177ADC4332F
-	for <linux-media@archiver.kernel.org>; Tue,  8 Nov 2022 12:20:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BECF1C433FE
+	for <linux-media@archiver.kernel.org>; Tue,  8 Nov 2022 13:17:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234188AbiKHMUe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Nov 2022 07:20:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39712 "EHLO
+        id S234449AbiKHNR0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Nov 2022 08:17:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234069AbiKHMUa (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Nov 2022 07:20:30 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B25A17A85
-        for <linux-media@vger.kernel.org>; Tue,  8 Nov 2022 04:20:27 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id bj12so38006501ejb.13
-        for <linux-media@vger.kernel.org>; Tue, 08 Nov 2022 04:20:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KndevzpL5iTtreG9PsqqDvMJxU2HgkOfgFxD9fvxXg0=;
-        b=ph9zmgpcsst6OY9WvWL4I8/fEYVu1vwau2jq0cmbSjj3now509hFuKHhDUgl/7g77D
-         xc7uOW9+8Lx47GgdpY8XEJYwQYSn3pBMSm5bUNVjXSuBYqYIfI2yeG9CH0FmckkZbaHC
-         9UXoHxGr6Yx1zpVYGgeMyopoT7GQVZKP4LcUoBj0mgDWu9+Pox0YHPsq/bakoht12IEx
-         tJYGa+JZ3fC//OULkCdlDt6NxUFSSa8iNiWy+9+r+LiJ8yjk9HavfVMeXs8AsEH+SRmj
-         SGdQBvFE+znuqgCw16HfW0VNgaw45I9K4r8FdrhH/4quY7KAemdTl7ttLh+VkvfrRFgs
-         FUjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KndevzpL5iTtreG9PsqqDvMJxU2HgkOfgFxD9fvxXg0=;
-        b=4he2EAEIXATf1Ap8h45tgC3H/zeXP88LtDpDx7+UCiWacLbGVd5ozJRLA+XNf1VI2B
-         1GwuFX1cnjAfBFfe1EUXSEs2AnMl8PKl/5L1Y6YMgkYCshwnufd5/dGSXfoZ+WJWGUFC
-         y9FXjg9plBCxzVvcZcjiBdUL+m/ZiPWXbhGYeukWvBLtAY604YnI1wBWwucDjQiF7NNO
-         ohaEKxiPSJpQ+Jecx7RxT/TJLt1WNcVNftFhNreYIAM3iX/ZyXq3Hta3pGo6lSlp73/L
-         x/7K4X2O7K/nwSOMZgdIQ9qPg3Uv5cbcsA7dNXc/0fiFSCzFMbHqhHn2TOIqV4+gGf96
-         aLCw==
-X-Gm-Message-State: ACrzQf0HiGIb/gjXdJL36g+wc7Fhf5Aid1J7wly6dGQC57PpEsdaKlTQ
-        KVZIlO0afQGSF5EwxkI8YHxiSmRJh4HDirsTNlUvxw==
-X-Google-Smtp-Source: AMsMyM4CGbfV7kczWiUta3Ci/J8FOJH08Fwd2/Q1jYme/bDhbdGh8WG3agWi1/gCMy4nSZ3GcJJSgf+i80vMjpc1yBM=
-X-Received: by 2002:a17:907:7b8b:b0:7ad:e144:19e1 with SMTP id
- ne11-20020a1709077b8b00b007ade14419e1mr42092920ejc.154.1667910025861; Tue, 08
- Nov 2022 04:20:25 -0800 (PST)
-MIME-Version: 1.0
-References: <20221107204959.37691-1-jacopo@jmondi.org>
-In-Reply-To: <20221107204959.37691-1-jacopo@jmondi.org>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Tue, 8 Nov 2022 12:20:09 +0000
-Message-ID: <CAPY8ntAgAtUCkWKzQgz0Uwf1xC8tUTskbn152eCoYyCW3mT_dQ@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Documentation: media: camera_sensor: Document
- blankings handling
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        with ESMTP id S234434AbiKHNRX (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Nov 2022 08:17:23 -0500
+Received: from meesny.iki.fi (meesny.iki.fi [195.140.195.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8244299A
+        for <linux-media@vger.kernel.org>; Tue,  8 Nov 2022 05:17:22 -0800 (PST)
+Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by meesny.iki.fi (Postfix) with ESMTPSA id F0100205A6;
+        Tue,  8 Nov 2022 15:17:19 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1667913440;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aXHD5ojfAaG6PrKNoQkvXleWatuwv5TQ5PjKPk56ITU=;
+        b=X5OgNRFFvpwV7b9mAgSC3VdXpl4dkk2VyNQceZlQ1CXp2mTKcnylunOP93uAilT69O2WMV
+        nI5HMQ3IzIWhSTcU6tScVzmJPTsQKkHtqpjzaz4A+2110Xz8WEOf9OQKbwnnqMOLn9TW7Z
+        Ht1nRzY0tFghXyIGfkoPjlEz2G+XJ3w=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1667913440;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aXHD5ojfAaG6PrKNoQkvXleWatuwv5TQ5PjKPk56ITU=;
+        b=svYHim8Jsejo0adIL2z0n83zzzY3HoVpoPaYPr8S347nDWcchx77S9OieHnf570c+gnjkW
+        smv7QfLJbOsMBUjplHRfTRcgWsaCaLPo+hsgtnN4UbepcNUdgQ1dN4rnskGF9SIGjNyva6
+        NLpt0LjPRZPWMf0W+bIv717ZahdNTaA=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1667913440; a=rsa-sha256; cv=none;
+        b=L55nt+gMQ4CPuCgc3xv8ndnNty9cAGZ5/NpmSsUKk3pnFapR229PSJdE8lMRWPRmnf9E3u
+        D0SY+SgThUdXuwhQLMqF0Z2rGlVskHlnH1wO95dqzFYkI8mRiH+i8FbW19yP0MvUrRJRIo
+        VeJES4XvM8uK+lE9xEjKajxgt1kjiyU=
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 65D07634CCA;
+        Tue,  8 Nov 2022 15:17:19 +0200 (EET)
+Date:   Tue, 8 Nov 2022 15:17:19 +0200
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     dave.stevenson@raspberrypi.com, jacopo@jmondi.org,
+        paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
+        mchehab@kernel.org, linux-media@vger.kernel.org,
         Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        laurent.pinchart@ideasonboard.com
+Subject: Re: [PATCH v6 0/3] Add imx577 compatible to imx412
+Message-ID: <Y2pW3/QNeUa5rYre@valkosipuli.retiisi.eu>
+References: <20221014180417.3683285-1-bryan.odonoghue@linaro.org>
+ <34fd2ddc-7645-21d4-45f2-f1534478d586@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <34fd2ddc-7645-21d4-45f2-f1534478d586@linaro.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo
+Hi Bryan,
 
-Sorry, I should have read this fully first :)
+On Mon, Nov 07, 2022 at 11:29:47PM +0000, Bryan O'Donoghue wrote:
+> On 14/10/2022 19:04, Bryan O'Donoghue wrote:
+> > v6:
+> > - Drops -items encapsulating compatible - Krzysztof
+> 
+> Ping.
+> 
+> Any chance of the good folks @
+> https://patchwork.linuxtv.org/project/linux-media picking this up ?
 
-Thanks for your efforts in writing the docs, and I appreciate it's
-worse when English isn't your native language.
+This is waiting like other media patches to be merged to my tree. I think
+I'll prepare a second branch to get more patches merged.
 
-On Mon, 7 Nov 2022 at 20:50, Jacopo Mondi <jacopo@jmondi.org> wrote:
->
-> Hello,
->    this series updates the camera-sensor documentation to indicate that
-> vertical and horizontal blankings should be updated when a new image format
-> is applied on the sensor.
->
-> 1/3 is more for discussion than inclusion, as I noticed the documentation and
-> the CCS driver use the analogue crop rectangle sizes to compute blanking limits
-> while most driver use the visible size.
->
-> Which ones are correct ?
->
-> As I interpret "Figure 47 Line and Frame Blanking Definitions" in CSI-2 spec (I
-> have version 1.01.00 r0.04 2-Apr-2009) it seems clear to me that blankings
-> surround the visible size ("valid data").
+> 
+> It unblocks enabling CAMSS on the qcom RB5 where the feedback I've had is we
+> should get compat imx577 merged to accurately map the hardware config we
+> have.
+> 
+> https://patchwork.kernel.org/project/linux-media/list/?series=644675
+> 
+> https://patches.linaro.org/project/linux-arm-msm/patch/20220518133004.342775-2-bryan.odonoghue@linaro.org/
 
-I'll agree when considering the CSI-2 link.
-However this is the same discussion as PIXEL_RATE vs LINK_FREQUENCY -
-the blanking interval on the sensor array can differ from that on the
-CSI-2 link. Largely we don't care about the CSI-2 link timings, and
-frame rate is configured from PIXEL_RATE and not LINK_FREQUENCY.
+-- 
+Regards,
 
-> However it is also correct to consider
-> blanking limits are a property of the pixel array usually represented by a
-> minx/max limits of some "total output size" register.
->
-> I wonder if it makes any real difference in practice...
-
-It's only going to make any difference on binned or scaled modes,
-which are not overly common in mainline drivers.
-
-However we do have an issue of drivers accepted into mainline that
-define blanking intervals based on the binned/scaled resolution and
-not the analogue crop only, so how do you fix them without regressions
-in the form of altered behaviour?
-
-> 3/3 also documents that exposure limits should be updated when a new vertical
-> blankings are applied.
->
-> I haven't documented if the actual control value should be reset to some
-> know value as the init-time default or to its minimum value, as described in
-> https://lore.kernel.org/linux-media/20221019065801.4n7alfivhffbvgzo@uno.localdomain/T/
->
-> A question for Dave: should the registration of events handler callbacks be
-> documented too as clarified in:
-> https://www.spinics.net/lists/linux-media/msg220715.html
-
-Absolutely. Unless it gets fixed in the core then the drivers need to do it.
-
-I have created the patches at [1] to address that issue (and the lack
-of V4L2_CTRL_FLAG_MODIFY_LAYOUT on flips), but need to curate the list
-of maintainers to send it to. Compile tested only as I don't have the
-hardware to test all of them.
-I've also pushed the start of the doc changes I was considering for
-all the bits needed when implementing sensor drivers - top commit on
-the same branch.
-
-  Dave
-
-[1] https://github.com/6by9/linux/tree/linux-media
-
-
-> Thanks!
->   j
->
-> Jacopo Mondi (3):
->   Documentation: media: camera-sensor: Correct frame interval
->   documentation: media: camera_sensor: Document blankings handling
->   documentation: media: camera_sensor: Update exposure on blanking
->     change
->
->  .../driver-api/media/camera-sensor.rst        | 69 +++++++++++++++++--
->  1 file changed, 65 insertions(+), 4 deletions(-)
->
-> --
-> 2.38.1
->
+Sakari Ailus
