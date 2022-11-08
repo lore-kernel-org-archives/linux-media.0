@@ -2,167 +2,128 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD6ABC4167B
-	for <linux-media@archiver.kernel.org>; Tue,  8 Nov 2022 10:36:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B7EFC4332F
+	for <linux-media@archiver.kernel.org>; Tue,  8 Nov 2022 11:42:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233980AbiKHKgA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Nov 2022 05:36:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57582 "EHLO
+        id S233656AbiKHLmT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Nov 2022 06:42:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233949AbiKHKfz (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Nov 2022 05:35:55 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4414343841
-        for <linux-media@vger.kernel.org>; Tue,  8 Nov 2022 02:35:51 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id kt23so37371218ejc.7
-        for <linux-media@vger.kernel.org>; Tue, 08 Nov 2022 02:35:51 -0800 (PST)
+        with ESMTP id S233450AbiKHLmR (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Nov 2022 06:42:17 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232122EF52
+        for <linux-media@vger.kernel.org>; Tue,  8 Nov 2022 03:42:15 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id v27so22051067eda.1
+        for <linux-media@vger.kernel.org>; Tue, 08 Nov 2022 03:42:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=raspberrypi.com; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QzGzsYzfZld5BaPsWA5Lt7NjqLM8KvUDhOQ6bLN6+Og=;
-        b=p2tdeDcHOvdvUTcDLFXYRVq4ekKoCNHqucsPWZvzZE97BFX7xpmVJ/CI5ytB8q2vTp
-         jWX3m1b0qgSIjDxOBWKwIuUhzj/SfDebRy0dDwWP7yyMGJHkmDVOPoZzD0CJ0hKn0UD2
-         3K0GFhZubMWCvjTAlMPSyuzZJgv2g/DOkK+D2umwGJ8dvv0LLVRovwZXC5PHc1vxs4v+
-         LZ1BsutMnBr9X9Ou9tGabFs3vrv46Zn76bMv6p5eoNUW0Yf8qNY7I3gOQiK/krUgrESk
-         I1jLhtmT9ZWkvBQVtvULojmEzs+ios3PbhEPgfy485phQntChVfnk+PudKmufTMIB1iA
-         e3Cg==
+        bh=I/2Zcin6SfWccAKAue0SGPxAi2+yFI7Ic/3HoFRhGq4=;
+        b=WEvfJGGWXkATwBTKvIjt389c3uQJa+zfbVOasdGo+52pIQbSy8XldEUhT1lkpvDtEy
+         MvU4UgsUsX1QzwEg0AahjzvY3SPZgD2WchfzN0wAy33AbFbUxNCQhub012+sR3DPB2XM
+         gv6aVL88DxBaCaJi3mckG7zEW0XouI7QGRbdqk+AYSqKaKF8S2hwBoBQpSQcRqhxKaWj
+         b8ZnRxggh94Rq4uY7HQmzuQAzLR2v6M8U3X+Lwgf2hnYk01MWWeC0B31LEejHPdrvgGz
+         s/fymTHJzS/IUjebDRUZJbOcn0hIOvoLFgWuvADGCTTV8lEizgdqRL8b1dVw31Z/xXxA
+         YH8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QzGzsYzfZld5BaPsWA5Lt7NjqLM8KvUDhOQ6bLN6+Og=;
-        b=nKNBIlF8QnAjYV1Qq/ywsusQObKaR+hmQgYsccn7GiAyfETDicdpigVRWKZIm9VTZ0
-         OBIgEWOyiQVQ5Ov0U6eTIxD9FUzGpz9ZNp1DazEPtrgiCDAQGG5SRR55iHYuKjvBk8vZ
-         M5u/uG0ZivORPH6bsKOc+WkLSSDadToKO91sUiZBmHeNQsdBV9Oj2g9wwzYIlog0HENG
-         emA1ggO8uJVNCUf7LNVkCSA7W1rjpIr1hi0XLP9hOS8Rs9z0QaYea3KoRyvim9JUqhU8
-         2IhWgzeWIjmNvoijjF/lwowmBL3e4SckeK6qJWtgd9PLoPqsJzgo/Ia4OwgTVbnbKxFg
-         t/tg==
-X-Gm-Message-State: ACrzQf2RxQ8T7/vE9CEuVkNRWIdsM0oj+4LabKSJUN0bZqsDnmzdOZ4L
-        HerxhXlWsQnQOlPeiD4l5EjCCf9zfKh5MwjuxjRBEw==
-X-Google-Smtp-Source: AMsMyM4XmkDJX+qrSEP4SpZrn8cWb1HWzNQvAAk1OfJ9imq8qxTAL9wtzeIx9tJqISQizQs+QRf+dML5kSmR4FEmz9A=
-X-Received: by 2002:a17:906:6956:b0:7ae:3a0b:c6f6 with SMTP id
- c22-20020a170906695600b007ae3a0bc6f6mr20431161ejs.383.1667903749742; Tue, 08
- Nov 2022 02:35:49 -0800 (PST)
+        bh=I/2Zcin6SfWccAKAue0SGPxAi2+yFI7Ic/3HoFRhGq4=;
+        b=kQ+dPd3f2Y5AWVr3dFlYzjewxHP9TNyem8jHGedGIIMMYsz1w53KS/Pp2KTZSJTIBr
+         +nXgUBcZraa2SLIRFyggH0KG0wzPzj7JzReUbNS2mOx7I4nN9ogeXG00aEdc82DiYO2R
+         kOSmaimgRkHb2uSSCongU7CY5jRIsnTnvcML7O2EhiQjSNlL/CqDfdxEGpx75HPkSL++
+         BhTUco4Y1fOWSJ7RaBlORkkjo1RqYb8kXaY9jMvKo+eVsaMkx5Ko4Vj+/Ym9neX8N0uJ
+         eqWtjiqcIIqjYYY1jvTkSFjGjaOG5R2WrTeAUb+GLT4o9kZKa4tbX3wMc4XByz7F9ChV
+         0p6A==
+X-Gm-Message-State: ACrzQf15n79K2ZB5MlERJI+ZcQBG34ee5fnkqPTozHxQH6E1ecnmxfxX
+        4t2IAb7HfRYYpmzHCI4t+v7zSJsCtCa02B+vHF9p7OdpNqnb2g==
+X-Google-Smtp-Source: AMsMyM58JzHgdQyaBVjjVZJb5Z+31zeau8C1XwsOl7RaziTl1bTA+XQ9yBJq+W5QSTj7wf8YX+w0j3WT92pu3F3eY+w=
+X-Received: by 2002:a05:6402:c4d:b0:457:99ec:1837 with SMTP id
+ cs13-20020a0564020c4d00b0045799ec1837mr24116304edb.86.1667907733681; Tue, 08
+ Nov 2022 03:42:13 -0800 (PST)
 MIME-Version: 1.0
-References: <20221013121255.1977-1-quic_mmitkov@quicinc.com> <46d82762-8b6b-8a3e-0bdd-5598163244de@linaro.org>
-In-Reply-To: <46d82762-8b6b-8a3e-0bdd-5598163244de@linaro.org>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Tue, 8 Nov 2022 11:35:38 +0100
-Message-ID: <CAG3jFysAfymcFS54CyxBYhJbQ4Qh7bvhpE8UPc3S1o_8uQq7Xg@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] media: camss: sm8250: Virtual channels support for SM8250
-To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
-Cc:     quic_mmitkov@quicinc.com, linux-media@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, akapatra@quicinc.com,
-        jzala@quicinc.com, todor.too@gmail.com, agross@kernel.org,
-        konrad.dybcio@somainline.org, mchehab@kernel.org,
-        cgera@qti.qualcomm.com, gchinnab@quicinc.com,
-        ayasan@qti.qualcomm.com, laurent.pinchart@ideasonboard.com
+References: <20221107204959.37691-1-jacopo@jmondi.org> <20221107204959.37691-2-jacopo@jmondi.org>
+In-Reply-To: <20221107204959.37691-2-jacopo@jmondi.org>
+From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date:   Tue, 8 Nov 2022 11:41:58 +0000
+Message-ID: <CAPY8ntDJVJftyxRsRg+cdbPfLpFXP4Mijy8F5ZOWLTtPqUt-LA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] Documentation: media: camera-sensor: Correct frame interval
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, 8 Nov 2022 at 01:12, Bryan O'Donoghue
-<bryan.odonoghue@linaro.org> wrote:
+Hi Jacopo.
+
+On Mon, 7 Nov 2022 at 20:50, Jacopo Mondi <jacopo@jmondi.org> wrote:
 >
-> On 13/10/2022 13:12, quic_mmitkov@quicinc.com wrote:
-> > From: Milen Mitkov <quic_mmitkov@quicinc.com>
-> >
-> > For v4:
-> > - fixes the warning reported by the kernel test robot
-> > - tiny code change to enable the vc functionality with the partially-applied
-> >    multistream patches on linux-next (tested on tag:next-20221010)
-> >
-> > For v3:
-> > - setting the sink pad format on the CSID entity will now propagate the
-> >    format to the source pads to keep the subdev in a valid internal state.
-> > - code syntax improvements
-> >
-> > For v2:
-> > - code syntax improvements
-> > - The info print for the enabled VCs was demoted to a dbg print. Can be
-> >    enabled with dynamic debug, e.g.:
-> > echo "file drivers/media/platform/qcom/camss/* +p" > /sys/kernel/debug/dynamic_debug/control
-> >
-> > NOTE: These changes depend on the multistream series, that as of yet
-> > is still not merged upstream. However, part of the
-> > multistream patches are merged in linux-next (tested on
-> > tag:next-20221010), including the patch that introduces the
-> > video_device_pipeline_alloc_start() functionality. This allows
-> > applying and using this series on linux-next without applying the
-> > complete multistream set.
-> >
-> > The CSID hardware on SM8250 can demux the input data stream into
-> > maximum of 4 multiple streams depending on virtual channel (vc)
-> > or data type (dt) configuration.
-> >
-> > Situations in which demuxing is useful:
-> > - HDR sensors that produce a 2-frame HDR output, e.g. a light and a dark frame
-> >    (the setup we used for testing, with the imx412 sensor),
-> >    or a 3-frame HDR output - light, medium-lit, dark frame.
-> > - sensors with additional metadata that is streamed over a different
-> >    virtual channel/datatype.
-> > - sensors that produce frames with multiple resolutions in the same pixel
-> >    data stream
-> >
-> > With these changes, the CSID entity has, as it did previously, a single
-> > sink port (0), and always exposes 4 source ports (1, 2,3, 4). The
-> > virtual channel configuration is determined by which of the source ports
-> > are linked to an output VFE line. For example, the link below will
-> > configure the CSID driver to enable vc 0 and vc 1:
-> >
-> > media-ctl -l '"msm_csid0":1->"msm_vfe0_rdi0":0[1]'
-> > media-ctl -l '"msm_csid0":2->"msm_vfe0_rdi1":0[1]'
-> >
-> > which will be demuxed and propagated into /dev/video0
-> > and /dev/video1 respectively. With this, the userspace can use
-> > any normal V4L2 client app to start/stop/queue/dequeue from these
-> > video nodes. Tested with the yavta app.
-> >
-> > The format of each RDI channel of the used VFE(s) (msm_vfe0_rdi0,
-> > msm_vfe0_rdi1,...) must also be configured explicitly.
-> >
-> > Note that in order to keep a valid internal subdevice state,
-> > setting the sink pad format of the CSID subdevice will propagate
-> > this format to the source pads. However, since the CSID hardware
-> > can demux the input stream into several streams each of which can
-> > be a different format, in that case each source pad's
-> > format must be set individually, e.g.:
-> >
-> > media-ctl -V '"msm_csid0":1[fmt:SRGGB10/3840x2160]'
-> > media-ctl -V '"msm_csid0":2[fmt:SRGGB10/960x540]'
-> >
-> > Milen Mitkov (4):
-> >    media: camss: sm8250: Virtual channels for CSID
-> >    media: camss: vfe: Reserve VFE lines on stream start and link to CSID
-> >    media: camss: vfe-480: Multiple outputs support for SM8250
-> >    media: camss: sm8250: Pipeline starting and stopping for multiple
-> >      virtual channels
-> >
-> >   .../platform/qcom/camss/camss-csid-gen2.c     | 54 ++++++++++------
-> >   .../media/platform/qcom/camss/camss-csid.c    | 44 +++++++++----
-> >   .../media/platform/qcom/camss/camss-csid.h    | 11 +++-
-> >   .../media/platform/qcom/camss/camss-vfe-480.c | 61 ++++++++++++-------
-> >   drivers/media/platform/qcom/camss/camss-vfe.c |  7 +++
-> >   .../media/platform/qcom/camss/camss-video.c   | 21 ++++++-
-> >   drivers/media/platform/qcom/camss/camss.c     |  2 +-
-> >   7 files changed, 140 insertions(+), 60 deletions(-)
-> >
+> The formula to compute the frame interval uses the analogue crop
+> rectangle dimensions to compute the total frame size in conjunction with
+> blankings.
 >
-> I've done some offline work with Milen on this.
+> Horizontal and vertical blankings are realized by extending the time
+> interval during which no valid pixels are sent on the bus between
+> visible lines and between consecutive frames, whose size is smaller than
+> the analogue crop rectangle if any additional cropping or pixel
+> subsampling is applied on the sensor processing pipeline.
 >
-> I'm happy enough to add my
->
-> Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->
-> to the series. I don't have - currently a VC enabled setup but for the
-> simple case this set doesn't break anything on RB5 for me.
->
+> Correct the documentation to use the visible line length and frame
+> height instead of the analogue crop dimensions.
+
+I'll defer to Sakari on this, but I think the original text is correct.
+
+Consider something like CCS where you have a separate array with
+analogue crop, and then binning and scaling steps. AIUI the pixel rate
+and [HV]BLANK will be defined for the array, not on the binned and
+scaled values which finally give the visible frame. See [1].
+
+For the majority of sensors where analogue cropping, binning, and
+scaling are not broken out separately, then it may well have been
+incorrectly implemented as they do often look at the output
+width/height. Should they be using the w/h values returned by
+V4L2_SEL_TGT_CROP on V4L2_SUBDEV_FORMAT_ACTIVE for the sensor modes
+instead? Quite probably, but that also makes the userspace more
+complex (and probably needs fixing).
+
+  Dave
+
+[1] https://github.com/torvalds/linux/blob/master/drivers/media/i2c/ccs/ccs-core.c#L734
+
+> Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 > ---
-> bod
-
-This series has my ack.
-
-Acked-by: Robert Foss <robert.foss@linaro.org>
+>  Documentation/driver-api/media/camera-sensor.rst | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+>
+> diff --git a/Documentation/driver-api/media/camera-sensor.rst b/Documentation/driver-api/media/camera-sensor.rst
+> index c7d4891bd24e..bb7d62db4cd1 100644
+> --- a/Documentation/driver-api/media/camera-sensor.rst
+> +++ b/Documentation/driver-api/media/camera-sensor.rst
+> @@ -87,12 +87,11 @@ less all modern raw camera sensors.
+>
+>  The frame interval is calculated using the following equation::
+>
+> -       frame interval = (analogue crop width + horizontal blanking) *
+> -                        (analogue crop height + vertical blanking) / pixel rate
+> +       frame interval = (visible width + horizontal blanking) *
+> +                        (visibile height + vertical blanking) / pixel rate
+>
+>  The formula is bus independent and is applicable for raw timing parameters on
+> -large variety of devices beyond camera sensors. Devices that have no analogue
+> -crop, use the full source image size, i.e. pixel array size.
+> +large variety of devices beyond camera sensors.
+>
+>  Horizontal and vertical blanking are specified by ``V4L2_CID_HBLANK`` and
+>  ``V4L2_CID_VBLANK``, respectively. The unit of the ``V4L2_CID_HBLANK`` control
+> --
+> 2.38.1
+>
