@@ -2,133 +2,76 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5599BC4332F
-	for <linux-media@archiver.kernel.org>; Tue,  8 Nov 2022 03:35:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B93FAC43217
+	for <linux-media@archiver.kernel.org>; Tue,  8 Nov 2022 03:49:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232501AbiKHDfp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Nov 2022 22:35:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55836 "EHLO
+        id S232760AbiKHDs7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Nov 2022 22:48:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232060AbiKHDfo (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Nov 2022 22:35:44 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607ACB46;
-        Mon,  7 Nov 2022 19:35:43 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N5tzB3WG9zRp5B;
-        Tue,  8 Nov 2022 11:35:34 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 8 Nov 2022 11:35:41 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.36) by
- dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 8 Nov 2022 11:35:41 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>
-CC:     <dwlsalmeida@gmail.com>, <mchehab@kernel.org>,
-        <chenzhongjin@huawei.com>
-Subject: [PATCH] media: vidtv: Fix use-after-free in vidtv_bridge_dvb_init()
-Date:   Tue, 8 Nov 2022 11:32:29 +0800
-Message-ID: <20221108033229.169644-1-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S232328AbiKHDs5 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Nov 2022 22:48:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F112D76F;
+        Mon,  7 Nov 2022 19:48:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A39F86140B;
+        Tue,  8 Nov 2022 03:48:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE5DEC433D6;
+        Tue,  8 Nov 2022 03:48:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667879335;
+        bh=+7fDjDjSwuIces8TlINydr9JTAVpjqCtHsiPm6OS7rM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KSsS7ToymbL46gAbd5H/O3HeZFAOXLCpNSaBvKq9bXWg4vKy1jF/1ReM6vX7955lV
+         nVPMW9RfLPpTs/t0f7/Y30VQElbLTUpASoSTTpGWRHJDnoIv4/Cyr5CgXGvqBmSjio
+         8Djmbwfh5+fetk5eLjZuoNS/LDSWTPFwTeJ8TRDmeKvwmRvn63CroeGd6KVrCcB9H2
+         yeAKpS+pBNYqoDeAVLIcstuRJp9T+RTYQo+BxqBoTmAwZF/Zd2E6s6mNO/XH9AXRl6
+         lPLlY6zskxM6yM1JaexNS6rrt+xQym9Yb/GTLW9lTqyICiBImr17w6aHvgQ4OMtdU5
+         /WmaGrsFxMxyg==
+Date:   Mon, 7 Nov 2022 21:48:52 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     robert.foss@linaro.org, todor.too@gmail.com, agross@kernel.org,
+        konrad.dybcio@somainline.org, mchehab@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        dmitry.baryshkov@linaro.org, vladimir.zapolskiy@linaro.org,
+        sakari.ailus@iki.fi, hverkuil@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, quic_mmitkov@quicinc.com,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] arm64: dts: qcom: qrb5165-rb5-vision-mezzanine:
+ Add vision mezzanine
+Message-ID: <20221108034852.3tiqs46mpat4pwt7@builder.lan>
+References: <20221108021816.213084-1-bryan.odonoghue@linaro.org>
+ <20221108021816.213084-3-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221108021816.213084-3-bryan.odonoghue@linaro.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-KASAN reports a use-after-free:
-BUG: KASAN: use-after-free in dvb_dmxdev_release+0x4d5/0x5d0 [dvb_core]
-Call Trace:
- ...
- dvb_dmxdev_release+0x4d5/0x5d0 [dvb_core]
- vidtv_bridge_probe+0x7bf/0xa40 [dvb_vidtv_bridge]
- platform_probe+0xb6/0x170
- ...
-Allocated by task 1238:
- ...
- dvb_register_device+0x1a7/0xa70 [dvb_core]
- dvb_dmxdev_init+0x2af/0x4a0 [dvb_core]
- vidtv_bridge_probe+0x766/0xa40 [dvb_vidtv_bridge]
- ...
-Freed by task 1238:
- dvb_register_device+0x6d2/0xa70 [dvb_core]
- dvb_dmxdev_init+0x2af/0x4a0 [dvb_core]
- vidtv_bridge_probe+0x766/0xa40 [dvb_vidtv_bridge]
- ...
+On Tue, Nov 08, 2022 at 02:18:15AM +0000, Bryan O'Donoghue wrote:
+[..]
+> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> index 8ef0a9fe67dd..7199a86d2cbe 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> @@ -3801,6 +3801,39 @@ tlmm: pinctrl@f100000 {
+>  			gpio-ranges = <&tlmm 0 0 181>;
+>  			wakeup-parent = <&pdc>;
+>  
+> +			cam2_default: cam2-default {
 
-It is because the error handling in vidtv_bridge_dvb_init() is wrong.
+Please add -state suffix to the pinctrl state nodes.
 
-First, vidtv_bridge_dmx(dev)_init() will clean themselves when fail, but
-goto fail_dmx(_dev): calls release functions again, which causes
-use-after-free.
+> +				rst {
 
-Also, in fail_fe, fail_tuner_probe and fail_demod_probe, j = i will cause
-out-of-bound when i finished its loop (i == NUM_FE). And the loop
-releasing is wrong, although now NUM_FE is 1 so it won't cause problem.
+And please add -pins suffix to the subnodes thereof.
 
-Fix this by correctly releasing everything.
-
-Fixes: f90cf6079bf6 ("media: vidtv: add a bridge driver")
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
----
- .../media/test-drivers/vidtv/vidtv_bridge.c   | 24 ++++++++-----------
- 1 file changed, 10 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_bridge.c b/drivers/media/test-drivers/vidtv/vidtv_bridge.c
-index 82620613d56b..046e6785f0a3 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_bridge.c
-+++ b/drivers/media/test-drivers/vidtv/vidtv_bridge.c
-@@ -459,26 +459,21 @@ static int vidtv_bridge_dvb_init(struct vidtv_dvb *dvb)
- 	for (j = j - 1; j >= 0; --j)
- 		dvb->demux.dmx.remove_frontend(&dvb->demux.dmx,
- 					       &dvb->dmx_fe[j]);
--fail_dmx_dev:
- 	dvb_dmxdev_release(&dvb->dmx_dev);
--fail_dmx:
-+fail_dmx_dev:
- 	dvb_dmx_release(&dvb->demux);
-+fail_dmx:
-+fail_demod_probe:
-+	for (i = i - 1; i >= 0; --i) {
-+		dvb_unregister_frontend(dvb->fe[i]);
- fail_fe:
--	for (j = i; j >= 0; --j)
--		dvb_unregister_frontend(dvb->fe[j]);
-+		dvb_frontend_detach(dvb->fe[i]);
-+		dvb_module_release(dvb->i2c_client_tuner[i]);
- fail_tuner_probe:
--	for (j = i; j >= 0; --j)
--		if (dvb->i2c_client_tuner[j])
--			dvb_module_release(dvb->i2c_client_tuner[j]);
--
--fail_demod_probe:
--	for (j = i; j >= 0; --j)
--		if (dvb->i2c_client_demod[j])
--			dvb_module_release(dvb->i2c_client_demod[j]);
--
-+		dvb_module_release(dvb->i2c_client_demod[i]);
-+	}
- fail_adapter:
- 	dvb_unregister_adapter(&dvb->adapter);
--
- fail_i2c:
- 	i2c_del_adapter(&dvb->i2c_adapter);
- 
-@@ -550,6 +545,7 @@ static int vidtv_bridge_remove(struct platform_device *pdev)
- 
- 	for (i = 0; i < NUM_FE; ++i) {
- 		dvb_unregister_frontend(dvb->fe[i]);
-+		dvb_frontend_detach(dvb->fe[i]);
- 		dvb_module_release(dvb->i2c_client_tuner[i]);
- 		dvb_module_release(dvb->i2c_client_demod[i]);
- 	}
--- 
-2.17.1
-
+Regards,
+Bjorn
