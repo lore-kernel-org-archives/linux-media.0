@@ -2,485 +2,113 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7790FC433FE
-	for <linux-media@archiver.kernel.org>; Wed,  9 Nov 2022 14:22:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F80EC4332F
+	for <linux-media@archiver.kernel.org>; Wed,  9 Nov 2022 14:51:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231560AbiKIOWA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Nov 2022 09:22:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58812 "EHLO
+        id S230161AbiKIOvZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Nov 2022 09:51:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231461AbiKIOVQ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Nov 2022 09:21:16 -0500
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE9923EBB;
-        Wed,  9 Nov 2022 06:20:18 -0800 (PST)
-Received: from booty.fritz.box (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id 6BD6BFF816;
-        Wed,  9 Nov 2022 14:20:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1668003616;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Hf+ndFwOk7J0RzX3PZJg+38Xr2MdPQZz58Tt3uS2qMk=;
-        b=kzS9LrpGkpAq+LZGFg4saIWfSv6XDggJoiqAPWCDc4SBe3YQmRxAlahvbfXm9j8l8o62YI
-        f1wXO5JRU8JYnmTX4Zuid5sUWIiXycwGbmlZYbiw3ZNFBOkLpEQKO6bbVYEZpBYoPvGjT/
-        jpyRmhxuS8jEQDQh24cjaDBgoTuJaETbbwqsMgCZRUFrkLL/wkMu4ZLkLRpB7mgq9Ih0r4
-        3DoeWg8qibyfA8YdGOAPiLLf57Vd8CDeMssaQIFIWNWYU4U06PcVeknoYzWeZdkgXj3iK5
-        vgc6UMhBXv2wK2VNqqFlqhvTSYqw53e5dwkacAnoCtR0WdKx5l902yuCGokzGQ==
-From:   luca.ceresoli@bootlin.com
-To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Richard Leitner <richard.leitner@skidata.com>
-Subject: [PATCH 22/23] staging: media: tegra-video: add support for VIP (parallel video input)
-Date:   Wed,  9 Nov 2022 15:18:51 +0100
-Message-Id: <20221109141852.729246-23-luca.ceresoli@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221109141852.729246-1-luca.ceresoli@bootlin.com>
-References: <20221109141852.729246-1-luca.ceresoli@bootlin.com>
+        with ESMTP id S229910AbiKIOvY (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Nov 2022 09:51:24 -0500
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7591C901;
+        Wed,  9 Nov 2022 06:51:23 -0800 (PST)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A9CnK6k025229;
+        Wed, 9 Nov 2022 15:50:44 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=5JtF3iJ2oXjNjIAbamTKE27XtiV1yY94Ah+QiBDWb3s=;
+ b=etElwXAkt6kcqJIe2SltGS49ceP/WxapGbX4u3Ff81O2QqHa2suZ/WJRKX9FO7dj+2EG
+ WwyePRFEabfKVWgx4H+AbcoWAywb6BCYs5ZbBSJQRQVfFyWsKw5Xp1gbdqEkHAWZqO4n
+ lok22cczp0S23kA54WfqwmQ2/aPIKgS8L4VTE7qxQkpZ3ns6ejnBLtumHU7ZJDdT2PTa
+ R78DNT7Nxovnv+sJyvJizEASGL3CgqIYak5Q2VVvbgAYRBsvRCoOEOnYVvj8AhCBa5KL
+ 2CgnVL1oassLIUMmIpEKGrqNspCCA5vTzKRmLpglyuE0fWIVG9E0cfugdaW3S0J6InH2 1g== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3kpyjqhquy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Nov 2022 15:50:44 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5240A10002A;
+        Wed,  9 Nov 2022 15:50:37 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D9E6D21FEA5;
+        Wed,  9 Nov 2022 15:50:37 +0100 (CET)
+Received: from [10.252.18.33] (10.252.18.33) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.32; Wed, 9 Nov
+ 2022 15:50:37 +0100
+Message-ID: <f0aee291-ce44-400b-be3a-dfe38c62e450@foss.st.com>
+Date:   Wed, 9 Nov 2022 15:50:37 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] Documentation: media: Add ST VGXY61 driver documentation
+ to userspace API table of contents
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-next@vger.kernel.org>
+CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <20221109100147.218947-1-bagasdotme@gmail.com>
+Content-Language: en-US
+From:   Benjamin MUGNIER <benjamin.mugnier@foss.st.com>
+In-Reply-To: <20221109100147.218947-1-bagasdotme@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.252.18.33]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-09_06,2022-11-09_01,2022-06-22_01
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Hi Bagas,
 
-The VI peripheral of Tegra supports capturing from MIPI CSI-2 or parallel
-video (called VIP in the docs). MIPI CSI-2 is already implemented. Add a
-VIP implementation.
+I already submitted this here:
+https://www.spinics.net/lists/linux-media/msg221143.html
 
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
----
- MAINTAINERS                                |   1 +
- drivers/staging/media/tegra-video/Makefile |   1 +
- drivers/staging/media/tegra-video/vip.c    | 298 +++++++++++++++++++++
- drivers/staging/media/tegra-video/vip.h    |  72 +++++
- 4 files changed, 372 insertions(+)
- create mode 100644 drivers/staging/media/tegra-video/vip.c
- create mode 100644 drivers/staging/media/tegra-video/vip.h
+Thanks.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 0a4f66a32e45..9d3ba90967db 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20286,6 +20286,7 @@ L:	linux-tegra@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vi.yaml
- F:	Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vip.yaml
-+F:	drivers/staging/media/tegra-video/vip.*
- 
- TEGRA XUSB PADCTL DRIVER
- M:	JC Kuo <jckuo@nvidia.com>
-diff --git a/drivers/staging/media/tegra-video/Makefile b/drivers/staging/media/tegra-video/Makefile
-index dfa2ef8f99ef..3c8ec1bb1f3e 100644
---- a/drivers/staging/media/tegra-video/Makefile
-+++ b/drivers/staging/media/tegra-video/Makefile
-@@ -2,6 +2,7 @@
- tegra-video-objs := \
- 		video.o \
- 		vi.o \
-+		vip.o \
- 		csi.o
- 
- tegra-video-$(CONFIG_ARCH_TEGRA_210_SOC) += tegra210.o
-diff --git a/drivers/staging/media/tegra-video/vip.c b/drivers/staging/media/tegra-video/vip.c
-new file mode 100644
-index 000000000000..cbf0c36fb098
---- /dev/null
-+++ b/drivers/staging/media/tegra-video/vip.c
-@@ -0,0 +1,298 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Parallel video capture module (VIP) for the Tegra VI.
-+ *
-+ * This file implements the VIP-specific infrastructure.
-+ *
-+ * Copyright (C) 2022 SKIDATA GmbH
-+ * Author: Luca Ceresoli <luca.ceresoli@bootlin.com>
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/host1x.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_graph.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+
-+#include <media/v4l2-fwnode.h>
-+
-+#include "vip.h"
-+
-+static inline struct tegra_vip *host1x_client_to_vip(struct host1x_client *client)
-+{
-+	return container_of(client, struct tegra_vip, client);
-+}
-+
-+static inline struct tegra_vip_channel *subdev_to_vip_channel(struct v4l2_subdev *subdev)
-+{
-+	return container_of(subdev, struct tegra_vip_channel, subdev);
-+}
-+
-+static inline struct tegra_vip *vip_channel_to_vip(struct tegra_vip_channel *chan)
-+{
-+	return container_of(chan, struct tegra_vip, chan);
-+}
-+
-+/* Find the previous subdev in the pipeline (i.e. the one connected to our sink pad) */
-+static struct v4l2_subdev *tegra_vip_channel_get_prev_subdev(struct tegra_vip_channel *chan)
-+{
-+	struct media_pad *remote_pad;
-+
-+	remote_pad = media_pad_remote_pad_first(&chan->pads[TEGRA_VIP_PAD_SINK]);
-+	if (!remote_pad)
-+		return NULL;
-+
-+	return media_entity_to_v4l2_subdev(remote_pad->entity);
-+}
-+
-+static int tegra_vip_enable_stream(struct v4l2_subdev *subdev)
-+{
-+	struct tegra_vip_channel *vip_chan = subdev_to_vip_channel(subdev);
-+	struct tegra_vip *vip = vip_channel_to_vip(vip_chan);
-+	struct v4l2_subdev *prev_subdev = tegra_vip_channel_get_prev_subdev(vip_chan);
-+	int err;
-+
-+	err = pm_runtime_resume_and_get(vip->dev);
-+	if (err)
-+		return dev_err_probe(vip->dev, err, "failed to get runtime PM\n");
-+
-+	err = vip->soc->ops->vip_start_streaming(vip_chan);
-+	if (err < 0)
-+		goto err_start_streaming;
-+
-+	err = v4l2_subdev_call(prev_subdev, video, s_stream, true);
-+	if (err < 0 && err != -ENOIOCTLCMD)
-+		goto err_prev_subdev_start_stream;
-+
-+	return 0;
-+
-+err_prev_subdev_start_stream:
-+err_start_streaming:
-+	pm_runtime_put(vip->dev);
-+	return err;
-+}
-+
-+static int tegra_vip_disable_stream(struct v4l2_subdev *subdev)
-+{
-+	struct tegra_vip_channel *vip_chan = subdev_to_vip_channel(subdev);
-+	struct tegra_vip *vip = vip_channel_to_vip(vip_chan);
-+	struct v4l2_subdev *prev_subdev = tegra_vip_channel_get_prev_subdev(vip_chan);
-+
-+	v4l2_subdev_call(prev_subdev, video, s_stream, false);
-+
-+	pm_runtime_put(vip->dev);
-+
-+	return 0;
-+}
-+
-+static int tegra_vip_s_stream(struct v4l2_subdev *subdev, int enable)
-+{
-+	int err;
-+
-+	if (enable)
-+		err = tegra_vip_enable_stream(subdev);
-+	else
-+		err = tegra_vip_disable_stream(subdev);
-+
-+	return err;
-+}
-+
-+static const struct v4l2_subdev_video_ops tegra_vip_video_ops = {
-+	.s_stream = tegra_vip_s_stream,
-+};
-+
-+static const struct v4l2_subdev_ops tegra_vip_ops = {
-+	.video  = &tegra_vip_video_ops,
-+};
-+
-+static int tegra_vip_channel_of_parse(struct tegra_vip *vip)
-+{
-+	struct device *dev = vip->dev;
-+	struct device_node *node;
-+	struct v4l2_fwnode_endpoint v4l2_ep = {
-+		.bus_type = V4L2_MBUS_PARALLEL
-+	};
-+	struct fwnode_handle *fwh;
-+	struct device_node *ep;
-+	unsigned int portno, num_pads;
-+	int err;
-+
-+	node = of_get_child_by_name(dev->of_node, "channel");
-+
-+	err = of_property_read_u32(node, "reg", &portno);
-+	if (err < 0) {
-+		dev_err_probe(dev, err, "%pOF: error reading reg property\n", node);
-+		goto err_node_put;
-+	}
-+
-+	if (portno != 0) {
-+		err = -EINVAL;
-+		dev_err_probe(dev, err, "%pOF: invalid reg property\n", node);
-+		goto err_node_put;
-+	}
-+
-+	ep = of_graph_get_endpoint_by_regs(node, 0, 0);
-+	if (!ep) {
-+		err = -EINVAL;
-+		dev_err_probe(dev, err, "%pOF: error getting endpoint node\n", node);
-+		goto err_node_put;
-+	}
-+
-+	fwh = of_fwnode_handle(ep);
-+	err = v4l2_fwnode_endpoint_parse(fwh, &v4l2_ep);
-+	of_node_put(ep);
-+	if (err) {
-+		dev_err_probe(dev, err, "%pOF: failed to parse v4l2 endpoint\n", node);
-+		goto err_node_put;
-+	}
-+
-+	num_pads = of_graph_get_endpoint_count(node);
-+	if (num_pads != TEGRA_VIP_PADS_NUM) {
-+		err = -EINVAL;
-+		dev_err_probe(dev, err, "%pOF: need 2 pads, got %d\n", node, num_pads);
-+		goto err_node_put;
-+	}
-+
-+	vip->chan.of_node = of_node_get(node);
-+	vip->chan.pads[TEGRA_VIP_PAD_SINK].flags = MEDIA_PAD_FL_SINK;
-+	vip->chan.pads[TEGRA_VIP_PAD_SOURCE].flags = MEDIA_PAD_FL_SOURCE;
-+
-+	return 0;
-+
-+err_node_put:
-+	of_node_put(node);
-+	return err;
-+}
-+
-+static int tegra_vip_channel_init(struct tegra_vip *vip)
-+{
-+	struct v4l2_subdev *subdev;
-+	int err;
-+
-+	subdev = &vip->chan.subdev;
-+	v4l2_subdev_init(subdev, &tegra_vip_ops);
-+	subdev->dev = vip->dev;
-+	snprintf(subdev->name, V4L2_SUBDEV_NAME_SIZE, "%s",
-+		 kbasename(vip->chan.of_node->full_name));
-+
-+	v4l2_set_subdevdata(subdev, &vip->chan);
-+	subdev->fwnode = of_fwnode_handle(vip->chan.of_node);
-+	subdev->entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
-+
-+	err = media_entity_pads_init(&subdev->entity, TEGRA_VIP_PADS_NUM, vip->chan.pads);
-+	if (err)
-+		return dev_err_probe(vip->dev, err, "failed to initialize media entity\n");
-+
-+	err = v4l2_async_register_subdev(subdev);
-+	if (err) {
-+		dev_err_probe(vip->dev, err, "failed to register subdev\n");
-+		goto err_register_subdev;
-+	}
-+
-+	return 0;
-+
-+err_register_subdev:
-+	media_entity_cleanup(&subdev->entity);
-+	return err;
-+}
-+
-+static int tegra_vip_init(struct host1x_client *client)
-+{
-+	struct tegra_vip *vip = host1x_client_to_vip(client);
-+	int err;
-+
-+	err = tegra_vip_channel_of_parse(vip);
-+	if (err)
-+		return err;
-+
-+	err = tegra_vip_channel_init(vip);
-+	if (err)
-+		goto err_init;
-+
-+	return 0;
-+
-+err_init:
-+	of_node_put(vip->chan.of_node);
-+	return err;
-+}
-+
-+static int tegra_vip_exit(struct host1x_client *client)
-+{
-+	struct tegra_vip *vip = host1x_client_to_vip(client);
-+	struct v4l2_subdev *subdev = &vip->chan.subdev;
-+
-+	v4l2_async_unregister_subdev(subdev);
-+	media_entity_cleanup(&subdev->entity);
-+	of_node_put(vip->chan.of_node);
-+
-+	return 0;
-+}
-+
-+static const struct host1x_client_ops vip_client_ops = {
-+	.init = tegra_vip_init,
-+	.exit = tegra_vip_exit,
-+};
-+
-+static int tegra_vip_probe(struct platform_device *pdev)
-+{
-+	struct tegra_vip *vip;
-+	int err;
-+
-+	dev_dbg(&pdev->dev, "Probing VIP \"%s\" from %pOF\n", pdev->name, pdev->dev.of_node);
-+
-+	vip = devm_kzalloc(&pdev->dev, sizeof(*vip), GFP_KERNEL);
-+	if (!vip)
-+		return -ENOMEM;
-+
-+	vip->soc = of_device_get_match_data(&pdev->dev);
-+
-+	vip->dev = &pdev->dev;
-+	platform_set_drvdata(pdev, vip);
-+
-+	/* initialize host1x interface */
-+	INIT_LIST_HEAD(&vip->client.list);
-+	vip->client.ops = &vip_client_ops;
-+	vip->client.dev = &pdev->dev;
-+
-+	err = host1x_client_register(&vip->client);
-+	if (err)
-+		return dev_err_probe(&pdev->dev, err, "failed to register host1x client\n");
-+
-+	pm_runtime_enable(&pdev->dev);
-+
-+	return 0;
-+}
-+
-+static int tegra_vip_remove(struct platform_device *pdev)
-+{
-+	struct tegra_vip *vip = platform_get_drvdata(pdev);
-+	int err;
-+
-+	err = host1x_client_unregister(&vip->client);
-+	if (err)
-+		return dev_err_probe(&pdev->dev, err, "failed to unregister host1x client\n");
-+
-+	pm_runtime_disable(&pdev->dev);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id tegra_vip_of_id_table[] = {
-+#if defined(CONFIG_ARCH_TEGRA_2x_SOC)
-+	{ .compatible = "nvidia,tegra20-vip", .data = &tegra20_vip_soc },
-+#endif
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, tegra_vip_of_id_table);
-+
-+struct platform_driver tegra_vip_driver = {
-+	.driver = {
-+		.name		= "tegra-vip",
-+		.of_match_table	= tegra_vip_of_id_table,
-+	},
-+	.probe			= tegra_vip_probe,
-+	.remove			= tegra_vip_remove,
-+};
-diff --git a/drivers/staging/media/tegra-video/vip.h b/drivers/staging/media/tegra-video/vip.h
-new file mode 100644
-index 000000000000..58b3ec28c364
---- /dev/null
-+++ b/drivers/staging/media/tegra-video/vip.h
-@@ -0,0 +1,72 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2022 SKIDATA GmbH
-+ * Author: Luca Ceresoli <luca.ceresoli@bootlin.com>
-+ */
-+
-+#ifndef __TEGRA_VIP_H__
-+#define __TEGRA_VIP_H__
-+
-+#include <media/media-entity.h>
-+#include <media/v4l2-async.h>
-+#include <media/v4l2-subdev.h>
-+
-+enum {
-+	TEGRA_VIP_PAD_SINK,
-+	TEGRA_VIP_PAD_SOURCE,
-+	TEGRA_VIP_PADS_NUM,
-+};
-+
-+struct tegra_vip;
-+
-+/**
-+ * struct tegra_vip_channel - Tegra VIP (parallel video capture) channel
-+ *
-+ * @subdev: V4L2 subdevice associated with this channel
-+ * @pads: media pads for the subdevice entity
-+ * @of_node: vip device tree node
-+ */
-+struct tegra_vip_channel {
-+	struct v4l2_subdev subdev;
-+	struct media_pad pads[TEGRA_VIP_PADS_NUM];
-+	struct device_node *of_node;
-+};
-+
-+/**
-+ * struct tegra_vip_ops - Tegra VIP operations
-+ *
-+ * @vip_start_streaming: programs vip hardware to enable streaming.
-+ */
-+struct tegra_vip_ops {
-+	int (*vip_start_streaming)(struct tegra_vip_channel *vip_chan);
-+};
-+
-+/**
-+ * struct tegra_vip_soc - NVIDIA Tegra VIP SoC structure
-+ *
-+ * @ops: vip hardware operations
-+ */
-+struct tegra_vip_soc {
-+	const struct tegra_vip_ops *ops;
-+};
-+
-+/**
-+ * struct tegra_vip - NVIDIA Tegra VIP device structure
-+ *
-+ * @dev: device struct
-+ * @client: host1x_client struct
-+ * @soc: pointer to SoC data structure
-+ * @chan: the VIP channel
-+ */
-+struct tegra_vip {
-+	struct device *dev;
-+	struct host1x_client client;
-+	const struct tegra_vip_soc *soc;
-+	struct tegra_vip_channel chan;
-+};
-+
-+#if defined(CONFIG_ARCH_TEGRA_2x_SOC)
-+extern const struct tegra_vip_soc tegra20_vip_soc;
-+#endif
-+
-+#endif
+On 11/9/22 11:01, Bagas Sanjaya wrote:
+> Sphinx reported missing toctree entry for ST VGXY61 documentation:
+> 
+> Documentation/userspace-api/media/drivers/st-vgxy61.rst: WARNING: document isn't included in any toctree
+> 
+> Add the entry to fix the warning.
+> 
+> Link: https://lore.kernel.org/linux-next/20221109162013.293250a2@canb.auug.org.au/
+> Fixes: 2378be892b6ff5 ("media: Documentation: Add ST VGXY61 driver documentation")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> ---
+>  Documentation/userspace-api/media/drivers/index.rst | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/userspace-api/media/drivers/index.rst b/Documentation/userspace-api/media/drivers/index.rst
+> index 32f82aed47d915..0f758c8d45235a 100644
+> --- a/Documentation/userspace-api/media/drivers/index.rst
+> +++ b/Documentation/userspace-api/media/drivers/index.rst
+> @@ -38,4 +38,5 @@ For more details see the file COPYING in the source distribution of Linux.
+>  	max2175
+>  	meye-uapi
+>  	omap3isp-uapi
+> +	st-vgxy61
+>  	uvcvideo
+> 
+> base-commit: 1e284ea984d3705e042b6b07469a66f1d43371e3
+
 -- 
-2.34.1
+Regards,
 
+Benjamin
