@@ -2,55 +2,55 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B958C43217
-	for <linux-media@archiver.kernel.org>; Wed,  9 Nov 2022 09:01:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAAD9C43217
+	for <linux-media@archiver.kernel.org>; Wed,  9 Nov 2022 09:15:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbiKIJBg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Nov 2022 04:01:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37734 "EHLO
+        id S230296AbiKIJPH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Nov 2022 04:15:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbiKIJBd (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Nov 2022 04:01:33 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716791DA76
-        for <linux-media@vger.kernel.org>; Wed,  9 Nov 2022 01:01:31 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id b9so24749221ljr.5
-        for <linux-media@vger.kernel.org>; Wed, 09 Nov 2022 01:01:31 -0800 (PST)
+        with ESMTP id S230080AbiKIJOb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Nov 2022 04:14:31 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1B81F2F2
+        for <linux-media@vger.kernel.org>; Wed,  9 Nov 2022 01:13:16 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id d6so24731827lfs.10
+        for <linux-media@vger.kernel.org>; Wed, 09 Nov 2022 01:13:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=koi87UBrY+4VbIvBhOaMl54U0jWmVKM7mhP4eLxgcCM=;
-        b=pYyHtrWUHIUnG+wcIiuyl8Eb4xpHSKWAbbm2UUGW+KAXP1NEZ5VG6w+KCCeVZDMvA6
-         xG0Afks2KDaRV8ZceEPEFN2cR6hlLiyqaBnfwVmfNfAm0mqPCqTf16Bui1CL0AzeI/jl
-         UJrBkDY3mWGCs41//YNt9kXSV1nlSqVf/qU/d1xdI3CDV5Ysz6Ns/LQ2zTF+LAm4cAD3
-         /Kt6hF2qRXx8UuklDBKOVfGgBSUX5aTqm6iE338qmimwzVn3HSyK4MyERUePThBrL95T
-         RSBHm+AvgOeYlCqvCQSudofFWbQfRZ71UE4pZnExgvX9GUlfeqJeBP/uT6sz1rRTtfKh
-         iMJA==
+        bh=KMMA/bjgoBoze1LBnX/Nw5JY8Hkox2bSDSTZbz1eJrE=;
+        b=c08bfG0K6FV5WBXfA0i8dHqn3m/UvjcC4mcPpcCpuSlOQkpY/zZ1y8A41xUb2hW8oB
+         7mVKjdcOXyUBBSHVbN5U4RdNXMFhuHdwt/oz4WTw0UiPgfd8LCpdK7INZDR6UpUPBt5u
+         AELkTxjBF3QK32F2zhR2+XXQLGZ5hwJtCPYAlE7zAtXSOhKFQd7/Mo+Ydpu7llA1i7uc
+         /x//WlN5Zp1ptbH3DT37ElmPIq9TCItaCa+XrMDdaEbLKAwqpXKbnMkwqd6wlI+0qVBf
+         2DjE7w+E/qrftf65Ljr/GNtLYACbPggteksGEoP+rm5iuiuWjoEku942u7XwgdqBRGg5
+         BbGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=koi87UBrY+4VbIvBhOaMl54U0jWmVKM7mhP4eLxgcCM=;
-        b=vKe6noI1PW30Lk/UQQFhBgg1XeFIu5+WJdg0BaLcxVuag3dUWVknWeYBVINN5CCGZt
-         Sbuwi+lPuRXflQKfcjCDZf3rXaAV8QnB5/2/CKtKU8lS5hiG+cjDCIskb3sSH1EnwDyQ
-         sye/KHG0jAXoO2+qLkFcjERBpTRswigy8hVGom6RK/arqhquc8337hGsqNHIQ3YYHjot
-         aPAURCMoZAG17X75PoUKOkTIWRGK3ez1nJ4T+OO9WMgmQ1joHMKmXFk1PqrMxWLwcRxG
-         W/usrhrmNIyCPN329FivHFj3LeLrmd6z//aEnRMaMk5L/iFnkcaZa02aMIypVB/fvQPi
-         HMvg==
-X-Gm-Message-State: ACrzQf1FPu4X0ZmRPWAiACNupfiXJ6FxGtWQLecnvIcyovYhnN3ZwKIK
-        lwI2DsWNU6yUWDeqTdceSvE5viTuaDuZow==
-X-Google-Smtp-Source: AMsMyM68gD6nF6Ys++aTB+8/odStmcWWdBR+jCLTj5ELwjEBJoftvdDjO2Ka2/JTTfzis+5UjDtBQg==
-X-Received: by 2002:a2e:9a88:0:b0:26f:c489:883e with SMTP id p8-20020a2e9a88000000b0026fc489883emr7498644lji.281.1667984489818;
-        Wed, 09 Nov 2022 01:01:29 -0800 (PST)
+        bh=KMMA/bjgoBoze1LBnX/Nw5JY8Hkox2bSDSTZbz1eJrE=;
+        b=Xu9vda9hfh3tAJ4dDOTuDO48FwYh6UMeaWXm2/gxbEi94WZis3yIMyJ+/rkm91X1Of
+         BpR/0hOvCP0lf9hAzMnxD8uMDr9uAnzwqa114Upigpm7A1zAwnonSoIyl0KaEMHNjYlo
+         L/VOncPDZVv+w8Pfi7bTHAcfuFuY/lIpmyb0ddkCe0xQRRe/d8xjHJ566qFkeJsHZnjs
+         /9mEtXPrhcdlAyjW4W7/JjRp/NMYx7OntPpzDv+swuM7yuiLSe63qcmc0pweIy/GuXJW
+         /ycUq9e96jjTDagbRuMVLG4/c/4g1RhJY8Kg4Tjh/JpHg31+iFRtweaxnJeug5d6SW1J
+         NyzA==
+X-Gm-Message-State: ANoB5pmIaLBmDuKGRaKXj+HR3qrM9iRpUYCPnmvGOf0QX/+aKpeyIuqo
+        U4aFxvkz10gQZ2isFfU5utDglg==
+X-Google-Smtp-Source: AA0mqf5vhuG4o/ejG+r4xLBj3u2AOMhVSoR0l36Az9u/3vDm1C4FRmFMs6/18+41BqI2RQPGcKo4Gg==
+X-Received: by 2002:ac2:5f1c:0:b0:4b4:11bf:9067 with SMTP id 28-20020ac25f1c000000b004b411bf9067mr1846080lfq.175.1667985194965;
+        Wed, 09 Nov 2022 01:13:14 -0800 (PST)
 Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id b2-20020a05651c032200b0026bf43a4d72sm2062535ljp.115.2022.11.09.01.01.28
+        by smtp.gmail.com with ESMTPSA id v21-20020a2e9255000000b002776ce08326sm2064318ljg.29.2022.11.09.01.13.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 01:01:29 -0800 (PST)
-Message-ID: <5741e444-00b3-16f6-d012-f2b77cf8b0b2@linaro.org>
-Date:   Wed, 9 Nov 2022 10:01:28 +0100
+        Wed, 09 Nov 2022 01:13:14 -0800 (PST)
+Message-ID: <6707abae-39aa-0d1b-dc5e-cee1d87402ec@linaro.org>
+Date:   Wed, 9 Nov 2022 10:13:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
@@ -93,17 +93,13 @@ On 09/11/2022 04:55, Aakarsh Jain wrote:
 > Signed-off-by: Aakarsh Jain <aakarsh.jain@samsung.com>
 > ---
 >  Documentation/devicetree/bindings/media/s5p-mfc.txt | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
 
-Use subject prefixes matching the subsystem (git log --oneline -- ...).
+Beside my previous comment, please include changelog. This is v2, right?
 
-This is a friendly reminder during the review process.
-
-It seems my previous comments were not fully addressed. Maybe my
-feedback got lost between the quotes, maybe you just forgot to apply it.
-Please go back to the previous discussion and either implement all
-requested changes or keep discussing them.
-
-Thank you.
+You should consider joining something like:
+https://www.linaro.org/events/member-training-upstream-kernel-development/
 
 Best regards,
 Krzysztof
