@@ -2,55 +2,55 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21100C4332F
-	for <linux-media@archiver.kernel.org>; Wed,  9 Nov 2022 03:49:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDA29C4167B
+	for <linux-media@archiver.kernel.org>; Wed,  9 Nov 2022 03:49:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbiKIDtu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Nov 2022 22:49:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34728 "EHLO
+        id S229934AbiKIDtv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Nov 2022 22:49:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbiKIDts (ORCPT
+        with ESMTP id S229809AbiKIDts (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Tue, 8 Nov 2022 22:49:48 -0500
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EDB1704C
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843AE165AE
         for <linux-media@vger.kernel.org>; Tue,  8 Nov 2022 19:49:45 -0800 (PST)
 Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20221109034943epoutp017cf297111dc372ac31f3ac6d853362ad~lzgrcTO950540705407epoutp01a
-        for <linux-media@vger.kernel.org>; Wed,  9 Nov 2022 03:49:43 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20221109034943epoutp017cf297111dc372ac31f3ac6d853362ad~lzgrcTO950540705407epoutp01a
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20221109034940epoutp037dfff6df9fe68af5b678fb71e25debdf~lzgpDkGQR1374113741epoutp032
+        for <linux-media@vger.kernel.org>; Wed,  9 Nov 2022 03:49:40 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20221109034940epoutp037dfff6df9fe68af5b678fb71e25debdf~lzgpDkGQR1374113741epoutp032
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1667965783;
-        bh=GkhT6RY6YD4XjFuK0VX93E/Md1fw2SF4cPwN2Vx5Qzc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UnNr4vwLq780+oxjduuK2CEmEAHlYu1KndBip9tjcTCRJ/swZe3SXWiQPygxCFGjB
-         UBCNjXEghDGyjyuJ+PmcosgGDKbBiSYfqjJHWgRCN3WFjo9WfIpwxEXU/xpE1OyYou
-         BRdfm2xFTkpGImVs4Clm057I5br8zkQmV3w4HLPs=
+        s=mail20170921; t=1667965780;
+        bh=f4uj/2b286Sv/+C+R2INmgplgOtBdNl04uwoOHKNWow=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=gx/SyFSpDIktgmp7Je8o8oL/nLCeWPEDfl7C6vtNZlZIqLQtb5FxNmtlmrq7t/7HY
+         zgzDddjqjnIG4YSYo7poeBn1NWYbej6TmQqsQDRqDFaPgM3HIBTaHBgPsBaB6kaSgY
+         S8In2UyoiEHxyHVTXJPwYa9yHi2K/zzFC3LfQ/sQ=
 Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20221109034941epcas5p11c5fa83092159838158fe7a3fc0f0c0d~lzgqVcwy30819608196epcas5p1z;
-        Wed,  9 Nov 2022 03:49:41 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.183]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4N6WDz2g4gz4x9Pv; Wed,  9 Nov
-        2022 03:49:39 +0000 (GMT)
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20221109034939epcas5p4747e6e57f34c6935c6f40925b4c71b56~lzgoKFUo80145801458epcas5p4h;
+        Wed,  9 Nov 2022 03:49:39 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.180]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4N6WDs43T3z4x9Pr; Wed,  9 Nov
+        2022 03:49:33 +0000 (GMT)
 Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        84.84.39477.3532B636; Wed,  9 Nov 2022 12:49:39 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20221109034707epcas5p10df6f7f537faa31309060e9409809ef3~lzeaQgZEN2328123281epcas5p1K;
-        Wed,  9 Nov 2022 03:47:07 +0000 (GMT)
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        1C.E9.01710.D432B636; Wed,  9 Nov 2022 12:49:33 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20221109034659epcas5p344ec93dad20a0994937f689d81e3f275~lzeTRVveB1607516075epcas5p3Y;
+        Wed,  9 Nov 2022 03:46:59 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20221109034707epsmtrp26a449a64134bd3ee59c941822b46a525~lzeaPaUuG1829318293epsmtrp2h;
-        Wed,  9 Nov 2022 03:47:07 +0000 (GMT)
-X-AuditID: b6c32a4a-007ff70000019a35-74-636b235383a3
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221109034659epsmtrp146092e018b104e988e6d3ed5f543c07e~lzeTQBM731074710747epsmtrp1M;
+        Wed,  9 Nov 2022 03:46:59 +0000 (GMT)
+X-AuditID: b6c32a49-a41ff700000006ae-be-636b234d5a65
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C1.9F.14392.AB22B636; Wed,  9 Nov 2022 12:47:07 +0900 (KST)
+        CC.8F.14392.3B22B636; Wed,  9 Nov 2022 12:46:59 +0900 (KST)
 Received: from cheetah.sa.corp.samsungelectronics.net (unknown
         [107.109.115.53]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20221109034703epsmtip137ca0d7cb0ffd5c6d3ee9503e2cc1ac2~lzeWnblP30103001030epsmtip1w;
-        Wed,  9 Nov 2022 03:47:03 +0000 (GMT)
+        20221109034656epsmtip151f3e307170cfbc57a722acdbdc049a4~lzeQBKqSg0214002140epsmtip1H;
+        Wed,  9 Nov 2022 03:46:56 +0000 (GMT)
 From:   Aakarsh Jain <aakarsh.jain@samsung.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
@@ -64,84 +64,81 @@ Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
         alim.akhtar@samsung.com, aswani.reddy@samsung.com,
         pankaj.dubey@samsung.com, smitha.t@samsung.com,
         aakarsh.jain@samsung.com
-Subject: [PATCH 3/3] media: s5p-mfc: Optimisation of code to remove error
- message
-Date:   Wed,  9 Nov 2022 09:23:48 +0530
-Message-Id: <20221109035348.69026-3-aakarsh.jain@samsung.com>
+Subject: [PATCH 1/3] media: s5p-mfc: fix usage of symbolic permissions to
+ octal
+Date:   Wed,  9 Nov 2022 09:23:46 +0530
+Message-Id: <20221109035348.69026-1-aakarsh.jain@samsung.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221109035348.69026-1-aakarsh.jain@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA0WTfUxTVxjGc+69vS1uxTuUeMY27cpgEwO0UsqBADolepkzw6EZM1ngrtzw
-        0dJ2bWGM/SEkfIchXcRMIOUbIyBC+WbF8TVBNzVQLAmjFYQJuE2MyCTKPloK23+/93nfJ+fJ
-        e87h4W4zpAcvSaljNUpGISR3EF3D+9/zjfaUy0SG66+hX3sucdCsoYtEteuLGLpfu0qgofZO
-        LuqYLMfR5dEBDqocucNB3YMPCNS2ZO+OX7ISaLGyBaDlMhuJipfmcGSct3CQua+CREWtnRx0
-        dcTKRfVT4xhqMG5gqKbzGRfl9I9wkdXUBVB27gh2GNLNhmZA91jrAD1V9xSne8usXLrWtIzR
-        xsYCkp6xmEi6ve4cnfPjC4Iu7mgEdOHIFEmvGvfSt9ZWuVH8s/LQRJaJZzUCVilTxScpE8KE
-        J6Jjj8YGSkViX3EwChIKlEwKGyaM+DDK91iSwr4CoSCNUaTapShGqxX6h4dqVKk6VpCo0urC
-        hKw6XqGWqP20TIo2VZngp2R1IWKR6GCgfTBOnli91oKpW3npeQ3d3ExQzy0ELjxISWDlxjTp
-        YDfqewArbB8Vgh12fgrgmKGN4yz+BLD6p4vktmN5op9wNvoBtNS95DqLHAw+L7qPFQIej6R8
-        4e1uhcOwm8oCcD5f55jBKT0Bfylewh2NXVQ0/Nl2l3AwQXnB0cu/cxzMp8Kgvrl1K98+2NQ6
-        sDnvQoXDrO6uzcMg9Q8PLk6sA+dQBOy9sbIVbxd8NNqxZfaAq4/7t3QZnK9Zxp2sgNdMFwgn
-        H4IDkxWEIzRO7YfX+vyd8luw9FYL5mCccoXfvFzAnDof9hi22RtWzKxznPwmHG6q34pDQ/Ns
-        M3AuRQ/gxHoeXgL2lv1/RBUAjeB1Vq1NSWC1geqDSvbL/25Npkoxgs1n7vNBD5ibfeI3BDAe
-        GAKQhwt385tbkmVu/HjmqwxWo4rVpCpY7RAItC9Qj3u4y1T2f6LUxYolwSKJVCqVBAdIxcI9
-        /NrvfGRuVAKjY+Usq2Y12z6M5+KRiamy186EdPzmP+Yqzf/kjYiHVz5dPCAvbfxB59W5EPr3
-        Um2Rq6/t/KMOS8RGFnYv7nB56de5cXH68I+DLvxhHUyLOyPpbnzn/ZM79xy1cCbTcsbyJJk+
-        9RdzXAtWwbsZO8vlVdXJAcnebuPV+8zHbyadNZbePCdo6OzRa83LR942DV8djImOUQS2zfNL
-        nv0V2h8TIu6tN60w7l9kfl4yZitIFQRlfvu88npVDWw4lv1iRT39WeRdfCL/vGede9D5pvjH
-        Xqdt3k9Octsllju4WZBxinpwJYQ4zjkkGhgKOD39anrMvcjIVvOpA6/wbRvRXWm3TywYxmxV
-        hvS5G338h+VH3D1zhYQ2kRH74Bot8y/1n1b6bwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprCIsWRmVeSWpSXmKPExsWy7bCSnO5upexkg9/fmCye7pjJavFg3jY2
-        i8U/njNZ3F/8mcXi0Oat7BZbrsxmtlh+/ACrxfwj51gtth98xGKx8QVQ9uLMuywWz+evY7R4
-        Oesem0Xfi4fMFpseX2O1uLxrDptFz4atrBZrj9xlt1h6/SKTxbJNf5gsFm39wm7RuvcIu8Xd
-        PdsYLVrajjA5SHismbeG0WPH3SWMHteXfGL22DnrLrvH4j0vmTw2repk87hzbQ+bx+Yl9R6t
-        R3+xePRtWcXo0XXkOpvH501yHqe+fmYP4I3isklJzcksSy3St0vgylj4dR1TwQaOivZl29kb
-        GJeydzFyckgImEi8vLSXpYuRi0NIYDejxIujs5ggEjIS/9uOQRUJS6z895wdoqiZSeLz179A
-        RRwcbAK6Eme354DERQRaGSWur+xkAnGYBVaySNze2AM2SVggUGL3l8OsIDaLgKrE8eVvwGxe
-        AVuJiWs2QG2Ql1i94QAziM0pYCfRuH0bWFwIqGbXwUusExj5FjAyrGKUTC0ozk3PLTYsMMxL
-        LdcrTswtLs1L10vOz93ECI44Lc0djNtXfdA7xMjEwXiIUYKDWUmEd826rGQh3pTEyqrUovz4
-        otKc1OJDjNIcLErivBe6TsYLCaQnlqRmp6YWpBbBZJk4OKUamFYWPzix7CxvXc3X2+Lbjm2y
-        C26YMEFBwkH2+1YJO954yykHt6uv2Rpa+rK56tC5rnjneI1XDHsUSh5q5Ku9rMjhM4h/Zbs0
-        XepalYbW2VM34tj5Mv235YotPz6tsEhU6Owjvluat091ePG7P1FLlPH/NM9EZNrnxQJOjxxl
-        36zfteZcas38jMYZO1yEyudnuf9pai3ZueQxA8vMP1v/CwXxNoaFbLD52mzvFc8SfDqPIzDJ
-        rEG9LzjasTTx3gK3iyZdXdwnDEuyfJe9n/ZM5sN69nWzpzBwbH+4lj050GPCBdXaG5Kn1gkY
-        23cWLs2YZfS/T8XR3++92++GKRkRCmeOv3453W9qqPfj/hvOSizFGYmGWsxFxYkAnZRJ6CcD
-        AAA=
-X-CMS-MailID: 20221109034707epcas5p10df6f7f537faa31309060e9409809ef3
+X-Brightmail-Tracker: H4sIAAAAAAAAA0WTf1CTdRzH7/s827OBDZ8DpS8rgnsqCS5w0zG/mEgJdY9HdJCFd951a42n
+        DRjb2jPEOCXtgIOBowWcQDiFYXqAw8ZPAQvGzKIAudBd6QAFlFl/lKSBclybw/rvde/P+/Pj
+        Pp/vl48HjxJCfrbGwOg1cjVFBHJ6RqJfiU17MVchuroajhb66rlo1tJDIOvyXQzNWJc4yNHZ
+        zUNdU1/h6OyVIS465Rznot7h2xz0zaI3Olnv5qC7p2wAeRqmCWRavIUj+9x1Lvqlv5FAlRe6
+        uei8081DZ1yTGPravoqh5u6/eajkkpOH3IM9ABWXOrHXId1uaQd0n7sF0K6W+zh9scHNo62D
+        Hoy2t5YT9M3rgwTd2fIZXXL5EYc2dbUC2uh0EfSS/QV69MESL11wIHeXipFnMfpIRqPQZmVr
+        lIlU6j5ZsixeKhLHihPQDipSI89jEqmUt9Nj38pWe1dARR6Uq/O9UrqcZamtu3fptfkGJlKl
+        ZQ2JFKPLUuskujhWnsfma5RxGsawUywSbYv3Gj/MVVW6WjGdlXeouryHcxTYCSPg8yEpgV31
+        oUYQwA8mBwB8OPO+n+8DuHA8yAgCvfwQwAbnCu4L+Pyu31aA33QJQNdUmp9LMGjrSPPVJMhY
+        ONar9smbyGMAzpUZfHVw0syBN0yLT+qEkBnQZKzDfH4O+TIcGNvmkwVkIrxz0gz8rSJg24Uh
+        3JcLyXk+dJRZ1gMp0DSxwvNzCLx3pWudhdBTVbrOCjjX7FmfWQ07Bms4fk6CQ1ONHF9fnIyG
+        Hf1b/XI4rB21YT7GySB4/PE85tcFsM/ylLfAxpvLXD8/D0fazqyPQ8Pxth95/jV8AO1uE/YF
+        CG/4v8NpAFpBGKNj85QMG68Ta5iC/26k0ObZwZNHHbO3D7hn/4xzAIwPHADycWqToN2WowgW
+        ZMk/LWT0Wpk+X82wDhDvXZkZF25WaL2/QmOQiSUJIolUKpUkbJeKqWcF1roYRTCplBuYXIbR
+        MfqneRg/QHgU+5IpCGY/V20JqL+2Q7WvOj0kr6lO1STJnD128fEKmupNeXNh/Fzmz0lNxOZ/
+        iI5O80lhRfPanr8aRzbYeictsCofec51Ttxe252cdbB2b6FjLSenSrAqv+YJ1M+WKUNVo0l7
+        8InfdwaVzRxOzc448m1BhQemP3NEwqzWDsoGqOr3ZjLPDsnM2p9eLSjvmn3tqn7+h6iIwydE
+        YdD2a1MRs9C2Oi10fFx+/l7MZfKlsNLC/ueIT77bONahOEFFWXW33umrrGCLckZy37ghzUhN
+        3F9bU7x9Q9zYxv315qK4BynTfzyKejf6UMRHw0q22H3APhFW2tr2/ek7oVONpuVko2W4huKw
+        Krk4Btez8n8BXm0wN10EAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAAzVRfyxUcQDv+9679x657e20eiHposXy41TrO5WJ1V6q0aZWttLFG4fT7Y7I
+        JC3UHVm/1sbhWkfmQpwOie06JyPMj3KrnPwqrJP8ajGjLuu/z+9/PiTKW0IdSFFCIitNEMbz
+        cVusroXv7FnLj4v0Ge3dAb825HPgcHEdDtW/JxD4RT2PQUOtjoAv3ytRWNam50CVsZsD69+M
+        YrBm8q/bm2/G4ISqCsCpgiEc5k2OoFA7NsCB/Y2FOMyt1nFgpdFMwFJTLwKfaVcQ+FS3QMCs
+        ZiMBzU11AGZmG5EAmqkorgBMg7kEMKaSOZR5VWAmGHXTFMJoNXKcGRxowpnakhtMVusyxuS9
+        1ABGYTThzLzWmelYnCdCueG2h6LYeNFVVurtf8k2JtekQSRqIuWhvA7LAFpcAWxImtpHmz4t
+        ASvmUa8BvVZNretO9Fr2W2Id29PlqxPEeuYWQhtajyoASeKUJ91VH68AtuQmKgvQpnI5YiUo
+        VY7Rn2tyEWvBngqhVQ+zUGsBo9zo112+VplLHaa/Fd0H6/vb6efVevQesHsCNmjAVlYiE0eL
+        ZQKJIIFN9pIJxbKkhGivyCtiLfj3jod7A6jX/PQyAIQEBkCTKH8Tt6IqNpLHjRJeS2WlVyKk
+        SfGszAAcSYy/hdujaI/gUdHCRDaOZSWs9L+LkDYOGcgGufi75UGQ7kifW8FGkYOj8nDoj5bd
+        97cdPx7T35iuEnyYuXggzDXpctn+vkeivSnH5lam0m5n3nzh2lBkKTkv/qLoWIv4NfbYb8Tl
+        bNhCc4AmfU+Rf8oc3Jc8M3jOYejiGWGgeXxR4houWMwcmrzT0+4XFvS8cVavV17vjdP1MO6/
+        z3r05QXPwaaDMafU2N09nUmepe9Uos27Lrh4z0piA9umLTt1J5vtqIiJ7tXhwYDNi6fNgdWW
+        UY+wkKicfvgpauxjZ9Fyn+/dQsuDgeBKZVBq+kprM89u2qf9WcD4LrmncsSRG7rb35RX9TOn
+        Re6E6NPCK7vaGFljK2ZZPmHDx2QxQoEHKpUJ/wDdKeTzDAMAAA==
+X-CMS-MailID: 20221109034659epcas5p344ec93dad20a0994937f689d81e3f275
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: REQ_APPROVE
 CMS-TYPE: 105P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221109034707epcas5p10df6f7f537faa31309060e9409809ef3
-References: <20221109035348.69026-1-aakarsh.jain@samsung.com>
-        <CGME20221109034707epcas5p10df6f7f537faa31309060e9409809ef3@epcas5p1.samsung.com>
+X-CMS-RootMailID: 20221109034659epcas5p344ec93dad20a0994937f689d81e3f275
+References: <CGME20221109034659epcas5p344ec93dad20a0994937f689d81e3f275@epcas5p3.samsung.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Already error number provision is present for block failing, while 
-requesting for DMA consistent memory allocation.
-So removing error message line from the block as recommended
-by scripts/checkpatch.pl.
+Change symbolic permissions to octal equivalent as recommended
+by scripts/checkpatch.pl in drivers/media/platform/samsung/
+s5p-mfc/s5p_mfc.c.
 
 Signed-off-by: Aakarsh Jain <aakarsh.jain@samsung.com>
 ---
- drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
-index e857f974bb98..19a9b54ff761 100644
+index fca5c6405eec..bc6d53e78876 100644
 --- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
 +++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
-@@ -1164,7 +1164,6 @@ static int s5p_mfc_configure_2port_memory(struct s5p_mfc_dev *mfc_dev)
- 	bank2_virt = dma_alloc_coherent(mfc_dev->mem_dev[BANK_R_CTX],
- 				       align_size, &bank2_dma_addr, GFP_KERNEL);
- 	if (!bank2_virt) {
--		mfc_err("Allocating bank2 base failed\n");
- 		s5p_mfc_release_firmware(mfc_dev);
- 		device_unregister(mfc_dev->mem_dev[BANK_R_CTX]);
- 		device_unregister(mfc_dev->mem_dev[BANK_L_CTX]);
+@@ -36,7 +36,7 @@
+ #define S5P_MFC_ENC_NAME	"s5p-mfc-enc"
+ 
+ int mfc_debug_level;
+-module_param_named(debug, mfc_debug_level, int, S_IRUGO | S_IWUSR);
++module_param_named(debug, mfc_debug_level, int, 0644);
+ MODULE_PARM_DESC(debug, "Debug level - higher value produces more verbose messages");
+ 
+ static char *mfc_mem_size;
 -- 
 2.17.1
 
