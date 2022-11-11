@@ -2,46 +2,45 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61C9CC4332F
-	for <linux-media@archiver.kernel.org>; Fri, 11 Nov 2022 13:30:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B638C433FE
+	for <linux-media@archiver.kernel.org>; Fri, 11 Nov 2022 13:30:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233840AbiKKNaD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Nov 2022 08:30:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46204 "EHLO
+        id S233918AbiKKNaF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Nov 2022 08:30:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230303AbiKKNaB (ORCPT
+        with ESMTP id S230303AbiKKNaE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Nov 2022 08:30:01 -0500
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Nov 2022 05:29:59 PST
-Received: from aer-iport-3.cisco.com (aer-iport-3.cisco.com [173.38.203.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A0317420
-        for <linux-media@vger.kernel.org>; Fri, 11 Nov 2022 05:29:59 -0800 (PST)
+        Fri, 11 Nov 2022 08:30:04 -0500
+Received: from aer-iport-1.cisco.com (aer-iport-1.cisco.com [173.38.203.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC935F852
+        for <linux-media@vger.kernel.org>; Fri, 11 Nov 2022 05:30:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=2395; q=dns/txt; s=iport;
-  t=1668173399; x=1669382999;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=JjDWV+oZk1DAoj6WsNXl8FUHGhpCryV0DX60cmHbNqI=;
-  b=ZvMi6cZci3Z+YYymJsyAlpDl6P2JwXWWiaslF5pjy7CxgUPx3OjLZuxO
-   WpPTKSt53NfynqG0zZbLzE2fZ+6Kj5w71PBdrhjbI18erDfVCRjiP8JZv
-   l0xAxWlbNvqOMNki7uDqC9j9gEHLeN5E40RemSEYvc5r+be9gThXPf1hw
-   Y=;
-X-CSE-ConnectionGUID: CEgM4lN3Ti6XLWX0+XVSCg==
-X-CSE-MsgGUID: u3UGAFkoQHeXGdZfoBmsAw==
+  d=cisco.com; i=@cisco.com; l=2903; q=dns/txt; s=iport;
+  t=1668173400; x=1669383000;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=MwdriA2eFflz+M/lNcQIqz3LTfDAPdJWVcF8A9IG+FA=;
+  b=ioiwLs79bqQM8dRY9rzmQmntbqykrIUzF2FDnAGn/AKNGMY8y52Wfp3c
+   iGw4KGbr4R25qw4Xkt0Qd2nkh6htrmxJheQfhvQuLkUF2h8p189MmdFvN
+   2cgezAKnrAtUl0JMh045tQN5Jvrd6b6SqXqQ3HkLeUh66f3ErGwGldeDl
+   M=;
 X-IronPort-AV: E=Sophos;i="5.96,156,1665446400"; 
-   d="scan'208";a="4860155"
+   d="scan'208";a="4891495"
 Received: from aer-iport-nat.cisco.com (HELO aer-core-1.cisco.com) ([173.38.203.22])
-  by aer-iport-3.cisco.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 13:28:54 +0000
+  by aer-iport-1.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 11 Nov 2022 13:28:55 +0000
 Received: from office-260.rd.cisco.com ([10.47.79.110])
-        by aer-core-1.cisco.com (8.15.2/8.15.2) with ESMTP id 2ABDSsVN020236;
+        by aer-core-1.cisco.com (8.15.2/8.15.2) with ESMTP id 2ABDSsVP020236;
         Fri, 11 Nov 2022 13:28:54 GMT
 From:   Erling Ljunggren <hljunggr@cisco.com>
 To:     linux-media@vger.kernel.org
 Cc:     Erling Ljunggren <hljunggr@cisco.com>
-Subject: [PATCH v4 0/5] Add the cat24c208 EDID EEPROM driver + new EDID capability
-Date:   Fri, 11 Nov 2022 14:29:01 +0100
-Message-Id: <20221111132906.2212662-1-hljunggr@cisco.com>
+Subject: [PATCH v4 2/5] media: docs: Add V4L2_CAP_EDID
+Date:   Fri, 11 Nov 2022 14:29:03 +0100
+Message-Id: <20221111132906.2212662-3-hljunggr@cisco.com>
 X-Mailer: git-send-email 2.38.0
+In-Reply-To: <20221111132906.2212662-1-hljunggr@cisco.com>
+References: <20221111132906.2212662-1-hljunggr@cisco.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Outbound-SMTP-Client: 10.47.79.110, [10.47.79.110]
@@ -50,64 +49,71 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series adds support for the standalone cat24c208 EDID EEPROM i2c device.
-Usually EDID support is part of an HDMI receiver, but this is a standalone EEPROM.
+Add documentation for the new edid capability.
 
-Note that EEPROMs for EDIDs are not regular EEPROM devices, these are dual port
-devices that follow the VESA E-DDC standard.
+Signed-off-by: Erling Ljunggren <hljunggr@cisco.com>
+---
+ Documentation/userspace-api/media/v4l/biblio.rst      | 11 +++++++++++
+ .../userspace-api/media/v4l/vidioc-querycap.rst       | 11 +++++++++++
+ .../userspace-api/media/videodev2.h.rst.exceptions    |  1 +
+ 3 files changed, 23 insertions(+)
 
-Since this is a standalone device that does not capture any video a new
-V4L2_CAP_EDID capability is introduced to represent such devices.
-Note that such a device doesn't have to be an EEPROM, it can also be
-implemented using a microcontroller, for example.
-
-v4:
- - update driver and bindings to support a video input connector phandle
- - use connector phandle to get HPD gpio and input label
-
-v3:
- - use old V4L2_CAP_ASYNCIO (0x02000000) capability bit
- - validate physical address of edid in driver
- - handle empty edid in driver
- - add cec notifier support to driver
- - update driver and bindings with hpd gpio support
- - removed references to "memory" in capability and docs
- - associate ioctls based on device direction
-
-v2:
- - fix dt binding example
- - rename i2c client variables in data struct
- - fix include: of_device.h -> mod_devicetable.h
- - sorted makefile
- - used define EDID_OFFSET_EXT_FLAG instead of magic number
- - removed of_match_ptr
- - added bus_info
- - remove unneeded headers
- - add depends on OF to Kconfig
-
-Erling Ljunggren (4):
-  media: videodev2.h: add V4L2_CAP_EDID
-  media: docs: Add V4L2_CAP_EDID
-  dt-bindings: media: add cat24c208 bindings
-  media: v4l2-dev: handle V4L2_CAP_EDID
-
-Jonathan Selnes (1):
-  media: i2c: cat24c208: driver for the cat24c208 EDID EEPROM
-
- .../bindings/media/i2c/onnn,cat24c208.yaml    |  46 ++
- .../userspace-api/media/v4l/biblio.rst        |  11 +
- .../media/v4l/vidioc-querycap.rst             |  11 +
- .../media/videodev2.h.rst.exceptions          |   1 +
- MAINTAINERS                                   |   7 +
- drivers/media/i2c/Kconfig                     |   9 +
- drivers/media/i2c/Makefile                    |   1 +
- drivers/media/i2c/cat24c208.c                 | 499 ++++++++++++++++++
- drivers/media/v4l2-core/v4l2-dev.c            |  15 +
- include/uapi/linux/videodev2.h                |   1 +
- 10 files changed, 601 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/onnn,cat24c208.yaml
- create mode 100644 drivers/media/i2c/cat24c208.c
-
+diff --git a/Documentation/userspace-api/media/v4l/biblio.rst b/Documentation/userspace-api/media/v4l/biblio.rst
+index 9cd18c153d19..5cbe41877a63 100644
+--- a/Documentation/userspace-api/media/v4l/biblio.rst
++++ b/Documentation/userspace-api/media/v4l/biblio.rst
+@@ -334,6 +334,17 @@ VESA DMT
+ 
+ :author:    Video Electronics Standards Association (http://www.vesa.org)
+ 
++.. _vesaeddc:
++
++E-DDC
++====
++
++
++:title:     VESA Enhanced Display Data Channel (E-DDC) Standard
++:subtitle:  Version 1.3
++
++:author:    Video Electronics Standards Association (http://www.vesa.org)
++
+ .. _vesaedid:
+ 
+ EDID
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-querycap.rst b/Documentation/userspace-api/media/v4l/vidioc-querycap.rst
+index 6c57b8428356..3d11d86d9cbf 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-querycap.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-querycap.rst
+@@ -244,6 +244,17 @@ specification the ioctl returns an ``EINVAL`` error code.
+       - 0x01000000
+       - The device supports the :c:func:`read()` and/or
+ 	:c:func:`write()` I/O methods.
++    * - ``V4L2_CAP_EDID``
++      - 0x02000000
++      - The device stores the EDID for a video input, or retrieves the EDID for a video
++        output. It is a standalone EDID device, so no video streaming etc. will take place.
++
++        For a video input this is typically an eeprom that supports the
++        :ref:`VESA Enhanced Display Data Channel Standard <vesaeddc>`. It can be something
++        else as well, for example a micro controller.
++
++        For a video output this is typically read from an external device such as an
++        HDMI splitter accessed by a serial port.
+     * - ``V4L2_CAP_STREAMING``
+       - 0x04000000
+       - The device supports the :ref:`streaming <mmap>` I/O method.
+diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+index 9cbb7a0c354a..b1b1127d278c 100644
+--- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
++++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+@@ -185,6 +185,7 @@ replace define V4L2_CAP_META_OUTPUT device-capabilities
+ replace define V4L2_CAP_DEVICE_CAPS device-capabilities
+ replace define V4L2_CAP_TOUCH device-capabilities
+ replace define V4L2_CAP_IO_MC device-capabilities
++replace define V4L2_CAP_EDID device-capabilities
+ 
+ # V4L2 pix flags
+ replace define V4L2_PIX_FMT_PRIV_MAGIC :c:type:`v4l2_pix_format`
 -- 
 2.38.0
 
