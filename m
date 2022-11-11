@@ -2,95 +2,72 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01B96C433FE
-	for <linux-media@archiver.kernel.org>; Fri, 11 Nov 2022 13:23:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9839FC433FE
+	for <linux-media@archiver.kernel.org>; Fri, 11 Nov 2022 13:30:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233183AbiKKNXh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Nov 2022 08:23:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44718 "EHLO
+        id S233675AbiKKNaC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Nov 2022 08:30:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbiKKNXg (ORCPT
+        with ESMTP id S233320AbiKKNaB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Nov 2022 08:23:36 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7595DFD9
-        for <linux-media@vger.kernel.org>; Fri, 11 Nov 2022 05:23:32 -0800 (PST)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N7zsh2p43zHvhm;
-        Fri, 11 Nov 2022 21:23:04 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 11 Nov 2022 21:23:30 +0800
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 11 Nov 2022 21:23:30 +0800
-Subject: Re: [PATCH] media: v4l2-dev: fix possible name leak in
- __video_register_device()
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-CC:     <linux-media@vger.kernel.org>, <mchehab@kernel.org>,
-        <sakari.ailus@linux.intel.com>, <hverkuil-cisco@xs4all.nl>,
-        <yangyingliang@huawei.com>
-References: <20221111085809.1676804-1-yangyingliang@huawei.com>
- <Y24TqcR9Hgy+R82/@pendragon.ideasonboard.com>
-From:   Yang Yingliang <yangyingliang@huawei.com>
-Message-ID: <b1f054e4-91f5-7d8a-330b-ac57213ad3bc@huawei.com>
-Date:   Fri, 11 Nov 2022 21:23:29 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Fri, 11 Nov 2022 08:30:01 -0500
+Received: from aer-iport-2.cisco.com (aer-iport-2.cisco.com [173.38.203.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDE65E9E9
+        for <linux-media@vger.kernel.org>; Fri, 11 Nov 2022 05:29:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=857; q=dns/txt; s=iport;
+  t=1668173400; x=1669383000;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=l61nc6jTSve+abgAe6wJ5HU8sDPRl07m3i6nXaXSrnM=;
+  b=IHj8dO1CvDNcNWO9QrsESY38hZkRTaKLOL+TdRf16ipgRQLxmKtE4qzB
+   khUrFpbGPLN5jI56SZklm5s6Q9m56dVcGkHlhl0Ao/6Rvkewoz4Li5CZS
+   KSuSiFGjTERCZjoemSCII/8mzu+pPGLmyBmJJItrUl7mOR3dWejspYTFV
+   w=;
+X-IronPort-AV: E=Sophos;i="5.96,156,1665446400"; 
+   d="scan'208";a="4893679"
+Received: from aer-iport-nat.cisco.com (HELO aer-core-1.cisco.com) ([173.38.203.22])
+  by aer-iport-2.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 11 Nov 2022 13:28:54 +0000
+Received: from office-260.rd.cisco.com ([10.47.79.110])
+        by aer-core-1.cisco.com (8.15.2/8.15.2) with ESMTP id 2ABDSsVO020236;
+        Fri, 11 Nov 2022 13:28:54 GMT
+From:   Erling Ljunggren <hljunggr@cisco.com>
+To:     linux-media@vger.kernel.org
+Cc:     Erling Ljunggren <hljunggr@cisco.com>
+Subject: [PATCH v4 1/5] media: videodev2.h: add V4L2_CAP_EDID
+Date:   Fri, 11 Nov 2022 14:29:02 +0100
+Message-Id: <20221111132906.2212662-2-hljunggr@cisco.com>
+X-Mailer: git-send-email 2.38.0
+In-Reply-To: <20221111132906.2212662-1-hljunggr@cisco.com>
+References: <20221111132906.2212662-1-hljunggr@cisco.com>
 MIME-Version: 1.0
-In-Reply-To: <Y24TqcR9Hgy+R82/@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+X-Outbound-SMTP-Client: 10.47.79.110, [10.47.79.110]
+X-Outbound-Node: aer-core-1.cisco.com
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Add capability flag to indicate that the device is an EDID-only device.
 
-On 2022/11/11 17:19, Laurent Pinchart wrote:
-> On Fri, Nov 11, 2022 at 04:58:09PM +0800, Yang Yingliang wrote:
->> Afer commit 1fa5ae857bb1 ("driver core: get rid of struct device's
->> bus_id string array"), the name of device is allocated dynamically,
->> so call kfree_const() to freed it in error case.
->>
->> Fixes: 1fa5ae857bb1 ("driver core: get rid of struct device's bus_id string array")
->> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
->> ---
->>   drivers/media/v4l2-core/v4l2-dev.c | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
->> index 397d553177fa..1fce1c29c60f 100644
->> --- a/drivers/media/v4l2-core/v4l2-dev.c
->> +++ b/drivers/media/v4l2-core/v4l2-dev.c
->> @@ -1036,6 +1036,9 @@ int __video_register_device(struct video_device *vdev,
->>   	ret = device_register(&vdev->dev);
->>   	if (ret < 0) {
->>   		pr_err("%s: device_register failed\n", __func__);
->> +		kfree_const(vdev->dev.kobj.name);
->> +		/* set it to null to avoid callers using a bad pointer */
->> +		vdev->dev.kobj.name = NULL;
-> This doesn't seem right to me. We shouldn't be poking into the kobj.
-> This should be handled in the driver core, or if that can't be done for
-> a reason specific to how the device is used in the V4L2 core, we need a
-> helper function from the driver core to perform the cleanup.
-In technical, we should call put_device() here, but the release() 
-function has not been set
-in this case, and v4l2_device_release() will release something that not 
-need be, so we can
-not handle it in the driver core well, I think free the name here 
-directly is the best way to
-fix it.
+Signed-off-by: Erling Ljunggren <hljunggr@cisco.com>
+---
+ include/uapi/linux/videodev2.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks,
-Yang
->
->>   		goto cleanup;
->>   	}
->>   	/* Register the release callback that will be called when the last
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 054fc8bbdb22..2ea95639f441 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -480,6 +480,7 @@ struct v4l2_capability {
+ #define V4L2_CAP_META_CAPTURE		0x00800000  /* Is a metadata capture device */
+ 
+ #define V4L2_CAP_READWRITE              0x01000000  /* read/write systemcalls */
++#define V4L2_CAP_EDID			0x02000000  /* Is an EDID-only device */
+ #define V4L2_CAP_STREAMING              0x04000000  /* streaming I/O ioctls */
+ #define V4L2_CAP_META_OUTPUT		0x08000000  /* Is a metadata output device */
+ 
+-- 
+2.38.0
+
