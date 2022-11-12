@@ -2,42 +2,45 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99A36C4321E
-	for <linux-media@archiver.kernel.org>; Sat, 12 Nov 2022 09:42:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8462FC43217
+	for <linux-media@archiver.kernel.org>; Sat, 12 Nov 2022 09:42:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234844AbiKLJmC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 12 Nov 2022 04:42:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35942 "EHLO
+        id S234700AbiKLJmF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 12 Nov 2022 04:42:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234540AbiKLJl7 (ORCPT
+        with ESMTP id S234847AbiKLJmD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 12 Nov 2022 04:41:59 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069741CFF3;
-        Sat, 12 Nov 2022 01:41:54 -0800 (PST)
-X-UUID: 81be595ca07540328aec620b6e1e6d20-20221112
+        Sat, 12 Nov 2022 04:42:03 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E551D309;
+        Sat, 12 Nov 2022 01:41:58 -0800 (PST)
+X-UUID: 328651832b854ac39f2746aa4b2e0d08-20221112
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=lENu3a5A9J6wdwuret1odYFBW6/Is27YNxGGEEqEMjQ=;
-        b=ON/ZeKnv9G5dlXrHM8zRx6cIvZ2WPGTywjpRan1BnKie02/KYfd33q7KcV63GzLuA5SXwXSjVF7jHdFouJomEvQ/BrA/7RtPBlG/UtwPUgp7ZV4hQkrSWphfAOuTJDntl70b8PFZWptyYT606ES3ablyAD+R0/lI8NKoVgAn7Vg=;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=fqUwc0KfzE+JLt+0m8FqWIvXx2dWICjp0wZ8oKRmkCA=;
+        b=ioDcLLHk3+YFVlti36YL8oNMhG2mVyaX26b3kxI7ffZfYiLVrw8HYKRoFF0TZ9GLVq2qrWHH5V7jjPHU1MpWII6JwzZntHL7dQQWaSG402QulDgFSfzxE2LU1yL505+TMiMSsC6txUw3JtT3AuV9NfkBryEmasWckCGNWJKNavY=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.13,REQID:9c39ae5b-83bd-458b-bc1b-68e87e374f92,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:d12e911,CLOUDID:a0e71286-088c-4756-8f76-577be701e693,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 81be595ca07540328aec620b6e1e6d20-20221112
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+X-CID-O-INFO: VERSION:1.1.12,REQID:822c2c42-52db-4a12-a4aa-4fc74b8c5d7c,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACT
+        ION:release,TS:75
+X-CID-INFO: VERSION:1.1.12,REQID:822c2c42-52db-4a12-a4aa-4fc74b8c5d7c,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACT
+        ION:quarantine,TS:75
+X-CID-META: VersionHash:62cd327,CLOUDID:05ff5a5d-100c-4555-952b-a62c895efded,B
+        ulkID:221112174153PU5PVGYW,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 328651832b854ac39f2746aa4b2e0d08-20221112
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 742630741; Sat, 12 Nov 2022 17:41:49 +0800
+        with ESMTP id 472636858; Sat, 12 Nov 2022 17:41:51 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
  mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Sat, 12 Nov 2022 17:41:47 +0800
+ 15.2.792.15; Sat, 12 Nov 2022 17:41:49 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkmbs13n1.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Sat, 12 Nov 2022 17:41:46 +0800
+ Transport; Sat, 12 Nov 2022 17:41:48 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Chen-Yu Tsai <wenst@chromium.org>,
@@ -60,9 +63,9 @@ CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH 1/5] media: mediatek: vcodec: Fix getting NULL pointer for dst buffer
-Date:   Sat, 12 Nov 2022 17:41:40 +0800
-Message-ID: <20221112094144.4256-2-yunfei.dong@mediatek.com>
+Subject: [PATCH 3/5] media: mediatek: vcodec: Fix h264 set lat buffer error
+Date:   Sat, 12 Nov 2022 17:41:42 +0800
+Message-ID: <20221112094144.4256-4-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221112094144.4256-1-yunfei.dong@mediatek.com>
 References: <20221112094144.4256-1-yunfei.dong@mediatek.com>
@@ -74,37 +77,75 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The driver may can't get v4l2 buffer when lat or core decode timeout,
-will lead to crash when call v4l2_m2m_buf_done to set dst buffer
-(NULL pointer) done.
+Will set lat buffer to lat_list two times when lat decode timeout for
+inner racing mode.
 
+If core thread can't get frame buffer, need to return error value.
+
+Fixes: 59fba9eed5a7 ("media: mediatek: vcodec: support stateless H.264 decoding for mt8192")
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
- .../mediatek/vcodec/mtk_vcodec_dec_stateless.c        | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ .../vcodec/vdec/vdec_h264_req_multi_if.c      | 23 ++++++++++++-------
+ 1 file changed, 15 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
-index c45bd2599bb2..e86809052a9f 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
-@@ -138,10 +138,13 @@ static void mtk_vdec_stateless_cap_to_disp(struct mtk_vcodec_ctx *ctx, int error
- 		state = VB2_BUF_STATE_DONE;
+diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
+index 4cc92700692b..2b7576265f48 100644
+--- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
++++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
+@@ -471,6 +471,12 @@ static int vdec_h264_slice_core_decode(struct vdec_lat_buf *lat_buf)
+ 	       sizeof(share_info->h264_slice_params));
  
- 	vb2_dst = v4l2_m2m_dst_buf_remove(ctx->m2m_ctx);
--	v4l2_m2m_buf_done(vb2_dst, state);
--
--	mtk_v4l2_debug(2, "free frame buffer id:%d to done list",
--		       vb2_dst->vb2_buf.index);
-+	if (vb2_dst) {
-+		v4l2_m2m_buf_done(vb2_dst, state);
-+		mtk_v4l2_debug(2, "free frame buffer id:%d to done list",
-+			       vb2_dst->vb2_buf.index);
-+	} else {
-+		mtk_v4l2_err("dst buffer is NULL");
+ 	fb = ctx->dev->vdec_pdata->get_cap_buffer(ctx);
++	if (!fb) {
++		err = -EBUSY;
++		mtk_vcodec_err(inst, "fb buffer is NULL");
++		goto vdec_dec_end;
 +	}
++
+ 	y_fb_dma = fb ? (u64)fb->base_y.dma_addr : 0;
+ 	vdec_fb_va = (unsigned long)fb;
  
- 	if (src_buf_req)
- 		v4l2_ctrl_request_complete(src_buf_req, &ctx->ctrl_hdl);
+@@ -630,7 +636,7 @@ static int vdec_h264_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+ 	err = vpu_dec_start(vpu, data, 2);
+ 	if (err) {
+ 		mtk_vcodec_debug(inst, "lat decode err: %d", err);
+-		goto err_scp_decode;
++		goto err_free_fb_out;
+ 	}
+ 
+ 	share_info->trans_end = inst->ctx->msg_queue.wdma_addr.dma_addr +
+@@ -647,12 +653,17 @@ static int vdec_h264_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+ 	/* wait decoder done interrupt */
+ 	timeout = mtk_vcodec_wait_for_done_ctx(inst->ctx, MTK_INST_IRQ_RECEIVED,
+ 					       WAIT_INTR_TIMEOUT_MS, MTK_VDEC_LAT0);
++	if (timeout)
++		mtk_vcodec_err(inst, "lat decode timeout: pic_%d", inst->slice_dec_num);
+ 	inst->vsi->dec.timeout = !!timeout;
+ 
+ 	err = vpu_dec_end(vpu);
+-	if (err == SLICE_HEADER_FULL || timeout || err == TRANS_BUFFER_FULL) {
+-		err = -EINVAL;
+-		goto err_scp_decode;
++	if (err == SLICE_HEADER_FULL || err == TRANS_BUFFER_FULL) {
++		if (!IS_VDEC_INNER_RACING(inst->ctx->dev->dec_capability))
++			vdec_msg_queue_qbuf(&inst->ctx->msg_queue.lat_ctx, lat_buf);
++		inst->slice_dec_num++;
++		mtk_vcodec_err(inst, "lat dec fail: pic_%d err:%d", inst->slice_dec_num, err);
++		return -EINVAL;
+ 	}
+ 
+ 	share_info->trans_end = inst->ctx->msg_queue.wdma_addr.dma_addr +
+@@ -669,10 +680,6 @@ static int vdec_h264_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+ 
+ 	inst->slice_dec_num++;
+ 	return 0;
+-
+-err_scp_decode:
+-	if (!IS_VDEC_INNER_RACING(inst->ctx->dev->dec_capability))
+-		vdec_msg_queue_qbuf(&inst->ctx->msg_queue.lat_ctx, lat_buf);
+ err_free_fb_out:
+ 	vdec_msg_queue_qbuf(&inst->ctx->msg_queue.lat_ctx, lat_buf);
+ 	mtk_vcodec_err(inst, "slice dec number: %d err: %d", inst->slice_dec_num, err);
 -- 
 2.18.0
 
