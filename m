@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDB15C4332F
-	for <linux-media@archiver.kernel.org>; Sat, 12 Nov 2022 17:27:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3512DC3A5A7
+	for <linux-media@archiver.kernel.org>; Sat, 12 Nov 2022 17:27:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235041AbiKLR1D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 12 Nov 2022 12:27:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32864 "EHLO
+        id S235066AbiKLR1F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 12 Nov 2022 12:27:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235040AbiKLR06 (ORCPT
+        with ESMTP id S235058AbiKLR1B (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 12 Nov 2022 12:26:58 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6409617409
-        for <linux-media@vger.kernel.org>; Sat, 12 Nov 2022 09:26:57 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id a5so11676815edb.11
-        for <linux-media@vger.kernel.org>; Sat, 12 Nov 2022 09:26:57 -0800 (PST)
+        Sat, 12 Nov 2022 12:27:01 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73EA917435
+        for <linux-media@vger.kernel.org>; Sat, 12 Nov 2022 09:27:00 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id f5so19181301ejc.5
+        for <linux-media@vger.kernel.org>; Sat, 12 Nov 2022 09:27:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Z38NVszeeRzwpeCo7llBZCNOGY8/lbL4u7FRY89ykkI=;
-        b=YpP/W7fpkp+243on8JOUUN+Qr+osZ/b3gkWDIGsJmZ9MfG+/hyldpIbn+EfbcH01TB
-         J55iN4eU3Zm2saAAsiarrRIGC74qvYX7AL+0eNVUGw1hXaoBbIpxU6/E8yeKoVjjenNB
-         +XhN2iZOR9/eCiye9ykYmktilHRc0o040IbT4xL4kUScUYnptO6/RKC7odsQ8kACRXLq
-         l+IDVlOaFTXcKpbFQjWACXI2tTd6rH6bo11U/LXdOE68sXEg+URxAJehtABAVncrc2bP
-         u45E8FRZyEpqyhOsdALNl3jGF8wvytHIVOaWb+Dht1WbxNbUIVgEzTCbDFdYixdVQytO
-         +2Hw==
+        bh=SW1r5A1hXNoZH6nEqF4dUZL+EuJMyzrztmVIxOhjiNs=;
+        b=d0rqWd2ROhCeMqItrY0s6ZyhyL/DkJKtZNMrjKTajV15rFO9E3PatqYtHESnrxlnw9
+         Gw66PqLaHesZMl33EA20vXYgBZBL7jPAS19TQBXFfwj644SizU3hRDW0gHqu1lLktCjn
+         CprMyumm7jdrZ9ftokGlu1gBZb+6CamVOe+h7b29nae9YBrv0JXIRInfTzu4WIjndUWD
+         5YV2/nvgYtijSWhmB2wAabcL0+LmyZhbLhfdx1Zwq7o+3eYXiczmmqdPiLMY3brf0lEN
+         hMKfEa+WZkmUd+LPTPLLj2ueVwURV7V1TwUx+BU8p4xfX/qVgJmjpZqzSPfqwW/ojnsF
+         ejvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Z38NVszeeRzwpeCo7llBZCNOGY8/lbL4u7FRY89ykkI=;
-        b=tW0eZ+nDSrsMSL8JS5UvenqM9FSIpUXoAwDaPvnXk+1ITcCuotzI+b0/st20sg7pR4
-         ytoJngjlcxuY3BYIWWSLyWFg3dmdq2fV/Wi5DZcPadgV12NDMDoa2S+sxTtfu3aUFTeR
-         2CMPwLm7SFWg5/E2o/20/1Rju5YgRQKJJW8MGmxpRWGZkb3Fwp+aBdW+hfLN4o+pla1D
-         9dyD6AQImdue7BpAO9G+1B464zC2SXUbg9R1cJrqkT8faNvdgMTzgYcFDuZKdzuY1yyF
-         +RAM0y3k7RFsqWDN1MsaSUZ6d017Ekic55NkPEsQGWLjCnlrNU0H5dEjc4hXICgjyvZs
-         ai5Q==
-X-Gm-Message-State: ANoB5pnxw4DjkgYihiwP7pPzPj4y7UiqUPYER9b6L3j9pcGHeYv/aXEN
-        v1sD57UjAcNK/JPAO4HpOPdQBQ==
-X-Google-Smtp-Source: AA0mqf5vdXHouvfKT3uRuv95XjECUr5LI2duP59LqQqBrXFB1b4w8za30xzeT0Laae5n7tznzqMt5Q==
-X-Received: by 2002:a05:6402:b7b:b0:463:ab08:2bc6 with SMTP id cb27-20020a0564020b7b00b00463ab082bc6mr5854206edb.143.1668274015984;
-        Sat, 12 Nov 2022 09:26:55 -0800 (PST)
+        bh=SW1r5A1hXNoZH6nEqF4dUZL+EuJMyzrztmVIxOhjiNs=;
+        b=ytmHWjp1u5poJ2KBmTC4N1+6Tr/v2nqMUtVY5S1PcG9/zzAmSk/p/Tyy6aqD8tmEWK
+         HCAcYJ1A+TO925C2MYXxpGnSy4iPjXqsz1y6lIOPuVdCknQIcdXoFLO8X5avWvw85Ip0
+         519gzDU4UOgYxndo/vtN0KmRomS6+6yBOtMW3NSac4ajDKi3r9o6X9dR+7inl1SLNBdr
+         uT3Q9cBdIYEJ6ER6Bvz9NrslUk1x65e0yr9jyC/fE/vX4wyncmP6gCCTHwSMVVKeATGh
+         XypWqnPB7S77d3KLYuj974Hy4tZkTNfB7UI6ktvqK9NI6O5stNWLrpmllRMg/9Ao2XRG
+         r4RA==
+X-Gm-Message-State: ANoB5pmo/ixy8NZWy1ffhi7puCmZujdJvkN31a/IT0BXeXrxZCr7FTBg
+        Vhr9Ve9dpYDk+zytz6Q5NxscDw==
+X-Google-Smtp-Source: AA0mqf6JkadfF0Xg+BNYVPuwe4u3uA3lS9ReUnGIBU4q9V+mI06Y1wKol/KPEGL0ob5VIoacGMfhtA==
+X-Received: by 2002:a17:906:7c0e:b0:7ad:2da5:36e4 with SMTP id t14-20020a1709067c0e00b007ad2da536e4mr5352772ejo.680.1668274020022;
+        Sat, 12 Nov 2022 09:27:00 -0800 (PST)
 Received: from localhost.localdomain (2001-1c06-2302-5600-3861-6a56-0346-9c90.cable.dynamic.v6.ziggo.nl. [2001:1c06:2302:5600:3861:6a56:346:9c90])
-        by smtp.gmail.com with ESMTPSA id qo9-20020a170907874900b0078c1e174e11sm2099265ejc.136.2022.11.12.09.26.54
+        by smtp.gmail.com with ESMTPSA id qo9-20020a170907874900b0078c1e174e11sm2099265ejc.136.2022.11.12.09.26.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Nov 2022 09:26:55 -0800 (PST)
+        Sat, 12 Nov 2022 09:26:59 -0800 (PST)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     robert.foss@linaro.org, todor.too@gmail.com, agross@kernel.org,
         andersson@kernel.org, konrad.dybcio@somainline.org,
@@ -60,11 +60,10 @@ Cc:     sakari.ailus@iki.fi, hverkuil@xs4all.nl,
         laurent.pinchart@ideasonboard.com, quic_mmitkov@quicinc.com,
         linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: [PATCH v5 2/6] arm64: dts: qcom: sdm845-db845c: Use okay not ok for status
-Date:   Sat, 12 Nov 2022 17:26:46 +0000
-Message-Id: <20221112172650.127280-3-bryan.odonoghue@linaro.org>
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Subject: [PATCH v5 5/6] arm64: dts: qcom: sm8250: camss: Define ports address/size cells
+Date:   Sat, 12 Nov 2022 17:26:49 +0000
+Message-Id: <20221112172650.127280-6-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221112172650.127280-1-bryan.odonoghue@linaro.org>
 References: <20221112172650.127280-1-bryan.odonoghue@linaro.org>
@@ -74,36 +73,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convert camss status from "ok" to "okay".
+The ports {} address and size cells definition is the same for every
+derived 8250 board so, we should define it in the core sm8250.dtsi.
 
-Reported-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Suggested-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/qcom/sm8250.dtsi | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-index 7c88312333c22..ce95b51f17fff 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-@@ -1182,7 +1182,7 @@ &camss {
- 	vdda-phy-supply = <&vreg_l1a_0p875>;
- 	vdda-pll-supply = <&vreg_l26a_1p2>;
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index d517d6a80bdcb..f28a8893d00d7 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -3412,6 +3412,11 @@ camss: camss@ac6a000 {
+ 					     "cam_hf_0_mnoc",
+ 					     "cam_sf_0_mnoc",
+ 					     "cam_sf_icp_mnoc";
++
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++			};
+ 		};
  
--	status = "ok";
-+	status = "okay";
- 
- 	ports {
- 		port@0 {
-@@ -1221,7 +1221,7 @@ camera@10 {
- 		avdd-supply = <&cam0_avdd_2v8>;
- 		dvdd-supply = <&cam0_dvdd_1v2>;
- 
--		status = "ok";
-+		status = "okay";
- 
- 		port {
- 			ov8856_ep: endpoint {
+ 		camcc: clock-controller@ad00000 {
 -- 
 2.34.1
 
