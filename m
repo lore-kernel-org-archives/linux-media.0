@@ -2,45 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0F51C4332F
-	for <linux-media@archiver.kernel.org>; Sat, 12 Nov 2022 09:42:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B1B8C433FE
+	for <linux-media@archiver.kernel.org>; Sat, 12 Nov 2022 09:42:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233223AbiKLJmH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 12 Nov 2022 04:42:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35956 "EHLO
+        id S234870AbiKLJmJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 12 Nov 2022 04:42:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234851AbiKLJmD (ORCPT
+        with ESMTP id S234722AbiKLJmD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sat, 12 Nov 2022 04:42:03 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020FB1D30F;
-        Sat, 12 Nov 2022 01:41:58 -0800 (PST)
-X-UUID: b3919d031d91402a908610ce7ad9c254-20221112
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EC01CFF9;
+        Sat, 12 Nov 2022 01:41:56 -0800 (PST)
+X-UUID: 80f2b0d0b2214d7886b7dff2d6d95872-20221112
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=ztddfO3HpzzX7jMv99ap2IqMNrkjflAF85r48IEZWKU=;
-        b=ijJYr09jeOsvoiYrO6XaJH8vC+WHZNO4xiLnGaUiRXfmrOPLI6tGkLomr2bs2sfsovruOJMl5vGGt7IBq9H2cfr9QZA1QZCAp+F1O1M8oPh5NFc4VQloh69xIRtVqcLXUPG3PKY9+zTs/yK3iVNv8pLUNEYTGYepNLxCtD3/5NY=;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=zviENZfXwyOfFZjYFG/07wjjoPE34cnyXb34jHJ5SG8=;
+        b=C+gFxE/8YWmmcjFzBk8fOUJOREbL6Uk3LUjyucTPM1fE10EDD0D5EvFe0E+GBeuxKC0NnQ60Zbs8SLU51LPTClJVIH9BZ3qRV0Oh4dqaz9zMD/C7snnqHBNMvxW/9ntMMy6CMMvGDEl2FPmdbpyEm+McKlJmlKdh+p0L5yE1yTE=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:2358fc7b-7b05-4fde-b557-82c0482015ca,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:95
-X-CID-INFO: VERSION:1.1.12,REQID:2358fc7b-7b05-4fde-b557-82c0482015ca,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:95
-X-CID-META: VersionHash:62cd327,CLOUDID:04ff5a5d-100c-4555-952b-a62c895efded,B
-        ulkID:221112174153HYKK6CPH,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: b3919d031d91402a908610ce7ad9c254-20221112
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+X-CID-O-INFO: VERSION:1.1.13,REQID:833bc75b-713d-4810-8093-234c3174ba0a,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-META: VersionHash:d12e911,CLOUDID:02ff5a5d-100c-4555-952b-a62c895efded,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 80f2b0d0b2214d7886b7dff2d6d95872-20221112
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2065121149; Sat, 12 Nov 2022 17:41:52 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1991555365; Sat, 12 Nov 2022 17:41:50 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Sat, 12 Nov 2022 17:41:51 +0800
+ 15.2.792.15; Sat, 12 Nov 2022 17:41:48 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkmbs13n1.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Sat, 12 Nov 2022 17:41:49 +0800
+ Transport; Sat, 12 Nov 2022 17:41:47 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Chen-Yu Tsai <wenst@chromium.org>,
@@ -63,9 +60,9 @@ CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH 4/5] media: mediatek: vcodec: Setting lat buf to lat_list when lat decode error
-Date:   Sat, 12 Nov 2022 17:41:43 +0800
-Message-ID: <20221112094144.4256-5-yunfei.dong@mediatek.com>
+Subject: [PATCH 2/5] media: mediatek: vcodec: Can't set dst buffer to done when lat decode error
+Date:   Sat, 12 Nov 2022 17:41:41 +0800
+Message-ID: <20221112094144.4256-3-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221112094144.4256-1-yunfei.dong@mediatek.com>
 References: <20221112094144.4256-1-yunfei.dong@mediatek.com>
@@ -77,65 +74,29 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Need to set lat buf to lat_list when lat decode error, or lat buffer will lost.
+Core thread will call v4l2_m2m_buf_done to set dst buffer done for
+lat architecture. If lat call v4l2_m2m_buf_done_and_job_finish to
+free dst buffer when lat decode error, core thread will access kernel
+NULL pointer dereference, then crash.
 
-Fixes: 5d418351ca8f ("media: mediatek: vcodec: support stateless VP9 decoding")
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
- .../mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c    | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ .../media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c   | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-index fb1c36a3592d..cbb6728b8a40 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-@@ -2073,21 +2073,23 @@ static int vdec_vp9_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
- 		return -EBUSY;
- 	}
- 	pfc = (struct vdec_vp9_slice_pfc *)lat_buf->private_data;
--	if (!pfc)
--		return -EINVAL;
-+	if (!pfc) {
-+		ret = -EINVAL;
-+		goto err_free_fb_out;
-+	}
- 	vsi = &pfc->vsi;
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
+index e86809052a9f..ffbcee04dc26 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
+@@ -253,7 +253,7 @@ static void mtk_vdec_worker(struct work_struct *work)
  
- 	ret = vdec_vp9_slice_setup_lat(instance, bs, lat_buf, pfc);
- 	if (ret) {
- 		mtk_vcodec_err(instance, "Failed to setup VP9 lat ret %d\n", ret);
--		return ret;
-+		goto err_free_fb_out;
- 	}
- 	vdec_vp9_slice_vsi_to_remote(vsi, instance->vsi);
- 
- 	ret = vpu_dec_start(&instance->vpu, NULL, 0);
- 	if (ret) {
- 		mtk_vcodec_err(instance, "Failed to dec VP9 ret %d\n", ret);
--		return ret;
-+		goto err_free_fb_out;
- 	}
- 
- 	if (instance->irq) {
-@@ -2107,7 +2109,7 @@ static int vdec_vp9_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
- 	/* LAT trans full, no more UBE or decode timeout */
- 	if (ret) {
- 		mtk_vcodec_err(instance, "VP9 decode error: %d\n", ret);
--		return ret;
-+		goto err_free_fb_out;
- 	}
- 
- 	mtk_vcodec_debug(instance, "lat dma addr: 0x%lx 0x%lx\n",
-@@ -2120,6 +2122,9 @@ static int vdec_vp9_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
- 	vdec_msg_queue_qbuf(&ctx->dev->msg_queue_core_ctx, lat_buf);
- 
- 	return 0;
-+err_free_fb_out:
-+	vdec_msg_queue_qbuf(&ctx->msg_queue.lat_ctx, lat_buf);
-+	return ret;
- }
- 
- static int vdec_vp9_slice_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+ 	state = ret ? VB2_BUF_STATE_ERROR : VB2_BUF_STATE_DONE;
+ 	if (!IS_VDEC_LAT_ARCH(dev->vdec_pdata->hw_arch) ||
+-	    ctx->current_codec == V4L2_PIX_FMT_VP8_FRAME || ret) {
++	    ctx->current_codec == V4L2_PIX_FMT_VP8_FRAME) {
+ 		v4l2_m2m_buf_done_and_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx, state);
+ 		if (src_buf_req)
+ 			v4l2_ctrl_request_complete(src_buf_req, &ctx->ctrl_hdl);
 -- 
 2.18.0
 
