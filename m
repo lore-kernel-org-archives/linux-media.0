@@ -2,78 +2,130 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5853C433FE
-	for <linux-media@archiver.kernel.org>; Sun, 13 Nov 2022 16:35:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36747C4167E
+	for <linux-media@archiver.kernel.org>; Sun, 13 Nov 2022 16:36:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233821AbiKMQf2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 13 Nov 2022 11:35:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
+        id S235404AbiKMQgC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 13 Nov 2022 11:36:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233029AbiKMQf0 (ORCPT
+        with ESMTP id S235392AbiKMQgA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 13 Nov 2022 11:35:26 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A13195A7;
-        Sun, 13 Nov 2022 08:35:26 -0800 (PST)
-Received: from [192.168.2.125] (109-252-117-140.nat.spd-mgts.ru [109.252.117.140])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E774366022FA;
-        Sun, 13 Nov 2022 16:35:23 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668357324;
-        bh=j9qUvJJp/X2OPgESZeNiGJ13HdOpsuZE/t5C9EOgn60=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Ebnk7x7WD+IAH7GwiTF4ZSDyeIVD58Reg5mAKWo/fnoy+gMY7V+jclZpRY1qDficD
-         pSgjHK097TZP7s7QChi/ksj65ak0gf1TuSTBBnzLMYQr2qpXePth7QsDpV68dimgfC
-         4IBS8MotxvmUB9rqqKi+/OOwxxpPuaaaWgNTY5xTKMkQ5MuFHeREpQINB1SmUSvV+H
-         oYx8bQLzayLrj235JY+Bm9J2H77WkDCCZA4J860YY5yOFW5ctQqQhOgPskljYAeW3r
-         oIpTX3FjkGka81pG0yKbEvboulAw5ITN6aKfC4zjrI4Ov8ZkOg4NraWwm1MccN5Ir2
-         9s6lpcq03HDew==
-Message-ID: <50cece73-a499-eba3-7018-9e92e0791c88@collabora.com>
-Date:   Sun, 13 Nov 2022 19:35:20 +0300
+        Sun, 13 Nov 2022 11:36:00 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4315210FE1;
+        Sun, 13 Nov 2022 08:35:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
+        :Reply-To:Content-Type:Content-ID:Content-Description;
+        bh=rczvEohbP4Tuhdub3uBqOVXlkIWc5YOmLPmvA8PuHak=; b=mi1i5xYt2RJoyJDrEBDhZI+XcY
+        a8Cf8kDgenb+pSjOQ0whpICnRG0uph9i16Ml8EV60aZwINhPhEsroDGa6eSGkNZHDAC+BqFND4LJV
+        R/yXCIbc/z5bgxST/jYUBNPmh83FDvn3rEufPr8KXKJQurOVrEqGM7diEbLXQpzM2zRr2fUhCKcVB
+        CoBXdX5M2T/A/IBmgcD2ta5i4AjE/zCEqeG6NxQyJb2lQEHrk74bjgutlpwxa2x4fCHYwIMJdG2qg
+        9hN75DQ0rOViioGJqAhzT65rDB1G39BT+G1rOCR83F/K1FZbqGxeWtXhmBrdU5sbV6jY7dCp6iv+U
+        lYx9tjxA==;
+Received: from 213-225-8-167.nat.highway.a1.net ([213.225.8.167] helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ouFxW-00CLT0-00; Sun, 13 Nov 2022 16:35:50 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alexandra Winter <wintera@linux.ibm.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-rdma@vger.kernel.org,
+        iommu@lists.linux.dev, linux-media@vger.kernel.org,
+        netdev@vger.kernel.org, linux-s390@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: [PATCH 2/7] RDMA/hfi1: don't pass bogus GFP_ flags to dma_alloc_coherent
+Date:   Sun, 13 Nov 2022 17:35:30 +0100
+Message-Id: <20221113163535.884299-3-hch@lst.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221113163535.884299-1-hch@lst.de>
+References: <20221113163535.884299-1-hch@lst.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2] udmabuf: add vmap method to udmabuf_ops
-Content-Language: en-US
-To:     Lukasz Wiecaszek <lukasz.wiecaszek@googlemail.com>,
-        Gerd Hoffmann <kraxel@redhat.com>
-Cc:     Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>,
-        kernel test robot <lkp@intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-References: <20221113150511.8878-1-lukasz.wiecaszek@gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20221113150511.8878-1-lukasz.wiecaszek@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 11/13/22 18:05, Lukasz Wiecaszek wrote:
-> +static int vmap_udmabuf(struct dma_buf *buf, struct iosys_map *map)
-> +{
-> +	struct udmabuf *ubuf = buf->priv;
-> +
-> +	if (!ubuf->vaddr) {
-> +		ubuf->vaddr = vm_map_ram(ubuf->pages, ubuf->pagecount, -1);
-> +		if (!ubuf->vaddr)
-> +			return -EINVAL;
-> +	}
+dma_alloc_coherent is an opaque allocator that only uses the GFP_ flags
+for allocation context control.  Don't pass GFP_USER which doesn't make
+sense for a kernel DMA allocation or __GFP_COMP which makes no sense
+for an allocation that can't in any way be converted to a page pointer.
 
-Create a new mapping on each vmap_udmabuf() and add the corresponding
-vunmap.
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+ drivers/infiniband/hw/hfi1/init.c | 21 +++------------------
+ 1 file changed, 3 insertions(+), 18 deletions(-)
 
-Otherwise persistent vmapping shall be released together with udmabuf.
-It doesn't look that persistent vmapping is needed for udmabufs.
-
+diff --git a/drivers/infiniband/hw/hfi1/init.c b/drivers/infiniband/hw/hfi1/init.c
+index 436372b314312..24c0f0d257fc9 100644
+--- a/drivers/infiniband/hw/hfi1/init.c
++++ b/drivers/infiniband/hw/hfi1/init.c
+@@ -1761,17 +1761,11 @@ int hfi1_create_rcvhdrq(struct hfi1_devdata *dd, struct hfi1_ctxtdata *rcd)
+ 	unsigned amt;
+ 
+ 	if (!rcd->rcvhdrq) {
+-		gfp_t gfp_flags;
+-
+ 		amt = rcvhdrq_size(rcd);
+ 
+-		if (rcd->ctxt < dd->first_dyn_alloc_ctxt || rcd->is_vnic)
+-			gfp_flags = GFP_KERNEL;
+-		else
+-			gfp_flags = GFP_USER;
+ 		rcd->rcvhdrq = dma_alloc_coherent(&dd->pcidev->dev, amt,
+ 						  &rcd->rcvhdrq_dma,
+-						  gfp_flags | __GFP_COMP);
++						  GFP_KERNEL);
+ 
+ 		if (!rcd->rcvhdrq) {
+ 			dd_dev_err(dd,
+@@ -1785,7 +1779,7 @@ int hfi1_create_rcvhdrq(struct hfi1_devdata *dd, struct hfi1_ctxtdata *rcd)
+ 			rcd->rcvhdrtail_kvaddr = dma_alloc_coherent(&dd->pcidev->dev,
+ 								    PAGE_SIZE,
+ 								    &rcd->rcvhdrqtailaddr_dma,
+-								    gfp_flags);
++								    GFP_KERNEL);
+ 			if (!rcd->rcvhdrtail_kvaddr)
+ 				goto bail_free;
+ 		}
+@@ -1821,19 +1815,10 @@ int hfi1_setup_eagerbufs(struct hfi1_ctxtdata *rcd)
+ {
+ 	struct hfi1_devdata *dd = rcd->dd;
+ 	u32 max_entries, egrtop, alloced_bytes = 0;
+-	gfp_t gfp_flags;
+ 	u16 order, idx = 0;
+ 	int ret = 0;
+ 	u16 round_mtu = roundup_pow_of_two(hfi1_max_mtu);
+ 
+-	/*
+-	 * GFP_USER, but without GFP_FS, so buffer cache can be
+-	 * coalesced (we hope); otherwise, even at order 4,
+-	 * heavy filesystem activity makes these fail, and we can
+-	 * use compound pages.
+-	 */
+-	gfp_flags = __GFP_RECLAIM | __GFP_IO | __GFP_COMP;
+-
+ 	/*
+ 	 * The minimum size of the eager buffers is a groups of MTU-sized
+ 	 * buffers.
+@@ -1864,7 +1849,7 @@ int hfi1_setup_eagerbufs(struct hfi1_ctxtdata *rcd)
+ 			dma_alloc_coherent(&dd->pcidev->dev,
+ 					   rcd->egrbufs.rcvtid_size,
+ 					   &rcd->egrbufs.buffers[idx].dma,
+-					   gfp_flags);
++					   GFP_KERNEL);
+ 		if (rcd->egrbufs.buffers[idx].addr) {
+ 			rcd->egrbufs.buffers[idx].len =
+ 				rcd->egrbufs.rcvtid_size;
 -- 
-Best regards,
-Dmitry
+2.30.2
 
