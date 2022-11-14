@@ -2,81 +2,128 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFC16C4332F
-	for <linux-media@archiver.kernel.org>; Mon, 14 Nov 2022 20:57:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02489C4332F
+	for <linux-media@archiver.kernel.org>; Mon, 14 Nov 2022 21:09:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236399AbiKNU5n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Nov 2022 15:57:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
+        id S237674AbiKNVJD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Nov 2022 16:09:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236156AbiKNU5m (ORCPT
+        with ESMTP id S237543AbiKNVIs (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Nov 2022 15:57:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1695F13
-        for <linux-media@vger.kernel.org>; Mon, 14 Nov 2022 12:57:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D70461463
-        for <linux-media@vger.kernel.org>; Mon, 14 Nov 2022 20:57:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0D6EC433C1;
-        Mon, 14 Nov 2022 20:57:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668459460;
-        bh=VHZQX/KrbbH/fEktluGwSoJ/71Orehv0REWjm6auGjY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=X8Lu3a5WJms6xXwLUAnLMJXnpSEKeO5G/C41qE/Y9Z6HstwKUMbf5GDRYGsQUj7Ki
-         5I1couqaBcLodT5ZlZJJcrFTkKzqIMbLLe5KCVhcVqWlIpexMHtcqODyVLjkK4xY+j
-         VAHaP7n9Igg0NS083wkkEaceal1Q1csnWqOWoDgqhh78KDwLHuqJ8WG1ZcqN18Ksn2
-         m1EQcptY5Gd3jMfRFBWwVJ/rzRL7Mbilq5NpzNB+JyxBCYQy4YTklv9gfXM0xu78PI
-         Z8duIVpBo4PDdOpAAn3g545lBHOzccDyLyXlNLlRnDrsceOOfaAWoDRKt5zhS9VVb2
-         pMOBFT0rxfMug==
-Date:   Mon, 14 Nov 2022 20:57:30 +0000
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Yury Luneff <yury.lunev@gmail.com>,
-        Nable <nable.maininbox@googlemail.com>,
-        andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH v2 17/17] media: atomisp: gc0310: Power on sensor from
- set_fmt() callback
-Message-ID: <20221114205730.333dc3cd@sal.lan>
-In-Reply-To: <20221020195533.114049-18-hdegoede@redhat.com>
-References: <20221020195533.114049-1-hdegoede@redhat.com>
-        <20221020195533.114049-18-hdegoede@redhat.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Mon, 14 Nov 2022 16:08:48 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DFD140D3
+        for <linux-media@vger.kernel.org>; Mon, 14 Nov 2022 13:08:43 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id s10so9198359ioa.5
+        for <linux-media@vger.kernel.org>; Mon, 14 Nov 2022 13:08:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=7w2BwecuP10eoRiF0s2tu2fH3T8pUbcm8v8VfHkjwQ0=;
+        b=iisayqaaLjlJqRw/iaSaygLpAGKMAriixdeBRH/eheiKZ4H+2bqqacpTYWOOcEpfo3
+         uTZxirx+d+8ZzYbVV/eJOzwoWj+uQpkExHc1mrejsn4UJXxYXgA2LyKVYQXYen/6hIj4
+         ClI2OZB2JvNphpTi0dPiahR9MiCV81YWTZ1nU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7w2BwecuP10eoRiF0s2tu2fH3T8pUbcm8v8VfHkjwQ0=;
+        b=kessVtmhcdATbJFceovzjOdfDo0M8xUzv0PEwZuTVVo+6W/ow8RVh8u0EGZ65eWUbR
+         yqHpSwL+N2gZ3il9SXa91OGU5eHBDljpO1b8zi+s64qDEUCzK+yo1ECvRqOIP655Ccbz
+         AuJ089rbks4Ur23lHWaw+L3e5ZmxIAwT+DCY6v5JrQvuGSTDCtK30Wt9algZPoc/D7p0
+         CneD0PStdnu1fo6yozVZ4j8IJyFhpx5vwyBv63zRsQKwwQq6sTRc9KH/Y+YTNF9hja+3
+         zkaa4b0grhiyiyh4mIJ7o0oh14tR1bDeFaQPWBXy+dXHGNM16EFP9VL7paqFaFchkZSq
+         YPWQ==
+X-Gm-Message-State: ANoB5plTiQwt040QFRPjJkNtcNvDgaaHAAkLf3/UXHxKtUXF9sva2R+l
+        ECvt3aMbSgnoKmi2e9c+iy9jnQ==
+X-Google-Smtp-Source: AA0mqf6gRWcibFN23DSGTRlJqaOwzs7g8rxQ7fCqoBhjZLO0U7Efm4j/YhV3WgEp72b/W3J/O6+b2w==
+X-Received: by 2002:a05:6638:1912:b0:375:4a9b:181a with SMTP id p18-20020a056638191200b003754a9b181amr6496957jal.233.1668460122982;
+        Mon, 14 Nov 2022 13:08:42 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id h1-20020a022b01000000b003734c4d01d2sm3873013jaa.61.2022.11.14.13.08.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 13:08:42 -0800 (PST)
+Content-Type: multipart/mixed; boundary="------------mrTfNph7za02S1U40kwMp0sv"
+Message-ID: <31b33241-291e-6694-1a81-636b13aa630d@linuxfoundation.org>
+Date:   Mon, 14 Nov 2022 14:08:42 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, linux-media@vger.kernel.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] Linux Media vimc fixes update for 6.1-rc6
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Thu, 20 Oct 2022 21:55:33 +0200
-Hans de Goede <hdegoede@redhat.com> escreveu:
+This is a multi-part message in MIME format.
+--------------mrTfNph7za02S1U40kwMp0sv
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-> Depending on which order userspace makes various v4l2 calls, the sensor
-> might still be powered down when set_fmt is called.
-> 
-> What should really happen here is delay the writing of the mode-related
-> registers till streaming is started, but for now use the same quick fix
-> as the atomisp_ov2680 code and call power_up() from set_fmt() in
-> combination with keeping track of the power-state to avoid doing the
-> power-up sequence twice.
+Hi Mauro,
 
-Yes, that seems to be the right solution: to store the mode and use
-it during stream on. I was thinking on doing this at ov2680, but I
-opted not to.
+Please pull the following vimc fixes update for Linux 6.1-rc6.
 
-The rationale is that we need first to ensure that atomisp will use the 
-standard API for the sensor drivers (this is currently not the case).
-As far as I recall, the try_fmt logic requires some things to come
-from the driver on a non-standard way, and for some, the device needs
-to be in power up state. It also uses it at atomisp/sensor's probe time.
+This vimc fixes update for Linux Media 6.1-rc6 consists of a critical fix
+in vimc_init error path.
 
-Regards,
-Mauro
+diff is attached.
+
+Please note that this patch a candidate for stables: applies to 6.0, 5.15,
+and 5.10 as is. Since vimc moved it needs port for 5.4 and 4.19.
+
+I will send patches for 5.4 and 4.19 stables once this patch get into the
+mainline.
+
+thanks,
+-- Shuah
+
+----------------------------------------------------------------
+The following changes since commit ca6976420bf11cb2c11702d824692c3b7d301b37:
+
+   media: vimc: Update device configuration in the documentation (2022-10-18 16:24:53 -0600)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux tags/linux-vimc-6.1-rc6
+
+for you to fetch changes up to 4585c540ad1358389e11240dc8d6cd9343f71e0a:
+
+   media: vimc: Fix wrong function called when vimc_init() fails (2022-11-10 09:52:53 -0700)
+
+----------------------------------------------------------------
+linux-vimc-6.1-rc6
+
+This vimc fixes update for Linux Media 6.1-rc6 consists of a critical fix
+in vimc_init error path.
+
+----------------------------------------------------------------
+Chen Zhongjin (1):
+       media: vimc: Fix wrong function called when vimc_init() fails
+
+  drivers/media/test-drivers/vimc/vimc-core.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+----------------------------------------------------------------
+--------------mrTfNph7za02S1U40kwMp0sv
+Content-Type: text/x-patch; charset=UTF-8; name="linux-vimc-6.1-rc6.diff"
+Content-Disposition: attachment; filename="linux-vimc-6.1-rc6.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWVkaWEvdGVzdC1kcml2ZXJzL3ZpbWMvdmltYy1jb3Jl
+LmMgYi9kcml2ZXJzL21lZGlhL3Rlc3QtZHJpdmVycy92aW1jL3ZpbWMtY29yZS5jCmluZGV4
+IDJhZTdhMGYxMWViZi4uZTgyY2ZhNWZmYmY0IDEwMDY0NAotLS0gYS9kcml2ZXJzL21lZGlh
+L3Rlc3QtZHJpdmVycy92aW1jL3ZpbWMtY29yZS5jCisrKyBiL2RyaXZlcnMvbWVkaWEvdGVz
+dC1kcml2ZXJzL3ZpbWMvdmltYy1jb3JlLmMKQEAgLTQzMyw3ICs0MzMsNyBAQCBzdGF0aWMg
+aW50IF9faW5pdCB2aW1jX2luaXQodm9pZCkKIAlpZiAocmV0KSB7CiAJCWRldl9lcnIoJnZp
+bWNfcGRldi5kZXYsCiAJCQkicGxhdGZvcm0gZHJpdmVyIHJlZ2lzdHJhdGlvbiBmYWlsZWQg
+KGVycj0lZClcbiIsIHJldCk7Ci0JCXBsYXRmb3JtX2RyaXZlcl91bnJlZ2lzdGVyKCZ2aW1j
+X3BkcnYpOworCQlwbGF0Zm9ybV9kZXZpY2VfdW5yZWdpc3RlcigmdmltY19wZGV2KTsKIAkJ
+cmV0dXJuIHJldDsKIAl9CiAK
+
+--------------mrTfNph7za02S1U40kwMp0sv--
