@@ -2,59 +2,61 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C005C433FE
-	for <linux-media@archiver.kernel.org>; Wed, 16 Nov 2022 11:01:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40738C4321E
+	for <linux-media@archiver.kernel.org>; Wed, 16 Nov 2022 11:04:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233420AbiKPLBc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Nov 2022 06:01:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45392 "EHLO
+        id S238936AbiKPLEg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Nov 2022 06:04:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233038AbiKPLBC (ORCPT
+        with ESMTP id S238515AbiKPLEU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:01:02 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CEE45EE4
-        for <linux-media@vger.kernel.org>; Wed, 16 Nov 2022 02:49:00 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id ft34so42998003ejc.12
-        for <linux-media@vger.kernel.org>; Wed, 16 Nov 2022 02:49:00 -0800 (PST)
+        Wed, 16 Nov 2022 06:04:20 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7596249B6F
+        for <linux-media@vger.kernel.org>; Wed, 16 Nov 2022 02:50:35 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id n20so22504607ejh.0
+        for <linux-media@vger.kernel.org>; Wed, 16 Nov 2022 02:50:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=in-reply-to:content-disposition:mime-version:references
          :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OSCwvxDUrivspPm0mWYSEKkrMB19obOv39RUwyA0PH0=;
-        b=VJ17UkTNHUXDMc38lOye7y2paGd4FOYHBRYpe2vgelPuC55Z4g5rnX+xNi0NFRGTrN
-         mdMUVKijrbkJJfn3y8Tm8vf3pLdF4omxIOM6UM8S6CVz2p3NrVUPvz4FNRN3RF3rQ/lN
-         9z9ibLXy5LDPJfO5cF7QIpPDKsW5E+659K7gg=
+        bh=mdwJ/650wADnRoR72oyZkQ8DiIzSWQSpq6IdxtCR+gY=;
+        b=f2SpOZdEZzXCSPn0ykm1oJX1As7I6xxh5wr16pOd/kbA5OOiuO0Y4IWH35k28OjNoj
+         wHiTHItpgbOeFMLRaKE+zMy2u3TZ9N8dtmICEQujo3Me7a5E74OF+31ufRLy1oYVFEA1
+         T3Nbw0vHjZlr/vzIiD2dpwD9w/oFbF5Q800Lc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references
          :mail-followup-to:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OSCwvxDUrivspPm0mWYSEKkrMB19obOv39RUwyA0PH0=;
-        b=Ob6YHDAU7hxgZhIO+GsuzlOWPCekoTLBMCdsz05KnT/CbgPWo05ZM2gRRsvIF908LK
-         9jcY/l4RhfJXe7Mj+fbHn3pRRnx0IIb+VzD7PlrEZYEhfk9MpsypouI+c1dKGa0wS9CZ
-         By8l6sh8aWeNT/1wKKOQ1oClo2DmHshPooYdVZMPRcSqFeSKhJL0GtlTplK9/ltDm0Pp
-         ihj3F1cvmWMY1GjmRqP/1y55sEdXYjMS1tjkhjdsJMLqzC3Q8KM0p18K/KMwiVMuqTdS
-         R0CWFdPNp4bui/tfMb+/gz+uSwhFHp1p0xf60FZInEtg0UNePFRYThINnbyWuGpCHqUq
-         blMQ==
-X-Gm-Message-State: ANoB5pmUV3yy/CgmHNF3TRxvoYeb8VItAZQwZF3M3C9p0IJkutAHVJa5
-        G930Gv3jH3QHH3kyyAydssiv5g==
-X-Google-Smtp-Source: AA0mqf6lc5lrEzUlEqYgu67h96R4r19JtBnDlqqKBl9ey0VuIf1EYIOTKVPSxvCTipQmxuaB88n35Q==
-X-Received: by 2002:a17:906:970e:b0:7ad:ccae:a30d with SMTP id k14-20020a170906970e00b007adccaea30dmr18079730ejx.704.1668595739329;
-        Wed, 16 Nov 2022 02:48:59 -0800 (PST)
+        bh=mdwJ/650wADnRoR72oyZkQ8DiIzSWQSpq6IdxtCR+gY=;
+        b=VVjJfS/FUHypAsDR+5jjBVcQk6PtfLAxKGnD2bOvMnDV6UVUnk982Li4RsPLCTnMub
+         NKAGmX2SUI1+OYMu/kiC79eV5TEFl3kwEleeN/Xvgq040PzBXXoCdUzCSRasYQshzVWs
+         VrNZa+aEzsFhm8sk6mHC1gKzUgFnq3v5LGWyj8TVno7IiuOll+xmrMs9aLueZDILW5oD
+         kRujwHm58x545+ienEQHdea0y1tHJlKZObgsRysSCq+aoI+nWBj4ObiRopG9O3Ae/4BY
+         DTe8G8O+TkSD9ONGxIicS6TuQKp6+MCDCI1bKhL8WXOqOG9cgBq96qDe3Tb/JIJelf/9
+         E6fg==
+X-Gm-Message-State: ANoB5pkFmV1Yc8N4kCNiTSGs9+iV+Wb78kBsav3CGL1CeaiSK2cdKUaP
+        eBM0ndmRceEwkpOBPohuRUOuMw==
+X-Google-Smtp-Source: AA0mqf4MgV0oW/LCUugReHUpBkpepoZ7Vy6UeNXMZ5Yjky+iNhPczOtY8K1ul1dtRtcsoxT6/N3VKQ==
+X-Received: by 2002:a17:906:78e:b0:7a1:e52e:bddb with SMTP id l14-20020a170906078e00b007a1e52ebddbmr16502698ejc.685.1668595834073;
+        Wed, 16 Nov 2022 02:50:34 -0800 (PST)
 Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id g13-20020a50ec0d000000b0045b3853c4b7sm7352935edr.51.2022.11.16.02.48.57
+        by smtp.gmail.com with ESMTPSA id jw17-20020a17090776b100b0078b1ff41f05sm6758790ejc.43.2022.11.16.02.50.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 02:48:58 -0800 (PST)
-Date:   Wed, 16 Nov 2022 11:48:56 +0100
+        Wed, 16 Nov 2022 02:50:33 -0800 (PST)
+Date:   Wed, 16 Nov 2022 11:50:31 +0100
 From:   Daniel Vetter <daniel@ffwll.ch>
 To:     David Hildenbrand <david@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
-        Nadav Amit <namit@vmware.com>, linux-kselftest@vger.kernel.org,
-        sparclinux@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        dri-devel@lists.freedesktop.org, Hans Verkuil <hverkuil@xs4all.nl>,
+        linux-mm@kvack.org, Nadav Amit <namit@vmware.com>,
+        linux-kselftest@vger.kernel.org, sparclinux@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
         Andrea Arcangeli <aarcange@redhat.com>,
         linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
         x86@kernel.org, Hugh Dickins <hughd@google.com>,
@@ -71,21 +73,24 @@ Cc:     linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
         linuxppc-dev@lists.ozlabs.org, Oded Gabbay <ogabbay@kernel.org>,
-        linux-mips@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-mips@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>,
+        linux-perf-users@vger.kernel.org,
         linux-security-module@vger.kernel.org, linux-alpha@vger.kernel.org,
         linux-fsdevel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Mike Kravetz <mike.kravetz@oracle.com>
-Subject: Re: [PATCH mm-unstable v1 13/20] media: videobuf-dma-sg: remove
- FOLL_FORCE usage
-Message-ID: <Y3TAGAUIo/IR+tAa@phenom.ffwll.local>
+Subject: Re: [PATCH mm-unstable v1 16/20] mm/frame-vector: remove FOLL_FORCE
+ usage
+Message-ID: <Y3TAd14jCBSKeqsL@phenom.ffwll.local>
 Mail-Followup-To: David Hildenbrand <david@redhat.com>,
         linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
-        Nadav Amit <namit@vmware.com>, linux-kselftest@vger.kernel.org,
-        sparclinux@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        dri-devel@lists.freedesktop.org, Hans Verkuil <hverkuil@xs4all.nl>,
+        linux-mm@kvack.org, Nadav Amit <namit@vmware.com>,
+        linux-kselftest@vger.kernel.org, sparclinux@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
         Andrea Arcangeli <aarcange@redhat.com>,
         linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
         x86@kernel.org, Hugh Dickins <hughd@google.com>,
@@ -101,88 +106,64 @@ Mail-Followup-To: David Hildenbrand <david@redhat.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
         Oded Gabbay <ogabbay@kernel.org>, linux-mips@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
+        Tomasz Figa <tfiga@chromium.org>, linux-perf-users@vger.kernel.org,
         linux-security-module@vger.kernel.org, linux-alpha@vger.kernel.org,
         linux-fsdevel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Mike Kravetz <mike.kravetz@oracle.com>
 References: <20221116102659.70287-1-david@redhat.com>
- <20221116102659.70287-14-david@redhat.com>
+ <20221116102659.70287-17-david@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221116102659.70287-14-david@redhat.com>
+In-Reply-To: <20221116102659.70287-17-david@redhat.com>
 X-Operating-System: Linux phenom 5.19.0-2-amd64 
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 11:26:52AM +0100, David Hildenbrand wrote:
-> GUP now supports reliable R/O long-term pinning in COW mappings, such
-> that we break COW early. MAP_SHARED VMAs only use the shared zeropage so
-> far in one corner case (DAXFS file with holes), which can be ignored
-> because GUP does not support long-term pinning in fsdax (see
-> check_vma_flags()).
+On Wed, Nov 16, 2022 at 11:26:55AM +0100, David Hildenbrand wrote:
+> FOLL_FORCE is really only for ptrace access. According to commit
+> 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are always
+> writable"), get_vaddr_frames() currently pins all pages writable as a
+> workaround for issues with read-only buffers.
 > 
-> Consequently, FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM is no longer required
-> for reliable R/O long-term pinning: FOLL_LONGTERM is sufficient. So stop
-> using FOLL_FORCE, which is really only for ptrace access.
+> FOLL_FORCE, however, seems to be a legacy leftover as it predates
+> commit 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are
+> always writable"). Let's just remove it.
 > 
+> Once the read-only buffer issue has been resolved, FOLL_WRITE could
+> again be set depending on the DMA direction.
+> 
+> Cc: Hans Verkuil <hverkuil@xs4all.nl>
+> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+> Cc: Tomasz Figa <tfiga@chromium.org>
+> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
 > Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
 > Signed-off-by: David Hildenbrand <david@redhat.com>
 
-I looked at this a while ago when going through some of the follow_pfn
-stuff, so
+Also code I looked at while looking at follow_pfn stuff
 
 Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 
 > ---
->  drivers/media/v4l2-core/videobuf-dma-sg.c | 14 +++++---------
->  1 file changed, 5 insertions(+), 9 deletions(-)
+>  drivers/media/common/videobuf2/frame_vector.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/media/v4l2-core/videobuf-dma-sg.c b/drivers/media/v4l2-core/videobuf-dma-sg.c
-> index f75e5eedeee0..234e9f647c96 100644
-> --- a/drivers/media/v4l2-core/videobuf-dma-sg.c
-> +++ b/drivers/media/v4l2-core/videobuf-dma-sg.c
-> @@ -151,17 +151,16 @@ static void videobuf_dma_init(struct videobuf_dmabuf *dma)
->  static int videobuf_dma_init_user_locked(struct videobuf_dmabuf *dma,
->  			int direction, unsigned long data, unsigned long size)
->  {
-> +	unsigned int gup_flags = FOLL_LONGTERM;
->  	unsigned long first, last;
-> -	int err, rw = 0;
-> -	unsigned int flags = FOLL_FORCE;
-> +	int err;
+> diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/common/videobuf2/frame_vector.c
+> index 542dde9d2609..062e98148c53 100644
+> --- a/drivers/media/common/videobuf2/frame_vector.c
+> +++ b/drivers/media/common/videobuf2/frame_vector.c
+> @@ -50,7 +50,7 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
+>  	start = untagged_addr(start);
 >  
->  	dma->direction = direction;
->  	switch (dma->direction) {
->  	case DMA_FROM_DEVICE:
-> -		rw = READ;
-> +		gup_flags |= FOLL_WRITE;
->  		break;
->  	case DMA_TO_DEVICE:
-> -		rw = WRITE;
->  		break;
->  	default:
->  		BUG();
-> @@ -177,14 +176,11 @@ static int videobuf_dma_init_user_locked(struct videobuf_dmabuf *dma,
->  	if (NULL == dma->pages)
->  		return -ENOMEM;
->  
-> -	if (rw == READ)
-> -		flags |= FOLL_WRITE;
-> -
->  	dprintk(1, "init user [0x%lx+0x%lx => %lu pages]\n",
->  		data, size, dma->nr_pages);
->  
-> -	err = pin_user_pages(data & PAGE_MASK, dma->nr_pages,
-> -			     flags | FOLL_LONGTERM, dma->pages, NULL);
-> +	err = pin_user_pages(data & PAGE_MASK, dma->nr_pages, gup_flags,
-> +			     dma->pages, NULL);
->  
->  	if (err != dma->nr_pages) {
->  		dma->nr_pages = (err >= 0) ? err : 0;
+>  	ret = pin_user_pages_fast(start, nr_frames,
+> -				  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
+> +				  FOLL_WRITE | FOLL_LONGTERM,
+>  				  (struct page **)(vec->ptrs));
+>  	if (ret > 0) {
+>  		vec->got_ref = true;
 > -- 
 > 2.38.1
 > 
