@@ -2,78 +2,89 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B339AC4332F
-	for <linux-media@archiver.kernel.org>; Thu, 17 Nov 2022 06:21:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6021DC433FE
+	for <linux-media@archiver.kernel.org>; Thu, 17 Nov 2022 07:02:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238829AbiKQGV5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Nov 2022 01:21:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60670 "EHLO
+        id S233752AbiKQHCq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Nov 2022 02:02:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232139AbiKQGV4 (ORCPT
+        with ESMTP id S231562AbiKQHCp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Nov 2022 01:21:56 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F5030F62
-        for <linux-media@vger.kernel.org>; Wed, 16 Nov 2022 22:21:55 -0800 (PST)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NCV9J2bx9zJnpN;
-        Thu, 17 Nov 2022 14:18:44 +0800 (CST)
-Received: from cgs.huawei.com (10.244.148.83) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 17 Nov 2022 14:21:53 +0800
-From:   Gaosheng Cui <cuigaosheng1@huawei.com>
-To:     <sumit.semwal@linaro.org>, <christian.koenig@amd.com>,
-        <tjmercier@google.com>, <quic_charante@quicinc.com>,
-        <cuigaosheng1@huawei.com>
-CC:     <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>
-Subject: [PATCH] dma-buf: Fix possible UAF in dma_buf_export
-Date:   Thu, 17 Nov 2022 14:21:52 +0800
-Message-ID: <20221117062152.3029018-1-cuigaosheng1@huawei.com>
+        Thu, 17 Nov 2022 02:02:45 -0500
+X-Greylist: delayed 342 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Nov 2022 23:02:44 PST
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D7396EB5C;
+        Wed, 16 Nov 2022 23:02:43 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-01 (Coremail) with SMTP id qwCowACXNmiN3HVjEDojCg--.6856S2;
+        Thu, 17 Nov 2022 15:02:37 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     p.zabel@pengutronix.de, mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] media: coda: Add check for kmalloc
+Date:   Thu, 17 Nov 2022 15:02:36 +0800
+Message-Id: <20221117070236.44632-1-jiasheng@iscas.ac.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.244.148.83]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowACXNmiN3HVjEDojCg--.6856S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CFW8tw45JFy5Cw43tr1fZwb_yoW8Jw48pF
+        W3Ar92yrWrGw1v9FWDJ3yxZas8ua4ftFWUGFy7uwn5CwsxWr40qFyjqay5tF1UArZ5CFyj
+        yFs8t3y5CF4UAFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
+        CwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
+        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUfpnQUUUUU=
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Smatch report warning as follows:
+As the kmalloc may return NULL pointer,
+it should be better to check the return value
+in order to avoid NULL poineter dereference,
+same as the others.
 
-drivers/dma-buf/dma-buf.c:681 dma_buf_export() warn:
-  '&dmabuf->list_node' not removed from list
-
-If dma_buf_stats_setup() fails in dma_buf_export(), goto err_sysfs
-and dmabuf will be freed, but dmabuf->list_node will not be removed
-from db_list.head, then list traversal may cause UAF.
-
-Fix by removeing it from db_list.head before free().
-
-Fixes: ef3a6b70507a ("dma-buf: call dma_buf_stats_setup after dmabuf is in valid list")
-Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+Fixes: cb1d3a336371 ("[media] coda: add CODA7541 JPEG support")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
- drivers/dma-buf/dma-buf.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/media/platform/chips-media/coda-bit.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index b809513b03fe..6848f50226d5 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -675,6 +675,9 @@ struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info)
- 	return dmabuf;
+diff --git a/drivers/media/platform/chips-media/coda-bit.c b/drivers/media/platform/chips-media/coda-bit.c
+index 2736a902e3df..240bdbc64785 100644
+--- a/drivers/media/platform/chips-media/coda-bit.c
++++ b/drivers/media/platform/chips-media/coda-bit.c
+@@ -1084,10 +1084,16 @@ static int coda_start_encoding(struct coda_ctx *ctx)
+ 	}
  
- err_sysfs:
-+	mutex_lock(&db_list.lock);
-+	list_del(&dmabuf->list_node);
-+	mutex_unlock(&db_list.lock);
- 	/*
- 	 * Set file->f_path.dentry->d_fsdata to NULL so that when
- 	 * dma_buf_release() gets invoked by dentry_ops, it exits
+ 	if (dst_fourcc == V4L2_PIX_FMT_JPEG) {
+-		if (!ctx->params.jpeg_qmat_tab[0])
++		if (!ctx->params.jpeg_qmat_tab[0]) {
+ 			ctx->params.jpeg_qmat_tab[0] = kmalloc(64, GFP_KERNEL);
+-		if (!ctx->params.jpeg_qmat_tab[1])
++			if (!ctx->params.jpeg_qmat_tab[0])
++				return -ENOMEM;
++		}
++		if (!ctx->params.jpeg_qmat_tab[1]) {
+ 			ctx->params.jpeg_qmat_tab[1] = kmalloc(64, GFP_KERNEL);
++			if (!ctx->params.jpeg_qmat_tab[1])
++				return -ENOMEM;
++		}
+ 		coda_set_jpeg_compression_quality(ctx, ctx->params.jpeg_quality);
+ 	}
+ 
 -- 
 2.25.1
 
