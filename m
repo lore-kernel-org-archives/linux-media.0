@@ -2,195 +2,101 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8A51C433FE
-	for <linux-media@archiver.kernel.org>; Thu, 17 Nov 2022 09:11:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB45FC433FE
+	for <linux-media@archiver.kernel.org>; Thu, 17 Nov 2022 09:25:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239761AbiKQJL1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Nov 2022 04:11:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38682 "EHLO
+        id S239314AbiKQJZU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Nov 2022 04:25:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239752AbiKQJL0 (ORCPT
+        with ESMTP id S234248AbiKQJZI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Nov 2022 04:11:26 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9315B5ADC4
-        for <linux-media@vger.kernel.org>; Thu, 17 Nov 2022 01:11:24 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id t25so3444122ejb.8
-        for <linux-media@vger.kernel.org>; Thu, 17 Nov 2022 01:11:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=w2kfn5b4knzE1+oQl9jwi6wbBS5Fy4A8mt/gKYPzDDY=;
-        b=I1BLtoq75dsLJakBJStQd2/w0ENDCPXS+L+xq1pB4I9guAn6qlcm88vjGVcjgJnxZb
-         QW+yP9nFhTTqUNrhbGDxFeJF+k1MKSu5GMT2upczZt4walVJtMB2r5llNOgeFYroAzfl
-         QPnEMw7mmn3bYkZn7JD4337mmunWQ266bJ1EQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w2kfn5b4knzE1+oQl9jwi6wbBS5Fy4A8mt/gKYPzDDY=;
-        b=6myYzNGLWMMH83kl5Qw8+D7JsOfMC8EpXyKkmtZwDPnHqSLFLRY9begtrwdpZxdZQ4
-         PXvsfJIOFhB1ElsR/FykAnq37JtnT3XzLEtd1UBHHUKvx98+Rvw79RNV0XEfDHckterl
-         iZ6O4/Fycm/hsEkYvEuB0e3ZSsF1Z+GeBzYkpU60eqYJrvsVQEkSa7GrjiHOrMvQWVbT
-         R3P0Mk7LWv5aDMbf70SP6HVMA0EItnM2tqUUkDRvZPuXSGi/ikn8wWV0HM8ACq+zgEfg
-         KgO1e2/+JavApWFRODZGYUfyZ6Inxbka/KR5KSOoIrthCbsDJNjJkzjGj+g8idUxSY/I
-         aVuA==
-X-Gm-Message-State: ANoB5pmunlIFjjzpcQrI4Zj6mFW+3KTGZrIyvKyv+4ZLsGssKbCvcIB9
-        G+Rjn8E11O8/REn0xsMH2Iyphw==
-X-Google-Smtp-Source: AA0mqf5qcvcHpVnnzYypXRCSlUwa0bOZTJnMKZcv3zxTRnMxqPi8rz92yOtpchQ4rvn3UxUG9pT7zA==
-X-Received: by 2002:a17:907:778c:b0:7ad:79c0:4669 with SMTP id ky12-20020a170907778c00b007ad79c04669mr1387919ejc.395.1668676283087;
-        Thu, 17 Nov 2022 01:11:23 -0800 (PST)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-54-207.cust.vodafonedsl.it. [188.217.54.207])
-        by smtp.gmail.com with ESMTPSA id n23-20020a05640204d700b0045c47b2a800sm257929edw.67.2022.11.17.01.11.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 01:11:22 -0800 (PST)
-Date:   Thu, 17 Nov 2022 10:11:20 +0100
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH 1/4] media: i2c: s5k6a3: switch to using gpiod API
-Message-ID: <20221117091120.GA2725180@tom-ThinkPad-T14s-Gen-2i>
-References: <20221115221145.2550572-1-dmitry.torokhov@gmail.com>
+        Thu, 17 Nov 2022 04:25:08 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D6A5FC7;
+        Thu, 17 Nov 2022 01:25:03 -0800 (PST)
+X-UUID: 0251dd356a174eb0b03b3eaa06a97557-20221117
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=zviENZfXwyOfFZjYFG/07wjjoPE34cnyXb34jHJ5SG8=;
+        b=IM1abASHy9/G4x2uRgj7wjpCEKvC1F08marpFfvS7tfLVl+2TEaW/GYeWfZvhigpPxIGChVXRMMRWXY2skFTI9QG004UCrBr/pgg2c21DeCfUFVW+T8+It2qmO5hcS7zB76RI7MX717ddAgQyjCmGvcvltvEWbvRuQ6+4Lg+dMs=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.13,REQID:0933916a-1895-431e-a0a4-e464b4119c2e,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-META: VersionHash:d12e911,CLOUDID:6b340c2f-2938-482e-aafd-98d66723b8a9,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 0251dd356a174eb0b03b3eaa06a97557-20221117
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1259357121; Thu, 17 Nov 2022 17:24:59 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 17 Nov 2022 17:24:57 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs13n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Thu, 17 Nov 2022 17:24:56 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>
+CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v2,2/5] media: mediatek: vcodec: Can't set dst buffer to done when lat decode error
+Date:   Thu, 17 Nov 2022 17:24:50 +0800
+Message-ID: <20221117092453.31366-3-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221117092453.31366-1-yunfei.dong@mediatek.com>
+References: <20221117092453.31366-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221115221145.2550572-1-dmitry.torokhov@gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dmitry,
+Core thread will call v4l2_m2m_buf_done to set dst buffer done for
+lat architecture. If lat call v4l2_m2m_buf_done_and_job_finish to
+free dst buffer when lat decode error, core thread will access kernel
+NULL pointer dereference, then crash.
 
-On Tue, Nov 15, 2022 at 02:11:42PM -0800, Dmitry Torokhov wrote:
-> This patch switches the driver away from legacy gpio/of_gpio API to
-> gpiod API, and removes one of the last uses of of_get_gpio_flags().
-> 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> ---
->  drivers/media/i2c/s5k6a3.c | 30 +++++++++++-------------------
->  1 file changed, 11 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/media/i2c/s5k6a3.c b/drivers/media/i2c/s5k6a3.c
-> index a4efd6d10b43..ef6673b10580 100644
-> --- a/drivers/media/i2c/s5k6a3.c
-> +++ b/drivers/media/i2c/s5k6a3.c
-> @@ -9,12 +9,12 @@
->  #include <linux/clk.h>
->  #include <linux/delay.h>
->  #include <linux/device.h>
-> +#include <linux/err.h>
->  #include <linux/errno.h>
-> -#include <linux/gpio.h>
-> +#include <linux/gpio/consumer.h>
->  #include <linux/i2c.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
-> -#include <linux/of_gpio.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/regulator/consumer.h>
->  #include <linux/slab.h>
-> @@ -59,7 +59,7 @@ struct s5k6a3 {
->  	struct v4l2_subdev subdev;
->  	struct media_pad pad;
->  	struct regulator_bulk_data supplies[S5K6A3_NUM_SUPPLIES];
-> -	int gpio_reset;
-> +	struct gpio_desc *gpio_reset;
->  	struct mutex lock;
->  	struct v4l2_mbus_framefmt format;
->  	struct clk *clock;
-> @@ -216,11 +216,11 @@ static int __s5k6a3_power_on(struct s5k6a3 *sensor)
->  			goto error_clk;
->  	}
->  
-> -	gpio_set_value(sensor->gpio_reset, 1);
-> +	gpiod_set_value_cansleep(sensor->gpio_reset, 0);
->  	usleep_range(600, 800);
-> -	gpio_set_value(sensor->gpio_reset, 0);
-> +	gpiod_set_value_cansleep(sensor->gpio_reset, 1);
->  	usleep_range(600, 800);
-> -	gpio_set_value(sensor->gpio_reset, 1);
-> +	gpiod_set_value_cansleep(sensor->gpio_reset, 0);
->  
->  	/* Delay needed for the sensor initialization */
->  	msleep(20);
-> @@ -240,7 +240,7 @@ static int __s5k6a3_power_off(struct s5k6a3 *sensor)
->  {
->  	int i;
->  
-> -	gpio_set_value(sensor->gpio_reset, 0);
-> +	gpiod_set_value_cansleep(sensor->gpio_reset, 1);
->  
->  	for (i = S5K6A3_NUM_SUPPLIES - 1; i >= 0; i--)
->  		regulator_disable(sensor->supplies[i].consumer);
-> @@ -285,32 +285,24 @@ static int s5k6a3_probe(struct i2c_client *client)
->  	struct device *dev = &client->dev;
->  	struct s5k6a3 *sensor;
->  	struct v4l2_subdev *sd;
-> -	int gpio, i, ret;
-> +	int i, ret;
->  
->  	sensor = devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
->  	if (!sensor)
->  		return -ENOMEM;
->  
->  	mutex_init(&sensor->lock);
-> -	sensor->gpio_reset = -EINVAL;
-> -	sensor->clock = ERR_PTR(-EINVAL);
->  	sensor->dev = dev;
->  
->  	sensor->clock = devm_clk_get(sensor->dev, S5K6A3_CLK_NAME);
->  	if (IS_ERR(sensor->clock))
->  		return PTR_ERR(sensor->clock);
->  
-> -	gpio = of_get_gpio_flags(dev->of_node, 0, NULL);
-> -	if (!gpio_is_valid(gpio))
-> -		return gpio;
-> -
-> -	ret = devm_gpio_request_one(dev, gpio, GPIOF_OUT_INIT_LOW,
-> -						S5K6A3_DRV_NAME);
-> -	if (ret < 0)
-> +	sensor->gpio_reset = devm_gpiod_get(dev, NULL, GPIOD_OUT_HIGH);
-> +	ret = PTR_ERR_OR_ZERO(sensor->gpio_reset);
-> +	if (ret)
->  		return ret;
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+---
+ .../media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c   | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Patch looks good to me!
-Reviewed-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-
-For the future I think would be nice use "reset-gpios" name in dts.
-Then call:
-
-	devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
-
-But this is a todo :)
-
-Regards,
-Tommaso
-
->  
-> -	sensor->gpio_reset = gpio;
-> -
->  	if (of_property_read_u32(dev->of_node, "clock-frequency",
->  				 &sensor->clock_frequency)) {
->  		sensor->clock_frequency = S5K6A3_DEFAULT_CLK_FREQ;
-> -- 
-> 2.38.1.431.g37b22c650d-goog
-> 
-
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
+index e86809052a9f..ffbcee04dc26 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
+@@ -253,7 +253,7 @@ static void mtk_vdec_worker(struct work_struct *work)
+ 
+ 	state = ret ? VB2_BUF_STATE_ERROR : VB2_BUF_STATE_DONE;
+ 	if (!IS_VDEC_LAT_ARCH(dev->vdec_pdata->hw_arch) ||
+-	    ctx->current_codec == V4L2_PIX_FMT_VP8_FRAME || ret) {
++	    ctx->current_codec == V4L2_PIX_FMT_VP8_FRAME) {
+ 		v4l2_m2m_buf_done_and_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx, state);
+ 		if (src_buf_req)
+ 			v4l2_ctrl_request_complete(src_buf_req, &ctx->ctrl_hdl);
 -- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
+2.18.0
 
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com
