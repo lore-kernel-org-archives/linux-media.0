@@ -2,330 +2,191 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09D0EC4332F
-	for <linux-media@archiver.kernel.org>; Fri, 18 Nov 2022 18:42:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 194F3C43219
+	for <linux-media@archiver.kernel.org>; Fri, 18 Nov 2022 18:51:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242497AbiKRSm4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 18 Nov 2022 13:42:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47886 "EHLO
+        id S242524AbiKRSu7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 18 Nov 2022 13:50:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234391AbiKRSmx (ORCPT
+        with ESMTP id S235502AbiKRSu6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 18 Nov 2022 13:42:53 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74FA67128;
-        Fri, 18 Nov 2022 10:42:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668796971; x=1700332971;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=V5Hw9NYkCkvMm5f8vj1Mv2/Ssn9brYUwFrrE08qkFnQ=;
-  b=b3/F+Qs+F5YQ8Zl7NUx+CyPDJEctrKJMMtNBjDIjdbLtdz0QMTQ2k4DV
-   +OT//41XPUXDVB/GkSyhZ2Mp5T/1C4DPfEGJjcR6KD/TxiR7O34a4Fzco
-   Duttxh0+OtJJChkqJ2nDuv9vRByrsHg7Q6tGwGEo7MA3NJCd23boMDvIc
-   UcuH1Rl8X4A4HWT3S0SZq1lesVFgQgvL1Iv6H589CkxzizyGkZIWlqWFC
-   5xmTc5BzgwsloMZ2aRifqehnKNfb4aak5Z81W77jVx7fK4Cv5pphVVw+K
-   twcM5ri675RuDljhUQZp/ID/JqbKveyjdItlrnpi2REmffFrQSVtL/PaN
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="310836553"
-X-IronPort-AV: E=Sophos;i="5.96,175,1665471600"; 
-   d="scan'208";a="310836553"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 10:42:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="746101486"
-X-IronPort-AV: E=Sophos;i="5.96,175,1665471600"; 
-   d="scan'208";a="746101486"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 18 Nov 2022 10:42:49 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 707EA10E; Fri, 18 Nov 2022 20:43:14 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH v1 1/1] atomisp: Make bds_factors_list be type of struct u32_fract
-Date:   Fri, 18 Nov 2022 20:43:09 +0200
-Message-Id: <20221118184309.60834-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
+        Fri, 18 Nov 2022 13:50:58 -0500
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15048C0B3;
+        Fri, 18 Nov 2022 10:50:55 -0800 (PST)
+Received: by mail-oi1-f172.google.com with SMTP id n186so6294576oih.7;
+        Fri, 18 Nov 2022 10:50:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=AEGisTxdolA6TJB3qImtZFl0Ek6u4ZDhP6CL8w75bQo=;
+        b=YZWNei94SVp8T8gnoS2hCQpeH6znfsgErh2YuUHnuljMlPFX/Q8wTahu1wd0FsE4FC
+         P3AG99UOyY3GJiOkI+PlwEbQ3Ra1bVHoqIj6IB00gi6plBDIcvlD3rghC+05Y/TcgC2F
+         eMDmMHcbhVR7d6UCO6s6k3wnJVjVnBtzzJK+xtoHfIywO9BY3PQ1eBE+MCcrKJ7br9Qu
+         qQFLq+byrb1d4FBp7/nCSPLXvPtQo6s7RuiVzl8Rb3YHOCw7k0FqYN/tHoJIkO+s4Fiy
+         PMlTJ+k+9rhtvZBm+05ztWIDqq2OntlxEly2kvrgJya4zXEaCpvG7jxLQgR6Bcc66q4r
+         e62g==
+X-Gm-Message-State: ANoB5plySIqP/kfJ+ggW63CNMKWsyTgtHGpx6OozNFDtb3VhYHd31Ce8
+        xcRx4H6SbacaVlTuAl+HRw==
+X-Google-Smtp-Source: AA0mqf41OMDQLBy2vrDxYSCq614dvKht2GD0zl0kCDAuuXBa962QTC+b9/Mrb78yb8+vJHmZs3z4Lg==
+X-Received: by 2002:a05:6808:20a:b0:35a:eae4:b8c5 with SMTP id l10-20020a056808020a00b0035aeae4b8c5mr4164391oie.155.1668797455071;
+        Fri, 18 Nov 2022 10:50:55 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q11-20020a9d630b000000b0066da36d2c45sm1893619otk.22.2022.11.18.10.50.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 10:50:54 -0800 (PST)
+Received: (nullmailer pid 856957 invoked by uid 1000);
+        Fri, 18 Nov 2022 18:50:54 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-amlogic@lists.infradead.org, Vinod Koul <vkoul@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        linux-phy@lists.infradead.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-watchdog@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-media@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        linux-arm-kernel@lists.infradead.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        linux-pci@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rtc@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        devicetree@vger.kernel.org, linux-mmc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+In-Reply-To: <20221117-b4-amlogic-bindings-convert-v1-1-3f025599b968@linaro.org>
+References: <20221117-b4-amlogic-bindings-convert-v1-0-3f025599b968@linaro.org> 
+ <20221117-b4-amlogic-bindings-convert-v1-1-3f025599b968@linaro.org>
+Message-Id: <166879731050.850509.16574480348039079520.robh@kernel.org>
+Subject: Re: [PATCH 01/12] dt-bindings: firmware: convert meson_sm.txt to dt-schema
+Date:   Fri, 18 Nov 2022 12:50:54 -0600
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The list contains the Bayer scale index, and rational fraction of it.
-The struct u32_fract is suitable type to hold that. Convert the driver
-to use latter instead of former.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- .../pipe/interface/ia_css_pipe_binarydesc.h   | 13 ++---
- .../pci/camera/pipe/src/pipe_binarydesc.c     | 55 ++++++++-----------
- .../atomisp/pci/runtime/binary/src/binary.c   | 42 +++++---------
- .../media/atomisp/pci/sh_css_param_shading.c  | 19 +++----
- 4 files changed, 51 insertions(+), 78 deletions(-)
+On Fri, 18 Nov 2022 15:33:27 +0100, Neil Armstrong wrote:
+> Convert the Amlogic Secure Monitor bindings to dt-schema.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  .../bindings/firmware/amlogic,meson-gxbb-sm.yaml   | 36 ++++++++++++++++++++++
+>  .../bindings/firmware/meson/meson_sm.txt           | 15 ---------
+>  2 files changed, 36 insertions(+), 15 deletions(-)
+> 
 
-diff --git a/drivers/staging/media/atomisp/pci/camera/pipe/interface/ia_css_pipe_binarydesc.h b/drivers/staging/media/atomisp/pci/camera/pipe/interface/ia_css_pipe_binarydesc.h
-index 965cfda50707..e42eeaeb3ee4 100644
---- a/drivers/staging/media/atomisp/pci/camera/pipe/interface/ia_css_pipe_binarydesc.h
-+++ b/drivers/staging/media/atomisp/pci/camera/pipe/interface/ia_css_pipe_binarydesc.h
-@@ -16,6 +16,8 @@
- #ifndef __IA_CSS_PIPE_BINARYDESC_H__
- #define __IA_CSS_PIPE_BINARYDESC_H__
- 
-+#include <linux/math.h>
-+
- #include <ia_css_types.h>		/* ia_css_pipe */
- #include <ia_css_frame_public.h>	/* ia_css_frame_info */
- #include <ia_css_binary.h>		/* ia_css_binary_descr */
-@@ -56,17 +58,12 @@ void ia_css_pipe_get_vfpp_binarydesc(
-  *
-  * @param[in] bds_factor: The bayer downscaling factor.
-  *		(= The bds_factor member in the sh_css_bds_factor structure.)
-- * @param[out] bds_factor_numerator: The numerator of the bayer downscaling factor.
-- *		(= The numerator member in the sh_css_bds_factor structure.)
-- * @param[out] bds_factor_denominator: The denominator of the bayer downscaling factor.
-- *		(= The denominator member in the sh_css_bds_factor structure.)
-+ * @param[out] bds: The rational fraction of the bayer downscaling factor.
-+ *		(= The respective member in the sh_css_bds_factor structure.)
-  * @return	0 or error code upon error.
-  *
-  */
--int sh_css_bds_factor_get_numerator_denominator(
--    unsigned int bds_factor,
--    unsigned int *bds_factor_numerator,
--    unsigned int *bds_factor_denominator);
-+int sh_css_bds_factor_get_fract(unsigned int bds_factor, struct u32_fract *bds);
- 
- /* @brief Get a binary descriptor for preview stage.
-  *
-diff --git a/drivers/staging/media/atomisp/pci/camera/pipe/src/pipe_binarydesc.c b/drivers/staging/media/atomisp/pci/camera/pipe/src/pipe_binarydesc.c
-index 7dd0e4a53c8b..06664ce75b60 100644
---- a/drivers/staging/media/atomisp/pci/camera/pipe/src/pipe_binarydesc.c
-+++ b/drivers/staging/media/atomisp/pci/camera/pipe/src/pipe_binarydesc.c
-@@ -13,6 +13,9 @@
-  * more details.
-  */
- 
-+#include <linux/kernel.h>
-+#include <linux/math.h>
-+
- #include "ia_css_pipe_binarydesc.h"
- #include "ia_css_frame_format.h"
- #include "ia_css_pipe.h"
-@@ -23,7 +26,6 @@
- #include <assert_support.h>
- /* HRT_GDC_N */
- #include "gdc_device.h"
--#include <linux/kernel.h>
- 
- /* This module provides a binary descriptions to used to find a binary. Since,
-  * every stage is associated with a binary, it implicity helps stage
-@@ -126,40 +128,29 @@ void ia_css_pipe_get_vfpp_binarydesc(
- 	IA_CSS_LEAVE_PRIVATE("");
- }
- 
--static struct sh_css_bds_factor bds_factors_list[] = {
--	{1, 1, SH_CSS_BDS_FACTOR_1_00},
--	{5, 4, SH_CSS_BDS_FACTOR_1_25},
--	{3, 2, SH_CSS_BDS_FACTOR_1_50},
--	{2, 1, SH_CSS_BDS_FACTOR_2_00},
--	{9, 4, SH_CSS_BDS_FACTOR_2_25},
--	{5, 2, SH_CSS_BDS_FACTOR_2_50},
--	{3, 1, SH_CSS_BDS_FACTOR_3_00},
--	{4, 1, SH_CSS_BDS_FACTOR_4_00},
--	{9, 2, SH_CSS_BDS_FACTOR_4_50},
--	{5, 1, SH_CSS_BDS_FACTOR_5_00},
--	{6, 1, SH_CSS_BDS_FACTOR_6_00},
--	{8, 1, SH_CSS_BDS_FACTOR_8_00}
-+static struct u32_fract bds_factors_list[] = {
-+	[SH_CSS_BDS_FACTOR_1_00] = {1, 1},
-+	[SH_CSS_BDS_FACTOR_1_25] = {5, 4},
-+	[SH_CSS_BDS_FACTOR_1_50] = {3, 2},
-+	[SH_CSS_BDS_FACTOR_2_00] = {2, 1},
-+	[SH_CSS_BDS_FACTOR_2_25] = {9, 4},
-+	[SH_CSS_BDS_FACTOR_2_50] = {5, 2},
-+	[SH_CSS_BDS_FACTOR_3_00] = {3, 1},
-+	[SH_CSS_BDS_FACTOR_4_00] = {4, 1},
-+	[SH_CSS_BDS_FACTOR_4_50] = {9, 2},
-+	[SH_CSS_BDS_FACTOR_5_00] = {5, 1},
-+	[SH_CSS_BDS_FACTOR_6_00] = {6, 1},
-+	[SH_CSS_BDS_FACTOR_8_00] = {8, 1},
- };
- 
--int sh_css_bds_factor_get_numerator_denominator(
--    unsigned int bds_factor,
--    unsigned int *bds_factor_numerator,
--    unsigned int *bds_factor_denominator)
-+int sh_css_bds_factor_get_fract(unsigned int bds_factor, struct u32_fract *bds)
- {
--	unsigned int i;
--
--	/* Loop over all bds factors until a match is found */
--	for (i = 0; i < ARRAY_SIZE(bds_factors_list); i++) {
--		if (bds_factors_list[i].bds_factor == bds_factor) {
--			*bds_factor_numerator = bds_factors_list[i].numerator;
--			*bds_factor_denominator = bds_factors_list[i].denominator;
--			return 0;
--		}
--	}
-+	/* Throw an error since bds_factor cannot be found in bds_factors_list */
-+	if (bds_factor >= ARRAY_SIZE(bds_factors_list))
-+		return -EINVAL;
- 
--	/* Throw an error since bds_factor cannot be found
--	in bds_factors_list */
--	return -EINVAL;
-+	*bds = bds_factors_list[bds_factor];
-+	return 0;
- }
- 
- int binarydesc_calculate_bds_factor(
-@@ -194,7 +185,7 @@ int binarydesc_calculate_bds_factor(
- 			    (out_h * num / den <= in_h);
- 
- 		if (cond) {
--			*bds_factor = bds_factors_list[i].bds_factor;
-+			*bds_factor = i;
- 			return 0;
- 		}
- 	}
-diff --git a/drivers/staging/media/atomisp/pci/runtime/binary/src/binary.c b/drivers/staging/media/atomisp/pci/runtime/binary/src/binary.c
-index 406ed5fb4c6a..768da86b8c2c 100644
---- a/drivers/staging/media/atomisp/pci/runtime/binary/src/binary.c
-+++ b/drivers/staging/media/atomisp/pci/runtime/binary/src/binary.c
-@@ -13,6 +13,8 @@
-  * more details.
-  */
- 
-+#include <linux/math.h>
-+
- #include <math_support.h>
- #include <gdc_device.h>	/* HR_GDC_N */
- 
-@@ -128,16 +130,8 @@ ia_css_binary_compute_shading_table_bayer_origin(
- {
- 	int err;
- 
--	/* Numerator and denominator of the fixed bayer downscaling factor.
--	(numerator >= denominator) */
--	unsigned int bds_num, bds_den;
--
--	/* Horizontal/Vertical ratio of bayer scaling
--	between input area and output area. */
--	unsigned int bs_hor_ratio_in;
--	unsigned int bs_hor_ratio_out;
--	unsigned int bs_ver_ratio_in;
--	unsigned int bs_ver_ratio_out;
-+	/* Rational fraction of the fixed bayer downscaling factor. */
-+	struct u32_fract bds;
- 
- 	/* Left padding set by InputFormatter. */
- 	unsigned int left_padding_bqs;			/* in bqs */
-@@ -158,19 +152,11 @@ ia_css_binary_compute_shading_table_bayer_origin(
- 	unsigned int bad_bqs_on_top_before_bs;	/* in bqs */
- 	unsigned int bad_bqs_on_top_after_bs;	/* in bqs */
- 
--	/* Get the numerator and denominator of bayer downscaling factor. */
--	err = sh_css_bds_factor_get_numerator_denominator
--	(required_bds_factor, &bds_num, &bds_den);
-+	/* Get the rational fraction of bayer downscaling factor. */
-+	err = sh_css_bds_factor_get_fract(required_bds_factor, &bds);
- 	if (err)
- 		return err;
- 
--	/* Set the horizontal/vertical ratio of bayer scaling
--	between input area and output area. */
--	bs_hor_ratio_in  = bds_num;
--	bs_hor_ratio_out = bds_den;
--	bs_ver_ratio_in  = bds_num;
--	bs_ver_ratio_out = bds_den;
--
- 	/* Set the left padding set by InputFormatter. (ifmtr.c) */
- 	if (stream_config->left_padding == -1)
- 		left_padding_bqs = _ISP_BQS(binary->left_padding);
-@@ -228,18 +214,18 @@ ia_css_binary_compute_shading_table_bayer_origin(
- 	located on the shading table during the shading correction. */
- 	res->sc_bayer_origin_x_bqs_on_shading_table =
- 		((left_padding_adjusted_bqs + bad_bqs_on_left_before_bs)
--		* bs_hor_ratio_out + bs_hor_ratio_in / 2) / bs_hor_ratio_in
-+		* bds.denominator + bds.numerator / 2) / bds.numerator
- 		+ bad_bqs_on_left_after_bs;
--	/* "+ bs_hor_ratio_in/2": rounding for division by bs_hor_ratio_in */
-+	/* "+ bds.numerator / 2": rounding for division by bds.numerator */
- 	res->sc_bayer_origin_y_bqs_on_shading_table =
--		(bad_bqs_on_top_before_bs * bs_ver_ratio_out + bs_ver_ratio_in / 2) / bs_ver_ratio_in
-+		(bad_bqs_on_top_before_bs * bds.denominator + bds.numerator / 2) / bds.numerator
- 		+ bad_bqs_on_top_after_bs;
--	/* "+ bs_ver_ratio_in/2": rounding for division by bs_ver_ratio_in */
-+	/* "+ bds.numerator / 2": rounding for division by bds.numerator */
- 
--	res->bayer_scale_hor_ratio_in  = (uint32_t)bs_hor_ratio_in;
--	res->bayer_scale_hor_ratio_out = (uint32_t)bs_hor_ratio_out;
--	res->bayer_scale_ver_ratio_in  = (uint32_t)bs_ver_ratio_in;
--	res->bayer_scale_ver_ratio_out = (uint32_t)bs_ver_ratio_out;
-+	res->bayer_scale_hor_ratio_in  = bds.numerator;
-+	res->bayer_scale_hor_ratio_out = bds.denominator;
-+	res->bayer_scale_ver_ratio_in  = bds.numerator;
-+	res->bayer_scale_ver_ratio_out = bds.denominator;
- 
- 	return err;
- }
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_param_shading.c b/drivers/staging/media/atomisp/pci/sh_css_param_shading.c
-index 41a4c9162319..5b43cc656269 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_param_shading.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_param_shading.c
-@@ -13,6 +13,7 @@
-  * more details.
-  */
- 
-+#include <linux/math.h>
- #include <linux/slab.h>
- 
- #include <math_support.h>
-@@ -239,10 +240,9 @@ prepare_shading_table(const struct ia_css_shading_table *in_table,
- {
- 	unsigned int input_width, input_height, table_width, table_height, i;
- 	unsigned int left_padding, top_padding, left_cropping;
--	unsigned int bds_numerator, bds_denominator;
--	int right_padding;
--
- 	struct ia_css_shading_table *result;
-+	struct u32_fract bds;
-+	int right_padding;
- 
- 	assert(target_table);
- 	assert(binary);
-@@ -265,17 +265,16 @@ prepare_shading_table(const struct ia_css_shading_table *in_table,
- 	left_cropping = (binary->info->sp.pipeline.left_cropping == 0) ?
- 			binary->dvs_envelope.width : 2 * ISP_VEC_NELEMS;
- 
--	sh_css_bds_factor_get_numerator_denominator
--	(bds_factor, &bds_numerator, &bds_denominator);
-+	sh_css_bds_factor_get_fract(bds_factor, &bds);
- 
- 	left_padding  = (left_padding + binary->info->sp.pipeline.left_cropping) *
--			bds_numerator / bds_denominator -
-+			bds.numerator / bds.denominator -
- 			binary->info->sp.pipeline.left_cropping;
- 	right_padding = (binary->internal_frame_info.res.width -
--			 binary->effective_in_frame_res.width * bds_denominator /
--			 bds_numerator - left_cropping) * bds_numerator / bds_denominator;
--	top_padding = binary->info->sp.pipeline.top_cropping * bds_numerator /
--		      bds_denominator -
-+			 binary->effective_in_frame_res.width * bds.denominator /
-+			 bds.numerator - left_cropping) * bds.numerator / bds.denominator;
-+	top_padding = binary->info->sp.pipeline.top_cropping * bds.numerator /
-+		      bds.denominator -
- 		      binary->info->sp.pipeline.top_cropping;
- 
- 	/*
--- 
-2.35.1
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
+
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
+
+Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221117-b4-amlogic-bindings-convert-v1-1-3f025599b968@linaro.org
+
+
+secure-monitor: compatible:0: 'amlogic,meson-gxbb-sm' was expected
+	arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-nanopi-k2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-nexbox-a95x.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-p200.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-p201.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-meta.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-telos.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-wetek-hub.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-wetek-play2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s805x-libretech-ac.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s805x-p241.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-libretech-pc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-mecool-kii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p230.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p231.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-sml5442tw.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-vero4k-plus.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-p281.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-tx3-mini.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-hwacom-amazetv.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-khadas-vim.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-libretech-cc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-libretech-cc-v2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-nexbox-a95x.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-gt1-ultimate.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-khadas-vim2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-mecool-kiii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-nexbox-a1.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-q200.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-q201.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-rbox-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-s912-libretech-pc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-vega-s96.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-wetek-core2.dtb
+
+secure-monitor: compatible: ['amlogic,meson-gx-sm', 'amlogic,meson-gxbb-sm'] is too long
+	arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-nanopi-k2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-nexbox-a95x.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-p200.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-p201.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-meta.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-telos.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-wetek-hub.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-wetek-play2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s805x-libretech-ac.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s805x-p241.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-libretech-pc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-mecool-kii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p230.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p231.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-sml5442tw.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-vero4k-plus.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-p281.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-tx3-mini.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-hwacom-amazetv.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-khadas-vim.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-libretech-cc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-libretech-cc-v2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-nexbox-a95x.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-gt1-ultimate.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-khadas-vim2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-mecool-kiii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-nexbox-a1.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-q200.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-q201.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-rbox-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-s912-libretech-pc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-vega-s96.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-wetek-core2.dtb
 
