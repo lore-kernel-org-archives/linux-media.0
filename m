@@ -2,49 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E908C4321E
-	for <linux-media@archiver.kernel.org>; Fri, 18 Nov 2022 23:55:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C20FC43217
+	for <linux-media@archiver.kernel.org>; Fri, 18 Nov 2022 23:56:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233900AbiKRXzq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 18 Nov 2022 18:55:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58082 "EHLO
+        id S230126AbiKRXz6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 18 Nov 2022 18:55:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231989AbiKRXyl (ORCPT
+        with ESMTP id S236808AbiKRXy5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 18 Nov 2022 18:54:41 -0500
+        Fri, 18 Nov 2022 18:54:57 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4E2CB6A0
-        for <linux-media@vger.kernel.org>; Fri, 18 Nov 2022 15:27:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A46BE26E
+        for <linux-media@vger.kernel.org>; Fri, 18 Nov 2022 15:27:59 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA99-0003nU-9l; Fri, 18 Nov 2022 23:47:43 +0100
+        id 1owA8t-00035O-4Z; Fri, 18 Nov 2022 23:47:27 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA97-0058e8-3T; Fri, 18 Nov 2022 23:47:42 +0100
+        id 1owA8q-0058YU-Gh; Fri, 18 Nov 2022 23:47:25 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA96-0000J5-Ok; Fri, 18 Nov 2022 23:47:40 +0100
+        id 1owA8q-0000ER-Q3; Fri, 18 Nov 2022 23:47:24 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Akihiro Tsukada <tskd08@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Petr Machata <petrm@nvidia.com>,
-        Peter Senna Tschudin <peter.senna@gmail.com>,
-        Peter Rosin <peda@axentia.se>,
-        Javier Martinez Canillas <javierm@redhat.com>
+        =?utf-8?q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>,
+        Ajay Gupta <ajayg@nvidia.com>, Petr Machata <petrm@nvidia.com>,
+        Peter Rosin <peda@axentia.se>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 404/606] media: tuners/mxl301rf: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:42:18 +0100
-Message-Id: <20221118224540.619276-405-uwe@kleine-koenig.org>
+Subject: [PATCH 335/606] media: i2c/bt819: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:41:09 +0100
+Message-Id: <20221118224540.619276-336-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -66,31 +64,31 @@ can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/tuners/mxl301rf.c | 5 ++---
+ drivers/media/i2c/bt819.c | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/tuners/mxl301rf.c b/drivers/media/tuners/mxl301rf.c
-index 6422056185a9..c35442a77ae5 100644
---- a/drivers/media/tuners/mxl301rf.c
-+++ b/drivers/media/tuners/mxl301rf.c
-@@ -283,8 +283,7 @@ static const struct dvb_tuner_ops mxl301rf_ops = {
- };
+diff --git a/drivers/media/i2c/bt819.c b/drivers/media/i2c/bt819.c
+index 4d9bb6eb7d65..39f8a5361166 100644
+--- a/drivers/media/i2c/bt819.c
++++ b/drivers/media/i2c/bt819.c
+@@ -380,8 +380,7 @@ static const struct v4l2_subdev_ops bt819_ops = {
  
+ /* ----------------------------------------------------------------------- */
  
--static int mxl301rf_probe(struct i2c_client *client,
--			  const struct i2c_device_id *id)
-+static int mxl301rf_probe(struct i2c_client *client)
+-static int bt819_probe(struct i2c_client *client,
+-			const struct i2c_device_id *id)
++static int bt819_probe(struct i2c_client *client)
  {
- 	struct mxl301rf_state *state;
- 	struct mxl301rf_config *cfg;
-@@ -327,7 +326,7 @@ static struct i2c_driver mxl301rf_driver = {
+ 	int i, ver;
+ 	struct bt819 *decoder;
+@@ -469,7 +468,7 @@ static struct i2c_driver bt819_driver = {
  	.driver = {
- 		.name	= "mxl301rf",
+ 		.name	= "bt819",
  	},
--	.probe		= mxl301rf_probe,
-+	.probe_new	= mxl301rf_probe,
- 	.remove		= mxl301rf_remove,
- 	.id_table	= mxl301rf_id,
+-	.probe		= bt819_probe,
++	.probe_new	= bt819_probe,
+ 	.remove		= bt819_remove,
+ 	.id_table	= bt819_id,
  };
 -- 
 2.38.1
