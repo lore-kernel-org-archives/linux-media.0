@@ -2,48 +2,48 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1ADB0C43219
-	for <linux-media@archiver.kernel.org>; Sat, 19 Nov 2022 00:41:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B566C4332F
+	for <linux-media@archiver.kernel.org>; Sat, 19 Nov 2022 00:41:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235952AbiKSAlI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 18 Nov 2022 19:41:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41530 "EHLO
+        id S237002AbiKSAlR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 18 Nov 2022 19:41:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236189AbiKSAkG (ORCPT
+        with ESMTP id S236267AbiKSAkG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 18 Nov 2022 19:40:06 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5B2C80E8
-        for <linux-media@vger.kernel.org>; Fri, 18 Nov 2022 15:44:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA7A25EA3
+        for <linux-media@vger.kernel.org>; Fri, 18 Nov 2022 15:44:41 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9A-0003pI-3V; Fri, 18 Nov 2022 23:47:44 +0100
+        id 1owA92-0003Tf-99; Fri, 18 Nov 2022 23:47:36 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA97-0058eT-Qv; Fri, 18 Nov 2022 23:47:42 +0100
+        id 1owA90-0058bM-0v; Fri, 18 Nov 2022 23:47:34 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA96-0000J8-U5; Fri, 18 Nov 2022 23:47:40 +0100
+        id 1owA90-0000Gc-71; Fri, 18 Nov 2022 23:47:34 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Akihiro Tsukada <tskd08@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Peter Senna Tschudin <peter.senna@gmail.com>,
-        =?utf-8?q?Marek_Beh=C3=BAn?= <kabel@kernel.org>
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        =?utf-8?q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>,
+        Corey Minyard <cminyard@mvista.com>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 405/606] media: tuners/qm1d1b0004: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:42:19 +0100
-Message-Id: <20221118224540.619276-406-uwe@kleine-koenig.org>
+Subject: [PATCH 369/606] media: i2c/saa7127: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:41:43 +0100
+Message-Id: <20221118224540.619276-370-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -60,35 +60,38 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-The probe function doesn't make use of the i2c_device_id * parameter so it
-can be trivially converted.
+.probe_new() doesn't get the i2c_device_id * parameter, so determine
+that explicitly in the probe function.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/tuners/qm1d1b0004.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/i2c/saa7127.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/tuners/qm1d1b0004.c b/drivers/media/tuners/qm1d1b0004.c
-index 9cba0893207c..0b6f750c54ad 100644
---- a/drivers/media/tuners/qm1d1b0004.c
-+++ b/drivers/media/tuners/qm1d1b0004.c
-@@ -197,7 +197,7 @@ static const struct dvb_tuner_ops qm1d1b0004_ops = {
- };
+diff --git a/drivers/media/i2c/saa7127.c b/drivers/media/i2c/saa7127.c
+index 78c9388c2ea1..f98f3a1c38a9 100644
+--- a/drivers/media/i2c/saa7127.c
++++ b/drivers/media/i2c/saa7127.c
+@@ -708,9 +708,9 @@ static const struct v4l2_subdev_ops saa7127_ops = {
  
- static int
--qm1d1b0004_probe(struct i2c_client *client, const struct i2c_device_id *id)
-+qm1d1b0004_probe(struct i2c_client *client)
+ /* ----------------------------------------------------------------------- */
+ 
+-static int saa7127_probe(struct i2c_client *client,
+-			 const struct i2c_device_id *id)
++static int saa7127_probe(struct i2c_client *client)
  {
- 	struct dvb_frontend *fe;
- 	struct qm1d1b0004_config *cfg;
-@@ -253,7 +253,7 @@ static struct i2c_driver qm1d1b0004_driver = {
++	const struct i2c_device_id *id = i2c_client_get_device_id(client);
+ 	struct saa7127_state *state;
+ 	struct v4l2_subdev *sd;
+ 	struct v4l2_sliced_vbi_data vbi = { 0, 0, 0, 0 };  /* set to disabled */
+@@ -810,7 +810,7 @@ static struct i2c_driver saa7127_driver = {
  	.driver = {
- 		.name = "qm1d1b0004",
+ 		.name	= "saa7127",
  	},
--	.probe    = qm1d1b0004_probe,
-+	.probe_new = qm1d1b0004_probe,
- 	.remove   = qm1d1b0004_remove,
- 	.id_table = qm1d1b0004_id,
+-	.probe		= saa7127_probe,
++	.probe_new	= saa7127_probe,
+ 	.remove		= saa7127_remove,
+ 	.id_table	= saa7127_id,
  };
 -- 
 2.38.1
