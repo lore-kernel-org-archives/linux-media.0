@@ -2,48 +2,45 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B566C4332F
-	for <linux-media@archiver.kernel.org>; Sat, 19 Nov 2022 00:41:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88C73C4332F
+	for <linux-media@archiver.kernel.org>; Sat, 19 Nov 2022 00:41:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237002AbiKSAlR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 18 Nov 2022 19:41:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60512 "EHLO
+        id S237016AbiKSAlS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 18 Nov 2022 19:41:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236267AbiKSAkG (ORCPT
+        with ESMTP id S236348AbiKSAkG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 18 Nov 2022 19:40:06 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA7A25EA3
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565738CF03
         for <linux-media@vger.kernel.org>; Fri, 18 Nov 2022 15:44:41 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA92-0003Tf-99; Fri, 18 Nov 2022 23:47:36 +0100
+        id 1owA99-0003pY-Ta; Fri, 18 Nov 2022 23:47:43 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA90-0058bM-0v; Fri, 18 Nov 2022 23:47:34 +0100
+        id 1owA97-0058ea-TP; Fri, 18 Nov 2022 23:47:42 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA90-0000Gc-71; Fri, 18 Nov 2022 23:47:34 +0100
+        id 1owA97-0000JM-MU; Fri, 18 Nov 2022 23:47:41 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        =?utf-8?q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>,
-        Corey Minyard <cminyard@mvista.com>
+        Olli Salonen <olli.salonen@iki.fi>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 369/606] media: i2c/saa7127: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:41:43 +0100
-Message-Id: <20221118224540.619276-370-uwe@kleine-koenig.org>
+Subject: [PATCH 409/606] media: tuners/tda18250: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:42:23 +0100
+Message-Id: <20221118224540.619276-410-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -60,38 +57,36 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-.probe_new() doesn't get the i2c_device_id * parameter, so determine
-that explicitly in the probe function.
+The probe function doesn't make use of the i2c_device_id * parameter so it
+can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/i2c/saa7127.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/media/tuners/tda18250.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/i2c/saa7127.c b/drivers/media/i2c/saa7127.c
-index 78c9388c2ea1..f98f3a1c38a9 100644
---- a/drivers/media/i2c/saa7127.c
-+++ b/drivers/media/i2c/saa7127.c
-@@ -708,9 +708,9 @@ static const struct v4l2_subdev_ops saa7127_ops = {
+diff --git a/drivers/media/tuners/tda18250.c b/drivers/media/tuners/tda18250.c
+index e404a5afad4c..66ff2d035de7 100644
+--- a/drivers/media/tuners/tda18250.c
++++ b/drivers/media/tuners/tda18250.c
+@@ -741,8 +741,7 @@ static const struct dvb_tuner_ops tda18250_ops = {
+ 	.sleep = tda18250_sleep,
+ };
  
- /* ----------------------------------------------------------------------- */
- 
--static int saa7127_probe(struct i2c_client *client,
--			 const struct i2c_device_id *id)
-+static int saa7127_probe(struct i2c_client *client)
+-static int tda18250_probe(struct i2c_client *client,
+-		const struct i2c_device_id *id)
++static int tda18250_probe(struct i2c_client *client)
  {
-+	const struct i2c_device_id *id = i2c_client_get_device_id(client);
- 	struct saa7127_state *state;
- 	struct v4l2_subdev *sd;
- 	struct v4l2_sliced_vbi_data vbi = { 0, 0, 0, 0 };  /* set to disabled */
-@@ -810,7 +810,7 @@ static struct i2c_driver saa7127_driver = {
+ 	struct tda18250_config *cfg = client->dev.platform_data;
+ 	struct dvb_frontend *fe = cfg->fe;
+@@ -878,7 +877,7 @@ static struct i2c_driver tda18250_driver = {
  	.driver = {
- 		.name	= "saa7127",
+ 		.name	= "tda18250",
  	},
--	.probe		= saa7127_probe,
-+	.probe_new	= saa7127_probe,
- 	.remove		= saa7127_remove,
- 	.id_table	= saa7127_id,
+-	.probe		= tda18250_probe,
++	.probe_new	= tda18250_probe,
+ 	.remove		= tda18250_remove,
+ 	.id_table	= tda18250_id_table,
  };
 -- 
 2.38.1
