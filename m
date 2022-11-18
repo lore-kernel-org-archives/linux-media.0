@@ -2,44 +2,49 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9232C433FE
-	for <linux-media@archiver.kernel.org>; Fri, 18 Nov 2022 22:58:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F2D5C4321E
+	for <linux-media@archiver.kernel.org>; Fri, 18 Nov 2022 22:58:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234810AbiKRW6z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 18 Nov 2022 17:58:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37802 "EHLO
+        id S235040AbiKRW64 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 18 Nov 2022 17:58:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235648AbiKRW5w (ORCPT
+        with ESMTP id S234469AbiKRW4h (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 18 Nov 2022 17:57:52 -0500
+        Fri, 18 Nov 2022 17:56:37 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED50FC72FB
-        for <linux-media@vger.kernel.org>; Fri, 18 Nov 2022 14:49:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B07C5B4E
+        for <linux-media@vger.kernel.org>; Fri, 18 Nov 2022 14:48:49 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8o-0002uL-4Z; Fri, 18 Nov 2022 23:47:22 +0100
+        id 1owA8p-0002xX-Vo; Fri, 18 Nov 2022 23:47:24 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8l-0058Ww-Ue; Fri, 18 Nov 2022 23:47:20 +0100
+        id 1owA8n-0058XN-6y; Fri, 18 Nov 2022 23:47:22 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8m-0000CC-5j; Fri, 18 Nov 2022 23:47:20 +0100
+        id 1owA8n-0000CT-AQ; Fri, 18 Nov 2022 23:47:21 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>, Antti Palosaari <crope@iki.fi>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
+        Wolfram Sang <wsa@kernel.org>,
+        Akihiro Tsukada <tskd08@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Petr Machata <petrm@nvidia.com>,
+        =?utf-8?q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.de>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 316/606] media: dvb-frontends/si2168: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:40:50 +0100
-Message-Id: <20221118224540.619276-317-uwe@kleine-koenig.org>
+Subject: [PATCH 320/606] media: dvb-frontends/tc90522: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:40:54 +0100
+Message-Id: <20221118224540.619276-321-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -56,36 +61,38 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-The probe function doesn't make use of the i2c_device_id * parameter so it
-can be trivially converted.
+.probe_new() doesn't get the i2c_device_id * parameter, so determine
+that explicitly in the probe function.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/dvb-frontends/si2168.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/media/dvb-frontends/tc90522.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/si2168.c b/drivers/media/dvb-frontends/si2168.c
-index 8157df4570d1..2a0e108c5eb0 100644
---- a/drivers/media/dvb-frontends/si2168.c
-+++ b/drivers/media/dvb-frontends/si2168.c
-@@ -672,8 +672,7 @@ static const struct dvb_frontend_ops si2168_ops = {
- 	.read_status = si2168_read_status,
+diff --git a/drivers/media/dvb-frontends/tc90522.c b/drivers/media/dvb-frontends/tc90522.c
+index c22d2a2b2a45..77a991bf4713 100644
+--- a/drivers/media/dvb-frontends/tc90522.c
++++ b/drivers/media/dvb-frontends/tc90522.c
+@@ -779,9 +779,9 @@ static const struct dvb_frontend_ops tc90522_ops_ter = {
  };
  
--static int si2168_probe(struct i2c_client *client,
--		const struct i2c_device_id *id)
-+static int si2168_probe(struct i2c_client *client)
+ 
+-static int tc90522_probe(struct i2c_client *client,
+-			 const struct i2c_device_id *id)
++static int tc90522_probe(struct i2c_client *client)
  {
- 	struct si2168_config *config = client->dev.platform_data;
- 	struct si2168_dev *dev;
-@@ -799,7 +798,7 @@ static struct i2c_driver si2168_driver = {
- 		.name                = "si2168",
- 		.suppress_bind_attrs = true,
++	const struct i2c_device_id *id = i2c_client_get_device_id(client);
+ 	struct tc90522_state *state;
+ 	struct tc90522_config *cfg;
+ 	const struct dvb_frontend_ops *ops;
+@@ -840,7 +840,7 @@ static struct i2c_driver tc90522_driver = {
+ 	.driver = {
+ 		.name	= "tc90522",
  	},
--	.probe		= si2168_probe,
-+	.probe_new	= si2168_probe,
- 	.remove		= si2168_remove,
- 	.id_table	= si2168_id_table,
+-	.probe		= tc90522_probe,
++	.probe_new	= tc90522_probe,
+ 	.remove		= tc90522_remove,
+ 	.id_table	= tc90522_id,
  };
 -- 
 2.38.1
