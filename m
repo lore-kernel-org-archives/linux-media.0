@@ -2,48 +2,45 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9217C433FE
-	for <linux-media@archiver.kernel.org>; Fri, 18 Nov 2022 23:58:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 225E1C46467
+	for <linux-media@archiver.kernel.org>; Fri, 18 Nov 2022 23:58:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234755AbiKRX6m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 18 Nov 2022 18:58:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43790 "EHLO
+        id S235671AbiKRX6o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 18 Nov 2022 18:58:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237264AbiKRX5S (ORCPT
+        with ESMTP id S232516AbiKRX4n (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 18 Nov 2022 18:57:18 -0500
+        Fri, 18 Nov 2022 18:56:43 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9F8BE850
-        for <linux-media@vger.kernel.org>; Fri, 18 Nov 2022 15:28:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76AFA44C
+        for <linux-media@vger.kernel.org>; Fri, 18 Nov 2022 15:28:31 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8v-0003C6-Kx; Fri, 18 Nov 2022 23:47:29 +0100
+        id 1owA8r-00033M-Tf; Fri, 18 Nov 2022 23:47:25 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8t-0058ZQ-7a; Fri, 18 Nov 2022 23:47:28 +0100
+        id 1owA8p-0058YE-H7; Fri, 18 Nov 2022 23:47:24 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8t-0000F3-Ba; Fri, 18 Nov 2022 23:47:27 +0100
+        id 1owA8p-0000DY-Po; Fri, 18 Nov 2022 23:47:23 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 345/606] media: i2c/lm3646: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:41:19 +0100
-Message-Id: <20221118224540.619276-346-uwe@kleine-koenig.org>
+Subject: [PATCH 331/606] media: i2c/adv7511-v4l2: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:41:05 +0100
+Message-Id: <20221118224540.619276-332-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -65,31 +62,30 @@ can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/i2c/lm3646.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/media/i2c/adv7511-v4l2.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/i2c/lm3646.c b/drivers/media/i2c/lm3646.c
-index 0aaa963917d8..2a0cf74d2bed 100644
---- a/drivers/media/i2c/lm3646.c
-+++ b/drivers/media/i2c/lm3646.c
-@@ -334,8 +334,7 @@ static int lm3646_init_device(struct lm3646_flash *flash)
- 	return regmap_read(flash->regmap, REG_FLAG, &reg_val);
+diff --git a/drivers/media/i2c/adv7511-v4l2.c b/drivers/media/i2c/adv7511-v4l2.c
+index 0d5ce69f12e7..3999fa524cab 100644
+--- a/drivers/media/i2c/adv7511-v4l2.c
++++ b/drivers/media/i2c/adv7511-v4l2.c
+@@ -1763,7 +1763,7 @@ static void adv7511_init_setup(struct v4l2_subdev *sd)
+ 	adv7511_cec_write(sd, 0x4e, ratio << 2);
  }
  
--static int lm3646_probe(struct i2c_client *client,
--			const struct i2c_device_id *devid)
-+static int lm3646_probe(struct i2c_client *client)
+-static int adv7511_probe(struct i2c_client *client, const struct i2c_device_id *id)
++static int adv7511_probe(struct i2c_client *client)
  {
- 	struct lm3646_flash *flash;
- 	struct lm3646_platform_data *pdata = dev_get_platdata(&client->dev);
-@@ -397,7 +396,7 @@ static struct i2c_driver lm3646_i2c_driver = {
+ 	struct adv7511_state *state;
+ 	struct adv7511_platform_data *pdata = client->dev.platform_data;
+@@ -1957,7 +1957,7 @@ static struct i2c_driver adv7511_driver = {
  	.driver = {
- 		   .name = LM3646_NAME,
- 		   },
--	.probe = lm3646_probe,
-+	.probe_new = lm3646_probe,
- 	.remove = lm3646_remove,
- 	.id_table = lm3646_id_table,
+ 		.name = "adv7511-v4l2",
+ 	},
+-	.probe = adv7511_probe,
++	.probe_new = adv7511_probe,
+ 	.remove = adv7511_remove,
+ 	.id_table = adv7511_id,
  };
 -- 
 2.38.1
