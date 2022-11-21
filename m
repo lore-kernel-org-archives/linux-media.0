@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21923C433FE
-	for <linux-media@archiver.kernel.org>; Mon, 21 Nov 2022 21:50:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 693F0C43217
+	for <linux-media@archiver.kernel.org>; Mon, 21 Nov 2022 21:50:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231981AbiKUVuN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Nov 2022 16:50:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40036 "EHLO
+        id S232058AbiKUVu2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Nov 2022 16:50:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231408AbiKUVtt (ORCPT
+        with ESMTP id S231916AbiKUVuD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Nov 2022 16:49:49 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C74CD28AB;
-        Mon, 21 Nov 2022 13:49:47 -0800 (PST)
+        Mon, 21 Nov 2022 16:50:03 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D304DD92D1;
+        Mon, 21 Nov 2022 13:50:00 -0800 (PST)
 Received: from umang.jainideasonboard.com (unknown [103.86.18.138])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A8F1674C;
-        Mon, 21 Nov 2022 22:49:41 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A9B3A74C;
+        Mon, 21 Nov 2022 22:49:54 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669067386;
-        bh=3bR6iZFiPI5OEdt/rE6YjEy9FHHlUzmTOGaNIwnNmHY=;
+        s=mail; t=1669067399;
+        bh=I5RVD3m86y+uw9pSPfzqUfe3r8mMXWOmrFAqF8rDzgk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W3VC1eMWOB/QVb8g10cqFHtwdn4X92ARIK9TqAjUOrzaCG5n/FT4OhIB7w4xTSYDP
-         N6zaKD2nRKEOwMOtamIHPxQuXGNqI8gj2KRXrypQVihSv1Vz2t1NXdkgUAAeq82++a
-         jgIJQ6qouegyNvDrZgtF3j6mTgL35IE1sqd4ItbU=
+        b=Ghd3OeOuFHsFIV9MRq/3+sr9UfDyBkt0bz0MN7yC/srcYXTwv/qRLB2IOwnEfoTn5
+         W4xSckqlVDh82UV1BQEwFhq5NWZYIHf1+OM7dOx1FZGRytYrLxNpGp057eeIkvTvb8
+         k/FYttzE6c6Nc7tvzCJ1YTyxPMuMxtdluT7zWvDE=
 From:   Umang Jain <umang.jain@ideasonboard.com>
 To:     linux-media@vger.kernel.org, kernel-list@raspberrypi.com,
         linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
@@ -39,383 +39,733 @@ Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Umang Jain <umang.jain@ideasonboard.com>
-Subject: [PATCH 08/14] uapi: bcm2835-isp: Add bcm2835-isp uapi header file
-Date:   Tue, 22 Nov 2022 03:17:16 +0530
-Message-Id: <20221121214722.22563-9-umang.jain@ideasonboard.com>
+Subject: [PATCH 10/14] WIP: vc04_services: bcm2835-isp: Allow formats with different colour spaces
+Date:   Tue, 22 Nov 2022 03:17:18 +0530
+Message-Id: <20221121214722.22563-11-umang.jain@ideasonboard.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221121214722.22563-1-umang.jain@ideasonboard.com>
 References: <20221121214722.22563-1-umang.jain@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+From: David Plowman <david.plowman@raspberrypi.com>
 
-This file defines the userland interface to the bcm2835-isp driver
-that will follow in a separate commit.
+Each supported format now includes a mask showing the allowed colour
+spaces, as well as a default colour space for when one was not
+specified.
 
-Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Additionally we translate the colour space to mmal format and pass it
+over to the VideoCore.
+
+Signed-off-by: David Plowman <david.plowman@raspberrypi.com>
 Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
 ---
- include/uapi/linux/bcm2835-isp.h   | 320 +++++++++++++++++++++++++++++
- include/uapi/linux/v4l2-controls.h |   6 +
- 2 files changed, 326 insertions(+)
- create mode 100644 include/uapi/linux/bcm2835-isp.h
+ .../bcm2835-isp/bcm2835-isp-fmts.h            | 180 ++++++++++++------
+ .../bcm2835-isp/bcm2835-v4l2-isp.c            |  68 ++++++-
+ 2 files changed, 192 insertions(+), 56 deletions(-)
 
-diff --git a/include/uapi/linux/bcm2835-isp.h b/include/uapi/linux/bcm2835-isp.h
-new file mode 100644
-index 000000000000..cf8c0437f159
---- /dev/null
-+++ b/include/uapi/linux/bcm2835-isp.h
-@@ -0,0 +1,320 @@
-+/* SPDX-License-Identifier: ((GPL-2.0+ WITH Linux-syscall-note) OR BSD-3-Clause) */
-+/*
-+ * bcm2835-isp.h
-+ *
-+ * BCM2835 ISP driver - user space header file.
-+ *
-+ * Copyright © 2019-2020 Raspberry Pi (Trading) Ltd.
-+ *
-+ * Author: Naushir Patuck (naush@raspberrypi.com)
-+ *
-+ */
-+
-+#ifndef __BCM2835_ISP_H_
-+#define __BCM2835_ISP_H_
-+
-+#include <linux/v4l2-controls.h>
-+
-+#define V4L2_CID_USER_BCM2835_ISP_CC_MATRIX	\
-+				(V4L2_CID_USER_BCM2835_ISP_BASE + 0x0001)
-+#define V4L2_CID_USER_BCM2835_ISP_LENS_SHADING	\
-+				(V4L2_CID_USER_BCM2835_ISP_BASE + 0x0002)
-+#define V4L2_CID_USER_BCM2835_ISP_BLACK_LEVEL	\
-+				(V4L2_CID_USER_BCM2835_ISP_BASE + 0x0003)
-+#define V4L2_CID_USER_BCM2835_ISP_GEQ		\
-+				(V4L2_CID_USER_BCM2835_ISP_BASE + 0x0004)
-+#define V4L2_CID_USER_BCM2835_ISP_GAMMA		\
-+				(V4L2_CID_USER_BCM2835_ISP_BASE + 0x0005)
-+#define V4L2_CID_USER_BCM2835_ISP_DENOISE	\
-+				(V4L2_CID_USER_BCM2835_ISP_BASE + 0x0006)
-+#define V4L2_CID_USER_BCM2835_ISP_SHARPEN	\
-+				(V4L2_CID_USER_BCM2835_ISP_BASE + 0x0007)
-+#define V4L2_CID_USER_BCM2835_ISP_DPC		\
-+				(V4L2_CID_USER_BCM2835_ISP_BASE + 0x0008)
-+
-+/*
-+ * All structs below are directly mapped onto the equivalent structs in
-+ * drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h
-+ * for convenience.
-+ */
-+
-+/**
-+ * struct bcm2835_isp_rational - Rational value type.
-+ *
-+ * @num:	Numerator.
-+ * @den:	Denominator.
-+ */
-+struct bcm2835_isp_rational {
-+	__s32 num;
-+	__u32 den;
-+};
-+
-+/**
-+ * struct bcm2835_isp_ccm - Colour correction matrix.
-+ *
-+ * @ccm:	3x3 correction matrix coefficients.
-+ * @offsets:	1x3 correction offsets.
-+ */
-+struct bcm2835_isp_ccm {
-+	struct bcm2835_isp_rational ccm[3][3];
-+	__s32 offsets[3];
-+};
-+
-+/**
-+ * struct bcm2835_isp_custom_ccm - Custom CCM applied with the
-+ *				   V4L2_CID_USER_BCM2835_ISP_CC_MATRIX ctrl.
-+ *
-+ * @enabled:	Enable custom CCM.
-+ * @ccm:	Custom CCM coefficients and offsets.
-+ */
-+struct bcm2835_isp_custom_ccm {
-+	__u32 enabled;
-+	struct bcm2835_isp_ccm ccm;
-+};
-+
-+/**
-+ * enum bcm2835_isp_gain_format - format of the gains in the lens shading
-+ *				  tables used with the
-+ *				  V4L2_CID_USER_BCM2835_ISP_LENS_SHADING ctrl.
-+ *
-+ * @GAIN_FORMAT_U0P8_1:		Gains are u0.8 format, starting at 1.0
-+ * @GAIN_FORMAT_U1P7_0:		Gains are u1.7 format, starting at 0.0
-+ * @GAIN_FORMAT_U1P7_1:		Gains are u1.7 format, starting at 1.0
-+ * @GAIN_FORMAT_U2P6_0:		Gains are u2.6 format, starting at 0.0
-+ * @GAIN_FORMAT_U2P6_1:		Gains are u2.6 format, starting at 1.0
-+ * @GAIN_FORMAT_U3P5_0:		Gains are u3.5 format, starting at 0.0
-+ * @GAIN_FORMAT_U3P5_1:		Gains are u3.5 format, starting at 1.0
-+ * @GAIN_FORMAT_U4P10:		Gains are u4.10 format, starting at 0.0
-+ */
-+enum bcm2835_isp_gain_format {
-+	GAIN_FORMAT_U0P8_1 = 0,
-+	GAIN_FORMAT_U1P7_0 = 1,
-+	GAIN_FORMAT_U1P7_1 = 2,
-+	GAIN_FORMAT_U2P6_0 = 3,
-+	GAIN_FORMAT_U2P6_1 = 4,
-+	GAIN_FORMAT_U3P5_0 = 5,
-+	GAIN_FORMAT_U3P5_1 = 6,
-+	GAIN_FORMAT_U4P10  = 7,
-+};
-+
-+/**
-+ * struct bcm2835_isp_lens_shading - Lens shading tables supplied with the
-+ *				     V4L2_CID_USER_BCM2835_ISP_LENS_SHADING
-+ *				     ctrl.
-+ *
-+ * @enabled:		Enable lens shading.
-+ * @grid_cell_size:	Size of grid cells in samples (16, 32, 64, 128 or 256).
-+ * @grid_width:		Width of lens shading tables in grid cells.
-+ * @grid_stride:	Row to row distance (in grid cells) between grid cells
-+ *			in the same horizontal location.
-+ * @grid_height:	Height of lens shading tables in grid cells.
-+ * @dmabuf:		dmabuf file handle containing the table.
-+ * @ref_transform:	Reference transform - unsupported, please pass zero.
-+ * @corner_sampled:	Whether the gains are sampled at the corner points
-+ *			of the grid cells or in the cell centres.
-+ * @gain_format:	Format of the gains (see enum &bcm2835_isp_gain_format).
-+ */
-+struct bcm2835_isp_lens_shading {
-+	__u32 enabled;
-+	__u32 grid_cell_size;
-+	__u32 grid_width;
-+	__u32 grid_stride;
-+	__u32 grid_height;
-+	__s32 dmabuf;
-+	__u32 ref_transform;
-+	__u32 corner_sampled;
-+	__u32 gain_format;
-+};
-+
-+/**
-+ * struct bcm2835_isp_black_level - Sensor black level set with the
-+ *				    V4L2_CID_USER_BCM2835_ISP_BLACK_LEVEL ctrl.
-+ *
-+ * @enabled:		Enable black level.
-+ * @black_level_r:	Black level for red channel.
-+ * @black_level_g:	Black level for green channels.
-+ * @black_level_b:	Black level for blue channel.
-+ */
-+struct bcm2835_isp_black_level {
-+	__u32 enabled;
-+	__u16 black_level_r;
-+	__u16 black_level_g;
-+	__u16 black_level_b;
-+	__u8 padding[2]; /* Unused */
-+};
-+
-+/**
-+ * struct bcm2835_isp_geq - Green equalisation parameters set with the
-+ *			    V4L2_CID_USER_BCM2835_ISP_GEQ ctrl.
-+ *
-+ * @enabled:	Enable green equalisation.
-+ * @offset:	Fixed offset of the green equalisation threshold.
-+ * @slope:	Slope of the green equalisation threshold.
-+ */
-+struct bcm2835_isp_geq {
-+	__u32 enabled;
-+	__u32 offset;
-+	struct bcm2835_isp_rational slope;
-+};
-+
-+#define BCM2835_NUM_GAMMA_PTS 33
-+
-+/**
-+ * struct bcm2835_isp_gamma - Gamma parameters set with the
-+ *			      V4L2_CID_USER_BCM2835_ISP_GAMMA ctrl.
-+ *
-+ * @enabled:	Enable gamma adjustment.
-+ * @X:		X values of the points defining the gamma curve.
-+ *		Values should be scaled to 16 bits.
-+ * @Y:		Y values of the points defining the gamma curve.
-+ *		Values should be scaled to 16 bits.
-+ */
-+struct bcm2835_isp_gamma {
-+	__u32 enabled;
-+	__u16 x[BCM2835_NUM_GAMMA_PTS];
-+	__u16 y[BCM2835_NUM_GAMMA_PTS];
-+};
-+
-+/**
-+ * struct bcm2835_isp_denoise - Denoise parameters set with the
-+ *				V4L2_CID_USER_BCM2835_ISP_DENOISE ctrl.
-+ *
-+ * @enabled:	Enable denoise.
-+ * @constant:	Fixed offset of the noise threshold.
-+ * @slope:	Slope of the noise threshold.
-+ * @strength:	Denoise strength between 0.0 (off) and 1.0 (maximum).
-+ */
-+struct bcm2835_isp_denoise {
-+	__u32 enabled;
-+	__u32 constant;
-+	struct bcm2835_isp_rational slope;
-+	struct bcm2835_isp_rational strength;
-+};
-+
-+/**
-+ * struct bcm2835_isp_sharpen - Sharpen parameters set with the
-+ *				V4L2_CID_USER_BCM2835_ISP_SHARPEN ctrl.
-+ *
-+ * @enabled:	Enable sharpening.
-+ * @threshold:	Threshold at which to start sharpening pixels.
-+ * @strength:	Strength with which pixel sharpening increases.
-+ * @limit:	Limit to the amount of sharpening applied.
-+ */
-+struct bcm2835_isp_sharpen {
-+	__u32 enabled;
-+	struct bcm2835_isp_rational threshold;
-+	struct bcm2835_isp_rational strength;
-+	struct bcm2835_isp_rational limit;
-+};
-+
-+/**
-+ * enum bcm2835_isp_dpc_mode - defective pixel correction (DPC) strength.
-+ *
-+ * @DPC_MODE_OFF:		No DPC.
-+ * @DPC_MODE_NORMAL:		Normal DPC.
-+ * @DPC_MODE_STRONG:		Strong DPC.
-+ */
-+enum bcm2835_isp_dpc_mode {
-+	DPC_MODE_OFF = 0,
-+	DPC_MODE_NORMAL = 1,
-+	DPC_MODE_STRONG = 2,
-+};
-+
-+/**
-+ * struct bcm2835_isp_dpc - Defective pixel correction (DPC) parameters set
-+ *			    with the V4L2_CID_USER_BCM2835_ISP_DPC ctrl.
-+ *
-+ * @enabled:	Enable DPC.
-+ * @strength:	DPC strength (see enum &bcm2835_isp_dpc_mode).
-+ */
-+struct bcm2835_isp_dpc {
-+	__u32 enabled;
-+	__u32 strength;
-+};
-+
-+/*
-+ * ISP statistics structures.
-+ *
-+ * The bcm2835_isp_stats structure is generated at the output of the
-+ * statistics node.  Note that this does not directly map onto the statistics
-+ * output of the ISP HW.  Instead, the MMAL firmware code maps the HW statistics
-+ * to the bcm2835_isp_stats structure.
-+ */
-+#define DEFAULT_AWB_REGIONS_X 16
-+#define DEFAULT_AWB_REGIONS_Y 12
-+
-+#define NUM_HISTOGRAMS 2
-+#define NUM_HISTOGRAM_BINS 128
-+#define AWB_REGIONS (DEFAULT_AWB_REGIONS_X * DEFAULT_AWB_REGIONS_Y)
-+#define FLOATING_REGIONS 16
-+#define AGC_REGIONS 16
-+#define FOCUS_REGIONS 12
-+
-+/**
-+ * struct bcm2835_isp_stats_hist - Histogram statistics
-+ *
-+ * @r_hist:	Red channel histogram.
-+ * @g_hist:	Combined green channel histogram.
-+ * @b_hist:	Blue channel histogram.
-+ */
-+struct bcm2835_isp_stats_hist {
-+	__u32 r_hist[NUM_HISTOGRAM_BINS];
-+	__u32 g_hist[NUM_HISTOGRAM_BINS];
-+	__u32 b_hist[NUM_HISTOGRAM_BINS];
-+};
-+
-+/**
-+ * struct bcm2835_isp_stats_region - Region sums.
-+ *
-+ * @counted:	The number of 2x2 bayer tiles accumulated.
-+ * @notcounted:	The number of 2x2 bayer tiles not accumulated.
-+ * @r_sum:	Total sum of counted pixels in the red channel for a region.
-+ * @g_sum:	Total sum of counted pixels in the green channel for a region.
-+ * @b_sum:	Total sum of counted pixels in the blue channel for a region.
-+ */
-+struct bcm2835_isp_stats_region {
-+	__u32 counted;
-+	__u32 notcounted;
-+	__u64 r_sum;
-+	__u64 g_sum;
-+	__u64 b_sum;
-+};
-+
-+/**
-+ * struct bcm2835_isp_stats_focus - Focus statistics.
-+ *
-+ * @contrast_val:	Focus measure - accumulated output of the focus filter.
-+ *			In the first dimension, index [0] counts pixels below a
-+ *			preset threshold, and index [1] counts pixels above the
-+ *			threshold.  In the second dimension, index [0] uses the
-+ *			first predefined filter, and index [1] uses the second
-+ *			predefined filter.
-+ * @contrast_val_num:	The number of counted pixels in the above accumulation.
-+ */
-+struct bcm2835_isp_stats_focus {
-+	__u64 contrast_val[2][2];
-+	__u32 contrast_val_num[2][2];
-+};
-+
-+/**
-+ * struct bcm2835_isp_stats - ISP statistics.
-+ *
-+ * @version:		Version of the bcm2835_isp_stats structure.
-+ * @size:		Size of the bcm2835_isp_stats structure.
-+ * @hist:		Histogram statistics for the entire image.
-+ * @awb_stats:		Statistics for the regions defined for AWB calculations.
-+ * @floating_stats:	Statistics for arbitrarily placed (floating) regions.
-+ * @agc_stats:		Statistics for the regions defined for AGC calculations.
-+ * @focus_stats:	Focus filter statistics for the focus regions.
-+ */
-+struct bcm2835_isp_stats {
-+	__u32 version;
-+	__u32 size;
-+	struct bcm2835_isp_stats_hist hist[NUM_HISTOGRAMS];
-+	struct bcm2835_isp_stats_region awb_stats[AWB_REGIONS];
-+	struct bcm2835_isp_stats_region floating_stats[FLOATING_REGIONS];
-+	struct bcm2835_isp_stats_region agc_stats[AGC_REGIONS];
-+	struct bcm2835_isp_stats_focus focus_stats[FOCUS_REGIONS];
-+};
-+
-+#endif /* __BCM2835_ISP_H_ */
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index b5e7d082b8ad..31606d42ec58 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -217,6 +217,7 @@ enum v4l2_colorfx {
-  * The base for Allegro driver controls.
-  * We reserve 16 controls for this driver.
-  */
-+
- #define V4L2_CID_USER_ALLEGRO_BASE		(V4L2_CID_USER_BASE + 0x1170)
+diff --git a/drivers/staging/vc04_services/bcm2835-isp/bcm2835-isp-fmts.h b/drivers/staging/vc04_services/bcm2835-isp/bcm2835-isp-fmts.h
+index 65913a4ff203..a545dbf2b5dd 100644
+--- a/drivers/staging/vc04_services/bcm2835-isp/bcm2835-isp-fmts.h
++++ b/drivers/staging/vc04_services/bcm2835-isp/bcm2835-isp-fmts.h
+@@ -20,10 +20,29 @@ struct bcm2835_isp_fmt {
+ 	int bytesperline_align;
+ 	u32 mmal_fmt;
+ 	int size_multiplier_x2;
+-	enum v4l2_colorspace colorspace;
++	u32 colorspace_mask;
++	enum v4l2_colorspace colorspace_default;
+ 	unsigned int step_size;
+ };
  
- /*
-@@ -231,6 +232,11 @@ enum v4l2_colorfx {
-  */
- #define V4L2_CID_USER_DW100_BASE		(V4L2_CID_USER_BASE + 0x1190)
- 
-+/* The base for the bcm2835-isp driver controls.
-+ * We reserve 16 controls for this driver.
-+ */
-+#define V4L2_CID_USER_BCM2835_ISP_BASE		(V4L2_CID_USER_BASE + 0x11a0)
++#define V4L2_COLORSPACE_MASK(colorspace) BIT(colorspace)
 +
- /* MPEG-class control IDs */
- /* The MPEG controls are applicable to all codec controls
-  * and the 'MPEG' part of the define is historical */
++#define V4L2_COLORSPACE_MASK_JPEG V4L2_COLORSPACE_MASK(V4L2_COLORSPACE_JPEG)
++#define V4L2_COLORSPACE_MASK_SMPTE170M V4L2_COLORSPACE_MASK(V4L2_COLORSPACE_SMPTE170M)
++#define V4L2_COLORSPACE_MASK_REC709 V4L2_COLORSPACE_MASK(V4L2_COLORSPACE_REC709)
++#define V4L2_COLORSPACE_MASK_SRGB V4L2_COLORSPACE_MASK(V4L2_COLORSPACE_SRGB)
++#define V4L2_COLORSPACE_MASK_RAW V4L2_COLORSPACE_MASK(V4L2_COLORSPACE_RAW)
++
++/*
++ * The colour spaces we support for YUV outputs. SRGB features here because,
++ * once you assign the default transfer func and so on, it and JPEG effectively
++ * mean the same.
++ */
++#define V4L2_COLORSPACE_MASK_YUV (V4L2_COLORSPACE_MASK_JPEG | \
++				  V4L2_COLORSPACE_MASK_SRGB | \
++				  V4L2_COLORSPACE_MASK_SMPTE170M | \
++				  V4L2_COLORSPACE_MASK_REC709)
++
+ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 	{
+ 		/* YUV formats */
+@@ -32,7 +51,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 64,
+ 		.mmal_fmt	    = MMAL_ENCODING_I420,
+ 		.size_multiplier_x2 = 3,
+-		.colorspace	    = V4L2_COLORSPACE_SMPTE170M,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_YUV,
++		.colorspace_default = V4L2_COLORSPACE_JPEG,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_YVU420,
+@@ -40,7 +60,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 64,
+ 		.mmal_fmt	    = MMAL_ENCODING_YV12,
+ 		.size_multiplier_x2 = 3,
+-		.colorspace	    = V4L2_COLORSPACE_SMPTE170M,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_YUV,
++		.colorspace_default = V4L2_COLORSPACE_SMPTE170M,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_NV12,
+@@ -48,7 +69,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_NV12,
+ 		.size_multiplier_x2 = 3,
+-		.colorspace	    = V4L2_COLORSPACE_SMPTE170M,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_YUV,
++		.colorspace_default = V4L2_COLORSPACE_SMPTE170M,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_NV21,
+@@ -56,7 +78,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_NV21,
+ 		.size_multiplier_x2 = 3,
+-		.colorspace	    = V4L2_COLORSPACE_SMPTE170M,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_YUV,
++		.colorspace_default = V4L2_COLORSPACE_SMPTE170M,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_YUYV,
+@@ -64,7 +87,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 64,
+ 		.mmal_fmt	    = MMAL_ENCODING_YUYV,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_SMPTE170M,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_YUV,
++		.colorspace_default = V4L2_COLORSPACE_SMPTE170M,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_UYVY,
+@@ -72,7 +96,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 64,
+ 		.mmal_fmt	    = MMAL_ENCODING_UYVY,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_SMPTE170M,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_YUV,
++		.colorspace_default = V4L2_COLORSPACE_SMPTE170M,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_YVYU,
+@@ -80,7 +105,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 64,
+ 		.mmal_fmt	    = MMAL_ENCODING_YVYU,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_SMPTE170M,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_YUV,
++		.colorspace_default = V4L2_COLORSPACE_SMPTE170M,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_VYUY,
+@@ -88,7 +114,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 64,
+ 		.mmal_fmt	    = MMAL_ENCODING_VYUY,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_SMPTE170M,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_YUV,
++		.colorspace_default = V4L2_COLORSPACE_SMPTE170M,
+ 		.step_size	    = 2,
+ 	}, {
+ 		/* RGB formats */
+@@ -97,7 +124,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_RGB24,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_SRGB,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_SRGB,
++		.colorspace_default = V4L2_COLORSPACE_SRGB,
+ 		.step_size	    = 1,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_RGB565,
+@@ -105,7 +133,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_RGB16,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_SRGB,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_SRGB,
++		.colorspace_default = V4L2_COLORSPACE_SRGB,
+ 		.step_size	    = 1,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_BGR24,
+@@ -113,7 +142,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BGR24,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_SRGB,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_SRGB,
++		.colorspace_default = V4L2_COLORSPACE_SRGB,
+ 		.step_size	    = 1,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_XBGR32,
+@@ -121,7 +151,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 64,
+ 		.mmal_fmt	    = MMAL_ENCODING_BGRA,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_SRGB,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_SRGB,
++		.colorspace_default = V4L2_COLORSPACE_SRGB,
+ 		.step_size	    = 1,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_RGBX32,
+@@ -129,7 +160,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 64,
+ 		.mmal_fmt	    = MMAL_ENCODING_RGBA,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_SRGB,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_SRGB,
++		.colorspace_default = V4L2_COLORSPACE_SRGB,
+ 		.step_size	    = 1,
+ 	}, {
+ 		/* Bayer formats */
+@@ -139,7 +171,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SRGGB8,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SBGGR8,
+@@ -147,7 +180,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SBGGR8,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SGRBG8,
+@@ -155,7 +189,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SGRBG8,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SGBRG8,
+@@ -163,7 +198,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SGBRG8,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		/* 10 bit */
+@@ -172,7 +208,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SRGGB10P,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SBGGR10P,
+@@ -180,7 +217,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SBGGR10P,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SGRBG10P,
+@@ -188,7 +226,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SGRBG10P,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SGBRG10P,
+@@ -196,7 +235,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SGBRG10P,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		/* 12 bit */
+@@ -205,7 +245,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SRGGB12P,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SBGGR12P,
+@@ -213,7 +254,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SBGGR12P,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SGRBG12P,
+@@ -221,7 +263,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SGRBG12P,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SGBRG12P,
+@@ -229,7 +272,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SGBRG12P,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		/* 14 bit */
+@@ -238,7 +282,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SRGGB14P,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SBGGR14P,
+@@ -246,7 +291,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SBGGR14P,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SGRBG14P,
+@@ -254,7 +300,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SGRBG14P,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SGBRG14P,
+@@ -262,7 +309,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SGBRG14P,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		/* 16 bit */
+@@ -271,7 +319,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SRGGB16,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SBGGR16,
+@@ -279,7 +328,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SBGGR16,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SGRBG16,
+@@ -287,7 +337,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SGRBG16,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SGBRG16,
+@@ -295,7 +346,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SGBRG16,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		/* Bayer formats unpacked to 16bpp */
+@@ -305,7 +357,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SRGGB10,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SBGGR10,
+@@ -313,7 +366,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SBGGR10,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SGRBG10,
+@@ -321,7 +375,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SGRBG10,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SGBRG10,
+@@ -329,7 +384,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SGBRG10,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		/* 12 bit */
+@@ -338,7 +394,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SRGGB12,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SBGGR12,
+@@ -346,7 +403,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SBGGR12,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SGRBG12,
+@@ -354,7 +412,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SGRBG12,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SGBRG12,
+@@ -362,7 +421,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SGBRG12,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		/* 14 bit */
+@@ -371,7 +431,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SRGGB14,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SBGGR14,
+@@ -379,7 +440,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SBGGR14,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SGRBG14,
+@@ -387,7 +449,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SGRBG14,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_PIX_FMT_SGBRG14,
+@@ -395,7 +458,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_BAYER_SGBRG14,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		/* Monochrome MIPI formats */
+@@ -405,7 +469,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_GREY,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		/* 10 bit */
+@@ -414,7 +479,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_Y10P,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		/* 12 bit */
+@@ -423,7 +489,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_Y12P,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		/* 14 bit */
+@@ -432,7 +499,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_Y14P,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		/* 16 bit */
+@@ -441,7 +509,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_Y16,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		/* 10 bit as 16bpp */
+@@ -450,7 +519,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_Y10,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		/* 12 bit as 16bpp */
+@@ -459,7 +529,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_Y12,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		/* 14 bit as 16bpp */
+@@ -468,7 +539,8 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
+ 		.bytesperline_align = 32,
+ 		.mmal_fmt	    = MMAL_ENCODING_Y14,
+ 		.size_multiplier_x2 = 2,
+-		.colorspace	    = V4L2_COLORSPACE_RAW,
++		.colorspace_mask    = V4L2_COLORSPACE_MASK_RAW,
++		.colorspace_default = V4L2_COLORSPACE_RAW,
+ 		.step_size	    = 2,
+ 	}, {
+ 		.fourcc		    = V4L2_META_FMT_BCM2835_ISP_STATS,
+diff --git a/drivers/staging/vc04_services/bcm2835-isp/bcm2835-v4l2-isp.c b/drivers/staging/vc04_services/bcm2835-isp/bcm2835-v4l2-isp.c
+index eb5f076fc6dc..cb7cdba76682 100644
+--- a/drivers/staging/vc04_services/bcm2835-isp/bcm2835-v4l2-isp.c
++++ b/drivers/staging/vc04_services/bcm2835-isp/bcm2835-v4l2-isp.c
+@@ -74,6 +74,7 @@ struct bcm2835_isp_q_data {
+ 	unsigned int width;
+ 	unsigned int height;
+ 	unsigned int sizeimage;
++	enum v4l2_colorspace colorspace;
+ 	const struct bcm2835_isp_fmt *fmt;
+ };
+ 
+@@ -313,6 +314,43 @@ static void mmal_buffer_cb(struct vchiq_mmal_instance *instance,
+ 		complete(&dev->frame_cmplt);
+ }
+ 
++struct colorspace_translation {
++	enum v4l2_colorspace v4l2_value;
++	u32 mmal_value;
++};
++
++static u32 translate_color_space(enum v4l2_colorspace color_space)
++{
++	static const struct colorspace_translation translations[] = {
++		{ V4L2_COLORSPACE_DEFAULT, MMAL_COLOR_SPACE_UNKNOWN },
++		{ V4L2_COLORSPACE_SMPTE170M, MMAL_COLOR_SPACE_ITUR_BT601 },
++		{ V4L2_COLORSPACE_SMPTE240M, MMAL_COLOR_SPACE_SMPTE240M },
++		{ V4L2_COLORSPACE_REC709, MMAL_COLOR_SPACE_ITUR_BT709 },
++		/* V4L2_COLORSPACE_BT878 unavailable */
++		{ V4L2_COLORSPACE_470_SYSTEM_M, MMAL_COLOR_SPACE_BT470_2_M },
++		{ V4L2_COLORSPACE_470_SYSTEM_BG, MMAL_COLOR_SPACE_BT470_2_BG },
++		{ V4L2_COLORSPACE_JPEG, MMAL_COLOR_SPACE_JPEG_JFIF },
++		/*
++		 * We don't have an encoding for SRGB as such, but VideoCore
++		 * will do the right thing if it gets "unknown".
++		 */
++		{ V4L2_COLORSPACE_SRGB, MMAL_COLOR_SPACE_UNKNOWN },
++		/* V4L2_COLORSPACE_OPRGB unavailable */
++		/* V4L2_COLORSPACE_BT2020 unavailable */
++		/* V4L2_COLORSPACE_RAW unavailable */
++		/* V4L2_COLORSPACE_DCI_P3 unavailable */
++	};
++
++	unsigned int i;
++
++	for (i = 0; i < ARRAY_SIZE(translations); i++) {
++		if (color_space == translations[i].v4l2_value)
++			return translations[i].mmal_value;
++	}
++
++	return MMAL_COLOR_SPACE_UNKNOWN;
++}
++
+ static void setup_mmal_port_format(struct bcm2835_isp_node *node,
+ 				   struct vchiq_mmal_port *port)
+ {
+@@ -326,6 +364,7 @@ static void setup_mmal_port_format(struct bcm2835_isp_node *node,
+ 	port->es.video.crop.height = q_data->height;
+ 	port->es.video.crop.x = 0;
+ 	port->es.video.crop.y = 0;
++	port->es.video.color_space = translate_color_space(q_data->colorspace);
+ };
+ 
+ static int setup_mmal_port(struct bcm2835_isp_node *node)
+@@ -834,6 +873,9 @@ static int populate_qdata_fmt(struct v4l2_format *f,
+ 		/* All parameters should have been set correctly by try_fmt */
+ 		q_data->bytesperline = f->fmt.pix.bytesperline;
+ 		q_data->sizeimage = f->fmt.pix.sizeimage;
++
++		/* We must indicate which of the allowed colour spaces we have. */
++		q_data->colorspace = f->fmt.pix.colorspace;
+ 	} else {
+ 		v4l2_dbg(1, debug, &dev->v4l2_dev,
+ 			 "%s: Setting meta format for fmt: %08x, size %u\n",
+@@ -845,6 +887,9 @@ static int populate_qdata_fmt(struct v4l2_format *f,
+ 		q_data->height = 0;
+ 		q_data->bytesperline = 0;
+ 		q_data->sizeimage = f->fmt.meta.buffersize;
++
++		/* This won't mean anything for metadata, but may as well fill it in. */
++		q_data->colorspace = V4L2_COLORSPACE_DEFAULT;
+ 	}
+ 
+ 	v4l2_dbg(1, debug, &dev->v4l2_dev,
+@@ -908,7 +953,7 @@ static int bcm2835_isp_node_g_fmt(struct file *file, void *priv,
+ 		f->fmt.pix.pixelformat = q_data->fmt->fourcc;
+ 		f->fmt.pix.bytesperline = q_data->bytesperline;
+ 		f->fmt.pix.sizeimage = q_data->sizeimage;
+-		f->fmt.pix.colorspace = q_data->fmt->colorspace;
++		f->fmt.pix.colorspace = q_data->colorspace;
+ 	}
+ 
+ 	return 0;
+@@ -975,13 +1020,31 @@ static int bcm2835_isp_node_try_fmt(struct file *file, void *priv,
+ 		fmt = get_default_format(node);
+ 
+ 	if (!node_is_stats(node)) {
++		int is_rgb;
++
+ 		f->fmt.pix.width = max(min(f->fmt.pix.width, MAX_DIM),
+ 				       MIN_DIM);
+ 		f->fmt.pix.height = max(min(f->fmt.pix.height, MAX_DIM),
+ 					MIN_DIM);
+ 
+ 		f->fmt.pix.pixelformat = fmt->fourcc;
+-		f->fmt.pix.colorspace = fmt->colorspace;
++
++		/*
++		 * Fill in the actual colour space when the requested one was
++		 * not supported. This also catches the case when the "default"
++		 * colour space was requested (as that's never in the mask).
++		 */
++		if (!(V4L2_COLORSPACE_MASK(f->fmt.pix.colorspace) & fmt->colorspace_mask))
++			f->fmt.pix.colorspace = fmt->colorspace_default;
++		/* In all cases, we only support the defaults for these: */
++		f->fmt.pix.ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(f->fmt.pix.colorspace);
++		f->fmt.pix.xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(f->fmt.pix.colorspace);
++		/* RAW counts as sRGB here so that we get full range. */
++		is_rgb = f->fmt.pix.colorspace == V4L2_COLORSPACE_SRGB ||
++			f->fmt.pix.colorspace == V4L2_COLORSPACE_RAW;
++		f->fmt.pix.quantization = V4L2_MAP_QUANTIZATION_DEFAULT(is_rgb, f->fmt.pix.colorspace,
++									f->fmt.pix.ycbcr_enc);
++
+ 		f->fmt.pix.bytesperline = get_bytesperline(f->fmt.pix.width,
+ 							   fmt);
+ 		f->fmt.pix.field = V4L2_FIELD_NONE;
+@@ -1307,6 +1370,7 @@ static int register_node(struct bcm2835_isp_dev *dev,
+ 					       node->q_data.width,
+ 					       node->q_data.height,
+ 					       node->q_data.fmt);
++	node->q_data.colorspace = node->q_data.fmt->colorspace_default;
+ 
+ 	queue->io_modes = VB2_MMAP | VB2_DMABUF;
+ 	queue->drv_priv = node;
 -- 
 2.37.3
 
