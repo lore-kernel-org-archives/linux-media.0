@@ -2,125 +2,131 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D118C433FE
-	for <linux-media@archiver.kernel.org>; Tue, 22 Nov 2022 18:57:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 390D7C4332F
+	for <linux-media@archiver.kernel.org>; Tue, 22 Nov 2022 19:29:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234684AbiKVS44 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Nov 2022 13:56:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54670 "EHLO
+        id S234769AbiKVT3W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Nov 2022 14:29:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234597AbiKVS4S (ORCPT
+        with ESMTP id S234492AbiKVT3T (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Nov 2022 13:56:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F26D48C79F
-        for <linux-media@vger.kernel.org>; Tue, 22 Nov 2022 10:55:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669143322;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=aep8RFMu1+GiUZaTPB9joRtRtN+HkoJa3LBopYYK188=;
-        b=S+U4JoCbZkrKl4Iwgf5G2uOJGR9D9ts/wNR4TfDPNFKiiANde8MPCtaZ4ZLfLx/7rM8Sj5
-        dlJ6ztPq1zw1/gnUB9rhR0/o1YCoa8jqkDfUCt38PZ445kUnirMmG5v4naPKYxkBI/HPld
-        lPfnK8U62C3+BHJsJJBae+iurbsvnc8=
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
- [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-435-vCo9EI06N-a8S3F_Run2Sg-1; Tue, 22 Nov 2022 13:52:38 -0500
-X-MC-Unique: vCo9EI06N-a8S3F_Run2Sg-1
-Received: by mail-pf1-f197.google.com with SMTP id u3-20020a056a00124300b0056d4ab0c7cbso9724895pfi.7
-        for <linux-media@vger.kernel.org>; Tue, 22 Nov 2022 10:52:17 -0800 (PST)
+        Tue, 22 Nov 2022 14:29:19 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F898FFAC
+        for <linux-media@vger.kernel.org>; Tue, 22 Nov 2022 11:29:17 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id b8so11231720edf.11
+        for <linux-media@vger.kernel.org>; Tue, 22 Nov 2022 11:29:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NVDnmC2dKJqAUSDipNMGo0RTknLwbcl5eyAafViq/zw=;
+        b=F6JQcHUsspYdGaSt4ieZNwOMZpEsONnlt9o3YWjXlEPIa0eIcgJ24H9S942F8Q4aMc
+         g+39K4DM+a7d2RygbPWquSET+BAUOl/CuMuwn+gW+NMmdBYH2TajHT6E0wgDLsvyRn8Q
+         Oyjdw7OWDhgLbC7P9JZW0uMGCjhOePfyWsSdI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=aep8RFMu1+GiUZaTPB9joRtRtN+HkoJa3LBopYYK188=;
-        b=0loCFuOY7ypAI8W9R6eUSdk9PH0Z6MK3mIkGPO2B+xA+pANvueYOy8HSlG0O3I1XrA
-         q1jLyQk7Db0Wpih9M2zpO9ThxY1EXzZ/P3uwgqVogHcJoIW6xvdjnS2kBj1UBperzClg
-         DhJh3QL5SdRTAtXaWFzJRLaMKtdcovzdiBIBi6q1X01xus3oJQwZcE+umfmYbnYh6gVR
-         aU51fj37selKXdKDGkmQHcIA6Pwoaq71GrezpLpOENHXBGkweVT/rOfGRey48zwAVqJz
-         OSyq8WGxXaag52W3ejwB1NS8MIV0/WQIY6iu+JHTXN6LkXE455BuM+clswg/lvEK4d+7
-         wceQ==
-X-Gm-Message-State: ANoB5pnXj4Fo9RHdjKlmSa7TPbk1nbcjFJ96IYBJWDUCGHGI9Q8deY0v
-        euSngiwSskDmvYd7VmvQUZFcjb7zSOk/yo9xWxPHdxnP506pkrhzgzUvmezk3hTCNEMd9/RG39H
-        eeZ7f9wJiq9H3wmTB34xQXAY=
-X-Received: by 2002:a63:f354:0:b0:476:db6f:e79d with SMTP id t20-20020a63f354000000b00476db6fe79dmr4471108pgj.399.1669143126989;
-        Tue, 22 Nov 2022 10:52:06 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5Z+51TBzvK+WApZPtmfv/cY2Dyq8KHaQoYEX+J7yPOkn9D/KL6gvCIltzBARHLl6qQLK4iww==
-X-Received: by 2002:a63:f354:0:b0:476:db6f:e79d with SMTP id t20-20020a63f354000000b00476db6fe79dmr4471079pgj.399.1669143126697;
-        Tue, 22 Nov 2022 10:52:06 -0800 (PST)
-Received: from ryzen.. ([240d:1a:c0d:9f00:fc9c:8ee9:e32c:2d9])
-        by smtp.gmail.com with ESMTPSA id y63-20020a623242000000b0056be1d7d4a3sm10950745pfy.73.2022.11.22.10.52.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 10:52:06 -0800 (PST)
-From:   Shigeru Yoshida <syoshida@redhat.com>
-To:     hverkuil@xs4all.nl, mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        Shigeru Yoshida <syoshida@redhat.com>,
-        syzbot+9ca7a12fd736d93e0232@syzkaller.appspotmail.com
-Subject: [PATCH] media: si470x: Fix use-after-free in si470x_int_in_callback()
-Date:   Wed, 23 Nov 2022 03:51:59 +0900
-Message-Id: <20221122185159.1184593-1-syoshida@redhat.com>
-X-Mailer: git-send-email 2.38.1
+        bh=NVDnmC2dKJqAUSDipNMGo0RTknLwbcl5eyAafViq/zw=;
+        b=rW196cuVfjFTJFLgJdarUAQYqdad5rLAbQ0VJuqvI1bI/y6UG9pEF0di1aqX46KNku
+         fX6EEI/itPgQtduIJB8+Avyl0Lm7aM5Pxb50VeDWXCP4ElKQ+cKPL4Iez9ghiRv9X7fT
+         yOiONZTtWvgXl2esn4+PNQZq7oqRmEvX8Y1qQMvLLMAYTcVTx8FzbhjRCUjgn+pSF+/R
+         cI/jEb1YFCHzPndHFmvNpqzWUVxhcyUtYaCCdTwiL8J0EMuu1WZEQ8jFEnqlNtLuuj5/
+         UxaaxrmYr7ApoXfeSXgfcdnjJIOxW7NdCyAXLYqcpuWyZMtqSgVDvDicKXbAm94+K97r
+         9/yw==
+X-Gm-Message-State: ANoB5pmIpPwUPYoYUVAcUYmuXJzqCpf+uVr8h8eLTz6LJrNgpTX9xmTI
+        foKs9PzVgHZZjtxaFcu/eRBeWAzb3EWJLQpJlBV8WA==
+X-Google-Smtp-Source: AA0mqf7IcusChboGRGGt1s/cB7q39wPkujHV5XTXD9uN+GJhpblKvI9MCtZZtq2mwcwYehW0Unnkdw9V4tf6ONn4w74=
+X-Received: by 2002:a05:6402:c0b:b0:463:a83c:e0af with SMTP id
+ co11-20020a0564020c0b00b00463a83ce0afmr21647244edb.158.1669145356462; Tue, 22
+ Nov 2022 11:29:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221122170801.842766-1-daniel.vetter@ffwll.ch>
+ <Y30PDdsvHIJo5YHR@ziepe.ca> <CAKMK7uEccwYTNwDYQazmZvTfBFQOikZt5A6BmegweyO-inKYbQ@mail.gmail.com>
+ <Y30Z4VxT7Wdoc1Lc@ziepe.ca>
+In-Reply-To: <Y30Z4VxT7Wdoc1Lc@ziepe.ca>
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+Date:   Tue, 22 Nov 2022 20:29:05 +0100
+Message-ID: <CAKMK7uE=8eqyh9BKg_+7B1jjMi6K4wrmPyi9xeLVvVYFxBgF9g@mail.gmail.com>
+Subject: Re: [PATCH] dma-buf: Require VM_PFNMAP vma for mmap
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-syzbot reported use-after-free in si470x_int_in_callback() [1].  This
-indicates that urb->context, which contains struct si470x_device
-object, is freed when si470x_int_in_callback() is called.
+On Tue, 22 Nov 2022 at 19:50, Jason Gunthorpe <jgg@ziepe.ca> wrote:
+>
+> On Tue, Nov 22, 2022 at 07:08:25PM +0100, Daniel Vetter wrote:
+> > On Tue, 22 Nov 2022 at 19:04, Jason Gunthorpe <jgg@ziepe.ca> wrote:
+> > >
+> > > On Tue, Nov 22, 2022 at 06:08:00PM +0100, Daniel Vetter wrote:
+> > > > tldr; DMA buffers aren't normal memory, expecting that you can use
+> > > > them like that (like calling get_user_pages works, or that they're
+> > > > accounting like any other normal memory) cannot be guaranteed.
+> > > >
+> > > > Since some userspace only runs on integrated devices, where all
+> > > > buffers are actually all resident system memory, there's a huge
+> > > > temptation to assume that a struct page is always present and useable
+> > > > like for any more pagecache backed mmap. This has the potential to
+> > > > result in a uapi nightmare.
+> > > >
+> > > > To stop this gap require that DMA buffer mmaps are VM_PFNMAP, which
+> > > > blocks get_user_pages and all the other struct page based
+> > > > infrastructure for everyone. In spirit this is the uapi counterpart to
+> > > > the kernel-internal CONFIG_DMABUF_DEBUG.
+> > > >
+> > > > Motivated by a recent patch which wanted to swich the system dma-buf
+> > > > heap to vm_insert_page instead of vm_insert_pfn.
+> > > >
+> > > > v2:
+> > > >
+> > > > Jason brought up that we also want to guarantee that all ptes have the
+> > > > pte_special flag set, to catch fast get_user_pages (on architectures
+> > > > that support this). Allowing VM_MIXEDMAP (like VM_SPECIAL does) would
+> > > > still allow vm_insert_page, but limiting to VM_PFNMAP will catch that.
+> > > >
+> > > > From auditing the various functions to insert pfn pte entires
+> > > > (vm_insert_pfn_prot, remap_pfn_range and all it's callers like
+> > > > dma_mmap_wc) it looks like VM_PFNMAP is already required anyway, so
+> > > > this should be the correct flag to check for.
+> > >
+> > > I didn't look at how this actually gets used, but it is a bit of a
+> > > pain to insert a lifetime controlled object like a struct page as a
+> > > special PTE/VM_PFNMAP
+> > >
+> > > How is the lifetime model implemented here? How do you know when
+> > > userspace has finally unmapped the page?
+> >
+> > The vma has a filp which is the refcounted dma_buf. With dma_buf you
+> > never get an individual page it's always the entire object. And it's
+> > up to the allocator how exactly it wants to use or not use the page's
+> > refcount. So if gup goes in and elevates the refcount, you can break
+> > stuff, which is why I'm doing this.
+>
+> But how does move work?
 
-The cause of this issue is that si470x_int_in_callback() is called for
-freed urb.
-
-si470x_usb_driver_probe() calls si470x_start_usb(), which then calls
-usb_submit_urb() and si470x_start().  If si470x_start_usb() fails,
-si470x_usb_driver_probe() doesn't kill urb, but it just frees struct
-si470x_device object, as depicted below:
-
-si470x_usb_driver_probe()
-  ...
-  si470x_start_usb()
-    ...
-    usb_submit_urb()
-    retval = si470x_start()
-    return retval
-  if (retval < 0)
-    free struct si470x_device object, but don't kill urb
-
-This patch fixes this issue by killing urb when si470x_start_usb()
-fails and urb is submitted.  If si470x_start_usb() fails and urb is
-not submitted, i.e. submitting usb fails, it just frees struct
-si470x_device object.
-
-Reported-by: syzbot+9ca7a12fd736d93e0232@syzkaller.appspotmail.com
-Link: https://syzkaller.appspot.com/bug?id=94ed6dddd5a55e90fd4bab942aa4bb297741d977 [1]
-Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
----
- drivers/media/radio/si470x/radio-si470x-usb.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/media/radio/si470x/radio-si470x-usb.c b/drivers/media/radio/si470x/radio-si470x-usb.c
-index 6b2768623c88..aa7a580dbecc 100644
---- a/drivers/media/radio/si470x/radio-si470x-usb.c
-+++ b/drivers/media/radio/si470x/radio-si470x-usb.c
-@@ -727,8 +727,10 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
- 
- 	/* start radio */
- 	retval = si470x_start_usb(radio);
--	if (retval < 0)
-+	if (retval < 0 && !radio->int_in_running)
- 		goto err_buf;
-+	else if (retval < 0)	/* in case of radio->int_in_running == 1 */
-+		goto err_all;
- 
- 	/* set initial frequency */
- 	si470x_set_freq(radio, 87.5 * FREQ_MUL); /* available in all regions */
+You nuke all the ptes. Drivers that move have slightly more than a
+bare struct file, they also have a struct address_space so that
+invalidate_mapping_range() works. Refaulting and any coherency issues
+when a refault races against a dma-buf migration is up to the
+driver/exporter to handle correctly. None rely on struct page like mm/
+moving stuff around for compaction/ksm/numa-balancing/whateverr.
+-Daniel
 -- 
-2.38.1
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
