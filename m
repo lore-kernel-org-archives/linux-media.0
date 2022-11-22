@@ -2,128 +2,121 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8B2EC4321E
-	for <linux-media@archiver.kernel.org>; Tue, 22 Nov 2022 20:38:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5603C433FE
+	for <linux-media@archiver.kernel.org>; Tue, 22 Nov 2022 21:18:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234875AbiKVUiL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Nov 2022 15:38:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45078 "EHLO
+        id S234834AbiKVVSF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Nov 2022 16:18:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233908AbiKVUiK (ORCPT
+        with ESMTP id S232723AbiKVVSD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Nov 2022 15:38:10 -0500
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49E11403E;
-        Tue, 22 Nov 2022 12:38:08 -0800 (PST)
-Received: by mail-il1-f182.google.com with SMTP id o17so1597113ilg.12;
-        Tue, 22 Nov 2022 12:38:08 -0800 (PST)
+        Tue, 22 Nov 2022 16:18:03 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD4C898E3;
+        Tue, 22 Nov 2022 13:18:00 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id l24so9805947edj.8;
+        Tue, 22 Nov 2022 13:18:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4sZiP84p7jF0pvs4MBIhQmWYULIbZ0e6iwSZJzE5pwQ=;
+        b=XpOZcqaQ0eMy/qeOh4hvhz9LsEcgUzveEG9u9Fem4DsxLAHM9lStEAPal0RGO4cpki
+         zStG3ZXk7GTzR18Pv4KIzhH3tg9WjCLXjS9yxaLfFXMZR+5H7MrGL0B105PEdTkS1Lnf
+         Ijx3MsUFnkA8u7hJfAfZbtT3XzuUcCe6/q5rUFo2GacXNAWIsEa17ZghJE67RMQQmV2T
+         lSQdvM2f8VgGG+cyLRawFSkPzcus9keTYvs8A4i0vGuWHppRUMZXpVcRPwYo5a4VcWM/
+         oDl5vAiGKYINf+6OEfeDdWxchkocvnF+Yl+9ifT3QGszHng7uJwRtzrpMStHgGUJVAQy
+         aL5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=IxhuJmnEARIWlXQpcwKPNDNfyA1cKV7mmycNRMiAUnw=;
-        b=74vPUyU7EiL3Ov/TjfMV35quBWVMCq81bQethB48+H5+lrZgRgdvGXB5BCUdJZdtVG
-         xFgnOnXiahVt/X7i+69SVUcEqYK4ivx7HrhnJAq2K+w2yjUjp/Jj75AHMtqjJrVAeQy/
-         Zme81J9MFH9ic4urDGptRscoIdSMEPf9xtI0pyw3I4lsXtVHshiTjeING4NlfCreGdQb
-         E3njP2b41RX+rWQiAin4lceYaTabL2JIHuEHH/GM7f1zS3JgZvnyf/v8Ccp/TVFYNX81
-         foWeB2aY4Vkp44ncoHWvUDt45Jc4rxT/TFRTpS4IG3zHBxqQVzdzgeilx6BJicaRSCBR
-         V5og==
-X-Gm-Message-State: ANoB5pkgQv61iqHS1Pxv7sDYGbAhCbWeRWpjB0ViGRp0KAmF+QrI5YPI
-        Ve4e9QJaM5Usg+YBwvChVE04HyiUJw==
-X-Google-Smtp-Source: AA0mqf7szvteT0DhoEE8ltblx51SieTice/p6rYK2egqQEWY2mUi7XDAmn+bUokAsQxJd8B3HHq92g==
-X-Received: by 2002:a92:cc4c:0:b0:2fc:81e8:db26 with SMTP id t12-20020a92cc4c000000b002fc81e8db26mr3822882ilq.73.1669149488075;
-        Tue, 22 Nov 2022 12:38:08 -0800 (PST)
-Received: from robh_at_kernel.org ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id u14-20020a056e02110e00b00302c31956b2sm2302289ilk.10.2022.11.22.12.38.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 12:38:07 -0800 (PST)
-Received: (nullmailer pid 514983 invoked by uid 1000);
-        Tue, 22 Nov 2022 20:28:34 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4sZiP84p7jF0pvs4MBIhQmWYULIbZ0e6iwSZJzE5pwQ=;
+        b=RdG9PL3YT1QaN+EYfSYxeO4yw7CxyOzOXx4/E0OPT/0NbbHIxdIjqJJJIoxRbzzOx+
+         VIEzdgmp18Ez/dAdufhwa2je0mkZBP4nmVKWwo9u7sPmldJK0Nc++UGL3KVTxYJ9QDVR
+         ckdT56Jd09Iw1qBjVaJ4Jtc/cs5HEgX9vLQIMOI6hutrtWSEmwcbp7nxjcwFi8EAIOCl
+         4mEPrMIJ78zFH70Bn/nstdYXIM6LURSc1UU0SAPFOxgkuJ0JIwTd5r7Xm5E4ANJKXDme
+         mze/V0kU6vwUF1WApNOIfhYnqGHjKdIFshDm4VsMJlPf8MzenU5zhloYoSsgpfwDiSnS
+         zLjw==
+X-Gm-Message-State: ANoB5pnGoFYaqYmNgGJp6aRv48LHW0/zOKr/8hnXLKhR946tDcHFMYpk
+        PEzjfoR7IOxETCHUGgvoHF/to6QLs3KoJEN0ORE=
+X-Google-Smtp-Source: AA0mqf7a2qbPeIAlQFrXSPAv9kBr2mK5cslq6jWPZVgJUbf8ANOsbilaUn7fkRFUZ8rW12ZdrinbI6kEnM+ZgCGI0OY=
+X-Received: by 2002:a05:6402:2987:b0:45c:a9d3:d535 with SMTP id
+ eq7-20020a056402298700b0045ca9d3d535mr22548328edb.0.1669151879209; Tue, 22
+ Nov 2022 13:17:59 -0800 (PST)
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Marvin Lin <milkfafa@gmail.com>
-Cc:     kflin@nuvoton.com, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, avifishman70@gmail.com,
-        kwliu@nuvoton.com, openbmc@lists.ozlabs.org, tmaimon77@gmail.com,
-        linux-kernel@vger.kernel.org, tali.perry1@gmail.com,
-        mchehab@kernel.org
-In-Reply-To: <20221122085724.3245078-3-milkfafa@gmail.com>
-References: <20221122085724.3245078-1-milkfafa@gmail.com>
- <20221122085724.3245078-3-milkfafa@gmail.com>
-Message-Id: <166914597689.442814.4178753345805789388.robh@kernel.org>
-Subject: Re: [PATCH v7 2/7] media: dt-binding: nuvoton: Add bindings for NPCM
- VCD and ECE engine
-Date:   Tue, 22 Nov 2022 14:28:34 -0600
+References: <20221102004329.5410-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221102004329.5410-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <Y3yYkQhJJFLau08X@paasikivi.fi.intel.com> <CA+V-a8u9QS6Wk8SSmmJheHmtRiUWyOpv9DDJO6qDR8viz1Wp7A@mail.gmail.com>
+ <Y30jdErgPI223eoM@paasikivi.fi.intel.com>
+In-Reply-To: <Y30jdErgPI223eoM@paasikivi.fi.intel.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Tue, 22 Nov 2022 21:17:32 +0000
+Message-ID: <CA+V-a8uLWqqqhs=vkzSVeNegg8uEXfTgJe26Jpap=eOb85aSGg@mail.gmail.com>
+Subject: Re: [PATCH v5 4/4] media: platform: Add Renesas RZ/G2L CRU driver
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Sakari,
 
-On Tue, 22 Nov 2022 16:57:19 +0800, Marvin Lin wrote:
-> Add dt-binding document for Video Capture/Differentiation Engine (VCD)
-> and Encoding Compression Engine (ECE) present on Nuvoton NPCM SoCs.
-> 
-> Signed-off-by: Marvin Lin <milkfafa@gmail.com>
-> ---
->  .../bindings/media/nuvoton,npcm-video.yaml    | 87 +++++++++++++++++++
->  1 file changed, 87 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/nuvoton,npcm-video.yaml
-> 
+On Tue, Nov 22, 2022 at 7:31 PM Sakari Ailus
+<sakari.ailus@linux.intel.com> wrote:
+>
+> Hi Prabhakar,
+>
+> On Tue, Nov 22, 2022 at 10:26:28AM +0000, Lad, Prabhakar wrote:
+> > Hi Sakari,
+> >
+> > On Tue, Nov 22, 2022 at 9:38 AM Sakari Ailus
+> > <sakari.ailus@linux.intel.com> wrote:
+> > >
+> > > Hi Prabhakar,
+> > >
+> > > On Wed, Nov 02, 2022 at 12:43:29AM +0000, Prabhakar wrote:
+> > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > >
+> > > > Add v4l driver for Renesas RZ/G2L Camera data Receiving Unit.
+> > > >
+> > > > Based on a patch in the BSP by Hien Huynh
+> > > > <hien.huynh.px@renesas.com>
+> > > >
+> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > >
+> > > Laurent's comment arrive a little late but the patch does not compile
+> > > against the media tree anymore. The argument of the media_pipeline_start()
+> > > and media_pipeline_stop() is now a pad, not an entity. See what the changes
+> > > look like in other drivers (the commit id is
+> > > 12cecbf9150f67b0ce7d88bc2e243e67637726c2).
+> > >
+> > I'll go through them soon, when do you plan to close the v6.2 window?
+> >
+> > > I'll still take the DT binding patches.
+> > >
+> > Or maybe we could wait and get them alongside the drivers?
+>
+> Can you send a new version by tomorrow morning (Finnish time)? The needed
+> changes didn't seem too complicated, I wouldn't want to delay my PR much
+> later as chances slipping to 6.3 will increase.
+>
+Okay, I'll try and get this asap.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/nuvoton,npcm-video.yaml: properties:nuvoton,syscon-gcr: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	Additional properties are not allowed ('$ref' was unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/nuvoton,npcm-video.yaml: properties:nuvoton,syscon-gcr: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	'/schemas/types.yaml#definitions/phandle' does not match 'types.yaml#/definitions/'
-		hint: A vendor property needs a $ref to types.yaml
-	'/schemas/types.yaml#definitions/phandle' does not match '^#/(definitions|\\$defs)/'
-		hint: A vendor property can have a $ref to a a $defs schema
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/nuvoton,npcm-video.yaml: properties:nuvoton,syscon-gfxi: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	Additional properties are not allowed ('$ref' was unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/nuvoton,npcm-video.yaml: properties:nuvoton,syscon-gfxi: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	'/schemas/types.yaml#definitions/phandle' does not match 'types.yaml#/definitions/'
-		hint: A vendor property needs a $ref to types.yaml
-	'/schemas/types.yaml#definitions/phandle' does not match '^#/(definitions|\\$defs)/'
-		hint: A vendor property can have a $ref to a a $defs schema
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221122085724.3245078-3-milkfafa@gmail.com
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command.
-
+Cheers,
+Prabhakar
