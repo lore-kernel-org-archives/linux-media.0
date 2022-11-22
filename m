@@ -2,794 +2,245 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9898DC43219
-	for <linux-media@archiver.kernel.org>; Tue, 22 Nov 2022 18:41:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A530C636F8
+	for <linux-media@archiver.kernel.org>; Tue, 22 Nov 2022 18:46:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234529AbiKVSlH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Nov 2022 13:41:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45598 "EHLO
+        id S234549AbiKVSp7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Nov 2022 13:45:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232366AbiKVSlG (ORCPT
+        with ESMTP id S233356AbiKVSpy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Nov 2022 13:41:06 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8733C85A2C;
-        Tue, 22 Nov 2022 10:41:01 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D74181180;
-        Tue, 22 Nov 2022 19:40:58 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669142459;
-        bh=bcPaKNGwYUhsGGmHv5s/kcMKhJiDxZIq87z1IjLKin8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s94mPeRt4lCGN8XJS4LMIz7PdC2ViNAoZ9yj6p8w3uPJMfz0lEuyPOgCPgJfo53tx
-         P/0g5HgMrOmGrgo/LMyT2rQtL2thpKO32UaiiuoBU8PBe39nVt0ywKqluDPM5XG1x+
-         8umM4nd2YQSgTIpwD0mUpAVW1KxXj4A6x8QhqDPk=
-Date:   Tue, 22 Nov 2022 20:40:43 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v5 3/4] media: platform: Add Renesas RZ/G2L MIPI CSI-2
- receiver driver
-Message-ID: <Y30Xq6D6Mut5Solx@pendragon.ideasonboard.com>
-References: <20221102004329.5410-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221102004329.5410-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <Y3wioC4Oyl81mBGh@pendragon.ideasonboard.com>
- <CA+V-a8tqT61fsge=wJwqnG3M3ZA4Ybkiyx2o0LnArwM6LoWdfQ@mail.gmail.com>
+        Tue, 22 Nov 2022 13:45:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940377FF22;
+        Tue, 22 Nov 2022 10:45:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CFCD6184A;
+        Tue, 22 Nov 2022 18:45:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28B47C433C1;
+        Tue, 22 Nov 2022 18:45:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669142752;
+        bh=fqxt6my1VSa4mXhEYdIoCfXvdzW45n/iFIvfCGSEDwo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hhEERrBRIpsc+q9yO9csAlWHVhCaviR/WcBNWNuioF+tk6pV0ZhL7NiG1rd0mCAxq
+         1szidsMiWWaFcDgeW9EGShTYklszbBWjIUflN4ZPlaCK62nJuyzjDBPZTppOU3jv4N
+         8/hxDxIBUqAHSPgEChU749Xv+EuNTWQcC+6zplPAHN/Izkl+hvR/NDoy/ucWGRSQdw
+         6okmEtteWfpDi+EH50bg96/6ZjPlAMMe5gMT1Fl+eoDaKbHg0REnL4BteXHVhuIHEj
+         P64Js1Mq3YXxz372bDZyRlFZt9w4L3EsyIeqfNpZZSqs+lnqo+Nmvd9aWM/UsJjBvO
+         sa1pYfX2CaTsw==
+Date:   Tue, 22 Nov 2022 18:58:18 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        kernel@pengutronix.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-rpi-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-leds@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-media@vger.kernel.org, patches@opensource.cirrus.com,
+        linux-actions@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, alsa-devel@alsa-project.org,
+        linux-omap@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
+        linux-pm@vger.kernel.org, Purism Kernel Team <kernel@puri.sm>,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        gregkh@linuxfoundation.org
+Subject: Re: [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
+Message-ID: <20221122185818.3740200d@jic23-huawei>
+In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CA+V-a8tqT61fsge=wJwqnG3M3ZA4Ybkiyx2o0LnArwM6LoWdfQ@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Prabhakar,
 
-On Tue, Nov 22, 2022 at 05:42:46PM +0000, Lad, Prabhakar wrote:
-> On Tue, Nov 22, 2022 at 1:15 AM Laurent Pinchart wrote:
-> > On Wed, Nov 02, 2022 at 12:43:28AM +0000, Prabhakar wrote:
-> > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > >
-> > > Add MIPI CSI-2 receiver driver for Renesas RZ/G2L. The MIPI
-> > > CSI-2 is part of the CRU module found on RZ/G2L family.
-> > >
-> > > Based on a patch in the BSP by Hien Huynh
-> > > <hien.huynh.px@renesas.com>
-> > >
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > ---
-> > > v4 -> v5
-> > > * Made sure to cleanup in s_stream error path
-> > >
-> <snip>
-> > > +struct rzg2l_csi2_timings {
-> > > +     u32 t_init;
-> > > +     u32 tclk_miss;
-> > > +     u32 tclk_settle;
-> > > +     u32 ths_settle;
-> > > +     u32 tclk_prepare;
-> > > +     u32 ths_prepare;
-> > > +     u32 max_hsfreq;
-> > > +};
-> > > +
-> > > +static const struct rzg2l_csi2_timings rzg2l_csi2_global_timings[] = {
-> > > +     [0] = {
-> >
-> > You can drop [0]. Same below.
-> >
-> The ths_settle value differs for [1].
+Queued all of the below:
+with one tweaked as per your suggestion and the highlighted one dropped on basis
+I was already carrying the equivalent - as you pointed out.
 
-I meant you can drop the "[0] = ", "[1] = ", ... :-)
+I was already carrying the required dependency.
 
-> > > +             .max_hsfreq = 80,
-> > > +             .t_init = 79801,
-> > > +             .tclk_miss = 4,
-> > > +             .tclk_settle = 23,
-> > > +             .ths_settle = 31,
-> > > +             .tclk_prepare = 10,
-> > > +             .ths_prepare = 19,
-> > > +     },
-> > > +     [1] = {
-> > > +             .max_hsfreq = 125,
-> > > +             .t_init = 79801,
-> > > +             .tclk_miss = 4,
-> > > +             .tclk_settle = 23,
-> > > +             .ths_settle = 28,
-> > > +             .tclk_prepare = 10,
-> > > +             .ths_prepare = 19,
-> > > +     },
-> > > +     [2] = {
-> > > +             .max_hsfreq = 250,
-> > > +             .t_init = 79801,
-> > > +             .tclk_miss = 4,
-> > > +             .tclk_settle = 23,
-> > > +             .ths_settle = 22,
-> > > +             .tclk_prepare = 10,
-> > > +             .ths_prepare = 16,
-> > > +     },
-> > > +     [3] = {
-> > > +             .max_hsfreq = 360,
-> > > +             .t_init = 79801,
-> > > +             .tclk_miss = 4,
-> > > +             .tclk_settle = 18,
-> > > +             .ths_settle = 19,
-> > > +             .tclk_prepare = 10,
-> > > +             .ths_prepare = 10,
-> > > +     },
-> > > +     [4] = {
-> > > +             .max_hsfreq = 1500,
-> > > +             .t_init = 79801,
-> > > +             .tclk_miss = 4,
-> > > +             .tclk_settle = 18,
-> > > +             .ths_settle = 18,
-> > > +             .tclk_prepare = 10,
-> > > +             .ths_prepare = 10,
-> > > +     },
-> > > +};
-> > > +
-> > > +struct rzg2l_csi2_format {
-> > > +     u32 code;
-> > > +     unsigned int datatype;
-> > > +     unsigned int bpp;
-> > > +};
-> > > +
-> > > +static const struct rzg2l_csi2_format rzg2l_csi2_formats[] = {
-> > > +     { .code = MEDIA_BUS_FMT_UYVY8_1X16,     .datatype = 0x1e, .bpp = 16 },
-> > > +};
-> > > +
-> > > +static inline struct rzg2l_csi2 *sd_to_csi2(struct v4l2_subdev *sd)
-> > > +{
-> > > +     return container_of(sd, struct rzg2l_csi2, subdev);
-> > > +}
-> > > +
-> > > +static const struct rzg2l_csi2_format *rzg2l_csi2_code_to_fmt(unsigned int code)
-> > > +{
-> > > +     unsigned int i;
-> > > +
-> > > +     for (i = 0; i < ARRAY_SIZE(rzg2l_csi2_formats); i++)
-> > > +             if (rzg2l_csi2_formats[i].code == code)
-> > > +                     return &rzg2l_csi2_formats[i];
-> > > +
-> > > +     return NULL;
-> > > +}
-> > > +
-> > > +static inline struct rzg2l_csi2 *notifier_to_csi2(struct v4l2_async_notifier *n)
-> > > +{
-> > > +     return container_of(n, struct rzg2l_csi2, notifier);
-> > > +}
-> > > +
-> > > +static u32 rzg2l_csi2_read(struct rzg2l_csi2 *csi2, unsigned int reg)
-> > > +{
-> > > +     return ioread32(csi2->base + reg);
-> > > +}
-> > > +
-> > > +static void rzg2l_csi2_write(struct rzg2l_csi2 *csi2, unsigned int reg,
-> > > +                          u32 data)
-> > > +{
-> > > +     iowrite32(data, csi2->base + reg);
-> > > +}
-> > > +
-> > > +static void rzg2l_csi2_set(struct rzg2l_csi2 *csi2, unsigned int reg, u32 set)
-> > > +{
-> > > +     rzg2l_csi2_write(csi2, reg, rzg2l_csi2_read(csi2, reg) | set);
-> > > +}
-> > > +
-> > > +static void rzg2l_csi2_clr(struct rzg2l_csi2 *csi2, unsigned int reg, u32 clr)
-> > > +{
-> > > +     rzg2l_csi2_write(csi2, reg, rzg2l_csi2_read(csi2, reg) & ~clr);
-> > > +}
-> > > +
-> > > +static int rzg2l_csi2_calc_mbps(struct rzg2l_csi2 *csi2)
-> > > +{
-> > > +     struct v4l2_subdev *source = csi2->remote_source;
-> > > +     const struct rzg2l_csi2_format *format;
-> > > +     const struct v4l2_mbus_framefmt *fmt;
-> > > +     struct v4l2_subdev_state *state;
-> > > +     struct v4l2_ctrl *ctrl;
-> > > +     u64 mbps;
-> > > +
-> > > +     /* Read the pixel rate control from remote. */
-> > > +     ctrl = v4l2_ctrl_find(source->ctrl_handler, V4L2_CID_PIXEL_RATE);
-> > > +     if (!ctrl) {
-> > > +             dev_err(csi2->dev, "no pixel rate control in subdev %s\n",
-> > > +                     source->name);
-> > > +             return -EINVAL;
-> > > +     }
-> > > +
-> > > +     state = v4l2_subdev_lock_and_get_active_state(&csi2->subdev);
-> > > +     fmt = v4l2_subdev_get_pad_format(&csi2->subdev, state, RZG2L_CSI2_SINK);
-> > > +     format = rzg2l_csi2_code_to_fmt(fmt->code);
-> > > +     v4l2_subdev_unlock_state(state);
-> > > +
-> > > +     /*
-> > > +      * Calculate hsfreq in Mbps
-> > > +      * hsfreq = (pixel_rate * bits_per_sample) / number_of_lanes
-> > > +      */
-> > > +     mbps = v4l2_ctrl_g_ctrl_int64(ctrl) * format->bpp;
-> > > +     do_div(mbps, csi2->lanes * 1000000);
-> > > +
-> > > +     return mbps;
-> > > +}
-> > > +
-> > > +/* -----------------------------------------------------------------------------
-> > > + * DPHY setting
-> > > + */
-> > > +
-> > > +static int rzg2l_csi2_dphy_disable(struct rzg2l_csi2 *csi2)
-> > > +{
-> > > +     int ret;
-> > > +
-> > > +     /* Reset the CRU (D-PHY) */
-> > > +     ret = reset_control_assert(csi2->cmn_rstb);
-> > > +     if (ret)
-> > > +             return ret;
-> > > +
-> > > +     /* Stop the D-PHY clock */
-> > > +     clk_disable_unprepare(csi2->sysclk);
-> > > +
-> > > +     /* Cancel the EN_LDO1200 register setting */
-> > > +     rzg2l_csi2_clr(csi2, CSIDPHYCTRL0, CSIDPHYCTRL0_EN_LDO1200);
-> > > +
-> > > +     /* Cancel the EN_BGR register setting */
-> > > +     rzg2l_csi2_clr(csi2, CSIDPHYCTRL0, CSIDPHYCTRL0_EN_BGR);
-> > > +
-> > > +     csi2->dphy_enabled = false;
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static int rzg2l_csi2_dphy_enable(struct rzg2l_csi2 *csi2)
-> > > +{
-> > > +     const struct rzg2l_csi2_timings *dphy_timing;
-> > > +     u32 dphytim0, dphytim1;
-> > > +     unsigned int i;
-> > > +     int mbps;
-> > > +     int ret;
-> > > +
-> > > +     mbps = rzg2l_csi2_calc_mbps(csi2);
-> > > +     if (mbps < 0)
-> > > +             return mbps;
-> > > +
-> > > +     csi2->hsfreq = mbps;
-> > > +
-> > > +     /* Set DPHY timing parameters */
-> > > +     for (i = 0; i < ARRAY_SIZE(rzg2l_csi2_global_timings); ++i) {
-> > > +             dphy_timing = &rzg2l_csi2_global_timings[i];
-> > > +
-> > > +             if (csi2->hsfreq <= dphy_timing->max_hsfreq)
-> > > +                     break;
-> > > +     }
-> > > +
-> > > +     if (i >= ARRAY_SIZE(rzg2l_csi2_global_timings))
-> > > +             return -EINVAL;
-> > > +
-> > > +     /* Set D-PHY timing parameters */
-> > > +     dphytim0 = CSIDPHYTIM0_TCLK_MISS(dphy_timing->tclk_miss) |
-> > > +                     CSIDPHYTIM0_T_INIT(dphy_timing->t_init);
-> > > +     dphytim1 = CSIDPHYTIM1_THS_PREPARE(dphy_timing->ths_prepare) |
-> > > +                     CSIDPHYTIM1_TCLK_PREPARE(dphy_timing->tclk_prepare) |
-> > > +                     CSIDPHYTIM1_THS_SETTLE(dphy_timing->ths_settle) |
-> > > +                     CSIDPHYTIM1_TCLK_SETTLE(dphy_timing->tclk_settle);
-> > > +     rzg2l_csi2_write(csi2, CSIDPHYTIM0, dphytim0);
-> > > +     rzg2l_csi2_write(csi2, CSIDPHYTIM1, dphytim1);
-> > > +
-> > > +     /* Enable D-PHY power control 0 */
-> > > +     rzg2l_csi2_write(csi2, CSIDPHYSKW0, CSIDPHYSKW0_DEFAULT_SKW);
-> > > +
-> > > +     /* Set the EN_BGR bit */
-> > > +     rzg2l_csi2_set(csi2, CSIDPHYCTRL0, CSIDPHYCTRL0_EN_BGR);
-> > > +
-> > > +     /* Delay 20us to be stable */
-> > > +     usleep_range(20, 40);
-> > > +
-> > > +     /* Enable D-PHY power control 1 */
-> > > +     rzg2l_csi2_set(csi2, CSIDPHYCTRL0, CSIDPHYCTRL0_EN_LDO1200);
-> > > +
-> > > +     /* Delay 10us to be stable */
-> > > +     usleep_range(10, 20);
-> > > +
-> > > +     /* Start supplying the internal clock for the D-PHY block */
-> > > +     ret = clk_prepare_enable(csi2->sysclk);
-> > > +     if (ret)
-> > > +             rzg2l_csi2_dphy_disable(csi2);
-> > > +
-> > > +     csi2->dphy_enabled = true;
-> > > +
-> > > +     return ret;
-> > > +}
-> > > +
-> > > +static int rzg2l_csi2_enable_reg_access(struct rzg2l_csi2 *csi2)
-> > > +{
-> > > +     int ret;
-> > > +
-> > > +     ret = reset_control_deassert(csi2->presetn);
-> > > +     if (ret < 0)
-> > > +             return ret;
-> >
-> > Could this be done in the runtime PM resume handler ? Same for
-> > reset_control_assert() in the runtime PM suspend handler.
->
-> Yes it can be done, I'll move them to the runtime PM handlers.
+Includes the IIO ones in staging.
 
-Great, that will make things easier :-) You could then drop the
-enable|disable_reg_access wrappers and call the RPM functions directly.
+Thanks,
 
-> > > +
-> > > +     ret = pm_runtime_resume_and_get(csi2->dev);
-> > > +     if (ret)
-> > > +             reset_control_assert(csi2->presetn);
-> > > +
-> > > +     return ret;
-> > > +}
-> > > +
-> > > +static void rzg2l_csi2_disable_reg_access(struct rzg2l_csi2 *csi2)
-> > > +{
-> > > +     pm_runtime_put_sync(csi2->dev);
-> > > +     reset_control_assert(csi2->presetn);
-> > > +}
-> > > +
-> > > +static int rzg2l_csi2_dphy_setting(struct v4l2_subdev *sd, bool on)
-> > > +{
-> > > +     struct rzg2l_csi2 *csi2 = sd_to_csi2(sd);
-> > > +     int ret;
-> > > +
-> > > +     ret = rzg2l_csi2_enable_reg_access(csi2);
-> > > +     if (ret < 0)
-> > > +             return ret;
-> > > +
-> > > +     if (on)
-> > > +             ret = rzg2l_csi2_dphy_enable(csi2);
-> > > +     else
-> > > +             ret = rzg2l_csi2_dphy_disable(csi2);
-> > > +
-> > > +     rzg2l_csi2_disable_reg_access(csi2);
-> > > +
-> > > +     return ret;
-> > > +}
-> > > +
-> > > +static void rzg2l_csi2_mipi_link_enable(struct rzg2l_csi2 *csi2)
-> > > +{
-> > > +     unsigned long vclk_rate = csi2->vclk_rate / HZ_PER_MHZ;
-> > > +     u32 frrskw, frrclk, frrskw_coeff, frrclk_coeff;
-> > > +
-> > > +     /* Select data lanes */
-> > > +     rzg2l_csi2_write(csi2, CSI2nMCT0, CSI2nMCT0_VDLN(csi2->lanes));
-> > > +
-> > > +     frrskw_coeff = 3 * vclk_rate * 8;
-> > > +     frrclk_coeff = frrskw_coeff / 2;
-> > > +     frrskw = DIV_ROUND_UP(frrskw_coeff, csi2->hsfreq);
-> > > +     frrclk = DIV_ROUND_UP(frrclk_coeff, csi2->hsfreq);
-> > > +     rzg2l_csi2_write(csi2, CSI2nMCT2, CSI2nMCT2_FRRSKW(frrskw) |
-> > > +                      CSI2nMCT2_FRRCLK(frrclk));
-> > > +
-> > > +     /*
-> > > +      * Select data type.
-> > > +      * FS, FE, LS, LE, Generic Short Packet Codes 1 to 8,
-> > > +      * Generic Long Packet Data Types 1 to 4 YUV422 8-bit,
-> > > +      * RGB565, RGB888, RAW8 to RAW20, User-defined 8-bit
-> > > +      * data types 1 to 8
-> > > +      */
-> > > +     rzg2l_csi2_write(csi2, CSI2nDTEL, 0xf778ff0f);
-> > > +     rzg2l_csi2_write(csi2, CSI2nDTEH, 0x00ffff1f);
-> > > +
-> > > +     /* Enable LINK reception */
-> > > +     rzg2l_csi2_write(csi2, CSI2nMCT3, CSI2nMCT3_RXEN);
-> > > +}
-> > > +
-> > > +static void rzg2l_csi2_mipi_link_disable(struct rzg2l_csi2 *csi2)
-> > > +{
-> > > +     unsigned int timeout = VSRSTS_RETRIES;
-> > > +
-> > > +     /* Stop LINK reception */
-> > > +     rzg2l_csi2_clr(csi2, CSI2nMCT3, CSI2nMCT3_RXEN);
-> > > +
-> > > +     /* Request a software reset of the LINK Video Pixel Interface */
-> > > +     rzg2l_csi2_write(csi2, CSI2nRTCT, CSI2nRTCT_VSRST);
-> > > +
-> > > +     /* Make sure CSI2nRTST.VSRSTS bit is cleared */
-> > > +     while (timeout--) {
-> > > +             if (!(rzg2l_csi2_read(csi2, CSI2nRTST) & CSI2nRTST_VSRSTS))
-> > > +                     break;
-> > > +             usleep_range(100, 200);
-> > > +     };
-> > > +
-> > > +     if (!timeout)
-> > > +             dev_err(csi2->dev, "Clearing CSI2nRTST.VSRSTS timed out\n");
-> > > +}
-> > > +
-> > > +static int rzg2l_csi2_mipi_link_setting(struct v4l2_subdev *sd, bool on)
-> > > +{
-> > > +     struct rzg2l_csi2 *csi2 = sd_to_csi2(sd);
-> > > +     int ret;
-> > > +
-> > > +     ret = rzg2l_csi2_enable_reg_access(csi2);
-> > > +     if (ret < 0)
-> > > +             return ret;
-> > > +
-> > > +     if (on)
-> > > +             rzg2l_csi2_mipi_link_enable(csi2);
-> > > +     else
-> > > +             rzg2l_csi2_mipi_link_disable(csi2);
-> > > +
-> > > +     rzg2l_csi2_disable_reg_access(csi2);
-> >
-> > This doesn't seem right. Runtime PM isn't just about register access.
-> > You need to call pm_runtime_resume_and_get() at the beginning of
-> > rzg2l_csi2_s_stream() when enabling, and pm_runtime_put_sync() at the
-> > end of rzg2l_csi2_s_stream() when disabling (+ error paths for the
-> > enable case).
-> 
-> OK, I'll make use of runtime PM in s_stream callback.
-> 
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static int rzg2l_csi2_s_stream(struct v4l2_subdev *sd, int enable)
-> > > +{
-> > > +     struct rzg2l_csi2 *csi2 = sd_to_csi2(sd);
-> > > +     int s_stream_ret = 0;
-> > > +     int ret;
-> > > +
-> > > +     if (enable) {
-> > > +             int ret;
-> > > +
-> > > +             ret = rzg2l_csi2_mipi_link_setting(sd, 1);
-> > > +             if (ret)
-> > > +                     return ret;
-> > > +
-> > > +             ret = reset_control_deassert(csi2->cmn_rstb);
-> > > +             if (ret)
-> > > +                     goto err_mipi_link_disable;
-> > > +     }
-> > > +
-> > > +     ret = v4l2_subdev_call(csi2->remote_source, video, s_stream, enable);
-> > > +     if (ret) {
-> > > +             s_stream_ret = ret;
-> > > +             dev_err(csi2->dev, "s_stream failed on remote source\n");
-> >
-> > With
-> > https://lore.kernel.org/linux-media/20221026065123.595777-1-sakari.ailus@linux.intel.com/
-> > I think you can drop this error message.
-> 
-> Agreed, I will drop the error message.
-> 
-> > > +     }
-> > > +
-> > > +     if (enable && ret)
-> > > +             goto err_assert_rstb;
-> > > +
-> > > +     if (!enable) {
-> > > +             ret = rzg2l_csi2_dphy_setting(sd, 0);
-> > > +             if (ret && !s_stream_ret)
-> > > +                     s_stream_ret = ret;
-> > > +             ret = rzg2l_csi2_mipi_link_setting(sd, 0);
-> > > +             if (ret && !s_stream_ret)
-> > > +                     s_stream_ret = ret;
-> > > +     }
-> > > +
-> > > +     return s_stream_ret;
-> > > +
-> > > +err_assert_rstb:
-> > > +     reset_control_assert(csi2->cmn_rstb);
-> > > +err_mipi_link_disable:
-> > > +     rzg2l_csi2_mipi_link_setting(sd, 0);
-> > > +     return ret;
-> > > +}
-> > > +
-> > > +static int rzg2l_csi2_pre_streamon(struct v4l2_subdev *sd, u32 flags)
-> > > +{
-> > > +     return rzg2l_csi2_dphy_setting(sd, 1);
-> > > +}
-> > > +
-> > > +static int rzg2l_csi2_post_streamoff(struct v4l2_subdev *sd)
-> > > +{
-> > > +     struct rzg2l_csi2 *csi2 = sd_to_csi2(sd);
-> > > +
-> > > +     /*
-> > > +      * In ideal case D-PHY will be disabled in s_stream(0) callback
-> > > +      * as mentioned the HW manual. The below will only happen when
-> > > +      * pre_streamon succeeds and further down the line s_stream(1)
-> > > +      * fails so we need to undo things in post_streamoff.
-> > > +      */
-> > > +     if (csi2->dphy_enabled)
-> > > +             return rzg2l_csi2_dphy_setting(sd, 0);
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static int rzg2l_csi2_set_format(struct v4l2_subdev *sd,
-> > > +                              struct v4l2_subdev_state *state,
-> > > +                              struct v4l2_subdev_format *fmt)
-> > > +{
-> > > +     struct v4l2_mbus_framefmt *src_format;
-> > > +     struct v4l2_mbus_framefmt *sink_format;
-> > > +
-> > > +     if (fmt->pad != RZG2L_CSI2_SINK && fmt->pad != RZG2L_CSI2_SOURCE)
-> > > +             return -EINVAL;
-> >
-> > You can drop this check as the set_format wrapper validates the pad
-> > value already.
-> 
-> OK, I will drop this check.
-> 
-> > > +
-> > > +     sink_format = v4l2_subdev_get_pad_format(sd, state, RZG2L_CSI2_SINK);
-> > > +     src_format = v4l2_subdev_get_pad_format(sd, state, RZG2L_CSI2_SOURCE);
-> >
-> > As the CSI-2 receiver can't modify the format on the output,
-> > set_format() on the source pad must not modify the format. Just add
-> >
-> >         if (fmt->pad == RZG2L_CSI2_SOURCE) {
-> >                 fmt->format = *src_format;
-> >                 return 0;
-> >         }
-> >
-> > here.
-> 
-> OK, I will update as above.
-> 
-> > > +
-> > > +     if (!rzg2l_csi2_code_to_fmt(fmt->format.code))
-> > > +             sink_format->code = rzg2l_csi2_formats[0].code;
-> > > +     else
-> > > +             sink_format->code = fmt->format.code;
-> > > +
-> > > +     sink_format->field = V4L2_FIELD_NONE;
-> > > +     sink_format->colorspace = fmt->format.colorspace;
-> > > +     sink_format->xfer_func = fmt->format.xfer_func;
-> > > +     sink_format->ycbcr_enc = fmt->format.ycbcr_enc;
-> > > +     sink_format->quantization = fmt->format.quantization;
-> > > +     sink_format->width = clamp_t(u32, fmt->format.width,
-> > > +                                  RZG2L_CSI2_MIN_WIDTH, RZG2L_CSI2_MAX_WIDTH);
-> > > +     sink_format->height = clamp_t(u32, fmt->format.height,
-> > > +                                   RZG2L_CSI2_MIN_HEIGHT, RZG2L_CSI2_MAX_HEIGHT);
-> > > +     fmt->format = *sink_format;
-> > > +
-> > > +     /* propagate format to source pad */
-> > > +     *src_format = *sink_format;
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static int rzg2l_csi2_init_config(struct v4l2_subdev *sd,
-> > > +                               struct v4l2_subdev_state *sd_state)
-> > > +{
-> > > +     struct v4l2_subdev_format fmt = { .pad = RZG2L_CSI2_SINK, };
-> > > +
-> > > +     fmt.format.width = RZG2L_CSI2_DEFAULT_WIDTH;
-> > > +     fmt.format.height = RZG2L_CSI2_DEFAULT_HEIGHT;
-> > > +     fmt.format.field = V4L2_FIELD_NONE;
-> > > +     fmt.format.code = RZG2L_CSI2_DEFAULT_FMT;
-> > > +     fmt.format.colorspace = V4L2_COLORSPACE_SRGB;
-> > > +     fmt.format.ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
-> > > +     fmt.format.quantization = V4L2_QUANTIZATION_DEFAULT;
-> > > +     fmt.format.xfer_func = V4L2_XFER_FUNC_DEFAULT;
-> > > +
-> > > +     return rzg2l_csi2_set_format(sd, sd_state, &fmt);
-> > > +}
-> > > +
-> > > +static int rzg2l_csi2_enum_mbus_code(struct v4l2_subdev *sd,
-> > > +                                  struct v4l2_subdev_state *sd_state,
-> > > +                                  struct v4l2_subdev_mbus_code_enum *code)
-> > > +{
-> > > +     if (code->index >= ARRAY_SIZE(rzg2l_csi2_formats))
-> > > +             return -EINVAL;
-> > > +
-> > > +     code->code = rzg2l_csi2_formats[code->index].code;
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static int rzg2l_csi2_enum_frame_size(struct v4l2_subdev *sd,
-> > > +                                   struct v4l2_subdev_state *sd_state,
-> > > +                                   struct v4l2_subdev_frame_size_enum *fse)
-> > > +{
-> > > +     if (fse->index != 0)
-> > > +             return -EINVAL;
-> > > +
-> > > +     fse->min_width = RZG2L_CSI2_MIN_WIDTH;
-> > > +     fse->min_height = RZG2L_CSI2_MIN_HEIGHT;
-> > > +     fse->max_width = RZG2L_CSI2_MAX_WIDTH;
-> > > +     fse->max_height = RZG2L_CSI2_MAX_HEIGHT;
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static const struct v4l2_subdev_video_ops rzg2l_csi2_video_ops = {
-> > > +     .s_stream = rzg2l_csi2_s_stream,
-> > > +     .pre_streamon = rzg2l_csi2_pre_streamon,
-> > > +     .post_streamoff = rzg2l_csi2_post_streamoff,
-> > > +};
-> > > +
-> > > +static const struct v4l2_subdev_pad_ops rzg2l_csi2_pad_ops = {
-> > > +     .enum_mbus_code = rzg2l_csi2_enum_mbus_code,
-> > > +     .init_cfg = rzg2l_csi2_init_config,
-> > > +     .enum_frame_size = rzg2l_csi2_enum_frame_size,
-> > > +     .set_fmt = rzg2l_csi2_set_format,
-> > > +     .get_fmt = v4l2_subdev_get_fmt,
-> > > +};
-> > > +
-> > > +static const struct v4l2_subdev_ops rzg2l_csi2_subdev_ops = {
-> > > +     .video  = &rzg2l_csi2_video_ops,
-> > > +     .pad    = &rzg2l_csi2_pad_ops,
-> > > +};
-> > > +
-> > > +/* -----------------------------------------------------------------------------
-> > > + * Async handling and registration of subdevices and links.
-> > > + */
-> > > +
-> > > +static int rzg2l_csi2_notify_bound(struct v4l2_async_notifier *notifier,
-> > > +                                struct v4l2_subdev *subdev,
-> > > +                                struct v4l2_async_subdev *asd)
-> > > +{
-> > > +     struct rzg2l_csi2 *csi2 = notifier_to_csi2(notifier);
-> > > +
-> > > +     csi2->remote_source = subdev;
-> > > +
-> > > +     dev_dbg(csi2->dev, "Bound subdev: %s pad\n", subdev->name);
-> > > +
-> > > +     return media_create_pad_link(&subdev->entity, RZG2L_CSI2_SINK,
-> > > +                                  &csi2->subdev.entity, 0,
-> > > +                                  MEDIA_LNK_FL_ENABLED |
-> > > +                                  MEDIA_LNK_FL_IMMUTABLE);
-> > > +}
-> > > +
-> > > +static void rzg2l_csi2_notify_unbind(struct v4l2_async_notifier *notifier,
-> > > +                                  struct v4l2_subdev *subdev,
-> > > +                                  struct v4l2_async_subdev *asd)
-> > > +{
-> > > +     struct rzg2l_csi2 *csi2 = notifier_to_csi2(notifier);
-> > > +
-> > > +     csi2->remote_source = NULL;
-> > > +
-> > > +     dev_dbg(csi2->dev, "Unbind subdev %s\n", subdev->name);
-> > > +}
-> > > +
-> > > +static const struct v4l2_async_notifier_operations rzg2l_csi2_notify_ops = {
-> > > +     .bound = rzg2l_csi2_notify_bound,
-> > > +     .unbind = rzg2l_csi2_notify_unbind,
-> > > +};
-> > > +
-> > > +static int rzg2l_csi2_parse_v4l2(struct rzg2l_csi2 *csi2,
-> > > +                              struct v4l2_fwnode_endpoint *vep)
-> > > +{
-> > > +     /* Only port 0 endpoint 0 is valid. */
-> > > +     if (vep->base.port || vep->base.id)
-> > > +             return -ENOTCONN;
-> > > +
-> > > +     csi2->lanes = vep->bus.mipi_csi2.num_data_lanes;
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static int rzg2l_csi2_parse_dt(struct rzg2l_csi2 *csi2)
-> > > +{
-> > > +     struct v4l2_fwnode_endpoint v4l2_ep = {
-> > > +             .bus_type = V4L2_MBUS_CSI2_DPHY
-> > > +     };
-> > > +     struct v4l2_async_subdev *asd;
-> > > +     struct fwnode_handle *fwnode;
-> > > +     struct fwnode_handle *ep;
-> > > +     int ret;
-> > > +
-> > > +     ep = fwnode_graph_get_endpoint_by_id(dev_fwnode(csi2->dev), 0, 0, 0);
-> > > +     if (!ep) {
-> > > +             dev_err(csi2->dev, "Not connected to subdevice\n");
-> > > +             return -EINVAL;
-> > > +     }
-> > > +
-> > > +     ret = v4l2_fwnode_endpoint_parse(ep, &v4l2_ep);
-> > > +     if (ret) {
-> > > +             dev_err(csi2->dev, "Could not parse v4l2 endpoint\n");
-> > > +             fwnode_handle_put(ep);
-> > > +             return -EINVAL;
-> > > +     }
-> > > +
-> > > +     ret = rzg2l_csi2_parse_v4l2(csi2, &v4l2_ep);
-> > > +     if (ret) {
-> > > +             fwnode_handle_put(ep);
-> > > +             return ret;
-> > > +     }
-> > > +
-> > > +     fwnode = fwnode_graph_get_remote_endpoint(ep);
-> > > +     fwnode_handle_put(ep);
-> > > +
-> > > +     v4l2_async_nf_init(&csi2->notifier);
-> > > +     csi2->notifier.ops = &rzg2l_csi2_notify_ops;
-> > > +
-> > > +     asd = v4l2_async_nf_add_fwnode(&csi2->notifier, fwnode,
-> > > +                                    struct v4l2_async_subdev);
-> > > +     fwnode_handle_put(fwnode);
-> > > +     if (IS_ERR(asd))
-> > > +             return PTR_ERR(asd);
-> > > +
-> > > +     ret = v4l2_async_subdev_nf_register(&csi2->subdev, &csi2->notifier);
-> > > +     if (ret)
-> > > +             v4l2_async_nf_cleanup(&csi2->notifier);
-> > > +
-> > > +     return ret;
-> > > +}
-> > > +
-> > > +static int rzg2l_validate_csi2_lanes(struct rzg2l_csi2 *csi2)
-> > > +{
-> > > +     int ret = 0;
-> > > +     int lanes;
-> > > +
-> > > +     if (csi2->lanes != 1 && csi2->lanes != 2 && csi2->lanes != 4) {
-> > > +             dev_err(csi2->dev, "Unsupported number of data-lanes: %u\n",
-> > > +                     csi2->lanes);
-> > > +             return -EINVAL;
-> > > +     }
-> > > +
-> > > +     ret = rzg2l_csi2_enable_reg_access(csi2);
-> > > +     if (ret < 0)
-> > > +             return ret;
-> > > +
-> > > +     /* Checking the maximum lanes support for CSI-2 module */
-> > > +     lanes = (rzg2l_csi2_read(csi2, CSI2nMCG) & CSI2nMCG_SDLN) >> 8;
-> > > +     if (lanes < csi2->lanes) {
-> > > +             dev_err(csi2->dev,
-> > > +                     "Failed to support %d data lanes\n", csi2->lanes);
-> > > +             ret = -EINVAL;
-> > > +     }
-> > > +
-> > > +     rzg2l_csi2_disable_reg_access(csi2);
-> > > +
-> > > +     return ret;
-> > > +}
-> > > +
-> > > +/* -----------------------------------------------------------------------------
-> > > + * Platform Device Driver.
-> > > + */
-> > > +
-> > > +static const struct media_entity_operations rzg2l_csi2_entity_ops = {
-> > > +     .link_validate = v4l2_subdev_link_validate,
-> > > +};
-> > > +
-> > > +static int rzg2l_csi2_probe(struct platform_device *pdev)
-> > > +{
-> > > +     struct rzg2l_csi2 *csi2;
-> > > +     struct clk *vclk;
-> > > +     int ret;
-> > > +
-> > > +     csi2 = devm_kzalloc(&pdev->dev, sizeof(*csi2), GFP_KERNEL);
-> > > +     if (!csi2)
-> > > +             return -ENOMEM;
-> > > +
-> > > +     csi2->base = devm_platform_ioremap_resource(pdev, 0);
-> > > +     if (IS_ERR(csi2->base))
-> > > +             return PTR_ERR(csi2->base);
-> > > +
-> > > +     csi2->cmn_rstb = devm_reset_control_get_exclusive(&pdev->dev, "cmn-rstb");
-> > > +     if (IS_ERR(csi2->cmn_rstb))
-> > > +             return dev_err_probe(&pdev->dev, PTR_ERR(csi2->cmn_rstb),
-> > > +                                  "Failed to get cpg cmn-rstb\n");
-> > > +
-> > > +     csi2->presetn = devm_reset_control_get_shared(&pdev->dev, "presetn");
-> >
-> > Is this really a shared reset control, or do you use the shared API only
-> > to enable reference counting of the reset controller ?
-> 
-> As the CSI2 block is part of CRU itself the presetn reset (enables reg
-> access) is shared with the CRU driver too hence the use of shared api.
+Jonathan
 
-Thanks for the confirmation.
+p.s. I perhaps foolishly did this in a highly manual way so as to
+also pick up Andy's RB.  So might have dropped one...
 
--- 
-Regards,
+Definitely would have been better as one patch per subsystem with
+a cover letter suitable for replies like Andy's to be picked up
+by b4.
 
-Laurent Pinchart
+
+>   iio: accel: adxl372_i2c: Convert to i2c's .probe_new()
+>   iio: accel: bma180: Convert to i2c's .probe_new()
+>   iio: accel: bma400: Convert to i2c's .probe_new()
+>   iio: accel: bmc150: Convert to i2c's .probe_new()
+>   iio: accel: da280: Convert to i2c's .probe_new()
+>   iio: accel: kxcjk-1013: Convert to i2c's .probe_new()
+>   iio: accel: mma7455_i2c: Convert to i2c's .probe_new()
+>   iio: accel: mma8452: Convert to i2c's .probe_new()
+>   iio: accel: mma9551: Convert to i2c's .probe_new()
+>   iio: accel: mma9553: Convert to i2c's .probe_new()
+>   iio: adc: ad7091r5: Convert to i2c's .probe_new()
+>   iio: adc: ad7291: Convert to i2c's .probe_new()
+>   iio: adc: ad799x: Convert to i2c's .probe_new()
+>   iio: adc: ina2xx-adc: Convert to i2c's .probe_new()
+>   iio: adc: ltc2471: Convert to i2c's .probe_new()
+>   iio: adc: ltc2485: Convert to i2c's .probe_new()
+>   iio: adc: ltc2497: Convert to i2c's .probe_new()
+>   iio: adc: max1363: Convert to i2c's .probe_new()
+>   iio: adc: max9611: Convert to i2c's .probe_new()
+>   iio: adc: mcp3422: Convert to i2c's .probe_new()
+>   iio: adc: ti-adc081c: Convert to i2c's .probe_new()
+>   iio: adc: ti-ads1015: Convert to i2c's .probe_new()
+>   iio: cdc: ad7150: Convert to i2c's .probe_new()
+>   iio: cdc: ad7746: Convert to i2c's .probe_new()
+>   iio: chemical: ams-iaq-core: Convert to i2c's .probe_new()
+>   iio: chemical: atlas-ezo-sensor: Convert to i2c's .probe_new()
+>   iio: chemical: atlas-sensor: Convert to i2c's .probe_new()
+>   iio: chemical: bme680_i2c: Convert to i2c's .probe_new()
+>   iio: chemical: ccs811: Convert to i2c's .probe_new()
+>   iio: chemical: scd4x: Convert to i2c's .probe_new()
+>   iio: chemical: sgp30: Convert to i2c's .probe_new()
+>   iio: chemical: sgp40: Convert to i2c's .probe_new()
+>   iio: chemical: vz89x: Convert to i2c's .probe_new()
+>   iio: dac: ad5064: Convert to i2c's .probe_new()
+>   iio: dac: ad5380: Convert to i2c's .probe_new()
+>   iio: dac: ad5446: Convert to i2c's .probe_new()
+>   iio: dac: ad5593r: Convert to i2c's .probe_new()
+>   iio: dac: ad5696-i2c: Convert to i2c's .probe_new()
+>   iio: dac: ds4424: Convert to i2c's .probe_new()
+>   iio: dac: m62332: Convert to i2c's .probe_new()
+>   iio: dac: max517: Convert to i2c's .probe_new()
+>   iio: dac: max5821: Convert to i2c's .probe_new()
+>   iio: dac: mcp4725: Convert to i2c's .probe_new()
+>   iio: dac: ti-dac5571: Convert to i2c's .probe_new()
+>   iio: gyro: bmg160_i2c: Convert to i2c's .probe_new()
+>   iio: gyro: itg3200_core: Convert to i2c's .probe_new()
+>   iio: gyro: mpu3050-i2c: Convert to i2c's .probe_new()
+>   iio: gyro: st_gyro_i2c: Convert to i2c's .probe_new()
+>   iio: health: afe4404: Convert to i2c's .probe_new()
+>   iio: health: max30100: Convert to i2c's .probe_new()
+>   iio: health: max30102: Convert to i2c's .probe_new()
+>   iio: humidity: am2315: Convert to i2c's .probe_new()
+>   iio: humidity: hdc100x: Convert to i2c's .probe_new()
+>   iio: humidity: hdc2010: Convert to i2c's .probe_new()
+>   iio: humidity: hts221_i2c: Convert to i2c's .probe_new()
+>   iio: humidity: htu21: Convert to i2c's .probe_new()
+>   iio: humidity: si7005: Convert to i2c's .probe_new()
+>   iio: humidity: si7020: Convert to i2c's .probe_new()
+>   iio: imu: bmi160/bmi160_i2c: Convert to i2c's .probe_new()
+>   iio: imu: fxos8700_i2c: Convert to i2c's .probe_new()
+>   iio: imu: inv_mpu6050: Convert to i2c's .probe_new()
+>   iio: imu: kmx61: Convert to i2c's .probe_new()
+>   iio: imu: st_lsm6dsx: Convert to i2c's .probe_new()
+>   iio: light: adjd_s311: Convert to i2c's .probe_new()
+>   iio: light: adux1020: Convert to i2c's .probe_new()
+>   iio: light: al3010: Convert to i2c's .probe_new()
+>   iio: light: al3320a: Convert to i2c's .probe_new()
+>   iio: light: apds9300: Convert to i2c's .probe_new()
+>   iio: light: apds9960: Convert to i2c's .probe_new()
+>   iio: light: bh1750: Convert to i2c's .probe_new()
+>   iio: light: bh1780: Convert to i2c's .probe_new()
+>   iio: light: cm3232: Convert to i2c's .probe_new()
+>   iio: light: cm3323: Convert to i2c's .probe_new()
+>   iio: light: cm36651: Convert to i2c's .probe_new()
+>   iio: light: gp2ap002: Convert to i2c's .probe_new()
+>   iio: light: gp2ap020a00f: Convert to i2c's .probe_new()
+>   iio: light: isl29018: Convert to i2c's .probe_new()
+>   iio: light: isl29028: Convert to i2c's .probe_new()
+>   iio: light: isl29125: Convert to i2c's .probe_new()
+>   iio: light: jsa1212: Convert to i2c's .probe_new()
+>   iio: light: ltr501: Convert to i2c's .probe_new()
+>   iio: light: lv0104cs: Convert to i2c's .probe_new()
+>   iio: light: max44000: Convert to i2c's .probe_new()
+>   iio: light: max44009: Convert to i2c's .probe_new()
+>   iio: light: noa1305: Convert to i2c's .probe_new()
+>   iio: light: opt3001: Convert to i2c's .probe_new()
+>   iio: light: pa12203001: Convert to i2c's .probe_new()
+>   iio: light: rpr0521: Convert to i2c's .probe_new()
+>   iio: light: si1133: Convert to i2c's .probe_new()
+>   iio: light: si1145: Convert to i2c's .probe_new()
+>   iio: light: st_uvis25_i2c: Convert to i2c's .probe_new()
+>   iio: light: stk3310: Convert to i2c's .probe_new()
+>   iio: light: tcs3414: Convert to i2c's .probe_new()
+>   iio: light: tcs3472: Convert to i2c's .probe_new()
+>   iio: light: tsl2563: Convert to i2c's .probe_new()
+>   iio: light: tsl2583: Convert to i2c's .probe_new()
+>   iio: light: tsl2772: Convert to i2c's .probe_new()
+>   iio: light: tsl4531: Convert to i2c's .probe_new()
+>   iio: light: us5182d: Convert to i2c's .probe_new()
+>   iio: light: vcnl4000: Convert to i2c's .probe_new()
+>   iio: light: vcnl4035: Convert to i2c's .probe_new()
+>   iio: light: veml6030: Convert to i2c's .probe_new()
+>   iio: light: veml6070: Convert to i2c's .probe_new()
+>   iio: light: zopt2201: Convert to i2c's .probe_new()
+>   iio: magnetometer: ak8974: Convert to i2c's .probe_new()
+>   iio: magnetometer: ak8975: Convert to i2c's .probe_new()
+>   iio: magnetometer: bmc150_magn_i2c: Convert to i2c's .probe_new()
+>   iio: magnetometer: hmc5843: Convert to i2c's .probe_new()
+>   iio: magnetometer: mag3110: Convert to i2c's .probe_new()
+>   iio: magnetometer: mmc35240: Convert to i2c's .probe_new()
+>   iio: magnetometer: yamaha-yas530: Convert to i2c's .probe_new()
+>   iio: potentiometer: ad5272: Convert to i2c's .probe_new()
+>   iio: potentiometer: ds1803: Convert to i2c's .probe_new()
+>   iio: potentiometer: max5432: Convert to i2c's .probe_new()
+>   iio: potentiometer: tpl0102: Convert to i2c's .probe_new()
+>   iio: potentiostat: lmp91000: Convert to i2c's .probe_new()
+>   iio: pressure: abp060mg: Convert to i2c's .probe_new()
+Not this one > iio: pressure: bmp280-i2c: Convert to i2c's .probe_new()
+>   iio: pressure: dlhl60d: Convert to i2c's .probe_new()
+>   iio: pressure: dps310: Convert to i2c's .probe_new()
+>   iio: pressure: hp03: Convert to i2c's .probe_new()
+>   iio: pressure: hp206c: Convert to i2c's .probe_new()
+>   iio: pressure: icp10100: Convert to i2c's .probe_new()
+>   iio: pressure: mpl115_i2c: Convert to i2c's .probe_new()
+>   iio: pressure: mpl3115: Convert to i2c's .probe_new()
+>   iio: pressure: ms5611_i2c: Convert to i2c's .probe_new()
+>   iio: pressure: ms5637: Convert to i2c's .probe_new()
+>   iio: pressure: st_pressure_i2c: Convert to i2c's .probe_new()
+>   iio: pressure: t5403: Convert to i2c's .probe_new()
+>   iio: pressure: zpa2326_i2c: Convert to i2c's .probe_new()
+>   iio: proximity: isl29501: Convert to i2c's .probe_new()
+>   iio: proximity: mb1232: Convert to i2c's .probe_new()
+>   iio: proximity: pulsedlight-lidar-lite-v2: Convert to i2c's
+>     .probe_new()
+>   iio: proximity: rfd77402: Convert to i2c's .probe_new()
+>   iio: proximity: srf08: Convert to i2c's .probe_new()
+>   iio: proximity: sx9500: Convert to i2c's .probe_new()
+>   iio: temperature: mlx90614: Convert to i2c's .probe_new()
+>   iio: temperature: mlx90632: Convert to i2c's .probe_new()
+>   iio: temperature: tmp006: Convert to i2c's .probe_new()
+>   iio: temperature: tmp007: Convert to i2c's .probe_new()
+>   iio: temperature: tsys01: Convert to i2c's .probe_new()
+>   iio: temperature: tsys02d: Convert to i2c's .probe_new()
+...
+
+>   staging: iio: adt7316: Convert to i2c's .probe_new()
+>   staging: iio: ad5933: Convert to i2c's .probe_new()
+>   staging: iio: ade7854: Convert to i2c's .probe_new()
+ 
