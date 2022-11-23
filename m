@@ -2,201 +2,134 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD379C4332F
-	for <linux-media@archiver.kernel.org>; Wed, 23 Nov 2022 11:04:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7510C433FE
+	for <linux-media@archiver.kernel.org>; Wed, 23 Nov 2022 12:03:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237096AbiKWLEN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Nov 2022 06:04:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39376 "EHLO
+        id S237201AbiKWMDk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Nov 2022 07:03:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237200AbiKWLD5 (ORCPT
+        with ESMTP id S236356AbiKWMDj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Nov 2022 06:03:57 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E893A2610B
-        for <linux-media@vger.kernel.org>; Wed, 23 Nov 2022 03:00:28 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CFA1A88F;
-        Wed, 23 Nov 2022 12:00:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669201227;
-        bh=1ImU1eNT1DdzwouZq/mqlbZgJT8LeXtEajqhpgsh1S0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X2nJBiHtg/4gNGqF2IGnXeHxLioQbanmLxI0VypYEpQBRPM7/53nN+UExWZiKJdDL
-         KSkkxAgJvlCLtCybl9I68hDaw9t8MzGeDtm0BcF6ZV6/KfqZ17h14boU07p+0AFDwa
-         hDBv60LGqVH/8u3Dxfb5Gv0kGrzz8pe3acl3GnYw=
-Date:   Wed, 23 Nov 2022 13:00:11 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc:     linux-media@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>,
-        Manivannan Sadhasivam <mani@kernel.org>
-Subject: Re: [PATCH v1 07/15] media: i2c: imx290: Factor out black level
- setting to a function
-Message-ID: <Y339O5TYeO2jVRYP@pendragon.ideasonboard.com>
-References: <20221122223250.21233-1-laurent.pinchart@ideasonboard.com>
- <20221122223250.21233-8-laurent.pinchart@ideasonboard.com>
- <CAPY8ntAqXK3efWB+J_KG==1yuewmon1abea8enk0CL8p9pkS9A@mail.gmail.com>
+        Wed, 23 Nov 2022 07:03:39 -0500
+Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 312C1643C;
+        Wed, 23 Nov 2022 04:03:36 -0800 (PST)
+Received: from mgb4.digiteq.red (unknown [62.77.71.229])
+        by mx.gpxsee.org (Postfix) with ESMTPSA id F0AA13D9D9;
+        Wed, 23 Nov 2022 13:03:33 +0100 (CET)
+From:   tumic@gpxsee.org
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lizhi Hou <lizhi.hou@amd.com>,
+        =?UTF-8?q?Martin=20T=C5=AFma?= <martin.tuma@digiteqautomotive.com>
+Subject: [PATCH v4 0/1] Digiteq Automotive MGB4 driver
+Date:   Wed, 23 Nov 2022 15:04:30 +0100
+Message-Id: <20221123140431.4730-1-tumic@gpxsee.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAPY8ntAqXK3efWB+J_KG==1yuewmon1abea8enk0CL8p9pkS9A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dave,
+From: Martin Tůma <martin.tuma@digiteqautomotive.com>
 
-On Wed, Nov 23, 2022 at 10:08:19AM +0000, Dave Stevenson wrote:
-> On Tue, 22 Nov 2022 at 22:34, Laurent Pinchart wrote:
-> >
-> > The black level programmed in the BLKLEVEL register depends on the
-> > output format. The black level value computation is currently performed
-> > in imx290_set_ctrl(), in addition to having different black level values
-> > in the output-specific register value tables. Move it to a separate
-> > function to simplify the imx290_set_ctrl() code.
-> 
-> Does this actually help?
-> The sensor only supports 10 and 12 bpp readout, so making it generic
-> for any bpp is rather redundant.
-> If you are looking at having different on-sensor black level values
-> kicking around, then tuning data goes out the window.
+Hi,
+This patch adds a driver for the Digiteq Automotive MGB4 grabber card.
+MGB4 is a modular frame grabber PCIe card for automotive video interfaces
+(FPD-Link and GMSL for now). It is based on a Xilinx FPGA and uses their
+XDMA IP core for DMA transfers. Additionally, Xilinx I2C and SPI IP cores
+which already have drivers in linux are used in the design.
 
-This may be needed for some use cases, but that's not what I'm after
-here. By the way, could you explain why we can't just set it to 0 in the
-sensor and avoid subtracting it in the ISP (at least for the data
-pedestal value that is added on purpose in the sensor, there can also be
-an additional black level due to other reasons) ? I'm sure there's a
-reason :-)
+The driver is a quite standard v4l2 driver, with one exception - there are
+a lot of sysfs options that may/must be set before opening the v4l2 device
+to adapt the card on a specific signal (see mgb4.rst for details)
+as the card must be able to work with various signal sources (or displays)
+that can not be auto-detected.
 
-> OK we do appear to have duplication between imx290_[10|12]bit_settings
-> and imx290_set_ctrl, but I don't get the need to compute it.
+I have run the driver through the v4l2-compliance test suite for both the
+input and the output and the results look fine to me (I can provide the
+output if required).
 
-The idea was to centralize black level setting in a single place, to
-prepare for the removal of he imx290->bpp field. It's really in
-imx290_set_ctrl() that it matters, I could keep the value in the
-imx290_10bit_settings and imx290_12bit_settings arrays, but I thought I
-could as well do it the same way everywhere.
+The patch requires the new XDMA v10 driver from Xilinx/AMD from the dmaengine
+mailing list to compile/work:
+https://www.spinics.net/lists/dmaengine/msg31864.html
 
-> > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > ---
-> >  drivers/media/i2c/imx290.c | 53 +++++++++++++++++++++-----------------
-> >  1 file changed, 29 insertions(+), 24 deletions(-)
-> >
-> > diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-> > index 135ed55592a1..d9fc6c44b0f0 100644
-> > --- a/drivers/media/i2c/imx290.c
-> > +++ b/drivers/media/i2c/imx290.c
-> > @@ -152,6 +152,9 @@
-> >  #define IMX290_PIXEL_ARRAY_RECORDING_WIDTH             1920
-> >  #define IMX290_PIXEL_ARRAY_RECORDING_HEIGHT            1080
-> >
-> > +/* Equivalent value for 16bpp */
-> > +#define IMX290_BLACK_LEVEL_DEFAULT                     3840
-> > +
-> >  #define IMX290_NUM_SUPPLIES                            3
-> >
-> >  struct imx290_regval {
-> > @@ -315,7 +318,6 @@ static const struct imx290_regval imx290_10bit_settings[] = {
-> >         { IMX290_ADBIT2, IMX290_ADBIT2_10BIT },
-> >         { IMX290_ADBIT3, IMX290_ADBIT3_10BIT },
-> >         { IMX290_CSI_DT_FMT, IMX290_CSI_DT_FMT_RAW10 },
-> > -       { IMX290_BLKLEVEL, 60 },
-> >  };
-> >
-> >  static const struct imx290_regval imx290_12bit_settings[] = {
-> > @@ -325,7 +327,6 @@ static const struct imx290_regval imx290_12bit_settings[] = {
-> >         { IMX290_ADBIT2, IMX290_ADBIT2_12BIT },
-> >         { IMX290_ADBIT3, IMX290_ADBIT3_12BIT },
-> >         { IMX290_CSI_DT_FMT, IMX290_CSI_DT_FMT_RAW12 },
-> > -       { IMX290_BLKLEVEL, 240 },
-> >  };
-> >
-> >  /* supported link frequencies */
-> > @@ -516,35 +517,43 @@ static int imx290_set_data_lanes(struct imx290 *imx290)
-> >         return ret;
-> >  }
-> >
-> > +static int imx290_set_black_level(struct imx290 *imx290,
-> > +                                 unsigned int black_level, int *err)
-> > +{
-> > +       return imx290_write(imx290, IMX290_BLKLEVEL,
-> > +                           black_level >> (16 - imx290->bpp), err);
-> > +}
-> > +
-> >  static int imx290_write_current_format(struct imx290 *imx290)
-> >  {
-> > +       const struct imx290_regval *regs;
-> > +       unsigned int num_regs;
-> > +       unsigned int bpp;
-> >         int ret;
-> >
-> >         switch (imx290->current_format.code) {
-> >         case MEDIA_BUS_FMT_SRGGB10_1X10:
-> > -               ret = imx290_set_register_array(imx290, imx290_10bit_settings,
-> > -                                               ARRAY_SIZE(
-> > -                                                       imx290_10bit_settings));
-> > -               if (ret < 0) {
-> > -                       dev_err(imx290->dev, "Could not set format registers\n");
-> > -                       return ret;
-> > -               }
-> > +               regs = imx290_10bit_settings;
-> > +               num_regs = ARRAY_SIZE(imx290_10bit_settings);
-> > +               bpp = 10;
-> >                 break;
-> >         case MEDIA_BUS_FMT_SRGGB12_1X12:
-> > -               ret = imx290_set_register_array(imx290, imx290_12bit_settings,
-> > -                                               ARRAY_SIZE(
-> > -                                                       imx290_12bit_settings));
-> > -               if (ret < 0) {
-> > -                       dev_err(imx290->dev, "Could not set format registers\n");
-> > -                       return ret;
-> > -               }
-> > +               regs = imx290_12bit_settings;
-> > +               num_regs = ARRAY_SIZE(imx290_12bit_settings);
-> > +               bpp = 12;
-> >                 break;
-> >         default:
-> >                 dev_err(imx290->dev, "Unknown pixel format\n");
-> >                 return -EINVAL;
-> >         }
-> >
-> > -       return 0;
-> > +       ret = imx290_set_register_array(imx290, regs, num_regs);
-> > +       if (ret < 0) {
-> > +               dev_err(imx290->dev, "Could not set format registers\n");
-> > +               return ret;
-> > +       }
-> > +
-> > +       return imx290_set_black_level(imx290, IMX290_BLACK_LEVEL_DEFAULT, &ret);
-> >  }
-> >
-> >  /* ----------------------------------------------------------------------------
-> > @@ -573,7 +582,7 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
-> >
-> >         case V4L2_CID_TEST_PATTERN:
-> >                 if (ctrl->val) {
-> > -                       imx290_write(imx290, IMX290_BLKLEVEL, 0, &ret);
-> > +                       imx290_set_black_level(imx290, 0, &ret);
-> >                         usleep_range(10000, 11000);
-> >                         imx290_write(imx290, IMX290_PGCTRL,
-> >                                      (u8)(IMX290_PGCTRL_REGEN |
-> > @@ -582,12 +591,8 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
-> >                 } else {
-> >                         imx290_write(imx290, IMX290_PGCTRL, 0x00, &ret);
-> >                         usleep_range(10000, 11000);
-> > -                       if (imx290->bpp == 10)
-> > -                               imx290_write(imx290, IMX290_BLKLEVEL, 0x3c,
-> > -                                            &ret);
-> > -                       else /* 12 bits per pixel */
-> > -                               imx290_write(imx290, IMX290_BLKLEVEL, 0xf0,
-> > -                                            &ret);
-> > +                       imx290_set_black_level(imx290, IMX290_BLACK_LEVEL_DEFAULT,
-> > +                                              &ret);
-> >                 }
-> >                 break;
-> >         default:
+Changes in v4:
+* Redesigned the signal change handling logic. Now using the propper timings
+  API in the video input driver and a propper open() syscall check/logic in
+  the video output driver.
+* Fixed all minor issues from v3 review.
+* 'checkpatch.pl --strict' used for checking the code.
+
+Changes in v3:
+* Rebased the DMA transfers part to use the new XDMA driver from Xilinx/AMD
+
+Changes in v2:
+* Completely rewritten the original Xilinx's XDMA driver to meet kernel code
+  standards.
+* Added all required "to" and "cc" mail addresses.
+
+Martin Tůma (1):
+  Added Digiteq Automotive MGB4 driver
+
+ Documentation/admin-guide/media/mgb4.rst      | 352 ++++++++
+ .../admin-guide/media/pci-cardlist.rst        |   1 +
+ .../admin-guide/media/v4l-drivers.rst         |   1 +
+ MAINTAINERS                                   |   7 +
+ drivers/media/pci/Kconfig                     |   1 +
+ drivers/media/pci/Makefile                    |   1 +
+ drivers/media/pci/mgb4/Kconfig                |  17 +
+ drivers/media/pci/mgb4/Makefile               |   6 +
+ drivers/media/pci/mgb4/mgb4_cmt.c             | 247 ++++++
+ drivers/media/pci/mgb4/mgb4_cmt.h             |  16 +
+ drivers/media/pci/mgb4/mgb4_core.c            | 642 ++++++++++++++
+ drivers/media/pci/mgb4/mgb4_core.h            |  65 ++
+ drivers/media/pci/mgb4/mgb4_dma.c             | 123 +++
+ drivers/media/pci/mgb4/mgb4_dma.h             |  18 +
+ drivers/media/pci/mgb4/mgb4_i2c.c             | 141 +++
+ drivers/media/pci/mgb4/mgb4_i2c.h             |  35 +
+ drivers/media/pci/mgb4/mgb4_io.h              |  39 +
+ drivers/media/pci/mgb4/mgb4_regs.c            |  30 +
+ drivers/media/pci/mgb4/mgb4_regs.h            |  35 +
+ drivers/media/pci/mgb4/mgb4_sysfs.h           |  18 +
+ drivers/media/pci/mgb4/mgb4_sysfs_in.c        | 780 ++++++++++++++++
+ drivers/media/pci/mgb4/mgb4_sysfs_out.c       | 732 +++++++++++++++
+ drivers/media/pci/mgb4/mgb4_sysfs_pci.c       |  86 ++
+ drivers/media/pci/mgb4/mgb4_trigger.c         | 209 +++++
+ drivers/media/pci/mgb4/mgb4_trigger.h         |   8 +
+ drivers/media/pci/mgb4/mgb4_vin.c             | 830 ++++++++++++++++++
+ drivers/media/pci/mgb4/mgb4_vin.h             |  63 ++
+ drivers/media/pci/mgb4/mgb4_vout.c            | 501 +++++++++++
+ drivers/media/pci/mgb4/mgb4_vout.h            |  58 ++
+ 29 files changed, 5062 insertions(+)
+ create mode 100644 Documentation/admin-guide/media/mgb4.rst
+ create mode 100644 drivers/media/pci/mgb4/Kconfig
+ create mode 100644 drivers/media/pci/mgb4/Makefile
+ create mode 100644 drivers/media/pci/mgb4/mgb4_cmt.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_cmt.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_core.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_core.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_dma.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_dma.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_i2c.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_i2c.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_io.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_regs.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_regs.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_in.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_out.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_pci.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_trigger.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_trigger.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vin.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vin.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vout.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vout.h
 
 -- 
-Regards,
+2.38.1
 
-Laurent Pinchart
