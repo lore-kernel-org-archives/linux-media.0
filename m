@@ -2,159 +2,139 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC268C4332F
-	for <linux-media@archiver.kernel.org>; Wed, 23 Nov 2022 13:31:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62DBBC4708C
+	for <linux-media@archiver.kernel.org>; Wed, 23 Nov 2022 13:32:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238046AbiKWNbe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Nov 2022 08:31:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38684 "EHLO
+        id S238234AbiKWNco (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Nov 2022 08:32:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236550AbiKWNbB (ORCPT
+        with ESMTP id S238874AbiKWNcT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:31:01 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE8FBC0
-        for <linux-media@vger.kernel.org>; Wed, 23 Nov 2022 05:12:28 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id m22so42612895eji.10
-        for <linux-media@vger.kernel.org>; Wed, 23 Nov 2022 05:12:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Bvs98D7kn/blwT63+h55cu2gonMJ65ywZrI5Z5R+q8s=;
-        b=CbKrP7EDuQM1+snQr1Bb3MbhbQ1msQARnAhP8lLIaw8jsoWgtUxr2YZuSk/BGmdbmJ
-         CHML6hqeeAqT5QapkEJBOq5hHCB/AFN2yNlNe0UTVNNzfzV9/OUQvXEwNyHqnNUkvY1T
-         XUteu4rleCYD+KdeDTBkycgH+nx6bdv7x5woMj/jfEdULmuRFG1kYORmlhBvWNHyjq/x
-         H7opk6T9ej6goLupldeCS1Ai/LJlUZUOxPUAiwU0bK3GQ4OL9oZmnaLbFfWEJQr0UdrJ
-         8M3M4FzvBqbSzpKZSgEd1wobGpuhu0JxJgOdz4rmFVlq1zq8VKc+WvA4aSOCyLsvSPc7
-         tlWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bvs98D7kn/blwT63+h55cu2gonMJ65ywZrI5Z5R+q8s=;
-        b=pVmkNvH5S0xNfeDMoi0F0/3rJrllA10wEg322wUtkpoBOC2nRPCg72fLhZuYEvXfqU
-         aUjfN3maKcputciwnPtk2ZTQY8QMNj/4zTSQr8Hl4kp/SWSRbnWt+mRq+1/ZbZ4G5EHb
-         nGS22qlN+y9np3VpOrcsaNor91HvqncLwTikxCZcsu7m7VjkEfMP7bzYh7eu6A6eW52v
-         lq1kGBYG161jOD57n843tTSdGyrkIP5Nx9a/FRSFaB2UkhN0cTsJVn0o8+KRy5zC+d3R
-         PJdNHJ0DBgf9g+SjSj/Bb4XKkPW6f19ZUhFCFXjVgWR4rOSRm60mbbACIRm9AIxhRa1L
-         Y0Ug==
-X-Gm-Message-State: ANoB5plQH97NDffDpaTk8+0/v4uTTlomOms2idPvZQbqmjfEMcm92HQI
-        XZxgUZre0N3cYJGbzrIOSnw=
-X-Google-Smtp-Source: AA0mqf5Nj1HAYv/xJhMhjUhsdKhcctZzH8JOkFU/AOEqdt3oRJ5z0AWvGNokuhO7wHbBhMGKlisOWQ==
-X-Received: by 2002:a17:906:1ecf:b0:7ad:902c:d1d6 with SMTP id m15-20020a1709061ecf00b007ad902cd1d6mr12072437ejj.143.1669209147048;
-        Wed, 23 Nov 2022 05:12:27 -0800 (PST)
-Received: from ?IPV6:2a02:908:1256:79a0:d2d7:ceea:efc2:af43? ([2a02:908:1256:79a0:d2d7:ceea:efc2:af43])
-        by smtp.gmail.com with ESMTPSA id mh23-20020a170906eb9700b007af105a87cbsm7152028ejb.152.2022.11.23.05.12.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 05:12:26 -0800 (PST)
-Message-ID: <dc2a9d7f-192b-e9d8-b1d1-3b868cb1fd44@gmail.com>
-Date:   Wed, 23 Nov 2022 14:12:25 +0100
+        Wed, 23 Nov 2022 08:32:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6230E12D28;
+        Wed, 23 Nov 2022 05:17:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1F0B9B81F24;
+        Wed, 23 Nov 2022 13:17:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC3BFC433D6;
+        Wed, 23 Nov 2022 13:17:36 +0000 (UTC)
+Message-ID: <73481668-9c41-7d01-d328-bd137a57c0b3@xs4all.nl>
+Date:   Wed, 23 Nov 2022 14:17:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [Linaro-mm-sig] Re: [PATCH] dma-buf: Require VM_PFNMAP vma for
- mmap
+ Thunderbird/102.4.1
+Subject: Re: [PATCH mm-unstable v1 13/20] media: videobuf-dma-sg: remove
+ FOLL_FORCE usage
 Content-Language: en-US
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Suren Baghdasaryan <surenb@google.com>,
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
         Matthew Wilcox <willy@infradead.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-References: <Y30Z4VxT7Wdoc1Lc@ziepe.ca>
- <CAKMK7uE=8eqyh9BKg_+7B1jjMi6K4wrmPyi9xeLVvVYFxBgF9g@mail.gmail.com>
- <Y30kK6dsssSLJVgp@ziepe.ca>
- <CAKMK7uFQQkG82PzuSTGQTnN3ZNps5N_4TjR5NRWo0LaJkEaNew@mail.gmail.com>
- <3d8607b4-973d-945d-c184-260157ade7c3@amd.com>
- <CAKMK7uHVGgGHTiXYOfseXXda2Ug992nYvhPsL+4z18ssqeHXHQ@mail.gmail.com>
- <b05e6091-4e07-1e32-773d-f603ac9ac98b@gmail.com>
- <CAKMK7uFjmzewqv3r4hL9hvLADwV536n2n6xbAWaUvmAcStr5KQ@mail.gmail.com>
- <Y34WI9SZdiH/p1tA@ziepe.ca> <f8f844a5-0910-d19a-5aea-df7a1d83b1d3@gmail.com>
- <Y34XvmtHfb4ZwopN@ziepe.ca>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <Y34XvmtHfb4ZwopN@ziepe.ca>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <20221116102659.70287-1-david@redhat.com>
+ <20221116102659.70287-14-david@redhat.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20221116102659.70287-14-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Am 23.11.22 um 13:53 schrieb Jason Gunthorpe:
-> On Wed, Nov 23, 2022 at 01:49:41PM +0100, Christian König wrote:
->> Am 23.11.22 um 13:46 schrieb Jason Gunthorpe:
->>> On Wed, Nov 23, 2022 at 11:06:55AM +0100, Daniel Vetter wrote:
->>>
->>>>> Maybe a GFP flag to set the page reference count to zero or something
->>>>> like this?
->>>> Hm yeah that might work. I'm not sure what it will all break though?
->>>> And we'd need to make sure that underflowing the page refcount dies in
->>>> a backtrace.
->>> Mucking with the refcount like this to protect against crazy out of
->>> tree drives seems horrible..
->> Well not only out of tree drivers. The intree KVM got that horrible
->> wrong as well, those where the latest guys complaining about it.
-> kvm was taking refs on special PTEs? That seems really unlikely?
+On 16/11/2022 11:26, David Hildenbrand wrote:
+> GUP now supports reliable R/O long-term pinning in COW mappings, such
+> that we break COW early. MAP_SHARED VMAs only use the shared zeropage so
+> far in one corner case (DAXFS file with holes), which can be ignored
+> because GUP does not support long-term pinning in fsdax (see
+> check_vma_flags()).
+> 
+> Consequently, FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM is no longer required
+> for reliable R/O long-term pinning: FOLL_LONGTERM is sufficient. So stop
+> using FOLL_FORCE, which is really only for ptrace access.
+> 
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-Well then look at this code here:
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-commit add6a0cd1c5ba51b201e1361b05a5df817083618
-Author: Paolo Bonzini <pbonzini@redhat.com>
-Date:   Tue Jun 7 17:51:18 2016 +0200
+Looks good!
 
-     KVM: MMU: try to fix up page faults before giving up
+	Hans
 
-     The vGPU folks would like to trap the first access to a BAR by setting
-     vm_ops on the VMAs produced by mmap-ing a VFIO device.  The fault 
-handler
-     then can use remap_pfn_range to place some non-reserved pages in 
-the VMA.
-
-     This kind of VM_PFNMAP mapping is not handled by KVM, but follow_pfn
-     and fixup_user_fault together help supporting it.  The patch also 
-supports
-     VM_MIXEDMAP vmas where the pfns are not reserved and thus subject to
-     reference counting.
-
-     Cc: Xiao Guangrong <guangrong.xiao@linux.intel.com>
-     Cc: Andrea Arcangeli <aarcange@redhat.com>
-     Cc: Radim Krčmář <rkrcmar@redhat.com>
-     Tested-by: Neo Jia <cjia@nvidia.com>
-     Reported-by: Kirti Wankhede <kwankhede@nvidia.com>
-     Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-
-And see also the discussion here: 
-https://patchwork.freedesktop.org/patch/414123/
-
-as well as here: https://patchwork.freedesktop.org/patch/499190/
-
-I can't count how often I have pointed out that this is absolutely 
-illegal and KVM can't touch pages in VMAs with VM_PFNMAP.
-
->>> The WARN_ON(pag_count(p) != 1) seems like a reasonable thing to do
->>> though, though you must combine this with the special PTE flag..
->> That's not sufficient. The pages are released much later than things
->> actually go wrong. In most cases this WARN_ON here won't hit.
-> How so? As long as the page is mapped into the PTE there is no issue
-> with corruption. If dmabuf checks the refcount after it does the unmap
-> mapping range it should catch any bogus pin that might be confused
-> about address coherency.
-
-Yeah, that would work. The problem is this WARN_ON() comes much later.
-
-The device drivers usually keep the page around for a while even after 
-it is unmapped. IIRC the cleanup worker only runs every 10ms or so.
-
-Christian.
-
->
-> Jason
+> ---
+>  drivers/media/v4l2-core/videobuf-dma-sg.c | 14 +++++---------
+>  1 file changed, 5 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/media/v4l2-core/videobuf-dma-sg.c b/drivers/media/v4l2-core/videobuf-dma-sg.c
+> index f75e5eedeee0..234e9f647c96 100644
+> --- a/drivers/media/v4l2-core/videobuf-dma-sg.c
+> +++ b/drivers/media/v4l2-core/videobuf-dma-sg.c
+> @@ -151,17 +151,16 @@ static void videobuf_dma_init(struct videobuf_dmabuf *dma)
+>  static int videobuf_dma_init_user_locked(struct videobuf_dmabuf *dma,
+>  			int direction, unsigned long data, unsigned long size)
+>  {
+> +	unsigned int gup_flags = FOLL_LONGTERM;
+>  	unsigned long first, last;
+> -	int err, rw = 0;
+> -	unsigned int flags = FOLL_FORCE;
+> +	int err;
+>  
+>  	dma->direction = direction;
+>  	switch (dma->direction) {
+>  	case DMA_FROM_DEVICE:
+> -		rw = READ;
+> +		gup_flags |= FOLL_WRITE;
+>  		break;
+>  	case DMA_TO_DEVICE:
+> -		rw = WRITE;
+>  		break;
+>  	default:
+>  		BUG();
+> @@ -177,14 +176,11 @@ static int videobuf_dma_init_user_locked(struct videobuf_dmabuf *dma,
+>  	if (NULL == dma->pages)
+>  		return -ENOMEM;
+>  
+> -	if (rw == READ)
+> -		flags |= FOLL_WRITE;
+> -
+>  	dprintk(1, "init user [0x%lx+0x%lx => %lu pages]\n",
+>  		data, size, dma->nr_pages);
+>  
+> -	err = pin_user_pages(data & PAGE_MASK, dma->nr_pages,
+> -			     flags | FOLL_LONGTERM, dma->pages, NULL);
+> +	err = pin_user_pages(data & PAGE_MASK, dma->nr_pages, gup_flags,
+> +			     dma->pages, NULL);
+>  
+>  	if (err != dma->nr_pages) {
+>  		dma->nr_pages = (err >= 0) ? err : 0;
 
