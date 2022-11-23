@@ -2,165 +2,131 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58A67C46467
-	for <linux-media@archiver.kernel.org>; Wed, 23 Nov 2022 13:32:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABE8EC4167D
+	for <linux-media@archiver.kernel.org>; Wed, 23 Nov 2022 13:34:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238282AbiKWNcr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Nov 2022 08:32:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39696 "EHLO
+        id S238801AbiKWNe2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Nov 2022 08:34:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238096AbiKWNbg (ORCPT
+        with ESMTP id S238921AbiKWNcZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:31:36 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382C76F359;
-        Wed, 23 Nov 2022 05:14:36 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id f7so24786039edc.6;
-        Wed, 23 Nov 2022 05:14:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sauF/j+i6mkS8I5Asm3wkjg9rAoolnMVFFABQhVn7ts=;
-        b=JrgCjNHpmpS+UFD/hJxkEdxsDcmk00K9l1zgw4rjJ6QL5LFgR9cDjNY17XgiVyuKWT
-         GVX3FjNvQF532OmACfplDQxa0ET6vUF3+AwWkzCoQgdvk8wm/vwi5bqEPhjgds3tvHVk
-         qcn3+9bWbQ09f6O6mbQXTHtJZBCGwc8Lfjz7fIehiorZZ8oPg8dRKYCne/QKG+ZgQ3Z5
-         zzGAl10ChcVHD+8+Mhy+mnFO2Ek6zUiOt22qnko9TArrSnnj1eidLr1A138vvA9aLTcz
-         ZwMNfHN3QT6GpL5rAIMHY7Io5oO/gphYT8wcDC9vjb4hS9xYXmqoE4cy5//Ks0/sJomc
-         X3OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sauF/j+i6mkS8I5Asm3wkjg9rAoolnMVFFABQhVn7ts=;
-        b=hTNUNN9prRDxYVem/12iuh5DtKfC5PRe+pzM1IrmUMOLxQc3FQ/yFXOPvGHBcvGji9
-         Wzl22oWHAMP9an14CgNX2/ihv8DD2OqqgNEAYqJd+3JNTaoqi+Xtopqi1pTy498UAVvW
-         cMC1niuea8DC+Vp1EuaBc2oBhoArwK86qNSq7CPerDBxPZ+Vl0mBWB/DPt4JE5K+EmGx
-         1u8VH+yBg8xOyCyYN09YFJlaO1EtG7SWE3aNDDXR3Fxorqu5VhaIlfs9UxMnoMA/BnCF
-         +EBlhakytqHlVOEQyRaANdboSi3nT5W0Flujf/+2evK7KMsI+xz8YPqSfZZ51erEW/g/
-         b9yQ==
-X-Gm-Message-State: ANoB5pnopyhkTq/4FvLPy0osu2m+4sy5RaC2DL4duSgtGf6o4Q0Cy4oF
-        4twblCdXN3tBgDHzhtoAL7I=
-X-Google-Smtp-Source: AA0mqf4EMwcpsdY1UQ9nMh8FYiw8FldQtuxFrB6UO57Z4G73kQazssLgzz4HdFhaHz+MfDNKhbLKUA==
-X-Received: by 2002:a05:6402:181:b0:461:ea0c:e151 with SMTP id r1-20020a056402018100b00461ea0ce151mr11327924edv.376.1669209274614;
-        Wed, 23 Nov 2022 05:14:34 -0800 (PST)
-Received: from [10.20.0.7] ([37.120.217.162])
-        by smtp.gmail.com with ESMTPSA id oz36-20020a1709077da400b00734bfab4d59sm958602ejc.170.2022.11.23.05.14.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 05:14:34 -0800 (PST)
-Message-ID: <711d5275-7e80-c00d-0cdc-0f3d52175361@gmail.com>
-Date:   Wed, 23 Nov 2022 14:14:31 +0100
+        Wed, 23 Nov 2022 08:32:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F0628706;
+        Wed, 23 Nov 2022 05:18:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BA6261CAC;
+        Wed, 23 Nov 2022 13:18:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74BDEC433C1;
+        Wed, 23 Nov 2022 13:18:32 +0000 (UTC)
+Message-ID: <e0701648-fec1-f1fd-0c69-8ed85e162a01@xs4all.nl>
+Date:   Wed, 23 Nov 2022 14:18:31 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
- const *
+ Thunderbird/102.4.1
+Subject: Re: [PATCH mm-unstable v1 15/20] media: pci/ivtv: remove FOLL_FORCE
+ usage
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Wolfram Sang <wsa@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        Jilin Yuan <yuanjilin@cdjrlc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Jason Gunthorpe <jgg@ziepe.ca>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org
-References: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
- <20221123122523.1332370-3-gregkh@linuxfoundation.org>
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <20221123122523.1332370-3-gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Andy Walls <awalls@md.metrocast.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <20221116102659.70287-1-david@redhat.com>
+ <20221116102659.70287-16-david@redhat.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20221116102659.70287-16-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+On 16/11/2022 11:26, David Hildenbrand wrote:
+> FOLL_FORCE is really only for ptrace access. R/O pinning a page is
+> supposed to fail if the VMA misses proper access permissions (no VM_READ).
+> 
+> Let's just remove FOLL_FORCE usage here; there would have to be a pretty
+> good reason to allow arbitrary drivers to R/O pin pages in a PROT_NONE
+> VMA. Most probably, FOLL_FORCE usage is just some legacy leftover.
 
-On 11/23/22 13:25, Greg Kroah-Hartman wrote:
-> The uevent() callback in struct device_type should not be modifying the
-> device that is passed into it, so mark it as a const * and propagate the
-> function signature changes out into all relevant subsystems that use
-> this callback.
+I'm pretty sure about that as well, so:
 
-[...]
-
-> diff --git a/drivers/platform/surface/aggregator/bus.c b/drivers/platform/surface/aggregator/bus.c
-> index de539938896e..407eb55050a6 100644
-> --- a/drivers/platform/surface/aggregator/bus.c
-> +++ b/drivers/platform/surface/aggregator/bus.c
-> @@ -35,9 +35,9 @@ static struct attribute *ssam_device_attrs[] = {
->   };
->   ATTRIBUTE_GROUPS(ssam_device);
->   
-> -static int ssam_device_uevent(struct device *dev, struct kobj_uevent_env *env)
-> +static int ssam_device_uevent(const struct device *dev, struct kobj_uevent_env *env)
->   {
-> -	struct ssam_device *sdev = to_ssam_device(dev);
-> +	const struct ssam_device *sdev = to_ssam_device(dev);
->   
->   	return add_uevent_var(env, "MODALIAS=ssam:d%02Xc%02Xt%02Xi%02Xf%02X",
->   			      sdev->uid.domain, sdev->uid.category,
-
-[...]
-
-> --- a/include/linux/surface_aggregator/device.h
-> +++ b/include/linux/surface_aggregator/device.h
-> @@ -229,7 +229,7 @@ static inline bool is_ssam_device(struct device *d)
->    * Return: Returns a pointer to the &struct ssam_device wrapping the given
->    * device @d.
->    */
-> -static inline struct ssam_device *to_ssam_device(struct device *d)
-> +static inline struct ssam_device *to_ssam_device(const struct device *d)
->   {
->   	return container_of(d, struct ssam_device, dev);
->   }
-
-I am slightly conflicted about this change as that now more or less
-implicitly drops the const. So I'm wondering if it wouldn't be better to
-either create a function specifically for const pointers or to just
-open-code it in the instance above.
-
-I guess we could also convert this to a macro. Then at least there
-wouldn't be an explicit and potentially misleading const-conversion
-indicated in the function signature.
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
 Regards,
-Max
+
+	Hans
+
+> 
+> Cc: Andy Walls <awalls@md.metrocast.net>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+> ---
+>  drivers/media/pci/ivtv/ivtv-udma.c | 2 +-
+>  drivers/media/pci/ivtv/ivtv-yuv.c  | 5 ++---
+>  2 files changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/media/pci/ivtv/ivtv-udma.c b/drivers/media/pci/ivtv/ivtv-udma.c
+> index 210be8290f24..99b9f55ca829 100644
+> --- a/drivers/media/pci/ivtv/ivtv-udma.c
+> +++ b/drivers/media/pci/ivtv/ivtv-udma.c
+> @@ -115,7 +115,7 @@ int ivtv_udma_setup(struct ivtv *itv, unsigned long ivtv_dest_addr,
+>  
+>  	/* Pin user pages for DMA Xfer */
+>  	err = pin_user_pages_unlocked(user_dma.uaddr, user_dma.page_count,
+> -			dma->map, FOLL_FORCE);
+> +			dma->map, 0);
+>  
+>  	if (user_dma.page_count != err) {
+>  		IVTV_DEBUG_WARN("failed to map user pages, returned %d instead of %d\n",
+> diff --git a/drivers/media/pci/ivtv/ivtv-yuv.c b/drivers/media/pci/ivtv/ivtv-yuv.c
+> index 4ba10c34a16a..582146f8d70d 100644
+> --- a/drivers/media/pci/ivtv/ivtv-yuv.c
+> +++ b/drivers/media/pci/ivtv/ivtv-yuv.c
+> @@ -63,12 +63,11 @@ static int ivtv_yuv_prep_user_dma(struct ivtv *itv, struct ivtv_user_dma *dma,
+>  
+>  	/* Pin user pages for DMA Xfer */
+>  	y_pages = pin_user_pages_unlocked(y_dma.uaddr,
+> -			y_dma.page_count, &dma->map[0], FOLL_FORCE);
+> +			y_dma.page_count, &dma->map[0], 0);
+>  	uv_pages = 0; /* silence gcc. value is set and consumed only if: */
+>  	if (y_pages == y_dma.page_count) {
+>  		uv_pages = pin_user_pages_unlocked(uv_dma.uaddr,
+> -				uv_dma.page_count, &dma->map[y_pages],
+> -				FOLL_FORCE);
+> +				uv_dma.page_count, &dma->map[y_pages], 0);
+>  	}
+>  
+>  	if (y_pages != y_dma.page_count || uv_pages != uv_dma.page_count) {
+
