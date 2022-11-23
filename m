@@ -2,131 +2,208 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD63AC43219
-	for <linux-media@archiver.kernel.org>; Wed, 23 Nov 2022 10:23:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEE3BC433FE
+	for <linux-media@archiver.kernel.org>; Wed, 23 Nov 2022 10:23:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237314AbiKWKXs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Nov 2022 05:23:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48414 "EHLO
+        id S237375AbiKWKXt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Nov 2022 05:23:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237487AbiKWKWI (ORCPT
+        with ESMTP id S237501AbiKWKWK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Nov 2022 05:22:08 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777F1102D
-        for <linux-media@vger.kernel.org>; Wed, 23 Nov 2022 02:08:35 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id b12so14815316wrn.2
-        for <linux-media@vger.kernel.org>; Wed, 23 Nov 2022 02:08:35 -0800 (PST)
+        Wed, 23 Nov 2022 05:22:10 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6282638B0
+        for <linux-media@vger.kernel.org>; Wed, 23 Nov 2022 02:08:37 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id h2so7618576ile.11
+        for <linux-media@vger.kernel.org>; Wed, 23 Nov 2022 02:08:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ouhGwXSeaVgRDyF6aOYlnUe1G6PkcJ3a2Ia2veN59q8=;
-        b=hbEPWRnyHRthni9llQ/pko59L9nujUbe07hiTRM2D3CWbFk2ap18EHe7YEPo5XTCEk
-         dd4eQD3AdJsZoMCZrJjRUwPRKv/xQkJS7WttM6KeWBd8UFu2Runk2FKMdYFHk3LkgfZR
-         ybYR3pbyVXD/b2cQMkSgaTquIo8exnsfE0Teg=
+        d=raspberrypi.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WyhlgSD0Qi5eYBn+SBJQEiELArCoAWM3aJmJZehxrVs=;
+        b=k9Xabmh506G2xZbAIQx1rAZmaDKe8mnOQtDnjqIAbIs0JKStvSwsdThsVyM55e0DDG
+         GvSY3/HUEK9MozCSvRmRoPsyzXz/uhkIoVexln86g2Lu4Z6R+gcZYcB8yhKJ8bST8sUJ
+         on5UlXLmcvCQh+4j5a7ih+0Wodhr1Hn+GIWdppRsClx7xDPf1gQzzq3sEjI9rrE2DCjm
+         OGa3eUr/7Fh6vk+0KLqptffAxf3S36r+JgQpoMVGTtVKGAV0y8qT14Q/Rz/VnFItRU7e
+         fk2lBPVp+/8nxDYodp+VI6mb2KWyGJYzrtjyMvelrSdT4hzmBnSQZl8j9dFcqNfuSfxb
+         8zPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ouhGwXSeaVgRDyF6aOYlnUe1G6PkcJ3a2Ia2veN59q8=;
-        b=toOzA+ud+cRomqJRnAWME+BirhD4/Q/rWTa/07uQkBwsZedNUtFBcidUP6L0Wq28M8
-         EEQA0LN42JkEZ5eLTcrNMIl33jGXHDXwjh6h8jaTiR5QKKelpTToJUpqmOZq1ZuWRt+N
-         0BR2rS4MHbGYfRV6pkIItM8iE/LILPFOFyy0rw+NIXS2tU01n/XoMZPNbp5pEc9a4o5o
-         +zjYn064qg5M3JmUixEwB6JRFfgx13Y3gI9VqmA5olkg083tJUXHetD7lwRmqFQIacYu
-         cXLVrekCWNic933P4/1WHJLa1JZnT3YWbrTrCniz4avmhmTRXIvaYqTOk1MlwBIcjSWg
-         qv1A==
-X-Gm-Message-State: ANoB5pkdrOk2MbHrK8dt8492K1WQuW9Zo8PKVv8Xh/n2s28J4NxpkeL3
-        TQ5usGz1+raNcIhKWEAqWNXu2g==
-X-Google-Smtp-Source: AA0mqf7JmrwWXtMFx88k5iciiSy2ZO2SDkDIGgwo8kBY1Ny7RPhvVd5HvnuLpUfi2CdI/K9sJvysrA==
-X-Received: by 2002:adf:fb0e:0:b0:241:87cb:6e0c with SMTP id c14-20020adffb0e000000b0024187cb6e0cmr6841150wrr.166.1669198114044;
-        Wed, 23 Nov 2022 02:08:34 -0800 (PST)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-55-94.cust.vodafonedsl.it. [188.217.55.94])
-        by smtp.gmail.com with ESMTPSA id m66-20020a1c2645000000b003cf9bf5208esm1695004wmm.19.2022.11.23.02.08.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 02:08:33 -0800 (PST)
-Date:   Wed, 23 Nov 2022 11:08:31 +0100
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH resend] media: staging: stkwebcam: Restore
- MEDIA_{USB,CAMERA}_SUPPORT dependencies
-Message-ID: <20221123100831.GE39395@tom-ThinkPad-T14s-Gen-2i>
-References: <a50fa46075fb760d8409ff6ea2232b2ddb7a102b.1669046259.git.geert+renesas@glider.be>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WyhlgSD0Qi5eYBn+SBJQEiELArCoAWM3aJmJZehxrVs=;
+        b=EN9kRUBJV8YcgeGTnWrTfAQ4/Tx3FZ7dE2Rv+R6X7R8CDzgHh2XO+ejj2VSFZl/YwL
+         7RiuQzZU/m/ZIgLocMKluiuzrCjIxL6QAot1rpzTrIRgyZyeFJVT/KrzseSEEDUPjPpX
+         hVwuv19EKH+esTB0Lp+ac28G6SDY4K++UpDiglSF7d+4DsI/Pfc5x4SBvEr1Yt6oQ2A5
+         M8zzHYsu7sb+038GY6kV13Sba/NGvjnbFb+RG9ysv36HQ2LScR34BHQA4CJKcPRFZRis
+         TNAcmyAPu8fuBzEPjW9AsiymfzrCw4y43OGyjJpei9CAMlmNRPpRFZPfP4eZwgxb8LDh
+         rBiw==
+X-Gm-Message-State: ANoB5pl55gFiCb2ZLFZticxl0y+wre/C9PB+JgIUPjx/xqIQxNpOLBiA
+        bHs3+01ijdwoqROOsJ92Ef0THjFz9aL+wpARD/VhXNGw0eW74A==
+X-Google-Smtp-Source: AA0mqf773rHMEQeFmFAa2Quvl/g573Z+5EOEyBx87ZfMTeaeEYn/5ym7M/F7sgmdNVwqXub2qheliJek+qXmOxLKA+Q=
+X-Received: by 2002:a92:cd0d:0:b0:302:467a:4eb2 with SMTP id
+ z13-20020a92cd0d000000b00302467a4eb2mr3515439iln.165.1669198116525; Wed, 23
+ Nov 2022 02:08:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a50fa46075fb760d8409ff6ea2232b2ddb7a102b.1669046259.git.geert+renesas@glider.be>
+References: <20221122223250.21233-1-laurent.pinchart@ideasonboard.com> <20221122223250.21233-8-laurent.pinchart@ideasonboard.com>
+In-Reply-To: <20221122223250.21233-8-laurent.pinchart@ideasonboard.com>
+From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date:   Wed, 23 Nov 2022 10:08:19 +0000
+Message-ID: <CAPY8ntAqXK3efWB+J_KG==1yuewmon1abea8enk0CL8p9pkS9A@mail.gmail.com>
+Subject: Re: [PATCH v1 07/15] media: i2c: imx290: Factor out black level
+ setting to a function
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Geert,
+Hi Laurent
 
-On Mon, Nov 21, 2022 at 04:58:33PM +0100, Geert Uytterhoeven wrote:
-> By moving support for the USB Syntek DC1125 Camera to staging, the
-> dependencies on MEDIA_USB_SUPPORT and MEDIA_CAMERA_SUPPORT were lost.
-> 
-> Fixes: 56280c64ecacc971 ("media: stkwebcam: deprecate driver, move to staging")
+On Tue, 22 Nov 2022 at 22:34, Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> The black level programmed in the BLKLEVEL register depends on the
+> output format. The black level value computation is currently performed
+> in imx290_set_ctrl(), in addition to having different black level values
+> in the output-specific register value tables. Move it to a separate
+> function to simplify the imx290_set_ctrl() code.
 
-Patch itself looks good but we have some style issue. Applying this
-patch I got the following warning from checkpatchl:
+Does this actually help?
+The sensor only supports 10 and 12 bpp readout, so making it generic
+for any bpp is rather redundant.
+If you are looking at having different on-sensor black level values
+kicking around, then tuning data goes out the window.
 
-WARNING: Please use correct Fixes: style 'Fixes: <12 chars of sha1> ("<title line>")' - ie: 'Fixes: 56280c64ecac ("media: stkwebcam: deprecate driver, move to staging")'
-#10: 
+OK we do appear to have duplication between imx290_[10|12]bit_settings
+and imx290_set_ctrl, but I don't get the need to compute it.
 
-You have to pass only the first 12 chars of the sha1 commit into Fixes
-msg:
+  Dave
 
-Use:
-
- Fixes: 56280c64ecac ("media: stkwebcam: deprecate driver, move to staging")
-
-Instead of:
-
- Fixes: 56280c64ecacc971 ("media: stkwebcam: deprecate driver, move to staging")
-
-Thanks & Regards,
-Tommaso
-
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > ---
->  drivers/staging/media/deprecated/stkwebcam/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/staging/media/deprecated/stkwebcam/Kconfig b/drivers/staging/media/deprecated/stkwebcam/Kconfig
-> index 4450403dff41fb64..7234498e634ac61c 100644
-> --- a/drivers/staging/media/deprecated/stkwebcam/Kconfig
-> +++ b/drivers/staging/media/deprecated/stkwebcam/Kconfig
-> @@ -2,7 +2,7 @@
->  config VIDEO_STKWEBCAM
->  	tristate "USB Syntek DC1125 Camera support (DEPRECATED)"
->  	depends on VIDEO_DEV
-> -	depends on USB
-> +	depends on MEDIA_USB_SUPPORT && MEDIA_CAMERA_SUPPORT
->  	help
->  	  Say Y here if you want to use this type of camera.
->  	  Supported devices are typically found in some Asus laptops,
-> -- 
-> 2.25.1
-> 
-
--- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
-
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com
+>  drivers/media/i2c/imx290.c | 53 +++++++++++++++++++++-----------------
+>  1 file changed, 29 insertions(+), 24 deletions(-)
+>
+> diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
+> index 135ed55592a1..d9fc6c44b0f0 100644
+> --- a/drivers/media/i2c/imx290.c
+> +++ b/drivers/media/i2c/imx290.c
+> @@ -152,6 +152,9 @@
+>  #define IMX290_PIXEL_ARRAY_RECORDING_WIDTH             1920
+>  #define IMX290_PIXEL_ARRAY_RECORDING_HEIGHT            1080
+>
+> +/* Equivalent value for 16bpp */
+> +#define IMX290_BLACK_LEVEL_DEFAULT                     3840
+> +
+>  #define IMX290_NUM_SUPPLIES                            3
+>
+>  struct imx290_regval {
+> @@ -315,7 +318,6 @@ static const struct imx290_regval imx290_10bit_settings[] = {
+>         { IMX290_ADBIT2, IMX290_ADBIT2_10BIT },
+>         { IMX290_ADBIT3, IMX290_ADBIT3_10BIT },
+>         { IMX290_CSI_DT_FMT, IMX290_CSI_DT_FMT_RAW10 },
+> -       { IMX290_BLKLEVEL, 60 },
+>  };
+>
+>  static const struct imx290_regval imx290_12bit_settings[] = {
+> @@ -325,7 +327,6 @@ static const struct imx290_regval imx290_12bit_settings[] = {
+>         { IMX290_ADBIT2, IMX290_ADBIT2_12BIT },
+>         { IMX290_ADBIT3, IMX290_ADBIT3_12BIT },
+>         { IMX290_CSI_DT_FMT, IMX290_CSI_DT_FMT_RAW12 },
+> -       { IMX290_BLKLEVEL, 240 },
+>  };
+>
+>  /* supported link frequencies */
+> @@ -516,35 +517,43 @@ static int imx290_set_data_lanes(struct imx290 *imx290)
+>         return ret;
+>  }
+>
+> +static int imx290_set_black_level(struct imx290 *imx290,
+> +                                 unsigned int black_level, int *err)
+> +{
+> +       return imx290_write(imx290, IMX290_BLKLEVEL,
+> +                           black_level >> (16 - imx290->bpp), err);
+> +}
+> +
+>  static int imx290_write_current_format(struct imx290 *imx290)
+>  {
+> +       const struct imx290_regval *regs;
+> +       unsigned int num_regs;
+> +       unsigned int bpp;
+>         int ret;
+>
+>         switch (imx290->current_format.code) {
+>         case MEDIA_BUS_FMT_SRGGB10_1X10:
+> -               ret = imx290_set_register_array(imx290, imx290_10bit_settings,
+> -                                               ARRAY_SIZE(
+> -                                                       imx290_10bit_settings));
+> -               if (ret < 0) {
+> -                       dev_err(imx290->dev, "Could not set format registers\n");
+> -                       return ret;
+> -               }
+> +               regs = imx290_10bit_settings;
+> +               num_regs = ARRAY_SIZE(imx290_10bit_settings);
+> +               bpp = 10;
+>                 break;
+>         case MEDIA_BUS_FMT_SRGGB12_1X12:
+> -               ret = imx290_set_register_array(imx290, imx290_12bit_settings,
+> -                                               ARRAY_SIZE(
+> -                                                       imx290_12bit_settings));
+> -               if (ret < 0) {
+> -                       dev_err(imx290->dev, "Could not set format registers\n");
+> -                       return ret;
+> -               }
+> +               regs = imx290_12bit_settings;
+> +               num_regs = ARRAY_SIZE(imx290_12bit_settings);
+> +               bpp = 12;
+>                 break;
+>         default:
+>                 dev_err(imx290->dev, "Unknown pixel format\n");
+>                 return -EINVAL;
+>         }
+>
+> -       return 0;
+> +       ret = imx290_set_register_array(imx290, regs, num_regs);
+> +       if (ret < 0) {
+> +               dev_err(imx290->dev, "Could not set format registers\n");
+> +               return ret;
+> +       }
+> +
+> +       return imx290_set_black_level(imx290, IMX290_BLACK_LEVEL_DEFAULT, &ret);
+>  }
+>
+>  /* ----------------------------------------------------------------------------
+> @@ -573,7 +582,7 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
+>
+>         case V4L2_CID_TEST_PATTERN:
+>                 if (ctrl->val) {
+> -                       imx290_write(imx290, IMX290_BLKLEVEL, 0, &ret);
+> +                       imx290_set_black_level(imx290, 0, &ret);
+>                         usleep_range(10000, 11000);
+>                         imx290_write(imx290, IMX290_PGCTRL,
+>                                      (u8)(IMX290_PGCTRL_REGEN |
+> @@ -582,12 +591,8 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
+>                 } else {
+>                         imx290_write(imx290, IMX290_PGCTRL, 0x00, &ret);
+>                         usleep_range(10000, 11000);
+> -                       if (imx290->bpp == 10)
+> -                               imx290_write(imx290, IMX290_BLKLEVEL, 0x3c,
+> -                                            &ret);
+> -                       else /* 12 bits per pixel */
+> -                               imx290_write(imx290, IMX290_BLKLEVEL, 0xf0,
+> -                                            &ret);
+> +                       imx290_set_black_level(imx290, IMX290_BLACK_LEVEL_DEFAULT,
+> +                                              &ret);
+>                 }
+>                 break;
+>         default:
+> --
+> Regards,
+>
+> Laurent Pinchart
+>
