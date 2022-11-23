@@ -2,368 +2,190 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABA58C4332F
-	for <linux-media@archiver.kernel.org>; Wed, 23 Nov 2022 14:17:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 548ECC4332F
+	for <linux-media@archiver.kernel.org>; Wed, 23 Nov 2022 14:30:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237108AbiKWOR2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Nov 2022 09:17:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39918 "EHLO
+        id S238733AbiKWOah (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Nov 2022 09:30:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237374AbiKWORZ (ORCPT
+        with ESMTP id S238494AbiKWOaL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Nov 2022 09:17:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05A631F81
-        for <linux-media@vger.kernel.org>; Wed, 23 Nov 2022 06:17:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 71621B81FF5
-        for <linux-media@vger.kernel.org>; Wed, 23 Nov 2022 14:17:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67210C433C1;
-        Wed, 23 Nov 2022 14:17:18 +0000 (UTC)
-Message-ID: <a0db73c5-fd80-cce5-8669-0b26128304e7@xs4all.nl>
-Date:   Wed, 23 Nov 2022 15:17:16 +0100
+        Wed, 23 Nov 2022 09:30:11 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A04F86A61
+        for <linux-media@vger.kernel.org>; Wed, 23 Nov 2022 06:28:40 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id bj12so43073070ejb.13
+        for <linux-media@vger.kernel.org>; Wed, 23 Nov 2022 06:28:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ucQTvmzn91rzZAss19wwLVdxDJtfMPnU+ZLD4q4UOr4=;
+        b=WT7aZnirqlfHwqauYBvMMtrVy5bo2pha0DsZfPUcmWaiXhqbaeij/6ndqYkdegeckT
+         THXjqnLDQxeZ28AXp9/umwOtWDLa7NQTMzqXphjm/QmIlNqvR/sbxc45IoMrQwWQHEe6
+         x7BOJapEwYbv+NuKJL+8sIorhR2MAi9iVY21A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ucQTvmzn91rzZAss19wwLVdxDJtfMPnU+ZLD4q4UOr4=;
+        b=oodPZhIE/FeZ8T/er4y5I4ar7efhbznk/0oRDDdgNQb8vythP1gj+R+MPqWLlUjnKN
+         Y+xU12e+nvchNoJfgBUpTtMvi3B5XwHZbnk1hZvYSFQLqHoxMMhjYlI7KRtdR1PPFKm5
+         1ZIg5M/Bcy2VPfqf0L/Q+gfsJP3ZzdImCayDvyQIA1nXZjbSPeZIu/BPLZ+w5M3C37tU
+         rcFwB9bncKP1pETcMy9mFmuVUwmE92uFfAzp43lHoaGUpyABVg/eAP//WpB5iR86Wwnl
+         IIuIgJsnliRd/lV0kLXteYoU2Wkj0bAYlFbNMLZ4+w6j4MmXe7kEXFtqNsKwRCUKaO7d
+         n68w==
+X-Gm-Message-State: ANoB5pnMkARjvRKq81sf6IwJoUtscISjFnrGEjumyCeECu3PkgVj0viV
+        rhz2tTxH+1CclTN7QjgG4eyGQRh9oSBlrtYRlqeeow==
+X-Google-Smtp-Source: AA0mqf6sZXWpHY0T6gpoVbuWg6Vf1JsDzG60PWxm05j3xQNGNGz1hoLjG6usYDq1yrMl9GvAUb1dUEr3/2FVoMO3p44=
+X-Received: by 2002:a17:907:8197:b0:7b8:eae2:716a with SMTP id
+ iy23-20020a170907819700b007b8eae2716amr5545863ejc.516.1669213718576; Wed, 23
+ Nov 2022 06:28:38 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: Handling of colorspace fields in image format
-Content-Language: en-US
-To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-References: <CAPY8ntC4XjhTC5jQd6OZF_6WsS+BLUD1QbxzjKTTLdiSgO2VzA@mail.gmail.com>
- <9afffc8e-00b0-fdfc-93fa-3fcb648ad5e6@xs4all.nl>
- <CAPY8ntBz10bc1c119EZVSCM2E0iw5Nt6jbeAb3x_6qDNOuRO5g@mail.gmail.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <CAPY8ntBz10bc1c119EZVSCM2E0iw5Nt6jbeAb3x_6qDNOuRO5g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <Y30kK6dsssSLJVgp@ziepe.ca> <CAKMK7uFQQkG82PzuSTGQTnN3ZNps5N_4TjR5NRWo0LaJkEaNew@mail.gmail.com>
+ <3d8607b4-973d-945d-c184-260157ade7c3@amd.com> <CAKMK7uHVGgGHTiXYOfseXXda2Ug992nYvhPsL+4z18ssqeHXHQ@mail.gmail.com>
+ <b05e6091-4e07-1e32-773d-f603ac9ac98b@gmail.com> <CAKMK7uFjmzewqv3r4hL9hvLADwV536n2n6xbAWaUvmAcStr5KQ@mail.gmail.com>
+ <Y34WI9SZdiH/p1tA@ziepe.ca> <f8f844a5-0910-d19a-5aea-df7a1d83b1d3@gmail.com>
+ <Y34XvmtHfb4ZwopN@ziepe.ca> <dc2a9d7f-192b-e9d8-b1d1-3b868cb1fd44@gmail.com> <Y34gBUl0m+j1JdFk@ziepe.ca>
+In-Reply-To: <Y34gBUl0m+j1JdFk@ziepe.ca>
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+Date:   Wed, 23 Nov 2022 15:28:27 +0100
+Message-ID: <CAKMK7uHWyOcZ77-+GY7hxFUA65uQYFe0fw2rww6Y-rLXvHFAYw@mail.gmail.com>
+Subject: Re: [Linaro-mm-sig] Re: [PATCH] dma-buf: Require VM_PFNMAP vma for mmap
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dave,
+On Wed, 23 Nov 2022 at 14:28, Jason Gunthorpe <jgg@ziepe.ca> wrote:
+>
+> On Wed, Nov 23, 2022 at 02:12:25PM +0100, Christian K=C3=B6nig wrote:
+> > Am 23.11.22 um 13:53 schrieb Jason Gunthorpe:
+> > > On Wed, Nov 23, 2022 at 01:49:41PM +0100, Christian K=C3=B6nig wrote:
+> > > > Am 23.11.22 um 13:46 schrieb Jason Gunthorpe:
+> > > > > On Wed, Nov 23, 2022 at 11:06:55AM +0100, Daniel Vetter wrote:
+> > > > >
+> > > > > > > Maybe a GFP flag to set the page reference count to zero or s=
+omething
+> > > > > > > like this?
+> > > > > > Hm yeah that might work. I'm not sure what it will all break th=
+ough?
+> > > > > > And we'd need to make sure that underflowing the page refcount =
+dies in
+> > > > > > a backtrace.
+> > > > > Mucking with the refcount like this to protect against crazy out =
+of
+> > > > > tree drives seems horrible..
+> > > > Well not only out of tree drivers. The intree KVM got that horrible
+> > > > wrong as well, those where the latest guys complaining about it.
+> > > kvm was taking refs on special PTEs? That seems really unlikely?
+> >
+> > Well then look at this code here:
+> >
+> > commit add6a0cd1c5ba51b201e1361b05a5df817083618
+> > Author: Paolo Bonzini <pbonzini@redhat.com>
+> > Date:   Tue Jun 7 17:51:18 2016 +0200
+> >
+> >     KVM: MMU: try to fix up page faults before giving up
+> >
+> >     The vGPU folks would like to trap the first access to a BAR by sett=
+ing
+> >     vm_ops on the VMAs produced by mmap-ing a VFIO device.  The fault
+> > handler
+> >     then can use remap_pfn_range to place some non-reserved pages in th=
+e
+> > VMA.
+> >
+> >     This kind of VM_PFNMAP mapping is not handled by KVM, but follow_pf=
+n
+> >     and fixup_user_fault together help supporting it.  The patch also
+> > supports
+> >     VM_MIXEDMAP vmas where the pfns are not reserved and thus subject t=
+o
+> >     reference counting.
+> >
+> >     Cc: Xiao Guangrong <guangrong.xiao@linux.intel.com>
+> >     Cc: Andrea Arcangeli <aarcange@redhat.com>
+> >     Cc: Radim Kr=C4=8Dm=C3=A1=C5=99 <rkrcmar@redhat.com>
+> >     Tested-by: Neo Jia <cjia@nvidia.com>
+> >     Reported-by: Kirti Wankhede <kwankhede@nvidia.com>
+> >     Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+>
+> This patch is known to be broken in so many ways. It also has a major
+> security hole that it ignores the PTE flags making the page
+> RO. Ignoring the special bit is somehow not surprising :(
+>
+> This probably doesn't work, but is the general idea of what KVM needs
+> to do:
 
-On 23/11/2022 10:52, Dave Stevenson wrote:
-> Hi Hans
-> Thanks for the response
-> 
-> On Tue, 22 Nov 2022 at 14:23, Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
->>
->> On 11/22/22 12:49, Dave Stevenson wrote:
->>> Hi Hans
->>>
->>> This has come about from a discussion with Laurent over how to handle
->>> colorspace fields, whether a particular configuration is legitimate,
->>> and whether we're looking at the correct behaviour. You're the go-to
->>> person for that sort of question :-)
->>>
->>> - CAPTURE queue (in this case on a M2M ISP device, but that doesn't
->>> really matter).
->>> - Limited colorspace options are available from the device (standard
->>> SDTV BT601 limited range, HDTV BT709 limited range, and JPEG's BT601
->>> full range).
->>> - VIDIOC_ENUM_FMT flags returns V4L2_FMT_FLAG_CSC_COLORSPACE. It does
->>> NOT set V4L2_FMT_FLAG_CSC_XFER_FUNC, V4L2_FMT_FLAG_CSC_YCBCR_ENC, or
->>> V4L2_FMT_FLAG_CSC_QUANTIZATION. (No documentation saying this isn't
->>> permitted, and why have 4 flags if they aren't independent).
->>> - VIDIOC_S_FMT called with V4L2_PIX_FMT_FLAG_SET_CSC set.
->>>
->>> Which colourspace fields from the format are applied?
->>
->> If only V4L2_FMT_FLAG_CSC_COLORSPACE is set, then only the colorspace
->> field from userspace is applied. Which is almost certainly wrong
->> sicne switching between the colorspace that is received and the
->> colorspace that you want requires complex calculations. And if a
->> device can do that, then it certainly can also allow userspace to
->> override the other three colorimetry fields. So setting just
->> V4L2_FMT_FLAG_CSC_COLORSPACE makes no sense.
->>
->> The V4L2_FMT_FLAG_CSC_* flags come into play if you want to allow
->> userspace to convert the colorimetry of the captured data to another
->> colorimetry. That's often not supported, the colorimetry fields are
->> just filled in based on what was captured. Often there is some support
->> to convert between YCBCR/RGB/QUANTIZATION settings, so such devices
->> can set V4L2_FMT_FLAG_CSC_YCBCR_ENC | V4L2_FMT_FLAG_CSC_QUANTIZATION
->> if they want. This is typically a 3x3 matrix + one vector in the hardware.
-> 
-> It's not a simple 3x3 matrix + vector in this case, and selection is
-> via an enum.
-> 
->>>
->>> The driver is saying that only colorspace is supported, and [1] says that
->>
->> No, the driver is saying that it can convert to another colorspace
->> if requested to do so by userspace, while leaving the xfer function,
->> ycbcr encoding and quantization range untouched.
->> That's a highly unlikely situation, and I think it's likely a bug
->> in the driver. It should probably drop that flag.
->>
->>> "The first is the colorspace identifier (enum v4l2_colorspace) which
->>> defines the chromaticities, the default transfer function, the default
->>> Y’CbCr encoding and the default quantization method"
->>> so we have all 4 parameters defined via the defaults.
->>> I read it that the ycbcr_enc, quantization, and xfer_func values
->>> passed in should be ignored and replaced with the "default" values
->>> derived from the colorspace value (use V4L2_MAP_XFER_FUNC_DEFAULT,
->>> V4L2_MAP_YCBCR_ENC_DEFAULT, and V4L2_MAP_QUANTIZATION_DEFAULT)
->>> Is this a valid interpretation?
->>
->> No. First of all, unless one or more of the V4L2_FMT_FLAG_CSC_* flags are
->> set, the driver fills in these fields, and ignores what userspace
->> filled in. So [1] just describes what these fields mean, and that you
->> can use those DEFAULT macros to determine what the actual xfer_func,
->> ycbcr_enc or quantization is if the driver left those values to 0.
->>
->> What those defaults are depends on the chosen colorspace field.
->>
->>>
->>> Confusion comes from [2] for V4L2_PIX_FMT_FLAG_SET_CSC saying:
->>
->> So if this flag is set, then userspace can ask the driver to convert
->> to specific colorimetry settings, if supported (what is supported is
->> indicated by the V4L2_FMT_FLAG_CSC_* flags returned by ENUM_FMT).
->>
->>> "If the colorimetry field (colorspace, xfer_func, ycbcr_enc, hsv_enc
->>> or quantization) is set to *_DEFAULT, then that colorimetry setting
->>> will remain unchanged from what was received."
->>> What is "received" in this case?
->>
->> This relates to a capture device, so for an m2m device that means
->> the colorimetry that userspace set for the output device.
-> 
-> This is an ISP. What is the xfer function, ycbcr encoding and
-> quantization range settings for a Bayer image with colorspace
-> V4L2_COLORSPACE_RAW? The documentation does not work for that use
-> case.
+Oh dear, when I dug around in there I entirely missed that
+kvm_try_get_pfn exists, and it's very broken indeed. kvm really needs
+to grow a proper mmu notifier.
 
-It wasn't clear to me that this was specifically about raw Bayer.
+Another thing I'm wondering right now, the follow_pte();
+fixup_user_fault(); follow_pte(); approach does not make any
+guarantees of actually being right. If you're sufficiently unlucky you
+might race against an immediate pte invalidate between the fixup and
+the 2nd follow_pte(). But you can also not loop, because that would
+fail to catch permanent faults.
 
-For COLORSPACE_RAW there really is no xfer_func as such. V4L2_MAP_XFER_FUNC_DEFAULT
-sets it to NONE for COLORSPACE_RAW, but the documentation for NONE is a bit
-misleading since it says that that means linear. For COLORSPACE_RAW is really
-means custom. I am wondering if a XFER_FUNC_RAW or _CUSTOM should be introduced
-to properly signal this. I am certainly not opposed to that.
+I think the iommu fault drivers have a similar pattern.
 
-The YCbCr encoding will be DEFAULT for Bayer (really, it is ignored, but
-it is good practice to set it to DEFAULT in that case). If you DO convert
-to YCbCr, then it has to follow some standard.
+What am I missing here? Or is that also just broken. gup works around
+this with the slow path that takes the mmap sem and walking the vma
+tree, follow_pte/fixup_user_fautl users dont. Maybe mmu notifier based
+restarting would help with this too, if done properly.
+-Daniel
 
-The quantization range will be FULL for Bayer. Again, something else doesn't
-make sense for Bayer.
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 1376a47fedeedb..4161241fc3228c 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -2598,6 +2598,19 @@ static int hva_to_pfn_remapped(struct vm_area_stru=
+ct *vma,
+>                         return r;
+>         }
+>
+> +       /*
+> +        * Special PTEs are never convertible into a struct page, even if=
+ the
+> +        * driver that owns them might have put a PFN with a struct page =
+into
+> +        * the PFNMAP. If the arch doesn't support special then we cannot
+> +        * safely process these pages.
+> +        */
+> +#ifdef CONFIG_ARCH_HAS_PTE_SPECIAL
+> +       if (pte_special(*ptep))
+> +               return -EINVAL;
+> +#else
+> +       return -EINVAL;
+> +#endif
+> +
+>         if (write_fault && !pte_write(*ptep)) {
+>                 pfn =3D KVM_PFN_ERR_RO_FAULT;
+>                 goto out;
+>
+> Jason
 
-> 
->> A typical m2m device will just copy the colorimetry fields from output
->> to capture format. If you want it to act as a csc device, then it will
->> have to advertise the relevant V4L2_FMT_FLAG_CSC_* flags.
->>
->> If it converts between different pixelformats (e.g. RGB to YUV), then
->> there is an implicit csc step, of course, but the result will be using
->> the default rules.
->>
->> Example: userspace passes a frame with V4L2_COLORSPACE_BT2020, V4L2_XFER_FUNC_709,
->> V4L2_YCBCR_ENC_DEFAULT (n/a) and V4L2_QUANTIZATION_FULL_RANGE, and wants
->> a NV12 back. The colorimetry for that will be V4L2_COLORSPACE_BT2020,
->> V4L2_XFER_FUNC_709, V4L2_YCBCR_ENC_BT2020 (most likely, hw limitations might
->> force this to 709 or 601) and V4L2_QUANTIZATION_LIM_RANGE.
->>
->> So this is all determined by the driver, not userspace.
-> 
-> Now I pass a Bayer frame of colorspace V4L2_COLORSPACE_RAW,
-> V4L2_XFER_FUNC_NONE in, and ask for NV12 out. What properties do I use
-> on that NV12 frame please?
 
-Bayer frame:
-colorspace = RAW
-xfer_func = NONE
-ycbcr_enc = DEFAULT (ignored)
-quantization = FULL
 
-NV12 frame:
-colorspace = RAW
-xfer_func = NONE
-ycbcr_enc = 601 for SDTV, 709 for !SDTV
-quantization = LIMITED
-
-> Likewise I could pass in RGB with colorspace V4L2_COLORSPACE_SRGB and
-> ask for NV12 out that is to be JPEG encoded. How do I ensure I get the
-> appropriate conversion parameters?
-
-RGB frame:
-colorspace = SRGB
-xfer_func = SRGB
-ycbcr_enc = DEFAULT (ignored)
-quantization = FULL
-
-JPEG frame:
-colorspace = SRGB
-xfer_func = SRGB
-ycbcr_enc = 601
-quantization = FULL
-
-(or you just set colorspace to COLORSPACE_JPEG, which is a shorthand for this)
-
-> 
->>> There is no inherent colourspace for
->>> the device as it is M2M, so does that come back to being default
->>> anyway, or reflecting the OUTPUT queue which might be Bayer and have
->>> no range? Can we still ignore them all as the relevant
->>> V4L2_FMT_FLAG_CSC_* flags aren't set?
->>>
->>> Hopefully you can enlighten us.
->>
->> So, to recap:
->>
->> 1) for an m2m device it is userspace that provides the colorimetry data
->>    in the output format. For a regular capture device it is the
->>    video receiver driver that sets it (typically determined by the
->>    sensor driver or a video receiver driver).
->> 2) Implicit CSC conversion might take place when converting between
->>    different pixel formats. Typically this will only affect the
->>    ycbcr_enc and quantization fields, since that's usually all that
->>    is supported. The colorspace and xfer_func fields are just copied
->>    from the output pixelformat.
-> 
-> As above, RGB or Bayer in to NV12 out makes no sense to copy
-> colorspace and xfer_func fields from the output pixelformat.
-
-Perhaps you should describe what your m2m device actually *does*? Ah,
-you did at the end :-)
-
-The m2m devices that I know just convert RGB to YUV or JPEG (or vice
-versa). In both cases the colorspace and transfer function remain as-is,
-so copying these two values from the output pixelformat is the right
-thing to do. It's all you have, nobody else can fill it in. Typically
-userspace will get this information from the sensor or video receiver.
-
-The process of converting a raw Bayer sensor to something presentable
-is something an ISP does, but the end result will have to specify
-valid (i.e. non-raw) colorspace/xfer_func/ycbcr_enc/quantization colorimetry,
-otherwise nobody will know how to interpret the resulting frame.
-
-> 
->> 3) If explicit CSC conversion is signaled by the driver by setting
->>    V4L2_FMT_FLAG_CSC_* flags, then userspace can request specific
->>    colorimetry results, and the hardware will be configured by the
->>    driver to give that result.
-> 
-> Not all results are achievable by all hardware.
-> So do we set all the V4L2_FMT_FLAG_CSC_* flags and just alter the bits
-> of the request that aren't supported in a way that the driver sees
-> fit?
-> 
->> I hope this helps!
-> 
-> Sort of, but only by muddying the waters.
-> 
-> Flipping it around then and asking how it should be implemented.
-> 
-> We have configuration for the ISP output path that produces 3
-> configurations regardless of input format corresponding to:
-> - V4L2_COLORSPACE_JPEG, V4L2_YCBCR_ENC_601, V4L2_XFER_FUNC_SRGB,
-> V4L2_QUANTIZATION_FULL_RANGE
-
-Here you request the JPEG pixelformat, so that forces the output
-configuration. So no need for any V4L2_FMT_FLAG_CSC_* for this pixel
-format.
-
-> - V4L2_COLORSPACE_SMPTE170M, V4L2_YCBCR_ENC_601, V4L2_XFER_FUNC_709,
-> V4L2_QUANTIZATION_LIM_RANGE
-> - V4L2_COLORSPACE_REC709, V4L2_YCBCR_ENC_709, V4L2_XFER_FUNC_709,
-> V4L2_QUANTIZATION_LIM_RANGE
-
-Here you select a YUV format (NV12 or similar). The default colorimetry
-it should select is V4L2_COLORSPACE_SMPTE170M for SDTV and V4L2_COLORSPACE_REC709
-otherwise. If you want to allow this to be overridden, then that can be
-done with V4L2_FMT_FLAG_CSC_COLORSPACE for these two pixelformats.
-
-If userspace selects an unsupported colorspace, then the driver should
-pick a supported colorspace (almost certainly you would want V4L2_COLORSPACE_REC709).
-
-> (Those should be the the same ycbcr_enc, xfer_func, and quantization
-> as the defaults for each colourspace, and translate to the normal
-> values used for JPEG, SDTV, and HDTV respectively).
-> These are selected by enum and we are not proposing on adding any extra ones.
-> 
-> The input is going to be Bayer with colorspace set to
-> V4L2_COLORSPACE_RAW. There are therefore no colorspace parameters that
-> can be "left unchanged" or otherwise copied from the OUPTUT queue.
-
-So this device does a lot more than most m2m devices: it apparently knows
-how to convert the raw Bayer data to a proper picture.
-
-I do wonder if it is really converting correctly to these three colorimetry
-permutations. If you give it a test pattern, then save the result in these
-three format and visually compare them, do they look identical? If the ISP
-really does convert correctly, then you should not be able to see any
-difference. There is a clear difference between V4L2_XFER_FUNC_SRGB and
-V4L2_XFER_FUNC_709 when seen side-by-side. Note that the difference between
-V4L2_COLORSPACE_SMPTE170M and V4L2_COLORSPACE_REC709 is pretty much impossible
-to see, they are very close.
-
-> 
-> What is the correct way to allow userspace selection of those options
-> within V4L2?
-> 
-> 
-> Looking at the datasheet for TC358743 (a chip that your company
-> maintains the driver for), it can convert the incoming HDMI to 6
-> output formats via the VI_REP register field VOUT_COLOR_SEL:
-> RGB Full
-> RGB Limited
-> 601YCbCr Full
-> 601 YCbCr Limited
-> 709 YCbCr Full
-> 709 YCbCr Limited
-> This is the same situation as for our ISP - configuration through an
-> enum even though there is more complexity underneath.
-> 
-> Currently the driver always selects 601 YCbCr Limited for UYVY output,
-> or RGB Full for 24bpp RGB.
-> If we were to extend that driver in a non-media controller system to
-> allow selection of the converted colourspace, how do we enforce those
-> restrictions?
-
-That chip can only convert between RGB/YUV and limited/full quantization
-range. The colorspace and xfer_func will be whatever is received in the AVI
-InfoFrame of the HDMI video stream. So this is a typical example of a
-3x3 matrix + vector implementation. It comes with a bunch of default matrixes
-(hardcoded and selected by the enum), but I believe it can be manually set
-as well. I can't remember if that's done in this driver.
-
-If you want to manually set ycbcr_enc and quantization, then you would
-have to specify V4L2_FMT_FLAG_CSC_YCBCR_ENC | V4L2_FMT_FLAG_CSC_QUANTIZATION.
-
-> Under MC you get a similar set of flags in V4L2_MBUS_FRAMEFMT_SET_CSC
-> for struct v4l2_mbus_framefmt and set_format, and
-> V4L2_SUBDEV_MBUS_CODE_CSC_* in struct v4l2_subdev_mbus_code_enum, so
-> the same principles will presumably apply there too.
-
-Yes.
-
-> (I'm noting that the tc358743 driver currently doesn't bother setting
-> any of the colorimetry fields other than colorspace).
-
-I believe the driver predates these additional colorimetry fields.
-
-Regards,
-
-	Hans
-
-> 
-> Thanks
->   Dave
-> 
->> Regards,
->>
->>         Hans
->>
->>>
->>> Cheers
->>>   Dave
->>>
->>> [1] https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/colorspaces-defs.html
->>> [2] https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/pixfmt-v4l2.html#v4l2-pix-fmt-flag-set-csc
->>
-
+--=20
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
