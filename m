@@ -2,73 +2,73 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EAD1DC433FE
-	for <linux-media@archiver.kernel.org>; Wed, 23 Nov 2022 09:01:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34CFCC47089
+	for <linux-media@archiver.kernel.org>; Wed, 23 Nov 2022 09:05:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236909AbiKWJBv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Nov 2022 04:01:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37986 "EHLO
+        id S236962AbiKWJFN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Nov 2022 04:05:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236898AbiKWJBu (ORCPT
+        with ESMTP id S236956AbiKWJE7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Nov 2022 04:01:50 -0500
+        Wed, 23 Nov 2022 04:04:59 -0500
 Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6C11001DF
-        for <linux-media@vger.kernel.org>; Wed, 23 Nov 2022 01:01:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7110C100B23
+        for <linux-media@vger.kernel.org>; Wed, 23 Nov 2022 01:04:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1669194109; x=1700730109;
+  t=1669194298; x=1700730298;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=c0tEAbZpxVxkfyoLyBrwYxacBDdVjZy1hNVPkXd3m2Q=;
-  b=n1NXjt2Jjd0Xyl/4kE+CZKtxTMV59q4u3OkIKhPnGIbowaDl/ypQLZAX
-   lRL6+9lwlYW5ypCANgiXi7/rDXYfyn+ejF5K/DQii1DUCKOsirJSUsWCq
-   MeNTKWylgG1aCWCkU+H1/Ayes91ytvC1KHAggMAi2IofZdkKg5+UIwbwR
-   9dSYRlOEKR+RVzDR6VfLOyYmq/58yZIavvW58cqjeQn0HvZPQY1OYA+tH
-   Q7pGn5sjBpLHkpP7c+H85XDxZtLh+RGUY9dE73dYlIZQgJVBtIsC3fW51
-   lUSUW9jnKwCaPeQqCcQc2hq/KW/g4Z2rVjlCIHnTwFO9sSmCM1K7qo2m+
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,186,1665439200"; 
-   d="scan'208";a="27529093"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 23 Nov 2022 10:01:46 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Wed, 23 Nov 2022 10:01:47 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Wed, 23 Nov 2022 10:01:47 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1669194106; x=1700730106;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=c0tEAbZpxVxkfyoLyBrwYxacBDdVjZy1hNVPkXd3m2Q=;
-  b=kn+2059JmqpmkaXXMbuvU8prtf9R8L26GTJE6a34egXaSaRV92Ty8d91
-   Tim2IVzO6cqkT39F24UYkYbrewpViT6lKfwfxOkVoypX4DbKj3kE+SKu1
-   6OFPAtgwdH8XULbuO/56jn4Vf8t+Gr3+jyPi8rIpCaU6y9tINqKPDIwEg
-   bnEPL4PgWC0X+nnnIioiNC5d1wLfPHqkNAyPCFK2JV7GLIpQ/q5Hdxwk2
-   TWljHB5FwaRLGGyL8mmgUcTarxIQzFVJGnjOi4zfK2rIpbf/TKf90XIQI
-   1LhhNAihLm8tC11xOboxd89ZQ2pHY9ESYUgqnmuuqf2tBWN17F5/mVV7e
+  bh=3dt1lEvoQAcIPeNs+VHClQ4BRR2wll2fbpGgQOVtKCk=;
+  b=LyRu1kKQiObSJxYmX7vngDCIUigxU1CaoaCqwTkVJITQePPPQfQO5Wvf
+   eT0ywAIowSBBF2RmGfmwC6OYpQsJHn8m3WQQEfMasl+iWCHVRkLzCYBfV
+   vCOyJvpHHZND7VSVU1I83EiTcasSdA28ITLiULNFAPsnt/f18Aj/EGzT8
+   Wo8dxgQY/CL6VYfrvs225ZY0AEGD2wFlkzTHyNzFsmx+9oCeFf8vG/M9O
+   wRSjeR6O5gwfSdKyL8Zi1vrMr6m9kgxAaigIFu42WMVmNRNjpyMmsqlPp
+   4J/K24ppSGzFmk5TNt31VZVsEisxmcvI2OXp20XSSLerYSdPuiKrIbkPz
    w==;
 X-IronPort-AV: E=Sophos;i="5.96,186,1665439200"; 
-   d="scan'208";a="27529087"
+   d="scan'208";a="27529198"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 23 Nov 2022 10:04:56 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 23 Nov 2022 10:04:56 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 23 Nov 2022 10:04:56 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1669194296; x=1700730296;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=3dt1lEvoQAcIPeNs+VHClQ4BRR2wll2fbpGgQOVtKCk=;
+  b=NmtlFZY5LgsBDQTBmYKr4Q+nMfQfWdAzh/1LaZKwRHXxSi1xtzolcpfm
+   TgKJuEfAZQIRyi+g/SUpDooblrZ69tBKHEqpUj9aWolDoDwWmZR8PPEI1
+   WMKAyF1OGDznXxtt5XLzW5+BkGxL8ctaK6pZ1YXwqe5dOedWwus22KXaG
+   7/5QwUn0iPVrOvGBmsD8h3w2dbFPx7nw38l1zbzcRxP/IAxKhMZ4k7EHW
+   GWRJrijpX5oNUdFPFRldito8lpWiIuiDOKMKR/4z2fhJbkJXkh0XrbtWB
+   LyOcdr2GEOEKsMB5vrcPNSn3DWvqGE9FIZDAV1gRw7W4e+wJfPGOyGPGy
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.96,186,1665439200"; 
+   d="scan'208";a="27529197"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 23 Nov 2022 10:01:43 +0100
+  by mx1.tq-group.com with ESMTP; 23 Nov 2022 10:04:56 +0100
 Received: from steina-w.localnet (unknown [10.123.53.21])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 0F166280056;
-        Wed, 23 Nov 2022 10:01:43 +0100 (CET)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 8FAC4280056;
+        Wed, 23 Nov 2022 10:04:56 +0100 (CET)
 From:   Alexander Stein <alexander.stein@ew.tq-group.com>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     linux-media@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>,
         Manivannan Sadhasivam <mani@kernel.org>
-Subject: Re: [PATCH v1 14/15] media: i2c: imx290: Configure data lanes at start time
-Date:   Wed, 23 Nov 2022 10:01:44 +0100
-Message-ID: <1885321.taCxCBeP46@steina-w>
+Subject: Re: [PATCH v1 15/15] media: i2c: imx290: Simplify imx290_set_data_lanes()
+Date:   Wed, 23 Nov 2022 10:04:58 +0100
+Message-ID: <2139506.Icojqenx9y@steina-w>
 Organization: TQ-Systems GmbH
-In-Reply-To: <20221122223250.21233-15-laurent.pinchart@ideasonboard.com>
-References: <20221122223250.21233-1-laurent.pinchart@ideasonboard.com> <20221122223250.21233-15-laurent.pinchart@ideasonboard.com>
+In-Reply-To: <20221122223250.21233-16-laurent.pinchart@ideasonboard.com>
+References: <20221122223250.21233-1-laurent.pinchart@ideasonboard.com> <20221122223250.21233-16-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -80,40 +80,70 @@ Hello Laurent,
 
 thanks for working on this.
 
-Am Dienstag, 22. November 2022, 23:32:49 CET schrieb Laurent Pinchart:
-> There's no need to configure the data lanes in the runtime PM resume
-> handler. Do so in imx290_start_streaming() instead.
+Am Dienstag, 22. November 2022, 23:32:50 CET schrieb Laurent Pinchart:
+> There's no need to check for an incorrect number of data lanes in
+> imx290_set_data_lanes() as the value is validated at probe() time. Drop
+> the check.
+> 
+> The PHY_LANE_NUM and CSI_LANE_MODE registers are programmed with a value
+> equal to the number of lanes minus one. Compute it instead of handling
+> it in the switch/case.
 > 
 > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > ---
->  drivers/media/i2c/imx290.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  drivers/media/i2c/imx290.c | 17 +++++------------
+>  1 file changed, 5 insertions(+), 12 deletions(-)
 > 
 > diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-> index dbed703fa199..4dfa090f918d 100644
+> index 4dfa090f918d..369db35a7afd 100644
 > --- a/drivers/media/i2c/imx290.c
 > +++ b/drivers/media/i2c/imx290.c
-> @@ -753,6 +753,9 @@ static int imx290_start_streaming(struct imx290 *imx290,
-> return ret;
+> @@ -512,28 +512,21 @@ static int imx290_set_register_array(struct imx290
+> *imx290,
+> 
+>  static int imx290_set_data_lanes(struct imx290 *imx290)
+>  {
+> -	int ret = 0, laneval, frsel;
+> +	int ret = 0;
+
+You can remove ret and make function returning void as well as there 
+(currently) is no error handling at all. The current single caller also 
+ignores the return value.
+
+Regards,
+Alexander
+
+> +	u32 frsel;
+> 
+>  	switch (imx290->nlanes) {
+>  	case 2:
+> -		laneval = 0x01;
+> +	default:
+>  		frsel = 0x02;
+>  		break;
+>  	case 4:
+> -		laneval = 0x03;
+>  		frsel = 0x01;
+>  		break;
+> -	default:
+> -		/*
+> -		 * We should never hit this since the data lane count is
+> -		 * validated in probe itself
+> -		 */
+> -		dev_err(imx290->dev, "Lane configuration not 
+supported\n");
+> -		return -EINVAL;
 >  	}
 > 
-> +	/* Set data lane count */
-> +	imx290_set_data_lanes(imx290);
-> +
->  	/* Apply the register values related to current frame format */
->  	format = v4l2_subdev_get_pad_format(&imx290->sd, state, 0);
->  	ret = imx290_setup_format(imx290, format);
-> @@ -1052,9 +1055,6 @@ static int imx290_power_on(struct device *dev)
->  	gpiod_set_value_cansleep(imx290->rst_gpio, 0);
->  	usleep_range(30000, 31000);
+> -	imx290_write(imx290, IMX290_PHY_LANE_NUM, laneval, &ret);
+> -	imx290_write(imx290, IMX290_CSI_LANE_MODE, laneval, &ret);
+> +	imx290_write(imx290, IMX290_PHY_LANE_NUM, imx290->nlanes - 1, &ret);
+> +	imx290_write(imx290, IMX290_CSI_LANE_MODE, imx290->nlanes - 1, 
+&ret);
+>  	imx290_write(imx290, IMX290_FR_FDG_SEL, frsel, &ret);
 > 
-> -	/* Set data lane count */
-> -	imx290_set_data_lanes(imx290);
-> -
->  	return 0;
->  }
+>  	return ret;
 
-Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 
 
 
