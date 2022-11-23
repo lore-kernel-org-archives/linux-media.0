@@ -2,92 +2,222 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 136C1C4332F
-	for <linux-media@archiver.kernel.org>; Wed, 23 Nov 2022 07:59:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DB17C4332F
+	for <linux-media@archiver.kernel.org>; Wed, 23 Nov 2022 08:03:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235892AbiKWH7k (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Nov 2022 02:59:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
+        id S235939AbiKWID5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Nov 2022 03:03:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236112AbiKWH7S (ORCPT
+        with ESMTP id S235604AbiKWIDy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Nov 2022 02:59:18 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C975F27CE1;
-        Tue, 22 Nov 2022 23:59:05 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id vv4so31641544ejc.2;
-        Tue, 22 Nov 2022 23:59:05 -0800 (PST)
+        Wed, 23 Nov 2022 03:03:54 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1B0717591
+        for <linux-media@vger.kernel.org>; Wed, 23 Nov 2022 00:03:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=f4Agszvcd8QQMAqioCrcTnE+poivJbc38QaNotksFdc=;
-        b=Yb1k+KxH+C9om/ZZiZxwn8UcaOs8xPuuxdLRjtfa51vPSFh6T0K3v8kSl5eeXRQeQG
-         38z2eE2a6ItpJftrkqbbTodr6uV5OEARhHmjX9Dt5t9Xb7GfTgo1dqv5Dl8aNcTVz6Cl
-         1x9cZtYp4FDthDCjnTLq7xCGeG4saj20lEinVYtQ0b2/3SYkQop71IM6uQkNkNt8FEp+
-         HohD7D9Iwn/sWDiA4pEyRnj5ZBr9x9REeE6VFRj6x3/JDqSF6p4U76JcIF/Hm2Hb5Gt2
-         VUojEKlDmvsjGmaC4fDAuEgYXISGcWTLz1Cv9wAyMMYlvd0vF1EiCItCnIHEqHQj5Tp5
-         HUnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f4Agszvcd8QQMAqioCrcTnE+poivJbc38QaNotksFdc=;
-        b=BRM2Y1lg4O0VAvQEVQFZuRsLM/MemFFQDSVe5KEgEhVJF8IFKIoI60WGJ8ElcCAcuS
-         78zHqa46nISSwVS7alGcIDC5qybp0Ig5o17gElBsT809ceTTU1TPpGcAE14cn7v4UKOY
-         r/NoDe13G2Z/0EgKkKiRxPZc69ehUZ7xZEWN10ISzlqRyELgHgbUnjKWx4O7jBcxKtZU
-         xLv7jm648UQgdudqwZ8y/Xa/MIp7fX7alTyMS3XOPSjgniw0zLRSTjO333b0hBJ1WN/0
-         CC6EohBHgql/mzTnP07ARpwkGyFEakqe/8aOnknEqEgTzaYkAH8lqq2xx6UCPwqqQZ6f
-         9Hcg==
-X-Gm-Message-State: ANoB5pksy11zA+zfTXHfz5lHk4GBVLDJjkFh3EkRlAXfveH+5ZcaCskt
-        6h1zurQhWwMU9imEqHV63/Y=
-X-Google-Smtp-Source: AA0mqf6/FyQ5WmB597b5JSXc5L+Ov3fi7K3xXst75oUpGs2S8vauPO5uLf5krdfA5+X+Ciw5oeqhPQ==
-X-Received: by 2002:a17:906:86c9:b0:78d:9324:6f18 with SMTP id j9-20020a17090686c900b0078d93246f18mr23171607ejy.664.1669190344265;
-        Tue, 22 Nov 2022 23:59:04 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id u9-20020a1709061da900b0074136cac2e7sm3742089ejh.81.2022.11.22.23.59.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 23:59:03 -0800 (PST)
-Date:   Wed, 23 Nov 2022 10:59:00 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: imx: remove code for non-existing config
- IMX_GPT_ICAP
-Message-ID: <Y33SxLh9xD8fQHAo@kadam>
-References: <20221122132330.30408-1-lukas.bulwahn@gmail.com>
- <20221122160937.GB39395@tom-ThinkPad-T14s-Gen-2i>
- <CAKXUXMxk-YoG4TdB8Em+cEMF8NA7rdMAboQz8nmhfVmVQ8oATA@mail.gmail.com>
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1669190633; x=1700726633;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=PSHDw6eiep/w4Yz10Epc2AYo8OBE+GhiEIUkxgp2pUQ=;
+  b=UfC+yZqHXzhG/Cun0lFYaxcJ0YiSMdHTAk/AEANit/4FM1UeGg8jPOXb
+   H7c5qoAWjY5j9E4YpDKllKJJqey182EpWjNJtiot+BL43BL4m0znkGOGF
+   +deXxLUwjXNfMTA4PMtVDwkGLzTUFwoAZfWjq88RWKrewzetMc8/EfEzk
+   92yxs8slNL1rtR5I5cRlmJxstLcNcJ+L8sZhEGKfdw7OOxRiBWd/d9OZA
+   1rc/Tf0Icw79pDDouApMOp0KvF6xtmltzlv6eCAkG1ClxSXaAuu3ugtBl
+   TEofyMe8R+212JctrmqBi9RuzEHPSk5GbD0kdIJGaXVDiBq4aY9vHFSKq
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,186,1665439200"; 
+   d="scan'208";a="27526263"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 23 Nov 2022 09:03:52 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 23 Nov 2022 09:03:52 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 23 Nov 2022 09:03:52 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1669190632; x=1700726632;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=PSHDw6eiep/w4Yz10Epc2AYo8OBE+GhiEIUkxgp2pUQ=;
+  b=bnogwibWQ/3tgpOw+CD4ZzH2hDdmB0QKgcGarnV5of8Hp9jfdyLiL1A+
+   U/rmGChgzPrnYqIkSuEvVcuT63wZUvvP3L7SEvIEqzmJVv3yiM29rEsSk
+   HXQdWbRFA7BWl1VI0lXUI6txNuGMFSTGeUu9/02iF+pYoB+tXS6qacgOf
+   FnCF+MsTROJ+jSJwml9AG+YppT0RR87bpGAkOoP9pGZ3J7sSOmlGFDo8n
+   /7TAOZCGqhwIqwBUKx78G8HlG3176ur71k3ZNOXyJqvIBD9q+sivgSqt2
+   qiQ6XyS7nQAA5iQoom59LfTmEYooDDqbjhkUX5BZ6k9KwzY04RHoscQsn
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,186,1665439200"; 
+   d="scan'208";a="27526262"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 23 Nov 2022 09:03:51 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id D2553280056;
+        Wed, 23 Nov 2022 09:03:51 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Subject: Re: [PATCH v1 07/15] media: i2c: imx290: Factor out black level setting to a function
+Date:   Wed, 23 Nov 2022 09:03:51 +0100
+Message-ID: <10185704.nUPlyArG6x@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20221122223250.21233-8-laurent.pinchart@ideasonboard.com>
+References: <20221122223250.21233-1-laurent.pinchart@ideasonboard.com> <20221122223250.21233-8-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKXUXMxk-YoG4TdB8Em+cEMF8NA7rdMAboQz8nmhfVmVQ8oATA@mail.gmail.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 08:56:06AM +0100, Lukas Bulwahn wrote:
-> 
-> Strangely, my checkpatch invocation on next-20221116 did not show that
-> warning and I am unaware that I made any specific changes to
-> checkpatch or its configuration.
-> 
+Hello Laurent,
 
-I think you need to apply the patch and retest with the -f option.
+thanks for working on this.
 
-regards,
-dan carpenter
+Am Dienstag, 22. November 2022, 23:32:42 CET schrieb Laurent Pinchart:
+> The black level programmed in the BLKLEVEL register depends on the
+> output format. The black level value computation is currently performed
+> in imx290_set_ctrl(), in addition to having different black level values
+> in the output-specific register value tables. Move it to a separate
+> function to simplify the imx290_set_ctrl() code.
+> 
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> ---
+>  drivers/media/i2c/imx290.c | 53 +++++++++++++++++++++-----------------
+>  1 file changed, 29 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
+> index 135ed55592a1..d9fc6c44b0f0 100644
+> --- a/drivers/media/i2c/imx290.c
+> +++ b/drivers/media/i2c/imx290.c
+> @@ -152,6 +152,9 @@
+>  #define IMX290_PIXEL_ARRAY_RECORDING_WIDTH		1920
+>  #define IMX290_PIXEL_ARRAY_RECORDING_HEIGHT		1080
+> 
+> +/* Equivalent value for 16bpp */
+> +#define IMX290_BLACK_LEVEL_DEFAULT			3840
+> +
+>  #define IMX290_NUM_SUPPLIES				3
+> 
+>  struct imx290_regval {
+> @@ -315,7 +318,6 @@ static const struct imx290_regval
+> imx290_10bit_settings[] = { { IMX290_ADBIT2, IMX290_ADBIT2_10BIT },
+>  	{ IMX290_ADBIT3, IMX290_ADBIT3_10BIT },
+>  	{ IMX290_CSI_DT_FMT, IMX290_CSI_DT_FMT_RAW10 },
+> -	{ IMX290_BLKLEVEL, 60 },
+>  };
+> 
+>  static const struct imx290_regval imx290_12bit_settings[] = {
+> @@ -325,7 +327,6 @@ static const struct imx290_regval
+> imx290_12bit_settings[] = { { IMX290_ADBIT2, IMX290_ADBIT2_12BIT },
+>  	{ IMX290_ADBIT3, IMX290_ADBIT3_12BIT },
+>  	{ IMX290_CSI_DT_FMT, IMX290_CSI_DT_FMT_RAW12 },
+> -	{ IMX290_BLKLEVEL, 240 },
+>  };
+> 
+>  /* supported link frequencies */
+> @@ -516,35 +517,43 @@ static int imx290_set_data_lanes(struct imx290
+> *imx290) return ret;
+>  }
+> 
+> +static int imx290_set_black_level(struct imx290 *imx290,
+> +				  unsigned int black_level, int *err)
+> +{
+> +	return imx290_write(imx290, IMX290_BLKLEVEL,
+> +			    black_level >> (16 - imx290->bpp), err);
+> +}
+> +
+>  static int imx290_write_current_format(struct imx290 *imx290)
+>  {
+> +	const struct imx290_regval *regs;
+> +	unsigned int num_regs;
+> +	unsigned int bpp;
+>  	int ret;
+> 
+>  	switch (imx290->current_format.code) {
+>  	case MEDIA_BUS_FMT_SRGGB10_1X10:
+> -		ret = imx290_set_register_array(imx290, 
+imx290_10bit_settings,
+> -						ARRAY_SIZE(
+> -							
+imx290_10bit_settings));
+> -		if (ret < 0) {
+> -			dev_err(imx290->dev, "Could not set format 
+registers\n");
+> -			return ret;
+> -		}
+> +		regs = imx290_10bit_settings;
+> +		num_regs = ARRAY_SIZE(imx290_10bit_settings);
+> +		bpp = 10;
+>  		break;
+>  	case MEDIA_BUS_FMT_SRGGB12_1X12:
+> -		ret = imx290_set_register_array(imx290, 
+imx290_12bit_settings,
+> -						ARRAY_SIZE(
+> -							
+imx290_12bit_settings));
+> -		if (ret < 0) {
+> -			dev_err(imx290->dev, "Could not set format 
+registers\n");
+> -			return ret;
+> -		}
+> +		regs = imx290_12bit_settings;
+> +		num_regs = ARRAY_SIZE(imx290_12bit_settings);
+> +		bpp = 12;
+>  		break;
+>  	default:
+>  		dev_err(imx290->dev, "Unknown pixel format\n");
+>  		return -EINVAL;
+>  	}
+> 
+> -	return 0;
+> +	ret = imx290_set_register_array(imx290, regs, num_regs);
+> +	if (ret < 0) {
+> +		dev_err(imx290->dev, "Could not set format registers\n");
+> +		return ret;
+> +	}
+> +
+> +	return imx290_set_black_level(imx290, IMX290_BLACK_LEVEL_DEFAULT, 
+&ret);
+>  }
+> 
+>  /*
+> ---------------------------------------------------------------------------
+> - @@ -573,7 +582,7 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
+> 
+>  	case V4L2_CID_TEST_PATTERN:
+>  		if (ctrl->val) {
+> -			imx290_write(imx290, IMX290_BLKLEVEL, 0, &ret);
+> +			imx290_set_black_level(imx290, 0, &ret);
+>  			usleep_range(10000, 11000);
+>  			imx290_write(imx290, IMX290_PGCTRL,
+>  				     (u8)(IMX290_PGCTRL_REGEN |
+> @@ -582,12 +591,8 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
+>  		} else {
+>  			imx290_write(imx290, IMX290_PGCTRL, 0x00, &ret);
+>  			usleep_range(10000, 11000);
+> -			if (imx290->bpp == 10)
+> -				imx290_write(imx290, IMX290_BLKLEVEL, 
+0x3c,
+> -					     &ret);
+> -			else /* 12 bits per pixel */
+> -				imx290_write(imx290, IMX290_BLKLEVEL, 
+0xf0,
+> -					     &ret);
+> +			imx290_set_black_level(imx290, 
+IMX290_BLACK_LEVEL_DEFAULT,
+> +					       &ret);
+>  		}
+>  		break;
+>  	default:
+
+Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+
+
 
