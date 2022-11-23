@@ -2,191 +2,231 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85D3AC43217
-	for <linux-media@archiver.kernel.org>; Wed, 23 Nov 2022 09:19:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09D7CC433FE
+	for <linux-media@archiver.kernel.org>; Wed, 23 Nov 2022 09:21:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237329AbiKWJTS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Nov 2022 04:19:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
+        id S237498AbiKWJVD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Nov 2022 04:21:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237403AbiKWJSx (ORCPT
+        with ESMTP id S237417AbiKWJUi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Nov 2022 04:18:53 -0500
-X-Greylist: delayed 24970 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Nov 2022 01:18:39 PST
-Received: from mx0b-00268f01.pphosted.com (mx0b-00268f01.pphosted.com [148.163.159.192])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525C21CFDD
-        for <linux-media@vger.kernel.org>; Wed, 23 Nov 2022 01:18:39 -0800 (PST)
-Received: from pps.filterd (m0165121.ppops.net [127.0.0.1])
-        by mx0b-00268f01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AMM6FCs025457;
-        Tue, 22 Nov 2022 23:12:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=equinix.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=pps202002;
- bh=7TEI4NH/qV57CYvKM38eV609pzCtT/R0mK1Z8C0wk8Y=;
- b=i+l+/fcyxOMIglfV+nR26bWe8893B5JVyu39liIlc/CrWeDu/hLw9oGtDJdOiafFli5d
- BCXtXLHpW30jCxqaKSj1vQkUUpkEbdBN+udPLudHwRbvD8GggooiwL7th8nKK1hHwzA6
- SyempD4NoqfHB2H6xfEQNrPoEcXzLylcCfyFjqlGVMUf7hWF76do3Uca0inWPcIKl58A
- iGkW40IppT/h07A1vWO8l8PIsynYgBhe6LbBHzxlcqoDJyt3wx1kDWEtaQE1zp0Ebvlr
- gQetPffaHfW2xerEogEJfHEZJuixGnWymXvLk7ob210Q8DeU0trmVtQyFSEQr53YxL2D 2w== 
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
-        by mx0b-00268f01.pphosted.com (PPS) with ESMTPS id 3m16wr04cr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Nov 2022 23:12:53 +0000
+        Wed, 23 Nov 2022 04:20:38 -0500
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2062.outbound.protection.outlook.com [40.107.95.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744108FE74;
+        Wed, 23 Nov 2022 01:20:36 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KDsaQUnipOyOrqn7C4lO6BwPg+/Gk1yMslMkUB+sr9vUHLxf1zsQ3DWB/tyI/5zlk0chaSNEBrr02TQbCJjcgqRNl6L5tix7cn9PgQFi3BHTdHaPcTdqaTeGemoMqSFOR5er+a60t5vlhqpd6qYHRFWhsyVaPyMpBqdzHbnP8wIjHClHD5ItOXTGiKUhNvhiDfD4acH/zuWPMpq3FSo3z81UVf2qpaM0d43bssAS9hJyKwopgVw5/LcTl1rV+txMIwD4XzyeK8k/fUg/j8jL7Z0dkfcIcFhDVXvOHuin5I3KAkK0h4qRNdSijPxF5ya3ROboaD/7x7OcieNx/tQdjQ==
+ b=Y/7MSF+96YqP3yqWbDbZY/l4j8tQu8Zegy7g853avB0Ji+fnEOV3h6WySqAV2aU9Q0XJp8+Y2gU1c153AUGG4Us7IUHA5suRIHheyzSzfzZOZ2qo/LgmOi8Z2SQ7Vnzpnsacphu/stOWjOBBJzh2oa9ejb4wZ2Kf5Nw3b7Q2Dra7paeAvait33QUndDvKLjQL0MstUsluGqgxllUfTAV12pU2CNIO8isOg+fnn2xom5jQrI5nrZ1/YIDkfRRQXAX+/mwvVw4R+fIjm7AHNUrYaS1oQaKsbGuLyP58y/4b59RgF6cD9brOIWI2zpM5cIWs8AKI+KceacVTiDYsr5QaA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7TEI4NH/qV57CYvKM38eV609pzCtT/R0mK1Z8C0wk8Y=;
- b=Bxry5Zb73nryrzUJi6of1zjFW3XhwkI2z/BWq6IJKUVqD2a9yBYJ+naT693mPI9/RxHu7L9LciV2C0Vf6KhmYyYZ5F6aPLQ3XvPEGmbmPkTZ5eLq8q+EnyCiFyDCk5SDJ3Dl6VSUX9LFVURjBZ1Ttk1Abcwps3JL+MXWIBDM4C6AnNErGEjMukEpoVRHaaqkQFVUJ/t2zImZBgAvKr97PMyqHLuIgvuPN1KQKwDk+LLnhdc63WMtn8KYSfoZALfilWu80+26HC2s7VMqre8ciehUjiO3CC6lU3bgBYs6VA0YxieU/pi0Mzvu9HyMUzPyW+DPBrlNrBXhJ5aia7CmsQ==
+ bh=V9nxb7J9kIIeH/n/FLXw3QUOA6jjKpMU+gpq28t8f7c=;
+ b=bqf3nasCKvhwDJ6AHLlT9/QoSBhuSLuow3iM1vUBV7Bo9xJOKG8fjTnt2nlJa9M9/GrtUgn/HIIt50mtuKIQr3icS/PNLEYZPM581WFt6bvo1WDd7DP4fQS39FHKFSRc1c+iK3zJkKJMT0UrOiilqK14cAPtAE0jfggplfDF96ESat+1HCXSxMjEeCFOGAAH3viYcoAub5SvSFNCoQMNym2j22/yNUIbSw4S1Lbkf9h9HKDE1R6zyUl2Xej0XFzWHLFzgze/ohKd3M+RWp90kV5nMbN55KpbZlUobwOUXd1P3KfPTueoBaVMYns7yNH3WA+UNUuEx8Iw2+cUxgrU6Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=equinix.com; dmarc=pass action=none header.from=equinix.com;
- dkim=pass header.d=equinix.com; arc=none
-Received: from DM8PR04MB8007.namprd04.prod.outlook.com (2603:10b6:5:314::20)
- by SA0PR04MB7388.namprd04.prod.outlook.com (2603:10b6:806:e2::19) with
+ smtp.mailfrom=synaptics.com; dmarc=pass action=none
+ header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=V9nxb7J9kIIeH/n/FLXw3QUOA6jjKpMU+gpq28t8f7c=;
+ b=U/ZiurlUqIfgnjSNfoDlCnIpzIrXdAcAw9XpVmcwuXnDQmmXXnlp28R/16B7G1hftdEcQlEq3oXWMz1qH0NG0WeXXK3GRH46YfxtVaMXHCSWHavIHtneBGGnlFx4ml5rdW8DK0BgBgAbu5oT7P1CUE7Heyzr+9ntSeUBLv7iHIo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=synaptics.com;
+Received: from DM6PR03MB5196.namprd03.prod.outlook.com (2603:10b6:5:24a::19)
+ by CO1PR03MB5682.namprd03.prod.outlook.com (2603:10b6:303:94::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Tue, 22 Nov
- 2022 23:12:51 +0000
-Received: from DM8PR04MB8007.namprd04.prod.outlook.com
- ([fe80::db6:5b31:1480:6e13]) by DM8PR04MB8007.namprd04.prod.outlook.com
- ([fe80::db6:5b31:1480:6e13%5]) with mapi id 15.20.5834.015; Tue, 22 Nov 2022
- 23:12:51 +0000
-From:   Zev Weiss <zweiss@equinix.com>
-To:     Jammy Huang <jammy_huang@aspeedtech.com>
-CC:     "eajames@linux.ibm.com" <eajames@linux.ibm.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>,
-        "zev@bewilderbeest.net" <zev@bewilderbeest.net>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] media: aspeed: Use v4l2_dbg to replace v4l2_warn to avoid
- log spam
-Thread-Topic: [PATCH] media: aspeed: Use v4l2_dbg to replace v4l2_warn to
- avoid log spam
-Thread-Index: AQHY/sfxJh7AYvMvxEid60k7NpMWxg==
-Date:   Tue, 22 Nov 2022 23:12:51 +0000
-Message-ID: <20221122231216.GF18848@packtop>
-References: <20221110095611.522-1-jammy_huang@aspeedtech.com>
-In-Reply-To: <20221110095611.522-1-jammy_huang@aspeedtech.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM8PR04MB8007:EE_|SA0PR04MB7388:EE_
-x-ms-office365-filtering-correlation-id: 2ca29159-297c-4f78-12ff-08daccdf145c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: QgAhGtx24CylRnJBimambcd/DKndmrPh0veVcvHNCUJ6qsd0fv2PGzEJY+ynfr1eNGyEkNWkbAwIB/9630TVUrxEGnH6DCAylQ4tFlQIYmvx0J/RWIEeP7pKtemTxtVFzpO5+MtHO5uom72H5meRuG41i/L2cvRnYdaVeA6ULauLBOLvg1uQkRo7/Q6uX+j3a6cieFM9yX8GOntYJvTpv9VuNdy/5niXEMqyahpHpO9UxXqoAB7GWFU8n9wPeeHMBoQ8QezQwm+9yybTyI4eI2++hSdMBfCrlDIs9I8UlD4o0XV+ZmVsypukEya2CyWrQeKC8tAy+xZ2lRIxKNRWDqmusapEfXEvqK180jIBXLW6HRiyvypsoB1VG9yrgtCqdqMmlZpmfpqZ2/IOlgNAwnvR1I+ZtchQv3WSQS4Umtk3epnUpRYiGBV1zO1GWWnkhfHZywjG0jo6xafINmMnjNxe+EBEf+Q+Ok7CFISXDiAZFMN1uInwKRPdN+BDbWX+2EDHq4o39pWI6infd0ulhVO3HL5Zvl7Hml+m/YBZJhTWvp5ScvfxwRWVCOLm+yg4tQcsXvdi/KKFGxThUTLGkVy4naGyttuV3WFgNSdOUH3gkJzmitS4op3nZP1HLdldC7Lg+aYCj9faTO5vpviec+8m92Oz11wrXBARku4j3dOKUsOC0jB6NRdBV6yW+QlCVxcyXnNqWLfmYleIryinlg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR04MB8007.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(7916004)(346002)(136003)(396003)(376002)(366004)(39860400002)(451199015)(91956017)(66476007)(66946007)(64756008)(316002)(8676002)(66446008)(6512007)(76116006)(9686003)(66556008)(54906003)(4326008)(26005)(6916009)(41300700001)(71200400001)(6506007)(33656002)(4744005)(6486002)(38100700002)(2906002)(122000001)(83380400001)(8936002)(186003)(1076003)(478600001)(7416002)(38070700005)(33716001)(5660300002)(86362001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?vqWQUfL4e8nGc+FVMbxRGBOxIzTyIHhGuXwWXwAXNcnwOx/+eCkiBQkLG18S?=
- =?us-ascii?Q?2NMxqX8q6Av4/Sf5CXdE0Jdkw8YLk/5wusjWjKMqvh83Hc9ARc3BLBQ9uvP0?=
- =?us-ascii?Q?qqUpxa5OaJnwCGC+6TwBs4Y4z7y4VULJIsaLvu09Kj4qvrAagtXeitWOaAWp?=
- =?us-ascii?Q?SeNgQMueRcdW6NQglyIcijuuyadZoj/YDV7f8dEAAC7+7f8e1XYz/Py2vTRK?=
- =?us-ascii?Q?fgFiP1grAbFsUIRCfct91vPLVP4nR8odYaLJHD5XMMqSJbaPydMWufgxAiBZ?=
- =?us-ascii?Q?uPJn5VyxpCC8up/3OGyWG7SqKkE1m3V71W87mEFAH95niO1q7TQ9IonpAve9?=
- =?us-ascii?Q?/XkYnTylQ8ghN0Jf5RgI1Lw7RWoKPd0O44QGEy9tLGQv+XSqgbKZfK9ZAFFt?=
- =?us-ascii?Q?TDQLyrYkqlRvdB4snhQAYp4mfMRPeAvipSyiLcM2WKI1aKSgw8hJzTOa8nEn?=
- =?us-ascii?Q?r9WMUBSdokx3jjYYgKU+j5d9z4pdMV3oqCukMELu76m6hoMWQ0TRI2K9ZwzZ?=
- =?us-ascii?Q?OvAZdA/nbnABG1SR0y1RpS9EwIXT6KVRd43aDbhzt+UYCU7SgMcGMt0ZA3jO?=
- =?us-ascii?Q?LxflLteRuqd93SGnUZ2AuMWMw6Zqlg41V4DBbvKtoaHWzm49Ge8ro0ODGZGA?=
- =?us-ascii?Q?SZLWkWQ4zVBCaW44M0y0PhqTtFXecb2fxH9ViJbyUIBbGANUdzYL4aglp62Q?=
- =?us-ascii?Q?Zt07XJbVrZLd56+xTkBoO8KEWYoqHKU0HBVlwS1PrT/ELYKg0dKFLqC1j5L9?=
- =?us-ascii?Q?DKLO/aC4M+saE+K4slwtWRp8VcChPSXHDU4TuLnPmqSApfYlK/bIoDTZZ95w?=
- =?us-ascii?Q?MtU/77JTmVRsttQSiL+Tz1W3jM9LSYvzH+r4dzkKxnJQBQed/107/oE6TypI?=
- =?us-ascii?Q?ZIkOWHdTZkSCqmq4v/e/WuNJ9C1QL3jzoDxc3AnctPbI/EYf/QOEtUygNiaO?=
- =?us-ascii?Q?j5K+r55nKouQqzfBVK2d193U1vzTOrej7JQa0PkOGa98+NkTpWyKHV1DkBsM?=
- =?us-ascii?Q?Q4ZfaRxNgRr06PcqayyKxTBVoR067hDcpUt7l82WUeNSuJoeHc5HKFwnJnUg?=
- =?us-ascii?Q?4m90If4P8x2adXhEiuwf2fydY8Ogfy0skJgtiYglnKTBLScFrRvm7h6z/Txx?=
- =?us-ascii?Q?mpf8vi6hkOxgm4YjjF+kn1/87nPCqi0WTBqIbMIJJJ7oQR5aVWtu6H2IcChQ?=
- =?us-ascii?Q?dIGojqkVC5zEu8r3n37mmncM0ysEBZ6aOcdgUxKD0S6OwUWkgr2zuAUJYwY2?=
- =?us-ascii?Q?p75KprrL3D7wnE0MUaF4feePKes3S9ueh5TDPaiCnslLUEfoVhp4sJzbMan8?=
- =?us-ascii?Q?odrg2FtSYUGGybzAF01dfE8eG/rz368khIU69YrOzqoDokPtxwA358roFojq?=
- =?us-ascii?Q?NJF6NzU3Rl/dbux+vKCpjSAG2zdvRqnHlTiSC2+eBlooOAybBTnEi5B2Z8mo?=
- =?us-ascii?Q?+Exldn+VzpElWjN641mQmkH3ShsDQkA58O0chq9E6iFT4N7qa0Y8M3p6FeHJ?=
- =?us-ascii?Q?ifHZnuD3+5wtVUnbxmNCdsN/0tNzIq/wgNjL0HrLM3t2h3e01kU3aab+SnTd?=
- =?us-ascii?Q?TQmDT1XcASB9hZWhanDwIsDF3EzdRM4nHsX5oepb?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2E354AE76C2C474FA6DFBB2B57638D32@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.17; Wed, 23 Nov
+ 2022 09:20:34 +0000
+Received: from DM6PR03MB5196.namprd03.prod.outlook.com
+ ([fe80::a132:66d9:ed0f:e5c1]) by DM6PR03MB5196.namprd03.prod.outlook.com
+ ([fe80::a132:66d9:ed0f:e5c1%6]) with mapi id 15.20.5834.015; Wed, 23 Nov 2022
+ 09:20:34 +0000
+From:   Hsia-Jun Li <randy.li@synaptics.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     airlied@linux.ie, daniel@ffwll.ch, ezequiel@vanguardiasur.com.ar,
+        helen.koike@collabora.com, jszhang@kernel.org,
+        laurent.pinchart@ideasonboard.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, maarten.lankhorst@linux.intel.com,
+        mchehab@kernel.org, mripard@kernel.org, nicolas@ndufresne.ca,
+        ribalda@chromium.org, sakari.ailus@linux.intel.com,
+        sebastian.hesselbarth@gmail.com, tfiga@chromium.org,
+        tzimmermann@suse.de, ayaka@soulik.info,
+        "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
+Subject: [PATCH v4] drm/fourcc: Add Synaptics VideoSmart tiled modifiers
+Date:   Wed, 23 Nov 2022 17:19:57 +0800
+Message-Id: <20221123091957.75967-1-randy.li@synaptics.com>
+X-Mailer: git-send-email 2.37.3
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR13CA0053.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c2::28) To DM6PR03MB5196.namprd03.prod.outlook.com
+ (2603:10b6:5:24a::19)
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?OEG61CDYWQf6gYHulEBXUvThYlPSIt/xfIRXkMjDTfB4BsEOU3ba+nQE3Suw?=
- =?us-ascii?Q?/yYMtn/p2J0VSZ2AAKMInD6lSDXvB8/3nMUYMdS1Fg8P26YBxjJGEF/ofHnO?=
- =?us-ascii?Q?5VjRlYx59GACQUXrdcDnHooPuzv7Oj6AkbNwl7OTJwAfeh+LBAbgM0NLoqsJ?=
- =?us-ascii?Q?jPhqRy5ZLZk423niVtv4vjj1kWUCHJO+VMHbLFJEAzeQZQk2OCWGDM4xfYrj?=
- =?us-ascii?Q?98mpcPk7/+XDPaN0tMvWFuA7AJbkIUvtgeoTlosXHroz9DVr/WviTiBKNTXQ?=
- =?us-ascii?Q?4exfhoXNRAHADig++0VXiAbOUGgQ3QsT1Lq4E+egVDq/wNI/h45hGkOOzkSg?=
- =?us-ascii?Q?GOCHgq49mE+6BzurPUtMPu5HOSSJSfWvyWZZB9lemA0A1N5/DOaK6MIon4MH?=
- =?us-ascii?Q?2gLeZHmkTmLrbtOAds2+FG6g5s+kRFF0o23gjHe98B/k/5psZUs4gYF8IVsN?=
- =?us-ascii?Q?SDFgxHus0Od0el5S7Ourk5yHKEK6IYXiPUNi3Z11CssgoY12ZGT7zL4IM3AX?=
- =?us-ascii?Q?Dylq+WOZgIthnOrFOhLPGm0SND5mvcviN/8hGANW7na2bFXElh/Cwk82+K8T?=
- =?us-ascii?Q?5HtiFqoojcSk1h9VjtaPGXAh/a57tKhRE6KYfe8xV5bYIgqnQQgYUPqHAPaV?=
- =?us-ascii?Q?CGSFlhYcjm2+MpxLuielGhnf5tKXSruyFJnL0lh4DS9xBjd4ryuzgM5V/95G?=
- =?us-ascii?Q?VKUJMtr6406BPtgOfJL4igSMsmp1NgJGziWrzE7zX6tlByb6pUNnGW50PL/4?=
- =?us-ascii?Q?2eb83Em5/R1gFMjCbkoUWOjJlx1ycQL0RpNtH3yN3tbeMkr0+LVamqvNUz9e?=
- =?us-ascii?Q?gw1/uikhpwjOiZy+MbUbjUmic/Tp553LcdcVNVgJVfd2SRKjtz/ehUPfuU/4?=
- =?us-ascii?Q?n9EU+vTN656AF+6Y5RHeCGjQRnlr5guNs74O5aIgIDReEUmpeGbgPrm4syxT?=
- =?us-ascii?Q?nRyGK1z2pHfP/ypIqyj5gdctKi0retGy6E+X6xwNU7c2AnAPnx6RzdPdaa06?=
- =?us-ascii?Q?ohYpjXPUnTSCNfvSkgPOOsS7mGc4zXgxbi5zwrgu83XmIB7vpw3qSPT7+89R?=
- =?us-ascii?Q?Z7DIuhLVbzvdvjCSYjnVPK6kJjmaXkVOBEMFXqHR9iYzJu7776TYdg3GNnc1?=
- =?us-ascii?Q?/Az6OjoFi4aOALoMCN7ELb4WTVE3ck+Tre7hCzK5DH9Zi44Q8Cu/E3tG2L0t?=
- =?us-ascii?Q?GMdvoEE4wr5KfYyvfw7eK8LRK45WRFdAVlmLbqlHpx2pWux5wlnFa4eD1qA?=
- =?us-ascii?Q?=3D?=
-X-OriginatorOrg: equinix.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR03MB5196:EE_|CO1PR03MB5682:EE_
+X-MS-Office365-Filtering-Correlation-Id: 614fc8ce-3403-4f5f-8e02-08dacd33f858
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uHLhaFLCZGgmIKGmrAnLN8fqtFGcO755GSriGlXJPlY3XLSbBaOEWk/EWX9Qy2o5B8LCWhgcgBNIcxlPwV9jfVZtwOa1B8Rpnc0wJ+MQJoN0ItZ8HWi9uEpJhuCGAJZPlBOFs1bjOX4f6EaRHsaUjgv4ZcxZtnx9W2EEBqNbXj9jng+dfcHf0lhMPZhkIJF8R2dSRHeLS4aL45Lx00K9tS+N1v5R+X0yqhdRgrZy1WRkt6Vhzj1NVPHs7vYCF+cPO2luW2mYNfGPxShJPuLswBq8AzFq+c3F5t35g8x52ORJ/lzYsQrc1UaFf3IXXgPO5FyknwHeuBPtp0Puohk7fI4JlS/YisJua2oZ1XzxLygZhjNY0DWmhACdnHx5jCo4oeqmUbV2cVclBC/La2nViBHHlBkE+yMi8S3w6SXnUsab3KzPuNDDaYD0550xjkbWz2cvl1zUrUjVaxZQ698hSYMml7FvsuSZomd+89pq54VBwBuWQwC0LJIK3z0J3RyDZzdMFMJjI+7fZD/1VB0ipQLHx896lP7bAb5HoDjPVa5ecDjdASTmQutdYhnEUfPp5siO8cZn33USsX5hwc5PaP/k50xIgK552Q/YdZfwlq/P2pw+iXmWtkyVZMyjnYRAOxB4BTP7i5UodeAPt3egj59CBrJ0f5+zW58b0WzwsZBq8zw6vu7uC/7A2fmBMQ9EAQPlgyYaPPIzDv8hLPd9ww==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB5196.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(376002)(39860400002)(136003)(346002)(396003)(451199015)(36756003)(2906002)(5660300002)(316002)(8936002)(66476007)(86362001)(186003)(2616005)(66556008)(6916009)(7416002)(83380400001)(4326008)(478600001)(26005)(6512007)(66946007)(1076003)(6486002)(8676002)(107886003)(6666004)(38350700002)(38100700002)(52116002)(6506007)(41300700001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?n83cspczHNFfpPWJ5MUqfoc7TN7P408GwPlIUfWgk+rdStSe6bAGD13iBJTr?=
+ =?us-ascii?Q?hMoPXHj1gVxafncv5gbRPVS/Y7AJH50DfplTAZiUqlN1ZqVSfzBCZDT5Z7ZF?=
+ =?us-ascii?Q?Qgkvcf2l14q4b3C/33rQefv+QkZTuCQAKMJA2Q2qh+GB/zyKHp9BMegv2nmQ?=
+ =?us-ascii?Q?7fTh6rHYdisbanAti7EfendrjT1b2x7SdS8fuXkk7nIZWCRec+8VR2s0pZig?=
+ =?us-ascii?Q?1ROiQ9cqplYvVIxxUbSOe0C0dGIwEzl7qLvChjNKjtUdLN+zjnm49vmsaChZ?=
+ =?us-ascii?Q?ubLch5tv6VtnydUqADRD/pnOF6x/W/7Rn/bVRrczVBKQoH+15WtLpSfn4c0o?=
+ =?us-ascii?Q?0kRrJcESO4Du/ZR/upz/CuMvftsrLUurVcV0M3PblY9XSfwSu6aA8ivaaGhD?=
+ =?us-ascii?Q?LaM6TtTsEZwGG7gJ+0Uz9DJS6xIRn9C3E81q43/ioPTZmcDp1n7wy7cF+EmP?=
+ =?us-ascii?Q?cb4FWY+fadtIXjHVXEOgT0X4Jghmb/3nPfLAV8lQhQw+CN1scYElCAR6N8/M?=
+ =?us-ascii?Q?Jbc1SXw0zvqCed1NX2Orh+acS1lrcQXxigC67vYxU88od6i9bMsTRIReubO6?=
+ =?us-ascii?Q?hTsE+lli3Z2rrGhHI3DcDHSGs+Xnz5PsNRc6t+yLS3otpUkdRuRT3jO8LMUi?=
+ =?us-ascii?Q?b60WwWVo3adocELl106ta2s+4Ou2ZA4IcJrqlAO+hzrwxOSwHSI01DZGWajS?=
+ =?us-ascii?Q?eWAFPYX38K6BE7ZMs5W8h3EclqxHToS2/hetg7m4YG8UdgQOuqsx2dG840Ca?=
+ =?us-ascii?Q?0f51o9SI1HEZiNcUwlt77th8kQ2sjhe9RP8UYmINPuopCRtxcb+r8y9CpKMm?=
+ =?us-ascii?Q?zT443tAyafINyAHUy64mCdUI13zPMiL6w0ShCcoMya+KEuA1rfKwIakbKpS2?=
+ =?us-ascii?Q?mTHHW2bzmwUdKPVk5Q8Ibcj1+cqf6SRVoxKibYUJCBT+K6rBv02R5Q7J7Jz8?=
+ =?us-ascii?Q?CT0CxS6GbS5Y07ptvDzrMROtICBAWqI0Wq14Wg+LMMq1FFsiFIgtTb2GvkaG?=
+ =?us-ascii?Q?Ugy2sYwBWupYWuN8IYDhdCpJ8acCHS3T871QQBNkYJSuVdh7J+zkJC2UCWhc?=
+ =?us-ascii?Q?6LaBVqVDPYlUbNOMfDdLmejAlv2kzULLxu8EmHcGvI3ElwELcHGcZaJHVs2w?=
+ =?us-ascii?Q?G/bsk52mRZbWEwgrPqdeojgzLVh/8GTMhqgbyVOF0wst0DEcjmck4ghtYkCc?=
+ =?us-ascii?Q?eZIRpqYb0CZoaYDK90DInll/oEWQi3I9xQaUSODrv1IbX4JGHvnyey4LdCoS?=
+ =?us-ascii?Q?msVoK2G0a5M4++bS5s5k88s03HPWDheiB51feSJf0AuGcrnn+24RT40NUXXb?=
+ =?us-ascii?Q?xpLXtFc0x1luhnt97+hEnKUrg8Qlq/UFAYO5zRHjR8KoGn1kuPuevA9Dm4Bo?=
+ =?us-ascii?Q?6N70zT8wwT44LDYTYZL6KXz/9DOya45s59zMJoL5p5XLJ5hMIIo7+NYOzwlA?=
+ =?us-ascii?Q?gfBgSIO3N3RarJp3qZ71BLi6M29bIhgCuebLS2vztC6YvNvcp4cu/SZXj7i9?=
+ =?us-ascii?Q?AP48+fHahMZY4bPYJQ2tofbf2W/v6NJ0A6+aEXfFaeVtxXbLHJDWGvgLBnWh?=
+ =?us-ascii?Q?bdKTadUXYviHWOjGixUOAUXtNd7MD0YKtwjdVQ/j?=
+X-OriginatorOrg: synaptics.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 614fc8ce-3403-4f5f-8e02-08dacd33f858
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB5196.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR04MB8007.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2ca29159-297c-4f78-12ff-08daccdf145c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Nov 2022 23:12:51.7542
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2022 09:20:34.3672
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72adb271-2fc7-4afe-a5ee-9de6a59f6bfb
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: fLyEMuewK421g1Z/WczTzTlN/wEdc83d1FtAlqCse4r0nUFcZKvix12EGuK0eb13SQr8CnFKs/0V23C2edD4CA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR04MB7388
-X-Proofpoint-GUID: Y_mzWDfyijHEHgwIS4RvaoLHE0XwJOxz
-X-Proofpoint-ORIG-GUID: Y_mzWDfyijHEHgwIS4RvaoLHE0XwJOxz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-22_13,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1011
- malwarescore=0 impostorscore=0 spamscore=0 suspectscore=0 bulkscore=0
- mlxlogscore=670 adultscore=0 phishscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211220175
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UUAVmx351ZAIgStjztlRHUwi9bUBgWPLKlOVz8ng/T/8xZnnI+Jyum/fD3NhiSan1zNAWwiTKK10f+tx4H/CVQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR03MB5682
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 01:56:11AM PST, Jammy Huang wrote:
->If the host is powered off, there will be many warning log. To avoid the
->log spam in this condition, replace v4l2_warn with v4l2_dbg.
->
->Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
->---
-> drivers/media/platform/aspeed/aspeed-video.c | 16 ++++++++--------
-> 1 file changed, 8 insertions(+), 8 deletions(-)
->
+From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
 
-Thanks Jammy -- after dropping the one hunk that wasn't applicable (due
-to not having all the prerequisite patches) this definitely fixed the
-log noise problems I'd been having.
+Memory Traffic Reduction(MTR) is a module in Synaptics
+VideoSmart platform could process lossless compression image
+and cache the tile memory line.
 
-I'm assuming the prerequisite patches are from your aspeed-jpeg support
-patch series?  If so, since this is a smaller/simpler patch, I think it
-might make sense to reorder things to try to get this merged first and
-then fixing up that patchset to use v4l2_dbg() instead of v4l2_warn(),
-rather than introducing a new instance of it and then patching it back
-out later with this one.
+Those modifiers only record the parameters would effort pixel
+layout or memory layout. Whether physical memory page mapping
+is used is not a part of format.
 
+We would allocate the same size of memory for uncompressed
+and compressed luma and chroma data, while the compressed buffer
+would request two extra planes holding the metadata for
+the decompression.
 
-Thanks,
-Zev
+Signed-off-by: Hsia-Jun(Randy) Li <randy.li@synaptics.com>
+---
+ include/uapi/drm/drm_fourcc.h | 75 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 75 insertions(+)
+
+diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourcc.h
+index bc056f2d537d..ca0b4ca70b36 100644
+--- a/include/uapi/drm/drm_fourcc.h
++++ b/include/uapi/drm/drm_fourcc.h
+@@ -407,6 +407,7 @@ extern "C" {
+ #define DRM_FORMAT_MOD_VENDOR_ARM     0x08
+ #define DRM_FORMAT_MOD_VENDOR_ALLWINNER 0x09
+ #define DRM_FORMAT_MOD_VENDOR_AMLOGIC 0x0a
++#define DRM_FORMAT_MOD_VENDOR_SYNAPTICS 0x0b
+ 
+ /* add more to the end as needed */
+ 
+@@ -1507,6 +1508,80 @@ drm_fourcc_canonicalize_nvidia_format_mod(__u64 modifier)
+ #define AMD_FMT_MOD_CLEAR(field) \
+ 	(~((__u64)AMD_FMT_MOD_##field##_MASK << AMD_FMT_MOD_##field##_SHIFT))
+ 
++/*
++ * Synaptics VideoSmart modifiers
++ *
++ * Tiles could be arranged in Groups of Tiles (GOTs), it is a small tile
++ * within a tile. GOT size and layout varies based on platform and
++ * performance concern. When the compression is applied, it is possible
++ * that we would have two tile type in the GOT, these parameters can't
++ * tell the secondary tile type.
++ *
++ * Besides, an 8 size 4 bytes arrary (32 bytes) would be need to store
++ * some compression parameters for a compression meta data plane.
++ *
++ *       Macro
++ * Bits  Param Description
++ * ----  ----- -----------------------------------------------------------------
++ *
++ *  7:0  f     Scan direction description.
++ *
++ *               0 = Invalid
++ *               1 = V4, the scan would always start from vertical for 4 pixel
++ *                   then move back to the start pixel of the next horizontal
++ *                   direction.
++ *               2 = Reserved for future use.
++ *
++ * 15:8  m     The times of pattern repeat in the right angle direction from
++ *             the first scan direction.
++ *
++ * 19:16 p     The padding bits after the whole scan, could be zero.
++ *
++ * 20:20 g     GOT packing flag.
++ *
++ * 23:21 -     Reserved for future use.  Must be zero.
++ *
++ * 27:24 h     log2(horizontal) of bytes, in GOTs.
++ *
++ * 31:28 v     log2(vertical) of bytes, in GOTs.
++ *
++ * 35:32 -     Reserved for future use.  Must be zero.
++ *
++ * 36:36 c     Compression flag.
++ *
++ * 55:37 -     Reserved for future use.  Must be zero.
++ *
++ */
++
++#define DRM_FORMAT_MOD_SYNA_V4_TILED		fourcc_mod_code(SYNAPTICS, 1)
++
++#define DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(f, m, p, g, h, v, c) \
++	fourcc_mod_code(SYNAPTICS, ((__u64)((f) & 0xff) | \
++				 ((__u64)((m) & 0xff) << 8) | \
++				 ((__u64)((p) & 0xf) << 16) | \
++				 ((__u64)((g) & 0x1) << 20) | \
++				 ((__u64)((h) & 0xf) << 24) | \
++				 ((__u64)((v) & 0xf) << 28) | \
++				 ((__u64)((c) & 0x1) << 36)))
++
++#define DRM_FORMAT_MOD_SYNA_V4H1 \
++	DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 1, 0, 0, 0, 0, 0)
++
++#define DRM_FORMAT_MOD_SYNA_V4H3P8 \
++	DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 3, 8, 0, 0, 0, 0)
++
++#define DRM_FORMAT_MOD_SYNA_V4H1_64L4_COMPRESSED \
++	DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 1, 0, 1, 6, 2, 1)
++
++#define DRM_FORMAT_MOD_SYNA_V4H3P8_64L4_COMPRESSED \
++	DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 3, 8, 1, 6, 2, 1)
++
++#define DRM_FORMAT_MOD_SYNA_V4H1_128L128_COMPRESSED \
++	DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 1, 0, 1, 7, 7, 1)
++
++#define DRM_FORMAT_MOD_SYNA_V4H3P8_128L128_COMPRESSED \
++	DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 3, 8, 1, 7, 7, 1)
++
+ #if defined(__cplusplus)
+ }
+ #endif
+-- 
+2.17.1
+
