@@ -2,126 +2,108 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF5F7C433FE
-	for <linux-media@archiver.kernel.org>; Wed, 23 Nov 2022 10:23:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 076A5C433FE
+	for <linux-media@archiver.kernel.org>; Wed, 23 Nov 2022 10:31:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237415AbiKWKXu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Nov 2022 05:23:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
+        id S236403AbiKWKbN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Nov 2022 05:31:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237505AbiKWKWK (ORCPT
+        with ESMTP id S236834AbiKWKav (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Nov 2022 05:22:10 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E49138BB
-        for <linux-media@vger.kernel.org>; Wed, 23 Nov 2022 02:08:37 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C9BB188F;
-        Wed, 23 Nov 2022 11:08:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669198116;
-        bh=P9zzVEhV/ZjDZBNFNDBLgQFvvJcoaX/s0i3MBpV5eGY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eh4VO+hBbjIdnQyB18aaZyod5UgzTh5efne6L5MxNTMBBtTUmGu1i7icb+wb9HLy0
-         zLm85Xq9Fm3ocFmp0wnFWP29aA8sbhfx6qeltkOncmwThoRak5k+L+aBM6fzVdStB7
-         PwaELERDECmsS9Ti13IfBMMVorqSkg1YSRqqRGYo=
-Date:   Wed, 23 Nov 2022 12:08:20 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     linux-media@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>,
-        Manivannan Sadhasivam <mani@kernel.org>
-Subject: Re: [PATCH v1 03/15] media: i2c: imx290: Factor out control update
- code to a function
-Message-ID: <Y33xFBpPPRQHuEDx@pendragon.ideasonboard.com>
-References: <20221122223250.21233-1-laurent.pinchart@ideasonboard.com>
- <20221122223250.21233-4-laurent.pinchart@ideasonboard.com>
- <4763239.GXAFRqVoOG@steina-w>
+        Wed, 23 Nov 2022 05:30:51 -0500
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7EF12294D;
+        Wed, 23 Nov 2022 02:13:45 -0800 (PST)
+Received: by mail-qv1-f50.google.com with SMTP id h7so11249056qvs.3;
+        Wed, 23 Nov 2022 02:13:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1J1/Dk89lTEXUaWgB7PSlowyLzY8WAPYmQ4lIK/72+8=;
+        b=MVWl9JHFuL2lc+s1+HJdbHS8/dX2EQbXoX/yMwXWry9nV83l3kIFK9J2NbD8G8ksK7
+         vKWQVhdYEc0jbEyzk+M5ZnIJ7Ktaet+C+XJBIDIkV9aM2N2h5S2baPiYA6V2t0PSal35
+         bUF35z9wxqyNqqDTLmaavKxJLg5aMVatIdEZ7P/aDx2wmxvAO9UGJHT/AL0OPsaGuT3C
+         6OzsIwUzXOjJjVput1wGYQg4sL6j/3mmemYnwERJqFDoTPatfxVq/g/HgNoi1BctD6yM
+         v+tmKQLFdQ9pOkCuQnxYwp4JunOd0sIfr84WO09tkqCRwf/ULYQjidb7oBeRyeCaZhdw
+         RPxw==
+X-Gm-Message-State: ANoB5pkRMLrZnKmK7eC9qju88lreIPjBeL95myKnVwM2/PqsWRIYrACi
+        3FGYNqJPKiebGugOqJnoP6zSQKEN2jUtbA==
+X-Google-Smtp-Source: AA0mqf7B09LUkeAyo/gD39xh+jGigjeZU8wlH5Mw5bvBWprw/17e7pDva275Zrue7vnVQQBhF6dADA==
+X-Received: by 2002:a05:6214:4290:b0:4bb:5d3a:bdad with SMTP id og16-20020a056214429000b004bb5d3abdadmr7798908qvb.26.1669198424729;
+        Wed, 23 Nov 2022 02:13:44 -0800 (PST)
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
+        by smtp.gmail.com with ESMTPSA id ey10-20020a05622a4c0a00b003a5fb681ae7sm9573050qtb.3.2022.11.23.02.13.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Nov 2022 02:13:43 -0800 (PST)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-3691e040abaso169719247b3.9;
+        Wed, 23 Nov 2022 02:13:42 -0800 (PST)
+X-Received: by 2002:a05:690c:b01:b0:370:202b:f085 with SMTP id
+ cj1-20020a05690c0b0100b00370202bf085mr25967882ywb.502.1669198422650; Wed, 23
+ Nov 2022 02:13:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4763239.GXAFRqVoOG@steina-w>
+References: <a50fa46075fb760d8409ff6ea2232b2ddb7a102b.1669046259.git.geert+renesas@glider.be>
+ <20221123100831.GE39395@tom-ThinkPad-T14s-Gen-2i>
+In-Reply-To: <20221123100831.GE39395@tom-ThinkPad-T14s-Gen-2i>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 23 Nov 2022 11:13:31 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUW8iKFjDj4fPtWfPvyQ1sjGcAy1Kz5j-osz9F4pdA47Q@mail.gmail.com>
+Message-ID: <CAMuHMdUW8iKFjDj4fPtWfPvyQ1sjGcAy1Kz5j-osz9F4pdA47Q@mail.gmail.com>
+Subject: Re: [PATCH resend] media: staging: stkwebcam: Restore
+ MEDIA_{USB,CAMERA}_SUPPORT dependencies
+To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Alexander,
+Hi Tommaso,
 
-On Wed, Nov 23, 2022 at 08:51:24AM +0100, Alexander Stein wrote:
-> Am Dienstag, 22. November 2022, 23:32:38 CET schrieb Laurent Pinchart:
-> > Move the control update code to a separate function to group it with all
-> > the control-related code and make imx290_set_fmt() more readable.
-> > 
-> > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > ---
-> >  drivers/media/i2c/imx290.c | 36 ++++++++++++++++--------------------
-> >  1 file changed, 16 insertions(+), 20 deletions(-)
-> > 
-> > diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-> > index 4dbf218e7a63..eb295502d0c3 100644
-> > --- a/drivers/media/i2c/imx290.c
-> > +++ b/drivers/media/i2c/imx290.c
-> > @@ -639,6 +639,21 @@ static const char * const imx290_test_pattern_menu[] =
-> > { "000/555h Toggle Pattern",
-> >  };
-> > 
-> > +static void imx290_ctrl_update(struct imx290 *imx290,
-> > +			       const struct imx290_mode *mode)
-> > +{
-> > +	unsigned int hblank = mode->hmax - mode->width;
-> > +	unsigned int vblank = IMX290_VMAX_DEFAULT - mode->height;
-> > +
-> > +	__v4l2_ctrl_s_ctrl(imx290->link_freq,
-> > +			   imx290_get_link_freq_index(imx290));
-> > +	__v4l2_ctrl_s_ctrl_int64(imx290->pixel_rate,
-> > +				 imx290_calc_pixel_rate(imx290));
-> 
-> I do not know the details, but I assume that imx290_ctrl_init already detects, 
-> using imx290->ctrls.error, if one of those controls have _not_ been created.
+On Wed, Nov 23, 2022 at 11:08 AM Tommaso Merciai
+<tommaso.merciai@amarulasolutions.com> wrote:
+> On Mon, Nov 21, 2022 at 04:58:33PM +0100, Geert Uytterhoeven wrote:
+> > By moving support for the USB Syntek DC1125 Camera to staging, the
+> > dependencies on MEDIA_USB_SUPPORT and MEDIA_CAMERA_SUPPORT were lost.
+> >
+> > Fixes: 56280c64ecacc971 ("media: stkwebcam: deprecate driver, move to staging")
+>
+> Patch itself looks good but we have some style issue. Applying this
+> patch I got the following warning from checkpatchl:
+>
+> WARNING: Please use correct Fixes: style 'Fixes: <12 chars of sha1> ("<title line>")' - ie: 'Fixes: 56280c64ecac ("media: stkwebcam: deprecate driver, move to staging")'
+> #10:
+>
+> You have to pass only the first 12 chars of the sha1 commit into Fixes
+> msg:
+>
+> Use:
+>
+>  Fixes: 56280c64ecac ("media: stkwebcam: deprecate driver, move to staging")
+>
+> Instead of:
+>
+>  Fixes: 56280c64ecacc971 ("media: stkwebcam: deprecate driver, move to staging")
 
-No, there's a bug here. It's fixed in latter patches in the series I
-think, but this breaks bisection. I'll fix it.
+I always use 16 chars, to avoid these becoming ambiguous in a few years.
 
-> If so:
-> Acked-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> 
-> > +
-> > +	__v4l2_ctrl_modify_range(imx290->hblank, hblank, hblank, 1, hblank);
-> > +	__v4l2_ctrl_modify_range(imx290->vblank, vblank, vblank, 1, vblank);
-> > +}
-> > +
-> >  static int imx290_ctrl_init(struct imx290 *imx290)
-> >  {
-> >  	struct v4l2_fwnode_device_properties props;
-> > @@ -904,26 +919,7 @@ static int imx290_set_fmt(struct v4l2_subdev *sd,
-> >  		imx290->current_mode = mode;
-> >  		imx290->bpp = imx290_formats[i].bpp;
-> > 
-> > -		if (imx290->link_freq)
-> > -			__v4l2_ctrl_s_ctrl(imx290->link_freq,
-> > -					   imx290_get_link_freq_index(imx290));
-> > -		if (imx290->pixel_rate)
-> > -			__v4l2_ctrl_s_ctrl_int64(imx290->pixel_rate,
-> > -					imx290_calc_pixel_rate(imx290));
-> > -
-> > -		if (imx290->hblank) {
-> > -			unsigned int hblank = mode->hmax - mode->width;
-> > -
-> > -			__v4l2_ctrl_modify_range(imx290->hblank, hblank, hblank,
-> > -						 1, hblank);
-> > -		}
-> > -
-> > -		if (imx290->vblank) {
-> > -			unsigned int vblank = IMX290_VMAX_DEFAULT - mode->height;
-> > -
-> > -			__v4l2_ctrl_modify_range(imx290->vblank, vblank, vblank,
-> > -						 1, vblank);
-> > -		}
-> > +		imx290_ctrl_update(imx290, mode);
-> >  	}
-> > 
-> >  	*format = fmt->format;
+Gr{oetje,eeting}s,
 
--- 
-Regards,
+                        Geert
 
-Laurent Pinchart
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
