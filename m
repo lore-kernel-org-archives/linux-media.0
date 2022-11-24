@@ -2,134 +2,104 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BEE1C433FE
-	for <linux-media@archiver.kernel.org>; Thu, 24 Nov 2022 20:01:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EBA0C43219
+	for <linux-media@archiver.kernel.org>; Thu, 24 Nov 2022 20:10:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiKXUBW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Nov 2022 15:01:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
+        id S229635AbiKXUKe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Nov 2022 15:10:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiKXUBU (ORCPT
+        with ESMTP id S229448AbiKXUKd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Nov 2022 15:01:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5592A704
-        for <linux-media@vger.kernel.org>; Thu, 24 Nov 2022 12:00:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669320018;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=s09UeePB6z8paukx/KjyayrP6nJqT11KHIhjeOQWkFA=;
-        b=bjj/ebgh31lcuUh/amdsBzgOODNAxSHtI+uXtmnBMb6+icg2dj3bK8tCzaEfMn0p/fy4+J
-        vUlDsdMRy5WjYo41DLo3t6z0RyURJF7m3hoqLrt9AKsJsSduDQ2790KU9WDgxjW/1EtPxP
-        vZuXdwmGYeGkopFbpPEp9pdkjqIcVhk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-538-ICzjd7L5N0i6azz14RFOdA-1; Thu, 24 Nov 2022 15:00:14 -0500
-X-MC-Unique: ICzjd7L5N0i6azz14RFOdA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 18620383D0C9;
-        Thu, 24 Nov 2022 20:00:14 +0000 (UTC)
-Received: from shalem.redhat.com (unknown [10.39.195.152])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D51FA1415114;
-        Thu, 24 Nov 2022 20:00:12 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Mark Gross <markgross@kernel.org>,
+        Thu, 24 Nov 2022 15:10:33 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A405E74602;
+        Thu, 24 Nov 2022 12:10:32 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id cg5so1507594qtb.12;
+        Thu, 24 Nov 2022 12:10:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FivUeQVybi8xrmJyrYP94s9THnNLLdRS+2IJ/8tAMuw=;
+        b=R+45aeplsXS6+AfF/t4Uo5wznE/U8VyZLe/UHLEEhk2HpTHmyBOHj1RFDwHYnotNhd
+         eoyk2Q9F2QOddjKyFrbQVwcTgsuXKdBwZV1xauklkWGRbWWENFDt74voeAVe2KXZFVS2
+         CS8z87pZPIZpqysDRNTycjXKo/068dQ1qNylJ62x2GPkIVhspZ8GJmPZCTFjTA6L61/7
+         rxbOCZtYeBbk+2GDgPFhYbV5eFMb3khmFFsXpjPBOWCBE2j5Fdzbm2Wf+463xyXBAu2h
+         2ITkj9AcoFxrXfwfzbKmDDYTdMa3Nt5BOmKPZEgh9+RiLEbdD3z3J3cQs7639BZ++QB7
+         fzlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FivUeQVybi8xrmJyrYP94s9THnNLLdRS+2IJ/8tAMuw=;
+        b=FzuQfQGw5YyJCAKPad8SxiP3J/oMV9qEJTchgMjQZ7TMvCQEXYNgLkwmXaUk0+74Ga
+         9LROYutnQVGm2KjcKD+pyym34ylBLxU6aYZveZlVOt2bAmTFgGjVAY2NkdpphfwbWhVD
+         t0KSJJYGf/d2Q4E2wVjFTrrYQr3LWwCtLDfxfJ0nB43rL0nBhDlk0mijWcW+7yyykCva
+         AbUdKYEEoNsT5Rgcv63TrvSKC540BdvxpEU8yNXZonyud5kH3HrEyeqzdWS4iTqVlnAC
+         SNaD54XvZSNeMXt8SpmUHcIQiqVML7XnrUSHwj/9PTw98pPFHc191uwIp3O58rTDI8c8
+         cBTQ==
+X-Gm-Message-State: ANoB5pkosjZdpHfQq7HL6T6+9SzxlP+VkBJ+lvHn16/89DOvQq+oI2wr
+        I9B45S217Yq8GlvnqWDsvpWmIvpQUmFh4K7UsLUvvVLAhDPA6Q==
+X-Google-Smtp-Source: AA0mqf6aA4H1LuMx7WJDLNYA5QnMRHjeqaNel369zvPwCRce3LnEXz9sVPlwEFVAzLGgfg66Nbtu+7iJZQWRLMeUao4=
+X-Received: by 2002:ac8:7652:0:b0:39c:c436:1ea8 with SMTP id
+ i18-20020ac87652000000b0039cc4361ea8mr33100444qtr.384.1669320631747; Thu, 24
+ Nov 2022 12:10:31 -0800 (PST)
+MIME-Version: 1.0
+References: <20221124200007.390901-1-hdegoede@redhat.com> <20221124200007.390901-2-hdegoede@redhat.com>
+In-Reply-To: <20221124200007.390901-2-hdegoede@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 24 Nov 2022 22:09:55 +0200
+Message-ID: <CAHp75VdWWXCvHnVaE3pYuntXyeP7zPOc6PpcQaXWFkEEPf+QxA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] platform/x86: int3472/discrete: Refactor GPIO to
+ sensor mapping
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Mark Gross <markgross@kernel.org>,
         Andy Shevchenko <andy@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Daniel Scally <djrscally@gmail.com>,
         platform-driver-x86@vger.kernel.org,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org
-Subject: [PATCH 1/3] platform/x86: int3472/discrete: Refactor GPIO to sensor mapping
-Date:   Thu, 24 Nov 2022 21:00:05 +0100
-Message-Id: <20221124200007.390901-2-hdegoede@redhat.com>
-In-Reply-To: <20221124200007.390901-1-hdegoede@redhat.com>
-References: <20221124200007.390901-1-hdegoede@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Make the GPIO to sensor mapping more generic and fold the
-INT3472_GPIO_TYPE_RESET and INT3472_GPIO_TYPE_POWERDOWN cases into
-a single generic case.
+On Thu, Nov 24, 2022 at 10:00 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> Make the GPIO to sensor mapping more generic and fold the
+> INT3472_GPIO_TYPE_RESET and INT3472_GPIO_TYPE_POWERDOWN cases into
+> a single generic case.
+>
+> This is a preparation patch for further GPIO mapping changes.
 
-This is a preparation patch for further GPIO mapping changes.
+...
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/platform/x86/intel/int3472/discrete.c | 31 ++++++++++++++-----
- 1 file changed, 23 insertions(+), 8 deletions(-)
+> +static const char *int3472_dsm_type_to_func(u8 type)
+> +{
+> +       switch (type) {
+> +       case INT3472_GPIO_TYPE_RESET:
+> +               return "reset";
+> +       case INT3472_GPIO_TYPE_POWERDOWN:
+> +               return "powerdown";
+> +       case INT3472_GPIO_TYPE_CLK_ENABLE:
+> +               return "clken";
+> +       case INT3472_GPIO_TYPE_PRIVACY_LED:
+> +               return "pled";
+> +       case INT3472_GPIO_TYPE_POWER_ENABLE:
+> +               return "power-enable";
 
-diff --git a/drivers/platform/x86/intel/int3472/discrete.c b/drivers/platform/x86/intel/int3472/discrete.c
-index 974a132db651..bc6c62f3f3bf 100644
---- a/drivers/platform/x86/intel/int3472/discrete.c
-+++ b/drivers/platform/x86/intel/int3472/discrete.c
-@@ -184,6 +184,24 @@ static int skl_int3472_map_gpio_to_clk(struct int3472_discrete_device *int3472,
- 	return 0;
- }
- 
-+static const char *int3472_dsm_type_to_func(u8 type)
-+{
-+	switch (type) {
-+	case INT3472_GPIO_TYPE_RESET:
-+		return "reset";
-+	case INT3472_GPIO_TYPE_POWERDOWN:
-+		return "powerdown";
-+	case INT3472_GPIO_TYPE_CLK_ENABLE:
-+		return "clken";
-+	case INT3472_GPIO_TYPE_PRIVACY_LED:
-+		return "pled";
-+	case INT3472_GPIO_TYPE_POWER_ENABLE:
-+		return "power-enable";
-+	}
-+
-+	return "unknown";
-+}
-+
- /**
-  * skl_int3472_handle_gpio_resources: Map PMIC resources to consuming sensor
-  * @ares: A pointer to a &struct acpi_resource
-@@ -223,6 +241,7 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
- 	struct acpi_resource_gpio *agpio;
- 	union acpi_object *obj;
- 	const char *err_msg;
-+	const char *func;
- 	int ret;
- 	u8 type;
- 
-@@ -246,19 +265,15 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
- 
- 	type = obj->integer.value & 0xff;
- 
-+	func = int3472_dsm_type_to_func(type);
-+
- 	switch (type) {
- 	case INT3472_GPIO_TYPE_RESET:
--		ret = skl_int3472_map_gpio_to_sensor(int3472, agpio, "reset",
--						     GPIO_ACTIVE_LOW);
--		if (ret)
--			err_msg = "Failed to map reset pin to sensor\n";
--
--		break;
- 	case INT3472_GPIO_TYPE_POWERDOWN:
--		ret = skl_int3472_map_gpio_to_sensor(int3472, agpio, "powerdown",
-+		ret = skl_int3472_map_gpio_to_sensor(int3472, agpio, func,
- 						     GPIO_ACTIVE_LOW);
- 		if (ret)
--			err_msg = "Failed to map powerdown pin to sensor\n";
-+			err_msg = "Failed to map GPIO pin to sensor\n";
- 
- 		break;
- 	case INT3472_GPIO_TYPE_CLK_ENABLE:
+default:
+  return "unknown";
+
+?
+
+> +       }
+> +
+> +       return "unknown";
+> +}
+
 -- 
-2.38.1
-
+With Best Regards,
+Andy Shevchenko
