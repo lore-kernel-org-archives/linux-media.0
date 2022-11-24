@@ -2,197 +2,156 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D60C0C4321E
-	for <linux-media@archiver.kernel.org>; Thu, 24 Nov 2022 12:37:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A857C43217
+	for <linux-media@archiver.kernel.org>; Thu, 24 Nov 2022 12:39:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbiKXMhx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Nov 2022 07:37:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49288 "EHLO
+        id S229668AbiKXMjL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Nov 2022 07:39:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiKXMhw (ORCPT
+        with ESMTP id S229733AbiKXMjJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Nov 2022 07:37:52 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2059.outbound.protection.outlook.com [40.107.94.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4624B9A6
-        for <linux-media@vger.kernel.org>; Thu, 24 Nov 2022 04:37:50 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hFvhN1xHfwlvfg/JW5Jc4sHRsDe26IKJT/yBpJ/pyQei2eUdYPrVCSj/7wONKALQvQxqnOhuFMTJFkt6uDrqdIQP60T3KeuWb8o21gG0pk/R2Zh9U4YV3MYVXxJja/e9C4pVEYaYU+Gl2YOKH2wmpnvkfsRHMHv+hkYBSUj2vTpm2T0+kE1cnaHth8pmr3/Wm8nqppVdNqE8KTR50lKV/SC6IoGht0V1RbAoJntiAKTRB8ZK384KD9YXRlN2xI1brF1MCh/18SV7Zuq+3+H1/mhTi+rkdmMKYdeqA9/JxaDMnoke5dy+t7OtMnw6kKgGUSoxd4wbyjUCnIYJYo64jA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kOeLNjOt/AkC1Px+fUVueqEskL2XhcFRi+cecQ4lGXI=;
- b=Q7VFwceF/qhvTFa/0kWaUmkdrCA6/ccFj00WnA6428TXpUKTu6iE2Dos09pA4bfj/gIeowqbJIL/qHVQ28ypUb8OzwB5lLSEZHVVZyPJGndtmkJW4u8DDTnSf9YBVotIYzlHroxheyqYDRf8ydjZvSKNwARCnMfaP1Ew0c4jFRQB4iavmcoxcZQK+DtZmWA9euiCeR3eAomINtCm7TCIYogoak61XH6UgJraTbDX+nm2QTJUGvTuVan1uEuwQxitxmWHnvAVap0rUIjwcjqauniw2nQ5GeLZV68P/G3XAfNwHFLZhxM6wgecCJHjfeOyF5veGw3nnzMaDtq4zReamg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kOeLNjOt/AkC1Px+fUVueqEskL2XhcFRi+cecQ4lGXI=;
- b=YcXrh5i2INpi3kOXcfrRlDGYrZgH2pdGrE1zMWTCxJoXUqNg9YKbBU9u5fotyrNfl53ci2hS39Qe/M8w9ukmQj0VWoyLBr8NnQ3vB+WUE0/x914P1fbqKz1V0PhB5azTnEgwRxq5aX1D0n9l9QoFYFHq67pWnViIfHZ8GqkuWjs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by CH2PR12MB4086.namprd12.prod.outlook.com (2603:10b6:610:7c::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Thu, 24 Nov
- 2022 12:37:46 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::7d43:3f30:4caf:7421]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::7d43:3f30:4caf:7421%7]) with mapi id 15.20.5857.019; Thu, 24 Nov 2022
- 12:37:46 +0000
-Message-ID: <689ad89b-0e34-3743-24c9-3f92856720f8@amd.com>
-Date:   Thu, 24 Nov 2022 13:37:41 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] dma-buf: Fix possible UAF in dma_buf_export
-Content-Language: en-US
-To:     cuigaosheng <cuigaosheng1@huawei.com>,
-        Charan Teja Kalla <quic_charante@quicinc.com>,
-        "T.J. Mercier" <tjmercier@google.com>
-Cc:     sumit.semwal@linaro.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-References: <20221117062152.3029018-1-cuigaosheng1@huawei.com>
- <f12a5dbe-4626-f6c7-236b-30bb16be1dd6@quicinc.com>
- <99d3aee6-ba3e-5333-6f79-ddbcfc0e8843@amd.com>
- <CABdmKX1UMB0L0PmHB59nijReZef6LUQ3XKXitHZo2YnUrJTz9Q@mail.gmail.com>
- <2c9fa595-e788-5474-4f2b-ffbd08a70d13@amd.com>
- <CABdmKX0KJJV0iQwy0aUNXcLc1DGyLjmh6_Y53asHEoh-uyHzAA@mail.gmail.com>
- <83944425-c177-7918-bcde-9cf7296a613f@amd.com>
- <e12784da-b3e3-ddec-0e84-f968d60097c4@quicinc.com>
- <b2d5d904-99f2-7974-a22d-63a6cf864973@huawei.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <b2d5d904-99f2-7974-a22d-63a6cf864973@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR2P281CA0022.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:14::9) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Thu, 24 Nov 2022 07:39:09 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC5F429A2;
+        Thu, 24 Nov 2022 04:39:07 -0800 (PST)
+X-UUID: 207cb3aaea134d308e908065f6bf2e64-20221124
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=RVnHnjZIbc03C/0P+k/dMEPQcRFLgg8+dULkY97lXN8=;
+        b=r/XA/CDG2XV1FPGBL7abSaaqJu9HLMHRR7siaWKGmlZzRYq2XxilsVgpfVIwnaoMHob5Zd2VZBEyN4Hi/DVAC+qTUchm64jbnIkK3tfBSqqY8HAgfgd/yqdtsFWDH+8WXKs5fjuUaXoA1mJ3mr+6ozIHca2UnxUBF3mn12iUWhI=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.14,REQID:4b33dbcc-c360-4cbd-aae8-d418c8cce306,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:dcaaed0,CLOUDID:d5ecba2f-2938-482e-aafd-98d66723b8a9,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 207cb3aaea134d308e908065f6bf2e64-20221124
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1537772208; Thu, 24 Nov 2022 20:39:02 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 24 Nov 2022 20:39:01 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Thu, 24 Nov 2022 20:39:01 +0800
+From:   Moudy Ho <moudy.ho@mediatek.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        <linux-media@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Moudy Ho <moudy.ho@mediatek.com>
+Subject: [PATCH v4 1/9] media: platform: mtk-mdp3: add chip configuration header file
+Date:   Thu, 24 Nov 2022 20:38:51 +0800
+Message-ID: <20221124123859.24395-2-moudy.ho@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20221124123859.24395-1-moudy.ho@mediatek.com>
+References: <20221124123859.24395-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|CH2PR12MB4086:EE_
-X-MS-Office365-Filtering-Correlation-Id: e014ea8d-b097-4a64-f69b-08dace18b09b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LzV4DXbWNBXCS3dG+CoHAvW28niVUDumJBpaaiFtX7TgBFrRa//p0movGXAJ1/pbbFCzHEssCrrNX/OCY5/e60HznO8z3NhMAChElUPUhNQi6egCBZyIJeTZME5x4WsWMDsYS233RPIPLkQxrpEeOxINY7+iz/ej0bn25XRrPdki75AjnZ7D83u3Y7tl336Z8a080GA5IOnGWIDuwQkMm5zxZa2AiObbAIW02oQx1OAj9UjCCytQIxPcFBe+OCLi98SSesewu5eUhWnCm4QlpjPCT12G/Ch+FZOJPhhMJfDeYjw5RDq29XbOkYB/MtPKnPQH9sjU5UhXLTAQpW31thUTZvMKMkiVwMEAkE0ARCFn9dmFNgCTwFjKBFcFOZDkvxInxAwcRL7s0czLUsJKhgmIU9nnRmmAqK/vtcroPXLPqQhmzXEzXgXwFH5arR0u6y5VALJtjwSgy0K1+t+tzsZzKkyGFuAyys3/lsEubf0tM/aMZracg+ACdaXccUvcaPO96/LDH1+5PO+3qf6729lGBtTpfBzXnQgFP0itw5/7H5GhqqI4z3WpXIbk+KGMp4Rooe/N8I+PmF6g0T9z50e37W2NOL0Q3HRH5LyndEZPROBAYG+2hMxu7C0HqwD6se7Hq2oe1SpVMa4FzwQX1GwQiBIfKJqxK/SO75qnBky2hgjD1uq95EnXR0NAtzpJi18aHufh8fg9ETUMzfbNCZxqUkeDmixp6iwNGFBJC9M=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(136003)(366004)(346002)(376002)(451199015)(5660300002)(2906002)(31686004)(83380400001)(66946007)(36756003)(4326008)(66476007)(8676002)(66556008)(110136005)(86362001)(31696002)(316002)(54906003)(8936002)(41300700001)(6486002)(478600001)(6506007)(26005)(6666004)(53546011)(6512007)(2616005)(186003)(66574015)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R2tKODZHUHNhMHlVNUNHdy9JU1BwQW1KV0hBVWlzQVBiaU1uc2MxUVdHUi84?=
- =?utf-8?B?Wm4vVGhsc3BCT1BNc2tWWmo2c3V1T2pqbVk1ekE3REtUNFFQbVNPNFpHSmQy?=
- =?utf-8?B?YjdtRFJjcnprMmxTZzVZQjF4WmNpNnY2ZzVHbmlOd0RJMk80QVpVR0FmV3JE?=
- =?utf-8?B?d1MxaDAzVW5LUnRXZWR1TEJzT1UrSFRHVk9nZUp0M3VRbE1TU0t5RXdOZEI3?=
- =?utf-8?B?dFBzTEpjQkRuNVdXSFVkeFNKbnp4NWhhblJVK3NkcFN0RDdsS1RkMTJqSEJn?=
- =?utf-8?B?UHF2U0doQng3VUZIWk1waUVrd0JLYkpWMkd0dTBXK2hmR2F5V0lPY1UxREhP?=
- =?utf-8?B?NDhweVFnT1BYc0lPUSt2d3B6WHRoak0xTWdsVWhlcDFrTklTcUphcFlyT0NY?=
- =?utf-8?B?Vm1ZVThZU3BRMDdOSWhNTTY2RkNjQXlGVUpKL01wR1NoN2tYYUZOYmt5cFNx?=
- =?utf-8?B?YmMra0crYzA3MWhCN29tSVJYS2xST3lHcU12L3VEb01ndlpLN2FXdk1YZ0N1?=
- =?utf-8?B?Uy9pak03OG9nVTdVWk1xeURMQ2lNcHhTemdCRzBmSjhqd2F6Ty9USWR6Y0dz?=
- =?utf-8?B?NU9QcDZhVjMwc040Y0Y0UmJjOVh1bHpSUzduMmFlUE5KTytXTWdBRVNpSU1O?=
- =?utf-8?B?VDRFU2FPdEJvVFVmakFFQ1EwU3VENUxlR2RHMjdlbktyeFB6aGNaMDdjdHlP?=
- =?utf-8?B?RlNRM3FTY2lWakFKeEI5dTJhaDJOSktmUEpSSHpZUjExTDZNN0pIRUgzRktQ?=
- =?utf-8?B?L05Bd3M5clNrR29lVkxINDN1K1pJaDFTY21wRCsvc0hUT2JSWFBGVmV5YmJU?=
- =?utf-8?B?V0xKYW81MGR2QzdkRmpkMFlBUTUvb2JKU0M0V2xGL25IcFBDTTJXVTZHby8y?=
- =?utf-8?B?QWswQXE3elRuZmpTRFhwRXZrYWtuemxzRFRMN3Z0SFZpM3dnQ0FTZ1NwekE0?=
- =?utf-8?B?d01QRElGckVEeURTckcySk9SMkR6SVhEZHFqOFE5SDNaQndEZ0J2R1lYM2px?=
- =?utf-8?B?S05PK0ZhQXBROXhXOG5JYWhGeWEvK250Sk5EbzhDTGpCQUEwSDZrNXVRWE1Z?=
- =?utf-8?B?QUFZeldDeUtnWW9VNy9NQTBxWDNnVVU1dHVTMzZsMVhDZ1o0OU1kWnpWRkY0?=
- =?utf-8?B?ZG5nSXlZN29qbkU2VUp1d2VGbVFOREFRLzlsaXdhcVdTTjZ5azdZamlsSEtH?=
- =?utf-8?B?YlRkYkRBajhvTjErQjZRVzVEeS8wa1pGLzZXMlVSRkRZak5iRkRVOE40REN4?=
- =?utf-8?B?VmM5V3lSdXFVV1hPZHJIaGF2WUlNbk1rZ1RRRWZna2JxS2t1UkV5d3ByYTRa?=
- =?utf-8?B?b0F1Zit1Ym9nQWcydUZaRFljVXN5VnJmY25yVjZ0dGE0RHdYQkp4d0tvemNv?=
- =?utf-8?B?T05YRzVSNm1aZ0l6OEZIRnBtQkNmMDQ1bDAyM3pCdWJuOHpHb0VoWnRJOVVo?=
- =?utf-8?B?TDAwTVhsZ1lML0xLdHNhMXJkY0N2MzBENWxiV2tlSGFya1pvS3VCNW5Qd0ZE?=
- =?utf-8?B?U3dQdWVjTFU5WlM5TTVpSndtaGZDeE0vMWdKUEJ5ems3R0E1WEozMjJGZk1D?=
- =?utf-8?B?UmNUN0dsUXBBSHVQc3RSckpMejJXVWVGY1pxUVl0MWlWNVJ4cEhWNUxmeW13?=
- =?utf-8?B?K1BUTEY2a0k3bUxXUEUwSkhiV0FsVlJ6M2QrRG1sbHBtaW5HMEtNN3A1K1pZ?=
- =?utf-8?B?aEtCMWtJZm55M3FyM3Evd0V1R2Joa2hKZnBoTlEwb1pOSTlvcjBVWEw1MFdD?=
- =?utf-8?B?U0Zhdm4vNjdzV3A4T3N2Y2g1djBGRkVVSGVvbExjd1VxNFRIS25hNDh4Nktt?=
- =?utf-8?B?NWN5NVpCR3NUMVEvaVBrbFJKc3Q4SlNrOGFqN0gvODZOYVJsazVENm1iOXla?=
- =?utf-8?B?azlRcGo1VWltY2pqUDJTMkNpTnJxS2F6SGo4OHp5SUZoZHh6Q3BQeHdka3kx?=
- =?utf-8?B?c2pHQzFBTWdnK005R1FGZ21JeUI0Q1psT0xLQm1uMDk2allGMUNkcjYxbk1D?=
- =?utf-8?B?cGRkbTN0MkJLdktJVVZNeTN4bmdFeXFWZnNuWjRmVTVtRmJkM1JvdW9xYUhl?=
- =?utf-8?B?RlZxNG9HS2RmK1ZKR1dReTFzN0kvUU96NEVZOHl4aU9reXJ5alJPajlBeTRQ?=
- =?utf-8?Q?yqWM=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e014ea8d-b097-4a64-f69b-08dace18b09b
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2022 12:37:46.6394
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UoPgDK+GNvk9+N/C6XvBmDGQvJARz5k0m4hGeexzQ2F8IPraZ7XIcO/6ThzIcDZs
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4086
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+In order to be compatible with more MDP3 chip settings in the future,
+move the chip-related configuration to a separate header file.
 
+Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+---
+ .../mediatek/mdp3/mt8183/mdp3-plat-mt8183.h   | 35 +++++++++++++++++++
+ .../platform/mediatek/mdp3/mtk-mdp3-core.c    | 27 ++------------
+ 2 files changed, 37 insertions(+), 25 deletions(-)
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mt8183/mdp3-plat-mt8183.h
 
-Am 24.11.22 um 13:05 schrieb cuigaosheng:
-> Some tips:
->     Before we call the dma_buf_stats_setup(), we have to finish 
-> creating the file,
-> otherwise dma_buf_stats_setup() will return -EINVAL, maybe we need to 
-> think about
-> this when making a new patch.
-
-I was already wondering why the order is this way.
-
-Why is dma_buf_stats_setup() needing the file in the first place?
-
-Thanks,
-Christian.
-
->
-> Hope these tips are useful, thanks!
->
-> On 2022/11/24 13:56, Charan Teja Kalla wrote:
->> Thanks T.J and Christian for the inputs.
->>
->> On 11/19/2022 7:00 PM, Christian König wrote:
->>>>      Yes, exactly that's the idea.
->>>>
->>>>      The only alternatives I can see would be to either move 
->>>> allocating
->>>>      the
->>>>      file and so completing the dma_buf initialization last again 
->>>> or just
->>>>      ignore errors from sysfs.
->>>>
->>>>      > If we still want to avoid calling 
->>>> dmabuf->ops->release(dmabuf) in
->>>>      > dma_buf_release like the comment says I guess we could use
->>>>      sysfs_entry
->>>>      > and ERR_PTR to flag that, otherwise it looks like we'd need 
->>>> a bit
->>>>      > somewhere.
->>>>
->>>>      No, this should be dropped as far as I can see. The sysfs cleanup
->>>>      code
->>>>      looks like it can handle not initialized kobj pointers.
->>>>
->>>>
->>>> Yeah there is also the null check in dma_buf_stats_teardown() that
->>>> would prevent it from running, but I understood the comment to be
->>>> referring to the release() dma_buf_ops call into the exporter which
->>>> comes right after the teardown call. That looks like it's preventing
->>>> the fput task work calling back into the exporter after the exporter
->>>> already got an error from dma_buf_export(). Otherwise the exporter
->>>> sees a release() for a buffer that it doesn't know about / thinks
->>>> shouldn't exist. So I could imagine an exporter trying to double free:
->>>> once for the failed dma_buf_export() call, and again when the
->>>> release() op is called later.
->>>
->>> Oh, very good point as well. Yeah, then creating the file should
->>> probably come last.
->>>
->> @Gaosheng: Could you please make these changes or you let me to do?
->>
->>> Regards,
->>> Christian.
->> .
+diff --git a/drivers/media/platform/mediatek/mdp3/mt8183/mdp3-plat-mt8183.h b/drivers/media/platform/mediatek/mdp3/mt8183/mdp3-plat-mt8183.h
+new file mode 100644
+index 000000000000..3084f62e7df5
+--- /dev/null
++++ b/drivers/media/platform/mediatek/mdp3/mt8183/mdp3-plat-mt8183.h
+@@ -0,0 +1,35 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (c) 2022 MediaTek Inc.
++ * Author: Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
++ */
++
++#ifndef __MDP3_PLAT_MT8183_H__
++#define __MDP3_PLAT_MT8183_H__
++
++static const struct mdp_platform_config mt8183_plat_cfg = {
++	.rdma_support_10bit		= true,
++	.rdma_rsz1_sram_sharing		= true,
++	.rdma_upsample_repeat_only	= true,
++	.rsz_disable_dcm_small_sample	= false,
++	.wrot_filter_constraint		= false,
++};
++
++static const struct of_device_id mt8183_mdp_probe_infra[MDP_INFRA_MAX] = {
++	[MDP_INFRA_MMSYS] = { .compatible = "mediatek,mt8183-mmsys" },
++	[MDP_INFRA_MUTEX] = { .compatible = "mediatek,mt8183-disp-mutex" },
++	[MDP_INFRA_SCP] = { .compatible = "mediatek,mt8183-scp" }
++};
++
++static const u32 mt8183_mutex_idx[MDP_MAX_COMP_COUNT] = {
++	[MDP_COMP_RDMA0] = MUTEX_MOD_IDX_MDP_RDMA0,
++	[MDP_COMP_RSZ0] = MUTEX_MOD_IDX_MDP_RSZ0,
++	[MDP_COMP_RSZ1] = MUTEX_MOD_IDX_MDP_RSZ1,
++	[MDP_COMP_TDSHP0] = MUTEX_MOD_IDX_MDP_TDSHP0,
++	[MDP_COMP_WROT0] = MUTEX_MOD_IDX_MDP_WROT0,
++	[MDP_COMP_WDMA] = MUTEX_MOD_IDX_MDP_WDMA,
++	[MDP_COMP_AAL0] = MUTEX_MOD_IDX_MDP_AAL0,
++	[MDP_COMP_CCORR0] = MUTEX_MOD_IDX_MDP_CCORR0,
++};
++
++#endif  /* __MDP3_PLAT_MT8183_H__ */
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+index 2d1f6ae9f080..658037d06250 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+@@ -12,33 +12,10 @@
+ #include <linux/remoteproc.h>
+ #include <linux/remoteproc/mtk_scp.h>
+ #include <media/videobuf2-dma-contig.h>
++
+ #include "mtk-mdp3-core.h"
+ #include "mtk-mdp3-m2m.h"
+-
+-static const struct mdp_platform_config mt8183_plat_cfg = {
+-	.rdma_support_10bit		= true,
+-	.rdma_rsz1_sram_sharing		= true,
+-	.rdma_upsample_repeat_only	= true,
+-	.rsz_disable_dcm_small_sample	= false,
+-	.wrot_filter_constraint		= false,
+-};
+-
+-static const struct of_device_id mt8183_mdp_probe_infra[MDP_INFRA_MAX] = {
+-	[MDP_INFRA_MMSYS] = { .compatible = "mediatek,mt8183-mmsys" },
+-	[MDP_INFRA_MUTEX] = { .compatible = "mediatek,mt8183-disp-mutex" },
+-	[MDP_INFRA_SCP] = { .compatible = "mediatek,mt8183-scp" }
+-};
+-
+-static const u32 mt8183_mutex_idx[MDP_MAX_COMP_COUNT] = {
+-	[MDP_COMP_RDMA0] = MUTEX_MOD_IDX_MDP_RDMA0,
+-	[MDP_COMP_RSZ0] = MUTEX_MOD_IDX_MDP_RSZ0,
+-	[MDP_COMP_RSZ1] = MUTEX_MOD_IDX_MDP_RSZ1,
+-	[MDP_COMP_TDSHP0] = MUTEX_MOD_IDX_MDP_TDSHP0,
+-	[MDP_COMP_WROT0] = MUTEX_MOD_IDX_MDP_WROT0,
+-	[MDP_COMP_WDMA] = MUTEX_MOD_IDX_MDP_WDMA,
+-	[MDP_COMP_AAL0] = MUTEX_MOD_IDX_MDP_AAL0,
+-	[MDP_COMP_CCORR0] = MUTEX_MOD_IDX_MDP_CCORR0,
+-};
++#include "mt8183/mdp3-plat-mt8183.h"
+ 
+ static const struct mtk_mdp_driver_data mt8183_mdp_driver_data = {
+ 	.mdp_probe_infra = mt8183_mdp_probe_infra,
+-- 
+2.18.0
 
