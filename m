@@ -2,297 +2,145 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1B14C433FE
-	for <linux-media@archiver.kernel.org>; Thu, 24 Nov 2022 19:25:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA0F3C433FE
+	for <linux-media@archiver.kernel.org>; Thu, 24 Nov 2022 20:01:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbiKXTZl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Nov 2022 14:25:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
+        id S229512AbiKXUBP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Nov 2022 15:01:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiKXTZk (ORCPT
+        with ESMTP id S229502AbiKXUBO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Nov 2022 14:25:40 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D5C663DA
-        for <linux-media@vger.kernel.org>; Thu, 24 Nov 2022 11:25:38 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2F5BB7FA;
-        Thu, 24 Nov 2022 20:25:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669317936;
-        bh=3WHz+XMeMTidqRxZazaPOyraez6VkGl7XsFzJ68CP00=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T38YuN5Y+UNjei4D6KnVlO8LKtO65MG5lzwhDNMANxFhTjT0i5SnJSnqELh0B8o90
-         wg6R49GsoqYXbcFSBrZN/t+CD/6EAnOlZTuFB0Yb3WLOQawR016e2rQZpOnrH+Trud
-         7sWxrjm7F0l0f+H2zIXOyK1ioKs5UiolM3IDl3ro=
-Date:   Thu, 24 Nov 2022 21:25:20 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc:     linux-media@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>,
-        Manivannan Sadhasivam <mani@kernel.org>
-Subject: Re: [PATCH v1 02/15] media: i2c: imx290: Factor out subdev init and
- cleanup to functions
-Message-ID: <Y3/FIPX2boTRjuNq@pendragon.ideasonboard.com>
-References: <20221122223250.21233-1-laurent.pinchart@ideasonboard.com>
- <20221122223250.21233-3-laurent.pinchart@ideasonboard.com>
- <CAPY8ntB7p6DtFOEg9gU5FBPu3kCRX0ssHGzXqc7UL31R8c_dZw@mail.gmail.com>
+        Thu, 24 Nov 2022 15:01:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B9B2AE19
+        for <linux-media@vger.kernel.org>; Thu, 24 Nov 2022 12:00:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669320019;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kSYyhzQPfz68JBO1GSnCmXiXgzkI4gleaHz5wVtm2sk=;
+        b=UU+U+pHa3PA6MHis7X0IMXqf0AVEHLe1vqVv2DrM6gmm1jVsqmb+GMsXuJM9dGBlkzwasg
+        YJxVkG6A6H0rlXkzCmuEDutZllWyCwubXSCiZWmiq9Jy/lic/xEsj9dpHEriXNOBIPQLPC
+        LNcyatWpFUWf4/T29FQ52Am4Hc0AzOA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-131-kMUabkGXNsKjFW53L2hndg-1; Thu, 24 Nov 2022 15:00:16 -0500
+X-MC-Unique: kMUabkGXNsKjFW53L2hndg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7B06285A588;
+        Thu, 24 Nov 2022 20:00:15 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.195.152])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4B8701415114;
+        Thu, 24 Nov 2022 20:00:14 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        platform-driver-x86@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org
+Subject: [PATCH 2/3] platform/x86: int3472/discrete: Get the polarity from the _DSM entry
+Date:   Thu, 24 Nov 2022 21:00:06 +0100
+Message-Id: <20221124200007.390901-3-hdegoede@redhat.com>
+In-Reply-To: <20221124200007.390901-1-hdegoede@redhat.com>
+References: <20221124200007.390901-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAPY8ntB7p6DtFOEg9gU5FBPu3kCRX0ssHGzXqc7UL31R8c_dZw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dave,
+The out of tree IPU6 driver has moved to also using the in kernel INT3472
+code for doing power-ctrl rather then doing their own thing (good!).
 
-On Thu, Nov 24, 2022 at 06:31:51PM +0000, Dave Stevenson wrote:
-> On Tue, 22 Nov 2022 at 22:34, Laurent Pinchart wrote:
-> >
-> > The probe() function is large. Make it more readable by factoring the
-> > subdev initialization code out. While at it, rename the error labels as
-> > the "free_" prefix isn't accurate.
-> >
-> > No functional change intended.
-> >
-> > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > ---
-> >  drivers/media/i2c/imx290.c | 109 +++++++++++++++++++++----------------
-> >  1 file changed, 62 insertions(+), 47 deletions(-)
-> >
-> > diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-> > index aae4f51941a1..4dbf218e7a63 100644
-> > --- a/drivers/media/i2c/imx290.c
-> > +++ b/drivers/media/i2c/imx290.c
-> > @@ -1015,6 +1015,46 @@ static const struct media_entity_operations imx290_subdev_entity_ops = {
-> >         .link_validate = v4l2_subdev_link_validate,
-> >  };
-> >
-> > +static int imx290_subdev_init(struct imx290 *imx290)
-> > +{
-> > +       struct i2c_client *client = to_i2c_client(imx290->dev);
-> > +       int ret;
-> > +
-> > +       /*
-> > +        * Initialize the frame format. In particular, imx290->current_mode
-> > +        * and imx290->bpp are set to defaults: imx290_calc_pixel_rate() call
-> > +        * below relies on these fields.
-> > +        */
-> > +       imx290_entity_init_cfg(&imx290->sd, NULL);
-> > +
-> > +       ret = imx290_ctrl_init(imx290);
-> > +       if (ret < 0) {
-> > +               dev_err(imx290->dev, "Control initialization error %d\n", ret);
-> > +               return ret;
-> > +       }
-> > +
-> > +       v4l2_i2c_subdev_init(&imx290->sd, client, &imx290_subdev_ops);
-> > +       imx290->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-> > +       imx290->sd.dev = imx290->dev;
-> > +       imx290->sd.entity.ops = &imx290_subdev_entity_ops;
-> > +       imx290->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-> > +
-> > +       imx290->pad.flags = MEDIA_PAD_FL_SOURCE;
-> > +       ret = media_entity_pads_init(&imx290->sd.entity, 1, &imx290->pad);
-> > +       if (ret < 0) {
-> > +               dev_err(imx290->dev, "Could not register media entity\n");
-> > +               return ret;
-> > +       }
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static void imx290_subdev_cleanup(struct imx290 *imx290)
-> > +{
-> > +       media_entity_cleanup(&imx290->sd.entity);
-> > +       v4l2_ctrl_handler_free(&imx290->ctrls);
-> > +}
-> > +
-> >  /* ----------------------------------------------------------------------------
-> >   * Power management
-> >   */
-> > @@ -1148,10 +1188,10 @@ static int imx290_probe(struct i2c_client *client)
-> >         fwnode_handle_put(endpoint);
-> >         if (ret == -ENXIO) {
-> >                 dev_err(dev, "Unsupported bus type, should be CSI2\n");
-> > -               goto free_err;
-> > +               goto err_endpoint;
-> >         } else if (ret) {
-> >                 dev_err(dev, "Parsing endpoint node failed\n");
-> > -               goto free_err;
-> > +               goto err_endpoint;
-> >         }
-> >
-> >         /* Get number of data lanes */
-> > @@ -1159,7 +1199,7 @@ static int imx290_probe(struct i2c_client *client)
-> >         if (imx290->nlanes != 2 && imx290->nlanes != 4) {
-> >                 dev_err(dev, "Invalid data lanes: %d\n", imx290->nlanes);
-> >                 ret = -EINVAL;
-> > -               goto free_err;
-> > +               goto err_endpoint;
-> >         }
-> >
-> >         dev_dbg(dev, "Using %u data lanes\n", imx290->nlanes);
-> > @@ -1167,7 +1207,7 @@ static int imx290_probe(struct i2c_client *client)
-> >         if (!ep.nr_of_link_frequencies) {
-> >                 dev_err(dev, "link-frequency property not found in DT\n");
-> >                 ret = -EINVAL;
-> > -               goto free_err;
-> > +               goto err_endpoint;
-> >         }
-> >
-> >         /* Check that link frequences for all the modes are in device tree */
-> > @@ -1175,7 +1215,7 @@ static int imx290_probe(struct i2c_client *client)
-> >         if (fq) {
-> >                 dev_err(dev, "Link frequency of %lld is not supported\n", fq);
-> >                 ret = -EINVAL;
-> > -               goto free_err;
-> > +               goto err_endpoint;
-> >         }
-> >
-> >         /* get system clock (xclk) */
-> > @@ -1183,14 +1223,14 @@ static int imx290_probe(struct i2c_client *client)
-> >         if (IS_ERR(imx290->xclk)) {
-> >                 dev_err(dev, "Could not get xclk");
-> >                 ret = PTR_ERR(imx290->xclk);
-> > -               goto free_err;
-> > +               goto err_endpoint;
-> >         }
-> >
-> >         ret = fwnode_property_read_u32(dev_fwnode(dev), "clock-frequency",
-> >                                        &xclk_freq);
-> >         if (ret) {
-> >                 dev_err(dev, "Could not get xclk frequency\n");
-> > -               goto free_err;
-> > +               goto err_endpoint;
-> >         }
-> >
-> >         /* external clock must be 37.125 MHz */
-> > @@ -1198,19 +1238,19 @@ static int imx290_probe(struct i2c_client *client)
-> >                 dev_err(dev, "External clock frequency %u is not supported\n",
-> >                         xclk_freq);
-> >                 ret = -EINVAL;
-> > -               goto free_err;
-> > +               goto err_endpoint;
-> >         }
-> >
-> >         ret = clk_set_rate(imx290->xclk, xclk_freq);
-> >         if (ret) {
-> >                 dev_err(dev, "Could not set xclk frequency\n");
-> > -               goto free_err;
-> > +               goto err_endpoint;
-> >         }
-> >
-> >         ret = imx290_get_regulators(dev, imx290);
-> >         if (ret < 0) {
-> >                 dev_err(dev, "Cannot get regulators\n");
-> > -               goto free_err;
-> > +               goto err_endpoint;
-> >         }
-> >
-> >         imx290->rst_gpio = devm_gpiod_get_optional(dev, "reset",
-> > @@ -1218,55 +1258,33 @@ static int imx290_probe(struct i2c_client *client)
-> >         if (IS_ERR(imx290->rst_gpio)) {
-> >                 dev_err(dev, "Cannot get reset gpio\n");
-> >                 ret = PTR_ERR(imx290->rst_gpio);
-> > -               goto free_err;
-> > +               goto err_endpoint;
-> >         }
-> >
-> >         mutex_init(&imx290->lock);
-> >
-> > -       /*
-> > -        * Initialize the frame format. In particular, imx290->current_mode
-> > -        * and imx290->bpp are set to defaults: imx290_calc_pixel_rate() call
-> > -        * below relies on these fields.
-> > -        */
-> > -       imx290_entity_init_cfg(&imx290->sd, NULL);
-> > -
-> > -       ret = imx290_ctrl_init(imx290);
-> > -       if (ret < 0) {
-> > -               dev_err(dev, "Control initialization error %d\n", ret);
-> > -               goto free_mutex;
-> > -       }
-> > -
-> > -       v4l2_i2c_subdev_init(&imx290->sd, client, &imx290_subdev_ops);
-> > -       imx290->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-> > -       imx290->sd.dev = &client->dev;
-> > -       imx290->sd.entity.ops = &imx290_subdev_entity_ops;
-> > -       imx290->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-> > -
-> > -       imx290->pad.flags = MEDIA_PAD_FL_SOURCE;
-> > -       ret = media_entity_pads_init(&imx290->sd.entity, 1, &imx290->pad);
-> > -       if (ret < 0) {
-> > -               dev_err(dev, "Could not register media entity\n");
-> > -               goto free_ctrl;
-> > -       }
-> > +       ret = imx290_subdev_init(imx290);
-> > +       if (ret)
-> > +               goto err_mutex;
-> >
-> >         ret = v4l2_async_register_subdev(&imx290->sd);
-> >         if (ret < 0) {
-> >                 dev_err(dev, "Could not register v4l2 device\n");
-> > -               goto free_entity;
-> > +               goto err_subdev;
-> >         }
-> >
-> >         /* Power on the device to match runtime PM state below */
-> >         ret = imx290_power_on(dev);
-> >         if (ret < 0) {
-> >                 dev_err(dev, "Could not power on the device\n");
-> > -               goto free_entity;
-> > +               goto err_subdev;
-> >         }
-> >
-> >         ret = imx290_read(imx290, IMX290_CHIP_ID, &chip_id);
-> >         if (ret) {
-> >                 dev_err(dev, "Could not read chip ID: %d\n", ret);
-> >                 imx290_power_off(dev);
-> > -               goto free_entity;
-> > +               goto err_subdev;
-> >         }
-> 
-> Which tree is this patch based on, as neither Sakari nor Mauro's trees
-> have this read in them.
-> I suspect an older patch which added it got dropped due to the worry
-> over Vision Component's modules which block 16 bit reads.
+On IPU6 the polarity is encoded in the _DSM entry rather then being
+hardcoded to GPIO_ACTIVE_LOW.
 
-There's a local patch indeed, which I incorrectly put at the bottom of
-the branch. It will be fixed in v2.
+Using the _DSM entry for this on IPU3 leads to regressions, so only
+use the _DSM entry for this on non IPU3 devices.
 
-> >
-> >         dev_info(dev, "chip ID 0x%04x\n", chip_id);
-> > @@ -1279,13 +1297,11 @@ static int imx290_probe(struct i2c_client *client)
-> >
-> >         return 0;
-> >
-> > -free_entity:
-> > -       media_entity_cleanup(&imx290->sd.entity);
-> > -free_ctrl:
-> > -       v4l2_ctrl_handler_free(&imx290->ctrls);
-> > -free_mutex:
-> > +err_subdev:
-> > +       imx290_subdev_cleanup(imx290);
-> > +err_mutex:
-> >         mutex_destroy(&imx290->lock);
-> > -free_err:
-> > +err_endpoint:
-> >         v4l2_fwnode_endpoint_free(&ep);
-> >
-> >         return ret;
-> > @@ -1297,8 +1313,7 @@ static void imx290_remove(struct i2c_client *client)
-> >         struct imx290 *imx290 = to_imx290(sd);
-> >
-> >         v4l2_async_unregister_subdev(sd);
-> > -       media_entity_cleanup(&sd->entity);
-> > -       v4l2_ctrl_handler_free(sd->ctrl_handler);
-> > +       imx290_subdev_cleanup(imx290);
-> >
-> >         mutex_destroy(&imx290->lock);
-> >
+Note there is a whole bunch of PCI-ids for the IPU6 which is why
+the check is for the IPU3-CIO2, because the CIO2 there has a unique
+PCI-id which can be used for this.
 
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/platform/x86/intel/int3472/discrete.c | 28 +++++++++++++++++--
+ 1 file changed, 26 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/platform/x86/intel/int3472/discrete.c b/drivers/platform/x86/intel/int3472/discrete.c
+index bc6c62f3f3bf..9159291be28a 100644
+--- a/drivers/platform/x86/intel/int3472/discrete.c
++++ b/drivers/platform/x86/intel/int3472/discrete.c
+@@ -11,6 +11,7 @@
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/overflow.h>
++#include <linux/pci.h>
+ #include <linux/platform_device.h>
+ #include <linux/uuid.h>
+ 
+@@ -36,6 +37,19 @@ static const guid_t cio2_sensor_module_guid =
+ 	GUID_INIT(0x822ace8f, 0x2814, 0x4174,
+ 		  0xa5, 0x6b, 0x5f, 0x02, 0x9f, 0xe0, 0x79, 0xee);
+ 
++/* IPU3 vs IPU6 needs to be handled differently */
++#define IPU3_CIO2_PCI_ID				0x9d32
++
++static const struct pci_device_id ipu3_cio2_pci_id_table[] = {
++	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, IPU3_CIO2_PCI_ID) },
++	{ }
++};
++
++static int ipu3_present(void)
++{
++	return pci_dev_present(ipu3_cio2_pci_id_table);
++}
++
+ /*
+  * Here follows platform specific mapping information that we can pass to
+  * the functions mapping resources to the sensors. Where the sensors have
+@@ -242,6 +256,7 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
+ 	union acpi_object *obj;
+ 	const char *err_msg;
+ 	const char *func;
++	u32 polarity;
+ 	int ret;
+ 	u8 type;
+ 
+@@ -265,13 +280,22 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
+ 
+ 	type = obj->integer.value & 0xff;
+ 
++	/* IPU3 always uses active-low, IPU6 polarity is encoded in the _DSM entry. */
++	if (ipu3_present())
++		polarity = GPIO_ACTIVE_LOW;
++	else
++		polarity = ((obj->integer.value >> 24) & 0xff) ? GPIO_ACTIVE_HIGH : GPIO_ACTIVE_LOW;
++
+ 	func = int3472_dsm_type_to_func(type);
+ 
++	dev_dbg(int3472->dev, "%s %s pin %d active-%s\n", func,
++		agpio->resource_source.string_ptr, agpio->pin_table[0],
++		(polarity == GPIO_ACTIVE_HIGH) ? "high" : "low");
++
+ 	switch (type) {
+ 	case INT3472_GPIO_TYPE_RESET:
+ 	case INT3472_GPIO_TYPE_POWERDOWN:
+-		ret = skl_int3472_map_gpio_to_sensor(int3472, agpio, func,
+-						     GPIO_ACTIVE_LOW);
++		ret = skl_int3472_map_gpio_to_sensor(int3472, agpio, func, polarity);
+ 		if (ret)
+ 			err_msg = "Failed to map GPIO pin to sensor\n";
+ 
 -- 
-Regards,
+2.38.1
 
-Laurent Pinchart
