@@ -2,86 +2,120 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 043FDC4332F
-	for <linux-media@archiver.kernel.org>; Fri, 25 Nov 2022 15:31:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9028C4332F
+	for <linux-media@archiver.kernel.org>; Fri, 25 Nov 2022 15:35:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbiKYPbz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 25 Nov 2022 10:31:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
+        id S229580AbiKYPfB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 25 Nov 2022 10:35:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiKYPbx (ORCPT
+        with ESMTP id S229495AbiKYPe6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 25 Nov 2022 10:31:53 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9288C25E8A
-        for <linux-media@vger.kernel.org>; Fri, 25 Nov 2022 07:31:52 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id vv4so11141785ejc.2
-        for <linux-media@vger.kernel.org>; Fri, 25 Nov 2022 07:31:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=konsulko.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B7xutFDYfxv2Xy2TxGLikGVF5LOdRp8bJ3PZY3ODS4k=;
-        b=XUPHLQeUPNtB1gOhP/tR9W79tQ1jjiAvTDwHuS2ilQDSOOymQZtrNII0uBGDV3PYWS
-         RwWrZedwzNVCCxh4BJwV/lEHBmMyHyopIIqz1i4nzFsauP9RuPd87oTVJmGsvHf2Sjis
-         ut43W9/yBNc6SMY7q8RfhvLSzWEX4La4n8yx0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B7xutFDYfxv2Xy2TxGLikGVF5LOdRp8bJ3PZY3ODS4k=;
-        b=IATjhqnxV/fzS5T+dKtYGwwl9dHR6Dm0pHTAXKxL+DuoA0fJWH2rYPLyRdmkK7baNi
-         Ezr37ojA2DcI6H94Wa1QAUDAP70WZs/sNiiauhj3YLrM2jLkYL2j3T4RDKUmN9svtQkQ
-         9GFF1mp6xjEL+O+EsPbntCigx9R7sA7538yVyaAwEr6UIMFhz8b3RYtWSAA9/5WhONjK
-         j3Xtxj6UtlrAGkod4enHlmjBadCNAy9QLZp+hLu4hLRW8zpW5yGAmsh1opKVI6a9AIy9
-         Ii0nx6VRMsf9DRNB83SwBewDObbcnltVSS+0SAx9EF+MqDzrgx0BWp36gzLQKbrvoWCy
-         DSfg==
-X-Gm-Message-State: ANoB5pnVaWLcq9wtE5Lfv1vuZyONvLfbvyTYFwUpZuwcfDuVnjMAj7mo
-        KmvavVrpD85/SOtQnPz5UXqKJXDSt7ywmQ==
-X-Google-Smtp-Source: AA0mqf5ffyFmityByOs/JOCceWPfZw+kQuNw1EgBj+gAbhyZV3Zexcz82scNQqjBm9zmN9TJ+K6rSg==
-X-Received: by 2002:a17:906:cf85:b0:78d:b66d:749f with SMTP id um5-20020a170906cf8500b0078db66d749fmr31106432ejb.566.1669390293850;
-        Fri, 25 Nov 2022 07:31:33 -0800 (PST)
-Received: from tone.k.g (lan.nucleusys.com. [92.247.61.126])
-        by smtp.gmail.com with ESMTPSA id p10-20020aa7cc8a000000b0045b4b67156fsm1878435edt.45.2022.11.25.07.31.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 07:31:33 -0800 (PST)
-From:   Petko Manolov <petko.manolov@konsulko.com>
-To:     linux-media@vger.kernel.org
-Cc:     laurent.pinchart@ideasonboard.com, sakari.ailus@iki.fi,
-        Petko Manolov <petko.manolov@konsulko.com>
-Subject: [PATCH v1 5/5] media: i2c: add imx492 entry for make
-Date:   Fri, 25 Nov 2022 17:31:20 +0200
-Message-Id: <20221125153120.541298-6-petko.manolov@konsulko.com>
+        Fri, 25 Nov 2022 10:34:58 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41FC2F006
+        for <linux-media@vger.kernel.org>; Fri, 25 Nov 2022 07:34:57 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1oyaj9-0005nu-KE; Fri, 25 Nov 2022 16:34:55 +0100
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1oyaj8-000Frf-0X; Fri, 25 Nov 2022 16:34:54 +0100
+Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1oyaj8-001Rde-5y; Fri, 25 Nov 2022 16:34:54 +0100
+From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-media@vger.kernel.org, gregkh@linuxfoundation.org,
+        balbi@kernel.org, laurent.pinchart@ideasonboard.com,
+        kernel@pengutronix.de, stable <stable@kernel.org>
+Subject: [PATCH v2 2/2] usb: gadget: uvc: limit isoc_sg to super speed gadgets
+Date:   Fri, 25 Nov 2022 16:34:50 +0100
+Message-Id: <20221125153450.344392-2-m.grzeschik@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221125153120.541298-1-petko.manolov@konsulko.com>
-References: <20221125153120.541298-1-petko.manolov@konsulko.com>
+In-Reply-To: <20221125153450.344392-1-m.grzeschik@pengutronix.de>
+References: <20221125153450.344392-1-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Make sure the driver gets compiled in case it is selected in Kconfig.
+When calling uvc_video_encode_isoc_sg the function is preparing the sg payload
+by setting the sglist pointers of the videobuffer for the request. The usb
+gadget driver then is parsing the sg list and uses each sg entry to send in one
+urb to the host. Because of the unrelated buffer of the uvc header that buffer
+has to be send separately in an extra sg entry.
 
-Signed-off-by: Petko Manolov <petko.manolov@konsulko.com>
+When it comes to transfers with an limited payload (e.g. the maximum of 3kB for
+high-speed) this extra payload handling is not justified. A simple memcpy of
+the header and payload is usually faster and does not come with that extra
+runtime overhead.
+
+This patch is changing the uvc_video_encode_isoc_sg encode function only to be
+used for super speed gadgets.
+
+Cc: stable <stable@kernel.org>
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+
 ---
- drivers/media/i2c/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+v1 -> v2: - left the sg assignment in uvc_buffer_sg under the test for use_sg
+          - rephrased the commit message
 
-diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-index ba28a8f8a07f..8cdad7e25e5e 100644
---- a/drivers/media/i2c/Makefile
-+++ b/drivers/media/i2c/Makefile
-@@ -48,6 +48,7 @@ obj-$(CONFIG_VIDEO_IMX334) += imx334.o
- obj-$(CONFIG_VIDEO_IMX335) += imx335.o
- obj-$(CONFIG_VIDEO_IMX355) += imx355.o
- obj-$(CONFIG_VIDEO_IMX412) += imx412.o
-+obj-$(CONFIG_VIDEO_IMX492) += imx492.o
- obj-$(CONFIG_VIDEO_IR_I2C) += ir-kbd-i2c.o
- obj-$(CONFIG_VIDEO_ISL7998X) += isl7998x.o
- obj-$(CONFIG_VIDEO_KS0127) += ks0127.o
+ drivers/usb/gadget/function/uvc_queue.c | 3 +--
+ drivers/usb/gadget/function/uvc_video.c | 9 +++++++--
+ 2 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
+index 0aa3d7e1f3cc32..0abb1763faf1b6 100644
+--- a/drivers/usb/gadget/function/uvc_queue.c
++++ b/drivers/usb/gadget/function/uvc_queue.c
+@@ -87,9 +87,8 @@ static int uvc_buffer_prepare(struct vb2_buffer *vb)
+ 	if (queue->use_sg) {
+ 		buf->sgt = vb2_dma_sg_plane_desc(vb, 0);
+ 		buf->sg = buf->sgt->sgl;
+-	} else {
+-		buf->mem = vb2_plane_vaddr(vb, 0);
+ 	}
++	buf->mem = vb2_plane_vaddr(vb, 0);
+ 	buf->length = vb2_plane_size(vb, 0);
+ 	if (vb->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
+ 		buf->bytesused = 0;
+diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+index dd1c6b2ca7c6f3..b6ea600b011185 100644
+--- a/drivers/usb/gadget/function/uvc_video.c
++++ b/drivers/usb/gadget/function/uvc_video.c
+@@ -459,6 +459,9 @@ static void uvcg_video_pump(struct work_struct *work)
+  */
+ int uvcg_video_enable(struct uvc_video *video, int enable)
+ {
++	struct uvc_device *uvc = video->uvc;
++	struct usb_composite_dev *cdev = uvc->func.config->cdev;
++	struct usb_gadget *gadget = cdev->gadget;
+ 	unsigned int i;
+ 	int ret;
+ 
+@@ -490,9 +493,11 @@ int uvcg_video_enable(struct uvc_video *video, int enable)
+ 	if (video->max_payload_size) {
+ 		video->encode = uvc_video_encode_bulk;
+ 		video->payload_size = 0;
+-	} else
+-		video->encode = video->queue.use_sg ?
++	} else {
++		video->encode = (video->queue.use_sg &&
++				 !(gadget->speed <= USB_SPEED_HIGH)) ?
+ 			uvc_video_encode_isoc_sg : uvc_video_encode_isoc;
++	}
+ 
+ 	video->req_int_count = 0;
+ 
 -- 
 2.30.2
 
