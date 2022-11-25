@@ -2,212 +2,155 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A546C4332F
-	for <linux-media@archiver.kernel.org>; Fri, 25 Nov 2022 16:01:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49E0AC4332F
+	for <linux-media@archiver.kernel.org>; Fri, 25 Nov 2022 16:02:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbiKYQBp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 25 Nov 2022 11:01:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52256 "EHLO
+        id S229853AbiKYQCM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 25 Nov 2022 11:02:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiKYQBo (ORCPT
+        with ESMTP id S229835AbiKYQCK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 25 Nov 2022 11:01:44 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87EE64B9A9
-        for <linux-media@vger.kernel.org>; Fri, 25 Nov 2022 08:01:43 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id z24so5646530ljn.4
-        for <linux-media@vger.kernel.org>; Fri, 25 Nov 2022 08:01:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=melexis.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QzEV4++7bXQHfd6gsAbxp8XUPvUs+nkOTyY83Sr3UTY=;
-        b=ZAiDK5yd/xeqy+ZSFr/KfpvNyJ0zNSZPAnup7G/ynZV+BOLO63vAp6mSvi0yyXtjhs
-         fGKGHUZApe+Mx42JNbZD7ZGJQYjYlpRfaCMj8JFeU1jOAILfXDT7zmibzV4GYJurNokt
-         VcZUwm5JesMnYBAMjv6roTAOig7PTMaIHF0JZRWJ/srodncvnorOyfLqKwnxpj5wP9HI
-         +TNWtSLBBa0Y16DL2iFrHAvCsJkzviMlKJy4dbTY2skZdTRBtIbODZjSl+wL5+RjC+aC
-         ocuFFThxggVRcTo14DAE0Rqh985y/quw++JJta5skK+JciZ4IPmITH63sTTHh4ra68wS
-         /XKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QzEV4++7bXQHfd6gsAbxp8XUPvUs+nkOTyY83Sr3UTY=;
-        b=uaU41oJ3Bx1ak4r+7srhzaKVLJL1RVn9zUnhauzsTmYLwHxmb603vyx56vVsImU/R2
-         e4q4SIqIBs872mjcmadij0mNeuVst9bw1mMg5pb0U2WTDppPVsTM2hbe7YvBbsu2L7EA
-         qSF1hKEMsJmHx9P6GPHDF06TGZoq+zvgjK+lXPxcTrAr06gG6A4GnlW2KYleUJFVOf5J
-         PIk5TDH7DuI+MyA41yjtNvJgUCoTuvE+hu61GFBkbmT802IQSK7x4YWpOOtB5GUDmLBI
-         96NCubhuqzPThzj8iBy7+fcv7VbKKJEv4br2eygvwtVhpXG2/rdtskZJf514dzvWxsVJ
-         s77g==
-X-Gm-Message-State: ANoB5pmqj1Z8iuLPaRkvdPp2GAaaFMuJFgyY/gDJ1687HdWHolf/GbnV
-        8s0EpKJ/SSkMP5vSHOr8fiPFIg==
-X-Google-Smtp-Source: AA0mqf6uPCogSlP5rPSi0t3jnuQe0YhGzLoBriMSzf9EMfOMiNHRouH14/pDsZF8A/CO7aR9dN/T4g==
-X-Received: by 2002:a05:651c:1954:b0:277:43c4:a864 with SMTP id bs20-20020a05651c195400b0027743c4a864mr11777535ljb.463.1669392098910;
-        Fri, 25 Nov 2022 08:01:38 -0800 (PST)
-Received: from melexis.com ([91.192.183.26])
-        by smtp.gmail.com with ESMTPSA id bt14-20020a056512260e00b00499d70c0310sm571160lfb.3.2022.11.25.08.01.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 08:01:38 -0800 (PST)
-Date:   Fri, 25 Nov 2022 18:01:34 +0200
-From:   Volodymyr Kharuk <vkh@melexis.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     linux-media@vger.kernel.org, Andrii Kyselov <ays@melexis.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        devicetree@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-Subject: Re: [PATCH v3 3/8] media: Documentation: v4l: Add TOF class controls
-Message-ID: <Y4Dm3pghvTTlXBNx@melexis.com>
-References: <cover.1669381013.git.vkh@melexis.com>
- <01cfeb602d52456bed08c89da356474474361e73.1669381013.git.vkh@melexis.com>
- <de7a776e-3fb2-3631-c301-847502fc1a39@xs4all.nl>
+        Fri, 25 Nov 2022 11:02:10 -0500
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B0464A9CD;
+        Fri, 25 Nov 2022 08:02:10 -0800 (PST)
+Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id E37A91B001B1;
+        Fri, 25 Nov 2022 18:02:07 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1669392127;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=amZ2eNZc2IpuqO8I2HCrrqLSq4BbWLC0jk8j44kBK9Y=;
+        b=DTZYuachhszqpEc+6ONz8datk3/lknTJCArIScEO58r8PTZf0vUCNMepM2LaJEXBZwQkPg
+        FYRFrL05FgHZ4gCmdTvovKNbGQNSWGB1n2DtpHiR51+TEAJvPUd0bpANbuiqoi75f8LOkA
+        ayXIJYpWamIjDff2brT9GphXwJREOcmS+WioP29Rch2keASVCpokmDQJOG8jCYM79xc/Ft
+        w1CObIsvOshzWSOpgpOmYAnHhxLGHCvvmNXZxEEVbImojXViiEaXc7hqMQILu1nbHTBMi7
+        /oT7BPZPvMz0zVYibIQOrKL+iUSG6A4ZWdX5CT1JPv6F/WDUenOePgLGzPM7sA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1669392127;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=amZ2eNZc2IpuqO8I2HCrrqLSq4BbWLC0jk8j44kBK9Y=;
+        b=Bg6IZ6DdVr1Ehr8PaSI157FLXKYhciJWLXQO3AenqtyoheN8UYEEcjsOMIG3rnKPAFyVZo
+        7Jy8hWaDq1iw3lTG+Ksv8+A9iK0/rFqspyQ8YF8LYU8BZkFSC7AdRWmZg3S06ABVuaeNJc
+        /hqCJjFNVetnZhHPxkrfZjnoSzPpc38nvd36wu9X+2ZMCXBQHFd3z4uSsbUXzmzXOKsomy
+        XV4qCJBhVM/Qcjj5YrkRzmQJckRjotkvsmb2i+wZ5E2lBo34PZpE+TjtJqzedHITf17FlB
+        8aLQmMwaKTpcuH7sZf3reL2pFGal+0Z+bEY4JOARKIyQ6+ifFGDCMOBw518U+A==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1669392127; a=rsa-sha256;
+        cv=none;
+        b=eiEevxM7wH5rbfV20Qcerzvyd+b02zroz8NCmmeuIE1aPIugxTkDaNu87mZJszweqSoALv
+        3gIkAHXylXJtOmTsnMBROCcWEx/F05Bq6IlZgsoO3yR0710yNcIoL5c3IrfEaG3PeiTHz9
+        j8NK2womqJSNm+paDVi2AZ6jPgauQFYRs0rrerlITS3dMuCAjhoBuMVLcjKDEJoakCzSw8
+        otD3do2D3V2sT7jayHLehBNtgwVMftZcYcg9hAYvog9sEEIqJ0j1cGZS/fJmLE0XtGiqqk
+        CzNW1QXfYmn6S4pj3lE78RIvABWHfHTJuYEvaJoRvq1rFGesfgqSIPoTlbDLng==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 8C68C634C92;
+        Fri, 25 Nov 2022 18:02:07 +0200 (EET)
+Date:   Fri, 25 Nov 2022 18:02:07 +0200
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     shravan kumar <shravan.chippa@microchip.com>
+Cc:     paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
+        mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 4/6] media: i2c: imx334: add default values in
+ 3840x2160@60 array
+Message-ID: <Y4Dm//xBeYBijT4d@valkosipuli.retiisi.eu>
+References: <20221125050807.1857479-1-shravan.chippa@microchip.com>
+ <20221125050807.1857479-5-shravan.chippa@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <de7a776e-3fb2-3631-c301-847502fc1a39@xs4all.nl>
+In-Reply-To: <20221125050807.1857479-5-shravan.chippa@microchip.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Thanks for review.
+Hi Shravan,
 
-On Fri, Nov 25, 2022 at 03:28:30PM +0100, Hans Verkuil wrote:
-> On 25/11/2022 14:34, Volodymyr Kharuk wrote:
-> > Add description about V4L2_CID_TOF_PHASE_SEQ, V4L2_CID_TOF_FMOD
-> > and V4L2_CID_TOF_TINT.
-> > Also updated MAINTAINERS with new ext-ctrls-tof file.
-> > 
-> > Signed-off-by: Volodymyr Kharuk <vkh@melexis.com>
-> > ---
-> >  .../userspace-api/media/v4l/common.rst        |  1 +
-> >  .../userspace-api/media/v4l/ext-ctrls-tof.rst | 35 +++++++++++++++++++
-> >  MAINTAINERS                                   |  7 ++++
-> >  3 files changed, 43 insertions(+)
-> >  create mode 100644 Documentation/userspace-api/media/v4l/ext-ctrls-tof.rst
-> > 
-> > diff --git a/Documentation/userspace-api/media/v4l/common.rst b/Documentation/userspace-api/media/v4l/common.rst
-> > index ea0435182e44..1ea79e453066 100644
-> > --- a/Documentation/userspace-api/media/v4l/common.rst
-> > +++ b/Documentation/userspace-api/media/v4l/common.rst
-> > @@ -52,6 +52,7 @@ applicable to all devices.
-> >      ext-ctrls-fm-rx
-> >      ext-ctrls-detect
-> >      ext-ctrls-colorimetry
-> > +    ext-ctrls-tof
-> >      fourcc
-> >      format
-> >      planar-apis
-> > diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-tof.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-tof.rst
-> > new file mode 100644
-> > index 000000000000..8902cc7cd47b
-> > --- /dev/null
-> > +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-tof.rst
-> > @@ -0,0 +1,35 @@
-> > +.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-> > +
-> > +.. _tof-controls:
-> > +
-> > +***************************************
-> > +Time of Flight Camera Control Reference
-> > +***************************************
-> > +
-> > +The Time of Flight class includes controls for digital features
-> > +of TOF camera.
+On Fri, Nov 25, 2022 at 10:38:05AM +0530, shravan kumar wrote:
+> From: Shravan Chippa <shravan.chippa@microchip.com>
 > 
-> You might want to extend this description a bit and give more info
-> about how they work. Perhaps a link to wikipedia or something
-> might help too.
-I was not sure what to add here. Ok, I will update.
+> -If we have only one mode there is no need to update camera
+> reset(default) values when we initialize the camera
+
+How is this related to the patch?
+
 > 
-> > +
-> > +.. _tof-control-id:
-> > +
-> > +Time of Flight Camera Control IDs
-> > +=================================
-> > +
-> > +``V4L2_CID_TOF_CLASS (class)``
-> > +    The TOF class descriptor. Calling :ref:`VIDIOC_QUERYCTRL` for
-> > +    this control will return a description of this control class.
-> > +
-> > +``V4L2_CID_TOF_PHASE_SEQ (dynamic array u16)``
-> > +    Change the shift between illumination and sampling for each phase
-> > +    in degrees. A distance/confidence picture is obtained by merging
-> > +    3..8 captures of the same scene using different phase shifts(some
+> -If we have mutipull modes in this case we need all value to
+> write while camera initializing, so i will not effect other modes
+> while shifting dynamically
 > 
-> Space before (
+> -All default values for 3840x2160@60 updated becouse if we change
+> the mode we will not be able to recover the values, so add in
+> mode_3840x2160_regs[] array
+
+Please remove dashes in front of the paragrahs and use period in the end of
+sentences.
+
+Are these registers' values specific to this mode or are they different on
+different modes?
+
 > 
-> > +    TOF sensors use different frequency modulation).
+> Signed-off-by: Shravan Chippa <shravan.chippa@microchip.com>
+> ---
+>  drivers/media/i2c/imx334.c | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
 > 
-> Either: use -> use a
-> Or:     modulation -> modulations
-> 
-> It's not clear right now whether "frequency modulation" is meant to be singular
-> or plural.
-> 
-> > +
-> > +    The maximum array size is driver specific.
-> > +
-> > +``V4L2_CID_TOF_FMOD (dynamic array u8)``
-> > +    The control sets the modulation frequency(in Mhz) per each phase.
-> 
-> Space before (
-> 
-> per each phase -> for each phase
-> 
-> > +    The maximum array size is driver specific.
-> 
-> What does the maximum array size signify? The number of phases?
-> It's not clear from the spec (and I have to admit I know very little
-> about TOF sensors).
-yes, array size defines the number of phases.
-But the maximum number of phases can be different and depend on the sensor.
-I'll update the doc.
-> 
-> > +
-> > +``V4L2_CID_TOF_TINT (dynamic array u16)``
-> > +    The control sets the integration time(in us) per each phase.
-> 
-> Add space before (
-> 
-> per each phase -> for each phase
-> 
-> > +    The maximum array size is driver specific.
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index aa1974054fce..a2bc2ce53056 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -13111,6 +13111,13 @@ S:	Supported
-> >  W:	http://www.melexis.com
-> >  F:	drivers/iio/temperature/mlx90632.c
-> >  
-> > +MELEXIS MLX7502X DRIVER
-> > +M:	Volodymyr Kharuk <vkh@melexis.com>
-> > +L:	linux-media@vger.kernel.org
-> > +S:	Supported
-> > +W:	http://www.melexis.com
-> > +F:	Documentation/userspace-api/media/v4l/ext-ctrls-tof.rst
-> > +
-> >  MELFAS MIP4 TOUCHSCREEN DRIVER
-> >  M:	Sangwon Jee <jeesw@melfas.com>
-> >  S:	Supported
-> 
-> Regards,
-> 
-> 	Hans
+> diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
+> index d3bb62c162b3..cd41df56ab7d 100644
+> --- a/drivers/media/i2c/imx334.c
+> +++ b/drivers/media/i2c/imx334.c
+> @@ -166,6 +166,7 @@ static const struct imx334_reg mode_3840x2160_regs[] = {
+>  	{0x3288, 0x21},
+>  	{0x328a, 0x02},
+>  	{0x302c, 0x3c},
+> +	{0x302d, 0x00},
+>  	{0x302e, 0x00},
+>  	{0x302f, 0x0f},
+>  	{0x3076, 0x70},
+> @@ -240,7 +241,26 @@ static const struct imx334_reg mode_3840x2160_regs[] = {
+>  	{0x3794, 0x7a},
+>  	{0x3796, 0xa1},
+>  	{0x3e04, 0x0e},
+> +	{0x319e, 0x00},
+>  	{0x3a00, 0x01},
+> +	{0x3A18, 0xBF},
+> +	{0x3A19, 0x00},
+> +	{0x3A1A, 0x67},
+> +	{0x3A1B, 0x00},
+> +	{0x3A1C, 0x6F},
+> +	{0x3A1D, 0x00},
+> +	{0x3A1E, 0xD7},
+> +	{0x3A1F, 0x01},
+> +	{0x3A20, 0x6F},
+> +	{0x3A21, 0x00},
+> +	{0x3A22, 0xCF},
+> +	{0x3A23, 0x00},
+> +	{0x3A24, 0x6F},
+> +	{0x3A25, 0x00},
+> +	{0x3A26, 0xB7},
+> +	{0x3A27, 0x00},
+> +	{0x3A28, 0x5F},
+> +	{0x3A29, 0x00},
+>  };
+>  
+>  /* Supported sensor mode configurations */
 
 -- 
---
-Volodymyr Kharuk
-Embedded Software Engineer
-Melexis-Ukraine
-Mykhaila Kotel'nykova St, 4, Kyiv
-Mobile phone: +38 050 346 5527
-www.melexis.com
----
-The contents of this e-mail are CONFIDENTIAL AND PROPRIETARY. Please read
-our disclaimer at http://www.melexis.com/mailpolicy
+Kind regards,
 
+Sakari Ailus
