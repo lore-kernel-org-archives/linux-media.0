@@ -2,108 +2,74 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8546C4332F
-	for <linux-media@archiver.kernel.org>; Fri, 25 Nov 2022 11:05:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84F81C4167B
+	for <linux-media@archiver.kernel.org>; Fri, 25 Nov 2022 11:06:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbiKYLFn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 25 Nov 2022 06:05:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
+        id S230235AbiKYLGL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 25 Nov 2022 06:06:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiKYLFm (ORCPT
+        with ESMTP id S229498AbiKYLGJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 25 Nov 2022 06:05:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698B54D5C9
-        for <linux-media@vger.kernel.org>; Fri, 25 Nov 2022 03:04:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669374290;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EIsNFOFnhjxNTgJU/2vZA8CiSz+sEWLC1ebQetbQ8TI=;
-        b=R5ybHP+mIGURzD9d5Y0jYGlFJQPyZ94PZ92B3XscNBVwFU3qf1txswQ9NV/CoUPveA1Ef1
-        Nc7Fu+Uw0nw6PlkTPRhImKEpMcSWYZX8O2pbUPKwGvWBb2gS7mXM+y22eFk421Y4dqHZ9S
-        cbDy2vbS4eecO2aTN2tgCdlUxfu0hz0=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-340-EMwBDDXXObGEBG_Q2LtgtA-1; Fri, 25 Nov 2022 06:04:49 -0500
-X-MC-Unique: EMwBDDXXObGEBG_Q2LtgtA-1
-Received: by mail-wm1-f69.google.com with SMTP id az40-20020a05600c602800b003cfa26c40easo3815107wmb.1
-        for <linux-media@vger.kernel.org>; Fri, 25 Nov 2022 03:04:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EIsNFOFnhjxNTgJU/2vZA8CiSz+sEWLC1ebQetbQ8TI=;
-        b=TyE8uWmcb27ZB0anmtJzEsqEhnO/EOasY/GaNSHCjgLBi6cGj6v4NcxL7LG454OUkQ
-         GPvd6aGeZqNGq4HkdC9XDCQXT2v8Hjl7kdKXoSV/e/hxFhudDHKmlF35UCi4pW6HjIgI
-         T2VYckyeJVN40DFgAIvtVC64Ha/rkN7YHIa5/YfPJr6/Jk3zBxo1j42taDWf9wldms/I
-         FHAjU2aE54tcBkhadHBMINYBvkIvX664djqyiglLkFcCUqSqvKzeuu/qqWaxxe0gx7+L
-         2O2wKU18AFfvDjGHqFOvlFTzrXCXkxwOiSk8korWrl7U39IRkNOkCxvsP50NFlSIJXjf
-         R89w==
-X-Gm-Message-State: ANoB5plMmPGxv21sFYuZQbGUCcgajgVlr5QA2B2FMueuAz26M+kpkKJD
-        JaGBBTaabwvVziapMY+kgVBiVSKA6QrPCWtHvrTpdGcmxTjQq4IdmJru1G/WLUm+32Kwm4RQews
-        4TZQuhKucW5Xg1dKU73kdCr8=
-X-Received: by 2002:adf:f6d1:0:b0:241:e2af:444f with SMTP id y17-20020adff6d1000000b00241e2af444fmr10706105wrp.676.1669374287047;
-        Fri, 25 Nov 2022 03:04:47 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4ai6UB7oIeeI+sRTVyelphEoAhUUiZPfWL2SD5YRQotSiu7iQrCPjltzySG4CbRwXoVo/zjA==
-X-Received: by 2002:adf:f6d1:0:b0:241:e2af:444f with SMTP id y17-20020adff6d1000000b00241e2af444fmr10706084wrp.676.1669374286732;
-        Fri, 25 Nov 2022 03:04:46 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id f14-20020a05600c154e00b003c6f3e5ba42sm10164544wmg.46.2022.11.25.03.04.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Nov 2022 03:04:45 -0800 (PST)
-Message-ID: <d5451d30-be68-c492-6ec8-41681db400e2@redhat.com>
-Date:   Fri, 25 Nov 2022 12:04:44 +0100
+        Fri, 25 Nov 2022 06:06:09 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CD54D5C7;
+        Fri, 25 Nov 2022 03:06:08 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="314496495"
+X-IronPort-AV: E=Sophos;i="5.96,193,1665471600"; 
+   d="scan'208";a="314496495"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2022 03:06:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="706036494"
+X-IronPort-AV: E=Sophos;i="5.96,193,1665471600"; 
+   d="scan'208";a="706036494"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008.fm.intel.com with ESMTP; 25 Nov 2022 03:06:06 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andy@kernel.org>)
+        id 1oyWWy-00HCRj-2L;
+        Fri, 25 Nov 2022 13:06:04 +0200
+Date:   Fri, 25 Nov 2022 13:06:04 +0200
+From:   Andy Shevchenko <andy@kernel.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Dan Scally <dan.scally@ideasonboard.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        platform-driver-x86@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org
+Subject: Re: [PATCH 0/3] platform/x86: int3472/discrete: Make it work with
+ IPU6
+Message-ID: <Y4ChnCHkV9RufccT@smile.fi.intel.com>
+References: <20221124200007.390901-1-hdegoede@redhat.com>
+ <e5d8913c-13ba-3b11-94bc-5d1ee1d736b0@ideasonboard.com>
+ <Y4Cf5tLWsBDTndei@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 12/24] drm/vc4: Move HVS state to main header
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Maxime Ripard <mripard@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     David Gow <davidgow@google.com>, linaro-mm-sig@lists.linaro.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
-        linux-media@vger.kernel.org, kunit-dev@googlegroups.com,
-        dri-devel@lists.freedesktop.org,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-kernel@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-References: <20221123-rpi-kunit-tests-v1-0-051a0bb60a16@cerno.tech>
- <20221123-rpi-kunit-tests-v1-12-051a0bb60a16@cerno.tech>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20221123-rpi-kunit-tests-v1-12-051a0bb60a16@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4Cf5tLWsBDTndei@pendragon.ideasonboard.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 11/23/22 16:25, Maxime Ripard wrote:
-> In order to introduce unit tests for the HVS state computation, we'll
-> need access to the vc4_hvs_state struct definition and its associated
-> helpers.
-> 
-> Let's move them in our driver header.
-> 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> ---
+On Fri, Nov 25, 2022 at 12:58:46PM +0200, Laurent Pinchart wrote:
+> On Fri, Nov 25, 2022 at 10:17:17AM +0000, Dan Scally wrote:
 
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+...
+
+> Can the LED framework be used without having the LED exposed to
+> userspace ?
+
+I believe the correct question here is "can the states of some leds be
+read-only from user perspective" (this way any changes into led subsystems
+looks less intrusive, esp. taking into account that subsystem is de facto
+unmaintained).
 
 -- 
-Best regards,
+With Best Regards,
+Andy Shevchenko
 
-Javier Martinez Canillas
-Core Platforms
-Red Hat
 
