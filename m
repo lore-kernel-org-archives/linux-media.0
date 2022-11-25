@@ -2,75 +2,135 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC535C4332F
-	for <linux-media@archiver.kernel.org>; Fri, 25 Nov 2022 09:26:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C928C4332F
+	for <linux-media@archiver.kernel.org>; Fri, 25 Nov 2022 09:28:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbiKYJ0w (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 25 Nov 2022 04:26:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
+        id S229877AbiKYJ2q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 25 Nov 2022 04:28:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiKYJ02 (ORCPT
+        with ESMTP id S229871AbiKYJ22 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 25 Nov 2022 04:26:28 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708F9326F1;
-        Fri, 25 Nov 2022 01:26:21 -0800 (PST)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NJTxQ1ltpz15Mv1;
-        Fri, 25 Nov 2022 17:25:46 +0800 (CST)
-Received: from huawei.com (10.175.112.208) by kwepemi500013.china.huawei.com
- (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 25 Nov
- 2022 17:26:18 +0800
-From:   Zheng Yongjun <zhengyongjun3@huawei.com>
-To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>,
-        <linux-media@vger.kernel.org>, <openbmc@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-CC:     <joel@jms.id.au>, <andrew@aj.id.au>
-Subject: [PATCH] media: aspeed: Fix return value check in aspeed_video_debugfs_create()
-Date:   Fri, 25 Nov 2022 09:24:15 +0000
-Message-ID: <20221125092415.29635-1-zhengyongjun3@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 25 Nov 2022 04:28:28 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB53A222BB;
+        Fri, 25 Nov 2022 01:28:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669368504; x=1700904504;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Wzwmhe1tAJXVDVxgspmjOf4RzyKkfCj4R+nMlHGJos8=;
+  b=dcMxsgzS+J1wjQfB1wt4NC632r/WZPuOF4+DsiVMZIms1Mnz5hVezLuf
+   SgJUS96g0oWxgD9wUvutFR+jaoPo08g+lQ/+uqvpe93odydm23blLZ8Fq
+   ucHGe8xpH7HfLv1q0b027OrP2FByQQFYLg98fNK6Qurkawum3Yo9W1ls6
+   1+HMwi2qDr4P77aTAbaEJmlTjtbCQj/dGg0/obQJmAZah/ZDOH4VDnhQu
+   amuIRD74kzpCj0MX9rD6vtTpaupDq/GXol8ojBdJD3FQio3YUShYGI1md
+   9PsRwUHTIWAWjbrZfC3Q/9K3l8MXqXm87JKiLgVcAvVkefyJRTGx0O69B
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,193,1665471600"; 
+   d="scan'208";a="190492699"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Nov 2022 02:28:23 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 25 Nov 2022 02:28:22 -0700
+Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Fri, 25 Nov 2022 02:28:21 -0700
+From:   Eugen Hristev <eugen.hristev@microchip.com>
+To:     <claudiu.beznea@microchip.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        Eugen Hristev <eugen.hristev@microchip.com>
+Subject: [PATCH] ARM: configs: switch to new MICROCHIP_ISC driver
+Date:   Fri, 25 Nov 2022 11:28:12 +0200
+Message-ID: <20221125092812.446379-1-eugen.hristev@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.175.112.208]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In case of error, the function debugfs_create_file() returns ERR_PTR()
-and never returns NULL. The NULL test in the return value check
-should be replaced with IS_ERR().
+The ATMEL_ISC and ATMEL_XISC have been deprecated and moved to staging.
+Use the new MICROCHIP_ISC/MICROCHIP_XISC symbols which are the
+replacement drivers.
 
-Fixes: 52fed10ad756 ("media: aspeed: add debugfs")
-Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 ---
- drivers/media/platform/aspeed/aspeed-video.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/aspeed/aspeed-video.c b/drivers/media/platform/aspeed/aspeed-video.c
-index 20f795ccc11b..c8fc2450e409 100644
---- a/drivers/media/platform/aspeed/aspeed-video.c
-+++ b/drivers/media/platform/aspeed/aspeed-video.c
-@@ -1780,10 +1780,12 @@ static int aspeed_video_debugfs_create(struct aspeed_video *video)
- 	debugfs_entry = debugfs_create_file(DEVICE_NAME, 0444, NULL,
- 					    video,
- 					    &aspeed_video_debugfs_ops);
--	if (!debugfs_entry)
-+	if (IS_ERR(debugfs_entry)) {
- 		aspeed_video_debugfs_remove(video);
-+		return ERR_PTR(debugfs_entry);
-+	}
+Hi,
 
--	return !debugfs_entry ? -EIO : 0;
-+	return 0;
- }
- #else
- static void aspeed_video_debugfs_remove(struct aspeed_video *video) { }
---
-2.17.1
+This should go in 6.2, after the media subsystem new features will be merged.
+The tree here :
+https://git.linuxtv.org/media_stage.git/
+... contains the patches that are destined for 6.2 and perform the
+move of the ISC drivers to staging:
+
+https://git.linuxtv.org/media_stage.git/commit/?id=55927c98a2c88019e23353a87f44032107ca2854
+
+Hence this patch has to go in the same kernel version to allow the current
+defconfigs that use the ISC to switch to the new driver.
+(The old driver won't be selected anymore since it depends on
+MEDIA_DEPRECATED , so that symbol has to be selected first to select the
+old driver which is now in staging )
+
+Thanks
+
+ arch/arm/configs/multi_v7_defconfig | 6 +++---
+ arch/arm/configs/sama5_defconfig    | 2 +-
+ arch/arm/configs/sama7_defconfig    | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+index b61b2e3d116b..d1686bc40e5d 100644
+--- a/arch/arm/configs/multi_v7_defconfig
++++ b/arch/arm/configs/multi_v7_defconfig
+@@ -663,11 +663,11 @@ CONFIG_USB_VIDEO_CLASS=m
+ CONFIG_V4L_PLATFORM_DRIVERS=y
+ CONFIG_V4L_MEM2MEM_DRIVERS=y
+ CONFIG_VIDEO_ASPEED=m
+-CONFIG_VIDEO_ATMEL_ISC=m
+-CONFIG_VIDEO_ATMEL_XISC=m
+ CONFIG_VIDEO_ATMEL_ISI=m
+-CONFIG_VIDEO_MICROCHIP_CSI2DC=m
+ CONFIG_VIDEO_MMP_CAMERA=m
++CONFIG_VIDEO_MICROCHIP_ISC=m
++CONFIG_VIDEO_MICROCHIP_XISC=m
++CONFIG_VIDEO_MICROCHIP_CSI2DC=m
+ CONFIG_VIDEO_TEGRA_VDE=m
+ CONFIG_VIDEO_RENESAS_CEU=m
+ CONFIG_VIDEO_RCAR_VIN=m
+diff --git a/arch/arm/configs/sama5_defconfig b/arch/arm/configs/sama5_defconfig
+index 877bbe7b777e..f89fd4e0d10a 100644
+--- a/arch/arm/configs/sama5_defconfig
++++ b/arch/arm/configs/sama5_defconfig
+@@ -150,8 +150,8 @@ CONFIG_MEDIA_PLATFORM_SUPPORT=y
+ CONFIG_MEDIA_USB_SUPPORT=y
+ CONFIG_USB_VIDEO_CLASS=m
+ CONFIG_V4L_PLATFORM_DRIVERS=y
+-CONFIG_VIDEO_ATMEL_ISC=y
+ CONFIG_VIDEO_ATMEL_ISI=y
++CONFIG_VIDEO_MICROCHIP_ISC=y
+ CONFIG_VIDEO_MT9V032=m
+ CONFIG_VIDEO_OV2640=m
+ CONFIG_VIDEO_OV5640=m
+diff --git a/arch/arm/configs/sama7_defconfig b/arch/arm/configs/sama7_defconfig
+index 8f28c9d443f0..cc42cea77f38 100644
+--- a/arch/arm/configs/sama7_defconfig
++++ b/arch/arm/configs/sama7_defconfig
+@@ -140,7 +140,7 @@ CONFIG_MEDIA_SUPPORT_FILTER=y
+ CONFIG_MEDIA_CAMERA_SUPPORT=y
+ CONFIG_MEDIA_PLATFORM_SUPPORT=y
+ CONFIG_V4L_PLATFORM_DRIVERS=y
+-CONFIG_VIDEO_ATMEL_XISC=y
++CONFIG_VIDEO_MICROCHIP_XISC=y
+ CONFIG_VIDEO_MICROCHIP_CSI2DC=y
+ CONFIG_VIDEO_IMX219=m
+ CONFIG_VIDEO_IMX274=m
+-- 
+2.25.1
 
