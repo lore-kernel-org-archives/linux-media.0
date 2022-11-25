@@ -2,252 +2,228 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AE36C4321E
-	for <linux-media@archiver.kernel.org>; Fri, 25 Nov 2022 17:07:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1D1EC4332F
+	for <linux-media@archiver.kernel.org>; Fri, 25 Nov 2022 18:38:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbiKYRHX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 25 Nov 2022 12:07:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
+        id S229796AbiKYSio (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 25 Nov 2022 13:38:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbiKYRHV (ORCPT
+        with ESMTP id S229601AbiKYSim (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 25 Nov 2022 12:07:21 -0500
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6570247335
-        for <linux-media@vger.kernel.org>; Fri, 25 Nov 2022 09:07:20 -0800 (PST)
-Received: by mail-qk1-x734.google.com with SMTP id z1so3001877qkl.9
-        for <linux-media@vger.kernel.org>; Fri, 25 Nov 2022 09:07:20 -0800 (PST)
+        Fri, 25 Nov 2022 13:38:42 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A11C10540
+        for <linux-media@vger.kernel.org>; Fri, 25 Nov 2022 10:38:42 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id e141so6031605ybh.3
+        for <linux-media@vger.kernel.org>; Fri, 25 Nov 2022 10:38:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=97kBq1lHFGTQU+jw0/b/R8A8S8A1UfU8aPvHkRRFZT4=;
-        b=20KP1RhXPKqqM2jWK5xsvK/NjCT6INujtBc6GaRsjf4fMRpNCxBMaCGt/1zoioiro+
-         Qjgxu2+QSi6zaOGIa5lKH6/wvdtKSXSpmVtTxFkKqTbVGNiZfprfSwGfVAqZXbY3fTtV
-         gcZktnSKO7PkuJ5dUsnTXJ0HgSdYfGbli61uB3hnnF62JBLpRB2QOMP7UAM/f6kKSp7L
-         3kRf9KIoIjMH6Fm8/0ieNzBiqxqb+oEtilxQSE1M5I7pjT5J3+d0YGmSFr+ohGYuB7Cs
-         g0gcoMNUFQj6RwxESEtsjVfrf+b7Gy257GahKgFhtnKaM4IFJy9S72r9tl81jBuVRtNJ
-         dX5Q==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R113yfqtwbqC0ITDeGvhSNa3zHrb/nkgAVqOtFCA4Qc=;
+        b=sS359yY7pQIaB3NIMVHYcqDqWmEn/ZMyYfc7T6oA3VOjJmqn0ykiDIAFmwHIQSbsLQ
+         SwBMwRnZhBCbXGg6szCpfHmDgxIEcskbbt0mPR6iR10Lm8nOmVRFbaaGEpADctbzhWX7
+         fPe0fWjas4DFr8/jjVLoxV6jKNqu62BAu3ItCwKWCUpG4SZvIJExxAKMtYoF3/lTTibB
+         wtCyMudC0RoYxPe2jfPlNOdYXLMVwnasC9E0dZJpO6P7XJIkWmnvWU/WvCispvu5W9wV
+         J3BwUkORUs03UIenFoYtgGx+XVyBQFc0F2NrmWWLOlFOUKkSTmiql4z9rE5LNMxJQJmf
+         by+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=97kBq1lHFGTQU+jw0/b/R8A8S8A1UfU8aPvHkRRFZT4=;
-        b=vi0aZfvz90YmQm7qu55JTfINcG6h5tLh0IQBXdzOXuJVP6vZvCBJbTnZZSurDuudfn
-         9CrKQN7fjPpskG3QXVCiBpj+b0lTCUier6R8rx1PCepwBWhDWj532ib3HnH0ZlX0A7R+
-         QV8fNtaCt29nILgkYGTPGIfti+yfGObR3IOstF5D91sgtWJ7FtYu3xZmKq1a/P3DvLvW
-         0FaqC3Og3rWhTQkqMFWC5S8tQF11Z68FXUSGQJakdl7fYFRuWhp2uMQe4I3WQYCiOeeR
-         xVY57XcmZaHWG/Ae0QvmkehipqKPc7kwYDyI9L+iyNsj4WVQHO3b9lOoXNzLA9zBUqHM
-         J3hw==
-X-Gm-Message-State: ANoB5pnz48FI8oCV4Fodv1z9X/AdnBSXMD1pIaoB9K2XjK7Ok2FoeooR
-        WaVDl/V9uTkCcgPa3cXSOUVQyA==
-X-Google-Smtp-Source: AA0mqf73BwAzRPM9OhZfqMvWynMdb0MPgrv9Ij3EKAfQMLZasIQDPXgVwAUXC0S60Weaq3zaXcXzHw==
-X-Received: by 2002:a05:620a:2b8b:b0:6fb:28a:4a57 with SMTP id dz11-20020a05620a2b8b00b006fb028a4a57mr35004047qkb.239.1669396039467;
-        Fri, 25 Nov 2022 09:07:19 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
-        by smtp.gmail.com with ESMTPSA id bv14-20020a05622a0a0e00b0039c37a7914csm2502106qtb.23.2022.11.25.09.07.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 09:07:19 -0800 (PST)
-Message-ID: <35256805b1ce0b2b7533f53f658c799a37255469.camel@ndufresne.ca>
-Subject: Re: [PATCH] media: videobuf2: add V4L2_BUF_FLAG_HEADERS_ONLY flag
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org
-Cc:     shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Tomasz Figa <tfiga@chromium.org>
-Date:   Fri, 25 Nov 2022 12:07:17 -0500
-In-Reply-To: <15ba9b9e-f3f6-7f30-c200-d7c9593a4735@xs4all.nl>
-References: <20220712093754.23370-1-ming.qian@nxp.com>
-         <15ba9b9e-f3f6-7f30-c200-d7c9593a4735@xs4all.nl>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R113yfqtwbqC0ITDeGvhSNa3zHrb/nkgAVqOtFCA4Qc=;
+        b=rRNpbHdUCGJhc5h40lpyy5jcTm8DbLoKVlG5JV4u2wJIfNhu94eoiCKxhKBm/rx96H
+         b3/cEacVBN9rYNaDLs96Fd+0R/dhL0cajJjvPaDdoYO7L2+uIdGTOO3eesz6b9nOzK3E
+         YtGDxJOChsW61yyOB6lMBVcsxa7POuGhNBxB6hDk0zxrTLoB4oWsltCqsAbLxOm3lV0O
+         tX//2ExNEQlXkfGfB7dnvOglayKWiZsxprUZxQy/ai3s6tGts4SNOA+nvZETxqrRkpjG
+         PTMyvH12+0jdW3HPRYcZOqfkQTYHFCCUo7l9RwHfYHLPUVgflH9Rrq3U6aZlCqYQV04h
+         u83A==
+X-Gm-Message-State: ANoB5pln0eHiKr8r1otLNxFL3blYBX5N2rlVz6T69onWoekNj+CP0rI0
+        GGIfl3z2jVS20aa5Fes0/3uhpyqKV62ndz+0UC06vw==
+X-Google-Smtp-Source: AA0mqf5AXflwQEOLKlJmJazpNyHLivko8S4A9tyMg119AsSvYjt/IFoUuaE2j1mVksysNrm0lltNF3qJhF/EdhJtEFs=
+X-Received: by 2002:a25:7408:0:b0:6f2:49a7:38ef with SMTP id
+ p8-20020a257408000000b006f249a738efmr6331877ybc.365.1669401521064; Fri, 25
+ Nov 2022 10:38:41 -0800 (PST)
+MIME-Version: 1.0
+References: <20221123193519.3948105-1-tjmercier@google.com>
+ <260a86f0-057e-e235-ac38-abeb922d0dc1@amd.com> <Y38z6A5IF/BlXVPp@phenom.ffwll.local>
+ <63972059-1c23-ceb9-841c-1cfee29a1c77@gmail.com>
+In-Reply-To: <63972059-1c23-ceb9-841c-1cfee29a1c77@gmail.com>
+From:   "T.J. Mercier" <tjmercier@google.com>
+Date:   Fri, 25 Nov 2022 10:38:30 -0800
+Message-ID: <CABdmKX2QvW_7qDeosxES4jLsTDPUWS-Qphj4FaJUsqDeVQbf9A@mail.gmail.com>
+Subject: Re: [Linaro-mm-sig] Re: [PATCH] dma-buf: A collection of typo and
+ documentation fixes
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
+Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
-MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Replying on top, a bit unusual, but I think it makes sense ....
+On Thu, Nov 24, 2022 at 1:43 AM Christian K=C3=B6nig
+<ckoenig.leichtzumerken@gmail.com> wrote:
+>
+> Am 24.11.22 um 10:05 schrieb Daniel Vetter:
+> > On Thu, Nov 24, 2022 at 08:03:09AM +0100, Christian K=C3=B6nig wrote:
+> >> Am 23.11.22 um 20:35 schrieb T.J. Mercier:
+> >>> I've been collecting these typo fixes for a while and it feels like
+> >>> time to send them in.
+> >>>
+> >>> Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> >> Acked-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+> > Will you also push this? I think tj doesn't have commit rights yet, and=
+ I
+> > somehow can't see the patch locally (I guess it's stuck in moderation).
+>
+> I was just about to complain that this doesn't apply cleanly to
+> drm-misc-next.
+>
+> Trivial problem, one of the typos was just removed by Dimitry a few
+> weeks ago.
+>
+> I've fixed that up locally and pushed the result, but nevertheless
+> please make sure that DMA-buf patches are based on the drm branches.
+>
+I'm sorry, this was on top of a random spot in Linus's 6.1-rc5.
+(84368d882b96 Merge tag 'soc-fixes-6.1-3') I'm not sure why I did
+that, but I suspect it was after a fresh git pull. I have too many
+repos.
 
-Le jeudi 24 novembre 2022 =C3=A0 11:42 +0100, Hans Verkuil a =C3=A9crit=C2=
-=A0:
-> +CC Nicolas and Tomasz.
->=20
-> I would like some feedback for this patch.
->=20
-> On 12/07/2022 11:37, Ming Qian wrote:
-> > By setting the V4L2_BUF_FLAG_HEADERS_ONLY flag,
-> > hint the vb2 only contains stream header,
-> > but does not contain any frame data.
-> >=20
-> > This flag needs to be used when header mode is set to
-> > V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE.
-> >=20
-> > Signed-off-by: Ming Qian <ming.qian@nxp.com>
-> > ---
-> >  Documentation/userspace-api/media/v4l/buffer.rst      | 11 +++++++++++
-> >  .../userspace-api/media/v4l/ext-ctrls-codec.rst       | 10 +++++++---
-> >  include/uapi/linux/videodev2.h                        |  2 ++
-> >  3 files changed, 20 insertions(+), 3 deletions(-)
-> >=20
-> > diff --git a/Documentation/userspace-api/media/v4l/buffer.rst b/Documen=
-tation/userspace-api/media/v4l/buffer.rst
-> > index 4638ec64db00..18a6f5fcc822 100644
-> > --- a/Documentation/userspace-api/media/v4l/buffer.rst
-> > +++ b/Documentation/userspace-api/media/v4l/buffer.rst
-> > @@ -607,6 +607,17 @@ Buffer Flags
-> >  	the format. Any subsequent call to the
-> >  	:ref:`VIDIOC_DQBUF <VIDIOC_QBUF>` ioctl will not block anymore,
-> >  	but return an ``EPIPE`` error code.
-> > +    * .. _`V4L2-BUF-FLAG-HEADERS-ONLY`:
-> > +
-> > +      - ``V4L2_BUF_FLAG_HEADERS_ONLY``
-> > +      - 0x00200000
-> > +      - This flag may be set when the buffer only contains codec
->=20
-> Set by the driver or userspace? Or either, depending on whether it is
-> an encoder or decoder?
+Thanks all for the reviews.
 
-I think it should be set by the driver when encoding, and set by user space=
- when
-decoding. And of course, should be documented as previous review underline.
-
->=20
-> codec -> the codec
->=20
-> > +	header, but does not contain any frame data. Usually the codec
-> > +	header is merged to the next idr frame, with the flag
->=20
-> to -> with
-> idr -> IDR
->=20
-> > +	``V4L2_BUF_FLAG_KEYFRAME``, but there is still some scenes that will
->=20
-> is -> are
->=20
-> scenes: do you mean 'scenarios'?
->=20
-> > +	split the header and queue it separately. This flag can set only when
->=20
-> "split the header and queue it separately" -> queue the header in a separ=
-ate buffer
->=20
-> can -> can be
->=20
-> > +	codec support V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE,
->=20
-> codec -> the codec
-> support -> supports
->=20
-> > +	and the header mode is set to V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE
-> >      * .. _`V4L2-BUF-FLAG-REQUEST-FD`:
-> > =20
-> >        - ``V4L2_BUF_FLAG_REQUEST_FD``
-> > diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst =
-b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> > index 6183f43f4d73..478b6af4205d 100644
-> > --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> > +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> > @@ -1386,8 +1386,12 @@ enum v4l2_mpeg_video_intra_refresh_period_type -
-> >      (enum)
-> > =20
-> >  enum v4l2_mpeg_video_header_mode -
-> > -    Determines whether the header is returned as the first buffer or i=
-s
-> > -    it returned together with the first frame. Applicable to encoders.
-> > +    Determines whether the header is returned as the first buffer
-> > +    with flag V4L2_BUF_FLAG_HEADERS_ONLY or is
->=20
-> or is it -> or if it is
->=20
-> > +    it returned together with the first frame.
-> > +    Applicable to encoders and decoders.
-> > +    If it's not implemented in a driver,
-> > +    V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME is to be assumed=
-,
-> >      Possible values are:
-> > =20
-> >  .. raw:: latex
-> > @@ -1401,7 +1405,7 @@ enum v4l2_mpeg_video_header_mode -
-> >      :stub-columns: 0
-> > =20
-> >      * - ``V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE``
-> > -      - The stream header is returned separately in the first buffer.
-> > +      - The stream header is returned separately in the first buffer w=
-ith the flag V4L2_BUF_FLAG_HEADERS_ONLY.
-> >      * - ``V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME``
-> >        - The stream header is returned together with the first encoded
-> >  	frame.
-> > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videod=
-ev2.h
-> > index 5311ac4fde35..6fd96acd6080 100644
-> > --- a/include/uapi/linux/videodev2.h
-> > +++ b/include/uapi/linux/videodev2.h
-> > @@ -1131,6 +1131,8 @@ static inline __u64 v4l2_timeval_to_ns(const stru=
-ct timeval *tv)
-> >  #define V4L2_BUF_FLAG_TSTAMP_SRC_SOE		0x00010000
-> >  /* mem2mem encoder/decoder */
-> >  #define V4L2_BUF_FLAG_LAST			0x00100000
-> > +/* Buffer only contains codec header */
->=20
-> codec -> the codec
->=20
-> > +#define V4L2_BUF_FLAG_HEADERS_ONLY		0x00200000
-> >  /* request_fd is valid */
-> >  #define V4L2_BUF_FLAG_REQUEST_FD		0x00800000
-> > =20
->=20
-> Of course, there needs to be a driver that uses this as well. And drivers=
- that support
-> V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE would need to add support for this f=
-lag as well,
-> I guess.
->=20
-> And what I haven't seen here is *why* you need this flag. There are alrea=
-dy drivers that
-> support V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE, and they managed fine witho=
-ut it.
-
-I think this can make sense, I'm not user of this, since this is OMX/Androi=
-d
-specific behaviour, but I think I can make sense of it.
-
-For encoders, in WebRTC (any RTP, or streaming protocol with keyframe reque=
-st),
-we often ask the encoder to produce a new keyframe. We don't reset the enco=
-der
-this point. Some encoder may resend the headers, as the encoder is in "sepe=
-rate
-mode" it should send it separately. Userland can then handle resending the =
-last
-seem header if it wasn't there. It also help locating when the request was
-actually honoured (I'm guessing there is already a keyframe flag of some so=
-rt).
-So to me this enhancement is valid, it makes everything nicer. I agree it n=
-eeds
-a solid adoption, so any driver supporting this should be ported (could be =
-blind
-ported and tested by their maintainers).
-
-For decoders, if a a decoder is in "separate mode", it seems that sending
-headers must happen this way. If this uses a separate path internally, the
-kernel needs also to be aware which buffers are what (and we don't parse in=
- the
-kernel). In very basic case, the driver assume that the first buffer after
-streamon is a header, but that prevents resolution changes without a
-drain+flush, which android and chromeos folks seems to use. (I always drain=
- and
-flush for what I'm doing).
-
-Nicolas
-
->=20
-> Regards,
->=20
-> 	Hans
-
+> Thanks,
+> Christian.
+>
+> > -Daniel
+> >
+> >>> ---
+> >>>    drivers/dma-buf/dma-buf.c | 14 +++++++-------
+> >>>    include/linux/dma-buf.h   |  6 +++---
+> >>>    2 files changed, 10 insertions(+), 10 deletions(-)
+> >>>
+> >>> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> >>> index dd0f83ee505b..614ccd208af4 100644
+> >>> --- a/drivers/dma-buf/dma-buf.c
+> >>> +++ b/drivers/dma-buf/dma-buf.c
+> >>> @@ -1141,7 +1141,7 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_unmap_attachment, =
+DMA_BUF);
+> >>>     *
+> >>>     * @dmabuf:      [in]    buffer which is moving
+> >>>     *
+> >>> - * Informs all attachmenst that they need to destroy and recreated a=
+ll their
+> >>> + * Informs all attachments that they need to destroy and recreate al=
+l their
+> >>>     * mappings.
+> >>>     */
+> >>>    void dma_buf_move_notify(struct dma_buf *dmabuf)
+> >>> @@ -1159,11 +1159,11 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_move_notify, DMA=
+_BUF);
+> >>>    /**
+> >>>     * DOC: cpu access
+> >>>     *
+> >>> - * There are mutliple reasons for supporting CPU access to a dma buf=
+fer object:
+> >>> + * There are multiple reasons for supporting CPU access to a dma buf=
+fer object:
+> >>>     *
+> >>>     * - Fallback operations in the kernel, for example when a device =
+is connected
+> >>>     *   over USB and the kernel needs to shuffle the data around firs=
+t before
+> >>> - *   sending it away. Cache coherency is handled by braketing any tr=
+ansactions
+> >>> + *   sending it away. Cache coherency is handled by bracketing any t=
+ransactions
+> >>>     *   with calls to dma_buf_begin_cpu_access() and dma_buf_end_cpu_=
+access()
+> >>>     *   access.
+> >>>     *
+> >>> @@ -1190,7 +1190,7 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_move_notify, DMA_B=
+UF);
+> >>>     *   replace ION buffers mmap support was needed.
+> >>>     *
+> >>>     *   There is no special interfaces, userspace simply calls mmap o=
+n the dma-buf
+> >>> - *   fd. But like for CPU access there's a need to braket the actual=
+ access,
+> >>> + *   fd. But like for CPU access there's a need to bracket the actua=
+l access,
+> >>>     *   which is handled by the ioctl (DMA_BUF_IOCTL_SYNC). Note that
+> >>>     *   DMA_BUF_IOCTL_SYNC can fail with -EAGAIN or -EINTR, in which =
+case it must
+> >>>     *   be restarted.
+> >>> @@ -1264,10 +1264,10 @@ static int __dma_buf_begin_cpu_access(struct =
+dma_buf *dmabuf,
+> >>>     * preparations. Coherency is only guaranteed in the specified ran=
+ge for the
+> >>>     * specified access direction.
+> >>>     * @dmabuf:      [in]    buffer to prepare cpu access for.
+> >>> - * @direction:     [in]    length of range for cpu access.
+> >>> + * @direction:     [in]    direction of access.
+> >>>     *
+> >>>     * After the cpu access is complete the caller should call
+> >>> - * dma_buf_end_cpu_access(). Only when cpu access is braketed by bot=
+h calls is
+> >>> + * dma_buf_end_cpu_access(). Only when cpu access is bracketed by bo=
+th calls is
+> >>>     * it guaranteed to be coherent with other DMA access.
+> >>>     *
+> >>>     * This function will also wait for any DMA transactions tracked t=
+hrough
+> >>> @@ -1307,7 +1307,7 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_begin_cpu_access, =
+DMA_BUF);
+> >>>     * actions. Coherency is only guaranteed in the specified range fo=
+r the
+> >>>     * specified access direction.
+> >>>     * @dmabuf:      [in]    buffer to complete cpu access for.
+> >>> - * @direction:     [in]    length of range for cpu access.
+> >>> + * @direction:     [in]    direction of access.
+> >>>     *
+> >>>     * This terminates CPU access started with dma_buf_begin_cpu_acces=
+s().
+> >>>     *
+> >>> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+> >>> index 71731796c8c3..1d61a4f6db35 100644
+> >>> --- a/include/linux/dma-buf.h
+> >>> +++ b/include/linux/dma-buf.h
+> >>> @@ -330,7 +330,7 @@ struct dma_buf {
+> >>>      * @lock:
+> >>>      *
+> >>>      * Used internally to serialize list manipulation, attach/detach =
+and
+> >>> -    * vmap/unmap. Note that in many cases this is superseeded by
+> >>> +    * vmap/unmap. Note that in many cases this is superseded by
+> >>>      * dma_resv_lock() on @resv.
+> >>>      */
+> >>>     struct mutex lock;
+> >>> @@ -365,7 +365,7 @@ struct dma_buf {
+> >>>      */
+> >>>     const char *name;
+> >>> -   /** @name_lock: Spinlock to protect name acces for read access. *=
+/
+> >>> +   /** @name_lock: Spinlock to protect name access for read access. =
+*/
+> >>>     spinlock_t name_lock;
+> >>>     /**
+> >>> @@ -402,7 +402,7 @@ struct dma_buf {
+> >>>      *   anything the userspace API considers write access.
+> >>>      *
+> >>>      * - Drivers may just always add a write fence, since that only
+> >>> -    *   causes unecessarily synchronization, but no correctness issu=
+es.
+> >>> +    *   causes unnecessary synchronization, but no correctness issue=
+s.
+> >>>      *
+> >>>      * - Some drivers only expose a synchronous userspace API with no
+> >>>      *   pipelining across drivers. These do not set any fences for t=
+heir
+>
