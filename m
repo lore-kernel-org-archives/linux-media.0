@@ -2,34 +2,36 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72125C43219
-	for <linux-media@archiver.kernel.org>; Fri, 25 Nov 2022 16:00:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A92E8C43219
+	for <linux-media@archiver.kernel.org>; Fri, 25 Nov 2022 16:01:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbiKYQAN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 25 Nov 2022 11:00:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51526 "EHLO
+        id S229842AbiKYQBl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 25 Nov 2022 11:01:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiKYQAM (ORCPT
+        with ESMTP id S229770AbiKYQBk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 25 Nov 2022 11:00:12 -0500
+        Fri, 25 Nov 2022 11:01:40 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14B22FFD7;
-        Fri, 25 Nov 2022 08:00:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129971D64C;
+        Fri, 25 Nov 2022 08:01:39 -0800 (PST)
 Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E197E496;
-        Fri, 25 Nov 2022 17:00:08 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 620B5496;
+        Fri, 25 Nov 2022 17:01:37 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669392009;
-        bh=cbdHVV2MrKXct2FMDoQfcRxM16G4dnrUe44uQpf2HvM=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=Penc6fcZwJKK+8p+FiWAio+z6qwam96N1qGUbM4blTpwycoTI81Sdx+3JnP13Iygu
-         DEgTfWlkXb86JBr0Ki0kvHZQMTl9526xL3X5SctIuI8KUgi9OMGDK/3Ag5GD4LVHnG
-         cRvwOdCC0QYvHxgw/Yj4i9xku3wadKZoBt5RBUwY=
-Message-ID: <6ee3d17c-3481-b33f-682d-ac4a1e03061c@ideasonboard.com>
-Date:   Fri, 25 Nov 2022 16:00:06 +0000
+        s=mail; t=1669392097;
+        bh=KDaNurLvDimY2hn+56FprGq+rSdNvURz9N1gHxhig8A=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=JaA9YiKKlCubWkgu5Q7zBPtjDW6ND8Bipn9BZ1CV3ehmvo+LDDLfP2F0l36Lw9eS+
+         YigQl1Vec198WCKjllmRpJButyFZXDHmO2aF2bx9nDS+/ZT8z8W/g8uM7RVGnFz6G6
+         17IyZi4FAUlCeBuZ1VCBXoE5x/jrZqrjpUnsPFn8=
+Message-ID: <b4d94ae0-6398-7224-54d1-8782b4e59844@ideasonboard.com>
+Date:   Fri, 25 Nov 2022 16:01:34 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
+Subject: Re: [PATCH 2/3] platform/x86: int3472/discrete: Get the polarity from
+ the _DSM entry
 Content-Language: en-US
 To:     Hans de Goede <hdegoede@redhat.com>,
         Mark Gross <markgross@kernel.org>,
@@ -39,11 +41,9 @@ Cc:     platform-driver-x86@vger.kernel.org,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org
 References: <20221124200007.390901-1-hdegoede@redhat.com>
- <20221124200007.390901-2-hdegoede@redhat.com>
+ <20221124200007.390901-3-hdegoede@redhat.com>
 From:   Dan Scally <dan.scally@ideasonboard.com>
-Subject: Re: [PATCH 1/3] platform/x86: int3472/discrete: Refactor GPIO to
- sensor mapping
-In-Reply-To: <20221124200007.390901-2-hdegoede@redhat.com>
+In-Reply-To: <20221124200007.390901-3-hdegoede@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -53,11 +53,25 @@ X-Mailing-List: linux-media@vger.kernel.org
 Hi Hans
 
 On 24/11/2022 20:00, Hans de Goede wrote:
-> Make the GPIO to sensor mapping more generic and fold the
-> INT3472_GPIO_TYPE_RESET and INT3472_GPIO_TYPE_POWERDOWN cases into
-> a single generic case.
+> The out of tree IPU6 driver has moved to also using the in kernel INT3472
+> code for doing power-ctrl rather then doing their own thing (good!).
+
+
+Neat!
+
 >
-> This is a preparation patch for further GPIO mapping changes.
+> On IPU6 the polarity is encoded in the _DSM entry rather then being
+> hardcoded to GPIO_ACTIVE_LOW.
+>
+> Using the _DSM entry for this on IPU3 leads to regressions, so only
+> use the _DSM entry for this on non IPU3 devices.
+
+
+Shame; some consistency might have been nice
+
+> Note there is a whole bunch of PCI-ids for the IPU6 which is why
+> the check is for the IPU3-CIO2, because the CIO2 there has a unique
+> PCI-id which can be used for this.
 >
 > Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 > ---
@@ -67,67 +81,71 @@ Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
 
 Tested-by: Daniel Scally <dan.scally@ideasonboard.com>
 
->   drivers/platform/x86/intel/int3472/discrete.c | 31 ++++++++++++++-----
->   1 file changed, 23 insertions(+), 8 deletions(-)
+>   drivers/platform/x86/intel/int3472/discrete.c | 28 +++++++++++++++++--
+>   1 file changed, 26 insertions(+), 2 deletions(-)
 >
 > diff --git a/drivers/platform/x86/intel/int3472/discrete.c b/drivers/platform/x86/intel/int3472/discrete.c
-> index 974a132db651..bc6c62f3f3bf 100644
+> index bc6c62f3f3bf..9159291be28a 100644
 > --- a/drivers/platform/x86/intel/int3472/discrete.c
 > +++ b/drivers/platform/x86/intel/int3472/discrete.c
-> @@ -184,6 +184,24 @@ static int skl_int3472_map_gpio_to_clk(struct int3472_discrete_device *int3472,
->   	return 0;
->   }
+> @@ -11,6 +11,7 @@
+>   #include <linux/kernel.h>
+>   #include <linux/module.h>
+>   #include <linux/overflow.h>
+> +#include <linux/pci.h>
+>   #include <linux/platform_device.h>
+>   #include <linux/uuid.h>
 >   
-> +static const char *int3472_dsm_type_to_func(u8 type)
-> +{
-> +	switch (type) {
-> +	case INT3472_GPIO_TYPE_RESET:
-> +		return "reset";
-> +	case INT3472_GPIO_TYPE_POWERDOWN:
-> +		return "powerdown";
-> +	case INT3472_GPIO_TYPE_CLK_ENABLE:
-> +		return "clken";
-> +	case INT3472_GPIO_TYPE_PRIVACY_LED:
-> +		return "pled";
-> +	case INT3472_GPIO_TYPE_POWER_ENABLE:
-> +		return "power-enable";
-> +	}
+> @@ -36,6 +37,19 @@ static const guid_t cio2_sensor_module_guid =
+>   	GUID_INIT(0x822ace8f, 0x2814, 0x4174,
+>   		  0xa5, 0x6b, 0x5f, 0x02, 0x9f, 0xe0, 0x79, 0xee);
+>   
+> +/* IPU3 vs IPU6 needs to be handled differently */
+> +#define IPU3_CIO2_PCI_ID				0x9d32
 > +
-> +	return "unknown";
+> +static const struct pci_device_id ipu3_cio2_pci_id_table[] = {
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, IPU3_CIO2_PCI_ID) },
+> +	{ }
+> +};
+> +
+> +static int ipu3_present(void)
+> +{
+> +	return pci_dev_present(ipu3_cio2_pci_id_table);
 > +}
 > +
->   /**
->    * skl_int3472_handle_gpio_resources: Map PMIC resources to consuming sensor
->    * @ares: A pointer to a &struct acpi_resource
-> @@ -223,6 +241,7 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
->   	struct acpi_resource_gpio *agpio;
+>   /*
+>    * Here follows platform specific mapping information that we can pass to
+>    * the functions mapping resources to the sensors. Where the sensors have
+> @@ -242,6 +256,7 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
 >   	union acpi_object *obj;
 >   	const char *err_msg;
-> +	const char *func;
+>   	const char *func;
+> +	u32 polarity;
 >   	int ret;
 >   	u8 type;
 >   
-> @@ -246,19 +265,15 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
+> @@ -265,13 +280,22 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
 >   
 >   	type = obj->integer.value & 0xff;
 >   
-> +	func = int3472_dsm_type_to_func(type);
+> +	/* IPU3 always uses active-low, IPU6 polarity is encoded in the _DSM entry. */
+> +	if (ipu3_present())
+> +		polarity = GPIO_ACTIVE_LOW;
+> +	else
+> +		polarity = ((obj->integer.value >> 24) & 0xff) ? GPIO_ACTIVE_HIGH : GPIO_ACTIVE_LOW;
+> +
+>   	func = int3472_dsm_type_to_func(type);
+>   
+> +	dev_dbg(int3472->dev, "%s %s pin %d active-%s\n", func,
+> +		agpio->resource_source.string_ptr, agpio->pin_table[0],
+> +		(polarity == GPIO_ACTIVE_HIGH) ? "high" : "low");
 > +
 >   	switch (type) {
 >   	case INT3472_GPIO_TYPE_RESET:
-> -		ret = skl_int3472_map_gpio_to_sensor(int3472, agpio, "reset",
-> -						     GPIO_ACTIVE_LOW);
-> -		if (ret)
-> -			err_msg = "Failed to map reset pin to sensor\n";
-> -
-> -		break;
 >   	case INT3472_GPIO_TYPE_POWERDOWN:
-> -		ret = skl_int3472_map_gpio_to_sensor(int3472, agpio, "powerdown",
-> +		ret = skl_int3472_map_gpio_to_sensor(int3472, agpio, func,
->   						     GPIO_ACTIVE_LOW);
+> -		ret = skl_int3472_map_gpio_to_sensor(int3472, agpio, func,
+> -						     GPIO_ACTIVE_LOW);
+> +		ret = skl_int3472_map_gpio_to_sensor(int3472, agpio, func, polarity);
 >   		if (ret)
-> -			err_msg = "Failed to map powerdown pin to sensor\n";
-> +			err_msg = "Failed to map GPIO pin to sensor\n";
+>   			err_msg = "Failed to map GPIO pin to sensor\n";
 >   
->   		break;
->   	case INT3472_GPIO_TYPE_CLK_ENABLE:
