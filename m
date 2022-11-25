@@ -2,141 +2,164 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A034C4332F
-	for <linux-media@archiver.kernel.org>; Fri, 25 Nov 2022 09:19:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6542CC4167D
+	for <linux-media@archiver.kernel.org>; Fri, 25 Nov 2022 09:26:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbiKYJTK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 25 Nov 2022 04:19:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35584 "EHLO
+        id S229476AbiKYJ0q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 25 Nov 2022 04:26:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiKYJTI (ORCPT
+        with ESMTP id S229631AbiKYJ00 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 25 Nov 2022 04:19:08 -0500
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2041.outbound.protection.outlook.com [40.107.13.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095871F2CB
-        for <linux-media@vger.kernel.org>; Fri, 25 Nov 2022 01:19:07 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EzcJJp7BCHnBgJ1AOuHP34T3TKwKMGV8eDSI4I2gXufwd8fZWYqLP6UOjobuK8MukUxvJ8vxj+AE7BFZXECpfRIBOkiPS/HZmaf48CF+rkYznLN31XTHY8GZkSHWjAj5ntn3hIfet4gDCuRpThMRcM5mFLBazKx0V0oqYCD/GpXuBg1Uah2rk0wztZJUDHhgQvWO28QKG5qr0IquIsyxgqEKf+QdUxH63dvNKj6wPJgsvbn7z8RzwFVndO2/Z3RzthwB0O9pHJ59SooqwzbswNTxXKPNtdtnfK0o90ic0qbmiotu8p1BK+fEJTZVnvUHAH3gtg0vCDYxKqEncMmYSQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=x3bcwGPvSwxnRcpg1nWFdAlgZ4hKEoFuAKH0vGmw1x4=;
- b=LsiU8lwta5v2Jvc87l5PzQTGTwiyHihX2Stw2cpoqCEN6pi5j44n9d1pctyd1g4WxNeSApZOGv+EYrV/zb4Hn1KI7/5+sHJyjnpuViifjv8uH0f13UaxPNn6hMnE/Chi7ePa93l2oLB8TdL2wAoNDr4sxZyxPOGaSikwtHZzh0MEiL6stfbfJNhu8BoaD/dtysbizgj4qNsjpFoE70e/xz22HPzx8HloA4+oVBS/cY+aDZz8+EPeHOp1wYa8jSEfOAoVFZTIysIWwXqpRcb5Uf2PYEVkT1KxDrKGNHfp8KX3ZqyGqtWj5T7c6Moaf8ozOpc3LDMKLyytkZHg1WIZbA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=x3bcwGPvSwxnRcpg1nWFdAlgZ4hKEoFuAKH0vGmw1x4=;
- b=MCzBCAAzU7/rN6vv/M43LfK8ga3+stbF3Sr+ohe5FBlu/jdZ3rWwnuYQ570AoigFEZLyFDHsflkUAhOxCTwfjBh4KTdF1DBHiBjZ4/6F1f4NUnJbensp88omRJpVY5Zzu/I2mwehmchg89E3Wd0cyIqlSOZ9DsXxeMhJo/iaEgw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AS8PR04MB9080.eurprd04.prod.outlook.com (2603:10a6:20b:447::16)
- by PA4PR04MB7677.eurprd04.prod.outlook.com (2603:10a6:102:eb::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Fri, 25 Nov
- 2022 09:19:04 +0000
-Received: from AS8PR04MB9080.eurprd04.prod.outlook.com
- ([fe80::d355:6f96:866e:b857]) by AS8PR04MB9080.eurprd04.prod.outlook.com
- ([fe80::d355:6f96:866e:b857%3]) with mapi id 15.20.5857.019; Fri, 25 Nov 2022
- 09:19:04 +0000
-From:   "Guoniu.zhou" <guoniu.zhou@nxp.com>
-To:     linux-media@vger.kernel.org
-Cc:     slongerbeam@gmail.com, mchehab@kernel.org,
-        sakari.ailus@linux.intel.com, hugues.fruchet@st.com,
-        laurent.pinchart@ideasonboard.com, jacopo@jmondi.org
-Subject: [PATCH v3] media: ov5640: set correct default link frequency
-Date:   Fri, 25 Nov 2022 17:20:24 +0800
-Message-Id: <20221125092024.2866111-1-guoniu.zhou@nxp.com>
-X-Mailer: git-send-email 2.37.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0023.apcprd02.prod.outlook.com
- (2603:1096:4:195::11) To AS8PR04MB9080.eurprd04.prod.outlook.com
- (2603:10a6:20b:447::16)
+        Fri, 25 Nov 2022 04:26:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE42C2AE07
+        for <linux-media@vger.kernel.org>; Fri, 25 Nov 2022 01:25:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669368331;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PdoQUUexZ7ga7BmgL2KbubMH7KSrCAhYA4sosdJ8U/Q=;
+        b=giVqJNnwSpAmIsy5HDtDQGT3+bBWEA8OgflXYS1O/0SdAGqnYYt+bsNx/APK4UFk7j2or7
+        DtRUkIN4IqTkKhYJURUGtRRCx5NZ8r0v9T/XOj5Y7U/pzJ/3hKoivblPIy7blRxO9n4k38
+        8YHfW+7eV3ZAbTvXG5qJD3BCegmIwBo=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-187-ZlO90_CzMGqjXD4d1MSRiw-1; Fri, 25 Nov 2022 04:25:29 -0500
+X-MC-Unique: ZlO90_CzMGqjXD4d1MSRiw-1
+Received: by mail-wm1-f69.google.com with SMTP id x10-20020a05600c420a00b003cfa33f2e7cso2168133wmh.2
+        for <linux-media@vger.kernel.org>; Fri, 25 Nov 2022 01:25:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PdoQUUexZ7ga7BmgL2KbubMH7KSrCAhYA4sosdJ8U/Q=;
+        b=e5QSs0rKK6i+OvCGDx/UL7vZ9xMsXUIUNRdueoRnABxL7F/sInpB+xwL1OdUBTEtHO
+         Ys2o3N7jntHGPI0nY1qyPUnUfnCxpa80MCqy0Ek6beM6TNvQ5Sm/tVN+G++FMD12esjs
+         dzgHXhi3IUOwNJ0CUnos6Ugny6CUzLtglYWHXZjH0A6xKYG/D7xXnonrjk8UU37WOR0+
+         j8J760a6N96tn9sKseV/+/2D2xunKczwRy1Sf9Trnq8jOKjhXkOENN8C2ZKUKMJpTZ9N
+         k1Od4s/KtuFIISroGhRqPKjEp7IrwpmOc1lacEYMJDS1hxQE9VQyCeCZ+R5FP3pp1HmQ
+         YITw==
+X-Gm-Message-State: ANoB5pn0Ooacbw7vOEF4cQFN/ujpwFpsbLshMmPE3qpHHqAz7yBanEfF
+        wr+ZM4UG0EhH0btIT7IJOkhb6hi4P20UUDmHPUcQAuROUdpWDCC0TJKPUd8te7+Fw5jJme9ptX7
+        uwTVHPzGlj1NCyitV1CUAq9c=
+X-Received: by 2002:a05:600c:3501:b0:3c7:4f0:77b3 with SMTP id h1-20020a05600c350100b003c704f077b3mr13270559wmq.93.1669368328284;
+        Fri, 25 Nov 2022 01:25:28 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4vxRVWps62Nub/Y/bXYoNoPFQkcrqfFgC4Xw+JywmVH37euSYEJ8/pRQ9JWKoQwlq2n7w9Uw==
+X-Received: by 2002:a05:600c:3501:b0:3c7:4f0:77b3 with SMTP id h1-20020a05600c350100b003c704f077b3mr13270533wmq.93.1669368328022;
+        Fri, 25 Nov 2022 01:25:28 -0800 (PST)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id b17-20020a5d4b91000000b0024207478de3sm664177wrt.93.2022.11.25.01.25.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Nov 2022 01:25:26 -0800 (PST)
+Message-ID: <56cbef35-da0e-d278-fef5-83b0944ed416@redhat.com>
+Date:   Fri, 25 Nov 2022 10:25:24 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR04MB9080:EE_|PA4PR04MB7677:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9c57869d-9029-441d-803f-08dacec617c0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: W4ojcKAGaQIsIDNPgVGodd4FdfqlOPIBNrSm/WfjW+jN7d+d/5wWG546sr0shyog08OlZtpmQDuPYzLFdy3S/cxDwvA7QGTeeYbPSzDK1TXp2ofWR8EOQGVedzaxfCcrA7N+9+UvJITdhyu6tiKjESK16usujSSOJmF0rKotpijrwHfGbfn8tw0nIpU0xuIvuYyjFP7mxn44dSYF7PEv/M3bh+GVWClS6QMpIe5Ull55OtqL2yWhLb3OHct8lIsirKy0AzLjkTG22ZRsYTADIlW90OwQ6sWwxEB38D3AvS18xYU6RhvSXrmvn3rglqZ3P3YD2twGqMiuDcKeweAfqIpZ44uHf7mtAlVBGp1ZsNG5bOMMcGLEr5CMGU0NipQvxIDcJg+3mqEsWXLmgf3mvbdbJ04WtIr0Fi/dlfffbT+l8UIawOG8kA/YmrdhUQ7zPpZXuf0uaeHRlKgfkcwz1L8GW49Ka2KW6x+DbqoDw+C4sVnxkX3YmUnNy4GbTvFM/V16AQart1Z9G4IlV/5pbu5GOdU82/majVXNjs1/n1538IodMU7GLk/OkBn1vrg3d+gzyHbYUip1XvfJvh1nMvKrVSQqdSK7mFzhe4WlLDxP/cN3MCo/5XeDO/2xMlmS2D3URV3OIonSfGxVfSqulQolExuH5HE4herNsFqf1kbo6MZmPx2tFtCNflvWIQ+z9MTlq6NDLnkzO8cvaza9mw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB9080.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(346002)(39860400002)(376002)(396003)(451199015)(36756003)(2906002)(83380400001)(41300700001)(186003)(2616005)(5660300002)(8936002)(1076003)(86362001)(38100700002)(38350700002)(6916009)(26005)(316002)(6512007)(6506007)(52116002)(6486002)(478600001)(6666004)(8676002)(4326008)(66556008)(66946007)(66476007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1ull/aJxrxD4EEtDIOIjGn3YgDFFCYvIlz/69GsN86gFMacWan0v9R14oHkL?=
- =?us-ascii?Q?jFN8rVLcX1AEOatjfdZqVRzbhqcHyI5lFIbaSqI2siKMX6CRlo9RaJpI0JXz?=
- =?us-ascii?Q?xUchH3McsZnopre00jC1AjuQTXklLihp9zrTaQxDyxwQ7ZBEPdCtyCR4jQ1m?=
- =?us-ascii?Q?CuwJMDSWDJL56TiJ3i3G8dm2YXNSTAv32SMJScpif8f5zMn5KzGXn4Ovdj4t?=
- =?us-ascii?Q?beBLJplJEGpBdzx/i3F2AQLbOO7adejhXGePJp4Rr0c1ta0+fDDkq2piusbf?=
- =?us-ascii?Q?F/zM4uiJP+OtpOkalTE2lCaRRG8yWN/jJjN5p9VWi+9AORuPxz0/1Gn5AHxl?=
- =?us-ascii?Q?wu60xS4al5DaDLpkwY/M90COdUJKDDw7hkelEcMtaS3C127WeQVtL57aF9Ji?=
- =?us-ascii?Q?xNyxlIYV8FZOJrslfL8pVfLfpGTUL030s6gQxOFfALMIawux8GG7c68m5n3X?=
- =?us-ascii?Q?SIWPlP3GFdCi0HGrxfhu9TV+8jmtDTCdYidOKCdb1Z3ZAPBS8LBsxmGWtgp2?=
- =?us-ascii?Q?OYlDH5pqZoQh/1aXyJF/3GUVL/7BC0nQ9B5h0try8sYrbqdBQvHd2VfMs9fb?=
- =?us-ascii?Q?WndLl3eU3V7SPScDZ0o5cDIqScqQaMCGezBVl8vySVP2agRHiDGRESZS4pQK?=
- =?us-ascii?Q?RJig40pxz/IEWQifPLjtercQnQ17+IeqBY/yHBltFXHE+wZwffS3xI4xz3AR?=
- =?us-ascii?Q?SzaTZ9OUVWBUpvT/WLoQTADOcE2TpJwal/dlcOQpxr+T8iJBPDZw/Ki6IOG3?=
- =?us-ascii?Q?FCRAMrTKKi+pBfPF/vhM7qPoJ1ximYqknVALmR0mwtLzn/grCUxi25NHOu6T?=
- =?us-ascii?Q?U5YSkCO6wRumTBJFDemeSjT4KV7Pemo41xDgmGul+Bw7iNkuQhdrxMvf3ZmN?=
- =?us-ascii?Q?IM74bO1rA9jadO+DSFHusuSE92hzrB0iKr9SnCwmrBM1ZSwC4RwVIOgRiESf?=
- =?us-ascii?Q?d34BX/kReo1D77iQ1HonPbc4z3p7Obi21tNSGwvUnFqR75uIh6nZRJZiL3Jl?=
- =?us-ascii?Q?gEy2QndP82mIWhhbasHJYx2W+j0+ZSUu7xtB0A35z11i/nU0jAWrStJ9DqeK?=
- =?us-ascii?Q?4Yj6zf883RbHaO5FEiLcaIha3aOVuamIyJYYIC9vb6idOoj+YU+RLk89LtLw?=
- =?us-ascii?Q?rDIVEsrGheHj+kiOlDM9pQxdoUVpFIXnOEt94Z55yxnwgwTcP6u1FYx3JRIM?=
- =?us-ascii?Q?4EGO9Wxkb8stRB5bmUlL/5wKSuTYdquvMfpBc5m0AiqiVrcRMp+lqfZ/o0eC?=
- =?us-ascii?Q?OfJ3Zc50Ov36BNrxOkGGLMfancI/HsmqrGSQA/E2fyRzlIlfqaisS8h5ME9y?=
- =?us-ascii?Q?gPA+4gDZefms/S7G1QuSXRYEGU8on0vO+VXUFgp4lEBsjhJPcTRlm0Lfjmwi?=
- =?us-ascii?Q?gyRyHk967fLPBf3xwTzKlfd0tuGCl9DpZZsj8xvC9PeEIAlAHWfZ5YI1Mf63?=
- =?us-ascii?Q?2JivrZA0oYnEFZPX9PnffNI/zJWbsqOtMh6brLHi4WS2YLaPG6nan7OyNOQe?=
- =?us-ascii?Q?Syg1ku2Yn5Un7yZuzVytDVxP3XEhS7bWW+m+IDuZl7xQUlxmUueWFZvhz/Iq?=
- =?us-ascii?Q?G3hpEP2WpSDcVyMOoPnLg/x+ggqF6w9aFZGoisjK?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9c57869d-9029-441d-803f-08dacec617c0
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB9080.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2022 09:19:04.5250
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: T8LARPpaMr7ROUff5lOMPCMy0WiWct5m4NeoXidghrqLPhAWK8FYdYY0zGtujwxNMGLWqtmAJxIpApbYkhBC0w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7677
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 04/24] drm/tests: helpers: Switch to a platform_device
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Maxime Ripard <mripard@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     David Gow <davidgow@google.com>, linaro-mm-sig@lists.linaro.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
+        linux-media@vger.kernel.org, kunit-dev@googlegroups.com,
+        dri-devel@lists.freedesktop.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kernel@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+References: <20221123-rpi-kunit-tests-v1-0-051a0bb60a16@cerno.tech>
+ <20221123-rpi-kunit-tests-v1-4-051a0bb60a16@cerno.tech>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20221123-rpi-kunit-tests-v1-4-051a0bb60a16@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-current_link_freq field in ov5640_dev structure is link frequency,
-not link frequency array index, so correct it.
+On 11/23/22 16:25, Maxime Ripard wrote:
+> The device managed resources are ran if the device has bus, which is not
+> the case of a root_device.
+> 
+> Let's use a platform_device instead.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
+>  drivers/gpu/drm/tests/drm_kunit_helpers.c | 19 +++++++++++++++++--
+>  1 file changed, 17 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/tests/drm_kunit_helpers.c b/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> index 2f974f45c5b4..651aa93a98a8 100644
+> --- a/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> +++ b/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> @@ -6,6 +6,7 @@
+>  #include <kunit/resource.h>
+>  
+>  #include <linux/device.h>
+> +#include <linux/platform_device.h>
+>  
+>  #include "drm_kunit_helpers.h"
+>  
+> @@ -20,12 +21,26 @@ static const struct drm_mode_config_funcs drm_mode_config_funcs = {
+>  
+>  struct device *drm_kunit_helper_alloc_device(struct kunit *test)
+>  {
+> -	return root_device_register(FAKE_DEVICE_NAME);
+> +	struct platform_device *pdev;
+> +	int ret;
+> +
+> +	ret = platform_driver_register(&fake_platform_driver);
 
-Fixes: 3c28588f35d3 ("media: ov5640: Update pixel_rate and link_freq")
-Signed-off-by: Guoniu.zhou <guoniu.zhou@nxp.com>
-Acked-by: Jacopo Mondi <jacopo@jmondi.org>
----
-v3:
-  - Remove empty line after Fixes: 3c28588f35d3 ("media: ov5640: Update pixel_rate and link_freq")
-  - Add "Acked-by: Jacopo Mondi <jacopo@jmondi.org>"
+Maybe the platform_driver_register() is something that should be done
+in the drm_client_modeset_test_init() callback ?
 
-v2:
- - Correct typo issue(s/structrue/structure)
----
- drivers/media/i2c/ov5640.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+I would also as a part of this series rename the kunit_suite from
+"drm_test_pick_cmdline_test_suite" to "drm_test_modeset_test_suite"
+or something like that. Since you are already setting the .init and
+.exit callbacks to allocate and release the devices. So it is more
+than just a test suite for cmdline params testing.
 
-diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index 2d740397a5d4..3f6d715efa82 100644
---- a/drivers/media/i2c/ov5640.c
-+++ b/drivers/media/i2c/ov5640.c
-@@ -3817,7 +3817,8 @@ static int ov5640_probe(struct i2c_client *client)
- 	sensor->current_mode =
- 		&ov5640_mode_data[OV5640_MODE_VGA_640_480];
- 	sensor->last_mode = sensor->current_mode;
--	sensor->current_link_freq = OV5640_DEFAULT_LINK_FREQ;
-+	sensor->current_link_freq =
-+		ov5640_csi2_link_freqs[OV5640_DEFAULT_LINK_FREQ];
- 
- 	sensor->ae_target = 52;
- 
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +
+> +	pdev = platform_device_alloc(FAKE_DEVICE_NAME, PLATFORM_DEVID_NONE);
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
+> +
+> +	ret = platform_device_add(pdev);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +
+> +	return &pdev->dev;
+>  }
+>
+
+Probably won't do it as a part of this series to avoid making it cross
+subsystem, but I think there's room to further consolidation since this
+helper seems to be quite generic and something that would be useful for
+other subsystems. So it would make sense for kunit to have helpers to
+manage platform drivers and devices.
+
+In fact, I see that drivers/base/test/test_async_driver_probe.c already
+has similar helpers that could be exposed to the rest of the kernel.
+
+The patch looks good to me though and any of these changes could be done
+as a follow-up:
+
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+
 -- 
-2.37.1
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
