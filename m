@@ -2,79 +2,79 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 286DFC4332F
-	for <linux-media@archiver.kernel.org>; Sat, 26 Nov 2022 10:40:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EAFD7C4332F
+	for <linux-media@archiver.kernel.org>; Sat, 26 Nov 2022 10:45:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbiKZKkB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 26 Nov 2022 05:40:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58288 "EHLO
+        id S229717AbiKZKpz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 26 Nov 2022 05:45:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiKZKj6 (ORCPT
+        with ESMTP id S229712AbiKZKpe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 26 Nov 2022 05:39:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCFF16583;
-        Sat, 26 Nov 2022 02:39:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8109DB811A3;
-        Sat, 26 Nov 2022 10:39:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2539C433D6;
-        Sat, 26 Nov 2022 10:39:53 +0000 (UTC)
-Message-ID: <e583b75d-feeb-bb33-1567-e7dde4f04ed7@xs4all.nl>
-Date:   Sat, 26 Nov 2022 11:39:52 +0100
+        Sat, 26 Nov 2022 05:45:34 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D122CDE6;
+        Sat, 26 Nov 2022 02:44:08 -0800 (PST)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NK7ch0ywLz15Mr5;
+        Sat, 26 Nov 2022 18:43:32 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 26 Nov 2022 18:44:06 +0800
+Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
+ (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 26 Nov
+ 2022 18:44:06 +0800
+From:   Liu Shixin <liushixin2@huawei.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Liu Shixin <liushixin2@huawei.com>
+Subject: [PATCH] media: saa7164: fix missing pci_disable_device()
+Date:   Sat, 26 Nov 2022 19:31:26 +0800
+Message-ID: <20221126113126.3291673-1-liushixin2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 4/4] media: i2c: s5c73m3: switch to using gpiod API
-Content-Language: en-US
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-References: <20221115221145.2550572-1-dmitry.torokhov@gmail.com>
- <20221115221145.2550572-4-dmitry.torokhov@gmail.com>
- <CACRpkdbARhDuqSiOZM6GZynHsQWau8JhsEa2zcpsPZSLuD07Kg@mail.gmail.com>
- <e4609919-d9be-33c4-1488-352443523b14@xs4all.nl>
-In-Reply-To: <e4609919-d9be-33c4-1488-352443523b14@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.32]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 26/11/2022 11:34, Hans Verkuil wrote:
-> Hi Linus,
-> 
-> On 17/11/2022 10:06, Linus Walleij wrote:
->> On Tue, Nov 15, 2022 at 11:11 PM Dmitry Torokhov
->> <dmitry.torokhov@gmail.com> wrote:
->>
->>> This patch switches the driver away from legacy gpio/of_gpio API to
->>> gpiod API, and removes use of of_get_named_gpio_flags() which I want to
->>> make private to gpiolib.
->>>
->>> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
->>
->> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> 
-> There are now two patches that do this switch to using the gpiod API:
-> this one, and one from you:
-> 
-> https://patchwork.linuxtv.org/project/linux-media/patch/20221108100604.1500909-1-linus.walleij@linaro.org/
+Add missing pci_disable_device() in the error path in saa7164_initdev().
 
-And a third one as well:
+Fixes: 1da177e4c3f4 ("V4L/DVB (12923): SAA7164: Add support for the NXP SAA7164 silicon")
+Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+---
+ drivers/media/pci/saa7164/saa7164-core.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-https://patchwork.linuxtv.org/project/linux-media/patch/20221116194307.164543-1-mairacanal@riseup.net/
-
-> 
-> Any preference?
-> 
-> Regards,
-> 
-> 	Hans
+diff --git a/drivers/media/pci/saa7164/saa7164-core.c b/drivers/media/pci/saa7164/saa7164-core.c
+index d5f32e3ff544..754c8be1b6d8 100644
+--- a/drivers/media/pci/saa7164/saa7164-core.c
++++ b/drivers/media/pci/saa7164/saa7164-core.c
+@@ -1259,7 +1259,7 @@ static int saa7164_initdev(struct pci_dev *pci_dev,
+ 
+ 	if (saa7164_dev_setup(dev) < 0) {
+ 		err = -EINVAL;
+-		goto fail_free;
++		goto fail_dev;
+ 	}
+ 
+ 	/* print pci info */
+@@ -1427,6 +1427,8 @@ static int saa7164_initdev(struct pci_dev *pci_dev,
+ 
+ fail_irq:
+ 	saa7164_dev_unregister(dev);
++fail_dev:
++	pci_disable_device(pci_dev);
+ fail_free:
+ 	v4l2_device_unregister(&dev->v4l2_dev);
+ 	kfree(dev);
+-- 
+2.25.1
 
