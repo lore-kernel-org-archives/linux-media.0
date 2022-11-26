@@ -2,116 +2,77 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F8BAC4167B
-	for <linux-media@archiver.kernel.org>; Fri, 25 Nov 2022 23:51:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2741CC4321E
+	for <linux-media@archiver.kernel.org>; Sat, 26 Nov 2022 02:30:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiKYXvT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 25 Nov 2022 18:51:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
+        id S230109AbiKZCa3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 25 Nov 2022 21:30:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiKYXvS (ORCPT
+        with ESMTP id S230148AbiKZCaV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 25 Nov 2022 18:51:18 -0500
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8895E18E;
-        Fri, 25 Nov 2022 15:51:17 -0800 (PST)
-Received: by mail-pj1-f43.google.com with SMTP id k2-20020a17090a4c8200b002187cce2f92so8907494pjh.2;
-        Fri, 25 Nov 2022 15:51:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UBCy9qp7TSwSwGwI/krp6oqH0EI9xTeC+ExI/AlQHzg=;
-        b=1OQZpXZ9Ed1f3U724rkw+MtCYUcdJtTOkQ3OJ37kYyDX/+ASIHd6vmK9sV2RyiKbDR
-         ffkPd2ZaEPqioDrIqq60oCchjlF1lDAjF6VQHiegOBVIjzBfg9O5LIsr17MGXVrhfHJ1
-         EpSV4AkvHA61ahLrikQ2SE8nCgoDrWzsdzSJlEvmLg0VS+Mfjt+DoY/n7vJxRMSDT0yY
-         M+5bSNwfcAKFZcSNTjEgcGXAitcGRLhVqwn8PT38U/J8WQuqXeGpHSbYU7jTEST9os7J
-         lhcWIDCR0gTByg9ebWcdcGzslqg1QCVb16SGCkSxfiJymBuUdmuTNnhxFpy5HCr5kqjH
-         8B4w==
-X-Gm-Message-State: ANoB5pmSedKMG6RkTCcAwZoIvPyhtzK5azH+FU+4AfjKzrZo/Eipmx+E
-        RQuM+oZM4QaEN5RqE01/84Q=
-X-Google-Smtp-Source: AA0mqf40CELg5Cd4cKADSnuQ7zDvszL+QjMGY2dYDbM8qR4FVWtlF2gM/wXRLECZg2wkT9gOazTizw==
-X-Received: by 2002:a17:90a:b88c:b0:218:e1c1:b4f3 with SMTP id o12-20020a17090ab88c00b00218e1c1b4f3mr15351878pjr.201.1669420276891;
-        Fri, 25 Nov 2022 15:51:16 -0800 (PST)
-Received: from [192.168.3.219] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id q6-20020a17090311c600b001865c298588sm3937409plh.258.2022.11.25.15.51.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Nov 2022 15:51:15 -0800 (PST)
-Message-ID: <d448b944-708a-32d4-37d7-0be16ee5f73c@acm.org>
-Date:   Fri, 25 Nov 2022 15:51:11 -0800
+        Fri, 25 Nov 2022 21:30:21 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034A85801E;
+        Fri, 25 Nov 2022 18:30:21 -0800 (PST)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NJwfx11zxzRpXl;
+        Sat, 26 Nov 2022 10:29:45 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 26 Nov
+ 2022 10:30:18 +0800
+From:   Zheng Yongjun <zhengyongjun3@huawei.com>
+To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>,
+        <linux-media@vger.kernel.org>, <openbmc@lists.ozlabs.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+CC:     <joel@jms.id.au>, <andrew@aj.id.au>
+Subject: [PATCH v2] media: aspeed: Fix return value check in aspeed_video_debugfs_create()
+Date:   Sat, 26 Nov 2022 02:28:13 +0000
+Message-ID: <20221126022813.57372-1-zhengyongjun3@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 1/5] driver core: make struct class.dev_uevent() take a
- const *
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>, Luis Chamberlain <mcgrof@kernel.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Johan Hovold <johan@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Keith Busch <kbusch@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Sebastian Reichel <sre@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Raed Salem <raeds@nvidia.com>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Avihai Horon <avihaih@nvidia.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Wang Yufen <wangyufen@huawei.com>, linux-block@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 11/23/22 04:25, Greg Kroah-Hartman wrote:
-> diff --git a/include/linux/mISDNif.h b/include/linux/mISDNif.h
-> index 7dd1f01ec4f9..7aab4a769736 100644
-> --- a/include/linux/mISDNif.h
-> +++ b/include/linux/mISDNif.h
-> @@ -586,7 +586,7 @@ extern struct mISDNclock *mISDN_register_clock(char *, int, clockctl_func_t *,
->   						void *);
->   extern void	mISDN_unregister_clock(struct mISDNclock *);
->   
-> -static inline struct mISDNdevice *dev_to_mISDN(struct device *dev)
-> +static inline struct mISDNdevice *dev_to_mISDN(const struct device *dev)
->   {
->   	if (dev)
->   		return dev_get_drvdata(dev);
+In case of error, the function debugfs_create_file() returns ERR_PTR()
+and never returns NULL. The NULL test in the return value check
+should be replaced with IS_ERR().
 
-Why does the dev_to_mISDN() function drop constness? I haven't found an 
-explanation for this in the cover letter.
+Fixes: 52fed10ad756 ("media: aspeed: add debugfs")
+Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
+---
+v2:
+- change return error code from ERR_PTR to PTR_ERR.
+ drivers/media/platform/aspeed/aspeed-video.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Thanks,
+diff --git a/drivers/media/platform/aspeed/aspeed-video.c b/drivers/media/platform/aspeed/aspeed-video.c
+index 20f795ccc11b..0113e6bc836f 100644
+--- a/drivers/media/platform/aspeed/aspeed-video.c
++++ b/drivers/media/platform/aspeed/aspeed-video.c
+@@ -1780,10 +1780,12 @@ static int aspeed_video_debugfs_create(struct aspeed_video *video)
+ 	debugfs_entry = debugfs_create_file(DEVICE_NAME, 0444, NULL,
+ 					    video,
+ 					    &aspeed_video_debugfs_ops);
+-	if (!debugfs_entry)
++	if (IS_ERR(debugfs_entry)) {
+ 		aspeed_video_debugfs_remove(video);
++		return PTR_ERR(debugfs_entry);
++	}
 
-Bart.
+-	return !debugfs_entry ? -EIO : 0;
++	return 0;
+ }
+ #else
+ static void aspeed_video_debugfs_remove(struct aspeed_video *video) { }
+--
+2.17.1
 
