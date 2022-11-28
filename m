@@ -2,42 +2,41 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E103C4321E
-	for <linux-media@archiver.kernel.org>; Mon, 28 Nov 2022 21:45:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BAAFC4708A
+	for <linux-media@archiver.kernel.org>; Mon, 28 Nov 2022 21:45:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233214AbiK1VpN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Nov 2022 16:45:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38912 "EHLO
+        id S232919AbiK1VpQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Nov 2022 16:45:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232801AbiK1VpM (ORCPT
+        with ESMTP id S232860AbiK1VpM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 28 Nov 2022 16:45:12 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77411DF25
-        for <linux-media@vger.kernel.org>; Mon, 28 Nov 2022 13:44:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F4B2B618
+        for <linux-media@vger.kernel.org>; Mon, 28 Nov 2022 13:44:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669671858;
+        s=mimecast20190719; t=1669671859;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HYgpL2606mVfO+98npo7eaosHXY5I8deinLTWhiViEE=;
-        b=SozgTE4t+V2EvkMHIkAe+Nu6s/pDrW+MJ5WoSWW4GQOACsmp8PX4tQZzufBOeSKAmwVsSX
-        lmS9rmXYJ6gP6L3gsAJTu5upA1BqCSREw60krIBSFQq5ZeqPV/k60JCVCYMaFKQV11BRFa
-        fsg3gXgGGPc3CAVZwMTUeI/G+F+U0ak=
+         content-transfer-encoding:content-transfer-encoding;
+        bh=jjeIa9pagPqNk41fRJdTkVrz+H7PIkcsjSzIe9Ct0qI=;
+        b=jGj0C2x1/5WHUVVoCxm1TmRITYpN/tpreT2ZxtY4WB3ytLutOpKoSHVFkJ3ppeN/IHqZya
+        W+tt9JHbjhAjep1IkAUpKOYWdXLpBW0lk4TcyOLgegXhOvPdwKwCY5zfQPYUu4zeTsm4gn
+        va2tNz0cysLhGTzmlAtml1HlQ6m5AJE=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-197-XIfB4YCLNIye0mUOA4KgEA-1; Mon, 28 Nov 2022 16:44:15 -0500
-X-MC-Unique: XIfB4YCLNIye0mUOA4KgEA-1
+ us-mta-79-WGq9Iw5XNrS9CZv8JPvVEg-1; Mon, 28 Nov 2022 16:44:13 -0500
+X-MC-Unique: WGq9Iw5XNrS9CZv8JPvVEg-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AD33286C177;
-        Mon, 28 Nov 2022 21:44:14 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E3702811E7A;
+        Mon, 28 Nov 2022 21:44:12 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.192.115])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 23AFD40C6EC2;
-        Mon, 28 Nov 2022 21:44:13 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2291940C6EC2;
+        Mon, 28 Nov 2022 21:44:11 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mark Gross <markgross@kernel.org>,
         Andy Shevchenko <andy@kernel.org>,
@@ -49,11 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         platform-driver-x86@vger.kernel.org, linux-gpio@vger.kernel.org,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org
-Subject: [PATCH 1/5] gpio: tps68470: Fix tps68470_gpio_get() reading from the wrong register
-Date:   Mon, 28 Nov 2022 22:44:04 +0100
-Message-Id: <20221128214408.165726-2-hdegoede@redhat.com>
-In-Reply-To: <20221128214408.165726-1-hdegoede@redhat.com>
-References: <20221128214408.165726-1-hdegoede@redhat.com>
+Subject: [PATCH 0/5] gpio/media/int3472: Add support for tps68470 privacy-LED output
+Date:   Mon, 28 Nov 2022 22:44:03 +0100
+Message-Id: <20221128214408.165726-1-hdegoede@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
@@ -61,28 +58,59 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-For the regular GPIO pins the value should be read from TPS68470_REG_GPDI,
-so that the actual value of the pin is read, rather then the value the pin
-would output when put in output mode.
+Hi All,
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/gpio/gpio-tps68470.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+While working on the earlier discussed changes for dealing with
+the privacy LED for "discrete" INT3472 ACPI devices I was wondering
+"how are we dealing with the privacy LED when the INT3472 ACPI device
+is a tps68470?".
 
-diff --git a/drivers/gpio/gpio-tps68470.c b/drivers/gpio/gpio-tps68470.c
-index aaddcabe9b35..778a72cf800c 100644
---- a/drivers/gpio/gpio-tps68470.c
-+++ b/drivers/gpio/gpio-tps68470.c
-@@ -30,7 +30,7 @@ static int tps68470_gpio_get(struct gpio_chip *gc, unsigned int offset)
- {
- 	struct tps68470_gpio_data *tps68470_gpio = gpiochip_get_data(gc);
- 	struct regmap *regmap = tps68470_gpio->tps68470_regmap;
--	unsigned int reg = TPS68470_REG_GPDO;
-+	unsigned int reg = TPS68470_REG_GPDI;
- 	int val, ret;
- 
- 	if (offset >= TPS68470_N_REGULAR_GPIO) {
+Well it turns out we were not dealing with this at all, leading to
+the privacy LED on the back of the Surface Go series not lighting up
+when the back camera is on.
+
+This series fixes this, it consists of:
+
+Patches 1-2: 2 small bugfixes to the gpio-tps68470 code
+Patch3:      Add support for the indicator LED outputs on the tps68470 as GPIOs
+Patch4:      Add support for a privacy LED to the ov8865 sensor driver
+Patch5:      Add gpio-lookup table entry for the privacy LED.
+
+There is one small issue here, I believe that patches 1-3 need to land before
+4 + 5 do. Once 4 + 5 have landed the ov8865 driver will try to get a
+GPIO with pin number 10 from the gpio-tps68470 provider and without patch 3,
+that will fail because only pins 0-9 exist until patch 3 lands.
+
+The easiest way to avoid this issue would be for me to merge patches 1-3 +
+5 through the pdx86 tree. GPIO subsystem maintainers, may I have your ack
+for this ?
+
+Note patch 4 is not a problem without patch 5, it uses gpiod_get_optional,
+so as long as there is no lookup entry for a "privacy-led" GPIO it is
+a no-op.
+
+Regards,
+
+Hans
+
+
+
+Hans de Goede (5):
+  gpio: tps68470: Fix tps68470_gpio_get() reading from the wrong
+    register
+  gpio: tps68470: Make tps68470_gpio_output() always set the initial
+    value
+  gpio: tps68470: Add support for the indicator LED outputs
+  media: ov8865: Add support for a privacy-led GPIO
+  platform/x86: int3472: Add support for the back privacy LED on Surface
+    Go models
+
+ drivers/gpio/gpio-tps68470.c                  | 52 +++++++++++++------
+ drivers/media/i2c/ov8865.c                    |  9 ++++
+ .../x86/intel/int3472/tps68470_board_data.c   |  1 +
+ include/linux/mfd/tps68470.h                  |  4 ++
+ 4 files changed, 49 insertions(+), 17 deletions(-)
+
 -- 
 2.38.1
 
