@@ -2,155 +2,114 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB028C4332F
-	for <linux-media@archiver.kernel.org>; Mon, 28 Nov 2022 18:29:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CA12C4321E
+	for <linux-media@archiver.kernel.org>; Mon, 28 Nov 2022 19:31:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233442AbiK1S3y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Nov 2022 13:29:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39048 "EHLO
+        id S233472AbiK1TbS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Nov 2022 14:31:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233407AbiK1S3h (ORCPT
+        with ESMTP id S231645AbiK1TbR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Nov 2022 13:29:37 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570C8D9F;
-        Mon, 28 Nov 2022 10:22:37 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E15E856D;
-        Mon, 28 Nov 2022 19:22:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669659756;
-        bh=GKwo/jr4IO4MGyrIhs+IuvV2L3spl2h6vEe+4IIYIAQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G/DONe1tNYdw5f5bi/QVSd5eFqePWTXcre2Ol5DYtpndDFaK6LO3qUjvaI+18wc/k
-         kCKlyf9SOhk3pftLzm0VKgYLezGpnV43XbYtWoQeV5bx2zu1CvSv22kiz2x94jMrki
-         9mEjb8hvRUn//iSOnbU5oXW/tzZ2xXfTXvxEFCnA=
-Date:   Mon, 28 Nov 2022 20:22:21 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Dan Scally <dan.scally@ideasonboard.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        platform-driver-x86@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org
-Subject: Re: [PATCH 0/3] platform/x86: int3472/discrete: Make it work with
- IPU6
-Message-ID: <Y4T8XQ6UFYooVLf9@pendragon.ideasonboard.com>
-References: <20221124200007.390901-1-hdegoede@redhat.com>
- <e5d8913c-13ba-3b11-94bc-5d1ee1d736b0@ideasonboard.com>
- <Y4Cf5tLWsBDTndei@pendragon.ideasonboard.com>
- <636c471d-d7ee-d184-7a9d-fbfd0545059c@redhat.com>
- <Y4DVXT2TlTYkUHEr@pendragon.ideasonboard.com>
- <27b71261-ac9b-c103-88af-2ca53477317a@redhat.com>
+        Mon, 28 Nov 2022 14:31:17 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD842CC85;
+        Mon, 28 Nov 2022 11:31:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=79D1N/wvlSFl18BNsKU0k/is/jrD25t41qoW9u3UtNQ=; b=QYDjpAPHhLoF6BlYY/NN/zcF72
+        FetOordi88yKv+vvVBN5IdCIWm8y6lE5krrM28WdRwivYaIvy1nvRVdf801nGkEA8sBAmv83H1/LI
+        HOzFGfTkz7jkUHeTUx7KAHWhKyPUv4Cc+4t02ITyJlRKeF49A3vCVsFs4FJtX6xyZTbrToOuF4TtQ
+        KT35xJLL+dcnCungBjAXZk+yxgX0ic3rDnT0XWLE56wnO0v73HcrBbFAcR0SEdGg/zBcwH2yuTDho
+        2vs7/Wuf1cE6b56WFrBYOr4cruTInuSO52wu5oHjKop41y4S4aa9l/SCj8ydRB1XFGCS4ds3xW3eP
+        DoEXCVUg==;
+Received: from [177.34.169.227] (helo=[192.168.0.8])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1ozjq1-00AbB7-Eo; Mon, 28 Nov 2022 20:30:45 +0100
+Message-ID: <264ee4eb-4385-d9b2-bcfa-fcc5dc27f611@igalia.com>
+Date:   Mon, 28 Nov 2022 16:30:37 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <27b71261-ac9b-c103-88af-2ca53477317a@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 02/17] drm/tests: helpers: Document
+ drm_kunit_device_init()
+To:     Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     David Gow <davidgow@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-media@vger.kernel.org
+References: <20221123-rpi-kunit-tests-v2-0-efe5ed518b63@cerno.tech>
+ <20221123-rpi-kunit-tests-v2-2-efe5ed518b63@cerno.tech>
+Content-Language: en-US
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
+In-Reply-To: <20221123-rpi-kunit-tests-v2-2-efe5ed518b63@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+On 11/28/22 11:53, Maxime Ripard wrote:
+> Commit 44a3928324e9 ("drm/tests: Add Kunit Helpers") introduced the
+> drm_kunit_device_init() function but didn't document it properly. Add
+> that documentation.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
-On Mon, Nov 28, 2022 at 05:11:52PM +0100, Hans de Goede wrote:
-> On 11/25/22 15:46, Laurent Pinchart wrote:
-> 
-> <snip>
-> 
-> >> There seems to be a bunch of GPIO/clk/regulator boilerplate duplicated
-> >> in all the sensor drivers. I think a little helper-library  for this might
-> >> be in order. E.g. Something like this (in the .h file)
-> > 
-> > I fully agree that camera sensor helpers would be good to have.
-> > 
-> >> struct camera_sensor_pwr_helper {
-> >> 	// bunch of stuff here, this should be fixed size so that the
-> >> 	// sensor drivers can embed it into their driver-data struct
-> >> };
-> >>
-> >> int camera_sensor_pwr_helper_init(struct camera_sensor_pwr_helper *helper,
-> >> 				  const char *supply_names, int supply_count,
-> >> 				  const char* clk_name.
-> >> 				  /* other stuff which I'm probably forgetting right now */);
-> > 
-> > There are all kind of constraints on the power on/off sequences, I don't
-> > think we would be able to model this in a generic way without making it
-> > so complicated that it would outweight the benefits.
-> 
-> I know that for some ICs the power sequence can be quite complicated,
-> but I think that for most this order should work fine:
-> 
-> 0. Force enable/reset GPIOs to disabled / reset-asserted (do this at GPIO request time ?)
-> 1. Enable clk(s)
-> 2. Enable regulators (using the bulk API, with supply-names passed
-> in by the sensor drivers, 
-> 3. Set enable/reset GPIOs to enabled / reset de-asserted
-> 
-> I guess on some models we may need to swap 1 and 2, there could be
-> a flag for that.
+Just a minor nit on naming, besides that:
 
-There are also various delays that may be needed between the different
-steps, including between bringing up (and down) the different power
-rails.
+Reviewed-by: Maíra Canal <mcanal@igalia.com>
 
-> Anything more complicated should just be coded out in the driver, but
-> I think just supporting this common pattern will already save us
-> quite a bit of code duplication.
-
-There was an old attempt to code generic power sequences in DT which
-didn't lead anywhere. I'm not quite sure doing so in a camera sensor
-helper will have a much better fate. We can of course give it a try, but
-as mentioned before, I think effort would be better focussed on first
-moving sensor drivers to runtime PM (and runtime PM autosuspend).
-
-> > What I think could help is moving all camera sensor drivers to runtime
-> > PM, and having helpers to properly enable runtime PM in probe() in a way
-> > that works on both ACPI and DT systems, with or without CONFIG_PM
-> > enabled. It's way more complicated than it sounds.
+> ---
+>  drivers/gpu/drm/tests/drm_kunit_helpers.c | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
 > 
-> I agree that we should move to runtime-pm and put the power-sequence
-> in the suspend/resume callback. This will be necessary for any sensors
-> used on atomisp2 devices, where there are actually ACPI _PS0 and _PS3
-> methods and/or ACPI power-resources doing the PM for us.
-> 
-> Note for some reason the current staging atomisp driver does not use this,
-> likely because it was developed for Android boards with broken ACPI
-> tables. But after having sampled the ACPI tables of a bunch of atomisp
-> windows devices I believe this should work fine for those.
-> 
-> >> // turn_on_privacy_led should be false when called from probe(), must be true when
-> >> // called on stream_on().
-> >> int camera_sensor_pwr_helper_on(struct camera_sensor_pwr_helper *helper, bool turn_on_privacy_led);
-> >> int camera_sensor_pwr_helper_off(struct camera_sensor_pwr_helper *helper);
-> >>
-> >> // maybe, or make everything devm managed? :
-> >> int camera_sensor_pwr_helper_exit(struct camera_sensor_pwr_helper *helper);
-> >>
-> >> Just is just a really really quick n dirty design. For one I could use
-> >> suggestions for a better name for the thing :)
-> >>
-> >> I think something like this will be helpfull to reduce a whole bunch
-> >> of boilerplate code related to powering on/off the sensor in all
-> >> the drivers; and it would give us a central place to drive an
-> >> (optional) privacy-led GPIO.
-> >>
-> >>>>> And likewise (eventually) completely drop the "clken" GPIO this
-> >>>>> patch series introduces (with some sensors) and instead always model
-> >>>>> this through the clk-framework.
-> >>>>>
-> >>>>> Hans de Goede (3):
-> >>>>>    platform/x86: int3472/discrete: Refactor GPIO to sensor mapping
-> >>>>>    platform/x86: int3472/discrete: Get the polarity from the _DSM entry
-> >>>>>    platform/x86: int3472/discrete: Add support for sensor-drivers which
-> >>>>>      expect clken + pled GPIOs
-> >>>>>
-> >>>>>   drivers/platform/x86/intel/int3472/common.h   |  2 +-
-> >>>>>   drivers/platform/x86/intel/int3472/discrete.c | 92 ++++++++++++++++---
-> >>>>>   2 files changed, 78 insertions(+), 16 deletions(-)
+> diff --git a/drivers/gpu/drm/tests/drm_kunit_helpers.c b/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> index 6600a4db3158..46a68c2fd80c 100644
+> --- a/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> +++ b/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> @@ -35,6 +35,23 @@ static void dev_free(struct kunit_resource *res)
+>  	root_device_unregister(dev);
+>  }
+>  
+> +/**
+> + * drm_kunit_device_init - Allocates a mock DRM device for Kunit tests
 
--- 
-Regards,
+s/Kunit/KUnit
 
-Laurent Pinchart
+Best Regards,
+- Maíra Canal
+
+> + * @test: The test context object
+> + * @features: Mocked DRM device driver features
+> + * @name: Name of the struct &device to allocate
+> + *
+> + * This function allocates a new struct &device, creates a struct
+> + * &drm_driver and will create a struct &drm_device using both.
+> + *
+> + * The device and driver are tied to the @test context and will get
+> + * cleaned at the end of the test. The drm_device is allocated through
+> + * devm_drm_dev_alloc() and will thus be freed through a device-managed
+> + * resource.
+> + *
+> + * Returns:
+> + * A pointer to the new drm_device, or an ERR_PTR() otherwise.
+> + */
+>  struct drm_device *drm_kunit_device_init(struct kunit *test, u32 features, char *name)
+>  {
+>  	struct kunit_dev *kdev;
+> 
