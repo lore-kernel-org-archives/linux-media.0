@@ -2,255 +2,176 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54AE4C433FE
-	for <linux-media@archiver.kernel.org>; Mon, 28 Nov 2022 10:05:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D42AC46467
+	for <linux-media@archiver.kernel.org>; Mon, 28 Nov 2022 10:23:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiK1KFl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Nov 2022 05:05:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
+        id S230252AbiK1KXw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Nov 2022 05:23:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbiK1KFi (ORCPT
+        with ESMTP id S230242AbiK1KXu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Nov 2022 05:05:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255F41A208
-        for <linux-media@vger.kernel.org>; Mon, 28 Nov 2022 02:04:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669629874;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0kptGvMGHSAx6t8nlMnrJ0d9wUMVGi1jatn/SMhdc8M=;
-        b=impGzpQsu8cA3F5ndUj3maCDrBARJutxZiE6LQStczvWu96o/UC4maQSjItFncsqZ+/znW
-        TLSI0dNo07O3a/PMnia/otF8rqHXEnHa0EnBupsDlk+du1azJ5s23wEPM3sjbKWzhUMOKz
-        14JvGyyIU9FWgmQocQEF1+tAqoAsRqI=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-308-Flgwr7FKOpSUvg3I-_NTzA-1; Mon, 28 Nov 2022 05:04:32 -0500
-X-MC-Unique: Flgwr7FKOpSUvg3I-_NTzA-1
-Received: by mail-ej1-f72.google.com with SMTP id jg27-20020a170907971b00b007ad9892f5f6so4031135ejc.7
-        for <linux-media@vger.kernel.org>; Mon, 28 Nov 2022 02:04:32 -0800 (PST)
+        Mon, 28 Nov 2022 05:23:50 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DEFB9A
+        for <linux-media@vger.kernel.org>; Mon, 28 Nov 2022 02:23:47 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id o15-20020a6bf80f000000b006de313e5cfeso5540908ioh.6
+        for <linux-media@vger.kernel.org>; Mon, 28 Nov 2022 02:23:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0kptGvMGHSAx6t8nlMnrJ0d9wUMVGi1jatn/SMhdc8M=;
-        b=BJgfPC99OAXLMUx978IJ3CgxE1rjxofDf+2Xag9f1Uk55Qg33Qc/XBmeBIFeybdZc/
-         wOVhiMu3duufk+uDPnttSTKX2HYuzTFaEu/VzzM475Y6yduNzAUH/Pmmrrm2tqJZFxu9
-         3wTXWN5rDwRPR562/ly1MkQXWWH+0Ohl+DFwQdfduJrMlIc+WnbJqravoTJcbk1pdvxy
-         3WlxoAhdJ3raViwmqoFrjHzK8M0fTUmI8F2dYVxAjIeFsVyhBm1URI1hWYeJcgNX/MSH
-         1xZomyuswDzLf3Z1gdJH7oR+PfIx80rk83mwrHB8f7F2d/xBpBmo63YTNHeiv/w9EDb8
-         W0fQ==
-X-Gm-Message-State: ANoB5pk4vOBd3k0uqVa6mhwh7+sU4QI2MbfQEpOXS6gIS3qLIHrS6b9O
-        yYu0av68WozdGjv1tRB53JCj2hfELUvAMinFNStgsVBfG0TupSvHQ1Xokmt3MwKX5gqUuo0qOsg
-        8i/dZOQdHAEzVA0ZZWUpNU6s=
-X-Received: by 2002:a17:906:3a14:b0:7ad:79c0:4662 with SMTP id z20-20020a1709063a1400b007ad79c04662mr42930023eje.400.1669629871629;
-        Mon, 28 Nov 2022 02:04:31 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4knslyJvMRk31JYSg0uvVLf7rjFniYPZio6qp3KHO4qybsVK7fEvuG2Qij7p6HZSe0jOdtmw==
-X-Received: by 2002:a17:906:3a14:b0:7ad:79c0:4662 with SMTP id z20-20020a1709063a1400b007ad79c04662mr42929995eje.400.1669629871327;
-        Mon, 28 Nov 2022 02:04:31 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id g3-20020a170906538300b0078cb06c2ef9sm4747116ejo.8.2022.11.28.02.04.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 02:04:30 -0800 (PST)
-Message-ID: <3606640b-14bf-28c3-cf2a-b8cc93bad07f@redhat.com>
-Date:   Mon, 28 Nov 2022 11:04:29 +0100
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NobAw+FI5C8ULf/Y4Ui7fBPT64uhSipLoJa02tBgo6w=;
+        b=xxCTJmd+dl2pS7IPSe5okBKQypRsYcPCP3654Qz32AA0Cwh3Kwmuq2woRkqImo3qNC
+         63JYLm6HyB0WL29hl6nXVyMlRZQgb1P2xi9jYx6QmV1wIWLjwinfEAF5/2gAevWKPCla
+         nTrE+dkrHo9lriU1irN9scno5BUsLbt6vUKGXmDUnm2iM6SHOPiyBOmZ4IW9T00LuMk5
+         nkvtp04vZXAO5/oMUUMgdHPKU3cKd82jPrvPPQn+0/w/K6bfrCYlWpGT01vx+aBuaClA
+         6j2jhHzP21bjqMmUqHkrn6rRjt2DxamcyjdVknwC/vUXm6Vk/BIIWyJJ+7HKJouM/xyt
+         VTAQ==
+X-Gm-Message-State: ANoB5pnzYoPtQeqJ7JTM6QGHss0ARKthCZ5JDl6+2PB8sup36VMa/86R
+        GD6QLHtWC4Etg2kfztCuTXceHcRiccGteJ0jm3aOSUwZRjNw
+X-Google-Smtp-Source: AA0mqf4q82h5u4p7M9JpZmf8yostPPR0v00Z1sWBDTOj2UMlZRBmJ58XVJx36gq0C2LTe7Y34B4QfwYkzwhvSooCAYj0epoKt1QT
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 3/3] platform/x86: int3472/discrete: Add support for
- sensor-drivers which expect clken + pled GPIOs
-Content-Language: en-US
-To:     Dan Scally <dan.scally@ideasonboard.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>
-Cc:     platform-driver-x86@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org
-References: <20221124200007.390901-1-hdegoede@redhat.com>
- <20221124200007.390901-4-hdegoede@redhat.com>
- <0fa6d92a-9b3b-cec9-c834-1b530ffe7a68@ideasonboard.com>
- <e7fb85f9-9e39-e33e-61b7-14e02cfafb88@redhat.com>
- <df65983e-547a-5ed7-0a49-812f6e227549@ideasonboard.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <df65983e-547a-5ed7-0a49-812f6e227549@ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a02:7409:0:b0:375:4727:8625 with SMTP id
+ o9-20020a027409000000b0037547278625mr14738013jac.300.1669631027186; Mon, 28
+ Nov 2022 02:23:47 -0800 (PST)
+Date:   Mon, 28 Nov 2022 02:23:47 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000048102d05ee8544e5@google.com>
+Subject: [syzbot] linux-next boot error: WARNING: refcount bug in dvb_register_device
+From:   syzbot <syzbot+fce48a3dd3368645bd6c@syzkaller.appspotmail.com>
+To:     colin.i.king@gmail.com, keitasuzuki.park@sslab.ics.keio.ac.jp,
+        linma@zju.edu.cn, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-next@vger.kernel.org,
+        mchehab@kernel.org, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Hello,
 
-On 11/28/22 08:39, Dan Scally wrote:
-> Morning Hans
-> 
-> On 25/11/2022 18:38, Hans de Goede wrote:
->> Hi,
->>
->> On 11/25/22 17:07, Dan Scally wrote:
->>> Hi Hans
->>>
->>> On 24/11/2022 20:00, Hans de Goede wrote:
->>>> The hm11b1 and ov01a1s sensor drivers shipped with the out of tree IPU6
->>>> driver, expect the clk_en GPIO to be modelled as a "clken" GPIO rather
->>>> then using the clk framework; and the hm11b1, ov01a1s and ov2740 driver
->>>> all 3 expect the privacy-led to be modelled as a "pled" GPIO, rather then
->>>> it being turned on/off at the same time as the clk.
->>>>
->>>> Adjust how we handle the GPIOs on these sensors accordingly, for now at
->>>> least, so that the out of tree driver can work with standard distro kernels
->>>> through e.g. dkms. Otherwise users need to run a patched kernel just for
->>>> this small difference.
->>>>
->>>> This of course needs to be revisited when we mainline these sensor drivers,
->>>> I can imagine the drivers getting clk-framework support when they are
->>>> mainlined and then at that same time their acpi HID can be dropped from
->>>> the use_gpio_for_clk_acpi_ids[] array.
->>>>
->>>> Note there already is a mainline driver for the ov2740, but that is not
->>>> impacted by this change since atm it uses neither the clk framework nor
->>>> a "clken" GPIO.
->>>>
->>>> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
->>>> ---
->>>> Maybe we should patch the sensor drivers for sensors supported with
->>>> the IPU3 to also expect the privacy-led to always be a separate GPIO?
->>>>
->>>> This way we can also avoid the camera LED briefly going on at boot,
->>>> when the driver is powering things up to read the sensor's ID register.
->>>>
->>>> And I have also put looking at making the mainline ov2740 driver suitable
->>>> for use with the (out of tree) IPU6 driver on my TODO list.
->>>> ---
->>>>    drivers/platform/x86/intel/int3472/common.h   |  2 +-
->>>>    drivers/platform/x86/intel/int3472/discrete.c | 37 +++++++++++++++----
->>>>    2 files changed, 31 insertions(+), 8 deletions(-)
->>>>
->>>> diff --git a/drivers/platform/x86/intel/int3472/common.h b/drivers/platform/x86/intel/int3472/common.h
->>>> index 53270d19c73a..58647d3084b9 100644
->>>> --- a/drivers/platform/x86/intel/int3472/common.h
->>>> +++ b/drivers/platform/x86/intel/int3472/common.h
->>>> @@ -23,7 +23,7 @@
->>>>    #define INT3472_GPIO_TYPE_PRIVACY_LED                0x0d
->>>>      #define INT3472_PDEV_MAX_NAME_LEN                23
->>>> -#define INT3472_MAX_SENSOR_GPIOS                3
->>>> +#define INT3472_MAX_SENSOR_GPIOS                4
->>>>      #define GPIO_REGULATOR_NAME_LENGTH                21
->>>>    #define GPIO_REGULATOR_SUPPLY_NAME_LENGTH            9
->>>> diff --git a/drivers/platform/x86/intel/int3472/discrete.c b/drivers/platform/x86/intel/int3472/discrete.c
->>>> index 9159291be28a..bfcf8184db16 100644
->>>> --- a/drivers/platform/x86/intel/int3472/discrete.c
->>>> +++ b/drivers/platform/x86/intel/int3472/discrete.c
->>>> @@ -216,6 +216,26 @@ static const char *int3472_dsm_type_to_func(u8 type)
->>>>        return "unknown";
->>>>    }
->>>>    +/*
->>>> + * The hm11b1 and ov01a1s sensor drivers shipped with the out of tree IPU6 driver,
->>>> + * expect the clk_en GPIO to be modelled as a "clken" GPIO rather then as a clk and
->>>> + * the hm11b1, ov01a1s and ov2740 driver all 3 expect the privacy-led to be modelled
->>>> + * as a "pled" GPIO, rather then it being turned on/off at the same time as the clk.
->>>> + *
->>>> + * Note there also is a mainline driver for the ov2740, but that does not use
->>>> + * the clk framework atm either.
->>>> + *
->>>> + * Adjust how we handle the GPIOs on these sensors accordingly, for now at least.
->>>> + * This needs to be revisited when we mainline these sensor drivers / when we merge
->>>> + * the necessary changes in the ov2740 sensor driver so that it can work on the IPU6.
->>>> + */
->>>
->>> I'm not really sure about this one though; wouldn't it be better to alter those sensor drivers to use the clock framework properly?
->> Yes, Laurent more or less said the same thing; and I was already starting
->> to think in this direction myself when typing the cover letter.
->>
->> So yes I agree with you and Laurent. That still leaves the question of what to do
->> with devices with just a privacy LED without a clk-en though.
->>
->> Dan, do you have a list of sensors which currently are known to work / be used
->> together with the IPU3 (and the int3472 discrete code) ?
->>
->> I know I will need to modifi the ov5693 code, but I wonder what other drivers
->> I will need to modify ?
-> 
-> 
-> The ov5693, ov8865 and ov7251 are the upstream working ones. There's a couple more that need changes upstreaming, but I can handle those during that process.
+syzbot found the following issue on:
 
-Ok thanks.
+HEAD commit:    15f2f20ccbf2 Add linux-next specific files for 20221128
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=114a14ad880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=50be0d6c9da3be9d
+dashboard link: https://syzkaller.appspot.com/bug?extid=fce48a3dd3368645bd6c
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
->> I think I might just move those sensor-drivers over to using a GPIO
->> for the privacy LED and just always register a GPIO for the privacy LED
->> pin, does that sound like a good idea to you ?
-> 
-> 
-> Well if we can't handle it during the int3472 code then yes - I certainly don't have  a better idea.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/0bcd04c8e812/disk-15f2f20c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/23f3cf3f818e/vmlinux-15f2f20c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/9111cdf112e7/bzImage-15f2f20c.xz
 
-I will patch the 3 sensors listed above to take an optional privacy LED GPIO then.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+fce48a3dd3368645bd6c@syzkaller.appspotmail.com
 
-I do plan to work on the sensor_power helper library which I discussed
-soon-ish since that should make things a lot easier, but for now I'll
-just do this the quick and dirty way, also to make backporting easier
-for distros (so that they can have a kernel which works with both
-IPU3 and the out-of-tree IPU6 stuff).
-
-Regards,
-
-Hans
-
-
+usbcore: registered new interface driver sonixj
+usbcore: registered new interface driver spca500
+usbcore: registered new interface driver spca501
+usbcore: registered new interface driver spca505
+usbcore: registered new interface driver spca506
+usbcore: registered new interface driver spca508
+usbcore: registered new interface driver spca561
+usbcore: registered new interface driver spca1528
+usbcore: registered new interface driver sq905
+usbcore: registered new interface driver sq905c
+usbcore: registered new interface driver sq930x
+usbcore: registered new interface driver sunplus
+usbcore: registered new interface driver stk014
+usbcore: registered new interface driver stk1135
+usbcore: registered new interface driver stv0680
+usbcore: registered new interface driver t613
+usbcore: registered new interface driver gspca_topro
+usbcore: registered new interface driver touptek
+usbcore: registered new interface driver tv8532
+usbcore: registered new interface driver vc032x
+usbcore: registered new interface driver vicam
+usbcore: registered new interface driver xirlink-cit
+usbcore: registered new interface driver gspca_zc3xx
+usbcore: registered new interface driver ALi m5602
+usbcore: registered new interface driver STV06xx
+usbcore: registered new interface driver gspca_gl860
+usbcore: registered new interface driver hackrf
+usbcore: registered new interface driver msi2500
+usbcore: registered new interface driver Philips webcam
+usbcore: registered new interface driver uvcvideo
+au0828: au0828 driver loaded
+usbcore: registered new interface driver au0828
+usbcore: registered new interface driver cx231xx
+usbcore: registered new interface driver em28xx
+em28xx: Registered (Em28xx v4l2 Extension) extension
+em28xx: Registered (Em28xx Audio Extension) extension
+em28xx: Registered (Em28xx dvb Extension) extension
+em28xx: Registered (Em28xx Input Extension) extension
+usbcore: registered new interface driver go7007
+usbcore: registered new interface driver go7007-loader
+usbcore: registered new interface driver hdpvr
+usbcore: registered new interface driver pvrusb2
+pvrusb2: V4L in-tree version:Hauppauge WinTV-PVR-USB2 MPEG2 Encoder/Tuner
+pvrusb2: Debug mask is 31 (0x1f)
+usbcore: registered new interface driver stk1160
+usbcore: registered new interface driver usbtv
+dvbdev: DVB: registering new adapter (dvb_vidtv_bridge)
+i2c i2c-0: DVB: registering adapter 0 frontend 0 (Dummy demod for DVB-T/T2/C/S/S2)...
+------------[ cut here ]------------
+refcount_t: addition on 0; use-after-free.
+WARNING: CPU: 0 PID: 1 at lib/refcount.c:25 refcount_warn_saturate+0x17c/0x1f0 lib/refcount.c:25
+Modules linked in:
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc6-next-20221128-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:refcount_warn_saturate+0x17c/0x1f0 lib/refcount.c:25
+Code: 0a 31 ff 89 de e8 64 54 75 fd 84 db 0f 85 2e ff ff ff e8 e7 57 75 fd 48 c7 c7 60 4c a6 8a c6 05 bf 49 51 0a 01 e8 5c 83 b4 05 <0f> 0b e9 0f ff ff ff e8 c8 57 75 fd 0f b6 1d a9 49 51 0a 31 ff 89
+RSP: 0000:ffffc900000678d0 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff88813ff58000 RSI: ffffffff81660e7c RDI: fffff5200000cf0c
+RBP: ffff888022a45010 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: 0000000000000001
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000001
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88823ffff000 CR3: 000000000c48e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __refcount_add include/linux/refcount.h:199 [inline]
+ __refcount_inc include/linux/refcount.h:250 [inline]
+ refcount_inc include/linux/refcount.h:267 [inline]
+ kref_get include/linux/kref.h:45 [inline]
+ dvb_device_get drivers/media/dvb-core/dvbdev.c:585 [inline]
+ dvb_register_device+0xe83/0x16e0 drivers/media/dvb-core/dvbdev.c:517
+ dvb_register_frontend+0x58f/0x8c0 drivers/media/dvb-core/dvb_frontend.c:3044
+ vidtv_bridge_dvb_init drivers/media/test-drivers/vidtv/vidtv_bridge.c:430 [inline]
+ vidtv_bridge_probe+0x450/0x9f0 drivers/media/test-drivers/vidtv/vidtv_bridge.c:502
+ platform_probe+0x100/0x1f0 drivers/base/platform.c:1400
+ call_driver_probe drivers/base/dd.c:560 [inline]
+ really_probe+0x249/0xb90 drivers/base/dd.c:639
+ __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
+ __driver_attach+0x271/0x570 drivers/base/dd.c:1194
+ bus_for_each_dev+0x14b/0x1d0 drivers/base/bus.c:301
+ bus_add_driver+0x4cd/0x640 drivers/base/bus.c:618
+ driver_register+0x224/0x3a0 drivers/base/driver.c:246
+ vidtv_bridge_init+0x3b/0x68 drivers/media/test-drivers/vidtv/vidtv_bridge.c:594
+ do_one_initcall+0x141/0x790 init/main.c:1306
+ do_initcall_level init/main.c:1379 [inline]
+ do_initcalls init/main.c:1395 [inline]
+ do_basic_setup init/main.c:1414 [inline]
+ kernel_init_freeable+0x6f9/0x782 init/main.c:1634
+ kernel_init+0x1e/0x1d0 init/main.c:1522
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> 
->> Anyways it is weekend now and I've already worked too many hours this week,
->> so I'll take a look at this on Monday.
->>
->> Regards,
->>
->> Hans
->>
->>
->>
->>>> +static const struct acpi_device_id use_gpio_for_clk_acpi_ids[] = {
->>>> +    { "HIMX11B1" }, /* hm11b1 */
->>>> +    { "OVTI01AS" }, /* ov01a1s */
->>>> +    { "INT3474" },  /* ov2740 */
->>>> +    {}
->>>> +};
->>>> +
->>>>    /**
->>>>     * skl_int3472_handle_gpio_resources: Map PMIC resources to consuming sensor
->>>>     * @ares: A pointer to a &struct acpi_resource
->>>> @@ -293,19 +313,22 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
->>>>            (polarity == GPIO_ACTIVE_HIGH) ? "high" : "low");
->>>>          switch (type) {
->>>> +    case INT3472_GPIO_TYPE_CLK_ENABLE:
->>>> +    case INT3472_GPIO_TYPE_PRIVACY_LED:
->>>> +        if (!acpi_match_device_ids(int3472->adev, use_gpio_for_clk_acpi_ids)) {
->>>> +            ret = skl_int3472_map_gpio_to_clk(int3472, agpio, type);
->>>> +            if (ret)
->>>> +                err_msg = "Failed to map GPIO to clock\n";
->>>> +
->>>> +            break;
->>>> +        }
->>>> +        fallthrough;
->>>>        case INT3472_GPIO_TYPE_RESET:
->>>>        case INT3472_GPIO_TYPE_POWERDOWN:
->>>>            ret = skl_int3472_map_gpio_to_sensor(int3472, agpio, func, polarity);
->>>>            if (ret)
->>>>                err_msg = "Failed to map GPIO pin to sensor\n";
->>>>    -        break;
->>>> -    case INT3472_GPIO_TYPE_CLK_ENABLE:
->>>> -    case INT3472_GPIO_TYPE_PRIVACY_LED:
->>>> -        ret = skl_int3472_map_gpio_to_clk(int3472, agpio, type);
->>>> -        if (ret)
->>>> -            err_msg = "Failed to map GPIO to clock\n";
->>>> -
->>>>            break;
->>>>        case INT3472_GPIO_TYPE_POWER_ENABLE:
->>>>            ret = skl_int3472_register_regulator(int3472, agpio);
-> 
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
