@@ -2,85 +2,307 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB2BDC46467
-	for <linux-media@archiver.kernel.org>; Mon, 28 Nov 2022 08:39:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BAACC4167D
+	for <linux-media@archiver.kernel.org>; Mon, 28 Nov 2022 08:40:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbiK1IjO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Nov 2022 03:39:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48900 "EHLO
+        id S230085AbiK1Ike (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Nov 2022 03:40:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbiK1IjM (ORCPT
+        with ESMTP id S229745AbiK1Ik3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Nov 2022 03:39:12 -0500
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A92BA9FED;
-        Mon, 28 Nov 2022 00:39:10 -0800 (PST)
-Received: from zju.edu.cn (unknown [10.12.77.33])
-        by mail-app3 (Coremail) with SMTP id cC_KCgB39bmnc4RjHCTNCQ--.64643S4;
-        Mon, 28 Nov 2022 16:39:03 +0800 (CST)
-From:   Lin Ma <linma@zju.edu.cn>
-To:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Lin Ma <linma@zju.edu.cn>,
-        "Stephen Rothwell" <sfr@canb.auug.org.au>
-Subject: [PATCH v0] media: dvbdev: fix build warning due to comments
-Date:   Mon, 28 Nov 2022 16:39:03 +0800
-Message-Id: <20221128083903.11117-1-linma@zju.edu.cn>
-X-Mailer: git-send-email 2.38.1
+        Mon, 28 Nov 2022 03:40:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3813E17ABC;
+        Mon, 28 Nov 2022 00:40:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8E4EB80CA3;
+        Mon, 28 Nov 2022 08:40:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C541C433C1;
+        Mon, 28 Nov 2022 08:40:23 +0000 (UTC)
+Message-ID: <bd446c0a-ed62-d8b0-e51c-bf4a7ba65aea@xs4all.nl>
+Date:   Mon, 28 Nov 2022 09:40:21 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Content-Language: en-US
+To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-media@vger.kernel.org
+References: <20221116194307.164543-1-mairacanal@riseup.net>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: Re: [PATCH 1/2] media: s5c73m3: Replace legacy gpio interface for
+ gpiod
+In-Reply-To: <20221116194307.164543-1-mairacanal@riseup.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cC_KCgB39bmnc4RjHCTNCQ--.64643S4
-X-Coremail-Antispam: 1UD129KBjvdXoWrZry8XFW7Aw1fXw4xuF4kWFg_yoWktFb_Ca
-        4IvrWkurn3GF40gr13tr1rX34rKwn2qrW8KF4ftas7AFZ8WFZ8WrZrKry2qryxuw47Jry3
-        Z3Z5Xw45WF10gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb2xFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
-        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
-        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E
-        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
-        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
-        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
-        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxF
-        aVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
-        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
-        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
-        CI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
-        z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Previous commit that introduces reference counter does not add proper
-comments, which will lead to warning when building htmldocs. Fix them.
+Hi Maíra,
 
-Reported-by: "Stephen Rothwell" <sfr@canb.auug.org.au>
-Fixes: 0fc044b2b5e2 ("media: dvbdev: adopts refcnt to avoid UAF")
-Signed-off-by: Lin Ma <linma@zju.edu.cn>
----
- include/media/dvbdev.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+I'm skipping your patch in favor of a similar patch from Linux Walleij:
 
-diff --git a/include/media/dvbdev.h b/include/media/dvbdev.h
-index fad987115..29d25c8a6 100644
---- a/include/media/dvbdev.h
-+++ b/include/media/dvbdev.h
-@@ -130,6 +130,7 @@ struct dvb_adapter {
-  * struct dvb_device - represents a DVB device node
-  *
-  * @list_head:	List head with all DVB devices
-+ * @ref:	reference counter
-  * @fops:	pointer to struct file_operations
-  * @adapter:	pointer to the adapter that holds this device node
-  * @type:	type of the device, as defined by &enum dvb_device_type.
-@@ -200,7 +201,7 @@ struct dvb_device {
- struct dvb_device *dvb_device_get(struct dvb_device *dvbdev);
- 
- /**
-- * dvb_device_get - Decrease dvb_device reference
-+ * dvb_device_put - Decrease dvb_device reference
-  *
-  * @dvbdev:	pointer to struct dvb_device
-  */
--- 
-2.38.1
+https://patchwork.linuxtv.org/project/linux-media/patch/20221108100604.1500909-1-linus.walleij@linaro.org/
+
+I will take your 2/2 patch, though. That looks good.
+
+Regards,
+
+	Hans
+
+On 16/11/2022 20:43, Maíra Canal wrote:
+> Considering the current transition of the GPIO subsystem, remove all
+> dependencies of the legacy GPIO interface (linux/gpio.h and linux
+> /of_gpio.h) and replace it with the descriptor-based GPIO approach.
+> 
+> Signed-off-by: Maíra Canal <mairacanal@riseup.net>
+> ---
+>  drivers/media/i2c/s5c73m3/s5c73m3-core.c | 95 ++++++++++--------------
+>  drivers/media/i2c/s5c73m3/s5c73m3.h      |  9 +--
+>  include/media/i2c/s5c73m3.h              | 15 +---
+>  3 files changed, 44 insertions(+), 75 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/s5c73m3/s5c73m3-core.c b/drivers/media/i2c/s5c73m3/s5c73m3-core.c
+> index d96ba58ce1e5..77cba5f47364 100644
+> --- a/drivers/media/i2c/s5c73m3/s5c73m3-core.c
+> +++ b/drivers/media/i2c/s5c73m3/s5c73m3-core.c
+> @@ -10,12 +10,11 @@
+>  #include <linux/clk.h>
+>  #include <linux/delay.h>
+>  #include <linux/firmware.h>
+> -#include <linux/gpio.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/i2c.h>
+>  #include <linux/init.h>
+>  #include <linux/media.h>
+>  #include <linux/module.h>
+> -#include <linux/of_gpio.h>
+>  #include <linux/of_graph.h>
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/sizes.h>
+> @@ -1347,22 +1346,26 @@ static int s5c73m3_oif_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+>  	return 0;
+>  }
+>  
+> -static int s5c73m3_gpio_set_value(struct s5c73m3 *priv, int id, u32 val)
+> +static int s5c73m3_gpio_set_value(struct gpio_desc *gpio, int val)
+>  {
+> -	if (!gpio_is_valid(priv->gpio[id].gpio))
+> +	if (!gpio)
+>  		return 0;
+> -	gpio_set_value(priv->gpio[id].gpio, !!val);
+> +	gpiod_set_value(gpio, !!val);
+>  	return 1;
+>  }
+>  
+> -static int s5c73m3_gpio_assert(struct s5c73m3 *priv, int id)
+> +static int s5c73m3_gpio_assert(struct gpio_desc *gpio)
+>  {
+> -	return s5c73m3_gpio_set_value(priv, id, priv->gpio[id].level);
+> +	int val = gpiod_get_value(gpio);
+> +
+> +	return s5c73m3_gpio_set_value(gpio, val);
+>  }
+>  
+> -static int s5c73m3_gpio_deassert(struct s5c73m3 *priv, int id)
+> +static int s5c73m3_gpio_deassert(struct gpio_desc *gpio)
+>  {
+> -	return s5c73m3_gpio_set_value(priv, id, !priv->gpio[id].level);
+> +	int val = gpiod_get_value(gpio);
+> +
+> +	return s5c73m3_gpio_set_value(gpio, !val);
+>  }
+>  
+>  static int __s5c73m3_power_on(struct s5c73m3 *state)
+> @@ -1386,10 +1389,10 @@ static int __s5c73m3_power_on(struct s5c73m3 *state)
+>  	v4l2_dbg(1, s5c73m3_dbg, &state->oif_sd, "clock frequency: %ld\n",
+>  					clk_get_rate(state->clock));
+>  
+> -	s5c73m3_gpio_deassert(state, STBY);
+> +	s5c73m3_gpio_deassert(state->gpio_stby);
+>  	usleep_range(100, 200);
+>  
+> -	s5c73m3_gpio_deassert(state, RSET);
+> +	s5c73m3_gpio_deassert(state->gpio_reset);
+>  	usleep_range(50, 100);
+>  
+>  	return 0;
+> @@ -1404,10 +1407,10 @@ static int __s5c73m3_power_off(struct s5c73m3 *state)
+>  {
+>  	int i, ret;
+>  
+> -	if (s5c73m3_gpio_assert(state, RSET))
+> +	if (s5c73m3_gpio_assert(state->gpio_reset))
+>  		usleep_range(10, 50);
+>  
+> -	if (s5c73m3_gpio_assert(state, STBY))
+> +	if (s5c73m3_gpio_assert(state->gpio_stby))
+>  		usleep_range(100, 200);
+>  
+>  	clk_disable_unprepare(state->clock);
+> @@ -1545,50 +1548,34 @@ static const struct v4l2_subdev_ops oif_subdev_ops = {
+>  
+>  static int s5c73m3_configure_gpios(struct s5c73m3 *state)
+>  {
+> -	static const char * const gpio_names[] = {
+> -		"S5C73M3_STBY", "S5C73M3_RST"
+> -	};
+>  	struct i2c_client *c = state->i2c_client;
+> -	struct s5c73m3_gpio *g = state->gpio;
+> -	int ret, i;
+> +	struct device *dev = &c->dev;
+> +	struct device_node *np = dev->of_node;
+>  
+> -	for (i = 0; i < GPIO_NUM; ++i) {
+> -		unsigned int flags = GPIOF_DIR_OUT;
+> -		if (g[i].level)
+> -			flags |= GPIOF_INIT_HIGH;
+> -		ret = devm_gpio_request_one(&c->dev, g[i].gpio, flags,
+> -					    gpio_names[i]);
+> -		if (ret) {
+> -			v4l2_err(c, "failed to request gpio %s\n",
+> -				 gpio_names[i]);
+> -			return ret;
+> -		}
+> +	state->gpio_stby = gpiod_get_from_of_node(np, "standby-gpios", 0, GPIOD_ASIS,
+> +			"S5C73M3_STBY");
+> +
+> +	if (IS_ERR(state->gpio_stby)) {
+> +		v4l2_err(c, "failed to request gpio S5C73M3_STBY");
+> +		return PTR_ERR(state->gpio_stby);
+>  	}
+> -	return 0;
+> -}
+>  
+> -static int s5c73m3_parse_gpios(struct s5c73m3 *state)
+> -{
+> -	static const char * const prop_names[] = {
+> -		"standby-gpios", "xshutdown-gpios",
+> -	};
+> -	struct device *dev = &state->i2c_client->dev;
+> -	struct device_node *node = dev->of_node;
+> -	int ret, i;
+> +	if (state->gpio_stby)
+> +		gpiod_direction_output(state->gpio_stby,
+> +				!gpiod_is_active_low(state->gpio_stby));
+>  
+> -	for (i = 0; i < GPIO_NUM; ++i) {
+> -		enum of_gpio_flags of_flags;
+> +	state->gpio_reset = gpiod_get_from_of_node(np, "xshutdown-gpios", 0, GPIOD_ASIS,
+> +			"S5C73M3_RST");
+>  
+> -		ret = of_get_named_gpio_flags(node, prop_names[i],
+> -					      0, &of_flags);
+> -		if (ret < 0) {
+> -			dev_err(dev, "failed to parse %s DT property\n",
+> -				prop_names[i]);
+> -			return -EINVAL;
+> -		}
+> -		state->gpio[i].gpio = ret;
+> -		state->gpio[i].level = !(of_flags & OF_GPIO_ACTIVE_LOW);
+> +	if (IS_ERR(state->gpio_reset)) {
+> +		v4l2_err(c, "failed to request gpio S5C73M3_RST");
+> +		return PTR_ERR(state->gpio_reset);
+>  	}
+> +
+> +	if (state->gpio_reset)
+> +		gpiod_direction_output(state->gpio_reset,
+> +				!gpiod_is_active_low(state->gpio_reset));
+> +
+>  	return 0;
+>  }
+>  
+> @@ -1608,8 +1595,8 @@ static int s5c73m3_get_platform_data(struct s5c73m3 *state)
+>  		}
+>  
+>  		state->mclk_frequency = pdata->mclk_frequency;
+> -		state->gpio[STBY] = pdata->gpio_stby;
+> -		state->gpio[RSET] = pdata->gpio_reset;
+> +		state->gpio_stby = pdata->gpio_stby;
+> +		state->gpio_reset = pdata->gpio_reset;
+>  		return 0;
+>  	}
+>  
+> @@ -1624,10 +1611,6 @@ static int s5c73m3_get_platform_data(struct s5c73m3 *state)
+>  					state->mclk_frequency);
+>  	}
+>  
+> -	ret = s5c73m3_parse_gpios(state);
+> -	if (ret < 0)
+> -		return -EINVAL;
+> -
+>  	node_ep = of_graph_get_next_endpoint(node, NULL);
+>  	if (!node_ep) {
+>  		dev_warn(dev, "no endpoint defined for node: %pOF\n", node);
+> diff --git a/drivers/media/i2c/s5c73m3/s5c73m3.h b/drivers/media/i2c/s5c73m3/s5c73m3.h
+> index c3fcfdd3ea66..f0056ae6e51a 100644
+> --- a/drivers/media/i2c/s5c73m3/s5c73m3.h
+> +++ b/drivers/media/i2c/s5c73m3/s5c73m3.h
+> @@ -351,12 +351,6 @@ struct s5c73m3_ctrls {
+>  	struct v4l2_ctrl *scene_mode;
+>  };
+>  
+> -enum s5c73m3_gpio_id {
+> -	STBY,
+> -	RSET,
+> -	GPIO_NUM,
+> -};
+> -
+>  enum s5c73m3_resolution_types {
+>  	RES_ISP,
+>  	RES_JPEG,
+> @@ -383,7 +377,8 @@ struct s5c73m3 {
+>  	u32 i2c_read_address;
+>  
+>  	struct regulator_bulk_data supplies[S5C73M3_MAX_SUPPLIES];
+> -	struct s5c73m3_gpio gpio[GPIO_NUM];
+> +	struct gpio_desc *gpio_stby;
+> +	struct gpio_desc *gpio_reset;
+>  
+>  	struct clk *clock;
+>  
+> diff --git a/include/media/i2c/s5c73m3.h b/include/media/i2c/s5c73m3.h
+> index a51f1025ba1c..caad855a8394 100644
+> --- a/include/media/i2c/s5c73m3.h
+> +++ b/include/media/i2c/s5c73m3.h
+> @@ -17,19 +17,10 @@
+>  #ifndef MEDIA_S5C73M3__
+>  #define MEDIA_S5C73M3__
+>  
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/videodev2.h>
+>  #include <media/v4l2-mediabus.h>
+>  
+> -/**
+> - * struct s5c73m3_gpio - data structure describing a GPIO
+> - * @gpio:  GPIO number
+> - * @level: indicates active state of the @gpio
+> - */
+> -struct s5c73m3_gpio {
+> -	int gpio;
+> -	int level;
+> -};
+> -
+>  /**
+>   * struct s5c73m3_platform_data - s5c73m3 driver platform data
+>   * @mclk_frequency: sensor's master clock frequency in Hz
+> @@ -44,8 +35,8 @@ struct s5c73m3_gpio {
+>  struct s5c73m3_platform_data {
+>  	unsigned long mclk_frequency;
+>  
+> -	struct s5c73m3_gpio gpio_reset;
+> -	struct s5c73m3_gpio gpio_stby;
+> +	struct gpio_desc *gpio_reset;
+> +	struct gpio_desc *gpio_stby;
+>  
+>  	enum v4l2_mbus_type bus_type;
+>  	u8 nlanes;
 
