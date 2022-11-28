@@ -2,43 +2,43 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73306C4708D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF2E8C636F9
 	for <linux-media@archiver.kernel.org>; Mon, 28 Nov 2022 14:44:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232623AbiK1Oni (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Nov 2022 09:43:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36068 "EHLO
+        id S231974AbiK1Onm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Nov 2022 09:43:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232557AbiK1OnH (ORCPT
+        with ESMTP id S232705AbiK1OnY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Nov 2022 09:43:07 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4D0E0FE;
-        Mon, 28 Nov 2022 06:43:06 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ASDMLN1005006;
-        Mon, 28 Nov 2022 14:42:56 GMT
+        Mon, 28 Nov 2022 09:43:24 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CBBE0FE;
+        Mon, 28 Nov 2022 06:43:21 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ASESuFj005989;
+        Mon, 28 Nov 2022 14:43:12 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=b+flTeLVNRI2i/YW6WFzY0JKVSv8TnD6PO7crGrBrOI=;
- b=kQeo0Nnxr5981hkP5xnUuTwHcAeVcs+a5o0lLcgBF1EbNYGXndc+fxNHuV29lWoJBT3a
- OVWeZ5YCK189UtXIpeliR3TxIJLj0n+Jyt0DvNlSZ/EL8aOdBuq0oil1iCv1f2DZpa/z
- SSw5NDYBA4rKlh2o9iPud4WNXIJt55Vbu5YLlTE9KpS1pkKPWFJvPK2jk4DAqHeoEXhK
- fb7M2k7aR51YP7h76fVBPgp7A/GWp1oY7IGW8WTS52I9AKHQFFw4uiwhvHU1HOmElubh
- rDEdRA2pzHOay1ZvRgqXD/TR2n/R9EDw2L9rplBLr6e7oUsyiR22KCn2/++7Ecd6+KeS IQ== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m38gq4t7t-1
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=qcppdkim1;
+ bh=Uom1u/5zkrOC8W2i//psHydpiJNx0p7BrprjTzsd1v4=;
+ b=YjBYmJQkKxSPJ6q0mpXxQR+puOqQEV7NLG8mKDL1GlfX7Z5aTLJS1GNAOkpWs8IDxZR7
+ yO/DsmSWSzKzlm5ph26fYOBt5S9ejFD5oltLFk8lZfVdjLphldvups8MUXBpBhNVc4uF
+ HPaai5FWMUPdwtqMI1VFvbDo4yxpx9uhosXsMFBwrY4w6lhTB6COQcudKScUtcgxkLrd
+ SwEU02j9jmqR2rrCPOw5BVPE6BbEe1hyh2N9TxgFo7H5yyGkjx/U/UZFcqWTiCDaKBZ/
+ 9mEXDPk5vf70bng8kiizBTR6fpcidInDymF0qFXa+2UWFdq62ej4mdw/rTsLdPistiaw uA== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m39tg4bpn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Nov 2022 14:42:56 +0000
+        Mon, 28 Nov 2022 14:43:12 +0000
 Received: from nasanex01a.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ASEgtT5006704
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ASEhBDm009763
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Nov 2022 14:42:55 GMT
+        Mon, 28 Nov 2022 14:43:11 GMT
 Received: from mmitkov.eu.qualcomm.com (10.80.80.8) by
  nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 28 Nov 2022 06:42:52 -0800
+ 15.2.986.36; Mon, 28 Nov 2022 06:43:08 -0800
 From:   <quic_mmitkov@quicinc.com>
 To:     <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <robert.foss@linaro.org>, <akapatra@quicinc.com>,
@@ -48,10 +48,12 @@ CC:     <agross@kernel.org>, <konrad.dybcio@somainline.org>,
         <cgera@qti.qualcomm.com>, <gchinnab@quicinc.com>,
         <ayasan@qti.qualcomm.com>, <laurent.pinchart@ideasonboard.com>,
         Milen Mitkov <quic_mmitkov@quicinc.com>
-Subject: [PATCH v5 0/4] media: camss: sm8250: Virtual channels support for SM8250
-Date:   Mon, 28 Nov 2022 16:42:06 +0200
-Message-ID: <20221128144210.1028-1-quic_mmitkov@quicinc.com>
+Subject: [PATCH v5 4/4] media: camss: sm8250: Pipeline starting and stopping for multiple virtual channels
+Date:   Mon, 28 Nov 2022 16:42:10 +0200
+Message-ID: <20221128144210.1028-5-quic_mmitkov@quicinc.com>
 X-Mailer: git-send-email 2.37.3.windows.1
+In-Reply-To: <20221128144210.1028-1-quic_mmitkov@quicinc.com>
+References: <20221128144210.1028-1-quic_mmitkov@quicinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -60,109 +62,91 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01a.na.qualcomm.com (10.52.223.231)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: BP-zYrDfa6vtL69J9OR32eM8reKi5fIQ
-X-Proofpoint-ORIG-GUID: BP-zYrDfa6vtL69J9OR32eM8reKi5fIQ
+X-Proofpoint-GUID: oAR77m9GWb9tURx-nCNsoSC0RQeHBi24
+X-Proofpoint-ORIG-GUID: oAR77m9GWb9tURx-nCNsoSC0RQeHBi24
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-28_13,2022-11-28_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- lowpriorityscore=0 malwarescore=0 bulkscore=0 phishscore=0 adultscore=0
- suspectscore=0 impostorscore=0 priorityscore=1501 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211280110
+ definitions=2022-11-28_12,2022-11-28_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
+ adultscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0 mlxlogscore=833
+ mlxscore=0 phishscore=0 impostorscore=0 priorityscore=1501 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211280109
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 From: Milen Mitkov <quic_mmitkov@quicinc.com>
 
-For v5:
-- Use entity->use_count instead of s_stream subdev call ret code to
-  check if another instance of the pipeline is running. Prevents an
-  error on 6.1 and up, when stopping one of several simultaneous
-  instances.
-- flush buffers instead of just returning if the pipeline didn't start.
+Use the multistream series function video_device_pipeline_alloc_start
+to allows multiple clients of the same pipeline.
 
-For v4:
-- fixes the warning reported by the kernel test robot
-- tiny code change to enable the vc functionality with the partially-applied
-  multistream patches on linux-next (tested on tag:next-20221010)
+If the VFE entity is used by another instance of the pipeline,
+the pipeline won't be stopped. This allows for stopping and starting
+streams at any point without disrupting the other running streams.
 
-For v3:
-- setting the sink pad format on the CSID entity will now propagate the
-  format to the source pads to keep the subdev in a valid internal state.
-- code syntax improvements
+Signed-off-by: Milen Mitkov <quic_mmitkov@quicinc.com>
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Acked-by: Robert Foss <robert.foss@linaro.org>
+---
+ .../media/platform/qcom/camss/camss-video.c   | 21 ++++++++++++++++---
+ 1 file changed, 18 insertions(+), 3 deletions(-)
 
-For v2:
-- code syntax improvements
-- The info print for the enabled VCs was demoted to a dbg print. Can be
-  enabled with dynamic debug, e.g.:
-echo "file drivers/media/platform/qcom/camss/* +p" > /sys/kernel/debug/dynamic_debug/control
-
-NOTE: These changes depend on the multistream series, that as of yet
-is still not merged upstream. However, part of the
-multistream patches are merged in linux-next (tested on
-tag:next-20221010), including the patch that introduces the
-video_device_pipeline_alloc_start() functionality. This allows 
-applying and using this series on linux-next without applying the
-complete multistream set.
-
-The CSID hardware on SM8250 can demux the input data stream into
-maximum of 4 multiple streams depending on virtual channel (vc)
-or data type (dt) configuration.
-
-Situations in which demuxing is useful:
-- HDR sensors that produce a 2-frame HDR output, e.g. a light and a dark frame
-  (the setup we used for testing, with the imx412 sensor),
-  or a 3-frame HDR output - light, medium-lit, dark frame.
-- sensors with additional metadata that is streamed over a different
-  virtual channel/datatype.
-- sensors that produce frames with multiple resolutions in the same pixel
-  data stream
-
-With these changes, the CSID entity has, as it did previously, a single
-sink port (0), and always exposes 4 source ports (1, 2,3, 4). The
-virtual channel configuration is determined by which of the source ports
-are linked to an output VFE line. For example, the link below will
-configure the CSID driver to enable vc 0 and vc 1:
-
-media-ctl -l '"msm_csid0":1->"msm_vfe0_rdi0":0[1]'
-media-ctl -l '"msm_csid0":2->"msm_vfe0_rdi1":0[1]'
-
-which will be demuxed and propagated into /dev/video0
-and /dev/video1 respectively. With this, the userspace can use
-any normal V4L2 client app to start/stop/queue/dequeue from these
-video nodes. Tested with the yavta app.
-
-The format of each RDI channel of the used VFE(s) (msm_vfe0_rdi0,
-msm_vfe0_rdi1,...) must also be configured explicitly.
-
-Note that in order to keep a valid internal subdevice state,
-setting the sink pad format of the CSID subdevice will propagate
-this format to the source pads. However, since the CSID hardware
-can demux the input stream into several streams each of which can 
-be a different format, in that case each source pad's 
-format must be set individually, e.g.:
-
-media-ctl -V '"msm_csid0":1[fmt:SRGGB10/3840x2160]'
-media-ctl -V '"msm_csid0":2[fmt:SRGGB10/960x540]'
-
-Milen Mitkov (4):
-  media: camss: sm8250: Virtual channels for CSID
-  media: camss: vfe: Reserve VFE lines on stream start and link to CSID
-  media: camss: vfe-480: Multiple outputs support for SM8250
-  media: camss: sm8250: Pipeline starting and stopping for multiple
-    virtual channels
-
- .../platform/qcom/camss/camss-csid-gen2.c     | 54 ++++++++++------
- .../media/platform/qcom/camss/camss-csid.c    | 44 +++++++++----
- .../media/platform/qcom/camss/camss-csid.h    | 11 +++-
- .../media/platform/qcom/camss/camss-vfe-480.c | 61 ++++++++++++-------
- drivers/media/platform/qcom/camss/camss-vfe.c |  1 +
- .../media/platform/qcom/camss/camss-video.c   | 21 ++++++-
- drivers/media/platform/qcom/camss/camss.c     |  2 +-
- 7 files changed, 134 insertions(+), 60 deletions(-)
-
+diff --git a/drivers/media/platform/qcom/camss/camss-video.c b/drivers/media/platform/qcom/camss/camss-video.c
+index 41deda232e4a..12ac7d4d755e 100644
+--- a/drivers/media/platform/qcom/camss/camss-video.c
++++ b/drivers/media/platform/qcom/camss/camss-video.c
+@@ -351,6 +351,7 @@ static int video_get_subdev_format(struct camss_video *video,
+ 	if (subdev == NULL)
+ 		return -EPIPE;
+ 
++	memset(&fmt, 0, sizeof(fmt));
+ 	fmt.pad = pad;
+ 	fmt.which = V4L2_SUBDEV_FORMAT_ACTIVE;
+ 
+@@ -493,9 +494,11 @@ static int video_start_streaming(struct vb2_queue *q, unsigned int count)
+ 	struct v4l2_subdev *subdev;
+ 	int ret;
+ 
+-	ret = video_device_pipeline_start(vdev, &video->pipe);
+-	if (ret < 0)
++	ret = video_device_pipeline_alloc_start(vdev);
++	if (ret < 0) {
++		dev_err(video->camss->dev, "Failed to start media pipeline: %d\n", ret);
+ 		goto flush_buffers;
++	}
+ 
+ 	ret = video_check_format(video);
+ 	if (ret < 0)
+@@ -537,6 +540,7 @@ static void video_stop_streaming(struct vb2_queue *q)
+ 	struct media_entity *entity;
+ 	struct media_pad *pad;
+ 	struct v4l2_subdev *subdev;
++	int ret;
+ 
+ 	entity = &vdev->entity;
+ 	while (1) {
+@@ -551,7 +555,18 @@ static void video_stop_streaming(struct vb2_queue *q)
+ 		entity = pad->entity;
+ 		subdev = media_entity_to_v4l2_subdev(entity);
+ 
+-		v4l2_subdev_call(subdev, video, s_stream, 0);
++		ret = v4l2_subdev_call(subdev, video, s_stream, 0);
++
++		if (entity->use_count > 1) {
++			/* Don't stop if other instances of the pipeline are still running */
++			dev_dbg(video->camss->dev, "Video pipeline still used, don't stop streaming.\n");
++			return;
++		}
++
++		if (ret) {
++			dev_err(video->camss->dev, "Video pipeline stop failed: %d\n", ret);
++			return;
++		}
+ 	}
+ 
+ 	video_device_pipeline_stop(vdev);
 -- 
 2.37.3
 
