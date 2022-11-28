@@ -2,43 +2,38 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF2E8C636F9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C56D2C63704
 	for <linux-media@archiver.kernel.org>; Mon, 28 Nov 2022 14:44:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231974AbiK1Onm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Nov 2022 09:43:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35814 "EHLO
+        id S232439AbiK1Ono (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Nov 2022 09:43:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232705AbiK1OnY (ORCPT
+        with ESMTP id S232227AbiK1OnE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Nov 2022 09:43:24 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CBBE0FE;
-        Mon, 28 Nov 2022 06:43:21 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ASESuFj005989;
-        Mon, 28 Nov 2022 14:43:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=Uom1u/5zkrOC8W2i//psHydpiJNx0p7BrprjTzsd1v4=;
- b=YjBYmJQkKxSPJ6q0mpXxQR+puOqQEV7NLG8mKDL1GlfX7Z5aTLJS1GNAOkpWs8IDxZR7
- yO/DsmSWSzKzlm5ph26fYOBt5S9ejFD5oltLFk8lZfVdjLphldvups8MUXBpBhNVc4uF
- HPaai5FWMUPdwtqMI1VFvbDo4yxpx9uhosXsMFBwrY4w6lhTB6COQcudKScUtcgxkLrd
- SwEU02j9jmqR2rrCPOw5BVPE6BbEe1hyh2N9TxgFo7H5yyGkjx/U/UZFcqWTiCDaKBZ/
- 9mEXDPk5vf70bng8kiizBTR6fpcidInDymF0qFXa+2UWFdq62ej4mdw/rTsLdPistiaw uA== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m39tg4bpn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Nov 2022 14:43:12 +0000
-Received: from nasanex01a.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ASEhBDm009763
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Nov 2022 14:43:11 GMT
+        Mon, 28 Nov 2022 09:43:04 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA8D23163;
+        Mon, 28 Nov 2022 06:43:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1669646584; x=1701182584;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=X1/UKOgT7/pL11XhDRr6jR8THx7G6AXiPasEtvj83rU=;
+  b=SqyQPyVsr0wiVRMmrMmvd5Ixf3q/cIZW4Q0jIojzx9b97Q8acqiflrqd
+   z7gjc/o/9ES7K4Pu5QohLE4ZylGNDp5YPl7B6lKVuZTjySIpIi7qqLa1r
+   LMKtIwfo9xsEpuHHvh6Wmk7PJ9FQxU8xI9i8pmdFZvV+A/KFfyp+DuCww
+   s=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 28 Nov 2022 06:43:03 -0800
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 06:43:04 -0800
 Received: from mmitkov.eu.qualcomm.com (10.80.80.8) by
  nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 28 Nov 2022 06:43:08 -0800
+ 15.2.986.36; Mon, 28 Nov 2022 06:42:59 -0800
 From:   <quic_mmitkov@quicinc.com>
 To:     <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <robert.foss@linaro.org>, <akapatra@quicinc.com>,
@@ -48,9 +43,9 @@ CC:     <agross@kernel.org>, <konrad.dybcio@somainline.org>,
         <cgera@qti.qualcomm.com>, <gchinnab@quicinc.com>,
         <ayasan@qti.qualcomm.com>, <laurent.pinchart@ideasonboard.com>,
         Milen Mitkov <quic_mmitkov@quicinc.com>
-Subject: [PATCH v5 4/4] media: camss: sm8250: Pipeline starting and stopping for multiple virtual channels
-Date:   Mon, 28 Nov 2022 16:42:10 +0200
-Message-ID: <20221128144210.1028-5-quic_mmitkov@quicinc.com>
+Subject: [PATCH v5 2/4] media: camss: vfe: Reserve VFE lines on stream start and link to CSID
+Date:   Mon, 28 Nov 2022 16:42:08 +0200
+Message-ID: <20221128144210.1028-3-quic_mmitkov@quicinc.com>
 X-Mailer: git-send-email 2.37.3.windows.1
 In-Reply-To: <20221128144210.1028-1-quic_mmitkov@quicinc.com>
 References: <20221128144210.1028-1-quic_mmitkov@quicinc.com>
@@ -60,93 +55,52 @@ Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
 X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: oAR77m9GWb9tURx-nCNsoSC0RQeHBi24
-X-Proofpoint-ORIG-GUID: oAR77m9GWb9tURx-nCNsoSC0RQeHBi24
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-28_12,2022-11-28_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- adultscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0 mlxlogscore=833
- mlxscore=0 phishscore=0 impostorscore=0 priorityscore=1501 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211280109
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 From: Milen Mitkov <quic_mmitkov@quicinc.com>
 
-Use the multistream series function video_device_pipeline_alloc_start
-to allows multiple clients of the same pipeline.
+For multiple virtual channels support, each VFE line can be in either
+ON, RESERVED or OFF states. This allows the starting and stopping
+of a VFE line independently of other active VFE lines.
 
-If the VFE entity is used by another instance of the pipeline,
-the pipeline won't be stopped. This allows for stopping and starting
-streams at any point without disrupting the other running streams.
+Also, link the CSID entity's source ports to corresponding VFE lines.
 
 Signed-off-by: Milen Mitkov <quic_mmitkov@quicinc.com>
 Reviewed-by: Robert Foss <robert.foss@linaro.org>
 Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Acked-by: Robert Foss <robert.foss@linaro.org>
 ---
- .../media/platform/qcom/camss/camss-video.c   | 21 ++++++++++++++++---
- 1 file changed, 18 insertions(+), 3 deletions(-)
+ drivers/media/platform/qcom/camss/camss-vfe.c | 1 +
+ drivers/media/platform/qcom/camss/camss.c     | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-video.c b/drivers/media/platform/qcom/camss/camss-video.c
-index 41deda232e4a..12ac7d4d755e 100644
---- a/drivers/media/platform/qcom/camss/camss-video.c
-+++ b/drivers/media/platform/qcom/camss/camss-video.c
-@@ -351,6 +351,7 @@ static int video_get_subdev_format(struct camss_video *video,
- 	if (subdev == NULL)
- 		return -EPIPE;
- 
-+	memset(&fmt, 0, sizeof(fmt));
- 	fmt.pad = pad;
- 	fmt.which = V4L2_SUBDEV_FORMAT_ACTIVE;
- 
-@@ -493,9 +494,11 @@ static int video_start_streaming(struct vb2_queue *q, unsigned int count)
- 	struct v4l2_subdev *subdev;
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+index a26e4a5d87b6..e0832f3f4f25 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+@@ -740,6 +740,7 @@ static int vfe_set_stream(struct v4l2_subdev *sd, int enable)
  	int ret;
  
--	ret = video_device_pipeline_start(vdev, &video->pipe);
--	if (ret < 0)
-+	ret = video_device_pipeline_alloc_start(vdev);
-+	if (ret < 0) {
-+		dev_err(video->camss->dev, "Failed to start media pipeline: %d\n", ret);
- 		goto flush_buffers;
-+	}
+ 	if (enable) {
++		line->output.state = VFE_OUTPUT_RESERVED;
+ 		ret = vfe->ops->vfe_enable(line);
+ 		if (ret < 0)
+ 			dev_err(vfe->camss->dev,
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index 9cda284f1e71..547099f8ed14 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -1320,7 +1320,7 @@ static int camss_register_entities(struct camss *camss)
+ 					struct v4l2_subdev *vfe = &camss->vfe[k].line[j].subdev;
  
- 	ret = video_check_format(video);
- 	if (ret < 0)
-@@ -537,6 +540,7 @@ static void video_stop_streaming(struct vb2_queue *q)
- 	struct media_entity *entity;
- 	struct media_pad *pad;
- 	struct v4l2_subdev *subdev;
-+	int ret;
- 
- 	entity = &vdev->entity;
- 	while (1) {
-@@ -551,7 +555,18 @@ static void video_stop_streaming(struct vb2_queue *q)
- 		entity = pad->entity;
- 		subdev = media_entity_to_v4l2_subdev(entity);
- 
--		v4l2_subdev_call(subdev, video, s_stream, 0);
-+		ret = v4l2_subdev_call(subdev, video, s_stream, 0);
-+
-+		if (entity->use_count > 1) {
-+			/* Don't stop if other instances of the pipeline are still running */
-+			dev_dbg(video->camss->dev, "Video pipeline still used, don't stop streaming.\n");
-+			return;
-+		}
-+
-+		if (ret) {
-+			dev_err(video->camss->dev, "Video pipeline stop failed: %d\n", ret);
-+			return;
-+		}
- 	}
- 
- 	video_device_pipeline_stop(vdev);
+ 					ret = media_create_pad_link(&csid->entity,
+-								    MSM_CSID_PAD_SRC,
++								    MSM_CSID_PAD_FIRST_SRC + j,
+ 								    &vfe->entity,
+ 								    MSM_VFE_PAD_SINK,
+ 								    0);
 -- 
 2.37.3
 
