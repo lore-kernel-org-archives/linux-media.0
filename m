@@ -2,88 +2,145 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 056AFC433FE
-	for <linux-media@archiver.kernel.org>; Mon, 28 Nov 2022 14:03:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87E53C433FE
+	for <linux-media@archiver.kernel.org>; Mon, 28 Nov 2022 14:08:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231256AbiK1ODm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Nov 2022 09:03:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59632 "EHLO
+        id S232430AbiK1OIo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Nov 2022 09:08:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232256AbiK1ODh (ORCPT
+        with ESMTP id S232369AbiK1OIS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Nov 2022 09:03:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4427DB4BA
-        for <linux-media@vger.kernel.org>; Mon, 28 Nov 2022 06:03:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DEC0461010
-        for <linux-media@vger.kernel.org>; Mon, 28 Nov 2022 14:03:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB5ABC433D6;
-        Mon, 28 Nov 2022 14:03:34 +0000 (UTC)
-Message-ID: <0098f4fd-afe2-38ae-0b91-497d86a024f5@xs4all.nl>
-Date:   Mon, 28 Nov 2022 15:03:33 +0100
+        Mon, 28 Nov 2022 09:08:18 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A88D2252F
+        for <linux-media@vger.kernel.org>; Mon, 28 Nov 2022 06:07:24 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id fy37so26020663ejc.11
+        for <linux-media@vger.kernel.org>; Mon, 28 Nov 2022 06:07:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=konsulko.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=T03xYO0xkCnKq7qYegQtsZ/KwYhW+ESpmdHMTsd0uCE=;
+        b=IcaiRUAm65EZmtwBbvzYZ4tHw6+BC41Pf8VaxxeFpn/ekJGtLPq9LBb0azmmT3ENeT
+         XdCgaXQEZu6w1kbZlr7acpfM0kevs6dIqezRzrpnzjmhG1C5Ev2xTwhDXVCqBYBiBU9y
+         BKFIHWmK7MM4mY+P+nZEe8qVuJPWHBAsnavWs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T03xYO0xkCnKq7qYegQtsZ/KwYhW+ESpmdHMTsd0uCE=;
+        b=U+bPgjiA6c1vCPBwP/uaFaydxVv7qd1JUxUcY6W5NmxkEFNSSnFD2RKfpK09gb8dGZ
+         8sSFeNniVSKx+kZ9+9Uc1MUeGpgXKuVrS4MKW4FrELemGLpGtNvm3FouJ653qIP4uATv
+         P5iSZo0VdDyYAeHprkEWMavaFqD5hf+nOJiQsZDNJ6WrEDDngJdQDKpf9qjkkP1lZub2
+         YzU+43iyAXRWPX9iTuHY3veCgbrnCWLTwELk6ACnCa+jvEc+9ObbkSzYXSA+2rpsDrIs
+         sMFpfTZhM60uHvnqvsSxFqtmNZ66Cv5vzjZif48ln4D89URJppAGJgC7VAoTAFrU1lQ8
+         VmEA==
+X-Gm-Message-State: ANoB5plJePI7UpI3IKBXMmXc1hSfZpvMMgMzyjGESbMnIfIny97kuAo8
+        95Db97wc0Jd1j+Xhzgn3LyHcIw==
+X-Google-Smtp-Source: AA0mqf7BKEyBVKqhELMhGIM08T1V3Kt0pd9ZvSwRnqiw6kmizIQGa+/xVtt36fi5vXHZuYBRmT6/UQ==
+X-Received: by 2002:a17:906:edce:b0:7ad:dd43:5d18 with SMTP id sb14-20020a170906edce00b007addd435d18mr26761889ejb.389.1669644443456;
+        Mon, 28 Nov 2022 06:07:23 -0800 (PST)
+Received: from bender.k.g (lan.nucleusys.com. [92.247.61.126])
+        by smtp.gmail.com with ESMTPSA id e4-20020a50fb84000000b00467960d7b62sm5239973edq.35.2022.11.28.06.07.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 06:07:23 -0800 (PST)
+Date:   Mon, 28 Nov 2022 16:07:22 +0200
+From:   Petko Manolov <petko.manolov@konsulko.com>
+To:     Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
+        sakari.ailus@iki.fi
+Subject: Re: [PATCH v1 0/5] Adds media driver for Sony IMX492 sensor
+Message-ID: <Y4TAmvy6gKNdc0n6@bender.k.g>
+References: <20221125153120.541298-1-petko.manolov@konsulko.com>
+ <166963953216.1079859.6469563044691422088@Monstersaurus>
+ <Y4Sziw2nt8gSyjSv@bender.k.g>
+ <166964269270.1079859.9052080973667851964@Monstersaurus>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Content-Language: en-US
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [PATCH] media: sun6i-csi: clarify return value, fix uninited variable
- and add missing static
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <166964269270.1079859.9052080973667851964@Monstersaurus>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This fixes three smatch warnings:
+On 22-11-28 13:38:12, Kieran Bingham wrote:
+> Quoting Petko Manolov (2022-11-28 13:11:39)
+> > On 22-11-28 12:45:32, Kieran Bingham wrote:
+> > > Hi Petko,
+> > > 
+> > > What device/ISP are you testing this sensor on?
+> > 
+> > I'll tell you, but only if you promise to not laugh too much.  Deal?
+> > 
+> > i.MX8M-Mini
+> > 
+> > I hope nobody will notice the above line...
+> 
+> I won't laugh at all. We've just merged the ISI pipeline handler for
+> libcamera, which should let you use libcamera on this target (I think).
 
-drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c:629:15: warning: 'enabled' may be used uninitialized [-Wmaybe-uninitialized]
-drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c:439 sun6i_csi_bridge_s_stream() warn: missing error code 'ret'
-drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c:682 sun6i_csi_bridge_notifier_bound() error: uninitialized symbol 'enabled'.
+I think i saw your patch in the ML.
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
-index 86d20c1c35ed..ebfc870d2af5 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
-@@ -415,8 +415,7 @@ static int sun6i_csi_bridge_s_stream(struct v4l2_subdev *subdev, int on)
- 	struct sun6i_csi_bridge_source *source;
- 	struct v4l2_subdev *source_subdev;
- 	struct media_pad *remote_pad;
--	/* Initialize to 0 to use both in disable label (ret != 0) and off. */
--	int ret = 0;
-+	int ret;
+> I would hope sometime in the future you'd be able to use the ISI pipeline
+> handler with a GPU based ISP with this sensor too.
 
- 	/* Source */
+Both of the above are present in i.MX8M-Plus, not the Mini.
 
-@@ -436,6 +435,7 @@ static int sun6i_csi_bridge_s_stream(struct v4l2_subdev *subdev, int on)
+> How are you managing the image 3a? the imx492 is a raw sensor isn't it ?
 
- 	if (!on) {
- 		v4l2_subdev_call(source_subdev, video, s_stream, 0);
-+		ret = 0;
- 		goto disable;
- 	}
+Not sure what you mean by "image 3a" and yes, it's a raw sensor.
 
-@@ -587,7 +587,7 @@ static const struct v4l2_subdev_pad_ops sun6i_csi_bridge_pad_ops = {
- 	.set_fmt	= sun6i_csi_bridge_set_fmt,
- };
+> > > Quoting Petko Manolov (2022-11-25 15:31:15)
+> > > > This patch adds dt-bindings documentation, driver source, etc for Sony imx492
+> > > > image sensor.
+> > > > 
+> > > > imx492 is a diagonal 23.1 mm (Type 1.4) CMOS image sensor with color or
+> > > > monochrome square pixel array and approximately 47.08 M effective pixels. 12-bit
+> > > > digital output makes it possible to output the signals with high definition for
+> > > > moving pictures. It is programmable through I2C interface. The I2C client
+> > > > address can be either 0x10 or 0x1a depending on SLASEL pin. Image data is sent
+> > > > through MIPI CSI-2.
+> > > > 
+> > > > Petko Manolov (5):
+> > > >   DT bindings for imx492
+> > > >   media: i2c: imx492: driver's header
+> > > >   media: i2c: imx492: driver's source
+> > > >   media: i2c: add imx492 config entry
+> > > >   media: i2c: add imx492 entry for make
+> > > 
+> > > Could you squash patches 2, 3, 4, and 5 into a single patch please?
+> > 
+> > This is the exact opposite to what the networking folks would prefer, but it's
+> > OK with me.
+> 
+> Haha ... yes - isn't it great working in mulitple subsystems....
 
--const struct v4l2_subdev_ops sun6i_csi_bridge_subdev_ops = {
-+static const struct v4l2_subdev_ops sun6i_csi_bridge_subdev_ops = {
- 	.video	= &sun6i_csi_bridge_video_ops,
- 	.pad	= &sun6i_csi_bridge_pad_ops,
- };
-@@ -652,7 +652,7 @@ sun6i_csi_bridge_notifier_bound(struct v4l2_async_notifier *notifier,
- 			     async_subdev);
- 	struct sun6i_csi_bridge *bridge = &csi_dev->bridge;
- 	struct sun6i_csi_bridge_source *source = bridge_async_subdev->source;
--	bool enabled;
-+	bool enabled = false;
- 	int ret;
+Yeah, easy to get confused... :)
 
- 	switch (source->endpoint.base.port) {
+> > > Also - I think you'll need an entry in MAINTAINERS.
+> > 
+> > Right, that one too.
+> > 
+> > > I can't see any reference to the selection controls:
+> > >  - V4L2_SEL_TGT_CROP_DEFAULT
+> > >  - V4L2_SEL_TGT_CROP
+> > >  - V4L2_SEL_TGT_CROP_BOUNDS
+> > 
+> > These are in a very early phase of implementing.
+> 
+> Ok
+> 
+> > > Do you have the datasheet or sufficient information to be able to implement
+> > > these controls?
+> > 
+> > Of course not.  We are brute forcing our way forward by mostly reverse
+> > engineering another solution that has an FPGA on the other end of the CSI link.
+> 
+> Understood ;-) (and ... I think what I was fearing/anticipating).
+
+I would have been too easy otherwise.
+
+
+		Petko
