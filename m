@@ -2,98 +2,142 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6207C4332F
-	for <linux-media@archiver.kernel.org>; Tue, 29 Nov 2022 17:13:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74583C4167B
+	for <linux-media@archiver.kernel.org>; Tue, 29 Nov 2022 21:57:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236492AbiK2RND (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 29 Nov 2022 12:13:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46464 "EHLO
+        id S236610AbiK2V46 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 29 Nov 2022 16:56:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236435AbiK2RMx (ORCPT
+        with ESMTP id S236772AbiK2V4w (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 29 Nov 2022 12:12:53 -0500
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929D912A99
-        for <linux-media@vger.kernel.org>; Tue, 29 Nov 2022 09:12:49 -0800 (PST)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-381662c78a9so145365627b3.7
-        for <linux-media@vger.kernel.org>; Tue, 29 Nov 2022 09:12:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JHEjD2xxLNtQCC6FYElEPgk7av75DQm6bwKKXcbxhRE=;
-        b=rcG6dqqNMky7jtdTJ46UkMVCNRhCC2wS2wzYNMxEWmGIbDbfjKUTHWdytUvxxZ1hCO
-         hii0c0lXZOyFm8dJkzKTYZkEVGzbv50tfIKwFHk1Z4+6D/+dF+zj4hRkJfq9z8cmBL21
-         qQbfMHJ2NlTGaB434A4h0QmMLvib0OqFYg5apgzZxYpA/sF5NBxK46w8UJ2wJy6vAGY8
-         3IeY9uTE0JxVikWmy/lCoTqxXfVyFtezGLVM3gKj95d4Dxt9v5+8VM8ZbuDVvgyI4R7x
-         EFR+uEnDq8S9gWaKyUB+g/NJ/YALqL4rI5FDrlTaSuguvEvo77nrE8+8zKnFOLXVVUTD
-         5LIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JHEjD2xxLNtQCC6FYElEPgk7av75DQm6bwKKXcbxhRE=;
-        b=DOPjTaEeEGc2eCXX9U4EjyLyBWxs3+/xEFnrWaiptl8b3HxUFvQkJH5rsddAUIBFbT
-         rodUTtga+JvMOn4+pP9zxefxJ9Az3L82NABJ9Jnls+KPOtilXmSxz0o4s9txmK6xo266
-         ZBQlYhxyRgTcuCh2e84aPsdcFoTHhB/R10G+GHG1QuUM9EsjQegoyVY9UWpMs+nZASRN
-         BEvTUZj8xbdf2AkwOoVnIA4FD38QAoVjGjIn4AkzaMO24ul0CnOFaezI1id0w4/gm+jJ
-         Bq8Unlg3d1i89L/9U/blVX/Tv5beEihIaLRVG0aOwPuvMJGF07Bps41gf6yt56VU6dbq
-         p4Kg==
-X-Gm-Message-State: ANoB5pndoSG/jRWuezekDUBGh8fKmENmgxcQCl7ThwurVb5ecmwqf5KZ
-        Jf7/OgR+cNi3svgnvJJrXsj1lPQcR42ala8XPuLeFg==
-X-Google-Smtp-Source: AA0mqf6tFV1ruJYeq+RpTMqBCXfOUZuF64Zqeq76MlGGXN950+keht0aCkWxTl6Ut47af6Q+Cm0dvHmw7A4GE9YbArk=
-X-Received: by 2002:a81:9a94:0:b0:3af:eac8:76e0 with SMTP id
- r142-20020a819a94000000b003afeac876e0mr30728331ywg.256.1669741968574; Tue, 29
- Nov 2022 09:12:48 -0800 (PST)
+        Tue, 29 Nov 2022 16:56:52 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3506C733
+        for <linux-media@vger.kernel.org>; Tue, 29 Nov 2022 13:56:50 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1p08av-0000nh-6E; Tue, 29 Nov 2022 22:56:49 +0100
+Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1p08au-0006Hi-PH; Tue, 29 Nov 2022 22:56:48 +0100
+Date:   Tue, 29 Nov 2022 22:56:48 +0100
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        gregkh@linuxfoundation.org, balbi@kernel.org,
+        kernel@pengutronix.de, Daniel Scally <dan.scally@ideasonboard.com>
+Subject: Re: [PATCH v7] usb: gadget: uvc: add validate and fix function for
+ uvc response
+Message-ID: <20221129215648.GR18924@pengutronix.de>
+References: <20221128103124.655264-1-m.grzeschik@pengutronix.de>
+ <Y4V4IED+SBhUR7Su@pendragon.ideasonboard.com>
+ <20221129102308.GO18924@pengutronix.de>
+ <Y4X0unPRK7iAnfaH@pendragon.ideasonboard.com>
+ <20221129152259.GQ18924@pengutronix.de>
 MIME-Version: 1.0
-References: <202211241926133236370@zte.com.cn>
-In-Reply-To: <202211241926133236370@zte.com.cn>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Tue, 29 Nov 2022 09:12:37 -0800
-Message-ID: <CABdmKX2aidW7LnvTWdULtHr0yzdSb=KqTWp=7RUUNCOA548Pag@mail.gmail.com>
-Subject: Re: [PATCH linux-next] dma-buf: use strscpy() to instead of strlcpy()
-To:     yang.yang29@zte.com.cn
-Cc:     sumit.semwal@linaro.org, christian.koenig@amd.com,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        xu.panda@zte.com.cn
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="JB7KW7Ey7eB5HOHs"
+Content-Disposition: inline
+In-Reply-To: <20221129152259.GQ18924@pengutronix.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 3:26 AM <yang.yang29@zte.com.cn> wrote:
->
-> From: Xu Panda <xu.panda@zte.com.cn>
->
-> The implementation of strscpy() is more robust and safer.
-> That's now the recommended way to copy NUL terminated strings.
->
-> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-> Signed-off-by: Yang Yang <yang.yang29@zte.com>
-> ---
->  drivers/dma-buf/dma-buf.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-> index b6c36914e7c6..485cf4f3431e 100644
-> --- a/drivers/dma-buf/dma-buf.c
-> +++ b/drivers/dma-buf/dma-buf.c
-> @@ -51,7 +51,7 @@ static char *dmabuffs_dname(struct dentry *dentry, char *buffer, int buflen)
->         dmabuf = dentry->d_fsdata;
->         spin_lock(&dmabuf->name_lock);
->         if (dmabuf->name)
-> -               ret = strlcpy(name, dmabuf->name, DMA_BUF_NAME_LEN);
-> +               ret = strscpy(name, dmabuf->name, DMA_BUF_NAME_LEN);
 
-The type of ret should also be changed to ssize_t to capture the
-negative error value which strlcpy does not have. We shouldn't ever
-see that error condition here with the code the way it is now, but
-let's not risk it.
+--JB7KW7Ey7eB5HOHs
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->         spin_unlock(&dmabuf->name_lock);
+On Tue, Nov 29, 2022 at 04:22:59PM +0100, Michael Grzeschik wrote:
+>On Tue, Nov 29, 2022 at 02:02:02PM +0200, Laurent Pinchart wrote:
+>>On Tue, Nov 29, 2022 at 11:23:08AM +0100, Michael Grzeschik wrote:
+>>>On Tue, Nov 29, 2022 at 05:10:24AM +0200, Laurent Pinchart wrote:
+>>>> On Mon, Nov 28, 2022 at 11:31:25AM +0100, Michael Grzeschik wrote:
+>>>>> When the userspace gets the setup requests for UVC_GET_CUR UVC_GET_MI=
+N,
+>>>>> UVC_GET_MAX, UVC_GET_DEF it will fill out the ctrl response. This data
+>>>>> needs to be validated. Since the kernel also knows the limits for val=
+id
+>>>>> cases, it can fixup the values in case the userspace is setting inval=
+id
+>>>>> data.
+>>>>
+>>>> Why is this a good idea ?
+>>>
+>>>Why is it not? We don't want the userspace to communicate other things
+>>>to the host than what is configured in the configfs. If you only object
+>>>the explanation, then I will improve the commit message and send an
+>>>fixed v8. If you have more objections please share your doubts, thanks.
+>>
+>>What bothers me is that this patch silently clamps invalid value, trying
+>>to hide the gadget userspace error from the host. It may allow the host
+>>to proceed one step further, but if the gadget userspace got it wrong in
+>>the first place, there's a very high chance it won't do the right thing
+>>in the next step anyway. This will make debugging more complicated,
+>>while at the same time not bringing much value.
 >
->         return dynamic_dname(buffer, buflen, "/%s:%s",
-> --
-> 2.15.2
+>I discussed this and we came up with a better approach. When the
+>userspace will send UVCIOC_SEND_RESPONSE we can return with a negativ
+>return value. Like EAGAIN if the validation was seeeing some trouble
+>with the userspaces uvc_streaming_control feedback to the host.
+>
+>The validation code will then still fixup the data, but instead of
+>transfering this manipulated answer to the host, it will return the
+>changes to the application with EAGAIN. So now the userspace can
+>react to it and it should even point out misconfigurations between
+>kernel and userspace and so will simplify the debugging.
+>
+>How about that?
+
+While implementing this I came across the problem that the
+UVCIOC_SEND_RESPONSE is handled in the vidioc_default handler.
+But for this handler we can not set flag INFO_FL_ALWAYS_COPY like
+for common v4l2_ioctls. :(
+
+I think this is still worth a path to go, but I am currently out
+of ideas how to achieve it. Help for this is much appreciated.
+
+Thanks,
+Michael
+
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--JB7KW7Ey7eB5HOHs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmOGgB4ACgkQC+njFXoe
+LGSe/xAAo/NslPqLmcUVcAU/QdQif5RKL4YG9F8M4CRkSd+JnhaUZQu/YmxvFmAC
+CmZKtSCu5XkL3FrDUEq+djF339I8pNup5L/9FkFq+MplbWjhEiaTcz1EmMFiFjMM
+iO3suWDbZBKo755KPgN/KhDe3GLjvkljK1omv0n93yLUH7lG8yML9bBrgsaSSSOt
+1VvNOQXbOe7b70RpZ6oxbq6Y9EUEHlG59XpYl2Jc6YMRoL5x03d+JeCTYSw21Fps
+0ulqZcmSQyXDBhu1oeCBrxFvL+ufD0Y3uewWO3AtqLyCcOBOAwpcmwunpSamoEow
+DP3Qd065U7iLyhg+LMo9lTftMJr/BbW+l0Wo8MHFaRnDBWcJHaHJt+gCpuRiW4OU
+prUi8m18q95WrFrkwDq+oTsZsjPqEd/hH/TCf1buxuOFjO6eoTf8ETF7a32bWGD+
+BvfnHhGqSUi581ZVm/7n/ohZ4laWsirW9zD6qpzvVfBpcP/aipeQFUUOKaDY/W/T
+H13gGzLu0MLZ62JcL0mEdsH7jPKKDDsVzuIpu9xnjvohdUynVZot0w6kWrgxxy/1
+l8+dbRg1uBOgAJiGa/W4bjl+dOVLRmPyoIgc0422rtLSwe6fbcKKmKwkZYKkrdSG
+fgEXsDFo19IB2hyYFXXUAnnD6YaMp7pBuhprkfBQvpkzS7bPkxc=
+=9nNw
+-----END PGP SIGNATURE-----
+
+--JB7KW7Ey7eB5HOHs--
