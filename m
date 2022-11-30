@@ -2,66 +2,72 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33199C4321E
-	for <linux-media@archiver.kernel.org>; Wed, 30 Nov 2022 07:20:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBDFCC433FE
+	for <linux-media@archiver.kernel.org>; Wed, 30 Nov 2022 07:53:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233735AbiK3HU3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Nov 2022 02:20:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
+        id S234228AbiK3Hxh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Nov 2022 02:53:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiK3HU2 (ORCPT
+        with ESMTP id S234221AbiK3Hxg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Nov 2022 02:20:28 -0500
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874712A24D;
-        Tue, 29 Nov 2022 23:20:26 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VW1oelD_1669792816;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VW1oelD_1669792816)
-          by smtp.aliyun-inc.com;
-          Wed, 30 Nov 2022 15:20:23 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     mchehab@kernel.org
-Cc:     p.zabel@pengutronix.de, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH v2] media: rzg2l-cru: Fix missing error code in rzg2l_cru_start_streaming_vq()
-Date:   Wed, 30 Nov 2022 15:20:14 +0800
-Message-Id: <20221130072014.95092-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Wed, 30 Nov 2022 02:53:36 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDB513E3C;
+        Tue, 29 Nov 2022 23:53:34 -0800 (PST)
+Received: from kwepemi500014.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NMWdw2Ht0zRpfP;
+        Wed, 30 Nov 2022 15:52:52 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.70) by
+ kwepemi500014.china.huawei.com (7.221.188.232) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 30 Nov 2022 15:53:31 +0800
+From:   Qiheng Lin <linqiheng@huawei.com>
+To:     <mchehab@kernel.org>, <matthias.bgg@gmail.com>
+CC:     <linux-media@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Qiheng Lin <linqiheng@huawei.com>
+Subject: [PATCH] media: platform: mtk-mdp3: Fix return value check in mdp_probe()
+Date:   Wed, 30 Nov 2022 16:13:12 +0800
+Message-ID: <20221130081312.35523-1-linqiheng@huawei.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500014.china.huawei.com (7.221.188.232)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Failed to allocate scratch buffer, add the error code '-ENOMEM' to the
-return value 'ret'.
+In case of error, the function mtk_mutex_get()
+returns ERR_PTR() and never returns NULL. The NULL test in the
+return value check should be replaced with IS_ERR().
 
-drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c:676 rzg2l_cru_start_streaming_vq() warn: missing error code 'ret'.
-
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3275
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Fixes: 61890ccaefaf ("media: platform: mtk-mdp3: add MediaTek MDP3 driver")
+Signed-off-by: Qiheng Lin <linqiheng@huawei.com>
 ---
-Changes in v2:
-  -Modified the subject line to "media: rzg2l-cru:".
+ drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c
-index 9533e4069ecd..91b57c7c2e56 100644
---- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c
-+++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c
-@@ -673,6 +673,7 @@ static int rzg2l_cru_start_streaming_vq(struct vb2_queue *vq, unsigned int count
- 	if (!cru->scratch) {
- 		return_unused_buffers(cru, VB2_BUF_STATE_QUEUED);
- 		dev_err(cru->dev, "Failed to allocate scratch buffer\n");
-+		ret = -ENOMEM;
- 		goto free_image_conv_irq;
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+index c413e59d4286..7a2d992dd842 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+@@ -207,8 +207,8 @@ static int mdp_probe(struct platform_device *pdev)
  	}
- 
+ 	for (i = 0; i < MDP_PIPE_MAX; i++) {
+ 		mdp->mdp_mutex[i] = mtk_mutex_get(&mm_pdev->dev);
+-		if (!mdp->mdp_mutex[i]) {
+-			ret = -ENODEV;
++		if (IS_ERR(mdp->mdp_mutex[i])) {
++			ret = PTR_ERR(mdp->mdp_mutex[i]);
+ 			goto err_return;
+ 		}
+ 	}
 -- 
-2.20.1.7.g153144c
+2.32.0
 
