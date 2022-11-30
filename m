@@ -2,171 +2,123 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14DABC433FE
-	for <linux-media@archiver.kernel.org>; Wed, 30 Nov 2022 18:24:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CC82C4321E
+	for <linux-media@archiver.kernel.org>; Wed, 30 Nov 2022 18:24:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbiK3SYN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Nov 2022 13:24:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
+        id S230192AbiK3SYR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Nov 2022 13:24:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbiK3SXz (ORCPT
+        with ESMTP id S230167AbiK3SX5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Nov 2022 13:23:55 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380051AF17
-        for <linux-media@vger.kernel.org>; Wed, 30 Nov 2022 10:23:32 -0800 (PST)
+        Wed, 30 Nov 2022 13:23:57 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9A1F07
+        for <linux-media@vger.kernel.org>; Wed, 30 Nov 2022 10:23:42 -0800 (PST)
 Received: from localhost.localdomain (node-1w7jr9st5p2etziuntaazujnj.ipv6.telus.net [IPv6:2001:569:beb1:1500:c96f:992f:7c34:9ff])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: dbrouwer)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0DECD660231D;
-        Wed, 30 Nov 2022 18:23:27 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 36217660231D;
+        Wed, 30 Nov 2022 18:23:38 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669832609;
-        bh=I2Q6BOnK2VkyBeQI/YQ0aDeJYc8iVUxu5a34uuCMctE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KdYw1XWC17LdW1L3Tfvm1twzEBYfzSHF3H11Dp1iUM9aJQrUpwjGSAiGh/5l/0lNA
-         1jm2LL2OUWNfRBpZyxpMRZ4AZ+ZUvTbHeeMO24za71zht8wL7rosE8CtliYLYmXJDy
-         MZCm4hgYNK854pdIS6IPdl1XNRbsGoLGh8IVWzgubWQ7vfb9F34714QwsJ/CZzKbCc
-         oKuT6jHn4za6OEut8YK25E4QVMNAd+XNmcSYlSg6KcK5RS13pIDhA1tZlw1kZ5AYyH
-         DaDbGA7rhtvhuhIrfIErB3p8A+4CZVwwfXOFFQ4qPjGfBpxUoUO0y9oebeJR/8jStg
-         D4QAzzY7NaN3A==
+        s=mail; t=1669832621;
+        bh=mkbXuCrcarObODRYjG2VVuMVezy8+vrvpKJSmaykbhA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ieoFe2msy3SGWm0KhwZpTeW8i+eIBBGKRHtIz9wmvmZ0NtU8gMBlqFQFvEWLbdlq4
+         PMxWCBznwLoms8Dl60z7izNz3ZwXU9IwAgZBEDJxV1dsyqEi1WdOGl9kohDzjvArlM
+         15p4VXWjRJ1n+TCRkekvy95ePg8V1XrOCTyX0QZGICYlmPvkg/rGeVLd4C5cwekTrm
+         JvRxN0fq8UrSOetZon2r523BiYCQ8494UaXX6cslvz8F8ynQsKE3k0gJzd5dhBEBrn
+         L0V4hCuoGkA+V72C6CH5ebRIK8fGET1/OPX8qfcR1rVagM0gTQpDnQLqWCammL3qKx
+         N0zv6ipiwMmHw==
 From:   Deborah Brouwer <deborah.brouwer@collabora.com>
 To:     linux-media@vger.kernel.org
 Cc:     daniel.almeida@collabora.com, nfraprado@collabora.com,
         nicolas.dufresne@collabora.com, hverkuil-cisco@xs4all.nl,
         deborahbrouwer3563@gmail.com,
         Deborah Brouwer <deborah.brouwer@collabora.com>
-Subject: [PATCH v4 0/2] utils: add v4l2-tracer utility
-Date:   Wed, 30 Nov 2022 10:24:13 -0800
-Message-Id: <cover.1669831184.git.deborah.brouwer@collabora.com>
+Subject: [PATCH v4 2/2] v4l2-tracer: add support for most basic controls
+Date:   Wed, 30 Nov 2022 10:24:15 -0800
+Message-Id: <aba188ee4aad4d8970085087d54509017215ea38.1669831184.git.deborah.brouwer@collabora.com>
 X-Mailer: git-send-email 2.38.0
+In-Reply-To: <cover.1669831184.git.deborah.brouwer@collabora.com>
+References: <cover.1669831184.git.deborah.brouwer@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi all - thank you very much for your reviews.
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-This is a patch series now to add Hans' patch
-for tracing basic controls.
+The v4l2-tracer utility didn't support tracing simple controls without
+a payload (i.e. the 'size' field is 0) and just a simple value.
 
-Changes since v3:
-- fix clang-tidy warnings
-- fix memory leaks in auto-generated code
-- strings: check for nullptr before assignment
-- remove unnecessary checks for nullptr before free()
-- polling: check return value
-- dynamic arrays: check memory allocation
-- put format-specific info (h264) into a union
-- add comment to the top of auto-generated files
-- replace array with std::vector for media topology 
-- move debug/verbose options to helper functions
-- fix auto-gen script to include a few extra controls
+This adds support for that, plus the four standard INTEGER64 controls
+that use field value64.
 
-Changes since v2:
-- remove duplication in entries for numbers/strings
-- use media topology to find retrace devices
-- add specific ioctls to trace
-- in help msg change 'data' -> 'video frame data'
-- trace mem_array with space after every byte
-- add to trace files package version, SHA, date
-- retracer also generates a JSON retrace file
-- default trace format is "pretty"
-- add a "compact" format option
-- consolidate options for tracer/retracer
-- remove mutex locks as unnecessary
-- add more autogenerated functions
-- add 'clean' command to remove fd/addresses
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Deborah Brouwer <deborah.brouwer@collabora.com>
+---
+ utils/v4l2-tracer/retrace.cpp | 16 ++++++++++++++++
+ utils/v4l2-tracer/trace.cpp   | 14 ++++++++++++--
+ 2 files changed, 28 insertions(+), 2 deletions(-)
 
-Changes since v1:
-- auto-generate code from uAPI headers
-- generated code adds some ability to trace
-  VP9/HEVC which compiles but still needs work
-- generated code adds full support for MPEG2
-- fix multiplanar decoding for vicodec
-- change library name to libv4l2tracer
-- update README
-- expand help to show options
-- remove extraneous files from gitignore
-
-Example:
-
-Trace an application decoding VP8:
-
-v4l2-tracer trace gst-launch-1.0 -- filesrc 
-location=test-25fps.vp8 ! parsebin ! 
-v4l2slvp8dec ! videocodectestsink
-
-Or trace an application decoding FWHT:
-
-v4l2-tracer trace v4l2-ctl -d3 --stream-mmap
---stream-out-mmap --stream-from-hdr
-test-25fps.fwht --stream-to out.yuv
-
-A trace file is generated: 71827_trace.json
-
-Retrace the trace file:
-v4l2-tracer retrace 71827_trace.json
-
-Specify nodes if using a different driver:
-v4l2-tracer -d0 -m0 retrace 71827_trace.json
-
-A retrace file is generated: 71827_trace_retrace.json
-
-Remove irrelevant differences (optional)
-e.g. file descriptors and addresses:
-v4l2-tracer clean 71827_trace.json
-v4l2-tracer clean 71827_trace_retrace.json
-
-Clean files are generated:
-clean_71827_trace.json
-clean_71827_trace_retrace.json
-
-Use an application to compare the files:
-kdiff3 clean_71827_trace.json clean_71827_trace_retrace.json
-
-Deborah Brouwer (1):
-  utils: add v4l2-tracer utility
-
-Hans Verkuil (1):
-  v4l2-tracer: add support for most basic controls
-
- README                                   |    8 +
- configure.ac                             |   12 +
- utils/Makefile.am                        |    5 +
- utils/v4l2-tracer/.gitignore             |    7 +
- utils/v4l2-tracer/Makefile.am            |   36 +
- utils/v4l2-tracer/libv4l2tracer.cpp      |  303 +++++
- utils/v4l2-tracer/retrace-helper.cpp     |  262 +++++
- utils/v4l2-tracer/retrace.cpp            | 1373 ++++++++++++++++++++++
- utils/v4l2-tracer/retrace.h              |   43 +
- utils/v4l2-tracer/trace-helper.cpp       |  500 ++++++++
- utils/v4l2-tracer/trace.cpp              |  603 ++++++++++
- utils/v4l2-tracer/trace.h                |   75 ++
- utils/v4l2-tracer/v4l2-tracer-common.cpp |  476 ++++++++
- utils/v4l2-tracer/v4l2-tracer-common.h   |   79 ++
- utils/v4l2-tracer/v4l2-tracer-gen.pl     |  879 ++++++++++++++
- utils/v4l2-tracer/v4l2-tracer.1.in       |  111 ++
- utils/v4l2-tracer/v4l2-tracer.cpp        |  415 +++++++
- 17 files changed, 5187 insertions(+)
- create mode 100644 utils/v4l2-tracer/.gitignore
- create mode 100644 utils/v4l2-tracer/Makefile.am
- create mode 100644 utils/v4l2-tracer/libv4l2tracer.cpp
- create mode 100644 utils/v4l2-tracer/retrace-helper.cpp
- create mode 100644 utils/v4l2-tracer/retrace.cpp
- create mode 100644 utils/v4l2-tracer/retrace.h
- create mode 100644 utils/v4l2-tracer/trace-helper.cpp
- create mode 100644 utils/v4l2-tracer/trace.cpp
- create mode 100644 utils/v4l2-tracer/trace.h
- create mode 100644 utils/v4l2-tracer/v4l2-tracer-common.cpp
- create mode 100644 utils/v4l2-tracer/v4l2-tracer-common.h
- create mode 100755 utils/v4l2-tracer/v4l2-tracer-gen.pl
- create mode 100644 utils/v4l2-tracer/v4l2-tracer.1.in
- create mode 100644 utils/v4l2-tracer/v4l2-tracer.cpp
-
+diff --git a/utils/v4l2-tracer/retrace.cpp b/utils/v4l2-tracer/retrace.cpp
+index 9b03d3bb..36a218d3 100644
+--- a/utils/v4l2-tracer/retrace.cpp
++++ b/utils/v4l2-tracer/retrace.cpp
+@@ -726,7 +726,23 @@ struct v4l2_ext_control *retrace_v4l2_ext_control(json_object *parent_obj, int c
+ 		p->value = retrace_v4l2_ext_control_value(v4l2_ext_control_obj,
+ 		                                          v4l2_stateless_hevc_start_code_val_def);
+ 		break;
++	case V4L2_CID_MPEG_VIDEO_DEC_PTS:
++	case V4L2_CID_MPEG_VIDEO_DEC_FRAME:
++	case V4L2_CID_MPEG_VIDEO_DEC_CONCEAL_COLOR:
++	case V4L2_CID_PIXEL_RATE: {
++		json_object *value64_obj;
++
++		if (json_object_object_get_ex(v4l2_ext_control_obj, "value64", &value64_obj))
++			p->value64 = json_object_get_int64(value64_obj);
++		break;
++	}
+ 	default:
++		if (!p->size) {
++			json_object *value_obj;
++
++			if (json_object_object_get_ex(v4l2_ext_control_obj, "value", &value_obj))
++				p->value = json_object_get_int(value_obj);
++		}
+ 		break;
+ 	}
+ 
+diff --git a/utils/v4l2-tracer/trace.cpp b/utils/v4l2-tracer/trace.cpp
+index cff78315..d5a09ad7 100644
+--- a/utils/v4l2-tracer/trace.cpp
++++ b/utils/v4l2-tracer/trace.cpp
+@@ -410,9 +410,19 @@ void trace_v4l2_ext_control(void *arg, json_object *parent_obj, std::string key_
+ 	case V4L2_CID_STATELESS_MPEG2_QUANTISATION:
+ 		trace_v4l2_ctrl_mpeg2_quantisation_gen(p->p_mpeg2_quantisation, v4l2_ext_control_obj);
+ 		break;
++	case V4L2_CID_MPEG_VIDEO_DEC_PTS:
++	case V4L2_CID_MPEG_VIDEO_DEC_FRAME:
++	case V4L2_CID_MPEG_VIDEO_DEC_CONCEAL_COLOR:
++	case V4L2_CID_PIXEL_RATE:
++		json_object_object_add(v4l2_ext_control_obj, "value64", json_object_new_int64(p->value64));
++		break;
+ 	default:
+-		fprintf(stderr, "%s:%s:%d: ", __FILE__, __func__, __LINE__);
+-		fprintf(stderr, "warning: cannot trace control: %s\n", val2s(p->id, control_val_def).c_str());
++		if (p->size) {
++			fprintf(stderr, "%s:%s:%d: ", __FILE__, __func__, __LINE__);
++			fprintf(stderr, "warning: cannot trace control: %s\n", val2s(p->id, control_val_def).c_str());
++		} else {
++			json_object_object_add(v4l2_ext_control_obj, "value", json_object_new_int(p->value));
++		}
+ 		break;
+ 	}
+ 
 -- 
 2.38.0
 
