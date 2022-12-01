@@ -2,96 +2,92 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B69AC4321E
-	for <linux-media@archiver.kernel.org>; Thu,  1 Dec 2022 02:09:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 627BFC47088
+	for <linux-media@archiver.kernel.org>; Thu,  1 Dec 2022 02:19:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbiLACJ1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Nov 2022 21:09:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44920 "EHLO
+        id S229931AbiLACS7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Nov 2022 21:18:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiLACJ0 (ORCPT
+        with ESMTP id S229862AbiLACSo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Nov 2022 21:09:26 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE3743857;
-        Wed, 30 Nov 2022 18:09:25 -0800 (PST)
-Received: from kwepemi500014.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NMzyL0gfFzmWBp;
-        Thu,  1 Dec 2022 10:08:42 +0800 (CST)
-Received: from [10.174.176.189] (10.174.176.189) by
+        Wed, 30 Nov 2022 21:18:44 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2F4537CE;
+        Wed, 30 Nov 2022 18:18:38 -0800 (PST)
+Received: from kwepemi500014.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NN08y6QGGzRpZP;
+        Thu,  1 Dec 2022 10:17:54 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.70) by
  kwepemi500014.china.huawei.com (7.221.188.232) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Dec 2022 10:09:23 +0800
-Message-ID: <683df422-68f2-12e3-ff5e-66c45e567db2@huawei.com>
-Date:   Thu, 1 Dec 2022 10:09:22 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH] media: platform: mtk-mdp3: Fix return value check in
- mdp_probe()
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     <mchehab@kernel.org>, <matthias.bgg@gmail.com>,
+ 15.1.2375.31; Thu, 1 Dec 2022 10:18:35 +0800
+From:   Qiheng Lin <linqiheng@huawei.com>
+To:     <mchehab@kernel.org>, <matthias.bgg@gmail.com>
+CC:     <angelogioacchino.delregno@collabora.com>,
         <linux-media@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221130081312.35523-1-linqiheng@huawei.com>
- <fc7ac761-eb81-347b-1c51-cdc9c786ee5b@collabora.com>
-From:   Qiheng Lin <linqiheng@huawei.com>
-In-Reply-To: <fc7ac761-eb81-347b-1c51-cdc9c786ee5b@collabora.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.189]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+        <linux-kernel@vger.kernel.org>, Qiheng Lin <linqiheng@huawei.com>
+Subject: [PATCH v2] media: platform: mtk-mdp3: Fix return value check in mdp_probe()
+Date:   Thu, 1 Dec 2022 10:35:05 +0800
+Message-ID: <20221201023505.48015-1-linqiheng@huawei.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
  kwepemi500014.china.huawei.com (7.221.188.232)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-在 2022/11/30 17:44, AngeloGioacchino Del Regno 写道:
-> Il 30/11/22 09:13, Qiheng Lin ha scritto:
->> In case of error, the function mtk_mutex_get()
->> returns ERR_PTR() and never returns NULL. The NULL test in the
->> return value check should be replaced with IS_ERR().
->>
->> Fixes: 61890ccaefaf ("media: platform: mtk-mdp3: add MediaTek MDP3 
->> driver")
->> Signed-off-by: Qiheng Lin <linqiheng@huawei.com>
->> ---
->>   drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c 
->> b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
->> index c413e59d4286..7a2d992dd842 100644
->> --- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
->> +++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
->> @@ -207,8 +207,8 @@ static int mdp_probe(struct platform_device *pdev)
->>       }
->>       for (i = 0; i < MDP_PIPE_MAX; i++) {
->>           mdp->mdp_mutex[i] = mtk_mutex_get(&mm_pdev->dev);
->> -        if (!mdp->mdp_mutex[i]) {
->> -            ret = -ENODEV;
->> +        if (IS_ERR(mdp->mdp_mutex[i])) {
->> +            ret = PTR_ERR(mdp->mdp_mutex[i]);
->>               goto err_return;
->>           }
->>       }
->>
-> 
-> That's true, and I fully agree.
-> While you're at it, can you also fix the err_return case?
-> 
-> if (mdp)
->      for ...
->          if (!IS_ERR_OR_NULL(mdp->mdp_mutex[i]))
->              mtk_mutex_put(...)
-> 
+In case of error, the function mtk_mutex_get()
+returns ERR_PTR() and never returns NULL. The NULL test in the
+return value check should be replaced with IS_ERR().
+And also fix the err_return case.
 
-Thanks for your suggestion, will send the v2.
+Fixes: 61890ccaefaf ("media: platform: mtk-mdp3: add MediaTek MDP3 driver")
+Signed-off-by: Qiheng Lin <linqiheng@huawei.com>
+---
 
-> Thanks,
-> Angelo
+v2:
+ - Add fix the err_return case.
+
+ drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+index c413e59d4286..48f3e32fe54e 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+@@ -207,8 +207,8 @@ static int mdp_probe(struct platform_device *pdev)
+ 	}
+ 	for (i = 0; i < MDP_PIPE_MAX; i++) {
+ 		mdp->mdp_mutex[i] = mtk_mutex_get(&mm_pdev->dev);
+-		if (!mdp->mdp_mutex[i]) {
+-			ret = -ENODEV;
++		if (IS_ERR(mdp->mdp_mutex[i])) {
++			ret = PTR_ERR(mdp->mdp_mutex[i]);
+ 			goto err_return;
+ 		}
+ 	}
+@@ -288,9 +288,10 @@ static int mdp_probe(struct platform_device *pdev)
+ err_deinit_comp:
+ 	mdp_comp_destroy(mdp);
+ err_return:
+-	for (i = 0; i < MDP_PIPE_MAX; i++)
+-		if (mdp)
+-			mtk_mutex_put(mdp->mdp_mutex[i]);
++	if (mdp)
++		for (i = 0; i < MDP_PIPE_MAX; i++)
++			if (!IS_ERR_OR_NULL(mdp->mdp_mutex[i]))
++				mtk_mutex_put(mdp->mdp_mutex[i]);
+ 	kfree(mdp);
+ 	dev_dbg(dev, "Errno %d\n", ret);
+ 	return ret;
+-- 
+2.32.0
 
