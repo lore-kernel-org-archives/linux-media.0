@@ -2,57 +2,58 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A15EC4321E
-	for <linux-media@archiver.kernel.org>; Fri,  2 Dec 2022 17:03:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 669EBC47088
+	for <linux-media@archiver.kernel.org>; Fri,  2 Dec 2022 17:03:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234362AbiLBRDV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 2 Dec 2022 12:03:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34770 "EHLO
+        id S234369AbiLBRDX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 2 Dec 2022 12:03:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234240AbiLBRDF (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 2 Dec 2022 12:03:05 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88155A6ED
-        for <linux-media@vger.kernel.org>; Fri,  2 Dec 2022 09:03:03 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id z92so7318385ede.1
-        for <linux-media@vger.kernel.org>; Fri, 02 Dec 2022 09:03:03 -0800 (PST)
+        with ESMTP id S234271AbiLBRDH (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 2 Dec 2022 12:03:07 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307392D5
+        for <linux-media@vger.kernel.org>; Fri,  2 Dec 2022 09:03:06 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id m19so7238128edj.8
+        for <linux-media@vger.kernel.org>; Fri, 02 Dec 2022 09:03:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=z1b0nTFpIaI5p5ZE8W0YvdyyzRVBuMuYrq9RTuFJCfc=;
-        b=OUpjWGMvZnDcLn43zLuHuWVOV3ISdEtKowFcHWm0+5fGSDDSl/v63vR/WAh0TSM7eS
-         Qeusd0VExamLNokTueTAxfUiw2NKAtZUKgbHuVONqUIyh1fx5iNlQaSVwoWbddgN/+mW
-         6ejuJt/TpHkPeV9fc5sGn6ZRggfSgT700uAvw=
+        bh=HzFzDnnX9pi7g8WQvEiGHdhzPZgy4R7i/X22w+LEdMI=;
+        b=ZJW37MUF8AZ6gWULeaZCcqG6uUEz6GiDhcUhr3cuJ0TXqjmGQGQ/KaERArPSMmZYVQ
+         v5NuRaE9CAuAEJk4+fiZAb3B1M/Uhb+ROQ6H7e+5zjdE42H2+rFoSmDtlIcorXvviC/o
+         BoTkA6Z7SzYy+iuJ9UYXh4+8sw3+x7MODEjyU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=z1b0nTFpIaI5p5ZE8W0YvdyyzRVBuMuYrq9RTuFJCfc=;
-        b=2oaG2GV8ByU4BdVSqx38QSewbXGAtFWLQQGaUJF+Fl1dgpHwmxzYF3hK4+kpo5sOlf
-         QLI0Vq9alpHK234oQeXJLbDTXPRd0mOlJ1zBAFGHTDGIblsomJiHmTFwC0zr2mQlAD1n
-         GQW1eOyb7M9H2krSSXQ0JDfeDRdrWJYOoyyYLymMmcpOQ9ZSEzclhffa/t5xtDxPLirw
-         1jHrhCwbt6Ov97G78eVLgtodGsBBl1euYExWjcMJlsassxWoBwiceEeD87Zf6W1cij4a
-         r8bDGYjLaQrdKxaqGb55/ACshALap3xS5WzjCbcrMka2r1odFkFSsPgWWBOMXVL4/t4D
-         uOCw==
-X-Gm-Message-State: ANoB5plHdidwYzk2wRZvXBL/iNwArFpIUjArraeyy/7HNaMFm+aQMhBT
-        1GoP3em8Xgw3mRK08oQZ6vk+ZA==
-X-Google-Smtp-Source: AA0mqf7lJ0bmDBBfoxuODgT+6hbcd49FQ/OyGeJeACmcHg5fS+P5Q64M6A2dxzvd5byboR2dKKAkhQ==
-X-Received: by 2002:aa7:c78b:0:b0:467:97e4:6339 with SMTP id n11-20020aa7c78b000000b0046797e46339mr64809687eds.381.1670000582204;
-        Fri, 02 Dec 2022 09:03:02 -0800 (PST)
+        bh=HzFzDnnX9pi7g8WQvEiGHdhzPZgy4R7i/X22w+LEdMI=;
+        b=an+e/X0m81meAksdmSC95TxXVtev7Oltrwjog5IsmTFaH/UCtBzD+U68XWr4WLlr9c
+         Fa2dP4DyT/gFKvfDutWj8f8+9aOV3NuKK+TxY1PGkgDbp1p5DO/WQujnVgdOmLbEZFSs
+         VHrEr0tBS5vEEeCKAognxH7pVMYH4M7WHRBV+vOslk7Zr/x0VTK7mnf+ZN+CtFGtsjvf
+         T3OAdF88aWXhiJnrlmHB6IwH8JK9XJJk5ko89IQeAbekrSBaRsHaXiQH2bVW32HreHCk
+         4yonlfLJbgfWune+gpznynpUxSEYDatrdrDYj+h92e7kvBINXuVhRp+NGzocEFlm3CO5
+         JHfQ==
+X-Gm-Message-State: ANoB5pl3NSFYDNDbw+S0bIqubJtMYUUkivieDZ2X2ZpoX4g4MpRALI04
+        GqTJ4VAccwmbkqM+4BmORJKPXA==
+X-Google-Smtp-Source: AA0mqf7lHA+y3zQtGSgQQEOsOTynBhg3rVkN8KO3h1NcrWakisbHptVDJ4C48OnjG+xDUKY+RrqzHA==
+X-Received: by 2002:a05:6402:5405:b0:468:4cd4:f133 with SMTP id ev5-20020a056402540500b004684cd4f133mr50745505edb.18.1670000584730;
+        Fri, 02 Dec 2022 09:03:04 -0800 (PST)
 Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id sa22-20020a170906edb600b0073d7ab84375sm3249133ejb.92.2022.12.02.09.03.01
+        by smtp.gmail.com with ESMTPSA id sa22-20020a170906edb600b0073d7ab84375sm3249133ejb.92.2022.12.02.09.03.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 09:03:01 -0800 (PST)
+        Fri, 02 Dec 2022 09:03:04 -0800 (PST)
 From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Fri, 02 Dec 2022 18:02:43 +0100
-Subject: [PATCH RESEND v2 3/8] media: uvc: Create UVC_QUIRK_IGNORE_EMPTY_TS quirk
+Date:   Fri, 02 Dec 2022 18:02:46 +0100
+Subject: [PATCH RESEND v2 6/8] media: uvcvideo: Allow hw clock updates with
+ buffers not full
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20220920-resend-hwtimestamp-v2-3-0d7978a817cc@chromium.org>
+Message-Id: <20220920-resend-hwtimestamp-v2-6-0d7978a817cc@chromium.org>
 References: <20220920-resend-hwtimestamp-v2-0-0d7978a817cc@chromium.org>
 In-Reply-To: <20220920-resend-hwtimestamp-v2-0-0d7978a817cc@chromium.org>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -61,130 +62,73 @@ Cc:     "hn.chen" <hn.chen@sunplusit.com>, linux-media@vger.kernel.org,
         Ricardo Ribalda <ribalda@chromium.org>,
         linux-kernel@vger.kernel.org
 X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3835; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=ThukGURKifBgx985aH8p0USOirI+IB7ilvRGG3W5Mrw=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjii+5H1M58hm5+Na5JGlt2ZCvH5eHmrmhoH7sSZGE
- ZrQBkNyJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4ovuQAKCRDRN9E+zzrEiNx8D/
- 9EncS+zAdR3hdqeACRDHKENTwfJGH6NYLWeUbbnK+NyO0eNPxeX7yBx0x1KM4Ytj3mAI3Ie83n0SjU
- mQdL01nH1MVySAJ7UQ1Kqf8xFW32/0aaV0pRJdG4X2ehFAbtypKorgCbTd5+jht2oMZPXWF1QIU62q
- 79UHEHPYu0s5RSQHWGyoxQhAAFJRgX1/dCwRGHkgWspTIHnTkiy1gn21lAST2dhAchbmOBHtXTu0jM
- kQwbeQTBGKIQ238AkqAB+EVwqsTsj1K9IMK1o4Lnncxl+asbwHQR8dAuJVS93VkV6CLGAb2pjwUHO6
- jMMzTz8knQDV57+TBY6CO8uElX7NoMXl8aKDR6fyBcRpO8FOwIQd6pQ6haBNzT4ubVGRtqeSGt3rJq
- 36z0wkNDQfpc3MDhnrNPkpC6D+/WO2wvCaa2DNo6v1AEHSvR9+H4gMLfjlIvMCx0amMC5ijK54cbpS
- 1KDy6Dpyx43o7JR+FIs5s50T8hYD6BOHsz/MVRK0KIs3gVzEWg8ZPsVCnl3phLPWHIb5R73VZ79YqY
- cTHXWzmnqv/n0UhiqFB2MXrgGahp1yveVgWeRE1dOUphjh9z6ygw6FOk85ImeL167C2EAN/BzL6mPk
- 12eAnO2y9xgOWUlzq1p9itZUg/oad21SP6Ov1SXVr0gh4iHgcvNmnBnYEOEQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1769; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=3Fs3H+ze+0F22wwrtRMwFmFB8rGrRyFOzQuhxGsMqbQ=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjii++aFV/k9m1GdsfCWkMCRxITd6LDxE6DJa5Uc8e
+ mePmB3eJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4ovvgAKCRDRN9E+zzrEiGCRD/
+ 9rwsjQhtVhBi0S2pt0k3Ny+IWzN/fublTh3yfjMsIAlrEucBUf88I9uq7z7D9OGqfqOs9R54/imZnS
+ IRo1BrgKSqPK12ZuHcEDh/f2LP69JM9q9F9SYw2RN2mG8zi8YwO/BT5OP2qSFgLZLHTikUSuWoHuaF
+ wUFN60AKltKKp48MCA/KTTH+XH28nx91yVyWJ5QaN2UzNIhOoA1U270tXxAsgwjxiw+68DghRTXqJ6
+ 84ericULGTZtwenLdIlkHcw6ggOSIhJLTJPsT+J9aqizin7S/Dizv4pM8JaOlrynZHl/AWqc4+TT1F
+ nC9h3DocTnNLizd3/vj/+hLFGnszvcZZJFwdhSrlDfkCNUXPBExLBTHn4s819WDGori6goKfZsj/zW
+ vf7euVAUB3AcojasWJCoipCGIsGpT8fXw/24ko2BrSp4da1c9dm5QYItjdWE+nu5fHS9qNQZzAEhBx
+ +x9750sF/rm7sAPW7IZ/uxRmrmLfHOYbkkCT/eAPUWVqzfFO0Xc3md0yuR6twJ1qX0LAjPzk5TT8Z8
+ F+ClhgplynV1MT0IVTeW/sO747rJZY1rRlu7gJGtpIV5dCkaFemOnlAy/+mxu3cEpSsoCw4JqFxtRf
+ PUp4TWs3VGwSKH9rEs/pIAQIoZh0AFj/T7fpozfVUWYI8JMKAF1MxqRmsw0g==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Some Sunplus cameras took a borderline interpretation of the UVC 1.5
-standard, and fill the PTS and SCR fields with invalid data if the
-package does not contain data.
+With UVC 1.5 we get as little as one clock sample per frame. Which means
+that it takes 32 frames to move from the software timestamp to the
+hardware timestamp method.
 
-"STC must be captured when the first video data of a video frame is put
-on the USB bus."
+This results in abrupt changes in the timestamping after 32 frames (~1
+second), resulting in noticeable artifacts when used for encoding.
 
-Eg:
-
-buffer: 0xa7755c00 len 000012 header:0x8c stc 00000000 sof 0000 pts 00000000
-buffer: 0xa7755c00 len 000012 header:0x8c stc 00000000 sof 0000 pts 00000000
-buffer: 0xa7755c00 len 000668 header:0x8c stc 73779dba sof 070c pts 7376d37a
-
-This borderline/buggy interpretation has been implemented in a variety
-of devices, from directly Sunplus and from other OEMs that rebrand
-Sunplus products.
-
-Luckily we can identify the affected modules by looking at the guid of
-one of the extension units:
-
-VideoControl Interface Descriptor:
-  guidExtensionCode         {82066163-7050-ab49-b8cc-b3855e8d221d}
-
-This patch adds a new quirk to take care of this.
-
-Complete lsusb of one of the affected cameras:
-
-Bus 001 Device 003: ID 1bcf:2a01 Sunplus Innovation Technology Inc.
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.01
-  bDeviceClass          239 Miscellaneous Device
-  bDeviceSubClass         2 ?
-  bDeviceProtocol         1 Interface Association
-  bMaxPacketSize0        64
-  idVendor           0x1bcf Sunplus Innovation Technology Inc.
-  idProduct          0x2a01
-  bcdDevice            0.02
-  iManufacturer           1 SunplusIT Inc
-  iProduct                2 HanChen Wise Camera
-  iSerial                 3 01.00.00
-  bNumConfigurations      1
+With this patch we modify the update algorithm to work with whatever
+amount of values are available.
 
 Tested-by: HungNien Chen <hn.chen@sunplusit.com>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/usb/uvc/uvc_driver.c | 11 +++++++++++
- drivers/media/usb/uvc/uvc_video.c  |  8 ++++++++
- drivers/media/usb/uvc/uvcvideo.h   |  1 +
- 3 files changed, 20 insertions(+)
+ drivers/media/usb/uvc/uvc_video.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index c63ecfd4617d..80ef0f0e04b0 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -1497,6 +1497,17 @@ static const struct uvc_entity_quirk {
- 	u8 guid[16];
- 	u32 quirks;
- } uvc_entity_quirk[] = {
-+	/*
-+	 * Some SunPlus uvc 1.5 device firmware expects that packages with
-+	 * no frame data are ignored by the host.
-+	 * Therefore it does not clear the PTS/SCR bits in the header, and
-+	 * breaks the timestamp decode algorithm.
-+	 */
-+	{
-+		.guid = {0x82, 0x06, 0x61, 0x63, 0x70, 0x50, 0xab, 0x49,
-+			 0xb8, 0xcc, 0xb3, 0x85, 0x5e, 0x8d, 0x22, 0x1d},
-+		.quirks = UVC_QUIRK_IGNORE_EMPTY_TS,
-+	},
- };
- 
- static void uvc_entity_quirks(struct uvc_device *dev)
 diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index ab56e65ca324..a5b184e71ad7 100644
+index 75c32e232f5d..7c6448c6d706 100644
 --- a/drivers/media/usb/uvc/uvc_video.c
 +++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -500,6 +500,14 @@ uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
- 	if (len < header_size)
- 		return;
+@@ -742,10 +742,10 @@ void uvc_video_clock_update(struct uvc_streaming *stream,
+ 
+ 	spin_lock_irqsave(&clock->lock, flags);
+ 
+-	if (clock->count < clock->size)
++	if (clock->count < 2)
+ 		goto done;
+ 
+-	first = &clock->samples[clock->head];
++	first = &clock->samples[(clock->head - clock->count) % clock->size];
+ 	last = &clock->samples[(clock->head - 1) % clock->size];
+ 
+ 	/* First step, PTS to SOF conversion. */
+@@ -760,6 +760,14 @@ void uvc_video_clock_update(struct uvc_streaming *stream,
+ 	if (y2 < y1)
+ 		y2 += 2048 << 16;
  
 +	/*
-+	 * Ignore the hardware timestamp on frames with no data on
-+	 * miss-behaving devices.
++	 * Have at least 1/4 of a second of timestamps before we
++	 * try to do any calculation. Otherwise we do not have enough
++	 * precission.
 +	 */
-+	if (stream->dev->quirks & UVC_QUIRK_IGNORE_EMPTY_TS &&
-+	    len == header_size)
-+		return;
++	if ((y2 - y1) < (256 << 16))
++		goto done;
 +
- 	/*
- 	 * Extract the timestamps:
- 	 *
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index 24c911aeebce..f395b67fe95a 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -212,6 +212,7 @@
- #define UVC_QUIRK_RESTORE_CTRLS_ON_INIT	0x00000400
- #define UVC_QUIRK_FORCE_Y8		0x00000800
- #define UVC_QUIRK_FORCE_BPP		0x00001000
-+#define UVC_QUIRK_IGNORE_EMPTY_TS	0x00002000
- 
- /* Format flags */
- #define UVC_FMT_FLAG_COMPRESSED		0x00000001
+ 	y = (u64)(y2 - y1) * (1ULL << 31) + (u64)y1 * (u64)x2
+ 	  - (u64)y2 * (u64)x1;
+ 	y = div_u64(y, x2 - x1);
 
 -- 
 2.39.0.rc0.267.gcb52ba06e7-goog-b4-0.11.0-dev-696ae
