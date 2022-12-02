@@ -2,57 +2,57 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4448C47089
-	for <linux-media@archiver.kernel.org>; Fri,  2 Dec 2022 17:03:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DAD7C47090
+	for <linux-media@archiver.kernel.org>; Fri,  2 Dec 2022 17:03:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234265AbiLBRDO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 2 Dec 2022 12:03:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34766 "EHLO
+        id S234327AbiLBRDQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 2 Dec 2022 12:03:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234232AbiLBRDD (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 2 Dec 2022 12:03:03 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821BD2BB22
-        for <linux-media@vger.kernel.org>; Fri,  2 Dec 2022 09:03:02 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id bj12so12920835ejb.13
-        for <linux-media@vger.kernel.org>; Fri, 02 Dec 2022 09:03:02 -0800 (PST)
+        with ESMTP id S233470AbiLBRDH (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 2 Dec 2022 12:03:07 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907121C13A
+        for <linux-media@vger.kernel.org>; Fri,  2 Dec 2022 09:03:05 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id z92so7318494ede.1
+        for <linux-media@vger.kernel.org>; Fri, 02 Dec 2022 09:03:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=bNwN70fEkttO9/UpjS90pNFzNVmjhBb547h7/recR+g=;
-        b=YMYF3FKLRKlD+VLDPSP4cm/n9VDbH+eOQhMJ4Ub0qET1/4YDbnMaYFow1EP3RGfI+m
-         vyNQwoImPxvn4FEnFouVF4PoTlzo+tCYB4JJvcJyL2Jw440PlHUJbuIcJTc6gtRPIlbT
-         7m7jbmZvRpcEM+ytuQZkODS4ts/U3+6fqeuOc=
+        bh=G9GzaUgP2dUy5ipTj5VK+ngXMm66U7fmrSGtTqAoH/4=;
+        b=GAX2TZTChMhZiFD67BGJI41r0AzDoMd9LC5vF2rPwKDFoNwZtXlfFEHYWeSEbE6eVM
+         oF5Lz1Bb0EgXKkEaecppdgNypI5MnqXlF3L0dK8bCzyoHNe9zOWKozkiv8qdto8TU320
+         PooQegpgKL9nwicmnN78WE56DL5DQvL/280aI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bNwN70fEkttO9/UpjS90pNFzNVmjhBb547h7/recR+g=;
-        b=jcvHErAVhdJgLYrGBT/XKNK4J1sBJgEvJn5SoVQpfa7yRP/dSEBGeZPDfZ4aFKQ8Jd
-         4Hp1fWhpujk/CC9FTdrBTqqYa4NEP/djPSdktaz1wN6zsKC4F+eemqkv9WyPfbRZII9b
-         QEU3wSUkY+13//vp+OY8N7buOSgGdsRh5FxtKa7/Ia1ej6ULoxQvn/iGfZaalUUlCbLh
-         56bQe4m71C1CgGxP9XQ1IwtcxWKE4o+FEbnfwLRvO8boHWylm9rfz9RYRrx6fhmI4vz/
-         wv+4akNIt8XOSfsk01c75a7Dh+GHeB7G3DHHssP95gJlVLJ040Vvh4KTe0YrsS/BVCfn
-         EL2w==
-X-Gm-Message-State: ANoB5pnRG65HvEjxtm9jc+ncBjWADZnOB2A/Ytmd4C55ioErnyrvAwkO
-        J4umslaL4GpB2Ng1qndiF5nU8g==
-X-Google-Smtp-Source: AA0mqf7j0ojwl/0ab78IwDUCpSYN3+EkBoWKs2AM8Wssw53FrEnbQ+LP+OZh9FaM8Gz3BMpLN0e6OQ==
-X-Received: by 2002:a17:906:5586:b0:7ad:902c:d158 with SMTP id y6-20020a170906558600b007ad902cd158mr47425492ejp.121.1670000581051;
-        Fri, 02 Dec 2022 09:03:01 -0800 (PST)
+        bh=G9GzaUgP2dUy5ipTj5VK+ngXMm66U7fmrSGtTqAoH/4=;
+        b=bOlr7zBP7fME4+IrNzM/LmNOFOSphrVCNl+GuPtHKr/DJg3G+4dLf80TQFtfOH3v5Q
+         u0hZKZSQicVQITNw+FcEywZHc4h21EJ1iOY+6yBJrgwVw0h4110YtcRJJVYYcEsYxMlg
+         SzjnfLp3EHBtO/X/nGPNwc/VBwSiDgoFg1drr6T+yGEqeS1iY2oWPizPHGeZ4guMbOCI
+         cx2ElaQ6BH721MW8g0/DjvXt2cP+tNS5GeCnCUsOvLOMah9/bysIUurhRcOmc9XFtfsn
+         vz7S+hnGWO1t2R5GeDHBPldl3hZMGqH5Vm99R3eskGcnb9J/6O91vu3G2Nqoop6A/djR
+         gZQA==
+X-Gm-Message-State: ANoB5pk5lfits6DLD+4A9qgpMBpKY++Lzb5WPeFfGLlz/PjKLLjIAvw1
+        9Ak7TVeOuRmJBYmQugJqCbO3lA==
+X-Google-Smtp-Source: AA0mqf7cuQ16oJ6iCMZcjNmjwO+oQ6d4SXqf/AobfnrYTMU1TDznCvuSURfIuDVefBcd2NnyU7nYNQ==
+X-Received: by 2002:aa7:c94a:0:b0:46b:74e1:872c with SMTP id h10-20020aa7c94a000000b0046b74e1872cmr17010867edt.301.1670000584034;
+        Fri, 02 Dec 2022 09:03:04 -0800 (PST)
 Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id sa22-20020a170906edb600b0073d7ab84375sm3249133ejb.92.2022.12.02.09.03.00
+        by smtp.gmail.com with ESMTPSA id sa22-20020a170906edb600b0073d7ab84375sm3249133ejb.92.2022.12.02.09.03.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 09:03:00 -0800 (PST)
+        Fri, 02 Dec 2022 09:03:03 -0800 (PST)
 From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Fri, 02 Dec 2022 18:02:42 +0100
-Subject: [PATCH RESEND v2 2/8] media: uvc: Allow quirking by entity guid
+Date:   Fri, 02 Dec 2022 18:02:45 +0100
+Subject: [PATCH RESEND v2 5/8] media: uvcvideo: Quirk for autosuspend in Logi C910
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20220920-resend-hwtimestamp-v2-2-0d7978a817cc@chromium.org>
+Message-Id: <20220920-resend-hwtimestamp-v2-5-0d7978a817cc@chromium.org>
 References: <20220920-resend-hwtimestamp-v2-0-0d7978a817cc@chromium.org>
 In-Reply-To: <20220920-resend-hwtimestamp-v2-0-0d7978a817cc@chromium.org>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -61,79 +61,141 @@ Cc:     "hn.chen" <hn.chen@sunplusit.com>, linux-media@vger.kernel.org,
         Ricardo Ribalda <ribalda@chromium.org>,
         linux-kernel@vger.kernel.org
 X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1791; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=es8VifXL1MkLaxdmrIj9wvoFjqnH8ap0KliznPX0ArQ=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjii+4UFyy5wEL7JacPovRxgY/wDg86ABUbzcK85TJ
- WJqFrIeJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4ovuAAKCRDRN9E+zzrEiHZ9D/
- 4yXuaKvxm2kV9m+nvZzNTV1+awqBpG5QYMl05OQ1Oww/Pq5x7PBGr0GQgVM4IauG2bLsRv6BKdFSAs
- z/H+qXgVE6q+ObvX1yOphZgnRXAuYZv+Jfy5o3Q1gQNjgw0glnps8A/gHuRf7PEmq0aWuNYRKsEjMB
- gl/cT+EP8p9dSNX9e7mWK44C4z9dsWfmR12O8urSGzRzR98LOeEED1ywLmh4dklEJId4WjexIOmvhU
- gmBL9Ir+GUgGk5oVY3VwyzOi2RgVxVhb/WqgwVNe1VuRGINTN/bVE2ckUzey56teTB/+JJeNp7LBo1
- WkxaGSUqVvACvKaNZEavwD6p9a7tP5Pyuk25zQrAhlT2DbljorwNyZa55B1b7K4lll7EzVBQ+HwBUd
- LRy893zuzDEWmtJGgcoK3dGXoaG2VSw9plEXXmSqFZbUQaK0pRDw8bPLhdlRitgpchX9WWcVNQCXsz
- t8FquJoH4sbmjRR2wxCWLeIFHiwTHTZwJ/eMQEWdjptRspwhpTyGqp2w9rjhxvM8wzrAgEepCNsS6a
- /3NMoA7ws+dnZ9urdLId4T+nCP70rUtzhB+9uuPKlcIoH77AQBac/aWleL+IjjjIxFGRJhakl9XHD0
- 7U+mdJMfjOq8KDm+v1elgwnafSKwNHNc7QQwICG6oMjE6VfMcpNT9kFzvt/w==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5268; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=vMpFMRWWnesB/JKaCX8FLzASNm4eeK6jiVYT2ygmW8I=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjii+8Yo31bNYjZttsorhUadWt28paNSHCekzMBfO9
+ 4MT7IFCJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4ovvAAKCRDRN9E+zzrEiMhTD/
+ 9M1V3Q8NhJzc0K7i6zH28Aead4zTfGgJS6iPzaMJOZwixbybTKy0p1NDW78eREp4Z3BTLh34iSugpL
+ DsbnWZtuRPx7zQisCQ8f3pWpZfIAFDn/9f2TIS9GkqqzM0maNn6tH/xpsrcXY36TcM+wDf2z5BfecN
+ IwmG6NhmjPx/HzR+jYE5Gm6f++dvtzUKP4SkFDsEk3BviuR+ZNqYviJqW/3ghoWpPGLCCbN/YCHyUH
+ vBxR+BOU0tqf/dPGmeBKrYtrY21PAUhoOOMNmlFfBtdDmX5on0MHzwfSQx0vSPNBFoGAJI0n9K/Y8N
+ wCE/oZnMGYz+4Xsk/gtBpkehQmvmJ8devs1V1RtpUN2mpAK2dwyjCI+1chU9lEkMFC7t+KIuAmYHi1
+ VyeMPzlZ1Ib3GmNkviwSQzs+EFNqHL7wPN0gqmfhrezON/Z0sE//13kGrZuLC5QM3fhNAUy3ppaEAr
+ ZR4ExcwbQcs4mxVMGCfgpv6I674ZomWF2U7gfQaPhNusnUeAbkKz57hAKIw1JWazklIQbTkJdjLbSP
+ YFi3tMBVSD65aR4U+QPjMjqTfcdA1bYCZIBOYCiFelXyh/QUF8cuNKVhOWeRquT3TiegfhnLfO431c
+ ZyLp2XQsLjBMsGZYu+wDQzCpO6Rpw3xOm3XksqZceCKtUJKwyTJ6ED6Xov8w==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When an IP is shared by multiple devices its erratas will be shared by
-all of them. Instead of creating a long list of device quirks, or
-waiting for the users to report errors in their hardware lets add a
-routine to add quirks based on the entity guid.
+Logitech C910 firmware is unable to recover from a usb autosuspend. When
+it resumes, the device is in a state where it only produces invalid
+frames. Eg:
 
-Tested-by: HungNien Chen <hn.chen@sunplusit.com>
+$ echo 0xFFFF > /sys/module/uvcvideo/parameters/trace # enable verbose log
+$ yavta -c1 -n1 --file='frame#.jpg' --format MJPEG --size=1920x1080 /dev/video1
+[350438.435219] uvcvideo: uvc_v4l2_open
+[350438.529794] uvcvideo: Resuming interface 2
+[350438.529801] uvcvideo: Resuming interface 3
+[350438.529991] uvcvideo: Trying format 0x47504a4d (MJPG): 1920x1080.
+[350438.529996] uvcvideo: Using default frame interval 33333.3 us (30.0 fps).
+[350438.551496] uvcvideo: uvc_v4l2_mmap
+[350438.555890] uvcvideo: Device requested 3060 B/frame bandwidth.
+[350438.555896] uvcvideo: Selecting alternate setting 11 (3060 B/frame bandwidth).
+[350438.556362] uvcvideo: Allocated 5 URB buffers of 32x3060 bytes each.
+[350439.316468] uvcvideo: Marking buffer as bad (error bit set).
+[350439.316475] uvcvideo: Frame complete (EOF found).
+[350439.316477] uvcvideo: EOF in empty payload.
+[350439.316484] uvcvideo: frame 1 stats: 149/261/417 packets, 1/149/417 pts (early initial), 416/417 scr, last pts/stc/sof 2976325734/2978107243/249
+[350439.384510] uvcvideo: Marking buffer as bad (error bit set).
+[350439.384516] uvcvideo: Frame complete (EOF found).
+[350439.384518] uvcvideo: EOF in empty payload.
+[350439.384525] uvcvideo: frame 2 stats: 265/379/533 packets, 1/265/533 pts (early initial), 532/533 scr, last pts/stc/sof 2979524454/2981305193/316
+[350439.448472] uvcvideo: Marking buffer as bad (error bit set).
+[350439.448478] uvcvideo: Frame complete (EOF found).
+[350439.448480] uvcvideo: EOF in empty payload.
+[350439.448487] uvcvideo: frame 3 stats: 265/377/533 packets, 1/265/533 pts (early initial), 532/533 scr, last pts/stc/sof 2982723174/2984503144/382
+...(loop)...
+
+The devices can leave this invalid state if its altstate is toggled.
+
+This patch addes a quirk for this device so it can be autosuspended
+properly.
+
+lsusb -v:
+Bus 001 Device 049: ID 046d:0821 Logitech, Inc. HD Webcam C910
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass          239 Miscellaneous Device
+  bDeviceSubClass         2
+  bDeviceProtocol         1 Interface Association
+  bMaxPacketSize0        64
+  idVendor           0x046d Logitech, Inc.
+  idProduct          0x0821 HD Webcam C910
+  bcdDevice            0.10
+  iManufacturer           0
+  iProduct                0
+  iSerial                 1 390022B0
+  bNumConfigurations      1
+
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/usb/uvc/uvc_driver.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ drivers/media/usb/uvc/uvc_driver.c | 18 ++++++++++++++++++
+ drivers/media/usb/uvc/uvc_video.c  |  5 +++++
+ drivers/media/usb/uvc/uvcvideo.h   |  1 +
+ 3 files changed, 24 insertions(+)
 
 diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 9c05776f11d1..c63ecfd4617d 100644
+index 4512316c8748..d2a158a1ce35 100644
 --- a/drivers/media/usb/uvc/uvc_driver.c
 +++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -1493,6 +1493,28 @@ static int uvc_parse_control(struct uvc_device *dev)
- 	return 0;
- }
+@@ -2823,6 +2823,24 @@ static const struct usb_device_id uvc_ids[] = {
+ 	  .bInterfaceSubClass	= 1,
+ 	  .bInterfaceProtocol	= 0,
+ 	  .driver_info		= (kernel_ulong_t)&uvc_quirk_probe_minmax },
++	/* Logitech, Webcam C910 */
++	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
++				| USB_DEVICE_ID_MATCH_INT_INFO,
++	  .idVendor		= 0x046d,
++	  .idProduct		= 0x0821,
++	  .bInterfaceClass	= USB_CLASS_VIDEO,
++	  .bInterfaceSubClass	= 1,
++	  .bInterfaceProtocol	= 0,
++	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_WAKE_AUTOSUSPEND)},
++	/* Logitech, Webcam B910 */
++	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
++				| USB_DEVICE_ID_MATCH_INT_INFO,
++	  .idVendor		= 0x046d,
++	  .idProduct		= 0x0823,
++	  .bInterfaceClass	= USB_CLASS_VIDEO,
++	  .bInterfaceSubClass	= 1,
++	  .bInterfaceProtocol	= 0,
++	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_WAKE_AUTOSUSPEND)},
+ 	/* Logitech Quickcam Fusion */
+ 	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+ 				| USB_DEVICE_ID_MATCH_INT_INFO,
+diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+index d387d6335344..75c32e232f5d 100644
+--- a/drivers/media/usb/uvc/uvc_video.c
++++ b/drivers/media/usb/uvc/uvc_video.c
+@@ -1983,6 +1983,11 @@ static int uvc_video_start_transfer(struct uvc_streaming *stream,
+ 			"Selecting alternate setting %u (%u B/frame bandwidth)\n",
+ 			altsetting, best_psize);
  
-+static const struct uvc_entity_quirk {
-+	u8 guid[16];
-+	u32 quirks;
-+} uvc_entity_quirk[] = {
-+};
-+
-+static void uvc_entity_quirks(struct uvc_device *dev)
-+{
-+	struct uvc_entity *entity;
-+	int i;
-+
-+	list_for_each_entry(entity, &dev->entities, list) {
-+		for (i = 0; i < ARRAY_SIZE(uvc_entity_quirk); i++) {
-+			if (memcmp(entity->guid, uvc_entity_quirk[i].guid,
-+				   sizeof(entity->guid)) == 0) {
-+				dev->quirks |= uvc_entity_quirk[i].quirks;
-+				break;
-+			}
++		if (stream->dev->quirks & UVC_QUIRK_WAKE_AUTOSUSPEND) {
++			usb_set_interface(stream->dev->udev, intfnum,
++					  altsetting);
++			usb_set_interface(stream->dev->udev, intfnum, 0);
 +		}
-+	}
-+}
-+
- /* -----------------------------------------------------------------------------
-  * Privacy GPIO
-  */
-@@ -2452,6 +2474,9 @@ static int uvc_probe(struct usb_interface *intf,
- 		goto error;
- 	}
+ 		ret = usb_set_interface(stream->dev->udev, intfnum, altsetting);
+ 		if (ret < 0)
+ 			return ret;
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index e41289605d0e..14daa7111953 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -214,6 +214,7 @@
+ #define UVC_QUIRK_FORCE_BPP		0x00001000
+ #define UVC_QUIRK_IGNORE_EMPTY_TS	0x00002000
+ #define UVC_QUIRK_INVALID_DEVICE_SOF	0x00004000
++#define UVC_QUIRK_WAKE_AUTOSUSPEND	0x00008000
  
-+	/* Apply entity based quirks */
-+	uvc_entity_quirks(dev);
-+
- 	dev_info(&dev->udev->dev, "Found UVC %u.%02x device %s (%04x:%04x)\n",
- 		 dev->uvc_version >> 8, dev->uvc_version & 0xff,
- 		 udev->product ? udev->product : "<unnamed>",
+ /* Format flags */
+ #define UVC_FMT_FLAG_COMPRESSED		0x00000001
 
 -- 
 2.39.0.rc0.267.gcb52ba06e7-goog-b4-0.11.0-dev-696ae
