@@ -2,57 +2,57 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EA20C47089
-	for <linux-media@archiver.kernel.org>; Fri,  2 Dec 2022 17:08:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADE2EC47088
+	for <linux-media@archiver.kernel.org>; Fri,  2 Dec 2022 17:08:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234338AbiLBRIj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 2 Dec 2022 12:08:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44908 "EHLO
+        id S234337AbiLBRIh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 2 Dec 2022 12:08:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234098AbiLBRIe (ORCPT
+        with ESMTP id S234147AbiLBRIe (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Fri, 2 Dec 2022 12:08:34 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B682DD2084
-        for <linux-media@vger.kernel.org>; Fri,  2 Dec 2022 09:08:32 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id fc4so6036689ejc.12
-        for <linux-media@vger.kernel.org>; Fri, 02 Dec 2022 09:08:32 -0800 (PST)
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74065CA790
+        for <linux-media@vger.kernel.org>; Fri,  2 Dec 2022 09:08:30 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id n20so13078789ejh.0
+        for <linux-media@vger.kernel.org>; Fri, 02 Dec 2022 09:08:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wtZA1IbfmQV1q6JbQ4L1axaQ6pL7lh9jXHUHF+NGf+s=;
-        b=XpikTCNVTwEOA5uF8nNd5n/17A51tYzKCsH3sFvNsx7NQIlGfqeYPmt+MPPTil0B9c
-         HoA1iwi/zEldKG9JkeVX+amy3q/vGckf4YOJJZq6aKxUtcpQqtvsP97cy1tjVEwII11V
-         nOqCsWmk2LGIUPqE1HZG8UiN0l0cJKQvaKSjY=
+        bh=0Osxc+X4hVnu15Q3eTBw5jI2KUp8vy0lxvuL8UQ3aC0=;
+        b=GnS8QhSYEMv6n4jw0yFfUbZvwg5Vhq+985nBIzjutBkUlJTjAES6Qa3j4FDdFzaNhd
+         xPs2ypslvirhSLt/avB43QTL/kelOxqQL6FrOFue/KgICMQvM051OhnKukuOG7/6nN1B
+         mNspBDvw6GParxheS+tuiAz0fi+ztewwb1HAU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wtZA1IbfmQV1q6JbQ4L1axaQ6pL7lh9jXHUHF+NGf+s=;
-        b=uOE2ucX6yeC/WhpI3JMabB3wCfQMtSCKDvKXkQhUZFHT1DQ63m83bS1RojwaZ6ucJw
-         lTPbHLuw8y5kAerpwbPrNA74k99Q8hAypykACVznz2EoyFc/pslIV2zLNraX9XfWPfpP
-         DyMmBg0hTEWtKew5gnLwijrdPH7KnB3EdHtDXGesLsutaNBbrzpvQlxbJXt2NdpflfaE
-         il0MfrIF30Hcc9h1YX16CqIQmvRXp5FrI2LuaLFHjlJgQDqttwzOq0b8bOzB3UJYKBaB
-         scIDQHz50TnbYGEEODwJ2XJP7o3qmzMt9v3whoulY16TYwlszScF6LmvGEQOY7AGPPwp
-         057A==
-X-Gm-Message-State: ANoB5pmwIZhf7qEx4yhBWuSTt9cwtDA/KNmP8ez2HnGhXSN3PHQ+n5la
-        285bruvz4Ca5AOG+XHqAe9aVzA==
-X-Google-Smtp-Source: AA0mqf5dJzt7LrpazmQka4+jBMsdtoK0r3QFvYdUKX1Vh8sKmomDA3k5HIQLxQG/VkNHAbFh65F7bg==
-X-Received: by 2002:a17:906:c303:b0:7ad:95d2:9df2 with SMTP id s3-20020a170906c30300b007ad95d29df2mr14266490ejz.607.1670000910978;
-        Fri, 02 Dec 2022 09:08:30 -0800 (PST)
+        bh=0Osxc+X4hVnu15Q3eTBw5jI2KUp8vy0lxvuL8UQ3aC0=;
+        b=2Bi1EpoVl4zg7/+GIb/R/zFnbRUgvibcqChgt4SnOf7oUgWCEw02H4BnMDaPSZc4tL
+         CJjZvJaEubWkLCSjbWoNiEBPlOnBaO9XR7KNNl6x37r4EO0aIiIX+ZSLMymtAm9vaSx6
+         LjVMoTuixDpgCk7O0OP/NIRlOTDEb9QCf9g7cO98uEJsu2x+NbZww1hk9SlLb6rmQcmc
+         JgdZSMKyHaeymG/kuS9DAZBh/R04c1EqJK5bALujejgAdQHEo5xABMxYMEwYyVKmq65B
+         qUQm7tNOEMBSP7UjTxibhWSiTruDbejBD1/FeIooUiN53RNsM+8m5VEwcrOrhK6YTb6B
+         KYAQ==
+X-Gm-Message-State: ANoB5pmkUaie2mjO9csW5so0Cf5SeemIOdidINa22+C8SAFYCmf/5qnu
+        p0uJdhnxNEB9cktibNu3xj9G9w==
+X-Google-Smtp-Source: AA0mqf590e54t6H3TnzsRoLmE3reCWONt4LAtXkHNH5TtEOJZa3ZkWb1dP2R5zjw1RElWBUSOtIqvg==
+X-Received: by 2002:a17:906:240f:b0:7c0:9f04:1938 with SMTP id z15-20020a170906240f00b007c09f041938mr11228599eja.769.1670000909427;
+        Fri, 02 Dec 2022 09:08:29 -0800 (PST)
 Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id p23-20020aa7d317000000b00461cdda400esm3168080edq.4.2022.12.02.09.08.30
+        by smtp.gmail.com with ESMTPSA id p23-20020aa7d317000000b00461cdda400esm3168080edq.4.2022.12.02.09.08.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 09:08:30 -0800 (PST)
+        Fri, 02 Dec 2022 09:08:29 -0800 (PST)
 From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Fri, 02 Dec 2022 18:08:19 +0100
-Subject: [PATCH v4 3/3] media: uvcvideo: Add a unique suffix to camera names
+Date:   Fri, 02 Dec 2022 18:08:17 +0100
+Subject: [PATCH v4 1/3] media: v4l2-dev.c: Add Meta: to the name of metadata devices
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20220920-resend-meta-v4-3-3ac355b66723@chromium.org>
+Message-Id: <20220920-resend-meta-v4-1-3ac355b66723@chromium.org>
 References: <20220920-resend-meta-v4-0-3ac355b66723@chromium.org>
 In-Reply-To: <20220920-resend-meta-v4-0-3ac355b66723@chromium.org>
 To:     Yunke Cao <yunkec@chromium.org>,
@@ -64,54 +64,64 @@ Cc:     linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Ricardo Ribalda <ribalda@chromium.org>
 X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1196; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=nncAxgIlMLPqi8B4D2XzAtMUAbjMzg6DbKN4jx7ltvo=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjijEKf6IQrPsYfpx8DB/t21WB2f//wrtkc3pBusyj
- OJet42yJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4oxCgAKCRDRN9E+zzrEiEf9EA
- CQ4I7QGoNfJc9SX11wg89UhJOeSV96QkPThsmoSd+ZSPI54GSWuTIU5scGGnYkXaCUoMlZh0UUvz2Q
- aIq7bDEfpmwCV6ioehV41ihZyXx3jAk8hHwjArKCdkvjxXL3qcBuYBvqDnNhPDufiMbdt020JrednB
- SlFrEa9DrGYNGERL7H5gyh60gLTxvT6i3TNP+8Q4+cgnXkMYDwTWXZ2Qgc5WY8ULBtXzWW8/BxNocr
- yVr3Lh795K3zVpg/AEiG+ZseaV9I5VTc5NzMDwAwEzOS66uLFPBNYuN67PlW/WO354hOJw8hdkgZqu
- nyem3E/OvSF6k5Je/csoQ3OUJFbw0b657ilB4bOQy/BL7yH6MYQPRfziUKJkLi4z+H7FdbuFZwpWEK
- EgdH9jGHSGYUD+ePn1TGzttAah24E17G4QOWGt2a23um4b00eIMvXZcYap/n6BfO6jDiJpMYiyfqZN
- swe6t1+t0zmKdYVcznkLD7F8Mj+WmkwYcQQrphdjKlQN8NsuSi2lXExVumSnGRNT3CahDuqovBw/Bq
- vJ187rhlO897Szhl+WuAzg1quLkKQ9J6sXb9M3Exexs3r1hdyg3alVYAjzxAFARErx9E4Y8C7HWJjG
- To1sxIYs0gyIO7Zacp/WnYB3q6NuiAnaIjJrWXFe32Bp18lk1ikY4VrFPJsg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1570; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=S/2IqTrS982KVl7xBqyOVIPsEn1hTfJgkOaPng55noA=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjijEHhwhyiGaRWIE8Uwg1apHOrqxn6xO5ElcuWngc
+ RfSqvt6JAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4oxBwAKCRDRN9E+zzrEiCbYD/
+ 9zTf9/1R1mr3eyJB5lNnh0633R51L2Org2I+fBBpEAQuV0E5f+X+Wvt5fS1x9OGakxv7FMljhc7/VW
+ UycA4caSUByvyMLsWh5VrwRzGe4PetwRafYyZHKMD2ltxmWKRdvf0EIzxlqJNtA2UpWqbv1/2fnZs2
+ MRS9jOpFIfKv6HexUGs9W0IQqW0zCjuXesmq/UiTEKCCF2wFK76A7fDEYiO67P6BhMX2PtJO4T2l9n
+ ghq7UWWV96Sdf0+zat+q2o15M5gh8vWsjJkLSIhyRCK35FKUS+LqRCdY21m747yr6c9ifbh+boyNeS
+ nTmy+N+jBPCswv8MmF7XT6glJkLRRe2NGtTpDU1yGBVuK9bbIwvyckVBQm2SOVtY6cDvaEhk5AroHV
+ CSMwrcqW70mLSKBLEGvGHSlLplp5Hr5xi5vCimvqZOxr0TcR1WhcXWqr3kh2I7BzjogliVIjarBQ2l
+ +2rOLr8Xl5dnXbc6kWM6JkL8z0U6h3JXaGWqpBB7/VSKsu+AHXhlLLH/u/vyQ/PV+Lh/T1Qh3dwPSV
+ jo06AX7OmJemmcNPTT9zVrpXfUlJZ9jtzxfasYcwM2dnOruGT4CIB/cIym/W+18ikKFQLWMk5ht+Sv
+ fvl56wMlfC+MwAgBex16f0J1qTa0BsB27zxm7iC0tqooCN4/bhSTb/GubcDg==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Some cameras have multiple data inputs (i.e. IR sensor and RGB sensor),
-append a unique number to the device name.
+Devices with Metadata output (like uvc), create two video devices, one
+for the data itself and another one for the metadata.
+
+Add a "Meta: " to the beginning of the device name, as suggested by Mauro,
+to avoid having multiple devices with the same name.
 
 Fixes v4l2-compliance:
-    Media Controller ioctls:
-         fail: v4l2-test-media.cpp(205): v2_entity_names_set.find(key) != v2_entity_names_set.end()
-       test MEDIA_IOC_G_TOPOLOGY: FAIL
-         fail: v4l2-test-media.cpp(394): num_data_links != num_links
-       test MEDIA_IOC_ENUM_ENTITIES/LINKS: FAIL
+Media Controller ioctls:
+     fail: v4l2-test-media.cpp(205): v2_entity_names_set.find(key) != v2_entity_names_set.end()
+   test MEDIA_IOC_G_TOPOLOGY: FAIL
+     fail: v4l2-test-media.cpp(394): num_data_links != num_links
+   test MEDIA_IOC_ENUM_ENTITIES/LINKS: FAIL
 
+Suggested-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/usb/uvc/uvc_driver.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/media/v4l2-core/v4l2-dev.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 215fb483efb0..f4032ebb3689 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -1963,7 +1963,8 @@ int uvc_register_video_device(struct uvc_device *dev,
- 		break;
- 	}
+diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
+index 397d553177fa..5c2c9ebb6b96 100644
+--- a/drivers/media/v4l2-core/v4l2-dev.c
++++ b/drivers/media/v4l2-core/v4l2-dev.c
+@@ -901,6 +901,15 @@ int __video_register_device(struct video_device *vdev,
+ 	if (WARN_ON(type != VFL_TYPE_SUBDEV && !vdev->device_caps))
+ 		return -EINVAL;
  
--	strscpy(vdev->name, dev->name, sizeof(vdev->name));
-+	snprintf(vdev->name, sizeof(vdev->name), "%s %u", dev->name,
-+		 stream->header.bTerminalLink);
- 
- 	/*
- 	 * Set the driver data before calling video_register_device, otherwise
++	/* Add Meta: to metadata device names */
++	if (vdev->device_caps &
++	    (V4L2_CAP_META_CAPTURE | V4L2_CAP_META_OUTPUT)) {
++		char aux[sizeof(vdev->name)];
++
++		snprintf(aux, sizeof(aux), "Meta: %s", vdev->name);
++		strscpy(vdev->name, aux, sizeof(aux));
++	}
++
+ 	/* v4l2_fh support */
+ 	spin_lock_init(&vdev->fh_lock);
+ 	INIT_LIST_HEAD(&vdev->fh_list);
 
 -- 
 2.39.0.rc0.267.gcb52ba06e7-goog-b4-0.11.0-dev-696ae
