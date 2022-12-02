@@ -2,52 +2,53 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB5D9C47089
-	for <linux-media@archiver.kernel.org>; Fri,  2 Dec 2022 15:28:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 036E6C47088
+	for <linux-media@archiver.kernel.org>; Fri,  2 Dec 2022 15:28:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233703AbiLBP2S (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 2 Dec 2022 10:28:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33470 "EHLO
+        id S233765AbiLBP2T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 2 Dec 2022 10:28:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233635AbiLBP2H (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 2 Dec 2022 10:28:07 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6F05435C
-        for <linux-media@vger.kernel.org>; Fri,  2 Dec 2022 07:28:02 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id n7so3766176wms.3
-        for <linux-media@vger.kernel.org>; Fri, 02 Dec 2022 07:28:02 -0800 (PST)
+        with ESMTP id S233682AbiLBP2I (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 2 Dec 2022 10:28:08 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70801903E
+        for <linux-media@vger.kernel.org>; Fri,  2 Dec 2022 07:28:03 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id w15so8285656wrl.9
+        for <linux-media@vger.kernel.org>; Fri, 02 Dec 2022 07:28:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=raspberrypi.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yfz7Nubr199pY33ajZs0mPC+wji22IeMXgdJJhI7MWk=;
-        b=Ydp+JiKt60nUr15pRavvUN1aj/R7jOkd+1QRS69q6L8cO/7e64EvlU8lun8J+vRx6a
-         CE3w1PzQJxt5XXBfCf8sqWDHw4RwszEOcnhN+p3fACsq8mc+G5yrMO/axJf8jQNzBNgT
-         NXN9+rFGtGsMmqlCUW8Yg+zjCBJxoHOmrcQKqovwFJeEtD6YLmsee1+osa5k/w13+UsV
-         RMSqT+0OZs2o/45ueBhS30v+azUaZT2UwJqE70E5ZIajyE/KQ7mS0zyc0G+g1Xz/mGki
-         UaS1Dm/zpXJsGzRAl4cL200KOvsHYTHl7T0AjM0qf/OR9U2ux9bnk9w1IohqrsidmbZ4
-         fp8w==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q307OwUmjrBOARnf+xhbF57KM6ddL1J7Y5GnrvOnQZ8=;
+        b=iDicF9dIoGYNac8k9mSQDVSg5NVtk1RItkLZTgx3UOrn1oYND6GvvQqxVMWF9Ob0+5
+         AynkKLLm2Zwj/pM40vcwkjpCHCJ6K8e+v5IyOx1ZMa5hrh2IcfJ3Ribd5qq0qQSbAKYk
+         nt3Ol7N0F42S5ZIZUtbWtB63Iw+9B47e54amLCXVEKc5aN/H6e82wN+PLB/2oEY4TY6r
+         WWsGrC9Zm+B3SDrxKYs78pjoeCigbhRpeMlDgz2/ixWVBq3fV2VpIeDYDVyUdYK6lLIQ
+         PaLvRUqncC+Hh5NvMP5sWedoaUKn6mHcy41moeUGhp3OwZ9mbjKEiBftZ6zc3ltur/Bj
+         Q+Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Yfz7Nubr199pY33ajZs0mPC+wji22IeMXgdJJhI7MWk=;
-        b=jt6j8sKWkR5IxpQI+CK17Hwn4sMM0g8SrllCw8a/OamQxVKAHwyriTAvOyBBlNgEzD
-         Jq7mxFsMZ+Kc1MFcD7Tj6ODnUhBm2rHV6YBrf6ULoMnC9+YenrglAiLMGJqovR28Afxz
-         VB4QgOQFNQyo41voWFqO0vJ7pa62BOwj69OdfbPKdseWo8vj3szWhgDorb9eOQBZQ94l
-         +1dbVxcIdt94HgAj6AvcZfxSoekbfjY+6iqpxE5OWUt0vYr8HiRVuBl/YCYAWmlUS2hJ
-         wgY7blEiEDWrbw5ZoXTOkCKYBio7OO+bhbpkigKBjh1LjTJcSbwYSzE14La2Em4l2KEj
-         CFuw==
-X-Gm-Message-State: ANoB5pnh7MmJnMbUtEO+4V9PaW/0N2ZsFOkm7n3hSCTmcE0FNwlKAljS
-        LDB2OodPVs+UAazEkpKyihcgBV+uS/S2XNYgUKI=
-X-Google-Smtp-Source: AA0mqf5a3sLiRh7bOPFlP7/k+ee4CGBJ8iwfz0FWIb0K6Um1YKBwpw/l6npUv9b4UgVjRxvmgefuCg==
-X-Received: by 2002:a05:600c:1e1a:b0:3cf:7959:d8be with SMTP id ay26-20020a05600c1e1a00b003cf7959d8bemr46004743wmb.85.1669994881029;
-        Fri, 02 Dec 2022 07:28:01 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q307OwUmjrBOARnf+xhbF57KM6ddL1J7Y5GnrvOnQZ8=;
+        b=aI7ARa1ccHYzNAPaEIdndBsNskWeNve14dvPtHL8NdzQPBOli/efeG8clyAuqe6K2i
+         QhKnF+CFQDzdDf1BVHNXgrZRU0qOn5q59r4MemdRC83w8C6X/ujbE/Zlz5H7UMMg4mcs
+         g1leLMGzEpb0oOaoTqglysBmKFpr+6erJ3QpBKLIxoas6jAgfSA1rJVv7fNFoq6TBkvj
+         g1jqo16ntnOJESLJAQgN07r1qoZcddTn49qAQ6t0N+gaHKHe+v8ldEmdseNgVAHlZnAP
+         oRngimXYr/OpQaNbyf2ofchmmASolwYOft4H64xq7IRlVDbz6RtlddLVeUDvXuaHxAgl
+         65PQ==
+X-Gm-Message-State: ANoB5pkdTsfV13OVgSSwXa9wQukm882z1c1wHb94Cr9LmXqRu1qfWOW+
+        DisPFcs3EJQpzdGwmpYYMJ3X8Q==
+X-Google-Smtp-Source: AA0mqf56zlNI58TT97arpw2FMyAqGl+9zCZ7azoiUItRkp4FA4sWvek9njUxGhCS0pg97REYs7uAnw==
+X-Received: by 2002:adf:e347:0:b0:236:76de:7280 with SMTP id n7-20020adfe347000000b0023676de7280mr45350558wrj.194.1669994882395;
+        Fri, 02 Dec 2022 07:28:02 -0800 (PST)
 Received: from dave-Ubuntu2204.pitowers.org ([93.93.133.154])
-        by smtp.googlemail.com with ESMTPSA id t17-20020a05600c41d100b003cf71b1f66csm8322773wmh.0.2022.12.02.07.28.00
+        by smtp.googlemail.com with ESMTPSA id t17-20020a05600c41d100b003cf71b1f66csm8322773wmh.0.2022.12.02.07.28.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 07:28:00 -0800 (PST)
+        Fri, 02 Dec 2022 07:28:02 -0800 (PST)
 From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
 To:     Rui Miguel Silva <rmfrfs@gmail.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -55,41 +56,46 @@ To:     Rui Miguel Silva <rmfrfs@gmail.com>,
         Tianshu Qiu <tian.shu.qiu@intel.com>,
         Jimmy Su <jimmy.su@intel.com>, linux-media@vger.kernel.org
 Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH 0/5] Ensure sensor drivers set V4L2_CTRL_FLAG_MODIFY_LAYOUT for flips
-Date:   Fri,  2 Dec 2022 15:27:22 +0000
-Message-Id: <20221202152727.1010207-1-dave.stevenson@raspberrypi.com>
+Subject: [PATCH 2/5] media: i2c: imx208: Set V4L2_CTRL_FLAG_MODIFY_LAYOUT on flips
+Date:   Fri,  2 Dec 2022 15:27:24 +0000
+Message-Id: <20221202152727.1010207-3-dave.stevenson@raspberrypi.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221202152727.1010207-1-dave.stevenson@raspberrypi.com>
+References: <20221202152727.1010207-1-dave.stevenson@raspberrypi.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi.
+The driver changes the Bayer order based on the flips, but
+does not define the control correctly with the
+V4L2_CTRL_FLAG_MODIFY_LAYOUT flag.
 
-I was doing a basic sweep of drivers and noted that these 5 drivers change the
-Bayer order based on HFLIP and VFLIP. However they don't set the
-V4L2_CTRL_FLAG_MODIFY_LAYOUT flag on the controls, so userspace has no notion
-that it needs to check for a changed format.
+Add the V4L2_CTRL_FLAG_MODIFY_LAYOUT flag.
 
-Add the flag to all the controls.
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+---
+ drivers/media/i2c/imx208.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-  Dave
-
-Dave Stevenson (5):
-  media: i2c: ov2680: Set V4L2_CTRL_FLAG_MODIFY_LAYOUT on flips
-  media: i2c: imx208: Set V4L2_CTRL_FLAG_MODIFY_LAYOUT on flips
-  media: i2c: imx319: Set V4L2_CTRL_FLAG_MODIFY_LAYOUT on flips
-  media: i2c: imx355: Set V4L2_CTRL_FLAG_MODIFY_LAYOUT on flips
-  media: i2c: ov08d10: Set V4L2_CTRL_FLAG_MODIFY_LAYOUT on flips
-
- drivers/media/i2c/imx208.c  | 4 ++++
- drivers/media/i2c/imx319.c  | 4 ++++
- drivers/media/i2c/imx355.c  | 4 ++++
- drivers/media/i2c/ov08d10.c | 5 +++++
- drivers/media/i2c/ov2680.c  | 4 ++++
- 5 files changed, 21 insertions(+)
-
+diff --git a/drivers/media/i2c/imx208.c b/drivers/media/i2c/imx208.c
+index a0e17bb9d4ca..64c70ebf9869 100644
+--- a/drivers/media/i2c/imx208.c
++++ b/drivers/media/i2c/imx208.c
+@@ -937,8 +937,12 @@ static int imx208_init_controls(struct imx208 *imx208)
+ 
+ 	imx208->hflip = v4l2_ctrl_new_std(ctrl_hdlr, &imx208_ctrl_ops,
+ 					  V4L2_CID_HFLIP, 0, 1, 1, 0);
++	if (imx208->hflip)
++		imx208->hflip->flags |= V4L2_CTRL_FLAG_MODIFY_LAYOUT;
+ 	imx208->vflip = v4l2_ctrl_new_std(ctrl_hdlr, &imx208_ctrl_ops,
+ 					  V4L2_CID_VFLIP, 0, 1, 1, 0);
++	if (imx208->vflip)
++		imx208->vflip->flags |= V4L2_CTRL_FLAG_MODIFY_LAYOUT;
+ 
+ 	v4l2_ctrl_new_std(ctrl_hdlr, &imx208_ctrl_ops, V4L2_CID_ANALOGUE_GAIN,
+ 			  IMX208_ANA_GAIN_MIN, IMX208_ANA_GAIN_MAX,
 -- 
 2.34.1
 
