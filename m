@@ -2,126 +2,137 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADE2EC47088
-	for <linux-media@archiver.kernel.org>; Fri,  2 Dec 2022 17:08:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D04CC4321E
+	for <linux-media@archiver.kernel.org>; Fri,  2 Dec 2022 17:19:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234337AbiLBRIh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 2 Dec 2022 12:08:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44870 "EHLO
+        id S233878AbiLBRTt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 2 Dec 2022 12:19:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234147AbiLBRIe (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 2 Dec 2022 12:08:34 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74065CA790
-        for <linux-media@vger.kernel.org>; Fri,  2 Dec 2022 09:08:30 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id n20so13078789ejh.0
-        for <linux-media@vger.kernel.org>; Fri, 02 Dec 2022 09:08:30 -0800 (PST)
+        with ESMTP id S233673AbiLBRTr (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 2 Dec 2022 12:19:47 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E04DE7857
+        for <linux-media@vger.kernel.org>; Fri,  2 Dec 2022 09:19:45 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id td2so13058078ejc.5
+        for <linux-media@vger.kernel.org>; Fri, 02 Dec 2022 09:19:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0Osxc+X4hVnu15Q3eTBw5jI2KUp8vy0lxvuL8UQ3aC0=;
-        b=GnS8QhSYEMv6n4jw0yFfUbZvwg5Vhq+985nBIzjutBkUlJTjAES6Qa3j4FDdFzaNhd
-         xPs2ypslvirhSLt/avB43QTL/kelOxqQL6FrOFue/KgICMQvM051OhnKukuOG7/6nN1B
-         mNspBDvw6GParxheS+tuiAz0fi+ztewwb1HAU=
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=r/RdQpRDc/P3p5PuMcx3RxG10Ut5U2wPQz1yCcrQs0Q=;
+        b=HzxHuLouTRvA3KjA2OBUGJkyjrJsTTCyeds0LYUc4MEDNmtV4h1eSfqOa4jK6SWkqX
+         zT7TdZry17LePKM+EvXbOs5xTw19lJEFcUWIPbNyboDMq14qQninfXyWf5BjAFyXIgpG
+         Z6VUGquxvE2DzNiryD+Jfj/yagd+CKvckd2nA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0Osxc+X4hVnu15Q3eTBw5jI2KUp8vy0lxvuL8UQ3aC0=;
-        b=2Bi1EpoVl4zg7/+GIb/R/zFnbRUgvibcqChgt4SnOf7oUgWCEw02H4BnMDaPSZc4tL
-         CJjZvJaEubWkLCSjbWoNiEBPlOnBaO9XR7KNNl6x37r4EO0aIiIX+ZSLMymtAm9vaSx6
-         LjVMoTuixDpgCk7O0OP/NIRlOTDEb9QCf9g7cO98uEJsu2x+NbZww1hk9SlLb6rmQcmc
-         JgdZSMKyHaeymG/kuS9DAZBh/R04c1EqJK5bALujejgAdQHEo5xABMxYMEwYyVKmq65B
-         qUQm7tNOEMBSP7UjTxibhWSiTruDbejBD1/FeIooUiN53RNsM+8m5VEwcrOrhK6YTb6B
-         KYAQ==
-X-Gm-Message-State: ANoB5pmkUaie2mjO9csW5so0Cf5SeemIOdidINa22+C8SAFYCmf/5qnu
-        p0uJdhnxNEB9cktibNu3xj9G9w==
-X-Google-Smtp-Source: AA0mqf590e54t6H3TnzsRoLmE3reCWONt4LAtXkHNH5TtEOJZa3ZkWb1dP2R5zjw1RElWBUSOtIqvg==
-X-Received: by 2002:a17:906:240f:b0:7c0:9f04:1938 with SMTP id z15-20020a170906240f00b007c09f041938mr11228599eja.769.1670000909427;
-        Fri, 02 Dec 2022 09:08:29 -0800 (PST)
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r/RdQpRDc/P3p5PuMcx3RxG10Ut5U2wPQz1yCcrQs0Q=;
+        b=mB6wDNM/d2FaAZdNJH9OVJC/ljAlwuI4H2TMHA9cS7jgunr2PrxOe83BoAC63RorO1
+         sYqe8tGqutYt4zYO/VWhVt7IxcnugepkYWUGZ5+x7rSkvgoy1OWEGjBWE5acEH7an463
+         8IIDhttWlJ9lmTA+Bpc09Hy9mpZWsUV1eUd9qLKVSCas3VorGZiTN4bpaaItqq/NY033
+         UMpXYey7nL7Y2sly6FA03xwxyJ95ZAvk0mL7yHbaknFooWBE2hVAoLRH+KeXAY3ZU9gI
+         Xxn76QT8FYCqPLENP6dePfv802SU9qaKjgJHRBUJSaiU2tWQtcJ+cYM0+wsqmq+kzfFr
+         d5UQ==
+X-Gm-Message-State: ANoB5pl1FDfFsXNsBwYjhEbgvAhvCrjNwu8YVYpCRvEz+nXzboeVSPBX
+        Iqk/t24vbdkES+YQkSmrYgPkmA==
+X-Google-Smtp-Source: AA0mqf6c9wbxGNnv16nmDSnRa3AMqPPV1Kw4oGHEw+22EO8NTOtinsOXsGc0Dt1L1CQA5n29ygSn+g==
+X-Received: by 2002:a17:906:39c8:b0:7ad:79c0:5482 with SMTP id i8-20020a17090639c800b007ad79c05482mr51357594eje.730.1670001584143;
+        Fri, 02 Dec 2022 09:19:44 -0800 (PST)
 Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id p23-20020aa7d317000000b00461cdda400esm3168080edq.4.2022.12.02.09.08.28
+        by smtp.gmail.com with ESMTPSA id l4-20020aa7c304000000b00458dc7e8ecasm3117864edq.72.2022.12.02.09.19.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 09:08:29 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Fri, 02 Dec 2022 18:08:17 +0100
-Subject: [PATCH v4 1/3] media: v4l2-dev.c: Add Meta: to the name of metadata devices
+        Fri, 02 Dec 2022 09:19:43 -0800 (PST)
+Subject: [PATCH v4 0/2] media: uvcvideo: Implement granular power management
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20220920-resend-meta-v4-1-3ac355b66723@chromium.org>
-References: <20220920-resend-meta-v4-0-3ac355b66723@chromium.org>
-In-Reply-To: <20220920-resend-meta-v4-0-3ac355b66723@chromium.org>
-To:     Yunke Cao <yunkec@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+X-B4-Tracking: v=1; b=H4sIAKIzimMC/4XNTQrCMBAF4KtI1kaaSdOkrryHuMjPYAOaSGIjUn
+ p3B5ciuhreg/fNwiqWiJXtNwsr2GKNOVHotxvmJ5vOyGOgzKAD6EboeMGKKfBbfmCptiFXoxFajB
+ hg0IxmzlbkrtjkJxqm+XKhcor1nsvz/aYJOscfYhO84wKkteCsNHI4+Knka5yvu1zO7EReg38GkK
+ GEVEE4J7w0Xwz5z5Bk+F4bNQSjlcYPY13XF0lCe9xAAQAA
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Fri, 02 Dec 2022 18:19:30 +0100
+Message-Id: <20220920-resend-powersave-v4-0-47484ae40761@chromium.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, Yunke Cao <yunkec@chromium.org>,
+        Max Staudt <mstaudt@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Ricardo Ribalda <ribalda@chromium.org>
+        Tomasz Figa <tfiga@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-kernel@vger.kernel.org
 X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1570; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=S/2IqTrS982KVl7xBqyOVIPsEn1hTfJgkOaPng55noA=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjijEHhwhyiGaRWIE8Uwg1apHOrqxn6xO5ElcuWngc
- RfSqvt6JAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4oxBwAKCRDRN9E+zzrEiCbYD/
- 9zTf9/1R1mr3eyJB5lNnh0633R51L2Org2I+fBBpEAQuV0E5f+X+Wvt5fS1x9OGakxv7FMljhc7/VW
- UycA4caSUByvyMLsWh5VrwRzGe4PetwRafYyZHKMD2ltxmWKRdvf0EIzxlqJNtA2UpWqbv1/2fnZs2
- MRS9jOpFIfKv6HexUGs9W0IQqW0zCjuXesmq/UiTEKCCF2wFK76A7fDEYiO67P6BhMX2PtJO4T2l9n
- ghq7UWWV96Sdf0+zat+q2o15M5gh8vWsjJkLSIhyRCK35FKUS+LqRCdY21m747yr6c9ifbh+boyNeS
- nTmy+N+jBPCswv8MmF7XT6glJkLRRe2NGtTpDU1yGBVuK9bbIwvyckVBQm2SOVtY6cDvaEhk5AroHV
- CSMwrcqW70mLSKBLEGvGHSlLplp5Hr5xi5vCimvqZOxr0TcR1WhcXWqr3kh2I7BzjogliVIjarBQ2l
- +2rOLr8Xl5dnXbc6kWM6JkL8z0U6h3JXaGWqpBB7/VSKsu+AHXhlLLH/u/vyQ/PV+Lh/T1Qh3dwPSV
- jo06AX7OmJemmcNPTT9zVrpXfUlJZ9jtzxfasYcwM2dnOruGT4CIB/cIym/W+18ikKFQLWMk5ht+Sv
- fvl56wMlfC+MwAgBex16f0J1qTa0BsB27zxm7iC0tqooCN4/bhSTb/GubcDg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1945; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=kciBkpg9OytuPzxiqiWfbkAo1WlMycZv7Sn0Qh/anFY=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjijOlKg2WE+mgx19kj8BfWLXFrt21VuBIwjiigxpp
+ S4ciJfCJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4ozpQAKCRDRN9E+zzrEiGlND/
+ 9de/F0ouT85wAcxMUsezJriMfv2tJLWDFZA0+HYtzm3cgRovk/352X+3fEv8WQTgLNmJsl1hbQFK2g
+ 8iNOjYeW/O0HciAtITljyDQi1udgCvcIOcAVv3gLXlUClMNQHJYhC96lysYhMCh9OOi/1R4a5G3TbN
+ yVjiU5gQR2hCDVfdHlqo25XKTpXrFl+MDm7btoJN9JcIOA5xP0wJqZocICS3yt9TYhjBJESSV/KZLX
+ HEdMKKVZ3tmK3xnyOrbcJK1o7McsrgHVu/kc3Kte1Urfqd/by4DDyoWSZnCXYltBjmgWElAJh5POVp
+ 1xFPCtKiVqNQTnMZmLeKQVoP+UewDxg6pg1b35psB5Slha75rjhSVmPBCrhuATsx/b2aNmjZk/x/xI
+ ZOtNOZTs3L4Wail5H2NIfgr8dL8HDdE1zOT82msp2/siKWkJVc8Qk6y/pdXOYfPQP4eNQPEXpsRdeF
+ eFmNXtBZr3UcjlDFzDh/oXlkdhOsDn9pbcWwXoM6ksjAau7mZqIC8I0PlVA3bbxTgnMhc/Mx7VBszz
+ qpnj8VIaP1t5Ab3M3RfQZDA+T6nfuq5uPLh2fBgXtk7YMvOMXQtSRsUsSTUNdRJhP1ZiRZnmqtHf2g
+ pfOHt6aQGfnmIu0dZsSucura6lggiY5b+gLWp+YOfN4dMOwGncEgfqID2N1w==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Devices with Metadata output (like uvc), create two video devices, one
-for the data itself and another one for the metadata.
+Instead of suspending/resume the USB device at open()/close(), do it
+when the device is actually used.
 
-Add a "Meta: " to the beginning of the device name, as suggested by Mauro,
-to avoid having multiple devices with the same name.
+This way we can reduce the power consumption when a service is holding
+the video device and leaving it in an idle state.
 
-Fixes v4l2-compliance:
-Media Controller ioctls:
-     fail: v4l2-test-media.cpp(205): v2_entity_names_set.find(key) != v2_entity_names_set.end()
-   test MEDIA_IOC_G_TOPOLOGY: FAIL
-     fail: v4l2-test-media.cpp(394): num_data_links != num_links
-   test MEDIA_IOC_ENUM_ENTITIES/LINKS: FAIL
-
-Suggested-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Tomasz Figa <tfiga@chromium.org>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Max Staudt <mstaudt@chromium.org>
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: Yunke Cao <yunkec@chromium.org>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/v4l2-core/v4l2-dev.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Changes in v4:
+- Remove patches to avoid crashes during device removal
+- Link to v3: https://lore.kernel.org/r/20220920-resend-powersave-v3-0-c47856d8757e@chromium.org
 
-diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
-index 397d553177fa..5c2c9ebb6b96 100644
---- a/drivers/media/v4l2-core/v4l2-dev.c
-+++ b/drivers/media/v4l2-core/v4l2-dev.c
-@@ -901,6 +901,15 @@ int __video_register_device(struct video_device *vdev,
- 	if (WARN_ON(type != VFL_TYPE_SUBDEV && !vdev->device_caps))
- 		return -EINVAL;
- 
-+	/* Add Meta: to metadata device names */
-+	if (vdev->device_caps &
-+	    (V4L2_CAP_META_CAPTURE | V4L2_CAP_META_OUTPUT)) {
-+		char aux[sizeof(vdev->name)];
-+
-+		snprintf(aux, sizeof(aux), "Meta: %s", vdev->name);
-+		strscpy(vdev->name, aux, sizeof(aux));
-+	}
-+
- 	/* v4l2_fh support */
- 	spin_lock_init(&vdev->fh_lock);
- 	INIT_LIST_HEAD(&vdev->fh_list);
+Changes in v3:
+- Rebase on top of uvc/next
+- Reorder series, and put "controversial" patches at the end.
+- Fix "use-before-set" bug. Thanks Max!
+- Link to v2: https://lore.kernel.org/r/20220920-resend-powersave-v2-0-5135d1bb1c38@chromium.org
 
+Changes in v2:
+- Make access to uvc_status contitional
+- Merge with Guenter race condition patchset: https://lore.kernel.org/lkml/20200917022547.198090-1-linux@roeck-us.net/
+- Link to v1: https://lore.kernel.org/r/20220920-resend-powersave-v1-0-123aa2ba3836@chromium.org
+
+---
+Ricardo Ribalda (2):
+      media: uvcvideo: Refactor streamon/streamoff
+      media: uvcvideo: Do power management granularly
+
+ drivers/media/usb/uvc/uvc_v4l2.c | 193 ++++++++++++++++++++++++++++++++-------
+ drivers/media/usb/uvc/uvcvideo.h |   1 +
+ 2 files changed, 159 insertions(+), 35 deletions(-)
+---
+base-commit: 58540610e464d8b2ba46a11b81c3e6fcc4118fae
+change-id: 20220920-resend-powersave-5981719ed267
+
+Best regards,
 -- 
-2.39.0.rc0.267.gcb52ba06e7-goog-b4-0.11.0-dev-696ae
+Ricardo Ribalda <ribalda@chromium.org>
