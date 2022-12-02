@@ -2,55 +2,55 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97CE1C47088
-	for <linux-media@archiver.kernel.org>; Fri,  2 Dec 2022 16:08:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB682C47089
+	for <linux-media@archiver.kernel.org>; Fri,  2 Dec 2022 16:08:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233546AbiLBQIA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 2 Dec 2022 11:08:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
+        id S233655AbiLBQIB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 2 Dec 2022 11:08:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233497AbiLBQHz (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 2 Dec 2022 11:07:55 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D10B26AF6
-        for <linux-media@vger.kernel.org>; Fri,  2 Dec 2022 08:07:53 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id fc4so5648458ejc.12
-        for <linux-media@vger.kernel.org>; Fri, 02 Dec 2022 08:07:53 -0800 (PST)
+        with ESMTP id S232678AbiLBQH6 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 2 Dec 2022 11:07:58 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CB94877E
+        for <linux-media@vger.kernel.org>; Fri,  2 Dec 2022 08:07:57 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id b2so12598974eja.7
+        for <linux-media@vger.kernel.org>; Fri, 02 Dec 2022 08:07:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=melexis.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lN7SLbrO6IRiwLkabai6Yk1jGwDx04yNJ/i+Pt05kbI=;
-        b=ouAx3zIYJo87/9kuuvnJZWrLXDYN/kBd8D+5aRKdCbEd1dmRsXWjsiR3wzgdhXK6Ye
-         DIeWzb6nM1n9s4HS0bVBZVnzMRykDMdu/R5T16y7L2CnknQAlqbInPP0F2ymzdtF/Jdj
-         SM1uDNeAMfGTTJWejfosCvi3BEHw8jmaCVBLCo/2zkJzz1+qiWp3jalmbXTRQ/IrSu25
-         wDWsS+qD+bcX6qxI2mi1iu4pO05i1aXCYwXvassyXivDC8ZKTHtp/Bbrxte4ans6t61v
-         6Bx4hf5sS+iyuVGGjYaChvf3aitP4H2aZhsIa85/MwxfmlRUYnNW280P5azwhRS2wFVA
-         Vjgg==
+        bh=4MIUkKA2KYBfUGIn+7D33Xcyk/nc4bcCxskkGZCe1Ew=;
+        b=mW6ereONlW40+RE74hjWo72srMOd1GojolYmJDXHyrJB2D19pSedyRVMs5D2knk/+o
+         J7n02CPrC8TV8crQi+ZsuYvosUb95fOuDtbN+xZqSbnN5qV5JZCCGmxbgyGuesbbhfRF
+         6o3g7o2mZbyC05+LHlp+4K6aYg3U9cB8dIFS0ikt/SdobdPHyjI/bBNsZlbcthn+MYRZ
+         3EWdJUts7whd/UG1qzZTZsSch4s080pbfJO8kj1iMoEvMm0bn3Q1PvezGvgdJ6Va0uJy
+         VGKjv9dQS06Ta6QMasi5FVxqQpAG17lhuIfHTaxDaNMy9oH6DdWJ7SnOM72jn+kSiNSp
+         4vCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lN7SLbrO6IRiwLkabai6Yk1jGwDx04yNJ/i+Pt05kbI=;
-        b=53argm6c+nSbE3xUwMtY66HM+dJr8ZDmo3yl2MWpuri0WJ56UTku+nVBrYZcbkvvl/
-         08Gu79ukDTlRPbHmiBtd0MAxta3B/SBWlYFffRb9PF2EhvbsiK0d1UipjlgUwlBfO2HF
-         Mpq+1KvJKqnFOimM/TcsYZWtZvK7hc6m5/EBU5ifq1pDKRth0RqUkDRVpfjqgKrY/98P
-         zdBlcsmbH5ud7tjJOja9PqyYyDDRkLegkorVj8ePGG0nk2IrV47ejwUeERvvBVjag8lK
-         nMGUoqgXagB8pBcFZGaj3eKyl74Dr0ntnAmumkygv5HOUYLovekIFy5FEPVc/eO3DxD7
-         VGBg==
-X-Gm-Message-State: ANoB5pntVlSAzkKX4djJw++3u4ebtc73akbn+d1uUNGBn6+foE2TujnE
-        vyJwCt39bjohhzIC+lYeXTaKAGKAKfaYTGBKVek2zQperiiyiy3wnMKFWvGusuB7PEcEYDBJXC1
-        B2cH18r8UwHUzMeWnJEFmxlDhN2oaFgTDqTv+GFZSexs9N5hYXANTm5gYE6Y97mR+n8jn4BwuVe
-        M=
-X-Google-Smtp-Source: AA0mqf7lH3dyya87BXasWaVfLkxyri8QF91SYPgtl7mldNw+Q68cRubykpXAJ1K8uaie15A9hC8TEw==
-X-Received: by 2002:a17:906:b108:b0:7b5:dd3e:69c1 with SMTP id u8-20020a170906b10800b007b5dd3e69c1mr44864435ejy.381.1669997272146;
-        Fri, 02 Dec 2022 08:07:52 -0800 (PST)
+        bh=4MIUkKA2KYBfUGIn+7D33Xcyk/nc4bcCxskkGZCe1Ew=;
+        b=EOAWvWT72PRjzcmPiZCtpnfRXRwLdrYHkumEtys9ukU1glGiEaHiGsYWtw+EcCCPhi
+         Fz+FNbdg/q7dZ0kfGBXbvXjbddy515fbIQrcM2VlE6Ruq9yfi0WRFwAWThgueyilhSmj
+         +13x5kU1zuU0FGVnNDdqd0JumVDUP/6sMl/8CkHz9E7+zsYAjiAgEdoiQb5D6n7vX1yw
+         XeqSOZcZFyXvo00vhtW2IavrlGXSRut943Zmx7rso3t/JlSPS8JUakmdF0LMLOoD2hfS
+         iJEhAsAbYPN08Lp7H9OPOT487N/kKsci33Hz6rQ0412V0oRdulvDsmGUBD9tJBCIPEdW
+         3q0g==
+X-Gm-Message-State: ANoB5pk8zHA/l9VymtB5BNkQ0gZ2iJJ5+NMKkgrmtUWxhipgxrNWd1YC
+        fQtaYyJuJKG98GQEVfVrMsQ85JzyMD2D4LrrMc4jqUbUecAq67n/q8PujRuC/qcPfKpau7XlCsP
+        b8rcMgO51LuNl3ODsM1Ds00YwpSO1E+W8ZcYudc0JybDBUGRvNChAOx2uiHbGKAmq7PVMm1SiLL
+        8=
+X-Google-Smtp-Source: AA0mqf6ZMRAO70UbtwrdqCFtlqy6KFee3MDEFDlIg+gB3iwV1z+KbyyNzC3DaS39w8Y/+Z/++/TUhg==
+X-Received: by 2002:a17:907:8b9b:b0:7b7:90c1:8263 with SMTP id tb27-20020a1709078b9b00b007b790c18263mr10353736ejc.604.1669997276996;
+        Fri, 02 Dec 2022 08:07:56 -0800 (PST)
 Received: from melexis ([91.192.183.26])
-        by smtp.gmail.com with ESMTPSA id o7-20020a056402444700b0044dbecdcd29sm1668210edb.12.2022.12.02.08.07.50
+        by smtp.gmail.com with ESMTPSA id s26-20020a170906285a00b007af0f0d2249sm3176698ejc.52.2022.12.02.08.07.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 08:07:51 -0800 (PST)
+        Fri, 02 Dec 2022 08:07:56 -0800 (PST)
 From:   Volodymyr Kharuk <vkh@melexis.com>
 To:     <linux-media@vger.kernel.org>
 Cc:     Andrii Kyselov <ays@melexis.com>,
@@ -63,9 +63,9 @@ Cc:     Andrii Kyselov <ays@melexis.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
         Volodymyr Kharuk <vkh@melexis.com>
-Subject: [PATCH v4 4/8] media: v4l: ctrls-api: Allow array update in __v4l2_ctrl_modify_range
-Date:   Fri,  2 Dec 2022 18:07:34 +0200
-Message-Id: <e69f6cd8eec064fecde250927f55ba29cd361465.1669978791.git.vkh@melexis.com>
+Subject: [PATCH v4 6/8] media: uapi: Add mlx7502x header file
+Date:   Fri,  2 Dec 2022 18:07:36 +0200
+Message-Id: <50d0e30ae32162d56f0a93ab52e7f9338de497cb.1669978791.git.vkh@melexis.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <cover.1669978791.git.vkh@melexis.com>
 References: <cover.1669978791.git.vkh@melexis.com>
@@ -75,67 +75,112 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-For V4L2_CID_TOF_TINT, which is dynamic array, it is required to use
-__v4l2_ctrl_modify_range.  So the idea is to use type_ops instead of u64
-from union. It will allow to work with any type.
+Define user controls for mlx7502x driver, add its documentation and
+update MAINTAINERS
 
 Signed-off-by: Volodymyr Kharuk <vkh@melexis.com>
 ---
- drivers/media/v4l2-core/v4l2-ctrls-api.c | 25 ++++++++++++------------
- 1 file changed, 13 insertions(+), 12 deletions(-)
+ .../userspace-api/media/drivers/index.rst     |  1 +
+ .../userspace-api/media/drivers/mlx7502x.rst  | 28 +++++++++++++++++++
+ MAINTAINERS                                   |  2 ++
+ include/uapi/linux/mlx7502x.h                 | 28 +++++++++++++++++++
+ 4 files changed, 59 insertions(+)
+ create mode 100644 Documentation/userspace-api/media/drivers/mlx7502x.rst
+ create mode 100644 include/uapi/linux/mlx7502x.h
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-api.c b/drivers/media/v4l2-core/v4l2-ctrls-api.c
-index d0a3aa3806fb..ebe57ec72813 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-api.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-api.c
-@@ -933,17 +933,18 @@ int __v4l2_ctrl_modify_range(struct v4l2_ctrl *ctrl,
- 	lockdep_assert_held(ctrl->handler->lock);
+diff --git a/Documentation/userspace-api/media/drivers/index.rst b/Documentation/userspace-api/media/drivers/index.rst
+index 46a494e00b72..0eb707516b23 100644
+--- a/Documentation/userspace-api/media/drivers/index.rst
++++ b/Documentation/userspace-api/media/drivers/index.rst
+@@ -38,5 +38,6 @@ For more details see the file COPYING in the source distribution of Linux.
+ 	imx-uapi
+ 	max2175
+ 	meye-uapi
++	mlx7502x
+ 	omap3isp-uapi
+ 	uvcvideo
+diff --git a/Documentation/userspace-api/media/drivers/mlx7502x.rst b/Documentation/userspace-api/media/drivers/mlx7502x.rst
+new file mode 100644
+index 000000000000..d68506c09f84
+--- /dev/null
++++ b/Documentation/userspace-api/media/drivers/mlx7502x.rst
+@@ -0,0 +1,28 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++Melexis mlx7502x ToF camera sensor driver
++=========================================
++
++The mlx7502x driver implements the following driver-specific controls:
++
++``V4L2_CID_MLX7502X_OUTPUT_MODE (menu)``
++----------------------------------------
++	The sensor has two taps, which gather reflected light: A and B.
++	The control sets the way data should be put in a buffer. The most
++	common output mode is A-B which provides the best sunlight robustness.
++
++.. flat-table::
++	:header-rows:  0
++	:stub-columns: 0
++	:widths:       1 4
++
++	* - ``V4L2_MLX7502X_OUTPUT_MODE_A_MINUS_B``
++	  - tap A minus tap B
++	* - ``V4L2_MLX7502X_OUTPUT_MODE_A_PLUS_B``
++	  - tap A plus tap B
++	* - ``V4L2_MLX7502X_OUTPUT_MODE_A``
++	  - only tap A
++	* - ``V4L2_MLX7502X_OUTPUT_MODE_B``
++	  - only tap B
++	* - ``V4L2_MLX7502X_OUTPUT_MODE_A_AND_B``
++	  - tap A and tap B (this config will change PAD format)
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 6f9072f3b1da..32e49523e9c0 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13116,7 +13116,9 @@ M:	Volodymyr Kharuk <vkh@melexis.com>
+ L:	linux-media@vger.kernel.org
+ S:	Supported
+ W:	http://www.melexis.com
++F:	Documentation/userspace-api/media/drivers/mlx7502x.rst
+ F:	Documentation/userspace-api/media/v4l/ext-ctrls-tof.rst
++F:	include/uapi/linux/mlx7502x.h
  
- 	switch (ctrl->type) {
-+	case V4L2_CTRL_TYPE_MENU:
-+	case V4L2_CTRL_TYPE_INTEGER_MENU:
-+		if (ctrl->is_array)
-+			return -EINVAL;
-+		fallthrough;
- 	case V4L2_CTRL_TYPE_INTEGER:
- 	case V4L2_CTRL_TYPE_INTEGER64:
- 	case V4L2_CTRL_TYPE_BOOLEAN:
--	case V4L2_CTRL_TYPE_MENU:
--	case V4L2_CTRL_TYPE_INTEGER_MENU:
- 	case V4L2_CTRL_TYPE_BITMASK:
- 	case V4L2_CTRL_TYPE_U8:
- 	case V4L2_CTRL_TYPE_U16:
- 	case V4L2_CTRL_TYPE_U32:
--		if (ctrl->is_array)
--			return -EINVAL;
- 		ret = check_range(ctrl->type, min, max, step, def);
- 		if (ret)
- 			return ret;
-@@ -961,16 +962,16 @@ int __v4l2_ctrl_modify_range(struct v4l2_ctrl *ctrl,
- 	}
- 	cur_to_new(ctrl);
- 	if (validate_new(ctrl, ctrl->p_new)) {
--		if (ctrl->type == V4L2_CTRL_TYPE_INTEGER64)
--			*ctrl->p_new.p_s64 = def;
--		else
--			*ctrl->p_new.p_s32 = def;
-+		WARN_ON(ctrl->is_array); /* This shouldn't happen, as
-+					  * INTEGER/Ux/BOOLEAN/BITMASK will not
-+					  * return an error.
-+					  * In case it happened, all array will
-+					  * set to default value
-+					  */
-+		ctrl->type_ops->init(ctrl, 0, ctrl->p_new);
- 	}
- 
--	if (ctrl->type == V4L2_CTRL_TYPE_INTEGER64)
--		value_changed = *ctrl->p_new.p_s64 != *ctrl->p_cur.p_s64;
--	else
--		value_changed = *ctrl->p_new.p_s32 != *ctrl->p_cur.p_s32;
-+	value_changed = !ctrl->type_ops->equal(ctrl, ctrl->p_cur, ctrl->p_new);
- 	if (value_changed)
- 		ret = set_ctrl(NULL, ctrl, V4L2_EVENT_CTRL_CH_RANGE);
- 	else if (range_changed)
+ MELFAS MIP4 TOUCHSCREEN DRIVER
+ M:	Sangwon Jee <jeesw@melfas.com>
+diff --git a/include/uapi/linux/mlx7502x.h b/include/uapi/linux/mlx7502x.h
+new file mode 100644
+index 000000000000..80e9317ff0fc
+--- /dev/null
++++ b/include/uapi/linux/mlx7502x.h
+@@ -0,0 +1,28 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++/*
++ * Melexis 7502x ToF cameras driver.
++ *
++ * Copyright (C) 2021 Melexis N.V.
++ *
++ */
++
++#ifndef __UAPI_MLX7502X_H_
++#define __UAPI_MLX7502X_H_
++
++#include <linux/v4l2-controls.h>
++
++/*
++ * this is related to the taps in ToF cameras,
++ * usually A minus B is the best option
++ */
++enum v4l2_mlx7502x_output_mode {
++	V4L2_MLX7502X_OUTPUT_MODE_A_MINUS_B = 0,
++	V4L2_MLX7502X_OUTPUT_MODE_A_PLUS_B,
++	V4L2_MLX7502X_OUTPUT_MODE_A,
++	V4L2_MLX7502X_OUTPUT_MODE_B,
++	V4L2_MLX7502X_OUTPUT_MODE_A_AND_B, /* output frame size doubles */
++};
++
++#define V4L2_CID_MLX7502X_OUTPUT_MODE	(V4L2_CID_USER_MLX7502X_BASE + 0)
++
++#endif /* __UAPI_MLX7502X_H_ */
 -- 
 BR,
 Volodymyr Kharuk
