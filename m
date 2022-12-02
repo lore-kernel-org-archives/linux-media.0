@@ -2,144 +2,109 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E319EC4321E
-	for <linux-media@archiver.kernel.org>; Fri,  2 Dec 2022 17:03:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75A70C4321E
+	for <linux-media@archiver.kernel.org>; Fri,  2 Dec 2022 17:08:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234385AbiLBRD0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 2 Dec 2022 12:03:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35138 "EHLO
+        id S234268AbiLBRIg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 2 Dec 2022 12:08:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234283AbiLBRDJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 2 Dec 2022 12:03:09 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F53FA80AD
-        for <linux-media@vger.kernel.org>; Fri,  2 Dec 2022 09:03:08 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id n21so12938107ejb.9
-        for <linux-media@vger.kernel.org>; Fri, 02 Dec 2022 09:03:08 -0800 (PST)
+        with ESMTP id S234167AbiLBRIe (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 2 Dec 2022 12:08:34 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6688D11F9
+        for <linux-media@vger.kernel.org>; Fri,  2 Dec 2022 09:08:31 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id o13so13017196ejm.1
+        for <linux-media@vger.kernel.org>; Fri, 02 Dec 2022 09:08:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/Z0mke9x4z8GIO16lOl+BgRgkcVeUrWg/yLKPpvbpk0=;
-        b=KRuFz2z0S00H+Jjqi+ULpUWR9oqEccGYNJsAXZkGZBhcf65dYLS+1T60tut2/084H9
-         yFv8Ka0pIlw9bYdvYfPfIwQnaIMHbWOkBl+Jq/ice6ApLUxFH2OyJayzcbyfsoSRShMP
-         mPkqZWZDlmcJ9vI5y6DfbmeuD9vPMDD0NZ0Ss=
+        bh=TCQ9M8MyOEnK5pTEhdeO3mymMoTWGn8RzIavHlNHD6M=;
+        b=R/oMM0lWUbfpFHh0O9/+DBNeQs4nbkDIDSrNwITxX3+i2Myafv0d25iU65xGMgf4IW
+         XKMysLO0P36sYbZ+nT5P+83p3R96mmLyFvA9BKQ5cmt16CFcazjSE3qiUF2E4Nv6vZos
+         HxqQPrOoyOiv43k+qZMxhGjrFKrW92au0ZVYc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/Z0mke9x4z8GIO16lOl+BgRgkcVeUrWg/yLKPpvbpk0=;
-        b=eT0eSifYJ36G/RrUt9iwrU0fPV/QVsWQ40PSP3OfbORhLtUY6SmW4+adbOSt0wp8R+
-         65eDoPgE0zq2HGstqdfkg3L1lUgPuvRYp56La8hdf8hh2/Av3pbeZFVcAcfa+Wp5irx8
-         93adszqWYB2cFeSsTpJPPgD1+1+pjzWF34jNtRvIIL4q73aD9TP75q6cS3KlqX76IBfq
-         Tvat6sNG3Sq0tA6nFi12hM6noeLxm/g/MXgM2ok1qoE3mtVFdt74P6gQ45+YKC8oyGb7
-         UhrCdAr4JlKlKS6yScaBajMiNvlAjOoFah8RIz9dsmjpjgHREFg2n9rAjkCnC3LfYYF9
-         rncQ==
-X-Gm-Message-State: ANoB5pmIrM6lxmSImmqiDyw4trMP8fl8FtAOxKFK8WaepI7hjMUOwYsd
-        HtLS1yIa+HDnG5q9SW/AAKcNww==
-X-Google-Smtp-Source: AA0mqf4r6lyjL/nTXmoNE4mmFDtudjSLLgswHdy173L99fa3FCvYicPNl45W4w9oXR2zBxUxINOE7w==
-X-Received: by 2002:a17:906:706:b0:7ac:2e16:eb05 with SMTP id y6-20020a170906070600b007ac2e16eb05mr63176435ejb.26.1670000586670;
-        Fri, 02 Dec 2022 09:03:06 -0800 (PST)
+        bh=TCQ9M8MyOEnK5pTEhdeO3mymMoTWGn8RzIavHlNHD6M=;
+        b=rtzF2f1fE2IDxsxA7iojNBkAOh4lp4alvgdIYj8zPhZ9D1UpDH/8ZJCCGqZL/yEf3n
+         fRz8WIOyXB+vNi4mLGYyPyhXOZXMCT2fO+AA0Ch1CbEHDlfvOzsbU9og8kFMjn9es2UZ
+         XvOLzDz6//lBH+iHjLixMIIAIuJIGYSmm9OyREtLZXDMg9kAliHqTmlw4hMEMkFP9JdC
+         1FoT+f72lW8mzJIetdtmJhcuDUXy0lvNBJiifzAJSf8RBYLrg/w/BOw8EZe/d/wcocOh
+         1O+bY0lmtXNCBXEWBhGb+nk40dmw8Z4C3Qcjeh1ONznqoBWG/p8pyrAq8y3DB6a+ti3P
+         5siQ==
+X-Gm-Message-State: ANoB5pkKLUUjhwuA3RtuA/nk5CIvpM4HVCLLs+5HBoQJs0ZPIJGQdmfQ
+        30nQf1PDk2/t1Ly2GAPOap3ImBbwF5rUpkeklas=
+X-Google-Smtp-Source: AA0mqf5qFfbKizkTww9gVuZZ6Lx0NduaYRmhqu+8NUTsfvjbqXxLawqkwYIEziC8u0/Af27zMXSlkA==
+X-Received: by 2002:a17:907:77ce:b0:7c0:8225:54d with SMTP id kz14-20020a17090777ce00b007c08225054dmr16814628ejc.286.1670000910178;
+        Fri, 02 Dec 2022 09:08:30 -0800 (PST)
 Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id sa22-20020a170906edb600b0073d7ab84375sm3249133ejb.92.2022.12.02.09.03.05
+        by smtp.gmail.com with ESMTPSA id p23-20020aa7d317000000b00461cdda400esm3168080edq.4.2022.12.02.09.08.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 09:03:06 -0800 (PST)
+        Fri, 02 Dec 2022 09:08:29 -0800 (PST)
 From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Fri, 02 Dec 2022 18:02:48 +0100
-Subject: [PATCH RESEND v2 8/8] media: uvcvideo: Fix hw timestampt handling for
- slow FPS
+Date:   Fri, 02 Dec 2022 18:08:18 +0100
+Subject: [PATCH v4 2/3] media: Documentation/driver-api: Document device name
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20220920-resend-hwtimestamp-v2-8-0d7978a817cc@chromium.org>
-References: <20220920-resend-hwtimestamp-v2-0-0d7978a817cc@chromium.org>
-In-Reply-To: <20220920-resend-hwtimestamp-v2-0-0d7978a817cc@chromium.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     "hn.chen" <hn.chen@sunplusit.com>, linux-media@vger.kernel.org,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        linux-kernel@vger.kernel.org
+Message-Id: <20220920-resend-meta-v4-2-3ac355b66723@chromium.org>
+References: <20220920-resend-meta-v4-0-3ac355b66723@chromium.org>
+In-Reply-To: <20220920-resend-meta-v4-0-3ac355b66723@chromium.org>
+To:     Yunke Cao <yunkec@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     linux-media@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Ricardo Ribalda <ribalda@chromium.org>
 X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2142; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=ZqBE4dWRk0InSyAxEr/auCSM1bp+38IChW6qVFv0hng=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjii/Bd0vLNfrMM135jh9PhB+8ydixKJHN5VNmGQ1w
- 6MdQC8WJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4ovwQAKCRDRN9E+zzrEiGdGD/
- 9DoAVTWVQznsEgzOwpYpRyWMCIQBxtwlwKzaq1BnTIWye0goRJf5CjrA9bRJu+Z6+rx/+lp/RTMufc
- MVg5aMuukcsBzqLmyag5x0oDtpufG/8q8n2V/I+eejUQIFhJ/WgRBeRArQaT9Ib0AKH9ZXcZt/uMTa
- yGrm+vuxIPwgV1SuSPB5rIxtxwyUAfiq7qlxJArP79mrahtKd78OmPqqKX5q0h64kJzurNStsVKwbw
- qigdhxx3mcd8ABG20FwkR2+uV72DJqtQxmTcFtiNkThYx9dAVGxnF+hi70ALb9Dt0KpiB+eXme+mzQ
- xpLSqnfBKJ0kUOikWg+horEpNYRqVMGp5DWgZ6Z0FDz6JfeDzu5/MbrQwUfr8MocQajT2SS5/+S7OI
- PHexHL/gL++hSerdMcUMIX0G3RxG+sAJHjcA6G97N0Qinm/yb6WuYKEDAp/PtldnBNrbFCe9aCEIbJ
- UmRo+SfzDzWrRpf1gxmME/bl68ZyQzBIiZMhajxdBi7VazfWPFNfmNcOKR/94iaIn/S1wmMpFCZUZK
- TG3CY6KD/rbVr64gJDE/XQMagdmzJFdtwG2F0SGjMp621qyhW6nIA3ZFpAhJreZkPAdoKlHaet+tAm
- XP6RlzuWoO5Ab/c4qButbsLioCEdGQd1KqvgIlt3Z0r9bJEbSeajw8QWfEmg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1173; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=SfUbFly0L3KPaCuRZ5w00Du+lIHrvLRHPtWI2RZZpxM=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjijEJTiEOmUITGiLvUCgkbCs81Q810EX+dXH3NyaT
+ mXwvuGGJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4oxCQAKCRDRN9E+zzrEiH+6D/
+ 4yIlInPaIUb3c4STKRJvD4EWozBosI6T/1nKVk3G6TFxnh9oizy6AXNbJLZrwtOJpKqkj9Ks5ICQ6B
+ lqFTWpjvhnfKcrVV0ToMygkwju67mqgUSm6PfTUhWhLbxk25i6+luvVtnkJfunw6W46/rU+9YNFs5c
+ w08uwPEckBTM6bciZkTrY7F27fpe6Hf7nW6J/a6gScSnQh7es6pdBrK/xAncOGTE9+SsQJPVvu0LvO
+ tDVnhPz1aV+BYYUCLE+Es/rJcGVBnxw+a+kZXQDqKQBCq2h6m1yThavXXHOh061luADcr0d6wHaIgY
+ g8OoMWu9bnT2QQmADG4cmgTDcM1OfBDXZhDzD/CCuCUEAhiqVYAOB/urPfyIfrFHq8jPhgVv3ws1T6
+ FPTJj7yvCgHG2tL4oSTVRFX46NiEm/311whLXSBchnQ0zg8VS3paWWhJy5/G/l6lE8tf7yZ37kmf12
+ 6kTAd5Q/WHYXdblAs3uFZs1+Z9NN0VNNJGVmek4sEyv9IrDtAopL2DqRjTxlY8iY8rHsD1hdag7ssg
+ +K+3ZLlfdwsRZyQtHdf1KwYxZrqRzq4wfL1u+Ds+hs5IkmIAlCWQFJyB9chP271obMkui7lUoKlJe+
+ XehpqL57Kfg8oqOuCmImjeMkOVT8RdJWrmv7yMKLImBs+fvBpOT0Oe6kH62w==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In UVC 1.5, when working with FPS under 32, there is a chance that the
-circular buffer contains two dev_sof overflows, but the clock interpolator
-is only capable of handle a single overflow.
+Document how the name of the metadata devices is modified.
 
-Remove all the samples from the circular buffer that are two overflows
-old.
-
-Tested-by: HungNien Chen <hn.chen@sunplusit.com>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/usb/uvc/uvc_video.c | 15 +++++++++++++++
- drivers/media/usb/uvc/uvcvideo.h  |  1 +
- 2 files changed, 16 insertions(+)
+ Documentation/driver-api/media/v4l2-dev.rst | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index c81a8362d582..6b6bd521d6c2 100644
---- a/drivers/media/usb/uvc/uvc_video.c
-+++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -471,6 +471,20 @@ static void uvc_video_clock_add_sample(struct uvc_clock *clock,
+diff --git a/Documentation/driver-api/media/v4l2-dev.rst b/Documentation/driver-api/media/v4l2-dev.rst
+index 99e3b5fa7444..935a46e29c5e 100644
+--- a/Documentation/driver-api/media/v4l2-dev.rst
++++ b/Documentation/driver-api/media/v4l2-dev.rst
+@@ -42,7 +42,9 @@ You should also set these fields of :c:type:`video_device`:
+ - :c:type:`video_device`->v4l2_dev: must be set to the :c:type:`v4l2_device`
+   parent device.
  
- 	spin_lock_irqsave(&clock->lock, flags);
+-- :c:type:`video_device`->name: set to something descriptive and unique.
++- :c:type:`video_device`->name: set to something descriptive and unique. If the
++  device has the `V4L2_CAP_META_CAPTURE` or `V4L2_CAP_META_OUTPUT` capabilities,
++  the string `Meta:` will be inserted before the original name.
  
-+	/* Delete last overflows */
-+	if (clock->head == clock->last_sof_overflow)
-+		clock->last_sof_overflow = -1;
-+
-+	/* Handle overflows */
-+	if (clock->count > 0 && clock->last_sof > sample->dev_sof) {
-+		/* Remove data from the last^2 overflows */
-+		if (clock->last_sof_overflow != -1)
-+			clock->count = (clock->head - clock->last_sof_overflow)
-+								% clock->count;
-+		clock->last_sof_overflow = clock->head;
-+	}
-+
-+	/* Add sample */
- 	memcpy(&clock->samples[clock->head], sample, sizeof(*sample));
- 	clock->last_sof = sample->dev_sof;
- 	clock->head = (clock->head + 1) % clock->size;
-@@ -594,6 +608,7 @@ static void uvc_video_clock_reset(struct uvc_clock *clock)
- 	clock->head = 0;
- 	clock->count = 0;
- 	clock->last_sof = -1;
-+	clock->last_sof_overflow = -1;
- 	clock->sof_offset = -1;
- }
- 
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index 14daa7111953..d8c520ce5a86 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -647,6 +647,7 @@ struct uvc_streaming {
- 		unsigned int head;
- 		unsigned int count;
- 		unsigned int size;
-+		unsigned int last_sof_overflow;
- 
- 		u16 last_sof;
- 		u16 sof_offset;
+ - :c:type:`video_device`->vfl_dir: set this to ``VFL_DIR_RX`` for capture
+   devices (``VFL_DIR_RX`` has value 0, so this is normally already the
 
 -- 
 2.39.0.rc0.267.gcb52ba06e7-goog-b4-0.11.0-dev-696ae
