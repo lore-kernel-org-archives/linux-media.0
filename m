@@ -2,96 +2,84 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27D56C636F9
-	for <linux-media@archiver.kernel.org>; Sat,  3 Dec 2022 21:29:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8735C47089
+	for <linux-media@archiver.kernel.org>; Sat,  3 Dec 2022 21:29:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiLCV3G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 3 Dec 2022 16:29:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35706 "EHLO
+        id S229680AbiLCV0U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 3 Dec 2022 16:26:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiLCV3E (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 3 Dec 2022 16:29:04 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF971B7A3;
-        Sat,  3 Dec 2022 13:29:03 -0800 (PST)
+        with ESMTP id S229498AbiLCV0T (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 3 Dec 2022 16:26:19 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2EF1A220;
+        Sat,  3 Dec 2022 13:26:18 -0800 (PST)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1ECCA993;
-        Sat,  3 Dec 2022 22:29:02 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 617E5993;
+        Sat,  3 Dec 2022 22:26:16 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1670102942;
-        bh=nAqtfvMNjfjaBTNIv2cNIPuLeOgxoJWZRuZnQGrHG7U=;
+        s=mail; t=1670102776;
+        bh=DFQPVvstzYFU3Y8ed20ItJ6G4cAHlTelbo+853g1wy8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pXWj+xg89T9J+cgGbiNrHHDjSWnEL+S7+ZCIT9xtj/wLxRqkgUnbkfhPsrllh3dFx
-         wNaTBIe+vj625aTNhI2C2k5ZkV+qGzZg+6O3w5JT3stULwtBTWaz0zmxHhaJzivNIS
-         A3Sz9KZ2+wu7JAYwV1y+0xrU8i3k5WHaFvDXj24Q=
-Date:   Sat, 3 Dec 2022 23:29:01 +0200
+        b=T0wfMe3vjlmasu+Rt6dntJs18oppFTGJQ5FPEzjwlMdKtTcPLb/T0HEONClBPU7JI
+         Xck99V9HmdyCbALu4/Mo9HW8mSDxFu8lPr9pxExVScHuZqIsJD/ZVUU/kZtaZNftnc
+         577iXUhzMQNQHXFiPErSmemBMa0c0+mPl/wRlNk0=
+Date:   Sat, 3 Dec 2022 23:26:14 +0200
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Michael Grzeschik <mgr@pengutronix.de>
+To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
 Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-        gregkh@linuxfoundation.org, balbi@kernel.org,
-        kernel@pengutronix.de, Daniel Scally <dan.scally@ideasonboard.com>
-Subject: Re: [PATCH v7] usb: gadget: uvc: add validate and fix function for
- uvc response
-Message-ID: <Y4u/nJGNrBsqDDm/@pendragon.ideasonboard.com>
-References: <20221128103124.655264-1-m.grzeschik@pengutronix.de>
- <Y4V4IED+SBhUR7Su@pendragon.ideasonboard.com>
- <20221129102308.GO18924@pengutronix.de>
- <Y4X0unPRK7iAnfaH@pendragon.ideasonboard.com>
- <20221129152259.GQ18924@pengutronix.de>
+        balbi@kernel.org, paul.elder@ideasonboard.com,
+        kernel@pengutronix.de, nicolas@ndufresne.ca,
+        kieran.bingham@ideasonboard.com
+Subject: Re: [PATCH v2 0/4] usb: gadget: uvc: parse configfs entries and
+ implement v4l2 enum api calls
+Message-ID: <Y4u+9g/gIneGZrlZ@pendragon.ideasonboard.com>
+References: <20220909221335.15033-1-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221129152259.GQ18924@pengutronix.de>
+In-Reply-To: <20220909221335.15033-1-m.grzeschik@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 04:22:59PM +0100, Michael Grzeschik wrote:
-> On Tue, Nov 29, 2022 at 02:02:02PM +0200, Laurent Pinchart wrote:
-> >Hi Michael,
-> >
-> >On Tue, Nov 29, 2022 at 11:23:08AM +0100, Michael Grzeschik wrote:
-> >> On Tue, Nov 29, 2022 at 05:10:24AM +0200, Laurent Pinchart wrote:
-> >> > On Mon, Nov 28, 2022 at 11:31:25AM +0100, Michael Grzeschik wrote:
-> >> >> When the userspace gets the setup requests for UVC_GET_CUR UVC_GET_MIN,
-> >> >> UVC_GET_MAX, UVC_GET_DEF it will fill out the ctrl response. This data
-> >> >> needs to be validated. Since the kernel also knows the limits for valid
-> >> >> cases, it can fixup the values in case the userspace is setting invalid
-> >> >> data.
-> >> >
-> >> > Why is this a good idea ?
-> >>
-> >> Why is it not? We don't want the userspace to communicate other things
-> >> to the host than what is configured in the configfs. If you only object
-> >> the explanation, then I will improve the commit message and send an
-> >> fixed v8. If you have more objections please share your doubts, thanks.
-> >
-> >What bothers me is that this patch silently clamps invalid value, trying
-> >to hide the gadget userspace error from the host. It may allow the host
-> >to proceed one step further, but if the gadget userspace got it wrong in
-> >the first place, there's a very high chance it won't do the right thing
-> >in the next step anyway. This will make debugging more complicated,
-> >while at the same time not bringing much value.
-> 
-> I discussed this and we came up with a better approach. When the
-> userspace will send UVCIOC_SEND_RESPONSE we can return with a negativ
-> return value. Like EAGAIN if the validation was seeeing some trouble
-> with the userspaces uvc_streaming_control feedback to the host.
-> 
-> The validation code will then still fixup the data, but instead of
-> transfering this manipulated answer to the host, it will return the
-> changes to the application with EAGAIN. So now the userspace can
-> react to it and it should even point out misconfigurations between
-> kernel and userspace and so will simplify the debugging.
-> 
-> How about that?
+Hi Michael,
 
-It still adds pointless complexity to the kernel. I see no reason at all
-for this. You're trying to guard against userspace bugs by returning an
-error code to the application that has bugs in the first place. Why
-would it then handle the error correctly ?
+On Sat, Sep 10, 2022 at 12:13:31AM +0200, Michael Grzeschik wrote:
+> This series improves the uvc video gadget by parsing the configfs
+> entries. With the configfs data, the userspace now is able to use simple
+> v4l2 api calls like enum and try_format to check for valid configurations
+> initially set by configfs.
 
-Please drop these changes.
+I've realized that this whole series got merged, despite my multiple
+attempts to explain why I think it's not a good idea. The UVC gadget
+requires userspace support, and there's no point in trying to move all
+these things to the kernel side. It only bloats the kernel, makes the
+code more complex, more difficult to maintain, and will make UVC 1.5
+support more difficult.
+
+I'm fairly unhappy with this, it will lower my trust towards your
+patches.
+
+> Michael Grzeschik (4):
+>   media: v4l: move helper functions for fractions from uvc to
+>     v4l2-common
+>   media: uvcvideo: move uvc_format_desc to common header
+>   usb: gadget: uvc: add v4l2 enumeration api calls
+>   usb: gadget: uvc: add v4l2 try_format api call
+> 
+>  drivers/media/usb/uvc/uvc_ctrl.c       |   1 +
+>  drivers/media/usb/uvc/uvc_driver.c     | 290 +-------------------
+>  drivers/media/usb/uvc/uvc_v4l2.c       |  14 +-
+>  drivers/media/usb/uvc/uvcvideo.h       | 147 ----------
+>  drivers/media/v4l2-core/v4l2-common.c  |  86 ++++++
+>  drivers/usb/gadget/function/f_uvc.c    |  30 +++
+>  drivers/usb/gadget/function/uvc.h      |   2 +
+>  drivers/usb/gadget/function/uvc_v4l2.c | 286 ++++++++++++++++++++
+>  include/media/v4l2-common.h            |   4 +
+>  include/media/v4l2-uvc.h               | 359 +++++++++++++++++++++++++
+>  10 files changed, 776 insertions(+), 443 deletions(-)
+>  create mode 100644 include/media/v4l2-uvc.h
 
 -- 
 Regards,
