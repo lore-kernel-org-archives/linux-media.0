@@ -2,121 +2,64 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 868A5C47089
-	for <linux-media@archiver.kernel.org>; Mon,  5 Dec 2022 15:27:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51E95C4332F
+	for <linux-media@archiver.kernel.org>; Mon,  5 Dec 2022 16:22:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232568AbiLEP1b (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 5 Dec 2022 10:27:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58908 "EHLO
+        id S231871AbiLEQWY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 5 Dec 2022 11:22:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232776AbiLEP1B (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Dec 2022 10:27:01 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1CFCDB;
-        Mon,  5 Dec 2022 07:25:30 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B5DrJFO016408;
-        Mon, 5 Dec 2022 15:25:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=X1/UKOgT7/pL11XhDRr6jR8THx7G6AXiPasEtvj83rU=;
- b=kkUcog4yWGJPv9GQJJ+bnsd6tiJSduFrPCXEhO5WfKBtr84Cp1sLkcwzoQb0kAd0EuDe
- syw0RKRxg/7abjhuae7cuuz9npjtnsTMebCQbETjD84DY7JqEcApMXo+ZpaPcCkNm7Do
- ocCLLbFtB1dEzaL3Nq+jiM2lGTrY4Dsqu4u5gdSJUILP5CQg/k5qAMPyfSs0MSptfc5b
- G0QWcEVxcs9UHLpWjOxEC4WkswfzxgXgQZQSuXJXc1e8SYdvIhM7TwHTqn5Z7j3vWL0Z
- x2Nc0l08IsKFOfwA/B7MkK/s1pODgwyoS60+FcWUIjfVJeQ6wVQvJQGYIWK4l8tZDrDJ ug== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m7yrf4bq6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Dec 2022 15:25:17 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B5FPG9b006637
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 5 Dec 2022 15:25:16 GMT
-Received: from mmitkov.eu.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 5 Dec 2022 07:25:13 -0800
-From:   <quic_mmitkov@quicinc.com>
-To:     <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <robert.foss@linaro.org>, <akapatra@quicinc.com>,
-        <jzala@quicinc.com>, <todor.too@gmail.com>
-CC:     <agross@kernel.org>, <konrad.dybcio@somainline.org>,
-        <mchehab@kernel.org>, <bryan.odonoghue@linaro.org>,
-        <cgera@qti.qualcomm.com>, <gchinnab@quicinc.com>,
-        <ayasan@qti.qualcomm.com>, <laurent.pinchart@ideasonboard.com>,
-        Milen Mitkov <quic_mmitkov@quicinc.com>
-Subject: [PATCH v6 2/4] media: camss: vfe: Reserve VFE lines on stream start and link to CSID
-Date:   Mon, 5 Dec 2022 17:24:48 +0200
-Message-ID: <20221205152450.1099-3-quic_mmitkov@quicinc.com>
-X-Mailer: git-send-email 2.37.3.windows.1
-In-Reply-To: <20221205152450.1099-1-quic_mmitkov@quicinc.com>
-References: <20221205152450.1099-1-quic_mmitkov@quicinc.com>
+        with ESMTP id S230309AbiLEQWX (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Dec 2022 11:22:23 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02EB81D66B
+        for <linux-media@vger.kernel.org>; Mon,  5 Dec 2022 08:22:21 -0800 (PST)
+Received: from [IPv6:2804:14d:72b4:8284:8136:cc5a:dce9:8832] (unknown [IPv6:2804:14d:72b4:8284:8136:cc5a:dce9:8832])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dwlsalmeida)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 80BD266015BC;
+        Mon,  5 Dec 2022 16:22:18 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1670257340;
+        bh=3XOli3sUmonvATiAGdMEgclcRc9SKKCgAuEEwakb3mg=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=Nd4Sh6+SLG3G+NviAJw9OJGjQdn5uAsNMEKNxD0EJMGnqnN3dcUPAbUUvgPVtSreX
+         X19jgdzxocu/p6pd9gZ2LnAyUYGx3c2YoU69yQFW0GdTMZ9ULedVeHPHy0lBoWzQzA
+         yoUK3cafUsXiDrSeuct+2fTrvmeU6Y49WDETX/XB7Q1501jdHPCtDO31SIE6J+q5CB
+         vClqF3FpSPs6oNpwxwksQXgqIzLOADRmjKLQGsNGmTJTx/tobPn74+BAkKgTMZawzu
+         qCiQRu6nhJj4iEWKFEiqqbYO+i1qRgp6+nh/NeNzqvLZwBnRjU7HzjpPWARxwvArx5
+         95oTk8TSKWheg==
+Message-ID: <977863282aceb69a08417c505720767793a66915.camel@collabora.com>
+Subject: Re: [PATCH v4 0/2] utils: add v4l2-tracer utility
+From:   Daniel Almeida <daniel.almeida@collabora.com>
+To:     Deborah Brouwer <deborah.brouwer@collabora.com>,
+        linux-media@vger.kernel.org
+Cc:     nfraprado@collabora.com, nicolas.dufresne@collabora.com,
+        hverkuil-cisco@xs4all.nl, deborahbrouwer3563@gmail.com
+Date:   Mon, 05 Dec 2022 13:22:06 -0300
+In-Reply-To: <704781937ac3930bc44561fc4001f76401882553.camel@collabora.com>
+References: <cover.1669831184.git.deborah.brouwer@collabora.com>
+         <704781937ac3930bc44561fc4001f76401882553.camel@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: pTCbL8th3DBuxs2zSCslORXPF5UToGLg
-X-Proofpoint-ORIG-GUID: pTCbL8th3DBuxs2zSCslORXPF5UToGLg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-05_01,2022-12-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=990
- phishscore=0 malwarescore=0 impostorscore=0 suspectscore=0 adultscore=0
- clxscore=1015 mlxscore=0 spamscore=0 priorityscore=1501 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2212050127
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Milen Mitkov <quic_mmitkov@quicinc.com>
+Apparently my name was stated as "Collabora", sorry, I've just switched
+email clients recently.
 
-For multiple virtual channels support, each VFE line can be in either
-ON, RESERVED or OFF states. This allows the starting and stopping
-of a VFE line independently of other active VFE lines.
+Fixed now.
 
-Also, link the CSID entity's source ports to corresponding VFE lines.
-
-Signed-off-by: Milen Mitkov <quic_mmitkov@quicinc.com>
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
-Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Acked-by: Robert Foss <robert.foss@linaro.org>
----
- drivers/media/platform/qcom/camss/camss-vfe.c | 1 +
- drivers/media/platform/qcom/camss/camss.c     | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
-index a26e4a5d87b6..e0832f3f4f25 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.c
-@@ -740,6 +740,7 @@ static int vfe_set_stream(struct v4l2_subdev *sd, int enable)
- 	int ret;
- 
- 	if (enable) {
-+		line->output.state = VFE_OUTPUT_RESERVED;
- 		ret = vfe->ops->vfe_enable(line);
- 		if (ret < 0)
- 			dev_err(vfe->camss->dev,
-diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-index 9cda284f1e71..547099f8ed14 100644
---- a/drivers/media/platform/qcom/camss/camss.c
-+++ b/drivers/media/platform/qcom/camss/camss.c
-@@ -1320,7 +1320,7 @@ static int camss_register_entities(struct camss *camss)
- 					struct v4l2_subdev *vfe = &camss->vfe[k].line[j].subdev;
- 
- 					ret = media_create_pad_link(&csid->entity,
--								    MSM_CSID_PAD_SRC,
-+								    MSM_CSID_PAD_FIRST_SRC + j,
- 								    &vfe->entity,
- 								    MSM_VFE_PAD_SINK,
- 								    0);
--- 
-2.37.3
+On Mon, 2022-12-05 at 11:39 -0300, Collabora wrote:
+> Hi Hans, this looks good to me.
+>=20
+> Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
+>=20
+>=20
+> -- Daniel
 
