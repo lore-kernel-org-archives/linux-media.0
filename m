@@ -2,89 +2,104 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AC5EC47089
-	for <linux-media@archiver.kernel.org>; Mon,  5 Dec 2022 16:45:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64F33C636F9
+	for <linux-media@archiver.kernel.org>; Mon,  5 Dec 2022 16:51:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233196AbiLEQpp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 5 Dec 2022 11:45:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
+        id S232001AbiLEQvi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 5 Dec 2022 11:51:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232621AbiLEQpI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Dec 2022 11:45:08 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA2C1FCF9
-        for <linux-media@vger.kernel.org>; Mon,  5 Dec 2022 08:43:44 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id v7so9217962wmn.0
-        for <linux-media@vger.kernel.org>; Mon, 05 Dec 2022 08:43:44 -0800 (PST)
+        with ESMTP id S232020AbiLEQu4 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Dec 2022 11:50:56 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6F7B1E9;
+        Mon,  5 Dec 2022 08:49:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Tm80V8MxZTxpH8Negzaw9yC6TePaEGAsS6LZXq3Sak8=;
-        b=vZoNeNgFajvPZnk/7PG2S1mOTR2KCGgiBqXs+6/gm5VKOI5/soGghHtC6bwX1jowiI
-         x48gFgtHKB0jT4IO3Yqnd4i1TQCAS2D+2XIPymvA0cg+3qEBhnEjBC9z0XDrYlgd/+as
-         gVCS7BC+H4gZRjctyWMzpOINEsjhp2PcHhyNqHFqHn36A6W2yEIgMR2pE28m6owJcYPS
-         Z6X5e6eIlVeXtXwejAtQ3U8hF4PQlnaBYlJLCECfnNDk/kWYDjJ0FqYXcYXefN8gqpoD
-         6SiGionsU9y565cMM1tIFW+gaaW2hwIbY1eXrgNlkKhBBSLHtnjkeKSpATeGT4xOZ1J0
-         yTTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tm80V8MxZTxpH8Negzaw9yC6TePaEGAsS6LZXq3Sak8=;
-        b=JIi8qZ6iMWS7e13r9lw+5YLyybNUl9dk9dvOgsyCnsJlnDHKFLtCuRVdKOJo8drlNn
-         PzIC7slPLSVZilfH4OyY9msbvT39rq9ziD6s5NKBcwyjA12ou+70QjfAA9rqeutcHS5h
-         2mMb1PgKqrrW7S98feDqGK40sdDck253d3WFGUM9zbdm14Im60EWCT6Nyfzum+bVSuyv
-         2lB6DSMDiV21R9nzeP4u9WO5I/NABN/ote/Yxq0M+pIs6zNsdgxEJQyK6pa6I6lpoWzu
-         uOPYLZEZ0LKuEbUzr6y6uICFXANoukJT3FhDlI0JbT1qZyZF3z7mvz8cpuy1HLiNPunx
-         wRQA==
-X-Gm-Message-State: ANoB5pklytVcedfmU4ayv6g+kUFxXHdb2UBRUG7VejaG5EIjH7vwer4U
-        M0AyavzLRcyHvZQ6e4CPgurWtA==
-X-Google-Smtp-Source: AA0mqf4VH/8dwNgqHSHIl59AH6n9wu1E2CA23P1jGP7ba2vPGh0J512RFMeyb3Ui7UelM3npGP4lzA==
-X-Received: by 2002:a05:600c:3d10:b0:3cf:8a44:e1eb with SMTP id bh16-20020a05600c3d1000b003cf8a44e1ebmr52440612wmb.189.1670258623035;
-        Mon, 05 Dec 2022 08:43:43 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id w1-20020a5d5441000000b002422b462975sm14052567wrv.34.2022.12.05.08.43.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 08:43:42 -0800 (PST)
-Message-ID: <846f56b0-2591-318d-cb37-99cbf6d7bb32@linaro.org>
-Date:   Mon, 5 Dec 2022 16:43:41 +0000
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1670258991; x=1701794991;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=rEp1zQdYuNC0t245hu4WP6DEtna2pq6vGeoF3bRP32E=;
+  b=j/QJIp3bqdfi40mNvhHczfME3hRf8msNHjwvWS3Vp8UAiqklrkXHWtJI
+   PjsjY7fxXmY4y3f16jt6x39GtfgDc6anXGWr8Ik9RgdKNfOQ29SgKTAXP
+   shQ9Rm24HuB+PO1hWBkVfy/PPfOZ4Q3ZxaKm+rykHf6NSmkab0WEER6RI
+   8=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 05 Dec 2022 08:49:49 -0800
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 08:49:49 -0800
+Received: from [10.251.45.87] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 5 Dec 2022
+ 08:49:44 -0800
+Message-ID: <d1554eec-7f45-c513-f77c-7868943de2d4@quicinc.com>
+Date:   Mon, 5 Dec 2022 18:49:42 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
 Subject: Re: [PATCH v6 4/4] media: camss: sm8250: Pipeline starting and
  stopping for multiple virtual channels
 Content-Language: en-US
-To:     quic_mmitkov@quicinc.com, linux-media@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, robert.foss@linaro.org,
-        akapatra@quicinc.com, jzala@quicinc.com, todor.too@gmail.com
-Cc:     agross@kernel.org, konrad.dybcio@somainline.org,
-        mchehab@kernel.org, cgera@qti.qualcomm.com, gchinnab@quicinc.com,
-        ayasan@qti.qualcomm.com, laurent.pinchart@ideasonboard.com
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <robert.foss@linaro.org>, <akapatra@quicinc.com>,
+        <jzala@quicinc.com>, <todor.too@gmail.com>
+CC:     <agross@kernel.org>, <konrad.dybcio@somainline.org>,
+        <mchehab@kernel.org>, <cgera@qti.qualcomm.com>,
+        <gchinnab@quicinc.com>, <ayasan@qti.qualcomm.com>,
+        <laurent.pinchart@ideasonboard.com>
 References: <20221205152450.1099-1-quic_mmitkov@quicinc.com>
  <20221205152450.1099-5-quic_mmitkov@quicinc.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20221205152450.1099-5-quic_mmitkov@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <846f56b0-2591-318d-cb37-99cbf6d7bb32@linaro.org>
+From:   "Milen Mitkov (Consultant)" <quic_mmitkov@quicinc.com>
+In-Reply-To: <846f56b0-2591-318d-cb37-99cbf6d7bb32@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 05/12/2022 15:24, quic_mmitkov@quicinc.com wrote:
-> media-ctl -v -d /dev/media0 -V '"imx577 '22-001a'":0[fmt:SRGGB10/3840x2160 field:none]'
 
-I really like the improved commit log, thank you for that.
+On 05/12/2022 18:43, Bryan O'Donoghue wrote:
+> On 05/12/2022 15:24, quic_mmitkov@quicinc.com wrote:
+>> media-ctl -v -d /dev/media0 -V '"imx577 
+>> '22-001a'":0[fmt:SRGGB10/3840x2160 field:none]'
+>
+> I really like the improved commit log, thank you for that.
+>
+> SRGGB10/3840x2160 drivers/media/i2c/imx412.c that's not a supported 
+> resolution.
+>
+> media-ctl -v -d /dev/media0 -V '"imx577 
+> '22-001a'":0[fmt:SRGGB10/4056x3040 field:none]'
+>
+> ?
+>
+> ---
+> bod
 
-SRGGB10/3840x2160 drivers/media/i2c/imx412.c that's not a supported 
-resolution.
 
-media-ctl -v -d /dev/media0 -V '"imx577 
-'22-001a'":0[fmt:SRGGB10/4056x3040 field:none]'
+Hi Bryan,
 
-?
+it's not a supported resolution with the current imx412/577 driver in 
+upstream. We tested with a different driver (with proprietary Sony 
+registers)
 
----
-bod
+that uses this resolution that generates 2 multiplexed streams. It would 
+be impossible for pure upstream solution to test this driver with imx412 
+right now.
+
+I couldn't have used the upstream supported resolution either, because 
+it's of a sensor mode with only 1 stream and that would create the 
+impression that anybody can just take this imx412 sensor and use the 
+upstream driver to test the solution, but this is in fact not possible 
+without register changes to the sensor driver itself.
+
+Regards,
+
+Milen
+
