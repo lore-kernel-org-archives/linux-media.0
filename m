@@ -2,67 +2,88 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77703C352A1
-	for <linux-media@archiver.kernel.org>; Tue,  6 Dec 2022 13:40:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51D5DC4708E
+	for <linux-media@archiver.kernel.org>; Tue,  6 Dec 2022 13:47:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234510AbiLFNkb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 6 Dec 2022 08:40:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
+        id S233008AbiLFNry (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 6 Dec 2022 08:47:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234492AbiLFNkY (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Dec 2022 08:40:24 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C3FBC01;
-        Tue,  6 Dec 2022 05:40:21 -0800 (PST)
-Received: from desky.lan (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6F7CF1221;
-        Tue,  6 Dec 2022 14:40:16 +0100 (CET)
+        with ESMTP id S234255AbiLFNrw (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Dec 2022 08:47:52 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910F6E0D4;
+        Tue,  6 Dec 2022 05:47:49 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id AFF49480;
+        Tue,  6 Dec 2022 14:47:47 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1670334016;
-        bh=rJt0FO/aAqEj8B7uQHCk9bENndv8lSqyEmt9qPkkRBw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KtbgzugvlBhU86kDvBhuCPCct79AXN1wAhPwffYB94DonzpEzR4UG4FN8QvSTWSTj
-         LkR+3xBaEtbFFpwZSlcjcdVkmpmVhjmKJP30ItQTbLQxf0FyehfK4UDT8iQyPIaA9E
-         MC3i30gIhyEzgQVKlc/G/14sUdUetMu7OYlcFzKM=
-From:   Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-To:     linux-renesas-soc@vger.kernel.org, linux-media@vger.kernel.org,
+        s=mail; t=1670334468;
+        bh=tJ0X7RQ5yJIhkQffTSluyqTAp/A/x6yOouFyd/oA5V8=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=SNOKP7Us0dslLqJdBj33OeIh2ylqq3Nu2h3lYwcVPq9YZ6xMDJEsuBPgtU1WUEEm6
+         YAMpIMTsP3cv5/6HMWaVgBRKzT0BRUvKsIGeqCodX5xxuwoPbuK0F79hjuAVg471el
+         PcKLF0bXthdnOvfDdUT53fMR0mzoRdAPuA6cOZeE=
+Message-ID: <65167d95-410b-c09d-a082-efe8b07a39c2@ideasonboard.com>
+Date:   Tue, 6 Dec 2022 15:47:45 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 0/7] media/drm: renesas: Add new pixel formats
+Content-Language: en-US
+To:     Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
+        linux-renesas-soc@vger.kernel.org, linux-media@vger.kernel.org,
         dri-devel@lists.freedesktop.org,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-Subject: [PATCH 6/7] drm: rcar-du: Bump V3U to gen 4
-Date:   Tue,  6 Dec 2022 15:39:53 +0200
-Message-Id: <20221206133954.397098-7-tomi.valkeinen+renesas@ideasonboard.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221206133954.397098-1-tomi.valkeinen+renesas@ideasonboard.com>
 References: <20221206133954.397098-1-tomi.valkeinen+renesas@ideasonboard.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20221206133954.397098-1-tomi.valkeinen+renesas@ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-V3U is actually gen 4 IP, like in V4H. Bumb up V3U gen in the
-rcar_du_r8a779a0_info.
+On 06/12/2022 15:39, Tomi Valkeinen wrote:
+> From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> 
+> Hi,
+> 
+> These add new pixel formats for Renesas V3U and V4H SoCs.
+> 
+> As the display pipeline is split between DRM and V4L2 components, this
+> series touches both subsystems. I'm sending all these together to
+> simplify review. If needed, I can later split this to V4L2 and DRM
+> parts, of which the V4L2 part needs to be merged first.
 
-Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
----
- drivers/gpu/drm/rcar-du/rcar_du_drv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I forgot to mention: this is based on the "[PATCH v5 0/7] Renesas V4H 
+DSI & DP output support" series.
 
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.c b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-index 46c60a2d710d..c7c5217cfc1a 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-@@ -504,7 +504,7 @@ static const struct rcar_du_device_info rcar_du_r8a7799x_info = {
- };
- 
- static const struct rcar_du_device_info rcar_du_r8a779a0_info = {
--	.gen = 3,
-+	.gen = 4,
- 	.features = RCAR_DU_FEATURE_CRTC_IRQ
- 		  | RCAR_DU_FEATURE_VSP1_SOURCE
- 		  | RCAR_DU_FEATURE_NO_BLENDING,
--- 
-2.34.1
+>   Tomi
+> 
+> Tomi Valkeinen (7):
+>    media: Add 2-10-10-10 RGB formats
+>    media: Add Y210, Y212 and Y216 formats
+>    media: renesas: vsp1: Change V3U to be gen4
+>    media: renesas: vsp1: Add V4H SoC version
+>    media: renesas: vsp1: Add new formats (2-10-10-10 ARGB, Y210)
+>    drm: rcar-du: Bump V3U to gen 4
+>    drm: rcar-du: Add new formats (2-10-10-10 ARGB, Y210)
+> 
+>   drivers/gpu/drm/rcar-du/rcar_du_drv.c         |  2 +-
+>   drivers/gpu/drm/rcar-du/rcar_du_kms.c         | 24 +++++++
+>   drivers/gpu/drm/rcar-du/rcar_du_vsp.c         | 49 ++++++++++++++-
+>   .../media/platform/renesas/vsp1/vsp1_drv.c    |  4 +-
+>   .../media/platform/renesas/vsp1/vsp1_hgo.c    |  4 +-
+>   .../media/platform/renesas/vsp1/vsp1_lif.c    |  1 +
+>   .../media/platform/renesas/vsp1/vsp1_pipe.c   | 15 +++++
+>   .../media/platform/renesas/vsp1/vsp1_regs.h   | 25 +++++++-
+>   .../media/platform/renesas/vsp1/vsp1_rpf.c    | 62 +++++++++++++++++--
+>   .../media/platform/renesas/vsp1/vsp1_video.c  |  4 +-
+>   .../media/platform/renesas/vsp1/vsp1_wpf.c    |  4 +-
+>   drivers/media/v4l2-core/v4l2-ioctl.c          |  6 ++
+>   include/uapi/linux/videodev2.h                | 11 ++++
+>   13 files changed, 193 insertions(+), 18 deletions(-)
+> 
 
