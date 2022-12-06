@@ -2,203 +2,100 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D693DC352A1
-	for <linux-media@archiver.kernel.org>; Tue,  6 Dec 2022 09:51:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE752C352A1
+	for <linux-media@archiver.kernel.org>; Tue,  6 Dec 2022 09:53:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235350AbiLFJvJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 6 Dec 2022 04:51:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56616 "EHLO
+        id S235499AbiLFJxa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 6 Dec 2022 04:53:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235145AbiLFJuG (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Dec 2022 04:50:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50EF613F2A;
-        Tue,  6 Dec 2022 01:49:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3617615FC;
-        Tue,  6 Dec 2022 09:49:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5281DC433C1;
-        Tue,  6 Dec 2022 09:49:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670320194;
-        bh=rz5AzYbQWf+iErrx+8viLCPkrqGF9zeD0tYEm5uP7vA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i98ADEJkBrR1yz0hsvgFbtYQBbCQC5fb5hmrrYmvztdJKtDMlj7JPs1ntRNw1W1r7
-         2mma3PtJ5x8GL/hIWdLGDbWad6olXwtCCZdKzqJM9eeS/C8Ho54Xf2+oRQWyb0Xm1X
-         aSovKByTKEl4V0fbccCQQXhHF3Oz+IicqH9XW9bapzu2K1tcf3SOTyJxm4uxuyqlg5
-         qiEN0sasLUo0TNma6Y4ZXKJcfjk7GcF0dI4plCQHyTYD5pYDTIWlr7+Kmv6kpjuITQ
-         bHIY1tKSFR+SKxFsAfEP+sJpdlwBDDPViIqmHxSq4Aj3uOum8vr90Hqgtzlv7Y5Mc7
-         3cLf9RO/U/9XQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Seth Jenkins <sethjenkins@google.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Hildenbrand <david@redhat.com>, Jan Kara <jack@suse.cz>,
-        Sasha Levin <sashal@kernel.org>, tfiga@chromium.org,
-        m.szyprowski@samsung.com, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.0 13/13] v4l2: don't fall back to follow_pfn() if pin_user_pages_fast() fails
-Date:   Tue,  6 Dec 2022 04:49:16 -0500
-Message-Id: <20221206094916.987259-13-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221206094916.987259-1-sashal@kernel.org>
-References: <20221206094916.987259-1-sashal@kernel.org>
+        with ESMTP id S235502AbiLFJwH (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Dec 2022 04:52:07 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F2220BDA
+        for <linux-media@vger.kernel.org>; Tue,  6 Dec 2022 01:51:30 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id u5so4545416pjy.5
+        for <linux-media@vger.kernel.org>; Tue, 06 Dec 2022 01:51:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9XFEuEO/uSZit0g9oIHRU2aY3eszS50qubKRuPycWJs=;
+        b=SzO1dYdo4FZNipKusWblICfW51XRb9SaJyS30QqB6xydPzwLRFfgomz64CUIS7p4gy
+         hLjM3PffKNgoSJJWCdfn9SYkufS5XSgXz0EYgm/yQy1AglhRjZ74bx/cJJbzEsYVHfel
+         2Noc6i7tZCkSLn3I13pnVRL898goz8YFkVzPnbic4Tl78Kioo+ztCagru71Dju+z7+X2
+         mekz/+HC/BUp2AsgaJ9Tt2C+gxOzvKE9vR1nmI930IOyFfrKC9Y1IOOIPKMlJnjTLsZv
+         3eghgWsxkeK53uOZP+G5zU1YvbhenLS5k/ABftQ9zTXGxez/RbF1OpHd9yVAXGGVNKd/
+         7ecw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9XFEuEO/uSZit0g9oIHRU2aY3eszS50qubKRuPycWJs=;
+        b=aJYg8bZQPGMKxVI4WHTOrI9ypoMP6bphQ4LXBJuYPfxUoArynoRCJ/bPVVtB22ByQs
+         hJNqNkEOMjYDi345Shb5i5EjVHcLz8MHTMWAJfCMQg9dMSMoiy6i7L2l8HMUH5gV0zG8
+         DVy1FkRN1NjsuVfptLSYQEOxCIAHgDEALdqx9O8Q8mXhQLHGqlHyo8M2H8FZw27QLMt2
+         p9p/kvvhBFnGzCEEl55DhFGEowbWUjAaU0oMkwHyfnJy2IAtbtFERf27cTDJUliXU1Ck
+         dtJLhejf+nwh0jVDudf7XxOM65XI5m9KbSP6DXzXEixJ+81SPt8gvYq3PfSlYx4kHnNi
+         fJDg==
+X-Gm-Message-State: ANoB5pmERRZ5vjnN/Ve20kMnirA4egjakGR4dzfO4VSuTrAQT/hdq9Ql
+        G8KYfC8elmDc3V+kHvdS3W3QzbA83KQ=
+X-Google-Smtp-Source: AA0mqf4o1iDbcLbVpPwWLY07E2c1JFPW5PyFLZdTxs9MHKJ/YwoO/ESEkz0Qu7qI65v8ACtMm5bCaA==
+X-Received: by 2002:a17:902:f601:b0:186:8431:ece3 with SMTP id n1-20020a170902f60100b001868431ece3mr70883059plg.8.1670320290426;
+        Tue, 06 Dec 2022 01:51:30 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-69.three.co.id. [180.214.232.69])
+        by smtp.gmail.com with ESMTPSA id b15-20020a170902d50f00b00174f61a7d09sm12171161plg.247.2022.12.06.01.51.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 01:51:29 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 49D20104553; Tue,  6 Dec 2022 16:51:27 +0700 (WIB)
+Date:   Tue, 6 Dec 2022 16:51:27 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Robert Schlabbach <robert_s@gmx.net>
+Subject: Re: [PATCH] media/frontend.h.rst.exceptions: add exceptions for new
+ dvb defines
+Message-ID: <Y48Qn58pF0Gm2evZ@debian.me>
+References: <2bff9dd2-e4ef-1b10-e64e-3c62849eb3b0@xs4all.nl>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="y79OFSX1vZHU7Ldk"
+Content-Disposition: inline
+In-Reply-To: <2bff9dd2-e4ef-1b10-e64e-3c62849eb3b0@xs4all.nl>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
 
-[ Upstream commit 6647e76ab623b2b3fb2efe03a86e9c9046c52c33 ]
+--y79OFSX1vZHU7Ldk
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The V4L2_MEMORY_USERPTR interface is long deprecated and shouldn't be
-used (and is discouraged for any modern v4l drivers).  And Seth Jenkins
-points out that the fallback to VM_PFNMAP/VM_IO is fundamentally racy
-and dangerous.
+On Mon, Nov 28, 2022 at 02:33:45PM +0100, Hans Verkuil wrote:
+> After some dvb/frontend.h additions, building the documentation
+> gives lots of warnings. Add the missing pieces to
+> frontend.h.rst.exceptions.
+>=20
 
-Note that it's not even a case that should trigger, since any normal
-user pointer logic ends up just using the pin_user_pages_fast() call
-that does the proper page reference counting.  That's not the problem
-case, only if you try to use special device mappings do you have any
-issues.
+All warnings went away, thanks!
 
-Normally I'd just remove this during the merge window, but since Seth
-pointed out the problem cases, we really want to know as soon as
-possible if there are actually any users of this odd special case of a
-legacy interface.  Neither Hans nor Mauro seem to think that such
-mis-uses of the old legacy interface should exist.  As Mauro says:
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
- "See, V4L2 has actually 4 streaming APIs:
-        - Kernel-allocated mmap (usually referred simply as just mmap);
-        - USERPTR mmap;
-        - read();
-        - dmabuf;
+--=20
+An old man doll... just what I always wanted! - Clara
 
-  The USERPTR is one of the oldest way to use it, coming from V4L
-  version 1 times, and by far the least used one"
+--y79OFSX1vZHU7Ldk
+Content-Type: application/pgp-signature; name="signature.asc"
 
-And Hans chimed in on the USERPTR interface:
+-----BEGIN PGP SIGNATURE-----
 
- "To be honest, I wouldn't mind if it goes away completely, but that's a
-  bit of a pipe dream right now"
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY48QnwAKCRD2uYlJVVFO
+o4DHAP4pbGVRVUwKU8f6IyVgYryVXoIKjE92ujGWi/bMWG1lXwEAsEtlI+iuCkDY
+pBG47Mq1cMY4F89SbEHSWZheWjfJ4As=
+=zdvd
+-----END PGP SIGNATURE-----
 
-but while removing this legacy interface entirely may be a pipe dream we
-can at least try to remove the unlikely (and actively broken) case of
-using special device mappings for USERPTR accesses.
-
-This replaces it with a WARN_ONCE() that we can remove once we've
-hopefully confirmed that no actual users exist.
-
-NOTE! Longer term, this means that a 'struct frame_vector' only ever
-contains proper page pointers, and all the games we have with converting
-them to pages can go away (grep for 'frame_vector_to_pages()' and the
-uses of 'vec->is_pfns').  But this is just the first step, to verify
-that this code really is all dead, and do so as quickly as possible.
-
-Reported-by: Seth Jenkins <sethjenkins@google.com>
-Acked-by: Hans Verkuil <hverkuil@xs4all.nl>
-Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Jan Kara <jack@suse.cz>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/media/common/videobuf2/frame_vector.c | 68 ++++---------------
- 1 file changed, 12 insertions(+), 56 deletions(-)
-
-diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/common/videobuf2/frame_vector.c
-index 542dde9d2609..144027035892 100644
---- a/drivers/media/common/videobuf2/frame_vector.c
-+++ b/drivers/media/common/videobuf2/frame_vector.c
-@@ -35,11 +35,7 @@
- int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
- 		     struct frame_vector *vec)
- {
--	struct mm_struct *mm = current->mm;
--	struct vm_area_struct *vma;
--	int ret_pin_user_pages_fast = 0;
--	int ret = 0;
--	int err;
-+	int ret;
- 
- 	if (nr_frames == 0)
- 		return 0;
-@@ -52,57 +48,17 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
- 	ret = pin_user_pages_fast(start, nr_frames,
- 				  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
- 				  (struct page **)(vec->ptrs));
--	if (ret > 0) {
--		vec->got_ref = true;
--		vec->is_pfns = false;
--		goto out_unlocked;
--	}
--	ret_pin_user_pages_fast = ret;
--
--	mmap_read_lock(mm);
--	vec->got_ref = false;
--	vec->is_pfns = true;
--	ret = 0;
--	do {
--		unsigned long *nums = frame_vector_pfns(vec);
--
--		vma = vma_lookup(mm, start);
--		if (!vma)
--			break;
--
--		while (ret < nr_frames && start + PAGE_SIZE <= vma->vm_end) {
--			err = follow_pfn(vma, start, &nums[ret]);
--			if (err) {
--				if (ret)
--					goto out;
--				// If follow_pfn() returns -EINVAL, then this
--				// is not an IO mapping or a raw PFN mapping.
--				// In that case, return the original error from
--				// pin_user_pages_fast(). Otherwise this
--				// function would return -EINVAL when
--				// pin_user_pages_fast() returned -ENOMEM,
--				// which makes debugging hard.
--				if (err == -EINVAL && ret_pin_user_pages_fast)
--					ret = ret_pin_user_pages_fast;
--				else
--					ret = err;
--				goto out;
--			}
--			start += PAGE_SIZE;
--			ret++;
--		}
--		/* Bail out if VMA doesn't completely cover the tail page. */
--		if (start < vma->vm_end)
--			break;
--	} while (ret < nr_frames);
--out:
--	mmap_read_unlock(mm);
--out_unlocked:
--	if (!ret)
--		ret = -EFAULT;
--	if (ret > 0)
--		vec->nr_frames = ret;
--	return ret;
-+	vec->got_ref = true;
-+	vec->is_pfns = false;
-+	vec->nr_frames = ret;
-+
-+	if (likely(ret > 0))
-+		return ret;
-+
-+	/* This used to (racily) return non-refcounted pfns. Let people know */
-+	WARN_ONCE(1, "get_vaddr_frames() cannot follow VM_IO mapping");
-+	vec->nr_frames = 0;
-+	return ret ? ret : -EFAULT;
- }
- EXPORT_SYMBOL(get_vaddr_frames);
- 
--- 
-2.35.1
-
+--y79OFSX1vZHU7Ldk--
