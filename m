@@ -2,37 +2,37 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41928C352A1
-	for <linux-media@archiver.kernel.org>; Tue,  6 Dec 2022 13:40:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DA10C47090
+	for <linux-media@archiver.kernel.org>; Tue,  6 Dec 2022 13:40:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234083AbiLFNk1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 6 Dec 2022 08:40:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
+        id S234523AbiLFNk3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 6 Dec 2022 08:40:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234485AbiLFNkY (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Dec 2022 08:40:24 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4371927B2E;
-        Tue,  6 Dec 2022 05:40:22 -0800 (PST)
+        with ESMTP id S234108AbiLFNkV (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 6 Dec 2022 08:40:21 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1559BC8B;
+        Tue,  6 Dec 2022 05:40:17 -0800 (PST)
 Received: from desky.lan (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1175F558;
-        Tue,  6 Dec 2022 14:40:17 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 33FC2EE6;
+        Tue,  6 Dec 2022 14:40:13 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1670334017;
-        bh=tPwYiDh/6WY9ouRwCbzRrdEso7JqxttJ5+Wwe+65iKg=;
+        s=mail; t=1670334016;
+        bh=o9jQ4kY4WjW8AXuwViYAQ7hMjB75CLutON1sLFWGleM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FX0sx7wrMK+zsn5pekovTL5G9oA0aaKDfzj3LH1/ukGano1YPX0FOaEu4dwaZBVnY
-         WGjplzPjiNBDhO3vJG1owxeLtVlIGBGxuR+FrGHEqLZVRvqyH8JY/ysfZ3a+2jOhwO
-         YsiVQtDBCMEYpj1OjTDRVWADW/xvz3wYi0BScya8=
+        b=U5+Amssa2Vy5CNtu6t5EdIqWd9dNbipa8Xy2tpXpRj+O2bA0czKz5gtrb45aE0riD
+         J0OXWdT4fhAokFawwP5hKM/Hp+XAY21AnVaZRCOmIV/5E4cvVAyH0u/Vm8fImsgOlu
+         YWChygf7RvjJm6eg6yi0Ua1DDz9qpb8TdAEyrOYU=
 From:   Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
 To:     linux-renesas-soc@vger.kernel.org, linux-media@vger.kernel.org,
         dri-devel@lists.freedesktop.org,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>
 Cc:     Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-Subject: [PATCH 7/7] drm: rcar-du: Add new formats (2-10-10-10 ARGB, Y210)
-Date:   Tue,  6 Dec 2022 15:39:54 +0200
-Message-Id: <20221206133954.397098-8-tomi.valkeinen+renesas@ideasonboard.com>
+Subject: [PATCH 5/7] media: renesas: vsp1: Add new formats (2-10-10-10 ARGB, Y210)
+Date:   Tue,  6 Dec 2022 15:39:52 +0200
+Message-Id: <20221206133954.397098-6-tomi.valkeinen+renesas@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221206133954.397098-1-tomi.valkeinen+renesas@ideasonboard.com>
 References: <20221206133954.397098-1-tomi.valkeinen+renesas@ideasonboard.com>
@@ -42,129 +42,149 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add new pixel formats: RGBX1010102, RGBA1010102, ARGB2101010 and Y210.
+Add new pixel formats: XBGR2101010, ABGR2101010, BGRA1010102 and Y210.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
 ---
- drivers/gpu/drm/rcar-du/rcar_du_kms.c | 24 +++++++++++++
- drivers/gpu/drm/rcar-du/rcar_du_vsp.c | 49 +++++++++++++++++++++++++--
- 2 files changed, 71 insertions(+), 2 deletions(-)
+ .../media/platform/renesas/vsp1/vsp1_pipe.c   | 15 ++++++
+ .../media/platform/renesas/vsp1/vsp1_regs.h   | 22 ++++++++
+ .../media/platform/renesas/vsp1/vsp1_rpf.c    | 50 +++++++++++++++++++
+ 3 files changed, 87 insertions(+)
 
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_kms.c b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-index 8c2719efda2a..8ccabf5a30c4 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-@@ -259,6 +259,24 @@ static const struct rcar_du_format_info rcar_du_format_infos[] = {
- 		.bpp = 32,
- 		.planes = 1,
- 		.hsub = 1,
-+	}, {
-+		.fourcc = DRM_FORMAT_RGBX1010102,
-+		.v4l2 = V4L2_PIX_FMT_XBGR2101010,
-+		.bpp = 32,
-+		.planes = 1,
-+		.hsub = 1,
-+	}, {
-+		.fourcc = DRM_FORMAT_RGBA1010102,
-+		.v4l2 = V4L2_PIX_FMT_ABGR2101010,
-+		.bpp = 32,
-+		.planes = 1,
-+		.hsub = 1,
-+	}, {
-+		.fourcc = DRM_FORMAT_ARGB2101010,
-+		.v4l2 = V4L2_PIX_FMT_BGRA1010102,
-+		.bpp = 32,
-+		.planes = 1,
-+		.hsub = 1,
- 	}, {
- 		.fourcc = DRM_FORMAT_YVYU,
- 		.v4l2 = V4L2_PIX_FMT_YVYU,
-@@ -307,6 +325,12 @@ static const struct rcar_du_format_info rcar_du_format_infos[] = {
- 		.bpp = 24,
- 		.planes = 3,
- 		.hsub = 1,
-+	}, {
-+		.fourcc = DRM_FORMAT_Y210,
-+		.v4l2 = V4L2_PIX_FMT_Y210,
-+		.bpp = 32,
-+		.planes = 1,
-+		.hsub = 2,
- 	},
+diff --git a/drivers/media/platform/renesas/vsp1/vsp1_pipe.c b/drivers/media/platform/renesas/vsp1/vsp1_pipe.c
+index f72ac01c21ea..2867b3de06fa 100644
+--- a/drivers/media/platform/renesas/vsp1/vsp1_pipe.c
++++ b/drivers/media/platform/renesas/vsp1/vsp1_pipe.c
+@@ -146,6 +146,18 @@ static const struct vsp1_format_info vsp1_video_formats[] = {
+ 	  VI6_FMT_ARGB_8888, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS |
+ 	  VI6_RPF_DSWAP_P_WDS | VI6_RPF_DSWAP_P_BTS,
+ 	  1, { 32, 0, 0 }, false, false, 1, 1, false },
++	{ V4L2_PIX_FMT_XBGR2101010, MEDIA_BUS_FMT_ARGB8888_1X32,
++	  VI6_FMT_RGB10_RGB10A2_A2RGB10,
++	  VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS,
++	  1, { 32, 0, 0 }, false, false, 1, 1, false },
++	{ V4L2_PIX_FMT_ABGR2101010, MEDIA_BUS_FMT_ARGB8888_1X32,
++	  VI6_FMT_RGB10_RGB10A2_A2RGB10,
++	  VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS,
++	  1, { 32, 0, 0 }, false, false, 1, 1, false },
++	{ V4L2_PIX_FMT_BGRA1010102, MEDIA_BUS_FMT_ARGB8888_1X32,
++	  VI6_FMT_RGB10_RGB10A2_A2RGB10,
++	  VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS,
++	  1, { 32, 0, 0 }, false, false, 1, 1, false },
+ 	{ V4L2_PIX_FMT_UYVY, MEDIA_BUS_FMT_AYUV8_1X32,
+ 	  VI6_FMT_YUYV_422, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS |
+ 	  VI6_RPF_DSWAP_P_WDS | VI6_RPF_DSWAP_P_BTS,
+@@ -202,6 +214,9 @@ static const struct vsp1_format_info vsp1_video_formats[] = {
+ 	  VI6_FMT_Y_U_V_444, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS |
+ 	  VI6_RPF_DSWAP_P_WDS | VI6_RPF_DSWAP_P_BTS,
+ 	  3, { 8, 8, 8 }, false, true, 1, 1, false },
++	{ V4L2_PIX_FMT_Y210, MEDIA_BUS_FMT_AYUV8_1X32,
++	  VI6_FMT_YUYV_422, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS,
++	  1, { 32, 0, 0 }, false, false, 2, 1, false },
  };
  
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_vsp.c b/drivers/gpu/drm/rcar-du/rcar_du_vsp.c
-index e465aef41585..6f3e109a4f80 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_vsp.c
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_vsp.c
-@@ -139,6 +139,42 @@ static const u32 rcar_du_vsp_formats[] = {
- 	DRM_FORMAT_YVU444,
- };
+ /**
+diff --git a/drivers/media/platform/renesas/vsp1/vsp1_regs.h b/drivers/media/platform/renesas/vsp1/vsp1_regs.h
+index c61e8dafeecf..8947ea05f95e 100644
+--- a/drivers/media/platform/renesas/vsp1/vsp1_regs.h
++++ b/drivers/media/platform/renesas/vsp1/vsp1_regs.h
+@@ -228,6 +228,27 @@
+ #define VI6_RPF_MULT_ALPHA_RATIO_MASK	(0xff << 0)
+ #define VI6_RPF_MULT_ALPHA_RATIO_SHIFT	0
  
-+/*
-+ * Gen4 supports the same formats as above, and additionally 2-10-10-10 RGB
-+ * formats and Y210 format.
-+ */
-+static const u32 rcar_du_vsp_formats_gen4[] = {
-+	DRM_FORMAT_RGB332,
-+	DRM_FORMAT_ARGB4444,
-+	DRM_FORMAT_XRGB4444,
-+	DRM_FORMAT_ARGB1555,
-+	DRM_FORMAT_XRGB1555,
-+	DRM_FORMAT_RGB565,
-+	DRM_FORMAT_BGR888,
-+	DRM_FORMAT_RGB888,
-+	DRM_FORMAT_BGRA8888,
-+	DRM_FORMAT_BGRX8888,
-+	DRM_FORMAT_ARGB8888,
-+	DRM_FORMAT_XRGB8888,
-+	DRM_FORMAT_RGBX1010102,
-+	DRM_FORMAT_RGBA1010102,
-+	DRM_FORMAT_ARGB2101010,
-+	DRM_FORMAT_UYVY,
-+	DRM_FORMAT_YUYV,
-+	DRM_FORMAT_YVYU,
-+	DRM_FORMAT_NV12,
-+	DRM_FORMAT_NV21,
-+	DRM_FORMAT_NV16,
-+	DRM_FORMAT_NV61,
-+	DRM_FORMAT_YUV420,
-+	DRM_FORMAT_YVU420,
-+	DRM_FORMAT_YUV422,
-+	DRM_FORMAT_YVU422,
-+	DRM_FORMAT_YUV444,
-+	DRM_FORMAT_YVU444,
-+	DRM_FORMAT_Y210,
-+};
++#define VI6_RPF_EXT_INFMT0		0x0370
++#define VI6_RPF_EXT_INFMT0_F2B_LSB		(0 << 12)
++#define VI6_RPF_EXT_INFMT0_F2B_MSB		(1 << 12)
++#define VI6_RPF_EXT_INFMT0_IPBD_Y_8		(0 << 8)
++#define VI6_RPF_EXT_INFMT0_IPBD_Y_10		(1 << 8)
++#define VI6_RPF_EXT_INFMT0_IPBD_Y_12		(2 << 8)
++#define VI6_RPF_EXT_INFMT0_IPBD_C_8		(0 << 4)
++#define VI6_RPF_EXT_INFMT0_IPBD_C_10		(1 << 4)
++#define VI6_RPF_EXT_INFMT0_IPBD_C_12		(2 << 4)
++#define VI6_RPF_EXT_INFMT0_BYPP_M1_RGB10	(3 << 0)
++#define VI6_RPF_EXT_INFMT0_BYPP_M1_N_RGB10	(0 << 0)
 +
- static void rcar_du_vsp_plane_setup(struct rcar_du_vsp_plane *plane)
- {
- 	struct rcar_du_vsp_plane_state *state =
-@@ -436,14 +472,23 @@ int rcar_du_vsp_init(struct rcar_du_vsp *vsp, struct device_node *np,
- 					 ? DRM_PLANE_TYPE_PRIMARY
- 					 : DRM_PLANE_TYPE_OVERLAY;
- 		struct rcar_du_vsp_plane *plane = &vsp->planes[i];
-+		unsigned int num_formats;
-+		const u32 *formats;
++#define VI6_RPF_EXT_INFMT1		0x0374
++#define VI6_RPF_EXT_INFMT2		0x0378
 +
-+		if (rcdu->info->gen < 4) {
-+			num_formats = ARRAY_SIZE(rcar_du_vsp_formats);
-+			formats = rcar_du_vsp_formats;
-+		} else {
-+			num_formats = ARRAY_SIZE(rcar_du_vsp_formats_gen4);
-+			formats = rcar_du_vsp_formats_gen4;
++#define VI6_RPF_BRDITH_CTRL		0x03e0
++#define VI6_RPF_BRDITH_CTRL_ODE_EN	(1 << 8)
++#define VI6_RPF_BRDITH_CTRL_ODE_DIS	(0 << 8)
++#define VI6_RPF_BRDITH_CTRL_CBRM_RO	(1 << 0)
++#define VI6_RPF_BRDITH_CTRL_CBRM_TR	(0 << 0)
++
+ /* -----------------------------------------------------------------------------
+  * WPF Control Registers
+  */
+@@ -846,6 +867,7 @@
+ #define VI6_FMT_XBXGXR_262626		0x21
+ #define VI6_FMT_ABGR_8888		0x22
+ #define VI6_FMT_XXRGB_88565		0x23
++#define VI6_FMT_RGB10_RGB10A2_A2RGB10	0x30
+ 
+ #define VI6_FMT_Y_UV_444		0x40
+ #define VI6_FMT_Y_UV_422		0x41
+diff --git a/drivers/media/platform/renesas/vsp1/vsp1_rpf.c b/drivers/media/platform/renesas/vsp1/vsp1_rpf.c
+index 045aa54f7998..c31282f8e56b 100644
+--- a/drivers/media/platform/renesas/vsp1/vsp1_rpf.c
++++ b/drivers/media/platform/renesas/vsp1/vsp1_rpf.c
+@@ -109,6 +109,56 @@ static void rpf_configure_stream(struct vsp1_entity *entity,
+ 	vsp1_rpf_write(rpf, dlb, VI6_RPF_INFMT, infmt);
+ 	vsp1_rpf_write(rpf, dlb, VI6_RPF_DSWAP, fmtinfo->swap);
+ 
++	if ((entity->vsp1->version & VI6_IP_VERSION_MODEL_MASK) == VI6_IP_VERSION_MODEL_VSPD_GEN4) {
++		u32 ext_infmt0;
++		u32 ext_infmt1;
++		u32 ext_infmt2;
++
++		switch (fmtinfo->fourcc) {
++		case V4L2_PIX_FMT_XBGR2101010:
++			ext_infmt0 = VI6_RPF_EXT_INFMT0_BYPP_M1_RGB10;
++			ext_infmt1 = (0 << 24)  | (10 << 16) |
++				     (20 << 8)  | (30 << 0);
++			ext_infmt2 = (10 << 24) | (10 << 16) |
++				     (10 << 8)  | (0 << 0);
++			break;
++
++		case V4L2_PIX_FMT_ABGR2101010:
++			ext_infmt0 = VI6_RPF_EXT_INFMT0_BYPP_M1_RGB10;
++			ext_infmt1 = (0 << 24)  | (10 << 16) |
++				     (20 << 8)  | (30 << 0);
++			ext_infmt2 = (10 << 24) | (10 << 16) |
++				     (10 << 8)  | (2 << 0);
++			break;
++
++		case V4L2_PIX_FMT_BGRA1010102:
++			ext_infmt0 = VI6_RPF_EXT_INFMT0_BYPP_M1_RGB10;
++			ext_infmt1 = (2 << 24)  | (12 << 16) |
++				     (22 << 8)  | (22 << 0);
++			ext_infmt2 = (10 << 24) | (10 << 16) |
++				     (10 << 8)  | (2 << 0);
++			break;
++
++		case V4L2_PIX_FMT_Y210:
++			ext_infmt0 = VI6_RPF_EXT_INFMT0_F2B_MSB |
++				     VI6_RPF_EXT_INFMT0_IPBD_Y_10 |
++				     VI6_RPF_EXT_INFMT0_IPBD_C_10;
++			ext_infmt1 = 0x0;
++			ext_infmt2 = 0x0;
++			break;
++
++		default:
++			ext_infmt0 = 0;
++			ext_infmt1 = 0;
++			ext_infmt2 = 0;
++			break;
 +		}
- 
- 		plane->vsp = vsp;
- 		plane->index = i;
- 
- 		ret = drm_universal_plane_init(&rcdu->ddev, &plane->plane,
- 					       crtcs, &rcar_du_vsp_plane_funcs,
--					       rcar_du_vsp_formats,
--					       ARRAY_SIZE(rcar_du_vsp_formats),
-+					       formats, num_formats,
- 					       NULL, type, NULL);
- 		if (ret < 0)
- 			return ret;
++
++		vsp1_rpf_write(rpf, dlb, VI6_RPF_EXT_INFMT0, ext_infmt0);
++		vsp1_rpf_write(rpf, dlb, VI6_RPF_EXT_INFMT1, ext_infmt1);
++		vsp1_rpf_write(rpf, dlb, VI6_RPF_EXT_INFMT2, ext_infmt2);
++	}
++
+ 	/* Output location. */
+ 	if (pipe->brx) {
+ 		const struct v4l2_rect *compose;
 -- 
 2.34.1
 
