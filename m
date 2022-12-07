@@ -2,95 +2,227 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22B2AC352A1
-	for <linux-media@archiver.kernel.org>; Wed,  7 Dec 2022 14:29:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EDA30C352A1
+	for <linux-media@archiver.kernel.org>; Wed,  7 Dec 2022 15:09:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbiLGO3K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Dec 2022 09:29:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52076 "EHLO
+        id S229821AbiLGPJg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Dec 2022 10:09:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbiLGO2n (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Dec 2022 09:28:43 -0500
-X-Greylist: delayed 610 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Dec 2022 06:28:33 PST
-Received: from mail.rosalinux.ru (mail.rosalinux.ru [195.19.76.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFDC6326F9;
-        Wed,  7 Dec 2022 06:28:32 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.rosalinux.ru (Postfix) with ESMTP id 728FC5D88BFE;
-        Wed,  7 Dec 2022 17:17:03 +0300 (MSK)
-Received: from mail.rosalinux.ru ([127.0.0.1])
-        by localhost (mail.rosalinux.ru [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id QonOtwzX_AXI; Wed,  7 Dec 2022 17:17:03 +0300 (MSK)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.rosalinux.ru (Postfix) with ESMTP id 40D4D5DA93A0;
-        Wed,  7 Dec 2022 17:17:03 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rosalinux.ru 40D4D5DA93A0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rosalinux.ru;
-        s=1D4BB666-A0F1-11EB-A1A2-F53579C7F503; t=1670422623;
-        bh=w/yclODkCgJWPfVa/yWAmC2/lYgiHSNRxjwj97Pe/0M=;
-        h=From:To:Date:Message-Id:MIME-Version;
-        b=hbLN8cD5C+k+gvhwBaPqC/QawC/Hsmh/Xljnq2w6WC9xGtixO/dbbkcQhZaB6jjb0
-         j2/f3B6Bo8BGNOw+/8dCnd/yw+jtNWtiP7b1b1MhLsu48N3PO1RbnCjLfrGlTQnGgp
-         30XP8l7NNt2YjLfhmYMAMQ6c8dy82xnqtWGMlwhC2BbknTU7SiQOT90o3dmLHeWyA6
-         fymtzJnpx/0EwvVRvbdPMP2LmHnoBc2vV37I+/auIHQM1SCsisRwLiv5x/k6rdpf9h
-         8aCv+TbTii02CXyVRBk60PoXuFRc6oWs8UGzuh/EFdQZu3xA/LM9s3NOfbJeyiftk5
-         NPsHEepkGBVIA==
-X-Virus-Scanned: amavisd-new at rosalinux.ru
-Received: from mail.rosalinux.ru ([127.0.0.1])
-        by localhost (mail.rosalinux.ru [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id V30dyoE9cVKj; Wed,  7 Dec 2022 17:17:03 +0300 (MSK)
-Received: from ubuntu.localdomain (unknown [144.206.93.23])
-        by mail.rosalinux.ru (Postfix) with ESMTPSA id 00F055D88BFE;
-        Wed,  7 Dec 2022 17:17:02 +0300 (MSK)
-From:   Aleksandr Burakov <a.burakov@rosalinux.ru>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Aleksandr Burakov <a.burakov@rosalinux.ru>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: [PATCH] media: v4l2-flash: fix NULL dereference in v4l2_flash_s_ctrl()
-Date:   Wed,  7 Dec 2022 17:18:07 +0300
-Message-Id: <20221207141808.22922-1-a.burakov@rosalinux.ru>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229846AbiLGPJd (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Dec 2022 10:09:33 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC1A5BD63;
+        Wed,  7 Dec 2022 07:09:30 -0800 (PST)
+Received: from localhost (89-26-75-29.goll.dyn.salzburg-online.at [89.26.75.29])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sebastianfricke)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7AF116602BB9;
+        Wed,  7 Dec 2022 15:09:28 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1670425768;
+        bh=4ObcAHwRV9dxMiI+YLG4qw8GWaJ1x1aWG49BDYqdCII=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZhVypiyiGCAUah9pISXuQOnBvkRc5wJnYPkU1ma0YI4PoRIeQ6GdQG03A76BCpv3D
+         tvEi393RzUtwjyqGe6hAxVjLcF1I+qcHMakeN2hHWQNc0rN3w0fukJYALVAsiX42lE
+         xot0c1btURasXWLlX8BZ5Qm6w+G/E9+psUXnptW1kwguLtEY/2RPI9gtlDVvM8XCs9
+         aGa5X3rN9Pkd3qM/zSXIMb+lU37DHNSMpLR4BW0TFaGU6qctpd5Q3+bTwSJTpwJF8a
+         dWVGYDpiSr4LfOGyh8MFulAX5t3h8DLnLr9xY8zTBawjWLGt7czNph9x35B0PY5u4y
+         w4hGB33sCYHuQ==
+Date:   Wed, 7 Dec 2022 16:09:25 +0100
+From:   Sebastian Fricke <sebastian.fricke@collabora.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        kernel@collabora.com, bob.beckett@collabora.com,
+        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com,
+        nas.chung@chipsnmedia.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 5/6] dt-bindings: media: wave5: add yaml devicetree
+ bindings
+Message-ID: <20221207150925.frotwpm3ukwwlnig@basti-XPS-13-9310>
+References: <20221207121350.66217-1-sebastian.fricke@collabora.com>
+ <20221207121350.66217-6-sebastian.fricke@collabora.com>
+ <48d60bd0-4de1-4a5e-eca1-1f8a9303cce0@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+In-Reply-To: <48d60bd0-4de1-4a5e-eca1-1f8a9303cce0@linaro.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The NULL check added for fled_cdev before dereference.
+Hello Krzysztof, 
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+On 07.12.2022 13:31, Krzysztof Kozlowski wrote:
+>On 07/12/2022 13:13, Sebastian Fricke wrote:
+>> From: Robert Beckett <bob.beckett@collabora.com>
+>>
+>> Add bindings for the wave5 chips&media codec driver
+>>
+>> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+>> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+>> Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+>
+>What's happening with this patch? Where is the changelog?
 
-Signed-off-by: Aleksandr Burakov <a.burakov@rosalinux.ru>
-Fixes: 42bd6f59ae90 ("media: Add registration helpers for V4L2 flash sub-=
-devices")
----
- drivers/media/v4l2-core/v4l2-flash-led-class.c | 4 ++++
- 1 file changed, 4 insertions(+)
+The changelog is located in the cover letter.
+https://lore.kernel.org/linux-media/20221207121350.66217-1-sebastian.fricke@collabora.com/
 
-diff --git a/drivers/media/v4l2-core/v4l2-flash-led-class.c b/drivers/med=
-ia/v4l2-core/v4l2-flash-led-class.c
-index 355595a0fefa..36cc46e80eea 100644
---- a/drivers/media/v4l2-core/v4l2-flash-led-class.c
-+++ b/drivers/media/v4l2-core/v4l2-flash-led-class.c
-@@ -291,12 +291,16 @@ static int v4l2_flash_s_ctrl(struct v4l2_ctrl *c)
- 		 * No conversion is needed as LED Flash class also uses
- 		 * microseconds for flash timeout units.
- 		 */
-+		if (!fled_cdev)
-+			return -EINVAL;
- 		return led_set_flash_timeout(fled_cdev, c->val);
- 	case V4L2_CID_FLASH_INTENSITY:
- 		/*
- 		 * No conversion is needed as LED Flash class also uses
- 		 * microamperes for flash intensity units.
- 		 */
-+		if (!fled_cdev)
-+			return -EINVAL;
- 		return led_set_flash_brightness(fled_cdev, c->val);
- 	}
-=20
---=20
-2.25.1
+>Why it is v11 and first time I see it?
 
+You actually replied to V10:
+https://lore.kernel.org/linux-media/20221023085341.s23qinjuw4qls3dn@basti-XPS-13-9310/
 
+>And why it is v11 with basic mistakes and lack of testing?!?
+>I would assume that v11 was already seen and tested...
+
+Sorry I don't have a lot of experience with dt-bindings, thank you for
+highlighting the issues, I will correct them. And I forgot to build the
+documentation during my testing runs.
+I took over the patch set from another contributor and as no one
+complained about the dt-bindings for the last 10 versions, I concentrated
+my energy on other problems.
+
+>
+>
+>> ---
+>>  .../devicetree/bindings/cnm,wave5.yml         | 72 +++++++++++++++++++
+>>  1 file changed, 72 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/cnm,wave5.yml
+>
+>Wrong directory. It wasn't here at all before, so I am really confused
+>how this could happen.
+
+Thanks for the highlight.
+
+I will move it to:
+Documentation/devicetree/bindings/media/cnm,wave5.yml
+
+>
+>Subject: drop redundant pieces: yaml, devicetree and bindings.
+
+I call it:
+
+dt-bindings: media: chips-media: add wave5 bindings
+
+in V12
+
+Sincerely,
+Sebastian Fricke
+
+>
+>
+>>
+>> diff --git a/Documentation/devicetree/bindings/cnm,wave5.yml b/Documentation/devicetree/bindings/cnm,wave5.yml
+>> new file mode 100644
+>> index 000000000000..01dddebb162e
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/cnm,wave5.yml
+>> @@ -0,0 +1,72 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/media/wave5.yaml#
+>
+>You clearly did not test them before sending.
+>
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Chips&Media Wave 5 Series multi-standard codec IP
+>> +
+>> +maintainers:
+>> +  - Nas Chung <nas.chung@chipsnmedia.com>
+>> +  - Robert Beckett <bob.beckett@collabora.com>
+>> +  - Sebastian Fricke <sebastian.fricke@collabora.com>
+>> +
+>> +description: |-
+>> +  The Chips&Media WAVE codec IP is a multi format video encoder/decoder
+>> +
+>> +properties:
+>> +  compatible:
+>> +    anyOf:
+>
+>Please start from example-schema or other recently approved bindings. No
+>anyOf.
+>
+>> +      - items:
+>
+>No items...
+>
+>> +        - enum:
+>> +            - cnm,cm511-vpu
+>> +            - cnm,cm517-vpu
+>> +            - cnm,cm521-vpu
+>> +            - cnm,cm521c-vpu
+>> +            - cnm,cm521c-dual-vpu
+>
+>What's the difference between this and one above?
+>
+>> +            - cnm,cm521e1-vpu
+>> +            - cnm,cm537-vpu
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    minItems: 1
+>> +    maxItems: 4
+>
+>This has to be specific.
+>
+>> +
+>> +  clock-names:
+>> +    minItems: 1
+>> +    maxItems: 4
+>
+>You need to list the names.
+>
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  power-domains:
+>> +    maxItems: 1
+>> +
+>> +  resets:
+>> +    maxItems: 1
+>> +
+>> +  sram:
+>
+>Missing vendor prefix.
+>
+>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>> +    description: phandle pointing to the SRAM device node
+>
+>And what is it for? Why do you need SRAM?
+>
+>> +    maxItems: 1
+>
+>Drop
+>
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupts
+>> +  - clocks
+>> +  - clock-names
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    vpu: video-codec@12345678 {
+>> +        compatible = "cnm,cm521-vpu";
+>> +        reg = <0x12345678 0x1000>;
+>> +        interrupts = <42>;
+>> +        clocks = <&clks 42>;
+>> +        clock-names = "vcodec";
+>> +        sram = <&sram>;
+>> +    };
+>
+>Best regards,
+>Krzysztof
+>
