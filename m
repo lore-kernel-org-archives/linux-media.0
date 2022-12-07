@@ -2,53 +2,53 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 964F8C352A1
-	for <linux-media@archiver.kernel.org>; Wed,  7 Dec 2022 10:23:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76AA8C63707
+	for <linux-media@archiver.kernel.org>; Wed,  7 Dec 2022 10:23:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbiLGKXS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Dec 2022 05:23:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49896 "EHLO
+        id S229835AbiLGKXW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Dec 2022 05:23:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiLGKXC (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Dec 2022 05:23:02 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0827C1571A
-        for <linux-media@vger.kernel.org>; Wed,  7 Dec 2022 02:23:00 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id f16so8699862ljc.8
-        for <linux-media@vger.kernel.org>; Wed, 07 Dec 2022 02:22:59 -0800 (PST)
+        with ESMTP id S230434AbiLGKXL (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Dec 2022 05:23:11 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4348186CF
+        for <linux-media@vger.kernel.org>; Wed,  7 Dec 2022 02:23:08 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id b13so17039249lfo.3
+        for <linux-media@vger.kernel.org>; Wed, 07 Dec 2022 02:23:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/AxgtdSHYHP1YbbzJqlPfT18aEYuRk09InbeSd0JHNg=;
-        b=tOruhaPzNOR3bQD/ouWBj+2tp/tUN/H/5pGNgjSe2ABiV3vA61PRSLsVlqeAvI3Oro
-         vHe3xvQC6FSO988F88LJTaSEr7beyBCC0Xr5mjSQNDZchgwGX/zzIK/HzVUFQm9VSFme
-         1SwIrYDkMGRN9sZr262zvK3Rqvw0K0UZRe3qgHO2FEKAoLEeQbmgdeRgDgkeB2V1Z9KU
-         ymxi4wc9pFKvlNmuXwlViGvq4nf0puoGFSzB+NSl2FGkbWnZ1skK7Dng2cwxys79bQBL
-         B2o3FQDAN5bNXMdZu277dHREbYgTFCPcottzQGS2KMyJNymjfRP+abAi8h8GpG1+lETO
-         jymg==
+        bh=4WOjKBqSX/bJNurWawr9UIxOhCwY9AfTE5WBw0ZvK0s=;
+        b=DeQM6xRnfiSdaMP8oukCCK2af0Cj+1aL66olpRw8WNrvnr0qDTHiaN9sD05CbnnvJR
+         DWKW0p8T3Lf38kXzN6/v4hUNzHDYTxaXvj9wJQlyHIB6q+jMiJzSHl2iIPlbE3TB/eld
+         dVJVqPJ6XRMS7IzUwKlr51M7MTPa4n79Z4TQrW0brbGYHb/b4ennlqJDTkZGHsDI4+he
+         3flAQDjvbd+7JJ8Ye1WBAhVN45mV9Pnlk5A0JIEuwvsvkLWZvw6pRv1RRZo34RqnYGDw
+         U+Kj70Ga0SIjTKWelk3/apw7gWxk6XBhJKov3cwZzCzAhS/hhtSjjo1UOBAhzPZzKDJO
+         TCeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/AxgtdSHYHP1YbbzJqlPfT18aEYuRk09InbeSd0JHNg=;
-        b=oqQ+gVxmPhpRjObJDeHokTbLAYcmECn0nyhY/zmPQfpxFITlOTIenNs1Sa2f6tTA61
-         bJUzq5NtE6Q9a5xZafvHoWfxw1++wrYKD3W2/atAtNPxpLUtO/10hfUByJLZg79jEma4
-         348oXiq+u4v8rxXchuYh3ZUsrXD2EqRQMgZ8igFt0RVUFoWWKtNGguluRvDlIlKiBmkA
-         THVG59/SaVckUfgAOUMcc6SIQj40XtvkNJd9jpgzkMG8IJz7IAS/mHn0pGG0Z4WDgdBT
-         Amjtlt0NCnY48apQKaoJnVvZRBCqfn1LW33EefQOQG/1dzp3LzF60EF6YyuYyPsoy8cE
-         C70Q==
-X-Gm-Message-State: ANoB5pksQhO1Go1Y+KERU88Zi0AUW8QBwcu02/J3cs4w3u5gCJ7yq/Gq
-        0EkEmolz3gvvQxflL5KC5aKCfQ==
-X-Google-Smtp-Source: AA0mqf77/+pUWb1Bn4v6zLGZhuX5q4wF2Fzv0XKIu9nI2Iw4J7TFxfO02J2gesAVCe0NSJikkfILHA==
-X-Received: by 2002:a2e:87d5:0:b0:27a:1ce7:bbcb with SMTP id v21-20020a2e87d5000000b0027a1ce7bbcbmr369003ljj.420.1670408578398;
-        Wed, 07 Dec 2022 02:22:58 -0800 (PST)
+        bh=4WOjKBqSX/bJNurWawr9UIxOhCwY9AfTE5WBw0ZvK0s=;
+        b=Ow1UcCyM4FNtfyk20z9xEF6xi3mEVN+cnTsvbkd9iyOlB8Q3IsBiED6N9s8nCDq6bA
+         WEAU2tY85rnKnqG4Q/Nrf+0yFOZBuPAldrIj8iq1+afLQTamlpF0tuVSde/Qv0Y/XNt2
+         LvcwEWnURotzjOEmfF4lDQPPa6kstyJ+KjrLPRxtfqSrKdjVxHe9/iTygM66GZONsi/+
+         rsNeH1hO/Lqzw+4ODE6g3zUUoajgLBmDr7yemZ+dlTheuQf9UTpAcc58LJ/hduxJwgc2
+         ctcZlUU/WRe02C6n5m+ickb9hjGASo+fWOWcWyny7wRBIgZgmR063yPD01wYpYJqYqw9
+         tniw==
+X-Gm-Message-State: ANoB5pkwIcmjHcIteHCFCOimgxdb8u2lF+E8vFGVQzASd53VZ78kAfBc
+        JPZHhVRKpfckXbuJP5EwmomgUA==
+X-Google-Smtp-Source: AA0mqf4J0zL0WrlS4LLGj+qa03tSO2qLooF7xgibIAe/OWddv4WibIXv6pH+N3JWoeV4VeyeojNpyg==
+X-Received: by 2002:a19:ca15:0:b0:4b5:9845:c89f with SMTP id a21-20020a19ca15000000b004b59845c89fmr182758lfg.127.1670408587036;
+        Wed, 07 Dec 2022 02:23:07 -0800 (PST)
 Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id bu31-20020a056512169f00b00499b27a329esm1953183lfb.300.2022.12.07.02.22.56
+        by smtp.gmail.com with ESMTPSA id bu31-20020a056512169f00b00499b27a329esm1953183lfb.300.2022.12.07.02.23.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 02:22:58 -0800 (PST)
+        Wed, 07 Dec 2022 02:23:05 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -73,9 +73,9 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-stm32@st-md-mailman.stormreply.com
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Rob Herring <robh@kernel.org>
-Subject: [PATCH v3 1/9] media: dt-bindings: amlogic,meson-gx-ao-cec: move to cec subfolder
-Date:   Wed,  7 Dec 2022 11:22:45 +0100
-Message-Id: <20221207102253.26663-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 6/9] media: dt-bindings: samsung,s5p-cec: convert to DT schema
+Date:   Wed,  7 Dec 2022 11:22:50 +0100
+Message-Id: <20221207102253.26663-7-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221207102253.26663-1-krzysztof.kozlowski@linaro.org>
 References: <20221207102253.26663-1-krzysztof.kozlowski@linaro.org>
@@ -85,49 +85,145 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Move amlogic,meson-gx-ao-cec.yaml bindings to cec subfolder and drop
-unneeded quotes.
+Convert Samsung S5P HDMI CEC adapter bindings to DT schema.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
-Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- .../bindings/media/{ => cec}/amlogic,meson-gx-ao-cec.yaml     | 4 ++--
- MAINTAINERS                                                   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
- rename Documentation/devicetree/bindings/media/{ => cec}/amlogic,meson-gx-ao-cec.yaml (93%)
+ .../bindings/media/cec/samsung,s5p-cec.yaml   | 66 +++++++++++++++++++
+ .../devicetree/bindings/media/s5p-cec.txt     | 36 ----------
+ MAINTAINERS                                   |  2 +-
+ 3 files changed, 67 insertions(+), 37 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/cec/samsung,s5p-cec.yaml
+ delete mode 100644 Documentation/devicetree/bindings/media/s5p-cec.txt
 
-diff --git a/Documentation/devicetree/bindings/media/amlogic,meson-gx-ao-cec.yaml b/Documentation/devicetree/bindings/media/cec/amlogic,meson-gx-ao-cec.yaml
-similarity index 93%
-rename from Documentation/devicetree/bindings/media/amlogic,meson-gx-ao-cec.yaml
-rename to Documentation/devicetree/bindings/media/cec/amlogic,meson-gx-ao-cec.yaml
-index 8d844f4312d1..f65c9681a9f7 100644
---- a/Documentation/devicetree/bindings/media/amlogic,meson-gx-ao-cec.yaml
-+++ b/Documentation/devicetree/bindings/media/cec/amlogic,meson-gx-ao-cec.yaml
-@@ -2,8 +2,8 @@
- # Copyright 2019 BayLibre, SAS
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/amlogic,meson-gx-ao-cec.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/cec/amlogic,meson-gx-ao-cec.yaml#
+diff --git a/Documentation/devicetree/bindings/media/cec/samsung,s5p-cec.yaml b/Documentation/devicetree/bindings/media/cec/samsung,s5p-cec.yaml
+new file mode 100644
+index 000000000000..016c8a77c1a6
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/cec/samsung,s5p-cec.yaml
+@@ -0,0 +1,66 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/cec/samsung,s5p-cec.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Amlogic Meson AO-CEC Controller
- 
++
++title: Samsung S5PV210 and Exynos HDMI CEC
++
++maintainers:
++  - Krzysztof Kozlowski <krzk@kernel.org>
++  - Marek Szyprowski <m.szyprowski@samsung.com>
++
++allOf:
++  - $ref: cec-common.yaml#
++
++properties:
++  compatible:
++    const: samsung,s5p-cec
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    items:
++      - const: hdmicec
++
++  interrupts:
++    maxItems: 1
++
++  samsung,syscon-phandle:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      Phandle to PMU system controller interface
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - clocks
++  - clock-names
++  - hdmi-phandle
++  - interrupts
++  - samsung,syscon-phandle
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/exynos5420.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    cec@101b0000 {
++        compatible = "samsung,s5p-cec";
++        reg = <0x101B0000 0x200>;
++
++        clocks = <&clock CLK_HDMI_CEC>;
++        clock-names = "hdmicec";
++        interrupts = <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>;
++        hdmi-phandle = <&hdmi>;
++        needs-hpd;
++        pinctrl-names = "default";
++        pinctrl-0 = <&hdmi_cec>;
++        samsung,syscon-phandle = <&pmu_system_controller>;
++    };
+diff --git a/Documentation/devicetree/bindings/media/s5p-cec.txt b/Documentation/devicetree/bindings/media/s5p-cec.txt
+deleted file mode 100644
+index e847291d4aff..000000000000
+--- a/Documentation/devicetree/bindings/media/s5p-cec.txt
++++ /dev/null
+@@ -1,36 +0,0 @@
+-* Samsung HDMI CEC driver
+-
+-The HDMI CEC module is present is Samsung SoCs and its purpose is to
+-handle communication between HDMI connected devices over the CEC bus.
+-
+-Required properties:
+-  - compatible : value should be following
+-	"samsung,s5p-cec"
+-
+-  - reg : Physical base address of the IP registers and length of memory
+-	  mapped region.
+-
+-  - interrupts : HDMI CEC interrupt number to the CPU.
+-  - clocks : from common clock binding: handle to HDMI CEC clock.
+-  - clock-names : from common clock binding: must contain "hdmicec",
+-		  corresponding to entry in the clocks property.
+-  - samsung,syscon-phandle - phandle to the PMU system controller
+-  - hdmi-phandle - phandle to the HDMI controller, see also cec.txt.
+-
+-Optional:
+-  - needs-hpd : if present the CEC support is only available when the HPD
+-		is high. See cec.txt for more details.
+-
+-Example:
+-
+-hdmicec: cec@100b0000 {
+-	compatible = "samsung,s5p-cec";
+-	reg = <0x100B0000 0x200>;
+-	interrupts = <0 114 0>;
+-	clocks = <&clock CLK_HDMI_CEC>;
+-	clock-names = "hdmicec";
+-	samsung,syscon-phandle = <&pmu_system_controller>;
+-	hdmi-phandle = <&hdmi>;
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&hdmi_cec>;
+-};
 diff --git a/MAINTAINERS b/MAINTAINERS
-index e3f3c3e53f77..07cb85cac4c3 100644
+index 45402e03cda5..05acbaecef52 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -13553,7 +13553,7 @@ L:	linux-amlogic@lists.infradead.org
- S:	Supported
- W:	http://linux-meson.com/
- T:	git git://linuxtv.org/media_tree.git
--F:	Documentation/devicetree/bindings/media/amlogic,meson-gx-ao-cec.yaml
-+F:	Documentation/devicetree/bindings/media/cec/amlogic,meson-gx-ao-cec.yaml
- F:	drivers/media/cec/platform/meson/ao-cec-g12a.c
- F:	drivers/media/cec/platform/meson/ao-cec.c
+@@ -2866,7 +2866,7 @@ M:	Marek Szyprowski <m.szyprowski@samsung.com>
+ L:	linux-samsung-soc@vger.kernel.org
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/media/s5p-cec.txt
++F:	Documentation/devicetree/bindings/media/cec/samsung,s5p-cec.yaml
+ F:	drivers/media/cec/platform/s5p/
  
+ ARM/SAMSUNG S5P SERIES JPEG CODEC SUPPORT
 -- 
 2.34.1
 
