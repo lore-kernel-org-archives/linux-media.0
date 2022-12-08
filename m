@@ -2,102 +2,163 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2991C63705
-	for <linux-media@archiver.kernel.org>; Thu,  8 Dec 2022 10:40:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87785C6370C
+	for <linux-media@archiver.kernel.org>; Thu,  8 Dec 2022 10:43:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbiLHKkh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 8 Dec 2022 05:40:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45070 "EHLO
+        id S230266AbiLHKnp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 8 Dec 2022 05:43:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbiLHKkU (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Dec 2022 05:40:20 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3065C0C5;
-        Thu,  8 Dec 2022 02:35:37 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 1603A33791;
-        Thu,  8 Dec 2022 10:35:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1670495736; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=m4BtgX7iuUEohIxHVLiyV8sjI0sG1CemLNb9OtXHuyE=;
-        b=sqBMBGxUS2aksX5AHpvvEhCJZ2pjVIua73CcaodAUua2Rs6GLBLoz7AozXIe3auL5QkAMp
-        hduTOwQ81EpFiTxmD2Dq5y5gjoqLfNiRIkKlYpoIPzjLWJklJBDoD/nZynRH35/r3FJicU
-        F0m1zuTpL3d9L52rPbju9b+WR84nkok=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 8DAD82C153;
-        Thu,  8 Dec 2022 10:35:33 +0000 (UTC)
-Date:   Thu, 8 Dec 2022 11:35:35 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Yong Zhi <yong.zhi@intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        Daniel Scally <dan.scally@ideasonboard.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: Re: [PATCH v2 1/4] media: ipu3-cio2: Don't dereference fwnode handle
-Message-ID: <Y5G99yAmflKJpF32@alley>
-References: <20221121152704.30180-1-andriy.shevchenko@linux.intel.com>
- <Y35wQuIbiCxyaOyp@smile.fi.intel.com>
- <Y5BWuXjipZcMXlan@paasikivi.fi.intel.com>
- <Y5BiiAwukaVrIvpF@smile.fi.intel.com>
+        with ESMTP id S230096AbiLHKnT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Dec 2022 05:43:19 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD9BD4A;
+        Thu,  8 Dec 2022 02:40:27 -0800 (PST)
+Received: from desky.lan (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EE32B9D9;
+        Thu,  8 Dec 2022 11:40:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1670496025;
+        bh=qqlP9y4CxrbgrpwUUQtSV2m4Q9RgrkWSjW1olrXBJFA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=CQkedEqPUuFFPv87Gd/8wD85ZblpiG5JbFMhLP9siK7EJ62KJmi7fMpz1mdGnqrZz
+         2kAWJltrhhHX5saJ8Kssqb/hB7dO1dlU5qS0FObnh+StI6kxHYXQ/6XN3wP4JuBmft
+         vf+lkBlx+mfWiMrqu0Y4nZq5pfeqIyfkI0SlrHE4=
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v5 1/8] i2c: core: let adapters be notified of client attach/detach
+Date:   Thu,  8 Dec 2022 12:39:59 +0200
+Message-Id: <20221208104006.316606-2-tomi.valkeinen@ideasonboard.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
+References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5BiiAwukaVrIvpF@smile.fi.intel.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed 2022-12-07 11:53:12, Andy Shevchenko wrote:
-> On Wed, Dec 07, 2022 at 09:02:49AM +0000, Sakari Ailus wrote:
-> > On Wed, Nov 23, 2022 at 09:10:58PM +0200, Andy Shevchenko wrote:
-> > > Dunno what happened to my previous reply to this. Okay, trying again...
-> > > 
-> > > + Cc: Petr, Sergey
-> > > 
-> > > On Mon, Nov 21, 2022 at 05:27:01PM +0200, Andy Shevchenko wrote:
-> > > > Use acpi_fwnode_handle() instead of dereferencing an fwnode handle directly,
-> > > > which is a better coding practice.
-> > > 
-> > > It appears that this series depends on fd070e8ceb90 ("test_printf: Refactor
-> > > fwnode_pointer() to make it more readable") which is in PRINTK tree.
-> > > 
-> > > Sakari, Mauro, if you are okay to route this via that tree, can we get your
-> > > tags for that? Otherwise we need to postpone this till v6.2-rc1 (but I would
-> > > like to decrease the chances to appear a new user of the to be removed API).
-> > > 
-> > > Note, that Greg Acked v1 of the swnode patches (which are the same in v2).
-> > 
-> > Sorry for the late reply. Feel free to do that if it's not too late, with:
-> > 
-> > Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> 
-> Thank you!
-> I think it's a bit late for printk tree to consume this. If it's the case
-> (Petr?) then I will submit a new version after v6.2-rc1 is out.
+From: Luca Ceresoli <luca@lucaceresoli.net>
 
-Yes, I am sorry but it is too late for the printk tree. I am going to
-send the pull request for 6.2 today or tomorrow. Linus explicitly
-asked to send the pull request early this time because the merge
-window will be overlapping with the holidays.
+An adapter might need to know when a new device is about to be
+added. This will soon bee needed to implement an "I2C address
+translator" (ATR for short), a device that propagates I2C transactions
+with a different slave address (an "alias" address). An ATR driver
+needs to know when a slave is being added to find a suitable alias and
+program the device translation map.
 
-On the positive side. There is a high chance that the changes from
-the printk tree will be in the mainline early enough so that you
-could manage to send this still during the merge window.
+Add an attach/detach callback pair to allow adapter drivers to be
+notified of clients being added and removed.
 
-Best Regards,
-Petr
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+---
+ drivers/i2c/i2c-core-base.c | 18 +++++++++++++++++-
+ include/linux/i2c.h         | 16 ++++++++++++++++
+ 2 files changed, 33 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index b4edf10e8fd0..c8bc71b1db82 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -966,15 +966,23 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
+ 		}
+ 	}
+ 
++	if (adap->attach_ops &&
++	    adap->attach_ops->attach_client &&
++	    adap->attach_ops->attach_client(adap, info, client) != 0)
++		goto out_remove_swnode;
++
+ 	status = device_register(&client->dev);
+ 	if (status)
+-		goto out_remove_swnode;
++		goto out_detach_client;
+ 
+ 	dev_dbg(&adap->dev, "client [%s] registered with bus id %s\n",
+ 		client->name, dev_name(&client->dev));
+ 
+ 	return client;
+ 
++out_detach_client:
++	if (adap->attach_ops && adap->attach_ops->detach_client)
++		adap->attach_ops->detach_client(adap, client);
+ out_remove_swnode:
+ 	device_remove_software_node(&client->dev);
+ out_err_put_of_node:
+@@ -996,9 +1004,17 @@ EXPORT_SYMBOL_GPL(i2c_new_client_device);
+  */
+ void i2c_unregister_device(struct i2c_client *client)
+ {
++	struct i2c_adapter *adap;
++
+ 	if (IS_ERR_OR_NULL(client))
+ 		return;
+ 
++	adap = client->adapter;
++
++	if (adap->attach_ops &&
++	    adap->attach_ops->detach_client)
++		adap->attach_ops->detach_client(adap, client);
++
+ 	if (client->dev.of_node) {
+ 		of_node_clear_flag(client->dev.of_node, OF_POPULATED);
+ 		of_node_put(client->dev.of_node);
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index f7c49bbdb8a1..9a385b6de388 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -584,6 +584,21 @@ struct i2c_lock_operations {
+ 	void (*unlock_bus)(struct i2c_adapter *adapter, unsigned int flags);
+ };
+ 
++/**
++ * struct i2c_attach_operations - callbacks to notify client attach/detach
++ * @attach_client: Notify of new client being attached
++ * @detach_client: Notify of new client being detached
++ *
++ * Both ops are optional.
++ */
++struct i2c_attach_operations {
++	int  (*attach_client)(struct i2c_adapter *adapter,
++			      const struct i2c_board_info *info,
++			      const struct i2c_client *client);
++	void (*detach_client)(struct i2c_adapter *adapter,
++			      const struct i2c_client *client);
++};
++
+ /**
+  * struct i2c_timings - I2C timing information
+  * @bus_freq_hz: the bus frequency in Hz
+@@ -726,6 +741,7 @@ struct i2c_adapter {
+ 
+ 	/* data fields that are valid for all devices	*/
+ 	const struct i2c_lock_operations *lock_ops;
++	const struct i2c_attach_operations *attach_ops;
+ 	struct rt_mutex bus_lock;
+ 	struct rt_mutex mux_lock;
+ 
+-- 
+2.34.1
+
