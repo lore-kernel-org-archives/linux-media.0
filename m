@@ -2,37 +2,37 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 872B0C04FDE
-	for <linux-media@archiver.kernel.org>; Fri,  9 Dec 2022 09:41:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82B59C04FDE
+	for <linux-media@archiver.kernel.org>; Fri,  9 Dec 2022 09:41:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbiLIJlO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 9 Dec 2022 04:41:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53120 "EHLO
+        id S229873AbiLIJlV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 9 Dec 2022 04:41:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiLIJlN (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Dec 2022 04:41:13 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BD83AC32;
-        Fri,  9 Dec 2022 01:41:12 -0800 (PST)
+        with ESMTP id S229769AbiLIJlU (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Dec 2022 04:41:20 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302543AC32;
+        Fri,  9 Dec 2022 01:41:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1670578872; x=1702114872;
+  t=1670578879; x=1702114879;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=bzcj5xVjRSmVIh/wqSOSKpnIOp0n6amFf3rtrbGSp9w=;
-  b=AfxFc2gvceyL6sGgSDdxbYKcw60lbB1JkDkOtJheQVDu8/0fUj5mhU+K
-   Ezzw8RZxFlvwxqzs5c5fZ6GUzAq+tQRXkEcMR2aDriQb3Ww5XNcRQ6Hcu
-   b2wZQln5H+M18Bz12HZoCbI9PR12VCulYBznNysY2beFU7XrT749gZxQb
+  bh=0OGvYIDVoE8/zPYv025eBw3EItK/EzTszK8CIBRtD7s=;
+  b=aPDEq/hiIlJvq94w/RTzR+LmN3m8DguxGKJHMwr6KYCEs7acAHOiXBJb
+   +CcoB3BXUh6K35mqwKmPPa/1qaAS6t26/av+5dpSpMtEjbhy/ob0CXMz5
+   /7SEdHJkUsMEiAsyx0o2v7CZJtXOiO1B5VfCQfF8OAETuCFOrVgH+l6gE
    g=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 09 Dec 2022 01:41:11 -0800
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 09 Dec 2022 01:41:19 -0800
 X-QCInternal: smtphost
 Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 01:41:11 -0800
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 01:41:18 -0800
 Received: from mmitkov.eu.qualcomm.com (10.80.80.8) by
  nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Fri, 9 Dec 2022 01:41:08 -0800
+ 15.2.986.36; Fri, 9 Dec 2022 01:41:15 -0800
 From:   <quic_mmitkov@quicinc.com>
 To:     <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <robert.foss@linaro.org>, <akapatra@quicinc.com>,
@@ -42,9 +42,9 @@ CC:     <agross@kernel.org>, <konrad.dybcio@somainline.org>,
         <cgera@qti.qualcomm.com>, <gchinnab@quicinc.com>,
         <ayasan@qti.qualcomm.com>, <laurent.pinchart@ideasonboard.com>,
         Milen Mitkov <quic_mmitkov@quicinc.com>
-Subject: [PATCH v7 1/4] media: camss: sm8250: Virtual channels for CSID
-Date:   Fri, 9 Dec 2022 11:40:34 +0200
-Message-ID: <20221209094037.1148-2-quic_mmitkov@quicinc.com>
+Subject: [PATCH v7 3/4] media: camss: vfe-480: Multiple outputs support for SM8250
+Date:   Fri, 9 Dec 2022 11:40:36 +0200
+Message-ID: <20221209094037.1148-4-quic_mmitkov@quicinc.com>
 X-Mailer: git-send-email 2.37.3.windows.1
 In-Reply-To: <20221209094037.1148-1-quic_mmitkov@quicinc.com>
 References: <20221209094037.1148-1-quic_mmitkov@quicinc.com>
@@ -60,298 +60,146 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Milen Mitkov <quic_mmitkov@quicinc.com>
 
-CSID hardware on SM8250 can demux up to 4 simultaneous streams
-based on virtual channel (vc) or datatype (dt).
-The CSID subdevice entity now has 4 source ports that can be
-enabled/disabled and thus can control which virtual channels
-are enabled. Datatype demuxing not tested.
-
-In order to keep a valid internal state of the subdevice,
-implicit format propagation from the sink to the source pads
-has been preserved. However, the format on each source pad
-can be different and in that case it must be configured explicitly.
-
-CSID's s_stream is called when any stream is started or stopped.
-It will call configure_streams() that will rewrite IRQ settings to HW.
-When multiple streams are running simultaneously there is an issue
-when writing IRQ settings for one stream while another is still
-running, thus avoid re-writing settings if they were not changed
-in link setup, or by fully powering off the CSID hardware.
+On SM8250 each VFE supports at least 3 RDI channels, or 4
+in case of VFE-Lite, so add appropriate IRQ setup and handling.
 
 Signed-off-by: Milen Mitkov <quic_mmitkov@quicinc.com>
 Reviewed-by: Robert Foss <robert.foss@linaro.org>
 Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Acked-by: Robert Foss <robert.foss@linaro.org>
 ---
- .../platform/qcom/camss/camss-csid-gen2.c     | 54 ++++++++++++-------
- .../media/platform/qcom/camss/camss-csid.c    | 44 ++++++++++-----
- .../media/platform/qcom/camss/camss-csid.h    | 11 +++-
- 3 files changed, 74 insertions(+), 35 deletions(-)
+ .../media/platform/qcom/camss/camss-vfe-480.c | 57 ++++++++++++-------
+ 1 file changed, 38 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csid-gen2.c b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
-index 2031bde13a93..0f8ac29d038d 100644
---- a/drivers/media/platform/qcom/camss/camss-csid-gen2.c
-+++ b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
-@@ -334,13 +334,14 @@ static const struct csid_format csid_formats[] = {
- 	},
- };
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-480.c b/drivers/media/platform/qcom/camss/camss-vfe-480.c
+index f03a84daafbe..f70aad2e8c23 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe-480.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-480.c
+@@ -94,6 +94,8 @@ static inline int bus_irq_mask_0_comp_done(struct vfe_device *vfe, int n)
+ #define RDI_WM(n)			((IS_LITE ? 0 : 23) + (n))
+ #define RDI_COMP_GROUP(n)		((IS_LITE ? 0 : 11) + (n))
  
--static void csid_configure_stream(struct csid_device *csid, u8 enable)
-+static void __csid_configure_stream(struct csid_device *csid, u8 enable, u8 vc)
++#define MAX_VFE_OUTPUT_LINES	4
++
+ static u32 vfe_hw_version(struct vfe_device *vfe)
  {
- 	struct csid_testgen_config *tg = &csid->testgen;
- 	u32 val;
- 	u32 phy_sel = 0;
- 	u8 lane_cnt = csid->phy.lane_cnt;
--	struct v4l2_mbus_framefmt *input_format = &csid->fmt[MSM_CSID_PAD_SRC];
-+	/* Source pads matching RDI channels on hardware. Pad 1 -> RDI0, Pad 2 -> RDI1, etc. */
-+	struct v4l2_mbus_framefmt *input_format = &csid->fmt[MSM_CSID_PAD_FIRST_SRC + vc];
- 	const struct csid_format *format = csid_get_fmt_entry(csid->formats, csid->nformats,
- 							      input_format->code);
+ 	u32 hw_version = readl_relaxed(vfe->base + VFE_HW_VERSION);
+@@ -171,12 +173,26 @@ static inline void vfe_reg_update_clear(struct vfe_device *vfe,
  
-@@ -351,8 +352,7 @@ static void csid_configure_stream(struct csid_device *csid, u8 enable)
- 		phy_sel = csid->phy.csiphy_id;
- 
- 	if (enable) {
--		u8 vc = 0; /* Virtual Channel 0 */
--		u8 dt_id = vc * 4;
-+		u8 dt_id = vc;
- 
- 		if (tg->enabled) {
- 			/* Config Test Generator */
-@@ -395,42 +395,42 @@ static void csid_configure_stream(struct csid_device *csid, u8 enable)
- 		val |= format->data_type << RDI_CFG0_DATA_TYPE;
- 		val |= vc << RDI_CFG0_VIRTUAL_CHANNEL;
- 		val |= dt_id << RDI_CFG0_DT_ID;
--		writel_relaxed(val, csid->base + CSID_RDI_CFG0(0));
-+		writel_relaxed(val, csid->base + CSID_RDI_CFG0(vc));
- 
- 		/* CSID_TIMESTAMP_STB_POST_IRQ */
- 		val = 2 << RDI_CFG1_TIMESTAMP_STB_SEL;
--		writel_relaxed(val, csid->base + CSID_RDI_CFG1(0));
-+		writel_relaxed(val, csid->base + CSID_RDI_CFG1(vc));
- 
- 		val = 1;
--		writel_relaxed(val, csid->base + CSID_RDI_FRM_DROP_PERIOD(0));
-+		writel_relaxed(val, csid->base + CSID_RDI_FRM_DROP_PERIOD(vc));
- 
- 		val = 0;
--		writel_relaxed(val, csid->base + CSID_RDI_FRM_DROP_PATTERN(0));
-+		writel_relaxed(val, csid->base + CSID_RDI_FRM_DROP_PATTERN(vc));
- 
- 		val = 1;
--		writel_relaxed(val, csid->base + CSID_RDI_IRQ_SUBSAMPLE_PERIOD(0));
-+		writel_relaxed(val, csid->base + CSID_RDI_IRQ_SUBSAMPLE_PERIOD(vc));
- 
- 		val = 0;
--		writel_relaxed(val, csid->base + CSID_RDI_IRQ_SUBSAMPLE_PATTERN(0));
-+		writel_relaxed(val, csid->base + CSID_RDI_IRQ_SUBSAMPLE_PATTERN(vc));
- 
- 		val = 1;
--		writel_relaxed(val, csid->base + CSID_RDI_RPP_PIX_DROP_PERIOD(0));
-+		writel_relaxed(val, csid->base + CSID_RDI_RPP_PIX_DROP_PERIOD(vc));
- 
- 		val = 0;
--		writel_relaxed(val, csid->base + CSID_RDI_RPP_PIX_DROP_PATTERN(0));
-+		writel_relaxed(val, csid->base + CSID_RDI_RPP_PIX_DROP_PATTERN(vc));
- 
- 		val = 1;
--		writel_relaxed(val, csid->base + CSID_RDI_RPP_LINE_DROP_PERIOD(0));
-+		writel_relaxed(val, csid->base + CSID_RDI_RPP_LINE_DROP_PERIOD(vc));
- 
- 		val = 0;
--		writel_relaxed(val, csid->base + CSID_RDI_RPP_LINE_DROP_PATTERN(0));
-+		writel_relaxed(val, csid->base + CSID_RDI_RPP_LINE_DROP_PATTERN(vc));
- 
- 		val = 0;
--		writel_relaxed(val, csid->base + CSID_RDI_CTRL(0));
-+		writel_relaxed(val, csid->base + CSID_RDI_CTRL(vc));
- 
--		val = readl_relaxed(csid->base + CSID_RDI_CFG0(0));
-+		val = readl_relaxed(csid->base + CSID_RDI_CFG0(vc));
- 		val |=  1 << RDI_CFG0_ENABLE;
--		writel_relaxed(val, csid->base + CSID_RDI_CFG0(0));
-+		writel_relaxed(val, csid->base + CSID_RDI_CFG0(vc));
- 	}
- 
- 	if (tg->enabled) {
-@@ -456,7 +456,16 @@ static void csid_configure_stream(struct csid_device *csid, u8 enable)
- 		val = HALT_CMD_RESUME_AT_FRAME_BOUNDARY << RDI_CTRL_HALT_CMD;
- 	else
- 		val = HALT_CMD_HALT_AT_FRAME_BOUNDARY << RDI_CTRL_HALT_CMD;
--	writel_relaxed(val, csid->base + CSID_RDI_CTRL(0));
-+	writel_relaxed(val, csid->base + CSID_RDI_CTRL(vc));
+ static void vfe_enable_irq_common(struct vfe_device *vfe)
+ {
+-	/* enable only the IRQs used: rup and comp_done irqs for RDI0 */
++	/* enable reset ack IRQ and top BUS status IRQ */
+ 	writel_relaxed(IRQ_MASK_0_RESET_ACK | IRQ_MASK_0_BUS_TOP_IRQ,
+ 		       vfe->base + VFE_IRQ_MASK(0));
+-	writel_relaxed(BUS_IRQ_MASK_0_RDI_RUP(vfe, 0) |
+-		       BUS_IRQ_MASK_0_COMP_DONE(vfe, RDI_COMP_GROUP(0)),
+-		       vfe->base + VFE_BUS_IRQ_MASK(0));
 +}
 +
-+static void csid_configure_stream(struct csid_device *csid, u8 enable)
++static void vfe_enable_lines_irq(struct vfe_device *vfe)
 +{
-+	u8 i;
-+	/* Loop through all enabled VCs and configure stream for each */
-+	for (i = 0; i < MSM_CSID_MAX_SRC_STREAMS; i++)
-+		if (csid->phy.en_vc & BIT(i))
-+			__csid_configure_stream(csid, enable, i);
- }
- 
- static int csid_configure_testgen_pattern(struct csid_device *csid, s32 val)
-@@ -502,6 +511,7 @@ static irqreturn_t csid_isr(int irq, void *dev)
- 	struct csid_device *csid = dev;
- 	u32 val;
- 	u8 reset_done;
 +	int i;
- 
- 	val = readl_relaxed(csid->base + CSID_TOP_IRQ_STATUS);
- 	writel_relaxed(val, csid->base + CSID_TOP_IRQ_CLEAR);
-@@ -510,8 +520,12 @@ static irqreturn_t csid_isr(int irq, void *dev)
- 	val = readl_relaxed(csid->base + CSID_CSI2_RX_IRQ_STATUS);
- 	writel_relaxed(val, csid->base + CSID_CSI2_RX_IRQ_CLEAR);
- 
--	val = readl_relaxed(csid->base + CSID_CSI2_RDIN_IRQ_STATUS(0));
--	writel_relaxed(val, csid->base + CSID_CSI2_RDIN_IRQ_CLEAR(0));
-+	/* Read and clear IRQ status for each enabled RDI channel */
-+	for (i = 0; i < MSM_CSID_MAX_SRC_STREAMS; i++)
-+		if (csid->phy.en_vc & BIT(i)) {
-+			val = readl_relaxed(csid->base + CSID_CSI2_RDIN_IRQ_STATUS(i));
-+			writel_relaxed(val, csid->base + CSID_CSI2_RDIN_IRQ_CLEAR(i));
-+		}
- 
- 	val = 1 << IRQ_CMD_CLEAR;
- 	writel_relaxed(val, csid->base + CSID_IRQ_CMD);
-diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
-index 88f188e0f750..6360314f04a6 100644
---- a/drivers/media/platform/qcom/camss/camss-csid.c
-+++ b/drivers/media/platform/qcom/camss/camss-csid.c
-@@ -196,6 +196,8 @@ static int csid_set_power(struct v4l2_subdev *sd, int on)
- 			return ret;
- 		}
- 
-+		csid->phy.need_vc_update = true;
++	u32 bus_irq_mask = 0;
 +
- 		enable_irq(csid->irq);
- 
- 		ret = csid->ops->reset(csid);
-@@ -249,7 +251,10 @@ static int csid_set_stream(struct v4l2_subdev *sd, int enable)
- 			return -ENOLINK;
- 	}
- 
--	csid->ops->configure_stream(csid, enable);
-+	if (csid->phy.need_vc_update) {
-+		csid->ops->configure_stream(csid, enable);
-+		csid->phy.need_vc_update = false;
++	for (i = 0; i < MAX_VFE_OUTPUT_LINES; i++) {
++		/* Enable IRQ for newly added lines, but also keep already running lines's IRQ */
++		if (vfe->line[i].output.state == VFE_OUTPUT_RESERVED ||
++		    vfe->line[i].output.state == VFE_OUTPUT_ON) {
++			bus_irq_mask |= BUS_IRQ_MASK_0_RDI_RUP(vfe, i)
++					| BUS_IRQ_MASK_0_COMP_DONE(vfe, RDI_COMP_GROUP(i));
++			}
 +	}
- 
- 	return 0;
++
++	writel_relaxed(bus_irq_mask, vfe->base + VFE_BUS_IRQ_MASK(0));
  }
-@@ -460,6 +465,7 @@ static int csid_set_format(struct v4l2_subdev *sd,
+ 
+ static void vfe_isr_reg_update(struct vfe_device *vfe, enum vfe_line_id line_id);
+@@ -193,6 +209,7 @@ static irqreturn_t vfe_isr(int irq, void *dev)
  {
- 	struct csid_device *csid = v4l2_get_subdevdata(sd);
- 	struct v4l2_mbus_framefmt *format;
+ 	struct vfe_device *vfe = dev;
+ 	u32 status;
 +	int i;
  
- 	format = __csid_get_format(csid, sd_state, fmt->pad, fmt->which);
- 	if (format == NULL)
-@@ -468,14 +474,14 @@ static int csid_set_format(struct v4l2_subdev *sd,
- 	csid_try_format(csid, sd_state, fmt->pad, &fmt->format, fmt->which);
- 	*format = fmt->format;
+ 	status = readl_relaxed(vfe->base + VFE_IRQ_STATUS(0));
+ 	writel_relaxed(status, vfe->base + VFE_IRQ_CLEAR(0));
+@@ -207,11 +224,14 @@ static irqreturn_t vfe_isr(int irq, void *dev)
+ 		writel_relaxed(status, vfe->base + VFE_BUS_IRQ_CLEAR(0));
+ 		writel_relaxed(1, vfe->base + VFE_BUS_IRQ_CLEAR_GLOBAL);
  
--	/* Propagate the format from sink to source */
-+	/* Propagate the format from sink to source pads */
- 	if (fmt->pad == MSM_CSID_PAD_SINK) {
--		format = __csid_get_format(csid, sd_state, MSM_CSID_PAD_SRC,
--					   fmt->which);
-+		for (i = MSM_CSID_PAD_FIRST_SRC; i < MSM_CSID_PADS_NUM; ++i) {
-+			format = __csid_get_format(csid, sd_state, i, fmt->which);
+-		if (status & BUS_IRQ_MASK_0_RDI_RUP(vfe, 0))
+-			vfe_isr_reg_update(vfe, 0);
++		/* Loop through all WMs IRQs */
++		for (i = 0; i < MSM_VFE_IMAGE_MASTERS_NUM; i++) {
++			if (status & BUS_IRQ_MASK_0_RDI_RUP(vfe, i))
++				vfe_isr_reg_update(vfe, i);
  
--		*format = fmt->format;
--		csid_try_format(csid, sd_state, MSM_CSID_PAD_SRC, format,
--				fmt->which);
-+			*format = fmt->format;
-+			csid_try_format(csid, sd_state, i, format, fmt->which);
+-		if (status & BUS_IRQ_MASK_0_COMP_DONE(vfe, RDI_COMP_GROUP(0)))
+-			vfe_isr_wm_done(vfe, 0);
++			if (status & BUS_IRQ_MASK_0_COMP_DONE(vfe, RDI_COMP_GROUP(i)))
++				vfe_isr_wm_done(vfe, i);
 +		}
  	}
  
- 	return 0;
-@@ -738,7 +744,6 @@ static int csid_link_setup(struct media_entity *entity,
- 		struct csid_device *csid;
- 		struct csiphy_device *csiphy;
- 		struct csiphy_lanes_cfg *lane_cfg;
--		struct v4l2_subdev_format format = { 0 };
+ 	return IRQ_HANDLED;
+@@ -234,7 +254,6 @@ static int vfe_get_output(struct vfe_line *line)
+ 	struct vfe_device *vfe = to_vfe(line);
+ 	struct vfe_output *output;
+ 	unsigned long flags;
+-	int wm_idx;
  
- 		sd = media_entity_to_v4l2_subdev(entity);
- 		csid = v4l2_get_subdevdata(sd);
-@@ -761,11 +766,22 @@ static int csid_link_setup(struct media_entity *entity,
- 		lane_cfg = &csiphy->cfg.csi2->lane_cfg;
- 		csid->phy.lane_cnt = lane_cfg->num_data;
- 		csid->phy.lane_assign = csid_get_lane_assign(lane_cfg);
-+	}
-+	/* Decide which virtual channels to enable based on which source pads are enabled */
-+	if (local->flags & MEDIA_PAD_FL_SOURCE) {
-+		struct v4l2_subdev *sd = media_entity_to_v4l2_subdev(entity);
-+		struct csid_device *csid = v4l2_get_subdevdata(sd);
-+		struct device *dev = csid->camss->dev;
-+
-+		if (flags & MEDIA_LNK_FL_ENABLED)
-+			csid->phy.en_vc |= BIT(local->index - 1);
-+		else
-+			csid->phy.en_vc &= ~BIT(local->index - 1);
+ 	spin_lock_irqsave(&vfe->output_lock, flags);
  
--		/* Reset format on source pad to sink pad format */
--		format.pad = MSM_CSID_PAD_SRC;
--		format.which = V4L2_SUBDEV_FORMAT_ACTIVE;
--		csid_set_format(&csid->subdev, NULL, &format);
-+		csid->phy.need_vc_update = true;
-+
-+		dev_dbg(dev, "%s: Enabled CSID virtual channels mask 0x%x\n",
-+			__func__, csid->phy.en_vc);
- 	}
+@@ -246,12 +265,12 @@ static int vfe_get_output(struct vfe_line *line)
+ 
+ 	output->wm_num = 1;
+ 
+-	wm_idx = vfe_reserve_wm(vfe, line->id);
+-	if (wm_idx < 0) {
+-		dev_err(vfe->camss->dev, "Can not reserve wm\n");
+-		goto error_get_wm;
+-	}
+-	output->wm_idx[0] = wm_idx;
++	/* Correspondence between VFE line number and WM number.
++	 * line 0 -> RDI 0, line 1 -> RDI1, line 2 -> RDI2, line 3 -> PIX/RDI3
++	 * Note this 1:1 mapping will not work for PIX streams.
++	 */
++	output->wm_idx[0] = line->id;
++	vfe->wm_output_map[line->id] = line->id;
+ 
+ 	output->drop_update_idx = 0;
+ 
+@@ -259,11 +278,9 @@ static int vfe_get_output(struct vfe_line *line)
  
  	return 0;
-@@ -816,6 +832,7 @@ int msm_csid_register_entity(struct csid_device *csid,
- 	struct v4l2_subdev *sd = &csid->subdev;
- 	struct media_pad *pads = csid->pads;
- 	struct device *dev = csid->camss->dev;
-+	int i;
- 	int ret;
  
- 	v4l2_subdev_init(sd, &csid_v4l2_ops);
-@@ -852,7 +869,8 @@ int msm_csid_register_entity(struct csid_device *csid,
- 	}
+-error_get_wm:
+-	vfe_release_wm(vfe, output->wm_idx[0]);
+-	output->state = VFE_OUTPUT_OFF;
+ error:
+ 	spin_unlock_irqrestore(&vfe->output_lock, flags);
++	output->state = VFE_OUTPUT_OFF;
  
- 	pads[MSM_CSID_PAD_SINK].flags = MEDIA_PAD_FL_SINK;
--	pads[MSM_CSID_PAD_SRC].flags = MEDIA_PAD_FL_SOURCE;
-+	for (i = MSM_CSID_PAD_FIRST_SRC; i < MSM_CSID_PADS_NUM; ++i)
-+		pads[i].flags = MEDIA_PAD_FL_SOURCE;
+ 	return -EINVAL;
+ }
+@@ -360,6 +377,8 @@ static int vfe_enable(struct vfe_line *line)
  
- 	sd->entity.function = MEDIA_ENT_F_PROC_VIDEO_PIXEL_FORMATTER;
- 	sd->entity.ops = &csid_media_ops;
-diff --git a/drivers/media/platform/qcom/camss/camss-csid.h b/drivers/media/platform/qcom/camss/camss-csid.h
-index f06040e44c51..d4b48432a097 100644
---- a/drivers/media/platform/qcom/camss/camss-csid.h
-+++ b/drivers/media/platform/qcom/camss/camss-csid.h
-@@ -19,8 +19,13 @@
- #include <media/v4l2-subdev.h>
+ 	vfe->stream_count++;
  
- #define MSM_CSID_PAD_SINK 0
--#define MSM_CSID_PAD_SRC 1
--#define MSM_CSID_PADS_NUM 2
-+#define MSM_CSID_PAD_FIRST_SRC 1
-+#define MSM_CSID_PADS_NUM 5
++	vfe_enable_lines_irq(vfe);
 +
-+#define MSM_CSID_PAD_SRC (MSM_CSID_PAD_FIRST_SRC)
-+
-+/* CSID hardware can demultiplex up to 4 outputs */
-+#define MSM_CSID_MAX_SRC_STREAMS	4
+ 	mutex_unlock(&vfe->stream_lock);
  
- #define DATA_TYPE_EMBEDDED_DATA_8BIT	0x12
- #define DATA_TYPE_YUV420_8BIT		0x18
-@@ -81,6 +86,8 @@ struct csid_phy_config {
- 	u8 csiphy_id;
- 	u8 lane_cnt;
- 	u32 lane_assign;
-+	u32 en_vc;
-+	u8 need_vc_update;
- };
+ 	ret = vfe_get_output(line);
+@@ -566,7 +585,7 @@ static const struct camss_video_ops vfe_video_ops_480 = {
+ static void vfe_subdev_init(struct device *dev, struct vfe_device *vfe)
+ {
+ 	vfe->video_ops = vfe_video_ops_480;
+-	vfe->line_num = 1;
++	vfe->line_num = MAX_VFE_OUTPUT_LINES;
+ }
  
- struct csid_device;
+ const struct vfe_hw_ops vfe_ops_480 = {
 -- 
 2.37.3
 
