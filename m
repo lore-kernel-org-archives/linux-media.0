@@ -2,37 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95D63C04FDE
-	for <linux-media@archiver.kernel.org>; Fri,  9 Dec 2022 09:41:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B337C4167B
+	for <linux-media@archiver.kernel.org>; Fri,  9 Dec 2022 09:41:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbiLIJlZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 9 Dec 2022 04:41:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53174 "EHLO
+        id S229901AbiLIJl1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 9 Dec 2022 04:41:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiLIJlY (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Dec 2022 04:41:24 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20208490A1;
-        Fri,  9 Dec 2022 01:41:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1670578883; x=1702114883;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=6O7ZCklEurCRrjSg6YYCFSAxTvCt17Jc+oOMT+dd7BY=;
-  b=gczwr4Ycsd1USM2kGxivkmim6OE4SvlQrJ2om7RLllbSrM7izJrjh9hX
-   4cp1vbK+FNfIbLrX9qW1QC6TQk12VKhsNB68DNabmFysx6FNX3kRWplu9
-   gClch03gRdLvwezOF+B64Ply3HYCGrxIZE1xiraZqejoz+sHDB306cPGn
-   8=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 09 Dec 2022 01:41:22 -0800
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 01:41:22 -0800
+        with ESMTP id S229769AbiLIJl0 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Dec 2022 04:41:26 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A56254762;
+        Fri,  9 Dec 2022 01:41:25 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B99dvui013969;
+        Fri, 9 Dec 2022 09:41:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=qcppdkim1;
+ bh=yekuQf9WN+3YB7oiCGodcXmVhT//PoO8mnUgLyWnxww=;
+ b=n21NgkX4Gi9QWTS3FQ1qSH0BBpFZ87yxUdysD6aNym+zZw3MfVt1hW9luXBqbwyBCUxe
+ Mg/fg4RZbTdnDO05p9Amj55R50P+N9INBGKQj7KZhcbrmltP4waqnG7IhsgFRcUQ4eNs
+ E7axEYGcT0S4X6zfhoNiIdTcMlDwDAAD53YoMSJHCiEG4Nf2Csk9wKUFjsPWDKBpCfbY
+ 2YmsjCKi4ZPn28URqimnFVMwwX5MG8gZWOY0mgd81nml2K3IraocoMxjjJx1KXyzCUJO
+ aQFJDjpK/JuOpC/1YPYnPAMGIgUC704K6kUBT/f5v0zRDSbGgPYJsF8v1slotVmmiegv 9w== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mbub5rt6g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Dec 2022 09:41:16 +0000
+Received: from nasanex01a.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B99fFew022702
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 9 Dec 2022 09:41:15 GMT
 Received: from mmitkov.eu.qualcomm.com (10.80.80.8) by
  nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Fri, 9 Dec 2022 01:41:19 -0800
+ 15.2.986.36; Fri, 9 Dec 2022 01:41:11 -0800
 From:   <quic_mmitkov@quicinc.com>
 To:     <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <robert.foss@linaro.org>, <akapatra@quicinc.com>,
@@ -42,9 +47,9 @@ CC:     <agross@kernel.org>, <konrad.dybcio@somainline.org>,
         <cgera@qti.qualcomm.com>, <gchinnab@quicinc.com>,
         <ayasan@qti.qualcomm.com>, <laurent.pinchart@ideasonboard.com>,
         Milen Mitkov <quic_mmitkov@quicinc.com>
-Subject: [PATCH v7 4/4] media: camss: sm8250: Pipeline starting and stopping for multiple virtual channels
-Date:   Fri, 9 Dec 2022 11:40:37 +0200
-Message-ID: <20221209094037.1148-5-quic_mmitkov@quicinc.com>
+Subject: [PATCH v7 2/4] media: camss: vfe: Reserve VFE lines on stream start and link to CSID
+Date:   Fri, 9 Dec 2022 11:40:35 +0200
+Message-ID: <20221209094037.1148-3-quic_mmitkov@quicinc.com>
 X-Mailer: git-send-email 2.37.3.windows.1
 In-Reply-To: <20221209094037.1148-1-quic_mmitkov@quicinc.com>
 References: <20221209094037.1148-1-quic_mmitkov@quicinc.com>
@@ -54,123 +59,134 @@ Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
 X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: TxTcVX4SvyotTj0HEWqRAELwNPN4tgpK
+X-Proofpoint-GUID: TxTcVX4SvyotTj0HEWqRAELwNPN4tgpK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-09_04,2022-12-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 mlxlogscore=999 suspectscore=0 impostorscore=0
+ spamscore=0 bulkscore=0 adultscore=0 phishscore=0 clxscore=1015 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212090066
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 From: Milen Mitkov <quic_mmitkov@quicinc.com>
 
-Use the multistream series function video_device_pipeline_alloc_start
-to allows multiple clients of the same pipeline.
+For multiple virtual channels support, each VFE line can be in either
+ON, RESERVED or OFF states. This allows the starting and stopping
+of a VFE line independently of other active VFE lines (e.g. already-
+running lines stay in ON state, and newly-added lines are RESERVED)
 
-If the VFE entity is used by another instance of the pipeline,
-the pipeline won't be stopped. This allows for stopping and starting
-streams at any point without disrupting the other running streams.
-
-To prepare and start multiple virtual channels each CSID source pad
-corresponding to a virtual channel must be linked to the corresponding
-IFE entity. CSID pad 1 (1st source pad) corresponds to virtual
-channel 0, CSID pad 2 corresponds to virtual channel 1 and so on.
-Each of these must be linked to corresponding IFE RDI port.
-E.g. to enable vc 0 on CSID0:
-
-media-ctl -l '"msm_csid0":1->"msm_vfe0_rdi0":0[1]'
-
-To enable vc1 on CSID0:
-
-media-ctl -l '"msm_csid0":2->"msm_vfe0_rdi1":0[1]'
-
-And so on. Note that on SM8250 each CSID is connected, at the
-hardware level, to only one IFE. Thus, you must link CSID0
-with IFE0, you can't link it with IFE1.
-
-Example: the following media controller setup expects multiplexed
-sensor data on CSIPHY2. Data will be passed on to CSID0, which will
-demux it to 2 streams - for RDI0 and RD1 ports of IFE0:
-
-media-ctl -v -d /dev/media0 -V '"imx577 '22-001a'":0[fmt:SRGGB10/3840x2160 field:none]'
-media-ctl -V '"msm_csiphy2":0[fmt:SRGGB10/3840x2160]'
-media-ctl -V '"msm_csid0":0[fmt:SRGGB10/3840x2160]'
-media-ctl -V '"msm_csid0":1[fmt:SRGGB10/3840x2160]'
-media-ctl -V '"msm_csid0":2[fmt:SRGGB10/3840x2160]'
-media-ctl -V '"msm_vfe0_rdi0":0[fmt:SRGGB10/3840x2160]'
-media-ctl -V '"msm_vfe0_rdi1":0[fmt:SRGGB10/3840x2160]'
-media-ctl -l '"msm_csiphy2":1->"msm_csid0":0[1]'
-media-ctl -l '"msm_csid0":1->"msm_vfe0_rdi0":0[1]'
-media-ctl -l '"msm_csid0":2->"msm_vfe0_rdi1":0[1]'
-
-Note: CSID's entity pad 0 is a sink pad, pads 1..4 are source pads
-To start streaming a v4l2 client must open the corresponding
-/dev/videoN node. For example, with yavta:
-
-yavta -B capture-mplane -c -I -n 5 -f SRGGB10P -s 3840x2160 -F /dev/video0
-yavta -B capture-mplane -c -I -n 5 -f SRGGB10P -s 3840x2160 -F /dev/video1
-
-Note that IFEs (vfe0, vfe1) on SM8250 have 3 RDI ports and a single
-PIX port and IFELites (vfe2, vfe3) have 4 RDI ports and no PIX port.
+Also, link the CSID entity's source ports to corresponding VFE lines.
 
 Signed-off-by: Milen Mitkov <quic_mmitkov@quicinc.com>
 Reviewed-by: Robert Foss <robert.foss@linaro.org>
 Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Acked-by: Robert Foss <robert.foss@linaro.org>
 ---
- .../media/platform/qcom/camss/camss-video.c   | 21 ++++++++++++++++---
- 1 file changed, 18 insertions(+), 3 deletions(-)
+ drivers/media/platform/qcom/camss/camss-vfe-170.c  | 4 ++--
+ drivers/media/platform/qcom/camss/camss-vfe-480.c  | 4 ++--
+ drivers/media/platform/qcom/camss/camss-vfe-gen1.c | 4 ++--
+ drivers/media/platform/qcom/camss/camss-vfe.c      | 1 +
+ drivers/media/platform/qcom/camss/camss.c          | 2 +-
+ 5 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-video.c b/drivers/media/platform/qcom/camss/camss-video.c
-index 41deda232e4a..12ac7d4d755e 100644
---- a/drivers/media/platform/qcom/camss/camss-video.c
-+++ b/drivers/media/platform/qcom/camss/camss-video.c
-@@ -351,6 +351,7 @@ static int video_get_subdev_format(struct camss_video *video,
- 	if (subdev == NULL)
- 		return -EPIPE;
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-170.c b/drivers/media/platform/qcom/camss/camss-vfe-170.c
+index 8e506a805d11..02494c89da91 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe-170.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-170.c
+@@ -409,7 +409,7 @@ static int vfe_get_output(struct vfe_line *line)
+ 	spin_lock_irqsave(&vfe->output_lock, flags);
  
-+	memset(&fmt, 0, sizeof(fmt));
- 	fmt.pad = pad;
- 	fmt.which = V4L2_SUBDEV_FORMAT_ACTIVE;
+ 	output = &line->output;
+-	if (output->state != VFE_OUTPUT_OFF) {
++	if (output->state > VFE_OUTPUT_RESERVED) {
+ 		dev_err(vfe->camss->dev, "Output is running\n");
+ 		goto error;
+ 	}
+@@ -462,7 +462,7 @@ static int vfe_enable_output(struct vfe_line *line)
  
-@@ -493,9 +494,11 @@ static int video_start_streaming(struct vb2_queue *q, unsigned int count)
- 	struct v4l2_subdev *subdev;
+ 	ops->reg_update_clear(vfe, line->id);
+ 
+-	if (output->state != VFE_OUTPUT_OFF) {
++	if (output->state > VFE_OUTPUT_RESERVED) {
+ 		dev_err(vfe->camss->dev, "Output is not in reserved state %d\n",
+ 			output->state);
+ 		spin_unlock_irqrestore(&vfe->output_lock, flags);
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-480.c b/drivers/media/platform/qcom/camss/camss-vfe-480.c
+index 3aa962b5663b..f03a84daafbe 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe-480.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-480.c
+@@ -239,7 +239,7 @@ static int vfe_get_output(struct vfe_line *line)
+ 	spin_lock_irqsave(&vfe->output_lock, flags);
+ 
+ 	output = &line->output;
+-	if (output->state != VFE_OUTPUT_OFF) {
++	if (output->state > VFE_OUTPUT_RESERVED) {
+ 		dev_err(vfe->camss->dev, "Output is running\n");
+ 		goto error;
+ 	}
+@@ -279,7 +279,7 @@ static int vfe_enable_output(struct vfe_line *line)
+ 
+ 	vfe_reg_update_clear(vfe, line->id);
+ 
+-	if (output->state != VFE_OUTPUT_OFF) {
++	if (output->state > VFE_OUTPUT_RESERVED) {
+ 		dev_err(vfe->camss->dev, "Output is not in reserved state %d\n",
+ 			output->state);
+ 		spin_unlock_irqrestore(&vfe->output_lock, flags);
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-gen1.c b/drivers/media/platform/qcom/camss/camss-vfe-gen1.c
+index 4fd265d01883..239d3d4ac666 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe-gen1.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-gen1.c
+@@ -194,7 +194,7 @@ static int vfe_enable_output(struct vfe_line *line)
+ 
+ 	ops->reg_update_clear(vfe, line->id);
+ 
+-	if (output->state != VFE_OUTPUT_RESERVED) {
++	if (output->state > VFE_OUTPUT_RESERVED) {
+ 		dev_err(vfe->camss->dev, "Output is not in reserved state %d\n", output->state);
+ 		spin_unlock_irqrestore(&vfe->output_lock, flags);
+ 		return -EINVAL;
+@@ -289,7 +289,7 @@ static int vfe_get_output(struct vfe_line *line)
+ 	spin_lock_irqsave(&vfe->output_lock, flags);
+ 
+ 	output = &line->output;
+-	if (output->state != VFE_OUTPUT_OFF) {
++	if (output->state > VFE_OUTPUT_RESERVED) {
+ 		dev_err(vfe->camss->dev, "Output is running\n");
+ 		goto error;
+ 	}
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+index a26e4a5d87b6..e0832f3f4f25 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+@@ -740,6 +740,7 @@ static int vfe_set_stream(struct v4l2_subdev *sd, int enable)
  	int ret;
  
--	ret = video_device_pipeline_start(vdev, &video->pipe);
--	if (ret < 0)
-+	ret = video_device_pipeline_alloc_start(vdev);
-+	if (ret < 0) {
-+		dev_err(video->camss->dev, "Failed to start media pipeline: %d\n", ret);
- 		goto flush_buffers;
-+	}
+ 	if (enable) {
++		line->output.state = VFE_OUTPUT_RESERVED;
+ 		ret = vfe->ops->vfe_enable(line);
+ 		if (ret < 0)
+ 			dev_err(vfe->camss->dev,
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index 9cda284f1e71..547099f8ed14 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -1320,7 +1320,7 @@ static int camss_register_entities(struct camss *camss)
+ 					struct v4l2_subdev *vfe = &camss->vfe[k].line[j].subdev;
  
- 	ret = video_check_format(video);
- 	if (ret < 0)
-@@ -537,6 +540,7 @@ static void video_stop_streaming(struct vb2_queue *q)
- 	struct media_entity *entity;
- 	struct media_pad *pad;
- 	struct v4l2_subdev *subdev;
-+	int ret;
- 
- 	entity = &vdev->entity;
- 	while (1) {
-@@ -551,7 +555,18 @@ static void video_stop_streaming(struct vb2_queue *q)
- 		entity = pad->entity;
- 		subdev = media_entity_to_v4l2_subdev(entity);
- 
--		v4l2_subdev_call(subdev, video, s_stream, 0);
-+		ret = v4l2_subdev_call(subdev, video, s_stream, 0);
-+
-+		if (entity->use_count > 1) {
-+			/* Don't stop if other instances of the pipeline are still running */
-+			dev_dbg(video->camss->dev, "Video pipeline still used, don't stop streaming.\n");
-+			return;
-+		}
-+
-+		if (ret) {
-+			dev_err(video->camss->dev, "Video pipeline stop failed: %d\n", ret);
-+			return;
-+		}
- 	}
- 
- 	video_device_pipeline_stop(vdev);
+ 					ret = media_create_pad_link(&csid->entity,
+-								    MSM_CSID_PAD_SRC,
++								    MSM_CSID_PAD_FIRST_SRC + j,
+ 								    &vfe->entity,
+ 								    MSM_VFE_PAD_SINK,
+ 								    0);
 -- 
 2.37.3
 
