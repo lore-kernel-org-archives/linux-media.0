@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFEDBC10F1D
-	for <linux-media@archiver.kernel.org>; Sat, 10 Dec 2022 07:32:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F27CC4708E
+	for <linux-media@archiver.kernel.org>; Sat, 10 Dec 2022 07:32:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiLJHch (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 10 Dec 2022 02:32:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
+        id S229813AbiLJHcm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 10 Dec 2022 02:32:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbiLJHcf (ORCPT
+        with ESMTP id S229750AbiLJHci (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 10 Dec 2022 02:32:35 -0500
+        Sat, 10 Dec 2022 02:32:38 -0500
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0599925E87;
-        Fri,  9 Dec 2022 23:32:29 -0800 (PST)
-X-UUID: 87ab1a13f3444c90a7284eeea5fb23ef-20221210
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F384025E89;
+        Fri,  9 Dec 2022 23:32:32 -0800 (PST)
+X-UUID: fd40ca88b7d7474f8f8532cd1a1bbf06-20221210
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=sAiL5PkBTmgJc7hwfS7p7RsdgPoufa31hrlJwDk2pyc=;
-        b=solOnwkwjOuKOGh0w3+B7MaXJccBeV4p1C1Q88TCZAoA5f6ztVFIXBy4WPzzyK+KzryARfeKICB8s5pCTrOiJcws5KeDSyTLiJEZSE79kzRlL7GW9UothvE/0pOIfuzElIHRjgjU/WNsdRwTh+tAHWkvjbiJTNU+pcA3XVSW4oA=;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=ecg1Ipv3buo16sdVZWJCgG3SlQX6vGOmvjh9A8JgIBs=;
+        b=BYwVbyXB205wzsUBh2eyVzao3L0T6rcrIMidbF8HvDHiswxnvBfKtPh3h3wlk4iqgKllTJEZ2q74N90/KvzEghMl7UAvxe9L+JUIIJcn8N1bKmOTNqhjix2cdQSzBcQd2zBX8eNzAeTirjFwMdwFChQbiXrWqrizy/oGrP6tFPk=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.14,REQID:721d517f-bf02-474c-851e-e11a6bdfc3aa,IP:0,U
+X-CID-O-INFO: VERSION:1.1.14,REQID:ceb39d6e-710a-4fa3-9787-40b81d301bd9,IP:0,U
         RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
         release,TS:0
-X-CID-META: VersionHash:dcaaed0,CLOUDID:cee4dc24-4387-4253-a41d-4f6f2296b154,B
+X-CID-META: VersionHash:dcaaed0,CLOUDID:43a631d2-652d-43fd-a13a-a5dd3c69a43d,B
         ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
         RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 87ab1a13f3444c90a7284eeea5fb23ef-20221210
+X-UUID: fd40ca88b7d7474f8f8532cd1a1bbf06-20221210
 Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2081499845; Sat, 10 Dec 2022 15:32:24 +0800
+        with ESMTP id 1022282198; Sat, 10 Dec 2022 15:32:26 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Sat, 10 Dec 2022 15:32:22 +0800
+ 15.2.792.15; Sat, 10 Dec 2022 15:32:24 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 10 Dec 2022 15:32:21 +0800
+ Transport; Sat, 10 Dec 2022 15:32:23 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Chen-Yu Tsai <wenst@chromium.org>,
@@ -58,9 +58,9 @@ CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH 2/5] media: mediatek: vcodec: using each instance lat_buf count replace core ready list
-Date:   Sat, 10 Dec 2022 15:32:15 +0800
-Message-ID: <20221210073218.17350-3-yunfei.dong@mediatek.com>
+Subject: [PATCH 4/5] media: mediatek: vcodec: add core decode done event
+Date:   Sat, 10 Dec 2022 15:32:17 +0800
+Message-ID: <20221210073218.17350-5-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221210073218.17350-1-yunfei.dong@mediatek.com>
 References: <20221210073218.17350-1-yunfei.dong@mediatek.com>
@@ -72,29 +72,64 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Core Hardware decoder depends on each instance lat_buf count,
-calling queue_work decode again when the lat_buf count of each instance
-isn't zero.
+Need to make sure core decode done before current instance is free.
 
 Fixes: 365e4ba01df4 ("media: mtk-vcodec: Add work queue for core hardware decode")
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
- drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c | 4 +++-
+ drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h | 2 ++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-index af7ddba1923a..2b88065d4d2a 100644
+index 6275536d5063..9bbbd3fa20eb 100644
 --- a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
 +++ b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-@@ -247,7 +247,7 @@ static void vdec_msg_queue_core_work(struct work_struct *work)
+@@ -201,7 +201,7 @@ bool vdec_msg_queue_wait_lat_buf_full(struct vdec_msg_queue *msg_queue)
+ 	spin_unlock(&core_ctx->ready_lock);
+ 
+ 	timeout_jiff = msecs_to_jiffies(1000 * (NUM_BUFFER_COUNT + 2));
+-	ret = wait_event_timeout(msg_queue->lat_ctx.ready_to_use,
++	ret = wait_event_timeout(msg_queue->ctx->msg_queue.core_dec_done,
+ 				 msg_queue->lat_ctx.ready_num == NUM_BUFFER_COUNT,
+ 				 timeout_jiff);
+ 	if (ret) {
+@@ -262,6 +262,7 @@ static void vdec_msg_queue_core_work(struct work_struct *work)
  	mtk_vcodec_dec_disable_hardware(ctx, MTK_VDEC_CORE);
  	vdec_msg_queue_qbuf(&ctx->msg_queue.lat_ctx, lat_buf);
  
--	if (!list_empty(&dev->msg_queue_core_ctx.ready_queue)) {
-+	if (atomic_read(&lat_buf->ctx->msg_queue.core_list_cnt)) {
++	wake_up_all(&ctx->msg_queue.core_dec_done);
+ 	if (atomic_read(&lat_buf->ctx->msg_queue.core_list_cnt)) {
  		mtk_v4l2_debug(3, "re-schedule to decode for core: %d",
  			       dev->msg_queue_core_ctx.ready_num);
- 		queue_work(dev->core_workqueue, &msg_queue->core_work);
+@@ -287,6 +288,7 @@ int vdec_msg_queue_init(struct vdec_msg_queue *msg_queue,
+ 	atomic_set(&msg_queue->lat_list_cnt, 0);
+ 	atomic_set(&msg_queue->core_list_cnt, 0);
+ 	mutex_init(&msg_queue->list_cnt_mutex);
++	init_waitqueue_head(&msg_queue->core_dec_done);
+ 
+ 	msg_queue->wdma_addr.size =
+ 		vde_msg_queue_get_trans_size(ctx->picinfo.buf_w,
+diff --git a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
+index 53ad05396c8c..0944b6436fb6 100644
+--- a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
++++ b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
+@@ -77,6 +77,7 @@ struct vdec_lat_buf {
+  * @lat_list_cnt: used to record each instance lat list count
+  * @core_list_cnt: used to record each instance core list count
+  * @list_cnt_mutex: used to protect list count
++ * @core_dec_done: core work queue decode done event
+  */
+ struct vdec_msg_queue {
+ 	struct vdec_lat_buf lat_buf[NUM_BUFFER_COUNT];
+@@ -93,6 +94,7 @@ struct vdec_msg_queue {
+ 	atomic_t core_list_cnt;
+ 	/* Protects access to lat and core list cnt */
+ 	struct mutex list_cnt_mutex;
++	wait_queue_head_t core_dec_done;
+ };
+ 
+ /**
 -- 
 2.18.0
 
