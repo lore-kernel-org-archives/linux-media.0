@@ -2,45 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D19EC4167B
-	for <linux-media@archiver.kernel.org>; Sat, 10 Dec 2022 07:32:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C28FBC4708D
+	for <linux-media@archiver.kernel.org>; Sat, 10 Dec 2022 07:32:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiLJHce (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 10 Dec 2022 02:32:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
+        id S229785AbiLJHcl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 10 Dec 2022 02:32:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiLJHcd (ORCPT
+        with ESMTP id S229738AbiLJHci (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 10 Dec 2022 02:32:33 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2021263B;
-        Fri,  9 Dec 2022 23:32:27 -0800 (PST)
-X-UUID: ca6ba3865f0e40758cb07f733de742cf-20221210
+        Sat, 10 Dec 2022 02:32:38 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBEC4FD;
+        Fri,  9 Dec 2022 23:32:34 -0800 (PST)
+X-UUID: 4252be373d7844958154b945cf10f50f-20221210
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=RV9FBZj19jlJj76zizzD8sDNUjqQGz9+DRIs5bQdvgo=;
-        b=dpGonxXrGs6UCuur090hQkAr6Q9Ja6LSvMw4j9VSg+YOmtyXc5d+p4dlQyyCHWP+IJeeLfYzpG2+3E+OJXKnpMxZ8BMi9en5AvnBZAfxOm/y9bTyBDbhEJWelks7sUgsyXRujnMvDXbI2M2sL9TO674qpnvvulTTimthE1ClxI4=;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=YXm7IiRh/S8ttqiZj2NLiwg/hF3EgrsbC+UQ+b2o5bc=;
+        b=h/Xe8SaMT9uO/mnW5RafqFRwI4smljAanjqoGVQVlgW2zprK7WuW7gLYSRoIP9Z/GaefkGcY/Ckgh8Vtxiq8HOhqMFObRTp/fY0KKyHuQZpeEFi79jPhF08c3LFFrmc0qDtp3gZ9Z9u/AFoaMLoc21hrKOHC0PTlaORaWiDHpow=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.14,REQID:35998799-579d-492b-ba45-6a4975e798b6,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.14,REQID:35998799-579d-492b-ba45-6a4975e798b6,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:dcaaed0,CLOUDID:f8a531d2-652d-43fd-a13a-a5dd3c69a43d,B
-        ulkID:2212101532234J9HKBJQ,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: ca6ba3865f0e40758cb07f733de742cf-20221210
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+X-CID-O-INFO: VERSION:1.1.14,REQID:f5412007-d4b2-45de-9a02-64314a55ed12,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:dcaaed0,CLOUDID:f6e4dc24-4387-4253-a41d-4f6f2296b154,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 4252be373d7844958154b945cf10f50f-20221210
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 21752955; Sat, 10 Dec 2022 15:32:22 +0800
+        with ESMTP id 1047213448; Sat, 10 Dec 2022 15:32:27 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
  mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Sat, 10 Dec 2022 15:32:20 +0800
+ 15.2.792.15; Sat, 10 Dec 2022 15:32:25 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 10 Dec 2022 15:32:19 +0800
+ Transport; Sat, 10 Dec 2022 15:32:24 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Chen-Yu Tsai <wenst@chromium.org>,
@@ -61,10 +58,12 @@ CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH 0/5] media: mediatek: vcodec: Fix power_VideoCall test fail
-Date:   Sat, 10 Dec 2022 15:32:13 +0800
-Message-ID: <20221210073218.17350-1-yunfei.dong@mediatek.com>
+Subject: [PATCH 5/5] media: mediatek: vcodec: remove unused lat_buf
+Date:   Sat, 10 Dec 2022 15:32:18 +0800
+Message-ID: <20221210073218.17350-6-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221210073218.17350-1-yunfei.dong@mediatek.com>
+References: <20221210073218.17350-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -73,36 +72,53 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Random getting below error message when test power_VideoCall/control.49_vp9:
-pc : __list_del_entry_valid+0xb0/0xfc
-lr : __list_del_entry_valid+0xac/0xfc
-sp : ffffffc020f23ce0
+Remove unused lat_buf from core list, or leading to core list access
+NULL point.
 
-The lat_buf in core list won't be deleted when one instance decode done.
-Will access invalid released lat_buf list when queue work continue to decode.
-Firstly, remove all unused lat_buf to the top of core list, making sure
-these buffers can be decoded in highest priority; lastly, remove all unused
-lat_buf when the instance is freed.
-
-patch 1 add params to record lat and core lat_buf count.
-patch 2 using each instance lat_buf count replace core ready list.
-patch 3 move lat_buf to the top of core list.
-patch 4 add core decode done event.
-patch 5 remove unused lat_buf.
+Fixes: 365e4ba01df4 ("media: mtk-vcodec: Add work queue for core hardware decode")
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
-Yunfei Dong (5):
-  media: mediatek: vcodec: add params to record lat and core lat_buf
-    count
-  media: mediatek: vcodec: using each instance lat_buf count replace
-    core ready list
-  media: mediatek: vcodec: move lat_buf to the top of core list
-  media: mediatek: vcodec: add core decode done event
-  media: mediatek: vcodec: remove unused lat_buf
+ .../platform/mediatek/vcodec/vdec_msg_queue.c | 20 ++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
- .../platform/mediatek/vcodec/vdec_msg_queue.c | 74 +++++++++++++++++--
- .../platform/mediatek/vcodec/vdec_msg_queue.h | 13 ++++
- 2 files changed, 81 insertions(+), 6 deletions(-)
-
+diff --git a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
+index 9bbbd3fa20eb..3f18eca7dbdd 100644
+--- a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
++++ b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
+@@ -185,7 +185,7 @@ bool vdec_msg_queue_wait_lat_buf_full(struct vdec_msg_queue *msg_queue)
+ 	struct vdec_lat_buf *buf, *tmp;
+ 	struct vdec_msg_queue_ctx *core_ctx;
+ 	long timeout_jiff;
+-	int ret;
++	int ret, count = 0;
+ 
+ 	core_ctx = &msg_queue->ctx->dev->msg_queue_core_ctx;
+ 	spin_lock(&core_ctx->ready_lock);
+@@ -209,8 +209,22 @@ bool vdec_msg_queue_wait_lat_buf_full(struct vdec_msg_queue *msg_queue)
+ 			       msg_queue->lat_ctx.ready_num);
+ 		return true;
+ 	}
+-	mtk_v4l2_err("failed with lat buf isn't full: %d",
+-		     msg_queue->lat_ctx.ready_num);
++
++	spin_lock(&core_ctx->ready_lock);
++	list_for_each_entry_safe(buf, tmp, &core_ctx->ready_queue, core_list) {
++		if (buf && buf->ctx == msg_queue->ctx) {
++			count++;
++			spin_lock(&msg_queue->lat_ctx.ready_lock);
++			list_del(&buf->core_list);
++			spin_unlock(&msg_queue->lat_ctx.ready_lock);
++		}
++	}
++	spin_unlock(&core_ctx->ready_lock);
++
++	mtk_v4l2_err("failed with lat buf isn't full: list(%d %d) count:%d",
++		     atomic_read(&msg_queue->lat_list_cnt),
++		     atomic_read(&msg_queue->core_list_cnt), count);
++
+ 	return false;
+ }
+ 
 -- 
 2.18.0
 
