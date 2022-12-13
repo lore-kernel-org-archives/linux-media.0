@@ -2,138 +2,87 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83926C4332F
-	for <linux-media@archiver.kernel.org>; Tue, 13 Dec 2022 14:36:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D189BC4332F
+	for <linux-media@archiver.kernel.org>; Tue, 13 Dec 2022 15:36:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235903AbiLMOgO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 13 Dec 2022 09:36:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55522 "EHLO
+        id S235883AbiLMPgU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 13 Dec 2022 10:36:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235686AbiLMOgI (ORCPT
+        with ESMTP id S236240AbiLMPgL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 13 Dec 2022 09:36:08 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7394420BFD
-        for <linux-media@vger.kernel.org>; Tue, 13 Dec 2022 06:36:05 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id tz12so14308379ejc.9
-        for <linux-media@vger.kernel.org>; Tue, 13 Dec 2022 06:36:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LoBGLUjEyhQfXWIWPOu9C92qTSNRy93bFCVJA1Gy7YQ=;
-        b=A9+F+Qfs1V94/OeuF0azEIfhIkJi+LCS+d3Cs11+Nwe+721/Z9kPMq2qwYD6CWLhp7
-         xjy4l9MDJSxb5AwXA6oXMgl0/A8whNjolgrz2x9VQtDgLXTsT8oDiDcUz6Ca9mq1MNb4
-         P12dtwtMiMZQBdZz0Ow2u4D0VNu0bWqYtRQcw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LoBGLUjEyhQfXWIWPOu9C92qTSNRy93bFCVJA1Gy7YQ=;
-        b=mBizwh5i+kfP1D6nRPSMN3UETg4V1N+yREmh5//b0JhBMmrPlq0tcxJSpbZubSNJ+q
-         w/cwKWXN/547pp6KopwaiHNUNY8jTNoxJPOGz3RoVA04nukeAmeXeHi7aWxQLCJ0PA8e
-         jybCe9ULXTTERxJWWSzC2XzQ2NBjN7rDgT6paNKQAc0oTQpEtFhkdV2g9eWc2YmTZDJT
-         uYyDkQhsIMOIMOQXXq3KlcPgVR8eFFS6ucsO8GUIGyR0uVrzwtMAyNETB32hVVW6Q08o
-         8QZy/emidGQQOJnwPDIs1ZHsI/CVMLPqYVSSe7AanI2K8GTE/pwHHbSagTVl9FOgwmaS
-         /1Nw==
-X-Gm-Message-State: ANoB5pnr6sT/WHxavSGzw+0BftuV48Y9wfCK2E/Z9DUwev7SleoiviVn
-        EPBfxyxblJgwW41zIX+rU9NXCfJLcwsKwxWHjLo=
-X-Google-Smtp-Source: AA0mqf6RdH1mZDqyzcy4filvbzKOY19S4yxBwVauYac4/dNFu+WtMWhDlHsBJg4Rb277UyI22owjEA==
-X-Received: by 2002:a17:906:a410:b0:7c0:e5ca:411c with SMTP id l16-20020a170906a41000b007c0e5ca411cmr15851856ejz.17.1670942163897;
-        Tue, 13 Dec 2022 06:36:03 -0800 (PST)
-Received: from alco.roam.corp.google.com ([100.104.168.209])
-        by smtp.gmail.com with ESMTPSA id kv17-20020a17090778d100b00781dbdb292asm4613960ejc.155.2022.12.13.06.36.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 06:36:03 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Tue, 13 Dec 2022 15:35:31 +0100
-Subject: [PATCH v2 2/2] media: uvcvideo: Do not alloc dev->status
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221212-uvc-race-v2-2-54496cc3b8ab@chromium.org>
-References: <20221212-uvc-race-v2-0-54496cc3b8ab@chromium.org>
-In-Reply-To: <20221212-uvc-race-v2-0-54496cc3b8ab@chromium.org>
-To:     Max Staudt <mstaudt@google.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Yunke Cao <yunkec@chromium.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Tue, 13 Dec 2022 10:36:11 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF4B1FFB0
+        for <linux-media@vger.kernel.org>; Tue, 13 Dec 2022 07:36:07 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p57K9-0003Lh-Hu; Tue, 13 Dec 2022 16:36:05 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p57K8-004HIS-5h; Tue, 13 Dec 2022 16:36:04 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p57K8-004nw3-6H; Tue, 13 Dec 2022 16:36:04 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Ricardo Ribalda <ribalda@chromium.org>
-X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1689; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=jEDQuOW3z7ZGcsKin4RTBJvSelqdlHZ1geiYjpdBLTo=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjmI3O4ptcgGHWc6J12tWDekLKnqXOo3j3z7Rmykia
- fM6ORvGJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY5iNzgAKCRDRN9E+zzrEiFvcEA
- CRu/tDiApvFvJAFb1Ou/ogsX4eEXmPAA4FtTn3zf36wW/CYBD3IefrmVoFpPkS1vS50bXAbNZO4gEG
- YBw2ZUKrDBFcwgKx01rQD9CDjIZBWR+yyP7SnKw8TMMcIsvK6nkgUdwotVDWvJC/gBWr3qCdrwo38l
- LtHT+kfE1PBU027stWfi3t0SzBk620H27apN5mmbcrXN5SKx/g61r/9dwZGRWGJqAAFtJi5ETOmwfD
- xKePSptFpzgeVQxpGskAZYlD+KyoYzzlcOQMQ+CiCVRckf1GD+iZdpo2wuWSE3E0W/nTsq3Sl0Sj5t
- c7Ny3sOMd1vkTfGhxl7ftL5y85B14Ilp17tqbpD5s9SqCRcNCyu6Al5Zn2+AKpuXtiZFu5KkLjBCVJ
- e95B6qrk35kQyrEb73wS9iChL/KNYgrdoVyITF+j5OHxruVFeYa2Wi4H2evV245EDo07y/qL7O3++1
- OpC3WHZ0mYJk/rFS8eWfUTMqiBzfha7iTCx3u7r5AZXr/DZ8ngyDkBehsMNY4w51rZ7e05kVp87cKJ
- EJvUimG4v+ZCaFVF2RrNCsDZtoFbDPD8Q+OnK4TYyDtmipeGdtF0hmUXi6a5xDLxvXaCRDG0/fN/8Q
- mwxYI/uW9XzF1H5HGCc4EhYdkQf6FgPzX6vtW5Jc7cUCY/QH98gAAektEAFA==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH 3/4] media: rc/ir-rx51: Drop empty platform remove function
+Date:   Tue, 13 Dec 2022 16:35:52 +0100
+Message-Id: <20221213153553.648871-4-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221213153553.648871-1-u.kleine-koenig@pengutronix.de>
+References: <20221213153553.648871-1-u.kleine-koenig@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1031; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=F2vNtI4sBjlo563V18pvpMYOKOb1t6/d1ijuu0LRauk=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjmJvPPqdal0kjjeWTkC/C0JQkwFzWNawA48gkhQmT 1TNaMFqJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY5ibzwAKCRDB/BR4rcrsCQRPB/ 4hCWr5UeUgoWRIh8K8VpLL2G+YqQo0Izlukkli9HjwW5XV8przqdRNVWgIIAhySjMLO8fQJtKYfm6u 9wlCd/+QO/xmZdkKQ4dVKbWTg7w/hfKp0jhS0bcBZVsxNFaeuMZOy5RQk5bZTcMpwU9TKOO4LFhtRg qT9ybl50yRgFdjJvXGGpy9l+MbDzpZ6F9FsV9shA6cNHlqlQIbjo47t9jmxaBotOWfOQkJLVf20Zu/ isyOK9AduMpxS1SQ7jIj2Cm6ibbCINdwLKRa5jDSej9DJET8E7VVmxSAxCx6wvhiaJZDBp4Hb9YP59 VfWMwrnp5TEUiGwIYDz3pVqthHJPi1
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-UVC_MAX_STATUS_SIZE is 16, simplify the code by inlining dev->status.
+A remove callback just returning 0 is equivalent to no remove callback
+at all. So drop the useless function.
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/usb/uvc/uvc_status.c | 9 +--------
- drivers/media/usb/uvc/uvcvideo.h   | 2 +-
- 2 files changed, 2 insertions(+), 9 deletions(-)
+ drivers/media/rc/ir-rx51.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
-index 09a5802dc974..52999b3b7c48 100644
---- a/drivers/media/usb/uvc/uvc_status.c
-+++ b/drivers/media/usb/uvc/uvc_status.c
-@@ -259,15 +259,9 @@ int uvc_status_init(struct uvc_device *dev)
- 
- 	uvc_input_init(dev);
- 
--	dev->status = kzalloc(UVC_MAX_STATUS_SIZE, GFP_KERNEL);
--	if (dev->status == NULL)
--		return -ENOMEM;
--
- 	dev->int_urb = usb_alloc_urb(0, GFP_KERNEL);
--	if (dev->int_urb == NULL) {
--		kfree(dev->status);
-+	if (!dev->int_urb)
- 		return -ENOMEM;
--	}
- 
- 	pipe = usb_rcvintpipe(dev->udev, ep->desc.bEndpointAddress);
- 
-@@ -296,7 +290,6 @@ void uvc_status_unregister(struct uvc_device *dev)
- void uvc_status_cleanup(struct uvc_device *dev)
- {
- 	usb_free_urb(dev->int_urb);
--	kfree(dev->status);
+diff --git a/drivers/media/rc/ir-rx51.c b/drivers/media/rc/ir-rx51.c
+index a3b145183260..da461f2223b6 100644
+--- a/drivers/media/rc/ir-rx51.c
++++ b/drivers/media/rc/ir-rx51.c
+@@ -266,11 +266,6 @@ static int ir_rx51_probe(struct platform_device *dev)
+ 	return devm_rc_register_device(&dev->dev, ir_rx51.rcdev);
  }
  
- int uvc_status_start(struct uvc_device *dev, gfp_t flags)
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index 6a9b72d6789e..ccc7e3b60bf1 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -559,7 +559,7 @@ struct uvc_device {
- 	/* Status Interrupt Endpoint */
- 	struct usb_host_endpoint *int_ep;
- 	struct urb *int_urb;
--	u8 *status;
-+	u8 status[UVC_MAX_STATUS_SIZE];
- 	bool flush_status;
- 	struct input_dev *input;
- 	char input_phys[64];
-
+-static int ir_rx51_remove(struct platform_device *dev)
+-{
+-	return 0;
+-}
+-
+ static const struct of_device_id ir_rx51_match[] = {
+ 	{
+ 		.compatible = "nokia,n900-ir",
+@@ -281,7 +276,6 @@ MODULE_DEVICE_TABLE(of, ir_rx51_match);
+ 
+ static struct platform_driver ir_rx51_platform_driver = {
+ 	.probe		= ir_rx51_probe,
+-	.remove		= ir_rx51_remove,
+ 	.suspend	= ir_rx51_suspend,
+ 	.resume		= ir_rx51_resume,
+ 	.driver		= {
 -- 
-2.39.0.rc1.256.g54fd8350bd-goog-b4-0.11.0-dev-696ae
+2.38.1
+
