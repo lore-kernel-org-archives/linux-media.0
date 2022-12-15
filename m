@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09879C3DA6E
-	for <linux-media@archiver.kernel.org>; Thu, 15 Dec 2022 12:18:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 216FDC4332F
+	for <linux-media@archiver.kernel.org>; Thu, 15 Dec 2022 12:18:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbiLOMSX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Dec 2022 07:18:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40742 "EHLO
+        id S230023AbiLOMSY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Dec 2022 07:18:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbiLOMRf (ORCPT
+        with ESMTP id S229931AbiLOMRt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Dec 2022 07:17:35 -0500
+        Thu, 15 Dec 2022 07:17:49 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACA52ED5C;
-        Thu, 15 Dec 2022 04:17:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D2D2EF3A;
+        Thu, 15 Dec 2022 04:17:32 -0800 (PST)
 Received: from desky.lan (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id F2EC618A2;
-        Thu, 15 Dec 2022 13:17:19 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B05B418DE;
+        Thu, 15 Dec 2022 13:17:21 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1671106640;
-        bh=fzxb+bO63Dt2iOrVRGhxqtzB/aQqDw1PMvkN2JkYKHc=;
+        s=mail; t=1671106642;
+        bh=3V8EbVC7X9NjJaLY8PxVxE0m97JUXy3uW+gXULa+3+I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Yj4npORTwjYj2w7N0I8FQomdWFDgDXty9ykZC3YvZ0VvClfiyu9dCODIMC/2RDY+E
-         Cm570JgPIyFX6qbwY1C/hCRqIgrnVwy3vbb03Gn5dq9RpokaTM1JKF6E3nSkPW+IP1
-         +oJ8Ecg3Stx5xGPzXe6WEI0+5Ip6uE+0KDzADaW0=
+        b=r0ika+owrdWAR41DtNyivgKHxcY8J1coQcj1GFeqx3rnltqLZATkLft2tF73dtJik
+         /eN8G5CZmsVvxqjjoIboLm4l+gXqCbLtG+bcRaRkETHdpNy6NR57zz7tesbRaLozLu
+         K+Aou/toxlycvIf3NzXbchfxSusP6J9T4uyZt6lc=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         sakari.ailus@linux.intel.com,
@@ -34,10 +34,11 @@ To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         satish.nagireddy@getcruise.com, Tomasz Figa <tfiga@chromium.org>
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v16 17/20] media: v4l2-subdev: Add v4l2_subdev_state_xlate_streams() helper
-Date:   Thu, 15 Dec 2022 14:16:31 +0200
-Message-Id: <20221215121634.287100-18-tomi.valkeinen@ideasonboard.com>
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: [PATCH v16 19/20] media: v4l2-subdev: Add v4l2_subdev_s_stream_helper() function
+Date:   Thu, 15 Dec 2022 14:16:33 +0200
+Message-Id: <20221215121634.287100-20-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221215121634.287100-1-tomi.valkeinen@ideasonboard.com>
 References: <20221215121634.287100-1-tomi.valkeinen@ideasonboard.com>
@@ -49,87 +50,98 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Add a helper function to translate streams between two pads of a subdev,
-using the subdev's internal routing table.
+The v4l2_subdev_s_stream_helper() helper can be used by subdevs that
+implement the stream-aware .enable_streams() and .disable_streams()
+operations to implement .s_stream(). This is limited to subdevs that
+have a single source pad.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/v4l2-core/v4l2-subdev.c | 26 ++++++++++++++++++++++++++
- include/media/v4l2-subdev.h           | 23 +++++++++++++++++++++++
- 2 files changed, 49 insertions(+)
+ drivers/media/v4l2-core/v4l2-subdev.c | 40 +++++++++++++++++++++++++++
+ include/media/v4l2-subdev.h           | 17 ++++++++++++
+ 2 files changed, 57 insertions(+)
 
 diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index f775b7980de1..d9ece0fd1b75 100644
+index 9c5e1ac65f4f..dd3c2d86f96e 100644
 --- a/drivers/media/v4l2-core/v4l2-subdev.c
 +++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -1598,6 +1598,32 @@ v4l2_subdev_state_get_opposite_stream_format(struct v4l2_subdev_state *state,
+@@ -1950,6 +1950,46 @@ int v4l2_subdev_disable_streams(struct v4l2_subdev *sd, u32 pad,
  }
- EXPORT_SYMBOL_GPL(v4l2_subdev_state_get_opposite_stream_format);
+ EXPORT_SYMBOL_GPL(v4l2_subdev_disable_streams);
  
-+u64 v4l2_subdev_state_xlate_streams(const struct v4l2_subdev_state *state,
-+				    u32 pad0, u32 pad1, u64 *streams)
++int v4l2_subdev_s_stream_helper(struct v4l2_subdev *sd, int enable)
 +{
-+	const struct v4l2_subdev_krouting *routing = &state->routing;
++	struct v4l2_subdev_state *state;
 +	struct v4l2_subdev_route *route;
-+	u64 streams0 = 0;
-+	u64 streams1 = 0;
++	struct media_pad *pad;
++	u64 source_mask = 0;
++	int pad_index = -1;
 +
-+	for_each_active_route(routing, route) {
-+		if (route->sink_pad == pad0 && route->source_pad == pad1 &&
-+		    (*streams & BIT_ULL(route->sink_stream))) {
-+			streams0 |= BIT_ULL(route->sink_stream);
-+			streams1 |= BIT_ULL(route->source_stream);
-+		}
-+		if (route->source_pad == pad0 && route->sink_pad == pad1 &&
-+		    (*streams & BIT_ULL(route->source_stream))) {
-+			streams0 |= BIT_ULL(route->source_stream);
-+			streams1 |= BIT_ULL(route->sink_stream);
++	/*
++	 * Find the source pad. This helper is meant for subdevs that have a
++	 * single source pad, so failures shouldn't happen, but catch them
++	 * loudly nonetheless as they indicate a driver bug.
++	 */
++	media_entity_for_each_pad(&sd->entity, pad) {
++		if (pad->flags & MEDIA_PAD_FL_SOURCE) {
++			pad_index = pad->index;
++			break;
 +		}
 +	}
 +
-+	*streams = streams0;
-+	return streams1;
-+}
-+EXPORT_SYMBOL_GPL(v4l2_subdev_state_xlate_streams);
++	if (WARN_ON(pad_index == -1))
++		return -EINVAL;
 +
- int v4l2_subdev_routing_validate(struct v4l2_subdev *sd,
- 				 const struct v4l2_subdev_krouting *routing,
- 				 enum v4l2_subdev_routing_restriction disallow)
++	/*
++	 * As there's a single source pad, just collect all the source streams.
++	 */
++	state = v4l2_subdev_lock_and_get_active_state(sd);
++
++	for_each_active_route(&state->routing, route)
++		source_mask |= BIT_ULL(route->source_stream);
++
++	v4l2_subdev_unlock_state(state);
++
++	if (enable)
++		return v4l2_subdev_enable_streams(sd, pad_index, source_mask);
++	else
++		return v4l2_subdev_disable_streams(sd, pad_index, source_mask);
++}
++EXPORT_SYMBOL_GPL(v4l2_subdev_s_stream_helper);
++
+ #endif /* CONFIG_VIDEO_V4L2_SUBDEV_API */
+ 
+ #endif /* CONFIG_MEDIA_CONTROLLER */
 diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index 6661887536bf..8c002d65e08e 100644
+index bff824367e0b..b21af00b1884 100644
 --- a/include/media/v4l2-subdev.h
 +++ b/include/media/v4l2-subdev.h
-@@ -1579,6 +1579,29 @@ struct v4l2_mbus_framefmt *
- v4l2_subdev_state_get_opposite_stream_format(struct v4l2_subdev_state *state,
- 					     u32 pad, u32 stream);
+@@ -1726,6 +1726,23 @@ int v4l2_subdev_enable_streams(struct v4l2_subdev *sd, u32 pad,
+ int v4l2_subdev_disable_streams(struct v4l2_subdev *sd, u32 pad,
+ 				u64 streams_mask);
  
 +/**
-+ * v4l2_subdev_state_xlate_streams() - Translate streams from one pad to another
++ * v4l2_subdev_s_stream_helper() - Helper to implement the subdev s_stream
++ *	operation using enable_streams and disable_streams
++ * @sd: The subdevice
++ * @enable: Enable or disable streaming
 + *
-+ * @state: Subdevice state
-+ * @pad0: The first pad
-+ * @pad1: The second pad
-+ * @streams: Streams bitmask on the first pad
++ * Subdevice drivers that implement the streams-aware
++ * &v4l2_subdev_pad_ops.enable_streams and &v4l2_subdev_pad_ops.disable_streams
++ * operations can use this helper to implement the legacy
++ * &v4l2_subdev_video_ops.s_stream operation.
 + *
-+ * Streams on sink pads of a subdev are routed to source pads as expressed in
-+ * the subdev state routing table. Stream numbers don't necessarily match on
-+ * the sink and source side of a route. This function translates stream numbers
-+ * on @pad0, expressed as a bitmask in @streams, to the corresponding streams
-+ * on @pad1 using the routing table from the @state. It returns the stream mask
-+ * on @pad1, and updates @streams with the streams that have been found in the
-+ * routing table.
++ * This helper can only be used by subdevs that have a single source pad.
 + *
-+ * @pad0 and @pad1 must be a sink and a source, in any order.
-+ *
-+ * Return: The bitmask of streams of @pad1 that are routed to @streams on @pad0.
++ * Return: 0 on success, or a negative error code otherwise.
 + */
-+u64 v4l2_subdev_state_xlate_streams(const struct v4l2_subdev_state *state,
-+				    u32 pad0, u32 pad1, u64 *streams);
++int v4l2_subdev_s_stream_helper(struct v4l2_subdev *sd, int enable);
 +
- /**
-  * enum v4l2_subdev_routing_restriction - Subdevice internal routing restrictions
-  *
+ #endif /* CONFIG_VIDEO_V4L2_SUBDEV_API */
+ 
+ #endif /* CONFIG_MEDIA_CONTROLLER */
 -- 
 2.34.1
 
