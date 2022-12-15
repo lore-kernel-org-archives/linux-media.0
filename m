@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EA79C3DA6E
-	for <linux-media@archiver.kernel.org>; Thu, 15 Dec 2022 12:17:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 539C2C4167B
+	for <linux-media@archiver.kernel.org>; Thu, 15 Dec 2022 12:17:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbiLOMRL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Dec 2022 07:17:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
+        id S229462AbiLOMRN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Dec 2022 07:17:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbiLOMRJ (ORCPT
+        with ESMTP id S230160AbiLOMRL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Dec 2022 07:17:09 -0500
+        Thu, 15 Dec 2022 07:17:11 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1253023178;
-        Thu, 15 Dec 2022 04:17:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8574523178;
+        Thu, 15 Dec 2022 04:17:10 -0800 (PST)
 Received: from desky.lan (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9ADE3327;
-        Thu, 15 Dec 2022 13:17:05 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4D0C112EF;
+        Thu, 15 Dec 2022 13:17:07 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1671106626;
-        bh=vHL6GZOxYhpH36KMFMPNVqQC7bma+TwthR0lKzTlePI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=f3diQ6mmvwrmIgKtwo574H9q3BED+ARNjlSNhYMHGV/7EwMTzRfqXNyYunGjksrxk
-         Lk6eCMxa0I4EJclzqQfVehmcbHX33fUwJm8K4h7mWFI/oENPBCxqjVt3HES+d6gYln
-         3O16jKi2CEYpihoicgZF2y/9kW8FOb4mnnb1kZZA=
+        s=mail; t=1671106627;
+        bh=y/7z+exO+3f1Axqi62tJwCC4d2zlinCaszJ+iZVM2HQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=sxQm40+dUXFZC+9IauWEXMecv+PvTb9oTjOAf/PzrQEVs5TFUnvhsVUaDIbSvpj/p
+         dyHYr+say1Du6XHw3uoBtj3UCBOR/nv06HXA+ncZ6mBezaGDgtW9qGzwrp1W85b+fE
+         rGSr9eo7InysXwRLCDVODgeojwGf8+Dv1f0Aa+KE=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         sakari.ailus@linux.intel.com,
@@ -35,112 +35,49 @@ To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         satish.nagireddy@getcruise.com, Tomasz Figa <tfiga@chromium.org>
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v16 00/20] v4l: routing and streams support
-Date:   Thu, 15 Dec 2022 14:16:14 +0200
-Message-Id: <20221215121634.287100-1-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v16 02/20] media: add V4L2_SUBDEV_FL_STREAMS
+Date:   Thu, 15 Dec 2022 14:16:16 +0200
+Message-Id: <20221215121634.287100-3-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221215121634.287100-1-tomi.valkeinen@ideasonboard.com>
+References: <20221215121634.287100-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Add subdev flag V4L2_SUBDEV_FL_STREAMS. It is used to indicate that the
+subdev supports the new API with multiplexed streams (routing, stream
+configs).
 
-This is v16 of the streams series. The v15 can be found from:
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+---
+ include/media/v4l2-subdev.h | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-https://lore.kernel.org/all/20221003121852.616745-1-tomi.valkeinen@ideasonboard.com/
-
-My work branch with additional drivers can be found from:
-
-git://git.kernel.org/pub/scm/linux/kernel/git/tomba/linux.git streams/work-v16
-
-And there's also the v4l-utils series v2 to add support to v4l2-ctl and
-media-ctl:
-
-https://lore.kernel.org/all/20220714132116.132498-1-tomi.valkeinen@ideasonboard.com/
-
-(Note: the v4l-utils above has not been changed to accommodate the drop
-of V4L2_SUBDEV_ROUTE_FL_SOURCE yet)
-
-Changes in v16:
-- v4l2_subdev_link_validate_get_format: Drop use of for_each_set_bit(),
-  as the sink_streams_mask is not unsigned long.
-- v4l2_subdev_set_routing: Cast parameters given to check_mul_overflow()
-  to size_t to avoid compiler warnings.
-- Drop V4L2_SUBDEV_ROUTE_FL_SOURCE
-- Require a code change and kernel compilation to enable Streams API.
-
-A bit more details for the last two changes:
-
-V4L2_SUBDEV_ROUTE_FL_SOURCE felt somewhat hacky, and the whole question
-of how sensors' streams in various cases should be handled was unclear.
-Thus it was decided (me, Laurent, Sakari) that we should only support
-the current single-stream sensors and work on multi-streams sensors on
-top of this series. This should not hinder any use case that was
-supportable in the v15, as most likely the second stream from a sensor
-would be an embedded data stream, and embedded data is not (really)
-supported upstream.
-
-The routing and stream support has been worked on for years by multiple
-persons, and has proven to be very complicated feature, or a set of
-features. While this series has been used on multiple different
-platforms for various use cases, we would still like to be on the safe
-side, especially regarding the userspace APIs. Thus, we decided that it
-would be good to get this series merged while still making it clear that
-the uAPI is not quite stable yet, and to achieve that, there's a static
-variable in v4l2-subdev.c that the user needs to set to enable the API.
-
- Tomi
-
-Jacopo Mondi (2):
-  media: Documentation: Add GS_ROUTING documentation
-  media: subdev: Add for_each_active_route() macro
-
-Laurent Pinchart (5):
-  media: subdev: Add [GS]_ROUTING subdev ioctls and operations
-  media: subdev: add v4l2_subdev_routing_validate() helper
-  media: v4l2-subdev: Add v4l2_subdev_state_xlate_streams() helper
-  media: v4l2-subdev: Add subdev .(enable|disable)_streams() operations
-  media: v4l2-subdev: Add v4l2_subdev_s_stream_helper() function
-
-Sakari Ailus (1):
-  media: Add stream to frame descriptor
-
-Tomi Valkeinen (12):
-  media: v4l2-subdev: Sort includes
-  media: add V4L2_SUBDEV_FL_STREAMS
-  media: add V4L2_SUBDEV_CAP_STREAMS
-  media: subdev: Require code change to enable [GS]_ROUTING
-  media: subdev: add v4l2_subdev_has_pad_interdep()
-  media: subdev: add v4l2_subdev_set_routing helper()
-  media: Documentation: add multiplexed streams documentation
-  media: subdev: add stream based configuration
-  media: subdev: use streams in v4l2_subdev_link_validate()
-  media: subdev: add "opposite" stream helper funcs
-  media: subdev: add streams to v4l2_subdev_get_fmt() helper function
-  media: subdev: add v4l2_subdev_set_routing_with_fmt() helper
-
- .clang-format                                 |    1 +
- .../driver-api/media/v4l2-subdev.rst          |    8 +
- .../userspace-api/media/v4l/dev-subdev.rst    |  140 +++
- .../userspace-api/media/v4l/user-func.rst     |    1 +
- .../v4l/vidioc-subdev-enum-frame-interval.rst |    5 +-
- .../v4l/vidioc-subdev-enum-frame-size.rst     |    5 +-
- .../v4l/vidioc-subdev-enum-mbus-code.rst      |    5 +-
- .../media/v4l/vidioc-subdev-g-crop.rst        |    5 +-
- .../media/v4l/vidioc-subdev-g-fmt.rst         |    5 +-
- .../v4l/vidioc-subdev-g-frame-interval.rst    |    5 +-
- .../media/v4l/vidioc-subdev-g-routing.rst     |  147 +++
- .../media/v4l/vidioc-subdev-g-selection.rst   |    5 +-
- drivers/media/v4l2-core/v4l2-ioctl.c          |   25 +-
- drivers/media/v4l2-core/v4l2-subdev.c         | 1000 ++++++++++++++++-
- include/media/v4l2-subdev.h                   |  377 +++++++
- include/uapi/linux/v4l2-subdev.h              |   74 +-
- 16 files changed, 1758 insertions(+), 50 deletions(-)
- create mode 100644 Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
-
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index 2f80c9c818ed..4be0a590c7c7 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -879,6 +879,17 @@ struct v4l2_subdev_internal_ops {
+  * should set this flag.
+  */
+ #define V4L2_SUBDEV_FL_HAS_EVENTS		(1U << 3)
++/*
++ * Set this flag if this subdev supports multiplexed streams. This means
++ * that the driver supports routing and handles the stream parameter in its
++ * v4l2_subdev_pad_ops handlers. More specifically, this means:
++ *
++ * - Centrally managed subdev active state is enabled
++ * - Legacy pad config is _not_ supported (state->pads is NULL)
++ * - Routing ioctls are available
++ * - Multiple streams per pad are supported
++ */
++#define V4L2_SUBDEV_FL_STREAMS			(1U << 4)
+ 
+ struct regulator_bulk_data;
+ 
 -- 
 2.34.1
 
