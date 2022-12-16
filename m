@@ -2,91 +2,192 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 694EAC001B2
-	for <linux-media@archiver.kernel.org>; Fri, 16 Dec 2022 10:36:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58F4DC4332F
+	for <linux-media@archiver.kernel.org>; Fri, 16 Dec 2022 10:38:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbiLPKgE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 16 Dec 2022 05:36:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60786 "EHLO
+        id S230078AbiLPKiB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 16 Dec 2022 05:38:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbiLPKf6 (ORCPT
+        with ESMTP id S229783AbiLPKiA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 16 Dec 2022 05:35:58 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61BCD2E9C8
-        for <linux-media@vger.kernel.org>; Fri, 16 Dec 2022 02:35:57 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1p684D-0005Wi-6Y; Fri, 16 Dec 2022 11:35:49 +0100
-Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1p684B-004tvU-DQ; Fri, 16 Dec 2022 11:35:48 +0100
-Received: from mfe by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1p684A-00FGHC-WE; Fri, 16 Dec 2022 11:35:47 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
-        hverkuil-cisco@xs4all.nl, mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 2/3] media: i2c: tc358746: fix ignoring read error in g_register callback
-Date:   Fri, 16 Dec 2022 11:35:44 +0100
-Message-Id: <20221216103545.3620670-3-m.felsch@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221216103545.3620670-1-m.felsch@pengutronix.de>
-References: <20221216103545.3620670-1-m.felsch@pengutronix.de>
+        Fri, 16 Dec 2022 05:38:00 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357BC2EF22
+        for <linux-media@vger.kernel.org>; Fri, 16 Dec 2022 02:37:59 -0800 (PST)
+Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4F58B570;
+        Fri, 16 Dec 2022 11:37:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1671187077;
+        bh=tzKQumKjWm/MwEwVrSKDKtOZBrIZMcYuQke2YVJYhDc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=CbRkCeR2pO4jpLIJp6hyjyKGiKAwlol9XAAkALpO23ENyXjAOrle9tH5uuVzqJGJB
+         iy2gFWrF0qDO86IFM5dG+XPf5y/YXJJBCFZqXm/Zplp3ibeTGjjq9o5/ITE6toXMSH
+         p62QvXN368IAFhPR3KpB/hp+KwNBv7XkQfB1g6ys=
+Message-ID: <d67b9d52-5a12-2e24-b3d9-809a45784c8d@ideasonboard.com>
+Date:   Fri, 16 Dec 2022 10:37:55 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v10 02/11] media: uvcvideo: add uvc_ctrl_get_boundary for
+ getting default value
+Content-Language: en-US
+To:     Yunke Cao <yunkec@google.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Tomasz Figa <tfiga@chromium.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-media@vger.kernel.org
+References: <20221109060621.704531-1-yunkec@google.com>
+ <20221109060621.704531-3-yunkec@google.com>
+From:   Dan Scally <dan.scally@ideasonboard.com>
+In-Reply-To: <20221109060621.704531-3-yunkec@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Currently we ignore the return value of tc358746_read() and return
-alawys return 0 which is wrong. Fix this by returning the actual return
-value of the read operation which is either 0 on success or an error
-value.
+Hi Yunke
 
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1527254 ("Error handling issues")
-Fixes: 80a21da36051 ("media: tc358746: add Toshiba TC358746 Parallel to CSI-2 bridge driver")
-Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
----
- drivers/media/i2c/tc358746.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+On 09/11/2022 06:06, Yunke Cao wrote:
+> Introduce uvc_ctrl_get_boundary(), making it easier to extend to
+> support compound controls and V4L2_CTRL_WHICH_MIN/MAX_VAL in the
+> following patches.
+>
+> For now, it simply returns EINVAL for compound controls and calls
+> __query_v4l2_ctrl() for non-compound controls.
+>
+> Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
+> Signed-off-by: Yunke Cao <yunkec@google.com>
+> ---
+> Changelog since v9:
+> - Make __uvc_ctrl_get_boundary_std() static.
+> Changelog since v8:
+> - No Change.
+> Changelog since v7:
+> - Rename uvc_ctrl_get_fixed() to uvc_ctrl_get_boundary().
+> - Move refactor (introduce  __uvc_ctrl_get_boundary_std()) in this patch
+>    instead of in the patch where we implement compound control.
+> - Fix locking. uvc_ctrl_get_boundary() now acquires ctrl_mutex.
+>    __uvc_ctrl_get_boundary_std() calls __uvc_query_v4l2_ctrl() while
+>    holding the mutex.
+> - Define a uvc_ctrl_mapping_is_compound() for readability.
+>
+>   drivers/media/usb/uvc/uvc_ctrl.c | 49 ++++++++++++++++++++++++++++++++
+>   drivers/media/usb/uvc/uvc_v4l2.c |  6 +---
+>   drivers/media/usb/uvc/uvcvideo.h |  2 ++
+>   3 files changed, 52 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> index c95a2229f4fa..dfb9d1daece6 100644
+> --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> @@ -837,6 +837,12 @@ static void uvc_set_le_value(struct uvc_control_mapping *mapping,
+>   	}
+>   }
+>   
+> +static bool
+> +uvc_ctrl_mapping_is_compound(const struct uvc_control_mapping *mapping)
+> +{
+> +	return mapping->v4l2_type >= V4L2_CTRL_COMPOUND_TYPES;
+> +}
+> +
+>   /* ------------------------------------------------------------------------
+>    * Terminal and unit management
+>    */
+> @@ -1743,6 +1749,49 @@ int uvc_ctrl_get(struct uvc_video_chain *chain,
+>   	return __uvc_ctrl_get(chain, ctrl, mapping, &xctrl->value);
+>   }
+>   
+> +static int __uvc_ctrl_get_boundary_std(struct uvc_video_chain *chain,
+> +				       struct uvc_control *ctrl,
+> +				       struct uvc_control_mapping *mapping,
+> +				       u32 v4l2_which,
+> +				       struct v4l2_ext_control *xctrl)
 
-diff --git a/drivers/media/i2c/tc358746.c b/drivers/media/i2c/tc358746.c
-index e7f27cbb5790..c5a0df300a06 100644
---- a/drivers/media/i2c/tc358746.c
-+++ b/drivers/media/i2c/tc358746.c
-@@ -988,6 +988,7 @@ static int __maybe_unused
- tc358746_g_register(struct v4l2_subdev *sd, struct v4l2_dbg_register *reg)
- {
- 	struct tc358746 *tc358746 = to_tc358746(sd);
-+	int err;
- 
- 	/* 32-bit registers starting from CLW_DPHYCONTTX */
- 	reg->size = reg->reg < CLW_DPHYCONTTX_REG ? 2 : 4;
-@@ -995,12 +996,12 @@ tc358746_g_register(struct v4l2_subdev *sd, struct v4l2_dbg_register *reg)
- 	if (!pm_runtime_get_if_in_use(sd->dev))
- 		return 0;
- 
--	tc358746_read(tc358746, reg->reg, (u32 *)&reg->val);
-+	err = tc358746_read(tc358746, reg->reg, (u32 *)&reg->val);
- 
- 	pm_runtime_mark_last_busy(sd->dev);
- 	pm_runtime_put_sync_autosuspend(sd->dev);
- 
--	return 0;
-+	return err;
- }
- 
- static int __maybe_unused
--- 
-2.30.2
 
+Here you define a parameter for v4l2_which, but further down...
+
+> +{
+> +	struct v4l2_queryctrl qc = { .id = xctrl->id };
+> +
+> +	int ret = __uvc_query_v4l2_ctrl(chain, ctrl, mapping, &qc);
+> +
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	xctrl->value = qc.default_value;
+> +	return 0;
+> +}
+> +
+> +int uvc_ctrl_get_boundary(struct uvc_video_chain *chain,
+> +			  struct v4l2_ext_control *xctrl)
+> +{
+> +	struct uvc_control *ctrl;
+> +	struct uvc_control_mapping *mapping;
+> +	int ret;
+> +
+> +	if (mutex_lock_interruptible(&chain->ctrl_mutex))
+> +		return -ERESTARTSYS;
+> +
+> +	ctrl = uvc_find_control(chain, xctrl->id, &mapping);
+> +	if (!ctrl) {
+> +		ret = -EINVAL;
+> +		goto done;
+> +	}
+> +
+> +	if (uvc_ctrl_mapping_is_compound(mapping))
+> +		ret = -EINVAL;
+> +	else
+> +		ret = __uvc_ctrl_get_boundary_std(chain, ctrl, mapping, xctrl);
+
+
+...here, you're not passing it, which causes a compilation error. 
+Otherwise I think the patch looks ok.
+
+> +
+> +done:
+> +	mutex_unlock(&chain->ctrl_mutex);
+> +	return ret;
+> +}
+> +
+>   int uvc_ctrl_set(struct uvc_fh *handle,
+>   	struct v4l2_ext_control *xctrl)
+>   {
+> diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+> index f4d4c33b6dfb..e807e348aa41 100644
+> --- a/drivers/media/usb/uvc/uvc_v4l2.c
+> +++ b/drivers/media/usb/uvc/uvc_v4l2.c
+> @@ -1046,15 +1046,11 @@ static int uvc_ioctl_g_ext_ctrls(struct file *file, void *fh,
+>   
+>   	if (ctrls->which == V4L2_CTRL_WHICH_DEF_VAL) {
+>   		for (i = 0; i < ctrls->count; ++ctrl, ++i) {
+> -			struct v4l2_queryctrl qc = { .id = ctrl->id };
+> -
+> -			ret = uvc_query_v4l2_ctrl(chain, &qc);
+> +			ret = uvc_ctrl_get_boundary(chain, ctrl);
+>   			if (ret < 0) {
+>   				ctrls->error_idx = i;
+>   				return ret;
+>   			}
+> -
+> -			ctrl->value = qc.default_value;
+>   		}
+>   
+>   		return 0;
+> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> index df93db259312..b2ee3d59a4c8 100644
+> --- a/drivers/media/usb/uvc/uvcvideo.h
+> +++ b/drivers/media/usb/uvc/uvcvideo.h
+> @@ -759,6 +759,8 @@ static inline int uvc_ctrl_rollback(struct uvc_fh *handle)
+>   }
+>   
+>   int uvc_ctrl_get(struct uvc_video_chain *chain, struct v4l2_ext_control *xctrl);
+> +int uvc_ctrl_get_boundary(struct uvc_video_chain *chain,
+> +			  struct v4l2_ext_control *xctrl);
+>   int uvc_ctrl_set(struct uvc_fh *handle, struct v4l2_ext_control *xctrl);
+>   int uvc_ctrl_is_accessible(struct uvc_video_chain *chain, u32 v4l2_id,
+>   			   bool read);
