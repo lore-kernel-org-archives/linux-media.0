@@ -2,110 +2,120 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E02EDC4167B
-	for <linux-media@archiver.kernel.org>; Fri, 16 Dec 2022 14:05:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D189C001B2
+	for <linux-media@archiver.kernel.org>; Fri, 16 Dec 2022 14:11:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbiLPOFd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 16 Dec 2022 09:05:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42106 "EHLO
+        id S230471AbiLPOLT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 16 Dec 2022 09:11:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiLPOFb (ORCPT
+        with ESMTP id S230518AbiLPOLB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 16 Dec 2022 09:05:31 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD7DA19D;
-        Fri, 16 Dec 2022 06:05:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671199530; x=1702735530;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rf6oqwgxdkbekgXRXJUeWpiQCH4OaXW2AGT9Sm8kUlc=;
-  b=JkSMiJ5c3fDw8AxjxfqmRZRtMfj1C1uyAwu2wFGmPVeRLkEzrB0KCioF
-   ovSa+Gyd9Ck7xnW6cIWfOf1x4gpog3fr9AL3LljCWEdo4wf1/6gu3Euyw
-   uSmAhfLFeTmISaMVo+DOo6+YsLT6r4MFZycG1Px7Y50KOpNgOdG5IVhbz
-   hP5HtBJ2Fewks/mnWTxJ34CwoH1gDxw2JHrP8Ua00vCpHH5bog5f7fXej
-   /GiCU5K4J3w0O/sx/vOVyc3Yf+VX/69NXIyVVA+pfyP0IaAO6RjLUBMas
-   QhoYXZo0dVQgDkyj4ywzrl+zPSTy1xtZU13oYT/w/NQghTqn74G7hhbF2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10563"; a="306648315"
-X-IronPort-AV: E=Sophos;i="5.96,249,1665471600"; 
-   d="scan'208";a="306648315"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2022 06:05:23 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10563"; a="792086022"
-X-IronPort-AV: E=Sophos;i="5.96,249,1665471600"; 
-   d="scan'208";a="792086022"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2022 06:05:21 -0800
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 2B9DC20310;
-        Fri, 16 Dec 2022 15:57:37 +0200 (EET)
-Date:   Fri, 16 Dec 2022 13:57:37 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Jai Luthra <j-luthra@ti.com>
+        Fri, 16 Dec 2022 09:11:01 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971C926492
+        for <linux-media@vger.kernel.org>; Fri, 16 Dec 2022 06:10:58 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id j4so3719745lfk.0
+        for <linux-media@vger.kernel.org>; Fri, 16 Dec 2022 06:10:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kS8ZeKiUCR8+MYFNYax7Uf8MjHUAoKMQjTLTMCr4w04=;
+        b=ODA2yDQpIwIz8f+EJj9tBTx0VnpbAaWWVL6Ah3mxoXk8euyygwoeB3A2qjaLcJZzHL
+         pGzK3Q59cAjbvHbbv0uctr7DUC7Wfk1lOwoaxT5UlocpgLgAH+kKwu6slXeG1rLEG7Q1
+         DXtsyd8cu+XmtQ7vTxCLCC1Xr0JBQlibPUsHQAEjPDe+J98pAXmD2UOndlcfvkrF9Zge
+         aLWzN0sU8TeG7v3F75uCIfxkSf5TTqAxX5JWS5B0/BKPbYVriU7sOQ8464RU+zHymIRd
+         eruP9VYx9GWyNbtIkS2E4sU1ErIJTLmQo4AYa4Y+we0kJ/2ot+QVcRU1bGnVK2qCQ0qX
+         WfgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kS8ZeKiUCR8+MYFNYax7Uf8MjHUAoKMQjTLTMCr4w04=;
+        b=avWFI/0yl+iP9MjJXXQqu3WKv6GP6plnVE1fkQ3e2HiBtVerT/N/ZDYkBDjQUmvRbR
+         BfYI1KSoYFSloHQHO9RuUCeS8ZRB47ZD95IU/zxvDdiv+eOOkz6/nJCbp+BUYsHNrBRc
+         Sr4anYuOmBatCZ4axJmGiKQWeRRvlLEXh3RagwRqIO8OH3EZTdtU/cXNg04Lqi6vBNlz
+         fPn9gDgFaHjJJuSluN7CeGUwVi3wcX9zunTc8ctPtTw5aseC5ewdJ1ttblCZPGwBpAeJ
+         U3yfrD7kVJwEiERT9tNTYYEQs6CURE1yC6Xu23i+t/2k5k6UJBCOSCVsWfxblP+qon2e
+         qIlA==
+X-Gm-Message-State: ANoB5pkLpNz34vTmt2c/WFH+e/teYBCwK3iHt9EA8FHDvcERe0U/NJNf
+        fLt2ParQ6D0EqhiaDB9CKClj/Q==
+X-Google-Smtp-Source: AA0mqf4Gbm4Fkka896QZfxdkrUWTv41o5l+be1bk/8yhvhmQbCZswzjIsP4TlZ0UEH9zI76S3f2CVg==
+X-Received: by 2002:a05:6512:32cd:b0:4a4:7cab:3b99 with SMTP id f13-20020a05651232cd00b004a47cab3b99mr10010897lfg.8.1671199856780;
+        Fri, 16 Dec 2022 06:10:56 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id v20-20020a05651203b400b00494a2a0f6cfsm228619lfp.183.2022.12.16.06.10.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 06:10:56 -0800 (PST)
+Message-ID: <51ef1ff4-db3d-64aa-aa9d-82f604a314c1@linaro.org>
+Date:   Fri, 16 Dec 2022 15:10:55 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 1/3] media: ov5640: Handle delays when no reset_gpio set
+Content-Language: en-US
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Jai Luthra <j-luthra@ti.com>
 Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH 1/3] media: ov5640: Handle delays when no reset_gpio set
-Message-ID: <Y5x5UbtLFDpFIoEp@paasikivi.fi.intel.com>
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org
 References: <20221216134409.6868-1-j-luthra@ti.com>
  <20221216134409.6868-2-j-luthra@ti.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221216134409.6868-2-j-luthra@ti.com>
+ <Y5x5UbtLFDpFIoEp@paasikivi.fi.intel.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y5x5UbtLFDpFIoEp@paasikivi.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jai,
-
-Thanks for the set.
-
-On Fri, Dec 16, 2022 at 07:14:07PM +0530, Jai Luthra wrote:
-> Some module manufacturers [1][2] don't expose the RESETB gpio of the
-> sensor directly through the 15-pin FFC connector. Instead wiring ~PWDN
-> as a proxy reset with appropriate delays.
+On 16/12/2022 14:57, Sakari Ailus wrote:
+> Hi Jai,
 > 
-> In such cases, reset_gpio will not be available to the driver, but it
-> will still be toggled when the sensor is powered on, and thus we should
-> still honor the wait time of >= 5ms + 1ms + 20ms (see figure 2-3 in [3])
-> before attempting any i/o operations over SCCB.
+> Thanks for the set.
 > 
-> [1] https://digilent.com/reference/_media/reference/add-ons/pcam-5c/pcam_5c_sch.pdf
-> [2] https://www.alinx.com/public/upload/file/AN5641_User_Manual.pdf
-> [3] https://cdn.sparkfun.com/datasheets/Sensors/LightImaging/OV5640_datasheet.pdf
+> On Fri, Dec 16, 2022 at 07:14:07PM +0530, Jai Luthra wrote:
+>> Some module manufacturers [1][2] don't expose the RESETB gpio of the
+>> sensor directly through the 15-pin FFC connector. Instead wiring ~PWDN
+>> as a proxy reset with appropriate delays.
+>>
+>> In such cases, reset_gpio will not be available to the driver, but it
+>> will still be toggled when the sensor is powered on, and thus we should
+>> still honor the wait time of >= 5ms + 1ms + 20ms (see figure 2-3 in [3])
+>> before attempting any i/o operations over SCCB.
+>>
+>> [1] https://digilent.com/reference/_media/reference/add-ons/pcam-5c/pcam_5c_sch.pdf
+>> [2] https://www.alinx.com/public/upload/file/AN5641_User_Manual.pdf
+>> [3] https://cdn.sparkfun.com/datasheets/Sensors/LightImaging/OV5640_datasheet.pdf
+>>
+>> Fixes: 19a81c1426c1 ("[media] add Omnivision OV5640 sensor driver")
+>> Signed-off-by: Jai Luthra <j-luthra@ti.com>
+>> ---
+>>  drivers/media/i2c/ov5640.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+>> index e0f908af581b..4bb7bf557cfa 100644
+>> --- a/drivers/media/i2c/ov5640.c
+>> +++ b/drivers/media/i2c/ov5640.c
+>> @@ -2466,6 +2466,7 @@ static int ov5640_set_power_on(struct ov5640_dev *sensor)
+>>  
+>>  	ov5640_reset(sensor);
+>>  	ov5640_power(sensor, true);
+>> +	usleep_range(26000, 30000);
 > 
-> Fixes: 19a81c1426c1 ("[media] add Omnivision OV5640 sensor driver")
-> Signed-off-by: Jai Luthra <j-luthra@ti.com>
-> ---
->  drivers/media/i2c/ov5640.c | 1 +
->  1 file changed, 1 insertion(+)
+> I think you should only do this if you don't have RESETB pin.
 > 
-> diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-> index e0f908af581b..4bb7bf557cfa 100644
-> --- a/drivers/media/i2c/ov5640.c
-> +++ b/drivers/media/i2c/ov5640.c
-> @@ -2466,6 +2466,7 @@ static int ov5640_set_power_on(struct ov5640_dev *sensor)
->  
->  	ov5640_reset(sensor);
->  	ov5640_power(sensor, true);
-> +	usleep_range(26000, 30000);
+> I'm not sure how to best describe this in DT. It's not the same as if you
+> didn't have RESETB GPIO.
 
-I think you should only do this if you don't have RESETB pin.
+Why it's not the same? I understand the RESETB pin is always there just
+sometimes going to GPIO and sometimes to some other line.
 
-I'm not sure how to best describe this in DT. It's not the same as if you
-didn't have RESETB GPIO.
+Best regards,
+Krzysztof
 
-Cc the devicetree list and Krzysztof.
-
->  
->  	ret = ov5640_init_slave_id(sensor);
->  	if (ret)
-
--- 
-Kind regards,
-
-Sakari Ailus
