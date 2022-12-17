@@ -2,121 +2,90 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75813C4332F
-	for <linux-media@archiver.kernel.org>; Sat, 17 Dec 2022 04:12:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85198C3DA6E
+	for <linux-media@archiver.kernel.org>; Sat, 17 Dec 2022 14:31:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbiLQEMn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 16 Dec 2022 23:12:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45106 "EHLO
+        id S229471AbiLQObZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 17 Dec 2022 09:31:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiLQEMk (ORCPT
+        with ESMTP id S229763AbiLQObX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 16 Dec 2022 23:12:40 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3192D18B38
-        for <linux-media@vger.kernel.org>; Fri, 16 Dec 2022 20:12:39 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id z8-20020a17090abd8800b00219ed30ce47so7974821pjr.3
-        for <linux-media@vger.kernel.org>; Fri, 16 Dec 2022 20:12:39 -0800 (PST)
+        Sat, 17 Dec 2022 09:31:23 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A819210F3;
+        Sat, 17 Dec 2022 06:31:22 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id s7so4998581plk.5;
+        Sat, 17 Dec 2022 06:31:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GH65Lzu8yLs0gJVkepUjZHRstDYH/hcDoJoKZUFbNI0=;
-        b=VZZXRW4I9PQi2pbj5Y12OzivoOtSdKGKXyCQxQ5m8NjibG+fHEtUA2GpOjdmFdZa64
-         9D61uvDRarEr0gMPekNM40CsY+NrmD7+B17uPqk/8GZSIX1Y2RmlVAoZvYdzkoNVtmel
-         WmYMFCrlJ/c2Qtd5viIPTqjrXsTJydcvKWbqI3Y3HUpiZsW4dwLAzdWRuzNryaUkSgqM
-         YxxXX6VvD6PAeUuuXFdKuN5wPsuRNmtEpyqaiXskTWr9Jvj5wsvZYaIzDcxnnJf6w7T1
-         yuZsRB9wsDNH1/1sttcJAkuO1RoTImQx6aznupM1NL9+lcffPNaM75Q/pmY2sIHsHPvU
-         RTaQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=q+7z7G254vlB30dxaX0Fo49gLNLsS7YJkR6iYNb6Fv0=;
+        b=jvKehRiQgyKNh+iZ6HY/I2oEgNq6qt40AhQ2jM/Y+rqzjAHIOXlTqvFfVR6mMnSKBe
+         g+3jV0bE1trLAS5HzhOIn3fss/Gaq/oe8RqAx2gFE9Opvj3mueiQUpkXEZAajeDViw8g
+         uJbOdK7pSMRmSM7O8VwSpdCfu3NiOcZSfhTEP2Lwt8GTGkixZcx+N0Jg8W8j6SLz82w3
+         5+9RtPUTBfxRVfpzyN5GGh65zVcKYc436J9IQsYbcaRN2hfq4IvH+bfK/jI27jtegKpG
+         XoqKkQ/NNZaiUdKLxybsDD/KSBIESlxpoErfdLKF9JDp7z7jV/usnSm21v/QNv8Q3APy
+         35Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GH65Lzu8yLs0gJVkepUjZHRstDYH/hcDoJoKZUFbNI0=;
-        b=8QwzS8TwqLIGjg0WNQUHHV+rpSt/qKv1DdMPVilgMeKzdIYUzKPblmEtDqpBjUvPOP
-         ByL2HtBGFIeM6HUPbE5XPM4BCtFKXSHtfTVxEZMyN7Q1zImj/b+UykOFgerl5yTygi4M
-         eJIVBeQa8Mu0yKMUdkmrEJgfV3E9aEogXYkeseaXrtAhUuOI7MU3vQ687bSdP3RjgLZa
-         xHCB+BiaqQ7bR/iG7HYUHyoi9QpNSSoCkoZ90ZsDvEnIKrMNHP7gA8ok1Nt6F4SoY8dT
-         srL3pNYVFxBywzaTeoLwMPeMnUDrbEhqJVCqcqQNe+QXOqOmkCKBW0HVdTXpzm0J1ne7
-         rfIw==
-X-Gm-Message-State: AFqh2krmOi2bUTOUBuGKc/wmfFPo/1gPpnp5f2iCphuos51/swuD3ozy
-        68pvHgMgVLhRNbI6n2umQtAHgdw2wkLmCRuO
-X-Google-Smtp-Source: AMrXdXtScOu3J4nT9043wO0QBOelq5bzdWwUG+cutNdvKhhdIobOxSwAaEVxgtNIm61fBcfABSBw6g==
-X-Received: by 2002:a17:902:a612:b0:18c:cde:fdda with SMTP id u18-20020a170902a61200b0018c0cdefddamr801217plq.37.1671250358215;
-        Fri, 16 Dec 2022 20:12:38 -0800 (PST)
-Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id y2-20020a17090264c200b00189adf6770fsm2383636pli.233.2022.12.16.20.12.37
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q+7z7G254vlB30dxaX0Fo49gLNLsS7YJkR6iYNb6Fv0=;
+        b=q0pSD/VwlY3U09gM+3UDZuM0k7T8KAy0iE4gP3TPEW1mcWVc8V4mt3dHLrt9k4770b
+         0K3PzZDORCTXy+dUbV1DWsmjGeTnGj2Gvy8rBG/QPClNKPTkN+uRAEoOsRIkXYsoe5Pv
+         2yAVySqzu8WlvbPPMICZH3v2s/xeq8HqH0Y3VoUNRcysgtLu3CPp+R6DFPIrW/YzQqyy
+         eE4HKZO3Q3EEV79eBYsLpeX0GILE8CIsAmjE4eifgOI32aKCLFrsTDUgDA0/dJD3HhQ+
+         sFVzvKdsg8l3RIB9bUBhYUuTEP85hHh13HKy8IlPhbZ/8iff6goBP8B24VY3I99m7/lS
+         JWhg==
+X-Gm-Message-State: ANoB5pktOou/Ft4Rl5Y2Jm9UhSv7u7s0MZPOVvsbatwVq2b9Tf7HNub2
+        pk9t8Ype7WW9ci8XAEq4rJ9jkrKe95PhzQqB
+X-Google-Smtp-Source: AA0mqf7WuudQT1xddyeqQk434g8azUldw7NaCX+6Q4guEXQQLo3/7D/ckgw31nmL76Sgsl3BamUJKg==
+X-Received: by 2002:a17:90b:198e:b0:219:cb6d:7b0b with SMTP id mv14-20020a17090b198e00b00219cb6d7b0bmr36174776pjb.44.1671287482118;
+        Sat, 17 Dec 2022 06:31:22 -0800 (PST)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id fy16-20020a17090b021000b00218b47be793sm2999708pjb.3.2022.12.17.06.31.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 20:12:37 -0800 (PST)
-Date:   Fri, 16 Dec 2022 20:12:37 -0800 (PST)
-X-Google-Original-Date: Fri, 16 Dec 2022 20:12:29 PST (-0800)
-Subject:     Re: [PATCH v3 00/12] Allwinner A31/A83T CSI/ISP/MIPI CSI-2 media fixes
-In-Reply-To: <20221208142006.425809-1-paul.kocialkowski@bootlin.com>
-CC:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev, yong.deng@magewell.com,
-        paul.kocialkowski@bootlin.com, mchehab@kernel.org, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        thomas.petazzoni@bootlin.com, hverkuil@xs4all.nl,
-        sakari.ailus@iki.fi, Conor Dooley <conor@kernel.org>,
-        nathan@kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     paul.kocialkowski@bootlin.com
-Message-ID: <mhng-31391bb7-1a92-42f1-a1bb-8a41a9431ccb@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Sat, 17 Dec 2022 06:31:21 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] media: mc: entity: Fix doc for media_graph_walk_init
+Date:   Sat, 17 Dec 2022 18:31:13 +0400
+Message-Id: <20221217143113.3219104-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, 08 Dec 2022 06:19:54 PST (-0800), paul.kocialkowski@bootlin.com wrote:
-> This series resolves reported smatch warnings against the recently-introduced
-> Allwinner A31/A83T CSI, ISP and MIPI CSI-2 drivers.
->
-> Smatch was ran again on the updated tree and no longer shows any error or
-> warning.
+There is no media_graph_walk_free(). media_graph_walk_cleanup() is used
+to release the resources.
 
-Thanks.  These also fix a handful of warnings I'm seeing when building 
-with clang.
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/media/mc/mc-entity.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+index b8bcbc734eaf..de25de328fbe 100644
+--- a/drivers/media/mc/mc-entity.c
++++ b/drivers/media/mc/mc-entity.c
+@@ -295,7 +295,7 @@ static struct media_entity *stack_pop(struct media_graph *graph)
+  *
+  * Reserve resources for graph walk in media device's current
+  * state. The memory must be released using
+- * media_graph_walk_free().
++ * media_graph_walk_cleanup().
+  *
+  * Returns error on failure, zero on success.
+  */
+-- 
+2.25.1
 
-> Changes since v2:
-> - Added isp params pending buffer fix;
-> - Added fixes tags where needed;
-> - Reworded cosmetic commits;
-> - Changed sunxi-isp to the proper sun6i-isp.
->
-> Changes since v1:
-> - Added fixes for static struct declarations;
-> - Fixed ISP commit titles by replacing bridge with proc.
->
-> Paul
->
-> Paul Kocialkowski (12):
->   media: sun6i-csi: bridge: Fix return code handling in stream off path
->   media: sun6i-csi: bridge: Error out on invalid port to fix warning
->   media: sunxi-csi: bridge: Declare subdev ops as static
->   media: sun6i-csi: capture: Remove useless ret initialization
->   media: sun6i-mipi-csi2: Clarify return code handling in stream off
->     path
->   media: sun8i-a83t-mipi-csi2: Clarify return code handling in stream
->     off path
->   media: sun6i-isp: proc: Fix return code handling in stream off path
->   media: sun6i-isp: proc: Error out on invalid port to fix warning
->   media: sun6i-isp: proc: Declare subdev ops as static
->   media: sun6i-isp: capture: Fix uninitialized variable use
->   media: sun6i-isp: params: Fix incorrect indentation
->   media: sun6i-isp: params: Unregister pending buffer on cleanup
->
->  drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c | 8 ++++----
->  .../media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c    | 2 +-
->  .../platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c      | 5 ++---
->  .../sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c     | 5 ++---
->  drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.c | 4 ++--
->  drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.c  | 6 ++++--
->  drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.c    | 8 ++++----
->  7 files changed, 19 insertions(+), 19 deletions(-)
