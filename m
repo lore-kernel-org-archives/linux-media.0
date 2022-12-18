@@ -2,44 +2,48 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44388C3DA7B
-	for <linux-media@archiver.kernel.org>; Sun, 18 Dec 2022 16:12:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E1A8C4167B
+	for <linux-media@archiver.kernel.org>; Sun, 18 Dec 2022 16:14:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbiLRQM4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Dec 2022 11:12:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
+        id S231685AbiLRQOE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Dec 2022 11:14:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231826AbiLRQMX (ORCPT
+        with ESMTP id S231593AbiLRQNL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Dec 2022 11:12:23 -0500
+        Sun, 18 Dec 2022 11:13:11 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5FFDFEF;
-        Sun, 18 Dec 2022 08:05:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0423962E2;
+        Sun, 18 Dec 2022 08:05:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CFF360DB4;
-        Sun, 18 Dec 2022 16:05:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03845C433D2;
-        Sun, 18 Dec 2022 16:05:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59E3F60DD5;
+        Sun, 18 Dec 2022 16:05:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A87A6C433F0;
+        Sun, 18 Dec 2022 16:05:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671379531;
-        bh=mvMMLmvxlfsWFgwEr+ZHtBmL6gLBDdJIqM9J7cHhbW0=;
+        s=k20201202; t=1671379548;
+        bh=OPvkiT7QvUdo/gNXFO9oYOmBeAvWlq2GcTA3WpacEwE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SYlbTt/kqkoh7mBMsAaEIegthjA9aAcKjdW4K80e+PQbVhjMKqVGhucOqM/EiEaxv
-         6L3gt4/lgg26lKDXMRaEgAZtWMfXZeOvU6U3QKcYW+XLpoWHbzZexE/GxJVYLqXhHB
-         ZLoQ4ro9gwKSYDuO+nUi6rPEC+2ynA/DiaRiVKM4nUIOVRn6/puURuTdGi0qfy0IkD
-         DQYBM4YmYJSF58fLY4AxqRGPWko8wNdAKDWVqiKsdgkWBiWxsJVoE0UHBF1wPL0Zt3
-         B8mU6/dx+cJyjEJgDBKgHUo1VXBnZdPhhSjcdRsr9p5+7wezXlhC4/dIeY9l/H8kaq
-         4yo5Lv49uDYSw==
+        b=nA+G99IVsjavwdW7pmhpE3rAMoPq8uEZpihhfec3VKlU472Yx0C1+Ld2nNEujKXSQ
+         doSbNZPUu0peZC0cXHaffNCXjQP+3inBUWSmR3m2Y0NRffsHU4pzJRnipINtu4UY94
+         5jCm1IQWJiVWQ17E67Q3t63CnxRm2SCDXX0tfA2/78GAo/bSV97aQxIekg9HnM0mBq
+         /sDRUa1ibR5jAEAglSYUb8oZNOFHE3slKV8ddzJV9JNPEXO1HVOXZ5nt4kgq7YcERU
+         uXHxlCCcYfCWGA84n9LZenTgTPRhGmNaxOkL/0A8NAH/URyFirfIqnelplG7B9rjoX
+         /IUM1G36oNDnA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yan Lei <yan_lei@dahuatech.com>,
+Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 58/85] media: dvb-frontends: fix leak of memory fw
-Date:   Sun, 18 Dec 2022 11:01:15 -0500
-Message-Id: <20221218160142.925394-58-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, tiffany.lin@mediatek.com,
+        andrew-ct.chen@mediatek.com, matthias.bgg@gmail.com,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.1 61/85] media: mediatek: vcodec: Can't set dst buffer to done when lat decode error
+Date:   Sun, 18 Dec 2022 11:01:18 -0500
+Message-Id: <20221218160142.925394-61-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221218160142.925394-1-sashal@kernel.org>
 References: <20221218160142.925394-1-sashal@kernel.org>
@@ -51,30 +55,36 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Yan Lei <yan_lei@dahuatech.com>
+From: Yunfei Dong <yunfei.dong@mediatek.com>
 
-[ Upstream commit a15fe8d9f1bf460a804bcf18a890bfd2cf0d5caa ]
+[ Upstream commit 3568ecd3f3a6d133ab7feffbba34955c8c79bbc4 ]
 
-Link: https://lore.kernel.org/linux-media/20220410061925.4107-1-chinayanlei2002@163.com
-Signed-off-by: Yan Lei <yan_lei@dahuatech.com>
+Core thread will call v4l2_m2m_buf_done to set dst buffer done for
+lat architecture. If lat call v4l2_m2m_buf_done_and_job_finish to
+free dst buffer when lat decode error, core thread will access kernel
+NULL pointer dereference, then crash.
+
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-frontends/bcm3510.c | 1 +
- 1 file changed, 1 insertion(+)
+ .../media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c   | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/dvb-frontends/bcm3510.c b/drivers/media/dvb-frontends/bcm3510.c
-index da0ff7b44da4..68b92b4419cf 100644
---- a/drivers/media/dvb-frontends/bcm3510.c
-+++ b/drivers/media/dvb-frontends/bcm3510.c
-@@ -649,6 +649,7 @@ static int bcm3510_download_firmware(struct dvb_frontend* fe)
- 		deb_info("firmware chunk, addr: 0x%04x, len: 0x%04x, total length: 0x%04zx\n",addr,len,fw->size);
- 		if ((ret = bcm3510_write_ram(st,addr,&b[i+4],len)) < 0) {
- 			err("firmware download failed: %d\n",ret);
-+			release_firmware(fw);
- 			return ret;
- 		}
- 		i += 4 + len;
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
+index c45bd2599bb2..f41a3ff17b04 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
+@@ -250,7 +250,7 @@ static void mtk_vdec_worker(struct work_struct *work)
+ 
+ 	state = ret ? VB2_BUF_STATE_ERROR : VB2_BUF_STATE_DONE;
+ 	if (!IS_VDEC_LAT_ARCH(dev->vdec_pdata->hw_arch) ||
+-	    ctx->current_codec == V4L2_PIX_FMT_VP8_FRAME || ret) {
++	    ctx->current_codec == V4L2_PIX_FMT_VP8_FRAME) {
+ 		v4l2_m2m_buf_done_and_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx, state);
+ 		if (src_buf_req)
+ 			v4l2_ctrl_request_complete(src_buf_req, &ctx->ctrl_hdl);
 -- 
 2.35.1
 
