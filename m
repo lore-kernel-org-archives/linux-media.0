@@ -2,145 +2,89 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EEC1C3DA7B
-	for <linux-media@archiver.kernel.org>; Sun, 18 Dec 2022 17:13:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F290C4332F
+	for <linux-media@archiver.kernel.org>; Sun, 18 Dec 2022 18:58:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233524AbiLRRNO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Dec 2022 12:13:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37686 "EHLO
+        id S230272AbiLRS6H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Dec 2022 13:58:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233520AbiLRRLE (ORCPT
+        with ESMTP id S230216AbiLRS6G (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Dec 2022 12:11:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7CE1EAFD;
-        Sun, 18 Dec 2022 08:23:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4459BB803F1;
-        Sun, 18 Dec 2022 16:23:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B4DDC433EF;
-        Sun, 18 Dec 2022 16:23:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671380631;
-        bh=1fXw6PcYdInX4Nm7rj3luK2/XN9nXHIR1RetC55iRxc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nG+BZ2ABZNb1kbhIToxCExJE3499+oYrqQTZ61np02c+TpanVI4hsZ5lqYaqVNrC9
-         hJ98WJo3nGgHx55wiv5OrsxafC4Y/VnuVSsaGiAsaas+UUi6z97d8iGpeaOqPEJPfF
-         AMUsmJEFoX+CIRBqqMJRYGlLkUfAShAy2o1j4Dw6iM6PjRWtPDWANeJrtCOdFLeRH6
-         pMd4toKMsVSwk7GmATYAMKjVS/qoZUoTN8atP5hYtCKdxGtdLu/oN4Pjaj/YdWniSO
-         kaQ/7R/C4PgIJU0vsHXQo4kSVbXPLRPwIpuwlL8AO1LDGAVGmhvUd4hg2iKyiM44iy
-         re5qax2C0QHUA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mazin Al Haddad <mazinalhaddad05@gmail.com>,
-        syzbot+f66dd31987e6740657be@syzkaller.appspotmail.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 16/20] media: dvb-usb: fix memory leak in dvb_usb_adapter_init()
-Date:   Sun, 18 Dec 2022 11:23:01 -0500
-Message-Id: <20221218162305.935724-16-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221218162305.935724-1-sashal@kernel.org>
-References: <20221218162305.935724-1-sashal@kernel.org>
+        Sun, 18 Dec 2022 13:58:06 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F338FEE;
+        Sun, 18 Dec 2022 10:58:04 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 602CA1C09DB; Sun, 18 Dec 2022 19:58:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1671389883;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FGFdHHTtpuX5Ly4phczSAMx8RAJOhEVAay3kGEN6IR8=;
+        b=b3Ekrtp9D0DsqUbf5GNoJgxgDJMjwu/CrSAIU6w+u45aG9GgO7cUwioBf5u6NDSSML63kZ
+        IFtHughU0zfhrUFKCXMzbCT5KP5cv7o3eCDc7QLqbs+VtA9ydyTG2ZWvofTznUiZ+TXYGt
+        cqnqNvy4XKSCBYncHYzJsngFl/qLzVI=
+Date:   Sun, 18 Dec 2022 19:58:02 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     tumic@gpxsee.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lizhi Hou <lizhi.hou@amd.com>,
+        Martin =?utf-8?B?VMWvbWE=?= <martin.tuma@digiteqautomotive.com>
+Subject: Re: [PATCH v4 0/1] Digiteq Automotive MGB4 driver
+Message-ID: <Y59iurFF9CM21p7o@duo.ucw.cz>
+References: <20221123140431.4730-1-tumic@gpxsee.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="aKB7rpqiU3Up+ofL"
+Content-Disposition: inline
+In-Reply-To: <20221123140431.4730-1-tumic@gpxsee.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mazin Al Haddad <mazinalhaddad05@gmail.com>
 
-[ Upstream commit 94d90fb06b94a90c176270d38861bcba34ce377d ]
+--aKB7rpqiU3Up+ofL
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Syzbot reports a memory leak in "dvb_usb_adapter_init()".
-The leak is due to not accounting for and freeing current iteration's
-adapter->priv in case of an error. Currently if an error occurs,
-it will exit before incrementing "num_adapters_initalized",
-which is used as a reference counter to free all adap->priv
-in "dvb_usb_adapter_exit()". There are multiple error paths that
-can exit from before incrementing the counter. Including the
-error handling paths for "dvb_usb_adapter_stream_init()",
-"dvb_usb_adapter_dvb_init()" and "dvb_usb_adapter_frontend_init()"
-within "dvb_usb_adapter_init()".
+Hi!
 
-This means that in case of an error in any of these functions the
-current iteration is not accounted for and the current iteration's
-adap->priv is not freed.
+> From: Martin T=C5=AFma <martin.tuma@digiteqautomotive.com>
+>=20
+> Hi,
+> This patch adds a driver for the Digiteq Automotive MGB4 grabber card.
+> MGB4 is a modular frame grabber PCIe card for automotive video interfaces
+> (FPD-Link and GMSL for now). It is based on a Xilinx FPGA and uses their
+> XDMA IP core for DMA transfers. Additionally, Xilinx I2C and SPI IP cores
+> which already have drivers in linux are used in the design.
+>=20
+> The driver is a quite standard v4l2 driver, with one exception - there are
+> a lot of sysfs options that may/must be set before opening the v4l2 device
+> to adapt the card on a specific signal (see mgb4.rst for details)
+> as the card must be able to work with various signal sources (or displays)
+> that can not be auto-detected.
 
-Fix this by freeing the current iteration's adap->priv in the
-"stream_init_err:" label in the error path. The rest of the
-(accounted for) adap->priv objects are freed in dvb_usb_adapter_exit()
-as expected using the num_adapters_initalized variable.
+Uff, that's "interesting". What kind of platform does this run on? You
+should be getting non-probeable parameters from deice tree (or APCI).
 
-Syzbot report:
+Best regards,
+								Pavel
+							=09
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
 
-BUG: memory leak
-unreferenced object 0xffff8881172f1a00 (size 512):
-  comm "kworker/0:2", pid 139, jiffies 4294994873 (age 10.960s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-backtrace:
-    [<ffffffff844af012>] dvb_usb_adapter_init drivers/media/usb/dvb-usb/dvb-usb-init.c:75 [inline]
-    [<ffffffff844af012>] dvb_usb_init drivers/media/usb/dvb-usb/dvb-usb-init.c:184 [inline]
-    [<ffffffff844af012>] dvb_usb_device_init.cold+0x4e5/0x79e drivers/media/usb/dvb-usb/dvb-usb-init.c:308
-    [<ffffffff830db21d>] dib0700_probe+0x8d/0x1b0 drivers/media/usb/dvb-usb/dib0700_core.c:883
-    [<ffffffff82d3fdc7>] usb_probe_interface+0x177/0x370 drivers/usb/core/driver.c:396
-    [<ffffffff8274ab37>] call_driver_probe drivers/base/dd.c:542 [inline]
-    [<ffffffff8274ab37>] really_probe.part.0+0xe7/0x310 drivers/base/dd.c:621
-    [<ffffffff8274ae6c>] really_probe drivers/base/dd.c:583 [inline]
-    [<ffffffff8274ae6c>] __driver_probe_device+0x10c/0x1e0 drivers/base/dd.c:752
-    [<ffffffff8274af6a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:782
-    [<ffffffff8274b786>] __device_attach_driver+0xf6/0x140 drivers/base/dd.c:899
-    [<ffffffff82747c87>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:427
-    [<ffffffff8274b352>] __device_attach+0x122/0x260 drivers/base/dd.c:970
-    [<ffffffff827498f6>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:487
-    [<ffffffff82745cdb>] device_add+0x5fb/0xdf0 drivers/base/core.c:3405
-    [<ffffffff82d3d202>] usb_set_configuration+0x8f2/0xb80 drivers/usb/core/message.c:2170
-    [<ffffffff82d4dbfc>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
-    [<ffffffff82d3f49c>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
-    [<ffffffff8274ab37>] call_driver_probe drivers/base/dd.c:542 [inline]
-    [<ffffffff8274ab37>] really_probe.part.0+0xe7/0x310 drivers/base/dd.c:621
-    [<ffffffff8274ae6c>] really_probe drivers/base/dd.c:583 [inline]
-    [<ffffffff8274ae6c>] __driver_probe_device+0x10c/0x1e0 drivers/base/dd.c:752
+--aKB7rpqiU3Up+ofL
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Link: https://syzkaller.appspot.com/bug?extid=f66dd31987e6740657be
-Reported-and-tested-by: syzbot+f66dd31987e6740657be@syzkaller.appspotmail.com
+-----BEGIN PGP SIGNATURE-----
 
-Link: https://lore.kernel.org/linux-media/20220824012152.539788-1-mazinalhaddad05@gmail.com
-Signed-off-by: Mazin Al Haddad <mazinalhaddad05@gmail.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/media/usb/dvb-usb/dvb-usb-init.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY59iugAKCRAw5/Bqldv6
+8lMSAJ9SB9PBRGjXPnIO1uAbVvXBLCDCuACfSoR6Gu3fbUu2czcZd34M8PcIjr4=
+=CGKZ
+-----END PGP SIGNATURE-----
 
-diff --git a/drivers/media/usb/dvb-usb/dvb-usb-init.c b/drivers/media/usb/dvb-usb/dvb-usb-init.c
-index 690c1e06fbfa..28077f3c9edf 100644
---- a/drivers/media/usb/dvb-usb/dvb-usb-init.c
-+++ b/drivers/media/usb/dvb-usb/dvb-usb-init.c
-@@ -84,7 +84,7 @@ static int dvb_usb_adapter_init(struct dvb_usb_device *d, short *adapter_nrs)
- 
- 		ret = dvb_usb_adapter_stream_init(adap);
- 		if (ret)
--			return ret;
-+			goto stream_init_err;
- 
- 		ret = dvb_usb_adapter_dvb_init(adap, adapter_nrs);
- 		if (ret)
-@@ -117,6 +117,8 @@ static int dvb_usb_adapter_init(struct dvb_usb_device *d, short *adapter_nrs)
- 	dvb_usb_adapter_dvb_exit(adap);
- dvb_init_err:
- 	dvb_usb_adapter_stream_exit(adap);
-+stream_init_err:
-+	kfree(adap->priv);
- 	return ret;
- }
- 
--- 
-2.35.1
-
+--aKB7rpqiU3Up+ofL--
