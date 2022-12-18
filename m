@@ -2,46 +2,44 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AFDBC3DA7C
-	for <linux-media@archiver.kernel.org>; Sun, 18 Dec 2022 17:13:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE5A3C3DA7D
+	for <linux-media@archiver.kernel.org>; Sun, 18 Dec 2022 17:13:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233464AbiLRRNL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Dec 2022 12:13:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
+        id S233490AbiLRRNN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Dec 2022 12:13:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233571AbiLRRLS (ORCPT
+        with ESMTP id S233105AbiLRRKi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Dec 2022 12:11:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DE613DF8;
-        Sun, 18 Dec 2022 08:23:58 -0800 (PST)
+        Sun, 18 Dec 2022 12:10:38 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2151EC41;
+        Sun, 18 Dec 2022 08:23:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28330B80BA7;
-        Sun, 18 Dec 2022 16:23:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B4C3C433F1;
-        Sun, 18 Dec 2022 16:23:54 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9B97DCE0C56;
+        Sun, 18 Dec 2022 16:23:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37975C433D2;
+        Sun, 18 Dec 2022 16:23:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671380636;
-        bh=3ntBw2N1j5Ww+dKL3/4PPJIwX5FXt64fDouDRz6ISCM=;
+        s=k20201202; t=1671380627;
+        bh=e+mK2I0XLSH5ibwB3tkTIJFc3uG7mhmJaeMBe1RVO2c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nF9ZCnTE3iMDxMFXnUWopzJtzWFl2EXpytEMUn/hxZUoxuHtgAUdzvU6mg7efHnK7
-         4SSAoG2dPfFOv7/93TO/LnXwFvL/EvTrFHU4kRw/DKthwaQ5z040igkDViES6lwFoc
-         Q0znwA/6X6/UdRTNBxE08YqHJMu1w67MufYjW3YHj4FNGYv/Ck5tj5t4VtzzgWTnrg
-         jrNXEybJIACt5fXZ/hG3wNlCqLX1CWYjB3GYWLTNt5OHh1IMPSwiJBEPBggAZC3xgd
-         +7woLxh0p+vbXqMmauzL3LKoNX6mfbO/KxjfaRAGh0QtFtsvPTYtGhVJrQEVBUJgPC
-         yOXrxe7lSLRPw==
+        b=jwQwOGcHkdPU6X5kWO+gxZmm1oiMJ1srGrnmODConbt1aQ1KrCx4cFBwk0GmBQcCo
+         S0edpwhMwxgXxPFg5BdqQJMDC63AEAp+VmgK/xNDn7NhvWybwbN6Ma8qmcngA+PbDR
+         D2CZ7Qw6ey5CK9uY7+ko0NkHM7DV2SjAMTAcCDDPbS+JpeuUtjiOtMF0+c9IVt/cJ5
+         iysL2qH5CJDGKNRrjIzU/pbjRPK2KBG8kIuRuWp/SF5+0bRLZahpbRv+Cw2KFlhiod
+         nLl56lRTgua/CKtFhJy8z6zBHkxjOLhMLfREnDV8kAZIxpYj7KURLU2eU9Dip8OXmR
+         KLkk5hUDnbLaw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Shigeru Yoshida <syoshida@redhat.com>,
-        syzbot+9ca7a12fd736d93e0232@syzkaller.appspotmail.com,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sasha Levin <sashal@kernel.org>, hverkuil@xs4all.nl,
-        mchehab@kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 19/20] media: si470x: Fix use-after-free in si470x_int_in_callback()
-Date:   Sun, 18 Dec 2022 11:23:04 -0500
-Message-Id: <20221218162305.935724-19-sashal@kernel.org>
+Cc:     Yan Lei <yan_lei@dahuatech.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 15/20] media: dvb-frontends: fix leak of memory fw
+Date:   Sun, 18 Dec 2022 11:23:00 -0500
+Message-Id: <20221218162305.935724-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221218162305.935724-1-sashal@kernel.org>
 References: <20221218162305.935724-1-sashal@kernel.org>
@@ -53,62 +51,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Shigeru Yoshida <syoshida@redhat.com>
+From: Yan Lei <yan_lei@dahuatech.com>
 
-[ Upstream commit 7d21e0b1b41b21d628bf2afce777727bd4479aa5 ]
+[ Upstream commit a15fe8d9f1bf460a804bcf18a890bfd2cf0d5caa ]
 
-syzbot reported use-after-free in si470x_int_in_callback() [1].  This
-indicates that urb->context, which contains struct si470x_device
-object, is freed when si470x_int_in_callback() is called.
-
-The cause of this issue is that si470x_int_in_callback() is called for
-freed urb.
-
-si470x_usb_driver_probe() calls si470x_start_usb(), which then calls
-usb_submit_urb() and si470x_start().  If si470x_start_usb() fails,
-si470x_usb_driver_probe() doesn't kill urb, but it just frees struct
-si470x_device object, as depicted below:
-
-si470x_usb_driver_probe()
-  ...
-  si470x_start_usb()
-    ...
-    usb_submit_urb()
-    retval = si470x_start()
-    return retval
-  if (retval < 0)
-    free struct si470x_device object, but don't kill urb
-
-This patch fixes this issue by killing urb when si470x_start_usb()
-fails and urb is submitted.  If si470x_start_usb() fails and urb is
-not submitted, i.e. submitting usb fails, it just frees struct
-si470x_device object.
-
-Reported-by: syzbot+9ca7a12fd736d93e0232@syzkaller.appspotmail.com
-Link: https://syzkaller.appspot.com/bug?id=94ed6dddd5a55e90fd4bab942aa4bb297741d977 [1]
-Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Link: https://lore.kernel.org/linux-media/20220410061925.4107-1-chinayanlei2002@163.com
+Signed-off-by: Yan Lei <yan_lei@dahuatech.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/radio/si470x/radio-si470x-usb.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/media/dvb-frontends/bcm3510.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/radio/si470x/radio-si470x-usb.c b/drivers/media/radio/si470x/radio-si470x-usb.c
-index a8a0ff9a1f83..6724c5287cc3 100644
---- a/drivers/media/radio/si470x/radio-si470x-usb.c
-+++ b/drivers/media/radio/si470x/radio-si470x-usb.c
-@@ -741,8 +741,10 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
- 
- 	/* start radio */
- 	retval = si470x_start_usb(radio);
--	if (retval < 0)
-+	if (retval < 0 && !radio->int_in_running)
- 		goto err_buf;
-+	else if (retval < 0)	/* in case of radio->int_in_running == 1 */
-+		goto err_all;
- 
- 	/* set initial frequency */
- 	si470x_set_freq(radio, 87.5 * FREQ_MUL); /* available in all regions */
+diff --git a/drivers/media/dvb-frontends/bcm3510.c b/drivers/media/dvb-frontends/bcm3510.c
+index bb698839e477..fc1dbdfb0cba 100644
+--- a/drivers/media/dvb-frontends/bcm3510.c
++++ b/drivers/media/dvb-frontends/bcm3510.c
+@@ -648,6 +648,7 @@ static int bcm3510_download_firmware(struct dvb_frontend* fe)
+ 		deb_info("firmware chunk, addr: 0x%04x, len: 0x%04x, total length: 0x%04zx\n",addr,len,fw->size);
+ 		if ((ret = bcm3510_write_ram(st,addr,&b[i+4],len)) < 0) {
+ 			err("firmware download failed: %d\n",ret);
++			release_firmware(fw);
+ 			return ret;
+ 		}
+ 		i += 4 + len;
 -- 
 2.35.1
 
