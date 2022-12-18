@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 342ACC46467
-	for <linux-media@archiver.kernel.org>; Sun, 18 Dec 2022 17:05:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F6CEC3DA7C
+	for <linux-media@archiver.kernel.org>; Sun, 18 Dec 2022 17:08:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233236AbiLRRFn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Dec 2022 12:05:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
+        id S230505AbiLRRIH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Dec 2022 12:08:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233350AbiLRREs (ORCPT
+        with ESMTP id S233436AbiLRRGl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Dec 2022 12:04:48 -0500
+        Sun, 18 Dec 2022 12:06:41 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE641DF03;
-        Sun, 18 Dec 2022 08:21:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2E9C74F;
+        Sun, 18 Dec 2022 08:23:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A67A060C99;
-        Sun, 18 Dec 2022 16:21:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22BB7C433F0;
-        Sun, 18 Dec 2022 16:21:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF1BB60C99;
+        Sun, 18 Dec 2022 16:23:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 319CEC433F2;
+        Sun, 18 Dec 2022 16:22:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671380503;
-        bh=WuohWH2oL/e1tbedEYaYIWUwyWyjMhdRAcVyWCS1/7o=;
+        s=k20201202; t=1671380580;
+        bh=noPrCegBTp9PV+M7uhFDhcaViqTvtzP0b7QtO8g6MaQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ktKllpja2JqOWOTPeF+9G3fOHU1YQfLq5eqVb+d1Dw31fKfYpXt68Sq5cE6Jvjhev
-         gskp2CaFXqGjy65vcMqYJuOCm3+sTZgUOXcXUYJkM0lQZRUqyvtxqq4wghbCTbIreT
-         Zhygz/HDeJw+BibEtdSFWC+Qy+df7P4hbC+YeBsT3TX/gGdCg8y40SaWdaqiRTAOvi
-         efPKufVUqC2InsDeSfz+n3vC8L4PiHoQ5DIyLymCMelhiK8XookBzKbHKkpnoCOl/7
-         p5BzBLdvKdBedfxtH7iO+5I90kB9hqn/yi2rOW+7MKFYn3u1+dOY1WjTdBkvhM3KZ3
-         WY3e5OPT0wWuA==
+        b=nTNMW8j2j9CEA0PJghxqnUOFYoj4d8Jott8+WPURvAREOHjwfiIP8cCQj0QBU3UXR
+         mR+M0xzVsV6yCVPAiOUjWtxY1qp1rfwbrJJxn9SKdNSKjzLGON71eLGKYEZUn1JFEQ
+         eoXnV8jNv9Vbj8N4bH56FD03VyL4kyQ8HbA9GDPacGvSPCcLFzBXlzrhOMAliPy7fP
+         Bkdag0pzm0hoj7vEURb+cpMmEyeQQ0j1MSH8FLGHuNmZnWV8wiQsxOibWL882Iw5KP
+         VlFC2/38iCHKkYa7c6kvpLk/95CsODTKXtZe4Z8d2nh8Ag5QqxrvC3rBStNkadJ3ju
+         /uJK33JlK85fA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Shigeru Yoshida <syoshida@redhat.com>,
@@ -39,12 +39,12 @@ Cc:     Shigeru Yoshida <syoshida@redhat.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Sasha Levin <sashal@kernel.org>, hverkuil@xs4all.nl,
         mchehab@kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 25/26] media: si470x: Fix use-after-free in si470x_int_in_callback()
-Date:   Sun, 18 Dec 2022 11:20:15 -0500
-Message-Id: <20221218162016.934280-25-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 22/23] media: si470x: Fix use-after-free in si470x_int_in_callback()
+Date:   Sun, 18 Dec 2022 11:21:48 -0500
+Message-Id: <20221218162149.935047-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221218162016.934280-1-sashal@kernel.org>
-References: <20221218162016.934280-1-sashal@kernel.org>
+In-Reply-To: <20221218162149.935047-1-sashal@kernel.org>
+References: <20221218162149.935047-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -94,10 +94,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/radio/si470x/radio-si470x-usb.c b/drivers/media/radio/si470x/radio-si470x-usb.c
-index ba43a727c0b9..51b961cfba7c 100644
+index 95581a847619..5710f362a26d 100644
 --- a/drivers/media/radio/si470x/radio-si470x-usb.c
 +++ b/drivers/media/radio/si470x/radio-si470x-usb.c
-@@ -742,8 +742,10 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
+@@ -736,8 +736,10 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
  
  	/* start radio */
  	retval = si470x_start_usb(radio);
