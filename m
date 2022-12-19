@@ -2,88 +2,76 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 252B3C46467
-	for <linux-media@archiver.kernel.org>; Mon, 19 Dec 2022 15:07:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6D53C3DA71
+	for <linux-media@archiver.kernel.org>; Mon, 19 Dec 2022 15:56:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232209AbiLSPHU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Dec 2022 10:07:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36612 "EHLO
+        id S232322AbiLSP43 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Dec 2022 10:56:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232611AbiLSPGr (ORCPT
+        with ESMTP id S232037AbiLSP41 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Dec 2022 10:06:47 -0500
-X-Greylist: delayed 970 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 19 Dec 2022 07:06:34 PST
-Received: from mail.ivk.ru (mail.ivk.ru [185.6.174.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D533B8A;
-        Mon, 19 Dec 2022 07:06:34 -0800 (PST)
-Received: from localhost.localdomain (unknown [91.190.239.60])
-        by mail.ivk.ru (Postfix) with ESMTPA id B063320002;
-        Mon, 19 Dec 2022 17:39:46 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ivk.ru;
-        s=FFC20516-06DA-11EA-9F07-2A32BFAFF1B3; t=1671460786;
-        bh=EowtjHuj3mSbkT+YGM3kfnkKglQvj+7gOskOHco/nSk=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=AFziF1H55xXg2l1Bgc2kVpdBuIyd91i6MYjU714BznG2NnMm2jo5w2xfQxTPcSIGn
-         mlFsKENt4Cw0kqXZc6u+maxhw5Byf0YmZUX641f+pSm7ebdMkXWcGtktXkREyWpq2v
-         0admCKhx1CKcLxGkrcRuuI6wKNpm+I1QK8KKprZZ/yJk3p7bMyWOgD8y+09TEkJym+
-         qZGNKeHv80/3rFSfVD5MplM81tkQ7a6CBm9VC+05HDmNqSv1+yYy4z0CcSkQIY91Kn
-         vCBjTBG0YibwplvDfVa5rdNgfqGuVRTzr8mYk92RJgaLl/HTHAvgNdrD6ZKz+eRcnm
-         EJRKXGSA22aEbj7637ysTfRbckWac50bLj8CWNAOFcF5WeZ4Kbuqb1oTujrTgFzgks
-         yUo+L+uLNipcIP4dyOUF8BVaGsRRXB8fKWcyTItk8mEzm5m7Q56kS+CdDZdclUJmQm
-         7apb2Rmm/lPjt2FZocJcUcWABGWPaurkAwMf3Clor1kkSfkwApAR04VxRKkENR8Uiv
-         SzcJXZt15kmurdbmlj/LB25DFFXsn09uZdVPfhrajkYDgj0GPBmLLtCljPJicjpuAv
-         6F0ds7x0YmyF1YjGM2rvkb54Ool4KykqQTNZAJVJwGK0HEnUoQP6D2woso/KnwXQJn
-         3n8SdCMVMc7+OcpuC1rG6D18=
-From:   Nikolay Burykin <burikin@ivk.ru>
-To:     Mauro Carvalho Chehab <mchehab@infradead.org>
-Cc:     Nikolay Burykin <burikin@ivk.ru>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
-        khoroshilov@ispras.ru
-Subject: [PATCH] ide: fix for potential NULL-pointer dereference
-Date:   Mon, 19 Dec 2022 17:39:17 +0300
-Message-Id: <20221219143917.30434-1-burikin@ivk.ru>
-X-Mailer: git-send-email 2.35.1
+        Mon, 19 Dec 2022 10:56:27 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7EA6343;
+        Mon, 19 Dec 2022 07:56:25 -0800 (PST)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:f69c:5603:d4ce:7aa2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 16C416602C2C;
+        Mon, 19 Dec 2022 15:56:24 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1671465384;
+        bh=0xvLSgnd51UVvYAm3gheA28esQ/NuH/ser9zs6gn/To=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=aMQCph4ji1fmcge88iutVVKOjX4jkQOaQi9ZFAj2jsNKwiZqEHDuKfI/LNdqFTRs+
+         AaN8xwR5SlMoX7wLrNKFKhJ4TPXSWitgkBz98+A7p5hmHG8lHVcGGPmFbrCQvtFlcI
+         EmBfjwSRzeUZBR+1zjUlDFlQcNLrPFbdcBE/yUALtP2MNaJieBKC94rKpMsAj0aYmA
+         KAAIC0oscoj575Ugso18t86qpHUqGVX73/DsgsExX326gZIJdH4qiXZ+qE54SJkK+e
+         9VmNVESDKWOp0MbAQtn9y5Q3+WyJCsDM6Ifab4KCfSpBwXTL3oG0cMRy3NTUpiHsG1
+         VRvGS/yN2lcSw==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        daniel.almeida@collabora.com, nicolas.dufresne@collabora.co.uk
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v1 1/9] dt-bindings: media: rockchip-vpu: Add rk3588 vpu compatible
+Date:   Mon, 19 Dec 2022 16:56:08 +0100
+Message-Id: <20221219155616.848690-2-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221219155616.848690-1-benjamin.gaignard@collabora.com>
+References: <20221219155616.848690-1-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-After having been compared to NULL value at ide-io.c:370,
-pointer 'rq->rq_disk' is dereferenced at ide-io.c:381.
+Add compatible for rk3588 AV1 vpu decoder.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
-
-Signed-off-by: Nikolay Burykin <burikin@ivk.ru>
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/ide/ide-io.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/media/rockchip-vpu.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/ide/ide-io.c b/drivers/ide/ide-io.c
-index 4867b67b60d6..343e93824b03 100644
---- a/drivers/ide/ide-io.c
-+++ b/drivers/ide/ide-io.c
-@@ -367,7 +367,11 @@ static ide_startstop_t start_request (ide_drive_t *drive, struct request *rq)
- 			    pm->pm_step == IDE_PM_COMPLETED)
- 				ide_complete_pm_rq(drive, rq);
- 			return startstop;
--		} else if (!rq->rq_disk && ata_misc_request(rq))
-+		} else if (!rq->rq_disk) {
-+			if (!ata_misc_request(rq)) {
-+				rq->rq_flags |= RQF_FAILED;
-+				goto kill_rq;
-+			}
- 			/*
- 			 * TODO: Once all ULDs have been modified to
- 			 * check for specific op codes rather than
-@@ -377,6 +381,7 @@ static ide_startstop_t start_request (ide_drive_t *drive, struct request *rq)
- 			 * dropped entirely.
- 			 */
- 			return ide_special_rq(drive, rq);
-+		}
- 
- 		drv = *(struct ide_driver **)rq->rq_disk->private_data;
- 
+diff --git a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
+index 6cc4d3e5a61d..8454df53f5cb 100644
+--- a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
++++ b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
+@@ -24,6 +24,7 @@ properties:
+           - rockchip,rk3399-vpu
+           - rockchip,px30-vpu
+           - rockchip,rk3568-vpu
++          - rockchip,rk3588-av1-vpu
+       - items:
+           - const: rockchip,rk3188-vpu
+           - const: rockchip,rk3066-vpu
 -- 
-2.38.1
+2.34.1
 
