@@ -2,202 +2,170 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AA70C10F1E
-	for <linux-media@archiver.kernel.org>; Tue, 20 Dec 2022 14:37:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E721C4167B
+	for <linux-media@archiver.kernel.org>; Tue, 20 Dec 2022 14:38:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234090AbiLTOhP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Dec 2022 09:37:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35906 "EHLO
+        id S234108AbiLTOi1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Dec 2022 09:38:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234089AbiLTOhI (ORCPT
+        with ESMTP id S234110AbiLTOiV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Dec 2022 09:37:08 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF636BB4
-        for <linux-media@vger.kernel.org>; Tue, 20 Dec 2022 06:36:58 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B0755886;
-        Tue, 20 Dec 2022 15:36:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1671547012;
-        bh=gWpjx1PzNfWrMuBSryKJatFh2V6ZhBNjf1kERFSwlNQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h7PGcfe/G17zxUPSHTCLszt9QVOEE1rzWi6Mve6rc/2AwBuyb3IiAn972uFBhdiHF
-         HJlwnOPkPg/zDYUkzA5V/J0RjS4k/Tzyfhef1Ok+rMSoYhsNGKKd7cTwOk4QGrBDv5
-         hE8IIYPu+j9uX0/ftI/edxWsityKZMXg8EtzBIZs=
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     linux-media@vger.kernel.org
-Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>
-Subject: [PATCH v2 4/5] media: ti: omap4iss: Use media_pipeline_for_each_entity()
-Date:   Tue, 20 Dec 2022 16:36:38 +0200
-Message-Id: <20221220143639.764-5-laurent.pinchart@ideasonboard.com>
-X-Mailer: git-send-email 2.38.2
-In-Reply-To: <20221220143639.764-1-laurent.pinchart@ideasonboard.com>
-References: <20221220143639.764-1-laurent.pinchart@ideasonboard.com>
+        Tue, 20 Dec 2022 09:38:21 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84203192B4;
+        Tue, 20 Dec 2022 06:38:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1671547099; x=1703083099;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=tpH9wONMCszvhaN4rH44w0PTiSijxDVawCxnXxk2WUA=;
+  b=TsEh1KEmR4XaywL3lQAbIoeCfPwmEYTFWH8WYOzl+aHx/LT5XadfhmHX
+   eCLl9c+JGXNrG3nUnhL7dCV+idL28gIpTAG0cwOYNdoE+HVw9PypwoLwT
+   etfDrUrKWZPjItL45jt9uoSC5JwF3NI4DFILb83U9gq05LQgFgYOVllhd
+   nhebvLOQ0AaN7Gwsoo+rdvuZvyar6yEWB9SZSkPBsGafPjhsAEFmIgLay
+   26x/wHdC829v52oSDtZ9cHyVUhKsZt00qIIjE4ce6L4mnOQapi89qHVSb
+   jJy0n+r/+1askMo7d9QEpySeLH7xO56S02wuhI2usJslonV2UI/xfzZfn
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,259,1665471600"; 
+   d="scan'208";a="204775892"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Dec 2022 07:38:19 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 20 Dec 2022 07:38:18 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
+ Transport; Tue, 20 Dec 2022 07:38:18 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iazO5HtPHtBGdTmmb9t4xEUA7D6EPXXryZrubfNe0JVSd9DQ+Xir9tYjnSIT/Oy3uTMWf2r2O7ZtdB/sw76DT9UoGF+zsGhZK27ECb/B9/JLF732lBOkKcAskH5Q59MNSjceM4GnomOyGmNlx7x+WUfz1ADAsmS7dseXwWxBW6lpAG9a6QylKnHJSiAIsRn0AzfpQPT8OkLHkjO1OSWqC1vKiGbTIk5IYQBKKY++sFKrEspeJU3R3CAqQDpjvl1smF62O9ZeVToGFXiZSl1sNeLiO+03Z81PAa9pibPQb7YGMYvtvcDDkwDKLlR1Ft+iFQobPQacFTbGD2qGre0srA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tpH9wONMCszvhaN4rH44w0PTiSijxDVawCxnXxk2WUA=;
+ b=ZxLRiHcFGgWJvDAVfZjz0YZ9VkGY0JLYe3kZruh4RvANZ6Zd5m5w/MFqYXseBp2t5DbIfXa9/f/dlg0F2oiH4Cyv5EYDAfjJOk/RO5x//AfyUZuXg1KPlitH1Rpbigkd+EC3+dw10trgzlDgqiiLbL6dI0v+/EbwF0M3RQl6zfVcS/bakPXUowjrfuI56S2X1fREjeFyHvCZGskcMn/7tUDjQZ5qn/VVUxQvTtVI2R5uBjG5zgju7F/YOcMmdSWK16vb3sN8dHxBPy3KqO4fZ3xi4hgkavaSarI0ZvdsF8AHuqhaY4uRrb6DmE8LF/7I175jveTKzfrAxa7OviIsoA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tpH9wONMCszvhaN4rH44w0PTiSijxDVawCxnXxk2WUA=;
+ b=LUd0nm03olnpKn2P6KFJ6m1UJcZMKABb5BWA9/0Cwc777hcKQIRgQc+EXr6kthGrriyNrPlUKhk+VTXA1hxQe644ObLAfC+ZOzAELzrp3Itp7b1nuOjCZnn+RSXhJjuFrvHEzSD2yUr+J1lknx70jVJNoChpof9T2GRbT/vonS4=
+Received: from BL1PR11MB5384.namprd11.prod.outlook.com (2603:10b6:208:311::14)
+ by PH7PR11MB6883.namprd11.prod.outlook.com (2603:10b6:510:202::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Tue, 20 Dec
+ 2022 14:38:15 +0000
+Received: from BL1PR11MB5384.namprd11.prod.outlook.com
+ ([fe80::775:3af1:d96f:ef6e]) by BL1PR11MB5384.namprd11.prod.outlook.com
+ ([fe80::775:3af1:d96f:ef6e%9]) with mapi id 15.20.5880.019; Tue, 20 Dec 2022
+ 14:38:15 +0000
+From:   <Eugen.Hristev@microchip.com>
+To:     <robh@kernel.org>
+CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <luis.oliveira@synopsys.com>
+Subject: Re: [PATCH v5 2/4] dt-bindings: phy: Document the Synopsys MIPI DPHY
+ Rx bindings
+Thread-Topic: [PATCH v5 2/4] dt-bindings: phy: Document the Synopsys MIPI DPHY
+ Rx bindings
+Thread-Index: AQHZEVwtB0LhKuNBckWg5VeIFProca5xK/SAgAWyswA=
+Date:   Tue, 20 Dec 2022 14:38:15 +0000
+Message-ID: <9c175af4-cf69-9a49-22ac-03b9e4458ee7@microchip.com>
+References: <20221216143717.1002015-1-eugen.hristev@microchip.com>
+ <20221216143717.1002015-3-eugen.hristev@microchip.com>
+ <20221216233719.GA80712-robh@kernel.org>
+In-Reply-To: <20221216233719.GA80712-robh@kernel.org>
+Accept-Language: en-US, ro-RO
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5384:EE_|PH7PR11MB6883:EE_
+x-ms-office365-filtering-correlation-id: d1586ab9-46d8-4138-71fb-08dae297d43f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0tXEwMfTrQoQyGWF+PVcYh8cfXF/kfQrXtk0ZSkiv01sxqITHXOJIwXe9oVcYykdpxpANPzROLuYekXcgY80CWeVuFbf3nixOTANHaWzZO2te0m9J1KhSSBg9KbaBqC1NelDq9D1gfUaQT7PxGvLrLWuI+oMLrGUVjtoJKo0HYqjusNgf+HXSHWWQ3an50yzWB0/aB8tEtIaJtt51ajfJ8A9M/5hPoXb43HXwm+nOCunbYBeT9Pydi5/sC1L/CsChXNqXT9MhZIsCGZkTkSuoepofSe7fEYqiXGqXRAFdEB6yjXAYIk5KACemOsykYNrsZY1ixR0HMCeFlJVEq0FOJwTyIAS6JekF4ORlKn1Vrrp6yqZhW2FRIbFBZoTD7ts3bR2k6YpOnKSeCBiC6vkU9vMPoBEZqBmgSVrLdSfjVCNfhN0zVle9GE7iyP9917fdxDETGjJ93sOTIdeEqNW9h71XfRZzd+T4p1lIkTs6K4rDaUWEAJhbOHb9v5qEK8yMZg1bOl8qA9S29ebMpGRPsrrvKigcLaUfpYCQythRECEYO8OEHiIaCxOU9fw2I6zXrIn2Gi1wDcKwqbvwkGyq6m1cCx7RNGqEHIqZMS2UoQXUlokFTCWKwXUvNajwrolkoqzr4LSqSMZOmNmR37vJljh2kE5Iv20grFFuqnUQ4iLD4ub+hTXmraKLNoJLuQrNl/nBN23QojIXh1NXQeuC+s+EViVXWCsKMuy/mEyjk3Vek55uUZqzGRVppsuzSOoMU112so40RPeSi/g45I4IA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5384.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(346002)(136003)(39860400002)(366004)(396003)(451199015)(54906003)(38070700005)(31686004)(8936002)(5660300002)(71200400001)(6916009)(4744005)(478600001)(6486002)(66556008)(6512007)(41300700001)(26005)(186003)(2906002)(38100700002)(53546011)(6506007)(31696002)(76116006)(2616005)(316002)(36756003)(66476007)(4326008)(86362001)(66446008)(66946007)(64756008)(8676002)(122000001)(91956017)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OE5vUzBEWFFhdGFEdVBwUStETm5jVGdwOTZNZUgyTkNraHV3N21teXYxRVQy?=
+ =?utf-8?B?T1NKVndSMVhrdGpyNnc0elpMc0pkTGVnYlpCVytZNWcwQWp5cmpVMGdZSS9n?=
+ =?utf-8?B?RURPaXcyWW5oSVJhSERNUG9ZV3RPbTU1QmVPampxMU9VejhvL0tjKzNpUklV?=
+ =?utf-8?B?eHBjWUczclhjUG9LN3B2NHJCcEtEYStMRmlwU2QzSDFkbUl5VHdmYnBkTmp0?=
+ =?utf-8?B?ZmJpVDBXU2xoZUNxN3crbHJXMHpocWllaS9GUVo0SThiS0s3S29heWxtVDk1?=
+ =?utf-8?B?YkNJYkJkaHI0QWhDb2grQkRHTVZGVXJSTm9DM2JaeVZ0RFArTTQ0NzF6a3dK?=
+ =?utf-8?B?dGhpcmtRTm42L3F1cWd5WHZiWUUvK3AxSitzeEo0ZjJIaWJ1SEdUWFRoRC9h?=
+ =?utf-8?B?cnVYSEU2WWROeWg4aVJpOFNGT25CWmc3NkdQdVlNWU5ibzJQOFE0eEpmYnRy?=
+ =?utf-8?B?WjdQTXZsaVZQbXdLaHdja3pXaHBxRU5FOCt3eVY2NzgvOTEyeUljeGVnSzdN?=
+ =?utf-8?B?alNHbysyaXh4UGd0bkVZemczR1hlYTFIanlCSXFvU2RSU2lybEZENklta1pS?=
+ =?utf-8?B?OEw3TFBvOE1RMDZ0T2RYeUNMMkJ0bjRzTG1RalRkSVhwYUNydkFXY1g2bE9E?=
+ =?utf-8?B?d1lLRWpzbjdJbkkyOGJyZWFkZ2kzVXpBWHNxNWtvaTZTYVhoM1pYV2N2TzY3?=
+ =?utf-8?B?cGIyV3hLVlI0ZnE1RDB6ME9sUjNSOUVnVEFOSTJqQkFyNnpPcHJYM0NUUFNN?=
+ =?utf-8?B?M0hlMmVUUHVsNE1mcEtDd1RDVGkwdXN0SjFGUVVsWHNpc3R1K1BBcG5ISDRB?=
+ =?utf-8?B?alVtK094YW9HbVp4TGw2TFhqOWovd1pCNVlaRmtUc29xeWxhQThBVXJvS1My?=
+ =?utf-8?B?NXdvOHk2MG1tZlc2aHNWaEo4S0FNRTZ1Mk1OVGordEdFOGRXMXpZVDZkZTla?=
+ =?utf-8?B?SUJITzQ0aitvUzRXSFZjWC91Ykc0YWJIT0g0SmdjV2FOL0R3dVc2ZzZlNU1w?=
+ =?utf-8?B?aE83dmduSVlHUy9EOGpGeEVKOE8rQzVLclh0SUZSOXNoTWlSMUsrbzQ1ZnRs?=
+ =?utf-8?B?NTNCUURXNTJLVHIyVkhETm9ETGx3blg4d2c4TURycGJQL0FqREZXYUUzc1Qx?=
+ =?utf-8?B?U2M3WEN6VG9rQnFoVnF6WFkrY0hIaTFQdmxDRStNMFcxUjAvSEZobUhxWUIw?=
+ =?utf-8?B?Nk91eFhlVjRUYk41RHpnV3BDbDNEaFZCaC8zK0hsVGpQVEo5ZVJUQy81T1BH?=
+ =?utf-8?B?Q0h6cmZRREMyR3RYRitzN1Y1a2dGUFEyY3AxVjQ0TTgxZFF6aXFzZ1Q3SEp3?=
+ =?utf-8?B?MGFuVkF4azVEdFgzNGU3NWY5SERCb3BDMy9kOFNSRmROM29OcTkwUUhOak05?=
+ =?utf-8?B?Q29NaCs1a0NkOC9aY1NuQjVlUWdqYmZGcGJKVXh3TzFnc2ptM3M1Z1ZUOWEv?=
+ =?utf-8?B?ZDhaTEU2SXQzN0JxTldrODNPcDBhRmZkajdpclVOSVI4K3oxQUJDNEVOdG5x?=
+ =?utf-8?B?YitOTzFBNUlqZzF4OHlVT08xVmhYZXdjb01aeU5WSFVJU1JreUlBYVNJME9u?=
+ =?utf-8?B?VzVvMEZuL0FlcmFNaGVlZGJld2tQTm0vcU1PYUkvMDdNYy9QeE5teWhQVU9z?=
+ =?utf-8?B?MlZTcmlteUZia1BZOU80SzJnNTdyY08rNWUvQ09yb2w0TFVlU2wwSDdKNTds?=
+ =?utf-8?B?cGpZWUdWSGRhZUN1SFlpM251M3laejMzVU1rMU5ySGE2L3F4RHZUU1RkVUJ2?=
+ =?utf-8?B?TGtXbDA5am42VjVtbEMrK2FJYXBnSnJ6OUZ4MzBrT0phWG9YSElKMVMzTis1?=
+ =?utf-8?B?cFgycmdoTDNGSzdINnQwbEZwSytndlg4cXJGMk9aUC9NRmlqZ0VjWUZheDFz?=
+ =?utf-8?B?V0VXd2hYYUh0SHhqVGR4VzhKd0tDVk04aEtNQ1c2RjFEejVXRUhYcjVTR1pF?=
+ =?utf-8?B?TE1nRVlFRFIyVmtKYUhURVpzc09nWStldE9MUFhXSyt2ZzB3UXA0NkZEeGFF?=
+ =?utf-8?B?Mm5tTkJUNTMrWUVyM2ZoTGNXVm5pM2llTlZTVDF2VlYwRnNTOEdZUUZHa2NP?=
+ =?utf-8?B?V1Q1aWovcU4yUTNsUUF4WVk4UUNEbzJURnFndS81cjVJWVBaU2F4Rm9OTlI4?=
+ =?utf-8?B?dmswT2ZOT3dXTnhvZkVocmVlczYzMFdSeitEdzlKdDBFSGgwQUQrd3ZPQUpl?=
+ =?utf-8?B?bEE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <9D5FC06DECEE8B439285A31BD5D8C286@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5384.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d1586ab9-46d8-4138-71fb-08dae297d43f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Dec 2022 14:38:15.4744
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 1sXpabB1DHg5opFVJc4PkkaFGmovgR38qMV6k2sdayGUncwhhgCkXkOrjfIDEN0Yut2Iu3oQJGgWZ3rXWcUTGZQZ8lNX0HomkPUm08Q1qe8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6883
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Replace usage of the deprecated media graph walk API with the new
-media_pipeline_for_each_entity() and media_pipeline_for_each_pad()
-macros.
-
-Even though the entity iterator may seem a better match when build the
-entity bitmap in iss_video_stream(), it would not be more efficient as
-it would still iterate internally over all pads. As the entity iterator
-requires explicit iterator initialization and cleanup calls, the code
-would be more complex.
-
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
-Changes since v1:
-
-- Initialize and cleanup the iterator
-- Use pad iterator in iss_video_streamon()
----
- drivers/staging/media/omap4iss/iss_video.c | 62 ++++++++--------------
- 1 file changed, 23 insertions(+), 39 deletions(-)
-
-diff --git a/drivers/staging/media/omap4iss/iss_video.c b/drivers/staging/media/omap4iss/iss_video.c
-index 0ad70faa9ba0..6b5022808618 100644
---- a/drivers/staging/media/omap4iss/iss_video.c
-+++ b/drivers/staging/media/omap4iss/iss_video.c
-@@ -201,39 +201,34 @@ iss_video_remote_subdev(struct iss_video *video, u32 *pad)
- 
- /* Return a pointer to the ISS video instance at the far end of the pipeline. */
- static struct iss_video *
--iss_video_far_end(struct iss_video *video)
-+iss_video_far_end(struct iss_video *video, struct iss_pipeline *pipe)
- {
--	struct media_graph graph;
--	struct media_entity *entity = &video->video.entity;
--	struct media_device *mdev = entity->graph_obj.mdev;
-+	struct media_pipeline_entity_iter iter;
-+	struct media_entity *entity;
- 	struct iss_video *far_end = NULL;
-+	int ret;
- 
--	mutex_lock(&mdev->graph_mutex);
-+	ret = media_pipeline_entity_iter_init(&pipe->pipe, &iter);
-+	if (ret)
-+		return ret;
- 
--	if (media_graph_walk_init(&graph, mdev)) {
--		mutex_unlock(&mdev->graph_mutex);
--		return NULL;
--	}
-+	media_pipeline_for_each_entity(&pipe->pipe, &iter, entity) {
-+		struct iss_video *other;
- 
--	media_graph_walk_start(&graph, entity);
--
--	while ((entity = media_graph_walk_next(&graph))) {
- 		if (entity == &video->video.entity)
- 			continue;
- 
- 		if (!is_media_entity_v4l2_video_device(entity))
- 			continue;
- 
--		far_end = to_iss_video(media_entity_to_video_device(entity));
--		if (far_end->type != video->type)
-+		other = to_iss_video(media_entity_to_video_device(entity));
-+		if (other->type != video->type) {
-+			far_end = other;
- 			break;
--
--		far_end = NULL;
-+		}
- 	}
- 
--	mutex_unlock(&mdev->graph_mutex);
--
--	media_graph_walk_cleanup(&graph);
-+	media_pipeline_entity_iter_cleanup(&iter);
- 
- 	return far_end;
- }
-@@ -850,12 +845,12 @@ iss_video_streamon(struct file *file, void *fh, enum v4l2_buf_type type)
- {
- 	struct iss_video_fh *vfh = to_iss_video_fh(fh);
- 	struct iss_video *video = video_drvdata(file);
--	struct media_graph graph;
--	struct media_entity *entity = &video->video.entity;
--	struct media_device *mdev = entity->graph_obj.mdev;
-+	struct media_device *mdev = video->video.entity.graph_obj.mdev;
-+	struct media_pipeline_pad_iter iter;
- 	enum iss_pipeline_state state;
- 	struct iss_pipeline *pipe;
- 	struct iss_video *far_end;
-+	struct media_pad *pad;
- 	unsigned long flags;
- 	int ret;
- 
-@@ -873,13 +868,9 @@ iss_video_streamon(struct file *file, void *fh, enum v4l2_buf_type type)
- 	pipe->external_rate = 0;
- 	pipe->external_bpp = 0;
- 
--	ret = media_entity_enum_init(&pipe->ent_enum, entity->graph_obj.mdev);
-+	ret = media_entity_enum_init(&pipe->ent_enum, mdev);
- 	if (ret)
--		goto err_graph_walk_init;
--
--	ret = media_graph_walk_init(&graph, entity->graph_obj.mdev);
--	if (ret)
--		goto err_graph_walk_init;
-+		goto err_entity_enum_init;
- 
- 	if (video->iss->pdata->set_constraints)
- 		video->iss->pdata->set_constraints(video->iss, true);
-@@ -888,11 +879,8 @@ iss_video_streamon(struct file *file, void *fh, enum v4l2_buf_type type)
- 	if (ret < 0)
- 		goto err_media_pipeline_start;
- 
--	mutex_lock(&mdev->graph_mutex);
--	media_graph_walk_start(&graph, entity);
--	while ((entity = media_graph_walk_next(&graph)))
--		media_entity_enum_set(&pipe->ent_enum, entity);
--	mutex_unlock(&mdev->graph_mutex);
-+	media_pipeline_for_each_pad(&pipe->pipe, &iter, pad)
-+		media_entity_enum_set(&pipe->ent_enum, pad->entity);
- 
- 	/*
- 	 * Verify that the currently configured format matches the output of
-@@ -909,7 +897,7 @@ iss_video_streamon(struct file *file, void *fh, enum v4l2_buf_type type)
- 	 * Find the ISS video node connected at the far end of the pipeline and
- 	 * update the pipeline.
- 	 */
--	far_end = iss_video_far_end(video);
-+	far_end = iss_video_far_end(video, pipe);
- 
- 	if (video->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) {
- 		state = ISS_PIPELINE_STREAM_OUTPUT | ISS_PIPELINE_IDLE_OUTPUT;
-@@ -966,8 +954,6 @@ iss_video_streamon(struct file *file, void *fh, enum v4l2_buf_type type)
- 		spin_unlock_irqrestore(&video->qlock, flags);
- 	}
- 
--	media_graph_walk_cleanup(&graph);
--
- 	mutex_unlock(&video->stream_lock);
- 
- 	return 0;
-@@ -981,9 +967,7 @@ iss_video_streamon(struct file *file, void *fh, enum v4l2_buf_type type)
- 		video->iss->pdata->set_constraints(video->iss, false);
- 	video->queue = NULL;
- 
--	media_graph_walk_cleanup(&graph);
--
--err_graph_walk_init:
-+err_entity_enum_init:
- 	media_entity_enum_cleanup(&pipe->ent_enum);
- 
- 	mutex_unlock(&video->stream_lock);
--- 
-Regards,
-
-Laurent Pinchart
-
+T24gMTIvMTcvMjIgMDE6MzcsIFJvYiBIZXJyaW5nIHdyb3RlOg0KPiBPbiBGcmksIERlYyAxNiwg
+MjAyMiBhdCAwNDozNzoxNVBNICswMjAwLCBFdWdlbiBIcmlzdGV2IHdyb3RlOg0KPj4gRnJvbTog
+THVpcyBPbGl2ZWlyYSA8THVpcy5PbGl2ZWlyYUBzeW5vcHN5cy5jb20+DQo+Pg0KPj4gQWRkIGRl
+dmljZS10cmVlIGJpbmRpbmdzIGRvY3VtZW50YXRpb24gZm9yIFNOUFMgRGVzaWduV2FyZSBNSVBJ
+IEQtUEhZIGluDQo+PiBSWCBtb2RlLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IEx1aXMgT2xpdmVp
+cmEgPGx1aXMub2xpdmVpcmFAc3lub3BzeXMuY29tPg0KPj4gLS0tDQo+PiAgIC4uLi9iaW5kaW5n
+cy9waHkvc25wcyxkdy1kcGh5LXJ4LnR4dCAgICAgICAgICB8IDI5ICsrKysrKysrKysrKysrKysr
+KysNCj4+ICAgMSBmaWxlIGNoYW5nZWQsIDI5IGluc2VydGlvbnMoKykNCj4+ICAgY3JlYXRlIG1v
+ZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9waHkvc25wcyxkdy1k
+cGh5LXJ4LnR4dA0KPiANCj4gTmV3IGJpbmRpbmdzIG11c3QgYmUgaW4gc2NoZW1hIGZvcm1hdC4N
+Cj4gDQo+IFJvYg0KPiANCg0KSGkgUm9iLA0KDQpJIGtub3cuIEkgYW0gc2VuZGluZyB0aGlzIGZv
+ciByZWZlcmVuY2Ugb25seS4gSXQgbWlnaHQgaGVscCBzb21lb25lLCBvciANCnNvbWVvbmUgZWxz
+ZSBtaWdodCBwaWNrIGl0IHVwIGFuZCBjb252ZXJ0IGl0Lg0KSSBtYW5hZ2VkIHRvIGNvbnZlcnQg
+dGhlIGRyaXZlciBiaW5kaW5nIHRvIHRoZSBiZXN0IG9mIG15IGFiaWxpdHksIGJ1dCANCm5vdCB0
+aGlzIG9uZS4NCg0KVGhhbmtzIGZvciByZXZpZXdpbmcgdGhvdWdoLg0KRXVnZW4NCg==
