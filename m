@@ -2,215 +2,136 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77B58C4167B
-	for <linux-media@archiver.kernel.org>; Tue, 20 Dec 2022 14:36:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00EB0C3DA6E
+	for <linux-media@archiver.kernel.org>; Tue, 20 Dec 2022 14:37:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234063AbiLTOgC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Dec 2022 09:36:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33378 "EHLO
+        id S234035AbiLTOhE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Dec 2022 09:37:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234056AbiLTOfc (ORCPT
+        with ESMTP id S233881AbiLTOgs (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Dec 2022 09:35:32 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79CF186F2;
-        Tue, 20 Dec 2022 06:35:28 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8EC2B4F8;
-        Tue, 20 Dec 2022 15:35:26 +0100 (CET)
+        Tue, 20 Dec 2022 09:36:48 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F60BAC
+        for <linux-media@vger.kernel.org>; Tue, 20 Dec 2022 06:36:47 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7BDA356D;
+        Tue, 20 Dec 2022 15:36:45 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1671546927;
-        bh=YQDi/3LJt+gT69X7KRKbaW9jyhfDa/9LxhNPa1qAHbg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BMNm1meIM395k4XIZDapWRBvxTmT/h3SZcRS/4e8M3wthEAjjQq2Btjn6YXnnEfd6
-         MPy2+IiaCioVkLJdzobYiJ4MyyBoe/VqRyGLNqMgd0CNiQypRWIiQ6PaQvM7BuWyzz
-         L2MLOloRFDbmsS2BrOE3FIYZ0JgXS+iC7p+UX94o=
-Message-ID: <af2bf62c-2a25-addc-5250-935e125ac009@ideasonboard.com>
-Date:   Tue, 20 Dec 2022 16:35:24 +0200
+        s=mail; t=1671547005;
+        bh=j5f0IG+PJIhceiA/3r8lRcq2vcxoloztWn9ZsRHa8+E=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Kuzr9VRcUs+n7M9VRsfYG8HmRwdM9BLfAd5e/KwhVENWV/qMXlWQVG9xPbtNMB/7x
+         DtHhcZF8lVasbb5CKnsqrK1zahYVslvAerBOyiunnlH2exk0T+f8JROS0sK8LQykOc
+         W/0Shc0w+tTN1txpgCJYCkGqy+Z+m0ctjb3tOn1U=
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+Subject: [PATCH v2 1/5] media: mc: entity: Add pad iterator for media_pipeline
+Date:   Tue, 20 Dec 2022 16:36:35 +0200
+Message-Id: <20221220143639.764-2-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.38.2
+In-Reply-To: <20221220143639.764-1-laurent.pinchart@ideasonboard.com>
+References: <20221220143639.764-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 1/7] media: Add 2-10-10-10 RGB formats
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-References: <20221219140139.294245-1-tomi.valkeinen+renesas@ideasonboard.com>
- <20221219140139.294245-2-tomi.valkeinen+renesas@ideasonboard.com>
- <Y6C3PtnjAdv/seMy@pendragon.ideasonboard.com>
- <cfbb8f85-2bf9-4623-96bd-c05390a57a10@ideasonboard.com>
- <Y6HFmVXL/A/gazTn@pendragon.ideasonboard.com>
-From:   Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-In-Reply-To: <Y6HFmVXL/A/gazTn@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 20/12/2022 16:24, Laurent Pinchart wrote:
-> Hi Tomi,
-> 
-> On Tue, Dec 20, 2022 at 04:12:29PM +0200, Tomi Valkeinen wrote:
->> On 19/12/2022 21:10, Laurent Pinchart wrote:
->>> On Mon, Dec 19, 2022 at 04:01:33PM +0200, Tomi Valkeinen wrote:
->>>> Add XBGR2101010, ABGR2101010 and BGRA1010102 formats.
->>>>
->>>> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
->>>> ---
->>>>    .../userspace-api/media/v4l/pixfmt-rgb.rst    | 194 ++++++++++++++++++
->>>>    drivers/media/v4l2-core/v4l2-ioctl.c          |   3 +
->>>>    include/uapi/linux/videodev2.h                |   3 +
->>>>    3 files changed, 200 insertions(+)
->>>>
->>>> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst b/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
->>>> index 30f51cd33f99..de78cd2dcd73 100644
->>>> --- a/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
->>>> +++ b/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
->>>> @@ -763,6 +763,200 @@ nomenclature that instead use the order of components as seen in a 24- or
->>>>        \normalsize
->>>>    
->>>>    
->>>> +10 Bits Per Component
->>>> +=====================
->>>> +
->>>> +These formats store a 30-bit RGB triplet with an optional 2 bit alpha in four
->>>> +bytes. They are named based on the order of the RGB components as seen in a
->>>> +32-bit word, which is then stored in memory in little endian byte order
->>>> +(unless otherwise noted by the presence of bit 31 in the 4CC value), and on the
->>>> +number of bits for each component.
->>>> +
->>>> +.. raw:: latex
->>>> +
->>>> +    \begingroup
->>>> +    \tiny
->>>> +    \setlength{\tabcolsep}{2pt}
->>>> +
->>>> +.. tabularcolumns:: |p{2.8cm}|p{2.0cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|
->>>> +
->>>> +
->>>> +.. flat-table:: RGB Formats 10 Bits Per Color Component
->>>> +    :header-rows:  2
->>>> +    :stub-columns: 0
->>>> +
->>>> +    * - Identifier
->>>> +      - Code
->>>> +      - :cspan:`7` Byte 0 in memory
->>>> +      - :cspan:`7` Byte 1
->>>> +      - :cspan:`7` Byte 2
->>>> +      - :cspan:`7` Byte 3
->>>> +    * -
->>>> +      -
->>>> +      - 7
->>>> +      - 6
->>>> +      - 5
->>>> +      - 4
->>>> +      - 3
->>>> +      - 2
->>>> +      - 1
->>>> +      - 0
->>>> +
->>>> +      - 7
->>>> +      - 6
->>>> +      - 5
->>>> +      - 4
->>>> +      - 3
->>>> +      - 2
->>>> +      - 1
->>>> +      - 0
->>>> +
->>>> +      - 7
->>>> +      - 6
->>>> +      - 5
->>>> +      - 4
->>>> +      - 3
->>>> +      - 2
->>>> +      - 1
->>>> +      - 0
->>>> +
->>>> +      - 7
->>>> +      - 6
->>>> +      - 5
->>>> +      - 4
->>>> +      - 3
->>>> +      - 2
->>>> +      - 1
->>>> +      - 0
->>>> +    * .. _V4L2-PIX-FMT-XBGR2101010:
->>>> +
->>>> +      - ``V4L2_PIX_FMT_XBGR2101010``
->>>> +      - 'RX30'
->>>> +
->>>> +      - b\ :sub:`5`
->>>> +      - b\ :sub:`4`
->>>> +      - b\ :sub:`3`
->>>> +      - b\ :sub:`2`
->>>> +      - b\ :sub:`1`
->>>> +      - b\ :sub:`0`
->>>> +      - x
->>>> +      - x
->>>> +
->>>> +      - g\ :sub:`3`
->>>> +      - g\ :sub:`2`
->>>> +      - g\ :sub:`1`
->>>> +      - g\ :sub:`0`
->>>> +      - b\ :sub:`9`
->>>> +      - b\ :sub:`8`
->>>> +      - b\ :sub:`7`
->>>> +      - b\ :sub:`6`
->>>> +
->>>> +      - r\ :sub:`1`
->>>> +      - r\ :sub:`0`
->>>> +      - g\ :sub:`9`
->>>> +      - g\ :sub:`8`
->>>> +      - g\ :sub:`7`
->>>> +      - g\ :sub:`6`
->>>> +      - g\ :sub:`5`
->>>> +      - g\ :sub:`4`
->>>> +
->>>> +      - r\ :sub:`9`
->>>> +      - r\ :sub:`8`
->>>> +      - r\ :sub:`7`
->>>> +      - r\ :sub:`6`
->>>> +      - r\ :sub:`5`
->>>> +      - r\ :sub:`4`
->>>> +      - r\ :sub:`3`
->>>> +      - r\ :sub:`2`
->>>> +      -
->>>
->>> This doesn't match the text above. This would be RGBX2101010. I'm not
->>> sure which format you want, so I don't know if it's the documentation or
->>> the format name that is incorrect. The next two formats also seem
->>> incorrect to me.
->>
->> Right, the text should say big endian instead of little endian.
-> 
-> No, in big-endian format, you would have, for instance,
-> V4L2_PIX_FMT_XBGR2101010 defined as
-> 
-> 	[x, x, B[9:4]], [B[3:0], G[9:6]], [G[5:0], R[1:0]], [R[7:0]]
-> 
-> in memory byte order, while the format you want to define is
-> 
-> 	[B[5:0], x, x], [G[3:0], B[9:6]], [R[1:0], G[9:4]], [R[9:2]]
+Add a media_pipeline_for_each_pad() macro to iterate over pads in a
+pipeline. This should be used by driver as a replacement of the
+media_graph_walk API, as iterating over the media_pipeline uses the
+cached list of pads and is thus more efficient.
 
-Yes, I see your point.
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/media/mc/mc-entity.c | 18 ++++++++++++++++++
+ include/media/media-entity.h | 29 +++++++++++++++++++++++++++++
+ 2 files changed, 47 insertions(+)
 
-> The issue here is that 10-bpp formats don't have an integer number of
-> bytes per component. They are thus more similar to the 16-bit RGB
-> formats, where the macro named defined the order in a 16-bit word, which
-> was then stored in little-endian format in memory. For 24-bit and 32-bit
-> formats, we departed from that rule by using the byte memory order in
-> the macro name. For 10-bpp RGB formats we can't do so anymore. The most
-> sensible option is thus, I think, to use the same naming scheme as the
-> 16-bit RGB formats, which incidentaly matches the DRM naming scheme.
+diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+index b8bcbc734eaf..70df2050951c 100644
+--- a/drivers/media/mc/mc-entity.c
++++ b/drivers/media/mc/mc-entity.c
+@@ -932,6 +932,24 @@ __must_check int media_pipeline_alloc_start(struct media_pad *pad)
+ }
+ EXPORT_SYMBOL_GPL(media_pipeline_alloc_start);
+ 
++struct media_pad *
++__media_pipeline_pad_iter_next(struct media_pipeline *pipe,
++			       struct media_pipeline_pad_iter *iter,
++			       struct media_pad *pad)
++{
++	if (!pad)
++		iter->cursor = pipe->pads.next;
++
++	if (iter->cursor == &pipe->pads)
++		return NULL;
++
++	pad = list_entry(iter->cursor, struct media_pipeline_pad, list)->pad;
++	iter->cursor = iter->cursor->next;
++
++	return pad;
++}
++EXPORT_SYMBOL_GPL(__media_pipeline_pad_iter_next);
++
+ /* -----------------------------------------------------------------------------
+  * Links management
+  */
+diff --git a/include/media/media-entity.h b/include/media/media-entity.h
+index 85ed08ddee9d..e881e483b550 100644
+--- a/include/media/media-entity.h
++++ b/include/media/media-entity.h
+@@ -130,6 +130,15 @@ struct media_pipeline_pad {
+ 	struct media_pad *pad;
+ };
+ 
++/**
++ * struct media_pipeline_pad_iter - Iterator for media_pipeline_for_each_pad
++ *
++ * @cursor: The current element
++ */
++struct media_pipeline_pad_iter {
++	struct list_head *cursor;
++};
++
+ /**
+  * struct media_link - A link object part of a media graph.
+  *
+@@ -1163,6 +1172,26 @@ void media_pipeline_stop(struct media_pad *pad);
+  */
+ void __media_pipeline_stop(struct media_pad *pad);
+ 
++struct media_pad *
++__media_pipeline_pad_iter_next(struct media_pipeline *pipe,
++			       struct media_pipeline_pad_iter *iter,
++			       struct media_pad *pad);
++
++/**
++ * media_pipeline_for_each_pad - Iterate on all pads in a media pipeline
++ * @pipe: The pipeline
++ * @iter: The iterator (struct media_pipeline_pad_iter)
++ * @pad: The iterator pad
++ *
++ * Iterate on all pads in a media pipeline. This is only valid after the
++ * pipeline has been built with media_pipeline_start() and before it gets
++ * destroyed with media_pipeline_stop().
++ */
++#define media_pipeline_for_each_pad(pipe, iter, pad)			\
++	for (pad = __media_pipeline_pad_iter_next((pipe), iter, NULL);	\
++	     pad != NULL;						\
++	     pad = __media_pipeline_pad_iter_next((pipe), iter, pad))
++
+ /**
+  * media_pipeline_alloc_start - Mark a pipeline as streaming
+  * @pad: Starting pad
+-- 
+Regards,
 
-I agree. It wasn't quite clear to me if Hans agreed to that in the patch 
-7 discussions, but as you say, maybe that's the only option that makes 
-sense.
-
-  Tomi
+Laurent Pinchart
 
