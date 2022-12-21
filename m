@@ -2,180 +2,230 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1825AC53210
-	for <linux-media@archiver.kernel.org>; Wed, 21 Dec 2022 09:25:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A19E8C4332F
+	for <linux-media@archiver.kernel.org>; Wed, 21 Dec 2022 09:33:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234578AbiLUJZU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 21 Dec 2022 04:25:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
+        id S234528AbiLUJdz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 21 Dec 2022 04:33:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234063AbiLUJZS (ORCPT
+        with ESMTP id S234352AbiLUJdw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 21 Dec 2022 04:25:18 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCD61CFF4;
-        Wed, 21 Dec 2022 01:25:17 -0800 (PST)
-Received: from desky.lan (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9723E1221;
-        Wed, 21 Dec 2022 10:25:11 +0100 (CET)
+        Wed, 21 Dec 2022 04:33:52 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3419621891
+        for <linux-media@vger.kernel.org>; Wed, 21 Dec 2022 01:33:50 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9BC4E4B2;
+        Wed, 21 Dec 2022 10:33:48 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1671614712;
-        bh=dS3ZhV2uW+kZaTZFRTY0e9hL+Iy+N0U4QRpLL7brsF4=;
+        s=mail; t=1671615228;
+        bh=9p+RZm40ivvLdT38EO5ZrAuS6ao61QhItww4lwP84jk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FWOABLFOtl/eOSH9CpRBfnA+bMlDC5ZoPpxzRhcxK0RanA29FdQHT7eYQQiFJPgMN
-         cPnti0EAsDufuQs7Um4prSvN2LHG0Zy2z8Ywfd5v64vjZ8tkqIU++zI43eO76/q+IJ
-         1stvNqnlA6Fm/R1lOw6tTIdIbkXl8fe9eGNOb/4g=
-From:   Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-To:     linux-renesas-soc@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-Subject: [PATCH v3 7/7] drm: rcar-du: Add new formats (2-10-10-10 ARGB, Y210)
-Date:   Wed, 21 Dec 2022 11:24:48 +0200
-Message-Id: <20221221092448.741294-8-tomi.valkeinen+renesas@ideasonboard.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221221092448.741294-1-tomi.valkeinen+renesas@ideasonboard.com>
-References: <20221221092448.741294-1-tomi.valkeinen+renesas@ideasonboard.com>
+        b=f6HxlO1IkY9h3g2pQn/cg7QC3mAoErVykxFNAb3qY25ti/hzyFoGfkYZHon9vApZI
+         QoJnTxVdOyzgUPGLiCXOT9Cpsv81IzH6b2iqgHRS0Ci/VzzVuiOWcMADUolETYaf2B
+         4kvqjbIOckamgTeE7PtBoo/x0g6PlKyN6mOzaCP8=
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+Subject: [PATCH v3 2/5] media: mc: entity: Add entity iterator for media_pipeline
+Date:   Wed, 21 Dec 2022 11:33:38 +0200
+Message-Id: <20221221093341.7580-3-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.38.2
+In-Reply-To: <20221221093341.7580-1-laurent.pinchart@ideasonboard.com>
+References: <20221221093341.7580-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add new pixel formats: RGBX1010102, RGBA1010102, ARGB2101010, Y210 and
-Y212.
+Add a media_pipeline_for_each_entity() macro to iterate over entities in
+a pipeline. This should be used by driver as a replacement of the
+media_graph_walk API, as iterating over the media_pipeline uses the
+cached list of pads and is thus more efficient.
 
-Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+Deprecate the media_graph_walk API to indicate it shouldn't be used in
+new drivers.
+
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/gpu/drm/rcar-du/rcar_du_kms.c | 30 ++++++++++++++++
- drivers/gpu/drm/rcar-du/rcar_du_vsp.c | 50 +++++++++++++++++++++++++--
- 2 files changed, 78 insertions(+), 2 deletions(-)
+Changes since v1:
 
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_kms.c b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-index 8c2719efda2a..adfb36b0e815 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-@@ -259,6 +259,24 @@ static const struct rcar_du_format_info rcar_du_format_infos[] = {
- 		.bpp = 32,
- 		.planes = 1,
- 		.hsub = 1,
-+	}, {
-+		.fourcc = DRM_FORMAT_RGBX1010102,
-+		.v4l2 = V4L2_PIX_FMT_RGBX1010102,
-+		.bpp = 32,
-+		.planes = 1,
-+		.hsub = 1,
-+	}, {
-+		.fourcc = DRM_FORMAT_RGBA1010102,
-+		.v4l2 = V4L2_PIX_FMT_RGBA1010102,
-+		.bpp = 32,
-+		.planes = 1,
-+		.hsub = 1,
-+	}, {
-+		.fourcc = DRM_FORMAT_ARGB2101010,
-+		.v4l2 = V4L2_PIX_FMT_ARGB2101010,
-+		.bpp = 32,
-+		.planes = 1,
-+		.hsub = 1,
- 	}, {
- 		.fourcc = DRM_FORMAT_YVYU,
- 		.v4l2 = V4L2_PIX_FMT_YVYU,
-@@ -307,6 +325,18 @@ static const struct rcar_du_format_info rcar_du_format_infos[] = {
- 		.bpp = 24,
- 		.planes = 3,
- 		.hsub = 1,
-+	}, {
-+		.fourcc = DRM_FORMAT_Y210,
-+		.v4l2 = V4L2_PIX_FMT_Y210,
-+		.bpp = 32,
-+		.planes = 1,
-+		.hsub = 2,
-+	}, {
-+		.fourcc = DRM_FORMAT_Y212,
-+		.v4l2 = V4L2_PIX_FMT_Y212,
-+		.bpp = 32,
-+		.planes = 1,
-+		.hsub = 2,
- 	},
+- Fix media entity enum test in __media_pipeline_entity_iter_next()
+---
+ drivers/media/mc/mc-entity.c | 37 +++++++++++++++++++
+ include/media/media-entity.h | 69 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 106 insertions(+)
+
+diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+index 70df2050951c..380144d7f84d 100644
+--- a/drivers/media/mc/mc-entity.c
++++ b/drivers/media/mc/mc-entity.c
+@@ -950,6 +950,43 @@ __media_pipeline_pad_iter_next(struct media_pipeline *pipe,
+ }
+ EXPORT_SYMBOL_GPL(__media_pipeline_pad_iter_next);
+ 
++int media_pipeline_entity_iter_init(struct media_pipeline *pipe,
++				    struct media_pipeline_entity_iter *iter)
++{
++	return media_entity_enum_init(&iter->ent_enum, pipe->mdev);
++}
++EXPORT_SYMBOL_GPL(media_pipeline_entity_iter_init);
++
++void media_pipeline_entity_iter_cleanup(struct media_pipeline_entity_iter *iter)
++{
++	media_entity_enum_cleanup(&iter->ent_enum);
++}
++EXPORT_SYMBOL_GPL(media_pipeline_entity_iter_cleanup);
++
++struct media_entity *
++__media_pipeline_entity_iter_next(struct media_pipeline *pipe,
++				  struct media_pipeline_entity_iter *iter,
++				  struct media_entity *entity)
++{
++	if (!entity)
++		iter->cursor = pipe->pads.next;
++
++	while (iter->cursor != &pipe->pads) {
++		struct media_pipeline_pad *ppad;
++		struct media_entity *entity;
++
++		ppad = list_entry(iter->cursor, struct media_pipeline_pad, list);
++		entity = ppad->pad->entity;
++		iter->cursor = iter->cursor->next;
++
++		if (!media_entity_enum_test_and_set(&iter->ent_enum, entity))
++			return entity;
++	}
++
++	return NULL;
++}
++EXPORT_SYMBOL_GPL(__media_pipeline_entity_iter_next);
++
+ /* -----------------------------------------------------------------------------
+  * Links management
+  */
+diff --git a/include/media/media-entity.h b/include/media/media-entity.h
+index e881e483b550..1b820cb6fed1 100644
+--- a/include/media/media-entity.h
++++ b/include/media/media-entity.h
+@@ -139,6 +139,17 @@ struct media_pipeline_pad_iter {
+ 	struct list_head *cursor;
  };
  
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_vsp.c b/drivers/gpu/drm/rcar-du/rcar_du_vsp.c
-index e465aef41585..fe90be51d64e 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_vsp.c
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_vsp.c
-@@ -139,6 +139,43 @@ static const u32 rcar_du_vsp_formats[] = {
- 	DRM_FORMAT_YVU444,
- };
- 
-+/*
-+ * Gen4 supports the same formats as above, and additionally 2-10-10-10 RGB
-+ * formats and Y210 & Y212 formats.
++/**
++ * struct media_pipeline_entity_iter - Iterator for media_pipeline_for_each_entity
++ *
++ * @ent_enum: The entity enumeration tracker
++ * @cursor: The current element
 + */
-+static const u32 rcar_du_vsp_formats_gen4[] = {
-+	DRM_FORMAT_RGB332,
-+	DRM_FORMAT_ARGB4444,
-+	DRM_FORMAT_XRGB4444,
-+	DRM_FORMAT_ARGB1555,
-+	DRM_FORMAT_XRGB1555,
-+	DRM_FORMAT_RGB565,
-+	DRM_FORMAT_BGR888,
-+	DRM_FORMAT_RGB888,
-+	DRM_FORMAT_BGRA8888,
-+	DRM_FORMAT_BGRX8888,
-+	DRM_FORMAT_ARGB8888,
-+	DRM_FORMAT_XRGB8888,
-+	DRM_FORMAT_RGBX1010102,
-+	DRM_FORMAT_RGBA1010102,
-+	DRM_FORMAT_ARGB2101010,
-+	DRM_FORMAT_UYVY,
-+	DRM_FORMAT_YUYV,
-+	DRM_FORMAT_YVYU,
-+	DRM_FORMAT_NV12,
-+	DRM_FORMAT_NV21,
-+	DRM_FORMAT_NV16,
-+	DRM_FORMAT_NV61,
-+	DRM_FORMAT_YUV420,
-+	DRM_FORMAT_YVU420,
-+	DRM_FORMAT_YUV422,
-+	DRM_FORMAT_YVU422,
-+	DRM_FORMAT_YUV444,
-+	DRM_FORMAT_YVU444,
-+	DRM_FORMAT_Y210,
-+	DRM_FORMAT_Y212,
++struct media_pipeline_entity_iter {
++	struct media_entity_enum ent_enum;
++	struct list_head *cursor;
 +};
 +
- static void rcar_du_vsp_plane_setup(struct rcar_du_vsp_plane *plane)
- {
- 	struct rcar_du_vsp_plane_state *state =
-@@ -436,14 +473,23 @@ int rcar_du_vsp_init(struct rcar_du_vsp *vsp, struct device_node *np,
- 					 ? DRM_PLANE_TYPE_PRIMARY
- 					 : DRM_PLANE_TYPE_OVERLAY;
- 		struct rcar_du_vsp_plane *plane = &vsp->planes[i];
-+		unsigned int num_formats;
-+		const u32 *formats;
+ /**
+  * struct media_link - A link object part of a media graph.
+  *
+@@ -1075,6 +1086,8 @@ int media_entity_get_fwnode_pad(struct media_entity *entity,
+  * @graph: Media graph structure that will be used to walk the graph
+  * @mdev: Pointer to the &media_device that contains the object
+  *
++ * This function is deprecated, use media_pipeline_for_each_pad() instead.
++ *
+  * The caller is required to hold the media_device graph_mutex during the graph
+  * walk until the graph state is released.
+  *
+@@ -1087,6 +1100,8 @@ __must_check int media_graph_walk_init(
+  * media_graph_walk_cleanup - Release resources used by graph walk.
+  *
+  * @graph: Media graph structure that will be used to walk the graph
++ *
++ * This function is deprecated, use media_pipeline_for_each_pad() instead.
+  */
+ void media_graph_walk_cleanup(struct media_graph *graph);
+ 
+@@ -1097,6 +1112,8 @@ void media_graph_walk_cleanup(struct media_graph *graph);
+  * @graph: Media graph structure that will be used to walk the graph
+  * @entity: Starting entity
+  *
++ * This function is deprecated, use media_pipeline_for_each_pad() instead.
++ *
+  * Before using this function, media_graph_walk_init() must be
+  * used to allocate resources used for walking the graph. This
+  * function initializes the graph traversal structure to walk the
+@@ -1112,6 +1129,8 @@ void media_graph_walk_start(struct media_graph *graph,
+  * media_graph_walk_next - Get the next entity in the graph
+  * @graph: Media graph structure
+  *
++ * This function is deprecated, use media_pipeline_for_each_pad() instead.
++ *
+  * Perform a depth-first traversal of the given media entities graph.
+  *
+  * The graph structure must have been previously initialized with a call to
+@@ -1192,6 +1211,56 @@ __media_pipeline_pad_iter_next(struct media_pipeline *pipe,
+ 	     pad != NULL;						\
+ 	     pad = __media_pipeline_pad_iter_next((pipe), iter, pad))
+ 
++/**
++ * media_pipeline_entity_iter_init - Initialize a pipeline entity iterator
++ * @pipe: The pipeline
++ * @iter: The iterator
++ *
++ * This function must be called to initialize the iterator before using it in a
++ * media_pipeline_for_each_entity() loop. The iterator must be destroyed by a
++ * call to media_pipeline_entity_iter_cleanup after the loop (including in code
++ * paths that break from the loop).
++ *
++ * The same iterator can be used in multiple consecutive loops without being
++ * destroyed and reinitialized.
++ *
++ * Return: 0 on success or a negative error code otherwise.
++ */
++int media_pipeline_entity_iter_init(struct media_pipeline *pipe,
++				    struct media_pipeline_entity_iter *iter);
 +
-+		if (rcdu->info->gen < 4) {
-+			num_formats = ARRAY_SIZE(rcar_du_vsp_formats);
-+			formats = rcar_du_vsp_formats;
-+		} else {
-+			num_formats = ARRAY_SIZE(rcar_du_vsp_formats_gen4);
-+			formats = rcar_du_vsp_formats_gen4;
-+		}
- 
- 		plane->vsp = vsp;
- 		plane->index = i;
- 
- 		ret = drm_universal_plane_init(&rcdu->ddev, &plane->plane,
- 					       crtcs, &rcar_du_vsp_plane_funcs,
--					       rcar_du_vsp_formats,
--					       ARRAY_SIZE(rcar_du_vsp_formats),
-+					       formats, num_formats,
- 					       NULL, type, NULL);
- 		if (ret < 0)
- 			return ret;
++/**
++ * media_pipeline_entity_iter_cleanup - Destroy a pipeline entity iterator
++ * @iter: The iterator
++ *
++ * This function must be called to destroy iterators initialized with
++ * media_pipeline_entity_iter_init().
++ */
++void media_pipeline_entity_iter_cleanup(struct media_pipeline_entity_iter *iter);
++
++struct media_entity *
++__media_pipeline_entity_iter_next(struct media_pipeline *pipe,
++				  struct media_pipeline_entity_iter *iter,
++				  struct media_entity *entity);
++
++/**
++ * media_pipeline_for_each_entity - Iterate on all entities in a media pipeline
++ * @pipe: The pipeline
++ * @iter: The iterator (struct media_pipeline_entity_iter)
++ * @entity: The iterator entity
++ *
++ * Iterate on all entities in a media pipeline. This is only valid after the
++ * pipeline has been built with media_pipeline_start() and before it gets
++ * destroyed with media_pipeline_stop(). The iterator must be initialized with
++ * media_pipeline_entity_iter_init() before iteration, and destroyed with
++ * media_pipeline_entity_iter_cleanup() after (including in code paths that
++ * break from the loop).
++ */
++#define media_pipeline_for_each_entity(pipe, iter, entity)			\
++	for (entity = __media_pipeline_entity_iter_next((pipe), iter, NULL);	\
++	     entity != NULL;							\
++	     entity = __media_pipeline_entity_iter_next((pipe), iter, entity))
++
+ /**
+  * media_pipeline_alloc_start - Mark a pipeline as streaming
+  * @pad: Starting pad
 -- 
-2.34.1
+Regards,
+
+Laurent Pinchart
 
