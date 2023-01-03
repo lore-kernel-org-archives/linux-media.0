@@ -2,60 +2,59 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCD50C46467
-	for <linux-media@archiver.kernel.org>; Tue,  3 Jan 2023 14:37:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B72AC46467
+	for <linux-media@archiver.kernel.org>; Tue,  3 Jan 2023 14:37:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237905AbjACOgt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Jan 2023 09:36:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48514 "EHLO
+        id S231134AbjACOhD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Jan 2023 09:37:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbjACOgq (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Jan 2023 09:36:46 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63F8DF5D
-        for <linux-media@vger.kernel.org>; Tue,  3 Jan 2023 06:36:44 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id u28so39201472edd.10
-        for <linux-media@vger.kernel.org>; Tue, 03 Jan 2023 06:36:44 -0800 (PST)
+        with ESMTP id S233507AbjACOgr (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Jan 2023 09:36:47 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A121710B4E
+        for <linux-media@vger.kernel.org>; Tue,  3 Jan 2023 06:36:46 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id z11so28191122ede.1
+        for <linux-media@vger.kernel.org>; Tue, 03 Jan 2023 06:36:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=bQLJIF5vy6+GHX5o/6FOMmbiOn2O8W3BvocWFKR+0zs=;
-        b=HiU9qv2UwS+gm1ITFwOMhSvhztleGatSztz4iLC0dw9gNdgpguiOFoR5rf6tgfVk2i
-         CbW4Z5sLQsnFWGZlzjwlziX2EXI7R3yBSj6rpQo0fFuzwiFgRajFw2Ez9jhf+iZelvtM
-         hJS4MVcXCTO4/pCppR+TDsNJedxCzDx6OMihY=
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rL6vjumDEZ8bp9EfDhAS6U23Sa8DpoR9rvInW/saadw=;
+        b=G2By3BqJTaOu7tcF/DiJTm7we72oLpjph2rOGNoSu+JD8xr2DkYMcjrUUF9vdGMtea
+         MlzYiKHewd3ACEitRrIqPdDGCY7yjVTgnQ9jjkI7pDAq3NsmTuWr1GoKLnKWWwY8BBtw
+         22kHIAil8+r17B8kM9KP4j4xw82PnctDUJ9pA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bQLJIF5vy6+GHX5o/6FOMmbiOn2O8W3BvocWFKR+0zs=;
-        b=JT201tk2zxrirQNznGWTIXRHna0IQSqrgw7rMadF/C5pV2bizxo2IVitoxEXuT+Yow
-         Afb4ghtwsnJ7P3K51fbLhjBq9uA95miGx/WeOiKvoeJMI9eOpV1j9O/wLDwHHIu1hw6G
-         EoMMsxKQx0aVNfRRLBINGKHP/yqO4TaSuPXuXTkEgHPQScsW0Z9HsZN772VzTch45PWL
-         vwPR0G39/tm1TD1lCQ5MfliWeHEpqI31IIf0q0jZ4EzpuuyM5vqM6JPPIZfMnnibCIn4
-         Gcxik3ogsGZ/omJbeYXvGyej8Fw4iB4K+yN2Nig+eY1Jer4eQxQhf3Q3UjgC1dmmRcz5
-         nYjQ==
-X-Gm-Message-State: AFqh2kpQlOCiPVPlNZ9pNtm+I4pTH5ZpcQfaIkVE1yxHk6hdxtGNoPxC
-        QLQKV9tEwfzk46aDZkeQ949opw==
-X-Google-Smtp-Source: AMrXdXuR86mJY8EWv7/0juuqHXymeKVYrcIuQfVtyPn4DMnXqCc0wQHCfiskr9QKwC+5foub/Pi4kg==
-X-Received: by 2002:a05:6402:1caa:b0:46f:a73d:367c with SMTP id cz10-20020a0564021caa00b0046fa73d367cmr34359462edb.34.1672756603397;
-        Tue, 03 Jan 2023 06:36:43 -0800 (PST)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rL6vjumDEZ8bp9EfDhAS6U23Sa8DpoR9rvInW/saadw=;
+        b=wYBntsVyXyAlZGohdYiIXmfUupIL+C9GVL4Xy+PKdFhdzrnsiGhUOXljgREbt+6Iti
+         ID1cgTLlg0psIcZ8lkrTPNEn4haW/rpHksgZt1bkjeD1RAvEaZ1Mx1WJmqKHQ9Qocstu
+         63nauc5MLepukvXifsE0dE91Q5g7NE8ZnugMM6tH7f4QaQFlb5g189SI7I4jFxtwsa8z
+         X0bnhrhrQ+FCJUKsOcuobH/BD4pbAhVkizxlwSE2MLLbR97PFuGElVgxAgMBsgOylil2
+         rjFCx91NDdOp+aVr4HyqbStQJJLzkuUVM9V3MKje6xmyvx+XuaZHObga1pjqrj+MopEK
+         r37A==
+X-Gm-Message-State: AFqh2kpJMGeN3uJ+Zp+hYurkUO2E31fcU+3PTNdiMBeWN5ZqTgbgLKde
+        tDKWRstGswt9hlGUiC4EzGtymSoXYRRTL4b5POU=
+X-Google-Smtp-Source: AMrXdXvjqPPYzbopbrJmWLjzf+kJEn8sIFmgDwOGZIYyPJaThxKy8VZaNxUZ0dVmtzYuIZIoAuzcNA==
+X-Received: by 2002:a50:cc4c:0:b0:463:e2cd:a8b5 with SMTP id n12-20020a50cc4c000000b00463e2cda8b5mr39293162edi.11.1672756605285;
+        Tue, 03 Jan 2023 06:36:45 -0800 (PST)
 Received: from alco.roam.corp.google.com ([2620:0:1059:10:9789:8e2b:74ac:a9a0])
-        by smtp.gmail.com with ESMTPSA id p14-20020a05640243ce00b0048ebf8a5736sm877245edc.21.2023.01.03.06.36.42
+        by smtp.gmail.com with ESMTPSA id p14-20020a05640243ce00b0048ebf8a5736sm877245edc.21.2023.01.03.06.36.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 06:36:42 -0800 (PST)
-Subject: [PATCH v3 0/8] Follow-up patches for uvc v4l2-compliance
+        Tue, 03 Jan 2023 06:36:44 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Tue, 03 Jan 2023 15:36:20 +0100
+Subject: [PATCH v3 2/8] media: uvcvideo: improve error logging in uvc_query_ctrl()
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAGI9tGMC/43NwQ6CMAwG4FchOzvTlSHiyfcwHtgosGRsZpMlhv
- DuNh696Kn52/xfN5EpOcriUm0iUXHZxcChPlTCzn2YSLqBs0BAhA5BJsoUBlm0R2nj8vCuD5akHg
- dDejRDaxrBZdNnkibxbeZ6WL3n5ezyM6bX51lRPG4/3aIkyLOqT9qqBrEzVzunuLh1OcY0iTurBf
- +TkKXWQqcRNADoL2nf9zeOgp1jDgEAAA==
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Tue, 03 Jan 2023 15:36:18 +0100
-Message-Id: <20220920-resend-v4l2-compliance-v3-0-598d33a15815@chromium.org>
+Message-Id: <20220920-resend-v4l2-compliance-v3-2-598d33a15815@chromium.org>
+References: <20220920-resend-v4l2-compliance-v3-0-598d33a15815@chromium.org>
+In-Reply-To: <20220920-resend-v4l2-compliance-v3-0-598d33a15815@chromium.org>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
@@ -64,97 +63,66 @@ Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
         Hans Verkuil <hans.verkuil@cisco.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
 X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2837; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=vKvmLcxuc2nhyZmIFds/cTOVNUVZGR27hg3cdx6vtU8=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjtD1lvOQH9GQnmKx8nTiQPN27ataN1Lx8oOhVq//+
- txFjF1WJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY7Q9ZQAKCRDRN9E+zzrEiE64D/
- 4u3lmLINT08iWDzuFNXp4oFu2i7pcPGED45veSMDpp2EHLvS/x92YUwn5jcMej1ucOvNfmfihgnPHf
- JM849JwuWOOI63ZlNgwjaLiUD/A5O/ZF5RGQP5p46uBm3ZhvCXpO+FjnjGAqvNkjeqGkZ1HvJ7Lvu/
- uYlcuQHCCd0fiptNDGsFxbRpaTkUpUeP4fq2s1cQoxrcRRD0R2J0apUOJDGsUDsmUETRnmbM8NDs+3
- jqi+CMIwVzgNoWJ7MKrKqxa0qvohI1WxuahQW70FMbc903W9ANrziIFy0V39wXF9DQSKXVBnjzqXl/
- N4w7jxVlW85cmCESpYLjnRjTPqfgIn74h+2DXdUPsZyTiX7brNFbVPOuGO7xMIegKrVdQ6TM+pobJW
- r1M6QhB6BWcCp11Tw3LOxO1cJXh4h84MRK85IE9C2s3ejAr8b6kz4d0IPCYLikT4NidWSksMX1bg1z
- Sl5ThJplSs+k0OtXG02trWrpRNIJzf0PJGIPipD1k+44bCsUhIK3B7j/cw5s9m35dI3t5iWUdW0s81
- pjNTzZ6aPfTB+Y41x86IhDs8jed5gHxVegeoT5Ck5WU3Za8sjzCmemzpEskVbkNupDZXaWUjFrONAq
- 5ff3OUz3HxdIeH/bShwoOuXEEz2Q7PRp7x8lVqMMRUvzGXtSjU1/DbUiIVIA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1481; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=xOoehc4vwLA0iipvzwLxfRoUl2KbfEEdDxl6zHy2Huk=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjtD1uUt2X//JNsQhBiFozEJj3L0qZd4uDB5oeAeJE
+ GHvpzAaJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY7Q9bgAKCRDRN9E+zzrEiIvdD/
+ 9KuCrPeHfK/M/hRHQYcLzHTK8be+wwTwYRSKkanRDWf0KHAK5MM6zVmT5hriYH0w3YqxzeeHKaIIDd
+ j1dQFL4sAMUqRD3GdBx24cAX/8qC+5vp3bS73dMCCbUcMFpS7/M6nBPomAgyCIH1aWr9wSctQJUSf4
+ 9d8evKsYnfknwWBOECRm81z7mFaegh42WjAlWu2jMbNZIcBRUsjSNL0LANTmbhppLhA+ZH9FM07br8
+ Rc/pK4V0ep5yaH2noRepY/hy1HgGwD/Jtc4I9Frn4jdPlKhoIQSLcHidf++AEBt6jPkQlxyS+FQu3H
+ UJeZVUhbUOReB/JNNyOjATS03KvlfmYvhSBM4FAOVH+70gnYpRXCMpgOu3SNFfH/xPAPAUG05Zo71I
+ 21xh3S9K7J+f1fVvpwcL96kLpgP9V7F3axwK7gGvjHHVIuX45vA4mWkA4Hz8G4p+veRNDLoCZZd+k/
+ qS5dK7hzhc9djVwq2bGXNpJ4yZ/K9r06KM4p/h9l+S/sNuPlHDexcN3n0Q5ZrAMbHyl22gaNn0OHTP
+ IYfCDOoaoTSmZqlYQyzpButmheKxlcvzHjBou4K5SSFyrq/yeHTMQ9TkZDde4lTLzJLKlGQ6KtS76O
+ RRxFuWoNuaohxgmgUePIsytf8tpmXzESQauylOQA5ibkSt0XMxJrLxOyQ/eQ==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patchset contains the fixes for the comments on "v10 of Fix
-v4l2-compliance errors series". In particular to the patches
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
--uvcvideo: uvc_ctrl_is_accessible: check for INACTIVE
--uvcvideo: improve error handling in uvc_query_ctrl()
+Standard use of the driver may result in error messages on the kernel
+ring buffer. This can hide other more important messages, and alert
+unnecessarily the user. Let's keep dev_err() for the important
+occasions.
 
-And the patch:
--uvcvideo: Fix handling on Bitmask controls
+If __uvc_query_ctrl() failed with a non -EPIPE error, then report that
+with dev_err. If an error code is obtained, then report that with
+dev_dbg.
 
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: Hans Verkuil <hans.verkuil@cisco.com>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-
+Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
+Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
 ---
-Changes in v3 (Thanks Laurent):
-- Add a new patch for refactoring __uvc_ctrl_add_mapping
-- Use standard names for menus
-  - Return error on uvc_mapping_get_menu_value
-  - Add const
-  - StyLe!
-- Do not return positive errors in uvc_query_ctrl()
-   - Improve commit message
-- improve error logging in uvc_query_ctrl()
-   - Fix comment
-   - Improve doc
-- Fix handling on Bitmask controls
-   - s/uvc/UVC
-   - Reflow comments to 80 chars
-   - Test with GET_RES first
-   - Remove clamp to (0,..)
-- Return -EACCES for Wrong state error
-   - Full rewrite of commit message
-- uvc_ctrl_is_accessible: check for INACTIVE
-   - Update commit message
-   - Remove try variable
-   - Update documentation
-- Implement mask for V4L2_CTRL_TYPE_MENU
-   - Include linux/bits.h
-- Link to v2: https://lore.kernel.org/r/20220920-resend-v4l2-compliance-v2-0-7c0942040004@chromium.org
+ drivers/media/usb/uvc/uvc_video.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-Changes in v2:
-- Include "Get menu names from framework series"
-  https://lore.kernel.org/r/20220920-standard-menues-v2-0-a35af3243c2f@chromium.org
-- Link to v1: https://lore.kernel.org/r/20220920-resend-v4l2-compliance-v1-0-81364c15229b@chromium.org
+diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+index d2eb9066e4dc..6b20a23bc3cf 100644
+--- a/drivers/media/usb/uvc/uvc_video.c
++++ b/drivers/media/usb/uvc/uvc_video.c
+@@ -79,13 +79,14 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
+ 	if (likely(ret == size))
+ 		return 0;
+ 
+-	dev_err(&dev->udev->dev,
+-		"Failed to query (%s) UVC control %u on unit %u: %d (exp. %u).\n",
+-		uvc_query_name(query), cs, unit, ret, size);
+-
+-	if (ret != -EPIPE)
++	if (ret != -EPIPE) {
++		dev_err(&dev->udev->dev,
++			"Failed to query (%s) UVC control %u on unit %u: %d (exp. %u).\n",
++			uvc_query_name(query), cs, unit, ret, size);
+ 		return ret;
++	}
+ 
++	/* Reuse data[0] to request the error code. */
+ 	tmp = *(u8 *)data;
+ 
+ 	ret = __uvc_query_ctrl(dev, UVC_GET_CUR, 0, intfnum,
 
----
-Hans Verkuil (2):
-      media: uvcvideo: Check for INACTIVE in uvc_ctrl_is_accessible()
-      media: uvcvideo: improve error logging in uvc_query_ctrl()
-
-Ricardo Ribalda (6):
-      media: uvcvideo: Return -EACCES for Wrong state error
-      media: uvcvideo: Do not return positive errors in uvc_query_ctrl()
-      media: uvcvideo: Fix handling on Bitmask controls
-      media: uvcvideo: Implement mask for V4L2_CTRL_TYPE_MENU
-      media: uvcvideo: Refactor __uvc_ctrl_add_mapping
-      media: uvcvideo: Use standard names for menus
-
- drivers/media/usb/uvc/uvc_ctrl.c   | 238 ++++++++++++++++++++++++++++---------
- drivers/media/usb/uvc/uvc_driver.c |  10 +-
- drivers/media/usb/uvc/uvc_v4l2.c   | 108 ++++++++++++-----
- drivers/media/usb/uvc/uvc_video.c  |  15 +--
- drivers/media/usb/uvc/uvcvideo.h   |   8 +-
- include/uapi/linux/uvcvideo.h      |   4 +-
- 6 files changed, 281 insertions(+), 102 deletions(-)
----
-base-commit: 69b41ac87e4a664de78a395ff97166f0b2943210
-change-id: 20220920-resend-v4l2-compliance-4fdbe4fbd7b5
-
-Best regards,
 -- 
-Ricardo Ribalda <ribalda@chromium.org>
+2.39.0.314.g84b9a713c41-goog-b4-0.11.0-dev-696ae
