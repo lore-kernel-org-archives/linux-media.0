@@ -2,142 +2,119 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13D14C46467
-	for <linux-media@archiver.kernel.org>; Tue,  3 Jan 2023 10:56:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45593C46467
+	for <linux-media@archiver.kernel.org>; Tue,  3 Jan 2023 11:02:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237090AbjACK4r (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Jan 2023 05:56:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
+        id S237436AbjACLCI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Jan 2023 06:02:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233135AbjACK4o (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Jan 2023 05:56:44 -0500
-Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2078.outbound.protection.outlook.com [40.107.241.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B609AE43
-        for <linux-media@vger.kernel.org>; Tue,  3 Jan 2023 02:56:42 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fVX/bOLK5mHSpia40g7w+tP5mtwXAsmZwXGl+RSUC0ULi8K8WoqdTIuDFykAqXHGK5R6B7WqGqnsxWEb9wWpGvr7ffLHkJDXA7UxUT5rHIX3CLjVpCCEIw0bztjoGUnx346SL/rQlqwr5TqBGM5j1obM6QScmwhpuxRg36zF3258skqpbgRXhXMtRSl6KwgskHWVaQbVSOKSVt6MGJnmzhT/sLGBGifduwbcBIBsjXwGMrfMqWmEZJSxK0THVmPQJcy2y0HK3IzqgJsGRxvz3OnQUvjHCD976hthjHxIXZkylY2WdPlbMC5iQnvTGKQMsGhs+S4B7LX/ZzjliaktuQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZKZv19mzzyLzrZFxlMMF7YHUVJxojnoCmXakBERIXLM=;
- b=HKonTXppTQUndepP1VKts53cfpq4NFTIg5gKizRUtpQPNNz+r3/6+Pu3Fp+53myMfPx+qLyvZInDn6YpMy+J4ycLSYns5T87pUq+1WNWRJ9bcRzKujEpqU+QEuT21JtRqcXXECpEtSyxFDyfbLXYvocelus/jbPGkwiPsTdEEqyfO17IgblHcKqY7FLb92PyCIPssMlTA3TCfNzK/eo0f5/jXuyOb3AC+i7SM8ypdRvBJn9+WGvwqlXEi4ltq1r3DTq2zmA92KRkBjJlp5sqv3p4zlEQGbamh4OV5Z8dQ0trAag9xFhMmokJUv3QvjzpQmHUS04Y0VRCEGoWXDpi4g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZKZv19mzzyLzrZFxlMMF7YHUVJxojnoCmXakBERIXLM=;
- b=Tj1bsadO8V+kWVKJYNcZYWOITkaNXoyYJhb0gN7wNOXLqrK5p/Mw5U3lD5tzwk1C/qVt/dfIvtbPRxzlj2sGTbkqO9WT/V/pJVvlzMBPFXUdOypMzqyduFmJtU9+82g7GQZTTm/O1+y1l64ea5xncZWAHUD2vlJJb5da8Hi1nYE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from PAXPR04MB8703.eurprd04.prod.outlook.com (2603:10a6:102:21e::22)
- by AM9PR04MB7713.eurprd04.prod.outlook.com (2603:10a6:20b:2d4::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Tue, 3 Jan
- 2023 10:56:40 +0000
-Received: from PAXPR04MB8703.eurprd04.prod.outlook.com
- ([fe80::19a6:6003:3641:13b2]) by PAXPR04MB8703.eurprd04.prod.outlook.com
- ([fe80::19a6:6003:3641:13b2%7]) with mapi id 15.20.5944.019; Tue, 3 Jan 2023
- 10:56:40 +0000
-From:   "Xavier Roumegue (OSS)" <xavier.roumegue@oss.nxp.com>
-To:     mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
-        hverkuil@xs4all.nl, laurent.pinchart@ideasonboard.com
-Cc:     Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
-        linux-media@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <error27@gmail.com>
-Subject: [PATCH] media: dw100: Add a missing unwind goto in dw100_probe()
-Date:   Tue,  3 Jan 2023 11:55:34 +0100
-Message-Id: <20230103105534.3018257-1-xavier.roumegue@oss.nxp.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: AS4P195CA0026.EURP195.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d6::12) To PAXPR04MB8703.eurprd04.prod.outlook.com
- (2603:10a6:102:21e::22)
+        with ESMTP id S237062AbjACLBz (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Jan 2023 06:01:55 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3159B51
+        for <linux-media@vger.kernel.org>; Tue,  3 Jan 2023 03:01:54 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id x22so72676743ejs.11
+        for <linux-media@vger.kernel.org>; Tue, 03 Jan 2023 03:01:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=pVSDtU7olXhlILdRW39EpiEJBIjwXVR1HyfxicCBJXA=;
+        b=jQI6cuA9L7qCnerstCMQGG118OwE+62frT9w34GiJ90I7hHoKM5pC6R9blce01Mg+P
+         pIy5YEssGXySRxqu9m/IBcKfqGzycAd+QyIn6oNASBnDTtGeLOKAc/IR2Qcc7vIrRn79
+         Jzh4g4EDPdvsExf/Q+H0zAFxH8tMsQz2HEoRQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pVSDtU7olXhlILdRW39EpiEJBIjwXVR1HyfxicCBJXA=;
+        b=1J+TVKhgdxoOwjThpky1lUXYkv1VCH+clXpMwx4cWeZh6o2rwJGadx2aVOMTjlNZHy
+         4PAT6J7DlWPHaa23OkldJAGN9t0rwHK3qr3N4W/pkBBwGDm7txeWYRvGZDxtode+1tJE
+         PoDT8XFPaL7169A/fXfztAa7gSZMNsW1YtAA2hZ8wzXOWK6Hi2ynI04NIN4TV9fKFT6N
+         gBhtUxOX9KJIv/ND+SByQqGwXcFZoU1IvJwRvuxZbUW4q/2M91NzUpHfwpSypQ72+BGl
+         mfM5jMXuJ0nhievnN7uBgypZeXFYVRZgicbSM6agQkLez85kpPRkqMqx3L4OcROMxbsV
+         VsQg==
+X-Gm-Message-State: AFqh2krNuy8I2Y4HHh/5hzRILam+DcJZhgelEaip6epvhuFagau/Dn05
+        rYa10V2mgj23knY817v75bHKxA==
+X-Google-Smtp-Source: AMrXdXvxsuHAkIifWrLekTL0gcNmQ5SuhULbkHRs7c/Rv4XlA8AAKGNGKqh0EnMwzbJ9Gn3Y78MS4A==
+X-Received: by 2002:a17:907:b686:b0:7c1:7c3a:ffba with SMTP id vm6-20020a170907b68600b007c17c3affbamr42763636ejc.35.1672743713414;
+        Tue, 03 Jan 2023 03:01:53 -0800 (PST)
+Received: from alco.roam.corp.google.com ([2620:0:1059:10:ef23:1430:9acc:b68])
+        by smtp.gmail.com with ESMTPSA id l12-20020a17090615cc00b007c0cd272a06sm13944331ejd.225.2023.01.03.03.01.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 03:01:53 -0800 (PST)
+Subject: [PATCH v3 0/3] media: uvcvideo: Limit Power Line Control
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8703:EE_|AM9PR04MB7713:EE_
-X-MS-Office365-Filtering-Correlation-Id: 36b9679b-6569-4364-6195-08daed793124
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WpdLgiUldO84fV4pCSKjKLkENRzUiWZ8UoTrKTedC8ZoZ5r6pk1yyyfoRelXiIk0zAbZGc4M9do0MvNp+JeaF2oTr/luOGyz1+D31jT3Xck84ROXM35F8TW3MYyvh1Z92ETAHvXpfO0VeYJLpzEBR65DEMoYI851bjACBMnyNzvq/tpSey4aMmfuXN5gmxJZSDrTp1NbeCEa4dvWrVxBqgZxcSUPR2N1KeiqWWOQpNCJv8G2OBDRePsabQqXgmk206YksLaxcCEROeN50TrDbS/xAAt/XkRftMpuAVgvKw6azmOG/4h3rJHVUukOAqD3VrqsWKk3mxNvlMGAD9qcIcycf5nOfV6KAytA8Ogtgg8GHNz5vWErZGDAge6szbutiWomL7o4upjGk3d7d+BEzXVjH5BnbNV3Xxv1W6CmRCoI4jUCcqmYX7InPNt+36f1CMLTz1FIHe8vCCx3L6UVsiVpky4lBWVRhk5jSuFDm3JjZDtu82bVmGdai9dSBUIpcGWhgPQN0cT3JtNByJPMSUUCmliOMvkn7o1NNsKTaN+MlQge0bFQer6Ypfg5sEfaytrQA3A/+MNi9RJNnGawN5INgqW5XIY4bMWFalY5RC8bJwkC5na8N8L/t5jSbu2GueK3U44Xti/vI6RIBHRwhQJx8Nb3cGeGIULmkoeDggyIYWboObkw5X40ECgUejn09bXrL1aKc3zINJUpXpwCjMlZX/VqrtAlDhDC3z6sAUk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8703.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(346002)(376002)(136003)(366004)(451199015)(83380400001)(1076003)(6512007)(26005)(6666004)(6506007)(86362001)(38350700002)(38100700002)(2616005)(186003)(478600001)(41300700001)(8676002)(4326008)(2906002)(5660300002)(8936002)(6486002)(52116002)(66556008)(66946007)(66476007)(54906003)(316002)(22166006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?CsxsDTMY2Doa322iz9zHhygHbeerQujGvA7mUhREPNQ6O2XHNvEgxeOC9xOG?=
- =?us-ascii?Q?p0KX7CLREEizeXk79T+bp50uRoj/tJoMsZeKWGbqSrNLObH51qiy8lSr9+ER?=
- =?us-ascii?Q?t6D/TNEo2xkZhbcYYWRHYtdJKKMZDGiW2q+f2Tj6m0RQe5PAZjz2JjgeU8qH?=
- =?us-ascii?Q?N2FTeZawzAiRY2rZh2g+marUFOas6XXZs0gBIsZHZCYrPClqthYB4uNf/Iml?=
- =?us-ascii?Q?uBBeMt8zWz7pgsO9nSStJgM9bODZAeLlj+lRzeuEnrcgwHEY4TINNiColxcT?=
- =?us-ascii?Q?/G4V9UEImxPoiSVwhW6V1sF4G2Bt9QYQngdM8V35J0JJ/9SF1azfecdtA8Rs?=
- =?us-ascii?Q?gFxQ1MlptW/p+ejWisOkqf5N4IP19s7V2pV75kuP8S6i4VrnmXeGO5u0W4FH?=
- =?us-ascii?Q?lSLslpppKC7VcQ0LDCz5Pgyl3w7ihftBsKUgWa9cMfrsp3WCdnr1WKwIbi8u?=
- =?us-ascii?Q?f2s1GBS9l8eesXLBehJtQMIw92QMpGirIrIbZiqdcCBc/Q7osKPel1f0vR+Z?=
- =?us-ascii?Q?DSWEW5nL7W96+25KAY3RB5BRYH6CNK1ie1SYYvqMosmC/HJXkMH8vusMd7kr?=
- =?us-ascii?Q?eotnq76dHqwPwYt9bBY7gTEl4AAIKNDrI7BdNhL18jY12ovfWQas4cJuR4sR?=
- =?us-ascii?Q?Zmz/Ni8XsqZEl0kzdj7Vj77KXJiouE0rsYueeRvHldJTw+zEZknE26LYNZ/X?=
- =?us-ascii?Q?117uZSL78rC6t+h+6mFzOxo+FbJGdqY//Hq6GHDHYVEprcTVOrIBoJZQ7MR8?=
- =?us-ascii?Q?ySI6wgGgus1HpdJyPvC5+5GS06gnE462VMsacAGoACKb4JPIrtvrftSKAWcA?=
- =?us-ascii?Q?QidDtGmDhQVxr6iD9wF1ScWnM/xnpjq7S6XF6r06fbmiRm5lM1v46uHt/nI1?=
- =?us-ascii?Q?bkP5EfOiYWAWv8j6fkuchEKZZyWSvwA/S/SHESPXXRpeSY11TVb3s6OEiQDF?=
- =?us-ascii?Q?SQuTywAv5pjzBAeUl8LVDvFRWzpBrp2bD1ypbUSlwIJxVS+H+B1ghQ9Ng01t?=
- =?us-ascii?Q?BI8gvZDBx1S/3xrV6pjwbbmtJeuKv7izOLgMnHgASSG6uqT8s1Y0rHT5DqBn?=
- =?us-ascii?Q?nGNMdbReVjJWO4pn0r1CyDqwaEsEhvW2L0K1M3vcmORMLQFnEYWAfCEdARcz?=
- =?us-ascii?Q?LgStLXqWbkFGoLzWNoN1pbl1bWfYl/Ukd1IAlNVhu8ZsdwDKxFtnxXyIXWVo?=
- =?us-ascii?Q?ogCQNpm9duHVnw8ebOzwOdoj7YNRJCr6nlXywGqRQ6PR/vd1HNs67BCiKkQN?=
- =?us-ascii?Q?0itPNhu2VMkyMNpQP5evtTZ8iacM6328slQQlcenDqWDimKel5iAx/XAAUeX?=
- =?us-ascii?Q?3aXhvZhJB/GOLzCLjU2fRLACHuQtzvQUufh5JlZI88xlmw2u9Y38GnCsdcck?=
- =?us-ascii?Q?mupVypRoVMVJuHZUgitQiN/T0tAwbYV1oVG7Z3kSLxH20NE+dS504Kfuvfsd?=
- =?us-ascii?Q?eib/IMioMjWBCURPznc1wR24c+nKe1PNePhTWVNGRMtdE4Dm/LRuEFxY4A3j?=
- =?us-ascii?Q?FsiuKZXQlmoXyae6U0MMH2+iFyAuo+qLfTL1UnbgWOtmv7MuMNbum1SBTRz4?=
- =?us-ascii?Q?z1JwKI0+3NlpEmmi8ohSnIVTedAzeVOg3ZQRzySIozPIBAXwv71xeGANFmXN?=
- =?us-ascii?Q?Hg=3D=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 36b9679b-6569-4364-6195-08daed793124
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8703.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2023 10:56:40.1076
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7xar6+ruQdtFjQ2vgiXe/WIAT71EcQdQwPexwiLr8AFQqQeRqy5x2E/UmBQzgk0OJnlriAf+TTsZeQChu/oz3Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB7713
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAALtGMC/3WNywqDMBBFf0Wybkpmoql21f8oXeRpAmogqYKI/9
+ 60u75Ww73cc2Yj2aZgMzlXG0l2CTnEqQR+qIj2cuotDaZkggwRgAG1Mq9ajrR1IFXTtQrQkbJWMl
+ uqkpy0L/tpHoZS+pDvMa0v+wLlXL9FC1BGucMa0XLkxl20T3EM83iMqX+qfyMnMKJmXSe4ke/IrT
+ AL/vmGBW26RtRQS8Fa/YHu+/4AtSFskBQBAAA=
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Tue, 03 Jan 2023 12:01:20 +0100
+Message-Id: <20221101-easycam-v3-0-2c9881a7a4f7@chromium.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1405; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=sML02cle1nMarXtXIOsKRVwDVFx3dvEdPkPGJTKYfsQ=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjtAsBue97dn5WQjp/JY9waSbr1wldWFgr+6XGy493
+ bWNJ7bqJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY7QLAQAKCRDRN9E+zzrEiPPGD/
+ 9+iYTGBndOHU/pcS2VNysgEf5lZYxuukvUVL8AWAWncFphPqiFrj+wckmUQqCjJjyszOUgtyTnvjec
+ xPlH8LbClNA7MArXVbap6J6NYw4/A0LWzLF1fM2/gRxs6nsAUKTt8qjwTm6TO9Qhs16XKip2hLQtgr
+ rkCYAQtjNkXeXEKzcGwXrW/R6r0R7ghSMnxZ8eWQPCdRdWfG0uUqM6m2nasJMT7T7MnNsSwSWkOIQX
+ EeUPc9ICBSwLIX4wKAQIs+hiIsC4mxovhtMYoI4MA0Vp6xX6GiC66/20d1gXD+u5xOTU4zoxb4Y9i8
+ 8EGuBRC38VLJS/8j3kXSI19RK+CIjIPwP1gW+Y0n98uXmZCJ5EwdjVcHhBQaeZLpnNo1ZOu0PZfNu0
+ xnb5mTaTN/BPUr7dDt5J7+t+GMWMiwH/viTAeGPbpjxp+1jUWmpwlk/5oNfdv4vcEjArlUeenZ5K7v
+ QU1YKSdgNaIAkaeOnQendLUSFN8aUfprLD2dy/JgDtnxxRR2/SuzwQN6Zn6nkSR3tZSComv9PQ68Cw
+ ljYRzEceRimwlVDTosCX3eFXIVks457YF7KSyYTfTRqC2ZFz9LLQw2x74iO9g9RkZl9mF29AH/knRr
+ eHipW6Yfx6N64wrYJ2kaf/O38Jqx/hKaxzpKVwnJ1pSBmYY+h4JY77X3Deow==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Xavier Roumegue <xavier.roumegue@oss.nxp.com>
+Another set of webcams with invalid PLC controls.
 
-In case the IRQ allocation returns an error in dw100_probe(), the pm
-runtime is not disabled before to return.
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-Add the missing unwind goto on the error handling path of the IRQ
-allocation request.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <error27@gmail.com>
-Signed-off-by: Xavier Roumegue <xavier.roumegue@oss.nxp.com>
 ---
- drivers/media/platform/nxp/dw100/dw100.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v3:
+- Add patch to refactor uvc_ctrl_power_line_mapping_limited. (Can be ignored)
+- Improve commit message. (Thanks Laurent!)
+- Reference uvc_ctrl_power_line_mapping_uvc11 from uvc_ctrl.c (Thanks Laurent!)
+- Link to v2: https://lore.kernel.org/r/20221101-easycam-v2-0-5956414a608c@chromium.org
 
-diff --git a/drivers/media/platform/nxp/dw100/dw100.c b/drivers/media/platform/nxp/dw100/dw100.c
-index f6d48c36f386..189d60cd5ed1 100644
---- a/drivers/media/platform/nxp/dw100/dw100.c
-+++ b/drivers/media/platform/nxp/dw100/dw100.c
-@@ -1571,7 +1571,7 @@ static int dw100_probe(struct platform_device *pdev)
- 			       dev_name(&pdev->dev), dw_dev);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "Failed to request irq: %d\n", ret);
--		return ret;
-+		goto err_pm;
- 	}
- 
- 	ret = v4l2_device_register(&pdev->dev, &dw_dev->v4l2_dev);
+Changes in v2:
+- Add Lenovo Integrated Camera
+- Link to v1: https://lore.kernel.org/r/20221101-easycam-v1-0-71d6409963da@chromium.org
+
+---
+Ricardo Ribalda (3):
+      media: uvcvideo: Limit power line control for Acer EasyCamera
+      media: uvcvideo: Fix power line control for Lenovo Integrated Camera
+      media: uvcvideo: Refactor power_line_frequency_controls_limited
+
+ drivers/media/usb/uvc/uvc_ctrl.c   | 41 ++++++++++++++++++++++++++++----------
+ drivers/media/usb/uvc/uvc_driver.c | 38 +++++++++++++++++++++--------------
+ drivers/media/usb/uvc/uvcvideo.h   |  2 ++
+ 3 files changed, 55 insertions(+), 26 deletions(-)
+---
+base-commit: 69b41ac87e4a664de78a395ff97166f0b2943210
+change-id: 20221101-easycam-8f1ab598b12f
+
+Best regards,
 -- 
-2.39.0
-
+Ricardo Ribalda <ribalda@chromium.org>
