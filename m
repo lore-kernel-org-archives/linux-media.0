@@ -2,171 +2,86 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B28A5C54EF0
-	for <linux-media@archiver.kernel.org>; Tue,  3 Jan 2023 11:02:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0C41C46467
+	for <linux-media@archiver.kernel.org>; Tue,  3 Jan 2023 11:45:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237463AbjACLCM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Jan 2023 06:02:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45606 "EHLO
+        id S237424AbjACLpj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Jan 2023 06:45:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237320AbjACLB6 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Jan 2023 06:01:58 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DA7B97
-        for <linux-media@vger.kernel.org>; Tue,  3 Jan 2023 03:01:57 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id tz12so72715012ejc.9
-        for <linux-media@vger.kernel.org>; Tue, 03 Jan 2023 03:01:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=00bD41CpohMBMgWN2aRl98+MG1NWyw9aXdRxmbyLX7k=;
-        b=lkh5HCyhJ0VSthqIJhVg7LcOAC5++DcCafGeW+njz7gDkKybj2yDo9MQKVo5UXRT6G
-         MILYofG4/Z6AMJSCIsZToHVaDBomPh1H6siahu7wUBPJpaihWnRtYYNnsM20RVRiDtUW
-         n2CZfMi+KUMjSk8bwX2x5599R1zGl7KIARf58=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=00bD41CpohMBMgWN2aRl98+MG1NWyw9aXdRxmbyLX7k=;
-        b=Yl6QAnZecYK/AzeHsBuehpcvr97dPQvpPaCXXeSPiWTi7J6+S1xhI8P4hIsoCu3Cy3
-         MqfdKft/sur5fH6YrSV+IUuXeRXebIjTciQe21CGybPgvqCw4ECYvdiqZVyvgWoAuDbO
-         hyo1uptVyG3SDBUjIwSimJzskhACpfghJdT+6Hbaed6POLsChI/pS/o5ONK1KyVKubnO
-         O2/p6JRLuQp3iacXOPEfe0q/K/1OSxqV1tkxurO1km22FES4xB6K7Lq3zLI0PJCqUlVz
-         8mb9TNXInW7B6uAFyVp+VXGD34RIm9CpTnP6G519xW1gBDypTOnFiVGfHol5OZk4o7MA
-         JyXA==
-X-Gm-Message-State: AFqh2kqnPMx4owz5bg+qt+B2CjXd0/BypYsZQRsEgUg7jjMii0G9r3Zu
-        dMq9NKrVjs0kpBYOUs5ld4G7jA==
-X-Google-Smtp-Source: AMrXdXulMSINEtzbSpMB3sr1ndMTGYRfhkV9njBGjb65OWUwvaklRjeHlms0gQxxrbKdq99S/2IKSQ==
-X-Received: by 2002:a17:907:8e93:b0:7ae:bfec:74c7 with SMTP id tx19-20020a1709078e9300b007aebfec74c7mr39110590ejc.72.1672743715986;
-        Tue, 03 Jan 2023 03:01:55 -0800 (PST)
-Received: from alco.roam.corp.google.com ([2620:0:1059:10:ef23:1430:9acc:b68])
-        by smtp.gmail.com with ESMTPSA id l12-20020a17090615cc00b007c0cd272a06sm13944331ejd.225.2023.01.03.03.01.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 03:01:55 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Tue, 03 Jan 2023 12:01:23 +0100
-Subject: [PATCH v3 3/3] media: uvcvideo: Refactor
- power_line_frequency_controls_limited
+        with ESMTP id S236914AbjACLpQ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Jan 2023 06:45:16 -0500
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59C35F83;
+        Tue,  3 Jan 2023 03:45:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1672746301; bh=hq1Mr8Cwby3ZbX2qb3uIoXDEXzZmuXFc29XcF8N/+r4=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=JOv+xNVKD5112S93a8c7aYmoCdX5KoU6wBhdnCWFfbKPJpGhoWZRjuks+zSBEsw75
+         SQPqDig8L+0Joav7loNL8qDYPMUh7sgIJsfpHPEyZZveFpTHIJKn7i+T7pkINA6PBZ
+         A56vNK7INh6hKl8O63cSAqsmToub/440/EUs+c68=
+Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Tue,  3 Jan 2023 12:45:01 +0100 (CET)
+X-EA-Auth: FA+GNfPw6PUD7+tjmQeBh7FR6EBoNuE5zSwpXBGXi4UNiowYmso+Xd15a3rfkgucAXYCHE1qTxBD6g3O2bSauSf9YlqOl8BE
+Date:   Tue, 3 Jan 2023 17:14:55 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: [PATCH] staging: media: imx: remove unnecessary return variable
+Message-ID: <Y7QVN0XY+ld2mBk4@qemulion>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221101-easycam-v3-3-2c9881a7a4f7@chromium.org>
-References: <20221101-easycam-v3-0-2c9881a7a4f7@chromium.org>
-In-Reply-To: <20221101-easycam-v3-0-2c9881a7a4f7@chromium.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3328; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=U6+fv6Oz+oBYLUlCti95XpzN5zRXjjLpaYFVN2dc0HI=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjtAsep6BRBKmLrGo7Jh0JjciKXjPQr18hFu57TlyO
- Go95FN+JAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY7QLHgAKCRDRN9E+zzrEiDfTD/
- sED2E32h08CttZhf7ECpbeysdAs4/o8+xOE0p0bCSKi5Tjk2X2z7qHE6CGs1mKFD6sXh4bArM/yatP
- 2eBzUH3JooZyZI0ZKYqrm8ZPsvYEDrLYYeErHU1D1McJsSoOUeKFLrLU+/VjfRthUB5Jd2mERmJkmv
- FONN68J9MWdIJO5P9rZk6qYWpxBBG+FULClMaf6xc3PkpM9CXMeBeInUC1uCveQ39M/rjjaA9zSrud
- gkhBFDxf8qBPZZ0v6u3l652X8k+++DLdW2Hu4J+i9iod7zaTHMesogtkzYXktqNEXE1oLM2Eb8aVxx
- n3KohB6dLJO4hVHryA/Ls3ML9zmQjBi/snepflN5/LTFbH0afItxxc4mEqMzGrr6C63Jfc9A7R9TAQ
- QJY5nSUiq/58UfWCbB6qdR9D2SKhxUAxK0ix4AUpvZgQw1BImKLtV/g4ix+O7i71hd0oJXVGa2dmXo
- OHGaHnTqnllCnUAT5FHVVeTB+KeF2UtdCUdlECRn7sqGTInQxqD785P17/IE3uquCIg4w1FWRxXmLO
- 63Ofnn8KevPELj3tOXP3H/a5gYXVR+Q9W91eIIh7P1GHnhHO9y9DcoSDgqVjDG06iINKWHARnY7+iw
- v8eoVUMyQ3sf4YqcAHBAW0xD0Rtldqn91Jm1pv3C6NLexP2bckaidYSwAXWQ==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Move the control mapping to uvc_ctrl.c. This way we do not have
-references to uvc controls or v4l2 controls in uvc_driver.c
+The function imx_media_fim_set_stream() can directly return 0 instead of
+using a ret variable which never changes its value. Issue identified
+using the returnvar.cocci Coccinelle semantic patch.
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Signed-off-by: Deepak R Varma <drv@mailo.com>
 ---
- drivers/media/usb/uvc/uvc_ctrl.c   | 17 +++++++++++++++++
- drivers/media/usb/uvc/uvc_driver.c | 17 -----------------
- drivers/media/usb/uvc/uvcvideo.h   |  1 +
- 3 files changed, 18 insertions(+), 17 deletions(-)
+ drivers/staging/media/imx/imx-media-fim.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index d8283d71bc96..4ff0415d8bf4 100644
---- a/drivers/media/usb/uvc/uvc_ctrl.c
-+++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -370,6 +370,11 @@ static const struct uvc_menu_info power_line_frequency_controls[] = {
- 	{ 3, "Auto" },
- };
- 
-+static const struct uvc_menu_info power_line_frequency_controls_limited[] = {
-+	{ 1, "50 Hz" },
-+	{ 2, "60 Hz" },
-+};
-+
- static const struct uvc_menu_info exposure_auto_controls[] = {
- 	{ 2, "Auto Mode" },
- 	{ 1, "Manual Mode" },
-@@ -751,6 +756,18 @@ static const struct uvc_control_mapping uvc_ctrl_mappings_uvc15[] = {
- 	},
- };
- 
-+const struct uvc_control_mapping uvc_ctrl_power_line_mapping_limited = {
-+	.id		= V4L2_CID_POWER_LINE_FREQUENCY,
-+	.entity		= UVC_GUID_UVC_PROCESSING,
-+	.selector	= UVC_PU_POWER_LINE_FREQUENCY_CONTROL,
-+	.size		= 2,
-+	.offset		= 0,
-+	.v4l2_type	= V4L2_CTRL_TYPE_MENU,
-+	.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
-+	.menu_info	= power_line_frequency_controls_limited,
-+	.menu_count	= ARRAY_SIZE(power_line_frequency_controls_limited),
-+};
-+
- /* ------------------------------------------------------------------------
-  * Utility functions
-  */
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 9c09bc988278..6531aed5d642 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -2377,23 +2377,6 @@ static const struct uvc_device_info uvc_ctrl_power_line_uvc11 = {
- 	},
- };
- 
--static const struct uvc_menu_info power_line_frequency_controls_limited[] = {
--	{ 1, "50 Hz" },
--	{ 2, "60 Hz" },
--};
--
--static const struct uvc_control_mapping uvc_ctrl_power_line_mapping_limited = {
--	.id		= V4L2_CID_POWER_LINE_FREQUENCY,
--	.entity		= UVC_GUID_UVC_PROCESSING,
--	.selector	= UVC_PU_POWER_LINE_FREQUENCY_CONTROL,
--	.size		= 2,
--	.offset		= 0,
--	.v4l2_type	= V4L2_CTRL_TYPE_MENU,
--	.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
--	.menu_info	= power_line_frequency_controls_limited,
--	.menu_count	= ARRAY_SIZE(power_line_frequency_controls_limited),
--};
--
- static const struct uvc_device_info uvc_ctrl_power_line_limited = {
- 	.mappings = (const struct uvc_control_mapping *[]) {
- 		&uvc_ctrl_power_line_mapping_limited,
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index bcb0b0c101c8..818ae7a6f9b9 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -728,6 +728,7 @@ int uvc_status_start(struct uvc_device *dev, gfp_t flags);
- void uvc_status_stop(struct uvc_device *dev);
- 
- /* Controls */
-+extern const struct uvc_control_mapping uvc_ctrl_power_line_mapping_limited;
- extern const struct uvc_control_mapping uvc_ctrl_power_line_mapping_uvc11;
- extern const struct v4l2_subscribed_event_ops uvc_ctrl_sub_ev_ops;
- 
+diff --git a/drivers/staging/media/imx/imx-media-fim.c b/drivers/staging/media/imx/imx-media-fim.c
+index fb6590dcfc36..e719227d4323 100644
+--- a/drivers/staging/media/imx/imx-media-fim.c
++++ b/drivers/staging/media/imx/imx-media-fim.c
+@@ -373,7 +373,6 @@ int imx_media_fim_set_stream(struct imx_media_fim *fim,
+ 			     bool on)
+ {
+ 	unsigned long flags;
+-	int ret = 0;
 
--- 
-2.39.0.314.g84b9a713c41-goog-b4-0.11.0-dev-696ae
+ 	v4l2_ctrl_lock(fim->ctrl[FIM_CL_ENABLE]);
+
+@@ -393,7 +392,7 @@ int imx_media_fim_set_stream(struct imx_media_fim *fim,
+ 	fim->stream_on = on;
+ out:
+ 	v4l2_ctrl_unlock(fim->ctrl[FIM_CL_ENABLE]);
+-	return ret;
++	return 0;
+ }
+
+ int imx_media_fim_add_controls(struct imx_media_fim *fim)
+--
+2.34.1
+
+
+
