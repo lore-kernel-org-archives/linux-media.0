@@ -2,57 +2,57 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A53BC4332F
-	for <linux-media@archiver.kernel.org>; Wed,  4 Jan 2023 10:46:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CAC14C4332F
+	for <linux-media@archiver.kernel.org>; Wed,  4 Jan 2023 10:46:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239069AbjADKqP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 Jan 2023 05:46:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57270 "EHLO
+        id S239087AbjADKqT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 Jan 2023 05:46:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbjADKp6 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Jan 2023 05:45:58 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC1F17054
-        for <linux-media@vger.kernel.org>; Wed,  4 Jan 2023 02:45:56 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id g1so33763434edj.8
-        for <linux-media@vger.kernel.org>; Wed, 04 Jan 2023 02:45:56 -0800 (PST)
+        with ESMTP id S234873AbjADKqA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Jan 2023 05:46:00 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F768DE2
+        for <linux-media@vger.kernel.org>; Wed,  4 Jan 2023 02:45:57 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id c17so47914011edj.13
+        for <linux-media@vger.kernel.org>; Wed, 04 Jan 2023 02:45:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Fi0DwAZll32eIad2Imhk1W2tOAIqK4+yUvq5hehYizE=;
-        b=XUGMCvUZpPHu5JfUsPHIp5UtuySYQQ3ZfTycNgzh4mj/V20ITnQtNomVDsuiaGJaT1
-         oyXvqyxXOzPSCjI19RAp1geECA+s+BlCE4fESF9UnhdxUtljbZ6F0XRdnfRq2SLJUfo3
-         pEh1nr6/VLLy05jXwqcFO3AOWX0vYQpAwjwB0=
+        bh=nvhfEUmWAxT7YLgkjs7oKY+EYBIYLwJw8UyNAJpHRQo=;
+        b=dISK5CQL6NuEAor3u8/gYBexo7B1bhbMOVEmYZZpAoY5p1A/rUPYMT62DxJMx90Npx
+         7rXQ7lCO+LPb/N0a54iJvyLbDia1pfLndow16zI2lueMd7ZvNURImkDJfvnVfuV0tz8B
+         BiM9S7QYLRWy1MzNC1hV6N7ho/LSBWnBX6ktM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Fi0DwAZll32eIad2Imhk1W2tOAIqK4+yUvq5hehYizE=;
-        b=4p4aAVFkiPGFFZaliYTZy/hw1apSEgLGscmoMVHCmWaoYLrqeXFLnRyZlWRFkzNeJX
-         LVH2HduS+i+1BEUL+XOGE/wYI274UID6laKNS0H7cpumftIwtYJNAIE1mmA+c9ds311+
-         ZQRAQGCWk3kFBuHjhAuLEPom7P3QbGn6k3xbDMNO2MfzYU9TtbEHfhLa3KddzYcgfDGG
-         5yPBQNwuai7KkvqLX6XHvv85lA24kctqUbC2tX5QexB50bnfGympI9PPbDYM3J1WIe3q
-         ewTu3qV9SWpefjJ+nvbHbftWvroOA6kOTYrRq0X52+lw2SNaNBd/RQWhgE4YCKInnEPY
-         BqEw==
-X-Gm-Message-State: AFqh2kqxMfMkvKzHMEePLXypKMh3CActJ2oC4M3sCgWvaW5m+5VkQi6N
-        YT6t3uv6cvKlswPMniCZdnOKag==
-X-Google-Smtp-Source: AMrXdXvwsKG211BYtshW9rWO2NXmxw73UOy+Sy1aOwSFvVVkQWotsKMhdnScrv560S+ZILSBfnCdAA==
-X-Received: by 2002:a05:6402:538d:b0:487:2ce6:2b80 with SMTP id ew13-20020a056402538d00b004872ce62b80mr25256957edb.8.1672829155133;
-        Wed, 04 Jan 2023 02:45:55 -0800 (PST)
+        bh=nvhfEUmWAxT7YLgkjs7oKY+EYBIYLwJw8UyNAJpHRQo=;
+        b=2UwXqC4jzPOadzGK8O+T6eZhjzd1o0FBXHj43NN9Xx+9KDl3E7LRA86u9lhebZXzME
+         Yb6s8C4PdpU8cFsPRi0dklsH4oML/Jh9n2zakJcT4AwttoI6HJg0LRtxVZ+YSDPSbMZL
+         +zN8S4J71qmfRnZVyfpTMx0a7rnp8zG6V7gvUOdPy3COxlyZ+ZrxlPMo3i7GcxqAxDgm
+         sfEoBH2/SCavi0YUq5Q9JB0opaylzBVPbzq860PR4wDjtCv7rocDHHWD4wELr/RNQ5aD
+         nrZ/yynQslrrrIvz5HhdXBolBvWwZIdOHZ/dJNAujhYrQDGdxBSIPPja/HCOczsdDvCL
+         rDtg==
+X-Gm-Message-State: AFqh2kptlDxz5/yMQ2FmIZEh7Ecuy7XCKe01XSj8FEAiYIFKttSg0Pcu
+        v4WLwiDzHzq0Ct+G6rCU/rh86A==
+X-Google-Smtp-Source: AMrXdXtK7yXq+Wrbdg6sTDOqQv2bKxvETVGBpupTcfgjXYK/Ufcf/+6DgdanTuYYxfCr3lXrtcQM3A==
+X-Received: by 2002:a05:6402:2932:b0:47e:bdb8:9133 with SMTP id ee50-20020a056402293200b0047ebdb89133mr46484720edb.38.1672829156878;
+        Wed, 04 Jan 2023 02:45:56 -0800 (PST)
 Received: from alco.roam.corp.google.com ([2620:0:1059:10:6531:9bb0:b3f7:86a8])
-        by smtp.gmail.com with ESMTPSA id g32-20020a056402322000b0048c85c5ad30sm4754971eda.83.2023.01.04.02.45.54
+        by smtp.gmail.com with ESMTPSA id g32-20020a056402322000b0048c85c5ad30sm4754971eda.83.2023.01.04.02.45.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 02:45:54 -0800 (PST)
+        Wed, 04 Jan 2023 02:45:56 -0800 (PST)
 From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 04 Jan 2023 11:45:24 +0100
-Subject: [PATCH v3 6/8] media: uvcvideo: Allow hw clock updates with buffers not full
+Date:   Wed, 04 Jan 2023 11:45:26 +0100
+Subject: [PATCH v3 8/8] media: uvcvideo: Fix hw timestamp handling for slow FPS
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20220920-resend-hwtimestamp-v3-6-db9faee7f47d@chromium.org>
+Message-Id: <20220920-resend-hwtimestamp-v3-8-db9faee7f47d@chromium.org>
 References: <20220920-resend-hwtimestamp-v3-0-db9faee7f47d@chromium.org>
 In-Reply-To: <20220920-resend-hwtimestamp-v3-0-db9faee7f47d@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -61,74 +61,90 @@ Cc:     linux-kernel@vger.kernel.org, "hn.chen" <hn.chen@sunplusit.com>,
         Ricardo Ribalda <ribalda@chromium.org>,
         linux-media@vger.kernel.org
 X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1843; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=A2mJudG+6/05Ux5SJhclsJyARWI+ebtKxr7o7Rpc9H0=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjtVjYRSolvHGNsAlK8u96MVXslFe5ioZa0X5tQYeg
- GorUlXmJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY7VY2AAKCRDRN9E+zzrEiICuD/
- sHUGrAeWicUm6+W27wgC2bTF9F1cAqj5AXqQ3hu4pmQK+0BSNSMIMxUWPLfp0VeT6BgeSsTkrf+MeJ
- THid/fK4hxg9E2JIYOLYRAa1FK9H/bUbLBl5UlJr2/p74Q9AsF+CuPBFbiOMIHXyLug9hKPzQ0FhaB
- 82T33bbRv/p2zlaZ6GyAWafawsT3d/4xZH/Evd+2oW/u0SKSINCcdIW8RtZQeDkEM/W4/W0CbPNt2R
- AkjLHTgG2MO/KQx6Yo4/SIiEbTI38VR/l61+hct7UDdf3n+BliR3cLaljBfgili9qjSK33T31FC+HB
- IX+MjqA/7XMUy+VUpC4xIBu+i4BuHEvsDiPXHIKUOVPi2kZa6iNy8UMdDapJ/eHe2hLlisGfb1illj
- SSf8Nbmc/7HSDgvKEZYTAfqizaEa+JxN5Uxir1q5FS0vlvnea9164Vw/aqIPbhPwEx7oRYPC3Uk7WZ
- 3Wy3AbLEucFFFNB6iSDVhbNlBvmCN7jJjzBirgUIUrSY+mt9f1Pk010/hlcI3K2FZWAOPsqXP4jzXR
- GkOqa1/oQkXwLz3sC45FE/zNQsDSTrU83mbG0ka8f0Aq7tdd5IDfUy7NlrocgKB6A3Ap6YI+pI//fv
- TFrzNcXbjAmoWDG5RcekvZRgQU+HRRCp2wpkksqvE6cTo8uLc+nWDnjTgnyQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2413; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=tXnPsHtSlRO20+xxBqG21iV1cCKWm3KfmKl4+olKPes=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjtVjb523K5wvvjKlkHqfOBA3pdJuwddqB6BwLexTj
+ vGE39kGJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY7VY2wAKCRDRN9E+zzrEiKnpD/
+ 4uI3pEVUaMQ/JFUCpFt+c9XzJcropqqB0VOrgtG/fXURnKGs1j6GDsXgAtvOn2QxdUsoGaTD6E4hz9
+ 9Am7G8HYbalb7qr/C3+9vk8+oFDx3KurgkXqv2vt/W3rLFg+QwOtU50Dkj5xz9E5xcwa0C487LmVrA
+ QsW8i/rVc/Y0n6UUa/nAOYsSKJAGbtjOnhhTmdQNRgELSJpbuRJ7I6ZwrM2JYuaJx1+zU1zpjsiyoL
+ yceYVrSYI0Z/EZYliOn+SZ402dhYEoSwlWjvSRFLTIbYHy6qXIl+XiAVuqC82nxXXcKEtBYGcmRLfW
+ L8IIdihEI7llbp06mYaT7BXkn33P2x4Io+9abzUcqiYLeL7/MVtyUO7XQhA+0SbAOVDkqiiPesARON
+ 7TAS+8G2u3o6PmoFwEaPcTcCgi5rZb1SDYgmMXB9nORZFIrXioAUZi21Hk3Ii5H7QdVLydpJlcI5HT
+ 5aWWv0vhy7do7RWiWXerW9vVzuprZm5Zr7WXQd6j2xm869vM/gaoIGpT+Uw9/8sUKVxq4/iLQKK+i3
+ mrJj0BoBRgLvjkkyeanNOeJgvfycD0SPpgRY6J/13D4FGO5ImLuJoxPTJWLUagCbgG9zqK0/pIP8Yr
+ k3YnrNzt7kwAlv4xk93YjItVzm0Jz9oOVQS0fIYlEw2AQpSUgV8DzqEg+hhg==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-With UVC 1.5 we get as little as one clock sample per frame. Which means
-that it takes 32 frames to move from the software timestamp to the
-hardware timestamp method.
+In UVC 1.5 we get a single clock value per frame. With the current
+buffer size of 32, FPS slowers than 32 might roll-over twice.
 
-This results in abrupt changes in the timestamping after 32 frames (~1
-second), resulting in noticeable artifacts when used for encoding.
+The current code cannot handle two roll-over and provide invalid
+timestamps.
 
-With this patch we modify the update algorithm to work with whatever
-amount of values are available.
+Revome all the samples from the circular buffer that are more than two
+rollovers old, so the algorithm always provides good timestamps.
+
+Note that we are removing values that are more than one second old,
+which means that there is enough distance between the two points that
+we use for the interpolation to provide good values.
 
 Tested-by: HungNien Chen <hn.chen@sunplusit.com>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/usb/uvc/uvc_video.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ drivers/media/usb/uvc/uvc_video.c | 15 +++++++++++++++
+ drivers/media/usb/uvc/uvcvideo.h  |  1 +
+ 2 files changed, 16 insertions(+)
 
 diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index fe5c7b465adf..5c37b080e0c6 100644
+index 2c6da49ff84b..b0b93e218288 100644
 --- a/drivers/media/usb/uvc/uvc_video.c
 +++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -743,10 +743,10 @@ void uvc_video_clock_update(struct uvc_streaming *stream,
+@@ -471,6 +471,20 @@ static void uvc_video_clock_add_sample(struct uvc_clock *clock,
  
  	spin_lock_irqsave(&clock->lock, flags);
  
--	if (clock->count < clock->size)
-+	if (clock->count < 2)
- 		goto done;
- 
--	first = &clock->samples[clock->head];
-+	first = &clock->samples[(clock->head - clock->count) % clock->size];
- 	last = &clock->samples[(clock->head - 1) % clock->size];
- 
- 	/* First step, PTS to SOF conversion. */
-@@ -761,6 +761,15 @@ void uvc_video_clock_update(struct uvc_streaming *stream,
- 	if (y2 < y1)
- 		y2 += 2048 << 16;
- 
-+	/*
-+	 * Have at least 1/4 of a second of timestamps before we
-+	 * try to do any calculation. Otherwise we do not have enough
-+	 * precision. This value was determined by running Android CTS
-+	 * on different devices.
-+	 */
-+	if ((y2 - y1) < (256 << 16))
-+		goto done;
++	/* Delete last overflows */
++	if (clock->head == clock->last_sof_overflow)
++		clock->last_sof_overflow = -1;
 +
- 	y = (u64)(y2 - y1) * (1ULL << 31) + (u64)y1 * (u64)x2
- 	  - (u64)y2 * (u64)x1;
- 	y = div_u64(y, x2 - x1);
++	/* Handle overflows */
++	if (clock->count > 0 && clock->last_sof > sample->dev_sof) {
++		/* Remove data from the last^2 overflows */
++		if (clock->last_sof_overflow != -1)
++			clock->count = (clock->head - clock->last_sof_overflow)
++								% clock->count;
++		clock->last_sof_overflow = clock->head;
++	}
++
++	/* Add sample */
+ 	memcpy(&clock->samples[clock->head], sample, sizeof(*sample));
+ 	clock->last_sof = sample->dev_sof;
+ 	clock->head = (clock->head + 1) % clock->size;
+@@ -595,6 +609,7 @@ static void uvc_video_clock_reset(struct uvc_clock *clock)
+ 	clock->head = 0;
+ 	clock->count = 0;
+ 	clock->last_sof = -1;
++	clock->last_sof_overflow = -1;
+ 	clock->sof_offset = -1;
+ }
+ 
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index 24c3e9411415..6dc015754e99 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -503,6 +503,7 @@ struct uvc_streaming {
+ 		unsigned int head;
+ 		unsigned int count;
+ 		unsigned int size;
++		unsigned int last_sof_overflow;
+ 
+ 		u16 last_sof;
+ 		u16 sof_offset;
 
 -- 
 2.39.0.314.g84b9a713c41-goog-b4-0.11.0-dev-696ae
