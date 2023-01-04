@@ -2,86 +2,165 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EA07C46467
-	for <linux-media@archiver.kernel.org>; Wed,  4 Jan 2023 16:13:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C5DFC54EF0
+	for <linux-media@archiver.kernel.org>; Wed,  4 Jan 2023 16:22:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235007AbjADQMr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 Jan 2023 11:12:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34094 "EHLO
+        id S239604AbjADQWu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 Jan 2023 11:22:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240079AbjADQMN (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Jan 2023 11:12:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EFE34087B;
-        Wed,  4 Jan 2023 08:11:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF7916179C;
-        Wed,  4 Jan 2023 16:11:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC3F6C433F0;
-        Wed,  4 Jan 2023 16:11:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1672848708;
-        bh=5vqMnOjPB/EzvYDjxxL+uagrVqeIhA4cDaoRhifpY2Y=;
+        with ESMTP id S239762AbjADQWX (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Jan 2023 11:22:23 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939B942E25
+        for <linux-media@vger.kernel.org>; Wed,  4 Jan 2023 08:22:22 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8A6431267;
+        Wed,  4 Jan 2023 17:22:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1672849340;
+        bh=KLRC4QYHx/r9pTSHoWepNKsOHI5RKeqI2tOOleyWLFU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tkIOltjj6KNOeDwL83sd3YRfSB3OnocTVA2X9i2iVhewgmqQYsoOTLQHb0sAmNw62
-         gL4ym6jyORObVrlL5H9j3AWqhO61KGKuxNHrQ7/LGW0maVMxCu1dPRhmc/t2HMEGg1
-         6RQhGdJBeTrEt7wwD2RRWFFZYuGmRPwetctN/cxk=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 6.0 002/177] media: stv0288: use explicitly signed char
-Date:   Wed,  4 Jan 2023 17:04:53 +0100
-Message-Id: <20230104160507.718681077@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230104160507.635888536@linuxfoundation.org>
-References: <20230104160507.635888536@linuxfoundation.org>
-User-Agent: quilt/0.67
+        b=nwxp1P+JtAxwIUfjwQar8rRymHo18GsqclY4qomRYhpl+iMRsMYMYFTQZ3ID0zaB0
+         aDLDxM4c43T3k+gKmzg1xqSWHcJE/0zZ1cTwl2FWb3+P3URoXVdAVuquot+CDi3+DP
+         qM36NDuneYb3a/an8ucglRM2PCCBexD7saV6Z4Us=
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     linux-sunxi@lists.linux.dev, Yong Deng <yong.deng@magewell.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Adam Pigg <adam@piggz.co.uk>
+Subject: [PATCH v1 1/2] media: sun6i-csi: capture: Use subdev operation to access bridge format
+Date:   Wed,  4 Jan 2023 18:22:14 +0200
+Message-Id: <20230104162215.31194-2-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.38.2
+In-Reply-To: <20230104162215.31194-1-laurent.pinchart@ideasonboard.com>
+References: <20230104162215.31194-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jason A. Donenfeld <Jason@zx2c4.com>
+Replace the sun6i_csi_bridge helper functions sun6i_csi_bridge_format()
+and sun6i_csi_bridge_dimensions() that access the bridge fields from the
+capture side with usage of the subdev .get_fmt() operation. This
+decouples the bridge and capture side better by using abstractions
+provided by the V4L2 subdev API, and prepares for usage of the subdev
+active state in the bridge.
 
-commit 7392134428c92a4cb541bd5c8f4f5c8d2e88364d upstream.
+The sun6i_csi_bridge_dimensions() helper is now unused and is removed.
+The sun6i_csi_bridge_format() helper will be removed in a subsequent
+change.
 
-With char becoming unsigned by default, and with `char` alone being
-ambiguous and based on architecture, signed chars need to be marked
-explicitly as such. Use `s8` and `u8` types here, since that's what
-surrounding code does. This fixes:
-
-drivers/media/dvb-frontends/stv0288.c:471 stv0288_set_frontend() warn: assigning (-9) to unsigned variable 'tm'
-drivers/media/dvb-frontends/stv0288.c:471 stv0288_set_frontend() warn: we never enter this loop
-
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org
-Cc: stable@vger.kernel.org
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/dvb-frontends/stv0288.c |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ .../sunxi/sun6i-csi/sun6i_csi_bridge.c        | 13 ++---------
+ .../sunxi/sun6i-csi/sun6i_csi_bridge.h        |  7 ------
+ .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 23 ++++++++++++-------
+ 3 files changed, 17 insertions(+), 26 deletions(-)
 
---- a/drivers/media/dvb-frontends/stv0288.c
-+++ b/drivers/media/dvb-frontends/stv0288.c
-@@ -440,9 +440,8 @@ static int stv0288_set_frontend(struct d
- 	struct stv0288_state *state = fe->demodulator_priv;
- 	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
+index 4db950973ce2..a149a0d4e601 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
+@@ -15,17 +15,8 @@
  
--	char tm;
--	unsigned char tda[3];
--	u8 reg, time_out = 0;
-+	u8 tda[3], reg, time_out = 0;
-+	s8 tm;
+ /* Helpers */
  
- 	dprintk("%s : FE_SET_FRONTEND\n", __func__);
+-void sun6i_csi_bridge_dimensions(struct sun6i_csi_device *csi_dev,
+-				 unsigned int *width, unsigned int *height)
+-{
+-	if (width)
+-		*width = csi_dev->bridge.mbus_format.width;
+-	if (height)
+-		*height = csi_dev->bridge.mbus_format.height;
+-}
+-
+-void sun6i_csi_bridge_format(struct sun6i_csi_device *csi_dev,
+-			     u32 *mbus_code, u32 *field)
++static void sun6i_csi_bridge_format(struct sun6i_csi_device *csi_dev,
++				    u32 *mbus_code, u32 *field)
+ {
+ 	if (mbus_code)
+ 		*mbus_code = csi_dev->bridge.mbus_format.code;
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h
+index ee592a14b9c5..b827ab1be011 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h
+@@ -49,13 +49,6 @@ struct sun6i_csi_bridge {
+ 	struct sun6i_csi_bridge_source	source_mipi_csi2;
+ };
  
+-/* Helpers */
+-
+-void sun6i_csi_bridge_dimensions(struct sun6i_csi_device *csi_dev,
+-				 unsigned int *width, unsigned int *height);
+-void sun6i_csi_bridge_format(struct sun6i_csi_device *csi_dev,
+-			     u32 *mbus_code, u32 *field);
+-
+ /* Format */
+ 
+ const struct sun6i_csi_bridge_format *
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
+index cf6aadbc130b..03d4adec054c 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
+@@ -893,11 +893,14 @@ static int sun6i_csi_capture_link_validate(struct media_link *link)
+ 	const struct sun6i_csi_capture_format *capture_format;
+ 	const struct sun6i_csi_bridge_format *bridge_format;
+ 	unsigned int capture_width, capture_height;
+-	unsigned int bridge_width, bridge_height;
+ 	const struct v4l2_format_info *format_info;
+ 	u32 pixelformat, capture_field;
+-	u32 mbus_code, bridge_field;
++	struct v4l2_subdev_format fmt = {
++		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
++		.pad = SUN6I_CSI_BRIDGE_PAD_SOURCE,
++	};
+ 	bool match;
++	int ret;
+ 
+ 	sun6i_csi_capture_dimensions(csi_dev, &capture_width, &capture_height);
+ 
+@@ -906,18 +909,21 @@ static int sun6i_csi_capture_link_validate(struct media_link *link)
+ 	if (WARN_ON(!capture_format))
+ 		return -EINVAL;
+ 
+-	sun6i_csi_bridge_dimensions(csi_dev, &bridge_width, &bridge_height);
++	ret = v4l2_subdev_call_state_active(&csi_dev->bridge.subdev, pad,
++					    get_fmt, &fmt);
++	if (ret)
++		return ret;
+ 
+-	sun6i_csi_bridge_format(csi_dev, &mbus_code, &bridge_field);
+-	bridge_format = sun6i_csi_bridge_format_find(mbus_code);
++	bridge_format = sun6i_csi_bridge_format_find(fmt.format.code);
+ 	if (WARN_ON(!bridge_format))
+ 		return -EINVAL;
+ 
+ 	/* No cropping/scaling is supported. */
+-	if (capture_width != bridge_width || capture_height != bridge_height) {
++	if (capture_width != fmt.format.width ||
++	    capture_height != fmt.format.height) {
+ 		v4l2_err(v4l2_dev,
+ 			 "invalid input/output dimensions: %ux%u/%ux%u\n",
+-			 bridge_width, bridge_height, capture_width,
++			 fmt.format.width, fmt.format.height, capture_width,
+ 			 capture_height);
+ 		return -EINVAL;
+ 	}
+@@ -949,7 +955,8 @@ static int sun6i_csi_capture_link_validate(struct media_link *link)
+ 	/* With raw input mode, we need a 1:1 match between input and output. */
+ 	if (bridge_format->input_format == SUN6I_CSI_INPUT_FMT_RAW ||
+ 	    capture_format->input_format_raw) {
+-		match = sun6i_csi_capture_format_match(pixelformat, mbus_code);
++		match = sun6i_csi_capture_format_match(pixelformat,
++						       fmt.format.code);
+ 		if (!match)
+ 			goto invalid;
+ 	}
+-- 
+Regards,
 
+Laurent Pinchart
 
