@@ -2,114 +2,96 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4620C46467
-	for <linux-media@archiver.kernel.org>; Wed,  4 Jan 2023 09:28:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9D46C46467
+	for <linux-media@archiver.kernel.org>; Wed,  4 Jan 2023 10:20:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233067AbjADJ1t (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 Jan 2023 04:27:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
+        id S234644AbjADKUZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 Jan 2023 05:20:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234437AbjADJ10 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Jan 2023 04:27:26 -0500
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E518712AA5;
-        Wed,  4 Jan 2023 01:27:24 -0800 (PST)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3047iuVw032302;
-        Wed, 4 Jan 2023 10:27:15 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=6xh5pAXEYT99LT/t8U9ik3ip5kLuSrEFuQdju6O96Pg=;
- b=AxgBjJx7JqFS7fLwbKQjc9Mq3oEY7Cc8g2UUspDl7JiuiaME8812BVELFoVMj+MpzIHe
- PR98xQ/5+HjWiecmrXsAna8OJvs3aYq4JLnCBLqYcdfNgsvd5KUS+GNUdBXJ2WqoAYSh
- wfZQq94TQX+2OxEyzDu8dLLVn3mPn3Xmofy7nTl2HRHl0lf7YYzdrolpGLzDdEKnUR6R
- Holcf2GyGn//u7++ADvFgQjBeoB6yicMcvcQDbtyHFzjeCGL0hVOVM55cBETcXqEgCwW
- BzUkQl2T6Mx+aLbgBFOBgku/oFkfIqtPM64CL5M/h8Fv3CFtlwi5gctjcUb9q6HMKPdX jg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3mtcupt4tu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Jan 2023 10:27:15 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D50C710002A;
-        Wed,  4 Jan 2023 10:27:14 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BAD0F21512C;
-        Wed,  4 Jan 2023 10:27:14 +0100 (CET)
-Received: from [10.129.166.172] (10.129.166.172) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Wed, 4 Jan
- 2023 10:27:14 +0100
-Message-ID: <b2ad42cb-fe09-73f5-8d7d-ac4f22817bac@foss.st.com>
-Date:   Wed, 4 Jan 2023 10:27:14 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
+        with ESMTP id S234341AbjADKUN (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Jan 2023 05:20:13 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C97193FA;
+        Wed,  4 Jan 2023 02:20:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672827612; x=1704363612;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NPxQWNdyTdWqkzxmEAyoSSF71GDzFceR3vK9LEhdjnM=;
+  b=MthnFznTiRTzQ3v8xqp/RJdfQ43alquLjWC8DqbAOmet/rw9oOqf6uKN
+   J0QyGNgNQF39K8/DiSgj1JOJzJykVfo4WIUgJCL8xL5t8/ExIxKbTHev9
+   exthv+HbIghs3t0gv6Q7bK++HmQjSAMnKjLM56HSgKDwJCdrNUQz+C5CW
+   E1nRYQOQ6qy9bOvpyazZe8WLu7UTOI7I5djYMH75CwBxZjfJgnhFSR3jc
+   unv0/4TqCq/t4ezM+01oIjBpSPJSYKh/DzddNmlV9kcRZHH5dODe4uuek
+   2YbmcAbX6/UaFciMGoBJiavWX4fdZQD+SZhlwP2VcFBfqh+blmmRLXZqn
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="349124524"
+X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
+   d="scan'208";a="349124524"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 02:20:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="797481111"
+X-IronPort-AV: E=Sophos;i="5.96,299,1665471600"; 
+   d="scan'208";a="797481111"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001.fm.intel.com with ESMTP; 04 Jan 2023 02:20:10 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pD0sT-004G40-0m;
+        Wed, 04 Jan 2023 12:20:09 +0200
+Date:   Wed, 4 Jan 2023 12:20:08 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Benjamin Mugnier <benjamin.mugnier@foss.st.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sylvain Petinot <sylvain.petinot@foss.st.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
 Subject: Re: [PATCH v1 1/1] media: i2c: st-vgxy61: Use asm intead of
  asm-generic
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Sylvain Petinot <sylvain.petinot@foss.st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
+Message-ID: <Y7VS2LuKGVQkcyrU@smile.fi.intel.com>
 References: <20230103145219.40226-1-andriy.shevchenko@linux.intel.com>
-Content-Language: en-US
-From:   Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-In-Reply-To: <20230103145219.40226-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.129.166.172]
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-04_05,2023-01-03_02,2022-06-22_01
+ <b2ad42cb-fe09-73f5-8d7d-ac4f22817bac@foss.st.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b2ad42cb-fe09-73f5-8d7d-ac4f22817bac@foss.st.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Andy,
+On Wed, Jan 04, 2023 at 10:27:14AM +0100, Benjamin Mugnier wrote:
+> On 1/3/23 15:52, Andy Shevchenko wrote:
 
-Thank you for your patch.
+...
 
-On 1/3/23 15:52, Andy Shevchenko wrote:
-> There is no point to specify asm-generic for the unaligned.h.
-> Drop the 'generic' suffix and move the inclusion to be after
-> the non-media linux/* ones.
-> 
-> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/media/i2c/st-vgxy61.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/i2c/st-vgxy61.c b/drivers/media/i2c/st-vgxy61.c
-> index 826baf4e064d..5dcabee6677d 100644
-> --- a/drivers/media/i2c/st-vgxy61.c
-> +++ b/drivers/media/i2c/st-vgxy61.c
-> @@ -5,7 +5,6 @@
->   * Copyright (C) 2022 STMicroelectronics SA
->   */
->  
-> -#include <asm-generic/unaligned.h>
->  #include <linux/clk.h>
->  #include <linux/delay.h>
->  #include <linux/gpio/consumer.h>
-> @@ -15,6 +14,9 @@
->  #include <linux/pm_runtime.h>
->  #include <linux/regulator/consumer.h>
->  #include <linux/units.h>
-> +
-> +#include <asm/unaligned.h>
-> +
+> > -#include <asm-generic/unaligned.h>
+> >  #include <linux/clk.h>
+> >  #include <linux/delay.h>
+> >  #include <linux/gpio/consumer.h>
+> > @@ -15,6 +14,9 @@
+> >  #include <linux/pm_runtime.h>
+> >  #include <linux/regulator/consumer.h>
+> >  #include <linux/units.h>
+> > +
+> > +#include <asm/unaligned.h>
 
-Any particular reason not to keep the alphabetical sort ?
+> Any particular reason not to keep the alphabetical sort ?
 
->  #include <media/mipi-csi2.h>
->  #include <media/v4l2-async.h>
->  #include <media/v4l2-ctrls.h>
+It's kept in an order in each of the groups of headers.
+
+The main rule here is to go from most generic headers to the particular ones.
+asm/* are definitely more particular than linux/* ones.
+
+> >  #include <media/mipi-csi2.h>
+> >  #include <media/v4l2-async.h>
+> >  #include <media/v4l2-ctrls.h>
 
 -- 
-Regards,
+With Best Regards,
+Andy Shevchenko
 
-Benjamin
+
