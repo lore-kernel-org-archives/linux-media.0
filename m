@@ -2,173 +2,174 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AD10C3DA7D
-	for <linux-media@archiver.kernel.org>; Thu,  5 Jan 2023 13:51:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41888C3DA7D
+	for <linux-media@archiver.kernel.org>; Thu,  5 Jan 2023 13:56:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233866AbjAENvC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Jan 2023 08:51:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35992 "EHLO
+        id S233114AbjAEN4A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Jan 2023 08:56:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233879AbjAENuW (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Jan 2023 08:50:22 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682085F926
-        for <linux-media@vger.kernel.org>; Thu,  5 Jan 2023 05:48:19 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mtr@pengutronix.de>)
-        id 1pDQah-0003Qm-Vi; Thu, 05 Jan 2023 14:47:32 +0100
-Received: from [2a0a:edc0:0:900:1d::48] (helo=litschi)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <mtr@pengutronix.de>)
-        id 1pDQag-0040LP-IO; Thu, 05 Jan 2023 14:47:30 +0100
-Received: from mtr by litschi with local (Exim 4.94.2)
-        (envelope-from <mtr@pengutronix.de>)
-        id 1pDQaf-000FVA-DN; Thu, 05 Jan 2023 14:47:29 +0100
-From:   Michael Tretter <m.tretter@pengutronix.de>
-To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-arm-kernel@lists.infradead.org,
-        Michael Tretter <m.tretter@pengutronix.de>
-Subject: [PATCH 1/8] media: dt-bindings: media: fsl-pxp: convert to yaml
-Date:   Thu,  5 Jan 2023 14:47:22 +0100
-Message-Id: <20230105134729.59542-2-m.tretter@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230105134729.59542-1-m.tretter@pengutronix.de>
-References: <20230105134729.59542-1-m.tretter@pengutronix.de>
+        with ESMTP id S234515AbjAENzY (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Jan 2023 08:55:24 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CEE04FD70
+        for <linux-media@vger.kernel.org>; Thu,  5 Jan 2023 05:53:20 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id fc4so90115166ejc.12
+        for <linux-media@vger.kernel.org>; Thu, 05 Jan 2023 05:53:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sjquDUj+Pkh3sX3Nb739RCA0OIWzHWBMegfajevm7GM=;
+        b=k93+/ngHoI/xdxPrMldx7VCfDuLVtw5GP1vHdLHCEYvd6l5FtQtVn1T9CteRiHSK5B
+         7dQ1l8u3N1ykmcIzYE/vsr5DuELzWvo9oIqVpQdEO8eeWKFVZKoeKXDIzz3bwEl1yuVk
+         zfZcBe5y4J7NffPPPFwr3BWiNNofQzKn/q/Y4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sjquDUj+Pkh3sX3Nb739RCA0OIWzHWBMegfajevm7GM=;
+        b=Ru0K3PIdDE/iPP4dBjigbN1XSkcaoghtmUQfIQQyh7OnoN4QAEQA+GZNuc2JZujTDN
+         9m62M8kw5eQjpg2N4G6MMENYlWRAaWAzKhtYB7/E/sZ8ScxFMOBxPPWF+J302A19NKAP
+         zhreIxN6sQMJQ7ASfsb0gzfhntZfW3kxPUc6i3eokL937EPohHd+p3Y8b2RapeDWDqTA
+         RjUm5biHvLaHn7Bm/mv6vwS2Zirpb/FmtriPsX484xD6+Yqbs1fS3VT6WxFBc3Y3d3aU
+         C+6UFahbCI1fegy+hKKdrk7s/vd/SSs9+mVhup6DYzNK8pEAgi8Onlw7savouqF4uzVh
+         8fGw==
+X-Gm-Message-State: AFqh2kqEJWEu/8imZ+lRmPuQHJLfAiZcRuyut+9/xgJseRwvx3F/WogO
+        3YVAASYCVztz/mi2A0gV0ceS9w==
+X-Google-Smtp-Source: AMrXdXvH2PelQyv965276xdO7FAFuyEmVm31ObXjdX8BSN6Wb/JLyfFcw8ffi7QS4ztds3s5jj7M3A==
+X-Received: by 2002:a17:906:ce4d:b0:849:a231:e503 with SMTP id se13-20020a170906ce4d00b00849a231e503mr38443183ejb.49.1672926799745;
+        Thu, 05 Jan 2023 05:53:19 -0800 (PST)
+Received: from alco.roam.corp.google.com ([2620:0:1059:10:43c3:8ac4:5d6f:2251])
+        by smtp.gmail.com with ESMTPSA id x11-20020a170906b08b00b007806c1474e1sm16459084ejy.127.2023.01.05.05.53.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 05:53:19 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Thu, 05 Jan 2023 14:52:57 +0100
+Subject: [PATCH v2 6/7] media: uvcvideo: Fix power line control for Lenovo
+ Integrated Camera
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mtr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230105-uvc-gcc5-v2-6-2ba6c660d6f5@chromium.org>
+References: <20230105-uvc-gcc5-v2-0-2ba6c660d6f5@chromium.org>
+In-Reply-To: <20230105-uvc-gcc5-v2-0-2ba6c660d6f5@chromium.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>,
+        linux-media@vger.kernel.org, Yunke Cao <yunkec@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3606; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=YcPdxuXc6e/MVQTKSpvQxEjmmIRWxl3uxbcqXKNQm+o=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjttZGZ0Iq14zpMyjUhg2dn1eR/Vv5bx5PpNod+Vx4
+ CxsIn36JAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY7bWRgAKCRDRN9E+zzrEiL8BD/
+ 97Mt7IwMd9kghnskq4VR56QmcQpNpbpWNvsTriv5ngN9WMHXvib/mKpInWWqth9td482tbC+WrAEzc
+ mFsRUe3hg+6C4VlfV7ly3J46mO7edihuDnu9OPq+Y8wEW6Yr5Qp7pORQg9B2zow9r8ar8LW3I8eEBM
+ ttXVJFHjbPVlinVlXSRZDi49yeqtaqeI9Ox3degAKgUB1MmYBYeYvSHneA2jcZFD72pRLeCPh05JQP
+ 5bvAOTH6nNq42DbY3Me2pPN9ncKJw2wG7xobBk//5PrgDQ5GOwjBBV101HXF88KUsdMYq7SubVwBXC
+ RN5vz92w/Cx65/4mB8/V1K2nN4jh4w7NLKNh1ZmYSTLpo44gCbzE7CKKSOMf9TGAUwUIUfVXAgK2S9
+ PVqTRpaxeO91nfgPaJ7BfNG5VQhdb86DaGXt4sIzd/5m2K8/Tz9ETPv0xQYC7mrBxzT8XaGw2IG0oz
+ JASMYr5v4D5DQsaS2xQofd4jdQrzGzsGtOvCbQo/Jzbiib5TLXDVR9xscnkHUeiMBLlig46UJ0XQxf
+ Gd1Pq05A5p0MVpVjkqMrMbecKT5BkBxK1nKh7FbTxEct5oOBzECYkBs9Mo58yJqQ8/jc77rQqDE9e8
+ mQhLLLaB6/0G4YLICcf65HNdaJdbIQc4VHPoyUCzMOr64N9WkyhJ3ZnNetTw==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convert the bindings of the Freescale Pixel Pipeline to YAML.
+The device does not implement the power line control correctly. It is
+a UVC 1.5 device, but implements the PLC control as a UVC 1.1 device.
 
-The conversion drops the previously listed compatibles for several SoCs.
-It is unclear, if the PXP on these SoCs is compatible to any of the PXPs
-on the existing SoCs and would allow to reuse the already defined
-compatibles. The missing compatibles should be brought back when the
-support for the PXP on these SoCs is added.
+Add the corresponding control mapping override.
 
-Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
+Bus 003 Device 002: ID 30c9:0093 Lenovo Integrated Camera
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.01
+  bDeviceClass          239 Miscellaneous Device
+  bDeviceSubClass         2
+  bDeviceProtocol         1 Interface Association
+  bMaxPacketSize0        64
+  idVendor           0x30c9
+  idProduct          0x0093
+  bcdDevice            0.07
+  iManufacturer           3 Lenovo
+  iProduct                1 Integrated Camera
+  iSerial                 2 8SSC21J75356V1SR2830069
+  bNumConfigurations      1
+
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- .../bindings/media/fsl,imx6ull-pxp.yaml       | 62 +++++++++++++++++++
- .../devicetree/bindings/media/fsl-pxp.txt     | 26 --------
- 2 files changed, 62 insertions(+), 26 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/fsl,imx6ull-pxp.yaml
- delete mode 100644 Documentation/devicetree/bindings/media/fsl-pxp.txt
+ drivers/media/usb/uvc/uvc_ctrl.c   |  2 +-
+ drivers/media/usb/uvc/uvc_driver.c | 16 ++++++++++++++++
+ drivers/media/usb/uvc/uvcvideo.h   |  1 +
+ 3 files changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/media/fsl,imx6ull-pxp.yaml b/Documentation/devicetree/bindings/media/fsl,imx6ull-pxp.yaml
-new file mode 100644
-index 000000000000..e5f227b84759
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/fsl,imx6ull-pxp.yaml
-@@ -0,0 +1,62 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+index f559a1ac6e3c..28ef9b2024a1 100644
+--- a/drivers/media/usb/uvc/uvc_ctrl.c
++++ b/drivers/media/usb/uvc/uvc_ctrl.c
+@@ -736,7 +736,7 @@ const struct uvc_control_mapping uvc_ctrl_power_line_mapping_limited = {
+ 				  V4L2_CID_POWER_LINE_FREQUENCY_50HZ),
+ };
+ 
+-static const struct uvc_control_mapping uvc_ctrl_power_line_mapping_uvc11 = {
++const struct uvc_control_mapping uvc_ctrl_power_line_mapping_uvc11 = {
+ 	.id		= V4L2_CID_POWER_LINE_FREQUENCY,
+ 	.entity		= UVC_GUID_UVC_PROCESSING,
+ 	.selector	= UVC_PU_POWER_LINE_FREQUENCY_CONTROL,
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 37d2b08bc8b2..57c948d47bbf 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -2385,6 +2385,13 @@ static const struct uvc_device_info uvc_ctrl_power_line_limited = {
+ 	},
+ };
+ 
++static const struct uvc_device_info uvc_ctrl_power_line_uvc11 = {
++	.mappings = (const struct uvc_control_mapping *[]) {
++		&uvc_ctrl_power_line_mapping_uvc11,
++		NULL, /* Sentinel */
++	},
++};
 +
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/media/fsl,imx6ull-pxp.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: Freescale Pixel Pipeline
-+
-+maintainers:
-+  - Philipp Zabel <p.zabel@pengutronix.de>
-+  - Michael Tretter <m.tretter@pengutronix.de>
-+
-+description:
-+  The Pixel Pipeline (PXP) is a memory-to-memory graphics processing engine
-+  that supports scaling, colorspace conversion, alpha blending, rotation, and
-+  pixel conversion via lookup table. Different versions are present on various
-+  i.MX SoCs from i.MX23 to i.MX7.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - fsl,imx6ul-pxp
-+      - fsl,imx6ull-pxp
-+      - fsl,imx7d-pxp
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    minItems: 1
-+    maxItems: 2
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: axi
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+
-+additionalProperties: False
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/imx6ul-clock.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    pxp: pxp@21cc000 {
-+        compatible = "fsl,imx6ull-pxp";
-+        reg = <0x021cc000 0x4000>;
-+        interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>;
-+        clock-names = "axi";
-+        clocks = <&clks IMX6UL_CLK_PXP>;
-+    };
-diff --git a/Documentation/devicetree/bindings/media/fsl-pxp.txt b/Documentation/devicetree/bindings/media/fsl-pxp.txt
-deleted file mode 100644
-index f8090e06530d..000000000000
---- a/Documentation/devicetree/bindings/media/fsl-pxp.txt
-+++ /dev/null
-@@ -1,26 +0,0 @@
--Freescale Pixel Pipeline
--========================
--
--The Pixel Pipeline (PXP) is a memory-to-memory graphics processing engine
--that supports scaling, colorspace conversion, alpha blending, rotation, and
--pixel conversion via lookup table. Different versions are present on various
--i.MX SoCs from i.MX23 to i.MX7.
--
--Required properties:
--- compatible: should be "fsl,<soc>-pxp", where SoC can be one of imx23, imx28,
--  imx6dl, imx6sl, imx6sll, imx6ul, imx6sx, imx6ull, or imx7d.
--- reg: the register base and size for the device registers
--- interrupts: the PXP interrupt, two interrupts for imx6ull and imx7d.
--- clock-names: should be "axi"
--- clocks: the PXP AXI clock
--
--Example:
--
--pxp@21cc000 {
--	compatible = "fsl,imx6ull-pxp";
--	reg = <0x021cc000 0x4000>;
--	interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>;
--	clock-names = "axi";
--	clocks = <&clks IMX6UL_CLK_PXP>;
--};
+ static const struct uvc_device_info uvc_quirk_probe_minmax = {
+ 	.quirks = UVC_QUIRK_PROBE_MINMAX,
+ };
+@@ -2964,6 +2971,15 @@ static const struct usb_device_id uvc_ids[] = {
+ 	  .bInterfaceSubClass	= 1,
+ 	  .bInterfaceProtocol	= 0,
+ 	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_BPP) },
++	/* Lenovo Integrated Camera */
++	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
++				| USB_DEVICE_ID_MATCH_INT_INFO,
++	  .idVendor		= 0x30c9,
++	  .idProduct		= 0x0093,
++	  .bInterfaceClass	= USB_CLASS_VIDEO,
++	  .bInterfaceSubClass	= 1,
++	  .bInterfaceProtocol	= UVC_PC_PROTOCOL_15,
++	  .driver_info		= (kernel_ulong_t)&uvc_ctrl_power_line_uvc11 },
+ 	/* Sonix Technology USB 2.0 Camera */
+ 	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+ 				| USB_DEVICE_ID_MATCH_INT_INFO,
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index 1b2d9f327583..31c33eb0edf5 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -748,6 +748,7 @@ void uvc_status_stop(struct uvc_device *dev);
+ 
+ /* Controls */
+ extern const struct uvc_control_mapping uvc_ctrl_power_line_mapping_limited;
++extern const struct uvc_control_mapping uvc_ctrl_power_line_mapping_uvc11;
+ extern const struct v4l2_subscribed_event_ops uvc_ctrl_sub_ev_ops;
+ 
+ int uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
+
 -- 
-2.30.2
-
+2.39.0.314.g84b9a713c41-goog-b4-0.11.0-dev-696ae
