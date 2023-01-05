@@ -2,30 +2,30 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 234FDC3DA7A
-	for <linux-media@archiver.kernel.org>; Thu,  5 Jan 2023 13:48:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85576C3DA7A
+	for <linux-media@archiver.kernel.org>; Thu,  5 Jan 2023 13:48:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233449AbjAENsK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Jan 2023 08:48:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33324 "EHLO
+        id S233714AbjAENsM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Jan 2023 08:48:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233662AbjAENrq (ORCPT
+        with ESMTP id S233616AbjAENrq (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 5 Jan 2023 08:47:46 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D622C4BD5B
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D49B4D4AD
         for <linux-media@vger.kernel.org>; Thu,  5 Jan 2023 05:47:33 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1pDQah-0003Qp-WD; Thu, 05 Jan 2023 14:47:32 +0100
+        id 1pDQai-0003Ql-07; Thu, 05 Jan 2023 14:47:32 +0100
 Received: from [2a0a:edc0:0:900:1d::48] (helo=litschi)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <mtr@pengutronix.de>)
-        id 1pDQah-0040LY-0g; Thu, 05 Jan 2023 14:47:31 +0100
+        id 1pDQag-0040LM-86; Thu, 05 Jan 2023 14:47:30 +0100
 Received: from mtr by litschi with local (Exim 4.94.2)
         (envelope-from <mtr@pengutronix.de>)
-        id 1pDQaf-000FVV-OR; Thu, 05 Jan 2023 14:47:29 +0100
+        id 1pDQaf-000FV7-2O; Thu, 05 Jan 2023 14:47:29 +0100
 From:   Michael Tretter <m.tretter@pengutronix.de>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         Philipp Zabel <p.zabel@pengutronix.de>
@@ -37,12 +37,10 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         kernel@pengutronix.de, linux-imx@nxp.com,
         linux-arm-kernel@lists.infradead.org,
         Michael Tretter <m.tretter@pengutronix.de>
-Subject: [PATCH 8/8] ARM: dts: imx7d: add node for PXP
-Date:   Thu,  5 Jan 2023 14:47:29 +0100
-Message-Id: <20230105134729.59542-9-m.tretter@pengutronix.de>
+Subject: [PATCH 0/8] media: imx-pxp: add support for i.MX7D
+Date:   Thu,  5 Jan 2023 14:47:21 +0100
+Message-Id: <20230105134729.59542-1-m.tretter@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230105134729.59542-1-m.tretter@pengutronix.de>
-References: <20230105134729.59542-1-m.tretter@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -53,34 +51,58 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The i.MX7d contains a Pixel Pipeline in version 3.0. Add the device tree
-node to make it available.
+This series adds support for the PXP found on the i.MX7D to the imx-pxp
+driver.
 
-Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
----
- arch/arm/boot/dts/imx7d.dtsi | 9 +++++++++
- 1 file changed, 9 insertions(+)
+The PXP on the i.MX7D has a few differences compared to the one on the
+i.MX6ULL. Especially, it has more processing blocks and slightly different
+multiplexers to route the data between the blocks. Therefore, the driver must
+configure a different data path depending on the platform.
 
-diff --git a/arch/arm/boot/dts/imx7d.dtsi b/arch/arm/boot/dts/imx7d.dtsi
-index 7ceb7c09f7ad..728cc9413a7c 100644
---- a/arch/arm/boot/dts/imx7d.dtsi
-+++ b/arch/arm/boot/dts/imx7d.dtsi
-@@ -165,6 +165,15 @@ pcie_phy: pcie-phy@306d0000 {
- 		  reg = <0x306d0000 0x10000>;
- 		  status = "disabled";
- 	};
-+
-+	pxp: pxp@30700000 {
-+		compatible = "fsl,imx7d-pxp";
-+		reg = <0x30700000 0x10000>;
-+		interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
-+			<GIC_SPI 46 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&clks IMX7D_PXP_CLK>;
-+		clock-names = "axi";
-+	};
- };
- 
- &aips3 {
+While the PXP has a version register, the reported version is the same on the
+i.MX6ULL and the i.MX7D. Therefore, we cannot use the version register to
+change the driver behavior, but have to use the device tree compatible. The
+driver still prints the found version to the log to help bringing up the PXP
+on further platforms.
+
+The patches are inspired by some earlier patches [0] by Laurent to add PXP
+support to the i.MX7d. Compared to the earlier patches, these patches add
+different behavior depending on the platform. Furthermore, the patches disable
+only the LUT block, but keep the rotator block enabled, as it may now be
+configured via the V4L2 rotate control.
+
+Patch 1 converts the dt-binding to yaml.
+
+Patches 2 to 5 cleanup and refactor the driver in preparation of handling
+different PXP versions.
+
+Patches 6 and 7 add the handling of different platforms and the i.MX7d
+specific configuration.
+
+Patch 8 adds the device tree node for the PXP to the i.MX7d device tree.
+
+Michael
+
+[0] https://lore.kernel.org/linux-media/20200510223100.11641-1-laurent.pinchart@ideasonboard.com/
+
+Michael Tretter (8):
+  media: dt-bindings: media: fsl-pxp: convert to yaml
+  media: imx-pxp: detect PXP version
+  media: imx-pxp: extract helper function to setup data path
+  media: imx-pxp: explicitly disable unused blocks
+  media: imx-pxp: disable LUT block
+  media: imx-pxp: make data_path_ctrl0 platform dependent
+  media: imx-pxp: add support for i.MX7D
+  ARM: dts: imx7d: add node for PXP
+
+ .../bindings/media/fsl,imx6ull-pxp.yaml       |  62 ++++++++
+ .../devicetree/bindings/media/fsl-pxp.txt     |  26 ---
+ arch/arm/boot/dts/imx7d.dtsi                  |   9 ++
+ drivers/media/platform/nxp/imx-pxp.c          | 148 +++++++++++++++---
+ 4 files changed, 197 insertions(+), 48 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/fsl,imx6ull-pxp.yaml
+ delete mode 100644 Documentation/devicetree/bindings/media/fsl-pxp.txt
+
 -- 
 2.30.2
 
