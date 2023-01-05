@@ -2,30 +2,30 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC9A3C54E76
-	for <linux-media@archiver.kernel.org>; Thu,  5 Jan 2023 13:48:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A24EEC3DA7D
+	for <linux-media@archiver.kernel.org>; Thu,  5 Jan 2023 13:49:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233853AbjAENsX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Jan 2023 08:48:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33360 "EHLO
+        id S233859AbjAENsY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Jan 2023 08:48:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233737AbjAENrr (ORCPT
+        with ESMTP id S233739AbjAENrr (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 5 Jan 2023 08:47:47 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64EB4BD6B
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66034BD6F
         for <linux-media@vger.kernel.org>; Thu,  5 Jan 2023 05:47:33 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1pDQai-0003Qt-5e; Thu, 05 Jan 2023 14:47:32 +0100
+        id 1pDQai-0003Qs-4c; Thu, 05 Jan 2023 14:47:32 +0100
 Received: from [2a0a:edc0:0:900:1d::48] (helo=litschi)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <mtr@pengutronix.de>)
-        id 1pDQah-0040Lg-Gz; Thu, 05 Jan 2023 14:47:31 +0100
+        id 1pDQah-0040Le-FU; Thu, 05 Jan 2023 14:47:31 +0100
 Received: from mtr by litschi with local (Exim 4.94.2)
         (envelope-from <mtr@pengutronix.de>)
-        id 1pDQaf-000FVD-F4; Thu, 05 Jan 2023 14:47:29 +0100
+        id 1pDQaf-000FVS-Mv; Thu, 05 Jan 2023 14:47:29 +0100
 From:   Michael Tretter <m.tretter@pengutronix.de>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         Philipp Zabel <p.zabel@pengutronix.de>
@@ -37,9 +37,9 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         kernel@pengutronix.de, linux-imx@nxp.com,
         linux-arm-kernel@lists.infradead.org,
         Michael Tretter <m.tretter@pengutronix.de>
-Subject: [PATCH 2/8] media: imx-pxp: detect PXP version
-Date:   Thu,  5 Jan 2023 14:47:23 +0100
-Message-Id: <20230105134729.59542-3-m.tretter@pengutronix.de>
+Subject: [PATCH 7/8] media: imx-pxp: add support for i.MX7D
+Date:   Thu,  5 Jan 2023 14:47:28 +0100
+Message-Id: <20230105134729.59542-8-m.tretter@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230105134729.59542-1-m.tretter@pengutronix.de>
 References: <20230105134729.59542-1-m.tretter@pengutronix.de>
@@ -53,72 +53,71 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Different versions of the Pixel Pipeline have different blocks and their
-routing may be different. Read the PXP_HW_VERSION register to determine
-the version of the PXP and print it to the log for debugging purposes.
+The i.MX7D needs a different data path configuration than the i.MX6ULL.
+Configure the data path as close as possible to the data path on the
+i.MX6ULL.
 
 Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 ---
- drivers/media/platform/nxp/imx-pxp.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ drivers/media/platform/nxp/imx-pxp.c | 36 ++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
 diff --git a/drivers/media/platform/nxp/imx-pxp.c b/drivers/media/platform/nxp/imx-pxp.c
-index 689ae5e6ac62..05abe40558b0 100644
+index 4e182f80a36b..04cc8df2a498 100644
 --- a/drivers/media/platform/nxp/imx-pxp.c
 +++ b/drivers/media/platform/nxp/imx-pxp.c
-@@ -10,6 +10,7 @@
-  * Pawel Osciak, <pawel@osciak.com>
-  * Marek Szyprowski, <m.szyprowski@samsung.com>
-  */
-+#include <linux/bitfield.h>
- #include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/dma-mapping.h>
-@@ -52,6 +53,11 @@ MODULE_PARM_DESC(debug, "activates debug info");
- #define MEM2MEM_HFLIP	(1 << 0)
- #define MEM2MEM_VFLIP	(1 << 1)
- 
-+#define PXP_VERSION_MAJOR(version) \
-+	FIELD_GET(BM_PXP_VERSION_MAJOR, version)
-+#define PXP_VERSION_MINOR(version) \
-+	FIELD_GET(BM_PXP_VERSION_MINOR, version)
-+
- #define dprintk(dev, fmt, arg...) \
- 	v4l2_dbg(1, debug, &dev->v4l2_dev, "%s: " fmt, __func__, ## arg)
- 
-@@ -192,6 +198,8 @@ struct pxp_dev {
- 	struct clk		*clk;
- 	void __iomem		*mmio;
- 
-+	u32			hw_version;
-+
- 	atomic_t		num_inst;
- 	struct mutex		dev_mutex;
- 	spinlock_t		irqlock;
-@@ -1660,6 +1668,11 @@ static int pxp_soft_reset(struct pxp_dev *dev)
- 	return 0;
+@@ -763,6 +763,37 @@ static u32 pxp_imx6ull_data_path_ctrl0(struct pxp_ctx *ctx)
+ 	return ctrl0;
  }
  
-+static u32 pxp_read_version(struct pxp_dev *dev)
++static u32 pxp_imx7d_data_path_ctrl0(struct pxp_ctx *ctx)
 +{
-+	return readl(dev->mmio + HW_PXP_VERSION);
++	u32 ctrl0;
++
++	ctrl0 = 0;
++	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX15_SEL(3);
++	/* Select Rotation 0 */
++	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX14_SEL(0);
++	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX13_SEL(3);
++	/* Select MUX11 for Rotation 0 */
++	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX12_SEL(1);
++	/* Bypass LUT */
++	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX11_SEL(1);
++	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX10_SEL(3);
++	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX9_SEL(3);
++	/* Select CSC 2 */
++	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX8_SEL(0);
++	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX7_SEL(3);
++	/* Select Composite Alpha Blending/Color Key 0 for CSC 2 */
++	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX6_SEL(1);
++	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX5_SEL(3);
++	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX4_SEL(3);
++	/* Bypass Rotation 1 */
++	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX3_SEL(0);
++	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX2_SEL(3);
++	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX1_SEL(3);
++	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX0_SEL(3);
++
++	return ctrl0;
 +}
 +
- static int pxp_probe(struct platform_device *pdev)
+ static u32 pxp_data_path_ctrl0(struct pxp_ctx *ctx)
  {
- 	struct pxp_dev *dev;
-@@ -1705,6 +1718,11 @@ static int pxp_probe(struct platform_device *pdev)
- 		goto err_clk;
- 	}
+ 	struct pxp_dev *dev = ctx->dev;
+@@ -1834,8 +1865,13 @@ static const struct pxp_pdata pxp_imx6ull_pdata = {
+ 	.data_path_ctrl0 = pxp_imx6ull_data_path_ctrl0,
+ };
  
-+	dev->hw_version = pxp_read_version(dev);
-+	dev_info(&pdev->dev, "PXP Version %d.%d\n",
-+		 PXP_VERSION_MAJOR(dev->hw_version),
-+		 PXP_VERSION_MINOR(dev->hw_version));
++static const struct pxp_pdata pxp_imx7d_pdata = {
++	.data_path_ctrl0 = pxp_imx7d_data_path_ctrl0,
++};
 +
- 	ret = v4l2_device_register(&pdev->dev, &dev->v4l2_dev);
- 	if (ret)
- 		goto err_clk;
+ static const struct of_device_id pxp_dt_ids[] = {
+ 	{ .compatible = "fsl,imx6ull-pxp", .data = &pxp_imx6ull_pdata },
++	{ .compatible = "fsl,imx7d-pxp", .data = &pxp_imx7d_pdata },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, pxp_dt_ids);
 -- 
 2.30.2
 
