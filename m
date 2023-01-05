@@ -2,480 +2,263 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B4FCC3DA7D
-	for <linux-media@archiver.kernel.org>; Thu,  5 Jan 2023 14:11:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8031C3DA7D
+	for <linux-media@archiver.kernel.org>; Thu,  5 Jan 2023 14:31:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233882AbjAEOKi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Jan 2023 09:10:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49480 "EHLO
+        id S233728AbjAEObt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Jan 2023 09:31:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234304AbjAEODe (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Jan 2023 09:03:34 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540A1F5A0;
-        Thu,  5 Jan 2023 06:03:33 -0800 (PST)
-Received: from desky.lan (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A54F4E35;
-        Thu,  5 Jan 2023 15:03:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1672927410;
-        bh=obzqZhLFhQBasGDxJabdtYs1n/X81EgemWVOcfNuR+Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=unsEPvfcLkH9KT9kHYAqBAg4I6ex6PFwjFFPmNBCTI8khbWsVw59F5Put+Q5s3ije
-         qG4wIX7ZwkRitCAZjp13dF+Z46BFoG9eJTZSCVlOozfPi3IcvliZcet06OmO11uaM/
-         IqPz0igp6L3h8rNy7k7E8Rb8LQuv1ZHtESj1hKXw=
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v6 5/8] dt-bindings: media: add TI DS90UB960 FPD-Link III Deserializer
-Date:   Thu,  5 Jan 2023 16:03:04 +0200
-Message-Id: <20230105140307.272052-6-tomi.valkeinen@ideasonboard.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230105140307.272052-1-tomi.valkeinen@ideasonboard.com>
-References: <20230105140307.272052-1-tomi.valkeinen@ideasonboard.com>
+        with ESMTP id S231942AbjAEObs (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Jan 2023 09:31:48 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9BD54D9B
+        for <linux-media@vger.kernel.org>; Thu,  5 Jan 2023 06:31:46 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id i9so53014005edj.4
+        for <linux-media@vger.kernel.org>; Thu, 05 Jan 2023 06:31:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uxMEPkPChqTffTimg1+lT4mVoFm2SlkoFtahp543sh0=;
+        b=Nl2kb6flwGDa/iE2cYHmUTREyxoI03PSIKAOACnDv0zDyr/r6i2HHU6mdZWOm4nrfv
+         x6XzkAQ3xmcK6lojVZPPTVhtyddOUcGOcael8rEW5NGma18D0QKsKNba1rUnRLGkpQBh
+         /UA7dBAflrPLSKJmwMhGsYUH4kHx2QoNV5n6E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uxMEPkPChqTffTimg1+lT4mVoFm2SlkoFtahp543sh0=;
+        b=3AaiXsOWDi3zxyf3P+1fD8kdarY3xt4ieUzljmJPAWeih7AD5c56ySLGp88zuFhv5C
+         dAGF1ChJAtikf8w86jZbNgZmCYReidKln2otGeXyO75y3IFPi00wltnshhDqQsUZSHyv
+         qJAK0yX841GLUdrJxgNeHc8eI2gQXs5je4lAlKafEvCVQBHj3zcVrV0q1ZW/DLZ9uUJJ
+         HzHRAdeyNl+i/SRda37idOdj+ROcsjs7OskbxWZHYZXWZJc2MtSvJSFYN03msKOr9EY8
+         U6BVCoiINVEyCldIj6QemL+Zt6/vD8/udpMMsAXo6HkAyyBjT9PeR/akAMv5HKVFExOb
+         RBWA==
+X-Gm-Message-State: AFqh2kp7hi8WkMgU1fAiLCba8VneKplMKH08qZsTcClAbfD2tfIvUJ3q
+        R1tRgEyZakeEbOsLXHBQfsE7dEYl3yjX1HJFRjw=
+X-Google-Smtp-Source: AMrXdXvThc/7ejFs6s8dszQ2WW4cbnwa87HriIjX74fGe9V9LDDd5Jl1o5hHNV2FTHwgYU31lzJEOQ==
+X-Received: by 2002:aa7:d04e:0:b0:45c:835b:ac4d with SMTP id n14-20020aa7d04e000000b0045c835bac4dmr44636174edo.8.1672929105339;
+        Thu, 05 Jan 2023 06:31:45 -0800 (PST)
+Received: from alco.roam.corp.google.com ([2620:0:1059:10:848f:5924:dffa:3b5c])
+        by smtp.gmail.com with ESMTPSA id c4-20020aa7c984000000b004873927780bsm10818084edt.20.2023.01.05.06.31.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 06:31:44 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Thu, 05 Jan 2023 15:31:29 +0100
+Subject: [PATCH v7] media: uvcvideo: Fix race condition with usb_kill_urb
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20221212-uvc-race-v7-0-e2517c66a55a@chromium.org>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Hillf Danton <hdanton@sina.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Max Staudt <mstaudt@google.com>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>,
+        Yunke Cao <yunkec@chromium.org>, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, stable@vger.kernel.org
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6479; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=cW2kwv2siZICftxj75pqCs1K4XmG0NtU3yyQXAzdBG4=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjtt9JhJKajr03HfmLDxie/eqxiOch8paSA4cqVoct
+ S4TdcW+JAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY7bfSQAKCRDRN9E+zzrEiFyeD/
+ 92GkSmfrDtKn8ZTQGY6JNCoQA7Yh7pbAvIn/+G0H0e2+A8d9Fcc4BrYob+WxcFsfrhapFdJgZx2Pbn
+ 3Tu8XCG2B6Pm5yWP4Lok3Dh+DrHEdS3+/Hrwwo8zkP9ZCsHF+klVHVZp+yKi9LLUEDW6yUAoPpCf+M
+ p9CNSIIV9Xf+T76bwb8k9h5E8aoy+IYvQWl6yCIboANF1Cg7pcycXerkP5qiLz5Jb9BSmtbEXeqlIC
+ nqXRPuUMDV4Er6lnzNPbyIttEHqqyrr+ml3UvWIpfmCIxRM9eI7B/gzudWW4LoqOeZ4qp7cXYPpGua
+ GjkZBXWSu5OF6RO1aUdvVJsOupJLFmWXBVZp2dvfx4V1ye1v5QFQMD8anl3cyeWgVtMWrgG4WZqYtq
+ LLbluvTvdMW5ZqSWiwWdk6iE5YYHgOWVT7SbxSzJLOHeRb9qi3HuZETQyluzjYRAHDA0vWrvvzxA6N
+ xOHW2pFwBkTphznOd7+y2Id9SIwzdgwsgGnCkCSPUGJ2M90OpnpjPwITti6Ywm5g6gwSHZ2+L9aQtW
+ M15xeaKDfzClDp2y0L8tE9/raf3H2NC9M8e510cVVwAHj2IY97JM9n6Ri40ZYO+UdImbqiFjHhHqAO
+ qdViYbLxaESv4umeSyYe5u9zsbzedumqjw9uyCzJRcl0P7paYBULLvnBxuNw==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add DT bindings for TI DS90UB960 FPD-Link III Deserializer.
+usb_kill_urb warranties that all the handlers are finished when it
+returns, but does not protect against threads that might be handling
+asynchronously the urb.
 
-Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
+For UVC, the function uvc_ctrl_status_event_async() takes care of
+control changes asynchronously.
+
+ If the code is executed in the following order:
+
+CPU 0					CPU 1
+===== 					=====
+uvc_status_complete()
+					uvc_status_stop()
+uvc_ctrl_status_event_work()
+					uvc_status_start() -> FAIL
+
+Then uvc_status_start will keep failing and this error will be shown:
+
+<4>[    5.540139] URB 0000000000000000 submitted while active
+drivers/usb/core/urb.c:378 usb_submit_urb+0x4c3/0x528
+
+Let's improve the current situation, by not re-submiting the urb if
+we are stopping the status event. Also process the queued work
+(if any) during stop.
+
+CPU 0					CPU 1
+===== 					=====
+uvc_status_complete()
+					uvc_status_stop()
+					uvc_status_start()
+uvc_ctrl_status_event_work() -> FAIL
+
+Hopefully, with the usb layer protection this should be enough to cover
+all the cases.
+
+Cc: stable@vger.kernel.org
+Fixes: e5225c820c05 ("media: uvcvideo: Send a control event when a Control Change interrupt arrives")
+Reviewed-by: Yunke Cao <yunkec@chromium.org>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- .../bindings/media/i2c/ti,ds90ub960.yaml      | 402 ++++++++++++++++++
- 1 file changed, 402 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
+uvc: Fix race condition on uvc
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
-new file mode 100644
-index 000000000000..664799ae55be
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
-@@ -0,0 +1,402 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub960.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Texas Instruments DS90UB9XX Family FPD-Link Deserializer Hubs
-+
-+maintainers:
-+  - Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-+
-+description:
-+  The TI DS90UB9XX devices are FPD-Link video deserializers with I2C and GPIO
-+  forwarding.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - ti,ds90ub960-q1
-+      - ti,ds90ub9702-q1
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+    description:
-+      Reference clock connected to the REFCLK pin.
-+
-+  clock-names:
-+    items:
-+      - const: refclk
-+
-+  powerdown-gpios:
-+    maxItems: 1
-+    description:
-+      Specifier for the GPIO connected to the PDB pin.
-+
-+  i2c-alias-pool:
-+    $ref: /schemas/types.yaml#/definitions/uint16-array
-+    description:
-+      I2C alias pool is a pool of I2C addresses on the main I2C bus that can be
-+      used to access the remote peripherals on the serializer's I2C bus. The
-+      addresses must be available, not used by any other peripheral. Each
-+      remote peripheral is assigned an alias from the pool, and transactions to
-+      that address will be forwarded to the remote peripheral, with the address
-+      translated to the remote peripheral's real address. This property is not
-+      needed if there are no I2C addressable remote peripherals.
-+
-+  links:
-+    type: object
-+    additionalProperties: false
-+
-+    properties:
-+      '#address-cells':
-+        const: 1
-+
-+      '#size-cells':
-+        const: 0
-+
-+      ti,manual-strobe:
-+        type: boolean
-+        description:
-+          Enable manual strobe position and EQ level
-+
-+    patternProperties:
-+      '^link@[0-3]$':
-+        type: object
-+        additionalProperties: false
-+        properties:
-+          reg:
-+            description: The link number
-+            maxItems: 1
-+
-+          i2c-alias:
-+            description:
-+              The I2C address used for the serializer. Transactions to this
-+              address on the I2C bus where the deserializer resides are
-+              forwarded to the serializer.
-+
-+          ti,rx-mode:
-+            $ref: /schemas/types.yaml#/definitions/uint32
-+            enum:
-+              - 0 # RAW10
-+              - 1 # RAW12 HF
-+              - 2 # RAW12 LF
-+              - 3 # CSI2 SYNC
-+              - 4 # CSI2 NON-SYNC
-+            description:
-+              FPD-Link Input Mode. This should reflect the hardware and the
-+              default mode of the connected camera module.
-+
-+          ti,cdr-mode:
-+            $ref: /schemas/types.yaml#/definitions/uint32
-+            enum:
-+              - 0 # FPD-Link III
-+              - 1 # FPD-Link IV
-+            description:
-+              FPD-Link CDR Mode. This should reflect the hardware and the
-+              default mode of the connected camera module.
-+
-+          ti,strobe-pos:
-+            $ref: /schemas/types.yaml#/definitions/int32
-+            minimum: -13
-+            maximum: 13
-+            description: Manual strobe position
-+
-+          ti,eq-level:
-+            $ref: /schemas/types.yaml#/definitions/uint32
-+            maximum: 14
-+            description: Manual EQ level
-+
-+          serializer:
-+            type: object
-+            description: FPD-Link Serializer node
-+
-+        required:
-+          - reg
-+          - i2c-alias
-+          - ti,rx-mode
-+          - serializer
-+
-+  ports:
-+    $ref: /schemas/graph.yaml#/properties/ports
-+
-+    properties:
-+      port@0:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description: FPD-Link input 0
-+
-+        properties:
-+          endpoint:
-+            $ref: /schemas/media/video-interfaces.yaml#
-+            unevaluatedProperties: false
-+            description:
-+              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
-+              hsync-active and vsync-active must be defined.
-+
-+      port@1:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description: FPD-Link input 1
-+
-+        properties:
-+          endpoint:
-+            $ref: /schemas/media/video-interfaces.yaml#
-+            unevaluatedProperties: false
-+            description:
-+              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
-+              hsync-active and vsync-active must be defined.
-+
-+      port@2:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description: FPD-Link input 2
-+
-+        properties:
-+          endpoint:
-+            $ref: /schemas/media/video-interfaces.yaml#
-+            unevaluatedProperties: false
-+            description:
-+              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
-+              hsync-active and vsync-active must be defined.
-+
-+      port@3:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description: FPD-Link input 3
-+
-+        properties:
-+          endpoint:
-+            $ref: /schemas/media/video-interfaces.yaml#
-+            unevaluatedProperties: false
-+            description:
-+              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
-+              hsync-active and vsync-active must be defined.
-+
-+      port@4:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description: CSI-2 Output 0
-+
-+        properties:
-+          endpoint:
-+            $ref: /schemas/media/video-interfaces.yaml#
-+            unevaluatedProperties: false
-+
-+            properties:
-+              data-lanes:
-+                minItems: 1
-+                maxItems: 4
-+
-+            required:
-+              - data-lanes
-+
-+      port@5:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description: CSI-2 Output 1
-+
-+        properties:
-+          endpoint:
-+            $ref: /schemas/media/video-interfaces.yaml#
-+            unevaluatedProperties: false
-+
-+            properties:
-+              data-lanes:
-+                minItems: 1
-+                maxItems: 4
-+
-+            required:
-+              - data-lanes
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - ports
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    i2c {
-+      clock-frequency = <400000>;
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      deser@3d {
-+        compatible = "ti,ds90ub960-q1";
-+        reg = <0x3d>;
-+
-+        clock-names = "refclk";
-+        clocks = <&fixed_clock>;
-+
-+        powerdown-gpios = <&pca9555 7 GPIO_ACTIVE_LOW>;
-+
-+        i2c-alias-pool = /bits/ 16 <0x4a 0x4b 0x4c 0x4d 0x4e 0x4f>;
-+
-+        ports {
-+          #address-cells = <1>;
-+          #size-cells = <0>;
-+
-+          /* Port 0, Camera 0 */
-+          port@0 {
-+            reg = <0>;
-+
-+            ub960_fpd3_1_in: endpoint {
-+              remote-endpoint = <&ub953_1_out>;
-+            };
-+          };
-+
-+          /* Port 1, Camera 1 */
-+          port@1 {
-+            reg = <1>;
-+
-+            ub960_fpd3_2_in: endpoint {
-+              remote-endpoint = <&ub913_2_out>;
-+              hsync-active = <0>;
-+              vsync-active = <1>;
-+            };
-+          };
-+
-+          /* Port 4, CSI-2 TX */
-+          port@4 {
-+            reg = <4>;
-+            ds90ub960_0_csi_out: endpoint {
-+              data-lanes = <1 2 3 4>;
-+              link-frequencies = /bits/ 64 <800000000>;
-+              remote-endpoint = <&csi2_phy0>;
-+            };
-+          };
-+        };
-+
-+        links {
-+          #address-cells = <1>;
-+          #size-cells = <0>;
-+
-+          /* Link 0 has DS90UB953 serializer and IMX274 sensor */
-+
-+          link@0 {
-+            reg = <0>;
-+            i2c-alias = <0x44>;
-+
-+            ti,rx-mode = <3>;
-+
-+            serializer1: serializer {
-+              compatible = "ti,ds90ub953-q1";
-+
-+              gpio-controller;
-+              #gpio-cells = <2>;
-+
-+              #clock-cells = <0>;
-+
-+              ports {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+
-+                port@0 {
-+                  reg = <0>;
-+                  ub953_1_in: endpoint {
-+                    data-lanes = <1 2 3 4>;
-+                    remote-endpoint = <&sensor_1_out>;
-+                  };
-+                };
-+
-+                port@1 {
-+                  reg = <1>;
-+
-+                  ub953_1_out: endpoint {
-+                    remote-endpoint = <&ub960_fpd3_1_in>;
-+                  };
-+                };
-+              };
-+
-+              i2c {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+
-+                sensor@1a {
-+                  compatible = "sony,imx274";
-+                  reg = <0x1a>;
-+
-+                  reset-gpios = <&serializer1 0 GPIO_ACTIVE_LOW>;
-+
-+                  port {
-+                    sensor_1_out: endpoint {
-+                      remote-endpoint = <&ub953_1_in>;
-+                    };
-+                  };
-+                };
-+              };
-+            };
-+          };  /* End of link@0 */
-+
-+          /* Link 1 has DS90UB913 serializer and MT9V111 sensor */
-+
-+          link@1 {
-+            reg = <1>;
-+            i2c-alias = <0x45>;
-+
-+            ti,rx-mode = <0>;
-+
-+            serializer2: serializer {
-+              compatible = "ti,ds90ub913a-q1";
-+
-+              gpio-controller;
-+              #gpio-cells = <2>;
-+
-+              clocks = <&clk_cam_48M>;
-+              clock-names = "clkin";
-+
-+              #clock-cells = <0>;
-+
-+              ports {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+
-+                port@0 {
-+                  reg = <0>;
-+                  ub913_2_in: endpoint {
-+                    remote-endpoint = <&sensor_2_out>;
-+                    pclk-sample = <1>;
-+                  };
-+                };
-+
-+                port@1 {
-+                  reg = <1>;
-+
-+                  ub913_2_out: endpoint {
-+                    remote-endpoint = <&ub960_fpd3_2_in>;
-+                  };
-+                };
-+              };
-+
-+              i2c {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+
-+                sensor@48 {
-+                  compatible = "aptina,mt9v111";
-+                  reg = <0x48>;
-+
-+                  clocks = <&serializer2>;
-+
-+                  port {
-+                    sensor_2_out: endpoint {
-+                      remote-endpoint = <&ub913_2_in>;
-+                    };
-+                  };
-+                };
-+              };
-+            };
-+          }; /* End of link@1 */
-+        };
-+      };
-+    };
-+...
+Make sure that all the async work is finished when we stop the status urb.
+
+To: Hillf Danton <hdanton@sina.com>
+To: Yunke Cao <yunkec@chromium.org>
+To: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Max Staudt <mstaudt@google.com>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+Changes in v7:
+- Use smp_store_release. (Thanks Hilf!)
+- Rebase on top of uvc/next.
+- Link to v6: https://lore.kernel.org/r/20221212-uvc-race-v6-0-2a662f8de011@chromium.org
+
+Changes in v6:
+- Improve comments. (Thanks Laurent).
+- Use true/false instead of 1/0 (Thanks Laurent).
+- Link to v5: https://lore.kernel.org/r/20221212-uvc-race-v5-0-3db3933d1608@chromium.org
+
+Changes in v5:
+- atomic_t do not impose barriers, use smp_mb() instead. (Thanks Laurent)
+- Add an extra cancel_work_sync().
+- Link to v4: https://lore.kernel.org/r/20221212-uvc-race-v4-0-38d7075b03f5@chromium.org
+
+Changes in v4:
+- Replace bool with atomic_t to avoid compiler reordering.
+- First complete the async work and then kill the urb to avoid race (Thanks Laurent!)
+- Link to v3: https://lore.kernel.org/r/20221212-uvc-race-v3-0-954efc752c9a@chromium.org
+
+Changes in v3:
+- Remove the patch for dev->status, makes more sense in another series, and makes
+  the zero day less nervous.
+- Update reviewed-by (thanks Yunke!).
+- Link to v2: https://lore.kernel.org/r/20221212-uvc-race-v2-0-54496cc3b8ab@chromium.org
+
+Changes in v2:
+- Add a patch for not kalloc dev->status
+- Redo the logic mechanism, so it also works with suspend (Thanks Yunke!)
+- Link to v1: https://lore.kernel.org/r/20221212-uvc-race-v1-0-c52e1783c31d@chromium.org
+---
+ drivers/media/usb/uvc/uvc_ctrl.c   |  5 +++++
+ drivers/media/usb/uvc/uvc_status.c | 33 +++++++++++++++++++++++++++++++++
+ drivers/media/usb/uvc/uvcvideo.h   |  1 +
+ 3 files changed, 39 insertions(+)
+
+diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+index e07b56bbf853..30c417768376 100644
+--- a/drivers/media/usb/uvc/uvc_ctrl.c
++++ b/drivers/media/usb/uvc/uvc_ctrl.c
+@@ -6,6 +6,7 @@
+  *          Laurent Pinchart (laurent.pinchart@ideasonboard.com)
+  */
+ 
++#include <asm/barrier.h>
+ #include <linux/bitops.h>
+ #include <linux/kernel.h>
+ #include <linux/list.h>
+@@ -1509,6 +1510,10 @@ static void uvc_ctrl_status_event_work(struct work_struct *work)
+ 
+ 	uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
+ 
++	/* The barrier is needed to synchronize with uvc_status_stop(). */
++	if (smp_load_acquire(&dev->flush_status))
++		return;
++
+ 	/* Resubmit the URB. */
+ 	w->urb->interval = dev->int_ep->desc.bInterval;
+ 	ret = usb_submit_urb(w->urb, GFP_KERNEL);
+diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
+index 602830a8023e..21e13b8441da 100644
+--- a/drivers/media/usb/uvc/uvc_status.c
++++ b/drivers/media/usb/uvc/uvc_status.c
+@@ -6,6 +6,7 @@
+  *          Laurent Pinchart (laurent.pinchart@ideasonboard.com)
+  */
+ 
++#include <asm/barrier.h>
+ #include <linux/kernel.h>
+ #include <linux/input.h>
+ #include <linux/slab.h>
+@@ -311,5 +312,37 @@ int uvc_status_start(struct uvc_device *dev, gfp_t flags)
+ 
+ void uvc_status_stop(struct uvc_device *dev)
+ {
++	struct uvc_ctrl_work *w = &dev->async_ctrl;
++
++	/*
++	 * Prevent the asynchronous control handler from requeing the URB. The
++	 * barrier is needed so the flush_status change is visible to other
++	 * CPUs running the asynchronous handler before usb_kill_urb() is
++	 * called below.
++	 */
++	smp_store_release(&dev->flush_status, true);
++
++	/* If there is any status event on the queue, process it. */
++	if (cancel_work_sync(&w->work))
++		uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
++
++	/* Kill the urb. */
+ 	usb_kill_urb(dev->int_urb);
++
++	/*
++	 * The URB completion handler may have queued asynchronous work. This
++	 * won't resubmit the URB as flush_status is set, but it needs to be
++	 * cancelled before returning or it could then race with a future
++	 * uvc_status_start() call.
++	 */
++	if (cancel_work_sync(&w->work))
++		uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
++
++	/*
++	 * From this point, there are no events on the queue and the status URB
++	 * is dead, this is, no events will be queued until uvc_status_start()
++	 * is called. The barrier is needed to make sure that it is written to
++	 * memory before uvc_status_start() is called again.
++	 */
++	smp_store_release(&dev->flush_status, false);
+ }
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index ae0066eceffd..b2b277cccbdb 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -578,6 +578,7 @@ struct uvc_device {
+ 	struct usb_host_endpoint *int_ep;
+ 	struct urb *int_urb;
+ 	struct uvc_status *status;
++	bool flush_status;
+ 
+ 	struct input_dev *input;
+ 	char input_phys[64];
+
+---
+base-commit: fb1316b0ff3fc3cd98637040ee17ab7be753aac7
+change-id: 20221212-uvc-race-09276ea68bf8
+
+Best regards,
 -- 
-2.34.1
-
+Ricardo Ribalda <ribalda@chromium.org>
