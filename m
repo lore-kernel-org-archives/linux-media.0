@@ -2,86 +2,85 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF78EC3DA7D
-	for <linux-media@archiver.kernel.org>; Thu,  5 Jan 2023 13:10:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 234FDC3DA7A
+	for <linux-media@archiver.kernel.org>; Thu,  5 Jan 2023 13:48:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbjAENKA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Jan 2023 08:10:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59956 "EHLO
+        id S233449AbjAENsK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Jan 2023 08:48:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbjAENJk (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Jan 2023 08:09:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDC05C1D3;
-        Thu,  5 Jan 2023 05:09:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CE9061A34;
-        Thu,  5 Jan 2023 13:09:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C7ACC433EF;
-        Thu,  5 Jan 2023 13:09:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1672924161;
-        bh=HTV6jjPSwVPA1txeBglso98Z39K0t4Xs2ZOnCMiE7bM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WlWZLRk50gHD5TMePLBIJbyqd/uh/wZ8C0Udlkn8ldva6ZkPKBVT6Pzi8SxLdiM3O
-         Gy5u87JaBNZ3E6EO0Qzj9JQ+94wcQK8duGeSRmTcwodQ5gT4xGr2Tmg4KY6/AVHKxu
-         BseXoFa0oKPAt9uCzSM5JFZG4wzL5rfDx92jMqFY=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.9 226/251] media: stv0288: use explicitly signed char
-Date:   Thu,  5 Jan 2023 13:56:03 +0100
-Message-Id: <20230105125345.200839865@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230105125334.727282894@linuxfoundation.org>
-References: <20230105125334.727282894@linuxfoundation.org>
-User-Agent: quilt/0.67
+        with ESMTP id S233662AbjAENrq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Jan 2023 08:47:46 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D622C4BD5B
+        for <linux-media@vger.kernel.org>; Thu,  5 Jan 2023 05:47:33 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1pDQah-0003Qp-WD; Thu, 05 Jan 2023 14:47:32 +0100
+Received: from [2a0a:edc0:0:900:1d::48] (helo=litschi)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1pDQah-0040LY-0g; Thu, 05 Jan 2023 14:47:31 +0100
+Received: from mtr by litschi with local (Exim 4.94.2)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1pDQaf-000FVV-OR; Thu, 05 Jan 2023 14:47:29 +0100
+From:   Michael Tretter <m.tretter@pengutronix.de>
+To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        kernel@pengutronix.de, linux-imx@nxp.com,
+        linux-arm-kernel@lists.infradead.org,
+        Michael Tretter <m.tretter@pengutronix.de>
+Subject: [PATCH 8/8] ARM: dts: imx7d: add node for PXP
+Date:   Thu,  5 Jan 2023 14:47:29 +0100
+Message-Id: <20230105134729.59542-9-m.tretter@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230105134729.59542-1-m.tretter@pengutronix.de>
+References: <20230105134729.59542-1-m.tretter@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mtr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jason A. Donenfeld <Jason@zx2c4.com>
+The i.MX7d contains a Pixel Pipeline in version 3.0. Add the device tree
+node to make it available.
 
-commit 7392134428c92a4cb541bd5c8f4f5c8d2e88364d upstream.
-
-With char becoming unsigned by default, and with `char` alone being
-ambiguous and based on architecture, signed chars need to be marked
-explicitly as such. Use `s8` and `u8` types here, since that's what
-surrounding code does. This fixes:
-
-drivers/media/dvb-frontends/stv0288.c:471 stv0288_set_frontend() warn: assigning (-9) to unsigned variable 'tm'
-drivers/media/dvb-frontends/stv0288.c:471 stv0288_set_frontend() warn: we never enter this loop
-
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org
-Cc: stable@vger.kernel.org
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 ---
- drivers/media/dvb-frontends/stv0288.c |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ arch/arm/boot/dts/imx7d.dtsi | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
---- a/drivers/media/dvb-frontends/stv0288.c
-+++ b/drivers/media/dvb-frontends/stv0288.c
-@@ -452,9 +452,8 @@ static int stv0288_set_frontend(struct d
- 	struct stv0288_state *state = fe->demodulator_priv;
- 	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
+diff --git a/arch/arm/boot/dts/imx7d.dtsi b/arch/arm/boot/dts/imx7d.dtsi
+index 7ceb7c09f7ad..728cc9413a7c 100644
+--- a/arch/arm/boot/dts/imx7d.dtsi
++++ b/arch/arm/boot/dts/imx7d.dtsi
+@@ -165,6 +165,15 @@ pcie_phy: pcie-phy@306d0000 {
+ 		  reg = <0x306d0000 0x10000>;
+ 		  status = "disabled";
+ 	};
++
++	pxp: pxp@30700000 {
++		compatible = "fsl,imx7d-pxp";
++		reg = <0x30700000 0x10000>;
++		interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
++			<GIC_SPI 46 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&clks IMX7D_PXP_CLK>;
++		clock-names = "axi";
++	};
+ };
  
--	char tm;
--	unsigned char tda[3];
--	u8 reg, time_out = 0;
-+	u8 tda[3], reg, time_out = 0;
-+	s8 tm;
- 
- 	dprintk("%s : FE_SET_FRONTEND\n", __func__);
- 
-
+ &aips3 {
+-- 
+2.30.2
 
