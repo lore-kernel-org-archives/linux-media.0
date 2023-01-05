@@ -2,60 +2,59 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41888C3DA7D
-	for <linux-media@archiver.kernel.org>; Thu,  5 Jan 2023 13:56:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C53CC53210
+	for <linux-media@archiver.kernel.org>; Thu,  5 Jan 2023 13:56:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233114AbjAEN4A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Jan 2023 08:56:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
+        id S232361AbjAEN4C (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Jan 2023 08:56:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234515AbjAENzY (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Jan 2023 08:55:24 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CEE04FD70
-        for <linux-media@vger.kernel.org>; Thu,  5 Jan 2023 05:53:20 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id fc4so90115166ejc.12
-        for <linux-media@vger.kernel.org>; Thu, 05 Jan 2023 05:53:20 -0800 (PST)
+        with ESMTP id S234503AbjAENzV (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Jan 2023 08:55:21 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 369CC4EC8A
+        for <linux-media@vger.kernel.org>; Thu,  5 Jan 2023 05:53:16 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id ud5so90304829ejc.4
+        for <linux-media@vger.kernel.org>; Thu, 05 Jan 2023 05:53:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sjquDUj+Pkh3sX3Nb739RCA0OIWzHWBMegfajevm7GM=;
-        b=k93+/ngHoI/xdxPrMldx7VCfDuLVtw5GP1vHdLHCEYvd6l5FtQtVn1T9CteRiHSK5B
-         7dQ1l8u3N1ykmcIzYE/vsr5DuELzWvo9oIqVpQdEO8eeWKFVZKoeKXDIzz3bwEl1yuVk
-         zfZcBe5y4J7NffPPPFwr3BWiNNofQzKn/q/Y4=
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=tH78Rn4lJLon0a4zVOfsUWs2I5WirZwta6cE5VpPqGI=;
+        b=f+486Ewn715r5VIXdUbCitdYnog0wqCfCAOSLnxf/uTbE2RQdsPOkAoFcRTCWTkXfC
+         PAwl6z+lFxxMwfuS+y8sYQmDFcRQ38CA2vg3xJQYouCBVKexrYRXq5ZqazQrGbFgn1JB
+         ZSIVDzjNptueaZ7bCi+44PYeZ/wSW92DmEjhs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sjquDUj+Pkh3sX3Nb739RCA0OIWzHWBMegfajevm7GM=;
-        b=Ru0K3PIdDE/iPP4dBjigbN1XSkcaoghtmUQfIQQyh7OnoN4QAEQA+GZNuc2JZujTDN
-         9m62M8kw5eQjpg2N4G6MMENYlWRAaWAzKhtYB7/E/sZ8ScxFMOBxPPWF+J302A19NKAP
-         zhreIxN6sQMJQ7ASfsb0gzfhntZfW3kxPUc6i3eokL937EPohHd+p3Y8b2RapeDWDqTA
-         RjUm5biHvLaHn7Bm/mv6vwS2Zirpb/FmtriPsX484xD6+Yqbs1fS3VT6WxFBc3Y3d3aU
-         C+6UFahbCI1fegy+hKKdrk7s/vd/SSs9+mVhup6DYzNK8pEAgi8Onlw7savouqF4uzVh
-         8fGw==
-X-Gm-Message-State: AFqh2kqEJWEu/8imZ+lRmPuQHJLfAiZcRuyut+9/xgJseRwvx3F/WogO
-        3YVAASYCVztz/mi2A0gV0ceS9w==
-X-Google-Smtp-Source: AMrXdXvH2PelQyv965276xdO7FAFuyEmVm31ObXjdX8BSN6Wb/JLyfFcw8ffi7QS4ztds3s5jj7M3A==
-X-Received: by 2002:a17:906:ce4d:b0:849:a231:e503 with SMTP id se13-20020a170906ce4d00b00849a231e503mr38443183ejb.49.1672926799745;
-        Thu, 05 Jan 2023 05:53:19 -0800 (PST)
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tH78Rn4lJLon0a4zVOfsUWs2I5WirZwta6cE5VpPqGI=;
+        b=KdOfnoeOAnNuq1GkHttnhLxsIaROLs1ytWCO34GA7dHDKYlNyP4JZZsAbZ4IaUQn91
+         51y8EldyvDec0mmxOgnWp39t338ajugwEVsC2cg5KaJ6cvrEGbgErwjiL/pe387t0gXs
+         yOwuiR28nMj4CQkB2weWr5scn6ymdNhornhx4GWdW89rFSkrmMhcRXny7zPakpPsXa6u
+         02BD9lYn+aFJDrKxQPqY7C0xU83tXyNRq0w2lq4WezInOYGEv8DSwJsYB3kcrnhZMErz
+         yzecFU/Tg//WjfxX/7Xize+bNnaplLBwOoAYqNSdUzzW6ojurB7/aduMPUQZAcB/SVaM
+         gXAw==
+X-Gm-Message-State: AFqh2kp1e9qbJkw5soC/sMA3/ZpWEw6ir19JOGJu6FeU/9qw5GQNI9rT
+        aPqd7WqbdLIrIYw60DK6T0VViAjwLGABH3wIMv4=
+X-Google-Smtp-Source: AMrXdXsC3mSKHl0LpWLvrH3n+FOu3EvqUmtijkXrkFP6xshYTLWze8yL4OcFMN5amMNsHOrilqAwxA==
+X-Received: by 2002:a17:906:99d6:b0:7c1:7c3a:5c65 with SMTP id s22-20020a17090699d600b007c17c3a5c65mr44075910ejn.4.1672926794766;
+        Thu, 05 Jan 2023 05:53:14 -0800 (PST)
 Received: from alco.roam.corp.google.com ([2620:0:1059:10:43c3:8ac4:5d6f:2251])
-        by smtp.gmail.com with ESMTPSA id x11-20020a170906b08b00b007806c1474e1sm16459084ejy.127.2023.01.05.05.53.18
+        by smtp.gmail.com with ESMTPSA id x11-20020a170906b08b00b007806c1474e1sm16459084ejy.127.2023.01.05.05.53.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 05:53:19 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Thu, 05 Jan 2023 14:52:57 +0100
-Subject: [PATCH v2 6/7] media: uvcvideo: Fix power line control for Lenovo
- Integrated Camera
+        Thu, 05 Jan 2023 05:53:14 -0800 (PST)
+Subject: [PATCH v2 0/7] media: uvcvideo: Hot fixes for top of next/uvc + std menus
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230105-uvc-gcc5-v2-6-2ba6c660d6f5@chromium.org>
-References: <20230105-uvc-gcc5-v2-0-2ba6c660d6f5@chromium.org>
-In-Reply-To: <20230105-uvc-gcc5-v2-0-2ba6c660d6f5@chromium.org>
+X-B4-Tracking: v=1; b=H4sIADPWtmMC/22MQQrDIBRErxL+ur+oqZh01XuULox+VEgUtAoleP
+ dK110Nb5h5JxTKgQrcpxMytVBCigPEZQLjdXSEwQ4GwcTMOJNYm0FnjEQllOI3Pq+rlTDmmy6EW9
+ bR+HGIdd9H6UN5p/z56Rsf8fxjahwZLlIyS0owWsTD+JyOUI9ryg5evfcvCL/cwKgAAAA=
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Thu, 05 Jan 2023 14:52:51 +0100
+Message-Id: <20230105-uvc-gcc5-v2-0-2ba6c660d6f5@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Ricardo Ribalda <ribalda@chromium.org>,
@@ -63,113 +62,69 @@ Cc:     Ricardo Ribalda <ribalda@chromium.org>,
         linux-kernel@vger.kernel.org,
         Sergey Senozhatsky <senozhatsky@chromium.org>
 X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3606; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=YcPdxuXc6e/MVQTKSpvQxEjmmIRWxl3uxbcqXKNQm+o=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjttZGZ0Iq14zpMyjUhg2dn1eR/Vv5bx5PpNod+Vx4
- CxsIn36JAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY7bWRgAKCRDRN9E+zzrEiL8BD/
- 97Mt7IwMd9kghnskq4VR56QmcQpNpbpWNvsTriv5ngN9WMHXvib/mKpInWWqth9td482tbC+WrAEzc
- mFsRUe3hg+6C4VlfV7ly3J46mO7edihuDnu9OPq+Y8wEW6Yr5Qp7pORQg9B2zow9r8ar8LW3I8eEBM
- ttXVJFHjbPVlinVlXSRZDi49yeqtaqeI9Ox3degAKgUB1MmYBYeYvSHneA2jcZFD72pRLeCPh05JQP
- 5bvAOTH6nNq42DbY3Me2pPN9ncKJw2wG7xobBk//5PrgDQ5GOwjBBV101HXF88KUsdMYq7SubVwBXC
- RN5vz92w/Cx65/4mB8/V1K2nN4jh4w7NLKNh1ZmYSTLpo44gCbzE7CKKSOMf9TGAUwUIUfVXAgK2S9
- PVqTRpaxeO91nfgPaJ7BfNG5VQhdb86DaGXt4sIzd/5m2K8/Tz9ETPv0xQYC7mrBxzT8XaGw2IG0oz
- JASMYr5v4D5DQsaS2xQofd4jdQrzGzsGtOvCbQo/Jzbiib5TLXDVR9xscnkHUeiMBLlig46UJ0XQxf
- Gd1Pq05A5p0MVpVjkqMrMbecKT5BkBxK1nKh7FbTxEct5oOBzECYkBs9Mo58yJqQ8/jc77rQqDE9e8
- mQhLLLaB6/0G4YLICcf65HNdaJdbIQc4VHPoyUCzMOr64N9WkyhJ3ZnNetTw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1812; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=FX5eF0xbfjbPcjejb97Gwov/ihOnN90O7mGjzsmiwjg=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjttY5bPHt1+0ap2FYizqXYtJlOgG2qFwn50O4GiVz
+ 5rJ6ITqJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY7bWOQAKCRDRN9E+zzrEiIl/D/
+ 4lQ39c2y4GHZRuyyKhZQHeTzqMuHfUeple8Scczh89C5MpRErSmcAzNqzMR6b+RwQL9JZRCUCEleGd
+ NOyOMKaK7OC/z8GvSPe8BnUTPI4VLpLPDX0E9jY+hVdxQ69sgPTDh1V39GzaMQXWkgzkhTAzfUvoZg
+ lQCsbAV5ORt2fY42HeFuYxhlBRDkTAplLE6QoPsEyuDF9IMCVfMi4Ic0dezZy4qcDULZjO5CdNy6Ko
+ b/v6nlXgGzplCdtH55jlDz9kZOmCbbkKTUKKST2Xi63Ni3nq/iWg+G1lS72YXS6B/PTSSbR/qTYBsy
+ 7J+KsBCqcEDrRZTbXOgD1fSrLqKNZjkUcsbM52sXOxjskE5hfgrYo2II1yNxyqh+UOVXE/8RmGxalh
+ glSycuK1zKAk1Si6gGWOTiOvQ+kHcjE40oVjJa58qAbuDtKcKFGVAF4CoyHAlSjdo04VAo9Xujh58o
+ VDU6C2ttAq+iy4QEhOZaJxO8Vs5tINkgGNfBkpL6td0UwPvkmVsFs48M1rjr9c6n10zzIHwn9AnrZu
+ iVqKpOVfFFpOnUp3fHfziUrNGALdBon3WuRoAJUMlTaEBhw2LhhQ376FwLLGRe5HWpBZdirACp3hc/
+ tAR2EIpsQPj5I0Oj09eCR+EPRX1vT/y1NVoRerf70JaHRVpCVZ3mu5LjFOCg==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The device does not implement the power line control correctly. It is
-a UVC 1.5 device, but implements the PLC control as a UVC 1.1 device.
+Hi Laurent
 
-Add the corresponding control mapping override.
+Here are some fixes for your next branch. We have not sent yet the
+patches to Mauro so I guess it is better to drop the broken patches
+and their reverts from this set.
 
-Bus 003 Device 002: ID 30c9:0093 Lenovo Integrated Camera
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.01
-  bDeviceClass          239 Miscellaneous Device
-  bDeviceSubClass         2
-  bDeviceProtocol         1 Interface Association
-  bMaxPacketSize0        64
-  idVendor           0x30c9
-  idProduct          0x0093
-  bcdDevice            0.07
-  iManufacturer           3 Lenovo
-  iProduct                1 Integrated Camera
-  iSerial                 2 8SSC21J75356V1SR2830069
-  bNumConfigurations      1
+If it is too late the revert patches have the proper Fixes: tag
 
+Thanks!
+
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: Yunke Cao <yunkec@chromium.org>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+
 ---
- drivers/media/usb/uvc/uvc_ctrl.c   |  2 +-
- drivers/media/usb/uvc/uvc_driver.c | 16 ++++++++++++++++
- drivers/media/usb/uvc/uvcvideo.h   |  1 +
- 3 files changed, 18 insertions(+), 1 deletion(-)
+Changes in v2:
+- Remove the wrongly added: Signed-off-by: Laurent
+- Append the: "Use standard names for menus" patch
+- Link to v1: https://lore.kernel.org/r/20230105-uvc-gcc5-v1-0-8550de720e82@chromium.org
 
-diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index f559a1ac6e3c..28ef9b2024a1 100644
---- a/drivers/media/usb/uvc/uvc_ctrl.c
-+++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -736,7 +736,7 @@ const struct uvc_control_mapping uvc_ctrl_power_line_mapping_limited = {
- 				  V4L2_CID_POWER_LINE_FREQUENCY_50HZ),
- };
- 
--static const struct uvc_control_mapping uvc_ctrl_power_line_mapping_uvc11 = {
-+const struct uvc_control_mapping uvc_ctrl_power_line_mapping_uvc11 = {
- 	.id		= V4L2_CID_POWER_LINE_FREQUENCY,
- 	.entity		= UVC_GUID_UVC_PROCESSING,
- 	.selector	= UVC_PU_POWER_LINE_FREQUENCY_CONTROL,
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 37d2b08bc8b2..57c948d47bbf 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -2385,6 +2385,13 @@ static const struct uvc_device_info uvc_ctrl_power_line_limited = {
- 	},
- };
- 
-+static const struct uvc_device_info uvc_ctrl_power_line_uvc11 = {
-+	.mappings = (const struct uvc_control_mapping *[]) {
-+		&uvc_ctrl_power_line_mapping_uvc11,
-+		NULL, /* Sentinel */
-+	},
-+};
-+
- static const struct uvc_device_info uvc_quirk_probe_minmax = {
- 	.quirks = UVC_QUIRK_PROBE_MINMAX,
- };
-@@ -2964,6 +2971,15 @@ static const struct usb_device_id uvc_ids[] = {
- 	  .bInterfaceSubClass	= 1,
- 	  .bInterfaceProtocol	= 0,
- 	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_BPP) },
-+	/* Lenovo Integrated Camera */
-+	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-+				| USB_DEVICE_ID_MATCH_INT_INFO,
-+	  .idVendor		= 0x30c9,
-+	  .idProduct		= 0x0093,
-+	  .bInterfaceClass	= USB_CLASS_VIDEO,
-+	  .bInterfaceSubClass	= 1,
-+	  .bInterfaceProtocol	= UVC_PC_PROTOCOL_15,
-+	  .driver_info		= (kernel_ulong_t)&uvc_ctrl_power_line_uvc11 },
- 	/* Sonix Technology USB 2.0 Camera */
- 	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
- 				| USB_DEVICE_ID_MATCH_INT_INFO,
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index 1b2d9f327583..31c33eb0edf5 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -748,6 +748,7 @@ void uvc_status_stop(struct uvc_device *dev);
- 
- /* Controls */
- extern const struct uvc_control_mapping uvc_ctrl_power_line_mapping_limited;
-+extern const struct uvc_control_mapping uvc_ctrl_power_line_mapping_uvc11;
- extern const struct v4l2_subscribed_event_ops uvc_ctrl_sub_ev_ops;
- 
- int uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
+---
+Ricardo Ribalda (7):
+      Revert "media: uvcvideo: Fix power line control for Lenovo Integrated Camera"
+      Revert "media: uvcvideo: Implement mask for V4L2_CTRL_TYPE_MENU"
+      media: uvcvideo: Implement mask for V4L2_CTRL_TYPE_MENU
+      media: uvcvideo: Refactor uvc_ctrl_mappings_uvcXX
+      media: uvcvideo: Refactor power_line_frequency_controls_limited
+      media: uvcvideo: Fix power line control for Lenovo Integrated Camera
+      media: uvcvideo: Use standard names for menus
 
+ drivers/media/usb/uvc/uvc_ctrl.c   | 191 ++++++++++++++++++++++++-------------
+ drivers/media/usb/uvc/uvc_driver.c |  25 +----
+ drivers/media/usb/uvc/uvc_v4l2.c   | 105 ++++++++++++++------
+ drivers/media/usb/uvc/uvcvideo.h   |   4 +-
+ include/uapi/linux/uvcvideo.h      |   4 +-
+ 5 files changed, 213 insertions(+), 116 deletions(-)
+---
+base-commit: fb1316b0ff3fc3cd98637040ee17ab7be753aac7
+change-id: 20230105-uvc-gcc5-7277141399d5
+
+Best regards,
 -- 
-2.39.0.314.g84b9a713c41-goog-b4-0.11.0-dev-696ae
+Ricardo Ribalda <ribalda@chromium.org>
