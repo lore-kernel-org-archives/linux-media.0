@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4D0FC4708D
-	for <linux-media@archiver.kernel.org>; Fri,  6 Jan 2023 13:34:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83E9EC5479D
+	for <linux-media@archiver.kernel.org>; Fri,  6 Jan 2023 13:34:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233893AbjAFNeA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 6 Jan 2023 08:34:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34892 "EHLO
+        id S234740AbjAFNeB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 6 Jan 2023 08:34:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234740AbjAFNdf (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Jan 2023 08:33:35 -0500
+        with ESMTP id S234785AbjAFNdg (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Jan 2023 08:33:36 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA62077AC9
-        for <linux-media@vger.kernel.org>; Fri,  6 Jan 2023 05:32:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE8E777FF
+        for <linux-media@vger.kernel.org>; Fri,  6 Jan 2023 05:32:43 -0800 (PST)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C217A6F0;
-        Fri,  6 Jan 2023 14:32:38 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A18C3A25;
+        Fri,  6 Jan 2023 14:32:41 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673011959;
-        bh=MGpoxU+SQNQxScq8Zfu41/hu46zTVwB9AeWWyAdEZqk=;
+        s=mail; t=1673011961;
+        bh=X0dFH/gmunl388tMMCumMCn9tAyvU3iA4YGBSbMoUA4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Np+2o0mNMrw3C6IRtTMp0QJt3Aj41+GkQmC2Hf5MgxMNC//UUN2AraDTZSYQ1Ux5B
-         2YVBjukhraR9/zwUdn9/73NjsiX5HEBqi7UdNsbnFd+uSbe+lc7H+RtLyMwUS9/TXh
-         arFsnJIZzAkbyzGXCPnsClfPgrDgEQThUkfXnmDA=
+        b=oeXxF8FlcEp/bqRYzv+A71TKyP602ossAAkvtG2K65b83DRCt2y8KM+s256ArlzGD
+         sWQCM+5dcEyc0yUZ1umaN89K41hY/EIqFVEixaNUv1mbzv2ARNplpjW1kwRcSflbaA
+         +54ZcLo5Nk+agU0Gp0KLT6jwbeBLpRyvYyjY4ODc=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Michael Tretter <m.tretter@pengutronix.de>,
         Philipp Zabel <p.zabel@pengutronix.de>, kernel@pengutronix.de,
         linux-imx@nxp.com
-Subject: [PATCH v1 4/6] media: imx-pxp: Implement frame size enumeration
-Date:   Fri,  6 Jan 2023 15:32:25 +0200
-Message-Id: <20230106133227.13685-5-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v1 6/6] media: imx-pxp: Use non-threaded IRQ
+Date:   Fri,  6 Jan 2023 15:32:27 +0200
+Message-Id: <20230106133227.13685-7-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.38.2
 In-Reply-To: <20230106133227.13685-1-laurent.pinchart@ideasonboard.com>
 References: <20230106133227.13685-1-laurent.pinchart@ideasonboard.com>
@@ -41,53 +41,34 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Implement support for the VIDIOC_ENUM_FRAMESIZES ioctl.
+There's no need to use threaded IRQs with the PXP, as the interrupt
+handler doesn't need to sleep and doesn't perform any time-consuming
+operation. Switch to regular IRQ handler.
+
+This fixes lockups of the PXP noticed on i.MX7, where the PXP would stop
+generating interrupts after a variable number of frames (from a few
+dozens to a few hundreds). The root cause is however unknown.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/nxp/imx-pxp.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ drivers/media/platform/nxp/imx-pxp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/platform/nxp/imx-pxp.c b/drivers/media/platform/nxp/imx-pxp.c
-index fd4c055c01eb..68f838e3069d 100644
+index e4d7a6339929..28a222c8fe86 100644
 --- a/drivers/media/platform/nxp/imx-pxp.c
 +++ b/drivers/media/platform/nxp/imx-pxp.c
-@@ -1391,6 +1391,26 @@ static int pxp_s_fmt_vid_out(struct file *file, void *priv,
- 	return 0;
- }
+@@ -1814,8 +1814,8 @@ static int pxp_probe(struct platform_device *pdev)
  
-+static int pxp_enum_framesizes(struct file *file, void *fh,
-+			       struct v4l2_frmsizeenum *fsize)
-+{
-+	if (fsize->index > 0)
-+		return -EINVAL;
-+
-+	if (!find_format(fsize->pixel_format))
-+		return -EINVAL;
-+
-+	fsize->type = V4L2_FRMSIZE_TYPE_STEPWISE;
-+	fsize->stepwise.min_width = MIN_W;
-+	fsize->stepwise.max_width = MAX_W;
-+	fsize->stepwise.step_width = ALIGN_W;
-+	fsize->stepwise.min_height = MIN_H;
-+	fsize->stepwise.max_height = MAX_H;
-+	fsize->stepwise.step_height = ALIGN_H;
-+
-+	return 0;
-+}
-+
- static u8 pxp_degrees_to_rot_mode(u32 degrees)
- {
- 	switch (degrees) {
-@@ -1459,6 +1479,8 @@ static const struct v4l2_ioctl_ops pxp_ioctl_ops = {
- 	.vidioc_try_fmt_vid_out	= pxp_try_fmt_vid_out,
- 	.vidioc_s_fmt_vid_out	= pxp_s_fmt_vid_out,
+ 	spin_lock_init(&dev->irqlock);
  
-+	.vidioc_enum_framesizes	= pxp_enum_framesizes,
-+
- 	.vidioc_reqbufs		= v4l2_m2m_ioctl_reqbufs,
- 	.vidioc_querybuf	= v4l2_m2m_ioctl_querybuf,
- 	.vidioc_qbuf		= v4l2_m2m_ioctl_qbuf,
+-	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL, pxp_irq_handler,
+-			IRQF_ONESHOT, dev_name(&pdev->dev), dev);
++	ret = devm_request_irq(&pdev->dev, irq, pxp_irq_handler,
++			       IRQF_TRIGGER_HIGH, dev_name(&pdev->dev), dev);
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "Failed to request irq: %d\n", ret);
+ 		return ret;
 -- 
 Regards,
 
