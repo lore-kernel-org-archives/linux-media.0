@@ -2,68 +2,111 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47DECC54EBC
-	for <linux-media@archiver.kernel.org>; Fri,  6 Jan 2023 13:33:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71913C54EF0
+	for <linux-media@archiver.kernel.org>; Fri,  6 Jan 2023 13:33:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234949AbjAFNdx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 6 Jan 2023 08:33:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35226 "EHLO
+        id S234696AbjAFNd4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 6 Jan 2023 08:33:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235180AbjAFNdb (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Jan 2023 08:33:31 -0500
+        with ESMTP id S235225AbjAFNdd (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Jan 2023 08:33:33 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121C677D07
-        for <linux-media@vger.kernel.org>; Fri,  6 Jan 2023 05:32:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B668D7F444
+        for <linux-media@vger.kernel.org>; Fri,  6 Jan 2023 05:32:38 -0800 (PST)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 871C24AE;
-        Fri,  6 Jan 2023 14:32:32 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 40EC74AE;
+        Fri,  6 Jan 2023 14:32:37 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673011952;
-        bh=tnZqbhIGqgf9PhRX7U7nxtMWujXNJHrlsGxKhBOVRvQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=tog+9Zeu1g8+EuLCtCEKBD7SZf1A8pQTeD7A4wios6i2J46pvBvaWnD26Tg3M1RIA
-         qJHKA6wvP42Z0wkr0qlYWSgmGrUZ+81YRB7bWEMIIenae/gnDjaw390Ud8BJCMiQ5B
-         wFadLQfXrGLlx2hmQuQvPnSmvy3kskCh2qk+MUXc=
+        s=mail; t=1673011957;
+        bh=wxmRVFy0YasYSasH5jMcJNDWdiJWFF/VKyuFYBimqI4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=gK6Fgaan1DoaJTZPvC54IIFdKSmL2PeCuQZ7ktvY3GWrJ9VkOt/xYdBYkSMdlllqW
+         wDPOVsDdRh8QICbcKiMxg5JVKRvLBAZT55OxOdDmVaqyajxq1L17EXlIIxVXtaFVzv
+         XxRqzU48D0hLlhP4N5sLoR0G9M27ZNYeH2MtMgnw=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Michael Tretter <m.tretter@pengutronix.de>,
         Philipp Zabel <p.zabel@pengutronix.de>, kernel@pengutronix.de,
         linux-imx@nxp.com
-Subject: [PATCH v1 0/6] media: imx-pxp: Miscellaneous enhancements
-Date:   Fri,  6 Jan 2023 15:32:21 +0200
-Message-Id: <20230106133227.13685-1-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v1 3/6] media: imx-pxp: Pass pixel format value to find_format()
+Date:   Fri,  6 Jan 2023 15:32:24 +0200
+Message-Id: <20230106133227.13685-4-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.38.2
+In-Reply-To: <20230106133227.13685-1-laurent.pinchart@ideasonboard.com>
+References: <20230106133227.13685-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+The find_format() function looks up format information for a given pixel
+format. It takes a v4l2_format pointer, but only uses the contained
+pixel format value. To prepare it for being used by callers that don't
+have v4l2_format, modify it to take the pixel format value directly.
 
-This patch series brings miscellaneous enhancements to the imx-pxp
-driver that I have kept in my tree for a too long time. As it's a
-collection of miscellanous changes, please see individual patches for
-details.
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/media/platform/nxp/imx-pxp.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-The patches are based on top of Michael's recent i.MX7D support for the
-imx-pxp driver [1]. Michael, I can rebase this on top of your v2, or
-feel free to take the patches in your tree already and include them in
-v2 if you prefer.
-
-[1] https://lore.kernel.org/linux-media/20230105134729.59542-1-m.tretter@pengutronix.de
-
-Laurent Pinchart (6):
-  media: imx-pxp: Sort headers alphabetically
-  media: imx-pxp: Add media controller support
-  media: imx-pxp: Pass pixel format value to find_format()
-  media: imx-pxp: Implement frame size enumeration
-  media: imx-pxp: Introduce pxp_read() and pxp_write() wrappers
-  media: imx-pxp: Use non-threaded IRQ
-
- drivers/media/platform/nxp/imx-pxp.c | 203 ++++++++++++++++++---------
- 1 file changed, 136 insertions(+), 67 deletions(-)
-
+diff --git a/drivers/media/platform/nxp/imx-pxp.c b/drivers/media/platform/nxp/imx-pxp.c
+index 132065c8b8b4..fd4c055c01eb 100644
+--- a/drivers/media/platform/nxp/imx-pxp.c
++++ b/drivers/media/platform/nxp/imx-pxp.c
+@@ -176,14 +176,14 @@ enum {
+ 	V4L2_M2M_DST = 1,
+ };
+ 
+-static struct pxp_fmt *find_format(struct v4l2_format *f)
++static struct pxp_fmt *find_format(unsigned int pixelformat)
+ {
+ 	struct pxp_fmt *fmt;
+ 	unsigned int k;
+ 
+ 	for (k = 0; k < NUM_FORMATS; k++) {
+ 		fmt = &formats[k];
+-		if (fmt->fourcc == f->fmt.pix.pixelformat)
++		if (fmt->fourcc == pixelformat)
+ 			break;
+ 	}
+ 
+@@ -1268,10 +1268,10 @@ static int pxp_try_fmt_vid_cap(struct file *file, void *priv,
+ 	struct pxp_fmt *fmt;
+ 	struct pxp_ctx *ctx = file2ctx(file);
+ 
+-	fmt = find_format(f);
++	fmt = find_format(f->fmt.pix.pixelformat);
+ 	if (!fmt) {
+ 		f->fmt.pix.pixelformat = formats[0].fourcc;
+-		fmt = find_format(f);
++		fmt = find_format(f->fmt.pix.pixelformat);
+ 	}
+ 	if (!(fmt->types & MEM2MEM_CAPTURE)) {
+ 		v4l2_err(&ctx->dev->v4l2_dev,
+@@ -1296,10 +1296,10 @@ static int pxp_try_fmt_vid_out(struct file *file, void *priv,
+ 	struct pxp_fmt *fmt;
+ 	struct pxp_ctx *ctx = file2ctx(file);
+ 
+-	fmt = find_format(f);
++	fmt = find_format(f->fmt.pix.pixelformat);
+ 	if (!fmt) {
+ 		f->fmt.pix.pixelformat = formats[0].fourcc;
+-		fmt = find_format(f);
++		fmt = find_format(f->fmt.pix.pixelformat);
+ 	}
+ 	if (!(fmt->types & MEM2MEM_OUTPUT)) {
+ 		v4l2_err(&ctx->dev->v4l2_dev,
+@@ -1332,7 +1332,7 @@ static int pxp_s_fmt(struct pxp_ctx *ctx, struct v4l2_format *f)
+ 		return -EBUSY;
+ 	}
+ 
+-	q_data->fmt		= find_format(f);
++	q_data->fmt		= find_format(f->fmt.pix.pixelformat);
+ 	q_data->width		= f->fmt.pix.width;
+ 	q_data->height		= f->fmt.pix.height;
+ 	q_data->bytesperline	= f->fmt.pix.bytesperline;
 -- 
 Regards,
 
