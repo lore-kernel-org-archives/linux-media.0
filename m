@@ -2,189 +2,251 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3F0BC4708D
-	for <linux-media@archiver.kernel.org>; Fri,  6 Jan 2023 15:39:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 158CFC61DB3
+	for <linux-media@archiver.kernel.org>; Fri,  6 Jan 2023 16:43:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233548AbjAFPjY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 6 Jan 2023 10:39:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50502 "EHLO
+        id S233742AbjAFQnr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 6 Jan 2023 11:43:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235180AbjAFPjQ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Jan 2023 10:39:16 -0500
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943A776803;
-        Fri,  6 Jan 2023 07:39:15 -0800 (PST)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-1322d768ba7so1877095fac.5;
-        Fri, 06 Jan 2023 07:39:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nOU74MfLltUT+h+F/CrT1EH2iRW8ZoWBGIJbj4ikcZg=;
-        b=kCHCa/r/NH7je4QvL7iXn+mGinMO0F8rBjuPT2QnoR6UCmONeCpDaIl710U7xlpmT6
-         ikc1XvbZrH2G6v6Ld0fca1JWE5cOEg+kijfMUaFDYx835qxVEn/NO4CRdNIV1hXhLi6O
-         rrlxk+4D9lTSqnIgV2F/N+SXbUbcjK/Jzijiqx247t8iDkut1B0x8qPdt36ZE01G1QZW
-         /5R0EoDpcDbcFNpofc0nZGeQSzfXDpRT+ZaQn6YmnNmhgSospP8Ca2nKXFCRIl9L06qc
-         0O0Hf1tAT1axF1D8RPs/Aprow4ZU5Du+LmsxjuIoYb/wQtuBG8ejJ4PRaBaX6KY3PrTK
-         u6vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nOU74MfLltUT+h+F/CrT1EH2iRW8ZoWBGIJbj4ikcZg=;
-        b=F06yqebb7xDQZgx5Q9Unc1dyLa0uAdcBtIxE/hScAQSQTFAAZQwheUupor8i7YfVHL
-         /zACm1DuV6124XiE7mRVsXnzpyIPj6tX8ljTSSJPIicc8Kc5ykFykjWIfyn+zxMmjz04
-         jANegVLyW2V8+MlYOlI2hPtmf9BRpndzlOgv0VuiWj+1HF0Uv1yW+i1oK3MyeAG9jx1P
-         DW7ZmZZ+tgiJaRn3i1y3xSPHqczD8Ec1p+OFxXkzw6zBTXoYHaSaBiLOJn/XCGs0+YGR
-         mvgkoTVlr3M1aRsUUsE0GdZkUHfUcJhMPcy3etpLSZhFdWg79hGTk/j0SHG/cjC2nuPR
-         QYeQ==
-X-Gm-Message-State: AFqh2kpznEWAIdcvsF+Ykyw8/xa8crhN01WjTbc8/hMU/dClaH2trXWC
-        dEopLJfOM6cFMYlg4EdMmLx3UyWvzklUPQBRVMY=
-X-Google-Smtp-Source: AMrXdXt0/0Yzb/5d06C0pGHF7OeoMwC1Beik/HhdgRVorPYXTJ/t6Z10/P3fO3icF9eUsmYUsIHQhJSZPSADJk9q0Qw=
-X-Received: by 2002:a05:6870:c59c:b0:150:d9aa:4011 with SMTP id
- ba28-20020a056870c59c00b00150d9aa4011mr1145315oab.96.1673019554943; Fri, 06
- Jan 2023 07:39:14 -0800 (PST)
+        with ESMTP id S236116AbjAFQna (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Jan 2023 11:43:30 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F87D7A3B2;
+        Fri,  6 Jan 2023 08:42:57 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eSQYw2cWFMx8V28onIGgb41pKTxh8rduxMUx2FNWjIVqAe2koKLgl7iqVg5L4FzNNZf3FlQJJzo7z/jUXLOvgJZQJcGSAZ51pPrRccV33E2JRT3MU3Q2xxfNO3Po/c9wdYiQMmQ/ZEYgtT6awD8IPWyrjDR14M5t0Xu1a9BjMYEqdKhoMiDBYDviYZ6NJIbQUaqGit54TpnFvkuu/dPPkpLFaTKJvQzaPrwdKp3pPNXcN7Uy2H+7hRRWZ0RTNfmElOCxBA9mKnz8BSgjw4ad2ydjTlFnha1oACSvq+iQvOpGyLxmzT+FJA7hnvCDAUhcoe02iNcRs3H1jNFfqnD+4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XygBCBJmZO0lHIPyUqo5uBagRbdg24bsaUztUT0w2OA=;
+ b=U7RF1Mv9M/7ktoeSixiPJb0RBgPfQMyfW47JLIY9v/V06xNmBpYqwwP9MRMYgs58L+5IZti3hkOqbbYq6KAQHWW5n6OaGi/RuOds1rVEn/YZIjH+80HzAtjmpXJIDY9FVHyOF3HRj3GU73NdMdKorCuDCRRdfZHPVxbzcmj4gVQScRwJjhMz/gi2wfntFASC2f8nJoy6PmZjAGQrKaMYQO8bSH5TbUoi4AmuJeslXMsiNAXKuJJXg/mFnuAiThgvW7cJg/2i+U4aZ/M56CaI6dChr4B6X9fmnae8hyegf7X0qN3SMVVD+835xqLpcJrvbfwtN3FkJ6thrW9E8l2Mpg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XygBCBJmZO0lHIPyUqo5uBagRbdg24bsaUztUT0w2OA=;
+ b=Tbh9/8B/UT9ocDz73PJS6qggA2YkfcxiwdbNHJ7C+/M618gI82WTBjD9XZmLiwKNMaPVsQVel5XO3Dqo5HK30KdC4visbWytfIgPcsb3niLfkH8UXWG4+6ahc7eZ40oQV2aJ/Z4NN3CT7YuZ9ylEKkkixrXwdppRQqqHWQuHpLa4jRKTdYhXGGvLA1+HpqLeHRW9zlo2exR+VmZwZxpSuQINFeHCPmXLK3VYfrFxpThNTehgovzYuEX8q/KV4aOo8sQTToSyS21xfU6aYu9pQd5r8xskpkbPGNipvwgdKtiTKzl7YwabFCO54FOTK22iWEVYpLgOWtEMDuLrycimYA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DS0PR12MB6437.namprd12.prod.outlook.com (2603:10b6:8:cb::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Fri, 6 Jan
+ 2023 16:42:50 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a%9]) with mapi id 15.20.5944.019; Fri, 6 Jan 2023
+ 16:42:50 +0000
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        ath10k@lists.infradead.org, ath11k@lists.infradead.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        dri-devel@lists.freedesktop.org, iommu@lists.linux.dev,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-tegra@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, nouveau@lists.freedesktop.org,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        virtualization@lists.linux-foundation.org
+Subject: [PATCH 3/8] iommu: Add a gfp parameter to iommu_map_sg()
+Date:   Fri,  6 Jan 2023 12:42:43 -0400
+Message-Id: <3-v1-6e8b3997c46d+89e-iommu_map_gfp_jgg@nvidia.com>
+In-Reply-To: <0-v1-6e8b3997c46d+89e-iommu_map_gfp_jgg@nvidia.com>
+References: 
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MN2PR02CA0022.namprd02.prod.outlook.com
+ (2603:10b6:208:fc::35) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
- <20221227082932.798359-1-geert@linux-m68k.org> <alpine.DEB.2.22.394.2212270933530.311423@ramsan.of.borg>
-In-Reply-To: <alpine.DEB.2.22.394.2212270933530.311423@ramsan.of.borg>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 6 Jan 2023 10:39:03 -0500
-Message-ID: <CADnq5_PtJ2JxAH7vaQsMHomUmiAxhiOqn4suf1SAQkaqt=sg+g@mail.gmail.com>
-Subject: Re: Build regressions/improvements in v6.2-rc1
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
-        "Mahfooz, Hamza" <Hamza.Mahfooz@amd.com>
-Cc:     linux-kernel@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-sh@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-mips@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        linux-f2fs-devel@lists.sourceforge.net, kasan-dev@googlegroups.com,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DS0PR12MB6437:EE_
+X-MS-Office365-Filtering-Correlation-Id: 535936a7-378c-498f-b9be-08daf0050bdd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ddBXClO3TdH885FpT+z6/fu7Zb+wH0xL2xQyi5Ww08ecDMP0xEsQrCXXm0MQgdh/8tNP4Fl2MYyC5jXzQVJpelBoltQei2DzzGTRuQFsRRbfdWQhoksq7uEhu+9Y1MYdzO9R06xkBs7LvXMqiiirNCk+8sRpNMD6+Up8+nBJ39YAlm4YGNGLVbLb1sDP3CZIXq0JttCNBf4WpvHyQmntDZjcn6hBuxYzyLkoRjT72atPrSl4TJ9XO8iAinAwyQaoEI5qkrC0fII+EC5SDIvI+45xteZ/0oR4Wvs850mNBlu/u+36AwgU0YLZ5VgQqmia5wYUyUiDRyet4nsgUsdtiIkD+OEJO0O7A8EqSIwATJ8cvIzPOLLVijtCw7sTKiUmvamZdxV0PiYCeHfLx5ZW+BfRO8oUvt1ooSQQcaOyqaruAn4f9czuLaFU6fTRsZN+x4PnEpgWupfButSSwoKHdqttj2t0nEKpuZi42M05u8DhAAsEANzZKioXyUfc7GdLzvYJ6RIixYBfFH4/4kLPxL2gYE4rJqhfFSq2iJkkIOt8orsWqmcI0U3dSPrJdnS7RME+TcMhuR1luYOYMiEfCoVjlbM38VxbRkttR8zntLtOUiZINvEwIZah/dFRxVkhZxubGI0+4Rny4gwzPFJSewbotyEPhTR4WiNM2nzZo+NVpDvVw4naD4vNb0Kw/gRR
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(376002)(346002)(39860400002)(396003)(451199015)(7416002)(5660300002)(54906003)(2906002)(41300700001)(8676002)(66946007)(8936002)(66476007)(316002)(4326008)(66556008)(83380400001)(6666004)(478600001)(110136005)(6506007)(36756003)(186003)(2616005)(26005)(6512007)(6486002)(86362001)(38100700002)(4216001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YJTzNNnR3Uo+lIW612KJEyyU0///XWaTmv5nX0TzHqzZ95ZRuXp0s/HoXNG6?=
+ =?us-ascii?Q?J9tBBh2Z0O3ALrSEGeWpinoWAGCU0XXJKJA/+BLHLxkrd4ZVpIJTtTcvgv7+?=
+ =?us-ascii?Q?PAejS1ZLpz+wxQMBocQfnI5FryaaRKElZSe09BvnJA7uBR4rRmJ811lynPCZ?=
+ =?us-ascii?Q?TYMM+oJ9W1WF8bA1l1/aOWzirpM6OmMzrEHYZdp4jon4B39IXjGyXqjWFrMe?=
+ =?us-ascii?Q?LzuKRdY+qaXw05Lo0UY7dzE3BMYvvOw8Ktors0oUofi7ekv3eNrhnDhi1UVf?=
+ =?us-ascii?Q?O+BZkuiUvzhEBn5oCw8nad2z4RxbI16s8W9dgeS8k29DuLQ40RNylYAvh35G?=
+ =?us-ascii?Q?Xiq2d/+dclcC+LmgQ/f+5++ajD3OahVIJU0r0gj3CqIrXnJKOALL7I9yU0xL?=
+ =?us-ascii?Q?Dd2rJODEmbgwh2FzukPG+JQoFD4edmXj/CMZs+7aLh4cSbwafMHFymFTP475?=
+ =?us-ascii?Q?l4VKcl4i0gk0LIpozkKIo5ksQDDoDrFL1eTti+QMQypZ2nIzEZk25nH3BJPV?=
+ =?us-ascii?Q?v7wrGGQmQrdJRIAt95O8qch94ORmwRiIDKKTwOoHIgBisv9hJLH1n6fx1l4m?=
+ =?us-ascii?Q?/g+VPun+JODgqYWF5TggiBUzAg1ZR2UKYfgMAdC/YnO7uSlnbe1qWPAUOY47?=
+ =?us-ascii?Q?/DRnGFQQYU/pjKXpnRyDS7lJRa3sYXSUXGjN+XFzkqmBc3QushkqC1/L87WZ?=
+ =?us-ascii?Q?FrgDv5wJGC+etsEJva23pB/6dzwjPlNSPZtGLuyOgf9FlDfCKZikIFsDLixj?=
+ =?us-ascii?Q?MfMm70YVDqWCX4ZQUtuVO3FtwAka3zp2MYKr184BBSR6S6SqUrsBk1kUziLF?=
+ =?us-ascii?Q?PYseHbw/NEjo0PyjlM4Iokc7bBOoeYBlF9cmxhT24jc2I/xNpvtBHjABYR0g?=
+ =?us-ascii?Q?yKa3JZMOsPE8T7u0Z3X/5JBq9HvGfAxNr4sK+pwJH30kI75OLa4ywsgrYMeJ?=
+ =?us-ascii?Q?vZkcOjP7a62FS3joF8VcqcDTZ5o1prNRu3GKNXgy6qkn90af91pTmHTkJyas?=
+ =?us-ascii?Q?B4rrl2aNeqXUrZEG7xEmNEzOuSkLXvnhFYIvlE8rUfdn3yi9FCA1nsw5ehcC?=
+ =?us-ascii?Q?no9AdUZBUFxf6me3c9On96h4v3w/KHJ3x4O5MPVjMRj6mVinPGaE/cpHscTe?=
+ =?us-ascii?Q?mVIT+NZ5BDy3IcHVl+D4BXVer84L9vFFOfDy3PW+WJS4z/WPx4bs4QNx8ocg?=
+ =?us-ascii?Q?QRxJQaW3m0Dfhrxrce+G31bLszWcN+a2+W9goXmUzROPtPhwvNiKLmHBktSG?=
+ =?us-ascii?Q?8JTjw4RtYxdoFnglxbT7m3wRH9rkEjsk4gQ+/0OdFytsRwVWi64Ccdx6Vxl4?=
+ =?us-ascii?Q?WULL5MeSMGMCkdlh5UFQLHmWs/0D20jkNwxMtsdoUvTVHp3J4NeR7qRMN14x?=
+ =?us-ascii?Q?RJNFV8qFwGi/3+Thu8bnuZE/Pwghtm9o+3W+ix+M0l+znpfNdmjkBaYstFUs?=
+ =?us-ascii?Q?QvPYARDHQMBUM6ymfwRvw/+/RsyIc5OmeuyebPNcudimG34c6to4Xzmqv0o3?=
+ =?us-ascii?Q?tzNVownh0Ev4VJ7HYdZIwEb5Mq+XTleVUjLTcQTPpq/549NDPM2NoME+ZG00?=
+ =?us-ascii?Q?qcR+BR4a2PLG3KHEFWhIFLo/1v5STJhyi9XwD/e+?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 535936a7-378c-498f-b9be-08daf0050bdd
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2023 16:42:49.2960
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EFaw49bMjIpwknKATZ1zNEDU+mjzkKu8bY0BTiBK5vw8YKqbcAsHpkrWECXxbnN8
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6437
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 10:34 AM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
->
-> On Tue, 27 Dec 2022, Geert Uytterhoeven wrote:
-> > Below is the list of build error/warning regressions/improvements in
-> > v6.2-rc1[1] compared to v6.1[2].
-> >
-> > Summarized:
-> >  - build errors: +11/-13
->
-> amd-gfx@lists.freedesktop.org
-> linux-arm-kernel@lists.infradead.org
-> linux-media@vger.kernel.org
-> linux-wireless@vger.kernel.org
-> linux-mips@vger.kernel.org
-> linux-sh@vger.kernel.org
-> linux-f2fs-devel@lists.sourceforge.net
-> linuxppc-dev@lists.ozlabs.org
-> kasan-dev@googlegroups.com
-> linux-xtensa@linux-xtensa.org
->
->    + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/displ=
-ay_mode_vba_31.c: error: the frame size of 2224 bytes is larger than 2048 b=
-ytes [-Werror=3Dframe-larger-than=3D]:  =3D> 7082:1
->    + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/disp=
-lay_mode_vba_314.c: error: the frame size of 2208 bytes is larger than 2048=
- bytes [-Werror=3Dframe-larger-than=3D]:  =3D> 7127:1
->
+Follow the pattern for iommu_map() and remove iommu_map_sg_atomic().
 
-@Siqueira, Rodrigo @Mahfooz, Hamza
+This allows __iommu_dma_alloc_noncontiguous() to use a GFP_KERNEL
+allocation here, based on the provided gfp flags.
 
-Can you take a look at fixing the DML stack size here up?
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+---
+ drivers/iommu/dma-iommu.c |  5 +++--
+ drivers/iommu/iommu.c     | 21 +++++----------------
+ include/linux/iommu.h     | 18 +++++-------------
+ 3 files changed, 13 insertions(+), 31 deletions(-)
 
-Alex
+diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+index 7016db569f81fc..8c2788633c1766 100644
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -833,7 +833,8 @@ static struct page **__iommu_dma_alloc_noncontiguous(struct device *dev,
+ 			arch_dma_prep_coherent(sg_page(sg), sg->length);
+ 	}
+ 
+-	ret = iommu_map_sg_atomic(domain, iova, sgt->sgl, sgt->orig_nents, ioprot);
++	ret = iommu_map_sg(domain, iova, sgt->sgl, sgt->orig_nents, ioprot,
++			   gfp);
+ 	if (ret < 0 || ret < size)
+ 		goto out_free_sg;
+ 
+@@ -1281,7 +1282,7 @@ static int iommu_dma_map_sg(struct device *dev, struct scatterlist *sg,
+ 	 * We'll leave any physical concatenation to the IOMMU driver's
+ 	 * implementation - it knows better than we do.
+ 	 */
+-	ret = iommu_map_sg_atomic(domain, iova, sg, nents, prot);
++	ret = iommu_map_sg(domain, iova, sg, nents, prot, GFP_ATOMIC);
+ 	if (ret < 0 || ret < iova_len)
+ 		goto out_free_iova;
+ 
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index fee37bb246f3ea..11fb3981e25642 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -2465,9 +2465,9 @@ size_t iommu_unmap_fast(struct iommu_domain *domain,
+ }
+ EXPORT_SYMBOL_GPL(iommu_unmap_fast);
+ 
+-static ssize_t __iommu_map_sg(struct iommu_domain *domain, unsigned long iova,
+-		struct scatterlist *sg, unsigned int nents, int prot,
+-		gfp_t gfp)
++ssize_t iommu_map_sg(struct iommu_domain *domain, unsigned long iova,
++		     struct scatterlist *sg, unsigned int nents, int prot,
++		     gfp_t gfp)
+ {
+ 	const struct iommu_domain_ops *ops = domain->ops;
+ 	size_t len = 0, mapped = 0;
+@@ -2475,6 +2475,8 @@ static ssize_t __iommu_map_sg(struct iommu_domain *domain, unsigned long iova,
+ 	unsigned int i = 0;
+ 	int ret;
+ 
++	might_sleep_if(gfpflags_allow_blocking(gfp));
++
+ 	while (i <= nents) {
+ 		phys_addr_t s_phys = sg_phys(sg);
+ 
+@@ -2514,21 +2516,8 @@ static ssize_t __iommu_map_sg(struct iommu_domain *domain, unsigned long iova,
+ 
+ 	return ret;
+ }
+-
+-ssize_t iommu_map_sg(struct iommu_domain *domain, unsigned long iova,
+-		     struct scatterlist *sg, unsigned int nents, int prot)
+-{
+-	might_sleep();
+-	return __iommu_map_sg(domain, iova, sg, nents, prot, GFP_KERNEL);
+-}
+ EXPORT_SYMBOL_GPL(iommu_map_sg);
+ 
+-ssize_t iommu_map_sg_atomic(struct iommu_domain *domain, unsigned long iova,
+-		    struct scatterlist *sg, unsigned int nents, int prot)
+-{
+-	return __iommu_map_sg(domain, iova, sg, nents, prot, GFP_ATOMIC);
+-}
+-
+ /**
+  * report_iommu_fault() - report about an IOMMU fault to the IOMMU framework
+  * @domain: the iommu domain where the fault has happened
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index 521cd79700f4d8..d5c16dc33c87de 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -474,10 +474,8 @@ extern size_t iommu_unmap_fast(struct iommu_domain *domain,
+ 			       unsigned long iova, size_t size,
+ 			       struct iommu_iotlb_gather *iotlb_gather);
+ extern ssize_t iommu_map_sg(struct iommu_domain *domain, unsigned long iova,
+-		struct scatterlist *sg, unsigned int nents, int prot);
+-extern ssize_t iommu_map_sg_atomic(struct iommu_domain *domain,
+-				   unsigned long iova, struct scatterlist *sg,
+-				   unsigned int nents, int prot);
++			    struct scatterlist *sg, unsigned int nents,
++			    int prot, gfp_t gfp);
+ extern phys_addr_t iommu_iova_to_phys(struct iommu_domain *domain, dma_addr_t iova);
+ extern void iommu_set_fault_handler(struct iommu_domain *domain,
+ 			iommu_fault_handler_t handler, void *token);
+@@ -791,14 +789,7 @@ static inline size_t iommu_unmap_fast(struct iommu_domain *domain,
+ 
+ static inline ssize_t iommu_map_sg(struct iommu_domain *domain,
+ 				   unsigned long iova, struct scatterlist *sg,
+-				   unsigned int nents, int prot)
+-{
+-	return -ENODEV;
+-}
+-
+-static inline ssize_t iommu_map_sg_atomic(struct iommu_domain *domain,
+-				  unsigned long iova, struct scatterlist *sg,
+-				  unsigned int nents, int prot)
++				   unsigned int nents, int prot, gfp_t gfp)
+ {
+ 	return -ENODEV;
+ }
+@@ -1109,7 +1100,8 @@ iommu_get_domain_for_dev_pasid(struct device *dev, ioasid_t pasid,
+ static inline size_t iommu_map_sgtable(struct iommu_domain *domain,
+ 			unsigned long iova, struct sg_table *sgt, int prot)
+ {
+-	return iommu_map_sg(domain, iova, sgt->sgl, sgt->orig_nents, prot);
++	return iommu_map_sg(domain, iova, sgt->sgl, sgt->orig_nents, prot,
++			    GFP_KERNEL);
+ }
+ 
+ #ifdef CONFIG_IOMMU_DEBUGFS
+-- 
+2.39.0
 
-
-> arm64-gcc5/arm64-allmodconfig
->
->    + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: a=
-rray subscript 2 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} =
-[-Werror=3Darray-bounds]:  =3D> 641:28
->    + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: a=
-rray subscript 3 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} =
-[-Werror=3Darray-bounds]:  =3D> 641:28
->
-> m68k-gcc8/m68k-allmodconfig
-> See also https://lore.kernel.org/all/CAMuHMdWpPX2mpqFEWjjbjsQvDBQOXyjjdpK=
-nQu9qURAuVZXmMw@mail.gmail.com
->
->    + /kisskb/src/include/linux/bitfield.h: error: call to '__field_overfl=
-ow' declared with attribute error: value doesn't fit into mask:  =3D> 151:3
->
-> In function 'u32_encode_bits',
->      inlined from 'ieee80211_mlo_multicast_tx' at /kisskb/src/net/mac8021=
-1/tx.c:4435:17,
->      inlined from 'ieee80211_subif_start_xmit' at /kisskb/src/net/mac8021=
-1/tx.c:4483:3:
->
-> mipsel-gcc5/mips-allmodconfig
->
->    + /kisskb/src/include/linux/compiler_types.h: error: call to '__compil=
-etime_assert_262' declared with attribute error: Unsupported access size fo=
-r {READ,WRITE}_ONCE().:  =3D> 358:45
->    + /kisskb/src/include/linux/compiler_types.h: error: call to '__compil=
-etime_assert_263' declared with attribute error: Unsupported access size fo=
-r {READ,WRITE}_ONCE().:  =3D> 358:45
->
-> In function 'follow_pmd_mask',
->      inlined from 'follow_pud_mask' at /kisskb/src/mm/gup.c:735:9,
->      inlined from 'follow_p4d_mask' at /kisskb/src/mm/gup.c:752:9,
->      inlined from 'follow_page_mask' at /kisskb/src/mm/gup.c:809:9:
->
-> sh4-gcc11/sh-defconfig (G=C3=BCnter wondered if pmd_t should use union)
->
->    + /kisskb/src/include/linux/fortify-string.h: error: '__builtin_memcpy=
-' offset [0, 127] is out of the bounds [0, 0] [-Werror=3Darray-bounds]:  =
-=3D> 57:33
->
-> /kisskb/src/arch/s390/kernel/setup.c: In function 'setup_lowcore_dat_on':
-> s390x-gcc11/s390-all{mod,yes}config
->
->    + /kisskb/src/include/linux/fortify-string.h: error: '__builtin_memset=
-' pointer overflow between offset [28, 898293814] and size [-898293787, -1]=
- [-Werror=3Darray-bounds]:  =3D> 59:33
->
-> /kisskb/src/fs/f2fs/inline.c: In function 'f2fs_move_inline_dirents':
->
-> powerpc-gcc11/ppc64_book3e_allmodconfig
-> powerpc-gcc11/powerpc-all{mod,yes}config
->
->    + /kisskb/src/kernel/kcsan/kcsan_test.c: error: the frame size of 1680=
- bytes is larger than 1536 bytes [-Werror=3Dframe-larger-than=3D]:  =3D> 25=
-7:1
->
-> xtensa-gcc11/xtensa-allmodconfig (patch available)
->
->    + {standard input}: Error: unknown pseudo-op: `.cfi_def_c':  =3D> 1718
->
-> sh4-gcc11/sh-allmodconfig (ICE =3D internal compiler error)
->
-> > [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/1b929c02afd37=
-871d5afb9d498426f83432e71c2/ (all 152 configs)
-> > [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/830b3c68c1fb1=
-e9176028d02ef86f3cf76aa2476/ (all 152 configs)
->
-> Gr{oetje,eeting}s,
->
->                                                 Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
-8k.org
->
-> In personal conversations with technical people, I call myself a hacker. =
-But
-> when I'm talking to journalists I just say "programmer" or something like=
- that.
->                                                             -- Linus Torv=
-alds
