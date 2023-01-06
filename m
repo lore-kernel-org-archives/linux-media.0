@@ -2,498 +2,154 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83437C54E76
-	for <linux-media@archiver.kernel.org>; Fri,  6 Jan 2023 07:30:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF698C54E76
+	for <linux-media@archiver.kernel.org>; Fri,  6 Jan 2023 07:30:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbjAFHaI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 6 Jan 2023 02:30:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
+        id S231888AbjAFHai (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 6 Jan 2023 02:30:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231888AbjAFHaB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Jan 2023 02:30:01 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2337C6F97D;
-        Thu,  5 Jan 2023 23:30:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1672990199; x=1704526199;
+        with ESMTP id S232088AbjAFHad (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Jan 2023 02:30:33 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE7E71FED;
+        Thu,  5 Jan 2023 23:30:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1672990229; x=1704526229;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=g2fKeZb67427ShhByoMZSwUROGw4IRlWfB30+CR6HTM=;
-  b=hNc5HcTBn9k7Imx8q3/capQUirus7N4df0x+Ss+nf5swkRviH/kPwaRy
-   IPZWdeiCBxsY27mVmiXZRRVbNBMh8LuihEniAgV6BmC9yW/bS9tFYERmY
-   NBZEHHGxLCPRbxmDOIc0zmzsDRSEBYQz7lNzIDuvGfBG7xU9LjyOESATn
-   9zxmRe0cPNnvCL1aD6WXlC5nPK5kyxn76hNrLK+yvUk4cALaWxjONSLhr
-   hZhq4dsAPtE6rc51+7Z5ZELyClnFhTswq8affyvjRIVUuXXRlrP6dZDnW
-   IlLlBB5O3XP87le77K7zWy+0ESom9QYxaNph7fYgb2m3rNGGh8Mq4++5u
+  bh=K08OhAmW3FK1nvM92XEIEnUdOkleecistnUg2IhBg3k=;
+  b=nRe5PyDTYWL0wo0ycu850GkHLnGa0q9cDpTNfOt1fI1DK0lpW3iD/e7w
+   XQvrcmsG/D8CNGhuGcx6Jz2JFN/FeVl/ybDb1o9Fy/qiJ7zdTs1DBNYzE
+   GmbOHJWF4/OBnu1Y+VDV4r0WfXvD5zoS9VYUgkHKfauoIdDEmC3HtaSq4
+   n3Ao1l/QfJf+sJppaPUAIpHW8D3fd0pymOERZ/fx1QOUUt1KeGZgwCJw1
+   AC62R01fqvLtzsMP8bIa2UEMDNsK2mk0PyD0mH5uDRjgMoyLTbvwUPo7Y
+   zZ8ODzBuosAiSq9y+pChMaaJpLsAzTk9GcB0DcRG9MRtOISD1Q7h/0kmy
    w==;
-X-IronPort-AV: E=Sophos;i="5.96,304,1665471600"; 
-   d="scan'208";a="131104698"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Jan 2023 00:29:54 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 6 Jan 2023 00:29:54 -0700
-Received: from microchip1-OptiPlex-9020.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Fri, 6 Jan 2023 00:29:51 -0700
-From:   shravan kumar <shravan.chippa@microchip.com>
-To:     <paul.j.murphy@intel.com>, <daniele.alessandrelli@intel.com>,
-        <mchehab@kernel.org>
-CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "shravan kumar" <shravan.chippa@microchip.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Prakash Battu <Prakash.Battu@microchip.com>
-Subject: [PATCH v8 3/4] media: i2c: imx334: support lower bandwidth mode
-Date:   Fri, 6 Jan 2023 12:59:30 +0530
-Message-ID: <20230106072931.2317597-4-shravan.chippa@microchip.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230106072931.2317597-1-shravan.chippa@microchip.com>
-References: <20230106072931.2317597-1-shravan.chippa@microchip.com>
+X-IronPort-AV: E=Sophos;i="5.96,304,1665439200"; 
+   d="scan'208";a="28270425"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 06 Jan 2023 08:30:26 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Fri, 06 Jan 2023 08:30:26 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Fri, 06 Jan 2023 08:30:26 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1672990226; x=1704526226;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=K08OhAmW3FK1nvM92XEIEnUdOkleecistnUg2IhBg3k=;
+  b=ldXTu9BGtkiqGItpxWzU57eAJYp6eAQXSUCTt32kH+9gixjJt8xGqXw0
+   aaNiIGf4DVFfkMVGFrGhV2iE9LH3ebbbfW5EKdOjvjSoN0L1fry2alAeY
+   NSoNQB545dwGbyZPGZrW9stTiI47zhj6hrUiQ8kvScVOPBaKYM8QwEYNO
+   MuZjlkwlTkLMrH23FbU/3zyppS4vmHEJ7SYHEmeUOYuHUPlKZTo7ZfHzk
+   XxCe+FMFt8hlklN0ZzroO/iC7AFWzPHKo7XQj4GymSDno2vqBevnh3l2Z
+   kPK/YMm++AUXzbe71Y4Ljs5QhsnYhi7BORf+k0GDDxGTAs0lrabgFeMSW
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,304,1665439200"; 
+   d="scan'208";a="28270424"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 06 Jan 2023 08:30:26 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 15BC2280056;
+        Fri,  6 Jan 2023 08:30:26 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Dafna Hirschfeld <dafna@fastmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Colin Ian King <colin.i.king@gmail.com>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] media: rkisp1: make a few const arrays static
+Date:   Fri, 06 Jan 2023 08:30:23 +0100
+Message-ID: <10879096.BaYr0rKQ5T@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20230105184403.63419-1-colin.i.king@gmail.com>
+References: <20230105184403.63419-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Shravan Chippa <shravan.chippa@microchip.com>
+Hi Ian,
 
-Some platforms may not be capable of supporting the bandwidth
-required for 12 bit or 3840x2160@60 resolutions.
+Am Donnerstag, 5. Januar 2023, 19:44:03 CET schrieb Colin Ian King:
+> Don't populate the const arrays on the stack, instead make them
+> static. Also makes the object code smaller.
 
-Add support for dynamically selecting 10 bit and 1920x1080@30
-resolutions while leaving the existing configuration as default
+While I don't dislike this change itself, are you sure about the size change?
 
-CC: Conor Dooley <conor.dooley@microchip.com>
-Signed-off-by: Prakash Battu <Prakash.Battu@microchip.com>
-Signed-off-by: Shravan Chippa <shravan.chippa@microchip.com>
----
- drivers/media/i2c/imx334.c | 300 +++++++++++++++++++++++++++++++++----
- 1 file changed, 274 insertions(+), 26 deletions(-)
+bloat-o-meter shows an overall increase:
+> ./scripts/bloat-o-meter /tmp/rkisp1-capture_old.o
+> /tmp/rkisp1-capture_new.o
+> add/remove: 3/0 grow/shrink: 1/2 up/down: 256/-116 (140)
+> Function                                     old     new   delta
+> rkisp1_try_fmt_vid_cap_mplane                 56     280    +224
+> dev_names                                      -      16     +16
+> max_widths                                     -       8      +8
+> max_heights                                    -       8      +8
+> rkisp1_try_fmt                               356     304     -52
+> rkisp1_register_capture                      548     484     -64
+> Total: Before=12333, After=12473, chg +1.14%
 
-diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
-index a4549d194cae..0315e1c9541d 100644
---- a/drivers/media/i2c/imx334.c
-+++ b/drivers/media/i2c/imx334.c
-@@ -79,7 +79,6 @@ struct imx334_reg_list {
-  * struct imx334_mode - imx334 sensor mode structure
-  * @width: Frame width
-  * @height: Frame height
-- * @code: Format code
-  * @hblank: Horizontal blanking in lines
-  * @vblank: Vertical blanking in lines
-  * @vblank_min: Minimal vertical blanking in lines
-@@ -91,7 +90,6 @@ struct imx334_reg_list {
- struct imx334_mode {
- 	u32 width;
- 	u32 height;
--	u32 code;
- 	u32 hblank;
- 	u32 vblank;
- 	u32 vblank_min;
-@@ -119,6 +117,7 @@ struct imx334_mode {
-  * @vblank: Vertical blanking in lines
-  * @cur_mode: Pointer to current selected sensor mode
-  * @mutex: Mutex for serializing sensor controls
-+ * @cur_code: current selected format code
-  * @streaming: Flag indicating streaming state
-  */
- struct imx334 {
-@@ -140,6 +139,7 @@ struct imx334 {
- 	u32 vblank;
- 	const struct imx334_mode *cur_mode;
- 	struct mutex mutex;
-+	u32 cur_code;
- 	bool streaming;
- };
- 
-@@ -147,6 +147,169 @@ static const s64 link_freq[] = {
- 	IMX334_LINK_FREQ,
- };
- 
-+/* Sensor mode registers */
-+static const struct imx334_reg mode_1920x1080_regs[] = {
-+	{0x3000, 0x01},
-+	{0x3018, 0x04},
-+	{0x3030, 0xCA},
-+	{0x3031, 0x08},
-+	{0x3032, 0x00},
-+	{0x3034, 0x4C},
-+	{0x3035, 0x04},
-+	{0x302C, 0xF0},
-+	{0x302D, 0x03},
-+	{0x302E, 0x80},
-+	{0x302F, 0x07},
-+	{0x3074, 0xCC},
-+	{0x3075, 0x02},
-+	{0x308E, 0xCD},
-+	{0x308F, 0x02},
-+	{0x3076, 0x38},
-+	{0x3077, 0x04},
-+	{0x3090, 0x38},
-+	{0x3091, 0x04},
-+	{0x3308, 0x38},
-+	{0x3309, 0x04},
-+	{0x30C6, 0x00},
-+	{0x30C7, 0x00},
-+	{0x30CE, 0x00},
-+	{0x30CF, 0x00},
-+	{0x30D8, 0x18},
-+	{0x30D9, 0x0A},
-+	{0x304C, 0x00},
-+	{0x304E, 0x00},
-+	{0x304F, 0x00},
-+	{0x3050, 0x00},
-+	{0x30B6, 0x00},
-+	{0x30B7, 0x00},
-+	{0x3116, 0x08},
-+	{0x3117, 0x00},
-+	{0x31A0, 0x20},
-+	{0x31A1, 0x0F},
-+	{0x300C, 0x3B},
-+	{0x300D, 0x29},
-+	{0x314C, 0x29},
-+	{0x314D, 0x01},
-+	{0x315A, 0x06},
-+	{0x3168, 0xA0},
-+	{0x316A, 0x7E},
-+	{0x319E, 0x02},
-+	{0x3199, 0x00},
-+	{0x319D, 0x00},
-+	{0x31DD, 0x03},
-+	{0x3300, 0x00},
-+	{0x341C, 0xFF},
-+	{0x341D, 0x01},
-+	{0x3A01, 0x03},
-+	{0x3A18, 0x7F},
-+	{0x3A19, 0x00},
-+	{0x3A1A, 0x37},
-+	{0x3A1B, 0x00},
-+	{0x3A1C, 0x37},
-+	{0x3A1D, 0x00},
-+	{0x3A1E, 0xF7},
-+	{0x3A1F, 0x00},
-+	{0x3A20, 0x3F},
-+	{0x3A21, 0x00},
-+	{0x3A20, 0x6F},
-+	{0x3A21, 0x00},
-+	{0x3A20, 0x3F},
-+	{0x3A21, 0x00},
-+	{0x3A20, 0x5F},
-+	{0x3A21, 0x00},
-+	{0x3A20, 0x2F},
-+	{0x3A21, 0x00},
-+	{0x3078, 0x02},
-+	{0x3079, 0x00},
-+	{0x307A, 0x00},
-+	{0x307B, 0x00},
-+	{0x3080, 0x02},
-+	{0x3081, 0x00},
-+	{0x3082, 0x00},
-+	{0x3083, 0x00},
-+	{0x3088, 0x02},
-+	{0x3094, 0x00},
-+	{0x3095, 0x00},
-+	{0x3096, 0x00},
-+	{0x309B, 0x02},
-+	{0x309C, 0x00},
-+	{0x309D, 0x00},
-+	{0x309E, 0x00},
-+	{0x30A4, 0x00},
-+	{0x30A5, 0x00},
-+	{0x3288, 0x21},
-+	{0x328A, 0x02},
-+	{0x3414, 0x05},
-+	{0x3416, 0x18},
-+	{0x35AC, 0x0E},
-+	{0x3648, 0x01},
-+	{0x364A, 0x04},
-+	{0x364C, 0x04},
-+	{0x3678, 0x01},
-+	{0x367C, 0x31},
-+	{0x367E, 0x31},
-+	{0x3708, 0x02},
-+	{0x3714, 0x01},
-+	{0x3715, 0x02},
-+	{0x3716, 0x02},
-+	{0x3717, 0x02},
-+	{0x371C, 0x3D},
-+	{0x371D, 0x3F},
-+	{0x372C, 0x00},
-+	{0x372D, 0x00},
-+	{0x372E, 0x46},
-+	{0x372F, 0x00},
-+	{0x3730, 0x89},
-+	{0x3731, 0x00},
-+	{0x3732, 0x08},
-+	{0x3733, 0x01},
-+	{0x3734, 0xFE},
-+	{0x3735, 0x05},
-+	{0x375D, 0x00},
-+	{0x375E, 0x00},
-+	{0x375F, 0x61},
-+	{0x3760, 0x06},
-+	{0x3768, 0x1B},
-+	{0x3769, 0x1B},
-+	{0x376A, 0x1A},
-+	{0x376B, 0x19},
-+	{0x376C, 0x18},
-+	{0x376D, 0x14},
-+	{0x376E, 0x0F},
-+	{0x3776, 0x00},
-+	{0x3777, 0x00},
-+	{0x3778, 0x46},
-+	{0x3779, 0x00},
-+	{0x377A, 0x08},
-+	{0x377B, 0x01},
-+	{0x377C, 0x45},
-+	{0x377D, 0x01},
-+	{0x377E, 0x23},
-+	{0x377F, 0x02},
-+	{0x3780, 0xD9},
-+	{0x3781, 0x03},
-+	{0x3782, 0xF5},
-+	{0x3783, 0x06},
-+	{0x3784, 0xA5},
-+	{0x3788, 0x0F},
-+	{0x378A, 0xD9},
-+	{0x378B, 0x03},
-+	{0x378C, 0xEB},
-+	{0x378D, 0x05},
-+	{0x378E, 0x87},
-+	{0x378F, 0x06},
-+	{0x3790, 0xF5},
-+	{0x3792, 0x43},
-+	{0x3794, 0x7A},
-+	{0x3796, 0xA1},
-+	{0x37B0, 0x37},
-+	{0x3E04, 0x0E},
-+	{0x30E8, 0x50},
-+	{0x30E9, 0x00},
-+	{0x3E04, 0x0E},
-+	{0x3002, 0x00},
-+};
-+
- /* Sensor mode registers */
- static const struct imx334_reg mode_3840x2160_regs[] = {
- 	{0x3000, 0x01},
-@@ -263,20 +426,53 @@ static const struct imx334_reg mode_3840x2160_regs[] = {
- 	{0x3A29, 0x00},
- };
- 
-+static const struct imx334_reg raw10_framefmt_regs[] = {
-+	{0x3050, 0x00},
-+	{0x319D, 0x00},
-+	{0x341C, 0xFF},
-+	{0x341D, 0x01},
-+};
-+
-+static const struct imx334_reg raw12_framefmt_regs[] = {
-+	{0x3050, 0x01},
-+	{0x319D, 0x01},
-+	{0x341C, 0x47},
-+	{0x341D, 0x00},
-+};
-+
-+static const u32 imx334_mbus_codes[] = {
-+	MEDIA_BUS_FMT_SRGGB12_1X12,
-+	MEDIA_BUS_FMT_SRGGB10_1X10,
-+};
-+
- /* Supported sensor mode configurations */
--static const struct imx334_mode supported_mode = {
--	.width = 3840,
--	.height = 2160,
--	.hblank = 560,
--	.vblank = 2340,
--	.vblank_min = 90,
--	.vblank_max = 132840,
--	.pclk = 594000000,
--	.link_freq_idx = 0,
--	.code = MEDIA_BUS_FMT_SRGGB12_1X12,
--	.reg_list = {
--		.num_of_regs = ARRAY_SIZE(mode_3840x2160_regs),
--		.regs = mode_3840x2160_regs,
-+static const struct imx334_mode supported_modes[] = {
-+	{
-+		.width = 3840,
-+		.height = 2160,
-+		.hblank = 560,
-+		.vblank = 2340,
-+		.vblank_min = 90,
-+		.vblank_max = 132840,
-+		.pclk = 594000000,
-+		.link_freq_idx = 0,
-+		.reg_list = {
-+			.num_of_regs = ARRAY_SIZE(mode_3840x2160_regs),
-+			.regs = mode_3840x2160_regs,
-+		},
-+	}, {
-+		.width = 1920,
-+		.height = 1080,
-+		.hblank = 280,
-+		.vblank = 1170,
-+		.vblank_min = 90,
-+		.vblank_max = 132840,
-+		.pclk = 74250000,
-+		.link_freq_idx = 0,
-+		.reg_list = {
-+			.num_of_regs = ARRAY_SIZE(mode_1920x1080_regs),
-+			.regs = mode_1920x1080_regs,
-+		},
- 	},
- };
- 
-@@ -518,6 +714,23 @@ static const struct v4l2_ctrl_ops imx334_ctrl_ops = {
- 	.s_ctrl = imx334_set_ctrl,
- };
- 
-+static int imx334_get_format_code(struct imx334 *imx334, u32 code)
-+{
-+	unsigned int i;
-+
-+	lockdep_assert_held(&imx334->mutex);
-+
-+	for (i = 0; i < ARRAY_SIZE(imx334_mbus_codes); i++) {
-+		if (imx334_mbus_codes[i] == code)
-+			break;
-+	}
-+
-+	if (i >= ARRAY_SIZE(imx334_mbus_codes))
-+		i = 0;
-+
-+	return imx334_mbus_codes[i];
-+}
-+
- /**
-  * imx334_enum_mbus_code() - Enumerate V4L2 sub-device mbus codes
-  * @sd: pointer to imx334 V4L2 sub-device structure
-@@ -530,10 +743,10 @@ static int imx334_enum_mbus_code(struct v4l2_subdev *sd,
- 				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
- {
--	if (code->index > 0)
-+	if (code->index >= ARRAY_SIZE(imx334_mbus_codes))
- 		return -EINVAL;
- 
--	code->code = supported_mode.code;
-+	code->code = imx334_mbus_codes[code->index];
- 
- 	return 0;
- }
-@@ -550,15 +763,21 @@ static int imx334_enum_frame_size(struct v4l2_subdev *sd,
- 				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fsize)
- {
--	if (fsize->index > 0)
-+	struct imx334 *imx334 = to_imx334(sd);
-+	u32 code;
-+
-+	if (fsize->index >= ARRAY_SIZE(supported_modes))
- 		return -EINVAL;
- 
--	if (fsize->code != supported_mode.code)
-+	mutex_lock(&imx334->mutex);
-+	code = imx334_get_format_code(imx334, fsize->code);
-+	mutex_unlock(&imx334->mutex);
-+	if (fsize->code != code)
- 		return -EINVAL;
- 
--	fsize->min_width = supported_mode.width;
-+	fsize->min_width = supported_modes[fsize->index].width;
- 	fsize->max_width = fsize->min_width;
--	fsize->min_height = supported_mode.height;
-+	fsize->min_height = supported_modes[fsize->index].height;
- 	fsize->max_height = fsize->min_height;
- 
- 	return 0;
-@@ -577,7 +796,6 @@ static void imx334_fill_pad_format(struct imx334 *imx334,
- {
- 	fmt->format.width = mode->width;
- 	fmt->format.height = mode->height;
--	fmt->format.code = mode->code;
- 	fmt->format.field = V4L2_FIELD_NONE;
- 	fmt->format.colorspace = V4L2_COLORSPACE_RAW;
- 	fmt->format.ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
-@@ -633,7 +851,13 @@ static int imx334_set_pad_format(struct v4l2_subdev *sd,
- 
- 	mutex_lock(&imx334->mutex);
- 
--	mode = &supported_mode;
-+	fmt->format.code = imx334_get_format_code(imx334, fmt->format.code);
-+
-+	mode = v4l2_find_nearest_size(supported_modes,
-+				      ARRAY_SIZE(supported_modes),
-+				      width, height,
-+				      fmt->format.width, fmt->format.height);
-+
- 	imx334_fill_pad_format(imx334, mode, fmt);
- 
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
-@@ -641,7 +865,8 @@ static int imx334_set_pad_format(struct v4l2_subdev *sd,
- 
- 		framefmt = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
- 		*framefmt = fmt->format;
--	} else {
-+	} else if (imx334->cur_mode != mode || imx334->cur_code != fmt->format.code) {
-+		imx334->cur_code = fmt->format.code;
- 		ret = imx334_update_controls(imx334, mode);
- 		if (!ret)
- 			imx334->cur_mode = mode;
-@@ -666,11 +891,26 @@ static int imx334_init_pad_cfg(struct v4l2_subdev *sd,
- 	struct v4l2_subdev_format fmt = { 0 };
- 
- 	fmt.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
--	imx334_fill_pad_format(imx334, &supported_mode, &fmt);
-+	imx334_fill_pad_format(imx334, &supported_modes[0], &fmt);
- 
- 	return imx334_set_pad_format(sd, sd_state, &fmt);
- }
- 
-+static int imx334_set_framefmt(struct imx334 *imx334)
-+{
-+	switch (imx334->cur_code) {
-+	case MEDIA_BUS_FMT_SRGGB10_1X10:
-+		return imx334_write_regs(imx334, raw10_framefmt_regs,
-+					ARRAY_SIZE(raw10_framefmt_regs));
-+
-+	case MEDIA_BUS_FMT_SRGGB12_1X12:
-+		return imx334_write_regs(imx334, raw12_framefmt_regs,
-+					ARRAY_SIZE(raw12_framefmt_regs));
-+	}
-+
-+	return -EINVAL;
-+}
-+
- /**
-  * imx334_start_streaming() - Start sensor stream
-  * @imx334: pointer to imx334 device
-@@ -691,6 +931,13 @@ static int imx334_start_streaming(struct imx334 *imx334)
- 		return ret;
- 	}
- 
-+	ret = imx334_set_framefmt(imx334);
-+	if (ret) {
-+		dev_err(imx334->dev, "%s failed to set frame format: %d\n",
-+			__func__, ret);
-+		return ret;
-+	}
-+
- 	/* Setup handler will write actual exposure and gain */
- 	ret =  __v4l2_ctrl_handler_setup(imx334->sd.ctrl_handler);
- 	if (ret) {
-@@ -1061,7 +1308,8 @@ static int imx334_probe(struct i2c_client *client)
- 	}
- 
- 	/* Set default mode to max resolution */
--	imx334->cur_mode = &supported_mode;
-+	imx334->cur_mode = &supported_modes[0];
-+	imx334->cur_code = imx334_mbus_codes[0];
- 	imx334->vblank = imx334->cur_mode->vblank;
- 
- 	ret = imx334_init_controls(imx334);
--- 
-2.34.1
+To be honest I don't know why GCC now inlines rkisp1_try_fmt() in 
+rkisp1_try_fmt_vid_cap_mplane.
+
+Best regards,
+Alexander
+
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  .../platform/rockchip/rkisp1/rkisp1-capture.c     | 15 +++++++++------
+>  1 file changed, 9 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
+> b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c index
+> d4540684ea9a..d1d1fdce03e3 100644
+> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
+> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
+> @@ -1131,10 +1131,12 @@ static void rkisp1_try_fmt(const struct
+> rkisp1_capture *cap, const struct rkisp1_capture_config *config =
+> cap->config;
+>  	const struct rkisp1_capture_fmt_cfg *fmt;
+>  	const struct v4l2_format_info *info;
+> -	const unsigned int max_widths[] = { RKISP1_RSZ_MP_SRC_MAX_WIDTH,
+> -					    
+RKISP1_RSZ_SP_SRC_MAX_WIDTH };
+> -	const unsigned int max_heights[] = { RKISP1_RSZ_MP_SRC_MAX_HEIGHT,
+> -					     
+RKISP1_RSZ_SP_SRC_MAX_HEIGHT};
+> +	static const unsigned int max_widths[] = {
+> +		RKISP1_RSZ_MP_SRC_MAX_WIDTH, RKISP1_RSZ_SP_SRC_MAX_WIDTH
+> +	};
+> +	static const unsigned int max_heights[] = {
+> +		RKISP1_RSZ_MP_SRC_MAX_HEIGHT, RKISP1_RSZ_SP_SRC_MAX_HEIGHT
+> +	};
+> 
+>  	fmt = rkisp1_find_fmt_cfg(cap, pixm->pixelformat);
+>  	if (!fmt) {
+> @@ -1336,8 +1338,9 @@ void rkisp1_capture_devs_unregister(struct
+> rkisp1_device *rkisp1)
+> 
+>  static int rkisp1_register_capture(struct rkisp1_capture *cap)
+>  {
+> -	const char * const dev_names[] = {RKISP1_MP_DEV_NAME,
+> -					  RKISP1_SP_DEV_NAME};
+> +	static const char * const dev_names[] = {
+> +		RKISP1_MP_DEV_NAME, RKISP1_SP_DEV_NAME
+> +	};
+>  	struct v4l2_device *v4l2_dev = &cap->rkisp1->v4l2_dev;
+>  	struct video_device *vdev = &cap->vnode.vdev;
+>  	struct rkisp1_vdev_node *node;
+
+
+
 
