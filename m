@@ -2,99 +2,171 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4831AC54EBD
-	for <linux-media@archiver.kernel.org>; Mon,  9 Jan 2023 21:27:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCB8AC678D5
+	for <linux-media@archiver.kernel.org>; Mon,  9 Jan 2023 21:40:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237458AbjAIV1n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Jan 2023 16:27:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38288 "EHLO
+        id S237990AbjAIVkL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Jan 2023 16:40:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjAIV1l (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Jan 2023 16:27:41 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5AFF55;
-        Mon,  9 Jan 2023 13:27:40 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net [192.222.136.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D21446602D68;
-        Mon,  9 Jan 2023 21:27:38 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673299659;
-        bh=o3DMSt1Ot2XXOL0bLV4Le+gFHG5Qw9UAoA+XB/anXbE=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Z2/2APEpGTaq+zXXShUb9nDM4nYcStKcnqYguBnfDgZbaFtXwo8oOBw4EWhFUgIc6
-         QiP5F7TYoUyWK6bvkqnAJYLnj70+NJuvmLfld4i/8t7IygKvVktK6U9JrCeLXPBjTs
-         n9UOELkStOaZpjHm5hIOhLMnBIpiMvoLTenYVNsRVuzpXV3Ahk330G+uJhuEXF4KI3
-         MweGdNwQaLtJfBNls6wnTyaGLZIXKMAUaPLjslHpQgnj5XTHj3hUD7ThzGdebviVx8
-         t1TrSZTeK9IwhU/dH/+SOD/nDehXUbAA4XvRmTmLstcfLVq8wHnWOH4pKUADLj35mg
-         sZHFpl7oL0K3g==
-Message-ID: <8b408632218fd0f06ec862a51822cf08e0f50a57.camel@collabora.com>
-Subject: Re: [PATCH] drivers/media/v4l2-core/v4l2-h264 : add detection of
- null pointers
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Dong Chuanjian <chuanjian@nfschina.com>, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl, sebastian.fricke@collabora.com,
-        ezequiel@vanguardiasur.com.ar
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 09 Jan 2023 16:27:29 -0500
-In-Reply-To: <20221227023625.7261-1-chuanjian@nfschina.com>
-References: <20221227023625.7261-1-chuanjian@nfschina.com>
+        with ESMTP id S238130AbjAIVjp (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Jan 2023 16:39:45 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DAD3BE83
+        for <linux-media@vger.kernel.org>; Mon,  9 Jan 2023 13:38:27 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id w9-20020a05690210c900b007b20e8d0c99so10397892ybu.0
+        for <linux-media@vger.kernel.org>; Mon, 09 Jan 2023 13:38:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jsT6wq4yb7S+NdjklyWb1ngjMGzkBXwNX+64A3lfzpA=;
+        b=fvDtcLaeN/uzP3qHT8MCEklfe9OhLf6lmImIfuCacJYjG57XiBued7S3DOodRE/TYJ
+         zCKNDg3ctqd3Dd67SPwPhW8ysEt0WGDBME6NGDgBcM5YrM326jXvkSXkPWXqmZwxbxsz
+         JlJKx2q3UL/4NVtdfwNCMCP7QlTJxXBQXsxWNIIGkTyzBjhTdHqnlRz7A6SrrXEGohYg
+         Y1TskQ4j5YZqdyazr4xhq4xZW9Gypy/dhRHNo7P2nwjIq6XxOhFfSm8keT19RigyoUi+
+         Lj952kU65FcH0FMfMGjpPdMsLkeIqjmWXAgeBMVlEt6SVmi5tV7uui22G7kOc9eQRFhz
+         T4Xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jsT6wq4yb7S+NdjklyWb1ngjMGzkBXwNX+64A3lfzpA=;
+        b=WPpb72hm5YoNypeKO1UwhL3wN//7MIXh5OJWcqm1dAY4S/I1nSDKVeMH/v06hhpdZ4
+         Xd0KlYmQIz32u7mJRlQ8+ME4Hkkm43VVDmSSxnvZ809vkReTceFPX6BeMfRDN2Sc7gjO
+         1eAnDYXlJZYxW6gG8ZXO51kkuDyCSyQ5dTKWIqAjxWFxUsSgby2FaGx5EB9tQtX93lNK
+         BypMXQqwox77ok10v6HsNYE1iaCyWiaSHGv7Lq2unOSlO5+D+no3uYK04PDCswHuFR6w
+         HphQHLEYHZi69kjK6mJFt3EuiD8o3PBE3HzJ9UkUCWXLPqIj9XaLYMYToYK0+MGjW1ec
+         78tg==
+X-Gm-Message-State: AFqh2kq9HkJwJ52A+3M1p8HlhZYV2A1Ami57oSmRQh68nGQxmNp50Yq4
+        tMHL1ewa+XdYlP/RrxRednYcOocpoYa2ac8=
+X-Google-Smtp-Source: AMrXdXtIpfaXFqcDGkNsmQctSMqXPQ/tLvykMkynrX+C5cGc1INOkvBaGX4j41udFUeKmd51zadys8k1Cp1SKbA=
+X-Received: from tj.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:53a])
+ (user=tjmercier job=sendgmr) by 2002:a0d:e241:0:b0:48f:a921:40f2 with SMTP id
+ l62-20020a0de241000000b0048fa92140f2mr5685523ywe.275.1673300307137; Mon, 09
+ Jan 2023 13:38:27 -0800 (PST)
+Date:   Mon,  9 Jan 2023 21:38:05 +0000
+In-Reply-To: <20230109213809.418135-1-tjmercier@google.com>
+Mime-Version: 1.0
+References: <20230109213809.418135-1-tjmercier@google.com>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Message-ID: <20230109213809.418135-3-tjmercier@google.com>
+Subject: [PATCH 2/4] dmabuf: Add cgroup charge transfer function
+From:   "T.J. Mercier" <tjmercier@google.com>
+To:     tjmercier@google.com, Sumit Semwal <sumit.semwal@linaro.org>,
+        "=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>
+Cc:     hannes@cmpxchg.org, daniel.vetter@ffwll.ch, android-mm@google.com,
+        jstultz@google.com, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
-MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Le mardi 27 d=C3=A9cembre 2022 =C3=A0 10:36 +0800, Dong Chuanjian a =C3=A9c=
-rit=C2=A0:
-> When the pointer variable is judged to be null, null is returned
-> directly.
->=20
-> Signed-off-by: Dong Chuanjian <chuanjian@nfschina.com>
+The dma_buf_transfer_charge function provides a way for processes to
+transfer charge of a buffer to a different cgroup. This is essential
+for the cases where a central allocator process does allocations for
+various subsystems, hands over the fd to the client who requested the
+memory, and drops all references to the allocated memory.
 
-Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Signed-off-by: T.J. Mercier <tjmercier@google.com>
+---
+ drivers/dma-buf/dma-buf.c  | 45 ++++++++++++++++++++++++++++++++++++++
+ include/linux/dma-buf.h    |  1 +
+ include/linux/memcontrol.h |  6 +++++
+ 3 files changed, 52 insertions(+)
 
-Please add the missing Fixes tag.
-
-Fixes: d3f756ad629b39 ("media: v4l2: Trace calculated p/b0/b1 initial refli=
-st")
-
-If someone have time, the pr_debug should be ported to v4l2_debug according=
- to
-some other reviews.
-
-> ---
-> v2: Directly return when pointer allocation fails.
-> v3: problems in synchronous repair format_ref_list_p
->=20
-> diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-cor=
-e/v4l2-h264.c
-> index 72bd64f65198..f6684c1d7319 100644
-> --- a/drivers/media/v4l2-core/v4l2-h264.c
-> +++ b/drivers/media/v4l2-core/v4l2-h264.c
-> @@ -305,6 +305,8 @@ static const char *format_ref_list_p(const struct v4l=
-2_h264_reflist_builder *bui
->  	int n =3D 0, i;
-> =20
->  	*out_str =3D kmalloc(tmp_str_size, GFP_KERNEL);
-> +	if (*out_str =3D=3D NULL)
-> +		return NULL;
-> =20
->  	n +=3D snprintf(*out_str + n, tmp_str_size - n, "|");
-> =20
-> @@ -343,6 +345,8 @@ static const char *format_ref_list_b(const struct v4l=
-2_h264_reflist_builder *bui
->  	int n =3D 0, i;
-> =20
->  	*out_str =3D kmalloc(tmp_str_size, GFP_KERNEL);
-> +	if (*out_str =3D=3D NULL)
-> +		return NULL;
-> =20
->  	n +=3D snprintf(*out_str + n, tmp_str_size - n, "|");
-> =20
+diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+index ac45dd101c4d..fd6c5002032b 100644
+--- a/drivers/dma-buf/dma-buf.c
++++ b/drivers/dma-buf/dma-buf.c
+@@ -11,6 +11,7 @@
+  * refining of this idea.
+  */
+ 
++#include <linux/atomic.h>
+ #include <linux/fs.h>
+ #include <linux/slab.h>
+ #include <linux/dma-buf.h>
+@@ -1618,6 +1619,50 @@ void dma_buf_vunmap_unlocked(struct dma_buf *dmabuf, struct iosys_map *map)
+ }
+ EXPORT_SYMBOL_NS_GPL(dma_buf_vunmap_unlocked, DMA_BUF);
+ 
++/**
++ * dma_buf_transfer_charge - Change the cgroup to which the provided dma_buf is charged.
++ * @dmabuf:	[in]	buffer whose charge will be migrated to a different cgroup
++ * @target:	[in]	the task_struct of the destination process for the cgroup charge
++ *
++ * Only tasks that belong to the same cgroup the buffer is currently charged to
++ * may call this function, otherwise it will return -EPERM.
++ *
++ * Returns 0 on success, or a negative errno code otherwise.
++ */
++int dma_buf_transfer_charge(struct dma_buf *dmabuf, struct task_struct *target)
++{
++	struct mem_cgroup *current_cg, *target_cg;
++	int ret = 0;
++
++	if (!IS_ENABLED(CONFIG_MEMCG))
++		return 0;
++
++	if (WARN_ON(!dmabuf) || WARN_ON(!target))
++		return -EINVAL;
++
++	current_cg = mem_cgroup_from_task(current);
++	target_cg = get_mem_cgroup_from_mm(target->mm);
++
++	if (current_cg == target_cg)
++		goto skip_transfer;
++
++	if (cmpxchg(&dmabuf->memcg, current_cg, target_cg) != current_cg) {
++		/* Only the current owner can transfer the charge */
++		ret = -EPERM;
++		goto skip_transfer;
++	}
++
++	mod_memcg_state(current_cg, MEMCG_DMABUF, -dmabuf->size);
++	mod_memcg_state(target_cg, MEMCG_DMABUF, dmabuf->size);
++
++	mem_cgroup_put(current_cg); /* unref from buffer - buffer keeps new ref to target_cg */
++	return 0;
++
++skip_transfer:
++	mem_cgroup_put(target_cg);
++	return ret;
++}
++
+ #ifdef CONFIG_DEBUG_FS
+ static int dma_buf_debug_show(struct seq_file *s, void *unused)
+ {
+diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+index 1f0ffb8e4bf5..6aa128d76aa7 100644
+--- a/include/linux/dma-buf.h
++++ b/include/linux/dma-buf.h
+@@ -634,4 +634,5 @@ int dma_buf_vmap(struct dma_buf *dmabuf, struct iosys_map *map);
+ void dma_buf_vunmap(struct dma_buf *dmabuf, struct iosys_map *map);
+ int dma_buf_vmap_unlocked(struct dma_buf *dmabuf, struct iosys_map *map);
+ void dma_buf_vunmap_unlocked(struct dma_buf *dmabuf, struct iosys_map *map);
++int dma_buf_transfer_charge(struct dma_buf *dmabuf, struct task_struct *target);
+ #endif /* __DMA_BUF_H__ */
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index 1c1da2da20a6..e5aec27044c7 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -1298,6 +1298,12 @@ struct mem_cgroup *mem_cgroup_from_css(struct cgroup_subsys_state *css)
+ 	return NULL;
+ }
+ 
++static inline
++struct mem_cgroup *mem_cgroup_from_task(struct task_struct *p)
++{
++	return NULL;
++}
++
+ static inline void obj_cgroup_put(struct obj_cgroup *objcg)
+ {
+ }
+-- 
+2.39.0.314.g84b9a713c41-goog
 
