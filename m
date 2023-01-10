@@ -2,143 +2,173 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02B2EC63797
-	for <linux-media@archiver.kernel.org>; Tue, 10 Jan 2023 00:18:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86194C67871
+	for <linux-media@archiver.kernel.org>; Tue, 10 Jan 2023 01:55:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237290AbjAJAS2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Jan 2023 19:18:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55986 "EHLO
+        id S230076AbjAJBzo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Jan 2023 20:55:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235471AbjAJASZ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Jan 2023 19:18:25 -0500
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF44739F8D
-        for <linux-media@vger.kernel.org>; Mon,  9 Jan 2023 16:18:24 -0800 (PST)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-4c7d35b37e2so78557807b3.2
-        for <linux-media@vger.kernel.org>; Mon, 09 Jan 2023 16:18:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sgQCt0va7Fj5/9fGcldqaAxXWYK8cBxGZmP9xyPfdn4=;
-        b=CjxZ1mdpIhqu8VGPVCMoqsbsDlIhqCjEmsPqq5qkb1qszkge1Jm7eoOuPAcP/ZV3bk
-         wPP+sf8id+ynxeTBPKOWQaibXFQF9VkirxIevCIzpGAQ21ueiyMyljdoDpqBwv6iADhp
-         JWDpspg8gxuUz/g8o8f3Q/TpOZXD4wUkStfMnP3bNMTdaoT8E8PrN4XpF0W1y5T9lIyj
-         m9H9otSUCpmNvNlNujrmOWTRlgks+Pwp+EXc1GX8tr1KUVIqmZXacuPH98ZfnNVZNFn8
-         /a3FCftCVuu8stwkCKaAOtd2Rf8qgv7JUkOT3SOOPfRdmX4H3QpcqFd3fI60DVZdrWVr
-         exyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sgQCt0va7Fj5/9fGcldqaAxXWYK8cBxGZmP9xyPfdn4=;
-        b=uL2kLQMiQ04SwiGjjmVuGsL9lWnLIV6ws0EdCgrKZzN3bYqUMZf361DlIcKXEGzidZ
-         wtEbUA/CoBRK7g2Voi76NV/3+NyJOAbc/71ANfYTPfiHKCbhhNrXebKZAeXyrp5YM7eJ
-         sWPV0m+YBUczc7fXpnREVFFhweq7VrXL7aNeGbHlqBOcvgewhRl0ZRJhMR3cmQV/J0TL
-         DKVupa/bRTXsvTjnxrNjiv7zyBgnDeoXxTyFbEj2kHAQ2QfpZ5zOkf234Y+vKi13gcBl
-         aKu8p4Qm0uafepCCvDZta5UJUVmvYU6/oWTVzQ5VB2becthOMpgUXj8Rrn1ohAg5okQO
-         4e6w==
-X-Gm-Message-State: AFqh2krkUrAGfKDrEyCIIxi3jBg4am4VhTCbESCf0aOOfbjeBrVS8Z33
-        SGsMBOEw7SgacIr8iHvDKBni68eDkj37xyVRng6JsQ==
-X-Google-Smtp-Source: AMrXdXvykUOk6Aq29zKPFweeZ5QLOqVr0VtGabuLWKsdUabDXPvAWtUyFW1w97fkSV+2AQTk/rtQ4CJ6GNWf2U6U44A=
-X-Received: by 2002:a81:7386:0:b0:391:c415:f872 with SMTP id
- o128-20020a817386000000b00391c415f872mr1094430ywc.318.1673309903890; Mon, 09
- Jan 2023 16:18:23 -0800 (PST)
-MIME-Version: 1.0
-References: <20230109213809.418135-1-tjmercier@google.com>
-In-Reply-To: <20230109213809.418135-1-tjmercier@google.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Mon, 9 Jan 2023 16:18:12 -0800
-Message-ID: <CALvZod4ru7F38tAO-gM9ZFKaEhS0w3KqFbPwhwcTvgJs4xMUow@mail.gmail.com>
-Subject: Re: [PATCH 0/4] Track exported dma-buffers with memcg
-To:     "T.J. Mercier" <tjmercier@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Carlos Llamas <cmllamas@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>, daniel.vetter@ffwll.ch,
-        android-mm@google.com, jstultz@google.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S229707AbjAJBzn (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Jan 2023 20:55:43 -0500
+X-Greylist: delayed 73 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 09 Jan 2023 17:55:38 PST
+Received: from mo-csw-fb.securemx.jp (mo-csw-fb1515.securemx.jp [210.130.202.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EACF21BA;
+        Mon,  9 Jan 2023 17:55:38 -0800 (PST)
+Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1515) id 30A1laeu018291; Tue, 10 Jan 2023 10:47:36 +0900
+Received: by mo-csw.securemx.jp (mx-mo-csw1515) id 30A1l2Sr031107; Tue, 10 Jan 2023 10:47:02 +0900
+X-Iguazu-Qid: 34tMMX4C9tR1mgr8Pn
+X-Iguazu-QSIG: v=2; s=0; t=1673315221; q=34tMMX4C9tR1mgr8Pn; m=CreVXJU1T1DlvwlDircNacW2NIOEHXti7FvoGNGcbKs=
+Received: from imx12-a.toshiba.co.jp ([38.106.60.135])
+        by relay.securemx.jp (mx-mr1511) id 30A1l0sP001836
+        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 10 Jan 2023 10:47:00 +0900
+X-SA-MID: 48793543
+From:   Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        yuji2.ishikawa@toshiba.co.jp
+Subject: [PATCH v4 1/6] dt-bindings: media: platform: visconti: Add Toshiba Visconti Video Input Interface bindings
+Date:   Tue, 10 Jan 2023 10:41:38 +0900
+X-TSB-HOP2: ON
+Message-Id: <20230110014143.18684-2-yuji2.ishikawa@toshiba.co.jp>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230110014143.18684-1-yuji2.ishikawa@toshiba.co.jp>
+References: <20230110014143.18684-1-yuji2.ishikawa@toshiba.co.jp>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi T.J.,
+Adds the Device Tree binding documentation that allows to describe
+the Video Input Interface found in Toshiba Visconti SoCs.
 
-On Mon, Jan 9, 2023 at 1:38 PM T.J. Mercier <tjmercier@google.com> wrote:
->
-> Based on discussions at LPC, this series adds a memory.stat counter for
-> exported dmabufs. This counter allows us to continue tracking
-> system-wide total exported buffer sizes which there is no longer any
-> way to get without DMABUF_SYSFS_STATS, and adds a new capability to
-> track per-cgroup exported buffer sizes. The total (root counter) is
-> helpful for accounting in-kernel dmabuf use (by comparing with the sum
-> of child nodes or with the sum of sizes of mapped buffers or FD
-> references in procfs) in addition to helping identify driver memory
-> leaks when in-kernel use continually increases over time. With
-> per-application cgroups, the per-cgroup counter allows us to quickly
-> see how much dma-buf memory an application has caused to be allocated.
-> This avoids the need to read through all of procfs which can be a
-> lengthy process, and causes the charge to "stick" to the allocating
-> process/cgroup as long as the buffer is alive, regardless of how the
-> buffer is shared (unless the charge is transferred).
->
-> The first patch adds the counter to memcg. The next two patches allow
-> the charge for a buffer to be transferred across cgroups which is
-> necessary because of the way most dmabufs are allocated from a central
-> process on Android. The fourth patch adds a SELinux hook to binder in
-> order to control who is allowed to transfer buffer charges.
->
-> [1] https://lore.kernel.org/all/20220617085702.4298-1-christian.koenig@amd.com/
->
+Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+Reviewed-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+---
+Changelog v2:
+- no change
 
-I am a bit confused by the term "charge" used in this patch series.
-From the patches, it seems like only a memcg stat is added and nothing
-is charged to the memcg.
+Changelog v3:
+- no change
 
-This leads me to the question: Why add this stat in memcg if the
-underlying memory is not charged to the memcg and if we don't really
-want to limit the usage?
+Changelog v4:
+- fix style problems at the v3 patch
+- remove "index" member
+- update example
+---
+ .../bindings/media/toshiba,visconti-viif.yaml | 98 +++++++++++++++++++
+ 1 file changed, 98 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
 
-I see two ways forward:
+diff --git a/Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml b/Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
+new file mode 100644
+index 00000000000..71442724d1a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
+@@ -0,0 +1,98 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/toshiba,visconti-viif.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Toshiba Visconti5 SoC Video Input Interface Device Tree Bindings
++
++maintainers:
++  - Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
++
++description:
++  Toshiba Visconti5 SoC Video Input Interface (VIIF)
++  receives MIPI CSI2 video stream,
++  processes the stream with embedded image signal processor (L1ISP, L2ISP),
++  then stores pictures to main memory.
++
++properties:
++  compatible:
++    const: toshiba,visconti-viif
++
++  reg:
++    items:
++      - description: registers for capture control
++      - description: registers for CSI2 receiver control
++
++  interrupts:
++    items:
++      - description: Sync Interrupt
++      - description: Status (Error) Interrupt
++      - description: CSI2 Receiver Interrupt
++      - description: L1ISP Interrupt
++
++  port:
++    $ref: /schemas/graph.yaml#/$defs/port-base
++    unevaluatedProperties: false
++    description: Input port, single endpoint describing the CSI-2 transmitter.
++
++    properties:
++      endpoint:
++        $ref: video-interfaces.yaml#
++        unevaluatedProperties: false
++
++        properties:
++          data-lanes:
++            description: VIIF supports 2 or 4 data lines
++            $ref: /schemas/types.yaml#/definitions/uint32-array
++            minItems: 1
++            maxItems: 4
++            items:
++              minimum: 1
++              maximum: 4
++
++          clock-lanes:
++            description: VIIF supports 1 clock line
++            const: 0
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        viif@1c000000 {
++            compatible = "toshiba,visconti-viif";
++            reg = <0 0x1c000000 0 0x6000>,
++                  <0 0x1c008000 0 0x400>;
++            interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
++
++            port {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                csi_in0: endpoint {
++                    remote-endpoint = <&imx219_out0>;
++                    bus-type = <4>;
++                    data-lanes = <1 2>;
++                    clock-lanes = <0>;
++                    clock-noncontinuous;
++                    link-frequencies = /bits/ 64 <456000000>;
++                };
++            };
++        };
++    };
+-- 
+2.25.1
 
-1. Instead of memcg, use bpf-rstat [1] infra to implement the
-per-cgroup stat for dmabuf. (You may need an additional hook for the
-stat transfer).
 
-2. Charge the actual memory to the memcg. Since the size of dmabuf is
-immutable across its lifetime, you will not need to do accounting at
-page level and instead use something similar to the network memory
-accounting interface/mechanism (or even more simple). However you
-would need to handle the reclaim, OOM and charge context and failure
-cases. However if you are not looking to limit the usage of dmabuf
-then this option is an overkill.
-
-Please let me know if I misunderstood something.
-
-[1] https://lore.kernel.org/all/20220824233117.1312810-1-haoluo@google.com/
-
-thanks,
-Shakeel
