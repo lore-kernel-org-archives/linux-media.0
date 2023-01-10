@@ -2,138 +2,89 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C37E5C54EBD
-	for <linux-media@archiver.kernel.org>; Tue, 10 Jan 2023 02:36:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80A11C46467
+	for <linux-media@archiver.kernel.org>; Tue, 10 Jan 2023 04:15:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbjAJCgj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Jan 2023 21:36:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60676 "EHLO
+        id S229600AbjAJEPo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Jan 2023 23:15:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjAJCgh (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Jan 2023 21:36:37 -0500
-Received: from mo-csw-fb.securemx.jp (mo-csw-fb1514.securemx.jp [210.130.202.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669BFB7F0;
-        Mon,  9 Jan 2023 18:36:36 -0800 (PST)
-Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1514) id 30A1laFX006185; Tue, 10 Jan 2023 10:47:36 +0900
-Received: by mo-csw.securemx.jp (mx-mo-csw1516) id 30A1l23S020662; Tue, 10 Jan 2023 10:47:02 +0900
-X-Iguazu-Qid: 34tMQ0sdliXH7P6xOJ
-X-Iguazu-QSIG: v=2; s=0; t=1673315221; q=34tMQ0sdliXH7P6xOJ; m=Ip4TVbWssxt9xhY/2q7Euf5QdK6wkLNwu6yXzAHO5bc=
-Received: from imx12-a.toshiba.co.jp ([38.106.60.135])
-        by relay.securemx.jp (mx-mr1512) id 30A1l0EA000945
-        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 10 Jan 2023 10:47:00 +0900
-X-SA-MID: 48793541
-From:   Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        yuji2.ishikawa@toshiba.co.jp
-Subject: [PATCH v4 0/6] Add Toshiba Visconti Video Input Interface driver
-Date:   Tue, 10 Jan 2023 10:41:37 +0900
-X-TSB-HOP2: ON
-Message-Id: <20230110014143.18684-1-yuji2.ishikawa@toshiba.co.jp>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S229560AbjAJEPm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Jan 2023 23:15:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217C5DF36
+        for <linux-media@vger.kernel.org>; Mon,  9 Jan 2023 20:15:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5279B810F1
+        for <linux-media@vger.kernel.org>; Tue, 10 Jan 2023 04:15:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25376C433F0
+        for <linux-media@vger.kernel.org>; Tue, 10 Jan 2023 04:15:36 +0000 (UTC)
+Date:   Tue, 10 Jan 2023 05:15:35 +0100
+Message-ID: <a1476f3551b61f63b6804a3910af40c8.hverkuil@xs4all.nl>
+From:   "Hans Verkuil" <hverkuil-cisco@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series is the Video Input Interface driver
-for Toshiba's ARM SoC, Visconti[0].
-This provides DT binding documentation,
-device driver, documentation and MAINTAINER files.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-A visconti VIIF driver instance exposes
-1 media control device file and 3 video device files
-for a VIIF hardware. 
-Detailed HW/SW are described in documentation directory.
-The VIIF hardware has CSI2 receiver,
-image signal processor and DMAC inside.
-The subdevice for image signal processor provides
-vendor specific V4L2 controls.
+Results of the daily build of media_tree:
 
-The device driver depends on two other drivers under development;
-clock framework driver and IOMMU driver.
-Corresponding features will be added later.
+date:			Tue Jan 10 03:00:08 CET 2023
+media-tree git hash:	6599e683db1bf22fee74302c47e31b9a42a1c3d2
+media_build git hash:	0fe857b86addf382f6fd383948bd7736a3201403
+v4l-utils git hash:	a114e2eee4ea9cb2a4f940ffe0528e74a75c1d1e
+edid-decode git hash:	e052f5f9fdf74ca11aa1a8edfa62eff8d0aa3d0d
+gcc version:		i686-linux-gcc (GCC) 12.2.0
+sparse repo:            git://git.kernel.org/pub/scm/devel/sparse/sparse.git
+sparse version:		v0.6.4-39-gce1a6720-dirty
+smatch repo:            git://repo.or.cz/smatch.git
+smatch version:		v0.5.0-8217-g40351132-dirty
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: dc83e185adb0d7fab1e388ade12feccc5c9d39f7
+host hardware:		x86_64
+host os:		6.0.0-5-amd64
 
-Best regards,
-Yuji
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-powerpc64: OK
+linux-git-mips: OK
+linux-git-arm-multi: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+apps: OK
+spec-git: OK
+virtme: ERRORS: Final Summary: 3080, Succeeded: 3036, Failed: 44, Warnings: 3
+virtme-32: ERRORS: Final Summary: 3193, Succeeded: 3145, Failed: 48, Warnings: 3
+sparse: WARNINGS
+smatch: WARNINGS
+kerneldoc: OK
 
-Changelog v2:
-- Resend v1 because a patch exceeds size limit.
+Detailed results are available here:
 
-Changelog v3:
-- Add documentation to describe SW and HW
-- Adapted to media control framework
-- Introduced ISP subdevice, capture device
-- Remove private IOCTLs and add vendor specific V4L2 controls
-- Change function name avoiding camelcase and uppercase letters
+https://hverkuil.home.xs4all.nl/logs/Tuesday.log
 
-Changelog v4:
-- Split patches because a patch exceeds size limit
-- fix dt-bindings document
-- stop specifying ID numbers for driver instance explicitly at device tree
-- use pm_runtime to trigger initialization of HW
-  along with open/close of device files.
-- add a entry for a header file at MAINTAINERS file
+Detailed regression test results are available here:
 
+https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media.log
+https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media-32.log
+https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media-dmesg.log
 
-[0]: https://toshiba.semicon-storage.com/ap-en/semiconductor/product/image-recognition-processors-visconti.html
+Full logs are available here:
 
-Yuji Ishikawa (6):
-  dt-bindings: media: platform: visconti: Add Toshiba Visconti Video
-    Input Interface bindings
-  media: platform: visconti: Add Toshiba Visconti Video Input Interface
-    driver
-  media: platform: visconti: Add Toshiba Visconti Video Input Interface
-    driver user interace
-  media: platform: visconti: Add Toshiba Visconti Video Input Interface
-    driver v4l2 controls handler
-  documentation: media: add documentation for Toshiba Visconti Video
-    Input Interface driver
-  MAINTAINERS: Add entries for Toshiba Visconti Video Input Interface
+https://hverkuil.home.xs4all.nl/logs/Tuesday.tar.bz2
 
- .../bindings/media/toshiba,visconti-viif.yaml |   98 +
- .../driver-api/media/drivers/index.rst        |    1 +
- .../media/drivers/visconti-viif.rst           |  455 +++
- MAINTAINERS                                   |    4 +
- drivers/media/platform/Kconfig                |    1 +
- drivers/media/platform/Makefile               |    1 +
- drivers/media/platform/visconti/Kconfig       |    9 +
- drivers/media/platform/visconti/Makefile      |    9 +
- drivers/media/platform/visconti/hwd_viif.c    | 1690 ++++++++++
- drivers/media/platform/visconti/hwd_viif.h    |  710 +++++
- .../media/platform/visconti/hwd_viif_csi2rx.c |  610 ++++
- .../platform/visconti/hwd_viif_internal.h     |  340 ++
- .../media/platform/visconti/hwd_viif_l1isp.c  | 2674 ++++++++++++++++
- .../media/platform/visconti/hwd_viif_reg.h    | 2802 +++++++++++++++++
- drivers/media/platform/visconti/viif.c        |  544 ++++
- drivers/media/platform/visconti/viif.h        |  203 ++
- .../media/platform/visconti/viif_capture.c    | 1201 +++++++
- .../media/platform/visconti/viif_controls.c   | 1153 +++++++
- drivers/media/platform/visconti/viif_isp.c    |  848 +++++
- include/uapi/linux/visconti_viif.h            | 1724 ++++++++++
- 20 files changed, 15077 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
- create mode 100644 Documentation/driver-api/media/drivers/visconti-viif.rst
- create mode 100644 drivers/media/platform/visconti/Kconfig
- create mode 100644 drivers/media/platform/visconti/Makefile
- create mode 100644 drivers/media/platform/visconti/hwd_viif.c
- create mode 100644 drivers/media/platform/visconti/hwd_viif.h
- create mode 100644 drivers/media/platform/visconti/hwd_viif_csi2rx.c
- create mode 100644 drivers/media/platform/visconti/hwd_viif_internal.h
- create mode 100644 drivers/media/platform/visconti/hwd_viif_l1isp.c
- create mode 100644 drivers/media/platform/visconti/hwd_viif_reg.h
- create mode 100644 drivers/media/platform/visconti/viif.c
- create mode 100644 drivers/media/platform/visconti/viif.h
- create mode 100644 drivers/media/platform/visconti/viif_capture.c
- create mode 100644 drivers/media/platform/visconti/viif_controls.c
- create mode 100644 drivers/media/platform/visconti/viif_isp.c
- create mode 100644 include/uapi/linux/visconti_viif.h
+The Media Infrastructure API from this daily build is here:
 
--- 
-2.25.1
-
-
+https://hverkuil.home.xs4all.nl/spec/index.html
