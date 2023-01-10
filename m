@@ -2,112 +2,146 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DFC3C54EBC
-	for <linux-media@archiver.kernel.org>; Tue, 10 Jan 2023 19:09:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AD62C46467
+	for <linux-media@archiver.kernel.org>; Tue, 10 Jan 2023 19:31:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239676AbjAJTJW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Jan 2023 14:09:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47878 "EHLO
+        id S231439AbjAJTbY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Jan 2023 14:31:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239879AbjAJTId (ORCPT
+        with ESMTP id S229690AbjAJTbV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:08:33 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8157950E74
-        for <linux-media@vger.kernel.org>; Tue, 10 Jan 2023 11:08:16 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-4a263c4ddbaso167258077b3.0
-        for <linux-media@vger.kernel.org>; Tue, 10 Jan 2023 11:08:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eB6zDLr3jptFznjCY+cJ6LV+lGxSv6mlgWXUb4GRVLE=;
-        b=kNneCXnUbGtaezFZly8EELiFvrMI8uCxra4hUNp5F8h55KzRcraX6HTcL/eoX2slxU
-         5eIut2BW8V2KxE4ECFGrtM+afRxG/KTeduZVHs5S8WSaTnrTAKUpQ9LGjuGWxJrrW+Rb
-         HL3W/mk5/ZWXlu153IFY6bWd5ku/c5DQ1P/WEPBZYa8NWqLe/FC6eZ+nVcj+NfNmapAJ
-         hhVfZ0STKoz+rrAswTAQZmVDSFu+39MDK4KoXl6hbj290qVSa10/hwUiXT3+ysS6+4M+
-         Fn8gtLHQRlRNe7nlS5w5XbzHPW/6rq2M3KUaxPGuT+9WamrHs6La624Sedcyvl8v1GSa
-         pxXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eB6zDLr3jptFznjCY+cJ6LV+lGxSv6mlgWXUb4GRVLE=;
-        b=usQdB6gQMOsRVJziOD49z+r+1/5wyOuhyRawbPiPYYhLBPyRTMGFtbIr09eLSAiK25
-         wakX3jE8m4TjvXVP+yPZw7X27t0f6USz2E2/tvO6PSsggxPbmGalmbf1zTmCiTH91PQi
-         Tw1fDFncGQSb0/saqH3DhzLH3QlVW+Ysk7th7BjmKKQ7iVqPzlAp29X97XNdL1M5g6En
-         elY8YEUSdvjGY2C1bwS3sfLpywYsvqeBQnjWNDqnagPGK+UoTd7GopiUpAhJdgf1SN4U
-         go0tvJWcey6nmAIWWhvLPA1ifU6GYl2t8ZXdwHl3L4MpKbrUlUACvwIcMMbna9yPW9Bt
-         p9ng==
-X-Gm-Message-State: AFqh2koyrgwVhMtsW39h3dYBhLIXZE5waAHuUVBBhQ4EWVghwa7KViYP
-        gFdw/wOqmOkgCsk3hMYK9GnvaS9V6fyZldqGiOKEKg==
-X-Google-Smtp-Source: AMrXdXuWt8GL2cvwM/11siCYrRBKZLbeyNUoNJAwEvUjJQicN0t0jFrxPGHJ56q+FKvR1iOeW+XS0IBv7xTbyCMXxzs=
-X-Received: by 2002:a05:690c:b88:b0:3e3:866c:a51b with SMTP id
- ck8-20020a05690c0b8800b003e3866ca51bmr218703ywb.439.1673377695560; Tue, 10
- Jan 2023 11:08:15 -0800 (PST)
+        Tue, 10 Jan 2023 14:31:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47C01EEFC;
+        Tue, 10 Jan 2023 11:31:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 71E65618CF;
+        Tue, 10 Jan 2023 19:31:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0CF5C433EF;
+        Tue, 10 Jan 2023 19:31:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673379079;
+        bh=YHM7OnD1xkzNBw2hgChz55Fq/+ac89HX2y+1zDcTRUc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DXZtYRszJm5fXAKV5wizqXg3VnyyOKnHtfK+0m6E5ajzHb8PHnRmGMGofYljLAHih
+         +mzLtx8PkIq7cDr1RAlmLnsrc5iwT841E1pJ4OlgUSPCaVz1iLLkLaVpsmQPHKk63q
+         /OuIdOTAT+bhyHh3nZw9+gAPMYdBzh3QZ1aPtD1Dh6dZXHXs+E7wBIgRvYRNHpQbdk
+         E5W11a6wugzI9NN+kZLIU7tk2BflJ/gnlGn6TE2MPPdXEroaFIST3JIGTBSPQQ4UKe
+         v9GV3lk6jgvRVPqgKIBTQrfA/hZBl9b7sXItq3BwNLjdMChJ0sTSW51WPJJTlMVZv0
+         8G6AbCSNhwRGQ==
+Message-ID: <b0245b64-a3eb-a242-8824-9effe0c63f0e@kernel.org>
+Date:   Tue, 10 Jan 2023 20:31:13 +0100
 MIME-Version: 1.0
-References: <20230109213809.418135-1-tjmercier@google.com> <20230109213809.418135-2-tjmercier@google.com>
- <Y70oqxejnUqkJVPx@dhcp22.suse.cz>
-In-Reply-To: <Y70oqxejnUqkJVPx@dhcp22.suse.cz>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Tue, 10 Jan 2023 11:08:04 -0800
-Message-ID: <CABdmKX3hBX1O8fJ2Zz0ajL=f+tROqWe-Kzr7oPjs46qBYBXV1g@mail.gmail.com>
-Subject: Re: [PATCH 1/4] memcg: Track exported dma-buffers
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        daniel.vetter@ffwll.ch, android-mm@google.com, jstultz@google.com,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 1/6] dt-bindings: media: platform: visconti: Add
+ Toshiba Visconti Video Input Interface bindings
+Content-Language: en-US
+To:     Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230110014143.18684-1-yuji2.ishikawa@toshiba.co.jp>
+ <20230110014143.18684-2-yuji2.ishikawa@toshiba.co.jp>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20230110014143.18684-2-yuji2.ishikawa@toshiba.co.jp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 12:58 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Mon 09-01-23 21:38:04, T.J. Mercier wrote:
-> > When a buffer is exported to userspace, use memcg to attribute the
-> > buffer to the allocating cgroup until all buffer references are
-> > released.
-> >
-> > Unlike the dmabuf sysfs stats implementation, this memcg accounting
-> > avoids contention over the kernfs_rwsem incurred when creating or
-> > removing nodes.
->
-> I am not familiar with dmabuf infrastructure so please bear with me.
-> AFAIU this patch adds a dmabuf specific counter to find out the amount
-> of dmabuf memory used. But I do not see any actual charging implemented
-> for that memory.
->
-> I have looked at two random users of dma_buf_export cma_heap_allocate
-> and it allocates pages to back the dmabuf (AFAIU) by cma_alloc
-> which doesn't account to memcg, system_heap_allocate uses
-> alloc_largest_available which relies on order_flags which doesn't seem
-> to ever use __GFP_ACCOUNT.
->
-> This would mean that the counter doesn't represent any actual memory
-> reflected in the overall memory consumption of a memcg. I believe this
-> is rather unexpected and confusing behavior. While some counters
-> overlap and their sum would exceed the charged memory we do not have any
-> that doesn't correspond to any memory (at least not for non-root memcgs).
->
-> --
-> Michal Hocko
-> SUSE Labs
+On 10/01/2023 02:41, Yuji Ishikawa wrote:
+> Adds the Device Tree binding documentation that allows to describe
+> the Video Input Interface found in Toshiba Visconti SoCs.
+> 
+> Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+> Reviewed-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
 
-Thank you, that behavior is not intentional. I'm not looking at the
-overall memcg charge yet otherwise I would have noticed this. I think
-I understand what's needed for the charging part, but Shakeel
-mentioned some additional work for "reclaim, OOM and charge context
-and failure cases" on the cover letter which I need to look into.
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
+
+You missed few of them, so clearly this was not sent correctly.
+
+
+Subject: drop second/last, redundant "bindings". The "dt-bindings"
+prefix is already stating that these are bindings.
+
+> ---
+> Changelog v2:
+> - no change
+> 
+> Changelog v3:
+> - no change
+> 
+> Changelog v4:
+> - fix style problems at the v3 patch
+> - remove "index" member
+> - update example
+> ---
+>  .../bindings/media/toshiba,visconti-viif.yaml | 98 +++++++++++++++++++
+>  1 file changed, 98 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml b/Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
+> new file mode 100644
+> index 00000000000..71442724d1a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
+> @@ -0,0 +1,98 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/toshiba,visconti-viif.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Toshiba Visconti5 SoC Video Input Interface Device Tree Bindings
+
+Drop "Device Tree Bindings"
+
+> +
+> +maintainers:
+> +  - Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+> +
+> +description:
+> +  Toshiba Visconti5 SoC Video Input Interface (VIIF)
+> +  receives MIPI CSI2 video stream,
+> +  processes the stream with embedded image signal processor (L1ISP, L2ISP),
+> +  then stores pictures to main memory.
+
+Fix wrapping.
+
+> +
+> +properties:
+> +  compatible:
+> +    const: toshiba,visconti-viif
+
+Compatible must be specific. You called your SoC visconti5, didn't you?
+
+> +
+> +  reg:
+> +    items:
+> +      - description: registers for capture control
+> +      - description: registers for CSI2 receiver control
+> +
+> +  interrupts:
+> +    items:
+> +      - description: Sync Interrupt
+> +      - description: Status (Error) Interrupt
+> +      - description: CSI2 Receiver Interrupt
+> +      - description: L1ISP Interrupt
+> +
+
+
+
+Best regards,
+Krzysztof
+
