@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A43DDC54EBE
-	for <linux-media@archiver.kernel.org>; Wed, 11 Jan 2023 10:54:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 496C4C678D6
+	for <linux-media@archiver.kernel.org>; Wed, 11 Jan 2023 10:54:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238193AbjAKKxr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 11 Jan 2023 05:53:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
+        id S238851AbjAKKyC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 11 Jan 2023 05:54:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236083AbjAKKxQ (ORCPT
+        with ESMTP id S238514AbjAKKxW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 11 Jan 2023 05:53:16 -0500
+        Wed, 11 Jan 2023 05:53:22 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91F5101D
-        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 02:53:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93F925E9
+        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 02:53:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1AE92B81BB4
-        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 10:53:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D60B0C433F1;
-        Wed, 11 Jan 2023 10:53:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9FAD9B81BAF
+        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 10:53:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 877B5C433EF;
+        Wed, 11 Jan 2023 10:53:12 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 07/13] tm6000: remove deprecated driver
-Date:   Wed, 11 Jan 2023 11:52:52 +0100
-Message-Id: <20230111105258.547471-8-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 10/13] saa7146: remove deprecated drivers
+Date:   Wed, 11 Jan 2023 11:52:55 +0100
+Message-Id: <20230111105258.547471-11-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230111105258.547471-1-hverkuil-cisco@xs4all.nl>
 References: <20230111105258.547471-1-hverkuil-cisco@xs4all.nl>
@@ -38,7721 +38,7324 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The tm6000 driver does not use the vb2 framework for streaming
-video, instead it uses the old vb1 framework and nobody stepped in to
-convert this driver to vb2.
+The saa7146-based hexium_gemini/orion and mxb drivers do not use the vb2
+framework for streaming video, instead they use the old vb1 framework and
+nobody stepped in to convert these drivers to vb2.
 
-The hardware is very old, so the decision was made to remove it
+The hardware is very old, so the decision was made to remove them
 altogether since we want to get rid of the old vb1 framework.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- .../admin-guide/media/tm6000-cardlist.rst     |   83 -
- .../admin-guide/media/usb-cardlist.rst        |    4 -
- MAINTAINERS                                   |    9 -
+ .../admin-guide/media/pci-cardlist.rst        |    3 -
+ MAINTAINERS                                   |    7 -
  drivers/staging/media/Kconfig                 |    1 -
  drivers/staging/media/Makefile                |    1 -
- .../staging/media/deprecated/tm6000/Kconfig   |   37 -
- .../staging/media/deprecated/tm6000/Makefile  |   14 -
- drivers/staging/media/deprecated/tm6000/TODO  |    7 -
- .../media/deprecated/tm6000/tm6000-alsa.c     |  440 -----
- .../media/deprecated/tm6000/tm6000-cards.c    | 1397 --------------
- .../media/deprecated/tm6000/tm6000-core.c     |  916 ---------
- .../media/deprecated/tm6000/tm6000-dvb.c      |  454 -----
- .../media/deprecated/tm6000/tm6000-i2c.c      |  317 ---
- .../media/deprecated/tm6000/tm6000-input.c    |  503 -----
- .../media/deprecated/tm6000/tm6000-regs.h     |  588 ------
- .../media/deprecated/tm6000/tm6000-stds.c     |  623 ------
- .../media/deprecated/tm6000/tm6000-usb-isoc.h |   38 -
- .../media/deprecated/tm6000/tm6000-video.c    | 1703 -----------------
- .../staging/media/deprecated/tm6000/tm6000.h  |  396 ----
- 19 files changed, 7531 deletions(-)
- delete mode 100644 Documentation/admin-guide/media/tm6000-cardlist.rst
- delete mode 100644 drivers/staging/media/deprecated/tm6000/Kconfig
- delete mode 100644 drivers/staging/media/deprecated/tm6000/Makefile
- delete mode 100644 drivers/staging/media/deprecated/tm6000/TODO
- delete mode 100644 drivers/staging/media/deprecated/tm6000/tm6000-alsa.c
- delete mode 100644 drivers/staging/media/deprecated/tm6000/tm6000-cards.c
- delete mode 100644 drivers/staging/media/deprecated/tm6000/tm6000-core.c
- delete mode 100644 drivers/staging/media/deprecated/tm6000/tm6000-dvb.c
- delete mode 100644 drivers/staging/media/deprecated/tm6000/tm6000-i2c.c
- delete mode 100644 drivers/staging/media/deprecated/tm6000/tm6000-input.c
- delete mode 100644 drivers/staging/media/deprecated/tm6000/tm6000-regs.h
- delete mode 100644 drivers/staging/media/deprecated/tm6000/tm6000-stds.c
- delete mode 100644 drivers/staging/media/deprecated/tm6000/tm6000-usb-isoc.h
- delete mode 100644 drivers/staging/media/deprecated/tm6000/tm6000-video.c
- delete mode 100644 drivers/staging/media/deprecated/tm6000/tm6000.h
+ .../staging/media/deprecated/saa7146/Kconfig  |    3 -
+ .../staging/media/deprecated/saa7146/Makefile |    2 -
+ .../media/deprecated/saa7146/common/Kconfig   |   10 -
+ .../media/deprecated/saa7146/common/Makefile  |    6 -
+ .../media/deprecated/saa7146/common/saa7146.h |  472 ------
+ .../deprecated/saa7146/common/saa7146_core.c  |  578 --------
+ .../deprecated/saa7146/common/saa7146_fops.c  |  658 ---------
+ .../deprecated/saa7146/common/saa7146_hlp.c   | 1046 --------------
+ .../deprecated/saa7146/common/saa7146_i2c.c   |  421 ------
+ .../deprecated/saa7146/common/saa7146_vbi.c   |  498 -------
+ .../deprecated/saa7146/common/saa7146_video.c | 1286 -----------------
+ .../deprecated/saa7146/common/saa7146_vv.h    |  266 ----
+ .../media/deprecated/saa7146/saa7146/Kconfig  |   48 -
+ .../media/deprecated/saa7146/saa7146/Makefile |    6 -
+ .../media/deprecated/saa7146/saa7146/TODO     |    7 -
+ .../saa7146/saa7146/hexium_gemini.c           |  425 ------
+ .../deprecated/saa7146/saa7146/hexium_orion.c |  496 -------
+ .../media/deprecated/saa7146/saa7146/mxb.c    |  873 -----------
+ 22 files changed, 7113 deletions(-)
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/Kconfig
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/Makefile
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/common/Kconfig
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/common/Makefile
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/common/saa7146.h
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/common/saa7146_core.c
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/common/saa7146_fops.c
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/common/saa7146_hlp.c
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/common/saa7146_i2c.c
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/common/saa7146_vbi.c
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/common/saa7146_video.c
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/common/saa7146_vv.h
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/saa7146/Kconfig
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/saa7146/Makefile
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/saa7146/TODO
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/saa7146/hexium_gemini.c
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/saa7146/hexium_orion.c
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/saa7146/mxb.c
 
-diff --git a/Documentation/admin-guide/media/tm6000-cardlist.rst b/Documentation/admin-guide/media/tm6000-cardlist.rst
-deleted file mode 100644
-index 6d2769c0f4d8..000000000000
---- a/Documentation/admin-guide/media/tm6000-cardlist.rst
-+++ /dev/null
-@@ -1,83 +0,0 @@
--.. SPDX-License-Identifier: GPL-2.0
--
--TM6000 cards list
--=================
--
--.. tabularcolumns:: |p{1.4cm}|p{11.1cm}|p{4.2cm}|
--
--.. flat-table::
--   :header-rows: 1
--   :widths: 2 19 18
--   :stub-columns: 0
--
--   * - Card number
--     - Card name
--     - USB IDs
--
--   * - 0
--     - Unknown tm6000 video grabber
--     -
--
--   * - 1
--     - Generic tm5600 board
--     - 6000:0001
--
--   * - 2
--     - Generic tm6000 board
--     -
--
--   * - 3
--     - Generic tm6010 board
--     - 6000:0002
--
--   * - 4
--     - 10Moons UT 821
--     -
--
--   * - 5
--     - 10Moons UT 330
--     -
--
--   * - 6
--     - ADSTECH Dual TV USB
--     - 06e1:f332
--
--   * - 7
--     - Freecom Hybrid Stick / Moka DVB-T Receiver Dual
--     - 14aa:0620
--
--   * - 8
--     - ADSTECH Mini Dual TV USB
--     - 06e1:b339
--
--   * - 9
--     - Hauppauge WinTV HVR-900H / WinTV USB2-Stick
--     - 2040:6600, 2040:6601, 2040:6610, 2040:6611
--
--   * - 10
--     - Beholder Wander DVB-T/TV/FM USB2.0
--     - 6000:dec0
--
--   * - 11
--     - Beholder Voyager TV/FM USB2.0
--     - 6000:dec1
--
--   * - 12
--     - Terratec Cinergy Hybrid XE / Cinergy Hybrid-Stick
--     - 0ccd:0086, 0ccd:00A5
--
--   * - 13
--     - Twinhan TU501(704D1)
--     - 13d3:3240, 13d3:3241, 13d3:3243, 13d3:3264
--
--   * - 14
--     - Beholder Wander Lite DVB-T/TV/FM USB2.0
--     - 6000:dec2
--
--   * - 15
--     - Beholder Voyager Lite TV/FM USB2.0
--     - 6000:dec3
--
--   * - 16
--     - Terratec Grabster AV 150/250 MX
--     - 0ccd:0079
-diff --git a/Documentation/admin-guide/media/usb-cardlist.rst b/Documentation/admin-guide/media/usb-cardlist.rst
-index 071ec3958b3a..5f5ab0723e48 100644
---- a/Documentation/admin-guide/media/usb-cardlist.rst
-+++ b/Documentation/admin-guide/media/usb-cardlist.rst
-@@ -92,9 +92,6 @@ pwc                     USB Philips Cameras
- s2250                   Sensoray 2250/2251
- s2255drv                USB Sensoray 2255 video capture device
- smsusb                  Siano SMS1xxx based MDTV receiver
--tm6000-alsa             TV Master TM5600/6000/6010 audio
--tm6000-dvb              DVB Support for tm6000 based TV cards
--tm6000                  TV Master TM5600/6000/6010 driver
- ttusb_dec               Technotrend/Hauppauge USB DEC devices
- usbtv                   USBTV007 video capture
- uvcvideo                USB Video Class (UVC)
-@@ -107,7 +104,6 @@ zd1301                  ZyDAS ZD1301
- 	au0828-cardlist
- 	cx231xx-cardlist
- 	em28xx-cardlist
--	tm6000-cardlist
- 	siano-cardlist
- 
- 	gspca-cardlist
+diff --git a/Documentation/admin-guide/media/pci-cardlist.rst b/Documentation/admin-guide/media/pci-cardlist.rst
+index aca13c7e8508..f0c90f42b713 100644
+--- a/Documentation/admin-guide/media/pci-cardlist.rst
++++ b/Documentation/admin-guide/media/pci-cardlist.rst
+@@ -69,14 +69,11 @@ dm1105            SDMC DM1105 based PCI cards
+ dt3155            DT3155 frame grabber
+ earth-pt1         PT1 cards
+ earth-pt3         Earthsoft PT3 cards
+-hexium_gemini     Hexium Gemini frame grabber
+-hexium_orion      Hexium HV-PCI6 and Orion frame grabber
+ hopper            HOPPER based cards
+ ipu3-cio2         Intel ipu3-cio2 driver
+ ivtv              Conexant cx23416/cx23415 MPEG encoder/decoder
+ ivtvfb            Conexant cx23415 framebuffer
+ mantis            MANTIS based cards
+-mxb               Siemens-Nixdorf 'Multimedia eXtension Board'
+ netup-unidvb      NetUP Universal DVB card
+ ngene             Micronas nGene
+ pluto2            Pluto2 cards
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 1a95b9bc6824..ba5254cd1002 100644
+index ba5254cd1002..485228b44f80 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -20976,15 +20976,6 @@ W:	http://sourceforge.net/projects/tlan/
- F:	Documentation/networking/device_drivers/ethernet/ti/tlan.rst
- F:	drivers/net/ethernet/ti/tlan.*
+@@ -18377,13 +18377,6 @@ T:	git git://linuxtv.org/media_tree.git
+ F:	Documentation/driver-api/media/drivers/saa7134*
+ F:	drivers/media/pci/saa7134/
  
--TM6000 VIDEO4LINUX DRIVER
--M:	Mauro Carvalho Chehab <mchehab@kernel.org>
+-SAA7146 VIDEO4LINUX-2 DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
 -L:	linux-media@vger.kernel.org
--S:	Odd fixes
--W:	https://linuxtv.org
+-S:	Maintained
 -T:	git git://linuxtv.org/media_tree.git
--F:	Documentation/admin-guide/media/tm6000*
--F:	drivers/staging/media/deprecated/tm6000/
+-F:	drivers/staging/media/deprecated/saa7146/
 -
- TMIO/SDHI MMC DRIVER
- M:	Wolfram Sang <wsa+renesas@sang-engineering.com>
- L:	linux-mmc@vger.kernel.org
+ SAFESETID SECURITY MODULE
+ M:	Micah Morton <mortonm@chromium.org>
+ S:	Supported
 diff --git a/drivers/staging/media/Kconfig b/drivers/staging/media/Kconfig
-index 7224f43afd7e..d71ee9a5d04b 100644
+index d71ee9a5d04b..2f2dbec4078d 100644
 --- a/drivers/staging/media/Kconfig
 +++ b/drivers/staging/media/Kconfig
-@@ -53,7 +53,6 @@ menuconfig STAGING_MEDIA_DEPRECATED
+@@ -52,7 +52,6 @@ menuconfig STAGING_MEDIA_DEPRECATED
+ 
  if STAGING_MEDIA_DEPRECATED
  source "drivers/staging/media/deprecated/atmel/Kconfig"
- source "drivers/staging/media/deprecated/saa7146/Kconfig"
--source "drivers/staging/media/deprecated/tm6000/Kconfig"
+-source "drivers/staging/media/deprecated/saa7146/Kconfig"
  endif
  
  endif
 diff --git a/drivers/staging/media/Makefile b/drivers/staging/media/Makefile
-index 37a4c6d81ded..1a01c1af3224 100644
+index 1a01c1af3224..4ab1938bc26f 100644
 --- a/drivers/staging/media/Makefile
 +++ b/drivers/staging/media/Makefile
-@@ -9,5 +9,4 @@ obj-$(CONFIG_VIDEO_ROCKCHIP_VDEC)	+= rkvdec/
+@@ -9,4 +9,3 @@ obj-$(CONFIG_VIDEO_ROCKCHIP_VDEC)	+= rkvdec/
  obj-$(CONFIG_VIDEO_SUNXI)	+= sunxi/
  obj-$(CONFIG_VIDEO_TEGRA)	+= tegra-video/
  obj-$(CONFIG_VIDEO_IPU3_IMGU)	+= ipu3/
--obj-$(CONFIG_VIDEO_TM6000)	+= deprecated/tm6000/
- obj-y += deprecated/saa7146/
-diff --git a/drivers/staging/media/deprecated/tm6000/Kconfig b/drivers/staging/media/deprecated/tm6000/Kconfig
+-obj-y += deprecated/saa7146/
+diff --git a/drivers/staging/media/deprecated/saa7146/Kconfig b/drivers/staging/media/deprecated/saa7146/Kconfig
 deleted file mode 100644
-index 73d72e49eb28..000000000000
---- a/drivers/staging/media/deprecated/tm6000/Kconfig
+index 3d2e2120788e..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/Kconfig
 +++ /dev/null
-@@ -1,37 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0-only
--config VIDEO_TM6000
--	tristate "TV Master TM5600/6000/6010 driver (DEPRECATED)"
--	depends on VIDEO_DEV && I2C && INPUT && RC_CORE && USB
--	select VIDEO_TUNER
--	select MEDIA_TUNER_XC2028
--	select MEDIA_TUNER_XC5000
--	select VIDEOBUF_VMALLOC
--	help
--	  Support for TM5600/TM6000/TM6010 USB Device
--
--	  Since these cards have no MPEG decoder onboard, they transmit
--	  only compressed MPEG data over the usb bus, so you need
--	  an external software decoder to watch TV on your computer.
--
--	  This driver is deprecated and is scheduled for removal by
--	  the beginning of 2023. See the TODO file for more information.
--
--	  Say Y if you own such a device and want to use it.
--
--config VIDEO_TM6000_ALSA
--	tristate "TV Master TM5600/6000/6010 audio support"
--	depends on VIDEO_TM6000 && SND
--	select SND_PCM
--	help
--	  This is a video4linux driver for direct (DMA) audio for
--	  TM5600/TM6000/TM6010 USB Devices.
--
--	  To compile this driver as a module, choose M here: the
--	  module will be called tm6000-alsa.
--
--config VIDEO_TM6000_DVB
--	tristate "DVB Support for tm6000 based TV cards"
--	depends on VIDEO_TM6000 && DVB_CORE && USB
--	select DVB_ZL10353
--	help
--	  This adds support for DVB cards based on the tm5600/tm6000 chip.
-diff --git a/drivers/staging/media/deprecated/tm6000/Makefile b/drivers/staging/media/deprecated/tm6000/Makefile
-deleted file mode 100644
-index 75247a02a485..000000000000
---- a/drivers/staging/media/deprecated/tm6000/Makefile
-+++ /dev/null
-@@ -1,14 +0,0 @@
+@@ -1,3 +0,0 @@
 -# SPDX-License-Identifier: GPL-2.0
--tm6000-y := tm6000-cards.o \
--		   tm6000-core.o  \
--		   tm6000-i2c.o   \
--		   tm6000-video.o \
--		   tm6000-stds.o \
--		   tm6000-input.o
--
--obj-$(CONFIG_VIDEO_TM6000) += tm6000.o
--obj-$(CONFIG_VIDEO_TM6000_ALSA) += tm6000-alsa.o
--obj-$(CONFIG_VIDEO_TM6000_DVB) += tm6000-dvb.o
--
--ccflags-y += -I $(srctree)/drivers/media/tuners
--ccflags-y += -I $(srctree)/drivers/media/dvb-frontends
-diff --git a/drivers/staging/media/deprecated/tm6000/TODO b/drivers/staging/media/deprecated/tm6000/TODO
+-source "drivers/staging/media/deprecated/saa7146/common/Kconfig"
+-source "drivers/staging/media/deprecated/saa7146/saa7146/Kconfig"
+diff --git a/drivers/staging/media/deprecated/saa7146/Makefile b/drivers/staging/media/deprecated/saa7146/Makefile
 deleted file mode 100644
-index ecb30a429689..000000000000
---- a/drivers/staging/media/deprecated/tm6000/TODO
+index 71866795174e..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/Makefile
 +++ /dev/null
-@@ -1,7 +0,0 @@
--This is one of the few drivers still not using the vb2
--framework, so this driver is now deprecated with the intent of
--removing it altogether by the beginning of 2023.
--
--In order to keep this driver it has to be converted to vb2.
--If someone is interested in doing this work, then contact the
--linux-media mailinglist (https://linuxtv.org/lists.php).
-diff --git a/drivers/staging/media/deprecated/tm6000/tm6000-alsa.c b/drivers/staging/media/deprecated/tm6000/tm6000-alsa.c
+@@ -1,2 +0,0 @@
+- # SPDX-License-Identifier: GPL-2.0-only
+-obj-y += common/ saa7146/
+diff --git a/drivers/staging/media/deprecated/saa7146/common/Kconfig b/drivers/staging/media/deprecated/saa7146/common/Kconfig
 deleted file mode 100644
-index a19a46770c2b..000000000000
---- a/drivers/staging/media/deprecated/tm6000/tm6000-alsa.c
+index a0aa155e5d85..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/common/Kconfig
 +++ /dev/null
-@@ -1,440 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--// Support for audio capture for tm5600/6000/6010
--// Copyright (c) 2007-2008 Mauro Carvalho Chehab <mchehab@kernel.org>
--//
--// Based on cx88-alsa.c
+@@ -1,10 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-config VIDEO_SAA7146
+-	tristate
+-	depends on I2C && PCI
 -
--#include <linux/module.h>
--#include <linux/init.h>
--#include <linux/device.h>
--#include <linux/interrupt.h>
--#include <linux/usb.h>
--#include <linux/slab.h>
+-config VIDEO_SAA7146_VV
+-	tristate
+-	depends on VIDEO_DEV
+-	select VIDEOBUF_DMA_SG
+-	select VIDEO_SAA7146
+diff --git a/drivers/staging/media/deprecated/saa7146/common/Makefile b/drivers/staging/media/deprecated/saa7146/common/Makefile
+deleted file mode 100644
+index 2a6337feaec8..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/common/Makefile
++++ /dev/null
+@@ -1,6 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-saa7146-objs    := saa7146_i2c.o saa7146_core.o
+-saa7146_vv-objs := saa7146_fops.o saa7146_video.o saa7146_hlp.o saa7146_vbi.o
 -
--#include <linux/delay.h>
--#include <sound/core.h>
--#include <sound/pcm.h>
--#include <sound/pcm_params.h>
--#include <sound/control.h>
--#include <sound/initval.h>
+-obj-$(CONFIG_VIDEO_SAA7146) += saa7146.o
+-obj-$(CONFIG_VIDEO_SAA7146_VV) += saa7146_vv.o
+diff --git a/drivers/staging/media/deprecated/saa7146/common/saa7146.h b/drivers/staging/media/deprecated/saa7146/common/saa7146.h
+deleted file mode 100644
+index 71ce63c99cb4..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/common/saa7146.h
++++ /dev/null
+@@ -1,472 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef __SAA7146__
+-#define __SAA7146__
 -
+-#include <linux/delay.h>	/* for delay-stuff */
+-#include <linux/slab.h>		/* for kmalloc/kfree */
+-#include <linux/pci.h>		/* for pci-config-stuff, vendor ids etc. */
+-#include <linux/init.h>		/* for "__init" */
+-#include <linux/interrupt.h>	/* for IMMEDIATE_BH */
+-#include <linux/kmod.h>		/* for kernel module loader */
+-#include <linux/i2c.h>		/* for i2c subsystem */
+-#include <asm/io.h>		/* for accessing devices */
+-#include <linux/stringify.h>
+-#include <linux/mutex.h>
+-#include <linux/scatterlist.h>
+-#include <media/v4l2-device.h>
+-#include <media/v4l2-ctrls.h>
 -
--#include "tm6000.h"
--#include "tm6000-regs.h"
+-#include <linux/vmalloc.h>	/* for vmalloc() */
+-#include <linux/mm.h>		/* for vmalloc_to_page() */
 -
--#undef dprintk
+-#define saa7146_write(sxy,adr,dat)    writel((dat),(sxy->mem+(adr)))
+-#define saa7146_read(sxy,adr)         readl(sxy->mem+(adr))
 -
--#define dprintk(level, fmt, arg...) do {				   \
--	if (debug >= level)						   \
--		printk(KERN_INFO "%s/1: " fmt, chip->core->name , ## arg); \
--	} while (0)
+-extern unsigned int saa7146_debug;
 -
--/****************************************************************************
--			Module global static vars
-- ****************************************************************************/
+-#ifndef DEBUG_VARIABLE
+-	#define DEBUG_VARIABLE saa7146_debug
+-#endif
 -
--static int index[SNDRV_CARDS] = SNDRV_DEFAULT_IDX;	/* Index 0-MAX */
+-#define ERR(fmt, ...)	pr_err("%s: " fmt, __func__, ##__VA_ARGS__)
 -
--static bool enable[SNDRV_CARDS] = SNDRV_DEFAULT_ENABLE_PNP;
+-#define _DBG(mask, fmt, ...)						\
+-do {									\
+-	if (DEBUG_VARIABLE & mask)					\
+-		pr_debug("%s(): " fmt, __func__, ##__VA_ARGS__);	\
+-} while (0)
 -
--module_param_array(enable, bool, NULL, 0444);
--MODULE_PARM_DESC(enable, "Enable tm6000x soundcard. default enabled.");
+-/* simple debug messages */
+-#define DEB_S(fmt, ...)		_DBG(0x01, fmt, ##__VA_ARGS__)
+-/* more detailed debug messages */
+-#define DEB_D(fmt, ...)		_DBG(0x02, fmt, ##__VA_ARGS__)
+-/* print enter and exit of functions */
+-#define DEB_EE(fmt, ...)	_DBG(0x04, fmt, ##__VA_ARGS__)
+-/* i2c debug messages */
+-#define DEB_I2C(fmt, ...)	_DBG(0x08, fmt, ##__VA_ARGS__)
+-/* vbi debug messages */
+-#define DEB_VBI(fmt, ...)	_DBG(0x10, fmt, ##__VA_ARGS__)
+-/* interrupt debug messages */
+-#define DEB_INT(fmt, ...)	_DBG(0x20, fmt, ##__VA_ARGS__)
+-/* capture debug messages */
+-#define DEB_CAP(fmt, ...)	_DBG(0x40, fmt, ##__VA_ARGS__)
 -
--module_param_array(index, int, NULL, 0444);
--MODULE_PARM_DESC(index, "Index value for tm6000x capture interface(s).");
+-#define SAA7146_ISR_CLEAR(x,y) \
+-	saa7146_write(x, ISR, (y));
 -
+-struct module;
 -
--/****************************************************************************
--				Module macros
-- ****************************************************************************/
+-struct saa7146_dev;
+-struct saa7146_extension;
+-struct saa7146_vv;
 -
--MODULE_DESCRIPTION("ALSA driver module for tm5600/tm6000/tm6010 based TV cards");
--MODULE_AUTHOR("Mauro Carvalho Chehab");
--MODULE_LICENSE("GPL v2");
--static unsigned int debug;
--module_param(debug, int, 0644);
--MODULE_PARM_DESC(debug, "enable debug messages");
--
--/****************************************************************************
--			Module specific functions
-- ****************************************************************************/
--
--/*
-- * BOARD Specific: Sets audio DMA
-- */
--
--static int _tm6000_start_audio_dma(struct snd_tm6000_card *chip)
--{
--	struct tm6000_core *core = chip->core;
--
--	dprintk(1, "Starting audio DMA\n");
--
--	/* Enables audio */
--	tm6000_set_reg_mask(core, TM6010_REQ07_RCC_ACTIVE_IF, 0x40, 0x40);
--
--	tm6000_set_audio_bitrate(core, 48000);
--
--	return 0;
--}
--
--/*
-- * BOARD Specific: Resets audio DMA
-- */
--static int _tm6000_stop_audio_dma(struct snd_tm6000_card *chip)
--{
--	struct tm6000_core *core = chip->core;
--
--	dprintk(1, "Stopping audio DMA\n");
--
--	/* Disables audio */
--	tm6000_set_reg_mask(core, TM6010_REQ07_RCC_ACTIVE_IF, 0x00, 0x40);
--
--	return 0;
--}
--
--/****************************************************************************
--				ALSA PCM Interface
-- ****************************************************************************/
--
--/*
-- * Digital hardware definition
-- */
--#define DEFAULT_FIFO_SIZE	4096
--
--static const struct snd_pcm_hardware snd_tm6000_digital_hw = {
--	.info = SNDRV_PCM_INFO_BATCH |
--		SNDRV_PCM_INFO_MMAP |
--		SNDRV_PCM_INFO_INTERLEAVED |
--		SNDRV_PCM_INFO_BLOCK_TRANSFER |
--		SNDRV_PCM_INFO_MMAP_VALID,
--	.formats = SNDRV_PCM_FMTBIT_S16_LE,
--
--	.rates = SNDRV_PCM_RATE_CONTINUOUS | SNDRV_PCM_RATE_KNOT,
--	.rate_min = 48000,
--	.rate_max = 48000,
--	.channels_min = 2,
--	.channels_max = 2,
--	.period_bytes_min = 64,
--	.period_bytes_max = 12544,
--	.periods_min = 2,
--	.periods_max = 98,
--	.buffer_bytes_max = 62720 * 8,
+-/* saa7146 page table */
+-struct saa7146_pgtable {
+-	unsigned int	size;
+-	__le32		*cpu;
+-	dma_addr_t	dma;
+-	/* used for offsets for u,v planes for planar capture modes */
+-	unsigned long	offset;
+-	/* used for custom pagetables (used for example by budget dvb cards) */
+-	struct scatterlist *slist;
+-	int		nents;
 -};
 -
--/*
-- * audio pcm capture open callback
-- */
--static int snd_tm6000_pcm_open(struct snd_pcm_substream *substream)
+-struct saa7146_pci_extension_data {
+-	struct saa7146_extension *ext;
+-	void *ext_priv;			/* most likely a name string */
+-};
+-
+-#define MAKE_EXTENSION_PCI(x_var, x_vendor, x_device)		\
+-	{							\
+-		.vendor    = PCI_VENDOR_ID_PHILIPS,		\
+-		.device	   = PCI_DEVICE_ID_PHILIPS_SAA7146,	\
+-		.subvendor = x_vendor,				\
+-		.subdevice = x_device,				\
+-		.driver_data = (unsigned long)& x_var,		\
+-	}
+-
+-struct saa7146_extension
 -{
--	struct snd_tm6000_card *chip = snd_pcm_substream_chip(substream);
--	struct snd_pcm_runtime *runtime = substream->runtime;
+-	char	name[32];		/* name of the device */
+-#define SAA7146_USE_I2C_IRQ	0x1
+-#define SAA7146_I2C_SHORT_DELAY	0x2
+-	int	flags;
+-
+-	/* pairs of subvendor and subdevice ids for
+-	   supported devices, last entry 0xffff, 0xfff */
+-	struct module *module;
+-	struct pci_driver driver;
+-	const struct pci_device_id *pci_tbl;
+-
+-	/* extension functions */
+-	int (*probe)(struct saa7146_dev *);
+-	int (*attach)(struct saa7146_dev *, struct saa7146_pci_extension_data *);
+-	int (*detach)(struct saa7146_dev*);
+-
+-	u32	irq_mask;	/* mask to indicate, which irq-events are handled by the extension */
+-	void	(*irq_func)(struct saa7146_dev*, u32* irq_mask);
+-};
+-
+-struct saa7146_dma
+-{
+-	dma_addr_t	dma_handle;
+-	__le32		*cpu_addr;
+-};
+-
+-struct saa7146_dev
+-{
+-	struct module			*module;
+-
+-	struct v4l2_device		v4l2_dev;
+-	struct v4l2_ctrl_handler	ctrl_handler;
+-
+-	/* different device locks */
+-	spinlock_t			slock;
+-	struct mutex			v4l2_lock;
+-
+-	unsigned char			__iomem *mem;		/* pointer to mapped IO memory */
+-	u32				revision;	/* chip revision; needed for bug-workarounds*/
+-
+-	/* pci-device & irq stuff*/
+-	char				name[32];
+-	struct pci_dev			*pci;
+-	u32				int_todo;
+-	spinlock_t			int_slock;
+-
+-	/* extension handling */
+-	struct saa7146_extension	*ext;		/* indicates if handled by extension */
+-	void				*ext_priv;	/* pointer for extension private use (most likely some private data) */
+-	struct saa7146_ext_vv		*ext_vv_data;
+-
+-	/* per device video/vbi information (if available) */
+-	struct saa7146_vv	*vv_data;
+-	void (*vv_callback)(struct saa7146_dev *dev, unsigned long status);
+-
+-	/* i2c-stuff */
+-	struct mutex			i2c_lock;
+-
+-	u32				i2c_bitrate;
+-	struct saa7146_dma		d_i2c;	/* pointer to i2c memory */
+-	wait_queue_head_t		i2c_wq;
+-	int				i2c_op;
+-
+-	/* memories */
+-	struct saa7146_dma		d_rps0;
+-	struct saa7146_dma		d_rps1;
+-};
+-
+-static inline struct saa7146_dev *to_saa7146_dev(struct v4l2_device *v4l2_dev)
+-{
+-	return container_of(v4l2_dev, struct saa7146_dev, v4l2_dev);
+-}
+-
+-/* from saa7146_i2c.c */
+-int saa7146_i2c_adapter_prepare(struct saa7146_dev *dev, struct i2c_adapter *i2c_adapter, u32 bitrate);
+-
+-/* from saa7146_core.c */
+-int saa7146_register_extension(struct saa7146_extension*);
+-int saa7146_unregister_extension(struct saa7146_extension*);
+-struct saa7146_format* saa7146_format_by_fourcc(struct saa7146_dev *dev, int fourcc);
+-int saa7146_pgtable_alloc(struct pci_dev *pci, struct saa7146_pgtable *pt);
+-void saa7146_pgtable_free(struct pci_dev *pci, struct saa7146_pgtable *pt);
+-int saa7146_pgtable_build_single(struct pci_dev *pci, struct saa7146_pgtable *pt, struct scatterlist *list, int length );
+-void *saa7146_vmalloc_build_pgtable(struct pci_dev *pci, long length, struct saa7146_pgtable *pt);
+-void saa7146_vfree_destroy_pgtable(struct pci_dev *pci, void *mem, struct saa7146_pgtable *pt);
+-void saa7146_setgpio(struct saa7146_dev *dev, int port, u32 data);
+-int saa7146_wait_for_debi_done(struct saa7146_dev *dev, int nobusyloop);
+-
+-/* some memory sizes */
+-#define SAA7146_I2C_MEM		( 1*PAGE_SIZE)
+-#define SAA7146_RPS_MEM		( 1*PAGE_SIZE)
+-
+-/* some i2c constants */
+-#define SAA7146_I2C_TIMEOUT	100	/* i2c-timeout-value in ms */
+-#define SAA7146_I2C_RETRIES	3	/* how many times shall we retry an i2c-operation? */
+-#define SAA7146_I2C_DELAY	5	/* time we wait after certain i2c-operations */
+-
+-/* unsorted defines */
+-#define ME1    0x0000000800
+-#define PV1    0x0000000008
+-
+-/* gpio defines */
+-#define SAA7146_GPIO_INPUT 0x00
+-#define SAA7146_GPIO_IRQHI 0x10
+-#define SAA7146_GPIO_IRQLO 0x20
+-#define SAA7146_GPIO_IRQHL 0x30
+-#define SAA7146_GPIO_OUTLO 0x40
+-#define SAA7146_GPIO_OUTHI 0x50
+-
+-/* debi defines */
+-#define DEBINOSWAP 0x000e0000
+-
+-/* define for the register programming sequencer (rps) */
+-#define CMD_NOP		0x00000000  /* No operation */
+-#define CMD_CLR_EVENT	0x00000000  /* Clear event */
+-#define CMD_SET_EVENT	0x10000000  /* Set signal event */
+-#define CMD_PAUSE	0x20000000  /* Pause */
+-#define CMD_CHECK_LATE	0x30000000  /* Check late */
+-#define CMD_UPLOAD	0x40000000  /* Upload */
+-#define CMD_STOP	0x50000000  /* Stop */
+-#define CMD_INTERRUPT	0x60000000  /* Interrupt */
+-#define CMD_JUMP	0x80000000  /* Jump */
+-#define CMD_WR_REG	0x90000000  /* Write (load) register */
+-#define CMD_RD_REG	0xa0000000  /* Read (store) register */
+-#define CMD_WR_REG_MASK	0xc0000000  /* Write register with mask */
+-
+-#define CMD_OAN		MASK_27
+-#define CMD_INV		MASK_26
+-#define CMD_SIG4	MASK_25
+-#define CMD_SIG3	MASK_24
+-#define CMD_SIG2	MASK_23
+-#define CMD_SIG1	MASK_22
+-#define CMD_SIG0	MASK_21
+-#define CMD_O_FID_B	MASK_14
+-#define CMD_E_FID_B	MASK_13
+-#define CMD_O_FID_A	MASK_12
+-#define CMD_E_FID_A	MASK_11
+-
+-/* some events and command modifiers for rps1 squarewave generator */
+-#define EVT_HS          (1<<15)     // Source Line Threshold reached
+-#define EVT_VBI_B       (1<<9)      // VSYNC Event
+-#define RPS_OAN         (1<<27)     // 1: OR events, 0: AND events
+-#define RPS_INV         (1<<26)     // Invert (compound) event
+-#define GPIO3_MSK       0xFF000000  // GPIO #3 control bits
+-
+-/* Bit mask constants */
+-#define MASK_00   0x00000001    /* Mask value for bit 0 */
+-#define MASK_01   0x00000002    /* Mask value for bit 1 */
+-#define MASK_02   0x00000004    /* Mask value for bit 2 */
+-#define MASK_03   0x00000008    /* Mask value for bit 3 */
+-#define MASK_04   0x00000010    /* Mask value for bit 4 */
+-#define MASK_05   0x00000020    /* Mask value for bit 5 */
+-#define MASK_06   0x00000040    /* Mask value for bit 6 */
+-#define MASK_07   0x00000080    /* Mask value for bit 7 */
+-#define MASK_08   0x00000100    /* Mask value for bit 8 */
+-#define MASK_09   0x00000200    /* Mask value for bit 9 */
+-#define MASK_10   0x00000400    /* Mask value for bit 10 */
+-#define MASK_11   0x00000800    /* Mask value for bit 11 */
+-#define MASK_12   0x00001000    /* Mask value for bit 12 */
+-#define MASK_13   0x00002000    /* Mask value for bit 13 */
+-#define MASK_14   0x00004000    /* Mask value for bit 14 */
+-#define MASK_15   0x00008000    /* Mask value for bit 15 */
+-#define MASK_16   0x00010000    /* Mask value for bit 16 */
+-#define MASK_17   0x00020000    /* Mask value for bit 17 */
+-#define MASK_18   0x00040000    /* Mask value for bit 18 */
+-#define MASK_19   0x00080000    /* Mask value for bit 19 */
+-#define MASK_20   0x00100000    /* Mask value for bit 20 */
+-#define MASK_21   0x00200000    /* Mask value for bit 21 */
+-#define MASK_22   0x00400000    /* Mask value for bit 22 */
+-#define MASK_23   0x00800000    /* Mask value for bit 23 */
+-#define MASK_24   0x01000000    /* Mask value for bit 24 */
+-#define MASK_25   0x02000000    /* Mask value for bit 25 */
+-#define MASK_26   0x04000000    /* Mask value for bit 26 */
+-#define MASK_27   0x08000000    /* Mask value for bit 27 */
+-#define MASK_28   0x10000000    /* Mask value for bit 28 */
+-#define MASK_29   0x20000000    /* Mask value for bit 29 */
+-#define MASK_30   0x40000000    /* Mask value for bit 30 */
+-#define MASK_31   0x80000000    /* Mask value for bit 31 */
+-
+-#define MASK_B0   0x000000ff    /* Mask value for byte 0 */
+-#define MASK_B1   0x0000ff00    /* Mask value for byte 1 */
+-#define MASK_B2   0x00ff0000    /* Mask value for byte 2 */
+-#define MASK_B3   0xff000000    /* Mask value for byte 3 */
+-
+-#define MASK_W0   0x0000ffff    /* Mask value for word 0 */
+-#define MASK_W1   0xffff0000    /* Mask value for word 1 */
+-
+-#define MASK_PA   0xfffffffc    /* Mask value for physical address */
+-#define MASK_PR   0xfffffffe	/* Mask value for protection register */
+-#define MASK_ER   0xffffffff    /* Mask value for the entire register */
+-
+-#define MASK_NONE 0x00000000    /* No mask */
+-
+-/* register aliases */
+-#define BASE_ODD1         0x00  /* Video DMA 1 registers  */
+-#define BASE_EVEN1        0x04
+-#define PROT_ADDR1        0x08
+-#define PITCH1            0x0C
+-#define BASE_PAGE1        0x10  /* Video DMA 1 base page */
+-#define NUM_LINE_BYTE1    0x14
+-
+-#define BASE_ODD2         0x18  /* Video DMA 2 registers */
+-#define BASE_EVEN2        0x1C
+-#define PROT_ADDR2        0x20
+-#define PITCH2            0x24
+-#define BASE_PAGE2        0x28  /* Video DMA 2 base page */
+-#define NUM_LINE_BYTE2    0x2C
+-
+-#define BASE_ODD3         0x30  /* Video DMA 3 registers */
+-#define BASE_EVEN3        0x34
+-#define PROT_ADDR3        0x38
+-#define PITCH3            0x3C
+-#define BASE_PAGE3        0x40  /* Video DMA 3 base page */
+-#define NUM_LINE_BYTE3    0x44
+-
+-#define PCI_BT_V1         0x48  /* Video/FIFO 1 */
+-#define PCI_BT_V2         0x49  /* Video/FIFO 2 */
+-#define PCI_BT_V3         0x4A  /* Video/FIFO 3 */
+-#define PCI_BT_DEBI       0x4B  /* DEBI */
+-#define PCI_BT_A          0x4C  /* Audio */
+-
+-#define DD1_INIT          0x50  /* Init setting of DD1 interface */
+-
+-#define DD1_STREAM_B      0x54  /* DD1 B video data stream handling */
+-#define DD1_STREAM_A      0x56  /* DD1 A video data stream handling */
+-
+-#define BRS_CTRL          0x58  /* BRS control register */
+-#define HPS_CTRL          0x5C  /* HPS control register */
+-#define HPS_V_SCALE       0x60  /* HPS vertical scale */
+-#define HPS_V_GAIN        0x64  /* HPS vertical ACL and gain */
+-#define HPS_H_PRESCALE    0x68  /* HPS horizontal prescale   */
+-#define HPS_H_SCALE       0x6C  /* HPS horizontal scale */
+-#define BCS_CTRL          0x70  /* BCS control */
+-#define CHROMA_KEY_RANGE  0x74
+-#define CLIP_FORMAT_CTRL  0x78  /* HPS outputs formats & clipping */
+-
+-#define DEBI_CONFIG       0x7C
+-#define DEBI_COMMAND      0x80
+-#define DEBI_PAGE         0x84
+-#define DEBI_AD           0x88
+-
+-#define I2C_TRANSFER      0x8C
+-#define I2C_STATUS        0x90
+-
+-#define BASE_A1_IN        0x94	/* Audio 1 input DMA */
+-#define PROT_A1_IN        0x98
+-#define PAGE_A1_IN        0x9C
+-
+-#define BASE_A1_OUT       0xA0  /* Audio 1 output DMA */
+-#define PROT_A1_OUT       0xA4
+-#define PAGE_A1_OUT       0xA8
+-
+-#define BASE_A2_IN        0xAC  /* Audio 2 input DMA */
+-#define PROT_A2_IN        0xB0
+-#define PAGE_A2_IN        0xB4
+-
+-#define BASE_A2_OUT       0xB8  /* Audio 2 output DMA */
+-#define PROT_A2_OUT       0xBC
+-#define PAGE_A2_OUT       0xC0
+-
+-#define RPS_PAGE0         0xC4  /* RPS task 0 page register */
+-#define RPS_PAGE1         0xC8  /* RPS task 1 page register */
+-
+-#define RPS_THRESH0       0xCC  /* HBI threshold for task 0 */
+-#define RPS_THRESH1       0xD0  /* HBI threshold for task 1 */
+-
+-#define RPS_TOV0          0xD4  /* RPS timeout for task 0 */
+-#define RPS_TOV1          0xD8  /* RPS timeout for task 1 */
+-
+-#define IER               0xDC  /* Interrupt enable register */
+-
+-#define GPIO_CTRL         0xE0  /* GPIO 0-3 register */
+-
+-#define EC1SSR            0xE4  /* Event cnt set 1 source select */
+-#define EC2SSR            0xE8  /* Event cnt set 2 source select */
+-#define ECT1R             0xEC  /* Event cnt set 1 thresholds */
+-#define ECT2R             0xF0  /* Event cnt set 2 thresholds */
+-
+-#define ACON1             0xF4
+-#define ACON2             0xF8
+-
+-#define MC1               0xFC   /* Main control register 1 */
+-#define MC2               0x100  /* Main control register 2  */
+-
+-#define RPS_ADDR0         0x104  /* RPS task 0 address register */
+-#define RPS_ADDR1         0x108  /* RPS task 1 address register */
+-
+-#define ISR               0x10C  /* Interrupt status register */
+-#define PSR               0x110  /* Primary status register */
+-#define SSR               0x114  /* Secondary status register */
+-
+-#define EC1R              0x118  /* Event counter set 1 register */
+-#define EC2R              0x11C  /* Event counter set 2 register */
+-
+-#define PCI_VDP1          0x120  /* Video DMA pointer of FIFO 1 */
+-#define PCI_VDP2          0x124  /* Video DMA pointer of FIFO 2 */
+-#define PCI_VDP3          0x128  /* Video DMA pointer of FIFO 3 */
+-#define PCI_ADP1          0x12C  /* Audio DMA pointer of audio out 1 */
+-#define PCI_ADP2          0x130  /* Audio DMA pointer of audio in 1 */
+-#define PCI_ADP3          0x134  /* Audio DMA pointer of audio out 2 */
+-#define PCI_ADP4          0x138  /* Audio DMA pointer of audio in 2 */
+-#define PCI_DMA_DDP       0x13C  /* DEBI DMA pointer */
+-
+-#define LEVEL_REP         0x140,
+-#define A_TIME_SLOT1      0x180,  /* from 180 - 1BC */
+-#define A_TIME_SLOT2      0x1C0,  /* from 1C0 - 1FC */
+-
+-/* isr masks */
+-#define SPCI_PPEF       0x80000000  /* PCI parity error */
+-#define SPCI_PABO       0x40000000  /* PCI access error (target or master abort) */
+-#define SPCI_PPED       0x20000000  /* PCI parity error on 'real time data' */
+-#define SPCI_RPS_I1     0x10000000  /* Interrupt issued by RPS1 */
+-#define SPCI_RPS_I0     0x08000000  /* Interrupt issued by RPS0 */
+-#define SPCI_RPS_LATE1  0x04000000  /* RPS task 1 is late */
+-#define SPCI_RPS_LATE0  0x02000000  /* RPS task 0 is late */
+-#define SPCI_RPS_E1     0x01000000  /* RPS error from task 1 */
+-#define SPCI_RPS_E0     0x00800000  /* RPS error from task 0 */
+-#define SPCI_RPS_TO1    0x00400000  /* RPS timeout task 1 */
+-#define SPCI_RPS_TO0    0x00200000  /* RPS timeout task 0 */
+-#define SPCI_UPLD       0x00100000  /* RPS in upload */
+-#define SPCI_DEBI_S     0x00080000  /* DEBI status */
+-#define SPCI_DEBI_E     0x00040000  /* DEBI error */
+-#define SPCI_IIC_S      0x00020000  /* I2C status */
+-#define SPCI_IIC_E      0x00010000  /* I2C error */
+-#define SPCI_A2_IN      0x00008000  /* Audio 2 input DMA protection / limit */
+-#define SPCI_A2_OUT     0x00004000  /* Audio 2 output DMA protection / limit */
+-#define SPCI_A1_IN      0x00002000  /* Audio 1 input DMA protection / limit */
+-#define SPCI_A1_OUT     0x00001000  /* Audio 1 output DMA protection / limit */
+-#define SPCI_AFOU       0x00000800  /* Audio FIFO over- / underflow */
+-#define SPCI_V_PE       0x00000400  /* Video protection address */
+-#define SPCI_VFOU       0x00000200  /* Video FIFO over- / underflow */
+-#define SPCI_FIDA       0x00000100  /* Field ID video port A */
+-#define SPCI_FIDB       0x00000080  /* Field ID video port B */
+-#define SPCI_PIN3       0x00000040  /* GPIO pin 3 */
+-#define SPCI_PIN2       0x00000020  /* GPIO pin 2 */
+-#define SPCI_PIN1       0x00000010  /* GPIO pin 1 */
+-#define SPCI_PIN0       0x00000008  /* GPIO pin 0 */
+-#define SPCI_ECS        0x00000004  /* Event counter 1, 2, 4, 5 */
+-#define SPCI_EC3S       0x00000002  /* Event counter 3 */
+-#define SPCI_EC0S       0x00000001  /* Event counter 0 */
+-
+-/* i2c */
+-#define	SAA7146_I2C_ABORT	(1<<7)
+-#define	SAA7146_I2C_SPERR	(1<<6)
+-#define	SAA7146_I2C_APERR	(1<<5)
+-#define	SAA7146_I2C_DTERR	(1<<4)
+-#define	SAA7146_I2C_DRERR	(1<<3)
+-#define	SAA7146_I2C_AL		(1<<2)
+-#define	SAA7146_I2C_ERR		(1<<1)
+-#define	SAA7146_I2C_BUSY	(1<<0)
+-
+-#define	SAA7146_I2C_START	(0x3)
+-#define	SAA7146_I2C_CONT	(0x2)
+-#define	SAA7146_I2C_STOP	(0x1)
+-#define	SAA7146_I2C_NOP		(0x0)
+-
+-#define SAA7146_I2C_BUS_BIT_RATE_6400	(0x500)
+-#define SAA7146_I2C_BUS_BIT_RATE_3200	(0x100)
+-#define SAA7146_I2C_BUS_BIT_RATE_480	(0x400)
+-#define SAA7146_I2C_BUS_BIT_RATE_320	(0x600)
+-#define SAA7146_I2C_BUS_BIT_RATE_240	(0x700)
+-#define SAA7146_I2C_BUS_BIT_RATE_120	(0x000)
+-#define SAA7146_I2C_BUS_BIT_RATE_80	(0x200)
+-#define SAA7146_I2C_BUS_BIT_RATE_60	(0x300)
+-
+-static inline void SAA7146_IER_DISABLE(struct saa7146_dev *x, unsigned y)
+-{
+-	unsigned long flags;
+-	spin_lock_irqsave(&x->int_slock, flags);
+-	saa7146_write(x, IER, saa7146_read(x, IER) & ~y);
+-	spin_unlock_irqrestore(&x->int_slock, flags);
+-}
+-
+-static inline void SAA7146_IER_ENABLE(struct saa7146_dev *x, unsigned y)
+-{
+-	unsigned long flags;
+-	spin_lock_irqsave(&x->int_slock, flags);
+-	saa7146_write(x, IER, saa7146_read(x, IER) | y);
+-	spin_unlock_irqrestore(&x->int_slock, flags);
+-}
+-
+-#endif
+diff --git a/drivers/staging/media/deprecated/saa7146/common/saa7146_core.c b/drivers/staging/media/deprecated/saa7146/common/saa7146_core.c
+deleted file mode 100644
+index da21d346b870..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/common/saa7146_core.c
++++ /dev/null
+@@ -1,578 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+-    saa7146.o - driver for generic saa7146-based hardware
+-
+-    Copyright (C) 1998-2003 Michael Hunold <michael@mihu.de>
+-
+-*/
+-
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
+-#include <linux/module.h>
+-#include "saa7146.h"
+-
+-static int saa7146_num;
+-
+-unsigned int saa7146_debug;
+-
+-module_param(saa7146_debug, uint, 0644);
+-MODULE_PARM_DESC(saa7146_debug, "debug level (default: 0)");
+-
+-#if 0
+-static void dump_registers(struct saa7146_dev* dev)
+-{
+-	int i = 0;
+-
+-	pr_info(" @ %li jiffies:\n", jiffies);
+-	for (i = 0; i <= 0x148; i += 4)
+-		pr_info("0x%03x: 0x%08x\n", i, saa7146_read(dev, i));
+-}
+-#endif
+-
+-/****************************************************************************
+- * gpio and debi helper functions
+- ****************************************************************************/
+-
+-void saa7146_setgpio(struct saa7146_dev *dev, int port, u32 data)
+-{
+-	u32 value = 0;
+-
+-	BUG_ON(port > 3);
+-
+-	value = saa7146_read(dev, GPIO_CTRL);
+-	value &= ~(0xff << (8*port));
+-	value |= (data << (8*port));
+-	saa7146_write(dev, GPIO_CTRL, value);
+-}
+-
+-/* This DEBI code is based on the saa7146 Stradis driver by Nathan Laredo */
+-static inline int saa7146_wait_for_debi_done_sleep(struct saa7146_dev *dev,
+-				unsigned long us1, unsigned long us2)
+-{
+-	unsigned long timeout;
 -	int err;
 -
--	err = snd_pcm_hw_constraint_pow2(runtime, 0,
--					 SNDRV_PCM_HW_PARAM_PERIODS);
--	if (err < 0)
--		goto _error;
+-	/* wait for registers to be programmed */
+-	timeout = jiffies + usecs_to_jiffies(us1);
+-	while (1) {
+-		err = time_after(jiffies, timeout);
+-		if (saa7146_read(dev, MC2) & 2)
+-			break;
+-		if (err) {
+-			pr_debug("%s: %s timed out while waiting for registers getting programmed\n",
+-			       dev->name, __func__);
+-			return -ETIMEDOUT;
+-		}
+-		msleep(1);
+-	}
 -
--	chip->substream = substream;
--
--	runtime->hw = snd_tm6000_digital_hw;
--	snd_pcm_hw_constraint_integer(runtime, SNDRV_PCM_HW_PARAM_PERIODS);
--
--	return 0;
--_error:
--	dprintk(1, "Error opening PCM!\n");
--	return err;
--}
--
--/*
-- * audio close callback
-- */
--static int snd_tm6000_close(struct snd_pcm_substream *substream)
--{
--	struct snd_tm6000_card *chip = snd_pcm_substream_chip(substream);
--	struct tm6000_core *core = chip->core;
--
--	if (atomic_read(&core->stream_started) > 0) {
--		atomic_set(&core->stream_started, 0);
--		schedule_work(&core->wq_trigger);
+-	/* wait for transfer to complete */
+-	timeout = jiffies + usecs_to_jiffies(us2);
+-	while (1) {
+-		err = time_after(jiffies, timeout);
+-		if (!(saa7146_read(dev, PSR) & SPCI_DEBI_S))
+-			break;
+-		saa7146_read(dev, MC2);
+-		if (err) {
+-			DEB_S("%s: %s timed out while waiting for transfer completion\n",
+-			      dev->name, __func__);
+-			return -ETIMEDOUT;
+-		}
+-		msleep(1);
 -	}
 -
 -	return 0;
 -}
 -
--static int tm6000_fillbuf(struct tm6000_core *core, char *buf, int size)
+-static inline int saa7146_wait_for_debi_done_busyloop(struct saa7146_dev *dev,
+-				unsigned long us1, unsigned long us2)
 -{
--	struct snd_tm6000_card *chip = core->adev;
--	struct snd_pcm_substream *substream = chip->substream;
--	struct snd_pcm_runtime *runtime;
--	int period_elapsed = 0;
--	unsigned int stride, buf_pos;
--	int length;
+-	unsigned long loops;
 -
--	if (atomic_read(&core->stream_started) == 0)
--		return 0;
--
--	if (!size || !substream) {
--		dprintk(1, "substream was NULL\n");
--		return -EINVAL;
+-	/* wait for registers to be programmed */
+-	loops = us1;
+-	while (1) {
+-		if (saa7146_read(dev, MC2) & 2)
+-			break;
+-		if (!loops--) {
+-			pr_err("%s: %s timed out while waiting for registers getting programmed\n",
+-			       dev->name, __func__);
+-			return -ETIMEDOUT;
+-		}
+-		udelay(1);
 -	}
 -
--	runtime = substream->runtime;
--	if (!runtime || !runtime->dma_area) {
--		dprintk(1, "runtime was NULL\n");
--		return -EINVAL;
+-	/* wait for transfer to complete */
+-	loops = us2 / 5;
+-	while (1) {
+-		if (!(saa7146_read(dev, PSR) & SPCI_DEBI_S))
+-			break;
+-		saa7146_read(dev, MC2);
+-		if (!loops--) {
+-			DEB_S("%s: %s timed out while waiting for transfer completion\n",
+-			      dev->name, __func__);
+-			return -ETIMEDOUT;
+-		}
+-		udelay(5);
 -	}
--
--	buf_pos = chip->buf_pos;
--	stride = runtime->frame_bits >> 3;
--
--	if (stride == 0) {
--		dprintk(1, "stride is zero\n");
--		return -EINVAL;
--	}
--
--	length = size / stride;
--	if (length == 0) {
--		dprintk(1, "%s: length was zero\n", __func__);
--		return -EINVAL;
--	}
--
--	dprintk(1, "Copying %d bytes at %p[%d] - buf size=%d x %d\n", size,
--		runtime->dma_area, buf_pos,
--		(unsigned int)runtime->buffer_size, stride);
--
--	if (buf_pos + length >= runtime->buffer_size) {
--		unsigned int cnt = runtime->buffer_size - buf_pos;
--		memcpy(runtime->dma_area + buf_pos * stride, buf, cnt * stride);
--		memcpy(runtime->dma_area, buf + cnt * stride,
--			length * stride - cnt * stride);
--	} else
--		memcpy(runtime->dma_area + buf_pos * stride, buf,
--			length * stride);
--
--	snd_pcm_stream_lock(substream);
--
--	chip->buf_pos += length;
--	if (chip->buf_pos >= runtime->buffer_size)
--		chip->buf_pos -= runtime->buffer_size;
--
--	chip->period_pos += length;
--	if (chip->period_pos >= runtime->period_size) {
--		chip->period_pos -= runtime->period_size;
--		period_elapsed = 1;
--	}
--
--	snd_pcm_stream_unlock(substream);
--
--	if (period_elapsed)
--		snd_pcm_period_elapsed(substream);
 -
 -	return 0;
 -}
 -
--/*
-- * prepare callback
-- */
--static int snd_tm6000_prepare(struct snd_pcm_substream *substream)
+-int saa7146_wait_for_debi_done(struct saa7146_dev *dev, int nobusyloop)
 -{
--	struct snd_tm6000_card *chip = snd_pcm_substream_chip(substream);
--
--	chip->buf_pos = 0;
--	chip->period_pos = 0;
--
--	return 0;
+-	if (nobusyloop)
+-		return saa7146_wait_for_debi_done_sleep(dev, 50000, 250000);
+-	else
+-		return saa7146_wait_for_debi_done_busyloop(dev, 50000, 250000);
 -}
--
--
--/*
-- * trigger callback
-- */
--static void audio_trigger(struct work_struct *work)
--{
--	struct tm6000_core *core = container_of(work, struct tm6000_core,
--						wq_trigger);
--	struct snd_tm6000_card *chip = core->adev;
--
--	if (atomic_read(&core->stream_started)) {
--		dprintk(1, "starting capture");
--		_tm6000_start_audio_dma(chip);
--	} else {
--		dprintk(1, "stopping capture");
--		_tm6000_stop_audio_dma(chip);
--	}
--}
--
--static int snd_tm6000_card_trigger(struct snd_pcm_substream *substream, int cmd)
--{
--	struct snd_tm6000_card *chip = snd_pcm_substream_chip(substream);
--	struct tm6000_core *core = chip->core;
--	int err = 0;
--
--	switch (cmd) {
--	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
--	case SNDRV_PCM_TRIGGER_RESUME:
--	case SNDRV_PCM_TRIGGER_START:
--		atomic_set(&core->stream_started, 1);
--		break;
--	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
--	case SNDRV_PCM_TRIGGER_SUSPEND:
--	case SNDRV_PCM_TRIGGER_STOP:
--		atomic_set(&core->stream_started, 0);
--		break;
--	default:
--		err = -EINVAL;
--		break;
--	}
--	schedule_work(&core->wq_trigger);
--
--	return err;
--}
--/*
-- * pointer callback
-- */
--static snd_pcm_uframes_t snd_tm6000_pointer(struct snd_pcm_substream *substream)
--{
--	struct snd_tm6000_card *chip = snd_pcm_substream_chip(substream);
--
--	return chip->buf_pos;
--}
--
--/*
-- * operators
-- */
--static const struct snd_pcm_ops snd_tm6000_pcm_ops = {
--	.open = snd_tm6000_pcm_open,
--	.close = snd_tm6000_close,
--	.prepare = snd_tm6000_prepare,
--	.trigger = snd_tm6000_card_trigger,
--	.pointer = snd_tm6000_pointer,
--};
--
--/*
-- * create a PCM device
-- */
--
--/* FIXME: Control interface - How to control volume/mute? */
 -
 -/****************************************************************************
--			Basic Flow for Sound Devices
+- * general helper functions
 - ****************************************************************************/
 -
--/*
-- * Alsa Constructor - Component probe
-- */
--static int tm6000_audio_init(struct tm6000_core *dev)
--{
--	struct snd_card		*card;
--	struct snd_tm6000_card	*chip;
--	int			rc;
--	static int		devnr;
--	char			component[14];
--	struct snd_pcm		*pcm;
--
--	if (!dev)
--		return 0;
--
--	if (devnr >= SNDRV_CARDS)
--		return -ENODEV;
--
--	if (!enable[devnr])
--		return -ENOENT;
--
--	rc = snd_card_new(&dev->udev->dev, index[devnr], "tm6000",
--			  THIS_MODULE, 0, &card);
--	if (rc < 0) {
--		snd_printk(KERN_ERR "cannot create card instance %d\n", devnr);
--		return rc;
--	}
--	strscpy(card->driver, "tm6000-alsa", sizeof(card->driver));
--	strscpy(card->shortname, "TM5600/60x0", sizeof(card->shortname));
--	sprintf(card->longname, "TM5600/60x0 Audio at bus %d device %d",
--		dev->udev->bus->busnum, dev->udev->devnum);
--
--	sprintf(component, "USB%04x:%04x",
--		le16_to_cpu(dev->udev->descriptor.idVendor),
--		le16_to_cpu(dev->udev->descriptor.idProduct));
--	snd_component_add(card, component);
--
--	chip = kzalloc(sizeof(struct snd_tm6000_card), GFP_KERNEL);
--	if (!chip) {
--		rc = -ENOMEM;
--		goto error;
--	}
--
--	chip->core = dev;
--	chip->card = card;
--	dev->adev = chip;
--	spin_lock_init(&chip->reg_lock);
--
--	rc = snd_pcm_new(card, "TM6000 Audio", 0, 0, 1, &pcm);
--	if (rc < 0)
--		goto error_chip;
--
--	pcm->info_flags = 0;
--	pcm->private_data = chip;
--	strscpy(pcm->name, "Trident TM5600/60x0", sizeof(pcm->name));
--
--	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_tm6000_pcm_ops);
--	snd_pcm_set_managed_buffer_all(pcm, SNDRV_DMA_TYPE_VMALLOC, NULL, 0, 0);
--
--	INIT_WORK(&dev->wq_trigger, audio_trigger);
--	rc = snd_card_register(card);
--	if (rc < 0)
--		goto error_chip;
--
--	dprintk(1, "Registered audio driver for %s\n", card->longname);
--
--	return 0;
--
--error_chip:
--	kfree(chip);
--	dev->adev = NULL;
--error:
--	snd_card_free(card);
--	return rc;
--}
--
--static int tm6000_audio_fini(struct tm6000_core *dev)
--{
--	struct snd_tm6000_card *chip;
--
--	if (!dev)
--		return 0;
--	chip = dev->adev;
--
--	if (!chip)
--		return 0;
--
--	if (!chip->card)
--		return 0;
--
--	snd_card_free(chip->card);
--	chip->card = NULL;
--	kfree(chip);
--	dev->adev = NULL;
--
--	return 0;
--}
--
--static struct tm6000_ops audio_ops = {
--	.type	= TM6000_AUDIO,
--	.name	= "TM6000 Audio Extension",
--	.init	= tm6000_audio_init,
--	.fini	= tm6000_audio_fini,
--	.fillbuf = tm6000_fillbuf,
--};
--
--static int __init tm6000_alsa_register(void)
--{
--	return tm6000_register_extension(&audio_ops);
--}
--
--static void __exit tm6000_alsa_unregister(void)
--{
--	tm6000_unregister_extension(&audio_ops);
--}
--
--module_init(tm6000_alsa_register);
--module_exit(tm6000_alsa_unregister);
-diff --git a/drivers/staging/media/deprecated/tm6000/tm6000-cards.c b/drivers/staging/media/deprecated/tm6000/tm6000-cards.c
-deleted file mode 100644
-index 98f4a63adc2a..000000000000
---- a/drivers/staging/media/deprecated/tm6000/tm6000-cards.c
-+++ /dev/null
-@@ -1,1397 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--// tm6000-cards.c - driver for TM5600/TM6000/TM6010 USB video capture devices
--//
--// Copyright (c) 2006-2007 Mauro Carvalho Chehab <mchehab@kernel.org>
--
--#include <linux/init.h>
--#include <linux/module.h>
--#include <linux/pci.h>
--#include <linux/delay.h>
--#include <linux/i2c.h>
--#include <linux/usb.h>
--#include <linux/slab.h>
--#include <media/v4l2-common.h>
--#include <media/tuner.h>
--#include <media/i2c/tvaudio.h>
--#include <media/rc-map.h>
--
--#include "tm6000.h"
--#include "tm6000-regs.h"
--#include "xc2028.h"
--#include "xc5000.h"
--
--#define TM6000_BOARD_UNKNOWN			0
--#define TM5600_BOARD_GENERIC			1
--#define TM6000_BOARD_GENERIC			2
--#define TM6010_BOARD_GENERIC			3
--#define TM5600_BOARD_10MOONS_UT821		4
--#define TM5600_BOARD_10MOONS_UT330		5
--#define TM6000_BOARD_ADSTECH_DUAL_TV		6
--#define TM6000_BOARD_FREECOM_AND_SIMILAR	7
--#define TM6000_BOARD_ADSTECH_MINI_DUAL_TV	8
--#define TM6010_BOARD_HAUPPAUGE_900H		9
--#define TM6010_BOARD_BEHOLD_WANDER		10
--#define TM6010_BOARD_BEHOLD_VOYAGER		11
--#define TM6010_BOARD_TERRATEC_CINERGY_HYBRID_XE	12
--#define TM6010_BOARD_TWINHAN_TU501		13
--#define TM6010_BOARD_BEHOLD_WANDER_LITE		14
--#define TM6010_BOARD_BEHOLD_VOYAGER_LITE	15
--#define TM5600_BOARD_TERRATEC_GRABSTER		16
--
--#define is_generic(model) ((model == TM6000_BOARD_UNKNOWN) || \
--			   (model == TM5600_BOARD_GENERIC) || \
--			   (model == TM6000_BOARD_GENERIC) || \
--			   (model == TM6010_BOARD_GENERIC))
--
--#define TM6000_MAXBOARDS        16
--static unsigned int card[]     = {[0 ... (TM6000_MAXBOARDS - 1)] = UNSET };
--
--module_param_array(card,  int, NULL, 0444);
--
--static unsigned long tm6000_devused;
--
--
--struct tm6000_board {
--	char            *name;
--	char		eename[16];		/* EEPROM name */
--	unsigned	eename_size;		/* size of EEPROM name */
--	unsigned	eename_pos;		/* Position where it appears at ROM */
--
--	struct tm6000_capabilities caps;
--
--	enum		tm6000_devtype type;	/* variant of the chipset */
--	int             tuner_type;     /* type of the tuner */
--	int             tuner_addr;     /* tuner address */
--	int             demod_addr;     /* demodulator address */
--
--	struct tm6000_gpio gpio;
--
--	struct tm6000_input	vinput[3];
--	struct tm6000_input	rinput;
--
--	char		*ir_codes;
--};
--
--static struct tm6000_board tm6000_boards[] = {
--	[TM6000_BOARD_UNKNOWN] = {
--		.name         = "Unknown tm6000 video grabber",
--		.caps = {
--			.has_tuner	= 1,
--			.has_eeprom	= 1,
--		},
--		.gpio = {
--			.tuner_reset	= TM6000_GPIO_1,
--		},
--		.vinput = { {
--			.type	= TM6000_INPUT_TV,
--			.vmux	= TM6000_VMUX_VIDEO_B,
--			.amux	= TM6000_AMUX_ADC1,
--			}, {
--			.type	= TM6000_INPUT_COMPOSITE1,
--			.vmux	= TM6000_VMUX_VIDEO_A,
--			.amux	= TM6000_AMUX_ADC2,
--			}, {
--			.type	= TM6000_INPUT_SVIDEO,
--			.vmux	= TM6000_VMUX_VIDEO_AB,
--			.amux	= TM6000_AMUX_ADC2,
--			},
--		},
--	},
--	[TM5600_BOARD_GENERIC] = {
--		.name         = "Generic tm5600 board",
--		.type         = TM5600,
--		.tuner_type   = TUNER_XC2028,
--		.tuner_addr   = 0xc2 >> 1,
--		.caps = {
--			.has_tuner	= 1,
--			.has_eeprom	= 1,
--		},
--		.gpio = {
--			.tuner_reset	= TM6000_GPIO_1,
--		},
--		.vinput = { {
--			.type	= TM6000_INPUT_TV,
--			.vmux	= TM6000_VMUX_VIDEO_B,
--			.amux	= TM6000_AMUX_ADC1,
--			}, {
--			.type	= TM6000_INPUT_COMPOSITE1,
--			.vmux	= TM6000_VMUX_VIDEO_A,
--			.amux	= TM6000_AMUX_ADC2,
--			}, {
--			.type	= TM6000_INPUT_SVIDEO,
--			.vmux	= TM6000_VMUX_VIDEO_AB,
--			.amux	= TM6000_AMUX_ADC2,
--			},
--		},
--	},
--	[TM6000_BOARD_GENERIC] = {
--		.name         = "Generic tm6000 board",
--		.tuner_type   = TUNER_XC2028,
--		.tuner_addr   = 0xc2 >> 1,
--		.caps = {
--			.has_tuner	= 1,
--			.has_eeprom	= 1,
--		},
--		.gpio = {
--			.tuner_reset	= TM6000_GPIO_1,
--		},
--		.vinput = { {
--			.type	= TM6000_INPUT_TV,
--			.vmux	= TM6000_VMUX_VIDEO_B,
--			.amux	= TM6000_AMUX_ADC1,
--			}, {
--			.type	= TM6000_INPUT_COMPOSITE1,
--			.vmux	= TM6000_VMUX_VIDEO_A,
--			.amux	= TM6000_AMUX_ADC2,
--			}, {
--			.type	= TM6000_INPUT_SVIDEO,
--			.vmux	= TM6000_VMUX_VIDEO_AB,
--			.amux	= TM6000_AMUX_ADC2,
--			},
--		},
--	},
--	[TM6010_BOARD_GENERIC] = {
--		.name         = "Generic tm6010 board",
--		.type         = TM6010,
--		.tuner_type   = TUNER_XC2028,
--		.tuner_addr   = 0xc2 >> 1,
--		.demod_addr   = 0x1e >> 1,
--		.caps = {
--			.has_tuner	= 1,
--			.has_dvb	= 1,
--			.has_zl10353	= 1,
--			.has_eeprom	= 1,
--			.has_remote	= 1,
--		},
--		.gpio = {
--			.tuner_reset	= TM6010_GPIO_2,
--			.tuner_on	= TM6010_GPIO_3,
--			.demod_reset	= TM6010_GPIO_1,
--			.demod_on	= TM6010_GPIO_4,
--			.power_led	= TM6010_GPIO_7,
--			.dvb_led	= TM6010_GPIO_5,
--			.ir		= TM6010_GPIO_0,
--		},
--		.vinput = { {
--			.type	= TM6000_INPUT_TV,
--			.vmux	= TM6000_VMUX_VIDEO_B,
--			.amux	= TM6000_AMUX_SIF1,
--			}, {
--			.type	= TM6000_INPUT_COMPOSITE1,
--			.vmux	= TM6000_VMUX_VIDEO_A,
--			.amux	= TM6000_AMUX_ADC2,
--			}, {
--			.type	= TM6000_INPUT_SVIDEO,
--			.vmux	= TM6000_VMUX_VIDEO_AB,
--			.amux	= TM6000_AMUX_ADC2,
--			},
--		},
--	},
--	[TM5600_BOARD_10MOONS_UT821] = {
--		.name         = "10Moons UT 821",
--		.tuner_type   = TUNER_XC2028,
--		.eename       = { '1', '0', 'M', 'O', 'O', 'N', 'S', '5', '6', '0', '0', 0xff, 0x45, 0x5b},
--		.eename_size  = 14,
--		.eename_pos   = 0x14,
--		.type         = TM5600,
--		.tuner_addr   = 0xc2 >> 1,
--		.caps = {
--			.has_tuner    = 1,
--			.has_eeprom   = 1,
--		},
--		.gpio = {
--			.tuner_reset	= TM6000_GPIO_1,
--		},
--		.vinput = { {
--			.type	= TM6000_INPUT_TV,
--			.vmux	= TM6000_VMUX_VIDEO_B,
--			.amux	= TM6000_AMUX_ADC1,
--			}, {
--			.type	= TM6000_INPUT_COMPOSITE1,
--			.vmux	= TM6000_VMUX_VIDEO_A,
--			.amux	= TM6000_AMUX_ADC2,
--			}, {
--			.type	= TM6000_INPUT_SVIDEO,
--			.vmux	= TM6000_VMUX_VIDEO_AB,
--			.amux	= TM6000_AMUX_ADC2,
--			},
--		},
--	},
--	[TM5600_BOARD_10MOONS_UT330] = {
--		.name         = "10Moons UT 330",
--		.tuner_type   = TUNER_PHILIPS_FQ1216AME_MK4,
--		.tuner_addr   = 0xc8 >> 1,
--		.caps = {
--			.has_tuner    = 1,
--			.has_dvb      = 0,
--			.has_zl10353  = 0,
--			.has_eeprom   = 1,
--		},
--		.vinput = { {
--			.type	= TM6000_INPUT_TV,
--			.vmux	= TM6000_VMUX_VIDEO_B,
--			.amux	= TM6000_AMUX_ADC1,
--			}, {
--			.type	= TM6000_INPUT_COMPOSITE1,
--			.vmux	= TM6000_VMUX_VIDEO_A,
--			.amux	= TM6000_AMUX_ADC2,
--			}, {
--			.type	= TM6000_INPUT_SVIDEO,
--			.vmux	= TM6000_VMUX_VIDEO_AB,
--			.amux	= TM6000_AMUX_ADC2,
--			},
--		},
--	},
--	[TM6000_BOARD_ADSTECH_DUAL_TV] = {
--		.name         = "ADSTECH Dual TV USB",
--		.tuner_type   = TUNER_XC2028,
--		.tuner_addr   = 0xc8 >> 1,
--		.caps = {
--			.has_tuner    = 1,
--			.has_tda9874  = 1,
--			.has_dvb      = 1,
--			.has_zl10353  = 1,
--			.has_eeprom   = 1,
--		},
--		.vinput = { {
--			.type	= TM6000_INPUT_TV,
--			.vmux	= TM6000_VMUX_VIDEO_B,
--			.amux	= TM6000_AMUX_ADC1,
--			}, {
--			.type	= TM6000_INPUT_COMPOSITE1,
--			.vmux	= TM6000_VMUX_VIDEO_A,
--			.amux	= TM6000_AMUX_ADC2,
--			}, {
--			.type	= TM6000_INPUT_SVIDEO,
--			.vmux	= TM6000_VMUX_VIDEO_AB,
--			.amux	= TM6000_AMUX_ADC2,
--			},
--		},
--	},
--	[TM6000_BOARD_FREECOM_AND_SIMILAR] = {
--		.name         = "Freecom Hybrid Stick / Moka DVB-T Receiver Dual",
--		.tuner_type   = TUNER_XC2028, /* has a XC3028 */
--		.tuner_addr   = 0xc2 >> 1,
--		.demod_addr   = 0x1e >> 1,
--		.caps = {
--			.has_tuner    = 1,
--			.has_dvb      = 1,
--			.has_zl10353  = 1,
--			.has_eeprom   = 0,
--			.has_remote   = 1,
--		},
--		.gpio = {
--			.tuner_reset	= TM6000_GPIO_4,
--		},
--		.vinput = { {
--			.type	= TM6000_INPUT_TV,
--			.vmux	= TM6000_VMUX_VIDEO_B,
--			.amux	= TM6000_AMUX_ADC1,
--			}, {
--			.type	= TM6000_INPUT_COMPOSITE1,
--			.vmux	= TM6000_VMUX_VIDEO_A,
--			.amux	= TM6000_AMUX_ADC2,
--			}, {
--			.type	= TM6000_INPUT_SVIDEO,
--			.vmux	= TM6000_VMUX_VIDEO_AB,
--			.amux	= TM6000_AMUX_ADC2,
--			},
--		},
--	},
--	[TM6000_BOARD_ADSTECH_MINI_DUAL_TV] = {
--		.name         = "ADSTECH Mini Dual TV USB",
--		.tuner_type   = TUNER_XC2028, /* has a XC3028 */
--		.tuner_addr   = 0xc8 >> 1,
--		.demod_addr   = 0x1e >> 1,
--		.caps = {
--			.has_tuner    = 1,
--			.has_dvb      = 1,
--			.has_zl10353  = 1,
--			.has_eeprom   = 0,
--		},
--		.gpio = {
--			.tuner_reset	= TM6000_GPIO_4,
--		},
--		.vinput = { {
--			.type	= TM6000_INPUT_TV,
--			.vmux	= TM6000_VMUX_VIDEO_B,
--			.amux	= TM6000_AMUX_ADC1,
--			}, {
--			.type	= TM6000_INPUT_COMPOSITE1,
--			.vmux	= TM6000_VMUX_VIDEO_A,
--			.amux	= TM6000_AMUX_ADC2,
--			}, {
--			.type	= TM6000_INPUT_SVIDEO,
--			.vmux	= TM6000_VMUX_VIDEO_AB,
--			.amux	= TM6000_AMUX_ADC2,
--			},
--		},
--	},
--	[TM6010_BOARD_HAUPPAUGE_900H] = {
--		.name         = "Hauppauge WinTV HVR-900H / WinTV USB2-Stick",
--		.eename       = { 'H', 0, 'V', 0, 'R', 0, '9', 0, '0', 0, '0', 0, 'H', 0 },
--		.eename_size  = 14,
--		.eename_pos   = 0x42,
--		.tuner_type   = TUNER_XC2028, /* has a XC3028 */
--		.tuner_addr   = 0xc2 >> 1,
--		.demod_addr   = 0x1e >> 1,
--		.type         = TM6010,
--		.ir_codes = RC_MAP_HAUPPAUGE,
--		.caps = {
--			.has_tuner    = 1,
--			.has_dvb      = 1,
--			.has_zl10353  = 1,
--			.has_eeprom   = 1,
--			.has_remote   = 1,
--		},
--		.gpio = {
--			.tuner_reset	= TM6010_GPIO_2,
--			.tuner_on	= TM6010_GPIO_3,
--			.demod_reset	= TM6010_GPIO_1,
--			.demod_on	= TM6010_GPIO_4,
--			.power_led	= TM6010_GPIO_7,
--			.dvb_led	= TM6010_GPIO_5,
--			.ir		= TM6010_GPIO_0,
--		},
--		.vinput = { {
--			.type	= TM6000_INPUT_TV,
--			.vmux	= TM6000_VMUX_VIDEO_B,
--			.amux	= TM6000_AMUX_SIF1,
--			}, {
--			.type	= TM6000_INPUT_COMPOSITE1,
--			.vmux	= TM6000_VMUX_VIDEO_A,
--			.amux	= TM6000_AMUX_ADC2,
--			}, {
--			.type	= TM6000_INPUT_SVIDEO,
--			.vmux	= TM6000_VMUX_VIDEO_AB,
--			.amux	= TM6000_AMUX_ADC2,
--			},
--		},
--	},
--	[TM6010_BOARD_BEHOLD_WANDER] = {
--		.name         = "Beholder Wander DVB-T/TV/FM USB2.0",
--		.tuner_type   = TUNER_XC5000,
--		.tuner_addr   = 0xc2 >> 1,
--		.demod_addr   = 0x1e >> 1,
--		.type         = TM6010,
--		.caps = {
--			.has_tuner      = 1,
--			.has_dvb        = 1,
--			.has_zl10353    = 1,
--			.has_eeprom     = 1,
--			.has_remote     = 1,
--			.has_radio	= 1,
--		},
--		.gpio = {
--			.tuner_reset	= TM6010_GPIO_0,
--			.demod_reset	= TM6010_GPIO_1,
--			.power_led	= TM6010_GPIO_6,
--		},
--		.vinput = { {
--			.type	= TM6000_INPUT_TV,
--			.vmux	= TM6000_VMUX_VIDEO_B,
--			.amux	= TM6000_AMUX_SIF1,
--			}, {
--			.type	= TM6000_INPUT_COMPOSITE1,
--			.vmux	= TM6000_VMUX_VIDEO_A,
--			.amux	= TM6000_AMUX_ADC2,
--			}, {
--			.type	= TM6000_INPUT_SVIDEO,
--			.vmux	= TM6000_VMUX_VIDEO_AB,
--			.amux	= TM6000_AMUX_ADC2,
--			},
--		},
--		.rinput = {
--			.type	= TM6000_INPUT_RADIO,
--			.amux	= TM6000_AMUX_ADC1,
--		},
--	},
--	[TM6010_BOARD_BEHOLD_VOYAGER] = {
--		.name         = "Beholder Voyager TV/FM USB2.0",
--		.tuner_type   = TUNER_XC5000,
--		.tuner_addr   = 0xc2 >> 1,
--		.type         = TM6010,
--		.caps = {
--			.has_tuner      = 1,
--			.has_dvb        = 0,
--			.has_zl10353    = 0,
--			.has_eeprom     = 1,
--			.has_remote     = 1,
--			.has_radio	= 1,
--		},
--		.gpio = {
--			.tuner_reset	= TM6010_GPIO_0,
--			.power_led	= TM6010_GPIO_6,
--		},
--		.vinput = { {
--			.type	= TM6000_INPUT_TV,
--			.vmux	= TM6000_VMUX_VIDEO_B,
--			.amux	= TM6000_AMUX_SIF1,
--			}, {
--			.type	= TM6000_INPUT_COMPOSITE1,
--			.vmux	= TM6000_VMUX_VIDEO_A,
--			.amux	= TM6000_AMUX_ADC2,
--			}, {
--			.type	= TM6000_INPUT_SVIDEO,
--			.vmux	= TM6000_VMUX_VIDEO_AB,
--			.amux	= TM6000_AMUX_ADC2,
--			},
--		},
--		.rinput = {
--			.type	= TM6000_INPUT_RADIO,
--			.amux	= TM6000_AMUX_ADC1,
--		},
--	},
--	[TM6010_BOARD_TERRATEC_CINERGY_HYBRID_XE] = {
--		.name         = "Terratec Cinergy Hybrid XE / Cinergy Hybrid-Stick",
--		.tuner_type   = TUNER_XC2028, /* has a XC3028 */
--		.tuner_addr   = 0xc2 >> 1,
--		.demod_addr   = 0x1e >> 1,
--		.type         = TM6010,
--		.caps = {
--			.has_tuner    = 1,
--			.has_dvb      = 1,
--			.has_zl10353  = 1,
--			.has_eeprom   = 1,
--			.has_remote   = 1,
--			.has_radio    = 1,
--		},
--		.gpio = {
--			.tuner_reset	= TM6010_GPIO_2,
--			.tuner_on	= TM6010_GPIO_3,
--			.demod_reset	= TM6010_GPIO_1,
--			.demod_on	= TM6010_GPIO_4,
--			.power_led	= TM6010_GPIO_7,
--			.dvb_led	= TM6010_GPIO_5,
--			.ir		= TM6010_GPIO_0,
--		},
--		.ir_codes = RC_MAP_NEC_TERRATEC_CINERGY_XS,
--		.vinput = { {
--			.type	= TM6000_INPUT_TV,
--			.vmux	= TM6000_VMUX_VIDEO_B,
--			.amux	= TM6000_AMUX_SIF1,
--			}, {
--			.type	= TM6000_INPUT_COMPOSITE1,
--			.vmux	= TM6000_VMUX_VIDEO_A,
--			.amux	= TM6000_AMUX_ADC2,
--			}, {
--			.type	= TM6000_INPUT_SVIDEO,
--			.vmux	= TM6000_VMUX_VIDEO_AB,
--			.amux	= TM6000_AMUX_ADC2,
--			},
--		},
--		.rinput = {
--			.type = TM6000_INPUT_RADIO,
--			.amux = TM6000_AMUX_SIF1,
--		},
--	},
--	[TM5600_BOARD_TERRATEC_GRABSTER] = {
--		.name         = "Terratec Grabster AV 150/250 MX",
--		.type         = TM5600,
--		.tuner_type   = TUNER_ABSENT,
--		.vinput = { {
--			.type	= TM6000_INPUT_TV,
--			.vmux	= TM6000_VMUX_VIDEO_B,
--			.amux	= TM6000_AMUX_ADC1,
--			}, {
--			.type	= TM6000_INPUT_COMPOSITE1,
--			.vmux	= TM6000_VMUX_VIDEO_A,
--			.amux	= TM6000_AMUX_ADC2,
--			}, {
--			.type	= TM6000_INPUT_SVIDEO,
--			.vmux	= TM6000_VMUX_VIDEO_AB,
--			.amux	= TM6000_AMUX_ADC2,
--			},
--		},
--	},
--	[TM6010_BOARD_TWINHAN_TU501] = {
--		.name         = "Twinhan TU501(704D1)",
--		.tuner_type   = TUNER_XC2028, /* has a XC3028 */
--		.tuner_addr   = 0xc2 >> 1,
--		.demod_addr   = 0x1e >> 1,
--		.type         = TM6010,
--		.caps = {
--			.has_tuner    = 1,
--			.has_dvb      = 1,
--			.has_zl10353  = 1,
--			.has_eeprom   = 1,
--			.has_remote   = 1,
--		},
--		.gpio = {
--			.tuner_reset	= TM6010_GPIO_2,
--			.tuner_on	= TM6010_GPIO_3,
--			.demod_reset	= TM6010_GPIO_1,
--			.demod_on	= TM6010_GPIO_4,
--			.power_led	= TM6010_GPIO_7,
--			.dvb_led	= TM6010_GPIO_5,
--			.ir		= TM6010_GPIO_0,
--		},
--		.vinput = { {
--			.type	= TM6000_INPUT_TV,
--			.vmux	= TM6000_VMUX_VIDEO_B,
--			.amux	= TM6000_AMUX_SIF1,
--			}, {
--			.type	= TM6000_INPUT_COMPOSITE1,
--			.vmux	= TM6000_VMUX_VIDEO_A,
--			.amux	= TM6000_AMUX_ADC2,
--			}, {
--			.type	= TM6000_INPUT_SVIDEO,
--			.vmux	= TM6000_VMUX_VIDEO_AB,
--			.amux	= TM6000_AMUX_ADC2,
--			},
--		},
--	},
--	[TM6010_BOARD_BEHOLD_WANDER_LITE] = {
--		.name         = "Beholder Wander Lite DVB-T/TV/FM USB2.0",
--		.tuner_type   = TUNER_XC5000,
--		.tuner_addr   = 0xc2 >> 1,
--		.demod_addr   = 0x1e >> 1,
--		.type         = TM6010,
--		.caps = {
--			.has_tuner      = 1,
--			.has_dvb        = 1,
--			.has_zl10353    = 1,
--			.has_eeprom     = 1,
--			.has_remote     = 0,
--			.has_radio	= 1,
--		},
--		.gpio = {
--			.tuner_reset	= TM6010_GPIO_0,
--			.demod_reset	= TM6010_GPIO_1,
--			.power_led	= TM6010_GPIO_6,
--		},
--		.vinput = { {
--			.type	= TM6000_INPUT_TV,
--			.vmux	= TM6000_VMUX_VIDEO_B,
--			.amux	= TM6000_AMUX_SIF1,
--			},
--		},
--		.rinput = {
--			.type	= TM6000_INPUT_RADIO,
--			.amux	= TM6000_AMUX_ADC1,
--		},
--	},
--	[TM6010_BOARD_BEHOLD_VOYAGER_LITE] = {
--		.name         = "Beholder Voyager Lite TV/FM USB2.0",
--		.tuner_type   = TUNER_XC5000,
--		.tuner_addr   = 0xc2 >> 1,
--		.type         = TM6010,
--		.caps = {
--			.has_tuner      = 1,
--			.has_dvb        = 0,
--			.has_zl10353    = 0,
--			.has_eeprom     = 1,
--			.has_remote     = 0,
--			.has_radio	= 1,
--		},
--		.gpio = {
--			.tuner_reset	= TM6010_GPIO_0,
--			.power_led	= TM6010_GPIO_6,
--		},
--		.vinput = { {
--			.type	= TM6000_INPUT_TV,
--			.vmux	= TM6000_VMUX_VIDEO_B,
--			.amux	= TM6000_AMUX_SIF1,
--			},
--		},
--		.rinput = {
--			.type	= TM6000_INPUT_RADIO,
--			.amux	= TM6000_AMUX_ADC1,
--		},
--	},
--};
--
--/* table of devices that work with this driver */
--static const struct usb_device_id tm6000_id_table[] = {
--	{ USB_DEVICE(0x6000, 0x0001), .driver_info = TM5600_BOARD_GENERIC },
--	{ USB_DEVICE(0x6000, 0x0002), .driver_info = TM6010_BOARD_GENERIC },
--	{ USB_DEVICE(0x06e1, 0xf332), .driver_info = TM6000_BOARD_ADSTECH_DUAL_TV },
--	{ USB_DEVICE(0x14aa, 0x0620), .driver_info = TM6000_BOARD_FREECOM_AND_SIMILAR },
--	{ USB_DEVICE(0x06e1, 0xb339), .driver_info = TM6000_BOARD_ADSTECH_MINI_DUAL_TV },
--	{ USB_DEVICE(0x2040, 0x6600), .driver_info = TM6010_BOARD_HAUPPAUGE_900H },
--	{ USB_DEVICE(0x2040, 0x6601), .driver_info = TM6010_BOARD_HAUPPAUGE_900H },
--	{ USB_DEVICE(0x2040, 0x6610), .driver_info = TM6010_BOARD_HAUPPAUGE_900H },
--	{ USB_DEVICE(0x2040, 0x6611), .driver_info = TM6010_BOARD_HAUPPAUGE_900H },
--	{ USB_DEVICE(0x6000, 0xdec0), .driver_info = TM6010_BOARD_BEHOLD_WANDER },
--	{ USB_DEVICE(0x6000, 0xdec1), .driver_info = TM6010_BOARD_BEHOLD_VOYAGER },
--	{ USB_DEVICE(0x0ccd, 0x0086), .driver_info = TM6010_BOARD_TERRATEC_CINERGY_HYBRID_XE },
--	{ USB_DEVICE(0x0ccd, 0x00A5), .driver_info = TM6010_BOARD_TERRATEC_CINERGY_HYBRID_XE },
--	{ USB_DEVICE(0x0ccd, 0x0079), .driver_info = TM5600_BOARD_TERRATEC_GRABSTER },
--	{ USB_DEVICE(0x13d3, 0x3240), .driver_info = TM6010_BOARD_TWINHAN_TU501 },
--	{ USB_DEVICE(0x13d3, 0x3241), .driver_info = TM6010_BOARD_TWINHAN_TU501 },
--	{ USB_DEVICE(0x13d3, 0x3243), .driver_info = TM6010_BOARD_TWINHAN_TU501 },
--	{ USB_DEVICE(0x13d3, 0x3264), .driver_info = TM6010_BOARD_TWINHAN_TU501 },
--	{ USB_DEVICE(0x6000, 0xdec2), .driver_info = TM6010_BOARD_BEHOLD_WANDER_LITE },
--	{ USB_DEVICE(0x6000, 0xdec3), .driver_info = TM6010_BOARD_BEHOLD_VOYAGER_LITE },
--	{ }
--};
--MODULE_DEVICE_TABLE(usb, tm6000_id_table);
--
--/* Control power led for show some activity */
--void tm6000_flash_led(struct tm6000_core *dev, u8 state)
--{
--	/* Power LED unconfigured */
--	if (!dev->gpio.power_led)
--		return;
--
--	/* ON Power LED */
--	if (state) {
--		switch (dev->model) {
--		case TM6010_BOARD_HAUPPAUGE_900H:
--		case TM6010_BOARD_TERRATEC_CINERGY_HYBRID_XE:
--		case TM6010_BOARD_TWINHAN_TU501:
--			tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--				dev->gpio.power_led, 0x00);
--			break;
--		case TM6010_BOARD_BEHOLD_WANDER:
--		case TM6010_BOARD_BEHOLD_VOYAGER:
--		case TM6010_BOARD_BEHOLD_WANDER_LITE:
--		case TM6010_BOARD_BEHOLD_VOYAGER_LITE:
--			tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--				dev->gpio.power_led, 0x01);
--			break;
--		}
--	}
--	/* OFF Power LED */
--	else {
--		switch (dev->model) {
--		case TM6010_BOARD_HAUPPAUGE_900H:
--		case TM6010_BOARD_TERRATEC_CINERGY_HYBRID_XE:
--		case TM6010_BOARD_TWINHAN_TU501:
--			tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--				dev->gpio.power_led, 0x01);
--			break;
--		case TM6010_BOARD_BEHOLD_WANDER:
--		case TM6010_BOARD_BEHOLD_VOYAGER:
--		case TM6010_BOARD_BEHOLD_WANDER_LITE:
--		case TM6010_BOARD_BEHOLD_VOYAGER_LITE:
--			tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--				dev->gpio.power_led, 0x00);
--			break;
--		}
--	}
--}
--
--/* Tuner callback to provide the proper gpio changes needed for xc5000 */
--int tm6000_xc5000_callback(void *ptr, int component, int command, int arg)
--{
--	int rc = 0;
--	struct tm6000_core *dev = ptr;
--
--	if (dev->tuner_type != TUNER_XC5000)
--		return 0;
--
--	switch (command) {
--	case XC5000_TUNER_RESET:
--		tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--			       dev->gpio.tuner_reset, 0x01);
--		msleep(15);
--		tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--			       dev->gpio.tuner_reset, 0x00);
--		msleep(15);
--		tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--			       dev->gpio.tuner_reset, 0x01);
--		break;
--	}
--	return rc;
--}
--EXPORT_SYMBOL_GPL(tm6000_xc5000_callback);
--
--/* Tuner callback to provide the proper gpio changes needed for xc2028 */
--
--int tm6000_tuner_callback(void *ptr, int component, int command, int arg)
--{
--	int rc = 0;
--	struct tm6000_core *dev = ptr;
--
--	if (dev->tuner_type != TUNER_XC2028)
--		return 0;
--
--	switch (command) {
--	case XC2028_RESET_CLK:
--		tm6000_ir_wait(dev, 0);
--
--		tm6000_set_reg(dev, REQ_04_EN_DISABLE_MCU_INT,
--					0x02, arg);
--		msleep(10);
--		rc = tm6000_i2c_reset(dev, 10);
--		break;
--	case XC2028_TUNER_RESET:
--		/* Reset codes during load firmware */
--		switch (arg) {
--		case 0:
--			/* newer tuner can faster reset */
--			switch (dev->model) {
--			case TM5600_BOARD_10MOONS_UT821:
--				tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--					       dev->gpio.tuner_reset, 0x01);
--				tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--					       0x300, 0x01);
--				msleep(10);
--				tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--					       dev->gpio.tuner_reset, 0x00);
--				tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--					       0x300, 0x00);
--				msleep(10);
--				tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--					       dev->gpio.tuner_reset, 0x01);
--				tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--					       0x300, 0x01);
--				break;
--			case TM6010_BOARD_HAUPPAUGE_900H:
--			case TM6010_BOARD_TERRATEC_CINERGY_HYBRID_XE:
--			case TM6010_BOARD_TWINHAN_TU501:
--				tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--					       dev->gpio.tuner_reset, 0x01);
--				msleep(60);
--				tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--					       dev->gpio.tuner_reset, 0x00);
--				msleep(75);
--				tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--					       dev->gpio.tuner_reset, 0x01);
--				msleep(60);
--				break;
--			default:
--				tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--					       dev->gpio.tuner_reset, 0x00);
--				msleep(130);
--				tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--					       dev->gpio.tuner_reset, 0x01);
--				msleep(130);
--				break;
--			}
--
--			tm6000_ir_wait(dev, 1);
--			break;
--		case 1:
--			tm6000_set_reg(dev, REQ_04_EN_DISABLE_MCU_INT,
--						0x02, 0x01);
--			msleep(10);
--			break;
--		case 2:
--			rc = tm6000_i2c_reset(dev, 100);
--			break;
--		}
--		break;
--	case XC2028_I2C_FLUSH:
--		tm6000_set_reg(dev, REQ_50_SET_START, 0, 0);
--		tm6000_set_reg(dev, REQ_51_SET_STOP, 0, 0);
--		break;
--	}
--	return rc;
--}
--EXPORT_SYMBOL_GPL(tm6000_tuner_callback);
--
--int tm6000_cards_setup(struct tm6000_core *dev)
--{
--	/*
--	 * Board-specific initialization sequence. Handles all GPIO
--	 * initialization sequences that are board-specific.
--	 * Up to now, all found devices use GPIO1 and GPIO4 at the same way.
--	 * Probably, they're all based on some reference device. Due to that,
--	 * there's a common routine at the end to handle those GPIO's. Devices
--	 * that use different pinups or init sequences can just return at
--	 * the board-specific session.
--	 */
--	switch (dev->model) {
--	case TM6010_BOARD_HAUPPAUGE_900H:
--	case TM6010_BOARD_TERRATEC_CINERGY_HYBRID_XE:
--	case TM6010_BOARD_TWINHAN_TU501:
--	case TM6010_BOARD_GENERIC:
--		/* Turn xceive 3028 on */
--		tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN, dev->gpio.tuner_on, 0x01);
--		msleep(15);
--		/* Turn zarlink zl10353 on */
--		tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN, dev->gpio.demod_on, 0x00);
--		msleep(15);
--		/* Reset zarlink zl10353 */
--		tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN, dev->gpio.demod_reset, 0x00);
--		msleep(50);
--		tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN, dev->gpio.demod_reset, 0x01);
--		msleep(15);
--		/* Turn zarlink zl10353 off */
--		tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN, dev->gpio.demod_on, 0x01);
--		msleep(15);
--		/* ir ? */
--		tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN, dev->gpio.ir, 0x01);
--		msleep(15);
--		/* Power led on (blue) */
--		tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN, dev->gpio.power_led, 0x00);
--		msleep(15);
--		/* DVB led off (orange) */
--		tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN, dev->gpio.dvb_led, 0x01);
--		msleep(15);
--		/* Turn zarlink zl10353 on */
--		tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN, dev->gpio.demod_on, 0x00);
--		msleep(15);
--		break;
--	case TM6010_BOARD_BEHOLD_WANDER:
--	case TM6010_BOARD_BEHOLD_WANDER_LITE:
--		/* Power led on (blue) */
--		tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN, dev->gpio.power_led, 0x01);
--		msleep(15);
--		/* Reset zarlink zl10353 */
--		tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN, dev->gpio.demod_reset, 0x00);
--		msleep(50);
--		tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN, dev->gpio.demod_reset, 0x01);
--		msleep(15);
--		break;
--	case TM6010_BOARD_BEHOLD_VOYAGER:
--	case TM6010_BOARD_BEHOLD_VOYAGER_LITE:
--		/* Power led on (blue) */
--		tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN, dev->gpio.power_led, 0x01);
--		msleep(15);
--		break;
--	default:
--		break;
--	}
--
--	/*
--	 * Default initialization. Most of the devices seem to use GPIO1
--	 * and GPIO4.on the same way, so, this handles the common sequence
--	 * used by most devices.
--	 * If a device uses a different sequence or different GPIO pins for
--	 * reset, just add the code at the board-specific part
--	 */
--
--	if (dev->gpio.tuner_reset) {
--		int rc;
--		int i;
--
--		for (i = 0; i < 2; i++) {
--			rc = tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--						dev->gpio.tuner_reset, 0x00);
--			if (rc < 0) {
--				printk(KERN_ERR "Error %i doing tuner reset\n", rc);
--				return rc;
--			}
--
--			msleep(10); /* Just to be conservative */
--			rc = tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--						dev->gpio.tuner_reset, 0x01);
--			if (rc < 0) {
--				printk(KERN_ERR "Error %i doing tuner reset\n", rc);
--				return rc;
--			}
--		}
--	} else {
--		printk(KERN_ERR "Tuner reset is not configured\n");
--		return -1;
--	}
--
--	msleep(50);
--
--	return 0;
--};
--
--static void tm6000_config_tuner(struct tm6000_core *dev)
--{
--	struct tuner_setup tun_setup;
--
--	/* Load tuner module */
--	v4l2_i2c_new_subdev(&dev->v4l2_dev, &dev->i2c_adap,
--		"tuner", dev->tuner_addr, NULL);
--
--	memset(&tun_setup, 0, sizeof(tun_setup));
--	tun_setup.type = dev->tuner_type;
--	tun_setup.addr = dev->tuner_addr;
--
--	tun_setup.mode_mask = 0;
--	if (dev->caps.has_tuner)
--		tun_setup.mode_mask |= (T_ANALOG_TV | T_RADIO);
--
--	switch (dev->tuner_type) {
--	case TUNER_XC2028:
--		tun_setup.tuner_callback = tm6000_tuner_callback;
--		break;
--	case TUNER_XC5000:
--		tun_setup.tuner_callback = tm6000_xc5000_callback;
--		break;
--	}
--
--	v4l2_device_call_all(&dev->v4l2_dev, 0, tuner, s_type_addr, &tun_setup);
--
--	switch (dev->tuner_type) {
--	case TUNER_XC2028: {
--		struct v4l2_priv_tun_config xc2028_cfg;
--		struct xc2028_ctrl ctl;
--
--		memset(&xc2028_cfg, 0, sizeof(xc2028_cfg));
--		memset(&ctl, 0, sizeof(ctl));
--
--		ctl.demod = XC3028_FE_ZARLINK456;
--
--		xc2028_cfg.tuner = TUNER_XC2028;
--		xc2028_cfg.priv  = &ctl;
--
--		switch (dev->model) {
--		case TM6010_BOARD_HAUPPAUGE_900H:
--		case TM6010_BOARD_TERRATEC_CINERGY_HYBRID_XE:
--		case TM6010_BOARD_TWINHAN_TU501:
--			ctl.max_len = 80;
--			ctl.fname = "xc3028L-v36.fw";
--			break;
--		default:
--			if (dev->dev_type == TM6010)
--				ctl.fname = "xc3028-v27.fw";
--			else
--				ctl.fname = "xc3028-v24.fw";
--		}
--
--		printk(KERN_INFO "Setting firmware parameters for xc2028\n");
--		v4l2_device_call_all(&dev->v4l2_dev, 0, tuner, s_config,
--				     &xc2028_cfg);
--
--		}
--		break;
--	case TUNER_XC5000:
--		{
--		struct v4l2_priv_tun_config  xc5000_cfg;
--		struct xc5000_config ctl = {
--			.i2c_address = dev->tuner_addr,
--			.if_khz      = 4570,
--			.radio_input = XC5000_RADIO_FM1_MONO,
--			};
--
--		xc5000_cfg.tuner = TUNER_XC5000;
--		xc5000_cfg.priv  = &ctl;
--
--		v4l2_device_call_all(&dev->v4l2_dev, 0, tuner, s_config,
--				     &xc5000_cfg);
--		}
--		break;
--	default:
--		printk(KERN_INFO "Unknown tuner type. Tuner is not configured.\n");
--		break;
--	}
--}
--
--static int fill_board_specific_data(struct tm6000_core *dev)
--{
--	int rc;
--
--	dev->dev_type   = tm6000_boards[dev->model].type;
--	dev->tuner_type = tm6000_boards[dev->model].tuner_type;
--	dev->tuner_addr = tm6000_boards[dev->model].tuner_addr;
--
--	dev->gpio = tm6000_boards[dev->model].gpio;
--
--	dev->ir_codes = tm6000_boards[dev->model].ir_codes;
--
--	dev->demod_addr = tm6000_boards[dev->model].demod_addr;
--
--	dev->caps = tm6000_boards[dev->model].caps;
--
--	dev->vinput[0] = tm6000_boards[dev->model].vinput[0];
--	dev->vinput[1] = tm6000_boards[dev->model].vinput[1];
--	dev->vinput[2] = tm6000_boards[dev->model].vinput[2];
--	dev->rinput = tm6000_boards[dev->model].rinput;
--
--	/* setup per-model quirks */
--	switch (dev->model) {
--	case TM6010_BOARD_TERRATEC_CINERGY_HYBRID_XE:
--	case TM6010_BOARD_HAUPPAUGE_900H:
--		dev->quirks |= TM6000_QUIRK_NO_USB_DELAY;
--		break;
--
--	default:
--		break;
--	}
--
--	/* initialize hardware */
--	rc = tm6000_init(dev);
--	if (rc < 0)
--		return rc;
--
--	return v4l2_device_register(&dev->udev->dev, &dev->v4l2_dev);
--}
--
--
--static void use_alternative_detection_method(struct tm6000_core *dev)
--{
--	int i, model = -1;
--
--	if (!dev->eedata_size)
--		return;
--
--	for (i = 0; i < ARRAY_SIZE(tm6000_boards); i++) {
--		if (!tm6000_boards[i].eename_size)
--			continue;
--		if (dev->eedata_size < tm6000_boards[i].eename_pos +
--				       tm6000_boards[i].eename_size)
--			continue;
--
--		if (!memcmp(&dev->eedata[tm6000_boards[i].eename_pos],
--			    tm6000_boards[i].eename,
--			    tm6000_boards[i].eename_size)) {
--			model = i;
--			break;
--		}
--	}
--	if (model < 0) {
--		printk(KERN_INFO "Device has eeprom but is currently unknown\n");
--		return;
--	}
--
--	dev->model = model;
--
--	printk(KERN_INFO "Device identified via eeprom as %s (type = %d)\n",
--	       tm6000_boards[model].name, model);
--}
--
--#if defined(CONFIG_MODULES) && defined(MODULE)
--static void request_module_async(struct work_struct *work)
--{
--	struct tm6000_core *dev = container_of(work, struct tm6000_core,
--					       request_module_wk);
--
--	request_module("tm6000-alsa");
--
--	if (dev->caps.has_dvb)
--		request_module("tm6000-dvb");
--}
--
--static void request_modules(struct tm6000_core *dev)
--{
--	INIT_WORK(&dev->request_module_wk, request_module_async);
--	schedule_work(&dev->request_module_wk);
--}
--
--static void flush_request_modules(struct tm6000_core *dev)
--{
--	flush_work(&dev->request_module_wk);
--}
--#else
--#define request_modules(dev)
--#define flush_request_modules(dev)
--#endif /* CONFIG_MODULES */
--
--static int tm6000_init_dev(struct tm6000_core *dev)
--{
--	struct v4l2_frequency f;
--	int rc = 0;
--
--	mutex_init(&dev->lock);
--	mutex_lock(&dev->lock);
--
--	if (!is_generic(dev->model)) {
--		rc = fill_board_specific_data(dev);
--		if (rc < 0)
--			goto err;
--
--		/* register i2c bus */
--		rc = tm6000_i2c_register(dev);
--		if (rc < 0)
--			goto err;
--	} else {
--		/* register i2c bus */
--		rc = tm6000_i2c_register(dev);
--		if (rc < 0)
--			goto err;
--
--		use_alternative_detection_method(dev);
--
--		rc = fill_board_specific_data(dev);
--		if (rc < 0)
--			goto err;
--	}
--
--	/* Default values for STD and resolutions */
--	dev->width = 720;
--	dev->height = 480;
--	dev->norm = V4L2_STD_NTSC_M;
--
--	/* Configure tuner */
--	tm6000_config_tuner(dev);
--
--	/* Set video standard */
--	v4l2_device_call_all(&dev->v4l2_dev, 0, video, s_std, dev->norm);
--
--	/* Set tuner frequency - also loads firmware on xc2028/xc3028 */
--	f.tuner = 0;
--	f.type = V4L2_TUNER_ANALOG_TV;
--	f.frequency = 3092;	/* 193.25 MHz */
--	dev->freq = f.frequency;
--	v4l2_device_call_all(&dev->v4l2_dev, 0, tuner, s_frequency, &f);
--
--	if (dev->caps.has_tda9874)
--		v4l2_i2c_new_subdev(&dev->v4l2_dev, &dev->i2c_adap,
--			"tvaudio", I2C_ADDR_TDA9874, NULL);
--
--	/* register and initialize V4L2 */
--	rc = tm6000_v4l2_register(dev);
--	if (rc < 0)
--		goto err;
--
--	tm6000_add_into_devlist(dev);
--	tm6000_init_extension(dev);
--
--	tm6000_ir_init(dev);
--
--	request_modules(dev);
--
--	mutex_unlock(&dev->lock);
--	return 0;
--
--err:
--	mutex_unlock(&dev->lock);
--	return rc;
--}
--
--/* high bandwidth multiplier, as encoded in highspeed endpoint descriptors */
--#define hb_mult(wMaxPacketSize) (1 + (((wMaxPacketSize) >> 11) & 0x03))
--
--static void get_max_endpoint(struct usb_device *udev,
--			     struct usb_host_interface *alt,
--			     char *msgtype,
--			     struct usb_host_endpoint *curr_e,
--			     struct tm6000_endpoint *tm_ep)
--{
--	u16 tmp = le16_to_cpu(curr_e->desc.wMaxPacketSize);
--	unsigned int size = tmp & 0x7ff;
--
--	if (udev->speed == USB_SPEED_HIGH)
--		size = size * hb_mult(tmp);
--
--	if (size > tm_ep->maxsize) {
--		tm_ep->endp = curr_e;
--		tm_ep->maxsize = size;
--		tm_ep->bInterfaceNumber = alt->desc.bInterfaceNumber;
--		tm_ep->bAlternateSetting = alt->desc.bAlternateSetting;
--
--		printk(KERN_INFO "tm6000: %s endpoint: 0x%02x (max size=%u bytes)\n",
--					msgtype, curr_e->desc.bEndpointAddress,
--					size);
--	}
--}
--
--/*
-- * tm6000_usb_probe()
-- * checks for supported devices
-- */
--static int tm6000_usb_probe(struct usb_interface *interface,
--			    const struct usb_device_id *id)
--{
--	struct usb_device *usbdev;
--	struct tm6000_core *dev;
--	int i, rc;
--	int nr = 0;
--	char *speed;
--
--	usbdev = usb_get_dev(interface_to_usbdev(interface));
--
--	/* Selects the proper interface */
--	rc = usb_set_interface(usbdev, 0, 1);
--	if (rc < 0)
--		goto report_failure;
--
--	/* Check to see next free device and mark as used */
--	nr = find_first_zero_bit(&tm6000_devused, TM6000_MAXBOARDS);
--	if (nr >= TM6000_MAXBOARDS) {
--		printk(KERN_ERR "tm6000: Supports only %i tm60xx boards.\n", TM6000_MAXBOARDS);
--		rc = -ENOMEM;
--		goto put_device;
--	}
--
--	/* Create and initialize dev struct */
--	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
--	if (!dev) {
--		rc = -ENOMEM;
--		goto put_device;
--	}
--	spin_lock_init(&dev->slock);
--	mutex_init(&dev->usb_lock);
--
--	/* Increment usage count */
--	set_bit(nr, &tm6000_devused);
--	snprintf(dev->name, 29, "tm6000 #%d", nr);
--
--	dev->model = id->driver_info;
--	if (card[nr] < ARRAY_SIZE(tm6000_boards))
--		dev->model = card[nr];
--
--	dev->udev = usbdev;
--	dev->devno = nr;
--
--	switch (usbdev->speed) {
--	case USB_SPEED_LOW:
--		speed = "1.5";
--		break;
--	case USB_SPEED_UNKNOWN:
--	case USB_SPEED_FULL:
--		speed = "12";
--		break;
--	case USB_SPEED_HIGH:
--		speed = "480";
--		break;
--	default:
--		speed = "unknown";
--	}
--
--	/* Get endpoints */
--	for (i = 0; i < interface->num_altsetting; i++) {
--		int ep;
--
--		for (ep = 0; ep < interface->altsetting[i].desc.bNumEndpoints; ep++) {
--			struct usb_host_endpoint	*e;
--			int dir_out;
--
--			e = &interface->altsetting[i].endpoint[ep];
--
--			dir_out = ((e->desc.bEndpointAddress &
--					USB_ENDPOINT_DIR_MASK) == USB_DIR_OUT);
--
--			printk(KERN_INFO "tm6000: alt %d, interface %i, class %i\n",
--			       i,
--			       interface->altsetting[i].desc.bInterfaceNumber,
--			       interface->altsetting[i].desc.bInterfaceClass);
--
--			switch (e->desc.bmAttributes) {
--			case USB_ENDPOINT_XFER_BULK:
--				if (!dir_out) {
--					get_max_endpoint(usbdev,
--							 &interface->altsetting[i],
--							 "Bulk IN", e,
--							 &dev->bulk_in);
--				} else {
--					get_max_endpoint(usbdev,
--							 &interface->altsetting[i],
--							 "Bulk OUT", e,
--							 &dev->bulk_out);
--				}
--				break;
--			case USB_ENDPOINT_XFER_ISOC:
--				if (!dir_out) {
--					get_max_endpoint(usbdev,
--							 &interface->altsetting[i],
--							 "ISOC IN", e,
--							 &dev->isoc_in);
--				} else {
--					get_max_endpoint(usbdev,
--							 &interface->altsetting[i],
--							 "ISOC OUT", e,
--							 &dev->isoc_out);
--				}
--				break;
--			case USB_ENDPOINT_XFER_INT:
--				if (!dir_out) {
--					get_max_endpoint(usbdev,
--							&interface->altsetting[i],
--							"INT IN", e,
--							&dev->int_in);
--				} else {
--					get_max_endpoint(usbdev,
--							&interface->altsetting[i],
--							"INT OUT", e,
--							&dev->int_out);
--				}
--				break;
--			}
--		}
--	}
--
--
--	printk(KERN_INFO "tm6000: New video device @ %s Mbps (%04x:%04x, ifnum %d)\n",
--		speed,
--		le16_to_cpu(dev->udev->descriptor.idVendor),
--		le16_to_cpu(dev->udev->descriptor.idProduct),
--		interface->altsetting->desc.bInterfaceNumber);
--
--/* check if the the device has the iso in endpoint at the correct place */
--	if (!dev->isoc_in.endp) {
--		printk(KERN_ERR "tm6000: probing error: no IN ISOC endpoint!\n");
--		rc = -ENODEV;
--		goto free_device;
--	}
--
--	/* save our data pointer in this interface device */
--	usb_set_intfdata(interface, dev);
--
--	printk(KERN_INFO "tm6000: Found %s\n", tm6000_boards[dev->model].name);
--
--	rc = tm6000_init_dev(dev);
--	if (rc < 0)
--		goto free_device;
--
--	return 0;
--
--free_device:
--	kfree(dev);
--report_failure:
--	printk(KERN_ERR "tm6000: Error %d while registering\n", rc);
--
--	clear_bit(nr, &tm6000_devused);
--put_device:
--	usb_put_dev(usbdev);
--	return rc;
--}
--
--/*
-- * tm6000_usb_disconnect()
-- * called when the device gets disconnected
-- * video device will be unregistered on v4l2_close in case it is still open
-- */
--static void tm6000_usb_disconnect(struct usb_interface *interface)
--{
--	struct tm6000_core *dev = usb_get_intfdata(interface);
--	usb_set_intfdata(interface, NULL);
--
--	if (!dev)
--		return;
--
--	printk(KERN_INFO "tm6000: disconnecting %s\n", dev->name);
--
--	flush_request_modules(dev);
--
--	tm6000_ir_fini(dev);
--
--	if (dev->gpio.power_led) {
--		switch (dev->model) {
--		case TM6010_BOARD_HAUPPAUGE_900H:
--		case TM6010_BOARD_TERRATEC_CINERGY_HYBRID_XE:
--		case TM6010_BOARD_TWINHAN_TU501:
--			/* Power led off */
--			tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--				dev->gpio.power_led, 0x01);
--			msleep(15);
--			break;
--		case TM6010_BOARD_BEHOLD_WANDER:
--		case TM6010_BOARD_BEHOLD_VOYAGER:
--		case TM6010_BOARD_BEHOLD_WANDER_LITE:
--		case TM6010_BOARD_BEHOLD_VOYAGER_LITE:
--			/* Power led off */
--			tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--				dev->gpio.power_led, 0x00);
--			msleep(15);
--			break;
--		}
--	}
--	tm6000_v4l2_unregister(dev);
--
--	tm6000_i2c_unregister(dev);
--
--	v4l2_device_unregister(&dev->v4l2_dev);
--
--	dev->state |= DEV_DISCONNECTED;
--
--	usb_put_dev(dev->udev);
--
--	tm6000_close_extension(dev);
--	tm6000_remove_from_devlist(dev);
--
--	clear_bit(dev->devno, &tm6000_devused);
--	kfree(dev);
--}
--
--static struct usb_driver tm6000_usb_driver = {
--		.name = "tm6000",
--		.probe = tm6000_usb_probe,
--		.disconnect = tm6000_usb_disconnect,
--		.id_table = tm6000_id_table,
--};
--
--module_usb_driver(tm6000_usb_driver);
--
--MODULE_DESCRIPTION("Trident TVMaster TM5600/TM6000/TM6010 USB2 adapter");
--MODULE_AUTHOR("Mauro Carvalho Chehab");
--MODULE_LICENSE("GPL v2");
-diff --git a/drivers/staging/media/deprecated/tm6000/tm6000-core.c b/drivers/staging/media/deprecated/tm6000/tm6000-core.c
-deleted file mode 100644
-index 5c8cbc5d6f72..000000000000
---- a/drivers/staging/media/deprecated/tm6000/tm6000-core.c
-+++ /dev/null
-@@ -1,916 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--// tm6000-core.c - driver for TM5600/TM6000/TM6010 USB video capture devices
--//
--// Copyright (c) 2006-2007 Mauro Carvalho Chehab <mchehab@kernel.org>
--//
--// Copyright (c) 2007 Michel Ludwig <michel.ludwig@gmail.com>
--//     - DVB-T support
--
--#include <linux/module.h>
--#include <linux/kernel.h>
--#include <linux/slab.h>
--#include <linux/usb.h>
--#include <linux/i2c.h>
--#include "tm6000.h"
--#include "tm6000-regs.h"
--#include <media/v4l2-common.h>
--#include <media/tuner.h>
--
--#define USB_TIMEOUT	(5 * HZ) /* ms */
--
--int tm6000_read_write_usb(struct tm6000_core *dev, u8 req_type, u8 req,
--			  u16 value, u16 index, u8 *buf, u16 len)
--{
--	int          ret, i;
--	unsigned int pipe;
--	u8	     *data = NULL;
--	int delay = 5000;
--
--	if (len) {
--		data = kzalloc(len, GFP_KERNEL);
--		if (!data)
--			return -ENOMEM;
--	}
--
--	mutex_lock(&dev->usb_lock);
--
--	if (req_type & USB_DIR_IN)
--		pipe = usb_rcvctrlpipe(dev->udev, 0);
--	else {
--		pipe = usb_sndctrlpipe(dev->udev, 0);
--		memcpy(data, buf, len);
--	}
--
--	if (tm6000_debug & V4L2_DEBUG_I2C) {
--		printk(KERN_DEBUG "(dev %p, pipe %08x): ", dev->udev, pipe);
--
--		printk(KERN_CONT "%s: %02x %02x %02x %02x %02x %02x %02x %02x ",
--			(req_type & USB_DIR_IN) ? " IN" : "OUT",
--			req_type, req, value&0xff, value>>8, index&0xff,
--			index>>8, len&0xff, len>>8);
--
--		if (!(req_type & USB_DIR_IN)) {
--			printk(KERN_CONT ">>> ");
--			for (i = 0; i < len; i++)
--				printk(KERN_CONT " %02x", buf[i]);
--			printk(KERN_CONT "\n");
--		}
--	}
--
--	ret = usb_control_msg(dev->udev, pipe, req, req_type, value, index,
--			      data, len, USB_TIMEOUT);
--
--	if (req_type &  USB_DIR_IN)
--		memcpy(buf, data, len);
--
--	if (tm6000_debug & V4L2_DEBUG_I2C) {
--		if (ret < 0) {
--			if (req_type &  USB_DIR_IN)
--				printk(KERN_DEBUG "<<< (len=%d)\n", len);
--
--			printk(KERN_CONT "%s: Error #%d\n", __func__, ret);
--		} else if (req_type &  USB_DIR_IN) {
--			printk(KERN_CONT "<<< ");
--			for (i = 0; i < len; i++)
--				printk(KERN_CONT " %02x", buf[i]);
--			printk(KERN_CONT "\n");
--		}
--	}
--
--	kfree(data);
--
--	if (dev->quirks & TM6000_QUIRK_NO_USB_DELAY)
--		delay = 0;
--
--	if (req == REQ_16_SET_GET_I2C_WR1_RDN && !(req_type & USB_DIR_IN)) {
--		unsigned int tsleep;
--		/* Calculate delay time, 14000us for 64 bytes */
--		tsleep = (len * 200) + 200;
--		if (tsleep < delay)
--			tsleep = delay;
--		usleep_range(tsleep, tsleep + 1000);
--	}
--	else if (delay)
--		usleep_range(delay, delay + 1000);
--
--	mutex_unlock(&dev->usb_lock);
--	return ret;
--}
--
--int tm6000_set_reg(struct tm6000_core *dev, u8 req, u16 value, u16 index)
--{
--	return
--		tm6000_read_write_usb(dev, USB_DIR_OUT | USB_TYPE_VENDOR,
--				      req, value, index, NULL, 0);
--}
--EXPORT_SYMBOL_GPL(tm6000_set_reg);
--
--int tm6000_get_reg(struct tm6000_core *dev, u8 req, u16 value, u16 index)
--{
--	int rc;
--	u8 buf[1];
--
--	rc = tm6000_read_write_usb(dev, USB_DIR_IN | USB_TYPE_VENDOR, req,
--					value, index, buf, 1);
--
--	if (rc < 0)
--		return rc;
--
--	return *buf;
--}
--EXPORT_SYMBOL_GPL(tm6000_get_reg);
--
--int tm6000_set_reg_mask(struct tm6000_core *dev, u8 req, u16 value,
--						u16 index, u16 mask)
--{
--	int rc;
--	u8 buf[1];
--	u8 new_index;
--
--	rc = tm6000_read_write_usb(dev, USB_DIR_IN | USB_TYPE_VENDOR, req,
--					value, 0, buf, 1);
--
--	if (rc < 0)
--		return rc;
--
--	new_index = (buf[0] & ~mask) | (index & mask);
--
--	if (new_index == buf[0])
--		return 0;
--
--	return tm6000_read_write_usb(dev, USB_DIR_OUT | USB_TYPE_VENDOR,
--				      req, value, new_index, NULL, 0);
--}
--EXPORT_SYMBOL_GPL(tm6000_set_reg_mask);
--
--int tm6000_get_reg16(struct tm6000_core *dev, u8 req, u16 value, u16 index)
--{
--	int rc;
--	u8 buf[2];
--
--	rc = tm6000_read_write_usb(dev, USB_DIR_IN | USB_TYPE_VENDOR, req,
--					value, index, buf, 2);
--
--	if (rc < 0)
--		return rc;
--
--	return buf[1]|buf[0]<<8;
--}
--
--int tm6000_get_reg32(struct tm6000_core *dev, u8 req, u16 value, u16 index)
--{
--	int rc;
--	u8 buf[4];
--
--	rc = tm6000_read_write_usb(dev, USB_DIR_IN | USB_TYPE_VENDOR, req,
--					value, index, buf, 4);
--
--	if (rc < 0)
--		return rc;
--
--	return buf[3] | buf[2] << 8 | buf[1] << 16 | buf[0] << 24;
--}
--
--int tm6000_i2c_reset(struct tm6000_core *dev, u16 tsleep)
--{
--	int rc;
--
--	rc = tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN, TM6000_GPIO_CLK, 0);
--	if (rc < 0)
--		return rc;
--
--	msleep(tsleep);
--
--	rc = tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN, TM6000_GPIO_CLK, 1);
--	msleep(tsleep);
--
--	return rc;
--}
--
--void tm6000_set_fourcc_format(struct tm6000_core *dev)
--{
--	if (dev->dev_type == TM6010) {
--		int val;
--
--		val = tm6000_get_reg(dev, TM6010_REQ07_RCC_ACTIVE_IF, 0) & 0xfc;
--		if (dev->fourcc == V4L2_PIX_FMT_UYVY)
--			tm6000_set_reg(dev, TM6010_REQ07_RCC_ACTIVE_IF, val);
--		else
--			tm6000_set_reg(dev, TM6010_REQ07_RCC_ACTIVE_IF, val | 1);
--	} else {
--		if (dev->fourcc == V4L2_PIX_FMT_UYVY)
--			tm6000_set_reg(dev, TM6010_REQ07_RC1_TRESHOLD, 0xd0);
--		else
--			tm6000_set_reg(dev, TM6010_REQ07_RC1_TRESHOLD, 0x90);
--	}
--}
--
--static void tm6000_set_vbi(struct tm6000_core *dev)
--{
--	/*
--	 * FIXME:
--	 * VBI lines and start/end are different between 60Hz and 50Hz
--	 * So, it is very likely that we need to change the config to
--	 * something that takes it into account, doing something different
--	 * if (dev->norm & V4L2_STD_525_60)
--	 */
--
--	if (dev->dev_type == TM6010) {
--		tm6000_set_reg(dev, TM6010_REQ07_R3F_RESET, 0x01);
--		tm6000_set_reg(dev, TM6010_REQ07_R41_TELETEXT_VBI_CODE1, 0x27);
--		tm6000_set_reg(dev, TM6010_REQ07_R42_VBI_DATA_HIGH_LEVEL, 0x55);
--		tm6000_set_reg(dev, TM6010_REQ07_R43_VBI_DATA_TYPE_LINE7, 0x66);
--		tm6000_set_reg(dev, TM6010_REQ07_R44_VBI_DATA_TYPE_LINE8, 0x66);
--		tm6000_set_reg(dev, TM6010_REQ07_R45_VBI_DATA_TYPE_LINE9, 0x66);
--		tm6000_set_reg(dev,
--			TM6010_REQ07_R46_VBI_DATA_TYPE_LINE10, 0x66);
--		tm6000_set_reg(dev,
--			TM6010_REQ07_R47_VBI_DATA_TYPE_LINE11, 0x66);
--		tm6000_set_reg(dev,
--			TM6010_REQ07_R48_VBI_DATA_TYPE_LINE12, 0x66);
--		tm6000_set_reg(dev,
--			TM6010_REQ07_R49_VBI_DATA_TYPE_LINE13, 0x66);
--		tm6000_set_reg(dev,
--			TM6010_REQ07_R4A_VBI_DATA_TYPE_LINE14, 0x66);
--		tm6000_set_reg(dev,
--			TM6010_REQ07_R4B_VBI_DATA_TYPE_LINE15, 0x66);
--		tm6000_set_reg(dev,
--			TM6010_REQ07_R4C_VBI_DATA_TYPE_LINE16, 0x66);
--		tm6000_set_reg(dev,
--			TM6010_REQ07_R4D_VBI_DATA_TYPE_LINE17, 0x66);
--		tm6000_set_reg(dev,
--			TM6010_REQ07_R4E_VBI_DATA_TYPE_LINE18, 0x66);
--		tm6000_set_reg(dev,
--			TM6010_REQ07_R4F_VBI_DATA_TYPE_LINE19, 0x66);
--		tm6000_set_reg(dev,
--			TM6010_REQ07_R50_VBI_DATA_TYPE_LINE20, 0x66);
--		tm6000_set_reg(dev,
--			TM6010_REQ07_R51_VBI_DATA_TYPE_LINE21, 0x66);
--		tm6000_set_reg(dev,
--			TM6010_REQ07_R52_VBI_DATA_TYPE_LINE22, 0x66);
--		tm6000_set_reg(dev,
--			TM6010_REQ07_R53_VBI_DATA_TYPE_LINE23, 0x00);
--		tm6000_set_reg(dev,
--			TM6010_REQ07_R54_VBI_DATA_TYPE_RLINES, 0x00);
--		tm6000_set_reg(dev,
--			TM6010_REQ07_R55_VBI_LOOP_FILTER_GAIN, 0x01);
--		tm6000_set_reg(dev,
--			TM6010_REQ07_R56_VBI_LOOP_FILTER_I_GAIN, 0x00);
--		tm6000_set_reg(dev,
--			TM6010_REQ07_R57_VBI_LOOP_FILTER_P_GAIN, 0x02);
--		tm6000_set_reg(dev, TM6010_REQ07_R58_VBI_CAPTION_DTO1, 0x35);
--		tm6000_set_reg(dev, TM6010_REQ07_R59_VBI_CAPTION_DTO0, 0xa0);
--		tm6000_set_reg(dev, TM6010_REQ07_R5A_VBI_TELETEXT_DTO1, 0x11);
--		tm6000_set_reg(dev, TM6010_REQ07_R5B_VBI_TELETEXT_DTO0, 0x4c);
--		tm6000_set_reg(dev, TM6010_REQ07_R40_TELETEXT_VBI_CODE0, 0x01);
--		tm6000_set_reg(dev, TM6010_REQ07_R3F_RESET, 0x00);
--	}
--}
--
--int tm6000_init_analog_mode(struct tm6000_core *dev)
--{
--	struct v4l2_frequency f;
--
--	if (dev->dev_type == TM6010) {
--		u8 active = TM6010_REQ07_RCC_ACTIVE_IF_AUDIO_ENABLE;
--
--		if (!dev->radio)
--			active |= TM6010_REQ07_RCC_ACTIVE_IF_VIDEO_ENABLE;
--
--		/* Enable video and audio */
--		tm6000_set_reg_mask(dev, TM6010_REQ07_RCC_ACTIVE_IF,
--							active, 0x60);
--		/* Disable TS input */
--		tm6000_set_reg_mask(dev, TM6010_REQ07_RC0_ACTIVE_VIDEO_SOURCE,
--							0x00, 0x40);
--	} else {
--		/* Enables soft reset */
--		tm6000_set_reg(dev, TM6010_REQ07_R3F_RESET, 0x01);
--
--		if (dev->scaler)
--			/* Disable Hfilter and Enable TS Drop err */
--			tm6000_set_reg(dev, TM6010_REQ07_RC0_ACTIVE_VIDEO_SOURCE, 0x20);
--		else	/* Enable Hfilter and disable TS Drop err */
--			tm6000_set_reg(dev, TM6010_REQ07_RC0_ACTIVE_VIDEO_SOURCE, 0x80);
--
--		tm6000_set_reg(dev, TM6010_REQ07_RC3_HSTART1, 0x88);
--		tm6000_set_reg(dev, TM6000_REQ07_RDA_CLK_SEL, 0x23);
--		tm6000_set_reg(dev, TM6010_REQ07_RD1_ADDR_FOR_REQ1, 0xc0);
--		tm6000_set_reg(dev, TM6010_REQ07_RD2_ADDR_FOR_REQ2, 0xd8);
--		tm6000_set_reg(dev, TM6010_REQ07_RD6_ENDP_REQ1_REQ2, 0x06);
--		tm6000_set_reg(dev, TM6000_REQ07_RDF_PWDOWN_ACLK, 0x1f);
--
--		/* AP Software reset */
--		tm6000_set_reg(dev, TM6010_REQ07_RFF_SOFT_RESET, 0x08);
--		tm6000_set_reg(dev, TM6010_REQ07_RFF_SOFT_RESET, 0x00);
--
--		tm6000_set_fourcc_format(dev);
--
--		/* Disables soft reset */
--		tm6000_set_reg(dev, TM6010_REQ07_R3F_RESET, 0x00);
--	}
--	msleep(20);
--
--	/* Tuner firmware can now be loaded */
--
--	/*
--	 * FIXME: This is a hack! xc3028 "sleeps" when no channel is detected
--	 * for more than a few seconds. Not sure why, as this behavior does
--	 * not happen on other devices with xc3028. So, I suspect that it
--	 * is yet another bug at tm6000. After start sleeping, decoding
--	 * doesn't start automatically. Instead, it requires some
--	 * I2C commands to wake it up. As we want to have image at the
--	 * beginning, we needed to add this hack. The better would be to
--	 * discover some way to make tm6000 to wake up without this hack.
--	 */
--	f.frequency = dev->freq;
--	v4l2_device_call_all(&dev->v4l2_dev, 0, tuner, s_frequency, &f);
--
--	msleep(100);
--	tm6000_set_standard(dev);
--	tm6000_set_vbi(dev);
--	tm6000_set_audio_bitrate(dev, 48000);
--
--	/* switch dvb led off */
--	if (dev->gpio.dvb_led) {
--		tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--			dev->gpio.dvb_led, 0x01);
--	}
--
--	return 0;
--}
--
--int tm6000_init_digital_mode(struct tm6000_core *dev)
--{
--	if (dev->dev_type == TM6010) {
--		/* Disable video and audio */
--		tm6000_set_reg_mask(dev, TM6010_REQ07_RCC_ACTIVE_IF,
--				0x00, 0x60);
--		/* Enable TS input */
--		tm6000_set_reg_mask(dev, TM6010_REQ07_RC0_ACTIVE_VIDEO_SOURCE,
--				0x40, 0x40);
--		/* all power down, but not the digital data port */
--		tm6000_set_reg(dev, TM6010_REQ07_RFE_POWER_DOWN, 0x28);
--		tm6000_set_reg(dev, TM6010_REQ08_RE2_POWER_DOWN_CTRL1, 0xfc);
--		tm6000_set_reg(dev, TM6010_REQ08_RE6_POWER_DOWN_CTRL2, 0xff);
--	} else  {
--		tm6000_set_reg(dev, TM6010_REQ07_RFF_SOFT_RESET, 0x08);
--		tm6000_set_reg(dev, TM6010_REQ07_RFF_SOFT_RESET, 0x00);
--		tm6000_set_reg(dev, TM6010_REQ07_R3F_RESET, 0x01);
--		tm6000_set_reg(dev, TM6000_REQ07_RDF_PWDOWN_ACLK, 0x08);
--		tm6000_set_reg(dev, TM6000_REQ07_RE2_VADC_STATUS_CTL, 0x0c);
--		tm6000_set_reg(dev, TM6000_REQ07_RE8_VADC_PWDOWN_CTL, 0xff);
--		tm6000_set_reg(dev, TM6000_REQ07_REB_VADC_AADC_MODE, 0xd8);
--		tm6000_set_reg(dev, TM6010_REQ07_RC0_ACTIVE_VIDEO_SOURCE, 0x40);
--		tm6000_set_reg(dev, TM6010_REQ07_RC1_TRESHOLD, 0xd0);
--		tm6000_set_reg(dev, TM6010_REQ07_RC3_HSTART1, 0x09);
--		tm6000_set_reg(dev, TM6000_REQ07_RDA_CLK_SEL, 0x37);
--		tm6000_set_reg(dev, TM6010_REQ07_RD1_ADDR_FOR_REQ1, 0xd8);
--		tm6000_set_reg(dev, TM6010_REQ07_RD2_ADDR_FOR_REQ2, 0xc0);
--		tm6000_set_reg(dev, TM6010_REQ07_RD6_ENDP_REQ1_REQ2, 0x60);
--
--		tm6000_set_reg(dev, TM6000_REQ07_RE2_VADC_STATUS_CTL, 0x0c);
--		tm6000_set_reg(dev, TM6000_REQ07_RE8_VADC_PWDOWN_CTL, 0xff);
--		tm6000_set_reg(dev, TM6000_REQ07_REB_VADC_AADC_MODE, 0x08);
--		msleep(50);
--
--		tm6000_set_reg(dev, REQ_04_EN_DISABLE_MCU_INT, 0x0020, 0x00);
--		msleep(50);
--		tm6000_set_reg(dev, REQ_04_EN_DISABLE_MCU_INT, 0x0020, 0x01);
--		msleep(50);
--		tm6000_set_reg(dev, REQ_04_EN_DISABLE_MCU_INT, 0x0020, 0x00);
--		msleep(100);
--	}
--
--	/* switch dvb led on */
--	if (dev->gpio.dvb_led) {
--		tm6000_set_reg(dev, REQ_03_SET_GET_MCU_PIN,
--			dev->gpio.dvb_led, 0x00);
--	}
--
--	return 0;
--}
--EXPORT_SYMBOL(tm6000_init_digital_mode);
--
--struct reg_init {
--	u8 req;
--	u8 reg;
--	u8 val;
--};
--
--/* The meaning of those initializations are unknown */
--static struct reg_init tm6000_init_tab[] = {
--	/* REG  VALUE */
--	{ TM6000_REQ07_RDF_PWDOWN_ACLK, 0x1f },
--	{ TM6010_REQ07_RFF_SOFT_RESET, 0x08 },
--	{ TM6010_REQ07_RFF_SOFT_RESET, 0x00 },
--	{ TM6010_REQ07_RD5_POWERSAVE, 0x4f },
--	{ TM6000_REQ07_RDA_CLK_SEL, 0x23 },
--	{ TM6000_REQ07_RDB_OUT_SEL, 0x08 },
--	{ TM6000_REQ07_RE2_VADC_STATUS_CTL, 0x00 },
--	{ TM6000_REQ07_RE3_VADC_INP_LPF_SEL1, 0x10 },
--	{ TM6000_REQ07_RE5_VADC_INP_LPF_SEL2, 0x00 },
--	{ TM6000_REQ07_RE8_VADC_PWDOWN_CTL, 0x00 },
--	{ TM6000_REQ07_REB_VADC_AADC_MODE, 0x64 },	/* 48000 bits/sample, external input */
--	{ TM6000_REQ07_REE_VADC_CTRL_SEL_CONTROL, 0xc2 },
--
--	{ TM6010_REQ07_R3F_RESET, 0x01 },		/* Start of soft reset */
--	{ TM6010_REQ07_R00_VIDEO_CONTROL0, 0x00 },
--	{ TM6010_REQ07_R01_VIDEO_CONTROL1, 0x07 },
--	{ TM6010_REQ07_R02_VIDEO_CONTROL2, 0x5f },
--	{ TM6010_REQ07_R03_YC_SEP_CONTROL, 0x00 },
--	{ TM6010_REQ07_R05_NOISE_THRESHOLD, 0x64 },
--	{ TM6010_REQ07_R07_OUTPUT_CONTROL, 0x01 },
--	{ TM6010_REQ07_R08_LUMA_CONTRAST_ADJ, 0x82 },
--	{ TM6010_REQ07_R09_LUMA_BRIGHTNESS_ADJ, 0x36 },
--	{ TM6010_REQ07_R0A_CHROMA_SATURATION_ADJ, 0x50 },
--	{ TM6010_REQ07_R0C_CHROMA_AGC_CONTROL, 0x6a },
--	{ TM6010_REQ07_R11_AGC_PEAK_CONTROL, 0xc9 },
--	{ TM6010_REQ07_R12_AGC_GATE_STARTH, 0x07 },
--	{ TM6010_REQ07_R13_AGC_GATE_STARTL, 0x3b },
--	{ TM6010_REQ07_R14_AGC_GATE_WIDTH, 0x47 },
--	{ TM6010_REQ07_R15_AGC_BP_DELAY, 0x6f },
--	{ TM6010_REQ07_R17_HLOOP_MAXSTATE, 0xcd },
--	{ TM6010_REQ07_R18_CHROMA_DTO_INCREMENT3, 0x1e },
--	{ TM6010_REQ07_R19_CHROMA_DTO_INCREMENT2, 0x8b },
--	{ TM6010_REQ07_R1A_CHROMA_DTO_INCREMENT1, 0xa2 },
--	{ TM6010_REQ07_R1B_CHROMA_DTO_INCREMENT0, 0xe9 },
--	{ TM6010_REQ07_R1C_HSYNC_DTO_INCREMENT3, 0x1c },
--	{ TM6010_REQ07_R1D_HSYNC_DTO_INCREMENT2, 0xcc },
--	{ TM6010_REQ07_R1E_HSYNC_DTO_INCREMENT1, 0xcc },
--	{ TM6010_REQ07_R1F_HSYNC_DTO_INCREMENT0, 0xcd },
--	{ TM6010_REQ07_R20_HSYNC_RISING_EDGE_TIME, 0x3c },
--	{ TM6010_REQ07_R21_HSYNC_PHASE_OFFSET, 0x3c },
--	{ TM6010_REQ07_R2D_CHROMA_BURST_END, 0x48 },
--	{ TM6010_REQ07_R2E_ACTIVE_VIDEO_HSTART, 0x88 },
--	{ TM6010_REQ07_R30_ACTIVE_VIDEO_VSTART, 0x22 },
--	{ TM6010_REQ07_R31_ACTIVE_VIDEO_VHIGHT, 0x61 },
--	{ TM6010_REQ07_R32_VSYNC_HLOCK_MIN, 0x74 },
--	{ TM6010_REQ07_R33_VSYNC_HLOCK_MAX, 0x1c },
--	{ TM6010_REQ07_R34_VSYNC_AGC_MIN, 0x74 },
--	{ TM6010_REQ07_R35_VSYNC_AGC_MAX, 0x1c },
--	{ TM6010_REQ07_R36_VSYNC_VBI_MIN, 0x7a },
--	{ TM6010_REQ07_R37_VSYNC_VBI_MAX, 0x26 },
--	{ TM6010_REQ07_R38_VSYNC_THRESHOLD, 0x40 },
--	{ TM6010_REQ07_R39_VSYNC_TIME_CONSTANT, 0x0a },
--	{ TM6010_REQ07_R42_VBI_DATA_HIGH_LEVEL, 0x55 },
--	{ TM6010_REQ07_R51_VBI_DATA_TYPE_LINE21, 0x11 },
--	{ TM6010_REQ07_R55_VBI_LOOP_FILTER_GAIN, 0x01 },
--	{ TM6010_REQ07_R57_VBI_LOOP_FILTER_P_GAIN, 0x02 },
--	{ TM6010_REQ07_R58_VBI_CAPTION_DTO1, 0x35 },
--	{ TM6010_REQ07_R59_VBI_CAPTION_DTO0, 0xa0 },
--	{ TM6010_REQ07_R80_COMB_FILTER_TRESHOLD, 0x15 },
--	{ TM6010_REQ07_R82_COMB_FILTER_CONFIG, 0x42 },
--	{ TM6010_REQ07_RC1_TRESHOLD, 0xd0 },
--	{ TM6010_REQ07_RC3_HSTART1, 0x88 },
--	{ TM6010_REQ07_R3F_RESET, 0x00 },		/* End of the soft reset */
--	{ TM6010_REQ05_R18_IMASK7, 0x00 },
--};
--
--static struct reg_init tm6010_init_tab[] = {
--	{ TM6010_REQ07_RC0_ACTIVE_VIDEO_SOURCE, 0x00 },
--	{ TM6010_REQ07_RC4_HSTART0, 0xa0 },
--	{ TM6010_REQ07_RC6_HEND0, 0x40 },
--	{ TM6010_REQ07_RCA_VEND0, 0x31 },
--	{ TM6010_REQ07_RCC_ACTIVE_IF, 0xe1 },
--	{ TM6010_REQ07_RE0_DVIDEO_SOURCE, 0x03 },
--	{ TM6010_REQ07_RFE_POWER_DOWN, 0x7f },
--
--	{ TM6010_REQ08_RE2_POWER_DOWN_CTRL1, 0xf0 },
--	{ TM6010_REQ08_RE3_ADC_IN1_SEL, 0xf4 },
--	{ TM6010_REQ08_RE4_ADC_IN2_SEL, 0xf8 },
--	{ TM6010_REQ08_RE6_POWER_DOWN_CTRL2, 0x00 },
--	{ TM6010_REQ08_REA_BUFF_DRV_CTRL, 0xf2 },
--	{ TM6010_REQ08_REB_SIF_GAIN_CTRL, 0xf0 },
--	{ TM6010_REQ08_REC_REVERSE_YC_CTRL, 0xc2 },
--	{ TM6010_REQ08_RF0_DAUDIO_INPUT_CONFIG, 0x60 },
--	{ TM6010_REQ08_RF1_AADC_POWER_DOWN, 0xfc },
--
--	{ TM6010_REQ07_R3F_RESET, 0x01 },
--	{ TM6010_REQ07_R00_VIDEO_CONTROL0, 0x00 },
--	{ TM6010_REQ07_R01_VIDEO_CONTROL1, 0x07 },
--	{ TM6010_REQ07_R02_VIDEO_CONTROL2, 0x5f },
--	{ TM6010_REQ07_R03_YC_SEP_CONTROL, 0x00 },
--	{ TM6010_REQ07_R05_NOISE_THRESHOLD, 0x64 },
--	{ TM6010_REQ07_R07_OUTPUT_CONTROL, 0x01 },
--	{ TM6010_REQ07_R08_LUMA_CONTRAST_ADJ, 0x82 },
--	{ TM6010_REQ07_R09_LUMA_BRIGHTNESS_ADJ, 0x36 },
--	{ TM6010_REQ07_R0A_CHROMA_SATURATION_ADJ, 0x50 },
--	{ TM6010_REQ07_R0C_CHROMA_AGC_CONTROL, 0x6a },
--	{ TM6010_REQ07_R11_AGC_PEAK_CONTROL, 0xc9 },
--	{ TM6010_REQ07_R12_AGC_GATE_STARTH, 0x07 },
--	{ TM6010_REQ07_R13_AGC_GATE_STARTL, 0x3b },
--	{ TM6010_REQ07_R14_AGC_GATE_WIDTH, 0x47 },
--	{ TM6010_REQ07_R15_AGC_BP_DELAY, 0x6f },
--	{ TM6010_REQ07_R17_HLOOP_MAXSTATE, 0xcd },
--	{ TM6010_REQ07_R18_CHROMA_DTO_INCREMENT3, 0x1e },
--	{ TM6010_REQ07_R19_CHROMA_DTO_INCREMENT2, 0x8b },
--	{ TM6010_REQ07_R1A_CHROMA_DTO_INCREMENT1, 0xa2 },
--	{ TM6010_REQ07_R1B_CHROMA_DTO_INCREMENT0, 0xe9 },
--	{ TM6010_REQ07_R1C_HSYNC_DTO_INCREMENT3, 0x1c },
--	{ TM6010_REQ07_R1D_HSYNC_DTO_INCREMENT2, 0xcc },
--	{ TM6010_REQ07_R1E_HSYNC_DTO_INCREMENT1, 0xcc },
--	{ TM6010_REQ07_R1F_HSYNC_DTO_INCREMENT0, 0xcd },
--	{ TM6010_REQ07_R20_HSYNC_RISING_EDGE_TIME, 0x3c },
--	{ TM6010_REQ07_R21_HSYNC_PHASE_OFFSET, 0x3c },
--	{ TM6010_REQ07_R2D_CHROMA_BURST_END, 0x48 },
--	{ TM6010_REQ07_R2E_ACTIVE_VIDEO_HSTART, 0x88 },
--	{ TM6010_REQ07_R30_ACTIVE_VIDEO_VSTART, 0x22 },
--	{ TM6010_REQ07_R31_ACTIVE_VIDEO_VHIGHT, 0x61 },
--	{ TM6010_REQ07_R32_VSYNC_HLOCK_MIN, 0x74 },
--	{ TM6010_REQ07_R33_VSYNC_HLOCK_MAX, 0x1c },
--	{ TM6010_REQ07_R34_VSYNC_AGC_MIN, 0x74 },
--	{ TM6010_REQ07_R35_VSYNC_AGC_MAX, 0x1c },
--	{ TM6010_REQ07_R36_VSYNC_VBI_MIN, 0x7a },
--	{ TM6010_REQ07_R37_VSYNC_VBI_MAX, 0x26 },
--	{ TM6010_REQ07_R38_VSYNC_THRESHOLD, 0x40 },
--	{ TM6010_REQ07_R39_VSYNC_TIME_CONSTANT, 0x0a },
--	{ TM6010_REQ07_R42_VBI_DATA_HIGH_LEVEL, 0x55 },
--	{ TM6010_REQ07_R51_VBI_DATA_TYPE_LINE21, 0x11 },
--	{ TM6010_REQ07_R55_VBI_LOOP_FILTER_GAIN, 0x01 },
--	{ TM6010_REQ07_R57_VBI_LOOP_FILTER_P_GAIN, 0x02 },
--	{ TM6010_REQ07_R58_VBI_CAPTION_DTO1, 0x35 },
--	{ TM6010_REQ07_R59_VBI_CAPTION_DTO0, 0xa0 },
--	{ TM6010_REQ07_R80_COMB_FILTER_TRESHOLD, 0x15 },
--	{ TM6010_REQ07_R82_COMB_FILTER_CONFIG, 0x42 },
--	{ TM6010_REQ07_RC1_TRESHOLD, 0xd0 },
--	{ TM6010_REQ07_RC3_HSTART1, 0x88 },
--	{ TM6010_REQ07_R3F_RESET, 0x00 },
--
--	{ TM6010_REQ05_R18_IMASK7, 0x00 },
--
--	{ TM6010_REQ07_RDC_IR_LEADER1, 0xaa },
--	{ TM6010_REQ07_RDD_IR_LEADER0, 0x30 },
--	{ TM6010_REQ07_RDE_IR_PULSE_CNT1, 0x20 },
--	{ TM6010_REQ07_RDF_IR_PULSE_CNT0, 0xd0 },
--	{ REQ_04_EN_DISABLE_MCU_INT, 0x02, 0x00 },
--	{ TM6010_REQ07_RD8_IR, 0x0f },
--
--	/* set remote wakeup key:any key wakeup */
--	{ TM6010_REQ07_RE5_REMOTE_WAKEUP,  0xfe },
--	{ TM6010_REQ07_RDA_IR_WAKEUP_SEL,  0xff },
--};
--
--int tm6000_init(struct tm6000_core *dev)
--{
--	int board, rc = 0, i, size;
--	struct reg_init *tab;
--
--	/* Check board revision */
--	board = tm6000_get_reg32(dev, REQ_40_GET_VERSION, 0, 0);
--	if (board >= 0) {
--		switch (board & 0xff) {
--		case 0xf3:
--			printk(KERN_INFO "Found tm6000\n");
--			if (dev->dev_type != TM6000)
--				dev->dev_type = TM6000;
--			break;
--		case 0xf4:
--			printk(KERN_INFO "Found tm6010\n");
--			if (dev->dev_type != TM6010)
--				dev->dev_type = TM6010;
--			break;
--		default:
--			printk(KERN_INFO "Unknown board version = 0x%08x\n", board);
--		}
--	} else
--		printk(KERN_ERR "Error %i while retrieving board version\n", board);
--
--	if (dev->dev_type == TM6010) {
--		tab = tm6010_init_tab;
--		size = ARRAY_SIZE(tm6010_init_tab);
--	} else {
--		tab = tm6000_init_tab;
--		size = ARRAY_SIZE(tm6000_init_tab);
--	}
--
--	/* Load board's initialization table */
--	for (i = 0; i < size; i++) {
--		rc = tm6000_set_reg(dev, tab[i].req, tab[i].reg, tab[i].val);
--		if (rc < 0) {
--			printk(KERN_ERR "Error %i while setting req %d, reg %d to value %d\n",
--			       rc,
--					tab[i].req, tab[i].reg, tab[i].val);
--			return rc;
--		}
--	}
--
--	msleep(5); /* Just to be conservative */
--
--	rc = tm6000_cards_setup(dev);
--
--	return rc;
--}
--
--
--int tm6000_set_audio_bitrate(struct tm6000_core *dev, int bitrate)
--{
--	int val = 0;
--	u8 areg_f0 = 0x60; /* ADC MCLK = 250 Fs */
--	u8 areg_0a = 0x91; /* SIF 48KHz */
--
--	switch (bitrate) {
--	case 48000:
--		areg_f0 = 0x60; /* ADC MCLK = 250 Fs */
--		areg_0a = 0x91; /* SIF 48KHz */
--		dev->audio_bitrate = bitrate;
--		break;
--	case 32000:
--		areg_f0 = 0x00; /* ADC MCLK = 375 Fs */
--		areg_0a = 0x90; /* SIF 32KHz */
--		dev->audio_bitrate = bitrate;
--		break;
--	default:
--		return -EINVAL;
--	}
--
--
--	/* enable I2S, if we use sif or external I2S device */
--	if (dev->dev_type == TM6010) {
--		val = tm6000_set_reg(dev, TM6010_REQ08_R0A_A_I2S_MOD, areg_0a);
--		if (val < 0)
--			return val;
--
--		val = tm6000_set_reg_mask(dev, TM6010_REQ08_RF0_DAUDIO_INPUT_CONFIG,
--							areg_f0, 0xf0);
--		if (val < 0)
--			return val;
--	} else {
--		val = tm6000_set_reg_mask(dev, TM6000_REQ07_REB_VADC_AADC_MODE,
--							areg_f0, 0xf0);
--		if (val < 0)
--			return val;
--	}
--	return 0;
--}
--EXPORT_SYMBOL_GPL(tm6000_set_audio_bitrate);
--
--int tm6000_set_audio_rinput(struct tm6000_core *dev)
--{
--	if (dev->dev_type == TM6010) {
--		/* Audio crossbar setting, default SIF1 */
--		u8 areg_f0;
--		u8 areg_07 = 0x10;
--
--		switch (dev->rinput.amux) {
--		case TM6000_AMUX_SIF1:
--		case TM6000_AMUX_SIF2:
--			areg_f0 = 0x03;
--			areg_07 = 0x30;
--			break;
--		case TM6000_AMUX_ADC1:
--			areg_f0 = 0x00;
--			break;
--		case TM6000_AMUX_ADC2:
--			areg_f0 = 0x08;
--			break;
--		case TM6000_AMUX_I2S:
--			areg_f0 = 0x04;
--			break;
--		default:
--			printk(KERN_INFO "%s: audio input doesn't support\n",
--				dev->name);
--			return 0;
--			break;
--		}
--		/* Set audio input crossbar */
--		tm6000_set_reg_mask(dev, TM6010_REQ08_RF0_DAUDIO_INPUT_CONFIG,
--							areg_f0, 0x0f);
--		/* Mux overflow workaround */
--		tm6000_set_reg_mask(dev, TM6010_REQ07_R07_OUTPUT_CONTROL,
--			areg_07, 0xf0);
--	} else {
--		u8 areg_eb;
--		/* Audio setting, default LINE1 */
--		switch (dev->rinput.amux) {
--		case TM6000_AMUX_ADC1:
--			areg_eb = 0x00;
--			break;
--		case TM6000_AMUX_ADC2:
--			areg_eb = 0x04;
--			break;
--		default:
--			printk(KERN_INFO "%s: audio input doesn't support\n",
--				dev->name);
--			return 0;
--			break;
--		}
--		/* Set audio input */
--		tm6000_set_reg_mask(dev, TM6000_REQ07_REB_VADC_AADC_MODE,
--							areg_eb, 0x0f);
--	}
--	return 0;
--}
--
--static void tm6010_set_mute_sif(struct tm6000_core *dev, u8 mute)
--{
--	u8 mute_reg = 0;
--
--	if (mute)
--		mute_reg = 0x08;
--
--	tm6000_set_reg_mask(dev, TM6010_REQ08_R0A_A_I2S_MOD, mute_reg, 0x08);
--}
--
--static void tm6010_set_mute_adc(struct tm6000_core *dev, u8 mute)
--{
--	u8 mute_reg = 0;
--
--	if (mute)
--		mute_reg = 0x20;
--
--	if (dev->dev_type == TM6010) {
--		tm6000_set_reg_mask(dev, TM6010_REQ08_RF2_LEFT_CHANNEL_VOL,
--							mute_reg, 0x20);
--		tm6000_set_reg_mask(dev, TM6010_REQ08_RF3_RIGHT_CHANNEL_VOL,
--							mute_reg, 0x20);
--	} else {
--		tm6000_set_reg_mask(dev, TM6000_REQ07_REC_VADC_AADC_LVOL,
--							mute_reg, 0x20);
--		tm6000_set_reg_mask(dev, TM6000_REQ07_RED_VADC_AADC_RVOL,
--							mute_reg, 0x20);
--	}
--}
--
--int tm6000_tvaudio_set_mute(struct tm6000_core *dev, u8 mute)
--{
--	enum tm6000_mux mux;
--
--	if (dev->radio)
--		mux = dev->rinput.amux;
--	else
--		mux = dev->vinput[dev->input].amux;
--
--	switch (mux) {
--	case TM6000_AMUX_SIF1:
--	case TM6000_AMUX_SIF2:
--		if (dev->dev_type == TM6010)
--			tm6010_set_mute_sif(dev, mute);
--		else {
--			printk(KERN_INFO "ERROR: TM5600 and TM6000 don't has SIF audio inputs. Please check the %s configuration.\n",
--			       dev->name);
--			return -EINVAL;
--		}
--		break;
--	case TM6000_AMUX_ADC1:
--	case TM6000_AMUX_ADC2:
--		tm6010_set_mute_adc(dev, mute);
--		break;
--	default:
--		return -EINVAL;
--		break;
--	}
--	return 0;
--}
--
--static void tm6010_set_volume_sif(struct tm6000_core *dev, int vol)
--{
--	u8 vol_reg;
--
--	vol_reg = vol & 0x0F;
--
--	if (vol < 0)
--		vol_reg |= 0x40;
--
--	tm6000_set_reg(dev, TM6010_REQ08_R07_A_LEFT_VOL, vol_reg);
--	tm6000_set_reg(dev, TM6010_REQ08_R08_A_RIGHT_VOL, vol_reg);
--}
--
--static void tm6010_set_volume_adc(struct tm6000_core *dev, int vol)
--{
--	u8 vol_reg;
--
--	vol_reg = (vol + 0x10) & 0x1f;
--
--	if (dev->dev_type == TM6010) {
--		tm6000_set_reg(dev, TM6010_REQ08_RF2_LEFT_CHANNEL_VOL, vol_reg);
--		tm6000_set_reg(dev, TM6010_REQ08_RF3_RIGHT_CHANNEL_VOL, vol_reg);
--	} else {
--		tm6000_set_reg(dev, TM6000_REQ07_REC_VADC_AADC_LVOL, vol_reg);
--		tm6000_set_reg(dev, TM6000_REQ07_RED_VADC_AADC_RVOL, vol_reg);
--	}
--}
--
--void tm6000_set_volume(struct tm6000_core *dev, int vol)
--{
--	enum tm6000_mux mux;
--
--	if (dev->radio) {
--		mux = dev->rinput.amux;
--		vol += 8; /* Offset to 0 dB */
--	} else
--		mux = dev->vinput[dev->input].amux;
--
--	switch (mux) {
--	case TM6000_AMUX_SIF1:
--	case TM6000_AMUX_SIF2:
--		if (dev->dev_type == TM6010)
--			tm6010_set_volume_sif(dev, vol);
--		else
--			printk(KERN_INFO "ERROR: TM5600 and TM6000 don't has SIF audio inputs. Please check the %s configuration.\n",
--			       dev->name);
--		break;
--	case TM6000_AMUX_ADC1:
--	case TM6000_AMUX_ADC2:
--		tm6010_set_volume_adc(dev, vol);
--		break;
--	default:
--		break;
--	}
--}
--
--static LIST_HEAD(tm6000_devlist);
--static DEFINE_MUTEX(tm6000_devlist_mutex);
--
--/*
-- * tm6000_realease_resource()
-- */
--
--void tm6000_remove_from_devlist(struct tm6000_core *dev)
--{
--	mutex_lock(&tm6000_devlist_mutex);
--	list_del(&dev->devlist);
--	mutex_unlock(&tm6000_devlist_mutex);
--};
--
--void tm6000_add_into_devlist(struct tm6000_core *dev)
--{
--	mutex_lock(&tm6000_devlist_mutex);
--	list_add_tail(&dev->devlist, &tm6000_devlist);
--	mutex_unlock(&tm6000_devlist_mutex);
--};
--
--/*
-- * Extension interface
-- */
--
--static LIST_HEAD(tm6000_extension_devlist);
--
--int tm6000_call_fillbuf(struct tm6000_core *dev, enum tm6000_ops_type type,
--			char *buf, int size)
--{
--	struct tm6000_ops *ops = NULL;
--
--	/* FIXME: tm6000_extension_devlist_lock should be a spinlock */
--
--	list_for_each_entry(ops, &tm6000_extension_devlist, next) {
--		if (ops->fillbuf && ops->type == type)
--			ops->fillbuf(dev, buf, size);
--	}
--
--	return 0;
--}
--
--int tm6000_register_extension(struct tm6000_ops *ops)
--{
--	struct tm6000_core *dev = NULL;
--
--	mutex_lock(&tm6000_devlist_mutex);
--	list_add_tail(&ops->next, &tm6000_extension_devlist);
--	list_for_each_entry(dev, &tm6000_devlist, devlist) {
--		ops->init(dev);
--		printk(KERN_INFO "%s: Initialized (%s) extension\n",
--		       dev->name, ops->name);
--	}
--	mutex_unlock(&tm6000_devlist_mutex);
--	return 0;
--}
--EXPORT_SYMBOL(tm6000_register_extension);
--
--void tm6000_unregister_extension(struct tm6000_ops *ops)
--{
--	struct tm6000_core *dev = NULL;
--
--	mutex_lock(&tm6000_devlist_mutex);
--	list_for_each_entry(dev, &tm6000_devlist, devlist)
--		ops->fini(dev);
--
--	printk(KERN_INFO "tm6000: Remove (%s) extension\n", ops->name);
--	list_del(&ops->next);
--	mutex_unlock(&tm6000_devlist_mutex);
--}
--EXPORT_SYMBOL(tm6000_unregister_extension);
--
--void tm6000_init_extension(struct tm6000_core *dev)
--{
--	struct tm6000_ops *ops = NULL;
--
--	mutex_lock(&tm6000_devlist_mutex);
--	list_for_each_entry(ops, &tm6000_extension_devlist, next) {
--		if (ops->init)
--			ops->init(dev);
--	}
--	mutex_unlock(&tm6000_devlist_mutex);
--}
--
--void tm6000_close_extension(struct tm6000_core *dev)
--{
--	struct tm6000_ops *ops = NULL;
--
--	mutex_lock(&tm6000_devlist_mutex);
--	list_for_each_entry(ops, &tm6000_extension_devlist, next) {
--		if (ops->fini)
--			ops->fini(dev);
--	}
--	mutex_unlock(&tm6000_devlist_mutex);
--}
-diff --git a/drivers/staging/media/deprecated/tm6000/tm6000-dvb.c b/drivers/staging/media/deprecated/tm6000/tm6000-dvb.c
-deleted file mode 100644
-index ee04973cbf93..000000000000
---- a/drivers/staging/media/deprecated/tm6000/tm6000-dvb.c
-+++ /dev/null
-@@ -1,454 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- *  tm6000-dvb.c - dvb-t support for TM5600/TM6000/TM6010 USB video capture devices
-- *
-- *  Copyright (C) 2007 Michel Ludwig <michel.ludwig@gmail.com>
-- */
--
--#include <linux/kernel.h>
--#include <linux/slab.h>
--#include <linux/usb.h>
--
--#include "tm6000.h"
--#include "tm6000-regs.h"
--
--#include "zl10353.h"
--
--#include <media/tuner.h>
--
--#include "xc2028.h"
--#include "xc5000.h"
--
--MODULE_DESCRIPTION("DVB driver extension module for tm5600/6000/6010 based TV cards");
--MODULE_AUTHOR("Mauro Carvalho Chehab");
--MODULE_LICENSE("GPL");
--
--static int debug;
--
--module_param(debug, int, 0644);
--MODULE_PARM_DESC(debug, "enable debug message");
--
--static inline void print_err_status(struct tm6000_core *dev,
--				    int packet, int status)
--{
--	char *errmsg = "Unknown";
--
--	switch (status) {
--	case -ENOENT:
--		errmsg = "unlinked synchronously";
--		break;
--	case -ECONNRESET:
--		errmsg = "unlinked asynchronously";
--		break;
--	case -ENOSR:
--		errmsg = "Buffer error (overrun)";
--		break;
--	case -EPIPE:
--		errmsg = "Stalled (device not responding)";
--		break;
--	case -EOVERFLOW:
--		errmsg = "Babble (bad cable?)";
--		break;
--	case -EPROTO:
--		errmsg = "Bit-stuff error (bad cable?)";
--		break;
--	case -EILSEQ:
--		errmsg = "CRC/Timeout (could be anything)";
--		break;
--	case -ETIME:
--		errmsg = "Device does not respond";
--		break;
--	}
--	if (packet < 0) {
--		dprintk(dev, 1, "URB status %d [%s].\n",
--			status, errmsg);
--	} else {
--		dprintk(dev, 1, "URB packet %d, status %d [%s].\n",
--			packet, status, errmsg);
--	}
--}
--
--static void tm6000_urb_received(struct urb *urb)
--{
--	int ret;
--	struct tm6000_core *dev = urb->context;
--
--	switch (urb->status) {
--	case 0:
--	case -ETIMEDOUT:
--		break;
--	case -ENOENT:
--	case -ECONNRESET:
--	case -ESHUTDOWN:
--		return;
--	default:
--		print_err_status(dev, 0, urb->status);
--	}
--
--	if (urb->actual_length > 0)
--		dvb_dmx_swfilter(&dev->dvb->demux, urb->transfer_buffer,
--						   urb->actual_length);
--
--	if (dev->dvb->streams > 0) {
--		ret = usb_submit_urb(urb, GFP_ATOMIC);
--		if (ret < 0) {
--			printk(KERN_ERR "tm6000:  error %s\n", __func__);
--			kfree(urb->transfer_buffer);
--			usb_free_urb(urb);
--			dev->dvb->bulk_urb = NULL;
--		}
--	}
--}
--
--static int tm6000_start_stream(struct tm6000_core *dev)
--{
--	int ret;
--	unsigned int pipe, size;
--	struct tm6000_dvb *dvb = dev->dvb;
--
--	printk(KERN_INFO "tm6000: got start stream request %s\n", __func__);
--
--	if (dev->mode != TM6000_MODE_DIGITAL) {
--		tm6000_init_digital_mode(dev);
--		dev->mode = TM6000_MODE_DIGITAL;
--	}
--
--	dvb->bulk_urb = usb_alloc_urb(0, GFP_KERNEL);
--	if (!dvb->bulk_urb)
--		return -ENOMEM;
--
--	pipe = usb_rcvbulkpipe(dev->udev, dev->bulk_in.endp->desc.bEndpointAddress
--							  & USB_ENDPOINT_NUMBER_MASK);
--
--	size = usb_maxpacket(dev->udev, pipe);
--	size = size * 15; /* 512 x 8 or 12 or 15 */
--
--	dvb->bulk_urb->transfer_buffer = kzalloc(size, GFP_KERNEL);
--	if (!dvb->bulk_urb->transfer_buffer) {
--		usb_free_urb(dvb->bulk_urb);
--		dvb->bulk_urb = NULL;
--		return -ENOMEM;
--	}
--
--	usb_fill_bulk_urb(dvb->bulk_urb, dev->udev, pipe,
--						 dvb->bulk_urb->transfer_buffer,
--						 size,
--						 tm6000_urb_received, dev);
--
--	ret = usb_clear_halt(dev->udev, pipe);
--	if (ret < 0) {
--		printk(KERN_ERR "tm6000: error %i in %s during pipe reset\n",
--							ret, __func__);
--
--		kfree(dvb->bulk_urb->transfer_buffer);
--		usb_free_urb(dvb->bulk_urb);
--		dvb->bulk_urb = NULL;
--		return ret;
--	} else
--		printk(KERN_ERR "tm6000: pipe reset\n");
--
--/*	mutex_lock(&tm6000_driver.open_close_mutex); */
--	ret = usb_submit_urb(dvb->bulk_urb, GFP_ATOMIC);
--
--/*	mutex_unlock(&tm6000_driver.open_close_mutex); */
--	if (ret) {
--		printk(KERN_ERR "tm6000: submit of urb failed (error=%i)\n",
--									ret);
--
--		kfree(dvb->bulk_urb->transfer_buffer);
--		usb_free_urb(dvb->bulk_urb);
--		dvb->bulk_urb = NULL;
--		return ret;
--	}
--
--	return 0;
--}
--
--static void tm6000_stop_stream(struct tm6000_core *dev)
--{
--	struct tm6000_dvb *dvb = dev->dvb;
--
--	if (dvb->bulk_urb) {
--		printk(KERN_INFO "urb killing\n");
--		usb_kill_urb(dvb->bulk_urb);
--		printk(KERN_INFO "urb buffer free\n");
--		kfree(dvb->bulk_urb->transfer_buffer);
--		usb_free_urb(dvb->bulk_urb);
--		dvb->bulk_urb = NULL;
--	}
--}
--
--static int tm6000_start_feed(struct dvb_demux_feed *feed)
--{
--	struct dvb_demux *demux = feed->demux;
--	struct tm6000_core *dev = demux->priv;
--	struct tm6000_dvb *dvb = dev->dvb;
--	printk(KERN_INFO "tm6000: got start feed request %s\n", __func__);
--
--	mutex_lock(&dvb->mutex);
--	if (dvb->streams == 0) {
--		dvb->streams = 1;
--/*		mutex_init(&tm6000_dev->streming_mutex); */
--		tm6000_start_stream(dev);
--	} else
--		++(dvb->streams);
--	mutex_unlock(&dvb->mutex);
--
--	return 0;
--}
--
--static int tm6000_stop_feed(struct dvb_demux_feed *feed)
--{
--	struct dvb_demux *demux = feed->demux;
--	struct tm6000_core *dev = demux->priv;
--	struct tm6000_dvb *dvb = dev->dvb;
--
--	printk(KERN_INFO "tm6000: got stop feed request %s\n", __func__);
--
--	mutex_lock(&dvb->mutex);
--
--	printk(KERN_INFO "stream %#x\n", dvb->streams);
--	--(dvb->streams);
--	if (dvb->streams == 0) {
--		printk(KERN_INFO "stop stream\n");
--		tm6000_stop_stream(dev);
--/*		mutex_destroy(&tm6000_dev->streaming_mutex); */
--	}
--	mutex_unlock(&dvb->mutex);
--/*	mutex_destroy(&tm6000_dev->streaming_mutex); */
--
--	return 0;
--}
--
--static int tm6000_dvb_attach_frontend(struct tm6000_core *dev)
--{
--	struct tm6000_dvb *dvb = dev->dvb;
--
--	if (dev->caps.has_zl10353) {
--		struct zl10353_config config = {
--				     .demod_address = dev->demod_addr,
--				     .no_tuner = 1,
--				     .parallel_ts = 1,
--				     .if2 = 45700,
--				     .disable_i2c_gate_ctrl = 1,
--				    };
--
--		dvb->frontend = dvb_attach(zl10353_attach, &config,
--							   &dev->i2c_adap);
--	} else {
--		printk(KERN_ERR "tm6000: no frontend defined for the device!\n");
--		return -1;
--	}
--
--	return (!dvb->frontend) ? -1 : 0;
--}
--
--DVB_DEFINE_MOD_OPT_ADAPTER_NR(adapter_nr);
--
--static int register_dvb(struct tm6000_core *dev)
--{
--	int ret = -1;
--	struct tm6000_dvb *dvb = dev->dvb;
--
--	mutex_init(&dvb->mutex);
--
--	dvb->streams = 0;
--
--	/* attach the frontend */
--	ret = tm6000_dvb_attach_frontend(dev);
--	if (ret < 0) {
--		printk(KERN_ERR "tm6000: couldn't attach the frontend!\n");
--		goto err;
--	}
--
--	ret = dvb_register_adapter(&dvb->adapter, "Trident TVMaster 6000 DVB-T",
--					THIS_MODULE, &dev->udev->dev, adapter_nr);
--	if (ret < 0) {
--		pr_err("tm6000: couldn't register the adapter!\n");
--		goto err;
--	}
--
--	dvb->adapter.priv = dev;
--
--	if (dvb->frontend) {
--		switch (dev->tuner_type) {
--		case TUNER_XC2028: {
--			struct xc2028_config cfg = {
--				.i2c_adap = &dev->i2c_adap,
--				.i2c_addr = dev->tuner_addr,
--			};
--
--			dvb->frontend->callback = tm6000_tuner_callback;
--			ret = dvb_register_frontend(&dvb->adapter, dvb->frontend);
--			if (ret < 0) {
--				printk(KERN_ERR
--					"tm6000: couldn't register frontend\n");
--				goto adapter_err;
--			}
--
--			if (!dvb_attach(xc2028_attach, dvb->frontend, &cfg)) {
--				printk(KERN_ERR "tm6000: couldn't register frontend (xc3028)\n");
--				ret = -EINVAL;
--				goto frontend_err;
--			}
--			printk(KERN_INFO "tm6000: XC2028/3028 asked to be attached to frontend!\n");
--			break;
--			}
--		case TUNER_XC5000: {
--			struct xc5000_config cfg = {
--				.i2c_address = dev->tuner_addr,
--			};
--
--			dvb->frontend->callback = tm6000_xc5000_callback;
--			ret = dvb_register_frontend(&dvb->adapter, dvb->frontend);
--			if (ret < 0) {
--				printk(KERN_ERR
--					"tm6000: couldn't register frontend\n");
--				goto adapter_err;
--			}
--
--			if (!dvb_attach(xc5000_attach, dvb->frontend, &dev->i2c_adap, &cfg)) {
--				printk(KERN_ERR "tm6000: couldn't register frontend (xc5000)\n");
--				ret = -EINVAL;
--				goto frontend_err;
--			}
--			printk(KERN_INFO "tm6000: XC5000 asked to be attached to frontend!\n");
--			break;
--			}
--		}
--	} else
--		printk(KERN_ERR "tm6000: no frontend found\n");
--
--	dvb->demux.dmx.capabilities = DMX_TS_FILTERING | DMX_SECTION_FILTERING
--							    | DMX_MEMORY_BASED_FILTERING;
--	dvb->demux.priv = dev;
--	dvb->demux.filternum = 8;
--	dvb->demux.feednum = 8;
--	dvb->demux.start_feed = tm6000_start_feed;
--	dvb->demux.stop_feed = tm6000_stop_feed;
--	dvb->demux.write_to_decoder = NULL;
--	ret = dvb_dmx_init(&dvb->demux);
--	if (ret < 0) {
--		printk(KERN_ERR "tm6000: dvb_dmx_init failed (errno = %d)\n", ret);
--		goto frontend_err;
--	}
--
--	dvb->dmxdev.filternum = dev->dvb->demux.filternum;
--	dvb->dmxdev.demux = &dev->dvb->demux.dmx;
--	dvb->dmxdev.capabilities = 0;
--
--	ret =  dvb_dmxdev_init(&dvb->dmxdev, &dvb->adapter);
--	if (ret < 0) {
--		printk(KERN_ERR "tm6000: dvb_dmxdev_init failed (errno = %d)\n", ret);
--		goto dvb_dmx_err;
--	}
--
--	return 0;
--
--dvb_dmx_err:
--	dvb_dmx_release(&dvb->demux);
--frontend_err:
--	if (dvb->frontend) {
--		dvb_unregister_frontend(dvb->frontend);
--		dvb_frontend_detach(dvb->frontend);
--	}
--adapter_err:
--	dvb_unregister_adapter(&dvb->adapter);
--err:
--	return ret;
--}
--
--static void unregister_dvb(struct tm6000_core *dev)
--{
--	struct tm6000_dvb *dvb = dev->dvb;
--
--	if (dvb->bulk_urb) {
--		struct urb *bulk_urb = dvb->bulk_urb;
--
--		kfree(bulk_urb->transfer_buffer);
--		bulk_urb->transfer_buffer = NULL;
--		usb_unlink_urb(bulk_urb);
--		usb_free_urb(bulk_urb);
--	}
--
--/*	mutex_lock(&tm6000_driver.open_close_mutex); */
--	if (dvb->frontend) {
--		dvb_unregister_frontend(dvb->frontend);
--		dvb_frontend_detach(dvb->frontend);
--	}
--
--	dvb_dmxdev_release(&dvb->dmxdev);
--	dvb_dmx_release(&dvb->demux);
--	dvb_unregister_adapter(&dvb->adapter);
--	mutex_destroy(&dvb->mutex);
--/*	mutex_unlock(&tm6000_driver.open_close_mutex); */
--}
--
--static int dvb_init(struct tm6000_core *dev)
--{
--	struct tm6000_dvb *dvb;
--	int rc;
--
--	if (!dev)
--		return 0;
--
--	if (!dev->caps.has_dvb)
--		return 0;
--
--	if (dev->udev->speed == USB_SPEED_FULL) {
--		printk(KERN_INFO "This USB2.0 device cannot be run on a USB1.1 port. (it lacks a hardware PID filter)\n");
--		return 0;
--	}
--
--	dvb = kzalloc(sizeof(struct tm6000_dvb), GFP_KERNEL);
--	if (!dvb)
--		return -ENOMEM;
--
--	dev->dvb = dvb;
--
--	rc = register_dvb(dev);
--	if (rc < 0) {
--		kfree(dvb);
--		dev->dvb = NULL;
--		return 0;
--	}
--
--	return 0;
--}
--
--static int dvb_fini(struct tm6000_core *dev)
--{
--	if (!dev)
--		return 0;
--
--	if (!dev->caps.has_dvb)
--		return 0;
--
--	if (dev->dvb) {
--		unregister_dvb(dev);
--		kfree(dev->dvb);
--		dev->dvb = NULL;
--	}
--
--	return 0;
--}
--
--static struct tm6000_ops dvb_ops = {
--	.type	= TM6000_DVB,
--	.name	= "TM6000 dvb Extension",
--	.init	= dvb_init,
--	.fini	= dvb_fini,
--};
--
--static int __init tm6000_dvb_register(void)
--{
--	return tm6000_register_extension(&dvb_ops);
--}
--
--static void __exit tm6000_dvb_unregister(void)
--{
--	tm6000_unregister_extension(&dvb_ops);
--}
--
--module_init(tm6000_dvb_register);
--module_exit(tm6000_dvb_unregister);
-diff --git a/drivers/staging/media/deprecated/tm6000/tm6000-i2c.c b/drivers/staging/media/deprecated/tm6000/tm6000-i2c.c
-deleted file mode 100644
-index 7554b93b82e6..000000000000
---- a/drivers/staging/media/deprecated/tm6000/tm6000-i2c.c
-+++ /dev/null
-@@ -1,317 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--// tm6000-i2c.c - driver for TM5600/TM6000/TM6010 USB video capture devices
--//
--// Copyright (c) 2006-2007 Mauro Carvalho Chehab <mchehab@kernel.org>
--//
--// Copyright (c) 2007 Michel Ludwig <michel.ludwig@gmail.com>
--//	- Fix SMBus Read Byte command
--
--#include <linux/module.h>
--#include <linux/kernel.h>
--#include <linux/usb.h>
--#include <linux/i2c.h>
--
--#include "tm6000.h"
--#include "tm6000-regs.h"
--#include <media/v4l2-common.h>
--#include <media/tuner.h>
--#include "xc2028.h"
--
--
--/* ----------------------------------------------------------- */
--
--static unsigned int i2c_debug;
--module_param(i2c_debug, int, 0644);
--MODULE_PARM_DESC(i2c_debug, "enable debug messages [i2c]");
--
--#define i2c_dprintk(lvl, fmt, args...) if (i2c_debug >= lvl) do { \
--			printk(KERN_DEBUG "%s at %s: " fmt, \
--			dev->name, __func__, ##args); } while (0)
--
--static int tm6000_i2c_send_regs(struct tm6000_core *dev, unsigned char addr,
--				__u8 reg, char *buf, int len)
--{
--	int rc;
--	unsigned int i2c_packet_limit = 16;
--
--	if (dev->dev_type == TM6010)
--		i2c_packet_limit = 80;
--
--	if (!buf)
--		return -1;
--
--	if (len < 1 || len > i2c_packet_limit) {
--		printk(KERN_ERR "Incorrect length of i2c packet = %d, limit set to %d\n",
--			len, i2c_packet_limit);
--		return -1;
--	}
--
--	/* capture mutex */
--	rc = tm6000_read_write_usb(dev, USB_DIR_OUT | USB_TYPE_VENDOR |
--		USB_RECIP_DEVICE, REQ_16_SET_GET_I2C_WR1_RDN,
--		addr | reg << 8, 0, buf, len);
--
--	if (rc < 0) {
--		/* release mutex */
--		return rc;
--	}
--
--	/* release mutex */
--	return rc;
--}
--
--/* Generic read - doesn't work fine with 16bit registers */
--static int tm6000_i2c_recv_regs(struct tm6000_core *dev, unsigned char addr,
--				__u8 reg, char *buf, int len)
--{
--	int rc;
--	u8 b[2];
--	unsigned int i2c_packet_limit = 16;
--
--	if (dev->dev_type == TM6010)
--		i2c_packet_limit = 64;
--
--	if (!buf)
--		return -1;
--
--	if (len < 1 || len > i2c_packet_limit) {
--		printk(KERN_ERR "Incorrect length of i2c packet = %d, limit set to %d\n",
--			len, i2c_packet_limit);
--		return -1;
--	}
--
--	/* capture mutex */
--	if ((dev->caps.has_zl10353) && (dev->demod_addr << 1 == addr) && (reg % 2 == 0)) {
--		/*
--		 * Workaround an I2C bug when reading from zl10353
--		 */
--		reg -= 1;
--		len += 1;
--
--		rc = tm6000_read_write_usb(dev, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
--			REQ_16_SET_GET_I2C_WR1_RDN, addr | reg << 8, 0, b, len);
--
--		*buf = b[1];
--	} else {
--		rc = tm6000_read_write_usb(dev, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
--			REQ_16_SET_GET_I2C_WR1_RDN, addr | reg << 8, 0, buf, len);
--	}
--
--	/* release mutex */
--	return rc;
--}
--
--/*
-- * read from a 16bit register
-- * for example xc2028, xc3028 or xc3028L
-- */
--static int tm6000_i2c_recv_regs16(struct tm6000_core *dev, unsigned char addr,
--				  __u16 reg, char *buf, int len)
--{
--	int rc;
--	unsigned char ureg;
--
--	if (!buf || len != 2)
--		return -1;
--
--	/* capture mutex */
--	if (dev->dev_type == TM6010) {
--		ureg = reg & 0xFF;
--		rc = tm6000_read_write_usb(dev, USB_DIR_OUT | USB_TYPE_VENDOR |
--			USB_RECIP_DEVICE, REQ_16_SET_GET_I2C_WR1_RDN,
--			addr | (reg & 0xFF00), 0, &ureg, 1);
--
--		if (rc < 0) {
--			/* release mutex */
--			return rc;
--		}
--
--		rc = tm6000_read_write_usb(dev, USB_DIR_IN | USB_TYPE_VENDOR |
--			USB_RECIP_DEVICE, REQ_35_AFTEK_TUNER_READ,
--			reg, 0, buf, len);
--	} else {
--		rc = tm6000_read_write_usb(dev, USB_DIR_IN | USB_TYPE_VENDOR |
--			USB_RECIP_DEVICE, REQ_14_SET_GET_I2C_WR2_RDN,
--			addr, reg, buf, len);
--	}
--
--	/* release mutex */
--	return rc;
--}
--
--static int tm6000_i2c_xfer(struct i2c_adapter *i2c_adap,
--			   struct i2c_msg msgs[], int num)
--{
--	struct tm6000_core *dev = i2c_adap->algo_data;
--	int addr, rc, i, byte;
--
--	for (i = 0; i < num; i++) {
--		addr = (msgs[i].addr << 1) & 0xff;
--		i2c_dprintk(2, "%s %s addr=0x%x len=%d:",
--			 (msgs[i].flags & I2C_M_RD) ? "read" : "write",
--			 i == num - 1 ? "stop" : "nonstop", addr, msgs[i].len);
--		if (msgs[i].flags & I2C_M_RD) {
--			/* read request without preceding register selection */
--			/*
--			 * The TM6000 only supports a read transaction
--			 * immediately after a 1 or 2 byte write to select
--			 * a register.  We cannot fulfill this request.
--			 */
--			i2c_dprintk(2, " read without preceding write not supported");
--			rc = -EOPNOTSUPP;
--			goto err;
--		} else if (i + 1 < num && msgs[i].len <= 2 &&
--			   (msgs[i + 1].flags & I2C_M_RD) &&
--			   msgs[i].addr == msgs[i + 1].addr) {
--			/* 1 or 2 byte write followed by a read */
--			if (i2c_debug >= 2)
--				for (byte = 0; byte < msgs[i].len; byte++)
--					printk(KERN_CONT " %02x", msgs[i].buf[byte]);
--			i2c_dprintk(2, "; joined to read %s len=%d:",
--				    i == num - 2 ? "stop" : "nonstop",
--				    msgs[i + 1].len);
--
--			if (msgs[i].len == 2) {
--				rc = tm6000_i2c_recv_regs16(dev, addr,
--					msgs[i].buf[0] << 8 | msgs[i].buf[1],
--					msgs[i + 1].buf, msgs[i + 1].len);
--			} else {
--				rc = tm6000_i2c_recv_regs(dev, addr, msgs[i].buf[0],
--					msgs[i + 1].buf, msgs[i + 1].len);
--			}
--
--			i++;
--
--			if (addr == dev->tuner_addr << 1) {
--				tm6000_set_reg(dev, REQ_50_SET_START, 0, 0);
--				tm6000_set_reg(dev, REQ_51_SET_STOP, 0, 0);
--			}
--			if (i2c_debug >= 2)
--				for (byte = 0; byte < msgs[i].len; byte++)
--					printk(KERN_CONT " %02x", msgs[i].buf[byte]);
--		} else {
--			/* write bytes */
--			if (i2c_debug >= 2)
--				for (byte = 0; byte < msgs[i].len; byte++)
--					printk(KERN_CONT " %02x", msgs[i].buf[byte]);
--			rc = tm6000_i2c_send_regs(dev, addr, msgs[i].buf[0],
--				msgs[i].buf + 1, msgs[i].len - 1);
--		}
--		if (i2c_debug >= 2)
--			printk(KERN_CONT "\n");
--		if (rc < 0)
--			goto err;
--	}
--
--	return num;
--err:
--	i2c_dprintk(2, " ERROR: %i\n", rc);
--	return rc;
--}
--
--static int tm6000_i2c_eeprom(struct tm6000_core *dev)
--{
--	int i, rc;
--	unsigned char *p = dev->eedata;
--	unsigned char bytes[17];
--
--	dev->i2c_client.addr = 0xa0 >> 1;
--	dev->eedata_size = 0;
--
--	bytes[16] = '\0';
--	for (i = 0; i < sizeof(dev->eedata); ) {
--		*p = i;
--		rc = tm6000_i2c_recv_regs(dev, 0xa0, i, p, 1);
--		if (rc < 1) {
--			if (p == dev->eedata)
--				goto noeeprom;
--			else {
--				printk(KERN_WARNING
--				"%s: i2c eeprom read error (err=%d)\n",
--				dev->name, rc);
--			}
--			return -EINVAL;
--		}
--		dev->eedata_size++;
--		p++;
--		if (0 == (i % 16))
--			printk(KERN_INFO "%s: i2c eeprom %02x:", dev->name, i);
--		printk(KERN_CONT " %02x", dev->eedata[i]);
--		if ((dev->eedata[i] >= ' ') && (dev->eedata[i] <= 'z'))
--			bytes[i%16] = dev->eedata[i];
--		else
--			bytes[i%16] = '.';
--
--		i++;
--
--		if (0 == (i % 16)) {
--			bytes[16] = '\0';
--			printk(KERN_CONT "  %s\n", bytes);
--		}
--	}
--	if (0 != (i%16)) {
--		bytes[i%16] = '\0';
--		for (i %= 16; i < 16; i++)
--			printk(KERN_CONT "   ");
--		printk(KERN_CONT "  %s\n", bytes);
--	}
--
--	return 0;
--
--noeeprom:
--	printk(KERN_INFO "%s: Huh, no eeprom present (err=%d)?\n",
--	       dev->name, rc);
--	return -EINVAL;
--}
--
--/* ----------------------------------------------------------- */
--
--/*
-- * functionality()
-- */
--static u32 functionality(struct i2c_adapter *adap)
--{
--	return I2C_FUNC_SMBUS_EMUL;
--}
--
--static const struct i2c_algorithm tm6000_algo = {
--	.master_xfer   = tm6000_i2c_xfer,
--	.functionality = functionality,
--};
--
--/* ----------------------------------------------------------- */
--
--/*
-- * tm6000_i2c_register()
-- * register i2c bus
-- */
--int tm6000_i2c_register(struct tm6000_core *dev)
--{
--	int rc;
--
--	dev->i2c_adap.owner = THIS_MODULE;
--	dev->i2c_adap.algo = &tm6000_algo;
--	dev->i2c_adap.dev.parent = &dev->udev->dev;
--	strscpy(dev->i2c_adap.name, dev->name, sizeof(dev->i2c_adap.name));
--	dev->i2c_adap.algo_data = dev;
--	i2c_set_adapdata(&dev->i2c_adap, &dev->v4l2_dev);
--	rc = i2c_add_adapter(&dev->i2c_adap);
--	if (rc)
--		return rc;
--
--	dev->i2c_client.adapter = &dev->i2c_adap;
--	strscpy(dev->i2c_client.name, "tm6000 internal", I2C_NAME_SIZE);
--	tm6000_i2c_eeprom(dev);
--
--	return 0;
--}
--
--/*
-- * tm6000_i2c_unregister()
-- * unregister i2c_bus
-- */
--int tm6000_i2c_unregister(struct tm6000_core *dev)
--{
--	i2c_del_adapter(&dev->i2c_adap);
--	return 0;
--}
-diff --git a/drivers/staging/media/deprecated/tm6000/tm6000-input.c b/drivers/staging/media/deprecated/tm6000/tm6000-input.c
-deleted file mode 100644
-index 5136e9e202f1..000000000000
---- a/drivers/staging/media/deprecated/tm6000/tm6000-input.c
-+++ /dev/null
-@@ -1,503 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- *  tm6000-input.c - driver for TM5600/TM6000/TM6010 USB video capture devices
-- *
-- *  Copyright (C) 2010 Stefan Ringel <stefan.ringel@arcor.de>
-- */
--
--#include <linux/module.h>
--#include <linux/init.h>
--#include <linux/delay.h>
--
--#include <linux/input.h>
--#include <linux/usb.h>
--
--#include <media/rc-core.h>
--
--#include "tm6000.h"
--#include "tm6000-regs.h"
--
--static unsigned int ir_debug;
--module_param(ir_debug, int, 0644);
--MODULE_PARM_DESC(ir_debug, "debug message level");
--
--static unsigned int enable_ir = 1;
--module_param(enable_ir, int, 0644);
--MODULE_PARM_DESC(enable_ir, "enable ir (default is enable)");
--
--static unsigned int ir_clock_mhz = 12;
--module_param(ir_clock_mhz, int, 0644);
--MODULE_PARM_DESC(ir_clock_mhz, "ir clock, in MHz");
--
--#define URB_SUBMIT_DELAY	100	/* ms - Delay to submit an URB request on retrial and init */
--#define URB_INT_LED_DELAY	100	/* ms - Delay to turn led on again on int mode */
--
--#undef dprintk
--
--#define dprintk(level, fmt, arg...) do {\
--	if (ir_debug >= level) \
--		printk(KERN_DEBUG "%s/ir: " fmt, ir->name , ## arg); \
--	} while (0)
--
--struct tm6000_ir_poll_result {
--	u16 rc_data;
--};
--
--struct tm6000_IR {
--	struct tm6000_core	*dev;
--	struct rc_dev		*rc;
--	char			name[32];
--	char			phys[32];
--
--	/* poll expernal decoder */
--	int			polling;
--	struct delayed_work	work;
--	u8			wait:1;
--	u8			pwled:2;
--	u8			submit_urb:1;
--	struct urb		*int_urb;
--
--	/* IR device properties */
--	u64			rc_proto;
--};
--
--void tm6000_ir_wait(struct tm6000_core *dev, u8 state)
--{
--	struct tm6000_IR *ir = dev->ir;
--
--	if (!dev->ir)
--		return;
--
--	dprintk(2, "%s: %i\n",__func__, ir->wait);
--
--	if (state)
--		ir->wait = 1;
--	else
--		ir->wait = 0;
--}
--
--static int tm6000_ir_config(struct tm6000_IR *ir)
--{
--	struct tm6000_core *dev = ir->dev;
--	u32 pulse = 0, leader = 0;
--
--	dprintk(2, "%s\n",__func__);
--
--	/*
--	 * The IR decoder supports RC-5 or NEC, with a configurable timing.
--	 * The timing configuration there is not that accurate, as it uses
--	 * approximate values. The NEC spec mentions a 562.5 unit period,
--	 * and RC-5 uses a 888.8 period.
--	 * Currently, driver assumes a clock provided by a 12 MHz XTAL, but
--	 * a modprobe parameter can adjust it.
--	 * Adjustments are required for other timings.
--	 * It seems that the 900ms timing for NEC is used to detect a RC-5
--	 * IR, in order to discard such decoding
--	 */
--
--	switch (ir->rc_proto) {
--	case RC_PROTO_BIT_NEC:
--		leader = 900;	/* ms */
--		pulse  = 700;	/* ms - the actual value would be 562 */
--		break;
--	default:
--	case RC_PROTO_BIT_RC5:
--		leader = 900;	/* ms - from the NEC decoding */
--		pulse  = 1780;	/* ms - The actual value would be 1776 */
--		break;
--	}
--
--	pulse = ir_clock_mhz * pulse;
--	leader = ir_clock_mhz * leader;
--	if (ir->rc_proto == RC_PROTO_BIT_NEC)
--		leader = leader | 0x8000;
--
--	dprintk(2, "%s: %s, %d MHz, leader = 0x%04x, pulse = 0x%06x \n",
--		__func__,
--		(ir->rc_proto == RC_PROTO_BIT_NEC) ? "NEC" : "RC-5",
--		ir_clock_mhz, leader, pulse);
--
--	/* Remote WAKEUP = enable, normal mode, from IR decoder output */
--	tm6000_set_reg(dev, TM6010_REQ07_RE5_REMOTE_WAKEUP, 0xfe);
--
--	/* Enable IR reception on non-busrt mode */
--	tm6000_set_reg(dev, TM6010_REQ07_RD8_IR, 0x2f);
--
--	/* IR_WKUP_SEL = Low byte in decoded IR data */
--	tm6000_set_reg(dev, TM6010_REQ07_RDA_IR_WAKEUP_SEL, 0xff);
--	/* IR_WKU_ADD code */
--	tm6000_set_reg(dev, TM6010_REQ07_RDB_IR_WAKEUP_ADD, 0xff);
--
--	tm6000_set_reg(dev, TM6010_REQ07_RDC_IR_LEADER1, leader >> 8);
--	tm6000_set_reg(dev, TM6010_REQ07_RDD_IR_LEADER0, leader);
--
--	tm6000_set_reg(dev, TM6010_REQ07_RDE_IR_PULSE_CNT1, pulse >> 8);
--	tm6000_set_reg(dev, TM6010_REQ07_RDF_IR_PULSE_CNT0, pulse);
--
--	if (!ir->polling)
--		tm6000_set_reg(dev, REQ_04_EN_DISABLE_MCU_INT, 2, 0);
--	else
--		tm6000_set_reg(dev, REQ_04_EN_DISABLE_MCU_INT, 2, 1);
--	msleep(10);
--
--	/* Shows that IR is working via the LED */
--	tm6000_flash_led(dev, 0);
--	msleep(100);
--	tm6000_flash_led(dev, 1);
--	ir->pwled = 1;
--
--	return 0;
--}
--
--static void tm6000_ir_keydown(struct tm6000_IR *ir,
--			      const char *buf, unsigned int len)
--{
--	u8 device, command;
--	u32 scancode;
--	enum rc_proto protocol;
--
--	if (len < 1)
--		return;
--
--	command = buf[0];
--	device = (len > 1 ? buf[1] : 0x0);
--	switch (ir->rc_proto) {
--	case RC_PROTO_BIT_RC5:
--		protocol = RC_PROTO_RC5;
--		scancode = RC_SCANCODE_RC5(device, command);
--		break;
--	case RC_PROTO_BIT_NEC:
--		protocol = RC_PROTO_NEC;
--		scancode = RC_SCANCODE_NEC(device, command);
--		break;
--	default:
--		protocol = RC_PROTO_OTHER;
--		scancode = RC_SCANCODE_OTHER(device << 8 | command);
--		break;
--	}
--
--	dprintk(1, "%s, protocol: 0x%04x, scancode: 0x%08x\n",
--		__func__, protocol, scancode);
--	rc_keydown(ir->rc, protocol, scancode, 0);
--}
--
--static void tm6000_ir_urb_received(struct urb *urb)
--{
--	struct tm6000_core *dev = urb->context;
--	struct tm6000_IR *ir = dev->ir;
--	char *buf;
--
--	dprintk(2, "%s\n",__func__);
--	if (urb->status < 0 || urb->actual_length <= 0) {
--		printk(KERN_INFO "tm6000: IR URB failure: status: %i, length %i\n",
--		       urb->status, urb->actual_length);
--		ir->submit_urb = 1;
--		schedule_delayed_work(&ir->work, msecs_to_jiffies(URB_SUBMIT_DELAY));
--		return;
--	}
--	buf = urb->transfer_buffer;
--
--	if (ir_debug)
--		print_hex_dump(KERN_DEBUG, "tm6000: IR data: ",
--			       DUMP_PREFIX_OFFSET,16, 1,
--			       buf, urb->actual_length, false);
--
--	tm6000_ir_keydown(ir, urb->transfer_buffer, urb->actual_length);
--
--	usb_submit_urb(urb, GFP_ATOMIC);
--	/*
--	 * Flash the led. We can't do it here, as it is running on IRQ context.
--	 * So, use the scheduler to do it, in a few ms.
--	 */
--	ir->pwled = 2;
--	schedule_delayed_work(&ir->work, msecs_to_jiffies(10));
--}
--
--static void tm6000_ir_handle_key(struct work_struct *work)
--{
--	struct tm6000_IR *ir = container_of(work, struct tm6000_IR, work.work);
--	struct tm6000_core *dev = ir->dev;
--	int rc;
--	u8 buf[2];
--
--	if (ir->wait)
--		return;
--
--	dprintk(3, "%s\n",__func__);
--
--	rc = tm6000_read_write_usb(dev, USB_DIR_IN |
--		USB_TYPE_VENDOR | USB_RECIP_DEVICE,
--		REQ_02_GET_IR_CODE, 0, 0, buf, 2);
--	if (rc < 0)
--		return;
--
--	/* Check if something was read */
--	if ((buf[0] & 0xff) == 0xff) {
--		if (!ir->pwled) {
--			tm6000_flash_led(dev, 1);
--			ir->pwled = 1;
--		}
--		return;
--	}
--
--	tm6000_ir_keydown(ir, buf, rc);
--	tm6000_flash_led(dev, 0);
--	ir->pwled = 0;
--
--	/* Re-schedule polling */
--	schedule_delayed_work(&ir->work, msecs_to_jiffies(ir->polling));
--}
--
--static void tm6000_ir_int_work(struct work_struct *work)
--{
--	struct tm6000_IR *ir = container_of(work, struct tm6000_IR, work.work);
--	struct tm6000_core *dev = ir->dev;
--	int rc;
--
--	dprintk(3, "%s, submit_urb = %d, pwled = %d\n",__func__, ir->submit_urb,
--		ir->pwled);
--
--	if (ir->submit_urb) {
--		dprintk(3, "Resubmit urb\n");
--		tm6000_set_reg(dev, REQ_04_EN_DISABLE_MCU_INT, 2, 0);
--
--		rc = usb_submit_urb(ir->int_urb, GFP_ATOMIC);
--		if (rc < 0) {
--			printk(KERN_ERR "tm6000: Can't submit an IR interrupt. Error %i\n",
--			       rc);
--			/* Retry in 100 ms */
--			schedule_delayed_work(&ir->work, msecs_to_jiffies(URB_SUBMIT_DELAY));
--			return;
--		}
--		ir->submit_urb = 0;
--	}
--
--	/* Led is enabled only if USB submit doesn't fail */
--	if (ir->pwled == 2) {
--		tm6000_flash_led(dev, 0);
--		ir->pwled = 0;
--		schedule_delayed_work(&ir->work, msecs_to_jiffies(URB_INT_LED_DELAY));
--	} else if (!ir->pwled) {
--		tm6000_flash_led(dev, 1);
--		ir->pwled = 1;
--	}
--}
--
--static int tm6000_ir_start(struct rc_dev *rc)
--{
--	struct tm6000_IR *ir = rc->priv;
--
--	dprintk(2, "%s\n",__func__);
--
--	schedule_delayed_work(&ir->work, 0);
--
--	return 0;
--}
--
--static void tm6000_ir_stop(struct rc_dev *rc)
--{
--	struct tm6000_IR *ir = rc->priv;
--
--	dprintk(2, "%s\n",__func__);
--
--	cancel_delayed_work_sync(&ir->work);
--}
--
--static int tm6000_ir_change_protocol(struct rc_dev *rc, u64 *rc_proto)
--{
--	struct tm6000_IR *ir = rc->priv;
--
--	if (!ir)
--		return 0;
--
--	dprintk(2, "%s\n",__func__);
--
--	ir->rc_proto = *rc_proto;
--
--	tm6000_ir_config(ir);
--	/* TODO */
--	return 0;
--}
--
--static int __tm6000_ir_int_start(struct rc_dev *rc)
--{
--	struct tm6000_IR *ir = rc->priv;
--	struct tm6000_core *dev;
--	int pipe, size;
--	int err = -ENOMEM;
--
--	if (!ir)
--		return -ENODEV;
--	dev = ir->dev;
--
--	dprintk(2, "%s\n",__func__);
--
--	ir->int_urb = usb_alloc_urb(0, GFP_ATOMIC);
--	if (!ir->int_urb)
--		return -ENOMEM;
--
--	pipe = usb_rcvintpipe(dev->udev,
--		dev->int_in.endp->desc.bEndpointAddress
--		& USB_ENDPOINT_NUMBER_MASK);
--
--	size = usb_maxpacket(dev->udev, pipe);
--	dprintk(1, "IR max size: %d\n", size);
--
--	ir->int_urb->transfer_buffer = kzalloc(size, GFP_ATOMIC);
--	if (!ir->int_urb->transfer_buffer) {
--		usb_free_urb(ir->int_urb);
--		return err;
--	}
--	dprintk(1, "int interval: %d\n", dev->int_in.endp->desc.bInterval);
--
--	usb_fill_int_urb(ir->int_urb, dev->udev, pipe,
--		ir->int_urb->transfer_buffer, size,
--		tm6000_ir_urb_received, dev,
--		dev->int_in.endp->desc.bInterval);
--
--	ir->submit_urb = 1;
--	schedule_delayed_work(&ir->work, msecs_to_jiffies(URB_SUBMIT_DELAY));
--
--	return 0;
--}
--
--static void __tm6000_ir_int_stop(struct rc_dev *rc)
--{
--	struct tm6000_IR *ir = rc->priv;
--
--	if (!ir || !ir->int_urb)
--		return;
--
--	dprintk(2, "%s\n",__func__);
--
--	usb_kill_urb(ir->int_urb);
--	kfree(ir->int_urb->transfer_buffer);
--	usb_free_urb(ir->int_urb);
--	ir->int_urb = NULL;
--}
--
--int tm6000_ir_int_start(struct tm6000_core *dev)
--{
--	struct tm6000_IR *ir = dev->ir;
--
--	if (!ir)
--		return 0;
--
--	return __tm6000_ir_int_start(ir->rc);
--}
--
--void tm6000_ir_int_stop(struct tm6000_core *dev)
--{
--	struct tm6000_IR *ir = dev->ir;
--
--	if (!ir || !ir->rc)
--		return;
--
--	__tm6000_ir_int_stop(ir->rc);
--}
--
--int tm6000_ir_init(struct tm6000_core *dev)
--{
--	struct tm6000_IR *ir;
--	struct rc_dev *rc;
--	int err = -ENOMEM;
--	u64 rc_proto;
--
--	if (!enable_ir)
--		return -ENODEV;
--
--	if (!dev->caps.has_remote)
--		return 0;
--
--	if (!dev->ir_codes)
--		return 0;
--
--	ir = kzalloc(sizeof(*ir), GFP_ATOMIC);
--	rc = rc_allocate_device(RC_DRIVER_SCANCODE);
--	if (!ir || !rc)
--		goto out;
--
--	dprintk(2, "%s\n", __func__);
--
--	/* record handles to ourself */
--	ir->dev = dev;
--	dev->ir = ir;
--	ir->rc = rc;
--
--	/* input setup */
--	rc->allowed_protocols = RC_PROTO_BIT_RC5 | RC_PROTO_BIT_NEC;
--	/* Needed, in order to support NEC remotes with 24 or 32 bits */
--	rc->scancode_mask = 0xffff;
--	rc->priv = ir;
--	rc->change_protocol = tm6000_ir_change_protocol;
--	if (dev->int_in.endp) {
--		rc->open    = __tm6000_ir_int_start;
--		rc->close   = __tm6000_ir_int_stop;
--		INIT_DELAYED_WORK(&ir->work, tm6000_ir_int_work);
--	} else {
--		rc->open  = tm6000_ir_start;
--		rc->close = tm6000_ir_stop;
--		ir->polling = 50;
--		INIT_DELAYED_WORK(&ir->work, tm6000_ir_handle_key);
--	}
--
--	snprintf(ir->name, sizeof(ir->name), "tm5600/60x0 IR (%s)",
--						dev->name);
--
--	usb_make_path(dev->udev, ir->phys, sizeof(ir->phys));
--	strlcat(ir->phys, "/input0", sizeof(ir->phys));
--
--	rc_proto = RC_PROTO_BIT_UNKNOWN;
--	tm6000_ir_change_protocol(rc, &rc_proto);
--
--	rc->device_name = ir->name;
--	rc->input_phys = ir->phys;
--	rc->input_id.bustype = BUS_USB;
--	rc->input_id.version = 1;
--	rc->input_id.vendor = le16_to_cpu(dev->udev->descriptor.idVendor);
--	rc->input_id.product = le16_to_cpu(dev->udev->descriptor.idProduct);
--	rc->map_name = dev->ir_codes;
--	rc->driver_name = "tm6000";
--	rc->dev.parent = &dev->udev->dev;
--
--	/* ir register */
--	err = rc_register_device(rc);
--	if (err)
--		goto out;
--
--	return 0;
--
--out:
--	dev->ir = NULL;
--	rc_free_device(rc);
--	kfree(ir);
--	return err;
--}
--
--int tm6000_ir_fini(struct tm6000_core *dev)
--{
--	struct tm6000_IR *ir = dev->ir;
--
--	/* skip detach on non attached board */
--
--	if (!ir)
--		return 0;
--
--	dprintk(2, "%s\n",__func__);
--
--	if (!ir->polling)
--		__tm6000_ir_int_stop(ir->rc);
--
--	tm6000_ir_stop(ir->rc);
--
--	/* Turn off the led */
--	tm6000_flash_led(dev, 0);
--	ir->pwled = 0;
--
--	rc_unregister_device(ir->rc);
--
--	kfree(ir);
--	dev->ir = NULL;
--
--	return 0;
--}
-diff --git a/drivers/staging/media/deprecated/tm6000/tm6000-regs.h b/drivers/staging/media/deprecated/tm6000/tm6000-regs.h
-deleted file mode 100644
-index 6a181f2e7ef2..000000000000
---- a/drivers/staging/media/deprecated/tm6000/tm6000-regs.h
-+++ /dev/null
-@@ -1,588 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/*
-- * tm6000-regs.h - driver for TM5600/TM6000/TM6010 USB video capture devices
-- *
-- * Copyright (c) 2006-2007 Mauro Carvalho Chehab <mchehab@kernel.org>
-- */
--
--/*
-- * Define TV Master TM5600/TM6000/TM6010 Request codes
-- */
--#define REQ_00_SET_IR_VALUE		0
--#define REQ_01_SET_WAKEUP_IRCODE	1
--#define REQ_02_GET_IR_CODE		2
--#define REQ_03_SET_GET_MCU_PIN		3
--#define REQ_04_EN_DISABLE_MCU_INT	4
--#define REQ_05_SET_GET_USBREG		5
--	/* Write: RegNum, Value, 0 */
--	/* Read : RegNum, Value, 1, RegStatus */
--#define REQ_06_SET_GET_USBREG_BIT	6
--#define REQ_07_SET_GET_AVREG		7
--	/* Write: RegNum, Value, 0 */
--	/* Read : RegNum, Value, 1, RegStatus */
--#define REQ_08_SET_GET_AVREG_BIT	8
--#define REQ_09_SET_GET_TUNER_FQ		9
--#define REQ_10_SET_TUNER_SYSTEM		10
--#define REQ_11_SET_EEPROM_ADDR		11
--#define REQ_12_SET_GET_EEPROMBYTE	12
--#define REQ_13_GET_EEPROM_SEQREAD	13
--#define REQ_14_SET_GET_I2C_WR2_RDN	14
--#define REQ_15_SET_GET_I2CBYTE		15
--	/* Write: Subaddr, Slave Addr, value, 0 */
--	/* Read : Subaddr, Slave Addr, value, 1 */
--#define REQ_16_SET_GET_I2C_WR1_RDN	16
--	/* Subaddr, Slave Addr, 0, length */
--#define REQ_17_SET_GET_I2CFP		17
--	/* Write: Slave Addr, register, value */
--	/* Read : Slave Addr, register, 2, data */
--#define REQ_20_DATA_TRANSFER		20
--#define REQ_30_I2C_WRITE		30
--#define REQ_31_I2C_READ			31
--#define REQ_35_AFTEK_TUNER_READ		35
--#define REQ_40_GET_VERSION		40
--#define REQ_50_SET_START		50
--#define REQ_51_SET_STOP			51
--#define REQ_52_TRANSMIT_DATA		52
--#define REQ_53_SPI_INITIAL		53
--#define REQ_54_SPI_SETSTART		54
--#define REQ_55_SPI_INOUTDATA		55
--#define REQ_56_SPI_SETSTOP		56
--
--/*
-- * Define TV Master TM5600/TM6000/TM6010 GPIO lines
-- */
--
--#define TM6000_GPIO_CLK		0x101
--#define TM6000_GPIO_DATA	0x100
--
--#define TM6000_GPIO_1		0x102
--#define TM6000_GPIO_2		0x103
--#define TM6000_GPIO_3		0x104
--#define TM6000_GPIO_4		0x300
--#define TM6000_GPIO_5		0x301
--#define TM6000_GPIO_6		0x304
--#define TM6000_GPIO_7		0x305
--
--/* tm6010 defines GPIO with different values */
--#define TM6010_GPIO_0      0x0102
--#define TM6010_GPIO_1      0x0103
--#define TM6010_GPIO_2      0x0104
--#define TM6010_GPIO_3      0x0105
--#define TM6010_GPIO_4      0x0106
--#define TM6010_GPIO_5      0x0107
--#define TM6010_GPIO_6      0x0300
--#define TM6010_GPIO_7      0x0301
--#define TM6010_GPIO_9      0x0305
--/*
-- * Define TV Master TM5600/TM6000/TM6010 URB message codes and length
-- */
--
--enum {
--	TM6000_URB_MSG_VIDEO = 1,
--	TM6000_URB_MSG_AUDIO,
--	TM6000_URB_MSG_VBI,
--	TM6000_URB_MSG_PTS,
--	TM6000_URB_MSG_ERR,
--};
--
--/* Define specific TM6000 Video decoder registers */
--#define TM6000_REQ07_RD8_TEST_SEL			0x07, 0xd8
--#define TM6000_REQ07_RD9_A_SIM_SEL			0x07, 0xd9
--#define TM6000_REQ07_RDA_CLK_SEL			0x07, 0xda
--#define TM6000_REQ07_RDB_OUT_SEL			0x07, 0xdb
--#define TM6000_REQ07_RDC_NSEL_I2S			0x07, 0xdc
--#define TM6000_REQ07_RDD_GPIO2_MDRV			0x07, 0xdd
--#define TM6000_REQ07_RDE_GPIO1_MDRV			0x07, 0xde
--#define TM6000_REQ07_RDF_PWDOWN_ACLK			0x07, 0xdf
--#define TM6000_REQ07_RE0_VADC_REF_CTL			0x07, 0xe0
--#define TM6000_REQ07_RE1_VADC_DACLIMP			0x07, 0xe1
--#define TM6000_REQ07_RE2_VADC_STATUS_CTL		0x07, 0xe2
--#define TM6000_REQ07_RE3_VADC_INP_LPF_SEL1		0x07, 0xe3
--#define TM6000_REQ07_RE4_VADC_TARGET1			0x07, 0xe4
--#define TM6000_REQ07_RE5_VADC_INP_LPF_SEL2		0x07, 0xe5
--#define TM6000_REQ07_RE6_VADC_TARGET2			0x07, 0xe6
--#define TM6000_REQ07_RE7_VADC_AGAIN_CTL			0x07, 0xe7
--#define TM6000_REQ07_RE8_VADC_PWDOWN_CTL		0x07, 0xe8
--#define TM6000_REQ07_RE9_VADC_INPUT_CTL1		0x07, 0xe9
--#define TM6000_REQ07_REA_VADC_INPUT_CTL2		0x07, 0xea
--#define TM6000_REQ07_REB_VADC_AADC_MODE			0x07, 0xeb
--#define TM6000_REQ07_REC_VADC_AADC_LVOL			0x07, 0xec
--#define TM6000_REQ07_RED_VADC_AADC_RVOL			0x07, 0xed
--#define TM6000_REQ07_REE_VADC_CTRL_SEL_CONTROL		0x07, 0xee
--#define TM6000_REQ07_REF_VADC_GAIN_MAP_CTL		0x07, 0xef
--#define TM6000_REQ07_RFD_BIST_ERR_VST_LOW		0x07, 0xfd
--#define TM6000_REQ07_RFE_BIST_ERR_VST_HIGH		0x07, 0xfe
--
--/* Define TM6000/TM6010 Video decoder registers */
--#define TM6010_REQ07_R00_VIDEO_CONTROL0			0x07, 0x00
--#define TM6010_REQ07_R01_VIDEO_CONTROL1			0x07, 0x01
--#define TM6010_REQ07_R02_VIDEO_CONTROL2			0x07, 0x02
--#define TM6010_REQ07_R03_YC_SEP_CONTROL			0x07, 0x03
--#define TM6010_REQ07_R04_LUMA_HAGC_CONTROL		0x07, 0x04
--#define TM6010_REQ07_R05_NOISE_THRESHOLD		0x07, 0x05
--#define TM6010_REQ07_R06_AGC_GATE_THRESHOLD		0x07, 0x06
--#define TM6010_REQ07_R07_OUTPUT_CONTROL			0x07, 0x07
--#define TM6010_REQ07_R08_LUMA_CONTRAST_ADJ		0x07, 0x08
--#define TM6010_REQ07_R09_LUMA_BRIGHTNESS_ADJ		0x07, 0x09
--#define TM6010_REQ07_R0A_CHROMA_SATURATION_ADJ		0x07, 0x0a
--#define TM6010_REQ07_R0B_CHROMA_HUE_PHASE_ADJ		0x07, 0x0b
--#define TM6010_REQ07_R0C_CHROMA_AGC_CONTROL		0x07, 0x0c
--#define TM6010_REQ07_R0D_CHROMA_KILL_LEVEL		0x07, 0x0d
--#define TM6010_REQ07_R0F_CHROMA_AUTO_POSITION		0x07, 0x0f
--#define TM6010_REQ07_R10_AGC_PEAK_NOMINAL		0x07, 0x10
--#define TM6010_REQ07_R11_AGC_PEAK_CONTROL		0x07, 0x11
--#define TM6010_REQ07_R12_AGC_GATE_STARTH		0x07, 0x12
--#define TM6010_REQ07_R13_AGC_GATE_STARTL		0x07, 0x13
--#define TM6010_REQ07_R14_AGC_GATE_WIDTH			0x07, 0x14
--#define TM6010_REQ07_R15_AGC_BP_DELAY			0x07, 0x15
--#define TM6010_REQ07_R16_LOCK_COUNT			0x07, 0x16
--#define TM6010_REQ07_R17_HLOOP_MAXSTATE			0x07, 0x17
--#define TM6010_REQ07_R18_CHROMA_DTO_INCREMENT3		0x07, 0x18
--#define TM6010_REQ07_R19_CHROMA_DTO_INCREMENT2		0x07, 0x19
--#define TM6010_REQ07_R1A_CHROMA_DTO_INCREMENT1		0x07, 0x1a
--#define TM6010_REQ07_R1B_CHROMA_DTO_INCREMENT0		0x07, 0x1b
--#define TM6010_REQ07_R1C_HSYNC_DTO_INCREMENT3		0x07, 0x1c
--#define TM6010_REQ07_R1D_HSYNC_DTO_INCREMENT2		0x07, 0x1d
--#define TM6010_REQ07_R1E_HSYNC_DTO_INCREMENT1		0x07, 0x1e
--#define TM6010_REQ07_R1F_HSYNC_DTO_INCREMENT0		0x07, 0x1f
--#define TM6010_REQ07_R20_HSYNC_RISING_EDGE_TIME		0x07, 0x20
--#define TM6010_REQ07_R21_HSYNC_PHASE_OFFSET		0x07, 0x21
--#define TM6010_REQ07_R22_HSYNC_PLL_START_TIME		0x07, 0x22
--#define TM6010_REQ07_R23_HSYNC_PLL_END_TIME		0x07, 0x23
--#define TM6010_REQ07_R24_HSYNC_TIP_START_TIME		0x07, 0x24
--#define TM6010_REQ07_R25_HSYNC_TIP_END_TIME		0x07, 0x25
--#define TM6010_REQ07_R26_HSYNC_RISING_EDGE_START	0x07, 0x26
--#define TM6010_REQ07_R27_HSYNC_RISING_EDGE_END		0x07, 0x27
--#define TM6010_REQ07_R28_BACKPORCH_START		0x07, 0x28
--#define TM6010_REQ07_R29_BACKPORCH_END			0x07, 0x29
--#define TM6010_REQ07_R2A_HSYNC_FILTER_START		0x07, 0x2a
--#define TM6010_REQ07_R2B_HSYNC_FILTER_END		0x07, 0x2b
--#define TM6010_REQ07_R2C_CHROMA_BURST_START		0x07, 0x2c
--#define TM6010_REQ07_R2D_CHROMA_BURST_END		0x07, 0x2d
--#define TM6010_REQ07_R2E_ACTIVE_VIDEO_HSTART		0x07, 0x2e
--#define TM6010_REQ07_R2F_ACTIVE_VIDEO_HWIDTH		0x07, 0x2f
--#define TM6010_REQ07_R30_ACTIVE_VIDEO_VSTART		0x07, 0x30
--#define TM6010_REQ07_R31_ACTIVE_VIDEO_VHIGHT		0x07, 0x31
--#define TM6010_REQ07_R32_VSYNC_HLOCK_MIN		0x07, 0x32
--#define TM6010_REQ07_R33_VSYNC_HLOCK_MAX		0x07, 0x33
--#define TM6010_REQ07_R34_VSYNC_AGC_MIN			0x07, 0x34
--#define TM6010_REQ07_R35_VSYNC_AGC_MAX			0x07, 0x35
--#define TM6010_REQ07_R36_VSYNC_VBI_MIN			0x07, 0x36
--#define TM6010_REQ07_R37_VSYNC_VBI_MAX			0x07, 0x37
--#define TM6010_REQ07_R38_VSYNC_THRESHOLD		0x07, 0x38
--#define TM6010_REQ07_R39_VSYNC_TIME_CONSTANT		0x07, 0x39
--#define TM6010_REQ07_R3A_STATUS1			0x07, 0x3a
--#define TM6010_REQ07_R3B_STATUS2			0x07, 0x3b
--#define TM6010_REQ07_R3C_STATUS3			0x07, 0x3c
--#define TM6010_REQ07_R3F_RESET				0x07, 0x3f
--#define TM6010_REQ07_R40_TELETEXT_VBI_CODE0		0x07, 0x40
--#define TM6010_REQ07_R41_TELETEXT_VBI_CODE1		0x07, 0x41
--#define TM6010_REQ07_R42_VBI_DATA_HIGH_LEVEL		0x07, 0x42
--#define TM6010_REQ07_R43_VBI_DATA_TYPE_LINE7		0x07, 0x43
--#define TM6010_REQ07_R44_VBI_DATA_TYPE_LINE8		0x07, 0x44
--#define TM6010_REQ07_R45_VBI_DATA_TYPE_LINE9		0x07, 0x45
--#define TM6010_REQ07_R46_VBI_DATA_TYPE_LINE10		0x07, 0x46
--#define TM6010_REQ07_R47_VBI_DATA_TYPE_LINE11		0x07, 0x47
--#define TM6010_REQ07_R48_VBI_DATA_TYPE_LINE12		0x07, 0x48
--#define TM6010_REQ07_R49_VBI_DATA_TYPE_LINE13		0x07, 0x49
--#define TM6010_REQ07_R4A_VBI_DATA_TYPE_LINE14		0x07, 0x4a
--#define TM6010_REQ07_R4B_VBI_DATA_TYPE_LINE15		0x07, 0x4b
--#define TM6010_REQ07_R4C_VBI_DATA_TYPE_LINE16		0x07, 0x4c
--#define TM6010_REQ07_R4D_VBI_DATA_TYPE_LINE17		0x07, 0x4d
--#define TM6010_REQ07_R4E_VBI_DATA_TYPE_LINE18		0x07, 0x4e
--#define TM6010_REQ07_R4F_VBI_DATA_TYPE_LINE19		0x07, 0x4f
--#define TM6010_REQ07_R50_VBI_DATA_TYPE_LINE20		0x07, 0x50
--#define TM6010_REQ07_R51_VBI_DATA_TYPE_LINE21		0x07, 0x51
--#define TM6010_REQ07_R52_VBI_DATA_TYPE_LINE22		0x07, 0x52
--#define TM6010_REQ07_R53_VBI_DATA_TYPE_LINE23		0x07, 0x53
--#define TM6010_REQ07_R54_VBI_DATA_TYPE_RLINES		0x07, 0x54
--#define TM6010_REQ07_R55_VBI_LOOP_FILTER_GAIN		0x07, 0x55
--#define TM6010_REQ07_R56_VBI_LOOP_FILTER_I_GAIN		0x07, 0x56
--#define TM6010_REQ07_R57_VBI_LOOP_FILTER_P_GAIN		0x07, 0x57
--#define TM6010_REQ07_R58_VBI_CAPTION_DTO1		0x07, 0x58
--#define TM6010_REQ07_R59_VBI_CAPTION_DTO0		0x07, 0x59
--#define TM6010_REQ07_R5A_VBI_TELETEXT_DTO1		0x07, 0x5a
--#define TM6010_REQ07_R5B_VBI_TELETEXT_DTO0		0x07, 0x5b
--#define TM6010_REQ07_R5C_VBI_WSS625_DTO1		0x07, 0x5c
--#define TM6010_REQ07_R5D_VBI_WSS625_DTO0		0x07, 0x5d
--#define TM6010_REQ07_R5E_VBI_CAPTION_FRAME_START	0x07, 0x5e
--#define TM6010_REQ07_R5F_VBI_WSS625_FRAME_START		0x07, 0x5f
--#define TM6010_REQ07_R60_TELETEXT_FRAME_START		0x07, 0x60
--#define TM6010_REQ07_R61_VBI_CCDATA1			0x07, 0x61
--#define TM6010_REQ07_R62_VBI_CCDATA2			0x07, 0x62
--#define TM6010_REQ07_R63_VBI_WSS625_DATA1		0x07, 0x63
--#define TM6010_REQ07_R64_VBI_WSS625_DATA2		0x07, 0x64
--#define TM6010_REQ07_R65_VBI_DATA_STATUS		0x07, 0x65
--#define TM6010_REQ07_R66_VBI_CAPTION_START		0x07, 0x66
--#define TM6010_REQ07_R67_VBI_WSS625_START		0x07, 0x67
--#define TM6010_REQ07_R68_VBI_TELETEXT_START		0x07, 0x68
--#define TM6010_REQ07_R70_HSYNC_DTO_INC_STATUS3		0x07, 0x70
--#define TM6010_REQ07_R71_HSYNC_DTO_INC_STATUS2		0x07, 0x71
--#define TM6010_REQ07_R72_HSYNC_DTO_INC_STATUS1		0x07, 0x72
--#define TM6010_REQ07_R73_HSYNC_DTO_INC_STATUS0		0x07, 0x73
--#define TM6010_REQ07_R74_CHROMA_DTO_INC_STATUS3		0x07, 0x74
--#define TM6010_REQ07_R75_CHROMA_DTO_INC_STATUS2		0x07, 0x75
--#define TM6010_REQ07_R76_CHROMA_DTO_INC_STATUS1		0x07, 0x76
--#define TM6010_REQ07_R77_CHROMA_DTO_INC_STATUS0		0x07, 0x77
--#define TM6010_REQ07_R78_AGC_AGAIN_STATUS		0x07, 0x78
--#define TM6010_REQ07_R79_AGC_DGAIN_STATUS		0x07, 0x79
--#define TM6010_REQ07_R7A_CHROMA_MAG_STATUS		0x07, 0x7a
--#define TM6010_REQ07_R7B_CHROMA_GAIN_STATUS1		0x07, 0x7b
--#define TM6010_REQ07_R7C_CHROMA_GAIN_STATUS0		0x07, 0x7c
--#define TM6010_REQ07_R7D_CORDIC_FREQ_STATUS		0x07, 0x7d
--#define TM6010_REQ07_R7F_STATUS_NOISE			0x07, 0x7f
--#define TM6010_REQ07_R80_COMB_FILTER_TRESHOLD		0x07, 0x80
--#define TM6010_REQ07_R82_COMB_FILTER_CONFIG		0x07, 0x82
--#define TM6010_REQ07_R83_CHROMA_LOCK_CONFIG		0x07, 0x83
--#define TM6010_REQ07_R84_NOISE_NTSC_C			0x07, 0x84
--#define TM6010_REQ07_R85_NOISE_PAL_C			0x07, 0x85
--#define TM6010_REQ07_R86_NOISE_PHASE_C			0x07, 0x86
--#define TM6010_REQ07_R87_NOISE_PHASE_Y			0x07, 0x87
--#define TM6010_REQ07_R8A_CHROMA_LOOPFILTER_STATE	0x07, 0x8a
--#define TM6010_REQ07_R8B_CHROMA_HRESAMPLER		0x07, 0x8b
--#define TM6010_REQ07_R8D_CPUMP_DELAY_ADJ		0x07, 0x8d
--#define TM6010_REQ07_R8E_CPUMP_ADJ			0x07, 0x8e
--#define TM6010_REQ07_R8F_CPUMP_DELAY			0x07, 0x8f
--
--/* Define TM6000/TM6010 Miscellaneous registers */
--#define TM6010_REQ07_RC0_ACTIVE_VIDEO_SOURCE		0x07, 0xc0
--#define TM6010_REQ07_RC1_TRESHOLD			0x07, 0xc1
--#define TM6010_REQ07_RC2_HSYNC_WIDTH			0x07, 0xc2
--#define TM6010_REQ07_RC3_HSTART1			0x07, 0xc3
--#define TM6010_REQ07_RC4_HSTART0			0x07, 0xc4
--#define TM6010_REQ07_RC5_HEND1				0x07, 0xc5
--#define TM6010_REQ07_RC6_HEND0				0x07, 0xc6
--#define TM6010_REQ07_RC7_VSTART1			0x07, 0xc7
--#define TM6010_REQ07_RC8_VSTART0			0x07, 0xc8
--#define TM6010_REQ07_RC9_VEND1				0x07, 0xc9
--#define TM6010_REQ07_RCA_VEND0				0x07, 0xca
--#define TM6010_REQ07_RCB_DELAY				0x07, 0xcb
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RCC_ACTIVE_IF			0x07, 0xcc
--#define TM6010_REQ07_RCC_ACTIVE_IF_VIDEO_ENABLE (1 << 5)
--#define TM6010_REQ07_RCC_ACTIVE_IF_AUDIO_ENABLE (1 << 6)
--#define TM6010_REQ07_RD0_USB_PERIPHERY_CONTROL		0x07, 0xd0
--#define TM6010_REQ07_RD1_ADDR_FOR_REQ1			0x07, 0xd1
--#define TM6010_REQ07_RD2_ADDR_FOR_REQ2			0x07, 0xd2
--#define TM6010_REQ07_RD3_ADDR_FOR_REQ3			0x07, 0xd3
--#define TM6010_REQ07_RD4_ADDR_FOR_REQ4			0x07, 0xd4
--#define TM6010_REQ07_RD5_POWERSAVE			0x07, 0xd5
--#define TM6010_REQ07_RD6_ENDP_REQ1_REQ2			0x07, 0xd6
--#define TM6010_REQ07_RD7_ENDP_REQ3_REQ4			0x07, 0xd7
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RD8_IR				0x07, 0xd8
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RD9_IR_BSIZE			0x07, 0xd9
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RDA_IR_WAKEUP_SEL			0x07, 0xda
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RDB_IR_WAKEUP_ADD			0x07, 0xdb
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RDC_IR_LEADER1			0x07, 0xdc
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RDD_IR_LEADER0			0x07, 0xdd
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RDE_IR_PULSE_CNT1			0x07, 0xde
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RDF_IR_PULSE_CNT0			0x07, 0xdf
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RE0_DVIDEO_SOURCE			0x07, 0xe0
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RE0_DVIDEO_SOURCE_IF		0x07, 0xe1
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RE2_OUT_SEL2			0x07, 0xe2
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RE3_OUT_SEL1			0x07, 0xe3
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RE4_OUT_SEL0			0x07, 0xe4
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RE5_REMOTE_WAKEUP			0x07, 0xe5
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RE7_PUB_GPIO			0x07, 0xe7
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RE8_TYPESEL_MOS_I2S		0x07, 0xe8
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RE9_TYPESEL_MOS_TS			0x07, 0xe9
--/* ONLY for TM6010 */
--#define TM6010_REQ07_REA_TYPESEL_MOS_CCIR		0x07, 0xea
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RF0_BIST_CRC_RESULT0		0x07, 0xf0
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RF1_BIST_CRC_RESULT1		0x07, 0xf1
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RF2_BIST_CRC_RESULT2		0x07, 0xf2
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RF3_BIST_CRC_RESULT3		0x07, 0xf3
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RF4_BIST_ERR_VST2			0x07, 0xf4
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RF5_BIST_ERR_VST1			0x07, 0xf5
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RF6_BIST_ERR_VST0			0x07, 0xf6
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RF7_BIST				0x07, 0xf7
--/* ONLY for TM6010 */
--#define TM6010_REQ07_RFE_POWER_DOWN			0x07, 0xfe
--#define TM6010_REQ07_RFF_SOFT_RESET			0x07, 0xff
--
--/* Define TM6000/TM6010 USB registers */
--#define TM6010_REQ05_R00_MAIN_CTRL		0x05, 0x00
--#define TM6010_REQ05_R01_DEVADDR		0x05, 0x01
--#define TM6010_REQ05_R02_TEST			0x05, 0x02
--#define TM6010_REQ05_R04_SOFN0			0x05, 0x04
--#define TM6010_REQ05_R05_SOFN1			0x05, 0x05
--#define TM6010_REQ05_R06_SOFTM0			0x05, 0x06
--#define TM6010_REQ05_R07_SOFTM1			0x05, 0x07
--#define TM6010_REQ05_R08_PHY_TEST		0x05, 0x08
--#define TM6010_REQ05_R09_VCTL			0x05, 0x09
--#define TM6010_REQ05_R0A_VSTA			0x05, 0x0a
--#define TM6010_REQ05_R0B_CX_CFG			0x05, 0x0b
--#define TM6010_REQ05_R0C_ENDP0_REG0		0x05, 0x0c
--#define TM6010_REQ05_R10_GMASK			0x05, 0x10
--#define TM6010_REQ05_R11_IMASK0			0x05, 0x11
--#define TM6010_REQ05_R12_IMASK1			0x05, 0x12
--#define TM6010_REQ05_R13_IMASK2			0x05, 0x13
--#define TM6010_REQ05_R14_IMASK3			0x05, 0x14
--#define TM6010_REQ05_R15_IMASK4			0x05, 0x15
--#define TM6010_REQ05_R16_IMASK5			0x05, 0x16
--#define TM6010_REQ05_R17_IMASK6			0x05, 0x17
--#define TM6010_REQ05_R18_IMASK7			0x05, 0x18
--#define TM6010_REQ05_R19_ZEROP0			0x05, 0x19
--#define TM6010_REQ05_R1A_ZEROP1			0x05, 0x1a
--#define TM6010_REQ05_R1C_FIFO_EMP0		0x05, 0x1c
--#define TM6010_REQ05_R1D_FIFO_EMP1		0x05, 0x1d
--#define TM6010_REQ05_R20_IRQ_GROUP		0x05, 0x20
--#define TM6010_REQ05_R21_IRQ_SOURCE0		0x05, 0x21
--#define TM6010_REQ05_R22_IRQ_SOURCE1		0x05, 0x22
--#define TM6010_REQ05_R23_IRQ_SOURCE2		0x05, 0x23
--#define TM6010_REQ05_R24_IRQ_SOURCE3		0x05, 0x24
--#define TM6010_REQ05_R25_IRQ_SOURCE4		0x05, 0x25
--#define TM6010_REQ05_R26_IRQ_SOURCE5		0x05, 0x26
--#define TM6010_REQ05_R27_IRQ_SOURCE6		0x05, 0x27
--#define TM6010_REQ05_R28_IRQ_SOURCE7		0x05, 0x28
--#define TM6010_REQ05_R29_SEQ_ERR0		0x05, 0x29
--#define TM6010_REQ05_R2A_SEQ_ERR1		0x05, 0x2a
--#define TM6010_REQ05_R2B_SEQ_ABORT0		0x05, 0x2b
--#define TM6010_REQ05_R2C_SEQ_ABORT1		0x05, 0x2c
--#define TM6010_REQ05_R2D_TX_ZERO0		0x05, 0x2d
--#define TM6010_REQ05_R2E_TX_ZERO1		0x05, 0x2e
--#define TM6010_REQ05_R2F_IDLE_CNT		0x05, 0x2f
--#define TM6010_REQ05_R30_FNO_P1			0x05, 0x30
--#define TM6010_REQ05_R31_FNO_P2			0x05, 0x31
--#define TM6010_REQ05_R32_FNO_P3			0x05, 0x32
--#define TM6010_REQ05_R33_FNO_P4			0x05, 0x33
--#define TM6010_REQ05_R34_FNO_P5			0x05, 0x34
--#define TM6010_REQ05_R35_FNO_P6			0x05, 0x35
--#define TM6010_REQ05_R36_FNO_P7			0x05, 0x36
--#define TM6010_REQ05_R37_FNO_P8			0x05, 0x37
--#define TM6010_REQ05_R38_FNO_P9			0x05, 0x38
--#define TM6010_REQ05_R30_FNO_P10		0x05, 0x39
--#define TM6010_REQ05_R30_FNO_P11		0x05, 0x3a
--#define TM6010_REQ05_R30_FNO_P12		0x05, 0x3b
--#define TM6010_REQ05_R30_FNO_P13		0x05, 0x3c
--#define TM6010_REQ05_R30_FNO_P14		0x05, 0x3d
--#define TM6010_REQ05_R30_FNO_P15		0x05, 0x3e
--#define TM6010_REQ05_R40_IN_MAXPS_LOW1		0x05, 0x40
--#define TM6010_REQ05_R41_IN_MAXPS_HIGH1		0x05, 0x41
--#define TM6010_REQ05_R42_IN_MAXPS_LOW2		0x05, 0x42
--#define TM6010_REQ05_R43_IN_MAXPS_HIGH2		0x05, 0x43
--#define TM6010_REQ05_R44_IN_MAXPS_LOW3		0x05, 0x44
--#define TM6010_REQ05_R45_IN_MAXPS_HIGH3		0x05, 0x45
--#define TM6010_REQ05_R46_IN_MAXPS_LOW4		0x05, 0x46
--#define TM6010_REQ05_R47_IN_MAXPS_HIGH4		0x05, 0x47
--#define TM6010_REQ05_R48_IN_MAXPS_LOW5		0x05, 0x48
--#define TM6010_REQ05_R49_IN_MAXPS_HIGH5		0x05, 0x49
--#define TM6010_REQ05_R4A_IN_MAXPS_LOW6		0x05, 0x4a
--#define TM6010_REQ05_R4B_IN_MAXPS_HIGH6		0x05, 0x4b
--#define TM6010_REQ05_R4C_IN_MAXPS_LOW7		0x05, 0x4c
--#define TM6010_REQ05_R4D_IN_MAXPS_HIGH7		0x05, 0x4d
--#define TM6010_REQ05_R4E_IN_MAXPS_LOW8		0x05, 0x4e
--#define TM6010_REQ05_R4F_IN_MAXPS_HIGH8		0x05, 0x4f
--#define TM6010_REQ05_R50_IN_MAXPS_LOW9		0x05, 0x50
--#define TM6010_REQ05_R51_IN_MAXPS_HIGH9		0x05, 0x51
--#define TM6010_REQ05_R40_IN_MAXPS_LOW10		0x05, 0x52
--#define TM6010_REQ05_R41_IN_MAXPS_HIGH10	0x05, 0x53
--#define TM6010_REQ05_R40_IN_MAXPS_LOW11		0x05, 0x54
--#define TM6010_REQ05_R41_IN_MAXPS_HIGH11	0x05, 0x55
--#define TM6010_REQ05_R40_IN_MAXPS_LOW12		0x05, 0x56
--#define TM6010_REQ05_R41_IN_MAXPS_HIGH12	0x05, 0x57
--#define TM6010_REQ05_R40_IN_MAXPS_LOW13		0x05, 0x58
--#define TM6010_REQ05_R41_IN_MAXPS_HIGH13	0x05, 0x59
--#define TM6010_REQ05_R40_IN_MAXPS_LOW14		0x05, 0x5a
--#define TM6010_REQ05_R41_IN_MAXPS_HIGH14	0x05, 0x5b
--#define TM6010_REQ05_R40_IN_MAXPS_LOW15		0x05, 0x5c
--#define TM6010_REQ05_R41_IN_MAXPS_HIGH15	0x05, 0x5d
--#define TM6010_REQ05_R60_OUT_MAXPS_LOW1		0x05, 0x60
--#define TM6010_REQ05_R61_OUT_MAXPS_HIGH1	0x05, 0x61
--#define TM6010_REQ05_R62_OUT_MAXPS_LOW2		0x05, 0x62
--#define TM6010_REQ05_R63_OUT_MAXPS_HIGH2	0x05, 0x63
--#define TM6010_REQ05_R64_OUT_MAXPS_LOW3		0x05, 0x64
--#define TM6010_REQ05_R65_OUT_MAXPS_HIGH3	0x05, 0x65
--#define TM6010_REQ05_R66_OUT_MAXPS_LOW4		0x05, 0x66
--#define TM6010_REQ05_R67_OUT_MAXPS_HIGH4	0x05, 0x67
--#define TM6010_REQ05_R68_OUT_MAXPS_LOW5		0x05, 0x68
--#define TM6010_REQ05_R69_OUT_MAXPS_HIGH5	0x05, 0x69
--#define TM6010_REQ05_R6A_OUT_MAXPS_LOW6		0x05, 0x6a
--#define TM6010_REQ05_R6B_OUT_MAXPS_HIGH6	0x05, 0x6b
--#define TM6010_REQ05_R6C_OUT_MAXPS_LOW7		0x05, 0x6c
--#define TM6010_REQ05_R6D_OUT_MAXPS_HIGH7	0x05, 0x6d
--#define TM6010_REQ05_R6E_OUT_MAXPS_LOW8		0x05, 0x6e
--#define TM6010_REQ05_R6F_OUT_MAXPS_HIGH8	0x05, 0x6f
--#define TM6010_REQ05_R70_OUT_MAXPS_LOW9		0x05, 0x70
--#define TM6010_REQ05_R71_OUT_MAXPS_HIGH9	0x05, 0x71
--#define TM6010_REQ05_R60_OUT_MAXPS_LOW10	0x05, 0x72
--#define TM6010_REQ05_R61_OUT_MAXPS_HIGH10	0x05, 0x73
--#define TM6010_REQ05_R60_OUT_MAXPS_LOW11	0x05, 0x74
--#define TM6010_REQ05_R61_OUT_MAXPS_HIGH11	0x05, 0x75
--#define TM6010_REQ05_R60_OUT_MAXPS_LOW12	0x05, 0x76
--#define TM6010_REQ05_R61_OUT_MAXPS_HIGH12	0x05, 0x77
--#define TM6010_REQ05_R60_OUT_MAXPS_LOW13	0x05, 0x78
--#define TM6010_REQ05_R61_OUT_MAXPS_HIGH13	0x05, 0x79
--#define TM6010_REQ05_R60_OUT_MAXPS_LOW14	0x05, 0x7a
--#define TM6010_REQ05_R61_OUT_MAXPS_HIGH14	0x05, 0x7b
--#define TM6010_REQ05_R60_OUT_MAXPS_LOW15	0x05, 0x7c
--#define TM6010_REQ05_R61_OUT_MAXPS_HIGH15	0x05, 0x7d
--#define TM6010_REQ05_R80_FIFO0			0x05, 0x80
--#define TM6010_REQ05_R81_FIFO1			0x05, 0x81
--#define TM6010_REQ05_R82_FIFO2			0x05, 0x82
--#define TM6010_REQ05_R83_FIFO3			0x05, 0x83
--#define TM6010_REQ05_R84_FIFO4			0x05, 0x84
--#define TM6010_REQ05_R85_FIFO5			0x05, 0x85
--#define TM6010_REQ05_R86_FIFO6			0x05, 0x86
--#define TM6010_REQ05_R87_FIFO7			0x05, 0x87
--#define TM6010_REQ05_R88_FIFO8			0x05, 0x88
--#define TM6010_REQ05_R89_FIFO9			0x05, 0x89
--#define TM6010_REQ05_R81_FIFO10			0x05, 0x8a
--#define TM6010_REQ05_R81_FIFO11			0x05, 0x8b
--#define TM6010_REQ05_R81_FIFO12			0x05, 0x8c
--#define TM6010_REQ05_R81_FIFO13			0x05, 0x8d
--#define TM6010_REQ05_R81_FIFO14			0x05, 0x8e
--#define TM6010_REQ05_R81_FIFO15			0x05, 0x8f
--#define TM6010_REQ05_R90_CFG_FIFO0		0x05, 0x90
--#define TM6010_REQ05_R91_CFG_FIFO1		0x05, 0x91
--#define TM6010_REQ05_R92_CFG_FIFO2		0x05, 0x92
--#define TM6010_REQ05_R93_CFG_FIFO3		0x05, 0x93
--#define TM6010_REQ05_R94_CFG_FIFO4		0x05, 0x94
--#define TM6010_REQ05_R95_CFG_FIFO5		0x05, 0x95
--#define TM6010_REQ05_R96_CFG_FIFO6		0x05, 0x96
--#define TM6010_REQ05_R97_CFG_FIFO7		0x05, 0x97
--#define TM6010_REQ05_R98_CFG_FIFO8		0x05, 0x98
--#define TM6010_REQ05_R99_CFG_FIFO9		0x05, 0x99
--#define TM6010_REQ05_R91_CFG_FIFO10		0x05, 0x9a
--#define TM6010_REQ05_R91_CFG_FIFO11		0x05, 0x9b
--#define TM6010_REQ05_R91_CFG_FIFO12		0x05, 0x9c
--#define TM6010_REQ05_R91_CFG_FIFO13		0x05, 0x9d
--#define TM6010_REQ05_R91_CFG_FIFO14		0x05, 0x9e
--#define TM6010_REQ05_R91_CFG_FIFO15		0x05, 0x9f
--#define TM6010_REQ05_RA0_CTL_FIFO0		0x05, 0xa0
--#define TM6010_REQ05_RA1_CTL_FIFO1		0x05, 0xa1
--#define TM6010_REQ05_RA2_CTL_FIFO2		0x05, 0xa2
--#define TM6010_REQ05_RA3_CTL_FIFO3		0x05, 0xa3
--#define TM6010_REQ05_RA4_CTL_FIFO4		0x05, 0xa4
--#define TM6010_REQ05_RA5_CTL_FIFO5		0x05, 0xa5
--#define TM6010_REQ05_RA6_CTL_FIFO6		0x05, 0xa6
--#define TM6010_REQ05_RA7_CTL_FIFO7		0x05, 0xa7
--#define TM6010_REQ05_RA8_CTL_FIFO8		0x05, 0xa8
--#define TM6010_REQ05_RA9_CTL_FIFO9		0x05, 0xa9
--#define TM6010_REQ05_RA1_CTL_FIFO10		0x05, 0xaa
--#define TM6010_REQ05_RA1_CTL_FIFO11		0x05, 0xab
--#define TM6010_REQ05_RA1_CTL_FIFO12		0x05, 0xac
--#define TM6010_REQ05_RA1_CTL_FIFO13		0x05, 0xad
--#define TM6010_REQ05_RA1_CTL_FIFO14		0x05, 0xae
--#define TM6010_REQ05_RA1_CTL_FIFO15		0x05, 0xaf
--#define TM6010_REQ05_RB0_BC_LOW_FIFO0		0x05, 0xb0
--#define TM6010_REQ05_RB1_BC_LOW_FIFO1		0x05, 0xb1
--#define TM6010_REQ05_RB2_BC_LOW_FIFO2		0x05, 0xb2
--#define TM6010_REQ05_RB3_BC_LOW_FIFO3		0x05, 0xb3
--#define TM6010_REQ05_RB4_BC_LOW_FIFO4		0x05, 0xb4
--#define TM6010_REQ05_RB5_BC_LOW_FIFO5		0x05, 0xb5
--#define TM6010_REQ05_RB6_BC_LOW_FIFO6		0x05, 0xb6
--#define TM6010_REQ05_RB7_BC_LOW_FIFO7		0x05, 0xb7
--#define TM6010_REQ05_RB8_BC_LOW_FIFO8		0x05, 0xb8
--#define TM6010_REQ05_RB9_BC_LOW_FIFO9		0x05, 0xb9
--#define TM6010_REQ05_RB1_BC_LOW_FIFO10		0x05, 0xba
--#define TM6010_REQ05_RB1_BC_LOW_FIFO11		0x05, 0xbb
--#define TM6010_REQ05_RB1_BC_LOW_FIFO12		0x05, 0xbc
--#define TM6010_REQ05_RB1_BC_LOW_FIFO13		0x05, 0xbd
--#define TM6010_REQ05_RB1_BC_LOW_FIFO14		0x05, 0xbe
--#define TM6010_REQ05_RB1_BC_LOW_FIFO15		0x05, 0xbf
--#define TM6010_REQ05_RC0_DATA_FIFO0		0x05, 0xc0
--#define TM6010_REQ05_RC4_DATA_FIFO1		0x05, 0xc4
--#define TM6010_REQ05_RC8_DATA_FIFO2		0x05, 0xc8
--#define TM6010_REQ05_RCC_DATA_FIFO3		0x05, 0xcc
--#define TM6010_REQ05_RD0_DATA_FIFO4		0x05, 0xd0
--#define TM6010_REQ05_RD4_DATA_FIFO5		0x05, 0xd4
--#define TM6010_REQ05_RD8_DATA_FIFO6		0x05, 0xd8
--#define TM6010_REQ05_RDC_DATA_FIFO7		0x05, 0xdc
--#define TM6010_REQ05_RE0_DATA_FIFO8		0x05, 0xe0
--#define TM6010_REQ05_RE4_DATA_FIFO9		0x05, 0xe4
--#define TM6010_REQ05_RC4_DATA_FIFO10		0x05, 0xe8
--#define TM6010_REQ05_RC4_DATA_FIFO11		0x05, 0xec
--#define TM6010_REQ05_RC4_DATA_FIFO12		0x05, 0xf0
--#define TM6010_REQ05_RC4_DATA_FIFO13		0x05, 0xf4
--#define TM6010_REQ05_RC4_DATA_FIFO14		0x05, 0xf8
--#define TM6010_REQ05_RC4_DATA_FIFO15		0x05, 0xfc
--
--/* Define TM6010 Audio decoder registers */
--/* This core available only in TM6010 */
--#define TM6010_REQ08_R00_A_VERSION		0x08, 0x00
--#define TM6010_REQ08_R01_A_INIT			0x08, 0x01
--#define TM6010_REQ08_R02_A_FIX_GAIN_CTRL	0x08, 0x02
--#define TM6010_REQ08_R03_A_AUTO_GAIN_CTRL	0x08, 0x03
--#define TM6010_REQ08_R04_A_SIF_AMP_CTRL		0x08, 0x04
--#define TM6010_REQ08_R05_A_STANDARD_MOD		0x08, 0x05
--#define TM6010_REQ08_R06_A_SOUND_MOD		0x08, 0x06
--#define TM6010_REQ08_R07_A_LEFT_VOL		0x08, 0x07
--#define TM6010_REQ08_R08_A_RIGHT_VOL		0x08, 0x08
--#define TM6010_REQ08_R09_A_MAIN_VOL		0x08, 0x09
--#define TM6010_REQ08_R0A_A_I2S_MOD		0x08, 0x0a
--#define TM6010_REQ08_R0B_A_ASD_THRES1		0x08, 0x0b
--#define TM6010_REQ08_R0C_A_ASD_THRES2		0x08, 0x0c
--#define TM6010_REQ08_R0D_A_AMD_THRES		0x08, 0x0d
--#define TM6010_REQ08_R0E_A_MONO_THRES1		0x08, 0x0e
--#define TM6010_REQ08_R0F_A_MONO_THRES2		0x08, 0x0f
--#define TM6010_REQ08_R10_A_MUTE_THRES1		0x08, 0x10
--#define TM6010_REQ08_R11_A_MUTE_THRES2		0x08, 0x11
--#define TM6010_REQ08_R12_A_AGC_U		0x08, 0x12
--#define TM6010_REQ08_R13_A_AGC_ERR_T		0x08, 0x13
--#define TM6010_REQ08_R14_A_AGC_GAIN_INIT	0x08, 0x14
--#define TM6010_REQ08_R15_A_AGC_STEP_THR		0x08, 0x15
--#define TM6010_REQ08_R16_A_AGC_GAIN_MAX		0x08, 0x16
--#define TM6010_REQ08_R17_A_AGC_GAIN_MIN		0x08, 0x17
--#define TM6010_REQ08_R18_A_TR_CTRL		0x08, 0x18
--#define TM6010_REQ08_R19_A_FH_2FH_GAIN		0x08, 0x19
--#define TM6010_REQ08_R1A_A_NICAM_SER_MAX	0x08, 0x1a
--#define TM6010_REQ08_R1B_A_NICAM_SER_MIN	0x08, 0x1b
--#define TM6010_REQ08_R1E_A_GAIN_DEEMPH_OUT	0x08, 0x1e
--#define TM6010_REQ08_R1F_A_TEST_INTF_SEL	0x08, 0x1f
--#define TM6010_REQ08_R20_A_TEST_PIN_SEL		0x08, 0x20
--#define TM6010_REQ08_R21_A_AGC_ERR		0x08, 0x21
--#define TM6010_REQ08_R22_A_AGC_GAIN		0x08, 0x22
--#define TM6010_REQ08_R23_A_NICAM_INFO		0x08, 0x23
--#define TM6010_REQ08_R24_A_SER			0x08, 0x24
--#define TM6010_REQ08_R25_A_C1_AMP		0x08, 0x25
--#define TM6010_REQ08_R26_A_C2_AMP		0x08, 0x26
--#define TM6010_REQ08_R27_A_NOISE_AMP		0x08, 0x27
--#define TM6010_REQ08_R28_A_AUDIO_MODE_RES	0x08, 0x28
--
--/* Define TM6010 Video ADC registers */
--#define TM6010_REQ08_RE0_ADC_REF		0x08, 0xe0
--#define TM6010_REQ08_RE1_DAC_CLMP		0x08, 0xe1
--#define TM6010_REQ08_RE2_POWER_DOWN_CTRL1	0x08, 0xe2
--#define TM6010_REQ08_RE3_ADC_IN1_SEL		0x08, 0xe3
--#define TM6010_REQ08_RE4_ADC_IN2_SEL		0x08, 0xe4
--#define TM6010_REQ08_RE5_GAIN_PARAM		0x08, 0xe5
--#define TM6010_REQ08_RE6_POWER_DOWN_CTRL2	0x08, 0xe6
--#define TM6010_REQ08_RE7_REG_GAIN_Y		0x08, 0xe7
--#define TM6010_REQ08_RE8_REG_GAIN_C		0x08, 0xe8
--#define TM6010_REQ08_RE9_BIAS_CTRL		0x08, 0xe9
--#define TM6010_REQ08_REA_BUFF_DRV_CTRL		0x08, 0xea
--#define TM6010_REQ08_REB_SIF_GAIN_CTRL		0x08, 0xeb
--#define TM6010_REQ08_REC_REVERSE_YC_CTRL	0x08, 0xec
--#define TM6010_REQ08_RED_GAIN_SEL		0x08, 0xed
--
--/* Define TM6010 Audio ADC registers */
--#define TM6010_REQ08_RF0_DAUDIO_INPUT_CONFIG	0x08, 0xf0
--#define TM6010_REQ08_RF1_AADC_POWER_DOWN	0x08, 0xf1
--#define TM6010_REQ08_RF2_LEFT_CHANNEL_VOL	0x08, 0xf2
--#define TM6010_REQ08_RF3_RIGHT_CHANNEL_VOL	0x08, 0xf3
-diff --git a/drivers/staging/media/deprecated/tm6000/tm6000-stds.c b/drivers/staging/media/deprecated/tm6000/tm6000-stds.c
-deleted file mode 100644
-index 858cb4f3a9ca..000000000000
---- a/drivers/staging/media/deprecated/tm6000/tm6000-stds.c
-+++ /dev/null
-@@ -1,623 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--// tm6000-stds.c - driver for TM5600/TM6000/TM6010 USB video capture devices
--//
--// Copyright (c) 2007 Mauro Carvalho Chehab <mchehab@kernel.org>
--
--#include <linux/module.h>
--#include <linux/kernel.h>
--#include "tm6000.h"
--#include "tm6000-regs.h"
--
--static unsigned int tm6010_a_mode;
--module_param(tm6010_a_mode, int, 0644);
--MODULE_PARM_DESC(tm6010_a_mode, "set tm6010 sif audio mode");
--
--struct tm6000_reg_settings {
--	unsigned char req;
--	unsigned char reg;
--	unsigned char value;
--};
--
--
--struct tm6000_std_settings {
--	v4l2_std_id id;
--	struct tm6000_reg_settings *common;
--};
--
--static struct tm6000_reg_settings composite_pal_m[] = {
--	{ TM6010_REQ07_R3F_RESET, 0x01 },
--	{ TM6010_REQ07_R00_VIDEO_CONTROL0, 0x04 },
--	{ TM6010_REQ07_R01_VIDEO_CONTROL1, 0x0e },
--	{ TM6010_REQ07_R02_VIDEO_CONTROL2, 0x5f },
--	{ TM6010_REQ07_R03_YC_SEP_CONTROL, 0x00 },
--	{ TM6010_REQ07_R07_OUTPUT_CONTROL, 0x31 },
--	{ TM6010_REQ07_R18_CHROMA_DTO_INCREMENT3, 0x1e },
--	{ TM6010_REQ07_R19_CHROMA_DTO_INCREMENT2, 0x83 },
--	{ TM6010_REQ07_R1A_CHROMA_DTO_INCREMENT1, 0x0a },
--	{ TM6010_REQ07_R1B_CHROMA_DTO_INCREMENT0, 0xe0 },
--	{ TM6010_REQ07_R1C_HSYNC_DTO_INCREMENT3, 0x1c },
--	{ TM6010_REQ07_R1D_HSYNC_DTO_INCREMENT2, 0xcc },
--	{ TM6010_REQ07_R1E_HSYNC_DTO_INCREMENT1, 0xcc },
--	{ TM6010_REQ07_R1F_HSYNC_DTO_INCREMENT0, 0xcd },
--	{ TM6010_REQ07_R2E_ACTIVE_VIDEO_HSTART, 0x88 },
--	{ TM6010_REQ07_R30_ACTIVE_VIDEO_VSTART, 0x20 },
--	{ TM6010_REQ07_R31_ACTIVE_VIDEO_VHIGHT, 0x61 },
--	{ TM6010_REQ07_R33_VSYNC_HLOCK_MAX, 0x0c },
--	{ TM6010_REQ07_R35_VSYNC_AGC_MAX, 0x1c },
--	{ TM6010_REQ07_R82_COMB_FILTER_CONFIG, 0x52 },
--	{ TM6010_REQ07_R83_CHROMA_LOCK_CONFIG, 0x6f },
--	{ TM6010_REQ07_R04_LUMA_HAGC_CONTROL, 0xdc },
--	{ TM6010_REQ07_R0D_CHROMA_KILL_LEVEL, 0x07 },
--	{ TM6010_REQ07_R3F_RESET, 0x00 },
--	{ 0, 0, 0 }
--};
--
--static struct tm6000_reg_settings composite_pal_nc[] = {
--	{ TM6010_REQ07_R3F_RESET, 0x01 },
--	{ TM6010_REQ07_R00_VIDEO_CONTROL0, 0x36 },
--	{ TM6010_REQ07_R01_VIDEO_CONTROL1, 0x0e },
--	{ TM6010_REQ07_R02_VIDEO_CONTROL2, 0x5f },
--	{ TM6010_REQ07_R03_YC_SEP_CONTROL, 0x02 },
--	{ TM6010_REQ07_R07_OUTPUT_CONTROL, 0x31 },
--	{ TM6010_REQ07_R18_CHROMA_DTO_INCREMENT3, 0x1e },
--	{ TM6010_REQ07_R19_CHROMA_DTO_INCREMENT2, 0x91 },
--	{ TM6010_REQ07_R1A_CHROMA_DTO_INCREMENT1, 0x1f },
--	{ TM6010_REQ07_R1B_CHROMA_DTO_INCREMENT0, 0x0c },
--	{ TM6010_REQ07_R1C_HSYNC_DTO_INCREMENT3, 0x1c },
--	{ TM6010_REQ07_R1D_HSYNC_DTO_INCREMENT2, 0xcc },
--	{ TM6010_REQ07_R1E_HSYNC_DTO_INCREMENT1, 0xcc },
--	{ TM6010_REQ07_R1F_HSYNC_DTO_INCREMENT0, 0xcd },
--	{ TM6010_REQ07_R2E_ACTIVE_VIDEO_HSTART, 0x8c },
--	{ TM6010_REQ07_R30_ACTIVE_VIDEO_VSTART, 0x2c },
--	{ TM6010_REQ07_R31_ACTIVE_VIDEO_VHIGHT, 0xc1 },
--	{ TM6010_REQ07_R33_VSYNC_HLOCK_MAX, 0x0c },
--	{ TM6010_REQ07_R35_VSYNC_AGC_MAX, 0x1c },
--	{ TM6010_REQ07_R82_COMB_FILTER_CONFIG, 0x52 },
--	{ TM6010_REQ07_R83_CHROMA_LOCK_CONFIG, 0x6f },
--	{ TM6010_REQ07_R04_LUMA_HAGC_CONTROL, 0xdc },
--	{ TM6010_REQ07_R0D_CHROMA_KILL_LEVEL, 0x07 },
--	{ TM6010_REQ07_R3F_RESET, 0x00 },
--	{ 0, 0, 0 }
--};
--
--static struct tm6000_reg_settings composite_pal[] = {
--	{ TM6010_REQ07_R3F_RESET, 0x01 },
--	{ TM6010_REQ07_R00_VIDEO_CONTROL0, 0x32 },
--	{ TM6010_REQ07_R01_VIDEO_CONTROL1, 0x0e },
--	{ TM6010_REQ07_R02_VIDEO_CONTROL2, 0x5f },
--	{ TM6010_REQ07_R03_YC_SEP_CONTROL, 0x02 },
--	{ TM6010_REQ07_R07_OUTPUT_CONTROL, 0x31 },
--	{ TM6010_REQ07_R18_CHROMA_DTO_INCREMENT3, 0x25 },
--	{ TM6010_REQ07_R19_CHROMA_DTO_INCREMENT2, 0xd5 },
--	{ TM6010_REQ07_R1A_CHROMA_DTO_INCREMENT1, 0x63 },
--	{ TM6010_REQ07_R1B_CHROMA_DTO_INCREMENT0, 0x50 },
--	{ TM6010_REQ07_R1C_HSYNC_DTO_INCREMENT3, 0x1c },
--	{ TM6010_REQ07_R1D_HSYNC_DTO_INCREMENT2, 0xcc },
--	{ TM6010_REQ07_R1E_HSYNC_DTO_INCREMENT1, 0xcc },
--	{ TM6010_REQ07_R1F_HSYNC_DTO_INCREMENT0, 0xcd },
--	{ TM6010_REQ07_R2E_ACTIVE_VIDEO_HSTART, 0x8c },
--	{ TM6010_REQ07_R30_ACTIVE_VIDEO_VSTART, 0x2c },
--	{ TM6010_REQ07_R31_ACTIVE_VIDEO_VHIGHT, 0xc1 },
--	{ TM6010_REQ07_R33_VSYNC_HLOCK_MAX, 0x0c },
--	{ TM6010_REQ07_R35_VSYNC_AGC_MAX, 0x1c },
--	{ TM6010_REQ07_R82_COMB_FILTER_CONFIG, 0x52 },
--	{ TM6010_REQ07_R83_CHROMA_LOCK_CONFIG, 0x6f },
--	{ TM6010_REQ07_R04_LUMA_HAGC_CONTROL, 0xdc },
--	{ TM6010_REQ07_R0D_CHROMA_KILL_LEVEL, 0x07 },
--	{ TM6010_REQ07_R3F_RESET, 0x00 },
--	{ 0, 0, 0 }
--};
--
--static struct tm6000_reg_settings composite_secam[] = {
--	{ TM6010_REQ07_R3F_RESET, 0x01 },
--	{ TM6010_REQ07_R00_VIDEO_CONTROL0, 0x38 },
--	{ TM6010_REQ07_R01_VIDEO_CONTROL1, 0x0e },
--	{ TM6010_REQ07_R02_VIDEO_CONTROL2, 0x5f },
--	{ TM6010_REQ07_R03_YC_SEP_CONTROL, 0x02 },
--	{ TM6010_REQ07_R07_OUTPUT_CONTROL, 0x31 },
--	{ TM6010_REQ07_R18_CHROMA_DTO_INCREMENT3, 0x24 },
--	{ TM6010_REQ07_R19_CHROMA_DTO_INCREMENT2, 0x92 },
--	{ TM6010_REQ07_R1A_CHROMA_DTO_INCREMENT1, 0xe8 },
--	{ TM6010_REQ07_R1B_CHROMA_DTO_INCREMENT0, 0xed },
--	{ TM6010_REQ07_R1C_HSYNC_DTO_INCREMENT3, 0x1c },
--	{ TM6010_REQ07_R1D_HSYNC_DTO_INCREMENT2, 0xcc },
--	{ TM6010_REQ07_R1E_HSYNC_DTO_INCREMENT1, 0xcc },
--	{ TM6010_REQ07_R1F_HSYNC_DTO_INCREMENT0, 0xcd },
--	{ TM6010_REQ07_R2E_ACTIVE_VIDEO_HSTART, 0x8c },
--	{ TM6010_REQ07_R30_ACTIVE_VIDEO_VSTART, 0x2c },
--	{ TM6010_REQ07_R31_ACTIVE_VIDEO_VHIGHT, 0xc1 },
--	{ TM6010_REQ07_R33_VSYNC_HLOCK_MAX, 0x2c },
--	{ TM6010_REQ07_R35_VSYNC_AGC_MAX, 0x18 },
--	{ TM6010_REQ07_R82_COMB_FILTER_CONFIG, 0x42 },
--	{ TM6010_REQ07_R83_CHROMA_LOCK_CONFIG, 0xff },
--	{ TM6010_REQ07_R0D_CHROMA_KILL_LEVEL, 0x07 },
--	{ TM6010_REQ07_R3F_RESET, 0x00 },
--	{ 0, 0, 0 }
--};
--
--static struct tm6000_reg_settings composite_ntsc[] = {
--	{ TM6010_REQ07_R3F_RESET, 0x01 },
--	{ TM6010_REQ07_R00_VIDEO_CONTROL0, 0x00 },
--	{ TM6010_REQ07_R01_VIDEO_CONTROL1, 0x0f },
--	{ TM6010_REQ07_R02_VIDEO_CONTROL2, 0x5f },
--	{ TM6010_REQ07_R03_YC_SEP_CONTROL, 0x00 },
--	{ TM6010_REQ07_R07_OUTPUT_CONTROL, 0x31 },
--	{ TM6010_REQ07_R18_CHROMA_DTO_INCREMENT3, 0x1e },
--	{ TM6010_REQ07_R19_CHROMA_DTO_INCREMENT2, 0x8b },
--	{ TM6010_REQ07_R1A_CHROMA_DTO_INCREMENT1, 0xa2 },
--	{ TM6010_REQ07_R1B_CHROMA_DTO_INCREMENT0, 0xe9 },
--	{ TM6010_REQ07_R1C_HSYNC_DTO_INCREMENT3, 0x1c },
--	{ TM6010_REQ07_R1D_HSYNC_DTO_INCREMENT2, 0xcc },
--	{ TM6010_REQ07_R1E_HSYNC_DTO_INCREMENT1, 0xcc },
--	{ TM6010_REQ07_R1F_HSYNC_DTO_INCREMENT0, 0xcd },
--	{ TM6010_REQ07_R2E_ACTIVE_VIDEO_HSTART, 0x88 },
--	{ TM6010_REQ07_R30_ACTIVE_VIDEO_VSTART, 0x22 },
--	{ TM6010_REQ07_R31_ACTIVE_VIDEO_VHIGHT, 0x61 },
--	{ TM6010_REQ07_R33_VSYNC_HLOCK_MAX, 0x1c },
--	{ TM6010_REQ07_R35_VSYNC_AGC_MAX, 0x1c },
--	{ TM6010_REQ07_R82_COMB_FILTER_CONFIG, 0x42 },
--	{ TM6010_REQ07_R83_CHROMA_LOCK_CONFIG, 0x6f },
--	{ TM6010_REQ07_R04_LUMA_HAGC_CONTROL, 0xdd },
--	{ TM6010_REQ07_R0D_CHROMA_KILL_LEVEL, 0x07 },
--	{ TM6010_REQ07_R3F_RESET, 0x00 },
--	{ 0, 0, 0 }
--};
--
--static struct tm6000_std_settings composite_stds[] = {
--	{ .id = V4L2_STD_PAL_M, .common = composite_pal_m, },
--	{ .id = V4L2_STD_PAL_Nc, .common = composite_pal_nc, },
--	{ .id = V4L2_STD_PAL, .common = composite_pal, },
--	{ .id = V4L2_STD_SECAM, .common = composite_secam, },
--	{ .id = V4L2_STD_NTSC, .common = composite_ntsc, },
--};
--
--static struct tm6000_reg_settings svideo_pal_m[] = {
--	{ TM6010_REQ07_R3F_RESET, 0x01 },
--	{ TM6010_REQ07_R00_VIDEO_CONTROL0, 0x05 },
--	{ TM6010_REQ07_R01_VIDEO_CONTROL1, 0x0e },
--	{ TM6010_REQ07_R02_VIDEO_CONTROL2, 0x5f },
--	{ TM6010_REQ07_R03_YC_SEP_CONTROL, 0x04 },
--	{ TM6010_REQ07_R07_OUTPUT_CONTROL, 0x31 },
--	{ TM6010_REQ07_R18_CHROMA_DTO_INCREMENT3, 0x1e },
--	{ TM6010_REQ07_R19_CHROMA_DTO_INCREMENT2, 0x83 },
--	{ TM6010_REQ07_R1A_CHROMA_DTO_INCREMENT1, 0x0a },
--	{ TM6010_REQ07_R1B_CHROMA_DTO_INCREMENT0, 0xe0 },
--	{ TM6010_REQ07_R1C_HSYNC_DTO_INCREMENT3, 0x1c },
--	{ TM6010_REQ07_R1D_HSYNC_DTO_INCREMENT2, 0xcc },
--	{ TM6010_REQ07_R1E_HSYNC_DTO_INCREMENT1, 0xcc },
--	{ TM6010_REQ07_R1F_HSYNC_DTO_INCREMENT0, 0xcd },
--	{ TM6010_REQ07_R2E_ACTIVE_VIDEO_HSTART, 0x88 },
--	{ TM6010_REQ07_R30_ACTIVE_VIDEO_VSTART, 0x22 },
--	{ TM6010_REQ07_R31_ACTIVE_VIDEO_VHIGHT, 0x61 },
--	{ TM6010_REQ07_R33_VSYNC_HLOCK_MAX, 0x0c },
--	{ TM6010_REQ07_R35_VSYNC_AGC_MAX, 0x1c },
--	{ TM6010_REQ07_R82_COMB_FILTER_CONFIG, 0x52 },
--	{ TM6010_REQ07_R83_CHROMA_LOCK_CONFIG, 0x6f },
--	{ TM6010_REQ07_R04_LUMA_HAGC_CONTROL, 0xdc },
--	{ TM6010_REQ07_R0D_CHROMA_KILL_LEVEL, 0x07 },
--	{ TM6010_REQ07_R3F_RESET, 0x00 },
--	{ 0, 0, 0 }
--};
--
--static struct tm6000_reg_settings svideo_pal_nc[] = {
--	{ TM6010_REQ07_R3F_RESET, 0x01 },
--	{ TM6010_REQ07_R00_VIDEO_CONTROL0, 0x37 },
--	{ TM6010_REQ07_R01_VIDEO_CONTROL1, 0x0e },
--	{ TM6010_REQ07_R02_VIDEO_CONTROL2, 0x5f },
--	{ TM6010_REQ07_R03_YC_SEP_CONTROL, 0x04 },
--	{ TM6010_REQ07_R07_OUTPUT_CONTROL, 0x31 },
--	{ TM6010_REQ07_R18_CHROMA_DTO_INCREMENT3, 0x1e },
--	{ TM6010_REQ07_R19_CHROMA_DTO_INCREMENT2, 0x91 },
--	{ TM6010_REQ07_R1A_CHROMA_DTO_INCREMENT1, 0x1f },
--	{ TM6010_REQ07_R1B_CHROMA_DTO_INCREMENT0, 0x0c },
--	{ TM6010_REQ07_R1C_HSYNC_DTO_INCREMENT3, 0x1c },
--	{ TM6010_REQ07_R1D_HSYNC_DTO_INCREMENT2, 0xcc },
--	{ TM6010_REQ07_R1E_HSYNC_DTO_INCREMENT1, 0xcc },
--	{ TM6010_REQ07_R1F_HSYNC_DTO_INCREMENT0, 0xcd },
--	{ TM6010_REQ07_R2E_ACTIVE_VIDEO_HSTART, 0x88 },
--	{ TM6010_REQ07_R30_ACTIVE_VIDEO_VSTART, 0x22 },
--	{ TM6010_REQ07_R31_ACTIVE_VIDEO_VHIGHT, 0xc1 },
--	{ TM6010_REQ07_R33_VSYNC_HLOCK_MAX, 0x0c },
--	{ TM6010_REQ07_R35_VSYNC_AGC_MAX, 0x1c },
--	{ TM6010_REQ07_R82_COMB_FILTER_CONFIG, 0x52 },
--	{ TM6010_REQ07_R83_CHROMA_LOCK_CONFIG, 0x6f },
--	{ TM6010_REQ07_R04_LUMA_HAGC_CONTROL, 0xdc },
--	{ TM6010_REQ07_R0D_CHROMA_KILL_LEVEL, 0x07 },
--	{ TM6010_REQ07_R3F_RESET, 0x00 },
--	{ 0, 0, 0 }
--};
--
--static struct tm6000_reg_settings svideo_pal[] = {
--	{ TM6010_REQ07_R3F_RESET, 0x01 },
--	{ TM6010_REQ07_R00_VIDEO_CONTROL0, 0x33 },
--	{ TM6010_REQ07_R01_VIDEO_CONTROL1, 0x0e },
--	{ TM6010_REQ07_R02_VIDEO_CONTROL2, 0x5f },
--	{ TM6010_REQ07_R03_YC_SEP_CONTROL, 0x04 },
--	{ TM6010_REQ07_R07_OUTPUT_CONTROL, 0x30 },
--	{ TM6010_REQ07_R18_CHROMA_DTO_INCREMENT3, 0x25 },
--	{ TM6010_REQ07_R19_CHROMA_DTO_INCREMENT2, 0xd5 },
--	{ TM6010_REQ07_R1A_CHROMA_DTO_INCREMENT1, 0x63 },
--	{ TM6010_REQ07_R1B_CHROMA_DTO_INCREMENT0, 0x50 },
--	{ TM6010_REQ07_R1C_HSYNC_DTO_INCREMENT3, 0x1c },
--	{ TM6010_REQ07_R1D_HSYNC_DTO_INCREMENT2, 0xcc },
--	{ TM6010_REQ07_R1E_HSYNC_DTO_INCREMENT1, 0xcc },
--	{ TM6010_REQ07_R1F_HSYNC_DTO_INCREMENT0, 0xcd },
--	{ TM6010_REQ07_R2E_ACTIVE_VIDEO_HSTART, 0x8c },
--	{ TM6010_REQ07_R30_ACTIVE_VIDEO_VSTART, 0x2a },
--	{ TM6010_REQ07_R31_ACTIVE_VIDEO_VHIGHT, 0xc1 },
--	{ TM6010_REQ07_R33_VSYNC_HLOCK_MAX, 0x0c },
--	{ TM6010_REQ07_R35_VSYNC_AGC_MAX, 0x1c },
--	{ TM6010_REQ07_R82_COMB_FILTER_CONFIG, 0x52 },
--	{ TM6010_REQ07_R83_CHROMA_LOCK_CONFIG, 0x6f },
--	{ TM6010_REQ07_R04_LUMA_HAGC_CONTROL, 0xdc },
--	{ TM6010_REQ07_R0D_CHROMA_KILL_LEVEL, 0x07 },
--	{ TM6010_REQ07_R3F_RESET, 0x00 },
--	{ 0, 0, 0 }
--};
--
--static struct tm6000_reg_settings svideo_secam[] = {
--	{ TM6010_REQ07_R3F_RESET, 0x01 },
--	{ TM6010_REQ07_R00_VIDEO_CONTROL0, 0x39 },
--	{ TM6010_REQ07_R01_VIDEO_CONTROL1, 0x0e },
--	{ TM6010_REQ07_R02_VIDEO_CONTROL2, 0x5f },
--	{ TM6010_REQ07_R03_YC_SEP_CONTROL, 0x03 },
--	{ TM6010_REQ07_R07_OUTPUT_CONTROL, 0x31 },
--	{ TM6010_REQ07_R18_CHROMA_DTO_INCREMENT3, 0x24 },
--	{ TM6010_REQ07_R19_CHROMA_DTO_INCREMENT2, 0x92 },
--	{ TM6010_REQ07_R1A_CHROMA_DTO_INCREMENT1, 0xe8 },
--	{ TM6010_REQ07_R1B_CHROMA_DTO_INCREMENT0, 0xed },
--	{ TM6010_REQ07_R1C_HSYNC_DTO_INCREMENT3, 0x1c },
--	{ TM6010_REQ07_R1D_HSYNC_DTO_INCREMENT2, 0xcc },
--	{ TM6010_REQ07_R1E_HSYNC_DTO_INCREMENT1, 0xcc },
--	{ TM6010_REQ07_R1F_HSYNC_DTO_INCREMENT0, 0xcd },
--	{ TM6010_REQ07_R2E_ACTIVE_VIDEO_HSTART, 0x8c },
--	{ TM6010_REQ07_R30_ACTIVE_VIDEO_VSTART, 0x2a },
--	{ TM6010_REQ07_R31_ACTIVE_VIDEO_VHIGHT, 0xc1 },
--	{ TM6010_REQ07_R33_VSYNC_HLOCK_MAX, 0x2c },
--	{ TM6010_REQ07_R35_VSYNC_AGC_MAX, 0x18 },
--	{ TM6010_REQ07_R82_COMB_FILTER_CONFIG, 0x42 },
--	{ TM6010_REQ07_R83_CHROMA_LOCK_CONFIG, 0xff },
--	{ TM6010_REQ07_R0D_CHROMA_KILL_LEVEL, 0x07 },
--	{ TM6010_REQ07_R3F_RESET, 0x00 },
--	{ 0, 0, 0 }
--};
--
--static struct tm6000_reg_settings svideo_ntsc[] = {
--	{ TM6010_REQ07_R3F_RESET, 0x01 },
--	{ TM6010_REQ07_R00_VIDEO_CONTROL0, 0x01 },
--	{ TM6010_REQ07_R01_VIDEO_CONTROL1, 0x0f },
--	{ TM6010_REQ07_R02_VIDEO_CONTROL2, 0x5f },
--	{ TM6010_REQ07_R03_YC_SEP_CONTROL, 0x03 },
--	{ TM6010_REQ07_R07_OUTPUT_CONTROL, 0x30 },
--	{ TM6010_REQ07_R17_HLOOP_MAXSTATE, 0x8b },
--	{ TM6010_REQ07_R18_CHROMA_DTO_INCREMENT3, 0x1e },
--	{ TM6010_REQ07_R19_CHROMA_DTO_INCREMENT2, 0x8b },
--	{ TM6010_REQ07_R1A_CHROMA_DTO_INCREMENT1, 0xa2 },
--	{ TM6010_REQ07_R1B_CHROMA_DTO_INCREMENT0, 0xe9 },
--	{ TM6010_REQ07_R1C_HSYNC_DTO_INCREMENT3, 0x1c },
--	{ TM6010_REQ07_R1D_HSYNC_DTO_INCREMENT2, 0xcc },
--	{ TM6010_REQ07_R1E_HSYNC_DTO_INCREMENT1, 0xcc },
--	{ TM6010_REQ07_R1F_HSYNC_DTO_INCREMENT0, 0xcd },
--	{ TM6010_REQ07_R2E_ACTIVE_VIDEO_HSTART, 0x88 },
--	{ TM6010_REQ07_R30_ACTIVE_VIDEO_VSTART, 0x22 },
--	{ TM6010_REQ07_R31_ACTIVE_VIDEO_VHIGHT, 0x61 },
--	{ TM6010_REQ07_R33_VSYNC_HLOCK_MAX, 0x1c },
--	{ TM6010_REQ07_R35_VSYNC_AGC_MAX, 0x1c },
--	{ TM6010_REQ07_R82_COMB_FILTER_CONFIG, 0x42 },
--	{ TM6010_REQ07_R83_CHROMA_LOCK_CONFIG, 0x6f },
--	{ TM6010_REQ07_R04_LUMA_HAGC_CONTROL, 0xdd },
--	{ TM6010_REQ07_R0D_CHROMA_KILL_LEVEL, 0x07 },
--	{ TM6010_REQ07_R3F_RESET, 0x00 },
--	{ 0, 0, 0 }
--};
--
--static struct tm6000_std_settings svideo_stds[] = {
--	{ .id = V4L2_STD_PAL_M, .common = svideo_pal_m, },
--	{ .id = V4L2_STD_PAL_Nc, .common = svideo_pal_nc, },
--	{ .id = V4L2_STD_PAL, .common = svideo_pal, },
--	{ .id = V4L2_STD_SECAM, .common = svideo_secam, },
--	{ .id = V4L2_STD_NTSC, .common = svideo_ntsc, },
--};
--
--static int tm6000_set_audio_std(struct tm6000_core *dev)
--{
--	uint8_t areg_02 = 0x04; /* GC1 Fixed gain 0dB */
--	uint8_t areg_05 = 0x01; /* Auto 4.5 = M Japan, Auto 6.5 = DK */
--	uint8_t areg_06 = 0x02; /* Auto de-emphasis, manual channel mode */
--
--	if (dev->radio) {
--		tm6000_set_reg(dev, TM6010_REQ08_R01_A_INIT, 0x00);
--		tm6000_set_reg(dev, TM6010_REQ08_R02_A_FIX_GAIN_CTRL, 0x04);
--		tm6000_set_reg(dev, TM6010_REQ08_R03_A_AUTO_GAIN_CTRL, 0x00);
--		tm6000_set_reg(dev, TM6010_REQ08_R04_A_SIF_AMP_CTRL, 0x80);
--		tm6000_set_reg(dev, TM6010_REQ08_R05_A_STANDARD_MOD, 0x0c);
--		/* set mono or stereo */
--		if (dev->amode == V4L2_TUNER_MODE_MONO)
--			tm6000_set_reg(dev, TM6010_REQ08_R06_A_SOUND_MOD, 0x00);
--		else if (dev->amode == V4L2_TUNER_MODE_STEREO)
--			tm6000_set_reg(dev, TM6010_REQ08_R06_A_SOUND_MOD, 0x02);
--		tm6000_set_reg(dev, TM6010_REQ08_R09_A_MAIN_VOL, 0x18);
--		tm6000_set_reg(dev, TM6010_REQ08_R0C_A_ASD_THRES2, 0x0a);
--		tm6000_set_reg(dev, TM6010_REQ08_R0D_A_AMD_THRES, 0x40);
--		tm6000_set_reg(dev, TM6010_REQ08_RF1_AADC_POWER_DOWN, 0xfe);
--		tm6000_set_reg(dev, TM6010_REQ08_R1E_A_GAIN_DEEMPH_OUT, 0x13);
--		tm6000_set_reg(dev, TM6010_REQ08_R01_A_INIT, 0x80);
--		tm6000_set_reg(dev, TM6010_REQ07_RFE_POWER_DOWN, 0xff);
--		return 0;
--	}
--
--	/*
--	 * STD/MN shouldn't be affected by tm6010_a_mode, as there's just one
--	 * audio standard for each V4L2_STD type.
--	 */
--	if ((dev->norm & V4L2_STD_NTSC) == V4L2_STD_NTSC_M_KR) {
--		areg_05 |= 0x04;
--	} else if ((dev->norm & V4L2_STD_NTSC) == V4L2_STD_NTSC_M_JP) {
--		areg_05 |= 0x43;
--	} else if (dev->norm & V4L2_STD_MN) {
--		areg_05 |= 0x22;
--	} else switch (tm6010_a_mode) {
--	/* auto */
--	case 0:
--		if ((dev->norm & V4L2_STD_SECAM) == V4L2_STD_SECAM_L)
--			areg_05 |= 0x00;
--		else	/* Other PAL/SECAM standards */
--			areg_05 |= 0x10;
--		break;
--	/* A2 */
--	case 1:
--		if (dev->norm & V4L2_STD_DK)
--			areg_05 = 0x09;
--		else
--			areg_05 = 0x05;
--		break;
--	/* NICAM */
--	case 2:
--		if (dev->norm & V4L2_STD_DK) {
--			areg_05 = 0x06;
--		} else if (dev->norm & V4L2_STD_PAL_I) {
--			areg_05 = 0x08;
--		} else if (dev->norm & V4L2_STD_SECAM_L) {
--			areg_05 = 0x0a;
--			areg_02 = 0x02;
--		} else {
--			areg_05 = 0x07;
--		}
--		break;
--	/* other */
--	case 3:
--		if (dev->norm & V4L2_STD_DK) {
--			areg_05 = 0x0b;
--		} else {
--			areg_05 = 0x02;
--		}
--		break;
--	}
--
--	tm6000_set_reg(dev, TM6010_REQ08_R01_A_INIT, 0x00);
--	tm6000_set_reg(dev, TM6010_REQ08_R02_A_FIX_GAIN_CTRL, areg_02);
--	tm6000_set_reg(dev, TM6010_REQ08_R03_A_AUTO_GAIN_CTRL, 0x00);
--	tm6000_set_reg(dev, TM6010_REQ08_R04_A_SIF_AMP_CTRL, 0xa0);
--	tm6000_set_reg(dev, TM6010_REQ08_R05_A_STANDARD_MOD, areg_05);
--	tm6000_set_reg(dev, TM6010_REQ08_R06_A_SOUND_MOD, areg_06);
--	tm6000_set_reg(dev, TM6010_REQ08_R07_A_LEFT_VOL, 0x00);
--	tm6000_set_reg(dev, TM6010_REQ08_R08_A_RIGHT_VOL, 0x00);
--	tm6000_set_reg(dev, TM6010_REQ08_R09_A_MAIN_VOL, 0x08);
--	tm6000_set_reg(dev, TM6010_REQ08_R0A_A_I2S_MOD, 0x91);
--	tm6000_set_reg(dev, TM6010_REQ08_R0B_A_ASD_THRES1, 0x20);
--	tm6000_set_reg(dev, TM6010_REQ08_R0C_A_ASD_THRES2, 0x12);
--	tm6000_set_reg(dev, TM6010_REQ08_R0D_A_AMD_THRES, 0x20);
--	tm6000_set_reg(dev, TM6010_REQ08_R0E_A_MONO_THRES1, 0xf0);
--	tm6000_set_reg(dev, TM6010_REQ08_R0F_A_MONO_THRES2, 0x80);
--	tm6000_set_reg(dev, TM6010_REQ08_R10_A_MUTE_THRES1, 0xc0);
--	tm6000_set_reg(dev, TM6010_REQ08_R11_A_MUTE_THRES2, 0x80);
--	tm6000_set_reg(dev, TM6010_REQ08_R12_A_AGC_U, 0x12);
--	tm6000_set_reg(dev, TM6010_REQ08_R13_A_AGC_ERR_T, 0xfe);
--	tm6000_set_reg(dev, TM6010_REQ08_R14_A_AGC_GAIN_INIT, 0x20);
--	tm6000_set_reg(dev, TM6010_REQ08_R15_A_AGC_STEP_THR, 0x14);
--	tm6000_set_reg(dev, TM6010_REQ08_R16_A_AGC_GAIN_MAX, 0xfe);
--	tm6000_set_reg(dev, TM6010_REQ08_R17_A_AGC_GAIN_MIN, 0x01);
--	tm6000_set_reg(dev, TM6010_REQ08_R18_A_TR_CTRL, 0xa0);
--	tm6000_set_reg(dev, TM6010_REQ08_R19_A_FH_2FH_GAIN, 0x32);
--	tm6000_set_reg(dev, TM6010_REQ08_R1A_A_NICAM_SER_MAX, 0x64);
--	tm6000_set_reg(dev, TM6010_REQ08_R1B_A_NICAM_SER_MIN, 0x20);
--	tm6000_set_reg(dev, REQ_08_SET_GET_AVREG_BIT, 0x1c, 0x00);
--	tm6000_set_reg(dev, REQ_08_SET_GET_AVREG_BIT, 0x1d, 0x00);
--	tm6000_set_reg(dev, TM6010_REQ08_R1E_A_GAIN_DEEMPH_OUT, 0x13);
--	tm6000_set_reg(dev, TM6010_REQ08_R1F_A_TEST_INTF_SEL, 0x00);
--	tm6000_set_reg(dev, TM6010_REQ08_R20_A_TEST_PIN_SEL, 0x00);
--	tm6000_set_reg(dev, TM6010_REQ08_R01_A_INIT, 0x80);
--
--	return 0;
--}
--
--void tm6000_get_std_res(struct tm6000_core *dev)
--{
--	/* Currently, those are the only supported resoltions */
--	if (dev->norm & V4L2_STD_525_60)
--		dev->height = 480;
--	else
--		dev->height = 576;
--
--	dev->width = 720;
--}
--
--static int tm6000_load_std(struct tm6000_core *dev, struct tm6000_reg_settings *set)
--{
--	int i, rc;
--
--	/* Load board's initialization table */
--	for (i = 0; set[i].req; i++) {
--		rc = tm6000_set_reg(dev, set[i].req, set[i].reg, set[i].value);
--		if (rc < 0) {
--			printk(KERN_ERR "Error %i while setting req %d, reg %d to value %d\n",
--			       rc, set[i].req, set[i].reg, set[i].value);
--			return rc;
--		}
--	}
--
--	return 0;
--}
--
--int tm6000_set_standard(struct tm6000_core *dev)
--{
--	struct tm6000_input *input;
--	int i, rc = 0;
--	u8 reg_07_fe = 0x8a;
--	u8 reg_08_f1 = 0xfc;
--	u8 reg_08_e2 = 0xf0;
--	u8 reg_08_e6 = 0x0f;
--
--	tm6000_get_std_res(dev);
--
--	if (!dev->radio)
--		input = &dev->vinput[dev->input];
--	else
--		input = &dev->rinput;
--
--	if (dev->dev_type == TM6010) {
--		switch (input->vmux) {
--		case TM6000_VMUX_VIDEO_A:
--			tm6000_set_reg(dev, TM6010_REQ08_RE3_ADC_IN1_SEL, 0xf4);
--			tm6000_set_reg(dev, TM6010_REQ08_REA_BUFF_DRV_CTRL, 0xf1);
--			tm6000_set_reg(dev, TM6010_REQ08_REB_SIF_GAIN_CTRL, 0xe0);
--			tm6000_set_reg(dev, TM6010_REQ08_REC_REVERSE_YC_CTRL, 0xc2);
--			tm6000_set_reg(dev, TM6010_REQ08_RED_GAIN_SEL, 0xe8);
--			reg_07_fe |= 0x01;
--			break;
--		case TM6000_VMUX_VIDEO_B:
--			tm6000_set_reg(dev, TM6010_REQ08_RE3_ADC_IN1_SEL, 0xf8);
--			tm6000_set_reg(dev, TM6010_REQ08_REA_BUFF_DRV_CTRL, 0xf1);
--			tm6000_set_reg(dev, TM6010_REQ08_REB_SIF_GAIN_CTRL, 0xe0);
--			tm6000_set_reg(dev, TM6010_REQ08_REC_REVERSE_YC_CTRL, 0xc2);
--			tm6000_set_reg(dev, TM6010_REQ08_RED_GAIN_SEL, 0xe8);
--			reg_07_fe |= 0x01;
--			break;
--		case TM6000_VMUX_VIDEO_AB:
--			tm6000_set_reg(dev, TM6010_REQ08_RE3_ADC_IN1_SEL, 0xfc);
--			tm6000_set_reg(dev, TM6010_REQ08_RE4_ADC_IN2_SEL, 0xf8);
--			reg_08_e6 = 0x00;
--			tm6000_set_reg(dev, TM6010_REQ08_REA_BUFF_DRV_CTRL, 0xf2);
--			tm6000_set_reg(dev, TM6010_REQ08_REB_SIF_GAIN_CTRL, 0xf0);
--			tm6000_set_reg(dev, TM6010_REQ08_REC_REVERSE_YC_CTRL, 0xc2);
--			tm6000_set_reg(dev, TM6010_REQ08_RED_GAIN_SEL, 0xe0);
--			break;
--		default:
--			break;
--		}
--		switch (input->amux) {
--		case TM6000_AMUX_ADC1:
--			tm6000_set_reg_mask(dev, TM6010_REQ08_RF0_DAUDIO_INPUT_CONFIG,
--				0x00, 0x0f);
--			/* Mux overflow workaround */
--			tm6000_set_reg_mask(dev, TM6010_REQ07_R07_OUTPUT_CONTROL,
--				0x10, 0xf0);
--			break;
--		case TM6000_AMUX_ADC2:
--			tm6000_set_reg_mask(dev, TM6010_REQ08_RF0_DAUDIO_INPUT_CONFIG,
--				0x08, 0x0f);
--			/* Mux overflow workaround */
--			tm6000_set_reg_mask(dev, TM6010_REQ07_R07_OUTPUT_CONTROL,
--				0x10, 0xf0);
--			break;
--		case TM6000_AMUX_SIF1:
--			reg_08_e2 |= 0x02;
--			reg_08_e6 = 0x08;
--			reg_07_fe |= 0x40;
--			reg_08_f1 |= 0x02;
--			tm6000_set_reg(dev, TM6010_REQ08_RE4_ADC_IN2_SEL, 0xf3);
--			tm6000_set_reg_mask(dev, TM6010_REQ08_RF0_DAUDIO_INPUT_CONFIG,
--				0x02, 0x0f);
--			/* Mux overflow workaround */
--			tm6000_set_reg_mask(dev, TM6010_REQ07_R07_OUTPUT_CONTROL,
--				0x30, 0xf0);
--			break;
--		case TM6000_AMUX_SIF2:
--			reg_08_e2 |= 0x02;
--			reg_08_e6 = 0x08;
--			reg_07_fe |= 0x40;
--			reg_08_f1 |= 0x02;
--			tm6000_set_reg(dev, TM6010_REQ08_RE4_ADC_IN2_SEL, 0xf7);
--			tm6000_set_reg_mask(dev, TM6010_REQ08_RF0_DAUDIO_INPUT_CONFIG,
--				0x02, 0x0f);
--			/* Mux overflow workaround */
--			tm6000_set_reg_mask(dev, TM6010_REQ07_R07_OUTPUT_CONTROL,
--				0x30, 0xf0);
--			break;
--		default:
--			break;
--		}
--		tm6000_set_reg(dev, TM6010_REQ08_RE2_POWER_DOWN_CTRL1, reg_08_e2);
--		tm6000_set_reg(dev, TM6010_REQ08_RE6_POWER_DOWN_CTRL2, reg_08_e6);
--		tm6000_set_reg(dev, TM6010_REQ08_RF1_AADC_POWER_DOWN, reg_08_f1);
--		tm6000_set_reg(dev, TM6010_REQ07_RFE_POWER_DOWN, reg_07_fe);
--	} else {
--		switch (input->vmux) {
--		case TM6000_VMUX_VIDEO_A:
--			tm6000_set_reg(dev, TM6000_REQ07_RE3_VADC_INP_LPF_SEL1, 0x10);
--			tm6000_set_reg(dev, TM6000_REQ07_RE5_VADC_INP_LPF_SEL2, 0x00);
--			tm6000_set_reg(dev, TM6000_REQ07_RE8_VADC_PWDOWN_CTL, 0x0f);
--			tm6000_set_reg(dev,
--			    REQ_03_SET_GET_MCU_PIN, input->v_gpio, 0);
--			break;
--		case TM6000_VMUX_VIDEO_B:
--			tm6000_set_reg(dev, TM6000_REQ07_RE3_VADC_INP_LPF_SEL1, 0x00);
--			tm6000_set_reg(dev, TM6000_REQ07_RE5_VADC_INP_LPF_SEL2, 0x00);
--			tm6000_set_reg(dev, TM6000_REQ07_RE8_VADC_PWDOWN_CTL, 0x0f);
--			tm6000_set_reg(dev,
--			    REQ_03_SET_GET_MCU_PIN, input->v_gpio, 0);
--			break;
--		case TM6000_VMUX_VIDEO_AB:
--			tm6000_set_reg(dev, TM6000_REQ07_RE3_VADC_INP_LPF_SEL1, 0x10);
--			tm6000_set_reg(dev, TM6000_REQ07_RE5_VADC_INP_LPF_SEL2, 0x10);
--			tm6000_set_reg(dev, TM6000_REQ07_RE8_VADC_PWDOWN_CTL, 0x00);
--			tm6000_set_reg(dev,
--			    REQ_03_SET_GET_MCU_PIN, input->v_gpio, 1);
--			break;
--		default:
--			break;
--		}
--		switch (input->amux) {
--		case TM6000_AMUX_ADC1:
--			tm6000_set_reg_mask(dev,
--				TM6000_REQ07_REB_VADC_AADC_MODE, 0x00, 0x0f);
--			break;
--		case TM6000_AMUX_ADC2:
--			tm6000_set_reg_mask(dev,
--				TM6000_REQ07_REB_VADC_AADC_MODE, 0x04, 0x0f);
--			break;
--		default:
--			break;
--		}
--	}
--	if (input->type == TM6000_INPUT_SVIDEO) {
--		for (i = 0; i < ARRAY_SIZE(svideo_stds); i++) {
--			if (dev->norm & svideo_stds[i].id) {
--				rc = tm6000_load_std(dev, svideo_stds[i].common);
--				goto ret;
--			}
--		}
--		return -EINVAL;
--	} else {
--		for (i = 0; i < ARRAY_SIZE(composite_stds); i++) {
--			if (dev->norm & composite_stds[i].id) {
--				rc = tm6000_load_std(dev, composite_stds[i].common);
--				goto ret;
--			}
--		}
--		return -EINVAL;
--	}
--
--ret:
--	if (rc < 0)
--		return rc;
--
--	if ((dev->dev_type == TM6010) &&
--	    ((input->amux == TM6000_AMUX_SIF1) ||
--	    (input->amux == TM6000_AMUX_SIF2)))
--		tm6000_set_audio_std(dev);
--
--	msleep(40);
--
--	return 0;
--}
-diff --git a/drivers/staging/media/deprecated/tm6000/tm6000-usb-isoc.h b/drivers/staging/media/deprecated/tm6000/tm6000-usb-isoc.h
-deleted file mode 100644
-index e3c6933f854d..000000000000
---- a/drivers/staging/media/deprecated/tm6000/tm6000-usb-isoc.h
-+++ /dev/null
-@@ -1,38 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/*
-- * tm6000-buf.c - driver for TM5600/TM6000/TM6010 USB video capture devices
-- *
-- * Copyright (c) 2006-2007 Mauro Carvalho Chehab <mchehab@kernel.org>
-- */
--
--#include <linux/videodev2.h>
--
--#define TM6000_URB_MSG_LEN 180
--
--struct usb_isoc_ctl {
--		/* max packet size of isoc transaction */
--	int				max_pkt_size;
--
--		/* number of allocated urbs */
--	int				num_bufs;
--
--		/* urb for isoc transfers */
--	struct urb			**urb;
--
--		/* transfer buffers for isoc transfer */
--	char				**transfer_buffer;
--
--		/* Last buffer command and region */
--	u8				cmd;
--	int				pos, size, pktsize;
--
--		/* Last field: ODD or EVEN? */
--	int				vfield, field;
--
--		/* Stores incomplete commands */
--	u32				tmp_buf;
--	int				tmp_buf_len;
--
--		/* Stores already requested buffers */
--	struct tm6000_buffer		*buf;
--};
-diff --git a/drivers/staging/media/deprecated/tm6000/tm6000-video.c b/drivers/staging/media/deprecated/tm6000/tm6000-video.c
-deleted file mode 100644
-index e06ed21edbdd..000000000000
---- a/drivers/staging/media/deprecated/tm6000/tm6000-video.c
-+++ /dev/null
-@@ -1,1703 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--// tm6000-video.c - driver for TM5600/TM6000/TM6010 USB video capture devices
--//
--// Copyright (c) 2006-2007 Mauro Carvalho Chehab <mchehab@kernel.org>
--//
--// Copyright (c) 2007 Michel Ludwig <michel.ludwig@gmail.com>
--//	- Fixed module load/unload
--
--#include <linux/module.h>
--#include <linux/delay.h>
--#include <linux/errno.h>
--#include <linux/fs.h>
--#include <linux/kernel.h>
--#include <linux/slab.h>
--#include <linux/mm.h>
--#include <linux/ioport.h>
--#include <linux/init.h>
--#include <linux/sched.h>
--#include <linux/random.h>
--#include <linux/usb.h>
--#include <linux/videodev2.h>
--#include <media/v4l2-ioctl.h>
--#include <media/v4l2-event.h>
--#include <media/tuner.h>
--#include <linux/interrupt.h>
--#include <linux/kthread.h>
--#include <linux/highmem.h>
--#include <linux/freezer.h>
--
--#include "tm6000-regs.h"
--#include "tm6000.h"
--
--#define BUFFER_TIMEOUT     msecs_to_jiffies(2000)  /* 2 seconds */
--
--/* Limits minimum and default number of buffers */
--#define TM6000_MIN_BUF 4
--#define TM6000_DEF_BUF 8
--
--#define TM6000_NUM_URB_BUF 8
--
--#define TM6000_MAX_ISO_PACKETS	46	/* Max number of ISO packets */
--
--/* Declare static vars that will be used as parameters */
--static unsigned int vid_limit = 16;	/* Video memory limit, in Mb */
--static int video_nr = -1;		/* /dev/videoN, -1 for autodetect */
--static int radio_nr = -1;		/* /dev/radioN, -1 for autodetect */
--static bool keep_urb;			/* keep urb buffers allocated */
--
--/* Debug level */
--int tm6000_debug;
--EXPORT_SYMBOL_GPL(tm6000_debug);
--
--static struct tm6000_fmt format[] = {
--	{
--		.fourcc   = V4L2_PIX_FMT_YUYV,
--		.depth    = 16,
--	}, {
--		.fourcc   = V4L2_PIX_FMT_UYVY,
--		.depth    = 16,
--	}, {
--		.fourcc   = V4L2_PIX_FMT_TM6000,
--		.depth    = 16,
--	}
--};
--
--/* ------------------------------------------------------------------
-- *	DMA and thread functions
-- * ------------------------------------------------------------------
-- */
--
--#define norm_maxw(a) 720
--#define norm_maxh(a) 576
--
--#define norm_minw(a) norm_maxw(a)
--#define norm_minh(a) norm_maxh(a)
--
--/*
-- * video-buf generic routine to get the next available buffer
-- */
--static inline void get_next_buf(struct tm6000_dmaqueue *dma_q,
--			       struct tm6000_buffer   **buf)
--{
--	struct tm6000_core *dev = container_of(dma_q, struct tm6000_core, vidq);
--
--	if (list_empty(&dma_q->active)) {
--		dprintk(dev, V4L2_DEBUG_QUEUE, "No active queue to serve\n");
--		*buf = NULL;
--		return;
--	}
--
--	*buf = list_entry(dma_q->active.next,
--			struct tm6000_buffer, vb.queue);
--}
--
--/*
-- * Announces that a buffer were filled and request the next
-- */
--static inline void buffer_filled(struct tm6000_core *dev,
--				 struct tm6000_dmaqueue *dma_q,
--				 struct tm6000_buffer *buf)
--{
--	/* Advice that buffer was filled */
--	dprintk(dev, V4L2_DEBUG_ISOC, "[%p/%d] wakeup\n", buf, buf->vb.i);
--	buf->vb.state = VIDEOBUF_DONE;
--	buf->vb.field_count++;
--	buf->vb.ts = ktime_get_ns();
--
--	list_del(&buf->vb.queue);
--	wake_up(&buf->vb.done);
--}
--
--/*
-- * Identify the tm5600/6000 buffer header type and properly handles
-- */
--static int copy_streams(u8 *data, unsigned long len,
--			struct urb *urb)
--{
--	struct tm6000_dmaqueue  *dma_q = urb->context;
--	struct tm6000_core *dev = container_of(dma_q, struct tm6000_core, vidq);
--	u8 *ptr = data, *endp = data+len;
--	unsigned long header = 0;
--	int rc = 0;
--	unsigned int cmd, cpysize, pktsize, size, field, block, line, pos = 0;
--	struct tm6000_buffer *vbuf = NULL;
--	char *voutp = NULL;
--	unsigned int linewidth;
--
--	if (!dev->radio) {
--		/* get video buffer */
--		get_next_buf(dma_q, &vbuf);
--
--		if (!vbuf)
--			return rc;
--		voutp = videobuf_to_vmalloc(&vbuf->vb);
--
--		if (!voutp)
--			return 0;
--	}
--
--	for (ptr = data; ptr < endp;) {
--		if (!dev->isoc_ctl.cmd) {
--			/* Header */
--			if (dev->isoc_ctl.tmp_buf_len > 0) {
--				/* from last urb or packet */
--				header = dev->isoc_ctl.tmp_buf;
--				if (4 - dev->isoc_ctl.tmp_buf_len > 0) {
--					memcpy((u8 *)&header +
--						dev->isoc_ctl.tmp_buf_len,
--						ptr,
--						4 - dev->isoc_ctl.tmp_buf_len);
--					ptr += 4 - dev->isoc_ctl.tmp_buf_len;
--				}
--				dev->isoc_ctl.tmp_buf_len = 0;
--			} else {
--				if (ptr + 3 >= endp) {
--					/* have incomplete header */
--					dev->isoc_ctl.tmp_buf_len = endp - ptr;
--					memcpy(&dev->isoc_ctl.tmp_buf, ptr,
--						dev->isoc_ctl.tmp_buf_len);
--					return rc;
--				}
--				/* Seek for sync */
--				for (; ptr < endp - 3; ptr++) {
--					if (*(ptr + 3) == 0x47)
--						break;
--				}
--				/* Get message header */
--				header = *(unsigned long *)ptr;
--				ptr += 4;
--			}
--
--			/* split the header fields */
--			size = ((header & 0x7e) << 1);
--			if (size > 0)
--				size -= 4;
--			block = (header >> 7) & 0xf;
--			field = (header >> 11) & 0x1;
--			line  = (header >> 12) & 0x1ff;
--			cmd   = (header >> 21) & 0x7;
--			/* Validates header fields */
--			if (size > TM6000_URB_MSG_LEN)
--				size = TM6000_URB_MSG_LEN;
--			pktsize = TM6000_URB_MSG_LEN;
--			/*
--			 * calculate position in buffer and change the buffer
--			 */
--			switch (cmd) {
--			case TM6000_URB_MSG_VIDEO:
--				if (!dev->radio) {
--					if ((dev->isoc_ctl.vfield != field) &&
--						(field == 1)) {
--						/*
--						 * Announces that a new buffer
--						 * were filled
--						 */
--						buffer_filled(dev, dma_q, vbuf);
--						dprintk(dev, V4L2_DEBUG_ISOC,
--							"new buffer filled\n");
--						get_next_buf(dma_q, &vbuf);
--						if (!vbuf)
--							return rc;
--						voutp = videobuf_to_vmalloc(&vbuf->vb);
--						if (!voutp)
--							return rc;
--						memset(voutp, 0, vbuf->vb.size);
--					}
--					linewidth = vbuf->vb.width << 1;
--					pos = ((line << 1) - field - 1) *
--					linewidth + block * TM6000_URB_MSG_LEN;
--					/* Don't allow to write out of the buffer */
--					if (pos + size > vbuf->vb.size)
--						cmd = TM6000_URB_MSG_ERR;
--					dev->isoc_ctl.vfield = field;
--				}
--				break;
--			case TM6000_URB_MSG_VBI:
--				break;
--			case TM6000_URB_MSG_AUDIO:
--			case TM6000_URB_MSG_PTS:
--				size = pktsize; /* Size is always 180 bytes */
--				break;
--			}
--		} else {
--			/* Continue the last copy */
--			cmd = dev->isoc_ctl.cmd;
--			size = dev->isoc_ctl.size;
--			pos = dev->isoc_ctl.pos;
--			pktsize = dev->isoc_ctl.pktsize;
--			field = dev->isoc_ctl.field;
--		}
--		cpysize = (endp - ptr > size) ? size : endp - ptr;
--		if (cpysize) {
--			/* copy data in different buffers */
--			switch (cmd) {
--			case TM6000_URB_MSG_VIDEO:
--				/* Fills video buffer */
--				if (vbuf)
--					memcpy(&voutp[pos], ptr, cpysize);
--				break;
--			case TM6000_URB_MSG_AUDIO: {
--				int i;
--				for (i = 0; i < cpysize; i += 2)
--					swab16s((u16 *)(ptr + i));
--
--				tm6000_call_fillbuf(dev, TM6000_AUDIO, ptr, cpysize);
--				break;
--			}
--			case TM6000_URB_MSG_VBI:
--				/* Need some code to copy vbi buffer */
--				break;
--			case TM6000_URB_MSG_PTS: {
--				/* Need some code to copy pts */
--				u32 pts;
--				pts = *(u32 *)ptr;
--				dprintk(dev, V4L2_DEBUG_ISOC, "field %d, PTS %x",
--					field, pts);
--				break;
--			}
--			}
--		}
--		if (ptr + pktsize > endp) {
--			/*
--			 * End of URB packet, but cmd processing is not
--			 * complete. Preserve the state for a next packet
--			 */
--			dev->isoc_ctl.pos = pos + cpysize;
--			dev->isoc_ctl.size = size - cpysize;
--			dev->isoc_ctl.cmd = cmd;
--			dev->isoc_ctl.field = field;
--			dev->isoc_ctl.pktsize = pktsize - (endp - ptr);
--			ptr += endp - ptr;
--		} else {
--			dev->isoc_ctl.cmd = 0;
--			ptr += pktsize;
--		}
--	}
--	return 0;
--}
--
--/*
-- * Identify the tm5600/6000 buffer header type and properly handles
-- */
--static int copy_multiplexed(u8 *ptr, unsigned long len,
--			struct urb *urb)
--{
--	struct tm6000_dmaqueue  *dma_q = urb->context;
--	struct tm6000_core *dev = container_of(dma_q, struct tm6000_core, vidq);
--	unsigned int pos = dev->isoc_ctl.pos, cpysize;
--	int rc = 1;
--	struct tm6000_buffer *buf;
--	char *outp = NULL;
--
--	get_next_buf(dma_q, &buf);
--	if (buf)
--		outp = videobuf_to_vmalloc(&buf->vb);
--
--	if (!outp)
--		return 0;
--
--	while (len > 0) {
--		cpysize = min(len, buf->vb.size-pos);
--		memcpy(&outp[pos], ptr, cpysize);
--		pos += cpysize;
--		ptr += cpysize;
--		len -= cpysize;
--		if (pos >= buf->vb.size) {
--			pos = 0;
--			/* Announces that a new buffer were filled */
--			buffer_filled(dev, dma_q, buf);
--			dprintk(dev, V4L2_DEBUG_ISOC, "new buffer filled\n");
--			get_next_buf(dma_q, &buf);
--			if (!buf)
--				break;
--			outp = videobuf_to_vmalloc(&(buf->vb));
--			if (!outp)
--				return rc;
--			pos = 0;
--		}
--	}
--
--	dev->isoc_ctl.pos = pos;
--	return rc;
--}
--
--static inline void print_err_status(struct tm6000_core *dev,
--				     int packet, int status)
--{
--	char *errmsg = "Unknown";
--
--	switch (status) {
--	case -ENOENT:
--		errmsg = "unlinked synchronously";
--		break;
--	case -ECONNRESET:
--		errmsg = "unlinked asynchronously";
--		break;
--	case -ENOSR:
--		errmsg = "Buffer error (overrun)";
--		break;
--	case -EPIPE:
--		errmsg = "Stalled (device not responding)";
--		break;
--	case -EOVERFLOW:
--		errmsg = "Babble (bad cable?)";
--		break;
--	case -EPROTO:
--		errmsg = "Bit-stuff error (bad cable?)";
--		break;
--	case -EILSEQ:
--		errmsg = "CRC/Timeout (could be anything)";
--		break;
--	case -ETIME:
--		errmsg = "Device does not respond";
--		break;
--	}
--	if (packet < 0) {
--		dprintk(dev, V4L2_DEBUG_QUEUE, "URB status %d [%s].\n",
--			status, errmsg);
--	} else {
--		dprintk(dev, V4L2_DEBUG_QUEUE, "URB packet %d, status %d [%s].\n",
--			packet, status, errmsg);
--	}
--}
--
--
--/*
-- * Controls the isoc copy of each urb packet
-- */
--static inline int tm6000_isoc_copy(struct urb *urb)
--{
--	struct tm6000_dmaqueue  *dma_q = urb->context;
--	struct tm6000_core *dev = container_of(dma_q, struct tm6000_core, vidq);
--	int i, len = 0, rc = 1, status;
--	char *p;
--
--	if (urb->status < 0) {
--		print_err_status(dev, -1, urb->status);
--		return 0;
--	}
--
--	for (i = 0; i < urb->number_of_packets; i++) {
--		status = urb->iso_frame_desc[i].status;
--
--		if (status < 0) {
--			print_err_status(dev, i, status);
--			continue;
--		}
--
--		len = urb->iso_frame_desc[i].actual_length;
--
--		if (len > 0) {
--			p = urb->transfer_buffer + urb->iso_frame_desc[i].offset;
--			if (!urb->iso_frame_desc[i].status) {
--				if ((dev->fourcc) == V4L2_PIX_FMT_TM6000) {
--					rc = copy_multiplexed(p, len, urb);
--					if (rc <= 0)
--						return rc;
--				} else {
--					copy_streams(p, len, urb);
--				}
--			}
--		}
--	}
--	return rc;
--}
--
--/* ------------------------------------------------------------------
-- *	URB control
-- * ------------------------------------------------------------------
-- */
--
--/*
-- * IRQ callback, called by URB callback
-- */
--static void tm6000_irq_callback(struct urb *urb)
--{
--	struct tm6000_dmaqueue  *dma_q = urb->context;
--	struct tm6000_core *dev = container_of(dma_q, struct tm6000_core, vidq);
--	unsigned long flags;
+-/* this is videobuf_vmalloc_to_sg() from videobuf-dma-sg.c
+-   make sure virt has been allocated with vmalloc_32(), otherwise the BUG()
+-   may be triggered on highmem machines */
+-static struct scatterlist* vmalloc_to_sg(unsigned char *virt, int nr_pages)
+-{
+-	struct scatterlist *sglist;
+-	struct page *pg;
 -	int i;
 -
--	switch (urb->status) {
--	case 0:
--	case -ETIMEDOUT:
--		break;
--
--	case -ECONNRESET:
--	case -ENOENT:
--	case -ESHUTDOWN:
--		return;
--
--	default:
--		tm6000_err("urb completion error %d.\n", urb->status);
--		break;
+-	sglist = kmalloc_array(nr_pages, sizeof(struct scatterlist), GFP_KERNEL);
+-	if (NULL == sglist)
+-		return NULL;
+-	sg_init_table(sglist, nr_pages);
+-	for (i = 0; i < nr_pages; i++, virt += PAGE_SIZE) {
+-		pg = vmalloc_to_page(virt);
+-		if (NULL == pg)
+-			goto err;
+-		BUG_ON(PageHighMem(pg));
+-		sg_set_page(&sglist[i], pg, PAGE_SIZE, 0);
 -	}
+-	return sglist;
 -
--	spin_lock_irqsave(&dev->slock, flags);
--	tm6000_isoc_copy(urb);
--	spin_unlock_irqrestore(&dev->slock, flags);
--
--	/* Reset urb buffers */
--	for (i = 0; i < urb->number_of_packets; i++) {
--		urb->iso_frame_desc[i].status = 0;
--		urb->iso_frame_desc[i].actual_length = 0;
--	}
--
--	urb->status = usb_submit_urb(urb, GFP_ATOMIC);
--	if (urb->status)
--		tm6000_err("urb resubmit failed (error=%i)\n",
--			urb->status);
--}
--
--/*
-- * Allocate URB buffers
-- */
--static int tm6000_alloc_urb_buffers(struct tm6000_core *dev)
--{
--	int num_bufs = TM6000_NUM_URB_BUF;
--	int i;
--
--	if (dev->urb_buffer)
--		return 0;
--
--	dev->urb_buffer = kmalloc_array(num_bufs, sizeof(*dev->urb_buffer),
--					GFP_KERNEL);
--	if (!dev->urb_buffer)
--		return -ENOMEM;
--
--	dev->urb_dma = kmalloc_array(num_bufs, sizeof(*dev->urb_dma),
--				     GFP_KERNEL);
--	if (!dev->urb_dma)
--		return -ENOMEM;
--
--	for (i = 0; i < num_bufs; i++) {
--		dev->urb_buffer[i] = usb_alloc_coherent(
--					dev->udev, dev->urb_size,
--					GFP_KERNEL, &dev->urb_dma[i]);
--		if (!dev->urb_buffer[i]) {
--			tm6000_err("unable to allocate %i bytes for transfer buffer %i\n",
--				    dev->urb_size, i);
--			return -ENOMEM;
--		}
--		memset(dev->urb_buffer[i], 0, dev->urb_size);
--	}
--
--	return 0;
--}
--
--/*
-- * Free URB buffers
-- */
--static int tm6000_free_urb_buffers(struct tm6000_core *dev)
--{
--	int i;
--
--	if (!dev->urb_buffer)
--		return 0;
--
--	for (i = 0; i < TM6000_NUM_URB_BUF; i++) {
--		if (dev->urb_buffer[i]) {
--			usb_free_coherent(dev->udev,
--					dev->urb_size,
--					dev->urb_buffer[i],
--					dev->urb_dma[i]);
--			dev->urb_buffer[i] = NULL;
--		}
--	}
--	kfree(dev->urb_buffer);
--	kfree(dev->urb_dma);
--	dev->urb_buffer = NULL;
--	dev->urb_dma = NULL;
--
--	return 0;
--}
--
--/*
-- * Stop and Deallocate URBs
-- */
--static void tm6000_uninit_isoc(struct tm6000_core *dev)
--{
--	struct urb *urb;
--	int i;
--
--	dev->isoc_ctl.buf = NULL;
--	for (i = 0; i < dev->isoc_ctl.num_bufs; i++) {
--		urb = dev->isoc_ctl.urb[i];
--		if (urb) {
--			usb_kill_urb(urb);
--			usb_unlink_urb(urb);
--			usb_free_urb(urb);
--			dev->isoc_ctl.urb[i] = NULL;
--		}
--		dev->isoc_ctl.transfer_buffer[i] = NULL;
--	}
--
--	if (!keep_urb)
--		tm6000_free_urb_buffers(dev);
--
--	kfree(dev->isoc_ctl.urb);
--	kfree(dev->isoc_ctl.transfer_buffer);
--
--	dev->isoc_ctl.urb = NULL;
--	dev->isoc_ctl.transfer_buffer = NULL;
--	dev->isoc_ctl.num_bufs = 0;
--}
--
--/*
-- * Assign URBs and start IRQ
-- */
--static int tm6000_prepare_isoc(struct tm6000_core *dev)
--{
--	struct tm6000_dmaqueue *dma_q = &dev->vidq;
--	int i, j, sb_size, pipe, size, max_packets;
--	int num_bufs = TM6000_NUM_URB_BUF;
--	struct urb *urb;
--
--	/* De-allocates all pending stuff */
--	tm6000_uninit_isoc(dev);
--	/* Stop interrupt USB pipe */
--	tm6000_ir_int_stop(dev);
--
--	usb_set_interface(dev->udev,
--			  dev->isoc_in.bInterfaceNumber,
--			  dev->isoc_in.bAlternateSetting);
--
--	/* Start interrupt USB pipe */
--	tm6000_ir_int_start(dev);
--
--	pipe = usb_rcvisocpipe(dev->udev,
--			       dev->isoc_in.endp->desc.bEndpointAddress &
--			       USB_ENDPOINT_NUMBER_MASK);
--
--	size = usb_maxpacket(dev->udev, pipe);
--
--	if (size > dev->isoc_in.maxsize)
--		size = dev->isoc_in.maxsize;
--
--	dev->isoc_ctl.max_pkt_size = size;
--
--	max_packets = TM6000_MAX_ISO_PACKETS;
--	sb_size = max_packets * size;
--	dev->urb_size = sb_size;
--
--	dev->isoc_ctl.num_bufs = num_bufs;
--
--	dev->isoc_ctl.urb = kmalloc_array(num_bufs, sizeof(void *),
--					  GFP_KERNEL);
--	if (!dev->isoc_ctl.urb)
--		return -ENOMEM;
--
--	dev->isoc_ctl.transfer_buffer = kmalloc_array(num_bufs,
--						      sizeof(void *),
--						      GFP_KERNEL);
--	if (!dev->isoc_ctl.transfer_buffer) {
--		kfree(dev->isoc_ctl.urb);
--		return -ENOMEM;
--	}
--
--	dprintk(dev, V4L2_DEBUG_QUEUE, "Allocating %d x %d packets (%d bytes) of %d bytes each to handle %u size\n",
--		    max_packets, num_bufs, sb_size,
--		    dev->isoc_in.maxsize, size);
--
--
--	if (tm6000_alloc_urb_buffers(dev) < 0) {
--		tm6000_err("cannot allocate memory for urb buffers\n");
--
--		/* call free, as some buffers might have been allocated */
--		tm6000_free_urb_buffers(dev);
--		kfree(dev->isoc_ctl.urb);
--		kfree(dev->isoc_ctl.transfer_buffer);
--		return -ENOMEM;
--	}
--
--	/* allocate urbs and transfer buffers */
--	for (i = 0; i < dev->isoc_ctl.num_bufs; i++) {
--		urb = usb_alloc_urb(max_packets, GFP_KERNEL);
--		if (!urb) {
--			tm6000_uninit_isoc(dev);
--			tm6000_free_urb_buffers(dev);
--			return -ENOMEM;
--		}
--		dev->isoc_ctl.urb[i] = urb;
--
--		urb->transfer_dma = dev->urb_dma[i];
--		dev->isoc_ctl.transfer_buffer[i] = dev->urb_buffer[i];
--
--		usb_fill_bulk_urb(urb, dev->udev, pipe,
--				  dev->isoc_ctl.transfer_buffer[i], sb_size,
--				  tm6000_irq_callback, dma_q);
--		urb->interval = dev->isoc_in.endp->desc.bInterval;
--		urb->number_of_packets = max_packets;
--		urb->transfer_flags = URB_ISO_ASAP | URB_NO_TRANSFER_DMA_MAP;
--
--		for (j = 0; j < max_packets; j++) {
--			urb->iso_frame_desc[j].offset = size * j;
--			urb->iso_frame_desc[j].length = size;
--		}
--	}
--
--	return 0;
--}
--
--static int tm6000_start_thread(struct tm6000_core *dev)
--{
--	struct tm6000_dmaqueue *dma_q = &dev->vidq;
--	int i;
--
--	dma_q->frame = 0;
--	dma_q->ini_jiffies = jiffies;
--
--	init_waitqueue_head(&dma_q->wq);
--
--	/* submit urbs and enables IRQ */
--	for (i = 0; i < dev->isoc_ctl.num_bufs; i++) {
--		int rc = usb_submit_urb(dev->isoc_ctl.urb[i], GFP_ATOMIC);
--		if (rc) {
--			tm6000_err("submit of urb %i failed (error=%i)\n", i,
--				   rc);
--			tm6000_uninit_isoc(dev);
--			return rc;
--		}
--	}
--
--	return 0;
--}
--
--/* ------------------------------------------------------------------
-- *	Videobuf operations
-- * ------------------------------------------------------------------
-- */
--
--static int
--buffer_setup(struct videobuf_queue *vq, unsigned int *count, unsigned int *size)
--{
--	struct tm6000_fh *fh = vq->priv_data;
--
--	*size = fh->fmt->depth * fh->width * fh->height >> 3;
--	if (0 == *count)
--		*count = TM6000_DEF_BUF;
--
--	if (*count < TM6000_MIN_BUF)
--		*count = TM6000_MIN_BUF;
--
--	while (*size * *count > vid_limit * 1024 * 1024)
--		(*count)--;
--
--	return 0;
--}
--
--static void free_buffer(struct videobuf_queue *vq, struct tm6000_buffer *buf)
--{
--	struct tm6000_fh *fh = vq->priv_data;
--	struct tm6000_core   *dev = fh->dev;
--	unsigned long flags;
--
--	/* We used to wait for the buffer to finish here, but this didn't work
--	   because, as we were keeping the state as VIDEOBUF_QUEUED,
--	   videobuf_queue_cancel marked it as finished for us.
--	   (Also, it could wedge forever if the hardware was misconfigured.)
--
--	   This should be safe; by the time we get here, the buffer isn't
--	   queued anymore. If we ever start marking the buffers as
--	   VIDEOBUF_ACTIVE, it won't be, though.
--	*/
--	spin_lock_irqsave(&dev->slock, flags);
--	if (dev->isoc_ctl.buf == buf)
--		dev->isoc_ctl.buf = NULL;
--	spin_unlock_irqrestore(&dev->slock, flags);
--
--	videobuf_vmalloc_free(&buf->vb);
--	buf->vb.state = VIDEOBUF_NEEDS_INIT;
--}
--
--static int
--buffer_prepare(struct videobuf_queue *vq, struct videobuf_buffer *vb,
--						enum v4l2_field field)
--{
--	struct tm6000_fh     *fh  = vq->priv_data;
--	struct tm6000_buffer *buf = container_of(vb, struct tm6000_buffer, vb);
--	struct tm6000_core   *dev = fh->dev;
--	int rc = 0;
--
--	BUG_ON(NULL == fh->fmt);
--
--
--	/* FIXME: It assumes depth=2 */
--	/* The only currently supported format is 16 bits/pixel */
--	buf->vb.size = fh->fmt->depth*fh->width*fh->height >> 3;
--	if (0 != buf->vb.baddr  &&  buf->vb.bsize < buf->vb.size)
--		return -EINVAL;
--
--	if (buf->fmt       != fh->fmt    ||
--	    buf->vb.width  != fh->width  ||
--	    buf->vb.height != fh->height ||
--	    buf->vb.field  != field) {
--		buf->fmt       = fh->fmt;
--		buf->vb.width  = fh->width;
--		buf->vb.height = fh->height;
--		buf->vb.field  = field;
--		buf->vb.state = VIDEOBUF_NEEDS_INIT;
--	}
--
--	if (VIDEOBUF_NEEDS_INIT == buf->vb.state) {
--		rc = videobuf_iolock(vq, &buf->vb, NULL);
--		if (rc != 0)
--			goto fail;
--	}
--
--	if (!dev->isoc_ctl.num_bufs) {
--		rc = tm6000_prepare_isoc(dev);
--		if (rc < 0)
--			goto fail;
--
--		rc = tm6000_start_thread(dev);
--		if (rc < 0)
--			goto fail;
--
--	}
--
--	buf->vb.state = VIDEOBUF_PREPARED;
--	return 0;
--
--fail:
--	free_buffer(vq, buf);
--	return rc;
--}
--
--static void
--buffer_queue(struct videobuf_queue *vq, struct videobuf_buffer *vb)
--{
--	struct tm6000_buffer    *buf     = container_of(vb, struct tm6000_buffer, vb);
--	struct tm6000_fh        *fh      = vq->priv_data;
--	struct tm6000_core      *dev     = fh->dev;
--	struct tm6000_dmaqueue  *vidq    = &dev->vidq;
--
--	buf->vb.state = VIDEOBUF_QUEUED;
--	list_add_tail(&buf->vb.queue, &vidq->active);
--}
--
--static void buffer_release(struct videobuf_queue *vq, struct videobuf_buffer *vb)
--{
--	struct tm6000_buffer   *buf  = container_of(vb, struct tm6000_buffer, vb);
--
--	free_buffer(vq, buf);
--}
--
--static const struct videobuf_queue_ops tm6000_video_qops = {
--	.buf_setup      = buffer_setup,
--	.buf_prepare    = buffer_prepare,
--	.buf_queue      = buffer_queue,
--	.buf_release    = buffer_release,
--};
--
--/* ------------------------------------------------------------------
-- *	IOCTL handling
-- * ------------------------------------------------------------------
-- */
--
--static bool is_res_read(struct tm6000_core *dev, struct tm6000_fh *fh)
--{
--	/* Is the current fh handling it? if so, that's OK */
--	if (dev->resources == fh && dev->is_res_read)
--		return true;
--
--	return false;
--}
--
--static bool is_res_streaming(struct tm6000_core *dev, struct tm6000_fh *fh)
--{
--	/* Is the current fh handling it? if so, that's OK */
--	if (dev->resources == fh)
--		return true;
--
--	return false;
--}
--
--static bool res_get(struct tm6000_core *dev, struct tm6000_fh *fh,
--		   bool is_res_read)
--{
--	/* Is the current fh handling it? if so, that's OK */
--	if (dev->resources == fh && dev->is_res_read == is_res_read)
--		return true;
--
--	/* is it free? */
--	if (dev->resources)
--		return false;
--
--	/* grab it */
--	dev->resources = fh;
--	dev->is_res_read = is_res_read;
--	dprintk(dev, V4L2_DEBUG_RES_LOCK, "res: get\n");
--	return true;
--}
--
--static void res_free(struct tm6000_core *dev, struct tm6000_fh *fh)
--{
--	/* Is the current fh handling it? if so, that's OK */
--	if (dev->resources != fh)
--		return;
--
--	dev->resources = NULL;
--	dprintk(dev, V4L2_DEBUG_RES_LOCK, "res: put\n");
--}
--
--/* ------------------------------------------------------------------
-- *	IOCTL vidioc handling
-- * ------------------------------------------------------------------
-- */
--static int vidioc_querycap(struct file *file, void  *priv,
--					struct v4l2_capability *cap)
--{
--	struct tm6000_core *dev = ((struct tm6000_fh *)priv)->dev;
--
--	strscpy(cap->driver, "tm6000", sizeof(cap->driver));
--	strscpy(cap->card, "Trident TM5600/6000/6010", sizeof(cap->card));
--	usb_make_path(dev->udev, cap->bus_info, sizeof(cap->bus_info));
--	cap->capabilities = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_READWRITE |
--			    V4L2_CAP_DEVICE_CAPS;
--	if (dev->tuner_type != TUNER_ABSENT)
--		cap->capabilities |= V4L2_CAP_TUNER;
--	if (dev->caps.has_radio)
--		cap->capabilities |= V4L2_CAP_RADIO;
--
--	return 0;
--}
--
--static int vidioc_enum_fmt_vid_cap(struct file *file, void  *priv,
--					struct v4l2_fmtdesc *f)
--{
--	if (f->index >= ARRAY_SIZE(format))
--		return -EINVAL;
--
--	f->pixelformat = format[f->index].fourcc;
--	return 0;
--}
--
--static int vidioc_g_fmt_vid_cap(struct file *file, void *priv,
--					struct v4l2_format *f)
--{
--	struct tm6000_fh  *fh = priv;
--
--	f->fmt.pix.width        = fh->width;
--	f->fmt.pix.height       = fh->height;
--	f->fmt.pix.field        = fh->vb_vidq.field;
--	f->fmt.pix.pixelformat  = fh->fmt->fourcc;
--	f->fmt.pix.colorspace   = V4L2_COLORSPACE_SMPTE170M;
--	f->fmt.pix.bytesperline =
--		(f->fmt.pix.width * fh->fmt->depth) >> 3;
--	f->fmt.pix.sizeimage =
--		f->fmt.pix.height * f->fmt.pix.bytesperline;
--
--	return 0;
--}
--
--static struct tm6000_fmt *format_by_fourcc(unsigned int fourcc)
--{
--	unsigned int i;
--
--	for (i = 0; i < ARRAY_SIZE(format); i++)
--		if (format[i].fourcc == fourcc)
--			return format+i;
+- err:
+-	kfree(sglist);
 -	return NULL;
 -}
 -
--static int vidioc_try_fmt_vid_cap(struct file *file, void *priv,
--			struct v4l2_format *f)
--{
--	struct tm6000_core *dev = ((struct tm6000_fh *)priv)->dev;
--	struct tm6000_fmt *fmt;
--	enum v4l2_field field;
+-/********************************************************************************/
+-/* common page table functions */
 -
--	fmt = format_by_fourcc(f->fmt.pix.pixelformat);
--	if (NULL == fmt) {
--		dprintk(dev, 2, "Fourcc format (0x%08x) invalid.\n",
--			f->fmt.pix.pixelformat);
--		return -EINVAL;
+-void *saa7146_vmalloc_build_pgtable(struct pci_dev *pci, long length, struct saa7146_pgtable *pt)
+-{
+-	int pages = (length+PAGE_SIZE-1)/PAGE_SIZE;
+-	void *mem = vmalloc_32(length);
+-	int slen = 0;
+-
+-	if (NULL == mem)
+-		goto err_null;
+-
+-	if (!(pt->slist = vmalloc_to_sg(mem, pages)))
+-		goto err_free_mem;
+-
+-	if (saa7146_pgtable_alloc(pci, pt))
+-		goto err_free_slist;
+-
+-	pt->nents = pages;
+-	slen = dma_map_sg(&pci->dev, pt->slist, pt->nents, DMA_FROM_DEVICE);
+-	if (0 == slen)
+-		goto err_free_pgtable;
+-
+-	if (0 != saa7146_pgtable_build_single(pci, pt, pt->slist, slen))
+-		goto err_unmap_sg;
+-
+-	return mem;
+-
+-err_unmap_sg:
+-	dma_unmap_sg(&pci->dev, pt->slist, pt->nents, DMA_FROM_DEVICE);
+-err_free_pgtable:
+-	saa7146_pgtable_free(pci, pt);
+-err_free_slist:
+-	kfree(pt->slist);
+-	pt->slist = NULL;
+-err_free_mem:
+-	vfree(mem);
+-err_null:
+-	return NULL;
+-}
+-
+-void saa7146_vfree_destroy_pgtable(struct pci_dev *pci, void *mem, struct saa7146_pgtable *pt)
+-{
+-	dma_unmap_sg(&pci->dev, pt->slist, pt->nents, DMA_FROM_DEVICE);
+-	saa7146_pgtable_free(pci, pt);
+-	kfree(pt->slist);
+-	pt->slist = NULL;
+-	vfree(mem);
+-}
+-
+-void saa7146_pgtable_free(struct pci_dev *pci, struct saa7146_pgtable *pt)
+-{
+-	if (NULL == pt->cpu)
+-		return;
+-	dma_free_coherent(&pci->dev, pt->size, pt->cpu, pt->dma);
+-	pt->cpu = NULL;
+-}
+-
+-int saa7146_pgtable_alloc(struct pci_dev *pci, struct saa7146_pgtable *pt)
+-{
+-	__le32       *cpu;
+-	dma_addr_t   dma_addr = 0;
+-
+-	cpu = dma_alloc_coherent(&pci->dev, PAGE_SIZE, &dma_addr, GFP_KERNEL);
+-	if (NULL == cpu) {
+-		return -ENOMEM;
+-	}
+-	pt->size = PAGE_SIZE;
+-	pt->cpu  = cpu;
+-	pt->dma  = dma_addr;
+-
+-	return 0;
+-}
+-
+-int saa7146_pgtable_build_single(struct pci_dev *pci, struct saa7146_pgtable *pt,
+-	struct scatterlist *list, int sglen  )
+-{
+-	__le32 *ptr, fill;
+-	int nr_pages = 0;
+-	int i,p;
+-
+-	BUG_ON(0 == sglen);
+-	BUG_ON(list->offset > PAGE_SIZE);
+-
+-	/* if we have a user buffer, the first page may not be
+-	   aligned to a page boundary. */
+-	pt->offset = list->offset;
+-
+-	ptr = pt->cpu;
+-	for (i = 0; i < sglen; i++, list++) {
+-/*
+-		pr_debug("i:%d, adr:0x%08x, len:%d, offset:%d\n",
+-			 i, sg_dma_address(list), sg_dma_len(list),
+-			 list->offset);
+-*/
+-		for (p = 0; p * 4096 < sg_dma_len(list); p++, ptr++) {
+-			*ptr = cpu_to_le32(sg_dma_address(list) + p * 4096);
+-			nr_pages++;
+-		}
 -	}
 -
--	field = V4L2_FIELD_INTERLACED;
 -
--	tm6000_get_std_res(dev);
+-	/* safety; fill the page table up with the last valid page */
+-	fill = *(ptr-1);
+-	for(i=nr_pages;i<1024;i++) {
+-		*ptr++ = fill;
+-	}
 -
--	f->fmt.pix.width  = dev->width;
--	f->fmt.pix.height = dev->height;
--
--	f->fmt.pix.width &= ~0x01;
--
--	f->fmt.pix.field = field;
--
--	f->fmt.pix.bytesperline =
--		(f->fmt.pix.width * fmt->depth) >> 3;
--	f->fmt.pix.sizeimage =
--		f->fmt.pix.height * f->fmt.pix.bytesperline;
--	f->fmt.pix.colorspace   = V4L2_COLORSPACE_SMPTE170M;
--
+-/*
+-	ptr = pt->cpu;
+-	pr_debug("offset: %d\n", pt->offset);
+-	for(i=0;i<5;i++) {
+-		pr_debug("ptr1 %d: 0x%08x\n", i, ptr[i]);
+-	}
+-*/
 -	return 0;
 -}
 -
--/*FIXME: This seems to be generic enough to be at videodev2 */
--static int vidioc_s_fmt_vid_cap(struct file *file, void *priv,
--					struct v4l2_format *f)
+-/********************************************************************************/
+-/* interrupt handler */
+-static irqreturn_t interrupt_hw(int irq, void *dev_id)
 -{
--	struct tm6000_fh  *fh = priv;
--	struct tm6000_core *dev = fh->dev;
--	int ret = vidioc_try_fmt_vid_cap(file, fh, f);
--	if (ret < 0)
--		return ret;
+-	struct saa7146_dev *dev = dev_id;
+-	u32 isr;
+-	u32 ack_isr;
 -
--	fh->fmt           = format_by_fourcc(f->fmt.pix.pixelformat);
--	fh->width         = f->fmt.pix.width;
--	fh->height        = f->fmt.pix.height;
--	fh->vb_vidq.field = f->fmt.pix.field;
--	fh->type          = f->type;
+-	/* read out the interrupt status register */
+-	ack_isr = isr = saa7146_read(dev, ISR);
 -
--	dev->fourcc       = f->fmt.pix.pixelformat;
+-	/* is this our interrupt? */
+-	if ( 0 == isr ) {
+-		/* nope, some other device */
+-		return IRQ_NONE;
+-	}
 -
--	tm6000_set_fourcc_format(dev);
+-	if (dev->ext) {
+-		if (dev->ext->irq_mask & isr) {
+-			if (dev->ext->irq_func)
+-				dev->ext->irq_func(dev, &isr);
+-			isr &= ~dev->ext->irq_mask;
+-		}
+-	}
+-	if (0 != (isr & (MASK_27))) {
+-		DEB_INT("irq: RPS0 (0x%08x)\n", isr);
+-		if (dev->vv_data && dev->vv_callback)
+-			dev->vv_callback(dev,isr);
+-		isr &= ~MASK_27;
+-	}
+-	if (0 != (isr & (MASK_28))) {
+-		if (dev->vv_data && dev->vv_callback)
+-			dev->vv_callback(dev,isr);
+-		isr &= ~MASK_28;
+-	}
+-	if (0 != (isr & (MASK_16|MASK_17))) {
+-		SAA7146_IER_DISABLE(dev, MASK_16|MASK_17);
+-		/* only wake up if we expect something */
+-		if (0 != dev->i2c_op) {
+-			dev->i2c_op = 0;
+-			wake_up(&dev->i2c_wq);
+-		} else {
+-			u32 psr = saa7146_read(dev, PSR);
+-			u32 ssr = saa7146_read(dev, SSR);
+-			pr_warn("%s: unexpected i2c irq: isr %08x psr %08x ssr %08x\n",
+-				dev->name, isr, psr, ssr);
+-		}
+-		isr &= ~(MASK_16|MASK_17);
+-	}
+-	if( 0 != isr ) {
+-		ERR("warning: interrupt enabled, but not handled properly.(0x%08x)\n",
+-		    isr);
+-		ERR("disabling interrupt source(s)!\n");
+-		SAA7146_IER_DISABLE(dev,isr);
+-	}
+-	saa7146_write(dev, ISR, ack_isr);
+-	return IRQ_HANDLED;
+-}
 -
+-/*********************************************************************************/
+-/* configuration-functions                                                       */
+-
+-static int saa7146_init_one(struct pci_dev *pci, const struct pci_device_id *ent)
+-{
+-	struct saa7146_pci_extension_data *pci_ext = (struct saa7146_pci_extension_data *)ent->driver_data;
+-	struct saa7146_extension *ext = pci_ext->ext;
+-	struct saa7146_dev *dev;
+-	int err = -ENOMEM;
+-
+-	/* clear out mem for sure */
+-	dev = kzalloc(sizeof(struct saa7146_dev), GFP_KERNEL);
+-	if (!dev) {
+-		ERR("out of memory\n");
+-		goto out;
+-	}
+-
+-	/* create a nice device name */
+-	sprintf(dev->name, "saa7146 (%d)", saa7146_num);
+-
+-	DEB_EE("pci:%p\n", pci);
+-
+-	err = pci_enable_device(pci);
+-	if (err < 0) {
+-		ERR("pci_enable_device() failed\n");
+-		goto err_free;
+-	}
+-
+-	/* enable bus-mastering */
+-	pci_set_master(pci);
+-
+-	dev->pci = pci;
+-
+-	/* get chip-revision; this is needed to enable bug-fixes */
+-	dev->revision = pci->revision;
+-
+-	/* remap the memory from virtual to physical address */
+-
+-	err = pci_request_region(pci, 0, "saa7146");
+-	if (err < 0)
+-		goto err_disable;
+-
+-	dev->mem = ioremap(pci_resource_start(pci, 0),
+-			   pci_resource_len(pci, 0));
+-	if (!dev->mem) {
+-		ERR("ioremap() failed\n");
+-		err = -ENODEV;
+-		goto err_release;
+-	}
+-
+-	/* we don't do a master reset here anymore, it screws up
+-	   some boards that don't have an i2c-eeprom for configuration
+-	   values */
+-/*
+-	saa7146_write(dev, MC1, MASK_31);
+-*/
+-
+-	/* disable all irqs */
+-	saa7146_write(dev, IER, 0);
+-
+-	/* shut down all dma transfers and rps tasks */
+-	saa7146_write(dev, MC1, 0x30ff0000);
+-
+-	/* clear out any rps-signals pending */
+-	saa7146_write(dev, MC2, 0xf8000000);
+-
+-	/* request an interrupt for the saa7146 */
+-	err = request_irq(pci->irq, interrupt_hw, IRQF_SHARED,
+-			  dev->name, dev);
+-	if (err < 0) {
+-		ERR("request_irq() failed\n");
+-		goto err_unmap;
+-	}
+-
+-	err = -ENOMEM;
+-
+-	/* get memory for various stuff */
+-	dev->d_rps0.cpu_addr = dma_alloc_coherent(&pci->dev, SAA7146_RPS_MEM,
+-						  &dev->d_rps0.dma_handle,
+-						  GFP_KERNEL);
+-	if (!dev->d_rps0.cpu_addr)
+-		goto err_free_irq;
+-
+-	dev->d_rps1.cpu_addr = dma_alloc_coherent(&pci->dev, SAA7146_RPS_MEM,
+-						  &dev->d_rps1.dma_handle,
+-						  GFP_KERNEL);
+-	if (!dev->d_rps1.cpu_addr)
+-		goto err_free_rps0;
+-
+-	dev->d_i2c.cpu_addr = dma_alloc_coherent(&pci->dev, SAA7146_RPS_MEM,
+-						 &dev->d_i2c.dma_handle, GFP_KERNEL);
+-	if (!dev->d_i2c.cpu_addr)
+-		goto err_free_rps1;
+-
+-	/* the rest + print status message */
+-
+-	pr_info("found saa7146 @ mem %p (revision %d, irq %d) (0x%04x,0x%04x)\n",
+-		dev->mem, dev->revision, pci->irq,
+-		pci->subsystem_vendor, pci->subsystem_device);
+-	dev->ext = ext;
+-
+-	mutex_init(&dev->v4l2_lock);
+-	spin_lock_init(&dev->int_slock);
+-	spin_lock_init(&dev->slock);
+-
+-	mutex_init(&dev->i2c_lock);
+-
+-	dev->module = THIS_MODULE;
+-	init_waitqueue_head(&dev->i2c_wq);
+-
+-	/* set some sane pci arbitrition values */
+-	saa7146_write(dev, PCI_BT_V1, 0x1c00101f);
+-
+-	/* TODO: use the status code of the callback */
+-
+-	err = -ENODEV;
+-
+-	if (ext->probe && ext->probe(dev)) {
+-		DEB_D("ext->probe() failed for %p. skipping device.\n", dev);
+-		goto err_free_i2c;
+-	}
+-
+-	if (ext->attach(dev, pci_ext)) {
+-		DEB_D("ext->attach() failed for %p. skipping device.\n", dev);
+-		goto err_free_i2c;
+-	}
+-	/* V4L extensions will set the pci drvdata to the v4l2_device in the
+-	   attach() above. So for those cards that do not use V4L we have to
+-	   set it explicitly. */
+-	pci_set_drvdata(pci, &dev->v4l2_dev);
+-
+-	saa7146_num++;
+-
+-	err = 0;
+-out:
+-	return err;
+-
+-err_free_i2c:
+-	dma_free_coherent(&pci->dev, SAA7146_RPS_MEM, dev->d_i2c.cpu_addr,
+-			  dev->d_i2c.dma_handle);
+-err_free_rps1:
+-	dma_free_coherent(&pci->dev, SAA7146_RPS_MEM, dev->d_rps1.cpu_addr,
+-			  dev->d_rps1.dma_handle);
+-err_free_rps0:
+-	dma_free_coherent(&pci->dev, SAA7146_RPS_MEM, dev->d_rps0.cpu_addr,
+-			  dev->d_rps0.dma_handle);
+-err_free_irq:
+-	free_irq(pci->irq, (void *)dev);
+-err_unmap:
+-	iounmap(dev->mem);
+-err_release:
+-	pci_release_region(pci, 0);
+-err_disable:
+-	pci_disable_device(pci);
+-err_free:
+-	kfree(dev);
+-	goto out;
+-}
+-
+-static void saa7146_remove_one(struct pci_dev *pdev)
+-{
+-	struct v4l2_device *v4l2_dev = pci_get_drvdata(pdev);
+-	struct saa7146_dev *dev = to_saa7146_dev(v4l2_dev);
+-	struct {
+-		void *addr;
+-		dma_addr_t dma;
+-	} dev_map[] = {
+-		{ dev->d_i2c.cpu_addr, dev->d_i2c.dma_handle },
+-		{ dev->d_rps1.cpu_addr, dev->d_rps1.dma_handle },
+-		{ dev->d_rps0.cpu_addr, dev->d_rps0.dma_handle },
+-		{ NULL, 0 }
+-	}, *p;
+-
+-	DEB_EE("dev:%p\n", dev);
+-
+-	dev->ext->detach(dev);
+-
+-	/* shut down all video dma transfers */
+-	saa7146_write(dev, MC1, 0x00ff0000);
+-
+-	/* disable all irqs, release irq-routine */
+-	saa7146_write(dev, IER, 0);
+-
+-	free_irq(pdev->irq, dev);
+-
+-	for (p = dev_map; p->addr; p++)
+-		dma_free_coherent(&pdev->dev, SAA7146_RPS_MEM, p->addr,
+-				  p->dma);
+-
+-	iounmap(dev->mem);
+-	pci_release_region(pdev, 0);
+-	pci_disable_device(pdev);
+-	kfree(dev);
+-
+-	saa7146_num--;
+-}
+-
+-/*********************************************************************************/
+-/* extension handling functions                                                  */
+-
+-int saa7146_register_extension(struct saa7146_extension* ext)
+-{
+-	DEB_EE("ext:%p\n", ext);
+-
+-	ext->driver.name = ext->name;
+-	ext->driver.id_table = ext->pci_tbl;
+-	ext->driver.probe = saa7146_init_one;
+-	ext->driver.remove = saa7146_remove_one;
+-
+-	pr_info("register extension '%s'\n", ext->name);
+-	return pci_register_driver(&ext->driver);
+-}
+-
+-int saa7146_unregister_extension(struct saa7146_extension* ext)
+-{
+-	DEB_EE("ext:%p\n", ext);
+-	pr_info("unregister extension '%s'\n", ext->name);
+-	pci_unregister_driver(&ext->driver);
 -	return 0;
 -}
 -
--static int vidioc_reqbufs(struct file *file, void *priv,
--			   struct v4l2_requestbuffers *p)
+-EXPORT_SYMBOL_GPL(saa7146_register_extension);
+-EXPORT_SYMBOL_GPL(saa7146_unregister_extension);
+-
+-/* misc functions used by extension modules */
+-EXPORT_SYMBOL_GPL(saa7146_pgtable_alloc);
+-EXPORT_SYMBOL_GPL(saa7146_pgtable_free);
+-EXPORT_SYMBOL_GPL(saa7146_pgtable_build_single);
+-EXPORT_SYMBOL_GPL(saa7146_vmalloc_build_pgtable);
+-EXPORT_SYMBOL_GPL(saa7146_vfree_destroy_pgtable);
+-EXPORT_SYMBOL_GPL(saa7146_wait_for_debi_done);
+-
+-EXPORT_SYMBOL_GPL(saa7146_setgpio);
+-
+-EXPORT_SYMBOL_GPL(saa7146_i2c_adapter_prepare);
+-
+-EXPORT_SYMBOL_GPL(saa7146_debug);
+-
+-MODULE_AUTHOR("Michael Hunold <michael@mihu.de>");
+-MODULE_DESCRIPTION("driver for generic saa7146-based hardware");
+-MODULE_LICENSE("GPL");
+diff --git a/drivers/staging/media/deprecated/saa7146/common/saa7146_fops.c b/drivers/staging/media/deprecated/saa7146/common/saa7146_fops.c
+deleted file mode 100644
+index aa14698a9c54..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/common/saa7146_fops.c
++++ /dev/null
+@@ -1,658 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
+-#include <linux/module.h>
+-#include "saa7146_vv.h"
+-
+-/****************************************************************************/
+-/* resource management functions, shamelessly stolen from saa7134 driver */
+-
+-int saa7146_res_get(struct saa7146_fh *fh, unsigned int bit)
 -{
--	struct tm6000_fh  *fh = priv;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
 -
--	return videobuf_reqbufs(&fh->vb_vidq, p);
--}
+-	if (fh->resources & bit) {
+-		DEB_D("already allocated! want: 0x%02x, cur:0x%02x\n",
+-		      bit, vv->resources);
+-		/* have it already allocated */
+-		return 1;
+-	}
 -
--static int vidioc_querybuf(struct file *file, void *priv,
--			    struct v4l2_buffer *p)
--{
--	struct tm6000_fh  *fh = priv;
--
--	return videobuf_querybuf(&fh->vb_vidq, p);
--}
--
--static int vidioc_qbuf(struct file *file, void *priv, struct v4l2_buffer *p)
--{
--	struct tm6000_fh  *fh = priv;
--
--	return videobuf_qbuf(&fh->vb_vidq, p);
--}
--
--static int vidioc_dqbuf(struct file *file, void *priv, struct v4l2_buffer *p)
--{
--	struct tm6000_fh  *fh = priv;
--
--	return videobuf_dqbuf(&fh->vb_vidq, p,
--				file->f_flags & O_NONBLOCK);
--}
--
--static int vidioc_streamon(struct file *file, void *priv, enum v4l2_buf_type i)
--{
--	struct tm6000_fh *fh = priv;
--	struct tm6000_core *dev = fh->dev;
--
--	if (fh->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
--		return -EINVAL;
--	if (i != fh->type)
--		return -EINVAL;
--
--	if (!res_get(dev, fh, false))
--		return -EBUSY;
--	return videobuf_streamon(&fh->vb_vidq);
--}
--
--static int vidioc_streamoff(struct file *file, void *priv, enum v4l2_buf_type i)
--{
--	struct tm6000_fh *fh = priv;
--	struct tm6000_core *dev = fh->dev;
--
--	if (fh->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
--		return -EINVAL;
--
--	if (i != fh->type)
--		return -EINVAL;
--
--	videobuf_streamoff(&fh->vb_vidq);
--	res_free(dev, fh);
--
--	return 0;
--}
--
--static int vidioc_s_std(struct file *file, void *priv, v4l2_std_id norm)
--{
--	int rc = 0;
--	struct tm6000_fh *fh = priv;
--	struct tm6000_core *dev = fh->dev;
--
--	dev->norm = norm;
--	rc = tm6000_init_analog_mode(dev);
--
--	fh->width  = dev->width;
--	fh->height = dev->height;
--
--	if (rc < 0)
--		return rc;
--
--	v4l2_device_call_all(&dev->v4l2_dev, 0, video, s_std, dev->norm);
--
--	return 0;
--}
--
--static int vidioc_g_std(struct file *file, void *priv, v4l2_std_id *norm)
--{
--	struct tm6000_fh *fh = priv;
--	struct tm6000_core *dev = fh->dev;
--
--	*norm = dev->norm;
--	return 0;
--}
--
--static const char *iname[] = {
--	[TM6000_INPUT_TV] = "Television",
--	[TM6000_INPUT_COMPOSITE1] = "Composite 1",
--	[TM6000_INPUT_COMPOSITE2] = "Composite 2",
--	[TM6000_INPUT_SVIDEO] = "S-Video",
--};
--
--static int vidioc_enum_input(struct file *file, void *priv,
--				struct v4l2_input *i)
--{
--	struct tm6000_fh   *fh = priv;
--	struct tm6000_core *dev = fh->dev;
--	unsigned int n;
--
--	n = i->index;
--	if (n >= 3)
--		return -EINVAL;
--
--	if (!dev->vinput[n].type)
--		return -EINVAL;
--
--	i->index = n;
--
--	if (dev->vinput[n].type == TM6000_INPUT_TV)
--		i->type = V4L2_INPUT_TYPE_TUNER;
--	else
--		i->type = V4L2_INPUT_TYPE_CAMERA;
--
--	strscpy(i->name, iname[dev->vinput[n].type], sizeof(i->name));
--
--	i->std = TM6000_STD;
--
--	return 0;
--}
--
--static int vidioc_g_input(struct file *file, void *priv, unsigned int *i)
--{
--	struct tm6000_fh   *fh = priv;
--	struct tm6000_core *dev = fh->dev;
--
--	*i = dev->input;
--
--	return 0;
--}
--
--static int vidioc_s_input(struct file *file, void *priv, unsigned int i)
--{
--	struct tm6000_fh   *fh = priv;
--	struct tm6000_core *dev = fh->dev;
--	int rc = 0;
--
--	if (i >= 3)
--		return -EINVAL;
--	if (!dev->vinput[i].type)
--		return -EINVAL;
--
--	dev->input = i;
--
--	rc = vidioc_s_std(file, priv, dev->norm);
--
--	return rc;
--}
--
--/* --- controls ---------------------------------------------- */
--
--static int tm6000_s_ctrl(struct v4l2_ctrl *ctrl)
--{
--	struct tm6000_core *dev = container_of(ctrl->handler, struct tm6000_core, ctrl_handler);
--	u8  val = ctrl->val;
--
--	switch (ctrl->id) {
--	case V4L2_CID_CONTRAST:
--		tm6000_set_reg(dev, TM6010_REQ07_R08_LUMA_CONTRAST_ADJ, val);
--		return 0;
--	case V4L2_CID_BRIGHTNESS:
--		tm6000_set_reg(dev, TM6010_REQ07_R09_LUMA_BRIGHTNESS_ADJ, val);
--		return 0;
--	case V4L2_CID_SATURATION:
--		tm6000_set_reg(dev, TM6010_REQ07_R0A_CHROMA_SATURATION_ADJ, val);
--		return 0;
--	case V4L2_CID_HUE:
--		tm6000_set_reg(dev, TM6010_REQ07_R0B_CHROMA_HUE_PHASE_ADJ, val);
+-	/* is it free? */
+-	if (vv->resources & bit) {
+-		DEB_D("locked! vv->resources:0x%02x, we want:0x%02x\n",
+-		      vv->resources, bit);
+-		/* no, someone else uses it */
 -		return 0;
 -	}
--	return -EINVAL;
+-	/* it's free, grab it */
+-	fh->resources |= bit;
+-	vv->resources |= bit;
+-	DEB_D("res: get 0x%02x, cur:0x%02x\n", bit, vv->resources);
+-	return 1;
 -}
 -
--static const struct v4l2_ctrl_ops tm6000_ctrl_ops = {
--	.s_ctrl = tm6000_s_ctrl,
--};
--
--static int tm6000_radio_s_ctrl(struct v4l2_ctrl *ctrl)
+-void saa7146_res_free(struct saa7146_fh *fh, unsigned int bits)
 -{
--	struct tm6000_core *dev = container_of(ctrl->handler,
--			struct tm6000_core, radio_ctrl_handler);
--	u8  val = ctrl->val;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
 -
--	switch (ctrl->id) {
--	case V4L2_CID_AUDIO_MUTE:
--		dev->ctl_mute = val;
--		tm6000_tvaudio_set_mute(dev, val);
--		return 0;
--	case V4L2_CID_AUDIO_VOLUME:
--		dev->ctl_volume = val;
--		tm6000_set_volume(dev, val);
--		return 0;
+-	BUG_ON((fh->resources & bits) != bits);
+-
+-	fh->resources &= ~bits;
+-	vv->resources &= ~bits;
+-	DEB_D("res: put 0x%02x, cur:0x%02x\n", bits, vv->resources);
+-}
+-
+-
+-/********************************************************************************/
+-/* common dma functions */
+-
+-void saa7146_dma_free(struct saa7146_dev *dev,struct videobuf_queue *q,
+-						struct saa7146_buf *buf)
+-{
+-	struct videobuf_dmabuf *dma=videobuf_to_dma(&buf->vb);
+-	DEB_EE("dev:%p, buf:%p\n", dev, buf);
+-
+-	videobuf_waiton(q, &buf->vb, 0, 0);
+-	videobuf_dma_unmap(q->dev, dma);
+-	videobuf_dma_free(dma);
+-	buf->vb.state = VIDEOBUF_NEEDS_INIT;
+-}
+-
+-
+-/********************************************************************************/
+-/* common buffer functions */
+-
+-int saa7146_buffer_queue(struct saa7146_dev *dev,
+-			 struct saa7146_dmaqueue *q,
+-			 struct saa7146_buf *buf)
+-{
+-	assert_spin_locked(&dev->slock);
+-	DEB_EE("dev:%p, dmaq:%p, buf:%p\n", dev, q, buf);
+-
+-	BUG_ON(!q);
+-
+-	if (NULL == q->curr) {
+-		q->curr = buf;
+-		DEB_D("immediately activating buffer %p\n", buf);
+-		buf->activate(dev,buf,NULL);
+-	} else {
+-		list_add_tail(&buf->vb.queue,&q->queue);
+-		buf->vb.state = VIDEOBUF_QUEUED;
+-		DEB_D("adding buffer %p to queue. (active buffer present)\n",
+-		      buf);
 -	}
--	return -EINVAL;
--}
--
--static const struct v4l2_ctrl_ops tm6000_radio_ctrl_ops = {
--	.s_ctrl = tm6000_radio_s_ctrl,
--};
--
--static int vidioc_g_tuner(struct file *file, void *priv,
--				struct v4l2_tuner *t)
--{
--	struct tm6000_fh   *fh  = priv;
--	struct tm6000_core *dev = fh->dev;
--
--	if (UNSET == dev->tuner_type)
--		return -ENOTTY;
--	if (0 != t->index)
--		return -EINVAL;
--
--	strscpy(t->name, "Television", sizeof(t->name));
--	t->type       = V4L2_TUNER_ANALOG_TV;
--	t->capability = V4L2_TUNER_CAP_NORM | V4L2_TUNER_CAP_STEREO;
--	t->rangehigh  = 0xffffffffUL;
--	t->rxsubchans = V4L2_TUNER_SUB_STEREO;
--
--	v4l2_device_call_all(&dev->v4l2_dev, 0, tuner, g_tuner, t);
--
--	t->audmode = dev->amode;
--
 -	return 0;
 -}
 -
--static int vidioc_s_tuner(struct file *file, void *priv,
--				const struct v4l2_tuner *t)
+-void saa7146_buffer_finish(struct saa7146_dev *dev,
+-			   struct saa7146_dmaqueue *q,
+-			   int state)
 -{
--	struct tm6000_fh   *fh  = priv;
--	struct tm6000_core *dev = fh->dev;
+-	assert_spin_locked(&dev->slock);
+-	DEB_EE("dev:%p, dmaq:%p, state:%d\n", dev, q, state);
+-	DEB_EE("q->curr:%p\n", q->curr);
 -
--	if (UNSET == dev->tuner_type)
--		return -ENOTTY;
--	if (0 != t->index)
--		return -EINVAL;
+-	/* finish current buffer */
+-	if (NULL == q->curr) {
+-		DEB_D("aiii. no current buffer\n");
+-		return;
+-	}
 -
--	if (t->audmode > V4L2_TUNER_MODE_STEREO)
--		dev->amode = V4L2_TUNER_MODE_STEREO;
--	else
--		dev->amode = t->audmode;
--	dprintk(dev, 3, "audio mode: %x\n", t->audmode);
+-	q->curr->vb.state = state;
+-	q->curr->vb.ts = ktime_get_ns();
+-	wake_up(&q->curr->vb.done);
 -
--	v4l2_device_call_all(&dev->v4l2_dev, 0, tuner, s_tuner, t);
--
--	return 0;
+-	q->curr = NULL;
 -}
 -
--static int vidioc_g_frequency(struct file *file, void *priv,
--				struct v4l2_frequency *f)
+-void saa7146_buffer_next(struct saa7146_dev *dev,
+-			 struct saa7146_dmaqueue *q, int vbi)
 -{
--	struct tm6000_fh   *fh  = priv;
--	struct tm6000_core *dev = fh->dev;
+-	struct saa7146_buf *buf,*next = NULL;
 -
--	if (UNSET == dev->tuner_type)
--		return -ENOTTY;
--	if (f->tuner)
--		return -EINVAL;
+-	BUG_ON(!q);
 -
--	f->frequency = dev->freq;
+-	DEB_INT("dev:%p, dmaq:%p, vbi:%d\n", dev, q, vbi);
 -
--	v4l2_device_call_all(&dev->v4l2_dev, 0, tuner, g_frequency, f);
+-	assert_spin_locked(&dev->slock);
+-	if (!list_empty(&q->queue)) {
+-		/* activate next one from queue */
+-		buf = list_entry(q->queue.next,struct saa7146_buf,vb.queue);
+-		list_del(&buf->vb.queue);
+-		if (!list_empty(&q->queue))
+-			next = list_entry(q->queue.next,struct saa7146_buf, vb.queue);
+-		q->curr = buf;
+-		DEB_INT("next buffer: buf:%p, prev:%p, next:%p\n",
+-			buf, q->queue.prev, q->queue.next);
+-		buf->activate(dev,buf,next);
+-	} else {
+-		DEB_INT("no next buffer. stopping.\n");
+-		if( 0 != vbi ) {
+-			/* turn off video-dma3 */
+-			saa7146_write(dev,MC1, MASK_20);
+-		} else {
+-			/* nothing to do -- just prevent next video-dma1 transfer
+-			   by lowering the protection address */
 -
--	return 0;
+-			// fixme: fix this for vflip != 0
+-
+-			saa7146_write(dev, PROT_ADDR1, 0);
+-			saa7146_write(dev, MC2, (MASK_02|MASK_18));
+-
+-			/* write the address of the rps-program */
+-			saa7146_write(dev, RPS_ADDR0, dev->d_rps0.dma_handle);
+-			/* turn on rps */
+-			saa7146_write(dev, MC1, (MASK_12 | MASK_28));
+-
+-/*
+-			printk("vdma%d.base_even:     0x%08x\n", 1,saa7146_read(dev,BASE_EVEN1));
+-			printk("vdma%d.base_odd:      0x%08x\n", 1,saa7146_read(dev,BASE_ODD1));
+-			printk("vdma%d.prot_addr:     0x%08x\n", 1,saa7146_read(dev,PROT_ADDR1));
+-			printk("vdma%d.base_page:     0x%08x\n", 1,saa7146_read(dev,BASE_PAGE1));
+-			printk("vdma%d.pitch:         0x%08x\n", 1,saa7146_read(dev,PITCH1));
+-			printk("vdma%d.num_line_byte: 0x%08x\n", 1,saa7146_read(dev,NUM_LINE_BYTE1));
+-*/
+-		}
+-		del_timer(&q->timeout);
+-	}
 -}
 -
--static int vidioc_s_frequency(struct file *file, void *priv,
--				const struct v4l2_frequency *f)
+-void saa7146_buffer_timeout(struct timer_list *t)
 -{
--	struct tm6000_fh   *fh  = priv;
--	struct tm6000_core *dev = fh->dev;
+-	struct saa7146_dmaqueue *q = from_timer(q, t, timeout);
+-	struct saa7146_dev *dev = q->dev;
+-	unsigned long flags;
 -
--	if (UNSET == dev->tuner_type)
--		return -ENOTTY;
--	if (f->tuner != 0)
--		return -EINVAL;
+-	DEB_EE("dev:%p, dmaq:%p\n", dev, q);
 -
--	dev->freq = f->frequency;
--	v4l2_device_call_all(&dev->v4l2_dev, 0, tuner, s_frequency, f);
+-	spin_lock_irqsave(&dev->slock,flags);
+-	if (q->curr) {
+-		DEB_D("timeout on %p\n", q->curr);
+-		saa7146_buffer_finish(dev,q,VIDEOBUF_ERROR);
+-	}
 -
--	return 0;
+-	/* we don't restart the transfer here like other drivers do. when
+-	   a streaming capture is disabled, the timeout function will be
+-	   called for the current buffer. if we activate the next buffer now,
+-	   we mess up our capture logic. if a timeout occurs on another buffer,
+-	   then something is seriously broken before, so no need to buffer the
+-	   next capture IMHO... */
+-/*
+-	saa7146_buffer_next(dev,q);
+-*/
+-	spin_unlock_irqrestore(&dev->slock,flags);
 -}
 -
--static int radio_g_tuner(struct file *file, void *priv,
--					struct v4l2_tuner *t)
--{
--	struct tm6000_fh *fh = file->private_data;
--	struct tm6000_core *dev = fh->dev;
+-/********************************************************************************/
+-/* file operations */
 -
--	if (0 != t->index)
--		return -EINVAL;
--
--	memset(t, 0, sizeof(*t));
--	strscpy(t->name, "Radio", sizeof(t->name));
--	t->type = V4L2_TUNER_RADIO;
--	t->capability = V4L2_TUNER_CAP_LOW | V4L2_TUNER_CAP_STEREO;
--	t->rxsubchans = V4L2_TUNER_SUB_STEREO;
--	t->audmode = V4L2_TUNER_MODE_STEREO;
--
--	v4l2_device_call_all(&dev->v4l2_dev, 0, tuner, g_tuner, t);
--
--	return 0;
--}
--
--static int radio_s_tuner(struct file *file, void *priv,
--					const struct v4l2_tuner *t)
--{
--	struct tm6000_fh *fh = file->private_data;
--	struct tm6000_core *dev = fh->dev;
--
--	if (0 != t->index)
--		return -EINVAL;
--	v4l2_device_call_all(&dev->v4l2_dev, 0, tuner, s_tuner, t);
--	return 0;
--}
--
--/* ------------------------------------------------------------------
--	File operations for the device
--   ------------------------------------------------------------------*/
--
--static int __tm6000_open(struct file *file)
+-static int fops_open(struct file *file)
 -{
 -	struct video_device *vdev = video_devdata(file);
--	struct tm6000_core *dev = video_drvdata(file);
--	struct tm6000_fh *fh;
--	enum v4l2_buf_type type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
--	int rc;
--	int radio = 0;
+-	struct saa7146_dev *dev = video_drvdata(file);
+-	struct saa7146_fh *fh = NULL;
+-	int result = 0;
 -
--	dprintk(dev, V4L2_DEBUG_OPEN, "tm6000: open called (dev=%s)\n",
--		video_device_node_name(vdev));
+-	DEB_EE("file:%p, dev:%s\n", file, video_device_node_name(vdev));
 -
--	switch (vdev->vfl_type) {
--	case VFL_TYPE_VIDEO:
--		type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
--		break;
--	case VFL_TYPE_VBI:
--		type = V4L2_BUF_TYPE_VBI_CAPTURE;
--		break;
--	case VFL_TYPE_RADIO:
--		radio = 1;
--		break;
--	default:
--		return -EINVAL;
+-	if (mutex_lock_interruptible(vdev->lock))
+-		return -ERESTARTSYS;
+-
+-	DEB_D("using: %p\n", dev);
+-
+-	/* check if an extension is registered */
+-	if( NULL == dev->ext ) {
+-		DEB_S("no extension registered for this device\n");
+-		result = -ENODEV;
+-		goto out;
 -	}
 -
--	/* If more than one user, mutex should be added */
--	dev->users++;
--
--	dprintk(dev, V4L2_DEBUG_OPEN, "open dev=%s type=%s users=%d\n",
--		video_device_node_name(vdev), v4l2_type_names[type],
--		dev->users);
--
--	/* allocate + initialize per filehandle data */
--	fh = kzalloc(sizeof(*fh), GFP_KERNEL);
+-	/* allocate per open data */
+-	fh = kzalloc(sizeof(*fh),GFP_KERNEL);
 -	if (NULL == fh) {
--		dev->users--;
--		return -ENOMEM;
+-		DEB_S("cannot allocate memory for per open data\n");
+-		result = -ENOMEM;
+-		goto out;
 -	}
 -
 -	v4l2_fh_init(&fh->fh, vdev);
--	file->private_data = fh;
--	fh->dev      = dev;
--	fh->radio    = radio;
--	dev->radio   = radio;
--	fh->type     = type;
--	dev->fourcc  = format[0].fourcc;
 -
--	fh->fmt      = format_by_fourcc(dev->fourcc);
+-	file->private_data = &fh->fh;
+-	fh->dev = dev;
 -
--	tm6000_get_std_res(dev);
--
--	fh->width = dev->width;
--	fh->height = dev->height;
--
--	dprintk(dev, V4L2_DEBUG_OPEN, "Open: fh=%p, dev=%p, dev->vidq=%p\n",
--		fh, dev, &dev->vidq);
--	dprintk(dev, V4L2_DEBUG_OPEN, "Open: list_empty queued=%d\n",
--		list_empty(&dev->vidq.queued));
--	dprintk(dev, V4L2_DEBUG_OPEN, "Open: list_empty active=%d\n",
--		list_empty(&dev->vidq.active));
--
--	/* initialize hardware on analog mode */
--	rc = tm6000_init_analog_mode(dev);
--	if (rc < 0) {
--		v4l2_fh_exit(&fh->fh);
--		kfree(fh);
--		return rc;
--	}
--
--	dev->mode = TM6000_MODE_ANALOG;
--
--	if (!fh->radio) {
--		videobuf_queue_vmalloc_init(&fh->vb_vidq, &tm6000_video_qops,
--				NULL, &dev->slock,
--				fh->type,
--				V4L2_FIELD_INTERLACED,
--				sizeof(struct tm6000_buffer), fh, &dev->lock);
+-	if (vdev->vfl_type == VFL_TYPE_VBI) {
+-		DEB_S("initializing vbi...\n");
+-		if (dev->ext_vv_data->capabilities & V4L2_CAP_VBI_CAPTURE)
+-			result = saa7146_vbi_uops.open(dev,file);
+-		if (dev->ext_vv_data->vbi_fops.open)
+-			dev->ext_vv_data->vbi_fops.open(file);
 -	} else {
--		dprintk(dev, V4L2_DEBUG_OPEN, "video_open: setting radio device\n");
--		tm6000_set_audio_rinput(dev);
--		v4l2_device_call_all(&dev->v4l2_dev, 0, tuner, s_radio);
--		tm6000_prepare_isoc(dev);
--		tm6000_start_thread(dev);
+-		DEB_S("initializing video...\n");
+-		result = saa7146_video_uops.open(dev,file);
 -	}
+-
+-	if (0 != result) {
+-		goto out;
+-	}
+-
+-	if( 0 == try_module_get(dev->ext->module)) {
+-		result = -EINVAL;
+-		goto out;
+-	}
+-
+-	result = 0;
 -	v4l2_fh_add(&fh->fh);
+-out:
+-	if (fh && result != 0) {
+-		kfree(fh);
+-		file->private_data = NULL;
+-	}
+-	mutex_unlock(vdev->lock);
+-	return result;
+-}
+-
+-static int fops_release(struct file *file)
+-{
+-	struct video_device *vdev = video_devdata(file);
+-	struct saa7146_fh  *fh  = file->private_data;
+-	struct saa7146_dev *dev = fh->dev;
+-
+-	DEB_EE("file:%p\n", file);
+-
+-	mutex_lock(vdev->lock);
+-
+-	if (vdev->vfl_type == VFL_TYPE_VBI) {
+-		if (dev->ext_vv_data->capabilities & V4L2_CAP_VBI_CAPTURE)
+-			saa7146_vbi_uops.release(dev,file);
+-		if (dev->ext_vv_data->vbi_fops.release)
+-			dev->ext_vv_data->vbi_fops.release(file);
+-	} else {
+-		saa7146_video_uops.release(dev,file);
+-	}
+-
+-	v4l2_fh_del(&fh->fh);
+-	v4l2_fh_exit(&fh->fh);
+-	module_put(dev->ext->module);
+-	file->private_data = NULL;
+-	kfree(fh);
+-
+-	mutex_unlock(vdev->lock);
 -
 -	return 0;
 -}
 -
--static int tm6000_open(struct file *file)
+-static int fops_mmap(struct file *file, struct vm_area_struct * vma)
 -{
 -	struct video_device *vdev = video_devdata(file);
+-	struct saa7146_fh *fh = file->private_data;
+-	struct videobuf_queue *q;
 -	int res;
 -
--	mutex_lock(vdev->lock);
--	res = __tm6000_open(file);
+-	switch (vdev->vfl_type) {
+-	case VFL_TYPE_VIDEO: {
+-		DEB_EE("V4L2_BUF_TYPE_VIDEO_CAPTURE: file:%p, vma:%p\n",
+-		       file, vma);
+-		q = &fh->video_q;
+-		break;
+-		}
+-	case VFL_TYPE_VBI: {
+-		DEB_EE("V4L2_BUF_TYPE_VBI_CAPTURE: file:%p, vma:%p\n",
+-		       file, vma);
+-		if (fh->dev->ext_vv_data->capabilities & V4L2_CAP_SLICED_VBI_OUTPUT)
+-			return -ENODEV;
+-		q = &fh->vbi_q;
+-		break;
+-		}
+-	default:
+-		BUG();
+-	}
+-
+-	if (mutex_lock_interruptible(vdev->lock))
+-		return -ERESTARTSYS;
+-	res = videobuf_mmap_mapper(q, vma);
 -	mutex_unlock(vdev->lock);
 -	return res;
 -}
 -
--static ssize_t
--tm6000_read(struct file *file, char __user *data, size_t count, loff_t *pos)
+-static __poll_t __fops_poll(struct file *file, struct poll_table_struct *wait)
 -{
--	struct tm6000_fh *fh = file->private_data;
--	struct tm6000_core *dev = fh->dev;
+-	struct video_device *vdev = video_devdata(file);
+-	struct saa7146_fh *fh = file->private_data;
+-	struct videobuf_buffer *buf = NULL;
+-	struct videobuf_queue *q;
+-	__poll_t res = v4l2_ctrl_poll(file, wait);
 -
--	if (fh->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) {
--		int res;
+-	DEB_EE("file:%p, poll:%p\n", file, wait);
 -
--		if (!res_get(fh->dev, fh, true))
--			return -EBUSY;
--
--		if (mutex_lock_interruptible(&dev->lock))
--			return -ERESTARTSYS;
--		res = videobuf_read_stream(&fh->vb_vidq, data, count, pos, 0,
--					file->f_flags & O_NONBLOCK);
--		mutex_unlock(&dev->lock);
--		return res;
+-	if (vdev->vfl_type == VFL_TYPE_VBI) {
+-		if (fh->dev->ext_vv_data->capabilities & V4L2_CAP_SLICED_VBI_OUTPUT)
+-			return res | EPOLLOUT | EPOLLWRNORM;
+-		if( 0 == fh->vbi_q.streaming )
+-			return res | videobuf_poll_stream(file, &fh->vbi_q, wait);
+-		q = &fh->vbi_q;
+-	} else {
+-		DEB_D("using video queue\n");
+-		q = &fh->video_q;
 -	}
--	return 0;
--}
 -
--static __poll_t
--__tm6000_poll(struct file *file, struct poll_table_struct *wait)
--{
--	__poll_t req_events = poll_requested_events(wait);
--	struct tm6000_fh        *fh = file->private_data;
--	struct tm6000_buffer    *buf;
--	__poll_t res = 0;
+-	if (!list_empty(&q->stream))
+-		buf = list_entry(q->stream.next, struct videobuf_buffer, stream);
 -
--	if (v4l2_event_pending(&fh->fh))
--		res = EPOLLPRI;
--	else if (req_events & EPOLLPRI)
--		poll_wait(file, &fh->fh.wait, wait);
--	if (V4L2_BUF_TYPE_VIDEO_CAPTURE != fh->type)
+-	if (!buf) {
+-		DEB_D("buf == NULL!\n");
 -		return res | EPOLLERR;
--
--	if (!!is_res_streaming(fh->dev, fh))
--		return res | EPOLLERR;
--
--	if (!is_res_read(fh->dev, fh)) {
--		/* streaming capture */
--		if (list_empty(&fh->vb_vidq.stream))
--			return res | EPOLLERR;
--		buf = list_entry(fh->vb_vidq.stream.next, struct tm6000_buffer, vb.stream);
--		poll_wait(file, &buf->vb.done, wait);
--		if (buf->vb.state == VIDEOBUF_DONE ||
--		    buf->vb.state == VIDEOBUF_ERROR)
--			return res | EPOLLIN | EPOLLRDNORM;
--	} else if (req_events & (EPOLLIN | EPOLLRDNORM)) {
--		/* read() capture */
--		return res | videobuf_poll_stream(file, &fh->vb_vidq, wait);
 -	}
+-
+-	poll_wait(file, &buf->done, wait);
+-	if (buf->state == VIDEOBUF_DONE || buf->state == VIDEOBUF_ERROR) {
+-		DEB_D("poll succeeded!\n");
+-		return res | EPOLLIN | EPOLLRDNORM;
+-	}
+-
+-	DEB_D("nothing to poll for, buf->state:%d\n", buf->state);
 -	return res;
 -}
 -
--static __poll_t tm6000_poll(struct file *file, struct poll_table_struct *wait)
+-static __poll_t fops_poll(struct file *file, struct poll_table_struct *wait)
 -{
--	struct tm6000_fh *fh = file->private_data;
--	struct tm6000_core *dev = fh->dev;
+-	struct video_device *vdev = video_devdata(file);
 -	__poll_t res;
 -
--	mutex_lock(&dev->lock);
--	res = __tm6000_poll(file, wait);
--	mutex_unlock(&dev->lock);
+-	mutex_lock(vdev->lock);
+-	res = __fops_poll(file, wait);
+-	mutex_unlock(vdev->lock);
 -	return res;
 -}
 -
--static int tm6000_release(struct file *file)
+-static ssize_t fops_read(struct file *file, char __user *data, size_t count, loff_t *ppos)
 -{
--	struct tm6000_fh         *fh = file->private_data;
--	struct tm6000_core      *dev = fh->dev;
--	struct video_device    *vdev = video_devdata(file);
+-	struct video_device *vdev = video_devdata(file);
+-	struct saa7146_fh *fh = file->private_data;
+-	int ret;
 -
--	dprintk(dev, V4L2_DEBUG_OPEN, "tm6000: close called (dev=%s, users=%d)\n",
--		video_device_node_name(vdev), dev->users);
--
--	mutex_lock(&dev->lock);
--	dev->users--;
--
--	res_free(dev, fh);
--
--	if (!dev->users) {
--		tm6000_uninit_isoc(dev);
--
--		/* Stop interrupt USB pipe */
--		tm6000_ir_int_stop(dev);
--
--		usb_reset_configuration(dev->udev);
--
--		if (dev->int_in.endp)
--			usb_set_interface(dev->udev,
--					dev->isoc_in.bInterfaceNumber, 2);
--		else
--			usb_set_interface(dev->udev,
--					dev->isoc_in.bInterfaceNumber, 0);
--
--		/* Start interrupt USB pipe */
--		tm6000_ir_int_start(dev);
--
--		if (!fh->radio)
--			videobuf_mmap_free(&fh->vb_vidq);
+-	switch (vdev->vfl_type) {
+-	case VFL_TYPE_VIDEO:
+-/*
+-		DEB_EE("V4L2_BUF_TYPE_VIDEO_CAPTURE: file:%p, data:%p, count:%lun",
+-		       file, data, (unsigned long)count);
+-*/
+-		return saa7146_video_uops.read(file,data,count,ppos);
+-	case VFL_TYPE_VBI:
+-/*
+-		DEB_EE("V4L2_BUF_TYPE_VBI_CAPTURE: file:%p, data:%p, count:%lu\n",
+-		       file, data, (unsigned long)count);
+-*/
+-		if (fh->dev->ext_vv_data->capabilities & V4L2_CAP_VBI_CAPTURE) {
+-			if (mutex_lock_interruptible(vdev->lock))
+-				return -ERESTARTSYS;
+-			ret = saa7146_vbi_uops.read(file, data, count, ppos);
+-			mutex_unlock(vdev->lock);
+-			return ret;
+-		}
+-		return -EINVAL;
+-	default:
+-		BUG();
 -	}
--	v4l2_fh_del(&fh->fh);
--	v4l2_fh_exit(&fh->fh);
--	kfree(fh);
--	mutex_unlock(&dev->lock);
--
--	return 0;
 -}
 -
--static int tm6000_mmap(struct file *file, struct vm_area_struct * vma)
+-static ssize_t fops_write(struct file *file, const char __user *data, size_t count, loff_t *ppos)
 -{
--	struct tm6000_fh *fh = file->private_data;
--	struct tm6000_core *dev = fh->dev;
--	int res;
+-	struct video_device *vdev = video_devdata(file);
+-	struct saa7146_fh *fh = file->private_data;
+-	int ret;
 -
--	if (mutex_lock_interruptible(&dev->lock))
--		return -ERESTARTSYS;
--	res = videobuf_mmap_mapper(&fh->vb_vidq, vma);
--	mutex_unlock(&dev->lock);
--	return res;
+-	switch (vdev->vfl_type) {
+-	case VFL_TYPE_VIDEO:
+-		return -EINVAL;
+-	case VFL_TYPE_VBI:
+-		if (fh->dev->ext_vv_data->vbi_fops.write) {
+-			if (mutex_lock_interruptible(vdev->lock))
+-				return -ERESTARTSYS;
+-			ret = fh->dev->ext_vv_data->vbi_fops.write(file, data, count, ppos);
+-			mutex_unlock(vdev->lock);
+-			return ret;
+-		}
+-		return -EINVAL;
+-	default:
+-		BUG();
+-	}
 -}
 -
--static const struct v4l2_file_operations tm6000_fops = {
--	.owner = THIS_MODULE,
--	.open = tm6000_open,
--	.release = tm6000_release,
--	.unlocked_ioctl = video_ioctl2, /* V4L2 ioctl handler */
--	.read = tm6000_read,
--	.poll = tm6000_poll,
--	.mmap = tm6000_mmap,
--};
--
--static const struct v4l2_ioctl_ops video_ioctl_ops = {
--	.vidioc_querycap          = vidioc_querycap,
--	.vidioc_enum_fmt_vid_cap  = vidioc_enum_fmt_vid_cap,
--	.vidioc_g_fmt_vid_cap     = vidioc_g_fmt_vid_cap,
--	.vidioc_try_fmt_vid_cap   = vidioc_try_fmt_vid_cap,
--	.vidioc_s_fmt_vid_cap     = vidioc_s_fmt_vid_cap,
--	.vidioc_s_std             = vidioc_s_std,
--	.vidioc_g_std             = vidioc_g_std,
--	.vidioc_enum_input        = vidioc_enum_input,
--	.vidioc_g_input           = vidioc_g_input,
--	.vidioc_s_input           = vidioc_s_input,
--	.vidioc_g_tuner           = vidioc_g_tuner,
--	.vidioc_s_tuner           = vidioc_s_tuner,
--	.vidioc_g_frequency       = vidioc_g_frequency,
--	.vidioc_s_frequency       = vidioc_s_frequency,
--	.vidioc_streamon          = vidioc_streamon,
--	.vidioc_streamoff         = vidioc_streamoff,
--	.vidioc_reqbufs           = vidioc_reqbufs,
--	.vidioc_querybuf          = vidioc_querybuf,
--	.vidioc_qbuf              = vidioc_qbuf,
--	.vidioc_dqbuf             = vidioc_dqbuf,
--	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
--	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
--};
--
--static struct video_device tm6000_template = {
--	.name		= "tm6000",
--	.fops           = &tm6000_fops,
--	.ioctl_ops      = &video_ioctl_ops,
--	.release	= video_device_release_empty,
--	.tvnorms        = TM6000_STD,
--};
--
--static const struct v4l2_file_operations radio_fops = {
+-static const struct v4l2_file_operations video_fops =
+-{
 -	.owner		= THIS_MODULE,
--	.open		= tm6000_open,
--	.poll		= v4l2_ctrl_poll,
--	.release	= tm6000_release,
+-	.open		= fops_open,
+-	.release	= fops_release,
+-	.read		= fops_read,
+-	.write		= fops_write,
+-	.poll		= fops_poll,
+-	.mmap		= fops_mmap,
 -	.unlocked_ioctl	= video_ioctl2,
 -};
 -
--static const struct v4l2_ioctl_ops radio_ioctl_ops = {
--	.vidioc_querycap	= vidioc_querycap,
--	.vidioc_g_tuner		= radio_g_tuner,
--	.vidioc_s_tuner		= radio_s_tuner,
--	.vidioc_g_frequency	= vidioc_g_frequency,
--	.vidioc_s_frequency	= vidioc_s_frequency,
--	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
--	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
--};
--
--static struct video_device tm6000_radio_template = {
--	.name			= "tm6000",
--	.fops			= &radio_fops,
--	.ioctl_ops		= &radio_ioctl_ops,
--};
--
--/* -----------------------------------------------------------------
-- *	Initialization and module stuff
-- * ------------------------------------------------------------------
-- */
--
--static void vdev_init(struct tm6000_core *dev,
--		struct video_device *vfd,
--		const struct video_device
--		*template, const char *type_name)
+-static void vv_callback(struct saa7146_dev *dev, unsigned long status)
 -{
--	*vfd = *template;
--	vfd->v4l2_dev = &dev->v4l2_dev;
--	vfd->release = video_device_release_empty;
--	vfd->lock = &dev->lock;
+-	u32 isr = status;
 -
--	snprintf(vfd->name, sizeof(vfd->name), "%s %s", dev->name, type_name);
+-	DEB_INT("dev:%p, isr:0x%08x\n", dev, (u32)status);
 -
--	video_set_drvdata(vfd, dev);
--}
--
--int tm6000_v4l2_register(struct tm6000_core *dev)
--{
--	int ret = 0;
--
--	v4l2_ctrl_handler_init(&dev->ctrl_handler, 6);
--	v4l2_ctrl_handler_init(&dev->radio_ctrl_handler, 2);
--	v4l2_ctrl_new_std(&dev->radio_ctrl_handler, &tm6000_radio_ctrl_ops,
--			V4L2_CID_AUDIO_MUTE, 0, 1, 1, 0);
--	v4l2_ctrl_new_std(&dev->radio_ctrl_handler, &tm6000_radio_ctrl_ops,
--			V4L2_CID_AUDIO_VOLUME, -15, 15, 1, 0);
--	v4l2_ctrl_new_std(&dev->ctrl_handler, &tm6000_ctrl_ops,
--			V4L2_CID_BRIGHTNESS, 0, 255, 1, 54);
--	v4l2_ctrl_new_std(&dev->ctrl_handler, &tm6000_ctrl_ops,
--			V4L2_CID_CONTRAST, 0, 255, 1, 119);
--	v4l2_ctrl_new_std(&dev->ctrl_handler, &tm6000_ctrl_ops,
--			V4L2_CID_SATURATION, 0, 255, 1, 112);
--	v4l2_ctrl_new_std(&dev->ctrl_handler, &tm6000_ctrl_ops,
--			V4L2_CID_HUE, -128, 127, 1, 0);
--	v4l2_ctrl_add_handler(&dev->ctrl_handler,
--			&dev->radio_ctrl_handler, NULL, false);
--
--	if (dev->radio_ctrl_handler.error)
--		ret = dev->radio_ctrl_handler.error;
--	if (!ret && dev->ctrl_handler.error)
--		ret = dev->ctrl_handler.error;
--	if (ret)
--		goto free_ctrl;
--
--	vdev_init(dev, &dev->vfd, &tm6000_template, "video");
--
--	dev->vfd.ctrl_handler = &dev->ctrl_handler;
--	dev->vfd.device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING |
--			       V4L2_CAP_READWRITE;
--	if (dev->tuner_type != TUNER_ABSENT)
--		dev->vfd.device_caps |= V4L2_CAP_TUNER;
--
--	/* init video dma queues */
--	INIT_LIST_HEAD(&dev->vidq.active);
--	INIT_LIST_HEAD(&dev->vidq.queued);
--
--	ret = video_register_device(&dev->vfd, VFL_TYPE_VIDEO, video_nr);
--
--	if (ret < 0) {
--		printk(KERN_INFO "%s: can't register video device\n",
--		       dev->name);
--		goto free_ctrl;
+-	if (0 != (isr & (MASK_27))) {
+-		DEB_INT("irq: RPS0 (0x%08x)\n", isr);
+-		saa7146_video_uops.irq_done(dev,isr);
 -	}
 -
--	printk(KERN_INFO "%s: registered device %s\n",
--	       dev->name, video_device_node_name(&dev->vfd));
+-	if (0 != (isr & (MASK_28))) {
+-		u32 mc2 = saa7146_read(dev, MC2);
+-		if( 0 != (mc2 & MASK_15)) {
+-			DEB_INT("irq: RPS1 vbi workaround (0x%08x)\n", isr);
+-			wake_up(&dev->vv_data->vbi_wq);
+-			saa7146_write(dev,MC2, MASK_31);
+-			return;
+-		}
+-		DEB_INT("irq: RPS1 (0x%08x)\n", isr);
+-		saa7146_vbi_uops.irq_done(dev,isr);
+-	}
+-}
 -
--	if (dev->caps.has_radio) {
--		vdev_init(dev, &dev->radio_dev, &tm6000_radio_template,
--							   "radio");
--		dev->radio_dev.ctrl_handler = &dev->radio_ctrl_handler;
--		dev->radio_dev.device_caps = V4L2_CAP_RADIO | V4L2_CAP_TUNER;
--		ret = video_register_device(&dev->radio_dev, VFL_TYPE_RADIO,
--					    radio_nr);
--		if (ret < 0) {
--			printk(KERN_INFO "%s: can't register radio device\n",
--			       dev->name);
--			goto unreg_video;
+-static const struct v4l2_ctrl_ops saa7146_ctrl_ops = {
+-	.s_ctrl = saa7146_s_ctrl,
+-};
+-
+-int saa7146_vv_init(struct saa7146_dev* dev, struct saa7146_ext_vv *ext_vv)
+-{
+-	struct v4l2_ctrl_handler *hdl = &dev->ctrl_handler;
+-	struct v4l2_pix_format *fmt;
+-	struct v4l2_vbi_format *vbi;
+-	struct saa7146_vv *vv;
+-	int err;
+-
+-	err = v4l2_device_register(&dev->pci->dev, &dev->v4l2_dev);
+-	if (err)
+-		return err;
+-
+-	v4l2_ctrl_handler_init(hdl, 6);
+-	v4l2_ctrl_new_std(hdl, &saa7146_ctrl_ops,
+-		V4L2_CID_BRIGHTNESS, 0, 255, 1, 128);
+-	v4l2_ctrl_new_std(hdl, &saa7146_ctrl_ops,
+-		V4L2_CID_CONTRAST, 0, 127, 1, 64);
+-	v4l2_ctrl_new_std(hdl, &saa7146_ctrl_ops,
+-		V4L2_CID_SATURATION, 0, 127, 1, 64);
+-	v4l2_ctrl_new_std(hdl, &saa7146_ctrl_ops,
+-		V4L2_CID_VFLIP, 0, 1, 1, 0);
+-	v4l2_ctrl_new_std(hdl, &saa7146_ctrl_ops,
+-		V4L2_CID_HFLIP, 0, 1, 1, 0);
+-	if (hdl->error) {
+-		err = hdl->error;
+-		v4l2_ctrl_handler_free(hdl);
+-		v4l2_device_unregister(&dev->v4l2_dev);
+-		return err;
+-	}
+-	dev->v4l2_dev.ctrl_handler = hdl;
+-
+-	vv = kzalloc(sizeof(struct saa7146_vv), GFP_KERNEL);
+-	if (vv == NULL) {
+-		ERR("out of memory. aborting.\n");
+-		v4l2_ctrl_handler_free(hdl);
+-		v4l2_device_unregister(&dev->v4l2_dev);
+-		return -ENOMEM;
+-	}
+-	ext_vv->vid_ops = saa7146_video_ioctl_ops;
+-	ext_vv->vbi_ops = saa7146_vbi_ioctl_ops;
+-	ext_vv->core_ops = &saa7146_video_ioctl_ops;
+-
+-	DEB_EE("dev:%p\n", dev);
+-
+-	/* set default values for video parts of the saa7146 */
+-	saa7146_write(dev, BCS_CTRL, 0x80400040);
+-
+-	/* enable video-port pins */
+-	saa7146_write(dev, MC1, (MASK_10 | MASK_26));
+-
+-	/* save per-device extension data (one extension can
+-	   handle different devices that might need different
+-	   configuration data) */
+-	dev->ext_vv_data = ext_vv;
+-
+-	vv->d_clipping.cpu_addr =
+-		dma_alloc_coherent(&dev->pci->dev, SAA7146_CLIPPING_MEM,
+-				   &vv->d_clipping.dma_handle, GFP_KERNEL);
+-	if( NULL == vv->d_clipping.cpu_addr ) {
+-		ERR("out of memory. aborting.\n");
+-		kfree(vv);
+-		v4l2_ctrl_handler_free(hdl);
+-		v4l2_device_unregister(&dev->v4l2_dev);
+-		return -ENOMEM;
+-	}
+-
+-	saa7146_video_uops.init(dev,vv);
+-	if (dev->ext_vv_data->capabilities & V4L2_CAP_VBI_CAPTURE)
+-		saa7146_vbi_uops.init(dev,vv);
+-
+-	vv->ov_fb.fmt.width = vv->standard->h_max_out;
+-	vv->ov_fb.fmt.height = vv->standard->v_max_out;
+-	vv->ov_fb.fmt.pixelformat = V4L2_PIX_FMT_RGB565;
+-	vv->ov_fb.fmt.bytesperline = 2 * vv->ov_fb.fmt.width;
+-	vv->ov_fb.fmt.sizeimage = vv->ov_fb.fmt.bytesperline * vv->ov_fb.fmt.height;
+-	vv->ov_fb.fmt.colorspace = V4L2_COLORSPACE_SRGB;
+-
+-	fmt = &vv->video_fmt;
+-	fmt->width = 384;
+-	fmt->height = 288;
+-	fmt->pixelformat = V4L2_PIX_FMT_BGR24;
+-	fmt->field = V4L2_FIELD_ANY;
+-	fmt->colorspace = V4L2_COLORSPACE_SMPTE170M;
+-	fmt->bytesperline = 3 * fmt->width;
+-	fmt->sizeimage = fmt->bytesperline * fmt->height;
+-
+-	vbi = &vv->vbi_fmt;
+-	vbi->sampling_rate	= 27000000;
+-	vbi->offset		= 248; /* todo */
+-	vbi->samples_per_line	= 720 * 2;
+-	vbi->sample_format	= V4L2_PIX_FMT_GREY;
+-
+-	/* fixme: this only works for PAL */
+-	vbi->start[0] = 5;
+-	vbi->count[0] = 16;
+-	vbi->start[1] = 312;
+-	vbi->count[1] = 16;
+-
+-	timer_setup(&vv->vbi_read_timeout, NULL, 0);
+-
+-	vv->ov_fb.capability = V4L2_FBUF_CAP_LIST_CLIPPING;
+-	vv->ov_fb.flags = V4L2_FBUF_FLAG_PRIMARY;
+-	dev->vv_data = vv;
+-	dev->vv_callback = &vv_callback;
+-
+-	return 0;
+-}
+-EXPORT_SYMBOL_GPL(saa7146_vv_init);
+-
+-int saa7146_vv_release(struct saa7146_dev* dev)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	DEB_EE("dev:%p\n", dev);
+-
+-	v4l2_device_unregister(&dev->v4l2_dev);
+-	dma_free_coherent(&dev->pci->dev, SAA7146_CLIPPING_MEM,
+-			  vv->d_clipping.cpu_addr, vv->d_clipping.dma_handle);
+-	v4l2_ctrl_handler_free(&dev->ctrl_handler);
+-	kfree(vv);
+-	dev->vv_data = NULL;
+-	dev->vv_callback = NULL;
+-
+-	return 0;
+-}
+-EXPORT_SYMBOL_GPL(saa7146_vv_release);
+-
+-int saa7146_register_device(struct video_device *vfd, struct saa7146_dev *dev,
+-			    char *name, int type)
+-{
+-	int err;
+-	int i;
+-
+-	DEB_EE("dev:%p, name:'%s', type:%d\n", dev, name, type);
+-
+-	vfd->fops = &video_fops;
+-	if (type == VFL_TYPE_VIDEO)
+-		vfd->ioctl_ops = &dev->ext_vv_data->vid_ops;
+-	else
+-		vfd->ioctl_ops = &dev->ext_vv_data->vbi_ops;
+-	vfd->release = video_device_release_empty;
+-	vfd->lock = &dev->v4l2_lock;
+-	vfd->v4l2_dev = &dev->v4l2_dev;
+-	vfd->tvnorms = 0;
+-	for (i = 0; i < dev->ext_vv_data->num_stds; i++)
+-		vfd->tvnorms |= dev->ext_vv_data->stds[i].id;
+-	strscpy(vfd->name, name, sizeof(vfd->name));
+-	vfd->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_VIDEO_OVERLAY |
+-			   V4L2_CAP_READWRITE | V4L2_CAP_STREAMING;
+-	vfd->device_caps |= dev->ext_vv_data->capabilities;
+-	if (type == VFL_TYPE_VIDEO)
+-		vfd->device_caps &=
+-			~(V4L2_CAP_VBI_CAPTURE | V4L2_CAP_SLICED_VBI_OUTPUT);
+-	else
+-		vfd->device_caps &=
+-			~(V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_VIDEO_OVERLAY | V4L2_CAP_AUDIO);
+-	video_set_drvdata(vfd, dev);
+-
+-	err = video_register_device(vfd, type, -1);
+-	if (err < 0) {
+-		ERR("cannot register v4l2 device. skipping.\n");
+-		return err;
+-	}
+-
+-	pr_info("%s: registered device %s [v4l2]\n",
+-		dev->name, video_device_node_name(vfd));
+-	return 0;
+-}
+-EXPORT_SYMBOL_GPL(saa7146_register_device);
+-
+-int saa7146_unregister_device(struct video_device *vfd, struct saa7146_dev *dev)
+-{
+-	DEB_EE("dev:%p\n", dev);
+-
+-	video_unregister_device(vfd);
+-	return 0;
+-}
+-EXPORT_SYMBOL_GPL(saa7146_unregister_device);
+-
+-static int __init saa7146_vv_init_module(void)
+-{
+-	return 0;
+-}
+-
+-
+-static void __exit saa7146_vv_cleanup_module(void)
+-{
+-}
+-
+-module_init(saa7146_vv_init_module);
+-module_exit(saa7146_vv_cleanup_module);
+-
+-MODULE_AUTHOR("Michael Hunold <michael@mihu.de>");
+-MODULE_DESCRIPTION("video4linux driver for saa7146-based hardware");
+-MODULE_LICENSE("GPL");
+diff --git a/drivers/staging/media/deprecated/saa7146/common/saa7146_hlp.c b/drivers/staging/media/deprecated/saa7146/common/saa7146_hlp.c
+deleted file mode 100644
+index b1222a4cfa4a..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/common/saa7146_hlp.c
++++ /dev/null
+@@ -1,1046 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
+-#include <linux/kernel.h>
+-#include <linux/export.h>
+-#include "saa7146_vv.h"
+-
+-static void calculate_output_format_register(struct saa7146_dev* saa, u32 palette, u32* clip_format)
+-{
+-	/* clear out the necessary bits */
+-	*clip_format &= 0x0000ffff;
+-	/* set these bits new */
+-	*clip_format |=  (( ((palette&0xf00)>>8) << 30) | ((palette&0x00f) << 24) | (((palette&0x0f0)>>4) << 16));
+-}
+-
+-static void calculate_hps_source_and_sync(struct saa7146_dev *dev, int source, int sync, u32* hps_ctrl)
+-{
+-	*hps_ctrl &= ~(MASK_30 | MASK_31 | MASK_28);
+-	*hps_ctrl |= (source << 30) | (sync << 28);
+-}
+-
+-static void calculate_hxo_and_hyo(struct saa7146_vv *vv, u32* hps_h_scale, u32* hps_ctrl)
+-{
+-	int hyo = 0, hxo = 0;
+-
+-	hyo = vv->standard->v_offset;
+-	hxo = vv->standard->h_offset;
+-
+-	*hps_h_scale	&= ~(MASK_B0 | 0xf00);
+-	*hps_h_scale	|= (hxo <<  0);
+-
+-	*hps_ctrl	&= ~(MASK_W0 | MASK_B2);
+-	*hps_ctrl	|= (hyo << 12);
+-}
+-
+-/* helper functions for the calculation of the horizontal- and vertical
+-   scaling registers, clip-format-register etc ...
+-   these functions take pointers to the (most-likely read-out
+-   original-values) and manipulate them according to the requested
+-   changes.
+-*/
+-
+-/* hps_coeff used for CXY and CXUV; scale 1/1 -> scale 1/64 */
+-static struct {
+-	u16 hps_coeff;
+-	u16 weight_sum;
+-} hps_h_coeff_tab [] = {
+-	{0x00,   2}, {0x02,   4}, {0x00,   4}, {0x06,   8}, {0x02,   8},
+-	{0x08,   8}, {0x00,   8}, {0x1E,  16}, {0x0E,   8}, {0x26,   8},
+-	{0x06,   8}, {0x42,   8}, {0x02,   8}, {0x80,   8}, {0x00,   8},
+-	{0xFE,  16}, {0xFE,   8}, {0x7E,   8}, {0x7E,   8}, {0x3E,   8},
+-	{0x3E,   8}, {0x1E,   8}, {0x1E,   8}, {0x0E,   8}, {0x0E,   8},
+-	{0x06,   8}, {0x06,   8}, {0x02,   8}, {0x02,   8}, {0x00,   8},
+-	{0x00,   8}, {0xFE,  16}, {0xFE,   8}, {0xFE,   8}, {0xFE,   8},
+-	{0xFE,   8}, {0xFE,   8}, {0xFE,   8}, {0xFE,   8}, {0xFE,   8},
+-	{0xFE,   8}, {0xFE,   8}, {0xFE,   8}, {0xFE,   8}, {0xFE,   8},
+-	{0xFE,   8}, {0xFE,   8}, {0xFE,   8}, {0xFE,   8}, {0x7E,   8},
+-	{0x7E,   8}, {0x3E,   8}, {0x3E,   8}, {0x1E,   8}, {0x1E,   8},
+-	{0x0E,   8}, {0x0E,   8}, {0x06,   8}, {0x06,   8}, {0x02,   8},
+-	{0x02,   8}, {0x00,   8}, {0x00,   8}, {0xFE,  16}
+-};
+-
+-/* table of attenuation values for horizontal scaling */
+-static u8 h_attenuation[] = { 1, 2, 4, 8, 2, 4, 8, 16, 0};
+-
+-/* calculate horizontal scale registers */
+-static int calculate_h_scale_registers(struct saa7146_dev *dev,
+-	int in_x, int out_x, int flip_lr,
+-	u32* hps_ctrl, u32* hps_v_gain, u32* hps_h_prescale, u32* hps_h_scale)
+-{
+-	/* horizontal prescaler */
+-	u32 dcgx = 0, xpsc = 0, xacm = 0, cxy = 0, cxuv = 0;
+-	/* horizontal scaler */
+-	u32 xim = 0, xp = 0, xsci =0;
+-	/* vertical scale & gain */
+-	u32 pfuv = 0;
+-
+-	/* helper variables */
+-	u32 h_atten = 0, i = 0;
+-
+-	if ( 0 == out_x ) {
+-		return -EINVAL;
+-	}
+-
+-	/* mask out vanity-bit */
+-	*hps_ctrl &= ~MASK_29;
+-
+-	/* calculate prescale-(xspc)-value:	[n   .. 1/2) : 1
+-						[1/2 .. 1/3) : 2
+-						[1/3 .. 1/4) : 3
+-						...		*/
+-	if (in_x > out_x) {
+-		xpsc = in_x / out_x;
+-	}
+-	else {
+-		/* zooming */
+-		xpsc = 1;
+-	}
+-
+-	/* if flip_lr-bit is set, number of pixels after
+-	   horizontal prescaling must be < 384 */
+-	if ( 0 != flip_lr ) {
+-
+-		/* set vanity bit */
+-		*hps_ctrl |= MASK_29;
+-
+-		while (in_x / xpsc >= 384 )
+-			xpsc++;
+-	}
+-	/* if zooming is wanted, number of pixels after
+-	   horizontal prescaling must be < 768 */
+-	else {
+-		while ( in_x / xpsc >= 768 )
+-			xpsc++;
+-	}
+-
+-	/* maximum prescale is 64 (p.69) */
+-	if ( xpsc > 64 )
+-		xpsc = 64;
+-
+-	/* keep xacm clear*/
+-	xacm = 0;
+-
+-	/* set horizontal filter parameters (CXY = CXUV) */
+-	cxy = hps_h_coeff_tab[( (xpsc - 1) < 63 ? (xpsc - 1) : 63 )].hps_coeff;
+-	cxuv = cxy;
+-
+-	/* calculate and set horizontal fine scale (xsci) */
+-
+-	/* bypass the horizontal scaler ? */
+-	if ( (in_x == out_x) && ( 1 == xpsc ) )
+-		xsci = 0x400;
+-	else
+-		xsci = ( (1024 * in_x) / (out_x * xpsc) ) + xpsc;
+-
+-	/* set start phase for horizontal fine scale (xp) to 0 */
+-	xp = 0;
+-
+-	/* set xim, if we bypass the horizontal scaler */
+-	if ( 0x400 == xsci )
+-		xim = 1;
+-	else
+-		xim = 0;
+-
+-	/* if the prescaler is bypassed, enable horizontal
+-	   accumulation mode (xacm) and clear dcgx */
+-	if( 1 == xpsc ) {
+-		xacm = 1;
+-		dcgx = 0;
+-	} else {
+-		xacm = 0;
+-		/* get best match in the table of attenuations
+-		   for horizontal scaling */
+-		h_atten = hps_h_coeff_tab[( (xpsc - 1) < 63 ? (xpsc - 1) : 63 )].weight_sum;
+-
+-		for (i = 0; h_attenuation[i] != 0; i++) {
+-			if (h_attenuation[i] >= h_atten)
+-				break;
 -		}
 -
--		printk(KERN_INFO "%s: registered device %s\n",
--		       dev->name, video_device_node_name(&dev->radio_dev));
+-		dcgx = i;
 -	}
 -
--	printk(KERN_INFO "Trident TVMaster TM5600/TM6000/TM6010 USB2 board (Load status: %d)\n", ret);
--	return ret;
+-	/* the horizontal scaling increment controls the UV filter
+-	   to reduce the bandwidth to improve the display quality,
+-	   so set it ... */
+-	if ( xsci == 0x400)
+-		pfuv = 0x00;
+-	else if ( xsci < 0x600)
+-		pfuv = 0x01;
+-	else if ( xsci < 0x680)
+-		pfuv = 0x11;
+-	else if ( xsci < 0x700)
+-		pfuv = 0x22;
+-	else
+-		pfuv = 0x33;
 -
--unreg_video:
--	video_unregister_device(&dev->vfd);
--free_ctrl:
--	v4l2_ctrl_handler_free(&dev->ctrl_handler);
--	v4l2_ctrl_handler_free(&dev->radio_ctrl_handler);
--	return ret;
--}
 -
--int tm6000_v4l2_unregister(struct tm6000_core *dev)
--{
--	video_unregister_device(&dev->vfd);
+-	*hps_v_gain  &= MASK_W0|MASK_B2;
+-	*hps_v_gain  |= (pfuv << 24);
 -
--	/* if URB buffers are still allocated free them now */
--	tm6000_free_urb_buffers(dev);
+-	*hps_h_scale	&= ~(MASK_W1 | 0xf000);
+-	*hps_h_scale	|= (xim << 31) | (xp << 24) | (xsci << 12);
 -
--	video_unregister_device(&dev->radio_dev);
+-	*hps_h_prescale	|= (dcgx << 27) | ((xpsc-1) << 18) | (xacm << 17) | (cxy << 8) | (cxuv << 0);
+-
 -	return 0;
 -}
 -
--int tm6000_v4l2_exit(void)
+-static struct {
+-	u16 hps_coeff;
+-	u16 weight_sum;
+-} hps_v_coeff_tab [] = {
+- {0x0100,   2},  {0x0102,   4},  {0x0300,   4},  {0x0106,   8},  {0x0502,   8},
+- {0x0708,   8},  {0x0F00,   8},  {0x011E,  16},  {0x110E,  16},  {0x1926,  16},
+- {0x3906,  16},  {0x3D42,  16},  {0x7D02,  16},  {0x7F80,  16},  {0xFF00,  16},
+- {0x01FE,  32},  {0x01FE,  32},  {0x817E,  32},  {0x817E,  32},  {0xC13E,  32},
+- {0xC13E,  32},  {0xE11E,  32},  {0xE11E,  32},  {0xF10E,  32},  {0xF10E,  32},
+- {0xF906,  32},  {0xF906,  32},  {0xFD02,  32},  {0xFD02,  32},  {0xFF00,  32},
+- {0xFF00,  32},  {0x01FE,  64},  {0x01FE,  64},  {0x01FE,  64},  {0x01FE,  64},
+- {0x01FE,  64},  {0x01FE,  64},  {0x01FE,  64},  {0x01FE,  64},  {0x01FE,  64},
+- {0x01FE,  64},  {0x01FE,  64},  {0x01FE,  64},  {0x01FE,  64},  {0x01FE,  64},
+- {0x01FE,  64},  {0x01FE,  64},  {0x01FE,  64},  {0x01FE,  64},  {0x817E,  64},
+- {0x817E,  64},  {0xC13E,  64},  {0xC13E,  64},  {0xE11E,  64},  {0xE11E,  64},
+- {0xF10E,  64},  {0xF10E,  64},  {0xF906,  64},  {0xF906,  64},  {0xFD02,  64},
+- {0xFD02,  64},  {0xFF00,  64},  {0xFF00,  64},  {0x01FE, 128}
+-};
+-
+-/* table of attenuation values for vertical scaling */
+-static u16 v_attenuation[] = { 2, 4, 8, 16, 32, 64, 128, 256, 0};
+-
+-/* calculate vertical scale registers */
+-static int calculate_v_scale_registers(struct saa7146_dev *dev, enum v4l2_field field,
+-	int in_y, int out_y, u32* hps_v_scale, u32* hps_v_gain)
 -{
+-	int lpi = 0;
+-
+-	/* vertical scaling */
+-	u32 yacm = 0, ysci = 0, yacl = 0, ypo = 0, ype = 0;
+-	/* vertical scale & gain */
+-	u32 dcgy = 0, cya_cyb = 0;
+-
+-	/* helper variables */
+-	u32 v_atten = 0, i = 0;
+-
+-	/* error, if vertical zooming */
+-	if ( in_y < out_y ) {
+-		return -EINVAL;
+-	}
+-
+-	/* linear phase interpolation may be used
+-	   if scaling is between 1 and 1/2 (both fields used)
+-	   or scaling is between 1/2 and 1/4 (if only one field is used) */
+-
+-	if (V4L2_FIELD_HAS_BOTH(field)) {
+-		if( 2*out_y >= in_y) {
+-			lpi = 1;
+-		}
+-	} else if (field == V4L2_FIELD_TOP
+-		|| field == V4L2_FIELD_ALTERNATE
+-		|| field == V4L2_FIELD_BOTTOM) {
+-		if( 4*out_y >= in_y ) {
+-			lpi = 1;
+-		}
+-		out_y *= 2;
+-	}
+-	if( 0 != lpi ) {
+-
+-		yacm = 0;
+-		yacl = 0;
+-		cya_cyb = 0x00ff;
+-
+-		/* calculate scaling increment */
+-		if ( in_y > out_y )
+-			ysci = ((1024 * in_y) / (out_y + 1)) - 1024;
+-		else
+-			ysci = 0;
+-
+-		dcgy = 0;
+-
+-		/* calculate ype and ypo */
+-		ype = ysci / 16;
+-		ypo = ype + (ysci / 64);
+-
+-	} else {
+-		yacm = 1;
+-
+-		/* calculate scaling increment */
+-		ysci = (((10 * 1024 * (in_y - out_y - 1)) / in_y) + 9) / 10;
+-
+-		/* calculate ype and ypo */
+-		ypo = ype = ((ysci + 15) / 16);
+-
+-		/* the sequence length interval (yacl) has to be set according
+-		   to the prescale value, e.g.	[n   .. 1/2) : 0
+-						[1/2 .. 1/3) : 1
+-						[1/3 .. 1/4) : 2
+-						... */
+-		if ( ysci < 512) {
+-			yacl = 0;
+-		} else {
+-			yacl = ( ysci / (1024 - ysci) );
+-		}
+-
+-		/* get filter coefficients for cya, cyb from table hps_v_coeff_tab */
+-		cya_cyb = hps_v_coeff_tab[ (yacl < 63 ? yacl : 63 ) ].hps_coeff;
+-
+-		/* get best match in the table of attenuations for vertical scaling */
+-		v_atten = hps_v_coeff_tab[ (yacl < 63 ? yacl : 63 ) ].weight_sum;
+-
+-		for (i = 0; v_attenuation[i] != 0; i++) {
+-			if (v_attenuation[i] >= v_atten)
+-				break;
+-		}
+-
+-		dcgy = i;
+-	}
+-
+-	/* ypo and ype swapped in spec ? */
+-	*hps_v_scale	|= (yacm << 31) | (ysci << 21) | (yacl << 15) | (ypo << 8 ) | (ype << 1);
+-
+-	*hps_v_gain	&= ~(MASK_W0|MASK_B2);
+-	*hps_v_gain	|= (dcgy << 16) | (cya_cyb << 0);
+-
 -	return 0;
 -}
 -
--module_param(video_nr, int, 0);
--MODULE_PARM_DESC(video_nr, "Allow changing video device number");
+-/* simple bubble-sort algorithm with duplicate elimination */
+-static int sort_and_eliminate(u32* values, int* count)
+-{
+-	int low = 0, high = 0, top = 0;
+-	int cur = 0, next = 0;
 -
--module_param_named(debug, tm6000_debug, int, 0444);
--MODULE_PARM_DESC(debug, "activates debug info");
+-	/* sanity checks */
+-	if( (0 > *count) || (NULL == values) ) {
+-		return -EINVAL;
+-	}
 -
--module_param(vid_limit, int, 0644);
--MODULE_PARM_DESC(vid_limit, "capture memory limit in megabytes");
+-	/* bubble sort the first @count items of the array @values */
+-	for( top = *count; top > 0; top--) {
+-		for( low = 0, high = 1; high < top; low++, high++) {
+-			if( values[low] > values[high] )
+-				swap(values[low], values[high]);
+-		}
+-	}
 -
--module_param(keep_urb, bool, 0);
--MODULE_PARM_DESC(keep_urb, "Keep urb buffers allocated even when the device is closed by the user");
-diff --git a/drivers/staging/media/deprecated/tm6000/tm6000.h b/drivers/staging/media/deprecated/tm6000/tm6000.h
-deleted file mode 100644
-index c08c95312739..000000000000
---- a/drivers/staging/media/deprecated/tm6000/tm6000.h
-+++ /dev/null
-@@ -1,396 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
+-	/* remove duplicate items */
+-	for( cur = 0, next = 1; next < *count; next++) {
+-		if( values[cur] != values[next])
+-			values[++cur] = values[next];
+-	}
+-
+-	*count = cur + 1;
+-
+-	return 0;
+-}
+-
+-static void calculate_clipping_registers_rect(struct saa7146_dev *dev, struct saa7146_fh *fh,
+-	struct saa7146_video_dma *vdma2, u32* clip_format, u32* arbtr_ctrl, enum v4l2_field field)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-	__le32 *clipping = vv->d_clipping.cpu_addr;
+-
+-	int width = vv->ov.win.w.width;
+-	int height =  vv->ov.win.w.height;
+-	int clipcount = vv->ov.nclips;
+-
+-	u32 line_list[32];
+-	u32 pixel_list[32];
+-	int numdwords = 0;
+-
+-	int i = 0, j = 0;
+-	int cnt_line = 0, cnt_pixel = 0;
+-
+-	int x[32], y[32], w[32], h[32];
+-
+-	/* clear out memory */
+-	memset(&line_list[0],  0x00, sizeof(u32)*32);
+-	memset(&pixel_list[0], 0x00, sizeof(u32)*32);
+-	memset(clipping,  0x00, SAA7146_CLIPPING_MEM);
+-
+-	/* fill the line and pixel-lists */
+-	for(i = 0; i < clipcount; i++) {
+-		int l = 0, r = 0, t = 0, b = 0;
+-
+-		x[i] = vv->ov.clips[i].c.left;
+-		y[i] = vv->ov.clips[i].c.top;
+-		w[i] = vv->ov.clips[i].c.width;
+-		h[i] = vv->ov.clips[i].c.height;
+-
+-		if( w[i] < 0) {
+-			x[i] += w[i]; w[i] = -w[i];
+-		}
+-		if( h[i] < 0) {
+-			y[i] += h[i]; h[i] = -h[i];
+-		}
+-		if( x[i] < 0) {
+-			w[i] += x[i]; x[i] = 0;
+-		}
+-		if( y[i] < 0) {
+-			h[i] += y[i]; y[i] = 0;
+-		}
+-		if( 0 != vv->vflip ) {
+-			y[i] = height - y[i] - h[i];
+-		}
+-
+-		l = x[i];
+-		r = x[i]+w[i];
+-		t = y[i];
+-		b = y[i]+h[i];
+-
+-		/* insert left/right coordinates */
+-		pixel_list[ 2*i   ] = min_t(int, l, width);
+-		pixel_list[(2*i)+1] = min_t(int, r, width);
+-		/* insert top/bottom coordinates */
+-		line_list[ 2*i   ] = min_t(int, t, height);
+-		line_list[(2*i)+1] = min_t(int, b, height);
+-	}
+-
+-	/* sort and eliminate lists */
+-	cnt_line = cnt_pixel = 2*clipcount;
+-	sort_and_eliminate( &pixel_list[0], &cnt_pixel );
+-	sort_and_eliminate( &line_list[0], &cnt_line );
+-
+-	/* calculate the number of used u32s */
+-	numdwords = max_t(int, (cnt_line+1), (cnt_pixel+1))*2;
+-	numdwords = max_t(int, 4, numdwords);
+-	numdwords = min_t(int, 64, numdwords);
+-
+-	/* fill up cliptable */
+-	for(i = 0; i < cnt_pixel; i++) {
+-		clipping[2*i] |= cpu_to_le32(pixel_list[i] << 16);
+-	}
+-	for(i = 0; i < cnt_line; i++) {
+-		clipping[(2*i)+1] |= cpu_to_le32(line_list[i] << 16);
+-	}
+-
+-	/* fill up cliptable with the display infos */
+-	for(j = 0; j < clipcount; j++) {
+-
+-		for(i = 0; i < cnt_pixel; i++) {
+-
+-			if( x[j] < 0)
+-				x[j] = 0;
+-
+-			if( pixel_list[i] < (x[j] + w[j])) {
+-
+-				if ( pixel_list[i] >= x[j] ) {
+-					clipping[2*i] |= cpu_to_le32(1 << j);
+-				}
+-			}
+-		}
+-		for(i = 0; i < cnt_line; i++) {
+-
+-			if( y[j] < 0)
+-				y[j] = 0;
+-
+-			if( line_list[i] < (y[j] + h[j]) ) {
+-
+-				if( line_list[i] >= y[j] ) {
+-					clipping[(2*i)+1] |= cpu_to_le32(1 << j);
+-				}
+-			}
+-		}
+-	}
+-
+-	/* adjust arbitration control register */
+-	*arbtr_ctrl &= 0xffff00ff;
+-	*arbtr_ctrl |= 0x00001c00;
+-
+-	vdma2->base_even	= vv->d_clipping.dma_handle;
+-	vdma2->base_odd		= vv->d_clipping.dma_handle;
+-	vdma2->prot_addr	= vv->d_clipping.dma_handle+((sizeof(u32))*(numdwords));
+-	vdma2->base_page	= 0x04;
+-	vdma2->pitch		= 0x00;
+-	vdma2->num_line_byte	= (0 << 16 | (sizeof(u32))*(numdwords-1) );
+-
+-	/* set clipping-mode. this depends on the field(s) used */
+-	*clip_format &= 0xfffffff7;
+-	if (V4L2_FIELD_HAS_BOTH(field)) {
+-		*clip_format |= 0x00000008;
+-	} else {
+-		*clip_format |= 0x00000000;
+-	}
+-}
+-
+-/* disable clipping */
+-static void saa7146_disable_clipping(struct saa7146_dev *dev)
+-{
+-	u32 clip_format	= saa7146_read(dev, CLIP_FORMAT_CTRL);
+-
+-	/* mask out relevant bits (=lower word)*/
+-	clip_format &= MASK_W1;
+-
+-	/* upload clipping-registers*/
+-	saa7146_write(dev, CLIP_FORMAT_CTRL,clip_format);
+-	saa7146_write(dev, MC2, (MASK_05 | MASK_21));
+-
+-	/* disable video dma2 */
+-	saa7146_write(dev, MC1, MASK_21);
+-}
+-
+-static void saa7146_set_clipping_rect(struct saa7146_fh *fh)
+-{
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	enum v4l2_field field = vv->ov.win.field;
+-	struct	saa7146_video_dma vdma2;
+-	u32 clip_format;
+-	u32 arbtr_ctrl;
+-
+-	/* check clipcount, disable clipping if clipcount == 0*/
+-	if (vv->ov.nclips == 0) {
+-		saa7146_disable_clipping(dev);
+-		return;
+-	}
+-
+-	clip_format = saa7146_read(dev, CLIP_FORMAT_CTRL);
+-	arbtr_ctrl = saa7146_read(dev, PCI_BT_V1);
+-
+-	calculate_clipping_registers_rect(dev, fh, &vdma2, &clip_format, &arbtr_ctrl, field);
+-
+-	/* set clipping format */
+-	clip_format &= 0xffff0008;
+-	clip_format |= (SAA7146_CLIPPING_RECT << 4);
+-
+-	/* prepare video dma2 */
+-	saa7146_write(dev, BASE_EVEN2,		vdma2.base_even);
+-	saa7146_write(dev, BASE_ODD2,		vdma2.base_odd);
+-	saa7146_write(dev, PROT_ADDR2,		vdma2.prot_addr);
+-	saa7146_write(dev, BASE_PAGE2,		vdma2.base_page);
+-	saa7146_write(dev, PITCH2,		vdma2.pitch);
+-	saa7146_write(dev, NUM_LINE_BYTE2,	vdma2.num_line_byte);
+-
+-	/* prepare the rest */
+-	saa7146_write(dev, CLIP_FORMAT_CTRL,clip_format);
+-	saa7146_write(dev, PCI_BT_V1, arbtr_ctrl);
+-
+-	/* upload clip_control-register, clipping-registers, enable video dma2 */
+-	saa7146_write(dev, MC2, (MASK_05 | MASK_21 | MASK_03 | MASK_19));
+-	saa7146_write(dev, MC1, (MASK_05 | MASK_21));
+-}
+-
+-static void saa7146_set_window(struct saa7146_dev *dev, int width, int height, enum v4l2_field field)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	int source = vv->current_hps_source;
+-	int sync = vv->current_hps_sync;
+-
+-	u32 hps_v_scale = 0, hps_v_gain  = 0, hps_ctrl = 0, hps_h_prescale = 0, hps_h_scale = 0;
+-
+-	/* set vertical scale */
+-	hps_v_scale = 0; /* all bits get set by the function-call */
+-	hps_v_gain  = 0; /* fixme: saa7146_read(dev, HPS_V_GAIN);*/
+-	calculate_v_scale_registers(dev, field, vv->standard->v_field*2, height, &hps_v_scale, &hps_v_gain);
+-
+-	/* set horizontal scale */
+-	hps_ctrl	= 0;
+-	hps_h_prescale	= 0; /* all bits get set in the function */
+-	hps_h_scale	= 0;
+-	calculate_h_scale_registers(dev, vv->standard->h_pixels, width, vv->hflip, &hps_ctrl, &hps_v_gain, &hps_h_prescale, &hps_h_scale);
+-
+-	/* set hyo and hxo */
+-	calculate_hxo_and_hyo(vv, &hps_h_scale, &hps_ctrl);
+-	calculate_hps_source_and_sync(dev, source, sync, &hps_ctrl);
+-
+-	/* write out new register contents */
+-	saa7146_write(dev, HPS_V_SCALE,	hps_v_scale);
+-	saa7146_write(dev, HPS_V_GAIN,	hps_v_gain);
+-	saa7146_write(dev, HPS_CTRL,	hps_ctrl);
+-	saa7146_write(dev, HPS_H_PRESCALE,hps_h_prescale);
+-	saa7146_write(dev, HPS_H_SCALE,	hps_h_scale);
+-
+-	/* upload shadow-ram registers */
+-	saa7146_write(dev, MC2, (MASK_05 | MASK_06 | MASK_21 | MASK_22) );
+-}
+-
+-/* calculate the new memory offsets for a desired position */
+-static void saa7146_set_position(struct saa7146_dev *dev, int w_x, int w_y, int w_height, enum v4l2_field field, u32 pixelformat)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct saa7146_format *sfmt = saa7146_format_by_fourcc(dev, pixelformat);
+-
+-	int b_depth = vv->ov_fmt->depth;
+-	int b_bpl = vv->ov_fb.fmt.bytesperline;
+-	/* The unsigned long cast is to remove a 64-bit compile warning since
+-	   it looks like a 64-bit address is cast to a 32-bit value, even
+-	   though the base pointer is really a 32-bit physical address that
+-	   goes into a 32-bit DMA register.
+-	   FIXME: might not work on some 64-bit platforms, but see the FIXME
+-	   in struct v4l2_framebuffer (videodev2.h) for that.
+-	 */
+-	u32 base = (u32)(unsigned long)vv->ov_fb.base;
+-
+-	struct	saa7146_video_dma vdma1;
+-
+-	/* calculate memory offsets for picture, look if we shall top-down-flip */
+-	vdma1.pitch	= 2*b_bpl;
+-	if ( 0 == vv->vflip ) {
+-		vdma1.base_even = base + (w_y * (vdma1.pitch/2)) + (w_x * (b_depth / 8));
+-		vdma1.base_odd  = vdma1.base_even + (vdma1.pitch / 2);
+-		vdma1.prot_addr = vdma1.base_even + (w_height * (vdma1.pitch / 2));
+-	}
+-	else {
+-		vdma1.base_even = base + ((w_y+w_height) * (vdma1.pitch/2)) + (w_x * (b_depth / 8));
+-		vdma1.base_odd  = vdma1.base_even - (vdma1.pitch / 2);
+-		vdma1.prot_addr = vdma1.base_odd - (w_height * (vdma1.pitch / 2));
+-	}
+-
+-	if (V4L2_FIELD_HAS_BOTH(field)) {
+-	} else if (field == V4L2_FIELD_ALTERNATE) {
+-		/* fixme */
+-		vdma1.base_odd = vdma1.prot_addr;
+-		vdma1.pitch /= 2;
+-	} else if (field == V4L2_FIELD_TOP) {
+-		vdma1.base_odd = vdma1.prot_addr;
+-		vdma1.pitch /= 2;
+-	} else if (field == V4L2_FIELD_BOTTOM) {
+-		vdma1.base_odd = vdma1.base_even;
+-		vdma1.base_even = vdma1.prot_addr;
+-		vdma1.pitch /= 2;
+-	}
+-
+-	if ( 0 != vv->vflip ) {
+-		vdma1.pitch *= -1;
+-	}
+-
+-	vdma1.base_page = sfmt->swap;
+-	vdma1.num_line_byte = (vv->standard->v_field<<16)+vv->standard->h_pixels;
+-
+-	saa7146_write_out_dma(dev, 1, &vdma1);
+-}
+-
+-static void saa7146_set_output_format(struct saa7146_dev *dev, unsigned long palette)
+-{
+-	u32 clip_format = saa7146_read(dev, CLIP_FORMAT_CTRL);
+-
+-	/* call helper function */
+-	calculate_output_format_register(dev,palette,&clip_format);
+-
+-	/* update the hps registers */
+-	saa7146_write(dev, CLIP_FORMAT_CTRL, clip_format);
+-	saa7146_write(dev, MC2, (MASK_05 | MASK_21));
+-}
+-
+-/* select input-source */
+-void saa7146_set_hps_source_and_sync(struct saa7146_dev *dev, int source, int sync)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-	u32 hps_ctrl = 0;
+-
+-	/* read old state */
+-	hps_ctrl = saa7146_read(dev, HPS_CTRL);
+-
+-	hps_ctrl &= ~( MASK_31 | MASK_30 | MASK_28 );
+-	hps_ctrl |= (source << 30) | (sync << 28);
+-
+-	/* write back & upload register */
+-	saa7146_write(dev, HPS_CTRL, hps_ctrl);
+-	saa7146_write(dev, MC2, (MASK_05 | MASK_21));
+-
+-	vv->current_hps_source = source;
+-	vv->current_hps_sync = sync;
+-}
+-EXPORT_SYMBOL_GPL(saa7146_set_hps_source_and_sync);
+-
+-int saa7146_enable_overlay(struct saa7146_fh *fh)
+-{
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	saa7146_set_window(dev, vv->ov.win.w.width, vv->ov.win.w.height, vv->ov.win.field);
+-	saa7146_set_position(dev, vv->ov.win.w.left, vv->ov.win.w.top, vv->ov.win.w.height, vv->ov.win.field, vv->ov_fmt->pixelformat);
+-	saa7146_set_output_format(dev, vv->ov_fmt->trans);
+-	saa7146_set_clipping_rect(fh);
+-
+-	/* enable video dma1 */
+-	saa7146_write(dev, MC1, (MASK_06 | MASK_22));
+-	return 0;
+-}
+-
+-void saa7146_disable_overlay(struct saa7146_fh *fh)
+-{
+-	struct saa7146_dev *dev = fh->dev;
+-
+-	/* disable clipping + video dma1 */
+-	saa7146_disable_clipping(dev);
+-	saa7146_write(dev, MC1, MASK_22);
+-}
+-
+-void saa7146_write_out_dma(struct saa7146_dev* dev, int which, struct saa7146_video_dma* vdma)
+-{
+-	int where = 0;
+-
+-	if( which < 1 || which > 3) {
+-		return;
+-	}
+-
+-	/* calculate starting address */
+-	where  = (which-1)*0x18;
+-
+-	saa7146_write(dev, where,	vdma->base_odd);
+-	saa7146_write(dev, where+0x04,	vdma->base_even);
+-	saa7146_write(dev, where+0x08,	vdma->prot_addr);
+-	saa7146_write(dev, where+0x0c,	vdma->pitch);
+-	saa7146_write(dev, where+0x10,	vdma->base_page);
+-	saa7146_write(dev, where+0x14,	vdma->num_line_byte);
+-
+-	/* upload */
+-	saa7146_write(dev, MC2, (MASK_02<<(which-1))|(MASK_18<<(which-1)));
 -/*
-- * tm6000.h - driver for TM5600/TM6000/TM6010 USB video capture devices
-- *
-- * Copyright (c) 2006-2007 Mauro Carvalho Chehab <mchehab@kernel.org>
-- *
-- * Copyright (c) 2007 Michel Ludwig <michel.ludwig@gmail.com>
-- *	- DVB-T support
-- */
+-	printk("vdma%d.base_even:     0x%08x\n", which,vdma->base_even);
+-	printk("vdma%d.base_odd:      0x%08x\n", which,vdma->base_odd);
+-	printk("vdma%d.prot_addr:     0x%08x\n", which,vdma->prot_addr);
+-	printk("vdma%d.base_page:     0x%08x\n", which,vdma->base_page);
+-	printk("vdma%d.pitch:         0x%08x\n", which,vdma->pitch);
+-	printk("vdma%d.num_line_byte: 0x%08x\n", which,vdma->num_line_byte);
+-*/
+-}
 -
--#include <linux/videodev2.h>
--#include <media/v4l2-common.h>
--#include <media/videobuf-vmalloc.h>
--#include "tm6000-usb-isoc.h"
--#include <linux/i2c.h>
--#include <linux/mutex.h>
--#include <media/v4l2-device.h>
+-static int calculate_video_dma_grab_packed(struct saa7146_dev* dev, struct saa7146_buf *buf)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct saa7146_video_dma vdma1;
+-
+-	struct saa7146_format *sfmt = saa7146_format_by_fourcc(dev,buf->fmt->pixelformat);
+-
+-	int width = buf->fmt->width;
+-	int height = buf->fmt->height;
+-	int bytesperline = buf->fmt->bytesperline;
+-	enum v4l2_field field = buf->fmt->field;
+-
+-	int depth = sfmt->depth;
+-
+-	DEB_CAP("[size=%dx%d,fields=%s]\n",
+-		width, height, v4l2_field_names[field]);
+-
+-	if( bytesperline != 0) {
+-		vdma1.pitch = bytesperline*2;
+-	} else {
+-		vdma1.pitch = (width*depth*2)/8;
+-	}
+-	vdma1.num_line_byte	= ((vv->standard->v_field<<16) + vv->standard->h_pixels);
+-	vdma1.base_page		= buf->pt[0].dma | ME1 | sfmt->swap;
+-
+-	if( 0 != vv->vflip ) {
+-		vdma1.prot_addr	= buf->pt[0].offset;
+-		vdma1.base_even	= buf->pt[0].offset+(vdma1.pitch/2)*height;
+-		vdma1.base_odd	= vdma1.base_even - (vdma1.pitch/2);
+-	} else {
+-		vdma1.base_even	= buf->pt[0].offset;
+-		vdma1.base_odd	= vdma1.base_even + (vdma1.pitch/2);
+-		vdma1.prot_addr	= buf->pt[0].offset+(vdma1.pitch/2)*height;
+-	}
+-
+-	if (V4L2_FIELD_HAS_BOTH(field)) {
+-	} else if (field == V4L2_FIELD_ALTERNATE) {
+-		/* fixme */
+-		if ( vv->last_field == V4L2_FIELD_TOP ) {
+-			vdma1.base_odd	= vdma1.prot_addr;
+-			vdma1.pitch /= 2;
+-		} else if ( vv->last_field == V4L2_FIELD_BOTTOM ) {
+-			vdma1.base_odd	= vdma1.base_even;
+-			vdma1.base_even = vdma1.prot_addr;
+-			vdma1.pitch /= 2;
+-		}
+-	} else if (field == V4L2_FIELD_TOP) {
+-		vdma1.base_odd	= vdma1.prot_addr;
+-		vdma1.pitch /= 2;
+-	} else if (field == V4L2_FIELD_BOTTOM) {
+-		vdma1.base_odd	= vdma1.base_even;
+-		vdma1.base_even = vdma1.prot_addr;
+-		vdma1.pitch /= 2;
+-	}
+-
+-	if( 0 != vv->vflip ) {
+-		vdma1.pitch *= -1;
+-	}
+-
+-	saa7146_write_out_dma(dev, 1, &vdma1);
+-	return 0;
+-}
+-
+-static int calc_planar_422(struct saa7146_vv *vv, struct saa7146_buf *buf, struct saa7146_video_dma *vdma2, struct saa7146_video_dma *vdma3)
+-{
+-	int height = buf->fmt->height;
+-	int width = buf->fmt->width;
+-
+-	vdma2->pitch	= width;
+-	vdma3->pitch	= width;
+-
+-	/* fixme: look at bytesperline! */
+-
+-	if( 0 != vv->vflip ) {
+-		vdma2->prot_addr	= buf->pt[1].offset;
+-		vdma2->base_even	= ((vdma2->pitch/2)*height)+buf->pt[1].offset;
+-		vdma2->base_odd		= vdma2->base_even - (vdma2->pitch/2);
+-
+-		vdma3->prot_addr	= buf->pt[2].offset;
+-		vdma3->base_even	= ((vdma3->pitch/2)*height)+buf->pt[2].offset;
+-		vdma3->base_odd		= vdma3->base_even - (vdma3->pitch/2);
+-	} else {
+-		vdma3->base_even	= buf->pt[2].offset;
+-		vdma3->base_odd		= vdma3->base_even + (vdma3->pitch/2);
+-		vdma3->prot_addr	= (vdma3->pitch/2)*height+buf->pt[2].offset;
+-
+-		vdma2->base_even	= buf->pt[1].offset;
+-		vdma2->base_odd		= vdma2->base_even + (vdma2->pitch/2);
+-		vdma2->prot_addr	= (vdma2->pitch/2)*height+buf->pt[1].offset;
+-	}
+-
+-	return 0;
+-}
+-
+-static int calc_planar_420(struct saa7146_vv *vv, struct saa7146_buf *buf, struct saa7146_video_dma *vdma2, struct saa7146_video_dma *vdma3)
+-{
+-	int height = buf->fmt->height;
+-	int width = buf->fmt->width;
+-
+-	vdma2->pitch	= width/2;
+-	vdma3->pitch	= width/2;
+-
+-	if( 0 != vv->vflip ) {
+-		vdma2->prot_addr	= buf->pt[2].offset;
+-		vdma2->base_even	= ((vdma2->pitch/2)*height)+buf->pt[2].offset;
+-		vdma2->base_odd		= vdma2->base_even - (vdma2->pitch/2);
+-
+-		vdma3->prot_addr	= buf->pt[1].offset;
+-		vdma3->base_even	= ((vdma3->pitch/2)*height)+buf->pt[1].offset;
+-		vdma3->base_odd		= vdma3->base_even - (vdma3->pitch/2);
+-
+-	} else {
+-		vdma3->base_even	= buf->pt[2].offset;
+-		vdma3->base_odd		= vdma3->base_even + (vdma3->pitch);
+-		vdma3->prot_addr	= (vdma3->pitch/2)*height+buf->pt[2].offset;
+-
+-		vdma2->base_even	= buf->pt[1].offset;
+-		vdma2->base_odd		= vdma2->base_even + (vdma2->pitch);
+-		vdma2->prot_addr	= (vdma2->pitch/2)*height+buf->pt[1].offset;
+-	}
+-	return 0;
+-}
+-
+-static int calculate_video_dma_grab_planar(struct saa7146_dev* dev, struct saa7146_buf *buf)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct saa7146_video_dma vdma1;
+-	struct saa7146_video_dma vdma2;
+-	struct saa7146_video_dma vdma3;
+-
+-	struct saa7146_format *sfmt = saa7146_format_by_fourcc(dev,buf->fmt->pixelformat);
+-
+-	int width = buf->fmt->width;
+-	int height = buf->fmt->height;
+-	enum v4l2_field field = buf->fmt->field;
+-
+-	BUG_ON(0 == buf->pt[0].dma);
+-	BUG_ON(0 == buf->pt[1].dma);
+-	BUG_ON(0 == buf->pt[2].dma);
+-
+-	DEB_CAP("[size=%dx%d,fields=%s]\n",
+-		width, height, v4l2_field_names[field]);
+-
+-	/* fixme: look at bytesperline! */
+-
+-	/* fixme: what happens for user space buffers here?. The offsets are
+-	   most likely wrong, this version here only works for page-aligned
+-	   buffers, modifications to the pagetable-functions are necessary...*/
+-
+-	vdma1.pitch		= width*2;
+-	vdma1.num_line_byte	= ((vv->standard->v_field<<16) + vv->standard->h_pixels);
+-	vdma1.base_page		= buf->pt[0].dma | ME1;
+-
+-	if( 0 != vv->vflip ) {
+-		vdma1.prot_addr	= buf->pt[0].offset;
+-		vdma1.base_even	= ((vdma1.pitch/2)*height)+buf->pt[0].offset;
+-		vdma1.base_odd	= vdma1.base_even - (vdma1.pitch/2);
+-	} else {
+-		vdma1.base_even	= buf->pt[0].offset;
+-		vdma1.base_odd	= vdma1.base_even + (vdma1.pitch/2);
+-		vdma1.prot_addr	= (vdma1.pitch/2)*height+buf->pt[0].offset;
+-	}
+-
+-	vdma2.num_line_byte	= 0; /* unused */
+-	vdma2.base_page		= buf->pt[1].dma | ME1;
+-
+-	vdma3.num_line_byte	= 0; /* unused */
+-	vdma3.base_page		= buf->pt[2].dma | ME1;
+-
+-	switch( sfmt->depth ) {
+-		case 12: {
+-			calc_planar_420(vv,buf,&vdma2,&vdma3);
+-			break;
+-		}
+-		case 16: {
+-			calc_planar_422(vv,buf,&vdma2,&vdma3);
+-			break;
+-		}
+-		default: {
+-			return -1;
+-		}
+-	}
+-
+-	if (V4L2_FIELD_HAS_BOTH(field)) {
+-	} else if (field == V4L2_FIELD_ALTERNATE) {
+-		/* fixme */
+-		vdma1.base_odd	= vdma1.prot_addr;
+-		vdma1.pitch /= 2;
+-		vdma2.base_odd	= vdma2.prot_addr;
+-		vdma2.pitch /= 2;
+-		vdma3.base_odd	= vdma3.prot_addr;
+-		vdma3.pitch /= 2;
+-	} else if (field == V4L2_FIELD_TOP) {
+-		vdma1.base_odd	= vdma1.prot_addr;
+-		vdma1.pitch /= 2;
+-		vdma2.base_odd	= vdma2.prot_addr;
+-		vdma2.pitch /= 2;
+-		vdma3.base_odd	= vdma3.prot_addr;
+-		vdma3.pitch /= 2;
+-	} else if (field == V4L2_FIELD_BOTTOM) {
+-		vdma1.base_odd	= vdma1.base_even;
+-		vdma1.base_even = vdma1.prot_addr;
+-		vdma1.pitch /= 2;
+-		vdma2.base_odd	= vdma2.base_even;
+-		vdma2.base_even = vdma2.prot_addr;
+-		vdma2.pitch /= 2;
+-		vdma3.base_odd	= vdma3.base_even;
+-		vdma3.base_even = vdma3.prot_addr;
+-		vdma3.pitch /= 2;
+-	}
+-
+-	if( 0 != vv->vflip ) {
+-		vdma1.pitch *= -1;
+-		vdma2.pitch *= -1;
+-		vdma3.pitch *= -1;
+-	}
+-
+-	saa7146_write_out_dma(dev, 1, &vdma1);
+-	if( (sfmt->flags & FORMAT_BYTE_SWAP) != 0 ) {
+-		saa7146_write_out_dma(dev, 3, &vdma2);
+-		saa7146_write_out_dma(dev, 2, &vdma3);
+-	} else {
+-		saa7146_write_out_dma(dev, 2, &vdma2);
+-		saa7146_write_out_dma(dev, 3, &vdma3);
+-	}
+-	return 0;
+-}
+-
+-static void program_capture_engine(struct saa7146_dev *dev, int planar)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-	int count = 0;
+-
+-	unsigned long e_wait = vv->current_hps_sync == SAA7146_HPS_SYNC_PORT_A ? CMD_E_FID_A : CMD_E_FID_B;
+-	unsigned long o_wait = vv->current_hps_sync == SAA7146_HPS_SYNC_PORT_A ? CMD_O_FID_A : CMD_O_FID_B;
+-
+-	/* wait for o_fid_a/b / e_fid_a/b toggle only if rps register 0 is not set*/
+-	WRITE_RPS0(CMD_PAUSE | CMD_OAN | CMD_SIG0 | o_wait);
+-	WRITE_RPS0(CMD_PAUSE | CMD_OAN | CMD_SIG0 | e_wait);
+-
+-	/* set rps register 0 */
+-	WRITE_RPS0(CMD_WR_REG | (1 << 8) | (MC2/4));
+-	WRITE_RPS0(MASK_27 | MASK_11);
+-
+-	/* turn on video-dma1 */
+-	WRITE_RPS0(CMD_WR_REG_MASK | (MC1/4));
+-	WRITE_RPS0(MASK_06 | MASK_22);			/* => mask */
+-	WRITE_RPS0(MASK_06 | MASK_22);			/* => values */
+-	if( 0 != planar ) {
+-		/* turn on video-dma2 */
+-		WRITE_RPS0(CMD_WR_REG_MASK | (MC1/4));
+-		WRITE_RPS0(MASK_05 | MASK_21);			/* => mask */
+-		WRITE_RPS0(MASK_05 | MASK_21);			/* => values */
+-
+-		/* turn on video-dma3 */
+-		WRITE_RPS0(CMD_WR_REG_MASK | (MC1/4));
+-		WRITE_RPS0(MASK_04 | MASK_20);			/* => mask */
+-		WRITE_RPS0(MASK_04 | MASK_20);			/* => values */
+-	}
+-
+-	/* wait for o_fid_a/b / e_fid_a/b toggle */
+-	if ( vv->last_field == V4L2_FIELD_INTERLACED ) {
+-		WRITE_RPS0(CMD_PAUSE | o_wait);
+-		WRITE_RPS0(CMD_PAUSE | e_wait);
+-	} else if ( vv->last_field == V4L2_FIELD_TOP ) {
+-		WRITE_RPS0(CMD_PAUSE | (vv->current_hps_sync == SAA7146_HPS_SYNC_PORT_A ? MASK_10 : MASK_09));
+-		WRITE_RPS0(CMD_PAUSE | o_wait);
+-	} else if ( vv->last_field == V4L2_FIELD_BOTTOM ) {
+-		WRITE_RPS0(CMD_PAUSE | (vv->current_hps_sync == SAA7146_HPS_SYNC_PORT_A ? MASK_10 : MASK_09));
+-		WRITE_RPS0(CMD_PAUSE | e_wait);
+-	}
+-
+-	/* turn off video-dma1 */
+-	WRITE_RPS0(CMD_WR_REG_MASK | (MC1/4));
+-	WRITE_RPS0(MASK_22 | MASK_06);			/* => mask */
+-	WRITE_RPS0(MASK_22);				/* => values */
+-	if( 0 != planar ) {
+-		/* turn off video-dma2 */
+-		WRITE_RPS0(CMD_WR_REG_MASK | (MC1/4));
+-		WRITE_RPS0(MASK_05 | MASK_21);			/* => mask */
+-		WRITE_RPS0(MASK_21);				/* => values */
+-
+-		/* turn off video-dma3 */
+-		WRITE_RPS0(CMD_WR_REG_MASK | (MC1/4));
+-		WRITE_RPS0(MASK_04 | MASK_20);			/* => mask */
+-		WRITE_RPS0(MASK_20);				/* => values */
+-	}
+-
+-	/* generate interrupt */
+-	WRITE_RPS0(CMD_INTERRUPT);
+-
+-	/* stop */
+-	WRITE_RPS0(CMD_STOP);
+-}
+-
+-void saa7146_set_capture(struct saa7146_dev *dev, struct saa7146_buf *buf, struct saa7146_buf *next)
+-{
+-	struct saa7146_format *sfmt = saa7146_format_by_fourcc(dev,buf->fmt->pixelformat);
+-	struct saa7146_vv *vv = dev->vv_data;
+-	u32 vdma1_prot_addr;
+-
+-	DEB_CAP("buf:%p, next:%p\n", buf, next);
+-
+-	vdma1_prot_addr = saa7146_read(dev, PROT_ADDR1);
+-	if( 0 == vdma1_prot_addr ) {
+-		/* clear out beginning of streaming bit (rps register 0)*/
+-		DEB_CAP("forcing sync to new frame\n");
+-		saa7146_write(dev, MC2, MASK_27 );
+-	}
+-
+-	saa7146_set_window(dev, buf->fmt->width, buf->fmt->height, buf->fmt->field);
+-	saa7146_set_output_format(dev, sfmt->trans);
+-	saa7146_disable_clipping(dev);
+-
+-	if ( vv->last_field == V4L2_FIELD_INTERLACED ) {
+-	} else if ( vv->last_field == V4L2_FIELD_TOP ) {
+-		vv->last_field = V4L2_FIELD_BOTTOM;
+-	} else if ( vv->last_field == V4L2_FIELD_BOTTOM ) {
+-		vv->last_field = V4L2_FIELD_TOP;
+-	}
+-
+-	if( 0 != IS_PLANAR(sfmt->trans)) {
+-		calculate_video_dma_grab_planar(dev, buf);
+-		program_capture_engine(dev,1);
+-	} else {
+-		calculate_video_dma_grab_packed(dev, buf);
+-		program_capture_engine(dev,0);
+-	}
+-
+-/*
+-	printk("vdma%d.base_even:     0x%08x\n", 1,saa7146_read(dev,BASE_EVEN1));
+-	printk("vdma%d.base_odd:      0x%08x\n", 1,saa7146_read(dev,BASE_ODD1));
+-	printk("vdma%d.prot_addr:     0x%08x\n", 1,saa7146_read(dev,PROT_ADDR1));
+-	printk("vdma%d.base_page:     0x%08x\n", 1,saa7146_read(dev,BASE_PAGE1));
+-	printk("vdma%d.pitch:         0x%08x\n", 1,saa7146_read(dev,PITCH1));
+-	printk("vdma%d.num_line_byte: 0x%08x\n", 1,saa7146_read(dev,NUM_LINE_BYTE1));
+-	printk("vdma%d => vptr      : 0x%08x\n", 1,saa7146_read(dev,PCI_VDP1));
+-*/
+-
+-	/* write the address of the rps-program */
+-	saa7146_write(dev, RPS_ADDR0, dev->d_rps0.dma_handle);
+-
+-	/* turn on rps */
+-	saa7146_write(dev, MC1, (MASK_12 | MASK_28));
+-}
+diff --git a/drivers/staging/media/deprecated/saa7146/common/saa7146_i2c.c b/drivers/staging/media/deprecated/saa7146/common/saa7146_i2c.c
+deleted file mode 100644
+index 7a33fe51775a..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/common/saa7146_i2c.c
++++ /dev/null
+@@ -1,421 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
+-#include "saa7146_vv.h"
+-
+-static u32 saa7146_i2c_func(struct i2c_adapter *adapter)
+-{
+-	/* DEB_I2C("'%s'\n", adapter->name); */
+-
+-	return	  I2C_FUNC_I2C
+-		| I2C_FUNC_SMBUS_QUICK
+-		| I2C_FUNC_SMBUS_READ_BYTE	| I2C_FUNC_SMBUS_WRITE_BYTE
+-		| I2C_FUNC_SMBUS_READ_BYTE_DATA | I2C_FUNC_SMBUS_WRITE_BYTE_DATA;
+-}
+-
+-/* this function returns the status-register of our i2c-device */
+-static inline u32 saa7146_i2c_status(struct saa7146_dev *dev)
+-{
+-	u32 iicsta = saa7146_read(dev, I2C_STATUS);
+-	/* DEB_I2C("status: 0x%08x\n", iicsta); */
+-	return iicsta;
+-}
+-
+-/* this function runs through the i2c-messages and prepares the data to be
+-   sent through the saa7146. have a look at the specifications p. 122 ff
+-   to understand this. it returns the number of u32s to send, or -1
+-   in case of an error. */
+-static int saa7146_i2c_msg_prepare(const struct i2c_msg *m, int num, __le32 *op)
+-{
+-	int h1, h2;
+-	int i, j, addr;
+-	int mem = 0, op_count = 0;
+-
+-	/* first determine size of needed memory */
+-	for(i = 0; i < num; i++) {
+-		mem += m[i].len + 1;
+-	}
+-
+-	/* worst case: we need one u32 for three bytes to be send
+-	   plus one extra byte to address the device */
+-	mem = 1 + ((mem-1) / 3);
+-
+-	/* we assume that op points to a memory of at least
+-	 * SAA7146_I2C_MEM bytes size. if we exceed this limit...
+-	 */
+-	if ((4 * mem) > SAA7146_I2C_MEM) {
+-		/* DEB_I2C("cannot prepare i2c-message\n"); */
+-		return -ENOMEM;
+-	}
+-
+-	/* be careful: clear out the i2c-mem first */
+-	memset(op,0,sizeof(__le32)*mem);
+-
+-	/* loop through all messages */
+-	for(i = 0; i < num; i++) {
+-
+-		addr = i2c_8bit_addr_from_msg(&m[i]);
+-		h1 = op_count/3; h2 = op_count%3;
+-		op[h1] |= cpu_to_le32(	    (u8)addr << ((3-h2)*8));
+-		op[h1] |= cpu_to_le32(SAA7146_I2C_START << ((3-h2)*2));
+-		op_count++;
+-
+-		/* loop through all bytes of message i */
+-		for(j = 0; j < m[i].len; j++) {
+-			/* insert the data bytes */
+-			h1 = op_count/3; h2 = op_count%3;
+-			op[h1] |= cpu_to_le32( (u32)((u8)m[i].buf[j]) << ((3-h2)*8));
+-			op[h1] |= cpu_to_le32(       SAA7146_I2C_CONT << ((3-h2)*2));
+-			op_count++;
+-		}
+-
+-	}
+-
+-	/* have a look at the last byte inserted:
+-	  if it was: ...CONT change it to ...STOP */
+-	h1 = (op_count-1)/3; h2 = (op_count-1)%3;
+-	if ( SAA7146_I2C_CONT == (0x3 & (le32_to_cpu(op[h1]) >> ((3-h2)*2))) ) {
+-		op[h1] &= ~cpu_to_le32(0x2 << ((3-h2)*2));
+-		op[h1] |= cpu_to_le32(SAA7146_I2C_STOP << ((3-h2)*2));
+-	}
+-
+-	/* return the number of u32s to send */
+-	return mem;
+-}
+-
+-/* this functions loops through all i2c-messages. normally, it should determine
+-   which bytes were read through the adapter and write them back to the corresponding
+-   i2c-message. but instead, we simply write back all bytes.
+-   fixme: this could be improved. */
+-static int saa7146_i2c_msg_cleanup(const struct i2c_msg *m, int num, __le32 *op)
+-{
+-	int i, j;
+-	int op_count = 0;
+-
+-	/* loop through all messages */
+-	for(i = 0; i < num; i++) {
+-
+-		op_count++;
+-
+-		/* loop through all bytes of message i */
+-		for(j = 0; j < m[i].len; j++) {
+-			/* write back all bytes that could have been read */
+-			m[i].buf[j] = (le32_to_cpu(op[op_count/3]) >> ((3-(op_count%3))*8));
+-			op_count++;
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+-/* this functions resets the i2c-device and returns 0 if everything was fine, otherwise -1 */
+-static int saa7146_i2c_reset(struct saa7146_dev *dev)
+-{
+-	/* get current status */
+-	u32 status = saa7146_i2c_status(dev);
+-
+-	/* clear registers for sure */
+-	saa7146_write(dev, I2C_STATUS, dev->i2c_bitrate);
+-	saa7146_write(dev, I2C_TRANSFER, 0);
+-
+-	/* check if any operation is still in progress */
+-	if ( 0 != ( status & SAA7146_I2C_BUSY) ) {
+-
+-		/* yes, kill ongoing operation */
+-		DEB_I2C("busy_state detected\n");
+-
+-		/* set "ABORT-OPERATION"-bit (bit 7)*/
+-		saa7146_write(dev, I2C_STATUS, (dev->i2c_bitrate | MASK_07));
+-		saa7146_write(dev, MC2, (MASK_00 | MASK_16));
+-		msleep(SAA7146_I2C_DELAY);
+-
+-		/* clear all error-bits pending; this is needed because p.123, note 1 */
+-		saa7146_write(dev, I2C_STATUS, dev->i2c_bitrate);
+-		saa7146_write(dev, MC2, (MASK_00 | MASK_16));
+-		msleep(SAA7146_I2C_DELAY);
+-	}
+-
+-	/* check if any error is (still) present. (this can be necessary because p.123, note 1) */
+-	status = saa7146_i2c_status(dev);
+-
+-	if ( dev->i2c_bitrate != status ) {
+-
+-		DEB_I2C("error_state detected. status:0x%08x\n", status);
+-
+-		/* Repeat the abort operation. This seems to be necessary
+-		   after serious protocol errors caused by e.g. the SAA7740 */
+-		saa7146_write(dev, I2C_STATUS, (dev->i2c_bitrate | MASK_07));
+-		saa7146_write(dev, MC2, (MASK_00 | MASK_16));
+-		msleep(SAA7146_I2C_DELAY);
+-
+-		/* clear all error-bits pending */
+-		saa7146_write(dev, I2C_STATUS, dev->i2c_bitrate);
+-		saa7146_write(dev, MC2, (MASK_00 | MASK_16));
+-		msleep(SAA7146_I2C_DELAY);
+-
+-		/* the data sheet says it might be necessary to clear the status
+-		   twice after an abort */
+-		saa7146_write(dev, I2C_STATUS, dev->i2c_bitrate);
+-		saa7146_write(dev, MC2, (MASK_00 | MASK_16));
+-		msleep(SAA7146_I2C_DELAY);
+-	}
+-
+-	/* if any error is still present, a fatal error has occurred ... */
+-	status = saa7146_i2c_status(dev);
+-	if ( dev->i2c_bitrate != status ) {
+-		DEB_I2C("fatal error. status:0x%08x\n", status);
+-		return -1;
+-	}
+-
+-	return 0;
+-}
+-
+-/* this functions writes out the data-byte 'dword' to the i2c-device.
+-   it returns 0 if ok, -1 if the transfer failed, -2 if the transfer
+-   failed badly (e.g. address error) */
+-static int saa7146_i2c_writeout(struct saa7146_dev *dev, __le32 *dword, int short_delay)
+-{
+-	u32 status = 0, mc2 = 0;
+-	int trial = 0;
+-	unsigned long timeout;
+-
+-	/* write out i2c-command */
+-	DEB_I2C("before: 0x%08x (status: 0x%08x), %d\n",
+-		*dword, saa7146_read(dev, I2C_STATUS), dev->i2c_op);
+-
+-	if( 0 != (SAA7146_USE_I2C_IRQ & dev->ext->flags)) {
+-
+-		saa7146_write(dev, I2C_STATUS,	 dev->i2c_bitrate);
+-		saa7146_write(dev, I2C_TRANSFER, le32_to_cpu(*dword));
+-
+-		dev->i2c_op = 1;
+-		SAA7146_ISR_CLEAR(dev, MASK_16|MASK_17);
+-		SAA7146_IER_ENABLE(dev, MASK_16|MASK_17);
+-		saa7146_write(dev, MC2, (MASK_00 | MASK_16));
+-
+-		timeout = HZ/100 + 1; /* 10ms */
+-		timeout = wait_event_interruptible_timeout(dev->i2c_wq, dev->i2c_op == 0, timeout);
+-		if (timeout == -ERESTARTSYS || dev->i2c_op) {
+-			SAA7146_IER_DISABLE(dev, MASK_16|MASK_17);
+-			SAA7146_ISR_CLEAR(dev, MASK_16|MASK_17);
+-			if (timeout == -ERESTARTSYS)
+-				/* a signal arrived */
+-				return -ERESTARTSYS;
+-
+-			pr_warn("%s %s [irq]: timed out waiting for end of xfer\n",
+-				dev->name, __func__);
+-			return -EIO;
+-		}
+-		status = saa7146_read(dev, I2C_STATUS);
+-	} else {
+-		saa7146_write(dev, I2C_STATUS,	 dev->i2c_bitrate);
+-		saa7146_write(dev, I2C_TRANSFER, le32_to_cpu(*dword));
+-		saa7146_write(dev, MC2, (MASK_00 | MASK_16));
+-
+-		/* do not poll for i2c-status before upload is complete */
+-		timeout = jiffies + HZ/100 + 1; /* 10ms */
+-		while(1) {
+-			mc2 = (saa7146_read(dev, MC2) & 0x1);
+-			if( 0 != mc2 ) {
+-				break;
+-			}
+-			if (time_after(jiffies,timeout)) {
+-				pr_warn("%s %s: timed out waiting for MC2\n",
+-					dev->name, __func__);
+-				return -EIO;
+-			}
+-		}
+-		/* wait until we get a transfer done or error */
+-		timeout = jiffies + HZ/100 + 1; /* 10ms */
+-		/* first read usually delivers bogus results... */
+-		saa7146_i2c_status(dev);
+-		while(1) {
+-			status = saa7146_i2c_status(dev);
+-			if ((status & 0x3) != 1)
+-				break;
+-			if (time_after(jiffies,timeout)) {
+-				/* this is normal when probing the bus
+-				 * (no answer from nonexisistant device...)
+-				 */
+-				pr_warn("%s %s [poll]: timed out waiting for end of xfer\n",
+-					dev->name, __func__);
+-				return -EIO;
+-			}
+-			if (++trial < 50 && short_delay)
+-				udelay(10);
+-			else
+-				msleep(1);
+-		}
+-	}
+-
+-	/* give a detailed status report */
+-	if ( 0 != (status & (SAA7146_I2C_SPERR | SAA7146_I2C_APERR |
+-			     SAA7146_I2C_DTERR | SAA7146_I2C_DRERR |
+-			     SAA7146_I2C_AL    | SAA7146_I2C_ERR   |
+-			     SAA7146_I2C_BUSY)) ) {
+-
+-		if ( 0 == (status & SAA7146_I2C_ERR) ||
+-		     0 == (status & SAA7146_I2C_BUSY) ) {
+-			/* it may take some time until ERR goes high - ignore */
+-			DEB_I2C("unexpected i2c status %04x\n", status);
+-		}
+-		if( 0 != (status & SAA7146_I2C_SPERR) ) {
+-			DEB_I2C("error due to invalid start/stop condition\n");
+-		}
+-		if( 0 != (status & SAA7146_I2C_DTERR) ) {
+-			DEB_I2C("error in data transmission\n");
+-		}
+-		if( 0 != (status & SAA7146_I2C_DRERR) ) {
+-			DEB_I2C("error when receiving data\n");
+-		}
+-		if( 0 != (status & SAA7146_I2C_AL) ) {
+-			DEB_I2C("error because arbitration lost\n");
+-		}
+-
+-		/* we handle address-errors here */
+-		if( 0 != (status & SAA7146_I2C_APERR) ) {
+-			DEB_I2C("error in address phase\n");
+-			return -EREMOTEIO;
+-		}
+-
+-		return -EIO;
+-	}
+-
+-	/* read back data, just in case we were reading ... */
+-	*dword = cpu_to_le32(saa7146_read(dev, I2C_TRANSFER));
+-
+-	DEB_I2C("after: 0x%08x\n", *dword);
+-	return 0;
+-}
+-
+-static int saa7146_i2c_transfer(struct saa7146_dev *dev, const struct i2c_msg *msgs, int num, int retries)
+-{
+-	int i = 0, count = 0;
+-	__le32 *buffer = dev->d_i2c.cpu_addr;
+-	int err = 0;
+-	int short_delay = 0;
+-
+-	if (mutex_lock_interruptible(&dev->i2c_lock))
+-		return -ERESTARTSYS;
+-
+-	for(i=0;i<num;i++) {
+-		DEB_I2C("msg:%d/%d\n", i+1, num);
+-	}
+-
+-	/* prepare the message(s), get number of u32s to transfer */
+-	count = saa7146_i2c_msg_prepare(msgs, num, buffer);
+-	if ( 0 > count ) {
+-		err = -EIO;
+-		goto out;
+-	}
+-
+-	if ( count > 3 || 0 != (SAA7146_I2C_SHORT_DELAY & dev->ext->flags) )
+-		short_delay = 1;
+-
+-	do {
+-		/* reset the i2c-device if necessary */
+-		err = saa7146_i2c_reset(dev);
+-		if ( 0 > err ) {
+-			DEB_I2C("could not reset i2c-device\n");
+-			goto out;
+-		}
+-
+-		/* write out the u32s one after another */
+-		for(i = 0; i < count; i++) {
+-			err = saa7146_i2c_writeout(dev, &buffer[i], short_delay);
+-			if ( 0 != err) {
+-				/* this one is unsatisfying: some i2c slaves on some
+-				   dvb cards don't acknowledge correctly, so the saa7146
+-				   thinks that an address error occurred. in that case, the
+-				   transaction should be retrying, even if an address error
+-				   occurred. analog saa7146 based cards extensively rely on
+-				   i2c address probing, however, and address errors indicate that a
+-				   device is really *not* there. retrying in that case
+-				   increases the time the device needs to probe greatly, so
+-				   it should be avoided. So we bail out in irq mode after an
+-				   address error and trust the saa7146 address error detection. */
+-				if (-EREMOTEIO == err && 0 != (SAA7146_USE_I2C_IRQ & dev->ext->flags))
+-					goto out;
+-				DEB_I2C("error while sending message(s). starting again\n");
+-				break;
+-			}
+-		}
+-		if( 0 == err ) {
+-			err = num;
+-			break;
+-		}
+-
+-		/* delay a bit before retrying */
+-		msleep(10);
+-
+-	} while (err != num && retries--);
+-
+-	/* quit if any error occurred */
+-	if (err != num)
+-		goto out;
+-
+-	/* if any things had to be read, get the results */
+-	if ( 0 != saa7146_i2c_msg_cleanup(msgs, num, buffer)) {
+-		DEB_I2C("could not cleanup i2c-message\n");
+-		err = -EIO;
+-		goto out;
+-	}
+-
+-	/* return the number of delivered messages */
+-	DEB_I2C("transmission successful. (msg:%d)\n", err);
+-out:
+-	/* another bug in revision 0: the i2c-registers get uploaded randomly by other
+-	   uploads, so we better clear them out before continuing */
+-	if( 0 == dev->revision ) {
+-		__le32 zero = 0;
+-		saa7146_i2c_reset(dev);
+-		if( 0 != saa7146_i2c_writeout(dev, &zero, short_delay)) {
+-			pr_info("revision 0 error. this should never happen\n");
+-		}
+-	}
+-
+-	mutex_unlock(&dev->i2c_lock);
+-	return err;
+-}
+-
+-/* utility functions */
+-static int saa7146_i2c_xfer(struct i2c_adapter* adapter, struct i2c_msg *msg, int num)
+-{
+-	struct v4l2_device *v4l2_dev = i2c_get_adapdata(adapter);
+-	struct saa7146_dev *dev = to_saa7146_dev(v4l2_dev);
+-
+-	/* use helper function to transfer data */
+-	return saa7146_i2c_transfer(dev, msg, num, adapter->retries);
+-}
+-
+-
+-/*****************************************************************************/
+-/* i2c-adapter helper functions                                              */
+-
+-/* exported algorithm data */
+-static const struct i2c_algorithm saa7146_algo = {
+-	.master_xfer	= saa7146_i2c_xfer,
+-	.functionality	= saa7146_i2c_func,
+-};
+-
+-int saa7146_i2c_adapter_prepare(struct saa7146_dev *dev, struct i2c_adapter *i2c_adapter, u32 bitrate)
+-{
+-	DEB_EE("bitrate: 0x%08x\n", bitrate);
+-
+-	/* enable i2c-port pins */
+-	saa7146_write(dev, MC1, (MASK_08 | MASK_24));
+-
+-	dev->i2c_bitrate = bitrate;
+-	saa7146_i2c_reset(dev);
+-
+-	if (i2c_adapter) {
+-		i2c_set_adapdata(i2c_adapter, &dev->v4l2_dev);
+-		i2c_adapter->dev.parent    = &dev->pci->dev;
+-		i2c_adapter->algo	   = &saa7146_algo;
+-		i2c_adapter->algo_data     = NULL;
+-		i2c_adapter->timeout = SAA7146_I2C_TIMEOUT;
+-		i2c_adapter->retries = SAA7146_I2C_RETRIES;
+-	}
+-
+-	return 0;
+-}
+diff --git a/drivers/staging/media/deprecated/saa7146/common/saa7146_vbi.c b/drivers/staging/media/deprecated/saa7146/common/saa7146_vbi.c
+deleted file mode 100644
+index 2d4a05d7bc5b..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/common/saa7146_vbi.c
++++ /dev/null
+@@ -1,498 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-#include "saa7146_vv.h"
+-
+-static int vbi_pixel_to_capture = 720 * 2;
+-
+-static int vbi_workaround(struct saa7146_dev *dev)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	u32          *cpu;
+-	dma_addr_t   dma_addr;
+-
+-	int count = 0;
+-	int i;
+-
+-	DECLARE_WAITQUEUE(wait, current);
+-
+-	DEB_VBI("dev:%p\n", dev);
+-
+-	/* once again, a bug in the saa7146: the brs acquisition
+-	   is buggy and especially the BXO-counter does not work
+-	   as specified. there is this workaround, but please
+-	   don't let me explain it. ;-) */
+-
+-	cpu = dma_alloc_coherent(&dev->pci->dev, 4096, &dma_addr, GFP_KERNEL);
+-	if (NULL == cpu)
+-		return -ENOMEM;
+-
+-	/* setup some basic programming, just for the workaround */
+-	saa7146_write(dev, BASE_EVEN3,	dma_addr);
+-	saa7146_write(dev, BASE_ODD3,	dma_addr+vbi_pixel_to_capture);
+-	saa7146_write(dev, PROT_ADDR3,	dma_addr+4096);
+-	saa7146_write(dev, PITCH3,	vbi_pixel_to_capture);
+-	saa7146_write(dev, BASE_PAGE3,	0x0);
+-	saa7146_write(dev, NUM_LINE_BYTE3, (2<<16)|((vbi_pixel_to_capture)<<0));
+-	saa7146_write(dev, MC2, MASK_04|MASK_20);
+-
+-	/* load brs-control register */
+-	WRITE_RPS1(CMD_WR_REG | (1 << 8) | (BRS_CTRL/4));
+-	/* BXO = 1h, BRS to outbound */
+-	WRITE_RPS1(0xc000008c);
+-	/* wait for vbi_a or vbi_b*/
+-	if ( 0 != (SAA7146_USE_PORT_B_FOR_VBI & dev->ext_vv_data->flags)) {
+-		DEB_D("...using port b\n");
+-		WRITE_RPS1(CMD_PAUSE | CMD_OAN | CMD_SIG1 | CMD_E_FID_B);
+-		WRITE_RPS1(CMD_PAUSE | CMD_OAN | CMD_SIG1 | CMD_O_FID_B);
+-/*
+-		WRITE_RPS1(CMD_PAUSE | MASK_09);
+-*/
+-	} else {
+-		DEB_D("...using port a\n");
+-		WRITE_RPS1(CMD_PAUSE | MASK_10);
+-	}
+-	/* upload brs */
+-	WRITE_RPS1(CMD_UPLOAD | MASK_08);
+-	/* load brs-control register */
+-	WRITE_RPS1(CMD_WR_REG | (1 << 8) | (BRS_CTRL/4));
+-	/* BYO = 1, BXO = NQBIL (=1728 for PAL, for NTSC this is 858*2) - NumByte3 (=1440) = 288 */
+-	WRITE_RPS1(((1728-(vbi_pixel_to_capture)) << 7) | MASK_19);
+-	/* wait for brs_done */
+-	WRITE_RPS1(CMD_PAUSE | MASK_08);
+-	/* upload brs */
+-	WRITE_RPS1(CMD_UPLOAD | MASK_08);
+-	/* load video-dma3 NumLines3 and NumBytes3 */
+-	WRITE_RPS1(CMD_WR_REG | (1 << 8) | (NUM_LINE_BYTE3/4));
+-	/* dev->vbi_count*2 lines, 720 pixel (= 1440 Bytes) */
+-	WRITE_RPS1((2 << 16) | (vbi_pixel_to_capture));
+-	/* load brs-control register */
+-	WRITE_RPS1(CMD_WR_REG | (1 << 8) | (BRS_CTRL/4));
+-	/* Set BRS right: note: this is an experimental value for BXO (=> PAL!) */
+-	WRITE_RPS1((540 << 7) | (5 << 19));  // 5 == vbi_start
+-	/* wait for brs_done */
+-	WRITE_RPS1(CMD_PAUSE | MASK_08);
+-	/* upload brs and video-dma3*/
+-	WRITE_RPS1(CMD_UPLOAD | MASK_08 | MASK_04);
+-	/* load mc2 register: enable dma3 */
+-	WRITE_RPS1(CMD_WR_REG | (1 << 8) | (MC1/4));
+-	WRITE_RPS1(MASK_20 | MASK_04);
+-	/* generate interrupt */
+-	WRITE_RPS1(CMD_INTERRUPT);
+-	/* stop rps1 */
+-	WRITE_RPS1(CMD_STOP);
+-
+-	/* we have to do the workaround twice to be sure that
+-	   everything is ok */
+-	for(i = 0; i < 2; i++) {
+-
+-		/* indicate to the irq handler that we do the workaround */
+-		saa7146_write(dev, MC2, MASK_31|MASK_15);
+-
+-		saa7146_write(dev, NUM_LINE_BYTE3, (1<<16)|(2<<0));
+-		saa7146_write(dev, MC2, MASK_04|MASK_20);
+-
+-		/* enable rps1 irqs */
+-		SAA7146_IER_ENABLE(dev,MASK_28);
+-
+-		/* prepare to wait to be woken up by the irq-handler */
+-		add_wait_queue(&vv->vbi_wq, &wait);
+-		set_current_state(TASK_INTERRUPTIBLE);
+-
+-		/* start rps1 to enable workaround */
+-		saa7146_write(dev, RPS_ADDR1, dev->d_rps1.dma_handle);
+-		saa7146_write(dev, MC1, (MASK_13 | MASK_29));
+-
+-		schedule();
+-
+-		DEB_VBI("brs bug workaround %d/1\n", i);
+-
+-		remove_wait_queue(&vv->vbi_wq, &wait);
+-		__set_current_state(TASK_RUNNING);
+-
+-		/* disable rps1 irqs */
+-		SAA7146_IER_DISABLE(dev,MASK_28);
+-
+-		/* stop video-dma3 */
+-		saa7146_write(dev, MC1, MASK_20);
+-
+-		if(signal_pending(current)) {
+-
+-			DEB_VBI("aborted (rps:0x%08x)\n",
+-				saa7146_read(dev, RPS_ADDR1));
+-
+-			/* stop rps1 for sure */
+-			saa7146_write(dev, MC1, MASK_29);
+-
+-			dma_free_coherent(&dev->pci->dev, 4096, cpu, dma_addr);
+-			return -EINTR;
+-		}
+-	}
+-
+-	dma_free_coherent(&dev->pci->dev, 4096, cpu, dma_addr);
+-	return 0;
+-}
+-
+-static void saa7146_set_vbi_capture(struct saa7146_dev *dev, struct saa7146_buf *buf, struct saa7146_buf *next)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	struct saa7146_video_dma vdma3;
+-
+-	int count = 0;
+-	unsigned long e_wait = vv->current_hps_sync == SAA7146_HPS_SYNC_PORT_A ? CMD_E_FID_A : CMD_E_FID_B;
+-	unsigned long o_wait = vv->current_hps_sync == SAA7146_HPS_SYNC_PORT_A ? CMD_O_FID_A : CMD_O_FID_B;
+-
+-/*
+-	vdma3.base_even	= 0xc8000000+2560*70;
+-	vdma3.base_odd	= 0xc8000000;
+-	vdma3.prot_addr	= 0xc8000000+2560*164;
+-	vdma3.pitch	= 2560;
+-	vdma3.base_page	= 0;
+-	vdma3.num_line_byte = (64<<16)|((vbi_pixel_to_capture)<<0); // set above!
+-*/
+-	vdma3.base_even	= buf->pt[2].offset;
+-	vdma3.base_odd	= buf->pt[2].offset + 16 * vbi_pixel_to_capture;
+-	vdma3.prot_addr	= buf->pt[2].offset + 16 * 2 * vbi_pixel_to_capture;
+-	vdma3.pitch	= vbi_pixel_to_capture;
+-	vdma3.base_page	= buf->pt[2].dma | ME1;
+-	vdma3.num_line_byte = (16 << 16) | vbi_pixel_to_capture;
+-
+-	saa7146_write_out_dma(dev, 3, &vdma3);
+-
+-	/* write beginning of rps-program */
+-	count = 0;
+-
+-	/* wait for o_fid_a/b / e_fid_a/b toggle only if bit 1 is not set */
+-
+-	/* we don't wait here for the first field anymore. this is different from the video
+-	   capture and might cause that the first buffer is only half filled (with only
+-	   one field). but since this is some sort of streaming data, this is not that negative.
+-	   but by doing this, we can use the whole engine from videobuf-dma-sg.c... */
+-
+-/*
+-	WRITE_RPS1(CMD_PAUSE | CMD_OAN | CMD_SIG1 | e_wait);
+-	WRITE_RPS1(CMD_PAUSE | CMD_OAN | CMD_SIG1 | o_wait);
+-*/
+-	/* set bit 1 */
+-	WRITE_RPS1(CMD_WR_REG | (1 << 8) | (MC2/4));
+-	WRITE_RPS1(MASK_28 | MASK_12);
+-
+-	/* turn on video-dma3 */
+-	WRITE_RPS1(CMD_WR_REG_MASK | (MC1/4));
+-	WRITE_RPS1(MASK_04 | MASK_20);			/* => mask */
+-	WRITE_RPS1(MASK_04 | MASK_20);			/* => values */
+-
+-	/* wait for o_fid_a/b / e_fid_a/b toggle */
+-	WRITE_RPS1(CMD_PAUSE | o_wait);
+-	WRITE_RPS1(CMD_PAUSE | e_wait);
+-
+-	/* generate interrupt */
+-	WRITE_RPS1(CMD_INTERRUPT);
+-
+-	/* stop */
+-	WRITE_RPS1(CMD_STOP);
+-
+-	/* enable rps1 irqs */
+-	SAA7146_IER_ENABLE(dev, MASK_28);
+-
+-	/* write the address of the rps-program */
+-	saa7146_write(dev, RPS_ADDR1, dev->d_rps1.dma_handle);
+-
+-	/* turn on rps */
+-	saa7146_write(dev, MC1, (MASK_13 | MASK_29));
+-}
+-
+-static int buffer_activate(struct saa7146_dev *dev,
+-			   struct saa7146_buf *buf,
+-			   struct saa7146_buf *next)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-	buf->vb.state = VIDEOBUF_ACTIVE;
+-
+-	DEB_VBI("dev:%p, buf:%p, next:%p\n", dev, buf, next);
+-	saa7146_set_vbi_capture(dev,buf,next);
+-
+-	mod_timer(&vv->vbi_dmaq.timeout, jiffies+BUFFER_TIMEOUT);
+-	return 0;
+-}
+-
+-static int buffer_prepare(struct videobuf_queue *q, struct videobuf_buffer *vb,enum v4l2_field field)
+-{
+-	struct file *file = q->priv_data;
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_buf *buf = (struct saa7146_buf *)vb;
+-
+-	int err = 0;
+-	int lines, llength, size;
+-
+-	lines   = 16 * 2 ; /* 2 fields */
+-	llength = vbi_pixel_to_capture;
+-	size = lines * llength;
+-
+-	DEB_VBI("vb:%p\n", vb);
+-
+-	if (0 != buf->vb.baddr  &&  buf->vb.bsize < size) {
+-		DEB_VBI("size mismatch\n");
+-		return -EINVAL;
+-	}
+-
+-	if (buf->vb.size != size)
+-		saa7146_dma_free(dev,q,buf);
+-
+-	if (VIDEOBUF_NEEDS_INIT == buf->vb.state) {
+-		struct videobuf_dmabuf *dma=videobuf_to_dma(&buf->vb);
+-
+-		buf->vb.width  = llength;
+-		buf->vb.height = lines;
+-		buf->vb.size   = size;
+-		buf->vb.field  = field;	// FIXME: check this
+-
+-		saa7146_pgtable_free(dev->pci, &buf->pt[2]);
+-		saa7146_pgtable_alloc(dev->pci, &buf->pt[2]);
+-
+-		err = videobuf_iolock(q,&buf->vb, NULL);
+-		if (err)
+-			goto oops;
+-		err = saa7146_pgtable_build_single(dev->pci, &buf->pt[2],
+-						 dma->sglist, dma->sglen);
+-		if (0 != err)
+-			return err;
+-	}
+-	buf->vb.state = VIDEOBUF_PREPARED;
+-	buf->activate = buffer_activate;
+-
+-	return 0;
+-
+- oops:
+-	DEB_VBI("error out\n");
+-	saa7146_dma_free(dev,q,buf);
+-
+-	return err;
+-}
+-
+-static int buffer_setup(struct videobuf_queue *q, unsigned int *count, unsigned int *size)
+-{
+-	int llength,lines;
+-
+-	lines   = 16 * 2 ; /* 2 fields */
+-	llength = vbi_pixel_to_capture;
+-
+-	*size = lines * llength;
+-	*count = 2;
+-
+-	DEB_VBI("count:%d, size:%d\n", *count, *size);
+-
+-	return 0;
+-}
+-
+-static void buffer_queue(struct videobuf_queue *q, struct videobuf_buffer *vb)
+-{
+-	struct file *file = q->priv_data;
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct saa7146_buf *buf = (struct saa7146_buf *)vb;
+-
+-	DEB_VBI("vb:%p\n", vb);
+-	saa7146_buffer_queue(dev, &vv->vbi_dmaq, buf);
+-}
+-
+-static void buffer_release(struct videobuf_queue *q, struct videobuf_buffer *vb)
+-{
+-	struct file *file = q->priv_data;
+-	struct saa7146_fh *fh   = file->private_data;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_buf *buf = (struct saa7146_buf *)vb;
+-
+-	DEB_VBI("vb:%p\n", vb);
+-	saa7146_dma_free(dev,q,buf);
+-}
+-
+-static const struct videobuf_queue_ops vbi_qops = {
+-	.buf_setup    = buffer_setup,
+-	.buf_prepare  = buffer_prepare,
+-	.buf_queue    = buffer_queue,
+-	.buf_release  = buffer_release,
+-};
+-
+-/* ------------------------------------------------------------------ */
+-
+-static void vbi_stop(struct saa7146_fh *fh, struct file *file)
+-{
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	unsigned long flags;
+-	DEB_VBI("dev:%p, fh:%p\n", dev, fh);
+-
+-	spin_lock_irqsave(&dev->slock,flags);
+-
+-	/* disable rps1  */
+-	saa7146_write(dev, MC1, MASK_29);
+-
+-	/* disable rps1 irqs */
+-	SAA7146_IER_DISABLE(dev, MASK_28);
+-
+-	/* shut down dma 3 transfers */
+-	saa7146_write(dev, MC1, MASK_20);
+-
+-	if (vv->vbi_dmaq.curr)
+-		saa7146_buffer_finish(dev, &vv->vbi_dmaq, VIDEOBUF_DONE);
+-
+-	videobuf_queue_cancel(&fh->vbi_q);
+-
+-	vv->vbi_streaming = NULL;
+-
+-	del_timer(&vv->vbi_dmaq.timeout);
+-	del_timer(&vv->vbi_read_timeout);
+-
+-	spin_unlock_irqrestore(&dev->slock, flags);
+-}
+-
+-static void vbi_read_timeout(struct timer_list *t)
+-{
+-	struct saa7146_vv *vv = from_timer(vv, t, vbi_read_timeout);
+-	struct file *file = vv->vbi_read_timeout_file;
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_dev *dev = fh->dev;
+-
+-	DEB_VBI("dev:%p, fh:%p\n", dev, fh);
+-
+-	vbi_stop(fh, file);
+-}
+-
+-static void vbi_init(struct saa7146_dev *dev, struct saa7146_vv *vv)
+-{
+-	DEB_VBI("dev:%p\n", dev);
+-
+-	INIT_LIST_HEAD(&vv->vbi_dmaq.queue);
+-
+-	timer_setup(&vv->vbi_dmaq.timeout, saa7146_buffer_timeout, 0);
+-	vv->vbi_dmaq.dev              = dev;
+-
+-	init_waitqueue_head(&vv->vbi_wq);
+-}
+-
+-static int vbi_open(struct saa7146_dev *dev, struct file *file)
+-{
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_vv *vv = fh->dev->vv_data;
+-
+-	u32 arbtr_ctrl	= saa7146_read(dev, PCI_BT_V1);
+-	int ret = 0;
+-
+-	DEB_VBI("dev:%p, fh:%p\n", dev, fh);
+-
+-	ret = saa7146_res_get(fh, RESOURCE_DMA3_BRS);
+-	if (0 == ret) {
+-		DEB_S("cannot get vbi RESOURCE_DMA3_BRS resource\n");
+-		return -EBUSY;
+-	}
+-
+-	/* adjust arbitrition control for video dma 3 */
+-	arbtr_ctrl &= ~0x1f0000;
+-	arbtr_ctrl |=  0x1d0000;
+-	saa7146_write(dev, PCI_BT_V1, arbtr_ctrl);
+-	saa7146_write(dev, MC2, (MASK_04|MASK_20));
+-
+-	videobuf_queue_sg_init(&fh->vbi_q, &vbi_qops,
+-			    &dev->pci->dev, &dev->slock,
+-			    V4L2_BUF_TYPE_VBI_CAPTURE,
+-			    V4L2_FIELD_SEQ_TB, // FIXME: does this really work?
+-			    sizeof(struct saa7146_buf),
+-			    file, &dev->v4l2_lock);
+-
+-	vv->vbi_read_timeout.function = vbi_read_timeout;
+-	vv->vbi_read_timeout_file = file;
+-
+-	/* initialize the brs */
+-	if ( 0 != (SAA7146_USE_PORT_B_FOR_VBI & dev->ext_vv_data->flags)) {
+-		saa7146_write(dev, BRS_CTRL, MASK_30|MASK_29 | (7 << 19));
+-	} else {
+-		saa7146_write(dev, BRS_CTRL, 0x00000001);
+-
+-		if (0 != (ret = vbi_workaround(dev))) {
+-			DEB_VBI("vbi workaround failed!\n");
+-			/* return ret;*/
+-		}
+-	}
+-
+-	/* upload brs register */
+-	saa7146_write(dev, MC2, (MASK_08|MASK_24));
+-	return 0;
+-}
+-
+-static void vbi_close(struct saa7146_dev *dev, struct file *file)
+-{
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	DEB_VBI("dev:%p, fh:%p\n", dev, fh);
+-
+-	if( fh == vv->vbi_streaming ) {
+-		vbi_stop(fh, file);
+-	}
+-	saa7146_res_free(fh, RESOURCE_DMA3_BRS);
+-}
+-
+-static void vbi_irq_done(struct saa7146_dev *dev, unsigned long status)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-	spin_lock(&dev->slock);
+-
+-	if (vv->vbi_dmaq.curr) {
+-		DEB_VBI("dev:%p, curr:%p\n", dev, vv->vbi_dmaq.curr);
+-		/* this must be += 2, one count for each field */
+-		vv->vbi_fieldcount+=2;
+-		vv->vbi_dmaq.curr->vb.field_count = vv->vbi_fieldcount;
+-		saa7146_buffer_finish(dev, &vv->vbi_dmaq, VIDEOBUF_DONE);
+-	} else {
+-		DEB_VBI("dev:%p\n", dev);
+-	}
+-	saa7146_buffer_next(dev, &vv->vbi_dmaq, 1);
+-
+-	spin_unlock(&dev->slock);
+-}
+-
+-static ssize_t vbi_read(struct file *file, char __user *data, size_t count, loff_t *ppos)
+-{
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	ssize_t ret = 0;
+-
+-	DEB_VBI("dev:%p, fh:%p\n", dev, fh);
+-
+-	if( NULL == vv->vbi_streaming ) {
+-		// fixme: check if dma3 is available
+-		// fixme: activate vbi engine here if necessary. (really?)
+-		vv->vbi_streaming = fh;
+-	}
+-
+-	if( fh != vv->vbi_streaming ) {
+-		DEB_VBI("open %p is already using vbi capture\n",
+-			vv->vbi_streaming);
+-		return -EBUSY;
+-	}
+-
+-	mod_timer(&vv->vbi_read_timeout, jiffies+BUFFER_TIMEOUT);
+-	ret = videobuf_read_stream(&fh->vbi_q, data, count, ppos, 1,
+-				   file->f_flags & O_NONBLOCK);
+-/*
+-	printk("BASE_ODD3:      0x%08x\n", saa7146_read(dev, BASE_ODD3));
+-	printk("BASE_EVEN3:     0x%08x\n", saa7146_read(dev, BASE_EVEN3));
+-	printk("PROT_ADDR3:     0x%08x\n", saa7146_read(dev, PROT_ADDR3));
+-	printk("PITCH3:         0x%08x\n", saa7146_read(dev, PITCH3));
+-	printk("BASE_PAGE3:     0x%08x\n", saa7146_read(dev, BASE_PAGE3));
+-	printk("NUM_LINE_BYTE3: 0x%08x\n", saa7146_read(dev, NUM_LINE_BYTE3));
+-	printk("BRS_CTRL:       0x%08x\n", saa7146_read(dev, BRS_CTRL));
+-*/
+-	return ret;
+-}
+-
+-const struct saa7146_use_ops saa7146_vbi_uops = {
+-	.init		= vbi_init,
+-	.open		= vbi_open,
+-	.release	= vbi_close,
+-	.irq_done	= vbi_irq_done,
+-	.read		= vbi_read,
+-};
+diff --git a/drivers/staging/media/deprecated/saa7146/common/saa7146_video.c b/drivers/staging/media/deprecated/saa7146/common/saa7146_video.c
+deleted file mode 100644
+index 4598a44231fa..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/common/saa7146_video.c
++++ /dev/null
+@@ -1,1286 +0,0 @@
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
+-#include <media/v4l2-event.h>
 -#include <media/v4l2-ctrls.h>
+-#include <linux/module.h>
+-#include <linux/kernel.h>
+-#include "saa7146_vv.h"
+-
+-static int max_memory = 32;
+-
+-module_param(max_memory, int, 0644);
+-MODULE_PARM_DESC(max_memory, "maximum memory usage for capture buffers (default: 32Mb)");
+-
+-#define IS_CAPTURE_ACTIVE(fh) \
+-	(((vv->video_status & STATUS_CAPTURE) != 0) && (vv->video_fh == fh))
+-
+-#define IS_OVERLAY_ACTIVE(fh) \
+-	(((vv->video_status & STATUS_OVERLAY) != 0) && (vv->video_fh == fh))
+-
+-/* format descriptions for capture and preview */
+-static struct saa7146_format formats[] = {
+-	{
+-		.pixelformat	= V4L2_PIX_FMT_RGB332,
+-		.trans		= RGB08_COMPOSED,
+-		.depth		= 8,
+-		.flags		= 0,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_RGB565,
+-		.trans		= RGB16_COMPOSED,
+-		.depth		= 16,
+-		.flags		= 0,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_BGR24,
+-		.trans		= RGB24_COMPOSED,
+-		.depth		= 24,
+-		.flags		= 0,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_BGR32,
+-		.trans		= RGB32_COMPOSED,
+-		.depth		= 32,
+-		.flags		= 0,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_RGB32,
+-		.trans		= RGB32_COMPOSED,
+-		.depth		= 32,
+-		.flags		= 0,
+-		.swap		= 0x2,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_GREY,
+-		.trans		= Y8,
+-		.depth		= 8,
+-		.flags		= 0,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_YUV422P,
+-		.trans		= YUV422_DECOMPOSED,
+-		.depth		= 16,
+-		.flags		= FORMAT_BYTE_SWAP|FORMAT_IS_PLANAR,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_YVU420,
+-		.trans		= YUV420_DECOMPOSED,
+-		.depth		= 12,
+-		.flags		= FORMAT_BYTE_SWAP|FORMAT_IS_PLANAR,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_YUV420,
+-		.trans		= YUV420_DECOMPOSED,
+-		.depth		= 12,
+-		.flags		= FORMAT_IS_PLANAR,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_UYVY,
+-		.trans		= YUV422_COMPOSED,
+-		.depth		= 16,
+-		.flags		= 0,
+-	}
+-};
+-
+-/* unfortunately, the saa7146 contains a bug which prevents it from doing on-the-fly byte swaps.
+-   due to this, it's impossible to provide additional *packed* formats, which are simply byte swapped
+-   (like V4L2_PIX_FMT_YUYV) ... 8-( */
+-
+-struct saa7146_format* saa7146_format_by_fourcc(struct saa7146_dev *dev, int fourcc)
+-{
+-	int i;
+-
+-	for (i = 0; i < ARRAY_SIZE(formats); i++) {
+-		if (formats[i].pixelformat == fourcc) {
+-			return formats+i;
+-		}
+-	}
+-
+-	DEB_D("unknown pixelformat:'%4.4s'\n", (char *)&fourcc);
+-	return NULL;
+-}
+-
+-static int vidioc_try_fmt_vid_overlay(struct file *file, void *fh, struct v4l2_format *f);
+-
+-int saa7146_start_preview(struct saa7146_fh *fh)
+-{
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct v4l2_format fmt;
+-	int ret = 0, err = 0;
+-
+-	DEB_EE("dev:%p, fh:%p\n", dev, fh);
+-
+-	/* check if we have overlay information */
+-	if (vv->ov.fh == NULL) {
+-		DEB_D("no overlay data available. try S_FMT first.\n");
+-		return -EAGAIN;
+-	}
+-
+-	/* check if streaming capture is running */
+-	if (IS_CAPTURE_ACTIVE(fh) != 0) {
+-		DEB_D("streaming capture is active\n");
+-		return -EBUSY;
+-	}
+-
+-	/* check if overlay is running */
+-	if (IS_OVERLAY_ACTIVE(fh) != 0) {
+-		if (vv->video_fh == fh) {
+-			DEB_D("overlay is already active\n");
+-			return 0;
+-		}
+-		DEB_D("overlay is already active in another open\n");
+-		return -EBUSY;
+-	}
+-
+-	if (0 == saa7146_res_get(fh, RESOURCE_DMA1_HPS|RESOURCE_DMA2_CLP)) {
+-		DEB_D("cannot get necessary overlay resources\n");
+-		return -EBUSY;
+-	}
+-
+-	fmt.fmt.win = vv->ov.win;
+-	err = vidioc_try_fmt_vid_overlay(NULL, fh, &fmt);
+-	if (0 != err) {
+-		saa7146_res_free(vv->video_fh, RESOURCE_DMA1_HPS|RESOURCE_DMA2_CLP);
+-		return -EBUSY;
+-	}
+-	vv->ov.win = fmt.fmt.win;
+-
+-	DEB_D("%dx%d+%d+%d 0x%08x field=%s\n",
+-	      vv->ov.win.w.width, vv->ov.win.w.height,
+-	      vv->ov.win.w.left, vv->ov.win.w.top,
+-	      vv->ov_fmt->pixelformat, v4l2_field_names[vv->ov.win.field]);
+-
+-	if (0 != (ret = saa7146_enable_overlay(fh))) {
+-		DEB_D("enabling overlay failed: %d\n", ret);
+-		saa7146_res_free(vv->video_fh, RESOURCE_DMA1_HPS|RESOURCE_DMA2_CLP);
+-		return ret;
+-	}
+-
+-	vv->video_status = STATUS_OVERLAY;
+-	vv->video_fh = fh;
+-
+-	return 0;
+-}
+-EXPORT_SYMBOL_GPL(saa7146_start_preview);
+-
+-int saa7146_stop_preview(struct saa7146_fh *fh)
+-{
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	DEB_EE("dev:%p, fh:%p\n", dev, fh);
+-
+-	/* check if streaming capture is running */
+-	if (IS_CAPTURE_ACTIVE(fh) != 0) {
+-		DEB_D("streaming capture is active\n");
+-		return -EBUSY;
+-	}
+-
+-	/* check if overlay is running at all */
+-	if ((vv->video_status & STATUS_OVERLAY) == 0) {
+-		DEB_D("no active overlay\n");
+-		return 0;
+-	}
+-
+-	if (vv->video_fh != fh) {
+-		DEB_D("overlay is active, but in another open\n");
+-		return -EBUSY;
+-	}
+-
+-	vv->video_status = 0;
+-	vv->video_fh = NULL;
+-
+-	saa7146_disable_overlay(fh);
+-
+-	saa7146_res_free(fh, RESOURCE_DMA1_HPS|RESOURCE_DMA2_CLP);
+-
+-	return 0;
+-}
+-EXPORT_SYMBOL_GPL(saa7146_stop_preview);
+-
+-/********************************************************************************/
+-/* common pagetable functions */
+-
+-static int saa7146_pgtable_build(struct saa7146_dev *dev, struct saa7146_buf *buf)
+-{
+-	struct pci_dev *pci = dev->pci;
+-	struct videobuf_dmabuf *dma=videobuf_to_dma(&buf->vb);
+-	struct scatterlist *list = dma->sglist;
+-	int length = dma->sglen;
+-	struct saa7146_format *sfmt = saa7146_format_by_fourcc(dev,buf->fmt->pixelformat);
+-
+-	DEB_EE("dev:%p, buf:%p, sg_len:%d\n", dev, buf, length);
+-
+-	if( 0 != IS_PLANAR(sfmt->trans)) {
+-		struct saa7146_pgtable *pt1 = &buf->pt[0];
+-		struct saa7146_pgtable *pt2 = &buf->pt[1];
+-		struct saa7146_pgtable *pt3 = &buf->pt[2];
+-		__le32  *ptr1, *ptr2, *ptr3;
+-		__le32 fill;
+-
+-		int size = buf->fmt->width*buf->fmt->height;
+-		int i,p,m1,m2,m3,o1,o2;
+-
+-		switch( sfmt->depth ) {
+-			case 12: {
+-				/* create some offsets inside the page table */
+-				m1 = ((size+PAGE_SIZE)/PAGE_SIZE)-1;
+-				m2 = ((size+(size/4)+PAGE_SIZE)/PAGE_SIZE)-1;
+-				m3 = ((size+(size/2)+PAGE_SIZE)/PAGE_SIZE)-1;
+-				o1 = size%PAGE_SIZE;
+-				o2 = (size+(size/4))%PAGE_SIZE;
+-				DEB_CAP("size:%d, m1:%d, m2:%d, m3:%d, o1:%d, o2:%d\n",
+-					size, m1, m2, m3, o1, o2);
+-				break;
+-			}
+-			case 16: {
+-				/* create some offsets inside the page table */
+-				m1 = ((size+PAGE_SIZE)/PAGE_SIZE)-1;
+-				m2 = ((size+(size/2)+PAGE_SIZE)/PAGE_SIZE)-1;
+-				m3 = ((2*size+PAGE_SIZE)/PAGE_SIZE)-1;
+-				o1 = size%PAGE_SIZE;
+-				o2 = (size+(size/2))%PAGE_SIZE;
+-				DEB_CAP("size:%d, m1:%d, m2:%d, m3:%d, o1:%d, o2:%d\n",
+-					size, m1, m2, m3, o1, o2);
+-				break;
+-			}
+-			default: {
+-				return -1;
+-			}
+-		}
+-
+-		ptr1 = pt1->cpu;
+-		ptr2 = pt2->cpu;
+-		ptr3 = pt3->cpu;
+-
+-		/* walk all pages, copy all page addresses to ptr1 */
+-		for (i = 0; i < length; i++, list++) {
+-			for (p = 0; p * 4096 < sg_dma_len(list); p++, ptr1++)
+-				*ptr1 = cpu_to_le32(sg_dma_address(list) - list->offset);
+-		}
+-/*
+-		ptr1 = pt1->cpu;
+-		for(j=0;j<40;j++) {
+-			printk("ptr1 %d: 0x%08x\n",j,ptr1[j]);
+-		}
+-*/
+-
+-		/* if we have a user buffer, the first page may not be
+-		   aligned to a page boundary. */
+-		pt1->offset = dma->sglist->offset;
+-		pt2->offset = pt1->offset+o1;
+-		pt3->offset = pt1->offset+o2;
+-
+-		/* create video-dma2 page table */
+-		ptr1 = pt1->cpu;
+-		for(i = m1; i <= m2 ; i++, ptr2++) {
+-			*ptr2 = ptr1[i];
+-		}
+-		fill = *(ptr2-1);
+-		for(;i<1024;i++,ptr2++) {
+-			*ptr2 = fill;
+-		}
+-		/* create video-dma3 page table */
+-		ptr1 = pt1->cpu;
+-		for(i = m2; i <= m3; i++,ptr3++) {
+-			*ptr3 = ptr1[i];
+-		}
+-		fill = *(ptr3-1);
+-		for(;i<1024;i++,ptr3++) {
+-			*ptr3 = fill;
+-		}
+-		/* finally: finish up video-dma1 page table */
+-		ptr1 = pt1->cpu+m1;
+-		fill = pt1->cpu[m1];
+-		for(i=m1;i<1024;i++,ptr1++) {
+-			*ptr1 = fill;
+-		}
+-/*
+-		ptr1 = pt1->cpu;
+-		ptr2 = pt2->cpu;
+-		ptr3 = pt3->cpu;
+-		for(j=0;j<40;j++) {
+-			printk("ptr1 %d: 0x%08x\n",j,ptr1[j]);
+-		}
+-		for(j=0;j<40;j++) {
+-			printk("ptr2 %d: 0x%08x\n",j,ptr2[j]);
+-		}
+-		for(j=0;j<40;j++) {
+-			printk("ptr3 %d: 0x%08x\n",j,ptr3[j]);
+-		}
+-*/
+-	} else {
+-		struct saa7146_pgtable *pt = &buf->pt[0];
+-		return saa7146_pgtable_build_single(pci, pt, list, length);
+-	}
+-
+-	return 0;
+-}
+-
+-
+-/********************************************************************************/
+-/* file operations */
+-
+-static int video_begin(struct saa7146_fh *fh)
+-{
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct saa7146_format *fmt = NULL;
+-	unsigned int resource;
+-	int ret = 0, err = 0;
+-
+-	DEB_EE("dev:%p, fh:%p\n", dev, fh);
+-
+-	if ((vv->video_status & STATUS_CAPTURE) != 0) {
+-		if (vv->video_fh == fh) {
+-			DEB_S("already capturing\n");
+-			return 0;
+-		}
+-		DEB_S("already capturing in another open\n");
+-		return -EBUSY;
+-	}
+-
+-	if ((vv->video_status & STATUS_OVERLAY) != 0) {
+-		DEB_S("warning: suspending overlay video for streaming capture\n");
+-		vv->ov_suspend = vv->video_fh;
+-		err = saa7146_stop_preview(vv->video_fh); /* side effect: video_status is now 0, video_fh is NULL */
+-		if (0 != err) {
+-			DEB_D("suspending video failed. aborting\n");
+-			return err;
+-		}
+-	}
+-
+-	fmt = saa7146_format_by_fourcc(dev, vv->video_fmt.pixelformat);
+-	/* we need to have a valid format set here */
+-	if (!fmt)
+-		return -EINVAL;
+-
+-	if (0 != (fmt->flags & FORMAT_IS_PLANAR)) {
+-		resource = RESOURCE_DMA1_HPS|RESOURCE_DMA2_CLP|RESOURCE_DMA3_BRS;
+-	} else {
+-		resource = RESOURCE_DMA1_HPS;
+-	}
+-
+-	ret = saa7146_res_get(fh, resource);
+-	if (0 == ret) {
+-		DEB_S("cannot get capture resource %d\n", resource);
+-		if (vv->ov_suspend != NULL) {
+-			saa7146_start_preview(vv->ov_suspend);
+-			vv->ov_suspend = NULL;
+-		}
+-		return -EBUSY;
+-	}
+-
+-	/* clear out beginning of streaming bit (rps register 0)*/
+-	saa7146_write(dev, MC2, MASK_27 );
+-
+-	/* enable rps0 irqs */
+-	SAA7146_IER_ENABLE(dev, MASK_27);
+-
+-	vv->video_fh = fh;
+-	vv->video_status = STATUS_CAPTURE;
+-
+-	return 0;
+-}
+-
+-static int video_end(struct saa7146_fh *fh, struct file *file)
+-{
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct saa7146_dmaqueue *q = &vv->video_dmaq;
+-	struct saa7146_format *fmt = NULL;
+-	unsigned long flags;
+-	unsigned int resource;
+-	u32 dmas = 0;
+-	DEB_EE("dev:%p, fh:%p\n", dev, fh);
+-
+-	if ((vv->video_status & STATUS_CAPTURE) != STATUS_CAPTURE) {
+-		DEB_S("not capturing\n");
+-		return 0;
+-	}
+-
+-	if (vv->video_fh != fh) {
+-		DEB_S("capturing, but in another open\n");
+-		return -EBUSY;
+-	}
+-
+-	fmt = saa7146_format_by_fourcc(dev, vv->video_fmt.pixelformat);
+-	/* we need to have a valid format set here */
+-	if (!fmt)
+-		return -EINVAL;
+-
+-	if (0 != (fmt->flags & FORMAT_IS_PLANAR)) {
+-		resource = RESOURCE_DMA1_HPS|RESOURCE_DMA2_CLP|RESOURCE_DMA3_BRS;
+-		dmas = MASK_22 | MASK_21 | MASK_20;
+-	} else {
+-		resource = RESOURCE_DMA1_HPS;
+-		dmas = MASK_22;
+-	}
+-	spin_lock_irqsave(&dev->slock,flags);
+-
+-	/* disable rps0  */
+-	saa7146_write(dev, MC1, MASK_28);
+-
+-	/* disable rps0 irqs */
+-	SAA7146_IER_DISABLE(dev, MASK_27);
+-
+-	/* shut down all used video dma transfers */
+-	saa7146_write(dev, MC1, dmas);
+-
+-	if (q->curr)
+-		saa7146_buffer_finish(dev, q, VIDEOBUF_DONE);
+-
+-	spin_unlock_irqrestore(&dev->slock, flags);
+-
+-	vv->video_fh = NULL;
+-	vv->video_status = 0;
+-
+-	saa7146_res_free(fh, resource);
+-
+-	if (vv->ov_suspend != NULL) {
+-		saa7146_start_preview(vv->ov_suspend);
+-		vv->ov_suspend = NULL;
+-	}
+-
+-	return 0;
+-}
+-
+-static int vidioc_querycap(struct file *file, void *fh, struct v4l2_capability *cap)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-
+-	strscpy((char *)cap->driver, "saa7146 v4l2", sizeof(cap->driver));
+-	strscpy((char *)cap->card, dev->ext->name, sizeof(cap->card));
+-	cap->capabilities = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_VIDEO_OVERLAY |
+-			    V4L2_CAP_READWRITE | V4L2_CAP_STREAMING |
+-			    V4L2_CAP_DEVICE_CAPS;
+-	cap->capabilities |= dev->ext_vv_data->capabilities;
+-	return 0;
+-}
+-
+-static int vidioc_g_fbuf(struct file *file, void *fh, struct v4l2_framebuffer *fb)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	*fb = vv->ov_fb;
+-	fb->capability = V4L2_FBUF_CAP_LIST_CLIPPING;
+-	fb->flags = V4L2_FBUF_FLAG_PRIMARY;
+-	return 0;
+-}
+-
+-static int vidioc_s_fbuf(struct file *file, void *fh, const struct v4l2_framebuffer *fb)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct saa7146_format *fmt;
+-
+-	DEB_EE("VIDIOC_S_FBUF\n");
+-
+-	if (!capable(CAP_SYS_ADMIN) && !capable(CAP_SYS_RAWIO))
+-		return -EPERM;
+-
+-	/* check args */
+-	fmt = saa7146_format_by_fourcc(dev, fb->fmt.pixelformat);
+-	if (NULL == fmt)
+-		return -EINVAL;
+-
+-	/* planar formats are not allowed for overlay video, clipping and video dma would clash */
+-	if (fmt->flags & FORMAT_IS_PLANAR)
+-		DEB_S("planar pixelformat '%4.4s' not allowed for overlay\n",
+-		      (char *)&fmt->pixelformat);
+-
+-	/* check if overlay is running */
+-	if (IS_OVERLAY_ACTIVE(fh) != 0) {
+-		if (vv->video_fh != fh) {
+-			DEB_D("refusing to change framebuffer information while overlay is active in another open\n");
+-			return -EBUSY;
+-		}
+-	}
+-
+-	/* ok, accept it */
+-	vv->ov_fb = *fb;
+-	vv->ov_fmt = fmt;
+-
+-	if (vv->ov_fb.fmt.bytesperline < vv->ov_fb.fmt.width) {
+-		vv->ov_fb.fmt.bytesperline = vv->ov_fb.fmt.width * fmt->depth / 8;
+-		DEB_D("setting bytesperline to %d\n", vv->ov_fb.fmt.bytesperline);
+-	}
+-	return 0;
+-}
+-
+-static int vidioc_enum_fmt_vid_cap(struct file *file, void *fh, struct v4l2_fmtdesc *f)
+-{
+-	if (f->index >= ARRAY_SIZE(formats))
+-		return -EINVAL;
+-	f->pixelformat = formats[f->index].pixelformat;
+-	return 0;
+-}
+-
+-int saa7146_s_ctrl(struct v4l2_ctrl *ctrl)
+-{
+-	struct saa7146_dev *dev = container_of(ctrl->handler,
+-				struct saa7146_dev, ctrl_handler);
+-	struct saa7146_vv *vv = dev->vv_data;
+-	u32 val;
+-
+-	switch (ctrl->id) {
+-	case V4L2_CID_BRIGHTNESS:
+-		val = saa7146_read(dev, BCS_CTRL);
+-		val &= 0x00ffffff;
+-		val |= (ctrl->val << 24);
+-		saa7146_write(dev, BCS_CTRL, val);
+-		saa7146_write(dev, MC2, MASK_22 | MASK_06);
+-		break;
+-
+-	case V4L2_CID_CONTRAST:
+-		val = saa7146_read(dev, BCS_CTRL);
+-		val &= 0xff00ffff;
+-		val |= (ctrl->val << 16);
+-		saa7146_write(dev, BCS_CTRL, val);
+-		saa7146_write(dev, MC2, MASK_22 | MASK_06);
+-		break;
+-
+-	case V4L2_CID_SATURATION:
+-		val = saa7146_read(dev, BCS_CTRL);
+-		val &= 0xffffff00;
+-		val |= (ctrl->val << 0);
+-		saa7146_write(dev, BCS_CTRL, val);
+-		saa7146_write(dev, MC2, MASK_22 | MASK_06);
+-		break;
+-
+-	case V4L2_CID_HFLIP:
+-		/* fixme: we can support changing VFLIP and HFLIP here... */
+-		if ((vv->video_status & STATUS_CAPTURE))
+-			return -EBUSY;
+-		vv->hflip = ctrl->val;
+-		break;
+-
+-	case V4L2_CID_VFLIP:
+-		if ((vv->video_status & STATUS_CAPTURE))
+-			return -EBUSY;
+-		vv->vflip = ctrl->val;
+-		break;
+-
+-	default:
+-		return -EINVAL;
+-	}
+-
+-	if ((vv->video_status & STATUS_OVERLAY) != 0) { /* CHECK: && (vv->video_fh == fh)) */
+-		struct saa7146_fh *fh = vv->video_fh;
+-
+-		saa7146_stop_preview(fh);
+-		saa7146_start_preview(fh);
+-	}
+-	return 0;
+-}
+-
+-static int vidioc_g_parm(struct file *file, void *fh,
+-		struct v4l2_streamparm *parm)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	if (parm->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-		return -EINVAL;
+-	parm->parm.capture.readbuffers = 1;
+-	v4l2_video_std_frame_period(vv->standard->id,
+-				    &parm->parm.capture.timeperframe);
+-	return 0;
+-}
+-
+-static int vidioc_g_fmt_vid_cap(struct file *file, void *fh, struct v4l2_format *f)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	f->fmt.pix = vv->video_fmt;
+-	return 0;
+-}
+-
+-static int vidioc_g_fmt_vid_overlay(struct file *file, void *fh, struct v4l2_format *f)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	f->fmt.win = vv->ov.win;
+-	return 0;
+-}
+-
+-static int vidioc_g_fmt_vbi_cap(struct file *file, void *fh, struct v4l2_format *f)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	f->fmt.vbi = vv->vbi_fmt;
+-	return 0;
+-}
+-
+-static int vidioc_try_fmt_vid_cap(struct file *file, void *fh, struct v4l2_format *f)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct saa7146_format *fmt;
+-	enum v4l2_field field;
+-	int maxw, maxh;
+-	int calc_bpl;
+-
+-	DEB_EE("V4L2_BUF_TYPE_VIDEO_CAPTURE: dev:%p, fh:%p\n", dev, fh);
+-
+-	fmt = saa7146_format_by_fourcc(dev, f->fmt.pix.pixelformat);
+-	if (NULL == fmt)
+-		return -EINVAL;
+-
+-	field = f->fmt.pix.field;
+-	maxw  = vv->standard->h_max_out;
+-	maxh  = vv->standard->v_max_out;
+-
+-	if (V4L2_FIELD_ANY == field) {
+-		field = (f->fmt.pix.height > maxh / 2)
+-			? V4L2_FIELD_INTERLACED
+-			: V4L2_FIELD_BOTTOM;
+-	}
+-	switch (field) {
+-	case V4L2_FIELD_ALTERNATE:
+-		vv->last_field = V4L2_FIELD_TOP;
+-		maxh = maxh / 2;
+-		break;
+-	case V4L2_FIELD_TOP:
+-	case V4L2_FIELD_BOTTOM:
+-		vv->last_field = V4L2_FIELD_INTERLACED;
+-		maxh = maxh / 2;
+-		break;
+-	case V4L2_FIELD_INTERLACED:
+-		vv->last_field = V4L2_FIELD_INTERLACED;
+-		break;
+-	default:
+-		DEB_D("no known field mode '%d'\n", field);
+-		return -EINVAL;
+-	}
+-
+-	f->fmt.pix.field = field;
+-	f->fmt.pix.colorspace = V4L2_COLORSPACE_SMPTE170M;
+-	if (f->fmt.pix.width > maxw)
+-		f->fmt.pix.width = maxw;
+-	if (f->fmt.pix.height > maxh)
+-		f->fmt.pix.height = maxh;
+-
+-	calc_bpl = (f->fmt.pix.width * fmt->depth) / 8;
+-
+-	if (f->fmt.pix.bytesperline < calc_bpl)
+-		f->fmt.pix.bytesperline = calc_bpl;
+-
+-	if (f->fmt.pix.bytesperline > (2 * PAGE_SIZE * fmt->depth) / 8) /* arbitrary constraint */
+-		f->fmt.pix.bytesperline = calc_bpl;
+-
+-	f->fmt.pix.sizeimage = f->fmt.pix.bytesperline * f->fmt.pix.height;
+-	DEB_D("w:%d, h:%d, bytesperline:%d, sizeimage:%d\n",
+-	      f->fmt.pix.width, f->fmt.pix.height,
+-	      f->fmt.pix.bytesperline, f->fmt.pix.sizeimage);
+-
+-	return 0;
+-}
+-
+-
+-static int vidioc_try_fmt_vid_overlay(struct file *file, void *fh, struct v4l2_format *f)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct v4l2_window *win = &f->fmt.win;
+-	enum v4l2_field field;
+-	int maxw, maxh;
+-
+-	DEB_EE("dev:%p\n", dev);
+-
+-	if (NULL == vv->ov_fb.base) {
+-		DEB_D("no fb base set\n");
+-		return -EINVAL;
+-	}
+-	if (NULL == vv->ov_fmt) {
+-		DEB_D("no fb fmt set\n");
+-		return -EINVAL;
+-	}
+-	if (win->w.width < 48 || win->w.height < 32) {
+-		DEB_D("min width/height. (%d,%d)\n",
+-		      win->w.width, win->w.height);
+-		return -EINVAL;
+-	}
+-	if (win->clipcount > 16) {
+-		DEB_D("clipcount too big\n");
+-		return -EINVAL;
+-	}
+-
+-	field = win->field;
+-	maxw  = vv->standard->h_max_out;
+-	maxh  = vv->standard->v_max_out;
+-
+-	if (V4L2_FIELD_ANY == field) {
+-		field = (win->w.height > maxh / 2)
+-			? V4L2_FIELD_INTERLACED
+-			: V4L2_FIELD_TOP;
+-		}
+-	switch (field) {
+-	case V4L2_FIELD_TOP:
+-	case V4L2_FIELD_BOTTOM:
+-	case V4L2_FIELD_ALTERNATE:
+-		maxh = maxh / 2;
+-		break;
+-	case V4L2_FIELD_INTERLACED:
+-		break;
+-	default:
+-		DEB_D("no known field mode '%d'\n", field);
+-		return -EINVAL;
+-	}
+-
+-	win->field = field;
+-	if (win->w.width > maxw)
+-		win->w.width = maxw;
+-	if (win->w.height > maxh)
+-		win->w.height = maxh;
+-
+-	return 0;
+-}
+-
+-static int vidioc_s_fmt_vid_cap(struct file *file, void *__fh, struct v4l2_format *f)
+-{
+-	struct saa7146_fh *fh = __fh;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	int err;
+-
+-	DEB_EE("V4L2_BUF_TYPE_VIDEO_CAPTURE: dev:%p, fh:%p\n", dev, fh);
+-	if (IS_CAPTURE_ACTIVE(fh) != 0) {
+-		DEB_EE("streaming capture is active\n");
+-		return -EBUSY;
+-	}
+-	err = vidioc_try_fmt_vid_cap(file, fh, f);
+-	if (0 != err)
+-		return err;
+-	vv->video_fmt = f->fmt.pix;
+-	DEB_EE("set to pixelformat '%4.4s'\n",
+-	       (char *)&vv->video_fmt.pixelformat);
+-	return 0;
+-}
+-
+-static int vidioc_s_fmt_vid_overlay(struct file *file, void *__fh, struct v4l2_format *f)
+-{
+-	struct saa7146_fh *fh = __fh;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	int err;
+-
+-	DEB_EE("V4L2_BUF_TYPE_VIDEO_OVERLAY: dev:%p, fh:%p\n", dev, fh);
+-	err = vidioc_try_fmt_vid_overlay(file, fh, f);
+-	if (0 != err)
+-		return err;
+-	vv->ov.win    = f->fmt.win;
+-	vv->ov.nclips = f->fmt.win.clipcount;
+-	if (vv->ov.nclips > 16)
+-		vv->ov.nclips = 16;
+-	memcpy(vv->ov.clips, f->fmt.win.clips,
+-	       sizeof(struct v4l2_clip) * vv->ov.nclips);
+-
+-	/* vv->ov.fh is used to indicate that we have valid overlay information, too */
+-	vv->ov.fh = fh;
+-
+-	/* check if our current overlay is active */
+-	if (IS_OVERLAY_ACTIVE(fh) != 0) {
+-		saa7146_stop_preview(fh);
+-		saa7146_start_preview(fh);
+-	}
+-	return 0;
+-}
+-
+-static int vidioc_g_std(struct file *file, void *fh, v4l2_std_id *norm)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	*norm = vv->standard->id;
+-	return 0;
+-}
+-
+-	/* the saa7146 supfhrts (used in conjunction with the saa7111a for example)
+-	   PAL / NTSC / SECAM. if your hardware does not (or does more)
+-	   -- override this function in your extension */
+-/*
+-	case VIDIOC_ENUMSTD:
+-	{
+-		struct v4l2_standard *e = arg;
+-		if (e->index < 0 )
+-			return -EINVAL;
+-		if( e->index < dev->ext_vv_data->num_stds ) {
+-			DEB_EE("VIDIOC_ENUMSTD: index:%d\n", e->index);
+-			v4l2_video_std_construct(e, dev->ext_vv_data->stds[e->index].id, dev->ext_vv_data->stds[e->index].name);
+-			return 0;
+-		}
+-		return -EINVAL;
+-	}
+-	*/
+-
+-static int vidioc_s_std(struct file *file, void *fh, v4l2_std_id id)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	int found = 0;
+-	int err, i;
+-
+-	DEB_EE("VIDIOC_S_STD\n");
+-
+-	if ((vv->video_status & STATUS_CAPTURE) == STATUS_CAPTURE) {
+-		DEB_D("cannot change video standard while streaming capture is active\n");
+-		return -EBUSY;
+-	}
+-
+-	if ((vv->video_status & STATUS_OVERLAY) != 0) {
+-		vv->ov_suspend = vv->video_fh;
+-		err = saa7146_stop_preview(vv->video_fh); /* side effect: video_status is now 0, video_fh is NULL */
+-		if (0 != err) {
+-			DEB_D("suspending video failed. aborting\n");
+-			return err;
+-		}
+-	}
+-
+-	for (i = 0; i < dev->ext_vv_data->num_stds; i++)
+-		if (id & dev->ext_vv_data->stds[i].id)
+-			break;
+-	if (i != dev->ext_vv_data->num_stds) {
+-		vv->standard = &dev->ext_vv_data->stds[i];
+-		if (NULL != dev->ext_vv_data->std_callback)
+-			dev->ext_vv_data->std_callback(dev, vv->standard);
+-		found = 1;
+-	}
+-
+-	if (vv->ov_suspend != NULL) {
+-		saa7146_start_preview(vv->ov_suspend);
+-		vv->ov_suspend = NULL;
+-	}
+-
+-	if (!found) {
+-		DEB_EE("VIDIOC_S_STD: standard not found\n");
+-		return -EINVAL;
+-	}
+-
+-	DEB_EE("VIDIOC_S_STD: set to standard to '%s'\n", vv->standard->name);
+-	return 0;
+-}
+-
+-static int vidioc_overlay(struct file *file, void *fh, unsigned int on)
+-{
+-	int err;
+-
+-	DEB_D("VIDIOC_OVERLAY on:%d\n", on);
+-	if (on)
+-		err = saa7146_start_preview(fh);
+-	else
+-		err = saa7146_stop_preview(fh);
+-	return err;
+-}
+-
+-static int vidioc_reqbufs(struct file *file, void *__fh, struct v4l2_requestbuffers *b)
+-{
+-	struct saa7146_fh *fh = __fh;
+-
+-	if (b->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-		return videobuf_reqbufs(&fh->video_q, b);
+-	if (b->type == V4L2_BUF_TYPE_VBI_CAPTURE)
+-		return videobuf_reqbufs(&fh->vbi_q, b);
+-	return -EINVAL;
+-}
+-
+-static int vidioc_querybuf(struct file *file, void *__fh, struct v4l2_buffer *buf)
+-{
+-	struct saa7146_fh *fh = __fh;
+-
+-	if (buf->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-		return videobuf_querybuf(&fh->video_q, buf);
+-	if (buf->type == V4L2_BUF_TYPE_VBI_CAPTURE)
+-		return videobuf_querybuf(&fh->vbi_q, buf);
+-	return -EINVAL;
+-}
+-
+-static int vidioc_qbuf(struct file *file, void *__fh, struct v4l2_buffer *buf)
+-{
+-	struct saa7146_fh *fh = __fh;
+-
+-	if (buf->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-		return videobuf_qbuf(&fh->video_q, buf);
+-	if (buf->type == V4L2_BUF_TYPE_VBI_CAPTURE)
+-		return videobuf_qbuf(&fh->vbi_q, buf);
+-	return -EINVAL;
+-}
+-
+-static int vidioc_dqbuf(struct file *file, void *__fh, struct v4l2_buffer *buf)
+-{
+-	struct saa7146_fh *fh = __fh;
+-
+-	if (buf->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-		return videobuf_dqbuf(&fh->video_q, buf, file->f_flags & O_NONBLOCK);
+-	if (buf->type == V4L2_BUF_TYPE_VBI_CAPTURE)
+-		return videobuf_dqbuf(&fh->vbi_q, buf, file->f_flags & O_NONBLOCK);
+-	return -EINVAL;
+-}
+-
+-static int vidioc_streamon(struct file *file, void *__fh, enum v4l2_buf_type type)
+-{
+-	struct saa7146_fh *fh = __fh;
+-	int err;
+-
+-	DEB_D("VIDIOC_STREAMON, type:%d\n", type);
+-
+-	err = video_begin(fh);
+-	if (err)
+-		return err;
+-	if (type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-		return videobuf_streamon(&fh->video_q);
+-	if (type == V4L2_BUF_TYPE_VBI_CAPTURE)
+-		return videobuf_streamon(&fh->vbi_q);
+-	return -EINVAL;
+-}
+-
+-static int vidioc_streamoff(struct file *file, void *__fh, enum v4l2_buf_type type)
+-{
+-	struct saa7146_fh *fh = __fh;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	int err;
+-
+-	DEB_D("VIDIOC_STREAMOFF, type:%d\n", type);
+-
+-	/* ugly: we need to copy some checks from video_end(),
+-	   because videobuf_streamoff() relies on the capture running.
+-	   check and fix this */
+-	if ((vv->video_status & STATUS_CAPTURE) != STATUS_CAPTURE) {
+-		DEB_S("not capturing\n");
+-		return 0;
+-	}
+-
+-	if (vv->video_fh != fh) {
+-		DEB_S("capturing, but in another open\n");
+-		return -EBUSY;
+-	}
+-
+-	err = -EINVAL;
+-	if (type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-		err = videobuf_streamoff(&fh->video_q);
+-	else if (type == V4L2_BUF_TYPE_VBI_CAPTURE)
+-		err = videobuf_streamoff(&fh->vbi_q);
+-	if (0 != err) {
+-		DEB_D("warning: videobuf_streamoff() failed\n");
+-		video_end(fh, file);
+-	} else {
+-		err = video_end(fh, file);
+-	}
+-	return err;
+-}
+-
+-const struct v4l2_ioctl_ops saa7146_video_ioctl_ops = {
+-	.vidioc_querycap             = vidioc_querycap,
+-	.vidioc_enum_fmt_vid_cap     = vidioc_enum_fmt_vid_cap,
+-	.vidioc_enum_fmt_vid_overlay = vidioc_enum_fmt_vid_cap,
+-	.vidioc_g_fmt_vid_cap        = vidioc_g_fmt_vid_cap,
+-	.vidioc_try_fmt_vid_cap      = vidioc_try_fmt_vid_cap,
+-	.vidioc_s_fmt_vid_cap        = vidioc_s_fmt_vid_cap,
+-	.vidioc_g_fmt_vid_overlay    = vidioc_g_fmt_vid_overlay,
+-	.vidioc_try_fmt_vid_overlay  = vidioc_try_fmt_vid_overlay,
+-	.vidioc_s_fmt_vid_overlay    = vidioc_s_fmt_vid_overlay,
+-
+-	.vidioc_overlay		     = vidioc_overlay,
+-	.vidioc_g_fbuf		     = vidioc_g_fbuf,
+-	.vidioc_s_fbuf		     = vidioc_s_fbuf,
+-	.vidioc_reqbufs              = vidioc_reqbufs,
+-	.vidioc_querybuf             = vidioc_querybuf,
+-	.vidioc_qbuf                 = vidioc_qbuf,
+-	.vidioc_dqbuf                = vidioc_dqbuf,
+-	.vidioc_g_std                = vidioc_g_std,
+-	.vidioc_s_std                = vidioc_s_std,
+-	.vidioc_streamon             = vidioc_streamon,
+-	.vidioc_streamoff            = vidioc_streamoff,
+-	.vidioc_g_parm		     = vidioc_g_parm,
+-	.vidioc_subscribe_event      = v4l2_ctrl_subscribe_event,
+-	.vidioc_unsubscribe_event    = v4l2_event_unsubscribe,
+-};
+-
+-const struct v4l2_ioctl_ops saa7146_vbi_ioctl_ops = {
+-	.vidioc_querycap             = vidioc_querycap,
+-	.vidioc_g_fmt_vbi_cap        = vidioc_g_fmt_vbi_cap,
+-
+-	.vidioc_reqbufs              = vidioc_reqbufs,
+-	.vidioc_querybuf             = vidioc_querybuf,
+-	.vidioc_qbuf                 = vidioc_qbuf,
+-	.vidioc_dqbuf                = vidioc_dqbuf,
+-	.vidioc_g_std                = vidioc_g_std,
+-	.vidioc_s_std                = vidioc_s_std,
+-	.vidioc_streamon             = vidioc_streamon,
+-	.vidioc_streamoff            = vidioc_streamoff,
+-	.vidioc_g_parm		     = vidioc_g_parm,
+-	.vidioc_subscribe_event      = v4l2_ctrl_subscribe_event,
+-	.vidioc_unsubscribe_event    = v4l2_event_unsubscribe,
+-};
+-
+-/*********************************************************************************/
+-/* buffer handling functions                                                  */
+-
+-static int buffer_activate (struct saa7146_dev *dev,
+-		     struct saa7146_buf *buf,
+-		     struct saa7146_buf *next)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	buf->vb.state = VIDEOBUF_ACTIVE;
+-	saa7146_set_capture(dev,buf,next);
+-
+-	mod_timer(&vv->video_dmaq.timeout, jiffies+BUFFER_TIMEOUT);
+-	return 0;
+-}
+-
+-static void release_all_pagetables(struct saa7146_dev *dev, struct saa7146_buf *buf)
+-{
+-	saa7146_pgtable_free(dev->pci, &buf->pt[0]);
+-	saa7146_pgtable_free(dev->pci, &buf->pt[1]);
+-	saa7146_pgtable_free(dev->pci, &buf->pt[2]);
+-}
+-
+-static int buffer_prepare(struct videobuf_queue *q,
+-			  struct videobuf_buffer *vb, enum v4l2_field field)
+-{
+-	struct file *file = q->priv_data;
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct saa7146_buf *buf = (struct saa7146_buf *)vb;
+-	int size,err = 0;
+-
+-	DEB_CAP("vbuf:%p\n", vb);
+-
+-	/* sanity checks */
+-	if (vv->video_fmt.width  < 48 ||
+-	    vv->video_fmt.height < 32 ||
+-	    vv->video_fmt.width  > vv->standard->h_max_out ||
+-	    vv->video_fmt.height > vv->standard->v_max_out) {
+-		DEB_D("w (%d) / h (%d) out of bounds\n",
+-		      vv->video_fmt.width, vv->video_fmt.height);
+-		return -EINVAL;
+-	}
+-
+-	size = vv->video_fmt.sizeimage;
+-	if (0 != buf->vb.baddr && buf->vb.bsize < size) {
+-		DEB_D("size mismatch\n");
+-		return -EINVAL;
+-	}
+-
+-	DEB_CAP("buffer_prepare [size=%dx%d,bytes=%d,fields=%s]\n",
+-		vv->video_fmt.width, vv->video_fmt.height,
+-		size, v4l2_field_names[vv->video_fmt.field]);
+-	if (buf->vb.width  != vv->video_fmt.width  ||
+-	    buf->vb.bytesperline != vv->video_fmt.bytesperline ||
+-	    buf->vb.height != vv->video_fmt.height ||
+-	    buf->vb.size   != size ||
+-	    buf->vb.field  != field      ||
+-	    buf->vb.field  != vv->video_fmt.field  ||
+-	    buf->fmt       != &vv->video_fmt) {
+-		saa7146_dma_free(dev,q,buf);
+-	}
+-
+-	if (VIDEOBUF_NEEDS_INIT == buf->vb.state) {
+-		struct saa7146_format *sfmt;
+-
+-		buf->vb.bytesperline  = vv->video_fmt.bytesperline;
+-		buf->vb.width  = vv->video_fmt.width;
+-		buf->vb.height = vv->video_fmt.height;
+-		buf->vb.size   = size;
+-		buf->vb.field  = field;
+-		buf->fmt       = &vv->video_fmt;
+-		buf->vb.field  = vv->video_fmt.field;
+-
+-		sfmt = saa7146_format_by_fourcc(dev,buf->fmt->pixelformat);
+-
+-		release_all_pagetables(dev, buf);
+-		if( 0 != IS_PLANAR(sfmt->trans)) {
+-			saa7146_pgtable_alloc(dev->pci, &buf->pt[0]);
+-			saa7146_pgtable_alloc(dev->pci, &buf->pt[1]);
+-			saa7146_pgtable_alloc(dev->pci, &buf->pt[2]);
+-		} else {
+-			saa7146_pgtable_alloc(dev->pci, &buf->pt[0]);
+-		}
+-
+-		err = videobuf_iolock(q,&buf->vb, &vv->ov_fb);
+-		if (err)
+-			goto oops;
+-		err = saa7146_pgtable_build(dev,buf);
+-		if (err)
+-			goto oops;
+-	}
+-	buf->vb.state = VIDEOBUF_PREPARED;
+-	buf->activate = buffer_activate;
+-
+-	return 0;
+-
+- oops:
+-	DEB_D("error out\n");
+-	saa7146_dma_free(dev,q,buf);
+-
+-	return err;
+-}
+-
+-static int buffer_setup(struct videobuf_queue *q, unsigned int *count, unsigned int *size)
+-{
+-	struct file *file = q->priv_data;
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_vv *vv = fh->dev->vv_data;
+-
+-	if (0 == *count || *count > MAX_SAA7146_CAPTURE_BUFFERS)
+-		*count = MAX_SAA7146_CAPTURE_BUFFERS;
+-
+-	*size = vv->video_fmt.sizeimage;
+-
+-	/* check if we exceed the "max_memory" parameter */
+-	if( (*count * *size) > (max_memory*1048576) ) {
+-		*count = (max_memory*1048576) / *size;
+-	}
+-
+-	DEB_CAP("%d buffers, %d bytes each\n", *count, *size);
+-
+-	return 0;
+-}
+-
+-static void buffer_queue(struct videobuf_queue *q, struct videobuf_buffer *vb)
+-{
+-	struct file *file = q->priv_data;
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct saa7146_buf *buf = (struct saa7146_buf *)vb;
+-
+-	DEB_CAP("vbuf:%p\n", vb);
+-	saa7146_buffer_queue(fh->dev, &vv->video_dmaq, buf);
+-}
+-
+-static void buffer_release(struct videobuf_queue *q, struct videobuf_buffer *vb)
+-{
+-	struct file *file = q->priv_data;
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_buf *buf = (struct saa7146_buf *)vb;
+-
+-	DEB_CAP("vbuf:%p\n", vb);
+-
+-	saa7146_dma_free(dev,q,buf);
+-
+-	release_all_pagetables(dev, buf);
+-}
+-
+-static const struct videobuf_queue_ops video_qops = {
+-	.buf_setup    = buffer_setup,
+-	.buf_prepare  = buffer_prepare,
+-	.buf_queue    = buffer_queue,
+-	.buf_release  = buffer_release,
+-};
+-
+-/********************************************************************************/
+-/* file operations */
+-
+-static void video_init(struct saa7146_dev *dev, struct saa7146_vv *vv)
+-{
+-	INIT_LIST_HEAD(&vv->video_dmaq.queue);
+-
+-	timer_setup(&vv->video_dmaq.timeout, saa7146_buffer_timeout, 0);
+-	vv->video_dmaq.dev              = dev;
+-
+-	/* set some default values */
+-	vv->standard = &dev->ext_vv_data->stds[0];
+-
+-	/* FIXME: what's this? */
+-	vv->current_hps_source = SAA7146_HPS_SOURCE_PORT_A;
+-	vv->current_hps_sync = SAA7146_HPS_SYNC_PORT_A;
+-}
+-
+-
+-static int video_open(struct saa7146_dev *dev, struct file *file)
+-{
+-	struct saa7146_fh *fh = file->private_data;
+-
+-	videobuf_queue_sg_init(&fh->video_q, &video_qops,
+-			    &dev->pci->dev, &dev->slock,
+-			    V4L2_BUF_TYPE_VIDEO_CAPTURE,
+-			    V4L2_FIELD_INTERLACED,
+-			    sizeof(struct saa7146_buf),
+-			    file, &dev->v4l2_lock);
+-
+-	return 0;
+-}
+-
+-
+-static void video_close(struct saa7146_dev *dev, struct file *file)
+-{
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct videobuf_queue *q = &fh->video_q;
+-
+-	if (IS_CAPTURE_ACTIVE(fh) != 0)
+-		video_end(fh, file);
+-	else if (IS_OVERLAY_ACTIVE(fh) != 0)
+-		saa7146_stop_preview(fh);
+-
+-	videobuf_stop(q);
+-	/* hmm, why is this function declared void? */
+-}
+-
+-
+-static void video_irq_done(struct saa7146_dev *dev, unsigned long st)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct saa7146_dmaqueue *q = &vv->video_dmaq;
+-
+-	spin_lock(&dev->slock);
+-	DEB_CAP("called\n");
+-
+-	/* only finish the buffer if we have one... */
+-	if( NULL != q->curr ) {
+-		saa7146_buffer_finish(dev,q,VIDEOBUF_DONE);
+-	}
+-	saa7146_buffer_next(dev,q,0);
+-
+-	spin_unlock(&dev->slock);
+-}
+-
+-static ssize_t video_read(struct file *file, char __user *data, size_t count, loff_t *ppos)
+-{
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	ssize_t ret = 0;
+-
+-	DEB_EE("called\n");
+-
+-	if ((vv->video_status & STATUS_CAPTURE) != 0) {
+-		/* fixme: should we allow read() captures while streaming capture? */
+-		if (vv->video_fh == fh) {
+-			DEB_S("already capturing\n");
+-			return -EBUSY;
+-		}
+-		DEB_S("already capturing in another open\n");
+-		return -EBUSY;
+-	}
+-
+-	ret = video_begin(fh);
+-	if( 0 != ret) {
+-		goto out;
+-	}
+-
+-	ret = videobuf_read_one(&fh->video_q , data, count, ppos,
+-				file->f_flags & O_NONBLOCK);
+-	if (ret != 0) {
+-		video_end(fh, file);
+-	} else {
+-		ret = video_end(fh, file);
+-	}
+-out:
+-	/* restart overlay if it was active before */
+-	if (vv->ov_suspend != NULL) {
+-		saa7146_start_preview(vv->ov_suspend);
+-		vv->ov_suspend = NULL;
+-	}
+-
+-	return ret;
+-}
+-
+-const struct saa7146_use_ops saa7146_video_uops = {
+-	.init = video_init,
+-	.open = video_open,
+-	.release = video_close,
+-	.irq_done = video_irq_done,
+-	.read = video_read,
+-};
+diff --git a/drivers/staging/media/deprecated/saa7146/common/saa7146_vv.h b/drivers/staging/media/deprecated/saa7146/common/saa7146_vv.h
+deleted file mode 100644
+index d7bd916fe3ad..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/common/saa7146_vv.h
++++ /dev/null
+@@ -1,266 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef __SAA7146_VV__
+-#define __SAA7146_VV__
+-
+-#include <media/v4l2-common.h>
+-#include <media/v4l2-ioctl.h>
 -#include <media/v4l2-fh.h>
+-#include <media/videobuf-dma-sg.h>
+-#include "saa7146.h"
 -
--#include <linux/dvb/frontend.h>
--#include <media/dvb_demux.h>
--#include <media/dvb_frontend.h>
--#include <media/dmxdev.h>
+-#define MAX_SAA7146_CAPTURE_BUFFERS	32	/* arbitrary */
+-#define BUFFER_TIMEOUT     (HZ/2)  /* 0.5 seconds */
 -
--/* Inputs */
--enum tm6000_itype {
--	TM6000_INPUT_TV	= 1,
--	TM6000_INPUT_COMPOSITE1,
--	TM6000_INPUT_COMPOSITE2,
--	TM6000_INPUT_SVIDEO,
--	TM6000_INPUT_DVB,
--	TM6000_INPUT_RADIO,
+-#define WRITE_RPS0(x) do { \
+-	dev->d_rps0.cpu_addr[ count++ ] = cpu_to_le32(x); \
+-	} while (0);
+-
+-#define WRITE_RPS1(x) do { \
+-	dev->d_rps1.cpu_addr[ count++ ] = cpu_to_le32(x); \
+-	} while (0);
+-
+-struct	saa7146_video_dma {
+-	u32 base_odd;
+-	u32 base_even;
+-	u32 prot_addr;
+-	u32 pitch;
+-	u32 base_page;
+-	u32 num_line_byte;
 -};
 -
--enum tm6000_mux {
--	TM6000_VMUX_VIDEO_A = 1,
--	TM6000_VMUX_VIDEO_B,
--	TM6000_VMUX_VIDEO_AB,
--	TM6000_AMUX_ADC1,
--	TM6000_AMUX_ADC2,
--	TM6000_AMUX_SIF1,
--	TM6000_AMUX_SIF2,
--	TM6000_AMUX_I2S,
+-#define FORMAT_BYTE_SWAP	0x1
+-#define FORMAT_IS_PLANAR	0x2
+-
+-struct saa7146_format {
+-	u32	pixelformat;
+-	u32	trans;
+-	u8	depth;
+-	u8	flags;
+-	u8	swap;
 -};
 -
--enum tm6000_devtype {
--	TM6000 = 0,
--	TM5600,
--	TM6010,
+-struct saa7146_standard
+-{
+-	char          *name;
+-	v4l2_std_id   id;
+-
+-	int v_offset;	/* number of lines of vertical offset before processing */
+-	int v_field;	/* number of lines in a field for HPS to process */
+-
+-	int h_offset;	/* horizontal offset of processing window */
+-	int h_pixels;	/* number of horizontal pixels to process */
+-
+-	int v_max_out;
+-	int h_max_out;
 -};
 -
--struct tm6000_input {
--	enum tm6000_itype	type;
--	enum tm6000_mux		vmux;
--	enum tm6000_mux		amux;
--	unsigned int		v_gpio;
--	unsigned int		a_gpio;
--};
--
--/* ------------------------------------------------------------------
-- *	Basic structures
-- * ------------------------------------------------------------------
-- */
--
--struct tm6000_fmt {
--	u32   fourcc;          /* v4l2 format id */
--	int   depth;
--};
--
--/* buffer for one video frame */
--struct tm6000_buffer {
+-/* buffer for one video/vbi frame */
+-struct saa7146_buf {
 -	/* common v4l buffer stuff -- must be first */
 -	struct videobuf_buffer vb;
 -
--	struct tm6000_fmt      *fmt;
+-	/* saa7146 specific */
+-	struct v4l2_pix_format  *fmt;
+-	int (*activate)(struct saa7146_dev *dev,
+-			struct saa7146_buf *buf,
+-			struct saa7146_buf *next);
+-
+-	/* page tables */
+-	struct saa7146_pgtable  pt[3];
 -};
 -
--struct tm6000_dmaqueue {
--	struct list_head       active;
--	struct list_head       queued;
--
--	/* thread for generating video stream*/
--	struct task_struct         *kthread;
--	wait_queue_head_t          wq;
--	/* Counters to control fps rate */
--	int                        frame;
--	int                        ini_jiffies;
+-struct saa7146_dmaqueue {
+-	struct saa7146_dev	*dev;
+-	struct saa7146_buf	*curr;
+-	struct list_head	queue;
+-	struct timer_list	timeout;
 -};
 -
--/* device states */
--enum tm6000_core_state {
--	DEV_INITIALIZED   = 0x01,
--	DEV_DISCONNECTED  = 0x02,
--	DEV_MISCONFIGURED = 0x04,
+-struct saa7146_overlay {
+-	struct saa7146_fh	*fh;
+-	struct v4l2_window	win;
+-	struct v4l2_clip	clips[16];
+-	int			nclips;
 -};
 -
--/* io methods */
--enum tm6000_io_method {
--	IO_NONE,
--	IO_READ,
--	IO_MMAP,
--};
--
--enum tm6000_mode {
--	TM6000_MODE_UNKNOWN = 0,
--	TM6000_MODE_ANALOG,
--	TM6000_MODE_DIGITAL,
--};
--
--struct tm6000_gpio {
--	int		tuner_reset;
--	int		tuner_on;
--	int		demod_reset;
--	int		demod_on;
--	int		power_led;
--	int		dvb_led;
--	int		ir;
--};
--
--struct tm6000_capabilities {
--	unsigned int    has_tuner:1;
--	unsigned int    has_tda9874:1;
--	unsigned int    has_dvb:1;
--	unsigned int    has_zl10353:1;
--	unsigned int    has_eeprom:1;
--	unsigned int    has_remote:1;
--	unsigned int    has_radio:1;
--};
--
--struct tm6000_dvb {
--	struct dvb_adapter	adapter;
--	struct dvb_demux	demux;
--	struct dvb_frontend	*frontend;
--	struct dmxdev		dmxdev;
--	unsigned int		streams;
--	struct urb		*bulk_urb;
--	struct mutex		mutex;
--};
--
--struct snd_tm6000_card {
--	struct snd_card			*card;
--	spinlock_t			reg_lock;
--	struct tm6000_core		*core;
--	struct snd_pcm_substream	*substream;
--
--	/* temporary data for buffer fill processing */
--	unsigned			buf_pos;
--	unsigned			period_pos;
--};
--
--struct tm6000_endpoint {
--	struct usb_host_endpoint	*endp;
--	__u8				bInterfaceNumber;
--	__u8				bAlternateSetting;
--	unsigned			maxsize;
--};
--
--#define TM6000_QUIRK_NO_USB_DELAY (1 << 0)
--
--struct tm6000_core {
--	/* generic device properties */
--	char				name[30];	/* name (including minor) of the device */
--	int				model;		/* index in the device_data struct */
--	int				devno;		/* marks the number of this device */
--	enum tm6000_devtype		dev_type;	/* type of device */
--	unsigned char			eedata[256];	/* Eeprom data */
--	unsigned			eedata_size;	/* Size of the eeprom info */
--
--	v4l2_std_id                     norm;           /* Current norm */
--	int				width, height;	/* Selected resolution */
--
--	enum tm6000_core_state		state;
--
--	/* Device Capabilities*/
--	struct tm6000_capabilities	caps;
--
--	/* Used to load alsa/dvb */
--	struct work_struct		request_module_wk;
--
--	/* Tuner configuration */
--	int				tuner_type;		/* type of the tuner */
--	int				tuner_addr;		/* tuner address */
--
--	struct tm6000_gpio		gpio;
--
--	char				*ir_codes;
--
--	__u8				radio;
--
--	/* Demodulator configuration */
--	int				demod_addr;	/* demodulator address */
--
--	int				audio_bitrate;
--	/* i2c i/o */
--	struct i2c_adapter		i2c_adap;
--	struct i2c_client		i2c_client;
--
--
--	/* extension */
--	struct list_head		devlist;
--
--	/* video for linux */
--	int				users;
--
--	/* various device info */
--	struct tm6000_fh		*resources;	/* Points to fh that is streaming */
--	bool				is_res_read;
--
--	struct video_device		vfd;
--	struct video_device		radio_dev;
--	struct tm6000_dmaqueue		vidq;
--	struct v4l2_device		v4l2_dev;
--	struct v4l2_ctrl_handler	ctrl_handler;
--	struct v4l2_ctrl_handler	radio_ctrl_handler;
--
--	int				input;
--	struct tm6000_input		vinput[3];	/* video input */
--	struct tm6000_input		rinput;		/* radio input */
--
--	int				freq;
--	unsigned int			fourcc;
--
--	enum tm6000_mode		mode;
--
--	int				ctl_mute;             /* audio */
--	int				ctl_volume;
--	int				amode;
--
--	/* DVB-T support */
--	struct tm6000_dvb		*dvb;
--
--	/* audio support */
--	struct snd_tm6000_card		*adev;
--	struct work_struct		wq_trigger;   /* Trigger to start/stop audio for alsa module */
--	atomic_t			stream_started;  /* stream should be running if true */
--
--	struct tm6000_IR		*ir;
--
--	/* locks */
--	struct mutex			lock;
--	struct mutex			usb_lock;
--
--	/* usb transfer */
--	struct usb_device		*udev;		/* the usb device */
--
--	struct tm6000_endpoint		bulk_in, bulk_out, isoc_in, isoc_out;
--	struct tm6000_endpoint		int_in, int_out;
--
--	/* scaler!=0 if scaler is active*/
--	int				scaler;
--
--		/* Isoc control struct */
--	struct usb_isoc_ctl          isoc_ctl;
--
--	spinlock_t                   slock;
--
--	/* urb dma buffers */
--	char				**urb_buffer;
--	dma_addr_t			*urb_dma;
--	unsigned int			urb_size;
--
--	unsigned long quirks;
--};
--
--enum tm6000_ops_type {
--	TM6000_AUDIO = 0x10,
--	TM6000_DVB = 0x20,
--};
--
--struct tm6000_ops {
--	struct list_head	next;
--	char			*name;
--	enum tm6000_ops_type	type;
--	int (*init)(struct tm6000_core *);
--	int (*fini)(struct tm6000_core *);
--	int (*fillbuf)(struct tm6000_core *, char *buf, int size);
--};
--
--struct tm6000_fh {
--	struct v4l2_fh		     fh;
--	struct tm6000_core           *dev;
--	unsigned int                 radio;
+-/* per open data */
+-struct saa7146_fh {
+-	/* Must be the first field! */
+-	struct v4l2_fh		fh;
+-	struct saa7146_dev	*dev;
 -
 -	/* video capture */
--	struct tm6000_fmt            *fmt;
--	unsigned int                 width, height;
--	struct videobuf_queue        vb_vidq;
+-	struct videobuf_queue	video_q;
 -
--	enum v4l2_buf_type           type;
+-	/* vbi capture */
+-	struct videobuf_queue	vbi_q;
+-
+-	unsigned int resources;	/* resource management for device open */
 -};
 -
--#define TM6000_STD	(V4L2_STD_PAL|V4L2_STD_PAL_N|V4L2_STD_PAL_Nc|    \
--			V4L2_STD_PAL_M|V4L2_STD_PAL_60|V4L2_STD_NTSC_M| \
--			V4L2_STD_NTSC_M_JP|V4L2_STD_SECAM)
+-#define STATUS_OVERLAY	0x01
+-#define STATUS_CAPTURE	0x02
 -
--/* In tm6000-cards.c */
+-struct saa7146_vv
+-{
+-	/* vbi capture */
+-	struct saa7146_dmaqueue		vbi_dmaq;
+-	struct v4l2_vbi_format		vbi_fmt;
+-	struct timer_list		vbi_read_timeout;
+-	struct file			*vbi_read_timeout_file;
+-	/* vbi workaround interrupt queue */
+-	wait_queue_head_t		vbi_wq;
+-	int				vbi_fieldcount;
+-	struct saa7146_fh		*vbi_streaming;
 -
--int tm6000_tuner_callback(void *ptr, int component, int command, int arg);
--int tm6000_xc5000_callback(void *ptr, int component, int command, int arg);
--int tm6000_cards_setup(struct tm6000_core *dev);
--void tm6000_flash_led(struct tm6000_core *dev, u8 state);
+-	int				video_status;
+-	struct saa7146_fh		*video_fh;
 -
--/* In tm6000-core.c */
+-	/* video overlay */
+-	struct saa7146_overlay		ov;
+-	struct v4l2_framebuffer		ov_fb;
+-	struct saa7146_format		*ov_fmt;
+-	struct saa7146_fh		*ov_suspend;
 -
--int tm6000_read_write_usb(struct tm6000_core *dev, u8 reqtype, u8 req,
--			   u16 value, u16 index, u8 *buf, u16 len);
--int tm6000_get_reg(struct tm6000_core *dev, u8 req, u16 value, u16 index);
--int tm6000_get_reg16(struct tm6000_core *dev, u8 req, u16 value, u16 index);
--int tm6000_get_reg32(struct tm6000_core *dev, u8 req, u16 value, u16 index);
--int tm6000_set_reg(struct tm6000_core *dev, u8 req, u16 value, u16 index);
--int tm6000_set_reg_mask(struct tm6000_core *dev, u8 req, u16 value,
--						u16 index, u16 mask);
--int tm6000_i2c_reset(struct tm6000_core *dev, u16 tsleep);
--int tm6000_init(struct tm6000_core *dev);
--int tm6000_reset(struct tm6000_core *dev);
+-	/* video capture */
+-	struct saa7146_dmaqueue		video_dmaq;
+-	struct v4l2_pix_format		video_fmt;
+-	enum v4l2_field			last_field;
 -
--int tm6000_init_analog_mode(struct tm6000_core *dev);
--int tm6000_init_digital_mode(struct tm6000_core *dev);
--int tm6000_set_audio_bitrate(struct tm6000_core *dev, int bitrate);
--int tm6000_set_audio_rinput(struct tm6000_core *dev);
--int tm6000_tvaudio_set_mute(struct tm6000_core *dev, u8 mute);
--void tm6000_set_volume(struct tm6000_core *dev, int vol);
+-	/* common: fixme? shouldn't this be in saa7146_fh?
+-	   (this leads to a more complicated question: shall the driver
+-	   store the different settings (for example S_INPUT) for every open
+-	   and restore it appropriately, or should all settings be common for
+-	   all opens? currently, we do the latter, like all other
+-	   drivers do... */
+-	struct saa7146_standard	*standard;
 -
--int tm6000_v4l2_register(struct tm6000_core *dev);
--int tm6000_v4l2_unregister(struct tm6000_core *dev);
--int tm6000_v4l2_exit(void);
--void tm6000_set_fourcc_format(struct tm6000_core *dev);
+-	int	vflip;
+-	int	hflip;
+-	int	current_hps_source;
+-	int	current_hps_sync;
 -
--void tm6000_remove_from_devlist(struct tm6000_core *dev);
--void tm6000_add_into_devlist(struct tm6000_core *dev);
--int tm6000_register_extension(struct tm6000_ops *ops);
--void tm6000_unregister_extension(struct tm6000_ops *ops);
--void tm6000_init_extension(struct tm6000_core *dev);
--void tm6000_close_extension(struct tm6000_core *dev);
--int tm6000_call_fillbuf(struct tm6000_core *dev, enum tm6000_ops_type type,
--			char *buf, int size);
+-	struct saa7146_dma	d_clipping;	/* pointer to clipping memory */
+-
+-	unsigned int resources;	/* resource management for device */
+-};
+-
+-/* flags */
+-#define SAA7146_USE_PORT_B_FOR_VBI	0x2     /* use input port b for vbi hardware bug workaround */
+-
+-struct saa7146_ext_vv
+-{
+-	/* information about the video capabilities of the device */
+-	int	inputs;
+-	int	audios;
+-	u32	capabilities;
+-	int	flags;
+-
+-	/* additionally supported transmission standards */
+-	struct saa7146_standard *stds;
+-	int num_stds;
+-	int (*std_callback)(struct saa7146_dev*, struct saa7146_standard *);
+-
+-	/* the extension can override this */
+-	struct v4l2_ioctl_ops vid_ops;
+-	struct v4l2_ioctl_ops vbi_ops;
+-	/* pointer to the saa7146 core ops */
+-	const struct v4l2_ioctl_ops *core_ops;
+-
+-	struct v4l2_file_operations vbi_fops;
+-};
+-
+-struct saa7146_use_ops  {
+-	void (*init)(struct saa7146_dev *, struct saa7146_vv *);
+-	int(*open)(struct saa7146_dev *, struct file *);
+-	void (*release)(struct saa7146_dev *, struct file *);
+-	void (*irq_done)(struct saa7146_dev *, unsigned long status);
+-	ssize_t (*read)(struct file *, char __user *, size_t, loff_t *);
+-};
+-
+-/* from saa7146_fops.c */
+-int saa7146_register_device(struct video_device *vid, struct saa7146_dev *dev, char *name, int type);
+-int saa7146_unregister_device(struct video_device *vid, struct saa7146_dev *dev);
+-void saa7146_buffer_finish(struct saa7146_dev *dev, struct saa7146_dmaqueue *q, int state);
+-void saa7146_buffer_next(struct saa7146_dev *dev, struct saa7146_dmaqueue *q,int vbi);
+-int saa7146_buffer_queue(struct saa7146_dev *dev, struct saa7146_dmaqueue *q, struct saa7146_buf *buf);
+-void saa7146_buffer_timeout(struct timer_list *t);
+-void saa7146_dma_free(struct saa7146_dev* dev,struct videobuf_queue *q,
+-						struct saa7146_buf *buf);
+-
+-int saa7146_vv_init(struct saa7146_dev* dev, struct saa7146_ext_vv *ext_vv);
+-int saa7146_vv_release(struct saa7146_dev* dev);
+-
+-/* from saa7146_hlp.c */
+-int saa7146_enable_overlay(struct saa7146_fh *fh);
+-void saa7146_disable_overlay(struct saa7146_fh *fh);
+-
+-void saa7146_set_capture(struct saa7146_dev *dev, struct saa7146_buf *buf, struct saa7146_buf *next);
+-void saa7146_write_out_dma(struct saa7146_dev* dev, int which, struct saa7146_video_dma* vdma) ;
+-void saa7146_set_hps_source_and_sync(struct saa7146_dev *saa, int source, int sync);
+-void saa7146_set_gpio(struct saa7146_dev *saa, u8 pin, u8 data);
+-
+-/* from saa7146_video.c */
+-extern const struct v4l2_ioctl_ops saa7146_video_ioctl_ops;
+-extern const struct v4l2_ioctl_ops saa7146_vbi_ioctl_ops;
+-extern const struct saa7146_use_ops saa7146_video_uops;
+-int saa7146_start_preview(struct saa7146_fh *fh);
+-int saa7146_stop_preview(struct saa7146_fh *fh);
+-long saa7146_video_do_ioctl(struct file *file, unsigned int cmd, void *arg);
+-int saa7146_s_ctrl(struct v4l2_ctrl *ctrl);
+-
+-/* from saa7146_vbi.c */
+-extern const struct saa7146_use_ops saa7146_vbi_uops;
+-
+-/* resource management functions */
+-int saa7146_res_get(struct saa7146_fh *fh, unsigned int bit);
+-void saa7146_res_free(struct saa7146_fh *fh, unsigned int bits);
+-
+-#define RESOURCE_DMA1_HPS	0x1
+-#define RESOURCE_DMA2_CLP	0x2
+-#define RESOURCE_DMA3_BRS	0x4
+-
+-/* saa7146 source inputs */
+-#define SAA7146_HPS_SOURCE_PORT_A	0x00
+-#define SAA7146_HPS_SOURCE_PORT_B	0x01
+-#define SAA7146_HPS_SOURCE_YPB_CPA	0x02
+-#define SAA7146_HPS_SOURCE_YPA_CPB	0x03
+-
+-/* sync inputs */
+-#define SAA7146_HPS_SYNC_PORT_A		0x00
+-#define SAA7146_HPS_SYNC_PORT_B		0x01
+-
+-/* some memory sizes */
+-/* max. 16 clipping rectangles */
+-#define SAA7146_CLIPPING_MEM	(16 * 4 * sizeof(u32))
+-
+-/* some defines for the various clipping-modes */
+-#define SAA7146_CLIPPING_RECT		0x4
+-#define SAA7146_CLIPPING_RECT_INVERTED	0x5
+-#define SAA7146_CLIPPING_MASK		0x6
+-#define SAA7146_CLIPPING_MASK_INVERTED	0x7
+-
+-/* output formats: each entry holds four information */
+-#define RGB08_COMPOSED	0x0217 /* composed is used in the sense of "not-planar" */
+-/* this means: planar?=0, yuv2rgb-conversation-mode=2, dither=yes(=1), format-mode = 7 */
+-#define RGB15_COMPOSED	0x0213
+-#define RGB16_COMPOSED	0x0210
+-#define RGB24_COMPOSED	0x0201
+-#define RGB32_COMPOSED	0x0202
+-
+-#define Y8			0x0006
+-#define YUV411_COMPOSED		0x0003
+-#define YUV422_COMPOSED		0x0000
+-/* this means: planar?=1, yuv2rgb-conversion-mode=0, dither=no(=0), format-mode = b */
+-#define YUV411_DECOMPOSED	0x100b
+-#define YUV422_DECOMPOSED	0x1009
+-#define YUV420_DECOMPOSED	0x100a
+-
+-#define IS_PLANAR(x) (x & 0xf000)
+-
+-/* misc defines */
+-#define SAA7146_NO_SWAP		(0x0)
+-#define SAA7146_TWO_BYTE_SWAP	(0x1)
+-#define SAA7146_FOUR_BYTE_SWAP	(0x2)
+-
+-#endif
+diff --git a/drivers/staging/media/deprecated/saa7146/saa7146/Kconfig b/drivers/staging/media/deprecated/saa7146/saa7146/Kconfig
+deleted file mode 100644
+index 228e8d3f8d2b..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/saa7146/Kconfig
++++ /dev/null
+@@ -1,48 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-config VIDEO_HEXIUM_GEMINI
+-	tristate "Hexium Gemini frame grabber (DEPRECATED)"
+-	depends on PCI && VIDEO_DEV && I2C
+-	select VIDEO_SAA7146_VV
+-	help
+-	  This is a video4linux driver for the Hexium Gemini frame
+-	  grabber card by Hexium. Please note that the Gemini Dual
+-	  card is *not* fully supported.
+-
+-	  This driver is deprecated and is scheduled for removal by
+-	  the beginning of 2023. See the TODO file for more information.
+-
+-	  To compile this driver as a module, choose M here: the
+-	  module will be called hexium_gemini.
+-
+-config VIDEO_HEXIUM_ORION
+-	tristate "Hexium HV-PCI6 and Orion frame grabber (DEPRECATED)"
+-	depends on PCI && VIDEO_DEV && I2C
+-	select VIDEO_SAA7146_VV
+-	help
+-	  This is a video4linux driver for the Hexium HV-PCI6 and
+-	  Orion frame grabber cards by Hexium.
+-
+-	  This driver is deprecated and is scheduled for removal by
+-	  the beginning of 2023. See the TODO file for more information.
+-
+-	  To compile this driver as a module, choose M here: the
+-	  module will be called hexium_orion.
+-
+-config VIDEO_MXB
+-	tristate "Siemens-Nixdorf 'Multimedia eXtension Board' (DEPRECATED)"
+-	depends on PCI && VIDEO_DEV && I2C
+-	select VIDEO_SAA7146_VV
+-	select VIDEO_TUNER
+-	select VIDEO_SAA711X if MEDIA_SUBDRV_AUTOSELECT
+-	select VIDEO_TDA9840 if MEDIA_SUBDRV_AUTOSELECT
+-	select VIDEO_TEA6415C if MEDIA_SUBDRV_AUTOSELECT
+-	select VIDEO_TEA6420 if MEDIA_SUBDRV_AUTOSELECT
+-	help
+-	  This is a video4linux driver for the 'Multimedia eXtension Board'
+-	  TV card by Siemens-Nixdorf.
+-
+-	  This driver is deprecated and is scheduled for removal by
+-	  the beginning of 2023. See the TODO file for more information.
+-
+-	  To compile this driver as a module, choose M here: the
+-	  module will be called mxb.
+diff --git a/drivers/staging/media/deprecated/saa7146/saa7146/Makefile b/drivers/staging/media/deprecated/saa7146/saa7146/Makefile
+deleted file mode 100644
+index 37c9336f83d5..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/saa7146/Makefile
++++ /dev/null
+@@ -1,6 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-obj-$(CONFIG_VIDEO_MXB) += mxb.o
+-obj-$(CONFIG_VIDEO_HEXIUM_ORION) += hexium_orion.o
+-obj-$(CONFIG_VIDEO_HEXIUM_GEMINI) += hexium_gemini.o
+-
+-ccflags-y += -I$(srctree)/drivers/media/i2c
+diff --git a/drivers/staging/media/deprecated/saa7146/saa7146/TODO b/drivers/staging/media/deprecated/saa7146/saa7146/TODO
+deleted file mode 100644
+index c9ae2ec79cea..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/saa7146/TODO
++++ /dev/null
+@@ -1,7 +0,0 @@
+-The saa7146-based drivers are one of the few drivers still not using
+-the vb2 framework, so these drivers are now deprecated with the intent of
+-removing them altogether by the beginning of 2023.
+-
+-In order to keep these drivers they have to be converted to vb2.
+-If someone is interested in doing this work, then contact the
+-linux-media mailinglist (https://linuxtv.org/lists.php).
+diff --git a/drivers/staging/media/deprecated/saa7146/saa7146/hexium_gemini.c b/drivers/staging/media/deprecated/saa7146/saa7146/hexium_gemini.c
+deleted file mode 100644
+index 124e82bd4507..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/saa7146/hexium_gemini.c
++++ /dev/null
+@@ -1,425 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+-    hexium_gemini.c - v4l2 driver for Hexium Gemini frame grabber cards
+-
+-    Visit http://www.mihu.de/linux/saa7146/ and follow the link
+-    to "hexium" for further details about this card.
+-
+-    Copyright (C) 2003 Michael Hunold <michael@mihu.de>
+-
+-*/
+-
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
+-#define DEBUG_VARIABLE debug
+-
+-#include <linux/module.h>
+-#include <linux/kernel.h>
+-#include "../common/saa7146_vv.h"
+-
+-static int debug;
+-module_param(debug, int, 0);
+-MODULE_PARM_DESC(debug, "debug verbosity");
+-
+-/* global variables */
+-static int hexium_num;
+-
+-#define HEXIUM_GEMINI			4
+-#define HEXIUM_GEMINI_DUAL		5
+-
+-#define HEXIUM_INPUTS	9
+-static struct v4l2_input hexium_inputs[HEXIUM_INPUTS] = {
+-	{ 0, "CVBS 1",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 1, "CVBS 2",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 2, "CVBS 3",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 3, "CVBS 4",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 4, "CVBS 5",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 5, "CVBS 6",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 6, "Y/C 1",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 7, "Y/C 2",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 8, "Y/C 3",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-};
+-
+-#define HEXIUM_AUDIOS	0
+-
+-struct hexium_data
+-{
+-	s8 adr;
+-	u8 byte;
+-};
+-
+-#define HEXIUM_GEMINI_V_1_0		1
+-#define HEXIUM_GEMINI_DUAL_V_1_0	2
+-
+-struct hexium
+-{
+-	int type;
+-
+-	struct video_device	video_dev;
+-	struct i2c_adapter	i2c_adapter;
+-
+-	int		cur_input;	/* current input */
+-	v4l2_std_id	cur_std;	/* current standard */
+-};
+-
+-/* Samsung KS0127B decoder default registers */
+-static u8 hexium_ks0127b[0x100]={
+-/*00*/ 0x00,0x52,0x30,0x40,0x01,0x0C,0x2A,0x10,
+-/*08*/ 0x00,0x00,0x00,0x60,0x00,0x00,0x0F,0x06,
+-/*10*/ 0x00,0x00,0xE4,0xC0,0x00,0x00,0x00,0x00,
+-/*18*/ 0x14,0x9B,0xFE,0xFF,0xFC,0xFF,0x03,0x22,
+-/*20*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*28*/ 0x00,0x00,0x00,0x00,0x00,0x2C,0x9B,0x00,
+-/*30*/ 0x00,0x00,0x10,0x80,0x80,0x10,0x80,0x80,
+-/*38*/ 0x01,0x04,0x00,0x00,0x00,0x29,0xC0,0x00,
+-/*40*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*48*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*50*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*58*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*60*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*68*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*70*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*78*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*80*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*88*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*90*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*98*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*A0*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*A8*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*B0*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*B8*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*C0*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*C8*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*D0*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*D8*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*E0*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*E8*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*F0*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*F8*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+-};
+-
+-static struct hexium_data hexium_pal[] = {
+-	{ 0x01, 0x52 }, { 0x12, 0x64 }, { 0x2D, 0x2C }, { 0x2E, 0x9B }, { -1 , 0xFF }
+-};
+-
+-static struct hexium_data hexium_ntsc[] = {
+-	{ 0x01, 0x53 }, { 0x12, 0x04 }, { 0x2D, 0x23 }, { 0x2E, 0x81 }, { -1 , 0xFF }
+-};
+-
+-static struct hexium_data hexium_secam[] = {
+-	{ 0x01, 0x52 }, { 0x12, 0x64 }, { 0x2D, 0x2C }, { 0x2E, 0x9B }, { -1 , 0xFF }
+-};
+-
+-static struct hexium_data hexium_input_select[] = {
+-	{ 0x02, 0x60 },
+-	{ 0x02, 0x64 },
+-	{ 0x02, 0x61 },
+-	{ 0x02, 0x65 },
+-	{ 0x02, 0x62 },
+-	{ 0x02, 0x66 },
+-	{ 0x02, 0x68 },
+-	{ 0x02, 0x69 },
+-	{ 0x02, 0x6A },
+-};
+-
+-/* fixme: h_offset = 0 for Hexium Gemini *Dual*, which
+-   are currently *not* supported*/
+-static struct saa7146_standard hexium_standards[] = {
+-	{
+-		.name	= "PAL",	.id	= V4L2_STD_PAL,
+-		.v_offset	= 28,	.v_field	= 288,
+-		.h_offset	= 1,	.h_pixels	= 680,
+-		.v_max_out	= 576,	.h_max_out	= 768,
+-	}, {
+-		.name	= "NTSC",	.id	= V4L2_STD_NTSC,
+-		.v_offset	= 28,	.v_field	= 240,
+-		.h_offset	= 1,	.h_pixels	= 640,
+-		.v_max_out	= 480,	.h_max_out	= 640,
+-	}, {
+-		.name	= "SECAM",	.id	= V4L2_STD_SECAM,
+-		.v_offset	= 28,	.v_field	= 288,
+-		.h_offset	= 1,	.h_pixels	= 720,
+-		.v_max_out	= 576,	.h_max_out	= 768,
+-	}
+-};
+-
+-/* bring hardware to a sane state. this has to be done, just in case someone
+-   wants to capture from this device before it has been properly initialized.
+-   the capture engine would badly fail, because no valid signal arrives on the
+-   saa7146, thus leading to timeouts and stuff. */
+-static int hexium_init_done(struct saa7146_dev *dev)
+-{
+-	struct hexium *hexium = (struct hexium *) dev->ext_priv;
+-	union i2c_smbus_data data;
+-	int i = 0;
+-
+-	DEB_D("hexium_init_done called\n");
+-
+-	/* initialize the helper ics to useful values */
+-	for (i = 0; i < sizeof(hexium_ks0127b); i++) {
+-		data.byte = hexium_ks0127b[i];
+-		if (0 != i2c_smbus_xfer(&hexium->i2c_adapter, 0x6c, 0, I2C_SMBUS_WRITE, i, I2C_SMBUS_BYTE_DATA, &data)) {
+-			pr_err("hexium_init_done() failed for address 0x%02x\n",
+-			       i);
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+-static int hexium_set_input(struct hexium *hexium, int input)
+-{
+-	union i2c_smbus_data data;
+-
+-	DEB_D("\n");
+-
+-	data.byte = hexium_input_select[input].byte;
+-	if (0 != i2c_smbus_xfer(&hexium->i2c_adapter, 0x6c, 0, I2C_SMBUS_WRITE, hexium_input_select[input].adr, I2C_SMBUS_BYTE_DATA, &data)) {
+-		return -1;
+-	}
+-
+-	return 0;
+-}
+-
+-static int hexium_set_standard(struct hexium *hexium, struct hexium_data *vdec)
+-{
+-	union i2c_smbus_data data;
+-	int i = 0;
+-
+-	DEB_D("\n");
+-
+-	while (vdec[i].adr != -1) {
+-		data.byte = vdec[i].byte;
+-		if (0 != i2c_smbus_xfer(&hexium->i2c_adapter, 0x6c, 0, I2C_SMBUS_WRITE, vdec[i].adr, I2C_SMBUS_BYTE_DATA, &data)) {
+-			pr_err("hexium_init_done: hexium_set_standard() failed for address 0x%02x\n",
+-			       i);
+-			return -1;
+-		}
+-		i++;
+-	}
+-	return 0;
+-}
+-
+-static int vidioc_enum_input(struct file *file, void *fh, struct v4l2_input *i)
+-{
+-	DEB_EE("VIDIOC_ENUMINPUT %d\n", i->index);
+-
+-	if (i->index >= HEXIUM_INPUTS)
+-		return -EINVAL;
+-
+-	memcpy(i, &hexium_inputs[i->index], sizeof(struct v4l2_input));
+-
+-	DEB_D("v4l2_ioctl: VIDIOC_ENUMINPUT %d\n", i->index);
+-	return 0;
+-}
+-
+-static int vidioc_g_input(struct file *file, void *fh, unsigned int *input)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct hexium *hexium = (struct hexium *) dev->ext_priv;
+-
+-	*input = hexium->cur_input;
+-
+-	DEB_D("VIDIOC_G_INPUT: %d\n", *input);
+-	return 0;
+-}
+-
+-static int vidioc_s_input(struct file *file, void *fh, unsigned int input)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct hexium *hexium = (struct hexium *) dev->ext_priv;
+-
+-	DEB_EE("VIDIOC_S_INPUT %d\n", input);
+-
+-	if (input >= HEXIUM_INPUTS)
+-		return -EINVAL;
+-
+-	hexium->cur_input = input;
+-	hexium_set_input(hexium, input);
+-	return 0;
+-}
+-
+-static struct saa7146_ext_vv vv_data;
+-
+-/* this function only gets called when the probing was successful */
+-static int hexium_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_data *info)
+-{
+-	struct hexium *hexium;
+-	int ret;
+-
+-	DEB_EE("\n");
+-
+-	hexium = kzalloc(sizeof(*hexium), GFP_KERNEL);
+-	if (!hexium)
+-		return -ENOMEM;
+-
+-	dev->ext_priv = hexium;
+-
+-	/* enable i2c-port pins */
+-	saa7146_write(dev, MC1, (MASK_08 | MASK_24 | MASK_10 | MASK_26));
+-
+-	strscpy(hexium->i2c_adapter.name, "hexium gemini",
+-		sizeof(hexium->i2c_adapter.name));
+-	saa7146_i2c_adapter_prepare(dev, &hexium->i2c_adapter, SAA7146_I2C_BUS_BIT_RATE_480);
+-	if (i2c_add_adapter(&hexium->i2c_adapter) < 0) {
+-		DEB_S("cannot register i2c-device. skipping.\n");
+-		kfree(hexium);
+-		return -EFAULT;
+-	}
+-
+-	/*  set HWControl GPIO number 2 */
+-	saa7146_setgpio(dev, 2, SAA7146_GPIO_OUTHI);
+-
+-	saa7146_write(dev, DD1_INIT, 0x07000700);
+-	saa7146_write(dev, DD1_STREAM_B, 0x00000000);
+-	saa7146_write(dev, MC2, (MASK_09 | MASK_25 | MASK_10 | MASK_26));
+-
+-	/* the rest */
+-	hexium->cur_input = 0;
+-	hexium_init_done(dev);
+-
+-	hexium_set_standard(hexium, hexium_pal);
+-	hexium->cur_std = V4L2_STD_PAL;
+-
+-	hexium_set_input(hexium, 0);
+-	hexium->cur_input = 0;
+-
+-	ret = saa7146_vv_init(dev, &vv_data);
+-	if (ret) {
+-		i2c_del_adapter(&hexium->i2c_adapter);
+-		kfree(hexium);
+-		return ret;
+-	}
+-
+-	vv_data.vid_ops.vidioc_enum_input = vidioc_enum_input;
+-	vv_data.vid_ops.vidioc_g_input = vidioc_g_input;
+-	vv_data.vid_ops.vidioc_s_input = vidioc_s_input;
+-	ret = saa7146_register_device(&hexium->video_dev, dev, "hexium gemini", VFL_TYPE_VIDEO);
+-	if (ret < 0) {
+-		pr_err("cannot register capture v4l2 device. skipping.\n");
+-		saa7146_vv_release(dev);
+-		i2c_del_adapter(&hexium->i2c_adapter);
+-		kfree(hexium);
+-		return ret;
+-	}
+-
+-	pr_info("found 'hexium gemini' frame grabber-%d\n", hexium_num);
+-	hexium_num++;
+-
+-	return 0;
+-}
+-
+-static int hexium_detach(struct saa7146_dev *dev)
+-{
+-	struct hexium *hexium = (struct hexium *) dev->ext_priv;
+-
+-	DEB_EE("dev:%p\n", dev);
+-
+-	saa7146_unregister_device(&hexium->video_dev, dev);
+-	saa7146_vv_release(dev);
+-
+-	hexium_num--;
+-
+-	i2c_del_adapter(&hexium->i2c_adapter);
+-	kfree(hexium);
+-	return 0;
+-}
+-
+-static int std_callback(struct saa7146_dev *dev, struct saa7146_standard *std)
+-{
+-	struct hexium *hexium = (struct hexium *) dev->ext_priv;
+-
+-	if (V4L2_STD_PAL == std->id) {
+-		hexium_set_standard(hexium, hexium_pal);
+-		hexium->cur_std = V4L2_STD_PAL;
+-		return 0;
+-	} else if (V4L2_STD_NTSC == std->id) {
+-		hexium_set_standard(hexium, hexium_ntsc);
+-		hexium->cur_std = V4L2_STD_NTSC;
+-		return 0;
+-	} else if (V4L2_STD_SECAM == std->id) {
+-		hexium_set_standard(hexium, hexium_secam);
+-		hexium->cur_std = V4L2_STD_SECAM;
+-		return 0;
+-	}
+-
+-	return -1;
+-}
+-
+-static struct saa7146_extension hexium_extension;
+-
+-static struct saa7146_pci_extension_data hexium_gemini_4bnc = {
+-	.ext_priv = "Hexium Gemini (4 BNC)",
+-	.ext = &hexium_extension,
+-};
+-
+-static struct saa7146_pci_extension_data hexium_gemini_dual_4bnc = {
+-	.ext_priv = "Hexium Gemini Dual (4 BNC)",
+-	.ext = &hexium_extension,
+-};
+-
+-static const struct pci_device_id pci_tbl[] = {
+-	{
+-	 .vendor = PCI_VENDOR_ID_PHILIPS,
+-	 .device = PCI_DEVICE_ID_PHILIPS_SAA7146,
+-	 .subvendor = 0x17c8,
+-	 .subdevice = 0x2401,
+-	 .driver_data = (unsigned long) &hexium_gemini_4bnc,
+-	 },
+-	{
+-	 .vendor = PCI_VENDOR_ID_PHILIPS,
+-	 .device = PCI_DEVICE_ID_PHILIPS_SAA7146,
+-	 .subvendor = 0x17c8,
+-	 .subdevice = 0x2402,
+-	 .driver_data = (unsigned long) &hexium_gemini_dual_4bnc,
+-	 },
+-	{
+-	 .vendor = 0,
+-	 }
+-};
+-
+-MODULE_DEVICE_TABLE(pci, pci_tbl);
+-
+-static struct saa7146_ext_vv vv_data = {
+-	.inputs = HEXIUM_INPUTS,
+-	.capabilities = 0,
+-	.stds = &hexium_standards[0],
+-	.num_stds = ARRAY_SIZE(hexium_standards),
+-	.std_callback = &std_callback,
+-};
+-
+-static struct saa7146_extension hexium_extension = {
+-	.name = "hexium gemini",
+-	.flags = SAA7146_USE_I2C_IRQ,
+-
+-	.pci_tbl = &pci_tbl[0],
+-	.module = THIS_MODULE,
+-
+-	.attach = hexium_attach,
+-	.detach = hexium_detach,
+-
+-	.irq_mask = 0,
+-	.irq_func = NULL,
+-};
+-
+-static int __init hexium_init_module(void)
+-{
+-	if (0 != saa7146_register_extension(&hexium_extension)) {
+-		DEB_S("failed to register extension\n");
+-		return -ENODEV;
+-	}
+-
+-	return 0;
+-}
+-
+-static void __exit hexium_cleanup_module(void)
+-{
+-	saa7146_unregister_extension(&hexium_extension);
+-}
+-
+-module_init(hexium_init_module);
+-module_exit(hexium_cleanup_module);
+-
+-MODULE_DESCRIPTION("video4linux-2 driver for Hexium Gemini frame grabber cards");
+-MODULE_AUTHOR("Michael Hunold <michael@mihu.de>");
+-MODULE_LICENSE("GPL");
+diff --git a/drivers/staging/media/deprecated/saa7146/saa7146/hexium_orion.c b/drivers/staging/media/deprecated/saa7146/saa7146/hexium_orion.c
+deleted file mode 100644
+index ebd63998ac79..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/saa7146/hexium_orion.c
++++ /dev/null
+@@ -1,496 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+-    hexium_orion.c - v4l2 driver for the Hexium Orion frame grabber cards
+-
+-    Visit http://www.mihu.de/linux/saa7146/ and follow the link
+-    to "hexium" for further details about this card.
+-
+-    Copyright (C) 2003 Michael Hunold <michael@mihu.de>
+-
+-*/
+-
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
+-#define DEBUG_VARIABLE debug
+-
+-#include <linux/module.h>
+-#include <linux/kernel.h>
+-#include "../common/saa7146_vv.h"
+-
+-static int debug;
+-module_param(debug, int, 0);
+-MODULE_PARM_DESC(debug, "debug verbosity");
+-
+-/* global variables */
+-static int hexium_num;
+-
+-#define HEXIUM_HV_PCI6_ORION		1
+-#define HEXIUM_ORION_1SVHS_3BNC		2
+-#define HEXIUM_ORION_4BNC		3
+-
+-#define HEXIUM_INPUTS	9
+-static struct v4l2_input hexium_inputs[HEXIUM_INPUTS] = {
+-	{ 0, "CVBS 1",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 1, "CVBS 2",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 2, "CVBS 3",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 3, "CVBS 4",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 4, "CVBS 5",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 5, "CVBS 6",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 6, "Y/C 1",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 7, "Y/C 2",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 8, "Y/C 3",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-};
+-
+-#define HEXIUM_AUDIOS	0
+-
+-struct hexium_data
+-{
+-	s8 adr;
+-	u8 byte;
+-};
+-
+-struct hexium
+-{
+-	int type;
+-	struct video_device	video_dev;
+-	struct i2c_adapter	i2c_adapter;
+-
+-	int cur_input;	/* current input */
+-};
+-
+-/* Philips SAA7110 decoder default registers */
+-static u8 hexium_saa7110[53]={
+-/*00*/ 0x4C,0x3C,0x0D,0xEF,0xBD,0xF0,0x00,0x00,
+-/*08*/ 0xF8,0xF8,0x60,0x60,0x40,0x86,0x18,0x90,
+-/*10*/ 0x00,0x2C,0x40,0x46,0x42,0x1A,0xFF,0xDA,
+-/*18*/ 0xF0,0x8B,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*20*/ 0xD9,0x17,0x40,0x41,0x80,0x41,0x80,0x4F,
+-/*28*/ 0xFE,0x01,0x0F,0x0F,0x03,0x01,0x81,0x03,
+-/*30*/ 0x44,0x75,0x01,0x8C,0x03
+-};
+-
+-static struct {
+-	struct hexium_data data[8];
+-} hexium_input_select[] = {
+-{
+-	{ /* cvbs 1 */
+-		{ 0x06, 0x00 },
+-		{ 0x20, 0xD9 },
+-		{ 0x21, 0x17 }, // 0x16,
+-		{ 0x22, 0x40 },
+-		{ 0x2C, 0x03 },
+-		{ 0x30, 0x44 },
+-		{ 0x31, 0x75 }, // ??
+-		{ 0x21, 0x16 }, // 0x03,
+-	}
+-}, {
+-	{ /* cvbs 2 */
+-		{ 0x06, 0x00 },
+-		{ 0x20, 0x78 },
+-		{ 0x21, 0x07 }, // 0x03,
+-		{ 0x22, 0xD2 },
+-		{ 0x2C, 0x83 },
+-		{ 0x30, 0x60 },
+-		{ 0x31, 0xB5 }, // ?
+-		{ 0x21, 0x03 },
+-	}
+-}, {
+-	{ /* cvbs 3 */
+-		{ 0x06, 0x00 },
+-		{ 0x20, 0xBA },
+-		{ 0x21, 0x07 }, // 0x05,
+-		{ 0x22, 0x91 },
+-		{ 0x2C, 0x03 },
+-		{ 0x30, 0x60 },
+-		{ 0x31, 0xB5 }, // ??
+-		{ 0x21, 0x05 }, // 0x03,
+-	}
+-}, {
+-	{ /* cvbs 4 */
+-		{ 0x06, 0x00 },
+-		{ 0x20, 0xD8 },
+-		{ 0x21, 0x17 }, // 0x16,
+-		{ 0x22, 0x40 },
+-		{ 0x2C, 0x03 },
+-		{ 0x30, 0x44 },
+-		{ 0x31, 0x75 }, // ??
+-		{ 0x21, 0x16 }, // 0x03,
+-	}
+-}, {
+-	{ /* cvbs 5 */
+-		{ 0x06, 0x00 },
+-		{ 0x20, 0xB8 },
+-		{ 0x21, 0x07 }, // 0x05,
+-		{ 0x22, 0x91 },
+-		{ 0x2C, 0x03 },
+-		{ 0x30, 0x60 },
+-		{ 0x31, 0xB5 }, // ??
+-		{ 0x21, 0x05 }, // 0x03,
+-	}
+-}, {
+-	{ /* cvbs 6 */
+-		{ 0x06, 0x00 },
+-		{ 0x20, 0x7C },
+-		{ 0x21, 0x07 }, // 0x03
+-		{ 0x22, 0xD2 },
+-		{ 0x2C, 0x83 },
+-		{ 0x30, 0x60 },
+-		{ 0x31, 0xB5 }, // ??
+-		{ 0x21, 0x03 },
+-	}
+-}, {
+-	{ /* y/c 1 */
+-		{ 0x06, 0x80 },
+-		{ 0x20, 0x59 },
+-		{ 0x21, 0x17 },
+-		{ 0x22, 0x42 },
+-		{ 0x2C, 0xA3 },
+-		{ 0x30, 0x44 },
+-		{ 0x31, 0x75 },
+-		{ 0x21, 0x12 },
+-	}
+-}, {
+-	{ /* y/c 2 */
+-		{ 0x06, 0x80 },
+-		{ 0x20, 0x9A },
+-		{ 0x21, 0x17 },
+-		{ 0x22, 0xB1 },
+-		{ 0x2C, 0x13 },
+-		{ 0x30, 0x60 },
+-		{ 0x31, 0xB5 },
+-		{ 0x21, 0x14 },
+-	}
+-}, {
+-	{ /* y/c 3 */
+-		{ 0x06, 0x80 },
+-		{ 0x20, 0x3C },
+-		{ 0x21, 0x27 },
+-		{ 0x22, 0xC1 },
+-		{ 0x2C, 0x23 },
+-		{ 0x30, 0x44 },
+-		{ 0x31, 0x75 },
+-		{ 0x21, 0x21 },
+-	}
+-}
+-};
+-
+-static struct saa7146_standard hexium_standards[] = {
+-	{
+-		.name	= "PAL",	.id	= V4L2_STD_PAL,
+-		.v_offset	= 16,	.v_field	= 288,
+-		.h_offset	= 1,	.h_pixels	= 680,
+-		.v_max_out	= 576,	.h_max_out	= 768,
+-	}, {
+-		.name	= "NTSC",	.id	= V4L2_STD_NTSC,
+-		.v_offset	= 16,	.v_field	= 240,
+-		.h_offset	= 1,	.h_pixels	= 640,
+-		.v_max_out	= 480,	.h_max_out	= 640,
+-	}, {
+-		.name	= "SECAM",	.id	= V4L2_STD_SECAM,
+-		.v_offset	= 16,	.v_field	= 288,
+-		.h_offset	= 1,	.h_pixels	= 720,
+-		.v_max_out	= 576,	.h_max_out	= 768,
+-	}
+-};
+-
+-/* this is only called for old HV-PCI6/Orion cards
+-   without eeprom */
+-static int hexium_probe(struct saa7146_dev *dev)
+-{
+-	struct hexium *hexium = NULL;
+-	union i2c_smbus_data data;
+-	int err = 0;
+-
+-	DEB_EE("\n");
+-
+-	/* there are no hexium orion cards with revision 0 saa7146s */
+-	if (0 == dev->revision) {
+-		return -EFAULT;
+-	}
+-
+-	hexium = kzalloc(sizeof(*hexium), GFP_KERNEL);
+-	if (!hexium)
+-		return -ENOMEM;
+-
+-	/* enable i2c-port pins */
+-	saa7146_write(dev, MC1, (MASK_08 | MASK_24 | MASK_10 | MASK_26));
+-
+-	saa7146_write(dev, DD1_INIT, 0x01000100);
+-	saa7146_write(dev, DD1_STREAM_B, 0x00000000);
+-	saa7146_write(dev, MC2, (MASK_09 | MASK_25 | MASK_10 | MASK_26));
+-
+-	strscpy(hexium->i2c_adapter.name, "hexium orion",
+-		sizeof(hexium->i2c_adapter.name));
+-	saa7146_i2c_adapter_prepare(dev, &hexium->i2c_adapter, SAA7146_I2C_BUS_BIT_RATE_480);
+-	if (i2c_add_adapter(&hexium->i2c_adapter) < 0) {
+-		DEB_S("cannot register i2c-device. skipping.\n");
+-		kfree(hexium);
+-		return -EFAULT;
+-	}
+-
+-	/* set SAA7110 control GPIO 0 */
+-	saa7146_setgpio(dev, 0, SAA7146_GPIO_OUTHI);
+-	/*  set HWControl GPIO number 2 */
+-	saa7146_setgpio(dev, 2, SAA7146_GPIO_OUTHI);
+-
+-	mdelay(10);
+-
+-	/* detect newer Hexium Orion cards by subsystem ids */
+-	if (0x17c8 == dev->pci->subsystem_vendor && 0x0101 == dev->pci->subsystem_device) {
+-		pr_info("device is a Hexium Orion w/ 1 SVHS + 3 BNC inputs\n");
+-		/* we store the pointer in our private data field */
+-		dev->ext_priv = hexium;
+-		hexium->type = HEXIUM_ORION_1SVHS_3BNC;
+-		return 0;
+-	}
+-
+-	if (0x17c8 == dev->pci->subsystem_vendor && 0x2101 == dev->pci->subsystem_device) {
+-		pr_info("device is a Hexium Orion w/ 4 BNC inputs\n");
+-		/* we store the pointer in our private data field */
+-		dev->ext_priv = hexium;
+-		hexium->type = HEXIUM_ORION_4BNC;
+-		return 0;
+-	}
+-
+-	/* check if this is an old hexium Orion card by looking at
+-	   a saa7110 at address 0x4e */
+-	err = i2c_smbus_xfer(&hexium->i2c_adapter, 0x4e, 0, I2C_SMBUS_READ,
+-			     0x00, I2C_SMBUS_BYTE_DATA, &data);
+-	if (err == 0) {
+-		pr_info("device is a Hexium HV-PCI6/Orion (old)\n");
+-		/* we store the pointer in our private data field */
+-		dev->ext_priv = hexium;
+-		hexium->type = HEXIUM_HV_PCI6_ORION;
+-		return 0;
+-	}
+-
+-	i2c_del_adapter(&hexium->i2c_adapter);
+-	kfree(hexium);
+-	return -EFAULT;
+-}
+-
+-/* bring hardware to a sane state. this has to be done, just in case someone
+-   wants to capture from this device before it has been properly initialized.
+-   the capture engine would badly fail, because no valid signal arrives on the
+-   saa7146, thus leading to timeouts and stuff. */
+-static int hexium_init_done(struct saa7146_dev *dev)
+-{
+-	struct hexium *hexium = (struct hexium *) dev->ext_priv;
+-	union i2c_smbus_data data;
+-	int i = 0;
+-
+-	DEB_D("hexium_init_done called\n");
+-
+-	/* initialize the helper ics to useful values */
+-	for (i = 0; i < sizeof(hexium_saa7110); i++) {
+-		data.byte = hexium_saa7110[i];
+-		if (0 != i2c_smbus_xfer(&hexium->i2c_adapter, 0x4e, 0, I2C_SMBUS_WRITE, i, I2C_SMBUS_BYTE_DATA, &data)) {
+-			pr_err("failed for address 0x%02x\n", i);
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+-static int hexium_set_input(struct hexium *hexium, int input)
+-{
+-	union i2c_smbus_data data;
+-	int i = 0;
+-
+-	DEB_D("\n");
+-
+-	for (i = 0; i < 8; i++) {
+-		int adr = hexium_input_select[input].data[i].adr;
+-		data.byte = hexium_input_select[input].data[i].byte;
+-		if (0 != i2c_smbus_xfer(&hexium->i2c_adapter, 0x4e, 0, I2C_SMBUS_WRITE, adr, I2C_SMBUS_BYTE_DATA, &data)) {
+-			return -1;
+-		}
+-		pr_debug("%d: 0x%02x => 0x%02x\n", input, adr, data.byte);
+-	}
+-
+-	return 0;
+-}
+-
+-static int vidioc_enum_input(struct file *file, void *fh, struct v4l2_input *i)
+-{
+-	DEB_EE("VIDIOC_ENUMINPUT %d\n", i->index);
+-
+-	if (i->index >= HEXIUM_INPUTS)
+-		return -EINVAL;
+-
+-	memcpy(i, &hexium_inputs[i->index], sizeof(struct v4l2_input));
+-
+-	DEB_D("v4l2_ioctl: VIDIOC_ENUMINPUT %d\n", i->index);
+-	return 0;
+-}
+-
+-static int vidioc_g_input(struct file *file, void *fh, unsigned int *input)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct hexium *hexium = (struct hexium *) dev->ext_priv;
+-
+-	*input = hexium->cur_input;
+-
+-	DEB_D("VIDIOC_G_INPUT: %d\n", *input);
+-	return 0;
+-}
+-
+-static int vidioc_s_input(struct file *file, void *fh, unsigned int input)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct hexium *hexium = (struct hexium *) dev->ext_priv;
+-
+-	if (input >= HEXIUM_INPUTS)
+-		return -EINVAL;
+-
+-	hexium->cur_input = input;
+-	hexium_set_input(hexium, input);
+-
+-	return 0;
+-}
+-
+-static struct saa7146_ext_vv vv_data;
+-
+-/* this function only gets called when the probing was successful */
+-static int hexium_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_data *info)
+-{
+-	struct hexium *hexium = (struct hexium *) dev->ext_priv;
+-	int ret;
+-
+-	DEB_EE("\n");
+-
+-	ret = saa7146_vv_init(dev, &vv_data);
+-	if (ret) {
+-		pr_err("Error in saa7146_vv_init()\n");
+-		return ret;
+-	}
+-
+-	vv_data.vid_ops.vidioc_enum_input = vidioc_enum_input;
+-	vv_data.vid_ops.vidioc_g_input = vidioc_g_input;
+-	vv_data.vid_ops.vidioc_s_input = vidioc_s_input;
+-	if (0 != saa7146_register_device(&hexium->video_dev, dev, "hexium orion", VFL_TYPE_VIDEO)) {
+-		pr_err("cannot register capture v4l2 device. skipping.\n");
+-		return -1;
+-	}
+-
+-	pr_err("found 'hexium orion' frame grabber-%d\n", hexium_num);
+-	hexium_num++;
+-
+-	/* the rest */
+-	hexium->cur_input = 0;
+-	hexium_init_done(dev);
+-
+-	return 0;
+-}
+-
+-static int hexium_detach(struct saa7146_dev *dev)
+-{
+-	struct hexium *hexium = (struct hexium *) dev->ext_priv;
+-
+-	DEB_EE("dev:%p\n", dev);
+-
+-	saa7146_unregister_device(&hexium->video_dev, dev);
+-	saa7146_vv_release(dev);
+-
+-	hexium_num--;
+-
+-	i2c_del_adapter(&hexium->i2c_adapter);
+-	kfree(hexium);
+-	return 0;
+-}
+-
+-static int std_callback(struct saa7146_dev *dev, struct saa7146_standard *std)
+-{
+-	return 0;
+-}
+-
+-static struct saa7146_extension extension;
+-
+-static struct saa7146_pci_extension_data hexium_hv_pci6 = {
+-	.ext_priv = "Hexium HV-PCI6 / Orion",
+-	.ext = &extension,
+-};
+-
+-static struct saa7146_pci_extension_data hexium_orion_1svhs_3bnc = {
+-	.ext_priv = "Hexium HV-PCI6 / Orion (1 SVHS/3 BNC)",
+-	.ext = &extension,
+-};
+-
+-static struct saa7146_pci_extension_data hexium_orion_4bnc = {
+-	.ext_priv = "Hexium HV-PCI6 / Orion (4 BNC)",
+-	.ext = &extension,
+-};
+-
+-static const struct pci_device_id pci_tbl[] = {
+-	{
+-	 .vendor = PCI_VENDOR_ID_PHILIPS,
+-	 .device = PCI_DEVICE_ID_PHILIPS_SAA7146,
+-	 .subvendor = 0x0000,
+-	 .subdevice = 0x0000,
+-	 .driver_data = (unsigned long) &hexium_hv_pci6,
+-	 },
+-	{
+-	 .vendor = PCI_VENDOR_ID_PHILIPS,
+-	 .device = PCI_DEVICE_ID_PHILIPS_SAA7146,
+-	 .subvendor = 0x17c8,
+-	 .subdevice = 0x0101,
+-	 .driver_data = (unsigned long) &hexium_orion_1svhs_3bnc,
+-	 },
+-	{
+-	 .vendor = PCI_VENDOR_ID_PHILIPS,
+-	 .device = PCI_DEVICE_ID_PHILIPS_SAA7146,
+-	 .subvendor = 0x17c8,
+-	 .subdevice = 0x2101,
+-	 .driver_data = (unsigned long) &hexium_orion_4bnc,
+-	 },
+-	{
+-	 .vendor = 0,
+-	 }
+-};
+-
+-MODULE_DEVICE_TABLE(pci, pci_tbl);
+-
+-static struct saa7146_ext_vv vv_data = {
+-	.inputs = HEXIUM_INPUTS,
+-	.capabilities = 0,
+-	.stds = &hexium_standards[0],
+-	.num_stds = ARRAY_SIZE(hexium_standards),
+-	.std_callback = &std_callback,
+-};
+-
+-static struct saa7146_extension extension = {
+-	.name = "hexium HV-PCI6 Orion",
+-	.flags = 0,		// SAA7146_USE_I2C_IRQ,
+-
+-	.pci_tbl = &pci_tbl[0],
+-	.module = THIS_MODULE,
+-
+-	.probe = hexium_probe,
+-	.attach = hexium_attach,
+-	.detach = hexium_detach,
+-
+-	.irq_mask = 0,
+-	.irq_func = NULL,
+-};
+-
+-static int __init hexium_init_module(void)
+-{
+-	if (0 != saa7146_register_extension(&extension)) {
+-		DEB_S("failed to register extension\n");
+-		return -ENODEV;
+-	}
+-
+-	return 0;
+-}
+-
+-static void __exit hexium_cleanup_module(void)
+-{
+-	saa7146_unregister_extension(&extension);
+-}
+-
+-module_init(hexium_init_module);
+-module_exit(hexium_cleanup_module);
+-
+-MODULE_DESCRIPTION("video4linux-2 driver for Hexium Orion frame grabber cards");
+-MODULE_AUTHOR("Michael Hunold <michael@mihu.de>");
+-MODULE_LICENSE("GPL");
+diff --git a/drivers/staging/media/deprecated/saa7146/saa7146/mxb.c b/drivers/staging/media/deprecated/saa7146/saa7146/mxb.c
+deleted file mode 100644
+index 3e568f952dae..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/saa7146/mxb.c
++++ /dev/null
+@@ -1,873 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+-    mxb - v4l2 driver for the Multimedia eXtension Board
+-
+-    Copyright (C) 1998-2006 Michael Hunold <michael@mihu.de>
+-
+-    Visit http://www.themm.net/~mihu/linux/saa7146/mxb.html
+-    for further details about this card.
+-
+-*/
+-
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
+-#define DEBUG_VARIABLE debug
+-
+-#include <media/tuner.h>
+-#include <media/v4l2-common.h>
+-#include <media/i2c/saa7115.h>
+-#include <linux/module.h>
+-#include <linux/kernel.h>
+-
+-#include "../common/saa7146_vv.h"
+-#include "tea6415c.h"
+-#include "tea6420.h"
+-
+-#define MXB_AUDIOS	6
+-
+-#define I2C_SAA7111A  0x24
+-#define	I2C_TDA9840   0x42
+-#define	I2C_TEA6415C  0x43
+-#define	I2C_TEA6420_1 0x4c
+-#define	I2C_TEA6420_2 0x4d
+-#define	I2C_TUNER     0x60
+-
+-#define MXB_BOARD_CAN_DO_VBI(dev)   (dev->revision != 0)
+-
+-/* global variable */
+-static int mxb_num;
+-
+-/* initial frequence the tuner will be tuned to.
+-   in verden (lower saxony, germany) 4148 is a
+-   channel called "phoenix" */
+-static int freq = 4148;
+-module_param(freq, int, 0644);
+-MODULE_PARM_DESC(freq, "initial frequency the tuner will be tuned to while setup");
+-
+-static int debug;
+-module_param(debug, int, 0644);
+-MODULE_PARM_DESC(debug, "Turn on/off device debugging (default:off).");
+-
+-#define MXB_INPUTS 4
+-enum { TUNER, AUX1, AUX3, AUX3_YC };
+-
+-static struct v4l2_input mxb_inputs[MXB_INPUTS] = {
+-	{ TUNER,   "Tuner",          V4L2_INPUT_TYPE_TUNER,  0x3f, 0,
+-		V4L2_STD_PAL_BG | V4L2_STD_PAL_I, 0, V4L2_IN_CAP_STD },
+-	{ AUX1,	   "AUX1",           V4L2_INPUT_TYPE_CAMERA, 0x3f, 0,
+-		V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ AUX3,	   "AUX3 Composite", V4L2_INPUT_TYPE_CAMERA, 0x3f, 0,
+-		V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ AUX3_YC, "AUX3 S-Video",   V4L2_INPUT_TYPE_CAMERA, 0x3f, 0,
+-		V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-};
+-
+-/* this array holds the information, which port of the saa7146 each
+-   input actually uses. the mxb uses port 0 for every input */
+-static struct {
+-	int hps_source;
+-	int hps_sync;
+-} input_port_selection[MXB_INPUTS] = {
+-	{ SAA7146_HPS_SOURCE_PORT_A, SAA7146_HPS_SYNC_PORT_A },
+-	{ SAA7146_HPS_SOURCE_PORT_A, SAA7146_HPS_SYNC_PORT_A },
+-	{ SAA7146_HPS_SOURCE_PORT_A, SAA7146_HPS_SYNC_PORT_A },
+-	{ SAA7146_HPS_SOURCE_PORT_A, SAA7146_HPS_SYNC_PORT_A },
+-};
+-
+-/* this array holds the information of the audio source (mxb_audios),
+-   which has to be switched corresponding to the video source (mxb_channels) */
+-static int video_audio_connect[MXB_INPUTS] =
+-	{ 0, 1, 3, 3 };
+-
+-struct mxb_routing {
+-	u32 input;
+-	u32 output;
+-};
+-
+-/* these are the available audio sources, which can switched
+-   to the line- and cd-output individually */
+-static struct v4l2_audio mxb_audios[MXB_AUDIOS] = {
+-	    {
+-		.index	= 0,
+-		.name	= "Tuner",
+-		.capability = V4L2_AUDCAP_STEREO,
+-	} , {
+-		.index	= 1,
+-		.name	= "AUX1",
+-		.capability = V4L2_AUDCAP_STEREO,
+-	} , {
+-		.index	= 2,
+-		.name	= "AUX2",
+-		.capability = V4L2_AUDCAP_STEREO,
+-	} , {
+-		.index	= 3,
+-		.name	= "AUX3",
+-		.capability = V4L2_AUDCAP_STEREO,
+-	} , {
+-		.index	= 4,
+-		.name	= "Radio (X9)",
+-		.capability = V4L2_AUDCAP_STEREO,
+-	} , {
+-		.index	= 5,
+-		.name	= "CD-ROM (X10)",
+-		.capability = V4L2_AUDCAP_STEREO,
+-	}
+-};
+-
+-/* These are the necessary input-output-pins for bringing one audio source
+-   (see above) to the CD-output. Note that gain is set to 0 in this table. */
+-static struct mxb_routing TEA6420_cd[MXB_AUDIOS + 1][2] = {
+-	{ { 1, 1 }, { 1, 1 } },	/* Tuner */
+-	{ { 5, 1 }, { 6, 1 } },	/* AUX 1 */
+-	{ { 4, 1 }, { 6, 1 } },	/* AUX 2 */
+-	{ { 3, 1 }, { 6, 1 } },	/* AUX 3 */
+-	{ { 1, 1 }, { 3, 1 } },	/* Radio */
+-	{ { 1, 1 }, { 2, 1 } },	/* CD-Rom */
+-	{ { 6, 1 }, { 6, 1 } }	/* Mute */
+-};
+-
+-/* These are the necessary input-output-pins for bringing one audio source
+-   (see above) to the line-output. Note that gain is set to 0 in this table. */
+-static struct mxb_routing TEA6420_line[MXB_AUDIOS + 1][2] = {
+-	{ { 2, 3 }, { 1, 2 } },
+-	{ { 5, 3 }, { 6, 2 } },
+-	{ { 4, 3 }, { 6, 2 } },
+-	{ { 3, 3 }, { 6, 2 } },
+-	{ { 2, 3 }, { 3, 2 } },
+-	{ { 2, 3 }, { 2, 2 } },
+-	{ { 6, 3 }, { 6, 2 } }	/* Mute */
+-};
+-
+-struct mxb
+-{
+-	struct video_device	video_dev;
+-	struct video_device	vbi_dev;
+-
+-	struct i2c_adapter	i2c_adapter;
+-
+-	struct v4l2_subdev	*saa7111a;
+-	struct v4l2_subdev	*tda9840;
+-	struct v4l2_subdev	*tea6415c;
+-	struct v4l2_subdev	*tuner;
+-	struct v4l2_subdev	*tea6420_1;
+-	struct v4l2_subdev	*tea6420_2;
+-
+-	int	cur_mode;	/* current audio mode (mono, stereo, ...) */
+-	int	cur_input;	/* current input */
+-	int	cur_audinput;	/* current audio input */
+-	int	cur_mute;	/* current mute status */
+-	struct v4l2_frequency	cur_freq;	/* current frequency the tuner is tuned to */
+-};
+-
+-#define saa7111a_call(mxb, o, f, args...) \
+-	v4l2_subdev_call(mxb->saa7111a, o, f, ##args)
+-#define tda9840_call(mxb, o, f, args...) \
+-	v4l2_subdev_call(mxb->tda9840, o, f, ##args)
+-#define tea6415c_call(mxb, o, f, args...) \
+-	v4l2_subdev_call(mxb->tea6415c, o, f, ##args)
+-#define tuner_call(mxb, o, f, args...) \
+-	v4l2_subdev_call(mxb->tuner, o, f, ##args)
+-#define call_all(dev, o, f, args...) \
+-	v4l2_device_call_until_err(&dev->v4l2_dev, 0, o, f, ##args)
+-
+-static void mxb_update_audmode(struct mxb *mxb)
+-{
+-	struct v4l2_tuner t = {
+-		.audmode = mxb->cur_mode,
+-	};
+-
+-	tda9840_call(mxb, tuner, s_tuner, &t);
+-}
+-
+-static inline void tea6420_route(struct mxb *mxb, int idx)
+-{
+-	v4l2_subdev_call(mxb->tea6420_1, audio, s_routing,
+-		TEA6420_cd[idx][0].input, TEA6420_cd[idx][0].output, 0);
+-	v4l2_subdev_call(mxb->tea6420_2, audio, s_routing,
+-		TEA6420_cd[idx][1].input, TEA6420_cd[idx][1].output, 0);
+-	v4l2_subdev_call(mxb->tea6420_1, audio, s_routing,
+-		TEA6420_line[idx][0].input, TEA6420_line[idx][0].output, 0);
+-	v4l2_subdev_call(mxb->tea6420_2, audio, s_routing,
+-		TEA6420_line[idx][1].input, TEA6420_line[idx][1].output, 0);
+-}
+-
+-static struct saa7146_extension extension;
+-
+-static int mxb_s_ctrl(struct v4l2_ctrl *ctrl)
+-{
+-	struct saa7146_dev *dev = container_of(ctrl->handler,
+-				struct saa7146_dev, ctrl_handler);
+-	struct mxb *mxb = dev->ext_priv;
+-
+-	switch (ctrl->id) {
+-	case V4L2_CID_AUDIO_MUTE:
+-		mxb->cur_mute = ctrl->val;
+-		/* switch the audio-source */
+-		tea6420_route(mxb, ctrl->val ? 6 :
+-				video_audio_connect[mxb->cur_input]);
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
+-	return 0;
+-}
+-
+-static const struct v4l2_ctrl_ops mxb_ctrl_ops = {
+-	.s_ctrl = mxb_s_ctrl,
+-};
+-
+-static int mxb_probe(struct saa7146_dev *dev)
+-{
+-	struct v4l2_ctrl_handler *hdl = &dev->ctrl_handler;
+-	struct mxb *mxb = NULL;
+-
+-	v4l2_ctrl_new_std(hdl, &mxb_ctrl_ops,
+-			V4L2_CID_AUDIO_MUTE, 0, 1, 1, 1);
+-	if (hdl->error)
+-		return hdl->error;
+-	mxb = kzalloc(sizeof(struct mxb), GFP_KERNEL);
+-	if (mxb == NULL) {
+-		DEB_D("not enough kernel memory\n");
+-		return -ENOMEM;
+-	}
 -
 -
--/* In tm6000-stds.c */
--void tm6000_get_std_res(struct tm6000_core *dev);
--int tm6000_set_standard(struct tm6000_core *dev);
+-	snprintf(mxb->i2c_adapter.name, sizeof(mxb->i2c_adapter.name), "mxb%d", mxb_num);
 -
--/* In tm6000-i2c.c */
--int tm6000_i2c_register(struct tm6000_core *dev);
--int tm6000_i2c_unregister(struct tm6000_core *dev);
+-	saa7146_i2c_adapter_prepare(dev, &mxb->i2c_adapter, SAA7146_I2C_BUS_BIT_RATE_480);
+-	if (i2c_add_adapter(&mxb->i2c_adapter) < 0) {
+-		DEB_S("cannot register i2c-device. skipping.\n");
+-		kfree(mxb);
+-		return -EFAULT;
+-	}
 -
--/* In tm6000-queue.c */
+-	mxb->saa7111a = v4l2_i2c_new_subdev(&dev->v4l2_dev, &mxb->i2c_adapter,
+-			"saa7111", I2C_SAA7111A, NULL);
+-	mxb->tea6420_1 = v4l2_i2c_new_subdev(&dev->v4l2_dev, &mxb->i2c_adapter,
+-			"tea6420", I2C_TEA6420_1, NULL);
+-	mxb->tea6420_2 = v4l2_i2c_new_subdev(&dev->v4l2_dev, &mxb->i2c_adapter,
+-			"tea6420", I2C_TEA6420_2, NULL);
+-	mxb->tea6415c = v4l2_i2c_new_subdev(&dev->v4l2_dev, &mxb->i2c_adapter,
+-			"tea6415c", I2C_TEA6415C, NULL);
+-	mxb->tda9840 = v4l2_i2c_new_subdev(&dev->v4l2_dev, &mxb->i2c_adapter,
+-			"tda9840", I2C_TDA9840, NULL);
+-	mxb->tuner = v4l2_i2c_new_subdev(&dev->v4l2_dev, &mxb->i2c_adapter,
+-			"tuner", I2C_TUNER, NULL);
 -
--int tm6000_v4l2_mmap(struct file *filp, struct vm_area_struct *vma);
+-	/* check if all devices are present */
+-	if (!mxb->tea6420_1 || !mxb->tea6420_2 || !mxb->tea6415c ||
+-	    !mxb->tda9840 || !mxb->saa7111a || !mxb->tuner) {
+-		pr_err("did not find all i2c devices. aborting\n");
+-		i2c_del_adapter(&mxb->i2c_adapter);
+-		kfree(mxb);
+-		return -ENODEV;
+-	}
 -
--int tm6000_vidioc_streamon(struct file *file, void *priv,
--			   enum v4l2_buf_type i);
--int tm6000_vidioc_streamoff(struct file *file, void *priv,
--			    enum v4l2_buf_type i);
--int tm6000_vidioc_reqbufs(struct file *file, void *priv,
--			  struct v4l2_requestbuffers *rb);
--int tm6000_vidioc_querybuf(struct file *file, void *priv,
--			   struct v4l2_buffer *b);
--int tm6000_vidioc_qbuf(struct file *file, void *priv, struct v4l2_buffer *b);
--int tm6000_vidioc_dqbuf(struct file *file, void *priv, struct v4l2_buffer *b);
--ssize_t tm6000_v4l2_read(struct file *filp, char __user * buf, size_t count,
--			 loff_t *f_pos);
--unsigned int tm6000_v4l2_poll(struct file *file,
--			      struct poll_table_struct *wait);
--int tm6000_queue_init(struct tm6000_core *dev);
+-	/* all devices are present, probe was successful */
 -
--/* In tm6000-alsa.c */
--/*int tm6000_audio_init(struct tm6000_core *dev, int idx);*/
+-	/* we store the pointer in our private data field */
+-	dev->ext_priv = mxb;
 -
--/* In tm6000-input.c */
--int tm6000_ir_init(struct tm6000_core *dev);
--int tm6000_ir_fini(struct tm6000_core *dev);
--void tm6000_ir_wait(struct tm6000_core *dev, u8 state);
--int tm6000_ir_int_start(struct tm6000_core *dev);
--void tm6000_ir_int_stop(struct tm6000_core *dev);
+-	v4l2_ctrl_handler_setup(hdl);
 -
--/* Debug stuff */
+-	return 0;
+-}
 -
--extern int tm6000_debug;
+-/* some init data for the saa7740, the so-called 'sound arena module'.
+-   there are no specs available, so we simply use some init values */
+-static struct {
+-	int	length;
+-	char	data[9];
+-} mxb_saa7740_init[] = {
+-	{ 3, { 0x80, 0x00, 0x00 } },{ 3, { 0x80, 0x89, 0x00 } },
+-	{ 3, { 0x80, 0xb0, 0x0a } },{ 3, { 0x00, 0x00, 0x00 } },
+-	{ 3, { 0x49, 0x00, 0x00 } },{ 3, { 0x4a, 0x00, 0x00 } },
+-	{ 3, { 0x4b, 0x00, 0x00 } },{ 3, { 0x4c, 0x00, 0x00 } },
+-	{ 3, { 0x4d, 0x00, 0x00 } },{ 3, { 0x4e, 0x00, 0x00 } },
+-	{ 3, { 0x4f, 0x00, 0x00 } },{ 3, { 0x50, 0x00, 0x00 } },
+-	{ 3, { 0x51, 0x00, 0x00 } },{ 3, { 0x52, 0x00, 0x00 } },
+-	{ 3, { 0x53, 0x00, 0x00 } },{ 3, { 0x54, 0x00, 0x00 } },
+-	{ 3, { 0x55, 0x00, 0x00 } },{ 3, { 0x56, 0x00, 0x00 } },
+-	{ 3, { 0x57, 0x00, 0x00 } },{ 3, { 0x58, 0x00, 0x00 } },
+-	{ 3, { 0x59, 0x00, 0x00 } },{ 3, { 0x5a, 0x00, 0x00 } },
+-	{ 3, { 0x5b, 0x00, 0x00 } },{ 3, { 0x5c, 0x00, 0x00 } },
+-	{ 3, { 0x5d, 0x00, 0x00 } },{ 3, { 0x5e, 0x00, 0x00 } },
+-	{ 3, { 0x5f, 0x00, 0x00 } },{ 3, { 0x60, 0x00, 0x00 } },
+-	{ 3, { 0x61, 0x00, 0x00 } },{ 3, { 0x62, 0x00, 0x00 } },
+-	{ 3, { 0x63, 0x00, 0x00 } },{ 3, { 0x64, 0x00, 0x00 } },
+-	{ 3, { 0x65, 0x00, 0x00 } },{ 3, { 0x66, 0x00, 0x00 } },
+-	{ 3, { 0x67, 0x00, 0x00 } },{ 3, { 0x68, 0x00, 0x00 } },
+-	{ 3, { 0x69, 0x00, 0x00 } },{ 3, { 0x6a, 0x00, 0x00 } },
+-	{ 3, { 0x6b, 0x00, 0x00 } },{ 3, { 0x6c, 0x00, 0x00 } },
+-	{ 3, { 0x6d, 0x00, 0x00 } },{ 3, { 0x6e, 0x00, 0x00 } },
+-	{ 3, { 0x6f, 0x00, 0x00 } },{ 3, { 0x70, 0x00, 0x00 } },
+-	{ 3, { 0x71, 0x00, 0x00 } },{ 3, { 0x72, 0x00, 0x00 } },
+-	{ 3, { 0x73, 0x00, 0x00 } },{ 3, { 0x74, 0x00, 0x00 } },
+-	{ 3, { 0x75, 0x00, 0x00 } },{ 3, { 0x76, 0x00, 0x00 } },
+-	{ 3, { 0x77, 0x00, 0x00 } },{ 3, { 0x41, 0x00, 0x42 } },
+-	{ 3, { 0x42, 0x10, 0x42 } },{ 3, { 0x43, 0x20, 0x42 } },
+-	{ 3, { 0x44, 0x30, 0x42 } },{ 3, { 0x45, 0x00, 0x01 } },
+-	{ 3, { 0x46, 0x00, 0x01 } },{ 3, { 0x47, 0x00, 0x01 } },
+-	{ 3, { 0x48, 0x00, 0x01 } },
+-	{ 9, { 0x01, 0x03, 0xc5, 0x5c, 0x7a, 0x85, 0x01, 0x00, 0x54 } },
+-	{ 9, { 0x21, 0x03, 0xc5, 0x5c, 0x7a, 0x85, 0x01, 0x00, 0x54 } },
+-	{ 9, { 0x09, 0x0b, 0xb4, 0x6b, 0x74, 0x85, 0x95, 0x00, 0x34 } },
+-	{ 9, { 0x29, 0x0b, 0xb4, 0x6b, 0x74, 0x85, 0x95, 0x00, 0x34 } },
+-	{ 9, { 0x11, 0x17, 0x43, 0x62, 0x68, 0x89, 0xd1, 0xff, 0xb0 } },
+-	{ 9, { 0x31, 0x17, 0x43, 0x62, 0x68, 0x89, 0xd1, 0xff, 0xb0 } },
+-	{ 9, { 0x19, 0x20, 0x62, 0x51, 0x5a, 0x95, 0x19, 0x01, 0x50 } },
+-	{ 9, { 0x39, 0x20, 0x62, 0x51, 0x5a, 0x95, 0x19, 0x01, 0x50 } },
+-	{ 9, { 0x05, 0x3e, 0xd2, 0x69, 0x4e, 0x9a, 0x51, 0x00, 0xf0 } },
+-	{ 9, { 0x25, 0x3e, 0xd2, 0x69, 0x4e, 0x9a, 0x51, 0x00, 0xf0 } },
+-	{ 9, { 0x0d, 0x3d, 0xa1, 0x40, 0x7d, 0x9f, 0x29, 0xfe, 0x14 } },
+-	{ 9, { 0x2d, 0x3d, 0xa1, 0x40, 0x7d, 0x9f, 0x29, 0xfe, 0x14 } },
+-	{ 9, { 0x15, 0x73, 0xa1, 0x50, 0x5d, 0xa6, 0xf5, 0xfe, 0x38 } },
+-	{ 9, { 0x35, 0x73, 0xa1, 0x50, 0x5d, 0xa6, 0xf5, 0xfe, 0x38 } },
+-	{ 9, { 0x1d, 0xed, 0xd0, 0x68, 0x29, 0xb4, 0xe1, 0x00, 0xb8 } },
+-	{ 9, { 0x3d, 0xed, 0xd0, 0x68, 0x29, 0xb4, 0xe1, 0x00, 0xb8 } },
+-	{ 3, { 0x80, 0xb3, 0x0a } },
+-	{-1, { 0 } }
+-};
 -
--#define dprintk(dev, level, fmt, arg...) do {\
--	if (tm6000_debug & level) \
--		printk(KERN_INFO "(%lu) %s %s :"fmt, jiffies, \
--			 dev->name, __func__ , ##arg); } while (0)
+-/* bring hardware to a sane state. this has to be done, just in case someone
+-   wants to capture from this device before it has been properly initialized.
+-   the capture engine would badly fail, because no valid signal arrives on the
+-   saa7146, thus leading to timeouts and stuff. */
+-static int mxb_init_done(struct saa7146_dev* dev)
+-{
+-	struct mxb* mxb = (struct mxb*)dev->ext_priv;
+-	struct i2c_msg msg;
+-	struct tuner_setup tun_setup;
+-	v4l2_std_id std = V4L2_STD_PAL_BG;
 -
--#define V4L2_DEBUG_REG		0x0004
--#define V4L2_DEBUG_I2C		0x0008
--#define V4L2_DEBUG_QUEUE	0x0010
--#define V4L2_DEBUG_ISOC		0x0020
--#define V4L2_DEBUG_RES_LOCK	0x0040	/* Resource locking */
--#define V4L2_DEBUG_OPEN		0x0080	/* video open/close debug */
+-	int i, err = 0;
 -
--#define tm6000_err(fmt, arg...) do {\
--	printk(KERN_ERR "tm6000 %s :"fmt, \
--		__func__ , ##arg); } while (0)
+-	/* mute audio on tea6420s */
+-	tea6420_route(mxb, 6);
+-
+-	/* select video mode in saa7111a */
+-	saa7111a_call(mxb, video, s_std, std);
+-
+-	/* select tuner-output on saa7111a */
+-	saa7111a_call(mxb, video, s_routing, SAA7115_COMPOSITE0,
+-		SAA7111_FMT_CCIR, 0);
+-
+-	/* select a tuner type */
+-	tun_setup.mode_mask = T_ANALOG_TV;
+-	tun_setup.addr = ADDR_UNSET;
+-	tun_setup.type = TUNER_PHILIPS_PAL;
+-	tuner_call(mxb, tuner, s_type_addr, &tun_setup);
+-	/* tune in some frequency on tuner */
+-	mxb->cur_freq.tuner = 0;
+-	mxb->cur_freq.type = V4L2_TUNER_ANALOG_TV;
+-	mxb->cur_freq.frequency = freq;
+-	tuner_call(mxb, tuner, s_frequency, &mxb->cur_freq);
+-
+-	/* set a default video standard */
+-	/* These two gpio calls set the GPIO pins that control the tda9820 */
+-	saa7146_write(dev, GPIO_CTRL, 0x00404050);
+-	saa7111a_call(mxb, core, s_gpio, 1);
+-	saa7111a_call(mxb, video, s_std, std);
+-	tuner_call(mxb, video, s_std, std);
+-
+-	/* switch to tuner-channel on tea6415c */
+-	tea6415c_call(mxb, video, s_routing, 3, 17, 0);
+-
+-	/* select tuner-output on multicable on tea6415c */
+-	tea6415c_call(mxb, video, s_routing, 3, 13, 0);
+-
+-	/* the rest for mxb */
+-	mxb->cur_input = 0;
+-	mxb->cur_audinput = video_audio_connect[mxb->cur_input];
+-	mxb->cur_mute = 1;
+-
+-	mxb->cur_mode = V4L2_TUNER_MODE_STEREO;
+-	mxb_update_audmode(mxb);
+-
+-	/* check if the saa7740 (aka 'sound arena module') is present
+-	   on the mxb. if so, we must initialize it. due to lack of
+-	   information about the saa7740, the values were reverse
+-	   engineered. */
+-	msg.addr = 0x1b;
+-	msg.flags = 0;
+-	msg.len = mxb_saa7740_init[0].length;
+-	msg.buf = &mxb_saa7740_init[0].data[0];
+-
+-	err = i2c_transfer(&mxb->i2c_adapter, &msg, 1);
+-	if (err == 1) {
+-		/* the sound arena module is a pos, that's probably the reason
+-		   philips refuses to hand out a datasheet for the saa7740...
+-		   it seems to screw up the i2c bus, so we disable fast irq
+-		   based i2c transactions here and rely on the slow and safe
+-		   polling method ... */
+-		extension.flags &= ~SAA7146_USE_I2C_IRQ;
+-		for (i = 1; ; i++) {
+-			if (-1 == mxb_saa7740_init[i].length)
+-				break;
+-
+-			msg.len = mxb_saa7740_init[i].length;
+-			msg.buf = &mxb_saa7740_init[i].data[0];
+-			err = i2c_transfer(&mxb->i2c_adapter, &msg, 1);
+-			if (err != 1) {
+-				DEB_D("failed to initialize 'sound arena module'\n");
+-				goto err;
+-			}
+-		}
+-		pr_info("'sound arena module' detected\n");
+-	}
+-err:
+-	/* the rest for saa7146: you should definitely set some basic values
+-	   for the input-port handling of the saa7146. */
+-
+-	/* ext->saa has been filled by the core driver */
+-
+-	/* some stuff is done via variables */
+-	saa7146_set_hps_source_and_sync(dev, input_port_selection[mxb->cur_input].hps_source,
+-			input_port_selection[mxb->cur_input].hps_sync);
+-
+-	/* some stuff is done via direct write to the registers */
+-
+-	/* this is ugly, but because of the fact that this is completely
+-	   hardware dependend, it should be done directly... */
+-	saa7146_write(dev, DD1_STREAM_B,	0x00000000);
+-	saa7146_write(dev, DD1_INIT,		0x02000200);
+-	saa7146_write(dev, MC2, (MASK_09 | MASK_25 | MASK_10 | MASK_26));
+-
+-	return 0;
+-}
+-
+-/* interrupt-handler. this gets called when irq_mask is != 0.
+-   it must clear the interrupt-bits in irq_mask it has handled */
+-/*
+-void mxb_irq_bh(struct saa7146_dev* dev, u32* irq_mask)
+-{
+-	struct mxb* mxb = (struct mxb*)dev->ext_priv;
+-}
+-*/
+-
+-static int vidioc_enum_input(struct file *file, void *fh, struct v4l2_input *i)
+-{
+-	DEB_EE("VIDIOC_ENUMINPUT %d\n", i->index);
+-	if (i->index >= MXB_INPUTS)
+-		return -EINVAL;
+-	memcpy(i, &mxb_inputs[i->index], sizeof(struct v4l2_input));
+-	return 0;
+-}
+-
+-static int vidioc_g_input(struct file *file, void *fh, unsigned int *i)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct mxb *mxb = (struct mxb *)dev->ext_priv;
+-	*i = mxb->cur_input;
+-
+-	DEB_EE("VIDIOC_G_INPUT %d\n", *i);
+-	return 0;
+-}
+-
+-static int vidioc_s_input(struct file *file, void *fh, unsigned int input)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct mxb *mxb = (struct mxb *)dev->ext_priv;
+-	int err = 0;
+-	int i = 0;
+-
+-	DEB_EE("VIDIOC_S_INPUT %d\n", input);
+-
+-	if (input >= MXB_INPUTS)
+-		return -EINVAL;
+-
+-	mxb->cur_input = input;
+-
+-	saa7146_set_hps_source_and_sync(dev, input_port_selection[input].hps_source,
+-			input_port_selection[input].hps_sync);
+-
+-	/* prepare switching of tea6415c and saa7111a;
+-	   have a look at the 'background'-file for further information  */
+-	switch (input) {
+-	case TUNER:
+-		i = SAA7115_COMPOSITE0;
+-
+-		err = tea6415c_call(mxb, video, s_routing, 3, 17, 0);
+-
+-		/* connect tuner-output always to multicable */
+-		if (!err)
+-			err = tea6415c_call(mxb, video, s_routing, 3, 13, 0);
+-		break;
+-	case AUX3_YC:
+-		/* nothing to be done here. aux3_yc is
+-		   directly connected to the saa711a */
+-		i = SAA7115_SVIDEO1;
+-		break;
+-	case AUX3:
+-		/* nothing to be done here. aux3 is
+-		   directly connected to the saa711a */
+-		i = SAA7115_COMPOSITE1;
+-		break;
+-	case AUX1:
+-		i = SAA7115_COMPOSITE0;
+-		err = tea6415c_call(mxb, video, s_routing, 1, 17, 0);
+-		break;
+-	}
+-
+-	if (err)
+-		return err;
+-
+-	/* switch video in saa7111a */
+-	if (saa7111a_call(mxb, video, s_routing, i, SAA7111_FMT_CCIR, 0))
+-		pr_err("VIDIOC_S_INPUT: could not address saa7111a\n");
+-
+-	mxb->cur_audinput = video_audio_connect[input];
+-	/* switch the audio-source only if necessary */
+-	if (0 == mxb->cur_mute)
+-		tea6420_route(mxb, mxb->cur_audinput);
+-	if (mxb->cur_audinput == 0)
+-		mxb_update_audmode(mxb);
+-
+-	return 0;
+-}
+-
+-static int vidioc_g_tuner(struct file *file, void *fh, struct v4l2_tuner *t)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct mxb *mxb = (struct mxb *)dev->ext_priv;
+-
+-	if (t->index) {
+-		DEB_D("VIDIOC_G_TUNER: channel %d does not have a tuner attached\n",
+-		      t->index);
+-		return -EINVAL;
+-	}
+-
+-	DEB_EE("VIDIOC_G_TUNER: %d\n", t->index);
+-
+-	memset(t, 0, sizeof(*t));
+-	strscpy(t->name, "TV Tuner", sizeof(t->name));
+-	t->type = V4L2_TUNER_ANALOG_TV;
+-	t->capability = V4L2_TUNER_CAP_NORM | V4L2_TUNER_CAP_STEREO |
+-			V4L2_TUNER_CAP_LANG1 | V4L2_TUNER_CAP_LANG2 | V4L2_TUNER_CAP_SAP;
+-	t->audmode = mxb->cur_mode;
+-	return call_all(dev, tuner, g_tuner, t);
+-}
+-
+-static int vidioc_s_tuner(struct file *file, void *fh, const struct v4l2_tuner *t)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct mxb *mxb = (struct mxb *)dev->ext_priv;
+-
+-	if (t->index) {
+-		DEB_D("VIDIOC_S_TUNER: channel %d does not have a tuner attached\n",
+-		      t->index);
+-		return -EINVAL;
+-	}
+-
+-	mxb->cur_mode = t->audmode;
+-	return call_all(dev, tuner, s_tuner, t);
+-}
+-
+-static int vidioc_querystd(struct file *file, void *fh, v4l2_std_id *norm)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-
+-	return call_all(dev, video, querystd, norm);
+-}
+-
+-static int vidioc_g_frequency(struct file *file, void *fh, struct v4l2_frequency *f)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct mxb *mxb = (struct mxb *)dev->ext_priv;
+-
+-	if (f->tuner)
+-		return -EINVAL;
+-	*f = mxb->cur_freq;
+-
+-	DEB_EE("VIDIOC_G_FREQ: freq:0x%08x\n", mxb->cur_freq.frequency);
+-	return 0;
+-}
+-
+-static int vidioc_s_frequency(struct file *file, void *fh, const struct v4l2_frequency *f)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct mxb *mxb = (struct mxb *)dev->ext_priv;
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	if (f->tuner)
+-		return -EINVAL;
+-
+-	if (V4L2_TUNER_ANALOG_TV != f->type)
+-		return -EINVAL;
+-
+-	DEB_EE("VIDIOC_S_FREQUENCY: freq:0x%08x\n", mxb->cur_freq.frequency);
+-
+-	/* tune in desired frequency */
+-	tuner_call(mxb, tuner, s_frequency, f);
+-	/* let the tuner subdev clamp the frequency to the tuner range */
+-	mxb->cur_freq = *f;
+-	tuner_call(mxb, tuner, g_frequency, &mxb->cur_freq);
+-	if (mxb->cur_audinput == 0)
+-		mxb_update_audmode(mxb);
+-
+-	if (mxb->cur_input)
+-		return 0;
+-
+-	/* hack: changing the frequency should invalidate the vbi-counter (=> alevt) */
+-	spin_lock(&dev->slock);
+-	vv->vbi_fieldcount = 0;
+-	spin_unlock(&dev->slock);
+-
+-	return 0;
+-}
+-
+-static int vidioc_enumaudio(struct file *file, void *fh, struct v4l2_audio *a)
+-{
+-	if (a->index >= MXB_AUDIOS)
+-		return -EINVAL;
+-	*a = mxb_audios[a->index];
+-	return 0;
+-}
+-
+-static int vidioc_g_audio(struct file *file, void *fh, struct v4l2_audio *a)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct mxb *mxb = (struct mxb *)dev->ext_priv;
+-
+-	DEB_EE("VIDIOC_G_AUDIO\n");
+-	*a = mxb_audios[mxb->cur_audinput];
+-	return 0;
+-}
+-
+-static int vidioc_s_audio(struct file *file, void *fh, const struct v4l2_audio *a)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct mxb *mxb = (struct mxb *)dev->ext_priv;
+-
+-	DEB_D("VIDIOC_S_AUDIO %d\n", a->index);
+-	if (a->index >= 32 ||
+-	    !(mxb_inputs[mxb->cur_input].audioset & (1 << a->index)))
+-		return -EINVAL;
+-
+-	if (mxb->cur_audinput != a->index) {
+-		mxb->cur_audinput = a->index;
+-		tea6420_route(mxb, a->index);
+-		if (mxb->cur_audinput == 0)
+-			mxb_update_audmode(mxb);
+-	}
+-	return 0;
+-}
+-
+-#ifdef CONFIG_VIDEO_ADV_DEBUG
+-static int vidioc_g_register(struct file *file, void *fh, struct v4l2_dbg_register *reg)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-
+-	if (reg->reg > pci_resource_len(dev->pci, 0) - 4)
+-		return -EINVAL;
+-	reg->val = saa7146_read(dev, reg->reg);
+-	reg->size = 4;
+-	return 0;
+-}
+-
+-static int vidioc_s_register(struct file *file, void *fh, const struct v4l2_dbg_register *reg)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-
+-	if (reg->reg > pci_resource_len(dev->pci, 0) - 4)
+-		return -EINVAL;
+-	saa7146_write(dev, reg->reg, reg->val);
+-	return 0;
+-}
+-#endif
+-
+-static struct saa7146_ext_vv vv_data;
+-
+-/* this function only gets called when the probing was successful */
+-static int mxb_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_data *info)
+-{
+-	struct mxb *mxb;
+-	int ret;
+-
+-	DEB_EE("dev:%p\n", dev);
+-
+-	ret = saa7146_vv_init(dev, &vv_data);
+-	if (ret) {
+-		ERR("Error in saa7146_vv_init()");
+-		return ret;
+-	}
+-
+-	if (mxb_probe(dev)) {
+-		saa7146_vv_release(dev);
+-		return -1;
+-	}
+-	mxb = (struct mxb *)dev->ext_priv;
+-
+-	vv_data.vid_ops.vidioc_enum_input = vidioc_enum_input;
+-	vv_data.vid_ops.vidioc_g_input = vidioc_g_input;
+-	vv_data.vid_ops.vidioc_s_input = vidioc_s_input;
+-	vv_data.vid_ops.vidioc_querystd = vidioc_querystd;
+-	vv_data.vid_ops.vidioc_g_tuner = vidioc_g_tuner;
+-	vv_data.vid_ops.vidioc_s_tuner = vidioc_s_tuner;
+-	vv_data.vid_ops.vidioc_g_frequency = vidioc_g_frequency;
+-	vv_data.vid_ops.vidioc_s_frequency = vidioc_s_frequency;
+-	vv_data.vid_ops.vidioc_enumaudio = vidioc_enumaudio;
+-	vv_data.vid_ops.vidioc_g_audio = vidioc_g_audio;
+-	vv_data.vid_ops.vidioc_s_audio = vidioc_s_audio;
+-#ifdef CONFIG_VIDEO_ADV_DEBUG
+-	vv_data.vid_ops.vidioc_g_register = vidioc_g_register;
+-	vv_data.vid_ops.vidioc_s_register = vidioc_s_register;
+-#endif
+-	if (saa7146_register_device(&mxb->video_dev, dev, "mxb", VFL_TYPE_VIDEO)) {
+-		ERR("cannot register capture v4l2 device. skipping.\n");
+-		saa7146_vv_release(dev);
+-		return -1;
+-	}
+-
+-	/* initialization stuff (vbi) (only for revision > 0 and for extensions which want it)*/
+-	if (MXB_BOARD_CAN_DO_VBI(dev)) {
+-		if (saa7146_register_device(&mxb->vbi_dev, dev, "mxb", VFL_TYPE_VBI)) {
+-			ERR("cannot register vbi v4l2 device. skipping.\n");
+-		}
+-	}
+-
+-	pr_info("found Multimedia eXtension Board #%d\n", mxb_num);
+-
+-	mxb_num++;
+-	mxb_init_done(dev);
+-	return 0;
+-}
+-
+-static int mxb_detach(struct saa7146_dev *dev)
+-{
+-	struct mxb *mxb = (struct mxb *)dev->ext_priv;
+-
+-	DEB_EE("dev:%p\n", dev);
+-
+-	/* mute audio on tea6420s */
+-	tea6420_route(mxb, 6);
+-
+-	saa7146_unregister_device(&mxb->video_dev,dev);
+-	if (MXB_BOARD_CAN_DO_VBI(dev))
+-		saa7146_unregister_device(&mxb->vbi_dev, dev);
+-	saa7146_vv_release(dev);
+-
+-	mxb_num--;
+-
+-	i2c_del_adapter(&mxb->i2c_adapter);
+-	kfree(mxb);
+-
+-	return 0;
+-}
+-
+-static int std_callback(struct saa7146_dev *dev, struct saa7146_standard *standard)
+-{
+-	struct mxb *mxb = (struct mxb *)dev->ext_priv;
+-
+-	if (V4L2_STD_PAL_I == standard->id) {
+-		v4l2_std_id std = V4L2_STD_PAL_I;
+-
+-		DEB_D("VIDIOC_S_STD: setting mxb for PAL_I\n");
+-		/* These two gpio calls set the GPIO pins that control the tda9820 */
+-		saa7146_write(dev, GPIO_CTRL, 0x00404050);
+-		saa7111a_call(mxb, core, s_gpio, 0);
+-		saa7111a_call(mxb, video, s_std, std);
+-		if (mxb->cur_input == 0)
+-			tuner_call(mxb, video, s_std, std);
+-	} else {
+-		v4l2_std_id std = V4L2_STD_PAL_BG;
+-
+-		if (mxb->cur_input)
+-			std = standard->id;
+-		DEB_D("VIDIOC_S_STD: setting mxb for PAL/NTSC/SECAM\n");
+-		/* These two gpio calls set the GPIO pins that control the tda9820 */
+-		saa7146_write(dev, GPIO_CTRL, 0x00404050);
+-		saa7111a_call(mxb, core, s_gpio, 1);
+-		saa7111a_call(mxb, video, s_std, std);
+-		if (mxb->cur_input == 0)
+-			tuner_call(mxb, video, s_std, std);
+-	}
+-	return 0;
+-}
+-
+-static struct saa7146_standard standard[] = {
+-	{
+-		.name	= "PAL-BG",	.id	= V4L2_STD_PAL_BG,
+-		.v_offset	= 0x17,	.v_field	= 288,
+-		.h_offset	= 0x14,	.h_pixels	= 680,
+-		.v_max_out	= 576,	.h_max_out	= 768,
+-	}, {
+-		.name	= "PAL-I",	.id	= V4L2_STD_PAL_I,
+-		.v_offset	= 0x17,	.v_field	= 288,
+-		.h_offset	= 0x14,	.h_pixels	= 680,
+-		.v_max_out	= 576,	.h_max_out	= 768,
+-	}, {
+-		.name	= "NTSC",	.id	= V4L2_STD_NTSC,
+-		.v_offset	= 0x16,	.v_field	= 240,
+-		.h_offset	= 0x06,	.h_pixels	= 708,
+-		.v_max_out	= 480,	.h_max_out	= 640,
+-	}, {
+-		.name	= "SECAM",	.id	= V4L2_STD_SECAM,
+-		.v_offset	= 0x14,	.v_field	= 288,
+-		.h_offset	= 0x14,	.h_pixels	= 720,
+-		.v_max_out	= 576,	.h_max_out	= 768,
+-	}
+-};
+-
+-static struct saa7146_pci_extension_data mxb = {
+-	.ext_priv = "Multimedia eXtension Board",
+-	.ext = &extension,
+-};
+-
+-static const struct pci_device_id pci_tbl[] = {
+-	{
+-		.vendor    = PCI_VENDOR_ID_PHILIPS,
+-		.device	   = PCI_DEVICE_ID_PHILIPS_SAA7146,
+-		.subvendor = 0x0000,
+-		.subdevice = 0x0000,
+-		.driver_data = (unsigned long)&mxb,
+-	}, {
+-		.vendor	= 0,
+-	}
+-};
+-
+-MODULE_DEVICE_TABLE(pci, pci_tbl);
+-
+-static struct saa7146_ext_vv vv_data = {
+-	.inputs		= MXB_INPUTS,
+-	.capabilities	= V4L2_CAP_TUNER | V4L2_CAP_VBI_CAPTURE | V4L2_CAP_AUDIO,
+-	.stds		= &standard[0],
+-	.num_stds	= ARRAY_SIZE(standard),
+-	.std_callback	= &std_callback,
+-};
+-
+-static struct saa7146_extension extension = {
+-	.name		= "Multimedia eXtension Board",
+-	.flags		= SAA7146_USE_I2C_IRQ,
+-
+-	.pci_tbl	= &pci_tbl[0],
+-	.module		= THIS_MODULE,
+-
+-	.attach		= mxb_attach,
+-	.detach		= mxb_detach,
+-
+-	.irq_mask	= 0,
+-	.irq_func	= NULL,
+-};
+-
+-static int __init mxb_init_module(void)
+-{
+-	if (saa7146_register_extension(&extension)) {
+-		DEB_S("failed to register extension\n");
+-		return -ENODEV;
+-	}
+-
+-	return 0;
+-}
+-
+-static void __exit mxb_cleanup_module(void)
+-{
+-	saa7146_unregister_extension(&extension);
+-}
+-
+-module_init(mxb_init_module);
+-module_exit(mxb_cleanup_module);
+-
+-MODULE_DESCRIPTION("video4linux-2 driver for the Siemens-Nixdorf 'Multimedia eXtension board'");
+-MODULE_AUTHOR("Michael Hunold <michael@mihu.de>");
+-MODULE_LICENSE("GPL");
 -- 
 2.39.0
 
