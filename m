@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E756C678D6
-	for <linux-media@archiver.kernel.org>; Wed, 11 Jan 2023 11:26:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F5A7C7112B
+	for <linux-media@archiver.kernel.org>; Wed, 11 Jan 2023 11:26:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232741AbjAKLZn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 11 Jan 2023 06:25:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53974 "EHLO
+        id S233820AbjAKLZ6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 11 Jan 2023 06:25:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232376AbjAKLYe (ORCPT
+        with ESMTP id S232511AbjAKLYi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 11 Jan 2023 06:24:34 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BB715FC3
-        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 03:24:30 -0800 (PST)
+        Wed, 11 Jan 2023 06:24:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596B917052
+        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 03:24:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DBC64CE1B56
-        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 11:24:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26BAFC433EF;
-        Wed, 11 Jan 2023 11:24:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C8A4261C4F
+        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 11:24:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D06C433F1;
+        Wed, 11 Jan 2023 11:24:33 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCHv2 04/16] stkwebcam: remove deprecated driver
-Date:   Wed, 11 Jan 2023 12:24:06 +0100
-Message-Id: <20230111112418.687882-5-hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv2 11/16] av7110: remove deprecated driver
+Date:   Wed, 11 Jan 2023 12:24:13 +0100
+Message-Id: <20230111112418.687882-12-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230111112418.687882-1-hverkuil-cisco@xs4all.nl>
 References: <20230111112418.687882-1-hverkuil-cisco@xs4all.nl>
@@ -38,2296 +38,1889 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The stkwebcam driver does not use the vb2 framework for streaming
-video, instead it implements this in the driver. This is error prone,
-and nobody stepped in to convert this driver to that framework.
+The av7110 driver does not use the vb2 framework for streaming
+video, instead it uses the old vb1 framework and nobody stepped in to
+convert this driver to vb2.
 
 The hardware is very old, so the decision was made to remove it
-altogether.
+altogether since we want to get rid of the old vb1 framework.
+
+The last remaining files of this driver are removed in this patch.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- .../admin-guide/media/other-usb-cardlist.rst  |    1 -
- .../admin-guide/media/usb-cardlist.rst        |    1 -
- drivers/staging/media/Kconfig                 |    1 -
- drivers/staging/media/Makefile                |    1 -
- .../media/deprecated/stkwebcam/Kconfig        |   18 -
- .../media/deprecated/stkwebcam/Makefile       |    5 -
- .../staging/media/deprecated/stkwebcam/TODO   |   12 -
- .../media/deprecated/stkwebcam/stk-sensor.c   |  587 -------
- .../media/deprecated/stkwebcam/stk-webcam.c   | 1434 -----------------
- .../media/deprecated/stkwebcam/stk-webcam.h   |  123 --
- 10 files changed, 2183 deletions(-)
- delete mode 100644 drivers/staging/media/deprecated/stkwebcam/Kconfig
- delete mode 100644 drivers/staging/media/deprecated/stkwebcam/Makefile
- delete mode 100644 drivers/staging/media/deprecated/stkwebcam/TODO
- delete mode 100644 drivers/staging/media/deprecated/stkwebcam/stk-sensor.c
- delete mode 100644 drivers/staging/media/deprecated/stkwebcam/stk-webcam.c
- delete mode 100644 drivers/staging/media/deprecated/stkwebcam/stk-webcam.h
+ .../media/deprecated/saa7146/av7110/Kconfig   | 106 ---
+ .../media/deprecated/saa7146/av7110/Makefile  |  23 -
+ .../media/deprecated/saa7146/av7110/TODO      |   9 -
+ .../deprecated/saa7146/av7110/budget-patch.c  | 665 ------------------
+ .../deprecated/saa7146/av7110/dvb_filter.c    | 115 ---
+ .../deprecated/saa7146/av7110/dvb_filter.h    | 242 -------
+ .../media/deprecated/saa7146/av7110/sp8870.c  | 609 ----------------
+ .../media/deprecated/saa7146/av7110/sp8870.h  |  37 -
+ 8 files changed, 1806 deletions(-)
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/Kconfig
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/Makefile
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/TODO
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/budget-patch.c
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/dvb_filter.c
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/dvb_filter.h
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/sp8870.c
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/sp8870.h
 
-diff --git a/Documentation/admin-guide/media/other-usb-cardlist.rst b/Documentation/admin-guide/media/other-usb-cardlist.rst
-index 51ca863a8601..843f1c509cbc 100644
---- a/Documentation/admin-guide/media/other-usb-cardlist.rst
-+++ b/Documentation/admin-guide/media/other-usb-cardlist.rst
-@@ -64,7 +64,6 @@ pwc		  Visionite VCS-UC300			  0d81:1900
- pwc		  Visionite VCS-UM100			  0d81:1910
- s2255drv	  Sensoray 2255				  1943:2255, 1943:2257
- stk1160		  STK1160 USB video capture dongle	  05e1:0408
--stkwebcam	  Syntek DC1125				  174f:a311, 05e1:0501
- dvb-ttusb-budget  Technotrend/Hauppauge Nova-USB devices  0b48:1003, 0b48:1004,
- 							  0b48:1005
- dvb-ttusb_dec	  Technotrend/Hauppauge MPEG decoder	  0b48:1006
-diff --git a/Documentation/admin-guide/media/usb-cardlist.rst b/Documentation/admin-guide/media/usb-cardlist.rst
-index af05dbecde0c..d5fd7249033d 100644
---- a/Documentation/admin-guide/media/usb-cardlist.rst
-+++ b/Documentation/admin-guide/media/usb-cardlist.rst
-@@ -92,7 +92,6 @@ pwc                     USB Philips Cameras
- s2250                   Sensoray 2250/2251
- s2255drv                USB Sensoray 2255 video capture device
- smsusb                  Siano SMS1xxx based MDTV receiver
--stkwebcam               USB Syntek DC1125 Camera
- tm6000-alsa             TV Master TM5600/6000/6010 audio
- tm6000-dvb              DVB Support for tm6000 based TV cards
- tm6000                  TV Master TM5600/6000/6010 driver
-diff --git a/drivers/staging/media/Kconfig b/drivers/staging/media/Kconfig
-index 257bb35af36f..d1c7e7597a10 100644
---- a/drivers/staging/media/Kconfig
-+++ b/drivers/staging/media/Kconfig
-@@ -53,7 +53,6 @@ menuconfig STAGING_MEDIA_DEPRECATED
- if STAGING_MEDIA_DEPRECATED
- source "drivers/staging/media/deprecated/atmel/Kconfig"
- source "drivers/staging/media/deprecated/saa7146/Kconfig"
--source "drivers/staging/media/deprecated/stkwebcam/Kconfig"
- source "drivers/staging/media/deprecated/tm6000/Kconfig"
- source "drivers/staging/media/deprecated/vpfe_capture/Kconfig"
- source "drivers/staging/media/deprecated/zr364xx/Kconfig"
-diff --git a/drivers/staging/media/Makefile b/drivers/staging/media/Makefile
-index 55e7479f91cf..da2e4f0fb7cb 100644
---- a/drivers/staging/media/Makefile
-+++ b/drivers/staging/media/Makefile
-@@ -6,7 +6,6 @@ obj-$(CONFIG_VIDEO_MAX96712)	+= max96712/
- obj-$(CONFIG_VIDEO_MESON_VDEC)	+= meson/vdec/
- obj-$(CONFIG_VIDEO_OMAP4)	+= omap4iss/
- obj-$(CONFIG_VIDEO_ROCKCHIP_VDEC)	+= rkvdec/
--obj-$(CONFIG_VIDEO_STKWEBCAM)	+= deprecated/stkwebcam/
- obj-$(CONFIG_VIDEO_SUNXI)	+= sunxi/
- obj-$(CONFIG_VIDEO_TEGRA)	+= tegra-video/
- obj-$(CONFIG_VIDEO_IPU3_IMGU)	+= ipu3/
-diff --git a/drivers/staging/media/deprecated/stkwebcam/Kconfig b/drivers/staging/media/deprecated/stkwebcam/Kconfig
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/Kconfig b/drivers/staging/media/deprecated/saa7146/av7110/Kconfig
 deleted file mode 100644
-index 7234498e634a..000000000000
---- a/drivers/staging/media/deprecated/stkwebcam/Kconfig
+index 1571eab31926..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/Kconfig
 +++ /dev/null
-@@ -1,18 +0,0 @@
+@@ -1,106 +0,0 @@
 -# SPDX-License-Identifier: GPL-2.0-only
--config VIDEO_STKWEBCAM
--	tristate "USB Syntek DC1125 Camera support (DEPRECATED)"
--	depends on VIDEO_DEV
--	depends on MEDIA_USB_SUPPORT && MEDIA_CAMERA_SUPPORT
+-config DVB_AV7110_IR
+-	bool
+-	depends on RC_CORE=y || RC_CORE = DVB_AV7110
+-	default DVB_AV7110
+-
+-config DVB_AV7110
+-	tristate "AV7110 cards (DEPRECATED)"
+-	depends on DVB_CORE && PCI && I2C
+-	select TTPCI_EEPROM
+-	select VIDEO_SAA7146_VV
+-	depends on VIDEO_DEV	# dependencies of VIDEO_SAA7146_VV
+-	select DVB_VES1820 if MEDIA_SUBDRV_AUTOSELECT
+-	select DVB_VES1X93 if MEDIA_SUBDRV_AUTOSELECT
+-	select DVB_STV0299 if MEDIA_SUBDRV_AUTOSELECT
+-	select DVB_TDA8083 if MEDIA_SUBDRV_AUTOSELECT
+-	select DVB_SP8870 if MEDIA_SUBDRV_AUTOSELECT
+-	select DVB_STV0297 if MEDIA_SUBDRV_AUTOSELECT
+-	select DVB_L64781 if MEDIA_SUBDRV_AUTOSELECT
+-	select DVB_LNBP21 if MEDIA_SUBDRV_AUTOSELECT
 -	help
--	  Say Y here if you want to use this type of camera.
--	  Supported devices are typically found in some Asus laptops,
--	  with USB id 174f:a311 and 05e1:0501. Other Syntek cameras
--	  may be supported by the stk11xx driver, from which this is
--	  derived, see <http://sourceforge.net/projects/syntekdriver/>
+-	  Support for SAA7146 and AV7110 based DVB cards as produced
+-	  by Fujitsu-Siemens, Technotrend, Hauppauge and others.
+-
+-	  This driver only supports the fullfeatured cards with
+-	  onboard MPEG2 decoder.
+-
+-	  This driver needs an external firmware. Please use the script
+-	  "<kerneldir>/scripts/get_dvb_firmware av7110" to
+-	  download/extract it, and then copy it to /usr/lib/hotplug/firmware
+-	  or /lib/firmware (depending on configuration of firmware hotplug).
+-
+-	  Alternatively, you can download the file and use the kernel's
+-	  EXTRA_FIRMWARE configuration option to build it into your
+-	  kernel image by adding the filename to the EXTRA_FIRMWARE
+-	  configuration option string.
 -
 -	  This driver is deprecated and is scheduled for removal by
--	  the end of 2022. See the TODO file for more information.
+-	  the beginning of 2023. See the TODO file for more information.
+-
+-	  Say Y if you own such a card and want to use it.
+-
+-config DVB_AV7110_OSD
+-	bool "AV7110 OSD support (DEPRECATED)"
+-	depends on DVB_AV7110
+-	default y if DVB_AV7110=y || DVB_AV7110=m
+-	help
+-	  The AV7110 firmware provides some code to generate an OnScreenDisplay
+-	  on the video output. This is kind of nonstandard and not guaranteed to
+-	  be maintained.
+-
+-	  Anyway, some popular DVB software like VDR uses this OSD to render
+-	  its menus, so say Y if you want to use this software.
+-
+-	  This driver is deprecated and is scheduled for removal by
+-	  the beginning of 2023. See the TODO file for more information.
+-
+-	  All other people say N.
+-
+-config DVB_BUDGET_PATCH
+-	tristate "AV7110 cards with Budget Patch (DEPRECATED)"
+-	depends on DVB_BUDGET_CORE && I2C
+-	depends on DVB_AV7110
+-	select DVB_STV0299 if MEDIA_SUBDRV_AUTOSELECT
+-	select DVB_VES1X93 if MEDIA_SUBDRV_AUTOSELECT
+-	select DVB_TDA8083 if MEDIA_SUBDRV_AUTOSELECT
+-	help
+-	  Support for Budget Patch (full TS) modification on
+-	  SAA7146+AV7110 based cards (DVB-S cards). This
+-	  driver doesn't use onboard MPEG2 decoder. The
+-	  card is driven in Budget-only mode. Card is
+-	  required to have loaded firmware to tune properly.
+-	  Firmware can be loaded by insertion and removal of
+-	  standard AV7110 driver prior to loading this
+-	  driver.
+-
+-	  This driver is deprecated and is scheduled for removal by
+-	  the beginning of 2023. See the TODO file for more information.
+-
+-	  Say Y if you own such a card and want to use it.
 -
 -	  To compile this driver as a module, choose M here: the
--	  module will be called stkwebcam.
+-	  module will be called budget-patch.
 -
-diff --git a/drivers/staging/media/deprecated/stkwebcam/Makefile b/drivers/staging/media/deprecated/stkwebcam/Makefile
+-if DVB_AV7110
+-
+-# Frontend driver that it is used only by AV7110 driver
+-# While technically independent, it doesn't make sense to keep
+-# it if we drop support for AV7110, as no other driver will use it.
+-
+-config DVB_SP8870
+-	tristate "Spase sp8870 based (DEPRECATED)"
+-	depends on DVB_CORE && I2C
+-	default m if !MEDIA_SUBDRV_AUTOSELECT
+-	help
+-	  A DVB-T tuner module. Say Y when you want to support this frontend.
+-
+-	  This driver needs external firmware. Please use the command
+-	  "<kerneldir>/scripts/get_dvb_firmware sp8870" to
+-	  download/extract it, and then copy it to /usr/lib/hotplug/firmware
+-	  or /lib/firmware (depending on configuration of firmware hotplug).
+-
+-	  This driver is deprecated and is scheduled for removal by
+-	  the beginning of 2023. See the TODO file for more information.
+-
+-endif
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/Makefile b/drivers/staging/media/deprecated/saa7146/av7110/Makefile
 deleted file mode 100644
-index 17ad7b6f43d0..000000000000
---- a/drivers/staging/media/deprecated/stkwebcam/Makefile
+index c04cd0a59109..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/Makefile
 +++ /dev/null
-@@ -1,5 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0-only
--stkwebcam-objs	:=	stk-webcam.o stk-sensor.o
+@@ -1,23 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0
+-#
+-# Makefile for the AV7110 DVB device driver
+-#
 -
--obj-$(CONFIG_VIDEO_STKWEBCAM)     += stkwebcam.o
+-dvb-ttpci-objs := av7110_hw.o av7110_v4l.o av7110_av.o av7110_ca.o av7110.o \
+-		  av7110_ipack.o dvb_filter.o
 -
-diff --git a/drivers/staging/media/deprecated/stkwebcam/TODO b/drivers/staging/media/deprecated/stkwebcam/TODO
+-ifdef CONFIG_DVB_AV7110_IR
+-dvb-ttpci-objs += av7110_ir.o
+-endif
+-
+-obj-$(CONFIG_DVB_BUDGET_PATCH) += budget-patch.o
+-
+-obj-$(CONFIG_DVB_AV7110) += dvb-ttpci.o
+-
+-obj-$(CONFIG_DVB_SP8870) += sp8870.o
+-
+-ccflags-y += -I $(srctree)/drivers/media/dvb-frontends
+-ccflags-y += -I $(srctree)/drivers/media/tuners
+-ccflags-y += -I $(srctree)/drivers/media/common
+-ccflags-y += -I $(srctree)/drivers/staging/media/deprecated/saa7146/ttpci
+-ccflags-y += -I $(srctree)/drivers/staging/media/deprecated/saa7146/common
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/TODO b/drivers/staging/media/deprecated/saa7146/av7110/TODO
 deleted file mode 100644
-index 735304a72729..000000000000
---- a/drivers/staging/media/deprecated/stkwebcam/TODO
+index 38817e04bb67..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/TODO
 +++ /dev/null
-@@ -1,12 +0,0 @@
--This is a very old driver for very old hardware (specifically
--laptops that use this sensor). In addition according to reports
--the picture quality is quite bad.
+@@ -1,9 +0,0 @@
+-- This driver is too old and relies on a different API.
+-  Drop it from Kernel on a couple of versions.
+-- Cleanup patches for the drivers here won't be accepted.
 -
--This is also one of the few drivers still not using the vb2
--framework (or even the old videobuf framework!), so this driver
--is now deprecated with the intent of removing it altogether by
--the end of 2022.
+-These drivers are now deprecated with the intent of
+-removing them altogether by the beginning of 2023.
 -
--In order to keep this driver it has to be converted to vb2.
 -If someone is interested in doing this work, then contact the
 -linux-media mailinglist (https://linuxtv.org/lists.php).
-diff --git a/drivers/staging/media/deprecated/stkwebcam/stk-sensor.c b/drivers/staging/media/deprecated/stkwebcam/stk-sensor.c
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/budget-patch.c b/drivers/staging/media/deprecated/saa7146/av7110/budget-patch.c
 deleted file mode 100644
-index 94aa6a27f934..000000000000
---- a/drivers/staging/media/deprecated/stkwebcam/stk-sensor.c
+index d173c8ade6a7..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/budget-patch.c
 +++ /dev/null
-@@ -1,587 +0,0 @@
+@@ -1,665 +0,0 @@
 -// SPDX-License-Identifier: GPL-2.0-or-later
--/* stk-sensor.c: Driver for ov96xx sensor (used in some Syntek webcams)
-- *
-- * Copyright 2007-2008 Jaime Velasco Juan <jsagarribay@gmail.com>
-- *
-- * Some parts derived from ov7670.c:
-- * Copyright 2006 One Laptop Per Child Association, Inc.  Written
-- * by Jonathan Corbet with substantial inspiration from Mark
-- * McClelland's ovcamchip code.
-- *
-- * Copyright 2006-7 Jonathan Corbet <corbet@lwn.net>
-- *
-- * This file may be distributed under the terms of the GNU General
-- */
--
--/* Controlling the sensor via the STK1125 vendor specific control interface:
-- * The camera uses an OmniVision sensor and the stk1125 provides an
-- * SCCB(i2c)-USB bridge which let us program the sensor.
-- * In my case the sensor id is 0x9652, it can be read from sensor's register
-- * 0x0A and 0x0B as follows:
-- * - read register #R:
-- *   output #R to index 0x0208
-- *   output 0x0070 to index 0x0200
-- *   input 1 byte from index 0x0201 (some kind of status register)
-- *     until its value is 0x01
-- *   input 1 byte from index 0x0209. This is the value of #R
-- * - write value V to register #R
-- *   output #R to index 0x0204
-- *   output V to index 0x0205
-- *   output 0x0005 to index 0x0200
-- *   input 1 byte from index 0x0201 until its value becomes 0x04
-- */
--
--/* It seems the i2c bus is controlled with these registers */
--
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
--#include "stk-webcam.h"
--
--#define STK_IIC_BASE		(0x0200)
--#  define STK_IIC_OP		(STK_IIC_BASE)
--#    define STK_IIC_OP_TX	(0x05)
--#    define STK_IIC_OP_RX	(0x70)
--#  define STK_IIC_STAT		(STK_IIC_BASE+1)
--#    define STK_IIC_STAT_TX_OK	(0x04)
--#    define STK_IIC_STAT_RX_OK	(0x01)
--/* I don't know what does this register.
-- * when it is 0x00 or 0x01, we cannot talk to the sensor,
-- * other values work */
--#  define STK_IIC_ENABLE	(STK_IIC_BASE+2)
--#    define STK_IIC_ENABLE_NO	(0x00)
--/* This is what the driver writes in windows */
--#    define STK_IIC_ENABLE_YES	(0x1e)
 -/*
-- * Address of the slave. Seems like the binary driver look for the
-- * sensor in multiple places, attempting a reset sequence.
-- * We only know about the ov9650
-- */
--#  define STK_IIC_ADDR		(STK_IIC_BASE+3)
--#  define STK_IIC_TX_INDEX	(STK_IIC_BASE+4)
--#  define STK_IIC_TX_VALUE	(STK_IIC_BASE+5)
--#  define STK_IIC_RX_INDEX	(STK_IIC_BASE+8)
--#  define STK_IIC_RX_VALUE	(STK_IIC_BASE+9)
--
--#define MAX_RETRIES		(50)
--
--#define SENSOR_ADDRESS		(0x60)
--
--/* From ov7670.c (These registers aren't fully accurate) */
--
--/* Registers */
--#define REG_GAIN	0x00	/* Gain lower 8 bits (rest in vref) */
--#define REG_BLUE	0x01	/* blue gain */
--#define REG_RED		0x02	/* red gain */
--#define REG_VREF	0x03	/* Pieces of GAIN, VSTART, VSTOP */
--#define REG_COM1	0x04	/* Control 1 */
--#define  COM1_CCIR656	  0x40  /* CCIR656 enable */
--#define  COM1_QFMT	  0x20  /* QVGA/QCIF format */
--#define  COM1_SKIP_0	  0x00  /* Do not skip any row */
--#define  COM1_SKIP_2	  0x04  /* Skip 2 rows of 4 */
--#define  COM1_SKIP_3	  0x08  /* Skip 3 rows of 4 */
--#define REG_BAVE	0x05	/* U/B Average level */
--#define REG_GbAVE	0x06	/* Y/Gb Average level */
--#define REG_AECHH	0x07	/* AEC MS 5 bits */
--#define REG_RAVE	0x08	/* V/R Average level */
--#define REG_COM2	0x09	/* Control 2 */
--#define  COM2_SSLEEP	  0x10	/* Soft sleep mode */
--#define REG_PID		0x0a	/* Product ID MSB */
--#define REG_VER		0x0b	/* Product ID LSB */
--#define REG_COM3	0x0c	/* Control 3 */
--#define  COM3_SWAP	  0x40	  /* Byte swap */
--#define  COM3_SCALEEN	  0x08	  /* Enable scaling */
--#define  COM3_DCWEN	  0x04	  /* Enable downsamp/crop/window */
--#define REG_COM4	0x0d	/* Control 4 */
--#define REG_COM5	0x0e	/* All "reserved" */
--#define REG_COM6	0x0f	/* Control 6 */
--#define REG_AECH	0x10	/* More bits of AEC value */
--#define REG_CLKRC	0x11	/* Clock control */
--#define   CLK_PLL	  0x80	  /* Enable internal PLL */
--#define   CLK_EXT	  0x40	  /* Use external clock directly */
--#define   CLK_SCALE	  0x3f	  /* Mask for internal clock scale */
--#define REG_COM7	0x12	/* Control 7 */
--#define   COM7_RESET	  0x80	  /* Register reset */
--#define   COM7_FMT_MASK	  0x38
--#define   COM7_FMT_SXGA	  0x00
--#define   COM7_FMT_VGA	  0x40
--#define	  COM7_FMT_CIF	  0x20	  /* CIF format */
--#define   COM7_FMT_QVGA	  0x10	  /* QVGA format */
--#define   COM7_FMT_QCIF	  0x08	  /* QCIF format */
--#define	  COM7_RGB	  0x04	  /* bits 0 and 2 - RGB format */
--#define	  COM7_YUV	  0x00	  /* YUV */
--#define	  COM7_BAYER	  0x01	  /* Bayer format */
--#define	  COM7_PBAYER	  0x05	  /* "Processed bayer" */
--#define REG_COM8	0x13	/* Control 8 */
--#define   COM8_FASTAEC	  0x80	  /* Enable fast AGC/AEC */
--#define   COM8_AECSTEP	  0x40	  /* Unlimited AEC step size */
--#define   COM8_BFILT	  0x20	  /* Band filter enable */
--#define   COM8_AGC	  0x04	  /* Auto gain enable */
--#define   COM8_AWB	  0x02	  /* White balance enable */
--#define   COM8_AEC	  0x01	  /* Auto exposure enable */
--#define REG_COM9	0x14	/* Control 9  - gain ceiling */
--#define REG_COM10	0x15	/* Control 10 */
--#define   COM10_HSYNC	  0x40	  /* HSYNC instead of HREF */
--#define   COM10_PCLK_HB	  0x20	  /* Suppress PCLK on horiz blank */
--#define   COM10_HREF_REV  0x08	  /* Reverse HREF */
--#define   COM10_VS_LEAD	  0x04	  /* VSYNC on clock leading edge */
--#define   COM10_VS_NEG	  0x02	  /* VSYNC negative */
--#define   COM10_HS_NEG	  0x01	  /* HSYNC negative */
--#define REG_HSTART	0x17	/* Horiz start high bits */
--#define REG_HSTOP	0x18	/* Horiz stop high bits */
--#define REG_VSTART	0x19	/* Vert start high bits */
--#define REG_VSTOP	0x1a	/* Vert stop high bits */
--#define REG_PSHFT	0x1b	/* Pixel delay after HREF */
--#define REG_MIDH	0x1c	/* Manuf. ID high */
--#define REG_MIDL	0x1d	/* Manuf. ID low */
--#define REG_MVFP	0x1e	/* Mirror / vflip */
--#define   MVFP_MIRROR	  0x20	  /* Mirror image */
--#define   MVFP_FLIP	  0x10	  /* Vertical flip */
--
--#define REG_AEW		0x24	/* AGC upper limit */
--#define REG_AEB		0x25	/* AGC lower limit */
--#define REG_VPT		0x26	/* AGC/AEC fast mode op region */
--#define REG_ADVFL	0x2d	/* Insert dummy lines (LSB) */
--#define REG_ADVFH	0x2e	/* Insert dummy lines (MSB) */
--#define REG_HSYST	0x30	/* HSYNC rising edge delay */
--#define REG_HSYEN	0x31	/* HSYNC falling edge delay */
--#define REG_HREF	0x32	/* HREF pieces */
--#define REG_TSLB	0x3a	/* lots of stuff */
--#define   TSLB_YLAST	  0x04	  /* UYVY or VYUY - see com13 */
--#define   TSLB_BYTEORD	  0x08	  /* swap bytes in 16bit mode? */
--#define REG_COM11	0x3b	/* Control 11 */
--#define   COM11_NIGHT	  0x80	  /* NIght mode enable */
--#define   COM11_NMFR	  0x60	  /* Two bit NM frame rate */
--#define   COM11_HZAUTO	  0x10	  /* Auto detect 50/60 Hz */
--#define	  COM11_50HZ	  0x08	  /* Manual 50Hz select */
--#define   COM11_EXP	  0x02
--#define REG_COM12	0x3c	/* Control 12 */
--#define   COM12_HREF	  0x80	  /* HREF always */
--#define REG_COM13	0x3d	/* Control 13 */
--#define   COM13_GAMMA	  0x80	  /* Gamma enable */
--#define	  COM13_UVSAT	  0x40	  /* UV saturation auto adjustment */
--#define	  COM13_CMATRIX	  0x10	  /* Enable color matrix for RGB or YUV */
--#define   COM13_UVSWAP	  0x01	  /* V before U - w/TSLB */
--#define REG_COM14	0x3e	/* Control 14 */
--#define   COM14_DCWEN	  0x10	  /* DCW/PCLK-scale enable */
--#define REG_EDGE	0x3f	/* Edge enhancement factor */
--#define REG_COM15	0x40	/* Control 15 */
--#define   COM15_R10F0	  0x00	  /* Data range 10 to F0 */
--#define	  COM15_R01FE	  0x80	  /*            01 to FE */
--#define   COM15_R00FF	  0xc0	  /*            00 to FF */
--#define   COM15_RGB565	  0x10	  /* RGB565 output */
--#define   COM15_RGBFIXME	  0x20	  /* FIXME  */
--#define   COM15_RGB555	  0x30	  /* RGB555 output */
--#define REG_COM16	0x41	/* Control 16 */
--#define   COM16_AWBGAIN   0x08	  /* AWB gain enable */
--#define REG_COM17	0x42	/* Control 17 */
--#define   COM17_AECWIN	  0xc0	  /* AEC window - must match COM4 */
--#define   COM17_CBAR	  0x08	  /* DSP Color bar */
--
--/*
-- * This matrix defines how the colors are generated, must be
-- * tweaked to adjust hue and saturation.
+- * budget-patch.c: driver for Budget Patch,
+- * hardware modification of DVB-S cards enabling full TS
 - *
-- * Order: v-red, v-green, v-blue, u-red, u-green, u-blue
+- * Written by Emard <emard@softhome.net>
 - *
-- * They are nine-bit signed quantities, with the sign bit
-- * stored in 0x58.  Sign for v-red is bit 0, and up from there.
+- * Original idea by Roberto Deza <rdeza@unav.es>
+- *
+- * Special thanks to Holger Waechtler, Michael Hunold, Marian Durkovic
+- * and Metzlerbros
+- *
+- * the project's page is at https://linuxtv.org
 - */
--#define	REG_CMATRIX_BASE 0x4f
--#define   CMATRIX_LEN 6
--#define REG_CMATRIX_SIGN 0x58
 -
+-#include "av7110.h"
+-#include "av7110_hw.h"
+-#include "budget.h"
+-#include "stv0299.h"
+-#include "ves1x93.h"
+-#include "tda8083.h"
 -
--#define REG_BRIGHT	0x55	/* Brightness */
--#define REG_CONTRAS	0x56	/* Contrast control */
+-#include "bsru6.h"
 -
--#define REG_GFIX	0x69	/* Fix gain control */
+-DVB_DEFINE_MOD_OPT_ADAPTER_NR(adapter_nr);
 -
--#define REG_RGB444	0x8c	/* RGB 444 control */
--#define   R444_ENABLE	  0x02	  /* Turn on RGB444, overrides 5x5 */
--#define   R444_RGBX	  0x01	  /* Empty nibble at end */
+-#define budget_patch budget
 -
--#define REG_HAECC1	0x9f	/* Hist AEC/AGC control 1 */
--#define REG_HAECC2	0xa0	/* Hist AEC/AGC control 2 */
+-static struct saa7146_extension budget_extension;
 -
--#define REG_BD50MAX	0xa5	/* 50hz banding step limit */
--#define REG_HAECC3	0xa6	/* Hist AEC/AGC control 3 */
--#define REG_HAECC4	0xa7	/* Hist AEC/AGC control 4 */
--#define REG_HAECC5	0xa8	/* Hist AEC/AGC control 5 */
--#define REG_HAECC6	0xa9	/* Hist AEC/AGC control 6 */
--#define REG_HAECC7	0xaa	/* Hist AEC/AGC control 7 */
--#define REG_BD60MAX	0xab	/* 60hz banding step limit */
+-MAKE_BUDGET_INFO(ttbp, "TT-Budget/Patch DVB-S 1.x PCI", BUDGET_PATCH);
+-//MAKE_BUDGET_INFO(satel,"TT-Budget/Patch SATELCO PCI", BUDGET_TT_HW_DISEQC);
 -
--
--
--
--/* Returns 0 if OK */
--static int stk_sensor_outb(struct stk_camera *dev, u8 reg, u8 val)
--{
--	int i = 0;
--	u8 tmpval = 0;
--
--	if (stk_camera_write_reg(dev, STK_IIC_TX_INDEX, reg))
--		return 1;
--	if (stk_camera_write_reg(dev, STK_IIC_TX_VALUE, val))
--		return 1;
--	if (stk_camera_write_reg(dev, STK_IIC_OP, STK_IIC_OP_TX))
--		return 1;
--	do {
--		if (stk_camera_read_reg(dev, STK_IIC_STAT, &tmpval))
--			return 1;
--		i++;
--	} while (tmpval == 0 && i < MAX_RETRIES);
--	if (tmpval != STK_IIC_STAT_TX_OK) {
--		if (tmpval)
--			pr_err("stk_sensor_outb failed, status=0x%02x\n",
--			       tmpval);
--		return 1;
--	} else
--		return 0;
--}
--
--static int stk_sensor_inb(struct stk_camera *dev, u8 reg, u8 *val)
--{
--	int i = 0;
--	u8 tmpval = 0;
--
--	if (stk_camera_write_reg(dev, STK_IIC_RX_INDEX, reg))
--		return 1;
--	if (stk_camera_write_reg(dev, STK_IIC_OP, STK_IIC_OP_RX))
--		return 1;
--	do {
--		if (stk_camera_read_reg(dev, STK_IIC_STAT, &tmpval))
--			return 1;
--		i++;
--	} while (tmpval == 0 && i < MAX_RETRIES);
--	if (tmpval != STK_IIC_STAT_RX_OK) {
--		if (tmpval)
--			pr_err("stk_sensor_inb failed, status=0x%02x\n",
--			       tmpval);
--		return 1;
+-static const struct pci_device_id pci_tbl[] = {
+-	MAKE_EXTENSION_PCI(ttbp,0x13c2, 0x0000),
+-//        MAKE_EXTENSION_PCI(satel, 0x13c2, 0x1013),
+-	{
+-		.vendor    = 0,
 -	}
+-};
 -
--	if (stk_camera_read_reg(dev, STK_IIC_RX_VALUE, &tmpval))
--		return 1;
--
--	*val = tmpval;
--	return 0;
--}
--
--static int stk_sensor_write_regvals(struct stk_camera *dev,
--		struct regval *rv)
--{
--	int ret;
--	if (rv == NULL)
--		return 0;
--	while (rv->reg != 0xff || rv->val != 0xff) {
--		ret = stk_sensor_outb(dev, rv->reg, rv->val);
--		if (ret != 0)
--			return ret;
--		rv++;
--	}
--	return 0;
--}
--
--int stk_sensor_sleep(struct stk_camera *dev)
--{
--	u8 tmp;
--	return stk_sensor_inb(dev, REG_COM2, &tmp)
--		|| stk_sensor_outb(dev, REG_COM2, tmp|COM2_SSLEEP);
--}
--
--int stk_sensor_wakeup(struct stk_camera *dev)
--{
--	u8 tmp;
--	return stk_sensor_inb(dev, REG_COM2, &tmp)
--		|| stk_sensor_outb(dev, REG_COM2, tmp&~COM2_SSLEEP);
--}
--
--static struct regval ov_initvals[] = {
--	{REG_CLKRC, CLK_PLL},
--	{REG_COM11, 0x01},
--	{0x6a, 0x7d},
--	{REG_AECH, 0x40},
--	{REG_GAIN, 0x00},
--	{REG_BLUE, 0x80},
--	{REG_RED, 0x80},
--	/* Do not enable fast AEC for now */
--	/*{REG_COM8, COM8_FASTAEC|COM8_AECSTEP|COM8_BFILT|COM8_AGC|COM8_AEC},*/
--	{REG_COM8, COM8_AECSTEP|COM8_BFILT|COM8_AGC|COM8_AEC},
--	{0x39, 0x50}, {0x38, 0x93},
--	{0x37, 0x00}, {0x35, 0x81},
--	{REG_COM5, 0x20},
--	{REG_COM1, 0x00},
--	{REG_COM3, 0x00},
--	{REG_COM4, 0x00},
--	{REG_PSHFT, 0x00},
--	{0x16, 0x07},
--	{0x33, 0xe2}, {0x34, 0xbf},
--	{REG_COM16, 0x00},
--	{0x96, 0x04},
--	/* Gamma curve values */
--/*	{ 0x7a, 0x20 },		{ 0x7b, 0x10 },
--	{ 0x7c, 0x1e },		{ 0x7d, 0x35 },
--	{ 0x7e, 0x5a },		{ 0x7f, 0x69 },
--	{ 0x80, 0x76 },		{ 0x81, 0x80 },
--	{ 0x82, 0x88 },		{ 0x83, 0x8f },
--	{ 0x84, 0x96 },		{ 0x85, 0xa3 },
--	{ 0x86, 0xaf },		{ 0x87, 0xc4 },
--	{ 0x88, 0xd7 },		{ 0x89, 0xe8 },
+-/* those lines are for budget-patch to be tried
+-** on a true budget card and observe the
+-** behaviour of VSYNC generated by rps1.
+-** this code was shamelessly copy/pasted from budget.c
 -*/
--	{REG_GFIX, 0x40},
--	{0x8e, 0x00},
--	{REG_COM12, 0x73},
--	{0x8f, 0xdf}, {0x8b, 0x06},
--	{0x8c, 0x20},
--	{0x94, 0x88}, {0x95, 0x88},
--/*	{REG_COM15, 0xc1}, TODO */
--	{0x29, 0x3f},
--	{REG_COM6, 0x42},
--	{REG_BD50MAX, 0x80},
--	{REG_HAECC6, 0xb8}, {REG_HAECC7, 0x92},
--	{REG_BD60MAX, 0x0a},
--	{0x90, 0x00}, {0x91, 0x00},
--	{REG_HAECC1, 0x00}, {REG_HAECC2, 0x00},
--	{REG_AEW, 0x68}, {REG_AEB, 0x5c},
--	{REG_VPT, 0xc3},
--	{REG_COM9, 0x2e},
--	{0x2a, 0x00}, {0x2b, 0x00},
--
--	{0xff, 0xff}, /* END MARKER */
--};
--
--/* Probe the I2C bus and initialise the sensor chip */
--int stk_sensor_init(struct stk_camera *dev)
+-static void gpio_Set22K (struct budget *budget, int state)
 -{
--	u8 idl = 0;
--	u8 idh = 0;
+-	struct saa7146_dev *dev=budget->dev;
+-	dprintk(2, "budget: %p\n", budget);
+-	saa7146_setgpio(dev, 3, (state ? SAA7146_GPIO_OUTHI : SAA7146_GPIO_OUTLO));
+-}
 -
--	if (stk_camera_write_reg(dev, STK_IIC_ENABLE, STK_IIC_ENABLE_YES)
--		|| stk_camera_write_reg(dev, STK_IIC_ADDR, SENSOR_ADDRESS)
--		|| stk_sensor_outb(dev, REG_COM7, COM7_RESET)) {
--		pr_err("Sensor resetting failed\n");
--		return -ENODEV;
+-/* Diseqc functions only for TT Budget card */
+-/* taken from the Skyvision DVB driver by
+-   Ralph Metzler <rjkm@metzlerbros.de> */
+-
+-static void DiseqcSendBit (struct budget *budget, int data)
+-{
+-	struct saa7146_dev *dev=budget->dev;
+-	dprintk(2, "budget: %p\n", budget);
+-
+-	saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTHI);
+-	udelay(data ? 500 : 1000);
+-	saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTLO);
+-	udelay(data ? 1000 : 500);
+-}
+-
+-static void DiseqcSendByte (struct budget *budget, int data)
+-{
+-	int i, par=1, d;
+-
+-	dprintk(2, "budget: %p\n", budget);
+-
+-	for (i=7; i>=0; i--) {
+-		d = (data>>i)&1;
+-		par ^= d;
+-		DiseqcSendBit(budget, d);
 -	}
--	msleep(10);
--	/* Read the manufacturer ID: ov = 0x7FA2 */
--	if (stk_sensor_inb(dev, REG_MIDH, &idh)
--	    || stk_sensor_inb(dev, REG_MIDL, &idl)) {
--		pr_err("Strange error reading sensor ID\n");
--		return -ENODEV;
+-
+-	DiseqcSendBit(budget, par);
+-}
+-
+-static int SendDiSEqCMsg (struct budget *budget, int len, u8 *msg, unsigned long burst)
+-{
+-	struct saa7146_dev *dev=budget->dev;
+-	int i;
+-
+-	dprintk(2, "budget: %p\n", budget);
+-
+-	saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTLO);
+-	mdelay(16);
+-
+-	for (i=0; i<len; i++)
+-		DiseqcSendByte(budget, msg[i]);
+-
+-	mdelay(16);
+-
+-	if (burst!=-1) {
+-		if (burst)
+-			DiseqcSendByte(budget, 0xff);
+-		else {
+-			saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTHI);
+-			mdelay(12);
+-			udelay(500);
+-			saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTLO);
+-		}
+-		msleep(20);
 -	}
--	if (idh != 0x7f || idl != 0xa2) {
--		pr_err("Huh? you don't have a sensor from ovt\n");
--		return -ENODEV;
--	}
--	if (stk_sensor_inb(dev, REG_PID, &idh)
--	    || stk_sensor_inb(dev, REG_VER, &idl)) {
--		pr_err("Could not read sensor model\n");
--		return -ENODEV;
--	}
--	stk_sensor_write_regvals(dev, ov_initvals);
--	msleep(10);
--	pr_info("OmniVision sensor detected, id %02X%02X at address %x\n",
--		idh, idl, SENSOR_ADDRESS);
+-
 -	return 0;
 -}
 -
--/* V4L2_PIX_FMT_UYVY */
--static struct regval ov_fmt_uyvy[] = {
--	{REG_TSLB, TSLB_YLAST|0x08 },
--	{ 0x4f, 0x80 },		/* "matrix coefficient 1" */
--	{ 0x50, 0x80 },		/* "matrix coefficient 2" */
--	{ 0x51, 0    },		/* vb */
--	{ 0x52, 0x22 },		/* "matrix coefficient 4" */
--	{ 0x53, 0x5e },		/* "matrix coefficient 5" */
--	{ 0x54, 0x80 },		/* "matrix coefficient 6" */
--	{REG_COM13, COM13_UVSAT|COM13_CMATRIX},
--	{REG_COM15, COM15_R00FF },
--	{0xff, 0xff}, /* END MARKER */
--};
--/* V4L2_PIX_FMT_YUYV */
--static struct regval ov_fmt_yuyv[] = {
--	{REG_TSLB, 0 },
--	{ 0x4f, 0x80 },		/* "matrix coefficient 1" */
--	{ 0x50, 0x80 },		/* "matrix coefficient 2" */
--	{ 0x51, 0    },		/* vb */
--	{ 0x52, 0x22 },		/* "matrix coefficient 4" */
--	{ 0x53, 0x5e },		/* "matrix coefficient 5" */
--	{ 0x54, 0x80 },		/* "matrix coefficient 6" */
--	{REG_COM13, COM13_UVSAT|COM13_CMATRIX},
--	{REG_COM15, COM15_R00FF },
--	{0xff, 0xff}, /* END MARKER */
--};
--
--/* V4L2_PIX_FMT_RGB565X rrrrrggg gggbbbbb */
--static struct regval ov_fmt_rgbr[] = {
--	{ REG_RGB444, 0 },	/* No RGB444 please */
--	{REG_TSLB, 0x00},
--	{ REG_COM1, 0x0 },
--	{ REG_COM9, 0x38 },	/* 16x gain ceiling; 0x8 is reserved bit */
--	{ 0x4f, 0xb3 },		/* "matrix coefficient 1" */
--	{ 0x50, 0xb3 },		/* "matrix coefficient 2" */
--	{ 0x51, 0    },		/* vb */
--	{ 0x52, 0x3d },		/* "matrix coefficient 4" */
--	{ 0x53, 0xa7 },		/* "matrix coefficient 5" */
--	{ 0x54, 0xe4 },		/* "matrix coefficient 6" */
--	{ REG_COM13, COM13_GAMMA },
--	{ REG_COM15, COM15_RGB565|COM15_R00FF },
--	{ 0xff, 0xff },
--};
--
--/* V4L2_PIX_FMT_RGB565 gggbbbbb rrrrrggg */
--static struct regval ov_fmt_rgbp[] = {
--	{ REG_RGB444, 0 },	/* No RGB444 please */
--	{REG_TSLB, TSLB_BYTEORD },
--	{ REG_COM1, 0x0 },
--	{ REG_COM9, 0x38 },	/* 16x gain ceiling; 0x8 is reserved bit */
--	{ 0x4f, 0xb3 },		/* "matrix coefficient 1" */
--	{ 0x50, 0xb3 },		/* "matrix coefficient 2" */
--	{ 0x51, 0    },		/* vb */
--	{ 0x52, 0x3d },		/* "matrix coefficient 4" */
--	{ 0x53, 0xa7 },		/* "matrix coefficient 5" */
--	{ 0x54, 0xe4 },		/* "matrix coefficient 6" */
--	{ REG_COM13, COM13_GAMMA },
--	{ REG_COM15, COM15_RGB565|COM15_R00FF },
--	{ 0xff, 0xff },
--};
--
--/* V4L2_PIX_FMT_SRGGB8 */
--static struct regval ov_fmt_bayer[] = {
--	/* This changes color order */
--	{REG_TSLB, 0x40}, /* BGGR */
--	/* {REG_TSLB, 0x08}, */ /* BGGR with vertical image flipping */
--	{REG_COM15, COM15_R00FF },
--	{0xff, 0xff}, /* END MARKER */
--};
--/*
-- * Store a set of start/stop values into the camera.
-- */
--static int stk_sensor_set_hw(struct stk_camera *dev,
--		int hstart, int hstop, int vstart, int vstop)
+-/* shamelessly copy/pasted from budget.c */
+-static int budget_set_tone(struct dvb_frontend *fe,
+-			   enum fe_sec_tone_mode tone)
 -{
--	int ret;
--	unsigned char v;
--/*
-- * Horizontal: 11 bits, top 8 live in hstart and hstop.  Bottom 3 of
-- * hstart are in href[2:0], bottom 3 of hstop in href[5:3].  There is
-- * a mystery "edge offset" value in the top two bits of href.
-- */
--	ret =  stk_sensor_outb(dev, REG_HSTART, (hstart >> 3) & 0xff);
--	ret += stk_sensor_outb(dev, REG_HSTOP, (hstop >> 3) & 0xff);
--	ret += stk_sensor_inb(dev, REG_HREF, &v);
--	v = (v & 0xc0) | ((hstop & 0x7) << 3) | (hstart & 0x7);
--	msleep(10);
--	ret += stk_sensor_outb(dev, REG_HREF, v);
--/*
-- * Vertical: similar arrangement (note: this is different from ov7670.c)
-- */
--	ret += stk_sensor_outb(dev, REG_VSTART, (vstart >> 3) & 0xff);
--	ret += stk_sensor_outb(dev, REG_VSTOP, (vstop >> 3) & 0xff);
--	ret += stk_sensor_inb(dev, REG_VREF, &v);
--	v = (v & 0xc0) | ((vstop & 0x7) << 3) | (vstart & 0x7);
--	msleep(10);
--	ret += stk_sensor_outb(dev, REG_VREF, v);
--	return ret;
--}
+-	struct budget* budget = (struct budget*) fe->dvb->priv;
 -
+-	switch (tone) {
+-	case SEC_TONE_ON:
+-		gpio_Set22K (budget, 1);
+-		break;
 -
--int stk_sensor_configure(struct stk_camera *dev)
--{
--	int com7;
--	/*
--	 * We setup the sensor to output dummy lines in low-res modes,
--	 * so we don't get absurdly hight framerates.
--	 */
--	unsigned dummylines;
--	int flip;
--	struct regval *rv;
+-	case SEC_TONE_OFF:
+-		gpio_Set22K (budget, 0);
+-		break;
 -
--	switch (dev->vsettings.mode) {
--	case MODE_QCIF: com7 = COM7_FMT_QCIF;
--		dummylines = 604;
--		break;
--	case MODE_QVGA: com7 = COM7_FMT_QVGA;
--		dummylines = 267;
--		break;
--	case MODE_CIF: com7 = COM7_FMT_CIF;
--		dummylines = 412;
--		break;
--	case MODE_VGA: com7 = COM7_FMT_VGA;
--		dummylines = 11;
--		break;
--	case MODE_SXGA: com7 = COM7_FMT_SXGA;
--		dummylines = 0;
--		break;
 -	default:
--		pr_err("Unsupported mode %d\n", dev->vsettings.mode);
--		return -EFAULT;
--	}
--	switch (dev->vsettings.palette) {
--	case V4L2_PIX_FMT_UYVY:
--		com7 |= COM7_YUV;
--		rv = ov_fmt_uyvy;
--		break;
--	case V4L2_PIX_FMT_YUYV:
--		com7 |= COM7_YUV;
--		rv = ov_fmt_yuyv;
--		break;
--	case V4L2_PIX_FMT_RGB565:
--		com7 |= COM7_RGB;
--		rv = ov_fmt_rgbp;
--		break;
--	case V4L2_PIX_FMT_RGB565X:
--		com7 |= COM7_RGB;
--		rv = ov_fmt_rgbr;
--		break;
--	case V4L2_PIX_FMT_SBGGR8:
--		com7 |= COM7_PBAYER;
--		rv = ov_fmt_bayer;
--		break;
--	default:
--		pr_err("Unsupported colorspace\n");
--		return -EFAULT;
--	}
--	/*FIXME sometimes the sensor go to a bad state
--	stk_sensor_write_regvals(dev, ov_initvals); */
--	stk_sensor_outb(dev, REG_COM7, com7);
--	msleep(50);
--	stk_sensor_write_regvals(dev, rv);
--	flip = (dev->vsettings.vflip?MVFP_FLIP:0)
--		| (dev->vsettings.hflip?MVFP_MIRROR:0);
--	stk_sensor_outb(dev, REG_MVFP, flip);
--	if (dev->vsettings.palette == V4L2_PIX_FMT_SBGGR8
--			&& !dev->vsettings.vflip)
--		stk_sensor_outb(dev, REG_TSLB, 0x08);
--	stk_sensor_outb(dev, REG_ADVFH, dummylines >> 8);
--	stk_sensor_outb(dev, REG_ADVFL, dummylines & 0xff);
--	msleep(50);
--	switch (dev->vsettings.mode) {
--	case MODE_VGA:
--		if (stk_sensor_set_hw(dev, 302, 1582, 6, 486))
--			pr_err("stk_sensor_set_hw failed (VGA)\n");
--		break;
--	case MODE_SXGA:
--	case MODE_CIF:
--	case MODE_QVGA:
--	case MODE_QCIF:
--		/*FIXME These settings seem ignored by the sensor
--		if (stk_sensor_set_hw(dev, 220, 1500, 10, 1034))
--			pr_err("stk_sensor_set_hw failed (SXGA)\n");
--		*/
--		break;
--	}
--	msleep(10);
--	return 0;
--}
--
--int stk_sensor_set_brightness(struct stk_camera *dev, int br)
--{
--	if (br < 0 || br > 0xff)
 -		return -EINVAL;
--	stk_sensor_outb(dev, REG_AEB, max(0x00, br - 6));
--	stk_sensor_outb(dev, REG_AEW, min(0xff, br + 6));
+-	}
+-
 -	return 0;
 -}
 -
-diff --git a/drivers/staging/media/deprecated/stkwebcam/stk-webcam.c b/drivers/staging/media/deprecated/stkwebcam/stk-webcam.c
-deleted file mode 100644
-index 787edb3d47c2..000000000000
---- a/drivers/staging/media/deprecated/stkwebcam/stk-webcam.c
-+++ /dev/null
-@@ -1,1434 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * stk-webcam.c : Driver for Syntek 1125 USB webcam controller
-- *
-- * Copyright (C) 2006 Nicolas VIVIEN
-- * Copyright 2007-2008 Jaime Velasco Juan <jsagarribay@gmail.com>
-- *
-- * Some parts are inspired from cafe_ccic.c
-- * Copyright 2006-2007 Jonathan Corbet
-- */
+-static int budget_diseqc_send_master_cmd(struct dvb_frontend* fe, struct dvb_diseqc_master_cmd* cmd)
+-{
+-	struct budget* budget = (struct budget*) fe->dvb->priv;
 -
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-	SendDiSEqCMsg (budget, cmd->msg_len, cmd->msg, 0);
 -
--#include <linux/module.h>
--#include <linux/init.h>
--#include <linux/kernel.h>
--#include <linux/errno.h>
--#include <linux/slab.h>
+-	return 0;
+-}
 -
--#include <linux/dmi.h>
--#include <linux/usb.h>
--#include <linux/mm.h>
--#include <linux/vmalloc.h>
--#include <linux/videodev2.h>
--#include <media/v4l2-common.h>
--#include <media/v4l2-ioctl.h>
--#include <media/v4l2-event.h>
+-static int budget_diseqc_send_burst(struct dvb_frontend *fe,
+-				    enum fe_sec_mini_cmd minicmd)
+-{
+-	struct budget* budget = (struct budget*) fe->dvb->priv;
 -
--#include "stk-webcam.h"
+-	SendDiSEqCMsg (budget, 0, NULL, minicmd);
+-
+-	return 0;
+-}
+-
+-static int budget_av7110_send_fw_cmd(struct budget_patch *budget, u16* buf, int length)
+-{
+-	int i;
+-
+-	dprintk(2, "budget: %p\n", budget);
+-
+-	for (i = 2; i < length; i++)
+-	{
+-		  ttpci_budget_debiwrite(budget, DEBINOSWAP, COMMAND + 2*i, 2, (u32) buf[i], 0,0);
+-		  msleep(5);
+-	}
+-	if (length)
+-		  ttpci_budget_debiwrite(budget, DEBINOSWAP, COMMAND + 2, 2, (u32) buf[1], 0,0);
+-	else
+-		  ttpci_budget_debiwrite(budget, DEBINOSWAP, COMMAND + 2, 2, 0, 0,0);
+-	msleep(5);
+-	ttpci_budget_debiwrite(budget, DEBINOSWAP, COMMAND, 2, (u32) buf[0], 0,0);
+-	msleep(5);
+-	return 0;
+-}
+-
+-static void av7110_set22k(struct budget_patch *budget, int state)
+-{
+-	u16 buf[2] = {( COMTYPE_AUDIODAC << 8) | (state ? ON22K : OFF22K), 0};
+-
+-	dprintk(2, "budget: %p\n", budget);
+-	budget_av7110_send_fw_cmd(budget, buf, 2);
+-}
+-
+-static int av7110_send_diseqc_msg(struct budget_patch *budget, int len, u8 *msg, int burst)
+-{
+-	int i;
+-	u16 buf[18] = { ((COMTYPE_AUDIODAC << 8) | SendDiSEqC),
+-		16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+-
+-	dprintk(2, "budget: %p\n", budget);
+-
+-	if (len>10)
+-		len=10;
+-
+-	buf[1] = len+2;
+-	buf[2] = len;
+-
+-	if (burst != -1)
+-		buf[3]=burst ? 0x01 : 0x00;
+-	else
+-		buf[3]=0xffff;
+-
+-	for (i=0; i<len; i++)
+-		buf[i+4]=msg[i];
+-
+-	budget_av7110_send_fw_cmd(budget, buf, 18);
+-	return 0;
+-}
+-
+-static int budget_patch_set_tone(struct dvb_frontend *fe,
+-				 enum fe_sec_tone_mode tone)
+-{
+-	struct budget_patch* budget = (struct budget_patch*) fe->dvb->priv;
+-
+-	switch (tone) {
+-	case SEC_TONE_ON:
+-		av7110_set22k (budget, 1);
+-		break;
+-
+-	case SEC_TONE_OFF:
+-		av7110_set22k (budget, 0);
+-		break;
+-
+-	default:
+-		return -EINVAL;
+-	}
+-
+-	return 0;
+-}
+-
+-static int budget_patch_diseqc_send_master_cmd(struct dvb_frontend* fe, struct dvb_diseqc_master_cmd* cmd)
+-{
+-	struct budget_patch* budget = (struct budget_patch*) fe->dvb->priv;
+-
+-	av7110_send_diseqc_msg (budget, cmd->msg_len, cmd->msg, 0);
+-
+-	return 0;
+-}
+-
+-static int budget_patch_diseqc_send_burst(struct dvb_frontend *fe,
+-					  enum fe_sec_mini_cmd minicmd)
+-{
+-	struct budget_patch* budget = (struct budget_patch*) fe->dvb->priv;
+-
+-	av7110_send_diseqc_msg (budget, 0, NULL, minicmd);
+-
+-	return 0;
+-}
+-
+-static int alps_bsrv2_tuner_set_params(struct dvb_frontend *fe)
+-{
+-	struct dtv_frontend_properties *p = &fe->dtv_property_cache;
+-	struct budget_patch* budget = (struct budget_patch*) fe->dvb->priv;
+-	u8 pwr = 0;
+-	u8 buf[4];
+-	struct i2c_msg msg = { .addr = 0x61, .flags = 0, .buf = buf, .len = sizeof(buf) };
+-	u32 div = (p->frequency + 479500) / 125;
+-
+-	if (p->frequency > 2000000)
+-		pwr = 3;
+-	else if (p->frequency > 1800000)
+-		pwr = 2;
+-	else if (p->frequency > 1600000)
+-		pwr = 1;
+-	else if (p->frequency > 1200000)
+-		pwr = 0;
+-	else if (p->frequency >= 1100000)
+-		pwr = 1;
+-	else pwr = 2;
+-
+-	buf[0] = (div >> 8) & 0x7f;
+-	buf[1] = div & 0xff;
+-	buf[2] = ((div & 0x18000) >> 10) | 0x95;
+-	buf[3] = (pwr << 6) | 0x30;
+-
+-	// NOTE: since we're using a prescaler of 2, we set the
+-	// divisor frequency to 62.5kHz and divide by 125 above
+-
+-	if (fe->ops.i2c_gate_ctrl)
+-		fe->ops.i2c_gate_ctrl(fe, 1);
+-	if (i2c_transfer (&budget->i2c_adap, &msg, 1) != 1)
+-		return -EIO;
+-	return 0;
+-}
+-
+-static struct ves1x93_config alps_bsrv2_config = {
+-	.demod_address = 0x08,
+-	.xin = 90100000UL,
+-	.invert_pwm = 0,
+-};
+-
+-static int grundig_29504_451_tuner_set_params(struct dvb_frontend *fe)
+-{
+-	struct dtv_frontend_properties *p = &fe->dtv_property_cache;
+-	struct budget_patch* budget = (struct budget_patch*) fe->dvb->priv;
+-	u32 div;
+-	u8 data[4];
+-	struct i2c_msg msg = { .addr = 0x61, .flags = 0, .buf = data, .len = sizeof(data) };
+-
+-	div = p->frequency / 125;
+-	data[0] = (div >> 8) & 0x7f;
+-	data[1] = div & 0xff;
+-	data[2] = 0x8e;
+-	data[3] = 0x00;
+-
+-	if (fe->ops.i2c_gate_ctrl)
+-		fe->ops.i2c_gate_ctrl(fe, 1);
+-	if (i2c_transfer (&budget->i2c_adap, &msg, 1) != 1)
+-		return -EIO;
+-	return 0;
+-}
+-
+-static struct tda8083_config grundig_29504_451_config = {
+-	.demod_address = 0x68,
+-};
+-
+-static void frontend_init(struct budget_patch* budget)
+-{
+-	switch(budget->dev->pci->subsystem_device) {
+-	case 0x0000: // Hauppauge/TT WinTV DVB-S rev1.X
+-	case 0x1013: // SATELCO Multimedia PCI
+-
+-		// try the ALPS BSRV2 first of all
+-		budget->dvb_frontend = dvb_attach(ves1x93_attach, &alps_bsrv2_config, &budget->i2c_adap);
+-		if (budget->dvb_frontend) {
+-			budget->dvb_frontend->ops.tuner_ops.set_params = alps_bsrv2_tuner_set_params;
+-			budget->dvb_frontend->ops.diseqc_send_master_cmd = budget_patch_diseqc_send_master_cmd;
+-			budget->dvb_frontend->ops.diseqc_send_burst = budget_patch_diseqc_send_burst;
+-			budget->dvb_frontend->ops.set_tone = budget_patch_set_tone;
+-			break;
+-		}
+-
+-		// try the ALPS BSRU6 now
+-		budget->dvb_frontend = dvb_attach(stv0299_attach, &alps_bsru6_config, &budget->i2c_adap);
+-		if (budget->dvb_frontend) {
+-			budget->dvb_frontend->ops.tuner_ops.set_params = alps_bsru6_tuner_set_params;
+-			budget->dvb_frontend->tuner_priv = &budget->i2c_adap;
+-
+-			budget->dvb_frontend->ops.diseqc_send_master_cmd = budget_diseqc_send_master_cmd;
+-			budget->dvb_frontend->ops.diseqc_send_burst = budget_diseqc_send_burst;
+-			budget->dvb_frontend->ops.set_tone = budget_set_tone;
+-			break;
+-		}
+-
+-		// Try the grundig 29504-451
+-		budget->dvb_frontend = dvb_attach(tda8083_attach, &grundig_29504_451_config, &budget->i2c_adap);
+-		if (budget->dvb_frontend) {
+-			budget->dvb_frontend->ops.tuner_ops.set_params = grundig_29504_451_tuner_set_params;
+-			budget->dvb_frontend->ops.diseqc_send_master_cmd = budget_diseqc_send_master_cmd;
+-			budget->dvb_frontend->ops.diseqc_send_burst = budget_diseqc_send_burst;
+-			budget->dvb_frontend->ops.set_tone = budget_set_tone;
+-			break;
+-		}
+-		break;
+-	}
+-
+-	if (budget->dvb_frontend == NULL) {
+-		printk("dvb-ttpci: A frontend driver was not found for device [%04x:%04x] subsystem [%04x:%04x]\n",
+-		       budget->dev->pci->vendor,
+-		       budget->dev->pci->device,
+-		       budget->dev->pci->subsystem_vendor,
+-		       budget->dev->pci->subsystem_device);
+-	} else {
+-		if (dvb_register_frontend(&budget->dvb_adapter, budget->dvb_frontend)) {
+-			printk("budget-av: Frontend registration failed!\n");
+-			dvb_frontend_detach(budget->dvb_frontend);
+-			budget->dvb_frontend = NULL;
+-		}
+-	}
+-}
+-
+-/* written by Emard */
+-static int budget_patch_attach (struct saa7146_dev* dev, struct saa7146_pci_extension_data *info)
+-{
+-	struct budget_patch *budget;
+-	int err;
+-	int count = 0;
+-	int detected = 0;
+-
+-#define PATCH_RESET 0
+-#define RPS_IRQ 0
+-#define HPS_SETUP 0
+-#if PATCH_RESET
+-	saa7146_write(dev, MC1, MASK_31);
+-	msleep(40);
+-#endif
+-#if HPS_SETUP
+-	// initialize registers. Better to have it like this
+-	// than leaving something unconfigured
+-	saa7146_write(dev, DD1_STREAM_B, 0);
+-	// port B VSYNC at rising edge
+-	saa7146_write(dev, DD1_INIT, 0x00000200);  // have this in budget-core too!
+-	saa7146_write(dev, BRS_CTRL, 0x00000000);  // VBI
+-
+-	// debi config
+-	// saa7146_write(dev, DEBI_CONFIG, MASK_30|MASK_28|MASK_18);
+-
+-	// zero all HPS registers
+-	saa7146_write(dev, HPS_H_PRESCALE, 0);                  // r68
+-	saa7146_write(dev, HPS_H_SCALE, 0);                     // r6c
+-	saa7146_write(dev, BCS_CTRL, 0);                        // r70
+-	saa7146_write(dev, HPS_V_SCALE, 0);                     // r60
+-	saa7146_write(dev, HPS_V_GAIN, 0);                      // r64
+-	saa7146_write(dev, CHROMA_KEY_RANGE, 0);                // r74
+-	saa7146_write(dev, CLIP_FORMAT_CTRL, 0);                // r78
+-	// Set HPS prescaler for port B input
+-	saa7146_write(dev, HPS_CTRL, (1<<30) | (0<<29) | (1<<28) | (0<<12) );
+-	saa7146_write(dev, MC2,
+-	  0 * (MASK_08 | MASK_24)  |   // BRS control
+-	  0 * (MASK_09 | MASK_25)  |   // a
+-	  0 * (MASK_10 | MASK_26)  |   // b
+-	  1 * (MASK_06 | MASK_22)  |   // HPS_CTRL1
+-	  1 * (MASK_05 | MASK_21)  |   // HPS_CTRL2
+-	  0 * (MASK_01 | MASK_15)      // DEBI
+-	   );
+-#endif
+-	// Disable RPS1 and RPS0
+-	saa7146_write(dev, MC1, ( MASK_29 | MASK_28));
+-	// RPS1 timeout disable
+-	saa7146_write(dev, RPS_TOV1, 0);
+-
+-	// code for autodetection
+-	// will wait for VBI_B event (vertical blank at port B)
+-	// and will reset GPIO3 after VBI_B is detected.
+-	// (GPIO3 should be raised high by CPU to
+-	// test if GPIO3 will generate vertical blank signal
+-	// in budget patch GPIO3 is connected to VSYNC_B
+-	count = 0;
+-#if 0
+-	WRITE_RPS1(CMD_UPLOAD |
+-	  MASK_10 | MASK_09 | MASK_08 | MASK_06 | MASK_05 | MASK_04 | MASK_03 | MASK_02 );
+-#endif
+-	WRITE_RPS1(CMD_PAUSE | EVT_VBI_B);
+-	WRITE_RPS1(CMD_WR_REG_MASK | (GPIO_CTRL>>2));
+-	WRITE_RPS1(GPIO3_MSK);
+-	WRITE_RPS1(SAA7146_GPIO_OUTLO<<24);
+-#if RPS_IRQ
+-	// issue RPS1 interrupt to increment counter
+-	WRITE_RPS1(CMD_INTERRUPT);
+-	// at least a NOP is neede between two interrupts
+-	WRITE_RPS1(CMD_NOP);
+-	// interrupt again
+-	WRITE_RPS1(CMD_INTERRUPT);
+-#endif
+-	WRITE_RPS1(CMD_STOP);
+-
+-#if RPS_IRQ
+-	// set event counter 1 source as RPS1 interrupt (0x03)          (rE4 p53)
+-	// use 0x03 to track RPS1 interrupts - increase by 1 every gpio3 is toggled
+-	// use 0x15 to track VPE  interrupts - increase by 1 every vpeirq() is called
+-	saa7146_write(dev, EC1SSR, (0x03<<2) | 3 );
+-	// set event counter 1 threshold to maximum allowed value        (rEC p55)
+-	saa7146_write(dev, ECT1R,  0x3fff );
+-#endif
+-	// Fix VSYNC level
+-	saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTLO);
+-	// Set RPS1 Address register to point to RPS code               (r108 p42)
+-	saa7146_write(dev, RPS_ADDR1, dev->d_rps1.dma_handle);
+-	// Enable RPS1,                                                 (rFC p33)
+-	saa7146_write(dev, MC1, (MASK_13 | MASK_29 ));
 -
 -
--static int hflip = -1;
--module_param(hflip, int, 0444);
--MODULE_PARM_DESC(hflip, "Horizontal image flip (mirror). Defaults to 0");
+-	mdelay(50);
+-	saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTHI);
+-	mdelay(150);
 -
--static int vflip = -1;
--module_param(vflip, int, 0444);
--MODULE_PARM_DESC(vflip, "Vertical image flip. Defaults to 0");
 -
--static int debug;
--module_param(debug, int, 0444);
--MODULE_PARM_DESC(debug, "Debug v4l ioctls. Defaults to 0");
+-	if( (saa7146_read(dev, GPIO_CTRL) & 0x10000000) == 0)
+-		detected = 1;
+-
+-#if RPS_IRQ
+-	printk("Event Counter 1 0x%04x\n", saa7146_read(dev, EC1R) & 0x3fff );
+-#endif
+-	// Disable RPS1
+-	saa7146_write(dev, MC1, ( MASK_29 ));
+-
+-	if(detected == 0)
+-		printk("budget-patch not detected or saa7146 in non-default state.\n"
+-		       "try enabling resetting of 7146 with MASK_31 in MC1 register\n");
+-
+-	else
+-		printk("BUDGET-PATCH DETECTED.\n");
+-
+-
+-/*      OLD (Original design by Roberto Deza):
+-**      This code will setup the SAA7146_RPS1 to generate a square
+-**      wave on GPIO3, changing when a field (TS_HEIGHT/2 "lines" of
+-**      TS_WIDTH packets) has been acquired on SAA7146_D1B video port;
+-**      then, this GPIO3 output which is connected to the D1B_VSYNC
+-**      input, will trigger the acquisition of the alternate field
+-**      and so on.
+-**      Currently, the TT_budget / WinTV_Nova cards have two ICs
+-**      (74HCT4040, LVC74) for the generation of this VSYNC signal,
+-**      which seems that can be done perfectly without this :-)).
+-*/
+-
+-/*      New design (By Emard)
+-**      this rps1 code will copy internal HS event to GPIO3 pin.
+-**      GPIO3 is in budget-patch hardware connected to port B VSYNC
+-
+-**      HS is an internal event of 7146, accessible with RPS
+-**      and temporarily raised high every n lines
+-**      (n in defined in the RPS_THRESH1 counter threshold)
+-**      I think HS is raised high on the beginning of the n-th line
+-**      and remains high until this n-th line that triggered
+-**      it is completely received. When the reception of n-th line
+-**      ends, HS is lowered.
+-
+-**      To transmit data over DMA, 7146 needs changing state at
+-**      port B VSYNC pin. Any changing of port B VSYNC will
+-**      cause some DMA data transfer, with more or less packets loss.
+-**      It depends on the phase and frequency of VSYNC and
+-**      the way of 7146 is instructed to trigger on port B (defined
+-**      in DD1_INIT register, 3rd nibble from the right valid
+-**      numbers are 0-7, see datasheet)
+-**
+-**      The correct triggering can minimize packet loss,
+-**      dvbtraffic should give this stable bandwidths:
+-**        22k transponder = 33814 kbit/s
+-**      27.5k transponder = 38045 kbit/s
+-**      by experiment it is found that the best results
+-**      (stable bandwidths and almost no packet loss)
+-**      are obtained using DD1_INIT triggering number 2
+-**      (Va at rising edge of VS Fa = HS x VS-failing forced toggle)
+-**      and a VSYNC phase that occurs in the middle of DMA transfer
+-**      (about byte 188*512=96256 in the DMA window).
+-**
+-**      Phase of HS is still not clear to me how to control,
+-**      It just happens to be so. It can be seen if one enables
+-**      RPS_IRQ and print Event Counter 1 in vpeirq(). Every
+-**      time RPS_INTERRUPT is called, the Event Counter 1 will
+-**      increment. That's how the 7146 is programmed to do event
+-**      counting in this budget-patch.c
+-**      I *think* HPS setting has something to do with the phase
+-**      of HS but I can't be 100% sure in that.
+-
+-**      hardware debug note: a working budget card (including budget patch)
+-**      with vpeirq() interrupt setup in mode "0x90" (every 64K) will
+-**      generate 3 interrupts per 25-Hz DMA frame of 2*188*512 bytes
+-**      and that means 3*25=75 Hz of interrupt frequency, as seen by
+-**      watch cat /proc/interrupts
+-**
+-**      If this frequency is 3x lower (and data received in the DMA
+-**      buffer don't start with 0x47, but in the middle of packets,
+-**      whose lengths appear to be like 188 292 188 104 etc.
+-**      this means VSYNC line is not connected in the hardware.
+-**      (check soldering pcb and pins)
+-**      The same behaviour of missing VSYNC can be duplicated on budget
+-**      cards, by setting DD1_INIT trigger mode 7 in 3rd nibble.
+-*/
+-
+-	// Setup RPS1 "program" (p35)
+-	count = 0;
+-
+-
+-	// Wait Source Line Counter Threshold                           (p36)
+-	WRITE_RPS1(CMD_PAUSE | EVT_HS);
+-	// Set GPIO3=1                                                  (p42)
+-	WRITE_RPS1(CMD_WR_REG_MASK | (GPIO_CTRL>>2));
+-	WRITE_RPS1(GPIO3_MSK);
+-	WRITE_RPS1(SAA7146_GPIO_OUTHI<<24);
+-#if RPS_IRQ
+-	// issue RPS1 interrupt
+-	WRITE_RPS1(CMD_INTERRUPT);
+-#endif
+-	// Wait reset Source Line Counter Threshold                     (p36)
+-	WRITE_RPS1(CMD_PAUSE | RPS_INV | EVT_HS);
+-	// Set GPIO3=0                                                  (p42)
+-	WRITE_RPS1(CMD_WR_REG_MASK | (GPIO_CTRL>>2));
+-	WRITE_RPS1(GPIO3_MSK);
+-	WRITE_RPS1(SAA7146_GPIO_OUTLO<<24);
+-#if RPS_IRQ
+-	// issue RPS1 interrupt
+-	WRITE_RPS1(CMD_INTERRUPT);
+-#endif
+-	// Jump to begin of RPS program                                 (p37)
+-	WRITE_RPS1(CMD_JUMP);
+-	WRITE_RPS1(dev->d_rps1.dma_handle);
+-
+-	// Fix VSYNC level
+-	saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTLO);
+-	// Set RPS1 Address register to point to RPS code               (r108 p42)
+-	saa7146_write(dev, RPS_ADDR1, dev->d_rps1.dma_handle);
+-
+-	if (!(budget = kmalloc (sizeof(struct budget_patch), GFP_KERNEL)))
+-		return -ENOMEM;
+-
+-	dprintk(2, "budget: %p\n", budget);
+-
+-	err = ttpci_budget_init(budget, dev, info, THIS_MODULE, adapter_nr);
+-	if (err) {
+-		kfree(budget);
+-		return err;
+-	}
+-
+-	// Set Source Line Counter Threshold, using BRS                 (rCC p43)
+-	// It generates HS event every TS_HEIGHT lines
+-	// this is related to TS_WIDTH set in register
+-	// NUM_LINE_BYTE3 in budget-core.c. If NUM_LINE_BYTE
+-	// low 16 bits are set to TS_WIDTH bytes (TS_WIDTH=2*188
+-	//,then RPS_THRESH1
+-	// should be set to trigger every TS_HEIGHT (512) lines.
+-	//
+-	saa7146_write(dev, RPS_THRESH1, budget->buffer_height | MASK_12 );
+-
+-	// saa7146_write(dev, RPS_THRESH0, ((TS_HEIGHT/2)<<16) |MASK_28| (TS_HEIGHT/2) |MASK_12 );
+-	// Enable RPS1                                                  (rFC p33)
+-	saa7146_write(dev, MC1, (MASK_13 | MASK_29));
+-
+-
+-	dev->ext_priv = budget;
+-
+-	budget->dvb_adapter.priv = budget;
+-	frontend_init(budget);
+-
+-	ttpci_budget_init_hooks(budget);
+-
+-	return 0;
+-}
+-
+-static int budget_patch_detach (struct saa7146_dev* dev)
+-{
+-	struct budget_patch *budget = (struct budget_patch*) dev->ext_priv;
+-	int err;
+-
+-	if (budget->dvb_frontend) {
+-		dvb_unregister_frontend(budget->dvb_frontend);
+-		dvb_frontend_detach(budget->dvb_frontend);
+-	}
+-	err = ttpci_budget_deinit (budget);
+-
+-	kfree (budget);
+-
+-	return err;
+-}
+-
+-static int __init budget_patch_init(void)
+-{
+-	return saa7146_register_extension(&budget_extension);
+-}
+-
+-static void __exit budget_patch_exit(void)
+-{
+-	saa7146_unregister_extension(&budget_extension);
+-}
+-
+-static struct saa7146_extension budget_extension = {
+-	.name           = "budget_patch dvb",
+-	.flags          = 0,
+-
+-	.module         = THIS_MODULE,
+-	.pci_tbl        = pci_tbl,
+-	.attach         = budget_patch_attach,
+-	.detach         = budget_patch_detach,
+-
+-	.irq_mask       = MASK_10,
+-	.irq_func       = ttpci_budget_irq10_handler,
+-};
+-
+-module_init(budget_patch_init);
+-module_exit(budget_patch_exit);
 -
 -MODULE_LICENSE("GPL");
--MODULE_AUTHOR("Jaime Velasco Juan <jsagarribay@gmail.com> and Nicolas VIVIEN");
--MODULE_DESCRIPTION("Syntek DC1125 webcam driver");
--
--/* Some cameras have audio interfaces, we aren't interested in those */
--static const struct usb_device_id stkwebcam_table[] = {
--	{ USB_DEVICE_AND_INTERFACE_INFO(0x174f, 0xa311, 0xff, 0xff, 0xff) },
--	{ USB_DEVICE_AND_INTERFACE_INFO(0x05e1, 0x0501, 0xff, 0xff, 0xff) },
--	{ }
--};
--MODULE_DEVICE_TABLE(usb, stkwebcam_table);
--
--/*
-- * The stk webcam laptop module is mounted upside down in some laptops :(
-- *
-- * Some background information (thanks to Hans de Goede for providing this):
-- *
-- * 1) Once upon a time the stkwebcam driver was written
-- *
-- * 2) The webcam in question was used mostly in Asus laptop models, including
-- * the laptop of the original author of the driver, and in these models, in
-- * typical Asus fashion (see the long long list for uvc cams inside v4l-utils),
-- * they mounted the webcam-module the wrong way up. So the hflip and vflip
-- * module options were given a default value of 1 (the correct value for
-- * upside down mounted models)
-- *
-- * 3) Years later I got a bug report from a user with a laptop with stkwebcam,
-- * where the module was actually mounted the right way up, and thus showed
-- * upside down under Linux. So now I was facing the choice of 2 options:
-- *
-- * a) Add a not-upside-down list to stkwebcam, which overrules the default.
-- *
-- * b) Do it like all the other drivers do, and make the default right for
-- *    cams mounted the proper way and add an upside-down model list, with
-- *    models where we need to flip-by-default.
-- *
-- * Despite knowing that going b) would cause a period of pain where we were
-- * building the table I opted to go for option b), since a) is just too ugly,
-- * and worse different from how every other driver does it leading to
-- * confusion in the long run. This change was made in kernel 3.6.
-- *
-- * So for any user report about upside-down images since kernel 3.6 ask them
-- * to provide the output of 'sudo dmidecode' so the laptop can be added in
-- * the table below.
-- */
--static const struct dmi_system_id stk_upside_down_dmi_table[] = {
--	{
--		.ident = "ASUS G1",
--		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK Computer Inc."),
--			DMI_MATCH(DMI_PRODUCT_NAME, "G1")
--		}
--	}, {
--		.ident = "ASUS F3JC",
--		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK Computer Inc."),
--			DMI_MATCH(DMI_PRODUCT_NAME, "F3JC")
--		}
--	},
--	{
--		.ident = "T12Rg-H",
--		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "HCL Infosystems Limited"),
--			DMI_MATCH(DMI_PRODUCT_NAME, "T12Rg-H")
--		}
--	},
--	{
--		.ident = "ASUS A6VM",
--		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK Computer Inc."),
--			DMI_MATCH(DMI_PRODUCT_NAME, "A6VM")
--		}
--	},
--	{
--		.ident = "ASUS A6JC",
--		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK Computer Inc."),
--			DMI_MATCH(DMI_PRODUCT_NAME, "A6JC")
--		}
--	},
--	{}
--};
--
--
--/*
-- * Basic stuff
-- */
--int stk_camera_write_reg(struct stk_camera *dev, u16 index, u8 value)
--{
--	struct usb_device *udev = dev->udev;
--	int ret;
--
--	ret =  usb_control_msg(udev, usb_sndctrlpipe(udev, 0),
--			0x01,
--			USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
--			value,
--			index,
--			NULL,
--			0,
--			500);
--	if (ret < 0)
--		return ret;
--	else
--		return 0;
--}
--
--int stk_camera_read_reg(struct stk_camera *dev, u16 index, u8 *value)
--{
--	struct usb_device *udev = dev->udev;
--	int ret;
--
--	ret = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
--			0x00,
--			USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
--			0x00,
--			index,
--			&dev->read_reg_scratch,
--			sizeof(u8),
--			500);
--	if (ret >= 0)
--		*value = dev->read_reg_scratch;
--
--	if (ret < 0)
--		return ret;
--	else
--		return 0;
--}
--
--static int stk_start_stream(struct stk_camera *dev)
--{
--	u8 value;
--	int i, ret;
--	u8 value_116, value_117;
--
--
--	if (!is_present(dev))
--		return -ENODEV;
--	if (!is_memallocd(dev) || !is_initialised(dev)) {
--		pr_err("FIXME: Buffers are not allocated\n");
--		return -EFAULT;
--	}
--	ret = usb_set_interface(dev->udev, 0, 5);
--
--	if (ret < 0)
--		pr_err("usb_set_interface failed !\n");
--	if (stk_sensor_wakeup(dev))
--		pr_err("error awaking the sensor\n");
--
--	stk_camera_read_reg(dev, 0x0116, &value_116);
--	stk_camera_read_reg(dev, 0x0117, &value_117);
--
--	stk_camera_write_reg(dev, 0x0116, 0x0000);
--	stk_camera_write_reg(dev, 0x0117, 0x0000);
--
--	stk_camera_read_reg(dev, 0x0100, &value);
--	stk_camera_write_reg(dev, 0x0100, value | 0x80);
--
--	stk_camera_write_reg(dev, 0x0116, value_116);
--	stk_camera_write_reg(dev, 0x0117, value_117);
--	for (i = 0; i < MAX_ISO_BUFS; i++) {
--		if (dev->isobufs[i].urb) {
--			ret = usb_submit_urb(dev->isobufs[i].urb, GFP_KERNEL);
--			atomic_inc(&dev->urbs_used);
--			if (ret)
--				return ret;
--		}
--	}
--	set_streaming(dev);
--	return 0;
--}
--
--static int stk_stop_stream(struct stk_camera *dev)
--{
--	u8 value;
--	int i;
--	if (is_present(dev)) {
--		stk_camera_read_reg(dev, 0x0100, &value);
--		stk_camera_write_reg(dev, 0x0100, value & ~0x80);
--		if (dev->isobufs != NULL) {
--			for (i = 0; i < MAX_ISO_BUFS; i++) {
--				if (dev->isobufs[i].urb)
--					usb_kill_urb(dev->isobufs[i].urb);
--			}
--		}
--		unset_streaming(dev);
--
--		if (usb_set_interface(dev->udev, 0, 0))
--			pr_err("usb_set_interface failed !\n");
--		if (stk_sensor_sleep(dev))
--			pr_err("error suspending the sensor\n");
--	}
--	return 0;
--}
--
--/*
-- * This seems to be the shortest init sequence we
-- * must do in order to find the sensor
-- * Bit 5 of reg. 0x0000 here is important, when reset to 0 the sensor
-- * is also reset. Maybe powers down it?
-- * Rest of values don't make a difference
-- */
--
--static struct regval stk1125_initvals[] = {
--	/*TODO: What means this sequence? */
--	{0x0000, 0x24},
--	{0x0100, 0x21},
--	{0x0002, 0x68},
--	{0x0003, 0x80},
--	{0x0005, 0x00},
--	{0x0007, 0x03},
--	{0x000d, 0x00},
--	{0x000f, 0x02},
--	{0x0300, 0x12},
--	{0x0350, 0x41},
--	{0x0351, 0x00},
--	{0x0352, 0x00},
--	{0x0353, 0x00},
--	{0x0018, 0x10},
--	{0x0019, 0x00},
--	{0x001b, 0x0e},
--	{0x001c, 0x46},
--	{0x0300, 0x80},
--	{0x001a, 0x04},
--	{0x0110, 0x00},
--	{0x0111, 0x00},
--	{0x0112, 0x00},
--	{0x0113, 0x00},
--
--	{0xffff, 0xff},
--};
--
--
--static int stk_initialise(struct stk_camera *dev)
--{
--	struct regval *rv;
--	int ret;
--	if (!is_present(dev))
--		return -ENODEV;
--	if (is_initialised(dev))
--		return 0;
--	rv = stk1125_initvals;
--	while (rv->reg != 0xffff) {
--		ret = stk_camera_write_reg(dev, rv->reg, rv->val);
--		if (ret)
--			return ret;
--		rv++;
--	}
--	if (stk_sensor_init(dev) == 0) {
--		set_initialised(dev);
--		return 0;
--	} else
--		return -1;
--}
--
--/* *********************************************** */
--/*
-- * This function is called as an URB transfert is complete (Isochronous pipe).
-- * So, the traitement is done in interrupt time, so it has be fast, not crash,
-- * and not stall. Neat.
-- */
--static void stk_isoc_handler(struct urb *urb)
--{
--	int i;
--	int ret;
--	int framelen;
--	unsigned long flags;
--
--	unsigned char *fill = NULL;
--	unsigned char *iso_buf = NULL;
--
--	struct stk_camera *dev;
--	struct stk_sio_buffer *fb;
--
--	dev = (struct stk_camera *) urb->context;
--
--	if (dev == NULL) {
--		pr_err("isoc_handler called with NULL device !\n");
--		return;
--	}
--
--	if (urb->status == -ENOENT || urb->status == -ECONNRESET
--		|| urb->status == -ESHUTDOWN) {
--		atomic_dec(&dev->urbs_used);
--		return;
--	}
--
--	spin_lock_irqsave(&dev->spinlock, flags);
--
--	if (urb->status != -EINPROGRESS && urb->status != 0) {
--		pr_err("isoc_handler: urb->status == %d\n", urb->status);
--		goto resubmit;
--	}
--
--	if (list_empty(&dev->sio_avail)) {
--		/*FIXME Stop streaming after a while */
--		pr_err_ratelimited("isoc_handler without available buffer!\n");
--		goto resubmit;
--	}
--	fb = list_first_entry(&dev->sio_avail,
--			struct stk_sio_buffer, list);
--	fill = fb->buffer + fb->v4lbuf.bytesused;
--
--	for (i = 0; i < urb->number_of_packets; i++) {
--		if (urb->iso_frame_desc[i].status != 0) {
--			if (urb->iso_frame_desc[i].status != -EXDEV)
--				pr_err("Frame %d has error %d\n",
--				       i, urb->iso_frame_desc[i].status);
--			continue;
--		}
--		framelen = urb->iso_frame_desc[i].actual_length;
--		iso_buf = urb->transfer_buffer + urb->iso_frame_desc[i].offset;
--
--		if (framelen <= 4)
--			continue; /* no data */
--
--		/*
--		 * we found something informational from there
--		 * the isoc frames have to type of headers
--		 * type1: 00 xx 00 00 or 20 xx 00 00
--		 * type2: 80 xx 00 00 00 00 00 00 or a0 xx 00 00 00 00 00 00
--		 * xx is a sequencer which has never been seen over 0x3f
--		 * imho data written down looks like bayer, i see similarities
--		 * after every 640 bytes
--		 */
--		if (*iso_buf & 0x80) {
--			framelen -= 8;
--			iso_buf += 8;
--			/* This marks a new frame */
--			if (fb->v4lbuf.bytesused != 0
--				&& fb->v4lbuf.bytesused != dev->frame_size) {
--				pr_err_ratelimited("frame %d, bytesused=%d, skipping\n",
--						   i, fb->v4lbuf.bytesused);
--				fb->v4lbuf.bytesused = 0;
--				fill = fb->buffer;
--			} else if (fb->v4lbuf.bytesused == dev->frame_size) {
--				if (list_is_singular(&dev->sio_avail)) {
--					/* Always reuse the last buffer */
--					fb->v4lbuf.bytesused = 0;
--					fill = fb->buffer;
--				} else {
--					list_move_tail(dev->sio_avail.next,
--						&dev->sio_full);
--					wake_up(&dev->wait_frame);
--					fb = list_first_entry(&dev->sio_avail,
--						struct stk_sio_buffer, list);
--					fb->v4lbuf.bytesused = 0;
--					fill = fb->buffer;
--				}
--			}
--		} else {
--			framelen -= 4;
--			iso_buf += 4;
--		}
--
--		/* Our buffer is full !!! */
--		if (framelen + fb->v4lbuf.bytesused > dev->frame_size) {
--			pr_err_ratelimited("Frame buffer overflow, lost sync\n");
--			/*FIXME Do something here? */
--			continue;
--		}
--		spin_unlock_irqrestore(&dev->spinlock, flags);
--		memcpy(fill, iso_buf, framelen);
--		spin_lock_irqsave(&dev->spinlock, flags);
--		fill += framelen;
--
--		/* New size of our buffer */
--		fb->v4lbuf.bytesused += framelen;
--	}
--
--resubmit:
--	spin_unlock_irqrestore(&dev->spinlock, flags);
--	urb->dev = dev->udev;
--	ret = usb_submit_urb(urb, GFP_ATOMIC);
--	if (ret != 0) {
--		pr_err("Error (%d) re-submitting urb in stk_isoc_handler\n",
--		       ret);
--	}
--}
--
--/* -------------------------------------------- */
--
--static int stk_prepare_iso(struct stk_camera *dev)
--{
--	void *kbuf;
--	int i, j;
--	struct urb *urb;
--	struct usb_device *udev;
--
--	if (dev == NULL)
--		return -ENXIO;
--	udev = dev->udev;
--
--	if (dev->isobufs)
--		pr_err("isobufs already allocated. Bad\n");
--	else
--		dev->isobufs = kcalloc(MAX_ISO_BUFS, sizeof(*dev->isobufs),
--				       GFP_KERNEL);
--	if (dev->isobufs == NULL) {
--		pr_err("Unable to allocate iso buffers\n");
--		return -ENOMEM;
--	}
--	for (i = 0; i < MAX_ISO_BUFS; i++) {
--		if (dev->isobufs[i].data == NULL) {
--			kbuf = kzalloc(ISO_BUFFER_SIZE, GFP_KERNEL);
--			if (kbuf == NULL) {
--				pr_err("Failed to allocate iso buffer %d\n", i);
--				goto isobufs_out;
--			}
--			dev->isobufs[i].data = kbuf;
--		} else
--			pr_err("isobuf data already allocated\n");
--		if (dev->isobufs[i].urb == NULL) {
--			urb = usb_alloc_urb(ISO_FRAMES_PER_DESC, GFP_KERNEL);
--			if (urb == NULL)
--				goto isobufs_out;
--			dev->isobufs[i].urb = urb;
--		} else {
--			pr_err("Killing URB\n");
--			usb_kill_urb(dev->isobufs[i].urb);
--			urb = dev->isobufs[i].urb;
--		}
--		urb->interval = 1;
--		urb->dev = udev;
--		urb->pipe = usb_rcvisocpipe(udev, dev->isoc_ep);
--		urb->transfer_flags = URB_ISO_ASAP;
--		urb->transfer_buffer = dev->isobufs[i].data;
--		urb->transfer_buffer_length = ISO_BUFFER_SIZE;
--		urb->complete = stk_isoc_handler;
--		urb->context = dev;
--		urb->start_frame = 0;
--		urb->number_of_packets = ISO_FRAMES_PER_DESC;
--
--		for (j = 0; j < ISO_FRAMES_PER_DESC; j++) {
--			urb->iso_frame_desc[j].offset = j * ISO_MAX_FRAME_SIZE;
--			urb->iso_frame_desc[j].length = ISO_MAX_FRAME_SIZE;
--		}
--	}
--	set_memallocd(dev);
--	return 0;
--
--isobufs_out:
--	for (i = 0; i < MAX_ISO_BUFS && dev->isobufs[i].data; i++)
--		kfree(dev->isobufs[i].data);
--	for (i = 0; i < MAX_ISO_BUFS && dev->isobufs[i].urb; i++)
--		usb_free_urb(dev->isobufs[i].urb);
--	kfree(dev->isobufs);
--	dev->isobufs = NULL;
--	return -ENOMEM;
--}
--
--static void stk_clean_iso(struct stk_camera *dev)
--{
--	int i;
--
--	if (dev == NULL || dev->isobufs == NULL)
--		return;
--
--	for (i = 0; i < MAX_ISO_BUFS; i++) {
--		struct urb *urb;
--
--		urb = dev->isobufs[i].urb;
--		if (urb) {
--			if (atomic_read(&dev->urbs_used) && is_present(dev))
--				usb_kill_urb(urb);
--			usb_free_urb(urb);
--		}
--		kfree(dev->isobufs[i].data);
--	}
--	kfree(dev->isobufs);
--	dev->isobufs = NULL;
--	unset_memallocd(dev);
--}
--
--static int stk_setup_siobuf(struct stk_camera *dev, int index)
--{
--	struct stk_sio_buffer *buf = dev->sio_bufs + index;
--	INIT_LIST_HEAD(&buf->list);
--	buf->v4lbuf.length = PAGE_ALIGN(dev->frame_size);
--	buf->buffer = vmalloc_user(buf->v4lbuf.length);
--	if (buf->buffer == NULL)
--		return -ENOMEM;
--	buf->mapcount = 0;
--	buf->dev = dev;
--	buf->v4lbuf.index = index;
--	buf->v4lbuf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
--	buf->v4lbuf.flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
--	buf->v4lbuf.field = V4L2_FIELD_NONE;
--	buf->v4lbuf.memory = V4L2_MEMORY_MMAP;
--	buf->v4lbuf.m.offset = 2*index*buf->v4lbuf.length;
--	return 0;
--}
--
--static int stk_free_sio_buffers(struct stk_camera *dev)
--{
--	int i;
--	int nbufs;
--	unsigned long flags;
--	if (dev->n_sbufs == 0 || dev->sio_bufs == NULL)
--		return 0;
--	/*
--	* If any buffers are mapped, we cannot free them at all.
--	*/
--	for (i = 0; i < dev->n_sbufs; i++) {
--		if (dev->sio_bufs[i].mapcount > 0)
--			return -EBUSY;
--	}
--	/*
--	* OK, let's do it.
--	*/
--	spin_lock_irqsave(&dev->spinlock, flags);
--	INIT_LIST_HEAD(&dev->sio_avail);
--	INIT_LIST_HEAD(&dev->sio_full);
--	nbufs = dev->n_sbufs;
--	dev->n_sbufs = 0;
--	spin_unlock_irqrestore(&dev->spinlock, flags);
--	for (i = 0; i < nbufs; i++)
--		vfree(dev->sio_bufs[i].buffer);
--	kfree(dev->sio_bufs);
--	dev->sio_bufs = NULL;
--	return 0;
--}
--
--static int stk_prepare_sio_buffers(struct stk_camera *dev, unsigned n_sbufs)
--{
--	int i;
--	if (dev->sio_bufs != NULL)
--		pr_err("sio_bufs already allocated\n");
--	else {
--		dev->sio_bufs = kcalloc(n_sbufs,
--					sizeof(struct stk_sio_buffer),
--					GFP_KERNEL);
--		if (dev->sio_bufs == NULL)
--			return -ENOMEM;
--		for (i = 0; i < n_sbufs; i++) {
--			if (stk_setup_siobuf(dev, i))
--				return (dev->n_sbufs > 1 ? 0 : -ENOMEM);
--			dev->n_sbufs = i+1;
--		}
--	}
--	return 0;
--}
--
--static int stk_allocate_buffers(struct stk_camera *dev, unsigned n_sbufs)
--{
--	int err;
--	err = stk_prepare_iso(dev);
--	if (err) {
--		stk_clean_iso(dev);
--		return err;
--	}
--	err = stk_prepare_sio_buffers(dev, n_sbufs);
--	if (err) {
--		stk_free_sio_buffers(dev);
--		return err;
--	}
--	return 0;
--}
--
--static void stk_free_buffers(struct stk_camera *dev)
--{
--	stk_clean_iso(dev);
--	stk_free_sio_buffers(dev);
--}
--/* -------------------------------------------- */
--
--/* v4l file operations */
--
--static int v4l_stk_open(struct file *fp)
--{
--	struct stk_camera *dev = video_drvdata(fp);
--	int err;
--
--	if (dev == NULL || !is_present(dev))
--		return -ENXIO;
--
--	if (mutex_lock_interruptible(&dev->lock))
--		return -ERESTARTSYS;
--	if (!dev->first_init)
--		stk_camera_write_reg(dev, 0x0, 0x24);
--	else
--		dev->first_init = 0;
--
--	err = v4l2_fh_open(fp);
--	if (!err)
--		usb_autopm_get_interface(dev->interface);
--	mutex_unlock(&dev->lock);
--	return err;
--}
--
--static int v4l_stk_release(struct file *fp)
--{
--	struct stk_camera *dev = video_drvdata(fp);
--
--	mutex_lock(&dev->lock);
--	if (dev->owner == fp) {
--		stk_stop_stream(dev);
--		stk_free_buffers(dev);
--		stk_camera_write_reg(dev, 0x0, 0x49); /* turn off the LED */
--		unset_initialised(dev);
--		dev->owner = NULL;
--	}
--
--	usb_autopm_put_interface(dev->interface);
--	mutex_unlock(&dev->lock);
--	return v4l2_fh_release(fp);
--}
--
--static ssize_t stk_read(struct file *fp, char __user *buf,
--		size_t count, loff_t *f_pos)
--{
--	int i;
--	int ret;
--	unsigned long flags;
--	struct stk_sio_buffer *sbuf;
--	struct stk_camera *dev = video_drvdata(fp);
--
--	if (!is_present(dev))
--		return -EIO;
--	if (dev->owner && (!dev->reading || dev->owner != fp))
--		return -EBUSY;
--	dev->owner = fp;
--	if (!is_streaming(dev)) {
--		if (stk_initialise(dev)
--			|| stk_allocate_buffers(dev, 3)
--			|| stk_start_stream(dev))
--			return -ENOMEM;
--		dev->reading = 1;
--		spin_lock_irqsave(&dev->spinlock, flags);
--		for (i = 0; i < dev->n_sbufs; i++) {
--			list_add_tail(&dev->sio_bufs[i].list, &dev->sio_avail);
--			dev->sio_bufs[i].v4lbuf.flags = V4L2_BUF_FLAG_QUEUED;
--		}
--		spin_unlock_irqrestore(&dev->spinlock, flags);
--	}
--	if (*f_pos == 0) {
--		if (fp->f_flags & O_NONBLOCK && list_empty(&dev->sio_full))
--			return -EWOULDBLOCK;
--		ret = wait_event_interruptible(dev->wait_frame,
--			!list_empty(&dev->sio_full) || !is_present(dev));
--		if (ret)
--			return ret;
--		if (!is_present(dev))
--			return -EIO;
--	}
--	if (count + *f_pos > dev->frame_size)
--		count = dev->frame_size - *f_pos;
--	spin_lock_irqsave(&dev->spinlock, flags);
--	if (list_empty(&dev->sio_full)) {
--		spin_unlock_irqrestore(&dev->spinlock, flags);
--		pr_err("BUG: No siobufs ready\n");
--		return 0;
--	}
--	sbuf = list_first_entry(&dev->sio_full, struct stk_sio_buffer, list);
--	spin_unlock_irqrestore(&dev->spinlock, flags);
--
--	if (copy_to_user(buf, sbuf->buffer + *f_pos, count))
--		return -EFAULT;
--
--	*f_pos += count;
--
--	if (*f_pos >= dev->frame_size) {
--		*f_pos = 0;
--		spin_lock_irqsave(&dev->spinlock, flags);
--		list_move_tail(&sbuf->list, &dev->sio_avail);
--		spin_unlock_irqrestore(&dev->spinlock, flags);
--	}
--	return count;
--}
--
--static ssize_t v4l_stk_read(struct file *fp, char __user *buf,
--		size_t count, loff_t *f_pos)
--{
--	struct stk_camera *dev = video_drvdata(fp);
--	int ret;
--
--	if (mutex_lock_interruptible(&dev->lock))
--		return -ERESTARTSYS;
--	ret = stk_read(fp, buf, count, f_pos);
--	mutex_unlock(&dev->lock);
--	return ret;
--}
--
--static __poll_t v4l_stk_poll(struct file *fp, poll_table *wait)
--{
--	struct stk_camera *dev = video_drvdata(fp);
--	__poll_t res = v4l2_ctrl_poll(fp, wait);
--
--	poll_wait(fp, &dev->wait_frame, wait);
--
--	if (!is_present(dev))
--		return EPOLLERR;
--
--	if (!list_empty(&dev->sio_full))
--		return res | EPOLLIN | EPOLLRDNORM;
--
--	return res;
--}
--
--
--static void stk_v4l_vm_open(struct vm_area_struct *vma)
--{
--	struct stk_sio_buffer *sbuf = vma->vm_private_data;
--	sbuf->mapcount++;
--}
--static void stk_v4l_vm_close(struct vm_area_struct *vma)
--{
--	struct stk_sio_buffer *sbuf = vma->vm_private_data;
--	sbuf->mapcount--;
--	if (sbuf->mapcount == 0)
--		sbuf->v4lbuf.flags &= ~V4L2_BUF_FLAG_MAPPED;
--}
--static const struct vm_operations_struct stk_v4l_vm_ops = {
--	.open = stk_v4l_vm_open,
--	.close = stk_v4l_vm_close
--};
--
--static int v4l_stk_mmap(struct file *fp, struct vm_area_struct *vma)
--{
--	unsigned int i;
--	int ret;
--	unsigned long offset = vma->vm_pgoff << PAGE_SHIFT;
--	struct stk_camera *dev = video_drvdata(fp);
--	struct stk_sio_buffer *sbuf = NULL;
--
--	if (!(vma->vm_flags & VM_WRITE) || !(vma->vm_flags & VM_SHARED))
--		return -EINVAL;
--
--	for (i = 0; i < dev->n_sbufs; i++) {
--		if (dev->sio_bufs[i].v4lbuf.m.offset == offset) {
--			sbuf = dev->sio_bufs + i;
--			break;
--		}
--	}
--	if (sbuf == NULL)
--		return -EINVAL;
--	ret = remap_vmalloc_range(vma, sbuf->buffer, 0);
--	if (ret)
--		return ret;
--	vma->vm_flags |= VM_DONTEXPAND;
--	vma->vm_private_data = sbuf;
--	vma->vm_ops = &stk_v4l_vm_ops;
--	sbuf->v4lbuf.flags |= V4L2_BUF_FLAG_MAPPED;
--	stk_v4l_vm_open(vma);
--	return 0;
--}
--
--/* v4l ioctl handlers */
--
--static int stk_vidioc_querycap(struct file *filp,
--		void *priv, struct v4l2_capability *cap)
--{
--	struct stk_camera *dev = video_drvdata(filp);
--
--	strscpy(cap->driver, "stk", sizeof(cap->driver));
--	strscpy(cap->card, "stk", sizeof(cap->card));
--	usb_make_path(dev->udev, cap->bus_info, sizeof(cap->bus_info));
--	return 0;
--}
--
--static int stk_vidioc_enum_input(struct file *filp,
--		void *priv, struct v4l2_input *input)
--{
--	if (input->index != 0)
--		return -EINVAL;
--
--	strscpy(input->name, "Syntek USB Camera", sizeof(input->name));
--	input->type = V4L2_INPUT_TYPE_CAMERA;
--	return 0;
--}
--
--
--static int stk_vidioc_g_input(struct file *filp, void *priv, unsigned int *i)
--{
--	*i = 0;
--	return 0;
--}
--
--static int stk_vidioc_s_input(struct file *filp, void *priv, unsigned int i)
--{
--	return i ? -EINVAL : 0;
--}
--
--static int stk_s_ctrl(struct v4l2_ctrl *ctrl)
--{
--	struct stk_camera *dev =
--		container_of(ctrl->handler, struct stk_camera, hdl);
--
--	switch (ctrl->id) {
--	case V4L2_CID_BRIGHTNESS:
--		return stk_sensor_set_brightness(dev, ctrl->val);
--	case V4L2_CID_HFLIP:
--		if (dmi_check_system(stk_upside_down_dmi_table))
--			dev->vsettings.hflip = !ctrl->val;
--		else
--			dev->vsettings.hflip = ctrl->val;
--		return 0;
--	case V4L2_CID_VFLIP:
--		if (dmi_check_system(stk_upside_down_dmi_table))
--			dev->vsettings.vflip = !ctrl->val;
--		else
--			dev->vsettings.vflip = ctrl->val;
--		return 0;
--	default:
--		return -EINVAL;
--	}
--	return 0;
--}
--
--
--static int stk_vidioc_enum_fmt_vid_cap(struct file *filp,
--		void *priv, struct v4l2_fmtdesc *fmtd)
--{
--	switch (fmtd->index) {
--	case 0:
--		fmtd->pixelformat = V4L2_PIX_FMT_RGB565;
--		break;
--	case 1:
--		fmtd->pixelformat = V4L2_PIX_FMT_RGB565X;
--		break;
--	case 2:
--		fmtd->pixelformat = V4L2_PIX_FMT_UYVY;
--		break;
--	case 3:
--		fmtd->pixelformat = V4L2_PIX_FMT_SBGGR8;
--		break;
--	case 4:
--		fmtd->pixelformat = V4L2_PIX_FMT_YUYV;
--		break;
--	default:
--		return -EINVAL;
--	}
--	return 0;
--}
--
--static struct stk_size {
--	unsigned w;
--	unsigned h;
--	enum stk_mode m;
--} stk_sizes[] = {
--	{ .w = 1280, .h = 1024, .m = MODE_SXGA, },
--	{ .w = 640,  .h = 480,  .m = MODE_VGA,  },
--	{ .w = 352,  .h = 288,  .m = MODE_CIF,  },
--	{ .w = 320,  .h = 240,  .m = MODE_QVGA, },
--	{ .w = 176,  .h = 144,  .m = MODE_QCIF, },
--};
--
--static int stk_vidioc_g_fmt_vid_cap(struct file *filp,
--		void *priv, struct v4l2_format *f)
--{
--	struct v4l2_pix_format *pix_format = &f->fmt.pix;
--	struct stk_camera *dev = video_drvdata(filp);
--	int i;
--
--	for (i = 0; i < ARRAY_SIZE(stk_sizes) &&
--			stk_sizes[i].m != dev->vsettings.mode; i++)
--		;
--	if (i == ARRAY_SIZE(stk_sizes)) {
--		pr_err("ERROR: mode invalid\n");
--		return -EINVAL;
--	}
--	pix_format->width = stk_sizes[i].w;
--	pix_format->height = stk_sizes[i].h;
--	pix_format->field = V4L2_FIELD_NONE;
--	pix_format->colorspace = V4L2_COLORSPACE_SRGB;
--	pix_format->pixelformat = dev->vsettings.palette;
--	if (dev->vsettings.palette == V4L2_PIX_FMT_SBGGR8)
--		pix_format->bytesperline = pix_format->width;
--	else
--		pix_format->bytesperline = 2 * pix_format->width;
--	pix_format->sizeimage = pix_format->bytesperline
--				* pix_format->height;
--	return 0;
--}
--
--static int stk_try_fmt_vid_cap(struct file *filp,
--		struct v4l2_format *fmtd, int *idx)
--{
--	int i;
--	switch (fmtd->fmt.pix.pixelformat) {
--	case V4L2_PIX_FMT_RGB565:
--	case V4L2_PIX_FMT_RGB565X:
--	case V4L2_PIX_FMT_UYVY:
--	case V4L2_PIX_FMT_YUYV:
--	case V4L2_PIX_FMT_SBGGR8:
--		break;
--	default:
--		return -EINVAL;
--	}
--	for (i = 1; i < ARRAY_SIZE(stk_sizes); i++) {
--		if (fmtd->fmt.pix.width > stk_sizes[i].w)
--			break;
--	}
--	if (i == ARRAY_SIZE(stk_sizes)
--		|| (abs(fmtd->fmt.pix.width - stk_sizes[i-1].w)
--			< abs(fmtd->fmt.pix.width - stk_sizes[i].w))) {
--		fmtd->fmt.pix.height = stk_sizes[i-1].h;
--		fmtd->fmt.pix.width = stk_sizes[i-1].w;
--		if (idx)
--			*idx = i - 1;
--	} else {
--		fmtd->fmt.pix.height = stk_sizes[i].h;
--		fmtd->fmt.pix.width = stk_sizes[i].w;
--		if (idx)
--			*idx = i;
--	}
--
--	fmtd->fmt.pix.field = V4L2_FIELD_NONE;
--	fmtd->fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
--	if (fmtd->fmt.pix.pixelformat == V4L2_PIX_FMT_SBGGR8)
--		fmtd->fmt.pix.bytesperline = fmtd->fmt.pix.width;
--	else
--		fmtd->fmt.pix.bytesperline = 2 * fmtd->fmt.pix.width;
--	fmtd->fmt.pix.sizeimage = fmtd->fmt.pix.bytesperline
--		* fmtd->fmt.pix.height;
--	return 0;
--}
--
--static int stk_vidioc_try_fmt_vid_cap(struct file *filp,
--		void *priv, struct v4l2_format *fmtd)
--{
--	return stk_try_fmt_vid_cap(filp, fmtd, NULL);
--}
--
--static int stk_setup_format(struct stk_camera *dev)
--{
--	int i = 0;
--	int depth;
--	if (dev->vsettings.palette == V4L2_PIX_FMT_SBGGR8)
--		depth = 1;
--	else
--		depth = 2;
--	while (i < ARRAY_SIZE(stk_sizes) &&
--			stk_sizes[i].m != dev->vsettings.mode)
--		i++;
--	if (i == ARRAY_SIZE(stk_sizes)) {
--		pr_err("Something is broken in %s\n", __func__);
--		return -EFAULT;
--	}
--	/* This registers controls some timings, not sure of what. */
--	stk_camera_write_reg(dev, 0x001b, 0x0e);
--	if (dev->vsettings.mode == MODE_SXGA)
--		stk_camera_write_reg(dev, 0x001c, 0x0e);
--	else
--		stk_camera_write_reg(dev, 0x001c, 0x46);
--	/*
--	 * Registers 0x0115 0x0114 are the size of each line (bytes),
--	 * regs 0x0117 0x0116 are the height of the image.
--	 */
--	stk_camera_write_reg(dev, 0x0115,
--		((stk_sizes[i].w * depth) >> 8) & 0xff);
--	stk_camera_write_reg(dev, 0x0114,
--		(stk_sizes[i].w * depth) & 0xff);
--	stk_camera_write_reg(dev, 0x0117,
--		(stk_sizes[i].h >> 8) & 0xff);
--	stk_camera_write_reg(dev, 0x0116,
--		stk_sizes[i].h & 0xff);
--	return stk_sensor_configure(dev);
--}
--
--static int stk_vidioc_s_fmt_vid_cap(struct file *filp,
--		void *priv, struct v4l2_format *fmtd)
--{
--	int ret;
--	int idx;
--	struct stk_camera *dev = video_drvdata(filp);
--
--	if (dev == NULL)
--		return -ENODEV;
--	if (!is_present(dev))
--		return -ENODEV;
--	if (is_streaming(dev))
--		return -EBUSY;
--	if (dev->owner)
--		return -EBUSY;
--	ret = stk_try_fmt_vid_cap(filp, fmtd, &idx);
--	if (ret)
--		return ret;
--
--	dev->vsettings.palette = fmtd->fmt.pix.pixelformat;
--	stk_free_buffers(dev);
--	dev->frame_size = fmtd->fmt.pix.sizeimage;
--	dev->vsettings.mode = stk_sizes[idx].m;
--
--	stk_initialise(dev);
--	return stk_setup_format(dev);
--}
--
--static int stk_vidioc_reqbufs(struct file *filp,
--		void *priv, struct v4l2_requestbuffers *rb)
--{
--	struct stk_camera *dev = video_drvdata(filp);
--
--	if (dev == NULL)
--		return -ENODEV;
--	if (rb->memory != V4L2_MEMORY_MMAP)
--		return -EINVAL;
--	if (is_streaming(dev)
--		|| (dev->owner && dev->owner != filp))
--		return -EBUSY;
--	stk_free_buffers(dev);
--	if (rb->count == 0) {
--		stk_camera_write_reg(dev, 0x0, 0x49); /* turn off the LED */
--		unset_initialised(dev);
--		dev->owner = NULL;
--		return 0;
--	}
--	dev->owner = filp;
--
--	/*FIXME If they ask for zero, we must stop streaming and free */
--	if (rb->count < 3)
--		rb->count = 3;
--	/* Arbitrary limit */
--	else if (rb->count > 5)
--		rb->count = 5;
--
--	stk_allocate_buffers(dev, rb->count);
--	rb->count = dev->n_sbufs;
--	return 0;
--}
--
--static int stk_vidioc_querybuf(struct file *filp,
--		void *priv, struct v4l2_buffer *buf)
--{
--	struct stk_camera *dev = video_drvdata(filp);
--	struct stk_sio_buffer *sbuf;
--
--	if (buf->index >= dev->n_sbufs)
--		return -EINVAL;
--	sbuf = dev->sio_bufs + buf->index;
--	*buf = sbuf->v4lbuf;
--	return 0;
--}
--
--static int stk_vidioc_qbuf(struct file *filp,
--		void *priv, struct v4l2_buffer *buf)
--{
--	struct stk_camera *dev = video_drvdata(filp);
--	struct stk_sio_buffer *sbuf;
--	unsigned long flags;
--
--	if (buf->memory != V4L2_MEMORY_MMAP)
--		return -EINVAL;
--
--	if (buf->index >= dev->n_sbufs)
--		return -EINVAL;
--	sbuf = dev->sio_bufs + buf->index;
--	if (sbuf->v4lbuf.flags & V4L2_BUF_FLAG_QUEUED)
--		return 0;
--	sbuf->v4lbuf.flags |= V4L2_BUF_FLAG_QUEUED;
--	sbuf->v4lbuf.flags &= ~V4L2_BUF_FLAG_DONE;
--	spin_lock_irqsave(&dev->spinlock, flags);
--	list_add_tail(&sbuf->list, &dev->sio_avail);
--	*buf = sbuf->v4lbuf;
--	spin_unlock_irqrestore(&dev->spinlock, flags);
--	return 0;
--}
--
--static int stk_vidioc_dqbuf(struct file *filp,
--		void *priv, struct v4l2_buffer *buf)
--{
--	struct stk_camera *dev = video_drvdata(filp);
--	struct stk_sio_buffer *sbuf;
--	unsigned long flags;
--	int ret;
--
--	if (!is_streaming(dev))
--		return -EINVAL;
--
--	if (filp->f_flags & O_NONBLOCK && list_empty(&dev->sio_full))
--		return -EWOULDBLOCK;
--	ret = wait_event_interruptible(dev->wait_frame,
--		!list_empty(&dev->sio_full) || !is_present(dev));
--	if (ret)
--		return ret;
--	if (!is_present(dev))
--		return -EIO;
--
--	spin_lock_irqsave(&dev->spinlock, flags);
--	sbuf = list_first_entry(&dev->sio_full, struct stk_sio_buffer, list);
--	list_del_init(&sbuf->list);
--	spin_unlock_irqrestore(&dev->spinlock, flags);
--	sbuf->v4lbuf.flags &= ~V4L2_BUF_FLAG_QUEUED;
--	sbuf->v4lbuf.flags |= V4L2_BUF_FLAG_DONE;
--	sbuf->v4lbuf.sequence = ++dev->sequence;
--	v4l2_buffer_set_timestamp(&sbuf->v4lbuf, ktime_get_ns());
--
--	*buf = sbuf->v4lbuf;
--	return 0;
--}
--
--static int stk_vidioc_streamon(struct file *filp,
--		void *priv, enum v4l2_buf_type type)
--{
--	struct stk_camera *dev = video_drvdata(filp);
--	if (is_streaming(dev))
--		return 0;
--	if (dev->sio_bufs == NULL)
--		return -EINVAL;
--	dev->sequence = 0;
--	return stk_start_stream(dev);
--}
--
--static int stk_vidioc_streamoff(struct file *filp,
--		void *priv, enum v4l2_buf_type type)
--{
--	struct stk_camera *dev = video_drvdata(filp);
--	unsigned long flags;
--	int i;
--	stk_stop_stream(dev);
--	spin_lock_irqsave(&dev->spinlock, flags);
--	INIT_LIST_HEAD(&dev->sio_avail);
--	INIT_LIST_HEAD(&dev->sio_full);
--	for (i = 0; i < dev->n_sbufs; i++) {
--		INIT_LIST_HEAD(&dev->sio_bufs[i].list);
--		dev->sio_bufs[i].v4lbuf.flags = 0;
--	}
--	spin_unlock_irqrestore(&dev->spinlock, flags);
--	return 0;
--}
--
--
--static int stk_vidioc_g_parm(struct file *filp,
--		void *priv, struct v4l2_streamparm *sp)
--{
--	/*FIXME This is not correct */
--	sp->parm.capture.timeperframe.numerator = 1;
--	sp->parm.capture.timeperframe.denominator = 30;
--	sp->parm.capture.readbuffers = 2;
--	return 0;
--}
--
--static int stk_vidioc_enum_framesizes(struct file *filp,
--		void *priv, struct v4l2_frmsizeenum *frms)
--{
--	if (frms->index >= ARRAY_SIZE(stk_sizes))
--		return -EINVAL;
--	switch (frms->pixel_format) {
--	case V4L2_PIX_FMT_RGB565:
--	case V4L2_PIX_FMT_RGB565X:
--	case V4L2_PIX_FMT_UYVY:
--	case V4L2_PIX_FMT_YUYV:
--	case V4L2_PIX_FMT_SBGGR8:
--		frms->type = V4L2_FRMSIZE_TYPE_DISCRETE;
--		frms->discrete.width = stk_sizes[frms->index].w;
--		frms->discrete.height = stk_sizes[frms->index].h;
--		return 0;
--	default: return -EINVAL;
--	}
--}
--
--static const struct v4l2_ctrl_ops stk_ctrl_ops = {
--	.s_ctrl = stk_s_ctrl,
--};
--
--static const struct v4l2_file_operations v4l_stk_fops = {
--	.owner = THIS_MODULE,
--	.open = v4l_stk_open,
--	.release = v4l_stk_release,
--	.read = v4l_stk_read,
--	.poll = v4l_stk_poll,
--	.mmap = v4l_stk_mmap,
--	.unlocked_ioctl = video_ioctl2,
--};
--
--static const struct v4l2_ioctl_ops v4l_stk_ioctl_ops = {
--	.vidioc_querycap = stk_vidioc_querycap,
--	.vidioc_enum_fmt_vid_cap = stk_vidioc_enum_fmt_vid_cap,
--	.vidioc_try_fmt_vid_cap = stk_vidioc_try_fmt_vid_cap,
--	.vidioc_s_fmt_vid_cap = stk_vidioc_s_fmt_vid_cap,
--	.vidioc_g_fmt_vid_cap = stk_vidioc_g_fmt_vid_cap,
--	.vidioc_enum_input = stk_vidioc_enum_input,
--	.vidioc_s_input = stk_vidioc_s_input,
--	.vidioc_g_input = stk_vidioc_g_input,
--	.vidioc_reqbufs = stk_vidioc_reqbufs,
--	.vidioc_querybuf = stk_vidioc_querybuf,
--	.vidioc_qbuf = stk_vidioc_qbuf,
--	.vidioc_dqbuf = stk_vidioc_dqbuf,
--	.vidioc_streamon = stk_vidioc_streamon,
--	.vidioc_streamoff = stk_vidioc_streamoff,
--	.vidioc_g_parm = stk_vidioc_g_parm,
--	.vidioc_enum_framesizes = stk_vidioc_enum_framesizes,
--	.vidioc_log_status = v4l2_ctrl_log_status,
--	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
--	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
--};
--
--static void stk_v4l_dev_release(struct video_device *vd)
--{
--	struct stk_camera *dev = vdev_to_camera(vd);
--
--	if (dev->sio_bufs != NULL || dev->isobufs != NULL)
--		pr_err("We are leaking memory\n");
--	usb_put_intf(dev->interface);
--	usb_put_dev(dev->udev);
--
--	v4l2_ctrl_handler_free(&dev->hdl);
--	v4l2_device_unregister(&dev->v4l2_dev);
--	kfree(dev);
--}
--
--static const struct video_device stk_v4l_data = {
--	.name = "stkwebcam",
--	.fops = &v4l_stk_fops,
--	.ioctl_ops = &v4l_stk_ioctl_ops,
--	.release = stk_v4l_dev_release,
--};
--
--
--static int stk_register_video_device(struct stk_camera *dev)
--{
--	int err;
--
--	dev->vdev = stk_v4l_data;
--	dev->vdev.lock = &dev->lock;
--	dev->vdev.v4l2_dev = &dev->v4l2_dev;
--	dev->vdev.device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_READWRITE |
--				V4L2_CAP_STREAMING;
--	video_set_drvdata(&dev->vdev, dev);
--	err = video_register_device(&dev->vdev, VFL_TYPE_VIDEO, -1);
--	if (err)
--		pr_err("v4l registration failed\n");
--	else
--		pr_info("Syntek USB2.0 Camera is now controlling device %s\n",
--			video_device_node_name(&dev->vdev));
--	return err;
--}
--
--
--/* USB Stuff */
--
--static int stk_camera_probe(struct usb_interface *interface,
--		const struct usb_device_id *id)
--{
--	struct v4l2_ctrl_handler *hdl;
--	int err = 0;
--	int i;
--
--	struct stk_camera *dev = NULL;
--	struct usb_device *udev = interface_to_usbdev(interface);
--	struct usb_host_interface *iface_desc;
--	struct usb_endpoint_descriptor *endpoint;
--
--	dev = kzalloc(sizeof(struct stk_camera), GFP_KERNEL);
--	if (dev == NULL) {
--		pr_err("Out of memory !\n");
--		return -ENOMEM;
--	}
--	err = v4l2_device_register(&interface->dev, &dev->v4l2_dev);
--	if (err < 0) {
--		dev_err(&udev->dev, "couldn't register v4l2_device\n");
--		kfree(dev);
--		return err;
--	}
--	hdl = &dev->hdl;
--	v4l2_ctrl_handler_init(hdl, 3);
--	v4l2_ctrl_new_std(hdl, &stk_ctrl_ops,
--			  V4L2_CID_BRIGHTNESS, 0, 0xff, 0x1, 0x60);
--	v4l2_ctrl_new_std(hdl, &stk_ctrl_ops,
--			  V4L2_CID_HFLIP, 0, 1, 1, 1);
--	v4l2_ctrl_new_std(hdl, &stk_ctrl_ops,
--			  V4L2_CID_VFLIP, 0, 1, 1, 1);
--	if (hdl->error) {
--		err = hdl->error;
--		dev_err(&udev->dev, "couldn't register control\n");
--		goto error;
--	}
--	dev->v4l2_dev.ctrl_handler = hdl;
--
--	spin_lock_init(&dev->spinlock);
--	mutex_init(&dev->lock);
--	init_waitqueue_head(&dev->wait_frame);
--	dev->first_init = 1; /* webcam LED management */
--
--	dev->udev = usb_get_dev(udev);
--	dev->interface = interface;
--	usb_get_intf(interface);
--
--	if (hflip != -1)
--		dev->vsettings.hflip = hflip;
--	else if (dmi_check_system(stk_upside_down_dmi_table))
--		dev->vsettings.hflip = 1;
--	else
--		dev->vsettings.hflip = 0;
--	if (vflip != -1)
--		dev->vsettings.vflip = vflip;
--	else if (dmi_check_system(stk_upside_down_dmi_table))
--		dev->vsettings.vflip = 1;
--	else
--		dev->vsettings.vflip = 0;
--	dev->n_sbufs = 0;
--	set_present(dev);
--
--	/* Set up the endpoint information
--	 * use only the first isoc-in endpoint
--	 * for the current alternate setting */
--	iface_desc = interface->cur_altsetting;
--
--	for (i = 0; i < iface_desc->desc.bNumEndpoints; ++i) {
--		endpoint = &iface_desc->endpoint[i].desc;
--
--		if (!dev->isoc_ep
--			&& usb_endpoint_is_isoc_in(endpoint)) {
--			/* we found an isoc in endpoint */
--			dev->isoc_ep = usb_endpoint_num(endpoint);
--			break;
--		}
--	}
--	if (!dev->isoc_ep) {
--		pr_err("Could not find isoc-in endpoint\n");
--		err = -ENODEV;
--		goto error_put;
--	}
--	dev->vsettings.palette = V4L2_PIX_FMT_RGB565;
--	dev->vsettings.mode = MODE_VGA;
--	dev->frame_size = 640 * 480 * 2;
--
--	INIT_LIST_HEAD(&dev->sio_avail);
--	INIT_LIST_HEAD(&dev->sio_full);
--
--	usb_set_intfdata(interface, dev);
--
--	err = stk_register_video_device(dev);
--	if (err)
--		goto error_put;
--
--	return 0;
--
--error_put:
--	usb_put_intf(interface);
--	usb_put_dev(dev->udev);
--error:
--	v4l2_ctrl_handler_free(hdl);
--	v4l2_device_unregister(&dev->v4l2_dev);
--	kfree(dev);
--	return err;
--}
--
--static void stk_camera_disconnect(struct usb_interface *interface)
--{
--	struct stk_camera *dev = usb_get_intfdata(interface);
--
--	usb_set_intfdata(interface, NULL);
--	unset_present(dev);
--
--	wake_up_interruptible(&dev->wait_frame);
--
--	pr_info("Syntek USB2.0 Camera release resources device %s\n",
--		video_device_node_name(&dev->vdev));
--
--	video_unregister_device(&dev->vdev);
--}
--
--#ifdef CONFIG_PM
--static int stk_camera_suspend(struct usb_interface *intf, pm_message_t message)
--{
--	struct stk_camera *dev = usb_get_intfdata(intf);
--	if (is_streaming(dev)) {
--		stk_stop_stream(dev);
--		/* yes, this is ugly */
--		set_streaming(dev);
--	}
--	return 0;
--}
--
--static int stk_camera_resume(struct usb_interface *intf)
--{
--	struct stk_camera *dev = usb_get_intfdata(intf);
--	if (!is_initialised(dev))
--		return 0;
--	unset_initialised(dev);
--	stk_initialise(dev);
--	stk_camera_write_reg(dev, 0x0, 0x49);
--	stk_setup_format(dev);
--	if (is_streaming(dev))
--		stk_start_stream(dev);
--	return 0;
--}
--#endif
--
--static struct usb_driver stk_camera_driver = {
--	.name = "stkwebcam",
--	.probe = stk_camera_probe,
--	.disconnect = stk_camera_disconnect,
--	.id_table = stkwebcam_table,
--#ifdef CONFIG_PM
--	.suspend = stk_camera_suspend,
--	.resume = stk_camera_resume,
--#endif
--};
--
--module_usb_driver(stk_camera_driver);
-diff --git a/drivers/staging/media/deprecated/stkwebcam/stk-webcam.h b/drivers/staging/media/deprecated/stkwebcam/stk-webcam.h
+-MODULE_AUTHOR("Emard, Roberto Deza, Holger Waechtler, Michael Hunold, others");
+-MODULE_DESCRIPTION("Driver for full TS modified DVB-S SAA7146+AV7110 based so-called Budget Patch cards");
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/dvb_filter.c b/drivers/staging/media/deprecated/saa7146/av7110/dvb_filter.c
 deleted file mode 100644
-index 136decffe9ce..000000000000
---- a/drivers/staging/media/deprecated/stkwebcam/stk-webcam.h
+index 8c2eca5dcdc9..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/dvb_filter.c
 +++ /dev/null
-@@ -1,123 +0,0 @@
+@@ -1,115 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-#include <linux/kernel.h>
+-#include <linux/module.h>
+-#include <linux/string.h>
+-#include "dvb_filter.h"
+-
+-static u32 freq[4] = {480, 441, 320, 0};
+-
+-static unsigned int ac3_bitrates[32] =
+-    {32,40,48,56,64,80,96,112,128,160,192,224,256,320,384,448,512,576,640,
+-     0,0,0,0,0,0,0,0,0,0,0,0,0};
+-
+-static u32 ac3_frames[3][32] =
+-    {{64,80,96,112,128,160,192,224,256,320,384,448,512,640,768,896,1024,
+-      1152,1280,0,0,0,0,0,0,0,0,0,0,0,0,0},
+-     {69,87,104,121,139,174,208,243,278,348,417,487,557,696,835,975,1114,
+-      1253,1393,0,0,0,0,0,0,0,0,0,0,0,0,0},
+-     {96,120,144,168,192,240,288,336,384,480,576,672,768,960,1152,1344,
+-      1536,1728,1920,0,0,0,0,0,0,0,0,0,0,0,0,0}};
+-
+-int dvb_filter_get_ac3info(u8 *mbuf, int count, struct dvb_audio_info *ai, int pr)
+-{
+-	u8 *headr;
+-	int found = 0;
+-	int c = 0;
+-	u8 frame = 0;
+-	int fr = 0;
+-
+-	while ( !found  && c < count){
+-		u8 *b = mbuf+c;
+-
+-		if ( b[0] == 0x0b &&  b[1] == 0x77 )
+-			found = 1;
+-		else {
+-			c++;
+-		}
+-	}
+-
+-	if (!found) return -1;
+-	if (pr)
+-		printk(KERN_DEBUG "Audiostream: AC3");
+-
+-	ai->off = c;
+-	if (c+5 >= count) return -1;
+-
+-	ai->layer = 0;  // 0 for AC3
+-	headr = mbuf+c+2;
+-
+-	frame = (headr[2]&0x3f);
+-	ai->bit_rate = ac3_bitrates[frame >> 1]*1000;
+-
+-	if (pr)
+-		printk(KERN_CONT "  BRate: %d kb/s", (int) ai->bit_rate/1000);
+-
+-	ai->frequency = (headr[2] & 0xc0 ) >> 6;
+-	fr = (headr[2] & 0xc0 ) >> 6;
+-	ai->frequency = freq[fr]*100;
+-	if (pr)
+-		printk(KERN_CONT "  Freq: %d Hz\n", (int) ai->frequency);
+-
+-	ai->framesize = ac3_frames[fr][frame >> 1];
+-	if ((frame & 1) &&  (fr == 1)) ai->framesize++;
+-	ai->framesize = ai->framesize << 1;
+-	if (pr)
+-		printk(KERN_DEBUG "  Framesize %d\n", (int) ai->framesize);
+-
+-	return 0;
+-}
+-
+-void dvb_filter_pes2ts_init(struct dvb_filter_pes2ts *p2ts, unsigned short pid,
+-			    dvb_filter_pes2ts_cb_t *cb, void *priv)
+-{
+-	unsigned char *buf=p2ts->buf;
+-
+-	buf[0]=0x47;
+-	buf[1]=(pid>>8);
+-	buf[2]=pid&0xff;
+-	p2ts->cc=0;
+-	p2ts->cb=cb;
+-	p2ts->priv=priv;
+-}
+-
+-int dvb_filter_pes2ts(struct dvb_filter_pes2ts *p2ts, unsigned char *pes,
+-		      int len, int payload_start)
+-{
+-	unsigned char *buf=p2ts->buf;
+-	int ret=0, rest;
+-
+-	//len=6+((pes[4]<<8)|pes[5]);
+-
+-	if (payload_start)
+-		buf[1]|=0x40;
+-	else
+-		buf[1]&=~0x40;
+-	while (len>=184) {
+-		buf[3]=0x10|((p2ts->cc++)&0x0f);
+-		memcpy(buf+4, pes, 184);
+-		if ((ret=p2ts->cb(p2ts->priv, buf)))
+-			return ret;
+-		len-=184; pes+=184;
+-		buf[1]&=~0x40;
+-	}
+-	if (!len)
+-		return 0;
+-	buf[3]=0x30|((p2ts->cc++)&0x0f);
+-	rest=183-len;
+-	if (rest) {
+-		buf[5]=0x00;
+-		if (rest-1)
+-			memset(buf+6, 0xff, rest-1);
+-	}
+-	buf[4]=rest;
+-	memcpy(buf+5+rest, pes, len);
+-	return p2ts->cb(p2ts->priv, buf);
+-}
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/dvb_filter.h b/drivers/staging/media/deprecated/saa7146/av7110/dvb_filter.h
+deleted file mode 100644
+index 67a3c6333bca..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/dvb_filter.h
++++ /dev/null
+@@ -1,242 +0,0 @@
+-/*
+- * dvb_filter.h
+- *
+- * Copyright (C) 2003 Convergence GmbH
+- *
+- * This program is free software; you can redistribute it and/or
+- * modify it under the terms of the GNU Lesser General Public License
+- * as published by the Free Software Foundation; either version 2.1
+- * of the License, or (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- */
+-
+-#ifndef _DVB_FILTER_H_
+-#define _DVB_FILTER_H_
+-
+-#include <linux/slab.h>
+-
+-#include <media/demux.h>
+-
+-typedef int (dvb_filter_pes2ts_cb_t) (void *, unsigned char *);
+-
+-struct dvb_filter_pes2ts {
+-	unsigned char buf[188];
+-	unsigned char cc;
+-	dvb_filter_pes2ts_cb_t *cb;
+-	void *priv;
+-};
+-
+-void dvb_filter_pes2ts_init(struct dvb_filter_pes2ts *p2ts, unsigned short pid,
+-			    dvb_filter_pes2ts_cb_t *cb, void *priv);
+-
+-int dvb_filter_pes2ts(struct dvb_filter_pes2ts *p2ts, unsigned char *pes,
+-		      int len, int payload_start);
+-
+-
+-#define PROG_STREAM_MAP  0xBC
+-#define PRIVATE_STREAM1  0xBD
+-#define PADDING_STREAM   0xBE
+-#define PRIVATE_STREAM2  0xBF
+-#define AUDIO_STREAM_S   0xC0
+-#define AUDIO_STREAM_E   0xDF
+-#define VIDEO_STREAM_S   0xE0
+-#define VIDEO_STREAM_E   0xEF
+-#define ECM_STREAM       0xF0
+-#define EMM_STREAM       0xF1
+-#define DSM_CC_STREAM    0xF2
+-#define ISO13522_STREAM  0xF3
+-#define PROG_STREAM_DIR  0xFF
+-
+-#define DVB_PICTURE_START    0x00
+-#define DVB_USER_START       0xb2
+-#define DVB_SEQUENCE_HEADER  0xb3
+-#define DVB_SEQUENCE_ERROR   0xb4
+-#define DVB_EXTENSION_START  0xb5
+-#define DVB_SEQUENCE_END     0xb7
+-#define DVB_GOP_START        0xb8
+-#define DVB_EXCEPT_SLICE     0xb0
+-
+-#define SEQUENCE_EXTENSION           0x01
+-#define SEQUENCE_DISPLAY_EXTENSION   0x02
+-#define PICTURE_CODING_EXTENSION     0x08
+-#define QUANT_MATRIX_EXTENSION       0x03
+-#define PICTURE_DISPLAY_EXTENSION    0x07
+-
+-#define I_FRAME 0x01
+-#define B_FRAME 0x02
+-#define P_FRAME 0x03
+-
+-/* Initialize sequence_data */
+-#define INIT_HORIZONTAL_SIZE        720
+-#define INIT_VERTICAL_SIZE          576
+-#define INIT_ASPECT_RATIO          0x02
+-#define INIT_FRAME_RATE            0x03
+-#define INIT_DISP_HORIZONTAL_SIZE   540
+-#define INIT_DISP_VERTICAL_SIZE     576
+-
+-
+-//flags2
+-#define PTS_DTS_FLAGS    0xC0
+-#define ESCR_FLAG        0x20
+-#define ES_RATE_FLAG     0x10
+-#define DSM_TRICK_FLAG   0x08
+-#define ADD_CPY_FLAG     0x04
+-#define PES_CRC_FLAG     0x02
+-#define PES_EXT_FLAG     0x01
+-
+-//pts_dts flags
+-#define PTS_ONLY         0x80
+-#define PTS_DTS          0xC0
+-
+-#define TS_SIZE        188
+-#define TRANS_ERROR    0x80
+-#define PAY_START      0x40
+-#define TRANS_PRIO     0x20
+-#define PID_MASK_HI    0x1F
+-//flags
+-#define TRANS_SCRMBL1  0x80
+-#define TRANS_SCRMBL2  0x40
+-#define ADAPT_FIELD    0x20
+-#define PAYLOAD        0x10
+-#define COUNT_MASK     0x0F
+-
+-// adaptation flags
+-#define DISCON_IND     0x80
+-#define RAND_ACC_IND   0x40
+-#define ES_PRI_IND     0x20
+-#define PCR_FLAG       0x10
+-#define OPCR_FLAG      0x08
+-#define SPLICE_FLAG    0x04
+-#define TRANS_PRIV     0x02
+-#define ADAP_EXT_FLAG  0x01
+-
+-// adaptation extension flags
+-#define LTW_FLAG       0x80
+-#define PIECE_RATE     0x40
+-#define SEAM_SPLICE    0x20
+-
+-
+-#define MAX_PLENGTH 0xFFFF
+-#define MMAX_PLENGTH (256*MAX_PLENGTH)
+-
+-#ifndef IPACKS
+-#define IPACKS 2048
+-#endif
+-
+-struct ipack {
+-	int size;
+-	int found;
+-	u8 *buf;
+-	u8 cid;
+-	u32 plength;
+-	u8 plen[2];
+-	u8 flag1;
+-	u8 flag2;
+-	u8 hlength;
+-	u8 pts[5];
+-	u16 *pid;
+-	int mpeg;
+-	u8 check;
+-	int which;
+-	int done;
+-	void *data;
+-	void (*func)(u8 *buf,  int size, void *priv);
+-	int count;
+-	int repack_subids;
+-};
+-
+-struct dvb_video_info {
+-	u32 horizontal_size;
+-	u32 vertical_size;
+-	u32 aspect_ratio;
+-	u32 framerate;
+-	u32 video_format;
+-	u32 bit_rate;
+-	u32 comp_bit_rate;
+-	u32 vbv_buffer_size;
+-	s16 vbv_delay;
+-	u32 CSPF;
+-	u32 off;
+-};
+-
+-#define OFF_SIZE 4
+-#define FIRST_FIELD 0
+-#define SECOND_FIELD 1
+-#define VIDEO_FRAME_PICTURE 0x03
+-
+-struct mpg_picture {
+-	int       channel;
+-	struct dvb_video_info vinfo;
+-	u32      *sequence_gop_header;
+-	u32      *picture_header;
+-	s32       time_code;
+-	int       low_delay;
+-	int       closed_gop;
+-	int       broken_link;
+-	int       sequence_header_flag;
+-	int       gop_flag;
+-	int       sequence_end_flag;
+-
+-	u8        profile_and_level;
+-	s32       picture_coding_parameter;
+-	u32       matrix[32];
+-	s8        matrix_change_flag;
+-
+-	u8        picture_header_parameter;
+-  /* bit 0 - 2: bwd f code
+-     bit 3    : fpb vector
+-     bit 4 - 6: fwd f code
+-     bit 7    : fpf vector */
+-
+-	int       mpeg1_flag;
+-	int       progressive_sequence;
+-	int       sequence_display_extension_flag;
+-	u32       sequence_header_data;
+-	s16       last_frame_centre_horizontal_offset;
+-	s16       last_frame_centre_vertical_offset;
+-
+-	u32       pts[2]; /* [0] 1st field, [1] 2nd field */
+-	int       top_field_first;
+-	int       repeat_first_field;
+-	int       progressive_frame;
+-	int       bank;
+-	int       forward_bank;
+-	int       backward_bank;
+-	int       compress;
+-	s16       frame_centre_horizontal_offset[OFF_SIZE];
+-		  /* [0-2] 1st field, [3] 2nd field */
+-	s16       frame_centre_vertical_offset[OFF_SIZE];
+-		  /* [0-2] 1st field, [3] 2nd field */
+-	s16       temporal_reference[2];
+-		  /* [0] 1st field, [1] 2nd field */
+-
+-	s8        picture_coding_type[2];
+-		  /* [0] 1st field, [1] 2nd field */
+-	s8        picture_structure[2];
+-		  /* [0] 1st field, [1] 2nd field */
+-	s8        picture_display_extension_flag[2];
+-		  /* [0] 1st field, [1] 2nd field */
+-		  /* picture_display_extenion() 0:no 1:exit*/
+-	s8        pts_flag[2];
+-		  /* [0] 1st field, [1] 2nd field */
+-};
+-
+-struct dvb_audio_info {
+-	int layer;
+-	u32 bit_rate;
+-	u32 frequency;
+-	u32 mode;
+-	u32 mode_extension ;
+-	u32 emphasis;
+-	u32 framesize;
+-	u32 off;
+-};
+-
+-int dvb_filter_get_ac3info(u8 *mbuf, int count, struct dvb_audio_info *ai, int pr);
+-
+-
+-#endif
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/sp8870.c b/drivers/staging/media/deprecated/saa7146/av7110/sp8870.c
+deleted file mode 100644
+index 9767159aeb9b..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/sp8870.c
++++ /dev/null
+@@ -1,609 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+-    Driver for Spase SP8870 demodulator
+-
+-    Copyright (C) 1999 Juergen Peitz
+-
+-
+-*/
+-/*
+- * This driver needs external firmware. Please use the command
+- * "<kerneldir>/scripts/get_dvb_firmware alps_tdlb7" to
+- * download/extract it, and then copy it to /usr/lib/hotplug/firmware
+- * or /lib/firmware (depending on configuration of firmware hotplug).
+- */
+-#define SP8870_DEFAULT_FIRMWARE "dvb-fe-sp8870.fw"
+-
+-#include <linux/init.h>
+-#include <linux/module.h>
+-#include <linux/device.h>
+-#include <linux/firmware.h>
+-#include <linux/delay.h>
+-#include <linux/string.h>
+-#include <linux/slab.h>
+-
+-#include <media/dvb_frontend.h>
+-#include "sp8870.h"
+-
+-
+-struct sp8870_state {
+-
+-	struct i2c_adapter* i2c;
+-
+-	const struct sp8870_config* config;
+-
+-	struct dvb_frontend frontend;
+-
+-	/* demodulator private data */
+-	u8 initialised:1;
+-};
+-
+-static int debug;
+-#define dprintk(args...) \
+-	do { \
+-		if (debug) printk(KERN_DEBUG "sp8870: " args); \
+-	} while (0)
+-
+-/* firmware size for sp8870 */
+-#define SP8870_FIRMWARE_SIZE 16382
+-
+-/* starting point for firmware in file 'Sc_main.mc' */
+-#define SP8870_FIRMWARE_OFFSET 0x0A
+-
+-static int sp8870_writereg (struct sp8870_state* state, u16 reg, u16 data)
+-{
+-	u8 buf [] = { reg >> 8, reg & 0xff, data >> 8, data & 0xff };
+-	struct i2c_msg msg = { .addr = state->config->demod_address, .flags = 0, .buf = buf, .len = 4 };
+-	int err;
+-
+-	if ((err = i2c_transfer (state->i2c, &msg, 1)) != 1) {
+-		dprintk ("%s: writereg error (err == %i, reg == 0x%02x, data == 0x%02x)\n", __func__, err, reg, data);
+-		return -EREMOTEIO;
+-	}
+-
+-	return 0;
+-}
+-
+-static int sp8870_readreg (struct sp8870_state* state, u16 reg)
+-{
+-	int ret;
+-	u8 b0 [] = { reg >> 8 , reg & 0xff };
+-	u8 b1 [] = { 0, 0 };
+-	struct i2c_msg msg [] = { { .addr = state->config->demod_address, .flags = 0, .buf = b0, .len = 2 },
+-			   { .addr = state->config->demod_address, .flags = I2C_M_RD, .buf = b1, .len = 2 } };
+-
+-	ret = i2c_transfer (state->i2c, msg, 2);
+-
+-	if (ret != 2) {
+-		dprintk("%s: readreg error (ret == %i)\n", __func__, ret);
+-		return -1;
+-	}
+-
+-	return (b1[0] << 8 | b1[1]);
+-}
+-
+-static int sp8870_firmware_upload (struct sp8870_state* state, const struct firmware *fw)
+-{
+-	struct i2c_msg msg;
+-	const char *fw_buf = fw->data;
+-	int fw_pos;
+-	u8 tx_buf[255];
+-	int tx_len;
+-	int err = 0;
+-
+-	dprintk ("%s: ...\n", __func__);
+-
+-	if (fw->size < SP8870_FIRMWARE_SIZE + SP8870_FIRMWARE_OFFSET)
+-		return -EINVAL;
+-
+-	// system controller stop
+-	sp8870_writereg(state, 0x0F00, 0x0000);
+-
+-	// instruction RAM register hiword
+-	sp8870_writereg(state, 0x8F08, ((SP8870_FIRMWARE_SIZE / 2) & 0xFFFF));
+-
+-	// instruction RAM MWR
+-	sp8870_writereg(state, 0x8F0A, ((SP8870_FIRMWARE_SIZE / 2) >> 16));
+-
+-	// do firmware upload
+-	fw_pos = SP8870_FIRMWARE_OFFSET;
+-	while (fw_pos < SP8870_FIRMWARE_SIZE + SP8870_FIRMWARE_OFFSET){
+-		tx_len = (fw_pos <= SP8870_FIRMWARE_SIZE + SP8870_FIRMWARE_OFFSET - 252) ? 252 : SP8870_FIRMWARE_SIZE + SP8870_FIRMWARE_OFFSET - fw_pos;
+-		// write register 0xCF0A
+-		tx_buf[0] = 0xCF;
+-		tx_buf[1] = 0x0A;
+-		memcpy(&tx_buf[2], fw_buf + fw_pos, tx_len);
+-		msg.addr = state->config->demod_address;
+-		msg.flags = 0;
+-		msg.buf = tx_buf;
+-		msg.len = tx_len + 2;
+-		if ((err = i2c_transfer (state->i2c, &msg, 1)) != 1) {
+-			printk("%s: firmware upload failed!\n", __func__);
+-			printk ("%s: i2c error (err == %i)\n", __func__, err);
+-			return err;
+-		}
+-		fw_pos += tx_len;
+-	}
+-
+-	dprintk ("%s: done!\n", __func__);
+-	return 0;
+-};
+-
+-static void sp8870_microcontroller_stop (struct sp8870_state* state)
+-{
+-	sp8870_writereg(state, 0x0F08, 0x000);
+-	sp8870_writereg(state, 0x0F09, 0x000);
+-
+-	// microcontroller STOP
+-	sp8870_writereg(state, 0x0F00, 0x000);
+-}
+-
+-static void sp8870_microcontroller_start (struct sp8870_state* state)
+-{
+-	sp8870_writereg(state, 0x0F08, 0x000);
+-	sp8870_writereg(state, 0x0F09, 0x000);
+-
+-	// microcontroller START
+-	sp8870_writereg(state, 0x0F00, 0x001);
+-	// not documented but if we don't read 0x0D01 out here
+-	// we don't get a correct data valid signal
+-	sp8870_readreg(state, 0x0D01);
+-}
+-
+-static int sp8870_read_data_valid_signal(struct sp8870_state* state)
+-{
+-	return (sp8870_readreg(state, 0x0D02) > 0);
+-}
+-
+-static int configure_reg0xc05 (struct dtv_frontend_properties *p, u16 *reg0xc05)
+-{
+-	int known_parameters = 1;
+-
+-	*reg0xc05 = 0x000;
+-
+-	switch (p->modulation) {
+-	case QPSK:
+-		break;
+-	case QAM_16:
+-		*reg0xc05 |= (1 << 10);
+-		break;
+-	case QAM_64:
+-		*reg0xc05 |= (2 << 10);
+-		break;
+-	case QAM_AUTO:
+-		known_parameters = 0;
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
+-
+-	switch (p->hierarchy) {
+-	case HIERARCHY_NONE:
+-		break;
+-	case HIERARCHY_1:
+-		*reg0xc05 |= (1 << 7);
+-		break;
+-	case HIERARCHY_2:
+-		*reg0xc05 |= (2 << 7);
+-		break;
+-	case HIERARCHY_4:
+-		*reg0xc05 |= (3 << 7);
+-		break;
+-	case HIERARCHY_AUTO:
+-		known_parameters = 0;
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
+-
+-	switch (p->code_rate_HP) {
+-	case FEC_1_2:
+-		break;
+-	case FEC_2_3:
+-		*reg0xc05 |= (1 << 3);
+-		break;
+-	case FEC_3_4:
+-		*reg0xc05 |= (2 << 3);
+-		break;
+-	case FEC_5_6:
+-		*reg0xc05 |= (3 << 3);
+-		break;
+-	case FEC_7_8:
+-		*reg0xc05 |= (4 << 3);
+-		break;
+-	case FEC_AUTO:
+-		known_parameters = 0;
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
+-
+-	if (known_parameters)
+-		*reg0xc05 |= (2 << 1);	/* use specified parameters */
+-	else
+-		*reg0xc05 |= (1 << 1);	/* enable autoprobing */
+-
+-	return 0;
+-}
+-
+-static int sp8870_wake_up(struct sp8870_state* state)
+-{
+-	// enable TS output and interface pins
+-	return sp8870_writereg(state, 0xC18, 0x00D);
+-}
+-
+-static int sp8870_set_frontend_parameters(struct dvb_frontend *fe)
+-{
+-	struct dtv_frontend_properties *p = &fe->dtv_property_cache;
+-	struct sp8870_state* state = fe->demodulator_priv;
+-	int  err;
+-	u16 reg0xc05;
+-
+-	if ((err = configure_reg0xc05(p, &reg0xc05)))
+-		return err;
+-
+-	// system controller stop
+-	sp8870_microcontroller_stop(state);
+-
+-	// set tuner parameters
+-	if (fe->ops.tuner_ops.set_params) {
+-		fe->ops.tuner_ops.set_params(fe);
+-		if (fe->ops.i2c_gate_ctrl) fe->ops.i2c_gate_ctrl(fe, 0);
+-	}
+-
+-	// sample rate correction bit [23..17]
+-	sp8870_writereg(state, 0x0319, 0x000A);
+-
+-	// sample rate correction bit [16..0]
+-	sp8870_writereg(state, 0x031A, 0x0AAB);
+-
+-	// integer carrier offset
+-	sp8870_writereg(state, 0x0309, 0x0400);
+-
+-	// fractional carrier offset
+-	sp8870_writereg(state, 0x030A, 0x0000);
+-
+-	// filter for 6/7/8 Mhz channel
+-	if (p->bandwidth_hz == 6000000)
+-		sp8870_writereg(state, 0x0311, 0x0002);
+-	else if (p->bandwidth_hz == 7000000)
+-		sp8870_writereg(state, 0x0311, 0x0001);
+-	else
+-		sp8870_writereg(state, 0x0311, 0x0000);
+-
+-	// scan order: 2k first = 0x0000, 8k first = 0x0001
+-	if (p->transmission_mode == TRANSMISSION_MODE_2K)
+-		sp8870_writereg(state, 0x0338, 0x0000);
+-	else
+-		sp8870_writereg(state, 0x0338, 0x0001);
+-
+-	sp8870_writereg(state, 0xc05, reg0xc05);
+-
+-	// read status reg in order to clear pending irqs
+-	err = sp8870_readreg(state, 0x200);
+-	if (err < 0)
+-		return err;
+-
+-	// system controller start
+-	sp8870_microcontroller_start(state);
+-
+-	return 0;
+-}
+-
+-static int sp8870_init (struct dvb_frontend* fe)
+-{
+-	struct sp8870_state* state = fe->demodulator_priv;
+-	const struct firmware *fw = NULL;
+-
+-	sp8870_wake_up(state);
+-	if (state->initialised) return 0;
+-	state->initialised = 1;
+-
+-	dprintk ("%s\n", __func__);
+-
+-
+-	/* request the firmware, this will block until someone uploads it */
+-	printk("sp8870: waiting for firmware upload (%s)...\n", SP8870_DEFAULT_FIRMWARE);
+-	if (state->config->request_firmware(fe, &fw, SP8870_DEFAULT_FIRMWARE)) {
+-		printk("sp8870: no firmware upload (timeout or file not found?)\n");
+-		return -EIO;
+-	}
+-
+-	if (sp8870_firmware_upload(state, fw)) {
+-		printk("sp8870: writing firmware to device failed\n");
+-		release_firmware(fw);
+-		return -EIO;
+-	}
+-	release_firmware(fw);
+-	printk("sp8870: firmware upload complete\n");
+-
+-	/* enable TS output and interface pins */
+-	sp8870_writereg(state, 0xc18, 0x00d);
+-
+-	// system controller stop
+-	sp8870_microcontroller_stop(state);
+-
+-	// ADC mode
+-	sp8870_writereg(state, 0x0301, 0x0003);
+-
+-	// Reed Solomon parity bytes passed to output
+-	sp8870_writereg(state, 0x0C13, 0x0001);
+-
+-	// MPEG clock is suppressed if no valid data
+-	sp8870_writereg(state, 0x0C14, 0x0001);
+-
+-	/* bit 0x010: enable data valid signal */
+-	sp8870_writereg(state, 0x0D00, 0x010);
+-	sp8870_writereg(state, 0x0D01, 0x000);
+-
+-	return 0;
+-}
+-
+-static int sp8870_read_status(struct dvb_frontend *fe,
+-			      enum fe_status *fe_status)
+-{
+-	struct sp8870_state* state = fe->demodulator_priv;
+-	int status;
+-	int signal;
+-
+-	*fe_status = 0;
+-
+-	status = sp8870_readreg (state, 0x0200);
+-	if (status < 0)
+-		return -EIO;
+-
+-	signal = sp8870_readreg (state, 0x0303);
+-	if (signal < 0)
+-		return -EIO;
+-
+-	if (signal > 0x0F)
+-		*fe_status |= FE_HAS_SIGNAL;
+-	if (status & 0x08)
+-		*fe_status |= FE_HAS_SYNC;
+-	if (status & 0x04)
+-		*fe_status |= FE_HAS_LOCK | FE_HAS_CARRIER | FE_HAS_VITERBI;
+-
+-	return 0;
+-}
+-
+-static int sp8870_read_ber (struct dvb_frontend* fe, u32 * ber)
+-{
+-	struct sp8870_state* state = fe->demodulator_priv;
+-	int ret;
+-	u32 tmp;
+-
+-	*ber = 0;
+-
+-	ret = sp8870_readreg(state, 0xC08);
+-	if (ret < 0)
+-		return -EIO;
+-
+-	tmp = ret & 0x3F;
+-
+-	ret = sp8870_readreg(state, 0xC07);
+-	if (ret < 0)
+-		return -EIO;
+-
+-	tmp = ret << 6;
+-	if (tmp >= 0x3FFF0)
+-		tmp = ~0;
+-
+-	*ber = tmp;
+-
+-	return 0;
+-}
+-
+-static int sp8870_read_signal_strength(struct dvb_frontend* fe,  u16 * signal)
+-{
+-	struct sp8870_state* state = fe->demodulator_priv;
+-	int ret;
+-	u16 tmp;
+-
+-	*signal = 0;
+-
+-	ret = sp8870_readreg (state, 0x306);
+-	if (ret < 0)
+-		return -EIO;
+-
+-	tmp = ret << 8;
+-
+-	ret = sp8870_readreg (state, 0x303);
+-	if (ret < 0)
+-		return -EIO;
+-
+-	tmp |= ret;
+-
+-	if (tmp)
+-		*signal = 0xFFFF - tmp;
+-
+-	return 0;
+-}
+-
+-static int sp8870_read_uncorrected_blocks (struct dvb_frontend* fe, u32* ublocks)
+-{
+-	struct sp8870_state* state = fe->demodulator_priv;
+-	int ret;
+-
+-	*ublocks = 0;
+-
+-	ret = sp8870_readreg(state, 0xC0C);
+-	if (ret < 0)
+-		return -EIO;
+-
+-	if (ret == 0xFFFF)
+-		ret = ~0;
+-
+-	*ublocks = ret;
+-
+-	return 0;
+-}
+-
+-/* number of trials to recover from lockup */
+-#define MAXTRIALS 5
+-/* maximum checks for data valid signal */
+-#define MAXCHECKS 100
+-
+-/* only for debugging: counter for detected lockups */
+-static int lockups;
+-/* only for debugging: counter for channel switches */
+-static int switches;
+-
+-static int sp8870_set_frontend(struct dvb_frontend *fe)
+-{
+-	struct dtv_frontend_properties *p = &fe->dtv_property_cache;
+-	struct sp8870_state* state = fe->demodulator_priv;
+-
+-	/*
+-	    The firmware of the sp8870 sometimes locks up after setting frontend parameters.
+-	    We try to detect this by checking the data valid signal.
+-	    If it is not set after MAXCHECKS we try to recover the lockup by setting
+-	    the frontend parameters again.
+-	*/
+-
+-	int err = 0;
+-	int valid = 0;
+-	int trials = 0;
+-	int check_count = 0;
+-
+-	dprintk("%s: frequency = %i\n", __func__, p->frequency);
+-
+-	for (trials = 1; trials <= MAXTRIALS; trials++) {
+-
+-		err = sp8870_set_frontend_parameters(fe);
+-		if (err)
+-			return err;
+-
+-		for (check_count = 0; check_count < MAXCHECKS; check_count++) {
+-//			valid = ((sp8870_readreg(i2c, 0x0200) & 4) == 0);
+-			valid = sp8870_read_data_valid_signal(state);
+-			if (valid) {
+-				dprintk("%s: delay = %i usec\n",
+-					__func__, check_count * 10);
+-				break;
+-			}
+-			udelay(10);
+-		}
+-		if (valid)
+-			break;
+-	}
+-
+-	if (!valid) {
+-		printk("%s: firmware crash!!!!!!\n", __func__);
+-		return -EIO;
+-	}
+-
+-	if (debug) {
+-		if (valid) {
+-			if (trials > 1) {
+-				printk("%s: firmware lockup!!!\n", __func__);
+-				printk("%s: recovered after %i trial(s))\n",  __func__, trials - 1);
+-				lockups++;
+-			}
+-		}
+-		switches++;
+-		printk("%s: switches = %i lockups = %i\n", __func__, switches, lockups);
+-	}
+-
+-	return 0;
+-}
+-
+-static int sp8870_sleep(struct dvb_frontend* fe)
+-{
+-	struct sp8870_state* state = fe->demodulator_priv;
+-
+-	// tristate TS output and disable interface pins
+-	return sp8870_writereg(state, 0xC18, 0x000);
+-}
+-
+-static int sp8870_get_tune_settings(struct dvb_frontend* fe, struct dvb_frontend_tune_settings* fesettings)
+-{
+-	fesettings->min_delay_ms = 350;
+-	fesettings->step_size = 0;
+-	fesettings->max_drift = 0;
+-	return 0;
+-}
+-
+-static int sp8870_i2c_gate_ctrl(struct dvb_frontend* fe, int enable)
+-{
+-	struct sp8870_state* state = fe->demodulator_priv;
+-
+-	if (enable) {
+-		return sp8870_writereg(state, 0x206, 0x001);
+-	} else {
+-		return sp8870_writereg(state, 0x206, 0x000);
+-	}
+-}
+-
+-static void sp8870_release(struct dvb_frontend* fe)
+-{
+-	struct sp8870_state* state = fe->demodulator_priv;
+-	kfree(state);
+-}
+-
+-static const struct dvb_frontend_ops sp8870_ops;
+-
+-struct dvb_frontend* sp8870_attach(const struct sp8870_config* config,
+-				   struct i2c_adapter* i2c)
+-{
+-	struct sp8870_state* state = NULL;
+-
+-	/* allocate memory for the internal state */
+-	state = kzalloc(sizeof(struct sp8870_state), GFP_KERNEL);
+-	if (state == NULL) goto error;
+-
+-	/* setup the state */
+-	state->config = config;
+-	state->i2c = i2c;
+-	state->initialised = 0;
+-
+-	/* check if the demod is there */
+-	if (sp8870_readreg(state, 0x0200) < 0) goto error;
+-
+-	/* create dvb_frontend */
+-	memcpy(&state->frontend.ops, &sp8870_ops, sizeof(struct dvb_frontend_ops));
+-	state->frontend.demodulator_priv = state;
+-	return &state->frontend;
+-
+-error:
+-	kfree(state);
+-	return NULL;
+-}
+-
+-static const struct dvb_frontend_ops sp8870_ops = {
+-	.delsys = { SYS_DVBT },
+-	.info = {
+-		.name			= "Spase SP8870 DVB-T",
+-		.frequency_min_hz	= 470 * MHz,
+-		.frequency_max_hz	= 860 * MHz,
+-		.frequency_stepsize_hz	= 166666,
+-		.caps			= FE_CAN_FEC_1_2 | FE_CAN_FEC_2_3 |
+-					  FE_CAN_FEC_3_4 | FE_CAN_FEC_5_6 |
+-					  FE_CAN_FEC_7_8 | FE_CAN_FEC_AUTO |
+-					  FE_CAN_QPSK | FE_CAN_QAM_16 |
+-					  FE_CAN_QAM_64 | FE_CAN_QAM_AUTO |
+-					  FE_CAN_HIERARCHY_AUTO |  FE_CAN_RECOVER
+-	},
+-
+-	.release = sp8870_release,
+-
+-	.init = sp8870_init,
+-	.sleep = sp8870_sleep,
+-	.i2c_gate_ctrl = sp8870_i2c_gate_ctrl,
+-
+-	.set_frontend = sp8870_set_frontend,
+-	.get_tune_settings = sp8870_get_tune_settings,
+-
+-	.read_status = sp8870_read_status,
+-	.read_ber = sp8870_read_ber,
+-	.read_signal_strength = sp8870_read_signal_strength,
+-	.read_ucblocks = sp8870_read_uncorrected_blocks,
+-};
+-
+-module_param(debug, int, 0644);
+-MODULE_PARM_DESC(debug, "Turn on/off frontend debugging (default:off).");
+-
+-MODULE_DESCRIPTION("Spase SP8870 DVB-T Demodulator driver");
+-MODULE_AUTHOR("Juergen Peitz");
+-MODULE_LICENSE("GPL");
+-
+-EXPORT_SYMBOL(sp8870_attach);
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/sp8870.h b/drivers/staging/media/deprecated/saa7146/av7110/sp8870.h
+deleted file mode 100644
+index 5eacf39f425e..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/sp8870.h
++++ /dev/null
+@@ -1,37 +0,0 @@
 -/* SPDX-License-Identifier: GPL-2.0-or-later */
 -/*
-- * stk-webcam.h : Driver for Syntek 1125 USB webcam controller
-- *
-- * Copyright (C) 2006 Nicolas VIVIEN
-- * Copyright 2007-2008 Jaime Velasco Juan <jsagarribay@gmail.com>
-- */
+-    Driver for Spase SP8870 demodulator
 -
--#ifndef STKWEBCAM_H
--#define STKWEBCAM_H
+-    Copyright (C) 1999 Juergen Peitz
 -
--#include <linux/usb.h>
--#include <media/v4l2-device.h>
--#include <media/v4l2-ctrls.h>
--#include <media/v4l2-common.h>
 -
--#define DRIVER_VERSION		"v0.0.1"
--#define DRIVER_VERSION_NUM	0x000001
+-*/
 -
--#define MAX_ISO_BUFS		3
--#define ISO_FRAMES_PER_DESC	16
--#define ISO_MAX_FRAME_SIZE	3 * 1024
--#define ISO_BUFFER_SIZE		(ISO_FRAMES_PER_DESC * ISO_MAX_FRAME_SIZE)
+-#ifndef SP8870_H
+-#define SP8870_H
 -
--struct stk_iso_buf {
--	void *data;
--	int length;
--	int read;
--	struct urb *urb;
+-#include <linux/dvb/frontend.h>
+-#include <linux/firmware.h>
+-
+-struct sp8870_config
+-{
+-	/* the demodulator's i2c address */
+-	u8 demod_address;
+-
+-	/* request firmware for device */
+-	int (*request_firmware)(struct dvb_frontend* fe, const struct firmware **fw, char* name);
 -};
 -
--/* Streaming IO buffers */
--struct stk_sio_buffer {
--	struct v4l2_buffer v4lbuf;
--	char *buffer;
--	int mapcount;
--	struct stk_camera *dev;
--	struct list_head list;
--};
+-#if IS_REACHABLE(CONFIG_DVB_SP8870)
+-extern struct dvb_frontend* sp8870_attach(const struct sp8870_config* config,
+-					  struct i2c_adapter* i2c);
+-#else
+-static inline struct dvb_frontend* sp8870_attach(const struct sp8870_config* config,
+-					  struct i2c_adapter* i2c)
+-{
+-	printk(KERN_WARNING "%s: driver disabled by Kconfig\n", __func__);
+-	return NULL;
+-}
+-#endif // CONFIG_DVB_SP8870
 -
--enum stk_mode {MODE_VGA, MODE_SXGA, MODE_CIF, MODE_QVGA, MODE_QCIF};
--
--struct stk_video {
--	enum stk_mode mode;
--	__u32 palette;
--	int hflip;
--	int vflip;
--};
--
--enum stk_status {
--	S_PRESENT = 1,
--	S_INITIALISED = 2,
--	S_MEMALLOCD = 4,
--	S_STREAMING = 8,
--};
--#define is_present(dev)		((dev)->status & S_PRESENT)
--#define is_initialised(dev)	((dev)->status & S_INITIALISED)
--#define is_streaming(dev)	((dev)->status & S_STREAMING)
--#define is_memallocd(dev)	((dev)->status & S_MEMALLOCD)
--#define set_present(dev)	((dev)->status = S_PRESENT)
--#define unset_present(dev)	((dev)->status &= \
--					~(S_PRESENT|S_INITIALISED|S_STREAMING))
--#define set_initialised(dev)	((dev)->status |= S_INITIALISED)
--#define unset_initialised(dev)	((dev)->status &= ~S_INITIALISED)
--#define set_memallocd(dev)	((dev)->status |= S_MEMALLOCD)
--#define unset_memallocd(dev)	((dev)->status &= ~S_MEMALLOCD)
--#define set_streaming(dev)	((dev)->status |= S_STREAMING)
--#define unset_streaming(dev)	((dev)->status &= ~S_STREAMING)
--
--struct regval {
--	unsigned reg;
--	unsigned val;
--};
--
--struct stk_camera {
--	struct v4l2_device v4l2_dev;
--	struct v4l2_ctrl_handler hdl;
--	struct video_device vdev;
--	struct usb_device *udev;
--	struct usb_interface *interface;
--	int webcam_model;
--	struct file *owner;
--	struct mutex lock;
--	int first_init;
--
--	u8 isoc_ep;
--
--	/* Not sure if this is right */
--	atomic_t urbs_used;
--
--	struct stk_video vsettings;
--
--	enum stk_status status;
--
--	spinlock_t spinlock;
--	wait_queue_head_t wait_frame;
--
--	struct stk_iso_buf *isobufs;
--
--	int frame_size;
--	/* Streaming buffers */
--	int reading;
--	unsigned int n_sbufs;
--	struct stk_sio_buffer *sio_bufs;
--	struct list_head sio_avail;
--	struct list_head sio_full;
--	unsigned sequence;
--
--	u8 read_reg_scratch;
--};
--
--#define vdev_to_camera(d) container_of(d, struct stk_camera, vdev)
--
--int stk_camera_write_reg(struct stk_camera *, u16, u8);
--int stk_camera_read_reg(struct stk_camera *, u16, u8 *);
--
--int stk_sensor_init(struct stk_camera *);
--int stk_sensor_configure(struct stk_camera *);
--int stk_sensor_sleep(struct stk_camera *dev);
--int stk_sensor_wakeup(struct stk_camera *dev);
--int stk_sensor_set_brightness(struct stk_camera *dev, int br);
--
--#endif
+-#endif // SP8870_H
 -- 
 2.39.0
 
