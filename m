@@ -2,1949 +2,2594 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACA30C678D6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81149C67871
 	for <linux-media@archiver.kernel.org>; Wed, 11 Jan 2023 10:53:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238735AbjAKKxX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 11 Jan 2023 05:53:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37200 "EHLO
+        id S238398AbjAKKxV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 11 Jan 2023 05:53:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238629AbjAKKxN (ORCPT
+        with ESMTP id S238543AbjAKKxK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 11 Jan 2023 05:53:13 -0500
+        Wed, 11 Jan 2023 05:53:10 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328D72018
-        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 02:53:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB371014
+        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 02:53:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8F7F7B81BAD
-        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 10:53:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 816E3C433D2;
-        Wed, 11 Jan 2023 10:53:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CA761B81BAE
+        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 10:53:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81A36C433F0;
+        Wed, 11 Jan 2023 10:53:01 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 05/13] zr364xx: remove deprecated driver
-Date:   Wed, 11 Jan 2023 11:52:50 +0100
-Message-Id: <20230111105258.547471-6-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 01/13] meye: remove this deprecated driver
+Date:   Wed, 11 Jan 2023 11:52:46 +0100
+Message-Id: <20230111105258.547471-2-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230111105258.547471-1-hverkuil-cisco@xs4all.nl>
 References: <20230111105258.547471-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The zr364xx driver does not use the vb2 framework for streaming
-video, instead it uses the old vb1 framework and nobody stepped in to
-convert this driver to vb2.
+The meye driver does not use the vb2 framework for streaming
+video, instead it implements this in the driver. This is error prone,
+and nobody stepped in to convert this driver to that framework.
 
 The hardware is very old, so the decision was made to remove it
-altogether since we want to get rid of the old vb1 framework.
+altogether.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- .../admin-guide/media/dvb-drivers.rst         |    1 -
- .../admin-guide/media/other-usb-cardlist.rst  |   11 -
- .../admin-guide/media/usb-cardlist.rst        |    1 -
- Documentation/admin-guide/media/zr364xx.rst   |  102 -
- MAINTAINERS                                   |   10 -
+ Documentation/admin-guide/media/meye.rst      |   93 -
+ .../admin-guide/media/pci-cardlist.rst        |    1 -
+ .../admin-guide/media/v4l-drivers.rst         |    1 -
+ .../userspace-api/media/drivers/index.rst     |    1 -
+ .../userspace-api/media/drivers/meye-uapi.rst |   53 -
+ MAINTAINERS                                   |    8 -
  drivers/staging/media/Kconfig                 |    1 -
  drivers/staging/media/Makefile                |    1 -
- .../staging/media/deprecated/zr364xx/Kconfig  |   18 -
- .../staging/media/deprecated/zr364xx/Makefile |    3 -
- drivers/staging/media/deprecated/zr364xx/TODO |    7 -
- .../media/deprecated/zr364xx/zr364xx.c        | 1635 -----------------
- 11 files changed, 1790 deletions(-)
- delete mode 100644 Documentation/admin-guide/media/zr364xx.rst
- delete mode 100644 drivers/staging/media/deprecated/zr364xx/Kconfig
- delete mode 100644 drivers/staging/media/deprecated/zr364xx/Makefile
- delete mode 100644 drivers/staging/media/deprecated/zr364xx/TODO
- delete mode 100644 drivers/staging/media/deprecated/zr364xx/zr364xx.c
+ drivers/staging/media/deprecated/meye/Kconfig |   19 -
+ .../staging/media/deprecated/meye/Makefile    |    2 -
+ drivers/staging/media/deprecated/meye/TODO    |    6 -
+ drivers/staging/media/deprecated/meye/meye.c  | 1814 -----------------
+ drivers/staging/media/deprecated/meye/meye.h  |  311 ---
+ include/uapi/linux/meye.h                     |   65 -
+ include/uapi/linux/v4l2-controls.h            |    8 +-
+ 15 files changed, 6 insertions(+), 2378 deletions(-)
+ delete mode 100644 Documentation/admin-guide/media/meye.rst
+ delete mode 100644 Documentation/userspace-api/media/drivers/meye-uapi.rst
+ delete mode 100644 drivers/staging/media/deprecated/meye/Kconfig
+ delete mode 100644 drivers/staging/media/deprecated/meye/Makefile
+ delete mode 100644 drivers/staging/media/deprecated/meye/TODO
+ delete mode 100644 drivers/staging/media/deprecated/meye/meye.c
+ delete mode 100644 drivers/staging/media/deprecated/meye/meye.h
+ delete mode 100644 include/uapi/linux/meye.h
 
-diff --git a/Documentation/admin-guide/media/dvb-drivers.rst b/Documentation/admin-guide/media/dvb-drivers.rst
-index 8df637c375f9..66fa4edd0606 100644
---- a/Documentation/admin-guide/media/dvb-drivers.rst
-+++ b/Documentation/admin-guide/media/dvb-drivers.rst
-@@ -13,4 +13,3 @@ Digital TV driver-specific documentation
- 	opera-firmware
- 	technisat
- 	ttusb-dec
--	zr364xx
-diff --git a/Documentation/admin-guide/media/other-usb-cardlist.rst b/Documentation/admin-guide/media/other-usb-cardlist.rst
-index 843f1c509cbc..fb88db50e861 100644
---- a/Documentation/admin-guide/media/other-usb-cardlist.rst
-+++ b/Documentation/admin-guide/media/other-usb-cardlist.rst
-@@ -75,15 +75,4 @@ dvb-ttusb_dec	  Technotrend/Hauppauge MPEG decoder
- 		  DEC2540-t				  0b48:1009
- usbtv		  Fushicai USBTV007 Audio-Video Grabber	  1b71:3002, 1f71:3301,
- 							  1f71:3306
--zr364xx		  USB ZR364XX Camera			  08ca:0109, 041e:4024,
--							  0d64:0108, 0546:3187,
--							  0d64:3108, 0595:4343,
--							  0bb0:500d, 0feb:2004,
--							  055f:b500, 08ca:2062,
--							  052b:1a18, 04c8:0729,
--							  04f2:a208, 0784:0040,
--							  06d6:0034, 0a17:0062,
--							  06d6:003b, 0a17:004e,
--							  041e:405d, 08ca:2102,
--							  06d6:003d
- ================  ======================================  =====================
-diff --git a/Documentation/admin-guide/media/usb-cardlist.rst b/Documentation/admin-guide/media/usb-cardlist.rst
-index d5fd7249033d..071ec3958b3a 100644
---- a/Documentation/admin-guide/media/usb-cardlist.rst
-+++ b/Documentation/admin-guide/media/usb-cardlist.rst
-@@ -99,7 +99,6 @@ ttusb_dec               Technotrend/Hauppauge USB DEC devices
- usbtv                   USBTV007 video capture
- uvcvideo                USB Video Class (UVC)
- zd1301                  ZyDAS ZD1301
--zr364xx                 USB ZR364XX Camera
- ======================  =========================================================
- 
- .. toctree::
-diff --git a/Documentation/admin-guide/media/zr364xx.rst b/Documentation/admin-guide/media/zr364xx.rst
+diff --git a/Documentation/admin-guide/media/meye.rst b/Documentation/admin-guide/media/meye.rst
 deleted file mode 100644
-index 7291e54b8be3..000000000000
---- a/Documentation/admin-guide/media/zr364xx.rst
+index 9098a1e65f8b..000000000000
+--- a/Documentation/admin-guide/media/meye.rst
 +++ /dev/null
-@@ -1,102 +0,0 @@
+@@ -1,93 +0,0 @@
 -.. SPDX-License-Identifier: GPL-2.0
 -
--Zoran 364xx based USB webcam module
--===================================
+-.. include:: <isonum.txt>
 -
--site: http://royale.zerezo.com/zr364xx/
+-Vaio Picturebook Motion Eye Camera Driver
+-=========================================
 -
--mail: royale@zerezo.com
+-Copyright |copy| 2001-2004 Stelian Pop <stelian@popies.net>
+-
+-Copyright |copy| 2001-2002 Alcôve <www.alcove.com>
+-
+-Copyright |copy| 2000 Andrew Tridgell <tridge@samba.org>
+-
+-This driver enable the use of video4linux compatible applications with the
+-Motion Eye camera. This driver requires the "Sony Laptop Extras" driver (which
+-can be found in the "Misc devices" section of the kernel configuration utility)
+-to be compiled and installed (using its "camera=1" parameter).
+-
+-It can do at maximum 30 fps @ 320x240 or 15 fps @ 640x480.
+-
+-Grabbing is supported in packed YUV colorspace only.
+-
+-MJPEG hardware grabbing is supported via a private API (see below).
+-
+-Hardware supported
+-------------------
+-
+-This driver supports the 'second' version of the MotionEye camera :)
+-
+-The first version was connected directly on the video bus of the Neomagic
+-video card and is unsupported.
+-
+-The second one, made by Kawasaki Steel is fully supported by this
+-driver (PCI vendor/device is 0x136b/0xff01)
+-
+-The third one, present in recent (more or less last year) Picturebooks
+-(C1M* models), is not supported. The manufacturer has given the specs
+-to the developers under a NDA (which allows the development of a GPL
+-driver however), but things are not moving very fast (see
+-http://r-engine.sourceforge.net/) (PCI vendor/device is 0x10cf/0x2011).
+-
+-There is a forth model connected on the USB bus in TR1* Vaio laptops.
+-This camera is not supported at all by the current driver, in fact
+-little information if any is available for this camera
+-(USB vendor/device is 0x054c/0x0107).
+-
+-Driver options
+---------------
+-
+-Several options can be passed to the meye driver using the standard
+-module argument syntax (<param>=<value> when passing the option to the
+-module or meye.<param>=<value> on the kernel boot line when meye is
+-statically linked into the kernel). Those options are:
+-
+-.. code-block:: none
+-
+-	gbuffers:	number of capture buffers, default is 2 (32 max)
+-
+-	gbufsize:	size of each capture buffer, default is 614400
+-
+-	video_nr:	video device to register (0 = /dev/video0, etc)
+-
+-Module use
+-----------
+-
+-In order to automatically load the meye module on use, you can put those lines
+-in your /etc/modprobe.d/meye.conf file:
+-
+-.. code-block:: none
+-
+-	alias char-major-81 videodev
+-	alias char-major-81-0 meye
+-	options meye gbuffers=32
+-
+-Usage:
+-------
+-
+-.. code-block:: none
+-
+-	xawtv >= 3.49 (<http://bytesex.org/xawtv/>)
+-		for display and uncompressed video capture:
+-
+-			xawtv -c /dev/video0 -geometry 640x480
+-				or
+-			xawtv -c /dev/video0 -geometry 320x240
+-
+-	motioneye (<http://popies.net/meye/>)
+-		for getting ppm or jpg snapshots, mjpeg video
+-
+-Bugs / Todo
+------------
+-
+-- 'motioneye' still uses the meye private v4l1 API extensions.
+diff --git a/Documentation/admin-guide/media/pci-cardlist.rst b/Documentation/admin-guide/media/pci-cardlist.rst
+index f4d670e632f8..42528795d4da 100644
+--- a/Documentation/admin-guide/media/pci-cardlist.rst
++++ b/Documentation/admin-guide/media/pci-cardlist.rst
+@@ -77,7 +77,6 @@ ipu3-cio2         Intel ipu3-cio2 driver
+ ivtv              Conexant cx23416/cx23415 MPEG encoder/decoder
+ ivtvfb            Conexant cx23415 framebuffer
+ mantis            MANTIS based cards
+-meye              Sony Vaio Picturebook Motion Eye
+ mxb               Siemens-Nixdorf 'Multimedia eXtension Board'
+ netup-unidvb      NetUP Universal DVB card
+ ngene             Micronas nGene
+diff --git a/Documentation/admin-guide/media/v4l-drivers.rst b/Documentation/admin-guide/media/v4l-drivers.rst
+index 90a026ee05c6..adb5240d0407 100644
+--- a/Documentation/admin-guide/media/v4l-drivers.rst
++++ b/Documentation/admin-guide/media/v4l-drivers.rst
+@@ -19,7 +19,6 @@ Video4Linux (V4L) driver-specific documentation
+ 	imx7
+ 	ipu3
+ 	ivtv
+-	meye
+ 	omap3isp
+ 	omap4_camera
+ 	philips
+diff --git a/Documentation/userspace-api/media/drivers/index.rst b/Documentation/userspace-api/media/drivers/index.rst
+index 915dbf0f4db5..6708d649afd7 100644
+--- a/Documentation/userspace-api/media/drivers/index.rst
++++ b/Documentation/userspace-api/media/drivers/index.rst
+@@ -37,7 +37,6 @@ For more details see the file COPYING in the source distribution of Linux.
+ 	dw100
+ 	imx-uapi
+ 	max2175
+-	meye-uapi
+ 	omap3isp-uapi
+ 	st-vgxy61
+ 	uvcvideo
+diff --git a/Documentation/userspace-api/media/drivers/meye-uapi.rst b/Documentation/userspace-api/media/drivers/meye-uapi.rst
+deleted file mode 100644
+index 66b1c142f920..000000000000
+--- a/Documentation/userspace-api/media/drivers/meye-uapi.rst
++++ /dev/null
+@@ -1,53 +0,0 @@
+-.. SPDX-License-Identifier: GPL-2.0
+-
+-.. include:: <isonum.txt>
+-
+-Vaio Picturebook Motion Eye Camera Driver
+-=========================================
+-
+-Copyright |copy| 2001-2004 Stelian Pop <stelian@popies.net>
+-
+-Copyright |copy| 2001-2002 Alcôve <www.alcove.com>
+-
+-Copyright |copy| 2000 Andrew Tridgell <tridge@samba.org>
+-
+-Private API
+------------
+-
+-The driver supports frame grabbing with the video4linux API,
+-so all video4linux tools (like xawtv) should work with this driver.
+-
+-Besides the video4linux interface, the driver has a private interface
+-for accessing the Motion Eye extended parameters (camera sharpness,
+-agc, video framerate), the snapshot and the MJPEG capture facilities.
+-
+-This interface consists of several ioctls (prototypes and structures
+-can be found in include/linux/meye.h):
+-
+-MEYEIOC_G_PARAMS and MEYEIOC_S_PARAMS
+-	Get and set the extended parameters of the motion eye camera.
+-	The user should always query the current parameters with
+-	MEYEIOC_G_PARAMS, change what he likes and then issue the
+-	MEYEIOC_S_PARAMS call (checking for -EINVAL). The extended
+-	parameters are described by the meye_params structure.
 -
 -
--Introduction
--------------
+-MEYEIOC_QBUF_CAPT
+-	Queue a buffer for capture (the buffers must have been
+-	obtained with a VIDIOCGMBUF call and mmap'ed by the
+-	application). The argument to MEYEIOC_QBUF_CAPT is the
+-	buffer number to queue (or -1 to end capture). The first
+-	call to MEYEIOC_QBUF_CAPT starts the streaming capture.
 -
+-MEYEIOC_SYNC
+-	Takes as an argument the buffer number you want to sync.
+-	This ioctl blocks until the buffer is filled and ready
+-	for the application to use. It returns the buffer size.
 -
--This brings support under Linux for the Aiptek PocketDV 3300 and similar
--devices in webcam mode. If you just want to get on your PC the pictures
--and movies on the camera, you should use the usb-storage module instead.
+-MEYEIOC_STILLCAPT and MEYEIOC_STILLJCAPT
+-	Takes a snapshot in an uncompressed or compressed jpeg format.
+-	This ioctl blocks until the snapshot is done and returns (for
+-	jpeg snapshot) the size of the image. The image data is
+-	available from the first mmap'ed buffer.
 -
--The driver works with several other cameras in webcam mode (see the list
--below).
--
--Possible chipsets are : ZR36430 (ZR36430BGC) and
--maybe ZR36431, ZR36440, ZR36442...
--
--You can try the experience changing the vendor/product ID values (look
--at the source code).
--
--You can get these values by looking at /var/log/messages when you plug
--your camera, or by typing : cat /sys/kernel/debug/usb/devices.
--
--
--Install
---------
--
--In order to use this driver, you must compile it with your kernel,
--with the following config options::
--
--    ./scripts/config -e USB
--    ./scripts/config -m MEDIA_SUPPORT
--    ./scripts/config -e MEDIA_USB_SUPPORT
--    ./scripts/config -e MEDIA_CAMERA_SUPPORT
--    ./scripts/config -m USB_ZR364XX
--
--Usage
-------
--
--modprobe zr364xx debug=X mode=Y
--
--- debug      : set to 1 to enable verbose debug messages
--- mode       : 0 = 320x240, 1 = 160x120, 2 = 640x480
--
--You can then use the camera with V4L2 compatible applications, for
--example Ekiga.
--
--To capture a single image, try this: dd if=/dev/video0 of=test.jpg bs=1M
--count=1
--
--links
-------
--
--http://mxhaard.free.fr/ (support for many others cams including some Aiptek PocketDV)
--http://www.harmwal.nl/pccam880/ (this project also supports cameras based on this chipset)
--
--Supported devices
-------------------
--
--======  =======  ==============  ====================
--Vendor  Product  Distributor     Model
--======  =======  ==============  ====================
--0x08ca  0x0109   Aiptek          PocketDV 3300
--0x08ca  0x0109   Maxell          Maxcam PRO DV3
--0x041e  0x4024   Creative        PC-CAM 880
--0x0d64  0x0108   Aiptek          Fidelity 3200
--0x0d64  0x0108   Praktica        DCZ 1.3 S
--0x0d64  0x0108   Genius          Digital Camera (?)
--0x0d64  0x0108   DXG Technology  Fashion Cam
--0x0546  0x3187   Polaroid        iON 230
--0x0d64  0x3108   Praktica        Exakta DC 2200
--0x0d64  0x3108   Genius          G-Shot D211
--0x0595  0x4343   Concord         Eye-Q Duo 1300
--0x0595  0x4343   Concord         Eye-Q Duo 2000
--0x0595  0x4343   Fujifilm        EX-10
--0x0595  0x4343   Ricoh           RDC-6000
--0x0595  0x4343   Digitrex        DSC 1300
--0x0595  0x4343   Firstline       FDC 2000
--0x0bb0  0x500d   Concord         EyeQ Go Wireless
--0x0feb  0x2004   CRS Electronic  3.3 Digital Camera
--0x0feb  0x2004   Packard Bell    DSC-300
--0x055f  0xb500   Mustek          MDC 3000
--0x08ca  0x2062   Aiptek          PocketDV 5700
--0x052b  0x1a18   Chiphead        Megapix V12
--0x04c8  0x0729   Konica          Revio 2
--0x04f2  0xa208   Creative        PC-CAM 850
--0x0784  0x0040   Traveler        Slimline X5
--0x06d6  0x0034   Trust           Powerc@m 750
--0x0a17  0x0062   Pentax          Optio 50L
--0x06d6  0x003b   Trust           Powerc@m 970Z
--0x0a17  0x004e   Pentax          Optio 50
--0x041e  0x405d   Creative        DiVi CAM 516
--0x08ca  0x2102   Aiptek          DV T300
--0x06d6  0x003d   Trust           Powerc@m 910Z
--======  =======  ==============  ====================
+-Look at the 'motioneye' application code for an actual example.
 diff --git a/MAINTAINERS b/MAINTAINERS
-index f814ab594ea4..1a95b9bc6824 100644
+index f61eb221415b..f814ab594ea4 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -21719,16 +21719,6 @@ S:	Orphan
- W:	http://linux-lc100020.sourceforge.net
- F:	drivers/net/wireless/zydas/zd1201.*
+@@ -13071,7 +13071,6 @@ F:	include/media/
+ F:	include/uapi/linux/dvb/
+ F:	include/uapi/linux/ivtv*
+ F:	include/uapi/linux/media.h
+-F:	include/uapi/linux/meye.h
+ F:	include/uapi/linux/uvcvideo.h
+ F:	include/uapi/linux/v4l2-*
+ F:	include/uapi/linux/videodev2.h
+@@ -14150,13 +14149,6 @@ F:	drivers/regulator/mpq7920.c
+ F:	drivers/regulator/mpq7920.h
+ F:	include/linux/mfd/mp2629.h
  
--USB ZR364XX DRIVER
--M:	Antoine Jacquet <royale@zerezo.com>
--L:	linux-usb@vger.kernel.org
--L:	linux-media@vger.kernel.org
--S:	Maintained
--W:	http://royale.zerezo.com/zr364xx/
--T:	git git://linuxtv.org/media_tree.git
--F:	Documentation/admin-guide/media/zr364xx*
--F:	drivers/staging/media/deprecated/zr364xx/
+-MOTION EYE VAIO PICTUREBOOK CAMERA DRIVER
+-S:	Orphan
+-W:	http://popies.net/meye/
+-F:	Documentation/userspace-api/media/drivers/meye*
+-F:	drivers/staging/media/deprecated/meye/
+-F:	include/uapi/linux/meye.h
 -
- USER-MODE LINUX (UML)
- M:	Richard Weinberger <richard@nod.at>
- M:	Anton Ivanov <anton.ivanov@cambridgegreys.com>
+ MOTORCOMM PHY DRIVER
+ M:	Peter Geis <pgwipeout@gmail.com>
+ M:	Frank <Frank.Sae@motor-comm.com>
 diff --git a/drivers/staging/media/Kconfig b/drivers/staging/media/Kconfig
-index d1c7e7597a10..57699d4fc232 100644
+index b79f93684c4f..c312fe741a30 100644
 --- a/drivers/staging/media/Kconfig
 +++ b/drivers/staging/media/Kconfig
-@@ -55,7 +55,6 @@ source "drivers/staging/media/deprecated/atmel/Kconfig"
+@@ -54,7 +54,6 @@ if STAGING_MEDIA_DEPRECATED
+ source "drivers/staging/media/deprecated/atmel/Kconfig"
+ source "drivers/staging/media/deprecated/cpia2/Kconfig"
+ source "drivers/staging/media/deprecated/fsl-viu/Kconfig"
+-source "drivers/staging/media/deprecated/meye/Kconfig"
  source "drivers/staging/media/deprecated/saa7146/Kconfig"
+ source "drivers/staging/media/deprecated/stkwebcam/Kconfig"
  source "drivers/staging/media/deprecated/tm6000/Kconfig"
- source "drivers/staging/media/deprecated/vpfe_capture/Kconfig"
--source "drivers/staging/media/deprecated/zr364xx/Kconfig"
- endif
- 
- endif
 diff --git a/drivers/staging/media/Makefile b/drivers/staging/media/Makefile
-index da2e4f0fb7cb..591e1df6e83e 100644
+index 54bbdd4b0d08..f61ab43625b3 100644
 --- a/drivers/staging/media/Makefile
 +++ b/drivers/staging/media/Makefile
-@@ -10,6 +10,5 @@ obj-$(CONFIG_VIDEO_SUNXI)	+= sunxi/
- obj-$(CONFIG_VIDEO_TEGRA)	+= tegra-video/
- obj-$(CONFIG_VIDEO_IPU3_IMGU)	+= ipu3/
- obj-$(CONFIG_VIDEO_TM6000)	+= deprecated/tm6000/
--obj-$(CONFIG_USB_ZR364XX)	+= deprecated/zr364xx/
- obj-y += deprecated/vpfe_capture/
- obj-y += deprecated/saa7146/
-diff --git a/drivers/staging/media/deprecated/zr364xx/Kconfig b/drivers/staging/media/deprecated/zr364xx/Kconfig
+@@ -5,7 +5,6 @@ obj-$(CONFIG_VIDEO_CPIA2)	+= deprecated/cpia2/
+ obj-$(CONFIG_VIDEO_IMX_MEDIA)	+= imx/
+ obj-$(CONFIG_VIDEO_MAX96712)	+= max96712/
+ obj-$(CONFIG_VIDEO_MESON_VDEC)	+= meson/vdec/
+-obj-$(CONFIG_VIDEO_MEYE)	+= deprecated/meye/
+ obj-$(CONFIG_VIDEO_OMAP4)	+= omap4iss/
+ obj-$(CONFIG_VIDEO_ROCKCHIP_VDEC)	+= rkvdec/
+ obj-$(CONFIG_VIDEO_STKWEBCAM)	+= deprecated/stkwebcam/
+diff --git a/drivers/staging/media/deprecated/meye/Kconfig b/drivers/staging/media/deprecated/meye/Kconfig
 deleted file mode 100644
-index ea29c9d8dca2..000000000000
---- a/drivers/staging/media/deprecated/zr364xx/Kconfig
+index f135f8568c85..000000000000
+--- a/drivers/staging/media/deprecated/meye/Kconfig
 +++ /dev/null
-@@ -1,18 +0,0 @@
+@@ -1,19 +0,0 @@
 -# SPDX-License-Identifier: GPL-2.0-only
--config USB_ZR364XX
--	tristate "USB ZR364XX Camera support (DEPRECATED)"
--	depends on USB && VIDEO_DEV
--	select VIDEOBUF_GEN
--	select VIDEOBUF_VMALLOC
+-config VIDEO_MEYE
+-	tristate "Sony Vaio Picturebook Motion Eye Video For Linux (DEPRECATED)"
+-	depends on PCI && VIDEO_DEV
+-	depends on SONY_LAPTOP
+-	depends on X86 || COMPILE_TEST
 -	help
--	  Say Y here if you want to connect this type of camera to your
--	  computer's USB port.
--	  See <file:Documentation/admin-guide/media/zr364xx.rst> for more info
--	  and list of supported cameras.
+-	  This is the video4linux driver for the Motion Eye camera found
+-	  in the Vaio Picturebook laptops. Please read the material in
+-	  <file:Documentation/admin-guide/media/meye.rst> for more information.
+-
+-	  If you say Y or M here, you need to say Y or M to "Sony Laptop
+-	  Extras" in the misc device section.
 -
 -	  This driver is deprecated and is scheduled for removal by
 -	  the beginning of 2023. See the TODO file for more information.
 -
 -	  To compile this driver as a module, choose M here: the
--	  module will be called zr364xx.
--
-diff --git a/drivers/staging/media/deprecated/zr364xx/Makefile b/drivers/staging/media/deprecated/zr364xx/Makefile
+-	  module will be called meye.
+diff --git a/drivers/staging/media/deprecated/meye/Makefile b/drivers/staging/media/deprecated/meye/Makefile
 deleted file mode 100644
-index edab017d499c..000000000000
---- a/drivers/staging/media/deprecated/zr364xx/Makefile
+index 36f1f86f0d58..000000000000
+--- a/drivers/staging/media/deprecated/meye/Makefile
 +++ /dev/null
-@@ -1,3 +0,0 @@
+@@ -1,2 +0,0 @@
 -# SPDX-License-Identifier: GPL-2.0-only
--obj-$(CONFIG_USB_ZR364XX)       += zr364xx.o
--
-diff --git a/drivers/staging/media/deprecated/zr364xx/TODO b/drivers/staging/media/deprecated/zr364xx/TODO
+-obj-$(CONFIG_VIDEO_MEYE) += meye.o
+diff --git a/drivers/staging/media/deprecated/meye/TODO b/drivers/staging/media/deprecated/meye/TODO
 deleted file mode 100644
-index ecb30a429689..000000000000
---- a/drivers/staging/media/deprecated/zr364xx/TODO
+index 6d1d1433d5a0..000000000000
+--- a/drivers/staging/media/deprecated/meye/TODO
 +++ /dev/null
-@@ -1,7 +0,0 @@
--This is one of the few drivers still not using the vb2
--framework, so this driver is now deprecated with the intent of
--removing it altogether by the beginning of 2023.
+@@ -1,6 +0,0 @@
+-The meye driver does not use the vb2 framework for streaming
+-video, instead it implements this in the driver.
 -
--In order to keep this driver it has to be converted to vb2.
--If someone is interested in doing this work, then contact the
--linux-media mailinglist (https://linuxtv.org/lists.php).
-diff --git a/drivers/staging/media/deprecated/zr364xx/zr364xx.c b/drivers/staging/media/deprecated/zr364xx/zr364xx.c
+-To prevent removal of this driver early 2023 it has to be
+-converted to use vb2. Contact the linux-media@vger.kernel.org
+-mailing list if you want to do this.
+diff --git a/drivers/staging/media/deprecated/meye/meye.c b/drivers/staging/media/deprecated/meye/meye.c
 deleted file mode 100644
-index 538a330046ec..000000000000
---- a/drivers/staging/media/deprecated/zr364xx/zr364xx.c
+index 5d87efd9b95c..000000000000
+--- a/drivers/staging/media/deprecated/meye/meye.c
 +++ /dev/null
-@@ -1,1635 +0,0 @@
+@@ -1,1814 +0,0 @@
 -// SPDX-License-Identifier: GPL-2.0-or-later
 -/*
-- * Zoran 364xx based USB webcam module version 0.73
+- * Motion Eye video4linux driver for Sony Vaio PictureBook
 - *
-- * Allows you to use your USB webcam with V4L2 applications
-- * This is still in heavy development !
+- * Copyright (C) 2001-2004 Stelian Pop <stelian@popies.net>
 - *
-- * Copyright (C) 2004  Antoine Jacquet <royale@zerezo.com>
-- * http://royale.zerezo.com/zr364xx/
+- * Copyright (C) 2001-2002 Alcôve <www.alcove.com>
 - *
-- * Heavily inspired by usb-skeleton.c, vicam.c, cpia.c and spca50x.c drivers
-- * V4L2 version inspired by meye.c driver
+- * Copyright (C) 2000 Andrew Tridgell <tridge@valinux.com>
 - *
-- * Some video buffer code by Lamarque based on s2255drv.c and vivi.c drivers.
+- * Earlier work by Werner Almesberger, Paul `Rusty' Russell and Paul Mackerras.
+- *
+- * Some parts borrowed from various video4linux drivers, especially
+- * bttv-driver.c and zoran.c, see original files for credits.
 - */
--
--
 -#include <linux/module.h>
+-#include <linux/pci.h>
+-#include <linux/sched.h>
 -#include <linux/init.h>
--#include <linux/usb.h>
--#include <linux/vmalloc.h>
--#include <linux/slab.h>
--#include <linux/highmem.h>
+-#include <linux/gfp.h>
+-#include <linux/videodev2.h>
 -#include <media/v4l2-common.h>
--#include <media/v4l2-ioctl.h>
 -#include <media/v4l2-device.h>
--#include <media/v4l2-ctrls.h>
+-#include <media/v4l2-ioctl.h>
 -#include <media/v4l2-fh.h>
 -#include <media/v4l2-event.h>
--#include <media/videobuf-vmalloc.h>
+-#include <linux/uaccess.h>
+-#include <asm/io.h>
+-#include <linux/delay.h>
+-#include <linux/interrupt.h>
+-#include <linux/vmalloc.h>
+-#include <linux/dma-mapping.h>
 -
+-#include "meye.h"
+-#include <linux/meye.h>
 -
--/* Version Information */
--#define DRIVER_VERSION "0.7.4"
--#define DRIVER_AUTHOR "Antoine Jacquet, http://royale.zerezo.com/"
--#define DRIVER_DESC "Zoran 364xx"
+-MODULE_AUTHOR("Stelian Pop <stelian@popies.net>");
+-MODULE_DESCRIPTION("v4l2 driver for the MotionEye camera");
+-MODULE_LICENSE("GPL");
+-MODULE_VERSION(MEYE_DRIVER_VERSION);
 -
+-/* number of grab buffers */
+-static unsigned int gbuffers = 2;
+-module_param(gbuffers, int, 0444);
+-MODULE_PARM_DESC(gbuffers, "number of capture buffers, default is 2 (32 max)");
 -
--/* Camera */
--#define FRAMES 1
--#define MAX_FRAME_SIZE 200000
--#define BUFFER_SIZE 0x1000
--#define CTRL_TIMEOUT 500
+-/* size of a grab buffer */
+-static unsigned int gbufsize = MEYE_MAX_BUFSIZE;
+-module_param(gbufsize, int, 0444);
+-MODULE_PARM_DESC(gbufsize, "size of the capture buffers, default is 614400 (will be rounded up to a page multiple)");
 -
--#define ZR364XX_DEF_BUFS	4
--#define ZR364XX_READ_IDLE	0
--#define ZR364XX_READ_FRAME	1
+-/* /dev/videoX registration number */
+-static int video_nr = -1;
+-module_param(video_nr, int, 0444);
+-MODULE_PARM_DESC(video_nr, "video device to register (0=/dev/video0, etc)");
 -
--/* Debug macro */
--#define DBG(fmt, args...) \
--	do { \
--		if (debug) { \
--			printk(KERN_INFO KBUILD_MODNAME " " fmt, ##args); \
--		} \
--	} while (0)
+-/* driver structure - only one possible */
+-static struct meye meye;
 -
--/*#define FULL_DEBUG 1*/
--#ifdef FULL_DEBUG
--#define _DBG DBG
--#else
--#define _DBG(fmt, args...)
+-/****************************************************************************/
+-/* Memory allocation routines (stolen from bttv-driver.c)                   */
+-/****************************************************************************/
+-static void *rvmalloc(unsigned long size)
+-{
+-	void *mem;
+-	unsigned long adr;
+-
+-	size = PAGE_ALIGN(size);
+-	mem = vmalloc_32(size);
+-	if (mem) {
+-		memset(mem, 0, size);
+-		adr = (unsigned long) mem;
+-		while (size > 0) {
+-			SetPageReserved(vmalloc_to_page((void *)adr));
+-			adr += PAGE_SIZE;
+-			size -= PAGE_SIZE;
+-		}
+-	}
+-	return mem;
+-}
+-
+-static void rvfree(void * mem, unsigned long size)
+-{
+-	unsigned long adr;
+-
+-	if (mem) {
+-		adr = (unsigned long) mem;
+-		while ((long) size > 0) {
+-			ClearPageReserved(vmalloc_to_page((void *)adr));
+-			adr += PAGE_SIZE;
+-			size -= PAGE_SIZE;
+-		}
+-		vfree(mem);
+-	}
+-}
+-
+-/*
+- * return a page table pointing to N pages of locked memory
+- *
+- * NOTE: The meye device expects DMA addresses on 32 bits, we build
+- * a table of 1024 entries = 4 bytes * 1024 = 4096 bytes.
+- */
+-static int ptable_alloc(void)
+-{
+-	u32 *pt;
+-	int i;
+-
+-	memset(meye.mchip_ptable, 0, sizeof(meye.mchip_ptable));
+-
+-	/* give only 32 bit DMA addresses */
+-	if (dma_set_mask(&meye.mchip_dev->dev, DMA_BIT_MASK(32)))
+-		return -1;
+-
+-	meye.mchip_ptable_toc = dma_alloc_coherent(&meye.mchip_dev->dev,
+-						   PAGE_SIZE,
+-						   &meye.mchip_dmahandle,
+-						   GFP_KERNEL);
+-	if (!meye.mchip_ptable_toc) {
+-		meye.mchip_dmahandle = 0;
+-		return -1;
+-	}
+-
+-	pt = meye.mchip_ptable_toc;
+-	for (i = 0; i < MCHIP_NB_PAGES; i++) {
+-		dma_addr_t dma;
+-		meye.mchip_ptable[i] = dma_alloc_coherent(&meye.mchip_dev->dev,
+-							  PAGE_SIZE,
+-							  &dma,
+-							  GFP_KERNEL);
+-		if (!meye.mchip_ptable[i]) {
+-			int j;
+-			pt = meye.mchip_ptable_toc;
+-			for (j = 0; j < i; ++j) {
+-				dma = (dma_addr_t) *pt;
+-				dma_free_coherent(&meye.mchip_dev->dev,
+-						  PAGE_SIZE,
+-						  meye.mchip_ptable[j], dma);
+-				pt++;
+-			}
+-			dma_free_coherent(&meye.mchip_dev->dev,
+-					  PAGE_SIZE,
+-					  meye.mchip_ptable_toc,
+-					  meye.mchip_dmahandle);
+-			meye.mchip_ptable_toc = NULL;
+-			meye.mchip_dmahandle = 0;
+-			return -1;
+-		}
+-		*pt = (u32) dma;
+-		pt++;
+-	}
+-	return 0;
+-}
+-
+-static void ptable_free(void)
+-{
+-	u32 *pt;
+-	int i;
+-
+-	pt = meye.mchip_ptable_toc;
+-	for (i = 0; i < MCHIP_NB_PAGES; i++) {
+-		dma_addr_t dma = (dma_addr_t) *pt;
+-		if (meye.mchip_ptable[i])
+-			dma_free_coherent(&meye.mchip_dev->dev,
+-					  PAGE_SIZE,
+-					  meye.mchip_ptable[i], dma);
+-		pt++;
+-	}
+-
+-	if (meye.mchip_ptable_toc)
+-		dma_free_coherent(&meye.mchip_dev->dev,
+-				  PAGE_SIZE,
+-				  meye.mchip_ptable_toc,
+-				  meye.mchip_dmahandle);
+-
+-	memset(meye.mchip_ptable, 0, sizeof(meye.mchip_ptable));
+-	meye.mchip_ptable_toc = NULL;
+-	meye.mchip_dmahandle = 0;
+-}
+-
+-/* copy data from ptable into buf */
+-static void ptable_copy(u8 *buf, int start, int size, int pt_pages)
+-{
+-	int i;
+-
+-	for (i = 0; i < (size / PAGE_SIZE) * PAGE_SIZE; i += PAGE_SIZE) {
+-		memcpy(buf + i, meye.mchip_ptable[start++], PAGE_SIZE);
+-		if (start >= pt_pages)
+-			start = 0;
+-	}
+-	memcpy(buf + i, meye.mchip_ptable[start], size % PAGE_SIZE);
+-}
+-
+-/****************************************************************************/
+-/* JPEG tables at different qualities to load into the VRJ chip             */
+-/****************************************************************************/
+-
+-/* return a set of quantisation tables based on a quality from 1 to 10 */
+-static u16 *jpeg_quantisation_tables(int *length, int quality)
+-{
+-	static u16 jpeg_tables[][70] = { {
+-		0xdbff, 0x4300, 0xff00, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
+-		0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
+-		0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
+-		0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
+-		0xffff, 0xffff, 0xffff,
+-		0xdbff, 0x4300, 0xff01, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
+-		0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
+-		0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
+-		0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
+-		0xffff, 0xffff, 0xffff,
+-	},
+-	{
+-		0xdbff, 0x4300, 0x5000, 0x3c37, 0x3c46, 0x5032, 0x4146, 0x5a46,
+-		0x5055, 0x785f, 0x82c8, 0x6e78, 0x786e, 0xaff5, 0x91b9, 0xffc8,
+-		0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
+-		0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
+-		0xffff, 0xffff, 0xffff,
+-		0xdbff, 0x4300, 0x5501, 0x5a5a, 0x6978, 0xeb78, 0x8282, 0xffeb,
+-		0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
+-		0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
+-		0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
+-		0xffff, 0xffff, 0xffff,
+-	},
+-	{
+-		0xdbff, 0x4300, 0x2800, 0x1e1c, 0x1e23, 0x2819, 0x2123, 0x2d23,
+-		0x282b, 0x3c30, 0x4164, 0x373c, 0x3c37, 0x587b, 0x495d, 0x9164,
+-		0x9980, 0x8f96, 0x8c80, 0xa08a, 0xe6b4, 0xa0c3, 0xdaaa, 0x8aad,
+-		0xc88c, 0xcbff, 0xeeda, 0xfff5, 0xffff, 0xc19b, 0xffff, 0xfaff,
+-		0xe6ff, 0xfffd, 0xfff8,
+-		0xdbff, 0x4300, 0x2b01, 0x2d2d, 0x353c, 0x763c, 0x4141, 0xf876,
+-		0x8ca5, 0xf8a5, 0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8,
+-		0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8,
+-		0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8,
+-		0xf8f8, 0xf8f8, 0xfff8,
+-	},
+-	{
+-		0xdbff, 0x4300, 0x1b00, 0x1412, 0x1417, 0x1b11, 0x1617, 0x1e17,
+-		0x1b1c, 0x2820, 0x2b42, 0x2528, 0x2825, 0x3a51, 0x303d, 0x6042,
+-		0x6555, 0x5f64, 0x5d55, 0x6a5b, 0x9978, 0x6a81, 0x9071, 0x5b73,
+-		0x855d, 0x86b5, 0x9e90, 0xaba3, 0xabad, 0x8067, 0xc9bc, 0xa6ba,
+-		0x99c7, 0xaba8, 0xffa4,
+-		0xdbff, 0x4300, 0x1c01, 0x1e1e, 0x2328, 0x4e28, 0x2b2b, 0xa44e,
+-		0x5d6e, 0xa46e, 0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4,
+-		0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4,
+-		0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4,
+-		0xa4a4, 0xa4a4, 0xffa4,
+-	},
+-	{
+-		0xdbff, 0x4300, 0x1400, 0x0f0e, 0x0f12, 0x140d, 0x1012, 0x1712,
+-		0x1415, 0x1e18, 0x2132, 0x1c1e, 0x1e1c, 0x2c3d, 0x242e, 0x4932,
+-		0x4c40, 0x474b, 0x4640, 0x5045, 0x735a, 0x5062, 0x6d55, 0x4556,
+-		0x6446, 0x6588, 0x776d, 0x817b, 0x8182, 0x604e, 0x978d, 0x7d8c,
+-		0x7396, 0x817e, 0xff7c,
+-		0xdbff, 0x4300, 0x1501, 0x1717, 0x1a1e, 0x3b1e, 0x2121, 0x7c3b,
+-		0x4653, 0x7c53, 0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c,
+-		0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c,
+-		0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c,
+-		0x7c7c, 0x7c7c, 0xff7c,
+-	},
+-	{
+-		0xdbff, 0x4300, 0x1000, 0x0c0b, 0x0c0e, 0x100a, 0x0d0e, 0x120e,
+-		0x1011, 0x1813, 0x1a28, 0x1618, 0x1816, 0x2331, 0x1d25, 0x3a28,
+-		0x3d33, 0x393c, 0x3833, 0x4037, 0x5c48, 0x404e, 0x5744, 0x3745,
+-		0x5038, 0x516d, 0x5f57, 0x6762, 0x6768, 0x4d3e, 0x7971, 0x6470,
+-		0x5c78, 0x6765, 0xff63,
+-		0xdbff, 0x4300, 0x1101, 0x1212, 0x1518, 0x2f18, 0x1a1a, 0x632f,
+-		0x3842, 0x6342, 0x6363, 0x6363, 0x6363, 0x6363, 0x6363, 0x6363,
+-		0x6363, 0x6363, 0x6363, 0x6363, 0x6363, 0x6363, 0x6363, 0x6363,
+-		0x6363, 0x6363, 0x6363, 0x6363, 0x6363, 0x6363, 0x6363, 0x6363,
+-		0x6363, 0x6363, 0xff63,
+-	},
+-	{
+-		0xdbff, 0x4300, 0x0d00, 0x0a09, 0x0a0b, 0x0d08, 0x0a0b, 0x0e0b,
+-		0x0d0e, 0x130f, 0x1520, 0x1213, 0x1312, 0x1c27, 0x171e, 0x2e20,
+-		0x3129, 0x2e30, 0x2d29, 0x332c, 0x4a3a, 0x333e, 0x4636, 0x2c37,
+-		0x402d, 0x4157, 0x4c46, 0x524e, 0x5253, 0x3e32, 0x615a, 0x505a,
+-		0x4a60, 0x5251, 0xff4f,
+-		0xdbff, 0x4300, 0x0e01, 0x0e0e, 0x1113, 0x2613, 0x1515, 0x4f26,
+-		0x2d35, 0x4f35, 0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f,
+-		0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f,
+-		0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f,
+-		0x4f4f, 0x4f4f, 0xff4f,
+-	},
+-	{
+-		0xdbff, 0x4300, 0x0a00, 0x0707, 0x0708, 0x0a06, 0x0808, 0x0b08,
+-		0x0a0a, 0x0e0b, 0x1018, 0x0d0e, 0x0e0d, 0x151d, 0x1116, 0x2318,
+-		0x251f, 0x2224, 0x221f, 0x2621, 0x372b, 0x262f, 0x3429, 0x2129,
+-		0x3022, 0x3141, 0x3934, 0x3e3b, 0x3e3e, 0x2e25, 0x4944, 0x3c43,
+-		0x3748, 0x3e3d, 0xff3b,
+-		0xdbff, 0x4300, 0x0a01, 0x0b0b, 0x0d0e, 0x1c0e, 0x1010, 0x3b1c,
+-		0x2228, 0x3b28, 0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b,
+-		0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b,
+-		0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b,
+-		0x3b3b, 0x3b3b, 0xff3b,
+-	},
+-	{
+-		0xdbff, 0x4300, 0x0600, 0x0504, 0x0506, 0x0604, 0x0506, 0x0706,
+-		0x0607, 0x0a08, 0x0a10, 0x090a, 0x0a09, 0x0e14, 0x0c0f, 0x1710,
+-		0x1814, 0x1718, 0x1614, 0x1a16, 0x251d, 0x1a1f, 0x231b, 0x161c,
+-		0x2016, 0x202c, 0x2623, 0x2927, 0x292a, 0x1f19, 0x302d, 0x282d,
+-		0x2530, 0x2928, 0xff28,
+-		0xdbff, 0x4300, 0x0701, 0x0707, 0x080a, 0x130a, 0x0a0a, 0x2813,
+-		0x161a, 0x281a, 0x2828, 0x2828, 0x2828, 0x2828, 0x2828, 0x2828,
+-		0x2828, 0x2828, 0x2828, 0x2828, 0x2828, 0x2828, 0x2828, 0x2828,
+-		0x2828, 0x2828, 0x2828, 0x2828, 0x2828, 0x2828, 0x2828, 0x2828,
+-		0x2828, 0x2828, 0xff28,
+-	},
+-	{
+-		0xdbff, 0x4300, 0x0300, 0x0202, 0x0203, 0x0302, 0x0303, 0x0403,
+-		0x0303, 0x0504, 0x0508, 0x0405, 0x0504, 0x070a, 0x0607, 0x0c08,
+-		0x0c0a, 0x0b0c, 0x0b0a, 0x0d0b, 0x120e, 0x0d10, 0x110e, 0x0b0e,
+-		0x100b, 0x1016, 0x1311, 0x1514, 0x1515, 0x0f0c, 0x1817, 0x1416,
+-		0x1218, 0x1514, 0xff14,
+-		0xdbff, 0x4300, 0x0301, 0x0404, 0x0405, 0x0905, 0x0505, 0x1409,
+-		0x0b0d, 0x140d, 0x1414, 0x1414, 0x1414, 0x1414, 0x1414, 0x1414,
+-		0x1414, 0x1414, 0x1414, 0x1414, 0x1414, 0x1414, 0x1414, 0x1414,
+-		0x1414, 0x1414, 0x1414, 0x1414, 0x1414, 0x1414, 0x1414, 0x1414,
+-		0x1414, 0x1414, 0xff14,
+-	},
+-	{
+-		0xdbff, 0x4300, 0x0100, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101,
+-		0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101,
+-		0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101,
+-		0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101,
+-		0x0101, 0x0101, 0xff01,
+-		0xdbff, 0x4300, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101,
+-		0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101,
+-		0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101,
+-		0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101,
+-		0x0101, 0x0101, 0xff01,
+-	} };
+-
+-	if (quality < 0 || quality > 10) {
+-		printk(KERN_WARNING
+-		       "meye: invalid quality level %d - using 8\n", quality);
+-		quality = 8;
+-	}
+-
+-	*length = ARRAY_SIZE(jpeg_tables[quality]);
+-	return jpeg_tables[quality];
+-}
+-
+-/* return a generic set of huffman tables */
+-static u16 *jpeg_huffman_tables(int *length)
+-{
+-	static u16 tables[] = {
+-		0xC4FF, 0xB500, 0x0010, 0x0102, 0x0303, 0x0402, 0x0503, 0x0405,
+-		0x0004, 0x0100, 0x017D, 0x0302, 0x0400, 0x0511, 0x2112, 0x4131,
+-		0x1306, 0x6151, 0x2207, 0x1471, 0x8132, 0xA191, 0x2308, 0xB142,
+-		0x15C1, 0xD152, 0x24F0, 0x6233, 0x8272, 0x0A09, 0x1716, 0x1918,
+-		0x251A, 0x2726, 0x2928, 0x342A, 0x3635, 0x3837, 0x3A39, 0x4443,
+-		0x4645, 0x4847, 0x4A49, 0x5453, 0x5655, 0x5857, 0x5A59, 0x6463,
+-		0x6665, 0x6867, 0x6A69, 0x7473, 0x7675, 0x7877, 0x7A79, 0x8483,
+-		0x8685, 0x8887, 0x8A89, 0x9392, 0x9594, 0x9796, 0x9998, 0xA29A,
+-		0xA4A3, 0xA6A5, 0xA8A7, 0xAAA9, 0xB3B2, 0xB5B4, 0xB7B6, 0xB9B8,
+-		0xC2BA, 0xC4C3, 0xC6C5, 0xC8C7, 0xCAC9, 0xD3D2, 0xD5D4, 0xD7D6,
+-		0xD9D8, 0xE1DA, 0xE3E2, 0xE5E4, 0xE7E6, 0xE9E8, 0xF1EA, 0xF3F2,
+-		0xF5F4, 0xF7F6, 0xF9F8, 0xFFFA,
+-		0xC4FF, 0xB500, 0x0011, 0x0102, 0x0402, 0x0304, 0x0704, 0x0405,
+-		0x0004, 0x0201, 0x0077, 0x0201, 0x1103, 0x0504, 0x3121, 0x1206,
+-		0x5141, 0x6107, 0x1371, 0x3222, 0x0881, 0x4214, 0xA191, 0xC1B1,
+-		0x2309, 0x5233, 0x15F0, 0x7262, 0x0AD1, 0x2416, 0xE134, 0xF125,
+-		0x1817, 0x1A19, 0x2726, 0x2928, 0x352A, 0x3736, 0x3938, 0x433A,
+-		0x4544, 0x4746, 0x4948, 0x534A, 0x5554, 0x5756, 0x5958, 0x635A,
+-		0x6564, 0x6766, 0x6968, 0x736A, 0x7574, 0x7776, 0x7978, 0x827A,
+-		0x8483, 0x8685, 0x8887, 0x8A89, 0x9392, 0x9594, 0x9796, 0x9998,
+-		0xA29A, 0xA4A3, 0xA6A5, 0xA8A7, 0xAAA9, 0xB3B2, 0xB5B4, 0xB7B6,
+-		0xB9B8, 0xC2BA, 0xC4C3, 0xC6C5, 0xC8C7, 0xCAC9, 0xD3D2, 0xD5D4,
+-		0xD7D6, 0xD9D8, 0xE2DA, 0xE4E3, 0xE6E5, 0xE8E7, 0xEAE9, 0xF3F2,
+-		0xF5F4, 0xF7F6, 0xF9F8, 0xFFFA,
+-		0xC4FF, 0x1F00, 0x0000, 0x0501, 0x0101, 0x0101, 0x0101, 0x0000,
+-		0x0000, 0x0000, 0x0000, 0x0201, 0x0403, 0x0605, 0x0807, 0x0A09,
+-		0xFF0B,
+-		0xC4FF, 0x1F00, 0x0001, 0x0103, 0x0101, 0x0101, 0x0101, 0x0101,
+-		0x0000, 0x0000, 0x0000, 0x0201, 0x0403, 0x0605, 0x0807, 0x0A09,
+-		0xFF0B
+-	};
+-
+-	*length = ARRAY_SIZE(tables);
+-	return tables;
+-}
+-
+-/****************************************************************************/
+-/* MCHIP low-level functions                                                */
+-/****************************************************************************/
+-
+-/* returns the horizontal capture size */
+-static inline int mchip_hsize(void)
+-{
+-	return meye.params.subsample ? 320 : 640;
+-}
+-
+-/* returns the vertical capture size */
+-static inline int mchip_vsize(void)
+-{
+-	return meye.params.subsample ? 240 : 480;
+-}
+-
+-/* waits for a register to be available */
+-static void mchip_sync(int reg)
+-{
+-	u32 status;
+-	int i;
+-
+-	if (reg == MCHIP_MM_FIFO_DATA) {
+-		for (i = 0; i < MCHIP_REG_TIMEOUT; i++) {
+-			status = readl(meye.mchip_mmregs +
+-				       MCHIP_MM_FIFO_STATUS);
+-			if (!(status & MCHIP_MM_FIFO_WAIT)) {
+-				printk(KERN_WARNING "meye: fifo not ready\n");
+-				return;
+-			}
+-			if (status & MCHIP_MM_FIFO_READY)
+-				return;
+-			udelay(1);
+-		}
+-	} else if (reg > 0x80) {
+-		u32 mask = (reg < 0x100) ? MCHIP_HIC_STATUS_MCC_RDY
+-					 : MCHIP_HIC_STATUS_VRJ_RDY;
+-		for (i = 0; i < MCHIP_REG_TIMEOUT; i++) {
+-			status = readl(meye.mchip_mmregs + MCHIP_HIC_STATUS);
+-			if (status & mask)
+-				return;
+-			udelay(1);
+-		}
+-	} else
+-		return;
+-	printk(KERN_WARNING
+-	       "meye: mchip_sync() timeout on reg 0x%x status=0x%x\n",
+-	       reg, status);
+-}
+-
+-/* sets a value into the register */
+-static inline void mchip_set(int reg, u32 v)
+-{
+-	mchip_sync(reg);
+-	writel(v, meye.mchip_mmregs + reg);
+-}
+-
+-/* get the register value */
+-static inline u32 mchip_read(int reg)
+-{
+-	mchip_sync(reg);
+-	return readl(meye.mchip_mmregs + reg);
+-}
+-
+-/* wait for a register to become a particular value */
+-static inline int mchip_delay(u32 reg, u32 v)
+-{
+-	int n = 10;
+-	while (--n && mchip_read(reg) != v)
+-		udelay(1);
+-	return n;
+-}
+-
+-/* setup subsampling */
+-static void mchip_subsample(void)
+-{
+-	mchip_set(MCHIP_MCC_R_SAMPLING, meye.params.subsample);
+-	mchip_set(MCHIP_MCC_R_XRANGE, mchip_hsize());
+-	mchip_set(MCHIP_MCC_R_YRANGE, mchip_vsize());
+-	mchip_set(MCHIP_MCC_B_XRANGE, mchip_hsize());
+-	mchip_set(MCHIP_MCC_B_YRANGE, mchip_vsize());
+-	mchip_delay(MCHIP_HIC_STATUS, MCHIP_HIC_STATUS_IDLE);
+-}
+-
+-/* set the framerate into the mchip */
+-static void mchip_set_framerate(void)
+-{
+-	mchip_set(MCHIP_HIC_S_RATE, meye.params.framerate);
+-}
+-
+-/* load some huffman and quantisation tables into the VRJ chip ready
+-   for JPEG compression */
+-static void mchip_load_tables(void)
+-{
+-	int i;
+-	int length;
+-	u16 *tables;
+-
+-	tables = jpeg_huffman_tables(&length);
+-	for (i = 0; i < length; i++)
+-		writel(tables[i], meye.mchip_mmregs + MCHIP_VRJ_TABLE_DATA);
+-
+-	tables = jpeg_quantisation_tables(&length, meye.params.quality);
+-	for (i = 0; i < length; i++)
+-		writel(tables[i], meye.mchip_mmregs + MCHIP_VRJ_TABLE_DATA);
+-}
+-
+-/* setup the VRJ parameters in the chip */
+-static void mchip_vrj_setup(u8 mode)
+-{
+-	mchip_set(MCHIP_VRJ_BUS_MODE, 5);
+-	mchip_set(MCHIP_VRJ_SIGNAL_ACTIVE_LEVEL, 0x1f);
+-	mchip_set(MCHIP_VRJ_PDAT_USE, 1);
+-	mchip_set(MCHIP_VRJ_IRQ_FLAG, 0xa0);
+-	mchip_set(MCHIP_VRJ_MODE_SPECIFY, mode);
+-	mchip_set(MCHIP_VRJ_NUM_LINES, mchip_vsize());
+-	mchip_set(MCHIP_VRJ_NUM_PIXELS, mchip_hsize());
+-	mchip_set(MCHIP_VRJ_NUM_COMPONENTS, 0x1b);
+-	mchip_set(MCHIP_VRJ_LIMIT_COMPRESSED_LO, 0xFFFF);
+-	mchip_set(MCHIP_VRJ_LIMIT_COMPRESSED_HI, 0xFFFF);
+-	mchip_set(MCHIP_VRJ_COMP_DATA_FORMAT, 0xC);
+-	mchip_set(MCHIP_VRJ_RESTART_INTERVAL, 0);
+-	mchip_set(MCHIP_VRJ_SOF1, 0x601);
+-	mchip_set(MCHIP_VRJ_SOF2, 0x1502);
+-	mchip_set(MCHIP_VRJ_SOF3, 0x1503);
+-	mchip_set(MCHIP_VRJ_SOF4, 0x1596);
+-	mchip_set(MCHIP_VRJ_SOS, 0x0ed0);
+-
+-	mchip_load_tables();
+-}
+-
+-/* sets the DMA parameters into the chip */
+-static void mchip_dma_setup(dma_addr_t dma_addr)
+-{
+-	int i;
+-
+-	mchip_set(MCHIP_MM_PT_ADDR, (u32)dma_addr);
+-	for (i = 0; i < 4; i++)
+-		mchip_set(MCHIP_MM_FIR(i), 0);
+-	meye.mchip_fnum = 0;
+-}
+-
+-/* setup for DMA transfers - also zeros the framebuffer */
+-static int mchip_dma_alloc(void)
+-{
+-	if (!meye.mchip_dmahandle)
+-		if (ptable_alloc())
+-			return -1;
+-	return 0;
+-}
+-
+-/* frees the DMA buffer */
+-static void mchip_dma_free(void)
+-{
+-	if (meye.mchip_dmahandle) {
+-		mchip_dma_setup(0);
+-		ptable_free();
+-	}
+-}
+-
+-/* stop any existing HIC action and wait for any dma to complete then
+-   reset the dma engine */
+-static void mchip_hic_stop(void)
+-{
+-	int i, j;
+-
+-	meye.mchip_mode = MCHIP_HIC_MODE_NOOP;
+-	if (!(mchip_read(MCHIP_HIC_STATUS) & MCHIP_HIC_STATUS_BUSY))
+-		return;
+-	for (i = 0; i < 20; ++i) {
+-		mchip_set(MCHIP_HIC_CMD, MCHIP_HIC_CMD_STOP);
+-		mchip_delay(MCHIP_HIC_CMD, 0);
+-		for (j = 0; j < 100; ++j) {
+-			if (mchip_delay(MCHIP_HIC_STATUS,
+-					MCHIP_HIC_STATUS_IDLE))
+-				return;
+-			msleep(1);
+-		}
+-		printk(KERN_ERR "meye: need to reset HIC!\n");
+-
+-		mchip_set(MCHIP_HIC_CTL, MCHIP_HIC_CTL_SOFT_RESET);
+-		msleep(250);
+-	}
+-	printk(KERN_ERR "meye: resetting HIC hanged!\n");
+-}
+-
+-/****************************************************************************/
+-/* MCHIP frame processing functions                                         */
+-/****************************************************************************/
+-
+-/* get the next ready frame from the dma engine */
+-static u32 mchip_get_frame(void)
+-{
+-	return mchip_read(MCHIP_MM_FIR(meye.mchip_fnum));
+-}
+-
+-/* frees the current frame from the dma engine */
+-static void mchip_free_frame(void)
+-{
+-	mchip_set(MCHIP_MM_FIR(meye.mchip_fnum), 0);
+-	meye.mchip_fnum++;
+-	meye.mchip_fnum %= 4;
+-}
+-
+-/* read one frame from the framebuffer assuming it was captured using
+-   a uncompressed transfer */
+-static void mchip_cont_read_frame(u32 v, u8 *buf, int size)
+-{
+-	int pt_id;
+-
+-	pt_id = (v >> 17) & 0x3FF;
+-
+-	ptable_copy(buf, pt_id, size, MCHIP_NB_PAGES);
+-}
+-
+-/* read a compressed frame from the framebuffer */
+-static int mchip_comp_read_frame(u32 v, u8 *buf, int size)
+-{
+-	int pt_start, pt_end, trailer;
+-	int fsize;
+-	int i;
+-
+-	pt_start = (v >> 19) & 0xFF;
+-	pt_end = (v >> 11) & 0xFF;
+-	trailer = (v >> 1) & 0x3FF;
+-
+-	if (pt_end < pt_start)
+-		fsize = (MCHIP_NB_PAGES_MJPEG - pt_start) * PAGE_SIZE +
+-			pt_end * PAGE_SIZE + trailer * 4;
+-	else
+-		fsize = (pt_end - pt_start) * PAGE_SIZE + trailer * 4;
+-
+-	if (fsize > size) {
+-		printk(KERN_WARNING "meye: oversized compressed frame %d\n",
+-		       fsize);
+-		return -1;
+-	}
+-
+-	ptable_copy(buf, pt_start, fsize, MCHIP_NB_PAGES_MJPEG);
+-
+-#ifdef MEYE_JPEG_CORRECTION
+-
+-	/* Some mchip generated jpeg frames are incorrect. In most
+-	 * (all ?) of those cases, the final EOI (0xff 0xd9) marker
+-	 * is not present at the end of the frame.
+-	 *
+-	 * Since adding the final marker is not enough to restore
+-	 * the jpeg integrity, we drop the frame.
+-	 */
+-
+-	for (i = fsize - 1; i > 0 && buf[i] == 0xff; i--) ;
+-
+-	if (i < 2 || buf[i - 1] != 0xff || buf[i] != 0xd9)
+-		return -1;
+-
 -#endif
 -
--/* Init methods, need to find nicer names for these
-- * the exact names of the chipsets would be the best if someone finds it */
--#define METHOD0 0
--#define METHOD1 1
--#define METHOD2 2
--#define METHOD3 3
--
--
--/* Module parameters */
--static int debug;
--static int mode;
--
--
--/* Module parameters interface */
--module_param(debug, int, 0644);
--MODULE_PARM_DESC(debug, "Debug level");
--module_param(mode, int, 0644);
--MODULE_PARM_DESC(mode, "0 = 320x240, 1 = 160x120, 2 = 640x480");
--
--
--/* Devices supported by this driver
-- * .driver_info contains the init method used by the camera */
--static const struct usb_device_id device_table[] = {
--	{USB_DEVICE(0x08ca, 0x0109), .driver_info = METHOD0 },
--	{USB_DEVICE(0x041e, 0x4024), .driver_info = METHOD0 },
--	{USB_DEVICE(0x0d64, 0x0108), .driver_info = METHOD0 },
--	{USB_DEVICE(0x0546, 0x3187), .driver_info = METHOD0 },
--	{USB_DEVICE(0x0d64, 0x3108), .driver_info = METHOD0 },
--	{USB_DEVICE(0x0595, 0x4343), .driver_info = METHOD0 },
--	{USB_DEVICE(0x0bb0, 0x500d), .driver_info = METHOD0 },
--	{USB_DEVICE(0x0feb, 0x2004), .driver_info = METHOD0 },
--	{USB_DEVICE(0x055f, 0xb500), .driver_info = METHOD0 },
--	{USB_DEVICE(0x08ca, 0x2062), .driver_info = METHOD2 },
--	{USB_DEVICE(0x052b, 0x1a18), .driver_info = METHOD1 },
--	{USB_DEVICE(0x04c8, 0x0729), .driver_info = METHOD0 },
--	{USB_DEVICE(0x04f2, 0xa208), .driver_info = METHOD0 },
--	{USB_DEVICE(0x0784, 0x0040), .driver_info = METHOD1 },
--	{USB_DEVICE(0x06d6, 0x0034), .driver_info = METHOD0 },
--	{USB_DEVICE(0x0a17, 0x0062), .driver_info = METHOD2 },
--	{USB_DEVICE(0x06d6, 0x003b), .driver_info = METHOD0 },
--	{USB_DEVICE(0x0a17, 0x004e), .driver_info = METHOD2 },
--	{USB_DEVICE(0x041e, 0x405d), .driver_info = METHOD2 },
--	{USB_DEVICE(0x08ca, 0x2102), .driver_info = METHOD3 },
--	{USB_DEVICE(0x06d6, 0x003d), .driver_info = METHOD0 },
--	{}			/* Terminating entry */
--};
--
--MODULE_DEVICE_TABLE(usb, device_table);
--
--/* frame structure */
--struct zr364xx_framei {
--	unsigned long ulState;	/* ulState:ZR364XX_READ_IDLE,
--					   ZR364XX_READ_FRAME */
--	void *lpvbits;		/* image data */
--	unsigned long cur_size;	/* current data copied to it */
--};
--
--/* image buffer structure */
--struct zr364xx_bufferi {
--	unsigned long dwFrames;			/* number of frames in buffer */
--	struct zr364xx_framei frame[FRAMES];	/* array of FRAME structures */
--};
--
--struct zr364xx_dmaqueue {
--	struct list_head	active;
--	struct zr364xx_camera	*cam;
--};
--
--struct zr364xx_pipeinfo {
--	u32 transfer_size;
--	u8 *transfer_buffer;
--	u32 state;
--	void *stream_urb;
--	void *cam;	/* back pointer to zr364xx_camera struct */
--	u32 err_count;
--	u32 idx;
--};
--
--struct zr364xx_fmt {
--	u32 fourcc;
--	int depth;
--};
--
--/* image formats.  */
--static const struct zr364xx_fmt formats[] = {
--	{
--		.fourcc = V4L2_PIX_FMT_JPEG,
--		.depth = 24
--	}
--};
--
--/* Camera stuff */
--struct zr364xx_camera {
--	struct usb_device *udev;	/* save off the usb device pointer */
--	struct usb_interface *interface;/* the interface for this device */
--	struct v4l2_device v4l2_dev;
--	struct v4l2_ctrl_handler ctrl_handler;
--	struct video_device vdev;	/* v4l video device */
--	struct v4l2_fh *owner;		/* owns the streaming */
--	int nb;
--	struct zr364xx_bufferi		buffer;
--	int skip;
--	int width;
--	int height;
--	int method;
--	struct mutex lock;
--
--	spinlock_t		slock;
--	struct zr364xx_dmaqueue	vidq;
--	int			last_frame;
--	int			cur_frame;
--	unsigned long		frame_count;
--	int			b_acquire;
--	struct zr364xx_pipeinfo	pipe[1];
--
--	u8			read_endpoint;
--
--	const struct zr364xx_fmt *fmt;
--	struct videobuf_queue	vb_vidq;
--	bool was_streaming;
--};
--
--/* buffer for one video frame */
--struct zr364xx_buffer {
--	/* common v4l buffer stuff -- must be first */
--	struct videobuf_buffer vb;
--	const struct zr364xx_fmt *fmt;
--};
--
--/* function used to send initialisation commands to the camera */
--static int send_control_msg(struct usb_device *udev, u8 request, u16 value,
--			    u16 index, unsigned char *cp, u16 size)
--{
--	int status;
--
--	unsigned char *transfer_buffer = kmemdup(cp, size, GFP_KERNEL);
--	if (!transfer_buffer)
--		return -ENOMEM;
--
--	status = usb_control_msg(udev,
--				 usb_sndctrlpipe(udev, 0),
--				 request,
--				 USB_DIR_OUT | USB_TYPE_VENDOR |
--				 USB_RECIP_DEVICE, value, index,
--				 transfer_buffer, size, CTRL_TIMEOUT);
--
--	kfree(transfer_buffer);
--	return status;
+-	return fsize;
 -}
 -
--
--/* Control messages sent to the camera to initialize it
-- * and launch the capture */
--typedef struct {
--	unsigned int value;
--	unsigned int size;
--	unsigned char *bytes;
--} message;
--
--/* method 0 */
--static unsigned char m0d1[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
--static unsigned char m0d2[] = { 0, 0, 0, 0, 0, 0 };
--static unsigned char m0d3[] = { 0, 0 };
--static message m0[] = {
--	{0x1f30, 0, NULL},
--	{0xd000, 0, NULL},
--	{0x3370, sizeof(m0d1), m0d1},
--	{0x2000, 0, NULL},
--	{0x2f0f, 0, NULL},
--	{0x2610, sizeof(m0d2), m0d2},
--	{0xe107, 0, NULL},
--	{0x2502, 0, NULL},
--	{0x1f70, 0, NULL},
--	{0xd000, 0, NULL},
--	{0x9a01, sizeof(m0d3), m0d3},
--	{-1, -1, NULL}
--};
--
--/* method 1 */
--static unsigned char m1d1[] = { 0xff, 0xff };
--static unsigned char m1d2[] = { 0x00, 0x00 };
--static message m1[] = {
--	{0x1f30, 0, NULL},
--	{0xd000, 0, NULL},
--	{0xf000, 0, NULL},
--	{0x2000, 0, NULL},
--	{0x2f0f, 0, NULL},
--	{0x2650, 0, NULL},
--	{0xe107, 0, NULL},
--	{0x2502, sizeof(m1d1), m1d1},
--	{0x1f70, 0, NULL},
--	{0xd000, 0, NULL},
--	{0xd000, 0, NULL},
--	{0xd000, 0, NULL},
--	{0x9a01, sizeof(m1d2), m1d2},
--	{-1, -1, NULL}
--};
--
--/* method 2 */
--static unsigned char m2d1[] = { 0xff, 0xff };
--static message m2[] = {
--	{0x1f30, 0, NULL},
--	{0xf000, 0, NULL},
--	{0x2000, 0, NULL},
--	{0x2f0f, 0, NULL},
--	{0x2650, 0, NULL},
--	{0xe107, 0, NULL},
--	{0x2502, sizeof(m2d1), m2d1},
--	{0x1f70, 0, NULL},
--	{-1, -1, NULL}
--};
--
--/* init table */
--static message *init[4] = { m0, m1, m2, m2 };
--
--
--/* JPEG static data in header (Huffman table, etc) */
--static unsigned char header1[] = {
--	0xFF, 0xD8,
--	/*
--	0xFF, 0xE0, 0x00, 0x10, 'J', 'F', 'I', 'F',
--	0x00, 0x01, 0x01, 0x00, 0x33, 0x8A, 0x00, 0x00, 0x33, 0x88,
--	*/
--	0xFF, 0xDB, 0x00, 0x84
--};
--static unsigned char header2[] = {
--	0xFF, 0xC4, 0x00, 0x1F, 0x00, 0x00, 0x01, 0x05, 0x01, 0x01, 0x01,
--	0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
--	0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B,
--	0xFF, 0xC4, 0x00, 0xB5, 0x10, 0x00, 0x02, 0x01, 0x03, 0x03, 0x02,
--	0x04, 0x03, 0x05, 0x05, 0x04, 0x04, 0x00, 0x00, 0x01, 0x7D, 0x01,
--	0x02, 0x03, 0x00, 0x04, 0x11, 0x05, 0x12, 0x21, 0x31, 0x41, 0x06,
--	0x13, 0x51, 0x61, 0x07, 0x22, 0x71, 0x14, 0x32, 0x81, 0x91, 0xA1,
--	0x08, 0x23, 0x42, 0xB1, 0xC1, 0x15, 0x52, 0xD1, 0xF0, 0x24, 0x33,
--	0x62, 0x72, 0x82, 0x09, 0x0A, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x25,
--	0x26, 0x27, 0x28, 0x29, 0x2A, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39,
--	0x3A, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x53, 0x54,
--	0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x63, 0x64, 0x65, 0x66, 0x67,
--	0x68, 0x69, 0x6A, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A,
--	0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x92, 0x93, 0x94,
--	0x95, 0x96, 0x97, 0x98, 0x99, 0x9A, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6,
--	0xA7, 0xA8, 0xA9, 0xAA, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7, 0xB8,
--	0xB9, 0xBA, 0xC2, 0xC3, 0xC4, 0xC5, 0xC6, 0xC7, 0xC8, 0xC9, 0xCA,
--	0xD2, 0xD3, 0xD4, 0xD5, 0xD6, 0xD7, 0xD8, 0xD9, 0xDA, 0xE1, 0xE2,
--	0xE3, 0xE4, 0xE5, 0xE6, 0xE7, 0xE8, 0xE9, 0xEA, 0xF1, 0xF2, 0xF3,
--	0xF4, 0xF5, 0xF6, 0xF7, 0xF8, 0xF9, 0xFA, 0xFF, 0xC4, 0x00, 0x1F,
--	0x01, 0x00, 0x03, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
--	0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x02, 0x03, 0x04,
--	0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0xFF, 0xC4, 0x00, 0xB5,
--	0x11, 0x00, 0x02, 0x01, 0x02, 0x04, 0x04, 0x03, 0x04, 0x07, 0x05,
--	0x04, 0x04, 0x00, 0x01, 0x02, 0x77, 0x00, 0x01, 0x02, 0x03, 0x11,
--	0x04, 0x05, 0x21, 0x31, 0x06, 0x12, 0x41, 0x51, 0x07, 0x61, 0x71,
--	0x13, 0x22, 0x32, 0x81, 0x08, 0x14, 0x42, 0x91, 0xA1, 0xB1, 0xC1,
--	0x09, 0x23, 0x33, 0x52, 0xF0, 0x15, 0x62, 0x72, 0xD1, 0x0A, 0x16,
--	0x24, 0x34, 0xE1, 0x25, 0xF1, 0x17, 0x18, 0x19, 0x1A, 0x26, 0x27,
--	0x28, 0x29, 0x2A, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x43, 0x44,
--	0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x53, 0x54, 0x55, 0x56, 0x57,
--	0x58, 0x59, 0x5A, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6A,
--	0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A, 0x82, 0x83, 0x84,
--	0x85, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x92, 0x93, 0x94, 0x95, 0x96,
--	0x97, 0x98, 0x99, 0x9A, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, 0xA8,
--	0xA9, 0xAA, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7, 0xB8, 0xB9, 0xBA,
--	0xC2, 0xC3, 0xC4, 0xC5, 0xC6, 0xC7, 0xC8, 0xC9, 0xCA, 0xD2, 0xD3,
--	0xD4, 0xD5, 0xD6, 0xD7, 0xD8, 0xD9, 0xDA, 0xE2, 0xE3, 0xE4, 0xE5,
--	0xE6, 0xE7, 0xE8, 0xE9, 0xEA, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7,
--	0xF8, 0xF9, 0xFA, 0xFF, 0xC0, 0x00, 0x11, 0x08, 0x00, 0xF0, 0x01,
--	0x40, 0x03, 0x01, 0x21, 0x00, 0x02, 0x11, 0x01, 0x03, 0x11, 0x01,
--	0xFF, 0xDA, 0x00, 0x0C, 0x03, 0x01, 0x00, 0x02, 0x11, 0x03, 0x11,
--	0x00, 0x3F, 0x00
--};
--static unsigned char header3;
--
--/* ------------------------------------------------------------------
--   Videobuf operations
--   ------------------------------------------------------------------*/
--
--static int buffer_setup(struct videobuf_queue *vq, unsigned int *count,
--			unsigned int *size)
+-/* take a picture into SDRAM */
+-static void mchip_take_picture(void)
 -{
--	struct zr364xx_camera *cam = vq->priv_data;
+-	int i;
 -
--	*size = cam->width * cam->height * (cam->fmt->depth >> 3);
+-	mchip_hic_stop();
+-	mchip_subsample();
+-	mchip_dma_setup(meye.mchip_dmahandle);
 -
--	if (*count == 0)
--		*count = ZR364XX_DEF_BUFS;
+-	mchip_set(MCHIP_HIC_MODE, MCHIP_HIC_MODE_STILL_CAP);
+-	mchip_set(MCHIP_HIC_CMD, MCHIP_HIC_CMD_START);
 -
--	if (*size * *count > ZR364XX_DEF_BUFS * 1024 * 1024)
--		*count = (ZR364XX_DEF_BUFS * 1024 * 1024) / *size;
+-	mchip_delay(MCHIP_HIC_CMD, 0);
 -
--	return 0;
--}
--
--static void free_buffer(struct videobuf_queue *vq, struct zr364xx_buffer *buf)
--{
--	_DBG("%s\n", __func__);
--
--	videobuf_vmalloc_free(&buf->vb);
--	buf->vb.state = VIDEOBUF_NEEDS_INIT;
--}
--
--static int buffer_prepare(struct videobuf_queue *vq, struct videobuf_buffer *vb,
--			  enum v4l2_field field)
--{
--	struct zr364xx_camera *cam = vq->priv_data;
--	struct zr364xx_buffer *buf = container_of(vb, struct zr364xx_buffer,
--						  vb);
--	int rc;
--
--	DBG("%s, field=%d\n", __func__, field);
--	if (!cam->fmt)
--		return -EINVAL;
--
--	buf->vb.size = cam->width * cam->height * (cam->fmt->depth >> 3);
--
--	if (buf->vb.baddr != 0 && buf->vb.bsize < buf->vb.size) {
--		DBG("invalid buffer prepare\n");
--		return -EINVAL;
--	}
--
--	buf->fmt = cam->fmt;
--	buf->vb.width = cam->width;
--	buf->vb.height = cam->height;
--	buf->vb.field = field;
--
--	if (buf->vb.state == VIDEOBUF_NEEDS_INIT) {
--		rc = videobuf_iolock(vq, &buf->vb, NULL);
--		if (rc < 0)
--			goto fail;
--	}
--
--	buf->vb.state = VIDEOBUF_PREPARED;
--	return 0;
--fail:
--	free_buffer(vq, buf);
--	return rc;
--}
--
--static void buffer_queue(struct videobuf_queue *vq, struct videobuf_buffer *vb)
--{
--	struct zr364xx_buffer *buf = container_of(vb, struct zr364xx_buffer,
--						  vb);
--	struct zr364xx_camera *cam = vq->priv_data;
--
--	_DBG("%s\n", __func__);
--
--	buf->vb.state = VIDEOBUF_QUEUED;
--	list_add_tail(&buf->vb.queue, &cam->vidq.active);
--}
--
--static void buffer_release(struct videobuf_queue *vq,
--			   struct videobuf_buffer *vb)
--{
--	struct zr364xx_buffer *buf = container_of(vb, struct zr364xx_buffer,
--						  vb);
--
--	_DBG("%s\n", __func__);
--	free_buffer(vq, buf);
--}
--
--static const struct videobuf_queue_ops zr364xx_video_qops = {
--	.buf_setup = buffer_setup,
--	.buf_prepare = buffer_prepare,
--	.buf_queue = buffer_queue,
--	.buf_release = buffer_release,
--};
--
--/********************/
--/* V4L2 integration */
--/********************/
--static int zr364xx_vidioc_streamon(struct file *file, void *priv,
--				   enum v4l2_buf_type type);
--
--static ssize_t zr364xx_read(struct file *file, char __user *buf, size_t count,
--			    loff_t * ppos)
--{
--	struct zr364xx_camera *cam = video_drvdata(file);
--	int err = 0;
--
--	_DBG("%s\n", __func__);
--
--	if (!buf)
--		return -EINVAL;
--
--	if (!count)
--		return -EINVAL;
--
--	if (mutex_lock_interruptible(&cam->lock))
--		return -ERESTARTSYS;
--
--	err = zr364xx_vidioc_streamon(file, file->private_data,
--				V4L2_BUF_TYPE_VIDEO_CAPTURE);
--	if (err == 0) {
--		DBG("%s: reading %d bytes at pos %d.\n", __func__,
--				(int) count, (int) *ppos);
--
--		/* NoMan Sux ! */
--		err = videobuf_read_one(&cam->vb_vidq, buf, count, ppos,
--					file->f_flags & O_NONBLOCK);
--	}
--	mutex_unlock(&cam->lock);
--	return err;
--}
--
--/* video buffer vmalloc implementation based partly on VIVI driver which is
-- *          Copyright (c) 2006 by
-- *                  Mauro Carvalho Chehab <mchehab--a.t--infradead.org>
-- *                  Ted Walther <ted--a.t--enumera.com>
-- *                  John Sokol <sokol--a.t--videotechnology.com>
-- *                  http://v4l.videotechnology.com/
-- *
-- */
--static void zr364xx_fillbuff(struct zr364xx_camera *cam,
--			     struct zr364xx_buffer *buf,
--			     int jpgsize)
--{
--	int pos = 0;
--	const char *tmpbuf;
--	char *vbuf = videobuf_to_vmalloc(&buf->vb);
--	unsigned long last_frame;
--
--	if (!vbuf)
--		return;
--
--	last_frame = cam->last_frame;
--	if (last_frame != -1) {
--		tmpbuf = (const char *)cam->buffer.frame[last_frame].lpvbits;
--		switch (buf->fmt->fourcc) {
--		case V4L2_PIX_FMT_JPEG:
--			buf->vb.size = jpgsize;
--			memcpy(vbuf, tmpbuf, buf->vb.size);
+-	for (i = 0; i < 100; ++i) {
+-		if (mchip_delay(MCHIP_HIC_STATUS, MCHIP_HIC_STATUS_IDLE))
 -			break;
--		default:
--			printk(KERN_DEBUG KBUILD_MODNAME ": unknown format?\n");
+-		msleep(1);
+-	}
+-}
+-
+-/* dma a previously taken picture into a buffer */
+-static void mchip_get_picture(u8 *buf, int bufsize)
+-{
+-	u32 v;
+-	int i;
+-
+-	mchip_set(MCHIP_HIC_MODE, MCHIP_HIC_MODE_STILL_OUT);
+-	mchip_set(MCHIP_HIC_CMD, MCHIP_HIC_CMD_START);
+-
+-	mchip_delay(MCHIP_HIC_CMD, 0);
+-	for (i = 0; i < 100; ++i) {
+-		if (mchip_delay(MCHIP_HIC_STATUS, MCHIP_HIC_STATUS_IDLE))
+-			break;
+-		msleep(1);
+-	}
+-	for (i = 0; i < 4; ++i) {
+-		v = mchip_get_frame();
+-		if (v & MCHIP_MM_FIR_RDY) {
+-			mchip_cont_read_frame(v, buf, bufsize);
+-			break;
 -		}
--		cam->last_frame = -1;
+-		mchip_free_frame();
+-	}
+-}
+-
+-/* start continuous dma capture */
+-static void mchip_continuous_start(void)
+-{
+-	mchip_hic_stop();
+-	mchip_subsample();
+-	mchip_set_framerate();
+-	mchip_dma_setup(meye.mchip_dmahandle);
+-
+-	meye.mchip_mode = MCHIP_HIC_MODE_CONT_OUT;
+-
+-	mchip_set(MCHIP_HIC_MODE, MCHIP_HIC_MODE_CONT_OUT);
+-	mchip_set(MCHIP_HIC_CMD, MCHIP_HIC_CMD_START);
+-
+-	mchip_delay(MCHIP_HIC_CMD, 0);
+-}
+-
+-/* compress one frame into a buffer */
+-static int mchip_compress_frame(u8 *buf, int bufsize)
+-{
+-	u32 v;
+-	int len = -1, i;
+-
+-	mchip_vrj_setup(0x3f);
+-	udelay(50);
+-
+-	mchip_set(MCHIP_HIC_MODE, MCHIP_HIC_MODE_STILL_COMP);
+-	mchip_set(MCHIP_HIC_CMD, MCHIP_HIC_CMD_START);
+-
+-	mchip_delay(MCHIP_HIC_CMD, 0);
+-	for (i = 0; i < 100; ++i) {
+-		if (mchip_delay(MCHIP_HIC_STATUS, MCHIP_HIC_STATUS_IDLE))
+-			break;
+-		msleep(1);
+-	}
+-
+-	for (i = 0; i < 4; ++i) {
+-		v = mchip_get_frame();
+-		if (v & MCHIP_MM_FIR_RDY) {
+-			len = mchip_comp_read_frame(v, buf, bufsize);
+-			break;
+-		}
+-		mchip_free_frame();
+-	}
+-	return len;
+-}
+-
+-#if 0
+-/* uncompress one image into a buffer */
+-static int mchip_uncompress_frame(u8 *img, int imgsize, u8 *buf, int bufsize)
+-{
+-	mchip_vrj_setup(0x3f);
+-	udelay(50);
+-
+-	mchip_set(MCHIP_HIC_MODE, MCHIP_HIC_MODE_STILL_DECOMP);
+-	mchip_set(MCHIP_HIC_CMD, MCHIP_HIC_CMD_START);
+-
+-	mchip_delay(MCHIP_HIC_CMD, 0);
+-
+-	return mchip_comp_read_frame(buf, bufsize);
+-}
+-#endif
+-
+-/* start continuous compressed capture */
+-static void mchip_cont_compression_start(void)
+-{
+-	mchip_hic_stop();
+-	mchip_vrj_setup(0x3f);
+-	mchip_subsample();
+-	mchip_set_framerate();
+-	mchip_dma_setup(meye.mchip_dmahandle);
+-
+-	meye.mchip_mode = MCHIP_HIC_MODE_CONT_COMP;
+-
+-	mchip_set(MCHIP_HIC_MODE, MCHIP_HIC_MODE_CONT_COMP);
+-	mchip_set(MCHIP_HIC_CMD, MCHIP_HIC_CMD_START);
+-
+-	mchip_delay(MCHIP_HIC_CMD, 0);
+-}
+-
+-/****************************************************************************/
+-/* Interrupt handling                                                       */
+-/****************************************************************************/
+-
+-static irqreturn_t meye_irq(int irq, void *dev_id)
+-{
+-	u32 v;
+-	int reqnr;
+-	static int sequence;
+-
+-	v = mchip_read(MCHIP_MM_INTA);
+-
+-	if (meye.mchip_mode != MCHIP_HIC_MODE_CONT_OUT &&
+-	    meye.mchip_mode != MCHIP_HIC_MODE_CONT_COMP)
+-		return IRQ_NONE;
+-
+-again:
+-	v = mchip_get_frame();
+-	if (!(v & MCHIP_MM_FIR_RDY))
+-		return IRQ_HANDLED;
+-
+-	if (meye.mchip_mode == MCHIP_HIC_MODE_CONT_OUT) {
+-		if (kfifo_out_locked(&meye.grabq, (unsigned char *)&reqnr,
+-			      sizeof(int), &meye.grabq_lock) != sizeof(int)) {
+-			mchip_free_frame();
+-			return IRQ_HANDLED;
+-		}
+-		mchip_cont_read_frame(v, meye.grab_fbuffer + gbufsize * reqnr,
+-				      mchip_hsize() * mchip_vsize() * 2);
+-		meye.grab_buffer[reqnr].size = mchip_hsize() * mchip_vsize() * 2;
+-		meye.grab_buffer[reqnr].state = MEYE_BUF_DONE;
+-		meye.grab_buffer[reqnr].ts = ktime_get_ns();
+-		meye.grab_buffer[reqnr].sequence = sequence++;
+-		kfifo_in_locked(&meye.doneq, (unsigned char *)&reqnr,
+-				sizeof(int), &meye.doneq_lock);
+-		wake_up_interruptible(&meye.proc_list);
 -	} else {
--		printk(KERN_ERR KBUILD_MODNAME ": =======no frame\n");
--		return;
+-		int size;
+-		size = mchip_comp_read_frame(v, meye.grab_temp, gbufsize);
+-		if (size == -1) {
+-			mchip_free_frame();
+-			goto again;
+-		}
+-		if (kfifo_out_locked(&meye.grabq, (unsigned char *)&reqnr,
+-			      sizeof(int), &meye.grabq_lock) != sizeof(int)) {
+-			mchip_free_frame();
+-			goto again;
+-		}
+-		memcpy(meye.grab_fbuffer + gbufsize * reqnr, meye.grab_temp,
+-		       size);
+-		meye.grab_buffer[reqnr].size = size;
+-		meye.grab_buffer[reqnr].state = MEYE_BUF_DONE;
+-		meye.grab_buffer[reqnr].ts = ktime_get_ns();
+-		meye.grab_buffer[reqnr].sequence = sequence++;
+-		kfifo_in_locked(&meye.doneq, (unsigned char *)&reqnr,
+-				sizeof(int), &meye.doneq_lock);
+-		wake_up_interruptible(&meye.proc_list);
 -	}
--	DBG("%s: Buffer %p size= %d\n", __func__, vbuf, pos);
--	/* tell v4l buffer was filled */
--
--	buf->vb.field_count = cam->frame_count * 2;
--	buf->vb.ts = ktime_get_ns();
--	buf->vb.state = VIDEOBUF_DONE;
+-	mchip_free_frame();
+-	goto again;
 -}
 -
--static int zr364xx_got_frame(struct zr364xx_camera *cam, int jpgsize)
+-/****************************************************************************/
+-/* video4linux integration                                                  */
+-/****************************************************************************/
+-
+-static int meye_open(struct file *file)
 -{
--	struct zr364xx_dmaqueue *dma_q = &cam->vidq;
--	struct zr364xx_buffer *buf;
--	unsigned long flags = 0;
--	int rc = 0;
+-	int i;
 -
--	DBG("wakeup: %p\n", &dma_q);
--	spin_lock_irqsave(&cam->slock, flags);
+-	if (test_and_set_bit(0, &meye.in_use))
+-		return -EBUSY;
 -
--	if (list_empty(&dma_q->active)) {
--		DBG("No active queue to serve\n");
--		rc = -1;
--		goto unlock;
+-	mchip_hic_stop();
+-
+-	if (mchip_dma_alloc()) {
+-		printk(KERN_ERR "meye: mchip framebuffer allocation failed\n");
+-		clear_bit(0, &meye.in_use);
+-		return -ENOBUFS;
 -	}
--	buf = list_entry(dma_q->active.next,
--			 struct zr364xx_buffer, vb.queue);
 -
--	if (!waitqueue_active(&buf->vb.done)) {
--		/* no one active */
--		rc = -1;
--		goto unlock;
--	}
--	list_del(&buf->vb.queue);
--	buf->vb.ts = ktime_get_ns();
--	DBG("[%p/%d] wakeup\n", buf, buf->vb.i);
--	zr364xx_fillbuff(cam, buf, jpgsize);
--	wake_up(&buf->vb.done);
--	DBG("wakeup [buf/i] [%p/%d]\n", buf, buf->vb.i);
--unlock:
--	spin_unlock_irqrestore(&cam->slock, flags);
--	return rc;
+-	for (i = 0; i < MEYE_MAX_BUFNBRS; i++)
+-		meye.grab_buffer[i].state = MEYE_BUF_UNUSED;
+-	kfifo_reset(&meye.grabq);
+-	kfifo_reset(&meye.doneq);
+-	return v4l2_fh_open(file);
 -}
 -
--/* this function moves the usb stream read pipe data
-- * into the system buffers.
-- * returns 0 on success, EAGAIN if more data to process (call this
-- * function again).
-- */
--static int zr364xx_read_video_callback(struct zr364xx_camera *cam,
--					struct zr364xx_pipeinfo *pipe_info,
--					struct urb *purb)
+-static int meye_release(struct file *file)
 -{
--	unsigned char *pdest;
--	unsigned char *psrc;
--	s32 idx = cam->cur_frame;
--	struct zr364xx_framei *frm = &cam->buffer.frame[idx];
--	int i = 0;
--	unsigned char *ptr = NULL;
+-	mchip_hic_stop();
+-	mchip_dma_free();
+-	clear_bit(0, &meye.in_use);
+-	return v4l2_fh_release(file);
+-}
 -
--	_DBG("buffer to user\n");
+-static int meyeioc_g_params(struct meye_params *p)
+-{
+-	*p = meye.params;
+-	return 0;
+-}
 -
--	/* swap bytes if camera needs it */
--	if (cam->method == METHOD0) {
--		u16 *buf = (u16 *)pipe_info->transfer_buffer;
--		for (i = 0; i < purb->actual_length/2; i++)
--			swab16s(buf + i);
--	}
--
--	/* search done.  now find out if should be acquiring */
--	if (!cam->b_acquire) {
--		/* we found a frame, but this channel is turned off */
--		frm->ulState = ZR364XX_READ_IDLE;
+-static int meyeioc_s_params(struct meye_params *jp)
+-{
+-	if (jp->subsample > 1)
 -		return -EINVAL;
--	}
 -
--	psrc = (u8 *)pipe_info->transfer_buffer;
--	ptr = pdest = frm->lpvbits;
+-	if (jp->quality > 10)
+-		return -EINVAL;
 -
--	if (frm->ulState == ZR364XX_READ_IDLE) {
--		if (purb->actual_length < 128) {
--			/* header incomplete */
--			dev_info(&cam->udev->dev,
--				 "%s: buffer (%d bytes) too small to hold jpeg header. Discarding.\n",
--				 __func__, purb->actual_length);
--			return -EINVAL;
--		}
+-	if (jp->sharpness > 63 || jp->agc > 63 || jp->picture > 63)
+-		return -EINVAL;
 -
--		frm->ulState = ZR364XX_READ_FRAME;
--		frm->cur_size = 0;
+-	if (jp->framerate > 31)
+-		return -EINVAL;
 -
--		_DBG("jpeg header, ");
--		memcpy(ptr, header1, sizeof(header1));
--		ptr += sizeof(header1);
--		header3 = 0;
--		memcpy(ptr, &header3, 1);
--		ptr++;
--		memcpy(ptr, psrc, 64);
--		ptr += 64;
--		header3 = 1;
--		memcpy(ptr, &header3, 1);
--		ptr++;
--		memcpy(ptr, psrc + 64, 64);
--		ptr += 64;
--		memcpy(ptr, header2, sizeof(header2));
--		ptr += sizeof(header2);
--		memcpy(ptr, psrc + 128,
--		       purb->actual_length - 128);
--		ptr += purb->actual_length - 128;
--		_DBG("header : %d %d %d %d %d %d %d %d %d\n",
--		    psrc[0], psrc[1], psrc[2],
--		    psrc[3], psrc[4], psrc[5],
--		    psrc[6], psrc[7], psrc[8]);
--		frm->cur_size = ptr - pdest;
--	} else {
--		if (frm->cur_size + purb->actual_length > MAX_FRAME_SIZE) {
--			dev_info(&cam->udev->dev,
--				 "%s: buffer (%d bytes) too small to hold frame data. Discarding frame data.\n",
--				 __func__, MAX_FRAME_SIZE);
--		} else {
--			pdest += frm->cur_size;
--			memcpy(pdest, psrc, purb->actual_length);
--			frm->cur_size += purb->actual_length;
--		}
--	}
--	/*_DBG("cur_size %lu urb size %d\n", frm->cur_size,
--		purb->actual_length);*/
+-	mutex_lock(&meye.lock);
 -
--	if (purb->actual_length < pipe_info->transfer_size) {
--		_DBG("****************Buffer[%d]full*************\n", idx);
--		cam->last_frame = cam->cur_frame;
--		cam->cur_frame++;
--		/* end of system frame ring buffer, start at zero */
--		if (cam->cur_frame == cam->buffer.dwFrames)
--			cam->cur_frame = 0;
+-	if (meye.params.subsample != jp->subsample ||
+-	    meye.params.quality != jp->quality)
+-		mchip_hic_stop();	/* need restart */
 -
--		/* frame ready */
--		/* go back to find the JPEG EOI marker */
--		ptr = pdest = frm->lpvbits;
--		ptr += frm->cur_size - 2;
--		while (ptr > pdest) {
--			if (*ptr == 0xFF && *(ptr + 1) == 0xD9
--			    && *(ptr + 2) == 0xFF)
--				break;
--			ptr--;
--		}
--		if (ptr == pdest)
--			DBG("No EOI marker\n");
+-	meye.params = *jp;
+-	sony_pic_camera_command(SONY_PIC_COMMAND_SETCAMERASHARPNESS,
+-			      meye.params.sharpness);
+-	sony_pic_camera_command(SONY_PIC_COMMAND_SETCAMERAAGC,
+-			      meye.params.agc);
+-	sony_pic_camera_command(SONY_PIC_COMMAND_SETCAMERAPICTURE,
+-			      meye.params.picture);
+-	mutex_unlock(&meye.lock);
 -
--		/* Sometimes there is junk data in the middle of the picture,
--		 * we want to skip this bogus frames */
--		while (ptr > pdest) {
--			if (*ptr == 0xFF && *(ptr + 1) == 0xFF
--			    && *(ptr + 2) == 0xFF)
--				break;
--			ptr--;
--		}
--		if (ptr != pdest) {
--			DBG("Bogus frame ? %d\n", ++(cam->nb));
--		} else if (cam->b_acquire) {
--			/* we skip the 2 first frames which are usually buggy */
--			if (cam->skip)
--				cam->skip--;
--			else {
--				_DBG("jpeg(%lu): %d %d %d %d %d %d %d %d\n",
--				    frm->cur_size,
--				    pdest[0], pdest[1], pdest[2], pdest[3],
--				    pdest[4], pdest[5], pdest[6], pdest[7]);
--
--				zr364xx_got_frame(cam, frm->cur_size);
--			}
--		}
--		cam->frame_count++;
--		frm->ulState = ZR364XX_READ_IDLE;
--		frm->cur_size = 0;
--	}
--	/* done successfully */
 -	return 0;
 -}
 -
--static int zr364xx_vidioc_querycap(struct file *file, void *priv,
--				   struct v4l2_capability *cap)
+-static int meyeioc_qbuf_capt(int *nb)
 -{
--	struct zr364xx_camera *cam = video_drvdata(file);
+-	if (!meye.grab_fbuffer)
+-		return -EINVAL;
 -
--	strscpy(cap->driver, DRIVER_DESC, sizeof(cap->driver));
--	if (cam->udev->product)
--		strscpy(cap->card, cam->udev->product, sizeof(cap->card));
--	strscpy(cap->bus_info, dev_name(&cam->udev->dev),
--		sizeof(cap->bus_info));
+-	if (*nb >= gbuffers)
+-		return -EINVAL;
+-
+-	if (*nb < 0) {
+-		/* stop capture */
+-		mchip_hic_stop();
+-		return 0;
+-	}
+-
+-	if (meye.grab_buffer[*nb].state != MEYE_BUF_UNUSED)
+-		return -EBUSY;
+-
+-	mutex_lock(&meye.lock);
+-
+-	if (meye.mchip_mode != MCHIP_HIC_MODE_CONT_COMP)
+-		mchip_cont_compression_start();
+-
+-	meye.grab_buffer[*nb].state = MEYE_BUF_USING;
+-	kfifo_in_locked(&meye.grabq, (unsigned char *)nb, sizeof(int),
+-			 &meye.grabq_lock);
+-	mutex_unlock(&meye.lock);
+-
 -	return 0;
 -}
 -
--static int zr364xx_vidioc_enum_input(struct file *file, void *priv,
--				     struct v4l2_input *i)
+-static int meyeioc_sync(struct file *file, void *fh, int *i)
+-{
+-	int unused;
+-
+-	if (*i < 0 || *i >= gbuffers)
+-		return -EINVAL;
+-
+-	mutex_lock(&meye.lock);
+-	switch (meye.grab_buffer[*i].state) {
+-
+-	case MEYE_BUF_UNUSED:
+-		mutex_unlock(&meye.lock);
+-		return -EINVAL;
+-	case MEYE_BUF_USING:
+-		if (file->f_flags & O_NONBLOCK) {
+-			mutex_unlock(&meye.lock);
+-			return -EAGAIN;
+-		}
+-		if (wait_event_interruptible(meye.proc_list,
+-			(meye.grab_buffer[*i].state != MEYE_BUF_USING))) {
+-			mutex_unlock(&meye.lock);
+-			return -EINTR;
+-		}
+-		fallthrough;
+-	case MEYE_BUF_DONE:
+-		meye.grab_buffer[*i].state = MEYE_BUF_UNUSED;
+-		if (kfifo_out_locked(&meye.doneq, (unsigned char *)&unused,
+-				sizeof(int), &meye.doneq_lock) != sizeof(int))
+-					break;
+-	}
+-	*i = meye.grab_buffer[*i].size;
+-	mutex_unlock(&meye.lock);
+-	return 0;
+-}
+-
+-static int meyeioc_stillcapt(void)
+-{
+-	if (!meye.grab_fbuffer)
+-		return -EINVAL;
+-
+-	if (meye.grab_buffer[0].state != MEYE_BUF_UNUSED)
+-		return -EBUSY;
+-
+-	mutex_lock(&meye.lock);
+-	meye.grab_buffer[0].state = MEYE_BUF_USING;
+-	mchip_take_picture();
+-
+-	mchip_get_picture(meye.grab_fbuffer,
+-			mchip_hsize() * mchip_vsize() * 2);
+-
+-	meye.grab_buffer[0].state = MEYE_BUF_DONE;
+-	mutex_unlock(&meye.lock);
+-
+-	return 0;
+-}
+-
+-static int meyeioc_stilljcapt(int *len)
+-{
+-	if (!meye.grab_fbuffer)
+-		return -EINVAL;
+-
+-	if (meye.grab_buffer[0].state != MEYE_BUF_UNUSED)
+-		return -EBUSY;
+-
+-	mutex_lock(&meye.lock);
+-	meye.grab_buffer[0].state = MEYE_BUF_USING;
+-	*len = -1;
+-
+-	while (*len == -1) {
+-		mchip_take_picture();
+-		*len = mchip_compress_frame(meye.grab_fbuffer, gbufsize);
+-	}
+-
+-	meye.grab_buffer[0].state = MEYE_BUF_DONE;
+-	mutex_unlock(&meye.lock);
+-	return 0;
+-}
+-
+-static int vidioc_querycap(struct file *file, void *fh,
+-				struct v4l2_capability *cap)
+-{
+-	strscpy(cap->driver, "meye", sizeof(cap->driver));
+-	strscpy(cap->card, "meye", sizeof(cap->card));
+-	return 0;
+-}
+-
+-static int vidioc_enum_input(struct file *file, void *fh, struct v4l2_input *i)
 -{
 -	if (i->index != 0)
 -		return -EINVAL;
--	strscpy(i->name, DRIVER_DESC " Camera", sizeof(i->name));
+-
+-	strscpy(i->name, "Camera", sizeof(i->name));
 -	i->type = V4L2_INPUT_TYPE_CAMERA;
+-
 -	return 0;
 -}
 -
--static int zr364xx_vidioc_g_input(struct file *file, void *priv,
--				  unsigned int *i)
+-static int vidioc_g_input(struct file *file, void *fh, unsigned int *i)
 -{
 -	*i = 0;
 -	return 0;
 -}
 -
--static int zr364xx_vidioc_s_input(struct file *file, void *priv,
--				  unsigned int i)
+-static int vidioc_s_input(struct file *file, void *fh, unsigned int i)
 -{
 -	if (i != 0)
 -		return -EINVAL;
+-
 -	return 0;
 -}
 -
--static int zr364xx_s_ctrl(struct v4l2_ctrl *ctrl)
+-static int meye_s_ctrl(struct v4l2_ctrl *ctrl)
 -{
--	struct zr364xx_camera *cam =
--		container_of(ctrl->handler, struct zr364xx_camera, ctrl_handler);
--	int temp;
--
+-	mutex_lock(&meye.lock);
 -	switch (ctrl->id) {
 -	case V4L2_CID_BRIGHTNESS:
--		/* hardware brightness */
--		send_control_msg(cam->udev, 1, 0x2001, 0, NULL, 0);
--		temp = (0x60 << 8) + 127 - ctrl->val;
--		send_control_msg(cam->udev, 1, temp, 0, NULL, 0);
+-		sony_pic_camera_command(
+-			SONY_PIC_COMMAND_SETCAMERABRIGHTNESS, ctrl->val);
+-		meye.brightness = ctrl->val << 10;
+-		break;
+-	case V4L2_CID_HUE:
+-		sony_pic_camera_command(
+-			SONY_PIC_COMMAND_SETCAMERAHUE, ctrl->val);
+-		meye.hue = ctrl->val << 10;
+-		break;
+-	case V4L2_CID_CONTRAST:
+-		sony_pic_camera_command(
+-			SONY_PIC_COMMAND_SETCAMERACONTRAST, ctrl->val);
+-		meye.contrast = ctrl->val << 10;
+-		break;
+-	case V4L2_CID_SATURATION:
+-		sony_pic_camera_command(
+-			SONY_PIC_COMMAND_SETCAMERACOLOR, ctrl->val);
+-		meye.colour = ctrl->val << 10;
+-		break;
+-	case V4L2_CID_MEYE_AGC:
+-		sony_pic_camera_command(
+-			SONY_PIC_COMMAND_SETCAMERAAGC, ctrl->val);
+-		meye.params.agc = ctrl->val;
+-		break;
+-	case V4L2_CID_SHARPNESS:
+-		sony_pic_camera_command(
+-			SONY_PIC_COMMAND_SETCAMERASHARPNESS, ctrl->val);
+-		meye.params.sharpness = ctrl->val;
+-		break;
+-	case V4L2_CID_MEYE_PICTURE:
+-		sony_pic_camera_command(
+-			SONY_PIC_COMMAND_SETCAMERAPICTURE, ctrl->val);
+-		meye.params.picture = ctrl->val;
+-		break;
+-	case V4L2_CID_JPEG_COMPRESSION_QUALITY:
+-		meye.params.quality = ctrl->val;
+-		break;
+-	case V4L2_CID_MEYE_FRAMERATE:
+-		meye.params.framerate = ctrl->val;
 -		break;
 -	default:
+-		mutex_unlock(&meye.lock);
 -		return -EINVAL;
+-	}
+-	mutex_unlock(&meye.lock);
+-
+-	return 0;
+-}
+-
+-static int vidioc_enum_fmt_vid_cap(struct file *file, void *fh,
+-				struct v4l2_fmtdesc *f)
+-{
+-	if (f->index > 1)
+-		return -EINVAL;
+-
+-	if (f->index == 0) {
+-		/* standard YUV 422 capture */
+-		f->flags = 0;
+-		f->pixelformat = V4L2_PIX_FMT_YUYV;
+-	} else {
+-		/* compressed MJPEG capture */
+-		f->pixelformat = V4L2_PIX_FMT_MJPEG;
 -	}
 -
 -	return 0;
 -}
 -
--static int zr364xx_vidioc_enum_fmt_vid_cap(struct file *file,
--				       void *priv, struct v4l2_fmtdesc *f)
+-static int vidioc_try_fmt_vid_cap(struct file *file, void *fh,
+-				struct v4l2_format *f)
 -{
--	if (f->index > 0)
+-	if (f->fmt.pix.pixelformat != V4L2_PIX_FMT_YUYV &&
+-	    f->fmt.pix.pixelformat != V4L2_PIX_FMT_MJPEG)
 -		return -EINVAL;
--	f->pixelformat = formats[0].fourcc;
--	return 0;
--}
 -
--static char *decode_fourcc(__u32 pixelformat, char *buf)
--{
--	buf[0] = pixelformat & 0xff;
--	buf[1] = (pixelformat >> 8) & 0xff;
--	buf[2] = (pixelformat >> 16) & 0xff;
--	buf[3] = (pixelformat >> 24) & 0xff;
--	buf[4] = '\0';
--	return buf;
--}
--
--static int zr364xx_vidioc_try_fmt_vid_cap(struct file *file, void *priv,
--				      struct v4l2_format *f)
--{
--	struct zr364xx_camera *cam = video_drvdata(file);
--	char pixelformat_name[5];
--
--	if (!cam)
--		return -ENODEV;
--
--	if (f->fmt.pix.pixelformat != V4L2_PIX_FMT_JPEG) {
--		DBG("%s: unsupported pixelformat V4L2_PIX_FMT_%s\n", __func__,
--		    decode_fourcc(f->fmt.pix.pixelformat, pixelformat_name));
+-	if (f->fmt.pix.field != V4L2_FIELD_ANY &&
+-	    f->fmt.pix.field != V4L2_FIELD_NONE)
 -		return -EINVAL;
--	}
 -
--	if (!(f->fmt.pix.width == 160 && f->fmt.pix.height == 120) &&
--	    !(f->fmt.pix.width == 640 && f->fmt.pix.height == 480)) {
+-	f->fmt.pix.field = V4L2_FIELD_NONE;
+-
+-	if (f->fmt.pix.width <= 320) {
 -		f->fmt.pix.width = 320;
 -		f->fmt.pix.height = 240;
+-	} else {
+-		f->fmt.pix.width = 640;
+-		f->fmt.pix.height = 480;
 -	}
 -
--	f->fmt.pix.field = V4L2_FIELD_NONE;
 -	f->fmt.pix.bytesperline = f->fmt.pix.width * 2;
--	f->fmt.pix.sizeimage = f->fmt.pix.height * f->fmt.pix.bytesperline;
--	f->fmt.pix.colorspace = V4L2_COLORSPACE_JPEG;
--	DBG("%s: V4L2_PIX_FMT_%s (%d) ok!\n", __func__,
--	    decode_fourcc(f->fmt.pix.pixelformat, pixelformat_name),
--	    f->fmt.pix.field);
+-	f->fmt.pix.sizeimage = f->fmt.pix.height *
+-			       f->fmt.pix.bytesperline;
+-	f->fmt.pix.colorspace = 0;
+-
 -	return 0;
 -}
 -
--static int zr364xx_vidioc_g_fmt_vid_cap(struct file *file, void *priv,
+-static int vidioc_g_fmt_vid_cap(struct file *file, void *fh,
 -				    struct v4l2_format *f)
 -{
--	struct zr364xx_camera *cam;
--
--	if (!file)
--		return -ENODEV;
--	cam = video_drvdata(file);
--
--	f->fmt.pix.pixelformat = formats[0].fourcc;
--	f->fmt.pix.field = V4L2_FIELD_NONE;
--	f->fmt.pix.width = cam->width;
--	f->fmt.pix.height = cam->height;
--	f->fmt.pix.bytesperline = f->fmt.pix.width * 2;
--	f->fmt.pix.sizeimage = f->fmt.pix.height * f->fmt.pix.bytesperline;
--	f->fmt.pix.colorspace = V4L2_COLORSPACE_JPEG;
--	return 0;
--}
--
--static int zr364xx_vidioc_s_fmt_vid_cap(struct file *file, void *priv,
--				    struct v4l2_format *f)
--{
--	struct zr364xx_camera *cam = video_drvdata(file);
--	struct videobuf_queue *q = &cam->vb_vidq;
--	char pixelformat_name[5];
--	int ret = zr364xx_vidioc_try_fmt_vid_cap(file, cam, f);
--	int i;
--
--	if (ret < 0)
--		return ret;
--
--	mutex_lock(&q->vb_lock);
--
--	if (videobuf_queue_is_busy(&cam->vb_vidq)) {
--		DBG("%s queue busy\n", __func__);
--		ret = -EBUSY;
--		goto out;
--	}
--
--	if (cam->owner) {
--		DBG("%s can't change format after started\n", __func__);
--		ret = -EBUSY;
--		goto out;
--	}
--
--	cam->width = f->fmt.pix.width;
--	cam->height = f->fmt.pix.height;
--	DBG("%s: %dx%d mode selected\n", __func__,
--		 cam->width, cam->height);
--	f->fmt.pix.bytesperline = f->fmt.pix.width * 2;
--	f->fmt.pix.sizeimage = f->fmt.pix.height * f->fmt.pix.bytesperline;
--	f->fmt.pix.colorspace = V4L2_COLORSPACE_JPEG;
--	cam->vb_vidq.field = f->fmt.pix.field;
--
--	if (f->fmt.pix.width == 160 && f->fmt.pix.height == 120)
--		mode = 1;
--	else if (f->fmt.pix.width == 640 && f->fmt.pix.height == 480)
--		mode = 2;
--	else
--		mode = 0;
--
--	m0d1[0] = mode;
--	m1[2].value = 0xf000 + mode;
--	m2[1].value = 0xf000 + mode;
--
--	/* special case for METHOD3, the modes are different */
--	if (cam->method == METHOD3) {
--		switch (mode) {
--		case 1:
--			m2[1].value = 0xf000 + 4;
--			break;
--		case 2:
--			m2[1].value = 0xf000 + 0;
--			break;
--		default:
--			m2[1].value = 0xf000 + 1;
--			break;
--		}
--	}
--
--	header2[437] = cam->height / 256;
--	header2[438] = cam->height % 256;
--	header2[439] = cam->width / 256;
--	header2[440] = cam->width % 256;
--
--	for (i = 0; init[cam->method][i].size != -1; i++) {
--		ret =
--		    send_control_msg(cam->udev, 1, init[cam->method][i].value,
--				     0, init[cam->method][i].bytes,
--				     init[cam->method][i].size);
--		if (ret < 0) {
--			dev_err(&cam->udev->dev,
--			   "error during resolution change sequence: %d\n", i);
--			goto out;
--		}
--	}
--
--	/* Added some delay here, since opening/closing the camera quickly,
--	 * like Ekiga does during its startup, can crash the webcam
--	 */
--	mdelay(100);
--	cam->skip = 2;
--	ret = 0;
--
--out:
--	mutex_unlock(&q->vb_lock);
--
--	DBG("%s: V4L2_PIX_FMT_%s (%d) ok!\n", __func__,
--	    decode_fourcc(f->fmt.pix.pixelformat, pixelformat_name),
--	    f->fmt.pix.field);
--	return ret;
--}
--
--static int zr364xx_vidioc_reqbufs(struct file *file, void *priv,
--			  struct v4l2_requestbuffers *p)
--{
--	struct zr364xx_camera *cam = video_drvdata(file);
--
--	if (cam->owner && cam->owner != priv)
--		return -EBUSY;
--	return videobuf_reqbufs(&cam->vb_vidq, p);
--}
--
--static int zr364xx_vidioc_querybuf(struct file *file,
--				void *priv,
--				struct v4l2_buffer *p)
--{
--	int rc;
--	struct zr364xx_camera *cam = video_drvdata(file);
--	rc = videobuf_querybuf(&cam->vb_vidq, p);
--	return rc;
--}
--
--static int zr364xx_vidioc_qbuf(struct file *file,
--				void *priv,
--				struct v4l2_buffer *p)
--{
--	int rc;
--	struct zr364xx_camera *cam = video_drvdata(file);
--	_DBG("%s\n", __func__);
--	if (cam->owner && cam->owner != priv)
--		return -EBUSY;
--	rc = videobuf_qbuf(&cam->vb_vidq, p);
--	return rc;
--}
--
--static int zr364xx_vidioc_dqbuf(struct file *file,
--				void *priv,
--				struct v4l2_buffer *p)
--{
--	int rc;
--	struct zr364xx_camera *cam = video_drvdata(file);
--	_DBG("%s\n", __func__);
--	if (cam->owner && cam->owner != priv)
--		return -EBUSY;
--	rc = videobuf_dqbuf(&cam->vb_vidq, p, file->f_flags & O_NONBLOCK);
--	return rc;
--}
--
--static void read_pipe_completion(struct urb *purb)
--{
--	struct zr364xx_pipeinfo *pipe_info;
--	struct zr364xx_camera *cam;
--	int pipe;
--
--	pipe_info = purb->context;
--	_DBG("%s %p, status %d\n", __func__, purb, purb->status);
--	if (!pipe_info) {
--		printk(KERN_ERR KBUILD_MODNAME ": no context!\n");
--		return;
--	}
--
--	cam = pipe_info->cam;
--	if (!cam) {
--		printk(KERN_ERR KBUILD_MODNAME ": no context!\n");
--		return;
--	}
--
--	/* if shutting down, do not resubmit, exit immediately */
--	if (purb->status == -ESHUTDOWN) {
--		DBG("%s, err shutdown\n", __func__);
--		pipe_info->err_count++;
--		return;
--	}
--
--	if (pipe_info->state == 0) {
--		DBG("exiting USB pipe\n");
--		return;
--	}
--
--	if (purb->actual_length > pipe_info->transfer_size) {
--		dev_err(&cam->udev->dev, "wrong number of bytes\n");
--		return;
--	}
--
--	if (purb->status == 0)
--		zr364xx_read_video_callback(cam, pipe_info, purb);
--	else {
--		pipe_info->err_count++;
--		DBG("%s: failed URB %d\n", __func__, purb->status);
--	}
--
--	pipe = usb_rcvbulkpipe(cam->udev, cam->read_endpoint);
--
--	/* reuse urb */
--	usb_fill_bulk_urb(pipe_info->stream_urb, cam->udev,
--			  pipe,
--			  pipe_info->transfer_buffer,
--			  pipe_info->transfer_size,
--			  read_pipe_completion, pipe_info);
--
--	if (pipe_info->state != 0) {
--		purb->status = usb_submit_urb(pipe_info->stream_urb,
--					      GFP_ATOMIC);
--
--		if (purb->status)
--			dev_err(&cam->udev->dev,
--				"error submitting urb (error=%i)\n",
--				purb->status);
--	} else
--		DBG("read pipe complete state 0\n");
--}
--
--static int zr364xx_start_readpipe(struct zr364xx_camera *cam)
--{
--	int pipe;
--	int retval;
--	struct zr364xx_pipeinfo *pipe_info = cam->pipe;
--	pipe = usb_rcvbulkpipe(cam->udev, cam->read_endpoint);
--	DBG("%s: start pipe IN x%x\n", __func__, cam->read_endpoint);
--
--	pipe_info->state = 1;
--	pipe_info->err_count = 0;
--	pipe_info->stream_urb = usb_alloc_urb(0, GFP_KERNEL);
--	if (!pipe_info->stream_urb)
--		return -ENOMEM;
--	/* transfer buffer allocated in board_init */
--	usb_fill_bulk_urb(pipe_info->stream_urb, cam->udev,
--			  pipe,
--			  pipe_info->transfer_buffer,
--			  pipe_info->transfer_size,
--			  read_pipe_completion, pipe_info);
--
--	DBG("submitting URB %p\n", pipe_info->stream_urb);
--	retval = usb_submit_urb(pipe_info->stream_urb, GFP_KERNEL);
--	if (retval) {
--		usb_free_urb(pipe_info->stream_urb);
--		printk(KERN_ERR KBUILD_MODNAME ": start read pipe failed\n");
--		return retval;
--	}
--
--	return 0;
--}
--
--static void zr364xx_stop_readpipe(struct zr364xx_camera *cam)
--{
--	struct zr364xx_pipeinfo *pipe_info;
--
--	if (!cam) {
--		printk(KERN_ERR KBUILD_MODNAME ": invalid device\n");
--		return;
--	}
--	DBG("stop read pipe\n");
--	pipe_info = cam->pipe;
--	if (pipe_info) {
--		if (pipe_info->state != 0)
--			pipe_info->state = 0;
--
--		if (pipe_info->stream_urb) {
--			/* cancel urb */
--			usb_kill_urb(pipe_info->stream_urb);
--			usb_free_urb(pipe_info->stream_urb);
--			pipe_info->stream_urb = NULL;
--		}
--	}
--	return;
--}
--
--/* starts acquisition process */
--static int zr364xx_start_acquire(struct zr364xx_camera *cam)
--{
--	int j;
--
--	DBG("start acquire\n");
--
--	cam->last_frame = -1;
--	cam->cur_frame = 0;
--	for (j = 0; j < FRAMES; j++) {
--		cam->buffer.frame[j].ulState = ZR364XX_READ_IDLE;
--		cam->buffer.frame[j].cur_size = 0;
--	}
--	cam->b_acquire = 1;
--	return 0;
--}
--
--static inline int zr364xx_stop_acquire(struct zr364xx_camera *cam)
--{
--	cam->b_acquire = 0;
--	return 0;
--}
--
--static int zr364xx_prepare(struct zr364xx_camera *cam)
--{
--	int res;
--	int i, j;
--
--	for (i = 0; init[cam->method][i].size != -1; i++) {
--		res = send_control_msg(cam->udev, 1, init[cam->method][i].value,
--				     0, init[cam->method][i].bytes,
--				     init[cam->method][i].size);
--		if (res < 0) {
--			dev_err(&cam->udev->dev,
--				"error during open sequence: %d\n", i);
--			return res;
--		}
--	}
--
--	cam->skip = 2;
--	cam->last_frame = -1;
--	cam->cur_frame = 0;
--	cam->frame_count = 0;
--	for (j = 0; j < FRAMES; j++) {
--		cam->buffer.frame[j].ulState = ZR364XX_READ_IDLE;
--		cam->buffer.frame[j].cur_size = 0;
--	}
--	v4l2_ctrl_handler_setup(&cam->ctrl_handler);
--	return 0;
--}
--
--static int zr364xx_vidioc_streamon(struct file *file, void *priv,
--				   enum v4l2_buf_type type)
--{
--	struct zr364xx_camera *cam = video_drvdata(file);
--	int res;
--
--	DBG("%s\n", __func__);
--
--	if (type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
--		return -EINVAL;
--
--	if (cam->owner && cam->owner != priv)
--		return -EBUSY;
--
--	res = zr364xx_prepare(cam);
--	if (res)
--		return res;
--	res = videobuf_streamon(&cam->vb_vidq);
--	if (res == 0) {
--		zr364xx_start_acquire(cam);
--		cam->owner = file->private_data;
--	}
--	return res;
--}
--
--static int zr364xx_vidioc_streamoff(struct file *file, void *priv,
--				    enum v4l2_buf_type type)
--{
--	struct zr364xx_camera *cam = video_drvdata(file);
--
--	DBG("%s\n", __func__);
--	if (type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
--		return -EINVAL;
--	if (cam->owner && cam->owner != priv)
--		return -EBUSY;
--	zr364xx_stop_acquire(cam);
--	return videobuf_streamoff(&cam->vb_vidq);
--}
--
--
--/* open the camera */
--static int zr364xx_open(struct file *file)
--{
--	struct zr364xx_camera *cam = video_drvdata(file);
--	int err;
--
--	DBG("%s\n", __func__);
--
--	if (mutex_lock_interruptible(&cam->lock))
--		return -ERESTARTSYS;
--
--	err = v4l2_fh_open(file);
--	if (err)
--		goto out;
--
--	/* Added some delay here, since opening/closing the camera quickly,
--	 * like Ekiga does during its startup, can crash the webcam
--	 */
--	mdelay(100);
--	err = 0;
--
--out:
--	mutex_unlock(&cam->lock);
--	DBG("%s: %d\n", __func__, err);
--	return err;
--}
--
--static void zr364xx_board_uninit(struct zr364xx_camera *cam)
--{
--	unsigned long i;
--
--	zr364xx_stop_readpipe(cam);
--
--	/* release sys buffers */
--	for (i = 0; i < FRAMES; i++) {
--		if (cam->buffer.frame[i].lpvbits) {
--			DBG("vfree %p\n", cam->buffer.frame[i].lpvbits);
--			vfree(cam->buffer.frame[i].lpvbits);
--		}
--		cam->buffer.frame[i].lpvbits = NULL;
--	}
--
--	/* release transfer buffer */
--	kfree(cam->pipe->transfer_buffer);
--}
--
--static void zr364xx_release(struct v4l2_device *v4l2_dev)
--{
--	struct zr364xx_camera *cam =
--		container_of(v4l2_dev, struct zr364xx_camera, v4l2_dev);
--
--	videobuf_mmap_free(&cam->vb_vidq);
--	v4l2_ctrl_handler_free(&cam->ctrl_handler);
--	zr364xx_board_uninit(cam);
--	v4l2_device_unregister(&cam->v4l2_dev);
--	kfree(cam);
--}
--
--/* release the camera */
--static int zr364xx_close(struct file *file)
--{
--	struct zr364xx_camera *cam;
--	struct usb_device *udev;
--	int i;
--
--	DBG("%s\n", __func__);
--	cam = video_drvdata(file);
--
--	mutex_lock(&cam->lock);
--	udev = cam->udev;
--
--	if (file->private_data == cam->owner) {
--		/* turn off stream */
--		if (cam->b_acquire)
--			zr364xx_stop_acquire(cam);
--		videobuf_streamoff(&cam->vb_vidq);
--
--		for (i = 0; i < 2; i++) {
--			send_control_msg(udev, 1, init[cam->method][i].value,
--					0, init[cam->method][i].bytes,
--					init[cam->method][i].size);
--		}
--		cam->owner = NULL;
--	}
--
--	/* Added some delay here, since opening/closing the camera quickly,
--	 * like Ekiga does during its startup, can crash the webcam
--	 */
--	mdelay(100);
--	mutex_unlock(&cam->lock);
--	return v4l2_fh_release(file);
--}
--
--
--static int zr364xx_mmap(struct file *file, struct vm_area_struct *vma)
--{
--	struct zr364xx_camera *cam = video_drvdata(file);
--	int ret;
--
--	if (!cam) {
--		DBG("%s: cam == NULL\n", __func__);
--		return -ENODEV;
--	}
--	DBG("mmap called, vma=%p\n", vma);
--
--	ret = videobuf_mmap_mapper(&cam->vb_vidq, vma);
--
--	DBG("vma start=0x%08lx, size=%ld, ret=%d\n",
--		(unsigned long)vma->vm_start,
--		(unsigned long)vma->vm_end - (unsigned long)vma->vm_start, ret);
--	return ret;
--}
--
--static __poll_t zr364xx_poll(struct file *file,
--			       struct poll_table_struct *wait)
--{
--	struct zr364xx_camera *cam = video_drvdata(file);
--	struct videobuf_queue *q = &cam->vb_vidq;
--	__poll_t res = v4l2_ctrl_poll(file, wait);
--
--	_DBG("%s\n", __func__);
--
--	return res | videobuf_poll_stream(file, q, wait);
--}
--
--static const struct v4l2_ctrl_ops zr364xx_ctrl_ops = {
--	.s_ctrl = zr364xx_s_ctrl,
--};
--
--static const struct v4l2_file_operations zr364xx_fops = {
--	.owner = THIS_MODULE,
--	.open = zr364xx_open,
--	.release = zr364xx_close,
--	.read = zr364xx_read,
--	.mmap = zr364xx_mmap,
--	.unlocked_ioctl = video_ioctl2,
--	.poll = zr364xx_poll,
--};
--
--static const struct v4l2_ioctl_ops zr364xx_ioctl_ops = {
--	.vidioc_querycap	= zr364xx_vidioc_querycap,
--	.vidioc_enum_fmt_vid_cap = zr364xx_vidioc_enum_fmt_vid_cap,
--	.vidioc_try_fmt_vid_cap	= zr364xx_vidioc_try_fmt_vid_cap,
--	.vidioc_s_fmt_vid_cap	= zr364xx_vidioc_s_fmt_vid_cap,
--	.vidioc_g_fmt_vid_cap	= zr364xx_vidioc_g_fmt_vid_cap,
--	.vidioc_enum_input	= zr364xx_vidioc_enum_input,
--	.vidioc_g_input		= zr364xx_vidioc_g_input,
--	.vidioc_s_input		= zr364xx_vidioc_s_input,
--	.vidioc_streamon	= zr364xx_vidioc_streamon,
--	.vidioc_streamoff	= zr364xx_vidioc_streamoff,
--	.vidioc_reqbufs         = zr364xx_vidioc_reqbufs,
--	.vidioc_querybuf        = zr364xx_vidioc_querybuf,
--	.vidioc_qbuf            = zr364xx_vidioc_qbuf,
--	.vidioc_dqbuf           = zr364xx_vidioc_dqbuf,
--	.vidioc_log_status      = v4l2_ctrl_log_status,
--	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
--	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
--};
--
--static const struct video_device zr364xx_template = {
--	.name = DRIVER_DESC,
--	.fops = &zr364xx_fops,
--	.ioctl_ops = &zr364xx_ioctl_ops,
--	.release = video_device_release_empty,
--	.device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_READWRITE |
--		       V4L2_CAP_STREAMING,
--};
--
--
--
--/*******************/
--/* USB integration */
--/*******************/
--static int zr364xx_board_init(struct zr364xx_camera *cam)
--{
--	struct zr364xx_pipeinfo *pipe = cam->pipe;
--	unsigned long i;
--	int err;
--
--	DBG("board init: %p\n", cam);
--	memset(pipe, 0, sizeof(*pipe));
--	pipe->cam = cam;
--	pipe->transfer_size = BUFFER_SIZE;
--
--	pipe->transfer_buffer = kzalloc(pipe->transfer_size,
--					GFP_KERNEL);
--	if (!pipe->transfer_buffer) {
--		DBG("out of memory!\n");
--		return -ENOMEM;
--	}
--
--	cam->b_acquire = 0;
--	cam->frame_count = 0;
--
--	/*** start create system buffers ***/
--	for (i = 0; i < FRAMES; i++) {
--		/* always allocate maximum size for system buffers */
--		cam->buffer.frame[i].lpvbits = vmalloc(MAX_FRAME_SIZE);
--
--		DBG("valloc %p, idx %lu, pdata %p\n",
--			&cam->buffer.frame[i], i,
--			cam->buffer.frame[i].lpvbits);
--		if (!cam->buffer.frame[i].lpvbits) {
--			printk(KERN_INFO KBUILD_MODNAME ": out of memory. Using less frames\n");
--			break;
--		}
--	}
--
--	if (i == 0) {
--		printk(KERN_INFO KBUILD_MODNAME ": out of memory. Aborting\n");
--		err = -ENOMEM;
--		goto err_free;
--	} else
--		cam->buffer.dwFrames = i;
--
--	/* make sure internal states are set */
--	for (i = 0; i < FRAMES; i++) {
--		cam->buffer.frame[i].ulState = ZR364XX_READ_IDLE;
--		cam->buffer.frame[i].cur_size = 0;
--	}
--
--	cam->cur_frame = 0;
--	cam->last_frame = -1;
--	/*** end create system buffers ***/
--
--	/* start read pipe */
--	err = zr364xx_start_readpipe(cam);
--	if (err)
--		goto err_free_frames;
--
--	DBG(": board initialized\n");
--	return 0;
--
--err_free_frames:
--	for (i = 0; i < FRAMES; i++)
--		vfree(cam->buffer.frame[i].lpvbits);
--err_free:
--	kfree(cam->pipe->transfer_buffer);
--	cam->pipe->transfer_buffer = NULL;
--	return err;
--}
--
--static int zr364xx_probe(struct usb_interface *intf,
--			 const struct usb_device_id *id)
--{
--	struct usb_device *udev = interface_to_usbdev(intf);
--	struct zr364xx_camera *cam = NULL;
--	struct usb_host_interface *iface_desc;
--	struct usb_endpoint_descriptor *endpoint;
--	struct v4l2_ctrl_handler *hdl;
--	int err;
--	int i;
--
--	DBG("probing...\n");
--
--	dev_info(&intf->dev, DRIVER_DESC " compatible webcam plugged\n");
--	dev_info(&intf->dev, "model %04x:%04x detected\n",
--		 le16_to_cpu(udev->descriptor.idVendor),
--		 le16_to_cpu(udev->descriptor.idProduct));
--
--	cam = kzalloc(sizeof(*cam), GFP_KERNEL);
--	if (!cam)
--		return -ENOMEM;
--
--	err = v4l2_device_register(&intf->dev, &cam->v4l2_dev);
--	if (err < 0) {
--		dev_err(&udev->dev, "couldn't register v4l2_device\n");
--		goto free_cam;
--	}
--	hdl = &cam->ctrl_handler;
--	v4l2_ctrl_handler_init(hdl, 1);
--	v4l2_ctrl_new_std(hdl, &zr364xx_ctrl_ops,
--			  V4L2_CID_BRIGHTNESS, 0, 127, 1, 64);
--	if (hdl->error) {
--		err = hdl->error;
--		dev_err(&udev->dev, "couldn't register control\n");
--		goto free_hdlr_and_unreg_dev;
--	}
--	/* save the init method used by this camera */
--	cam->method = id->driver_info;
--	mutex_init(&cam->lock);
--	cam->vdev = zr364xx_template;
--	cam->vdev.lock = &cam->lock;
--	cam->vdev.v4l2_dev = &cam->v4l2_dev;
--	cam->vdev.ctrl_handler = &cam->ctrl_handler;
--	video_set_drvdata(&cam->vdev, cam);
--
--	cam->udev = udev;
--
--	switch (mode) {
--	case 1:
--		dev_info(&udev->dev, "160x120 mode selected\n");
--		cam->width = 160;
--		cam->height = 120;
+-	switch (meye.mchip_mode) {
+-	case MCHIP_HIC_MODE_CONT_OUT:
+-	default:
+-		f->fmt.pix.pixelformat = V4L2_PIX_FMT_YUYV;
 -		break;
--	case 2:
--		dev_info(&udev->dev, "640x480 mode selected\n");
--		cam->width = 640;
--		cam->height = 480;
+-	case MCHIP_HIC_MODE_CONT_COMP:
+-		f->fmt.pix.pixelformat = V4L2_PIX_FMT_MJPEG;
+-		break;
+-	}
+-
+-	f->fmt.pix.field = V4L2_FIELD_NONE;
+-	f->fmt.pix.width = mchip_hsize();
+-	f->fmt.pix.height = mchip_vsize();
+-	f->fmt.pix.bytesperline = f->fmt.pix.width * 2;
+-	f->fmt.pix.sizeimage = f->fmt.pix.height *
+-			       f->fmt.pix.bytesperline;
+-
+-	return 0;
+-}
+-
+-static int vidioc_s_fmt_vid_cap(struct file *file, void *fh,
+-				    struct v4l2_format *f)
+-{
+-	if (f->fmt.pix.pixelformat != V4L2_PIX_FMT_YUYV &&
+-	    f->fmt.pix.pixelformat != V4L2_PIX_FMT_MJPEG)
+-		return -EINVAL;
+-
+-	if (f->fmt.pix.field != V4L2_FIELD_ANY &&
+-	    f->fmt.pix.field != V4L2_FIELD_NONE)
+-		return -EINVAL;
+-
+-	f->fmt.pix.field = V4L2_FIELD_NONE;
+-	mutex_lock(&meye.lock);
+-
+-	if (f->fmt.pix.width <= 320) {
+-		f->fmt.pix.width = 320;
+-		f->fmt.pix.height = 240;
+-		meye.params.subsample = 1;
+-	} else {
+-		f->fmt.pix.width = 640;
+-		f->fmt.pix.height = 480;
+-		meye.params.subsample = 0;
+-	}
+-
+-	switch (f->fmt.pix.pixelformat) {
+-	case V4L2_PIX_FMT_YUYV:
+-		meye.mchip_mode = MCHIP_HIC_MODE_CONT_OUT;
+-		break;
+-	case V4L2_PIX_FMT_MJPEG:
+-		meye.mchip_mode = MCHIP_HIC_MODE_CONT_COMP;
+-		break;
+-	}
+-
+-	mutex_unlock(&meye.lock);
+-	f->fmt.pix.bytesperline = f->fmt.pix.width * 2;
+-	f->fmt.pix.sizeimage = f->fmt.pix.height *
+-			       f->fmt.pix.bytesperline;
+-	f->fmt.pix.colorspace = 0;
+-
+-	return 0;
+-}
+-
+-static int vidioc_reqbufs(struct file *file, void *fh,
+-				struct v4l2_requestbuffers *req)
+-{
+-	int i;
+-
+-	if (req->memory != V4L2_MEMORY_MMAP)
+-		return -EINVAL;
+-
+-	if (meye.grab_fbuffer && req->count == gbuffers) {
+-		/* already allocated, no modifications */
+-		return 0;
+-	}
+-
+-	mutex_lock(&meye.lock);
+-	if (meye.grab_fbuffer) {
+-		for (i = 0; i < gbuffers; i++)
+-			if (meye.vma_use_count[i]) {
+-				mutex_unlock(&meye.lock);
+-				return -EINVAL;
+-			}
+-		rvfree(meye.grab_fbuffer, gbuffers * gbufsize);
+-		meye.grab_fbuffer = NULL;
+-	}
+-
+-	gbuffers = max(2, min((int)req->count, MEYE_MAX_BUFNBRS));
+-	req->count = gbuffers;
+-	meye.grab_fbuffer = rvmalloc(gbuffers * gbufsize);
+-
+-	if (!meye.grab_fbuffer) {
+-		printk(KERN_ERR "meye: v4l framebuffer allocation failed\n");
+-		mutex_unlock(&meye.lock);
+-		return -ENOMEM;
+-	}
+-
+-	for (i = 0; i < gbuffers; i++)
+-		meye.vma_use_count[i] = 0;
+-
+-	mutex_unlock(&meye.lock);
+-
+-	return 0;
+-}
+-
+-static int vidioc_querybuf(struct file *file, void *fh, struct v4l2_buffer *buf)
+-{
+-	unsigned int index = buf->index;
+-
+-	if (index >= gbuffers)
+-		return -EINVAL;
+-
+-	buf->bytesused = meye.grab_buffer[index].size;
+-	buf->flags = V4L2_BUF_FLAG_MAPPED | V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
+-
+-	if (meye.grab_buffer[index].state == MEYE_BUF_USING)
+-		buf->flags |= V4L2_BUF_FLAG_QUEUED;
+-
+-	if (meye.grab_buffer[index].state == MEYE_BUF_DONE)
+-		buf->flags |= V4L2_BUF_FLAG_DONE;
+-
+-	buf->field = V4L2_FIELD_NONE;
+-	v4l2_buffer_set_timestamp(buf, meye.grab_buffer[index].ts);
+-	buf->sequence = meye.grab_buffer[index].sequence;
+-	buf->memory = V4L2_MEMORY_MMAP;
+-	buf->m.offset = index * gbufsize;
+-	buf->length = gbufsize;
+-
+-	return 0;
+-}
+-
+-static int vidioc_qbuf(struct file *file, void *fh, struct v4l2_buffer *buf)
+-{
+-	if (buf->memory != V4L2_MEMORY_MMAP)
+-		return -EINVAL;
+-
+-	if (buf->index >= gbuffers)
+-		return -EINVAL;
+-
+-	if (meye.grab_buffer[buf->index].state != MEYE_BUF_UNUSED)
+-		return -EINVAL;
+-
+-	mutex_lock(&meye.lock);
+-	buf->flags |= V4L2_BUF_FLAG_QUEUED;
+-	buf->flags &= ~V4L2_BUF_FLAG_DONE;
+-	meye.grab_buffer[buf->index].state = MEYE_BUF_USING;
+-	kfifo_in_locked(&meye.grabq, (unsigned char *)&buf->index,
+-			sizeof(int), &meye.grabq_lock);
+-	mutex_unlock(&meye.lock);
+-
+-	return 0;
+-}
+-
+-static int vidioc_dqbuf(struct file *file, void *fh, struct v4l2_buffer *buf)
+-{
+-	int reqnr;
+-
+-	if (buf->memory != V4L2_MEMORY_MMAP)
+-		return -EINVAL;
+-
+-	mutex_lock(&meye.lock);
+-
+-	if (kfifo_len(&meye.doneq) == 0 && file->f_flags & O_NONBLOCK) {
+-		mutex_unlock(&meye.lock);
+-		return -EAGAIN;
+-	}
+-
+-	if (wait_event_interruptible(meye.proc_list,
+-				     kfifo_len(&meye.doneq) != 0) < 0) {
+-		mutex_unlock(&meye.lock);
+-		return -EINTR;
+-	}
+-
+-	if (!kfifo_out_locked(&meye.doneq, (unsigned char *)&reqnr,
+-		       sizeof(int), &meye.doneq_lock)) {
+-		mutex_unlock(&meye.lock);
+-		return -EBUSY;
+-	}
+-
+-	if (meye.grab_buffer[reqnr].state != MEYE_BUF_DONE) {
+-		mutex_unlock(&meye.lock);
+-		return -EINVAL;
+-	}
+-
+-	buf->index = reqnr;
+-	buf->bytesused = meye.grab_buffer[reqnr].size;
+-	buf->flags = V4L2_BUF_FLAG_MAPPED | V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
+-	buf->field = V4L2_FIELD_NONE;
+-	v4l2_buffer_set_timestamp(buf, meye.grab_buffer[reqnr].ts);
+-	buf->sequence = meye.grab_buffer[reqnr].sequence;
+-	buf->memory = V4L2_MEMORY_MMAP;
+-	buf->m.offset = reqnr * gbufsize;
+-	buf->length = gbufsize;
+-	meye.grab_buffer[reqnr].state = MEYE_BUF_UNUSED;
+-	mutex_unlock(&meye.lock);
+-
+-	return 0;
+-}
+-
+-static int vidioc_streamon(struct file *file, void *fh, enum v4l2_buf_type i)
+-{
+-	mutex_lock(&meye.lock);
+-
+-	switch (meye.mchip_mode) {
+-	case MCHIP_HIC_MODE_CONT_OUT:
+-		mchip_continuous_start();
+-		break;
+-	case MCHIP_HIC_MODE_CONT_COMP:
+-		mchip_cont_compression_start();
 -		break;
 -	default:
--		dev_info(&udev->dev, "320x240 mode selected\n");
--		cam->width = 320;
--		cam->height = 240;
--		break;
+-		mutex_unlock(&meye.lock);
+-		return -EINVAL;
 -	}
 -
--	m0d1[0] = mode;
--	m1[2].value = 0xf000 + mode;
--	m2[1].value = 0xf000 + mode;
+-	mutex_unlock(&meye.lock);
 -
--	/* special case for METHOD3, the modes are different */
--	if (cam->method == METHOD3) {
--		switch (mode) {
--		case 1:
--			m2[1].value = 0xf000 + 4;
--			break;
--		case 2:
--			m2[1].value = 0xf000 + 0;
--			break;
--		default:
--			m2[1].value = 0xf000 + 1;
--			break;
--		}
--	}
--
--	header2[437] = cam->height / 256;
--	header2[438] = cam->height % 256;
--	header2[439] = cam->width / 256;
--	header2[440] = cam->width % 256;
--
--	cam->nb = 0;
--
--	DBG("dev: %p, udev %p interface %p\n", cam, cam->udev, intf);
--
--	/* set up the endpoint information  */
--	iface_desc = intf->cur_altsetting;
--	DBG("num endpoints %d\n", iface_desc->desc.bNumEndpoints);
--	for (i = 0; i < iface_desc->desc.bNumEndpoints; ++i) {
--		endpoint = &iface_desc->endpoint[i].desc;
--		if (!cam->read_endpoint && usb_endpoint_is_bulk_in(endpoint)) {
--			/* we found the bulk in endpoint */
--			cam->read_endpoint = endpoint->bEndpointAddress;
--		}
--	}
--
--	if (!cam->read_endpoint) {
--		err = -ENOMEM;
--		dev_err(&intf->dev, "Could not find bulk-in endpoint\n");
--		goto free_hdlr_and_unreg_dev;
--	}
--
--	/* v4l */
--	INIT_LIST_HEAD(&cam->vidq.active);
--	cam->vidq.cam = cam;
--
--	usb_set_intfdata(intf, cam);
--
--	/* load zr364xx board specific */
--	err = zr364xx_board_init(cam);
--	if (err)
--		goto free_hdlr_and_unreg_dev;
--	err = v4l2_ctrl_handler_setup(hdl);
--	if (err)
--		goto board_uninit;
--
--	spin_lock_init(&cam->slock);
--
--	cam->fmt = formats;
--
--	videobuf_queue_vmalloc_init(&cam->vb_vidq, &zr364xx_video_qops,
--				    NULL, &cam->slock,
--				    V4L2_BUF_TYPE_VIDEO_CAPTURE,
--				    V4L2_FIELD_NONE,
--				    sizeof(struct zr364xx_buffer), cam, &cam->lock);
--
--	err = video_register_device(&cam->vdev, VFL_TYPE_VIDEO, -1);
--	if (err) {
--		dev_err(&udev->dev, "video_register_device failed\n");
--		goto board_uninit;
--	}
--	cam->v4l2_dev.release = zr364xx_release;
--
--	dev_info(&udev->dev, DRIVER_DESC " controlling device %s\n",
--		 video_device_node_name(&cam->vdev));
--	return 0;
--
--board_uninit:
--	zr364xx_board_uninit(cam);
--free_hdlr_and_unreg_dev:
--	v4l2_ctrl_handler_free(hdl);
--	v4l2_device_unregister(&cam->v4l2_dev);
--free_cam:
--	kfree(cam);
--	return err;
--}
--
--
--static void zr364xx_disconnect(struct usb_interface *intf)
--{
--	struct zr364xx_camera *cam = usb_get_intfdata(intf);
--
--	mutex_lock(&cam->lock);
--	usb_set_intfdata(intf, NULL);
--	dev_info(&intf->dev, DRIVER_DESC " webcam unplugged\n");
--	video_unregister_device(&cam->vdev);
--	v4l2_device_disconnect(&cam->v4l2_dev);
--
--	/* stops the read pipe if it is running */
--	if (cam->b_acquire)
--		zr364xx_stop_acquire(cam);
--
--	zr364xx_stop_readpipe(cam);
--	mutex_unlock(&cam->lock);
--	v4l2_device_put(&cam->v4l2_dev);
--}
--
--
--#ifdef CONFIG_PM
--static int zr364xx_suspend(struct usb_interface *intf, pm_message_t message)
--{
--	struct zr364xx_camera *cam = usb_get_intfdata(intf);
--
--	cam->was_streaming = cam->b_acquire;
--	if (!cam->was_streaming)
--		return 0;
--	zr364xx_stop_acquire(cam);
--	zr364xx_stop_readpipe(cam);
 -	return 0;
 -}
 -
--static int zr364xx_resume(struct usb_interface *intf)
+-static int vidioc_streamoff(struct file *file, void *fh, enum v4l2_buf_type i)
 -{
--	struct zr364xx_camera *cam = usb_get_intfdata(intf);
--	int res;
+-	mutex_lock(&meye.lock);
+-	mchip_hic_stop();
+-	kfifo_reset(&meye.grabq);
+-	kfifo_reset(&meye.doneq);
 -
--	if (!cam->was_streaming)
--		return 0;
+-	for (i = 0; i < MEYE_MAX_BUFNBRS; i++)
+-		meye.grab_buffer[i].state = MEYE_BUF_UNUSED;
 -
--	res = zr364xx_start_readpipe(cam);
--	if (res)
--		return res;
--
--	res = zr364xx_prepare(cam);
--	if (res)
--		goto err_prepare;
--
--	zr364xx_start_acquire(cam);
+-	mutex_unlock(&meye.lock);
 -	return 0;
+-}
 -
--err_prepare:
--	zr364xx_stop_readpipe(cam);
+-static long vidioc_default(struct file *file, void *fh, bool valid_prio,
+-			   unsigned int cmd, void *arg)
+-{
+-	switch (cmd) {
+-	case MEYEIOC_G_PARAMS:
+-		return meyeioc_g_params((struct meye_params *) arg);
+-
+-	case MEYEIOC_S_PARAMS:
+-		return meyeioc_s_params((struct meye_params *) arg);
+-
+-	case MEYEIOC_QBUF_CAPT:
+-		return meyeioc_qbuf_capt((int *) arg);
+-
+-	case MEYEIOC_SYNC:
+-		return meyeioc_sync(file, fh, (int *) arg);
+-
+-	case MEYEIOC_STILLCAPT:
+-		return meyeioc_stillcapt();
+-
+-	case MEYEIOC_STILLJCAPT:
+-		return meyeioc_stilljcapt((int *) arg);
+-
+-	default:
+-		return -ENOTTY;
+-	}
+-
+-}
+-
+-static __poll_t meye_poll(struct file *file, poll_table *wait)
+-{
+-	__poll_t res = v4l2_ctrl_poll(file, wait);
+-
+-	mutex_lock(&meye.lock);
+-	poll_wait(file, &meye.proc_list, wait);
+-	if (kfifo_len(&meye.doneq))
+-		res |= EPOLLIN | EPOLLRDNORM;
+-	mutex_unlock(&meye.lock);
 -	return res;
 -}
--#endif
 -
--/**********************/
--/* Module integration */
--/**********************/
+-static void meye_vm_open(struct vm_area_struct *vma)
+-{
+-	long idx = (long)vma->vm_private_data;
+-	meye.vma_use_count[idx]++;
+-}
 -
--static struct usb_driver zr364xx_driver = {
--	.name = "zr364xx",
--	.probe = zr364xx_probe,
--	.disconnect = zr364xx_disconnect,
--#ifdef CONFIG_PM
--	.suspend = zr364xx_suspend,
--	.resume = zr364xx_resume,
--	.reset_resume = zr364xx_resume,
--#endif
--	.id_table = device_table
+-static void meye_vm_close(struct vm_area_struct *vma)
+-{
+-	long idx = (long)vma->vm_private_data;
+-	meye.vma_use_count[idx]--;
+-}
+-
+-static const struct vm_operations_struct meye_vm_ops = {
+-	.open		= meye_vm_open,
+-	.close		= meye_vm_close,
 -};
 -
--module_usb_driver(zr364xx_driver);
+-static int meye_mmap(struct file *file, struct vm_area_struct *vma)
+-{
+-	unsigned long start = vma->vm_start;
+-	unsigned long size = vma->vm_end - vma->vm_start;
+-	unsigned long offset = vma->vm_pgoff << PAGE_SHIFT;
+-	unsigned long page, pos;
 -
--MODULE_AUTHOR(DRIVER_AUTHOR);
--MODULE_DESCRIPTION(DRIVER_DESC);
--MODULE_LICENSE("GPL");
--MODULE_VERSION(DRIVER_VERSION);
+-	mutex_lock(&meye.lock);
+-	if (size > gbuffers * gbufsize || offset > gbuffers * gbufsize - size) {
+-		mutex_unlock(&meye.lock);
+-		return -EINVAL;
+-	}
+-	if (!meye.grab_fbuffer) {
+-		int i;
+-
+-		/* lazy allocation */
+-		meye.grab_fbuffer = rvmalloc(gbuffers*gbufsize);
+-		if (!meye.grab_fbuffer) {
+-			printk(KERN_ERR "meye: v4l framebuffer allocation failed\n");
+-			mutex_unlock(&meye.lock);
+-			return -ENOMEM;
+-		}
+-		for (i = 0; i < gbuffers; i++)
+-			meye.vma_use_count[i] = 0;
+-	}
+-	pos = (unsigned long)meye.grab_fbuffer + offset;
+-
+-	while (size > 0) {
+-		page = vmalloc_to_pfn((void *)pos);
+-		if (remap_pfn_range(vma, start, page, PAGE_SIZE, PAGE_SHARED)) {
+-			mutex_unlock(&meye.lock);
+-			return -EAGAIN;
+-		}
+-		start += PAGE_SIZE;
+-		pos += PAGE_SIZE;
+-		if (size > PAGE_SIZE)
+-			size -= PAGE_SIZE;
+-		else
+-			size = 0;
+-	}
+-
+-	vma->vm_ops = &meye_vm_ops;
+-	vma->vm_flags &= ~VM_IO;	/* not I/O memory */
+-	vma->vm_flags |= VM_DONTEXPAND | VM_DONTDUMP;
+-	vma->vm_private_data = (void *) (offset / gbufsize);
+-	meye_vm_open(vma);
+-
+-	mutex_unlock(&meye.lock);
+-	return 0;
+-}
+-
+-static const struct v4l2_file_operations meye_fops = {
+-	.owner		= THIS_MODULE,
+-	.open		= meye_open,
+-	.release	= meye_release,
+-	.mmap		= meye_mmap,
+-	.unlocked_ioctl	= video_ioctl2,
+-	.poll		= meye_poll,
+-};
+-
+-static const struct v4l2_ioctl_ops meye_ioctl_ops = {
+-	.vidioc_querycap	= vidioc_querycap,
+-	.vidioc_enum_input	= vidioc_enum_input,
+-	.vidioc_g_input		= vidioc_g_input,
+-	.vidioc_s_input		= vidioc_s_input,
+-	.vidioc_enum_fmt_vid_cap = vidioc_enum_fmt_vid_cap,
+-	.vidioc_try_fmt_vid_cap	= vidioc_try_fmt_vid_cap,
+-	.vidioc_g_fmt_vid_cap	= vidioc_g_fmt_vid_cap,
+-	.vidioc_s_fmt_vid_cap	= vidioc_s_fmt_vid_cap,
+-	.vidioc_reqbufs		= vidioc_reqbufs,
+-	.vidioc_querybuf	= vidioc_querybuf,
+-	.vidioc_qbuf		= vidioc_qbuf,
+-	.vidioc_dqbuf		= vidioc_dqbuf,
+-	.vidioc_streamon	= vidioc_streamon,
+-	.vidioc_streamoff	= vidioc_streamoff,
+-	.vidioc_log_status	= v4l2_ctrl_log_status,
+-	.vidioc_subscribe_event	= v4l2_ctrl_subscribe_event,
+-	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
+-	.vidioc_default		= vidioc_default,
+-};
+-
+-static const struct video_device meye_template = {
+-	.name		= "meye",
+-	.fops		= &meye_fops,
+-	.ioctl_ops	= &meye_ioctl_ops,
+-	.release	= video_device_release_empty,
+-	.device_caps	= V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING,
+-};
+-
+-static const struct v4l2_ctrl_ops meye_ctrl_ops = {
+-	.s_ctrl = meye_s_ctrl,
+-};
+-
+-static int __maybe_unused meye_suspend(struct device *dev)
+-{
+-	meye.pm_mchip_mode = meye.mchip_mode;
+-	mchip_hic_stop();
+-	mchip_set(MCHIP_MM_INTA, 0x0);
+-	return 0;
+-}
+-
+-static int __maybe_unused meye_resume(struct device *dev)
+-{
+-	pci_write_config_word(meye.mchip_dev, MCHIP_PCI_SOFTRESET_SET, 1);
+-
+-	mchip_delay(MCHIP_HIC_CMD, 0);
+-	mchip_delay(MCHIP_HIC_STATUS, MCHIP_HIC_STATUS_IDLE);
+-	msleep(1);
+-	mchip_set(MCHIP_VRJ_SOFT_RESET, 1);
+-	msleep(1);
+-	mchip_set(MCHIP_MM_PCI_MODE, 5);
+-	msleep(1);
+-	mchip_set(MCHIP_MM_INTA, MCHIP_MM_INTA_HIC_1_MASK);
+-
+-	switch (meye.pm_mchip_mode) {
+-	case MCHIP_HIC_MODE_CONT_OUT:
+-		mchip_continuous_start();
+-		break;
+-	case MCHIP_HIC_MODE_CONT_COMP:
+-		mchip_cont_compression_start();
+-		break;
+-	}
+-	return 0;
+-}
+-
+-static int meye_probe(struct pci_dev *pcidev, const struct pci_device_id *ent)
+-{
+-	static const struct v4l2_ctrl_config ctrl_agc = {
+-		.id = V4L2_CID_MEYE_AGC,
+-		.type = V4L2_CTRL_TYPE_INTEGER,
+-		.ops = &meye_ctrl_ops,
+-		.name = "AGC",
+-		.max = 63,
+-		.step = 1,
+-		.def = 48,
+-		.flags = V4L2_CTRL_FLAG_SLIDER,
+-	};
+-	static const struct v4l2_ctrl_config ctrl_picture = {
+-		.id = V4L2_CID_MEYE_PICTURE,
+-		.type = V4L2_CTRL_TYPE_INTEGER,
+-		.ops = &meye_ctrl_ops,
+-		.name = "Picture",
+-		.max = 63,
+-		.step = 1,
+-	};
+-	static const struct v4l2_ctrl_config ctrl_framerate = {
+-		.id = V4L2_CID_MEYE_FRAMERATE,
+-		.type = V4L2_CTRL_TYPE_INTEGER,
+-		.ops = &meye_ctrl_ops,
+-		.name = "Framerate",
+-		.max = 31,
+-		.step = 1,
+-	};
+-	struct v4l2_device *v4l2_dev = &meye.v4l2_dev;
+-	int ret = -EBUSY;
+-	unsigned long mchip_adr;
+-
+-	if (meye.mchip_dev != NULL) {
+-		printk(KERN_ERR "meye: only one device allowed!\n");
+-		return ret;
+-	}
+-
+-	ret = v4l2_device_register(&pcidev->dev, v4l2_dev);
+-	if (ret < 0) {
+-		v4l2_err(v4l2_dev, "Could not register v4l2_device\n");
+-		return ret;
+-	}
+-	ret = -ENOMEM;
+-	meye.mchip_dev = pcidev;
+-
+-	meye.grab_temp = vmalloc(array_size(PAGE_SIZE, MCHIP_NB_PAGES_MJPEG));
+-	if (!meye.grab_temp)
+-		goto outvmalloc;
+-
+-	spin_lock_init(&meye.grabq_lock);
+-	if (kfifo_alloc(&meye.grabq, sizeof(int) * MEYE_MAX_BUFNBRS,
+-			GFP_KERNEL))
+-		goto outkfifoalloc1;
+-
+-	spin_lock_init(&meye.doneq_lock);
+-	if (kfifo_alloc(&meye.doneq, sizeof(int) * MEYE_MAX_BUFNBRS,
+-			GFP_KERNEL))
+-		goto outkfifoalloc2;
+-
+-	meye.vdev = meye_template;
+-	meye.vdev.v4l2_dev = &meye.v4l2_dev;
+-
+-	ret = sony_pic_camera_command(SONY_PIC_COMMAND_SETCAMERA, 1);
+-	if (ret) {
+-		v4l2_err(v4l2_dev, "meye: unable to power on the camera\n");
+-		v4l2_err(v4l2_dev, "meye: did you enable the camera in sonypi using the module options ?\n");
+-		goto outsonypienable;
+-	}
+-
+-	ret = pci_enable_device(meye.mchip_dev);
+-	if (ret) {
+-		v4l2_err(v4l2_dev, "meye: pci_enable_device failed\n");
+-		goto outenabledev;
+-	}
+-
+-	ret = -EIO;
+-	mchip_adr = pci_resource_start(meye.mchip_dev,0);
+-	if (!mchip_adr) {
+-		v4l2_err(v4l2_dev, "meye: mchip has no device base address\n");
+-		goto outregions;
+-	}
+-	if (!request_mem_region(pci_resource_start(meye.mchip_dev, 0),
+-				pci_resource_len(meye.mchip_dev, 0),
+-				"meye")) {
+-		v4l2_err(v4l2_dev, "meye: request_mem_region failed\n");
+-		goto outregions;
+-	}
+-	meye.mchip_mmregs = ioremap(mchip_adr, MCHIP_MM_REGS);
+-	if (!meye.mchip_mmregs) {
+-		v4l2_err(v4l2_dev, "meye: ioremap failed\n");
+-		goto outremap;
+-	}
+-
+-	meye.mchip_irq = pcidev->irq;
+-	if (request_irq(meye.mchip_irq, meye_irq,
+-			IRQF_SHARED, "meye", meye_irq)) {
+-		v4l2_err(v4l2_dev, "request_irq failed\n");
+-		goto outreqirq;
+-	}
+-
+-	pci_write_config_byte(meye.mchip_dev, PCI_CACHE_LINE_SIZE, 8);
+-	pci_write_config_byte(meye.mchip_dev, PCI_LATENCY_TIMER, 64);
+-
+-	pci_set_master(meye.mchip_dev);
+-
+-	/* Ask the camera to perform a soft reset. */
+-	pci_write_config_word(meye.mchip_dev, MCHIP_PCI_SOFTRESET_SET, 1);
+-
+-	mchip_delay(MCHIP_HIC_CMD, 0);
+-	mchip_delay(MCHIP_HIC_STATUS, MCHIP_HIC_STATUS_IDLE);
+-
+-	msleep(1);
+-	mchip_set(MCHIP_VRJ_SOFT_RESET, 1);
+-
+-	msleep(1);
+-	mchip_set(MCHIP_MM_PCI_MODE, 5);
+-
+-	msleep(1);
+-	mchip_set(MCHIP_MM_INTA, MCHIP_MM_INTA_HIC_1_MASK);
+-
+-	mutex_init(&meye.lock);
+-	init_waitqueue_head(&meye.proc_list);
+-
+-	v4l2_ctrl_handler_init(&meye.hdl, 3);
+-	v4l2_ctrl_new_std(&meye.hdl, &meye_ctrl_ops,
+-			  V4L2_CID_BRIGHTNESS, 0, 63, 1, 32);
+-	v4l2_ctrl_new_std(&meye.hdl, &meye_ctrl_ops,
+-			  V4L2_CID_HUE, 0, 63, 1, 32);
+-	v4l2_ctrl_new_std(&meye.hdl, &meye_ctrl_ops,
+-			  V4L2_CID_CONTRAST, 0, 63, 1, 32);
+-	v4l2_ctrl_new_std(&meye.hdl, &meye_ctrl_ops,
+-			  V4L2_CID_SATURATION, 0, 63, 1, 32);
+-	v4l2_ctrl_new_custom(&meye.hdl, &ctrl_agc, NULL);
+-	v4l2_ctrl_new_std(&meye.hdl, &meye_ctrl_ops,
+-			  V4L2_CID_SHARPNESS, 0, 63, 1, 32);
+-	v4l2_ctrl_new_custom(&meye.hdl, &ctrl_picture, NULL);
+-	v4l2_ctrl_new_std(&meye.hdl, &meye_ctrl_ops,
+-			  V4L2_CID_JPEG_COMPRESSION_QUALITY, 0, 10, 1, 8);
+-	v4l2_ctrl_new_custom(&meye.hdl, &ctrl_framerate, NULL);
+-	if (meye.hdl.error) {
+-		v4l2_err(v4l2_dev, "couldn't register controls\n");
+-		goto outvideoreg;
+-	}
+-
+-	v4l2_ctrl_handler_setup(&meye.hdl);
+-	meye.vdev.ctrl_handler = &meye.hdl;
+-
+-	if (video_register_device(&meye.vdev, VFL_TYPE_VIDEO,
+-				  video_nr) < 0) {
+-		v4l2_err(v4l2_dev, "video_register_device failed\n");
+-		goto outvideoreg;
+-	}
+-
+-	v4l2_info(v4l2_dev, "Motion Eye Camera Driver v%s.\n",
+-	       MEYE_DRIVER_VERSION);
+-	v4l2_info(v4l2_dev, "mchip KL5A72002 rev. %d, base %lx, irq %d\n",
+-	       meye.mchip_dev->revision, mchip_adr, meye.mchip_irq);
+-
+-	return 0;
+-
+-outvideoreg:
+-	v4l2_ctrl_handler_free(&meye.hdl);
+-	free_irq(meye.mchip_irq, meye_irq);
+-outreqirq:
+-	iounmap(meye.mchip_mmregs);
+-outremap:
+-	release_mem_region(pci_resource_start(meye.mchip_dev, 0),
+-			   pci_resource_len(meye.mchip_dev, 0));
+-outregions:
+-	pci_disable_device(meye.mchip_dev);
+-outenabledev:
+-	sony_pic_camera_command(SONY_PIC_COMMAND_SETCAMERA, 0);
+-outsonypienable:
+-	kfifo_free(&meye.doneq);
+-outkfifoalloc2:
+-	kfifo_free(&meye.grabq);
+-outkfifoalloc1:
+-	vfree(meye.grab_temp);
+-outvmalloc:
+-	return ret;
+-}
+-
+-static void meye_remove(struct pci_dev *pcidev)
+-{
+-	video_unregister_device(&meye.vdev);
+-
+-	mchip_hic_stop();
+-
+-	mchip_dma_free();
+-
+-	/* disable interrupts */
+-	mchip_set(MCHIP_MM_INTA, 0x0);
+-
+-	free_irq(meye.mchip_irq, meye_irq);
+-
+-	iounmap(meye.mchip_mmregs);
+-
+-	release_mem_region(pci_resource_start(meye.mchip_dev, 0),
+-			   pci_resource_len(meye.mchip_dev, 0));
+-
+-	pci_disable_device(meye.mchip_dev);
+-
+-	sony_pic_camera_command(SONY_PIC_COMMAND_SETCAMERA, 0);
+-
+-	kfifo_free(&meye.doneq);
+-	kfifo_free(&meye.grabq);
+-
+-	vfree(meye.grab_temp);
+-
+-	if (meye.grab_fbuffer) {
+-		rvfree(meye.grab_fbuffer, gbuffers*gbufsize);
+-		meye.grab_fbuffer = NULL;
+-	}
+-
+-	printk(KERN_INFO "meye: removed\n");
+-}
+-
+-static const struct pci_device_id meye_pci_tbl[] = {
+-	{ PCI_VDEVICE(KAWASAKI, PCI_DEVICE_ID_MCHIP_KL5A72002), 0 },
+-	{ }
+-};
+-
+-MODULE_DEVICE_TABLE(pci, meye_pci_tbl);
+-
+-static SIMPLE_DEV_PM_OPS(meye_pm_ops, meye_suspend, meye_resume);
+-
+-static struct pci_driver meye_driver = {
+-	.name		= "meye",
+-	.id_table	= meye_pci_tbl,
+-	.probe		= meye_probe,
+-	.remove		= meye_remove,
+-	.driver.pm	= &meye_pm_ops,
+-};
+-
+-static int __init meye_init(void)
+-{
+-	gbuffers = max(2, min((int)gbuffers, MEYE_MAX_BUFNBRS));
+-	if (gbufsize > MEYE_MAX_BUFSIZE)
+-		gbufsize = MEYE_MAX_BUFSIZE;
+-	gbufsize = PAGE_ALIGN(gbufsize);
+-	printk(KERN_INFO "meye: using %d buffers with %dk (%dk total) for capture\n",
+-			 gbuffers,
+-			 gbufsize / 1024, gbuffers * gbufsize / 1024);
+-	return pci_register_driver(&meye_driver);
+-}
+-
+-static void __exit meye_exit(void)
+-{
+-	pci_unregister_driver(&meye_driver);
+-}
+-
+-module_init(meye_init);
+-module_exit(meye_exit);
+diff --git a/drivers/staging/media/deprecated/meye/meye.h b/drivers/staging/media/deprecated/meye/meye.h
+deleted file mode 100644
+index 5fa6552cf93d..000000000000
+--- a/drivers/staging/media/deprecated/meye/meye.h
++++ /dev/null
+@@ -1,311 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Motion Eye video4linux driver for Sony Vaio PictureBook
+- *
+- * Copyright (C) 2001-2004 Stelian Pop <stelian@popies.net>
+- *
+- * Copyright (C) 2001-2002 Alcôve <www.alcove.com>
+- *
+- * Copyright (C) 2000 Andrew Tridgell <tridge@valinux.com>
+- *
+- * Earlier work by Werner Almesberger, Paul `Rusty' Russell and Paul Mackerras.
+- *
+- * Some parts borrowed from various video4linux drivers, especially
+- * bttv-driver.c and zoran.c, see original files for credits.
+- */
+-
+-#ifndef _MEYE_PRIV_H_
+-#define _MEYE_PRIV_H_
+-
+-#define MEYE_DRIVER_MAJORVERSION	 1
+-#define MEYE_DRIVER_MINORVERSION	14
+-
+-#define MEYE_DRIVER_VERSION __stringify(MEYE_DRIVER_MAJORVERSION) "." \
+-			    __stringify(MEYE_DRIVER_MINORVERSION)
+-
+-#include <linux/types.h>
+-#include <linux/pci.h>
+-#include <linux/kfifo.h>
+-#include <media/v4l2-ctrls.h>
+-
+-/****************************************************************************/
+-/* Motion JPEG chip registers                                               */
+-/****************************************************************************/
+-
+-/* Motion JPEG chip PCI configuration registers */
+-#define MCHIP_PCI_POWER_CSR		0x54
+-#define MCHIP_PCI_MCORE_STATUS		0x60		/* see HIC_STATUS   */
+-#define MCHIP_PCI_HOSTUSEREQ_SET	0x64
+-#define MCHIP_PCI_HOSTUSEREQ_CLR	0x68
+-#define MCHIP_PCI_LOWPOWER_SET		0x6c
+-#define MCHIP_PCI_LOWPOWER_CLR		0x70
+-#define MCHIP_PCI_SOFTRESET_SET		0x74
+-
+-/* Motion JPEG chip memory mapped registers */
+-#define MCHIP_MM_REGS			0x200		/* 512 bytes        */
+-#define MCHIP_REG_TIMEOUT		1000		/* reg access, ~us  */
+-#define MCHIP_MCC_VRJ_TIMEOUT		1000		/* MCC & VRJ access */
+-
+-#define MCHIP_MM_PCI_MODE		0x00		/* PCI access mode */
+-#define MCHIP_MM_PCI_MODE_RETRY		0x00000001	/* retry mode */
+-#define MCHIP_MM_PCI_MODE_MASTER	0x00000002	/* master access */
+-#define MCHIP_MM_PCI_MODE_READ_LINE	0x00000004	/* read line */
+-
+-#define MCHIP_MM_INTA			0x04		/* Int status/mask */
+-#define MCHIP_MM_INTA_MCC		0x00000001	/* MCC interrupt */
+-#define MCHIP_MM_INTA_VRJ		0x00000002	/* VRJ interrupt */
+-#define MCHIP_MM_INTA_HIC_1		0x00000004	/* one frame done */
+-#define MCHIP_MM_INTA_HIC_1_MASK	0x00000400	/* 1: enable */
+-#define MCHIP_MM_INTA_HIC_END		0x00000008	/* all frames done */
+-#define MCHIP_MM_INTA_HIC_END_MASK	0x00000800
+-#define MCHIP_MM_INTA_JPEG		0x00000010	/* decompress. error */
+-#define MCHIP_MM_INTA_JPEG_MASK		0x00001000
+-#define MCHIP_MM_INTA_CAPTURE		0x00000020	/* capture end */
+-#define MCHIP_MM_INTA_PCI_ERR		0x00000040	/* PCI error */
+-#define MCHIP_MM_INTA_PCI_ERR_MASK	0x00004000
+-
+-#define MCHIP_MM_PT_ADDR		0x08		/* page table address*/
+-							/* n*4kB */
+-#define MCHIP_NB_PAGES			1024		/* pages for display */
+-#define MCHIP_NB_PAGES_MJPEG		256		/* pages for mjpeg */
+-
+-#define MCHIP_MM_FIR(n)			(0x0c+(n)*4)	/* Frame info 0-3 */
+-#define MCHIP_MM_FIR_RDY		0x00000001	/* frame ready */
+-#define MCHIP_MM_FIR_FAILFR_MASK	0xf8000000	/* # of failed frames */
+-#define MCHIP_MM_FIR_FAILFR_SHIFT	27
+-
+-	/* continuous comp/decomp mode */
+-#define MCHIP_MM_FIR_C_ENDL_MASK	0x000007fe	/* end DW [10] */
+-#define MCHIP_MM_FIR_C_ENDL_SHIFT	1
+-#define MCHIP_MM_FIR_C_ENDP_MASK	0x0007f800	/* end page [8] */
+-#define MCHIP_MM_FIR_C_ENDP_SHIFT	11
+-#define MCHIP_MM_FIR_C_STARTP_MASK	0x07f80000	/* start page [8] */
+-#define MCHIP_MM_FIR_C_STARTP_SHIFT	19
+-
+-	/* continuous picture output mode */
+-#define MCHIP_MM_FIR_O_STARTP_MASK	0x7ffe0000	/* start page [10] */
+-#define MCHIP_MM_FIR_O_STARTP_SHIFT	17
+-
+-#define MCHIP_MM_FIFO_DATA		0x1c		/* PCI TGT FIFO data */
+-#define MCHIP_MM_FIFO_STATUS		0x20		/* PCI TGT FIFO stat */
+-#define MCHIP_MM_FIFO_MASK		0x00000003
+-#define MCHIP_MM_FIFO_WAIT_OR_READY	0x00000002      /* Bits common to WAIT & READY*/
+-#define MCHIP_MM_FIFO_IDLE		0x0		/* HIC idle */
+-#define MCHIP_MM_FIFO_IDLE1		0x1		/* idem ??? */
+-#define	MCHIP_MM_FIFO_WAIT		0x2		/* wait request */
+-#define MCHIP_MM_FIFO_READY		0x3		/* data ready */
+-
+-#define MCHIP_HIC_HOST_USEREQ		0x40		/* host uses MCORE */
+-
+-#define MCHIP_HIC_TP_BUSY		0x44		/* taking picture */
+-
+-#define MCHIP_HIC_PIC_SAVED		0x48		/* pic in SDRAM */
+-
+-#define MCHIP_HIC_LOWPOWER		0x4c		/* clock stopped */
+-
+-#define MCHIP_HIC_CTL			0x50		/* HIC control */
+-#define MCHIP_HIC_CTL_SOFT_RESET	0x00000001	/* MCORE reset */
+-#define MCHIP_HIC_CTL_MCORE_RDY		0x00000002	/* MCORE ready */
+-
+-#define MCHIP_HIC_CMD			0x54		/* HIC command */
+-#define MCHIP_HIC_CMD_BITS		0x00000003      /* cmd width=[1:0]*/
+-#define MCHIP_HIC_CMD_NOOP		0x0
+-#define MCHIP_HIC_CMD_START		0x1
+-#define MCHIP_HIC_CMD_STOP		0x2
+-
+-#define MCHIP_HIC_MODE			0x58
+-#define MCHIP_HIC_MODE_NOOP		0x0
+-#define MCHIP_HIC_MODE_STILL_CAP	0x1		/* still pic capt */
+-#define MCHIP_HIC_MODE_DISPLAY		0x2		/* display */
+-#define MCHIP_HIC_MODE_STILL_COMP	0x3		/* still pic comp. */
+-#define MCHIP_HIC_MODE_STILL_DECOMP	0x4		/* still pic decomp. */
+-#define MCHIP_HIC_MODE_CONT_COMP	0x5		/* cont capt+comp */
+-#define MCHIP_HIC_MODE_CONT_DECOMP	0x6		/* cont decomp+disp */
+-#define MCHIP_HIC_MODE_STILL_OUT	0x7		/* still pic output */
+-#define MCHIP_HIC_MODE_CONT_OUT		0x8		/* cont output */
+-
+-#define MCHIP_HIC_STATUS		0x5c
+-#define MCHIP_HIC_STATUS_MCC_RDY	0x00000001	/* MCC reg acc ok */
+-#define MCHIP_HIC_STATUS_VRJ_RDY	0x00000002	/* VRJ reg acc ok */
+-#define MCHIP_HIC_STATUS_IDLE           0x00000003
+-#define MCHIP_HIC_STATUS_CAPDIS		0x00000004	/* cap/disp in prog */
+-#define MCHIP_HIC_STATUS_COMPDEC	0x00000008	/* (de)comp in prog */
+-#define MCHIP_HIC_STATUS_BUSY		0x00000010	/* HIC busy */
+-
+-#define MCHIP_HIC_S_RATE		0x60		/* MJPEG # frames */
+-
+-#define MCHIP_HIC_PCI_VFMT		0x64		/* video format */
+-#define MCHIP_HIC_PCI_VFMT_YVYU		0x00000001	/* 0: V Y' U Y */
+-							/* 1: Y' V Y U */
+-
+-#define MCHIP_MCC_CMD			0x80		/* MCC commands */
+-#define MCHIP_MCC_CMD_INITIAL		0x0		/* idle ? */
+-#define MCHIP_MCC_CMD_IIC_START_SET	0x1
+-#define MCHIP_MCC_CMD_IIC_END_SET	0x2
+-#define MCHIP_MCC_CMD_FM_WRITE		0x3		/* frame memory */
+-#define MCHIP_MCC_CMD_FM_READ		0x4
+-#define MCHIP_MCC_CMD_FM_STOP		0x5
+-#define MCHIP_MCC_CMD_CAPTURE		0x6
+-#define MCHIP_MCC_CMD_DISPLAY		0x7
+-#define MCHIP_MCC_CMD_END_DISP		0x8
+-#define MCHIP_MCC_CMD_STILL_COMP	0x9
+-#define MCHIP_MCC_CMD_STILL_DECOMP	0xa
+-#define MCHIP_MCC_CMD_STILL_OUTPUT	0xb
+-#define MCHIP_MCC_CMD_CONT_OUTPUT	0xc
+-#define MCHIP_MCC_CMD_CONT_COMP		0xd
+-#define MCHIP_MCC_CMD_CONT_DECOMP	0xe
+-#define MCHIP_MCC_CMD_RESET		0xf		/* MCC reset */
+-
+-#define MCHIP_MCC_IIC_WR		0x84
+-
+-#define MCHIP_MCC_MCC_WR		0x88
+-
+-#define MCHIP_MCC_MCC_RD		0x8c
+-
+-#define MCHIP_MCC_STATUS		0x90
+-#define MCHIP_MCC_STATUS_CAPT		0x00000001	/* capturing */
+-#define MCHIP_MCC_STATUS_DISP		0x00000002	/* displaying */
+-#define MCHIP_MCC_STATUS_COMP		0x00000004	/* compressing */
+-#define MCHIP_MCC_STATUS_DECOMP		0x00000008	/* decompressing */
+-#define MCHIP_MCC_STATUS_MCC_WR		0x00000010	/* register ready */
+-#define MCHIP_MCC_STATUS_MCC_RD		0x00000020	/* register ready */
+-#define MCHIP_MCC_STATUS_IIC_WR		0x00000040	/* register ready */
+-#define MCHIP_MCC_STATUS_OUTPUT		0x00000080	/* output in prog */
+-
+-#define MCHIP_MCC_SIG_POLARITY		0x94
+-#define MCHIP_MCC_SIG_POL_VS_H		0x00000001	/* VS active-high */
+-#define MCHIP_MCC_SIG_POL_HS_H		0x00000002	/* HS active-high */
+-#define MCHIP_MCC_SIG_POL_DOE_H		0x00000004	/* DOE active-high */
+-
+-#define MCHIP_MCC_IRQ			0x98
+-#define MCHIP_MCC_IRQ_CAPDIS_STRT	0x00000001	/* cap/disp started */
+-#define MCHIP_MCC_IRQ_CAPDIS_STRT_MASK	0x00000010
+-#define MCHIP_MCC_IRQ_CAPDIS_END	0x00000002	/* cap/disp ended */
+-#define MCHIP_MCC_IRQ_CAPDIS_END_MASK	0x00000020
+-#define MCHIP_MCC_IRQ_COMPDEC_STRT	0x00000004	/* (de)comp started */
+-#define MCHIP_MCC_IRQ_COMPDEC_STRT_MASK	0x00000040
+-#define MCHIP_MCC_IRQ_COMPDEC_END	0x00000008	/* (de)comp ended */
+-#define MCHIP_MCC_IRQ_COMPDEC_END_MASK	0x00000080
+-
+-#define MCHIP_MCC_HSTART		0x9c		/* video in */
+-#define MCHIP_MCC_VSTART		0xa0
+-#define MCHIP_MCC_HCOUNT		0xa4
+-#define MCHIP_MCC_VCOUNT		0xa8
+-#define MCHIP_MCC_R_XBASE		0xac		/* capt/disp */
+-#define MCHIP_MCC_R_YBASE		0xb0
+-#define MCHIP_MCC_R_XRANGE		0xb4
+-#define MCHIP_MCC_R_YRANGE		0xb8
+-#define MCHIP_MCC_B_XBASE		0xbc		/* comp/decomp */
+-#define MCHIP_MCC_B_YBASE		0xc0
+-#define MCHIP_MCC_B_XRANGE		0xc4
+-#define MCHIP_MCC_B_YRANGE		0xc8
+-
+-#define MCHIP_MCC_R_SAMPLING		0xcc		/* 1: 1:4 */
+-
+-#define MCHIP_VRJ_CMD			0x100		/* VRJ commands */
+-
+-/* VRJ registers (see table 12.2.4) */
+-#define MCHIP_VRJ_COMPRESSED_DATA	0x1b0
+-#define MCHIP_VRJ_PIXEL_DATA		0x1b8
+-
+-#define MCHIP_VRJ_BUS_MODE		0x100
+-#define MCHIP_VRJ_SIGNAL_ACTIVE_LEVEL	0x108
+-#define MCHIP_VRJ_PDAT_USE		0x110
+-#define MCHIP_VRJ_MODE_SPECIFY		0x118
+-#define MCHIP_VRJ_LIMIT_COMPRESSED_LO	0x120
+-#define MCHIP_VRJ_LIMIT_COMPRESSED_HI	0x124
+-#define MCHIP_VRJ_COMP_DATA_FORMAT	0x128
+-#define MCHIP_VRJ_TABLE_DATA		0x140
+-#define MCHIP_VRJ_RESTART_INTERVAL	0x148
+-#define MCHIP_VRJ_NUM_LINES		0x150
+-#define MCHIP_VRJ_NUM_PIXELS		0x158
+-#define MCHIP_VRJ_NUM_COMPONENTS	0x160
+-#define MCHIP_VRJ_SOF1			0x168
+-#define MCHIP_VRJ_SOF2			0x170
+-#define MCHIP_VRJ_SOF3			0x178
+-#define MCHIP_VRJ_SOF4			0x180
+-#define MCHIP_VRJ_SOS			0x188
+-#define MCHIP_VRJ_SOFT_RESET		0x190
+-
+-#define MCHIP_VRJ_STATUS		0x1c0
+-#define MCHIP_VRJ_STATUS_BUSY		0x00001
+-#define MCHIP_VRJ_STATUS_COMP_ACCESS	0x00002
+-#define MCHIP_VRJ_STATUS_PIXEL_ACCESS	0x00004
+-#define MCHIP_VRJ_STATUS_ERROR		0x00008
+-
+-#define MCHIP_VRJ_IRQ_FLAG		0x1c8
+-#define MCHIP_VRJ_ERROR_REPORT		0x1d8
+-
+-#define MCHIP_VRJ_START_COMMAND		0x1a0
+-
+-/****************************************************************************/
+-/* Driver definitions.                                                      */
+-/****************************************************************************/
+-
+-/* Sony Programmable I/O Controller for accessing the camera commands */
+-#include <linux/sony-laptop.h>
+-
+-/* private API definitions */
+-#include <linux/meye.h>
+-#include <linux/mutex.h>
+-
+-
+-/* Enable jpg software correction */
+-#define MEYE_JPEG_CORRECTION	1
+-
+-/* Maximum size of a buffer */
+-#define MEYE_MAX_BUFSIZE	614400	/* 640 * 480 * 2 */
+-
+-/* Maximum number of buffers */
+-#define MEYE_MAX_BUFNBRS	32
+-
+-/* State of a buffer */
+-#define MEYE_BUF_UNUSED	0	/* not used */
+-#define MEYE_BUF_USING	1	/* currently grabbing / playing */
+-#define MEYE_BUF_DONE	2	/* done */
+-
+-/* grab buffer */
+-struct meye_grab_buffer {
+-	int state;			/* state of buffer */
+-	unsigned long size;		/* size of jpg frame */
+-	u64 ts;				/* timestamp */
+-	unsigned long sequence;		/* sequence number */
+-};
+-
+-/* size of kfifos containing buffer indices */
+-#define MEYE_QUEUE_SIZE	MEYE_MAX_BUFNBRS
+-
+-/* Motion Eye device structure */
+-struct meye {
+-	struct v4l2_device v4l2_dev;	/* Main v4l2_device struct */
+-	struct v4l2_ctrl_handler hdl;
+-	struct pci_dev *mchip_dev;	/* pci device */
+-	u8 mchip_irq;			/* irq */
+-	u8 mchip_mode;			/* actual mchip mode: HIC_MODE... */
+-	u8 mchip_fnum;			/* current mchip frame number */
+-	unsigned char __iomem *mchip_mmregs;/* mchip: memory mapped registers */
+-	u8 *mchip_ptable[MCHIP_NB_PAGES];/* mchip: ptable */
+-	void *mchip_ptable_toc;		/* mchip: ptable toc */
+-	dma_addr_t mchip_dmahandle;	/* mchip: dma handle to ptable toc */
+-	unsigned char *grab_fbuffer;	/* capture framebuffer */
+-	unsigned char *grab_temp;	/* temporary buffer */
+-					/* list of buffers */
+-	struct meye_grab_buffer grab_buffer[MEYE_MAX_BUFNBRS];
+-	int vma_use_count[MEYE_MAX_BUFNBRS]; /* mmap count */
+-	struct mutex lock;		/* mutex for open/mmap... */
+-	struct kfifo grabq;		/* queue for buffers to be grabbed */
+-	spinlock_t grabq_lock;		/* lock protecting the queue */
+-	struct kfifo doneq;		/* queue for grabbed buffers */
+-	spinlock_t doneq_lock;		/* lock protecting the queue */
+-	wait_queue_head_t proc_list;	/* wait queue */
+-	struct video_device vdev;	/* video device parameters */
+-	u16 brightness;
+-	u16 hue;
+-	u16 contrast;
+-	u16 colour;
+-	struct meye_params params;	/* additional parameters */
+-	unsigned long in_use;		/* set to 1 if the device is in use */
+-	u8 pm_mchip_mode;		/* old mchip mode */
+-};
+-
+-#endif
+diff --git a/include/uapi/linux/meye.h b/include/uapi/linux/meye.h
+deleted file mode 100644
+index de9e3a954f3d..000000000000
+--- a/include/uapi/linux/meye.h
++++ /dev/null
+@@ -1,65 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
+-/*
+- * Motion Eye video4linux driver for Sony Vaio PictureBook
+- *
+- * Copyright (C) 2001-2003 Stelian Pop <stelian@popies.net>
+- *
+- * Copyright (C) 2001-2002 Alcôve <www.alcove.com>
+- *
+- * Copyright (C) 2000 Andrew Tridgell <tridge@valinux.com>
+- *
+- * Earlier work by Werner Almesberger, Paul `Rusty' Russell and Paul Mackerras.
+- *
+- * Some parts borrowed from various video4linux drivers, especially
+- * bttv-driver.c and zoran.c, see original files for credits.
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+- */
+-
+-#ifndef _MEYE_H_
+-#define _MEYE_H_
+-
+-/****************************************************************************/
+-/* Private API for handling mjpeg capture / playback.                       */
+-/****************************************************************************/
+-
+-struct meye_params {
+-	unsigned char subsample;
+-	unsigned char quality;
+-	unsigned char sharpness;
+-	unsigned char agc;
+-	unsigned char picture;
+-	unsigned char framerate;
+-};
+-
+-/* query the extended parameters */
+-#define MEYEIOC_G_PARAMS	_IOR ('v', BASE_VIDIOC_PRIVATE+0, struct meye_params)
+-/* set the extended parameters */
+-#define MEYEIOC_S_PARAMS	_IOW ('v', BASE_VIDIOC_PRIVATE+1, struct meye_params)
+-/* queue a buffer for mjpeg capture */
+-#define MEYEIOC_QBUF_CAPT	_IOW ('v', BASE_VIDIOC_PRIVATE+2, int)
+-/* sync a previously queued mjpeg buffer */
+-#define MEYEIOC_SYNC		_IOWR('v', BASE_VIDIOC_PRIVATE+3, int)
+-/* get a still uncompressed snapshot */
+-#define MEYEIOC_STILLCAPT	_IO  ('v', BASE_VIDIOC_PRIVATE+4)
+-/* get a jpeg compressed snapshot */
+-#define MEYEIOC_STILLJCAPT	_IOR ('v', BASE_VIDIOC_PRIVATE+5, int)
+-
+-/* V4L2 private controls */
+-#define V4L2_CID_MEYE_AGC		(V4L2_CID_USER_MEYE_BASE + 0)
+-#define V4L2_CID_MEYE_PICTURE		(V4L2_CID_USER_MEYE_BASE + 1)
+-#define V4L2_CID_MEYE_FRAMERATE		(V4L2_CID_USER_MEYE_BASE + 2)
+-
+-#endif
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index b73a8ba7df6c..5e80daa4ffe0 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -115,9 +115,13 @@ enum v4l2_colorfx {
+ 
+ /* USER-class private control IDs */
+ 
+-/* The base for the meye driver controls. See linux/meye.h for the list
+- * of controls. We reserve 16 controls for this driver. */
++#ifndef __KERNEL__
++/*
++ * The base for the meye driver controls. This driver was removed, but
++ * we keep this define in case any software still uses it.
++ */
+ #define V4L2_CID_USER_MEYE_BASE			(V4L2_CID_USER_BASE + 0x1000)
++#endif
+ 
+ /* The base for the bttv driver controls.
+  * We reserve 32 controls for this driver. */
 -- 
 2.39.0
 
