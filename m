@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A150C6379F
-	for <linux-media@archiver.kernel.org>; Wed, 11 Jan 2023 10:54:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA70FC5479D
+	for <linux-media@archiver.kernel.org>; Wed, 11 Jan 2023 10:54:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238776AbjAKKxz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 11 Jan 2023 05:53:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
+        id S238606AbjAKKxw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 11 Jan 2023 05:53:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjAKKxQ (ORCPT
+        with ESMTP id S233116AbjAKKxP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 11 Jan 2023 05:53:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC99117E
-        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 02:53:13 -0800 (PST)
+        Wed, 11 Jan 2023 05:53:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750BD1014
+        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 02:53:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B245761C1E
-        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 10:53:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E72EC433D2;
-        Wed, 11 Jan 2023 10:53:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5525B81BB3
+        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 10:53:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC557C433EF;
+        Wed, 11 Jan 2023 10:53:07 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 09/13] ttpci: remove deprecated driver
-Date:   Wed, 11 Jan 2023 11:52:54 +0100
-Message-Id: <20230111105258.547471-10-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 06/13] vpfe_capture: remove deprecated davinci drivers
+Date:   Wed, 11 Jan 2023 11:52:51 +0100
+Message-Id: <20230111105258.547471-7-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230111105258.547471-1-hverkuil-cisco@xs4all.nl>
 References: <20230111105258.547471-1-hverkuil-cisco@xs4all.nl>
@@ -38,5038 +38,6871 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The ttpci driver does not use the vb2 framework for streaming
-video, instead it uses the old vb1 framework and nobody stepped in to
-convert this driver to vb2.
+The vpfe_capture drivers do not use the vb2 framework for streaming
+video, instead they use the old vb1 framework and nobody stepped in to
+convert these drivers to vb2.
 
-The hardware is very old, so the decision was made to remove it
+The hardware is very old, so the decision was made to remove them
 altogether since we want to get rid of the old vb1 framework.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- .../admin-guide/media/pci-cardlist.rst        |    1 -
- .../staging/media/deprecated/saa7146/Kconfig  |    1 -
- .../staging/media/deprecated/saa7146/Makefile |    2 +-
- .../media/deprecated/saa7146/ttpci/Kconfig    |   95 -
- .../media/deprecated/saa7146/ttpci/Makefile   |   13 -
- .../media/deprecated/saa7146/ttpci/TODO       |    7 -
- .../deprecated/saa7146/ttpci/budget-av.c      | 1622 -----------------
- .../deprecated/saa7146/ttpci/budget-ci.c      | 1574 ----------------
- .../deprecated/saa7146/ttpci/budget-core.c    |  603 ------
- .../media/deprecated/saa7146/ttpci/budget.c   |  883 ---------
- .../media/deprecated/saa7146/ttpci/budget.h   |  129 --
- 11 files changed, 1 insertion(+), 4929 deletions(-)
- delete mode 100644 drivers/staging/media/deprecated/saa7146/ttpci/Kconfig
- delete mode 100644 drivers/staging/media/deprecated/saa7146/ttpci/Makefile
- delete mode 100644 drivers/staging/media/deprecated/saa7146/ttpci/TODO
- delete mode 100644 drivers/staging/media/deprecated/saa7146/ttpci/budget-av.c
- delete mode 100644 drivers/staging/media/deprecated/saa7146/ttpci/budget-ci.c
- delete mode 100644 drivers/staging/media/deprecated/saa7146/ttpci/budget-core.c
- delete mode 100644 drivers/staging/media/deprecated/saa7146/ttpci/budget.c
- delete mode 100644 drivers/staging/media/deprecated/saa7146/ttpci/budget.h
+ drivers/staging/media/Kconfig                 |    1 -
+ drivers/staging/media/Makefile                |    1 -
+ .../media/deprecated/vpfe_capture/Kconfig     |   58 -
+ .../media/deprecated/vpfe_capture/Makefile    |    4 -
+ .../media/deprecated/vpfe_capture/TODO        |    7 -
+ .../deprecated/vpfe_capture/ccdc_hw_device.h  |   80 -
+ .../deprecated/vpfe_capture/dm355_ccdc.c      |  934 --------
+ .../deprecated/vpfe_capture/dm355_ccdc.h      |  308 ---
+ .../deprecated/vpfe_capture/dm355_ccdc_regs.h |  297 ---
+ .../deprecated/vpfe_capture/dm644x_ccdc.c     |  879 --------
+ .../deprecated/vpfe_capture/dm644x_ccdc.h     |  171 --
+ .../vpfe_capture/dm644x_ccdc_regs.h           |  140 --
+ .../media/deprecated/vpfe_capture/isif.c      | 1127 ----------
+ .../media/deprecated/vpfe_capture/isif.h      |  518 -----
+ .../media/deprecated/vpfe_capture/isif_regs.h |  256 ---
+ .../deprecated/vpfe_capture/vpfe_capture.c    | 1902 -----------------
+ include/media/davinci/ccdc_types.h            |   30 -
+ 17 files changed, 6713 deletions(-)
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/Kconfig
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/Makefile
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/TODO
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/ccdc_hw_device.h
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.c
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.h
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc_regs.h
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.c
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.h
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc_regs.h
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/isif.c
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/isif.h
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/isif_regs.h
+ delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/vpfe_capture.c
+ delete mode 100644 include/media/davinci/ccdc_types.h
 
-diff --git a/Documentation/admin-guide/media/pci-cardlist.rst b/Documentation/admin-guide/media/pci-cardlist.rst
-index 42528795d4da..aca13c7e8508 100644
---- a/Documentation/admin-guide/media/pci-cardlist.rst
-+++ b/Documentation/admin-guide/media/pci-cardlist.rst
-@@ -67,7 +67,6 @@ cx88xx            Conexant 2388x (bt878 successor)
- ddbridge          Digital Devices bridge
- dm1105            SDMC DM1105 based PCI cards
- dt3155            DT3155 frame grabber
--dvb-ttpci         AV7110 cards
- earth-pt1         PT1 cards
- earth-pt3         Earthsoft PT3 cards
- hexium_gemini     Hexium Gemini frame grabber
-diff --git a/drivers/staging/media/deprecated/saa7146/Kconfig b/drivers/staging/media/deprecated/saa7146/Kconfig
-index d0cb52164ff8..3d2e2120788e 100644
---- a/drivers/staging/media/deprecated/saa7146/Kconfig
-+++ b/drivers/staging/media/deprecated/saa7146/Kconfig
-@@ -1,4 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0
- source "drivers/staging/media/deprecated/saa7146/common/Kconfig"
- source "drivers/staging/media/deprecated/saa7146/saa7146/Kconfig"
--source "drivers/staging/media/deprecated/saa7146/ttpci/Kconfig"
-diff --git a/drivers/staging/media/deprecated/saa7146/Makefile b/drivers/staging/media/deprecated/saa7146/Makefile
-index 9d99fdedf813..71866795174e 100644
---- a/drivers/staging/media/deprecated/saa7146/Makefile
-+++ b/drivers/staging/media/deprecated/saa7146/Makefile
-@@ -1,2 +1,2 @@
-  # SPDX-License-Identifier: GPL-2.0-only
--obj-y += common/ saa7146/ ttpci/
-+obj-y += common/ saa7146/
-diff --git a/drivers/staging/media/deprecated/saa7146/ttpci/Kconfig b/drivers/staging/media/deprecated/saa7146/ttpci/Kconfig
+diff --git a/drivers/staging/media/Kconfig b/drivers/staging/media/Kconfig
+index 57699d4fc232..7224f43afd7e 100644
+--- a/drivers/staging/media/Kconfig
++++ b/drivers/staging/media/Kconfig
+@@ -54,7 +54,6 @@ if STAGING_MEDIA_DEPRECATED
+ source "drivers/staging/media/deprecated/atmel/Kconfig"
+ source "drivers/staging/media/deprecated/saa7146/Kconfig"
+ source "drivers/staging/media/deprecated/tm6000/Kconfig"
+-source "drivers/staging/media/deprecated/vpfe_capture/Kconfig"
+ endif
+ 
+ endif
+diff --git a/drivers/staging/media/Makefile b/drivers/staging/media/Makefile
+index 591e1df6e83e..37a4c6d81ded 100644
+--- a/drivers/staging/media/Makefile
++++ b/drivers/staging/media/Makefile
+@@ -10,5 +10,4 @@ obj-$(CONFIG_VIDEO_SUNXI)	+= sunxi/
+ obj-$(CONFIG_VIDEO_TEGRA)	+= tegra-video/
+ obj-$(CONFIG_VIDEO_IPU3_IMGU)	+= ipu3/
+ obj-$(CONFIG_VIDEO_TM6000)	+= deprecated/tm6000/
+-obj-y += deprecated/vpfe_capture/
+ obj-y += deprecated/saa7146/
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/Kconfig b/drivers/staging/media/deprecated/vpfe_capture/Kconfig
 deleted file mode 100644
-index 8c85ed58e938..000000000000
---- a/drivers/staging/media/deprecated/saa7146/ttpci/Kconfig
+index 10250e7e566b..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/Kconfig
 +++ /dev/null
-@@ -1,95 +0,0 @@
+@@ -1,58 +0,0 @@
 -# SPDX-License-Identifier: GPL-2.0-only
--config DVB_BUDGET_CORE
--	tristate "SAA7146 DVB cards (aka Budget, Nova-PCI) (DEPRECATED)"
--	depends on DVB_CORE && PCI && I2C
--	select VIDEO_SAA7146
--	select TTPCI_EEPROM
+-config VIDEO_DM6446_CCDC
+-	tristate "TI DM6446 CCDC video capture driver"
+-	depends on V4L_PLATFORM_DRIVERS
+-	depends on VIDEO_DEV
+-	depends on ARCH_DAVINCI || COMPILE_TEST
+-	depends on I2C
+-	select VIDEOBUF_DMA_CONTIG
 -	help
--	  Support for simple SAA7146 based DVB cards
--	  (so called Budget- or Nova-PCI cards) without onboard
--	  MPEG2 decoder.
--
--config DVB_BUDGET
--	tristate "Budget cards (DEPRECATED)"
--	depends on DVB_BUDGET_CORE && I2C
--	select DVB_STV0299 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_VES1X93 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_VES1820 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_L64781 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_TDA8083 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_S5H1420 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_TDA10086 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_TDA826X if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_LNBP21 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_TDA1004X if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_ISL6423 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_STV090x if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_STV6110x if MEDIA_SUBDRV_AUTOSELECT
--	help
--	  Support for simple SAA7146 based DVB cards (so called Budget-
--	  or Nova-PCI cards) without onboard MPEG2 decoder, and without
--	  analog inputs or an onboard Common Interface connector.
+-	  Enables DaVinci CCD hw module. DaVinci CCDC hw interfaces
+-	  with decoder modules such as TVP5146 over BT656 or
+-	  sensor module such as MT9T001 over a raw interface. This
+-	  module configures the interface and CCDC/ISIF to do
+-	  video frame capture from slave decoders.
 -
 -	  This driver is deprecated and is scheduled for removal by
 -	  the beginning of 2023. See the TODO file for more information.
 -
--	  Say Y if you own such a card and want to use it.
+-	  To compile this driver as a module, choose M here. There will
+-	  be two modules called vpfe_capture.ko and dm644x_ccdc.ko
 -
--	  To compile this driver as a module, choose M here: the
--	  module will be called budget.
--
--config DVB_BUDGET_CI
--	tristate "Budget cards with onboard CI connector (DEPRECATED)"
--	depends on DVB_BUDGET_CORE && I2C
--	select DVB_STV0297 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_STV0299 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_TDA1004X if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_STB0899 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_STB6100 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_LNBP21 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_STV0288 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_STB6000 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_TDA10023 if MEDIA_SUBDRV_AUTOSELECT
--	select MEDIA_TUNER_TDA827X if MEDIA_SUBDRV_AUTOSELECT
--	depends on RC_CORE
+-config VIDEO_DM355_CCDC
+-	tristate "TI DM355 CCDC video capture driver"
+-	depends on V4L_PLATFORM_DRIVERS
+-	depends on VIDEO_DEV
+-	depends on ARCH_DAVINCI || COMPILE_TEST
+-	depends on I2C
+-	select VIDEOBUF_DMA_CONTIG
 -	help
--	  Support for simple SAA7146 based DVB cards
--	  (so called Budget- or Nova-PCI cards) without onboard
--	  MPEG2 decoder, but with onboard Common Interface connector.
--
--	  Note: The Common Interface is not yet supported by this driver
--	  due to lack of information from the vendor.
+-	  Enables DM355 CCD hw module. DM355 CCDC hw interfaces
+-	  with decoder modules such as TVP5146 over BT656 or
+-	  sensor module such as MT9T001 over a raw interface. This
+-	  module configures the interface and CCDC/ISIF to do
+-	  video frame capture from a slave decoders
 -
 -	  This driver is deprecated and is scheduled for removal by
 -	  the beginning of 2023. See the TODO file for more information.
 -
--	  Say Y if you own such a card and want to use it.
+-	  To compile this driver as a module, choose M here. There will
+-	  be two modules called vpfe_capture.ko and dm355_ccdc.ko
 -
--	  To compile this driver as a module, choose M here: the
--	  module will be called budget-ci.
--
--config DVB_BUDGET_AV
--	tristate "Budget cards with analog video inputs (DEPRECATED)"
--	depends on DVB_BUDGET_CORE && I2C
--	select VIDEO_SAA7146_VV
--	depends on VIDEO_DEV	# dependencies of VIDEO_SAA7146_VV
--	select DVB_PLL if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_STV0299 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_TDA1004X if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_TDA10021 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_TDA10023 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_STB0899 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_TDA8261 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_TUA6100 if MEDIA_SUBDRV_AUTOSELECT
+-config VIDEO_DM365_ISIF
+-	tristate "TI DM365 ISIF video capture driver"
+-	depends on V4L_PLATFORM_DRIVERS
+-	depends on VIDEO_DEV
+-	depends on ARCH_DAVINCI || COMPILE_TEST
+-	depends on I2C
+-	select VIDEOBUF_DMA_CONTIG
 -	help
--	  Support for simple SAA7146 based DVB cards
--	  (so called Budget- or Nova-PCI cards) without onboard
--	  MPEG2 decoder, but with one or more analog video inputs.
+-	  Enables ISIF hw module. This is the hardware module for
+-	  configuring ISIF in VPFE to capture Raw Bayer RGB data from
+-	  a image sensor or YUV data from a YUV source.
 -
 -	  This driver is deprecated and is scheduled for removal by
 -	  the beginning of 2023. See the TODO file for more information.
 -
--	  Say Y if you own such a card and want to use it.
--
--	  To compile this driver as a module, choose M here: the
--	  module will be called budget-av.
-diff --git a/drivers/staging/media/deprecated/saa7146/ttpci/Makefile b/drivers/staging/media/deprecated/saa7146/ttpci/Makefile
+-	  To compile this driver as a module, choose M here. There will
+-	  be two modules called vpfe_capture.ko and isif.ko
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/Makefile b/drivers/staging/media/deprecated/vpfe_capture/Makefile
 deleted file mode 100644
-index b0708f6e40cc..000000000000
---- a/drivers/staging/media/deprecated/saa7146/ttpci/Makefile
+index 609e8dc09ce7..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/Makefile
 +++ /dev/null
-@@ -1,13 +0,0 @@
+@@ -1,4 +0,0 @@
 -# SPDX-License-Identifier: GPL-2.0
--#
--# Makefile for the kernel SAA7146 FULL TS DVB device driver
--#
--
--obj-$(CONFIG_DVB_BUDGET_CORE) += budget-core.o
--obj-$(CONFIG_DVB_BUDGET) += budget.o
--obj-$(CONFIG_DVB_BUDGET_AV) += budget-av.o
--obj-$(CONFIG_DVB_BUDGET_CI) += budget-ci.o
--
--ccflags-y += -I $(srctree)/drivers/media/dvb-frontends/
--ccflags-y += -I $(srctree)/drivers/media/tuners
--ccflags-y += -I $(srctree)/drivers/media/common
-diff --git a/drivers/staging/media/deprecated/saa7146/ttpci/TODO b/drivers/staging/media/deprecated/saa7146/ttpci/TODO
+-obj-$(CONFIG_VIDEO_DM6446_CCDC) += vpfe_capture.o dm644x_ccdc.o
+-obj-$(CONFIG_VIDEO_DM355_CCDC) += vpfe_capture.o dm355_ccdc.o
+-obj-$(CONFIG_VIDEO_DM365_ISIF) += vpfe_capture.o isif.o
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/TODO b/drivers/staging/media/deprecated/vpfe_capture/TODO
 deleted file mode 100644
-index c9ae2ec79cea..000000000000
---- a/drivers/staging/media/deprecated/saa7146/ttpci/TODO
+index ce654d7337af..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/TODO
 +++ /dev/null
 @@ -1,7 +0,0 @@
--The saa7146-based drivers are one of the few drivers still not using
--the vb2 framework, so these drivers are now deprecated with the intent of
+-These are one of the few drivers still not using the vb2
+-framework, so these drivers are now deprecated with the intent of
 -removing them altogether by the beginning of 2023.
 -
 -In order to keep these drivers they have to be converted to vb2.
 -If someone is interested in doing this work, then contact the
 -linux-media mailinglist (https://linuxtv.org/lists.php).
-diff --git a/drivers/staging/media/deprecated/saa7146/ttpci/budget-av.c b/drivers/staging/media/deprecated/saa7146/ttpci/budget-av.c
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/ccdc_hw_device.h b/drivers/staging/media/deprecated/vpfe_capture/ccdc_hw_device.h
 deleted file mode 100644
-index 0c61a2dec221..000000000000
---- a/drivers/staging/media/deprecated/saa7146/ttpci/budget-av.c
+index a545052a95a9..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/ccdc_hw_device.h
 +++ /dev/null
-@@ -1,1622 +0,0 @@
+@@ -1,80 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Copyright (C) 2008-2009 Texas Instruments Inc
+- *
+- * ccdc device API
+- */
+-#ifndef _CCDC_HW_DEVICE_H
+-#define _CCDC_HW_DEVICE_H
+-
+-#ifdef __KERNEL__
+-#include <linux/videodev2.h>
+-#include <linux/device.h>
+-#include <media/davinci/vpfe_types.h>
+-#include <media/davinci/ccdc_types.h>
+-
+-/*
+- * ccdc hw operations
+- */
+-struct ccdc_hw_ops {
+-	/* Pointer to initialize function to initialize ccdc device */
+-	int (*open) (struct device *dev);
+-	/* Pointer to deinitialize function */
+-	int (*close) (struct device *dev);
+-	/* set ccdc base address */
+-	void (*set_ccdc_base)(void *base, int size);
+-	/* Pointer to function to enable or disable ccdc */
+-	void (*enable) (int en);
+-	/* reset sbl. only for 6446 */
+-	void (*reset) (void);
+-	/* enable output to sdram */
+-	void (*enable_out_to_sdram) (int en);
+-	/* Pointer to function to set hw parameters */
+-	int (*set_hw_if_params) (struct vpfe_hw_if_param *param);
+-	/* get interface parameters */
+-	int (*get_hw_if_params) (struct vpfe_hw_if_param *param);
+-	/* Pointer to function to configure ccdc */
+-	int (*configure) (void);
+-
+-	/* Pointer to function to set buffer type */
+-	int (*set_buftype) (enum ccdc_buftype buf_type);
+-	/* Pointer to function to get buffer type */
+-	enum ccdc_buftype (*get_buftype) (void);
+-	/* Pointer to function to set frame format */
+-	int (*set_frame_format) (enum ccdc_frmfmt frm_fmt);
+-	/* Pointer to function to get frame format */
+-	enum ccdc_frmfmt (*get_frame_format) (void);
+-	/* enumerate hw pix formats */
+-	int (*enum_pix)(u32 *hw_pix, int i);
+-	/* Pointer to function to set buffer type */
+-	u32 (*get_pixel_format) (void);
+-	/* Pointer to function to get pixel format. */
+-	int (*set_pixel_format) (u32 pixfmt);
+-	/* Pointer to function to set image window */
+-	int (*set_image_window) (struct v4l2_rect *win);
+-	/* Pointer to function to set image window */
+-	void (*get_image_window) (struct v4l2_rect *win);
+-	/* Pointer to function to get line length */
+-	unsigned int (*get_line_length) (void);
+-
+-	/* Pointer to function to set frame buffer address */
+-	void (*setfbaddr) (unsigned long addr);
+-	/* Pointer to function to get field id */
+-	int (*getfid) (void);
+-};
+-
+-struct ccdc_hw_device {
+-	/* ccdc device name */
+-	char name[32];
+-	/* module owner */
+-	struct module *owner;
+-	/* hw ops */
+-	struct ccdc_hw_ops hw_ops;
+-};
+-
+-/* Used by CCDC module to register & unregister with vpfe capture driver */
+-int vpfe_register_ccdc_device(const struct ccdc_hw_device *dev);
+-void vpfe_unregister_ccdc_device(const struct ccdc_hw_device *dev);
+-
+-#endif
+-#endif
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.c b/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.c
+deleted file mode 100644
+index da8db53e9498..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.c
++++ /dev/null
+@@ -1,934 +0,0 @@
 -// SPDX-License-Identifier: GPL-2.0-or-later
 -/*
-- * budget-av.c: driver for the SAA7146 based Budget DVB cards
-- *              with analog video in
+- * Copyright (C) 2005-2009 Texas Instruments Inc
 - *
-- * Compiled from various sources by Michael Hunold <michael@mihu.de>
+- * CCDC hardware module for DM355
+- * ------------------------------
 - *
-- * CI interface support (c) 2004 Olivier Gournet <ogournet@anevia.com> &
-- *                               Andrew de Quincey <adq_dvb@lidskialf.net>
+- * This module is for configuring DM355 CCD controller of VPFE to capture
+- * Raw yuv or Bayer RGB data from a decoder. CCDC has several modules
+- * such as Defect Pixel Correction, Color Space Conversion etc to
+- * pre-process the Bayer RGB data, before writing it to SDRAM.
 - *
-- * Copyright (C) 2002 Ralph Metzler <rjkm@metzlerbros.de>
-- *
-- * Copyright (C) 1999-2002 Ralph  Metzler
-- *                       & Marcus Metzler for convergence integrated media GmbH
-- *
-- * the project's page is at https://linuxtv.org
+- * TODO: 1) Raw bayer parameter settings and bayer capture
+- *	 2) Split module parameter structure to module specific ioctl structs
+- *	 3) add support for lense shading correction
+- *	 4) investigate if enum used for user space type definition
+- *	    to be replaced by #defines or integer
 - */
--
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
--#include "budget.h"
--#include "stv0299.h"
--#include "stb0899_drv.h"
--#include "stb0899_reg.h"
--#include "stb0899_cfg.h"
--#include "tda8261.h"
--#include "tda8261_cfg.h"
--#include "tda1002x.h"
--#include "tda1004x.h"
--#include "tua6100.h"
--#include "dvb-pll.h"
--#include "../common/saa7146_vv.h"
+-#include <linux/platform_device.h>
+-#include <linux/uaccess.h>
+-#include <linux/videodev2.h>
+-#include <linux/err.h>
 -#include <linux/module.h>
--#include <linux/errno.h>
--#include <linux/slab.h>
--#include <linux/interrupt.h>
--#include <linux/input.h>
--#include <linux/spinlock.h>
 -
--#include <media/dvb_ca_en50221.h>
+-#include "dm355_ccdc.h"
+-#include <media/davinci/vpss.h>
 -
--#define DEBICICAM		0x02420000
+-#include "dm355_ccdc_regs.h"
+-#include "ccdc_hw_device.h"
 -
--#define SLOTSTATUS_NONE         1
--#define SLOTSTATUS_PRESENT      2
--#define SLOTSTATUS_RESET        4
--#define SLOTSTATUS_READY        8
--#define SLOTSTATUS_OCCUPIED     (SLOTSTATUS_PRESENT|SLOTSTATUS_RESET|SLOTSTATUS_READY)
+-MODULE_LICENSE("GPL");
+-MODULE_DESCRIPTION("CCDC Driver for DM355");
+-MODULE_AUTHOR("Texas Instruments");
 -
--DVB_DEFINE_MOD_OPT_ADAPTER_NR(adapter_nr);
--
--struct budget_av {
--	struct budget budget;
--	struct video_device vd;
--	int cur_input;
--	int has_saa7113;
--	struct tasklet_struct ciintf_irq_tasklet;
--	int slot_status;
--	struct dvb_ca_en50221 ca;
--	u8 reinitialise_demod:1;
+-static struct ccdc_oper_config {
+-	struct device *dev;
+-	/* CCDC interface type */
+-	enum vpfe_hw_if_type if_type;
+-	/* Raw Bayer configuration */
+-	struct ccdc_params_raw bayer;
+-	/* YCbCr configuration */
+-	struct ccdc_params_ycbcr ycbcr;
+-	/* ccdc base address */
+-	void __iomem *base_addr;
+-} ccdc_cfg = {
+-	/* Raw configurations */
+-	.bayer = {
+-		.pix_fmt = CCDC_PIXFMT_RAW,
+-		.frm_fmt = CCDC_FRMFMT_PROGRESSIVE,
+-		.win = CCDC_WIN_VGA,
+-		.fid_pol = VPFE_PINPOL_POSITIVE,
+-		.vd_pol = VPFE_PINPOL_POSITIVE,
+-		.hd_pol = VPFE_PINPOL_POSITIVE,
+-		.gain = {
+-			.r_ye = 256,
+-			.gb_g = 256,
+-			.gr_cy = 256,
+-			.b_mg = 256
+-		},
+-		.config_params = {
+-			.datasft = 2,
+-			.mfilt1 = CCDC_NO_MEDIAN_FILTER1,
+-			.mfilt2 = CCDC_NO_MEDIAN_FILTER2,
+-			.alaw = {
+-				.gamma_wd = 2,
+-			},
+-			.blk_clamp = {
+-				.sample_pixel = 1,
+-				.dc_sub = 25
+-			},
+-			.col_pat_field0 = {
+-				.olop = CCDC_GREEN_BLUE,
+-				.olep = CCDC_BLUE,
+-				.elop = CCDC_RED,
+-				.elep = CCDC_GREEN_RED
+-			},
+-			.col_pat_field1 = {
+-				.olop = CCDC_GREEN_BLUE,
+-				.olep = CCDC_BLUE,
+-				.elop = CCDC_RED,
+-				.elep = CCDC_GREEN_RED
+-			},
+-		},
+-	},
+-	/* YCbCr configuration */
+-	.ycbcr = {
+-		.win = CCDC_WIN_PAL,
+-		.pix_fmt = CCDC_PIXFMT_YCBCR_8BIT,
+-		.frm_fmt = CCDC_FRMFMT_INTERLACED,
+-		.fid_pol = VPFE_PINPOL_POSITIVE,
+-		.vd_pol = VPFE_PINPOL_POSITIVE,
+-		.hd_pol = VPFE_PINPOL_POSITIVE,
+-		.bt656_enable = 1,
+-		.pix_order = CCDC_PIXORDER_CBYCRY,
+-		.buf_type = CCDC_BUFTYPE_FLD_INTERLEAVED
+-	},
 -};
 -
--static int ciintf_slot_shutdown(struct dvb_ca_en50221 *ca, int slot);
 -
+-/* Raw Bayer formats */
+-static u32 ccdc_raw_bayer_pix_formats[] =
+-		{V4L2_PIX_FMT_SBGGR8, V4L2_PIX_FMT_SBGGR16};
 -
--/* GPIO Connections:
-- * 0 - Vcc/Reset (Reset is controlled by capacitor). Resets the frontend *AS WELL*!
-- * 1 - CI memory select 0=>IO memory, 1=>Attribute Memory
-- * 2 - CI Card Enable (Active Low)
-- * 3 - CI Card Detect
+-/* Raw YUV formats */
+-static u32 ccdc_raw_yuv_pix_formats[] =
+-		{V4L2_PIX_FMT_UYVY, V4L2_PIX_FMT_YUYV};
+-
+-/* register access routines */
+-static inline u32 regr(u32 offset)
+-{
+-	return __raw_readl(ccdc_cfg.base_addr + offset);
+-}
+-
+-static inline void regw(u32 val, u32 offset)
+-{
+-	__raw_writel(val, ccdc_cfg.base_addr + offset);
+-}
+-
+-static void ccdc_enable(int en)
+-{
+-	unsigned int temp;
+-	temp = regr(SYNCEN);
+-	temp &= (~CCDC_SYNCEN_VDHDEN_MASK);
+-	temp |= (en & CCDC_SYNCEN_VDHDEN_MASK);
+-	regw(temp, SYNCEN);
+-}
+-
+-static void ccdc_enable_output_to_sdram(int en)
+-{
+-	unsigned int temp;
+-	temp = regr(SYNCEN);
+-	temp &= (~(CCDC_SYNCEN_WEN_MASK));
+-	temp |= ((en << CCDC_SYNCEN_WEN_SHIFT) & CCDC_SYNCEN_WEN_MASK);
+-	regw(temp, SYNCEN);
+-}
+-
+-static void ccdc_config_gain_offset(void)
+-{
+-	/* configure gain */
+-	regw(ccdc_cfg.bayer.gain.r_ye, RYEGAIN);
+-	regw(ccdc_cfg.bayer.gain.gr_cy, GRCYGAIN);
+-	regw(ccdc_cfg.bayer.gain.gb_g, GBGGAIN);
+-	regw(ccdc_cfg.bayer.gain.b_mg, BMGGAIN);
+-	/* configure offset */
+-	regw(ccdc_cfg.bayer.ccdc_offset, OFFSET);
+-}
+-
+-/*
+- * ccdc_restore_defaults()
+- * This function restore power on defaults in the ccdc registers
 - */
--
--/****************************************************************************
-- * INITIALIZATION
-- ****************************************************************************/
--
--static u8 i2c_readreg(struct i2c_adapter *i2c, u8 id, u8 reg)
+-static int ccdc_restore_defaults(void)
 -{
--	u8 mm1[] = { 0x00 };
--	u8 mm2[] = { 0x00 };
--	struct i2c_msg msgs[2];
--
--	msgs[0].flags = 0;
--	msgs[1].flags = I2C_M_RD;
--	msgs[0].addr = msgs[1].addr = id / 2;
--	mm1[0] = reg;
--	msgs[0].len = 1;
--	msgs[1].len = 1;
--	msgs[0].buf = mm1;
--	msgs[1].buf = mm2;
--
--	i2c_transfer(i2c, msgs, 2);
--
--	return mm2[0];
--}
--
--static int i2c_readregs(struct i2c_adapter *i2c, u8 id, u8 reg, u8 * buf, u8 len)
--{
--	u8 mm1[] = { reg };
--	struct i2c_msg msgs[2] = {
--		{.addr = id / 2,.flags = 0,.buf = mm1,.len = 1},
--		{.addr = id / 2,.flags = I2C_M_RD,.buf = buf,.len = len}
--	};
--
--	if (i2c_transfer(i2c, msgs, 2) != 2)
--		return -EIO;
--
--	return 0;
--}
--
--static int i2c_writereg(struct i2c_adapter *i2c, u8 id, u8 reg, u8 val)
--{
--	u8 msg[2] = { reg, val };
--	struct i2c_msg msgs;
--
--	msgs.flags = 0;
--	msgs.addr = id / 2;
--	msgs.len = 2;
--	msgs.buf = msg;
--	return i2c_transfer(i2c, &msgs, 1);
--}
--
--static int ciintf_read_attribute_mem(struct dvb_ca_en50221 *ca, int slot, int address)
--{
--	struct budget_av *budget_av = (struct budget_av *) ca->data;
--	int result;
--
--	if (slot != 0)
--		return -EINVAL;
--
--	saa7146_setgpio(budget_av->budget.dev, 1, SAA7146_GPIO_OUTHI);
--	udelay(1);
--
--	result = ttpci_budget_debiread(&budget_av->budget, DEBICICAM, address & 0xfff, 1, 0, 1);
--	if (result == -ETIMEDOUT) {
--		ciintf_slot_shutdown(ca, slot);
--		pr_info("cam ejected 1\n");
--	}
--	return result;
--}
--
--static int ciintf_write_attribute_mem(struct dvb_ca_en50221 *ca, int slot, int address, u8 value)
--{
--	struct budget_av *budget_av = (struct budget_av *) ca->data;
--	int result;
--
--	if (slot != 0)
--		return -EINVAL;
--
--	saa7146_setgpio(budget_av->budget.dev, 1, SAA7146_GPIO_OUTHI);
--	udelay(1);
--
--	result = ttpci_budget_debiwrite(&budget_av->budget, DEBICICAM, address & 0xfff, 1, value, 0, 1);
--	if (result == -ETIMEDOUT) {
--		ciintf_slot_shutdown(ca, slot);
--		pr_info("cam ejected 2\n");
--	}
--	return result;
--}
--
--static int ciintf_read_cam_control(struct dvb_ca_en50221 *ca, int slot, u8 address)
--{
--	struct budget_av *budget_av = (struct budget_av *) ca->data;
--	int result;
--
--	if (slot != 0)
--		return -EINVAL;
--
--	saa7146_setgpio(budget_av->budget.dev, 1, SAA7146_GPIO_OUTLO);
--	udelay(1);
--
--	result = ttpci_budget_debiread(&budget_av->budget, DEBICICAM, address & 3, 1, 0, 0);
--	if (result == -ETIMEDOUT) {
--		ciintf_slot_shutdown(ca, slot);
--		pr_info("cam ejected 3\n");
--		return -ETIMEDOUT;
--	}
--	return result;
--}
--
--static int ciintf_write_cam_control(struct dvb_ca_en50221 *ca, int slot, u8 address, u8 value)
--{
--	struct budget_av *budget_av = (struct budget_av *) ca->data;
--	int result;
--
--	if (slot != 0)
--		return -EINVAL;
--
--	saa7146_setgpio(budget_av->budget.dev, 1, SAA7146_GPIO_OUTLO);
--	udelay(1);
--
--	result = ttpci_budget_debiwrite(&budget_av->budget, DEBICICAM, address & 3, 1, value, 0, 0);
--	if (result == -ETIMEDOUT) {
--		ciintf_slot_shutdown(ca, slot);
--		pr_info("cam ejected 5\n");
--	}
--	return result;
--}
--
--static int ciintf_slot_reset(struct dvb_ca_en50221 *ca, int slot)
--{
--	struct budget_av *budget_av = (struct budget_av *) ca->data;
--	struct saa7146_dev *saa = budget_av->budget.dev;
--
--	if (slot != 0)
--		return -EINVAL;
--
--	dprintk(1, "ciintf_slot_reset\n");
--	budget_av->slot_status = SLOTSTATUS_RESET;
--
--	saa7146_setgpio(saa, 2, SAA7146_GPIO_OUTHI); /* disable card */
--
--	saa7146_setgpio(saa, 0, SAA7146_GPIO_OUTHI); /* Vcc off */
--	msleep(2);
--	saa7146_setgpio(saa, 0, SAA7146_GPIO_OUTLO); /* Vcc on */
--	msleep(20); /* 20 ms Vcc settling time */
--
--	saa7146_setgpio(saa, 2, SAA7146_GPIO_OUTLO); /* enable card */
--	ttpci_budget_set_video_port(saa, BUDGET_VIDEO_PORTB);
--	msleep(20);
--
--	/* reinitialise the frontend if necessary */
--	if (budget_av->reinitialise_demod)
--		dvb_frontend_reinitialise(budget_av->budget.dvb_frontend);
--
--	return 0;
--}
--
--static int ciintf_slot_shutdown(struct dvb_ca_en50221 *ca, int slot)
--{
--	struct budget_av *budget_av = (struct budget_av *) ca->data;
--	struct saa7146_dev *saa = budget_av->budget.dev;
--
--	if (slot != 0)
--		return -EINVAL;
--
--	dprintk(1, "ciintf_slot_shutdown\n");
--
--	ttpci_budget_set_video_port(saa, BUDGET_VIDEO_PORTB);
--	budget_av->slot_status = SLOTSTATUS_NONE;
--
--	return 0;
--}
--
--static int ciintf_slot_ts_enable(struct dvb_ca_en50221 *ca, int slot)
--{
--	struct budget_av *budget_av = (struct budget_av *) ca->data;
--	struct saa7146_dev *saa = budget_av->budget.dev;
--
--	if (slot != 0)
--		return -EINVAL;
--
--	dprintk(1, "ciintf_slot_ts_enable: %d\n", budget_av->slot_status);
--
--	ttpci_budget_set_video_port(saa, BUDGET_VIDEO_PORTA);
--
--	return 0;
--}
--
--static int ciintf_poll_slot_status(struct dvb_ca_en50221 *ca, int slot, int open)
--{
--	struct budget_av *budget_av = (struct budget_av *) ca->data;
--	struct saa7146_dev *saa = budget_av->budget.dev;
--	int result;
--
--	if (slot != 0)
--		return -EINVAL;
--
--	/* test the card detect line - needs to be done carefully
--	 * since it never goes high for some CAMs on this interface (e.g. topuptv) */
--	if (budget_av->slot_status == SLOTSTATUS_NONE) {
--		saa7146_setgpio(saa, 3, SAA7146_GPIO_INPUT);
--		udelay(1);
--		if (saa7146_read(saa, PSR) & MASK_06) {
--			if (budget_av->slot_status == SLOTSTATUS_NONE) {
--				budget_av->slot_status = SLOTSTATUS_PRESENT;
--				pr_info("cam inserted A\n");
--			}
--		}
--		saa7146_setgpio(saa, 3, SAA7146_GPIO_OUTLO);
--	}
--
--	/* We also try and read from IO memory to work round the above detection bug. If
--	 * there is no CAM, we will get a timeout. Only done if there is no cam
--	 * present, since this test actually breaks some cams :(
--	 *
--	 * if the CI interface is not open, we also do the above test since we
--	 * don't care if the cam has problems - we'll be resetting it on open() anyway */
--	if ((budget_av->slot_status == SLOTSTATUS_NONE) || (!open)) {
--		saa7146_setgpio(budget_av->budget.dev, 1, SAA7146_GPIO_OUTLO);
--		result = ttpci_budget_debiread(&budget_av->budget, DEBICICAM, 0, 1, 0, 1);
--		if ((result >= 0) && (budget_av->slot_status == SLOTSTATUS_NONE)) {
--			budget_av->slot_status = SLOTSTATUS_PRESENT;
--			pr_info("cam inserted B\n");
--		} else if (result < 0) {
--			if (budget_av->slot_status != SLOTSTATUS_NONE) {
--				ciintf_slot_shutdown(ca, slot);
--				pr_info("cam ejected 5\n");
--				return 0;
--			}
--		}
--	}
--
--	/* read from attribute memory in reset/ready state to know when the CAM is ready */
--	if (budget_av->slot_status == SLOTSTATUS_RESET) {
--		result = ciintf_read_attribute_mem(ca, slot, 0);
--		if (result == 0x1d) {
--			budget_av->slot_status = SLOTSTATUS_READY;
--		}
--	}
--
--	/* work out correct return code */
--	if (budget_av->slot_status != SLOTSTATUS_NONE) {
--		if (budget_av->slot_status & SLOTSTATUS_READY) {
--			return DVB_CA_EN50221_POLL_CAM_PRESENT | DVB_CA_EN50221_POLL_CAM_READY;
--		}
--		return DVB_CA_EN50221_POLL_CAM_PRESENT;
--	}
--	return 0;
--}
--
--static int ciintf_init(struct budget_av *budget_av)
--{
--	struct saa7146_dev *saa = budget_av->budget.dev;
--	int result;
--
--	memset(&budget_av->ca, 0, sizeof(struct dvb_ca_en50221));
--
--	saa7146_setgpio(saa, 0, SAA7146_GPIO_OUTLO);
--	saa7146_setgpio(saa, 1, SAA7146_GPIO_OUTLO);
--	saa7146_setgpio(saa, 2, SAA7146_GPIO_OUTLO);
--	saa7146_setgpio(saa, 3, SAA7146_GPIO_OUTLO);
--
--	/* Enable DEBI pins */
--	saa7146_write(saa, MC1, MASK_27 | MASK_11);
--
--	/* register CI interface */
--	budget_av->ca.owner = THIS_MODULE;
--	budget_av->ca.read_attribute_mem = ciintf_read_attribute_mem;
--	budget_av->ca.write_attribute_mem = ciintf_write_attribute_mem;
--	budget_av->ca.read_cam_control = ciintf_read_cam_control;
--	budget_av->ca.write_cam_control = ciintf_write_cam_control;
--	budget_av->ca.slot_reset = ciintf_slot_reset;
--	budget_av->ca.slot_shutdown = ciintf_slot_shutdown;
--	budget_av->ca.slot_ts_enable = ciintf_slot_ts_enable;
--	budget_av->ca.poll_slot_status = ciintf_poll_slot_status;
--	budget_av->ca.data = budget_av;
--	budget_av->budget.ci_present = 1;
--	budget_av->slot_status = SLOTSTATUS_NONE;
--
--	if ((result = dvb_ca_en50221_init(&budget_av->budget.dvb_adapter,
--					  &budget_av->ca, 0, 1)) != 0) {
--		pr_err("ci initialisation failed\n");
--		goto error;
--	}
--
--	pr_info("ci interface initialised\n");
--	return 0;
--
--error:
--	saa7146_write(saa, MC1, MASK_27);
--	return result;
--}
--
--static void ciintf_deinit(struct budget_av *budget_av)
--{
--	struct saa7146_dev *saa = budget_av->budget.dev;
--
--	saa7146_setgpio(saa, 0, SAA7146_GPIO_INPUT);
--	saa7146_setgpio(saa, 1, SAA7146_GPIO_INPUT);
--	saa7146_setgpio(saa, 2, SAA7146_GPIO_INPUT);
--	saa7146_setgpio(saa, 3, SAA7146_GPIO_INPUT);
--
--	/* release the CA device */
--	dvb_ca_en50221_release(&budget_av->ca);
--
--	/* disable DEBI pins */
--	saa7146_write(saa, MC1, MASK_27);
--}
--
--
--static const u8 saa7113_tab[] = {
--	0x01, 0x08,
--	0x02, 0xc0,
--	0x03, 0x33,
--	0x04, 0x00,
--	0x05, 0x00,
--	0x06, 0xeb,
--	0x07, 0xe0,
--	0x08, 0x28,
--	0x09, 0x00,
--	0x0a, 0x80,
--	0x0b, 0x47,
--	0x0c, 0x40,
--	0x0d, 0x00,
--	0x0e, 0x01,
--	0x0f, 0x44,
--
--	0x10, 0x08,
--	0x11, 0x0c,
--	0x12, 0x7b,
--	0x13, 0x00,
--	0x15, 0x00, 0x16, 0x00, 0x17, 0x00,
--
--	0x57, 0xff,
--	0x40, 0x82, 0x58, 0x00, 0x59, 0x54, 0x5a, 0x07,
--	0x5b, 0x83, 0x5e, 0x00,
--	0xff
--};
--
--static int saa7113_init(struct budget_av *budget_av)
--{
--	struct budget *budget = &budget_av->budget;
--	struct saa7146_dev *saa = budget->dev;
--	const u8 *data = saa7113_tab;
--
--	saa7146_setgpio(saa, 0, SAA7146_GPIO_OUTHI);
--	msleep(200);
--
--	if (i2c_writereg(&budget->i2c_adap, 0x4a, 0x01, 0x08) != 1) {
--		dprintk(1, "saa7113 not found on KNC card\n");
--		return -ENODEV;
--	}
--
--	dprintk(1, "saa7113 detected and initializing\n");
--
--	while (*data != 0xff) {
--		i2c_writereg(&budget->i2c_adap, 0x4a, *data, *(data + 1));
--		data += 2;
--	}
--
--	dprintk(1, "saa7113  status=%02x\n", i2c_readreg(&budget->i2c_adap, 0x4a, 0x1f));
--
--	return 0;
--}
--
--static int saa7113_setinput(struct budget_av *budget_av, int input)
--{
--	struct budget *budget = &budget_av->budget;
--
--	if (1 != budget_av->has_saa7113)
--		return -ENODEV;
--
--	if (input == 1) {
--		i2c_writereg(&budget->i2c_adap, 0x4a, 0x02, 0xc7);
--		i2c_writereg(&budget->i2c_adap, 0x4a, 0x09, 0x80);
--	} else if (input == 0) {
--		i2c_writereg(&budget->i2c_adap, 0x4a, 0x02, 0xc0);
--		i2c_writereg(&budget->i2c_adap, 0x4a, 0x09, 0x00);
--	} else
--		return -EINVAL;
--
--	budget_av->cur_input = input;
--	return 0;
--}
--
--
--static int philips_su1278_ty_ci_set_symbol_rate(struct dvb_frontend *fe, u32 srate, u32 ratio)
--{
--	u8 aclk = 0;
--	u8 bclk = 0;
--	u8 m1;
--
--	aclk = 0xb5;
--	if (srate < 2000000)
--		bclk = 0x86;
--	else if (srate < 5000000)
--		bclk = 0x89;
--	else if (srate < 15000000)
--		bclk = 0x8f;
--	else if (srate < 45000000)
--		bclk = 0x95;
--
--	m1 = 0x14;
--	if (srate < 4000000)
--		m1 = 0x10;
--
--	stv0299_writereg(fe, 0x13, aclk);
--	stv0299_writereg(fe, 0x14, bclk);
--	stv0299_writereg(fe, 0x1f, (ratio >> 16) & 0xff);
--	stv0299_writereg(fe, 0x20, (ratio >> 8) & 0xff);
--	stv0299_writereg(fe, 0x21, (ratio) & 0xf0);
--	stv0299_writereg(fe, 0x0f, 0x80 | m1);
--
--	return 0;
--}
--
--static int philips_su1278_ty_ci_tuner_set_params(struct dvb_frontend *fe)
--{
--	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
--	u32 div;
--	u8 buf[4];
--	struct budget *budget = (struct budget *) fe->dvb->priv;
--	struct i2c_msg msg = {.addr = 0x61,.flags = 0,.buf = buf,.len = sizeof(buf) };
--
--	if ((c->frequency < 950000) || (c->frequency > 2150000))
--		return -EINVAL;
--
--	div = (c->frequency + (125 - 1)) / 125;	/* round correctly */
--	buf[0] = (div >> 8) & 0x7f;
--	buf[1] = div & 0xff;
--	buf[2] = 0x80 | ((div & 0x18000) >> 10) | 4;
--	buf[3] = 0x20;
--
--	if (c->symbol_rate < 4000000)
--		buf[3] |= 1;
--
--	if (c->frequency < 1250000)
--		buf[3] |= 0;
--	else if (c->frequency < 1550000)
--		buf[3] |= 0x40;
--	else if (c->frequency < 2050000)
--		buf[3] |= 0x80;
--	else if (c->frequency < 2150000)
--		buf[3] |= 0xC0;
--
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer(&budget->i2c_adap, &msg, 1) != 1)
--		return -EIO;
--	return 0;
--}
--
--static u8 typhoon_cinergy1200s_inittab[] = {
--	0x01, 0x15,
--	0x02, 0x30,
--	0x03, 0x00,
--	0x04, 0x7d,		/* F22FR = 0x7d, F22 = f_VCO / 128 / 0x7d = 22 kHz */
--	0x05, 0x35,		/* I2CT = 0, SCLT = 1, SDAT = 1 */
--	0x06, 0x40,		/* DAC not used, set to high impendance mode */
--	0x07, 0x00,		/* DAC LSB */
--	0x08, 0x40,		/* DiSEqC off */
--	0x09, 0x00,		/* FIFO */
--	0x0c, 0x51,		/* OP1 ctl = Normal, OP1 val = 1 (LNB Power ON) */
--	0x0d, 0x82,		/* DC offset compensation = ON, beta_agc1 = 2 */
--	0x0e, 0x23,		/* alpha_tmg = 2, beta_tmg = 3 */
--	0x10, 0x3f,		// AGC2  0x3d
--	0x11, 0x84,
--	0x12, 0xb9,
--	0x15, 0xc9,		// lock detector threshold
--	0x16, 0x00,
--	0x17, 0x00,
--	0x18, 0x00,
--	0x19, 0x00,
--	0x1a, 0x00,
--	0x1f, 0x50,
--	0x20, 0x00,
--	0x21, 0x00,
--	0x22, 0x00,
--	0x23, 0x00,
--	0x28, 0x00,		// out imp: normal  out type: parallel FEC mode:0
--	0x29, 0x1e,		// 1/2 threshold
--	0x2a, 0x14,		// 2/3 threshold
--	0x2b, 0x0f,		// 3/4 threshold
--	0x2c, 0x09,		// 5/6 threshold
--	0x2d, 0x05,		// 7/8 threshold
--	0x2e, 0x01,
--	0x31, 0x1f,		// test all FECs
--	0x32, 0x19,		// viterbi and synchro search
--	0x33, 0xfc,		// rs control
--	0x34, 0x93,		// error control
--	0x0f, 0x92,
--	0xff, 0xff
--};
--
--static const struct stv0299_config typhoon_config = {
--	.demod_address = 0x68,
--	.inittab = typhoon_cinergy1200s_inittab,
--	.mclk = 88000000UL,
--	.invert = 0,
--	.skip_reinit = 0,
--	.lock_output = STV0299_LOCKOUTPUT_1,
--	.volt13_op0_op1 = STV0299_VOLT13_OP0,
--	.min_delay_ms = 100,
--	.set_symbol_rate = philips_su1278_ty_ci_set_symbol_rate,
--};
--
--
--static const struct stv0299_config cinergy_1200s_config = {
--	.demod_address = 0x68,
--	.inittab = typhoon_cinergy1200s_inittab,
--	.mclk = 88000000UL,
--	.invert = 0,
--	.skip_reinit = 0,
--	.lock_output = STV0299_LOCKOUTPUT_0,
--	.volt13_op0_op1 = STV0299_VOLT13_OP0,
--	.min_delay_ms = 100,
--	.set_symbol_rate = philips_su1278_ty_ci_set_symbol_rate,
--};
--
--static const struct stv0299_config cinergy_1200s_1894_0010_config = {
--	.demod_address = 0x68,
--	.inittab = typhoon_cinergy1200s_inittab,
--	.mclk = 88000000UL,
--	.invert = 1,
--	.skip_reinit = 0,
--	.lock_output = STV0299_LOCKOUTPUT_1,
--	.volt13_op0_op1 = STV0299_VOLT13_OP0,
--	.min_delay_ms = 100,
--	.set_symbol_rate = philips_su1278_ty_ci_set_symbol_rate,
--};
--
--static int philips_cu1216_tuner_set_params(struct dvb_frontend *fe)
--{
--	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
--	struct budget *budget = (struct budget *) fe->dvb->priv;
--	u8 buf[6];
--	struct i2c_msg msg = {.addr = 0x60,.flags = 0,.buf = buf,.len = sizeof(buf) };
 -	int i;
 -
--#define CU1216_IF 36125000
--#define TUNER_MUL 62500
+-	dev_dbg(ccdc_cfg.dev, "\nstarting ccdc_restore_defaults...");
+-	/* set all registers to zero */
+-	for (i = 0; i <= CCDC_REG_LAST; i += 4)
+-		regw(0, i);
 -
--	u32 div = (c->frequency + CU1216_IF + TUNER_MUL / 2) / TUNER_MUL;
--
--	buf[0] = (div >> 8) & 0x7f;
--	buf[1] = div & 0xff;
--	buf[2] = 0xce;
--	buf[3] = (c->frequency < 150000000 ? 0x01 :
--		  c->frequency < 445000000 ? 0x02 : 0x04);
--	buf[4] = 0xde;
--	buf[5] = 0x20;
--
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer(&budget->i2c_adap, &msg, 1) != 1)
--		return -EIO;
--
--	/* wait for the pll lock */
--	msg.flags = I2C_M_RD;
--	msg.len = 1;
--	for (i = 0; i < 20; i++) {
--		if (fe->ops.i2c_gate_ctrl)
--			fe->ops.i2c_gate_ctrl(fe, 1);
--		if (i2c_transfer(&budget->i2c_adap, &msg, 1) == 1 && (buf[0] & 0x40))
--			break;
--		msleep(10);
+-	/* now override the values with power on defaults in registers */
+-	regw(MODESET_DEFAULT, MODESET);
+-	/* no culling support */
+-	regw(CULH_DEFAULT, CULH);
+-	regw(CULV_DEFAULT, CULV);
+-	/* Set default Gain and Offset */
+-	ccdc_cfg.bayer.gain.r_ye = GAIN_DEFAULT;
+-	ccdc_cfg.bayer.gain.gb_g = GAIN_DEFAULT;
+-	ccdc_cfg.bayer.gain.gr_cy = GAIN_DEFAULT;
+-	ccdc_cfg.bayer.gain.b_mg = GAIN_DEFAULT;
+-	ccdc_config_gain_offset();
+-	regw(OUTCLIP_DEFAULT, OUTCLIP);
+-	regw(LSCCFG2_DEFAULT, LSCCFG2);
+-	/* select ccdc input */
+-	if (vpss_select_ccdc_source(VPSS_CCDCIN)) {
+-		dev_dbg(ccdc_cfg.dev, "\ncouldn't select ccdc input source");
+-		return -EFAULT;
 -	}
--
--	/* switch the charge pump to the lower current */
--	msg.flags = 0;
--	msg.len = 2;
--	msg.buf = &buf[2];
--	buf[2] &= ~0x40;
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer(&budget->i2c_adap, &msg, 1) != 1)
--		return -EIO;
--
--	return 0;
--}
--
--static struct tda1002x_config philips_cu1216_config = {
--	.demod_address = 0x0c,
--	.invert = 1,
--};
--
--static struct tda1002x_config philips_cu1216_config_altaddress = {
--	.demod_address = 0x0d,
--	.invert = 0,
--};
--
--static struct tda10023_config philips_cu1216_tda10023_config = {
--	.demod_address = 0x0c,
--	.invert = 1,
--};
--
--static int philips_tu1216_tuner_init(struct dvb_frontend *fe)
--{
--	struct budget *budget = (struct budget *) fe->dvb->priv;
--	static u8 tu1216_init[] = { 0x0b, 0xf5, 0x85, 0xab };
--	struct i2c_msg tuner_msg = {.addr = 0x60,.flags = 0,.buf = tu1216_init,.len = sizeof(tu1216_init) };
--
--	// setup PLL configuration
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer(&budget->i2c_adap, &tuner_msg, 1) != 1)
--		return -EIO;
--	msleep(1);
--
--	return 0;
--}
--
--static int philips_tu1216_tuner_set_params(struct dvb_frontend *fe)
--{
--	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
--	struct budget *budget = (struct budget *) fe->dvb->priv;
--	u8 tuner_buf[4];
--	struct i2c_msg tuner_msg = {.addr = 0x60,.flags = 0,.buf = tuner_buf,.len =
--			sizeof(tuner_buf) };
--	int tuner_frequency = 0;
--	u8 band, cp, filter;
--
--	// determine charge pump
--	tuner_frequency = c->frequency + 36166000;
--	if (tuner_frequency < 87000000)
--		return -EINVAL;
--	else if (tuner_frequency < 130000000)
--		cp = 3;
--	else if (tuner_frequency < 160000000)
--		cp = 5;
--	else if (tuner_frequency < 200000000)
--		cp = 6;
--	else if (tuner_frequency < 290000000)
--		cp = 3;
--	else if (tuner_frequency < 420000000)
--		cp = 5;
--	else if (tuner_frequency < 480000000)
--		cp = 6;
--	else if (tuner_frequency < 620000000)
--		cp = 3;
--	else if (tuner_frequency < 830000000)
--		cp = 5;
--	else if (tuner_frequency < 895000000)
--		cp = 7;
--	else
--		return -EINVAL;
--
--	// determine band
--	if (c->frequency < 49000000)
--		return -EINVAL;
--	else if (c->frequency < 161000000)
--		band = 1;
--	else if (c->frequency < 444000000)
--		band = 2;
--	else if (c->frequency < 861000000)
--		band = 4;
--	else
--		return -EINVAL;
--
--	// setup PLL filter
--	switch (c->bandwidth_hz) {
--	case 6000000:
--		filter = 0;
--		break;
--
--	case 7000000:
--		filter = 0;
--		break;
--
--	case 8000000:
--		filter = 1;
--		break;
--
--	default:
--		return -EINVAL;
+-	/* select ccdc clock */
+-	if (vpss_enable_clock(VPSS_CCDC_CLOCK, 1) < 0) {
+-		dev_dbg(ccdc_cfg.dev, "\ncouldn't enable ccdc clock");
+-		return -EFAULT;
 -	}
--
--	// calculate divisor
--	// ((36166000+((1000000/6)/2)) + Finput)/(1000000/6)
--	tuner_frequency = (((c->frequency / 1000) * 6) + 217496) / 1000;
--
--	// setup tuner buffer
--	tuner_buf[0] = (tuner_frequency >> 8) & 0x7f;
--	tuner_buf[1] = tuner_frequency & 0xff;
--	tuner_buf[2] = 0xca;
--	tuner_buf[3] = (cp << 5) | (filter << 3) | band;
--
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer(&budget->i2c_adap, &tuner_msg, 1) != 1)
--		return -EIO;
--
--	msleep(1);
+-	dev_dbg(ccdc_cfg.dev, "\nEnd of ccdc_restore_defaults...");
 -	return 0;
 -}
 -
--static int philips_tu1216_request_firmware(struct dvb_frontend *fe,
--					   const struct firmware **fw, char *name)
+-static int ccdc_open(struct device *device)
 -{
--	struct budget *budget = (struct budget *) fe->dvb->priv;
--
--	return request_firmware(fw, name, &budget->dev->pci->dev);
+-	return ccdc_restore_defaults();
 -}
 -
--static struct tda1004x_config philips_tu1216_config = {
--
--	.demod_address = 0x8,
--	.invert = 1,
--	.invert_oclk = 1,
--	.xtal_freq = TDA10046_XTAL_4M,
--	.agc_config = TDA10046_AGC_DEFAULT,
--	.if_freq = TDA10046_FREQ_3617,
--	.request_firmware = philips_tu1216_request_firmware,
--};
--
--static u8 philips_sd1878_inittab[] = {
--	0x01, 0x15,
--	0x02, 0x30,
--	0x03, 0x00,
--	0x04, 0x7d,
--	0x05, 0x35,
--	0x06, 0x40,
--	0x07, 0x00,
--	0x08, 0x43,
--	0x09, 0x02,
--	0x0C, 0x51,
--	0x0D, 0x82,
--	0x0E, 0x23,
--	0x10, 0x3f,
--	0x11, 0x84,
--	0x12, 0xb9,
--	0x15, 0xc9,
--	0x16, 0x19,
--	0x17, 0x8c,
--	0x18, 0x59,
--	0x19, 0xf8,
--	0x1a, 0xfe,
--	0x1c, 0x7f,
--	0x1d, 0x00,
--	0x1e, 0x00,
--	0x1f, 0x50,
--	0x20, 0x00,
--	0x21, 0x00,
--	0x22, 0x00,
--	0x23, 0x00,
--	0x28, 0x00,
--	0x29, 0x28,
--	0x2a, 0x14,
--	0x2b, 0x0f,
--	0x2c, 0x09,
--	0x2d, 0x09,
--	0x31, 0x1f,
--	0x32, 0x19,
--	0x33, 0xfc,
--	0x34, 0x93,
--	0xff, 0xff
--};
--
--static int philips_sd1878_ci_set_symbol_rate(struct dvb_frontend *fe,
--		u32 srate, u32 ratio)
+-static int ccdc_close(struct device *device)
 -{
--	u8 aclk = 0;
--	u8 bclk = 0;
--	u8 m1;
--
--	aclk = 0xb5;
--	if (srate < 2000000)
--		bclk = 0x86;
--	else if (srate < 5000000)
--		bclk = 0x89;
--	else if (srate < 15000000)
--		bclk = 0x8f;
--	else if (srate < 45000000)
--		bclk = 0x95;
--
--	m1 = 0x14;
--	if (srate < 4000000)
--		m1 = 0x10;
--
--	stv0299_writereg(fe, 0x0e, 0x23);
--	stv0299_writereg(fe, 0x0f, 0x94);
--	stv0299_writereg(fe, 0x10, 0x39);
--	stv0299_writereg(fe, 0x13, aclk);
--	stv0299_writereg(fe, 0x14, bclk);
--	stv0299_writereg(fe, 0x15, 0xc9);
--	stv0299_writereg(fe, 0x1f, (ratio >> 16) & 0xff);
--	stv0299_writereg(fe, 0x20, (ratio >> 8) & 0xff);
--	stv0299_writereg(fe, 0x21, (ratio) & 0xf0);
--	stv0299_writereg(fe, 0x0f, 0x80 | m1);
--
+-	/* disable clock */
+-	vpss_enable_clock(VPSS_CCDC_CLOCK, 0);
+-	/* do nothing for now */
 -	return 0;
 -}
--
--static const struct stv0299_config philips_sd1878_config = {
--	.demod_address = 0x68,
--     .inittab = philips_sd1878_inittab,
--	.mclk = 88000000UL,
--	.invert = 0,
--	.skip_reinit = 0,
--	.lock_output = STV0299_LOCKOUTPUT_1,
--	.volt13_op0_op1 = STV0299_VOLT13_OP0,
--	.min_delay_ms = 100,
--	.set_symbol_rate = philips_sd1878_ci_set_symbol_rate,
--};
--
--/* KNC1 DVB-S (STB0899) Inittab	*/
--static const struct stb0899_s1_reg knc1_stb0899_s1_init_1[] = {
--
--	{ STB0899_DEV_ID		, 0x81 },
--	{ STB0899_DISCNTRL1		, 0x32 },
--	{ STB0899_DISCNTRL2		, 0x80 },
--	{ STB0899_DISRX_ST0		, 0x04 },
--	{ STB0899_DISRX_ST1		, 0x00 },
--	{ STB0899_DISPARITY		, 0x00 },
--	{ STB0899_DISSTATUS		, 0x20 },
--	{ STB0899_DISF22		, 0x8c },
--	{ STB0899_DISF22RX		, 0x9a },
--	{ STB0899_SYSREG		, 0x0b },
--	{ STB0899_ACRPRESC		, 0x11 },
--	{ STB0899_ACRDIV1		, 0x0a },
--	{ STB0899_ACRDIV2		, 0x05 },
--	{ STB0899_DACR1			, 0x00 },
--	{ STB0899_DACR2			, 0x00 },
--	{ STB0899_OUTCFG		, 0x00 },
--	{ STB0899_MODECFG		, 0x00 },
--	{ STB0899_IRQSTATUS_3		, 0x30 },
--	{ STB0899_IRQSTATUS_2		, 0x00 },
--	{ STB0899_IRQSTATUS_1		, 0x00 },
--	{ STB0899_IRQSTATUS_0		, 0x00 },
--	{ STB0899_IRQMSK_3		, 0xf3 },
--	{ STB0899_IRQMSK_2		, 0xfc },
--	{ STB0899_IRQMSK_1		, 0xff },
--	{ STB0899_IRQMSK_0		, 0xff },
--	{ STB0899_IRQCFG		, 0x00 },
--	{ STB0899_I2CCFG		, 0x88 },
--	{ STB0899_I2CRPT		, 0x58 }, /* Repeater=8, Stop=disabled */
--	{ STB0899_IOPVALUE5		, 0x00 },
--	{ STB0899_IOPVALUE4		, 0x20 },
--	{ STB0899_IOPVALUE3		, 0xc9 },
--	{ STB0899_IOPVALUE2		, 0x90 },
--	{ STB0899_IOPVALUE1		, 0x40 },
--	{ STB0899_IOPVALUE0		, 0x00 },
--	{ STB0899_GPIO00CFG		, 0x82 },
--	{ STB0899_GPIO01CFG		, 0x82 },
--	{ STB0899_GPIO02CFG		, 0x82 },
--	{ STB0899_GPIO03CFG		, 0x82 },
--	{ STB0899_GPIO04CFG		, 0x82 },
--	{ STB0899_GPIO05CFG		, 0x82 },
--	{ STB0899_GPIO06CFG		, 0x82 },
--	{ STB0899_GPIO07CFG		, 0x82 },
--	{ STB0899_GPIO08CFG		, 0x82 },
--	{ STB0899_GPIO09CFG		, 0x82 },
--	{ STB0899_GPIO10CFG		, 0x82 },
--	{ STB0899_GPIO11CFG		, 0x82 },
--	{ STB0899_GPIO12CFG		, 0x82 },
--	{ STB0899_GPIO13CFG		, 0x82 },
--	{ STB0899_GPIO14CFG		, 0x82 },
--	{ STB0899_GPIO15CFG		, 0x82 },
--	{ STB0899_GPIO16CFG		, 0x82 },
--	{ STB0899_GPIO17CFG		, 0x82 },
--	{ STB0899_GPIO18CFG		, 0x82 },
--	{ STB0899_GPIO19CFG		, 0x82 },
--	{ STB0899_GPIO20CFG		, 0x82 },
--	{ STB0899_SDATCFG		, 0xb8 },
--	{ STB0899_SCLTCFG		, 0xba },
--	{ STB0899_AGCRFCFG		, 0x08 }, /* 0x1c */
--	{ STB0899_GPIO22		, 0x82 }, /* AGCBB2CFG */
--	{ STB0899_GPIO21		, 0x91 }, /* AGCBB1CFG */
--	{ STB0899_DIRCLKCFG		, 0x82 },
--	{ STB0899_CLKOUT27CFG		, 0x7e },
--	{ STB0899_STDBYCFG		, 0x82 },
--	{ STB0899_CS0CFG		, 0x82 },
--	{ STB0899_CS1CFG		, 0x82 },
--	{ STB0899_DISEQCOCFG		, 0x20 },
--	{ STB0899_GPIO32CFG		, 0x82 },
--	{ STB0899_GPIO33CFG		, 0x82 },
--	{ STB0899_GPIO34CFG		, 0x82 },
--	{ STB0899_GPIO35CFG		, 0x82 },
--	{ STB0899_GPIO36CFG		, 0x82 },
--	{ STB0899_GPIO37CFG		, 0x82 },
--	{ STB0899_GPIO38CFG		, 0x82 },
--	{ STB0899_GPIO39CFG		, 0x82 },
--	{ STB0899_NCOARSE		, 0x15 }, /* 0x15 = 27 Mhz Clock, F/3 = 198MHz, F/6 = 99MHz */
--	{ STB0899_SYNTCTRL		, 0x02 }, /* 0x00 = CLK from CLKI, 0x02 = CLK from XTALI */
--	{ STB0899_FILTCTRL		, 0x00 },
--	{ STB0899_SYSCTRL		, 0x00 },
--	{ STB0899_STOPCLK1		, 0x20 },
--	{ STB0899_STOPCLK2		, 0x00 },
--	{ STB0899_INTBUFSTATUS		, 0x00 },
--	{ STB0899_INTBUFCTRL		, 0x0a },
--	{ 0xffff			, 0xff },
--};
--
--static const struct stb0899_s1_reg knc1_stb0899_s1_init_3[] = {
--	{ STB0899_DEMOD			, 0x00 },
--	{ STB0899_RCOMPC		, 0xc9 },
--	{ STB0899_AGC1CN		, 0x41 },
--	{ STB0899_AGC1REF		, 0x08 },
--	{ STB0899_RTC			, 0x7a },
--	{ STB0899_TMGCFG		, 0x4e },
--	{ STB0899_AGC2REF		, 0x33 },
--	{ STB0899_TLSR			, 0x84 },
--	{ STB0899_CFD			, 0xee },
--	{ STB0899_ACLC			, 0x87 },
--	{ STB0899_BCLC			, 0x94 },
--	{ STB0899_EQON			, 0x41 },
--	{ STB0899_LDT			, 0xdd },
--	{ STB0899_LDT2			, 0xc9 },
--	{ STB0899_EQUALREF		, 0xb4 },
--	{ STB0899_TMGRAMP		, 0x10 },
--	{ STB0899_TMGTHD		, 0x30 },
--	{ STB0899_IDCCOMP		, 0xfb },
--	{ STB0899_QDCCOMP		, 0x03 },
--	{ STB0899_POWERI		, 0x3b },
--	{ STB0899_POWERQ		, 0x3d },
--	{ STB0899_RCOMP			, 0x81 },
--	{ STB0899_AGCIQIN		, 0x80 },
--	{ STB0899_AGC2I1		, 0x04 },
--	{ STB0899_AGC2I2		, 0xf5 },
--	{ STB0899_TLIR			, 0x25 },
--	{ STB0899_RTF			, 0x80 },
--	{ STB0899_DSTATUS		, 0x00 },
--	{ STB0899_LDI			, 0xca },
--	{ STB0899_CFRM			, 0xf1 },
--	{ STB0899_CFRL			, 0xf3 },
--	{ STB0899_NIRM			, 0x2a },
--	{ STB0899_NIRL			, 0x05 },
--	{ STB0899_ISYMB			, 0x17 },
--	{ STB0899_QSYMB			, 0xfa },
--	{ STB0899_SFRH			, 0x2f },
--	{ STB0899_SFRM			, 0x68 },
--	{ STB0899_SFRL			, 0x40 },
--	{ STB0899_SFRUPH		, 0x2f },
--	{ STB0899_SFRUPM		, 0x68 },
--	{ STB0899_SFRUPL		, 0x40 },
--	{ STB0899_EQUAI1		, 0xfd },
--	{ STB0899_EQUAQ1		, 0x04 },
--	{ STB0899_EQUAI2		, 0x0f },
--	{ STB0899_EQUAQ2		, 0xff },
--	{ STB0899_EQUAI3		, 0xdf },
--	{ STB0899_EQUAQ3		, 0xfa },
--	{ STB0899_EQUAI4		, 0x37 },
--	{ STB0899_EQUAQ4		, 0x0d },
--	{ STB0899_EQUAI5		, 0xbd },
--	{ STB0899_EQUAQ5		, 0xf7 },
--	{ STB0899_DSTATUS2		, 0x00 },
--	{ STB0899_VSTATUS		, 0x00 },
--	{ STB0899_VERROR		, 0xff },
--	{ STB0899_IQSWAP		, 0x2a },
--	{ STB0899_ECNT1M		, 0x00 },
--	{ STB0899_ECNT1L		, 0x00 },
--	{ STB0899_ECNT2M		, 0x00 },
--	{ STB0899_ECNT2L		, 0x00 },
--	{ STB0899_ECNT3M		, 0x00 },
--	{ STB0899_ECNT3L		, 0x00 },
--	{ STB0899_FECAUTO1		, 0x06 },
--	{ STB0899_FECM			, 0x01 },
--	{ STB0899_VTH12			, 0xf0 },
--	{ STB0899_VTH23			, 0xa0 },
--	{ STB0899_VTH34			, 0x78 },
--	{ STB0899_VTH56			, 0x4e },
--	{ STB0899_VTH67			, 0x48 },
--	{ STB0899_VTH78			, 0x38 },
--	{ STB0899_PRVIT			, 0xff },
--	{ STB0899_VITSYNC		, 0x19 },
--	{ STB0899_RSULC			, 0xb1 }, /* DVB = 0xb1, DSS = 0xa1 */
--	{ STB0899_TSULC			, 0x42 },
--	{ STB0899_RSLLC			, 0x40 },
--	{ STB0899_TSLPL			, 0x12 },
--	{ STB0899_TSCFGH		, 0x0c },
--	{ STB0899_TSCFGM		, 0x00 },
--	{ STB0899_TSCFGL		, 0x0c },
--	{ STB0899_TSOUT			, 0x4d }, /* 0x0d for CAM */
--	{ STB0899_RSSYNCDEL		, 0x00 },
--	{ STB0899_TSINHDELH		, 0x02 },
--	{ STB0899_TSINHDELM		, 0x00 },
--	{ STB0899_TSINHDELL		, 0x00 },
--	{ STB0899_TSLLSTKM		, 0x00 },
--	{ STB0899_TSLLSTKL		, 0x00 },
--	{ STB0899_TSULSTKM		, 0x00 },
--	{ STB0899_TSULSTKL		, 0xab },
--	{ STB0899_PCKLENUL		, 0x00 },
--	{ STB0899_PCKLENLL		, 0xcc },
--	{ STB0899_RSPCKLEN		, 0xcc },
--	{ STB0899_TSSTATUS		, 0x80 },
--	{ STB0899_ERRCTRL1		, 0xb6 },
--	{ STB0899_ERRCTRL2		, 0x96 },
--	{ STB0899_ERRCTRL3		, 0x89 },
--	{ STB0899_DMONMSK1		, 0x27 },
--	{ STB0899_DMONMSK0		, 0x03 },
--	{ STB0899_DEMAPVIT		, 0x5c },
--	{ STB0899_PLPARM		, 0x1f },
--	{ STB0899_PDELCTRL		, 0x48 },
--	{ STB0899_PDELCTRL2		, 0x00 },
--	{ STB0899_BBHCTRL1		, 0x00 },
--	{ STB0899_BBHCTRL2		, 0x00 },
--	{ STB0899_HYSTTHRESH		, 0x77 },
--	{ STB0899_MATCSTM		, 0x00 },
--	{ STB0899_MATCSTL		, 0x00 },
--	{ STB0899_UPLCSTM		, 0x00 },
--	{ STB0899_UPLCSTL		, 0x00 },
--	{ STB0899_DFLCSTM		, 0x00 },
--	{ STB0899_DFLCSTL		, 0x00 },
--	{ STB0899_SYNCCST		, 0x00 },
--	{ STB0899_SYNCDCSTM		, 0x00 },
--	{ STB0899_SYNCDCSTL		, 0x00 },
--	{ STB0899_ISI_ENTRY		, 0x00 },
--	{ STB0899_ISI_BIT_EN		, 0x00 },
--	{ STB0899_MATSTRM		, 0x00 },
--	{ STB0899_MATSTRL		, 0x00 },
--	{ STB0899_UPLSTRM		, 0x00 },
--	{ STB0899_UPLSTRL		, 0x00 },
--	{ STB0899_DFLSTRM		, 0x00 },
--	{ STB0899_DFLSTRL		, 0x00 },
--	{ STB0899_SYNCSTR		, 0x00 },
--	{ STB0899_SYNCDSTRM		, 0x00 },
--	{ STB0899_SYNCDSTRL		, 0x00 },
--	{ STB0899_CFGPDELSTATUS1	, 0x10 },
--	{ STB0899_CFGPDELSTATUS2	, 0x00 },
--	{ STB0899_BBFERRORM		, 0x00 },
--	{ STB0899_BBFERRORL		, 0x00 },
--	{ STB0899_UPKTERRORM		, 0x00 },
--	{ STB0899_UPKTERRORL		, 0x00 },
--	{ 0xffff			, 0xff },
--};
--
--/* STB0899 demodulator config for the KNC1 and clones */
--static struct stb0899_config knc1_dvbs2_config = {
--	.init_dev		= knc1_stb0899_s1_init_1,
--	.init_s2_demod		= stb0899_s2_init_2,
--	.init_s1_demod		= knc1_stb0899_s1_init_3,
--	.init_s2_fec		= stb0899_s2_init_4,
--	.init_tst		= stb0899_s1_init_5,
--
--	.postproc		= NULL,
--
--	.demod_address		= 0x68,
--//	.ts_output_mode		= STB0899_OUT_PARALLEL,	/* types = SERIAL/PARALLEL	*/
--	.block_sync_mode	= STB0899_SYNC_FORCED,	/* DSS, SYNC_FORCED/UNSYNCED	*/
--//	.ts_pfbit_toggle	= STB0899_MPEG_NORMAL,	/* DirecTV, MPEG toggling seq	*/
--
--	.xtal_freq		= 27000000,
--	.inversion		= IQ_SWAP_OFF,
--
--	.lo_clk			= 76500000,
--	.hi_clk			= 90000000,
--
--	.esno_ave		= STB0899_DVBS2_ESNO_AVE,
--	.esno_quant		= STB0899_DVBS2_ESNO_QUANT,
--	.avframes_coarse	= STB0899_DVBS2_AVFRAMES_COARSE,
--	.avframes_fine		= STB0899_DVBS2_AVFRAMES_FINE,
--	.miss_threshold		= STB0899_DVBS2_MISS_THRESHOLD,
--	.uwp_threshold_acq	= STB0899_DVBS2_UWP_THRESHOLD_ACQ,
--	.uwp_threshold_track	= STB0899_DVBS2_UWP_THRESHOLD_TRACK,
--	.uwp_threshold_sof	= STB0899_DVBS2_UWP_THRESHOLD_SOF,
--	.sof_search_timeout	= STB0899_DVBS2_SOF_SEARCH_TIMEOUT,
--
--	.btr_nco_bits		= STB0899_DVBS2_BTR_NCO_BITS,
--	.btr_gain_shift_offset	= STB0899_DVBS2_BTR_GAIN_SHIFT_OFFSET,
--	.crl_nco_bits		= STB0899_DVBS2_CRL_NCO_BITS,
--	.ldpc_max_iter		= STB0899_DVBS2_LDPC_MAX_ITER,
--
--	.tuner_get_frequency	= tda8261_get_frequency,
--	.tuner_set_frequency	= tda8261_set_frequency,
--	.tuner_set_bandwidth	= NULL,
--	.tuner_get_bandwidth	= tda8261_get_bandwidth,
--	.tuner_set_rfsiggain	= NULL
--};
--
 -/*
-- * SD1878/SHA tuner config
-- * 1F, Single I/P, Horizontal mount, High Sensitivity
+- * ccdc_setwin()
+- * This function will configure the window size to
+- * be capture in CCDC reg.
 - */
--static const struct tda8261_config sd1878c_config = {
--//	.name		= "SD1878/SHA",
--	.addr		= 0x60,
--	.step_size	= TDA8261_STEP_1000 /* kHz */
--};
--
--static u8 read_pwm(struct budget_av *budget_av)
+-static void ccdc_setwin(struct v4l2_rect *image_win,
+-			enum ccdc_frmfmt frm_fmt, int ppc)
 -{
--	u8 b = 0xff;
--	u8 pwm;
--	struct i2c_msg msg[] = { {.addr = 0x50,.flags = 0,.buf = &b,.len = 1},
--	{.addr = 0x50,.flags = I2C_M_RD,.buf = &pwm,.len = 1}
--	};
--
--	if ((i2c_transfer(&budget_av->budget.i2c_adap, msg, 2) != 2)
--	    || (pwm == 0xff))
--		pwm = 0x48;
--
--	return pwm;
--}
--
--#define SUBID_DVBS_KNC1			0x0010
--#define SUBID_DVBS_KNC1_PLUS		0x0011
--#define SUBID_DVBS_TYPHOON		0x4f56
--#define SUBID_DVBS_CINERGY1200		0x1154
--#define SUBID_DVBS_CYNERGY1200N		0x1155
--#define SUBID_DVBS_TV_STAR		0x0014
--#define SUBID_DVBS_TV_STAR_PLUS_X4	0x0015
--#define SUBID_DVBS_TV_STAR_CI		0x0016
--#define SUBID_DVBS2_KNC1		0x0018
--#define SUBID_DVBS2_KNC1_OEM		0x0019
--#define SUBID_DVBS_EASYWATCH_1		0x001a
--#define SUBID_DVBS_EASYWATCH_2		0x001b
--#define SUBID_DVBS2_EASYWATCH		0x001d
--#define SUBID_DVBS_EASYWATCH		0x001e
--
--#define SUBID_DVBC_EASYWATCH		0x002a
--#define SUBID_DVBC_EASYWATCH_MK3	0x002c
--#define SUBID_DVBC_KNC1			0x0020
--#define SUBID_DVBC_KNC1_PLUS		0x0021
--#define SUBID_DVBC_KNC1_MK3		0x0022
--#define SUBID_DVBC_KNC1_TDA10024	0x0028
--#define SUBID_DVBC_KNC1_PLUS_MK3	0x0023
--#define SUBID_DVBC_CINERGY1200		0x1156
--#define SUBID_DVBC_CINERGY1200_MK3	0x1176
--
--#define SUBID_DVBT_EASYWATCH		0x003a
--#define SUBID_DVBT_KNC1_PLUS		0x0031
--#define SUBID_DVBT_KNC1			0x0030
--#define SUBID_DVBT_CINERGY1200		0x1157
--
--static void frontend_init(struct budget_av *budget_av)
--{
--	struct saa7146_dev * saa = budget_av->budget.dev;
--	struct dvb_frontend * fe = NULL;
--
--	/* Enable / PowerON Frontend */
--	saa7146_setgpio(saa, 0, SAA7146_GPIO_OUTLO);
--
--	/* Wait for PowerON */
--	msleep(100);
--
--	/* additional setup necessary for the PLUS cards */
--	switch (saa->pci->subsystem_device) {
--		case SUBID_DVBS_KNC1_PLUS:
--		case SUBID_DVBC_KNC1_PLUS:
--		case SUBID_DVBT_KNC1_PLUS:
--		case SUBID_DVBC_EASYWATCH:
--		case SUBID_DVBC_KNC1_PLUS_MK3:
--		case SUBID_DVBS2_KNC1:
--		case SUBID_DVBS2_KNC1_OEM:
--		case SUBID_DVBS2_EASYWATCH:
--			saa7146_setgpio(saa, 3, SAA7146_GPIO_OUTHI);
--			break;
--	}
--
--	switch (saa->pci->subsystem_device) {
--
--	case SUBID_DVBS_KNC1:
--		/*
--		 * maybe that setting is needed for other dvb-s cards as well,
--		 * but so far it has been only confirmed for this type
--		 */
--		budget_av->reinitialise_demod = 1;
--		fallthrough;
--	case SUBID_DVBS_KNC1_PLUS:
--	case SUBID_DVBS_EASYWATCH_1:
--		if (saa->pci->subsystem_vendor == 0x1894) {
--			fe = dvb_attach(stv0299_attach, &cinergy_1200s_1894_0010_config,
--					     &budget_av->budget.i2c_adap);
--			if (fe) {
--				dvb_attach(tua6100_attach, fe, 0x60, &budget_av->budget.i2c_adap);
--			}
--		} else {
--			fe = dvb_attach(stv0299_attach, &typhoon_config,
--					     &budget_av->budget.i2c_adap);
--			if (fe) {
--				fe->ops.tuner_ops.set_params = philips_su1278_ty_ci_tuner_set_params;
--			}
--		}
--		break;
--
--	case SUBID_DVBS_TV_STAR:
--	case SUBID_DVBS_TV_STAR_PLUS_X4:
--	case SUBID_DVBS_TV_STAR_CI:
--	case SUBID_DVBS_CYNERGY1200N:
--	case SUBID_DVBS_EASYWATCH:
--	case SUBID_DVBS_EASYWATCH_2:
--		fe = dvb_attach(stv0299_attach, &philips_sd1878_config,
--				&budget_av->budget.i2c_adap);
--		if (fe) {
--			dvb_attach(dvb_pll_attach, fe, 0x60,
--				   &budget_av->budget.i2c_adap,
--				   DVB_PLL_PHILIPS_SD1878_TDA8261);
--		}
--		break;
--
--	case SUBID_DVBS_TYPHOON:
--		fe = dvb_attach(stv0299_attach, &typhoon_config,
--				    &budget_av->budget.i2c_adap);
--		if (fe) {
--			fe->ops.tuner_ops.set_params = philips_su1278_ty_ci_tuner_set_params;
--		}
--		break;
--	case SUBID_DVBS2_KNC1:
--	case SUBID_DVBS2_KNC1_OEM:
--	case SUBID_DVBS2_EASYWATCH:
--		budget_av->reinitialise_demod = 1;
--		if ((fe = dvb_attach(stb0899_attach, &knc1_dvbs2_config, &budget_av->budget.i2c_adap)))
--			dvb_attach(tda8261_attach, fe, &sd1878c_config, &budget_av->budget.i2c_adap);
--
--		break;
--	case SUBID_DVBS_CINERGY1200:
--		fe = dvb_attach(stv0299_attach, &cinergy_1200s_config,
--				    &budget_av->budget.i2c_adap);
--		if (fe) {
--			fe->ops.tuner_ops.set_params = philips_su1278_ty_ci_tuner_set_params;
--		}
--		break;
--
--	case SUBID_DVBC_KNC1:
--	case SUBID_DVBC_KNC1_PLUS:
--	case SUBID_DVBC_CINERGY1200:
--	case SUBID_DVBC_EASYWATCH:
--		budget_av->reinitialise_demod = 1;
--		budget_av->budget.dev->i2c_bitrate = SAA7146_I2C_BUS_BIT_RATE_240;
--		fe = dvb_attach(tda10021_attach, &philips_cu1216_config,
--				     &budget_av->budget.i2c_adap,
--				     read_pwm(budget_av));
--		if (fe == NULL)
--			fe = dvb_attach(tda10021_attach, &philips_cu1216_config_altaddress,
--					     &budget_av->budget.i2c_adap,
--					     read_pwm(budget_av));
--		if (fe) {
--			fe->ops.tuner_ops.set_params = philips_cu1216_tuner_set_params;
--		}
--		break;
--
--	case SUBID_DVBC_EASYWATCH_MK3:
--	case SUBID_DVBC_CINERGY1200_MK3:
--	case SUBID_DVBC_KNC1_MK3:
--	case SUBID_DVBC_KNC1_TDA10024:
--	case SUBID_DVBC_KNC1_PLUS_MK3:
--		budget_av->reinitialise_demod = 1;
--		budget_av->budget.dev->i2c_bitrate = SAA7146_I2C_BUS_BIT_RATE_240;
--		fe = dvb_attach(tda10023_attach,
--			&philips_cu1216_tda10023_config,
--			&budget_av->budget.i2c_adap,
--			read_pwm(budget_av));
--		if (fe) {
--			fe->ops.tuner_ops.set_params = philips_cu1216_tuner_set_params;
--		}
--		break;
--
--	case SUBID_DVBT_EASYWATCH:
--	case SUBID_DVBT_KNC1:
--	case SUBID_DVBT_KNC1_PLUS:
--	case SUBID_DVBT_CINERGY1200:
--		budget_av->reinitialise_demod = 1;
--		fe = dvb_attach(tda10046_attach, &philips_tu1216_config,
--				     &budget_av->budget.i2c_adap);
--		if (fe) {
--			fe->ops.tuner_ops.init = philips_tu1216_tuner_init;
--			fe->ops.tuner_ops.set_params = philips_tu1216_tuner_set_params;
--		}
--		break;
--	}
--
--	if (fe == NULL) {
--		pr_err("A frontend driver was not found for device [%04x:%04x] subsystem [%04x:%04x]\n",
--		       saa->pci->vendor,
--		       saa->pci->device,
--		       saa->pci->subsystem_vendor,
--		       saa->pci->subsystem_device);
--		return;
--	}
--
--	budget_av->budget.dvb_frontend = fe;
--
--	if (dvb_register_frontend(&budget_av->budget.dvb_adapter,
--				  budget_av->budget.dvb_frontend)) {
--		pr_err("Frontend registration failed!\n");
--		dvb_frontend_detach(budget_av->budget.dvb_frontend);
--		budget_av->budget.dvb_frontend = NULL;
--	}
--}
--
--
--static void budget_av_irq(struct saa7146_dev *dev, u32 * isr)
--{
--	struct budget_av *budget_av = (struct budget_av *) dev->ext_priv;
--
--	dprintk(8, "dev: %p, budget_av: %p\n", dev, budget_av);
--
--	if (*isr & MASK_10)
--		ttpci_budget_irq10_handler(dev, isr);
--}
--
--static int budget_av_detach(struct saa7146_dev *dev)
--{
--	struct budget_av *budget_av = (struct budget_av *) dev->ext_priv;
--	int err;
--
--	dprintk(2, "dev: %p\n", dev);
--
--	if (1 == budget_av->has_saa7113) {
--		saa7146_setgpio(dev, 0, SAA7146_GPIO_OUTLO);
--
--		msleep(200);
--
--		saa7146_unregister_device(&budget_av->vd, dev);
--
--		saa7146_vv_release(dev);
--	}
--
--	if (budget_av->budget.ci_present)
--		ciintf_deinit(budget_av);
--
--	if (budget_av->budget.dvb_frontend != NULL) {
--		dvb_unregister_frontend(budget_av->budget.dvb_frontend);
--		dvb_frontend_detach(budget_av->budget.dvb_frontend);
--	}
--	err = ttpci_budget_deinit(&budget_av->budget);
--
--	kfree(budget_av);
--
--	return err;
--}
--
--#define KNC1_INPUTS 2
--static struct v4l2_input knc1_inputs[KNC1_INPUTS] = {
--	{ 0, "Composite", V4L2_INPUT_TYPE_TUNER, 1, 0,
--		V4L2_STD_PAL_BG | V4L2_STD_NTSC_M, 0, V4L2_IN_CAP_STD },
--	{ 1, "S-Video", V4L2_INPUT_TYPE_CAMERA, 2, 0,
--		V4L2_STD_PAL_BG | V4L2_STD_NTSC_M, 0, V4L2_IN_CAP_STD },
--};
--
--static int vidioc_enum_input(struct file *file, void *fh, struct v4l2_input *i)
--{
--	dprintk(1, "VIDIOC_ENUMINPUT %d\n", i->index);
--	if (i->index >= KNC1_INPUTS)
--		return -EINVAL;
--	memcpy(i, &knc1_inputs[i->index], sizeof(struct v4l2_input));
--	return 0;
--}
--
--static int vidioc_g_input(struct file *file, void *fh, unsigned int *i)
--{
--	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
--	struct budget_av *budget_av = (struct budget_av *)dev->ext_priv;
--
--	*i = budget_av->cur_input;
--
--	dprintk(1, "VIDIOC_G_INPUT %d\n", *i);
--	return 0;
--}
--
--static int vidioc_s_input(struct file *file, void *fh, unsigned int input)
--{
--	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
--	struct budget_av *budget_av = (struct budget_av *)dev->ext_priv;
--
--	dprintk(1, "VIDIOC_S_INPUT %d\n", input);
--	return saa7113_setinput(budget_av, input);
--}
--
--static struct saa7146_ext_vv vv_data;
--
--static int budget_av_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_data *info)
--{
--	struct budget_av *budget_av;
--	u8 *mac;
--	int err;
--
--	dprintk(2, "dev: %p\n", dev);
--
--	if (!(budget_av = kzalloc(sizeof(struct budget_av), GFP_KERNEL)))
--		return -ENOMEM;
--
--	budget_av->has_saa7113 = 0;
--	budget_av->budget.ci_present = 0;
--
--	dev->ext_priv = budget_av;
--
--	err = ttpci_budget_init(&budget_av->budget, dev, info, THIS_MODULE,
--				adapter_nr);
--	if (err) {
--		kfree(budget_av);
--		return err;
--	}
--
--	/* knc1 initialization */
--	saa7146_write(dev, DD1_STREAM_B, 0x04000000);
--	saa7146_write(dev, DD1_INIT, 0x07000600);
--	saa7146_write(dev, MC2, MASK_09 | MASK_25 | MASK_10 | MASK_26);
--
--	if (saa7113_init(budget_av) == 0) {
--		budget_av->has_saa7113 = 1;
--		err = saa7146_vv_init(dev, &vv_data);
--		if (err != 0) {
--			/* fixme: proper cleanup here */
--			ERR("cannot init vv subsystem\n");
--			return err;
--		}
--		vv_data.vid_ops.vidioc_enum_input = vidioc_enum_input;
--		vv_data.vid_ops.vidioc_g_input = vidioc_g_input;
--		vv_data.vid_ops.vidioc_s_input = vidioc_s_input;
--
--		if ((err = saa7146_register_device(&budget_av->vd, dev, "knc1", VFL_TYPE_VIDEO))) {
--			/* fixme: proper cleanup here */
--			ERR("cannot register capture v4l2 device\n");
--			saa7146_vv_release(dev);
--			return err;
--		}
--
--		/* beware: this modifies dev->vv ... */
--		saa7146_set_hps_source_and_sync(dev, SAA7146_HPS_SOURCE_PORT_A,
--						SAA7146_HPS_SYNC_PORT_A);
--
--		saa7113_setinput(budget_av, 0);
--	}
--
--	/* fixme: find some sane values here... */
--	saa7146_write(dev, PCI_BT_V1, 0x1c00101f);
--
--	mac = budget_av->budget.dvb_adapter.proposed_mac;
--	if (i2c_readregs(&budget_av->budget.i2c_adap, 0xa0, 0x30, mac, 6)) {
--		pr_err("KNC1-%d: Could not read MAC from KNC1 card\n",
--		       budget_av->budget.dvb_adapter.num);
--		eth_zero_addr(mac);
--	} else {
--		pr_info("KNC1-%d: MAC addr = %pM\n",
--			budget_av->budget.dvb_adapter.num, mac);
--	}
--
--	budget_av->budget.dvb_adapter.priv = budget_av;
--	frontend_init(budget_av);
--	ciintf_init(budget_av);
--
--	ttpci_budget_init_hooks(&budget_av->budget);
--
--	return 0;
--}
--
--static struct saa7146_standard standard[] = {
--	{.name = "PAL",.id = V4L2_STD_PAL,
--	 .v_offset = 0x17,.v_field = 288,
--	 .h_offset = 0x14,.h_pixels = 680,
--	 .v_max_out = 576,.h_max_out = 768 },
--
--	{.name = "NTSC",.id = V4L2_STD_NTSC,
--	 .v_offset = 0x16,.v_field = 240,
--	 .h_offset = 0x06,.h_pixels = 708,
--	 .v_max_out = 480,.h_max_out = 640, },
--};
--
--static struct saa7146_ext_vv vv_data = {
--	.inputs = 2,
--	.capabilities = 0,	// perhaps later: V4L2_CAP_VBI_CAPTURE, but that need tweaking with the saa7113
--	.flags = 0,
--	.stds = &standard[0],
--	.num_stds = ARRAY_SIZE(standard),
--};
--
--static struct saa7146_extension budget_extension;
--
--MAKE_BUDGET_INFO(knc1s, "KNC1 DVB-S", BUDGET_KNC1S);
--MAKE_BUDGET_INFO(knc1s2,"KNC1 DVB-S2", BUDGET_KNC1S2);
--MAKE_BUDGET_INFO(sates2,"Satelco EasyWatch DVB-S2", BUDGET_KNC1S2);
--MAKE_BUDGET_INFO(knc1c, "KNC1 DVB-C", BUDGET_KNC1C);
--MAKE_BUDGET_INFO(knc1t, "KNC1 DVB-T", BUDGET_KNC1T);
--MAKE_BUDGET_INFO(kncxs, "KNC TV STAR DVB-S", BUDGET_TVSTAR);
--MAKE_BUDGET_INFO(satewpls, "Satelco EasyWatch DVB-S light", BUDGET_TVSTAR);
--MAKE_BUDGET_INFO(satewpls1, "Satelco EasyWatch DVB-S light", BUDGET_KNC1S);
--MAKE_BUDGET_INFO(satewps, "Satelco EasyWatch DVB-S", BUDGET_KNC1S);
--MAKE_BUDGET_INFO(satewplc, "Satelco EasyWatch DVB-C", BUDGET_KNC1CP);
--MAKE_BUDGET_INFO(satewcmk3, "Satelco EasyWatch DVB-C MK3", BUDGET_KNC1C_MK3);
--MAKE_BUDGET_INFO(satewt, "Satelco EasyWatch DVB-T", BUDGET_KNC1T);
--MAKE_BUDGET_INFO(knc1sp, "KNC1 DVB-S Plus", BUDGET_KNC1SP);
--MAKE_BUDGET_INFO(knc1spx4, "KNC1 DVB-S Plus X4", BUDGET_KNC1SP);
--MAKE_BUDGET_INFO(knc1cp, "KNC1 DVB-C Plus", BUDGET_KNC1CP);
--MAKE_BUDGET_INFO(knc1cmk3, "KNC1 DVB-C MK3", BUDGET_KNC1C_MK3);
--MAKE_BUDGET_INFO(knc1ctda10024, "KNC1 DVB-C TDA10024", BUDGET_KNC1C_TDA10024);
--MAKE_BUDGET_INFO(knc1cpmk3, "KNC1 DVB-C Plus MK3", BUDGET_KNC1CP_MK3);
--MAKE_BUDGET_INFO(knc1tp, "KNC1 DVB-T Plus", BUDGET_KNC1TP);
--MAKE_BUDGET_INFO(cin1200s, "TerraTec Cinergy 1200 DVB-S", BUDGET_CIN1200S);
--MAKE_BUDGET_INFO(cin1200sn, "TerraTec Cinergy 1200 DVB-S", BUDGET_CIN1200S);
--MAKE_BUDGET_INFO(cin1200c, "Terratec Cinergy 1200 DVB-C", BUDGET_CIN1200C);
--MAKE_BUDGET_INFO(cin1200cmk3, "Terratec Cinergy 1200 DVB-C MK3", BUDGET_CIN1200C_MK3);
--MAKE_BUDGET_INFO(cin1200t, "Terratec Cinergy 1200 DVB-T", BUDGET_CIN1200T);
--
--static const struct pci_device_id pci_tbl[] = {
--	MAKE_EXTENSION_PCI(knc1s, 0x1131, 0x4f56),
--	MAKE_EXTENSION_PCI(knc1s, 0x1131, 0x0010),
--	MAKE_EXTENSION_PCI(knc1s, 0x1894, 0x0010),
--	MAKE_EXTENSION_PCI(knc1sp, 0x1131, 0x0011),
--	MAKE_EXTENSION_PCI(knc1sp, 0x1894, 0x0011),
--	MAKE_EXTENSION_PCI(kncxs, 0x1894, 0x0014),
--	MAKE_EXTENSION_PCI(knc1spx4, 0x1894, 0x0015),
--	MAKE_EXTENSION_PCI(kncxs, 0x1894, 0x0016),
--	MAKE_EXTENSION_PCI(knc1s2, 0x1894, 0x0018),
--	MAKE_EXTENSION_PCI(knc1s2, 0x1894, 0x0019),
--	MAKE_EXTENSION_PCI(sates2, 0x1894, 0x001d),
--	MAKE_EXTENSION_PCI(satewpls, 0x1894, 0x001e),
--	MAKE_EXTENSION_PCI(satewpls1, 0x1894, 0x001a),
--	MAKE_EXTENSION_PCI(satewps, 0x1894, 0x001b),
--	MAKE_EXTENSION_PCI(satewplc, 0x1894, 0x002a),
--	MAKE_EXTENSION_PCI(satewcmk3, 0x1894, 0x002c),
--	MAKE_EXTENSION_PCI(satewt, 0x1894, 0x003a),
--	MAKE_EXTENSION_PCI(knc1c, 0x1894, 0x0020),
--	MAKE_EXTENSION_PCI(knc1cp, 0x1894, 0x0021),
--	MAKE_EXTENSION_PCI(knc1cmk3, 0x1894, 0x0022),
--	MAKE_EXTENSION_PCI(knc1ctda10024, 0x1894, 0x0028),
--	MAKE_EXTENSION_PCI(knc1cpmk3, 0x1894, 0x0023),
--	MAKE_EXTENSION_PCI(knc1t, 0x1894, 0x0030),
--	MAKE_EXTENSION_PCI(knc1tp, 0x1894, 0x0031),
--	MAKE_EXTENSION_PCI(cin1200s, 0x153b, 0x1154),
--	MAKE_EXTENSION_PCI(cin1200sn, 0x153b, 0x1155),
--	MAKE_EXTENSION_PCI(cin1200c, 0x153b, 0x1156),
--	MAKE_EXTENSION_PCI(cin1200cmk3, 0x153b, 0x1176),
--	MAKE_EXTENSION_PCI(cin1200t, 0x153b, 0x1157),
--	{
--	 .vendor = 0,
--	}
--};
--
--MODULE_DEVICE_TABLE(pci, pci_tbl);
--
--static struct saa7146_extension budget_extension = {
--	.name = "budget_av",
--	.flags = SAA7146_USE_I2C_IRQ,
--
--	.pci_tbl = pci_tbl,
--
--	.module = THIS_MODULE,
--	.attach = budget_av_attach,
--	.detach = budget_av_detach,
--
--	.irq_mask = MASK_10,
--	.irq_func = budget_av_irq,
--};
--
--static int __init budget_av_init(void)
--{
--	return saa7146_register_extension(&budget_extension);
--}
--
--static void __exit budget_av_exit(void)
--{
--	saa7146_unregister_extension(&budget_extension);
--}
--
--module_init(budget_av_init);
--module_exit(budget_av_exit);
--
--MODULE_LICENSE("GPL");
--MODULE_AUTHOR("Ralph Metzler, Marcus Metzler, Michael Hunold, others");
--MODULE_DESCRIPTION("driver for the SAA7146 based so-called budget PCI DVB w/ analog input and CI-module (e.g. the KNC cards)");
-diff --git a/drivers/staging/media/deprecated/saa7146/ttpci/budget-ci.c b/drivers/staging/media/deprecated/saa7146/ttpci/budget-ci.c
-deleted file mode 100644
-index d59d18647371..000000000000
---- a/drivers/staging/media/deprecated/saa7146/ttpci/budget-ci.c
-+++ /dev/null
-@@ -1,1574 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * budget-ci.c: driver for the SAA7146 based Budget DVB cards
-- *
-- * Compiled from various sources by Michael Hunold <michael@mihu.de>
-- *
-- *     msp430 IR support contributed by Jack Thomasson <jkt@Helius.COM>
-- *     partially based on the Siemens DVB driver by Ralph+Marcus Metzler
-- *
-- * CI interface support (c) 2004 Andrew de Quincey <adq_dvb@lidskialf.net>
-- *
-- * the project's page is at https://linuxtv.org
-- */
--
--#include <linux/module.h>
--#include <linux/errno.h>
--#include <linux/slab.h>
--#include <linux/interrupt.h>
--#include <linux/spinlock.h>
--#include <media/rc-core.h>
--
--#include "budget.h"
--
--#include <media/dvb_ca_en50221.h>
--#include "stv0299.h"
--#include "stv0297.h"
--#include "tda1004x.h"
--#include "stb0899_drv.h"
--#include "stb0899_reg.h"
--#include "stb0899_cfg.h"
--#include "stb6100.h"
--#include "stb6100_cfg.h"
--#include "lnbp21.h"
--#include "bsbe1.h"
--#include "bsru6.h"
--#include "tda1002x.h"
--#include "tda827x.h"
--#include "bsbe1-d01a.h"
--
--#define MODULE_NAME "budget_ci"
--
--/*
-- * Regarding DEBIADDR_IR:
-- * Some CI modules hang if random addresses are read.
-- * Using address 0x4000 for the IR read means that we
-- * use the same address as for CI version, which should
-- * be a safe default.
-- */
--#define DEBIADDR_IR		0x4000
--#define DEBIADDR_CICONTROL	0x0000
--#define DEBIADDR_CIVERSION	0x4000
--#define DEBIADDR_IO		0x1000
--#define DEBIADDR_ATTR		0x3000
--
--#define CICONTROL_RESET		0x01
--#define CICONTROL_ENABLETS	0x02
--#define CICONTROL_CAMDETECT	0x08
--
--#define DEBICICTL		0x00420000
--#define DEBICICAM		0x02420000
--
--#define SLOTSTATUS_NONE		1
--#define SLOTSTATUS_PRESENT	2
--#define SLOTSTATUS_RESET	4
--#define SLOTSTATUS_READY	8
--#define SLOTSTATUS_OCCUPIED	(SLOTSTATUS_PRESENT|SLOTSTATUS_RESET|SLOTSTATUS_READY)
--
--/* RC5 device wildcard */
--#define IR_DEVICE_ANY		255
--
--static int rc5_device = -1;
--module_param(rc5_device, int, 0644);
--MODULE_PARM_DESC(rc5_device, "only IR commands to given RC5 device (device = 0 - 31, any device = 255, default: autodetect)");
--
--static int ir_debug;
--module_param(ir_debug, int, 0644);
--MODULE_PARM_DESC(ir_debug, "enable debugging information for IR decoding");
--
--DVB_DEFINE_MOD_OPT_ADAPTER_NR(adapter_nr);
--
--struct budget_ci_ir {
--	struct rc_dev *dev;
--	struct tasklet_struct msp430_irq_tasklet;
--	char name[72]; /* 40 + 32 for (struct saa7146_dev).name */
--	char phys[32];
--	int rc5_device;
--	u32 ir_key;
--	bool have_command;
--	bool full_rc5;		/* Outputs a full RC5 code */
--};
--
--struct budget_ci {
--	struct budget budget;
--	struct tasklet_struct ciintf_irq_tasklet;
--	int slot_status;
--	int ci_irq;
--	struct dvb_ca_en50221 ca;
--	struct budget_ci_ir ir;
--	u8 tuner_pll_address; /* used for philips_tdm1316l configs */
--};
--
--static void msp430_ir_interrupt(struct tasklet_struct *t)
--{
--	struct budget_ci_ir *ir = from_tasklet(ir, t, msp430_irq_tasklet);
--	struct budget_ci *budget_ci = container_of(ir, typeof(*budget_ci), ir);
--	struct rc_dev *dev = budget_ci->ir.dev;
--	u32 command = ttpci_budget_debiread(&budget_ci->budget, DEBINOSWAP, DEBIADDR_IR, 2, 1, 0) >> 8;
+-	int horz_start, horz_nr_pixels;
+-	int vert_start, vert_nr_lines;
+-	int mid_img = 0;
+-
+-	dev_dbg(ccdc_cfg.dev, "\nStarting ccdc_setwin...");
 -
 -	/*
--	 * The msp430 chip can generate two different bytes, command and device
--	 *
--	 * type1: X1CCCCCC, C = command bits (0 - 63)
--	 * type2: X0TDDDDD, D = device bits (0 - 31), T = RC5 toggle bit
--	 *
--	 * Each signal from the remote control can generate one or more command
--	 * bytes and one or more device bytes. For the repeated bytes, the
--	 * highest bit (X) is set. The first command byte is always generated
--	 * before the first device byte. Other than that, no specific order
--	 * seems to apply. To make life interesting, bytes can also be lost.
--	 *
--	 * Only when we have a command and device byte, a keypress is
--	 * generated.
+-	 * ppc - per pixel count. indicates how many pixels per cell
+-	 * output to SDRAM. example, for ycbcr, it is one y and one c, so 2.
+-	 * raw capture this is 1
 -	 */
+-	horz_start = image_win->left << (ppc - 1);
+-	horz_nr_pixels = ((image_win->width) << (ppc - 1)) - 1;
 -
--	if (ir_debug)
--		printk("budget_ci: received byte 0x%02x\n", command);
+-	/* Writing the horizontal info into the registers */
+-	regw(horz_start, SPH);
+-	regw(horz_nr_pixels, NPH);
+-	vert_start = image_win->top;
 -
--	/* Remove repeat bit, we use every command */
--	command = command & 0x7f;
--
--	/* Is this a RC5 command byte? */
--	if (command & 0x40) {
--		budget_ci->ir.have_command = true;
--		budget_ci->ir.ir_key = command & 0x3f;
--		return;
--	}
--
--	/* It's a RC5 device byte */
--	if (!budget_ci->ir.have_command)
--		return;
--	budget_ci->ir.have_command = false;
--
--	if (budget_ci->ir.rc5_device != IR_DEVICE_ANY &&
--	    budget_ci->ir.rc5_device != (command & 0x1f))
--		return;
--
--	if (budget_ci->ir.full_rc5) {
--		rc_keydown(dev, RC_PROTO_RC5,
--			   RC_SCANCODE_RC5(budget_ci->ir.rc5_device, budget_ci->ir.ir_key),
--			   !!(command & 0x20));
--		return;
--	}
--
--	/* FIXME: We should generate complete scancodes for all devices */
--	rc_keydown(dev, RC_PROTO_UNKNOWN, budget_ci->ir.ir_key,
--		   !!(command & 0x20));
--}
--
--static int msp430_ir_init(struct budget_ci *budget_ci)
--{
--	struct saa7146_dev *saa = budget_ci->budget.dev;
--	struct rc_dev *dev;
--	int error;
--
--	dev = rc_allocate_device(RC_DRIVER_SCANCODE);
--	if (!dev) {
--		printk(KERN_ERR "budget_ci: IR interface initialisation failed\n");
--		return -ENOMEM;
--	}
--
--	snprintf(budget_ci->ir.name, sizeof(budget_ci->ir.name),
--		 "Budget-CI dvb ir receiver %s", saa->name);
--	snprintf(budget_ci->ir.phys, sizeof(budget_ci->ir.phys),
--		 "pci-%s/ir0", pci_name(saa->pci));
--
--	dev->driver_name = MODULE_NAME;
--	dev->device_name = budget_ci->ir.name;
--	dev->input_phys = budget_ci->ir.phys;
--	dev->input_id.bustype = BUS_PCI;
--	dev->input_id.version = 1;
--	if (saa->pci->subsystem_vendor) {
--		dev->input_id.vendor = saa->pci->subsystem_vendor;
--		dev->input_id.product = saa->pci->subsystem_device;
+-	if (frm_fmt == CCDC_FRMFMT_INTERLACED) {
+-		vert_nr_lines = (image_win->height >> 1) - 1;
+-		vert_start >>= 1;
+-		/* Since first line doesn't have any data */
+-		vert_start += 1;
+-		/* configure VDINT0 and VDINT1 */
+-		regw(vert_start, VDINT0);
 -	} else {
--		dev->input_id.vendor = saa->pci->vendor;
--		dev->input_id.product = saa->pci->device;
+-		/* Since first line doesn't have any data */
+-		vert_start += 1;
+-		vert_nr_lines = image_win->height - 1;
+-		/* configure VDINT0 and VDINT1 */
+-		mid_img = vert_start + (image_win->height / 2);
+-		regw(vert_start, VDINT0);
+-		regw(mid_img, VDINT1);
 -	}
--	dev->dev.parent = &saa->pci->dev;
--
--	if (rc5_device < 0)
--		budget_ci->ir.rc5_device = IR_DEVICE_ANY;
--	else
--		budget_ci->ir.rc5_device = rc5_device;
--
--	/* Select keymap and address */
--	switch (budget_ci->budget.dev->pci->subsystem_device) {
--	case 0x100c:
--	case 0x100f:
--	case 0x1011:
--	case 0x1012:
--		/* The hauppauge keymap is a superset of these remotes */
--		dev->map_name = RC_MAP_HAUPPAUGE;
--		budget_ci->ir.full_rc5 = true;
--
--		if (rc5_device < 0)
--			budget_ci->ir.rc5_device = 0x1f;
--		break;
--	case 0x1010:
--	case 0x1017:
--	case 0x1019:
--	case 0x101a:
--	case 0x101b:
--		/* for the Technotrend 1500 bundled remote */
--		dev->map_name = RC_MAP_TT_1500;
--		break;
--	default:
--		/* unknown remote */
--		dev->map_name = RC_MAP_BUDGET_CI_OLD;
--		break;
--	}
--	if (!budget_ci->ir.full_rc5)
--		dev->scancode_mask = 0xff;
--
--	error = rc_register_device(dev);
--	if (error) {
--		printk(KERN_ERR "budget_ci: could not init driver for IR device (code %d)\n", error);
--		rc_free_device(dev);
--		return error;
--	}
--
--	budget_ci->ir.dev = dev;
--
--	tasklet_setup(&budget_ci->ir.msp430_irq_tasklet, msp430_ir_interrupt);
--
--	SAA7146_IER_ENABLE(saa, MASK_06);
--	saa7146_setgpio(saa, 3, SAA7146_GPIO_IRQHI);
--
--	return 0;
+-	regw(vert_start & CCDC_START_VER_ONE_MASK, SLV0);
+-	regw(vert_start & CCDC_START_VER_TWO_MASK, SLV1);
+-	regw(vert_nr_lines & CCDC_NUM_LINES_VER, NLV);
+-	dev_dbg(ccdc_cfg.dev, "\nEnd of ccdc_setwin...");
 -}
 -
--static void msp430_ir_deinit(struct budget_ci *budget_ci)
+-/* This function will configure CCDC for YCbCr video capture */
+-static void ccdc_config_ycbcr(void)
 -{
--	struct saa7146_dev *saa = budget_ci->budget.dev;
--
--	SAA7146_IER_DISABLE(saa, MASK_06);
--	saa7146_setgpio(saa, 3, SAA7146_GPIO_INPUT);
--	tasklet_kill(&budget_ci->ir.msp430_irq_tasklet);
--
--	rc_unregister_device(budget_ci->ir.dev);
--}
--
--static int ciintf_read_attribute_mem(struct dvb_ca_en50221 *ca, int slot, int address)
--{
--	struct budget_ci *budget_ci = (struct budget_ci *) ca->data;
--
--	if (slot != 0)
--		return -EINVAL;
--
--	return ttpci_budget_debiread(&budget_ci->budget, DEBICICAM,
--				     DEBIADDR_ATTR | (address & 0xfff), 1, 1, 0);
--}
--
--static int ciintf_write_attribute_mem(struct dvb_ca_en50221 *ca, int slot, int address, u8 value)
--{
--	struct budget_ci *budget_ci = (struct budget_ci *) ca->data;
--
--	if (slot != 0)
--		return -EINVAL;
--
--	return ttpci_budget_debiwrite(&budget_ci->budget, DEBICICAM,
--				      DEBIADDR_ATTR | (address & 0xfff), 1, value, 1, 0);
--}
--
--static int ciintf_read_cam_control(struct dvb_ca_en50221 *ca, int slot, u8 address)
--{
--	struct budget_ci *budget_ci = (struct budget_ci *) ca->data;
--
--	if (slot != 0)
--		return -EINVAL;
--
--	return ttpci_budget_debiread(&budget_ci->budget, DEBICICAM,
--				     DEBIADDR_IO | (address & 3), 1, 1, 0);
--}
--
--static int ciintf_write_cam_control(struct dvb_ca_en50221 *ca, int slot, u8 address, u8 value)
--{
--	struct budget_ci *budget_ci = (struct budget_ci *) ca->data;
--
--	if (slot != 0)
--		return -EINVAL;
--
--	return ttpci_budget_debiwrite(&budget_ci->budget, DEBICICAM,
--				      DEBIADDR_IO | (address & 3), 1, value, 1, 0);
--}
--
--static int ciintf_slot_reset(struct dvb_ca_en50221 *ca, int slot)
--{
--	struct budget_ci *budget_ci = (struct budget_ci *) ca->data;
--	struct saa7146_dev *saa = budget_ci->budget.dev;
--
--	if (slot != 0)
--		return -EINVAL;
--
--	if (budget_ci->ci_irq) {
--		// trigger on RISING edge during reset so we know when READY is re-asserted
--		saa7146_setgpio(saa, 0, SAA7146_GPIO_IRQHI);
--	}
--	budget_ci->slot_status = SLOTSTATUS_RESET;
--	ttpci_budget_debiwrite(&budget_ci->budget, DEBICICTL, DEBIADDR_CICONTROL, 1, 0, 1, 0);
--	msleep(1);
--	ttpci_budget_debiwrite(&budget_ci->budget, DEBICICTL, DEBIADDR_CICONTROL, 1,
--			       CICONTROL_RESET, 1, 0);
--
--	saa7146_setgpio(saa, 1, SAA7146_GPIO_OUTHI);
--	ttpci_budget_set_video_port(saa, BUDGET_VIDEO_PORTB);
--	return 0;
--}
--
--static int ciintf_slot_shutdown(struct dvb_ca_en50221 *ca, int slot)
--{
--	struct budget_ci *budget_ci = (struct budget_ci *) ca->data;
--	struct saa7146_dev *saa = budget_ci->budget.dev;
--
--	if (slot != 0)
--		return -EINVAL;
--
--	saa7146_setgpio(saa, 1, SAA7146_GPIO_OUTHI);
--	ttpci_budget_set_video_port(saa, BUDGET_VIDEO_PORTB);
--	return 0;
--}
--
--static int ciintf_slot_ts_enable(struct dvb_ca_en50221 *ca, int slot)
--{
--	struct budget_ci *budget_ci = (struct budget_ci *) ca->data;
--	struct saa7146_dev *saa = budget_ci->budget.dev;
--	int tmp;
--
--	if (slot != 0)
--		return -EINVAL;
--
--	saa7146_setgpio(saa, 1, SAA7146_GPIO_OUTLO);
--
--	tmp = ttpci_budget_debiread(&budget_ci->budget, DEBICICTL, DEBIADDR_CICONTROL, 1, 1, 0);
--	ttpci_budget_debiwrite(&budget_ci->budget, DEBICICTL, DEBIADDR_CICONTROL, 1,
--			       tmp | CICONTROL_ENABLETS, 1, 0);
--
--	ttpci_budget_set_video_port(saa, BUDGET_VIDEO_PORTA);
--	return 0;
--}
--
--static void ciintf_interrupt(struct tasklet_struct *t)
--{
--	struct budget_ci *budget_ci = from_tasklet(budget_ci, t,
--						   ciintf_irq_tasklet);
--	struct saa7146_dev *saa = budget_ci->budget.dev;
--	unsigned int flags;
--
--	// ensure we don't get spurious IRQs during initialisation
--	if (!budget_ci->budget.ci_present)
--		return;
--
--	// read the CAM status
--	flags = ttpci_budget_debiread(&budget_ci->budget, DEBICICTL, DEBIADDR_CICONTROL, 1, 1, 0);
--	if (flags & CICONTROL_CAMDETECT) {
--
--		// GPIO should be set to trigger on falling edge if a CAM is present
--		saa7146_setgpio(saa, 0, SAA7146_GPIO_IRQLO);
--
--		if (budget_ci->slot_status & SLOTSTATUS_NONE) {
--			// CAM insertion IRQ
--			budget_ci->slot_status = SLOTSTATUS_PRESENT;
--			dvb_ca_en50221_camchange_irq(&budget_ci->ca, 0,
--						     DVB_CA_EN50221_CAMCHANGE_INSERTED);
--
--		} else if (budget_ci->slot_status & SLOTSTATUS_RESET) {
--			// CAM ready (reset completed)
--			budget_ci->slot_status = SLOTSTATUS_READY;
--			dvb_ca_en50221_camready_irq(&budget_ci->ca, 0);
--
--		} else if (budget_ci->slot_status & SLOTSTATUS_READY) {
--			// FR/DA IRQ
--			dvb_ca_en50221_frda_irq(&budget_ci->ca, 0);
--		}
--	} else {
--
--		// trigger on rising edge if a CAM is not present - when a CAM is inserted, we
--		// only want to get the IRQ when it sets READY. If we trigger on the falling edge,
--		// the CAM might not actually be ready yet.
--		saa7146_setgpio(saa, 0, SAA7146_GPIO_IRQHI);
--
--		// generate a CAM removal IRQ if we haven't already
--		if (budget_ci->slot_status & SLOTSTATUS_OCCUPIED) {
--			// CAM removal IRQ
--			budget_ci->slot_status = SLOTSTATUS_NONE;
--			dvb_ca_en50221_camchange_irq(&budget_ci->ca, 0,
--						     DVB_CA_EN50221_CAMCHANGE_REMOVED);
--		}
--	}
--}
--
--static int ciintf_poll_slot_status(struct dvb_ca_en50221 *ca, int slot, int open)
--{
--	struct budget_ci *budget_ci = (struct budget_ci *) ca->data;
--	unsigned int flags;
--
--	// ensure we don't get spurious IRQs during initialisation
--	if (!budget_ci->budget.ci_present)
--		return -EINVAL;
--
--	// read the CAM status
--	flags = ttpci_budget_debiread(&budget_ci->budget, DEBICICTL, DEBIADDR_CICONTROL, 1, 1, 0);
--	if (flags & CICONTROL_CAMDETECT) {
--		// mark it as present if it wasn't before
--		if (budget_ci->slot_status & SLOTSTATUS_NONE) {
--			budget_ci->slot_status = SLOTSTATUS_PRESENT;
--		}
--
--		// during a RESET, we check if we can read from IO memory to see when CAM is ready
--		if (budget_ci->slot_status & SLOTSTATUS_RESET) {
--			if (ciintf_read_attribute_mem(ca, slot, 0) == 0x1d) {
--				budget_ci->slot_status = SLOTSTATUS_READY;
--			}
--		}
--	} else {
--		budget_ci->slot_status = SLOTSTATUS_NONE;
--	}
--
--	if (budget_ci->slot_status != SLOTSTATUS_NONE) {
--		if (budget_ci->slot_status & SLOTSTATUS_READY) {
--			return DVB_CA_EN50221_POLL_CAM_PRESENT | DVB_CA_EN50221_POLL_CAM_READY;
--		}
--		return DVB_CA_EN50221_POLL_CAM_PRESENT;
--	}
--
--	return 0;
--}
--
--static int ciintf_init(struct budget_ci *budget_ci)
--{
--	struct saa7146_dev *saa = budget_ci->budget.dev;
--	int flags;
--	int result;
--	int ci_version;
--	int ca_flags;
--
--	memset(&budget_ci->ca, 0, sizeof(struct dvb_ca_en50221));
--
--	// enable DEBI pins
--	saa7146_write(saa, MC1, MASK_27 | MASK_11);
--
--	// test if it is there
--	ci_version = ttpci_budget_debiread(&budget_ci->budget, DEBICICTL, DEBIADDR_CIVERSION, 1, 1, 0);
--	if ((ci_version & 0xa0) != 0xa0) {
--		result = -ENODEV;
--		goto error;
--	}
--
--	// determine whether a CAM is present or not
--	flags = ttpci_budget_debiread(&budget_ci->budget, DEBICICTL, DEBIADDR_CICONTROL, 1, 1, 0);
--	budget_ci->slot_status = SLOTSTATUS_NONE;
--	if (flags & CICONTROL_CAMDETECT)
--		budget_ci->slot_status = SLOTSTATUS_PRESENT;
--
--	// version 0xa2 of the CI firmware doesn't generate interrupts
--	if (ci_version == 0xa2) {
--		ca_flags = 0;
--		budget_ci->ci_irq = 0;
--	} else {
--		ca_flags = DVB_CA_EN50221_FLAG_IRQ_CAMCHANGE |
--				DVB_CA_EN50221_FLAG_IRQ_FR |
--				DVB_CA_EN50221_FLAG_IRQ_DA;
--		budget_ci->ci_irq = 1;
--	}
--
--	// register CI interface
--	budget_ci->ca.owner = THIS_MODULE;
--	budget_ci->ca.read_attribute_mem = ciintf_read_attribute_mem;
--	budget_ci->ca.write_attribute_mem = ciintf_write_attribute_mem;
--	budget_ci->ca.read_cam_control = ciintf_read_cam_control;
--	budget_ci->ca.write_cam_control = ciintf_write_cam_control;
--	budget_ci->ca.slot_reset = ciintf_slot_reset;
--	budget_ci->ca.slot_shutdown = ciintf_slot_shutdown;
--	budget_ci->ca.slot_ts_enable = ciintf_slot_ts_enable;
--	budget_ci->ca.poll_slot_status = ciintf_poll_slot_status;
--	budget_ci->ca.data = budget_ci;
--	if ((result = dvb_ca_en50221_init(&budget_ci->budget.dvb_adapter,
--					  &budget_ci->ca,
--					  ca_flags, 1)) != 0) {
--		printk("budget_ci: CI interface detected, but initialisation failed.\n");
--		goto error;
--	}
--
--	// Setup CI slot IRQ
--	if (budget_ci->ci_irq) {
--		tasklet_setup(&budget_ci->ciintf_irq_tasklet, ciintf_interrupt);
--		if (budget_ci->slot_status != SLOTSTATUS_NONE) {
--			saa7146_setgpio(saa, 0, SAA7146_GPIO_IRQLO);
--		} else {
--			saa7146_setgpio(saa, 0, SAA7146_GPIO_IRQHI);
--		}
--		SAA7146_IER_ENABLE(saa, MASK_03);
--	}
--
--	// enable interface
--	ttpci_budget_debiwrite(&budget_ci->budget, DEBICICTL, DEBIADDR_CICONTROL, 1,
--			       CICONTROL_RESET, 1, 0);
--
--	// success!
--	printk("budget_ci: CI interface initialised\n");
--	budget_ci->budget.ci_present = 1;
--
--	// forge a fake CI IRQ so the CAM state is setup correctly
--	if (budget_ci->ci_irq) {
--		flags = DVB_CA_EN50221_CAMCHANGE_REMOVED;
--		if (budget_ci->slot_status != SLOTSTATUS_NONE)
--			flags = DVB_CA_EN50221_CAMCHANGE_INSERTED;
--		dvb_ca_en50221_camchange_irq(&budget_ci->ca, 0, flags);
--	}
--
--	return 0;
--
--error:
--	saa7146_write(saa, MC1, MASK_27);
--	return result;
--}
--
--static void ciintf_deinit(struct budget_ci *budget_ci)
--{
--	struct saa7146_dev *saa = budget_ci->budget.dev;
--
--	// disable CI interrupts
--	if (budget_ci->ci_irq) {
--		SAA7146_IER_DISABLE(saa, MASK_03);
--		saa7146_setgpio(saa, 0, SAA7146_GPIO_INPUT);
--		tasklet_kill(&budget_ci->ciintf_irq_tasklet);
--	}
--
--	// reset interface
--	ttpci_budget_debiwrite(&budget_ci->budget, DEBICICTL, DEBIADDR_CICONTROL, 1, 0, 1, 0);
--	msleep(1);
--	ttpci_budget_debiwrite(&budget_ci->budget, DEBICICTL, DEBIADDR_CICONTROL, 1,
--			       CICONTROL_RESET, 1, 0);
--
--	// disable TS data stream to CI interface
--	saa7146_setgpio(saa, 1, SAA7146_GPIO_INPUT);
--
--	// release the CA device
--	dvb_ca_en50221_release(&budget_ci->ca);
--
--	// disable DEBI pins
--	saa7146_write(saa, MC1, MASK_27);
--}
--
--static void budget_ci_irq(struct saa7146_dev *dev, u32 * isr)
--{
--	struct budget_ci *budget_ci = (struct budget_ci *) dev->ext_priv;
--
--	dprintk(8, "dev: %p, budget_ci: %p\n", dev, budget_ci);
--
--	if (*isr & MASK_06)
--		tasklet_schedule(&budget_ci->ir.msp430_irq_tasklet);
--
--	if (*isr & MASK_10)
--		ttpci_budget_irq10_handler(dev, isr);
--
--	if ((*isr & MASK_03) && (budget_ci->budget.ci_present) && (budget_ci->ci_irq))
--		tasklet_schedule(&budget_ci->ciintf_irq_tasklet);
--}
--
--static u8 philips_su1278_tt_inittab[] = {
--	0x01, 0x0f,
--	0x02, 0x30,
--	0x03, 0x00,
--	0x04, 0x5b,
--	0x05, 0x85,
--	0x06, 0x02,
--	0x07, 0x00,
--	0x08, 0x02,
--	0x09, 0x00,
--	0x0C, 0x01,
--	0x0D, 0x81,
--	0x0E, 0x44,
--	0x0f, 0x14,
--	0x10, 0x3c,
--	0x11, 0x84,
--	0x12, 0xda,
--	0x13, 0x97,
--	0x14, 0x95,
--	0x15, 0xc9,
--	0x16, 0x19,
--	0x17, 0x8c,
--	0x18, 0x59,
--	0x19, 0xf8,
--	0x1a, 0xfe,
--	0x1c, 0x7f,
--	0x1d, 0x00,
--	0x1e, 0x00,
--	0x1f, 0x50,
--	0x20, 0x00,
--	0x21, 0x00,
--	0x22, 0x00,
--	0x23, 0x00,
--	0x28, 0x00,
--	0x29, 0x28,
--	0x2a, 0x14,
--	0x2b, 0x0f,
--	0x2c, 0x09,
--	0x2d, 0x09,
--	0x31, 0x1f,
--	0x32, 0x19,
--	0x33, 0xfc,
--	0x34, 0x93,
--	0xff, 0xff
--};
--
--static int philips_su1278_tt_set_symbol_rate(struct dvb_frontend *fe, u32 srate, u32 ratio)
--{
--	stv0299_writereg(fe, 0x0e, 0x44);
--	if (srate >= 10000000) {
--		stv0299_writereg(fe, 0x13, 0x97);
--		stv0299_writereg(fe, 0x14, 0x95);
--		stv0299_writereg(fe, 0x15, 0xc9);
--		stv0299_writereg(fe, 0x17, 0x8c);
--		stv0299_writereg(fe, 0x1a, 0xfe);
--		stv0299_writereg(fe, 0x1c, 0x7f);
--		stv0299_writereg(fe, 0x2d, 0x09);
--	} else {
--		stv0299_writereg(fe, 0x13, 0x99);
--		stv0299_writereg(fe, 0x14, 0x8d);
--		stv0299_writereg(fe, 0x15, 0xce);
--		stv0299_writereg(fe, 0x17, 0x43);
--		stv0299_writereg(fe, 0x1a, 0x1d);
--		stv0299_writereg(fe, 0x1c, 0x12);
--		stv0299_writereg(fe, 0x2d, 0x05);
--	}
--	stv0299_writereg(fe, 0x0e, 0x23);
--	stv0299_writereg(fe, 0x0f, 0x94);
--	stv0299_writereg(fe, 0x10, 0x39);
--	stv0299_writereg(fe, 0x15, 0xc9);
--
--	stv0299_writereg(fe, 0x1f, (ratio >> 16) & 0xff);
--	stv0299_writereg(fe, 0x20, (ratio >> 8) & 0xff);
--	stv0299_writereg(fe, 0x21, (ratio) & 0xf0);
--
--	return 0;
--}
--
--static int philips_su1278_tt_tuner_set_params(struct dvb_frontend *fe)
--{
--	struct dtv_frontend_properties *p = &fe->dtv_property_cache;
--	struct budget_ci *budget_ci = (struct budget_ci *) fe->dvb->priv;
--	u32 div;
--	u8 buf[4];
--	struct i2c_msg msg = {.addr = 0x60,.flags = 0,.buf = buf,.len = sizeof(buf) };
--
--	if ((p->frequency < 950000) || (p->frequency > 2150000))
--		return -EINVAL;
--
--	div = (p->frequency + (500 - 1)) / 500;	/* round correctly */
--	buf[0] = (div >> 8) & 0x7f;
--	buf[1] = div & 0xff;
--	buf[2] = 0x80 | ((div & 0x18000) >> 10) | 2;
--	buf[3] = 0x20;
--
--	if (p->symbol_rate < 4000000)
--		buf[3] |= 1;
--
--	if (p->frequency < 1250000)
--		buf[3] |= 0;
--	else if (p->frequency < 1550000)
--		buf[3] |= 0x40;
--	else if (p->frequency < 2050000)
--		buf[3] |= 0x80;
--	else if (p->frequency < 2150000)
--		buf[3] |= 0xC0;
--
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer(&budget_ci->budget.i2c_adap, &msg, 1) != 1)
--		return -EIO;
--	return 0;
--}
--
--static const struct stv0299_config philips_su1278_tt_config = {
--
--	.demod_address = 0x68,
--	.inittab = philips_su1278_tt_inittab,
--	.mclk = 64000000UL,
--	.invert = 0,
--	.skip_reinit = 1,
--	.lock_output = STV0299_LOCKOUTPUT_1,
--	.volt13_op0_op1 = STV0299_VOLT13_OP1,
--	.min_delay_ms = 50,
--	.set_symbol_rate = philips_su1278_tt_set_symbol_rate,
--};
--
--
--
--static int philips_tdm1316l_tuner_init(struct dvb_frontend *fe)
--{
--	struct budget_ci *budget_ci = (struct budget_ci *) fe->dvb->priv;
--	static u8 td1316_init[] = { 0x0b, 0xf5, 0x85, 0xab };
--	static u8 disable_mc44BC374c[] = { 0x1d, 0x74, 0xa0, 0x68 };
--	struct i2c_msg tuner_msg = {.addr = budget_ci->tuner_pll_address,.flags = 0,.buf = td1316_init,.len =
--			sizeof(td1316_init) };
--
--	// setup PLL configuration
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer(&budget_ci->budget.i2c_adap, &tuner_msg, 1) != 1)
--		return -EIO;
--	msleep(1);
--
--	// disable the mc44BC374c (do not check for errors)
--	tuner_msg.addr = 0x65;
--	tuner_msg.buf = disable_mc44BC374c;
--	tuner_msg.len = sizeof(disable_mc44BC374c);
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer(&budget_ci->budget.i2c_adap, &tuner_msg, 1) != 1) {
--		if (fe->ops.i2c_gate_ctrl)
--			fe->ops.i2c_gate_ctrl(fe, 1);
--		i2c_transfer(&budget_ci->budget.i2c_adap, &tuner_msg, 1);
--	}
--
--	return 0;
--}
--
--static int philips_tdm1316l_tuner_set_params(struct dvb_frontend *fe)
--{
--	struct dtv_frontend_properties *p = &fe->dtv_property_cache;
--	struct budget_ci *budget_ci = (struct budget_ci *) fe->dvb->priv;
--	u8 tuner_buf[4];
--	struct i2c_msg tuner_msg = {.addr = budget_ci->tuner_pll_address,.flags = 0,.buf = tuner_buf,.len = sizeof(tuner_buf) };
--	int tuner_frequency = 0;
--	u8 band, cp, filter;
--
--	// determine charge pump
--	tuner_frequency = p->frequency + 36130000;
--	if (tuner_frequency < 87000000)
--		return -EINVAL;
--	else if (tuner_frequency < 130000000)
--		cp = 3;
--	else if (tuner_frequency < 160000000)
--		cp = 5;
--	else if (tuner_frequency < 200000000)
--		cp = 6;
--	else if (tuner_frequency < 290000000)
--		cp = 3;
--	else if (tuner_frequency < 420000000)
--		cp = 5;
--	else if (tuner_frequency < 480000000)
--		cp = 6;
--	else if (tuner_frequency < 620000000)
--		cp = 3;
--	else if (tuner_frequency < 830000000)
--		cp = 5;
--	else if (tuner_frequency < 895000000)
--		cp = 7;
--	else
--		return -EINVAL;
--
--	// determine band
--	if (p->frequency < 49000000)
--		return -EINVAL;
--	else if (p->frequency < 159000000)
--		band = 1;
--	else if (p->frequency < 444000000)
--		band = 2;
--	else if (p->frequency < 861000000)
--		band = 4;
--	else
--		return -EINVAL;
--
--	// setup PLL filter and TDA9889
--	switch (p->bandwidth_hz) {
--	case 6000000:
--		tda1004x_writereg(fe, 0x0C, 0x14);
--		filter = 0;
--		break;
--
--	case 7000000:
--		tda1004x_writereg(fe, 0x0C, 0x80);
--		filter = 0;
--		break;
--
--	case 8000000:
--		tda1004x_writereg(fe, 0x0C, 0x14);
--		filter = 1;
--		break;
--
--	default:
--		return -EINVAL;
--	}
--
--	// calculate divisor
--	// ((36130000+((1000000/6)/2)) + Finput)/(1000000/6)
--	tuner_frequency = (((p->frequency / 1000) * 6) + 217280) / 1000;
--
--	// setup tuner buffer
--	tuner_buf[0] = tuner_frequency >> 8;
--	tuner_buf[1] = tuner_frequency & 0xff;
--	tuner_buf[2] = 0xca;
--	tuner_buf[3] = (cp << 5) | (filter << 3) | band;
--
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer(&budget_ci->budget.i2c_adap, &tuner_msg, 1) != 1)
--		return -EIO;
--
--	msleep(1);
--	return 0;
--}
--
--static int philips_tdm1316l_request_firmware(struct dvb_frontend *fe,
--					     const struct firmware **fw, char *name)
--{
--	struct budget_ci *budget_ci = (struct budget_ci *) fe->dvb->priv;
--
--	return request_firmware(fw, name, &budget_ci->budget.dev->pci->dev);
--}
--
--static struct tda1004x_config philips_tdm1316l_config = {
--
--	.demod_address = 0x8,
--	.invert = 0,
--	.invert_oclk = 0,
--	.xtal_freq = TDA10046_XTAL_4M,
--	.agc_config = TDA10046_AGC_DEFAULT,
--	.if_freq = TDA10046_FREQ_3617,
--	.request_firmware = philips_tdm1316l_request_firmware,
--};
--
--static struct tda1004x_config philips_tdm1316l_config_invert = {
--
--	.demod_address = 0x8,
--	.invert = 1,
--	.invert_oclk = 0,
--	.xtal_freq = TDA10046_XTAL_4M,
--	.agc_config = TDA10046_AGC_DEFAULT,
--	.if_freq = TDA10046_FREQ_3617,
--	.request_firmware = philips_tdm1316l_request_firmware,
--};
--
--static int dvbc_philips_tdm1316l_tuner_set_params(struct dvb_frontend *fe)
--{
--	struct dtv_frontend_properties *p = &fe->dtv_property_cache;
--	struct budget_ci *budget_ci = (struct budget_ci *) fe->dvb->priv;
--	u8 tuner_buf[5];
--	struct i2c_msg tuner_msg = {.addr = budget_ci->tuner_pll_address,
--				    .flags = 0,
--				    .buf = tuner_buf,
--				    .len = sizeof(tuner_buf) };
--	int tuner_frequency = 0;
--	u8 band, cp, filter;
--
--	// determine charge pump
--	tuner_frequency = p->frequency + 36125000;
--	if (tuner_frequency < 87000000)
--		return -EINVAL;
--	else if (tuner_frequency < 130000000) {
--		cp = 3;
--		band = 1;
--	} else if (tuner_frequency < 160000000) {
--		cp = 5;
--		band = 1;
--	} else if (tuner_frequency < 200000000) {
--		cp = 6;
--		band = 1;
--	} else if (tuner_frequency < 290000000) {
--		cp = 3;
--		band = 2;
--	} else if (tuner_frequency < 420000000) {
--		cp = 5;
--		band = 2;
--	} else if (tuner_frequency < 480000000) {
--		cp = 6;
--		band = 2;
--	} else if (tuner_frequency < 620000000) {
--		cp = 3;
--		band = 4;
--	} else if (tuner_frequency < 830000000) {
--		cp = 5;
--		band = 4;
--	} else if (tuner_frequency < 895000000) {
--		cp = 7;
--		band = 4;
--	} else
--		return -EINVAL;
--
--	// assume PLL filter should always be 8MHz for the moment.
--	filter = 1;
--
--	// calculate divisor
--	tuner_frequency = (p->frequency + 36125000 + (62500/2)) / 62500;
--
--	// setup tuner buffer
--	tuner_buf[0] = tuner_frequency >> 8;
--	tuner_buf[1] = tuner_frequency & 0xff;
--	tuner_buf[2] = 0xc8;
--	tuner_buf[3] = (cp << 5) | (filter << 3) | band;
--	tuner_buf[4] = 0x80;
--
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer(&budget_ci->budget.i2c_adap, &tuner_msg, 1) != 1)
--		return -EIO;
--
--	msleep(50);
--
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer(&budget_ci->budget.i2c_adap, &tuner_msg, 1) != 1)
--		return -EIO;
--
--	msleep(1);
--
--	return 0;
--}
--
--static u8 dvbc_philips_tdm1316l_inittab[] = {
--	0x80, 0x01,
--	0x80, 0x00,
--	0x81, 0x01,
--	0x81, 0x00,
--	0x00, 0x09,
--	0x01, 0x69,
--	0x03, 0x00,
--	0x04, 0x00,
--	0x07, 0x00,
--	0x08, 0x00,
--	0x20, 0x00,
--	0x21, 0x40,
--	0x22, 0x00,
--	0x23, 0x00,
--	0x24, 0x40,
--	0x25, 0x88,
--	0x30, 0xff,
--	0x31, 0x00,
--	0x32, 0xff,
--	0x33, 0x00,
--	0x34, 0x50,
--	0x35, 0x7f,
--	0x36, 0x00,
--	0x37, 0x20,
--	0x38, 0x00,
--	0x40, 0x1c,
--	0x41, 0xff,
--	0x42, 0x29,
--	0x43, 0x20,
--	0x44, 0xff,
--	0x45, 0x00,
--	0x46, 0x00,
--	0x49, 0x04,
--	0x4a, 0x00,
--	0x4b, 0x7b,
--	0x52, 0x30,
--	0x55, 0xae,
--	0x56, 0x47,
--	0x57, 0xe1,
--	0x58, 0x3a,
--	0x5a, 0x1e,
--	0x5b, 0x34,
--	0x60, 0x00,
--	0x63, 0x00,
--	0x64, 0x00,
--	0x65, 0x00,
--	0x66, 0x00,
--	0x67, 0x00,
--	0x68, 0x00,
--	0x69, 0x00,
--	0x6a, 0x02,
--	0x6b, 0x00,
--	0x70, 0xff,
--	0x71, 0x00,
--	0x72, 0x00,
--	0x73, 0x00,
--	0x74, 0x0c,
--	0x80, 0x00,
--	0x81, 0x00,
--	0x82, 0x00,
--	0x83, 0x00,
--	0x84, 0x04,
--	0x85, 0x80,
--	0x86, 0x24,
--	0x87, 0x78,
--	0x88, 0x10,
--	0x89, 0x00,
--	0x90, 0x01,
--	0x91, 0x01,
--	0xa0, 0x04,
--	0xa1, 0x00,
--	0xa2, 0x00,
--	0xb0, 0x91,
--	0xb1, 0x0b,
--	0xc0, 0x53,
--	0xc1, 0x70,
--	0xc2, 0x12,
--	0xd0, 0x00,
--	0xd1, 0x00,
--	0xd2, 0x00,
--	0xd3, 0x00,
--	0xd4, 0x00,
--	0xd5, 0x00,
--	0xde, 0x00,
--	0xdf, 0x00,
--	0x61, 0x38,
--	0x62, 0x0a,
--	0x53, 0x13,
--	0x59, 0x08,
--	0xff, 0xff,
--};
--
--static struct stv0297_config dvbc_philips_tdm1316l_config = {
--	.demod_address = 0x1c,
--	.inittab = dvbc_philips_tdm1316l_inittab,
--	.invert = 0,
--	.stop_during_read = 1,
--};
--
--static struct tda10023_config tda10023_config = {
--	.demod_address = 0xc,
--	.invert = 0,
--	.xtal = 16000000,
--	.pll_m = 11,
--	.pll_p = 3,
--	.pll_n = 1,
--	.deltaf = 0xa511,
--};
--
--static struct tda827x_config tda827x_config = {
--	.config = 0,
--};
--
--/* TT S2-3200 DVB-S (STB0899) Inittab */
--static const struct stb0899_s1_reg tt3200_stb0899_s1_init_1[] = {
--
--	{ STB0899_DEV_ID		, 0x81 },
--	{ STB0899_DISCNTRL1		, 0x32 },
--	{ STB0899_DISCNTRL2		, 0x80 },
--	{ STB0899_DISRX_ST0		, 0x04 },
--	{ STB0899_DISRX_ST1		, 0x00 },
--	{ STB0899_DISPARITY		, 0x00 },
--	{ STB0899_DISSTATUS		, 0x20 },
--	{ STB0899_DISF22		, 0x8c },
--	{ STB0899_DISF22RX		, 0x9a },
--	{ STB0899_SYSREG		, 0x0b },
--	{ STB0899_ACRPRESC		, 0x11 },
--	{ STB0899_ACRDIV1		, 0x0a },
--	{ STB0899_ACRDIV2		, 0x05 },
--	{ STB0899_DACR1			, 0x00 },
--	{ STB0899_DACR2			, 0x00 },
--	{ STB0899_OUTCFG		, 0x00 },
--	{ STB0899_MODECFG		, 0x00 },
--	{ STB0899_IRQSTATUS_3		, 0x30 },
--	{ STB0899_IRQSTATUS_2		, 0x00 },
--	{ STB0899_IRQSTATUS_1		, 0x00 },
--	{ STB0899_IRQSTATUS_0		, 0x00 },
--	{ STB0899_IRQMSK_3		, 0xf3 },
--	{ STB0899_IRQMSK_2		, 0xfc },
--	{ STB0899_IRQMSK_1		, 0xff },
--	{ STB0899_IRQMSK_0		, 0xff },
--	{ STB0899_IRQCFG		, 0x00 },
--	{ STB0899_I2CCFG		, 0x88 },
--	{ STB0899_I2CRPT		, 0x48 }, /* 12k Pullup, Repeater=16, Stop=disabled */
--	{ STB0899_IOPVALUE5		, 0x00 },
--	{ STB0899_IOPVALUE4		, 0x20 },
--	{ STB0899_IOPVALUE3		, 0xc9 },
--	{ STB0899_IOPVALUE2		, 0x90 },
--	{ STB0899_IOPVALUE1		, 0x40 },
--	{ STB0899_IOPVALUE0		, 0x00 },
--	{ STB0899_GPIO00CFG		, 0x82 },
--	{ STB0899_GPIO01CFG		, 0x82 },
--	{ STB0899_GPIO02CFG		, 0x82 },
--	{ STB0899_GPIO03CFG		, 0x82 },
--	{ STB0899_GPIO04CFG		, 0x82 },
--	{ STB0899_GPIO05CFG		, 0x82 },
--	{ STB0899_GPIO06CFG		, 0x82 },
--	{ STB0899_GPIO07CFG		, 0x82 },
--	{ STB0899_GPIO08CFG		, 0x82 },
--	{ STB0899_GPIO09CFG		, 0x82 },
--	{ STB0899_GPIO10CFG		, 0x82 },
--	{ STB0899_GPIO11CFG		, 0x82 },
--	{ STB0899_GPIO12CFG		, 0x82 },
--	{ STB0899_GPIO13CFG		, 0x82 },
--	{ STB0899_GPIO14CFG		, 0x82 },
--	{ STB0899_GPIO15CFG		, 0x82 },
--	{ STB0899_GPIO16CFG		, 0x82 },
--	{ STB0899_GPIO17CFG		, 0x82 },
--	{ STB0899_GPIO18CFG		, 0x82 },
--	{ STB0899_GPIO19CFG		, 0x82 },
--	{ STB0899_GPIO20CFG		, 0x82 },
--	{ STB0899_SDATCFG		, 0xb8 },
--	{ STB0899_SCLTCFG		, 0xba },
--	{ STB0899_AGCRFCFG		, 0x1c }, /* 0x11 */
--	{ STB0899_GPIO22		, 0x82 }, /* AGCBB2CFG */
--	{ STB0899_GPIO21		, 0x91 }, /* AGCBB1CFG */
--	{ STB0899_DIRCLKCFG		, 0x82 },
--	{ STB0899_CLKOUT27CFG		, 0x7e },
--	{ STB0899_STDBYCFG		, 0x82 },
--	{ STB0899_CS0CFG		, 0x82 },
--	{ STB0899_CS1CFG		, 0x82 },
--	{ STB0899_DISEQCOCFG		, 0x20 },
--	{ STB0899_GPIO32CFG		, 0x82 },
--	{ STB0899_GPIO33CFG		, 0x82 },
--	{ STB0899_GPIO34CFG		, 0x82 },
--	{ STB0899_GPIO35CFG		, 0x82 },
--	{ STB0899_GPIO36CFG		, 0x82 },
--	{ STB0899_GPIO37CFG		, 0x82 },
--	{ STB0899_GPIO38CFG		, 0x82 },
--	{ STB0899_GPIO39CFG		, 0x82 },
--	{ STB0899_NCOARSE		, 0x15 }, /* 0x15 = 27 Mhz Clock, F/3 = 198MHz, F/6 = 99MHz */
--	{ STB0899_SYNTCTRL		, 0x02 }, /* 0x00 = CLK from CLKI, 0x02 = CLK from XTALI */
--	{ STB0899_FILTCTRL		, 0x00 },
--	{ STB0899_SYSCTRL		, 0x00 },
--	{ STB0899_STOPCLK1		, 0x20 },
--	{ STB0899_STOPCLK2		, 0x00 },
--	{ STB0899_INTBUFSTATUS		, 0x00 },
--	{ STB0899_INTBUFCTRL		, 0x0a },
--	{ 0xffff			, 0xff },
--};
--
--static const struct stb0899_s1_reg tt3200_stb0899_s1_init_3[] = {
--	{ STB0899_DEMOD			, 0x00 },
--	{ STB0899_RCOMPC		, 0xc9 },
--	{ STB0899_AGC1CN		, 0x41 },
--	{ STB0899_AGC1REF		, 0x10 },
--	{ STB0899_RTC			, 0x7a },
--	{ STB0899_TMGCFG		, 0x4e },
--	{ STB0899_AGC2REF		, 0x34 },
--	{ STB0899_TLSR			, 0x84 },
--	{ STB0899_CFD			, 0xc7 },
--	{ STB0899_ACLC			, 0x87 },
--	{ STB0899_BCLC			, 0x94 },
--	{ STB0899_EQON			, 0x41 },
--	{ STB0899_LDT			, 0xdd },
--	{ STB0899_LDT2			, 0xc9 },
--	{ STB0899_EQUALREF		, 0xb4 },
--	{ STB0899_TMGRAMP		, 0x10 },
--	{ STB0899_TMGTHD		, 0x30 },
--	{ STB0899_IDCCOMP		, 0xfb },
--	{ STB0899_QDCCOMP		, 0x03 },
--	{ STB0899_POWERI		, 0x3b },
--	{ STB0899_POWERQ		, 0x3d },
--	{ STB0899_RCOMP			, 0x81 },
--	{ STB0899_AGCIQIN		, 0x80 },
--	{ STB0899_AGC2I1		, 0x04 },
--	{ STB0899_AGC2I2		, 0xf5 },
--	{ STB0899_TLIR			, 0x25 },
--	{ STB0899_RTF			, 0x80 },
--	{ STB0899_DSTATUS		, 0x00 },
--	{ STB0899_LDI			, 0xca },
--	{ STB0899_CFRM			, 0xf1 },
--	{ STB0899_CFRL			, 0xf3 },
--	{ STB0899_NIRM			, 0x2a },
--	{ STB0899_NIRL			, 0x05 },
--	{ STB0899_ISYMB			, 0x17 },
--	{ STB0899_QSYMB			, 0xfa },
--	{ STB0899_SFRH			, 0x2f },
--	{ STB0899_SFRM			, 0x68 },
--	{ STB0899_SFRL			, 0x40 },
--	{ STB0899_SFRUPH		, 0x2f },
--	{ STB0899_SFRUPM		, 0x68 },
--	{ STB0899_SFRUPL		, 0x40 },
--	{ STB0899_EQUAI1		, 0xfd },
--	{ STB0899_EQUAQ1		, 0x04 },
--	{ STB0899_EQUAI2		, 0x0f },
--	{ STB0899_EQUAQ2		, 0xff },
--	{ STB0899_EQUAI3		, 0xdf },
--	{ STB0899_EQUAQ3		, 0xfa },
--	{ STB0899_EQUAI4		, 0x37 },
--	{ STB0899_EQUAQ4		, 0x0d },
--	{ STB0899_EQUAI5		, 0xbd },
--	{ STB0899_EQUAQ5		, 0xf7 },
--	{ STB0899_DSTATUS2		, 0x00 },
--	{ STB0899_VSTATUS		, 0x00 },
--	{ STB0899_VERROR		, 0xff },
--	{ STB0899_IQSWAP		, 0x2a },
--	{ STB0899_ECNT1M		, 0x00 },
--	{ STB0899_ECNT1L		, 0x00 },
--	{ STB0899_ECNT2M		, 0x00 },
--	{ STB0899_ECNT2L		, 0x00 },
--	{ STB0899_ECNT3M		, 0x00 },
--	{ STB0899_ECNT3L		, 0x00 },
--	{ STB0899_FECAUTO1		, 0x06 },
--	{ STB0899_FECM			, 0x01 },
--	{ STB0899_VTH12			, 0xf0 },
--	{ STB0899_VTH23			, 0xa0 },
--	{ STB0899_VTH34			, 0x78 },
--	{ STB0899_VTH56			, 0x4e },
--	{ STB0899_VTH67			, 0x48 },
--	{ STB0899_VTH78			, 0x38 },
--	{ STB0899_PRVIT			, 0xff },
--	{ STB0899_VITSYNC		, 0x19 },
--	{ STB0899_RSULC			, 0xb1 }, /* DVB = 0xb1, DSS = 0xa1 */
--	{ STB0899_TSULC			, 0x42 },
--	{ STB0899_RSLLC			, 0x40 },
--	{ STB0899_TSLPL			, 0x12 },
--	{ STB0899_TSCFGH		, 0x0c },
--	{ STB0899_TSCFGM		, 0x00 },
--	{ STB0899_TSCFGL		, 0x0c },
--	{ STB0899_TSOUT			, 0x4d }, /* 0x0d for CAM */
--	{ STB0899_RSSYNCDEL		, 0x00 },
--	{ STB0899_TSINHDELH		, 0x02 },
--	{ STB0899_TSINHDELM		, 0x00 },
--	{ STB0899_TSINHDELL		, 0x00 },
--	{ STB0899_TSLLSTKM		, 0x00 },
--	{ STB0899_TSLLSTKL		, 0x00 },
--	{ STB0899_TSULSTKM		, 0x00 },
--	{ STB0899_TSULSTKL		, 0xab },
--	{ STB0899_PCKLENUL		, 0x00 },
--	{ STB0899_PCKLENLL		, 0xcc },
--	{ STB0899_RSPCKLEN		, 0xcc },
--	{ STB0899_TSSTATUS		, 0x80 },
--	{ STB0899_ERRCTRL1		, 0xb6 },
--	{ STB0899_ERRCTRL2		, 0x96 },
--	{ STB0899_ERRCTRL3		, 0x89 },
--	{ STB0899_DMONMSK1		, 0x27 },
--	{ STB0899_DMONMSK0		, 0x03 },
--	{ STB0899_DEMAPVIT		, 0x5c },
--	{ STB0899_PLPARM		, 0x1f },
--	{ STB0899_PDELCTRL		, 0x48 },
--	{ STB0899_PDELCTRL2		, 0x00 },
--	{ STB0899_BBHCTRL1		, 0x00 },
--	{ STB0899_BBHCTRL2		, 0x00 },
--	{ STB0899_HYSTTHRESH		, 0x77 },
--	{ STB0899_MATCSTM		, 0x00 },
--	{ STB0899_MATCSTL		, 0x00 },
--	{ STB0899_UPLCSTM		, 0x00 },
--	{ STB0899_UPLCSTL		, 0x00 },
--	{ STB0899_DFLCSTM		, 0x00 },
--	{ STB0899_DFLCSTL		, 0x00 },
--	{ STB0899_SYNCCST		, 0x00 },
--	{ STB0899_SYNCDCSTM		, 0x00 },
--	{ STB0899_SYNCDCSTL		, 0x00 },
--	{ STB0899_ISI_ENTRY		, 0x00 },
--	{ STB0899_ISI_BIT_EN		, 0x00 },
--	{ STB0899_MATSTRM		, 0x00 },
--	{ STB0899_MATSTRL		, 0x00 },
--	{ STB0899_UPLSTRM		, 0x00 },
--	{ STB0899_UPLSTRL		, 0x00 },
--	{ STB0899_DFLSTRM		, 0x00 },
--	{ STB0899_DFLSTRL		, 0x00 },
--	{ STB0899_SYNCSTR		, 0x00 },
--	{ STB0899_SYNCDSTRM		, 0x00 },
--	{ STB0899_SYNCDSTRL		, 0x00 },
--	{ STB0899_CFGPDELSTATUS1	, 0x10 },
--	{ STB0899_CFGPDELSTATUS2	, 0x00 },
--	{ STB0899_BBFERRORM		, 0x00 },
--	{ STB0899_BBFERRORL		, 0x00 },
--	{ STB0899_UPKTERRORM		, 0x00 },
--	{ STB0899_UPKTERRORL		, 0x00 },
--	{ 0xffff			, 0xff },
--};
--
--static struct stb0899_config tt3200_config = {
--	.init_dev		= tt3200_stb0899_s1_init_1,
--	.init_s2_demod		= stb0899_s2_init_2,
--	.init_s1_demod		= tt3200_stb0899_s1_init_3,
--	.init_s2_fec		= stb0899_s2_init_4,
--	.init_tst		= stb0899_s1_init_5,
--
--	.postproc		= NULL,
--
--	.demod_address		= 0x68,
--
--	.xtal_freq		= 27000000,
--	.inversion		= IQ_SWAP_ON,
--
--	.lo_clk			= 76500000,
--	.hi_clk			= 99000000,
--
--	.esno_ave		= STB0899_DVBS2_ESNO_AVE,
--	.esno_quant		= STB0899_DVBS2_ESNO_QUANT,
--	.avframes_coarse	= STB0899_DVBS2_AVFRAMES_COARSE,
--	.avframes_fine		= STB0899_DVBS2_AVFRAMES_FINE,
--	.miss_threshold		= STB0899_DVBS2_MISS_THRESHOLD,
--	.uwp_threshold_acq	= STB0899_DVBS2_UWP_THRESHOLD_ACQ,
--	.uwp_threshold_track	= STB0899_DVBS2_UWP_THRESHOLD_TRACK,
--	.uwp_threshold_sof	= STB0899_DVBS2_UWP_THRESHOLD_SOF,
--	.sof_search_timeout	= STB0899_DVBS2_SOF_SEARCH_TIMEOUT,
--
--	.btr_nco_bits		= STB0899_DVBS2_BTR_NCO_BITS,
--	.btr_gain_shift_offset	= STB0899_DVBS2_BTR_GAIN_SHIFT_OFFSET,
--	.crl_nco_bits		= STB0899_DVBS2_CRL_NCO_BITS,
--	.ldpc_max_iter		= STB0899_DVBS2_LDPC_MAX_ITER,
--
--	.tuner_get_frequency	= stb6100_get_frequency,
--	.tuner_set_frequency	= stb6100_set_frequency,
--	.tuner_set_bandwidth	= stb6100_set_bandwidth,
--	.tuner_get_bandwidth	= stb6100_get_bandwidth,
--	.tuner_set_rfsiggain	= NULL
--};
--
--static struct stb6100_config tt3200_stb6100_config = {
--	.tuner_address	= 0x60,
--	.refclock	= 27000000,
--};
--
--static void frontend_init(struct budget_ci *budget_ci)
--{
--	switch (budget_ci->budget.dev->pci->subsystem_device) {
--	case 0x100c:		// Hauppauge/TT Nova-CI budget (stv0299/ALPS BSRU6(tsa5059))
--		budget_ci->budget.dvb_frontend =
--			dvb_attach(stv0299_attach, &alps_bsru6_config, &budget_ci->budget.i2c_adap);
--		if (budget_ci->budget.dvb_frontend) {
--			budget_ci->budget.dvb_frontend->ops.tuner_ops.set_params = alps_bsru6_tuner_set_params;
--			budget_ci->budget.dvb_frontend->tuner_priv = &budget_ci->budget.i2c_adap;
--			break;
--		}
--		break;
--
--	case 0x100f:		// Hauppauge/TT Nova-CI budget (stv0299b/Philips su1278(tsa5059))
--		budget_ci->budget.dvb_frontend =
--			dvb_attach(stv0299_attach, &philips_su1278_tt_config, &budget_ci->budget.i2c_adap);
--		if (budget_ci->budget.dvb_frontend) {
--			budget_ci->budget.dvb_frontend->ops.tuner_ops.set_params = philips_su1278_tt_tuner_set_params;
--			break;
--		}
--		break;
--
--	case 0x1010:		// TT DVB-C CI budget (stv0297/Philips tdm1316l(tda6651tt))
--		budget_ci->tuner_pll_address = 0x61;
--		budget_ci->budget.dvb_frontend =
--			dvb_attach(stv0297_attach, &dvbc_philips_tdm1316l_config, &budget_ci->budget.i2c_adap);
--		if (budget_ci->budget.dvb_frontend) {
--			budget_ci->budget.dvb_frontend->ops.tuner_ops.set_params = dvbc_philips_tdm1316l_tuner_set_params;
--			break;
--		}
--		break;
--
--	case 0x1011:		// Hauppauge/TT Nova-T budget (tda10045/Philips tdm1316l(tda6651tt) + TDA9889)
--		budget_ci->tuner_pll_address = 0x63;
--		budget_ci->budget.dvb_frontend =
--			dvb_attach(tda10045_attach, &philips_tdm1316l_config, &budget_ci->budget.i2c_adap);
--		if (budget_ci->budget.dvb_frontend) {
--			budget_ci->budget.dvb_frontend->ops.tuner_ops.init = philips_tdm1316l_tuner_init;
--			budget_ci->budget.dvb_frontend->ops.tuner_ops.set_params = philips_tdm1316l_tuner_set_params;
--			break;
--		}
--		break;
--
--	case 0x1012:		// TT DVB-T CI budget (tda10046/Philips tdm1316l(tda6651tt))
--		budget_ci->tuner_pll_address = 0x60;
--		budget_ci->budget.dvb_frontend =
--			dvb_attach(tda10046_attach, &philips_tdm1316l_config_invert, &budget_ci->budget.i2c_adap);
--		if (budget_ci->budget.dvb_frontend) {
--			budget_ci->budget.dvb_frontend->ops.tuner_ops.init = philips_tdm1316l_tuner_init;
--			budget_ci->budget.dvb_frontend->ops.tuner_ops.set_params = philips_tdm1316l_tuner_set_params;
--			break;
--		}
--		break;
--
--	case 0x1017:		// TT S-1500 PCI
--		budget_ci->budget.dvb_frontend = dvb_attach(stv0299_attach, &alps_bsbe1_config, &budget_ci->budget.i2c_adap);
--		if (budget_ci->budget.dvb_frontend) {
--			budget_ci->budget.dvb_frontend->ops.tuner_ops.set_params = alps_bsbe1_tuner_set_params;
--			budget_ci->budget.dvb_frontend->tuner_priv = &budget_ci->budget.i2c_adap;
--
--			budget_ci->budget.dvb_frontend->ops.dishnetwork_send_legacy_command = NULL;
--			if (dvb_attach(lnbp21_attach, budget_ci->budget.dvb_frontend, &budget_ci->budget.i2c_adap, LNBP21_LLC, 0) == NULL) {
--				printk("%s: No LNBP21 found!\n", __func__);
--				dvb_frontend_detach(budget_ci->budget.dvb_frontend);
--				budget_ci->budget.dvb_frontend = NULL;
--			}
--		}
--		break;
--
--	case 0x101a: /* TT Budget-C-1501 (philips tda10023/philips tda8274A) */
--		budget_ci->budget.dvb_frontend = dvb_attach(tda10023_attach, &tda10023_config, &budget_ci->budget.i2c_adap, 0x48);
--		if (budget_ci->budget.dvb_frontend) {
--			if (dvb_attach(tda827x_attach, budget_ci->budget.dvb_frontend, 0x61, &budget_ci->budget.i2c_adap, &tda827x_config) == NULL) {
--				printk(KERN_ERR "%s: No tda827x found!\n", __func__);
--				dvb_frontend_detach(budget_ci->budget.dvb_frontend);
--				budget_ci->budget.dvb_frontend = NULL;
--			}
--		}
--		break;
--
--	case 0x101b: /* TT S-1500B (BSBE1-D01A - STV0288/STB6000/LNBP21) */
--		budget_ci->budget.dvb_frontend = dvb_attach(stv0288_attach, &stv0288_bsbe1_d01a_config, &budget_ci->budget.i2c_adap);
--		if (budget_ci->budget.dvb_frontend) {
--			if (dvb_attach(stb6000_attach, budget_ci->budget.dvb_frontend, 0x63, &budget_ci->budget.i2c_adap)) {
--				if (!dvb_attach(lnbp21_attach, budget_ci->budget.dvb_frontend, &budget_ci->budget.i2c_adap, 0, 0)) {
--					printk(KERN_ERR "%s: No LNBP21 found!\n", __func__);
--					dvb_frontend_detach(budget_ci->budget.dvb_frontend);
--					budget_ci->budget.dvb_frontend = NULL;
--				}
--			} else {
--				printk(KERN_ERR "%s: No STB6000 found!\n", __func__);
--				dvb_frontend_detach(budget_ci->budget.dvb_frontend);
--				budget_ci->budget.dvb_frontend = NULL;
--			}
--		}
--		break;
--
--	case 0x1019:		// TT S2-3200 PCI
+-	struct ccdc_params_ycbcr *params = &ccdc_cfg.ycbcr;
+-	u32 temp;
+-
+-	/* first set the CCDC power on defaults values in all registers */
+-	dev_dbg(ccdc_cfg.dev, "\nStarting ccdc_config_ycbcr...");
+-	ccdc_restore_defaults();
+-
+-	/* configure pixel format & video frame format */
+-	temp = (((params->pix_fmt & CCDC_INPUT_MODE_MASK) <<
+-		CCDC_INPUT_MODE_SHIFT) |
+-		((params->frm_fmt & CCDC_FRM_FMT_MASK) <<
+-		CCDC_FRM_FMT_SHIFT));
+-
+-	/* setup BT.656 sync mode */
+-	if (params->bt656_enable) {
+-		regw(CCDC_REC656IF_BT656_EN, REC656IF);
 -		/*
--		 * NOTE! on some STB0899 versions, the internal PLL takes a longer time
--		 * to settle, aka LOCK. On the older revisions of the chip, we don't see
--		 * this, as a result on the newer chips the entire clock tree, will not
--		 * be stable after a freshly POWER 'ed up situation.
--		 * In this case, we should RESET the STB0899 (Active LOW) and wait for
--		 * PLL stabilization.
--		 *
--		 * On the TT S2 3200 and clones, the STB0899 demodulator's RESETB is
--		 * connected to the SAA7146 GPIO, GPIO2, Pin 142
+-		 * configure the FID, VD, HD pin polarity fld,hd pol positive,
+-		 * vd negative, 8-bit pack mode
 -		 */
--		/* Reset Demodulator */
--		saa7146_setgpio(budget_ci->budget.dev, 2, SAA7146_GPIO_OUTLO);
--		/* Wait for everything to die */
--		msleep(50);
--		/* Pull it up out of Reset state */
--		saa7146_setgpio(budget_ci->budget.dev, 2, SAA7146_GPIO_OUTHI);
--		/* Wait for PLL to stabilize */
--		msleep(250);
--		/*
--		 * PLL state should be stable now. Ideally, we should check
--		 * for PLL LOCK status. But well, never mind!
--		 */
--		budget_ci->budget.dvb_frontend = dvb_attach(stb0899_attach, &tt3200_config, &budget_ci->budget.i2c_adap);
--		if (budget_ci->budget.dvb_frontend) {
--			if (dvb_attach(stb6100_attach, budget_ci->budget.dvb_frontend, &tt3200_stb6100_config, &budget_ci->budget.i2c_adap)) {
--				if (!dvb_attach(lnbp21_attach, budget_ci->budget.dvb_frontend, &budget_ci->budget.i2c_adap, 0, 0)) {
--					printk("%s: No LNBP21 found!\n", __func__);
--					dvb_frontend_detach(budget_ci->budget.dvb_frontend);
--					budget_ci->budget.dvb_frontend = NULL;
--				}
--			} else {
--					dvb_frontend_detach(budget_ci->budget.dvb_frontend);
--					budget_ci->budget.dvb_frontend = NULL;
--			}
--		}
--		break;
--
+-		temp |= CCDC_VD_POL_NEGATIVE;
+-	} else {		/* y/c external sync mode */
+-		temp |= (((params->fid_pol & CCDC_FID_POL_MASK) <<
+-			CCDC_FID_POL_SHIFT) |
+-			((params->hd_pol & CCDC_HD_POL_MASK) <<
+-			CCDC_HD_POL_SHIFT) |
+-			((params->vd_pol & CCDC_VD_POL_MASK) <<
+-			CCDC_VD_POL_SHIFT));
 -	}
 -
--	if (budget_ci->budget.dvb_frontend == NULL) {
--		printk("budget-ci: A frontend driver was not found for device [%04x:%04x] subsystem [%04x:%04x]\n",
--		       budget_ci->budget.dev->pci->vendor,
--		       budget_ci->budget.dev->pci->device,
--		       budget_ci->budget.dev->pci->subsystem_vendor,
--		       budget_ci->budget.dev->pci->subsystem_device);
--	} else {
--		if (dvb_register_frontend
--		    (&budget_ci->budget.dvb_adapter, budget_ci->budget.dvb_frontend)) {
--			printk("budget-ci: Frontend registration failed!\n");
--			dvb_frontend_detach(budget_ci->budget.dvb_frontend);
--			budget_ci->budget.dvb_frontend = NULL;
--		}
--	}
--}
+-	/* pack the data to 8-bit */
+-	temp |= CCDC_DATA_PACK_ENABLE;
 -
--static int budget_ci_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_data *info)
--{
--	struct budget_ci *budget_ci;
--	int err;
+-	regw(temp, MODESET);
 -
--	budget_ci = kzalloc(sizeof(struct budget_ci), GFP_KERNEL);
--	if (!budget_ci) {
--		err = -ENOMEM;
--		goto out1;
--	}
+-	/* configure video window */
+-	ccdc_setwin(&params->win, params->frm_fmt, 2);
 -
--	dprintk(2, "budget_ci: %p\n", budget_ci);
--
--	dev->ext_priv = budget_ci;
--
--	err = ttpci_budget_init(&budget_ci->budget, dev, info, THIS_MODULE,
--				adapter_nr);
--	if (err)
--		goto out2;
--
--	err = msp430_ir_init(budget_ci);
--	if (err)
--		goto out3;
--
--	ciintf_init(budget_ci);
--
--	budget_ci->budget.dvb_adapter.priv = budget_ci;
--	frontend_init(budget_ci);
--
--	ttpci_budget_init_hooks(&budget_ci->budget);
--
--	return 0;
--
--out3:
--	ttpci_budget_deinit(&budget_ci->budget);
--out2:
--	kfree(budget_ci);
--out1:
--	return err;
--}
--
--static int budget_ci_detach(struct saa7146_dev *dev)
--{
--	struct budget_ci *budget_ci = (struct budget_ci *) dev->ext_priv;
--	struct saa7146_dev *saa = budget_ci->budget.dev;
--	int err;
--
--	if (budget_ci->budget.ci_present)
--		ciintf_deinit(budget_ci);
--	msp430_ir_deinit(budget_ci);
--	if (budget_ci->budget.dvb_frontend) {
--		dvb_unregister_frontend(budget_ci->budget.dvb_frontend);
--		dvb_frontend_detach(budget_ci->budget.dvb_frontend);
--	}
--	err = ttpci_budget_deinit(&budget_ci->budget);
--
--	// disable frontend and CI interface
--	saa7146_setgpio(saa, 2, SAA7146_GPIO_INPUT);
--
--	kfree(budget_ci);
--
--	return err;
--}
--
--static struct saa7146_extension budget_extension;
--
--MAKE_BUDGET_INFO(ttbs2, "TT-Budget/S-1500 PCI", BUDGET_TT);
--MAKE_BUDGET_INFO(ttbci, "TT-Budget/WinTV-NOVA-CI PCI", BUDGET_TT_HW_DISEQC);
--MAKE_BUDGET_INFO(ttbt2, "TT-Budget/WinTV-NOVA-T	 PCI", BUDGET_TT);
--MAKE_BUDGET_INFO(ttbtci, "TT-Budget-T-CI PCI", BUDGET_TT);
--MAKE_BUDGET_INFO(ttbcci, "TT-Budget-C-CI PCI", BUDGET_TT);
--MAKE_BUDGET_INFO(ttc1501, "TT-Budget C-1501 PCI", BUDGET_TT);
--MAKE_BUDGET_INFO(tt3200, "TT-Budget S2-3200 PCI", BUDGET_TT);
--MAKE_BUDGET_INFO(ttbs1500b, "TT-Budget S-1500B PCI", BUDGET_TT);
--
--static const struct pci_device_id pci_tbl[] = {
--	MAKE_EXTENSION_PCI(ttbci, 0x13c2, 0x100c),
--	MAKE_EXTENSION_PCI(ttbci, 0x13c2, 0x100f),
--	MAKE_EXTENSION_PCI(ttbcci, 0x13c2, 0x1010),
--	MAKE_EXTENSION_PCI(ttbt2, 0x13c2, 0x1011),
--	MAKE_EXTENSION_PCI(ttbtci, 0x13c2, 0x1012),
--	MAKE_EXTENSION_PCI(ttbs2, 0x13c2, 0x1017),
--	MAKE_EXTENSION_PCI(ttc1501, 0x13c2, 0x101a),
--	MAKE_EXTENSION_PCI(tt3200, 0x13c2, 0x1019),
--	MAKE_EXTENSION_PCI(ttbs1500b, 0x13c2, 0x101b),
--	{
--	 .vendor = 0,
--	 }
--};
--
--MODULE_DEVICE_TABLE(pci, pci_tbl);
--
--static struct saa7146_extension budget_extension = {
--	.name = "budget_ci dvb",
--	.flags = SAA7146_USE_I2C_IRQ,
--
--	.module = THIS_MODULE,
--	.pci_tbl = &pci_tbl[0],
--	.attach = budget_ci_attach,
--	.detach = budget_ci_detach,
--
--	.irq_mask = MASK_03 | MASK_06 | MASK_10,
--	.irq_func = budget_ci_irq,
--};
--
--static int __init budget_ci_init(void)
--{
--	return saa7146_register_extension(&budget_extension);
--}
--
--static void __exit budget_ci_exit(void)
--{
--	saa7146_unregister_extension(&budget_extension);
--}
--
--module_init(budget_ci_init);
--module_exit(budget_ci_exit);
--
--MODULE_LICENSE("GPL");
--MODULE_AUTHOR("Michael Hunold, Jack Thomasson, Andrew de Quincey, others");
--MODULE_DESCRIPTION("driver for the SAA7146 based so-called budget PCI DVB cards w/ CI-module produced by Siemens, Technotrend, Hauppauge");
-diff --git a/drivers/staging/media/deprecated/saa7146/ttpci/budget-core.c b/drivers/staging/media/deprecated/saa7146/ttpci/budget-core.c
-deleted file mode 100644
-index 5d5796f24469..000000000000
---- a/drivers/staging/media/deprecated/saa7146/ttpci/budget-core.c
-+++ /dev/null
-@@ -1,603 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * budget-core.c: driver for the SAA7146 based Budget DVB cards
-- *
-- * Compiled from various sources by Michael Hunold <michael@mihu.de>
-- *
-- * Copyright (C) 2002 Ralph Metzler <rjkm@metzlerbros.de>
-- *
-- * Copyright (C) 1999-2002 Ralph  Metzler
-- *			 & Marcus Metzler for convergence integrated media GmbH
-- *
-- * 26feb2004 Support for FS Activy Card (Grundig tuner) by
-- *	     Michael Dreher <michael@5dot1.de>,
-- *	     Oliver Endriss <o.endriss@gmx.de>,
-- *	     Andreas 'randy' Weinberger
-- *
-- * the project's page is at https://linuxtv.org
-- */
--
--
--#include "budget.h"
--#include "ttpci-eeprom.h"
--
--#define TS_WIDTH		(2 * TS_SIZE)
--#define TS_WIDTH_ACTIVY		TS_SIZE
--#define TS_WIDTH_DVBC		TS_SIZE
--#define TS_HEIGHT_MASK		0xf00
--#define TS_HEIGHT_MASK_ACTIVY	0xc00
--#define TS_HEIGHT_MASK_DVBC	0xe00
--#define TS_MIN_BUFSIZE_K	188
--#define TS_MAX_BUFSIZE_K	1410
--#define TS_MAX_BUFSIZE_K_ACTIVY	564
--#define TS_MAX_BUFSIZE_K_DVBC	1316
--#define BUFFER_WARNING_WAIT	(30*HZ)
--
--int budget_debug;
--static int dma_buffer_size = TS_MIN_BUFSIZE_K;
--module_param_named(debug, budget_debug, int, 0644);
--module_param_named(bufsize, dma_buffer_size, int, 0444);
--MODULE_PARM_DESC(debug, "Turn on/off budget debugging (default:off).");
--MODULE_PARM_DESC(bufsize, "DMA buffer size in KB, default: 188, min: 188, max: 1410 (Activy: 564)");
--
--/****************************************************************************
-- * TT budget / WinTV Nova
-- ****************************************************************************/
--
--static int stop_ts_capture(struct budget *budget)
--{
--	dprintk(2, "budget: %p\n", budget);
--
--	saa7146_write(budget->dev, MC1, MASK_20);	// DMA3 off
--	SAA7146_IER_DISABLE(budget->dev, MASK_10);
--	return 0;
--}
--
--static int start_ts_capture(struct budget *budget)
--{
--	struct saa7146_dev *dev = budget->dev;
--
--	dprintk(2, "budget: %p\n", budget);
--
--	if (!budget->feeding || !budget->fe_synced)
--		return 0;
--
--	saa7146_write(dev, MC1, MASK_20);	// DMA3 off
--
--	memset(budget->grabbing, 0x00, budget->buffer_size);
--
--	saa7146_write(dev, PCI_BT_V1, 0x001c0000 | (saa7146_read(dev, PCI_BT_V1) & ~0x001f0000));
--
--	budget->ttbp = 0;
+-	/* configure the order of y cb cr in SD-RAM */
+-	temp = (params->pix_order << CCDC_Y8POS_SHIFT);
+-	temp |= CCDC_LATCH_ON_VSYNC_DISABLE | CCDC_CCDCFG_FIDMD_NO_LATCH_VSYNC;
+-	regw(temp, CCDCFG);
 -
 -	/*
--	 *  Signal path on the Activy:
--	 *
--	 *  tuner -> SAA7146 port A -> SAA7146 BRS -> SAA7146 DMA3 -> memory
--	 *
--	 *  Since the tuner feeds 204 bytes packets into the SAA7146,
--	 *  DMA3 is configured to strip the trailing 16 FEC bytes:
--	 *      Pitch: 188, NumBytes3: 188, NumLines3: 1024
+-	 * configure the horizontal line offset. This is done by rounding up
+-	 * width to a multiple of 16 pixels and multiply by two to account for
+-	 * y:cb:cr 4:2:2 data
+-	 */
+-	regw(((params->win.width * 2 + 31) >> 5), HSIZE);
+-
+-	/* configure the memory line offset */
+-	if (params->buf_type == CCDC_BUFTYPE_FLD_INTERLEAVED) {
+-		/* two fields are interleaved in memory */
+-		regw(CCDC_SDOFST_FIELD_INTERLEAVED, SDOFST);
+-	}
+-
+-	dev_dbg(ccdc_cfg.dev, "\nEnd of ccdc_config_ycbcr...\n");
+-}
+-
+-/*
+- * ccdc_config_black_clamp()
+- * configure parameters for Optical Black Clamp
+- */
+-static void ccdc_config_black_clamp(struct ccdc_black_clamp *bclamp)
+-{
+-	u32 val;
+-
+-	if (!bclamp->b_clamp_enable) {
+-		/* configure DCSub */
+-		regw(bclamp->dc_sub & CCDC_BLK_DC_SUB_MASK, DCSUB);
+-		regw(0x0000, CLAMP);
+-		return;
+-	}
+-	/* Enable the Black clamping, set sample lines and pixels */
+-	val = (bclamp->start_pixel & CCDC_BLK_ST_PXL_MASK) |
+-	      ((bclamp->sample_pixel & CCDC_BLK_SAMPLE_LN_MASK) <<
+-		CCDC_BLK_SAMPLE_LN_SHIFT) | CCDC_BLK_CLAMP_ENABLE;
+-	regw(val, CLAMP);
+-
+-	/* If Black clamping is enable then make dcsub 0 */
+-	val = (bclamp->sample_ln & CCDC_NUM_LINE_CALC_MASK)
+-			<< CCDC_NUM_LINE_CALC_SHIFT;
+-	regw(val, DCSUB);
+-}
+-
+-/*
+- * ccdc_config_black_compense()
+- * configure parameters for Black Compensation
+- */
+-static void ccdc_config_black_compense(struct ccdc_black_compensation *bcomp)
+-{
+-	u32 val;
+-
+-	val = (bcomp->b & CCDC_BLK_COMP_MASK) |
+-		((bcomp->gb & CCDC_BLK_COMP_MASK) <<
+-		CCDC_BLK_COMP_GB_COMP_SHIFT);
+-	regw(val, BLKCMP1);
+-
+-	val = ((bcomp->gr & CCDC_BLK_COMP_MASK) <<
+-		CCDC_BLK_COMP_GR_COMP_SHIFT) |
+-		((bcomp->r & CCDC_BLK_COMP_MASK) <<
+-		CCDC_BLK_COMP_R_COMP_SHIFT);
+-	regw(val, BLKCMP0);
+-}
+-
+-/*
+- * ccdc_write_dfc_entry()
+- * write an entry in the dfc table.
+- */
+-static int ccdc_write_dfc_entry(int index, struct ccdc_vertical_dft *dfc)
+-{
+-/* TODO This is to be re-visited and adjusted */
+-#define DFC_WRITE_WAIT_COUNT	1000
+-	u32 val, count = DFC_WRITE_WAIT_COUNT;
+-
+-	regw(dfc->dft_corr_vert[index], DFCMEM0);
+-	regw(dfc->dft_corr_horz[index], DFCMEM1);
+-	regw(dfc->dft_corr_sub1[index], DFCMEM2);
+-	regw(dfc->dft_corr_sub2[index], DFCMEM3);
+-	regw(dfc->dft_corr_sub3[index], DFCMEM4);
+-	/* set WR bit to write */
+-	val = regr(DFCMEMCTL) | CCDC_DFCMEMCTL_DFCMWR_MASK;
+-	regw(val, DFCMEMCTL);
+-
+-	/*
+-	 * Assume, it is very short. If we get an error, we need to
+-	 * adjust this value
+-	 */
+-	while (regr(DFCMEMCTL) & CCDC_DFCMEMCTL_DFCMWR_MASK)
+-		count--;
+-	/*
+-	 * TODO We expect the count to be non-zero to be successful. Adjust
+-	 * the count if write requires more time
 -	 */
 -
--	switch(budget->card->type) {
--	case BUDGET_FS_ACTIVY:
--		saa7146_write(dev, DD1_INIT, 0x04000000);
--		saa7146_write(dev, MC2, (MASK_09 | MASK_25));
--		saa7146_write(dev, BRS_CTRL, 0x00000000);
--		break;
--	case BUDGET_PATCH:
--		saa7146_write(dev, DD1_INIT, 0x00000200);
--		saa7146_write(dev, MC2, (MASK_10 | MASK_26));
--		saa7146_write(dev, BRS_CTRL, 0x60000000);
--		break;
--	case BUDGET_CIN1200C_MK3:
--	case BUDGET_KNC1C_MK3:
--	case BUDGET_KNC1C_TDA10024:
--	case BUDGET_KNC1CP_MK3:
--		if (budget->video_port == BUDGET_VIDEO_PORTA) {
--			saa7146_write(dev, DD1_INIT, 0x06000200);
--			saa7146_write(dev, MC2, (MASK_09 | MASK_25 | MASK_10 | MASK_26));
--			saa7146_write(dev, BRS_CTRL, 0x00000000);
--		} else {
--			saa7146_write(dev, DD1_INIT, 0x00000600);
--			saa7146_write(dev, MC2, (MASK_09 | MASK_25 | MASK_10 | MASK_26));
--			saa7146_write(dev, BRS_CTRL, 0x60000000);
--		}
--		break;
--	default:
--		if (budget->video_port == BUDGET_VIDEO_PORTA) {
--			saa7146_write(dev, DD1_INIT, 0x06000200);
--			saa7146_write(dev, MC2, (MASK_09 | MASK_25 | MASK_10 | MASK_26));
--			saa7146_write(dev, BRS_CTRL, 0x00000000);
--		} else {
--			saa7146_write(dev, DD1_INIT, 0x02000600);
--			saa7146_write(dev, MC2, (MASK_09 | MASK_25 | MASK_10 | MASK_26));
--			saa7146_write(dev, BRS_CTRL, 0x60000000);
--		}
+-	if (count) {
+-		dev_err(ccdc_cfg.dev, "defect table write timeout !!!\n");
+-		return -1;
 -	}
--
--	saa7146_write(dev, MC2, (MASK_08 | MASK_24));
--	mdelay(10);
--
--	saa7146_write(dev, BASE_ODD3, 0);
--	if (budget->buffer_size > budget->buffer_height * budget->buffer_width) {
--		// using odd/even buffers
--		saa7146_write(dev, BASE_EVEN3, budget->buffer_height * budget->buffer_width);
--	} else {
--		// using a single buffer
--		saa7146_write(dev, BASE_EVEN3, 0);
--	}
--	saa7146_write(dev, PROT_ADDR3, budget->buffer_size);
--	saa7146_write(dev, BASE_PAGE3, budget->pt.dma | ME1 | 0x90);
--
--	saa7146_write(dev, PITCH3, budget->buffer_width);
--	saa7146_write(dev, NUM_LINE_BYTE3,
--			(budget->buffer_height << 16) | budget->buffer_width);
--
--	saa7146_write(dev, MC2, (MASK_04 | MASK_20));
--
--	SAA7146_ISR_CLEAR(budget->dev, MASK_10);	/* VPE */
--	SAA7146_IER_ENABLE(budget->dev, MASK_10);	/* VPE */
--	saa7146_write(dev, MC1, (MASK_04 | MASK_20));	/* DMA3 on */
--
 -	return 0;
 -}
 -
--static int budget_read_fe_status(struct dvb_frontend *fe,
--				 enum fe_status *status)
--{
--	struct budget *budget = (struct budget *) fe->dvb->priv;
--	int synced;
--	int ret;
--
--	if (budget->read_fe_status)
--		ret = budget->read_fe_status(fe, status);
--	else
--		ret = -EINVAL;
--
--	if (!ret) {
--		synced = (*status & FE_HAS_LOCK);
--		if (synced != budget->fe_synced) {
--			budget->fe_synced = synced;
--			spin_lock(&budget->feedlock);
--			if (synced)
--				start_ts_capture(budget);
--			else
--				stop_ts_capture(budget);
--			spin_unlock(&budget->feedlock);
--		}
--	}
--	return ret;
--}
--
--static void vpeirq(struct tasklet_struct *t)
--{
--	struct budget *budget = from_tasklet(budget, t, vpe_tasklet);
--	u8 *mem = (u8 *) (budget->grabbing);
--	u32 olddma = budget->ttbp;
--	u32 newdma = saa7146_read(budget->dev, PCI_VDP3);
--	u32 count;
--
--	/* Ensure streamed PCI data is synced to CPU */
--	dma_sync_sg_for_cpu(&budget->dev->pci->dev, budget->pt.slist,
--			    budget->pt.nents, DMA_FROM_DEVICE);
--
--	/* nearest lower position divisible by 188 */
--	newdma -= newdma % 188;
--
--	if (newdma >= budget->buffer_size)
--		return;
--
--	budget->ttbp = newdma;
--
--	if (budget->feeding == 0 || newdma == olddma)
--		return;
--
--	if (newdma > olddma) {	/* no wraparound, dump olddma..newdma */
--		count = newdma - olddma;
--		dvb_dmx_swfilter_packets(&budget->demux, mem + olddma, count / 188);
--	} else {		/* wraparound, dump olddma..buflen and 0..newdma */
--		count = budget->buffer_size - olddma;
--		dvb_dmx_swfilter_packets(&budget->demux, mem + olddma, count / 188);
--		count += newdma;
--		dvb_dmx_swfilter_packets(&budget->demux, mem, newdma / 188);
--	}
--
--	if (count > budget->buffer_warning_threshold)
--		budget->buffer_warnings++;
--
--	if (budget->buffer_warnings && time_after(jiffies, budget->buffer_warning_time)) {
--		printk("%s %s: used %d times >80%% of buffer (%u bytes now)\n",
--			budget->dev->name, __func__, budget->buffer_warnings, count);
--		budget->buffer_warning_time = jiffies + BUFFER_WARNING_WAIT;
--		budget->buffer_warnings = 0;
--	}
--}
--
--
--static int ttpci_budget_debiread_nolock(struct budget *budget, u32 config,
--		int addr, int count, int nobusyloop)
--{
--	struct saa7146_dev *saa = budget->dev;
--	int result;
--
--	result = saa7146_wait_for_debi_done(saa, nobusyloop);
--	if (result < 0)
--		return result;
--
--	saa7146_write(saa, DEBI_COMMAND, (count << 17) | 0x10000 | (addr & 0xffff));
--	saa7146_write(saa, DEBI_CONFIG, config);
--	saa7146_write(saa, DEBI_PAGE, 0);
--	saa7146_write(saa, MC2, (2 << 16) | 2);
--
--	result = saa7146_wait_for_debi_done(saa, nobusyloop);
--	if (result < 0)
--		return result;
--
--	result = saa7146_read(saa, DEBI_AD);
--	result &= (0xffffffffUL >> ((4 - count) * 8));
--	return result;
--}
--
--int ttpci_budget_debiread(struct budget *budget, u32 config, int addr, int count,
--			  int uselocks, int nobusyloop)
--{
--	if (count > 4 || count <= 0)
--		return 0;
--
--	if (uselocks) {
--		unsigned long flags;
--		int result;
--
--		spin_lock_irqsave(&budget->debilock, flags);
--		result = ttpci_budget_debiread_nolock(budget, config, addr,
--						      count, nobusyloop);
--		spin_unlock_irqrestore(&budget->debilock, flags);
--		return result;
--	}
--	return ttpci_budget_debiread_nolock(budget, config, addr,
--					    count, nobusyloop);
--}
--
--static int ttpci_budget_debiwrite_nolock(struct budget *budget, u32 config,
--		int addr, int count, u32 value, int nobusyloop)
--{
--	struct saa7146_dev *saa = budget->dev;
--	int result;
--
--	result = saa7146_wait_for_debi_done(saa, nobusyloop);
--	if (result < 0)
--		return result;
--
--	saa7146_write(saa, DEBI_COMMAND, (count << 17) | 0x00000 | (addr & 0xffff));
--	saa7146_write(saa, DEBI_CONFIG, config);
--	saa7146_write(saa, DEBI_PAGE, 0);
--	saa7146_write(saa, DEBI_AD, value);
--	saa7146_write(saa, MC2, (2 << 16) | 2);
--
--	result = saa7146_wait_for_debi_done(saa, nobusyloop);
--	return result < 0 ? result : 0;
--}
--
--int ttpci_budget_debiwrite(struct budget *budget, u32 config, int addr,
--			   int count, u32 value, int uselocks, int nobusyloop)
--{
--	if (count > 4 || count <= 0)
--		return 0;
--
--	if (uselocks) {
--		unsigned long flags;
--		int result;
--
--		spin_lock_irqsave(&budget->debilock, flags);
--		result = ttpci_budget_debiwrite_nolock(budget, config, addr,
--						count, value, nobusyloop);
--		spin_unlock_irqrestore(&budget->debilock, flags);
--		return result;
--	}
--	return ttpci_budget_debiwrite_nolock(budget, config, addr,
--					     count, value, nobusyloop);
--}
--
--
--/****************************************************************************
-- * DVB API SECTION
-- ****************************************************************************/
--
--static int budget_start_feed(struct dvb_demux_feed *feed)
--{
--	struct dvb_demux *demux = feed->demux;
--	struct budget *budget = (struct budget *) demux->priv;
--	int status = 0;
--
--	dprintk(2, "budget: %p\n", budget);
--
--	if (!demux->dmx.frontend)
--		return -EINVAL;
--
--	spin_lock(&budget->feedlock);
--	feed->pusi_seen = false; /* have a clean section start */
--	if (budget->feeding++ == 0)
--		status = start_ts_capture(budget);
--	spin_unlock(&budget->feedlock);
--	return status;
--}
--
--static int budget_stop_feed(struct dvb_demux_feed *feed)
--{
--	struct dvb_demux *demux = feed->demux;
--	struct budget *budget = (struct budget *) demux->priv;
--	int status = 0;
--
--	dprintk(2, "budget: %p\n", budget);
--
--	spin_lock(&budget->feedlock);
--	if (--budget->feeding == 0)
--		status = stop_ts_capture(budget);
--	spin_unlock(&budget->feedlock);
--	return status;
--}
--
--static int budget_register(struct budget *budget)
--{
--	struct dvb_demux *dvbdemux = &budget->demux;
--	int ret;
--
--	dprintk(2, "budget: %p\n", budget);
--
--	dvbdemux->priv = (void *) budget;
--
--	dvbdemux->filternum = 256;
--	dvbdemux->feednum = 256;
--	dvbdemux->start_feed = budget_start_feed;
--	dvbdemux->stop_feed = budget_stop_feed;
--	dvbdemux->write_to_decoder = NULL;
--
--	dvbdemux->dmx.capabilities = (DMX_TS_FILTERING | DMX_SECTION_FILTERING |
--				      DMX_MEMORY_BASED_FILTERING);
--
--	dvb_dmx_init(&budget->demux);
--
--	budget->dmxdev.filternum = 256;
--	budget->dmxdev.demux = &dvbdemux->dmx;
--	budget->dmxdev.capabilities = 0;
--
--	dvb_dmxdev_init(&budget->dmxdev, &budget->dvb_adapter);
--
--	budget->hw_frontend.source = DMX_FRONTEND_0;
--
--	ret = dvbdemux->dmx.add_frontend(&dvbdemux->dmx, &budget->hw_frontend);
--
--	if (ret < 0)
--		goto err_release_dmx;
--
--	budget->mem_frontend.source = DMX_MEMORY_FE;
--	ret = dvbdemux->dmx.add_frontend(&dvbdemux->dmx, &budget->mem_frontend);
--	if (ret < 0)
--		goto err_release_dmx;
--
--	ret = dvbdemux->dmx.connect_frontend(&dvbdemux->dmx, &budget->hw_frontend);
--	if (ret < 0)
--		goto err_release_dmx;
--
--	dvb_net_init(&budget->dvb_adapter, &budget->dvb_net, &dvbdemux->dmx);
--
--	return 0;
--
--err_release_dmx:
--	dvb_dmxdev_release(&budget->dmxdev);
--	dvb_dmx_release(&budget->demux);
--	return ret;
--}
--
--static void budget_unregister(struct budget *budget)
--{
--	struct dvb_demux *dvbdemux = &budget->demux;
--
--	dprintk(2, "budget: %p\n", budget);
--
--	dvb_net_release(&budget->dvb_net);
--
--	dvbdemux->dmx.close(&dvbdemux->dmx);
--	dvbdemux->dmx.remove_frontend(&dvbdemux->dmx, &budget->hw_frontend);
--	dvbdemux->dmx.remove_frontend(&dvbdemux->dmx, &budget->mem_frontend);
--
--	dvb_dmxdev_release(&budget->dmxdev);
--	dvb_dmx_release(&budget->demux);
--}
--
--int ttpci_budget_init(struct budget *budget, struct saa7146_dev *dev,
--		      struct saa7146_pci_extension_data *info,
--		      struct module *owner, short *adapter_nums)
--{
--	int ret = 0;
--	struct budget_info *bi = info->ext_priv;
--	int max_bufsize;
--	int height_mask;
--
--	memset(budget, 0, sizeof(struct budget));
--
--	dprintk(2, "dev: %p, budget: %p\n", dev, budget);
--
--	budget->card = bi;
--	budget->dev = (struct saa7146_dev *) dev;
--
--	switch(budget->card->type) {
--	case BUDGET_FS_ACTIVY:
--		budget->buffer_width = TS_WIDTH_ACTIVY;
--		max_bufsize = TS_MAX_BUFSIZE_K_ACTIVY;
--		height_mask = TS_HEIGHT_MASK_ACTIVY;
--		break;
--
--	case BUDGET_KNC1C:
--	case BUDGET_KNC1CP:
--	case BUDGET_CIN1200C:
--	case BUDGET_KNC1C_MK3:
--	case BUDGET_KNC1C_TDA10024:
--	case BUDGET_KNC1CP_MK3:
--	case BUDGET_CIN1200C_MK3:
--		budget->buffer_width = TS_WIDTH_DVBC;
--		max_bufsize = TS_MAX_BUFSIZE_K_DVBC;
--		height_mask = TS_HEIGHT_MASK_DVBC;
--		break;
--
--	default:
--		budget->buffer_width = TS_WIDTH;
--		max_bufsize = TS_MAX_BUFSIZE_K;
--		height_mask = TS_HEIGHT_MASK;
--	}
--
--	if (dma_buffer_size < TS_MIN_BUFSIZE_K)
--		dma_buffer_size = TS_MIN_BUFSIZE_K;
--	else if (dma_buffer_size > max_bufsize)
--		dma_buffer_size = max_bufsize;
--
--	budget->buffer_height = dma_buffer_size * 1024 / budget->buffer_width;
--	if (budget->buffer_height > 0xfff) {
--		budget->buffer_height /= 2;
--		budget->buffer_height &= height_mask;
--		budget->buffer_size = 2 * budget->buffer_height * budget->buffer_width;
--	} else {
--		budget->buffer_height &= height_mask;
--		budget->buffer_size = budget->buffer_height * budget->buffer_width;
--	}
--	budget->buffer_warning_threshold = budget->buffer_size * 80/100;
--	budget->buffer_warnings = 0;
--	budget->buffer_warning_time = jiffies;
--
--	dprintk(2, "%s: buffer type = %s, width = %d, height = %d\n",
--		budget->dev->name,
--		budget->buffer_size > budget->buffer_width * budget->buffer_height ? "odd/even" : "single",
--		budget->buffer_width, budget->buffer_height);
--	printk("%s: dma buffer size %u\n", budget->dev->name, budget->buffer_size);
--
--	ret = dvb_register_adapter(&budget->dvb_adapter, budget->card->name,
--				   owner, &budget->dev->pci->dev, adapter_nums);
--	if (ret < 0)
--		return ret;
--
--	/* set dd1 stream a & b */
--	saa7146_write(dev, DD1_STREAM_B, 0x00000000);
--	saa7146_write(dev, MC2, (MASK_09 | MASK_25));
--	saa7146_write(dev, MC2, (MASK_10 | MASK_26));
--	saa7146_write(dev, DD1_INIT, 0x02000000);
--	saa7146_write(dev, MC2, (MASK_09 | MASK_25 | MASK_10 | MASK_26));
--
--	if (bi->type != BUDGET_FS_ACTIVY)
--		budget->video_port = BUDGET_VIDEO_PORTB;
--	else
--		budget->video_port = BUDGET_VIDEO_PORTA;
--	spin_lock_init(&budget->feedlock);
--	spin_lock_init(&budget->debilock);
--
--	/* the Siemens DVB needs this if you want to have the i2c chips
--	   get recognized before the main driver is loaded */
--	if (bi->type != BUDGET_FS_ACTIVY)
--		saa7146_write(dev, GPIO_CTRL, 0x500000);	/* GPIO 3 = 1 */
--
--	strscpy(budget->i2c_adap.name, budget->card->name,
--		sizeof(budget->i2c_adap.name));
--
--	saa7146_i2c_adapter_prepare(dev, &budget->i2c_adap, SAA7146_I2C_BUS_BIT_RATE_120);
--	strscpy(budget->i2c_adap.name, budget->card->name,
--		sizeof(budget->i2c_adap.name));
--
--	if (i2c_add_adapter(&budget->i2c_adap) < 0) {
--		ret = -ENOMEM;
--		goto err_dvb_unregister;
--	}
--
--	ttpci_eeprom_parse_mac(&budget->i2c_adap, budget->dvb_adapter.proposed_mac);
--
--	budget->grabbing = saa7146_vmalloc_build_pgtable(dev->pci, budget->buffer_size, &budget->pt);
--	if (NULL == budget->grabbing) {
--		ret = -ENOMEM;
--		goto err_del_i2c;
--	}
--
--	saa7146_write(dev, PCI_BT_V1, 0x001c0000);
--	/* upload all */
--	saa7146_write(dev, GPIO_CTRL, 0x000000);
--
--	tasklet_setup(&budget->vpe_tasklet, vpeirq);
--
--	/* frontend power on */
--	if (bi->type != BUDGET_FS_ACTIVY)
--		saa7146_setgpio(dev, 2, SAA7146_GPIO_OUTHI);
--
--	if ((ret = budget_register(budget)) == 0)
--		return 0; /* Everything OK */
--
--	/* An error occurred, cleanup resources */
--	saa7146_vfree_destroy_pgtable(dev->pci, budget->grabbing, &budget->pt);
--
--err_del_i2c:
--	i2c_del_adapter(&budget->i2c_adap);
--
--err_dvb_unregister:
--	dvb_unregister_adapter(&budget->dvb_adapter);
--
--	return ret;
--}
--
--void ttpci_budget_init_hooks(struct budget *budget)
--{
--	if (budget->dvb_frontend && !budget->read_fe_status) {
--		budget->read_fe_status = budget->dvb_frontend->ops.read_status;
--		budget->dvb_frontend->ops.read_status = budget_read_fe_status;
--	}
--}
--
--int ttpci_budget_deinit(struct budget *budget)
--{
--	struct saa7146_dev *dev = budget->dev;
--
--	dprintk(2, "budget: %p\n", budget);
--
--	budget_unregister(budget);
--
--	tasklet_kill(&budget->vpe_tasklet);
--
--	saa7146_vfree_destroy_pgtable(dev->pci, budget->grabbing, &budget->pt);
--
--	i2c_del_adapter(&budget->i2c_adap);
--
--	dvb_unregister_adapter(&budget->dvb_adapter);
--
--	return 0;
--}
--
--void ttpci_budget_irq10_handler(struct saa7146_dev *dev, u32 * isr)
--{
--	struct budget *budget = (struct budget *) dev->ext_priv;
--
--	dprintk(8, "dev: %p, budget: %p\n", dev, budget);
--
--	if (*isr & MASK_10)
--		tasklet_schedule(&budget->vpe_tasklet);
--}
--
--void ttpci_budget_set_video_port(struct saa7146_dev *dev, int video_port)
--{
--	struct budget *budget = (struct budget *) dev->ext_priv;
--
--	spin_lock(&budget->feedlock);
--	budget->video_port = video_port;
--	if (budget->feeding) {
--		stop_ts_capture(budget);
--		start_ts_capture(budget);
--	}
--	spin_unlock(&budget->feedlock);
--}
--
--EXPORT_SYMBOL_GPL(ttpci_budget_debiread);
--EXPORT_SYMBOL_GPL(ttpci_budget_debiwrite);
--EXPORT_SYMBOL_GPL(ttpci_budget_init);
--EXPORT_SYMBOL_GPL(ttpci_budget_init_hooks);
--EXPORT_SYMBOL_GPL(ttpci_budget_deinit);
--EXPORT_SYMBOL_GPL(ttpci_budget_irq10_handler);
--EXPORT_SYMBOL_GPL(ttpci_budget_set_video_port);
--EXPORT_SYMBOL_GPL(budget_debug);
--
--MODULE_LICENSE("GPL");
-diff --git a/drivers/staging/media/deprecated/saa7146/ttpci/budget.c b/drivers/staging/media/deprecated/saa7146/ttpci/budget.c
-deleted file mode 100644
-index a88711a3ac7f..000000000000
---- a/drivers/staging/media/deprecated/saa7146/ttpci/budget.c
-+++ /dev/null
-@@ -1,883 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
 -/*
-- * budget.c: driver for the SAA7146 based Budget DVB cards
-- *
-- * Compiled from various sources by Michael Hunold <michael@mihu.de>
-- *
-- * Copyright (C) 2002 Ralph Metzler <rjkm@metzlerbros.de>
-- *
-- * Copyright (C) 1999-2002 Ralph  Metzler
-- *                       & Marcus Metzler for convergence integrated media GmbH
-- *
-- * 26feb2004 Support for FS Activy Card (Grundig tuner) by
-- *           Michael Dreher <michael@5dot1.de>,
-- *           Oliver Endriss <o.endriss@gmx.de> and
-- *           Andreas 'randy' Weinberger
-- *
-- * the project's page is at https://linuxtv.org
+- * ccdc_config_vdfc()
+- * configure parameters for Vertical Defect Correction
 - */
--
--#include "budget.h"
--#include "stv0299.h"
--#include "ves1x93.h"
--#include "ves1820.h"
--#include "l64781.h"
--#include "tda8083.h"
--#include "s5h1420.h"
--#include "tda10086.h"
--#include "tda826x.h"
--#include "lnbp21.h"
--#include "bsru6.h"
--#include "bsbe1.h"
--#include "tdhd1.h"
--#include "stv6110x.h"
--#include "stv090x.h"
--#include "isl6423.h"
--#include "lnbh24.h"
--
--
--static int diseqc_method;
--module_param(diseqc_method, int, 0444);
--MODULE_PARM_DESC(diseqc_method, "Select DiSEqC method for subsystem id 13c2:1003, 0: default, 1: more reliable (for newer revisions only)");
--
--DVB_DEFINE_MOD_OPT_ADAPTER_NR(adapter_nr);
--
--static void Set22K (struct budget *budget, int state)
+-static int ccdc_config_vdfc(struct ccdc_vertical_dft *dfc)
 -{
--	struct saa7146_dev *dev=budget->dev;
--	dprintk(2, "budget: %p\n", budget);
--	saa7146_setgpio(dev, 3, (state ? SAA7146_GPIO_OUTHI : SAA7146_GPIO_OUTLO));
--}
--
--/* Diseqc functions only for TT Budget card */
--/* taken from the Skyvision DVB driver by
--   Ralph Metzler <rjkm@metzlerbros.de> */
--
--static void DiseqcSendBit (struct budget *budget, int data)
--{
--	struct saa7146_dev *dev=budget->dev;
--	dprintk(2, "budget: %p\n", budget);
--
--	saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTHI);
--	udelay(data ? 500 : 1000);
--	saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTLO);
--	udelay(data ? 1000 : 500);
--}
--
--static void DiseqcSendByte (struct budget *budget, int data)
--{
--	int i, par=1, d;
--
--	dprintk(2, "budget: %p\n", budget);
--
--	for (i=7; i>=0; i--) {
--		d = (data>>i)&1;
--		par ^= d;
--		DiseqcSendBit(budget, d);
--	}
--
--	DiseqcSendBit(budget, par);
--}
--
--static int SendDiSEqCMsg (struct budget *budget, int len, u8 *msg, unsigned long burst)
--{
--	struct saa7146_dev *dev=budget->dev;
+-	u32 val;
 -	int i;
 -
--	dprintk(2, "budget: %p\n", budget);
+-	/* Configure General Defect Correction. The table used is from IPIPE */
+-	val = dfc->gen_dft_en & CCDC_DFCCTL_GDFCEN_MASK;
 -
--	saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTLO);
--	mdelay(16);
--
--	for (i=0; i<len; i++)
--		DiseqcSendByte(budget, msg[i]);
--
--	mdelay(16);
--
--	if (burst!=-1) {
--		if (burst)
--			DiseqcSendByte(budget, 0xff);
--		else {
--			saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTHI);
--			mdelay(12);
--			udelay(500);
--			saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTLO);
--		}
--		msleep(20);
+-	/* Configure Vertical Defect Correction if needed */
+-	if (!dfc->ver_dft_en) {
+-		/* Enable only General Defect Correction */
+-		regw(val, DFCCTL);
+-		return 0;
 -	}
 -
+-	if (dfc->table_size > CCDC_DFT_TABLE_SIZE)
+-		return -EINVAL;
+-
+-	val |= CCDC_DFCCTL_VDFC_DISABLE;
+-	val |= (dfc->dft_corr_ctl.vdfcsl & CCDC_DFCCTL_VDFCSL_MASK) <<
+-		CCDC_DFCCTL_VDFCSL_SHIFT;
+-	val |= (dfc->dft_corr_ctl.vdfcuda & CCDC_DFCCTL_VDFCUDA_MASK) <<
+-		CCDC_DFCCTL_VDFCUDA_SHIFT;
+-	val |= (dfc->dft_corr_ctl.vdflsft & CCDC_DFCCTL_VDFLSFT_MASK) <<
+-		CCDC_DFCCTL_VDFLSFT_SHIFT;
+-	regw(val , DFCCTL);
+-
+-	/* clear address ptr to offset 0 */
+-	val = CCDC_DFCMEMCTL_DFCMARST_MASK << CCDC_DFCMEMCTL_DFCMARST_SHIFT;
+-
+-	/* write defect table entries */
+-	for (i = 0; i < dfc->table_size; i++) {
+-		/* increment address for non zero index */
+-		if (i != 0)
+-			val = CCDC_DFCMEMCTL_INC_ADDR;
+-		regw(val, DFCMEMCTL);
+-		if (ccdc_write_dfc_entry(i, dfc) < 0)
+-			return -EFAULT;
+-	}
+-
+-	/* update saturation level and enable dfc */
+-	regw(dfc->saturation_ctl & CCDC_VDC_DFCVSAT_MASK, DFCVSAT);
+-	val = regr(DFCCTL) | (CCDC_DFCCTL_VDFCEN_MASK <<
+-			CCDC_DFCCTL_VDFCEN_SHIFT);
+-	regw(val, DFCCTL);
 -	return 0;
 -}
 -
 -/*
-- *   Routines for the Fujitsu Siemens Activy budget card
-- *   22 kHz tone and DiSEqC are handled by the frontend.
-- *   Voltage must be set here.
-- *   GPIO 1: LNBP EN, GPIO 2: LNBP VSEL
+- * ccdc_config_csc()
+- * configure parameters for color space conversion
+- * Each register CSCM0-7 has two values in S8Q5 format.
 - */
--static int SetVoltage_Activy(struct budget *budget,
--			     enum fe_sec_voltage voltage)
+-static void ccdc_config_csc(struct ccdc_csc *csc)
 -{
--	struct saa7146_dev *dev=budget->dev;
+-	u32 val1 = 0, val2;
+-	int i;
 -
--	dprintk(2, "budget: %p\n", budget);
+-	if (!csc->enable)
+-		return;
 -
--	switch (voltage) {
--		case SEC_VOLTAGE_13:
--			saa7146_setgpio(dev, 1, SAA7146_GPIO_OUTHI);
--			saa7146_setgpio(dev, 2, SAA7146_GPIO_OUTLO);
--			break;
--		case SEC_VOLTAGE_18:
--			saa7146_setgpio(dev, 1, SAA7146_GPIO_OUTHI);
--			saa7146_setgpio(dev, 2, SAA7146_GPIO_OUTHI);
--			break;
--		case SEC_VOLTAGE_OFF:
--			saa7146_setgpio(dev, 1, SAA7146_GPIO_OUTLO);
--			break;
--		default:
+-	/* Enable the CSC sub-module */
+-	regw(CCDC_CSC_ENABLE, CSCCTL);
+-
+-	/* Converting the co-eff as per the format of the register */
+-	for (i = 0; i < CCDC_CSC_COEFF_TABLE_SIZE; i++) {
+-		if ((i % 2) == 0) {
+-			/* CSCM - LSB */
+-			val1 = (csc->coeff[i].integer &
+-				CCDC_CSC_COEF_INTEG_MASK)
+-				<< CCDC_CSC_COEF_INTEG_SHIFT;
+-			/*
+-			 * convert decimal part to binary. Use 2 decimal
+-			 * precision, user values range from .00 - 0.99
+-			 */
+-			val1 |= (((csc->coeff[i].decimal &
+-				CCDC_CSC_COEF_DECIMAL_MASK) *
+-				CCDC_CSC_DEC_MAX) / 100);
+-		} else {
+-
+-			/* CSCM - MSB */
+-			val2 = (csc->coeff[i].integer &
+-				CCDC_CSC_COEF_INTEG_MASK)
+-				<< CCDC_CSC_COEF_INTEG_SHIFT;
+-			val2 |= (((csc->coeff[i].decimal &
+-				 CCDC_CSC_COEF_DECIMAL_MASK) *
+-				 CCDC_CSC_DEC_MAX) / 100);
+-			val2 <<= CCDC_CSCM_MSB_SHIFT;
+-			val2 |= val1;
+-			regw(val2, (CSCM0 + ((i - 1) << 1)));
+-		}
+-	}
+-}
+-
+-/*
+- * ccdc_config_color_patterns()
+- * configure parameters for color patterns
+- */
+-static void ccdc_config_color_patterns(struct ccdc_col_pat *pat0,
+-				       struct ccdc_col_pat *pat1)
+-{
+-	u32 val;
+-
+-	val = (pat0->olop | (pat0->olep << 2) | (pat0->elop << 4) |
+-		(pat0->elep << 6) | (pat1->olop << 8) | (pat1->olep << 10) |
+-		(pat1->elop << 12) | (pat1->elep << 14));
+-	regw(val, COLPTN);
+-}
+-
+-/* This function will configure CCDC for Raw mode image capture */
+-static int ccdc_config_raw(void)
+-{
+-	struct ccdc_params_raw *params = &ccdc_cfg.bayer;
+-	struct ccdc_config_params_raw *config_params =
+-					&ccdc_cfg.bayer.config_params;
+-	unsigned int val;
+-
+-	dev_dbg(ccdc_cfg.dev, "\nStarting ccdc_config_raw...");
+-
+-	/* restore power on defaults to register */
+-	ccdc_restore_defaults();
+-
+-	/* CCDCFG register:
+-	 * set CCD Not to swap input since input is RAW data
+-	 * set FID detection function to Latch at V-Sync
+-	 * set WENLOG - ccdc valid area to AND
+-	 * set TRGSEL to WENBIT
+-	 * set EXTRG to DISABLE
+-	 * disable latching function on VSYNC - shadowed registers
+-	 */
+-	regw(CCDC_YCINSWP_RAW | CCDC_CCDCFG_FIDMD_LATCH_VSYNC |
+-	     CCDC_CCDCFG_WENLOG_AND | CCDC_CCDCFG_TRGSEL_WEN |
+-	     CCDC_CCDCFG_EXTRG_DISABLE | CCDC_LATCH_ON_VSYNC_DISABLE, CCDCFG);
+-
+-	/*
+-	 * Set VDHD direction to input,  input type to raw input
+-	 * normal data polarity, do not use external WEN
+-	 */
+-	val = (CCDC_VDHDOUT_INPUT | CCDC_RAW_IP_MODE | CCDC_DATAPOL_NORMAL |
+-		CCDC_EXWEN_DISABLE);
+-
+-	/*
+-	 * Configure the vertical sync polarity (MODESET.VDPOL), horizontal
+-	 * sync polarity (MODESET.HDPOL), field id polarity (MODESET.FLDPOL),
+-	 * frame format(progressive or interlace), & pixel format (Input mode)
+-	 */
+-	val |= (((params->vd_pol & CCDC_VD_POL_MASK) << CCDC_VD_POL_SHIFT) |
+-		((params->hd_pol & CCDC_HD_POL_MASK) << CCDC_HD_POL_SHIFT) |
+-		((params->fid_pol & CCDC_FID_POL_MASK) << CCDC_FID_POL_SHIFT) |
+-		((params->frm_fmt & CCDC_FRM_FMT_MASK) << CCDC_FRM_FMT_SHIFT) |
+-		((params->pix_fmt & CCDC_PIX_FMT_MASK) << CCDC_PIX_FMT_SHIFT));
+-
+-	/* set pack for alaw compression */
+-	if ((config_params->data_sz == CCDC_DATA_8BITS) ||
+-	     config_params->alaw.enable)
+-		val |= CCDC_DATA_PACK_ENABLE;
+-
+-	/* Configure for LPF */
+-	if (config_params->lpf_enable)
+-		val |= (config_params->lpf_enable & CCDC_LPF_MASK) <<
+-			CCDC_LPF_SHIFT;
+-
+-	/* Configure the data shift */
+-	val |= (config_params->datasft & CCDC_DATASFT_MASK) <<
+-		CCDC_DATASFT_SHIFT;
+-	regw(val , MODESET);
+-	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to MODESET...\n", val);
+-
+-	/* Configure the Median Filter threshold */
+-	regw((config_params->med_filt_thres) & CCDC_MED_FILT_THRESH, MEDFILT);
+-
+-	/* Configure GAMMAWD register. defaur 11-2, and Mosaic cfa pattern */
+-	val = CCDC_GAMMA_BITS_11_2 << CCDC_GAMMAWD_INPUT_SHIFT |
+-		CCDC_CFA_MOSAIC;
+-
+-	/* Enable and configure aLaw register if needed */
+-	if (config_params->alaw.enable) {
+-		val |= (CCDC_ALAW_ENABLE |
+-			((config_params->alaw.gamma_wd &
+-			CCDC_ALAW_GAMMA_WD_MASK) <<
+-			CCDC_GAMMAWD_INPUT_SHIFT));
+-	}
+-
+-	/* Configure Median filter1 & filter2 */
+-	val |= ((config_params->mfilt1 << CCDC_MFILT1_SHIFT) |
+-		(config_params->mfilt2 << CCDC_MFILT2_SHIFT));
+-
+-	regw(val, GAMMAWD);
+-	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to GAMMAWD...\n", val);
+-
+-	/* configure video window */
+-	ccdc_setwin(&params->win, params->frm_fmt, 1);
+-
+-	/* Optical Clamp Averaging */
+-	ccdc_config_black_clamp(&config_params->blk_clamp);
+-
+-	/* Black level compensation */
+-	ccdc_config_black_compense(&config_params->blk_comp);
+-
+-	/* Vertical Defect Correction if needed */
+-	if (ccdc_config_vdfc(&config_params->vertical_dft) < 0)
+-		return -EFAULT;
+-
+-	/* color space conversion */
+-	ccdc_config_csc(&config_params->csc);
+-
+-	/* color pattern */
+-	ccdc_config_color_patterns(&config_params->col_pat_field0,
+-				   &config_params->col_pat_field1);
+-
+-	/* Configure the Gain  & offset control */
+-	ccdc_config_gain_offset();
+-
+-	dev_dbg(ccdc_cfg.dev, "\nWriting %x to COLPTN...\n", val);
+-
+-	/* Configure DATAOFST  register */
+-	val = (config_params->data_offset.horz_offset & CCDC_DATAOFST_MASK) <<
+-		CCDC_DATAOFST_H_SHIFT;
+-	val |= (config_params->data_offset.vert_offset & CCDC_DATAOFST_MASK) <<
+-		CCDC_DATAOFST_V_SHIFT;
+-	regw(val, DATAOFST);
+-
+-	/* configuring HSIZE register */
+-	val = (params->horz_flip_enable & CCDC_HSIZE_FLIP_MASK) <<
+-		CCDC_HSIZE_FLIP_SHIFT;
+-
+-	/* If pack 8 is enable then 1 pixel will take 1 byte */
+-	if ((config_params->data_sz == CCDC_DATA_8BITS) ||
+-	     config_params->alaw.enable) {
+-		val |= (((params->win.width) + 31) >> 5) &
+-			CCDC_HSIZE_VAL_MASK;
+-
+-		/* adjust to multiple of 32 */
+-		dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to HSIZE...\n",
+-		       (((params->win.width) + 31) >> 5) &
+-			CCDC_HSIZE_VAL_MASK);
+-	} else {
+-		/* else one pixel will take 2 byte */
+-		val |= (((params->win.width * 2) + 31) >> 5) &
+-			CCDC_HSIZE_VAL_MASK;
+-
+-		dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to HSIZE...\n",
+-		       (((params->win.width * 2) + 31) >> 5) &
+-			CCDC_HSIZE_VAL_MASK);
+-	}
+-	regw(val, HSIZE);
+-
+-	/* Configure SDOFST register */
+-	if (params->frm_fmt == CCDC_FRMFMT_INTERLACED) {
+-		if (params->image_invert_enable) {
+-			/* For interlace inverse mode */
+-			regw(CCDC_SDOFST_INTERLACE_INVERSE, SDOFST);
+-			dev_dbg(ccdc_cfg.dev, "\nWriting %x to SDOFST...\n",
+-				CCDC_SDOFST_INTERLACE_INVERSE);
+-		} else {
+-			/* For interlace non inverse mode */
+-			regw(CCDC_SDOFST_INTERLACE_NORMAL, SDOFST);
+-			dev_dbg(ccdc_cfg.dev, "\nWriting %x to SDOFST...\n",
+-				CCDC_SDOFST_INTERLACE_NORMAL);
+-		}
+-	} else if (params->frm_fmt == CCDC_FRMFMT_PROGRESSIVE) {
+-		if (params->image_invert_enable) {
+-			/* For progessive inverse mode */
+-			regw(CCDC_SDOFST_PROGRESSIVE_INVERSE, SDOFST);
+-			dev_dbg(ccdc_cfg.dev, "\nWriting %x to SDOFST...\n",
+-				CCDC_SDOFST_PROGRESSIVE_INVERSE);
+-		} else {
+-			/* For progessive non inverse mode */
+-			regw(CCDC_SDOFST_PROGRESSIVE_NORMAL, SDOFST);
+-			dev_dbg(ccdc_cfg.dev, "\nWriting %x to SDOFST...\n",
+-				CCDC_SDOFST_PROGRESSIVE_NORMAL);
+-		}
+-	}
+-	dev_dbg(ccdc_cfg.dev, "\nend of ccdc_config_raw...");
+-	return 0;
+-}
+-
+-static int ccdc_configure(void)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		return ccdc_config_raw();
+-	else
+-		ccdc_config_ycbcr();
+-	return 0;
+-}
+-
+-static int ccdc_set_buftype(enum ccdc_buftype buf_type)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		ccdc_cfg.bayer.buf_type = buf_type;
+-	else
+-		ccdc_cfg.ycbcr.buf_type = buf_type;
+-	return 0;
+-}
+-static enum ccdc_buftype ccdc_get_buftype(void)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		return ccdc_cfg.bayer.buf_type;
+-	return ccdc_cfg.ycbcr.buf_type;
+-}
+-
+-static int ccdc_enum_pix(u32 *pix, int i)
+-{
+-	int ret = -EINVAL;
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER) {
+-		if (i < ARRAY_SIZE(ccdc_raw_bayer_pix_formats)) {
+-			*pix = ccdc_raw_bayer_pix_formats[i];
+-			ret = 0;
+-		}
+-	} else {
+-		if (i < ARRAY_SIZE(ccdc_raw_yuv_pix_formats)) {
+-			*pix = ccdc_raw_yuv_pix_formats[i];
+-			ret = 0;
+-		}
+-	}
+-	return ret;
+-}
+-
+-static int ccdc_set_pixel_format(u32 pixfmt)
+-{
+-	struct ccdc_a_law *alaw = &ccdc_cfg.bayer.config_params.alaw;
+-
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER) {
+-		ccdc_cfg.bayer.pix_fmt = CCDC_PIXFMT_RAW;
+-		if (pixfmt == V4L2_PIX_FMT_SBGGR8)
+-			alaw->enable = 1;
+-		else if (pixfmt != V4L2_PIX_FMT_SBGGR16)
+-			return -EINVAL;
+-	} else {
+-		if (pixfmt == V4L2_PIX_FMT_YUYV)
+-			ccdc_cfg.ycbcr.pix_order = CCDC_PIXORDER_YCBYCR;
+-		else if (pixfmt == V4L2_PIX_FMT_UYVY)
+-			ccdc_cfg.ycbcr.pix_order = CCDC_PIXORDER_CBYCRY;
+-		else
 -			return -EINVAL;
 -	}
+-	return 0;
+-}
+-static u32 ccdc_get_pixel_format(void)
+-{
+-	struct ccdc_a_law *alaw = &ccdc_cfg.bayer.config_params.alaw;
+-	u32 pixfmt;
+-
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		if (alaw->enable)
+-			pixfmt = V4L2_PIX_FMT_SBGGR8;
+-		else
+-			pixfmt = V4L2_PIX_FMT_SBGGR16;
+-	else {
+-		if (ccdc_cfg.ycbcr.pix_order == CCDC_PIXORDER_YCBYCR)
+-			pixfmt = V4L2_PIX_FMT_YUYV;
+-		else
+-			pixfmt = V4L2_PIX_FMT_UYVY;
+-	}
+-	return pixfmt;
+-}
+-static int ccdc_set_image_window(struct v4l2_rect *win)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		ccdc_cfg.bayer.win = *win;
+-	else
+-		ccdc_cfg.ycbcr.win = *win;
+-	return 0;
+-}
+-
+-static void ccdc_get_image_window(struct v4l2_rect *win)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		*win = ccdc_cfg.bayer.win;
+-	else
+-		*win = ccdc_cfg.ycbcr.win;
+-}
+-
+-static unsigned int ccdc_get_line_length(void)
+-{
+-	struct ccdc_config_params_raw *config_params =
+-				&ccdc_cfg.bayer.config_params;
+-	unsigned int len;
+-
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER) {
+-		if ((config_params->alaw.enable) ||
+-		    (config_params->data_sz == CCDC_DATA_8BITS))
+-			len = ccdc_cfg.bayer.win.width;
+-		else
+-			len = ccdc_cfg.bayer.win.width * 2;
+-	} else
+-		len = ccdc_cfg.ycbcr.win.width * 2;
+-	return ALIGN(len, 32);
+-}
+-
+-static int ccdc_set_frame_format(enum ccdc_frmfmt frm_fmt)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		ccdc_cfg.bayer.frm_fmt = frm_fmt;
+-	else
+-		ccdc_cfg.ycbcr.frm_fmt = frm_fmt;
+-	return 0;
+-}
+-
+-static enum ccdc_frmfmt ccdc_get_frame_format(void)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		return ccdc_cfg.bayer.frm_fmt;
+-	else
+-		return ccdc_cfg.ycbcr.frm_fmt;
+-}
+-
+-static int ccdc_getfid(void)
+-{
+-	return  (regr(MODESET) >> 15) & 1;
+-}
+-
+-/* misc operations */
+-static inline void ccdc_setfbaddr(unsigned long addr)
+-{
+-	regw((addr >> 21) & 0x007f, STADRH);
+-	regw((addr >> 5) & 0x0ffff, STADRL);
+-}
+-
+-static int ccdc_set_hw_if_params(struct vpfe_hw_if_param *params)
+-{
+-	ccdc_cfg.if_type = params->if_type;
+-
+-	switch (params->if_type) {
+-	case VPFE_BT656:
+-	case VPFE_YCBCR_SYNC_16:
+-	case VPFE_YCBCR_SYNC_8:
+-		ccdc_cfg.ycbcr.vd_pol = params->vdpol;
+-		ccdc_cfg.ycbcr.hd_pol = params->hdpol;
+-		break;
+-	default:
+-		/* TODO add support for raw bayer here */
+-		return -EINVAL;
+-	}
+-	return 0;
+-}
+-
+-static const struct ccdc_hw_device ccdc_hw_dev = {
+-	.name = "DM355 CCDC",
+-	.owner = THIS_MODULE,
+-	.hw_ops = {
+-		.open = ccdc_open,
+-		.close = ccdc_close,
+-		.enable = ccdc_enable,
+-		.enable_out_to_sdram = ccdc_enable_output_to_sdram,
+-		.set_hw_if_params = ccdc_set_hw_if_params,
+-		.configure = ccdc_configure,
+-		.set_buftype = ccdc_set_buftype,
+-		.get_buftype = ccdc_get_buftype,
+-		.enum_pix = ccdc_enum_pix,
+-		.set_pixel_format = ccdc_set_pixel_format,
+-		.get_pixel_format = ccdc_get_pixel_format,
+-		.set_frame_format = ccdc_set_frame_format,
+-		.get_frame_format = ccdc_get_frame_format,
+-		.set_image_window = ccdc_set_image_window,
+-		.get_image_window = ccdc_get_image_window,
+-		.get_line_length = ccdc_get_line_length,
+-		.setfbaddr = ccdc_setfbaddr,
+-		.getfid = ccdc_getfid,
+-	},
+-};
+-
+-static int dm355_ccdc_probe(struct platform_device *pdev)
+-{
+-	void (*setup_pinmux)(void);
+-	struct resource	*res;
+-	int status = 0;
+-
+-	/*
+-	 * first try to register with vpfe. If not correct platform, then we
+-	 * don't have to iomap
+-	 */
+-	status = vpfe_register_ccdc_device(&ccdc_hw_dev);
+-	if (status < 0)
+-		return status;
+-
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	if (!res) {
+-		status = -ENODEV;
+-		goto fail_nores;
+-	}
+-
+-	res = request_mem_region(res->start, resource_size(res), res->name);
+-	if (!res) {
+-		status = -EBUSY;
+-		goto fail_nores;
+-	}
+-
+-	ccdc_cfg.base_addr = ioremap(res->start, resource_size(res));
+-	if (!ccdc_cfg.base_addr) {
+-		status = -ENOMEM;
+-		goto fail_nomem;
+-	}
+-
+-	/* Platform data holds setup_pinmux function ptr */
+-	if (NULL == pdev->dev.platform_data) {
+-		status = -ENODEV;
+-		goto fail_nomap;
+-	}
+-	setup_pinmux = pdev->dev.platform_data;
+-	/*
+-	 * setup Mux configuration for ccdc which may be different for
+-	 * different SoCs using this CCDC
+-	 */
+-	setup_pinmux();
+-	ccdc_cfg.dev = &pdev->dev;
+-	printk(KERN_NOTICE "%s is registered with vpfe.\n", ccdc_hw_dev.name);
+-	return 0;
+-fail_nomap:
+-	iounmap(ccdc_cfg.base_addr);
+-fail_nomem:
+-	release_mem_region(res->start, resource_size(res));
+-fail_nores:
+-	vpfe_unregister_ccdc_device(&ccdc_hw_dev);
+-	return status;
+-}
+-
+-static int dm355_ccdc_remove(struct platform_device *pdev)
+-{
+-	struct resource	*res;
+-
+-	iounmap(ccdc_cfg.base_addr);
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	release_mem_region(res->start, resource_size(res));
+-	vpfe_unregister_ccdc_device(&ccdc_hw_dev);
+-	return 0;
+-}
+-
+-static struct platform_driver dm355_ccdc_driver = {
+-	.driver = {
+-		.name	= "dm355_ccdc",
+-	},
+-	.remove = dm355_ccdc_remove,
+-	.probe = dm355_ccdc_probe,
+-};
+-
+-module_platform_driver(dm355_ccdc_driver);
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.h b/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.h
+deleted file mode 100644
+index 1f3d00aa46d1..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.h
++++ /dev/null
+@@ -1,308 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Copyright (C) 2005-2009 Texas Instruments Inc
+- */
+-#ifndef _DM355_CCDC_H
+-#define _DM355_CCDC_H
+-#include <media/davinci/ccdc_types.h>
+-#include <media/davinci/vpfe_types.h>
+-
+-/* enum for No of pixel per line to be avg. in Black Clamping */
+-enum ccdc_sample_length {
+-	CCDC_SAMPLE_1PIXELS,
+-	CCDC_SAMPLE_2PIXELS,
+-	CCDC_SAMPLE_4PIXELS,
+-	CCDC_SAMPLE_8PIXELS,
+-	CCDC_SAMPLE_16PIXELS
+-};
+-
+-/* enum for No of lines in Black Clamping */
+-enum ccdc_sample_line {
+-	CCDC_SAMPLE_1LINES,
+-	CCDC_SAMPLE_2LINES,
+-	CCDC_SAMPLE_4LINES,
+-	CCDC_SAMPLE_8LINES,
+-	CCDC_SAMPLE_16LINES
+-};
+-
+-/* enum for Alaw gamma width */
+-enum ccdc_gamma_width {
+-	CCDC_GAMMA_BITS_13_4,
+-	CCDC_GAMMA_BITS_12_3,
+-	CCDC_GAMMA_BITS_11_2,
+-	CCDC_GAMMA_BITS_10_1,
+-	CCDC_GAMMA_BITS_09_0
+-};
+-
+-enum ccdc_colpats {
+-	CCDC_RED,
+-	CCDC_GREEN_RED,
+-	CCDC_GREEN_BLUE,
+-	CCDC_BLUE
+-};
+-
+-struct ccdc_col_pat {
+-	enum ccdc_colpats olop;
+-	enum ccdc_colpats olep;
+-	enum ccdc_colpats elop;
+-	enum ccdc_colpats elep;
+-};
+-
+-enum ccdc_datasft {
+-	CCDC_DATA_NO_SHIFT,
+-	CCDC_DATA_SHIFT_1BIT,
+-	CCDC_DATA_SHIFT_2BIT,
+-	CCDC_DATA_SHIFT_3BIT,
+-	CCDC_DATA_SHIFT_4BIT,
+-	CCDC_DATA_SHIFT_5BIT,
+-	CCDC_DATA_SHIFT_6BIT
+-};
+-
+-enum ccdc_data_size {
+-	CCDC_DATA_16BITS,
+-	CCDC_DATA_15BITS,
+-	CCDC_DATA_14BITS,
+-	CCDC_DATA_13BITS,
+-	CCDC_DATA_12BITS,
+-	CCDC_DATA_11BITS,
+-	CCDC_DATA_10BITS,
+-	CCDC_DATA_8BITS
+-};
+-enum ccdc_mfilt1 {
+-	CCDC_NO_MEDIAN_FILTER1,
+-	CCDC_AVERAGE_FILTER1,
+-	CCDC_MEDIAN_FILTER1
+-};
+-
+-enum ccdc_mfilt2 {
+-	CCDC_NO_MEDIAN_FILTER2,
+-	CCDC_AVERAGE_FILTER2,
+-	CCDC_MEDIAN_FILTER2
+-};
+-
+-/* structure for ALaw */
+-struct ccdc_a_law {
+-	/* Enable/disable A-Law */
+-	unsigned char enable;
+-	/* Gamma Width Input */
+-	enum ccdc_gamma_width gamma_wd;
+-};
+-
+-/* structure for Black Clamping */
+-struct ccdc_black_clamp {
+-	/* only if bClampEnable is TRUE */
+-	unsigned char b_clamp_enable;
+-	/* only if bClampEnable is TRUE */
+-	enum ccdc_sample_length sample_pixel;
+-	/* only if bClampEnable is TRUE */
+-	enum ccdc_sample_line sample_ln;
+-	/* only if bClampEnable is TRUE */
+-	unsigned short start_pixel;
+-	/* only if bClampEnable is FALSE */
+-	unsigned short sgain;
+-	unsigned short dc_sub;
+-};
+-
+-/* structure for Black Level Compensation */
+-struct ccdc_black_compensation {
+-	/* Constant value to subtract from Red component */
+-	unsigned char r;
+-	/* Constant value to subtract from Gr component */
+-	unsigned char gr;
+-	/* Constant value to subtract from Blue component */
+-	unsigned char b;
+-	/* Constant value to subtract from Gb component */
+-	unsigned char gb;
+-};
+-
+-struct ccdc_float {
+-	int integer;
+-	unsigned int decimal;
+-};
+-
+-#define CCDC_CSC_COEFF_TABLE_SIZE	16
+-/* structure for color space converter */
+-struct ccdc_csc {
+-	unsigned char enable;
+-	/*
+-	 * S8Q5. Use 2 decimal precision, user values range from -3.00 to 3.99.
+-	 * example - to use 1.03, set integer part as 1, and decimal part as 3
+-	 * to use -1.03, set integer part as -1 and decimal part as 3
+-	 */
+-	struct ccdc_float coeff[CCDC_CSC_COEFF_TABLE_SIZE];
+-};
+-
+-/* Structures for Vertical Defect Correction*/
+-enum ccdc_vdf_csl {
+-	CCDC_VDF_NORMAL,
+-	CCDC_VDF_HORZ_INTERPOL_SAT,
+-	CCDC_VDF_HORZ_INTERPOL
+-};
+-
+-enum ccdc_vdf_cuda {
+-	CCDC_VDF_WHOLE_LINE_CORRECT,
+-	CCDC_VDF_UPPER_DISABLE
+-};
+-
+-enum ccdc_dfc_mwr {
+-	CCDC_DFC_MWR_WRITE_COMPLETE,
+-	CCDC_DFC_WRITE_REG
+-};
+-
+-enum ccdc_dfc_mrd {
+-	CCDC_DFC_READ_COMPLETE,
+-	CCDC_DFC_READ_REG
+-};
+-
+-enum ccdc_dfc_ma_rst {
+-	CCDC_DFC_INCR_ADDR,
+-	CCDC_DFC_CLR_ADDR
+-};
+-
+-enum ccdc_dfc_mclr {
+-	CCDC_DFC_CLEAR_COMPLETE,
+-	CCDC_DFC_CLEAR
+-};
+-
+-struct ccdc_dft_corr_ctl {
+-	enum ccdc_vdf_csl vdfcsl;
+-	enum ccdc_vdf_cuda vdfcuda;
+-	unsigned int vdflsft;
+-};
+-
+-struct ccdc_dft_corr_mem_ctl {
+-	enum ccdc_dfc_mwr dfcmwr;
+-	enum ccdc_dfc_mrd dfcmrd;
+-	enum ccdc_dfc_ma_rst dfcmarst;
+-	enum ccdc_dfc_mclr dfcmclr;
+-};
+-
+-#define CCDC_DFT_TABLE_SIZE	16
+-/*
+- * Main Structure for vertical defect correction. Vertical defect
+- * correction can correct up to 16 defects if defects less than 16
+- * then pad the rest with 0
+- */
+-struct ccdc_vertical_dft {
+-	unsigned char ver_dft_en;
+-	unsigned char gen_dft_en;
+-	unsigned int saturation_ctl;
+-	struct ccdc_dft_corr_ctl dft_corr_ctl;
+-	struct ccdc_dft_corr_mem_ctl dft_corr_mem_ctl;
+-	int table_size;
+-	unsigned int dft_corr_horz[CCDC_DFT_TABLE_SIZE];
+-	unsigned int dft_corr_vert[CCDC_DFT_TABLE_SIZE];
+-	unsigned int dft_corr_sub1[CCDC_DFT_TABLE_SIZE];
+-	unsigned int dft_corr_sub2[CCDC_DFT_TABLE_SIZE];
+-	unsigned int dft_corr_sub3[CCDC_DFT_TABLE_SIZE];
+-};
+-
+-struct ccdc_data_offset {
+-	unsigned char horz_offset;
+-	unsigned char vert_offset;
+-};
+-
+-/*
+- * Structure for CCDC configuration parameters for raw capture mode passed
+- * by application
+- */
+-struct ccdc_config_params_raw {
+-	/* data shift to be applied before storing */
+-	enum ccdc_datasft datasft;
+-	/* data size value from 8 to 16 bits */
+-	enum ccdc_data_size data_sz;
+-	/* median filter for sdram */
+-	enum ccdc_mfilt1 mfilt1;
+-	enum ccdc_mfilt2 mfilt2;
+-	/* low pass filter enable/disable */
+-	unsigned char lpf_enable;
+-	/* Threshold of median filter */
+-	int med_filt_thres;
+-	/*
+-	 * horz and vertical data offset. Applicable for defect correction
+-	 * and lsc
+-	 */
+-	struct ccdc_data_offset data_offset;
+-	/* Structure for Optional A-Law */
+-	struct ccdc_a_law alaw;
+-	/* Structure for Optical Black Clamp */
+-	struct ccdc_black_clamp blk_clamp;
+-	/* Structure for Black Compensation */
+-	struct ccdc_black_compensation blk_comp;
+-	/* structure for vertical Defect Correction Module Configuration */
+-	struct ccdc_vertical_dft vertical_dft;
+-	/* structure for color space converter Module Configuration */
+-	struct ccdc_csc csc;
+-	/* color patters for bayer capture */
+-	struct ccdc_col_pat col_pat_field0;
+-	struct ccdc_col_pat col_pat_field1;
+-};
+-
+-#ifdef __KERNEL__
+-#include <linux/io.h>
+-
+-#define CCDC_WIN_PAL	{0, 0, 720, 576}
+-#define CCDC_WIN_VGA	{0, 0, 640, 480}
+-
+-struct ccdc_params_ycbcr {
+-	/* pixel format */
+-	enum ccdc_pixfmt pix_fmt;
+-	/* progressive or interlaced frame */
+-	enum ccdc_frmfmt frm_fmt;
+-	/* video window */
+-	struct v4l2_rect win;
+-	/* field id polarity */
+-	enum vpfe_pin_pol fid_pol;
+-	/* vertical sync polarity */
+-	enum vpfe_pin_pol vd_pol;
+-	/* horizontal sync polarity */
+-	enum vpfe_pin_pol hd_pol;
+-	/* enable BT.656 embedded sync mode */
+-	int bt656_enable;
+-	/* cb:y:cr:y or y:cb:y:cr in memory */
+-	enum ccdc_pixorder pix_order;
+-	/* interleaved or separated fields  */
+-	enum ccdc_buftype buf_type;
+-};
+-
+-/* Gain applied to Raw Bayer data */
+-struct ccdc_gain {
+-	unsigned short r_ye;
+-	unsigned short gr_cy;
+-	unsigned short gb_g;
+-	unsigned short b_mg;
+-};
+-
+-/* Structure for CCDC configuration parameters for raw capture mode */
+-struct ccdc_params_raw {
+-	/* pixel format */
+-	enum ccdc_pixfmt pix_fmt;
+-	/* progressive or interlaced frame */
+-	enum ccdc_frmfmt frm_fmt;
+-	/* video window */
+-	struct v4l2_rect win;
+-	/* field id polarity */
+-	enum vpfe_pin_pol fid_pol;
+-	/* vertical sync polarity */
+-	enum vpfe_pin_pol vd_pol;
+-	/* horizontal sync polarity */
+-	enum vpfe_pin_pol hd_pol;
+-	/* interleaved or separated fields */
+-	enum ccdc_buftype buf_type;
+-	/* Gain values */
+-	struct ccdc_gain gain;
+-	/* offset */
+-	unsigned int ccdc_offset;
+-	/* horizontal flip enable */
+-	unsigned char horz_flip_enable;
+-	/*
+-	 * enable to store the image in inverse order in memory
+-	 * (bottom to top)
+-	 */
+-	unsigned char image_invert_enable;
+-	/* Configurable part of raw data */
+-	struct ccdc_config_params_raw config_params;
+-};
+-
+-#endif
+-#endif				/* DM355_CCDC_H */
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc_regs.h b/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc_regs.h
+deleted file mode 100644
+index eb381f075245..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc_regs.h
++++ /dev/null
+@@ -1,297 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Copyright (C) 2005-2009 Texas Instruments Inc
+- */
+-#ifndef _DM355_CCDC_REGS_H
+-#define _DM355_CCDC_REGS_H
+-
+-/**************************************************************************\
+-* Register OFFSET Definitions
+-\**************************************************************************/
+-#define SYNCEN				0x00
+-#define MODESET				0x04
+-#define HDWIDTH				0x08
+-#define VDWIDTH				0x0c
+-#define PPLN				0x10
+-#define LPFR				0x14
+-#define SPH				0x18
+-#define NPH				0x1c
+-#define SLV0				0x20
+-#define SLV1				0x24
+-#define NLV				0x28
+-#define CULH				0x2c
+-#define CULV				0x30
+-#define HSIZE				0x34
+-#define SDOFST				0x38
+-#define STADRH				0x3c
+-#define STADRL				0x40
+-#define CLAMP				0x44
+-#define DCSUB				0x48
+-#define COLPTN				0x4c
+-#define BLKCMP0				0x50
+-#define BLKCMP1				0x54
+-#define MEDFILT				0x58
+-#define RYEGAIN				0x5c
+-#define GRCYGAIN			0x60
+-#define GBGGAIN				0x64
+-#define BMGGAIN				0x68
+-#define OFFSET				0x6c
+-#define OUTCLIP				0x70
+-#define VDINT0				0x74
+-#define VDINT1				0x78
+-#define RSV0				0x7c
+-#define GAMMAWD				0x80
+-#define REC656IF			0x84
+-#define CCDCFG				0x88
+-#define FMTCFG				0x8c
+-#define FMTPLEN				0x90
+-#define FMTSPH				0x94
+-#define FMTLNH				0x98
+-#define FMTSLV				0x9c
+-#define FMTLNV				0xa0
+-#define FMTRLEN				0xa4
+-#define FMTHCNT				0xa8
+-#define FMT_ADDR_PTR_B			0xac
+-#define FMT_ADDR_PTR(i)			(FMT_ADDR_PTR_B + (i * 4))
+-#define FMTPGM_VF0			0xcc
+-#define FMTPGM_VF1			0xd0
+-#define FMTPGM_AP0			0xd4
+-#define FMTPGM_AP1			0xd8
+-#define FMTPGM_AP2			0xdc
+-#define FMTPGM_AP3                      0xe0
+-#define FMTPGM_AP4                      0xe4
+-#define FMTPGM_AP5                      0xe8
+-#define FMTPGM_AP6                      0xec
+-#define FMTPGM_AP7                      0xf0
+-#define LSCCFG1                         0xf4
+-#define LSCCFG2                         0xf8
+-#define LSCH0                           0xfc
+-#define LSCV0                           0x100
+-#define LSCKH                           0x104
+-#define LSCKV                           0x108
+-#define LSCMEMCTL                       0x10c
+-#define LSCMEMD                         0x110
+-#define LSCMEMQ                         0x114
+-#define DFCCTL                          0x118
+-#define DFCVSAT                         0x11c
+-#define DFCMEMCTL                       0x120
+-#define DFCMEM0                         0x124
+-#define DFCMEM1                         0x128
+-#define DFCMEM2                         0x12c
+-#define DFCMEM3                         0x130
+-#define DFCMEM4                         0x134
+-#define CSCCTL                          0x138
+-#define CSCM0                           0x13c
+-#define CSCM1                           0x140
+-#define CSCM2                           0x144
+-#define CSCM3                           0x148
+-#define CSCM4                           0x14c
+-#define CSCM5                           0x150
+-#define CSCM6                           0x154
+-#define CSCM7                           0x158
+-#define DATAOFST			0x15c
+-#define CCDC_REG_LAST			DATAOFST
+-/**************************************************************
+-*	Define for various register bit mask and shifts for CCDC
+-*
+-**************************************************************/
+-#define CCDC_RAW_IP_MODE			0
+-#define CCDC_VDHDOUT_INPUT			0
+-#define CCDC_YCINSWP_RAW			(0 << 4)
+-#define CCDC_EXWEN_DISABLE			0
+-#define CCDC_DATAPOL_NORMAL			0
+-#define CCDC_CCDCFG_FIDMD_LATCH_VSYNC		0
+-#define CCDC_CCDCFG_FIDMD_NO_LATCH_VSYNC	(1 << 6)
+-#define CCDC_CCDCFG_WENLOG_AND			0
+-#define CCDC_CCDCFG_TRGSEL_WEN			0
+-#define CCDC_CCDCFG_EXTRG_DISABLE		0
+-#define CCDC_CFA_MOSAIC				0
+-#define CCDC_Y8POS_SHIFT			11
+-
+-#define CCDC_VDC_DFCVSAT_MASK			0x3fff
+-#define CCDC_DATAOFST_MASK			0x0ff
+-#define CCDC_DATAOFST_H_SHIFT			0
+-#define CCDC_DATAOFST_V_SHIFT			8
+-#define CCDC_GAMMAWD_CFA_MASK			1
+-#define CCDC_GAMMAWD_CFA_SHIFT			5
+-#define CCDC_GAMMAWD_INPUT_SHIFT		2
+-#define CCDC_FID_POL_MASK			1
+-#define CCDC_FID_POL_SHIFT			4
+-#define CCDC_HD_POL_MASK			1
+-#define CCDC_HD_POL_SHIFT			3
+-#define CCDC_VD_POL_MASK			1
+-#define CCDC_VD_POL_SHIFT			2
+-#define CCDC_VD_POL_NEGATIVE			(1 << 2)
+-#define CCDC_FRM_FMT_MASK			1
+-#define CCDC_FRM_FMT_SHIFT			7
+-#define CCDC_DATA_SZ_MASK			7
+-#define CCDC_DATA_SZ_SHIFT			8
+-#define CCDC_VDHDOUT_MASK			1
+-#define CCDC_VDHDOUT_SHIFT			0
+-#define CCDC_EXWEN_MASK				1
+-#define CCDC_EXWEN_SHIFT			5
+-#define CCDC_INPUT_MODE_MASK			3
+-#define CCDC_INPUT_MODE_SHIFT			12
+-#define CCDC_PIX_FMT_MASK			3
+-#define CCDC_PIX_FMT_SHIFT			12
+-#define CCDC_DATAPOL_MASK			1
+-#define CCDC_DATAPOL_SHIFT			6
+-#define CCDC_WEN_ENABLE				(1 << 1)
+-#define CCDC_VDHDEN_ENABLE			(1 << 16)
+-#define CCDC_LPF_ENABLE				(1 << 14)
+-#define CCDC_ALAW_ENABLE			1
+-#define CCDC_ALAW_GAMMA_WD_MASK			7
+-#define CCDC_REC656IF_BT656_EN			3
+-
+-#define CCDC_FMTCFG_FMTMODE_MASK		3
+-#define CCDC_FMTCFG_FMTMODE_SHIFT		1
+-#define CCDC_FMTCFG_LNUM_MASK			3
+-#define CCDC_FMTCFG_LNUM_SHIFT			4
+-#define CCDC_FMTCFG_ADDRINC_MASK		7
+-#define CCDC_FMTCFG_ADDRINC_SHIFT		8
+-
+-#define CCDC_CCDCFG_FIDMD_SHIFT			6
+-#define	CCDC_CCDCFG_WENLOG_SHIFT		8
+-#define CCDC_CCDCFG_TRGSEL_SHIFT		9
+-#define CCDC_CCDCFG_EXTRG_SHIFT			10
+-#define CCDC_CCDCFG_MSBINVI_SHIFT		13
+-
+-#define CCDC_HSIZE_FLIP_SHIFT			12
+-#define CCDC_HSIZE_FLIP_MASK			1
+-#define CCDC_HSIZE_VAL_MASK			0xFFF
+-#define CCDC_SDOFST_FIELD_INTERLEAVED		0x249
+-#define CCDC_SDOFST_INTERLACE_INVERSE		0x4B6D
+-#define CCDC_SDOFST_INTERLACE_NORMAL		0x0B6D
+-#define CCDC_SDOFST_PROGRESSIVE_INVERSE		0x4000
+-#define CCDC_SDOFST_PROGRESSIVE_NORMAL		0
+-#define CCDC_START_PX_HOR_MASK			0x7FFF
+-#define CCDC_NUM_PX_HOR_MASK			0x7FFF
+-#define CCDC_START_VER_ONE_MASK			0x7FFF
+-#define CCDC_START_VER_TWO_MASK			0x7FFF
+-#define CCDC_NUM_LINES_VER			0x7FFF
+-
+-#define CCDC_BLK_CLAMP_ENABLE			(1 << 15)
+-#define CCDC_BLK_SGAIN_MASK			0x1F
+-#define CCDC_BLK_ST_PXL_MASK			0x1FFF
+-#define CCDC_BLK_SAMPLE_LN_MASK			3
+-#define CCDC_BLK_SAMPLE_LN_SHIFT		13
+-
+-#define CCDC_NUM_LINE_CALC_MASK			3
+-#define CCDC_NUM_LINE_CALC_SHIFT		14
+-
+-#define CCDC_BLK_DC_SUB_MASK			0x3FFF
+-#define CCDC_BLK_COMP_MASK			0xFF
+-#define CCDC_BLK_COMP_GB_COMP_SHIFT		8
+-#define CCDC_BLK_COMP_GR_COMP_SHIFT		0
+-#define CCDC_BLK_COMP_R_COMP_SHIFT		8
+-#define CCDC_LATCH_ON_VSYNC_DISABLE		(1 << 15)
+-#define CCDC_LATCH_ON_VSYNC_ENABLE		(0 << 15)
+-#define CCDC_FPC_ENABLE				(1 << 15)
+-#define CCDC_FPC_FPC_NUM_MASK			0x7FFF
+-#define CCDC_DATA_PACK_ENABLE			(1 << 11)
+-#define CCDC_FMT_HORZ_FMTLNH_MASK		0x1FFF
+-#define CCDC_FMT_HORZ_FMTSPH_MASK		0x1FFF
+-#define CCDC_FMT_HORZ_FMTSPH_SHIFT		16
+-#define CCDC_FMT_VERT_FMTLNV_MASK		0x1FFF
+-#define CCDC_FMT_VERT_FMTSLV_MASK		0x1FFF
+-#define CCDC_FMT_VERT_FMTSLV_SHIFT		16
+-#define CCDC_VP_OUT_VERT_NUM_MASK		0x3FFF
+-#define CCDC_VP_OUT_VERT_NUM_SHIFT		17
+-#define CCDC_VP_OUT_HORZ_NUM_MASK		0x1FFF
+-#define CCDC_VP_OUT_HORZ_NUM_SHIFT		4
+-#define CCDC_VP_OUT_HORZ_ST_MASK		0xF
+-
+-#define CCDC_CSC_COEF_INTEG_MASK		7
+-#define CCDC_CSC_COEF_DECIMAL_MASK		0x1f
+-#define CCDC_CSC_COEF_INTEG_SHIFT		5
+-#define CCDC_CSCM_MSB_SHIFT			8
+-#define CCDC_CSC_ENABLE				1
+-#define CCDC_CSC_DEC_MAX			32
+-
+-#define CCDC_MFILT1_SHIFT			10
+-#define CCDC_MFILT2_SHIFT			8
+-#define CCDC_MED_FILT_THRESH			0x3FFF
+-#define CCDC_LPF_MASK				1
+-#define CCDC_LPF_SHIFT				14
+-#define CCDC_OFFSET_MASK			0x3FF
+-#define CCDC_DATASFT_MASK			7
+-#define CCDC_DATASFT_SHIFT			8
+-
+-#define CCDC_DF_ENABLE				1
+-
+-#define CCDC_FMTPLEN_P0_MASK			0xF
+-#define CCDC_FMTPLEN_P1_MASK			0xF
+-#define CCDC_FMTPLEN_P2_MASK			7
+-#define CCDC_FMTPLEN_P3_MASK			7
+-#define CCDC_FMTPLEN_P0_SHIFT			0
+-#define CCDC_FMTPLEN_P1_SHIFT			4
+-#define CCDC_FMTPLEN_P2_SHIFT			8
+-#define CCDC_FMTPLEN_P3_SHIFT			12
+-
+-#define CCDC_FMTSPH_MASK			0x1FFF
+-#define CCDC_FMTLNH_MASK			0x1FFF
+-#define CCDC_FMTSLV_MASK			0x1FFF
+-#define CCDC_FMTLNV_MASK			0x7FFF
+-#define CCDC_FMTRLEN_MASK			0x1FFF
+-#define CCDC_FMTHCNT_MASK			0x1FFF
+-
+-#define CCDC_ADP_INIT_MASK			0x1FFF
+-#define CCDC_ADP_LINE_SHIFT			13
+-#define CCDC_ADP_LINE_MASK			3
+-#define CCDC_FMTPGN_APTR_MASK			7
+-
+-#define CCDC_DFCCTL_GDFCEN_MASK			1
+-#define CCDC_DFCCTL_VDFCEN_MASK			1
+-#define CCDC_DFCCTL_VDFC_DISABLE		(0 << 4)
+-#define CCDC_DFCCTL_VDFCEN_SHIFT		4
+-#define CCDC_DFCCTL_VDFCSL_MASK			3
+-#define CCDC_DFCCTL_VDFCSL_SHIFT		5
+-#define CCDC_DFCCTL_VDFCUDA_MASK		1
+-#define CCDC_DFCCTL_VDFCUDA_SHIFT		7
+-#define CCDC_DFCCTL_VDFLSFT_MASK		3
+-#define CCDC_DFCCTL_VDFLSFT_SHIFT		8
+-#define CCDC_DFCMEMCTL_DFCMARST_MASK		1
+-#define CCDC_DFCMEMCTL_DFCMARST_SHIFT		2
+-#define CCDC_DFCMEMCTL_DFCMWR_MASK		1
+-#define CCDC_DFCMEMCTL_DFCMWR_SHIFT		0
+-#define CCDC_DFCMEMCTL_INC_ADDR			(0 << 2)
+-
+-#define CCDC_LSCCFG_GFTSF_MASK			7
+-#define CCDC_LSCCFG_GFTSF_SHIFT			1
+-#define CCDC_LSCCFG_GFTINV_MASK			0xf
+-#define CCDC_LSCCFG_GFTINV_SHIFT		4
+-#define CCDC_LSC_GFTABLE_SEL_MASK		3
+-#define CCDC_LSC_GFTABLE_EPEL_SHIFT		8
+-#define CCDC_LSC_GFTABLE_OPEL_SHIFT		10
+-#define CCDC_LSC_GFTABLE_EPOL_SHIFT		12
+-#define CCDC_LSC_GFTABLE_OPOL_SHIFT		14
+-#define CCDC_LSC_GFMODE_MASK			3
+-#define CCDC_LSC_GFMODE_SHIFT			4
+-#define CCDC_LSC_DISABLE			0
+-#define CCDC_LSC_ENABLE				1
+-#define CCDC_LSC_TABLE1_SLC			0
+-#define CCDC_LSC_TABLE2_SLC			1
+-#define CCDC_LSC_TABLE3_SLC			2
+-#define CCDC_LSC_MEMADDR_RESET			(1 << 2)
+-#define CCDC_LSC_MEMADDR_INCR			(0 << 2)
+-#define CCDC_LSC_FRAC_MASK_T1			0xFF
+-#define CCDC_LSC_INT_MASK			3
+-#define CCDC_LSC_FRAC_MASK			0x3FFF
+-#define CCDC_LSC_CENTRE_MASK			0x3FFF
+-#define CCDC_LSC_COEF_MASK			0xff
+-#define CCDC_LSC_COEFL_SHIFT			0
+-#define CCDC_LSC_COEFU_SHIFT			8
+-#define CCDC_GAIN_MASK				0x7FF
+-#define CCDC_SYNCEN_VDHDEN_MASK			(1 << 0)
+-#define CCDC_SYNCEN_WEN_MASK			(1 << 1)
+-#define CCDC_SYNCEN_WEN_SHIFT			1
+-
+-/* Power on Defaults in hardware */
+-#define MODESET_DEFAULT				0x200
+-#define CULH_DEFAULT				0xFFFF
+-#define CULV_DEFAULT				0xFF
+-#define GAIN_DEFAULT				256
+-#define OUTCLIP_DEFAULT				0x3FFF
+-#define LSCCFG2_DEFAULT				0xE
+-
+-#endif
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.c b/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.c
+deleted file mode 100644
+index 4a93e5ad6415..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.c
++++ /dev/null
+@@ -1,879 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * Copyright (C) 2006-2009 Texas Instruments Inc
+- *
+- * CCDC hardware module for DM6446
+- * ------------------------------
+- *
+- * This module is for configuring CCD controller of DM6446 VPFE to capture
+- * Raw yuv or Bayer RGB data from a decoder. CCDC has several modules
+- * such as Defect Pixel Correction, Color Space Conversion etc to
+- * pre-process the Raw Bayer RGB data, before writing it to SDRAM.
+- * This file is named DM644x so that other variants such DM6443
+- * may be supported using the same module.
+- *
+- * TODO: Test Raw bayer parameter settings and bayer capture
+- *	 Split module parameter structure to module specific ioctl structs
+- *	 investigate if enum used for user space type definition
+- *	 to be replaced by #defines or integer
+- */
+-#include <linux/platform_device.h>
+-#include <linux/uaccess.h>
+-#include <linux/videodev2.h>
+-#include <linux/gfp.h>
+-#include <linux/err.h>
+-#include <linux/module.h>
+-
+-#include "dm644x_ccdc.h"
+-#include <media/davinci/vpss.h>
+-
+-#include "dm644x_ccdc_regs.h"
+-#include "ccdc_hw_device.h"
+-
+-MODULE_LICENSE("GPL");
+-MODULE_DESCRIPTION("CCDC Driver for DM6446");
+-MODULE_AUTHOR("Texas Instruments");
+-
+-static struct ccdc_oper_config {
+-	struct device *dev;
+-	/* CCDC interface type */
+-	enum vpfe_hw_if_type if_type;
+-	/* Raw Bayer configuration */
+-	struct ccdc_params_raw bayer;
+-	/* YCbCr configuration */
+-	struct ccdc_params_ycbcr ycbcr;
+-	/* ccdc base address */
+-	void __iomem *base_addr;
+-} ccdc_cfg = {
+-	/* Raw configurations */
+-	.bayer = {
+-		.pix_fmt = CCDC_PIXFMT_RAW,
+-		.frm_fmt = CCDC_FRMFMT_PROGRESSIVE,
+-		.win = CCDC_WIN_VGA,
+-		.fid_pol = VPFE_PINPOL_POSITIVE,
+-		.vd_pol = VPFE_PINPOL_POSITIVE,
+-		.hd_pol = VPFE_PINPOL_POSITIVE,
+-		.config_params = {
+-			.data_sz = CCDC_DATA_10BITS,
+-		},
+-	},
+-	.ycbcr = {
+-		.pix_fmt = CCDC_PIXFMT_YCBCR_8BIT,
+-		.frm_fmt = CCDC_FRMFMT_INTERLACED,
+-		.win = CCDC_WIN_PAL,
+-		.fid_pol = VPFE_PINPOL_POSITIVE,
+-		.vd_pol = VPFE_PINPOL_POSITIVE,
+-		.hd_pol = VPFE_PINPOL_POSITIVE,
+-		.bt656_enable = 1,
+-		.pix_order = CCDC_PIXORDER_CBYCRY,
+-		.buf_type = CCDC_BUFTYPE_FLD_INTERLEAVED
+-	},
+-};
+-
+-#define CCDC_MAX_RAW_YUV_FORMATS	2
+-
+-/* Raw Bayer formats */
+-static u32 ccdc_raw_bayer_pix_formats[] =
+-	{V4L2_PIX_FMT_SBGGR8, V4L2_PIX_FMT_SBGGR16};
+-
+-/* Raw YUV formats */
+-static u32 ccdc_raw_yuv_pix_formats[] =
+-	{V4L2_PIX_FMT_UYVY, V4L2_PIX_FMT_YUYV};
+-
+-/* CCDC Save/Restore context */
+-static u32 ccdc_ctx[CCDC_REG_END / sizeof(u32)];
+-
+-/* register access routines */
+-static inline u32 regr(u32 offset)
+-{
+-	return __raw_readl(ccdc_cfg.base_addr + offset);
+-}
+-
+-static inline void regw(u32 val, u32 offset)
+-{
+-	__raw_writel(val, ccdc_cfg.base_addr + offset);
+-}
+-
+-static void ccdc_enable(int flag)
+-{
+-	regw(flag, CCDC_PCR);
+-}
+-
+-static void ccdc_enable_vport(int flag)
+-{
+-	if (flag)
+-		/* enable video port */
+-		regw(CCDC_ENABLE_VIDEO_PORT, CCDC_FMTCFG);
+-	else
+-		regw(CCDC_DISABLE_VIDEO_PORT, CCDC_FMTCFG);
+-}
+-
+-/*
+- * ccdc_setwin()
+- * This function will configure the window size
+- * to be capture in CCDC reg
+- */
+-static void ccdc_setwin(struct v4l2_rect *image_win,
+-			enum ccdc_frmfmt frm_fmt,
+-			int ppc)
+-{
+-	int horz_start, horz_nr_pixels;
+-	int vert_start, vert_nr_lines;
+-	int val = 0, mid_img = 0;
+-
+-	dev_dbg(ccdc_cfg.dev, "\nStarting ccdc_setwin...");
+-	/*
+-	 * ppc - per pixel count. indicates how many pixels per cell
+-	 * output to SDRAM. example, for ycbcr, it is one y and one c, so 2.
+-	 * raw capture this is 1
+-	 */
+-	horz_start = image_win->left << (ppc - 1);
+-	horz_nr_pixels = (image_win->width << (ppc - 1)) - 1;
+-	regw((horz_start << CCDC_HORZ_INFO_SPH_SHIFT) | horz_nr_pixels,
+-	     CCDC_HORZ_INFO);
+-
+-	vert_start = image_win->top;
+-
+-	if (frm_fmt == CCDC_FRMFMT_INTERLACED) {
+-		vert_nr_lines = (image_win->height >> 1) - 1;
+-		vert_start >>= 1;
+-		/* Since first line doesn't have any data */
+-		vert_start += 1;
+-		/* configure VDINT0 */
+-		val = (vert_start << CCDC_VDINT_VDINT0_SHIFT);
+-		regw(val, CCDC_VDINT);
+-
+-	} else {
+-		/* Since first line doesn't have any data */
+-		vert_start += 1;
+-		vert_nr_lines = image_win->height - 1;
+-		/*
+-		 * configure VDINT0 and VDINT1. VDINT1 will be at half
+-		 * of image height
+-		 */
+-		mid_img = vert_start + (image_win->height / 2);
+-		val = (vert_start << CCDC_VDINT_VDINT0_SHIFT) |
+-		    (mid_img & CCDC_VDINT_VDINT1_MASK);
+-		regw(val, CCDC_VDINT);
+-
+-	}
+-	regw((vert_start << CCDC_VERT_START_SLV0_SHIFT) | vert_start,
+-	     CCDC_VERT_START);
+-	regw(vert_nr_lines, CCDC_VERT_LINES);
+-	dev_dbg(ccdc_cfg.dev, "\nEnd of ccdc_setwin...");
+-}
+-
+-static void ccdc_readregs(void)
+-{
+-	unsigned int val = 0;
+-
+-	val = regr(CCDC_ALAW);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to ALAW...\n", val);
+-	val = regr(CCDC_CLAMP);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to CLAMP...\n", val);
+-	val = regr(CCDC_DCSUB);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to DCSUB...\n", val);
+-	val = regr(CCDC_BLKCMP);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to BLKCMP...\n", val);
+-	val = regr(CCDC_FPC_ADDR);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to FPC_ADDR...\n", val);
+-	val = regr(CCDC_FPC);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to FPC...\n", val);
+-	val = regr(CCDC_FMTCFG);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to FMTCFG...\n", val);
+-	val = regr(CCDC_COLPTN);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to COLPTN...\n", val);
+-	val = regr(CCDC_FMT_HORZ);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to FMT_HORZ...\n", val);
+-	val = regr(CCDC_FMT_VERT);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to FMT_VERT...\n", val);
+-	val = regr(CCDC_HSIZE_OFF);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to HSIZE_OFF...\n", val);
+-	val = regr(CCDC_SDOFST);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to SDOFST...\n", val);
+-	val = regr(CCDC_VP_OUT);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to VP_OUT...\n", val);
+-	val = regr(CCDC_SYN_MODE);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to SYN_MODE...\n", val);
+-	val = regr(CCDC_HORZ_INFO);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to HORZ_INFO...\n", val);
+-	val = regr(CCDC_VERT_START);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to VERT_START...\n", val);
+-	val = regr(CCDC_VERT_LINES);
+-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to VERT_LINES...\n", val);
+-}
+-
+-static int ccdc_close(struct device *dev)
+-{
+-	return 0;
+-}
+-
+-/*
+- * ccdc_restore_defaults()
+- * This function will write defaults to all CCDC registers
+- */
+-static void ccdc_restore_defaults(void)
+-{
+-	int i;
+-
+-	/* disable CCDC */
+-	ccdc_enable(0);
+-	/* set all registers to default value */
+-	for (i = 4; i <= 0x94; i += 4)
+-		regw(0,  i);
+-	regw(CCDC_NO_CULLING, CCDC_CULLING);
+-	regw(CCDC_GAMMA_BITS_11_2, CCDC_ALAW);
+-}
+-
+-static int ccdc_open(struct device *device)
+-{
+-	ccdc_restore_defaults();
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		ccdc_enable_vport(1);
+-	return 0;
+-}
+-
+-static void ccdc_sbl_reset(void)
+-{
+-	vpss_clear_wbl_overflow(VPSS_PCR_CCDC_WBL_O);
+-}
+-
+-/*
+- * ccdc_config_ycbcr()
+- * This function will configure CCDC for YCbCr video capture
+- */
+-static void ccdc_config_ycbcr(void)
+-{
+-	struct ccdc_params_ycbcr *params = &ccdc_cfg.ycbcr;
+-	u32 syn_mode;
+-
+-	dev_dbg(ccdc_cfg.dev, "\nStarting ccdc_config_ycbcr...");
+-	/*
+-	 * first restore the CCDC registers to default values
+-	 * This is important since we assume default values to be set in
+-	 * a lot of registers that we didn't touch
+-	 */
+-	ccdc_restore_defaults();
+-
+-	/*
+-	 * configure pixel format, frame format, configure video frame
+-	 * format, enable output to SDRAM, enable internal timing generator
+-	 * and 8bit pack mode
+-	 */
+-	syn_mode = (((params->pix_fmt & CCDC_SYN_MODE_INPMOD_MASK) <<
+-		    CCDC_SYN_MODE_INPMOD_SHIFT) |
+-		    ((params->frm_fmt & CCDC_SYN_FLDMODE_MASK) <<
+-		    CCDC_SYN_FLDMODE_SHIFT) | CCDC_VDHDEN_ENABLE |
+-		    CCDC_WEN_ENABLE | CCDC_DATA_PACK_ENABLE);
+-
+-	/* setup BT.656 sync mode */
+-	if (params->bt656_enable) {
+-		regw(CCDC_REC656IF_BT656_EN, CCDC_REC656IF);
+-
+-		/*
+-		 * configure the FID, VD, HD pin polarity,
+-		 * fld,hd pol positive, vd negative, 8-bit data
+-		 */
+-		syn_mode |= CCDC_SYN_MODE_VD_POL_NEGATIVE;
+-		if (ccdc_cfg.if_type == VPFE_BT656_10BIT)
+-			syn_mode |= CCDC_SYN_MODE_10BITS;
+-		else
+-			syn_mode |= CCDC_SYN_MODE_8BITS;
+-	} else {
+-		/* y/c external sync mode */
+-		syn_mode |= (((params->fid_pol & CCDC_FID_POL_MASK) <<
+-			     CCDC_FID_POL_SHIFT) |
+-			     ((params->hd_pol & CCDC_HD_POL_MASK) <<
+-			     CCDC_HD_POL_SHIFT) |
+-			     ((params->vd_pol & CCDC_VD_POL_MASK) <<
+-			     CCDC_VD_POL_SHIFT));
+-	}
+-	regw(syn_mode, CCDC_SYN_MODE);
+-
+-	/* configure video window */
+-	ccdc_setwin(&params->win, params->frm_fmt, 2);
+-
+-	/*
+-	 * configure the order of y cb cr in SDRAM, and disable latch
+-	 * internal register on vsync
+-	 */
+-	if (ccdc_cfg.if_type == VPFE_BT656_10BIT)
+-		regw((params->pix_order << CCDC_CCDCFG_Y8POS_SHIFT) |
+-			CCDC_LATCH_ON_VSYNC_DISABLE | CCDC_CCDCFG_BW656_10BIT,
+-			CCDC_CCDCFG);
+-	else
+-		regw((params->pix_order << CCDC_CCDCFG_Y8POS_SHIFT) |
+-			CCDC_LATCH_ON_VSYNC_DISABLE, CCDC_CCDCFG);
+-
+-	/*
+-	 * configure the horizontal line offset. This should be a
+-	 * on 32 byte boundary. So clear LSB 5 bits
+-	 */
+-	regw(((params->win.width * 2  + 31) & ~0x1f), CCDC_HSIZE_OFF);
+-
+-	/* configure the memory line offset */
+-	if (params->buf_type == CCDC_BUFTYPE_FLD_INTERLEAVED)
+-		/* two fields are interleaved in memory */
+-		regw(CCDC_SDOFST_FIELD_INTERLEAVED, CCDC_SDOFST);
+-
+-	ccdc_sbl_reset();
+-	dev_dbg(ccdc_cfg.dev, "\nEnd of ccdc_config_ycbcr...\n");
+-}
+-
+-static void ccdc_config_black_clamp(struct ccdc_black_clamp *bclamp)
+-{
+-	u32 val;
+-
+-	if (!bclamp->enable) {
+-		/* configure DCSub */
+-		val = (bclamp->dc_sub) & CCDC_BLK_DC_SUB_MASK;
+-		regw(val, CCDC_DCSUB);
+-		dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to DCSUB...\n", val);
+-		regw(CCDC_CLAMP_DEFAULT_VAL, CCDC_CLAMP);
+-		dev_dbg(ccdc_cfg.dev, "\nWriting 0x0000 to CLAMP...\n");
+-		return;
+-	}
+-	/*
+-	 * Configure gain,  Start pixel, No of line to be avg,
+-	 * No of pixel/line to be avg, & Enable the Black clamping
+-	 */
+-	val = ((bclamp->sgain & CCDC_BLK_SGAIN_MASK) |
+-	       ((bclamp->start_pixel & CCDC_BLK_ST_PXL_MASK) <<
+-		CCDC_BLK_ST_PXL_SHIFT) |
+-	       ((bclamp->sample_ln & CCDC_BLK_SAMPLE_LINE_MASK) <<
+-		CCDC_BLK_SAMPLE_LINE_SHIFT) |
+-	       ((bclamp->sample_pixel & CCDC_BLK_SAMPLE_LN_MASK) <<
+-		CCDC_BLK_SAMPLE_LN_SHIFT) | CCDC_BLK_CLAMP_ENABLE);
+-	regw(val, CCDC_CLAMP);
+-	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to CLAMP...\n", val);
+-	/* If Black clamping is enable then make dcsub 0 */
+-	regw(CCDC_DCSUB_DEFAULT_VAL, CCDC_DCSUB);
+-	dev_dbg(ccdc_cfg.dev, "\nWriting 0x00000000 to DCSUB...\n");
+-}
+-
+-static void ccdc_config_black_compense(struct ccdc_black_compensation *bcomp)
+-{
+-	u32 val;
+-
+-	val = ((bcomp->b & CCDC_BLK_COMP_MASK) |
+-	      ((bcomp->gb & CCDC_BLK_COMP_MASK) <<
+-	       CCDC_BLK_COMP_GB_COMP_SHIFT) |
+-	      ((bcomp->gr & CCDC_BLK_COMP_MASK) <<
+-	       CCDC_BLK_COMP_GR_COMP_SHIFT) |
+-	      ((bcomp->r & CCDC_BLK_COMP_MASK) <<
+-	       CCDC_BLK_COMP_R_COMP_SHIFT));
+-	regw(val, CCDC_BLKCMP);
+-}
+-
+-/*
+- * ccdc_config_raw()
+- * This function will configure CCDC for Raw capture mode
+- */
+-static void ccdc_config_raw(void)
+-{
+-	struct ccdc_params_raw *params = &ccdc_cfg.bayer;
+-	struct ccdc_config_params_raw *config_params =
+-				&ccdc_cfg.bayer.config_params;
+-	unsigned int syn_mode = 0;
+-	unsigned int val;
+-
+-	dev_dbg(ccdc_cfg.dev, "\nStarting ccdc_config_raw...");
+-
+-	/*      Reset CCDC */
+-	ccdc_restore_defaults();
+-
+-	/* Disable latching function registers on VSYNC  */
+-	regw(CCDC_LATCH_ON_VSYNC_DISABLE, CCDC_CCDCFG);
+-
+-	/*
+-	 * Configure the vertical sync polarity(SYN_MODE.VDPOL),
+-	 * horizontal sync polarity (SYN_MODE.HDPOL), frame id polarity
+-	 * (SYN_MODE.FLDPOL), frame format(progressive or interlace),
+-	 * data size(SYNMODE.DATSIZ), &pixel format (Input mode), output
+-	 * SDRAM, enable internal timing generator
+-	 */
+-	syn_mode =
+-		(((params->vd_pol & CCDC_VD_POL_MASK) << CCDC_VD_POL_SHIFT) |
+-		((params->hd_pol & CCDC_HD_POL_MASK) << CCDC_HD_POL_SHIFT) |
+-		((params->fid_pol & CCDC_FID_POL_MASK) << CCDC_FID_POL_SHIFT) |
+-		((params->frm_fmt & CCDC_FRM_FMT_MASK) << CCDC_FRM_FMT_SHIFT) |
+-		((config_params->data_sz & CCDC_DATA_SZ_MASK) <<
+-		CCDC_DATA_SZ_SHIFT) |
+-		((params->pix_fmt & CCDC_PIX_FMT_MASK) << CCDC_PIX_FMT_SHIFT) |
+-		CCDC_WEN_ENABLE | CCDC_VDHDEN_ENABLE);
+-
+-	/* Enable and configure aLaw register if needed */
+-	if (config_params->alaw.enable) {
+-		val = ((config_params->alaw.gamma_wd &
+-		      CCDC_ALAW_GAMMA_WD_MASK) | CCDC_ALAW_ENABLE);
+-		regw(val, CCDC_ALAW);
+-		dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to ALAW...\n", val);
+-	}
+-
+-	/* Configure video window */
+-	ccdc_setwin(&params->win, params->frm_fmt, CCDC_PPC_RAW);
+-
+-	/* Configure Black Clamp */
+-	ccdc_config_black_clamp(&config_params->blk_clamp);
+-
+-	/* Configure Black level compensation */
+-	ccdc_config_black_compense(&config_params->blk_comp);
+-
+-	/* If data size is 8 bit then pack the data */
+-	if ((config_params->data_sz == CCDC_DATA_8BITS) ||
+-	     config_params->alaw.enable)
+-		syn_mode |= CCDC_DATA_PACK_ENABLE;
+-
+-	/* disable video port */
+-	val = CCDC_DISABLE_VIDEO_PORT;
+-
+-	if (config_params->data_sz == CCDC_DATA_8BITS)
+-		val |= (CCDC_DATA_10BITS & CCDC_FMTCFG_VPIN_MASK)
+-		    << CCDC_FMTCFG_VPIN_SHIFT;
+-	else
+-		val |= (config_params->data_sz & CCDC_FMTCFG_VPIN_MASK)
+-		    << CCDC_FMTCFG_VPIN_SHIFT;
+-	/* Write value in FMTCFG */
+-	regw(val, CCDC_FMTCFG);
+-
+-	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to FMTCFG...\n", val);
+-	/* Configure the color pattern according to mt9t001 sensor */
+-	regw(CCDC_COLPTN_VAL, CCDC_COLPTN);
+-
+-	dev_dbg(ccdc_cfg.dev, "\nWriting 0xBB11BB11 to COLPTN...\n");
+-	/*
+-	 * Configure Data formatter(Video port) pixel selection
+-	 * (FMT_HORZ, FMT_VERT)
+-	 */
+-	val = ((params->win.left & CCDC_FMT_HORZ_FMTSPH_MASK) <<
+-	      CCDC_FMT_HORZ_FMTSPH_SHIFT) |
+-	      (params->win.width & CCDC_FMT_HORZ_FMTLNH_MASK);
+-	regw(val, CCDC_FMT_HORZ);
+-
+-	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to FMT_HORZ...\n", val);
+-	val = (params->win.top & CCDC_FMT_VERT_FMTSLV_MASK)
+-	    << CCDC_FMT_VERT_FMTSLV_SHIFT;
+-	if (params->frm_fmt == CCDC_FRMFMT_PROGRESSIVE)
+-		val |= (params->win.height) & CCDC_FMT_VERT_FMTLNV_MASK;
+-	else
+-		val |= (params->win.height >> 1) & CCDC_FMT_VERT_FMTLNV_MASK;
+-
+-	dev_dbg(ccdc_cfg.dev, "\nparams->win.height  0x%x ...\n",
+-	       params->win.height);
+-	regw(val, CCDC_FMT_VERT);
+-
+-	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to FMT_VERT...\n", val);
+-
+-	dev_dbg(ccdc_cfg.dev, "\nbelow regw(val, FMT_VERT)...");
+-
+-	/*
+-	 * Configure Horizontal offset register. If pack 8 is enabled then
+-	 * 1 pixel will take 1 byte
+-	 */
+-	if ((config_params->data_sz == CCDC_DATA_8BITS) ||
+-	    config_params->alaw.enable)
+-		regw((params->win.width + CCDC_32BYTE_ALIGN_VAL) &
+-		    CCDC_HSIZE_OFF_MASK, CCDC_HSIZE_OFF);
+-	else
+-		/* else one pixel will take 2 byte */
+-		regw(((params->win.width * CCDC_TWO_BYTES_PER_PIXEL) +
+-		    CCDC_32BYTE_ALIGN_VAL) & CCDC_HSIZE_OFF_MASK,
+-		    CCDC_HSIZE_OFF);
+-
+-	/* Set value for SDOFST */
+-	if (params->frm_fmt == CCDC_FRMFMT_INTERLACED) {
+-		if (params->image_invert_enable) {
+-			/* For intelace inverse mode */
+-			regw(CCDC_INTERLACED_IMAGE_INVERT, CCDC_SDOFST);
+-			dev_dbg(ccdc_cfg.dev, "\nWriting 0x4B6D to SDOFST..\n");
+-		}
+-
+-		else {
+-			/* For intelace non inverse mode */
+-			regw(CCDC_INTERLACED_NO_IMAGE_INVERT, CCDC_SDOFST);
+-			dev_dbg(ccdc_cfg.dev, "\nWriting 0x0249 to SDOFST..\n");
+-		}
+-	} else if (params->frm_fmt == CCDC_FRMFMT_PROGRESSIVE) {
+-		regw(CCDC_PROGRESSIVE_NO_IMAGE_INVERT, CCDC_SDOFST);
+-		dev_dbg(ccdc_cfg.dev, "\nWriting 0x0000 to SDOFST...\n");
+-	}
+-
+-	/*
+-	 * Configure video port pixel selection (VPOUT)
+-	 * Here -1 is to make the height value less than FMT_VERT.FMTLNV
+-	 */
+-	if (params->frm_fmt == CCDC_FRMFMT_PROGRESSIVE)
+-		val = (((params->win.height - 1) & CCDC_VP_OUT_VERT_NUM_MASK))
+-		    << CCDC_VP_OUT_VERT_NUM_SHIFT;
+-	else
+-		val =
+-		    ((((params->win.height >> CCDC_INTERLACED_HEIGHT_SHIFT) -
+-		     1) & CCDC_VP_OUT_VERT_NUM_MASK)) <<
+-		    CCDC_VP_OUT_VERT_NUM_SHIFT;
+-
+-	val |= ((((params->win.width))) & CCDC_VP_OUT_HORZ_NUM_MASK)
+-	    << CCDC_VP_OUT_HORZ_NUM_SHIFT;
+-	val |= (params->win.left) & CCDC_VP_OUT_HORZ_ST_MASK;
+-	regw(val, CCDC_VP_OUT);
+-
+-	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to VP_OUT...\n", val);
+-	regw(syn_mode, CCDC_SYN_MODE);
+-	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to SYN_MODE...\n", syn_mode);
+-
+-	ccdc_sbl_reset();
+-	dev_dbg(ccdc_cfg.dev, "\nend of ccdc_config_raw...");
+-	ccdc_readregs();
+-}
+-
+-static int ccdc_configure(void)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		ccdc_config_raw();
+-	else
+-		ccdc_config_ycbcr();
+-	return 0;
+-}
+-
+-static int ccdc_set_buftype(enum ccdc_buftype buf_type)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		ccdc_cfg.bayer.buf_type = buf_type;
+-	else
+-		ccdc_cfg.ycbcr.buf_type = buf_type;
+-	return 0;
+-}
+-
+-static enum ccdc_buftype ccdc_get_buftype(void)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		return ccdc_cfg.bayer.buf_type;
+-	return ccdc_cfg.ycbcr.buf_type;
+-}
+-
+-static int ccdc_enum_pix(u32 *pix, int i)
+-{
+-	int ret = -EINVAL;
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER) {
+-		if (i < ARRAY_SIZE(ccdc_raw_bayer_pix_formats)) {
+-			*pix = ccdc_raw_bayer_pix_formats[i];
+-			ret = 0;
+-		}
+-	} else {
+-		if (i < ARRAY_SIZE(ccdc_raw_yuv_pix_formats)) {
+-			*pix = ccdc_raw_yuv_pix_formats[i];
+-			ret = 0;
+-		}
+-	}
+-	return ret;
+-}
+-
+-static int ccdc_set_pixel_format(u32 pixfmt)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER) {
+-		ccdc_cfg.bayer.pix_fmt = CCDC_PIXFMT_RAW;
+-		if (pixfmt == V4L2_PIX_FMT_SBGGR8)
+-			ccdc_cfg.bayer.config_params.alaw.enable = 1;
+-		else if (pixfmt != V4L2_PIX_FMT_SBGGR16)
+-			return -EINVAL;
+-	} else {
+-		if (pixfmt == V4L2_PIX_FMT_YUYV)
+-			ccdc_cfg.ycbcr.pix_order = CCDC_PIXORDER_YCBYCR;
+-		else if (pixfmt == V4L2_PIX_FMT_UYVY)
+-			ccdc_cfg.ycbcr.pix_order = CCDC_PIXORDER_CBYCRY;
+-		else
+-			return -EINVAL;
+-	}
+-	return 0;
+-}
+-
+-static u32 ccdc_get_pixel_format(void)
+-{
+-	struct ccdc_a_law *alaw = &ccdc_cfg.bayer.config_params.alaw;
+-	u32 pixfmt;
+-
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		if (alaw->enable)
+-			pixfmt = V4L2_PIX_FMT_SBGGR8;
+-		else
+-			pixfmt = V4L2_PIX_FMT_SBGGR16;
+-	else {
+-		if (ccdc_cfg.ycbcr.pix_order == CCDC_PIXORDER_YCBYCR)
+-			pixfmt = V4L2_PIX_FMT_YUYV;
+-		else
+-			pixfmt = V4L2_PIX_FMT_UYVY;
+-	}
+-	return pixfmt;
+-}
+-
+-static int ccdc_set_image_window(struct v4l2_rect *win)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		ccdc_cfg.bayer.win = *win;
+-	else
+-		ccdc_cfg.ycbcr.win = *win;
+-	return 0;
+-}
+-
+-static void ccdc_get_image_window(struct v4l2_rect *win)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		*win = ccdc_cfg.bayer.win;
+-	else
+-		*win = ccdc_cfg.ycbcr.win;
+-}
+-
+-static unsigned int ccdc_get_line_length(void)
+-{
+-	struct ccdc_config_params_raw *config_params =
+-				&ccdc_cfg.bayer.config_params;
+-	unsigned int len;
+-
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER) {
+-		if ((config_params->alaw.enable) ||
+-		    (config_params->data_sz == CCDC_DATA_8BITS))
+-			len = ccdc_cfg.bayer.win.width;
+-		else
+-			len = ccdc_cfg.bayer.win.width * 2;
+-	} else
+-		len = ccdc_cfg.ycbcr.win.width * 2;
+-	return ALIGN(len, 32);
+-}
+-
+-static int ccdc_set_frame_format(enum ccdc_frmfmt frm_fmt)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		ccdc_cfg.bayer.frm_fmt = frm_fmt;
+-	else
+-		ccdc_cfg.ycbcr.frm_fmt = frm_fmt;
+-	return 0;
+-}
+-
+-static enum ccdc_frmfmt ccdc_get_frame_format(void)
+-{
+-	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
+-		return ccdc_cfg.bayer.frm_fmt;
+-	else
+-		return ccdc_cfg.ycbcr.frm_fmt;
+-}
+-
+-static int ccdc_getfid(void)
+-{
+-	return (regr(CCDC_SYN_MODE) >> 15) & 1;
+-}
+-
+-/* misc operations */
+-static inline void ccdc_setfbaddr(unsigned long addr)
+-{
+-	regw(addr & 0xffffffe0, CCDC_SDR_ADDR);
+-}
+-
+-static int ccdc_set_hw_if_params(struct vpfe_hw_if_param *params)
+-{
+-	ccdc_cfg.if_type = params->if_type;
+-
+-	switch (params->if_type) {
+-	case VPFE_BT656:
+-	case VPFE_YCBCR_SYNC_16:
+-	case VPFE_YCBCR_SYNC_8:
+-	case VPFE_BT656_10BIT:
+-		ccdc_cfg.ycbcr.vd_pol = params->vdpol;
+-		ccdc_cfg.ycbcr.hd_pol = params->hdpol;
+-		break;
+-	default:
+-		/* TODO add support for raw bayer here */
+-		return -EINVAL;
+-	}
+-	return 0;
+-}
+-
+-static void ccdc_save_context(void)
+-{
+-	ccdc_ctx[CCDC_PCR >> 2] = regr(CCDC_PCR);
+-	ccdc_ctx[CCDC_SYN_MODE >> 2] = regr(CCDC_SYN_MODE);
+-	ccdc_ctx[CCDC_HD_VD_WID >> 2] = regr(CCDC_HD_VD_WID);
+-	ccdc_ctx[CCDC_PIX_LINES >> 2] = regr(CCDC_PIX_LINES);
+-	ccdc_ctx[CCDC_HORZ_INFO >> 2] = regr(CCDC_HORZ_INFO);
+-	ccdc_ctx[CCDC_VERT_START >> 2] = regr(CCDC_VERT_START);
+-	ccdc_ctx[CCDC_VERT_LINES >> 2] = regr(CCDC_VERT_LINES);
+-	ccdc_ctx[CCDC_CULLING >> 2] = regr(CCDC_CULLING);
+-	ccdc_ctx[CCDC_HSIZE_OFF >> 2] = regr(CCDC_HSIZE_OFF);
+-	ccdc_ctx[CCDC_SDOFST >> 2] = regr(CCDC_SDOFST);
+-	ccdc_ctx[CCDC_SDR_ADDR >> 2] = regr(CCDC_SDR_ADDR);
+-	ccdc_ctx[CCDC_CLAMP >> 2] = regr(CCDC_CLAMP);
+-	ccdc_ctx[CCDC_DCSUB >> 2] = regr(CCDC_DCSUB);
+-	ccdc_ctx[CCDC_COLPTN >> 2] = regr(CCDC_COLPTN);
+-	ccdc_ctx[CCDC_BLKCMP >> 2] = regr(CCDC_BLKCMP);
+-	ccdc_ctx[CCDC_FPC >> 2] = regr(CCDC_FPC);
+-	ccdc_ctx[CCDC_FPC_ADDR >> 2] = regr(CCDC_FPC_ADDR);
+-	ccdc_ctx[CCDC_VDINT >> 2] = regr(CCDC_VDINT);
+-	ccdc_ctx[CCDC_ALAW >> 2] = regr(CCDC_ALAW);
+-	ccdc_ctx[CCDC_REC656IF >> 2] = regr(CCDC_REC656IF);
+-	ccdc_ctx[CCDC_CCDCFG >> 2] = regr(CCDC_CCDCFG);
+-	ccdc_ctx[CCDC_FMTCFG >> 2] = regr(CCDC_FMTCFG);
+-	ccdc_ctx[CCDC_FMT_HORZ >> 2] = regr(CCDC_FMT_HORZ);
+-	ccdc_ctx[CCDC_FMT_VERT >> 2] = regr(CCDC_FMT_VERT);
+-	ccdc_ctx[CCDC_FMT_ADDR0 >> 2] = regr(CCDC_FMT_ADDR0);
+-	ccdc_ctx[CCDC_FMT_ADDR1 >> 2] = regr(CCDC_FMT_ADDR1);
+-	ccdc_ctx[CCDC_FMT_ADDR2 >> 2] = regr(CCDC_FMT_ADDR2);
+-	ccdc_ctx[CCDC_FMT_ADDR3 >> 2] = regr(CCDC_FMT_ADDR3);
+-	ccdc_ctx[CCDC_FMT_ADDR4 >> 2] = regr(CCDC_FMT_ADDR4);
+-	ccdc_ctx[CCDC_FMT_ADDR5 >> 2] = regr(CCDC_FMT_ADDR5);
+-	ccdc_ctx[CCDC_FMT_ADDR6 >> 2] = regr(CCDC_FMT_ADDR6);
+-	ccdc_ctx[CCDC_FMT_ADDR7 >> 2] = regr(CCDC_FMT_ADDR7);
+-	ccdc_ctx[CCDC_PRGEVEN_0 >> 2] = regr(CCDC_PRGEVEN_0);
+-	ccdc_ctx[CCDC_PRGEVEN_1 >> 2] = regr(CCDC_PRGEVEN_1);
+-	ccdc_ctx[CCDC_PRGODD_0 >> 2] = regr(CCDC_PRGODD_0);
+-	ccdc_ctx[CCDC_PRGODD_1 >> 2] = regr(CCDC_PRGODD_1);
+-	ccdc_ctx[CCDC_VP_OUT >> 2] = regr(CCDC_VP_OUT);
+-}
+-
+-static void ccdc_restore_context(void)
+-{
+-	regw(ccdc_ctx[CCDC_SYN_MODE >> 2], CCDC_SYN_MODE);
+-	regw(ccdc_ctx[CCDC_HD_VD_WID >> 2], CCDC_HD_VD_WID);
+-	regw(ccdc_ctx[CCDC_PIX_LINES >> 2], CCDC_PIX_LINES);
+-	regw(ccdc_ctx[CCDC_HORZ_INFO >> 2], CCDC_HORZ_INFO);
+-	regw(ccdc_ctx[CCDC_VERT_START >> 2], CCDC_VERT_START);
+-	regw(ccdc_ctx[CCDC_VERT_LINES >> 2], CCDC_VERT_LINES);
+-	regw(ccdc_ctx[CCDC_CULLING >> 2], CCDC_CULLING);
+-	regw(ccdc_ctx[CCDC_HSIZE_OFF >> 2], CCDC_HSIZE_OFF);
+-	regw(ccdc_ctx[CCDC_SDOFST >> 2], CCDC_SDOFST);
+-	regw(ccdc_ctx[CCDC_SDR_ADDR >> 2], CCDC_SDR_ADDR);
+-	regw(ccdc_ctx[CCDC_CLAMP >> 2], CCDC_CLAMP);
+-	regw(ccdc_ctx[CCDC_DCSUB >> 2], CCDC_DCSUB);
+-	regw(ccdc_ctx[CCDC_COLPTN >> 2], CCDC_COLPTN);
+-	regw(ccdc_ctx[CCDC_BLKCMP >> 2], CCDC_BLKCMP);
+-	regw(ccdc_ctx[CCDC_FPC >> 2], CCDC_FPC);
+-	regw(ccdc_ctx[CCDC_FPC_ADDR >> 2], CCDC_FPC_ADDR);
+-	regw(ccdc_ctx[CCDC_VDINT >> 2], CCDC_VDINT);
+-	regw(ccdc_ctx[CCDC_ALAW >> 2], CCDC_ALAW);
+-	regw(ccdc_ctx[CCDC_REC656IF >> 2], CCDC_REC656IF);
+-	regw(ccdc_ctx[CCDC_CCDCFG >> 2], CCDC_CCDCFG);
+-	regw(ccdc_ctx[CCDC_FMTCFG >> 2], CCDC_FMTCFG);
+-	regw(ccdc_ctx[CCDC_FMT_HORZ >> 2], CCDC_FMT_HORZ);
+-	regw(ccdc_ctx[CCDC_FMT_VERT >> 2], CCDC_FMT_VERT);
+-	regw(ccdc_ctx[CCDC_FMT_ADDR0 >> 2], CCDC_FMT_ADDR0);
+-	regw(ccdc_ctx[CCDC_FMT_ADDR1 >> 2], CCDC_FMT_ADDR1);
+-	regw(ccdc_ctx[CCDC_FMT_ADDR2 >> 2], CCDC_FMT_ADDR2);
+-	regw(ccdc_ctx[CCDC_FMT_ADDR3 >> 2], CCDC_FMT_ADDR3);
+-	regw(ccdc_ctx[CCDC_FMT_ADDR4 >> 2], CCDC_FMT_ADDR4);
+-	regw(ccdc_ctx[CCDC_FMT_ADDR5 >> 2], CCDC_FMT_ADDR5);
+-	regw(ccdc_ctx[CCDC_FMT_ADDR6 >> 2], CCDC_FMT_ADDR6);
+-	regw(ccdc_ctx[CCDC_FMT_ADDR7 >> 2], CCDC_FMT_ADDR7);
+-	regw(ccdc_ctx[CCDC_PRGEVEN_0 >> 2], CCDC_PRGEVEN_0);
+-	regw(ccdc_ctx[CCDC_PRGEVEN_1 >> 2], CCDC_PRGEVEN_1);
+-	regw(ccdc_ctx[CCDC_PRGODD_0 >> 2], CCDC_PRGODD_0);
+-	regw(ccdc_ctx[CCDC_PRGODD_1 >> 2], CCDC_PRGODD_1);
+-	regw(ccdc_ctx[CCDC_VP_OUT >> 2], CCDC_VP_OUT);
+-	regw(ccdc_ctx[CCDC_PCR >> 2], CCDC_PCR);
+-}
+-static const struct ccdc_hw_device ccdc_hw_dev = {
+-	.name = "DM6446 CCDC",
+-	.owner = THIS_MODULE,
+-	.hw_ops = {
+-		.open = ccdc_open,
+-		.close = ccdc_close,
+-		.reset = ccdc_sbl_reset,
+-		.enable = ccdc_enable,
+-		.set_hw_if_params = ccdc_set_hw_if_params,
+-		.configure = ccdc_configure,
+-		.set_buftype = ccdc_set_buftype,
+-		.get_buftype = ccdc_get_buftype,
+-		.enum_pix = ccdc_enum_pix,
+-		.set_pixel_format = ccdc_set_pixel_format,
+-		.get_pixel_format = ccdc_get_pixel_format,
+-		.set_frame_format = ccdc_set_frame_format,
+-		.get_frame_format = ccdc_get_frame_format,
+-		.set_image_window = ccdc_set_image_window,
+-		.get_image_window = ccdc_get_image_window,
+-		.get_line_length = ccdc_get_line_length,
+-		.setfbaddr = ccdc_setfbaddr,
+-		.getfid = ccdc_getfid,
+-	},
+-};
+-
+-static int dm644x_ccdc_probe(struct platform_device *pdev)
+-{
+-	struct resource	*res;
+-	int status = 0;
+-
+-	/*
+-	 * first try to register with vpfe. If not correct platform, then we
+-	 * don't have to iomap
+-	 */
+-	status = vpfe_register_ccdc_device(&ccdc_hw_dev);
+-	if (status < 0)
+-		return status;
+-
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	if (!res) {
+-		status = -ENODEV;
+-		goto fail_nores;
+-	}
+-
+-	res = request_mem_region(res->start, resource_size(res), res->name);
+-	if (!res) {
+-		status = -EBUSY;
+-		goto fail_nores;
+-	}
+-
+-	ccdc_cfg.base_addr = ioremap(res->start, resource_size(res));
+-	if (!ccdc_cfg.base_addr) {
+-		status = -ENOMEM;
+-		goto fail_nomem;
+-	}
+-
+-	ccdc_cfg.dev = &pdev->dev;
+-	printk(KERN_NOTICE "%s is registered with vpfe.\n", ccdc_hw_dev.name);
+-	return 0;
+-fail_nomem:
+-	release_mem_region(res->start, resource_size(res));
+-fail_nores:
+-	vpfe_unregister_ccdc_device(&ccdc_hw_dev);
+-	return status;
+-}
+-
+-static int dm644x_ccdc_remove(struct platform_device *pdev)
+-{
+-	struct resource	*res;
+-
+-	iounmap(ccdc_cfg.base_addr);
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	release_mem_region(res->start, resource_size(res));
+-	vpfe_unregister_ccdc_device(&ccdc_hw_dev);
+-	return 0;
+-}
+-
+-static int dm644x_ccdc_suspend(struct device *dev)
+-{
+-	/* Save CCDC context */
+-	ccdc_save_context();
+-	/* Disable CCDC */
+-	ccdc_enable(0);
 -
 -	return 0;
 -}
 -
--static int siemens_budget_set_voltage(struct dvb_frontend *fe,
--				      enum fe_sec_voltage voltage)
+-static int dm644x_ccdc_resume(struct device *dev)
 -{
--	struct budget* budget = (struct budget*) fe->dvb->priv;
+-	/* Restore CCDC context */
+-	ccdc_restore_context();
 -
--	return SetVoltage_Activy (budget, voltage);
+-	return 0;
 -}
 -
--static int budget_set_tone(struct dvb_frontend *fe,
--			   enum fe_sec_tone_mode tone)
+-static const struct dev_pm_ops dm644x_ccdc_pm_ops = {
+-	.suspend = dm644x_ccdc_suspend,
+-	.resume = dm644x_ccdc_resume,
+-};
+-
+-static struct platform_driver dm644x_ccdc_driver = {
+-	.driver = {
+-		.name	= "dm644x_ccdc",
+-		.pm = &dm644x_ccdc_pm_ops,
+-	},
+-	.remove = dm644x_ccdc_remove,
+-	.probe = dm644x_ccdc_probe,
+-};
+-
+-module_platform_driver(dm644x_ccdc_driver);
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.h b/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.h
+deleted file mode 100644
+index c20dba3d76d6..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.h
++++ /dev/null
+@@ -1,171 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Copyright (C) 2006-2009 Texas Instruments Inc
+- */
+-#ifndef _DM644X_CCDC_H
+-#define _DM644X_CCDC_H
+-#include <media/davinci/ccdc_types.h>
+-#include <media/davinci/vpfe_types.h>
+-
+-/* enum for No of pixel per line to be avg. in Black Clamping*/
+-enum ccdc_sample_length {
+-	CCDC_SAMPLE_1PIXELS,
+-	CCDC_SAMPLE_2PIXELS,
+-	CCDC_SAMPLE_4PIXELS,
+-	CCDC_SAMPLE_8PIXELS,
+-	CCDC_SAMPLE_16PIXELS
+-};
+-
+-/* enum for No of lines in Black Clamping */
+-enum ccdc_sample_line {
+-	CCDC_SAMPLE_1LINES,
+-	CCDC_SAMPLE_2LINES,
+-	CCDC_SAMPLE_4LINES,
+-	CCDC_SAMPLE_8LINES,
+-	CCDC_SAMPLE_16LINES
+-};
+-
+-/* enum for Alaw gamma width */
+-enum ccdc_gamma_width {
+-	CCDC_GAMMA_BITS_15_6,	/* use bits 15-6 for gamma */
+-	CCDC_GAMMA_BITS_14_5,
+-	CCDC_GAMMA_BITS_13_4,
+-	CCDC_GAMMA_BITS_12_3,
+-	CCDC_GAMMA_BITS_11_2,
+-	CCDC_GAMMA_BITS_10_1,
+-	CCDC_GAMMA_BITS_09_0	/* use bits 9-0 for gamma */
+-};
+-
+-/* returns the highest bit used for the gamma */
+-static inline u8 ccdc_gamma_width_max_bit(enum ccdc_gamma_width width)
 -{
--	struct budget* budget = (struct budget*) fe->dvb->priv;
+-	return 15 - width;
+-}
 -
--	switch (tone) {
--	case SEC_TONE_ON:
--		Set22K (budget, 1);
+-enum ccdc_data_size {
+-	CCDC_DATA_16BITS,
+-	CCDC_DATA_15BITS,
+-	CCDC_DATA_14BITS,
+-	CCDC_DATA_13BITS,
+-	CCDC_DATA_12BITS,
+-	CCDC_DATA_11BITS,
+-	CCDC_DATA_10BITS,
+-	CCDC_DATA_8BITS
+-};
+-
+-/* returns the highest bit used for this data size */
+-static inline u8 ccdc_data_size_max_bit(enum ccdc_data_size sz)
+-{
+-	return sz == CCDC_DATA_8BITS ? 7 : 15 - sz;
+-}
+-
+-/* structure for ALaw */
+-struct ccdc_a_law {
+-	/* Enable/disable A-Law */
+-	unsigned char enable;
+-	/* Gamma Width Input */
+-	enum ccdc_gamma_width gamma_wd;
+-};
+-
+-/* structure for Black Clamping */
+-struct ccdc_black_clamp {
+-	unsigned char enable;
+-	/* only if bClampEnable is TRUE */
+-	enum ccdc_sample_length sample_pixel;
+-	/* only if bClampEnable is TRUE */
+-	enum ccdc_sample_line sample_ln;
+-	/* only if bClampEnable is TRUE */
+-	unsigned short start_pixel;
+-	/* only if bClampEnable is TRUE */
+-	unsigned short sgain;
+-	/* only if bClampEnable is FALSE */
+-	unsigned short dc_sub;
+-};
+-
+-/* structure for Black Level Compensation */
+-struct ccdc_black_compensation {
+-	/* Constant value to subtract from Red component */
+-	char r;
+-	/* Constant value to subtract from Gr component */
+-	char gr;
+-	/* Constant value to subtract from Blue component */
+-	char b;
+-	/* Constant value to subtract from Gb component */
+-	char gb;
+-};
+-
+-/* Structure for CCDC configuration parameters for raw capture mode passed
+- * by application
+- */
+-struct ccdc_config_params_raw {
+-	/* data size value from 8 to 16 bits */
+-	enum ccdc_data_size data_sz;
+-	/* Structure for Optional A-Law */
+-	struct ccdc_a_law alaw;
+-	/* Structure for Optical Black Clamp */
+-	struct ccdc_black_clamp blk_clamp;
+-	/* Structure for Black Compensation */
+-	struct ccdc_black_compensation blk_comp;
+-};
+-
+-
+-#ifdef __KERNEL__
+-#include <linux/io.h>
+-/* Define to enable/disable video port */
+-#define FP_NUM_BYTES		4
+-/* Define for extra pixel/line and extra lines/frame */
+-#define NUM_EXTRAPIXELS		8
+-#define NUM_EXTRALINES		8
+-
+-/* settings for commonly used video formats */
+-#define CCDC_WIN_PAL     {0, 0, 720, 576}
+-/* ntsc square pixel */
+-#define CCDC_WIN_VGA	{0, 0, (640 + NUM_EXTRAPIXELS), (480 + NUM_EXTRALINES)}
+-
+-/* Structure for CCDC configuration parameters for raw capture mode */
+-struct ccdc_params_raw {
+-	/* pixel format */
+-	enum ccdc_pixfmt pix_fmt;
+-	/* progressive or interlaced frame */
+-	enum ccdc_frmfmt frm_fmt;
+-	/* video window */
+-	struct v4l2_rect win;
+-	/* field id polarity */
+-	enum vpfe_pin_pol fid_pol;
+-	/* vertical sync polarity */
+-	enum vpfe_pin_pol vd_pol;
+-	/* horizontal sync polarity */
+-	enum vpfe_pin_pol hd_pol;
+-	/* interleaved or separated fields */
+-	enum ccdc_buftype buf_type;
+-	/*
+-	 * enable to store the image in inverse
+-	 * order in memory(bottom to top)
+-	 */
+-	unsigned char image_invert_enable;
+-	/* configurable parameters */
+-	struct ccdc_config_params_raw config_params;
+-};
+-
+-struct ccdc_params_ycbcr {
+-	/* pixel format */
+-	enum ccdc_pixfmt pix_fmt;
+-	/* progressive or interlaced frame */
+-	enum ccdc_frmfmt frm_fmt;
+-	/* video window */
+-	struct v4l2_rect win;
+-	/* field id polarity */
+-	enum vpfe_pin_pol fid_pol;
+-	/* vertical sync polarity */
+-	enum vpfe_pin_pol vd_pol;
+-	/* horizontal sync polarity */
+-	enum vpfe_pin_pol hd_pol;
+-	/* enable BT.656 embedded sync mode */
+-	int bt656_enable;
+-	/* cb:y:cr:y or y:cb:y:cr in memory */
+-	enum ccdc_pixorder pix_order;
+-	/* interleaved or separated fields  */
+-	enum ccdc_buftype buf_type;
+-};
+-#endif
+-#endif				/* _DM644X_CCDC_H */
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc_regs.h b/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc_regs.h
+deleted file mode 100644
+index c4894f6a254e..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc_regs.h
++++ /dev/null
+@@ -1,140 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Copyright (C) 2006-2009 Texas Instruments Inc
+- */
+-#ifndef _DM644X_CCDC_REGS_H
+-#define _DM644X_CCDC_REGS_H
+-
+-/**************************************************************************\
+-* Register OFFSET Definitions
+-\**************************************************************************/
+-#define CCDC_PID				0x0
+-#define CCDC_PCR				0x4
+-#define CCDC_SYN_MODE				0x8
+-#define CCDC_HD_VD_WID				0xc
+-#define CCDC_PIX_LINES				0x10
+-#define CCDC_HORZ_INFO				0x14
+-#define CCDC_VERT_START				0x18
+-#define CCDC_VERT_LINES				0x1c
+-#define CCDC_CULLING				0x20
+-#define CCDC_HSIZE_OFF				0x24
+-#define CCDC_SDOFST				0x28
+-#define CCDC_SDR_ADDR				0x2c
+-#define CCDC_CLAMP				0x30
+-#define CCDC_DCSUB				0x34
+-#define CCDC_COLPTN				0x38
+-#define CCDC_BLKCMP				0x3c
+-#define CCDC_FPC				0x40
+-#define CCDC_FPC_ADDR				0x44
+-#define CCDC_VDINT				0x48
+-#define CCDC_ALAW				0x4c
+-#define CCDC_REC656IF				0x50
+-#define CCDC_CCDCFG				0x54
+-#define CCDC_FMTCFG				0x58
+-#define CCDC_FMT_HORZ				0x5c
+-#define CCDC_FMT_VERT				0x60
+-#define CCDC_FMT_ADDR0				0x64
+-#define CCDC_FMT_ADDR1				0x68
+-#define CCDC_FMT_ADDR2				0x6c
+-#define CCDC_FMT_ADDR3				0x70
+-#define CCDC_FMT_ADDR4				0x74
+-#define CCDC_FMT_ADDR5				0x78
+-#define CCDC_FMT_ADDR6				0x7c
+-#define CCDC_FMT_ADDR7				0x80
+-#define CCDC_PRGEVEN_0				0x84
+-#define CCDC_PRGEVEN_1				0x88
+-#define CCDC_PRGODD_0				0x8c
+-#define CCDC_PRGODD_1				0x90
+-#define CCDC_VP_OUT				0x94
+-#define CCDC_REG_END				0x98
+-
+-/***************************************************************
+-*	Define for various register bit mask and shifts for CCDC
+-****************************************************************/
+-#define CCDC_FID_POL_MASK			1
+-#define CCDC_FID_POL_SHIFT			4
+-#define CCDC_HD_POL_MASK			1
+-#define CCDC_HD_POL_SHIFT			3
+-#define CCDC_VD_POL_MASK			1
+-#define CCDC_VD_POL_SHIFT			2
+-#define CCDC_HSIZE_OFF_MASK			0xffffffe0
+-#define CCDC_32BYTE_ALIGN_VAL			31
+-#define CCDC_FRM_FMT_MASK			0x1
+-#define CCDC_FRM_FMT_SHIFT			7
+-#define CCDC_DATA_SZ_MASK			7
+-#define CCDC_DATA_SZ_SHIFT			8
+-#define CCDC_PIX_FMT_MASK			3
+-#define CCDC_PIX_FMT_SHIFT			12
+-#define CCDC_VP2SDR_DISABLE			0xFFFBFFFF
+-#define CCDC_WEN_ENABLE				BIT(17)
+-#define CCDC_SDR2RSZ_DISABLE			0xFFF7FFFF
+-#define CCDC_VDHDEN_ENABLE			BIT(16)
+-#define CCDC_LPF_ENABLE				BIT(14)
+-#define CCDC_ALAW_ENABLE			BIT(3)
+-#define CCDC_ALAW_GAMMA_WD_MASK			7
+-#define CCDC_BLK_CLAMP_ENABLE			BIT(31)
+-#define CCDC_BLK_SGAIN_MASK			0x1F
+-#define CCDC_BLK_ST_PXL_MASK			0x7FFF
+-#define CCDC_BLK_ST_PXL_SHIFT			10
+-#define CCDC_BLK_SAMPLE_LN_MASK			7
+-#define CCDC_BLK_SAMPLE_LN_SHIFT		28
+-#define CCDC_BLK_SAMPLE_LINE_MASK		7
+-#define CCDC_BLK_SAMPLE_LINE_SHIFT		25
+-#define CCDC_BLK_DC_SUB_MASK			0x03FFF
+-#define CCDC_BLK_COMP_MASK			0xFF
+-#define CCDC_BLK_COMP_GB_COMP_SHIFT		8
+-#define CCDC_BLK_COMP_GR_COMP_SHIFT		16
+-#define CCDC_BLK_COMP_R_COMP_SHIFT		24
+-#define CCDC_LATCH_ON_VSYNC_DISABLE		BIT(15)
+-#define CCDC_FPC_ENABLE				BIT(15)
+-#define CCDC_FPC_DISABLE			0
+-#define CCDC_FPC_FPC_NUM_MASK			0x7FFF
+-#define CCDC_DATA_PACK_ENABLE			BIT(11)
+-#define CCDC_FMTCFG_VPIN_MASK			7
+-#define CCDC_FMTCFG_VPIN_SHIFT			12
+-#define CCDC_FMT_HORZ_FMTLNH_MASK		0x1FFF
+-#define CCDC_FMT_HORZ_FMTSPH_MASK		0x1FFF
+-#define CCDC_FMT_HORZ_FMTSPH_SHIFT		16
+-#define CCDC_FMT_VERT_FMTLNV_MASK		0x1FFF
+-#define CCDC_FMT_VERT_FMTSLV_MASK		0x1FFF
+-#define CCDC_FMT_VERT_FMTSLV_SHIFT		16
+-#define CCDC_VP_OUT_VERT_NUM_MASK		0x3FFF
+-#define CCDC_VP_OUT_VERT_NUM_SHIFT		17
+-#define CCDC_VP_OUT_HORZ_NUM_MASK		0x1FFF
+-#define CCDC_VP_OUT_HORZ_NUM_SHIFT		4
+-#define CCDC_VP_OUT_HORZ_ST_MASK		0xF
+-#define CCDC_HORZ_INFO_SPH_SHIFT		16
+-#define CCDC_VERT_START_SLV0_SHIFT		16
+-#define CCDC_VDINT_VDINT0_SHIFT			16
+-#define CCDC_VDINT_VDINT1_MASK			0xFFFF
+-#define CCDC_PPC_RAW				1
+-#define CCDC_DCSUB_DEFAULT_VAL			0
+-#define CCDC_CLAMP_DEFAULT_VAL			0
+-#define CCDC_ENABLE_VIDEO_PORT			0x8000
+-#define CCDC_DISABLE_VIDEO_PORT			0
+-#define CCDC_COLPTN_VAL				0xBB11BB11
+-#define CCDC_TWO_BYTES_PER_PIXEL		2
+-#define CCDC_INTERLACED_IMAGE_INVERT		0x4B6D
+-#define CCDC_INTERLACED_NO_IMAGE_INVERT		0x0249
+-#define CCDC_PROGRESSIVE_IMAGE_INVERT		0x4000
+-#define CCDC_PROGRESSIVE_NO_IMAGE_INVERT	0
+-#define CCDC_INTERLACED_HEIGHT_SHIFT		1
+-#define CCDC_SYN_MODE_INPMOD_SHIFT		12
+-#define CCDC_SYN_MODE_INPMOD_MASK		3
+-#define CCDC_SYN_MODE_8BITS			(7 << 8)
+-#define CCDC_SYN_MODE_10BITS			(6 << 8)
+-#define CCDC_SYN_MODE_11BITS			(5 << 8)
+-#define CCDC_SYN_MODE_12BITS			(4 << 8)
+-#define CCDC_SYN_MODE_13BITS			(3 << 8)
+-#define CCDC_SYN_MODE_14BITS			(2 << 8)
+-#define CCDC_SYN_MODE_15BITS			(1 << 8)
+-#define CCDC_SYN_MODE_16BITS			(0 << 8)
+-#define CCDC_SYN_FLDMODE_MASK			1
+-#define CCDC_SYN_FLDMODE_SHIFT			7
+-#define CCDC_REC656IF_BT656_EN			3
+-#define CCDC_SYN_MODE_VD_POL_NEGATIVE		BIT(2)
+-#define CCDC_CCDCFG_Y8POS_SHIFT			11
+-#define CCDC_CCDCFG_BW656_10BIT			BIT(5)
+-#define CCDC_SDOFST_FIELD_INTERLEAVED		0x249
+-#define CCDC_NO_CULLING				0xffff00ff
+-#endif
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/isif.c b/drivers/staging/media/deprecated/vpfe_capture/isif.c
+deleted file mode 100644
+index 4059891c2824..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/isif.c
++++ /dev/null
+@@ -1,1127 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * Copyright (C) 2008-2009 Texas Instruments Inc
+- *
+- * Image Sensor Interface (ISIF) driver
+- *
+- * This driver is for configuring the ISIF IP available on DM365 or any other
+- * TI SoCs. This is used for capturing yuv or bayer video or image data
+- * from a decoder or sensor. This IP is similar to the CCDC IP on DM355
+- * and DM6446, but with enhanced or additional ip blocks. The driver
+- * configures the ISIF upon commands from the vpfe bridge driver through
+- * ccdc_hw_device interface.
+- *
+- * TODO: 1) Raw bayer parameter settings and bayer capture
+- *	 2) Add support for control ioctl
+- */
+-#include <linux/delay.h>
+-#include <linux/platform_device.h>
+-#include <linux/uaccess.h>
+-#include <linux/io.h>
+-#include <linux/videodev2.h>
+-#include <linux/err.h>
+-#include <linux/module.h>
+-
+-#include "isif.h"
+-#include <media/davinci/vpss.h>
+-
+-#include "isif_regs.h"
+-#include "ccdc_hw_device.h"
+-
+-/* Defaults for module configuration parameters */
+-static const struct isif_config_params_raw isif_config_defaults = {
+-	.linearize = {
+-		.en = 0,
+-		.corr_shft = ISIF_NO_SHIFT,
+-		.scale_fact = {1, 0},
+-	},
+-	.df_csc = {
+-		.df_or_csc = 0,
+-		.csc = {
+-			.en = 0,
+-		},
+-	},
+-	.dfc = {
+-		.en = 0,
+-	},
+-	.bclamp = {
+-		.en = 0,
+-	},
+-	.gain_offset = {
+-		.gain = {
+-			.r_ye = {1, 0},
+-			.gr_cy = {1, 0},
+-			.gb_g = {1, 0},
+-			.b_mg = {1, 0},
+-		},
+-	},
+-	.culling = {
+-		.hcpat_odd = 0xff,
+-		.hcpat_even = 0xff,
+-		.vcpat = 0xff,
+-	},
+-	.compress = {
+-		.alg = ISIF_ALAW,
+-	},
+-};
+-
+-/* ISIF operation configuration */
+-static struct isif_oper_config {
+-	struct device *dev;
+-	enum vpfe_hw_if_type if_type;
+-	struct isif_ycbcr_config ycbcr;
+-	struct isif_params_raw bayer;
+-	enum isif_data_pack data_pack;
+-	/* ISIF base address */
+-	void __iomem *base_addr;
+-	/* ISIF Linear Table 0 */
+-	void __iomem *linear_tbl0_addr;
+-	/* ISIF Linear Table 1 */
+-	void __iomem *linear_tbl1_addr;
+-} isif_cfg = {
+-	.ycbcr = {
+-		.pix_fmt = CCDC_PIXFMT_YCBCR_8BIT,
+-		.frm_fmt = CCDC_FRMFMT_INTERLACED,
+-		.win = ISIF_WIN_NTSC,
+-		.fid_pol = VPFE_PINPOL_POSITIVE,
+-		.vd_pol = VPFE_PINPOL_POSITIVE,
+-		.hd_pol = VPFE_PINPOL_POSITIVE,
+-		.pix_order = CCDC_PIXORDER_CBYCRY,
+-		.buf_type = CCDC_BUFTYPE_FLD_INTERLEAVED,
+-	},
+-	.bayer = {
+-		.pix_fmt = CCDC_PIXFMT_RAW,
+-		.frm_fmt = CCDC_FRMFMT_PROGRESSIVE,
+-		.win = ISIF_WIN_VGA,
+-		.fid_pol = VPFE_PINPOL_POSITIVE,
+-		.vd_pol = VPFE_PINPOL_POSITIVE,
+-		.hd_pol = VPFE_PINPOL_POSITIVE,
+-		.gain = {
+-			.r_ye = {1, 0},
+-			.gr_cy = {1, 0},
+-			.gb_g = {1, 0},
+-			.b_mg = {1, 0},
+-		},
+-		.cfa_pat = ISIF_CFA_PAT_MOSAIC,
+-		.data_msb = ISIF_BIT_MSB_11,
+-		.config_params = {
+-			.data_shift = ISIF_NO_SHIFT,
+-			.col_pat_field0 = {
+-				.olop = ISIF_GREEN_BLUE,
+-				.olep = ISIF_BLUE,
+-				.elop = ISIF_RED,
+-				.elep = ISIF_GREEN_RED,
+-			},
+-			.col_pat_field1 = {
+-				.olop = ISIF_GREEN_BLUE,
+-				.olep = ISIF_BLUE,
+-				.elop = ISIF_RED,
+-				.elep = ISIF_GREEN_RED,
+-			},
+-			.test_pat_gen = 0,
+-		},
+-	},
+-	.data_pack = ISIF_DATA_PACK8,
+-};
+-
+-/* Raw Bayer formats */
+-static const u32 isif_raw_bayer_pix_formats[] = {
+-	V4L2_PIX_FMT_SBGGR8, V4L2_PIX_FMT_SBGGR16};
+-
+-/* Raw YUV formats */
+-static const u32 isif_raw_yuv_pix_formats[] = {
+-	V4L2_PIX_FMT_UYVY, V4L2_PIX_FMT_YUYV};
+-
+-/* register access routines */
+-static inline u32 regr(u32 offset)
+-{
+-	return __raw_readl(isif_cfg.base_addr + offset);
+-}
+-
+-static inline void regw(u32 val, u32 offset)
+-{
+-	__raw_writel(val, isif_cfg.base_addr + offset);
+-}
+-
+-/* reg_modify() - read, modify and write register */
+-static inline u32 reg_modify(u32 mask, u32 val, u32 offset)
+-{
+-	u32 new_val = (regr(offset) & ~mask) | (val & mask);
+-
+-	regw(new_val, offset);
+-	return new_val;
+-}
+-
+-static inline void regw_lin_tbl(u32 val, u32 offset, int i)
+-{
+-	if (!i)
+-		__raw_writel(val, isif_cfg.linear_tbl0_addr + offset);
+-	else
+-		__raw_writel(val, isif_cfg.linear_tbl1_addr + offset);
+-}
+-
+-static void isif_disable_all_modules(void)
+-{
+-	/* disable BC */
+-	regw(0, CLAMPCFG);
+-	/* disable vdfc */
+-	regw(0, DFCCTL);
+-	/* disable CSC */
+-	regw(0, CSCCTL);
+-	/* disable linearization */
+-	regw(0, LINCFG0);
+-	/* disable other modules here as they are supported */
+-}
+-
+-static void isif_enable(int en)
+-{
+-	if (!en) {
+-		/* Before disable isif, disable all ISIF modules */
+-		isif_disable_all_modules();
+-		/*
+-		 * wait for next VD. Assume lowest scan rate is 12 Hz. So
+-		 * 100 msec delay is good enough
+-		 */
+-		msleep(100);
+-	}
+-	reg_modify(ISIF_SYNCEN_VDHDEN_MASK, en, SYNCEN);
+-}
+-
+-static void isif_enable_output_to_sdram(int en)
+-{
+-	reg_modify(ISIF_SYNCEN_WEN_MASK, en << ISIF_SYNCEN_WEN_SHIFT, SYNCEN);
+-}
+-
+-static void isif_config_culling(struct isif_cul *cul)
+-{
+-	u32 val;
+-
+-	/* Horizontal pattern */
+-	val = (cul->hcpat_even << CULL_PAT_EVEN_LINE_SHIFT) | cul->hcpat_odd;
+-	regw(val, CULH);
+-
+-	/* vertical pattern */
+-	regw(cul->vcpat, CULV);
+-
+-	/* LPF */
+-	reg_modify(ISIF_LPF_MASK << ISIF_LPF_SHIFT,
+-		  cul->en_lpf << ISIF_LPF_SHIFT, MODESET);
+-}
+-
+-static void isif_config_gain_offset(void)
+-{
+-	struct isif_gain_offsets_adj *gain_off_p =
+-		&isif_cfg.bayer.config_params.gain_offset;
+-	u32 val;
+-
+-	val = (!!gain_off_p->gain_sdram_en << GAIN_SDRAM_EN_SHIFT) |
+-	      (!!gain_off_p->gain_ipipe_en << GAIN_IPIPE_EN_SHIFT) |
+-	      (!!gain_off_p->gain_h3a_en << GAIN_H3A_EN_SHIFT) |
+-	      (!!gain_off_p->offset_sdram_en << OFST_SDRAM_EN_SHIFT) |
+-	      (!!gain_off_p->offset_ipipe_en << OFST_IPIPE_EN_SHIFT) |
+-	      (!!gain_off_p->offset_h3a_en << OFST_H3A_EN_SHIFT);
+-
+-	reg_modify(GAIN_OFFSET_EN_MASK, val, CGAMMAWD);
+-
+-	val = (gain_off_p->gain.r_ye.integer << GAIN_INTEGER_SHIFT) |
+-	       gain_off_p->gain.r_ye.decimal;
+-	regw(val, CRGAIN);
+-
+-	val = (gain_off_p->gain.gr_cy.integer << GAIN_INTEGER_SHIFT) |
+-	       gain_off_p->gain.gr_cy.decimal;
+-	regw(val, CGRGAIN);
+-
+-	val = (gain_off_p->gain.gb_g.integer << GAIN_INTEGER_SHIFT) |
+-	       gain_off_p->gain.gb_g.decimal;
+-	regw(val, CGBGAIN);
+-
+-	val = (gain_off_p->gain.b_mg.integer << GAIN_INTEGER_SHIFT) |
+-	       gain_off_p->gain.b_mg.decimal;
+-	regw(val, CBGAIN);
+-
+-	regw(gain_off_p->offset, COFSTA);
+-}
+-
+-static void isif_restore_defaults(void)
+-{
+-	enum vpss_ccdc_source_sel source = VPSS_CCDCIN;
+-
+-	dev_dbg(isif_cfg.dev, "\nstarting isif_restore_defaults...");
+-	isif_cfg.bayer.config_params = isif_config_defaults;
+-	/* Enable clock to ISIF, IPIPEIF and BL */
+-	vpss_enable_clock(VPSS_CCDC_CLOCK, 1);
+-	vpss_enable_clock(VPSS_IPIPEIF_CLOCK, 1);
+-	vpss_enable_clock(VPSS_BL_CLOCK, 1);
+-	/* Set default offset and gain */
+-	isif_config_gain_offset();
+-	vpss_select_ccdc_source(source);
+-	dev_dbg(isif_cfg.dev, "\nEnd of isif_restore_defaults...");
+-}
+-
+-static int isif_open(struct device *device)
+-{
+-	isif_restore_defaults();
+-	return 0;
+-}
+-
+-/* This function will configure the window size to be capture in ISIF reg */
+-static void isif_setwin(struct v4l2_rect *image_win,
+-			enum ccdc_frmfmt frm_fmt, int ppc)
+-{
+-	int horz_start, horz_nr_pixels;
+-	int vert_start, vert_nr_lines;
+-	int mid_img = 0;
+-
+-	dev_dbg(isif_cfg.dev, "\nStarting isif_setwin...");
+-	/*
+-	 * ppc - per pixel count. indicates how many pixels per cell
+-	 * output to SDRAM. example, for ycbcr, it is one y and one c, so 2.
+-	 * raw capture this is 1
+-	 */
+-	horz_start = image_win->left << (ppc - 1);
+-	horz_nr_pixels = ((image_win->width) << (ppc - 1)) - 1;
+-
+-	/* Writing the horizontal info into the registers */
+-	regw(horz_start & START_PX_HOR_MASK, SPH);
+-	regw(horz_nr_pixels & NUM_PX_HOR_MASK, LNH);
+-	vert_start = image_win->top;
+-
+-	if (frm_fmt == CCDC_FRMFMT_INTERLACED) {
+-		vert_nr_lines = (image_win->height >> 1) - 1;
+-		vert_start >>= 1;
+-		/* To account for VD since line 0 doesn't have any data */
+-		vert_start += 1;
+-	} else {
+-		/* To account for VD since line 0 doesn't have any data */
+-		vert_start += 1;
+-		vert_nr_lines = image_win->height - 1;
+-		/* configure VDINT0 and VDINT1 */
+-		mid_img = vert_start + (image_win->height / 2);
+-		regw(mid_img, VDINT1);
+-	}
+-
+-	regw(0, VDINT0);
+-	regw(vert_start & START_VER_ONE_MASK, SLV0);
+-	regw(vert_start & START_VER_TWO_MASK, SLV1);
+-	regw(vert_nr_lines & NUM_LINES_VER, LNV);
+-}
+-
+-static void isif_config_bclamp(struct isif_black_clamp *bc)
+-{
+-	u32 val;
+-
+-	/*
+-	 * DC Offset is always added to image data irrespective of bc enable
+-	 * status
+-	 */
+-	regw(bc->dc_offset, CLDCOFST);
+-
+-	if (bc->en) {
+-		val = bc->bc_mode_color << ISIF_BC_MODE_COLOR_SHIFT;
+-
+-		/* Enable BC and horizontal clamp calculation parameters */
+-		val = val | 1 | (bc->horz.mode << ISIF_HORZ_BC_MODE_SHIFT);
+-
+-		regw(val, CLAMPCFG);
+-
+-		if (bc->horz.mode != ISIF_HORZ_BC_DISABLE) {
+-			/*
+-			 * Window count for calculation
+-			 * Base window selection
+-			 * pixel limit
+-			 * Horizontal size of window
+-			 * vertical size of the window
+-			 * Horizontal start position of the window
+-			 * Vertical start position of the window
+-			 */
+-			val = bc->horz.win_count_calc |
+-			      ((!!bc->horz.base_win_sel_calc) <<
+-				ISIF_HORZ_BC_WIN_SEL_SHIFT) |
+-			      ((!!bc->horz.clamp_pix_limit) <<
+-				ISIF_HORZ_BC_PIX_LIMIT_SHIFT) |
+-			      (bc->horz.win_h_sz_calc <<
+-				ISIF_HORZ_BC_WIN_H_SIZE_SHIFT) |
+-			      (bc->horz.win_v_sz_calc <<
+-				ISIF_HORZ_BC_WIN_V_SIZE_SHIFT);
+-			regw(val, CLHWIN0);
+-
+-			regw(bc->horz.win_start_h_calc, CLHWIN1);
+-			regw(bc->horz.win_start_v_calc, CLHWIN2);
+-		}
+-
+-		/* vertical clamp calculation parameters */
+-
+-		/* Reset clamp value sel for previous line */
+-		val |=
+-		(bc->vert.reset_val_sel << ISIF_VERT_BC_RST_VAL_SEL_SHIFT) |
+-		(bc->vert.line_ave_coef << ISIF_VERT_BC_LINE_AVE_COEF_SHIFT);
+-		regw(val, CLVWIN0);
+-
+-		/* Optical Black horizontal start position */
+-		regw(bc->vert.ob_start_h, CLVWIN1);
+-		/* Optical Black vertical start position */
+-		regw(bc->vert.ob_start_v, CLVWIN2);
+-		/* Optical Black vertical size for calculation */
+-		regw(bc->vert.ob_v_sz_calc, CLVWIN3);
+-		/* Vertical start position for BC subtraction */
+-		regw(bc->vert_start_sub, CLSV);
+-	}
+-}
+-
+-static void isif_config_linearization(struct isif_linearize *linearize)
+-{
+-	u32 val, i;
+-
+-	if (!linearize->en) {
+-		regw(0, LINCFG0);
+-		return;
+-	}
+-
+-	/* shift value for correction & enable linearization (set lsb) */
+-	val = (linearize->corr_shft << ISIF_LIN_CORRSFT_SHIFT) | 1;
+-	regw(val, LINCFG0);
+-
+-	/* Scale factor */
+-	val = ((!!linearize->scale_fact.integer) <<
+-	       ISIF_LIN_SCALE_FACT_INTEG_SHIFT) |
+-	       linearize->scale_fact.decimal;
+-	regw(val, LINCFG1);
+-
+-	for (i = 0; i < ISIF_LINEAR_TAB_SIZE; i++) {
+-		if (i % 2)
+-			regw_lin_tbl(linearize->table[i], ((i >> 1) << 2), 1);
+-		else
+-			regw_lin_tbl(linearize->table[i], ((i >> 1) << 2), 0);
+-	}
+-}
+-
+-static int isif_config_dfc(struct isif_dfc *vdfc)
+-{
+-	/* initialize retries to loop for max ~ 250 usec */
+-	u32 val, count, retries = loops_per_jiffy / (4000/HZ);
+-	int i;
+-
+-	if (!vdfc->en)
+-		return 0;
+-
+-	/* Correction mode */
+-	val = (vdfc->corr_mode << ISIF_VDFC_CORR_MOD_SHIFT);
+-
+-	/* Correct whole line or partial */
+-	if (vdfc->corr_whole_line)
+-		val |= 1 << ISIF_VDFC_CORR_WHOLE_LN_SHIFT;
+-
+-	/* level shift value */
+-	val |= vdfc->def_level_shift << ISIF_VDFC_LEVEL_SHFT_SHIFT;
+-
+-	regw(val, DFCCTL);
+-
+-	/* Defect saturation level */
+-	regw(vdfc->def_sat_level, VDFSATLV);
+-
+-	regw(vdfc->table[0].pos_vert, DFCMEM0);
+-	regw(vdfc->table[0].pos_horz, DFCMEM1);
+-	if (vdfc->corr_mode == ISIF_VDFC_NORMAL ||
+-	    vdfc->corr_mode == ISIF_VDFC_HORZ_INTERPOL_IF_SAT) {
+-		regw(vdfc->table[0].level_at_pos, DFCMEM2);
+-		regw(vdfc->table[0].level_up_pixels, DFCMEM3);
+-		regw(vdfc->table[0].level_low_pixels, DFCMEM4);
+-	}
+-
+-	/* set DFCMARST and set DFCMWR */
+-	val = regr(DFCMEMCTL) | (1 << ISIF_DFCMEMCTL_DFCMARST_SHIFT) | 1;
+-	regw(val, DFCMEMCTL);
+-
+-	count = retries;
+-	while (count && (regr(DFCMEMCTL) & 0x1))
+-		count--;
+-
+-	if (!count) {
+-		dev_dbg(isif_cfg.dev, "defect table write timeout !!!\n");
+-		return -1;
+-	}
+-
+-	for (i = 1; i < vdfc->num_vdefects; i++) {
+-		regw(vdfc->table[i].pos_vert, DFCMEM0);
+-		regw(vdfc->table[i].pos_horz, DFCMEM1);
+-		if (vdfc->corr_mode == ISIF_VDFC_NORMAL ||
+-		    vdfc->corr_mode == ISIF_VDFC_HORZ_INTERPOL_IF_SAT) {
+-			regw(vdfc->table[i].level_at_pos, DFCMEM2);
+-			regw(vdfc->table[i].level_up_pixels, DFCMEM3);
+-			regw(vdfc->table[i].level_low_pixels, DFCMEM4);
+-		}
+-		val = regr(DFCMEMCTL);
+-		/* clear DFCMARST and set DFCMWR */
+-		val &= ~BIT(ISIF_DFCMEMCTL_DFCMARST_SHIFT);
+-		val |= 1;
+-		regw(val, DFCMEMCTL);
+-
+-		count = retries;
+-		while (count && (regr(DFCMEMCTL) & 0x1))
+-			count--;
+-
+-		if (!count) {
+-			dev_err(isif_cfg.dev,
+-				"defect table write timeout !!!\n");
+-			return -1;
+-		}
+-	}
+-	if (vdfc->num_vdefects < ISIF_VDFC_TABLE_SIZE) {
+-		/* Extra cycle needed */
+-		regw(0, DFCMEM0);
+-		regw(0x1FFF, DFCMEM1);
+-		regw(1, DFCMEMCTL);
+-	}
+-
+-	/* enable VDFC */
+-	reg_modify((1 << ISIF_VDFC_EN_SHIFT), (1 << ISIF_VDFC_EN_SHIFT),
+-		   DFCCTL);
+-	return 0;
+-}
+-
+-static void isif_config_csc(struct isif_df_csc *df_csc)
+-{
+-	u32 val1 = 0, val2 = 0, i;
+-
+-	if (!df_csc->csc.en) {
+-		regw(0, CSCCTL);
+-		return;
+-	}
+-	for (i = 0; i < ISIF_CSC_NUM_COEFF; i++) {
+-		if ((i % 2) == 0) {
+-			/* CSCM - LSB */
+-			val1 = (df_csc->csc.coeff[i].integer <<
+-				ISIF_CSC_COEF_INTEG_SHIFT) |
+-				df_csc->csc.coeff[i].decimal;
+-		} else {
+-
+-			/* CSCM - MSB */
+-			val2 = (df_csc->csc.coeff[i].integer <<
+-				ISIF_CSC_COEF_INTEG_SHIFT) |
+-				df_csc->csc.coeff[i].decimal;
+-			val2 <<= ISIF_CSCM_MSB_SHIFT;
+-			val2 |= val1;
+-			regw(val2, (CSCM0 + ((i - 1) << 1)));
+-		}
+-	}
+-
+-	/* program the active area */
+-	regw(df_csc->start_pix, FMTSPH);
+-	/*
+-	 * one extra pixel as required for CSC. Actually number of
+-	 * pixel - 1 should be configured in this register. So we
+-	 * need to subtract 1 before writing to FMTSPH, but we will
+-	 * not do this since csc requires one extra pixel
+-	 */
+-	regw(df_csc->num_pixels, FMTLNH);
+-	regw(df_csc->start_line, FMTSLV);
+-	/*
+-	 * one extra line as required for CSC. See reason documented for
+-	 * num_pixels
+-	 */
+-	regw(df_csc->num_lines, FMTLNV);
+-
+-	/* Enable CSC */
+-	regw(1, CSCCTL);
+-}
+-
+-static int isif_config_raw(void)
+-{
+-	struct isif_params_raw *params = &isif_cfg.bayer;
+-	struct isif_config_params_raw *module_params =
+-		&isif_cfg.bayer.config_params;
+-	struct vpss_pg_frame_size frame_size;
+-	struct vpss_sync_pol sync;
+-	u32 val;
+-
+-	dev_dbg(isif_cfg.dev, "\nStarting isif_config_raw..\n");
+-
+-	/*
+-	 * Configure CCDCFG register:-
+-	 * Set CCD Not to swap input since input is RAW data
+-	 * Set FID detection function to Latch at V-Sync
+-	 * Set WENLOG - isif valid area
+-	 * Set TRGSEL
+-	 * Set EXTRG
+-	 * Packed to 8 or 16 bits
+-	 */
+-
+-	val = ISIF_YCINSWP_RAW | ISIF_CCDCFG_FIDMD_LATCH_VSYNC |
+-		ISIF_CCDCFG_WENLOG_AND | ISIF_CCDCFG_TRGSEL_WEN |
+-		ISIF_CCDCFG_EXTRG_DISABLE | isif_cfg.data_pack;
+-
+-	dev_dbg(isif_cfg.dev, "Writing 0x%x to ...CCDCFG \n", val);
+-	regw(val, CCDCFG);
+-
+-	/*
+-	 * Configure the vertical sync polarity(MODESET.VDPOL)
+-	 * Configure the horizontal sync polarity (MODESET.HDPOL)
+-	 * Configure frame id polarity (MODESET.FLDPOL)
+-	 * Configure data polarity
+-	 * Configure External WEN Selection
+-	 * Configure frame format(progressive or interlace)
+-	 * Configure pixel format (Input mode)
+-	 * Configure the data shift
+-	 */
+-
+-	val = ISIF_VDHDOUT_INPUT | (params->vd_pol << ISIF_VD_POL_SHIFT) |
+-		(params->hd_pol << ISIF_HD_POL_SHIFT) |
+-		(params->fid_pol << ISIF_FID_POL_SHIFT) |
+-		(ISIF_DATAPOL_NORMAL << ISIF_DATAPOL_SHIFT) |
+-		(ISIF_EXWEN_DISABLE << ISIF_EXWEN_SHIFT) |
+-		(params->frm_fmt << ISIF_FRM_FMT_SHIFT) |
+-		(params->pix_fmt << ISIF_INPUT_SHIFT) |
+-		(params->config_params.data_shift << ISIF_DATASFT_SHIFT);
+-
+-	regw(val, MODESET);
+-	dev_dbg(isif_cfg.dev, "Writing 0x%x to MODESET...\n", val);
+-
+-	/*
+-	 * Configure GAMMAWD register
+-	 * CFA pattern setting
+-	 */
+-	val = params->cfa_pat << ISIF_GAMMAWD_CFA_SHIFT;
+-
+-	/* Gamma msb */
+-	if (module_params->compress.alg == ISIF_ALAW)
+-		val |= ISIF_ALAW_ENABLE;
+-
+-	val |= (params->data_msb << ISIF_ALAW_GAMMA_WD_SHIFT);
+-	regw(val, CGAMMAWD);
+-
+-	/* Configure DPCM compression settings */
+-	if (module_params->compress.alg == ISIF_DPCM) {
+-		val =  BIT(ISIF_DPCM_EN_SHIFT) |
+-		       (module_params->compress.pred <<
+-		       ISIF_DPCM_PREDICTOR_SHIFT);
+-	}
+-
+-	regw(val, MISC);
+-
+-	/* Configure Gain & Offset */
+-	isif_config_gain_offset();
+-
+-	/* Configure Color pattern */
+-	val = (params->config_params.col_pat_field0.olop) |
+-	      (params->config_params.col_pat_field0.olep << 2) |
+-	      (params->config_params.col_pat_field0.elop << 4) |
+-	      (params->config_params.col_pat_field0.elep << 6) |
+-	      (params->config_params.col_pat_field1.olop << 8) |
+-	      (params->config_params.col_pat_field1.olep << 10) |
+-	      (params->config_params.col_pat_field1.elop << 12) |
+-	      (params->config_params.col_pat_field1.elep << 14);
+-	regw(val, CCOLP);
+-	dev_dbg(isif_cfg.dev, "Writing %x to CCOLP ...\n", val);
+-
+-	/* Configure HSIZE register  */
+-	val = (!!params->horz_flip_en) << ISIF_HSIZE_FLIP_SHIFT;
+-
+-	/* calculate line offset in 32 bytes based on pack value */
+-	if (isif_cfg.data_pack == ISIF_PACK_8BIT)
+-		val |= ((params->win.width + 31) >> 5);
+-	else if (isif_cfg.data_pack == ISIF_PACK_12BIT)
+-		val |= (((params->win.width +
+-		       (params->win.width >> 2)) + 31) >> 5);
+-	else
+-		val |= (((params->win.width * 2) + 31) >> 5);
+-	regw(val, HSIZE);
+-
+-	/* Configure SDOFST register  */
+-	if (params->frm_fmt == CCDC_FRMFMT_INTERLACED) {
+-		if (params->image_invert_en) {
+-			/* For interlace inverse mode */
+-			regw(0x4B6D, SDOFST);
+-			dev_dbg(isif_cfg.dev, "Writing 0x4B6D to SDOFST...\n");
+-		} else {
+-			/* For interlace non inverse mode */
+-			regw(0x0B6D, SDOFST);
+-			dev_dbg(isif_cfg.dev, "Writing 0x0B6D to SDOFST...\n");
+-		}
+-	} else if (params->frm_fmt == CCDC_FRMFMT_PROGRESSIVE) {
+-		if (params->image_invert_en) {
+-			/* For progressive inverse mode */
+-			regw(0x4000, SDOFST);
+-			dev_dbg(isif_cfg.dev, "Writing 0x4000 to SDOFST...\n");
+-		} else {
+-			/* For progressive non inverse mode */
+-			regw(0x0000, SDOFST);
+-			dev_dbg(isif_cfg.dev, "Writing 0x0000 to SDOFST...\n");
+-		}
+-	}
+-
+-	/* Configure video window */
+-	isif_setwin(&params->win, params->frm_fmt, 1);
+-
+-	/* Configure Black Clamp */
+-	isif_config_bclamp(&module_params->bclamp);
+-
+-	/* Configure Vertical Defection Pixel Correction */
+-	if (isif_config_dfc(&module_params->dfc) < 0)
+-		return -EFAULT;
+-
+-	if (!module_params->df_csc.df_or_csc)
+-		/* Configure Color Space Conversion */
+-		isif_config_csc(&module_params->df_csc);
+-
+-	isif_config_linearization(&module_params->linearize);
+-
+-	/* Configure Culling */
+-	isif_config_culling(&module_params->culling);
+-
+-	/* Configure horizontal and vertical offsets(DFC,LSC,Gain) */
+-	regw(module_params->horz_offset, DATAHOFST);
+-	regw(module_params->vert_offset, DATAVOFST);
+-
+-	/* Setup test pattern if enabled */
+-	if (params->config_params.test_pat_gen) {
+-		/* Use the HD/VD pol settings from user */
+-		sync.ccdpg_hdpol = params->hd_pol;
+-		sync.ccdpg_vdpol = params->vd_pol;
+-		dm365_vpss_set_sync_pol(sync);
+-		frame_size.hlpfr = isif_cfg.bayer.win.width;
+-		frame_size.pplen = isif_cfg.bayer.win.height;
+-		dm365_vpss_set_pg_frame_size(frame_size);
+-		vpss_select_ccdc_source(VPSS_PGLPBK);
+-	}
+-
+-	dev_dbg(isif_cfg.dev, "\nEnd of isif_config_ycbcr...\n");
+-	return 0;
+-}
+-
+-static int isif_set_buftype(enum ccdc_buftype buf_type)
+-{
+-	if (isif_cfg.if_type == VPFE_RAW_BAYER)
+-		isif_cfg.bayer.buf_type = buf_type;
+-	else
+-		isif_cfg.ycbcr.buf_type = buf_type;
+-
+-	return 0;
+-
+-}
+-static enum ccdc_buftype isif_get_buftype(void)
+-{
+-	if (isif_cfg.if_type == VPFE_RAW_BAYER)
+-		return isif_cfg.bayer.buf_type;
+-
+-	return isif_cfg.ycbcr.buf_type;
+-}
+-
+-static int isif_enum_pix(u32 *pix, int i)
+-{
+-	int ret = -EINVAL;
+-
+-	if (isif_cfg.if_type == VPFE_RAW_BAYER) {
+-		if (i < ARRAY_SIZE(isif_raw_bayer_pix_formats)) {
+-			*pix = isif_raw_bayer_pix_formats[i];
+-			ret = 0;
+-		}
+-	} else {
+-		if (i < ARRAY_SIZE(isif_raw_yuv_pix_formats)) {
+-			*pix = isif_raw_yuv_pix_formats[i];
+-			ret = 0;
+-		}
+-	}
+-
+-	return ret;
+-}
+-
+-static int isif_set_pixel_format(unsigned int pixfmt)
+-{
+-	if (isif_cfg.if_type == VPFE_RAW_BAYER) {
+-		if (pixfmt == V4L2_PIX_FMT_SBGGR8) {
+-			if ((isif_cfg.bayer.config_params.compress.alg !=
+-			     ISIF_ALAW) &&
+-			    (isif_cfg.bayer.config_params.compress.alg !=
+-			     ISIF_DPCM)) {
+-				dev_dbg(isif_cfg.dev,
+-					"Either configure A-Law or DPCM\n");
+-				return -EINVAL;
+-			}
+-			isif_cfg.data_pack = ISIF_PACK_8BIT;
+-		} else if (pixfmt == V4L2_PIX_FMT_SBGGR16) {
+-			isif_cfg.bayer.config_params.compress.alg =
+-					ISIF_NO_COMPRESSION;
+-			isif_cfg.data_pack = ISIF_PACK_16BIT;
+-		} else
+-			return -EINVAL;
+-		isif_cfg.bayer.pix_fmt = CCDC_PIXFMT_RAW;
+-	} else {
+-		if (pixfmt == V4L2_PIX_FMT_YUYV)
+-			isif_cfg.ycbcr.pix_order = CCDC_PIXORDER_YCBYCR;
+-		else if (pixfmt == V4L2_PIX_FMT_UYVY)
+-			isif_cfg.ycbcr.pix_order = CCDC_PIXORDER_CBYCRY;
+-		else
+-			return -EINVAL;
+-		isif_cfg.data_pack = ISIF_PACK_8BIT;
+-	}
+-	return 0;
+-}
+-
+-static u32 isif_get_pixel_format(void)
+-{
+-	u32 pixfmt;
+-
+-	if (isif_cfg.if_type == VPFE_RAW_BAYER)
+-		if (isif_cfg.bayer.config_params.compress.alg == ISIF_ALAW ||
+-		    isif_cfg.bayer.config_params.compress.alg == ISIF_DPCM)
+-			pixfmt = V4L2_PIX_FMT_SBGGR8;
+-		else
+-			pixfmt = V4L2_PIX_FMT_SBGGR16;
+-	else {
+-		if (isif_cfg.ycbcr.pix_order == CCDC_PIXORDER_YCBYCR)
+-			pixfmt = V4L2_PIX_FMT_YUYV;
+-		else
+-			pixfmt = V4L2_PIX_FMT_UYVY;
+-	}
+-	return pixfmt;
+-}
+-
+-static int isif_set_image_window(struct v4l2_rect *win)
+-{
+-	if (isif_cfg.if_type == VPFE_RAW_BAYER) {
+-		isif_cfg.bayer.win.top = win->top;
+-		isif_cfg.bayer.win.left = win->left;
+-		isif_cfg.bayer.win.width = win->width;
+-		isif_cfg.bayer.win.height = win->height;
+-	} else {
+-		isif_cfg.ycbcr.win.top = win->top;
+-		isif_cfg.ycbcr.win.left = win->left;
+-		isif_cfg.ycbcr.win.width = win->width;
+-		isif_cfg.ycbcr.win.height = win->height;
+-	}
+-	return 0;
+-}
+-
+-static void isif_get_image_window(struct v4l2_rect *win)
+-{
+-	if (isif_cfg.if_type == VPFE_RAW_BAYER)
+-		*win = isif_cfg.bayer.win;
+-	else
+-		*win = isif_cfg.ycbcr.win;
+-}
+-
+-static unsigned int isif_get_line_length(void)
+-{
+-	unsigned int len;
+-
+-	if (isif_cfg.if_type == VPFE_RAW_BAYER) {
+-		if (isif_cfg.data_pack == ISIF_PACK_8BIT)
+-			len = ((isif_cfg.bayer.win.width));
+-		else if (isif_cfg.data_pack == ISIF_PACK_12BIT)
+-			len = (((isif_cfg.bayer.win.width * 2) +
+-				 (isif_cfg.bayer.win.width >> 2)));
+-		else
+-			len = (((isif_cfg.bayer.win.width * 2)));
+-	} else
+-		len = (((isif_cfg.ycbcr.win.width * 2)));
+-	return ALIGN(len, 32);
+-}
+-
+-static int isif_set_frame_format(enum ccdc_frmfmt frm_fmt)
+-{
+-	if (isif_cfg.if_type == VPFE_RAW_BAYER)
+-		isif_cfg.bayer.frm_fmt = frm_fmt;
+-	else
+-		isif_cfg.ycbcr.frm_fmt = frm_fmt;
+-	return 0;
+-}
+-static enum ccdc_frmfmt isif_get_frame_format(void)
+-{
+-	if (isif_cfg.if_type == VPFE_RAW_BAYER)
+-		return isif_cfg.bayer.frm_fmt;
+-	return isif_cfg.ycbcr.frm_fmt;
+-}
+-
+-static int isif_getfid(void)
+-{
+-	return (regr(MODESET) >> 15) & 0x1;
+-}
+-
+-/* misc operations */
+-static void isif_setfbaddr(unsigned long addr)
+-{
+-	regw((addr >> 21) & 0x07ff, CADU);
+-	regw((addr >> 5) & 0x0ffff, CADL);
+-}
+-
+-static int isif_set_hw_if_params(struct vpfe_hw_if_param *params)
+-{
+-	isif_cfg.if_type = params->if_type;
+-
+-	switch (params->if_type) {
+-	case VPFE_BT656:
+-	case VPFE_BT656_10BIT:
+-	case VPFE_YCBCR_SYNC_8:
+-		isif_cfg.ycbcr.pix_fmt = CCDC_PIXFMT_YCBCR_8BIT;
+-		isif_cfg.ycbcr.pix_order = CCDC_PIXORDER_CBYCRY;
 -		break;
--
--	case SEC_TONE_OFF:
--		Set22K (budget, 0);
+-	case VPFE_BT1120:
+-	case VPFE_YCBCR_SYNC_16:
+-		isif_cfg.ycbcr.pix_fmt = CCDC_PIXFMT_YCBCR_16BIT;
+-		isif_cfg.ycbcr.pix_order = CCDC_PIXORDER_CBYCRY;
 -		break;
--
+-	case VPFE_RAW_BAYER:
+-		isif_cfg.bayer.pix_fmt = CCDC_PIXFMT_RAW;
+-		break;
 -	default:
+-		dev_dbg(isif_cfg.dev, "Invalid interface type\n");
 -		return -EINVAL;
 -	}
 -
 -	return 0;
 -}
 -
--static int budget_diseqc_send_master_cmd(struct dvb_frontend* fe, struct dvb_diseqc_master_cmd* cmd)
+-/* This function will configure ISIF for YCbCr parameters. */
+-static int isif_config_ycbcr(void)
 -{
--	struct budget* budget = (struct budget*) fe->dvb->priv;
+-	struct isif_ycbcr_config *params = &isif_cfg.ycbcr;
+-	u32 modeset = 0, ccdcfg = 0;
 -
--	SendDiSEqCMsg (budget, cmd->msg_len, cmd->msg, 0);
+-	dev_dbg(isif_cfg.dev, "\nStarting isif_config_ycbcr...");
 -
--	return 0;
--}
+-	/* configure pixel format or input mode */
+-	modeset = modeset | (params->pix_fmt << ISIF_INPUT_SHIFT) |
+-		  (params->frm_fmt << ISIF_FRM_FMT_SHIFT) |
+-		  (params->fid_pol << ISIF_FID_POL_SHIFT) |
+-		  (params->hd_pol << ISIF_HD_POL_SHIFT) |
+-		  (params->vd_pol << ISIF_VD_POL_SHIFT);
 -
--static int budget_diseqc_send_burst(struct dvb_frontend *fe,
--				    enum fe_sec_mini_cmd minicmd)
--{
--	struct budget* budget = (struct budget*) fe->dvb->priv;
+-	/* pack the data to 8-bit ISIFCFG */
+-	switch (isif_cfg.if_type) {
+-	case VPFE_BT656:
+-		if (params->pix_fmt != CCDC_PIXFMT_YCBCR_8BIT) {
+-			dev_dbg(isif_cfg.dev, "Invalid pix_fmt(input mode)\n");
+-			return -EINVAL;
+-		}
+-		modeset |= (VPFE_PINPOL_NEGATIVE << ISIF_VD_POL_SHIFT);
+-		regw(3, REC656IF);
+-		ccdcfg = ccdcfg | ISIF_DATA_PACK8 | ISIF_YCINSWP_YCBCR;
+-		break;
+-	case VPFE_BT656_10BIT:
+-		if (params->pix_fmt != CCDC_PIXFMT_YCBCR_8BIT) {
+-			dev_dbg(isif_cfg.dev, "Invalid pix_fmt(input mode)\n");
+-			return -EINVAL;
+-		}
+-		/* setup BT.656, embedded sync  */
+-		regw(3, REC656IF);
+-		/* enable 10 bit mode in ccdcfg */
+-		ccdcfg = ccdcfg | ISIF_DATA_PACK8 | ISIF_YCINSWP_YCBCR |
+-			ISIF_BW656_ENABLE;
+-		break;
+-	case VPFE_BT1120:
+-		if (params->pix_fmt != CCDC_PIXFMT_YCBCR_16BIT) {
+-			dev_dbg(isif_cfg.dev, "Invalid pix_fmt(input mode)\n");
+-			return -EINVAL;
+-		}
+-		regw(3, REC656IF);
+-		break;
 -
--	SendDiSEqCMsg (budget, 0, NULL, minicmd);
+-	case VPFE_YCBCR_SYNC_8:
+-		ccdcfg |= ISIF_DATA_PACK8;
+-		ccdcfg |= ISIF_YCINSWP_YCBCR;
+-		if (params->pix_fmt != CCDC_PIXFMT_YCBCR_8BIT) {
+-			dev_dbg(isif_cfg.dev, "Invalid pix_fmt(input mode)\n");
+-			return -EINVAL;
+-		}
+-		break;
+-	case VPFE_YCBCR_SYNC_16:
+-		if (params->pix_fmt != CCDC_PIXFMT_YCBCR_16BIT) {
+-			dev_dbg(isif_cfg.dev, "Invalid pix_fmt(input mode)\n");
+-			return -EINVAL;
+-		}
+-		break;
+-	default:
+-		/* should never come here */
+-		dev_dbg(isif_cfg.dev, "Invalid interface type\n");
+-		return -EINVAL;
+-	}
 -
--	return 0;
--}
+-	regw(modeset, MODESET);
 -
--static int alps_bsrv2_tuner_set_params(struct dvb_frontend *fe)
--{
--	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
--	struct budget* budget = (struct budget*) fe->dvb->priv;
--	u8 pwr = 0;
--	u8 buf[4];
--	struct i2c_msg msg = { .addr = 0x61, .flags = 0, .buf = buf, .len = sizeof(buf) };
--	u32 div = (c->frequency + 479500) / 125;
+-	/* Set up pix order */
+-	ccdcfg |= params->pix_order << ISIF_PIX_ORDER_SHIFT;
 -
--	if (c->frequency > 2000000)
--		pwr = 3;
--	else if (c->frequency > 1800000)
--		pwr = 2;
--	else if (c->frequency > 1600000)
--		pwr = 1;
--	else if (c->frequency > 1200000)
--		pwr = 0;
--	else if (c->frequency >= 1100000)
--		pwr = 1;
--	else pwr = 2;
+-	regw(ccdcfg, CCDCFG);
 -
--	buf[0] = (div >> 8) & 0x7f;
--	buf[1] = div & 0xff;
--	buf[2] = ((div & 0x18000) >> 10) | 0x95;
--	buf[3] = (pwr << 6) | 0x30;
--
--	// NOTE: since we're using a prescaler of 2, we set the
--	// divisor frequency to 62.5kHz and divide by 125 above
--
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer (&budget->i2c_adap, &msg, 1) != 1) return -EIO;
--	return 0;
--}
--
--static struct ves1x93_config alps_bsrv2_config =
--{
--	.demod_address = 0x08,
--	.xin = 90100000UL,
--	.invert_pwm = 0,
--};
--
--static int alps_tdbe2_tuner_set_params(struct dvb_frontend *fe)
--{
--	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
--	struct budget* budget = (struct budget*) fe->dvb->priv;
--	u32 div;
--	u8 data[4];
--	struct i2c_msg msg = { .addr = 0x62, .flags = 0, .buf = data, .len = sizeof(data) };
--
--	div = (c->frequency + 35937500 + 31250) / 62500;
--
--	data[0] = (div >> 8) & 0x7f;
--	data[1] = div & 0xff;
--	data[2] = 0x85 | ((div >> 10) & 0x60);
--	data[3] = (c->frequency < 174000000 ? 0x88 : c->frequency < 470000000 ? 0x84 : 0x81);
--
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer (&budget->i2c_adap, &msg, 1) != 1) return -EIO;
--	return 0;
--}
--
--static struct ves1820_config alps_tdbe2_config = {
--	.demod_address = 0x09,
--	.xin = 57840000UL,
--	.invert = 1,
--	.selagc = VES1820_SELAGC_SIGNAMPERR,
--};
--
--static int grundig_29504_401_tuner_set_params(struct dvb_frontend *fe)
--{
--	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
--	struct budget *budget = fe->dvb->priv;
--	u8 *tuner_addr = fe->tuner_priv;
--	u32 div;
--	u8 cfg, cpump, band_select;
--	u8 data[4];
--	struct i2c_msg msg = { .flags = 0, .buf = data, .len = sizeof(data) };
--
--	if (tuner_addr)
--		msg.addr = *tuner_addr;
+-	/* configure video window */
+-	if ((isif_cfg.if_type == VPFE_BT1120) ||
+-	    (isif_cfg.if_type == VPFE_YCBCR_SYNC_16))
+-		isif_setwin(&params->win, params->frm_fmt, 1);
 -	else
--		msg.addr = 0x61;
+-		isif_setwin(&params->win, params->frm_fmt, 2);
 -
--	div = (36125000 + c->frequency) / 166666;
+-	/*
+-	 * configure the horizontal line offset
+-	 * this is done by rounding up width to a multiple of 16 pixels
+-	 * and multiply by two to account for y:cb:cr 4:2:2 data
+-	 */
+-	regw(((((params->win.width * 2) + 31) & 0xffffffe0) >> 5), HSIZE);
 -
--	cfg = 0x88;
--
--	if (c->frequency < 175000000)
--		cpump = 2;
--	else if (c->frequency < 390000000)
--		cpump = 1;
--	else if (c->frequency < 470000000)
--		cpump = 2;
--	else if (c->frequency < 750000000)
--		cpump = 1;
--	else
--		cpump = 3;
--
--	if (c->frequency < 175000000)
--		band_select = 0x0e;
--	else if (c->frequency < 470000000)
--		band_select = 0x05;
--	else
--		band_select = 0x03;
--
--	data[0] = (div >> 8) & 0x7f;
--	data[1] = div & 0xff;
--	data[2] = ((div >> 10) & 0x60) | cfg;
--	data[3] = (cpump << 6) | band_select;
--
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer (&budget->i2c_adap, &msg, 1) != 1) return -EIO;
--	return 0;
--}
--
--static struct l64781_config grundig_29504_401_config = {
--	.demod_address = 0x55,
--};
--
--static struct l64781_config grundig_29504_401_config_activy = {
--	.demod_address = 0x54,
--};
--
--static u8 tuner_address_grundig_29504_401_activy = 0x60;
--
--static int grundig_29504_451_tuner_set_params(struct dvb_frontend *fe)
--{
--	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
--	struct budget* budget = (struct budget*) fe->dvb->priv;
--	u32 div;
--	u8 data[4];
--	struct i2c_msg msg = { .addr = 0x61, .flags = 0, .buf = data, .len = sizeof(data) };
--
--	div = c->frequency / 125;
--	data[0] = (div >> 8) & 0x7f;
--	data[1] = div & 0xff;
--	data[2] = 0x8e;
--	data[3] = 0x00;
--
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer (&budget->i2c_adap, &msg, 1) != 1) return -EIO;
--	return 0;
--}
--
--static struct tda8083_config grundig_29504_451_config = {
--	.demod_address = 0x68,
--};
--
--static int s5h1420_tuner_set_params(struct dvb_frontend *fe)
--{
--	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
--	struct budget* budget = (struct budget*) fe->dvb->priv;
--	u32 div;
--	u8 data[4];
--	struct i2c_msg msg = { .addr = 0x61, .flags = 0, .buf = data, .len = sizeof(data) };
--
--	div = c->frequency / 1000;
--	data[0] = (div >> 8) & 0x7f;
--	data[1] = div & 0xff;
--	data[2] = 0xc2;
--
--	if (div < 1450)
--		data[3] = 0x00;
--	else if (div < 1850)
--		data[3] = 0x40;
--	else if (div < 2000)
--		data[3] = 0x80;
--	else
--		data[3] = 0xc0;
--
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer (&budget->i2c_adap, &msg, 1) != 1) return -EIO;
+-	/* configure the memory line offset */
+-	if ((params->frm_fmt == CCDC_FRMFMT_INTERLACED) &&
+-	    (params->buf_type == CCDC_BUFTYPE_FLD_INTERLEAVED))
+-		/* two fields are interleaved in memory */
+-		regw(0x00000249, SDOFST);
 -
 -	return 0;
 -}
 -
--static struct s5h1420_config s5h1420_config = {
--	.demod_address = 0x53,
--	.invert = 1,
--	.cdclk_polarity = 1,
--};
--
--static struct tda10086_config tda10086_config = {
--	.demod_address = 0x0e,
--	.invert = 0,
--	.diseqc_tone = 1,
--	.xtal_freq = TDA10086_XTAL_16M,
--};
--
--static const struct stv0299_config alps_bsru6_config_activy = {
--	.demod_address = 0x68,
--	.inittab = alps_bsru6_inittab,
--	.mclk = 88000000UL,
--	.invert = 1,
--	.op0_off = 1,
--	.min_delay_ms = 100,
--	.set_symbol_rate = alps_bsru6_set_symbol_rate,
--};
--
--static const struct stv0299_config alps_bsbe1_config_activy = {
--	.demod_address = 0x68,
--	.inittab = alps_bsbe1_inittab,
--	.mclk = 88000000UL,
--	.invert = 1,
--	.op0_off = 1,
--	.min_delay_ms = 100,
--	.set_symbol_rate = alps_bsbe1_set_symbol_rate,
--};
--
--static int alps_tdhd1_204_request_firmware(struct dvb_frontend *fe, const struct firmware **fw, char *name)
+-static int isif_configure(void)
 -{
--	struct budget *budget = (struct budget *)fe->dvb->priv;
--
--	return request_firmware(fw, name, &budget->dev->pci->dev);
+-	if (isif_cfg.if_type == VPFE_RAW_BAYER)
+-		return isif_config_raw();
+-	return isif_config_ycbcr();
 -}
 -
--
--static int i2c_readreg(struct i2c_adapter *i2c, u8 adr, u8 reg)
+-static int isif_close(struct device *device)
 -{
--	u8 val;
--	struct i2c_msg msg[] = {
--		{ .addr = adr, .flags = 0, .buf = &reg, .len = 1 },
--		{ .addr = adr, .flags = I2C_M_RD, .buf = &val, .len = 1 }
+-	/* copy defaults to module params */
+-	isif_cfg.bayer.config_params = isif_config_defaults;
+-	return 0;
+-}
+-
+-static const struct ccdc_hw_device isif_hw_dev = {
+-	.name = "ISIF",
+-	.owner = THIS_MODULE,
+-	.hw_ops = {
+-		.open = isif_open,
+-		.close = isif_close,
+-		.enable = isif_enable,
+-		.enable_out_to_sdram = isif_enable_output_to_sdram,
+-		.set_hw_if_params = isif_set_hw_if_params,
+-		.configure = isif_configure,
+-		.set_buftype = isif_set_buftype,
+-		.get_buftype = isif_get_buftype,
+-		.enum_pix = isif_enum_pix,
+-		.set_pixel_format = isif_set_pixel_format,
+-		.get_pixel_format = isif_get_pixel_format,
+-		.set_frame_format = isif_set_frame_format,
+-		.get_frame_format = isif_get_frame_format,
+-		.set_image_window = isif_set_image_window,
+-		.get_image_window = isif_get_image_window,
+-		.get_line_length = isif_get_line_length,
+-		.setfbaddr = isif_setfbaddr,
+-		.getfid = isif_getfid,
+-	},
+-};
+-
+-static int isif_probe(struct platform_device *pdev)
+-{
+-	void (*setup_pinmux)(void);
+-	struct resource	*res;
+-	void __iomem *addr;
+-	int status = 0, i;
+-
+-	/* Platform data holds setup_pinmux function ptr */
+-	if (!pdev->dev.platform_data)
+-		return -ENODEV;
+-
+-	/*
+-	 * first try to register with vpfe. If not correct platform, then we
+-	 * don't have to iomap
+-	 */
+-	status = vpfe_register_ccdc_device(&isif_hw_dev);
+-	if (status < 0)
+-		return status;
+-
+-	setup_pinmux = pdev->dev.platform_data;
+-	/*
+-	 * setup Mux configuration for ccdc which may be different for
+-	 * different SoCs using this CCDC
+-	 */
+-	setup_pinmux();
+-
+-	i = 0;
+-	/* Get the ISIF base address, linearization table0 and table1 addr. */
+-	while (i < 3) {
+-		res = platform_get_resource(pdev, IORESOURCE_MEM, i);
+-		if (!res) {
+-			status = -ENODEV;
+-			goto fail_nobase_res;
+-		}
+-		res = request_mem_region(res->start, resource_size(res),
+-					 res->name);
+-		if (!res) {
+-			status = -EBUSY;
+-			goto fail_nobase_res;
+-		}
+-		addr = ioremap(res->start, resource_size(res));
+-		if (!addr) {
+-			status = -ENOMEM;
+-			goto fail_base_iomap;
+-		}
+-		switch (i) {
+-		case 0:
+-			/* ISIF base address */
+-			isif_cfg.base_addr = addr;
+-			break;
+-		case 1:
+-			/* ISIF linear tbl0 address */
+-			isif_cfg.linear_tbl0_addr = addr;
+-			break;
+-		default:
+-			/* ISIF linear tbl0 address */
+-			isif_cfg.linear_tbl1_addr = addr;
+-			break;
+-		}
+-		i++;
+-	}
+-	isif_cfg.dev = &pdev->dev;
+-
+-	printk(KERN_NOTICE "%s is registered with vpfe.\n",
+-		isif_hw_dev.name);
+-	return 0;
+-fail_base_iomap:
+-	release_mem_region(res->start, resource_size(res));
+-	i--;
+-fail_nobase_res:
+-	if (isif_cfg.base_addr) {
+-		iounmap(isif_cfg.base_addr);
+-		isif_cfg.base_addr = NULL;
+-	}
+-	if (isif_cfg.linear_tbl0_addr) {
+-		iounmap(isif_cfg.linear_tbl0_addr);
+-		isif_cfg.linear_tbl0_addr = NULL;
+-	}
+-
+-	while (i >= 0) {
+-		res = platform_get_resource(pdev, IORESOURCE_MEM, i);
+-		if (res)
+-			release_mem_region(res->start, resource_size(res));
+-		i--;
+-	}
+-	vpfe_unregister_ccdc_device(&isif_hw_dev);
+-	return status;
+-}
+-
+-static int isif_remove(struct platform_device *pdev)
+-{
+-	struct resource	*res;
+-	int i = 0;
+-
+-	iounmap(isif_cfg.base_addr);
+-	isif_cfg.base_addr = NULL;
+-	iounmap(isif_cfg.linear_tbl0_addr);
+-	isif_cfg.linear_tbl0_addr = NULL;
+-	iounmap(isif_cfg.linear_tbl1_addr);
+-	isif_cfg.linear_tbl1_addr = NULL;
+-	while (i < 3) {
+-		res = platform_get_resource(pdev, IORESOURCE_MEM, i);
+-		release_mem_region(res->start, resource_size(res));
+-		i++;
+-	}
+-	vpfe_unregister_ccdc_device(&isif_hw_dev);
+-	return 0;
+-}
+-
+-static struct platform_driver isif_driver = {
+-	.driver = {
+-		.name	= "isif",
+-	},
+-	.remove = isif_remove,
+-	.probe = isif_probe,
+-};
+-
+-module_platform_driver(isif_driver);
+-
+-MODULE_LICENSE("GPL");
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/isif.h b/drivers/staging/media/deprecated/vpfe_capture/isif.h
+deleted file mode 100644
+index 8369acd26e7e..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/isif.h
++++ /dev/null
+@@ -1,518 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Copyright (C) 2008-2009 Texas Instruments Inc
+- *
+- * isif header file
+- */
+-#ifndef _ISIF_H
+-#define _ISIF_H
+-
+-#include <media/davinci/ccdc_types.h>
+-#include <media/davinci/vpfe_types.h>
+-
+-/* isif float type S8Q8/U8Q8 */
+-struct isif_float_8 {
+-	/* 8 bit integer part */
+-	__u8 integer;
+-	/* 8 bit decimal part */
+-	__u8 decimal;
+-};
+-
+-/* isif float type U16Q16/S16Q16 */
+-struct isif_float_16 {
+-	/* 16 bit integer part */
+-	__u16 integer;
+-	/* 16 bit decimal part */
+-	__u16 decimal;
+-};
+-
+-/************************************************************************
+- *   Vertical Defect Correction parameters
+- ***********************************************************************/
+-/* Defect Correction (DFC) table entry */
+-struct isif_vdfc_entry {
+-	/* vertical position of defect */
+-	__u16 pos_vert;
+-	/* horizontal position of defect */
+-	__u16 pos_horz;
+-	/*
+-	 * Defect level of Vertical line defect position. This is subtracted
+-	 * from the data at the defect position
+-	 */
+-	__u8 level_at_pos;
+-	/*
+-	 * Defect level of the pixels upper than the vertical line defect.
+-	 * This is subtracted from the data
+-	 */
+-	__u8 level_up_pixels;
+-	/*
+-	 * Defect level of the pixels lower than the vertical line defect.
+-	 * This is subtracted from the data
+-	 */
+-	__u8 level_low_pixels;
+-};
+-
+-#define ISIF_VDFC_TABLE_SIZE		8
+-struct isif_dfc {
+-	/* enable vertical defect correction */
+-	__u8 en;
+-	/* Defect level subtraction. Just fed through if saturating */
+-#define	ISIF_VDFC_NORMAL		0
+-	/*
+-	 * Defect level subtraction. Horizontal interpolation ((i-2)+(i+2))/2
+-	 * if data saturating
+-	 */
+-#define ISIF_VDFC_HORZ_INTERPOL_IF_SAT	1
+-	/* Horizontal interpolation (((i-2)+(i+2))/2) */
+-#define	ISIF_VDFC_HORZ_INTERPOL		2
+-	/* one of the vertical defect correction modes above */
+-	__u8 corr_mode;
+-	/* 0 - whole line corrected, 1 - not pixels upper than the defect */
+-	__u8 corr_whole_line;
+-#define ISIF_VDFC_NO_SHIFT		0
+-#define ISIF_VDFC_SHIFT_1		1
+-#define ISIF_VDFC_SHIFT_2		2
+-#define ISIF_VDFC_SHIFT_3		3
+-#define ISIF_VDFC_SHIFT_4		4
+-	/*
+-	 * defect level shift value. level_at_pos, level_upper_pos,
+-	 * and level_lower_pos can be shifted up by this value. Choose
+-	 * one of the values above
+-	 */
+-	__u8 def_level_shift;
+-	/* defect saturation level */
+-	__u16 def_sat_level;
+-	/* number of vertical defects. Max is ISIF_VDFC_TABLE_SIZE */
+-	__u16 num_vdefects;
+-	/* VDFC table ptr */
+-	struct isif_vdfc_entry table[ISIF_VDFC_TABLE_SIZE];
+-};
+-
+-struct isif_horz_bclamp {
+-
+-	/* Horizontal clamp disabled. Only vertical clamp value is subtracted */
+-#define	ISIF_HORZ_BC_DISABLE		0
+-	/*
+-	 * Horizontal clamp value is calculated and subtracted from image data
+-	 * along with vertical clamp value
+-	 */
+-#define ISIF_HORZ_BC_CLAMP_CALC_ENABLED	1
+-	/*
+-	 * Horizontal clamp value calculated from previous image is subtracted
+-	 * from image data along with vertical clamp value.
+-	 */
+-#define ISIF_HORZ_BC_CLAMP_NOT_UPDATED	2
+-	/* horizontal clamp mode. One of the values above */
+-	__u8 mode;
+-	/*
+-	 * pixel value limit enable.
+-	 *  0 - limit disabled
+-	 *  1 - pixel value limited to 1023
+-	 */
+-	__u8 clamp_pix_limit;
+-	/* Select Most left window for bc calculation */
+-#define	ISIF_SEL_MOST_LEFT_WIN		0
+-	/* Select Most right window for bc calculation */
+-#define ISIF_SEL_MOST_RIGHT_WIN		1
+-	/* Select most left or right window for clamp val calculation */
+-	__u8 base_win_sel_calc;
+-	/* Window count per color for calculation. range 1-32 */
+-	__u8 win_count_calc;
+-	/* Window start position - horizontal for calculation. 0 - 8191 */
+-	__u16 win_start_h_calc;
+-	/* Window start position - vertical for calculation 0 - 8191 */
+-	__u16 win_start_v_calc;
+-#define ISIF_HORZ_BC_SZ_H_2PIXELS	0
+-#define ISIF_HORZ_BC_SZ_H_4PIXELS	1
+-#define ISIF_HORZ_BC_SZ_H_8PIXELS	2
+-#define ISIF_HORZ_BC_SZ_H_16PIXELS	3
+-	/* Width of the sample window in pixels for calculation */
+-	__u8 win_h_sz_calc;
+-#define ISIF_HORZ_BC_SZ_V_32PIXELS	0
+-#define ISIF_HORZ_BC_SZ_V_64PIXELS	1
+-#define	ISIF_HORZ_BC_SZ_V_128PIXELS	2
+-#define ISIF_HORZ_BC_SZ_V_256PIXELS	3
+-	/* Height of the sample window in pixels for calculation */
+-	__u8 win_v_sz_calc;
+-};
+-
+-/************************************************************************
+- *  Black Clamp parameters
+- ***********************************************************************/
+-struct isif_vert_bclamp {
+-	/* Reset value used is the clamp value calculated */
+-#define	ISIF_VERT_BC_USE_HORZ_CLAMP_VAL		0
+-	/* Reset value used is reset_clamp_val configured */
+-#define	ISIF_VERT_BC_USE_CONFIG_CLAMP_VAL	1
+-	/* No update, previous image value is used */
+-#define	ISIF_VERT_BC_NO_UPDATE			2
+-	/*
+-	 * Reset value selector for vertical clamp calculation. Use one of
+-	 * the above values
+-	 */
+-	__u8 reset_val_sel;
+-	/* U8Q8. Line average coefficient used in vertical clamp calculation */
+-	__u8 line_ave_coef;
+-	/* Height of the optical black region for calculation */
+-	__u16 ob_v_sz_calc;
+-	/* Optical black region start position - horizontal. 0 - 8191 */
+-	__u16 ob_start_h;
+-	/* Optical black region start position - vertical 0 - 8191 */
+-	__u16 ob_start_v;
+-};
+-
+-struct isif_black_clamp {
+-	/*
+-	 * This offset value is added irrespective of the clamp enable status.
+-	 * S13
+-	 */
+-	__u16 dc_offset;
+-	/*
+-	 * Enable black/digital clamp value to be subtracted from the image data
+-	 */
+-	__u8 en;
+-	/*
+-	 * black clamp mode. same/separate clamp for 4 colors
+-	 * 0 - disable - same clamp value for all colors
+-	 * 1 - clamp value calculated separately for all colors
+-	 */
+-	__u8 bc_mode_color;
+-	/* Vertical start position for bc subtraction */
+-	__u16 vert_start_sub;
+-	/* Black clamp for horizontal direction */
+-	struct isif_horz_bclamp horz;
+-	/* Black clamp for vertical direction */
+-	struct isif_vert_bclamp vert;
+-};
+-
+-/*************************************************************************
+-** Color Space Conversion (CSC)
+-*************************************************************************/
+-#define ISIF_CSC_NUM_COEFF	16
+-struct isif_color_space_conv {
+-	/* Enable color space conversion */
+-	__u8 en;
+-	/*
+-	 * csc coefficient table. S8Q5, M00 at index 0, M01 at index 1, and
+-	 * so forth
+-	 */
+-	struct isif_float_8 coeff[ISIF_CSC_NUM_COEFF];
+-};
+-
+-
+-/*************************************************************************
+-**  Black  Compensation parameters
+-*************************************************************************/
+-struct isif_black_comp {
+-	/* Comp for Red */
+-	__s8 r_comp;
+-	/* Comp for Gr */
+-	__s8 gr_comp;
+-	/* Comp for Blue */
+-	__s8 b_comp;
+-	/* Comp for Gb */
+-	__s8 gb_comp;
+-};
+-
+-/*************************************************************************
+-**  Gain parameters
+-*************************************************************************/
+-struct isif_gain {
+-	/* Gain for Red or ye */
+-	struct isif_float_16 r_ye;
+-	/* Gain for Gr or cy */
+-	struct isif_float_16 gr_cy;
+-	/* Gain for Gb or g */
+-	struct isif_float_16 gb_g;
+-	/* Gain for Blue or mg */
+-	struct isif_float_16 b_mg;
+-};
+-
+-#define ISIF_LINEAR_TAB_SIZE	192
+-/*************************************************************************
+-**  Linearization parameters
+-*************************************************************************/
+-struct isif_linearize {
+-	/* Enable or Disable linearization of data */
+-	__u8 en;
+-	/* Shift value applied */
+-	__u8 corr_shft;
+-	/* scale factor applied U11Q10 */
+-	struct isif_float_16 scale_fact;
+-	/* Size of the linear table */
+-	__u16 table[ISIF_LINEAR_TAB_SIZE];
+-};
+-
+-/* Color patterns */
+-#define ISIF_RED	0
+-#define	ISIF_GREEN_RED	1
+-#define ISIF_GREEN_BLUE	2
+-#define ISIF_BLUE	3
+-struct isif_col_pat {
+-	__u8 olop;
+-	__u8 olep;
+-	__u8 elop;
+-	__u8 elep;
+-};
+-
+-/*************************************************************************
+-**  Data formatter parameters
+-*************************************************************************/
+-struct isif_fmtplen {
+-	/*
+-	 * number of program entries for SET0, range 1 - 16
+-	 * when fmtmode is ISIF_SPLIT, 1 - 8 when fmtmode is
+-	 * ISIF_COMBINE
+-	 */
+-	__u16 plen0;
+-	/*
+-	 * number of program entries for SET1, range 1 - 16
+-	 * when fmtmode is ISIF_SPLIT, 1 - 8 when fmtmode is
+-	 * ISIF_COMBINE
+-	 */
+-	__u16 plen1;
+-	/**
+-	 * number of program entries for SET2, range 1 - 16
+-	 * when fmtmode is ISIF_SPLIT, 1 - 8 when fmtmode is
+-	 * ISIF_COMBINE
+-	 */
+-	__u16 plen2;
+-	/**
+-	 * number of program entries for SET3, range 1 - 16
+-	 * when fmtmode is ISIF_SPLIT, 1 - 8 when fmtmode is
+-	 * ISIF_COMBINE
+-	 */
+-	__u16 plen3;
+-};
+-
+-struct isif_fmt_cfg {
+-#define ISIF_SPLIT		0
+-#define ISIF_COMBINE		1
+-	/* Split or combine or line alternate */
+-	__u8 fmtmode;
+-	/* enable or disable line alternating mode */
+-	__u8 ln_alter_en;
+-#define ISIF_1LINE		0
+-#define	ISIF_2LINES		1
+-#define	ISIF_3LINES		2
+-#define	ISIF_4LINES		3
+-	/* Split/combine line number */
+-	__u8 lnum;
+-	/* Address increment Range 1 - 16 */
+-	__u8 addrinc;
+-};
+-
+-struct isif_fmt_addr_ptr {
+-	/* Initial address */
+-	__u32 init_addr;
+-	/* output line number */
+-#define ISIF_1STLINE		0
+-#define	ISIF_2NDLINE		1
+-#define	ISIF_3RDLINE		2
+-#define	ISIF_4THLINE		3
+-	__u8 out_line;
+-};
+-
+-struct isif_fmtpgm_ap {
+-	/* program address pointer */
+-	__u8 pgm_aptr;
+-	/* program address increment or decrement */
+-	__u8 pgmupdt;
+-};
+-
+-struct isif_data_formatter {
+-	/* Enable/Disable data formatter */
+-	__u8 en;
+-	/* data formatter configuration */
+-	struct isif_fmt_cfg cfg;
+-	/* Formatter program entries length */
+-	struct isif_fmtplen plen;
+-	/* first pixel in a line fed to formatter */
+-	__u16 fmtrlen;
+-	/* HD interval for output line. Only valid when split line */
+-	__u16 fmthcnt;
+-	/* formatter address pointers */
+-	struct isif_fmt_addr_ptr fmtaddr_ptr[16];
+-	/* program enable/disable */
+-	__u8 pgm_en[32];
+-	/* program address pointers */
+-	struct isif_fmtpgm_ap fmtpgm_ap[32];
+-};
+-
+-struct isif_df_csc {
+-	/* Color Space Conversion configuration, 0 - csc, 1 - df */
+-	__u8 df_or_csc;
+-	/* csc configuration valid if df_or_csc is 0 */
+-	struct isif_color_space_conv csc;
+-	/* data formatter configuration valid if df_or_csc is 1 */
+-	struct isif_data_formatter df;
+-	/* start pixel in a line at the input */
+-	__u32 start_pix;
+-	/* number of pixels in input line */
+-	__u32 num_pixels;
+-	/* start line at the input */
+-	__u32 start_line;
+-	/* number of lines at the input */
+-	__u32 num_lines;
+-};
+-
+-struct isif_gain_offsets_adj {
+-	/* Gain adjustment per color */
+-	struct isif_gain gain;
+-	/* Offset adjustment */
+-	__u16 offset;
+-	/* Enable or Disable Gain adjustment for SDRAM data */
+-	__u8 gain_sdram_en;
+-	/* Enable or Disable Gain adjustment for IPIPE data */
+-	__u8 gain_ipipe_en;
+-	/* Enable or Disable Gain adjustment for H3A data */
+-	__u8 gain_h3a_en;
+-	/* Enable or Disable Gain adjustment for SDRAM data */
+-	__u8 offset_sdram_en;
+-	/* Enable or Disable Gain adjustment for IPIPE data */
+-	__u8 offset_ipipe_en;
+-	/* Enable or Disable Gain adjustment for H3A data */
+-	__u8 offset_h3a_en;
+-};
+-
+-struct isif_cul {
+-	/* Horizontal Cull pattern for odd lines */
+-	__u8 hcpat_odd;
+-	/* Horizontal Cull pattern for even lines */
+-	__u8 hcpat_even;
+-	/* Vertical Cull pattern */
+-	__u8 vcpat;
+-	/* Enable or disable lpf. Apply when cull is enabled */
+-	__u8 en_lpf;
+-};
+-
+-struct isif_compress {
+-#define ISIF_ALAW		0
+-#define ISIF_DPCM		1
+-#define ISIF_NO_COMPRESSION	2
+-	/* Compression Algorithm used */
+-	__u8 alg;
+-	/* Choose Predictor1 for DPCM compression */
+-#define ISIF_DPCM_PRED1		0
+-	/* Choose Predictor2 for DPCM compression */
+-#define ISIF_DPCM_PRED2		1
+-	/* Predictor for DPCM compression */
+-	__u8 pred;
+-};
+-
+-/* all the stuff in this struct will be provided by userland */
+-struct isif_config_params_raw {
+-	/* Linearization parameters for image sensor data input */
+-	struct isif_linearize linearize;
+-	/* Data formatter or CSC */
+-	struct isif_df_csc df_csc;
+-	/* Defect Pixel Correction (DFC) configuration */
+-	struct isif_dfc dfc;
+-	/* Black/Digital Clamp configuration */
+-	struct isif_black_clamp bclamp;
+-	/* Gain, offset adjustments */
+-	struct isif_gain_offsets_adj gain_offset;
+-	/* Culling */
+-	struct isif_cul culling;
+-	/* A-Law and DPCM compression options */
+-	struct isif_compress compress;
+-	/* horizontal offset for Gain/LSC/DFC */
+-	__u16 horz_offset;
+-	/* vertical offset for Gain/LSC/DFC */
+-	__u16 vert_offset;
+-	/* color pattern for field 0 */
+-	struct isif_col_pat col_pat_field0;
+-	/* color pattern for field 1 */
+-	struct isif_col_pat col_pat_field1;
+-#define ISIF_NO_SHIFT		0
+-#define	ISIF_1BIT_SHIFT		1
+-#define	ISIF_2BIT_SHIFT		2
+-#define	ISIF_3BIT_SHIFT		3
+-#define	ISIF_4BIT_SHIFT		4
+-#define ISIF_5BIT_SHIFT		5
+-#define ISIF_6BIT_SHIFT		6
+-	/* Data shift applied before storing to SDRAM */
+-	__u8 data_shift;
+-	/* enable input test pattern generation */
+-	__u8 test_pat_gen;
+-};
+-
+-#ifdef __KERNEL__
+-struct isif_ycbcr_config {
+-	/* isif pixel format */
+-	enum ccdc_pixfmt pix_fmt;
+-	/* isif frame format */
+-	enum ccdc_frmfmt frm_fmt;
+-	/* ISIF crop window */
+-	struct v4l2_rect win;
+-	/* field polarity */
+-	enum vpfe_pin_pol fid_pol;
+-	/* interface VD polarity */
+-	enum vpfe_pin_pol vd_pol;
+-	/* interface HD polarity */
+-	enum vpfe_pin_pol hd_pol;
+-	/* isif pix order. Only used for ycbcr capture */
+-	enum ccdc_pixorder pix_order;
+-	/* isif buffer type. Only used for ycbcr capture */
+-	enum ccdc_buftype buf_type;
+-};
+-
+-/* MSB of image data connected to sensor port */
+-enum isif_data_msb {
+-	ISIF_BIT_MSB_15,
+-	ISIF_BIT_MSB_14,
+-	ISIF_BIT_MSB_13,
+-	ISIF_BIT_MSB_12,
+-	ISIF_BIT_MSB_11,
+-	ISIF_BIT_MSB_10,
+-	ISIF_BIT_MSB_9,
+-	ISIF_BIT_MSB_8,
+-	ISIF_BIT_MSB_7
+-};
+-
+-enum isif_cfa_pattern {
+-	ISIF_CFA_PAT_MOSAIC,
+-	ISIF_CFA_PAT_STRIPE
+-};
+-
+-struct isif_params_raw {
+-	/* isif pixel format */
+-	enum ccdc_pixfmt pix_fmt;
+-	/* isif frame format */
+-	enum ccdc_frmfmt frm_fmt;
+-	/* video window */
+-	struct v4l2_rect win;
+-	/* field polarity */
+-	enum vpfe_pin_pol fid_pol;
+-	/* interface VD polarity */
+-	enum vpfe_pin_pol vd_pol;
+-	/* interface HD polarity */
+-	enum vpfe_pin_pol hd_pol;
+-	/* buffer type. Applicable for interlaced mode */
+-	enum ccdc_buftype buf_type;
+-	/* Gain values */
+-	struct isif_gain gain;
+-	/* cfa pattern */
+-	enum isif_cfa_pattern cfa_pat;
+-	/* Data MSB position */
+-	enum isif_data_msb data_msb;
+-	/* Enable horizontal flip */
+-	unsigned char horz_flip_en;
+-	/* Enable image invert vertically */
+-	unsigned char image_invert_en;
+-
+-	/* all the userland defined stuff*/
+-	struct isif_config_params_raw config_params;
+-};
+-
+-enum isif_data_pack {
+-	ISIF_PACK_16BIT,
+-	ISIF_PACK_12BIT,
+-	ISIF_PACK_8BIT
+-};
+-
+-#define ISIF_WIN_NTSC				{0, 0, 720, 480}
+-#define ISIF_WIN_VGA				{0, 0, 640, 480}
+-
+-#endif
+-#endif
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/isif_regs.h b/drivers/staging/media/deprecated/vpfe_capture/isif_regs.h
+deleted file mode 100644
+index d68d38841ae7..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/isif_regs.h
++++ /dev/null
+@@ -1,256 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Copyright (C) 2008-2009 Texas Instruments Inc
+- */
+-#ifndef _ISIF_REGS_H
+-#define _ISIF_REGS_H
+-
+-/* ISIF registers relative offsets */
+-#define SYNCEN					0x00
+-#define MODESET					0x04
+-#define HDW					0x08
+-#define VDW					0x0c
+-#define PPLN					0x10
+-#define LPFR					0x14
+-#define SPH					0x18
+-#define LNH					0x1c
+-#define SLV0					0x20
+-#define SLV1					0x24
+-#define LNV					0x28
+-#define CULH					0x2c
+-#define CULV					0x30
+-#define HSIZE					0x34
+-#define SDOFST					0x38
+-#define CADU					0x3c
+-#define CADL					0x40
+-#define LINCFG0					0x44
+-#define LINCFG1					0x48
+-#define CCOLP					0x4c
+-#define CRGAIN					0x50
+-#define CGRGAIN					0x54
+-#define CGBGAIN					0x58
+-#define CBGAIN					0x5c
+-#define COFSTA					0x60
+-#define FLSHCFG0				0x64
+-#define FLSHCFG1				0x68
+-#define FLSHCFG2				0x6c
+-#define VDINT0					0x70
+-#define VDINT1					0x74
+-#define VDINT2					0x78
+-#define MISC					0x7c
+-#define CGAMMAWD				0x80
+-#define REC656IF				0x84
+-#define CCDCFG					0x88
+-/*****************************************************
+-* Defect Correction registers
+-*****************************************************/
+-#define DFCCTL					0x8c
+-#define VDFSATLV				0x90
+-#define DFCMEMCTL				0x94
+-#define DFCMEM0					0x98
+-#define DFCMEM1					0x9c
+-#define DFCMEM2					0xa0
+-#define DFCMEM3					0xa4
+-#define DFCMEM4					0xa8
+-/****************************************************
+-* Black Clamp registers
+-****************************************************/
+-#define CLAMPCFG				0xac
+-#define CLDCOFST				0xb0
+-#define CLSV					0xb4
+-#define CLHWIN0					0xb8
+-#define CLHWIN1					0xbc
+-#define CLHWIN2					0xc0
+-#define CLVRV					0xc4
+-#define CLVWIN0					0xc8
+-#define CLVWIN1					0xcc
+-#define CLVWIN2					0xd0
+-#define CLVWIN3					0xd4
+-/****************************************************
+-* Lense Shading Correction
+-****************************************************/
+-#define DATAHOFST				0xd8
+-#define DATAVOFST				0xdc
+-#define LSCHVAL					0xe0
+-#define LSCVVAL					0xe4
+-#define TWODLSCCFG				0xe8
+-#define TWODLSCOFST				0xec
+-#define TWODLSCINI				0xf0
+-#define TWODLSCGRBU				0xf4
+-#define TWODLSCGRBL				0xf8
+-#define TWODLSCGROF				0xfc
+-#define TWODLSCORBU				0x100
+-#define TWODLSCORBL				0x104
+-#define TWODLSCOROF				0x108
+-#define TWODLSCIRQEN				0x10c
+-#define TWODLSCIRQST				0x110
+-/****************************************************
+-* Data formatter
+-****************************************************/
+-#define FMTCFG					0x114
+-#define FMTPLEN					0x118
+-#define FMTSPH					0x11c
+-#define FMTLNH					0x120
+-#define FMTSLV					0x124
+-#define FMTLNV					0x128
+-#define FMTRLEN					0x12c
+-#define FMTHCNT					0x130
+-#define FMTAPTR_BASE				0x134
+-/* Below macro for addresses FMTAPTR0 - FMTAPTR15 */
+-#define FMTAPTR(i)			(FMTAPTR_BASE + (i * 4))
+-#define FMTPGMVF0				0x174
+-#define FMTPGMVF1				0x178
+-#define FMTPGMAPU0				0x17c
+-#define FMTPGMAPU1				0x180
+-#define FMTPGMAPS0				0x184
+-#define FMTPGMAPS1				0x188
+-#define FMTPGMAPS2				0x18c
+-#define FMTPGMAPS3				0x190
+-#define FMTPGMAPS4				0x194
+-#define FMTPGMAPS5				0x198
+-#define FMTPGMAPS6				0x19c
+-#define FMTPGMAPS7				0x1a0
+-/************************************************
+-* Color Space Converter
+-************************************************/
+-#define CSCCTL					0x1a4
+-#define CSCM0					0x1a8
+-#define CSCM1					0x1ac
+-#define CSCM2					0x1b0
+-#define CSCM3					0x1b4
+-#define CSCM4					0x1b8
+-#define CSCM5					0x1bc
+-#define CSCM6					0x1c0
+-#define CSCM7					0x1c4
+-#define OBWIN0					0x1c8
+-#define OBWIN1					0x1cc
+-#define OBWIN2					0x1d0
+-#define OBWIN3					0x1d4
+-#define OBVAL0					0x1d8
+-#define OBVAL1					0x1dc
+-#define OBVAL2					0x1e0
+-#define OBVAL3					0x1e4
+-#define OBVAL4					0x1e8
+-#define OBVAL5					0x1ec
+-#define OBVAL6					0x1f0
+-#define OBVAL7					0x1f4
+-#define CLKCTL					0x1f8
+-
+-/* Masks & Shifts below */
+-#define START_PX_HOR_MASK			0x7FFF
+-#define NUM_PX_HOR_MASK				0x7FFF
+-#define START_VER_ONE_MASK			0x7FFF
+-#define START_VER_TWO_MASK			0x7FFF
+-#define NUM_LINES_VER				0x7FFF
+-
+-/* gain - offset masks */
+-#define GAIN_INTEGER_SHIFT			9
+-#define OFFSET_MASK				0xFFF
+-#define GAIN_SDRAM_EN_SHIFT			12
+-#define GAIN_IPIPE_EN_SHIFT			13
+-#define GAIN_H3A_EN_SHIFT			14
+-#define OFST_SDRAM_EN_SHIFT			8
+-#define OFST_IPIPE_EN_SHIFT			9
+-#define OFST_H3A_EN_SHIFT			10
+-#define GAIN_OFFSET_EN_MASK			0x7700
+-
+-/* Culling */
+-#define CULL_PAT_EVEN_LINE_SHIFT		8
+-
+-/* CCDCFG register */
+-#define ISIF_YCINSWP_RAW			(0x00 << 4)
+-#define ISIF_YCINSWP_YCBCR			(0x01 << 4)
+-#define ISIF_CCDCFG_FIDMD_LATCH_VSYNC		(0x00 << 6)
+-#define ISIF_CCDCFG_WENLOG_AND			(0x00 << 8)
+-#define ISIF_CCDCFG_TRGSEL_WEN			(0x00 << 9)
+-#define ISIF_CCDCFG_EXTRG_DISABLE		(0x00 << 10)
+-#define ISIF_LATCH_ON_VSYNC_DISABLE		(0x01 << 15)
+-#define ISIF_LATCH_ON_VSYNC_ENABLE		(0x00 << 15)
+-#define ISIF_DATA_PACK_MASK			3
+-#define ISIF_DATA_PACK16			0
+-#define ISIF_DATA_PACK12			1
+-#define ISIF_DATA_PACK8				2
+-#define ISIF_PIX_ORDER_SHIFT			11
+-#define ISIF_BW656_ENABLE			(0x01 << 5)
+-
+-/* MODESET registers */
+-#define ISIF_VDHDOUT_INPUT			(0x00 << 0)
+-#define ISIF_INPUT_SHIFT			12
+-#define ISIF_RAW_INPUT_MODE			0
+-#define ISIF_FID_POL_SHIFT			4
+-#define ISIF_HD_POL_SHIFT			3
+-#define ISIF_VD_POL_SHIFT			2
+-#define ISIF_DATAPOL_NORMAL			0
+-#define ISIF_DATAPOL_SHIFT			6
+-#define ISIF_EXWEN_DISABLE			0
+-#define ISIF_EXWEN_SHIFT			5
+-#define ISIF_FRM_FMT_SHIFT			7
+-#define ISIF_DATASFT_SHIFT			8
+-#define ISIF_LPF_SHIFT				14
+-#define ISIF_LPF_MASK				1
+-
+-/* GAMMAWD registers */
+-#define ISIF_ALAW_GAMMA_WD_MASK			0xF
+-#define ISIF_ALAW_GAMMA_WD_SHIFT		1
+-#define ISIF_ALAW_ENABLE			1
+-#define ISIF_GAMMAWD_CFA_SHIFT			5
+-
+-/* HSIZE registers */
+-#define ISIF_HSIZE_FLIP_MASK			1
+-#define ISIF_HSIZE_FLIP_SHIFT			12
+-
+-/* MISC registers */
+-#define ISIF_DPCM_EN_SHIFT			12
+-#define ISIF_DPCM_PREDICTOR_SHIFT		13
+-
+-/* Black clamp related */
+-#define ISIF_BC_MODE_COLOR_SHIFT		4
+-#define ISIF_HORZ_BC_MODE_SHIFT			1
+-#define ISIF_HORZ_BC_WIN_SEL_SHIFT		5
+-#define ISIF_HORZ_BC_PIX_LIMIT_SHIFT		6
+-#define ISIF_HORZ_BC_WIN_H_SIZE_SHIFT		8
+-#define ISIF_HORZ_BC_WIN_V_SIZE_SHIFT		12
+-#define	ISIF_VERT_BC_RST_VAL_SEL_SHIFT		4
+-#define ISIF_VERT_BC_LINE_AVE_COEF_SHIFT	8
+-
+-/* VDFC registers */
+-#define ISIF_VDFC_EN_SHIFT			4
+-#define ISIF_VDFC_CORR_MOD_SHIFT		5
+-#define ISIF_VDFC_CORR_WHOLE_LN_SHIFT		7
+-#define ISIF_VDFC_LEVEL_SHFT_SHIFT		8
+-#define ISIF_VDFC_POS_MASK			0x1FFF
+-#define ISIF_DFCMEMCTL_DFCMARST_SHIFT		2
+-
+-/* CSC registers */
+-#define ISIF_CSC_COEF_INTEG_MASK		7
+-#define ISIF_CSC_COEF_DECIMAL_MASK		0x1f
+-#define ISIF_CSC_COEF_INTEG_SHIFT		5
+-#define ISIF_CSCM_MSB_SHIFT			8
+-#define ISIF_DF_CSC_SPH_MASK			0x1FFF
+-#define ISIF_DF_CSC_LNH_MASK			0x1FFF
+-#define ISIF_DF_CSC_SLV_MASK			0x1FFF
+-#define ISIF_DF_CSC_LNV_MASK			0x1FFF
+-#define ISIF_DF_NUMLINES			0x7FFF
+-#define ISIF_DF_NUMPIX				0x1FFF
+-
+-/* Offsets for LSC/DFC/Gain */
+-#define ISIF_DATA_H_OFFSET_MASK			0x1FFF
+-#define ISIF_DATA_V_OFFSET_MASK			0x1FFF
+-
+-/* Linearization */
+-#define ISIF_LIN_CORRSFT_SHIFT			4
+-#define ISIF_LIN_SCALE_FACT_INTEG_SHIFT		10
+-
+-
+-/* Pattern registers */
+-#define ISIF_PG_EN				(1 << 3)
+-#define ISIF_SEL_PG_SRC				(3 << 4)
+-#define ISIF_PG_VD_POL_SHIFT			0
+-#define ISIF_PG_HD_POL_SHIFT			1
+-
+-/*random other junk*/
+-#define ISIF_SYNCEN_VDHDEN_MASK			(1 << 0)
+-#define ISIF_SYNCEN_WEN_MASK			(1 << 1)
+-#define ISIF_SYNCEN_WEN_SHIFT			1
+-
+-#endif
+diff --git a/drivers/staging/media/deprecated/vpfe_capture/vpfe_capture.c b/drivers/staging/media/deprecated/vpfe_capture/vpfe_capture.c
+deleted file mode 100644
+index 0a2226b321d7..000000000000
+--- a/drivers/staging/media/deprecated/vpfe_capture/vpfe_capture.c
++++ /dev/null
+@@ -1,1902 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * Copyright (C) 2008-2009 Texas Instruments Inc
+- *
+- * Driver name : VPFE Capture driver
+- *    VPFE Capture driver allows applications to capture and stream video
+- *    frames on DaVinci SoCs (DM6446, DM355 etc) from a YUV source such as
+- *    TVP5146 or  Raw Bayer RGB image data from an image sensor
+- *    such as Microns' MT9T001, MT9T031 etc.
+- *
+- *    These SoCs have, in common, a Video Processing Subsystem (VPSS) that
+- *    consists of a Video Processing Front End (VPFE) for capturing
+- *    video/raw image data and Video Processing Back End (VPBE) for displaying
+- *    YUV data through an in-built analog encoder or Digital LCD port. This
+- *    driver is for capture through VPFE. A typical EVM using these SoCs have
+- *    following high level configuration.
+- *
+- *    decoder(TVP5146/		YUV/
+- *	     MT9T001)   -->  Raw Bayer RGB ---> MUX -> VPFE (CCDC/ISIF)
+- *				data input              |      |
+- *							V      |
+- *						      SDRAM    |
+- *							       V
+- *							   Image Processor
+- *							       |
+- *							       V
+- *							     SDRAM
+- *    The data flow happens from a decoder connected to the VPFE over a
+- *    YUV embedded (BT.656/BT.1120) or separate sync or raw bayer rgb interface
+- *    and to the input of VPFE through an optional MUX (if more inputs are
+- *    to be interfaced on the EVM). The input data is first passed through
+- *    CCDC (CCD Controller, a.k.a Image Sensor Interface, ISIF). The CCDC
+- *    does very little or no processing on YUV data and does pre-process Raw
+- *    Bayer RGB data through modules such as Defect Pixel Correction (DFC)
+- *    Color Space Conversion (CSC), data gain/offset etc. After this, data
+- *    can be written to SDRAM or can be connected to the image processing
+- *    block such as IPIPE (on DM355 only).
+- *
+- *    Features supported
+- *		- MMAP IO
+- *		- Capture using TVP5146 over BT.656
+- *		- support for interfacing decoders using sub device model
+- *		- Work with DM355 or DM6446 CCDC to do Raw Bayer RGB/YUV
+- *		  data capture to SDRAM.
+- *    TODO list
+- *		- Support multiple REQBUF after open
+- *		- Support for de-allocating buffers through REQBUF
+- *		- Support for Raw Bayer RGB capture
+- *		- Support for chaining Image Processor
+- *		- Support for static allocation of buffers
+- *		- Support for USERPTR IO
+- *		- Support for STREAMON before QBUF
+- *		- Support for control ioctls
+- */
+-#include <linux/module.h>
+-#include <linux/slab.h>
+-#include <linux/init.h>
+-#include <linux/platform_device.h>
+-#include <linux/interrupt.h>
+-#include <media/v4l2-common.h>
+-#include <linux/io.h>
+-#include <media/davinci/vpfe_capture.h>
+-#include "ccdc_hw_device.h"
+-
+-static int debug;
+-static u32 numbuffers = 3;
+-static u32 bufsize = (720 * 576 * 2);
+-
+-module_param(numbuffers, uint, S_IRUGO);
+-module_param(bufsize, uint, S_IRUGO);
+-module_param(debug, int, 0644);
+-
+-MODULE_PARM_DESC(numbuffers, "buffer count (default:3)");
+-MODULE_PARM_DESC(bufsize, "buffer size in bytes (default:720 x 576 x 2)");
+-MODULE_PARM_DESC(debug, "Debug level 0-1");
+-
+-MODULE_DESCRIPTION("VPFE Video for Linux Capture Driver");
+-MODULE_LICENSE("GPL");
+-MODULE_AUTHOR("Texas Instruments");
+-
+-/* standard information */
+-struct vpfe_standard {
+-	v4l2_std_id std_id;
+-	unsigned int width;
+-	unsigned int height;
+-	struct v4l2_fract pixelaspect;
+-	/* 0 - progressive, 1 - interlaced */
+-	int frame_format;
+-};
+-
+-/* ccdc configuration */
+-struct ccdc_config {
+-	/* This make sure vpfe is probed and ready to go */
+-	int vpfe_probed;
+-	/* name of ccdc device */
+-	char name[32];
+-};
+-
+-/* data structures */
+-static struct vpfe_config_params config_params = {
+-	.min_numbuffers = 3,
+-	.numbuffers = 3,
+-	.min_bufsize = 720 * 480 * 2,
+-	.device_bufsize = 720 * 576 * 2,
+-};
+-
+-/* ccdc device registered */
+-static const struct ccdc_hw_device *ccdc_dev;
+-/* lock for accessing ccdc information */
+-static DEFINE_MUTEX(ccdc_lock);
+-/* ccdc configuration */
+-static struct ccdc_config *ccdc_cfg;
+-
+-static const struct vpfe_standard vpfe_standards[] = {
+-	{V4L2_STD_525_60, 720, 480, {11, 10}, 1},
+-	{V4L2_STD_625_50, 720, 576, {54, 59}, 1},
+-};
+-
+-/* Used when raw Bayer image from ccdc is directly captured to SDRAM */
+-static const struct vpfe_pixel_format vpfe_pix_fmts[] = {
+-	{
+-		.pixelformat = V4L2_PIX_FMT_SBGGR8,
+-		.bpp = 1,
+-	},
+-	{
+-		.pixelformat = V4L2_PIX_FMT_SBGGR16,
+-		.bpp = 2,
+-	},
+-	{
+-		.pixelformat = V4L2_PIX_FMT_SGRBG10DPCM8,
+-		.bpp = 1,
+-	},
+-	{
+-		.pixelformat = V4L2_PIX_FMT_UYVY,
+-		.bpp = 2,
+-	},
+-	{
+-		.pixelformat = V4L2_PIX_FMT_YUYV,
+-		.bpp = 2,
+-	},
+-	{
+-		.pixelformat = V4L2_PIX_FMT_NV12,
+-		.bpp = 1,
+-	},
+-};
+-
+-/*
+- * vpfe_lookup_pix_format()
+- * lookup an entry in the vpfe pix format table based on pix_format
+- */
+-static const struct vpfe_pixel_format *vpfe_lookup_pix_format(u32 pix_format)
+-{
+-	int i;
+-
+-	for (i = 0; i < ARRAY_SIZE(vpfe_pix_fmts); i++) {
+-		if (pix_format == vpfe_pix_fmts[i].pixelformat)
+-			return &vpfe_pix_fmts[i];
+-	}
+-	return NULL;
+-}
+-
+-/*
+- * vpfe_register_ccdc_device. CCDC module calls this to
+- * register with vpfe capture
+- */
+-int vpfe_register_ccdc_device(const struct ccdc_hw_device *dev)
+-{
+-	int ret = 0;
+-	printk(KERN_NOTICE "vpfe_register_ccdc_device: %s\n", dev->name);
+-
+-	if (!dev->hw_ops.open ||
+-	    !dev->hw_ops.enable ||
+-	    !dev->hw_ops.set_hw_if_params ||
+-	    !dev->hw_ops.configure ||
+-	    !dev->hw_ops.set_buftype ||
+-	    !dev->hw_ops.get_buftype ||
+-	    !dev->hw_ops.enum_pix ||
+-	    !dev->hw_ops.set_frame_format ||
+-	    !dev->hw_ops.get_frame_format ||
+-	    !dev->hw_ops.get_pixel_format ||
+-	    !dev->hw_ops.set_pixel_format ||
+-	    !dev->hw_ops.set_image_window ||
+-	    !dev->hw_ops.get_image_window ||
+-	    !dev->hw_ops.get_line_length ||
+-	    !dev->hw_ops.getfid)
+-		return -EINVAL;
+-
+-	mutex_lock(&ccdc_lock);
+-	if (!ccdc_cfg) {
+-		/*
+-		 * TODO. Will this ever happen? if so, we need to fix it.
+-		 * Probably we need to add the request to a linked list and
+-		 * walk through it during vpfe probe
+-		 */
+-		printk(KERN_ERR "vpfe capture not initialized\n");
+-		ret = -EFAULT;
+-		goto unlock;
+-	}
+-
+-	if (strcmp(dev->name, ccdc_cfg->name)) {
+-		/* ignore this ccdc */
+-		ret = -EINVAL;
+-		goto unlock;
+-	}
+-
+-	if (ccdc_dev) {
+-		printk(KERN_ERR "ccdc already registered\n");
+-		ret = -EINVAL;
+-		goto unlock;
+-	}
+-
+-	ccdc_dev = dev;
+-unlock:
+-	mutex_unlock(&ccdc_lock);
+-	return ret;
+-}
+-EXPORT_SYMBOL(vpfe_register_ccdc_device);
+-
+-/*
+- * vpfe_unregister_ccdc_device. CCDC module calls this to
+- * unregister with vpfe capture
+- */
+-void vpfe_unregister_ccdc_device(const struct ccdc_hw_device *dev)
+-{
+-	if (!dev) {
+-		printk(KERN_ERR "invalid ccdc device ptr\n");
+-		return;
+-	}
+-
+-	printk(KERN_NOTICE "vpfe_unregister_ccdc_device, dev->name = %s\n",
+-		dev->name);
+-
+-	if (strcmp(dev->name, ccdc_cfg->name)) {
+-		/* ignore this ccdc */
+-		return;
+-	}
+-
+-	mutex_lock(&ccdc_lock);
+-	ccdc_dev = NULL;
+-	mutex_unlock(&ccdc_lock);
+-}
+-EXPORT_SYMBOL(vpfe_unregister_ccdc_device);
+-
+-/*
+- * vpfe_config_ccdc_image_format()
+- * For a pix format, configure ccdc to setup the capture
+- */
+-static int vpfe_config_ccdc_image_format(struct vpfe_device *vpfe_dev)
+-{
+-	enum ccdc_frmfmt frm_fmt = CCDC_FRMFMT_INTERLACED;
+-	int ret = 0;
+-
+-	if (ccdc_dev->hw_ops.set_pixel_format(
+-			vpfe_dev->fmt.fmt.pix.pixelformat) < 0) {
+-		v4l2_err(&vpfe_dev->v4l2_dev,
+-			"couldn't set pix format in ccdc\n");
+-		return -EINVAL;
+-	}
+-	/* configure the image window */
+-	ccdc_dev->hw_ops.set_image_window(&vpfe_dev->crop);
+-
+-	switch (vpfe_dev->fmt.fmt.pix.field) {
+-	case V4L2_FIELD_INTERLACED:
+-		/* do nothing, since it is default */
+-		ret = ccdc_dev->hw_ops.set_buftype(
+-				CCDC_BUFTYPE_FLD_INTERLEAVED);
+-		break;
+-	case V4L2_FIELD_NONE:
+-		frm_fmt = CCDC_FRMFMT_PROGRESSIVE;
+-		/* buffer type only applicable for interlaced scan */
+-		break;
+-	case V4L2_FIELD_SEQ_TB:
+-		ret = ccdc_dev->hw_ops.set_buftype(
+-				CCDC_BUFTYPE_FLD_SEPARATED);
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
+-
+-	/* set the frame format */
+-	if (!ret)
+-		ret = ccdc_dev->hw_ops.set_frame_format(frm_fmt);
+-	return ret;
+-}
+-/*
+- * vpfe_config_image_format()
+- * For a given standard, this functions sets up the default
+- * pix format & crop values in the vpfe device and ccdc.  It first
+- * starts with defaults based values from the standard table.
+- * It then checks if sub device supports get_fmt and then override the
+- * values based on that.Sets crop values to match with scan resolution
+- * starting at 0,0. It calls vpfe_config_ccdc_image_format() set the
+- * values in ccdc
+- */
+-static int vpfe_config_image_format(struct vpfe_device *vpfe_dev,
+-				    v4l2_std_id std_id)
+-{
+-	struct vpfe_subdev_info *sdinfo = vpfe_dev->current_subdev;
+-	struct v4l2_subdev_format fmt = {
+-		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
 -	};
+-	struct v4l2_mbus_framefmt *mbus_fmt = &fmt.format;
+-	struct v4l2_pix_format *pix = &vpfe_dev->fmt.fmt.pix;
+-	int i, ret;
 -
--	return (i2c_transfer(i2c, msg, 2) != 2) ? -EIO : val;
--}
--
--static u8 read_pwm(struct budget* budget)
--{
--	u8 b = 0xff;
--	u8 pwm;
--	struct i2c_msg msg[] = { { .addr = 0x50,.flags = 0,.buf = &b,.len = 1 },
--				 { .addr = 0x50,.flags = I2C_M_RD,.buf = &pwm,.len = 1} };
--
--	if ((i2c_transfer(&budget->i2c_adap, msg, 2) != 2) || (pwm == 0xff))
--		pwm = 0x48;
--
--	return pwm;
--}
--
--static struct stv090x_config tt1600_stv090x_config = {
--	.device			= STV0903,
--	.demod_mode		= STV090x_SINGLE,
--	.clk_mode		= STV090x_CLK_EXT,
--
--	.xtal			= 13500000,
--	.address		= 0x68,
--
--	.ts1_mode		= STV090x_TSMODE_DVBCI,
--	.ts2_mode		= STV090x_TSMODE_SERIAL_CONTINUOUS,
--
--	.repeater_level		= STV090x_RPTLEVEL_16,
--
--	.tuner_init		= NULL,
--	.tuner_sleep		= NULL,
--	.tuner_set_mode		= NULL,
--	.tuner_set_frequency	= NULL,
--	.tuner_get_frequency	= NULL,
--	.tuner_set_bandwidth	= NULL,
--	.tuner_get_bandwidth	= NULL,
--	.tuner_set_bbgain	= NULL,
--	.tuner_get_bbgain	= NULL,
--	.tuner_set_refclk	= NULL,
--	.tuner_get_status	= NULL,
--};
--
--static struct stv6110x_config tt1600_stv6110x_config = {
--	.addr			= 0x60,
--	.refclk			= 27000000,
--	.clk_div		= 2,
--};
--
--static struct isl6423_config tt1600_isl6423_config = {
--	.current_max		= SEC_CURRENT_515m,
--	.curlim			= SEC_CURRENT_LIM_ON,
--	.mod_extern		= 1,
--	.addr			= 0x08,
--};
--
--static void frontend_init(struct budget *budget)
--{
--	(void)alps_bsbe1_config; /* avoid warning */
--
--	switch(budget->dev->pci->subsystem_device) {
--	case 0x1003: // Hauppauge/TT Nova budget (stv0299/ALPS BSRU6(tsa5059) OR ves1893/ALPS BSRV2(sp5659))
--	case 0x1013:
--		// try the ALPS BSRV2 first of all
--		budget->dvb_frontend = dvb_attach(ves1x93_attach, &alps_bsrv2_config, &budget->i2c_adap);
--		if (budget->dvb_frontend) {
--			budget->dvb_frontend->ops.tuner_ops.set_params = alps_bsrv2_tuner_set_params;
--			budget->dvb_frontend->ops.diseqc_send_master_cmd = budget_diseqc_send_master_cmd;
--			budget->dvb_frontend->ops.diseqc_send_burst = budget_diseqc_send_burst;
--			budget->dvb_frontend->ops.set_tone = budget_set_tone;
--			break;
--		}
--
--		// try the ALPS BSRU6 now
--		budget->dvb_frontend = dvb_attach(stv0299_attach, &alps_bsru6_config, &budget->i2c_adap);
--		if (budget->dvb_frontend) {
--			budget->dvb_frontend->ops.tuner_ops.set_params = alps_bsru6_tuner_set_params;
--			budget->dvb_frontend->tuner_priv = &budget->i2c_adap;
--			if (budget->dev->pci->subsystem_device == 0x1003 && diseqc_method == 0) {
--				budget->dvb_frontend->ops.diseqc_send_master_cmd = budget_diseqc_send_master_cmd;
--				budget->dvb_frontend->ops.diseqc_send_burst = budget_diseqc_send_burst;
--				budget->dvb_frontend->ops.set_tone = budget_set_tone;
--			}
--			break;
--		}
--		break;
--
--	case 0x1004: // Hauppauge/TT DVB-C budget (ves1820/ALPS TDBE2(sp5659))
--
--		budget->dvb_frontend = dvb_attach(ves1820_attach, &alps_tdbe2_config, &budget->i2c_adap, read_pwm(budget));
--		if (budget->dvb_frontend) {
--			budget->dvb_frontend->ops.tuner_ops.set_params = alps_tdbe2_tuner_set_params;
--			break;
--		}
--		break;
--
--	case 0x1005: // Hauppauge/TT Nova-T budget (L64781/Grundig 29504-401(tsa5060))
--
--		budget->dvb_frontend = dvb_attach(l64781_attach, &grundig_29504_401_config, &budget->i2c_adap);
--		if (budget->dvb_frontend) {
--			budget->dvb_frontend->ops.tuner_ops.set_params = grundig_29504_401_tuner_set_params;
--			budget->dvb_frontend->tuner_priv = NULL;
--			break;
--		}
--		break;
--
--	case 0x4f52: /* Cards based on Philips Semi Sylt PCI ref. design */
--		budget->dvb_frontend = dvb_attach(stv0299_attach, &alps_bsru6_config, &budget->i2c_adap);
--		if (budget->dvb_frontend) {
--			printk(KERN_INFO "budget: tuner ALPS BSRU6 in Philips Semi. Sylt detected\n");
--			budget->dvb_frontend->ops.tuner_ops.set_params = alps_bsru6_tuner_set_params;
--			budget->dvb_frontend->tuner_priv = &budget->i2c_adap;
--			break;
--		}
--		break;
--
--	case 0x4f60: /* Fujitsu Siemens Activy Budget-S PCI rev AL (stv0299/tsa5059) */
--	{
--		int subtype = i2c_readreg(&budget->i2c_adap, 0x50, 0x67);
--
--		if (subtype < 0)
--			break;
--		/* fixme: find a better way to identify the card */
--		if (subtype < 0x36) {
--			/* assume ALPS BSRU6 */
--			budget->dvb_frontend = dvb_attach(stv0299_attach, &alps_bsru6_config_activy, &budget->i2c_adap);
--			if (budget->dvb_frontend) {
--				printk(KERN_INFO "budget: tuner ALPS BSRU6 detected\n");
--				budget->dvb_frontend->ops.tuner_ops.set_params = alps_bsru6_tuner_set_params;
--				budget->dvb_frontend->tuner_priv = &budget->i2c_adap;
--				budget->dvb_frontend->ops.set_voltage = siemens_budget_set_voltage;
--				budget->dvb_frontend->ops.dishnetwork_send_legacy_command = NULL;
--				break;
--			}
--		} else {
--			/* assume ALPS BSBE1 */
--			/* reset tuner */
--			saa7146_setgpio(budget->dev, 3, SAA7146_GPIO_OUTLO);
--			msleep(50);
--			saa7146_setgpio(budget->dev, 3, SAA7146_GPIO_OUTHI);
--			msleep(250);
--			budget->dvb_frontend = dvb_attach(stv0299_attach, &alps_bsbe1_config_activy, &budget->i2c_adap);
--			if (budget->dvb_frontend) {
--				printk(KERN_INFO "budget: tuner ALPS BSBE1 detected\n");
--				budget->dvb_frontend->ops.tuner_ops.set_params = alps_bsbe1_tuner_set_params;
--				budget->dvb_frontend->tuner_priv = &budget->i2c_adap;
--				budget->dvb_frontend->ops.set_voltage = siemens_budget_set_voltage;
--				budget->dvb_frontend->ops.dishnetwork_send_legacy_command = NULL;
--				break;
--			}
--		}
--		break;
--	}
--
--	case 0x4f61: // Fujitsu Siemens Activy Budget-S PCI rev GR (tda8083/Grundig 29504-451(tsa5522))
--		budget->dvb_frontend = dvb_attach(tda8083_attach, &grundig_29504_451_config, &budget->i2c_adap);
--		if (budget->dvb_frontend) {
--			budget->dvb_frontend->ops.tuner_ops.set_params = grundig_29504_451_tuner_set_params;
--			budget->dvb_frontend->ops.set_voltage = siemens_budget_set_voltage;
--			budget->dvb_frontend->ops.dishnetwork_send_legacy_command = NULL;
--		}
--		break;
--
--	case 0x5f60: /* Fujitsu Siemens Activy Budget-T PCI rev AL (tda10046/ALPS TDHD1-204A) */
--		budget->dvb_frontend = dvb_attach(tda10046_attach, &alps_tdhd1_204a_config, &budget->i2c_adap);
--		if (budget->dvb_frontend) {
--			budget->dvb_frontend->ops.tuner_ops.set_params = alps_tdhd1_204a_tuner_set_params;
--			budget->dvb_frontend->tuner_priv = &budget->i2c_adap;
--		}
--		break;
--
--	case 0x5f61: /* Fujitsu Siemens Activy Budget-T PCI rev GR (L64781/Grundig 29504-401(tsa5060)) */
--		budget->dvb_frontend = dvb_attach(l64781_attach, &grundig_29504_401_config_activy, &budget->i2c_adap);
--		if (budget->dvb_frontend) {
--			budget->dvb_frontend->tuner_priv = &tuner_address_grundig_29504_401_activy;
--			budget->dvb_frontend->ops.tuner_ops.set_params = grundig_29504_401_tuner_set_params;
--		}
--		break;
--
--	case 0x1016: // Hauppauge/TT Nova-S SE (samsung s5h1420/????(tda8260))
--	{
--		struct dvb_frontend *fe;
--
--		fe = dvb_attach(s5h1420_attach, &s5h1420_config, &budget->i2c_adap);
--		if (fe) {
--			fe->ops.tuner_ops.set_params = s5h1420_tuner_set_params;
--			budget->dvb_frontend = fe;
--			if (dvb_attach(lnbp21_attach, fe, &budget->i2c_adap,
--				       0, 0) == NULL) {
--				printk("%s: No LNBP21 found!\n", __func__);
--				goto error_out;
--			}
+-	for (i = 0; i < ARRAY_SIZE(vpfe_standards); i++) {
+-		if (vpfe_standards[i].std_id & std_id) {
+-			vpfe_dev->std_info.active_pixels =
+-					vpfe_standards[i].width;
+-			vpfe_dev->std_info.active_lines =
+-					vpfe_standards[i].height;
+-			vpfe_dev->std_info.frame_format =
+-					vpfe_standards[i].frame_format;
+-			vpfe_dev->std_index = i;
 -			break;
 -		}
 -	}
--		fallthrough;
--	case 0x1018: // TT Budget-S-1401 (philips tda10086/philips tda8262)
--	{
--		struct dvb_frontend *fe;
 -
--		// gpio2 is connected to CLB - reset it + leave it high
--		saa7146_setgpio(budget->dev, 2, SAA7146_GPIO_OUTLO);
--		msleep(1);
--		saa7146_setgpio(budget->dev, 2, SAA7146_GPIO_OUTHI);
--		msleep(1);
--
--		fe = dvb_attach(tda10086_attach, &tda10086_config, &budget->i2c_adap);
--		if (fe) {
--			budget->dvb_frontend = fe;
--			if (dvb_attach(tda826x_attach, fe, 0x60,
--				       &budget->i2c_adap, 0) == NULL)
--				printk("%s: No tda826x found!\n", __func__);
--			if (dvb_attach(lnbp21_attach, fe,
--				       &budget->i2c_adap, 0, 0) == NULL) {
--				printk("%s: No LNBP21 found!\n", __func__);
--				goto error_out;
--			}
--			break;
--		}
--	}
--		fallthrough;
--
--	case 0x101c: { /* TT S2-1600 */
--			const struct stv6110x_devctl *ctl;
--			saa7146_setgpio(budget->dev, 2, SAA7146_GPIO_OUTLO);
--			msleep(50);
--			saa7146_setgpio(budget->dev, 2, SAA7146_GPIO_OUTHI);
--			msleep(250);
--
--			budget->dvb_frontend = dvb_attach(stv090x_attach,
--							  &tt1600_stv090x_config,
--							  &budget->i2c_adap,
--							  STV090x_DEMODULATOR_0);
--
--			if (budget->dvb_frontend) {
--
--				ctl = dvb_attach(stv6110x_attach,
--						 budget->dvb_frontend,
--						 &tt1600_stv6110x_config,
--						 &budget->i2c_adap);
--
--				if (ctl) {
--					tt1600_stv090x_config.tuner_init	  = ctl->tuner_init;
--					tt1600_stv090x_config.tuner_sleep	  = ctl->tuner_sleep;
--					tt1600_stv090x_config.tuner_set_mode	  = ctl->tuner_set_mode;
--					tt1600_stv090x_config.tuner_set_frequency = ctl->tuner_set_frequency;
--					tt1600_stv090x_config.tuner_get_frequency = ctl->tuner_get_frequency;
--					tt1600_stv090x_config.tuner_set_bandwidth = ctl->tuner_set_bandwidth;
--					tt1600_stv090x_config.tuner_get_bandwidth = ctl->tuner_get_bandwidth;
--					tt1600_stv090x_config.tuner_set_bbgain	  = ctl->tuner_set_bbgain;
--					tt1600_stv090x_config.tuner_get_bbgain	  = ctl->tuner_get_bbgain;
--					tt1600_stv090x_config.tuner_set_refclk	  = ctl->tuner_set_refclk;
--					tt1600_stv090x_config.tuner_get_status	  = ctl->tuner_get_status;
--
--					/* call the init function once to initialize
--					   tuner's clock output divider and demod's
--					   master clock */
--					if (budget->dvb_frontend->ops.init)
--						budget->dvb_frontend->ops.init(budget->dvb_frontend);
--
--					if (dvb_attach(isl6423_attach,
--						       budget->dvb_frontend,
--						       &budget->i2c_adap,
--						       &tt1600_isl6423_config) == NULL) {
--						printk(KERN_ERR "%s: No Intersil ISL6423 found!\n", __func__);
--						goto error_out;
--					}
--				} else {
--					printk(KERN_ERR "%s: No STV6110(A) Silicon Tuner found!\n", __func__);
--					goto error_out;
--				}
--			}
--		}
--		break;
--
--	case 0x1020: { /* Omicom S2 */
--			const struct stv6110x_devctl *ctl;
--			saa7146_setgpio(budget->dev, 2, SAA7146_GPIO_OUTLO);
--			msleep(50);
--			saa7146_setgpio(budget->dev, 2, SAA7146_GPIO_OUTHI);
--			msleep(250);
--
--			budget->dvb_frontend = dvb_attach(stv090x_attach,
--							  &tt1600_stv090x_config,
--							  &budget->i2c_adap,
--							  STV090x_DEMODULATOR_0);
--
--			if (budget->dvb_frontend) {
--				printk(KERN_INFO "budget: Omicom S2 detected\n");
--
--				ctl = dvb_attach(stv6110x_attach,
--						 budget->dvb_frontend,
--						 &tt1600_stv6110x_config,
--						 &budget->i2c_adap);
--
--				if (ctl) {
--					tt1600_stv090x_config.tuner_init	  = ctl->tuner_init;
--					tt1600_stv090x_config.tuner_sleep	  = ctl->tuner_sleep;
--					tt1600_stv090x_config.tuner_set_mode	  = ctl->tuner_set_mode;
--					tt1600_stv090x_config.tuner_set_frequency = ctl->tuner_set_frequency;
--					tt1600_stv090x_config.tuner_get_frequency = ctl->tuner_get_frequency;
--					tt1600_stv090x_config.tuner_set_bandwidth = ctl->tuner_set_bandwidth;
--					tt1600_stv090x_config.tuner_get_bandwidth = ctl->tuner_get_bandwidth;
--					tt1600_stv090x_config.tuner_set_bbgain	  = ctl->tuner_set_bbgain;
--					tt1600_stv090x_config.tuner_get_bbgain	  = ctl->tuner_get_bbgain;
--					tt1600_stv090x_config.tuner_set_refclk	  = ctl->tuner_set_refclk;
--					tt1600_stv090x_config.tuner_get_status	  = ctl->tuner_get_status;
--
--					/* call the init function once to initialize
--					   tuner's clock output divider and demod's
--					   master clock */
--					if (budget->dvb_frontend->ops.init)
--						budget->dvb_frontend->ops.init(budget->dvb_frontend);
--
--					if (dvb_attach(lnbh24_attach,
--							budget->dvb_frontend,
--							&budget->i2c_adap,
--							LNBH24_PCL | LNBH24_TTX,
--							LNBH24_TEN, 0x14>>1) == NULL) {
--						printk(KERN_ERR
--						"No LNBH24 found!\n");
--						goto error_out;
--					}
--				} else {
--					printk(KERN_ERR "%s: No STV6110(A) Silicon Tuner found!\n", __func__);
--					goto error_out;
--				}
--			}
--		}
--		break;
+-	if (i ==  ARRAY_SIZE(vpfe_standards)) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "standard not supported\n");
+-		return -EINVAL;
 -	}
 -
--	if (budget->dvb_frontend == NULL) {
--		printk("budget: A frontend driver was not found for device [%04x:%04x] subsystem [%04x:%04x]\n",
--		       budget->dev->pci->vendor,
--		       budget->dev->pci->device,
--		       budget->dev->pci->subsystem_vendor,
--		       budget->dev->pci->subsystem_device);
+-	vpfe_dev->crop.top = 0;
+-	vpfe_dev->crop.left = 0;
+-	vpfe_dev->crop.width = vpfe_dev->std_info.active_pixels;
+-	vpfe_dev->crop.height = vpfe_dev->std_info.active_lines;
+-	pix->width = vpfe_dev->crop.width;
+-	pix->height = vpfe_dev->crop.height;
+-
+-	/* first field and frame format based on standard frame format */
+-	if (vpfe_dev->std_info.frame_format) {
+-		pix->field = V4L2_FIELD_INTERLACED;
+-		/* assume V4L2_PIX_FMT_UYVY as default */
+-		pix->pixelformat = V4L2_PIX_FMT_UYVY;
+-		v4l2_fill_mbus_format(mbus_fmt, pix,
+-				MEDIA_BUS_FMT_YUYV10_2X10);
 -	} else {
--		if (dvb_register_frontend(&budget->dvb_adapter, budget->dvb_frontend))
--			goto error_out;
+-		pix->field = V4L2_FIELD_NONE;
+-		/* assume V4L2_PIX_FMT_SBGGR8 */
+-		pix->pixelformat = V4L2_PIX_FMT_SBGGR8;
+-		v4l2_fill_mbus_format(mbus_fmt, pix,
+-				MEDIA_BUS_FMT_SBGGR8_1X8);
 -	}
--	return;
 -
--error_out:
--	printk("budget: Frontend registration failed!\n");
--	dvb_frontend_detach(budget->dvb_frontend);
--	budget->dvb_frontend = NULL;
--	return;
+-	/* if sub device supports get_fmt, override the defaults */
+-	ret = v4l2_device_call_until_err(&vpfe_dev->v4l2_dev,
+-			sdinfo->grp_id, pad, get_fmt, NULL, &fmt);
+-
+-	if (ret && ret != -ENOIOCTLCMD) {
+-		v4l2_err(&vpfe_dev->v4l2_dev,
+-			"error in getting get_fmt from sub device\n");
+-		return ret;
+-	}
+-	v4l2_fill_pix_format(pix, mbus_fmt);
+-	pix->bytesperline = pix->width * 2;
+-	pix->sizeimage = pix->bytesperline * pix->height;
+-
+-	/* Sets the values in CCDC */
+-	ret = vpfe_config_ccdc_image_format(vpfe_dev);
+-	if (ret)
+-		return ret;
+-
+-	/* Update the values of sizeimage and bytesperline */
+-	pix->bytesperline = ccdc_dev->hw_ops.get_line_length();
+-	pix->sizeimage = pix->bytesperline * pix->height;
+-
+-	return 0;
 -}
 -
--static int budget_attach (struct saa7146_dev* dev, struct saa7146_pci_extension_data *info)
+-static int vpfe_initialize_device(struct vpfe_device *vpfe_dev)
 -{
--	struct budget *budget = NULL;
--	int err;
+-	int ret;
 -
--	budget = kmalloc(sizeof(struct budget), GFP_KERNEL);
--	if( NULL == budget ) {
+-	/* set first input of current subdevice as the current input */
+-	vpfe_dev->current_input = 0;
+-
+-	/* set default standard */
+-	vpfe_dev->std_index = 0;
+-
+-	/* Configure the default format information */
+-	ret = vpfe_config_image_format(vpfe_dev,
+-				vpfe_standards[vpfe_dev->std_index].std_id);
+-	if (ret)
+-		return ret;
+-
+-	/* now open the ccdc device to initialize it */
+-	mutex_lock(&ccdc_lock);
+-	if (!ccdc_dev) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "ccdc device not registered\n");
+-		ret = -ENODEV;
+-		goto unlock;
+-	}
+-
+-	if (!try_module_get(ccdc_dev->owner)) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Couldn't lock ccdc module\n");
+-		ret = -ENODEV;
+-		goto unlock;
+-	}
+-	ret = ccdc_dev->hw_ops.open(vpfe_dev->pdev);
+-	if (!ret)
+-		vpfe_dev->initialized = 1;
+-
+-	/* Clear all VPFE/CCDC interrupts */
+-	if (vpfe_dev->cfg->clr_intr)
+-		vpfe_dev->cfg->clr_intr(-1);
+-
+-unlock:
+-	mutex_unlock(&ccdc_lock);
+-	return ret;
+-}
+-
+-/*
+- * vpfe_open : It creates object of file handle structure and
+- * stores it in private_data  member of filepointer
+- */
+-static int vpfe_open(struct file *file)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	struct video_device *vdev = video_devdata(file);
+-	struct vpfe_fh *fh;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_open\n");
+-
+-	if (!vpfe_dev->cfg->num_subdevs) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "No decoder registered\n");
+-		return -ENODEV;
+-	}
+-
+-	/* Allocate memory for the file handle object */
+-	fh = kmalloc(sizeof(*fh), GFP_KERNEL);
+-	if (!fh)
+-		return -ENOMEM;
+-
+-	/* store pointer to fh in private_data member of file */
+-	file->private_data = fh;
+-	fh->vpfe_dev = vpfe_dev;
+-	v4l2_fh_init(&fh->fh, vdev);
+-	mutex_lock(&vpfe_dev->lock);
+-	/* If decoder is not initialized. initialize it */
+-	if (!vpfe_dev->initialized) {
+-		if (vpfe_initialize_device(vpfe_dev)) {
+-			mutex_unlock(&vpfe_dev->lock);
+-			v4l2_fh_exit(&fh->fh);
+-			kfree(fh);
+-			return -ENODEV;
+-		}
+-	}
+-	/* Increment device usrs counter */
+-	vpfe_dev->usrs++;
+-	/* Set io_allowed member to false */
+-	fh->io_allowed = 0;
+-	v4l2_fh_add(&fh->fh);
+-	mutex_unlock(&vpfe_dev->lock);
+-	return 0;
+-}
+-
+-static void vpfe_schedule_next_buffer(struct vpfe_device *vpfe_dev)
+-{
+-	unsigned long addr;
+-
+-	vpfe_dev->next_frm = list_entry(vpfe_dev->dma_queue.next,
+-					struct videobuf_buffer, queue);
+-	list_del(&vpfe_dev->next_frm->queue);
+-	vpfe_dev->next_frm->state = VIDEOBUF_ACTIVE;
+-	addr = videobuf_to_dma_contig(vpfe_dev->next_frm);
+-
+-	ccdc_dev->hw_ops.setfbaddr(addr);
+-}
+-
+-static void vpfe_schedule_bottom_field(struct vpfe_device *vpfe_dev)
+-{
+-	unsigned long addr;
+-
+-	addr = videobuf_to_dma_contig(vpfe_dev->cur_frm);
+-	addr += vpfe_dev->field_off;
+-	ccdc_dev->hw_ops.setfbaddr(addr);
+-}
+-
+-static void vpfe_process_buffer_complete(struct vpfe_device *vpfe_dev)
+-{
+-	vpfe_dev->cur_frm->ts = ktime_get_ns();
+-	vpfe_dev->cur_frm->state = VIDEOBUF_DONE;
+-	vpfe_dev->cur_frm->size = vpfe_dev->fmt.fmt.pix.sizeimage;
+-	wake_up_interruptible(&vpfe_dev->cur_frm->done);
+-	vpfe_dev->cur_frm = vpfe_dev->next_frm;
+-}
+-
+-/* ISR for VINT0*/
+-static irqreturn_t vpfe_isr(int irq, void *dev_id)
+-{
+-	struct vpfe_device *vpfe_dev = dev_id;
+-	enum v4l2_field field;
+-	int fid;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "\nStarting vpfe_isr...\n");
+-	field = vpfe_dev->fmt.fmt.pix.field;
+-
+-	/* if streaming not started, don't do anything */
+-	if (!vpfe_dev->started)
+-		goto clear_intr;
+-
+-	/* only for 6446 this will be applicable */
+-	if (ccdc_dev->hw_ops.reset)
+-		ccdc_dev->hw_ops.reset();
+-
+-	if (field == V4L2_FIELD_NONE) {
+-		/* handle progressive frame capture */
+-		v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev,
+-			"frame format is progressive...\n");
+-		if (vpfe_dev->cur_frm != vpfe_dev->next_frm)
+-			vpfe_process_buffer_complete(vpfe_dev);
+-		goto clear_intr;
+-	}
+-
+-	/* interlaced or TB capture check which field we are in hardware */
+-	fid = ccdc_dev->hw_ops.getfid();
+-
+-	/* switch the software maintained field id */
+-	vpfe_dev->field_id ^= 1;
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "field id = %x:%x.\n",
+-		fid, vpfe_dev->field_id);
+-	if (fid == vpfe_dev->field_id) {
+-		/* we are in-sync here,continue */
+-		if (fid == 0) {
+-			/*
+-			 * One frame is just being captured. If the next frame
+-			 * is available, release the current frame and move on
+-			 */
+-			if (vpfe_dev->cur_frm != vpfe_dev->next_frm)
+-				vpfe_process_buffer_complete(vpfe_dev);
+-			/*
+-			 * based on whether the two fields are stored
+-			 * interleavely or separately in memory, reconfigure
+-			 * the CCDC memory address
+-			 */
+-			if (field == V4L2_FIELD_SEQ_TB)
+-				vpfe_schedule_bottom_field(vpfe_dev);
+-			goto clear_intr;
+-		}
+-		/*
+-		 * if one field is just being captured configure
+-		 * the next frame get the next frame from the empty
+-		 * queue if no frame is available hold on to the
+-		 * current buffer
+-		 */
+-		spin_lock(&vpfe_dev->dma_queue_lock);
+-		if (!list_empty(&vpfe_dev->dma_queue) &&
+-		    vpfe_dev->cur_frm == vpfe_dev->next_frm)
+-			vpfe_schedule_next_buffer(vpfe_dev);
+-		spin_unlock(&vpfe_dev->dma_queue_lock);
+-	} else if (fid == 0) {
+-		/*
+-		 * out of sync. Recover from any hardware out-of-sync.
+-		 * May loose one frame
+-		 */
+-		vpfe_dev->field_id = fid;
+-	}
+-clear_intr:
+-	if (vpfe_dev->cfg->clr_intr)
+-		vpfe_dev->cfg->clr_intr(irq);
+-
+-	return IRQ_HANDLED;
+-}
+-
+-/* vdint1_isr - isr handler for VINT1 interrupt */
+-static irqreturn_t vdint1_isr(int irq, void *dev_id)
+-{
+-	struct vpfe_device *vpfe_dev = dev_id;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "\nInside vdint1_isr...\n");
+-
+-	/* if streaming not started, don't do anything */
+-	if (!vpfe_dev->started) {
+-		if (vpfe_dev->cfg->clr_intr)
+-			vpfe_dev->cfg->clr_intr(irq);
+-		return IRQ_HANDLED;
+-	}
+-
+-	spin_lock(&vpfe_dev->dma_queue_lock);
+-	if ((vpfe_dev->fmt.fmt.pix.field == V4L2_FIELD_NONE) &&
+-	    !list_empty(&vpfe_dev->dma_queue) &&
+-	    vpfe_dev->cur_frm == vpfe_dev->next_frm)
+-		vpfe_schedule_next_buffer(vpfe_dev);
+-	spin_unlock(&vpfe_dev->dma_queue_lock);
+-
+-	if (vpfe_dev->cfg->clr_intr)
+-		vpfe_dev->cfg->clr_intr(irq);
+-
+-	return IRQ_HANDLED;
+-}
+-
+-static void vpfe_detach_irq(struct vpfe_device *vpfe_dev)
+-{
+-	enum ccdc_frmfmt frame_format;
+-
+-	frame_format = ccdc_dev->hw_ops.get_frame_format();
+-	if (frame_format == CCDC_FRMFMT_PROGRESSIVE)
+-		free_irq(vpfe_dev->ccdc_irq1, vpfe_dev);
+-}
+-
+-static int vpfe_attach_irq(struct vpfe_device *vpfe_dev)
+-{
+-	enum ccdc_frmfmt frame_format;
+-
+-	frame_format = ccdc_dev->hw_ops.get_frame_format();
+-	if (frame_format == CCDC_FRMFMT_PROGRESSIVE) {
+-		return request_irq(vpfe_dev->ccdc_irq1, vdint1_isr,
+-				    0, "vpfe_capture1",
+-				    vpfe_dev);
+-	}
+-	return 0;
+-}
+-
+-/* vpfe_stop_ccdc_capture: stop streaming in ccdc/isif */
+-static void vpfe_stop_ccdc_capture(struct vpfe_device *vpfe_dev)
+-{
+-	vpfe_dev->started = 0;
+-	ccdc_dev->hw_ops.enable(0);
+-	if (ccdc_dev->hw_ops.enable_out_to_sdram)
+-		ccdc_dev->hw_ops.enable_out_to_sdram(0);
+-}
+-
+-/*
+- * vpfe_release : This function deletes buffer queue, frees the
+- * buffers and the vpfe file  handle
+- */
+-static int vpfe_release(struct file *file)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	struct vpfe_fh *fh = file->private_data;
+-	struct vpfe_subdev_info *sdinfo;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_release\n");
+-
+-	/* Get the device lock */
+-	mutex_lock(&vpfe_dev->lock);
+-	/* if this instance is doing IO */
+-	if (fh->io_allowed) {
+-		if (vpfe_dev->started) {
+-			sdinfo = vpfe_dev->current_subdev;
+-			ret = v4l2_device_call_until_err(&vpfe_dev->v4l2_dev,
+-							 sdinfo->grp_id,
+-							 video, s_stream, 0);
+-			if (ret && (ret != -ENOIOCTLCMD))
+-				v4l2_err(&vpfe_dev->v4l2_dev,
+-				"stream off failed in subdev\n");
+-			vpfe_stop_ccdc_capture(vpfe_dev);
+-			vpfe_detach_irq(vpfe_dev);
+-			videobuf_streamoff(&vpfe_dev->buffer_queue);
+-		}
+-		vpfe_dev->io_usrs = 0;
+-		vpfe_dev->numbuffers = config_params.numbuffers;
+-		videobuf_stop(&vpfe_dev->buffer_queue);
+-		videobuf_mmap_free(&vpfe_dev->buffer_queue);
+-	}
+-
+-	/* Decrement device usrs counter */
+-	vpfe_dev->usrs--;
+-	v4l2_fh_del(&fh->fh);
+-	v4l2_fh_exit(&fh->fh);
+-	/* If this is the last file handle */
+-	if (!vpfe_dev->usrs) {
+-		vpfe_dev->initialized = 0;
+-		if (ccdc_dev->hw_ops.close)
+-			ccdc_dev->hw_ops.close(vpfe_dev->pdev);
+-		module_put(ccdc_dev->owner);
+-	}
+-	mutex_unlock(&vpfe_dev->lock);
+-	file->private_data = NULL;
+-	/* Free memory allocated to file handle object */
+-	kfree(fh);
+-	return 0;
+-}
+-
+-/*
+- * vpfe_mmap : It is used to map kernel space buffers
+- * into user spaces
+- */
+-static int vpfe_mmap(struct file *file, struct vm_area_struct *vma)
+-{
+-	/* Get the device object and file handle object */
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_mmap\n");
+-
+-	return videobuf_mmap_mapper(&vpfe_dev->buffer_queue, vma);
+-}
+-
+-/*
+- * vpfe_poll: It is used for select/poll system call
+- */
+-static __poll_t vpfe_poll(struct file *file, poll_table *wait)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_poll\n");
+-
+-	if (vpfe_dev->started)
+-		return videobuf_poll_stream(file,
+-					    &vpfe_dev->buffer_queue, wait);
+-	return 0;
+-}
+-
+-/* vpfe capture driver file operations */
+-static const struct v4l2_file_operations vpfe_fops = {
+-	.owner = THIS_MODULE,
+-	.open = vpfe_open,
+-	.release = vpfe_release,
+-	.unlocked_ioctl = video_ioctl2,
+-	.mmap = vpfe_mmap,
+-	.poll = vpfe_poll
+-};
+-
+-/*
+- * vpfe_check_format()
+- * This function adjust the input pixel format as per hardware
+- * capabilities and update the same in pixfmt.
+- * Following algorithm used :-
+- *
+- *	If given pixformat is not in the vpfe list of pix formats or not
+- *	supported by the hardware, current value of pixformat in the device
+- *	is used
+- *	If given field is not supported, then current field is used. If field
+- *	is different from current, then it is matched with that from sub device.
+- *	Minimum height is 2 lines for interlaced or tb field and 1 line for
+- *	progressive. Maximum height is clamped to active active lines of scan
+- *	Minimum width is 32 bytes in memory and width is clamped to active
+- *	pixels of scan.
+- *	bytesperline is a multiple of 32.
+- */
+-static const struct vpfe_pixel_format *
+-	vpfe_check_format(struct vpfe_device *vpfe_dev,
+-			  struct v4l2_pix_format *pixfmt)
+-{
+-	u32 min_height = 1, min_width = 32, max_width, max_height;
+-	const struct vpfe_pixel_format *vpfe_pix_fmt;
+-	u32 pix;
+-	int temp, found;
+-
+-	vpfe_pix_fmt = vpfe_lookup_pix_format(pixfmt->pixelformat);
+-	if (!vpfe_pix_fmt) {
+-		/*
+-		 * use current pixel format in the vpfe device. We
+-		 * will find this pix format in the table
+-		 */
+-		pixfmt->pixelformat = vpfe_dev->fmt.fmt.pix.pixelformat;
+-		vpfe_pix_fmt = vpfe_lookup_pix_format(pixfmt->pixelformat);
+-	}
+-
+-	/* check if hw supports it */
+-	temp = 0;
+-	found = 0;
+-	while (ccdc_dev->hw_ops.enum_pix(&pix, temp) >= 0) {
+-		if (vpfe_pix_fmt->pixelformat == pix) {
+-			found = 1;
+-			break;
+-		}
+-		temp++;
+-	}
+-
+-	if (!found) {
+-		/* use current pixel format */
+-		pixfmt->pixelformat = vpfe_dev->fmt.fmt.pix.pixelformat;
+-		/*
+-		 * Since this is currently used in the vpfe device, we
+-		 * will find this pix format in the table
+-		 */
+-		vpfe_pix_fmt = vpfe_lookup_pix_format(pixfmt->pixelformat);
+-	}
+-
+-	/* check what field format is supported */
+-	if (pixfmt->field == V4L2_FIELD_ANY) {
+-		/* if field is any, use current value as default */
+-		pixfmt->field = vpfe_dev->fmt.fmt.pix.field;
+-	}
+-
+-	/*
+-	 * if field is not same as current field in the vpfe device
+-	 * try matching the field with the sub device field
+-	 */
+-	if (vpfe_dev->fmt.fmt.pix.field != pixfmt->field) {
+-		/*
+-		 * If field value is not in the supported fields, use current
+-		 * field used in the device as default
+-		 */
+-		switch (pixfmt->field) {
+-		case V4L2_FIELD_INTERLACED:
+-		case V4L2_FIELD_SEQ_TB:
+-			/* if sub device is supporting progressive, use that */
+-			if (!vpfe_dev->std_info.frame_format)
+-				pixfmt->field = V4L2_FIELD_NONE;
+-			break;
+-		case V4L2_FIELD_NONE:
+-			if (vpfe_dev->std_info.frame_format)
+-				pixfmt->field = V4L2_FIELD_INTERLACED;
+-			break;
+-
+-		default:
+-			/* use current field as default */
+-			pixfmt->field = vpfe_dev->fmt.fmt.pix.field;
+-			break;
+-		}
+-	}
+-
+-	/* Now adjust image resolutions supported */
+-	if (pixfmt->field == V4L2_FIELD_INTERLACED ||
+-	    pixfmt->field == V4L2_FIELD_SEQ_TB)
+-		min_height = 2;
+-
+-	max_width = vpfe_dev->std_info.active_pixels;
+-	max_height = vpfe_dev->std_info.active_lines;
+-	min_width /= vpfe_pix_fmt->bpp;
+-
+-	v4l2_info(&vpfe_dev->v4l2_dev, "width = %d, height = %d, bpp = %d\n",
+-		  pixfmt->width, pixfmt->height, vpfe_pix_fmt->bpp);
+-
+-	pixfmt->width = clamp((pixfmt->width), min_width, max_width);
+-	pixfmt->height = clamp((pixfmt->height), min_height, max_height);
+-
+-	/* If interlaced, adjust height to be a multiple of 2 */
+-	if (pixfmt->field == V4L2_FIELD_INTERLACED)
+-		pixfmt->height &= (~1);
+-	/*
+-	 * recalculate bytesperline and sizeimage since width
+-	 * and height might have changed
+-	 */
+-	pixfmt->bytesperline = (((pixfmt->width * vpfe_pix_fmt->bpp) + 31)
+-				& ~31);
+-	if (pixfmt->pixelformat == V4L2_PIX_FMT_NV12)
+-		pixfmt->sizeimage =
+-			pixfmt->bytesperline * pixfmt->height +
+-			((pixfmt->bytesperline * pixfmt->height) >> 1);
+-	else
+-		pixfmt->sizeimage = pixfmt->bytesperline * pixfmt->height;
+-
+-	v4l2_info(&vpfe_dev->v4l2_dev, "adjusted width = %d, height = %d, bpp = %d, bytesperline = %d, sizeimage = %d\n",
+-		 pixfmt->width, pixfmt->height, vpfe_pix_fmt->bpp,
+-		 pixfmt->bytesperline, pixfmt->sizeimage);
+-	return vpfe_pix_fmt;
+-}
+-
+-static int vpfe_querycap(struct file *file, void  *priv,
+-			       struct v4l2_capability *cap)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_querycap\n");
+-
+-	strscpy(cap->driver, CAPTURE_DRV_NAME, sizeof(cap->driver));
+-	strscpy(cap->bus_info, "VPFE", sizeof(cap->bus_info));
+-	strscpy(cap->card, vpfe_dev->cfg->card_name, sizeof(cap->card));
+-	return 0;
+-}
+-
+-static int vpfe_g_fmt_vid_cap(struct file *file, void *priv,
+-				struct v4l2_format *fmt)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_g_fmt_vid_cap\n");
+-	/* Fill in the information about format */
+-	*fmt = vpfe_dev->fmt;
+-	return 0;
+-}
+-
+-static int vpfe_enum_fmt_vid_cap(struct file *file, void  *priv,
+-				   struct v4l2_fmtdesc *fmt)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	const struct vpfe_pixel_format *pix_fmt;
+-	u32 pix;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_enum_fmt_vid_cap\n");
+-
+-	if (ccdc_dev->hw_ops.enum_pix(&pix, fmt->index) < 0)
+-		return -EINVAL;
+-
+-	/* Fill in the information about format */
+-	pix_fmt = vpfe_lookup_pix_format(pix);
+-	if (pix_fmt) {
+-		fmt->pixelformat = pix_fmt->pixelformat;
+-		return 0;
+-	}
+-	return -EINVAL;
+-}
+-
+-static int vpfe_s_fmt_vid_cap(struct file *file, void *priv,
+-				struct v4l2_format *fmt)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	const struct vpfe_pixel_format *pix_fmts;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_s_fmt_vid_cap\n");
+-
+-	/* If streaming is started, return error */
+-	if (vpfe_dev->started) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Streaming is started\n");
+-		return -EBUSY;
+-	}
+-
+-	/* Check for valid frame format */
+-	pix_fmts = vpfe_check_format(vpfe_dev, &fmt->fmt.pix);
+-	if (!pix_fmts)
+-		return -EINVAL;
+-
+-	/* store the pixel format in the device  object */
+-	ret = mutex_lock_interruptible(&vpfe_dev->lock);
+-	if (ret)
+-		return ret;
+-
+-	/* First detach any IRQ if currently attached */
+-	vpfe_detach_irq(vpfe_dev);
+-	vpfe_dev->fmt = *fmt;
+-	/* set image capture parameters in the ccdc */
+-	ret = vpfe_config_ccdc_image_format(vpfe_dev);
+-	mutex_unlock(&vpfe_dev->lock);
+-	return ret;
+-}
+-
+-static int vpfe_try_fmt_vid_cap(struct file *file, void *priv,
+-				  struct v4l2_format *f)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	const struct vpfe_pixel_format *pix_fmts;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_try_fmt_vid_cap\n");
+-
+-	pix_fmts = vpfe_check_format(vpfe_dev, &f->fmt.pix);
+-	if (!pix_fmts)
+-		return -EINVAL;
+-	return 0;
+-}
+-
+-/*
+- * vpfe_get_subdev_input_index - Get subdev index and subdev input index for a
+- * given app input index
+- */
+-static int vpfe_get_subdev_input_index(struct vpfe_device *vpfe_dev,
+-					int *subdev_index,
+-					int *subdev_input_index,
+-					int app_input_index)
+-{
+-	struct vpfe_config *cfg = vpfe_dev->cfg;
+-	struct vpfe_subdev_info *sdinfo;
+-	int i, j = 0;
+-
+-	for (i = 0; i < cfg->num_subdevs; i++) {
+-		sdinfo = &cfg->sub_devs[i];
+-		if (app_input_index < (j + sdinfo->num_inputs)) {
+-			*subdev_index = i;
+-			*subdev_input_index = app_input_index - j;
+-			return 0;
+-		}
+-		j += sdinfo->num_inputs;
+-	}
+-	return -EINVAL;
+-}
+-
+-/*
+- * vpfe_get_app_input - Get app input index for a given subdev input index
+- * driver stores the input index of the current sub device and translate it
+- * when application request the current input
+- */
+-static int vpfe_get_app_input_index(struct vpfe_device *vpfe_dev,
+-				    int *app_input_index)
+-{
+-	struct vpfe_config *cfg = vpfe_dev->cfg;
+-	struct vpfe_subdev_info *sdinfo;
+-	int i, j = 0;
+-
+-	for (i = 0; i < cfg->num_subdevs; i++) {
+-		sdinfo = &cfg->sub_devs[i];
+-		if (!strcmp(sdinfo->name, vpfe_dev->current_subdev->name)) {
+-			if (vpfe_dev->current_input >= sdinfo->num_inputs)
+-				return -1;
+-			*app_input_index = j + vpfe_dev->current_input;
+-			return 0;
+-		}
+-		j += sdinfo->num_inputs;
+-	}
+-	return -EINVAL;
+-}
+-
+-static int vpfe_enum_input(struct file *file, void *priv,
+-				 struct v4l2_input *inp)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	struct vpfe_subdev_info *sdinfo;
+-	int subdev, index ;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_enum_input\n");
+-
+-	if (vpfe_get_subdev_input_index(vpfe_dev,
+-					&subdev,
+-					&index,
+-					inp->index) < 0) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "input information not found for the subdev\n");
+-		return -EINVAL;
+-	}
+-	sdinfo = &vpfe_dev->cfg->sub_devs[subdev];
+-	*inp = sdinfo->inputs[index];
+-	return 0;
+-}
+-
+-static int vpfe_g_input(struct file *file, void *priv, unsigned int *index)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_g_input\n");
+-
+-	return vpfe_get_app_input_index(vpfe_dev, index);
+-}
+-
+-
+-static int vpfe_s_input(struct file *file, void *priv, unsigned int index)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	struct v4l2_subdev *sd;
+-	struct vpfe_subdev_info *sdinfo;
+-	int subdev_index, inp_index;
+-	struct vpfe_route *route;
+-	u32 input, output;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_s_input\n");
+-
+-	ret = mutex_lock_interruptible(&vpfe_dev->lock);
+-	if (ret)
+-		return ret;
+-
+-	/*
+-	 * If streaming is started return device busy
+-	 * error
+-	 */
+-	if (vpfe_dev->started) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Streaming is on\n");
+-		ret = -EBUSY;
+-		goto unlock_out;
+-	}
+-	ret = vpfe_get_subdev_input_index(vpfe_dev,
+-					  &subdev_index,
+-					  &inp_index,
+-					  index);
+-	if (ret < 0) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "invalid input index\n");
+-		goto unlock_out;
+-	}
+-
+-	sdinfo = &vpfe_dev->cfg->sub_devs[subdev_index];
+-	sd = vpfe_dev->sd[subdev_index];
+-	route = &sdinfo->routes[inp_index];
+-	if (route && sdinfo->can_route) {
+-		input = route->input;
+-		output = route->output;
+-	} else {
+-		input = 0;
+-		output = 0;
+-	}
+-
+-	if (sd)
+-		ret = v4l2_subdev_call(sd, video, s_routing, input, output, 0);
+-
+-	if (ret) {
+-		v4l2_err(&vpfe_dev->v4l2_dev,
+-			"vpfe_doioctl:error in setting input in decoder\n");
+-		ret = -EINVAL;
+-		goto unlock_out;
+-	}
+-	vpfe_dev->current_subdev = sdinfo;
+-	if (sd)
+-		vpfe_dev->v4l2_dev.ctrl_handler = sd->ctrl_handler;
+-	vpfe_dev->current_input = index;
+-	vpfe_dev->std_index = 0;
+-
+-	/* set the bus/interface parameter for the sub device in ccdc */
+-	ret = ccdc_dev->hw_ops.set_hw_if_params(&sdinfo->ccdc_if_params);
+-	if (ret)
+-		goto unlock_out;
+-
+-	/* set the default image parameters in the device */
+-	ret = vpfe_config_image_format(vpfe_dev,
+-				vpfe_standards[vpfe_dev->std_index].std_id);
+-unlock_out:
+-	mutex_unlock(&vpfe_dev->lock);
+-	return ret;
+-}
+-
+-static int vpfe_querystd(struct file *file, void *priv, v4l2_std_id *std_id)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	struct vpfe_subdev_info *sdinfo;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_querystd\n");
+-
+-	ret = mutex_lock_interruptible(&vpfe_dev->lock);
+-	sdinfo = vpfe_dev->current_subdev;
+-	if (ret)
+-		return ret;
+-	/* Call querystd function of decoder device */
+-	ret = v4l2_device_call_until_err(&vpfe_dev->v4l2_dev, sdinfo->grp_id,
+-					 video, querystd, std_id);
+-	mutex_unlock(&vpfe_dev->lock);
+-	return ret;
+-}
+-
+-static int vpfe_s_std(struct file *file, void *priv, v4l2_std_id std_id)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	struct vpfe_subdev_info *sdinfo;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_s_std\n");
+-
+-	/* Call decoder driver function to set the standard */
+-	ret = mutex_lock_interruptible(&vpfe_dev->lock);
+-	if (ret)
+-		return ret;
+-
+-	sdinfo = vpfe_dev->current_subdev;
+-	/* If streaming is started, return device busy error */
+-	if (vpfe_dev->started) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "streaming is started\n");
+-		ret = -EBUSY;
+-		goto unlock_out;
+-	}
+-
+-	ret = v4l2_device_call_until_err(&vpfe_dev->v4l2_dev, sdinfo->grp_id,
+-					 video, s_std, std_id);
+-	if (ret < 0) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Failed to set standard\n");
+-		goto unlock_out;
+-	}
+-	ret = vpfe_config_image_format(vpfe_dev, std_id);
+-
+-unlock_out:
+-	mutex_unlock(&vpfe_dev->lock);
+-	return ret;
+-}
+-
+-static int vpfe_g_std(struct file *file, void *priv, v4l2_std_id *std_id)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_g_std\n");
+-
+-	*std_id = vpfe_standards[vpfe_dev->std_index].std_id;
+-	return 0;
+-}
+-/*
+- *  Videobuf operations
+- */
+-static int vpfe_videobuf_setup(struct videobuf_queue *vq,
+-				unsigned int *count,
+-				unsigned int *size)
+-{
+-	struct vpfe_fh *fh = vq->priv_data;
+-	struct vpfe_device *vpfe_dev = fh->vpfe_dev;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_buffer_setup\n");
+-	*size = vpfe_dev->fmt.fmt.pix.sizeimage;
+-	if (vpfe_dev->memory == V4L2_MEMORY_MMAP &&
+-		vpfe_dev->fmt.fmt.pix.sizeimage > config_params.device_bufsize)
+-		*size = config_params.device_bufsize;
+-
+-	if (*count < config_params.min_numbuffers)
+-		*count = config_params.min_numbuffers;
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev,
+-		"count=%d, size=%d\n", *count, *size);
+-	return 0;
+-}
+-
+-static int vpfe_videobuf_prepare(struct videobuf_queue *vq,
+-				struct videobuf_buffer *vb,
+-				enum v4l2_field field)
+-{
+-	struct vpfe_fh *fh = vq->priv_data;
+-	struct vpfe_device *vpfe_dev = fh->vpfe_dev;
+-	unsigned long addr;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_buffer_prepare\n");
+-
+-	/* If buffer is not initialized, initialize it */
+-	if (VIDEOBUF_NEEDS_INIT == vb->state) {
+-		vb->width = vpfe_dev->fmt.fmt.pix.width;
+-		vb->height = vpfe_dev->fmt.fmt.pix.height;
+-		vb->size = vpfe_dev->fmt.fmt.pix.sizeimage;
+-		vb->field = field;
+-
+-		ret = videobuf_iolock(vq, vb, NULL);
+-		if (ret < 0)
+-			return ret;
+-
+-		addr = videobuf_to_dma_contig(vb);
+-		/* Make sure user addresses are aligned to 32 bytes */
+-		if (!ALIGN(addr, 32))
+-			return -EINVAL;
+-
+-		vb->state = VIDEOBUF_PREPARED;
+-	}
+-	return 0;
+-}
+-
+-static void vpfe_videobuf_queue(struct videobuf_queue *vq,
+-				struct videobuf_buffer *vb)
+-{
+-	/* Get the file handle object and device object */
+-	struct vpfe_fh *fh = vq->priv_data;
+-	struct vpfe_device *vpfe_dev = fh->vpfe_dev;
+-	unsigned long flags;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_buffer_queue\n");
+-
+-	/* add the buffer to the DMA queue */
+-	spin_lock_irqsave(&vpfe_dev->dma_queue_lock, flags);
+-	list_add_tail(&vb->queue, &vpfe_dev->dma_queue);
+-	spin_unlock_irqrestore(&vpfe_dev->dma_queue_lock, flags);
+-
+-	/* Change state of the buffer */
+-	vb->state = VIDEOBUF_QUEUED;
+-}
+-
+-static void vpfe_videobuf_release(struct videobuf_queue *vq,
+-				  struct videobuf_buffer *vb)
+-{
+-	struct vpfe_fh *fh = vq->priv_data;
+-	struct vpfe_device *vpfe_dev = fh->vpfe_dev;
+-	unsigned long flags;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_videobuf_release\n");
+-
+-	/*
+-	 * We need to flush the buffer from the dma queue since
+-	 * they are de-allocated
+-	 */
+-	spin_lock_irqsave(&vpfe_dev->dma_queue_lock, flags);
+-	INIT_LIST_HEAD(&vpfe_dev->dma_queue);
+-	spin_unlock_irqrestore(&vpfe_dev->dma_queue_lock, flags);
+-	videobuf_dma_contig_free(vq, vb);
+-	vb->state = VIDEOBUF_NEEDS_INIT;
+-}
+-
+-static const struct videobuf_queue_ops vpfe_videobuf_qops = {
+-	.buf_setup      = vpfe_videobuf_setup,
+-	.buf_prepare    = vpfe_videobuf_prepare,
+-	.buf_queue      = vpfe_videobuf_queue,
+-	.buf_release    = vpfe_videobuf_release,
+-};
+-
+-/*
+- * vpfe_reqbufs. currently support REQBUF only once opening
+- * the device.
+- */
+-static int vpfe_reqbufs(struct file *file, void *priv,
+-			struct v4l2_requestbuffers *req_buf)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	struct vpfe_fh *fh = file->private_data;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_reqbufs\n");
+-
+-	if (V4L2_BUF_TYPE_VIDEO_CAPTURE != req_buf->type) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Invalid buffer type\n");
+-		return -EINVAL;
+-	}
+-
+-	ret = mutex_lock_interruptible(&vpfe_dev->lock);
+-	if (ret)
+-		return ret;
+-
+-	if (vpfe_dev->io_usrs != 0) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Only one IO user allowed\n");
+-		ret = -EBUSY;
+-		goto unlock_out;
+-	}
+-
+-	vpfe_dev->memory = req_buf->memory;
+-	videobuf_queue_dma_contig_init(&vpfe_dev->buffer_queue,
+-				&vpfe_videobuf_qops,
+-				vpfe_dev->pdev,
+-				&vpfe_dev->irqlock,
+-				req_buf->type,
+-				vpfe_dev->fmt.fmt.pix.field,
+-				sizeof(struct videobuf_buffer),
+-				fh, NULL);
+-
+-	fh->io_allowed = 1;
+-	vpfe_dev->io_usrs = 1;
+-	INIT_LIST_HEAD(&vpfe_dev->dma_queue);
+-	ret = videobuf_reqbufs(&vpfe_dev->buffer_queue, req_buf);
+-unlock_out:
+-	mutex_unlock(&vpfe_dev->lock);
+-	return ret;
+-}
+-
+-static int vpfe_querybuf(struct file *file, void *priv,
+-			 struct v4l2_buffer *buf)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_querybuf\n");
+-
+-	if (V4L2_BUF_TYPE_VIDEO_CAPTURE != buf->type) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Invalid buf type\n");
+-		return  -EINVAL;
+-	}
+-
+-	if (vpfe_dev->memory != V4L2_MEMORY_MMAP) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Invalid memory\n");
+-		return -EINVAL;
+-	}
+-	/* Call videobuf_querybuf to get information */
+-	return videobuf_querybuf(&vpfe_dev->buffer_queue, buf);
+-}
+-
+-static int vpfe_qbuf(struct file *file, void *priv,
+-		     struct v4l2_buffer *p)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	struct vpfe_fh *fh = file->private_data;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_qbuf\n");
+-
+-	if (V4L2_BUF_TYPE_VIDEO_CAPTURE != p->type) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Invalid buf type\n");
+-		return -EINVAL;
+-	}
+-
+-	/*
+-	 * If this file handle is not allowed to do IO,
+-	 * return error
+-	 */
+-	if (!fh->io_allowed) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "fh->io_allowed\n");
+-		return -EACCES;
+-	}
+-	return videobuf_qbuf(&vpfe_dev->buffer_queue, p);
+-}
+-
+-static int vpfe_dqbuf(struct file *file, void *priv,
+-		      struct v4l2_buffer *buf)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_dqbuf\n");
+-
+-	if (V4L2_BUF_TYPE_VIDEO_CAPTURE != buf->type) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Invalid buf type\n");
+-		return -EINVAL;
+-	}
+-	return videobuf_dqbuf(&vpfe_dev->buffer_queue,
+-				      buf, file->f_flags & O_NONBLOCK);
+-}
+-
+-/*
+- * vpfe_calculate_offsets : This function calculates buffers offset
+- * for top and bottom field
+- */
+-static void vpfe_calculate_offsets(struct vpfe_device *vpfe_dev)
+-{
+-	struct v4l2_rect image_win;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_calculate_offsets\n");
+-
+-	ccdc_dev->hw_ops.get_image_window(&image_win);
+-	vpfe_dev->field_off = image_win.height * image_win.width;
+-}
+-
+-/* vpfe_start_ccdc_capture: start streaming in ccdc/isif */
+-static void vpfe_start_ccdc_capture(struct vpfe_device *vpfe_dev)
+-{
+-	ccdc_dev->hw_ops.enable(1);
+-	if (ccdc_dev->hw_ops.enable_out_to_sdram)
+-		ccdc_dev->hw_ops.enable_out_to_sdram(1);
+-	vpfe_dev->started = 1;
+-}
+-
+-/*
+- * vpfe_streamon. Assume the DMA queue is not empty.
+- * application is expected to call QBUF before calling
+- * this ioctl. If not, driver returns error
+- */
+-static int vpfe_streamon(struct file *file, void *priv,
+-			 enum v4l2_buf_type buf_type)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	struct vpfe_fh *fh = file->private_data;
+-	struct vpfe_subdev_info *sdinfo;
+-	unsigned long addr;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_streamon\n");
+-
+-	if (V4L2_BUF_TYPE_VIDEO_CAPTURE != buf_type) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Invalid buf type\n");
+-		return -EINVAL;
+-	}
+-
+-	/* If file handle is not allowed IO, return error */
+-	if (!fh->io_allowed) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "fh->io_allowed\n");
+-		return -EACCES;
+-	}
+-
+-	sdinfo = vpfe_dev->current_subdev;
+-	ret = v4l2_device_call_until_err(&vpfe_dev->v4l2_dev, sdinfo->grp_id,
+-					video, s_stream, 1);
+-
+-	if (ret && (ret != -ENOIOCTLCMD)) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "stream on failed in subdev\n");
+-		return -EINVAL;
+-	}
+-
+-	/* If buffer queue is empty, return error */
+-	if (list_empty(&vpfe_dev->buffer_queue.stream)) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "buffer queue is empty\n");
+-		return -EIO;
+-	}
+-
+-	/* Call videobuf_streamon to start streaming * in videobuf */
+-	ret = videobuf_streamon(&vpfe_dev->buffer_queue);
+-	if (ret)
+-		return ret;
+-
+-
+-	ret = mutex_lock_interruptible(&vpfe_dev->lock);
+-	if (ret)
+-		goto streamoff;
+-	/* Get the next frame from the buffer queue */
+-	vpfe_dev->next_frm = list_entry(vpfe_dev->dma_queue.next,
+-					struct videobuf_buffer, queue);
+-	vpfe_dev->cur_frm = vpfe_dev->next_frm;
+-	/* Remove buffer from the buffer queue */
+-	list_del(&vpfe_dev->cur_frm->queue);
+-	/* Mark state of the current frame to active */
+-	vpfe_dev->cur_frm->state = VIDEOBUF_ACTIVE;
+-	/* Initialize field_id and started member */
+-	vpfe_dev->field_id = 0;
+-	addr = videobuf_to_dma_contig(vpfe_dev->cur_frm);
+-
+-	/* Calculate field offset */
+-	vpfe_calculate_offsets(vpfe_dev);
+-
+-	if (vpfe_attach_irq(vpfe_dev) < 0) {
+-		v4l2_err(&vpfe_dev->v4l2_dev,
+-			 "Error in attaching interrupt handle\n");
+-		ret = -EFAULT;
+-		goto unlock_out;
+-	}
+-	if (ccdc_dev->hw_ops.configure() < 0) {
+-		v4l2_err(&vpfe_dev->v4l2_dev,
+-			 "Error in configuring ccdc\n");
+-		ret = -EINVAL;
+-		goto unlock_out;
+-	}
+-	ccdc_dev->hw_ops.setfbaddr((unsigned long)(addr));
+-	vpfe_start_ccdc_capture(vpfe_dev);
+-	mutex_unlock(&vpfe_dev->lock);
+-	return ret;
+-unlock_out:
+-	mutex_unlock(&vpfe_dev->lock);
+-streamoff:
+-	videobuf_streamoff(&vpfe_dev->buffer_queue);
+-	return ret;
+-}
+-
+-static int vpfe_streamoff(struct file *file, void *priv,
+-			  enum v4l2_buf_type buf_type)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	struct vpfe_fh *fh = file->private_data;
+-	struct vpfe_subdev_info *sdinfo;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_streamoff\n");
+-
+-	if (V4L2_BUF_TYPE_VIDEO_CAPTURE != buf_type) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Invalid buf type\n");
+-		return -EINVAL;
+-	}
+-
+-	/* If io is allowed for this file handle, return error */
+-	if (!fh->io_allowed) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "fh->io_allowed\n");
+-		return -EACCES;
+-	}
+-
+-	/* If streaming is not started, return error */
+-	if (!vpfe_dev->started) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "device started\n");
+-		return -EINVAL;
+-	}
+-
+-	ret = mutex_lock_interruptible(&vpfe_dev->lock);
+-	if (ret)
+-		return ret;
+-
+-	vpfe_stop_ccdc_capture(vpfe_dev);
+-	vpfe_detach_irq(vpfe_dev);
+-
+-	sdinfo = vpfe_dev->current_subdev;
+-	ret = v4l2_device_call_until_err(&vpfe_dev->v4l2_dev, sdinfo->grp_id,
+-					video, s_stream, 0);
+-
+-	if (ret && (ret != -ENOIOCTLCMD))
+-		v4l2_err(&vpfe_dev->v4l2_dev, "stream off failed in subdev\n");
+-	ret = videobuf_streamoff(&vpfe_dev->buffer_queue);
+-	mutex_unlock(&vpfe_dev->lock);
+-	return ret;
+-}
+-
+-static int vpfe_g_pixelaspect(struct file *file, void *priv,
+-			      int type, struct v4l2_fract *f)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_g_pixelaspect\n");
+-
+-	if (type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-		return -EINVAL;
+-	/* If std_index is invalid, then just return (== 1:1 aspect) */
+-	if (vpfe_dev->std_index >= ARRAY_SIZE(vpfe_standards))
+-		return 0;
+-
+-	*f = vpfe_standards[vpfe_dev->std_index].pixelaspect;
+-	return 0;
+-}
+-
+-static int vpfe_g_selection(struct file *file, void *priv,
+-			    struct v4l2_selection *sel)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_g_selection\n");
+-
+-	if (sel->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-		return -EINVAL;
+-
+-	switch (sel->target) {
+-	case V4L2_SEL_TGT_CROP:
+-		sel->r = vpfe_dev->crop;
+-		break;
+-	case V4L2_SEL_TGT_CROP_DEFAULT:
+-	case V4L2_SEL_TGT_CROP_BOUNDS:
+-		sel->r.width = vpfe_standards[vpfe_dev->std_index].width;
+-		sel->r.height = vpfe_standards[vpfe_dev->std_index].height;
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
+-	return 0;
+-}
+-
+-static int vpfe_s_selection(struct file *file, void *priv,
+-			    struct v4l2_selection *sel)
+-{
+-	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	struct v4l2_rect rect = sel->r;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_s_selection\n");
+-
+-	if (sel->type != V4L2_BUF_TYPE_VIDEO_CAPTURE ||
+-	    sel->target != V4L2_SEL_TGT_CROP)
+-		return -EINVAL;
+-
+-	if (vpfe_dev->started) {
+-		/* make sure streaming is not started */
+-		v4l2_err(&vpfe_dev->v4l2_dev,
+-			"Cannot change crop when streaming is ON\n");
+-		return -EBUSY;
+-	}
+-
+-	ret = mutex_lock_interruptible(&vpfe_dev->lock);
+-	if (ret)
+-		return ret;
+-
+-	if (rect.top < 0 || rect.left < 0) {
+-		v4l2_err(&vpfe_dev->v4l2_dev,
+-			"doesn't support negative values for top & left\n");
+-		ret = -EINVAL;
+-		goto unlock_out;
+-	}
+-
+-	/* adjust the width to 16 pixel boundary */
+-	rect.width = ((rect.width + 15) & ~0xf);
+-
+-	/* make sure parameters are valid */
+-	if ((rect.left + rect.width >
+-		vpfe_dev->std_info.active_pixels) ||
+-	    (rect.top + rect.height >
+-		vpfe_dev->std_info.active_lines)) {
+-		v4l2_err(&vpfe_dev->v4l2_dev, "Error in S_SELECTION params\n");
+-		ret = -EINVAL;
+-		goto unlock_out;
+-	}
+-	ccdc_dev->hw_ops.set_image_window(&rect);
+-	vpfe_dev->fmt.fmt.pix.width = rect.width;
+-	vpfe_dev->fmt.fmt.pix.height = rect.height;
+-	vpfe_dev->fmt.fmt.pix.bytesperline =
+-		ccdc_dev->hw_ops.get_line_length();
+-	vpfe_dev->fmt.fmt.pix.sizeimage =
+-		vpfe_dev->fmt.fmt.pix.bytesperline *
+-		vpfe_dev->fmt.fmt.pix.height;
+-	vpfe_dev->crop = rect;
+-	sel->r = rect;
+-unlock_out:
+-	mutex_unlock(&vpfe_dev->lock);
+-	return ret;
+-}
+-
+-/* vpfe capture ioctl operations */
+-static const struct v4l2_ioctl_ops vpfe_ioctl_ops = {
+-	.vidioc_querycap	 = vpfe_querycap,
+-	.vidioc_g_fmt_vid_cap    = vpfe_g_fmt_vid_cap,
+-	.vidioc_enum_fmt_vid_cap = vpfe_enum_fmt_vid_cap,
+-	.vidioc_s_fmt_vid_cap    = vpfe_s_fmt_vid_cap,
+-	.vidioc_try_fmt_vid_cap  = vpfe_try_fmt_vid_cap,
+-	.vidioc_enum_input	 = vpfe_enum_input,
+-	.vidioc_g_input		 = vpfe_g_input,
+-	.vidioc_s_input		 = vpfe_s_input,
+-	.vidioc_querystd	 = vpfe_querystd,
+-	.vidioc_s_std		 = vpfe_s_std,
+-	.vidioc_g_std		 = vpfe_g_std,
+-	.vidioc_reqbufs		 = vpfe_reqbufs,
+-	.vidioc_querybuf	 = vpfe_querybuf,
+-	.vidioc_qbuf		 = vpfe_qbuf,
+-	.vidioc_dqbuf		 = vpfe_dqbuf,
+-	.vidioc_streamon	 = vpfe_streamon,
+-	.vidioc_streamoff	 = vpfe_streamoff,
+-	.vidioc_g_pixelaspect	 = vpfe_g_pixelaspect,
+-	.vidioc_g_selection	 = vpfe_g_selection,
+-	.vidioc_s_selection	 = vpfe_s_selection,
+-};
+-
+-static struct vpfe_device *vpfe_initialize(void)
+-{
+-	struct vpfe_device *vpfe_dev;
+-
+-	/* Default number of buffers should be 3 */
+-	if ((numbuffers > 0) &&
+-	    (numbuffers < config_params.min_numbuffers))
+-		numbuffers = config_params.min_numbuffers;
+-
+-	/*
+-	 * Set buffer size to min buffers size if invalid buffer size is
+-	 * given
+-	 */
+-	if (bufsize < config_params.min_bufsize)
+-		bufsize = config_params.min_bufsize;
+-
+-	config_params.numbuffers = numbuffers;
+-
+-	if (numbuffers)
+-		config_params.device_bufsize = bufsize;
+-
+-	/* Allocate memory for device objects */
+-	vpfe_dev = kzalloc(sizeof(*vpfe_dev), GFP_KERNEL);
+-
+-	return vpfe_dev;
+-}
+-
+-/*
+- * vpfe_probe : This function creates device entries by register
+- * itself to the V4L2 driver and initializes fields of each
+- * device objects
+- */
+-static int vpfe_probe(struct platform_device *pdev)
+-{
+-	struct vpfe_subdev_info *sdinfo;
+-	struct vpfe_config *vpfe_cfg;
+-	struct resource *res1;
+-	struct vpfe_device *vpfe_dev;
+-	struct i2c_adapter *i2c_adap;
+-	struct video_device *vfd;
+-	int ret, i, j;
+-	int num_subdevs = 0;
+-
+-	/* Get the pointer to the device object */
+-	vpfe_dev = vpfe_initialize();
+-
+-	if (!vpfe_dev) {
+-		v4l2_err(pdev->dev.driver,
+-			"Failed to allocate memory for vpfe_dev\n");
 -		return -ENOMEM;
 -	}
 -
--	dprintk(2, "dev:%p, info:%p, budget:%p\n", dev, info, budget);
+-	vpfe_dev->pdev = &pdev->dev;
 -
--	dev->ext_priv = budget;
--
--	err = ttpci_budget_init(budget, dev, info, THIS_MODULE, adapter_nr);
--	if (err) {
--		printk("==> failed\n");
--		kfree (budget);
--		return err;
+-	if (!pdev->dev.platform_data) {
+-		v4l2_err(pdev->dev.driver, "Unable to get vpfe config\n");
+-		ret = -ENODEV;
+-		goto probe_free_dev_mem;
 -	}
 -
--	budget->dvb_adapter.priv = budget;
--	frontend_init(budget);
+-	vpfe_cfg = pdev->dev.platform_data;
+-	vpfe_dev->cfg = vpfe_cfg;
+-	if (!vpfe_cfg->ccdc || !vpfe_cfg->card_name || !vpfe_cfg->sub_devs) {
+-		v4l2_err(pdev->dev.driver, "null ptr in vpfe_cfg\n");
+-		ret = -ENOENT;
+-		goto probe_free_dev_mem;
+-	}
 -
--	ttpci_budget_init_hooks(budget);
+-	/* Allocate memory for ccdc configuration */
+-	ccdc_cfg = kmalloc(sizeof(*ccdc_cfg), GFP_KERNEL);
+-	if (!ccdc_cfg) {
+-		ret = -ENOMEM;
+-		goto probe_free_dev_mem;
+-	}
 -
+-	mutex_lock(&ccdc_lock);
+-
+-	strscpy(ccdc_cfg->name, vpfe_cfg->ccdc, sizeof(ccdc_cfg->name));
+-	/* Get VINT0 irq resource */
+-	res1 = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (!res1) {
+-		v4l2_err(pdev->dev.driver,
+-			 "Unable to get interrupt for VINT0\n");
+-		ret = -ENODEV;
+-		goto probe_free_ccdc_cfg_mem;
+-	}
+-	vpfe_dev->ccdc_irq0 = res1->start;
+-
+-	/* Get VINT1 irq resource */
+-	res1 = platform_get_resource(pdev, IORESOURCE_IRQ, 1);
+-	if (!res1) {
+-		v4l2_err(pdev->dev.driver,
+-			 "Unable to get interrupt for VINT1\n");
+-		ret = -ENODEV;
+-		goto probe_free_ccdc_cfg_mem;
+-	}
+-	vpfe_dev->ccdc_irq1 = res1->start;
+-
+-	ret = request_irq(vpfe_dev->ccdc_irq0, vpfe_isr, 0,
+-			  "vpfe_capture0", vpfe_dev);
+-
+-	if (0 != ret) {
+-		v4l2_err(pdev->dev.driver, "Unable to request interrupt\n");
+-		goto probe_free_ccdc_cfg_mem;
+-	}
+-
+-	vfd = &vpfe_dev->video_dev;
+-	/* Initialize field of video device */
+-	vfd->release		= video_device_release_empty;
+-	vfd->fops		= &vpfe_fops;
+-	vfd->ioctl_ops		= &vpfe_ioctl_ops;
+-	vfd->tvnorms		= 0;
+-	vfd->v4l2_dev		= &vpfe_dev->v4l2_dev;
+-	vfd->device_caps	= V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
+-	snprintf(vfd->name, sizeof(vfd->name),
+-		 "%s_V%d.%d.%d",
+-		 CAPTURE_DRV_NAME,
+-		 (VPFE_CAPTURE_VERSION_CODE >> 16) & 0xff,
+-		 (VPFE_CAPTURE_VERSION_CODE >> 8) & 0xff,
+-		 (VPFE_CAPTURE_VERSION_CODE) & 0xff);
+-
+-	ret = v4l2_device_register(&pdev->dev, &vpfe_dev->v4l2_dev);
+-	if (ret) {
+-		v4l2_err(pdev->dev.driver,
+-			"Unable to register v4l2 device.\n");
+-		goto probe_out_release_irq;
+-	}
+-	v4l2_info(&vpfe_dev->v4l2_dev, "v4l2 device registered\n");
+-	spin_lock_init(&vpfe_dev->irqlock);
+-	spin_lock_init(&vpfe_dev->dma_queue_lock);
+-	mutex_init(&vpfe_dev->lock);
+-
+-	/* Initialize field of the device objects */
+-	vpfe_dev->numbuffers = config_params.numbuffers;
+-
+-	/* register video device */
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev,
+-		"trying to register vpfe device.\n");
+-	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev,
+-		"video_dev=%p\n", &vpfe_dev->video_dev);
+-	vpfe_dev->fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+-	ret = video_register_device(&vpfe_dev->video_dev,
+-				    VFL_TYPE_VIDEO, -1);
+-
+-	if (ret) {
+-		v4l2_err(pdev->dev.driver,
+-			"Unable to register video device.\n");
+-		goto probe_out_v4l2_unregister;
+-	}
+-
+-	v4l2_info(&vpfe_dev->v4l2_dev, "video device registered\n");
+-	/* set the driver data in platform device */
+-	platform_set_drvdata(pdev, vpfe_dev);
+-	/* set driver private data */
+-	video_set_drvdata(&vpfe_dev->video_dev, vpfe_dev);
+-	i2c_adap = i2c_get_adapter(vpfe_cfg->i2c_adapter_id);
+-	num_subdevs = vpfe_cfg->num_subdevs;
+-	vpfe_dev->sd = kmalloc_array(num_subdevs,
+-				     sizeof(*vpfe_dev->sd),
+-				     GFP_KERNEL);
+-	if (!vpfe_dev->sd) {
+-		ret = -ENOMEM;
+-		goto probe_out_video_unregister;
+-	}
+-
+-	for (i = 0; i < num_subdevs; i++) {
+-		struct v4l2_input *inps;
+-
+-		sdinfo = &vpfe_cfg->sub_devs[i];
+-
+-		/* Load up the subdevice */
+-		vpfe_dev->sd[i] =
+-			v4l2_i2c_new_subdev_board(&vpfe_dev->v4l2_dev,
+-						  i2c_adap,
+-						  &sdinfo->board_info,
+-						  NULL);
+-		if (vpfe_dev->sd[i]) {
+-			v4l2_info(&vpfe_dev->v4l2_dev,
+-				  "v4l2 sub device %s registered\n",
+-				  sdinfo->name);
+-			vpfe_dev->sd[i]->grp_id = sdinfo->grp_id;
+-			/* update tvnorms from the sub devices */
+-			for (j = 0; j < sdinfo->num_inputs; j++) {
+-				inps = &sdinfo->inputs[j];
+-				vfd->tvnorms |= inps->std;
+-			}
+-		} else {
+-			v4l2_info(&vpfe_dev->v4l2_dev,
+-				  "v4l2 sub device %s register fails\n",
+-				  sdinfo->name);
+-			ret = -ENXIO;
+-			goto probe_sd_out;
+-		}
+-	}
+-
+-	/* set first sub device as current one */
+-	vpfe_dev->current_subdev = &vpfe_cfg->sub_devs[0];
+-	vpfe_dev->v4l2_dev.ctrl_handler = vpfe_dev->sd[0]->ctrl_handler;
+-
+-	/* We have at least one sub device to work with */
+-	mutex_unlock(&ccdc_lock);
+-	return 0;
+-
+-probe_sd_out:
+-	kfree(vpfe_dev->sd);
+-probe_out_video_unregister:
+-	video_unregister_device(&vpfe_dev->video_dev);
+-probe_out_v4l2_unregister:
+-	v4l2_device_unregister(&vpfe_dev->v4l2_dev);
+-probe_out_release_irq:
+-	free_irq(vpfe_dev->ccdc_irq0, vpfe_dev);
+-probe_free_ccdc_cfg_mem:
+-	kfree(ccdc_cfg);
+-	mutex_unlock(&ccdc_lock);
+-probe_free_dev_mem:
+-	kfree(vpfe_dev);
+-	return ret;
+-}
+-
+-/*
+- * vpfe_remove : It un-register device from V4L2 driver
+- */
+-static int vpfe_remove(struct platform_device *pdev)
+-{
+-	struct vpfe_device *vpfe_dev = platform_get_drvdata(pdev);
+-
+-	v4l2_info(pdev->dev.driver, "vpfe_remove\n");
+-
+-	free_irq(vpfe_dev->ccdc_irq0, vpfe_dev);
+-	kfree(vpfe_dev->sd);
+-	v4l2_device_unregister(&vpfe_dev->v4l2_dev);
+-	video_unregister_device(&vpfe_dev->video_dev);
+-	kfree(vpfe_dev);
+-	kfree(ccdc_cfg);
 -	return 0;
 -}
 -
--static int budget_detach (struct saa7146_dev* dev)
+-static int vpfe_suspend(struct device *dev)
 -{
--	struct budget *budget = (struct budget*) dev->ext_priv;
--	int err;
--
--	if (budget->dvb_frontend) {
--		dvb_unregister_frontend(budget->dvb_frontend);
--		dvb_frontend_detach(budget->dvb_frontend);
--	}
--
--	err = ttpci_budget_deinit (budget);
--
--	kfree (budget);
--	dev->ext_priv = NULL;
--
--	return err;
+-	return 0;
 -}
 -
--static struct saa7146_extension budget_extension;
+-static int vpfe_resume(struct device *dev)
+-{
+-	return 0;
+-}
 -
--MAKE_BUDGET_INFO(ttbs,	"TT-Budget/WinTV-NOVA-S  PCI",	BUDGET_TT);
--MAKE_BUDGET_INFO(ttbc,	"TT-Budget/WinTV-NOVA-C  PCI",	BUDGET_TT);
--MAKE_BUDGET_INFO(ttbt,	"TT-Budget/WinTV-NOVA-T  PCI",	BUDGET_TT);
--MAKE_BUDGET_INFO(satel,	"SATELCO Multimedia PCI",	BUDGET_TT_HW_DISEQC);
--MAKE_BUDGET_INFO(ttbs1401, "TT-Budget-S-1401 PCI", BUDGET_TT);
--MAKE_BUDGET_INFO(tt1600, "TT-Budget S2-1600 PCI", BUDGET_TT);
--MAKE_BUDGET_INFO(fsacs0, "Fujitsu Siemens Activy Budget-S PCI (rev GR/grundig frontend)", BUDGET_FS_ACTIVY);
--MAKE_BUDGET_INFO(fsacs1, "Fujitsu Siemens Activy Budget-S PCI (rev AL/alps frontend)", BUDGET_FS_ACTIVY);
--MAKE_BUDGET_INFO(fsact,	 "Fujitsu Siemens Activy Budget-T PCI (rev GR/Grundig frontend)", BUDGET_FS_ACTIVY);
--MAKE_BUDGET_INFO(fsact1, "Fujitsu Siemens Activy Budget-T PCI (rev AL/ALPS TDHD1-204A)", BUDGET_FS_ACTIVY);
--MAKE_BUDGET_INFO(omicom, "Omicom S2 PCI", BUDGET_TT);
--MAKE_BUDGET_INFO(sylt,   "Philips Semi Sylt PCI", BUDGET_TT_HW_DISEQC);
--
--static const struct pci_device_id pci_tbl[] = {
--	MAKE_EXTENSION_PCI(ttbs,  0x13c2, 0x1003),
--	MAKE_EXTENSION_PCI(ttbc,  0x13c2, 0x1004),
--	MAKE_EXTENSION_PCI(ttbt,  0x13c2, 0x1005),
--	MAKE_EXTENSION_PCI(satel, 0x13c2, 0x1013),
--	MAKE_EXTENSION_PCI(ttbs,  0x13c2, 0x1016),
--	MAKE_EXTENSION_PCI(ttbs1401, 0x13c2, 0x1018),
--	MAKE_EXTENSION_PCI(tt1600, 0x13c2, 0x101c),
--	MAKE_EXTENSION_PCI(fsacs1,0x1131, 0x4f60),
--	MAKE_EXTENSION_PCI(fsacs0,0x1131, 0x4f61),
--	MAKE_EXTENSION_PCI(fsact1, 0x1131, 0x5f60),
--	MAKE_EXTENSION_PCI(fsact, 0x1131, 0x5f61),
--	MAKE_EXTENSION_PCI(omicom, 0x14c4, 0x1020),
--	MAKE_EXTENSION_PCI(sylt, 0x1131, 0x4f52),
--	{
--		.vendor    = 0,
--	}
+-static const struct dev_pm_ops vpfe_dev_pm_ops = {
+-	.suspend = vpfe_suspend,
+-	.resume = vpfe_resume,
 -};
 -
--MODULE_DEVICE_TABLE(pci, pci_tbl);
--
--static struct saa7146_extension budget_extension = {
--	.name		= "budget dvb",
--	.flags		= SAA7146_USE_I2C_IRQ,
--
--	.module		= THIS_MODULE,
--	.pci_tbl	= pci_tbl,
--	.attach		= budget_attach,
--	.detach		= budget_detach,
--
--	.irq_mask	= MASK_10,
--	.irq_func	= ttpci_budget_irq10_handler,
+-static struct platform_driver vpfe_driver = {
+-	.driver = {
+-		.name = CAPTURE_DRV_NAME,
+-		.pm = &vpfe_dev_pm_ops,
+-	},
+-	.probe = vpfe_probe,
+-	.remove = vpfe_remove,
 -};
 -
--static int __init budget_init(void)
--{
--	return saa7146_register_extension(&budget_extension);
--}
--
--static void __exit budget_exit(void)
--{
--	saa7146_unregister_extension(&budget_extension);
--}
--
--module_init(budget_init);
--module_exit(budget_exit);
--
--MODULE_LICENSE("GPL");
--MODULE_AUTHOR("Ralph Metzler, Marcus Metzler, Michael Hunold, others");
--MODULE_DESCRIPTION("driver for the SAA7146 based so-called budget PCI DVB cards by Siemens, Technotrend, Hauppauge");
-diff --git a/drivers/staging/media/deprecated/saa7146/ttpci/budget.h b/drivers/staging/media/deprecated/saa7146/ttpci/budget.h
+-module_platform_driver(vpfe_driver);
+diff --git a/include/media/davinci/ccdc_types.h b/include/media/davinci/ccdc_types.h
 deleted file mode 100644
-index 82cc0df492b3..000000000000
---- a/drivers/staging/media/deprecated/saa7146/ttpci/budget.h
+index 971984dc1ce4..000000000000
+--- a/include/media/davinci/ccdc_types.h
 +++ /dev/null
-@@ -1,129 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--
--#ifndef __BUDGET_DVB__
--#define __BUDGET_DVB__
--
--#include <media/dvb_frontend.h>
--#include <media/dvbdev.h>
--#include <media/demux.h>
--#include <media/dvb_demux.h>
--#include <media/dmxdev.h>
--#include <media/dvb_net.h>
--
--#include <linux/module.h>
--#include <linux/mutex.h>
--
--#include "../common/saa7146.h"
--
--extern int budget_debug;
--
--#ifdef dprintk
--#undef dprintk
--#endif
--
--#define dprintk(level, fmt, arg...) do {				\
--	if (level & budget_debug)					\
--		printk(KERN_DEBUG KBUILD_MODNAME ": %s(): " fmt,	\
--		       __func__, ##arg);				\
--} while (0)
--
--#define TS_SIZE        188
--
--struct budget_info {
--	char *name;
--	int type;
+@@ -1,30 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Copyright (C) 2008-2009 Texas Instruments Inc
+- *
+- **************************************************************************/
+-#ifndef _CCDC_TYPES_H
+-#define _CCDC_TYPES_H
+-enum ccdc_pixfmt {
+-	CCDC_PIXFMT_RAW,
+-	CCDC_PIXFMT_YCBCR_16BIT,
+-	CCDC_PIXFMT_YCBCR_8BIT
 -};
 -
--/* place to store all the necessary device information */
--struct budget {
--
--	/* devices */
--	struct dvb_device dvb_dev;
--	struct dvb_net dvb_net;
--
--	struct saa7146_dev *dev;
--
--	struct i2c_adapter i2c_adap;
--	struct budget_info *card;
--
--	unsigned char *grabbing;
--	struct saa7146_pgtable pt;
--
--	struct tasklet_struct fidb_tasklet;
--	struct tasklet_struct vpe_tasklet;
--
--	struct dmxdev dmxdev;
--	struct dvb_demux demux;
--
--	struct dmx_frontend hw_frontend;
--	struct dmx_frontend mem_frontend;
--
--	int ci_present;
--	int video_port;
--
--	u32 buffer_width;
--	u32 buffer_height;
--	u32 buffer_size;
--	u32 buffer_warning_threshold;
--	u32 buffer_warnings;
--	unsigned long buffer_warning_time;
--
--	u32 ttbp;
--	int feeding;
--
--	spinlock_t feedlock;
--
--	spinlock_t debilock;
--
--	struct dvb_adapter dvb_adapter;
--	struct dvb_frontend *dvb_frontend;
--	int (*read_fe_status)(struct dvb_frontend *fe, enum fe_status *status);
--	int fe_synced;
--
--	void *priv;
+-enum ccdc_frmfmt {
+-	CCDC_FRMFMT_PROGRESSIVE,
+-	CCDC_FRMFMT_INTERLACED
 -};
 -
--#define MAKE_BUDGET_INFO(x_var,x_name,x_type) \
--static struct budget_info x_var ## _info = { \
--	.name=x_name,	\
--	.type=x_type };	\
--static struct saa7146_pci_extension_data x_var = { \
--	.ext_priv = &x_var ## _info, \
--	.ext = &budget_extension };
+-/* PIXEL ORDER IN MEMORY from LSB to MSB */
+-/* only applicable for 8-bit input mode  */
+-enum ccdc_pixorder {
+-	CCDC_PIXORDER_YCBYCR,
+-	CCDC_PIXORDER_CBYCRY,
+-};
 -
--#define BUDGET_TT		   0
--#define BUDGET_TT_HW_DISEQC	   1
--#define BUDGET_PATCH		   3
--#define BUDGET_FS_ACTIVY	   4
--#define BUDGET_CIN1200S		   5
--#define BUDGET_CIN1200C		   6
--#define BUDGET_CIN1200T		   7
--#define BUDGET_KNC1S		   8
--#define BUDGET_KNC1C		   9
--#define BUDGET_KNC1T		   10
--#define BUDGET_KNC1SP		   11
--#define BUDGET_KNC1CP		   12
--#define BUDGET_KNC1TP		   13
--#define BUDGET_TVSTAR		   14
--#define BUDGET_CIN1200C_MK3	   15
--#define BUDGET_KNC1C_MK3	   16
--#define BUDGET_KNC1CP_MK3	   17
--#define BUDGET_KNC1S2              18
--#define BUDGET_KNC1C_TDA10024	   19
--
--#define BUDGET_VIDEO_PORTA         0
--#define BUDGET_VIDEO_PORTB         1
--
--extern int ttpci_budget_init(struct budget *budget, struct saa7146_dev *dev,
--			     struct saa7146_pci_extension_data *info,
--			     struct module *owner, short *adapter_nums);
--extern void ttpci_budget_init_hooks(struct budget *budget);
--extern int ttpci_budget_deinit(struct budget *budget);
--extern void ttpci_budget_irq10_handler(struct saa7146_dev *dev, u32 * isr);
--extern void ttpci_budget_set_video_port(struct saa7146_dev *dev, int video_port);
--extern int ttpci_budget_debiread(struct budget *budget, u32 config, int addr, int count,
--				 int uselocks, int nobusyloop);
--extern int ttpci_budget_debiwrite(struct budget *budget, u32 config, int addr, int count, u32 value,
--				  int uselocks, int nobusyloop);
--
+-enum ccdc_buftype {
+-	CCDC_BUFTYPE_FLD_INTERLEAVED,
+-	CCDC_BUFTYPE_FLD_SEPARATED
+-};
 -#endif
 -- 
 2.39.0
