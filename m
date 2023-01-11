@@ -2,2594 +2,1747 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94349C5479D
-	for <linux-media@archiver.kernel.org>; Wed, 11 Jan 2023 11:26:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6358C46467
+	for <linux-media@archiver.kernel.org>; Wed, 11 Jan 2023 11:26:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbjAKLZd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 11 Jan 2023 06:25:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53660 "EHLO
+        id S232173AbjAKLZh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 11 Jan 2023 06:25:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232268AbjAKLY1 (ORCPT
+        with ESMTP id S232343AbjAKLYa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 11 Jan 2023 06:24:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556F19F
-        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 03:24:23 -0800 (PST)
+        Wed, 11 Jan 2023 06:24:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9753A18B1F
+        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 03:24:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C7FAD61C50
-        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 11:24:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E706C433F0;
-        Wed, 11 Jan 2023 11:24:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C862B819EF
+        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 11:24:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3AFDC433F0;
+        Wed, 11 Jan 2023 11:24:23 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCHv2 01/16] meye: remove this deprecated driver
-Date:   Wed, 11 Jan 2023 12:24:03 +0100
-Message-Id: <20230111112418.687882-2-hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv2 03/16] fsl-viu: remove deprecated driver
+Date:   Wed, 11 Jan 2023 12:24:05 +0100
+Message-Id: <20230111112418.687882-4-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230111112418.687882-1-hverkuil-cisco@xs4all.nl>
 References: <20230111112418.687882-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The meye driver does not use the vb2 framework for streaming
-video, instead it implements this in the driver. This is error prone,
-and nobody stepped in to convert this driver to that framework.
+The fsl-viu driver does not use the vb2 framework for streaming
+video, instead it uses the old vb1 framework and nobody stepped in to
+convert this driver to vb2.
 
 The hardware is very old, so the decision was made to remove it
-altogether.
+altogether since we want to get rid of the old vb1 framework.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- Documentation/admin-guide/media/meye.rst      |   93 -
- .../admin-guide/media/pci-cardlist.rst        |    1 -
- .../admin-guide/media/v4l-drivers.rst         |    1 -
- .../userspace-api/media/drivers/index.rst     |    1 -
- .../userspace-api/media/drivers/meye-uapi.rst |   53 -
- MAINTAINERS                                   |    8 -
+ .../admin-guide/media/platform-cardlist.rst   |    1 -
  drivers/staging/media/Kconfig                 |    1 -
  drivers/staging/media/Makefile                |    1 -
- drivers/staging/media/deprecated/meye/Kconfig |   19 -
- .../staging/media/deprecated/meye/Makefile    |    2 -
- drivers/staging/media/deprecated/meye/TODO    |    6 -
- drivers/staging/media/deprecated/meye/meye.c  | 1814 -----------------
- drivers/staging/media/deprecated/meye/meye.h  |  311 ---
- include/uapi/linux/meye.h                     |   65 -
- include/uapi/linux/v4l2-controls.h            |    8 +-
- 15 files changed, 6 insertions(+), 2378 deletions(-)
- delete mode 100644 Documentation/admin-guide/media/meye.rst
- delete mode 100644 Documentation/userspace-api/media/drivers/meye-uapi.rst
- delete mode 100644 drivers/staging/media/deprecated/meye/Kconfig
- delete mode 100644 drivers/staging/media/deprecated/meye/Makefile
- delete mode 100644 drivers/staging/media/deprecated/meye/TODO
- delete mode 100644 drivers/staging/media/deprecated/meye/meye.c
- delete mode 100644 drivers/staging/media/deprecated/meye/meye.h
- delete mode 100644 include/uapi/linux/meye.h
+ .../staging/media/deprecated/fsl-viu/Kconfig  |   15 -
+ .../staging/media/deprecated/fsl-viu/Makefile |    2 -
+ drivers/staging/media/deprecated/fsl-viu/TODO |    7 -
+ .../media/deprecated/fsl-viu/fsl-viu.c        | 1599 -----------------
+ 7 files changed, 1626 deletions(-)
+ delete mode 100644 drivers/staging/media/deprecated/fsl-viu/Kconfig
+ delete mode 100644 drivers/staging/media/deprecated/fsl-viu/Makefile
+ delete mode 100644 drivers/staging/media/deprecated/fsl-viu/TODO
+ delete mode 100644 drivers/staging/media/deprecated/fsl-viu/fsl-viu.c
 
-diff --git a/Documentation/admin-guide/media/meye.rst b/Documentation/admin-guide/media/meye.rst
-deleted file mode 100644
-index 9098a1e65f8b..000000000000
---- a/Documentation/admin-guide/media/meye.rst
-+++ /dev/null
-@@ -1,93 +0,0 @@
--.. SPDX-License-Identifier: GPL-2.0
--
--.. include:: <isonum.txt>
--
--Vaio Picturebook Motion Eye Camera Driver
--=========================================
--
--Copyright |copy| 2001-2004 Stelian Pop <stelian@popies.net>
--
--Copyright |copy| 2001-2002 Alcôve <www.alcove.com>
--
--Copyright |copy| 2000 Andrew Tridgell <tridge@samba.org>
--
--This driver enable the use of video4linux compatible applications with the
--Motion Eye camera. This driver requires the "Sony Laptop Extras" driver (which
--can be found in the "Misc devices" section of the kernel configuration utility)
--to be compiled and installed (using its "camera=1" parameter).
--
--It can do at maximum 30 fps @ 320x240 or 15 fps @ 640x480.
--
--Grabbing is supported in packed YUV colorspace only.
--
--MJPEG hardware grabbing is supported via a private API (see below).
--
--Hardware supported
--------------------
--
--This driver supports the 'second' version of the MotionEye camera :)
--
--The first version was connected directly on the video bus of the Neomagic
--video card and is unsupported.
--
--The second one, made by Kawasaki Steel is fully supported by this
--driver (PCI vendor/device is 0x136b/0xff01)
--
--The third one, present in recent (more or less last year) Picturebooks
--(C1M* models), is not supported. The manufacturer has given the specs
--to the developers under a NDA (which allows the development of a GPL
--driver however), but things are not moving very fast (see
--http://r-engine.sourceforge.net/) (PCI vendor/device is 0x10cf/0x2011).
--
--There is a forth model connected on the USB bus in TR1* Vaio laptops.
--This camera is not supported at all by the current driver, in fact
--little information if any is available for this camera
--(USB vendor/device is 0x054c/0x0107).
--
--Driver options
----------------
--
--Several options can be passed to the meye driver using the standard
--module argument syntax (<param>=<value> when passing the option to the
--module or meye.<param>=<value> on the kernel boot line when meye is
--statically linked into the kernel). Those options are:
--
--.. code-block:: none
--
--	gbuffers:	number of capture buffers, default is 2 (32 max)
--
--	gbufsize:	size of each capture buffer, default is 614400
--
--	video_nr:	video device to register (0 = /dev/video0, etc)
--
--Module use
------------
--
--In order to automatically load the meye module on use, you can put those lines
--in your /etc/modprobe.d/meye.conf file:
--
--.. code-block:: none
--
--	alias char-major-81 videodev
--	alias char-major-81-0 meye
--	options meye gbuffers=32
--
--Usage:
--------
--
--.. code-block:: none
--
--	xawtv >= 3.49 (<http://bytesex.org/xawtv/>)
--		for display and uncompressed video capture:
--
--			xawtv -c /dev/video0 -geometry 640x480
--				or
--			xawtv -c /dev/video0 -geometry 320x240
--
--	motioneye (<http://popies.net/meye/>)
--		for getting ppm or jpg snapshots, mjpeg video
--
--Bugs / Todo
-------------
--
--- 'motioneye' still uses the meye private v4l1 API extensions.
-diff --git a/Documentation/admin-guide/media/pci-cardlist.rst b/Documentation/admin-guide/media/pci-cardlist.rst
-index f4d670e632f8..42528795d4da 100644
---- a/Documentation/admin-guide/media/pci-cardlist.rst
-+++ b/Documentation/admin-guide/media/pci-cardlist.rst
-@@ -77,7 +77,6 @@ ipu3-cio2         Intel ipu3-cio2 driver
- ivtv              Conexant cx23416/cx23415 MPEG encoder/decoder
- ivtvfb            Conexant cx23415 framebuffer
- mantis            MANTIS based cards
--meye              Sony Vaio Picturebook Motion Eye
- mxb               Siemens-Nixdorf 'Multimedia eXtension Board'
- netup-unidvb      NetUP Universal DVB card
- ngene             Micronas nGene
-diff --git a/Documentation/admin-guide/media/v4l-drivers.rst b/Documentation/admin-guide/media/v4l-drivers.rst
-index 90a026ee05c6..adb5240d0407 100644
---- a/Documentation/admin-guide/media/v4l-drivers.rst
-+++ b/Documentation/admin-guide/media/v4l-drivers.rst
-@@ -19,7 +19,6 @@ Video4Linux (V4L) driver-specific documentation
- 	imx7
- 	ipu3
- 	ivtv
--	meye
- 	omap3isp
- 	omap4_camera
- 	philips
-diff --git a/Documentation/userspace-api/media/drivers/index.rst b/Documentation/userspace-api/media/drivers/index.rst
-index 915dbf0f4db5..6708d649afd7 100644
---- a/Documentation/userspace-api/media/drivers/index.rst
-+++ b/Documentation/userspace-api/media/drivers/index.rst
-@@ -37,7 +37,6 @@ For more details see the file COPYING in the source distribution of Linux.
- 	dw100
- 	imx-uapi
- 	max2175
--	meye-uapi
- 	omap3isp-uapi
- 	st-vgxy61
- 	uvcvideo
-diff --git a/Documentation/userspace-api/media/drivers/meye-uapi.rst b/Documentation/userspace-api/media/drivers/meye-uapi.rst
-deleted file mode 100644
-index 66b1c142f920..000000000000
---- a/Documentation/userspace-api/media/drivers/meye-uapi.rst
-+++ /dev/null
-@@ -1,53 +0,0 @@
--.. SPDX-License-Identifier: GPL-2.0
--
--.. include:: <isonum.txt>
--
--Vaio Picturebook Motion Eye Camera Driver
--=========================================
--
--Copyright |copy| 2001-2004 Stelian Pop <stelian@popies.net>
--
--Copyright |copy| 2001-2002 Alcôve <www.alcove.com>
--
--Copyright |copy| 2000 Andrew Tridgell <tridge@samba.org>
--
--Private API
-------------
--
--The driver supports frame grabbing with the video4linux API,
--so all video4linux tools (like xawtv) should work with this driver.
--
--Besides the video4linux interface, the driver has a private interface
--for accessing the Motion Eye extended parameters (camera sharpness,
--agc, video framerate), the snapshot and the MJPEG capture facilities.
--
--This interface consists of several ioctls (prototypes and structures
--can be found in include/linux/meye.h):
--
--MEYEIOC_G_PARAMS and MEYEIOC_S_PARAMS
--	Get and set the extended parameters of the motion eye camera.
--	The user should always query the current parameters with
--	MEYEIOC_G_PARAMS, change what he likes and then issue the
--	MEYEIOC_S_PARAMS call (checking for -EINVAL). The extended
--	parameters are described by the meye_params structure.
--
--
--MEYEIOC_QBUF_CAPT
--	Queue a buffer for capture (the buffers must have been
--	obtained with a VIDIOCGMBUF call and mmap'ed by the
--	application). The argument to MEYEIOC_QBUF_CAPT is the
--	buffer number to queue (or -1 to end capture). The first
--	call to MEYEIOC_QBUF_CAPT starts the streaming capture.
--
--MEYEIOC_SYNC
--	Takes as an argument the buffer number you want to sync.
--	This ioctl blocks until the buffer is filled and ready
--	for the application to use. It returns the buffer size.
--
--MEYEIOC_STILLCAPT and MEYEIOC_STILLJCAPT
--	Takes a snapshot in an uncompressed or compressed jpeg format.
--	This ioctl blocks until the snapshot is done and returns (for
--	jpeg snapshot) the size of the image. The image data is
--	available from the first mmap'ed buffer.
--
--Look at the 'motioneye' application code for an actual example.
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f61eb221415b..f814ab594ea4 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13071,7 +13071,6 @@ F:	include/media/
- F:	include/uapi/linux/dvb/
- F:	include/uapi/linux/ivtv*
- F:	include/uapi/linux/media.h
--F:	include/uapi/linux/meye.h
- F:	include/uapi/linux/uvcvideo.h
- F:	include/uapi/linux/v4l2-*
- F:	include/uapi/linux/videodev2.h
-@@ -14150,13 +14149,6 @@ F:	drivers/regulator/mpq7920.c
- F:	drivers/regulator/mpq7920.h
- F:	include/linux/mfd/mp2629.h
- 
--MOTION EYE VAIO PICTUREBOOK CAMERA DRIVER
--S:	Orphan
--W:	http://popies.net/meye/
--F:	Documentation/userspace-api/media/drivers/meye*
--F:	drivers/staging/media/deprecated/meye/
--F:	include/uapi/linux/meye.h
--
- MOTORCOMM PHY DRIVER
- M:	Peter Geis <pgwipeout@gmail.com>
- M:	Frank <Frank.Sae@motor-comm.com>
+diff --git a/Documentation/admin-guide/media/platform-cardlist.rst b/Documentation/admin-guide/media/platform-cardlist.rst
+index ac73c4166d1e..c0c22b3f469d 100644
+--- a/Documentation/admin-guide/media/platform-cardlist.rst
++++ b/Documentation/admin-guide/media/platform-cardlist.rst
+@@ -30,7 +30,6 @@ exynos-fimc-is     EXYNOS4x12 FIMC-IS (Imaging Subsystem)
+ exynos-fimc-lite   EXYNOS FIMC-LITE camera interface
+ exynos-gsc         Samsung Exynos G-Scaler
+ exy                Samsung S5P/EXYNOS4 SoC series Camera Subsystem
+-fsl-viu            Freescale VIU
+ imx-pxp            i.MX Pixel Pipeline (PXP)
+ isdf               TI DM365 ISIF video capture
+ mmp_camera         Marvell Armada 610 integrated camera controller
 diff --git a/drivers/staging/media/Kconfig b/drivers/staging/media/Kconfig
-index b79f93684c4f..c312fe741a30 100644
+index 8d6c26e48609..257bb35af36f 100644
 --- a/drivers/staging/media/Kconfig
 +++ b/drivers/staging/media/Kconfig
-@@ -54,7 +54,6 @@ if STAGING_MEDIA_DEPRECATED
+@@ -52,7 +52,6 @@ menuconfig STAGING_MEDIA_DEPRECATED
+ 
+ if STAGING_MEDIA_DEPRECATED
  source "drivers/staging/media/deprecated/atmel/Kconfig"
- source "drivers/staging/media/deprecated/cpia2/Kconfig"
- source "drivers/staging/media/deprecated/fsl-viu/Kconfig"
--source "drivers/staging/media/deprecated/meye/Kconfig"
+-source "drivers/staging/media/deprecated/fsl-viu/Kconfig"
  source "drivers/staging/media/deprecated/saa7146/Kconfig"
  source "drivers/staging/media/deprecated/stkwebcam/Kconfig"
  source "drivers/staging/media/deprecated/tm6000/Kconfig"
 diff --git a/drivers/staging/media/Makefile b/drivers/staging/media/Makefile
-index 54bbdd4b0d08..f61ab43625b3 100644
+index 1f2c00cae4db..55e7479f91cf 100644
 --- a/drivers/staging/media/Makefile
 +++ b/drivers/staging/media/Makefile
-@@ -5,7 +5,6 @@ obj-$(CONFIG_VIDEO_CPIA2)	+= deprecated/cpia2/
- obj-$(CONFIG_VIDEO_IMX_MEDIA)	+= imx/
- obj-$(CONFIG_VIDEO_MAX96712)	+= max96712/
- obj-$(CONFIG_VIDEO_MESON_VDEC)	+= meson/vdec/
--obj-$(CONFIG_VIDEO_MEYE)	+= deprecated/meye/
- obj-$(CONFIG_VIDEO_OMAP4)	+= omap4iss/
- obj-$(CONFIG_VIDEO_ROCKCHIP_VDEC)	+= rkvdec/
- obj-$(CONFIG_VIDEO_STKWEBCAM)	+= deprecated/stkwebcam/
-diff --git a/drivers/staging/media/deprecated/meye/Kconfig b/drivers/staging/media/deprecated/meye/Kconfig
+@@ -11,7 +11,6 @@ obj-$(CONFIG_VIDEO_SUNXI)	+= sunxi/
+ obj-$(CONFIG_VIDEO_TEGRA)	+= tegra-video/
+ obj-$(CONFIG_VIDEO_IPU3_IMGU)	+= ipu3/
+ obj-$(CONFIG_VIDEO_TM6000)	+= deprecated/tm6000/
+-obj-$(CONFIG_VIDEO_VIU)		+= deprecated/fsl-viu/
+ obj-$(CONFIG_USB_ZR364XX)	+= deprecated/zr364xx/
+ obj-y += deprecated/vpfe_capture/
+ obj-y += deprecated/saa7146/
+diff --git a/drivers/staging/media/deprecated/fsl-viu/Kconfig b/drivers/staging/media/deprecated/fsl-viu/Kconfig
 deleted file mode 100644
-index f135f8568c85..000000000000
---- a/drivers/staging/media/deprecated/meye/Kconfig
+index 399892c69a18..000000000000
+--- a/drivers/staging/media/deprecated/fsl-viu/Kconfig
 +++ /dev/null
-@@ -1,19 +0,0 @@
+@@ -1,15 +0,0 @@
 -# SPDX-License-Identifier: GPL-2.0-only
--config VIDEO_MEYE
--	tristate "Sony Vaio Picturebook Motion Eye Video For Linux (DEPRECATED)"
--	depends on PCI && VIDEO_DEV
--	depends on SONY_LAPTOP
--	depends on X86 || COMPILE_TEST
+-config VIDEO_VIU
+-	tristate "NXP VIU Video Driver (DEPRECATED)"
+-	depends on V4L_PLATFORM_DRIVERS
+-	depends on VIDEO_DEV && (PPC_MPC512x || COMPILE_TEST) && I2C
+-	select VIDEOBUF_DMA_CONTIG
 -	help
--	  This is the video4linux driver for the Motion Eye camera found
--	  in the Vaio Picturebook laptops. Please read the material in
--	  <file:Documentation/admin-guide/media/meye.rst> for more information.
--
--	  If you say Y or M here, you need to say Y or M to "Sony Laptop
--	  Extras" in the misc device section.
+-	  Support for Freescale VIU video driver. This device captures
+-	  video data, or overlays video on DIU frame buffer.
 -
 -	  This driver is deprecated and is scheduled for removal by
 -	  the beginning of 2023. See the TODO file for more information.
 -
--	  To compile this driver as a module, choose M here: the
--	  module will be called meye.
-diff --git a/drivers/staging/media/deprecated/meye/Makefile b/drivers/staging/media/deprecated/meye/Makefile
+-	  Say Y here if you want to enable VIU device on MPC5121e Rev2+.
+-	  In doubt, say N.
+diff --git a/drivers/staging/media/deprecated/fsl-viu/Makefile b/drivers/staging/media/deprecated/fsl-viu/Makefile
 deleted file mode 100644
-index 36f1f86f0d58..000000000000
---- a/drivers/staging/media/deprecated/meye/Makefile
+index 931ec56ad08c..000000000000
+--- a/drivers/staging/media/deprecated/fsl-viu/Makefile
 +++ /dev/null
 @@ -1,2 +0,0 @@
 -# SPDX-License-Identifier: GPL-2.0-only
--obj-$(CONFIG_VIDEO_MEYE) += meye.o
-diff --git a/drivers/staging/media/deprecated/meye/TODO b/drivers/staging/media/deprecated/meye/TODO
+-obj-$(CONFIG_VIDEO_VIU) += fsl-viu.o
+diff --git a/drivers/staging/media/deprecated/fsl-viu/TODO b/drivers/staging/media/deprecated/fsl-viu/TODO
 deleted file mode 100644
-index 6d1d1433d5a0..000000000000
---- a/drivers/staging/media/deprecated/meye/TODO
+index ecb30a429689..000000000000
+--- a/drivers/staging/media/deprecated/fsl-viu/TODO
 +++ /dev/null
-@@ -1,6 +0,0 @@
--The meye driver does not use the vb2 framework for streaming
--video, instead it implements this in the driver.
+@@ -1,7 +0,0 @@
+-This is one of the few drivers still not using the vb2
+-framework, so this driver is now deprecated with the intent of
+-removing it altogether by the beginning of 2023.
 -
--To prevent removal of this driver early 2023 it has to be
--converted to use vb2. Contact the linux-media@vger.kernel.org
--mailing list if you want to do this.
-diff --git a/drivers/staging/media/deprecated/meye/meye.c b/drivers/staging/media/deprecated/meye/meye.c
+-In order to keep this driver it has to be converted to vb2.
+-If someone is interested in doing this work, then contact the
+-linux-media mailinglist (https://linuxtv.org/lists.php).
+diff --git a/drivers/staging/media/deprecated/fsl-viu/fsl-viu.c b/drivers/staging/media/deprecated/fsl-viu/fsl-viu.c
 deleted file mode 100644
-index 5d87efd9b95c..000000000000
---- a/drivers/staging/media/deprecated/meye/meye.c
+index afc96f6db2a1..000000000000
+--- a/drivers/staging/media/deprecated/fsl-viu/fsl-viu.c
 +++ /dev/null
-@@ -1,1814 +0,0 @@
+@@ -1,1599 +0,0 @@
 -// SPDX-License-Identifier: GPL-2.0-or-later
 -/*
-- * Motion Eye video4linux driver for Sony Vaio PictureBook
+- * Copyright 2008-2010 Freescale Semiconductor, Inc. All Rights Reserved.
 - *
-- * Copyright (C) 2001-2004 Stelian Pop <stelian@popies.net>
+- *  Freescale VIU video driver
 - *
-- * Copyright (C) 2001-2002 Alcôve <www.alcove.com>
-- *
-- * Copyright (C) 2000 Andrew Tridgell <tridge@valinux.com>
-- *
-- * Earlier work by Werner Almesberger, Paul `Rusty' Russell and Paul Mackerras.
-- *
-- * Some parts borrowed from various video4linux drivers, especially
-- * bttv-driver.c and zoran.c, see original files for credits.
+- *  Authors: Hongjun Chen <hong-jun.chen@freescale.com>
+- *	     Porting to 2.6.35 by DENX Software Engineering,
+- *	     Anatolij Gustschin <agust@denx.de>
 - */
+-
 -#include <linux/module.h>
--#include <linux/pci.h>
--#include <linux/sched.h>
+-#include <linux/clk.h>
+-#include <linux/kernel.h>
+-#include <linux/i2c.h>
 -#include <linux/init.h>
--#include <linux/gfp.h>
--#include <linux/videodev2.h>
+-#include <linux/interrupt.h>
+-#include <linux/io.h>
+-#include <linux/of_address.h>
+-#include <linux/of_irq.h>
+-#include <linux/of_platform.h>
+-#include <linux/slab.h>
 -#include <media/v4l2-common.h>
 -#include <media/v4l2-device.h>
 -#include <media/v4l2-ioctl.h>
+-#include <media/v4l2-ctrls.h>
 -#include <media/v4l2-fh.h>
 -#include <media/v4l2-event.h>
--#include <linux/uaccess.h>
--#include <asm/io.h>
--#include <linux/delay.h>
--#include <linux/interrupt.h>
--#include <linux/vmalloc.h>
--#include <linux/dma-mapping.h>
+-#include <media/videobuf-dma-contig.h>
 -
--#include "meye.h"
--#include <linux/meye.h>
+-#define DRV_NAME		"fsl_viu"
+-#define VIU_VERSION		"0.5.1"
 -
--MODULE_AUTHOR("Stelian Pop <stelian@popies.net>");
--MODULE_DESCRIPTION("v4l2 driver for the MotionEye camera");
--MODULE_LICENSE("GPL");
--MODULE_VERSION(MEYE_DRIVER_VERSION);
+-#define BUFFER_TIMEOUT		msecs_to_jiffies(500)  /* 0.5 seconds */
 -
--/* number of grab buffers */
--static unsigned int gbuffers = 2;
--module_param(gbuffers, int, 0444);
--MODULE_PARM_DESC(gbuffers, "number of capture buffers, default is 2 (32 max)");
+-#define	VIU_VID_MEM_LIMIT	4	/* Video memory limit, in Mb */
 -
--/* size of a grab buffer */
--static unsigned int gbufsize = MEYE_MAX_BUFSIZE;
--module_param(gbufsize, int, 0444);
--MODULE_PARM_DESC(gbufsize, "size of the capture buffers, default is 614400 (will be rounded up to a page multiple)");
+-/* I2C address of video decoder chip is 0x4A */
+-#define VIU_VIDEO_DECODER_ADDR	0x25
 -
--/* /dev/videoX registration number */
--static int video_nr = -1;
--module_param(video_nr, int, 0444);
--MODULE_PARM_DESC(video_nr, "video device to register (0=/dev/video0, etc)");
+-static int info_level;
 -
--/* driver structure - only one possible */
--static struct meye meye;
--
--/****************************************************************************/
--/* Memory allocation routines (stolen from bttv-driver.c)                   */
--/****************************************************************************/
--static void *rvmalloc(unsigned long size)
--{
--	void *mem;
--	unsigned long adr;
--
--	size = PAGE_ALIGN(size);
--	mem = vmalloc_32(size);
--	if (mem) {
--		memset(mem, 0, size);
--		adr = (unsigned long) mem;
--		while (size > 0) {
--			SetPageReserved(vmalloc_to_page((void *)adr));
--			adr += PAGE_SIZE;
--			size -= PAGE_SIZE;
--		}
--	}
--	return mem;
--}
--
--static void rvfree(void * mem, unsigned long size)
--{
--	unsigned long adr;
--
--	if (mem) {
--		adr = (unsigned long) mem;
--		while ((long) size > 0) {
--			ClearPageReserved(vmalloc_to_page((void *)adr));
--			adr += PAGE_SIZE;
--			size -= PAGE_SIZE;
--		}
--		vfree(mem);
--	}
--}
+-#define dprintk(level, fmt, arg...)					\
+-	do {								\
+-		if (level <= info_level)				\
+-			printk(KERN_DEBUG "viu: " fmt , ## arg);	\
+-	} while (0)
 -
 -/*
-- * return a page table pointing to N pages of locked memory
-- *
-- * NOTE: The meye device expects DMA addresses on 32 bits, we build
-- * a table of 1024 entries = 4 bytes * 1024 = 4096 bytes.
+- * Basic structures
 - */
--static int ptable_alloc(void)
+-struct viu_fmt {
+-	u32   fourcc;		/* v4l2 format id */
+-	u32   pixelformat;
+-	int   depth;
+-};
+-
+-static struct viu_fmt formats[] = {
+-	{
+-		.fourcc		= V4L2_PIX_FMT_RGB565,
+-		.pixelformat	= V4L2_PIX_FMT_RGB565,
+-		.depth		= 16,
+-	}, {
+-		.fourcc		= V4L2_PIX_FMT_RGB32,
+-		.pixelformat	= V4L2_PIX_FMT_RGB32,
+-		.depth		= 32,
+-	}
+-};
+-
+-struct viu_dev;
+-struct viu_buf;
+-
+-/* buffer for one video frame */
+-struct viu_buf {
+-	/* common v4l buffer stuff -- must be first */
+-	struct videobuf_buffer vb;
+-	struct viu_fmt *fmt;
+-};
+-
+-struct viu_dmaqueue {
+-	struct viu_dev		*dev;
+-	struct list_head	active;
+-	struct list_head	queued;
+-	struct timer_list	timeout;
+-};
+-
+-struct viu_status {
+-	u32 field_irq;
+-	u32 vsync_irq;
+-	u32 hsync_irq;
+-	u32 vstart_irq;
+-	u32 dma_end_irq;
+-	u32 error_irq;
+-};
+-
+-struct viu_reg {
+-	u32 status_cfg;
+-	u32 luminance;
+-	u32 chroma_r;
+-	u32 chroma_g;
+-	u32 chroma_b;
+-	u32 field_base_addr;
+-	u32 dma_inc;
+-	u32 picture_count;
+-	u32 req_alarm;
+-	u32 alpha;
+-} __attribute__ ((packed));
+-
+-struct viu_dev {
+-	struct v4l2_device	v4l2_dev;
+-	struct v4l2_ctrl_handler hdl;
+-	struct mutex		lock;
+-	spinlock_t		slock;
+-	int			users;
+-
+-	struct device		*dev;
+-	/* various device info */
+-	struct video_device	*vdev;
+-	struct viu_dmaqueue	vidq;
+-	enum v4l2_field		capfield;
+-	int			field;
+-	int			first;
+-	int			dma_done;
+-
+-	/* Hardware register area */
+-	struct viu_reg __iomem	*vr;
+-
+-	/* Interrupt vector */
+-	int			irq;
+-	struct viu_status	irqs;
+-
+-	/* video overlay */
+-	struct v4l2_framebuffer	ovbuf;
+-	struct viu_fmt		*ovfmt;
+-	unsigned int		ovenable;
+-	enum v4l2_field		ovfield;
+-
+-	/* crop */
+-	struct v4l2_rect	crop_current;
+-
+-	/* clock pointer */
+-	struct clk		*clk;
+-
+-	/* decoder */
+-	struct v4l2_subdev	*decoder;
+-
+-	v4l2_std_id		std;
+-};
+-
+-struct viu_fh {
+-	/* must remain the first field of this struct */
+-	struct v4l2_fh		fh;
+-	struct viu_dev		*dev;
+-
+-	/* video capture */
+-	struct videobuf_queue	vb_vidq;
+-	spinlock_t		vbq_lock; /* spinlock for the videobuf queue */
+-
+-	/* video overlay */
+-	struct v4l2_window	win;
+-	struct v4l2_clip	clips[1];
+-
+-	/* video capture */
+-	struct viu_fmt		*fmt;
+-	int			width, height, sizeimage;
+-	enum v4l2_buf_type	type;
+-};
+-
+-static struct viu_reg reg_val;
+-
+-/*
+- * Macro definitions of VIU registers
+- */
+-
+-/* STATUS_CONFIG register */
+-enum status_config {
+-	SOFT_RST		= 1 << 0,
+-
+-	ERR_MASK		= 0x0f << 4,	/* Error code mask */
+-	ERR_NO			= 0x00,		/* No error */
+-	ERR_DMA_V		= 0x01 << 4,	/* DMA in vertical active */
+-	ERR_DMA_VB		= 0x02 << 4,	/* DMA in vertical blanking */
+-	ERR_LINE_TOO_LONG	= 0x04 << 4,	/* Line too long */
+-	ERR_TOO_MANG_LINES	= 0x05 << 4,	/* Too many lines in field */
+-	ERR_LINE_TOO_SHORT	= 0x06 << 4,	/* Line too short */
+-	ERR_NOT_ENOUGH_LINE	= 0x07 << 4,	/* Not enough lines in field */
+-	ERR_FIFO_OVERFLOW	= 0x08 << 4,	/* FIFO overflow */
+-	ERR_FIFO_UNDERFLOW	= 0x09 << 4,	/* FIFO underflow */
+-	ERR_1bit_ECC		= 0x0a << 4,	/* One bit ECC error */
+-	ERR_MORE_ECC		= 0x0b << 4,	/* Two/more bits ECC error */
+-
+-	INT_FIELD_EN		= 0x01 << 8,	/* Enable field interrupt */
+-	INT_VSYNC_EN		= 0x01 << 9,	/* Enable vsync interrupt */
+-	INT_HSYNC_EN		= 0x01 << 10,	/* Enable hsync interrupt */
+-	INT_VSTART_EN		= 0x01 << 11,	/* Enable vstart interrupt */
+-	INT_DMA_END_EN		= 0x01 << 12,	/* Enable DMA end interrupt */
+-	INT_ERROR_EN		= 0x01 << 13,	/* Enable error interrupt */
+-	INT_ECC_EN		= 0x01 << 14,	/* Enable ECC interrupt */
+-
+-	INT_FIELD_STATUS	= 0x01 << 16,	/* field interrupt status */
+-	INT_VSYNC_STATUS	= 0x01 << 17,	/* vsync interrupt status */
+-	INT_HSYNC_STATUS	= 0x01 << 18,	/* hsync interrupt status */
+-	INT_VSTART_STATUS	= 0x01 << 19,	/* vstart interrupt status */
+-	INT_DMA_END_STATUS	= 0x01 << 20,	/* DMA end interrupt status */
+-	INT_ERROR_STATUS	= 0x01 << 21,	/* error interrupt status */
+-
+-	DMA_ACT			= 0x01 << 27,	/* Enable DMA transfer */
+-	FIELD_NO		= 0x01 << 28,	/* Field number */
+-	DITHER_ON		= 0x01 << 29,	/* Dithering is on */
+-	ROUND_ON		= 0x01 << 30,	/* Round is on */
+-	MODE_32BIT		= 1UL << 31,	/* Data in RGBa888,
+-						 * 0 in RGB565
+-						 */
+-};
+-
+-#define norm_maxw()	720
+-#define norm_maxh()	576
+-
+-#define INT_ALL_STATUS	(INT_FIELD_STATUS | INT_VSYNC_STATUS | \
+-			 INT_HSYNC_STATUS | INT_VSTART_STATUS | \
+-			 INT_DMA_END_STATUS | INT_ERROR_STATUS)
+-
+-#define NUM_FORMATS	ARRAY_SIZE(formats)
+-
+-static irqreturn_t viu_intr(int irq, void *dev_id);
+-
+-static struct viu_fmt *format_by_fourcc(int fourcc)
 -{
--	u32 *pt;
 -	int i;
 -
--	memset(meye.mchip_ptable, 0, sizeof(meye.mchip_ptable));
--
--	/* give only 32 bit DMA addresses */
--	if (dma_set_mask(&meye.mchip_dev->dev, DMA_BIT_MASK(32)))
--		return -1;
--
--	meye.mchip_ptable_toc = dma_alloc_coherent(&meye.mchip_dev->dev,
--						   PAGE_SIZE,
--						   &meye.mchip_dmahandle,
--						   GFP_KERNEL);
--	if (!meye.mchip_ptable_toc) {
--		meye.mchip_dmahandle = 0;
--		return -1;
+-	for (i = 0; i < NUM_FORMATS; i++) {
+-		if (formats[i].pixelformat == fourcc)
+-			return formats + i;
 -	}
 -
--	pt = meye.mchip_ptable_toc;
--	for (i = 0; i < MCHIP_NB_PAGES; i++) {
--		dma_addr_t dma;
--		meye.mchip_ptable[i] = dma_alloc_coherent(&meye.mchip_dev->dev,
--							  PAGE_SIZE,
--							  &dma,
--							  GFP_KERNEL);
--		if (!meye.mchip_ptable[i]) {
--			int j;
--			pt = meye.mchip_ptable_toc;
--			for (j = 0; j < i; ++j) {
--				dma = (dma_addr_t) *pt;
--				dma_free_coherent(&meye.mchip_dev->dev,
--						  PAGE_SIZE,
--						  meye.mchip_ptable[j], dma);
--				pt++;
--			}
--			dma_free_coherent(&meye.mchip_dev->dev,
--					  PAGE_SIZE,
--					  meye.mchip_ptable_toc,
--					  meye.mchip_dmahandle);
--			meye.mchip_ptable_toc = NULL;
--			meye.mchip_dmahandle = 0;
--			return -1;
+-	dprintk(0, "unknown pixelformat:'%4.4s'\n", (char *)&fourcc);
+-	return NULL;
+-}
+-
+-static void viu_start_dma(struct viu_dev *dev)
+-{
+-	struct viu_reg __iomem *vr = dev->vr;
+-
+-	dev->field = 0;
+-
+-	/* Enable DMA operation */
+-	iowrite32be(SOFT_RST, &vr->status_cfg);
+-	iowrite32be(INT_FIELD_EN, &vr->status_cfg);
+-}
+-
+-static void viu_stop_dma(struct viu_dev *dev)
+-{
+-	struct viu_reg __iomem *vr = dev->vr;
+-	int cnt = 100;
+-	u32 status_cfg;
+-
+-	iowrite32be(0, &vr->status_cfg);
+-
+-	/* Clear pending interrupts */
+-	status_cfg = ioread32be(&vr->status_cfg);
+-	if (status_cfg & 0x3f0000)
+-		iowrite32be(status_cfg & 0x3f0000, &vr->status_cfg);
+-
+-	if (status_cfg & DMA_ACT) {
+-		do {
+-			status_cfg = ioread32be(&vr->status_cfg);
+-			if (status_cfg & INT_DMA_END_STATUS)
+-				break;
+-		} while (cnt--);
+-
+-		if (cnt < 0) {
+-			/* timed out, issue soft reset */
+-			iowrite32be(SOFT_RST, &vr->status_cfg);
+-			iowrite32be(0, &vr->status_cfg);
+-		} else {
+-			/* clear DMA_END and other pending irqs */
+-			iowrite32be(status_cfg & 0x3f0000, &vr->status_cfg);
 -		}
--		*pt = (u32) dma;
--		pt++;
--	}
--	return 0;
--}
--
--static void ptable_free(void)
--{
--	u32 *pt;
--	int i;
--
--	pt = meye.mchip_ptable_toc;
--	for (i = 0; i < MCHIP_NB_PAGES; i++) {
--		dma_addr_t dma = (dma_addr_t) *pt;
--		if (meye.mchip_ptable[i])
--			dma_free_coherent(&meye.mchip_dev->dev,
--					  PAGE_SIZE,
--					  meye.mchip_ptable[i], dma);
--		pt++;
 -	}
 -
--	if (meye.mchip_ptable_toc)
--		dma_free_coherent(&meye.mchip_dev->dev,
--				  PAGE_SIZE,
--				  meye.mchip_ptable_toc,
--				  meye.mchip_dmahandle);
--
--	memset(meye.mchip_ptable, 0, sizeof(meye.mchip_ptable));
--	meye.mchip_ptable_toc = NULL;
--	meye.mchip_dmahandle = 0;
+-	dev->field = 0;
 -}
 -
--/* copy data from ptable into buf */
--static void ptable_copy(u8 *buf, int start, int size, int pt_pages)
+-static int restart_video_queue(struct viu_dmaqueue *vidq)
 -{
--	int i;
+-	struct viu_buf *buf, *prev;
 -
--	for (i = 0; i < (size / PAGE_SIZE) * PAGE_SIZE; i += PAGE_SIZE) {
--		memcpy(buf + i, meye.mchip_ptable[start++], PAGE_SIZE);
--		if (start >= pt_pages)
--			start = 0;
--	}
--	memcpy(buf + i, meye.mchip_ptable[start], size % PAGE_SIZE);
--}
+-	dprintk(1, "%s vidq=%p\n", __func__, vidq);
+-	if (!list_empty(&vidq->active)) {
+-		buf = list_entry(vidq->active.next, struct viu_buf, vb.queue);
+-		dprintk(2, "restart_queue [%p/%d]: restart dma\n",
+-			buf, buf->vb.i);
 -
--/****************************************************************************/
--/* JPEG tables at different qualities to load into the VRJ chip             */
--/****************************************************************************/
+-		viu_stop_dma(vidq->dev);
 -
--/* return a set of quantisation tables based on a quality from 1 to 10 */
--static u16 *jpeg_quantisation_tables(int *length, int quality)
--{
--	static u16 jpeg_tables[][70] = { {
--		0xdbff, 0x4300, 0xff00, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
--		0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
--		0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
--		0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
--		0xffff, 0xffff, 0xffff,
--		0xdbff, 0x4300, 0xff01, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
--		0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
--		0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
--		0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
--		0xffff, 0xffff, 0xffff,
--	},
--	{
--		0xdbff, 0x4300, 0x5000, 0x3c37, 0x3c46, 0x5032, 0x4146, 0x5a46,
--		0x5055, 0x785f, 0x82c8, 0x6e78, 0x786e, 0xaff5, 0x91b9, 0xffc8,
--		0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
--		0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
--		0xffff, 0xffff, 0xffff,
--		0xdbff, 0x4300, 0x5501, 0x5a5a, 0x6978, 0xeb78, 0x8282, 0xffeb,
--		0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
--		0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
--		0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
--		0xffff, 0xffff, 0xffff,
--	},
--	{
--		0xdbff, 0x4300, 0x2800, 0x1e1c, 0x1e23, 0x2819, 0x2123, 0x2d23,
--		0x282b, 0x3c30, 0x4164, 0x373c, 0x3c37, 0x587b, 0x495d, 0x9164,
--		0x9980, 0x8f96, 0x8c80, 0xa08a, 0xe6b4, 0xa0c3, 0xdaaa, 0x8aad,
--		0xc88c, 0xcbff, 0xeeda, 0xfff5, 0xffff, 0xc19b, 0xffff, 0xfaff,
--		0xe6ff, 0xfffd, 0xfff8,
--		0xdbff, 0x4300, 0x2b01, 0x2d2d, 0x353c, 0x763c, 0x4141, 0xf876,
--		0x8ca5, 0xf8a5, 0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8,
--		0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8,
--		0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8, 0xf8f8,
--		0xf8f8, 0xf8f8, 0xfff8,
--	},
--	{
--		0xdbff, 0x4300, 0x1b00, 0x1412, 0x1417, 0x1b11, 0x1617, 0x1e17,
--		0x1b1c, 0x2820, 0x2b42, 0x2528, 0x2825, 0x3a51, 0x303d, 0x6042,
--		0x6555, 0x5f64, 0x5d55, 0x6a5b, 0x9978, 0x6a81, 0x9071, 0x5b73,
--		0x855d, 0x86b5, 0x9e90, 0xaba3, 0xabad, 0x8067, 0xc9bc, 0xa6ba,
--		0x99c7, 0xaba8, 0xffa4,
--		0xdbff, 0x4300, 0x1c01, 0x1e1e, 0x2328, 0x4e28, 0x2b2b, 0xa44e,
--		0x5d6e, 0xa46e, 0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4,
--		0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4,
--		0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4, 0xa4a4,
--		0xa4a4, 0xa4a4, 0xffa4,
--	},
--	{
--		0xdbff, 0x4300, 0x1400, 0x0f0e, 0x0f12, 0x140d, 0x1012, 0x1712,
--		0x1415, 0x1e18, 0x2132, 0x1c1e, 0x1e1c, 0x2c3d, 0x242e, 0x4932,
--		0x4c40, 0x474b, 0x4640, 0x5045, 0x735a, 0x5062, 0x6d55, 0x4556,
--		0x6446, 0x6588, 0x776d, 0x817b, 0x8182, 0x604e, 0x978d, 0x7d8c,
--		0x7396, 0x817e, 0xff7c,
--		0xdbff, 0x4300, 0x1501, 0x1717, 0x1a1e, 0x3b1e, 0x2121, 0x7c3b,
--		0x4653, 0x7c53, 0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c,
--		0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c,
--		0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c, 0x7c7c,
--		0x7c7c, 0x7c7c, 0xff7c,
--	},
--	{
--		0xdbff, 0x4300, 0x1000, 0x0c0b, 0x0c0e, 0x100a, 0x0d0e, 0x120e,
--		0x1011, 0x1813, 0x1a28, 0x1618, 0x1816, 0x2331, 0x1d25, 0x3a28,
--		0x3d33, 0x393c, 0x3833, 0x4037, 0x5c48, 0x404e, 0x5744, 0x3745,
--		0x5038, 0x516d, 0x5f57, 0x6762, 0x6768, 0x4d3e, 0x7971, 0x6470,
--		0x5c78, 0x6765, 0xff63,
--		0xdbff, 0x4300, 0x1101, 0x1212, 0x1518, 0x2f18, 0x1a1a, 0x632f,
--		0x3842, 0x6342, 0x6363, 0x6363, 0x6363, 0x6363, 0x6363, 0x6363,
--		0x6363, 0x6363, 0x6363, 0x6363, 0x6363, 0x6363, 0x6363, 0x6363,
--		0x6363, 0x6363, 0x6363, 0x6363, 0x6363, 0x6363, 0x6363, 0x6363,
--		0x6363, 0x6363, 0xff63,
--	},
--	{
--		0xdbff, 0x4300, 0x0d00, 0x0a09, 0x0a0b, 0x0d08, 0x0a0b, 0x0e0b,
--		0x0d0e, 0x130f, 0x1520, 0x1213, 0x1312, 0x1c27, 0x171e, 0x2e20,
--		0x3129, 0x2e30, 0x2d29, 0x332c, 0x4a3a, 0x333e, 0x4636, 0x2c37,
--		0x402d, 0x4157, 0x4c46, 0x524e, 0x5253, 0x3e32, 0x615a, 0x505a,
--		0x4a60, 0x5251, 0xff4f,
--		0xdbff, 0x4300, 0x0e01, 0x0e0e, 0x1113, 0x2613, 0x1515, 0x4f26,
--		0x2d35, 0x4f35, 0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f,
--		0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f,
--		0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f, 0x4f4f,
--		0x4f4f, 0x4f4f, 0xff4f,
--	},
--	{
--		0xdbff, 0x4300, 0x0a00, 0x0707, 0x0708, 0x0a06, 0x0808, 0x0b08,
--		0x0a0a, 0x0e0b, 0x1018, 0x0d0e, 0x0e0d, 0x151d, 0x1116, 0x2318,
--		0x251f, 0x2224, 0x221f, 0x2621, 0x372b, 0x262f, 0x3429, 0x2129,
--		0x3022, 0x3141, 0x3934, 0x3e3b, 0x3e3e, 0x2e25, 0x4944, 0x3c43,
--		0x3748, 0x3e3d, 0xff3b,
--		0xdbff, 0x4300, 0x0a01, 0x0b0b, 0x0d0e, 0x1c0e, 0x1010, 0x3b1c,
--		0x2228, 0x3b28, 0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b,
--		0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b,
--		0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b, 0x3b3b,
--		0x3b3b, 0x3b3b, 0xff3b,
--	},
--	{
--		0xdbff, 0x4300, 0x0600, 0x0504, 0x0506, 0x0604, 0x0506, 0x0706,
--		0x0607, 0x0a08, 0x0a10, 0x090a, 0x0a09, 0x0e14, 0x0c0f, 0x1710,
--		0x1814, 0x1718, 0x1614, 0x1a16, 0x251d, 0x1a1f, 0x231b, 0x161c,
--		0x2016, 0x202c, 0x2623, 0x2927, 0x292a, 0x1f19, 0x302d, 0x282d,
--		0x2530, 0x2928, 0xff28,
--		0xdbff, 0x4300, 0x0701, 0x0707, 0x080a, 0x130a, 0x0a0a, 0x2813,
--		0x161a, 0x281a, 0x2828, 0x2828, 0x2828, 0x2828, 0x2828, 0x2828,
--		0x2828, 0x2828, 0x2828, 0x2828, 0x2828, 0x2828, 0x2828, 0x2828,
--		0x2828, 0x2828, 0x2828, 0x2828, 0x2828, 0x2828, 0x2828, 0x2828,
--		0x2828, 0x2828, 0xff28,
--	},
--	{
--		0xdbff, 0x4300, 0x0300, 0x0202, 0x0203, 0x0302, 0x0303, 0x0403,
--		0x0303, 0x0504, 0x0508, 0x0405, 0x0504, 0x070a, 0x0607, 0x0c08,
--		0x0c0a, 0x0b0c, 0x0b0a, 0x0d0b, 0x120e, 0x0d10, 0x110e, 0x0b0e,
--		0x100b, 0x1016, 0x1311, 0x1514, 0x1515, 0x0f0c, 0x1817, 0x1416,
--		0x1218, 0x1514, 0xff14,
--		0xdbff, 0x4300, 0x0301, 0x0404, 0x0405, 0x0905, 0x0505, 0x1409,
--		0x0b0d, 0x140d, 0x1414, 0x1414, 0x1414, 0x1414, 0x1414, 0x1414,
--		0x1414, 0x1414, 0x1414, 0x1414, 0x1414, 0x1414, 0x1414, 0x1414,
--		0x1414, 0x1414, 0x1414, 0x1414, 0x1414, 0x1414, 0x1414, 0x1414,
--		0x1414, 0x1414, 0xff14,
--	},
--	{
--		0xdbff, 0x4300, 0x0100, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101,
--		0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101,
--		0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101,
--		0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101,
--		0x0101, 0x0101, 0xff01,
--		0xdbff, 0x4300, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101,
--		0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101,
--		0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101,
--		0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101, 0x0101,
--		0x0101, 0x0101, 0xff01,
--	} };
--
--	if (quality < 0 || quality > 10) {
--		printk(KERN_WARNING
--		       "meye: invalid quality level %d - using 8\n", quality);
--		quality = 8;
--	}
--
--	*length = ARRAY_SIZE(jpeg_tables[quality]);
--	return jpeg_tables[quality];
--}
--
--/* return a generic set of huffman tables */
--static u16 *jpeg_huffman_tables(int *length)
--{
--	static u16 tables[] = {
--		0xC4FF, 0xB500, 0x0010, 0x0102, 0x0303, 0x0402, 0x0503, 0x0405,
--		0x0004, 0x0100, 0x017D, 0x0302, 0x0400, 0x0511, 0x2112, 0x4131,
--		0x1306, 0x6151, 0x2207, 0x1471, 0x8132, 0xA191, 0x2308, 0xB142,
--		0x15C1, 0xD152, 0x24F0, 0x6233, 0x8272, 0x0A09, 0x1716, 0x1918,
--		0x251A, 0x2726, 0x2928, 0x342A, 0x3635, 0x3837, 0x3A39, 0x4443,
--		0x4645, 0x4847, 0x4A49, 0x5453, 0x5655, 0x5857, 0x5A59, 0x6463,
--		0x6665, 0x6867, 0x6A69, 0x7473, 0x7675, 0x7877, 0x7A79, 0x8483,
--		0x8685, 0x8887, 0x8A89, 0x9392, 0x9594, 0x9796, 0x9998, 0xA29A,
--		0xA4A3, 0xA6A5, 0xA8A7, 0xAAA9, 0xB3B2, 0xB5B4, 0xB7B6, 0xB9B8,
--		0xC2BA, 0xC4C3, 0xC6C5, 0xC8C7, 0xCAC9, 0xD3D2, 0xD5D4, 0xD7D6,
--		0xD9D8, 0xE1DA, 0xE3E2, 0xE5E4, 0xE7E6, 0xE9E8, 0xF1EA, 0xF3F2,
--		0xF5F4, 0xF7F6, 0xF9F8, 0xFFFA,
--		0xC4FF, 0xB500, 0x0011, 0x0102, 0x0402, 0x0304, 0x0704, 0x0405,
--		0x0004, 0x0201, 0x0077, 0x0201, 0x1103, 0x0504, 0x3121, 0x1206,
--		0x5141, 0x6107, 0x1371, 0x3222, 0x0881, 0x4214, 0xA191, 0xC1B1,
--		0x2309, 0x5233, 0x15F0, 0x7262, 0x0AD1, 0x2416, 0xE134, 0xF125,
--		0x1817, 0x1A19, 0x2726, 0x2928, 0x352A, 0x3736, 0x3938, 0x433A,
--		0x4544, 0x4746, 0x4948, 0x534A, 0x5554, 0x5756, 0x5958, 0x635A,
--		0x6564, 0x6766, 0x6968, 0x736A, 0x7574, 0x7776, 0x7978, 0x827A,
--		0x8483, 0x8685, 0x8887, 0x8A89, 0x9392, 0x9594, 0x9796, 0x9998,
--		0xA29A, 0xA4A3, 0xA6A5, 0xA8A7, 0xAAA9, 0xB3B2, 0xB5B4, 0xB7B6,
--		0xB9B8, 0xC2BA, 0xC4C3, 0xC6C5, 0xC8C7, 0xCAC9, 0xD3D2, 0xD5D4,
--		0xD7D6, 0xD9D8, 0xE2DA, 0xE4E3, 0xE6E5, 0xE8E7, 0xEAE9, 0xF3F2,
--		0xF5F4, 0xF7F6, 0xF9F8, 0xFFFA,
--		0xC4FF, 0x1F00, 0x0000, 0x0501, 0x0101, 0x0101, 0x0101, 0x0000,
--		0x0000, 0x0000, 0x0000, 0x0201, 0x0403, 0x0605, 0x0807, 0x0A09,
--		0xFF0B,
--		0xC4FF, 0x1F00, 0x0001, 0x0103, 0x0101, 0x0101, 0x0101, 0x0101,
--		0x0000, 0x0000, 0x0000, 0x0201, 0x0403, 0x0605, 0x0807, 0x0A09,
--		0xFF0B
--	};
--
--	*length = ARRAY_SIZE(tables);
--	return tables;
--}
--
--/****************************************************************************/
--/* MCHIP low-level functions                                                */
--/****************************************************************************/
--
--/* returns the horizontal capture size */
--static inline int mchip_hsize(void)
--{
--	return meye.params.subsample ? 320 : 640;
--}
--
--/* returns the vertical capture size */
--static inline int mchip_vsize(void)
--{
--	return meye.params.subsample ? 240 : 480;
--}
--
--/* waits for a register to be available */
--static void mchip_sync(int reg)
--{
--	u32 status;
--	int i;
--
--	if (reg == MCHIP_MM_FIFO_DATA) {
--		for (i = 0; i < MCHIP_REG_TIMEOUT; i++) {
--			status = readl(meye.mchip_mmregs +
--				       MCHIP_MM_FIFO_STATUS);
--			if (!(status & MCHIP_MM_FIFO_WAIT)) {
--				printk(KERN_WARNING "meye: fifo not ready\n");
--				return;
--			}
--			if (status & MCHIP_MM_FIFO_READY)
--				return;
--			udelay(1);
+-		/* cancel all outstanding capture requests */
+-		list_for_each_entry_safe(buf, prev, &vidq->active, vb.queue) {
+-			list_del(&buf->vb.queue);
+-			buf->vb.state = VIDEOBUF_ERROR;
+-			wake_up(&buf->vb.done);
 -		}
--	} else if (reg > 0x80) {
--		u32 mask = (reg < 0x100) ? MCHIP_HIC_STATUS_MCC_RDY
--					 : MCHIP_HIC_STATUS_VRJ_RDY;
--		for (i = 0; i < MCHIP_REG_TIMEOUT; i++) {
--			status = readl(meye.mchip_mmregs + MCHIP_HIC_STATUS);
--			if (status & mask)
--				return;
--			udelay(1);
--		}
--	} else
--		return;
--	printk(KERN_WARNING
--	       "meye: mchip_sync() timeout on reg 0x%x status=0x%x\n",
--	       reg, status);
--}
--
--/* sets a value into the register */
--static inline void mchip_set(int reg, u32 v)
--{
--	mchip_sync(reg);
--	writel(v, meye.mchip_mmregs + reg);
--}
--
--/* get the register value */
--static inline u32 mchip_read(int reg)
--{
--	mchip_sync(reg);
--	return readl(meye.mchip_mmregs + reg);
--}
--
--/* wait for a register to become a particular value */
--static inline int mchip_delay(u32 reg, u32 v)
--{
--	int n = 10;
--	while (--n && mchip_read(reg) != v)
--		udelay(1);
--	return n;
--}
--
--/* setup subsampling */
--static void mchip_subsample(void)
--{
--	mchip_set(MCHIP_MCC_R_SAMPLING, meye.params.subsample);
--	mchip_set(MCHIP_MCC_R_XRANGE, mchip_hsize());
--	mchip_set(MCHIP_MCC_R_YRANGE, mchip_vsize());
--	mchip_set(MCHIP_MCC_B_XRANGE, mchip_hsize());
--	mchip_set(MCHIP_MCC_B_YRANGE, mchip_vsize());
--	mchip_delay(MCHIP_HIC_STATUS, MCHIP_HIC_STATUS_IDLE);
--}
--
--/* set the framerate into the mchip */
--static void mchip_set_framerate(void)
--{
--	mchip_set(MCHIP_HIC_S_RATE, meye.params.framerate);
--}
--
--/* load some huffman and quantisation tables into the VRJ chip ready
--   for JPEG compression */
--static void mchip_load_tables(void)
--{
--	int i;
--	int length;
--	u16 *tables;
--
--	tables = jpeg_huffman_tables(&length);
--	for (i = 0; i < length; i++)
--		writel(tables[i], meye.mchip_mmregs + MCHIP_VRJ_TABLE_DATA);
--
--	tables = jpeg_quantisation_tables(&length, meye.params.quality);
--	for (i = 0; i < length; i++)
--		writel(tables[i], meye.mchip_mmregs + MCHIP_VRJ_TABLE_DATA);
--}
--
--/* setup the VRJ parameters in the chip */
--static void mchip_vrj_setup(u8 mode)
--{
--	mchip_set(MCHIP_VRJ_BUS_MODE, 5);
--	mchip_set(MCHIP_VRJ_SIGNAL_ACTIVE_LEVEL, 0x1f);
--	mchip_set(MCHIP_VRJ_PDAT_USE, 1);
--	mchip_set(MCHIP_VRJ_IRQ_FLAG, 0xa0);
--	mchip_set(MCHIP_VRJ_MODE_SPECIFY, mode);
--	mchip_set(MCHIP_VRJ_NUM_LINES, mchip_vsize());
--	mchip_set(MCHIP_VRJ_NUM_PIXELS, mchip_hsize());
--	mchip_set(MCHIP_VRJ_NUM_COMPONENTS, 0x1b);
--	mchip_set(MCHIP_VRJ_LIMIT_COMPRESSED_LO, 0xFFFF);
--	mchip_set(MCHIP_VRJ_LIMIT_COMPRESSED_HI, 0xFFFF);
--	mchip_set(MCHIP_VRJ_COMP_DATA_FORMAT, 0xC);
--	mchip_set(MCHIP_VRJ_RESTART_INTERVAL, 0);
--	mchip_set(MCHIP_VRJ_SOF1, 0x601);
--	mchip_set(MCHIP_VRJ_SOF2, 0x1502);
--	mchip_set(MCHIP_VRJ_SOF3, 0x1503);
--	mchip_set(MCHIP_VRJ_SOF4, 0x1596);
--	mchip_set(MCHIP_VRJ_SOS, 0x0ed0);
--
--	mchip_load_tables();
--}
--
--/* sets the DMA parameters into the chip */
--static void mchip_dma_setup(dma_addr_t dma_addr)
--{
--	int i;
--
--	mchip_set(MCHIP_MM_PT_ADDR, (u32)dma_addr);
--	for (i = 0; i < 4; i++)
--		mchip_set(MCHIP_MM_FIR(i), 0);
--	meye.mchip_fnum = 0;
--}
--
--/* setup for DMA transfers - also zeros the framebuffer */
--static int mchip_dma_alloc(void)
--{
--	if (!meye.mchip_dmahandle)
--		if (ptable_alloc())
--			return -1;
--	return 0;
--}
--
--/* frees the DMA buffer */
--static void mchip_dma_free(void)
--{
--	if (meye.mchip_dmahandle) {
--		mchip_dma_setup(0);
--		ptable_free();
--	}
--}
--
--/* stop any existing HIC action and wait for any dma to complete then
--   reset the dma engine */
--static void mchip_hic_stop(void)
--{
--	int i, j;
--
--	meye.mchip_mode = MCHIP_HIC_MODE_NOOP;
--	if (!(mchip_read(MCHIP_HIC_STATUS) & MCHIP_HIC_STATUS_BUSY))
--		return;
--	for (i = 0; i < 20; ++i) {
--		mchip_set(MCHIP_HIC_CMD, MCHIP_HIC_CMD_STOP);
--		mchip_delay(MCHIP_HIC_CMD, 0);
--		for (j = 0; j < 100; ++j) {
--			if (mchip_delay(MCHIP_HIC_STATUS,
--					MCHIP_HIC_STATUS_IDLE))
--				return;
--			msleep(1);
--		}
--		printk(KERN_ERR "meye: need to reset HIC!\n");
--
--		mchip_set(MCHIP_HIC_CTL, MCHIP_HIC_CTL_SOFT_RESET);
--		msleep(250);
--	}
--	printk(KERN_ERR "meye: resetting HIC hanged!\n");
--}
--
--/****************************************************************************/
--/* MCHIP frame processing functions                                         */
--/****************************************************************************/
--
--/* get the next ready frame from the dma engine */
--static u32 mchip_get_frame(void)
--{
--	return mchip_read(MCHIP_MM_FIR(meye.mchip_fnum));
--}
--
--/* frees the current frame from the dma engine */
--static void mchip_free_frame(void)
--{
--	mchip_set(MCHIP_MM_FIR(meye.mchip_fnum), 0);
--	meye.mchip_fnum++;
--	meye.mchip_fnum %= 4;
--}
--
--/* read one frame from the framebuffer assuming it was captured using
--   a uncompressed transfer */
--static void mchip_cont_read_frame(u32 v, u8 *buf, int size)
--{
--	int pt_id;
--
--	pt_id = (v >> 17) & 0x3FF;
--
--	ptable_copy(buf, pt_id, size, MCHIP_NB_PAGES);
--}
--
--/* read a compressed frame from the framebuffer */
--static int mchip_comp_read_frame(u32 v, u8 *buf, int size)
--{
--	int pt_start, pt_end, trailer;
--	int fsize;
--	int i;
--
--	pt_start = (v >> 19) & 0xFF;
--	pt_end = (v >> 11) & 0xFF;
--	trailer = (v >> 1) & 0x3FF;
--
--	if (pt_end < pt_start)
--		fsize = (MCHIP_NB_PAGES_MJPEG - pt_start) * PAGE_SIZE +
--			pt_end * PAGE_SIZE + trailer * 4;
--	else
--		fsize = (pt_end - pt_start) * PAGE_SIZE + trailer * 4;
--
--	if (fsize > size) {
--		printk(KERN_WARNING "meye: oversized compressed frame %d\n",
--		       fsize);
--		return -1;
--	}
--
--	ptable_copy(buf, pt_start, fsize, MCHIP_NB_PAGES_MJPEG);
--
--#ifdef MEYE_JPEG_CORRECTION
--
--	/* Some mchip generated jpeg frames are incorrect. In most
--	 * (all ?) of those cases, the final EOI (0xff 0xd9) marker
--	 * is not present at the end of the frame.
--	 *
--	 * Since adding the final marker is not enough to restore
--	 * the jpeg integrity, we drop the frame.
--	 */
--
--	for (i = fsize - 1; i > 0 && buf[i] == 0xff; i--) ;
--
--	if (i < 2 || buf[i - 1] != 0xff || buf[i] != 0xd9)
--		return -1;
--
--#endif
--
--	return fsize;
--}
--
--/* take a picture into SDRAM */
--static void mchip_take_picture(void)
--{
--	int i;
--
--	mchip_hic_stop();
--	mchip_subsample();
--	mchip_dma_setup(meye.mchip_dmahandle);
--
--	mchip_set(MCHIP_HIC_MODE, MCHIP_HIC_MODE_STILL_CAP);
--	mchip_set(MCHIP_HIC_CMD, MCHIP_HIC_CMD_START);
--
--	mchip_delay(MCHIP_HIC_CMD, 0);
--
--	for (i = 0; i < 100; ++i) {
--		if (mchip_delay(MCHIP_HIC_STATUS, MCHIP_HIC_STATUS_IDLE))
--			break;
--		msleep(1);
--	}
--}
--
--/* dma a previously taken picture into a buffer */
--static void mchip_get_picture(u8 *buf, int bufsize)
--{
--	u32 v;
--	int i;
--
--	mchip_set(MCHIP_HIC_MODE, MCHIP_HIC_MODE_STILL_OUT);
--	mchip_set(MCHIP_HIC_CMD, MCHIP_HIC_CMD_START);
--
--	mchip_delay(MCHIP_HIC_CMD, 0);
--	for (i = 0; i < 100; ++i) {
--		if (mchip_delay(MCHIP_HIC_STATUS, MCHIP_HIC_STATUS_IDLE))
--			break;
--		msleep(1);
--	}
--	for (i = 0; i < 4; ++i) {
--		v = mchip_get_frame();
--		if (v & MCHIP_MM_FIR_RDY) {
--			mchip_cont_read_frame(v, buf, bufsize);
--			break;
--		}
--		mchip_free_frame();
--	}
--}
--
--/* start continuous dma capture */
--static void mchip_continuous_start(void)
--{
--	mchip_hic_stop();
--	mchip_subsample();
--	mchip_set_framerate();
--	mchip_dma_setup(meye.mchip_dmahandle);
--
--	meye.mchip_mode = MCHIP_HIC_MODE_CONT_OUT;
--
--	mchip_set(MCHIP_HIC_MODE, MCHIP_HIC_MODE_CONT_OUT);
--	mchip_set(MCHIP_HIC_CMD, MCHIP_HIC_CMD_START);
--
--	mchip_delay(MCHIP_HIC_CMD, 0);
--}
--
--/* compress one frame into a buffer */
--static int mchip_compress_frame(u8 *buf, int bufsize)
--{
--	u32 v;
--	int len = -1, i;
--
--	mchip_vrj_setup(0x3f);
--	udelay(50);
--
--	mchip_set(MCHIP_HIC_MODE, MCHIP_HIC_MODE_STILL_COMP);
--	mchip_set(MCHIP_HIC_CMD, MCHIP_HIC_CMD_START);
--
--	mchip_delay(MCHIP_HIC_CMD, 0);
--	for (i = 0; i < 100; ++i) {
--		if (mchip_delay(MCHIP_HIC_STATUS, MCHIP_HIC_STATUS_IDLE))
--			break;
--		msleep(1);
--	}
--
--	for (i = 0; i < 4; ++i) {
--		v = mchip_get_frame();
--		if (v & MCHIP_MM_FIR_RDY) {
--			len = mchip_comp_read_frame(v, buf, bufsize);
--			break;
--		}
--		mchip_free_frame();
--	}
--	return len;
--}
--
--#if 0
--/* uncompress one image into a buffer */
--static int mchip_uncompress_frame(u8 *img, int imgsize, u8 *buf, int bufsize)
--{
--	mchip_vrj_setup(0x3f);
--	udelay(50);
--
--	mchip_set(MCHIP_HIC_MODE, MCHIP_HIC_MODE_STILL_DECOMP);
--	mchip_set(MCHIP_HIC_CMD, MCHIP_HIC_CMD_START);
--
--	mchip_delay(MCHIP_HIC_CMD, 0);
--
--	return mchip_comp_read_frame(buf, bufsize);
--}
--#endif
--
--/* start continuous compressed capture */
--static void mchip_cont_compression_start(void)
--{
--	mchip_hic_stop();
--	mchip_vrj_setup(0x3f);
--	mchip_subsample();
--	mchip_set_framerate();
--	mchip_dma_setup(meye.mchip_dmahandle);
--
--	meye.mchip_mode = MCHIP_HIC_MODE_CONT_COMP;
--
--	mchip_set(MCHIP_HIC_MODE, MCHIP_HIC_MODE_CONT_COMP);
--	mchip_set(MCHIP_HIC_CMD, MCHIP_HIC_CMD_START);
--
--	mchip_delay(MCHIP_HIC_CMD, 0);
--}
--
--/****************************************************************************/
--/* Interrupt handling                                                       */
--/****************************************************************************/
--
--static irqreturn_t meye_irq(int irq, void *dev_id)
--{
--	u32 v;
--	int reqnr;
--	static int sequence;
--
--	v = mchip_read(MCHIP_MM_INTA);
--
--	if (meye.mchip_mode != MCHIP_HIC_MODE_CONT_OUT &&
--	    meye.mchip_mode != MCHIP_HIC_MODE_CONT_COMP)
--		return IRQ_NONE;
--
--again:
--	v = mchip_get_frame();
--	if (!(v & MCHIP_MM_FIR_RDY))
--		return IRQ_HANDLED;
--
--	if (meye.mchip_mode == MCHIP_HIC_MODE_CONT_OUT) {
--		if (kfifo_out_locked(&meye.grabq, (unsigned char *)&reqnr,
--			      sizeof(int), &meye.grabq_lock) != sizeof(int)) {
--			mchip_free_frame();
--			return IRQ_HANDLED;
--		}
--		mchip_cont_read_frame(v, meye.grab_fbuffer + gbufsize * reqnr,
--				      mchip_hsize() * mchip_vsize() * 2);
--		meye.grab_buffer[reqnr].size = mchip_hsize() * mchip_vsize() * 2;
--		meye.grab_buffer[reqnr].state = MEYE_BUF_DONE;
--		meye.grab_buffer[reqnr].ts = ktime_get_ns();
--		meye.grab_buffer[reqnr].sequence = sequence++;
--		kfifo_in_locked(&meye.doneq, (unsigned char *)&reqnr,
--				sizeof(int), &meye.doneq_lock);
--		wake_up_interruptible(&meye.proc_list);
--	} else {
--		int size;
--		size = mchip_comp_read_frame(v, meye.grab_temp, gbufsize);
--		if (size == -1) {
--			mchip_free_frame();
--			goto again;
--		}
--		if (kfifo_out_locked(&meye.grabq, (unsigned char *)&reqnr,
--			      sizeof(int), &meye.grabq_lock) != sizeof(int)) {
--			mchip_free_frame();
--			goto again;
--		}
--		memcpy(meye.grab_fbuffer + gbufsize * reqnr, meye.grab_temp,
--		       size);
--		meye.grab_buffer[reqnr].size = size;
--		meye.grab_buffer[reqnr].state = MEYE_BUF_DONE;
--		meye.grab_buffer[reqnr].ts = ktime_get_ns();
--		meye.grab_buffer[reqnr].sequence = sequence++;
--		kfifo_in_locked(&meye.doneq, (unsigned char *)&reqnr,
--				sizeof(int), &meye.doneq_lock);
--		wake_up_interruptible(&meye.proc_list);
--	}
--	mchip_free_frame();
--	goto again;
--}
--
--/****************************************************************************/
--/* video4linux integration                                                  */
--/****************************************************************************/
--
--static int meye_open(struct file *file)
--{
--	int i;
--
--	if (test_and_set_bit(0, &meye.in_use))
--		return -EBUSY;
--
--	mchip_hic_stop();
--
--	if (mchip_dma_alloc()) {
--		printk(KERN_ERR "meye: mchip framebuffer allocation failed\n");
--		clear_bit(0, &meye.in_use);
--		return -ENOBUFS;
--	}
--
--	for (i = 0; i < MEYE_MAX_BUFNBRS; i++)
--		meye.grab_buffer[i].state = MEYE_BUF_UNUSED;
--	kfifo_reset(&meye.grabq);
--	kfifo_reset(&meye.doneq);
--	return v4l2_fh_open(file);
--}
--
--static int meye_release(struct file *file)
--{
--	mchip_hic_stop();
--	mchip_dma_free();
--	clear_bit(0, &meye.in_use);
--	return v4l2_fh_release(file);
--}
--
--static int meyeioc_g_params(struct meye_params *p)
--{
--	*p = meye.params;
--	return 0;
--}
--
--static int meyeioc_s_params(struct meye_params *jp)
--{
--	if (jp->subsample > 1)
--		return -EINVAL;
--
--	if (jp->quality > 10)
--		return -EINVAL;
--
--	if (jp->sharpness > 63 || jp->agc > 63 || jp->picture > 63)
--		return -EINVAL;
--
--	if (jp->framerate > 31)
--		return -EINVAL;
--
--	mutex_lock(&meye.lock);
--
--	if (meye.params.subsample != jp->subsample ||
--	    meye.params.quality != jp->quality)
--		mchip_hic_stop();	/* need restart */
--
--	meye.params = *jp;
--	sony_pic_camera_command(SONY_PIC_COMMAND_SETCAMERASHARPNESS,
--			      meye.params.sharpness);
--	sony_pic_camera_command(SONY_PIC_COMMAND_SETCAMERAAGC,
--			      meye.params.agc);
--	sony_pic_camera_command(SONY_PIC_COMMAND_SETCAMERAPICTURE,
--			      meye.params.picture);
--	mutex_unlock(&meye.lock);
--
--	return 0;
--}
--
--static int meyeioc_qbuf_capt(int *nb)
--{
--	if (!meye.grab_fbuffer)
--		return -EINVAL;
--
--	if (*nb >= gbuffers)
--		return -EINVAL;
--
--	if (*nb < 0) {
--		/* stop capture */
--		mchip_hic_stop();
+-		mod_timer(&vidq->timeout, jiffies+BUFFER_TIMEOUT);
 -		return 0;
 -	}
 -
--	if (meye.grab_buffer[*nb].state != MEYE_BUF_UNUSED)
--		return -EBUSY;
+-	prev = NULL;
+-	for (;;) {
+-		if (list_empty(&vidq->queued))
+-			return 0;
+-		buf = list_entry(vidq->queued.next, struct viu_buf, vb.queue);
+-		if (prev == NULL) {
+-			list_move_tail(&buf->vb.queue, &vidq->active);
 -
--	mutex_lock(&meye.lock);
+-			dprintk(1, "Restarting video dma\n");
+-			viu_stop_dma(vidq->dev);
+-			viu_start_dma(vidq->dev);
 -
--	if (meye.mchip_mode != MCHIP_HIC_MODE_CONT_COMP)
--		mchip_cont_compression_start();
+-			buf->vb.state = VIDEOBUF_ACTIVE;
+-			mod_timer(&vidq->timeout, jiffies+BUFFER_TIMEOUT);
+-			dprintk(2, "[%p/%d] restart_queue - first active\n",
+-				buf, buf->vb.i);
 -
--	meye.grab_buffer[*nb].state = MEYE_BUF_USING;
--	kfifo_in_locked(&meye.grabq, (unsigned char *)nb, sizeof(int),
--			 &meye.grabq_lock);
--	mutex_unlock(&meye.lock);
--
--	return 0;
--}
--
--static int meyeioc_sync(struct file *file, void *fh, int *i)
--{
--	int unused;
--
--	if (*i < 0 || *i >= gbuffers)
--		return -EINVAL;
--
--	mutex_lock(&meye.lock);
--	switch (meye.grab_buffer[*i].state) {
--
--	case MEYE_BUF_UNUSED:
--		mutex_unlock(&meye.lock);
--		return -EINVAL;
--	case MEYE_BUF_USING:
--		if (file->f_flags & O_NONBLOCK) {
--			mutex_unlock(&meye.lock);
--			return -EAGAIN;
+-		} else if (prev->vb.width  == buf->vb.width  &&
+-			   prev->vb.height == buf->vb.height &&
+-			   prev->fmt       == buf->fmt) {
+-			list_move_tail(&buf->vb.queue, &vidq->active);
+-			buf->vb.state = VIDEOBUF_ACTIVE;
+-			dprintk(2, "[%p/%d] restart_queue - move to active\n",
+-				buf, buf->vb.i);
+-		} else {
+-			return 0;
 -		}
--		if (wait_event_interruptible(meye.proc_list,
--			(meye.grab_buffer[*i].state != MEYE_BUF_USING))) {
--			mutex_unlock(&meye.lock);
--			return -EINTR;
--		}
--		fallthrough;
--	case MEYE_BUF_DONE:
--		meye.grab_buffer[*i].state = MEYE_BUF_UNUSED;
--		if (kfifo_out_locked(&meye.doneq, (unsigned char *)&unused,
--				sizeof(int), &meye.doneq_lock) != sizeof(int))
--					break;
+-		prev = buf;
 -	}
--	*i = meye.grab_buffer[*i].size;
--	mutex_unlock(&meye.lock);
--	return 0;
 -}
 -
--static int meyeioc_stillcapt(void)
+-static void viu_vid_timeout(struct timer_list *t)
 -{
--	if (!meye.grab_fbuffer)
--		return -EINVAL;
+-	struct viu_dev *dev = from_timer(dev, t, vidq.timeout);
+-	struct viu_buf *buf;
+-	struct viu_dmaqueue *vidq = &dev->vidq;
 -
--	if (meye.grab_buffer[0].state != MEYE_BUF_UNUSED)
--		return -EBUSY;
--
--	mutex_lock(&meye.lock);
--	meye.grab_buffer[0].state = MEYE_BUF_USING;
--	mchip_take_picture();
--
--	mchip_get_picture(meye.grab_fbuffer,
--			mchip_hsize() * mchip_vsize() * 2);
--
--	meye.grab_buffer[0].state = MEYE_BUF_DONE;
--	mutex_unlock(&meye.lock);
--
--	return 0;
--}
--
--static int meyeioc_stilljcapt(int *len)
--{
--	if (!meye.grab_fbuffer)
--		return -EINVAL;
--
--	if (meye.grab_buffer[0].state != MEYE_BUF_UNUSED)
--		return -EBUSY;
--
--	mutex_lock(&meye.lock);
--	meye.grab_buffer[0].state = MEYE_BUF_USING;
--	*len = -1;
--
--	while (*len == -1) {
--		mchip_take_picture();
--		*len = mchip_compress_frame(meye.grab_fbuffer, gbufsize);
+-	while (!list_empty(&vidq->active)) {
+-		buf = list_entry(vidq->active.next, struct viu_buf, vb.queue);
+-		list_del(&buf->vb.queue);
+-		buf->vb.state = VIDEOBUF_ERROR;
+-		wake_up(&buf->vb.done);
+-		dprintk(1, "viu/0: [%p/%d] timeout\n", buf, buf->vb.i);
 -	}
 -
--	meye.grab_buffer[0].state = MEYE_BUF_DONE;
--	mutex_unlock(&meye.lock);
+-	restart_video_queue(vidq);
+-}
+-
+-/*
+- * Videobuf operations
+- */
+-static int buffer_setup(struct videobuf_queue *vq, unsigned int *count,
+-			unsigned int *size)
+-{
+-	struct viu_fh *fh = vq->priv_data;
+-
+-	*size = fh->width * fh->height * fh->fmt->depth >> 3;
+-	if (*count == 0)
+-		*count = 32;
+-
+-	while (*size * *count > VIU_VID_MEM_LIMIT * 1024 * 1024)
+-		(*count)--;
+-
+-	dprintk(1, "%s, count=%d, size=%d\n", __func__, *count, *size);
 -	return 0;
 -}
 -
--static int vidioc_querycap(struct file *file, void *fh,
--				struct v4l2_capability *cap)
+-static void free_buffer(struct videobuf_queue *vq, struct viu_buf *buf)
 -{
--	strscpy(cap->driver, "meye", sizeof(cap->driver));
--	strscpy(cap->card, "meye", sizeof(cap->card));
+-	struct videobuf_buffer *vb = &buf->vb;
+-	void *vaddr = NULL;
+-
+-	videobuf_waiton(vq, &buf->vb, 0, 0);
+-
+-	if (vq->int_ops && vq->int_ops->vaddr)
+-		vaddr = vq->int_ops->vaddr(vb);
+-
+-	if (vaddr)
+-		videobuf_dma_contig_free(vq, &buf->vb);
+-
+-	buf->vb.state = VIDEOBUF_NEEDS_INIT;
+-}
+-
+-inline int buffer_activate(struct viu_dev *dev, struct viu_buf *buf)
+-{
+-	struct viu_reg __iomem *vr = dev->vr;
+-	int bpp;
+-
+-	/* setup the DMA base address */
+-	reg_val.field_base_addr = videobuf_to_dma_contig(&buf->vb);
+-
+-	dprintk(1, "buffer_activate [%p/%d]: dma addr 0x%lx\n",
+-		buf, buf->vb.i, (unsigned long)reg_val.field_base_addr);
+-
+-	/* interlace is on by default, set horizontal DMA increment */
+-	reg_val.status_cfg = 0;
+-	bpp = buf->fmt->depth >> 3;
+-	switch (bpp) {
+-	case 2:
+-		reg_val.status_cfg &= ~MODE_32BIT;
+-		reg_val.dma_inc = buf->vb.width * 2;
+-		break;
+-	case 4:
+-		reg_val.status_cfg |= MODE_32BIT;
+-		reg_val.dma_inc = buf->vb.width * 4;
+-		break;
+-	default:
+-		dprintk(0, "doesn't support color depth(%d)\n",
+-			bpp * 8);
+-		return -EINVAL;
+-	}
+-
+-	/* setup picture_count register */
+-	reg_val.picture_count = (buf->vb.height / 2) << 16 |
+-				buf->vb.width;
+-
+-	reg_val.status_cfg |= DMA_ACT | INT_DMA_END_EN | INT_FIELD_EN;
+-
+-	buf->vb.state = VIDEOBUF_ACTIVE;
+-	dev->capfield = buf->vb.field;
+-
+-	/* reset dma increment if needed */
+-	if (!V4L2_FIELD_HAS_BOTH(buf->vb.field))
+-		reg_val.dma_inc = 0;
+-
+-	iowrite32be(reg_val.dma_inc, &vr->dma_inc);
+-	iowrite32be(reg_val.picture_count, &vr->picture_count);
+-	iowrite32be(reg_val.field_base_addr, &vr->field_base_addr);
+-	mod_timer(&dev->vidq.timeout, jiffies + BUFFER_TIMEOUT);
 -	return 0;
 -}
 -
--static int vidioc_enum_input(struct file *file, void *fh, struct v4l2_input *i)
+-static int buffer_prepare(struct videobuf_queue *vq,
+-			  struct videobuf_buffer *vb,
+-			  enum v4l2_field field)
 -{
--	if (i->index != 0)
+-	struct viu_fh  *fh  = vq->priv_data;
+-	struct viu_buf *buf = container_of(vb, struct viu_buf, vb);
+-	int rc;
+-
+-	BUG_ON(fh->fmt == NULL);
+-
+-	if (fh->width  < 48 || fh->width  > norm_maxw() ||
+-	    fh->height < 32 || fh->height > norm_maxh())
+-		return -EINVAL;
+-	buf->vb.size = (fh->width * fh->height * fh->fmt->depth) >> 3;
+-	if (buf->vb.baddr != 0 && buf->vb.bsize < buf->vb.size)
 -		return -EINVAL;
 -
--	strscpy(i->name, "Camera", sizeof(i->name));
--	i->type = V4L2_INPUT_TYPE_CAMERA;
+-	if (buf->fmt       != fh->fmt	 ||
+-	    buf->vb.width  != fh->width  ||
+-	    buf->vb.height != fh->height ||
+-	    buf->vb.field  != field) {
+-		buf->fmt       = fh->fmt;
+-		buf->vb.width  = fh->width;
+-		buf->vb.height = fh->height;
+-		buf->vb.field  = field;
+-	}
+-
+-	if (buf->vb.state == VIDEOBUF_NEEDS_INIT) {
+-		rc = videobuf_iolock(vq, &buf->vb, NULL);
+-		if (rc != 0)
+-			goto fail;
+-
+-		buf->vb.width  = fh->width;
+-		buf->vb.height = fh->height;
+-		buf->vb.field  = field;
+-		buf->fmt       = fh->fmt;
+-	}
+-
+-	buf->vb.state = VIDEOBUF_PREPARED;
+-	return 0;
+-
+-fail:
+-	free_buffer(vq, buf);
+-	return rc;
+-}
+-
+-static void buffer_queue(struct videobuf_queue *vq, struct videobuf_buffer *vb)
+-{
+-	struct viu_buf       *buf     = container_of(vb, struct viu_buf, vb);
+-	struct viu_fh        *fh      = vq->priv_data;
+-	struct viu_dev       *dev     = fh->dev;
+-	struct viu_dmaqueue  *vidq    = &dev->vidq;
+-	struct viu_buf       *prev;
+-
+-	if (!list_empty(&vidq->queued)) {
+-		dprintk(1, "adding vb queue=%p\n", &buf->vb.queue);
+-		dprintk(1, "vidq pointer 0x%p, queued 0x%p\n",
+-				vidq, &vidq->queued);
+-		dprintk(1, "dev %p, queued: self %p, next %p, head %p\n",
+-			dev, &vidq->queued, vidq->queued.next,
+-			vidq->queued.prev);
+-		list_add_tail(&buf->vb.queue, &vidq->queued);
+-		buf->vb.state = VIDEOBUF_QUEUED;
+-		dprintk(2, "[%p/%d] buffer_queue - append to queued\n",
+-			buf, buf->vb.i);
+-	} else if (list_empty(&vidq->active)) {
+-		dprintk(1, "adding vb active=%p\n", &buf->vb.queue);
+-		list_add_tail(&buf->vb.queue, &vidq->active);
+-		buf->vb.state = VIDEOBUF_ACTIVE;
+-		mod_timer(&vidq->timeout, jiffies+BUFFER_TIMEOUT);
+-		dprintk(2, "[%p/%d] buffer_queue - first active\n",
+-			buf, buf->vb.i);
+-
+-		buffer_activate(dev, buf);
+-	} else {
+-		dprintk(1, "adding vb queue2=%p\n", &buf->vb.queue);
+-		prev = list_entry(vidq->active.prev, struct viu_buf, vb.queue);
+-		if (prev->vb.width  == buf->vb.width  &&
+-		    prev->vb.height == buf->vb.height &&
+-		    prev->fmt       == buf->fmt) {
+-			list_add_tail(&buf->vb.queue, &vidq->active);
+-			buf->vb.state = VIDEOBUF_ACTIVE;
+-			dprintk(2, "[%p/%d] buffer_queue - append to active\n",
+-				buf, buf->vb.i);
+-		} else {
+-			list_add_tail(&buf->vb.queue, &vidq->queued);
+-			buf->vb.state = VIDEOBUF_QUEUED;
+-			dprintk(2, "[%p/%d] buffer_queue - first queued\n",
+-				buf, buf->vb.i);
+-		}
+-	}
+-}
+-
+-static void buffer_release(struct videobuf_queue *vq,
+-				struct videobuf_buffer *vb)
+-{
+-	struct viu_buf *buf  = container_of(vb, struct viu_buf, vb);
+-	struct viu_fh  *fh   = vq->priv_data;
+-	struct viu_dev *dev  = (struct viu_dev *)fh->dev;
+-
+-	viu_stop_dma(dev);
+-	free_buffer(vq, buf);
+-}
+-
+-static const struct videobuf_queue_ops viu_video_qops = {
+-	.buf_setup      = buffer_setup,
+-	.buf_prepare    = buffer_prepare,
+-	.buf_queue      = buffer_queue,
+-	.buf_release    = buffer_release,
+-};
+-
+-/*
+- * IOCTL vidioc handling
+- */
+-static int vidioc_querycap(struct file *file, void *priv,
+-			   struct v4l2_capability *cap)
+-{
+-	strscpy(cap->driver, "viu", sizeof(cap->driver));
+-	strscpy(cap->card, "viu", sizeof(cap->card));
+-	strscpy(cap->bus_info, "platform:viu", sizeof(cap->bus_info));
+-	return 0;
+-}
+-
+-static int vidioc_enum_fmt(struct file *file, void  *priv,
+-					struct v4l2_fmtdesc *f)
+-{
+-	int index = f->index;
+-
+-	if (f->index >= NUM_FORMATS)
+-		return -EINVAL;
+-
+-	f->pixelformat = formats[index].fourcc;
+-	return 0;
+-}
+-
+-static int vidioc_g_fmt_cap(struct file *file, void *priv,
+-					struct v4l2_format *f)
+-{
+-	struct viu_fh *fh = priv;
+-
+-	f->fmt.pix.width        = fh->width;
+-	f->fmt.pix.height       = fh->height;
+-	f->fmt.pix.field        = fh->vb_vidq.field;
+-	f->fmt.pix.pixelformat  = fh->fmt->pixelformat;
+-	f->fmt.pix.bytesperline =
+-			(f->fmt.pix.width * fh->fmt->depth) >> 3;
+-	f->fmt.pix.sizeimage	= fh->sizeimage;
+-	f->fmt.pix.colorspace	= V4L2_COLORSPACE_SMPTE170M;
+-	return 0;
+-}
+-
+-static int vidioc_try_fmt_cap(struct file *file, void *priv,
+-					struct v4l2_format *f)
+-{
+-	struct viu_fmt *fmt;
+-	unsigned int maxw, maxh;
+-
+-	fmt = format_by_fourcc(f->fmt.pix.pixelformat);
+-	if (!fmt) {
+-		dprintk(1, "Fourcc format (0x%08x) invalid.",
+-			f->fmt.pix.pixelformat);
+-		return -EINVAL;
+-	}
+-
+-	maxw  = norm_maxw();
+-	maxh  = norm_maxh();
+-
+-	f->fmt.pix.field = V4L2_FIELD_INTERLACED;
+-	if (f->fmt.pix.height < 32)
+-		f->fmt.pix.height = 32;
+-	if (f->fmt.pix.height > maxh)
+-		f->fmt.pix.height = maxh;
+-	if (f->fmt.pix.width < 48)
+-		f->fmt.pix.width = 48;
+-	if (f->fmt.pix.width > maxw)
+-		f->fmt.pix.width = maxw;
+-	f->fmt.pix.width &= ~0x03;
+-	f->fmt.pix.bytesperline =
+-		(f->fmt.pix.width * fmt->depth) >> 3;
+-	f->fmt.pix.sizeimage = f->fmt.pix.height * f->fmt.pix.bytesperline;
+-	f->fmt.pix.colorspace = V4L2_COLORSPACE_SMPTE170M;
 -
 -	return 0;
 -}
 -
--static int vidioc_g_input(struct file *file, void *fh, unsigned int *i)
+-static int vidioc_s_fmt_cap(struct file *file, void *priv,
+-					struct v4l2_format *f)
+-{
+-	struct viu_fh *fh = priv;
+-	int ret;
+-
+-	ret = vidioc_try_fmt_cap(file, fh, f);
+-	if (ret < 0)
+-		return ret;
+-
+-	fh->fmt           = format_by_fourcc(f->fmt.pix.pixelformat);
+-	fh->width         = f->fmt.pix.width;
+-	fh->height        = f->fmt.pix.height;
+-	fh->sizeimage     = f->fmt.pix.sizeimage;
+-	fh->vb_vidq.field = f->fmt.pix.field;
+-	fh->type          = f->type;
+-	return 0;
+-}
+-
+-static int vidioc_g_fmt_overlay(struct file *file, void *priv,
+-					struct v4l2_format *f)
+-{
+-	struct viu_fh *fh = priv;
+-
+-	f->fmt.win = fh->win;
+-	return 0;
+-}
+-
+-static int verify_preview(struct viu_dev *dev, struct v4l2_window *win)
+-{
+-	enum v4l2_field field;
+-	int maxw, maxh;
+-
+-	if (dev->ovbuf.base == NULL)
+-		return -EINVAL;
+-	if (dev->ovfmt == NULL)
+-		return -EINVAL;
+-	if (win->w.width < 48 || win->w.height < 32)
+-		return -EINVAL;
+-
+-	field = win->field;
+-	maxw  = dev->crop_current.width;
+-	maxh  = dev->crop_current.height;
+-
+-	if (field == V4L2_FIELD_ANY) {
+-		field = (win->w.height > maxh/2)
+-			? V4L2_FIELD_INTERLACED
+-			: V4L2_FIELD_TOP;
+-	}
+-	switch (field) {
+-	case V4L2_FIELD_TOP:
+-	case V4L2_FIELD_BOTTOM:
+-		maxh = maxh / 2;
+-		break;
+-	case V4L2_FIELD_INTERLACED:
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
+-
+-	win->field = field;
+-	if (win->w.width > maxw)
+-		win->w.width = maxw;
+-	if (win->w.height > maxh)
+-		win->w.height = maxh;
+-	return 0;
+-}
+-
+-inline void viu_activate_overlay(struct viu_reg __iomem *vr)
+-{
+-	iowrite32be(reg_val.field_base_addr, &vr->field_base_addr);
+-	iowrite32be(reg_val.dma_inc, &vr->dma_inc);
+-	iowrite32be(reg_val.picture_count, &vr->picture_count);
+-}
+-
+-static int viu_setup_preview(struct viu_dev *dev, struct viu_fh *fh)
+-{
+-	int bpp;
+-
+-	dprintk(1, "%s %dx%d\n", __func__,
+-		fh->win.w.width, fh->win.w.height);
+-
+-	reg_val.status_cfg = 0;
+-
+-	/* setup window */
+-	reg_val.picture_count = (fh->win.w.height / 2) << 16 |
+-				fh->win.w.width;
+-
+-	/* setup color depth and dma increment */
+-	bpp = dev->ovfmt->depth / 8;
+-	switch (bpp) {
+-	case 2:
+-		reg_val.status_cfg &= ~MODE_32BIT;
+-		reg_val.dma_inc = fh->win.w.width * 2;
+-		break;
+-	case 4:
+-		reg_val.status_cfg |= MODE_32BIT;
+-		reg_val.dma_inc = fh->win.w.width * 4;
+-		break;
+-	default:
+-		dprintk(0, "device doesn't support color depth(%d)\n",
+-			bpp * 8);
+-		return -EINVAL;
+-	}
+-
+-	dev->ovfield = fh->win.field;
+-	if (!V4L2_FIELD_HAS_BOTH(dev->ovfield))
+-		reg_val.dma_inc = 0;
+-
+-	reg_val.status_cfg |= DMA_ACT | INT_DMA_END_EN | INT_FIELD_EN;
+-
+-	/* setup the base address of the overlay buffer */
+-	reg_val.field_base_addr = (u32)(long)dev->ovbuf.base;
+-
+-	return 0;
+-}
+-
+-static int vidioc_s_fmt_overlay(struct file *file, void *priv,
+-					struct v4l2_format *f)
+-{
+-	struct viu_fh  *fh  = priv;
+-	struct viu_dev *dev = (struct viu_dev *)fh->dev;
+-	unsigned long  flags;
+-	int err;
+-
+-	err = verify_preview(dev, &f->fmt.win);
+-	if (err)
+-		return err;
+-
+-	fh->win = f->fmt.win;
+-
+-	spin_lock_irqsave(&dev->slock, flags);
+-	viu_setup_preview(dev, fh);
+-	spin_unlock_irqrestore(&dev->slock, flags);
+-	return 0;
+-}
+-
+-static int vidioc_try_fmt_overlay(struct file *file, void *priv,
+-					struct v4l2_format *f)
+-{
+-	return 0;
+-}
+-
+-static int vidioc_overlay(struct file *file, void *priv, unsigned int on)
+-{
+-	struct viu_fh  *fh  = priv;
+-	struct viu_dev *dev = (struct viu_dev *)fh->dev;
+-	unsigned long  flags;
+-
+-	if (on) {
+-		spin_lock_irqsave(&dev->slock, flags);
+-		viu_activate_overlay(dev->vr);
+-		dev->ovenable = 1;
+-
+-		/* start dma */
+-		viu_start_dma(dev);
+-		spin_unlock_irqrestore(&dev->slock, flags);
+-	} else {
+-		viu_stop_dma(dev);
+-		dev->ovenable = 0;
+-	}
+-
+-	return 0;
+-}
+-
+-static int vidioc_g_fbuf(struct file *file, void *priv, struct v4l2_framebuffer *arg)
+-{
+-	struct viu_fh  *fh = priv;
+-	struct viu_dev *dev = fh->dev;
+-	struct v4l2_framebuffer *fb = arg;
+-
+-	*fb = dev->ovbuf;
+-	fb->capability = V4L2_FBUF_CAP_LIST_CLIPPING;
+-	return 0;
+-}
+-
+-static int vidioc_s_fbuf(struct file *file, void *priv, const struct v4l2_framebuffer *arg)
+-{
+-	struct viu_fh  *fh = priv;
+-	struct viu_dev *dev = fh->dev;
+-	const struct v4l2_framebuffer *fb = arg;
+-	struct viu_fmt *fmt;
+-
+-	if (!capable(CAP_SYS_ADMIN) && !capable(CAP_SYS_RAWIO))
+-		return -EPERM;
+-
+-	/* check args */
+-	fmt = format_by_fourcc(fb->fmt.pixelformat);
+-	if (fmt == NULL)
+-		return -EINVAL;
+-
+-	/* ok, accept it */
+-	dev->ovbuf = *fb;
+-	dev->ovfmt = fmt;
+-	if (dev->ovbuf.fmt.bytesperline == 0) {
+-		dev->ovbuf.fmt.bytesperline =
+-			dev->ovbuf.fmt.width * fmt->depth / 8;
+-	}
+-	return 0;
+-}
+-
+-static int vidioc_reqbufs(struct file *file, void *priv,
+-				struct v4l2_requestbuffers *p)
+-{
+-	struct viu_fh *fh = priv;
+-
+-	return videobuf_reqbufs(&fh->vb_vidq, p);
+-}
+-
+-static int vidioc_querybuf(struct file *file, void *priv,
+-					struct v4l2_buffer *p)
+-{
+-	struct viu_fh *fh = priv;
+-
+-	return videobuf_querybuf(&fh->vb_vidq, p);
+-}
+-
+-static int vidioc_qbuf(struct file *file, void *priv, struct v4l2_buffer *p)
+-{
+-	struct viu_fh *fh = priv;
+-
+-	return videobuf_qbuf(&fh->vb_vidq, p);
+-}
+-
+-static int vidioc_dqbuf(struct file *file, void *priv, struct v4l2_buffer *p)
+-{
+-	struct viu_fh *fh = priv;
+-
+-	return videobuf_dqbuf(&fh->vb_vidq, p,
+-				file->f_flags & O_NONBLOCK);
+-}
+-
+-static int vidioc_streamon(struct file *file, void *priv, enum v4l2_buf_type i)
+-{
+-	struct viu_fh *fh = priv;
+-	struct viu_dev *dev = fh->dev;
+-
+-	if (fh->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-		return -EINVAL;
+-	if (fh->type != i)
+-		return -EINVAL;
+-
+-	if (dev->ovenable)
+-		dev->ovenable = 0;
+-
+-	viu_start_dma(fh->dev);
+-
+-	return videobuf_streamon(&fh->vb_vidq);
+-}
+-
+-static int vidioc_streamoff(struct file *file, void *priv, enum v4l2_buf_type i)
+-{
+-	struct viu_fh  *fh = priv;
+-
+-	if (fh->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-		return -EINVAL;
+-	if (fh->type != i)
+-		return -EINVAL;
+-
+-	viu_stop_dma(fh->dev);
+-
+-	return videobuf_streamoff(&fh->vb_vidq);
+-}
+-
+-#define decoder_call(viu, o, f, args...) \
+-	v4l2_subdev_call(viu->decoder, o, f, ##args)
+-
+-static int vidioc_querystd(struct file *file, void *priv, v4l2_std_id *std_id)
+-{
+-	struct viu_fh *fh = priv;
+-
+-	decoder_call(fh->dev, video, querystd, std_id);
+-	return 0;
+-}
+-
+-static int vidioc_s_std(struct file *file, void *priv, v4l2_std_id id)
+-{
+-	struct viu_fh *fh = priv;
+-
+-	fh->dev->std = id;
+-	decoder_call(fh->dev, video, s_std, id);
+-	return 0;
+-}
+-
+-static int vidioc_g_std(struct file *file, void *priv, v4l2_std_id *std_id)
+-{
+-	struct viu_fh *fh = priv;
+-
+-	*std_id = fh->dev->std;
+-	return 0;
+-}
+-
+-/* only one input in this driver */
+-static int vidioc_enum_input(struct file *file, void *priv,
+-					struct v4l2_input *inp)
+-{
+-	struct viu_fh *fh = priv;
+-
+-	if (inp->index != 0)
+-		return -EINVAL;
+-
+-	inp->type = V4L2_INPUT_TYPE_CAMERA;
+-	inp->std = fh->dev->vdev->tvnorms;
+-	strscpy(inp->name, "Camera", sizeof(inp->name));
+-	return 0;
+-}
+-
+-static int vidioc_g_input(struct file *file, void *priv, unsigned int *i)
 -{
 -	*i = 0;
 -	return 0;
 -}
 -
--static int vidioc_s_input(struct file *file, void *fh, unsigned int i)
+-static int vidioc_s_input(struct file *file, void *priv, unsigned int i)
 -{
--	if (i != 0)
+-	struct viu_fh *fh = priv;
+-
+-	if (i)
 -		return -EINVAL;
 -
+-	decoder_call(fh->dev, video, s_routing, i, 0, 0);
 -	return 0;
 -}
 -
--static int meye_s_ctrl(struct v4l2_ctrl *ctrl)
+-inline void viu_activate_next_buf(struct viu_dev *dev,
+-				struct viu_dmaqueue *viuq)
 -{
--	mutex_lock(&meye.lock);
--	switch (ctrl->id) {
--	case V4L2_CID_BRIGHTNESS:
--		sony_pic_camera_command(
--			SONY_PIC_COMMAND_SETCAMERABRIGHTNESS, ctrl->val);
--		meye.brightness = ctrl->val << 10;
--		break;
--	case V4L2_CID_HUE:
--		sony_pic_camera_command(
--			SONY_PIC_COMMAND_SETCAMERAHUE, ctrl->val);
--		meye.hue = ctrl->val << 10;
--		break;
--	case V4L2_CID_CONTRAST:
--		sony_pic_camera_command(
--			SONY_PIC_COMMAND_SETCAMERACONTRAST, ctrl->val);
--		meye.contrast = ctrl->val << 10;
--		break;
--	case V4L2_CID_SATURATION:
--		sony_pic_camera_command(
--			SONY_PIC_COMMAND_SETCAMERACOLOR, ctrl->val);
--		meye.colour = ctrl->val << 10;
--		break;
--	case V4L2_CID_MEYE_AGC:
--		sony_pic_camera_command(
--			SONY_PIC_COMMAND_SETCAMERAAGC, ctrl->val);
--		meye.params.agc = ctrl->val;
--		break;
--	case V4L2_CID_SHARPNESS:
--		sony_pic_camera_command(
--			SONY_PIC_COMMAND_SETCAMERASHARPNESS, ctrl->val);
--		meye.params.sharpness = ctrl->val;
--		break;
--	case V4L2_CID_MEYE_PICTURE:
--		sony_pic_camera_command(
--			SONY_PIC_COMMAND_SETCAMERAPICTURE, ctrl->val);
--		meye.params.picture = ctrl->val;
--		break;
--	case V4L2_CID_JPEG_COMPRESSION_QUALITY:
--		meye.params.quality = ctrl->val;
--		break;
--	case V4L2_CID_MEYE_FRAMERATE:
--		meye.params.framerate = ctrl->val;
--		break;
--	default:
--		mutex_unlock(&meye.lock);
--		return -EINVAL;
--	}
--	mutex_unlock(&meye.lock);
+-	struct viu_dmaqueue *vidq = viuq;
+-	struct viu_buf *buf;
 -
--	return 0;
+-	/* launch another DMA operation for an active/queued buffer */
+-	if (!list_empty(&vidq->active)) {
+-		buf = list_entry(vidq->active.next, struct viu_buf,
+-					vb.queue);
+-		dprintk(1, "start another queued buffer: 0x%p\n", buf);
+-		buffer_activate(dev, buf);
+-	} else if (!list_empty(&vidq->queued)) {
+-		buf = list_entry(vidq->queued.next, struct viu_buf,
+-					vb.queue);
+-		list_del(&buf->vb.queue);
+-
+-		dprintk(1, "start another queued buffer: 0x%p\n", buf);
+-		list_add_tail(&buf->vb.queue, &vidq->active);
+-		buf->vb.state = VIDEOBUF_ACTIVE;
+-		buffer_activate(dev, buf);
+-	}
 -}
 -
--static int vidioc_enum_fmt_vid_cap(struct file *file, void *fh,
--				struct v4l2_fmtdesc *f)
+-inline void viu_default_settings(struct viu_reg __iomem *vr)
 -{
--	if (f->index > 1)
--		return -EINVAL;
--
--	if (f->index == 0) {
--		/* standard YUV 422 capture */
--		f->flags = 0;
--		f->pixelformat = V4L2_PIX_FMT_YUYV;
--	} else {
--		/* compressed MJPEG capture */
--		f->pixelformat = V4L2_PIX_FMT_MJPEG;
--	}
--
--	return 0;
+-	iowrite32be(0x9512A254, &vr->luminance);
+-	iowrite32be(0x03310000, &vr->chroma_r);
+-	iowrite32be(0x06600F38, &vr->chroma_g);
+-	iowrite32be(0x00000409, &vr->chroma_b);
+-	iowrite32be(0x000000ff, &vr->alpha);
+-	iowrite32be(0x00000090, &vr->req_alarm);
+-	dprintk(1, "status reg: 0x%08x, field base: 0x%08x\n",
+-		ioread32be(&vr->status_cfg), ioread32be(&vr->field_base_addr));
 -}
 -
--static int vidioc_try_fmt_vid_cap(struct file *file, void *fh,
--				struct v4l2_format *f)
+-static void viu_overlay_intr(struct viu_dev *dev, u32 status)
 -{
--	if (f->fmt.pix.pixelformat != V4L2_PIX_FMT_YUYV &&
--	    f->fmt.pix.pixelformat != V4L2_PIX_FMT_MJPEG)
--		return -EINVAL;
+-	struct viu_reg __iomem *vr = dev->vr;
 -
--	if (f->fmt.pix.field != V4L2_FIELD_ANY &&
--	    f->fmt.pix.field != V4L2_FIELD_NONE)
--		return -EINVAL;
+-	if (status & INT_DMA_END_STATUS)
+-		dev->dma_done = 1;
 -
--	f->fmt.pix.field = V4L2_FIELD_NONE;
+-	if (status & INT_FIELD_STATUS) {
+-		if (dev->dma_done) {
+-			u32 addr = reg_val.field_base_addr;
 -
--	if (f->fmt.pix.width <= 320) {
--		f->fmt.pix.width = 320;
--		f->fmt.pix.height = 240;
--	} else {
--		f->fmt.pix.width = 640;
--		f->fmt.pix.height = 480;
+-			dev->dma_done = 0;
+-			if (status & FIELD_NO)
+-				addr += reg_val.dma_inc;
+-
+-			iowrite32be(addr, &vr->field_base_addr);
+-			iowrite32be(reg_val.dma_inc, &vr->dma_inc);
+-			iowrite32be((status & 0xffc0ffff) |
+-				 (status & INT_ALL_STATUS) |
+-				 reg_val.status_cfg, &vr->status_cfg);
+-		} else if (status & INT_VSYNC_STATUS) {
+-			iowrite32be((status & 0xffc0ffff) |
+-				 (status & INT_ALL_STATUS) |
+-				 reg_val.status_cfg, &vr->status_cfg);
+-		}
 -	}
--
--	f->fmt.pix.bytesperline = f->fmt.pix.width * 2;
--	f->fmt.pix.sizeimage = f->fmt.pix.height *
--			       f->fmt.pix.bytesperline;
--	f->fmt.pix.colorspace = 0;
--
--	return 0;
 -}
 -
--static int vidioc_g_fmt_vid_cap(struct file *file, void *fh,
--				    struct v4l2_format *f)
+-static void viu_capture_intr(struct viu_dev *dev, u32 status)
 -{
--	switch (meye.mchip_mode) {
--	case MCHIP_HIC_MODE_CONT_OUT:
--	default:
--		f->fmt.pix.pixelformat = V4L2_PIX_FMT_YUYV;
--		break;
--	case MCHIP_HIC_MODE_CONT_COMP:
--		f->fmt.pix.pixelformat = V4L2_PIX_FMT_MJPEG;
--		break;
+-	struct viu_dmaqueue *vidq = &dev->vidq;
+-	struct viu_reg __iomem *vr = dev->vr;
+-	struct viu_buf *buf;
+-	int field_num;
+-	int need_two;
+-	int dma_done = 0;
+-
+-	field_num = status & FIELD_NO;
+-	need_two = V4L2_FIELD_HAS_BOTH(dev->capfield);
+-
+-	if (status & INT_DMA_END_STATUS) {
+-		dma_done = 1;
+-		if (((field_num == 0) && (dev->field == 0)) ||
+-		    (field_num && (dev->field == 1)))
+-			dev->field++;
 -	}
 -
--	f->fmt.pix.field = V4L2_FIELD_NONE;
--	f->fmt.pix.width = mchip_hsize();
--	f->fmt.pix.height = mchip_vsize();
--	f->fmt.pix.bytesperline = f->fmt.pix.width * 2;
--	f->fmt.pix.sizeimage = f->fmt.pix.height *
--			       f->fmt.pix.bytesperline;
+-	if (status & INT_FIELD_STATUS) {
+-		dprintk(1, "irq: field %d, done %d\n",
+-			!!field_num, dma_done);
+-		if (unlikely(dev->first)) {
+-			if (field_num == 0) {
+-				dev->first = 0;
+-				dprintk(1, "activate first buf\n");
+-				viu_activate_next_buf(dev, vidq);
+-			} else
+-				dprintk(1, "wait field 0\n");
+-			return;
+-		}
 -
--	return 0;
--}
+-		/* setup buffer address for next dma operation */
+-		if (!list_empty(&vidq->active)) {
+-			u32 addr = reg_val.field_base_addr;
 -
--static int vidioc_s_fmt_vid_cap(struct file *file, void *fh,
--				    struct v4l2_format *f)
--{
--	if (f->fmt.pix.pixelformat != V4L2_PIX_FMT_YUYV &&
--	    f->fmt.pix.pixelformat != V4L2_PIX_FMT_MJPEG)
--		return -EINVAL;
--
--	if (f->fmt.pix.field != V4L2_FIELD_ANY &&
--	    f->fmt.pix.field != V4L2_FIELD_NONE)
--		return -EINVAL;
--
--	f->fmt.pix.field = V4L2_FIELD_NONE;
--	mutex_lock(&meye.lock);
--
--	if (f->fmt.pix.width <= 320) {
--		f->fmt.pix.width = 320;
--		f->fmt.pix.height = 240;
--		meye.params.subsample = 1;
--	} else {
--		f->fmt.pix.width = 640;
--		f->fmt.pix.height = 480;
--		meye.params.subsample = 0;
--	}
--
--	switch (f->fmt.pix.pixelformat) {
--	case V4L2_PIX_FMT_YUYV:
--		meye.mchip_mode = MCHIP_HIC_MODE_CONT_OUT;
--		break;
--	case V4L2_PIX_FMT_MJPEG:
--		meye.mchip_mode = MCHIP_HIC_MODE_CONT_COMP;
--		break;
--	}
--
--	mutex_unlock(&meye.lock);
--	f->fmt.pix.bytesperline = f->fmt.pix.width * 2;
--	f->fmt.pix.sizeimage = f->fmt.pix.height *
--			       f->fmt.pix.bytesperline;
--	f->fmt.pix.colorspace = 0;
--
--	return 0;
--}
--
--static int vidioc_reqbufs(struct file *file, void *fh,
--				struct v4l2_requestbuffers *req)
--{
--	int i;
--
--	if (req->memory != V4L2_MEMORY_MMAP)
--		return -EINVAL;
--
--	if (meye.grab_fbuffer && req->count == gbuffers) {
--		/* already allocated, no modifications */
--		return 0;
--	}
--
--	mutex_lock(&meye.lock);
--	if (meye.grab_fbuffer) {
--		for (i = 0; i < gbuffers; i++)
--			if (meye.vma_use_count[i]) {
--				mutex_unlock(&meye.lock);
--				return -EINVAL;
+-			if (field_num && need_two) {
+-				addr += reg_val.dma_inc;
+-				dprintk(1, "field 1, 0x%lx, dev field %d\n",
+-					(unsigned long)addr, dev->field);
 -			}
--		rvfree(meye.grab_fbuffer, gbuffers * gbufsize);
--		meye.grab_fbuffer = NULL;
+-			iowrite32be(addr, &vr->field_base_addr);
+-			iowrite32be(reg_val.dma_inc, &vr->dma_inc);
+-			iowrite32be((status & 0xffc0ffff) |
+-				 (status & INT_ALL_STATUS) |
+-				 reg_val.status_cfg, &vr->status_cfg);
+-			return;
+-		}
 -	}
 -
--	gbuffers = max(2, min((int)req->count, MEYE_MAX_BUFNBRS));
--	req->count = gbuffers;
--	meye.grab_fbuffer = rvmalloc(gbuffers * gbufsize);
+-	if (dma_done && field_num && (dev->field == 2)) {
+-		dev->field = 0;
+-		buf = list_entry(vidq->active.next,
+-				 struct viu_buf, vb.queue);
+-		dprintk(1, "viu/0: [%p/%d] 0x%lx/0x%lx: dma complete\n",
+-			buf, buf->vb.i,
+-			(unsigned long)videobuf_to_dma_contig(&buf->vb),
+-			(unsigned long)ioread32be(&vr->field_base_addr));
 -
--	if (!meye.grab_fbuffer) {
--		printk(KERN_ERR "meye: v4l framebuffer allocation failed\n");
--		mutex_unlock(&meye.lock);
--		return -ENOMEM;
+-		if (waitqueue_active(&buf->vb.done)) {
+-			list_del(&buf->vb.queue);
+-			buf->vb.ts = ktime_get_ns();
+-			buf->vb.state = VIDEOBUF_DONE;
+-			buf->vb.field_count++;
+-			wake_up(&buf->vb.done);
+-		}
+-		/* activate next dma buffer */
+-		viu_activate_next_buf(dev, vidq);
 -	}
--
--	for (i = 0; i < gbuffers; i++)
--		meye.vma_use_count[i] = 0;
--
--	mutex_unlock(&meye.lock);
--
--	return 0;
 -}
 -
--static int vidioc_querybuf(struct file *file, void *fh, struct v4l2_buffer *buf)
+-static irqreturn_t viu_intr(int irq, void *dev_id)
 -{
--	unsigned int index = buf->index;
+-	struct viu_dev *dev  = (struct viu_dev *)dev_id;
+-	struct viu_reg __iomem *vr = dev->vr;
+-	u32 status;
+-	u32 error;
 -
--	if (index >= gbuffers)
--		return -EINVAL;
+-	status = ioread32be(&vr->status_cfg);
 -
--	buf->bytesused = meye.grab_buffer[index].size;
--	buf->flags = V4L2_BUF_FLAG_MAPPED | V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
--
--	if (meye.grab_buffer[index].state == MEYE_BUF_USING)
--		buf->flags |= V4L2_BUF_FLAG_QUEUED;
--
--	if (meye.grab_buffer[index].state == MEYE_BUF_DONE)
--		buf->flags |= V4L2_BUF_FLAG_DONE;
--
--	buf->field = V4L2_FIELD_NONE;
--	v4l2_buffer_set_timestamp(buf, meye.grab_buffer[index].ts);
--	buf->sequence = meye.grab_buffer[index].sequence;
--	buf->memory = V4L2_MEMORY_MMAP;
--	buf->m.offset = index * gbufsize;
--	buf->length = gbufsize;
--
--	return 0;
--}
--
--static int vidioc_qbuf(struct file *file, void *fh, struct v4l2_buffer *buf)
--{
--	if (buf->memory != V4L2_MEMORY_MMAP)
--		return -EINVAL;
--
--	if (buf->index >= gbuffers)
--		return -EINVAL;
--
--	if (meye.grab_buffer[buf->index].state != MEYE_BUF_UNUSED)
--		return -EINVAL;
--
--	mutex_lock(&meye.lock);
--	buf->flags |= V4L2_BUF_FLAG_QUEUED;
--	buf->flags &= ~V4L2_BUF_FLAG_DONE;
--	meye.grab_buffer[buf->index].state = MEYE_BUF_USING;
--	kfifo_in_locked(&meye.grabq, (unsigned char *)&buf->index,
--			sizeof(int), &meye.grabq_lock);
--	mutex_unlock(&meye.lock);
--
--	return 0;
--}
--
--static int vidioc_dqbuf(struct file *file, void *fh, struct v4l2_buffer *buf)
--{
--	int reqnr;
--
--	if (buf->memory != V4L2_MEMORY_MMAP)
--		return -EINVAL;
--
--	mutex_lock(&meye.lock);
--
--	if (kfifo_len(&meye.doneq) == 0 && file->f_flags & O_NONBLOCK) {
--		mutex_unlock(&meye.lock);
--		return -EAGAIN;
+-	if (status & INT_ERROR_STATUS) {
+-		dev->irqs.error_irq++;
+-		error = status & ERR_MASK;
+-		if (error)
+-			dprintk(1, "Err: error(%d), times:%d!\n",
+-				error >> 4, dev->irqs.error_irq);
+-		/* Clear interrupt error bit and error flags */
+-		iowrite32be((status & 0xffc0ffff) | INT_ERROR_STATUS,
+-			    &vr->status_cfg);
 -	}
 -
--	if (wait_event_interruptible(meye.proc_list,
--				     kfifo_len(&meye.doneq) != 0) < 0) {
--		mutex_unlock(&meye.lock);
--		return -EINTR;
+-	if (status & INT_DMA_END_STATUS) {
+-		dev->irqs.dma_end_irq++;
+-		dev->dma_done = 1;
+-		dprintk(2, "VIU DMA end interrupt times: %d\n",
+-					dev->irqs.dma_end_irq);
 -	}
 -
--	if (!kfifo_out_locked(&meye.doneq, (unsigned char *)&reqnr,
--		       sizeof(int), &meye.doneq_lock)) {
--		mutex_unlock(&meye.lock);
+-	if (status & INT_HSYNC_STATUS)
+-		dev->irqs.hsync_irq++;
+-
+-	if (status & INT_FIELD_STATUS) {
+-		dev->irqs.field_irq++;
+-		dprintk(2, "VIU field interrupt times: %d\n",
+-					dev->irqs.field_irq);
+-	}
+-
+-	if (status & INT_VSTART_STATUS)
+-		dev->irqs.vstart_irq++;
+-
+-	if (status & INT_VSYNC_STATUS) {
+-		dev->irqs.vsync_irq++;
+-		dprintk(2, "VIU vsync interrupt times: %d\n",
+-			dev->irqs.vsync_irq);
+-	}
+-
+-	/* clear all pending irqs */
+-	status = ioread32be(&vr->status_cfg);
+-	iowrite32be((status & 0xffc0ffff) | (status & INT_ALL_STATUS),
+-		    &vr->status_cfg);
+-
+-	if (dev->ovenable) {
+-		viu_overlay_intr(dev, status);
+-		return IRQ_HANDLED;
+-	}
+-
+-	/* Capture mode */
+-	viu_capture_intr(dev, status);
+-	return IRQ_HANDLED;
+-}
+-
+-/*
+- * File operations for the device
+- */
+-static int viu_open(struct file *file)
+-{
+-	struct video_device *vdev = video_devdata(file);
+-	struct viu_dev *dev = video_get_drvdata(vdev);
+-	struct viu_fh *fh;
+-	struct viu_reg __iomem *vr;
+-	int minor = vdev->minor;
+-	u32 status_cfg;
+-
+-	dprintk(1, "viu: open (minor=%d)\n", minor);
+-
+-	dev->users++;
+-	if (dev->users > 1) {
+-		dev->users--;
 -		return -EBUSY;
 -	}
 -
--	if (meye.grab_buffer[reqnr].state != MEYE_BUF_DONE) {
--		mutex_unlock(&meye.lock);
--		return -EINVAL;
+-	vr = dev->vr;
+-
+-	dprintk(1, "open minor=%d type=%s users=%d\n", minor,
+-		v4l2_type_names[V4L2_BUF_TYPE_VIDEO_CAPTURE], dev->users);
+-
+-	if (mutex_lock_interruptible(&dev->lock)) {
+-		dev->users--;
+-		return -ERESTARTSYS;
 -	}
 -
--	buf->index = reqnr;
--	buf->bytesused = meye.grab_buffer[reqnr].size;
--	buf->flags = V4L2_BUF_FLAG_MAPPED | V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
--	buf->field = V4L2_FIELD_NONE;
--	v4l2_buffer_set_timestamp(buf, meye.grab_buffer[reqnr].ts);
--	buf->sequence = meye.grab_buffer[reqnr].sequence;
--	buf->memory = V4L2_MEMORY_MMAP;
--	buf->m.offset = reqnr * gbufsize;
--	buf->length = gbufsize;
--	meye.grab_buffer[reqnr].state = MEYE_BUF_UNUSED;
--	mutex_unlock(&meye.lock);
+-	/* allocate and initialize per filehandle data */
+-	fh = kzalloc(sizeof(*fh), GFP_KERNEL);
+-	if (!fh) {
+-		dev->users--;
+-		mutex_unlock(&dev->lock);
+-		return -ENOMEM;
+-	}
 -
+-	v4l2_fh_init(&fh->fh, vdev);
+-	file->private_data = fh;
+-	fh->dev = dev;
+-
+-	fh->type     = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+-	fh->fmt      = format_by_fourcc(V4L2_PIX_FMT_RGB32);
+-	fh->width    = norm_maxw();
+-	fh->height   = norm_maxh();
+-	dev->crop_current.width  = fh->width;
+-	dev->crop_current.height = fh->height;
+-
+-	dprintk(1, "Open: fh=%p, dev=%p, dev->vidq=%p\n", fh, dev, &dev->vidq);
+-	dprintk(1, "Open: list_empty queued=%d\n",
+-		list_empty(&dev->vidq.queued));
+-	dprintk(1, "Open: list_empty active=%d\n",
+-		list_empty(&dev->vidq.active));
+-
+-	viu_default_settings(vr);
+-
+-	status_cfg = ioread32be(&vr->status_cfg);
+-	iowrite32be(status_cfg & ~(INT_VSYNC_EN | INT_HSYNC_EN |
+-				INT_FIELD_EN | INT_VSTART_EN |
+-				INT_DMA_END_EN | INT_ERROR_EN | INT_ECC_EN),
+-		    &vr->status_cfg);
+-
+-	status_cfg = ioread32be(&vr->status_cfg);
+-	iowrite32be(status_cfg | INT_ALL_STATUS, &vr->status_cfg);
+-
+-	spin_lock_init(&fh->vbq_lock);
+-	videobuf_queue_dma_contig_init(&fh->vb_vidq, &viu_video_qops,
+-				       dev->dev, &fh->vbq_lock,
+-				       fh->type, V4L2_FIELD_INTERLACED,
+-				       sizeof(struct viu_buf), fh,
+-				       &fh->dev->lock);
+-	v4l2_fh_add(&fh->fh);
+-	mutex_unlock(&dev->lock);
 -	return 0;
 -}
 -
--static int vidioc_streamon(struct file *file, void *fh, enum v4l2_buf_type i)
+-static ssize_t viu_read(struct file *file, char __user *data, size_t count,
+-			loff_t *ppos)
 -{
--	mutex_lock(&meye.lock);
+-	struct viu_fh *fh = file->private_data;
+-	struct viu_dev *dev = fh->dev;
+-	int ret = 0;
 -
--	switch (meye.mchip_mode) {
--	case MCHIP_HIC_MODE_CONT_OUT:
--		mchip_continuous_start();
--		break;
--	case MCHIP_HIC_MODE_CONT_COMP:
--		mchip_cont_compression_start();
--		break;
--	default:
--		mutex_unlock(&meye.lock);
--		return -EINVAL;
+-	dprintk(2, "%s\n", __func__);
+-	if (dev->ovenable)
+-		dev->ovenable = 0;
+-
+-	if (fh->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) {
+-		if (mutex_lock_interruptible(&dev->lock))
+-			return -ERESTARTSYS;
+-		viu_start_dma(dev);
+-		ret = videobuf_read_stream(&fh->vb_vidq, data, count,
+-				ppos, 0, file->f_flags & O_NONBLOCK);
+-		mutex_unlock(&dev->lock);
+-		return ret;
 -	}
--
--	mutex_unlock(&meye.lock);
--
 -	return 0;
 -}
 -
--static int vidioc_streamoff(struct file *file, void *fh, enum v4l2_buf_type i)
+-static __poll_t viu_poll(struct file *file, struct poll_table_struct *wait)
 -{
--	mutex_lock(&meye.lock);
--	mchip_hic_stop();
--	kfifo_reset(&meye.grabq);
--	kfifo_reset(&meye.doneq);
--
--	for (i = 0; i < MEYE_MAX_BUFNBRS; i++)
--		meye.grab_buffer[i].state = MEYE_BUF_UNUSED;
--
--	mutex_unlock(&meye.lock);
--	return 0;
--}
--
--static long vidioc_default(struct file *file, void *fh, bool valid_prio,
--			   unsigned int cmd, void *arg)
--{
--	switch (cmd) {
--	case MEYEIOC_G_PARAMS:
--		return meyeioc_g_params((struct meye_params *) arg);
--
--	case MEYEIOC_S_PARAMS:
--		return meyeioc_s_params((struct meye_params *) arg);
--
--	case MEYEIOC_QBUF_CAPT:
--		return meyeioc_qbuf_capt((int *) arg);
--
--	case MEYEIOC_SYNC:
--		return meyeioc_sync(file, fh, (int *) arg);
--
--	case MEYEIOC_STILLCAPT:
--		return meyeioc_stillcapt();
--
--	case MEYEIOC_STILLJCAPT:
--		return meyeioc_stilljcapt((int *) arg);
--
--	default:
--		return -ENOTTY;
--	}
--
--}
--
--static __poll_t meye_poll(struct file *file, poll_table *wait)
--{
+-	struct viu_fh *fh = file->private_data;
+-	struct videobuf_queue *q = &fh->vb_vidq;
+-	struct viu_dev *dev = fh->dev;
+-	__poll_t req_events = poll_requested_events(wait);
 -	__poll_t res = v4l2_ctrl_poll(file, wait);
 -
--	mutex_lock(&meye.lock);
--	poll_wait(file, &meye.proc_list, wait);
--	if (kfifo_len(&meye.doneq))
--		res |= EPOLLIN | EPOLLRDNORM;
--	mutex_unlock(&meye.lock);
+-	if (V4L2_BUF_TYPE_VIDEO_CAPTURE != fh->type)
+-		return EPOLLERR;
+-
+-	if (!(req_events & (EPOLLIN | EPOLLRDNORM)))
+-		return res;
+-
+-	mutex_lock(&dev->lock);
+-	res |= videobuf_poll_stream(file, q, wait);
+-	mutex_unlock(&dev->lock);
 -	return res;
 -}
 -
--static void meye_vm_open(struct vm_area_struct *vma)
+-static int viu_release(struct file *file)
 -{
--	long idx = (long)vma->vm_private_data;
--	meye.vma_use_count[idx]++;
--}
+-	struct viu_fh *fh = file->private_data;
+-	struct viu_dev *dev = fh->dev;
+-	int minor = video_devdata(file)->minor;
 -
--static void meye_vm_close(struct vm_area_struct *vma)
--{
--	long idx = (long)vma->vm_private_data;
--	meye.vma_use_count[idx]--;
--}
+-	mutex_lock(&dev->lock);
+-	viu_stop_dma(dev);
+-	videobuf_stop(&fh->vb_vidq);
+-	videobuf_mmap_free(&fh->vb_vidq);
+-	v4l2_fh_del(&fh->fh);
+-	v4l2_fh_exit(&fh->fh);
+-	mutex_unlock(&dev->lock);
 -
--static const struct vm_operations_struct meye_vm_ops = {
--	.open		= meye_vm_open,
--	.close		= meye_vm_close,
--};
+-	kfree(fh);
 -
--static int meye_mmap(struct file *file, struct vm_area_struct *vma)
--{
--	unsigned long start = vma->vm_start;
--	unsigned long size = vma->vm_end - vma->vm_start;
--	unsigned long offset = vma->vm_pgoff << PAGE_SHIFT;
--	unsigned long page, pos;
--
--	mutex_lock(&meye.lock);
--	if (size > gbuffers * gbufsize || offset > gbuffers * gbufsize - size) {
--		mutex_unlock(&meye.lock);
--		return -EINVAL;
--	}
--	if (!meye.grab_fbuffer) {
--		int i;
--
--		/* lazy allocation */
--		meye.grab_fbuffer = rvmalloc(gbuffers*gbufsize);
--		if (!meye.grab_fbuffer) {
--			printk(KERN_ERR "meye: v4l framebuffer allocation failed\n");
--			mutex_unlock(&meye.lock);
--			return -ENOMEM;
--		}
--		for (i = 0; i < gbuffers; i++)
--			meye.vma_use_count[i] = 0;
--	}
--	pos = (unsigned long)meye.grab_fbuffer + offset;
--
--	while (size > 0) {
--		page = vmalloc_to_pfn((void *)pos);
--		if (remap_pfn_range(vma, start, page, PAGE_SIZE, PAGE_SHARED)) {
--			mutex_unlock(&meye.lock);
--			return -EAGAIN;
--		}
--		start += PAGE_SIZE;
--		pos += PAGE_SIZE;
--		if (size > PAGE_SIZE)
--			size -= PAGE_SIZE;
--		else
--			size = 0;
--	}
--
--	vma->vm_ops = &meye_vm_ops;
--	vma->vm_flags &= ~VM_IO;	/* not I/O memory */
--	vma->vm_flags |= VM_DONTEXPAND | VM_DONTDUMP;
--	vma->vm_private_data = (void *) (offset / gbufsize);
--	meye_vm_open(vma);
--
--	mutex_unlock(&meye.lock);
+-	dev->users--;
+-	dprintk(1, "close (minor=%d, users=%d)\n",
+-		minor, dev->users);
 -	return 0;
 -}
 -
--static const struct v4l2_file_operations meye_fops = {
--	.owner		= THIS_MODULE,
--	.open		= meye_open,
--	.release	= meye_release,
--	.mmap		= meye_mmap,
--	.unlocked_ioctl	= video_ioctl2,
--	.poll		= meye_poll,
--};
--
--static const struct v4l2_ioctl_ops meye_ioctl_ops = {
--	.vidioc_querycap	= vidioc_querycap,
--	.vidioc_enum_input	= vidioc_enum_input,
--	.vidioc_g_input		= vidioc_g_input,
--	.vidioc_s_input		= vidioc_s_input,
--	.vidioc_enum_fmt_vid_cap = vidioc_enum_fmt_vid_cap,
--	.vidioc_try_fmt_vid_cap	= vidioc_try_fmt_vid_cap,
--	.vidioc_g_fmt_vid_cap	= vidioc_g_fmt_vid_cap,
--	.vidioc_s_fmt_vid_cap	= vidioc_s_fmt_vid_cap,
--	.vidioc_reqbufs		= vidioc_reqbufs,
--	.vidioc_querybuf	= vidioc_querybuf,
--	.vidioc_qbuf		= vidioc_qbuf,
--	.vidioc_dqbuf		= vidioc_dqbuf,
--	.vidioc_streamon	= vidioc_streamon,
--	.vidioc_streamoff	= vidioc_streamoff,
--	.vidioc_log_status	= v4l2_ctrl_log_status,
--	.vidioc_subscribe_event	= v4l2_ctrl_subscribe_event,
--	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
--	.vidioc_default		= vidioc_default,
--};
--
--static const struct video_device meye_template = {
--	.name		= "meye",
--	.fops		= &meye_fops,
--	.ioctl_ops	= &meye_ioctl_ops,
--	.release	= video_device_release_empty,
--	.device_caps	= V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING,
--};
--
--static const struct v4l2_ctrl_ops meye_ctrl_ops = {
--	.s_ctrl = meye_s_ctrl,
--};
--
--static int __maybe_unused meye_suspend(struct device *dev)
+-static void viu_reset(struct viu_reg __iomem *reg)
 -{
--	meye.pm_mchip_mode = meye.mchip_mode;
--	mchip_hic_stop();
--	mchip_set(MCHIP_MM_INTA, 0x0);
--	return 0;
+-	iowrite32be(0, &reg->status_cfg);
+-	iowrite32be(0x9512a254, &reg->luminance);
+-	iowrite32be(0x03310000, &reg->chroma_r);
+-	iowrite32be(0x06600f38, &reg->chroma_g);
+-	iowrite32be(0x00000409, &reg->chroma_b);
+-	iowrite32be(0, &reg->field_base_addr);
+-	iowrite32be(0, &reg->dma_inc);
+-	iowrite32be(0x01e002d0, &reg->picture_count);
+-	iowrite32be(0x00000090, &reg->req_alarm);
+-	iowrite32be(0x000000ff, &reg->alpha);
 -}
 -
--static int __maybe_unused meye_resume(struct device *dev)
+-static int viu_mmap(struct file *file, struct vm_area_struct *vma)
 -{
--	pci_write_config_word(meye.mchip_dev, MCHIP_PCI_SOFTRESET_SET, 1);
+-	struct viu_fh *fh = file->private_data;
+-	struct viu_dev *dev = fh->dev;
+-	int ret;
 -
--	mchip_delay(MCHIP_HIC_CMD, 0);
--	mchip_delay(MCHIP_HIC_STATUS, MCHIP_HIC_STATUS_IDLE);
--	msleep(1);
--	mchip_set(MCHIP_VRJ_SOFT_RESET, 1);
--	msleep(1);
--	mchip_set(MCHIP_MM_PCI_MODE, 5);
--	msleep(1);
--	mchip_set(MCHIP_MM_INTA, MCHIP_MM_INTA_HIC_1_MASK);
+-	dprintk(1, "mmap called, vma=%p\n", vma);
 -
--	switch (meye.pm_mchip_mode) {
--	case MCHIP_HIC_MODE_CONT_OUT:
--		mchip_continuous_start();
--		break;
--	case MCHIP_HIC_MODE_CONT_COMP:
--		mchip_cont_compression_start();
--		break;
--	}
--	return 0;
--}
+-	if (mutex_lock_interruptible(&dev->lock))
+-		return -ERESTARTSYS;
+-	ret = videobuf_mmap_mapper(&fh->vb_vidq, vma);
+-	mutex_unlock(&dev->lock);
 -
--static int meye_probe(struct pci_dev *pcidev, const struct pci_device_id *ent)
--{
--	static const struct v4l2_ctrl_config ctrl_agc = {
--		.id = V4L2_CID_MEYE_AGC,
--		.type = V4L2_CTRL_TYPE_INTEGER,
--		.ops = &meye_ctrl_ops,
--		.name = "AGC",
--		.max = 63,
--		.step = 1,
--		.def = 48,
--		.flags = V4L2_CTRL_FLAG_SLIDER,
--	};
--	static const struct v4l2_ctrl_config ctrl_picture = {
--		.id = V4L2_CID_MEYE_PICTURE,
--		.type = V4L2_CTRL_TYPE_INTEGER,
--		.ops = &meye_ctrl_ops,
--		.name = "Picture",
--		.max = 63,
--		.step = 1,
--	};
--	static const struct v4l2_ctrl_config ctrl_framerate = {
--		.id = V4L2_CID_MEYE_FRAMERATE,
--		.type = V4L2_CTRL_TYPE_INTEGER,
--		.ops = &meye_ctrl_ops,
--		.name = "Framerate",
--		.max = 31,
--		.step = 1,
--	};
--	struct v4l2_device *v4l2_dev = &meye.v4l2_dev;
--	int ret = -EBUSY;
--	unsigned long mchip_adr;
+-	dprintk(1, "vma start=0x%08lx, size=%ld, ret=%d\n",
+-		(unsigned long)vma->vm_start,
+-		(unsigned long)vma->vm_end-(unsigned long)vma->vm_start,
+-		ret);
 -
--	if (meye.mchip_dev != NULL) {
--		printk(KERN_ERR "meye: only one device allowed!\n");
--		return ret;
--	}
--
--	ret = v4l2_device_register(&pcidev->dev, v4l2_dev);
--	if (ret < 0) {
--		v4l2_err(v4l2_dev, "Could not register v4l2_device\n");
--		return ret;
--	}
--	ret = -ENOMEM;
--	meye.mchip_dev = pcidev;
--
--	meye.grab_temp = vmalloc(array_size(PAGE_SIZE, MCHIP_NB_PAGES_MJPEG));
--	if (!meye.grab_temp)
--		goto outvmalloc;
--
--	spin_lock_init(&meye.grabq_lock);
--	if (kfifo_alloc(&meye.grabq, sizeof(int) * MEYE_MAX_BUFNBRS,
--			GFP_KERNEL))
--		goto outkfifoalloc1;
--
--	spin_lock_init(&meye.doneq_lock);
--	if (kfifo_alloc(&meye.doneq, sizeof(int) * MEYE_MAX_BUFNBRS,
--			GFP_KERNEL))
--		goto outkfifoalloc2;
--
--	meye.vdev = meye_template;
--	meye.vdev.v4l2_dev = &meye.v4l2_dev;
--
--	ret = sony_pic_camera_command(SONY_PIC_COMMAND_SETCAMERA, 1);
--	if (ret) {
--		v4l2_err(v4l2_dev, "meye: unable to power on the camera\n");
--		v4l2_err(v4l2_dev, "meye: did you enable the camera in sonypi using the module options ?\n");
--		goto outsonypienable;
--	}
--
--	ret = pci_enable_device(meye.mchip_dev);
--	if (ret) {
--		v4l2_err(v4l2_dev, "meye: pci_enable_device failed\n");
--		goto outenabledev;
--	}
--
--	ret = -EIO;
--	mchip_adr = pci_resource_start(meye.mchip_dev,0);
--	if (!mchip_adr) {
--		v4l2_err(v4l2_dev, "meye: mchip has no device base address\n");
--		goto outregions;
--	}
--	if (!request_mem_region(pci_resource_start(meye.mchip_dev, 0),
--				pci_resource_len(meye.mchip_dev, 0),
--				"meye")) {
--		v4l2_err(v4l2_dev, "meye: request_mem_region failed\n");
--		goto outregions;
--	}
--	meye.mchip_mmregs = ioremap(mchip_adr, MCHIP_MM_REGS);
--	if (!meye.mchip_mmregs) {
--		v4l2_err(v4l2_dev, "meye: ioremap failed\n");
--		goto outremap;
--	}
--
--	meye.mchip_irq = pcidev->irq;
--	if (request_irq(meye.mchip_irq, meye_irq,
--			IRQF_SHARED, "meye", meye_irq)) {
--		v4l2_err(v4l2_dev, "request_irq failed\n");
--		goto outreqirq;
--	}
--
--	pci_write_config_byte(meye.mchip_dev, PCI_CACHE_LINE_SIZE, 8);
--	pci_write_config_byte(meye.mchip_dev, PCI_LATENCY_TIMER, 64);
--
--	pci_set_master(meye.mchip_dev);
--
--	/* Ask the camera to perform a soft reset. */
--	pci_write_config_word(meye.mchip_dev, MCHIP_PCI_SOFTRESET_SET, 1);
--
--	mchip_delay(MCHIP_HIC_CMD, 0);
--	mchip_delay(MCHIP_HIC_STATUS, MCHIP_HIC_STATUS_IDLE);
--
--	msleep(1);
--	mchip_set(MCHIP_VRJ_SOFT_RESET, 1);
--
--	msleep(1);
--	mchip_set(MCHIP_MM_PCI_MODE, 5);
--
--	msleep(1);
--	mchip_set(MCHIP_MM_INTA, MCHIP_MM_INTA_HIC_1_MASK);
--
--	mutex_init(&meye.lock);
--	init_waitqueue_head(&meye.proc_list);
--
--	v4l2_ctrl_handler_init(&meye.hdl, 3);
--	v4l2_ctrl_new_std(&meye.hdl, &meye_ctrl_ops,
--			  V4L2_CID_BRIGHTNESS, 0, 63, 1, 32);
--	v4l2_ctrl_new_std(&meye.hdl, &meye_ctrl_ops,
--			  V4L2_CID_HUE, 0, 63, 1, 32);
--	v4l2_ctrl_new_std(&meye.hdl, &meye_ctrl_ops,
--			  V4L2_CID_CONTRAST, 0, 63, 1, 32);
--	v4l2_ctrl_new_std(&meye.hdl, &meye_ctrl_ops,
--			  V4L2_CID_SATURATION, 0, 63, 1, 32);
--	v4l2_ctrl_new_custom(&meye.hdl, &ctrl_agc, NULL);
--	v4l2_ctrl_new_std(&meye.hdl, &meye_ctrl_ops,
--			  V4L2_CID_SHARPNESS, 0, 63, 1, 32);
--	v4l2_ctrl_new_custom(&meye.hdl, &ctrl_picture, NULL);
--	v4l2_ctrl_new_std(&meye.hdl, &meye_ctrl_ops,
--			  V4L2_CID_JPEG_COMPRESSION_QUALITY, 0, 10, 1, 8);
--	v4l2_ctrl_new_custom(&meye.hdl, &ctrl_framerate, NULL);
--	if (meye.hdl.error) {
--		v4l2_err(v4l2_dev, "couldn't register controls\n");
--		goto outvideoreg;
--	}
--
--	v4l2_ctrl_handler_setup(&meye.hdl);
--	meye.vdev.ctrl_handler = &meye.hdl;
--
--	if (video_register_device(&meye.vdev, VFL_TYPE_VIDEO,
--				  video_nr) < 0) {
--		v4l2_err(v4l2_dev, "video_register_device failed\n");
--		goto outvideoreg;
--	}
--
--	v4l2_info(v4l2_dev, "Motion Eye Camera Driver v%s.\n",
--	       MEYE_DRIVER_VERSION);
--	v4l2_info(v4l2_dev, "mchip KL5A72002 rev. %d, base %lx, irq %d\n",
--	       meye.mchip_dev->revision, mchip_adr, meye.mchip_irq);
--
--	return 0;
--
--outvideoreg:
--	v4l2_ctrl_handler_free(&meye.hdl);
--	free_irq(meye.mchip_irq, meye_irq);
--outreqirq:
--	iounmap(meye.mchip_mmregs);
--outremap:
--	release_mem_region(pci_resource_start(meye.mchip_dev, 0),
--			   pci_resource_len(meye.mchip_dev, 0));
--outregions:
--	pci_disable_device(meye.mchip_dev);
--outenabledev:
--	sony_pic_camera_command(SONY_PIC_COMMAND_SETCAMERA, 0);
--outsonypienable:
--	kfifo_free(&meye.doneq);
--outkfifoalloc2:
--	kfifo_free(&meye.grabq);
--outkfifoalloc1:
--	vfree(meye.grab_temp);
--outvmalloc:
 -	return ret;
 -}
 -
--static void meye_remove(struct pci_dev *pcidev)
+-static const struct v4l2_file_operations viu_fops = {
+-	.owner		= THIS_MODULE,
+-	.open		= viu_open,
+-	.release	= viu_release,
+-	.read		= viu_read,
+-	.poll		= viu_poll,
+-	.unlocked_ioctl	= video_ioctl2, /* V4L2 ioctl handler */
+-	.mmap		= viu_mmap,
+-};
+-
+-static const struct v4l2_ioctl_ops viu_ioctl_ops = {
+-	.vidioc_querycap	= vidioc_querycap,
+-	.vidioc_enum_fmt_vid_cap  = vidioc_enum_fmt,
+-	.vidioc_g_fmt_vid_cap     = vidioc_g_fmt_cap,
+-	.vidioc_try_fmt_vid_cap   = vidioc_try_fmt_cap,
+-	.vidioc_s_fmt_vid_cap     = vidioc_s_fmt_cap,
+-	.vidioc_enum_fmt_vid_overlay = vidioc_enum_fmt,
+-	.vidioc_g_fmt_vid_overlay = vidioc_g_fmt_overlay,
+-	.vidioc_try_fmt_vid_overlay = vidioc_try_fmt_overlay,
+-	.vidioc_s_fmt_vid_overlay = vidioc_s_fmt_overlay,
+-	.vidioc_overlay	      = vidioc_overlay,
+-	.vidioc_g_fbuf	      = vidioc_g_fbuf,
+-	.vidioc_s_fbuf	      = vidioc_s_fbuf,
+-	.vidioc_reqbufs       = vidioc_reqbufs,
+-	.vidioc_querybuf      = vidioc_querybuf,
+-	.vidioc_qbuf          = vidioc_qbuf,
+-	.vidioc_dqbuf         = vidioc_dqbuf,
+-	.vidioc_g_std         = vidioc_g_std,
+-	.vidioc_s_std         = vidioc_s_std,
+-	.vidioc_querystd      = vidioc_querystd,
+-	.vidioc_enum_input    = vidioc_enum_input,
+-	.vidioc_g_input       = vidioc_g_input,
+-	.vidioc_s_input       = vidioc_s_input,
+-	.vidioc_streamon      = vidioc_streamon,
+-	.vidioc_streamoff     = vidioc_streamoff,
+-	.vidioc_log_status    = v4l2_ctrl_log_status,
+-	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
+-	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
+-};
+-
+-static const struct video_device viu_template = {
+-	.name		= "FSL viu",
+-	.fops		= &viu_fops,
+-	.minor		= -1,
+-	.ioctl_ops	= &viu_ioctl_ops,
+-	.release	= video_device_release,
+-
+-	.tvnorms        = V4L2_STD_NTSC_M | V4L2_STD_PAL,
+-	.device_caps	= V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING |
+-			  V4L2_CAP_VIDEO_OVERLAY | V4L2_CAP_READWRITE,
+-};
+-
+-static int viu_of_probe(struct platform_device *op)
 -{
--	video_unregister_device(&meye.vdev);
+-	struct viu_dev *viu_dev;
+-	struct video_device *vdev;
+-	struct resource r;
+-	struct viu_reg __iomem *viu_regs;
+-	struct i2c_adapter *ad;
+-	int ret, viu_irq;
+-	struct clk *clk;
 -
--	mchip_hic_stop();
--
--	mchip_dma_free();
--
--	/* disable interrupts */
--	mchip_set(MCHIP_MM_INTA, 0x0);
--
--	free_irq(meye.mchip_irq, meye_irq);
--
--	iounmap(meye.mchip_mmregs);
--
--	release_mem_region(pci_resource_start(meye.mchip_dev, 0),
--			   pci_resource_len(meye.mchip_dev, 0));
--
--	pci_disable_device(meye.mchip_dev);
--
--	sony_pic_camera_command(SONY_PIC_COMMAND_SETCAMERA, 0);
--
--	kfifo_free(&meye.doneq);
--	kfifo_free(&meye.grabq);
--
--	vfree(meye.grab_temp);
--
--	if (meye.grab_fbuffer) {
--		rvfree(meye.grab_fbuffer, gbuffers*gbufsize);
--		meye.grab_fbuffer = NULL;
+-	ret = of_address_to_resource(op->dev.of_node, 0, &r);
+-	if (ret) {
+-		dev_err(&op->dev, "Can't parse device node resource\n");
+-		return -ENODEV;
 -	}
 -
--	printk(KERN_INFO "meye: removed\n");
+-	viu_irq = irq_of_parse_and_map(op->dev.of_node, 0);
+-	if (!viu_irq) {
+-		dev_err(&op->dev, "Error while mapping the irq\n");
+-		return -EINVAL;
+-	}
+-
+-	/* request mem region */
+-	if (!devm_request_mem_region(&op->dev, r.start,
+-				     sizeof(struct viu_reg), DRV_NAME)) {
+-		dev_err(&op->dev, "Error while requesting mem region\n");
+-		ret = -EBUSY;
+-		goto err_irq;
+-	}
+-
+-	/* remap registers */
+-	viu_regs = devm_ioremap(&op->dev, r.start, sizeof(struct viu_reg));
+-	if (!viu_regs) {
+-		dev_err(&op->dev, "Can't map register set\n");
+-		ret = -ENOMEM;
+-		goto err_irq;
+-	}
+-
+-	/* Prepare our private structure */
+-	viu_dev = devm_kzalloc(&op->dev, sizeof(struct viu_dev), GFP_KERNEL);
+-	if (!viu_dev) {
+-		dev_err(&op->dev, "Can't allocate private structure\n");
+-		ret = -ENOMEM;
+-		goto err_irq;
+-	}
+-
+-	viu_dev->vr = viu_regs;
+-	viu_dev->irq = viu_irq;
+-	viu_dev->dev = &op->dev;
+-
+-	/* init video dma queues */
+-	INIT_LIST_HEAD(&viu_dev->vidq.active);
+-	INIT_LIST_HEAD(&viu_dev->vidq.queued);
+-
+-	snprintf(viu_dev->v4l2_dev.name,
+-		 sizeof(viu_dev->v4l2_dev.name), "%s", "VIU");
+-	ret = v4l2_device_register(viu_dev->dev, &viu_dev->v4l2_dev);
+-	if (ret < 0) {
+-		dev_err(&op->dev, "v4l2_device_register() failed: %d\n", ret);
+-		goto err_irq;
+-	}
+-
+-	ad = i2c_get_adapter(0);
+-	if (!ad) {
+-		ret = -EFAULT;
+-		dev_err(&op->dev, "couldn't get i2c adapter\n");
+-		goto err_v4l2;
+-	}
+-
+-	v4l2_ctrl_handler_init(&viu_dev->hdl, 5);
+-	if (viu_dev->hdl.error) {
+-		ret = viu_dev->hdl.error;
+-		dev_err(&op->dev, "couldn't register control\n");
+-		goto err_i2c;
+-	}
+-	/* This control handler will inherit the control(s) from the
+-	   sub-device(s). */
+-	viu_dev->v4l2_dev.ctrl_handler = &viu_dev->hdl;
+-	viu_dev->decoder = v4l2_i2c_new_subdev(&viu_dev->v4l2_dev, ad,
+-			"saa7113", VIU_VIDEO_DECODER_ADDR, NULL);
+-
+-	timer_setup(&viu_dev->vidq.timeout, viu_vid_timeout, 0);
+-	viu_dev->std = V4L2_STD_NTSC_M;
+-	viu_dev->first = 1;
+-
+-	/* Allocate memory for video device */
+-	vdev = video_device_alloc();
+-	if (vdev == NULL) {
+-		ret = -ENOMEM;
+-		goto err_hdl;
+-	}
+-
+-	*vdev = viu_template;
+-
+-	vdev->v4l2_dev = &viu_dev->v4l2_dev;
+-
+-	viu_dev->vdev = vdev;
+-
+-	/* initialize locks */
+-	mutex_init(&viu_dev->lock);
+-	viu_dev->vdev->lock = &viu_dev->lock;
+-	spin_lock_init(&viu_dev->slock);
+-
+-	video_set_drvdata(viu_dev->vdev, viu_dev);
+-
+-	mutex_lock(&viu_dev->lock);
+-
+-	ret = video_register_device(viu_dev->vdev, VFL_TYPE_VIDEO, -1);
+-	if (ret < 0) {
+-		video_device_release(viu_dev->vdev);
+-		goto err_unlock;
+-	}
+-
+-	/* enable VIU clock */
+-	clk = devm_clk_get(&op->dev, "ipg");
+-	if (IS_ERR(clk)) {
+-		dev_err(&op->dev, "failed to lookup the clock!\n");
+-		ret = PTR_ERR(clk);
+-		goto err_vdev;
+-	}
+-	ret = clk_prepare_enable(clk);
+-	if (ret) {
+-		dev_err(&op->dev, "failed to enable the clock!\n");
+-		goto err_vdev;
+-	}
+-	viu_dev->clk = clk;
+-
+-	/* reset VIU module */
+-	viu_reset(viu_dev->vr);
+-
+-	/* install interrupt handler */
+-	if (request_irq(viu_dev->irq, viu_intr, 0, "viu", (void *)viu_dev)) {
+-		dev_err(&op->dev, "Request VIU IRQ failed.\n");
+-		ret = -ENODEV;
+-		goto err_clk;
+-	}
+-
+-	mutex_unlock(&viu_dev->lock);
+-
+-	dev_info(&op->dev, "Freescale VIU Video Capture Board\n");
+-	return ret;
+-
+-err_clk:
+-	clk_disable_unprepare(viu_dev->clk);
+-err_vdev:
+-	video_unregister_device(viu_dev->vdev);
+-err_unlock:
+-	mutex_unlock(&viu_dev->lock);
+-err_hdl:
+-	v4l2_ctrl_handler_free(&viu_dev->hdl);
+-err_i2c:
+-	i2c_put_adapter(ad);
+-err_v4l2:
+-	v4l2_device_unregister(&viu_dev->v4l2_dev);
+-err_irq:
+-	irq_dispose_mapping(viu_irq);
+-	return ret;
 -}
 -
--static const struct pci_device_id meye_pci_tbl[] = {
--	{ PCI_VDEVICE(KAWASAKI, PCI_DEVICE_ID_MCHIP_KL5A72002), 0 },
--	{ }
--};
--
--MODULE_DEVICE_TABLE(pci, meye_pci_tbl);
--
--static SIMPLE_DEV_PM_OPS(meye_pm_ops, meye_suspend, meye_resume);
--
--static struct pci_driver meye_driver = {
--	.name		= "meye",
--	.id_table	= meye_pci_tbl,
--	.probe		= meye_probe,
--	.remove		= meye_remove,
--	.driver.pm	= &meye_pm_ops,
--};
--
--static int __init meye_init(void)
+-static int viu_of_remove(struct platform_device *op)
 -{
--	gbuffers = max(2, min((int)gbuffers, MEYE_MAX_BUFNBRS));
--	if (gbufsize > MEYE_MAX_BUFSIZE)
--		gbufsize = MEYE_MAX_BUFSIZE;
--	gbufsize = PAGE_ALIGN(gbufsize);
--	printk(KERN_INFO "meye: using %d buffers with %dk (%dk total) for capture\n",
--			 gbuffers,
--			 gbufsize / 1024, gbuffers * gbufsize / 1024);
--	return pci_register_driver(&meye_driver);
+-	struct v4l2_device *v4l2_dev = platform_get_drvdata(op);
+-	struct viu_dev *dev = container_of(v4l2_dev, struct viu_dev, v4l2_dev);
+-	struct v4l2_subdev *sdev = list_entry(v4l2_dev->subdevs.next,
+-					      struct v4l2_subdev, list);
+-	struct i2c_client *client = v4l2_get_subdevdata(sdev);
+-
+-	free_irq(dev->irq, (void *)dev);
+-	irq_dispose_mapping(dev->irq);
+-
+-	clk_disable_unprepare(dev->clk);
+-
+-	v4l2_ctrl_handler_free(&dev->hdl);
+-	video_unregister_device(dev->vdev);
+-	i2c_put_adapter(client->adapter);
+-	v4l2_device_unregister(&dev->v4l2_dev);
+-	return 0;
 -}
 -
--static void __exit meye_exit(void)
+-#ifdef CONFIG_PM
+-static int viu_suspend(struct platform_device *op, pm_message_t state)
 -{
--	pci_unregister_driver(&meye_driver);
+-	struct v4l2_device *v4l2_dev = platform_get_drvdata(op);
+-	struct viu_dev *dev = container_of(v4l2_dev, struct viu_dev, v4l2_dev);
+-
+-	clk_disable(dev->clk);
+-	return 0;
 -}
 -
--module_init(meye_init);
--module_exit(meye_exit);
-diff --git a/drivers/staging/media/deprecated/meye/meye.h b/drivers/staging/media/deprecated/meye/meye.h
-deleted file mode 100644
-index 5fa6552cf93d..000000000000
---- a/drivers/staging/media/deprecated/meye/meye.h
-+++ /dev/null
-@@ -1,311 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
-- * Motion Eye video4linux driver for Sony Vaio PictureBook
-- *
-- * Copyright (C) 2001-2004 Stelian Pop <stelian@popies.net>
-- *
-- * Copyright (C) 2001-2002 Alcôve <www.alcove.com>
-- *
-- * Copyright (C) 2000 Andrew Tridgell <tridge@valinux.com>
-- *
-- * Earlier work by Werner Almesberger, Paul `Rusty' Russell and Paul Mackerras.
-- *
-- * Some parts borrowed from various video4linux drivers, especially
-- * bttv-driver.c and zoran.c, see original files for credits.
-- */
+-static int viu_resume(struct platform_device *op)
+-{
+-	struct v4l2_device *v4l2_dev = platform_get_drvdata(op);
+-	struct viu_dev *dev = container_of(v4l2_dev, struct viu_dev, v4l2_dev);
 -
--#ifndef _MEYE_PRIV_H_
--#define _MEYE_PRIV_H_
--
--#define MEYE_DRIVER_MAJORVERSION	 1
--#define MEYE_DRIVER_MINORVERSION	14
--
--#define MEYE_DRIVER_VERSION __stringify(MEYE_DRIVER_MAJORVERSION) "." \
--			    __stringify(MEYE_DRIVER_MINORVERSION)
--
--#include <linux/types.h>
--#include <linux/pci.h>
--#include <linux/kfifo.h>
--#include <media/v4l2-ctrls.h>
--
--/****************************************************************************/
--/* Motion JPEG chip registers                                               */
--/****************************************************************************/
--
--/* Motion JPEG chip PCI configuration registers */
--#define MCHIP_PCI_POWER_CSR		0x54
--#define MCHIP_PCI_MCORE_STATUS		0x60		/* see HIC_STATUS   */
--#define MCHIP_PCI_HOSTUSEREQ_SET	0x64
--#define MCHIP_PCI_HOSTUSEREQ_CLR	0x68
--#define MCHIP_PCI_LOWPOWER_SET		0x6c
--#define MCHIP_PCI_LOWPOWER_CLR		0x70
--#define MCHIP_PCI_SOFTRESET_SET		0x74
--
--/* Motion JPEG chip memory mapped registers */
--#define MCHIP_MM_REGS			0x200		/* 512 bytes        */
--#define MCHIP_REG_TIMEOUT		1000		/* reg access, ~us  */
--#define MCHIP_MCC_VRJ_TIMEOUT		1000		/* MCC & VRJ access */
--
--#define MCHIP_MM_PCI_MODE		0x00		/* PCI access mode */
--#define MCHIP_MM_PCI_MODE_RETRY		0x00000001	/* retry mode */
--#define MCHIP_MM_PCI_MODE_MASTER	0x00000002	/* master access */
--#define MCHIP_MM_PCI_MODE_READ_LINE	0x00000004	/* read line */
--
--#define MCHIP_MM_INTA			0x04		/* Int status/mask */
--#define MCHIP_MM_INTA_MCC		0x00000001	/* MCC interrupt */
--#define MCHIP_MM_INTA_VRJ		0x00000002	/* VRJ interrupt */
--#define MCHIP_MM_INTA_HIC_1		0x00000004	/* one frame done */
--#define MCHIP_MM_INTA_HIC_1_MASK	0x00000400	/* 1: enable */
--#define MCHIP_MM_INTA_HIC_END		0x00000008	/* all frames done */
--#define MCHIP_MM_INTA_HIC_END_MASK	0x00000800
--#define MCHIP_MM_INTA_JPEG		0x00000010	/* decompress. error */
--#define MCHIP_MM_INTA_JPEG_MASK		0x00001000
--#define MCHIP_MM_INTA_CAPTURE		0x00000020	/* capture end */
--#define MCHIP_MM_INTA_PCI_ERR		0x00000040	/* PCI error */
--#define MCHIP_MM_INTA_PCI_ERR_MASK	0x00004000
--
--#define MCHIP_MM_PT_ADDR		0x08		/* page table address*/
--							/* n*4kB */
--#define MCHIP_NB_PAGES			1024		/* pages for display */
--#define MCHIP_NB_PAGES_MJPEG		256		/* pages for mjpeg */
--
--#define MCHIP_MM_FIR(n)			(0x0c+(n)*4)	/* Frame info 0-3 */
--#define MCHIP_MM_FIR_RDY		0x00000001	/* frame ready */
--#define MCHIP_MM_FIR_FAILFR_MASK	0xf8000000	/* # of failed frames */
--#define MCHIP_MM_FIR_FAILFR_SHIFT	27
--
--	/* continuous comp/decomp mode */
--#define MCHIP_MM_FIR_C_ENDL_MASK	0x000007fe	/* end DW [10] */
--#define MCHIP_MM_FIR_C_ENDL_SHIFT	1
--#define MCHIP_MM_FIR_C_ENDP_MASK	0x0007f800	/* end page [8] */
--#define MCHIP_MM_FIR_C_ENDP_SHIFT	11
--#define MCHIP_MM_FIR_C_STARTP_MASK	0x07f80000	/* start page [8] */
--#define MCHIP_MM_FIR_C_STARTP_SHIFT	19
--
--	/* continuous picture output mode */
--#define MCHIP_MM_FIR_O_STARTP_MASK	0x7ffe0000	/* start page [10] */
--#define MCHIP_MM_FIR_O_STARTP_SHIFT	17
--
--#define MCHIP_MM_FIFO_DATA		0x1c		/* PCI TGT FIFO data */
--#define MCHIP_MM_FIFO_STATUS		0x20		/* PCI TGT FIFO stat */
--#define MCHIP_MM_FIFO_MASK		0x00000003
--#define MCHIP_MM_FIFO_WAIT_OR_READY	0x00000002      /* Bits common to WAIT & READY*/
--#define MCHIP_MM_FIFO_IDLE		0x0		/* HIC idle */
--#define MCHIP_MM_FIFO_IDLE1		0x1		/* idem ??? */
--#define	MCHIP_MM_FIFO_WAIT		0x2		/* wait request */
--#define MCHIP_MM_FIFO_READY		0x3		/* data ready */
--
--#define MCHIP_HIC_HOST_USEREQ		0x40		/* host uses MCORE */
--
--#define MCHIP_HIC_TP_BUSY		0x44		/* taking picture */
--
--#define MCHIP_HIC_PIC_SAVED		0x48		/* pic in SDRAM */
--
--#define MCHIP_HIC_LOWPOWER		0x4c		/* clock stopped */
--
--#define MCHIP_HIC_CTL			0x50		/* HIC control */
--#define MCHIP_HIC_CTL_SOFT_RESET	0x00000001	/* MCORE reset */
--#define MCHIP_HIC_CTL_MCORE_RDY		0x00000002	/* MCORE ready */
--
--#define MCHIP_HIC_CMD			0x54		/* HIC command */
--#define MCHIP_HIC_CMD_BITS		0x00000003      /* cmd width=[1:0]*/
--#define MCHIP_HIC_CMD_NOOP		0x0
--#define MCHIP_HIC_CMD_START		0x1
--#define MCHIP_HIC_CMD_STOP		0x2
--
--#define MCHIP_HIC_MODE			0x58
--#define MCHIP_HIC_MODE_NOOP		0x0
--#define MCHIP_HIC_MODE_STILL_CAP	0x1		/* still pic capt */
--#define MCHIP_HIC_MODE_DISPLAY		0x2		/* display */
--#define MCHIP_HIC_MODE_STILL_COMP	0x3		/* still pic comp. */
--#define MCHIP_HIC_MODE_STILL_DECOMP	0x4		/* still pic decomp. */
--#define MCHIP_HIC_MODE_CONT_COMP	0x5		/* cont capt+comp */
--#define MCHIP_HIC_MODE_CONT_DECOMP	0x6		/* cont decomp+disp */
--#define MCHIP_HIC_MODE_STILL_OUT	0x7		/* still pic output */
--#define MCHIP_HIC_MODE_CONT_OUT		0x8		/* cont output */
--
--#define MCHIP_HIC_STATUS		0x5c
--#define MCHIP_HIC_STATUS_MCC_RDY	0x00000001	/* MCC reg acc ok */
--#define MCHIP_HIC_STATUS_VRJ_RDY	0x00000002	/* VRJ reg acc ok */
--#define MCHIP_HIC_STATUS_IDLE           0x00000003
--#define MCHIP_HIC_STATUS_CAPDIS		0x00000004	/* cap/disp in prog */
--#define MCHIP_HIC_STATUS_COMPDEC	0x00000008	/* (de)comp in prog */
--#define MCHIP_HIC_STATUS_BUSY		0x00000010	/* HIC busy */
--
--#define MCHIP_HIC_S_RATE		0x60		/* MJPEG # frames */
--
--#define MCHIP_HIC_PCI_VFMT		0x64		/* video format */
--#define MCHIP_HIC_PCI_VFMT_YVYU		0x00000001	/* 0: V Y' U Y */
--							/* 1: Y' V Y U */
--
--#define MCHIP_MCC_CMD			0x80		/* MCC commands */
--#define MCHIP_MCC_CMD_INITIAL		0x0		/* idle ? */
--#define MCHIP_MCC_CMD_IIC_START_SET	0x1
--#define MCHIP_MCC_CMD_IIC_END_SET	0x2
--#define MCHIP_MCC_CMD_FM_WRITE		0x3		/* frame memory */
--#define MCHIP_MCC_CMD_FM_READ		0x4
--#define MCHIP_MCC_CMD_FM_STOP		0x5
--#define MCHIP_MCC_CMD_CAPTURE		0x6
--#define MCHIP_MCC_CMD_DISPLAY		0x7
--#define MCHIP_MCC_CMD_END_DISP		0x8
--#define MCHIP_MCC_CMD_STILL_COMP	0x9
--#define MCHIP_MCC_CMD_STILL_DECOMP	0xa
--#define MCHIP_MCC_CMD_STILL_OUTPUT	0xb
--#define MCHIP_MCC_CMD_CONT_OUTPUT	0xc
--#define MCHIP_MCC_CMD_CONT_COMP		0xd
--#define MCHIP_MCC_CMD_CONT_DECOMP	0xe
--#define MCHIP_MCC_CMD_RESET		0xf		/* MCC reset */
--
--#define MCHIP_MCC_IIC_WR		0x84
--
--#define MCHIP_MCC_MCC_WR		0x88
--
--#define MCHIP_MCC_MCC_RD		0x8c
--
--#define MCHIP_MCC_STATUS		0x90
--#define MCHIP_MCC_STATUS_CAPT		0x00000001	/* capturing */
--#define MCHIP_MCC_STATUS_DISP		0x00000002	/* displaying */
--#define MCHIP_MCC_STATUS_COMP		0x00000004	/* compressing */
--#define MCHIP_MCC_STATUS_DECOMP		0x00000008	/* decompressing */
--#define MCHIP_MCC_STATUS_MCC_WR		0x00000010	/* register ready */
--#define MCHIP_MCC_STATUS_MCC_RD		0x00000020	/* register ready */
--#define MCHIP_MCC_STATUS_IIC_WR		0x00000040	/* register ready */
--#define MCHIP_MCC_STATUS_OUTPUT		0x00000080	/* output in prog */
--
--#define MCHIP_MCC_SIG_POLARITY		0x94
--#define MCHIP_MCC_SIG_POL_VS_H		0x00000001	/* VS active-high */
--#define MCHIP_MCC_SIG_POL_HS_H		0x00000002	/* HS active-high */
--#define MCHIP_MCC_SIG_POL_DOE_H		0x00000004	/* DOE active-high */
--
--#define MCHIP_MCC_IRQ			0x98
--#define MCHIP_MCC_IRQ_CAPDIS_STRT	0x00000001	/* cap/disp started */
--#define MCHIP_MCC_IRQ_CAPDIS_STRT_MASK	0x00000010
--#define MCHIP_MCC_IRQ_CAPDIS_END	0x00000002	/* cap/disp ended */
--#define MCHIP_MCC_IRQ_CAPDIS_END_MASK	0x00000020
--#define MCHIP_MCC_IRQ_COMPDEC_STRT	0x00000004	/* (de)comp started */
--#define MCHIP_MCC_IRQ_COMPDEC_STRT_MASK	0x00000040
--#define MCHIP_MCC_IRQ_COMPDEC_END	0x00000008	/* (de)comp ended */
--#define MCHIP_MCC_IRQ_COMPDEC_END_MASK	0x00000080
--
--#define MCHIP_MCC_HSTART		0x9c		/* video in */
--#define MCHIP_MCC_VSTART		0xa0
--#define MCHIP_MCC_HCOUNT		0xa4
--#define MCHIP_MCC_VCOUNT		0xa8
--#define MCHIP_MCC_R_XBASE		0xac		/* capt/disp */
--#define MCHIP_MCC_R_YBASE		0xb0
--#define MCHIP_MCC_R_XRANGE		0xb4
--#define MCHIP_MCC_R_YRANGE		0xb8
--#define MCHIP_MCC_B_XBASE		0xbc		/* comp/decomp */
--#define MCHIP_MCC_B_YBASE		0xc0
--#define MCHIP_MCC_B_XRANGE		0xc4
--#define MCHIP_MCC_B_YRANGE		0xc8
--
--#define MCHIP_MCC_R_SAMPLING		0xcc		/* 1: 1:4 */
--
--#define MCHIP_VRJ_CMD			0x100		/* VRJ commands */
--
--/* VRJ registers (see table 12.2.4) */
--#define MCHIP_VRJ_COMPRESSED_DATA	0x1b0
--#define MCHIP_VRJ_PIXEL_DATA		0x1b8
--
--#define MCHIP_VRJ_BUS_MODE		0x100
--#define MCHIP_VRJ_SIGNAL_ACTIVE_LEVEL	0x108
--#define MCHIP_VRJ_PDAT_USE		0x110
--#define MCHIP_VRJ_MODE_SPECIFY		0x118
--#define MCHIP_VRJ_LIMIT_COMPRESSED_LO	0x120
--#define MCHIP_VRJ_LIMIT_COMPRESSED_HI	0x124
--#define MCHIP_VRJ_COMP_DATA_FORMAT	0x128
--#define MCHIP_VRJ_TABLE_DATA		0x140
--#define MCHIP_VRJ_RESTART_INTERVAL	0x148
--#define MCHIP_VRJ_NUM_LINES		0x150
--#define MCHIP_VRJ_NUM_PIXELS		0x158
--#define MCHIP_VRJ_NUM_COMPONENTS	0x160
--#define MCHIP_VRJ_SOF1			0x168
--#define MCHIP_VRJ_SOF2			0x170
--#define MCHIP_VRJ_SOF3			0x178
--#define MCHIP_VRJ_SOF4			0x180
--#define MCHIP_VRJ_SOS			0x188
--#define MCHIP_VRJ_SOFT_RESET		0x190
--
--#define MCHIP_VRJ_STATUS		0x1c0
--#define MCHIP_VRJ_STATUS_BUSY		0x00001
--#define MCHIP_VRJ_STATUS_COMP_ACCESS	0x00002
--#define MCHIP_VRJ_STATUS_PIXEL_ACCESS	0x00004
--#define MCHIP_VRJ_STATUS_ERROR		0x00008
--
--#define MCHIP_VRJ_IRQ_FLAG		0x1c8
--#define MCHIP_VRJ_ERROR_REPORT		0x1d8
--
--#define MCHIP_VRJ_START_COMMAND		0x1a0
--
--/****************************************************************************/
--/* Driver definitions.                                                      */
--/****************************************************************************/
--
--/* Sony Programmable I/O Controller for accessing the camera commands */
--#include <linux/sony-laptop.h>
--
--/* private API definitions */
--#include <linux/meye.h>
--#include <linux/mutex.h>
--
--
--/* Enable jpg software correction */
--#define MEYE_JPEG_CORRECTION	1
--
--/* Maximum size of a buffer */
--#define MEYE_MAX_BUFSIZE	614400	/* 640 * 480 * 2 */
--
--/* Maximum number of buffers */
--#define MEYE_MAX_BUFNBRS	32
--
--/* State of a buffer */
--#define MEYE_BUF_UNUSED	0	/* not used */
--#define MEYE_BUF_USING	1	/* currently grabbing / playing */
--#define MEYE_BUF_DONE	2	/* done */
--
--/* grab buffer */
--struct meye_grab_buffer {
--	int state;			/* state of buffer */
--	unsigned long size;		/* size of jpg frame */
--	u64 ts;				/* timestamp */
--	unsigned long sequence;		/* sequence number */
--};
--
--/* size of kfifos containing buffer indices */
--#define MEYE_QUEUE_SIZE	MEYE_MAX_BUFNBRS
--
--/* Motion Eye device structure */
--struct meye {
--	struct v4l2_device v4l2_dev;	/* Main v4l2_device struct */
--	struct v4l2_ctrl_handler hdl;
--	struct pci_dev *mchip_dev;	/* pci device */
--	u8 mchip_irq;			/* irq */
--	u8 mchip_mode;			/* actual mchip mode: HIC_MODE... */
--	u8 mchip_fnum;			/* current mchip frame number */
--	unsigned char __iomem *mchip_mmregs;/* mchip: memory mapped registers */
--	u8 *mchip_ptable[MCHIP_NB_PAGES];/* mchip: ptable */
--	void *mchip_ptable_toc;		/* mchip: ptable toc */
--	dma_addr_t mchip_dmahandle;	/* mchip: dma handle to ptable toc */
--	unsigned char *grab_fbuffer;	/* capture framebuffer */
--	unsigned char *grab_temp;	/* temporary buffer */
--					/* list of buffers */
--	struct meye_grab_buffer grab_buffer[MEYE_MAX_BUFNBRS];
--	int vma_use_count[MEYE_MAX_BUFNBRS]; /* mmap count */
--	struct mutex lock;		/* mutex for open/mmap... */
--	struct kfifo grabq;		/* queue for buffers to be grabbed */
--	spinlock_t grabq_lock;		/* lock protecting the queue */
--	struct kfifo doneq;		/* queue for grabbed buffers */
--	spinlock_t doneq_lock;		/* lock protecting the queue */
--	wait_queue_head_t proc_list;	/* wait queue */
--	struct video_device vdev;	/* video device parameters */
--	u16 brightness;
--	u16 hue;
--	u16 contrast;
--	u16 colour;
--	struct meye_params params;	/* additional parameters */
--	unsigned long in_use;		/* set to 1 if the device is in use */
--	u8 pm_mchip_mode;		/* old mchip mode */
--};
--
+-	clk_enable(dev->clk);
+-	return 0;
+-}
 -#endif
-diff --git a/include/uapi/linux/meye.h b/include/uapi/linux/meye.h
-deleted file mode 100644
-index de9e3a954f3d..000000000000
---- a/include/uapi/linux/meye.h
-+++ /dev/null
-@@ -1,65 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
+-
 -/*
-- * Motion Eye video4linux driver for Sony Vaio PictureBook
-- *
-- * Copyright (C) 2001-2003 Stelian Pop <stelian@popies.net>
-- *
-- * Copyright (C) 2001-2002 Alcôve <www.alcove.com>
-- *
-- * Copyright (C) 2000 Andrew Tridgell <tridge@valinux.com>
-- *
-- * Earlier work by Werner Almesberger, Paul `Rusty' Russell and Paul Mackerras.
-- *
-- * Some parts borrowed from various video4linux drivers, especially
-- * bttv-driver.c and zoran.c, see original files for credits.
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program; if not, write to the Free Software
-- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+- * Initialization and module stuff
 - */
+-static const struct of_device_id mpc512x_viu_of_match[] = {
+-	{
+-		.compatible = "fsl,mpc5121-viu",
+-	},
+-	{},
+-};
+-MODULE_DEVICE_TABLE(of, mpc512x_viu_of_match);
 -
--#ifndef _MEYE_H_
--#define _MEYE_H_
--
--/****************************************************************************/
--/* Private API for handling mjpeg capture / playback.                       */
--/****************************************************************************/
--
--struct meye_params {
--	unsigned char subsample;
--	unsigned char quality;
--	unsigned char sharpness;
--	unsigned char agc;
--	unsigned char picture;
--	unsigned char framerate;
+-static struct platform_driver viu_of_platform_driver = {
+-	.probe = viu_of_probe,
+-	.remove = viu_of_remove,
+-#ifdef CONFIG_PM
+-	.suspend = viu_suspend,
+-	.resume = viu_resume,
+-#endif
+-	.driver = {
+-		.name = DRV_NAME,
+-		.of_match_table = mpc512x_viu_of_match,
+-	},
 -};
 -
--/* query the extended parameters */
--#define MEYEIOC_G_PARAMS	_IOR ('v', BASE_VIDIOC_PRIVATE+0, struct meye_params)
--/* set the extended parameters */
--#define MEYEIOC_S_PARAMS	_IOW ('v', BASE_VIDIOC_PRIVATE+1, struct meye_params)
--/* queue a buffer for mjpeg capture */
--#define MEYEIOC_QBUF_CAPT	_IOW ('v', BASE_VIDIOC_PRIVATE+2, int)
--/* sync a previously queued mjpeg buffer */
--#define MEYEIOC_SYNC		_IOWR('v', BASE_VIDIOC_PRIVATE+3, int)
--/* get a still uncompressed snapshot */
--#define MEYEIOC_STILLCAPT	_IO  ('v', BASE_VIDIOC_PRIVATE+4)
--/* get a jpeg compressed snapshot */
--#define MEYEIOC_STILLJCAPT	_IOR ('v', BASE_VIDIOC_PRIVATE+5, int)
+-module_platform_driver(viu_of_platform_driver);
 -
--/* V4L2 private controls */
--#define V4L2_CID_MEYE_AGC		(V4L2_CID_USER_MEYE_BASE + 0)
--#define V4L2_CID_MEYE_PICTURE		(V4L2_CID_USER_MEYE_BASE + 1)
--#define V4L2_CID_MEYE_FRAMERATE		(V4L2_CID_USER_MEYE_BASE + 2)
--
--#endif
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index b73a8ba7df6c..5e80daa4ffe0 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -115,9 +115,13 @@ enum v4l2_colorfx {
- 
- /* USER-class private control IDs */
- 
--/* The base for the meye driver controls. See linux/meye.h for the list
-- * of controls. We reserve 16 controls for this driver. */
-+#ifndef __KERNEL__
-+/*
-+ * The base for the meye driver controls. This driver was removed, but
-+ * we keep this define in case any software still uses it.
-+ */
- #define V4L2_CID_USER_MEYE_BASE			(V4L2_CID_USER_BASE + 0x1000)
-+#endif
- 
- /* The base for the bttv driver controls.
-  * We reserve 32 controls for this driver. */
+-MODULE_DESCRIPTION("Freescale Video-In(VIU)");
+-MODULE_AUTHOR("Hongjun Chen");
+-MODULE_LICENSE("GPL");
+-MODULE_VERSION(VIU_VERSION);
 -- 
 2.39.0
 
