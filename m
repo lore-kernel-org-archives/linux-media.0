@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCAB8C678DF
-	for <linux-media@archiver.kernel.org>; Wed, 11 Jan 2023 11:26:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B84DC54EBC
+	for <linux-media@archiver.kernel.org>; Wed, 11 Jan 2023 11:26:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233594AbjAKLZy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 11 Jan 2023 06:25:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
+        id S229626AbjAKL0F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 11 Jan 2023 06:26:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232384AbjAKLYh (ORCPT
+        with ESMTP id S231653AbjAKLYy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 11 Jan 2023 06:24:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D7EF5A1
-        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 03:24:34 -0800 (PST)
+        Wed, 11 Jan 2023 06:24:54 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4962186DB
+        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 03:24:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98F0C61C50
-        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 11:24:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D345C433EF;
-        Wed, 11 Jan 2023 11:24:32 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 474AACE1A9F
+        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 11:24:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5FD7C433F0;
+        Wed, 11 Jan 2023 11:24:35 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCHv2 10/16] av7110: remove av7110* sources
-Date:   Wed, 11 Jan 2023 12:24:12 +0100
-Message-Id: <20230111112418.687882-11-hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv2 13/16] saa7146: remove deprecated drivers
+Date:   Wed, 11 Jan 2023 12:24:15 +0100
+Message-Id: <20230111112418.687882-14-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230111112418.687882-1-hverkuil-cisco@xs4all.nl>
 References: <20230111112418.687882-1-hverkuil-cisco@xs4all.nl>
@@ -38,8033 +38,4305 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The av7110 driver does not use the vb2 framework for streaming
-video, instead it uses the old vb1 framework and nobody stepped in to
-convert this driver to vb2.
+The saa7146-based hexium_gemini/orion and mxb drivers do not use the vb2
+framework for streaming video, instead they use the old vb1 framework and
+nobody stepped in to convert these drivers to vb2.
 
-The hardware is very old, so the decision was made to remove it
+The hardware is very old, so the decision was made to remove them
 altogether since we want to get rid of the old vb1 framework.
-
-This patch deletes all av7110* sources.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- .../media/deprecated/saa7146/av7110/av7110.c  | 2919 -----------------
- .../media/deprecated/saa7146/av7110/av7110.h  |  315 --
- .../deprecated/saa7146/av7110/av7110_av.c     | 1681 ----------
- .../deprecated/saa7146/av7110/av7110_av.h     |   32 -
- .../deprecated/saa7146/av7110/av7110_ca.c     |  380 ---
- .../deprecated/saa7146/av7110/av7110_ca.h     |   15 -
- .../deprecated/saa7146/av7110/av7110_hw.c     | 1204 -------
- .../deprecated/saa7146/av7110/av7110_hw.h     |  496 ---
- .../deprecated/saa7146/av7110/av7110_ipack.c  |  404 ---
- .../deprecated/saa7146/av7110/av7110_ipack.h  |   13 -
- .../deprecated/saa7146/av7110/av7110_ir.c     |  158 -
- .../deprecated/saa7146/av7110/av7110_v4l.c    |  952 ------
- 12 files changed, 8569 deletions(-)
- delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/av7110.c
- delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/av7110.h
- delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/av7110_av.c
- delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/av7110_av.h
- delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/av7110_ca.c
- delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/av7110_ca.h
- delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/av7110_hw.c
- delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/av7110_hw.h
- delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/av7110_ipack.c
- delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/av7110_ipack.h
- delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/av7110_ir.c
- delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/av7110_v4l.c
+ .../admin-guide/media/pci-cardlist.rst        |    3 -
+ MAINTAINERS                                   |    7 -
+ drivers/staging/media/Kconfig                 |    1 -
+ drivers/staging/media/Makefile                |    1 -
+ .../staging/media/deprecated/saa7146/Kconfig  |    3 -
+ .../staging/media/deprecated/saa7146/Makefile |    2 -
+ .../media/deprecated/saa7146/common/Kconfig   |   10 -
+ .../media/deprecated/saa7146/common/Makefile  |    6 -
+ .../media/deprecated/saa7146/common/saa7146.h |  472 ------
+ .../deprecated/saa7146/common/saa7146_core.c  |  578 --------
+ .../deprecated/saa7146/common/saa7146_fops.c  |  658 ---------
+ .../deprecated/saa7146/common/saa7146_hlp.c   | 1046 --------------
+ .../deprecated/saa7146/common/saa7146_i2c.c   |  421 ------
+ .../deprecated/saa7146/common/saa7146_vbi.c   |  498 -------
+ .../deprecated/saa7146/common/saa7146_video.c | 1286 -----------------
+ .../deprecated/saa7146/common/saa7146_vv.h    |  266 ----
+ .../media/deprecated/saa7146/saa7146/Kconfig  |   48 -
+ .../media/deprecated/saa7146/saa7146/Makefile |    6 -
+ .../media/deprecated/saa7146/saa7146/TODO     |    7 -
+ .../saa7146/saa7146/hexium_gemini.c           |  425 ------
+ .../deprecated/saa7146/saa7146/hexium_orion.c |  496 -------
+ .../media/deprecated/saa7146/saa7146/mxb.c    |  873 -----------
+ 22 files changed, 7113 deletions(-)
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/Kconfig
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/Makefile
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/common/Kconfig
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/common/Makefile
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/common/saa7146.h
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/common/saa7146_core.c
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/common/saa7146_fops.c
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/common/saa7146_hlp.c
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/common/saa7146_i2c.c
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/common/saa7146_vbi.c
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/common/saa7146_video.c
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/common/saa7146_vv.h
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/saa7146/Kconfig
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/saa7146/Makefile
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/saa7146/TODO
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/saa7146/hexium_gemini.c
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/saa7146/hexium_orion.c
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/saa7146/mxb.c
 
-diff --git a/drivers/staging/media/deprecated/saa7146/av7110/av7110.c b/drivers/staging/media/deprecated/saa7146/av7110/av7110.c
+diff --git a/Documentation/admin-guide/media/pci-cardlist.rst b/Documentation/admin-guide/media/pci-cardlist.rst
+index aca13c7e8508..f0c90f42b713 100644
+--- a/Documentation/admin-guide/media/pci-cardlist.rst
++++ b/Documentation/admin-guide/media/pci-cardlist.rst
+@@ -69,14 +69,11 @@ dm1105            SDMC DM1105 based PCI cards
+ dt3155            DT3155 frame grabber
+ earth-pt1         PT1 cards
+ earth-pt3         Earthsoft PT3 cards
+-hexium_gemini     Hexium Gemini frame grabber
+-hexium_orion      Hexium HV-PCI6 and Orion frame grabber
+ hopper            HOPPER based cards
+ ipu3-cio2         Intel ipu3-cio2 driver
+ ivtv              Conexant cx23416/cx23415 MPEG encoder/decoder
+ ivtvfb            Conexant cx23415 framebuffer
+ mantis            MANTIS based cards
+-mxb               Siemens-Nixdorf 'Multimedia eXtension Board'
+ netup-unidvb      NetUP Universal DVB card
+ ngene             Micronas nGene
+ pluto2            Pluto2 cards
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ba5254cd1002..485228b44f80 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -18377,13 +18377,6 @@ T:	git git://linuxtv.org/media_tree.git
+ F:	Documentation/driver-api/media/drivers/saa7134*
+ F:	drivers/media/pci/saa7134/
+ 
+-SAA7146 VIDEO4LINUX-2 DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
+-L:	linux-media@vger.kernel.org
+-S:	Maintained
+-T:	git git://linuxtv.org/media_tree.git
+-F:	drivers/staging/media/deprecated/saa7146/
+-
+ SAFESETID SECURITY MODULE
+ M:	Micah Morton <mortonm@chromium.org>
+ S:	Supported
+diff --git a/drivers/staging/media/Kconfig b/drivers/staging/media/Kconfig
+index d71ee9a5d04b..2f2dbec4078d 100644
+--- a/drivers/staging/media/Kconfig
++++ b/drivers/staging/media/Kconfig
+@@ -52,7 +52,6 @@ menuconfig STAGING_MEDIA_DEPRECATED
+ 
+ if STAGING_MEDIA_DEPRECATED
+ source "drivers/staging/media/deprecated/atmel/Kconfig"
+-source "drivers/staging/media/deprecated/saa7146/Kconfig"
+ endif
+ 
+ endif
+diff --git a/drivers/staging/media/Makefile b/drivers/staging/media/Makefile
+index 1a01c1af3224..4ab1938bc26f 100644
+--- a/drivers/staging/media/Makefile
++++ b/drivers/staging/media/Makefile
+@@ -9,4 +9,3 @@ obj-$(CONFIG_VIDEO_ROCKCHIP_VDEC)	+= rkvdec/
+ obj-$(CONFIG_VIDEO_SUNXI)	+= sunxi/
+ obj-$(CONFIG_VIDEO_TEGRA)	+= tegra-video/
+ obj-$(CONFIG_VIDEO_IPU3_IMGU)	+= ipu3/
+-obj-y += deprecated/saa7146/
+diff --git a/drivers/staging/media/deprecated/saa7146/Kconfig b/drivers/staging/media/deprecated/saa7146/Kconfig
 deleted file mode 100644
-index df81a9b744c2..000000000000
---- a/drivers/staging/media/deprecated/saa7146/av7110/av7110.c
+index 3d2e2120788e..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/Kconfig
 +++ /dev/null
-@@ -1,2919 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * driver for the SAA7146 based AV110 cards (like the Fujitsu-Siemens DVB)
-- * av7110.c: initialization and demux stuff
-- *
-- * Copyright (C) 1999-2002 Ralph  Metzler
-- *                       & Marcus Metzler for convergence integrated media GmbH
-- *
-- * originally based on code by:
-- * Copyright (C) 1998,1999 Christian Theiss <mistert@rz.fh-augsburg.de>
-- *
-- * the project's page is at https://linuxtv.org
-- */
--
--
--#include <linux/module.h>
--#include <linux/kmod.h>
--#include <linux/delay.h>
--#include <linux/fs.h>
--#include <linux/timer.h>
--#include <linux/poll.h>
--
--#include <linux/kernel.h>
--#include <linux/sched.h>
--#include <linux/types.h>
--#include <linux/fcntl.h>
--#include <linux/interrupt.h>
--#include <linux/string.h>
--#include <linux/pci.h>
--#include <linux/vmalloc.h>
--#include <linux/firmware.h>
--#include <linux/crc32.h>
--#include <linux/i2c.h>
--#include <linux/kthread.h>
--#include <linux/slab.h>
--#include <asm/unaligned.h>
--#include <asm/byteorder.h>
--
--
--#include <linux/dvb/frontend.h>
--
--#include <media/dvb_frontend.h>
--
--#include "ttpci-eeprom.h"
--#include "av7110.h"
--#include "av7110_hw.h"
--#include "av7110_av.h"
--#include "av7110_ca.h"
--#include "av7110_ipack.h"
--
--#include "bsbe1.h"
--#include "lnbp21.h"
--#include "bsru6.h"
--
--#define TS_WIDTH  376
--#define TS_HEIGHT 512
--#define TS_BUFLEN (TS_WIDTH*TS_HEIGHT)
--#define TS_MAX_PACKETS (TS_BUFLEN/TS_SIZE)
--
--
--int av7110_debug;
--
--static int vidmode = CVBS_RGB_OUT;
--static int pids_off;
--static int adac = DVB_ADAC_TI;
--static int hw_sections;
--static int rgb_on;
--static int volume = 255;
--static int budgetpatch;
--static int wss_cfg_4_3 = 0x4008;
--static int wss_cfg_16_9 = 0x0007;
--static int tv_standard;
--static int full_ts;
--
--module_param_named(debug, av7110_debug, int, 0644);
--MODULE_PARM_DESC(debug, "debug level (bitmask, default 0)");
--module_param(vidmode, int, 0444);
--MODULE_PARM_DESC(vidmode,"analog video out: 0 off, 1 CVBS+RGB (default), 2 CVBS+YC, 3 YC");
--module_param(pids_off, int, 0444);
--MODULE_PARM_DESC(pids_off,"clear video/audio/PCR PID filters when demux is closed");
--module_param(adac, int, 0444);
--MODULE_PARM_DESC(adac,"audio DAC type: 0 TI, 1 CRYSTAL, 2 MSP (use if autodetection fails)");
--module_param(hw_sections, int, 0444);
--MODULE_PARM_DESC(hw_sections, "0 use software section filter, 1 use hardware");
--module_param(rgb_on, int, 0444);
--MODULE_PARM_DESC(rgb_on, "For Siemens DVB-C cards only: Enable RGB control signal on SCART pin 16 to switch SCART video mode from CVBS to RGB");
--module_param(volume, int, 0444);
--MODULE_PARM_DESC(volume, "initial volume: default 255 (range 0-255)");
--module_param(budgetpatch, int, 0444);
--MODULE_PARM_DESC(budgetpatch, "use budget-patch hardware modification: default 0 (0 no, 1 autodetect, 2 always)");
--module_param(full_ts, int, 0444);
--MODULE_PARM_DESC(full_ts, "enable code for full-ts hardware modification: 0 disable (default), 1 enable");
--module_param(wss_cfg_4_3, int, 0444);
--MODULE_PARM_DESC(wss_cfg_4_3, "WSS 4:3 - default 0x4008 - bit 15: disable, 14: burst mode, 13..0: wss data");
--module_param(wss_cfg_16_9, int, 0444);
--MODULE_PARM_DESC(wss_cfg_16_9, "WSS 16:9 - default 0x0007 - bit 15: disable, 14: burst mode, 13..0: wss data");
--module_param(tv_standard, int, 0444);
--MODULE_PARM_DESC(tv_standard, "TV standard: 0 PAL (default), 1 NTSC");
--
--DVB_DEFINE_MOD_OPT_ADAPTER_NR(adapter_nr);
--
--static void restart_feeds(struct av7110 *av7110);
--static int budget_start_feed(struct dvb_demux_feed *feed);
--static int budget_stop_feed(struct dvb_demux_feed *feed);
--
--static int av7110_num;
--
--#define FE_FUNC_OVERRIDE(fe_func, av7110_copy, av7110_func) \
--{\
--	if (fe_func != NULL) { \
--		av7110_copy = fe_func; \
--		fe_func = av7110_func; \
--	} \
--}
--
--
--static void init_av7110_av(struct av7110 *av7110)
--{
--	int ret;
--	struct saa7146_dev *dev = av7110->dev;
--
--	/* set internal volume control to maximum */
--	av7110->adac_type = DVB_ADAC_TI;
--	ret = av7110_set_volume(av7110, av7110->mixer.volume_left, av7110->mixer.volume_right);
--	if (ret < 0)
--		printk("dvb-ttpci:cannot set internal volume to maximum:%d\n",ret);
--
--	ret = av7110_fw_cmd(av7110, COMTYPE_ENCODER, SetMonitorType,
--			    1, (u16) av7110->display_ar);
--	if (ret < 0)
--		printk("dvb-ttpci: unable to set aspect ratio\n");
--	ret = av7110_fw_cmd(av7110, COMTYPE_ENCODER, SetPanScanType,
--			    1, av7110->display_panscan);
--	if (ret < 0)
--		printk("dvb-ttpci: unable to set pan scan\n");
--
--	ret = av7110_fw_cmd(av7110, COMTYPE_ENCODER, SetWSSConfig, 2, 2, wss_cfg_4_3);
--	if (ret < 0)
--		printk("dvb-ttpci: unable to configure 4:3 wss\n");
--	ret = av7110_fw_cmd(av7110, COMTYPE_ENCODER, SetWSSConfig, 2, 3, wss_cfg_16_9);
--	if (ret < 0)
--		printk("dvb-ttpci: unable to configure 16:9 wss\n");
--
--	ret = av7710_set_video_mode(av7110, vidmode);
--	if (ret < 0)
--		printk("dvb-ttpci:cannot set video mode:%d\n",ret);
--
--	/* handle different card types */
--	/* remaining inits according to card and frontend type */
--	av7110->analog_tuner_flags = 0;
--	av7110->current_input = 0;
--	if (dev->pci->subsystem_vendor == 0x13c2 && dev->pci->subsystem_device == 0x000a)
--		av7110_fw_cmd(av7110, COMTYPE_AUDIODAC, ADSwitch, 1, 0); // SPDIF on
--	if (i2c_writereg(av7110, 0x20, 0x00, 0x00) == 1) {
--		printk ("dvb-ttpci: Crystal audio DAC @ card %d detected\n",
--			av7110->dvb_adapter.num);
--		av7110->adac_type = DVB_ADAC_CRYSTAL;
--		i2c_writereg(av7110, 0x20, 0x01, 0xd2);
--		i2c_writereg(av7110, 0x20, 0x02, 0x49);
--		i2c_writereg(av7110, 0x20, 0x03, 0x00);
--		i2c_writereg(av7110, 0x20, 0x04, 0x00);
--
--		/**
--		 * some special handling for the Siemens DVB-C cards...
--		 */
--	} else if (0 == av7110_init_analog_module(av7110)) {
--		/* done. */
--	}
--	else if (dev->pci->subsystem_vendor == 0x110a) {
--		printk("dvb-ttpci: DVB-C w/o analog module @ card %d detected\n",
--			av7110->dvb_adapter.num);
--		av7110->adac_type = DVB_ADAC_NONE;
--	}
--	else {
--		av7110->adac_type = adac;
--		printk("dvb-ttpci: adac type set to %d @ card %d\n",
--			av7110->adac_type, av7110->dvb_adapter.num);
--	}
--
--	if (av7110->adac_type == DVB_ADAC_NONE || av7110->adac_type == DVB_ADAC_MSP34x0) {
--		// switch DVB SCART on
--		ret = av7110_fw_cmd(av7110, COMTYPE_AUDIODAC, MainSwitch, 1, 0);
--		if (ret < 0)
--			printk("dvb-ttpci:cannot switch on SCART(Main):%d\n",ret);
--		ret = av7110_fw_cmd(av7110, COMTYPE_AUDIODAC, ADSwitch, 1, 1);
--		if (ret < 0)
--			printk("dvb-ttpci:cannot switch on SCART(AD):%d\n",ret);
--		if (rgb_on &&
--		    ((av7110->dev->pci->subsystem_vendor == 0x110a) ||
--		     (av7110->dev->pci->subsystem_vendor == 0x13c2)) &&
--		     (av7110->dev->pci->subsystem_device == 0x0000)) {
--			saa7146_setgpio(dev, 1, SAA7146_GPIO_OUTHI); // RGB on, SCART pin 16
--			//saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTLO); // SCARTpin 8
--		}
--	}
--
--	if (dev->pci->subsystem_vendor == 0x13c2 && dev->pci->subsystem_device == 0x000e)
--		av7110_fw_cmd(av7110, COMTYPE_AUDIODAC, SpdifSwitch, 1, 0); // SPDIF on
--
--	ret = av7110_set_volume(av7110, av7110->mixer.volume_left, av7110->mixer.volume_right);
--	if (ret < 0)
--		printk("dvb-ttpci:cannot set volume :%d\n",ret);
--}
--
--static void recover_arm(struct av7110 *av7110)
--{
--	dprintk(4, "%p\n",av7110);
--
--	av7110_bootarm(av7110);
--	msleep(100);
--
--	init_av7110_av(av7110);
--
--	/* card-specific recovery */
--	if (av7110->recover)
--		av7110->recover(av7110);
--
--	restart_feeds(av7110);
--
--#if IS_ENABLED(CONFIG_DVB_AV7110_IR)
--	av7110_set_ir_config(av7110);
--#endif
--}
--
--static void av7110_arm_sync(struct av7110 *av7110)
--{
--	if (av7110->arm_thread)
--		kthread_stop(av7110->arm_thread);
--
--	av7110->arm_thread = NULL;
--}
--
--static int arm_thread(void *data)
--{
--	struct av7110 *av7110 = data;
--	u16 newloops = 0;
--	int timeout;
--
--	dprintk(4, "%p\n",av7110);
--
--	for (;;) {
--		timeout = wait_event_interruptible_timeout(av7110->arm_wait,
--			kthread_should_stop(), 5 * HZ);
--
--		if (-ERESTARTSYS == timeout || kthread_should_stop()) {
--			/* got signal or told to quit*/
--			break;
--		}
--
--		if (!av7110->arm_ready)
--			continue;
--
--		if (mutex_lock_interruptible(&av7110->dcomlock))
--			break;
--		newloops = rdebi(av7110, DEBINOSWAP, STATUS_LOOPS, 0, 2);
--		mutex_unlock(&av7110->dcomlock);
--
--		if (newloops == av7110->arm_loops || av7110->arm_errors > 3) {
--			printk(KERN_ERR "dvb-ttpci: ARM crashed @ card %d\n",
--			       av7110->dvb_adapter.num);
--
--			recover_arm(av7110);
--
--			if (mutex_lock_interruptible(&av7110->dcomlock))
--				break;
--			newloops = rdebi(av7110, DEBINOSWAP, STATUS_LOOPS, 0, 2) - 1;
--			mutex_unlock(&av7110->dcomlock);
--		}
--		av7110->arm_loops = newloops;
--		av7110->arm_errors = 0;
--	}
--
--	return 0;
--}
--
--
--/****************************************************************************
-- * IRQ handling
-- ****************************************************************************/
--
--static int DvbDmxFilterCallback(u8 *buffer1, size_t buffer1_len,
--				u8 *buffer2, size_t buffer2_len,
--				struct dvb_demux_filter *dvbdmxfilter,
--				struct av7110 *av7110)
--{
--	if (!dvbdmxfilter->feed->demux->dmx.frontend)
--		return 0;
--	if (dvbdmxfilter->feed->demux->dmx.frontend->source == DMX_MEMORY_FE)
--		return 0;
--
--	switch (dvbdmxfilter->type) {
--	case DMX_TYPE_SEC:
--		if ((((buffer1[1] << 8) | buffer1[2]) & 0xfff) + 3 != buffer1_len)
--			return 0;
--		if (dvbdmxfilter->doneq) {
--			struct dmx_section_filter *filter = &dvbdmxfilter->filter;
--			int i;
--			u8 xor, neq = 0;
--
--			for (i = 0; i < DVB_DEMUX_MASK_MAX; i++) {
--				xor = filter->filter_value[i] ^ buffer1[i];
--				neq |= dvbdmxfilter->maskandnotmode[i] & xor;
--			}
--			if (!neq)
--				return 0;
--		}
--		return dvbdmxfilter->feed->cb.sec(buffer1, buffer1_len,
--						  buffer2, buffer2_len,
--						  &dvbdmxfilter->filter, NULL);
--	case DMX_TYPE_TS:
--		if (!(dvbdmxfilter->feed->ts_type & TS_PACKET))
--			return 0;
--		if (dvbdmxfilter->feed->ts_type & TS_PAYLOAD_ONLY)
--			return dvbdmxfilter->feed->cb.ts(buffer1, buffer1_len,
--							 buffer2, buffer2_len,
--							 &dvbdmxfilter->feed->feed.ts,
--							 NULL);
--		else
--			av7110_p2t_write(buffer1, buffer1_len,
--					 dvbdmxfilter->feed->pid,
--					 &av7110->p2t_filter[dvbdmxfilter->index]);
--		return 0;
--	default:
--		return 0;
--	}
--}
--
--
--//#define DEBUG_TIMING
--static inline void print_time(char *s)
--{
--#ifdef DEBUG_TIMING
--	struct timespec64 ts;
--	ktime_get_real_ts64(&ts);
--	printk("%s: %lld.%09ld\n", s, (s64)ts.tv_sec, ts.tv_nsec);
--#endif
--}
--
--#define DEBI_READ 0
--#define DEBI_WRITE 1
--static inline void start_debi_dma(struct av7110 *av7110, int dir,
--				  unsigned long addr, unsigned int len)
--{
--	dprintk(8, "%c %08lx %u\n", dir == DEBI_READ ? 'R' : 'W', addr, len);
--	if (saa7146_wait_for_debi_done(av7110->dev, 0)) {
--		printk(KERN_ERR "%s: saa7146_wait_for_debi_done timed out\n", __func__);
--		return;
--	}
--
--	SAA7146_ISR_CLEAR(av7110->dev, MASK_19); /* for good measure */
--	SAA7146_IER_ENABLE(av7110->dev, MASK_19);
--	if (len < 5)
--		len = 5; /* we want a real DEBI DMA */
--	if (dir == DEBI_WRITE)
--		iwdebi(av7110, DEBISWAB, addr, 0, (len + 3) & ~3);
--	else
--		irdebi(av7110, DEBISWAB, addr, 0, len);
--}
--
--static void debiirq(struct tasklet_struct *t)
--{
--	struct av7110 *av7110 = from_tasklet(av7110, t, debi_tasklet);
--	int type = av7110->debitype;
--	int handle = (type >> 8) & 0x1f;
--	unsigned int xfer = 0;
--
--	print_time("debi");
--	dprintk(4, "type 0x%04x\n", type);
--
--	if (type == -1) {
--		printk("DEBI irq oops @ %ld, psr:0x%08x, ssr:0x%08x\n",
--		       jiffies, saa7146_read(av7110->dev, PSR),
--		       saa7146_read(av7110->dev, SSR));
--		goto debi_done;
--	}
--	av7110->debitype = -1;
--
--	switch (type & 0xff) {
--
--	case DATA_TS_RECORD:
--		dvb_dmx_swfilter_packets(&av7110->demux,
--					 (const u8 *) av7110->debi_virt,
--					 av7110->debilen / 188);
--		xfer = RX_BUFF;
--		break;
--
--	case DATA_PES_RECORD:
--		if (av7110->demux.recording)
--			av7110_record_cb(&av7110->p2t[handle],
--					 (u8 *) av7110->debi_virt,
--					 av7110->debilen);
--		xfer = RX_BUFF;
--		break;
--
--	case DATA_IPMPE:
--	case DATA_FSECTION:
--	case DATA_PIPING:
--		if (av7110->handle2filter[handle])
--			DvbDmxFilterCallback((u8 *)av7110->debi_virt,
--					     av7110->debilen, NULL, 0,
--					     av7110->handle2filter[handle],
--					     av7110);
--		xfer = RX_BUFF;
--		break;
--
--	case DATA_CI_GET:
--	{
--		u8 *data = av7110->debi_virt;
--		u8 data_0 = data[0];
--
--		if (data_0 < 2 && data[2] == 0xff) {
--			int flags = 0;
--			if (data[5] > 0)
--				flags |= CA_CI_MODULE_PRESENT;
--			if (data[5] > 5)
--				flags |= CA_CI_MODULE_READY;
--			av7110->ci_slot[data_0].flags = flags;
--		} else
--			ci_get_data(&av7110->ci_rbuffer,
--				    av7110->debi_virt,
--				    av7110->debilen);
--		xfer = RX_BUFF;
--		break;
--	}
--
--	case DATA_COMMON_INTERFACE:
--		CI_handle(av7110, (u8 *)av7110->debi_virt, av7110->debilen);
--		xfer = RX_BUFF;
--		break;
--
--	case DATA_DEBUG_MESSAGE:
--		((s8*)av7110->debi_virt)[Reserved_SIZE - 1] = 0;
--		printk("%s\n", (s8 *) av7110->debi_virt);
--		xfer = RX_BUFF;
--		break;
--
--	case DATA_CI_PUT:
--		dprintk(4, "debi DATA_CI_PUT\n");
--		xfer = TX_BUFF;
--		break;
--	case DATA_MPEG_PLAY:
--		dprintk(4, "debi DATA_MPEG_PLAY\n");
--		xfer = TX_BUFF;
--		break;
--	case DATA_BMP_LOAD:
--		dprintk(4, "debi DATA_BMP_LOAD\n");
--		xfer = TX_BUFF;
--		break;
--	default:
--		break;
--	}
--debi_done:
--	spin_lock(&av7110->debilock);
--	if (xfer)
--		iwdebi(av7110, DEBINOSWAP, xfer, 0, 2);
--	ARM_ClearMailBox(av7110);
--	spin_unlock(&av7110->debilock);
--}
--
--/* irq from av7110 firmware writing the mailbox register in the DPRAM */
--static void gpioirq(struct tasklet_struct *t)
--{
--	struct av7110 *av7110 = from_tasklet(av7110, t, gpio_tasklet);
--	u32 rxbuf, txbuf;
--	int len;
--
--	if (av7110->debitype != -1)
--		/* we shouldn't get any irq while a debi xfer is running */
--		printk("dvb-ttpci: GPIO0 irq oops @ %ld, psr:0x%08x, ssr:0x%08x\n",
--		       jiffies, saa7146_read(av7110->dev, PSR),
--		       saa7146_read(av7110->dev, SSR));
--
--	if (saa7146_wait_for_debi_done(av7110->dev, 0)) {
--		printk(KERN_ERR "%s: saa7146_wait_for_debi_done timed out\n", __func__);
--		BUG(); /* maybe we should try resetting the debi? */
--	}
--
--	spin_lock(&av7110->debilock);
--	ARM_ClearIrq(av7110);
--
--	/* see what the av7110 wants */
--	av7110->debitype = irdebi(av7110, DEBINOSWAP, IRQ_STATE, 0, 2);
--	av7110->debilen  = irdebi(av7110, DEBINOSWAP, IRQ_STATE_EXT, 0, 2);
--	rxbuf = irdebi(av7110, DEBINOSWAP, RX_BUFF, 0, 2);
--	txbuf = irdebi(av7110, DEBINOSWAP, TX_BUFF, 0, 2);
--	len = (av7110->debilen + 3) & ~3;
--
--	print_time("gpio");
--	dprintk(8, "GPIO0 irq 0x%04x %d\n", av7110->debitype, av7110->debilen);
--
--	switch (av7110->debitype & 0xff) {
--
--	case DATA_TS_PLAY:
--	case DATA_PES_PLAY:
--		break;
--
--	case DATA_MPEG_VIDEO_EVENT:
--	{
--		u32 h_ar;
--		struct video_event event;
--
--		av7110->video_size.w = irdebi(av7110, DEBINOSWAP, STATUS_MPEG_WIDTH, 0, 2);
--		h_ar = irdebi(av7110, DEBINOSWAP, STATUS_MPEG_HEIGHT_AR, 0, 2);
--
--		iwdebi(av7110, DEBINOSWAP, IRQ_STATE_EXT, 0, 2);
--		iwdebi(av7110, DEBINOSWAP, RX_BUFF, 0, 2);
--
--		av7110->video_size.h = h_ar & 0xfff;
--
--		event.type = VIDEO_EVENT_SIZE_CHANGED;
--		event.u.size.w = av7110->video_size.w;
--		event.u.size.h = av7110->video_size.h;
--		switch ((h_ar >> 12) & 0xf)
--		{
--		case 3:
--			av7110->video_size.aspect_ratio = VIDEO_FORMAT_16_9;
--			event.u.size.aspect_ratio = VIDEO_FORMAT_16_9;
--			av7110->videostate.video_format = VIDEO_FORMAT_16_9;
--			break;
--		case 4:
--			av7110->video_size.aspect_ratio = VIDEO_FORMAT_221_1;
--			event.u.size.aspect_ratio = VIDEO_FORMAT_221_1;
--			av7110->videostate.video_format = VIDEO_FORMAT_221_1;
--			break;
--		default:
--			av7110->video_size.aspect_ratio = VIDEO_FORMAT_4_3;
--			event.u.size.aspect_ratio = VIDEO_FORMAT_4_3;
--			av7110->videostate.video_format = VIDEO_FORMAT_4_3;
--		}
--
--		dprintk(8, "GPIO0 irq: DATA_MPEG_VIDEO_EVENT: w/h/ar = %u/%u/%u\n",
--			av7110->video_size.w, av7110->video_size.h,
--			av7110->video_size.aspect_ratio);
--
--		dvb_video_add_event(av7110, &event);
--		break;
--	}
--
--	case DATA_CI_PUT:
--	{
--		int avail;
--		struct dvb_ringbuffer *cibuf = &av7110->ci_wbuffer;
--
--		avail = dvb_ringbuffer_avail(cibuf);
--		if (avail <= 2) {
--			iwdebi(av7110, DEBINOSWAP, IRQ_STATE_EXT, 0, 2);
--			iwdebi(av7110, DEBINOSWAP, TX_LEN, 0, 2);
--			iwdebi(av7110, DEBINOSWAP, TX_BUFF, 0, 2);
--			break;
--		}
--		len = DVB_RINGBUFFER_PEEK(cibuf, 0) << 8;
--		len |= DVB_RINGBUFFER_PEEK(cibuf, 1);
--		if (avail < len + 2) {
--			iwdebi(av7110, DEBINOSWAP, IRQ_STATE_EXT, 0, 2);
--			iwdebi(av7110, DEBINOSWAP, TX_LEN, 0, 2);
--			iwdebi(av7110, DEBINOSWAP, TX_BUFF, 0, 2);
--			break;
--		}
--		DVB_RINGBUFFER_SKIP(cibuf, 2);
--
--		dvb_ringbuffer_read(cibuf, av7110->debi_virt, len);
--
--		iwdebi(av7110, DEBINOSWAP, TX_LEN, len, 2);
--		iwdebi(av7110, DEBINOSWAP, IRQ_STATE_EXT, len, 2);
--		dprintk(8, "DMA: CI\n");
--		start_debi_dma(av7110, DEBI_WRITE, DPRAM_BASE + txbuf, len);
--		spin_unlock(&av7110->debilock);
--		wake_up(&cibuf->queue);
--		return;
--	}
--
--	case DATA_MPEG_PLAY:
--		if (!av7110->playing) {
--			iwdebi(av7110, DEBINOSWAP, IRQ_STATE_EXT, 0, 2);
--			iwdebi(av7110, DEBINOSWAP, TX_LEN, 0, 2);
--			iwdebi(av7110, DEBINOSWAP, TX_BUFF, 0, 2);
--			break;
--		}
--		len = 0;
--		if (av7110->debitype & 0x100) {
--			spin_lock(&av7110->aout.lock);
--			len = av7110_pes_play(av7110->debi_virt, &av7110->aout, 2048);
--			spin_unlock(&av7110->aout.lock);
--		}
--		if (len <= 0 && (av7110->debitype & 0x200)
--		    &&av7110->videostate.play_state != VIDEO_FREEZED) {
--			spin_lock(&av7110->avout.lock);
--			len = av7110_pes_play(av7110->debi_virt, &av7110->avout, 2048);
--			spin_unlock(&av7110->avout.lock);
--		}
--		if (len <= 0) {
--			iwdebi(av7110, DEBINOSWAP, IRQ_STATE_EXT, 0, 2);
--			iwdebi(av7110, DEBINOSWAP, TX_LEN, 0, 2);
--			iwdebi(av7110, DEBINOSWAP, TX_BUFF, 0, 2);
--			break;
--		}
--		dprintk(8, "GPIO0 PES_PLAY len=%04x\n", len);
--		iwdebi(av7110, DEBINOSWAP, TX_LEN, len, 2);
--		iwdebi(av7110, DEBINOSWAP, IRQ_STATE_EXT, len, 2);
--		dprintk(8, "DMA: MPEG_PLAY\n");
--		start_debi_dma(av7110, DEBI_WRITE, DPRAM_BASE + txbuf, len);
--		spin_unlock(&av7110->debilock);
--		return;
--
--	case DATA_BMP_LOAD:
--		len = av7110->debilen;
--		dprintk(8, "gpio DATA_BMP_LOAD len %d\n", len);
--		if (!len) {
--			av7110->bmp_state = BMP_LOADED;
--			iwdebi(av7110, DEBINOSWAP, IRQ_STATE_EXT, 0, 2);
--			iwdebi(av7110, DEBINOSWAP, TX_LEN, 0, 2);
--			iwdebi(av7110, DEBINOSWAP, TX_BUFF, 0, 2);
--			wake_up(&av7110->bmpq);
--			dprintk(8, "gpio DATA_BMP_LOAD done\n");
--			break;
--		}
--		if (len > av7110->bmplen)
--			len = av7110->bmplen;
--		if (len > 2 * 1024)
--			len = 2 * 1024;
--		iwdebi(av7110, DEBINOSWAP, TX_LEN, len, 2);
--		iwdebi(av7110, DEBINOSWAP, IRQ_STATE_EXT, len, 2);
--		memcpy(av7110->debi_virt, av7110->bmpbuf+av7110->bmpp, len);
--		av7110->bmpp += len;
--		av7110->bmplen -= len;
--		dprintk(8, "gpio DATA_BMP_LOAD DMA len %d\n", len);
--		start_debi_dma(av7110, DEBI_WRITE, DPRAM_BASE+txbuf, len);
--		spin_unlock(&av7110->debilock);
--		return;
--
--	case DATA_CI_GET:
--	case DATA_COMMON_INTERFACE:
--	case DATA_FSECTION:
--	case DATA_IPMPE:
--	case DATA_PIPING:
--		if (!len || len > 4 * 1024) {
--			iwdebi(av7110, DEBINOSWAP, RX_BUFF, 0, 2);
--			break;
--		}
--		fallthrough;
--
--	case DATA_TS_RECORD:
--	case DATA_PES_RECORD:
--		dprintk(8, "DMA: TS_REC etc.\n");
--		start_debi_dma(av7110, DEBI_READ, DPRAM_BASE+rxbuf, len);
--		spin_unlock(&av7110->debilock);
--		return;
--
--	case DATA_DEBUG_MESSAGE:
--		if (!len || len > 0xff) {
--			iwdebi(av7110, DEBINOSWAP, RX_BUFF, 0, 2);
--			break;
--		}
--		start_debi_dma(av7110, DEBI_READ, Reserved, len);
--		spin_unlock(&av7110->debilock);
--		return;
--
--	case DATA_IRCOMMAND:
--#if IS_ENABLED(CONFIG_DVB_AV7110_IR)
--		av7110_ir_handler(av7110,
--				  swahw32(irdebi(av7110, DEBINOSWAP, Reserved,
--						 0, 4)));
--#endif
--		iwdebi(av7110, DEBINOSWAP, RX_BUFF, 0, 2);
--		break;
--
--	default:
--		printk("dvb-ttpci: gpioirq unknown type=%d len=%d\n",
--		       av7110->debitype, av7110->debilen);
--		break;
--	}
--	av7110->debitype = -1;
--	ARM_ClearMailBox(av7110);
--	spin_unlock(&av7110->debilock);
--}
--
--
--#ifdef CONFIG_DVB_AV7110_OSD
--static int dvb_osd_ioctl(struct file *file,
--			 unsigned int cmd, void *parg)
--{
--	struct dvb_device *dvbdev = file->private_data;
--	struct av7110 *av7110 = dvbdev->priv;
--
--	dprintk(4, "%p\n", av7110);
--
--	if (cmd == OSD_SEND_CMD)
--		return av7110_osd_cmd(av7110, (osd_cmd_t *) parg);
--	if (cmd == OSD_GET_CAPABILITY)
--		return av7110_osd_capability(av7110, (osd_cap_t *) parg);
--
--	return -EINVAL;
--}
--
--
--static const struct file_operations dvb_osd_fops = {
--	.owner		= THIS_MODULE,
--	.unlocked_ioctl	= dvb_generic_ioctl,
--	.open		= dvb_generic_open,
--	.release	= dvb_generic_release,
--	.llseek		= noop_llseek,
--};
--
--static struct dvb_device dvbdev_osd = {
--	.priv		= NULL,
--	.users		= 1,
--	.writers	= 1,
--	.fops		= &dvb_osd_fops,
--	.kernel_ioctl	= dvb_osd_ioctl,
--};
--#endif /* CONFIG_DVB_AV7110_OSD */
--
--
--static inline int SetPIDs(struct av7110 *av7110, u16 vpid, u16 apid, u16 ttpid,
--			  u16 subpid, u16 pcrpid)
--{
--	u16 aflags = 0;
--
--	dprintk(4, "%p\n", av7110);
--
--	if (vpid == 0x1fff || apid == 0x1fff ||
--	    ttpid == 0x1fff || subpid == 0x1fff || pcrpid == 0x1fff) {
--		vpid = apid = ttpid = subpid = pcrpid = 0;
--		av7110->pids[DMX_PES_VIDEO] = 0;
--		av7110->pids[DMX_PES_AUDIO] = 0;
--		av7110->pids[DMX_PES_TELETEXT] = 0;
--		av7110->pids[DMX_PES_PCR] = 0;
--	}
--
--	if (av7110->audiostate.bypass_mode)
--		aflags |= 0x8000;
--
--	return av7110_fw_cmd(av7110, COMTYPE_PIDFILTER, MultiPID, 6,
--			     pcrpid, vpid, apid, ttpid, subpid, aflags);
--}
--
--int ChangePIDs(struct av7110 *av7110, u16 vpid, u16 apid, u16 ttpid,
--		u16 subpid, u16 pcrpid)
--{
--	int ret = 0;
--	dprintk(4, "%p\n", av7110);
--
--	if (mutex_lock_interruptible(&av7110->pid_mutex))
--		return -ERESTARTSYS;
--
--	if (!(vpid & 0x8000))
--		av7110->pids[DMX_PES_VIDEO] = vpid;
--	if (!(apid & 0x8000))
--		av7110->pids[DMX_PES_AUDIO] = apid;
--	if (!(ttpid & 0x8000))
--		av7110->pids[DMX_PES_TELETEXT] = ttpid;
--	if (!(pcrpid & 0x8000))
--		av7110->pids[DMX_PES_PCR] = pcrpid;
--
--	av7110->pids[DMX_PES_SUBTITLE] = 0;
--
--	if (av7110->fe_synced) {
--		pcrpid = av7110->pids[DMX_PES_PCR];
--		ret = SetPIDs(av7110, vpid, apid, ttpid, subpid, pcrpid);
--	}
--
--	mutex_unlock(&av7110->pid_mutex);
--	return ret;
--}
--
--
--/******************************************************************************
-- * hardware filter functions
-- ******************************************************************************/
--
--static int StartHWFilter(struct dvb_demux_filter *dvbdmxfilter)
--{
--	struct dvb_demux_feed *dvbdmxfeed = dvbdmxfilter->feed;
--	struct av7110 *av7110 = dvbdmxfeed->demux->priv;
--	u16 buf[20];
--	int ret, i;
--	u16 handle;
--//	u16 mode = 0x0320;
--	u16 mode = 0xb96a;
--
--	dprintk(4, "%p\n", av7110);
--
--	if (av7110->full_ts)
--		return 0;
--
--	if (dvbdmxfilter->type == DMX_TYPE_SEC) {
--		if (hw_sections) {
--			buf[4] = (dvbdmxfilter->filter.filter_value[0] << 8) |
--				dvbdmxfilter->maskandmode[0];
--			for (i = 3; i < 18; i++)
--				buf[i + 4 - 2] =
--					(dvbdmxfilter->filter.filter_value[i] << 8) |
--					dvbdmxfilter->maskandmode[i];
--			mode = 4;
--		}
--	} else if ((dvbdmxfeed->ts_type & TS_PACKET) &&
--		   !(dvbdmxfeed->ts_type & TS_PAYLOAD_ONLY)) {
--		av7110_p2t_init(&av7110->p2t_filter[dvbdmxfilter->index], dvbdmxfeed);
--	}
--
--	buf[0] = (COMTYPE_PID_FILTER << 8) + AddPIDFilter;
--	buf[1] = 16;
--	buf[2] = dvbdmxfeed->pid;
--	buf[3] = mode;
--
--	ret = av7110_fw_request(av7110, buf, 20, &handle, 1);
--	if (ret != 0 || handle >= 32) {
--		printk(KERN_ERR "dvb-ttpci: %s error  buf %04x %04x %04x %04x  ret %d  handle %04x\n",
--				__func__, buf[0], buf[1], buf[2], buf[3],
--				ret, handle);
--		dvbdmxfilter->hw_handle = 0xffff;
--		if (!ret)
--			ret = -1;
--		return ret;
--	}
--
--	av7110->handle2filter[handle] = dvbdmxfilter;
--	dvbdmxfilter->hw_handle = handle;
--
--	return ret;
--}
--
--static int StopHWFilter(struct dvb_demux_filter *dvbdmxfilter)
--{
--	struct av7110 *av7110 = dvbdmxfilter->feed->demux->priv;
--	u16 buf[3];
--	u16 answ[2];
--	int ret;
--	u16 handle;
--
--	dprintk(4, "%p\n", av7110);
--
--	if (av7110->full_ts)
--		return 0;
--
--	handle = dvbdmxfilter->hw_handle;
--	if (handle >= 32) {
--		printk("%s tried to stop invalid filter %04x, filter type = %x\n",
--				__func__, handle, dvbdmxfilter->type);
--		return -EINVAL;
--	}
--
--	av7110->handle2filter[handle] = NULL;
--
--	buf[0] = (COMTYPE_PID_FILTER << 8) + DelPIDFilter;
--	buf[1] = 1;
--	buf[2] = handle;
--	ret = av7110_fw_request(av7110, buf, 3, answ, 2);
--	if (ret != 0 || answ[1] != handle) {
--		printk(KERN_ERR "dvb-ttpci: %s error  cmd %04x %04x %04x  ret %x  resp %04x %04x  pid %d\n",
--				__func__, buf[0], buf[1], buf[2], ret,
--				answ[0], answ[1], dvbdmxfilter->feed->pid);
--		if (!ret)
--			ret = -1;
--	}
--	return ret;
--}
--
--
--static int dvb_feed_start_pid(struct dvb_demux_feed *dvbdmxfeed)
--{
--	struct dvb_demux *dvbdmx = dvbdmxfeed->demux;
--	struct av7110 *av7110 = dvbdmx->priv;
--	u16 *pid = dvbdmx->pids, npids[5];
--	int i;
--	int ret = 0;
--
--	dprintk(4, "%p\n", av7110);
--
--	npids[0] = npids[1] = npids[2] = npids[3] = npids[4] = 0xffff;
--	i = dvbdmxfeed->pes_type;
--	npids[i] = (pid[i]&0x8000) ? 0 : pid[i];
--	if ((i == 2) && npids[i] && (dvbdmxfeed->ts_type & TS_PACKET)) {
--		npids[i] = 0;
--		ret = ChangePIDs(av7110, npids[1], npids[0], npids[2], npids[3], npids[4]);
--		if (!ret)
--			ret = StartHWFilter(dvbdmxfeed->filter);
--		return ret;
--	}
--	if (dvbdmxfeed->pes_type <= 2 || dvbdmxfeed->pes_type == 4) {
--		ret = ChangePIDs(av7110, npids[1], npids[0], npids[2], npids[3], npids[4]);
--		if (ret)
--			return ret;
--	}
--
--	if (dvbdmxfeed->pes_type < 2 && npids[0])
--		if (av7110->fe_synced)
--		{
--			ret = av7110_fw_cmd(av7110, COMTYPE_PIDFILTER, Scan, 0);
--			if (ret)
--				return ret;
--		}
--
--	if ((dvbdmxfeed->ts_type & TS_PACKET) && !av7110->full_ts) {
--		if (dvbdmxfeed->pes_type == 0 && !(dvbdmx->pids[0] & 0x8000))
--			ret = av7110_av_start_record(av7110, RP_AUDIO, dvbdmxfeed);
--		if (dvbdmxfeed->pes_type == 1 && !(dvbdmx->pids[1] & 0x8000))
--			ret = av7110_av_start_record(av7110, RP_VIDEO, dvbdmxfeed);
--	}
--	return ret;
--}
--
--static int dvb_feed_stop_pid(struct dvb_demux_feed *dvbdmxfeed)
--{
--	struct dvb_demux *dvbdmx = dvbdmxfeed->demux;
--	struct av7110 *av7110 = dvbdmx->priv;
--	u16 *pid = dvbdmx->pids, npids[5];
--	int i;
--
--	int ret = 0;
--
--	dprintk(4, "%p\n", av7110);
--
--	if (dvbdmxfeed->pes_type <= 1) {
--		ret = av7110_av_stop(av7110, dvbdmxfeed->pes_type ?  RP_VIDEO : RP_AUDIO);
--		if (ret)
--			return ret;
--		if (!av7110->rec_mode)
--			dvbdmx->recording = 0;
--		if (!av7110->playing)
--			dvbdmx->playing = 0;
--	}
--	npids[0] = npids[1] = npids[2] = npids[3] = npids[4] = 0xffff;
--	i = dvbdmxfeed->pes_type;
--	switch (i) {
--	case 2: //teletext
--		if (dvbdmxfeed->ts_type & TS_PACKET)
--			ret = StopHWFilter(dvbdmxfeed->filter);
--		npids[2] = 0;
--		break;
--	case 0:
--	case 1:
--	case 4:
--		if (!pids_off)
--			return 0;
--		npids[i] = (pid[i]&0x8000) ? 0 : pid[i];
--		break;
--	}
--	if (!ret)
--		ret = ChangePIDs(av7110, npids[1], npids[0], npids[2], npids[3], npids[4]);
--	return ret;
--}
--
--static int av7110_start_feed(struct dvb_demux_feed *feed)
--{
--	struct dvb_demux *demux = feed->demux;
--	struct av7110 *av7110 = demux->priv;
--	int ret = 0;
--
--	dprintk(4, "%p\n", av7110);
--
--	if (!demux->dmx.frontend)
--		return -EINVAL;
--
--	if (!av7110->full_ts && feed->pid > 0x1fff)
--		return -EINVAL;
--
--	if (feed->type == DMX_TYPE_TS) {
--		if ((feed->ts_type & TS_DECODER) &&
--		    (feed->pes_type <= DMX_PES_PCR)) {
--			switch (demux->dmx.frontend->source) {
--			case DMX_MEMORY_FE:
--				if (feed->ts_type & TS_DECODER)
--				       if (feed->pes_type < 2 &&
--					   !(demux->pids[0] & 0x8000) &&
--					   !(demux->pids[1] & 0x8000)) {
--					       dvb_ringbuffer_flush_spinlock_wakeup(&av7110->avout);
--					       dvb_ringbuffer_flush_spinlock_wakeup(&av7110->aout);
--					       ret = av7110_av_start_play(av7110,RP_AV);
--					       if (!ret)
--						       demux->playing = 1;
--					}
--				break;
--			default:
--				ret = dvb_feed_start_pid(feed);
--				break;
--			}
--		} else if ((feed->ts_type & TS_PACKET) &&
--			   (demux->dmx.frontend->source != DMX_MEMORY_FE)) {
--			ret = StartHWFilter(feed->filter);
--		}
--	}
--
--	if (av7110->full_ts) {
--		budget_start_feed(feed);
--		return ret;
--	}
--
--	if (feed->type == DMX_TYPE_SEC) {
--		int i;
--
--		for (i = 0; i < demux->filternum; i++) {
--			if (demux->filter[i].state != DMX_STATE_READY)
--				continue;
--			if (demux->filter[i].type != DMX_TYPE_SEC)
--				continue;
--			if (demux->filter[i].filter.parent != &feed->feed.sec)
--				continue;
--			demux->filter[i].state = DMX_STATE_GO;
--			if (demux->dmx.frontend->source != DMX_MEMORY_FE) {
--				ret = StartHWFilter(&demux->filter[i]);
--				if (ret)
--					break;
--			}
--		}
--	}
--
--	return ret;
--}
--
--
--static int av7110_stop_feed(struct dvb_demux_feed *feed)
--{
--	struct dvb_demux *demux = feed->demux;
--	struct av7110 *av7110 = demux->priv;
--	int i, rc, ret = 0;
--	dprintk(4, "%p\n", av7110);
--
--	if (feed->type == DMX_TYPE_TS) {
--		if (feed->ts_type & TS_DECODER) {
--			if (feed->pes_type >= DMX_PES_OTHER ||
--			    !demux->pesfilter[feed->pes_type])
--				return -EINVAL;
--			demux->pids[feed->pes_type] |= 0x8000;
--			demux->pesfilter[feed->pes_type] = NULL;
--		}
--		if (feed->ts_type & TS_DECODER &&
--		    feed->pes_type < DMX_PES_OTHER) {
--			ret = dvb_feed_stop_pid(feed);
--		} else
--			if ((feed->ts_type & TS_PACKET) &&
--			    (demux->dmx.frontend->source != DMX_MEMORY_FE))
--				ret = StopHWFilter(feed->filter);
--	}
--
--	if (av7110->full_ts) {
--		budget_stop_feed(feed);
--		return ret;
--	}
--
--	if (feed->type == DMX_TYPE_SEC) {
--		for (i = 0; i<demux->filternum; i++) {
--			if (demux->filter[i].state == DMX_STATE_GO &&
--			    demux->filter[i].filter.parent == &feed->feed.sec) {
--				demux->filter[i].state = DMX_STATE_READY;
--				if (demux->dmx.frontend->source != DMX_MEMORY_FE) {
--					rc = StopHWFilter(&demux->filter[i]);
--					if (!ret)
--						ret = rc;
--					/* keep going, stop as many filters as possible */
--				}
--			}
--		}
--	}
--
--	return ret;
--}
--
--
--static void restart_feeds(struct av7110 *av7110)
--{
--	struct dvb_demux *dvbdmx = &av7110->demux;
--	struct dvb_demux_feed *feed;
--	int mode;
--	int feeding;
--	int i, j;
--
--	dprintk(4, "%p\n", av7110);
--
--	mode = av7110->playing;
--	av7110->playing = 0;
--	av7110->rec_mode = 0;
--
--	feeding = av7110->feeding1; /* full_ts mod */
--
--	for (i = 0; i < dvbdmx->feednum; i++) {
--		feed = &dvbdmx->feed[i];
--		if (feed->state == DMX_STATE_GO) {
--			if (feed->type == DMX_TYPE_SEC) {
--				for (j = 0; j < dvbdmx->filternum; j++) {
--					if (dvbdmx->filter[j].type != DMX_TYPE_SEC)
--						continue;
--					if (dvbdmx->filter[j].filter.parent != &feed->feed.sec)
--						continue;
--					if (dvbdmx->filter[j].state == DMX_STATE_GO)
--						dvbdmx->filter[j].state = DMX_STATE_READY;
--				}
--			}
--			av7110_start_feed(feed);
--		}
--	}
--
--	av7110->feeding1 = feeding; /* full_ts mod */
--
--	if (mode)
--		av7110_av_start_play(av7110, mode);
--}
--
--static int dvb_get_stc(struct dmx_demux *demux, unsigned int num,
--		       uint64_t *stc, unsigned int *base)
--{
--	int ret;
--	u16 fwstc[4];
--	u16 tag = ((COMTYPE_REQUEST << 8) + ReqSTC);
--	struct dvb_demux *dvbdemux;
--	struct av7110 *av7110;
--
--	/* pointer casting paranoia... */
--	BUG_ON(!demux);
--	dvbdemux = demux->priv;
--	BUG_ON(!dvbdemux);
--	av7110 = dvbdemux->priv;
--
--	dprintk(4, "%p\n", av7110);
--
--	if (num != 0)
--		return -EINVAL;
--
--	ret = av7110_fw_request(av7110, &tag, 0, fwstc, 4);
--	if (ret) {
--		printk(KERN_ERR "%s: av7110_fw_request error\n", __func__);
--		return ret;
--	}
--	dprintk(2, "fwstc = %04hx %04hx %04hx %04hx\n",
--		fwstc[0], fwstc[1], fwstc[2], fwstc[3]);
--
--	*stc =	(((uint64_t) ((fwstc[3] & 0x8000) >> 15)) << 32) |
--		(((uint64_t)  fwstc[1]) << 16) | ((uint64_t) fwstc[0]);
--	*base = 1;
--
--	dprintk(4, "stc = %lu\n", (unsigned long)*stc);
--
--	return 0;
--}
--
--
--/******************************************************************************
-- * SEC device file operations
-- ******************************************************************************/
--
--
--static int av7110_set_tone(struct dvb_frontend *fe, enum fe_sec_tone_mode tone)
--{
--	struct av7110* av7110 = fe->dvb->priv;
--
--	switch (tone) {
--	case SEC_TONE_ON:
--		return Set22K(av7110, 1);
--
--	case SEC_TONE_OFF:
--		return Set22K(av7110, 0);
--
--	default:
--		return -EINVAL;
--	}
--}
--
--static int av7110_diseqc_send_master_cmd(struct dvb_frontend* fe,
--					 struct dvb_diseqc_master_cmd* cmd)
--{
--	struct av7110* av7110 = fe->dvb->priv;
--
--	return av7110_diseqc_send(av7110, cmd->msg_len, cmd->msg, -1);
--}
--
--static int av7110_diseqc_send_burst(struct dvb_frontend* fe,
--				    enum fe_sec_mini_cmd minicmd)
--{
--	struct av7110* av7110 = fe->dvb->priv;
--
--	return av7110_diseqc_send(av7110, 0, NULL, minicmd);
--}
--
--/* simplified code from budget-core.c */
--static int stop_ts_capture(struct av7110 *budget)
--{
--	dprintk(2, "budget: %p\n", budget);
--
--	if (--budget->feeding1)
--		return budget->feeding1;
--	saa7146_write(budget->dev, MC1, MASK_20);	/* DMA3 off */
--	SAA7146_IER_DISABLE(budget->dev, MASK_10);
--	SAA7146_ISR_CLEAR(budget->dev, MASK_10);
--	return 0;
--}
--
--static int start_ts_capture(struct av7110 *budget)
--{
--	unsigned y;
--
--	dprintk(2, "budget: %p\n", budget);
--
--	if (budget->feeding1)
--		return ++budget->feeding1;
--	for (y = 0; y < TS_HEIGHT; y++)
--		memset(budget->grabbing + y * TS_WIDTH, 0x00, TS_WIDTH);
--	budget->ttbp = 0;
--	SAA7146_ISR_CLEAR(budget->dev, MASK_10);  /* VPE */
--	SAA7146_IER_ENABLE(budget->dev, MASK_10); /* VPE */
--	saa7146_write(budget->dev, MC1, (MASK_04 | MASK_20)); /* DMA3 on */
--	return ++budget->feeding1;
--}
--
--static int budget_start_feed(struct dvb_demux_feed *feed)
--{
--	struct dvb_demux *demux = feed->demux;
--	struct av7110 *budget = demux->priv;
--	int status;
--
--	dprintk(2, "av7110: %p\n", budget);
--
--	spin_lock(&budget->feedlock1);
--	feed->pusi_seen = false; /* have a clean section start */
--	status = start_ts_capture(budget);
--	spin_unlock(&budget->feedlock1);
--	return status;
--}
--
--static int budget_stop_feed(struct dvb_demux_feed *feed)
--{
--	struct dvb_demux *demux = feed->demux;
--	struct av7110 *budget = demux->priv;
--	int status;
--
--	dprintk(2, "budget: %p\n", budget);
--
--	spin_lock(&budget->feedlock1);
--	status = stop_ts_capture(budget);
--	spin_unlock(&budget->feedlock1);
--	return status;
--}
--
--static void vpeirq(struct tasklet_struct *t)
--{
--	struct av7110 *budget = from_tasklet(budget, t, vpe_tasklet);
--	u8 *mem = (u8 *) (budget->grabbing);
--	u32 olddma = budget->ttbp;
--	u32 newdma = saa7146_read(budget->dev, PCI_VDP3);
--	struct dvb_demux *demux = budget->full_ts ? &budget->demux : &budget->demux1;
--
--	/* nearest lower position divisible by 188 */
--	newdma -= newdma % 188;
--
--	if (newdma >= TS_BUFLEN)
--		return;
--
--	budget->ttbp = newdma;
--
--	if (!budget->feeding1 || (newdma == olddma))
--		return;
--
--	/* Ensure streamed PCI data is synced to CPU */
--	dma_sync_sg_for_cpu(&budget->dev->pci->dev, budget->pt.slist,
--			    budget->pt.nents, DMA_FROM_DEVICE);
--
--#if 0
--	/* track rps1 activity */
--	printk("vpeirq: %02x Event Counter 1 0x%04x\n",
--	       mem[olddma],
--	       saa7146_read(budget->dev, EC1R) & 0x3fff);
--#endif
--
--	if (newdma > olddma)
--		/* no wraparound, dump olddma..newdma */
--		dvb_dmx_swfilter_packets(demux, mem + olddma, (newdma - olddma) / 188);
--	else {
--		/* wraparound, dump olddma..buflen and 0..newdma */
--		dvb_dmx_swfilter_packets(demux, mem + olddma, (TS_BUFLEN - olddma) / 188);
--		dvb_dmx_swfilter_packets(demux, mem, newdma / 188);
--	}
--}
--
--static int av7110_register(struct av7110 *av7110)
--{
--	int ret, i;
--	struct dvb_demux *dvbdemux = &av7110->demux;
--	struct dvb_demux *dvbdemux1 = &av7110->demux1;
--
--	dprintk(4, "%p\n", av7110);
--
--	if (av7110->registered)
--		return -1;
--
--	av7110->registered = 1;
--
--	dvbdemux->priv = (void *) av7110;
--
--	for (i = 0; i < 32; i++)
--		av7110->handle2filter[i] = NULL;
--
--	dvbdemux->filternum = (av7110->full_ts) ? 256 : 32;
--	dvbdemux->feednum = (av7110->full_ts) ? 256 : 32;
--	dvbdemux->start_feed = av7110_start_feed;
--	dvbdemux->stop_feed = av7110_stop_feed;
--	dvbdemux->write_to_decoder = av7110_write_to_decoder;
--	dvbdemux->dmx.capabilities = (DMX_TS_FILTERING | DMX_SECTION_FILTERING |
--				      DMX_MEMORY_BASED_FILTERING);
--
--	dvb_dmx_init(&av7110->demux);
--	av7110->demux.dmx.get_stc = dvb_get_stc;
--
--	av7110->dmxdev.filternum = (av7110->full_ts) ? 256 : 32;
--	av7110->dmxdev.demux = &dvbdemux->dmx;
--	av7110->dmxdev.capabilities = 0;
--
--	dvb_dmxdev_init(&av7110->dmxdev, &av7110->dvb_adapter);
--
--	av7110->hw_frontend.source = DMX_FRONTEND_0;
--
--	ret = dvbdemux->dmx.add_frontend(&dvbdemux->dmx, &av7110->hw_frontend);
--
--	if (ret < 0)
--		return ret;
--
--	av7110->mem_frontend.source = DMX_MEMORY_FE;
--
--	ret = dvbdemux->dmx.add_frontend(&dvbdemux->dmx, &av7110->mem_frontend);
--
--	if (ret < 0)
--		return ret;
--
--	ret = dvbdemux->dmx.connect_frontend(&dvbdemux->dmx,
--					     &av7110->hw_frontend);
--	if (ret < 0)
--		return ret;
--
--	av7110_av_register(av7110);
--	av7110_ca_register(av7110);
--
--#ifdef CONFIG_DVB_AV7110_OSD
--	dvb_register_device(&av7110->dvb_adapter, &av7110->osd_dev,
--			    &dvbdev_osd, av7110, DVB_DEVICE_OSD, 0);
--#endif
--
--	dvb_net_init(&av7110->dvb_adapter, &av7110->dvb_net, &dvbdemux->dmx);
--
--	if (budgetpatch) {
--		/* initialize software demux1 without its own frontend
--		 * demux1 hardware is connected to frontend0 of demux0
--		 */
--		dvbdemux1->priv = (void *) av7110;
--
--		dvbdemux1->filternum = 256;
--		dvbdemux1->feednum = 256;
--		dvbdemux1->start_feed = budget_start_feed;
--		dvbdemux1->stop_feed = budget_stop_feed;
--		dvbdemux1->write_to_decoder = NULL;
--
--		dvbdemux1->dmx.capabilities = (DMX_TS_FILTERING | DMX_SECTION_FILTERING |
--					       DMX_MEMORY_BASED_FILTERING);
--
--		dvb_dmx_init(&av7110->demux1);
--
--		av7110->dmxdev1.filternum = 256;
--		av7110->dmxdev1.demux = &dvbdemux1->dmx;
--		av7110->dmxdev1.capabilities = 0;
--
--		dvb_dmxdev_init(&av7110->dmxdev1, &av7110->dvb_adapter);
--
--		dvb_net_init(&av7110->dvb_adapter, &av7110->dvb_net1, &dvbdemux1->dmx);
--		printk("dvb-ttpci: additional demux1 for budget-patch registered\n");
--	}
--	return 0;
--}
--
--
--static void dvb_unregister(struct av7110 *av7110)
--{
--	struct dvb_demux *dvbdemux = &av7110->demux;
--	struct dvb_demux *dvbdemux1 = &av7110->demux1;
--
--	dprintk(4, "%p\n", av7110);
--
--	if (!av7110->registered)
--		return;
--
--	if (budgetpatch) {
--		dvb_net_release(&av7110->dvb_net1);
--		dvbdemux->dmx.close(&dvbdemux1->dmx);
--		dvb_dmxdev_release(&av7110->dmxdev1);
--		dvb_dmx_release(&av7110->demux1);
--	}
--
--	dvb_net_release(&av7110->dvb_net);
--
--	dvbdemux->dmx.close(&dvbdemux->dmx);
--	dvbdemux->dmx.remove_frontend(&dvbdemux->dmx, &av7110->hw_frontend);
--	dvbdemux->dmx.remove_frontend(&dvbdemux->dmx, &av7110->mem_frontend);
--
--	dvb_dmxdev_release(&av7110->dmxdev);
--	dvb_dmx_release(&av7110->demux);
--
--	if (av7110->fe != NULL) {
--		dvb_unregister_frontend(av7110->fe);
--		dvb_frontend_detach(av7110->fe);
--	}
--	dvb_unregister_device(av7110->osd_dev);
--	av7110_av_unregister(av7110);
--	av7110_ca_unregister(av7110);
--}
--
--
--/****************************************************************************
-- * I2C client commands
-- ****************************************************************************/
--
--int i2c_writereg(struct av7110 *av7110, u8 id, u8 reg, u8 val)
--{
--	u8 msg[2] = { reg, val };
--	struct i2c_msg msgs;
--
--	msgs.flags = 0;
--	msgs.addr = id / 2;
--	msgs.len = 2;
--	msgs.buf = msg;
--	return i2c_transfer(&av7110->i2c_adap, &msgs, 1);
--}
--
--u8 i2c_readreg(struct av7110 *av7110, u8 id, u8 reg)
--{
--	u8 mm1[] = {0x00};
--	u8 mm2[] = {0x00};
--	struct i2c_msg msgs[2];
--
--	msgs[0].flags = 0;
--	msgs[1].flags = I2C_M_RD;
--	msgs[0].addr = msgs[1].addr = id / 2;
--	mm1[0] = reg;
--	msgs[0].len = 1; msgs[1].len = 1;
--	msgs[0].buf = mm1; msgs[1].buf = mm2;
--	i2c_transfer(&av7110->i2c_adap, msgs, 2);
--
--	return mm2[0];
--}
--
--/****************************************************************************
-- * INITIALIZATION
-- ****************************************************************************/
--
--
--static int check_firmware(struct av7110* av7110)
--{
--	u32 crc = 0, len = 0;
--	unsigned char *ptr;
--
--	/* check for firmware magic */
--	ptr = av7110->bin_fw;
--	if (ptr[0] != 'A' || ptr[1] != 'V' ||
--	    ptr[2] != 'F' || ptr[3] != 'W') {
--		printk("dvb-ttpci: this is not an av7110 firmware\n");
--		return -EINVAL;
--	}
--	ptr += 4;
--
--	/* check dpram file */
--	crc = get_unaligned_be32(ptr);
--	ptr += 4;
--	len = get_unaligned_be32(ptr);
--	ptr += 4;
--	if (len >= 512) {
--		printk("dvb-ttpci: dpram file is way too big.\n");
--		return -EINVAL;
--	}
--	if (crc != crc32_le(0, ptr, len)) {
--		printk("dvb-ttpci: crc32 of dpram file does not match.\n");
--		return -EINVAL;
--	}
--	av7110->bin_dpram = ptr;
--	av7110->size_dpram = len;
--	ptr += len;
--
--	/* check root file */
--	crc = get_unaligned_be32(ptr);
--	ptr += 4;
--	len = get_unaligned_be32(ptr);
--	ptr += 4;
--
--	if (len <= 200000 || len >= 300000 ||
--	    len > ((av7110->bin_fw + av7110->size_fw) - ptr)) {
--		printk("dvb-ttpci: root file has strange size (%d). aborting.\n", len);
--		return -EINVAL;
--	}
--	if( crc != crc32_le(0, ptr, len)) {
--		printk("dvb-ttpci: crc32 of root file does not match.\n");
--		return -EINVAL;
--	}
--	av7110->bin_root = ptr;
--	av7110->size_root = len;
--	return 0;
--}
--
--static void put_firmware(struct av7110* av7110)
--{
--	vfree(av7110->bin_fw);
--}
--
--static int get_firmware(struct av7110* av7110)
--{
--	int ret;
--	const struct firmware *fw;
--
--	/* request the av7110 firmware, this will block until someone uploads it */
--	ret = request_firmware(&fw, "dvb-ttpci-01.fw", &av7110->dev->pci->dev);
--	if (ret) {
--		if (ret == -ENOENT) {
--			printk(KERN_ERR "dvb-ttpci: could not load firmware, file not found: dvb-ttpci-01.fw\n");
--			printk(KERN_ERR "dvb-ttpci: usually this should be in /usr/lib/hotplug/firmware or /lib/firmware\n");
--			printk(KERN_ERR "dvb-ttpci: and can be downloaded from https://linuxtv.org/download/dvb/firmware/\n");
--		} else
--			printk(KERN_ERR "dvb-ttpci: cannot request firmware (error %i)\n",
--			       ret);
--		return -EINVAL;
--	}
--
--	if (fw->size <= 200000) {
--		printk("dvb-ttpci: this firmware is way too small.\n");
--		release_firmware(fw);
--		return -EINVAL;
--	}
--
--	/* check if the firmware is available */
--	av7110->bin_fw = vmalloc(fw->size);
--	if (NULL == av7110->bin_fw) {
--		dprintk(1, "out of memory\n");
--		release_firmware(fw);
--		return -ENOMEM;
--	}
--
--	memcpy(av7110->bin_fw, fw->data, fw->size);
--	av7110->size_fw = fw->size;
--	if ((ret = check_firmware(av7110)))
--		vfree(av7110->bin_fw);
--
--	release_firmware(fw);
--	return ret;
--}
--
--static int alps_bsrv2_tuner_set_params(struct dvb_frontend *fe)
--{
--	struct dtv_frontend_properties *p = &fe->dtv_property_cache;
--	struct av7110* av7110 = fe->dvb->priv;
--	u8 pwr = 0;
--	u8 buf[4];
--	struct i2c_msg msg = { .addr = 0x61, .flags = 0, .buf = buf, .len = sizeof(buf) };
--	u32 div = (p->frequency + 479500) / 125;
--
--	if (p->frequency > 2000000)
--		pwr = 3;
--	else if (p->frequency > 1800000)
--		pwr = 2;
--	else if (p->frequency > 1600000)
--		pwr = 1;
--	else if (p->frequency > 1200000)
--		pwr = 0;
--	else if (p->frequency >= 1100000)
--		pwr = 1;
--	else
--		pwr = 2;
--
--	buf[0] = (div >> 8) & 0x7f;
--	buf[1] = div & 0xff;
--	buf[2] = ((div & 0x18000) >> 10) | 0x95;
--	buf[3] = (pwr << 6) | 0x30;
--
--	// NOTE: since we're using a prescaler of 2, we set the
--	// divisor frequency to 62.5kHz and divide by 125 above
--
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer (&av7110->i2c_adap, &msg, 1) != 1)
--		return -EIO;
--	return 0;
--}
--
--static struct ves1x93_config alps_bsrv2_config = {
--	.demod_address = 0x08,
--	.xin = 90100000UL,
--	.invert_pwm = 0,
--};
--
--static int alps_tdbe2_tuner_set_params(struct dvb_frontend *fe)
--{
--	struct dtv_frontend_properties *p = &fe->dtv_property_cache;
--	struct av7110* av7110 = fe->dvb->priv;
--	u32 div;
--	u8 data[4];
--	struct i2c_msg msg = { .addr = 0x62, .flags = 0, .buf = data, .len = sizeof(data) };
--
--	div = (p->frequency + 35937500 + 31250) / 62500;
--
--	data[0] = (div >> 8) & 0x7f;
--	data[1] = div & 0xff;
--	data[2] = 0x85 | ((div >> 10) & 0x60);
--	data[3] = (p->frequency < 174000000 ? 0x88 : p->frequency < 470000000 ? 0x84 : 0x81);
--
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer(&av7110->i2c_adap, &msg, 1) != 1)
--		return -EIO;
--	return 0;
--}
--
--static struct ves1820_config alps_tdbe2_config = {
--	.demod_address = 0x09,
--	.xin = 57840000UL,
--	.invert = 1,
--	.selagc = VES1820_SELAGC_SIGNAMPERR,
--};
--
--
--
--
--static int grundig_29504_451_tuner_set_params(struct dvb_frontend *fe)
--{
--	struct dtv_frontend_properties *p = &fe->dtv_property_cache;
--	struct av7110* av7110 = fe->dvb->priv;
--	u32 div;
--	u8 data[4];
--	struct i2c_msg msg = { .addr = 0x61, .flags = 0, .buf = data, .len = sizeof(data) };
--
--	div = p->frequency / 125;
--	data[0] = (div >> 8) & 0x7f;
--	data[1] = div & 0xff;
--	data[2] = 0x8e;
--	data[3] = 0x00;
--
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer(&av7110->i2c_adap, &msg, 1) != 1)
--		return -EIO;
--	return 0;
--}
--
--static struct tda8083_config grundig_29504_451_config = {
--	.demod_address = 0x68,
--};
--
--
--
--static int philips_cd1516_tuner_set_params(struct dvb_frontend *fe)
--{
--	struct dtv_frontend_properties *p = &fe->dtv_property_cache;
--	struct av7110* av7110 = fe->dvb->priv;
--	u32 div;
--	u32 f = p->frequency;
--	u8 data[4];
--	struct i2c_msg msg = { .addr = 0x61, .flags = 0, .buf = data, .len = sizeof(data) };
--
--	div = (f + 36125000 + 31250) / 62500;
--
--	data[0] = (div >> 8) & 0x7f;
--	data[1] = div & 0xff;
--	data[2] = 0x8e;
--	data[3] = (f < 174000000 ? 0xa1 : f < 470000000 ? 0x92 : 0x34);
--
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer(&av7110->i2c_adap, &msg, 1) != 1)
--		return -EIO;
--	return 0;
--}
--
--static struct ves1820_config philips_cd1516_config = {
--	.demod_address = 0x09,
--	.xin = 57840000UL,
--	.invert = 1,
--	.selagc = VES1820_SELAGC_SIGNAMPERR,
--};
--
--
--
--static int alps_tdlb7_tuner_set_params(struct dvb_frontend *fe)
--{
--	struct dtv_frontend_properties *p = &fe->dtv_property_cache;
--	struct av7110* av7110 = fe->dvb->priv;
--	u32 div, pwr;
--	u8 data[4];
--	struct i2c_msg msg = { .addr = 0x60, .flags = 0, .buf = data, .len = sizeof(data) };
--
--	div = (p->frequency + 36200000) / 166666;
--
--	if (p->frequency <= 782000000)
--		pwr = 1;
--	else
--		pwr = 2;
--
--	data[0] = (div >> 8) & 0x7f;
--	data[1] = div & 0xff;
--	data[2] = 0x85;
--	data[3] = pwr << 6;
--
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer(&av7110->i2c_adap, &msg, 1) != 1)
--		return -EIO;
--	return 0;
--}
--
--static int alps_tdlb7_request_firmware(struct dvb_frontend* fe, const struct firmware **fw, char* name)
--{
--#if IS_ENABLED(CONFIG_DVB_SP8870)
--	struct av7110* av7110 = fe->dvb->priv;
--
--	return request_firmware(fw, name, &av7110->dev->pci->dev);
--#else
--	return -EINVAL;
--#endif
--}
--
--static const struct sp8870_config alps_tdlb7_config = {
--
--	.demod_address = 0x71,
--	.request_firmware = alps_tdlb7_request_firmware,
--};
--
--
--static u8 nexusca_stv0297_inittab[] = {
--	0x80, 0x01,
--	0x80, 0x00,
--	0x81, 0x01,
--	0x81, 0x00,
--	0x00, 0x09,
--	0x01, 0x69,
--	0x03, 0x00,
--	0x04, 0x00,
--	0x07, 0x00,
--	0x08, 0x00,
--	0x20, 0x00,
--	0x21, 0x40,
--	0x22, 0x00,
--	0x23, 0x00,
--	0x24, 0x40,
--	0x25, 0x88,
--	0x30, 0xff,
--	0x31, 0x00,
--	0x32, 0xff,
--	0x33, 0x00,
--	0x34, 0x50,
--	0x35, 0x7f,
--	0x36, 0x00,
--	0x37, 0x20,
--	0x38, 0x00,
--	0x40, 0x1c,
--	0x41, 0xff,
--	0x42, 0x29,
--	0x43, 0x00,
--	0x44, 0xff,
--	0x45, 0x00,
--	0x46, 0x00,
--	0x49, 0x04,
--	0x4a, 0x00,
--	0x4b, 0x7b,
--	0x52, 0x30,
--	0x55, 0xae,
--	0x56, 0x47,
--	0x57, 0xe1,
--	0x58, 0x3a,
--	0x5a, 0x1e,
--	0x5b, 0x34,
--	0x60, 0x00,
--	0x63, 0x00,
--	0x64, 0x00,
--	0x65, 0x00,
--	0x66, 0x00,
--	0x67, 0x00,
--	0x68, 0x00,
--	0x69, 0x00,
--	0x6a, 0x02,
--	0x6b, 0x00,
--	0x70, 0xff,
--	0x71, 0x00,
--	0x72, 0x00,
--	0x73, 0x00,
--	0x74, 0x0c,
--	0x80, 0x00,
--	0x81, 0x00,
--	0x82, 0x00,
--	0x83, 0x00,
--	0x84, 0x04,
--	0x85, 0x80,
--	0x86, 0x24,
--	0x87, 0x78,
--	0x88, 0x10,
--	0x89, 0x00,
--	0x90, 0x01,
--	0x91, 0x01,
--	0xa0, 0x04,
--	0xa1, 0x00,
--	0xa2, 0x00,
--	0xb0, 0x91,
--	0xb1, 0x0b,
--	0xc0, 0x53,
--	0xc1, 0x70,
--	0xc2, 0x12,
--	0xd0, 0x00,
--	0xd1, 0x00,
--	0xd2, 0x00,
--	0xd3, 0x00,
--	0xd4, 0x00,
--	0xd5, 0x00,
--	0xde, 0x00,
--	0xdf, 0x00,
--	0x61, 0x49,
--	0x62, 0x0b,
--	0x53, 0x08,
--	0x59, 0x08,
--	0xff, 0xff,
--};
--
--static int nexusca_stv0297_tuner_set_params(struct dvb_frontend *fe)
--{
--	struct dtv_frontend_properties *p = &fe->dtv_property_cache;
--	struct av7110* av7110 = fe->dvb->priv;
--	u32 div;
--	u8 data[4];
--	struct i2c_msg msg = { .addr = 0x63, .flags = 0, .buf = data, .len = sizeof(data) };
--	struct i2c_msg readmsg = { .addr = 0x63, .flags = I2C_M_RD, .buf = data, .len = 1 };
--	int i;
--
--	div = (p->frequency + 36150000 + 31250) / 62500;
--
--	data[0] = (div >> 8) & 0x7f;
--	data[1] = div & 0xff;
--	data[2] = 0xce;
--
--	if (p->frequency < 45000000)
--		return -EINVAL;
--	else if (p->frequency < 137000000)
--		data[3] = 0x01;
--	else if (p->frequency < 403000000)
--		data[3] = 0x02;
--	else if (p->frequency < 860000000)
--		data[3] = 0x04;
--	else
--		return -EINVAL;
--
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer(&av7110->i2c_adap, &msg, 1) != 1) {
--		printk("nexusca: pll transfer failed!\n");
--		return -EIO;
--	}
--
--	// wait for PLL lock
--	for(i = 0; i < 20; i++) {
--		if (fe->ops.i2c_gate_ctrl)
--			fe->ops.i2c_gate_ctrl(fe, 1);
--		if (i2c_transfer(&av7110->i2c_adap, &readmsg, 1) == 1)
--			if (data[0] & 0x40) break;
--		msleep(10);
--	}
--
--	return 0;
--}
--
--static struct stv0297_config nexusca_stv0297_config = {
--
--	.demod_address = 0x1C,
--	.inittab = nexusca_stv0297_inittab,
--	.invert = 1,
--	.stop_during_read = 1,
--};
--
--
--
--static int grundig_29504_401_tuner_set_params(struct dvb_frontend *fe)
--{
--	struct dtv_frontend_properties *p = &fe->dtv_property_cache;
--	struct av7110* av7110 = fe->dvb->priv;
--	u32 div;
--	u8 cfg, cpump, band_select;
--	u8 data[4];
--	struct i2c_msg msg = { .addr = 0x61, .flags = 0, .buf = data, .len = sizeof(data) };
--
--	div = (36125000 + p->frequency) / 166666;
--
--	cfg = 0x88;
--
--	if (p->frequency < 175000000)
--		cpump = 2;
--	else if (p->frequency < 390000000)
--		cpump = 1;
--	else if (p->frequency < 470000000)
--		cpump = 2;
--	else if (p->frequency < 750000000)
--		cpump = 1;
--	else
--		cpump = 3;
--
--	if (p->frequency < 175000000)
--		band_select = 0x0e;
--	else if (p->frequency < 470000000)
--		band_select = 0x05;
--	else
--		band_select = 0x03;
--
--	data[0] = (div >> 8) & 0x7f;
--	data[1] = div & 0xff;
--	data[2] = ((div >> 10) & 0x60) | cfg;
--	data[3] = (cpump << 6) | band_select;
--
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer (&av7110->i2c_adap, &msg, 1) != 1) return -EIO;
--	return 0;
--}
--
--static struct l64781_config grundig_29504_401_config = {
--	.demod_address = 0x55,
--};
--
--
--
--static int av7110_fe_lock_fix(struct av7110 *av7110, enum fe_status status)
--{
--	int ret = 0;
--	int synced = (status & FE_HAS_LOCK) ? 1 : 0;
--
--	av7110->fe_status = status;
--
--	if (av7110->fe_synced == synced)
--		return 0;
--
--	if (av7110->playing) {
--		av7110->fe_synced = synced;
--		return 0;
--	}
--
--	if (mutex_lock_interruptible(&av7110->pid_mutex))
--		return -ERESTARTSYS;
--
--	if (synced) {
--		ret = SetPIDs(av7110, av7110->pids[DMX_PES_VIDEO],
--			av7110->pids[DMX_PES_AUDIO],
--			av7110->pids[DMX_PES_TELETEXT], 0,
--			av7110->pids[DMX_PES_PCR]);
--		if (!ret)
--			ret = av7110_fw_cmd(av7110, COMTYPE_PIDFILTER, Scan, 0);
--	} else {
--		ret = SetPIDs(av7110, 0, 0, 0, 0, 0);
--		if (!ret) {
--			ret = av7110_fw_cmd(av7110, COMTYPE_PID_FILTER, FlushTSQueue, 0);
--			if (!ret)
--				ret = av7110_wait_msgstate(av7110, GPMQBusy);
--		}
--	}
--
--	if (!ret)
--		av7110->fe_synced = synced;
--
--	mutex_unlock(&av7110->pid_mutex);
--	return ret;
--}
--
--static int av7110_fe_set_frontend(struct dvb_frontend *fe)
--{
--	struct av7110* av7110 = fe->dvb->priv;
--
--	int ret = av7110_fe_lock_fix(av7110, 0);
--	if (!ret)
--		ret = av7110->fe_set_frontend(fe);
--
--	return ret;
--}
--
--static int av7110_fe_init(struct dvb_frontend* fe)
--{
--	struct av7110* av7110 = fe->dvb->priv;
--
--	int ret = av7110_fe_lock_fix(av7110, 0);
--	if (!ret)
--		ret = av7110->fe_init(fe);
--	return ret;
--}
--
--static int av7110_fe_read_status(struct dvb_frontend *fe,
--				 enum fe_status *status)
--{
--	struct av7110* av7110 = fe->dvb->priv;
--
--	/* call the real implementation */
--	int ret = av7110->fe_read_status(fe, status);
--	if (!ret)
--		if (((*status ^ av7110->fe_status) & FE_HAS_LOCK) && (*status & FE_HAS_LOCK))
--			ret = av7110_fe_lock_fix(av7110, *status);
--	return ret;
--}
--
--static int av7110_fe_diseqc_reset_overload(struct dvb_frontend* fe)
--{
--	struct av7110* av7110 = fe->dvb->priv;
--
--	int ret = av7110_fe_lock_fix(av7110, 0);
--	if (!ret)
--		ret = av7110->fe_diseqc_reset_overload(fe);
--	return ret;
--}
--
--static int av7110_fe_diseqc_send_master_cmd(struct dvb_frontend* fe,
--					    struct dvb_diseqc_master_cmd* cmd)
--{
--	struct av7110* av7110 = fe->dvb->priv;
--
--	int ret = av7110_fe_lock_fix(av7110, 0);
--	if (!ret) {
--		av7110->saved_master_cmd = *cmd;
--		ret = av7110->fe_diseqc_send_master_cmd(fe, cmd);
--	}
--	return ret;
--}
--
--static int av7110_fe_diseqc_send_burst(struct dvb_frontend *fe,
--				       enum fe_sec_mini_cmd minicmd)
--{
--	struct av7110* av7110 = fe->dvb->priv;
--
--	int ret = av7110_fe_lock_fix(av7110, 0);
--	if (!ret) {
--		av7110->saved_minicmd = minicmd;
--		ret = av7110->fe_diseqc_send_burst(fe, minicmd);
--	}
--	return ret;
--}
--
--static int av7110_fe_set_tone(struct dvb_frontend *fe,
--			      enum fe_sec_tone_mode tone)
--{
--	struct av7110* av7110 = fe->dvb->priv;
--
--	int ret = av7110_fe_lock_fix(av7110, 0);
--	if (!ret) {
--		av7110->saved_tone = tone;
--		ret = av7110->fe_set_tone(fe, tone);
--	}
--	return ret;
--}
--
--static int av7110_fe_set_voltage(struct dvb_frontend *fe,
--				 enum fe_sec_voltage voltage)
--{
--	struct av7110* av7110 = fe->dvb->priv;
--
--	int ret = av7110_fe_lock_fix(av7110, 0);
--	if (!ret) {
--		av7110->saved_voltage = voltage;
--		ret = av7110->fe_set_voltage(fe, voltage);
--	}
--	return ret;
--}
--
--static int av7110_fe_dishnetwork_send_legacy_command(struct dvb_frontend* fe, unsigned long cmd)
--{
--	struct av7110* av7110 = fe->dvb->priv;
--
--	int ret = av7110_fe_lock_fix(av7110, 0);
--	if (!ret)
--		ret = av7110->fe_dishnetwork_send_legacy_command(fe, cmd);
--	return ret;
--}
--
--static void dvb_s_recover(struct av7110* av7110)
--{
--	av7110_fe_init(av7110->fe);
--
--	av7110_fe_set_voltage(av7110->fe, av7110->saved_voltage);
--	if (av7110->saved_master_cmd.msg_len) {
--		msleep(20);
--		av7110_fe_diseqc_send_master_cmd(av7110->fe, &av7110->saved_master_cmd);
--	}
--	msleep(20);
--	av7110_fe_diseqc_send_burst(av7110->fe, av7110->saved_minicmd);
--	msleep(20);
--	av7110_fe_set_tone(av7110->fe, av7110->saved_tone);
--
--	av7110_fe_set_frontend(av7110->fe);
--}
--
--static u8 read_pwm(struct av7110* av7110)
--{
--	u8 b = 0xff;
--	u8 pwm;
--	struct i2c_msg msg[] = { { .addr = 0x50,.flags = 0,.buf = &b,.len = 1 },
--				 { .addr = 0x50,.flags = I2C_M_RD,.buf = &pwm,.len = 1} };
--
--	if ((i2c_transfer(&av7110->i2c_adap, msg, 2) != 2) || (pwm == 0xff))
--		pwm = 0x48;
--
--	return pwm;
--}
--
--static int frontend_init(struct av7110 *av7110)
--{
--	int ret;
--
--	if (av7110->dev->pci->subsystem_vendor == 0x110a) {
--		switch(av7110->dev->pci->subsystem_device) {
--		case 0x0000: // Fujitsu/Siemens DVB-Cable (ves1820/Philips CD1516(??))
--			av7110->fe = dvb_attach(ves1820_attach, &philips_cd1516_config,
--						    &av7110->i2c_adap, read_pwm(av7110));
--			if (av7110->fe) {
--				av7110->fe->ops.tuner_ops.set_params = philips_cd1516_tuner_set_params;
--			}
--			break;
--		}
--
--	} else if (av7110->dev->pci->subsystem_vendor == 0x13c2) {
--		switch(av7110->dev->pci->subsystem_device) {
--		case 0x0000: // Hauppauge/TT WinTV DVB-S rev1.X
--		case 0x0003: // Hauppauge/TT WinTV Nexus-S Rev 2.X
--		case 0x1002: // Hauppauge/TT WinTV DVB-S rev1.3SE
--
--			// try the ALPS BSRV2 first of all
--			av7110->fe = dvb_attach(ves1x93_attach, &alps_bsrv2_config, &av7110->i2c_adap);
--			if (av7110->fe) {
--				av7110->fe->ops.tuner_ops.set_params = alps_bsrv2_tuner_set_params;
--				av7110->fe->ops.diseqc_send_master_cmd = av7110_diseqc_send_master_cmd;
--				av7110->fe->ops.diseqc_send_burst = av7110_diseqc_send_burst;
--				av7110->fe->ops.set_tone = av7110_set_tone;
--				av7110->recover = dvb_s_recover;
--				break;
--			}
--
--			// try the ALPS BSRU6 now
--			av7110->fe = dvb_attach(stv0299_attach, &alps_bsru6_config, &av7110->i2c_adap);
--			if (av7110->fe) {
--				av7110->fe->ops.tuner_ops.set_params = alps_bsru6_tuner_set_params;
--				av7110->fe->tuner_priv = &av7110->i2c_adap;
--
--				av7110->fe->ops.diseqc_send_master_cmd = av7110_diseqc_send_master_cmd;
--				av7110->fe->ops.diseqc_send_burst = av7110_diseqc_send_burst;
--				av7110->fe->ops.set_tone = av7110_set_tone;
--				av7110->recover = dvb_s_recover;
--				break;
--			}
--
--			// Try the grundig 29504-451
--			av7110->fe = dvb_attach(tda8083_attach, &grundig_29504_451_config, &av7110->i2c_adap);
--			if (av7110->fe) {
--				av7110->fe->ops.tuner_ops.set_params = grundig_29504_451_tuner_set_params;
--				av7110->fe->ops.diseqc_send_master_cmd = av7110_diseqc_send_master_cmd;
--				av7110->fe->ops.diseqc_send_burst = av7110_diseqc_send_burst;
--				av7110->fe->ops.set_tone = av7110_set_tone;
--				av7110->recover = dvb_s_recover;
--				break;
--			}
--
--			/* Try DVB-C cards */
--			switch(av7110->dev->pci->subsystem_device) {
--			case 0x0000:
--				/* Siemens DVB-C (full-length card) VES1820/Philips CD1516 */
--				av7110->fe = dvb_attach(ves1820_attach, &philips_cd1516_config, &av7110->i2c_adap,
--							read_pwm(av7110));
--				if (av7110->fe) {
--					av7110->fe->ops.tuner_ops.set_params = philips_cd1516_tuner_set_params;
--				}
--				break;
--			case 0x0003:
--				/* Hauppauge DVB-C 2.1 VES1820/ALPS TDBE2 */
--				av7110->fe = dvb_attach(ves1820_attach, &alps_tdbe2_config, &av7110->i2c_adap,
--							read_pwm(av7110));
--				if (av7110->fe) {
--					av7110->fe->ops.tuner_ops.set_params = alps_tdbe2_tuner_set_params;
--				}
--				break;
--			}
--			break;
--
--		case 0x0001: // Hauppauge/TT Nexus-T premium rev1.X
--		{
--			struct dvb_frontend *fe;
--
--			// try ALPS TDLB7 first, then Grundig 29504-401
--			fe = dvb_attach(sp8870_attach, &alps_tdlb7_config, &av7110->i2c_adap);
--			if (fe) {
--				fe->ops.tuner_ops.set_params = alps_tdlb7_tuner_set_params;
--				av7110->fe = fe;
--				break;
--			}
--		}
--			fallthrough;
--
--		case 0x0008: // Hauppauge/TT DVB-T
--			// Grundig 29504-401
--			av7110->fe = dvb_attach(l64781_attach, &grundig_29504_401_config, &av7110->i2c_adap);
--			if (av7110->fe)
--				av7110->fe->ops.tuner_ops.set_params = grundig_29504_401_tuner_set_params;
--			break;
--
--		case 0x0002: // Hauppauge/TT DVB-C premium rev2.X
--
--			av7110->fe = dvb_attach(ves1820_attach, &alps_tdbe2_config, &av7110->i2c_adap, read_pwm(av7110));
--			if (av7110->fe) {
--				av7110->fe->ops.tuner_ops.set_params = alps_tdbe2_tuner_set_params;
--			}
--			break;
--
--		case 0x0004: // Galaxis DVB-S rev1.3
--			/* ALPS BSRV2 */
--			av7110->fe = dvb_attach(ves1x93_attach, &alps_bsrv2_config, &av7110->i2c_adap);
--			if (av7110->fe) {
--				av7110->fe->ops.tuner_ops.set_params = alps_bsrv2_tuner_set_params;
--				av7110->fe->ops.diseqc_send_master_cmd = av7110_diseqc_send_master_cmd;
--				av7110->fe->ops.diseqc_send_burst = av7110_diseqc_send_burst;
--				av7110->fe->ops.set_tone = av7110_set_tone;
--				av7110->recover = dvb_s_recover;
--			}
--			break;
--
--		case 0x0006: /* Fujitsu-Siemens DVB-S rev 1.6 */
--			/* Grundig 29504-451 */
--			av7110->fe = dvb_attach(tda8083_attach, &grundig_29504_451_config, &av7110->i2c_adap);
--			if (av7110->fe) {
--				av7110->fe->ops.tuner_ops.set_params = grundig_29504_451_tuner_set_params;
--				av7110->fe->ops.diseqc_send_master_cmd = av7110_diseqc_send_master_cmd;
--				av7110->fe->ops.diseqc_send_burst = av7110_diseqc_send_burst;
--				av7110->fe->ops.set_tone = av7110_set_tone;
--				av7110->recover = dvb_s_recover;
--			}
--			break;
--
--		case 0x000A: // Hauppauge/TT Nexus-CA rev1.X
--
--			av7110->fe = dvb_attach(stv0297_attach, &nexusca_stv0297_config, &av7110->i2c_adap);
--			if (av7110->fe) {
--				av7110->fe->ops.tuner_ops.set_params = nexusca_stv0297_tuner_set_params;
--
--				/* set TDA9819 into DVB mode */
--				saa7146_setgpio(av7110->dev, 1, SAA7146_GPIO_OUTLO); // TDA9819 pin9(STD)
--				saa7146_setgpio(av7110->dev, 3, SAA7146_GPIO_OUTLO); // TDA9819 pin30(VIF)
--
--				/* tuner on this needs a slower i2c bus speed */
--				av7110->dev->i2c_bitrate = SAA7146_I2C_BUS_BIT_RATE_240;
--				break;
--			}
--			break;
--
--		case 0x000E: /* Hauppauge/TT Nexus-S rev 2.3 */
--			/* ALPS BSBE1 */
--			av7110->fe = dvb_attach(stv0299_attach, &alps_bsbe1_config, &av7110->i2c_adap);
--			if (av7110->fe) {
--				av7110->fe->ops.tuner_ops.set_params = alps_bsbe1_tuner_set_params;
--				av7110->fe->tuner_priv = &av7110->i2c_adap;
--
--				if (dvb_attach(lnbp21_attach, av7110->fe, &av7110->i2c_adap, 0, 0) == NULL) {
--					printk("dvb-ttpci: LNBP21 not found!\n");
--					if (av7110->fe->ops.release)
--						av7110->fe->ops.release(av7110->fe);
--					av7110->fe = NULL;
--				} else {
--					av7110->fe->ops.dishnetwork_send_legacy_command = NULL;
--					av7110->recover = dvb_s_recover;
--				}
--			}
--			break;
--		}
--	}
--
--	if (!av7110->fe) {
--		/* FIXME: propagate the failure code from the lower layers */
--		ret = -ENOMEM;
--		printk("dvb-ttpci: A frontend driver was not found for device [%04x:%04x] subsystem [%04x:%04x]\n",
--		       av7110->dev->pci->vendor,
--		       av7110->dev->pci->device,
--		       av7110->dev->pci->subsystem_vendor,
--		       av7110->dev->pci->subsystem_device);
--	} else {
--		FE_FUNC_OVERRIDE(av7110->fe->ops.init, av7110->fe_init, av7110_fe_init);
--		FE_FUNC_OVERRIDE(av7110->fe->ops.read_status, av7110->fe_read_status, av7110_fe_read_status);
--		FE_FUNC_OVERRIDE(av7110->fe->ops.diseqc_reset_overload, av7110->fe_diseqc_reset_overload, av7110_fe_diseqc_reset_overload);
--		FE_FUNC_OVERRIDE(av7110->fe->ops.diseqc_send_master_cmd, av7110->fe_diseqc_send_master_cmd, av7110_fe_diseqc_send_master_cmd);
--		FE_FUNC_OVERRIDE(av7110->fe->ops.diseqc_send_burst, av7110->fe_diseqc_send_burst, av7110_fe_diseqc_send_burst);
--		FE_FUNC_OVERRIDE(av7110->fe->ops.set_tone, av7110->fe_set_tone, av7110_fe_set_tone);
--		FE_FUNC_OVERRIDE(av7110->fe->ops.set_voltage, av7110->fe_set_voltage, av7110_fe_set_voltage);
--		FE_FUNC_OVERRIDE(av7110->fe->ops.dishnetwork_send_legacy_command, av7110->fe_dishnetwork_send_legacy_command, av7110_fe_dishnetwork_send_legacy_command);
--		FE_FUNC_OVERRIDE(av7110->fe->ops.set_frontend, av7110->fe_set_frontend, av7110_fe_set_frontend);
--
--		ret = dvb_register_frontend(&av7110->dvb_adapter, av7110->fe);
--		if (ret < 0) {
--			printk("av7110: Frontend registration failed!\n");
--			dvb_frontend_detach(av7110->fe);
--			av7110->fe = NULL;
--		}
--	}
--	return ret;
--}
--
--/* Budgetpatch note:
-- * Original hardware design by Roberto Deza:
-- * There is a DVB_Wiki at
-- * https://linuxtv.org
-- *
-- * New software triggering design by Emard that works on
-- * original Roberto Deza's hardware:
-- *
-- * rps1 code for budgetpatch will copy internal HS event to GPIO3 pin.
-- * GPIO3 is in budget-patch hardware connectd to port B VSYNC
-- * HS is an internal event of 7146, accessible with RPS
-- * and temporarily raised high every n lines
-- * (n in defined in the RPS_THRESH1 counter threshold)
-- * I think HS is raised high on the beginning of the n-th line
-- * and remains high until this n-th line that triggered
-- * it is completely received. When the reception of n-th line
-- * ends, HS is lowered.
-- *
-- * To transmit data over DMA, 7146 needs changing state at
-- * port B VSYNC pin. Any changing of port B VSYNC will
-- * cause some DMA data transfer, with more or less packets loss.
-- * It depends on the phase and frequency of VSYNC and
-- * the way of 7146 is instructed to trigger on port B (defined
-- * in DD1_INIT register, 3rd nibble from the right valid
-- * numbers are 0-7, see datasheet)
-- *
-- * The correct triggering can minimize packet loss,
-- * dvbtraffic should give this stable bandwidths:
-- *   22k transponder = 33814 kbit/s
-- * 27.5k transponder = 38045 kbit/s
-- * by experiment it is found that the best results
-- * (stable bandwidths and almost no packet loss)
-- * are obtained using DD1_INIT triggering number 2
-- * (Va at rising edge of VS Fa = HS x VS-failing forced toggle)
-- * and a VSYNC phase that occurs in the middle of DMA transfer
-- * (about byte 188*512=96256 in the DMA window).
-- *
-- * Phase of HS is still not clear to me how to control,
-- * It just happens to be so. It can be seen if one enables
-- * RPS_IRQ and print Event Counter 1 in vpeirq(). Every
-- * time RPS_INTERRUPT is called, the Event Counter 1 will
-- * increment. That's how the 7146 is programmed to do event
-- * counting in this budget-patch.c
-- * I *think* HPS setting has something to do with the phase
-- * of HS but I can't be 100% sure in that.
-- *
-- * hardware debug note: a working budget card (including budget patch)
-- * with vpeirq() interrupt setup in mode "0x90" (every 64K) will
-- * generate 3 interrupts per 25-Hz DMA frame of 2*188*512 bytes
-- * and that means 3*25=75 Hz of interrupt frequency, as seen by
-- * watch cat /proc/interrupts
-- *
-- * If this frequency is 3x lower (and data received in the DMA
-- * buffer don't start with 0x47, but in the middle of packets,
-- * whose lengths appear to be like 188 292 188 104 etc.
-- * this means VSYNC line is not connected in the hardware.
-- * (check soldering pcb and pins)
-- * The same behaviour of missing VSYNC can be duplicated on budget
-- * cards, by setting DD1_INIT trigger mode 7 in 3rd nibble.
-- */
--static int av7110_attach(struct saa7146_dev* dev,
--			 struct saa7146_pci_extension_data *pci_ext)
--{
--	const int length = TS_WIDTH * TS_HEIGHT;
--	struct pci_dev *pdev = dev->pci;
--	struct av7110 *av7110;
--	struct task_struct *thread;
--	int ret, count = 0;
--
--	dprintk(4, "dev: %p\n", dev);
--
--	/* Set RPS_IRQ to 1 to track rps1 activity.
--	 * Enabling this won't send any interrupt to PC CPU.
--	 */
--#define RPS_IRQ 0
--
--	if (budgetpatch == 1) {
--		budgetpatch = 0;
--		/* autodetect the presence of budget patch
--		 * this only works if saa7146 has been recently
--		 * reset with MASK_31 to MC1
--		 *
--		 * will wait for VBI_B event (vertical blank at port B)
--		 * and will reset GPIO3 after VBI_B is detected.
--		 * (GPIO3 should be raised high by CPU to
--		 * test if GPIO3 will generate vertical blank signal
--		 * in budget patch GPIO3 is connected to VSYNC_B
--		 */
--
--		/* RESET SAA7146 */
--		saa7146_write(dev, MC1, MASK_31);
--		/* autodetection success seems to be time-dependend after reset */
--
--		/* Fix VSYNC level */
--		saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTLO);
--		/* set vsync_b triggering */
--		saa7146_write(dev, DD1_STREAM_B, 0);
--		/* port B VSYNC at rising edge */
--		saa7146_write(dev, DD1_INIT, 0x00000200);
--		saa7146_write(dev, BRS_CTRL, 0x00000000);  // VBI
--		saa7146_write(dev, MC2,
--			      1 * (MASK_08 | MASK_24)  |   // BRS control
--			      0 * (MASK_09 | MASK_25)  |   // a
--			      1 * (MASK_10 | MASK_26)  |   // b
--			      0 * (MASK_06 | MASK_22)  |   // HPS_CTRL1
--			      0 * (MASK_05 | MASK_21)  |   // HPS_CTRL2
--			      0 * (MASK_01 | MASK_15)      // DEBI
--		);
--
--		/* start writing RPS1 code from beginning */
--		count = 0;
--		/* Disable RPS1 */
--		saa7146_write(dev, MC1, MASK_29);
--		/* RPS1 timeout disable */
--		saa7146_write(dev, RPS_TOV1, 0);
--		WRITE_RPS1(CMD_PAUSE | EVT_VBI_B);
--		WRITE_RPS1(CMD_WR_REG_MASK | (GPIO_CTRL>>2));
--		WRITE_RPS1(GPIO3_MSK);
--		WRITE_RPS1(SAA7146_GPIO_OUTLO<<24);
--#if RPS_IRQ
--		/* issue RPS1 interrupt to increment counter */
--		WRITE_RPS1(CMD_INTERRUPT);
--#endif
--		WRITE_RPS1(CMD_STOP);
--		/* Jump to begin of RPS program as safety measure               (p37) */
--		WRITE_RPS1(CMD_JUMP);
--		WRITE_RPS1(dev->d_rps1.dma_handle);
--
--#if RPS_IRQ
--		/* set event counter 1 source as RPS1 interrupt (0x03)          (rE4 p53)
--		 * use 0x03 to track RPS1 interrupts - increase by 1 every gpio3 is toggled
--		 * use 0x15 to track VPE  interrupts - increase by 1 every vpeirq() is called
--		 */
--		saa7146_write(dev, EC1SSR, (0x03<<2) | 3 );
--		/* set event counter 1 threshold to maximum allowed value        (rEC p55) */
--		saa7146_write(dev, ECT1R,  0x3fff );
--#endif
--		/* Set RPS1 Address register to point to RPS code               (r108 p42) */
--		saa7146_write(dev, RPS_ADDR1, dev->d_rps1.dma_handle);
--		/* Enable RPS1,                                                 (rFC p33) */
--		saa7146_write(dev, MC1, (MASK_13 | MASK_29 ));
--
--		mdelay(10);
--		/* now send VSYNC_B to rps1 by rising GPIO3 */
--		saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTHI);
--		mdelay(10);
--		/* if rps1 responded by lowering the GPIO3,
--		 * then we have budgetpatch hardware
--		 */
--		if ((saa7146_read(dev, GPIO_CTRL) & 0x10000000) == 0) {
--			budgetpatch = 1;
--			printk("dvb-ttpci: BUDGET-PATCH DETECTED.\n");
--		}
--		/* Disable RPS1 */
--		saa7146_write(dev, MC1, ( MASK_29 ));
--#if RPS_IRQ
--		printk("dvb-ttpci: Event Counter 1 0x%04x\n", saa7146_read(dev, EC1R) & 0x3fff );
--#endif
--	}
--
--	/* prepare the av7110 device struct */
--	av7110 = kzalloc(sizeof(struct av7110), GFP_KERNEL);
--	if (!av7110) {
--		dprintk(1, "out of memory\n");
--		return -ENOMEM;
--	}
--
--	av7110->card_name = (char*) pci_ext->ext_priv;
--	av7110->dev = dev;
--	dev->ext_priv = av7110;
--
--	ret = get_firmware(av7110);
--	if (ret < 0)
--		goto err_kfree_0;
--
--	ret = dvb_register_adapter(&av7110->dvb_adapter, av7110->card_name,
--				   THIS_MODULE, &dev->pci->dev, adapter_nr);
--	if (ret < 0)
--		goto err_put_firmware_1;
--
--	/* the Siemens DVB needs this if you want to have the i2c chips
--	   get recognized before the main driver is fully loaded */
--	saa7146_write(dev, GPIO_CTRL, 0x500000);
--
--	strscpy(av7110->i2c_adap.name, pci_ext->ext_priv,
--		sizeof(av7110->i2c_adap.name));
--
--	saa7146_i2c_adapter_prepare(dev, &av7110->i2c_adap, SAA7146_I2C_BUS_BIT_RATE_120); /* 275 kHz */
--
--	ret = i2c_add_adapter(&av7110->i2c_adap);
--	if (ret < 0)
--		goto err_dvb_unregister_adapter_2;
--
--	ttpci_eeprom_parse_mac(&av7110->i2c_adap,
--			       av7110->dvb_adapter.proposed_mac);
--	ret = -ENOMEM;
--
--	/* full-ts mod? */
--	if (full_ts)
--		av7110->full_ts = true;
--
--	/* check for full-ts flag in eeprom */
--	if (i2c_readreg(av7110, 0xaa, 0) == 0x4f && i2c_readreg(av7110, 0xaa, 1) == 0x45) {
--		u8 flags = i2c_readreg(av7110, 0xaa, 2);
--		if (flags != 0xff && (flags & 0x01))
--			av7110->full_ts = true;
--	}
--
--	if (av7110->full_ts) {
--		printk(KERN_INFO "dvb-ttpci: full-ts mode enabled for saa7146 port B\n");
--		spin_lock_init(&av7110->feedlock1);
--		av7110->grabbing = saa7146_vmalloc_build_pgtable(pdev, length,
--								 &av7110->pt);
--		if (!av7110->grabbing)
--			goto err_i2c_del_3;
--
--		saa7146_write(dev, DD1_STREAM_B, 0x00000000);
--		saa7146_write(dev, MC2, (MASK_10 | MASK_26));
--
--		saa7146_write(dev, DD1_INIT, 0x00000600);
--		saa7146_write(dev, MC2, (MASK_09 | MASK_25 | MASK_10 | MASK_26));
--
--		saa7146_write(dev, BRS_CTRL, 0x60000000);
--		saa7146_write(dev, MC2, MASK_08 | MASK_24);
--
--		/* dma3 */
--		saa7146_write(dev, PCI_BT_V1, 0x001c0000 | (saa7146_read(dev, PCI_BT_V1) & ~0x001f0000));
--		saa7146_write(dev, BASE_ODD3, 0);
--		saa7146_write(dev, BASE_EVEN3, 0);
--		saa7146_write(dev, PROT_ADDR3, TS_WIDTH * TS_HEIGHT);
--		saa7146_write(dev, PITCH3, TS_WIDTH);
--		saa7146_write(dev, BASE_PAGE3, av7110->pt.dma | ME1 | 0x90);
--		saa7146_write(dev, NUM_LINE_BYTE3, (TS_HEIGHT << 16) | TS_WIDTH);
--		saa7146_write(dev, MC2, MASK_04 | MASK_20);
--
--		tasklet_setup(&av7110->vpe_tasklet, vpeirq);
--
--	} else if (budgetpatch) {
--		spin_lock_init(&av7110->feedlock1);
--		av7110->grabbing = saa7146_vmalloc_build_pgtable(pdev, length,
--								 &av7110->pt);
--		if (!av7110->grabbing)
--			goto err_i2c_del_3;
--
--		saa7146_write(dev, PCI_BT_V1, 0x1c1f101f);
--		saa7146_write(dev, BCS_CTRL, 0x80400040);
--		/* set dd1 stream a & b */
--		saa7146_write(dev, DD1_STREAM_B, 0x00000000);
--		saa7146_write(dev, DD1_INIT, 0x03000200);
--		saa7146_write(dev, MC2, (MASK_09 | MASK_25 | MASK_10 | MASK_26));
--		saa7146_write(dev, BRS_CTRL, 0x60000000);
--		saa7146_write(dev, BASE_ODD3, 0);
--		saa7146_write(dev, BASE_EVEN3, 0);
--		saa7146_write(dev, PROT_ADDR3, TS_WIDTH * TS_HEIGHT);
--		saa7146_write(dev, BASE_PAGE3, av7110->pt.dma | ME1 | 0x90);
--
--		saa7146_write(dev, PITCH3, TS_WIDTH);
--		saa7146_write(dev, NUM_LINE_BYTE3, (TS_HEIGHT << 16) | TS_WIDTH);
--
--		/* upload all */
--		saa7146_write(dev, MC2, 0x077c077c);
--		saa7146_write(dev, GPIO_CTRL, 0x000000);
--#if RPS_IRQ
--		/* set event counter 1 source as RPS1 interrupt (0x03)          (rE4 p53)
--		 * use 0x03 to track RPS1 interrupts - increase by 1 every gpio3 is toggled
--		 * use 0x15 to track VPE  interrupts - increase by 1 every vpeirq() is called
--		 */
--		saa7146_write(dev, EC1SSR, (0x03<<2) | 3 );
--		/* set event counter 1 threshold to maximum allowed value        (rEC p55) */
--		saa7146_write(dev, ECT1R,  0x3fff );
--#endif
--		/* Setup BUDGETPATCH MAIN RPS1 "program" (p35) */
--		count = 0;
--
--		/* Wait Source Line Counter Threshold                           (p36) */
--		WRITE_RPS1(CMD_PAUSE | EVT_HS);
--		/* Set GPIO3=1                                                  (p42) */
--		WRITE_RPS1(CMD_WR_REG_MASK | (GPIO_CTRL>>2));
--		WRITE_RPS1(GPIO3_MSK);
--		WRITE_RPS1(SAA7146_GPIO_OUTHI<<24);
--#if RPS_IRQ
--		/* issue RPS1 interrupt */
--		WRITE_RPS1(CMD_INTERRUPT);
--#endif
--		/* Wait reset Source Line Counter Threshold                     (p36) */
--		WRITE_RPS1(CMD_PAUSE | RPS_INV | EVT_HS);
--		/* Set GPIO3=0                                                  (p42) */
--		WRITE_RPS1(CMD_WR_REG_MASK | (GPIO_CTRL>>2));
--		WRITE_RPS1(GPIO3_MSK);
--		WRITE_RPS1(SAA7146_GPIO_OUTLO<<24);
--#if RPS_IRQ
--		/* issue RPS1 interrupt */
--		WRITE_RPS1(CMD_INTERRUPT);
--#endif
--		/* Jump to begin of RPS program                                 (p37) */
--		WRITE_RPS1(CMD_JUMP);
--		WRITE_RPS1(dev->d_rps1.dma_handle);
--
--		/* Fix VSYNC level */
--		saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTLO);
--		/* Set RPS1 Address register to point to RPS code               (r108 p42) */
--		saa7146_write(dev, RPS_ADDR1, dev->d_rps1.dma_handle);
--		/* Set Source Line Counter Threshold, using BRS                 (rCC p43)
--		 * It generates HS event every TS_HEIGHT lines
--		 * this is related to TS_WIDTH set in register
--		 * NUM_LINE_BYTE3. If NUM_LINE_BYTE low 16 bits
--		 * are set to TS_WIDTH bytes (TS_WIDTH=2*188),
--		 * then RPS_THRESH1 should be set to trigger
--		 * every TS_HEIGHT (512) lines.
--		 */
--		saa7146_write(dev, RPS_THRESH1, (TS_HEIGHT*1) | MASK_12 );
--
--		/* Enable RPS1                                                  (rFC p33) */
--		saa7146_write(dev, MC1, (MASK_13 | MASK_29));
--
--		/* end of budgetpatch register initialization */
--		tasklet_setup(&av7110->vpe_tasklet,  vpeirq);
--	} else {
--		saa7146_write(dev, PCI_BT_V1, 0x1c00101f);
--		saa7146_write(dev, BCS_CTRL, 0x80400040);
--
--		/* set dd1 stream a & b */
--		saa7146_write(dev, DD1_STREAM_B, 0x00000000);
--		saa7146_write(dev, DD1_INIT, 0x03000000);
--		saa7146_write(dev, MC2, (MASK_09 | MASK_25 | MASK_10 | MASK_26));
--
--		/* upload all */
--		saa7146_write(dev, MC2, 0x077c077c);
--		saa7146_write(dev, GPIO_CTRL, 0x000000);
--	}
--
--	tasklet_setup(&av7110->debi_tasklet, debiirq);
--	tasklet_setup(&av7110->gpio_tasklet, gpioirq);
--
--	mutex_init(&av7110->pid_mutex);
--
--	/* locks for data transfers from/to AV7110 */
--	spin_lock_init(&av7110->debilock);
--	mutex_init(&av7110->dcomlock);
--	av7110->debitype = -1;
--
--	/* default OSD window */
--	av7110->osdwin = 1;
--	mutex_init(&av7110->osd_mutex);
--
--	/* TV standard */
--	av7110->vidmode = tv_standard == 1 ? AV7110_VIDEO_MODE_NTSC
--					   : AV7110_VIDEO_MODE_PAL;
--
--	/* ARM "watchdog" */
--	init_waitqueue_head(&av7110->arm_wait);
--	av7110->arm_thread = NULL;
--
--	/* allocate and init buffers */
--	av7110->debi_virt = dma_alloc_coherent(&pdev->dev, 8192,
--					       &av7110->debi_bus, GFP_KERNEL);
--	if (!av7110->debi_virt)
--		goto err_saa71466_vfree_4;
--
--
--	av7110->iobuf = vmalloc(AVOUTLEN+AOUTLEN+BMPLEN+4*IPACKS);
--	if (!av7110->iobuf)
--		goto err_pci_free_5;
--
--	ret = av7110_av_init(av7110);
--	if (ret < 0)
--		goto err_iobuf_vfree_6;
--
--	/* init BMP buffer */
--	av7110->bmpbuf = av7110->iobuf+AVOUTLEN+AOUTLEN;
--	init_waitqueue_head(&av7110->bmpq);
--
--	ret = av7110_ca_init(av7110);
--	if (ret < 0)
--		goto err_av7110_av_exit_7;
--
--	/* load firmware into AV7110 cards */
--	ret = av7110_bootarm(av7110);
--	if (ret < 0)
--		goto err_av7110_ca_exit_8;
--
--	ret = av7110_firmversion(av7110);
--	if (ret < 0)
--		goto err_stop_arm_9;
--
--	if (FW_VERSION(av7110->arm_app)<0x2501)
--		printk(KERN_WARNING
--		       "dvb-ttpci: Warning, firmware version 0x%04x is too old. System might be unstable!\n",
--		       FW_VERSION(av7110->arm_app));
--
--	thread = kthread_run(arm_thread, (void *) av7110, "arm_mon");
--	if (IS_ERR(thread)) {
--		ret = PTR_ERR(thread);
--		goto err_stop_arm_9;
--	}
--	av7110->arm_thread = thread;
--
--	/* set initial volume in mixer struct */
--	av7110->mixer.volume_left  = volume;
--	av7110->mixer.volume_right = volume;
--
--	ret = av7110_register(av7110);
--	if (ret < 0)
--		goto err_arm_thread_stop_10;
--
--	init_av7110_av(av7110);
--
--	/* special case DVB-C: these cards have an analog tuner
--	   plus need some special handling, so we have separate
--	   saa7146_ext_vv data for these... */
--	ret = av7110_init_v4l(av7110);
--	if (ret < 0)
--		goto err_av7110_unregister_11;
--
--	av7110->dvb_adapter.priv = av7110;
--	ret = frontend_init(av7110);
--	if (ret < 0)
--		goto err_av7110_exit_v4l_12;
--
--	mutex_init(&av7110->ioctl_mutex);
--
--#if IS_ENABLED(CONFIG_DVB_AV7110_IR)
--	av7110_ir_init(av7110);
--#endif
--	printk(KERN_INFO "dvb-ttpci: found av7110-%d.\n", av7110_num);
--	av7110_num++;
--out:
--	return ret;
--
--err_av7110_exit_v4l_12:
--	av7110_exit_v4l(av7110);
--err_av7110_unregister_11:
--	dvb_unregister(av7110);
--err_arm_thread_stop_10:
--	av7110_arm_sync(av7110);
--err_stop_arm_9:
--	/* Nothing to do. Rejoice. */
--err_av7110_ca_exit_8:
--	av7110_ca_exit(av7110);
--err_av7110_av_exit_7:
--	av7110_av_exit(av7110);
--err_iobuf_vfree_6:
--	vfree(av7110->iobuf);
--err_pci_free_5:
--	dma_free_coherent(&pdev->dev, 8192, av7110->debi_virt,
--			  av7110->debi_bus);
--err_saa71466_vfree_4:
--	if (av7110->grabbing)
--		saa7146_vfree_destroy_pgtable(pdev, av7110->grabbing, &av7110->pt);
--err_i2c_del_3:
--	i2c_del_adapter(&av7110->i2c_adap);
--err_dvb_unregister_adapter_2:
--	dvb_unregister_adapter(&av7110->dvb_adapter);
--err_put_firmware_1:
--	put_firmware(av7110);
--err_kfree_0:
--	kfree(av7110);
--	goto out;
--}
--
--static int av7110_detach(struct saa7146_dev* saa)
--{
--	struct av7110 *av7110 = saa->ext_priv;
--	dprintk(4, "%p\n", av7110);
--
--#if IS_ENABLED(CONFIG_DVB_AV7110_IR)
--	av7110_ir_exit(av7110);
--#endif
--	if (budgetpatch || av7110->full_ts) {
--		if (budgetpatch) {
--			/* Disable RPS1 */
--			saa7146_write(saa, MC1, MASK_29);
--			/* VSYNC LOW (inactive) */
--			saa7146_setgpio(saa, 3, SAA7146_GPIO_OUTLO);
--		}
--		saa7146_write(saa, MC1, MASK_20);	/* DMA3 off */
--		SAA7146_IER_DISABLE(saa, MASK_10);
--		SAA7146_ISR_CLEAR(saa, MASK_10);
--		msleep(50);
--		tasklet_kill(&av7110->vpe_tasklet);
--		saa7146_vfree_destroy_pgtable(saa->pci, av7110->grabbing, &av7110->pt);
--	}
--	av7110_exit_v4l(av7110);
--
--	av7110_arm_sync(av7110);
--
--	tasklet_kill(&av7110->debi_tasklet);
--	tasklet_kill(&av7110->gpio_tasklet);
--
--	dvb_unregister(av7110);
--
--	SAA7146_IER_DISABLE(saa, MASK_19 | MASK_03);
--	SAA7146_ISR_CLEAR(saa, MASK_19 | MASK_03);
--
--	av7110_ca_exit(av7110);
--	av7110_av_exit(av7110);
--
--	vfree(av7110->iobuf);
--	dma_free_coherent(&saa->pci->dev, 8192, av7110->debi_virt,
--			  av7110->debi_bus);
--
--	i2c_del_adapter(&av7110->i2c_adap);
--
--	dvb_unregister_adapter (&av7110->dvb_adapter);
--
--	av7110_num--;
--
--	put_firmware(av7110);
--
--	kfree(av7110);
--
--	saa->ext_priv = NULL;
--
--	return 0;
--}
--
--
--static void av7110_irq(struct saa7146_dev* dev, u32 *isr)
--{
--	struct av7110 *av7110 = dev->ext_priv;
--
--	//print_time("av7110_irq");
--
--	/* Note: Don't try to handle the DEBI error irq (MASK_18), in
--	 * intel mode the timeout is asserted all the time...
--	 */
--
--	if (*isr & MASK_19) {
--		//printk("av7110_irq: DEBI\n");
--		/* Note 1: The DEBI irq is level triggered: We must enable it
--		 * only after we started a DMA xfer, and disable it here
--		 * immediately, or it will be signalled all the time while
--		 * DEBI is idle.
--		 * Note 2: You would think that an irq which is masked is
--		 * not signalled by the hardware. Not so for the SAA7146:
--		 * An irq is signalled as long as the corresponding bit
--		 * in the ISR is set, and disabling irqs just prevents the
--		 * hardware from setting the ISR bit. This means a) that we
--		 * must clear the ISR *after* disabling the irq (which is why
--		 * we must do it here even though saa7146_core did it already),
--		 * and b) that if we were to disable an edge triggered irq
--		 * (like the gpio irqs sadly are) temporarily we would likely
--		 * loose some. This sucks :-(
--		 */
--		SAA7146_IER_DISABLE(av7110->dev, MASK_19);
--		SAA7146_ISR_CLEAR(av7110->dev, MASK_19);
--		tasklet_schedule(&av7110->debi_tasklet);
--	}
--
--	if (*isr & MASK_03) {
--		//printk("av7110_irq: GPIO\n");
--		tasklet_schedule(&av7110->gpio_tasklet);
--	}
--
--	if (*isr & MASK_10)
--		tasklet_schedule(&av7110->vpe_tasklet);
--}
--
--
--static struct saa7146_extension av7110_extension_driver;
--
--#define MAKE_AV7110_INFO(x_var,x_name) \
--static struct saa7146_pci_extension_data x_var = { \
--	.ext_priv = x_name, \
--	.ext = &av7110_extension_driver }
--
--MAKE_AV7110_INFO(tts_1_X_fsc,"Technotrend/Hauppauge WinTV DVB-S rev1.X or Fujitsu Siemens DVB-C");
--MAKE_AV7110_INFO(ttt_1_X,    "Technotrend/Hauppauge WinTV DVB-T rev1.X");
--MAKE_AV7110_INFO(ttc_1_X,    "Technotrend/Hauppauge WinTV Nexus-CA rev1.X");
--MAKE_AV7110_INFO(ttc_2_X,    "Technotrend/Hauppauge WinTV DVB-C rev2.X");
--MAKE_AV7110_INFO(tts_2_X,    "Technotrend/Hauppauge WinTV Nexus-S rev2.X");
--MAKE_AV7110_INFO(tts_2_3,    "Technotrend/Hauppauge WinTV Nexus-S rev2.3");
--MAKE_AV7110_INFO(tts_1_3se,  "Technotrend/Hauppauge WinTV DVB-S rev1.3 SE");
--MAKE_AV7110_INFO(ttt,        "Technotrend/Hauppauge DVB-T");
--MAKE_AV7110_INFO(fsc,        "Fujitsu Siemens DVB-C");
--MAKE_AV7110_INFO(fss,        "Fujitsu Siemens DVB-S rev1.6");
--MAKE_AV7110_INFO(gxs_1_3,    "Galaxis DVB-S rev1.3");
--
--static const struct pci_device_id pci_tbl[] = {
--	MAKE_EXTENSION_PCI(fsc,         0x110a, 0x0000),
--	MAKE_EXTENSION_PCI(tts_1_X_fsc, 0x13c2, 0x0000),
--	MAKE_EXTENSION_PCI(ttt_1_X,     0x13c2, 0x0001),
--	MAKE_EXTENSION_PCI(ttc_2_X,     0x13c2, 0x0002),
--	MAKE_EXTENSION_PCI(tts_2_X,     0x13c2, 0x0003),
--	MAKE_EXTENSION_PCI(gxs_1_3,     0x13c2, 0x0004),
--	MAKE_EXTENSION_PCI(fss,         0x13c2, 0x0006),
--	MAKE_EXTENSION_PCI(ttt,         0x13c2, 0x0008),
--	MAKE_EXTENSION_PCI(ttc_1_X,     0x13c2, 0x000a),
--	MAKE_EXTENSION_PCI(tts_2_3,     0x13c2, 0x000e),
--	MAKE_EXTENSION_PCI(tts_1_3se,   0x13c2, 0x1002),
--
--/*	MAKE_EXTENSION_PCI(???, 0x13c2, 0x0005), UNDEFINED CARD */ // Technisat SkyStar1
--/*	MAKE_EXTENSION_PCI(???, 0x13c2, 0x0009), UNDEFINED CARD */ // TT/Hauppauge WinTV Nexus-CA v????
--
--	{
--		.vendor    = 0,
--	}
--};
--
--MODULE_DEVICE_TABLE(pci, pci_tbl);
--
--
--static struct saa7146_extension av7110_extension_driver = {
--	.name		= "av7110",
--	.flags		= SAA7146_USE_I2C_IRQ,
--
--	.module		= THIS_MODULE,
--	.pci_tbl	= &pci_tbl[0],
--	.attach		= av7110_attach,
--	.detach		= av7110_detach,
--
--	.irq_mask	= MASK_19 | MASK_03 | MASK_10,
--	.irq_func	= av7110_irq,
--};
--
--
--static int __init av7110_init(void)
--{
--	return saa7146_register_extension(&av7110_extension_driver);
--}
--
--
--static void __exit av7110_exit(void)
--{
--	saa7146_unregister_extension(&av7110_extension_driver);
--}
--
--module_init(av7110_init);
--module_exit(av7110_exit);
--
--MODULE_DESCRIPTION("driver for the SAA7146 based AV110 PCI DVB cards by Siemens, Technotrend, Hauppauge");
--MODULE_AUTHOR("Ralph Metzler, Marcus Metzler, others");
--MODULE_LICENSE("GPL");
-diff --git a/drivers/staging/media/deprecated/saa7146/av7110/av7110.h b/drivers/staging/media/deprecated/saa7146/av7110/av7110.h
+@@ -1,3 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0
+-source "drivers/staging/media/deprecated/saa7146/common/Kconfig"
+-source "drivers/staging/media/deprecated/saa7146/saa7146/Kconfig"
+diff --git a/drivers/staging/media/deprecated/saa7146/Makefile b/drivers/staging/media/deprecated/saa7146/Makefile
 deleted file mode 100644
-index 9fde69b38f1c..000000000000
---- a/drivers/staging/media/deprecated/saa7146/av7110/av7110.h
+index 71866795174e..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/Makefile
 +++ /dev/null
-@@ -1,315 +0,0 @@
+@@ -1,2 +0,0 @@
+- # SPDX-License-Identifier: GPL-2.0-only
+-obj-y += common/ saa7146/
+diff --git a/drivers/staging/media/deprecated/saa7146/common/Kconfig b/drivers/staging/media/deprecated/saa7146/common/Kconfig
+deleted file mode 100644
+index a0aa155e5d85..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/common/Kconfig
++++ /dev/null
+@@ -1,10 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-config VIDEO_SAA7146
+-	tristate
+-	depends on I2C && PCI
+-
+-config VIDEO_SAA7146_VV
+-	tristate
+-	depends on VIDEO_DEV
+-	select VIDEOBUF_DMA_SG
+-	select VIDEO_SAA7146
+diff --git a/drivers/staging/media/deprecated/saa7146/common/Makefile b/drivers/staging/media/deprecated/saa7146/common/Makefile
+deleted file mode 100644
+index 2a6337feaec8..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/common/Makefile
++++ /dev/null
+@@ -1,6 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-saa7146-objs    := saa7146_i2c.o saa7146_core.o
+-saa7146_vv-objs := saa7146_fops.o saa7146_video.o saa7146_hlp.o saa7146_vbi.o
+-
+-obj-$(CONFIG_VIDEO_SAA7146) += saa7146.o
+-obj-$(CONFIG_VIDEO_SAA7146_VV) += saa7146_vv.o
+diff --git a/drivers/staging/media/deprecated/saa7146/common/saa7146.h b/drivers/staging/media/deprecated/saa7146/common/saa7146.h
+deleted file mode 100644
+index 71ce63c99cb4..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/common/saa7146.h
++++ /dev/null
+@@ -1,472 +0,0 @@
 -/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _AV7110_H_
--#define _AV7110_H_
+-#ifndef __SAA7146__
+-#define __SAA7146__
 -
--#include <linux/interrupt.h>
--#include <linux/socket.h>
--#include <linux/netdevice.h>
--#include <linux/i2c.h>
--#include <linux/input.h>
--#include <linux/time.h>
--
--#include <linux/dvb/video.h>
--#include <linux/dvb/audio.h>
--#include <linux/dvb/dmx.h>
--#include <linux/dvb/ca.h>
--#include <linux/dvb/osd.h>
--#include <linux/dvb/net.h>
+-#include <linux/delay.h>	/* for delay-stuff */
+-#include <linux/slab.h>		/* for kmalloc/kfree */
+-#include <linux/pci.h>		/* for pci-config-stuff, vendor ids etc. */
+-#include <linux/init.h>		/* for "__init" */
+-#include <linux/interrupt.h>	/* for IMMEDIATE_BH */
+-#include <linux/kmod.h>		/* for kernel module loader */
+-#include <linux/i2c.h>		/* for i2c subsystem */
+-#include <asm/io.h>		/* for accessing devices */
+-#include <linux/stringify.h>
 -#include <linux/mutex.h>
+-#include <linux/scatterlist.h>
+-#include <media/v4l2-device.h>
+-#include <media/v4l2-ctrls.h>
 -
--#include <media/dvbdev.h>
--#include <media/demux.h>
--#include <media/dvb_demux.h>
--#include <media/dmxdev.h>
--#include "dvb_filter.h"
--#include <media/dvb_net.h>
--#include <media/dvb_ringbuffer.h>
--#include <media/dvb_frontend.h>
--#include "ves1820.h"
--#include "ves1x93.h"
--#include "stv0299.h"
--#include "tda8083.h"
--#include "sp8870.h"
--#include "stv0297.h"
--#include "l64781.h"
+-#include <linux/vmalloc.h>	/* for vmalloc() */
+-#include <linux/mm.h>		/* for vmalloc_to_page() */
 -
--#include "saa7146_vv.h"
+-#define saa7146_write(sxy,adr,dat)    writel((dat),(sxy->mem+(adr)))
+-#define saa7146_read(sxy,adr)         readl(sxy->mem+(adr))
 -
+-extern unsigned int saa7146_debug;
 -
--#define ANALOG_TUNER_VES1820 1
--#define ANALOG_TUNER_STV0297 2
+-#ifndef DEBUG_VARIABLE
+-	#define DEBUG_VARIABLE saa7146_debug
+-#endif
 -
--extern int av7110_debug;
+-#define ERR(fmt, ...)	pr_err("%s: " fmt, __func__, ##__VA_ARGS__)
 -
--#define dprintk(level, fmt, arg...) do {				\
--	if (level & av7110_debug)					\
--		printk(KERN_DEBUG KBUILD_MODNAME ": %s(): " fmt,	\
--		       __func__, ##arg);				\
+-#define _DBG(mask, fmt, ...)						\
+-do {									\
+-	if (DEBUG_VARIABLE & mask)					\
+-		pr_debug("%s(): " fmt, __func__, ##__VA_ARGS__);	\
 -} while (0)
 -
--#define MAXFILT 32
+-/* simple debug messages */
+-#define DEB_S(fmt, ...)		_DBG(0x01, fmt, ##__VA_ARGS__)
+-/* more detailed debug messages */
+-#define DEB_D(fmt, ...)		_DBG(0x02, fmt, ##__VA_ARGS__)
+-/* print enter and exit of functions */
+-#define DEB_EE(fmt, ...)	_DBG(0x04, fmt, ##__VA_ARGS__)
+-/* i2c debug messages */
+-#define DEB_I2C(fmt, ...)	_DBG(0x08, fmt, ##__VA_ARGS__)
+-/* vbi debug messages */
+-#define DEB_VBI(fmt, ...)	_DBG(0x10, fmt, ##__VA_ARGS__)
+-/* interrupt debug messages */
+-#define DEB_INT(fmt, ...)	_DBG(0x20, fmt, ##__VA_ARGS__)
+-/* capture debug messages */
+-#define DEB_CAP(fmt, ...)	_DBG(0x40, fmt, ##__VA_ARGS__)
 -
--enum {AV_PES_STREAM, PS_STREAM, TS_STREAM, PES_STREAM};
+-#define SAA7146_ISR_CLEAR(x,y) \
+-	saa7146_write(x, ISR, (y));
 -
--enum av7110_video_mode {
--	AV7110_VIDEO_MODE_PAL	= 0,
--	AV7110_VIDEO_MODE_NTSC	= 1
+-struct module;
+-
+-struct saa7146_dev;
+-struct saa7146_extension;
+-struct saa7146_vv;
+-
+-/* saa7146 page table */
+-struct saa7146_pgtable {
+-	unsigned int	size;
+-	__le32		*cpu;
+-	dma_addr_t	dma;
+-	/* used for offsets for u,v planes for planar capture modes */
+-	unsigned long	offset;
+-	/* used for custom pagetables (used for example by budget dvb cards) */
+-	struct scatterlist *slist;
+-	int		nents;
 -};
 -
--struct av7110_p2t {
--	u8		  pes[TS_SIZE];
--	u8		  counter;
--	long int	  pos;
--	int		  frags;
--	struct dvb_demux_feed *feed;
+-struct saa7146_pci_extension_data {
+-	struct saa7146_extension *ext;
+-	void *ext_priv;			/* most likely a name string */
 -};
 -
--/* video MPEG decoder events: */
--/* (code copied from dvb_frontend.c, should maybe be factored out...) */
--#define MAX_VIDEO_EVENT 8
--struct dvb_video_events {
--	struct video_event	  events[MAX_VIDEO_EVENT];
--	int			  eventw;
--	int			  eventr;
--	int			  overflow;
--	wait_queue_head_t	  wait_queue;
--	spinlock_t		  lock;
+-#define MAKE_EXTENSION_PCI(x_var, x_vendor, x_device)		\
+-	{							\
+-		.vendor    = PCI_VENDOR_ID_PHILIPS,		\
+-		.device	   = PCI_DEVICE_ID_PHILIPS_SAA7146,	\
+-		.subvendor = x_vendor,				\
+-		.subdevice = x_device,				\
+-		.driver_data = (unsigned long)& x_var,		\
+-	}
+-
+-struct saa7146_extension
+-{
+-	char	name[32];		/* name of the device */
+-#define SAA7146_USE_I2C_IRQ	0x1
+-#define SAA7146_I2C_SHORT_DELAY	0x2
+-	int	flags;
+-
+-	/* pairs of subvendor and subdevice ids for
+-	   supported devices, last entry 0xffff, 0xfff */
+-	struct module *module;
+-	struct pci_driver driver;
+-	const struct pci_device_id *pci_tbl;
+-
+-	/* extension functions */
+-	int (*probe)(struct saa7146_dev *);
+-	int (*attach)(struct saa7146_dev *, struct saa7146_pci_extension_data *);
+-	int (*detach)(struct saa7146_dev*);
+-
+-	u32	irq_mask;	/* mask to indicate, which irq-events are handled by the extension */
+-	void	(*irq_func)(struct saa7146_dev*, u32* irq_mask);
 -};
 -
--
--struct av7110;
--
--/* infrared remote control */
--struct infrared {
--	struct rc_dev		*rcdev;
--	char			input_phys[32];
--	u32			ir_config;
+-struct saa7146_dma
+-{
+-	dma_addr_t	dma_handle;
+-	__le32		*cpu_addr;
 -};
 -
--/* place to store all the necessary device information */
--struct av7110 {
+-struct saa7146_dev
+-{
+-	struct module			*module;
 -
--	/* devices */
+-	struct v4l2_device		v4l2_dev;
+-	struct v4l2_ctrl_handler	ctrl_handler;
 -
--	struct dvb_device	dvb_dev;
--	struct dvb_net		dvb_net;
+-	/* different device locks */
+-	spinlock_t			slock;
+-	struct mutex			v4l2_lock;
 -
--	struct video_device	v4l_dev;
--	struct video_device	vbi_dev;
+-	unsigned char			__iomem *mem;		/* pointer to mapped IO memory */
+-	u32				revision;	/* chip revision; needed for bug-workarounds*/
 -
--	struct saa7146_dev	*dev;
+-	/* pci-device & irq stuff*/
+-	char				name[32];
+-	struct pci_dev			*pci;
+-	u32				int_todo;
+-	spinlock_t			int_slock;
 -
--	struct i2c_adapter	i2c_adap;
+-	/* extension handling */
+-	struct saa7146_extension	*ext;		/* indicates if handled by extension */
+-	void				*ext_priv;	/* pointer for extension private use (most likely some private data) */
+-	struct saa7146_ext_vv		*ext_vv_data;
 -
--	char			*card_name;
+-	/* per device video/vbi information (if available) */
+-	struct saa7146_vv	*vv_data;
+-	void (*vv_callback)(struct saa7146_dev *dev, unsigned long status);
 -
--	/* support for analog module of dvb-c */
--	int			analog_tuner_flags;
--	int			current_input;
--	u32			current_freq;
+-	/* i2c-stuff */
+-	struct mutex			i2c_lock;
 -
--	struct tasklet_struct	debi_tasklet;
--	struct tasklet_struct	gpio_tasklet;
+-	u32				i2c_bitrate;
+-	struct saa7146_dma		d_i2c;	/* pointer to i2c memory */
+-	wait_queue_head_t		i2c_wq;
+-	int				i2c_op;
 -
--	int adac_type;	       /* audio DAC type */
--#define DVB_ADAC_TI	  0
--#define DVB_ADAC_CRYSTAL  1
--#define DVB_ADAC_MSP34x0  2
--#define DVB_ADAC_MSP34x5  3
--#define DVB_ADAC_NONE	 -1
--
--
--	/* buffers */
--
--	void		       *iobuf;	 /* memory for all buffers */
--	struct dvb_ringbuffer	avout;   /* buffer for video or A/V mux */
--#define AVOUTLEN (128*1024)
--	struct dvb_ringbuffer	aout;    /* buffer for audio */
--#define AOUTLEN (64*1024)
--	void		       *bmpbuf;
--#define BMPLEN (8*32768+1024)
--
--	/* bitmap buffers and states */
--
--	int			bmpp;
--	int			bmplen;
--	volatile int		bmp_state;
--#define BMP_NONE     0
--#define BMP_LOADING  1
--#define BMP_LOADED   2
--	wait_queue_head_t	bmpq;
--
--
--	/* DEBI and polled command interface */
--
--	spinlock_t		debilock;
--	struct mutex		dcomlock;
--	volatile int		debitype;
--	volatile int		debilen;
--
--
--	/* Recording and playback flags */
--
--	int			rec_mode;
--	int			playing;
--#define RP_NONE  0
--#define RP_VIDEO 1
--#define RP_AUDIO 2
--#define RP_AV	 3
--
--
--	/* OSD */
--
--	int			osdwin;      /* currently active window */
--	u16			osdbpp[8];
--	struct mutex		osd_mutex;
--
--	/* CA */
--
--	struct ca_slot_info	ci_slot[2];
--
--	enum av7110_video_mode	vidmode;
--	struct dmxdev		dmxdev;
--	struct dvb_demux	demux;
--
--	struct dmx_frontend	hw_frontend;
--	struct dmx_frontend	mem_frontend;
--
--	/* for budget mode demux1 */
--	struct dmxdev		dmxdev1;
--	struct dvb_demux	demux1;
--	struct dvb_net		dvb_net1;
--	spinlock_t		feedlock1;
--	int			feeding1;
--	u32			ttbp;
--	unsigned char           *grabbing;
--	struct saa7146_pgtable  pt;
--	struct tasklet_struct   vpe_tasklet;
--	bool			full_ts;
--
--	int			fe_synced;
--	struct mutex		pid_mutex;
--
--	int			video_blank;
--	struct video_status	videostate;
--	u16			display_panscan;
--	int			display_ar;
--	int			trickmode;
--#define TRICK_NONE   0
--#define TRICK_FAST   1
--#define TRICK_SLOW   2
--#define TRICK_FREEZE 3
--	struct audio_status	audiostate;
--
--	struct dvb_demux_filter *handle2filter[32];
--	struct av7110_p2t	 p2t_filter[MAXFILT];
--	struct dvb_filter_pes2ts p2t[2];
--	struct ipack		 ipack[2];
--	u8			*kbuf[2];
--
--	int sinfo;
--	int feeding;
--
--	int arm_errors;
--	int registered;
--
--
--	/* AV711X */
--
--	u32		    arm_fw;
--	u32		    arm_rtsl;
--	u32		    arm_vid;
--	u32		    arm_app;
--	u32		    avtype;
--	int		    arm_ready;
--	struct task_struct *arm_thread;
--	wait_queue_head_t   arm_wait;
--	u16		    arm_loops;
--
--	void		   *debi_virt;
--	dma_addr_t	    debi_bus;
--
--	u16		    pids[DMX_PES_OTHER];
--
--	struct dvb_ringbuffer	 ci_rbuffer;
--	struct dvb_ringbuffer	 ci_wbuffer;
--
--	struct audio_mixer	mixer;
--
--	struct dvb_adapter	 dvb_adapter;
--	struct dvb_device	 *video_dev;
--	struct dvb_device	 *audio_dev;
--	struct dvb_device	 *ca_dev;
--	struct dvb_device	 *osd_dev;
--
--	struct dvb_video_events  video_events;
--	video_size_t		 video_size;
--
--	u16			wssMode;
--	u16			wssData;
--
--	struct infrared		ir;
--
--	/* firmware stuff */
--	unsigned char *bin_fw;
--	unsigned long size_fw;
--
--	unsigned char *bin_dpram;
--	unsigned long size_dpram;
--
--	unsigned char *bin_root;
--	unsigned long size_root;
--
--	struct dvb_frontend* fe;
--	enum fe_status fe_status;
--
--	struct mutex ioctl_mutex;
--
--	/* crash recovery */
--	void				(*recover)(struct av7110* av7110);
--	enum fe_sec_voltage		saved_voltage;
--	enum fe_sec_tone_mode		saved_tone;
--	struct dvb_diseqc_master_cmd	saved_master_cmd;
--	enum fe_sec_mini_cmd		saved_minicmd;
--
--	int (*fe_init)(struct dvb_frontend* fe);
--	int (*fe_read_status)(struct dvb_frontend *fe, enum fe_status *status);
--	int (*fe_diseqc_reset_overload)(struct dvb_frontend *fe);
--	int (*fe_diseqc_send_master_cmd)(struct dvb_frontend *fe,
--					 struct dvb_diseqc_master_cmd *cmd);
--	int (*fe_diseqc_send_burst)(struct dvb_frontend *fe,
--				    enum fe_sec_mini_cmd minicmd);
--	int (*fe_set_tone)(struct dvb_frontend *fe,
--			   enum fe_sec_tone_mode tone);
--	int (*fe_set_voltage)(struct dvb_frontend *fe,
--			      enum fe_sec_voltage voltage);
--	int (*fe_dishnetwork_send_legacy_command)(struct dvb_frontend *fe,
--						  unsigned long cmd);
--	int (*fe_set_frontend)(struct dvb_frontend *fe);
+-	/* memories */
+-	struct saa7146_dma		d_rps0;
+-	struct saa7146_dma		d_rps1;
 -};
 -
--
--extern int ChangePIDs(struct av7110 *av7110, u16 vpid, u16 apid, u16 ttpid,
--		       u16 subpid, u16 pcrpid);
--
--void av7110_ir_handler(struct av7110 *av7110, u32 ircom);
--int av7110_set_ir_config(struct av7110 *av7110);
--int av7110_ir_init(struct av7110 *av7110);
--void av7110_ir_exit(struct av7110 *av7110);
--
--/* msp3400 i2c subaddresses */
--#define MSP_WR_DEM 0x10
--#define MSP_RD_DEM 0x11
--#define MSP_WR_DSP 0x12
--#define MSP_RD_DSP 0x13
--
--extern int i2c_writereg(struct av7110 *av7110, u8 id, u8 reg, u8 val);
--extern u8 i2c_readreg(struct av7110 *av7110, u8 id, u8 reg);
--extern int msp_writereg(struct av7110 *av7110, u8 dev, u16 reg, u16 val);
--
--
--extern int av7110_init_analog_module(struct av7110 *av7110);
--extern int av7110_init_v4l(struct av7110 *av7110);
--extern int av7110_exit_v4l(struct av7110 *av7110);
--
--#endif /* _AV7110_H_ */
-diff --git a/drivers/staging/media/deprecated/saa7146/av7110/av7110_av.c b/drivers/staging/media/deprecated/saa7146/av7110/av7110_av.c
-deleted file mode 100644
-index 0bf513c26b6b..000000000000
---- a/drivers/staging/media/deprecated/saa7146/av7110/av7110_av.c
-+++ /dev/null
-@@ -1,1681 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * av7110_av.c: audio and video MPEG decoder stuff
-- *
-- * Copyright (C) 1999-2002 Ralph  Metzler
-- *                       & Marcus Metzler for convergence integrated media GmbH
-- *
-- * originally based on code by:
-- * Copyright (C) 1998,1999 Christian Theiss <mistert@rz.fh-augsburg.de>
-- *
-- * the project's page is at https://linuxtv.org
-- */
--
--#include <linux/ethtool.h>
--#include <linux/types.h>
--#include <linux/kernel.h>
--#include <linux/string.h>
--#include <linux/delay.h>
--#include <linux/fs.h>
--
--#include "av7110.h"
--#include "av7110_hw.h"
--#include "av7110_av.h"
--#include "av7110_ipack.h"
--
--/* MPEG-2 (ISO 13818 / H.222.0) stream types */
--#define PROG_STREAM_MAP  0xBC
--#define PRIVATE_STREAM1  0xBD
--#define PADDING_STREAM	 0xBE
--#define PRIVATE_STREAM2  0xBF
--#define AUDIO_STREAM_S	 0xC0
--#define AUDIO_STREAM_E	 0xDF
--#define VIDEO_STREAM_S	 0xE0
--#define VIDEO_STREAM_E	 0xEF
--#define ECM_STREAM	 0xF0
--#define EMM_STREAM	 0xF1
--#define DSM_CC_STREAM	 0xF2
--#define ISO13522_STREAM  0xF3
--#define PROG_STREAM_DIR  0xFF
--
--#define PTS_DTS_FLAGS	 0xC0
--
--//pts_dts flags
--#define PTS_ONLY	 0x80
--#define PTS_DTS		 0xC0
--#define TS_SIZE		 188
--#define TRANS_ERROR	 0x80
--#define PAY_START	 0x40
--#define TRANS_PRIO	 0x20
--#define PID_MASK_HI	 0x1F
--//flags
--#define TRANS_SCRMBL1	 0x80
--#define TRANS_SCRMBL2	 0x40
--#define ADAPT_FIELD	 0x20
--#define PAYLOAD		 0x10
--#define COUNT_MASK	 0x0F
--
--// adaptation flags
--#define DISCON_IND	 0x80
--#define RAND_ACC_IND	 0x40
--#define ES_PRI_IND	 0x20
--#define PCR_FLAG	 0x10
--#define OPCR_FLAG	 0x08
--#define SPLICE_FLAG	 0x04
--#define TRANS_PRIV	 0x02
--#define ADAP_EXT_FLAG	 0x01
--
--// adaptation extension flags
--#define LTW_FLAG	 0x80
--#define PIECE_RATE	 0x40
--#define SEAM_SPLICE	 0x20
--
--
--static void p_to_t(u8 const *buf, long int length, u16 pid,
--		   u8 *counter, struct dvb_demux_feed *feed);
--static int write_ts_to_decoder(struct av7110 *av7110, int type, const u8 *buf, size_t len);
--
--
--int av7110_record_cb(struct dvb_filter_pes2ts *p2t, u8 *buf, size_t len)
--{
--	struct dvb_demux_feed *dvbdmxfeed = (struct dvb_demux_feed *) p2t->priv;
--
--	if (!(dvbdmxfeed->ts_type & TS_PACKET))
--		return 0;
--	if (buf[3] == 0xe0)	 // video PES do not have a length in TS
--		buf[4] = buf[5] = 0;
--	if (dvbdmxfeed->ts_type & TS_PAYLOAD_ONLY)
--		return dvbdmxfeed->cb.ts(buf, len, NULL, 0,
--					 &dvbdmxfeed->feed.ts, NULL);
--	else
--		return dvb_filter_pes2ts(p2t, buf, len, 1);
--}
--
--static int dvb_filter_pes2ts_cb(void *priv, unsigned char *data)
--{
--	struct dvb_demux_feed *dvbdmxfeed = (struct dvb_demux_feed *) priv;
--
--	dvbdmxfeed->cb.ts(data, 188, NULL, 0,
--			  &dvbdmxfeed->feed.ts, NULL);
--	return 0;
--}
--
--int av7110_av_start_record(struct av7110 *av7110, int av,
--			   struct dvb_demux_feed *dvbdmxfeed)
--{
--	int ret = 0;
--	struct dvb_demux *dvbdmx = dvbdmxfeed->demux;
--
--	dprintk(2, "av7110:%p, dvb_demux_feed:%p\n", av7110, dvbdmxfeed);
--
--	if (av7110->playing || (av7110->rec_mode & av))
--		return -EBUSY;
--	av7110_fw_cmd(av7110, COMTYPE_REC_PLAY, __Stop, 0);
--	dvbdmx->recording = 1;
--	av7110->rec_mode |= av;
--
--	switch (av7110->rec_mode) {
--	case RP_AUDIO:
--		dvb_filter_pes2ts_init(&av7110->p2t[0],
--				       dvbdmx->pesfilter[0]->pid,
--				       dvb_filter_pes2ts_cb,
--				       (void *) dvbdmx->pesfilter[0]);
--		ret = av7110_fw_cmd(av7110, COMTYPE_REC_PLAY, __Record, 2, AudioPES, 0);
--		break;
--
--	case RP_VIDEO:
--		dvb_filter_pes2ts_init(&av7110->p2t[1],
--				       dvbdmx->pesfilter[1]->pid,
--				       dvb_filter_pes2ts_cb,
--				       (void *) dvbdmx->pesfilter[1]);
--		ret = av7110_fw_cmd(av7110, COMTYPE_REC_PLAY, __Record, 2, VideoPES, 0);
--		break;
--
--	case RP_AV:
--		dvb_filter_pes2ts_init(&av7110->p2t[0],
--				       dvbdmx->pesfilter[0]->pid,
--				       dvb_filter_pes2ts_cb,
--				       (void *) dvbdmx->pesfilter[0]);
--		dvb_filter_pes2ts_init(&av7110->p2t[1],
--				       dvbdmx->pesfilter[1]->pid,
--				       dvb_filter_pes2ts_cb,
--				       (void *) dvbdmx->pesfilter[1]);
--		ret = av7110_fw_cmd(av7110, COMTYPE_REC_PLAY, __Record, 2, AV_PES, 0);
--		break;
--	}
--	return ret;
--}
--
--int av7110_av_start_play(struct av7110 *av7110, int av)
--{
--	int ret = 0;
--	dprintk(2, "av7110:%p, \n", av7110);
--
--	if (av7110->rec_mode)
--		return -EBUSY;
--	if (av7110->playing & av)
--		return -EBUSY;
--
--	av7110_fw_cmd(av7110, COMTYPE_REC_PLAY, __Stop, 0);
--
--	if (av7110->playing == RP_NONE) {
--		av7110_ipack_reset(&av7110->ipack[0]);
--		av7110_ipack_reset(&av7110->ipack[1]);
--	}
--
--	av7110->playing |= av;
--	switch (av7110->playing) {
--	case RP_AUDIO:
--		ret = av7110_fw_cmd(av7110, COMTYPE_REC_PLAY, __Play, 2, AudioPES, 0);
--		break;
--	case RP_VIDEO:
--		ret = av7110_fw_cmd(av7110, COMTYPE_REC_PLAY, __Play, 2, VideoPES, 0);
--		av7110->sinfo = 0;
--		break;
--	case RP_AV:
--		av7110->sinfo = 0;
--		ret = av7110_fw_cmd(av7110, COMTYPE_REC_PLAY, __Play, 2, AV_PES, 0);
--		break;
--	}
--	return ret;
--}
--
--int av7110_av_stop(struct av7110 *av7110, int av)
--{
--	int ret = 0;
--	dprintk(2, "av7110:%p, \n", av7110);
--
--	if (!(av7110->playing & av) && !(av7110->rec_mode & av))
--		return 0;
--	av7110_fw_cmd(av7110, COMTYPE_REC_PLAY, __Stop, 0);
--	if (av7110->playing) {
--		av7110->playing &= ~av;
--		switch (av7110->playing) {
--		case RP_AUDIO:
--			ret = av7110_fw_cmd(av7110, COMTYPE_REC_PLAY, __Play, 2, AudioPES, 0);
--			break;
--		case RP_VIDEO:
--			ret = av7110_fw_cmd(av7110, COMTYPE_REC_PLAY, __Play, 2, VideoPES, 0);
--			break;
--		case RP_NONE:
--			ret = av7110_set_vidmode(av7110, av7110->vidmode);
--			break;
--		}
--	} else {
--		av7110->rec_mode &= ~av;
--		switch (av7110->rec_mode) {
--		case RP_AUDIO:
--			ret = av7110_fw_cmd(av7110, COMTYPE_REC_PLAY, __Record, 2, AudioPES, 0);
--			break;
--		case RP_VIDEO:
--			ret = av7110_fw_cmd(av7110, COMTYPE_REC_PLAY, __Record, 2, VideoPES, 0);
--			break;
--		case RP_NONE:
--			break;
--		}
--	}
--	return ret;
--}
--
--
--int av7110_pes_play(void *dest, struct dvb_ringbuffer *buf, int dlen)
--{
--	int len;
--	u32 sync;
--	u16 blen;
--
--	if (!dlen) {
--		wake_up(&buf->queue);
--		return -1;
--	}
--	while (1) {
--		len = dvb_ringbuffer_avail(buf);
--		if (len < 6) {
--			wake_up(&buf->queue);
--			return -1;
--		}
--		sync =  DVB_RINGBUFFER_PEEK(buf, 0) << 24;
--		sync |= DVB_RINGBUFFER_PEEK(buf, 1) << 16;
--		sync |= DVB_RINGBUFFER_PEEK(buf, 2) << 8;
--		sync |= DVB_RINGBUFFER_PEEK(buf, 3);
--
--		if (((sync &~ 0x0f) == 0x000001e0) ||
--		    ((sync &~ 0x1f) == 0x000001c0) ||
--		    (sync == 0x000001bd))
--			break;
--		printk("resync\n");
--		DVB_RINGBUFFER_SKIP(buf, 1);
--	}
--	blen =  DVB_RINGBUFFER_PEEK(buf, 4) << 8;
--	blen |= DVB_RINGBUFFER_PEEK(buf, 5);
--	blen += 6;
--	if (len < blen || blen > dlen) {
--		//printk("buffer empty - avail %d blen %u dlen %d\n", len, blen, dlen);
--		wake_up(&buf->queue);
--		return -1;
--	}
--
--	dvb_ringbuffer_read(buf, dest, (size_t) blen);
--
--	dprintk(2, "pread=0x%08lx, pwrite=0x%08lx\n",
--	       (unsigned long) buf->pread, (unsigned long) buf->pwrite);
--	wake_up(&buf->queue);
--	return blen;
--}
--
--
--int av7110_set_volume(struct av7110 *av7110, unsigned int volleft,
--		      unsigned int volright)
--{
--	unsigned int vol, val, balance = 0;
--	int err;
--
--	dprintk(2, "av7110:%p, \n", av7110);
--
--	av7110->mixer.volume_left = volleft;
--	av7110->mixer.volume_right = volright;
--
--	switch (av7110->adac_type) {
--	case DVB_ADAC_TI:
--		volleft = (volleft * 256) / 1036;
--		volright = (volright * 256) / 1036;
--		if (volleft > 0x3f)
--			volleft = 0x3f;
--		if (volright > 0x3f)
--			volright = 0x3f;
--		if ((err = SendDAC(av7110, 3, 0x80 + volleft)))
--			return err;
--		return SendDAC(av7110, 4, volright);
--
--	case DVB_ADAC_CRYSTAL:
--		volleft = 127 - volleft / 2;
--		volright = 127 - volright / 2;
--		i2c_writereg(av7110, 0x20, 0x03, volleft);
--		i2c_writereg(av7110, 0x20, 0x04, volright);
--		return 0;
--
--	case DVB_ADAC_MSP34x0:
--		vol  = (volleft > volright) ? volleft : volright;
--		val	= (vol * 0x73 / 255) << 8;
--		if (vol > 0)
--		       balance = ((volright - volleft) * 127) / vol;
--		msp_writereg(av7110, MSP_WR_DSP, 0x0001, balance << 8);
--		msp_writereg(av7110, MSP_WR_DSP, 0x0000, val); /* loudspeaker */
--		msp_writereg(av7110, MSP_WR_DSP, 0x0006, val); /* headphonesr */
--		return 0;
--
--	case DVB_ADAC_MSP34x5:
--		vol = (volleft > volright) ? volleft : volright;
--		val = (vol * 0x73 / 255) << 8;
--		if (vol > 0)
--			balance = ((volright - volleft) * 127) / vol;
--		msp_writereg(av7110, MSP_WR_DSP, 0x0001, balance << 8);
--		msp_writereg(av7110, MSP_WR_DSP, 0x0000, val); /* loudspeaker */
--		return 0;
--	}
--
--	return 0;
--}
--
--int av7110_set_vidmode(struct av7110 *av7110, enum av7110_video_mode mode)
--{
--	int ret;
--	dprintk(2, "av7110:%p, \n", av7110);
--
--	ret = av7110_fw_cmd(av7110, COMTYPE_ENCODER, LoadVidCode, 1, mode);
--
--	if (!ret && !av7110->playing) {
--		ret = ChangePIDs(av7110, av7110->pids[DMX_PES_VIDEO],
--			   av7110->pids[DMX_PES_AUDIO],
--			   av7110->pids[DMX_PES_TELETEXT],
--			   0, av7110->pids[DMX_PES_PCR]);
--		if (!ret)
--			ret = av7110_fw_cmd(av7110, COMTYPE_PIDFILTER, Scan, 0);
--	}
--	return ret;
--}
--
--
--static enum av7110_video_mode sw2mode[16] = {
--	AV7110_VIDEO_MODE_PAL, AV7110_VIDEO_MODE_NTSC,
--	AV7110_VIDEO_MODE_NTSC, AV7110_VIDEO_MODE_PAL,
--	AV7110_VIDEO_MODE_NTSC, AV7110_VIDEO_MODE_NTSC,
--	AV7110_VIDEO_MODE_PAL, AV7110_VIDEO_MODE_NTSC,
--	AV7110_VIDEO_MODE_PAL, AV7110_VIDEO_MODE_PAL,
--	AV7110_VIDEO_MODE_PAL, AV7110_VIDEO_MODE_PAL,
--	AV7110_VIDEO_MODE_PAL, AV7110_VIDEO_MODE_PAL,
--	AV7110_VIDEO_MODE_PAL, AV7110_VIDEO_MODE_PAL,
--};
--
--static int get_video_format(struct av7110 *av7110, u8 *buf, int count)
--{
--	int i;
--	int hsize, vsize;
--	int sw;
--	u8 *p;
--	int ret = 0;
--
--	dprintk(2, "av7110:%p, \n", av7110);
--
--	if (av7110->sinfo)
--		return 0;
--	for (i = 7; i < count - 10; i++) {
--		p = buf + i;
--		if (p[0] || p[1] || p[2] != 0x01 || p[3] != 0xb3)
--			continue;
--		p += 4;
--		hsize = ((p[1] &0xF0) >> 4) | (p[0] << 4);
--		vsize = ((p[1] &0x0F) << 8) | (p[2]);
--		sw = (p[3] & 0x0F);
--		ret = av7110_set_vidmode(av7110, sw2mode[sw]);
--		if (!ret) {
--			dprintk(2, "playback %dx%d fr=%d\n", hsize, vsize, sw);
--			av7110->sinfo = 1;
--		}
--		break;
--	}
--	return ret;
--}
--
--
--/****************************************************************************
-- * I/O buffer management and control
-- ****************************************************************************/
--
--static inline long aux_ring_buffer_write(struct dvb_ringbuffer *rbuf,
--					 const u8 *buf, unsigned long count)
--{
--	unsigned long todo = count;
--	int free;
--
--	while (todo > 0) {
--		if (dvb_ringbuffer_free(rbuf) < 2048) {
--			if (wait_event_interruptible(rbuf->queue,
--						     (dvb_ringbuffer_free(rbuf) >= 2048)))
--				return count - todo;
--		}
--		free = dvb_ringbuffer_free(rbuf);
--		if (free > todo)
--			free = todo;
--		dvb_ringbuffer_write(rbuf, buf, free);
--		todo -= free;
--		buf += free;
--	}
--
--	return count - todo;
--}
--
--static void play_video_cb(u8 *buf, int count, void *priv)
--{
--	struct av7110 *av7110 = (struct av7110 *) priv;
--	dprintk(2, "av7110:%p, \n", av7110);
--
--	if ((buf[3] & 0xe0) == 0xe0) {
--		get_video_format(av7110, buf, count);
--		aux_ring_buffer_write(&av7110->avout, buf, count);
--	} else
--		aux_ring_buffer_write(&av7110->aout, buf, count);
--}
--
--static void play_audio_cb(u8 *buf, int count, void *priv)
--{
--	struct av7110 *av7110 = (struct av7110 *) priv;
--	dprintk(2, "av7110:%p, \n", av7110);
--
--	aux_ring_buffer_write(&av7110->aout, buf, count);
--}
--
--
--#define FREE_COND_TS (dvb_ringbuffer_free(rb) >= 4096)
--
--static ssize_t ts_play(struct av7110 *av7110, const char __user *buf,
--		       unsigned long count, int nonblock, int type)
--{
--	struct dvb_ringbuffer *rb;
--	u8 *kb;
--	unsigned long todo = count;
--
--	dprintk(2, "%s: type %d cnt %lu\n", __func__, type, count);
--
--	rb = (type) ? &av7110->avout : &av7110->aout;
--	kb = av7110->kbuf[type];
--
--	if (!kb)
--		return -ENOBUFS;
--
--	if (nonblock && !FREE_COND_TS)
--		return -EWOULDBLOCK;
--
--	while (todo >= TS_SIZE) {
--		if (!FREE_COND_TS) {
--			if (nonblock)
--				return count - todo;
--			if (wait_event_interruptible(rb->queue, FREE_COND_TS))
--				return count - todo;
--		}
--		if (copy_from_user(kb, buf, TS_SIZE))
--			return -EFAULT;
--		write_ts_to_decoder(av7110, type, kb, TS_SIZE);
--		todo -= TS_SIZE;
--		buf += TS_SIZE;
--	}
--
--	return count - todo;
--}
--
--
--#define FREE_COND (dvb_ringbuffer_free(&av7110->avout) >= 20 * 1024 && \
--		   dvb_ringbuffer_free(&av7110->aout) >= 20 * 1024)
--
--static ssize_t dvb_play(struct av7110 *av7110, const char __user *buf,
--			unsigned long count, int nonblock, int type)
--{
--	unsigned long todo = count, n;
--	dprintk(2, "av7110:%p, \n", av7110);
--
--	if (!av7110->kbuf[type])
--		return -ENOBUFS;
--
--	if (nonblock && !FREE_COND)
--		return -EWOULDBLOCK;
--
--	while (todo > 0) {
--		if (!FREE_COND) {
--			if (nonblock)
--				return count - todo;
--			if (wait_event_interruptible(av7110->avout.queue,
--						     FREE_COND))
--				return count - todo;
--		}
--		n = todo;
--		if (n > IPACKS * 2)
--			n = IPACKS * 2;
--		if (copy_from_user(av7110->kbuf[type], buf, n))
--			return -EFAULT;
--		av7110_ipack_instant_repack(av7110->kbuf[type], n,
--					    &av7110->ipack[type]);
--		todo -= n;
--		buf += n;
--	}
--	return count - todo;
--}
--
--static ssize_t dvb_play_kernel(struct av7110 *av7110, const u8 *buf,
--			unsigned long count, int nonblock, int type)
--{
--	unsigned long todo = count, n;
--	dprintk(2, "av7110:%p, \n", av7110);
--
--	if (!av7110->kbuf[type])
--		return -ENOBUFS;
--
--	if (nonblock && !FREE_COND)
--		return -EWOULDBLOCK;
--
--	while (todo > 0) {
--		if (!FREE_COND) {
--			if (nonblock)
--				return count - todo;
--			if (wait_event_interruptible(av7110->avout.queue,
--						     FREE_COND))
--				return count - todo;
--		}
--		n = todo;
--		if (n > IPACKS * 2)
--			n = IPACKS * 2;
--		av7110_ipack_instant_repack(buf, n, &av7110->ipack[type]);
--		todo -= n;
--		buf += n;
--	}
--	return count - todo;
--}
--
--static ssize_t dvb_aplay(struct av7110 *av7110, const char __user *buf,
--			 unsigned long count, int nonblock, int type)
--{
--	unsigned long todo = count, n;
--	dprintk(2, "av7110:%p, \n", av7110);
--
--	if (!av7110->kbuf[type])
--		return -ENOBUFS;
--	if (nonblock && dvb_ringbuffer_free(&av7110->aout) < 20 * 1024)
--		return -EWOULDBLOCK;
--
--	while (todo > 0) {
--		if (dvb_ringbuffer_free(&av7110->aout) < 20 * 1024) {
--			if (nonblock)
--				return count - todo;
--			if (wait_event_interruptible(av7110->aout.queue,
--					(dvb_ringbuffer_free(&av7110->aout) >= 20 * 1024)))
--				return count-todo;
--		}
--		n = todo;
--		if (n > IPACKS * 2)
--			n = IPACKS * 2;
--		if (copy_from_user(av7110->kbuf[type], buf, n))
--			return -EFAULT;
--		av7110_ipack_instant_repack(av7110->kbuf[type], n,
--					    &av7110->ipack[type]);
--		todo -= n;
--		buf += n;
--	}
--	return count - todo;
--}
--
--void av7110_p2t_init(struct av7110_p2t *p, struct dvb_demux_feed *feed)
--{
--	memset(p->pes, 0, TS_SIZE);
--	p->counter = 0;
--	p->pos = 0;
--	p->frags = 0;
--	if (feed)
--		p->feed = feed;
--}
--
--static void clear_p2t(struct av7110_p2t *p)
--{
--	memset(p->pes, 0, TS_SIZE);
--//	p->counter = 0;
--	p->pos = 0;
--	p->frags = 0;
--}
--
--
--static int find_pes_header(u8 const *buf, long int length, int *frags)
--{
--	int c = 0;
--	int found = 0;
--
--	*frags = 0;
--
--	while (c < length - 3 && !found) {
--		if (buf[c] == 0x00 && buf[c + 1] == 0x00 &&
--		    buf[c + 2] == 0x01) {
--			switch ( buf[c + 3] ) {
--			case PROG_STREAM_MAP:
--			case PRIVATE_STREAM2:
--			case PROG_STREAM_DIR:
--			case ECM_STREAM:
--			case EMM_STREAM:
--			case PADDING_STREAM:
--			case DSM_CC_STREAM:
--			case ISO13522_STREAM:
--			case PRIVATE_STREAM1:
--			case AUDIO_STREAM_S ... AUDIO_STREAM_E:
--			case VIDEO_STREAM_S ... VIDEO_STREAM_E:
--				found = 1;
--				break;
--
--			default:
--				c++;
--				break;
--			}
--		} else
--			c++;
--	}
--	if (c == length - 3 && !found) {
--		if (buf[length - 1] == 0x00)
--			*frags = 1;
--		if (buf[length - 2] == 0x00 &&
--		    buf[length - 1] == 0x00)
--			*frags = 2;
--		if (buf[length - 3] == 0x00 &&
--		    buf[length - 2] == 0x00 &&
--		    buf[length - 1] == 0x01)
--			*frags = 3;
--		return -1;
--	}
--
--	return c;
--}
--
--void av7110_p2t_write(u8 const *buf, long int length, u16 pid, struct av7110_p2t *p)
--{
--	int c, c2, l, add;
--	int check, rest;
--
--	c = 0;
--	c2 = 0;
--	if (p->frags){
--		check = 0;
--		switch(p->frags) {
--		case 1:
--			if (buf[c] == 0x00 && buf[c + 1] == 0x01) {
--				check = 1;
--				c += 2;
--			}
--			break;
--		case 2:
--			if (buf[c] == 0x01) {
--				check = 1;
--				c++;
--			}
--			break;
--		case 3:
--			check = 1;
--		}
--		if (check) {
--			switch (buf[c]) {
--			case PROG_STREAM_MAP:
--			case PRIVATE_STREAM2:
--			case PROG_STREAM_DIR:
--			case ECM_STREAM:
--			case EMM_STREAM:
--			case PADDING_STREAM:
--			case DSM_CC_STREAM:
--			case ISO13522_STREAM:
--			case PRIVATE_STREAM1:
--			case AUDIO_STREAM_S ... AUDIO_STREAM_E:
--			case VIDEO_STREAM_S ... VIDEO_STREAM_E:
--				p->pes[0] = 0x00;
--				p->pes[1] = 0x00;
--				p->pes[2] = 0x01;
--				p->pes[3] = buf[c];
--				p->pos = 4;
--				memcpy(p->pes + p->pos, buf + c, (TS_SIZE - 4) - p->pos);
--				c += (TS_SIZE - 4) - p->pos;
--				p_to_t(p->pes, (TS_SIZE - 4), pid, &p->counter, p->feed);
--				clear_p2t(p);
--				break;
--
--			default:
--				c = 0;
--				break;
--			}
--		}
--		p->frags = 0;
--	}
--
--	if (p->pos) {
--		c2 = find_pes_header(buf + c, length - c, &p->frags);
--		if (c2 >= 0 && c2 < (TS_SIZE - 4) - p->pos)
--			l = c2+c;
--		else
--			l = (TS_SIZE - 4) - p->pos;
--		memcpy(p->pes + p->pos, buf, l);
--		c += l;
--		p->pos += l;
--		p_to_t(p->pes, p->pos, pid, &p->counter, p->feed);
--		clear_p2t(p);
--	}
--
--	add = 0;
--	while (c < length) {
--		c2 = find_pes_header(buf + c + add, length - c - add, &p->frags);
--		if (c2 >= 0) {
--			c2 += c + add;
--			if (c2 > c){
--				p_to_t(buf + c, c2 - c, pid, &p->counter, p->feed);
--				c = c2;
--				clear_p2t(p);
--				add = 0;
--			} else
--				add = 1;
--		} else {
--			l = length - c;
--			rest = l % (TS_SIZE - 4);
--			l -= rest;
--			p_to_t(buf + c, l, pid, &p->counter, p->feed);
--			memcpy(p->pes, buf + c + l, rest);
--			p->pos = rest;
--			c = length;
--		}
--	}
--}
--
--
--static int write_ts_header2(u16 pid, u8 *counter, int pes_start, u8 *buf, u8 length)
--{
--	int i;
--	int c = 0;
--	int fill;
--	u8 tshead[4] = { 0x47, 0x00, 0x00, 0x10 };
--
--	fill = (TS_SIZE - 4) - length;
--	if (pes_start)
--		tshead[1] = 0x40;
--	if (fill)
--		tshead[3] = 0x30;
--	tshead[1] |= (u8)((pid & 0x1F00) >> 8);
--	tshead[2] |= (u8)(pid & 0x00FF);
--	tshead[3] |= ((*counter)++ & 0x0F);
--	memcpy(buf, tshead, 4);
--	c += 4;
--
--	if (fill) {
--		buf[4] = fill - 1;
--		c++;
--		if (fill > 1) {
--			buf[5] = 0x00;
--			c++;
--		}
--		for (i = 6; i < fill + 4; i++) {
--			buf[i] = 0xFF;
--			c++;
--		}
--	}
--
--	return c;
--}
--
--
--static void p_to_t(u8 const *buf, long int length, u16 pid, u8 *counter,
--		   struct dvb_demux_feed *feed)
--{
--	int l, pes_start;
--	u8 obuf[TS_SIZE];
--	long c = 0;
--
--	pes_start = 0;
--	if (length > 3 &&
--	     buf[0] == 0x00 && buf[1] == 0x00 && buf[2] == 0x01)
--		switch (buf[3]) {
--		case PROG_STREAM_MAP:
--		case PRIVATE_STREAM2:
--		case PROG_STREAM_DIR:
--		case ECM_STREAM:
--		case EMM_STREAM:
--		case PADDING_STREAM:
--		case DSM_CC_STREAM:
--		case ISO13522_STREAM:
--		case PRIVATE_STREAM1:
--		case AUDIO_STREAM_S ... AUDIO_STREAM_E:
--		case VIDEO_STREAM_S ... VIDEO_STREAM_E:
--			pes_start = 1;
--			break;
--
--		default:
--			break;
--		}
--
--	while (c < length) {
--		memset(obuf, 0, TS_SIZE);
--		if (length - c >= (TS_SIZE - 4)){
--			l = write_ts_header2(pid, counter, pes_start,
--					     obuf, (TS_SIZE - 4));
--			memcpy(obuf + l, buf + c, TS_SIZE - l);
--			c += TS_SIZE - l;
--		} else {
--			l = write_ts_header2(pid, counter, pes_start,
--					     obuf, length - c);
--			memcpy(obuf + l, buf + c, TS_SIZE - l);
--			c = length;
--		}
--		feed->cb.ts(obuf, 188, NULL, 0, &feed->feed.ts, NULL);
--		pes_start = 0;
--	}
--}
--
--
--static int write_ts_to_decoder(struct av7110 *av7110, int type, const u8 *buf, size_t len)
--{
--	struct ipack *ipack = &av7110->ipack[type];
--
--	if (buf[1] & TRANS_ERROR) {
--		av7110_ipack_reset(ipack);
--		return -1;
--	}
--
--	if (!(buf[3] & PAYLOAD))
--		return -1;
--
--	if (buf[1] & PAY_START)
--		av7110_ipack_flush(ipack);
--
--	if (buf[3] & ADAPT_FIELD) {
--		len -= buf[4] + 1;
--		buf += buf[4] + 1;
--		if (!len)
--			return 0;
--	}
--
--	av7110_ipack_instant_repack(buf + 4, len - 4, ipack);
--	return 0;
--}
--
--
--int av7110_write_to_decoder(struct dvb_demux_feed *feed, const u8 *buf, size_t len)
--{
--	struct dvb_demux *demux = feed->demux;
--	struct av7110 *av7110 = (struct av7110 *) demux->priv;
--
--	dprintk(2, "av7110:%p, \n", av7110);
--
--	if (av7110->full_ts && demux->dmx.frontend->source != DMX_MEMORY_FE)
--		return 0;
--
--	switch (feed->pes_type) {
--	case 0:
--		if (av7110->audiostate.stream_source == AUDIO_SOURCE_MEMORY)
--			return -EINVAL;
--		break;
--	case 1:
--		if (av7110->videostate.stream_source == VIDEO_SOURCE_MEMORY)
--			return -EINVAL;
--		break;
--	default:
--		return -1;
--	}
--
--	return write_ts_to_decoder(av7110, feed->pes_type, buf, len);
--}
--
--
--
--/******************************************************************************
-- * Video MPEG decoder events
-- ******************************************************************************/
--void dvb_video_add_event(struct av7110 *av7110, struct video_event *event)
--{
--	struct dvb_video_events *events = &av7110->video_events;
--	int wp;
--
--	spin_lock_bh(&events->lock);
--
--	wp = (events->eventw + 1) % MAX_VIDEO_EVENT;
--	if (wp == events->eventr) {
--		events->overflow = 1;
--		events->eventr = (events->eventr + 1) % MAX_VIDEO_EVENT;
--	}
--
--	//FIXME: timestamp?
--	memcpy(&events->events[events->eventw], event, sizeof(struct video_event));
--	events->eventw = wp;
--
--	spin_unlock_bh(&events->lock);
--
--	wake_up_interruptible(&events->wait_queue);
--}
--
--
--static int dvb_video_get_event (struct av7110 *av7110, struct video_event *event, int flags)
--{
--	struct dvb_video_events *events = &av7110->video_events;
--
--	if (events->overflow) {
--		events->overflow = 0;
--		return -EOVERFLOW;
--	}
--	if (events->eventw == events->eventr) {
--		int ret;
--
--		if (flags & O_NONBLOCK)
--			return -EWOULDBLOCK;
--
--		ret = wait_event_interruptible(events->wait_queue,
--					       events->eventw != events->eventr);
--		if (ret < 0)
--			return ret;
--	}
--
--	spin_lock_bh(&events->lock);
--
--	memcpy(event, &events->events[events->eventr],
--	       sizeof(struct video_event));
--	events->eventr = (events->eventr + 1) % MAX_VIDEO_EVENT;
--
--	spin_unlock_bh(&events->lock);
--
--	return 0;
--}
--
--/******************************************************************************
-- * DVB device file operations
-- ******************************************************************************/
--
--static __poll_t dvb_video_poll(struct file *file, poll_table *wait)
--{
--	struct dvb_device *dvbdev = file->private_data;
--	struct av7110 *av7110 = dvbdev->priv;
--	__poll_t mask = 0;
--
--	dprintk(2, "av7110:%p, \n", av7110);
--
--	if ((file->f_flags & O_ACCMODE) != O_RDONLY)
--		poll_wait(file, &av7110->avout.queue, wait);
--
--	poll_wait(file, &av7110->video_events.wait_queue, wait);
--
--	if (av7110->video_events.eventw != av7110->video_events.eventr)
--		mask = EPOLLPRI;
--
--	if ((file->f_flags & O_ACCMODE) != O_RDONLY) {
--		if (av7110->playing) {
--			if (FREE_COND)
--				mask |= (EPOLLOUT | EPOLLWRNORM);
--		} else {
--			/* if not playing: may play if asked for */
--			mask |= (EPOLLOUT | EPOLLWRNORM);
--		}
--	}
--
--	return mask;
--}
--
--static ssize_t dvb_video_write(struct file *file, const char __user *buf,
--			       size_t count, loff_t *ppos)
--{
--	struct dvb_device *dvbdev = file->private_data;
--	struct av7110 *av7110 = dvbdev->priv;
--	unsigned char c;
--
--	dprintk(2, "av7110:%p, \n", av7110);
--
--	if ((file->f_flags & O_ACCMODE) == O_RDONLY)
--		return -EPERM;
--
--	if (av7110->videostate.stream_source != VIDEO_SOURCE_MEMORY)
--		return -EPERM;
--
--	if (get_user(c, buf))
--		return -EFAULT;
--	if (c == 0x47 && count % TS_SIZE == 0)
--		return ts_play(av7110, buf, count, file->f_flags & O_NONBLOCK, 1);
--	else
--		return dvb_play(av7110, buf, count, file->f_flags & O_NONBLOCK, 1);
--}
--
--static __poll_t dvb_audio_poll(struct file *file, poll_table *wait)
--{
--	struct dvb_device *dvbdev = file->private_data;
--	struct av7110 *av7110 = dvbdev->priv;
--	__poll_t mask = 0;
--
--	dprintk(2, "av7110:%p, \n", av7110);
--
--	poll_wait(file, &av7110->aout.queue, wait);
--
--	if (av7110->playing) {
--		if (dvb_ringbuffer_free(&av7110->aout) >= 20 * 1024)
--			mask |= (EPOLLOUT | EPOLLWRNORM);
--	} else /* if not playing: may play if asked for */
--		mask = (EPOLLOUT | EPOLLWRNORM);
--
--	return mask;
--}
--
--static ssize_t dvb_audio_write(struct file *file, const char __user *buf,
--			       size_t count, loff_t *ppos)
--{
--	struct dvb_device *dvbdev = file->private_data;
--	struct av7110 *av7110 = dvbdev->priv;
--	unsigned char c;
--
--	dprintk(2, "av7110:%p, \n", av7110);
--
--	if (av7110->audiostate.stream_source != AUDIO_SOURCE_MEMORY) {
--		printk(KERN_ERR "not audio source memory\n");
--		return -EPERM;
--	}
--
--	if (get_user(c, buf))
--		return -EFAULT;
--	if (c == 0x47 && count % TS_SIZE == 0)
--		return ts_play(av7110, buf, count, file->f_flags & O_NONBLOCK, 0);
--	else
--		return dvb_aplay(av7110, buf, count, file->f_flags & O_NONBLOCK, 0);
--}
--
--static u8 iframe_header[] = { 0x00, 0x00, 0x01, 0xe0, 0x00, 0x00, 0x80, 0x00, 0x00 };
--
--#define MIN_IFRAME 400000
--
--static int play_iframe(struct av7110 *av7110, char __user *buf, unsigned int len, int nonblock)
--{
--	unsigned i, n;
--	int progressive = 0;
--	int match = 0;
--
--	dprintk(2, "av7110:%p, \n", av7110);
--
--	if (len == 0)
--		return 0;
--
--	if (!(av7110->playing & RP_VIDEO)) {
--		if (av7110_av_start_play(av7110, RP_VIDEO) < 0)
--			return -EBUSY;
--	}
--
--	/* search in buf for instances of 00 00 01 b5 1? */
--	for (i = 0; i < len; i++) {
--		unsigned char c;
--		if (get_user(c, buf + i))
--			return -EFAULT;
--		if (match == 5) {
--			progressive = c & 0x08;
--			match = 0;
--		}
--		if (c == 0x00) {
--			match = (match == 1 || match == 2) ? 2 : 1;
--			continue;
--		}
--		switch (match++) {
--		case 2: if (c == 0x01)
--				continue;
--			break;
--		case 3: if (c == 0xb5)
--				continue;
--			break;
--		case 4: if ((c & 0xf0) == 0x10)
--				continue;
--			break;
--		}
--		match = 0;
--	}
--
--	/* setting n always > 1, fixes problems when playing stillframes
--	   consisting of I- and P-Frames */
--	n = MIN_IFRAME / len + 1;
--
--	/* FIXME: nonblock? */
--	dvb_play_kernel(av7110, iframe_header, sizeof(iframe_header), 0, 1);
--
--	for (i = 0; i < n; i++)
--		dvb_play(av7110, buf, len, 0, 1);
--
--	av7110_ipack_flush(&av7110->ipack[1]);
--
--	if (progressive)
--		return vidcom(av7110, AV_VIDEO_CMD_FREEZE, 1);
--	else
--		return 0;
--}
--
--#ifdef CONFIG_COMPAT
--struct compat_video_still_picture {
--	compat_uptr_t iFrame;
--	int32_t size;
--};
--#define VIDEO_STILLPICTURE32 _IOW('o', 30, struct compat_video_still_picture)
--
--struct compat_video_event {
--	__s32 type;
--	/* unused, make sure to use atomic time for y2038 if it ever gets used */
--	compat_long_t timestamp;
--	union {
--		video_size_t size;
--		unsigned int frame_rate;        /* in frames per 1000sec */
--		unsigned char vsync_field;      /* unknown/odd/even/progressive */
--	} u;
--};
--#define VIDEO_GET_EVENT32 _IOR('o', 28, struct compat_video_event)
--
--static int dvb_compat_video_get_event(struct av7110 *av7110,
--				      struct compat_video_event *event, int flags)
--{
--	struct video_event ev;
--	int ret;
--
--	ret = dvb_video_get_event(av7110, &ev, flags);
--
--	*event = (struct compat_video_event) {
--		.type = ev.type,
--		.timestamp = ev.timestamp,
--		.u.size = ev.u.size,
--	};
--
--	return ret;
--}
--#endif
--
--static int dvb_video_ioctl(struct file *file,
--			   unsigned int cmd, void *parg)
--{
--	struct dvb_device *dvbdev = file->private_data;
--	struct av7110 *av7110 = dvbdev->priv;
--	unsigned long arg = (unsigned long) parg;
--	int ret = 0;
--
--	dprintk(1, "av7110:%p, cmd=%04x\n", av7110,cmd);
--
--	if ((file->f_flags & O_ACCMODE) == O_RDONLY) {
--		if ( cmd != VIDEO_GET_STATUS && cmd != VIDEO_GET_EVENT &&
--		     cmd != VIDEO_GET_SIZE ) {
--			return -EPERM;
--		}
--	}
--
--	if (mutex_lock_interruptible(&av7110->ioctl_mutex))
--		return -ERESTARTSYS;
--
--	switch (cmd) {
--	case VIDEO_STOP:
--		av7110->videostate.play_state = VIDEO_STOPPED;
--		if (av7110->videostate.stream_source == VIDEO_SOURCE_MEMORY)
--			ret = av7110_av_stop(av7110, RP_VIDEO);
--		else
--			ret = vidcom(av7110, AV_VIDEO_CMD_STOP,
--			       av7110->videostate.video_blank ? 0 : 1);
--		if (!ret)
--			av7110->trickmode = TRICK_NONE;
--		break;
--
--	case VIDEO_PLAY:
--		av7110->trickmode = TRICK_NONE;
--		if (av7110->videostate.play_state == VIDEO_FREEZED) {
--			av7110->videostate.play_state = VIDEO_PLAYING;
--			ret = vidcom(av7110, AV_VIDEO_CMD_PLAY, 0);
--			if (ret)
--				break;
--		}
--		if (av7110->videostate.stream_source == VIDEO_SOURCE_MEMORY) {
--			if (av7110->playing == RP_AV) {
--				ret = av7110_fw_cmd(av7110, COMTYPE_REC_PLAY, __Stop, 0);
--				if (ret)
--					break;
--				av7110->playing &= ~RP_VIDEO;
--			}
--			ret = av7110_av_start_play(av7110, RP_VIDEO);
--		}
--		if (!ret)
--			ret = vidcom(av7110, AV_VIDEO_CMD_PLAY, 0);
--		if (!ret)
--			av7110->videostate.play_state = VIDEO_PLAYING;
--		break;
--
--	case VIDEO_FREEZE:
--		av7110->videostate.play_state = VIDEO_FREEZED;
--		if (av7110->playing & RP_VIDEO)
--			ret = av7110_fw_cmd(av7110, COMTYPE_REC_PLAY, __Pause, 0);
--		else
--			ret = vidcom(av7110, AV_VIDEO_CMD_FREEZE, 1);
--		if (!ret)
--			av7110->trickmode = TRICK_FREEZE;
--		break;
--
--	case VIDEO_CONTINUE:
--		if (av7110->playing & RP_VIDEO)
--			ret = av7110_fw_cmd(av7110, COMTYPE_REC_PLAY, __Continue, 0);
--		if (!ret)
--			ret = vidcom(av7110, AV_VIDEO_CMD_PLAY, 0);
--		if (!ret) {
--			av7110->videostate.play_state = VIDEO_PLAYING;
--			av7110->trickmode = TRICK_NONE;
--		}
--		break;
--
--	case VIDEO_SELECT_SOURCE:
--		av7110->videostate.stream_source = (video_stream_source_t) arg;
--		break;
--
--	case VIDEO_SET_BLANK:
--		av7110->videostate.video_blank = (int) arg;
--		break;
--
--	case VIDEO_GET_STATUS:
--		memcpy(parg, &av7110->videostate, sizeof(struct video_status));
--		break;
--
--#ifdef CONFIG_COMPAT
--	case VIDEO_GET_EVENT32:
--		ret = dvb_compat_video_get_event(av7110, parg, file->f_flags);
--		break;
--#endif
--
--	case VIDEO_GET_EVENT:
--		ret = dvb_video_get_event(av7110, parg, file->f_flags);
--		break;
--
--	case VIDEO_GET_SIZE:
--		memcpy(parg, &av7110->video_size, sizeof(video_size_t));
--		break;
--
--	case VIDEO_SET_DISPLAY_FORMAT:
--	{
--		video_displayformat_t format = (video_displayformat_t) arg;
--		switch (format) {
--		case VIDEO_PAN_SCAN:
--			av7110->display_panscan = VID_PAN_SCAN_PREF;
--			break;
--		case VIDEO_LETTER_BOX:
--			av7110->display_panscan = VID_VC_AND_PS_PREF;
--			break;
--		case VIDEO_CENTER_CUT_OUT:
--			av7110->display_panscan = VID_CENTRE_CUT_PREF;
--			break;
--		default:
--			ret = -EINVAL;
--		}
--		if (ret < 0)
--			break;
--		av7110->videostate.display_format = format;
--		ret = av7110_fw_cmd(av7110, COMTYPE_ENCODER, SetPanScanType,
--				    1, av7110->display_panscan);
--		break;
--	}
--
--	case VIDEO_SET_FORMAT:
--		if (arg > 1) {
--			ret = -EINVAL;
--			break;
--		}
--		av7110->display_ar = arg;
--		ret = av7110_fw_cmd(av7110, COMTYPE_ENCODER, SetMonitorType,
--				    1, (u16) arg);
--		break;
--
--#ifdef CONFIG_COMPAT
--	case VIDEO_STILLPICTURE32:
--	{
--		struct compat_video_still_picture *pic =
--			(struct compat_video_still_picture *) parg;
--		av7110->videostate.stream_source = VIDEO_SOURCE_MEMORY;
--		dvb_ringbuffer_flush_spinlock_wakeup(&av7110->avout);
--		ret = play_iframe(av7110, compat_ptr(pic->iFrame),
--				  pic->size, file->f_flags & O_NONBLOCK);
--		break;
--	}
--#endif
--
--	case VIDEO_STILLPICTURE:
--	{
--		struct video_still_picture *pic =
--			(struct video_still_picture *) parg;
--		av7110->videostate.stream_source = VIDEO_SOURCE_MEMORY;
--		dvb_ringbuffer_flush_spinlock_wakeup(&av7110->avout);
--		ret = play_iframe(av7110, pic->iFrame, pic->size,
--				  file->f_flags & O_NONBLOCK);
--		break;
--	}
--
--	case VIDEO_FAST_FORWARD:
--		//note: arg is ignored by firmware
--		if (av7110->playing & RP_VIDEO)
--			ret = av7110_fw_cmd(av7110, COMTYPE_REC_PLAY,
--					    __Scan_I, 2, AV_PES, 0);
--		else
--			ret = vidcom(av7110, AV_VIDEO_CMD_FFWD, arg);
--		if (!ret) {
--			av7110->trickmode = TRICK_FAST;
--			av7110->videostate.play_state = VIDEO_PLAYING;
--		}
--		break;
--
--	case VIDEO_SLOWMOTION:
--		if (av7110->playing&RP_VIDEO) {
--			if (av7110->trickmode != TRICK_SLOW)
--				ret = av7110_fw_cmd(av7110, COMTYPE_REC_PLAY, __Slow, 2, 0, 0);
--			if (!ret)
--				ret = vidcom(av7110, AV_VIDEO_CMD_SLOW, arg);
--		} else {
--			ret = vidcom(av7110, AV_VIDEO_CMD_PLAY, 0);
--			if (!ret)
--				ret = vidcom(av7110, AV_VIDEO_CMD_STOP, 0);
--			if (!ret)
--				ret = vidcom(av7110, AV_VIDEO_CMD_SLOW, arg);
--		}
--		if (!ret) {
--			av7110->trickmode = TRICK_SLOW;
--			av7110->videostate.play_state = VIDEO_PLAYING;
--		}
--		break;
--
--	case VIDEO_GET_CAPABILITIES:
--		*(int *)parg = VIDEO_CAP_MPEG1 | VIDEO_CAP_MPEG2 |
--			VIDEO_CAP_SYS | VIDEO_CAP_PROG;
--		break;
--
--	case VIDEO_CLEAR_BUFFER:
--		dvb_ringbuffer_flush_spinlock_wakeup(&av7110->avout);
--		av7110_ipack_reset(&av7110->ipack[1]);
--		if (av7110->playing == RP_AV) {
--			ret = av7110_fw_cmd(av7110, COMTYPE_REC_PLAY,
--					    __Play, 2, AV_PES, 0);
--			if (ret)
--				break;
--			if (av7110->trickmode == TRICK_FAST)
--				ret = av7110_fw_cmd(av7110, COMTYPE_REC_PLAY,
--						    __Scan_I, 2, AV_PES, 0);
--			if (av7110->trickmode == TRICK_SLOW) {
--				ret = av7110_fw_cmd(av7110, COMTYPE_REC_PLAY,
--						    __Slow, 2, 0, 0);
--				if (!ret)
--					ret = vidcom(av7110, AV_VIDEO_CMD_SLOW, arg);
--			}
--			if (av7110->trickmode == TRICK_FREEZE)
--				ret = vidcom(av7110, AV_VIDEO_CMD_STOP, 1);
--		}
--		break;
--
--	case VIDEO_SET_STREAMTYPE:
--		break;
--
--	default:
--		ret = -ENOIOCTLCMD;
--		break;
--	}
--
--	mutex_unlock(&av7110->ioctl_mutex);
--	return ret;
--}
--
--static int dvb_audio_ioctl(struct file *file,
--			   unsigned int cmd, void *parg)
--{
--	struct dvb_device *dvbdev = file->private_data;
--	struct av7110 *av7110 = dvbdev->priv;
--	unsigned long arg = (unsigned long) parg;
--	int ret = 0;
--
--	dprintk(1, "av7110:%p, cmd=%04x\n", av7110,cmd);
--
--	if (((file->f_flags & O_ACCMODE) == O_RDONLY) &&
--	    (cmd != AUDIO_GET_STATUS))
--		return -EPERM;
--
--	if (mutex_lock_interruptible(&av7110->ioctl_mutex))
--		return -ERESTARTSYS;
--
--	switch (cmd) {
--	case AUDIO_STOP:
--		if (av7110->audiostate.stream_source == AUDIO_SOURCE_MEMORY)
--			ret = av7110_av_stop(av7110, RP_AUDIO);
--		else
--			ret = audcom(av7110, AUDIO_CMD_MUTE);
--		if (!ret)
--			av7110->audiostate.play_state = AUDIO_STOPPED;
--		break;
--
--	case AUDIO_PLAY:
--		if (av7110->audiostate.stream_source == AUDIO_SOURCE_MEMORY)
--			ret = av7110_av_start_play(av7110, RP_AUDIO);
--		if (!ret)
--			ret = audcom(av7110, AUDIO_CMD_UNMUTE);
--		if (!ret)
--			av7110->audiostate.play_state = AUDIO_PLAYING;
--		break;
--
--	case AUDIO_PAUSE:
--		ret = audcom(av7110, AUDIO_CMD_MUTE);
--		if (!ret)
--			av7110->audiostate.play_state = AUDIO_PAUSED;
--		break;
--
--	case AUDIO_CONTINUE:
--		if (av7110->audiostate.play_state == AUDIO_PAUSED) {
--			av7110->audiostate.play_state = AUDIO_PLAYING;
--			ret = audcom(av7110, AUDIO_CMD_UNMUTE | AUDIO_CMD_PCM16);
--		}
--		break;
--
--	case AUDIO_SELECT_SOURCE:
--		av7110->audiostate.stream_source = (audio_stream_source_t) arg;
--		break;
--
--	case AUDIO_SET_MUTE:
--	{
--		ret = audcom(av7110, arg ? AUDIO_CMD_MUTE : AUDIO_CMD_UNMUTE);
--		if (!ret)
--			av7110->audiostate.mute_state = (int) arg;
--		break;
--	}
--
--	case AUDIO_SET_AV_SYNC:
--		av7110->audiostate.AV_sync_state = (int) arg;
--		ret = audcom(av7110, arg ? AUDIO_CMD_SYNC_ON : AUDIO_CMD_SYNC_OFF);
--		break;
--
--	case AUDIO_SET_BYPASS_MODE:
--		if (FW_VERSION(av7110->arm_app) < 0x2621)
--			ret = -EINVAL;
--		av7110->audiostate.bypass_mode = (int)arg;
--		break;
--
--	case AUDIO_CHANNEL_SELECT:
--		av7110->audiostate.channel_select = (audio_channel_select_t) arg;
--		switch(av7110->audiostate.channel_select) {
--		case AUDIO_STEREO:
--			ret = audcom(av7110, AUDIO_CMD_STEREO);
--			if (!ret) {
--				if (av7110->adac_type == DVB_ADAC_CRYSTAL)
--					i2c_writereg(av7110, 0x20, 0x02, 0x49);
--				else if (av7110->adac_type == DVB_ADAC_MSP34x5)
--					msp_writereg(av7110, MSP_WR_DSP, 0x0008, 0x0220);
--			}
--			break;
--		case AUDIO_MONO_LEFT:
--			ret = audcom(av7110, AUDIO_CMD_MONO_L);
--			if (!ret) {
--				if (av7110->adac_type == DVB_ADAC_CRYSTAL)
--					i2c_writereg(av7110, 0x20, 0x02, 0x4a);
--				else if (av7110->adac_type == DVB_ADAC_MSP34x5)
--					msp_writereg(av7110, MSP_WR_DSP, 0x0008, 0x0200);
--			}
--			break;
--		case AUDIO_MONO_RIGHT:
--			ret = audcom(av7110, AUDIO_CMD_MONO_R);
--			if (!ret) {
--				if (av7110->adac_type == DVB_ADAC_CRYSTAL)
--					i2c_writereg(av7110, 0x20, 0x02, 0x45);
--				else if (av7110->adac_type == DVB_ADAC_MSP34x5)
--					msp_writereg(av7110, MSP_WR_DSP, 0x0008, 0x0210);
--			}
--			break;
--		default:
--			ret = -EINVAL;
--			break;
--		}
--		break;
--
--	case AUDIO_GET_STATUS:
--		memcpy(parg, &av7110->audiostate, sizeof(struct audio_status));
--		break;
--
--	case AUDIO_GET_CAPABILITIES:
--		if (FW_VERSION(av7110->arm_app) < 0x2621)
--			*(unsigned int *)parg = AUDIO_CAP_LPCM | AUDIO_CAP_MP1 | AUDIO_CAP_MP2;
--		else
--			*(unsigned int *)parg = AUDIO_CAP_LPCM | AUDIO_CAP_DTS | AUDIO_CAP_AC3 |
--						AUDIO_CAP_MP1 | AUDIO_CAP_MP2;
--		break;
--
--	case AUDIO_CLEAR_BUFFER:
--		dvb_ringbuffer_flush_spinlock_wakeup(&av7110->aout);
--		av7110_ipack_reset(&av7110->ipack[0]);
--		if (av7110->playing == RP_AV)
--			ret = av7110_fw_cmd(av7110, COMTYPE_REC_PLAY,
--					    __Play, 2, AV_PES, 0);
--		break;
--
--	case AUDIO_SET_ID:
--		break;
--
--	case AUDIO_SET_MIXER:
--	{
--		struct audio_mixer *amix = (struct audio_mixer *)parg;
--		ret = av7110_set_volume(av7110, amix->volume_left, amix->volume_right);
--		break;
--	}
--
--	case AUDIO_SET_STREAMTYPE:
--		break;
--
--	default:
--		ret = -ENOIOCTLCMD;
--	}
--
--	mutex_unlock(&av7110->ioctl_mutex);
--	return ret;
--}
--
--
--static int dvb_video_open(struct inode *inode, struct file *file)
--{
--	struct dvb_device *dvbdev = file->private_data;
--	struct av7110 *av7110 = dvbdev->priv;
--	int err;
--
--	dprintk(2, "av7110:%p, \n", av7110);
--
--	if ((err = dvb_generic_open(inode, file)) < 0)
--		return err;
--
--	if ((file->f_flags & O_ACCMODE) != O_RDONLY) {
--		dvb_ringbuffer_flush_spinlock_wakeup(&av7110->aout);
--		dvb_ringbuffer_flush_spinlock_wakeup(&av7110->avout);
--		av7110->video_blank = 1;
--		av7110->audiostate.AV_sync_state = 1;
--		av7110->videostate.stream_source = VIDEO_SOURCE_DEMUX;
--
--		/*  empty event queue */
--		av7110->video_events.eventr = av7110->video_events.eventw = 0;
--	}
--
--	return 0;
--}
--
--static int dvb_video_release(struct inode *inode, struct file *file)
--{
--	struct dvb_device *dvbdev = file->private_data;
--	struct av7110 *av7110 = dvbdev->priv;
--
--	dprintk(2, "av7110:%p, \n", av7110);
--
--	if ((file->f_flags & O_ACCMODE) != O_RDONLY) {
--		av7110_av_stop(av7110, RP_VIDEO);
--	}
--
--	return dvb_generic_release(inode, file);
--}
--
--static int dvb_audio_open(struct inode *inode, struct file *file)
--{
--	struct dvb_device *dvbdev = file->private_data;
--	struct av7110 *av7110 = dvbdev->priv;
--	int err = dvb_generic_open(inode, file);
--
--	dprintk(2, "av7110:%p, \n", av7110);
--
--	if (err < 0)
--		return err;
--	dvb_ringbuffer_flush_spinlock_wakeup(&av7110->aout);
--	av7110->audiostate.stream_source = AUDIO_SOURCE_DEMUX;
--	return 0;
--}
--
--static int dvb_audio_release(struct inode *inode, struct file *file)
--{
--	struct dvb_device *dvbdev = file->private_data;
--	struct av7110 *av7110 = dvbdev->priv;
--
--	dprintk(2, "av7110:%p, \n", av7110);
--
--	av7110_av_stop(av7110, RP_AUDIO);
--	return dvb_generic_release(inode, file);
--}
--
--
--
--/******************************************************************************
-- * driver registration
-- ******************************************************************************/
--
--static const struct file_operations dvb_video_fops = {
--	.owner		= THIS_MODULE,
--	.write		= dvb_video_write,
--	.unlocked_ioctl	= dvb_generic_ioctl,
--	.compat_ioctl	= dvb_generic_ioctl,
--	.open		= dvb_video_open,
--	.release	= dvb_video_release,
--	.poll		= dvb_video_poll,
--	.llseek		= noop_llseek,
--};
--
--static struct dvb_device dvbdev_video = {
--	.priv		= NULL,
--	.users		= 6,
--	.readers	= 5,	/* arbitrary */
--	.writers	= 1,
--	.fops		= &dvb_video_fops,
--	.kernel_ioctl	= dvb_video_ioctl,
--};
--
--static const struct file_operations dvb_audio_fops = {
--	.owner		= THIS_MODULE,
--	.write		= dvb_audio_write,
--	.unlocked_ioctl	= dvb_generic_ioctl,
--	.compat_ioctl	= dvb_generic_ioctl,
--	.open		= dvb_audio_open,
--	.release	= dvb_audio_release,
--	.poll		= dvb_audio_poll,
--	.llseek		= noop_llseek,
--};
--
--static struct dvb_device dvbdev_audio = {
--	.priv		= NULL,
--	.users		= 1,
--	.writers	= 1,
--	.fops		= &dvb_audio_fops,
--	.kernel_ioctl	= dvb_audio_ioctl,
--};
--
--
--int av7110_av_register(struct av7110 *av7110)
--{
--	av7110->audiostate.AV_sync_state = 0;
--	av7110->audiostate.mute_state = 0;
--	av7110->audiostate.play_state = AUDIO_STOPPED;
--	av7110->audiostate.stream_source = AUDIO_SOURCE_DEMUX;
--	av7110->audiostate.channel_select = AUDIO_STEREO;
--	av7110->audiostate.bypass_mode = 0;
--
--	av7110->videostate.video_blank = 0;
--	av7110->videostate.play_state = VIDEO_STOPPED;
--	av7110->videostate.stream_source = VIDEO_SOURCE_DEMUX;
--	av7110->videostate.video_format = VIDEO_FORMAT_4_3;
--	av7110->videostate.display_format = VIDEO_LETTER_BOX;
--	av7110->display_ar = VIDEO_FORMAT_4_3;
--	av7110->display_panscan = VID_VC_AND_PS_PREF;
--
--	init_waitqueue_head(&av7110->video_events.wait_queue);
--	spin_lock_init(&av7110->video_events.lock);
--	av7110->video_events.eventw = av7110->video_events.eventr = 0;
--	av7110->video_events.overflow = 0;
--	memset(&av7110->video_size, 0, sizeof (video_size_t));
--
--	dvb_register_device(&av7110->dvb_adapter, &av7110->video_dev,
--			    &dvbdev_video, av7110, DVB_DEVICE_VIDEO, 0);
--
--	dvb_register_device(&av7110->dvb_adapter, &av7110->audio_dev,
--			    &dvbdev_audio, av7110, DVB_DEVICE_AUDIO, 0);
--
--	return 0;
--}
--
--void av7110_av_unregister(struct av7110 *av7110)
--{
--	dvb_unregister_device(av7110->audio_dev);
--	dvb_unregister_device(av7110->video_dev);
--}
--
--int av7110_av_init(struct av7110 *av7110)
--{
--	void (*play[])(u8 *, int, void *) = { play_audio_cb, play_video_cb };
--	int i, ret;
--
--	for (i = 0; i < 2; i++) {
--		struct ipack *ipack = av7110->ipack + i;
--
--		ret = av7110_ipack_init(ipack, IPACKS, play[i]);
--		if (ret < 0) {
--			if (i)
--				av7110_ipack_free(--ipack);
--			goto out;
--		}
--		ipack->data = av7110;
--	}
--
--	dvb_ringbuffer_init(&av7110->avout, av7110->iobuf, AVOUTLEN);
--	dvb_ringbuffer_init(&av7110->aout, av7110->iobuf + AVOUTLEN, AOUTLEN);
--
--	av7110->kbuf[0] = (u8 *)(av7110->iobuf + AVOUTLEN + AOUTLEN + BMPLEN);
--	av7110->kbuf[1] = av7110->kbuf[0] + 2 * IPACKS;
--out:
--	return ret;
--}
--
--void av7110_av_exit(struct av7110 *av7110)
--{
--	av7110_ipack_free(&av7110->ipack[0]);
--	av7110_ipack_free(&av7110->ipack[1]);
--}
-diff --git a/drivers/staging/media/deprecated/saa7146/av7110/av7110_av.h b/drivers/staging/media/deprecated/saa7146/av7110/av7110_av.h
-deleted file mode 100644
-index 71bbd4391f57..000000000000
---- a/drivers/staging/media/deprecated/saa7146/av7110/av7110_av.h
-+++ /dev/null
-@@ -1,32 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _AV7110_AV_H_
--#define _AV7110_AV_H_
--
--struct av7110;
--
--extern int av7110_set_vidmode(struct av7110 *av7110,
--			      enum av7110_video_mode mode);
--
--extern int av7110_record_cb(struct dvb_filter_pes2ts *p2t, u8 *buf, size_t len);
--extern int av7110_pes_play(void *dest, struct dvb_ringbuffer *buf, int dlen);
--extern int av7110_write_to_decoder(struct dvb_demux_feed *feed, const u8 *buf, size_t len);
--
--extern int av7110_set_volume(struct av7110 *av7110, unsigned int volleft,
--			     unsigned int volright);
--extern int av7110_av_stop(struct av7110 *av7110, int av);
--extern int av7110_av_start_record(struct av7110 *av7110, int av,
--			  struct dvb_demux_feed *dvbdmxfeed);
--extern int av7110_av_start_play(struct av7110 *av7110, int av);
--
--extern void dvb_video_add_event(struct av7110 *av7110, struct video_event *event);
--
--extern void av7110_p2t_init(struct av7110_p2t *p, struct dvb_demux_feed *feed);
--extern void av7110_p2t_write(u8 const *buf, long int length, u16 pid, struct av7110_p2t *p);
--
--extern int av7110_av_register(struct av7110 *av7110);
--extern void av7110_av_unregister(struct av7110 *av7110);
--extern int av7110_av_init(struct av7110 *av7110);
--extern void av7110_av_exit(struct av7110 *av7110);
--
--
--#endif /* _AV7110_AV_H_ */
-diff --git a/drivers/staging/media/deprecated/saa7146/av7110/av7110_ca.c b/drivers/staging/media/deprecated/saa7146/av7110/av7110_ca.c
-deleted file mode 100644
-index c1338e074a3d..000000000000
---- a/drivers/staging/media/deprecated/saa7146/av7110/av7110_ca.c
-+++ /dev/null
-@@ -1,380 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * av7110_ca.c: CA and CI stuff
-- *
-- * Copyright (C) 1999-2002 Ralph  Metzler
-- *                       & Marcus Metzler for convergence integrated media GmbH
-- *
-- * originally based on code by:
-- * Copyright (C) 1998,1999 Christian Theiss <mistert@rz.fh-augsburg.de>
-- *
-- * the project's page is at https://linuxtv.org
-- */
--
--#include <linux/kernel.h>
--#include <linux/types.h>
--#include <linux/delay.h>
--#include <linux/fs.h>
--#include <linux/timer.h>
--#include <linux/poll.h>
--#include <linux/gfp.h>
--
--#include "av7110.h"
--#include "av7110_hw.h"
--#include "av7110_ca.h"
--
--
--void CI_handle(struct av7110 *av7110, u8 *data, u16 len)
--{
--	dprintk(8, "av7110:%p\n",av7110);
--
--	if (len < 3)
--		return;
--	switch (data[0]) {
--	case CI_MSG_CI_INFO:
--		if (data[2] != 1 && data[2] != 2)
--			break;
--		switch (data[1]) {
--		case 0:
--			av7110->ci_slot[data[2] - 1].flags = 0;
--			break;
--		case 1:
--			av7110->ci_slot[data[2] - 1].flags |= CA_CI_MODULE_PRESENT;
--			break;
--		case 2:
--			av7110->ci_slot[data[2] - 1].flags |= CA_CI_MODULE_READY;
--			break;
--		}
--		break;
--	case CI_SWITCH_PRG_REPLY:
--		//av7110->ci_stat=data[1];
--		break;
--	default:
--		break;
--	}
--}
--
--
--void ci_get_data(struct dvb_ringbuffer *cibuf, u8 *data, int len)
--{
--	if (dvb_ringbuffer_free(cibuf) < len + 2)
--		return;
--
--	DVB_RINGBUFFER_WRITE_BYTE(cibuf, len >> 8);
--	DVB_RINGBUFFER_WRITE_BYTE(cibuf, len & 0xff);
--	dvb_ringbuffer_write(cibuf, data, len);
--	wake_up_interruptible(&cibuf->queue);
--}
--
--
--/******************************************************************************
-- * CI link layer file ops
-- ******************************************************************************/
--
--static int ci_ll_init(struct dvb_ringbuffer *cirbuf, struct dvb_ringbuffer *ciwbuf, int size)
--{
--	struct dvb_ringbuffer *tab[] = { cirbuf, ciwbuf, NULL }, **p;
--	void *data;
--
--	for (p = tab; *p; p++) {
--		data = vmalloc(size);
--		if (!data) {
--			while (p-- != tab) {
--				vfree(p[0]->data);
--				p[0]->data = NULL;
--			}
--			return -ENOMEM;
--		}
--		dvb_ringbuffer_init(*p, data, size);
--	}
--	return 0;
--}
--
--static void ci_ll_flush(struct dvb_ringbuffer *cirbuf, struct dvb_ringbuffer *ciwbuf)
--{
--	dvb_ringbuffer_flush_spinlock_wakeup(cirbuf);
--	dvb_ringbuffer_flush_spinlock_wakeup(ciwbuf);
--}
--
--static void ci_ll_release(struct dvb_ringbuffer *cirbuf, struct dvb_ringbuffer *ciwbuf)
--{
--	vfree(cirbuf->data);
--	cirbuf->data = NULL;
--	vfree(ciwbuf->data);
--	ciwbuf->data = NULL;
--}
--
--static int ci_ll_reset(struct dvb_ringbuffer *cibuf, struct file *file,
--		       int slots, struct ca_slot_info *slot)
--{
--	int i;
--	int len = 0;
--	u8 msg[8] = { 0x00, 0x06, 0x00, 0x00, 0xff, 0x02, 0x00, 0x00 };
--
--	for (i = 0; i < 2; i++) {
--		if (slots & (1 << i))
--			len += 8;
--	}
--
--	if (dvb_ringbuffer_free(cibuf) < len)
--		return -EBUSY;
--
--	for (i = 0; i < 2; i++) {
--		if (slots & (1 << i)) {
--			msg[2] = i;
--			dvb_ringbuffer_write(cibuf, msg, 8);
--			slot[i].flags = 0;
--		}
--	}
--
--	return 0;
--}
--
--static ssize_t ci_ll_write(struct dvb_ringbuffer *cibuf, struct file *file,
--			   const char __user *buf, size_t count, loff_t *ppos)
--{
--	int free;
--	int non_blocking = file->f_flags & O_NONBLOCK;
--	u8 *page = (u8 *)__get_free_page(GFP_USER);
--	int res;
--
--	if (!page)
--		return -ENOMEM;
--
--	res = -EINVAL;
--	if (count > 2048)
--		goto out;
--
--	res = -EFAULT;
--	if (copy_from_user(page, buf, count))
--		goto out;
--
--	free = dvb_ringbuffer_free(cibuf);
--	if (count + 2 > free) {
--		res = -EWOULDBLOCK;
--		if (non_blocking)
--			goto out;
--		res = -ERESTARTSYS;
--		if (wait_event_interruptible(cibuf->queue,
--					     (dvb_ringbuffer_free(cibuf) >= count + 2)))
--			goto out;
--	}
--
--	DVB_RINGBUFFER_WRITE_BYTE(cibuf, count >> 8);
--	DVB_RINGBUFFER_WRITE_BYTE(cibuf, count & 0xff);
--
--	res = dvb_ringbuffer_write(cibuf, page, count);
--out:
--	free_page((unsigned long)page);
--	return res;
--}
--
--static ssize_t ci_ll_read(struct dvb_ringbuffer *cibuf, struct file *file,
--			  char __user *buf, size_t count, loff_t *ppos)
--{
--	int avail;
--	int non_blocking = file->f_flags & O_NONBLOCK;
--	ssize_t len;
--
--	if (!cibuf->data || !count)
--		return 0;
--	if (non_blocking && (dvb_ringbuffer_empty(cibuf)))
--		return -EWOULDBLOCK;
--	if (wait_event_interruptible(cibuf->queue,
--				     !dvb_ringbuffer_empty(cibuf)))
--		return -ERESTARTSYS;
--	avail = dvb_ringbuffer_avail(cibuf);
--	if (avail < 4)
--		return 0;
--	len = DVB_RINGBUFFER_PEEK(cibuf, 0) << 8;
--	len |= DVB_RINGBUFFER_PEEK(cibuf, 1);
--	if (avail < len + 2 || count < len)
--		return -EINVAL;
--	DVB_RINGBUFFER_SKIP(cibuf, 2);
--
--	return dvb_ringbuffer_read_user(cibuf, buf, len);
--}
--
--static int dvb_ca_open(struct inode *inode, struct file *file)
--{
--	struct dvb_device *dvbdev = file->private_data;
--	struct av7110 *av7110 = dvbdev->priv;
--	int err = dvb_generic_open(inode, file);
--
--	dprintk(8, "av7110:%p\n",av7110);
--
--	if (err < 0)
--		return err;
--	ci_ll_flush(&av7110->ci_rbuffer, &av7110->ci_wbuffer);
--	return 0;
--}
--
--static __poll_t dvb_ca_poll (struct file *file, poll_table *wait)
--{
--	struct dvb_device *dvbdev = file->private_data;
--	struct av7110 *av7110 = dvbdev->priv;
--	struct dvb_ringbuffer *rbuf = &av7110->ci_rbuffer;
--	struct dvb_ringbuffer *wbuf = &av7110->ci_wbuffer;
--	__poll_t mask = 0;
--
--	dprintk(8, "av7110:%p\n",av7110);
--
--	poll_wait(file, &rbuf->queue, wait);
--	poll_wait(file, &wbuf->queue, wait);
--
--	if (!dvb_ringbuffer_empty(rbuf))
--		mask |= (EPOLLIN | EPOLLRDNORM);
--
--	if (dvb_ringbuffer_free(wbuf) > 1024)
--		mask |= (EPOLLOUT | EPOLLWRNORM);
--
--	return mask;
--}
--
--static int dvb_ca_ioctl(struct file *file, unsigned int cmd, void *parg)
--{
--	struct dvb_device *dvbdev = file->private_data;
--	struct av7110 *av7110 = dvbdev->priv;
--	unsigned long arg = (unsigned long) parg;
--	int ret = 0;
--
--	dprintk(8, "av7110:%p\n",av7110);
--
--	if (mutex_lock_interruptible(&av7110->ioctl_mutex))
--		return -ERESTARTSYS;
--
--	switch (cmd) {
--	case CA_RESET:
--		ret = ci_ll_reset(&av7110->ci_wbuffer, file, arg,
--				  &av7110->ci_slot[0]);
--		break;
--	case CA_GET_CAP:
--	{
--		struct ca_caps cap;
--
--		cap.slot_num = 2;
--		cap.slot_type = (FW_CI_LL_SUPPORT(av7110->arm_app) ?
--				 CA_CI_LINK : CA_CI) | CA_DESCR;
--		cap.descr_num = 16;
--		cap.descr_type = CA_ECD;
--		memcpy(parg, &cap, sizeof(cap));
--		break;
--	}
--
--	case CA_GET_SLOT_INFO:
--	{
--		struct ca_slot_info *info=(struct ca_slot_info *)parg;
--
--		if (info->num < 0 || info->num > 1) {
--			mutex_unlock(&av7110->ioctl_mutex);
--			return -EINVAL;
--		}
--		av7110->ci_slot[info->num].num = info->num;
--		av7110->ci_slot[info->num].type = FW_CI_LL_SUPPORT(av7110->arm_app) ?
--							CA_CI_LINK : CA_CI;
--		memcpy(info, &av7110->ci_slot[info->num], sizeof(struct ca_slot_info));
--		break;
--	}
--
--	case CA_GET_MSG:
--		break;
--
--	case CA_SEND_MSG:
--		break;
--
--	case CA_GET_DESCR_INFO:
--	{
--		struct ca_descr_info info;
--
--		info.num = 16;
--		info.type = CA_ECD;
--		memcpy(parg, &info, sizeof (info));
--		break;
--	}
--
--	case CA_SET_DESCR:
--	{
--		struct ca_descr *descr = (struct ca_descr*) parg;
--
--		if (descr->index >= 16 || descr->parity > 1) {
--			mutex_unlock(&av7110->ioctl_mutex);
--			return -EINVAL;
--		}
--		av7110_fw_cmd(av7110, COMTYPE_PIDFILTER, SetDescr, 5,
--			      (descr->index<<8)|descr->parity,
--			      (descr->cw[0]<<8)|descr->cw[1],
--			      (descr->cw[2]<<8)|descr->cw[3],
--			      (descr->cw[4]<<8)|descr->cw[5],
--			      (descr->cw[6]<<8)|descr->cw[7]);
--		break;
--	}
--
--	default:
--		ret = -EINVAL;
--		break;
--	}
--
--	mutex_unlock(&av7110->ioctl_mutex);
--	return ret;
--}
--
--static ssize_t dvb_ca_write(struct file *file, const char __user *buf,
--			    size_t count, loff_t *ppos)
--{
--	struct dvb_device *dvbdev = file->private_data;
--	struct av7110 *av7110 = dvbdev->priv;
--
--	dprintk(8, "av7110:%p\n",av7110);
--	return ci_ll_write(&av7110->ci_wbuffer, file, buf, count, ppos);
--}
--
--static ssize_t dvb_ca_read(struct file *file, char __user *buf,
--			   size_t count, loff_t *ppos)
--{
--	struct dvb_device *dvbdev = file->private_data;
--	struct av7110 *av7110 = dvbdev->priv;
--
--	dprintk(8, "av7110:%p\n",av7110);
--	return ci_ll_read(&av7110->ci_rbuffer, file, buf, count, ppos);
--}
--
--static const struct file_operations dvb_ca_fops = {
--	.owner		= THIS_MODULE,
--	.read		= dvb_ca_read,
--	.write		= dvb_ca_write,
--	.unlocked_ioctl	= dvb_generic_ioctl,
--	.open		= dvb_ca_open,
--	.release	= dvb_generic_release,
--	.poll		= dvb_ca_poll,
--	.llseek		= default_llseek,
--};
--
--static struct dvb_device dvbdev_ca = {
--	.priv		= NULL,
--	.users		= 1,
--	.writers	= 1,
--	.fops		= &dvb_ca_fops,
--	.kernel_ioctl	= dvb_ca_ioctl,
--};
--
--
--int av7110_ca_register(struct av7110 *av7110)
--{
--	return dvb_register_device(&av7110->dvb_adapter, &av7110->ca_dev,
--				   &dvbdev_ca, av7110, DVB_DEVICE_CA, 0);
--}
--
--void av7110_ca_unregister(struct av7110 *av7110)
--{
--	dvb_unregister_device(av7110->ca_dev);
--}
--
--int av7110_ca_init(struct av7110* av7110)
--{
--	return ci_ll_init(&av7110->ci_rbuffer, &av7110->ci_wbuffer, 8192);
--}
--
--void av7110_ca_exit(struct av7110* av7110)
--{
--	ci_ll_release(&av7110->ci_rbuffer, &av7110->ci_wbuffer);
--}
-diff --git a/drivers/staging/media/deprecated/saa7146/av7110/av7110_ca.h b/drivers/staging/media/deprecated/saa7146/av7110/av7110_ca.h
-deleted file mode 100644
-index a6e3f2955730..000000000000
---- a/drivers/staging/media/deprecated/saa7146/av7110/av7110_ca.h
-+++ /dev/null
-@@ -1,15 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _AV7110_CA_H_
--#define _AV7110_CA_H_
--
--struct av7110;
--
--extern void CI_handle(struct av7110 *av7110, u8 *data, u16 len);
--extern void ci_get_data(struct dvb_ringbuffer *cibuf, u8 *data, int len);
--
--extern int av7110_ca_register(struct av7110 *av7110);
--extern void av7110_ca_unregister(struct av7110 *av7110);
--extern int av7110_ca_init(struct av7110* av7110);
--extern void av7110_ca_exit(struct av7110* av7110);
--
--#endif /* _AV7110_CA_H_ */
-diff --git a/drivers/staging/media/deprecated/saa7146/av7110/av7110_hw.c b/drivers/staging/media/deprecated/saa7146/av7110/av7110_hw.c
-deleted file mode 100644
-index 93ca31e38ddd..000000000000
---- a/drivers/staging/media/deprecated/saa7146/av7110/av7110_hw.c
-+++ /dev/null
-@@ -1,1204 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * av7110_hw.c: av7110 low level hardware access and firmware interface
-- *
-- * Copyright (C) 1999-2002 Ralph  Metzler
-- *                       & Marcus Metzler for convergence integrated media GmbH
-- *
-- * originally based on code by:
-- * Copyright (C) 1998,1999 Christian Theiss <mistert@rz.fh-augsburg.de>
-- *
-- * the project's page is at https://linuxtv.org
-- */
--
--/* for debugging ARM communication: */
--//#define COM_DEBUG
--
--#include <linux/types.h>
--#include <linux/kernel.h>
--#include <linux/string.h>
--#include <linux/delay.h>
--#include <linux/fs.h>
--
--#include "av7110.h"
--#include "av7110_hw.h"
--
--#define _NOHANDSHAKE
--
--/*
-- * Max transfer size done by av7110_fw_cmd()
-- *
-- * The maximum size passed to this function is 6 bytes. The buffer also
-- * uses two additional ones for type and size. So, 8 bytes is enough.
-- */
--#define MAX_XFER_SIZE  8
--
--/****************************************************************************
-- * DEBI functions
-- ****************************************************************************/
--
--/* This DEBI code is based on the Stradis driver
--   by Nathan Laredo <laredo@gnu.org> */
--
--int av7110_debiwrite(struct av7110 *av7110, u32 config,
--		     int addr, u32 val, unsigned int count)
--{
--	struct saa7146_dev *dev = av7110->dev;
--
--	if (count > 32764) {
--		printk("%s: invalid count %d\n", __func__, count);
--		return -1;
--	}
--	if (saa7146_wait_for_debi_done(av7110->dev, 0) < 0) {
--		printk("%s: wait_for_debi_done failed\n", __func__);
--		return -1;
--	}
--	saa7146_write(dev, DEBI_CONFIG, config);
--	if (count <= 4)		/* immediate transfer */
--		saa7146_write(dev, DEBI_AD, val);
--	else			/* block transfer */
--		saa7146_write(dev, DEBI_AD, av7110->debi_bus);
--	saa7146_write(dev, DEBI_COMMAND, (count << 17) | (addr & 0xffff));
--	saa7146_write(dev, MC2, (2 << 16) | 2);
--	return 0;
--}
--
--u32 av7110_debiread(struct av7110 *av7110, u32 config, int addr, unsigned int count)
--{
--	struct saa7146_dev *dev = av7110->dev;
--	u32 result = 0;
--
--	if (count > 32764) {
--		printk("%s: invalid count %d\n", __func__, count);
--		return 0;
--	}
--	if (saa7146_wait_for_debi_done(av7110->dev, 0) < 0) {
--		printk("%s: wait_for_debi_done #1 failed\n", __func__);
--		return 0;
--	}
--	saa7146_write(dev, DEBI_AD, av7110->debi_bus);
--	saa7146_write(dev, DEBI_COMMAND, (count << 17) | 0x10000 | (addr & 0xffff));
--
--	saa7146_write(dev, DEBI_CONFIG, config);
--	saa7146_write(dev, MC2, (2 << 16) | 2);
--	if (count > 4)
--		return count;
--	if (saa7146_wait_for_debi_done(av7110->dev, 0) < 0) {
--		printk("%s: wait_for_debi_done #2 failed\n", __func__);
--		return 0;
--	}
--
--	result = saa7146_read(dev, DEBI_AD);
--	result &= (0xffffffffUL >> ((4 - count) * 8));
--	return result;
--}
--
--
--
--/* av7110 ARM core boot stuff */
--#if 0
--void av7110_reset_arm(struct av7110 *av7110)
--{
--	saa7146_setgpio(av7110->dev, RESET_LINE, SAA7146_GPIO_OUTLO);
--
--	/* Disable DEBI and GPIO irq */
--	SAA7146_IER_DISABLE(av7110->dev, MASK_19 | MASK_03);
--	SAA7146_ISR_CLEAR(av7110->dev, MASK_19 | MASK_03);
--
--	saa7146_setgpio(av7110->dev, RESET_LINE, SAA7146_GPIO_OUTHI);
--	msleep(30);	/* the firmware needs some time to initialize */
--
--	ARM_ResetMailBox(av7110);
--
--	SAA7146_ISR_CLEAR(av7110->dev, MASK_19 | MASK_03);
--	SAA7146_IER_ENABLE(av7110->dev, MASK_03);
--
--	av7110->arm_ready = 1;
--	dprintk(1, "reset ARM\n");
--}
--#endif  /*  0  */
--
--static int waitdebi(struct av7110 *av7110, int adr, int state)
--{
--	int k;
--
--	dprintk(4, "%p\n", av7110);
--
--	for (k = 0; k < 100; k++) {
--		if (irdebi(av7110, DEBINOSWAP, adr, 0, 2) == state)
--			return 0;
--		udelay(5);
--	}
--	return -ETIMEDOUT;
--}
--
--static int load_dram(struct av7110 *av7110, u32 *data, int len)
--{
--	int i;
--	int blocks, rest;
--	u32 base, bootblock = AV7110_BOOT_BLOCK;
--
--	dprintk(4, "%p\n", av7110);
--
--	blocks = len / AV7110_BOOT_MAX_SIZE;
--	rest = len % AV7110_BOOT_MAX_SIZE;
--	base = DRAM_START_CODE;
--
--	for (i = 0; i < blocks; i++) {
--		if (waitdebi(av7110, AV7110_BOOT_STATE, BOOTSTATE_BUFFER_EMPTY) < 0) {
--			printk(KERN_ERR "dvb-ttpci: load_dram(): timeout at block %d\n", i);
--			return -ETIMEDOUT;
--		}
--		dprintk(4, "writing DRAM block %d\n", i);
--		mwdebi(av7110, DEBISWAB, bootblock,
--		       ((u8 *)data) + i * AV7110_BOOT_MAX_SIZE, AV7110_BOOT_MAX_SIZE);
--		bootblock ^= 0x1400;
--		iwdebi(av7110, DEBISWAB, AV7110_BOOT_BASE, swab32(base), 4);
--		iwdebi(av7110, DEBINOSWAP, AV7110_BOOT_SIZE, AV7110_BOOT_MAX_SIZE, 2);
--		iwdebi(av7110, DEBINOSWAP, AV7110_BOOT_STATE, BOOTSTATE_BUFFER_FULL, 2);
--		base += AV7110_BOOT_MAX_SIZE;
--	}
--
--	if (rest > 0) {
--		if (waitdebi(av7110, AV7110_BOOT_STATE, BOOTSTATE_BUFFER_EMPTY) < 0) {
--			printk(KERN_ERR "dvb-ttpci: load_dram(): timeout at last block\n");
--			return -ETIMEDOUT;
--		}
--		if (rest > 4)
--			mwdebi(av7110, DEBISWAB, bootblock,
--			       ((u8 *)data) + i * AV7110_BOOT_MAX_SIZE, rest);
--		else
--			mwdebi(av7110, DEBISWAB, bootblock,
--			       ((u8 *)data) + i * AV7110_BOOT_MAX_SIZE - 4, rest + 4);
--
--		iwdebi(av7110, DEBISWAB, AV7110_BOOT_BASE, swab32(base), 4);
--		iwdebi(av7110, DEBINOSWAP, AV7110_BOOT_SIZE, rest, 2);
--		iwdebi(av7110, DEBINOSWAP, AV7110_BOOT_STATE, BOOTSTATE_BUFFER_FULL, 2);
--	}
--	if (waitdebi(av7110, AV7110_BOOT_STATE, BOOTSTATE_BUFFER_EMPTY) < 0) {
--		printk(KERN_ERR "dvb-ttpci: load_dram(): timeout after last block\n");
--		return -ETIMEDOUT;
--	}
--	iwdebi(av7110, DEBINOSWAP, AV7110_BOOT_SIZE, 0, 2);
--	iwdebi(av7110, DEBINOSWAP, AV7110_BOOT_STATE, BOOTSTATE_BUFFER_FULL, 2);
--	if (waitdebi(av7110, AV7110_BOOT_STATE, BOOTSTATE_AV7110_BOOT_COMPLETE) < 0) {
--		printk(KERN_ERR "dvb-ttpci: load_dram(): final handshake timeout\n");
--		return -ETIMEDOUT;
--	}
--	return 0;
--}
--
--
--/* we cannot write av7110 DRAM directly, so load a bootloader into
-- * the DPRAM which implements a simple boot protocol */
--int av7110_bootarm(struct av7110 *av7110)
--{
--	const struct firmware *fw;
--	const char *fw_name = "av7110/bootcode.bin";
--	struct saa7146_dev *dev = av7110->dev;
--	u32 ret;
--	int i;
--
--	dprintk(4, "%p\n", av7110);
--
--	av7110->arm_ready = 0;
--
--	saa7146_setgpio(dev, RESET_LINE, SAA7146_GPIO_OUTLO);
--
--	/* Disable DEBI and GPIO irq */
--	SAA7146_IER_DISABLE(av7110->dev, MASK_03 | MASK_19);
--	SAA7146_ISR_CLEAR(av7110->dev, MASK_19 | MASK_03);
--
--	/* enable DEBI */
--	saa7146_write(av7110->dev, MC1, 0x08800880);
--	saa7146_write(av7110->dev, DD1_STREAM_B, 0x00000000);
--	saa7146_write(av7110->dev, MC2, (MASK_09 | MASK_25 | MASK_10 | MASK_26));
--
--	/* test DEBI */
--	iwdebi(av7110, DEBISWAP, DPRAM_BASE, 0x76543210, 4);
--	/* FIXME: Why does Nexus CA require 2x iwdebi for first init? */
--	iwdebi(av7110, DEBISWAP, DPRAM_BASE, 0x76543210, 4);
--
--	if ((ret=irdebi(av7110, DEBINOSWAP, DPRAM_BASE, 0, 4)) != 0x10325476) {
--		printk(KERN_ERR "dvb-ttpci: debi test in av7110_bootarm() failed: %08x != %08x (check your BIOS 'Plug&Play OS' settings)\n",
--		       ret, 0x10325476);
--		return -1;
--	}
--	for (i = 0; i < 8192; i += 4)
--		iwdebi(av7110, DEBISWAP, DPRAM_BASE + i, 0x00, 4);
--	dprintk(2, "debi test OK\n");
--
--	/* boot */
--	dprintk(1, "load boot code\n");
--	saa7146_setgpio(dev, ARM_IRQ_LINE, SAA7146_GPIO_IRQLO);
--	//saa7146_setgpio(dev, DEBI_DONE_LINE, SAA7146_GPIO_INPUT);
--	//saa7146_setgpio(dev, 3, SAA7146_GPIO_INPUT);
--
--	ret = request_firmware(&fw, fw_name, &dev->pci->dev);
--	if (ret) {
--		printk(KERN_ERR "dvb-ttpci: Failed to load firmware \"%s\"\n",
--			fw_name);
--		return ret;
--	}
--
--	mwdebi(av7110, DEBISWAB, DPRAM_BASE, fw->data, fw->size);
--	release_firmware(fw);
--	iwdebi(av7110, DEBINOSWAP, AV7110_BOOT_STATE, BOOTSTATE_BUFFER_FULL, 2);
--
--	if (saa7146_wait_for_debi_done(av7110->dev, 1)) {
--		printk(KERN_ERR "dvb-ttpci: av7110_bootarm(): saa7146_wait_for_debi_done() timed out\n");
--		return -ETIMEDOUT;
--	}
--	saa7146_setgpio(dev, RESET_LINE, SAA7146_GPIO_OUTHI);
--	mdelay(1);
--
--	dprintk(1, "load dram code\n");
--	if (load_dram(av7110, (u32 *)av7110->bin_root, av7110->size_root) < 0) {
--		printk(KERN_ERR "dvb-ttpci: av7110_bootarm(): load_dram() failed\n");
--		return -1;
--	}
--
--	saa7146_setgpio(dev, RESET_LINE, SAA7146_GPIO_OUTLO);
--	mdelay(1);
--
--	dprintk(1, "load dpram code\n");
--	mwdebi(av7110, DEBISWAB, DPRAM_BASE, av7110->bin_dpram, av7110->size_dpram);
--
--	if (saa7146_wait_for_debi_done(av7110->dev, 1)) {
--		printk(KERN_ERR "dvb-ttpci: av7110_bootarm(): saa7146_wait_for_debi_done() timed out after loading DRAM\n");
--		return -ETIMEDOUT;
--	}
--	saa7146_setgpio(dev, RESET_LINE, SAA7146_GPIO_OUTHI);
--	msleep(30);	/* the firmware needs some time to initialize */
--
--	//ARM_ClearIrq(av7110);
--	ARM_ResetMailBox(av7110);
--	SAA7146_ISR_CLEAR(av7110->dev, MASK_19 | MASK_03);
--	SAA7146_IER_ENABLE(av7110->dev, MASK_03);
--
--	av7110->arm_errors = 0;
--	av7110->arm_ready = 1;
--	return 0;
--}
--MODULE_FIRMWARE("av7110/bootcode.bin");
--
--/****************************************************************************
-- * DEBI command polling
-- ****************************************************************************/
--
--int av7110_wait_msgstate(struct av7110 *av7110, u16 flags)
--{
--	unsigned long start;
--	u32 stat;
--	int err;
--
--	if (FW_VERSION(av7110->arm_app) <= 0x261c) {
--		/* not supported by old firmware */
--		msleep(50);
--		return 0;
--	}
--
--	/* new firmware */
--	start = jiffies;
--	for (;;) {
--		err = time_after(jiffies, start + ARM_WAIT_FREE);
--		if (mutex_lock_interruptible(&av7110->dcomlock))
--			return -ERESTARTSYS;
--		stat = rdebi(av7110, DEBINOSWAP, MSGSTATE, 0, 2);
--		mutex_unlock(&av7110->dcomlock);
--		if ((stat & flags) == 0)
--			break;
--		if (err) {
--			printk(KERN_ERR "%s: timeout waiting for MSGSTATE %04x\n",
--				__func__, stat & flags);
--			return -ETIMEDOUT;
--		}
--		msleep(1);
--	}
--	return 0;
--}
--
--static int __av7110_send_fw_cmd(struct av7110 *av7110, u16* buf, int length)
--{
--	int i;
--	unsigned long start;
--	char *type = NULL;
--	u16 flags[2] = {0, 0};
--	u32 stat;
--	int err;
--
--//	dprintk(4, "%p\n", av7110);
--
--	if (!av7110->arm_ready) {
--		dprintk(1, "arm not ready.\n");
--		return -ENXIO;
--	}
--
--	start = jiffies;
--	while (1) {
--		err = time_after(jiffies, start + ARM_WAIT_FREE);
--		if (rdebi(av7110, DEBINOSWAP, COMMAND, 0, 2) == 0)
--			break;
--		if (err) {
--			printk(KERN_ERR "dvb-ttpci: %s(): timeout waiting for COMMAND idle\n", __func__);
--			av7110->arm_errors++;
--			return -ETIMEDOUT;
--		}
--		msleep(1);
--	}
--
--	if (FW_VERSION(av7110->arm_app) <= 0x261f)
--		wdebi(av7110, DEBINOSWAP, COM_IF_LOCK, 0xffff, 2);
--
--#ifndef _NOHANDSHAKE
--	start = jiffies;
--	while (1) {
--		err = time_after(jiffies, start + ARM_WAIT_SHAKE);
--		if (rdebi(av7110, DEBINOSWAP, HANDSHAKE_REG, 0, 2) == 0)
--			break;
--		if (err) {
--			printk(KERN_ERR "dvb-ttpci: %s(): timeout waiting for HANDSHAKE_REG\n", __func__);
--			return -ETIMEDOUT;
--		}
--		msleep(1);
--	}
--#endif
--
--	switch ((buf[0] >> 8) & 0xff) {
--	case COMTYPE_PIDFILTER:
--	case COMTYPE_ENCODER:
--	case COMTYPE_REC_PLAY:
--	case COMTYPE_MPEGDECODER:
--		type = "MSG";
--		flags[0] = GPMQOver;
--		flags[1] = GPMQFull;
--		break;
--	case COMTYPE_OSD:
--		type = "OSD";
--		flags[0] = OSDQOver;
--		flags[1] = OSDQFull;
--		break;
--	case COMTYPE_MISC:
--		if (FW_VERSION(av7110->arm_app) >= 0x261d) {
--			type = "MSG";
--			flags[0] = GPMQOver;
--			flags[1] = GPMQBusy;
--		}
--		break;
--	default:
--		break;
--	}
--
--	if (type != NULL) {
--		/* non-immediate COMMAND type */
--		start = jiffies;
--		for (;;) {
--			err = time_after(jiffies, start + ARM_WAIT_FREE);
--			stat = rdebi(av7110, DEBINOSWAP, MSGSTATE, 0, 2);
--			if (stat & flags[0]) {
--				printk(KERN_ERR "%s: %s QUEUE overflow\n",
--					__func__, type);
--				return -1;
--			}
--			if ((stat & flags[1]) == 0)
--				break;
--			if (err) {
--				printk(KERN_ERR "%s: timeout waiting on busy %s QUEUE\n",
--					__func__, type);
--				av7110->arm_errors++;
--				return -ETIMEDOUT;
--			}
--			msleep(1);
--		}
--	}
--
--	for (i = 2; i < length; i++)
--		wdebi(av7110, DEBINOSWAP, COMMAND + 2 * i, (u32) buf[i], 2);
--
--	if (length)
--		wdebi(av7110, DEBINOSWAP, COMMAND + 2, (u32) buf[1], 2);
--	else
--		wdebi(av7110, DEBINOSWAP, COMMAND + 2, 0, 2);
--
--	wdebi(av7110, DEBINOSWAP, COMMAND, (u32) buf[0], 2);
--
--	if (FW_VERSION(av7110->arm_app) <= 0x261f)
--		wdebi(av7110, DEBINOSWAP, COM_IF_LOCK, 0x0000, 2);
--
--#ifdef COM_DEBUG
--	start = jiffies;
--	while (1) {
--		err = time_after(jiffies, start + ARM_WAIT_FREE);
--		if (rdebi(av7110, DEBINOSWAP, COMMAND, 0, 2) == 0)
--			break;
--		if (err) {
--			printk(KERN_ERR "dvb-ttpci: %s(): timeout waiting for COMMAND %d to complete\n",
--			       __func__, (buf[0] >> 8) & 0xff);
--			return -ETIMEDOUT;
--		}
--		msleep(1);
--	}
--
--	stat = rdebi(av7110, DEBINOSWAP, MSGSTATE, 0, 2);
--	if (stat & GPMQOver) {
--		printk(KERN_ERR "dvb-ttpci: %s(): GPMQOver\n", __func__);
--		return -ENOSPC;
--	}
--	else if (stat & OSDQOver) {
--		printk(KERN_ERR "dvb-ttpci: %s(): OSDQOver\n", __func__);
--		return -ENOSPC;
--	}
--#endif
--
--	return 0;
--}
--
--static int av7110_send_fw_cmd(struct av7110 *av7110, u16* buf, int length)
--{
--	int ret;
--
--//	dprintk(4, "%p\n", av7110);
--
--	if (!av7110->arm_ready) {
--		dprintk(1, "arm not ready.\n");
--		return -1;
--	}
--	if (mutex_lock_interruptible(&av7110->dcomlock))
--		return -ERESTARTSYS;
--
--	ret = __av7110_send_fw_cmd(av7110, buf, length);
--	mutex_unlock(&av7110->dcomlock);
--	if (ret && ret!=-ERESTARTSYS)
--		printk(KERN_ERR "dvb-ttpci: %s(): av7110_send_fw_cmd error %d\n",
--		       __func__, ret);
--	return ret;
--}
--
--int av7110_fw_cmd(struct av7110 *av7110, int type, int com, int num, ...)
--{
--	va_list args;
--	u16 buf[MAX_XFER_SIZE];
--	int i, ret;
--
--//	dprintk(4, "%p\n", av7110);
--
--	if (2 + num > ARRAY_SIZE(buf)) {
--		printk(KERN_WARNING
--		       "%s: %s len=%d is too big!\n",
--		       KBUILD_MODNAME, __func__, num);
--		return -EINVAL;
--	}
--
--	buf[0] = ((type << 8) | com);
--	buf[1] = num;
--
--	if (num) {
--		va_start(args, num);
--		for (i = 0; i < num; i++)
--			buf[i + 2] = va_arg(args, u32);
--		va_end(args);
--	}
--
--	ret = av7110_send_fw_cmd(av7110, buf, num + 2);
--	if (ret && ret != -ERESTARTSYS)
--		printk(KERN_ERR "dvb-ttpci: av7110_fw_cmd error %d\n", ret);
--	return ret;
--}
--
--#if 0
--int av7110_send_ci_cmd(struct av7110 *av7110, u8 subcom, u8 *buf, u8 len)
--{
--	int i, ret;
--	u16 cmd[18] = { ((COMTYPE_COMMON_IF << 8) + subcom),
--		16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
--
--	dprintk(4, "%p\n", av7110);
--
--	for(i = 0; i < len && i < 32; i++)
--	{
--		if(i % 2 == 0)
--			cmd[(i / 2) + 2] = (u16)(buf[i]) << 8;
--		else
--			cmd[(i / 2) + 2] |= buf[i];
--	}
--
--	ret = av7110_send_fw_cmd(av7110, cmd, 18);
--	if (ret && ret != -ERESTARTSYS)
--		printk(KERN_ERR "dvb-ttpci: av7110_send_ci_cmd error %d\n", ret);
--	return ret;
--}
--#endif  /*  0  */
--
--int av7110_fw_request(struct av7110 *av7110, u16 *request_buf,
--		      int request_buf_len, u16 *reply_buf, int reply_buf_len)
--{
--	int err;
--	s16 i;
--	unsigned long start;
--#ifdef COM_DEBUG
--	u32 stat;
--#endif
--
--	dprintk(4, "%p\n", av7110);
--
--	if (!av7110->arm_ready) {
--		dprintk(1, "arm not ready.\n");
--		return -1;
--	}
--
--	if (mutex_lock_interruptible(&av7110->dcomlock))
--		return -ERESTARTSYS;
--
--	if ((err = __av7110_send_fw_cmd(av7110, request_buf, request_buf_len)) < 0) {
--		mutex_unlock(&av7110->dcomlock);
--		printk(KERN_ERR "dvb-ttpci: av7110_fw_request error %d\n", err);
--		return err;
--	}
--
--	start = jiffies;
--	while (1) {
--		err = time_after(jiffies, start + ARM_WAIT_FREE);
--		if (rdebi(av7110, DEBINOSWAP, COMMAND, 0, 2) == 0)
--			break;
--		if (err) {
--			printk(KERN_ERR "%s: timeout waiting for COMMAND to complete\n", __func__);
--			mutex_unlock(&av7110->dcomlock);
--			return -ETIMEDOUT;
--		}
--#ifdef _NOHANDSHAKE
--		msleep(1);
--#endif
--	}
--
--#ifndef _NOHANDSHAKE
--	start = jiffies;
--	while (1) {
--		err = time_after(jiffies, start + ARM_WAIT_SHAKE);
--		if (rdebi(av7110, DEBINOSWAP, HANDSHAKE_REG, 0, 2) == 0)
--			break;
--		if (err) {
--			printk(KERN_ERR "%s: timeout waiting for HANDSHAKE_REG\n", __func__);
--			mutex_unlock(&av7110->dcomlock);
--			return -ETIMEDOUT;
--		}
--		msleep(1);
--	}
--#endif
--
--#ifdef COM_DEBUG
--	stat = rdebi(av7110, DEBINOSWAP, MSGSTATE, 0, 2);
--	if (stat & GPMQOver) {
--		printk(KERN_ERR "%s: GPMQOver\n", __func__);
--		mutex_unlock(&av7110->dcomlock);
--		return -1;
--	}
--	else if (stat & OSDQOver) {
--		printk(KERN_ERR "%s: OSDQOver\n", __func__);
--		mutex_unlock(&av7110->dcomlock);
--		return -1;
--	}
--#endif
--
--	for (i = 0; i < reply_buf_len; i++)
--		reply_buf[i] = rdebi(av7110, DEBINOSWAP, COM_BUFF + 2 * i, 0, 2);
--
--	mutex_unlock(&av7110->dcomlock);
--	return 0;
--}
--
--static int av7110_fw_query(struct av7110 *av7110, u16 tag, u16* buf, s16 length)
--{
--	int ret;
--	ret = av7110_fw_request(av7110, &tag, 0, buf, length);
--	if (ret)
--		printk(KERN_ERR "dvb-ttpci: av7110_fw_query error %d\n", ret);
--	return ret;
--}
--
--
--/****************************************************************************
-- * Firmware commands
-- ****************************************************************************/
--
--/* get version of the firmware ROM, RTSL, video ucode and ARM application  */
--int av7110_firmversion(struct av7110 *av7110)
--{
--	u16 buf[20];
--	u16 tag = ((COMTYPE_REQUEST << 8) + ReqVersion);
--
--	dprintk(4, "%p\n", av7110);
--
--	if (av7110_fw_query(av7110, tag, buf, 16)) {
--		printk("dvb-ttpci: failed to boot firmware @ card %d\n",
--		       av7110->dvb_adapter.num);
--		return -EIO;
--	}
--
--	av7110->arm_fw = (buf[0] << 16) + buf[1];
--	av7110->arm_rtsl = (buf[2] << 16) + buf[3];
--	av7110->arm_vid = (buf[4] << 16) + buf[5];
--	av7110->arm_app = (buf[6] << 16) + buf[7];
--	av7110->avtype = (buf[8] << 16) + buf[9];
--
--	printk("dvb-ttpci: info @ card %d: firm %08x, rtsl %08x, vid %08x, app %08x\n",
--	       av7110->dvb_adapter.num, av7110->arm_fw,
--	       av7110->arm_rtsl, av7110->arm_vid, av7110->arm_app);
--
--	/* print firmware capabilities */
--	if (FW_CI_LL_SUPPORT(av7110->arm_app))
--		printk("dvb-ttpci: firmware @ card %d supports CI link layer interface\n",
--		       av7110->dvb_adapter.num);
--	else
--		printk("dvb-ttpci: no firmware support for CI link layer interface @ card %d\n",
--		       av7110->dvb_adapter.num);
--
--	return 0;
--}
--
--
--int av7110_diseqc_send(struct av7110 *av7110, int len, u8 *msg, unsigned long burst)
--{
--	int i, ret;
--	u16 buf[18] = { ((COMTYPE_AUDIODAC << 8) + SendDiSEqC),
--			16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
--
--	dprintk(4, "%p\n", av7110);
--
--	if (len > 10)
--		len = 10;
--
--	buf[1] = len + 2;
--	buf[2] = len;
--
--	if (burst != -1)
--		buf[3] = burst ? 0x01 : 0x00;
--	else
--		buf[3] = 0xffff;
--
--	for (i = 0; i < len; i++)
--		buf[i + 4] = msg[i];
--
--	ret = av7110_send_fw_cmd(av7110, buf, 18);
--	if (ret && ret!=-ERESTARTSYS)
--		printk(KERN_ERR "dvb-ttpci: av7110_diseqc_send error %d\n", ret);
--	return ret;
--}
--
--
--#ifdef CONFIG_DVB_AV7110_OSD
--
--static inline int SetColorBlend(struct av7110 *av7110, u8 windownr)
--{
--	return av7110_fw_cmd(av7110, COMTYPE_OSD, SetCBlend, 1, windownr);
--}
--
--static inline int SetBlend_(struct av7110 *av7110, u8 windownr,
--		     enum av7110_osd_palette_type colordepth, u16 index, u8 blending)
--{
--	return av7110_fw_cmd(av7110, COMTYPE_OSD, SetBlend, 4,
--			     windownr, colordepth, index, blending);
--}
--
--static inline int SetColor_(struct av7110 *av7110, u8 windownr,
--		     enum av7110_osd_palette_type colordepth, u16 index, u16 colorhi, u16 colorlo)
--{
--	return av7110_fw_cmd(av7110, COMTYPE_OSD, SetColor, 5,
--			     windownr, colordepth, index, colorhi, colorlo);
--}
--
--static inline int SetFont(struct av7110 *av7110, u8 windownr, u8 fontsize,
--			  u16 colorfg, u16 colorbg)
--{
--	return av7110_fw_cmd(av7110, COMTYPE_OSD, Set_Font, 4,
--			     windownr, fontsize, colorfg, colorbg);
--}
--
--static int FlushText(struct av7110 *av7110)
--{
--	unsigned long start;
--	int err;
--
--	if (mutex_lock_interruptible(&av7110->dcomlock))
--		return -ERESTARTSYS;
--	start = jiffies;
--	while (1) {
--		err = time_after(jiffies, start + ARM_WAIT_OSD);
--		if (rdebi(av7110, DEBINOSWAP, BUFF1_BASE, 0, 2) == 0)
--			break;
--		if (err) {
--			printk(KERN_ERR "dvb-ttpci: %s(): timeout waiting for BUFF1_BASE == 0\n",
--			       __func__);
--			mutex_unlock(&av7110->dcomlock);
--			return -ETIMEDOUT;
--		}
--		msleep(1);
--	}
--	mutex_unlock(&av7110->dcomlock);
--	return 0;
--}
--
--static int WriteText(struct av7110 *av7110, u8 win, u16 x, u16 y, char *buf)
--{
--	int i, ret;
--	unsigned long start;
--	int length = strlen(buf) + 1;
--	u16 cbuf[5] = { (COMTYPE_OSD << 8) + DText, 3, win, x, y };
--
--	if (mutex_lock_interruptible(&av7110->dcomlock))
--		return -ERESTARTSYS;
--
--	start = jiffies;
--	while (1) {
--		ret = time_after(jiffies, start + ARM_WAIT_OSD);
--		if (rdebi(av7110, DEBINOSWAP, BUFF1_BASE, 0, 2) == 0)
--			break;
--		if (ret) {
--			printk(KERN_ERR "dvb-ttpci: %s: timeout waiting for BUFF1_BASE == 0\n",
--			       __func__);
--			mutex_unlock(&av7110->dcomlock);
--			return -ETIMEDOUT;
--		}
--		msleep(1);
--	}
--#ifndef _NOHANDSHAKE
--	start = jiffies;
--	while (1) {
--		ret = time_after(jiffies, start + ARM_WAIT_SHAKE);
--		if (rdebi(av7110, DEBINOSWAP, HANDSHAKE_REG, 0, 2) == 0)
--			break;
--		if (ret) {
--			printk(KERN_ERR "dvb-ttpci: %s: timeout waiting for HANDSHAKE_REG\n",
--			       __func__);
--			mutex_unlock(&av7110->dcomlock);
--			return -ETIMEDOUT;
--		}
--		msleep(1);
--	}
--#endif
--	for (i = 0; i < length / 2; i++)
--		wdebi(av7110, DEBINOSWAP, BUFF1_BASE + i * 2,
--		      swab16(*(u16 *)(buf + 2 * i)), 2);
--	if (length & 1)
--		wdebi(av7110, DEBINOSWAP, BUFF1_BASE + i * 2, 0, 2);
--	ret = __av7110_send_fw_cmd(av7110, cbuf, 5);
--	mutex_unlock(&av7110->dcomlock);
--	if (ret && ret!=-ERESTARTSYS)
--		printk(KERN_ERR "dvb-ttpci: WriteText error %d\n", ret);
--	return ret;
--}
--
--static inline int DrawLine(struct av7110 *av7110, u8 windownr,
--			   u16 x, u16 y, u16 dx, u16 dy, u16 color)
--{
--	return av7110_fw_cmd(av7110, COMTYPE_OSD, DLine, 6,
--			     windownr, x, y, dx, dy, color);
--}
--
--static inline int DrawBlock(struct av7110 *av7110, u8 windownr,
--			    u16 x, u16 y, u16 dx, u16 dy, u16 color)
--{
--	return av7110_fw_cmd(av7110, COMTYPE_OSD, DBox, 6,
--			     windownr, x, y, dx, dy, color);
--}
--
--static inline int HideWindow(struct av7110 *av7110, u8 windownr)
--{
--	return av7110_fw_cmd(av7110, COMTYPE_OSD, WHide, 1, windownr);
--}
--
--static inline int MoveWindowRel(struct av7110 *av7110, u8 windownr, u16 x, u16 y)
--{
--	return av7110_fw_cmd(av7110, COMTYPE_OSD, WMoveD, 3, windownr, x, y);
--}
--
--static inline int MoveWindowAbs(struct av7110 *av7110, u8 windownr, u16 x, u16 y)
--{
--	return av7110_fw_cmd(av7110, COMTYPE_OSD, WMoveA, 3, windownr, x, y);
--}
--
--static inline int DestroyOSDWindow(struct av7110 *av7110, u8 windownr)
--{
--	return av7110_fw_cmd(av7110, COMTYPE_OSD, WDestroy, 1, windownr);
--}
--
--static inline int CreateOSDWindow(struct av7110 *av7110, u8 windownr,
--				  osd_raw_window_t disptype,
--				  u16 width, u16 height)
--{
--	return av7110_fw_cmd(av7110, COMTYPE_OSD, WCreate, 4,
--			     windownr, disptype, width, height);
--}
--
--
--static enum av7110_osd_palette_type bpp2pal[8] = {
--	Pal1Bit, Pal2Bit, 0, Pal4Bit, 0, 0, 0, Pal8Bit
--};
--static osd_raw_window_t bpp2bit[8] = {
--	OSD_BITMAP1, OSD_BITMAP2, 0, OSD_BITMAP4, 0, 0, 0, OSD_BITMAP8
--};
--
--static inline int WaitUntilBmpLoaded(struct av7110 *av7110)
--{
--	int ret = wait_event_timeout(av7110->bmpq,
--				av7110->bmp_state != BMP_LOADING, 10*HZ);
--	if (ret == 0) {
--		printk("dvb-ttpci: warning: timeout waiting in LoadBitmap: %d, %d\n",
--		       ret, av7110->bmp_state);
--		av7110->bmp_state = BMP_NONE;
--		return -ETIMEDOUT;
--	}
--	return 0;
--}
--
--static inline int LoadBitmap(struct av7110 *av7110,
--			     u16 dx, u16 dy, int inc, u8 __user * data)
--{
--	u16 format;
--	int bpp;
--	int i;
--	int d, delta;
--	u8 c;
--	int ret;
--
--	dprintk(4, "%p\n", av7110);
--
--	format = bpp2bit[av7110->osdbpp[av7110->osdwin]];
--
--	av7110->bmp_state = BMP_LOADING;
--	if	(format == OSD_BITMAP8) {
--		bpp=8; delta = 1;
--	} else if (format == OSD_BITMAP4) {
--		bpp=4; delta = 2;
--	} else if (format == OSD_BITMAP2) {
--		bpp=2; delta = 4;
--	} else if (format == OSD_BITMAP1) {
--		bpp=1; delta = 8;
--	} else {
--		av7110->bmp_state = BMP_NONE;
--		return -EINVAL;
--	}
--	av7110->bmplen = ((dx * dy * bpp + 7) & ~7) / 8;
--	av7110->bmpp = 0;
--	if (av7110->bmplen > 32768) {
--		av7110->bmp_state = BMP_NONE;
--		return -EINVAL;
--	}
--	for (i = 0; i < dy; i++) {
--		if (copy_from_user(av7110->bmpbuf + 1024 + i * dx, data + i * inc, dx)) {
--			av7110->bmp_state = BMP_NONE;
--			return -EINVAL;
--		}
--	}
--	if (format != OSD_BITMAP8) {
--		for (i = 0; i < dx * dy / delta; i++) {
--			c = ((u8 *)av7110->bmpbuf)[1024 + i * delta + delta - 1];
--			for (d = delta - 2; d >= 0; d--) {
--				c |= (((u8 *)av7110->bmpbuf)[1024 + i * delta + d]
--				      << ((delta - d - 1) * bpp));
--				((u8 *)av7110->bmpbuf)[1024 + i] = c;
--			}
--		}
--	}
--	av7110->bmplen += 1024;
--	dprintk(4, "av7110_fw_cmd: LoadBmp size %d\n", av7110->bmplen);
--	ret = av7110_fw_cmd(av7110, COMTYPE_OSD, LoadBmp, 3, format, dx, dy);
--	if (!ret)
--		ret = WaitUntilBmpLoaded(av7110);
--	return ret;
--}
--
--static int BlitBitmap(struct av7110 *av7110, u16 x, u16 y)
--{
--	dprintk(4, "%p\n", av7110);
--
--	return av7110_fw_cmd(av7110, COMTYPE_OSD, BlitBmp, 4, av7110->osdwin, x, y, 0);
--}
--
--static inline int ReleaseBitmap(struct av7110 *av7110)
--{
--	dprintk(4, "%p\n", av7110);
--
--	if (av7110->bmp_state != BMP_LOADED && FW_VERSION(av7110->arm_app) < 0x261e)
--		return -1;
--	if (av7110->bmp_state == BMP_LOADING)
--		dprintk(1,"ReleaseBitmap called while BMP_LOADING\n");
--	av7110->bmp_state = BMP_NONE;
--	return av7110_fw_cmd(av7110, COMTYPE_OSD, ReleaseBmp, 0);
--}
--
--static u32 RGB2YUV(u16 R, u16 G, u16 B)
--{
--	u16 y, u, v;
--	u16 Y, Cr, Cb;
--
--	y = R * 77 + G * 150 + B * 29;	/* Luma=0.299R+0.587G+0.114B 0..65535 */
--	u = 2048 + B * 8 -(y >> 5);	/* Cr 0..4095 */
--	v = 2048 + R * 8 -(y >> 5);	/* Cb 0..4095 */
--
--	Y = y / 256;
--	Cb = u / 16;
--	Cr = v / 16;
--
--	return Cr | (Cb << 16) | (Y << 8);
--}
--
--static int OSDSetColor(struct av7110 *av7110, u8 color, u8 r, u8 g, u8 b, u8 blend)
--{
--	int ret;
--
--	u16 ch, cl;
--	u32 yuv;
--
--	yuv = blend ? RGB2YUV(r,g,b) : 0;
--	cl = (yuv & 0xffff);
--	ch = ((yuv >> 16) & 0xffff);
--	ret = SetColor_(av7110, av7110->osdwin, bpp2pal[av7110->osdbpp[av7110->osdwin]],
--			color, ch, cl);
--	if (!ret)
--		ret = SetBlend_(av7110, av7110->osdwin, bpp2pal[av7110->osdbpp[av7110->osdwin]],
--				color, ((blend >> 4) & 0x0f));
--	return ret;
--}
--
--static int OSDSetPalette(struct av7110 *av7110, u32 __user * colors, u8 first, u8 last)
--{
--	int i;
--	int length = last - first + 1;
--
--	if (length * 4 > DATA_BUFF3_SIZE)
--		return -EINVAL;
--
--	for (i = 0; i < length; i++) {
--		u32 color, blend, yuv;
--
--		if (get_user(color, colors + i))
--			return -EFAULT;
--		blend = (color & 0xF0000000) >> 4;
--		yuv = blend ? RGB2YUV(color & 0xFF, (color >> 8) & 0xFF,
--				     (color >> 16) & 0xFF) | blend : 0;
--		yuv = ((yuv & 0xFFFF0000) >> 16) | ((yuv & 0x0000FFFF) << 16);
--		wdebi(av7110, DEBINOSWAP, DATA_BUFF3_BASE + i * 4, yuv, 4);
--	}
--	return av7110_fw_cmd(av7110, COMTYPE_OSD, Set_Palette, 4,
--			    av7110->osdwin,
--			    bpp2pal[av7110->osdbpp[av7110->osdwin]],
--			    first, last);
--}
--
--static int OSDSetBlock(struct av7110 *av7110, int x0, int y0,
--		       int x1, int y1, int inc, u8 __user * data)
--{
--	uint w, h, bpp, bpl, size, lpb, bnum, brest;
--	int i;
--	int rc,release_rc;
--
--	w = x1 - x0 + 1;
--	h = y1 - y0 + 1;
--	if (inc <= 0)
--		inc = w;
--	if (w <= 0 || w > 720 || h <= 0 || h > 576)
--		return -EINVAL;
--	bpp = av7110->osdbpp[av7110->osdwin] + 1;
--	bpl = ((w * bpp + 7) & ~7) / 8;
--	size = h * bpl;
--	lpb = (32 * 1024) / bpl;
--	bnum = size / (lpb * bpl);
--	brest = size - bnum * lpb * bpl;
--
--	if (av7110->bmp_state == BMP_LOADING) {
--		/* possible if syscall is repeated by -ERESTARTSYS and if firmware cannot abort */
--		BUG_ON (FW_VERSION(av7110->arm_app) >= 0x261e);
--		rc = WaitUntilBmpLoaded(av7110);
--		if (rc)
--			return rc;
--		/* just continue. This should work for all fw versions
--		 * if bnum==1 && !brest && LoadBitmap was successful
--		 */
--	}
--
--	rc = 0;
--	for (i = 0; i < bnum; i++) {
--		rc = LoadBitmap(av7110, w, lpb, inc, data);
--		if (rc)
--			break;
--		rc = BlitBitmap(av7110, x0, y0 + i * lpb);
--		if (rc)
--			break;
--		data += lpb * inc;
--	}
--	if (!rc && brest) {
--		rc = LoadBitmap(av7110, w, brest / bpl, inc, data);
--		if (!rc)
--			rc = BlitBitmap(av7110, x0, y0 + bnum * lpb);
--	}
--	release_rc = ReleaseBitmap(av7110);
--	if (!rc)
--		rc = release_rc;
--	if (rc)
--		dprintk(1,"returns %d\n",rc);
--	return rc;
--}
--
--int av7110_osd_cmd(struct av7110 *av7110, osd_cmd_t *dc)
--{
--	int ret;
--
--	if (mutex_lock_interruptible(&av7110->osd_mutex))
--		return -ERESTARTSYS;
--
--	switch (dc->cmd) {
--	case OSD_Close:
--		ret = DestroyOSDWindow(av7110, av7110->osdwin);
--		break;
--	case OSD_Open:
--		av7110->osdbpp[av7110->osdwin] = (dc->color - 1) & 7;
--		ret = CreateOSDWindow(av7110, av7110->osdwin,
--				bpp2bit[av7110->osdbpp[av7110->osdwin]],
--				dc->x1 - dc->x0 + 1, dc->y1 - dc->y0 + 1);
--		if (ret)
--			break;
--		if (!dc->data) {
--			ret = MoveWindowAbs(av7110, av7110->osdwin, dc->x0, dc->y0);
--			if (ret)
--				break;
--			ret = SetColorBlend(av7110, av7110->osdwin);
--		}
--		break;
--	case OSD_Show:
--		ret = MoveWindowRel(av7110, av7110->osdwin, 0, 0);
--		break;
--	case OSD_Hide:
--		ret = HideWindow(av7110, av7110->osdwin);
--		break;
--	case OSD_Clear:
--		ret = DrawBlock(av7110, av7110->osdwin, 0, 0, 720, 576, 0);
--		break;
--	case OSD_Fill:
--		ret = DrawBlock(av7110, av7110->osdwin, 0, 0, 720, 576, dc->color);
--		break;
--	case OSD_SetColor:
--		ret = OSDSetColor(av7110, dc->color, dc->x0, dc->y0, dc->x1, dc->y1);
--		break;
--	case OSD_SetPalette:
--		if (FW_VERSION(av7110->arm_app) >= 0x2618)
--			ret = OSDSetPalette(av7110, dc->data, dc->color, dc->x0);
--		else {
--			int i, len = dc->x0-dc->color+1;
--			u8 __user *colors = (u8 __user *)dc->data;
--			u8 r, g = 0, b = 0, blend = 0;
--			ret = 0;
--			for (i = 0; i<len; i++) {
--				if (get_user(r, colors + i * 4) ||
--				    get_user(g, colors + i * 4 + 1) ||
--				    get_user(b, colors + i * 4 + 2) ||
--				    get_user(blend, colors + i * 4 + 3)) {
--					ret = -EFAULT;
--					break;
--				    }
--				ret = OSDSetColor(av7110, dc->color + i, r, g, b, blend);
--				if (ret)
--					break;
--			}
--		}
--		break;
--	case OSD_SetPixel:
--		ret = DrawLine(av7110, av7110->osdwin,
--			 dc->x0, dc->y0, 0, 0, dc->color);
--		break;
--	case OSD_SetRow:
--		dc->y1 = dc->y0;
--		fallthrough;
--	case OSD_SetBlock:
--		ret = OSDSetBlock(av7110, dc->x0, dc->y0, dc->x1, dc->y1, dc->color, dc->data);
--		break;
--	case OSD_FillRow:
--		ret = DrawBlock(av7110, av7110->osdwin, dc->x0, dc->y0,
--			  dc->x1-dc->x0+1, dc->y1, dc->color);
--		break;
--	case OSD_FillBlock:
--		ret = DrawBlock(av7110, av7110->osdwin, dc->x0, dc->y0,
--			  dc->x1 - dc->x0 + 1, dc->y1 - dc->y0 + 1, dc->color);
--		break;
--	case OSD_Line:
--		ret = DrawLine(av7110, av7110->osdwin,
--			 dc->x0, dc->y0, dc->x1 - dc->x0, dc->y1 - dc->y0, dc->color);
--		break;
--	case OSD_Text:
--	{
--		char textbuf[240];
--
--		if (strncpy_from_user(textbuf, dc->data, 240) < 0) {
--			ret = -EFAULT;
--			break;
--		}
--		textbuf[239] = 0;
--		if (dc->x1 > 3)
--			dc->x1 = 3;
--		ret = SetFont(av7110, av7110->osdwin, dc->x1,
--			(u16) (dc->color & 0xffff), (u16) (dc->color >> 16));
--		if (!ret)
--			ret = FlushText(av7110);
--		if (!ret)
--			ret = WriteText(av7110, av7110->osdwin, dc->x0, dc->y0, textbuf);
--		break;
--	}
--	case OSD_SetWindow:
--		if (dc->x0 < 1 || dc->x0 > 7)
--			ret = -EINVAL;
--		else {
--			av7110->osdwin = dc->x0;
--			ret = 0;
--		}
--		break;
--	case OSD_MoveWindow:
--		ret = MoveWindowAbs(av7110, av7110->osdwin, dc->x0, dc->y0);
--		if (!ret)
--			ret = SetColorBlend(av7110, av7110->osdwin);
--		break;
--	case OSD_OpenRaw:
--		if (dc->color < OSD_BITMAP1 || dc->color > OSD_CURSOR) {
--			ret = -EINVAL;
--			break;
--		}
--		if (dc->color >= OSD_BITMAP1 && dc->color <= OSD_BITMAP8HR)
--			av7110->osdbpp[av7110->osdwin] = (1 << (dc->color & 3)) - 1;
--		else
--			av7110->osdbpp[av7110->osdwin] = 0;
--		ret = CreateOSDWindow(av7110, av7110->osdwin, (osd_raw_window_t)dc->color,
--				dc->x1 - dc->x0 + 1, dc->y1 - dc->y0 + 1);
--		if (ret)
--			break;
--		if (!dc->data) {
--			ret = MoveWindowAbs(av7110, av7110->osdwin, dc->x0, dc->y0);
--			if (!ret)
--				ret = SetColorBlend(av7110, av7110->osdwin);
--		}
--		break;
--	default:
--		ret = -EINVAL;
--		break;
--	}
--
--	mutex_unlock(&av7110->osd_mutex);
--	if (ret==-ERESTARTSYS)
--		dprintk(1, "av7110_osd_cmd(%d) returns with -ERESTARTSYS\n",dc->cmd);
--	else if (ret)
--		dprintk(1, "av7110_osd_cmd(%d) returns with %d\n",dc->cmd,ret);
--
--	return ret;
--}
--
--int av7110_osd_capability(struct av7110 *av7110, osd_cap_t *cap)
--{
--	switch (cap->cmd) {
--	case OSD_CAP_MEMSIZE:
--		if (FW_4M_SDRAM(av7110->arm_app))
--			cap->val = 1000000;
--		else
--			cap->val = 92000;
--		return 0;
--	default:
--		return -EINVAL;
--	}
--}
--#endif /* CONFIG_DVB_AV7110_OSD */
-diff --git a/drivers/staging/media/deprecated/saa7146/av7110/av7110_hw.h b/drivers/staging/media/deprecated/saa7146/av7110/av7110_hw.h
-deleted file mode 100644
-index 6380d8950c69..000000000000
---- a/drivers/staging/media/deprecated/saa7146/av7110/av7110_hw.h
-+++ /dev/null
-@@ -1,496 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _AV7110_HW_H_
--#define _AV7110_HW_H_
--
--#include "av7110.h"
--
--/* DEBI transfer mode defs */
--
+-static inline struct saa7146_dev *to_saa7146_dev(struct v4l2_device *v4l2_dev)
+-{
+-	return container_of(v4l2_dev, struct saa7146_dev, v4l2_dev);
+-}
+-
+-/* from saa7146_i2c.c */
+-int saa7146_i2c_adapter_prepare(struct saa7146_dev *dev, struct i2c_adapter *i2c_adapter, u32 bitrate);
+-
+-/* from saa7146_core.c */
+-int saa7146_register_extension(struct saa7146_extension*);
+-int saa7146_unregister_extension(struct saa7146_extension*);
+-struct saa7146_format* saa7146_format_by_fourcc(struct saa7146_dev *dev, int fourcc);
+-int saa7146_pgtable_alloc(struct pci_dev *pci, struct saa7146_pgtable *pt);
+-void saa7146_pgtable_free(struct pci_dev *pci, struct saa7146_pgtable *pt);
+-int saa7146_pgtable_build_single(struct pci_dev *pci, struct saa7146_pgtable *pt, struct scatterlist *list, int length );
+-void *saa7146_vmalloc_build_pgtable(struct pci_dev *pci, long length, struct saa7146_pgtable *pt);
+-void saa7146_vfree_destroy_pgtable(struct pci_dev *pci, void *mem, struct saa7146_pgtable *pt);
+-void saa7146_setgpio(struct saa7146_dev *dev, int port, u32 data);
+-int saa7146_wait_for_debi_done(struct saa7146_dev *dev, int nobusyloop);
+-
+-/* some memory sizes */
+-#define SAA7146_I2C_MEM		( 1*PAGE_SIZE)
+-#define SAA7146_RPS_MEM		( 1*PAGE_SIZE)
+-
+-/* some i2c constants */
+-#define SAA7146_I2C_TIMEOUT	100	/* i2c-timeout-value in ms */
+-#define SAA7146_I2C_RETRIES	3	/* how many times shall we retry an i2c-operation? */
+-#define SAA7146_I2C_DELAY	5	/* time we wait after certain i2c-operations */
+-
+-/* unsorted defines */
+-#define ME1    0x0000000800
+-#define PV1    0x0000000008
+-
+-/* gpio defines */
+-#define SAA7146_GPIO_INPUT 0x00
+-#define SAA7146_GPIO_IRQHI 0x10
+-#define SAA7146_GPIO_IRQLO 0x20
+-#define SAA7146_GPIO_IRQHL 0x30
+-#define SAA7146_GPIO_OUTLO 0x40
+-#define SAA7146_GPIO_OUTHI 0x50
+-
+-/* debi defines */
 -#define DEBINOSWAP 0x000e0000
--#define DEBISWAB   0x001e0000
--#define DEBISWAP   0x002e0000
 -
--#define ARM_WAIT_FREE  (HZ)
--#define ARM_WAIT_SHAKE (HZ/5)
--#define ARM_WAIT_OSD (HZ)
+-/* define for the register programming sequencer (rps) */
+-#define CMD_NOP		0x00000000  /* No operation */
+-#define CMD_CLR_EVENT	0x00000000  /* Clear event */
+-#define CMD_SET_EVENT	0x10000000  /* Set signal event */
+-#define CMD_PAUSE	0x20000000  /* Pause */
+-#define CMD_CHECK_LATE	0x30000000  /* Check late */
+-#define CMD_UPLOAD	0x40000000  /* Upload */
+-#define CMD_STOP	0x50000000  /* Stop */
+-#define CMD_INTERRUPT	0x60000000  /* Interrupt */
+-#define CMD_JUMP	0x80000000  /* Jump */
+-#define CMD_WR_REG	0x90000000  /* Write (load) register */
+-#define CMD_RD_REG	0xa0000000  /* Read (store) register */
+-#define CMD_WR_REG_MASK	0xc0000000  /* Write register with mask */
 -
+-#define CMD_OAN		MASK_27
+-#define CMD_INV		MASK_26
+-#define CMD_SIG4	MASK_25
+-#define CMD_SIG3	MASK_24
+-#define CMD_SIG2	MASK_23
+-#define CMD_SIG1	MASK_22
+-#define CMD_SIG0	MASK_21
+-#define CMD_O_FID_B	MASK_14
+-#define CMD_E_FID_B	MASK_13
+-#define CMD_O_FID_A	MASK_12
+-#define CMD_E_FID_A	MASK_11
 -
--enum av7110_bootstate
--{
--	BOOTSTATE_BUFFER_EMPTY	= 0,
--	BOOTSTATE_BUFFER_FULL	= 1,
--	BOOTSTATE_AV7110_BOOT_COMPLETE	= 2
--};
+-/* some events and command modifiers for rps1 squarewave generator */
+-#define EVT_HS          (1<<15)     // Source Line Threshold reached
+-#define EVT_VBI_B       (1<<9)      // VSYNC Event
+-#define RPS_OAN         (1<<27)     // 1: OR events, 0: AND events
+-#define RPS_INV         (1<<26)     // Invert (compound) event
+-#define GPIO3_MSK       0xFF000000  // GPIO #3 control bits
 -
--enum av7110_type_rec_play_format
--{	RP_None,
--	AudioPES,
--	AudioMp2,
--	AudioPCM,
--	VideoPES,
--	AV_PES
--};
+-/* Bit mask constants */
+-#define MASK_00   0x00000001    /* Mask value for bit 0 */
+-#define MASK_01   0x00000002    /* Mask value for bit 1 */
+-#define MASK_02   0x00000004    /* Mask value for bit 2 */
+-#define MASK_03   0x00000008    /* Mask value for bit 3 */
+-#define MASK_04   0x00000010    /* Mask value for bit 4 */
+-#define MASK_05   0x00000020    /* Mask value for bit 5 */
+-#define MASK_06   0x00000040    /* Mask value for bit 6 */
+-#define MASK_07   0x00000080    /* Mask value for bit 7 */
+-#define MASK_08   0x00000100    /* Mask value for bit 8 */
+-#define MASK_09   0x00000200    /* Mask value for bit 9 */
+-#define MASK_10   0x00000400    /* Mask value for bit 10 */
+-#define MASK_11   0x00000800    /* Mask value for bit 11 */
+-#define MASK_12   0x00001000    /* Mask value for bit 12 */
+-#define MASK_13   0x00002000    /* Mask value for bit 13 */
+-#define MASK_14   0x00004000    /* Mask value for bit 14 */
+-#define MASK_15   0x00008000    /* Mask value for bit 15 */
+-#define MASK_16   0x00010000    /* Mask value for bit 16 */
+-#define MASK_17   0x00020000    /* Mask value for bit 17 */
+-#define MASK_18   0x00040000    /* Mask value for bit 18 */
+-#define MASK_19   0x00080000    /* Mask value for bit 19 */
+-#define MASK_20   0x00100000    /* Mask value for bit 20 */
+-#define MASK_21   0x00200000    /* Mask value for bit 21 */
+-#define MASK_22   0x00400000    /* Mask value for bit 22 */
+-#define MASK_23   0x00800000    /* Mask value for bit 23 */
+-#define MASK_24   0x01000000    /* Mask value for bit 24 */
+-#define MASK_25   0x02000000    /* Mask value for bit 25 */
+-#define MASK_26   0x04000000    /* Mask value for bit 26 */
+-#define MASK_27   0x08000000    /* Mask value for bit 27 */
+-#define MASK_28   0x10000000    /* Mask value for bit 28 */
+-#define MASK_29   0x20000000    /* Mask value for bit 29 */
+-#define MASK_30   0x40000000    /* Mask value for bit 30 */
+-#define MASK_31   0x80000000    /* Mask value for bit 31 */
 -
--enum av7110_osd_palette_type
--{
--	NoPalet =  0,	   /* No palette */
--	Pal1Bit =  2,	   /* 2 colors for 1 Bit Palette    */
--	Pal2Bit =  4,	   /* 4 colors for 2 bit palette    */
--	Pal4Bit =  16,	   /* 16 colors for 4 bit palette   */
--	Pal8Bit =  256	   /* 256 colors for 16 bit palette */
--};
+-#define MASK_B0   0x000000ff    /* Mask value for byte 0 */
+-#define MASK_B1   0x0000ff00    /* Mask value for byte 1 */
+-#define MASK_B2   0x00ff0000    /* Mask value for byte 2 */
+-#define MASK_B3   0xff000000    /* Mask value for byte 3 */
 -
--/* switch defines */
--#define SB_GPIO 3
--#define SB_OFF	SAA7146_GPIO_OUTLO  /* SlowBlank off (TV-Mode) */
--#define SB_ON	SAA7146_GPIO_INPUT  /* SlowBlank on  (AV-Mode) */
--#define SB_WIDE SAA7146_GPIO_OUTHI  /* SlowBlank 6V  (16/9-Mode) (not implemented) */
+-#define MASK_W0   0x0000ffff    /* Mask value for word 0 */
+-#define MASK_W1   0xffff0000    /* Mask value for word 1 */
 -
--#define FB_GPIO 1
--#define FB_OFF	SAA7146_GPIO_LO     /* FastBlank off (CVBS-Mode) */
--#define FB_ON	SAA7146_GPIO_OUTHI  /* FastBlank on  (RGB-Mode) */
--#define FB_LOOP	SAA7146_GPIO_INPUT  /* FastBlank loop-through (PC graphics ???) */
+-#define MASK_PA   0xfffffffc    /* Mask value for physical address */
+-#define MASK_PR   0xfffffffe	/* Mask value for protection register */
+-#define MASK_ER   0xffffffff    /* Mask value for the entire register */
 -
--enum av7110_video_output_mode
--{
--	NO_OUT	     = 0,		/* disable analog output */
--	CVBS_RGB_OUT = 1,
--	CVBS_YC_OUT  = 2,
--	YC_OUT	     = 3
--};
+-#define MASK_NONE 0x00000000    /* No mask */
 -
--/* firmware internal msg q status: */
--#define GPMQFull	0x0001		/* Main Message Queue Full */
--#define GPMQOver	0x0002		/* Main Message Queue Overflow */
--#define HPQFull		0x0004		/* High Priority Msg Queue Full */
--#define HPQOver		0x0008
--#define OSDQFull	0x0010		/* OSD Queue Full */
--#define OSDQOver	0x0020
--#define GPMQBusy	0x0040		/* Queue not empty, FW >= 261d */
--#define HPQBusy		0x0080
--#define OSDQBusy	0x0100
+-/* register aliases */
+-#define BASE_ODD1         0x00  /* Video DMA 1 registers  */
+-#define BASE_EVEN1        0x04
+-#define PROT_ADDR1        0x08
+-#define PITCH1            0x0C
+-#define BASE_PAGE1        0x10  /* Video DMA 1 base page */
+-#define NUM_LINE_BYTE1    0x14
 -
--/* hw section filter flags */
--#define	SECTION_EIT		0x01
--#define	SECTION_SINGLE		0x00
--#define	SECTION_CYCLE		0x02
--#define	SECTION_CONTINUOS	0x04
--#define	SECTION_MODE		0x06
--#define SECTION_IPMPE		0x0C	/* size up to 4k */
--#define SECTION_HIGH_SPEED	0x1C	/* larger buffer */
--#define DATA_PIPING_FLAG	0x20	/* for Data Piping Filter */
+-#define BASE_ODD2         0x18  /* Video DMA 2 registers */
+-#define BASE_EVEN2        0x1C
+-#define PROT_ADDR2        0x20
+-#define PITCH2            0x24
+-#define BASE_PAGE2        0x28  /* Video DMA 2 base page */
+-#define NUM_LINE_BYTE2    0x2C
 -
--#define	PBUFSIZE_NONE 0x0000
--#define	PBUFSIZE_1P   0x0100
--#define	PBUFSIZE_2P   0x0200
--#define	PBUFSIZE_1K   0x0300
--#define	PBUFSIZE_2K   0x0400
--#define	PBUFSIZE_4K   0x0500
--#define	PBUFSIZE_8K   0x0600
--#define PBUFSIZE_16K  0x0700
--#define PBUFSIZE_32K  0x0800
+-#define BASE_ODD3         0x30  /* Video DMA 3 registers */
+-#define BASE_EVEN3        0x34
+-#define PROT_ADDR3        0x38
+-#define PITCH3            0x3C
+-#define BASE_PAGE3        0x40  /* Video DMA 3 base page */
+-#define NUM_LINE_BYTE3    0x44
 -
+-#define PCI_BT_V1         0x48  /* Video/FIFO 1 */
+-#define PCI_BT_V2         0x49  /* Video/FIFO 2 */
+-#define PCI_BT_V3         0x4A  /* Video/FIFO 3 */
+-#define PCI_BT_DEBI       0x4B  /* DEBI */
+-#define PCI_BT_A          0x4C  /* Audio */
 -
--/* firmware command codes */
--enum av7110_osd_command {
--	WCreate,
--	WDestroy,
--	WMoveD,
--	WMoveA,
--	WHide,
--	WTop,
--	DBox,
--	DLine,
--	DText,
--	Set_Font,
--	SetColor,
--	SetBlend,
--	SetWBlend,
--	SetCBlend,
--	SetNonBlend,
--	LoadBmp,
--	BlitBmp,
--	ReleaseBmp,
--	SetWTrans,
--	SetWNoTrans,
--	Set_Palette
--};
+-#define DD1_INIT          0x50  /* Init setting of DD1 interface */
 -
--enum av7110_pid_command {
--	MultiPID,
--	VideoPID,
--	AudioPID,
--	InitFilt,
--	FiltError,
--	NewVersion,
--	CacheError,
--	AddPIDFilter,
--	DelPIDFilter,
--	Scan,
--	SetDescr,
--	SetIR,
--	FlushTSQueue
--};
+-#define DD1_STREAM_B      0x54  /* DD1 B video data stream handling */
+-#define DD1_STREAM_A      0x56  /* DD1 A video data stream handling */
 -
--enum av7110_mpeg_command {
--	SelAudChannels
--};
+-#define BRS_CTRL          0x58  /* BRS control register */
+-#define HPS_CTRL          0x5C  /* HPS control register */
+-#define HPS_V_SCALE       0x60  /* HPS vertical scale */
+-#define HPS_V_GAIN        0x64  /* HPS vertical ACL and gain */
+-#define HPS_H_PRESCALE    0x68  /* HPS horizontal prescale   */
+-#define HPS_H_SCALE       0x6C  /* HPS horizontal scale */
+-#define BCS_CTRL          0x70  /* BCS control */
+-#define CHROMA_KEY_RANGE  0x74
+-#define CLIP_FORMAT_CTRL  0x78  /* HPS outputs formats & clipping */
 -
--enum av7110_audio_command {
--	AudioDAC,
--	CabADAC,
--	ON22K,
--	OFF22K,
--	MainSwitch,
--	ADSwitch,
--	SendDiSEqC,
--	SetRegister,
--	SpdifSwitch
--};
+-#define DEBI_CONFIG       0x7C
+-#define DEBI_COMMAND      0x80
+-#define DEBI_PAGE         0x84
+-#define DEBI_AD           0x88
 -
--enum av7110_request_command {
--	AudioState,
--	AudioBuffState,
--	VideoState1,
--	VideoState2,
--	VideoState3,
--	CrashCounter,
--	ReqVersion,
--	ReqVCXO,
--	ReqRegister,
--	ReqSecFilterError,
--	ReqSTC
--};
+-#define I2C_TRANSFER      0x8C
+-#define I2C_STATUS        0x90
 -
--enum av7110_encoder_command {
--	SetVidMode,
--	SetTestMode,
--	LoadVidCode,
--	SetMonitorType,
--	SetPanScanType,
--	SetFreezeMode,
--	SetWSSConfig
--};
+-#define BASE_A1_IN        0x94	/* Audio 1 input DMA */
+-#define PROT_A1_IN        0x98
+-#define PAGE_A1_IN        0x9C
 -
--enum av7110_rec_play_state {
--	__Record,
--	__Stop,
--	__Play,
--	__Pause,
--	__Slow,
--	__FF_IP,
--	__Scan_I,
--	__Continue
--};
+-#define BASE_A1_OUT       0xA0  /* Audio 1 output DMA */
+-#define PROT_A1_OUT       0xA4
+-#define PAGE_A1_OUT       0xA8
 -
--enum av7110_fw_cmd_misc {
--	AV7110_FW_VIDEO_ZOOM = 1,
--	AV7110_FW_VIDEO_COMMAND,
--	AV7110_FW_AUDIO_COMMAND
--};
+-#define BASE_A2_IN        0xAC  /* Audio 2 input DMA */
+-#define PROT_A2_IN        0xB0
+-#define PAGE_A2_IN        0xB4
 -
--enum av7110_command_type {
--	COMTYPE_NOCOM,
--	COMTYPE_PIDFILTER,
--	COMTYPE_MPEGDECODER,
--	COMTYPE_OSD,
--	COMTYPE_BMP,
--	COMTYPE_ENCODER,
--	COMTYPE_AUDIODAC,
--	COMTYPE_REQUEST,
--	COMTYPE_SYSTEM,
--	COMTYPE_REC_PLAY,
--	COMTYPE_COMMON_IF,
--	COMTYPE_PID_FILTER,
--	COMTYPE_PES,
--	COMTYPE_TS,
--	COMTYPE_VIDEO,
--	COMTYPE_AUDIO,
--	COMTYPE_CI_LL,
--	COMTYPE_MISC = 0x80
--};
+-#define BASE_A2_OUT       0xB8  /* Audio 2 output DMA */
+-#define PROT_A2_OUT       0xBC
+-#define PAGE_A2_OUT       0xC0
 -
--#define VID_NONE_PREF		0x00	/* No aspect ration processing preferred */
--#define VID_PAN_SCAN_PREF	0x01	/* Pan and Scan Display preferred */
--#define VID_VERT_COMP_PREF	0x02	/* Vertical compression display preferred */
--#define VID_VC_AND_PS_PREF	0x03	/* PanScan and vertical Compression if allowed */
--#define VID_CENTRE_CUT_PREF	0x05	/* PanScan with zero vector */
+-#define RPS_PAGE0         0xC4  /* RPS task 0 page register */
+-#define RPS_PAGE1         0xC8  /* RPS task 1 page register */
 -
--/* MPEG video decoder commands */
--#define AV_VIDEO_CMD_STOP	0x000e
--#define AV_VIDEO_CMD_PLAY	0x000d
--#define AV_VIDEO_CMD_FREEZE	0x0102
--#define AV_VIDEO_CMD_FFWD	0x0016
--#define AV_VIDEO_CMD_SLOW	0x0022
+-#define RPS_THRESH0       0xCC  /* HBI threshold for task 0 */
+-#define RPS_THRESH1       0xD0  /* HBI threshold for task 1 */
 -
--/* MPEG audio decoder commands */
--#define AUDIO_CMD_MUTE		0x0001
--#define AUDIO_CMD_UNMUTE	0x0002
--#define AUDIO_CMD_PCM16		0x0010
--#define AUDIO_CMD_STEREO	0x0080
--#define AUDIO_CMD_MONO_L	0x0100
--#define AUDIO_CMD_MONO_R	0x0200
--#define AUDIO_CMD_SYNC_OFF	0x000e
--#define AUDIO_CMD_SYNC_ON	0x000f
+-#define RPS_TOV0          0xD4  /* RPS timeout for task 0 */
+-#define RPS_TOV1          0xD8  /* RPS timeout for task 1 */
 -
--/* firmware data interface codes */
--#define DATA_NONE		 0x00
--#define DATA_FSECTION		 0x01
--#define DATA_IPMPE		 0x02
--#define DATA_MPEG_RECORD	 0x03
--#define DATA_DEBUG_MESSAGE	 0x04
--#define DATA_COMMON_INTERFACE	 0x05
--#define DATA_MPEG_PLAY		 0x06
--#define DATA_BMP_LOAD		 0x07
--#define DATA_IRCOMMAND		 0x08
--#define DATA_PIPING		 0x09
--#define DATA_STREAMING		 0x0a
--#define DATA_CI_GET		 0x0b
--#define DATA_CI_PUT		 0x0c
--#define DATA_MPEG_VIDEO_EVENT	 0x0d
+-#define IER               0xDC  /* Interrupt enable register */
 -
--#define DATA_PES_RECORD		 0x10
--#define DATA_PES_PLAY		 0x11
--#define DATA_TS_RECORD		 0x12
--#define DATA_TS_PLAY		 0x13
+-#define GPIO_CTRL         0xE0  /* GPIO 0-3 register */
 -
--/* ancient CI command codes, only two are actually still used
-- * by the link level CI firmware */
--#define CI_CMD_ERROR		 0x00
--#define CI_CMD_ACK		 0x01
--#define CI_CMD_SYSTEM_READY	 0x02
--#define CI_CMD_KEYPRESS		 0x03
--#define CI_CMD_ON_TUNED		 0x04
--#define CI_CMD_ON_SWITCH_PROGRAM 0x05
--#define CI_CMD_SECTION_ARRIVED	 0x06
--#define CI_CMD_SECTION_TIMEOUT	 0x07
--#define CI_CMD_TIME		 0x08
--#define CI_CMD_ENTER_MENU	 0x09
--#define CI_CMD_FAST_PSI		 0x0a
--#define CI_CMD_GET_SLOT_INFO	 0x0b
+-#define EC1SSR            0xE4  /* Event cnt set 1 source select */
+-#define EC2SSR            0xE8  /* Event cnt set 2 source select */
+-#define ECT1R             0xEC  /* Event cnt set 1 thresholds */
+-#define ECT2R             0xF0  /* Event cnt set 2 thresholds */
 -
--#define CI_MSG_NONE		 0x00
--#define CI_MSG_CI_INFO		 0x01
--#define CI_MSG_MENU		 0x02
--#define CI_MSG_LIST		 0x03
--#define CI_MSG_TEXT		 0x04
--#define CI_MSG_REQUEST_INPUT	 0x05
--#define CI_MSG_INPUT_COMPLETE	 0x06
--#define CI_MSG_LIST_MORE	 0x07
--#define CI_MSG_MENU_MORE	 0x08
--#define CI_MSG_CLOSE_MMI_IMM	 0x09
--#define CI_MSG_SECTION_REQUEST	 0x0a
--#define CI_MSG_CLOSE_FILTER	 0x0b
--#define CI_PSI_COMPLETE		 0x0c
--#define CI_MODULE_READY		 0x0d
--#define CI_SWITCH_PRG_REPLY	 0x0e
--#define CI_MSG_TEXT_MORE	 0x0f
+-#define ACON1             0xF4
+-#define ACON2             0xF8
 -
--#define CI_MSG_CA_PMT		 0xe0
--#define CI_MSG_ERROR		 0xf0
+-#define MC1               0xFC   /* Main control register 1 */
+-#define MC2               0x100  /* Main control register 2  */
 -
+-#define RPS_ADDR0         0x104  /* RPS task 0 address register */
+-#define RPS_ADDR1         0x108  /* RPS task 1 address register */
 -
--/* base address of the dual ported RAM which serves as communication
-- * area between PCI bus and av7110,
-- * as seen by the DEBI bus of the saa7146 */
--#define	DPRAM_BASE 0x4000
+-#define ISR               0x10C  /* Interrupt status register */
+-#define PSR               0x110  /* Primary status register */
+-#define SSR               0x114  /* Secondary status register */
 -
--/* boot protocol area */
--#define AV7110_BOOT_STATE	(DPRAM_BASE + 0x3F8)
--#define AV7110_BOOT_SIZE	(DPRAM_BASE + 0x3FA)
--#define AV7110_BOOT_BASE	(DPRAM_BASE + 0x3FC)
--#define AV7110_BOOT_BLOCK	(DPRAM_BASE + 0x400)
--#define AV7110_BOOT_MAX_SIZE	0xc00
+-#define EC1R              0x118  /* Event counter set 1 register */
+-#define EC2R              0x11C  /* Event counter set 2 register */
 -
--/* firmware command protocol area */
--#define IRQ_STATE	(DPRAM_BASE + 0x0F4)
--#define IRQ_STATE_EXT	(DPRAM_BASE + 0x0F6)
--#define MSGSTATE	(DPRAM_BASE + 0x0F8)
--#define COMMAND		(DPRAM_BASE + 0x0FC)
--#define COM_BUFF	(DPRAM_BASE + 0x100)
--#define COM_BUFF_SIZE	0x20
+-#define PCI_VDP1          0x120  /* Video DMA pointer of FIFO 1 */
+-#define PCI_VDP2          0x124  /* Video DMA pointer of FIFO 2 */
+-#define PCI_VDP3          0x128  /* Video DMA pointer of FIFO 3 */
+-#define PCI_ADP1          0x12C  /* Audio DMA pointer of audio out 1 */
+-#define PCI_ADP2          0x130  /* Audio DMA pointer of audio in 1 */
+-#define PCI_ADP3          0x134  /* Audio DMA pointer of audio out 2 */
+-#define PCI_ADP4          0x138  /* Audio DMA pointer of audio in 2 */
+-#define PCI_DMA_DDP       0x13C  /* DEBI DMA pointer */
 -
--/* various data buffers */
--#define BUFF1_BASE	(DPRAM_BASE + 0x120)
--#define BUFF1_SIZE	0xE0
+-#define LEVEL_REP         0x140,
+-#define A_TIME_SLOT1      0x180,  /* from 180 - 1BC */
+-#define A_TIME_SLOT2      0x1C0,  /* from 1C0 - 1FC */
 -
--#define DATA_BUFF0_BASE	(DPRAM_BASE + 0x200)
--#define DATA_BUFF0_SIZE	0x0800
+-/* isr masks */
+-#define SPCI_PPEF       0x80000000  /* PCI parity error */
+-#define SPCI_PABO       0x40000000  /* PCI access error (target or master abort) */
+-#define SPCI_PPED       0x20000000  /* PCI parity error on 'real time data' */
+-#define SPCI_RPS_I1     0x10000000  /* Interrupt issued by RPS1 */
+-#define SPCI_RPS_I0     0x08000000  /* Interrupt issued by RPS0 */
+-#define SPCI_RPS_LATE1  0x04000000  /* RPS task 1 is late */
+-#define SPCI_RPS_LATE0  0x02000000  /* RPS task 0 is late */
+-#define SPCI_RPS_E1     0x01000000  /* RPS error from task 1 */
+-#define SPCI_RPS_E0     0x00800000  /* RPS error from task 0 */
+-#define SPCI_RPS_TO1    0x00400000  /* RPS timeout task 1 */
+-#define SPCI_RPS_TO0    0x00200000  /* RPS timeout task 0 */
+-#define SPCI_UPLD       0x00100000  /* RPS in upload */
+-#define SPCI_DEBI_S     0x00080000  /* DEBI status */
+-#define SPCI_DEBI_E     0x00040000  /* DEBI error */
+-#define SPCI_IIC_S      0x00020000  /* I2C status */
+-#define SPCI_IIC_E      0x00010000  /* I2C error */
+-#define SPCI_A2_IN      0x00008000  /* Audio 2 input DMA protection / limit */
+-#define SPCI_A2_OUT     0x00004000  /* Audio 2 output DMA protection / limit */
+-#define SPCI_A1_IN      0x00002000  /* Audio 1 input DMA protection / limit */
+-#define SPCI_A1_OUT     0x00001000  /* Audio 1 output DMA protection / limit */
+-#define SPCI_AFOU       0x00000800  /* Audio FIFO over- / underflow */
+-#define SPCI_V_PE       0x00000400  /* Video protection address */
+-#define SPCI_VFOU       0x00000200  /* Video FIFO over- / underflow */
+-#define SPCI_FIDA       0x00000100  /* Field ID video port A */
+-#define SPCI_FIDB       0x00000080  /* Field ID video port B */
+-#define SPCI_PIN3       0x00000040  /* GPIO pin 3 */
+-#define SPCI_PIN2       0x00000020  /* GPIO pin 2 */
+-#define SPCI_PIN1       0x00000010  /* GPIO pin 1 */
+-#define SPCI_PIN0       0x00000008  /* GPIO pin 0 */
+-#define SPCI_ECS        0x00000004  /* Event counter 1, 2, 4, 5 */
+-#define SPCI_EC3S       0x00000002  /* Event counter 3 */
+-#define SPCI_EC0S       0x00000001  /* Event counter 0 */
 -
--#define DATA_BUFF1_BASE	(DATA_BUFF0_BASE+DATA_BUFF0_SIZE)
--#define DATA_BUFF1_SIZE	0x0800
+-/* i2c */
+-#define	SAA7146_I2C_ABORT	(1<<7)
+-#define	SAA7146_I2C_SPERR	(1<<6)
+-#define	SAA7146_I2C_APERR	(1<<5)
+-#define	SAA7146_I2C_DTERR	(1<<4)
+-#define	SAA7146_I2C_DRERR	(1<<3)
+-#define	SAA7146_I2C_AL		(1<<2)
+-#define	SAA7146_I2C_ERR		(1<<1)
+-#define	SAA7146_I2C_BUSY	(1<<0)
 -
--#define DATA_BUFF2_BASE	(DATA_BUFF1_BASE+DATA_BUFF1_SIZE)
--#define DATA_BUFF2_SIZE	0x0800
+-#define	SAA7146_I2C_START	(0x3)
+-#define	SAA7146_I2C_CONT	(0x2)
+-#define	SAA7146_I2C_STOP	(0x1)
+-#define	SAA7146_I2C_NOP		(0x0)
 -
--#define DATA_BUFF3_BASE (DATA_BUFF2_BASE+DATA_BUFF2_SIZE)
--#define DATA_BUFF3_SIZE 0x0400
+-#define SAA7146_I2C_BUS_BIT_RATE_6400	(0x500)
+-#define SAA7146_I2C_BUS_BIT_RATE_3200	(0x100)
+-#define SAA7146_I2C_BUS_BIT_RATE_480	(0x400)
+-#define SAA7146_I2C_BUS_BIT_RATE_320	(0x600)
+-#define SAA7146_I2C_BUS_BIT_RATE_240	(0x700)
+-#define SAA7146_I2C_BUS_BIT_RATE_120	(0x000)
+-#define SAA7146_I2C_BUS_BIT_RATE_80	(0x200)
+-#define SAA7146_I2C_BUS_BIT_RATE_60	(0x300)
 -
--#define Reserved	(DPRAM_BASE + 0x1E00)
--#define Reserved_SIZE	0x1C0
--
--
--/* firmware status area */
--#define STATUS_BASE	(DPRAM_BASE + 0x1FC0)
--#define STATUS_LOOPS	(STATUS_BASE + 0x08)
--
--#define STATUS_MPEG_WIDTH     (STATUS_BASE + 0x0C)
--/* ((aspect_ratio & 0xf) << 12) | (height & 0xfff) */
--#define STATUS_MPEG_HEIGHT_AR (STATUS_BASE + 0x0E)
--
--/* firmware data protocol area */
--#define RX_TYPE		(DPRAM_BASE + 0x1FE8)
--#define RX_LEN		(DPRAM_BASE + 0x1FEA)
--#define TX_TYPE		(DPRAM_BASE + 0x1FEC)
--#define TX_LEN		(DPRAM_BASE + 0x1FEE)
--
--#define RX_BUFF		(DPRAM_BASE + 0x1FF4)
--#define TX_BUFF		(DPRAM_BASE + 0x1FF6)
--
--#define HANDSHAKE_REG	(DPRAM_BASE + 0x1FF8)
--#define COM_IF_LOCK	(DPRAM_BASE + 0x1FFA)
--
--#define IRQ_RX		(DPRAM_BASE + 0x1FFC)
--#define IRQ_TX		(DPRAM_BASE + 0x1FFE)
--
--/* used by boot protocol to load firmware into av7110 DRAM */
--#define DRAM_START_CODE		0x2e000404
--#define DRAM_MAX_CODE_SIZE	0x00100000
--
--/* saa7146 gpio lines */
--#define RESET_LINE		2
--#define DEBI_DONE_LINE		1
--#define ARM_IRQ_LINE		0
--
--
--
--extern int av7110_bootarm(struct av7110 *av7110);
--extern int av7110_firmversion(struct av7110 *av7110);
--#define FW_CI_LL_SUPPORT(arm_app) ((arm_app) & 0x80000000)
--#define FW_4M_SDRAM(arm_app)      ((arm_app) & 0x40000000)
--#define FW_VERSION(arm_app)	  ((arm_app) & 0x0000FFFF)
--
--extern int av7110_wait_msgstate(struct av7110 *av7110, u16 flags);
--extern int av7110_fw_cmd(struct av7110 *av7110, int type, int com, int num, ...);
--extern int av7110_fw_request(struct av7110 *av7110, u16 *request_buf,
--			     int request_buf_len, u16 *reply_buf, int reply_buf_len);
--
--
--/* DEBI (saa7146 data extension bus interface) access */
--extern int av7110_debiwrite(struct av7110 *av7110, u32 config,
--			    int addr, u32 val, unsigned int count);
--extern u32 av7110_debiread(struct av7110 *av7110, u32 config,
--			   int addr, unsigned int count);
--
--
--/* DEBI during interrupt */
--/* single word writes */
--static inline void iwdebi(struct av7110 *av7110, u32 config, int addr, u32 val, unsigned int count)
--{
--	av7110_debiwrite(av7110, config, addr, val, count);
--}
--
--/* buffer writes */
--static inline void mwdebi(struct av7110 *av7110, u32 config, int addr,
--			  const u8 *val, int count)
--{
--	memcpy(av7110->debi_virt, val, count);
--	av7110_debiwrite(av7110, config, addr, 0, count);
--}
--
--static inline u32 irdebi(struct av7110 *av7110, u32 config, int addr, u32 val, unsigned int count)
--{
--	u32 res;
--
--	res=av7110_debiread(av7110, config, addr, count);
--	if (count<=4)
--		memcpy(av7110->debi_virt, (char *) &res, count);
--	return res;
--}
--
--/* DEBI outside interrupts, only for count <= 4! */
--static inline void wdebi(struct av7110 *av7110, u32 config, int addr, u32 val, unsigned int count)
+-static inline void SAA7146_IER_DISABLE(struct saa7146_dev *x, unsigned y)
 -{
 -	unsigned long flags;
--
--	spin_lock_irqsave(&av7110->debilock, flags);
--	av7110_debiwrite(av7110, config, addr, val, count);
--	spin_unlock_irqrestore(&av7110->debilock, flags);
+-	spin_lock_irqsave(&x->int_slock, flags);
+-	saa7146_write(x, IER, saa7146_read(x, IER) & ~y);
+-	spin_unlock_irqrestore(&x->int_slock, flags);
 -}
 -
--static inline u32 rdebi(struct av7110 *av7110, u32 config, int addr, u32 val, unsigned int count)
+-static inline void SAA7146_IER_ENABLE(struct saa7146_dev *x, unsigned y)
 -{
 -	unsigned long flags;
--	u32 res;
--
--	spin_lock_irqsave(&av7110->debilock, flags);
--	res=av7110_debiread(av7110, config, addr, count);
--	spin_unlock_irqrestore(&av7110->debilock, flags);
--	return res;
+-	spin_lock_irqsave(&x->int_slock, flags);
+-	saa7146_write(x, IER, saa7146_read(x, IER) | y);
+-	spin_unlock_irqrestore(&x->int_slock, flags);
 -}
--
--/* handle mailbox registers of the dual ported RAM */
--static inline void ARM_ResetMailBox(struct av7110 *av7110)
--{
--	unsigned long flags;
--
--	spin_lock_irqsave(&av7110->debilock, flags);
--	av7110_debiread(av7110, DEBINOSWAP, IRQ_RX, 2);
--	av7110_debiwrite(av7110, DEBINOSWAP, IRQ_RX, 0, 2);
--	spin_unlock_irqrestore(&av7110->debilock, flags);
--}
--
--static inline void ARM_ClearMailBox(struct av7110 *av7110)
--{
--	iwdebi(av7110, DEBINOSWAP, IRQ_RX, 0, 2);
--}
--
--static inline void ARM_ClearIrq(struct av7110 *av7110)
--{
--	irdebi(av7110, DEBINOSWAP, IRQ_RX, 0, 2);
--}
--
--/****************************************************************************
-- * Firmware commands
-- ****************************************************************************/
--
--static inline int SendDAC(struct av7110 *av7110, u8 addr, u8 data)
--{
--	return av7110_fw_cmd(av7110, COMTYPE_AUDIODAC, AudioDAC, 2, addr, data);
--}
--
--static inline int av7710_set_video_mode(struct av7110 *av7110, int mode)
--{
--	return av7110_fw_cmd(av7110, COMTYPE_ENCODER, SetVidMode, 1, mode);
--}
--
--static inline int vidcom(struct av7110 *av7110, u32 com, u32 arg)
--{
--	return av7110_fw_cmd(av7110, COMTYPE_MISC, AV7110_FW_VIDEO_COMMAND, 4,
--			     (com>>16), (com&0xffff),
--			     (arg>>16), (arg&0xffff));
--}
--
--static inline int audcom(struct av7110 *av7110, u32 com)
--{
--	return av7110_fw_cmd(av7110, COMTYPE_MISC, AV7110_FW_AUDIO_COMMAND, 2,
--			     (com>>16), (com&0xffff));
--}
--
--static inline int Set22K(struct av7110 *av7110, int state)
--{
--	return av7110_fw_cmd(av7110, COMTYPE_AUDIODAC, (state ? ON22K : OFF22K), 0);
--}
--
--
--extern int av7110_diseqc_send(struct av7110 *av7110, int len, u8 *msg, unsigned long burst);
--
--
--#ifdef CONFIG_DVB_AV7110_OSD
--extern int av7110_osd_cmd(struct av7110 *av7110, osd_cmd_t *dc);
--extern int av7110_osd_capability(struct av7110 *av7110, osd_cap_t *cap);
--#endif /* CONFIG_DVB_AV7110_OSD */
--
--
--
--#endif /* _AV7110_HW_H_ */
-diff --git a/drivers/staging/media/deprecated/saa7146/av7110/av7110_ipack.c b/drivers/staging/media/deprecated/saa7146/av7110/av7110_ipack.c
-deleted file mode 100644
-index 30330ed01ce8..000000000000
---- a/drivers/staging/media/deprecated/saa7146/av7110/av7110_ipack.c
-+++ /dev/null
-@@ -1,404 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--#include "dvb_filter.h"
--#include "av7110_ipack.h"
--#include <linux/string.h>	/* for memcpy() */
--#include <linux/vmalloc.h>
--
--
--void av7110_ipack_reset(struct ipack *p)
--{
--	p->found = 0;
--	p->cid = 0;
--	p->plength = 0;
--	p->flag1 = 0;
--	p->flag2 = 0;
--	p->hlength = 0;
--	p->mpeg = 0;
--	p->check = 0;
--	p->which = 0;
--	p->done = 0;
--	p->count = 0;
--}
--
--
--int av7110_ipack_init(struct ipack *p, int size,
--		      void (*func)(u8 *buf, int size, void *priv))
--{
--	if (!(p->buf = vmalloc(size))) {
--		printk(KERN_WARNING "Couldn't allocate memory for ipack\n");
--		return -ENOMEM;
--	}
--	p->size = size;
--	p->func = func;
--	p->repack_subids = 0;
--	av7110_ipack_reset(p);
--	return 0;
--}
--
--
--void av7110_ipack_free(struct ipack *p)
--{
--	vfree(p->buf);
--}
--
--
--static void send_ipack(struct ipack *p)
--{
--	int off;
--	struct dvb_audio_info ai;
--	int ac3_off = 0;
--	int streamid = 0;
--	int nframes = 0;
--	int f = 0;
--
--	switch (p->mpeg) {
--	case 2:
--		if (p->count < 10)
--			return;
--		p->buf[3] = p->cid;
--		p->buf[4] = (u8)(((p->count - 6) & 0xff00) >> 8);
--		p->buf[5] = (u8)((p->count - 6) & 0x00ff);
--		if (p->repack_subids && p->cid == PRIVATE_STREAM1) {
--			off = 9 + p->buf[8];
--			streamid = p->buf[off];
--			if ((streamid & 0xf8) == 0x80) {
--				ai.off = 0;
--				ac3_off = ((p->buf[off + 2] << 8)|
--					   p->buf[off + 3]);
--				if (ac3_off < p->count)
--					f = dvb_filter_get_ac3info(p->buf + off + 3 + ac3_off,
--								   p->count - ac3_off, &ai, 0);
--				if (!f) {
--					nframes = (p->count - off - 3 - ac3_off) /
--						ai.framesize + 1;
--					p->buf[off + 2] = (ac3_off >> 8) & 0xff;
--					p->buf[off + 3] = (ac3_off) & 0xff;
--					p->buf[off + 1] = nframes;
--					ac3_off +=  nframes * ai.framesize - p->count;
--				}
--			}
--		}
--		p->func(p->buf, p->count, p->data);
--
--		p->buf[6] = 0x80;
--		p->buf[7] = 0x00;
--		p->buf[8] = 0x00;
--		p->count = 9;
--		if (p->repack_subids && p->cid == PRIVATE_STREAM1
--		    && (streamid & 0xf8) == 0x80) {
--			p->count += 4;
--			p->buf[9] = streamid;
--			p->buf[10] = (ac3_off >> 8) & 0xff;
--			p->buf[11] = (ac3_off) & 0xff;
--			p->buf[12] = 0;
--		}
--		break;
--
--	case 1:
--		if (p->count < 8)
--			return;
--		p->buf[3] = p->cid;
--		p->buf[4] = (u8)(((p->count - 6) & 0xff00) >> 8);
--		p->buf[5] = (u8)((p->count - 6) & 0x00ff);
--		p->func(p->buf, p->count, p->data);
--
--		p->buf[6] = 0x0f;
--		p->count = 7;
--		break;
--	}
--}
--
--
--void av7110_ipack_flush(struct ipack *p)
--{
--	if (p->plength != MMAX_PLENGTH - 6 || p->found <= 6)
--		return;
--	p->plength = p->found - 6;
--	p->found = 0;
--	send_ipack(p);
--	av7110_ipack_reset(p);
--}
--
--
--static void write_ipack(struct ipack *p, const u8 *data, int count)
--{
--	u8 headr[3] = { 0x00, 0x00, 0x01 };
--
--	if (p->count < 6) {
--		memcpy(p->buf, headr, 3);
--		p->count = 6;
--	}
--
--	if (p->count + count < p->size){
--		memcpy(p->buf+p->count, data, count);
--		p->count += count;
--	} else {
--		int rest = p->size - p->count;
--		memcpy(p->buf+p->count, data, rest);
--		p->count += rest;
--		send_ipack(p);
--		if (count - rest > 0)
--			write_ipack(p, data + rest, count - rest);
--	}
--}
--
--
--int av7110_ipack_instant_repack (const u8 *buf, int count, struct ipack *p)
--{
--	int l;
--	int c = 0;
--
--	while (c < count && (p->mpeg == 0 ||
--			     (p->mpeg == 1 && p->found < 7) ||
--			     (p->mpeg == 2 && p->found < 9))
--	       &&  (p->found < 5 || !p->done)) {
--		switch (p->found) {
--		case 0:
--		case 1:
--			if (buf[c] == 0x00)
--				p->found++;
--			else
--				p->found = 0;
--			c++;
--			break;
--		case 2:
--			if (buf[c] == 0x01)
--				p->found++;
--			else if (buf[c] == 0)
--				p->found = 2;
--			else
--				p->found = 0;
--			c++;
--			break;
--		case 3:
--			p->cid = 0;
--			switch (buf[c]) {
--			case PROG_STREAM_MAP:
--			case PRIVATE_STREAM2:
--			case PROG_STREAM_DIR:
--			case ECM_STREAM     :
--			case EMM_STREAM     :
--			case PADDING_STREAM :
--			case DSM_CC_STREAM  :
--			case ISO13522_STREAM:
--				p->done = 1;
--				fallthrough;
--			case PRIVATE_STREAM1:
--			case VIDEO_STREAM_S ... VIDEO_STREAM_E:
--			case AUDIO_STREAM_S ... AUDIO_STREAM_E:
--				p->found++;
--				p->cid = buf[c];
--				c++;
--				break;
--			default:
--				p->found = 0;
--				break;
--			}
--			break;
--
--		case 4:
--			if (count-c > 1) {
--				p->plen[0] = buf[c];
--				c++;
--				p->plen[1] = buf[c];
--				c++;
--				p->found += 2;
--				p->plength = (p->plen[0] << 8) | p->plen[1];
--			} else {
--				p->plen[0] = buf[c];
--				p->found++;
--				return count;
--			}
--			break;
--		case 5:
--			p->plen[1] = buf[c];
--			c++;
--			p->found++;
--			p->plength = (p->plen[0] << 8) | p->plen[1];
--			break;
--		case 6:
--			if (!p->done) {
--				p->flag1 = buf[c];
--				c++;
--				p->found++;
--				if ((p->flag1 & 0xc0) == 0x80)
--					p->mpeg = 2;
--				else {
--					p->hlength = 0;
--					p->which = 0;
--					p->mpeg = 1;
--					p->flag2 = 0;
--				}
--			}
--			break;
--
--		case 7:
--			if (!p->done && p->mpeg == 2) {
--				p->flag2 = buf[c];
--				c++;
--				p->found++;
--			}
--			break;
--
--		case 8:
--			if (!p->done && p->mpeg == 2) {
--				p->hlength = buf[c];
--				c++;
--				p->found++;
--			}
--			break;
--		}
--	}
--
--	if (c == count)
--		return count;
--
--	if (!p->plength)
--		p->plength = MMAX_PLENGTH - 6;
--
--	if (p->done || ((p->mpeg == 2 && p->found >= 9) ||
--			(p->mpeg == 1 && p->found >= 7))) {
--		switch (p->cid) {
--		case AUDIO_STREAM_S ... AUDIO_STREAM_E:
--		case VIDEO_STREAM_S ... VIDEO_STREAM_E:
--		case PRIVATE_STREAM1:
--			if (p->mpeg == 2 && p->found == 9) {
--				write_ipack(p, &p->flag1, 1);
--				write_ipack(p, &p->flag2, 1);
--				write_ipack(p, &p->hlength, 1);
--			}
--
--			if (p->mpeg == 1 && p->found == 7)
--				write_ipack(p, &p->flag1, 1);
--
--			if (p->mpeg == 2 && (p->flag2 & PTS_ONLY) &&
--			    p->found < 14) {
--				while (c < count && p->found < 14) {
--					p->pts[p->found - 9] = buf[c];
--					write_ipack(p, buf + c, 1);
--					c++;
--					p->found++;
--				}
--				if (c == count)
--					return count;
--			}
--
--			if (p->mpeg == 1 && p->which < 2000) {
--
--				if (p->found == 7) {
--					p->check = p->flag1;
--					p->hlength = 1;
--				}
--
--				while (!p->which && c < count &&
--				       p->check == 0xff){
--					p->check = buf[c];
--					write_ipack(p, buf + c, 1);
--					c++;
--					p->found++;
--					p->hlength++;
--				}
--
--				if (c == count)
--					return count;
--
--				if ((p->check & 0xc0) == 0x40 && !p->which) {
--					p->check = buf[c];
--					write_ipack(p, buf + c, 1);
--					c++;
--					p->found++;
--					p->hlength++;
--
--					p->which = 1;
--					if (c == count)
--						return count;
--					p->check = buf[c];
--					write_ipack(p, buf + c, 1);
--					c++;
--					p->found++;
--					p->hlength++;
--					p->which = 2;
--					if (c == count)
--						return count;
--				}
--
--				if (p->which == 1) {
--					p->check = buf[c];
--					write_ipack(p, buf + c, 1);
--					c++;
--					p->found++;
--					p->hlength++;
--					p->which = 2;
--					if (c == count)
--						return count;
--				}
--
--				if ((p->check & 0x30) && p->check != 0xff) {
--					p->flag2 = (p->check & 0xf0) << 2;
--					p->pts[0] = p->check;
--					p->which = 3;
--				}
--
--				if (c == count)
--					return count;
--				if (p->which > 2){
--					if ((p->flag2 & PTS_DTS_FLAGS) == PTS_ONLY) {
--						while (c < count && p->which < 7) {
--							p->pts[p->which - 2] = buf[c];
--							write_ipack(p, buf + c, 1);
--							c++;
--							p->found++;
--							p->which++;
--							p->hlength++;
--						}
--						if (c == count)
--							return count;
--					} else if ((p->flag2 & PTS_DTS_FLAGS) == PTS_DTS) {
--						while (c < count && p->which < 12) {
--							if (p->which < 7)
--								p->pts[p->which - 2] = buf[c];
--							write_ipack(p, buf + c, 1);
--							c++;
--							p->found++;
--							p->which++;
--							p->hlength++;
--						}
--						if (c == count)
--							return count;
--					}
--					p->which = 2000;
--				}
--
--			}
--
--			while (c < count && p->found < p->plength + 6) {
--				l = count - c;
--				if (l + p->found > p->plength + 6)
--					l = p->plength + 6 - p->found;
--				write_ipack(p, buf + c, l);
--				p->found += l;
--				c += l;
--			}
--			break;
--		}
--
--
--		if (p->done) {
--			if (p->found + count - c < p->plength + 6) {
--				p->found += count - c;
--				c = count;
--			} else {
--				c += p->plength + 6 - p->found;
--				p->found = p->plength + 6;
--			}
--		}
--
--		if (p->plength && p->found == p->plength + 6) {
--			send_ipack(p);
--			av7110_ipack_reset(p);
--			if (c < count)
--				av7110_ipack_instant_repack(buf + c, count - c, p);
--		}
--	}
--	return count;
--}
-diff --git a/drivers/staging/media/deprecated/saa7146/av7110/av7110_ipack.h b/drivers/staging/media/deprecated/saa7146/av7110/av7110_ipack.h
-deleted file mode 100644
-index 943ec899bb93..000000000000
---- a/drivers/staging/media/deprecated/saa7146/av7110/av7110_ipack.h
-+++ /dev/null
-@@ -1,13 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _AV7110_IPACK_H_
--#define _AV7110_IPACK_H_
--
--extern int av7110_ipack_init(struct ipack *p, int size,
--			     void (*func)(u8 *buf,  int size, void *priv));
--
--extern void av7110_ipack_reset(struct ipack *p);
--extern int  av7110_ipack_instant_repack(const u8 *buf, int count, struct ipack *p);
--extern void av7110_ipack_free(struct ipack * p);
--extern void av7110_ipack_flush(struct ipack *p);
 -
 -#endif
-diff --git a/drivers/staging/media/deprecated/saa7146/av7110/av7110_ir.c b/drivers/staging/media/deprecated/saa7146/av7110/av7110_ir.c
+diff --git a/drivers/staging/media/deprecated/saa7146/common/saa7146_core.c b/drivers/staging/media/deprecated/saa7146/common/saa7146_core.c
 deleted file mode 100644
-index a851ba328e4a..000000000000
---- a/drivers/staging/media/deprecated/saa7146/av7110/av7110_ir.c
+index da21d346b870..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/common/saa7146_core.c
 +++ /dev/null
-@@ -1,158 +0,0 @@
+@@ -1,578 +0,0 @@
 -// SPDX-License-Identifier: GPL-2.0-or-later
 -/*
-- * Driver for the remote control of SAA7146 based AV7110 cards
-- *
-- * Copyright (C) 1999-2003 Holger Waechtler <holger@convergence.de>
-- * Copyright (C) 2003-2007 Oliver Endriss <o.endriss@gmx.de>
-- * Copyright (C) 2019 Sean Young <sean@mess.org>
-- */
+-    saa7146.o - driver for generic saa7146-based hardware
 -
--#include <linux/kernel.h>
--#include <media/rc-core.h>
+-    Copyright (C) 1998-2003 Michael Hunold <michael@mihu.de>
 -
--#include "av7110.h"
--#include "av7110_hw.h"
--
--#define IR_RC5		0
--#define IR_RCMM		1
--#define IR_RC5_EXT	2 /* internal only */
--
--/* interrupt handler */
--void av7110_ir_handler(struct av7110 *av7110, u32 ircom)
--{
--	struct rc_dev *rcdev = av7110->ir.rcdev;
--	enum rc_proto proto;
--	u32 command, addr, scancode;
--	u32 toggle;
--
--	dprintk(4, "ir command = %08x\n", ircom);
--
--	if (rcdev) {
--		switch (av7110->ir.ir_config) {
--		case IR_RC5: /* RC5: 5 bits device address, 6 bits command */
--			command = ircom & 0x3f;
--			addr = (ircom >> 6) & 0x1f;
--			scancode = RC_SCANCODE_RC5(addr, command);
--			toggle = ircom & 0x0800;
--			proto = RC_PROTO_RC5;
--			break;
--
--		case IR_RCMM: /* RCMM: 32 bits scancode */
--			scancode = ircom & ~0x8000;
--			toggle = ircom & 0x8000;
--			proto = RC_PROTO_RCMM32;
--			break;
--
--		case IR_RC5_EXT:
--			/*
--			 * extended RC5: 5 bits device address, 7 bits command
--			 *
--			 * Extended RC5 uses only one start bit. The second
--			 * start bit is re-assigned bit 6 of the command bit.
--			 */
--			command = ircom & 0x3f;
--			addr = (ircom >> 6) & 0x1f;
--			if (!(ircom & 0x1000))
--				command |= 0x40;
--			scancode = RC_SCANCODE_RC5(addr, command);
--			toggle = ircom & 0x0800;
--			proto = RC_PROTO_RC5;
--			break;
--		default:
--			dprintk(2, "unknown ir config %d\n",
--				av7110->ir.ir_config);
--			return;
--		}
--
--		rc_keydown(rcdev, proto, scancode, toggle != 0);
--	}
--}
--
--int av7110_set_ir_config(struct av7110 *av7110)
--{
--	dprintk(4, "ir config = %08x\n", av7110->ir.ir_config);
--
--	return av7110_fw_cmd(av7110, COMTYPE_PIDFILTER, SetIR, 1,
--			     av7110->ir.ir_config);
--}
--
--static int change_protocol(struct rc_dev *rcdev, u64 *rc_type)
--{
--	struct av7110 *av7110 = rcdev->priv;
--	u32 ir_config;
--
--	if (*rc_type & RC_PROTO_BIT_RCMM32) {
--		ir_config = IR_RCMM;
--		*rc_type = RC_PROTO_BIT_RCMM32;
--	} else if (*rc_type & RC_PROTO_BIT_RC5) {
--		if (FW_VERSION(av7110->arm_app) >= 0x2620)
--			ir_config = IR_RC5_EXT;
--		else
--			ir_config = IR_RC5;
--		*rc_type = RC_PROTO_BIT_RC5;
--	} else {
--		return -EINVAL;
--	}
--
--	if (ir_config == av7110->ir.ir_config)
--		return 0;
--
--	av7110->ir.ir_config = ir_config;
--
--	return av7110_set_ir_config(av7110);
--}
--
--int av7110_ir_init(struct av7110 *av7110)
--{
--	struct rc_dev *rcdev;
--	struct pci_dev *pci;
--	int ret;
--
--	rcdev = rc_allocate_device(RC_DRIVER_SCANCODE);
--	if (!rcdev)
--		return -ENOMEM;
--
--	pci = av7110->dev->pci;
--
--	snprintf(av7110->ir.input_phys, sizeof(av7110->ir.input_phys),
--		 "pci-%s/ir0", pci_name(pci));
--
--	rcdev->device_name = av7110->card_name;
--	rcdev->driver_name = KBUILD_MODNAME;
--	rcdev->input_phys = av7110->ir.input_phys;
--	rcdev->input_id.bustype = BUS_PCI;
--	rcdev->input_id.version = 2;
--	if (pci->subsystem_vendor) {
--		rcdev->input_id.vendor	= pci->subsystem_vendor;
--		rcdev->input_id.product = pci->subsystem_device;
--	} else {
--		rcdev->input_id.vendor	= pci->vendor;
--		rcdev->input_id.product = pci->device;
--	}
--
--	rcdev->dev.parent = &pci->dev;
--	rcdev->allowed_protocols = RC_PROTO_BIT_RC5 | RC_PROTO_BIT_RCMM32;
--	rcdev->change_protocol = change_protocol;
--	rcdev->map_name = RC_MAP_HAUPPAUGE;
--	rcdev->priv = av7110;
--
--	av7110->ir.rcdev = rcdev;
--	av7110->ir.ir_config = IR_RC5;
--	av7110_set_ir_config(av7110);
--
--	ret = rc_register_device(rcdev);
--	if (ret) {
--		av7110->ir.rcdev = NULL;
--		rc_free_device(rcdev);
--	}
--
--	return ret;
--}
--
--void av7110_ir_exit(struct av7110 *av7110)
--{
--	rc_unregister_device(av7110->ir.rcdev);
--}
--
--//MODULE_AUTHOR("Holger Waechtler <holger@convergence.de>, Oliver Endriss <o.endriss@gmx.de>");
--//MODULE_LICENSE("GPL");
-diff --git a/drivers/staging/media/deprecated/saa7146/av7110/av7110_v4l.c b/drivers/staging/media/deprecated/saa7146/av7110/av7110_v4l.c
-deleted file mode 100644
-index c89f536f699c..000000000000
---- a/drivers/staging/media/deprecated/saa7146/av7110/av7110_v4l.c
-+++ /dev/null
-@@ -1,952 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * av7110_v4l.c: av7110 video4linux interface for DVB and Siemens DVB-C analog module
-- *
-- * Copyright (C) 1999-2002 Ralph  Metzler
-- *                       & Marcus Metzler for convergence integrated media GmbH
-- *
-- * originally based on code by:
-- * Copyright (C) 1998,1999 Christian Theiss <mistert@rz.fh-augsburg.de>
-- *
-- * the project's page is at https://linuxtv.org
-- */
+-*/
 -
 -#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 -
--#include <linux/kernel.h>
--#include <linux/types.h>
--#include <linux/delay.h>
--#include <linux/fs.h>
--#include <linux/timer.h>
--#include <linux/poll.h>
+-#include <linux/module.h>
+-#include "saa7146.h"
 -
--#include "av7110.h"
--#include "av7110_hw.h"
--#include "av7110_av.h"
+-static int saa7146_num;
 -
--int msp_writereg(struct av7110 *av7110, u8 dev, u16 reg, u16 val)
+-unsigned int saa7146_debug;
+-
+-module_param(saa7146_debug, uint, 0644);
+-MODULE_PARM_DESC(saa7146_debug, "debug level (default: 0)");
+-
+-#if 0
+-static void dump_registers(struct saa7146_dev* dev)
 -{
--	u8 msg[5] = { dev, reg >> 8, reg & 0xff, val >> 8 , val & 0xff };
--	struct i2c_msg msgs = { .flags = 0, .len = 5, .buf = msg };
+-	int i = 0;
 -
--	switch (av7110->adac_type) {
--	case DVB_ADAC_MSP34x0:
--		msgs.addr = 0x40;
--		break;
--	case DVB_ADAC_MSP34x5:
--		msgs.addr = 0x42;
--		break;
--	default:
--		return 0;
+-	pr_info(" @ %li jiffies:\n", jiffies);
+-	for (i = 0; i <= 0x148; i += 4)
+-		pr_info("0x%03x: 0x%08x\n", i, saa7146_read(dev, i));
+-}
+-#endif
+-
+-/****************************************************************************
+- * gpio and debi helper functions
+- ****************************************************************************/
+-
+-void saa7146_setgpio(struct saa7146_dev *dev, int port, u32 data)
+-{
+-	u32 value = 0;
+-
+-	BUG_ON(port > 3);
+-
+-	value = saa7146_read(dev, GPIO_CTRL);
+-	value &= ~(0xff << (8*port));
+-	value |= (data << (8*port));
+-	saa7146_write(dev, GPIO_CTRL, value);
+-}
+-
+-/* This DEBI code is based on the saa7146 Stradis driver by Nathan Laredo */
+-static inline int saa7146_wait_for_debi_done_sleep(struct saa7146_dev *dev,
+-				unsigned long us1, unsigned long us2)
+-{
+-	unsigned long timeout;
+-	int err;
+-
+-	/* wait for registers to be programmed */
+-	timeout = jiffies + usecs_to_jiffies(us1);
+-	while (1) {
+-		err = time_after(jiffies, timeout);
+-		if (saa7146_read(dev, MC2) & 2)
+-			break;
+-		if (err) {
+-			pr_debug("%s: %s timed out while waiting for registers getting programmed\n",
+-			       dev->name, __func__);
+-			return -ETIMEDOUT;
+-		}
+-		msleep(1);
 -	}
 -
--	if (i2c_transfer(&av7110->i2c_adap, &msgs, 1) != 1) {
--		dprintk(1, "dvb-ttpci: failed @ card %d, %u = %u\n",
--		       av7110->dvb_adapter.num, reg, val);
--		return -EIO;
+-	/* wait for transfer to complete */
+-	timeout = jiffies + usecs_to_jiffies(us2);
+-	while (1) {
+-		err = time_after(jiffies, timeout);
+-		if (!(saa7146_read(dev, PSR) & SPCI_DEBI_S))
+-			break;
+-		saa7146_read(dev, MC2);
+-		if (err) {
+-			DEB_S("%s: %s timed out while waiting for transfer completion\n",
+-			      dev->name, __func__);
+-			return -ETIMEDOUT;
+-		}
+-		msleep(1);
 -	}
+-
 -	return 0;
 -}
 -
--static int msp_readreg(struct av7110 *av7110, u8 dev, u16 reg, u16 *val)
+-static inline int saa7146_wait_for_debi_done_busyloop(struct saa7146_dev *dev,
+-				unsigned long us1, unsigned long us2)
 -{
--	u8 msg1[3] = { dev, reg >> 8, reg & 0xff };
--	u8 msg2[2];
--	struct i2c_msg msgs[2] = {
--		{ .flags = 0	   , .len = 3, .buf = msg1 },
--		{ .flags = I2C_M_RD, .len = 2, .buf = msg2 }
--	};
+-	unsigned long loops;
 -
--	switch (av7110->adac_type) {
--	case DVB_ADAC_MSP34x0:
--		msgs[0].addr = 0x40;
--		msgs[1].addr = 0x40;
--		break;
--	case DVB_ADAC_MSP34x5:
--		msgs[0].addr = 0x42;
--		msgs[1].addr = 0x42;
--		break;
--	default:
--		return 0;
+-	/* wait for registers to be programmed */
+-	loops = us1;
+-	while (1) {
+-		if (saa7146_read(dev, MC2) & 2)
+-			break;
+-		if (!loops--) {
+-			pr_err("%s: %s timed out while waiting for registers getting programmed\n",
+-			       dev->name, __func__);
+-			return -ETIMEDOUT;
+-		}
+-		udelay(1);
 -	}
 -
--	if (i2c_transfer(&av7110->i2c_adap, &msgs[0], 2) != 2) {
--		dprintk(1, "dvb-ttpci: failed @ card %d, %u\n",
--		       av7110->dvb_adapter.num, reg);
--		return -EIO;
+-	/* wait for transfer to complete */
+-	loops = us2 / 5;
+-	while (1) {
+-		if (!(saa7146_read(dev, PSR) & SPCI_DEBI_S))
+-			break;
+-		saa7146_read(dev, MC2);
+-		if (!loops--) {
+-			DEB_S("%s: %s timed out while waiting for transfer completion\n",
+-			      dev->name, __func__);
+-			return -ETIMEDOUT;
+-		}
+-		udelay(5);
 -	}
--	*val = (msg2[0] << 8) | msg2[1];
+-
 -	return 0;
 -}
 -
--static struct v4l2_input inputs[4] = {
--	{
--		.index		= 0,
--		.name		= "DVB",
--		.type		= V4L2_INPUT_TYPE_CAMERA,
--		.audioset	= 1,
--		.tuner		= 0, /* ignored */
--		.std		= V4L2_STD_PAL_BG|V4L2_STD_NTSC_M,
--		.status		= 0,
--		.capabilities	= V4L2_IN_CAP_STD,
--	}, {
--		.index		= 1,
--		.name		= "Television",
--		.type		= V4L2_INPUT_TYPE_TUNER,
--		.audioset	= 1,
--		.tuner		= 0,
--		.std		= V4L2_STD_PAL_BG|V4L2_STD_NTSC_M,
--		.status		= 0,
--		.capabilities	= V4L2_IN_CAP_STD,
--	}, {
--		.index		= 2,
--		.name		= "Video",
--		.type		= V4L2_INPUT_TYPE_CAMERA,
--		.audioset	= 0,
--		.tuner		= 0,
--		.std		= V4L2_STD_PAL_BG|V4L2_STD_NTSC_M,
--		.status		= 0,
--		.capabilities	= V4L2_IN_CAP_STD,
--	}, {
--		.index		= 3,
--		.name		= "Y/C",
--		.type		= V4L2_INPUT_TYPE_CAMERA,
--		.audioset	= 0,
--		.tuner		= 0,
--		.std		= V4L2_STD_PAL_BG|V4L2_STD_NTSC_M,
--		.status		= 0,
--		.capabilities	= V4L2_IN_CAP_STD,
--	}
--};
--
--static int ves1820_writereg(struct saa7146_dev *dev, u8 addr, u8 reg, u8 data)
+-int saa7146_wait_for_debi_done(struct saa7146_dev *dev, int nobusyloop)
 -{
--	struct av7110 *av7110 = dev->ext_priv;
--	u8 buf[] = { 0x00, reg, data };
--	struct i2c_msg msg = { .addr = addr, .flags = 0, .buf = buf, .len = 3 };
--
--	dprintk(4, "dev: %p\n", dev);
--
--	if (1 != i2c_transfer(&av7110->i2c_adap, &msg, 1))
--		return -1;
--	return 0;
--}
--
--static int tuner_write(struct saa7146_dev *dev, u8 addr, u8 data [4])
--{
--	struct av7110 *av7110 = dev->ext_priv;
--	struct i2c_msg msg = { .addr = addr, .flags = 0, .buf = data, .len = 4 };
--
--	dprintk(4, "dev: %p\n", dev);
--
--	if (1 != i2c_transfer(&av7110->i2c_adap, &msg, 1))
--		return -1;
--	return 0;
--}
--
--static int ves1820_set_tv_freq(struct saa7146_dev *dev, u32 freq)
--{
--	u32 div;
--	u8 config;
--	u8 buf[4];
--
--	dprintk(4, "freq: 0x%08x\n", freq);
--
--	/* magic number: 614. tuning with the frequency given by v4l2
--	   is always off by 614*62.5 = 38375 kHz...*/
--	div = freq + 614;
--
--	buf[0] = (div >> 8) & 0x7f;
--	buf[1] = div & 0xff;
--	buf[2] = 0x8e;
--
--	if (freq < 16U * 16825 / 100)
--		config = 0xa0;
--	else if (freq < 16U * 44725 / 100)
--		config = 0x90;
+-	if (nobusyloop)
+-		return saa7146_wait_for_debi_done_sleep(dev, 50000, 250000);
 -	else
--		config = 0x30;
--	config &= ~0x02;
--
--	buf[3] = config;
--
--	return tuner_write(dev, 0x61, buf);
+-		return saa7146_wait_for_debi_done_busyloop(dev, 50000, 250000);
 -}
 -
--static int stv0297_set_tv_freq(struct saa7146_dev *dev, u32 freq)
+-/****************************************************************************
+- * general helper functions
+- ****************************************************************************/
+-
+-/* this is videobuf_vmalloc_to_sg() from videobuf-dma-sg.c
+-   make sure virt has been allocated with vmalloc_32(), otherwise the BUG()
+-   may be triggered on highmem machines */
+-static struct scatterlist* vmalloc_to_sg(unsigned char *virt, int nr_pages)
 -{
--	struct av7110 *av7110 = (struct av7110*)dev->ext_priv;
--	u32 div;
--	u8 data[4];
+-	struct scatterlist *sglist;
+-	struct page *pg;
+-	int i;
 -
--	div = (freq + 38900000 + 31250) / 62500;
+-	sglist = kmalloc_array(nr_pages, sizeof(struct scatterlist), GFP_KERNEL);
+-	if (NULL == sglist)
+-		return NULL;
+-	sg_init_table(sglist, nr_pages);
+-	for (i = 0; i < nr_pages; i++, virt += PAGE_SIZE) {
+-		pg = vmalloc_to_page(virt);
+-		if (NULL == pg)
+-			goto err;
+-		BUG_ON(PageHighMem(pg));
+-		sg_set_page(&sglist[i], pg, PAGE_SIZE, 0);
+-	}
+-	return sglist;
 -
--	data[0] = (div >> 8) & 0x7f;
--	data[1] = div & 0xff;
--	data[2] = 0xce;
--
--	if (freq < 45000000)
--		return -EINVAL;
--	else if (freq < 137000000)
--		data[3] = 0x01;
--	else if (freq < 403000000)
--		data[3] = 0x02;
--	else if (freq < 860000000)
--		data[3] = 0x04;
--	else
--		return -EINVAL;
--
--	if (av7110->fe->ops.i2c_gate_ctrl)
--		av7110->fe->ops.i2c_gate_ctrl(av7110->fe, 1);
--	return tuner_write(dev, 0x63, data);
+- err:
+-	kfree(sglist);
+-	return NULL;
 -}
 -
+-/********************************************************************************/
+-/* common page table functions */
+-
+-void *saa7146_vmalloc_build_pgtable(struct pci_dev *pci, long length, struct saa7146_pgtable *pt)
+-{
+-	int pages = (length+PAGE_SIZE-1)/PAGE_SIZE;
+-	void *mem = vmalloc_32(length);
+-	int slen = 0;
+-
+-	if (NULL == mem)
+-		goto err_null;
+-
+-	if (!(pt->slist = vmalloc_to_sg(mem, pages)))
+-		goto err_free_mem;
+-
+-	if (saa7146_pgtable_alloc(pci, pt))
+-		goto err_free_slist;
+-
+-	pt->nents = pages;
+-	slen = dma_map_sg(&pci->dev, pt->slist, pt->nents, DMA_FROM_DEVICE);
+-	if (0 == slen)
+-		goto err_free_pgtable;
+-
+-	if (0 != saa7146_pgtable_build_single(pci, pt, pt->slist, slen))
+-		goto err_unmap_sg;
+-
+-	return mem;
+-
+-err_unmap_sg:
+-	dma_unmap_sg(&pci->dev, pt->slist, pt->nents, DMA_FROM_DEVICE);
+-err_free_pgtable:
+-	saa7146_pgtable_free(pci, pt);
+-err_free_slist:
+-	kfree(pt->slist);
+-	pt->slist = NULL;
+-err_free_mem:
+-	vfree(mem);
+-err_null:
+-	return NULL;
+-}
+-
+-void saa7146_vfree_destroy_pgtable(struct pci_dev *pci, void *mem, struct saa7146_pgtable *pt)
+-{
+-	dma_unmap_sg(&pci->dev, pt->slist, pt->nents, DMA_FROM_DEVICE);
+-	saa7146_pgtable_free(pci, pt);
+-	kfree(pt->slist);
+-	pt->slist = NULL;
+-	vfree(mem);
+-}
+-
+-void saa7146_pgtable_free(struct pci_dev *pci, struct saa7146_pgtable *pt)
+-{
+-	if (NULL == pt->cpu)
+-		return;
+-	dma_free_coherent(&pci->dev, pt->size, pt->cpu, pt->dma);
+-	pt->cpu = NULL;
+-}
+-
+-int saa7146_pgtable_alloc(struct pci_dev *pci, struct saa7146_pgtable *pt)
+-{
+-	__le32       *cpu;
+-	dma_addr_t   dma_addr = 0;
+-
+-	cpu = dma_alloc_coherent(&pci->dev, PAGE_SIZE, &dma_addr, GFP_KERNEL);
+-	if (NULL == cpu) {
+-		return -ENOMEM;
+-	}
+-	pt->size = PAGE_SIZE;
+-	pt->cpu  = cpu;
+-	pt->dma  = dma_addr;
+-
+-	return 0;
+-}
+-
+-int saa7146_pgtable_build_single(struct pci_dev *pci, struct saa7146_pgtable *pt,
+-	struct scatterlist *list, int sglen  )
+-{
+-	__le32 *ptr, fill;
+-	int nr_pages = 0;
+-	int i,p;
+-
+-	BUG_ON(0 == sglen);
+-	BUG_ON(list->offset > PAGE_SIZE);
+-
+-	/* if we have a user buffer, the first page may not be
+-	   aligned to a page boundary. */
+-	pt->offset = list->offset;
+-
+-	ptr = pt->cpu;
+-	for (i = 0; i < sglen; i++, list++) {
+-/*
+-		pr_debug("i:%d, adr:0x%08x, len:%d, offset:%d\n",
+-			 i, sg_dma_address(list), sg_dma_len(list),
+-			 list->offset);
+-*/
+-		for (p = 0; p * 4096 < sg_dma_len(list); p++, ptr++) {
+-			*ptr = cpu_to_le32(sg_dma_address(list) + p * 4096);
+-			nr_pages++;
+-		}
+-	}
 -
 -
--static struct saa7146_standard analog_standard[];
--static struct saa7146_standard dvb_standard[];
--static struct saa7146_standard standard[];
+-	/* safety; fill the page table up with the last valid page */
+-	fill = *(ptr-1);
+-	for(i=nr_pages;i<1024;i++) {
+-		*ptr++ = fill;
+-	}
 -
--static const struct v4l2_audio msp3400_v4l2_audio = {
--	.index = 0,
--	.name = "Television",
--	.capability = V4L2_AUDCAP_STEREO
--};
+-/*
+-	ptr = pt->cpu;
+-	pr_debug("offset: %d\n", pt->offset);
+-	for(i=0;i<5;i++) {
+-		pr_debug("ptr1 %d: 0x%08x\n", i, ptr[i]);
+-	}
+-*/
+-	return 0;
+-}
 -
--static int av7110_dvb_c_switch(struct saa7146_fh *fh)
+-/********************************************************************************/
+-/* interrupt handler */
+-static irqreturn_t interrupt_hw(int irq, void *dev_id)
+-{
+-	struct saa7146_dev *dev = dev_id;
+-	u32 isr;
+-	u32 ack_isr;
+-
+-	/* read out the interrupt status register */
+-	ack_isr = isr = saa7146_read(dev, ISR);
+-
+-	/* is this our interrupt? */
+-	if ( 0 == isr ) {
+-		/* nope, some other device */
+-		return IRQ_NONE;
+-	}
+-
+-	if (dev->ext) {
+-		if (dev->ext->irq_mask & isr) {
+-			if (dev->ext->irq_func)
+-				dev->ext->irq_func(dev, &isr);
+-			isr &= ~dev->ext->irq_mask;
+-		}
+-	}
+-	if (0 != (isr & (MASK_27))) {
+-		DEB_INT("irq: RPS0 (0x%08x)\n", isr);
+-		if (dev->vv_data && dev->vv_callback)
+-			dev->vv_callback(dev,isr);
+-		isr &= ~MASK_27;
+-	}
+-	if (0 != (isr & (MASK_28))) {
+-		if (dev->vv_data && dev->vv_callback)
+-			dev->vv_callback(dev,isr);
+-		isr &= ~MASK_28;
+-	}
+-	if (0 != (isr & (MASK_16|MASK_17))) {
+-		SAA7146_IER_DISABLE(dev, MASK_16|MASK_17);
+-		/* only wake up if we expect something */
+-		if (0 != dev->i2c_op) {
+-			dev->i2c_op = 0;
+-			wake_up(&dev->i2c_wq);
+-		} else {
+-			u32 psr = saa7146_read(dev, PSR);
+-			u32 ssr = saa7146_read(dev, SSR);
+-			pr_warn("%s: unexpected i2c irq: isr %08x psr %08x ssr %08x\n",
+-				dev->name, isr, psr, ssr);
+-		}
+-		isr &= ~(MASK_16|MASK_17);
+-	}
+-	if( 0 != isr ) {
+-		ERR("warning: interrupt enabled, but not handled properly.(0x%08x)\n",
+-		    isr);
+-		ERR("disabling interrupt source(s)!\n");
+-		SAA7146_IER_DISABLE(dev,isr);
+-	}
+-	saa7146_write(dev, ISR, ack_isr);
+-	return IRQ_HANDLED;
+-}
+-
+-/*********************************************************************************/
+-/* configuration-functions                                                       */
+-
+-static int saa7146_init_one(struct pci_dev *pci, const struct pci_device_id *ent)
+-{
+-	struct saa7146_pci_extension_data *pci_ext = (struct saa7146_pci_extension_data *)ent->driver_data;
+-	struct saa7146_extension *ext = pci_ext->ext;
+-	struct saa7146_dev *dev;
+-	int err = -ENOMEM;
+-
+-	/* clear out mem for sure */
+-	dev = kzalloc(sizeof(struct saa7146_dev), GFP_KERNEL);
+-	if (!dev) {
+-		ERR("out of memory\n");
+-		goto out;
+-	}
+-
+-	/* create a nice device name */
+-	sprintf(dev->name, "saa7146 (%d)", saa7146_num);
+-
+-	DEB_EE("pci:%p\n", pci);
+-
+-	err = pci_enable_device(pci);
+-	if (err < 0) {
+-		ERR("pci_enable_device() failed\n");
+-		goto err_free;
+-	}
+-
+-	/* enable bus-mastering */
+-	pci_set_master(pci);
+-
+-	dev->pci = pci;
+-
+-	/* get chip-revision; this is needed to enable bug-fixes */
+-	dev->revision = pci->revision;
+-
+-	/* remap the memory from virtual to physical address */
+-
+-	err = pci_request_region(pci, 0, "saa7146");
+-	if (err < 0)
+-		goto err_disable;
+-
+-	dev->mem = ioremap(pci_resource_start(pci, 0),
+-			   pci_resource_len(pci, 0));
+-	if (!dev->mem) {
+-		ERR("ioremap() failed\n");
+-		err = -ENODEV;
+-		goto err_release;
+-	}
+-
+-	/* we don't do a master reset here anymore, it screws up
+-	   some boards that don't have an i2c-eeprom for configuration
+-	   values */
+-/*
+-	saa7146_write(dev, MC1, MASK_31);
+-*/
+-
+-	/* disable all irqs */
+-	saa7146_write(dev, IER, 0);
+-
+-	/* shut down all dma transfers and rps tasks */
+-	saa7146_write(dev, MC1, 0x30ff0000);
+-
+-	/* clear out any rps-signals pending */
+-	saa7146_write(dev, MC2, 0xf8000000);
+-
+-	/* request an interrupt for the saa7146 */
+-	err = request_irq(pci->irq, interrupt_hw, IRQF_SHARED,
+-			  dev->name, dev);
+-	if (err < 0) {
+-		ERR("request_irq() failed\n");
+-		goto err_unmap;
+-	}
+-
+-	err = -ENOMEM;
+-
+-	/* get memory for various stuff */
+-	dev->d_rps0.cpu_addr = dma_alloc_coherent(&pci->dev, SAA7146_RPS_MEM,
+-						  &dev->d_rps0.dma_handle,
+-						  GFP_KERNEL);
+-	if (!dev->d_rps0.cpu_addr)
+-		goto err_free_irq;
+-
+-	dev->d_rps1.cpu_addr = dma_alloc_coherent(&pci->dev, SAA7146_RPS_MEM,
+-						  &dev->d_rps1.dma_handle,
+-						  GFP_KERNEL);
+-	if (!dev->d_rps1.cpu_addr)
+-		goto err_free_rps0;
+-
+-	dev->d_i2c.cpu_addr = dma_alloc_coherent(&pci->dev, SAA7146_RPS_MEM,
+-						 &dev->d_i2c.dma_handle, GFP_KERNEL);
+-	if (!dev->d_i2c.cpu_addr)
+-		goto err_free_rps1;
+-
+-	/* the rest + print status message */
+-
+-	pr_info("found saa7146 @ mem %p (revision %d, irq %d) (0x%04x,0x%04x)\n",
+-		dev->mem, dev->revision, pci->irq,
+-		pci->subsystem_vendor, pci->subsystem_device);
+-	dev->ext = ext;
+-
+-	mutex_init(&dev->v4l2_lock);
+-	spin_lock_init(&dev->int_slock);
+-	spin_lock_init(&dev->slock);
+-
+-	mutex_init(&dev->i2c_lock);
+-
+-	dev->module = THIS_MODULE;
+-	init_waitqueue_head(&dev->i2c_wq);
+-
+-	/* set some sane pci arbitrition values */
+-	saa7146_write(dev, PCI_BT_V1, 0x1c00101f);
+-
+-	/* TODO: use the status code of the callback */
+-
+-	err = -ENODEV;
+-
+-	if (ext->probe && ext->probe(dev)) {
+-		DEB_D("ext->probe() failed for %p. skipping device.\n", dev);
+-		goto err_free_i2c;
+-	}
+-
+-	if (ext->attach(dev, pci_ext)) {
+-		DEB_D("ext->attach() failed for %p. skipping device.\n", dev);
+-		goto err_free_i2c;
+-	}
+-	/* V4L extensions will set the pci drvdata to the v4l2_device in the
+-	   attach() above. So for those cards that do not use V4L we have to
+-	   set it explicitly. */
+-	pci_set_drvdata(pci, &dev->v4l2_dev);
+-
+-	saa7146_num++;
+-
+-	err = 0;
+-out:
+-	return err;
+-
+-err_free_i2c:
+-	dma_free_coherent(&pci->dev, SAA7146_RPS_MEM, dev->d_i2c.cpu_addr,
+-			  dev->d_i2c.dma_handle);
+-err_free_rps1:
+-	dma_free_coherent(&pci->dev, SAA7146_RPS_MEM, dev->d_rps1.cpu_addr,
+-			  dev->d_rps1.dma_handle);
+-err_free_rps0:
+-	dma_free_coherent(&pci->dev, SAA7146_RPS_MEM, dev->d_rps0.cpu_addr,
+-			  dev->d_rps0.dma_handle);
+-err_free_irq:
+-	free_irq(pci->irq, (void *)dev);
+-err_unmap:
+-	iounmap(dev->mem);
+-err_release:
+-	pci_release_region(pci, 0);
+-err_disable:
+-	pci_disable_device(pci);
+-err_free:
+-	kfree(dev);
+-	goto out;
+-}
+-
+-static void saa7146_remove_one(struct pci_dev *pdev)
+-{
+-	struct v4l2_device *v4l2_dev = pci_get_drvdata(pdev);
+-	struct saa7146_dev *dev = to_saa7146_dev(v4l2_dev);
+-	struct {
+-		void *addr;
+-		dma_addr_t dma;
+-	} dev_map[] = {
+-		{ dev->d_i2c.cpu_addr, dev->d_i2c.dma_handle },
+-		{ dev->d_rps1.cpu_addr, dev->d_rps1.dma_handle },
+-		{ dev->d_rps0.cpu_addr, dev->d_rps0.dma_handle },
+-		{ NULL, 0 }
+-	}, *p;
+-
+-	DEB_EE("dev:%p\n", dev);
+-
+-	dev->ext->detach(dev);
+-
+-	/* shut down all video dma transfers */
+-	saa7146_write(dev, MC1, 0x00ff0000);
+-
+-	/* disable all irqs, release irq-routine */
+-	saa7146_write(dev, IER, 0);
+-
+-	free_irq(pdev->irq, dev);
+-
+-	for (p = dev_map; p->addr; p++)
+-		dma_free_coherent(&pdev->dev, SAA7146_RPS_MEM, p->addr,
+-				  p->dma);
+-
+-	iounmap(dev->mem);
+-	pci_release_region(pdev, 0);
+-	pci_disable_device(pdev);
+-	kfree(dev);
+-
+-	saa7146_num--;
+-}
+-
+-/*********************************************************************************/
+-/* extension handling functions                                                  */
+-
+-int saa7146_register_extension(struct saa7146_extension* ext)
+-{
+-	DEB_EE("ext:%p\n", ext);
+-
+-	ext->driver.name = ext->name;
+-	ext->driver.id_table = ext->pci_tbl;
+-	ext->driver.probe = saa7146_init_one;
+-	ext->driver.remove = saa7146_remove_one;
+-
+-	pr_info("register extension '%s'\n", ext->name);
+-	return pci_register_driver(&ext->driver);
+-}
+-
+-int saa7146_unregister_extension(struct saa7146_extension* ext)
+-{
+-	DEB_EE("ext:%p\n", ext);
+-	pr_info("unregister extension '%s'\n", ext->name);
+-	pci_unregister_driver(&ext->driver);
+-	return 0;
+-}
+-
+-EXPORT_SYMBOL_GPL(saa7146_register_extension);
+-EXPORT_SYMBOL_GPL(saa7146_unregister_extension);
+-
+-/* misc functions used by extension modules */
+-EXPORT_SYMBOL_GPL(saa7146_pgtable_alloc);
+-EXPORT_SYMBOL_GPL(saa7146_pgtable_free);
+-EXPORT_SYMBOL_GPL(saa7146_pgtable_build_single);
+-EXPORT_SYMBOL_GPL(saa7146_vmalloc_build_pgtable);
+-EXPORT_SYMBOL_GPL(saa7146_vfree_destroy_pgtable);
+-EXPORT_SYMBOL_GPL(saa7146_wait_for_debi_done);
+-
+-EXPORT_SYMBOL_GPL(saa7146_setgpio);
+-
+-EXPORT_SYMBOL_GPL(saa7146_i2c_adapter_prepare);
+-
+-EXPORT_SYMBOL_GPL(saa7146_debug);
+-
+-MODULE_AUTHOR("Michael Hunold <michael@mihu.de>");
+-MODULE_DESCRIPTION("driver for generic saa7146-based hardware");
+-MODULE_LICENSE("GPL");
+diff --git a/drivers/staging/media/deprecated/saa7146/common/saa7146_fops.c b/drivers/staging/media/deprecated/saa7146/common/saa7146_fops.c
+deleted file mode 100644
+index aa14698a9c54..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/common/saa7146_fops.c
++++ /dev/null
+@@ -1,658 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
+-#include <linux/module.h>
+-#include "saa7146_vv.h"
+-
+-/****************************************************************************/
+-/* resource management functions, shamelessly stolen from saa7134 driver */
+-
+-int saa7146_res_get(struct saa7146_fh *fh, unsigned int bit)
 -{
 -	struct saa7146_dev *dev = fh->dev;
 -	struct saa7146_vv *vv = dev->vv_data;
--	struct av7110 *av7110 = (struct av7110*)dev->ext_priv;
--	u16 adswitch;
--	int source, sync, err;
 -
--	dprintk(4, "%p\n", av7110);
+-	if (fh->resources & bit) {
+-		DEB_D("already allocated! want: 0x%02x, cur:0x%02x\n",
+-		      bit, vv->resources);
+-		/* have it already allocated */
+-		return 1;
+-	}
+-
+-	/* is it free? */
+-	if (vv->resources & bit) {
+-		DEB_D("locked! vv->resources:0x%02x, we want:0x%02x\n",
+-		      vv->resources, bit);
+-		/* no, someone else uses it */
+-		return 0;
+-	}
+-	/* it's free, grab it */
+-	fh->resources |= bit;
+-	vv->resources |= bit;
+-	DEB_D("res: get 0x%02x, cur:0x%02x\n", bit, vv->resources);
+-	return 1;
+-}
+-
+-void saa7146_res_free(struct saa7146_fh *fh, unsigned int bits)
+-{
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	BUG_ON((fh->resources & bits) != bits);
+-
+-	fh->resources &= ~bits;
+-	vv->resources &= ~bits;
+-	DEB_D("res: put 0x%02x, cur:0x%02x\n", bits, vv->resources);
+-}
+-
+-
+-/********************************************************************************/
+-/* common dma functions */
+-
+-void saa7146_dma_free(struct saa7146_dev *dev,struct videobuf_queue *q,
+-						struct saa7146_buf *buf)
+-{
+-	struct videobuf_dmabuf *dma=videobuf_to_dma(&buf->vb);
+-	DEB_EE("dev:%p, buf:%p\n", dev, buf);
+-
+-	videobuf_waiton(q, &buf->vb, 0, 0);
+-	videobuf_dma_unmap(q->dev, dma);
+-	videobuf_dma_free(dma);
+-	buf->vb.state = VIDEOBUF_NEEDS_INIT;
+-}
+-
+-
+-/********************************************************************************/
+-/* common buffer functions */
+-
+-int saa7146_buffer_queue(struct saa7146_dev *dev,
+-			 struct saa7146_dmaqueue *q,
+-			 struct saa7146_buf *buf)
+-{
+-	assert_spin_locked(&dev->slock);
+-	DEB_EE("dev:%p, dmaq:%p, buf:%p\n", dev, q, buf);
+-
+-	BUG_ON(!q);
+-
+-	if (NULL == q->curr) {
+-		q->curr = buf;
+-		DEB_D("immediately activating buffer %p\n", buf);
+-		buf->activate(dev,buf,NULL);
+-	} else {
+-		list_add_tail(&buf->vb.queue,&q->queue);
+-		buf->vb.state = VIDEOBUF_QUEUED;
+-		DEB_D("adding buffer %p to queue. (active buffer present)\n",
+-		      buf);
+-	}
+-	return 0;
+-}
+-
+-void saa7146_buffer_finish(struct saa7146_dev *dev,
+-			   struct saa7146_dmaqueue *q,
+-			   int state)
+-{
+-	assert_spin_locked(&dev->slock);
+-	DEB_EE("dev:%p, dmaq:%p, state:%d\n", dev, q, state);
+-	DEB_EE("q->curr:%p\n", q->curr);
+-
+-	/* finish current buffer */
+-	if (NULL == q->curr) {
+-		DEB_D("aiii. no current buffer\n");
+-		return;
+-	}
+-
+-	q->curr->vb.state = state;
+-	q->curr->vb.ts = ktime_get_ns();
+-	wake_up(&q->curr->vb.done);
+-
+-	q->curr = NULL;
+-}
+-
+-void saa7146_buffer_next(struct saa7146_dev *dev,
+-			 struct saa7146_dmaqueue *q, int vbi)
+-{
+-	struct saa7146_buf *buf,*next = NULL;
+-
+-	BUG_ON(!q);
+-
+-	DEB_INT("dev:%p, dmaq:%p, vbi:%d\n", dev, q, vbi);
+-
+-	assert_spin_locked(&dev->slock);
+-	if (!list_empty(&q->queue)) {
+-		/* activate next one from queue */
+-		buf = list_entry(q->queue.next,struct saa7146_buf,vb.queue);
+-		list_del(&buf->vb.queue);
+-		if (!list_empty(&q->queue))
+-			next = list_entry(q->queue.next,struct saa7146_buf, vb.queue);
+-		q->curr = buf;
+-		DEB_INT("next buffer: buf:%p, prev:%p, next:%p\n",
+-			buf, q->queue.prev, q->queue.next);
+-		buf->activate(dev,buf,next);
+-	} else {
+-		DEB_INT("no next buffer. stopping.\n");
+-		if( 0 != vbi ) {
+-			/* turn off video-dma3 */
+-			saa7146_write(dev,MC1, MASK_20);
+-		} else {
+-			/* nothing to do -- just prevent next video-dma1 transfer
+-			   by lowering the protection address */
+-
+-			// fixme: fix this for vflip != 0
+-
+-			saa7146_write(dev, PROT_ADDR1, 0);
+-			saa7146_write(dev, MC2, (MASK_02|MASK_18));
+-
+-			/* write the address of the rps-program */
+-			saa7146_write(dev, RPS_ADDR0, dev->d_rps0.dma_handle);
+-			/* turn on rps */
+-			saa7146_write(dev, MC1, (MASK_12 | MASK_28));
+-
+-/*
+-			printk("vdma%d.base_even:     0x%08x\n", 1,saa7146_read(dev,BASE_EVEN1));
+-			printk("vdma%d.base_odd:      0x%08x\n", 1,saa7146_read(dev,BASE_ODD1));
+-			printk("vdma%d.prot_addr:     0x%08x\n", 1,saa7146_read(dev,PROT_ADDR1));
+-			printk("vdma%d.base_page:     0x%08x\n", 1,saa7146_read(dev,BASE_PAGE1));
+-			printk("vdma%d.pitch:         0x%08x\n", 1,saa7146_read(dev,PITCH1));
+-			printk("vdma%d.num_line_byte: 0x%08x\n", 1,saa7146_read(dev,NUM_LINE_BYTE1));
+-*/
+-		}
+-		del_timer(&q->timeout);
+-	}
+-}
+-
+-void saa7146_buffer_timeout(struct timer_list *t)
+-{
+-	struct saa7146_dmaqueue *q = from_timer(q, t, timeout);
+-	struct saa7146_dev *dev = q->dev;
+-	unsigned long flags;
+-
+-	DEB_EE("dev:%p, dmaq:%p\n", dev, q);
+-
+-	spin_lock_irqsave(&dev->slock,flags);
+-	if (q->curr) {
+-		DEB_D("timeout on %p\n", q->curr);
+-		saa7146_buffer_finish(dev,q,VIDEOBUF_ERROR);
+-	}
+-
+-	/* we don't restart the transfer here like other drivers do. when
+-	   a streaming capture is disabled, the timeout function will be
+-	   called for the current buffer. if we activate the next buffer now,
+-	   we mess up our capture logic. if a timeout occurs on another buffer,
+-	   then something is seriously broken before, so no need to buffer the
+-	   next capture IMHO... */
+-/*
+-	saa7146_buffer_next(dev,q);
+-*/
+-	spin_unlock_irqrestore(&dev->slock,flags);
+-}
+-
+-/********************************************************************************/
+-/* file operations */
+-
+-static int fops_open(struct file *file)
+-{
+-	struct video_device *vdev = video_devdata(file);
+-	struct saa7146_dev *dev = video_drvdata(file);
+-	struct saa7146_fh *fh = NULL;
+-	int result = 0;
+-
+-	DEB_EE("file:%p, dev:%s\n", file, video_device_node_name(vdev));
+-
+-	if (mutex_lock_interruptible(vdev->lock))
+-		return -ERESTARTSYS;
+-
+-	DEB_D("using: %p\n", dev);
+-
+-	/* check if an extension is registered */
+-	if( NULL == dev->ext ) {
+-		DEB_S("no extension registered for this device\n");
+-		result = -ENODEV;
+-		goto out;
+-	}
+-
+-	/* allocate per open data */
+-	fh = kzalloc(sizeof(*fh),GFP_KERNEL);
+-	if (NULL == fh) {
+-		DEB_S("cannot allocate memory for per open data\n");
+-		result = -ENOMEM;
+-		goto out;
+-	}
+-
+-	v4l2_fh_init(&fh->fh, vdev);
+-
+-	file->private_data = &fh->fh;
+-	fh->dev = dev;
+-
+-	if (vdev->vfl_type == VFL_TYPE_VBI) {
+-		DEB_S("initializing vbi...\n");
+-		if (dev->ext_vv_data->capabilities & V4L2_CAP_VBI_CAPTURE)
+-			result = saa7146_vbi_uops.open(dev,file);
+-		if (dev->ext_vv_data->vbi_fops.open)
+-			dev->ext_vv_data->vbi_fops.open(file);
+-	} else {
+-		DEB_S("initializing video...\n");
+-		result = saa7146_video_uops.open(dev,file);
+-	}
+-
+-	if (0 != result) {
+-		goto out;
+-	}
+-
+-	if( 0 == try_module_get(dev->ext->module)) {
+-		result = -EINVAL;
+-		goto out;
+-	}
+-
+-	result = 0;
+-	v4l2_fh_add(&fh->fh);
+-out:
+-	if (fh && result != 0) {
+-		kfree(fh);
+-		file->private_data = NULL;
+-	}
+-	mutex_unlock(vdev->lock);
+-	return result;
+-}
+-
+-static int fops_release(struct file *file)
+-{
+-	struct video_device *vdev = video_devdata(file);
+-	struct saa7146_fh  *fh  = file->private_data;
+-	struct saa7146_dev *dev = fh->dev;
+-
+-	DEB_EE("file:%p\n", file);
+-
+-	mutex_lock(vdev->lock);
+-
+-	if (vdev->vfl_type == VFL_TYPE_VBI) {
+-		if (dev->ext_vv_data->capabilities & V4L2_CAP_VBI_CAPTURE)
+-			saa7146_vbi_uops.release(dev,file);
+-		if (dev->ext_vv_data->vbi_fops.release)
+-			dev->ext_vv_data->vbi_fops.release(file);
+-	} else {
+-		saa7146_video_uops.release(dev,file);
+-	}
+-
+-	v4l2_fh_del(&fh->fh);
+-	v4l2_fh_exit(&fh->fh);
+-	module_put(dev->ext->module);
+-	file->private_data = NULL;
+-	kfree(fh);
+-
+-	mutex_unlock(vdev->lock);
+-
+-	return 0;
+-}
+-
+-static int fops_mmap(struct file *file, struct vm_area_struct * vma)
+-{
+-	struct video_device *vdev = video_devdata(file);
+-	struct saa7146_fh *fh = file->private_data;
+-	struct videobuf_queue *q;
+-	int res;
+-
+-	switch (vdev->vfl_type) {
+-	case VFL_TYPE_VIDEO: {
+-		DEB_EE("V4L2_BUF_TYPE_VIDEO_CAPTURE: file:%p, vma:%p\n",
+-		       file, vma);
+-		q = &fh->video_q;
+-		break;
+-		}
+-	case VFL_TYPE_VBI: {
+-		DEB_EE("V4L2_BUF_TYPE_VBI_CAPTURE: file:%p, vma:%p\n",
+-		       file, vma);
+-		if (fh->dev->ext_vv_data->capabilities & V4L2_CAP_SLICED_VBI_OUTPUT)
+-			return -ENODEV;
+-		q = &fh->vbi_q;
+-		break;
+-		}
+-	default:
+-		BUG();
+-	}
+-
+-	if (mutex_lock_interruptible(vdev->lock))
+-		return -ERESTARTSYS;
+-	res = videobuf_mmap_mapper(q, vma);
+-	mutex_unlock(vdev->lock);
+-	return res;
+-}
+-
+-static __poll_t __fops_poll(struct file *file, struct poll_table_struct *wait)
+-{
+-	struct video_device *vdev = video_devdata(file);
+-	struct saa7146_fh *fh = file->private_data;
+-	struct videobuf_buffer *buf = NULL;
+-	struct videobuf_queue *q;
+-	__poll_t res = v4l2_ctrl_poll(file, wait);
+-
+-	DEB_EE("file:%p, poll:%p\n", file, wait);
+-
+-	if (vdev->vfl_type == VFL_TYPE_VBI) {
+-		if (fh->dev->ext_vv_data->capabilities & V4L2_CAP_SLICED_VBI_OUTPUT)
+-			return res | EPOLLOUT | EPOLLWRNORM;
+-		if( 0 == fh->vbi_q.streaming )
+-			return res | videobuf_poll_stream(file, &fh->vbi_q, wait);
+-		q = &fh->vbi_q;
+-	} else {
+-		DEB_D("using video queue\n");
+-		q = &fh->video_q;
+-	}
+-
+-	if (!list_empty(&q->stream))
+-		buf = list_entry(q->stream.next, struct videobuf_buffer, stream);
+-
+-	if (!buf) {
+-		DEB_D("buf == NULL!\n");
+-		return res | EPOLLERR;
+-	}
+-
+-	poll_wait(file, &buf->done, wait);
+-	if (buf->state == VIDEOBUF_DONE || buf->state == VIDEOBUF_ERROR) {
+-		DEB_D("poll succeeded!\n");
+-		return res | EPOLLIN | EPOLLRDNORM;
+-	}
+-
+-	DEB_D("nothing to poll for, buf->state:%d\n", buf->state);
+-	return res;
+-}
+-
+-static __poll_t fops_poll(struct file *file, struct poll_table_struct *wait)
+-{
+-	struct video_device *vdev = video_devdata(file);
+-	__poll_t res;
+-
+-	mutex_lock(vdev->lock);
+-	res = __fops_poll(file, wait);
+-	mutex_unlock(vdev->lock);
+-	return res;
+-}
+-
+-static ssize_t fops_read(struct file *file, char __user *data, size_t count, loff_t *ppos)
+-{
+-	struct video_device *vdev = video_devdata(file);
+-	struct saa7146_fh *fh = file->private_data;
+-	int ret;
+-
+-	switch (vdev->vfl_type) {
+-	case VFL_TYPE_VIDEO:
+-/*
+-		DEB_EE("V4L2_BUF_TYPE_VIDEO_CAPTURE: file:%p, data:%p, count:%lun",
+-		       file, data, (unsigned long)count);
+-*/
+-		return saa7146_video_uops.read(file,data,count,ppos);
+-	case VFL_TYPE_VBI:
+-/*
+-		DEB_EE("V4L2_BUF_TYPE_VBI_CAPTURE: file:%p, data:%p, count:%lu\n",
+-		       file, data, (unsigned long)count);
+-*/
+-		if (fh->dev->ext_vv_data->capabilities & V4L2_CAP_VBI_CAPTURE) {
+-			if (mutex_lock_interruptible(vdev->lock))
+-				return -ERESTARTSYS;
+-			ret = saa7146_vbi_uops.read(file, data, count, ppos);
+-			mutex_unlock(vdev->lock);
+-			return ret;
+-		}
+-		return -EINVAL;
+-	default:
+-		BUG();
+-	}
+-}
+-
+-static ssize_t fops_write(struct file *file, const char __user *data, size_t count, loff_t *ppos)
+-{
+-	struct video_device *vdev = video_devdata(file);
+-	struct saa7146_fh *fh = file->private_data;
+-	int ret;
+-
+-	switch (vdev->vfl_type) {
+-	case VFL_TYPE_VIDEO:
+-		return -EINVAL;
+-	case VFL_TYPE_VBI:
+-		if (fh->dev->ext_vv_data->vbi_fops.write) {
+-			if (mutex_lock_interruptible(vdev->lock))
+-				return -ERESTARTSYS;
+-			ret = fh->dev->ext_vv_data->vbi_fops.write(file, data, count, ppos);
+-			mutex_unlock(vdev->lock);
+-			return ret;
+-		}
+-		return -EINVAL;
+-	default:
+-		BUG();
+-	}
+-}
+-
+-static const struct v4l2_file_operations video_fops =
+-{
+-	.owner		= THIS_MODULE,
+-	.open		= fops_open,
+-	.release	= fops_release,
+-	.read		= fops_read,
+-	.write		= fops_write,
+-	.poll		= fops_poll,
+-	.mmap		= fops_mmap,
+-	.unlocked_ioctl	= video_ioctl2,
+-};
+-
+-static void vv_callback(struct saa7146_dev *dev, unsigned long status)
+-{
+-	u32 isr = status;
+-
+-	DEB_INT("dev:%p, isr:0x%08x\n", dev, (u32)status);
+-
+-	if (0 != (isr & (MASK_27))) {
+-		DEB_INT("irq: RPS0 (0x%08x)\n", isr);
+-		saa7146_video_uops.irq_done(dev,isr);
+-	}
+-
+-	if (0 != (isr & (MASK_28))) {
+-		u32 mc2 = saa7146_read(dev, MC2);
+-		if( 0 != (mc2 & MASK_15)) {
+-			DEB_INT("irq: RPS1 vbi workaround (0x%08x)\n", isr);
+-			wake_up(&dev->vv_data->vbi_wq);
+-			saa7146_write(dev,MC2, MASK_31);
+-			return;
+-		}
+-		DEB_INT("irq: RPS1 (0x%08x)\n", isr);
+-		saa7146_vbi_uops.irq_done(dev,isr);
+-	}
+-}
+-
+-static const struct v4l2_ctrl_ops saa7146_ctrl_ops = {
+-	.s_ctrl = saa7146_s_ctrl,
+-};
+-
+-int saa7146_vv_init(struct saa7146_dev* dev, struct saa7146_ext_vv *ext_vv)
+-{
+-	struct v4l2_ctrl_handler *hdl = &dev->ctrl_handler;
+-	struct v4l2_pix_format *fmt;
+-	struct v4l2_vbi_format *vbi;
+-	struct saa7146_vv *vv;
+-	int err;
+-
+-	err = v4l2_device_register(&dev->pci->dev, &dev->v4l2_dev);
+-	if (err)
+-		return err;
+-
+-	v4l2_ctrl_handler_init(hdl, 6);
+-	v4l2_ctrl_new_std(hdl, &saa7146_ctrl_ops,
+-		V4L2_CID_BRIGHTNESS, 0, 255, 1, 128);
+-	v4l2_ctrl_new_std(hdl, &saa7146_ctrl_ops,
+-		V4L2_CID_CONTRAST, 0, 127, 1, 64);
+-	v4l2_ctrl_new_std(hdl, &saa7146_ctrl_ops,
+-		V4L2_CID_SATURATION, 0, 127, 1, 64);
+-	v4l2_ctrl_new_std(hdl, &saa7146_ctrl_ops,
+-		V4L2_CID_VFLIP, 0, 1, 1, 0);
+-	v4l2_ctrl_new_std(hdl, &saa7146_ctrl_ops,
+-		V4L2_CID_HFLIP, 0, 1, 1, 0);
+-	if (hdl->error) {
+-		err = hdl->error;
+-		v4l2_ctrl_handler_free(hdl);
+-		v4l2_device_unregister(&dev->v4l2_dev);
+-		return err;
+-	}
+-	dev->v4l2_dev.ctrl_handler = hdl;
+-
+-	vv = kzalloc(sizeof(struct saa7146_vv), GFP_KERNEL);
+-	if (vv == NULL) {
+-		ERR("out of memory. aborting.\n");
+-		v4l2_ctrl_handler_free(hdl);
+-		v4l2_device_unregister(&dev->v4l2_dev);
+-		return -ENOMEM;
+-	}
+-	ext_vv->vid_ops = saa7146_video_ioctl_ops;
+-	ext_vv->vbi_ops = saa7146_vbi_ioctl_ops;
+-	ext_vv->core_ops = &saa7146_video_ioctl_ops;
+-
+-	DEB_EE("dev:%p\n", dev);
+-
+-	/* set default values for video parts of the saa7146 */
+-	saa7146_write(dev, BCS_CTRL, 0x80400040);
+-
+-	/* enable video-port pins */
+-	saa7146_write(dev, MC1, (MASK_10 | MASK_26));
+-
+-	/* save per-device extension data (one extension can
+-	   handle different devices that might need different
+-	   configuration data) */
+-	dev->ext_vv_data = ext_vv;
+-
+-	vv->d_clipping.cpu_addr =
+-		dma_alloc_coherent(&dev->pci->dev, SAA7146_CLIPPING_MEM,
+-				   &vv->d_clipping.dma_handle, GFP_KERNEL);
+-	if( NULL == vv->d_clipping.cpu_addr ) {
+-		ERR("out of memory. aborting.\n");
+-		kfree(vv);
+-		v4l2_ctrl_handler_free(hdl);
+-		v4l2_device_unregister(&dev->v4l2_dev);
+-		return -ENOMEM;
+-	}
+-
+-	saa7146_video_uops.init(dev,vv);
+-	if (dev->ext_vv_data->capabilities & V4L2_CAP_VBI_CAPTURE)
+-		saa7146_vbi_uops.init(dev,vv);
+-
+-	vv->ov_fb.fmt.width = vv->standard->h_max_out;
+-	vv->ov_fb.fmt.height = vv->standard->v_max_out;
+-	vv->ov_fb.fmt.pixelformat = V4L2_PIX_FMT_RGB565;
+-	vv->ov_fb.fmt.bytesperline = 2 * vv->ov_fb.fmt.width;
+-	vv->ov_fb.fmt.sizeimage = vv->ov_fb.fmt.bytesperline * vv->ov_fb.fmt.height;
+-	vv->ov_fb.fmt.colorspace = V4L2_COLORSPACE_SRGB;
+-
+-	fmt = &vv->video_fmt;
+-	fmt->width = 384;
+-	fmt->height = 288;
+-	fmt->pixelformat = V4L2_PIX_FMT_BGR24;
+-	fmt->field = V4L2_FIELD_ANY;
+-	fmt->colorspace = V4L2_COLORSPACE_SMPTE170M;
+-	fmt->bytesperline = 3 * fmt->width;
+-	fmt->sizeimage = fmt->bytesperline * fmt->height;
+-
+-	vbi = &vv->vbi_fmt;
+-	vbi->sampling_rate	= 27000000;
+-	vbi->offset		= 248; /* todo */
+-	vbi->samples_per_line	= 720 * 2;
+-	vbi->sample_format	= V4L2_PIX_FMT_GREY;
+-
+-	/* fixme: this only works for PAL */
+-	vbi->start[0] = 5;
+-	vbi->count[0] = 16;
+-	vbi->start[1] = 312;
+-	vbi->count[1] = 16;
+-
+-	timer_setup(&vv->vbi_read_timeout, NULL, 0);
+-
+-	vv->ov_fb.capability = V4L2_FBUF_CAP_LIST_CLIPPING;
+-	vv->ov_fb.flags = V4L2_FBUF_FLAG_PRIMARY;
+-	dev->vv_data = vv;
+-	dev->vv_callback = &vv_callback;
+-
+-	return 0;
+-}
+-EXPORT_SYMBOL_GPL(saa7146_vv_init);
+-
+-int saa7146_vv_release(struct saa7146_dev* dev)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	DEB_EE("dev:%p\n", dev);
+-
+-	v4l2_device_unregister(&dev->v4l2_dev);
+-	dma_free_coherent(&dev->pci->dev, SAA7146_CLIPPING_MEM,
+-			  vv->d_clipping.cpu_addr, vv->d_clipping.dma_handle);
+-	v4l2_ctrl_handler_free(&dev->ctrl_handler);
+-	kfree(vv);
+-	dev->vv_data = NULL;
+-	dev->vv_callback = NULL;
+-
+-	return 0;
+-}
+-EXPORT_SYMBOL_GPL(saa7146_vv_release);
+-
+-int saa7146_register_device(struct video_device *vfd, struct saa7146_dev *dev,
+-			    char *name, int type)
+-{
+-	int err;
+-	int i;
+-
+-	DEB_EE("dev:%p, name:'%s', type:%d\n", dev, name, type);
+-
+-	vfd->fops = &video_fops;
+-	if (type == VFL_TYPE_VIDEO)
+-		vfd->ioctl_ops = &dev->ext_vv_data->vid_ops;
+-	else
+-		vfd->ioctl_ops = &dev->ext_vv_data->vbi_ops;
+-	vfd->release = video_device_release_empty;
+-	vfd->lock = &dev->v4l2_lock;
+-	vfd->v4l2_dev = &dev->v4l2_dev;
+-	vfd->tvnorms = 0;
+-	for (i = 0; i < dev->ext_vv_data->num_stds; i++)
+-		vfd->tvnorms |= dev->ext_vv_data->stds[i].id;
+-	strscpy(vfd->name, name, sizeof(vfd->name));
+-	vfd->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_VIDEO_OVERLAY |
+-			   V4L2_CAP_READWRITE | V4L2_CAP_STREAMING;
+-	vfd->device_caps |= dev->ext_vv_data->capabilities;
+-	if (type == VFL_TYPE_VIDEO)
+-		vfd->device_caps &=
+-			~(V4L2_CAP_VBI_CAPTURE | V4L2_CAP_SLICED_VBI_OUTPUT);
+-	else
+-		vfd->device_caps &=
+-			~(V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_VIDEO_OVERLAY | V4L2_CAP_AUDIO);
+-	video_set_drvdata(vfd, dev);
+-
+-	err = video_register_device(vfd, type, -1);
+-	if (err < 0) {
+-		ERR("cannot register v4l2 device. skipping.\n");
+-		return err;
+-	}
+-
+-	pr_info("%s: registered device %s [v4l2]\n",
+-		dev->name, video_device_node_name(vfd));
+-	return 0;
+-}
+-EXPORT_SYMBOL_GPL(saa7146_register_device);
+-
+-int saa7146_unregister_device(struct video_device *vfd, struct saa7146_dev *dev)
+-{
+-	DEB_EE("dev:%p\n", dev);
+-
+-	video_unregister_device(vfd);
+-	return 0;
+-}
+-EXPORT_SYMBOL_GPL(saa7146_unregister_device);
+-
+-static int __init saa7146_vv_init_module(void)
+-{
+-	return 0;
+-}
+-
+-
+-static void __exit saa7146_vv_cleanup_module(void)
+-{
+-}
+-
+-module_init(saa7146_vv_init_module);
+-module_exit(saa7146_vv_cleanup_module);
+-
+-MODULE_AUTHOR("Michael Hunold <michael@mihu.de>");
+-MODULE_DESCRIPTION("video4linux driver for saa7146-based hardware");
+-MODULE_LICENSE("GPL");
+diff --git a/drivers/staging/media/deprecated/saa7146/common/saa7146_hlp.c b/drivers/staging/media/deprecated/saa7146/common/saa7146_hlp.c
+deleted file mode 100644
+index b1222a4cfa4a..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/common/saa7146_hlp.c
++++ /dev/null
+@@ -1,1046 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
+-#include <linux/kernel.h>
+-#include <linux/export.h>
+-#include "saa7146_vv.h"
+-
+-static void calculate_output_format_register(struct saa7146_dev* saa, u32 palette, u32* clip_format)
+-{
+-	/* clear out the necessary bits */
+-	*clip_format &= 0x0000ffff;
+-	/* set these bits new */
+-	*clip_format |=  (( ((palette&0xf00)>>8) << 30) | ((palette&0x00f) << 24) | (((palette&0x0f0)>>4) << 16));
+-}
+-
+-static void calculate_hps_source_and_sync(struct saa7146_dev *dev, int source, int sync, u32* hps_ctrl)
+-{
+-	*hps_ctrl &= ~(MASK_30 | MASK_31 | MASK_28);
+-	*hps_ctrl |= (source << 30) | (sync << 28);
+-}
+-
+-static void calculate_hxo_and_hyo(struct saa7146_vv *vv, u32* hps_h_scale, u32* hps_ctrl)
+-{
+-	int hyo = 0, hxo = 0;
+-
+-	hyo = vv->standard->v_offset;
+-	hxo = vv->standard->h_offset;
+-
+-	*hps_h_scale	&= ~(MASK_B0 | 0xf00);
+-	*hps_h_scale	|= (hxo <<  0);
+-
+-	*hps_ctrl	&= ~(MASK_W0 | MASK_B2);
+-	*hps_ctrl	|= (hyo << 12);
+-}
+-
+-/* helper functions for the calculation of the horizontal- and vertical
+-   scaling registers, clip-format-register etc ...
+-   these functions take pointers to the (most-likely read-out
+-   original-values) and manipulate them according to the requested
+-   changes.
+-*/
+-
+-/* hps_coeff used for CXY and CXUV; scale 1/1 -> scale 1/64 */
+-static struct {
+-	u16 hps_coeff;
+-	u16 weight_sum;
+-} hps_h_coeff_tab [] = {
+-	{0x00,   2}, {0x02,   4}, {0x00,   4}, {0x06,   8}, {0x02,   8},
+-	{0x08,   8}, {0x00,   8}, {0x1E,  16}, {0x0E,   8}, {0x26,   8},
+-	{0x06,   8}, {0x42,   8}, {0x02,   8}, {0x80,   8}, {0x00,   8},
+-	{0xFE,  16}, {0xFE,   8}, {0x7E,   8}, {0x7E,   8}, {0x3E,   8},
+-	{0x3E,   8}, {0x1E,   8}, {0x1E,   8}, {0x0E,   8}, {0x0E,   8},
+-	{0x06,   8}, {0x06,   8}, {0x02,   8}, {0x02,   8}, {0x00,   8},
+-	{0x00,   8}, {0xFE,  16}, {0xFE,   8}, {0xFE,   8}, {0xFE,   8},
+-	{0xFE,   8}, {0xFE,   8}, {0xFE,   8}, {0xFE,   8}, {0xFE,   8},
+-	{0xFE,   8}, {0xFE,   8}, {0xFE,   8}, {0xFE,   8}, {0xFE,   8},
+-	{0xFE,   8}, {0xFE,   8}, {0xFE,   8}, {0xFE,   8}, {0x7E,   8},
+-	{0x7E,   8}, {0x3E,   8}, {0x3E,   8}, {0x1E,   8}, {0x1E,   8},
+-	{0x0E,   8}, {0x0E,   8}, {0x06,   8}, {0x06,   8}, {0x02,   8},
+-	{0x02,   8}, {0x00,   8}, {0x00,   8}, {0xFE,  16}
+-};
+-
+-/* table of attenuation values for horizontal scaling */
+-static u8 h_attenuation[] = { 1, 2, 4, 8, 2, 4, 8, 16, 0};
+-
+-/* calculate horizontal scale registers */
+-static int calculate_h_scale_registers(struct saa7146_dev *dev,
+-	int in_x, int out_x, int flip_lr,
+-	u32* hps_ctrl, u32* hps_v_gain, u32* hps_h_prescale, u32* hps_h_scale)
+-{
+-	/* horizontal prescaler */
+-	u32 dcgx = 0, xpsc = 0, xacm = 0, cxy = 0, cxuv = 0;
+-	/* horizontal scaler */
+-	u32 xim = 0, xp = 0, xsci =0;
+-	/* vertical scale & gain */
+-	u32 pfuv = 0;
+-
+-	/* helper variables */
+-	u32 h_atten = 0, i = 0;
+-
+-	if ( 0 == out_x ) {
+-		return -EINVAL;
+-	}
+-
+-	/* mask out vanity-bit */
+-	*hps_ctrl &= ~MASK_29;
+-
+-	/* calculate prescale-(xspc)-value:	[n   .. 1/2) : 1
+-						[1/2 .. 1/3) : 2
+-						[1/3 .. 1/4) : 3
+-						...		*/
+-	if (in_x > out_x) {
+-		xpsc = in_x / out_x;
+-	}
+-	else {
+-		/* zooming */
+-		xpsc = 1;
+-	}
+-
+-	/* if flip_lr-bit is set, number of pixels after
+-	   horizontal prescaling must be < 384 */
+-	if ( 0 != flip_lr ) {
+-
+-		/* set vanity bit */
+-		*hps_ctrl |= MASK_29;
+-
+-		while (in_x / xpsc >= 384 )
+-			xpsc++;
+-	}
+-	/* if zooming is wanted, number of pixels after
+-	   horizontal prescaling must be < 768 */
+-	else {
+-		while ( in_x / xpsc >= 768 )
+-			xpsc++;
+-	}
+-
+-	/* maximum prescale is 64 (p.69) */
+-	if ( xpsc > 64 )
+-		xpsc = 64;
+-
+-	/* keep xacm clear*/
+-	xacm = 0;
+-
+-	/* set horizontal filter parameters (CXY = CXUV) */
+-	cxy = hps_h_coeff_tab[( (xpsc - 1) < 63 ? (xpsc - 1) : 63 )].hps_coeff;
+-	cxuv = cxy;
+-
+-	/* calculate and set horizontal fine scale (xsci) */
+-
+-	/* bypass the horizontal scaler ? */
+-	if ( (in_x == out_x) && ( 1 == xpsc ) )
+-		xsci = 0x400;
+-	else
+-		xsci = ( (1024 * in_x) / (out_x * xpsc) ) + xpsc;
+-
+-	/* set start phase for horizontal fine scale (xp) to 0 */
+-	xp = 0;
+-
+-	/* set xim, if we bypass the horizontal scaler */
+-	if ( 0x400 == xsci )
+-		xim = 1;
+-	else
+-		xim = 0;
+-
+-	/* if the prescaler is bypassed, enable horizontal
+-	   accumulation mode (xacm) and clear dcgx */
+-	if( 1 == xpsc ) {
+-		xacm = 1;
+-		dcgx = 0;
+-	} else {
+-		xacm = 0;
+-		/* get best match in the table of attenuations
+-		   for horizontal scaling */
+-		h_atten = hps_h_coeff_tab[( (xpsc - 1) < 63 ? (xpsc - 1) : 63 )].weight_sum;
+-
+-		for (i = 0; h_attenuation[i] != 0; i++) {
+-			if (h_attenuation[i] >= h_atten)
+-				break;
+-		}
+-
+-		dcgx = i;
+-	}
+-
+-	/* the horizontal scaling increment controls the UV filter
+-	   to reduce the bandwidth to improve the display quality,
+-	   so set it ... */
+-	if ( xsci == 0x400)
+-		pfuv = 0x00;
+-	else if ( xsci < 0x600)
+-		pfuv = 0x01;
+-	else if ( xsci < 0x680)
+-		pfuv = 0x11;
+-	else if ( xsci < 0x700)
+-		pfuv = 0x22;
+-	else
+-		pfuv = 0x33;
+-
+-
+-	*hps_v_gain  &= MASK_W0|MASK_B2;
+-	*hps_v_gain  |= (pfuv << 24);
+-
+-	*hps_h_scale	&= ~(MASK_W1 | 0xf000);
+-	*hps_h_scale	|= (xim << 31) | (xp << 24) | (xsci << 12);
+-
+-	*hps_h_prescale	|= (dcgx << 27) | ((xpsc-1) << 18) | (xacm << 17) | (cxy << 8) | (cxuv << 0);
+-
+-	return 0;
+-}
+-
+-static struct {
+-	u16 hps_coeff;
+-	u16 weight_sum;
+-} hps_v_coeff_tab [] = {
+- {0x0100,   2},  {0x0102,   4},  {0x0300,   4},  {0x0106,   8},  {0x0502,   8},
+- {0x0708,   8},  {0x0F00,   8},  {0x011E,  16},  {0x110E,  16},  {0x1926,  16},
+- {0x3906,  16},  {0x3D42,  16},  {0x7D02,  16},  {0x7F80,  16},  {0xFF00,  16},
+- {0x01FE,  32},  {0x01FE,  32},  {0x817E,  32},  {0x817E,  32},  {0xC13E,  32},
+- {0xC13E,  32},  {0xE11E,  32},  {0xE11E,  32},  {0xF10E,  32},  {0xF10E,  32},
+- {0xF906,  32},  {0xF906,  32},  {0xFD02,  32},  {0xFD02,  32},  {0xFF00,  32},
+- {0xFF00,  32},  {0x01FE,  64},  {0x01FE,  64},  {0x01FE,  64},  {0x01FE,  64},
+- {0x01FE,  64},  {0x01FE,  64},  {0x01FE,  64},  {0x01FE,  64},  {0x01FE,  64},
+- {0x01FE,  64},  {0x01FE,  64},  {0x01FE,  64},  {0x01FE,  64},  {0x01FE,  64},
+- {0x01FE,  64},  {0x01FE,  64},  {0x01FE,  64},  {0x01FE,  64},  {0x817E,  64},
+- {0x817E,  64},  {0xC13E,  64},  {0xC13E,  64},  {0xE11E,  64},  {0xE11E,  64},
+- {0xF10E,  64},  {0xF10E,  64},  {0xF906,  64},  {0xF906,  64},  {0xFD02,  64},
+- {0xFD02,  64},  {0xFF00,  64},  {0xFF00,  64},  {0x01FE, 128}
+-};
+-
+-/* table of attenuation values for vertical scaling */
+-static u16 v_attenuation[] = { 2, 4, 8, 16, 32, 64, 128, 256, 0};
+-
+-/* calculate vertical scale registers */
+-static int calculate_v_scale_registers(struct saa7146_dev *dev, enum v4l2_field field,
+-	int in_y, int out_y, u32* hps_v_scale, u32* hps_v_gain)
+-{
+-	int lpi = 0;
+-
+-	/* vertical scaling */
+-	u32 yacm = 0, ysci = 0, yacl = 0, ypo = 0, ype = 0;
+-	/* vertical scale & gain */
+-	u32 dcgy = 0, cya_cyb = 0;
+-
+-	/* helper variables */
+-	u32 v_atten = 0, i = 0;
+-
+-	/* error, if vertical zooming */
+-	if ( in_y < out_y ) {
+-		return -EINVAL;
+-	}
+-
+-	/* linear phase interpolation may be used
+-	   if scaling is between 1 and 1/2 (both fields used)
+-	   or scaling is between 1/2 and 1/4 (if only one field is used) */
+-
+-	if (V4L2_FIELD_HAS_BOTH(field)) {
+-		if( 2*out_y >= in_y) {
+-			lpi = 1;
+-		}
+-	} else if (field == V4L2_FIELD_TOP
+-		|| field == V4L2_FIELD_ALTERNATE
+-		|| field == V4L2_FIELD_BOTTOM) {
+-		if( 4*out_y >= in_y ) {
+-			lpi = 1;
+-		}
+-		out_y *= 2;
+-	}
+-	if( 0 != lpi ) {
+-
+-		yacm = 0;
+-		yacl = 0;
+-		cya_cyb = 0x00ff;
+-
+-		/* calculate scaling increment */
+-		if ( in_y > out_y )
+-			ysci = ((1024 * in_y) / (out_y + 1)) - 1024;
+-		else
+-			ysci = 0;
+-
+-		dcgy = 0;
+-
+-		/* calculate ype and ypo */
+-		ype = ysci / 16;
+-		ypo = ype + (ysci / 64);
+-
+-	} else {
+-		yacm = 1;
+-
+-		/* calculate scaling increment */
+-		ysci = (((10 * 1024 * (in_y - out_y - 1)) / in_y) + 9) / 10;
+-
+-		/* calculate ype and ypo */
+-		ypo = ype = ((ysci + 15) / 16);
+-
+-		/* the sequence length interval (yacl) has to be set according
+-		   to the prescale value, e.g.	[n   .. 1/2) : 0
+-						[1/2 .. 1/3) : 1
+-						[1/3 .. 1/4) : 2
+-						... */
+-		if ( ysci < 512) {
+-			yacl = 0;
+-		} else {
+-			yacl = ( ysci / (1024 - ysci) );
+-		}
+-
+-		/* get filter coefficients for cya, cyb from table hps_v_coeff_tab */
+-		cya_cyb = hps_v_coeff_tab[ (yacl < 63 ? yacl : 63 ) ].hps_coeff;
+-
+-		/* get best match in the table of attenuations for vertical scaling */
+-		v_atten = hps_v_coeff_tab[ (yacl < 63 ? yacl : 63 ) ].weight_sum;
+-
+-		for (i = 0; v_attenuation[i] != 0; i++) {
+-			if (v_attenuation[i] >= v_atten)
+-				break;
+-		}
+-
+-		dcgy = i;
+-	}
+-
+-	/* ypo and ype swapped in spec ? */
+-	*hps_v_scale	|= (yacm << 31) | (ysci << 21) | (yacl << 15) | (ypo << 8 ) | (ype << 1);
+-
+-	*hps_v_gain	&= ~(MASK_W0|MASK_B2);
+-	*hps_v_gain	|= (dcgy << 16) | (cya_cyb << 0);
+-
+-	return 0;
+-}
+-
+-/* simple bubble-sort algorithm with duplicate elimination */
+-static int sort_and_eliminate(u32* values, int* count)
+-{
+-	int low = 0, high = 0, top = 0;
+-	int cur = 0, next = 0;
+-
+-	/* sanity checks */
+-	if( (0 > *count) || (NULL == values) ) {
+-		return -EINVAL;
+-	}
+-
+-	/* bubble sort the first @count items of the array @values */
+-	for( top = *count; top > 0; top--) {
+-		for( low = 0, high = 1; high < top; low++, high++) {
+-			if( values[low] > values[high] )
+-				swap(values[low], values[high]);
+-		}
+-	}
+-
+-	/* remove duplicate items */
+-	for( cur = 0, next = 1; next < *count; next++) {
+-		if( values[cur] != values[next])
+-			values[++cur] = values[next];
+-	}
+-
+-	*count = cur + 1;
+-
+-	return 0;
+-}
+-
+-static void calculate_clipping_registers_rect(struct saa7146_dev *dev, struct saa7146_fh *fh,
+-	struct saa7146_video_dma *vdma2, u32* clip_format, u32* arbtr_ctrl, enum v4l2_field field)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-	__le32 *clipping = vv->d_clipping.cpu_addr;
+-
+-	int width = vv->ov.win.w.width;
+-	int height =  vv->ov.win.w.height;
+-	int clipcount = vv->ov.nclips;
+-
+-	u32 line_list[32];
+-	u32 pixel_list[32];
+-	int numdwords = 0;
+-
+-	int i = 0, j = 0;
+-	int cnt_line = 0, cnt_pixel = 0;
+-
+-	int x[32], y[32], w[32], h[32];
+-
+-	/* clear out memory */
+-	memset(&line_list[0],  0x00, sizeof(u32)*32);
+-	memset(&pixel_list[0], 0x00, sizeof(u32)*32);
+-	memset(clipping,  0x00, SAA7146_CLIPPING_MEM);
+-
+-	/* fill the line and pixel-lists */
+-	for(i = 0; i < clipcount; i++) {
+-		int l = 0, r = 0, t = 0, b = 0;
+-
+-		x[i] = vv->ov.clips[i].c.left;
+-		y[i] = vv->ov.clips[i].c.top;
+-		w[i] = vv->ov.clips[i].c.width;
+-		h[i] = vv->ov.clips[i].c.height;
+-
+-		if( w[i] < 0) {
+-			x[i] += w[i]; w[i] = -w[i];
+-		}
+-		if( h[i] < 0) {
+-			y[i] += h[i]; h[i] = -h[i];
+-		}
+-		if( x[i] < 0) {
+-			w[i] += x[i]; x[i] = 0;
+-		}
+-		if( y[i] < 0) {
+-			h[i] += y[i]; y[i] = 0;
+-		}
+-		if( 0 != vv->vflip ) {
+-			y[i] = height - y[i] - h[i];
+-		}
+-
+-		l = x[i];
+-		r = x[i]+w[i];
+-		t = y[i];
+-		b = y[i]+h[i];
+-
+-		/* insert left/right coordinates */
+-		pixel_list[ 2*i   ] = min_t(int, l, width);
+-		pixel_list[(2*i)+1] = min_t(int, r, width);
+-		/* insert top/bottom coordinates */
+-		line_list[ 2*i   ] = min_t(int, t, height);
+-		line_list[(2*i)+1] = min_t(int, b, height);
+-	}
+-
+-	/* sort and eliminate lists */
+-	cnt_line = cnt_pixel = 2*clipcount;
+-	sort_and_eliminate( &pixel_list[0], &cnt_pixel );
+-	sort_and_eliminate( &line_list[0], &cnt_line );
+-
+-	/* calculate the number of used u32s */
+-	numdwords = max_t(int, (cnt_line+1), (cnt_pixel+1))*2;
+-	numdwords = max_t(int, 4, numdwords);
+-	numdwords = min_t(int, 64, numdwords);
+-
+-	/* fill up cliptable */
+-	for(i = 0; i < cnt_pixel; i++) {
+-		clipping[2*i] |= cpu_to_le32(pixel_list[i] << 16);
+-	}
+-	for(i = 0; i < cnt_line; i++) {
+-		clipping[(2*i)+1] |= cpu_to_le32(line_list[i] << 16);
+-	}
+-
+-	/* fill up cliptable with the display infos */
+-	for(j = 0; j < clipcount; j++) {
+-
+-		for(i = 0; i < cnt_pixel; i++) {
+-
+-			if( x[j] < 0)
+-				x[j] = 0;
+-
+-			if( pixel_list[i] < (x[j] + w[j])) {
+-
+-				if ( pixel_list[i] >= x[j] ) {
+-					clipping[2*i] |= cpu_to_le32(1 << j);
+-				}
+-			}
+-		}
+-		for(i = 0; i < cnt_line; i++) {
+-
+-			if( y[j] < 0)
+-				y[j] = 0;
+-
+-			if( line_list[i] < (y[j] + h[j]) ) {
+-
+-				if( line_list[i] >= y[j] ) {
+-					clipping[(2*i)+1] |= cpu_to_le32(1 << j);
+-				}
+-			}
+-		}
+-	}
+-
+-	/* adjust arbitration control register */
+-	*arbtr_ctrl &= 0xffff00ff;
+-	*arbtr_ctrl |= 0x00001c00;
+-
+-	vdma2->base_even	= vv->d_clipping.dma_handle;
+-	vdma2->base_odd		= vv->d_clipping.dma_handle;
+-	vdma2->prot_addr	= vv->d_clipping.dma_handle+((sizeof(u32))*(numdwords));
+-	vdma2->base_page	= 0x04;
+-	vdma2->pitch		= 0x00;
+-	vdma2->num_line_byte	= (0 << 16 | (sizeof(u32))*(numdwords-1) );
+-
+-	/* set clipping-mode. this depends on the field(s) used */
+-	*clip_format &= 0xfffffff7;
+-	if (V4L2_FIELD_HAS_BOTH(field)) {
+-		*clip_format |= 0x00000008;
+-	} else {
+-		*clip_format |= 0x00000000;
+-	}
+-}
+-
+-/* disable clipping */
+-static void saa7146_disable_clipping(struct saa7146_dev *dev)
+-{
+-	u32 clip_format	= saa7146_read(dev, CLIP_FORMAT_CTRL);
+-
+-	/* mask out relevant bits (=lower word)*/
+-	clip_format &= MASK_W1;
+-
+-	/* upload clipping-registers*/
+-	saa7146_write(dev, CLIP_FORMAT_CTRL,clip_format);
+-	saa7146_write(dev, MC2, (MASK_05 | MASK_21));
+-
+-	/* disable video dma2 */
+-	saa7146_write(dev, MC1, MASK_21);
+-}
+-
+-static void saa7146_set_clipping_rect(struct saa7146_fh *fh)
+-{
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	enum v4l2_field field = vv->ov.win.field;
+-	struct	saa7146_video_dma vdma2;
+-	u32 clip_format;
+-	u32 arbtr_ctrl;
+-
+-	/* check clipcount, disable clipping if clipcount == 0*/
+-	if (vv->ov.nclips == 0) {
+-		saa7146_disable_clipping(dev);
+-		return;
+-	}
+-
+-	clip_format = saa7146_read(dev, CLIP_FORMAT_CTRL);
+-	arbtr_ctrl = saa7146_read(dev, PCI_BT_V1);
+-
+-	calculate_clipping_registers_rect(dev, fh, &vdma2, &clip_format, &arbtr_ctrl, field);
+-
+-	/* set clipping format */
+-	clip_format &= 0xffff0008;
+-	clip_format |= (SAA7146_CLIPPING_RECT << 4);
+-
+-	/* prepare video dma2 */
+-	saa7146_write(dev, BASE_EVEN2,		vdma2.base_even);
+-	saa7146_write(dev, BASE_ODD2,		vdma2.base_odd);
+-	saa7146_write(dev, PROT_ADDR2,		vdma2.prot_addr);
+-	saa7146_write(dev, BASE_PAGE2,		vdma2.base_page);
+-	saa7146_write(dev, PITCH2,		vdma2.pitch);
+-	saa7146_write(dev, NUM_LINE_BYTE2,	vdma2.num_line_byte);
+-
+-	/* prepare the rest */
+-	saa7146_write(dev, CLIP_FORMAT_CTRL,clip_format);
+-	saa7146_write(dev, PCI_BT_V1, arbtr_ctrl);
+-
+-	/* upload clip_control-register, clipping-registers, enable video dma2 */
+-	saa7146_write(dev, MC2, (MASK_05 | MASK_21 | MASK_03 | MASK_19));
+-	saa7146_write(dev, MC1, (MASK_05 | MASK_21));
+-}
+-
+-static void saa7146_set_window(struct saa7146_dev *dev, int width, int height, enum v4l2_field field)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	int source = vv->current_hps_source;
+-	int sync = vv->current_hps_sync;
+-
+-	u32 hps_v_scale = 0, hps_v_gain  = 0, hps_ctrl = 0, hps_h_prescale = 0, hps_h_scale = 0;
+-
+-	/* set vertical scale */
+-	hps_v_scale = 0; /* all bits get set by the function-call */
+-	hps_v_gain  = 0; /* fixme: saa7146_read(dev, HPS_V_GAIN);*/
+-	calculate_v_scale_registers(dev, field, vv->standard->v_field*2, height, &hps_v_scale, &hps_v_gain);
+-
+-	/* set horizontal scale */
+-	hps_ctrl	= 0;
+-	hps_h_prescale	= 0; /* all bits get set in the function */
+-	hps_h_scale	= 0;
+-	calculate_h_scale_registers(dev, vv->standard->h_pixels, width, vv->hflip, &hps_ctrl, &hps_v_gain, &hps_h_prescale, &hps_h_scale);
+-
+-	/* set hyo and hxo */
+-	calculate_hxo_and_hyo(vv, &hps_h_scale, &hps_ctrl);
+-	calculate_hps_source_and_sync(dev, source, sync, &hps_ctrl);
+-
+-	/* write out new register contents */
+-	saa7146_write(dev, HPS_V_SCALE,	hps_v_scale);
+-	saa7146_write(dev, HPS_V_GAIN,	hps_v_gain);
+-	saa7146_write(dev, HPS_CTRL,	hps_ctrl);
+-	saa7146_write(dev, HPS_H_PRESCALE,hps_h_prescale);
+-	saa7146_write(dev, HPS_H_SCALE,	hps_h_scale);
+-
+-	/* upload shadow-ram registers */
+-	saa7146_write(dev, MC2, (MASK_05 | MASK_06 | MASK_21 | MASK_22) );
+-}
+-
+-/* calculate the new memory offsets for a desired position */
+-static void saa7146_set_position(struct saa7146_dev *dev, int w_x, int w_y, int w_height, enum v4l2_field field, u32 pixelformat)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct saa7146_format *sfmt = saa7146_format_by_fourcc(dev, pixelformat);
+-
+-	int b_depth = vv->ov_fmt->depth;
+-	int b_bpl = vv->ov_fb.fmt.bytesperline;
+-	/* The unsigned long cast is to remove a 64-bit compile warning since
+-	   it looks like a 64-bit address is cast to a 32-bit value, even
+-	   though the base pointer is really a 32-bit physical address that
+-	   goes into a 32-bit DMA register.
+-	   FIXME: might not work on some 64-bit platforms, but see the FIXME
+-	   in struct v4l2_framebuffer (videodev2.h) for that.
+-	 */
+-	u32 base = (u32)(unsigned long)vv->ov_fb.base;
+-
+-	struct	saa7146_video_dma vdma1;
+-
+-	/* calculate memory offsets for picture, look if we shall top-down-flip */
+-	vdma1.pitch	= 2*b_bpl;
+-	if ( 0 == vv->vflip ) {
+-		vdma1.base_even = base + (w_y * (vdma1.pitch/2)) + (w_x * (b_depth / 8));
+-		vdma1.base_odd  = vdma1.base_even + (vdma1.pitch / 2);
+-		vdma1.prot_addr = vdma1.base_even + (w_height * (vdma1.pitch / 2));
+-	}
+-	else {
+-		vdma1.base_even = base + ((w_y+w_height) * (vdma1.pitch/2)) + (w_x * (b_depth / 8));
+-		vdma1.base_odd  = vdma1.base_even - (vdma1.pitch / 2);
+-		vdma1.prot_addr = vdma1.base_odd - (w_height * (vdma1.pitch / 2));
+-	}
+-
+-	if (V4L2_FIELD_HAS_BOTH(field)) {
+-	} else if (field == V4L2_FIELD_ALTERNATE) {
+-		/* fixme */
+-		vdma1.base_odd = vdma1.prot_addr;
+-		vdma1.pitch /= 2;
+-	} else if (field == V4L2_FIELD_TOP) {
+-		vdma1.base_odd = vdma1.prot_addr;
+-		vdma1.pitch /= 2;
+-	} else if (field == V4L2_FIELD_BOTTOM) {
+-		vdma1.base_odd = vdma1.base_even;
+-		vdma1.base_even = vdma1.prot_addr;
+-		vdma1.pitch /= 2;
+-	}
+-
+-	if ( 0 != vv->vflip ) {
+-		vdma1.pitch *= -1;
+-	}
+-
+-	vdma1.base_page = sfmt->swap;
+-	vdma1.num_line_byte = (vv->standard->v_field<<16)+vv->standard->h_pixels;
+-
+-	saa7146_write_out_dma(dev, 1, &vdma1);
+-}
+-
+-static void saa7146_set_output_format(struct saa7146_dev *dev, unsigned long palette)
+-{
+-	u32 clip_format = saa7146_read(dev, CLIP_FORMAT_CTRL);
+-
+-	/* call helper function */
+-	calculate_output_format_register(dev,palette,&clip_format);
+-
+-	/* update the hps registers */
+-	saa7146_write(dev, CLIP_FORMAT_CTRL, clip_format);
+-	saa7146_write(dev, MC2, (MASK_05 | MASK_21));
+-}
+-
+-/* select input-source */
+-void saa7146_set_hps_source_and_sync(struct saa7146_dev *dev, int source, int sync)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-	u32 hps_ctrl = 0;
+-
+-	/* read old state */
+-	hps_ctrl = saa7146_read(dev, HPS_CTRL);
+-
+-	hps_ctrl &= ~( MASK_31 | MASK_30 | MASK_28 );
+-	hps_ctrl |= (source << 30) | (sync << 28);
+-
+-	/* write back & upload register */
+-	saa7146_write(dev, HPS_CTRL, hps_ctrl);
+-	saa7146_write(dev, MC2, (MASK_05 | MASK_21));
+-
+-	vv->current_hps_source = source;
+-	vv->current_hps_sync = sync;
+-}
+-EXPORT_SYMBOL_GPL(saa7146_set_hps_source_and_sync);
+-
+-int saa7146_enable_overlay(struct saa7146_fh *fh)
+-{
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	saa7146_set_window(dev, vv->ov.win.w.width, vv->ov.win.w.height, vv->ov.win.field);
+-	saa7146_set_position(dev, vv->ov.win.w.left, vv->ov.win.w.top, vv->ov.win.w.height, vv->ov.win.field, vv->ov_fmt->pixelformat);
+-	saa7146_set_output_format(dev, vv->ov_fmt->trans);
+-	saa7146_set_clipping_rect(fh);
+-
+-	/* enable video dma1 */
+-	saa7146_write(dev, MC1, (MASK_06 | MASK_22));
+-	return 0;
+-}
+-
+-void saa7146_disable_overlay(struct saa7146_fh *fh)
+-{
+-	struct saa7146_dev *dev = fh->dev;
+-
+-	/* disable clipping + video dma1 */
+-	saa7146_disable_clipping(dev);
+-	saa7146_write(dev, MC1, MASK_22);
+-}
+-
+-void saa7146_write_out_dma(struct saa7146_dev* dev, int which, struct saa7146_video_dma* vdma)
+-{
+-	int where = 0;
+-
+-	if( which < 1 || which > 3) {
+-		return;
+-	}
+-
+-	/* calculate starting address */
+-	where  = (which-1)*0x18;
+-
+-	saa7146_write(dev, where,	vdma->base_odd);
+-	saa7146_write(dev, where+0x04,	vdma->base_even);
+-	saa7146_write(dev, where+0x08,	vdma->prot_addr);
+-	saa7146_write(dev, where+0x0c,	vdma->pitch);
+-	saa7146_write(dev, where+0x10,	vdma->base_page);
+-	saa7146_write(dev, where+0x14,	vdma->num_line_byte);
+-
+-	/* upload */
+-	saa7146_write(dev, MC2, (MASK_02<<(which-1))|(MASK_18<<(which-1)));
+-/*
+-	printk("vdma%d.base_even:     0x%08x\n", which,vdma->base_even);
+-	printk("vdma%d.base_odd:      0x%08x\n", which,vdma->base_odd);
+-	printk("vdma%d.prot_addr:     0x%08x\n", which,vdma->prot_addr);
+-	printk("vdma%d.base_page:     0x%08x\n", which,vdma->base_page);
+-	printk("vdma%d.pitch:         0x%08x\n", which,vdma->pitch);
+-	printk("vdma%d.num_line_byte: 0x%08x\n", which,vdma->num_line_byte);
+-*/
+-}
+-
+-static int calculate_video_dma_grab_packed(struct saa7146_dev* dev, struct saa7146_buf *buf)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct saa7146_video_dma vdma1;
+-
+-	struct saa7146_format *sfmt = saa7146_format_by_fourcc(dev,buf->fmt->pixelformat);
+-
+-	int width = buf->fmt->width;
+-	int height = buf->fmt->height;
+-	int bytesperline = buf->fmt->bytesperline;
+-	enum v4l2_field field = buf->fmt->field;
+-
+-	int depth = sfmt->depth;
+-
+-	DEB_CAP("[size=%dx%d,fields=%s]\n",
+-		width, height, v4l2_field_names[field]);
+-
+-	if( bytesperline != 0) {
+-		vdma1.pitch = bytesperline*2;
+-	} else {
+-		vdma1.pitch = (width*depth*2)/8;
+-	}
+-	vdma1.num_line_byte	= ((vv->standard->v_field<<16) + vv->standard->h_pixels);
+-	vdma1.base_page		= buf->pt[0].dma | ME1 | sfmt->swap;
+-
+-	if( 0 != vv->vflip ) {
+-		vdma1.prot_addr	= buf->pt[0].offset;
+-		vdma1.base_even	= buf->pt[0].offset+(vdma1.pitch/2)*height;
+-		vdma1.base_odd	= vdma1.base_even - (vdma1.pitch/2);
+-	} else {
+-		vdma1.base_even	= buf->pt[0].offset;
+-		vdma1.base_odd	= vdma1.base_even + (vdma1.pitch/2);
+-		vdma1.prot_addr	= buf->pt[0].offset+(vdma1.pitch/2)*height;
+-	}
+-
+-	if (V4L2_FIELD_HAS_BOTH(field)) {
+-	} else if (field == V4L2_FIELD_ALTERNATE) {
+-		/* fixme */
+-		if ( vv->last_field == V4L2_FIELD_TOP ) {
+-			vdma1.base_odd	= vdma1.prot_addr;
+-			vdma1.pitch /= 2;
+-		} else if ( vv->last_field == V4L2_FIELD_BOTTOM ) {
+-			vdma1.base_odd	= vdma1.base_even;
+-			vdma1.base_even = vdma1.prot_addr;
+-			vdma1.pitch /= 2;
+-		}
+-	} else if (field == V4L2_FIELD_TOP) {
+-		vdma1.base_odd	= vdma1.prot_addr;
+-		vdma1.pitch /= 2;
+-	} else if (field == V4L2_FIELD_BOTTOM) {
+-		vdma1.base_odd	= vdma1.base_even;
+-		vdma1.base_even = vdma1.prot_addr;
+-		vdma1.pitch /= 2;
+-	}
+-
+-	if( 0 != vv->vflip ) {
+-		vdma1.pitch *= -1;
+-	}
+-
+-	saa7146_write_out_dma(dev, 1, &vdma1);
+-	return 0;
+-}
+-
+-static int calc_planar_422(struct saa7146_vv *vv, struct saa7146_buf *buf, struct saa7146_video_dma *vdma2, struct saa7146_video_dma *vdma3)
+-{
+-	int height = buf->fmt->height;
+-	int width = buf->fmt->width;
+-
+-	vdma2->pitch	= width;
+-	vdma3->pitch	= width;
+-
+-	/* fixme: look at bytesperline! */
+-
+-	if( 0 != vv->vflip ) {
+-		vdma2->prot_addr	= buf->pt[1].offset;
+-		vdma2->base_even	= ((vdma2->pitch/2)*height)+buf->pt[1].offset;
+-		vdma2->base_odd		= vdma2->base_even - (vdma2->pitch/2);
+-
+-		vdma3->prot_addr	= buf->pt[2].offset;
+-		vdma3->base_even	= ((vdma3->pitch/2)*height)+buf->pt[2].offset;
+-		vdma3->base_odd		= vdma3->base_even - (vdma3->pitch/2);
+-	} else {
+-		vdma3->base_even	= buf->pt[2].offset;
+-		vdma3->base_odd		= vdma3->base_even + (vdma3->pitch/2);
+-		vdma3->prot_addr	= (vdma3->pitch/2)*height+buf->pt[2].offset;
+-
+-		vdma2->base_even	= buf->pt[1].offset;
+-		vdma2->base_odd		= vdma2->base_even + (vdma2->pitch/2);
+-		vdma2->prot_addr	= (vdma2->pitch/2)*height+buf->pt[1].offset;
+-	}
+-
+-	return 0;
+-}
+-
+-static int calc_planar_420(struct saa7146_vv *vv, struct saa7146_buf *buf, struct saa7146_video_dma *vdma2, struct saa7146_video_dma *vdma3)
+-{
+-	int height = buf->fmt->height;
+-	int width = buf->fmt->width;
+-
+-	vdma2->pitch	= width/2;
+-	vdma3->pitch	= width/2;
+-
+-	if( 0 != vv->vflip ) {
+-		vdma2->prot_addr	= buf->pt[2].offset;
+-		vdma2->base_even	= ((vdma2->pitch/2)*height)+buf->pt[2].offset;
+-		vdma2->base_odd		= vdma2->base_even - (vdma2->pitch/2);
+-
+-		vdma3->prot_addr	= buf->pt[1].offset;
+-		vdma3->base_even	= ((vdma3->pitch/2)*height)+buf->pt[1].offset;
+-		vdma3->base_odd		= vdma3->base_even - (vdma3->pitch/2);
+-
+-	} else {
+-		vdma3->base_even	= buf->pt[2].offset;
+-		vdma3->base_odd		= vdma3->base_even + (vdma3->pitch);
+-		vdma3->prot_addr	= (vdma3->pitch/2)*height+buf->pt[2].offset;
+-
+-		vdma2->base_even	= buf->pt[1].offset;
+-		vdma2->base_odd		= vdma2->base_even + (vdma2->pitch);
+-		vdma2->prot_addr	= (vdma2->pitch/2)*height+buf->pt[1].offset;
+-	}
+-	return 0;
+-}
+-
+-static int calculate_video_dma_grab_planar(struct saa7146_dev* dev, struct saa7146_buf *buf)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct saa7146_video_dma vdma1;
+-	struct saa7146_video_dma vdma2;
+-	struct saa7146_video_dma vdma3;
+-
+-	struct saa7146_format *sfmt = saa7146_format_by_fourcc(dev,buf->fmt->pixelformat);
+-
+-	int width = buf->fmt->width;
+-	int height = buf->fmt->height;
+-	enum v4l2_field field = buf->fmt->field;
+-
+-	BUG_ON(0 == buf->pt[0].dma);
+-	BUG_ON(0 == buf->pt[1].dma);
+-	BUG_ON(0 == buf->pt[2].dma);
+-
+-	DEB_CAP("[size=%dx%d,fields=%s]\n",
+-		width, height, v4l2_field_names[field]);
+-
+-	/* fixme: look at bytesperline! */
+-
+-	/* fixme: what happens for user space buffers here?. The offsets are
+-	   most likely wrong, this version here only works for page-aligned
+-	   buffers, modifications to the pagetable-functions are necessary...*/
+-
+-	vdma1.pitch		= width*2;
+-	vdma1.num_line_byte	= ((vv->standard->v_field<<16) + vv->standard->h_pixels);
+-	vdma1.base_page		= buf->pt[0].dma | ME1;
+-
+-	if( 0 != vv->vflip ) {
+-		vdma1.prot_addr	= buf->pt[0].offset;
+-		vdma1.base_even	= ((vdma1.pitch/2)*height)+buf->pt[0].offset;
+-		vdma1.base_odd	= vdma1.base_even - (vdma1.pitch/2);
+-	} else {
+-		vdma1.base_even	= buf->pt[0].offset;
+-		vdma1.base_odd	= vdma1.base_even + (vdma1.pitch/2);
+-		vdma1.prot_addr	= (vdma1.pitch/2)*height+buf->pt[0].offset;
+-	}
+-
+-	vdma2.num_line_byte	= 0; /* unused */
+-	vdma2.base_page		= buf->pt[1].dma | ME1;
+-
+-	vdma3.num_line_byte	= 0; /* unused */
+-	vdma3.base_page		= buf->pt[2].dma | ME1;
+-
+-	switch( sfmt->depth ) {
+-		case 12: {
+-			calc_planar_420(vv,buf,&vdma2,&vdma3);
+-			break;
+-		}
+-		case 16: {
+-			calc_planar_422(vv,buf,&vdma2,&vdma3);
+-			break;
+-		}
+-		default: {
+-			return -1;
+-		}
+-	}
+-
+-	if (V4L2_FIELD_HAS_BOTH(field)) {
+-	} else if (field == V4L2_FIELD_ALTERNATE) {
+-		/* fixme */
+-		vdma1.base_odd	= vdma1.prot_addr;
+-		vdma1.pitch /= 2;
+-		vdma2.base_odd	= vdma2.prot_addr;
+-		vdma2.pitch /= 2;
+-		vdma3.base_odd	= vdma3.prot_addr;
+-		vdma3.pitch /= 2;
+-	} else if (field == V4L2_FIELD_TOP) {
+-		vdma1.base_odd	= vdma1.prot_addr;
+-		vdma1.pitch /= 2;
+-		vdma2.base_odd	= vdma2.prot_addr;
+-		vdma2.pitch /= 2;
+-		vdma3.base_odd	= vdma3.prot_addr;
+-		vdma3.pitch /= 2;
+-	} else if (field == V4L2_FIELD_BOTTOM) {
+-		vdma1.base_odd	= vdma1.base_even;
+-		vdma1.base_even = vdma1.prot_addr;
+-		vdma1.pitch /= 2;
+-		vdma2.base_odd	= vdma2.base_even;
+-		vdma2.base_even = vdma2.prot_addr;
+-		vdma2.pitch /= 2;
+-		vdma3.base_odd	= vdma3.base_even;
+-		vdma3.base_even = vdma3.prot_addr;
+-		vdma3.pitch /= 2;
+-	}
+-
+-	if( 0 != vv->vflip ) {
+-		vdma1.pitch *= -1;
+-		vdma2.pitch *= -1;
+-		vdma3.pitch *= -1;
+-	}
+-
+-	saa7146_write_out_dma(dev, 1, &vdma1);
+-	if( (sfmt->flags & FORMAT_BYTE_SWAP) != 0 ) {
+-		saa7146_write_out_dma(dev, 3, &vdma2);
+-		saa7146_write_out_dma(dev, 2, &vdma3);
+-	} else {
+-		saa7146_write_out_dma(dev, 2, &vdma2);
+-		saa7146_write_out_dma(dev, 3, &vdma3);
+-	}
+-	return 0;
+-}
+-
+-static void program_capture_engine(struct saa7146_dev *dev, int planar)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-	int count = 0;
+-
+-	unsigned long e_wait = vv->current_hps_sync == SAA7146_HPS_SYNC_PORT_A ? CMD_E_FID_A : CMD_E_FID_B;
+-	unsigned long o_wait = vv->current_hps_sync == SAA7146_HPS_SYNC_PORT_A ? CMD_O_FID_A : CMD_O_FID_B;
+-
+-	/* wait for o_fid_a/b / e_fid_a/b toggle only if rps register 0 is not set*/
+-	WRITE_RPS0(CMD_PAUSE | CMD_OAN | CMD_SIG0 | o_wait);
+-	WRITE_RPS0(CMD_PAUSE | CMD_OAN | CMD_SIG0 | e_wait);
+-
+-	/* set rps register 0 */
+-	WRITE_RPS0(CMD_WR_REG | (1 << 8) | (MC2/4));
+-	WRITE_RPS0(MASK_27 | MASK_11);
+-
+-	/* turn on video-dma1 */
+-	WRITE_RPS0(CMD_WR_REG_MASK | (MC1/4));
+-	WRITE_RPS0(MASK_06 | MASK_22);			/* => mask */
+-	WRITE_RPS0(MASK_06 | MASK_22);			/* => values */
+-	if( 0 != planar ) {
+-		/* turn on video-dma2 */
+-		WRITE_RPS0(CMD_WR_REG_MASK | (MC1/4));
+-		WRITE_RPS0(MASK_05 | MASK_21);			/* => mask */
+-		WRITE_RPS0(MASK_05 | MASK_21);			/* => values */
+-
+-		/* turn on video-dma3 */
+-		WRITE_RPS0(CMD_WR_REG_MASK | (MC1/4));
+-		WRITE_RPS0(MASK_04 | MASK_20);			/* => mask */
+-		WRITE_RPS0(MASK_04 | MASK_20);			/* => values */
+-	}
+-
+-	/* wait for o_fid_a/b / e_fid_a/b toggle */
+-	if ( vv->last_field == V4L2_FIELD_INTERLACED ) {
+-		WRITE_RPS0(CMD_PAUSE | o_wait);
+-		WRITE_RPS0(CMD_PAUSE | e_wait);
+-	} else if ( vv->last_field == V4L2_FIELD_TOP ) {
+-		WRITE_RPS0(CMD_PAUSE | (vv->current_hps_sync == SAA7146_HPS_SYNC_PORT_A ? MASK_10 : MASK_09));
+-		WRITE_RPS0(CMD_PAUSE | o_wait);
+-	} else if ( vv->last_field == V4L2_FIELD_BOTTOM ) {
+-		WRITE_RPS0(CMD_PAUSE | (vv->current_hps_sync == SAA7146_HPS_SYNC_PORT_A ? MASK_10 : MASK_09));
+-		WRITE_RPS0(CMD_PAUSE | e_wait);
+-	}
+-
+-	/* turn off video-dma1 */
+-	WRITE_RPS0(CMD_WR_REG_MASK | (MC1/4));
+-	WRITE_RPS0(MASK_22 | MASK_06);			/* => mask */
+-	WRITE_RPS0(MASK_22);				/* => values */
+-	if( 0 != planar ) {
+-		/* turn off video-dma2 */
+-		WRITE_RPS0(CMD_WR_REG_MASK | (MC1/4));
+-		WRITE_RPS0(MASK_05 | MASK_21);			/* => mask */
+-		WRITE_RPS0(MASK_21);				/* => values */
+-
+-		/* turn off video-dma3 */
+-		WRITE_RPS0(CMD_WR_REG_MASK | (MC1/4));
+-		WRITE_RPS0(MASK_04 | MASK_20);			/* => mask */
+-		WRITE_RPS0(MASK_20);				/* => values */
+-	}
+-
+-	/* generate interrupt */
+-	WRITE_RPS0(CMD_INTERRUPT);
+-
+-	/* stop */
+-	WRITE_RPS0(CMD_STOP);
+-}
+-
+-void saa7146_set_capture(struct saa7146_dev *dev, struct saa7146_buf *buf, struct saa7146_buf *next)
+-{
+-	struct saa7146_format *sfmt = saa7146_format_by_fourcc(dev,buf->fmt->pixelformat);
+-	struct saa7146_vv *vv = dev->vv_data;
+-	u32 vdma1_prot_addr;
+-
+-	DEB_CAP("buf:%p, next:%p\n", buf, next);
+-
+-	vdma1_prot_addr = saa7146_read(dev, PROT_ADDR1);
+-	if( 0 == vdma1_prot_addr ) {
+-		/* clear out beginning of streaming bit (rps register 0)*/
+-		DEB_CAP("forcing sync to new frame\n");
+-		saa7146_write(dev, MC2, MASK_27 );
+-	}
+-
+-	saa7146_set_window(dev, buf->fmt->width, buf->fmt->height, buf->fmt->field);
+-	saa7146_set_output_format(dev, sfmt->trans);
+-	saa7146_disable_clipping(dev);
+-
+-	if ( vv->last_field == V4L2_FIELD_INTERLACED ) {
+-	} else if ( vv->last_field == V4L2_FIELD_TOP ) {
+-		vv->last_field = V4L2_FIELD_BOTTOM;
+-	} else if ( vv->last_field == V4L2_FIELD_BOTTOM ) {
+-		vv->last_field = V4L2_FIELD_TOP;
+-	}
+-
+-	if( 0 != IS_PLANAR(sfmt->trans)) {
+-		calculate_video_dma_grab_planar(dev, buf);
+-		program_capture_engine(dev,1);
+-	} else {
+-		calculate_video_dma_grab_packed(dev, buf);
+-		program_capture_engine(dev,0);
+-	}
+-
+-/*
+-	printk("vdma%d.base_even:     0x%08x\n", 1,saa7146_read(dev,BASE_EVEN1));
+-	printk("vdma%d.base_odd:      0x%08x\n", 1,saa7146_read(dev,BASE_ODD1));
+-	printk("vdma%d.prot_addr:     0x%08x\n", 1,saa7146_read(dev,PROT_ADDR1));
+-	printk("vdma%d.base_page:     0x%08x\n", 1,saa7146_read(dev,BASE_PAGE1));
+-	printk("vdma%d.pitch:         0x%08x\n", 1,saa7146_read(dev,PITCH1));
+-	printk("vdma%d.num_line_byte: 0x%08x\n", 1,saa7146_read(dev,NUM_LINE_BYTE1));
+-	printk("vdma%d => vptr      : 0x%08x\n", 1,saa7146_read(dev,PCI_VDP1));
+-*/
+-
+-	/* write the address of the rps-program */
+-	saa7146_write(dev, RPS_ADDR0, dev->d_rps0.dma_handle);
+-
+-	/* turn on rps */
+-	saa7146_write(dev, MC1, (MASK_12 | MASK_28));
+-}
+diff --git a/drivers/staging/media/deprecated/saa7146/common/saa7146_i2c.c b/drivers/staging/media/deprecated/saa7146/common/saa7146_i2c.c
+deleted file mode 100644
+index 7a33fe51775a..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/common/saa7146_i2c.c
++++ /dev/null
+@@ -1,421 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
+-#include "saa7146_vv.h"
+-
+-static u32 saa7146_i2c_func(struct i2c_adapter *adapter)
+-{
+-	/* DEB_I2C("'%s'\n", adapter->name); */
+-
+-	return	  I2C_FUNC_I2C
+-		| I2C_FUNC_SMBUS_QUICK
+-		| I2C_FUNC_SMBUS_READ_BYTE	| I2C_FUNC_SMBUS_WRITE_BYTE
+-		| I2C_FUNC_SMBUS_READ_BYTE_DATA | I2C_FUNC_SMBUS_WRITE_BYTE_DATA;
+-}
+-
+-/* this function returns the status-register of our i2c-device */
+-static inline u32 saa7146_i2c_status(struct saa7146_dev *dev)
+-{
+-	u32 iicsta = saa7146_read(dev, I2C_STATUS);
+-	/* DEB_I2C("status: 0x%08x\n", iicsta); */
+-	return iicsta;
+-}
+-
+-/* this function runs through the i2c-messages and prepares the data to be
+-   sent through the saa7146. have a look at the specifications p. 122 ff
+-   to understand this. it returns the number of u32s to send, or -1
+-   in case of an error. */
+-static int saa7146_i2c_msg_prepare(const struct i2c_msg *m, int num, __le32 *op)
+-{
+-	int h1, h2;
+-	int i, j, addr;
+-	int mem = 0, op_count = 0;
+-
+-	/* first determine size of needed memory */
+-	for(i = 0; i < num; i++) {
+-		mem += m[i].len + 1;
+-	}
+-
+-	/* worst case: we need one u32 for three bytes to be send
+-	   plus one extra byte to address the device */
+-	mem = 1 + ((mem-1) / 3);
+-
+-	/* we assume that op points to a memory of at least
+-	 * SAA7146_I2C_MEM bytes size. if we exceed this limit...
+-	 */
+-	if ((4 * mem) > SAA7146_I2C_MEM) {
+-		/* DEB_I2C("cannot prepare i2c-message\n"); */
+-		return -ENOMEM;
+-	}
+-
+-	/* be careful: clear out the i2c-mem first */
+-	memset(op,0,sizeof(__le32)*mem);
+-
+-	/* loop through all messages */
+-	for(i = 0; i < num; i++) {
+-
+-		addr = i2c_8bit_addr_from_msg(&m[i]);
+-		h1 = op_count/3; h2 = op_count%3;
+-		op[h1] |= cpu_to_le32(	    (u8)addr << ((3-h2)*8));
+-		op[h1] |= cpu_to_le32(SAA7146_I2C_START << ((3-h2)*2));
+-		op_count++;
+-
+-		/* loop through all bytes of message i */
+-		for(j = 0; j < m[i].len; j++) {
+-			/* insert the data bytes */
+-			h1 = op_count/3; h2 = op_count%3;
+-			op[h1] |= cpu_to_le32( (u32)((u8)m[i].buf[j]) << ((3-h2)*8));
+-			op[h1] |= cpu_to_le32(       SAA7146_I2C_CONT << ((3-h2)*2));
+-			op_count++;
+-		}
+-
+-	}
+-
+-	/* have a look at the last byte inserted:
+-	  if it was: ...CONT change it to ...STOP */
+-	h1 = (op_count-1)/3; h2 = (op_count-1)%3;
+-	if ( SAA7146_I2C_CONT == (0x3 & (le32_to_cpu(op[h1]) >> ((3-h2)*2))) ) {
+-		op[h1] &= ~cpu_to_le32(0x2 << ((3-h2)*2));
+-		op[h1] |= cpu_to_le32(SAA7146_I2C_STOP << ((3-h2)*2));
+-	}
+-
+-	/* return the number of u32s to send */
+-	return mem;
+-}
+-
+-/* this functions loops through all i2c-messages. normally, it should determine
+-   which bytes were read through the adapter and write them back to the corresponding
+-   i2c-message. but instead, we simply write back all bytes.
+-   fixme: this could be improved. */
+-static int saa7146_i2c_msg_cleanup(const struct i2c_msg *m, int num, __le32 *op)
+-{
+-	int i, j;
+-	int op_count = 0;
+-
+-	/* loop through all messages */
+-	for(i = 0; i < num; i++) {
+-
+-		op_count++;
+-
+-		/* loop through all bytes of message i */
+-		for(j = 0; j < m[i].len; j++) {
+-			/* write back all bytes that could have been read */
+-			m[i].buf[j] = (le32_to_cpu(op[op_count/3]) >> ((3-(op_count%3))*8));
+-			op_count++;
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+-/* this functions resets the i2c-device and returns 0 if everything was fine, otherwise -1 */
+-static int saa7146_i2c_reset(struct saa7146_dev *dev)
+-{
+-	/* get current status */
+-	u32 status = saa7146_i2c_status(dev);
+-
+-	/* clear registers for sure */
+-	saa7146_write(dev, I2C_STATUS, dev->i2c_bitrate);
+-	saa7146_write(dev, I2C_TRANSFER, 0);
+-
+-	/* check if any operation is still in progress */
+-	if ( 0 != ( status & SAA7146_I2C_BUSY) ) {
+-
+-		/* yes, kill ongoing operation */
+-		DEB_I2C("busy_state detected\n");
+-
+-		/* set "ABORT-OPERATION"-bit (bit 7)*/
+-		saa7146_write(dev, I2C_STATUS, (dev->i2c_bitrate | MASK_07));
+-		saa7146_write(dev, MC2, (MASK_00 | MASK_16));
+-		msleep(SAA7146_I2C_DELAY);
+-
+-		/* clear all error-bits pending; this is needed because p.123, note 1 */
+-		saa7146_write(dev, I2C_STATUS, dev->i2c_bitrate);
+-		saa7146_write(dev, MC2, (MASK_00 | MASK_16));
+-		msleep(SAA7146_I2C_DELAY);
+-	}
+-
+-	/* check if any error is (still) present. (this can be necessary because p.123, note 1) */
+-	status = saa7146_i2c_status(dev);
+-
+-	if ( dev->i2c_bitrate != status ) {
+-
+-		DEB_I2C("error_state detected. status:0x%08x\n", status);
+-
+-		/* Repeat the abort operation. This seems to be necessary
+-		   after serious protocol errors caused by e.g. the SAA7740 */
+-		saa7146_write(dev, I2C_STATUS, (dev->i2c_bitrate | MASK_07));
+-		saa7146_write(dev, MC2, (MASK_00 | MASK_16));
+-		msleep(SAA7146_I2C_DELAY);
+-
+-		/* clear all error-bits pending */
+-		saa7146_write(dev, I2C_STATUS, dev->i2c_bitrate);
+-		saa7146_write(dev, MC2, (MASK_00 | MASK_16));
+-		msleep(SAA7146_I2C_DELAY);
+-
+-		/* the data sheet says it might be necessary to clear the status
+-		   twice after an abort */
+-		saa7146_write(dev, I2C_STATUS, dev->i2c_bitrate);
+-		saa7146_write(dev, MC2, (MASK_00 | MASK_16));
+-		msleep(SAA7146_I2C_DELAY);
+-	}
+-
+-	/* if any error is still present, a fatal error has occurred ... */
+-	status = saa7146_i2c_status(dev);
+-	if ( dev->i2c_bitrate != status ) {
+-		DEB_I2C("fatal error. status:0x%08x\n", status);
+-		return -1;
+-	}
+-
+-	return 0;
+-}
+-
+-/* this functions writes out the data-byte 'dword' to the i2c-device.
+-   it returns 0 if ok, -1 if the transfer failed, -2 if the transfer
+-   failed badly (e.g. address error) */
+-static int saa7146_i2c_writeout(struct saa7146_dev *dev, __le32 *dword, int short_delay)
+-{
+-	u32 status = 0, mc2 = 0;
+-	int trial = 0;
+-	unsigned long timeout;
+-
+-	/* write out i2c-command */
+-	DEB_I2C("before: 0x%08x (status: 0x%08x), %d\n",
+-		*dword, saa7146_read(dev, I2C_STATUS), dev->i2c_op);
+-
+-	if( 0 != (SAA7146_USE_I2C_IRQ & dev->ext->flags)) {
+-
+-		saa7146_write(dev, I2C_STATUS,	 dev->i2c_bitrate);
+-		saa7146_write(dev, I2C_TRANSFER, le32_to_cpu(*dword));
+-
+-		dev->i2c_op = 1;
+-		SAA7146_ISR_CLEAR(dev, MASK_16|MASK_17);
+-		SAA7146_IER_ENABLE(dev, MASK_16|MASK_17);
+-		saa7146_write(dev, MC2, (MASK_00 | MASK_16));
+-
+-		timeout = HZ/100 + 1; /* 10ms */
+-		timeout = wait_event_interruptible_timeout(dev->i2c_wq, dev->i2c_op == 0, timeout);
+-		if (timeout == -ERESTARTSYS || dev->i2c_op) {
+-			SAA7146_IER_DISABLE(dev, MASK_16|MASK_17);
+-			SAA7146_ISR_CLEAR(dev, MASK_16|MASK_17);
+-			if (timeout == -ERESTARTSYS)
+-				/* a signal arrived */
+-				return -ERESTARTSYS;
+-
+-			pr_warn("%s %s [irq]: timed out waiting for end of xfer\n",
+-				dev->name, __func__);
+-			return -EIO;
+-		}
+-		status = saa7146_read(dev, I2C_STATUS);
+-	} else {
+-		saa7146_write(dev, I2C_STATUS,	 dev->i2c_bitrate);
+-		saa7146_write(dev, I2C_TRANSFER, le32_to_cpu(*dword));
+-		saa7146_write(dev, MC2, (MASK_00 | MASK_16));
+-
+-		/* do not poll for i2c-status before upload is complete */
+-		timeout = jiffies + HZ/100 + 1; /* 10ms */
+-		while(1) {
+-			mc2 = (saa7146_read(dev, MC2) & 0x1);
+-			if( 0 != mc2 ) {
+-				break;
+-			}
+-			if (time_after(jiffies,timeout)) {
+-				pr_warn("%s %s: timed out waiting for MC2\n",
+-					dev->name, __func__);
+-				return -EIO;
+-			}
+-		}
+-		/* wait until we get a transfer done or error */
+-		timeout = jiffies + HZ/100 + 1; /* 10ms */
+-		/* first read usually delivers bogus results... */
+-		saa7146_i2c_status(dev);
+-		while(1) {
+-			status = saa7146_i2c_status(dev);
+-			if ((status & 0x3) != 1)
+-				break;
+-			if (time_after(jiffies,timeout)) {
+-				/* this is normal when probing the bus
+-				 * (no answer from nonexisistant device...)
+-				 */
+-				pr_warn("%s %s [poll]: timed out waiting for end of xfer\n",
+-					dev->name, __func__);
+-				return -EIO;
+-			}
+-			if (++trial < 50 && short_delay)
+-				udelay(10);
+-			else
+-				msleep(1);
+-		}
+-	}
+-
+-	/* give a detailed status report */
+-	if ( 0 != (status & (SAA7146_I2C_SPERR | SAA7146_I2C_APERR |
+-			     SAA7146_I2C_DTERR | SAA7146_I2C_DRERR |
+-			     SAA7146_I2C_AL    | SAA7146_I2C_ERR   |
+-			     SAA7146_I2C_BUSY)) ) {
+-
+-		if ( 0 == (status & SAA7146_I2C_ERR) ||
+-		     0 == (status & SAA7146_I2C_BUSY) ) {
+-			/* it may take some time until ERR goes high - ignore */
+-			DEB_I2C("unexpected i2c status %04x\n", status);
+-		}
+-		if( 0 != (status & SAA7146_I2C_SPERR) ) {
+-			DEB_I2C("error due to invalid start/stop condition\n");
+-		}
+-		if( 0 != (status & SAA7146_I2C_DTERR) ) {
+-			DEB_I2C("error in data transmission\n");
+-		}
+-		if( 0 != (status & SAA7146_I2C_DRERR) ) {
+-			DEB_I2C("error when receiving data\n");
+-		}
+-		if( 0 != (status & SAA7146_I2C_AL) ) {
+-			DEB_I2C("error because arbitration lost\n");
+-		}
+-
+-		/* we handle address-errors here */
+-		if( 0 != (status & SAA7146_I2C_APERR) ) {
+-			DEB_I2C("error in address phase\n");
+-			return -EREMOTEIO;
+-		}
+-
+-		return -EIO;
+-	}
+-
+-	/* read back data, just in case we were reading ... */
+-	*dword = cpu_to_le32(saa7146_read(dev, I2C_TRANSFER));
+-
+-	DEB_I2C("after: 0x%08x\n", *dword);
+-	return 0;
+-}
+-
+-static int saa7146_i2c_transfer(struct saa7146_dev *dev, const struct i2c_msg *msgs, int num, int retries)
+-{
+-	int i = 0, count = 0;
+-	__le32 *buffer = dev->d_i2c.cpu_addr;
+-	int err = 0;
+-	int short_delay = 0;
+-
+-	if (mutex_lock_interruptible(&dev->i2c_lock))
+-		return -ERESTARTSYS;
+-
+-	for(i=0;i<num;i++) {
+-		DEB_I2C("msg:%d/%d\n", i+1, num);
+-	}
+-
+-	/* prepare the message(s), get number of u32s to transfer */
+-	count = saa7146_i2c_msg_prepare(msgs, num, buffer);
+-	if ( 0 > count ) {
+-		err = -EIO;
+-		goto out;
+-	}
+-
+-	if ( count > 3 || 0 != (SAA7146_I2C_SHORT_DELAY & dev->ext->flags) )
+-		short_delay = 1;
+-
+-	do {
+-		/* reset the i2c-device if necessary */
+-		err = saa7146_i2c_reset(dev);
+-		if ( 0 > err ) {
+-			DEB_I2C("could not reset i2c-device\n");
+-			goto out;
+-		}
+-
+-		/* write out the u32s one after another */
+-		for(i = 0; i < count; i++) {
+-			err = saa7146_i2c_writeout(dev, &buffer[i], short_delay);
+-			if ( 0 != err) {
+-				/* this one is unsatisfying: some i2c slaves on some
+-				   dvb cards don't acknowledge correctly, so the saa7146
+-				   thinks that an address error occurred. in that case, the
+-				   transaction should be retrying, even if an address error
+-				   occurred. analog saa7146 based cards extensively rely on
+-				   i2c address probing, however, and address errors indicate that a
+-				   device is really *not* there. retrying in that case
+-				   increases the time the device needs to probe greatly, so
+-				   it should be avoided. So we bail out in irq mode after an
+-				   address error and trust the saa7146 address error detection. */
+-				if (-EREMOTEIO == err && 0 != (SAA7146_USE_I2C_IRQ & dev->ext->flags))
+-					goto out;
+-				DEB_I2C("error while sending message(s). starting again\n");
+-				break;
+-			}
+-		}
+-		if( 0 == err ) {
+-			err = num;
+-			break;
+-		}
+-
+-		/* delay a bit before retrying */
+-		msleep(10);
+-
+-	} while (err != num && retries--);
+-
+-	/* quit if any error occurred */
+-	if (err != num)
+-		goto out;
+-
+-	/* if any things had to be read, get the results */
+-	if ( 0 != saa7146_i2c_msg_cleanup(msgs, num, buffer)) {
+-		DEB_I2C("could not cleanup i2c-message\n");
+-		err = -EIO;
+-		goto out;
+-	}
+-
+-	/* return the number of delivered messages */
+-	DEB_I2C("transmission successful. (msg:%d)\n", err);
+-out:
+-	/* another bug in revision 0: the i2c-registers get uploaded randomly by other
+-	   uploads, so we better clear them out before continuing */
+-	if( 0 == dev->revision ) {
+-		__le32 zero = 0;
+-		saa7146_i2c_reset(dev);
+-		if( 0 != saa7146_i2c_writeout(dev, &zero, short_delay)) {
+-			pr_info("revision 0 error. this should never happen\n");
+-		}
+-	}
+-
+-	mutex_unlock(&dev->i2c_lock);
+-	return err;
+-}
+-
+-/* utility functions */
+-static int saa7146_i2c_xfer(struct i2c_adapter* adapter, struct i2c_msg *msg, int num)
+-{
+-	struct v4l2_device *v4l2_dev = i2c_get_adapdata(adapter);
+-	struct saa7146_dev *dev = to_saa7146_dev(v4l2_dev);
+-
+-	/* use helper function to transfer data */
+-	return saa7146_i2c_transfer(dev, msg, num, adapter->retries);
+-}
+-
+-
+-/*****************************************************************************/
+-/* i2c-adapter helper functions                                              */
+-
+-/* exported algorithm data */
+-static const struct i2c_algorithm saa7146_algo = {
+-	.master_xfer	= saa7146_i2c_xfer,
+-	.functionality	= saa7146_i2c_func,
+-};
+-
+-int saa7146_i2c_adapter_prepare(struct saa7146_dev *dev, struct i2c_adapter *i2c_adapter, u32 bitrate)
+-{
+-	DEB_EE("bitrate: 0x%08x\n", bitrate);
+-
+-	/* enable i2c-port pins */
+-	saa7146_write(dev, MC1, (MASK_08 | MASK_24));
+-
+-	dev->i2c_bitrate = bitrate;
+-	saa7146_i2c_reset(dev);
+-
+-	if (i2c_adapter) {
+-		i2c_set_adapdata(i2c_adapter, &dev->v4l2_dev);
+-		i2c_adapter->dev.parent    = &dev->pci->dev;
+-		i2c_adapter->algo	   = &saa7146_algo;
+-		i2c_adapter->algo_data     = NULL;
+-		i2c_adapter->timeout = SAA7146_I2C_TIMEOUT;
+-		i2c_adapter->retries = SAA7146_I2C_RETRIES;
+-	}
+-
+-	return 0;
+-}
+diff --git a/drivers/staging/media/deprecated/saa7146/common/saa7146_vbi.c b/drivers/staging/media/deprecated/saa7146/common/saa7146_vbi.c
+deleted file mode 100644
+index 2d4a05d7bc5b..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/common/saa7146_vbi.c
++++ /dev/null
+@@ -1,498 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-#include "saa7146_vv.h"
+-
+-static int vbi_pixel_to_capture = 720 * 2;
+-
+-static int vbi_workaround(struct saa7146_dev *dev)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	u32          *cpu;
+-	dma_addr_t   dma_addr;
+-
+-	int count = 0;
+-	int i;
+-
+-	DECLARE_WAITQUEUE(wait, current);
+-
+-	DEB_VBI("dev:%p\n", dev);
+-
+-	/* once again, a bug in the saa7146: the brs acquisition
+-	   is buggy and especially the BXO-counter does not work
+-	   as specified. there is this workaround, but please
+-	   don't let me explain it. ;-) */
+-
+-	cpu = dma_alloc_coherent(&dev->pci->dev, 4096, &dma_addr, GFP_KERNEL);
+-	if (NULL == cpu)
+-		return -ENOMEM;
+-
+-	/* setup some basic programming, just for the workaround */
+-	saa7146_write(dev, BASE_EVEN3,	dma_addr);
+-	saa7146_write(dev, BASE_ODD3,	dma_addr+vbi_pixel_to_capture);
+-	saa7146_write(dev, PROT_ADDR3,	dma_addr+4096);
+-	saa7146_write(dev, PITCH3,	vbi_pixel_to_capture);
+-	saa7146_write(dev, BASE_PAGE3,	0x0);
+-	saa7146_write(dev, NUM_LINE_BYTE3, (2<<16)|((vbi_pixel_to_capture)<<0));
+-	saa7146_write(dev, MC2, MASK_04|MASK_20);
+-
+-	/* load brs-control register */
+-	WRITE_RPS1(CMD_WR_REG | (1 << 8) | (BRS_CTRL/4));
+-	/* BXO = 1h, BRS to outbound */
+-	WRITE_RPS1(0xc000008c);
+-	/* wait for vbi_a or vbi_b*/
+-	if ( 0 != (SAA7146_USE_PORT_B_FOR_VBI & dev->ext_vv_data->flags)) {
+-		DEB_D("...using port b\n");
+-		WRITE_RPS1(CMD_PAUSE | CMD_OAN | CMD_SIG1 | CMD_E_FID_B);
+-		WRITE_RPS1(CMD_PAUSE | CMD_OAN | CMD_SIG1 | CMD_O_FID_B);
+-/*
+-		WRITE_RPS1(CMD_PAUSE | MASK_09);
+-*/
+-	} else {
+-		DEB_D("...using port a\n");
+-		WRITE_RPS1(CMD_PAUSE | MASK_10);
+-	}
+-	/* upload brs */
+-	WRITE_RPS1(CMD_UPLOAD | MASK_08);
+-	/* load brs-control register */
+-	WRITE_RPS1(CMD_WR_REG | (1 << 8) | (BRS_CTRL/4));
+-	/* BYO = 1, BXO = NQBIL (=1728 for PAL, for NTSC this is 858*2) - NumByte3 (=1440) = 288 */
+-	WRITE_RPS1(((1728-(vbi_pixel_to_capture)) << 7) | MASK_19);
+-	/* wait for brs_done */
+-	WRITE_RPS1(CMD_PAUSE | MASK_08);
+-	/* upload brs */
+-	WRITE_RPS1(CMD_UPLOAD | MASK_08);
+-	/* load video-dma3 NumLines3 and NumBytes3 */
+-	WRITE_RPS1(CMD_WR_REG | (1 << 8) | (NUM_LINE_BYTE3/4));
+-	/* dev->vbi_count*2 lines, 720 pixel (= 1440 Bytes) */
+-	WRITE_RPS1((2 << 16) | (vbi_pixel_to_capture));
+-	/* load brs-control register */
+-	WRITE_RPS1(CMD_WR_REG | (1 << 8) | (BRS_CTRL/4));
+-	/* Set BRS right: note: this is an experimental value for BXO (=> PAL!) */
+-	WRITE_RPS1((540 << 7) | (5 << 19));  // 5 == vbi_start
+-	/* wait for brs_done */
+-	WRITE_RPS1(CMD_PAUSE | MASK_08);
+-	/* upload brs and video-dma3*/
+-	WRITE_RPS1(CMD_UPLOAD | MASK_08 | MASK_04);
+-	/* load mc2 register: enable dma3 */
+-	WRITE_RPS1(CMD_WR_REG | (1 << 8) | (MC1/4));
+-	WRITE_RPS1(MASK_20 | MASK_04);
+-	/* generate interrupt */
+-	WRITE_RPS1(CMD_INTERRUPT);
+-	/* stop rps1 */
+-	WRITE_RPS1(CMD_STOP);
+-
+-	/* we have to do the workaround twice to be sure that
+-	   everything is ok */
+-	for(i = 0; i < 2; i++) {
+-
+-		/* indicate to the irq handler that we do the workaround */
+-		saa7146_write(dev, MC2, MASK_31|MASK_15);
+-
+-		saa7146_write(dev, NUM_LINE_BYTE3, (1<<16)|(2<<0));
+-		saa7146_write(dev, MC2, MASK_04|MASK_20);
+-
+-		/* enable rps1 irqs */
+-		SAA7146_IER_ENABLE(dev,MASK_28);
+-
+-		/* prepare to wait to be woken up by the irq-handler */
+-		add_wait_queue(&vv->vbi_wq, &wait);
+-		set_current_state(TASK_INTERRUPTIBLE);
+-
+-		/* start rps1 to enable workaround */
+-		saa7146_write(dev, RPS_ADDR1, dev->d_rps1.dma_handle);
+-		saa7146_write(dev, MC1, (MASK_13 | MASK_29));
+-
+-		schedule();
+-
+-		DEB_VBI("brs bug workaround %d/1\n", i);
+-
+-		remove_wait_queue(&vv->vbi_wq, &wait);
+-		__set_current_state(TASK_RUNNING);
+-
+-		/* disable rps1 irqs */
+-		SAA7146_IER_DISABLE(dev,MASK_28);
+-
+-		/* stop video-dma3 */
+-		saa7146_write(dev, MC1, MASK_20);
+-
+-		if(signal_pending(current)) {
+-
+-			DEB_VBI("aborted (rps:0x%08x)\n",
+-				saa7146_read(dev, RPS_ADDR1));
+-
+-			/* stop rps1 for sure */
+-			saa7146_write(dev, MC1, MASK_29);
+-
+-			dma_free_coherent(&dev->pci->dev, 4096, cpu, dma_addr);
+-			return -EINTR;
+-		}
+-	}
+-
+-	dma_free_coherent(&dev->pci->dev, 4096, cpu, dma_addr);
+-	return 0;
+-}
+-
+-static void saa7146_set_vbi_capture(struct saa7146_dev *dev, struct saa7146_buf *buf, struct saa7146_buf *next)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	struct saa7146_video_dma vdma3;
+-
+-	int count = 0;
+-	unsigned long e_wait = vv->current_hps_sync == SAA7146_HPS_SYNC_PORT_A ? CMD_E_FID_A : CMD_E_FID_B;
+-	unsigned long o_wait = vv->current_hps_sync == SAA7146_HPS_SYNC_PORT_A ? CMD_O_FID_A : CMD_O_FID_B;
+-
+-/*
+-	vdma3.base_even	= 0xc8000000+2560*70;
+-	vdma3.base_odd	= 0xc8000000;
+-	vdma3.prot_addr	= 0xc8000000+2560*164;
+-	vdma3.pitch	= 2560;
+-	vdma3.base_page	= 0;
+-	vdma3.num_line_byte = (64<<16)|((vbi_pixel_to_capture)<<0); // set above!
+-*/
+-	vdma3.base_even	= buf->pt[2].offset;
+-	vdma3.base_odd	= buf->pt[2].offset + 16 * vbi_pixel_to_capture;
+-	vdma3.prot_addr	= buf->pt[2].offset + 16 * 2 * vbi_pixel_to_capture;
+-	vdma3.pitch	= vbi_pixel_to_capture;
+-	vdma3.base_page	= buf->pt[2].dma | ME1;
+-	vdma3.num_line_byte = (16 << 16) | vbi_pixel_to_capture;
+-
+-	saa7146_write_out_dma(dev, 3, &vdma3);
+-
+-	/* write beginning of rps-program */
+-	count = 0;
+-
+-	/* wait for o_fid_a/b / e_fid_a/b toggle only if bit 1 is not set */
+-
+-	/* we don't wait here for the first field anymore. this is different from the video
+-	   capture and might cause that the first buffer is only half filled (with only
+-	   one field). but since this is some sort of streaming data, this is not that negative.
+-	   but by doing this, we can use the whole engine from videobuf-dma-sg.c... */
+-
+-/*
+-	WRITE_RPS1(CMD_PAUSE | CMD_OAN | CMD_SIG1 | e_wait);
+-	WRITE_RPS1(CMD_PAUSE | CMD_OAN | CMD_SIG1 | o_wait);
+-*/
+-	/* set bit 1 */
+-	WRITE_RPS1(CMD_WR_REG | (1 << 8) | (MC2/4));
+-	WRITE_RPS1(MASK_28 | MASK_12);
+-
+-	/* turn on video-dma3 */
+-	WRITE_RPS1(CMD_WR_REG_MASK | (MC1/4));
+-	WRITE_RPS1(MASK_04 | MASK_20);			/* => mask */
+-	WRITE_RPS1(MASK_04 | MASK_20);			/* => values */
+-
+-	/* wait for o_fid_a/b / e_fid_a/b toggle */
+-	WRITE_RPS1(CMD_PAUSE | o_wait);
+-	WRITE_RPS1(CMD_PAUSE | e_wait);
+-
+-	/* generate interrupt */
+-	WRITE_RPS1(CMD_INTERRUPT);
+-
+-	/* stop */
+-	WRITE_RPS1(CMD_STOP);
+-
+-	/* enable rps1 irqs */
+-	SAA7146_IER_ENABLE(dev, MASK_28);
+-
+-	/* write the address of the rps-program */
+-	saa7146_write(dev, RPS_ADDR1, dev->d_rps1.dma_handle);
+-
+-	/* turn on rps */
+-	saa7146_write(dev, MC1, (MASK_13 | MASK_29));
+-}
+-
+-static int buffer_activate(struct saa7146_dev *dev,
+-			   struct saa7146_buf *buf,
+-			   struct saa7146_buf *next)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-	buf->vb.state = VIDEOBUF_ACTIVE;
+-
+-	DEB_VBI("dev:%p, buf:%p, next:%p\n", dev, buf, next);
+-	saa7146_set_vbi_capture(dev,buf,next);
+-
+-	mod_timer(&vv->vbi_dmaq.timeout, jiffies+BUFFER_TIMEOUT);
+-	return 0;
+-}
+-
+-static int buffer_prepare(struct videobuf_queue *q, struct videobuf_buffer *vb,enum v4l2_field field)
+-{
+-	struct file *file = q->priv_data;
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_buf *buf = (struct saa7146_buf *)vb;
+-
+-	int err = 0;
+-	int lines, llength, size;
+-
+-	lines   = 16 * 2 ; /* 2 fields */
+-	llength = vbi_pixel_to_capture;
+-	size = lines * llength;
+-
+-	DEB_VBI("vb:%p\n", vb);
+-
+-	if (0 != buf->vb.baddr  &&  buf->vb.bsize < size) {
+-		DEB_VBI("size mismatch\n");
+-		return -EINVAL;
+-	}
+-
+-	if (buf->vb.size != size)
+-		saa7146_dma_free(dev,q,buf);
+-
+-	if (VIDEOBUF_NEEDS_INIT == buf->vb.state) {
+-		struct videobuf_dmabuf *dma=videobuf_to_dma(&buf->vb);
+-
+-		buf->vb.width  = llength;
+-		buf->vb.height = lines;
+-		buf->vb.size   = size;
+-		buf->vb.field  = field;	// FIXME: check this
+-
+-		saa7146_pgtable_free(dev->pci, &buf->pt[2]);
+-		saa7146_pgtable_alloc(dev->pci, &buf->pt[2]);
+-
+-		err = videobuf_iolock(q,&buf->vb, NULL);
+-		if (err)
+-			goto oops;
+-		err = saa7146_pgtable_build_single(dev->pci, &buf->pt[2],
+-						 dma->sglist, dma->sglen);
+-		if (0 != err)
+-			return err;
+-	}
+-	buf->vb.state = VIDEOBUF_PREPARED;
+-	buf->activate = buffer_activate;
+-
+-	return 0;
+-
+- oops:
+-	DEB_VBI("error out\n");
+-	saa7146_dma_free(dev,q,buf);
+-
+-	return err;
+-}
+-
+-static int buffer_setup(struct videobuf_queue *q, unsigned int *count, unsigned int *size)
+-{
+-	int llength,lines;
+-
+-	lines   = 16 * 2 ; /* 2 fields */
+-	llength = vbi_pixel_to_capture;
+-
+-	*size = lines * llength;
+-	*count = 2;
+-
+-	DEB_VBI("count:%d, size:%d\n", *count, *size);
+-
+-	return 0;
+-}
+-
+-static void buffer_queue(struct videobuf_queue *q, struct videobuf_buffer *vb)
+-{
+-	struct file *file = q->priv_data;
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct saa7146_buf *buf = (struct saa7146_buf *)vb;
+-
+-	DEB_VBI("vb:%p\n", vb);
+-	saa7146_buffer_queue(dev, &vv->vbi_dmaq, buf);
+-}
+-
+-static void buffer_release(struct videobuf_queue *q, struct videobuf_buffer *vb)
+-{
+-	struct file *file = q->priv_data;
+-	struct saa7146_fh *fh   = file->private_data;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_buf *buf = (struct saa7146_buf *)vb;
+-
+-	DEB_VBI("vb:%p\n", vb);
+-	saa7146_dma_free(dev,q,buf);
+-}
+-
+-static const struct videobuf_queue_ops vbi_qops = {
+-	.buf_setup    = buffer_setup,
+-	.buf_prepare  = buffer_prepare,
+-	.buf_queue    = buffer_queue,
+-	.buf_release  = buffer_release,
+-};
+-
+-/* ------------------------------------------------------------------ */
+-
+-static void vbi_stop(struct saa7146_fh *fh, struct file *file)
+-{
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	unsigned long flags;
+-	DEB_VBI("dev:%p, fh:%p\n", dev, fh);
+-
+-	spin_lock_irqsave(&dev->slock,flags);
+-
+-	/* disable rps1  */
+-	saa7146_write(dev, MC1, MASK_29);
+-
+-	/* disable rps1 irqs */
+-	SAA7146_IER_DISABLE(dev, MASK_28);
+-
+-	/* shut down dma 3 transfers */
+-	saa7146_write(dev, MC1, MASK_20);
+-
+-	if (vv->vbi_dmaq.curr)
+-		saa7146_buffer_finish(dev, &vv->vbi_dmaq, VIDEOBUF_DONE);
+-
+-	videobuf_queue_cancel(&fh->vbi_q);
+-
+-	vv->vbi_streaming = NULL;
+-
+-	del_timer(&vv->vbi_dmaq.timeout);
+-	del_timer(&vv->vbi_read_timeout);
+-
+-	spin_unlock_irqrestore(&dev->slock, flags);
+-}
+-
+-static void vbi_read_timeout(struct timer_list *t)
+-{
+-	struct saa7146_vv *vv = from_timer(vv, t, vbi_read_timeout);
+-	struct file *file = vv->vbi_read_timeout_file;
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_dev *dev = fh->dev;
+-
+-	DEB_VBI("dev:%p, fh:%p\n", dev, fh);
+-
+-	vbi_stop(fh, file);
+-}
+-
+-static void vbi_init(struct saa7146_dev *dev, struct saa7146_vv *vv)
+-{
+-	DEB_VBI("dev:%p\n", dev);
+-
+-	INIT_LIST_HEAD(&vv->vbi_dmaq.queue);
+-
+-	timer_setup(&vv->vbi_dmaq.timeout, saa7146_buffer_timeout, 0);
+-	vv->vbi_dmaq.dev              = dev;
+-
+-	init_waitqueue_head(&vv->vbi_wq);
+-}
+-
+-static int vbi_open(struct saa7146_dev *dev, struct file *file)
+-{
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_vv *vv = fh->dev->vv_data;
+-
+-	u32 arbtr_ctrl	= saa7146_read(dev, PCI_BT_V1);
+-	int ret = 0;
+-
+-	DEB_VBI("dev:%p, fh:%p\n", dev, fh);
+-
+-	ret = saa7146_res_get(fh, RESOURCE_DMA3_BRS);
+-	if (0 == ret) {
+-		DEB_S("cannot get vbi RESOURCE_DMA3_BRS resource\n");
+-		return -EBUSY;
+-	}
+-
+-	/* adjust arbitrition control for video dma 3 */
+-	arbtr_ctrl &= ~0x1f0000;
+-	arbtr_ctrl |=  0x1d0000;
+-	saa7146_write(dev, PCI_BT_V1, arbtr_ctrl);
+-	saa7146_write(dev, MC2, (MASK_04|MASK_20));
+-
+-	videobuf_queue_sg_init(&fh->vbi_q, &vbi_qops,
+-			    &dev->pci->dev, &dev->slock,
+-			    V4L2_BUF_TYPE_VBI_CAPTURE,
+-			    V4L2_FIELD_SEQ_TB, // FIXME: does this really work?
+-			    sizeof(struct saa7146_buf),
+-			    file, &dev->v4l2_lock);
+-
+-	vv->vbi_read_timeout.function = vbi_read_timeout;
+-	vv->vbi_read_timeout_file = file;
+-
+-	/* initialize the brs */
+-	if ( 0 != (SAA7146_USE_PORT_B_FOR_VBI & dev->ext_vv_data->flags)) {
+-		saa7146_write(dev, BRS_CTRL, MASK_30|MASK_29 | (7 << 19));
+-	} else {
+-		saa7146_write(dev, BRS_CTRL, 0x00000001);
+-
+-		if (0 != (ret = vbi_workaround(dev))) {
+-			DEB_VBI("vbi workaround failed!\n");
+-			/* return ret;*/
+-		}
+-	}
+-
+-	/* upload brs register */
+-	saa7146_write(dev, MC2, (MASK_08|MASK_24));
+-	return 0;
+-}
+-
+-static void vbi_close(struct saa7146_dev *dev, struct file *file)
+-{
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	DEB_VBI("dev:%p, fh:%p\n", dev, fh);
+-
+-	if( fh == vv->vbi_streaming ) {
+-		vbi_stop(fh, file);
+-	}
+-	saa7146_res_free(fh, RESOURCE_DMA3_BRS);
+-}
+-
+-static void vbi_irq_done(struct saa7146_dev *dev, unsigned long status)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-	spin_lock(&dev->slock);
+-
+-	if (vv->vbi_dmaq.curr) {
+-		DEB_VBI("dev:%p, curr:%p\n", dev, vv->vbi_dmaq.curr);
+-		/* this must be += 2, one count for each field */
+-		vv->vbi_fieldcount+=2;
+-		vv->vbi_dmaq.curr->vb.field_count = vv->vbi_fieldcount;
+-		saa7146_buffer_finish(dev, &vv->vbi_dmaq, VIDEOBUF_DONE);
+-	} else {
+-		DEB_VBI("dev:%p\n", dev);
+-	}
+-	saa7146_buffer_next(dev, &vv->vbi_dmaq, 1);
+-
+-	spin_unlock(&dev->slock);
+-}
+-
+-static ssize_t vbi_read(struct file *file, char __user *data, size_t count, loff_t *ppos)
+-{
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	ssize_t ret = 0;
+-
+-	DEB_VBI("dev:%p, fh:%p\n", dev, fh);
+-
+-	if( NULL == vv->vbi_streaming ) {
+-		// fixme: check if dma3 is available
+-		// fixme: activate vbi engine here if necessary. (really?)
+-		vv->vbi_streaming = fh;
+-	}
+-
+-	if( fh != vv->vbi_streaming ) {
+-		DEB_VBI("open %p is already using vbi capture\n",
+-			vv->vbi_streaming);
+-		return -EBUSY;
+-	}
+-
+-	mod_timer(&vv->vbi_read_timeout, jiffies+BUFFER_TIMEOUT);
+-	ret = videobuf_read_stream(&fh->vbi_q, data, count, ppos, 1,
+-				   file->f_flags & O_NONBLOCK);
+-/*
+-	printk("BASE_ODD3:      0x%08x\n", saa7146_read(dev, BASE_ODD3));
+-	printk("BASE_EVEN3:     0x%08x\n", saa7146_read(dev, BASE_EVEN3));
+-	printk("PROT_ADDR3:     0x%08x\n", saa7146_read(dev, PROT_ADDR3));
+-	printk("PITCH3:         0x%08x\n", saa7146_read(dev, PITCH3));
+-	printk("BASE_PAGE3:     0x%08x\n", saa7146_read(dev, BASE_PAGE3));
+-	printk("NUM_LINE_BYTE3: 0x%08x\n", saa7146_read(dev, NUM_LINE_BYTE3));
+-	printk("BRS_CTRL:       0x%08x\n", saa7146_read(dev, BRS_CTRL));
+-*/
+-	return ret;
+-}
+-
+-const struct saa7146_use_ops saa7146_vbi_uops = {
+-	.init		= vbi_init,
+-	.open		= vbi_open,
+-	.release	= vbi_close,
+-	.irq_done	= vbi_irq_done,
+-	.read		= vbi_read,
+-};
+diff --git a/drivers/staging/media/deprecated/saa7146/common/saa7146_video.c b/drivers/staging/media/deprecated/saa7146/common/saa7146_video.c
+deleted file mode 100644
+index 4598a44231fa..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/common/saa7146_video.c
++++ /dev/null
+@@ -1,1286 +0,0 @@
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
+-#include <media/v4l2-event.h>
+-#include <media/v4l2-ctrls.h>
+-#include <linux/module.h>
+-#include <linux/kernel.h>
+-#include "saa7146_vv.h"
+-
+-static int max_memory = 32;
+-
+-module_param(max_memory, int, 0644);
+-MODULE_PARM_DESC(max_memory, "maximum memory usage for capture buffers (default: 32Mb)");
+-
+-#define IS_CAPTURE_ACTIVE(fh) \
+-	(((vv->video_status & STATUS_CAPTURE) != 0) && (vv->video_fh == fh))
+-
+-#define IS_OVERLAY_ACTIVE(fh) \
+-	(((vv->video_status & STATUS_OVERLAY) != 0) && (vv->video_fh == fh))
+-
+-/* format descriptions for capture and preview */
+-static struct saa7146_format formats[] = {
+-	{
+-		.pixelformat	= V4L2_PIX_FMT_RGB332,
+-		.trans		= RGB08_COMPOSED,
+-		.depth		= 8,
+-		.flags		= 0,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_RGB565,
+-		.trans		= RGB16_COMPOSED,
+-		.depth		= 16,
+-		.flags		= 0,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_BGR24,
+-		.trans		= RGB24_COMPOSED,
+-		.depth		= 24,
+-		.flags		= 0,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_BGR32,
+-		.trans		= RGB32_COMPOSED,
+-		.depth		= 32,
+-		.flags		= 0,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_RGB32,
+-		.trans		= RGB32_COMPOSED,
+-		.depth		= 32,
+-		.flags		= 0,
+-		.swap		= 0x2,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_GREY,
+-		.trans		= Y8,
+-		.depth		= 8,
+-		.flags		= 0,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_YUV422P,
+-		.trans		= YUV422_DECOMPOSED,
+-		.depth		= 16,
+-		.flags		= FORMAT_BYTE_SWAP|FORMAT_IS_PLANAR,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_YVU420,
+-		.trans		= YUV420_DECOMPOSED,
+-		.depth		= 12,
+-		.flags		= FORMAT_BYTE_SWAP|FORMAT_IS_PLANAR,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_YUV420,
+-		.trans		= YUV420_DECOMPOSED,
+-		.depth		= 12,
+-		.flags		= FORMAT_IS_PLANAR,
+-	}, {
+-		.pixelformat	= V4L2_PIX_FMT_UYVY,
+-		.trans		= YUV422_COMPOSED,
+-		.depth		= 16,
+-		.flags		= 0,
+-	}
+-};
+-
+-/* unfortunately, the saa7146 contains a bug which prevents it from doing on-the-fly byte swaps.
+-   due to this, it's impossible to provide additional *packed* formats, which are simply byte swapped
+-   (like V4L2_PIX_FMT_YUYV) ... 8-( */
+-
+-struct saa7146_format* saa7146_format_by_fourcc(struct saa7146_dev *dev, int fourcc)
+-{
+-	int i;
+-
+-	for (i = 0; i < ARRAY_SIZE(formats); i++) {
+-		if (formats[i].pixelformat == fourcc) {
+-			return formats+i;
+-		}
+-	}
+-
+-	DEB_D("unknown pixelformat:'%4.4s'\n", (char *)&fourcc);
+-	return NULL;
+-}
+-
+-static int vidioc_try_fmt_vid_overlay(struct file *file, void *fh, struct v4l2_format *f);
+-
+-int saa7146_start_preview(struct saa7146_fh *fh)
+-{
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct v4l2_format fmt;
+-	int ret = 0, err = 0;
+-
+-	DEB_EE("dev:%p, fh:%p\n", dev, fh);
+-
+-	/* check if we have overlay information */
+-	if (vv->ov.fh == NULL) {
+-		DEB_D("no overlay data available. try S_FMT first.\n");
+-		return -EAGAIN;
+-	}
+-
+-	/* check if streaming capture is running */
+-	if (IS_CAPTURE_ACTIVE(fh) != 0) {
+-		DEB_D("streaming capture is active\n");
+-		return -EBUSY;
+-	}
+-
+-	/* check if overlay is running */
+-	if (IS_OVERLAY_ACTIVE(fh) != 0) {
+-		if (vv->video_fh == fh) {
+-			DEB_D("overlay is already active\n");
+-			return 0;
+-		}
+-		DEB_D("overlay is already active in another open\n");
+-		return -EBUSY;
+-	}
+-
+-	if (0 == saa7146_res_get(fh, RESOURCE_DMA1_HPS|RESOURCE_DMA2_CLP)) {
+-		DEB_D("cannot get necessary overlay resources\n");
+-		return -EBUSY;
+-	}
+-
+-	fmt.fmt.win = vv->ov.win;
+-	err = vidioc_try_fmt_vid_overlay(NULL, fh, &fmt);
+-	if (0 != err) {
+-		saa7146_res_free(vv->video_fh, RESOURCE_DMA1_HPS|RESOURCE_DMA2_CLP);
+-		return -EBUSY;
+-	}
+-	vv->ov.win = fmt.fmt.win;
+-
+-	DEB_D("%dx%d+%d+%d 0x%08x field=%s\n",
+-	      vv->ov.win.w.width, vv->ov.win.w.height,
+-	      vv->ov.win.w.left, vv->ov.win.w.top,
+-	      vv->ov_fmt->pixelformat, v4l2_field_names[vv->ov.win.field]);
+-
+-	if (0 != (ret = saa7146_enable_overlay(fh))) {
+-		DEB_D("enabling overlay failed: %d\n", ret);
+-		saa7146_res_free(vv->video_fh, RESOURCE_DMA1_HPS|RESOURCE_DMA2_CLP);
+-		return ret;
+-	}
+-
+-	vv->video_status = STATUS_OVERLAY;
+-	vv->video_fh = fh;
+-
+-	return 0;
+-}
+-EXPORT_SYMBOL_GPL(saa7146_start_preview);
+-
+-int saa7146_stop_preview(struct saa7146_fh *fh)
+-{
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	DEB_EE("dev:%p, fh:%p\n", dev, fh);
+-
+-	/* check if streaming capture is running */
+-	if (IS_CAPTURE_ACTIVE(fh) != 0) {
+-		DEB_D("streaming capture is active\n");
+-		return -EBUSY;
+-	}
+-
+-	/* check if overlay is running at all */
+-	if ((vv->video_status & STATUS_OVERLAY) == 0) {
+-		DEB_D("no active overlay\n");
+-		return 0;
+-	}
+-
+-	if (vv->video_fh != fh) {
+-		DEB_D("overlay is active, but in another open\n");
+-		return -EBUSY;
+-	}
+-
+-	vv->video_status = 0;
+-	vv->video_fh = NULL;
+-
+-	saa7146_disable_overlay(fh);
+-
+-	saa7146_res_free(fh, RESOURCE_DMA1_HPS|RESOURCE_DMA2_CLP);
+-
+-	return 0;
+-}
+-EXPORT_SYMBOL_GPL(saa7146_stop_preview);
+-
+-/********************************************************************************/
+-/* common pagetable functions */
+-
+-static int saa7146_pgtable_build(struct saa7146_dev *dev, struct saa7146_buf *buf)
+-{
+-	struct pci_dev *pci = dev->pci;
+-	struct videobuf_dmabuf *dma=videobuf_to_dma(&buf->vb);
+-	struct scatterlist *list = dma->sglist;
+-	int length = dma->sglen;
+-	struct saa7146_format *sfmt = saa7146_format_by_fourcc(dev,buf->fmt->pixelformat);
+-
+-	DEB_EE("dev:%p, buf:%p, sg_len:%d\n", dev, buf, length);
+-
+-	if( 0 != IS_PLANAR(sfmt->trans)) {
+-		struct saa7146_pgtable *pt1 = &buf->pt[0];
+-		struct saa7146_pgtable *pt2 = &buf->pt[1];
+-		struct saa7146_pgtable *pt3 = &buf->pt[2];
+-		__le32  *ptr1, *ptr2, *ptr3;
+-		__le32 fill;
+-
+-		int size = buf->fmt->width*buf->fmt->height;
+-		int i,p,m1,m2,m3,o1,o2;
+-
+-		switch( sfmt->depth ) {
+-			case 12: {
+-				/* create some offsets inside the page table */
+-				m1 = ((size+PAGE_SIZE)/PAGE_SIZE)-1;
+-				m2 = ((size+(size/4)+PAGE_SIZE)/PAGE_SIZE)-1;
+-				m3 = ((size+(size/2)+PAGE_SIZE)/PAGE_SIZE)-1;
+-				o1 = size%PAGE_SIZE;
+-				o2 = (size+(size/4))%PAGE_SIZE;
+-				DEB_CAP("size:%d, m1:%d, m2:%d, m3:%d, o1:%d, o2:%d\n",
+-					size, m1, m2, m3, o1, o2);
+-				break;
+-			}
+-			case 16: {
+-				/* create some offsets inside the page table */
+-				m1 = ((size+PAGE_SIZE)/PAGE_SIZE)-1;
+-				m2 = ((size+(size/2)+PAGE_SIZE)/PAGE_SIZE)-1;
+-				m3 = ((2*size+PAGE_SIZE)/PAGE_SIZE)-1;
+-				o1 = size%PAGE_SIZE;
+-				o2 = (size+(size/2))%PAGE_SIZE;
+-				DEB_CAP("size:%d, m1:%d, m2:%d, m3:%d, o1:%d, o2:%d\n",
+-					size, m1, m2, m3, o1, o2);
+-				break;
+-			}
+-			default: {
+-				return -1;
+-			}
+-		}
+-
+-		ptr1 = pt1->cpu;
+-		ptr2 = pt2->cpu;
+-		ptr3 = pt3->cpu;
+-
+-		/* walk all pages, copy all page addresses to ptr1 */
+-		for (i = 0; i < length; i++, list++) {
+-			for (p = 0; p * 4096 < sg_dma_len(list); p++, ptr1++)
+-				*ptr1 = cpu_to_le32(sg_dma_address(list) - list->offset);
+-		}
+-/*
+-		ptr1 = pt1->cpu;
+-		for(j=0;j<40;j++) {
+-			printk("ptr1 %d: 0x%08x\n",j,ptr1[j]);
+-		}
+-*/
+-
+-		/* if we have a user buffer, the first page may not be
+-		   aligned to a page boundary. */
+-		pt1->offset = dma->sglist->offset;
+-		pt2->offset = pt1->offset+o1;
+-		pt3->offset = pt1->offset+o2;
+-
+-		/* create video-dma2 page table */
+-		ptr1 = pt1->cpu;
+-		for(i = m1; i <= m2 ; i++, ptr2++) {
+-			*ptr2 = ptr1[i];
+-		}
+-		fill = *(ptr2-1);
+-		for(;i<1024;i++,ptr2++) {
+-			*ptr2 = fill;
+-		}
+-		/* create video-dma3 page table */
+-		ptr1 = pt1->cpu;
+-		for(i = m2; i <= m3; i++,ptr3++) {
+-			*ptr3 = ptr1[i];
+-		}
+-		fill = *(ptr3-1);
+-		for(;i<1024;i++,ptr3++) {
+-			*ptr3 = fill;
+-		}
+-		/* finally: finish up video-dma1 page table */
+-		ptr1 = pt1->cpu+m1;
+-		fill = pt1->cpu[m1];
+-		for(i=m1;i<1024;i++,ptr1++) {
+-			*ptr1 = fill;
+-		}
+-/*
+-		ptr1 = pt1->cpu;
+-		ptr2 = pt2->cpu;
+-		ptr3 = pt3->cpu;
+-		for(j=0;j<40;j++) {
+-			printk("ptr1 %d: 0x%08x\n",j,ptr1[j]);
+-		}
+-		for(j=0;j<40;j++) {
+-			printk("ptr2 %d: 0x%08x\n",j,ptr2[j]);
+-		}
+-		for(j=0;j<40;j++) {
+-			printk("ptr3 %d: 0x%08x\n",j,ptr3[j]);
+-		}
+-*/
+-	} else {
+-		struct saa7146_pgtable *pt = &buf->pt[0];
+-		return saa7146_pgtable_build_single(pci, pt, list, length);
+-	}
+-
+-	return 0;
+-}
+-
+-
+-/********************************************************************************/
+-/* file operations */
+-
+-static int video_begin(struct saa7146_fh *fh)
+-{
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct saa7146_format *fmt = NULL;
+-	unsigned int resource;
+-	int ret = 0, err = 0;
+-
+-	DEB_EE("dev:%p, fh:%p\n", dev, fh);
+-
+-	if ((vv->video_status & STATUS_CAPTURE) != 0) {
+-		if (vv->video_fh == fh) {
+-			DEB_S("already capturing\n");
+-			return 0;
+-		}
+-		DEB_S("already capturing in another open\n");
+-		return -EBUSY;
+-	}
 -
 -	if ((vv->video_status & STATUS_OVERLAY) != 0) {
+-		DEB_S("warning: suspending overlay video for streaming capture\n");
 -		vv->ov_suspend = vv->video_fh;
 -		err = saa7146_stop_preview(vv->video_fh); /* side effect: video_status is now 0, video_fh is NULL */
--		if (err != 0) {
--			dprintk(2, "suspending video failed\n");
+-		if (0 != err) {
+-			DEB_D("suspending video failed. aborting\n");
+-			return err;
+-		}
+-	}
+-
+-	fmt = saa7146_format_by_fourcc(dev, vv->video_fmt.pixelformat);
+-	/* we need to have a valid format set here */
+-	if (!fmt)
+-		return -EINVAL;
+-
+-	if (0 != (fmt->flags & FORMAT_IS_PLANAR)) {
+-		resource = RESOURCE_DMA1_HPS|RESOURCE_DMA2_CLP|RESOURCE_DMA3_BRS;
+-	} else {
+-		resource = RESOURCE_DMA1_HPS;
+-	}
+-
+-	ret = saa7146_res_get(fh, resource);
+-	if (0 == ret) {
+-		DEB_S("cannot get capture resource %d\n", resource);
+-		if (vv->ov_suspend != NULL) {
+-			saa7146_start_preview(vv->ov_suspend);
 -			vv->ov_suspend = NULL;
 -		}
+-		return -EBUSY;
 -	}
 -
--	if (0 != av7110->current_input) {
--		dprintk(1, "switching to analog TV:\n");
--		adswitch = 1;
--		source = SAA7146_HPS_SOURCE_PORT_B;
--		sync = SAA7146_HPS_SYNC_PORT_B;
--		memcpy(standard, analog_standard, sizeof(struct saa7146_standard) * 2);
+-	/* clear out beginning of streaming bit (rps register 0)*/
+-	saa7146_write(dev, MC2, MASK_27 );
 -
--		switch (av7110->current_input) {
--		case 1:
--			dprintk(1, "switching SAA7113 to Analog Tuner Input\n");
--			msp_writereg(av7110, MSP_WR_DSP, 0x0008, 0x0000); // loudspeaker source
--			msp_writereg(av7110, MSP_WR_DSP, 0x0009, 0x0000); // headphone source
--			msp_writereg(av7110, MSP_WR_DSP, 0x000a, 0x0000); // SCART 1 source
--			msp_writereg(av7110, MSP_WR_DSP, 0x000e, 0x3000); // FM matrix, mono
--			msp_writereg(av7110, MSP_WR_DSP, 0x0000, 0x4f00); // loudspeaker + headphone
--			msp_writereg(av7110, MSP_WR_DSP, 0x0007, 0x4f00); // SCART 1 volume
+-	/* enable rps0 irqs */
+-	SAA7146_IER_ENABLE(dev, MASK_27);
 -
--			if (av7110->analog_tuner_flags & ANALOG_TUNER_VES1820) {
--				if (ves1820_writereg(dev, 0x09, 0x0f, 0x60))
--					dprintk(1, "setting band in demodulator failed\n");
--			} else if (av7110->analog_tuner_flags & ANALOG_TUNER_STV0297) {
--				saa7146_setgpio(dev, 1, SAA7146_GPIO_OUTHI); // TDA9819 pin9(STD)
--				saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTHI); // TDA9819 pin30(VIF)
--			}
--			if (i2c_writereg(av7110, 0x48, 0x02, 0xd0) != 1)
--				dprintk(1, "saa7113 write failed @ card %d", av7110->dvb_adapter.num);
--			break;
--		case 2:
--			dprintk(1, "switching SAA7113 to Video AV CVBS Input\n");
--			if (i2c_writereg(av7110, 0x48, 0x02, 0xd2) != 1)
--				dprintk(1, "saa7113 write failed @ card %d", av7110->dvb_adapter.num);
--			break;
--		case 3:
--			dprintk(1, "switching SAA7113 to Video AV Y/C Input\n");
--			if (i2c_writereg(av7110, 0x48, 0x02, 0xd9) != 1)
--				dprintk(1, "saa7113 write failed @ card %d", av7110->dvb_adapter.num);
--			break;
--		default:
--			dprintk(1, "switching SAA7113 to Input: AV7110: SAA7113: invalid input\n");
--		}
+-	vv->video_fh = fh;
+-	vv->video_status = STATUS_CAPTURE;
+-
+-	return 0;
+-}
+-
+-static int video_end(struct saa7146_fh *fh, struct file *file)
+-{
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct saa7146_dmaqueue *q = &vv->video_dmaq;
+-	struct saa7146_format *fmt = NULL;
+-	unsigned long flags;
+-	unsigned int resource;
+-	u32 dmas = 0;
+-	DEB_EE("dev:%p, fh:%p\n", dev, fh);
+-
+-	if ((vv->video_status & STATUS_CAPTURE) != STATUS_CAPTURE) {
+-		DEB_S("not capturing\n");
+-		return 0;
+-	}
+-
+-	if (vv->video_fh != fh) {
+-		DEB_S("capturing, but in another open\n");
+-		return -EBUSY;
+-	}
+-
+-	fmt = saa7146_format_by_fourcc(dev, vv->video_fmt.pixelformat);
+-	/* we need to have a valid format set here */
+-	if (!fmt)
+-		return -EINVAL;
+-
+-	if (0 != (fmt->flags & FORMAT_IS_PLANAR)) {
+-		resource = RESOURCE_DMA1_HPS|RESOURCE_DMA2_CLP|RESOURCE_DMA3_BRS;
+-		dmas = MASK_22 | MASK_21 | MASK_20;
 -	} else {
--		adswitch = 0;
--		source = SAA7146_HPS_SOURCE_PORT_A;
--		sync = SAA7146_HPS_SYNC_PORT_A;
--		memcpy(standard, dvb_standard, sizeof(struct saa7146_standard) * 2);
--		dprintk(1, "switching DVB mode\n");
--		msp_writereg(av7110, MSP_WR_DSP, 0x0008, 0x0220); // loudspeaker source
--		msp_writereg(av7110, MSP_WR_DSP, 0x0009, 0x0220); // headphone source
--		msp_writereg(av7110, MSP_WR_DSP, 0x000a, 0x0220); // SCART 1 source
--		msp_writereg(av7110, MSP_WR_DSP, 0x000e, 0x3000); // FM matrix, mono
--		msp_writereg(av7110, MSP_WR_DSP, 0x0000, 0x7f00); // loudspeaker + headphone
--		msp_writereg(av7110, MSP_WR_DSP, 0x0007, 0x7f00); // SCART 1 volume
--
--		if (av7110->analog_tuner_flags & ANALOG_TUNER_VES1820) {
--			if (ves1820_writereg(dev, 0x09, 0x0f, 0x20))
--				dprintk(1, "setting band in demodulator failed\n");
--		} else if (av7110->analog_tuner_flags & ANALOG_TUNER_STV0297) {
--			saa7146_setgpio(dev, 1, SAA7146_GPIO_OUTLO); // TDA9819 pin9(STD)
--			saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTLO); // TDA9819 pin30(VIF)
--		}
+-		resource = RESOURCE_DMA1_HPS;
+-		dmas = MASK_22;
 -	}
+-	spin_lock_irqsave(&dev->slock,flags);
 -
--	/* hmm, this does not do anything!? */
--	if (av7110_fw_cmd(av7110, COMTYPE_AUDIODAC, ADSwitch, 1, adswitch))
--		dprintk(1, "ADSwitch error\n");
+-	/* disable rps0  */
+-	saa7146_write(dev, MC1, MASK_28);
 -
--	saa7146_set_hps_source_and_sync(dev, source, sync);
+-	/* disable rps0 irqs */
+-	SAA7146_IER_DISABLE(dev, MASK_27);
+-
+-	/* shut down all used video dma transfers */
+-	saa7146_write(dev, MC1, dmas);
+-
+-	if (q->curr)
+-		saa7146_buffer_finish(dev, q, VIDEOBUF_DONE);
+-
+-	spin_unlock_irqrestore(&dev->slock, flags);
+-
+-	vv->video_fh = NULL;
+-	vv->video_status = 0;
+-
+-	saa7146_res_free(fh, resource);
 -
 -	if (vv->ov_suspend != NULL) {
 -		saa7146_start_preview(vv->ov_suspend);
@@ -8074,648 +4346,3016 @@ index c89f536f699c..000000000000
 -	return 0;
 -}
 -
--static int vidioc_g_tuner(struct file *file, void *fh, struct v4l2_tuner *t)
+-static int vidioc_querycap(struct file *file, void *fh, struct v4l2_capability *cap)
 -{
 -	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
--	struct av7110 *av7110 = (struct av7110 *)dev->ext_priv;
--	u16 stereo_det;
--	s8 stereo;
 -
--	dprintk(2, "VIDIOC_G_TUNER: %d\n", t->index);
--
--	if (!av7110->analog_tuner_flags || t->index != 0)
--		return -EINVAL;
--
--	memset(t, 0, sizeof(*t));
--	strscpy((char *)t->name, "Television", sizeof(t->name));
--
--	t->type = V4L2_TUNER_ANALOG_TV;
--	t->capability = V4L2_TUNER_CAP_NORM | V4L2_TUNER_CAP_STEREO |
--		V4L2_TUNER_CAP_LANG1 | V4L2_TUNER_CAP_LANG2 | V4L2_TUNER_CAP_SAP;
--	t->rangelow = 772;	/* 48.25 MHZ / 62.5 kHz = 772, see fi1216mk2-specs, page 2 */
--	t->rangehigh = 13684;	/* 855.25 MHz / 62.5 kHz = 13684 */
--	/* FIXME: add the real signal strength here */
--	t->signal = 0xffff;
--	t->afc = 0;
--
--	/* FIXME: standard / stereo detection is still broken */
--	msp_readreg(av7110, MSP_RD_DEM, 0x007e, &stereo_det);
--	dprintk(1, "VIDIOC_G_TUNER: msp3400 TV standard detection: 0x%04x\n", stereo_det);
--	msp_readreg(av7110, MSP_RD_DSP, 0x0018, &stereo_det);
--	dprintk(1, "VIDIOC_G_TUNER: msp3400 stereo detection: 0x%04x\n", stereo_det);
--	stereo = (s8)(stereo_det >> 8);
--	if (stereo > 0x10) {
--		/* stereo */
--		t->rxsubchans = V4L2_TUNER_SUB_STEREO | V4L2_TUNER_SUB_MONO;
--		t->audmode = V4L2_TUNER_MODE_STEREO;
--	} else if (stereo < -0x10) {
--		/* bilingual */
--		t->rxsubchans = V4L2_TUNER_SUB_LANG1 | V4L2_TUNER_SUB_LANG2;
--		t->audmode = V4L2_TUNER_MODE_LANG1;
--	} else /* mono */
--		t->rxsubchans = V4L2_TUNER_SUB_MONO;
--
+-	strscpy((char *)cap->driver, "saa7146 v4l2", sizeof(cap->driver));
+-	strscpy((char *)cap->card, dev->ext->name, sizeof(cap->card));
+-	cap->capabilities = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_VIDEO_OVERLAY |
+-			    V4L2_CAP_READWRITE | V4L2_CAP_STREAMING |
+-			    V4L2_CAP_DEVICE_CAPS;
+-	cap->capabilities |= dev->ext_vv_data->capabilities;
 -	return 0;
 -}
 -
--static int vidioc_s_tuner(struct file *file, void *fh, const struct v4l2_tuner *t)
+-static int vidioc_g_fbuf(struct file *file, void *fh, struct v4l2_framebuffer *fb)
 -{
 -	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
--	struct av7110 *av7110 = (struct av7110 *)dev->ext_priv;
--	u16 fm_matrix, src;
--	dprintk(2, "VIDIOC_S_TUNER: %d\n", t->index);
+-	struct saa7146_vv *vv = dev->vv_data;
 -
--	if (!av7110->analog_tuner_flags || av7110->current_input != 1)
+-	*fb = vv->ov_fb;
+-	fb->capability = V4L2_FBUF_CAP_LIST_CLIPPING;
+-	fb->flags = V4L2_FBUF_FLAG_PRIMARY;
+-	return 0;
+-}
+-
+-static int vidioc_s_fbuf(struct file *file, void *fh, const struct v4l2_framebuffer *fb)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct saa7146_format *fmt;
+-
+-	DEB_EE("VIDIOC_S_FBUF\n");
+-
+-	if (!capable(CAP_SYS_ADMIN) && !capable(CAP_SYS_RAWIO))
+-		return -EPERM;
+-
+-	/* check args */
+-	fmt = saa7146_format_by_fourcc(dev, fb->fmt.pixelformat);
+-	if (NULL == fmt)
 -		return -EINVAL;
 -
--	switch (t->audmode) {
--	case V4L2_TUNER_MODE_STEREO:
--		dprintk(2, "VIDIOC_S_TUNER: V4L2_TUNER_MODE_STEREO\n");
--		fm_matrix = 0x3001; /* stereo */
--		src = 0x0020;
--		break;
--	case V4L2_TUNER_MODE_LANG1_LANG2:
--		dprintk(2, "VIDIOC_S_TUNER: V4L2_TUNER_MODE_LANG1_LANG2\n");
--		fm_matrix = 0x3000; /* bilingual */
--		src = 0x0020;
--		break;
--	case V4L2_TUNER_MODE_LANG1:
--		dprintk(2, "VIDIOC_S_TUNER: V4L2_TUNER_MODE_LANG1\n");
--		fm_matrix = 0x3000; /* mono */
--		src = 0x0000;
--		break;
--	case V4L2_TUNER_MODE_LANG2:
--		dprintk(2, "VIDIOC_S_TUNER: V4L2_TUNER_MODE_LANG2\n");
--		fm_matrix = 0x3000; /* mono */
--		src = 0x0010;
--		break;
--	default: /* case V4L2_TUNER_MODE_MONO: */
--		dprintk(2, "VIDIOC_S_TUNER: TDA9840_SET_MONO\n");
--		fm_matrix = 0x3000; /* mono */
--		src = 0x0030;
--		break;
+-	/* planar formats are not allowed for overlay video, clipping and video dma would clash */
+-	if (fmt->flags & FORMAT_IS_PLANAR)
+-		DEB_S("planar pixelformat '%4.4s' not allowed for overlay\n",
+-		      (char *)&fmt->pixelformat);
+-
+-	/* check if overlay is running */
+-	if (IS_OVERLAY_ACTIVE(fh) != 0) {
+-		if (vv->video_fh != fh) {
+-			DEB_D("refusing to change framebuffer information while overlay is active in another open\n");
+-			return -EBUSY;
+-		}
 -	}
--	msp_writereg(av7110, MSP_WR_DSP, 0x000e, fm_matrix);
--	msp_writereg(av7110, MSP_WR_DSP, 0x0008, src);
--	msp_writereg(av7110, MSP_WR_DSP, 0x0009, src);
--	msp_writereg(av7110, MSP_WR_DSP, 0x000a, src);
+-
+-	/* ok, accept it */
+-	vv->ov_fb = *fb;
+-	vv->ov_fmt = fmt;
+-
+-	if (vv->ov_fb.fmt.bytesperline < vv->ov_fb.fmt.width) {
+-		vv->ov_fb.fmt.bytesperline = vv->ov_fb.fmt.width * fmt->depth / 8;
+-		DEB_D("setting bytesperline to %d\n", vv->ov_fb.fmt.bytesperline);
+-	}
 -	return 0;
 -}
 -
--static int vidioc_g_frequency(struct file *file, void *fh, struct v4l2_frequency *f)
+-static int vidioc_enum_fmt_vid_cap(struct file *file, void *fh, struct v4l2_fmtdesc *f)
 -{
--	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
--	struct av7110 *av7110 = (struct av7110 *)dev->ext_priv;
--
--	dprintk(2, "VIDIOC_G_FREQ: freq:0x%08x\n", f->frequency);
--
--	if (!av7110->analog_tuner_flags || av7110->current_input != 1)
+-	if (f->index >= ARRAY_SIZE(formats))
 -		return -EINVAL;
--
--	memset(f, 0, sizeof(*f));
--	f->type = V4L2_TUNER_ANALOG_TV;
--	f->frequency =	av7110->current_freq;
+-	f->pixelformat = formats[f->index].pixelformat;
 -	return 0;
 -}
 -
--static int vidioc_s_frequency(struct file *file, void *fh, const struct v4l2_frequency *f)
+-int saa7146_s_ctrl(struct v4l2_ctrl *ctrl)
+-{
+-	struct saa7146_dev *dev = container_of(ctrl->handler,
+-				struct saa7146_dev, ctrl_handler);
+-	struct saa7146_vv *vv = dev->vv_data;
+-	u32 val;
+-
+-	switch (ctrl->id) {
+-	case V4L2_CID_BRIGHTNESS:
+-		val = saa7146_read(dev, BCS_CTRL);
+-		val &= 0x00ffffff;
+-		val |= (ctrl->val << 24);
+-		saa7146_write(dev, BCS_CTRL, val);
+-		saa7146_write(dev, MC2, MASK_22 | MASK_06);
+-		break;
+-
+-	case V4L2_CID_CONTRAST:
+-		val = saa7146_read(dev, BCS_CTRL);
+-		val &= 0xff00ffff;
+-		val |= (ctrl->val << 16);
+-		saa7146_write(dev, BCS_CTRL, val);
+-		saa7146_write(dev, MC2, MASK_22 | MASK_06);
+-		break;
+-
+-	case V4L2_CID_SATURATION:
+-		val = saa7146_read(dev, BCS_CTRL);
+-		val &= 0xffffff00;
+-		val |= (ctrl->val << 0);
+-		saa7146_write(dev, BCS_CTRL, val);
+-		saa7146_write(dev, MC2, MASK_22 | MASK_06);
+-		break;
+-
+-	case V4L2_CID_HFLIP:
+-		/* fixme: we can support changing VFLIP and HFLIP here... */
+-		if ((vv->video_status & STATUS_CAPTURE))
+-			return -EBUSY;
+-		vv->hflip = ctrl->val;
+-		break;
+-
+-	case V4L2_CID_VFLIP:
+-		if ((vv->video_status & STATUS_CAPTURE))
+-			return -EBUSY;
+-		vv->vflip = ctrl->val;
+-		break;
+-
+-	default:
+-		return -EINVAL;
+-	}
+-
+-	if ((vv->video_status & STATUS_OVERLAY) != 0) { /* CHECK: && (vv->video_fh == fh)) */
+-		struct saa7146_fh *fh = vv->video_fh;
+-
+-		saa7146_stop_preview(fh);
+-		saa7146_start_preview(fh);
+-	}
+-	return 0;
+-}
+-
+-static int vidioc_g_parm(struct file *file, void *fh,
+-		struct v4l2_streamparm *parm)
 -{
 -	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
--	struct av7110 *av7110 = (struct av7110 *)dev->ext_priv;
+-	struct saa7146_vv *vv = dev->vv_data;
 -
--	dprintk(2, "VIDIOC_S_FREQUENCY: freq:0x%08x\n", f->frequency);
+-	if (parm->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-		return -EINVAL;
+-	parm->parm.capture.readbuffers = 1;
+-	v4l2_video_std_frame_period(vv->standard->id,
+-				    &parm->parm.capture.timeperframe);
+-	return 0;
+-}
 -
--	if (!av7110->analog_tuner_flags || av7110->current_input != 1)
+-static int vidioc_g_fmt_vid_cap(struct file *file, void *fh, struct v4l2_format *f)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	f->fmt.pix = vv->video_fmt;
+-	return 0;
+-}
+-
+-static int vidioc_g_fmt_vid_overlay(struct file *file, void *fh, struct v4l2_format *f)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	f->fmt.win = vv->ov.win;
+-	return 0;
+-}
+-
+-static int vidioc_g_fmt_vbi_cap(struct file *file, void *fh, struct v4l2_format *f)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	f->fmt.vbi = vv->vbi_fmt;
+-	return 0;
+-}
+-
+-static int vidioc_try_fmt_vid_cap(struct file *file, void *fh, struct v4l2_format *f)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct saa7146_format *fmt;
+-	enum v4l2_field field;
+-	int maxw, maxh;
+-	int calc_bpl;
+-
+-	DEB_EE("V4L2_BUF_TYPE_VIDEO_CAPTURE: dev:%p, fh:%p\n", dev, fh);
+-
+-	fmt = saa7146_format_by_fourcc(dev, f->fmt.pix.pixelformat);
+-	if (NULL == fmt)
 -		return -EINVAL;
 -
--	if (V4L2_TUNER_ANALOG_TV != f->type)
+-	field = f->fmt.pix.field;
+-	maxw  = vv->standard->h_max_out;
+-	maxh  = vv->standard->v_max_out;
+-
+-	if (V4L2_FIELD_ANY == field) {
+-		field = (f->fmt.pix.height > maxh / 2)
+-			? V4L2_FIELD_INTERLACED
+-			: V4L2_FIELD_BOTTOM;
+-	}
+-	switch (field) {
+-	case V4L2_FIELD_ALTERNATE:
+-		vv->last_field = V4L2_FIELD_TOP;
+-		maxh = maxh / 2;
+-		break;
+-	case V4L2_FIELD_TOP:
+-	case V4L2_FIELD_BOTTOM:
+-		vv->last_field = V4L2_FIELD_INTERLACED;
+-		maxh = maxh / 2;
+-		break;
+-	case V4L2_FIELD_INTERLACED:
+-		vv->last_field = V4L2_FIELD_INTERLACED;
+-		break;
+-	default:
+-		DEB_D("no known field mode '%d'\n", field);
 -		return -EINVAL;
+-	}
 -
--	msp_writereg(av7110, MSP_WR_DSP, 0x0000, 0xffe0); /* fast mute */
--	msp_writereg(av7110, MSP_WR_DSP, 0x0007, 0xffe0);
+-	f->fmt.pix.field = field;
+-	f->fmt.pix.colorspace = V4L2_COLORSPACE_SMPTE170M;
+-	if (f->fmt.pix.width > maxw)
+-		f->fmt.pix.width = maxw;
+-	if (f->fmt.pix.height > maxh)
+-		f->fmt.pix.height = maxh;
 -
--	/* tune in desired frequency */
--	if (av7110->analog_tuner_flags & ANALOG_TUNER_VES1820)
--		ves1820_set_tv_freq(dev, f->frequency);
--	else if (av7110->analog_tuner_flags & ANALOG_TUNER_STV0297)
--		stv0297_set_tv_freq(dev, f->frequency);
--	av7110->current_freq = f->frequency;
+-	calc_bpl = (f->fmt.pix.width * fmt->depth) / 8;
 -
--	msp_writereg(av7110, MSP_WR_DSP, 0x0015, 0x003f); /* start stereo detection */
--	msp_writereg(av7110, MSP_WR_DSP, 0x0015, 0x0000);
--	msp_writereg(av7110, MSP_WR_DSP, 0x0000, 0x4f00); /* loudspeaker + headphone */
--	msp_writereg(av7110, MSP_WR_DSP, 0x0007, 0x4f00); /* SCART 1 volume */
+-	if (f->fmt.pix.bytesperline < calc_bpl)
+-		f->fmt.pix.bytesperline = calc_bpl;
+-
+-	if (f->fmt.pix.bytesperline > (2 * PAGE_SIZE * fmt->depth) / 8) /* arbitrary constraint */
+-		f->fmt.pix.bytesperline = calc_bpl;
+-
+-	f->fmt.pix.sizeimage = f->fmt.pix.bytesperline * f->fmt.pix.height;
+-	DEB_D("w:%d, h:%d, bytesperline:%d, sizeimage:%d\n",
+-	      f->fmt.pix.width, f->fmt.pix.height,
+-	      f->fmt.pix.bytesperline, f->fmt.pix.sizeimage);
+-
+-	return 0;
+-}
+-
+-
+-static int vidioc_try_fmt_vid_overlay(struct file *file, void *fh, struct v4l2_format *f)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct v4l2_window *win = &f->fmt.win;
+-	enum v4l2_field field;
+-	int maxw, maxh;
+-
+-	DEB_EE("dev:%p\n", dev);
+-
+-	if (NULL == vv->ov_fb.base) {
+-		DEB_D("no fb base set\n");
+-		return -EINVAL;
+-	}
+-	if (NULL == vv->ov_fmt) {
+-		DEB_D("no fb fmt set\n");
+-		return -EINVAL;
+-	}
+-	if (win->w.width < 48 || win->w.height < 32) {
+-		DEB_D("min width/height. (%d,%d)\n",
+-		      win->w.width, win->w.height);
+-		return -EINVAL;
+-	}
+-	if (win->clipcount > 16) {
+-		DEB_D("clipcount too big\n");
+-		return -EINVAL;
+-	}
+-
+-	field = win->field;
+-	maxw  = vv->standard->h_max_out;
+-	maxh  = vv->standard->v_max_out;
+-
+-	if (V4L2_FIELD_ANY == field) {
+-		field = (win->w.height > maxh / 2)
+-			? V4L2_FIELD_INTERLACED
+-			: V4L2_FIELD_TOP;
+-		}
+-	switch (field) {
+-	case V4L2_FIELD_TOP:
+-	case V4L2_FIELD_BOTTOM:
+-	case V4L2_FIELD_ALTERNATE:
+-		maxh = maxh / 2;
+-		break;
+-	case V4L2_FIELD_INTERLACED:
+-		break;
+-	default:
+-		DEB_D("no known field mode '%d'\n", field);
+-		return -EINVAL;
+-	}
+-
+-	win->field = field;
+-	if (win->w.width > maxw)
+-		win->w.width = maxw;
+-	if (win->w.height > maxh)
+-		win->w.height = maxh;
+-
+-	return 0;
+-}
+-
+-static int vidioc_s_fmt_vid_cap(struct file *file, void *__fh, struct v4l2_format *f)
+-{
+-	struct saa7146_fh *fh = __fh;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	int err;
+-
+-	DEB_EE("V4L2_BUF_TYPE_VIDEO_CAPTURE: dev:%p, fh:%p\n", dev, fh);
+-	if (IS_CAPTURE_ACTIVE(fh) != 0) {
+-		DEB_EE("streaming capture is active\n");
+-		return -EBUSY;
+-	}
+-	err = vidioc_try_fmt_vid_cap(file, fh, f);
+-	if (0 != err)
+-		return err;
+-	vv->video_fmt = f->fmt.pix;
+-	DEB_EE("set to pixelformat '%4.4s'\n",
+-	       (char *)&vv->video_fmt.pixelformat);
+-	return 0;
+-}
+-
+-static int vidioc_s_fmt_vid_overlay(struct file *file, void *__fh, struct v4l2_format *f)
+-{
+-	struct saa7146_fh *fh = __fh;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	int err;
+-
+-	DEB_EE("V4L2_BUF_TYPE_VIDEO_OVERLAY: dev:%p, fh:%p\n", dev, fh);
+-	err = vidioc_try_fmt_vid_overlay(file, fh, f);
+-	if (0 != err)
+-		return err;
+-	vv->ov.win    = f->fmt.win;
+-	vv->ov.nclips = f->fmt.win.clipcount;
+-	if (vv->ov.nclips > 16)
+-		vv->ov.nclips = 16;
+-	memcpy(vv->ov.clips, f->fmt.win.clips,
+-	       sizeof(struct v4l2_clip) * vv->ov.nclips);
+-
+-	/* vv->ov.fh is used to indicate that we have valid overlay information, too */
+-	vv->ov.fh = fh;
+-
+-	/* check if our current overlay is active */
+-	if (IS_OVERLAY_ACTIVE(fh) != 0) {
+-		saa7146_stop_preview(fh);
+-		saa7146_start_preview(fh);
+-	}
+-	return 0;
+-}
+-
+-static int vidioc_g_std(struct file *file, void *fh, v4l2_std_id *norm)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	*norm = vv->standard->id;
+-	return 0;
+-}
+-
+-	/* the saa7146 supfhrts (used in conjunction with the saa7111a for example)
+-	   PAL / NTSC / SECAM. if your hardware does not (or does more)
+-	   -- override this function in your extension */
+-/*
+-	case VIDIOC_ENUMSTD:
+-	{
+-		struct v4l2_standard *e = arg;
+-		if (e->index < 0 )
+-			return -EINVAL;
+-		if( e->index < dev->ext_vv_data->num_stds ) {
+-			DEB_EE("VIDIOC_ENUMSTD: index:%d\n", e->index);
+-			v4l2_video_std_construct(e, dev->ext_vv_data->stds[e->index].id, dev->ext_vv_data->stds[e->index].name);
+-			return 0;
+-		}
+-		return -EINVAL;
+-	}
+-	*/
+-
+-static int vidioc_s_std(struct file *file, void *fh, v4l2_std_id id)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	int found = 0;
+-	int err, i;
+-
+-	DEB_EE("VIDIOC_S_STD\n");
+-
+-	if ((vv->video_status & STATUS_CAPTURE) == STATUS_CAPTURE) {
+-		DEB_D("cannot change video standard while streaming capture is active\n");
+-		return -EBUSY;
+-	}
+-
+-	if ((vv->video_status & STATUS_OVERLAY) != 0) {
+-		vv->ov_suspend = vv->video_fh;
+-		err = saa7146_stop_preview(vv->video_fh); /* side effect: video_status is now 0, video_fh is NULL */
+-		if (0 != err) {
+-			DEB_D("suspending video failed. aborting\n");
+-			return err;
+-		}
+-	}
+-
+-	for (i = 0; i < dev->ext_vv_data->num_stds; i++)
+-		if (id & dev->ext_vv_data->stds[i].id)
+-			break;
+-	if (i != dev->ext_vv_data->num_stds) {
+-		vv->standard = &dev->ext_vv_data->stds[i];
+-		if (NULL != dev->ext_vv_data->std_callback)
+-			dev->ext_vv_data->std_callback(dev, vv->standard);
+-		found = 1;
+-	}
+-
+-	if (vv->ov_suspend != NULL) {
+-		saa7146_start_preview(vv->ov_suspend);
+-		vv->ov_suspend = NULL;
+-	}
+-
+-	if (!found) {
+-		DEB_EE("VIDIOC_S_STD: standard not found\n");
+-		return -EINVAL;
+-	}
+-
+-	DEB_EE("VIDIOC_S_STD: set to standard to '%s'\n", vv->standard->name);
+-	return 0;
+-}
+-
+-static int vidioc_overlay(struct file *file, void *fh, unsigned int on)
+-{
+-	int err;
+-
+-	DEB_D("VIDIOC_OVERLAY on:%d\n", on);
+-	if (on)
+-		err = saa7146_start_preview(fh);
+-	else
+-		err = saa7146_stop_preview(fh);
+-	return err;
+-}
+-
+-static int vidioc_reqbufs(struct file *file, void *__fh, struct v4l2_requestbuffers *b)
+-{
+-	struct saa7146_fh *fh = __fh;
+-
+-	if (b->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-		return videobuf_reqbufs(&fh->video_q, b);
+-	if (b->type == V4L2_BUF_TYPE_VBI_CAPTURE)
+-		return videobuf_reqbufs(&fh->vbi_q, b);
+-	return -EINVAL;
+-}
+-
+-static int vidioc_querybuf(struct file *file, void *__fh, struct v4l2_buffer *buf)
+-{
+-	struct saa7146_fh *fh = __fh;
+-
+-	if (buf->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-		return videobuf_querybuf(&fh->video_q, buf);
+-	if (buf->type == V4L2_BUF_TYPE_VBI_CAPTURE)
+-		return videobuf_querybuf(&fh->vbi_q, buf);
+-	return -EINVAL;
+-}
+-
+-static int vidioc_qbuf(struct file *file, void *__fh, struct v4l2_buffer *buf)
+-{
+-	struct saa7146_fh *fh = __fh;
+-
+-	if (buf->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-		return videobuf_qbuf(&fh->video_q, buf);
+-	if (buf->type == V4L2_BUF_TYPE_VBI_CAPTURE)
+-		return videobuf_qbuf(&fh->vbi_q, buf);
+-	return -EINVAL;
+-}
+-
+-static int vidioc_dqbuf(struct file *file, void *__fh, struct v4l2_buffer *buf)
+-{
+-	struct saa7146_fh *fh = __fh;
+-
+-	if (buf->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-		return videobuf_dqbuf(&fh->video_q, buf, file->f_flags & O_NONBLOCK);
+-	if (buf->type == V4L2_BUF_TYPE_VBI_CAPTURE)
+-		return videobuf_dqbuf(&fh->vbi_q, buf, file->f_flags & O_NONBLOCK);
+-	return -EINVAL;
+-}
+-
+-static int vidioc_streamon(struct file *file, void *__fh, enum v4l2_buf_type type)
+-{
+-	struct saa7146_fh *fh = __fh;
+-	int err;
+-
+-	DEB_D("VIDIOC_STREAMON, type:%d\n", type);
+-
+-	err = video_begin(fh);
+-	if (err)
+-		return err;
+-	if (type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-		return videobuf_streamon(&fh->video_q);
+-	if (type == V4L2_BUF_TYPE_VBI_CAPTURE)
+-		return videobuf_streamon(&fh->vbi_q);
+-	return -EINVAL;
+-}
+-
+-static int vidioc_streamoff(struct file *file, void *__fh, enum v4l2_buf_type type)
+-{
+-	struct saa7146_fh *fh = __fh;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	int err;
+-
+-	DEB_D("VIDIOC_STREAMOFF, type:%d\n", type);
+-
+-	/* ugly: we need to copy some checks from video_end(),
+-	   because videobuf_streamoff() relies on the capture running.
+-	   check and fix this */
+-	if ((vv->video_status & STATUS_CAPTURE) != STATUS_CAPTURE) {
+-		DEB_S("not capturing\n");
+-		return 0;
+-	}
+-
+-	if (vv->video_fh != fh) {
+-		DEB_S("capturing, but in another open\n");
+-		return -EBUSY;
+-	}
+-
+-	err = -EINVAL;
+-	if (type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-		err = videobuf_streamoff(&fh->video_q);
+-	else if (type == V4L2_BUF_TYPE_VBI_CAPTURE)
+-		err = videobuf_streamoff(&fh->vbi_q);
+-	if (0 != err) {
+-		DEB_D("warning: videobuf_streamoff() failed\n");
+-		video_end(fh, file);
+-	} else {
+-		err = video_end(fh, file);
+-	}
+-	return err;
+-}
+-
+-const struct v4l2_ioctl_ops saa7146_video_ioctl_ops = {
+-	.vidioc_querycap             = vidioc_querycap,
+-	.vidioc_enum_fmt_vid_cap     = vidioc_enum_fmt_vid_cap,
+-	.vidioc_enum_fmt_vid_overlay = vidioc_enum_fmt_vid_cap,
+-	.vidioc_g_fmt_vid_cap        = vidioc_g_fmt_vid_cap,
+-	.vidioc_try_fmt_vid_cap      = vidioc_try_fmt_vid_cap,
+-	.vidioc_s_fmt_vid_cap        = vidioc_s_fmt_vid_cap,
+-	.vidioc_g_fmt_vid_overlay    = vidioc_g_fmt_vid_overlay,
+-	.vidioc_try_fmt_vid_overlay  = vidioc_try_fmt_vid_overlay,
+-	.vidioc_s_fmt_vid_overlay    = vidioc_s_fmt_vid_overlay,
+-
+-	.vidioc_overlay		     = vidioc_overlay,
+-	.vidioc_g_fbuf		     = vidioc_g_fbuf,
+-	.vidioc_s_fbuf		     = vidioc_s_fbuf,
+-	.vidioc_reqbufs              = vidioc_reqbufs,
+-	.vidioc_querybuf             = vidioc_querybuf,
+-	.vidioc_qbuf                 = vidioc_qbuf,
+-	.vidioc_dqbuf                = vidioc_dqbuf,
+-	.vidioc_g_std                = vidioc_g_std,
+-	.vidioc_s_std                = vidioc_s_std,
+-	.vidioc_streamon             = vidioc_streamon,
+-	.vidioc_streamoff            = vidioc_streamoff,
+-	.vidioc_g_parm		     = vidioc_g_parm,
+-	.vidioc_subscribe_event      = v4l2_ctrl_subscribe_event,
+-	.vidioc_unsubscribe_event    = v4l2_event_unsubscribe,
+-};
+-
+-const struct v4l2_ioctl_ops saa7146_vbi_ioctl_ops = {
+-	.vidioc_querycap             = vidioc_querycap,
+-	.vidioc_g_fmt_vbi_cap        = vidioc_g_fmt_vbi_cap,
+-
+-	.vidioc_reqbufs              = vidioc_reqbufs,
+-	.vidioc_querybuf             = vidioc_querybuf,
+-	.vidioc_qbuf                 = vidioc_qbuf,
+-	.vidioc_dqbuf                = vidioc_dqbuf,
+-	.vidioc_g_std                = vidioc_g_std,
+-	.vidioc_s_std                = vidioc_s_std,
+-	.vidioc_streamon             = vidioc_streamon,
+-	.vidioc_streamoff            = vidioc_streamoff,
+-	.vidioc_g_parm		     = vidioc_g_parm,
+-	.vidioc_subscribe_event      = v4l2_ctrl_subscribe_event,
+-	.vidioc_unsubscribe_event    = v4l2_event_unsubscribe,
+-};
+-
+-/*********************************************************************************/
+-/* buffer handling functions                                                  */
+-
+-static int buffer_activate (struct saa7146_dev *dev,
+-		     struct saa7146_buf *buf,
+-		     struct saa7146_buf *next)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	buf->vb.state = VIDEOBUF_ACTIVE;
+-	saa7146_set_capture(dev,buf,next);
+-
+-	mod_timer(&vv->video_dmaq.timeout, jiffies+BUFFER_TIMEOUT);
+-	return 0;
+-}
+-
+-static void release_all_pagetables(struct saa7146_dev *dev, struct saa7146_buf *buf)
+-{
+-	saa7146_pgtable_free(dev->pci, &buf->pt[0]);
+-	saa7146_pgtable_free(dev->pci, &buf->pt[1]);
+-	saa7146_pgtable_free(dev->pci, &buf->pt[2]);
+-}
+-
+-static int buffer_prepare(struct videobuf_queue *q,
+-			  struct videobuf_buffer *vb, enum v4l2_field field)
+-{
+-	struct file *file = q->priv_data;
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct saa7146_buf *buf = (struct saa7146_buf *)vb;
+-	int size,err = 0;
+-
+-	DEB_CAP("vbuf:%p\n", vb);
+-
+-	/* sanity checks */
+-	if (vv->video_fmt.width  < 48 ||
+-	    vv->video_fmt.height < 32 ||
+-	    vv->video_fmt.width  > vv->standard->h_max_out ||
+-	    vv->video_fmt.height > vv->standard->v_max_out) {
+-		DEB_D("w (%d) / h (%d) out of bounds\n",
+-		      vv->video_fmt.width, vv->video_fmt.height);
+-		return -EINVAL;
+-	}
+-
+-	size = vv->video_fmt.sizeimage;
+-	if (0 != buf->vb.baddr && buf->vb.bsize < size) {
+-		DEB_D("size mismatch\n");
+-		return -EINVAL;
+-	}
+-
+-	DEB_CAP("buffer_prepare [size=%dx%d,bytes=%d,fields=%s]\n",
+-		vv->video_fmt.width, vv->video_fmt.height,
+-		size, v4l2_field_names[vv->video_fmt.field]);
+-	if (buf->vb.width  != vv->video_fmt.width  ||
+-	    buf->vb.bytesperline != vv->video_fmt.bytesperline ||
+-	    buf->vb.height != vv->video_fmt.height ||
+-	    buf->vb.size   != size ||
+-	    buf->vb.field  != field      ||
+-	    buf->vb.field  != vv->video_fmt.field  ||
+-	    buf->fmt       != &vv->video_fmt) {
+-		saa7146_dma_free(dev,q,buf);
+-	}
+-
+-	if (VIDEOBUF_NEEDS_INIT == buf->vb.state) {
+-		struct saa7146_format *sfmt;
+-
+-		buf->vb.bytesperline  = vv->video_fmt.bytesperline;
+-		buf->vb.width  = vv->video_fmt.width;
+-		buf->vb.height = vv->video_fmt.height;
+-		buf->vb.size   = size;
+-		buf->vb.field  = field;
+-		buf->fmt       = &vv->video_fmt;
+-		buf->vb.field  = vv->video_fmt.field;
+-
+-		sfmt = saa7146_format_by_fourcc(dev,buf->fmt->pixelformat);
+-
+-		release_all_pagetables(dev, buf);
+-		if( 0 != IS_PLANAR(sfmt->trans)) {
+-			saa7146_pgtable_alloc(dev->pci, &buf->pt[0]);
+-			saa7146_pgtable_alloc(dev->pci, &buf->pt[1]);
+-			saa7146_pgtable_alloc(dev->pci, &buf->pt[2]);
+-		} else {
+-			saa7146_pgtable_alloc(dev->pci, &buf->pt[0]);
+-		}
+-
+-		err = videobuf_iolock(q,&buf->vb, &vv->ov_fb);
+-		if (err)
+-			goto oops;
+-		err = saa7146_pgtable_build(dev,buf);
+-		if (err)
+-			goto oops;
+-	}
+-	buf->vb.state = VIDEOBUF_PREPARED;
+-	buf->activate = buffer_activate;
+-
+-	return 0;
+-
+- oops:
+-	DEB_D("error out\n");
+-	saa7146_dma_free(dev,q,buf);
+-
+-	return err;
+-}
+-
+-static int buffer_setup(struct videobuf_queue *q, unsigned int *count, unsigned int *size)
+-{
+-	struct file *file = q->priv_data;
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_vv *vv = fh->dev->vv_data;
+-
+-	if (0 == *count || *count > MAX_SAA7146_CAPTURE_BUFFERS)
+-		*count = MAX_SAA7146_CAPTURE_BUFFERS;
+-
+-	*size = vv->video_fmt.sizeimage;
+-
+-	/* check if we exceed the "max_memory" parameter */
+-	if( (*count * *size) > (max_memory*1048576) ) {
+-		*count = (max_memory*1048576) / *size;
+-	}
+-
+-	DEB_CAP("%d buffers, %d bytes each\n", *count, *size);
+-
+-	return 0;
+-}
+-
+-static void buffer_queue(struct videobuf_queue *q, struct videobuf_buffer *vb)
+-{
+-	struct file *file = q->priv_data;
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct saa7146_buf *buf = (struct saa7146_buf *)vb;
+-
+-	DEB_CAP("vbuf:%p\n", vb);
+-	saa7146_buffer_queue(fh->dev, &vv->video_dmaq, buf);
+-}
+-
+-static void buffer_release(struct videobuf_queue *q, struct videobuf_buffer *vb)
+-{
+-	struct file *file = q->priv_data;
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_buf *buf = (struct saa7146_buf *)vb;
+-
+-	DEB_CAP("vbuf:%p\n", vb);
+-
+-	saa7146_dma_free(dev,q,buf);
+-
+-	release_all_pagetables(dev, buf);
+-}
+-
+-static const struct videobuf_queue_ops video_qops = {
+-	.buf_setup    = buffer_setup,
+-	.buf_prepare  = buffer_prepare,
+-	.buf_queue    = buffer_queue,
+-	.buf_release  = buffer_release,
+-};
+-
+-/********************************************************************************/
+-/* file operations */
+-
+-static void video_init(struct saa7146_dev *dev, struct saa7146_vv *vv)
+-{
+-	INIT_LIST_HEAD(&vv->video_dmaq.queue);
+-
+-	timer_setup(&vv->video_dmaq.timeout, saa7146_buffer_timeout, 0);
+-	vv->video_dmaq.dev              = dev;
+-
+-	/* set some default values */
+-	vv->standard = &dev->ext_vv_data->stds[0];
+-
+-	/* FIXME: what's this? */
+-	vv->current_hps_source = SAA7146_HPS_SOURCE_PORT_A;
+-	vv->current_hps_sync = SAA7146_HPS_SYNC_PORT_A;
+-}
+-
+-
+-static int video_open(struct saa7146_dev *dev, struct file *file)
+-{
+-	struct saa7146_fh *fh = file->private_data;
+-
+-	videobuf_queue_sg_init(&fh->video_q, &video_qops,
+-			    &dev->pci->dev, &dev->slock,
+-			    V4L2_BUF_TYPE_VIDEO_CAPTURE,
+-			    V4L2_FIELD_INTERLACED,
+-			    sizeof(struct saa7146_buf),
+-			    file, &dev->v4l2_lock);
+-
+-	return 0;
+-}
+-
+-
+-static void video_close(struct saa7146_dev *dev, struct file *file)
+-{
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct videobuf_queue *q = &fh->video_q;
+-
+-	if (IS_CAPTURE_ACTIVE(fh) != 0)
+-		video_end(fh, file);
+-	else if (IS_OVERLAY_ACTIVE(fh) != 0)
+-		saa7146_stop_preview(fh);
+-
+-	videobuf_stop(q);
+-	/* hmm, why is this function declared void? */
+-}
+-
+-
+-static void video_irq_done(struct saa7146_dev *dev, unsigned long st)
+-{
+-	struct saa7146_vv *vv = dev->vv_data;
+-	struct saa7146_dmaqueue *q = &vv->video_dmaq;
+-
+-	spin_lock(&dev->slock);
+-	DEB_CAP("called\n");
+-
+-	/* only finish the buffer if we have one... */
+-	if( NULL != q->curr ) {
+-		saa7146_buffer_finish(dev,q,VIDEOBUF_DONE);
+-	}
+-	saa7146_buffer_next(dev,q,0);
+-
+-	spin_unlock(&dev->slock);
+-}
+-
+-static ssize_t video_read(struct file *file, char __user *data, size_t count, loff_t *ppos)
+-{
+-	struct saa7146_fh *fh = file->private_data;
+-	struct saa7146_dev *dev = fh->dev;
+-	struct saa7146_vv *vv = dev->vv_data;
+-	ssize_t ret = 0;
+-
+-	DEB_EE("called\n");
+-
+-	if ((vv->video_status & STATUS_CAPTURE) != 0) {
+-		/* fixme: should we allow read() captures while streaming capture? */
+-		if (vv->video_fh == fh) {
+-			DEB_S("already capturing\n");
+-			return -EBUSY;
+-		}
+-		DEB_S("already capturing in another open\n");
+-		return -EBUSY;
+-	}
+-
+-	ret = video_begin(fh);
+-	if( 0 != ret) {
+-		goto out;
+-	}
+-
+-	ret = videobuf_read_one(&fh->video_q , data, count, ppos,
+-				file->f_flags & O_NONBLOCK);
+-	if (ret != 0) {
+-		video_end(fh, file);
+-	} else {
+-		ret = video_end(fh, file);
+-	}
+-out:
+-	/* restart overlay if it was active before */
+-	if (vv->ov_suspend != NULL) {
+-		saa7146_start_preview(vv->ov_suspend);
+-		vv->ov_suspend = NULL;
+-	}
+-
+-	return ret;
+-}
+-
+-const struct saa7146_use_ops saa7146_video_uops = {
+-	.init = video_init,
+-	.open = video_open,
+-	.release = video_close,
+-	.irq_done = video_irq_done,
+-	.read = video_read,
+-};
+diff --git a/drivers/staging/media/deprecated/saa7146/common/saa7146_vv.h b/drivers/staging/media/deprecated/saa7146/common/saa7146_vv.h
+deleted file mode 100644
+index d7bd916fe3ad..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/common/saa7146_vv.h
++++ /dev/null
+@@ -1,266 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef __SAA7146_VV__
+-#define __SAA7146_VV__
+-
+-#include <media/v4l2-common.h>
+-#include <media/v4l2-ioctl.h>
+-#include <media/v4l2-fh.h>
+-#include <media/videobuf-dma-sg.h>
+-#include "saa7146.h"
+-
+-#define MAX_SAA7146_CAPTURE_BUFFERS	32	/* arbitrary */
+-#define BUFFER_TIMEOUT     (HZ/2)  /* 0.5 seconds */
+-
+-#define WRITE_RPS0(x) do { \
+-	dev->d_rps0.cpu_addr[ count++ ] = cpu_to_le32(x); \
+-	} while (0);
+-
+-#define WRITE_RPS1(x) do { \
+-	dev->d_rps1.cpu_addr[ count++ ] = cpu_to_le32(x); \
+-	} while (0);
+-
+-struct	saa7146_video_dma {
+-	u32 base_odd;
+-	u32 base_even;
+-	u32 prot_addr;
+-	u32 pitch;
+-	u32 base_page;
+-	u32 num_line_byte;
+-};
+-
+-#define FORMAT_BYTE_SWAP	0x1
+-#define FORMAT_IS_PLANAR	0x2
+-
+-struct saa7146_format {
+-	u32	pixelformat;
+-	u32	trans;
+-	u8	depth;
+-	u8	flags;
+-	u8	swap;
+-};
+-
+-struct saa7146_standard
+-{
+-	char          *name;
+-	v4l2_std_id   id;
+-
+-	int v_offset;	/* number of lines of vertical offset before processing */
+-	int v_field;	/* number of lines in a field for HPS to process */
+-
+-	int h_offset;	/* horizontal offset of processing window */
+-	int h_pixels;	/* number of horizontal pixels to process */
+-
+-	int v_max_out;
+-	int h_max_out;
+-};
+-
+-/* buffer for one video/vbi frame */
+-struct saa7146_buf {
+-	/* common v4l buffer stuff -- must be first */
+-	struct videobuf_buffer vb;
+-
+-	/* saa7146 specific */
+-	struct v4l2_pix_format  *fmt;
+-	int (*activate)(struct saa7146_dev *dev,
+-			struct saa7146_buf *buf,
+-			struct saa7146_buf *next);
+-
+-	/* page tables */
+-	struct saa7146_pgtable  pt[3];
+-};
+-
+-struct saa7146_dmaqueue {
+-	struct saa7146_dev	*dev;
+-	struct saa7146_buf	*curr;
+-	struct list_head	queue;
+-	struct timer_list	timeout;
+-};
+-
+-struct saa7146_overlay {
+-	struct saa7146_fh	*fh;
+-	struct v4l2_window	win;
+-	struct v4l2_clip	clips[16];
+-	int			nclips;
+-};
+-
+-/* per open data */
+-struct saa7146_fh {
+-	/* Must be the first field! */
+-	struct v4l2_fh		fh;
+-	struct saa7146_dev	*dev;
+-
+-	/* video capture */
+-	struct videobuf_queue	video_q;
+-
+-	/* vbi capture */
+-	struct videobuf_queue	vbi_q;
+-
+-	unsigned int resources;	/* resource management for device open */
+-};
+-
+-#define STATUS_OVERLAY	0x01
+-#define STATUS_CAPTURE	0x02
+-
+-struct saa7146_vv
+-{
+-	/* vbi capture */
+-	struct saa7146_dmaqueue		vbi_dmaq;
+-	struct v4l2_vbi_format		vbi_fmt;
+-	struct timer_list		vbi_read_timeout;
+-	struct file			*vbi_read_timeout_file;
+-	/* vbi workaround interrupt queue */
+-	wait_queue_head_t		vbi_wq;
+-	int				vbi_fieldcount;
+-	struct saa7146_fh		*vbi_streaming;
+-
+-	int				video_status;
+-	struct saa7146_fh		*video_fh;
+-
+-	/* video overlay */
+-	struct saa7146_overlay		ov;
+-	struct v4l2_framebuffer		ov_fb;
+-	struct saa7146_format		*ov_fmt;
+-	struct saa7146_fh		*ov_suspend;
+-
+-	/* video capture */
+-	struct saa7146_dmaqueue		video_dmaq;
+-	struct v4l2_pix_format		video_fmt;
+-	enum v4l2_field			last_field;
+-
+-	/* common: fixme? shouldn't this be in saa7146_fh?
+-	   (this leads to a more complicated question: shall the driver
+-	   store the different settings (for example S_INPUT) for every open
+-	   and restore it appropriately, or should all settings be common for
+-	   all opens? currently, we do the latter, like all other
+-	   drivers do... */
+-	struct saa7146_standard	*standard;
+-
+-	int	vflip;
+-	int	hflip;
+-	int	current_hps_source;
+-	int	current_hps_sync;
+-
+-	struct saa7146_dma	d_clipping;	/* pointer to clipping memory */
+-
+-	unsigned int resources;	/* resource management for device */
+-};
+-
+-/* flags */
+-#define SAA7146_USE_PORT_B_FOR_VBI	0x2     /* use input port b for vbi hardware bug workaround */
+-
+-struct saa7146_ext_vv
+-{
+-	/* information about the video capabilities of the device */
+-	int	inputs;
+-	int	audios;
+-	u32	capabilities;
+-	int	flags;
+-
+-	/* additionally supported transmission standards */
+-	struct saa7146_standard *stds;
+-	int num_stds;
+-	int (*std_callback)(struct saa7146_dev*, struct saa7146_standard *);
+-
+-	/* the extension can override this */
+-	struct v4l2_ioctl_ops vid_ops;
+-	struct v4l2_ioctl_ops vbi_ops;
+-	/* pointer to the saa7146 core ops */
+-	const struct v4l2_ioctl_ops *core_ops;
+-
+-	struct v4l2_file_operations vbi_fops;
+-};
+-
+-struct saa7146_use_ops  {
+-	void (*init)(struct saa7146_dev *, struct saa7146_vv *);
+-	int(*open)(struct saa7146_dev *, struct file *);
+-	void (*release)(struct saa7146_dev *, struct file *);
+-	void (*irq_done)(struct saa7146_dev *, unsigned long status);
+-	ssize_t (*read)(struct file *, char __user *, size_t, loff_t *);
+-};
+-
+-/* from saa7146_fops.c */
+-int saa7146_register_device(struct video_device *vid, struct saa7146_dev *dev, char *name, int type);
+-int saa7146_unregister_device(struct video_device *vid, struct saa7146_dev *dev);
+-void saa7146_buffer_finish(struct saa7146_dev *dev, struct saa7146_dmaqueue *q, int state);
+-void saa7146_buffer_next(struct saa7146_dev *dev, struct saa7146_dmaqueue *q,int vbi);
+-int saa7146_buffer_queue(struct saa7146_dev *dev, struct saa7146_dmaqueue *q, struct saa7146_buf *buf);
+-void saa7146_buffer_timeout(struct timer_list *t);
+-void saa7146_dma_free(struct saa7146_dev* dev,struct videobuf_queue *q,
+-						struct saa7146_buf *buf);
+-
+-int saa7146_vv_init(struct saa7146_dev* dev, struct saa7146_ext_vv *ext_vv);
+-int saa7146_vv_release(struct saa7146_dev* dev);
+-
+-/* from saa7146_hlp.c */
+-int saa7146_enable_overlay(struct saa7146_fh *fh);
+-void saa7146_disable_overlay(struct saa7146_fh *fh);
+-
+-void saa7146_set_capture(struct saa7146_dev *dev, struct saa7146_buf *buf, struct saa7146_buf *next);
+-void saa7146_write_out_dma(struct saa7146_dev* dev, int which, struct saa7146_video_dma* vdma) ;
+-void saa7146_set_hps_source_and_sync(struct saa7146_dev *saa, int source, int sync);
+-void saa7146_set_gpio(struct saa7146_dev *saa, u8 pin, u8 data);
+-
+-/* from saa7146_video.c */
+-extern const struct v4l2_ioctl_ops saa7146_video_ioctl_ops;
+-extern const struct v4l2_ioctl_ops saa7146_vbi_ioctl_ops;
+-extern const struct saa7146_use_ops saa7146_video_uops;
+-int saa7146_start_preview(struct saa7146_fh *fh);
+-int saa7146_stop_preview(struct saa7146_fh *fh);
+-long saa7146_video_do_ioctl(struct file *file, unsigned int cmd, void *arg);
+-int saa7146_s_ctrl(struct v4l2_ctrl *ctrl);
+-
+-/* from saa7146_vbi.c */
+-extern const struct saa7146_use_ops saa7146_vbi_uops;
+-
+-/* resource management functions */
+-int saa7146_res_get(struct saa7146_fh *fh, unsigned int bit);
+-void saa7146_res_free(struct saa7146_fh *fh, unsigned int bits);
+-
+-#define RESOURCE_DMA1_HPS	0x1
+-#define RESOURCE_DMA2_CLP	0x2
+-#define RESOURCE_DMA3_BRS	0x4
+-
+-/* saa7146 source inputs */
+-#define SAA7146_HPS_SOURCE_PORT_A	0x00
+-#define SAA7146_HPS_SOURCE_PORT_B	0x01
+-#define SAA7146_HPS_SOURCE_YPB_CPA	0x02
+-#define SAA7146_HPS_SOURCE_YPA_CPB	0x03
+-
+-/* sync inputs */
+-#define SAA7146_HPS_SYNC_PORT_A		0x00
+-#define SAA7146_HPS_SYNC_PORT_B		0x01
+-
+-/* some memory sizes */
+-/* max. 16 clipping rectangles */
+-#define SAA7146_CLIPPING_MEM	(16 * 4 * sizeof(u32))
+-
+-/* some defines for the various clipping-modes */
+-#define SAA7146_CLIPPING_RECT		0x4
+-#define SAA7146_CLIPPING_RECT_INVERTED	0x5
+-#define SAA7146_CLIPPING_MASK		0x6
+-#define SAA7146_CLIPPING_MASK_INVERTED	0x7
+-
+-/* output formats: each entry holds four information */
+-#define RGB08_COMPOSED	0x0217 /* composed is used in the sense of "not-planar" */
+-/* this means: planar?=0, yuv2rgb-conversation-mode=2, dither=yes(=1), format-mode = 7 */
+-#define RGB15_COMPOSED	0x0213
+-#define RGB16_COMPOSED	0x0210
+-#define RGB24_COMPOSED	0x0201
+-#define RGB32_COMPOSED	0x0202
+-
+-#define Y8			0x0006
+-#define YUV411_COMPOSED		0x0003
+-#define YUV422_COMPOSED		0x0000
+-/* this means: planar?=1, yuv2rgb-conversion-mode=0, dither=no(=0), format-mode = b */
+-#define YUV411_DECOMPOSED	0x100b
+-#define YUV422_DECOMPOSED	0x1009
+-#define YUV420_DECOMPOSED	0x100a
+-
+-#define IS_PLANAR(x) (x & 0xf000)
+-
+-/* misc defines */
+-#define SAA7146_NO_SWAP		(0x0)
+-#define SAA7146_TWO_BYTE_SWAP	(0x1)
+-#define SAA7146_FOUR_BYTE_SWAP	(0x2)
+-
+-#endif
+diff --git a/drivers/staging/media/deprecated/saa7146/saa7146/Kconfig b/drivers/staging/media/deprecated/saa7146/saa7146/Kconfig
+deleted file mode 100644
+index 228e8d3f8d2b..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/saa7146/Kconfig
++++ /dev/null
+@@ -1,48 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-config VIDEO_HEXIUM_GEMINI
+-	tristate "Hexium Gemini frame grabber (DEPRECATED)"
+-	depends on PCI && VIDEO_DEV && I2C
+-	select VIDEO_SAA7146_VV
+-	help
+-	  This is a video4linux driver for the Hexium Gemini frame
+-	  grabber card by Hexium. Please note that the Gemini Dual
+-	  card is *not* fully supported.
+-
+-	  This driver is deprecated and is scheduled for removal by
+-	  the beginning of 2023. See the TODO file for more information.
+-
+-	  To compile this driver as a module, choose M here: the
+-	  module will be called hexium_gemini.
+-
+-config VIDEO_HEXIUM_ORION
+-	tristate "Hexium HV-PCI6 and Orion frame grabber (DEPRECATED)"
+-	depends on PCI && VIDEO_DEV && I2C
+-	select VIDEO_SAA7146_VV
+-	help
+-	  This is a video4linux driver for the Hexium HV-PCI6 and
+-	  Orion frame grabber cards by Hexium.
+-
+-	  This driver is deprecated and is scheduled for removal by
+-	  the beginning of 2023. See the TODO file for more information.
+-
+-	  To compile this driver as a module, choose M here: the
+-	  module will be called hexium_orion.
+-
+-config VIDEO_MXB
+-	tristate "Siemens-Nixdorf 'Multimedia eXtension Board' (DEPRECATED)"
+-	depends on PCI && VIDEO_DEV && I2C
+-	select VIDEO_SAA7146_VV
+-	select VIDEO_TUNER
+-	select VIDEO_SAA711X if MEDIA_SUBDRV_AUTOSELECT
+-	select VIDEO_TDA9840 if MEDIA_SUBDRV_AUTOSELECT
+-	select VIDEO_TEA6415C if MEDIA_SUBDRV_AUTOSELECT
+-	select VIDEO_TEA6420 if MEDIA_SUBDRV_AUTOSELECT
+-	help
+-	  This is a video4linux driver for the 'Multimedia eXtension Board'
+-	  TV card by Siemens-Nixdorf.
+-
+-	  This driver is deprecated and is scheduled for removal by
+-	  the beginning of 2023. See the TODO file for more information.
+-
+-	  To compile this driver as a module, choose M here: the
+-	  module will be called mxb.
+diff --git a/drivers/staging/media/deprecated/saa7146/saa7146/Makefile b/drivers/staging/media/deprecated/saa7146/saa7146/Makefile
+deleted file mode 100644
+index 37c9336f83d5..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/saa7146/Makefile
++++ /dev/null
+@@ -1,6 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-obj-$(CONFIG_VIDEO_MXB) += mxb.o
+-obj-$(CONFIG_VIDEO_HEXIUM_ORION) += hexium_orion.o
+-obj-$(CONFIG_VIDEO_HEXIUM_GEMINI) += hexium_gemini.o
+-
+-ccflags-y += -I$(srctree)/drivers/media/i2c
+diff --git a/drivers/staging/media/deprecated/saa7146/saa7146/TODO b/drivers/staging/media/deprecated/saa7146/saa7146/TODO
+deleted file mode 100644
+index c9ae2ec79cea..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/saa7146/TODO
++++ /dev/null
+@@ -1,7 +0,0 @@
+-The saa7146-based drivers are one of the few drivers still not using
+-the vb2 framework, so these drivers are now deprecated with the intent of
+-removing them altogether by the beginning of 2023.
+-
+-In order to keep these drivers they have to be converted to vb2.
+-If someone is interested in doing this work, then contact the
+-linux-media mailinglist (https://linuxtv.org/lists.php).
+diff --git a/drivers/staging/media/deprecated/saa7146/saa7146/hexium_gemini.c b/drivers/staging/media/deprecated/saa7146/saa7146/hexium_gemini.c
+deleted file mode 100644
+index 124e82bd4507..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/saa7146/hexium_gemini.c
++++ /dev/null
+@@ -1,425 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+-    hexium_gemini.c - v4l2 driver for Hexium Gemini frame grabber cards
+-
+-    Visit http://www.mihu.de/linux/saa7146/ and follow the link
+-    to "hexium" for further details about this card.
+-
+-    Copyright (C) 2003 Michael Hunold <michael@mihu.de>
+-
+-*/
+-
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
+-#define DEBUG_VARIABLE debug
+-
+-#include <linux/module.h>
+-#include <linux/kernel.h>
+-#include "../common/saa7146_vv.h"
+-
+-static int debug;
+-module_param(debug, int, 0);
+-MODULE_PARM_DESC(debug, "debug verbosity");
+-
+-/* global variables */
+-static int hexium_num;
+-
+-#define HEXIUM_GEMINI			4
+-#define HEXIUM_GEMINI_DUAL		5
+-
+-#define HEXIUM_INPUTS	9
+-static struct v4l2_input hexium_inputs[HEXIUM_INPUTS] = {
+-	{ 0, "CVBS 1",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 1, "CVBS 2",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 2, "CVBS 3",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 3, "CVBS 4",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 4, "CVBS 5",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 5, "CVBS 6",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 6, "Y/C 1",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 7, "Y/C 2",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 8, "Y/C 3",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-};
+-
+-#define HEXIUM_AUDIOS	0
+-
+-struct hexium_data
+-{
+-	s8 adr;
+-	u8 byte;
+-};
+-
+-#define HEXIUM_GEMINI_V_1_0		1
+-#define HEXIUM_GEMINI_DUAL_V_1_0	2
+-
+-struct hexium
+-{
+-	int type;
+-
+-	struct video_device	video_dev;
+-	struct i2c_adapter	i2c_adapter;
+-
+-	int		cur_input;	/* current input */
+-	v4l2_std_id	cur_std;	/* current standard */
+-};
+-
+-/* Samsung KS0127B decoder default registers */
+-static u8 hexium_ks0127b[0x100]={
+-/*00*/ 0x00,0x52,0x30,0x40,0x01,0x0C,0x2A,0x10,
+-/*08*/ 0x00,0x00,0x00,0x60,0x00,0x00,0x0F,0x06,
+-/*10*/ 0x00,0x00,0xE4,0xC0,0x00,0x00,0x00,0x00,
+-/*18*/ 0x14,0x9B,0xFE,0xFF,0xFC,0xFF,0x03,0x22,
+-/*20*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*28*/ 0x00,0x00,0x00,0x00,0x00,0x2C,0x9B,0x00,
+-/*30*/ 0x00,0x00,0x10,0x80,0x80,0x10,0x80,0x80,
+-/*38*/ 0x01,0x04,0x00,0x00,0x00,0x29,0xC0,0x00,
+-/*40*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*48*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*50*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*58*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*60*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*68*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*70*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*78*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*80*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*88*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*90*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*98*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*A0*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*A8*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*B0*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*B8*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*C0*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*C8*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*D0*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*D8*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*E0*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*E8*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*F0*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*F8*/ 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+-};
+-
+-static struct hexium_data hexium_pal[] = {
+-	{ 0x01, 0x52 }, { 0x12, 0x64 }, { 0x2D, 0x2C }, { 0x2E, 0x9B }, { -1 , 0xFF }
+-};
+-
+-static struct hexium_data hexium_ntsc[] = {
+-	{ 0x01, 0x53 }, { 0x12, 0x04 }, { 0x2D, 0x23 }, { 0x2E, 0x81 }, { -1 , 0xFF }
+-};
+-
+-static struct hexium_data hexium_secam[] = {
+-	{ 0x01, 0x52 }, { 0x12, 0x64 }, { 0x2D, 0x2C }, { 0x2E, 0x9B }, { -1 , 0xFF }
+-};
+-
+-static struct hexium_data hexium_input_select[] = {
+-	{ 0x02, 0x60 },
+-	{ 0x02, 0x64 },
+-	{ 0x02, 0x61 },
+-	{ 0x02, 0x65 },
+-	{ 0x02, 0x62 },
+-	{ 0x02, 0x66 },
+-	{ 0x02, 0x68 },
+-	{ 0x02, 0x69 },
+-	{ 0x02, 0x6A },
+-};
+-
+-/* fixme: h_offset = 0 for Hexium Gemini *Dual*, which
+-   are currently *not* supported*/
+-static struct saa7146_standard hexium_standards[] = {
+-	{
+-		.name	= "PAL",	.id	= V4L2_STD_PAL,
+-		.v_offset	= 28,	.v_field	= 288,
+-		.h_offset	= 1,	.h_pixels	= 680,
+-		.v_max_out	= 576,	.h_max_out	= 768,
+-	}, {
+-		.name	= "NTSC",	.id	= V4L2_STD_NTSC,
+-		.v_offset	= 28,	.v_field	= 240,
+-		.h_offset	= 1,	.h_pixels	= 640,
+-		.v_max_out	= 480,	.h_max_out	= 640,
+-	}, {
+-		.name	= "SECAM",	.id	= V4L2_STD_SECAM,
+-		.v_offset	= 28,	.v_field	= 288,
+-		.h_offset	= 1,	.h_pixels	= 720,
+-		.v_max_out	= 576,	.h_max_out	= 768,
+-	}
+-};
+-
+-/* bring hardware to a sane state. this has to be done, just in case someone
+-   wants to capture from this device before it has been properly initialized.
+-   the capture engine would badly fail, because no valid signal arrives on the
+-   saa7146, thus leading to timeouts and stuff. */
+-static int hexium_init_done(struct saa7146_dev *dev)
+-{
+-	struct hexium *hexium = (struct hexium *) dev->ext_priv;
+-	union i2c_smbus_data data;
+-	int i = 0;
+-
+-	DEB_D("hexium_init_done called\n");
+-
+-	/* initialize the helper ics to useful values */
+-	for (i = 0; i < sizeof(hexium_ks0127b); i++) {
+-		data.byte = hexium_ks0127b[i];
+-		if (0 != i2c_smbus_xfer(&hexium->i2c_adapter, 0x6c, 0, I2C_SMBUS_WRITE, i, I2C_SMBUS_BYTE_DATA, &data)) {
+-			pr_err("hexium_init_done() failed for address 0x%02x\n",
+-			       i);
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+-static int hexium_set_input(struct hexium *hexium, int input)
+-{
+-	union i2c_smbus_data data;
+-
+-	DEB_D("\n");
+-
+-	data.byte = hexium_input_select[input].byte;
+-	if (0 != i2c_smbus_xfer(&hexium->i2c_adapter, 0x6c, 0, I2C_SMBUS_WRITE, hexium_input_select[input].adr, I2C_SMBUS_BYTE_DATA, &data)) {
+-		return -1;
+-	}
+-
+-	return 0;
+-}
+-
+-static int hexium_set_standard(struct hexium *hexium, struct hexium_data *vdec)
+-{
+-	union i2c_smbus_data data;
+-	int i = 0;
+-
+-	DEB_D("\n");
+-
+-	while (vdec[i].adr != -1) {
+-		data.byte = vdec[i].byte;
+-		if (0 != i2c_smbus_xfer(&hexium->i2c_adapter, 0x6c, 0, I2C_SMBUS_WRITE, vdec[i].adr, I2C_SMBUS_BYTE_DATA, &data)) {
+-			pr_err("hexium_init_done: hexium_set_standard() failed for address 0x%02x\n",
+-			       i);
+-			return -1;
+-		}
+-		i++;
+-	}
 -	return 0;
 -}
 -
 -static int vidioc_enum_input(struct file *file, void *fh, struct v4l2_input *i)
 -{
--	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
--	struct av7110 *av7110 = (struct av7110 *)dev->ext_priv;
+-	DEB_EE("VIDIOC_ENUMINPUT %d\n", i->index);
 -
--	dprintk(2, "VIDIOC_ENUMINPUT: %d\n", i->index);
+-	if (i->index >= HEXIUM_INPUTS)
+-		return -EINVAL;
 -
--	if (av7110->analog_tuner_flags) {
--		if (i->index >= 4)
--			return -EINVAL;
--	} else {
--		if (i->index != 0)
--			return -EINVAL;
--	}
+-	memcpy(i, &hexium_inputs[i->index], sizeof(struct v4l2_input));
 -
--	memcpy(i, &inputs[i->index], sizeof(struct v4l2_input));
--
+-	DEB_D("v4l2_ioctl: VIDIOC_ENUMINPUT %d\n", i->index);
 -	return 0;
 -}
 -
 -static int vidioc_g_input(struct file *file, void *fh, unsigned int *input)
 -{
 -	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
--	struct av7110 *av7110 = (struct av7110 *)dev->ext_priv;
+-	struct hexium *hexium = (struct hexium *) dev->ext_priv;
 -
--	*input = av7110->current_input;
--	dprintk(2, "VIDIOC_G_INPUT: %d\n", *input);
+-	*input = hexium->cur_input;
+-
+-	DEB_D("VIDIOC_G_INPUT: %d\n", *input);
 -	return 0;
 -}
 -
 -static int vidioc_s_input(struct file *file, void *fh, unsigned int input)
 -{
 -	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
--	struct av7110 *av7110 = (struct av7110 *)dev->ext_priv;
+-	struct hexium *hexium = (struct hexium *) dev->ext_priv;
 -
--	dprintk(2, "VIDIOC_S_INPUT: %d\n", input);
+-	DEB_EE("VIDIOC_S_INPUT %d\n", input);
 -
--	if (!av7110->analog_tuner_flags)
--		return input ? -EINVAL : 0;
--
--	if (input >= 4)
+-	if (input >= HEXIUM_INPUTS)
 -		return -EINVAL;
 -
--	av7110->current_input = input;
--	return av7110_dvb_c_switch(fh);
+-	hexium->cur_input = input;
+-	hexium_set_input(hexium, input);
+-	return 0;
+-}
+-
+-static struct saa7146_ext_vv vv_data;
+-
+-/* this function only gets called when the probing was successful */
+-static int hexium_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_data *info)
+-{
+-	struct hexium *hexium;
+-	int ret;
+-
+-	DEB_EE("\n");
+-
+-	hexium = kzalloc(sizeof(*hexium), GFP_KERNEL);
+-	if (!hexium)
+-		return -ENOMEM;
+-
+-	dev->ext_priv = hexium;
+-
+-	/* enable i2c-port pins */
+-	saa7146_write(dev, MC1, (MASK_08 | MASK_24 | MASK_10 | MASK_26));
+-
+-	strscpy(hexium->i2c_adapter.name, "hexium gemini",
+-		sizeof(hexium->i2c_adapter.name));
+-	saa7146_i2c_adapter_prepare(dev, &hexium->i2c_adapter, SAA7146_I2C_BUS_BIT_RATE_480);
+-	if (i2c_add_adapter(&hexium->i2c_adapter) < 0) {
+-		DEB_S("cannot register i2c-device. skipping.\n");
+-		kfree(hexium);
+-		return -EFAULT;
+-	}
+-
+-	/*  set HWControl GPIO number 2 */
+-	saa7146_setgpio(dev, 2, SAA7146_GPIO_OUTHI);
+-
+-	saa7146_write(dev, DD1_INIT, 0x07000700);
+-	saa7146_write(dev, DD1_STREAM_B, 0x00000000);
+-	saa7146_write(dev, MC2, (MASK_09 | MASK_25 | MASK_10 | MASK_26));
+-
+-	/* the rest */
+-	hexium->cur_input = 0;
+-	hexium_init_done(dev);
+-
+-	hexium_set_standard(hexium, hexium_pal);
+-	hexium->cur_std = V4L2_STD_PAL;
+-
+-	hexium_set_input(hexium, 0);
+-	hexium->cur_input = 0;
+-
+-	ret = saa7146_vv_init(dev, &vv_data);
+-	if (ret) {
+-		i2c_del_adapter(&hexium->i2c_adapter);
+-		kfree(hexium);
+-		return ret;
+-	}
+-
+-	vv_data.vid_ops.vidioc_enum_input = vidioc_enum_input;
+-	vv_data.vid_ops.vidioc_g_input = vidioc_g_input;
+-	vv_data.vid_ops.vidioc_s_input = vidioc_s_input;
+-	ret = saa7146_register_device(&hexium->video_dev, dev, "hexium gemini", VFL_TYPE_VIDEO);
+-	if (ret < 0) {
+-		pr_err("cannot register capture v4l2 device. skipping.\n");
+-		saa7146_vv_release(dev);
+-		i2c_del_adapter(&hexium->i2c_adapter);
+-		kfree(hexium);
+-		return ret;
+-	}
+-
+-	pr_info("found 'hexium gemini' frame grabber-%d\n", hexium_num);
+-	hexium_num++;
+-
+-	return 0;
+-}
+-
+-static int hexium_detach(struct saa7146_dev *dev)
+-{
+-	struct hexium *hexium = (struct hexium *) dev->ext_priv;
+-
+-	DEB_EE("dev:%p\n", dev);
+-
+-	saa7146_unregister_device(&hexium->video_dev, dev);
+-	saa7146_vv_release(dev);
+-
+-	hexium_num--;
+-
+-	i2c_del_adapter(&hexium->i2c_adapter);
+-	kfree(hexium);
+-	return 0;
+-}
+-
+-static int std_callback(struct saa7146_dev *dev, struct saa7146_standard *std)
+-{
+-	struct hexium *hexium = (struct hexium *) dev->ext_priv;
+-
+-	if (V4L2_STD_PAL == std->id) {
+-		hexium_set_standard(hexium, hexium_pal);
+-		hexium->cur_std = V4L2_STD_PAL;
+-		return 0;
+-	} else if (V4L2_STD_NTSC == std->id) {
+-		hexium_set_standard(hexium, hexium_ntsc);
+-		hexium->cur_std = V4L2_STD_NTSC;
+-		return 0;
+-	} else if (V4L2_STD_SECAM == std->id) {
+-		hexium_set_standard(hexium, hexium_secam);
+-		hexium->cur_std = V4L2_STD_SECAM;
+-		return 0;
+-	}
+-
+-	return -1;
+-}
+-
+-static struct saa7146_extension hexium_extension;
+-
+-static struct saa7146_pci_extension_data hexium_gemini_4bnc = {
+-	.ext_priv = "Hexium Gemini (4 BNC)",
+-	.ext = &hexium_extension,
+-};
+-
+-static struct saa7146_pci_extension_data hexium_gemini_dual_4bnc = {
+-	.ext_priv = "Hexium Gemini Dual (4 BNC)",
+-	.ext = &hexium_extension,
+-};
+-
+-static const struct pci_device_id pci_tbl[] = {
+-	{
+-	 .vendor = PCI_VENDOR_ID_PHILIPS,
+-	 .device = PCI_DEVICE_ID_PHILIPS_SAA7146,
+-	 .subvendor = 0x17c8,
+-	 .subdevice = 0x2401,
+-	 .driver_data = (unsigned long) &hexium_gemini_4bnc,
+-	 },
+-	{
+-	 .vendor = PCI_VENDOR_ID_PHILIPS,
+-	 .device = PCI_DEVICE_ID_PHILIPS_SAA7146,
+-	 .subvendor = 0x17c8,
+-	 .subdevice = 0x2402,
+-	 .driver_data = (unsigned long) &hexium_gemini_dual_4bnc,
+-	 },
+-	{
+-	 .vendor = 0,
+-	 }
+-};
+-
+-MODULE_DEVICE_TABLE(pci, pci_tbl);
+-
+-static struct saa7146_ext_vv vv_data = {
+-	.inputs = HEXIUM_INPUTS,
+-	.capabilities = 0,
+-	.stds = &hexium_standards[0],
+-	.num_stds = ARRAY_SIZE(hexium_standards),
+-	.std_callback = &std_callback,
+-};
+-
+-static struct saa7146_extension hexium_extension = {
+-	.name = "hexium gemini",
+-	.flags = SAA7146_USE_I2C_IRQ,
+-
+-	.pci_tbl = &pci_tbl[0],
+-	.module = THIS_MODULE,
+-
+-	.attach = hexium_attach,
+-	.detach = hexium_detach,
+-
+-	.irq_mask = 0,
+-	.irq_func = NULL,
+-};
+-
+-static int __init hexium_init_module(void)
+-{
+-	if (0 != saa7146_register_extension(&hexium_extension)) {
+-		DEB_S("failed to register extension\n");
+-		return -ENODEV;
+-	}
+-
+-	return 0;
+-}
+-
+-static void __exit hexium_cleanup_module(void)
+-{
+-	saa7146_unregister_extension(&hexium_extension);
+-}
+-
+-module_init(hexium_init_module);
+-module_exit(hexium_cleanup_module);
+-
+-MODULE_DESCRIPTION("video4linux-2 driver for Hexium Gemini frame grabber cards");
+-MODULE_AUTHOR("Michael Hunold <michael@mihu.de>");
+-MODULE_LICENSE("GPL");
+diff --git a/drivers/staging/media/deprecated/saa7146/saa7146/hexium_orion.c b/drivers/staging/media/deprecated/saa7146/saa7146/hexium_orion.c
+deleted file mode 100644
+index ebd63998ac79..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/saa7146/hexium_orion.c
++++ /dev/null
+@@ -1,496 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+-    hexium_orion.c - v4l2 driver for the Hexium Orion frame grabber cards
+-
+-    Visit http://www.mihu.de/linux/saa7146/ and follow the link
+-    to "hexium" for further details about this card.
+-
+-    Copyright (C) 2003 Michael Hunold <michael@mihu.de>
+-
+-*/
+-
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
+-#define DEBUG_VARIABLE debug
+-
+-#include <linux/module.h>
+-#include <linux/kernel.h>
+-#include "../common/saa7146_vv.h"
+-
+-static int debug;
+-module_param(debug, int, 0);
+-MODULE_PARM_DESC(debug, "debug verbosity");
+-
+-/* global variables */
+-static int hexium_num;
+-
+-#define HEXIUM_HV_PCI6_ORION		1
+-#define HEXIUM_ORION_1SVHS_3BNC		2
+-#define HEXIUM_ORION_4BNC		3
+-
+-#define HEXIUM_INPUTS	9
+-static struct v4l2_input hexium_inputs[HEXIUM_INPUTS] = {
+-	{ 0, "CVBS 1",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 1, "CVBS 2",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 2, "CVBS 3",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 3, "CVBS 4",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 4, "CVBS 5",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 5, "CVBS 6",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 6, "Y/C 1",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 7, "Y/C 2",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ 8, "Y/C 3",	V4L2_INPUT_TYPE_CAMERA,	0, 0, V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-};
+-
+-#define HEXIUM_AUDIOS	0
+-
+-struct hexium_data
+-{
+-	s8 adr;
+-	u8 byte;
+-};
+-
+-struct hexium
+-{
+-	int type;
+-	struct video_device	video_dev;
+-	struct i2c_adapter	i2c_adapter;
+-
+-	int cur_input;	/* current input */
+-};
+-
+-/* Philips SAA7110 decoder default registers */
+-static u8 hexium_saa7110[53]={
+-/*00*/ 0x4C,0x3C,0x0D,0xEF,0xBD,0xF0,0x00,0x00,
+-/*08*/ 0xF8,0xF8,0x60,0x60,0x40,0x86,0x18,0x90,
+-/*10*/ 0x00,0x2C,0x40,0x46,0x42,0x1A,0xFF,0xDA,
+-/*18*/ 0xF0,0x8B,0x00,0x00,0x00,0x00,0x00,0x00,
+-/*20*/ 0xD9,0x17,0x40,0x41,0x80,0x41,0x80,0x4F,
+-/*28*/ 0xFE,0x01,0x0F,0x0F,0x03,0x01,0x81,0x03,
+-/*30*/ 0x44,0x75,0x01,0x8C,0x03
+-};
+-
+-static struct {
+-	struct hexium_data data[8];
+-} hexium_input_select[] = {
+-{
+-	{ /* cvbs 1 */
+-		{ 0x06, 0x00 },
+-		{ 0x20, 0xD9 },
+-		{ 0x21, 0x17 }, // 0x16,
+-		{ 0x22, 0x40 },
+-		{ 0x2C, 0x03 },
+-		{ 0x30, 0x44 },
+-		{ 0x31, 0x75 }, // ??
+-		{ 0x21, 0x16 }, // 0x03,
+-	}
+-}, {
+-	{ /* cvbs 2 */
+-		{ 0x06, 0x00 },
+-		{ 0x20, 0x78 },
+-		{ 0x21, 0x07 }, // 0x03,
+-		{ 0x22, 0xD2 },
+-		{ 0x2C, 0x83 },
+-		{ 0x30, 0x60 },
+-		{ 0x31, 0xB5 }, // ?
+-		{ 0x21, 0x03 },
+-	}
+-}, {
+-	{ /* cvbs 3 */
+-		{ 0x06, 0x00 },
+-		{ 0x20, 0xBA },
+-		{ 0x21, 0x07 }, // 0x05,
+-		{ 0x22, 0x91 },
+-		{ 0x2C, 0x03 },
+-		{ 0x30, 0x60 },
+-		{ 0x31, 0xB5 }, // ??
+-		{ 0x21, 0x05 }, // 0x03,
+-	}
+-}, {
+-	{ /* cvbs 4 */
+-		{ 0x06, 0x00 },
+-		{ 0x20, 0xD8 },
+-		{ 0x21, 0x17 }, // 0x16,
+-		{ 0x22, 0x40 },
+-		{ 0x2C, 0x03 },
+-		{ 0x30, 0x44 },
+-		{ 0x31, 0x75 }, // ??
+-		{ 0x21, 0x16 }, // 0x03,
+-	}
+-}, {
+-	{ /* cvbs 5 */
+-		{ 0x06, 0x00 },
+-		{ 0x20, 0xB8 },
+-		{ 0x21, 0x07 }, // 0x05,
+-		{ 0x22, 0x91 },
+-		{ 0x2C, 0x03 },
+-		{ 0x30, 0x60 },
+-		{ 0x31, 0xB5 }, // ??
+-		{ 0x21, 0x05 }, // 0x03,
+-	}
+-}, {
+-	{ /* cvbs 6 */
+-		{ 0x06, 0x00 },
+-		{ 0x20, 0x7C },
+-		{ 0x21, 0x07 }, // 0x03
+-		{ 0x22, 0xD2 },
+-		{ 0x2C, 0x83 },
+-		{ 0x30, 0x60 },
+-		{ 0x31, 0xB5 }, // ??
+-		{ 0x21, 0x03 },
+-	}
+-}, {
+-	{ /* y/c 1 */
+-		{ 0x06, 0x80 },
+-		{ 0x20, 0x59 },
+-		{ 0x21, 0x17 },
+-		{ 0x22, 0x42 },
+-		{ 0x2C, 0xA3 },
+-		{ 0x30, 0x44 },
+-		{ 0x31, 0x75 },
+-		{ 0x21, 0x12 },
+-	}
+-}, {
+-	{ /* y/c 2 */
+-		{ 0x06, 0x80 },
+-		{ 0x20, 0x9A },
+-		{ 0x21, 0x17 },
+-		{ 0x22, 0xB1 },
+-		{ 0x2C, 0x13 },
+-		{ 0x30, 0x60 },
+-		{ 0x31, 0xB5 },
+-		{ 0x21, 0x14 },
+-	}
+-}, {
+-	{ /* y/c 3 */
+-		{ 0x06, 0x80 },
+-		{ 0x20, 0x3C },
+-		{ 0x21, 0x27 },
+-		{ 0x22, 0xC1 },
+-		{ 0x2C, 0x23 },
+-		{ 0x30, 0x44 },
+-		{ 0x31, 0x75 },
+-		{ 0x21, 0x21 },
+-	}
+-}
+-};
+-
+-static struct saa7146_standard hexium_standards[] = {
+-	{
+-		.name	= "PAL",	.id	= V4L2_STD_PAL,
+-		.v_offset	= 16,	.v_field	= 288,
+-		.h_offset	= 1,	.h_pixels	= 680,
+-		.v_max_out	= 576,	.h_max_out	= 768,
+-	}, {
+-		.name	= "NTSC",	.id	= V4L2_STD_NTSC,
+-		.v_offset	= 16,	.v_field	= 240,
+-		.h_offset	= 1,	.h_pixels	= 640,
+-		.v_max_out	= 480,	.h_max_out	= 640,
+-	}, {
+-		.name	= "SECAM",	.id	= V4L2_STD_SECAM,
+-		.v_offset	= 16,	.v_field	= 288,
+-		.h_offset	= 1,	.h_pixels	= 720,
+-		.v_max_out	= 576,	.h_max_out	= 768,
+-	}
+-};
+-
+-/* this is only called for old HV-PCI6/Orion cards
+-   without eeprom */
+-static int hexium_probe(struct saa7146_dev *dev)
+-{
+-	struct hexium *hexium = NULL;
+-	union i2c_smbus_data data;
+-	int err = 0;
+-
+-	DEB_EE("\n");
+-
+-	/* there are no hexium orion cards with revision 0 saa7146s */
+-	if (0 == dev->revision) {
+-		return -EFAULT;
+-	}
+-
+-	hexium = kzalloc(sizeof(*hexium), GFP_KERNEL);
+-	if (!hexium)
+-		return -ENOMEM;
+-
+-	/* enable i2c-port pins */
+-	saa7146_write(dev, MC1, (MASK_08 | MASK_24 | MASK_10 | MASK_26));
+-
+-	saa7146_write(dev, DD1_INIT, 0x01000100);
+-	saa7146_write(dev, DD1_STREAM_B, 0x00000000);
+-	saa7146_write(dev, MC2, (MASK_09 | MASK_25 | MASK_10 | MASK_26));
+-
+-	strscpy(hexium->i2c_adapter.name, "hexium orion",
+-		sizeof(hexium->i2c_adapter.name));
+-	saa7146_i2c_adapter_prepare(dev, &hexium->i2c_adapter, SAA7146_I2C_BUS_BIT_RATE_480);
+-	if (i2c_add_adapter(&hexium->i2c_adapter) < 0) {
+-		DEB_S("cannot register i2c-device. skipping.\n");
+-		kfree(hexium);
+-		return -EFAULT;
+-	}
+-
+-	/* set SAA7110 control GPIO 0 */
+-	saa7146_setgpio(dev, 0, SAA7146_GPIO_OUTHI);
+-	/*  set HWControl GPIO number 2 */
+-	saa7146_setgpio(dev, 2, SAA7146_GPIO_OUTHI);
+-
+-	mdelay(10);
+-
+-	/* detect newer Hexium Orion cards by subsystem ids */
+-	if (0x17c8 == dev->pci->subsystem_vendor && 0x0101 == dev->pci->subsystem_device) {
+-		pr_info("device is a Hexium Orion w/ 1 SVHS + 3 BNC inputs\n");
+-		/* we store the pointer in our private data field */
+-		dev->ext_priv = hexium;
+-		hexium->type = HEXIUM_ORION_1SVHS_3BNC;
+-		return 0;
+-	}
+-
+-	if (0x17c8 == dev->pci->subsystem_vendor && 0x2101 == dev->pci->subsystem_device) {
+-		pr_info("device is a Hexium Orion w/ 4 BNC inputs\n");
+-		/* we store the pointer in our private data field */
+-		dev->ext_priv = hexium;
+-		hexium->type = HEXIUM_ORION_4BNC;
+-		return 0;
+-	}
+-
+-	/* check if this is an old hexium Orion card by looking at
+-	   a saa7110 at address 0x4e */
+-	err = i2c_smbus_xfer(&hexium->i2c_adapter, 0x4e, 0, I2C_SMBUS_READ,
+-			     0x00, I2C_SMBUS_BYTE_DATA, &data);
+-	if (err == 0) {
+-		pr_info("device is a Hexium HV-PCI6/Orion (old)\n");
+-		/* we store the pointer in our private data field */
+-		dev->ext_priv = hexium;
+-		hexium->type = HEXIUM_HV_PCI6_ORION;
+-		return 0;
+-	}
+-
+-	i2c_del_adapter(&hexium->i2c_adapter);
+-	kfree(hexium);
+-	return -EFAULT;
+-}
+-
+-/* bring hardware to a sane state. this has to be done, just in case someone
+-   wants to capture from this device before it has been properly initialized.
+-   the capture engine would badly fail, because no valid signal arrives on the
+-   saa7146, thus leading to timeouts and stuff. */
+-static int hexium_init_done(struct saa7146_dev *dev)
+-{
+-	struct hexium *hexium = (struct hexium *) dev->ext_priv;
+-	union i2c_smbus_data data;
+-	int i = 0;
+-
+-	DEB_D("hexium_init_done called\n");
+-
+-	/* initialize the helper ics to useful values */
+-	for (i = 0; i < sizeof(hexium_saa7110); i++) {
+-		data.byte = hexium_saa7110[i];
+-		if (0 != i2c_smbus_xfer(&hexium->i2c_adapter, 0x4e, 0, I2C_SMBUS_WRITE, i, I2C_SMBUS_BYTE_DATA, &data)) {
+-			pr_err("failed for address 0x%02x\n", i);
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+-static int hexium_set_input(struct hexium *hexium, int input)
+-{
+-	union i2c_smbus_data data;
+-	int i = 0;
+-
+-	DEB_D("\n");
+-
+-	for (i = 0; i < 8; i++) {
+-		int adr = hexium_input_select[input].data[i].adr;
+-		data.byte = hexium_input_select[input].data[i].byte;
+-		if (0 != i2c_smbus_xfer(&hexium->i2c_adapter, 0x4e, 0, I2C_SMBUS_WRITE, adr, I2C_SMBUS_BYTE_DATA, &data)) {
+-			return -1;
+-		}
+-		pr_debug("%d: 0x%02x => 0x%02x\n", input, adr, data.byte);
+-	}
+-
+-	return 0;
+-}
+-
+-static int vidioc_enum_input(struct file *file, void *fh, struct v4l2_input *i)
+-{
+-	DEB_EE("VIDIOC_ENUMINPUT %d\n", i->index);
+-
+-	if (i->index >= HEXIUM_INPUTS)
+-		return -EINVAL;
+-
+-	memcpy(i, &hexium_inputs[i->index], sizeof(struct v4l2_input));
+-
+-	DEB_D("v4l2_ioctl: VIDIOC_ENUMINPUT %d\n", i->index);
+-	return 0;
+-}
+-
+-static int vidioc_g_input(struct file *file, void *fh, unsigned int *input)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct hexium *hexium = (struct hexium *) dev->ext_priv;
+-
+-	*input = hexium->cur_input;
+-
+-	DEB_D("VIDIOC_G_INPUT: %d\n", *input);
+-	return 0;
+-}
+-
+-static int vidioc_s_input(struct file *file, void *fh, unsigned int input)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct hexium *hexium = (struct hexium *) dev->ext_priv;
+-
+-	if (input >= HEXIUM_INPUTS)
+-		return -EINVAL;
+-
+-	hexium->cur_input = input;
+-	hexium_set_input(hexium, input);
+-
+-	return 0;
+-}
+-
+-static struct saa7146_ext_vv vv_data;
+-
+-/* this function only gets called when the probing was successful */
+-static int hexium_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_data *info)
+-{
+-	struct hexium *hexium = (struct hexium *) dev->ext_priv;
+-	int ret;
+-
+-	DEB_EE("\n");
+-
+-	ret = saa7146_vv_init(dev, &vv_data);
+-	if (ret) {
+-		pr_err("Error in saa7146_vv_init()\n");
+-		return ret;
+-	}
+-
+-	vv_data.vid_ops.vidioc_enum_input = vidioc_enum_input;
+-	vv_data.vid_ops.vidioc_g_input = vidioc_g_input;
+-	vv_data.vid_ops.vidioc_s_input = vidioc_s_input;
+-	if (0 != saa7146_register_device(&hexium->video_dev, dev, "hexium orion", VFL_TYPE_VIDEO)) {
+-		pr_err("cannot register capture v4l2 device. skipping.\n");
+-		return -1;
+-	}
+-
+-	pr_err("found 'hexium orion' frame grabber-%d\n", hexium_num);
+-	hexium_num++;
+-
+-	/* the rest */
+-	hexium->cur_input = 0;
+-	hexium_init_done(dev);
+-
+-	return 0;
+-}
+-
+-static int hexium_detach(struct saa7146_dev *dev)
+-{
+-	struct hexium *hexium = (struct hexium *) dev->ext_priv;
+-
+-	DEB_EE("dev:%p\n", dev);
+-
+-	saa7146_unregister_device(&hexium->video_dev, dev);
+-	saa7146_vv_release(dev);
+-
+-	hexium_num--;
+-
+-	i2c_del_adapter(&hexium->i2c_adapter);
+-	kfree(hexium);
+-	return 0;
+-}
+-
+-static int std_callback(struct saa7146_dev *dev, struct saa7146_standard *std)
+-{
+-	return 0;
+-}
+-
+-static struct saa7146_extension extension;
+-
+-static struct saa7146_pci_extension_data hexium_hv_pci6 = {
+-	.ext_priv = "Hexium HV-PCI6 / Orion",
+-	.ext = &extension,
+-};
+-
+-static struct saa7146_pci_extension_data hexium_orion_1svhs_3bnc = {
+-	.ext_priv = "Hexium HV-PCI6 / Orion (1 SVHS/3 BNC)",
+-	.ext = &extension,
+-};
+-
+-static struct saa7146_pci_extension_data hexium_orion_4bnc = {
+-	.ext_priv = "Hexium HV-PCI6 / Orion (4 BNC)",
+-	.ext = &extension,
+-};
+-
+-static const struct pci_device_id pci_tbl[] = {
+-	{
+-	 .vendor = PCI_VENDOR_ID_PHILIPS,
+-	 .device = PCI_DEVICE_ID_PHILIPS_SAA7146,
+-	 .subvendor = 0x0000,
+-	 .subdevice = 0x0000,
+-	 .driver_data = (unsigned long) &hexium_hv_pci6,
+-	 },
+-	{
+-	 .vendor = PCI_VENDOR_ID_PHILIPS,
+-	 .device = PCI_DEVICE_ID_PHILIPS_SAA7146,
+-	 .subvendor = 0x17c8,
+-	 .subdevice = 0x0101,
+-	 .driver_data = (unsigned long) &hexium_orion_1svhs_3bnc,
+-	 },
+-	{
+-	 .vendor = PCI_VENDOR_ID_PHILIPS,
+-	 .device = PCI_DEVICE_ID_PHILIPS_SAA7146,
+-	 .subvendor = 0x17c8,
+-	 .subdevice = 0x2101,
+-	 .driver_data = (unsigned long) &hexium_orion_4bnc,
+-	 },
+-	{
+-	 .vendor = 0,
+-	 }
+-};
+-
+-MODULE_DEVICE_TABLE(pci, pci_tbl);
+-
+-static struct saa7146_ext_vv vv_data = {
+-	.inputs = HEXIUM_INPUTS,
+-	.capabilities = 0,
+-	.stds = &hexium_standards[0],
+-	.num_stds = ARRAY_SIZE(hexium_standards),
+-	.std_callback = &std_callback,
+-};
+-
+-static struct saa7146_extension extension = {
+-	.name = "hexium HV-PCI6 Orion",
+-	.flags = 0,		// SAA7146_USE_I2C_IRQ,
+-
+-	.pci_tbl = &pci_tbl[0],
+-	.module = THIS_MODULE,
+-
+-	.probe = hexium_probe,
+-	.attach = hexium_attach,
+-	.detach = hexium_detach,
+-
+-	.irq_mask = 0,
+-	.irq_func = NULL,
+-};
+-
+-static int __init hexium_init_module(void)
+-{
+-	if (0 != saa7146_register_extension(&extension)) {
+-		DEB_S("failed to register extension\n");
+-		return -ENODEV;
+-	}
+-
+-	return 0;
+-}
+-
+-static void __exit hexium_cleanup_module(void)
+-{
+-	saa7146_unregister_extension(&extension);
+-}
+-
+-module_init(hexium_init_module);
+-module_exit(hexium_cleanup_module);
+-
+-MODULE_DESCRIPTION("video4linux-2 driver for Hexium Orion frame grabber cards");
+-MODULE_AUTHOR("Michael Hunold <michael@mihu.de>");
+-MODULE_LICENSE("GPL");
+diff --git a/drivers/staging/media/deprecated/saa7146/saa7146/mxb.c b/drivers/staging/media/deprecated/saa7146/saa7146/mxb.c
+deleted file mode 100644
+index 3e568f952dae..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/saa7146/mxb.c
++++ /dev/null
+@@ -1,873 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+-    mxb - v4l2 driver for the Multimedia eXtension Board
+-
+-    Copyright (C) 1998-2006 Michael Hunold <michael@mihu.de>
+-
+-    Visit http://www.themm.net/~mihu/linux/saa7146/mxb.html
+-    for further details about this card.
+-
+-*/
+-
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
+-#define DEBUG_VARIABLE debug
+-
+-#include <media/tuner.h>
+-#include <media/v4l2-common.h>
+-#include <media/i2c/saa7115.h>
+-#include <linux/module.h>
+-#include <linux/kernel.h>
+-
+-#include "../common/saa7146_vv.h"
+-#include "tea6415c.h"
+-#include "tea6420.h"
+-
+-#define MXB_AUDIOS	6
+-
+-#define I2C_SAA7111A  0x24
+-#define	I2C_TDA9840   0x42
+-#define	I2C_TEA6415C  0x43
+-#define	I2C_TEA6420_1 0x4c
+-#define	I2C_TEA6420_2 0x4d
+-#define	I2C_TUNER     0x60
+-
+-#define MXB_BOARD_CAN_DO_VBI(dev)   (dev->revision != 0)
+-
+-/* global variable */
+-static int mxb_num;
+-
+-/* initial frequence the tuner will be tuned to.
+-   in verden (lower saxony, germany) 4148 is a
+-   channel called "phoenix" */
+-static int freq = 4148;
+-module_param(freq, int, 0644);
+-MODULE_PARM_DESC(freq, "initial frequency the tuner will be tuned to while setup");
+-
+-static int debug;
+-module_param(debug, int, 0644);
+-MODULE_PARM_DESC(debug, "Turn on/off device debugging (default:off).");
+-
+-#define MXB_INPUTS 4
+-enum { TUNER, AUX1, AUX3, AUX3_YC };
+-
+-static struct v4l2_input mxb_inputs[MXB_INPUTS] = {
+-	{ TUNER,   "Tuner",          V4L2_INPUT_TYPE_TUNER,  0x3f, 0,
+-		V4L2_STD_PAL_BG | V4L2_STD_PAL_I, 0, V4L2_IN_CAP_STD },
+-	{ AUX1,	   "AUX1",           V4L2_INPUT_TYPE_CAMERA, 0x3f, 0,
+-		V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ AUX3,	   "AUX3 Composite", V4L2_INPUT_TYPE_CAMERA, 0x3f, 0,
+-		V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-	{ AUX3_YC, "AUX3 S-Video",   V4L2_INPUT_TYPE_CAMERA, 0x3f, 0,
+-		V4L2_STD_ALL, 0, V4L2_IN_CAP_STD },
+-};
+-
+-/* this array holds the information, which port of the saa7146 each
+-   input actually uses. the mxb uses port 0 for every input */
+-static struct {
+-	int hps_source;
+-	int hps_sync;
+-} input_port_selection[MXB_INPUTS] = {
+-	{ SAA7146_HPS_SOURCE_PORT_A, SAA7146_HPS_SYNC_PORT_A },
+-	{ SAA7146_HPS_SOURCE_PORT_A, SAA7146_HPS_SYNC_PORT_A },
+-	{ SAA7146_HPS_SOURCE_PORT_A, SAA7146_HPS_SYNC_PORT_A },
+-	{ SAA7146_HPS_SOURCE_PORT_A, SAA7146_HPS_SYNC_PORT_A },
+-};
+-
+-/* this array holds the information of the audio source (mxb_audios),
+-   which has to be switched corresponding to the video source (mxb_channels) */
+-static int video_audio_connect[MXB_INPUTS] =
+-	{ 0, 1, 3, 3 };
+-
+-struct mxb_routing {
+-	u32 input;
+-	u32 output;
+-};
+-
+-/* these are the available audio sources, which can switched
+-   to the line- and cd-output individually */
+-static struct v4l2_audio mxb_audios[MXB_AUDIOS] = {
+-	    {
+-		.index	= 0,
+-		.name	= "Tuner",
+-		.capability = V4L2_AUDCAP_STEREO,
+-	} , {
+-		.index	= 1,
+-		.name	= "AUX1",
+-		.capability = V4L2_AUDCAP_STEREO,
+-	} , {
+-		.index	= 2,
+-		.name	= "AUX2",
+-		.capability = V4L2_AUDCAP_STEREO,
+-	} , {
+-		.index	= 3,
+-		.name	= "AUX3",
+-		.capability = V4L2_AUDCAP_STEREO,
+-	} , {
+-		.index	= 4,
+-		.name	= "Radio (X9)",
+-		.capability = V4L2_AUDCAP_STEREO,
+-	} , {
+-		.index	= 5,
+-		.name	= "CD-ROM (X10)",
+-		.capability = V4L2_AUDCAP_STEREO,
+-	}
+-};
+-
+-/* These are the necessary input-output-pins for bringing one audio source
+-   (see above) to the CD-output. Note that gain is set to 0 in this table. */
+-static struct mxb_routing TEA6420_cd[MXB_AUDIOS + 1][2] = {
+-	{ { 1, 1 }, { 1, 1 } },	/* Tuner */
+-	{ { 5, 1 }, { 6, 1 } },	/* AUX 1 */
+-	{ { 4, 1 }, { 6, 1 } },	/* AUX 2 */
+-	{ { 3, 1 }, { 6, 1 } },	/* AUX 3 */
+-	{ { 1, 1 }, { 3, 1 } },	/* Radio */
+-	{ { 1, 1 }, { 2, 1 } },	/* CD-Rom */
+-	{ { 6, 1 }, { 6, 1 } }	/* Mute */
+-};
+-
+-/* These are the necessary input-output-pins for bringing one audio source
+-   (see above) to the line-output. Note that gain is set to 0 in this table. */
+-static struct mxb_routing TEA6420_line[MXB_AUDIOS + 1][2] = {
+-	{ { 2, 3 }, { 1, 2 } },
+-	{ { 5, 3 }, { 6, 2 } },
+-	{ { 4, 3 }, { 6, 2 } },
+-	{ { 3, 3 }, { 6, 2 } },
+-	{ { 2, 3 }, { 3, 2 } },
+-	{ { 2, 3 }, { 2, 2 } },
+-	{ { 6, 3 }, { 6, 2 } }	/* Mute */
+-};
+-
+-struct mxb
+-{
+-	struct video_device	video_dev;
+-	struct video_device	vbi_dev;
+-
+-	struct i2c_adapter	i2c_adapter;
+-
+-	struct v4l2_subdev	*saa7111a;
+-	struct v4l2_subdev	*tda9840;
+-	struct v4l2_subdev	*tea6415c;
+-	struct v4l2_subdev	*tuner;
+-	struct v4l2_subdev	*tea6420_1;
+-	struct v4l2_subdev	*tea6420_2;
+-
+-	int	cur_mode;	/* current audio mode (mono, stereo, ...) */
+-	int	cur_input;	/* current input */
+-	int	cur_audinput;	/* current audio input */
+-	int	cur_mute;	/* current mute status */
+-	struct v4l2_frequency	cur_freq;	/* current frequency the tuner is tuned to */
+-};
+-
+-#define saa7111a_call(mxb, o, f, args...) \
+-	v4l2_subdev_call(mxb->saa7111a, o, f, ##args)
+-#define tda9840_call(mxb, o, f, args...) \
+-	v4l2_subdev_call(mxb->tda9840, o, f, ##args)
+-#define tea6415c_call(mxb, o, f, args...) \
+-	v4l2_subdev_call(mxb->tea6415c, o, f, ##args)
+-#define tuner_call(mxb, o, f, args...) \
+-	v4l2_subdev_call(mxb->tuner, o, f, ##args)
+-#define call_all(dev, o, f, args...) \
+-	v4l2_device_call_until_err(&dev->v4l2_dev, 0, o, f, ##args)
+-
+-static void mxb_update_audmode(struct mxb *mxb)
+-{
+-	struct v4l2_tuner t = {
+-		.audmode = mxb->cur_mode,
+-	};
+-
+-	tda9840_call(mxb, tuner, s_tuner, &t);
+-}
+-
+-static inline void tea6420_route(struct mxb *mxb, int idx)
+-{
+-	v4l2_subdev_call(mxb->tea6420_1, audio, s_routing,
+-		TEA6420_cd[idx][0].input, TEA6420_cd[idx][0].output, 0);
+-	v4l2_subdev_call(mxb->tea6420_2, audio, s_routing,
+-		TEA6420_cd[idx][1].input, TEA6420_cd[idx][1].output, 0);
+-	v4l2_subdev_call(mxb->tea6420_1, audio, s_routing,
+-		TEA6420_line[idx][0].input, TEA6420_line[idx][0].output, 0);
+-	v4l2_subdev_call(mxb->tea6420_2, audio, s_routing,
+-		TEA6420_line[idx][1].input, TEA6420_line[idx][1].output, 0);
+-}
+-
+-static struct saa7146_extension extension;
+-
+-static int mxb_s_ctrl(struct v4l2_ctrl *ctrl)
+-{
+-	struct saa7146_dev *dev = container_of(ctrl->handler,
+-				struct saa7146_dev, ctrl_handler);
+-	struct mxb *mxb = dev->ext_priv;
+-
+-	switch (ctrl->id) {
+-	case V4L2_CID_AUDIO_MUTE:
+-		mxb->cur_mute = ctrl->val;
+-		/* switch the audio-source */
+-		tea6420_route(mxb, ctrl->val ? 6 :
+-				video_audio_connect[mxb->cur_input]);
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
+-	return 0;
+-}
+-
+-static const struct v4l2_ctrl_ops mxb_ctrl_ops = {
+-	.s_ctrl = mxb_s_ctrl,
+-};
+-
+-static int mxb_probe(struct saa7146_dev *dev)
+-{
+-	struct v4l2_ctrl_handler *hdl = &dev->ctrl_handler;
+-	struct mxb *mxb = NULL;
+-
+-	v4l2_ctrl_new_std(hdl, &mxb_ctrl_ops,
+-			V4L2_CID_AUDIO_MUTE, 0, 1, 1, 1);
+-	if (hdl->error)
+-		return hdl->error;
+-	mxb = kzalloc(sizeof(struct mxb), GFP_KERNEL);
+-	if (mxb == NULL) {
+-		DEB_D("not enough kernel memory\n");
+-		return -ENOMEM;
+-	}
+-
+-
+-	snprintf(mxb->i2c_adapter.name, sizeof(mxb->i2c_adapter.name), "mxb%d", mxb_num);
+-
+-	saa7146_i2c_adapter_prepare(dev, &mxb->i2c_adapter, SAA7146_I2C_BUS_BIT_RATE_480);
+-	if (i2c_add_adapter(&mxb->i2c_adapter) < 0) {
+-		DEB_S("cannot register i2c-device. skipping.\n");
+-		kfree(mxb);
+-		return -EFAULT;
+-	}
+-
+-	mxb->saa7111a = v4l2_i2c_new_subdev(&dev->v4l2_dev, &mxb->i2c_adapter,
+-			"saa7111", I2C_SAA7111A, NULL);
+-	mxb->tea6420_1 = v4l2_i2c_new_subdev(&dev->v4l2_dev, &mxb->i2c_adapter,
+-			"tea6420", I2C_TEA6420_1, NULL);
+-	mxb->tea6420_2 = v4l2_i2c_new_subdev(&dev->v4l2_dev, &mxb->i2c_adapter,
+-			"tea6420", I2C_TEA6420_2, NULL);
+-	mxb->tea6415c = v4l2_i2c_new_subdev(&dev->v4l2_dev, &mxb->i2c_adapter,
+-			"tea6415c", I2C_TEA6415C, NULL);
+-	mxb->tda9840 = v4l2_i2c_new_subdev(&dev->v4l2_dev, &mxb->i2c_adapter,
+-			"tda9840", I2C_TDA9840, NULL);
+-	mxb->tuner = v4l2_i2c_new_subdev(&dev->v4l2_dev, &mxb->i2c_adapter,
+-			"tuner", I2C_TUNER, NULL);
+-
+-	/* check if all devices are present */
+-	if (!mxb->tea6420_1 || !mxb->tea6420_2 || !mxb->tea6415c ||
+-	    !mxb->tda9840 || !mxb->saa7111a || !mxb->tuner) {
+-		pr_err("did not find all i2c devices. aborting\n");
+-		i2c_del_adapter(&mxb->i2c_adapter);
+-		kfree(mxb);
+-		return -ENODEV;
+-	}
+-
+-	/* all devices are present, probe was successful */
+-
+-	/* we store the pointer in our private data field */
+-	dev->ext_priv = mxb;
+-
+-	v4l2_ctrl_handler_setup(hdl);
+-
+-	return 0;
+-}
+-
+-/* some init data for the saa7740, the so-called 'sound arena module'.
+-   there are no specs available, so we simply use some init values */
+-static struct {
+-	int	length;
+-	char	data[9];
+-} mxb_saa7740_init[] = {
+-	{ 3, { 0x80, 0x00, 0x00 } },{ 3, { 0x80, 0x89, 0x00 } },
+-	{ 3, { 0x80, 0xb0, 0x0a } },{ 3, { 0x00, 0x00, 0x00 } },
+-	{ 3, { 0x49, 0x00, 0x00 } },{ 3, { 0x4a, 0x00, 0x00 } },
+-	{ 3, { 0x4b, 0x00, 0x00 } },{ 3, { 0x4c, 0x00, 0x00 } },
+-	{ 3, { 0x4d, 0x00, 0x00 } },{ 3, { 0x4e, 0x00, 0x00 } },
+-	{ 3, { 0x4f, 0x00, 0x00 } },{ 3, { 0x50, 0x00, 0x00 } },
+-	{ 3, { 0x51, 0x00, 0x00 } },{ 3, { 0x52, 0x00, 0x00 } },
+-	{ 3, { 0x53, 0x00, 0x00 } },{ 3, { 0x54, 0x00, 0x00 } },
+-	{ 3, { 0x55, 0x00, 0x00 } },{ 3, { 0x56, 0x00, 0x00 } },
+-	{ 3, { 0x57, 0x00, 0x00 } },{ 3, { 0x58, 0x00, 0x00 } },
+-	{ 3, { 0x59, 0x00, 0x00 } },{ 3, { 0x5a, 0x00, 0x00 } },
+-	{ 3, { 0x5b, 0x00, 0x00 } },{ 3, { 0x5c, 0x00, 0x00 } },
+-	{ 3, { 0x5d, 0x00, 0x00 } },{ 3, { 0x5e, 0x00, 0x00 } },
+-	{ 3, { 0x5f, 0x00, 0x00 } },{ 3, { 0x60, 0x00, 0x00 } },
+-	{ 3, { 0x61, 0x00, 0x00 } },{ 3, { 0x62, 0x00, 0x00 } },
+-	{ 3, { 0x63, 0x00, 0x00 } },{ 3, { 0x64, 0x00, 0x00 } },
+-	{ 3, { 0x65, 0x00, 0x00 } },{ 3, { 0x66, 0x00, 0x00 } },
+-	{ 3, { 0x67, 0x00, 0x00 } },{ 3, { 0x68, 0x00, 0x00 } },
+-	{ 3, { 0x69, 0x00, 0x00 } },{ 3, { 0x6a, 0x00, 0x00 } },
+-	{ 3, { 0x6b, 0x00, 0x00 } },{ 3, { 0x6c, 0x00, 0x00 } },
+-	{ 3, { 0x6d, 0x00, 0x00 } },{ 3, { 0x6e, 0x00, 0x00 } },
+-	{ 3, { 0x6f, 0x00, 0x00 } },{ 3, { 0x70, 0x00, 0x00 } },
+-	{ 3, { 0x71, 0x00, 0x00 } },{ 3, { 0x72, 0x00, 0x00 } },
+-	{ 3, { 0x73, 0x00, 0x00 } },{ 3, { 0x74, 0x00, 0x00 } },
+-	{ 3, { 0x75, 0x00, 0x00 } },{ 3, { 0x76, 0x00, 0x00 } },
+-	{ 3, { 0x77, 0x00, 0x00 } },{ 3, { 0x41, 0x00, 0x42 } },
+-	{ 3, { 0x42, 0x10, 0x42 } },{ 3, { 0x43, 0x20, 0x42 } },
+-	{ 3, { 0x44, 0x30, 0x42 } },{ 3, { 0x45, 0x00, 0x01 } },
+-	{ 3, { 0x46, 0x00, 0x01 } },{ 3, { 0x47, 0x00, 0x01 } },
+-	{ 3, { 0x48, 0x00, 0x01 } },
+-	{ 9, { 0x01, 0x03, 0xc5, 0x5c, 0x7a, 0x85, 0x01, 0x00, 0x54 } },
+-	{ 9, { 0x21, 0x03, 0xc5, 0x5c, 0x7a, 0x85, 0x01, 0x00, 0x54 } },
+-	{ 9, { 0x09, 0x0b, 0xb4, 0x6b, 0x74, 0x85, 0x95, 0x00, 0x34 } },
+-	{ 9, { 0x29, 0x0b, 0xb4, 0x6b, 0x74, 0x85, 0x95, 0x00, 0x34 } },
+-	{ 9, { 0x11, 0x17, 0x43, 0x62, 0x68, 0x89, 0xd1, 0xff, 0xb0 } },
+-	{ 9, { 0x31, 0x17, 0x43, 0x62, 0x68, 0x89, 0xd1, 0xff, 0xb0 } },
+-	{ 9, { 0x19, 0x20, 0x62, 0x51, 0x5a, 0x95, 0x19, 0x01, 0x50 } },
+-	{ 9, { 0x39, 0x20, 0x62, 0x51, 0x5a, 0x95, 0x19, 0x01, 0x50 } },
+-	{ 9, { 0x05, 0x3e, 0xd2, 0x69, 0x4e, 0x9a, 0x51, 0x00, 0xf0 } },
+-	{ 9, { 0x25, 0x3e, 0xd2, 0x69, 0x4e, 0x9a, 0x51, 0x00, 0xf0 } },
+-	{ 9, { 0x0d, 0x3d, 0xa1, 0x40, 0x7d, 0x9f, 0x29, 0xfe, 0x14 } },
+-	{ 9, { 0x2d, 0x3d, 0xa1, 0x40, 0x7d, 0x9f, 0x29, 0xfe, 0x14 } },
+-	{ 9, { 0x15, 0x73, 0xa1, 0x50, 0x5d, 0xa6, 0xf5, 0xfe, 0x38 } },
+-	{ 9, { 0x35, 0x73, 0xa1, 0x50, 0x5d, 0xa6, 0xf5, 0xfe, 0x38 } },
+-	{ 9, { 0x1d, 0xed, 0xd0, 0x68, 0x29, 0xb4, 0xe1, 0x00, 0xb8 } },
+-	{ 9, { 0x3d, 0xed, 0xd0, 0x68, 0x29, 0xb4, 0xe1, 0x00, 0xb8 } },
+-	{ 3, { 0x80, 0xb3, 0x0a } },
+-	{-1, { 0 } }
+-};
+-
+-/* bring hardware to a sane state. this has to be done, just in case someone
+-   wants to capture from this device before it has been properly initialized.
+-   the capture engine would badly fail, because no valid signal arrives on the
+-   saa7146, thus leading to timeouts and stuff. */
+-static int mxb_init_done(struct saa7146_dev* dev)
+-{
+-	struct mxb* mxb = (struct mxb*)dev->ext_priv;
+-	struct i2c_msg msg;
+-	struct tuner_setup tun_setup;
+-	v4l2_std_id std = V4L2_STD_PAL_BG;
+-
+-	int i, err = 0;
+-
+-	/* mute audio on tea6420s */
+-	tea6420_route(mxb, 6);
+-
+-	/* select video mode in saa7111a */
+-	saa7111a_call(mxb, video, s_std, std);
+-
+-	/* select tuner-output on saa7111a */
+-	saa7111a_call(mxb, video, s_routing, SAA7115_COMPOSITE0,
+-		SAA7111_FMT_CCIR, 0);
+-
+-	/* select a tuner type */
+-	tun_setup.mode_mask = T_ANALOG_TV;
+-	tun_setup.addr = ADDR_UNSET;
+-	tun_setup.type = TUNER_PHILIPS_PAL;
+-	tuner_call(mxb, tuner, s_type_addr, &tun_setup);
+-	/* tune in some frequency on tuner */
+-	mxb->cur_freq.tuner = 0;
+-	mxb->cur_freq.type = V4L2_TUNER_ANALOG_TV;
+-	mxb->cur_freq.frequency = freq;
+-	tuner_call(mxb, tuner, s_frequency, &mxb->cur_freq);
+-
+-	/* set a default video standard */
+-	/* These two gpio calls set the GPIO pins that control the tda9820 */
+-	saa7146_write(dev, GPIO_CTRL, 0x00404050);
+-	saa7111a_call(mxb, core, s_gpio, 1);
+-	saa7111a_call(mxb, video, s_std, std);
+-	tuner_call(mxb, video, s_std, std);
+-
+-	/* switch to tuner-channel on tea6415c */
+-	tea6415c_call(mxb, video, s_routing, 3, 17, 0);
+-
+-	/* select tuner-output on multicable on tea6415c */
+-	tea6415c_call(mxb, video, s_routing, 3, 13, 0);
+-
+-	/* the rest for mxb */
+-	mxb->cur_input = 0;
+-	mxb->cur_audinput = video_audio_connect[mxb->cur_input];
+-	mxb->cur_mute = 1;
+-
+-	mxb->cur_mode = V4L2_TUNER_MODE_STEREO;
+-	mxb_update_audmode(mxb);
+-
+-	/* check if the saa7740 (aka 'sound arena module') is present
+-	   on the mxb. if so, we must initialize it. due to lack of
+-	   information about the saa7740, the values were reverse
+-	   engineered. */
+-	msg.addr = 0x1b;
+-	msg.flags = 0;
+-	msg.len = mxb_saa7740_init[0].length;
+-	msg.buf = &mxb_saa7740_init[0].data[0];
+-
+-	err = i2c_transfer(&mxb->i2c_adapter, &msg, 1);
+-	if (err == 1) {
+-		/* the sound arena module is a pos, that's probably the reason
+-		   philips refuses to hand out a datasheet for the saa7740...
+-		   it seems to screw up the i2c bus, so we disable fast irq
+-		   based i2c transactions here and rely on the slow and safe
+-		   polling method ... */
+-		extension.flags &= ~SAA7146_USE_I2C_IRQ;
+-		for (i = 1; ; i++) {
+-			if (-1 == mxb_saa7740_init[i].length)
+-				break;
+-
+-			msg.len = mxb_saa7740_init[i].length;
+-			msg.buf = &mxb_saa7740_init[i].data[0];
+-			err = i2c_transfer(&mxb->i2c_adapter, &msg, 1);
+-			if (err != 1) {
+-				DEB_D("failed to initialize 'sound arena module'\n");
+-				goto err;
+-			}
+-		}
+-		pr_info("'sound arena module' detected\n");
+-	}
+-err:
+-	/* the rest for saa7146: you should definitely set some basic values
+-	   for the input-port handling of the saa7146. */
+-
+-	/* ext->saa has been filled by the core driver */
+-
+-	/* some stuff is done via variables */
+-	saa7146_set_hps_source_and_sync(dev, input_port_selection[mxb->cur_input].hps_source,
+-			input_port_selection[mxb->cur_input].hps_sync);
+-
+-	/* some stuff is done via direct write to the registers */
+-
+-	/* this is ugly, but because of the fact that this is completely
+-	   hardware dependend, it should be done directly... */
+-	saa7146_write(dev, DD1_STREAM_B,	0x00000000);
+-	saa7146_write(dev, DD1_INIT,		0x02000200);
+-	saa7146_write(dev, MC2, (MASK_09 | MASK_25 | MASK_10 | MASK_26));
+-
+-	return 0;
+-}
+-
+-/* interrupt-handler. this gets called when irq_mask is != 0.
+-   it must clear the interrupt-bits in irq_mask it has handled */
+-/*
+-void mxb_irq_bh(struct saa7146_dev* dev, u32* irq_mask)
+-{
+-	struct mxb* mxb = (struct mxb*)dev->ext_priv;
+-}
+-*/
+-
+-static int vidioc_enum_input(struct file *file, void *fh, struct v4l2_input *i)
+-{
+-	DEB_EE("VIDIOC_ENUMINPUT %d\n", i->index);
+-	if (i->index >= MXB_INPUTS)
+-		return -EINVAL;
+-	memcpy(i, &mxb_inputs[i->index], sizeof(struct v4l2_input));
+-	return 0;
+-}
+-
+-static int vidioc_g_input(struct file *file, void *fh, unsigned int *i)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct mxb *mxb = (struct mxb *)dev->ext_priv;
+-	*i = mxb->cur_input;
+-
+-	DEB_EE("VIDIOC_G_INPUT %d\n", *i);
+-	return 0;
+-}
+-
+-static int vidioc_s_input(struct file *file, void *fh, unsigned int input)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct mxb *mxb = (struct mxb *)dev->ext_priv;
+-	int err = 0;
+-	int i = 0;
+-
+-	DEB_EE("VIDIOC_S_INPUT %d\n", input);
+-
+-	if (input >= MXB_INPUTS)
+-		return -EINVAL;
+-
+-	mxb->cur_input = input;
+-
+-	saa7146_set_hps_source_and_sync(dev, input_port_selection[input].hps_source,
+-			input_port_selection[input].hps_sync);
+-
+-	/* prepare switching of tea6415c and saa7111a;
+-	   have a look at the 'background'-file for further information  */
+-	switch (input) {
+-	case TUNER:
+-		i = SAA7115_COMPOSITE0;
+-
+-		err = tea6415c_call(mxb, video, s_routing, 3, 17, 0);
+-
+-		/* connect tuner-output always to multicable */
+-		if (!err)
+-			err = tea6415c_call(mxb, video, s_routing, 3, 13, 0);
+-		break;
+-	case AUX3_YC:
+-		/* nothing to be done here. aux3_yc is
+-		   directly connected to the saa711a */
+-		i = SAA7115_SVIDEO1;
+-		break;
+-	case AUX3:
+-		/* nothing to be done here. aux3 is
+-		   directly connected to the saa711a */
+-		i = SAA7115_COMPOSITE1;
+-		break;
+-	case AUX1:
+-		i = SAA7115_COMPOSITE0;
+-		err = tea6415c_call(mxb, video, s_routing, 1, 17, 0);
+-		break;
+-	}
+-
+-	if (err)
+-		return err;
+-
+-	/* switch video in saa7111a */
+-	if (saa7111a_call(mxb, video, s_routing, i, SAA7111_FMT_CCIR, 0))
+-		pr_err("VIDIOC_S_INPUT: could not address saa7111a\n");
+-
+-	mxb->cur_audinput = video_audio_connect[input];
+-	/* switch the audio-source only if necessary */
+-	if (0 == mxb->cur_mute)
+-		tea6420_route(mxb, mxb->cur_audinput);
+-	if (mxb->cur_audinput == 0)
+-		mxb_update_audmode(mxb);
+-
+-	return 0;
+-}
+-
+-static int vidioc_g_tuner(struct file *file, void *fh, struct v4l2_tuner *t)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct mxb *mxb = (struct mxb *)dev->ext_priv;
+-
+-	if (t->index) {
+-		DEB_D("VIDIOC_G_TUNER: channel %d does not have a tuner attached\n",
+-		      t->index);
+-		return -EINVAL;
+-	}
+-
+-	DEB_EE("VIDIOC_G_TUNER: %d\n", t->index);
+-
+-	memset(t, 0, sizeof(*t));
+-	strscpy(t->name, "TV Tuner", sizeof(t->name));
+-	t->type = V4L2_TUNER_ANALOG_TV;
+-	t->capability = V4L2_TUNER_CAP_NORM | V4L2_TUNER_CAP_STEREO |
+-			V4L2_TUNER_CAP_LANG1 | V4L2_TUNER_CAP_LANG2 | V4L2_TUNER_CAP_SAP;
+-	t->audmode = mxb->cur_mode;
+-	return call_all(dev, tuner, g_tuner, t);
+-}
+-
+-static int vidioc_s_tuner(struct file *file, void *fh, const struct v4l2_tuner *t)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct mxb *mxb = (struct mxb *)dev->ext_priv;
+-
+-	if (t->index) {
+-		DEB_D("VIDIOC_S_TUNER: channel %d does not have a tuner attached\n",
+-		      t->index);
+-		return -EINVAL;
+-	}
+-
+-	mxb->cur_mode = t->audmode;
+-	return call_all(dev, tuner, s_tuner, t);
+-}
+-
+-static int vidioc_querystd(struct file *file, void *fh, v4l2_std_id *norm)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-
+-	return call_all(dev, video, querystd, norm);
+-}
+-
+-static int vidioc_g_frequency(struct file *file, void *fh, struct v4l2_frequency *f)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct mxb *mxb = (struct mxb *)dev->ext_priv;
+-
+-	if (f->tuner)
+-		return -EINVAL;
+-	*f = mxb->cur_freq;
+-
+-	DEB_EE("VIDIOC_G_FREQ: freq:0x%08x\n", mxb->cur_freq.frequency);
+-	return 0;
+-}
+-
+-static int vidioc_s_frequency(struct file *file, void *fh, const struct v4l2_frequency *f)
+-{
+-	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
+-	struct mxb *mxb = (struct mxb *)dev->ext_priv;
+-	struct saa7146_vv *vv = dev->vv_data;
+-
+-	if (f->tuner)
+-		return -EINVAL;
+-
+-	if (V4L2_TUNER_ANALOG_TV != f->type)
+-		return -EINVAL;
+-
+-	DEB_EE("VIDIOC_S_FREQUENCY: freq:0x%08x\n", mxb->cur_freq.frequency);
+-
+-	/* tune in desired frequency */
+-	tuner_call(mxb, tuner, s_frequency, f);
+-	/* let the tuner subdev clamp the frequency to the tuner range */
+-	mxb->cur_freq = *f;
+-	tuner_call(mxb, tuner, g_frequency, &mxb->cur_freq);
+-	if (mxb->cur_audinput == 0)
+-		mxb_update_audmode(mxb);
+-
+-	if (mxb->cur_input)
+-		return 0;
+-
+-	/* hack: changing the frequency should invalidate the vbi-counter (=> alevt) */
+-	spin_lock(&dev->slock);
+-	vv->vbi_fieldcount = 0;
+-	spin_unlock(&dev->slock);
+-
+-	return 0;
 -}
 -
 -static int vidioc_enumaudio(struct file *file, void *fh, struct v4l2_audio *a)
 -{
--	dprintk(2, "VIDIOC_G_AUDIO: %d\n", a->index);
--	if (a->index != 0)
+-	if (a->index >= MXB_AUDIOS)
 -		return -EINVAL;
--	*a = msp3400_v4l2_audio;
+-	*a = mxb_audios[a->index];
 -	return 0;
 -}
 -
 -static int vidioc_g_audio(struct file *file, void *fh, struct v4l2_audio *a)
 -{
 -	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
--	struct av7110 *av7110 = (struct av7110 *)dev->ext_priv;
+-	struct mxb *mxb = (struct mxb *)dev->ext_priv;
 -
--	dprintk(2, "VIDIOC_G_AUDIO: %d\n", a->index);
--	if (a->index != 0)
--		return -EINVAL;
--	if (av7110->current_input >= 2)
--		return -EINVAL;
--	*a = msp3400_v4l2_audio;
+-	DEB_EE("VIDIOC_G_AUDIO\n");
+-	*a = mxb_audios[mxb->cur_audinput];
 -	return 0;
 -}
 -
 -static int vidioc_s_audio(struct file *file, void *fh, const struct v4l2_audio *a)
 -{
 -	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
--	struct av7110 *av7110 = (struct av7110 *)dev->ext_priv;
+-	struct mxb *mxb = (struct mxb *)dev->ext_priv;
 -
--	dprintk(2, "VIDIOC_S_AUDIO: %d\n", a->index);
--	if (av7110->current_input >= 2)
+-	DEB_D("VIDIOC_S_AUDIO %d\n", a->index);
+-	if (a->index >= 32 ||
+-	    !(mxb_inputs[mxb->cur_input].audioset & (1 << a->index)))
 -		return -EINVAL;
--	return a->index ? -EINVAL : 0;
+-
+-	if (mxb->cur_audinput != a->index) {
+-		mxb->cur_audinput = a->index;
+-		tea6420_route(mxb, a->index);
+-		if (mxb->cur_audinput == 0)
+-			mxb_update_audmode(mxb);
+-	}
+-	return 0;
 -}
 -
--static int vidioc_g_sliced_vbi_cap(struct file *file, void *fh,
--					struct v4l2_sliced_vbi_cap *cap)
+-#ifdef CONFIG_VIDEO_ADV_DEBUG
+-static int vidioc_g_register(struct file *file, void *fh, struct v4l2_dbg_register *reg)
 -{
 -	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
--	struct av7110 *av7110 = (struct av7110 *)dev->ext_priv;
 -
--	dprintk(2, "VIDIOC_G_SLICED_VBI_CAP\n");
--	if (cap->type != V4L2_BUF_TYPE_SLICED_VBI_OUTPUT)
+-	if (reg->reg > pci_resource_len(dev->pci, 0) - 4)
 -		return -EINVAL;
--	if (FW_VERSION(av7110->arm_app) >= 0x2623) {
--		cap->service_set = V4L2_SLICED_WSS_625;
--		cap->service_lines[0][23] = V4L2_SLICED_WSS_625;
--	}
+-	reg->val = saa7146_read(dev, reg->reg);
+-	reg->size = 4;
 -	return 0;
 -}
 -
--static int vidioc_g_fmt_sliced_vbi_out(struct file *file, void *fh,
--					struct v4l2_format *f)
+-static int vidioc_s_register(struct file *file, void *fh, const struct v4l2_dbg_register *reg)
 -{
 -	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
--	struct av7110 *av7110 = (struct av7110 *)dev->ext_priv;
 -
--	dprintk(2, "VIDIOC_G_FMT:\n");
--	if (FW_VERSION(av7110->arm_app) < 0x2623)
+-	if (reg->reg > pci_resource_len(dev->pci, 0) - 4)
 -		return -EINVAL;
--	memset(&f->fmt.sliced, 0, sizeof f->fmt.sliced);
--	if (av7110->wssMode) {
--		f->fmt.sliced.service_set = V4L2_SLICED_WSS_625;
--		f->fmt.sliced.service_lines[0][23] = V4L2_SLICED_WSS_625;
--		f->fmt.sliced.io_size = sizeof(struct v4l2_sliced_vbi_data);
--	}
+-	saa7146_write(dev, reg->reg, reg->val);
 -	return 0;
 -}
+-#endif
 -
--static int vidioc_s_fmt_sliced_vbi_out(struct file *file, void *fh,
--					struct v4l2_format *f)
+-static struct saa7146_ext_vv vv_data;
+-
+-/* this function only gets called when the probing was successful */
+-static int mxb_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_data *info)
 -{
--	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
--	struct av7110 *av7110 = (struct av7110 *)dev->ext_priv;
--
--	dprintk(2, "VIDIOC_S_FMT\n");
--	if (FW_VERSION(av7110->arm_app) < 0x2623)
--		return -EINVAL;
--	if (f->fmt.sliced.service_set != V4L2_SLICED_WSS_625 &&
--	    f->fmt.sliced.service_lines[0][23] != V4L2_SLICED_WSS_625) {
--		memset(&f->fmt.sliced, 0, sizeof(f->fmt.sliced));
--		/* WSS controlled by firmware */
--		av7110->wssMode = 0;
--		av7110->wssData = 0;
--		return av7110_fw_cmd(av7110, COMTYPE_ENCODER,
--				     SetWSSConfig, 1, 0);
--	} else {
--		memset(&f->fmt.sliced, 0, sizeof(f->fmt.sliced));
--		f->fmt.sliced.service_set = V4L2_SLICED_WSS_625;
--		f->fmt.sliced.service_lines[0][23] = V4L2_SLICED_WSS_625;
--		f->fmt.sliced.io_size = sizeof(struct v4l2_sliced_vbi_data);
--		/* WSS controlled by userspace */
--		av7110->wssMode = 1;
--		av7110->wssData = 0;
--	}
--	return 0;
--}
--
--static int av7110_vbi_reset(struct file *file)
--{
--	struct saa7146_fh *fh = file->private_data;
--	struct saa7146_dev *dev = fh->dev;
--	struct av7110 *av7110 = (struct av7110*) dev->ext_priv;
--
--	dprintk(2, "%s\n", __func__);
--	av7110->wssMode = 0;
--	av7110->wssData = 0;
--	if (FW_VERSION(av7110->arm_app) < 0x2623)
--		return 0;
--	else
--		return av7110_fw_cmd(av7110, COMTYPE_ENCODER, SetWSSConfig, 1, 0);
--}
--
--static ssize_t av7110_vbi_write(struct file *file, const char __user *data, size_t count, loff_t *ppos)
--{
--	struct saa7146_fh *fh = file->private_data;
--	struct saa7146_dev *dev = fh->dev;
--	struct av7110 *av7110 = (struct av7110*) dev->ext_priv;
--	struct v4l2_sliced_vbi_data d;
--	int rc;
--
--	dprintk(2, "%s\n", __func__);
--	if (FW_VERSION(av7110->arm_app) < 0x2623 || !av7110->wssMode || count != sizeof d)
--		return -EINVAL;
--	if (copy_from_user(&d, data, count))
--		return -EFAULT;
--	if ((d.id != 0 && d.id != V4L2_SLICED_WSS_625) || d.field != 0 || d.line != 23)
--		return -EINVAL;
--	if (d.id)
--		av7110->wssData = ((d.data[1] << 8) & 0x3f00) | d.data[0];
--	else
--		av7110->wssData = 0x8000;
--	rc = av7110_fw_cmd(av7110, COMTYPE_ENCODER, SetWSSConfig, 2, 1, av7110->wssData);
--	return (rc < 0) ? rc : count;
--}
--
--/****************************************************************************
-- * INITIALIZATION
-- ****************************************************************************/
--
--static u8 saa7113_init_regs[] = {
--	0x02, 0xd0,
--	0x03, 0x23,
--	0x04, 0x00,
--	0x05, 0x00,
--	0x06, 0xe9,
--	0x07, 0x0d,
--	0x08, 0x98,
--	0x09, 0x02,
--	0x0a, 0x80,
--	0x0b, 0x40,
--	0x0c, 0x40,
--	0x0d, 0x00,
--	0x0e, 0x01,
--	0x0f, 0x7c,
--	0x10, 0x48,
--	0x11, 0x0c,
--	0x12, 0x8b,
--	0x13, 0x1a,
--	0x14, 0x00,
--	0x15, 0x00,
--	0x16, 0x00,
--	0x17, 0x00,
--	0x18, 0x00,
--	0x19, 0x00,
--	0x1a, 0x00,
--	0x1b, 0x00,
--	0x1c, 0x00,
--	0x1d, 0x00,
--	0x1e, 0x00,
--
--	0x41, 0x77,
--	0x42, 0x77,
--	0x43, 0x77,
--	0x44, 0x77,
--	0x45, 0x77,
--	0x46, 0x77,
--	0x47, 0x77,
--	0x48, 0x77,
--	0x49, 0x77,
--	0x4a, 0x77,
--	0x4b, 0x77,
--	0x4c, 0x77,
--	0x4d, 0x77,
--	0x4e, 0x77,
--	0x4f, 0x77,
--	0x50, 0x77,
--	0x51, 0x77,
--	0x52, 0x77,
--	0x53, 0x77,
--	0x54, 0x77,
--	0x55, 0x77,
--	0x56, 0x77,
--	0x57, 0xff,
--
--	0xff
--};
--
--
--static struct saa7146_ext_vv av7110_vv_data_st;
--static struct saa7146_ext_vv av7110_vv_data_c;
--
--int av7110_init_analog_module(struct av7110 *av7110)
--{
--	u16 version1, version2;
--
--	if (i2c_writereg(av7110, 0x80, 0x0, 0x80) == 1 &&
--	    i2c_writereg(av7110, 0x80, 0x0, 0) == 1) {
--		pr_info("DVB-C analog module @ card %d detected, initializing MSP3400\n",
--			av7110->dvb_adapter.num);
--		av7110->adac_type = DVB_ADAC_MSP34x0;
--	} else if (i2c_writereg(av7110, 0x84, 0x0, 0x80) == 1 &&
--		   i2c_writereg(av7110, 0x84, 0x0, 0) == 1) {
--		pr_info("DVB-C analog module @ card %d detected, initializing MSP3415\n",
--			av7110->dvb_adapter.num);
--		av7110->adac_type = DVB_ADAC_MSP34x5;
--	} else
--		return -ENODEV;
--
--	msleep(100); // the probing above resets the msp...
--	msp_readreg(av7110, MSP_RD_DSP, 0x001e, &version1);
--	msp_readreg(av7110, MSP_RD_DSP, 0x001f, &version2);
--	dprintk(1, "dvb-ttpci: @ card %d MSP34xx version 0x%04x 0x%04x\n",
--		av7110->dvb_adapter.num, version1, version2);
--	msp_writereg(av7110, MSP_WR_DSP, 0x0013, 0x0c00);
--	msp_writereg(av7110, MSP_WR_DSP, 0x0000, 0x7f00); // loudspeaker + headphone
--	msp_writereg(av7110, MSP_WR_DSP, 0x0008, 0x0220); // loudspeaker source
--	msp_writereg(av7110, MSP_WR_DSP, 0x0009, 0x0220); // headphone source
--	msp_writereg(av7110, MSP_WR_DSP, 0x0004, 0x7f00); // loudspeaker volume
--	msp_writereg(av7110, MSP_WR_DSP, 0x000a, 0x0220); // SCART 1 source
--	msp_writereg(av7110, MSP_WR_DSP, 0x0007, 0x7f00); // SCART 1 volume
--	msp_writereg(av7110, MSP_WR_DSP, 0x000d, 0x1900); // prescale SCART
--
--	if (i2c_writereg(av7110, 0x48, 0x01, 0x00)!=1) {
--		pr_info("saa7113 not accessible\n");
--	} else {
--		u8 *i = saa7113_init_regs;
--
--		if ((av7110->dev->pci->subsystem_vendor == 0x110a) && (av7110->dev->pci->subsystem_device == 0x0000)) {
--			/* Fujitsu/Siemens DVB-Cable */
--			av7110->analog_tuner_flags |= ANALOG_TUNER_VES1820;
--		} else if ((av7110->dev->pci->subsystem_vendor == 0x13c2) && (av7110->dev->pci->subsystem_device == 0x0002)) {
--			/* Hauppauge/TT DVB-C premium */
--			av7110->analog_tuner_flags |= ANALOG_TUNER_VES1820;
--		} else if ((av7110->dev->pci->subsystem_vendor == 0x13c2) && (av7110->dev->pci->subsystem_device == 0x000A)) {
--			/* Hauppauge/TT DVB-C premium */
--			av7110->analog_tuner_flags |= ANALOG_TUNER_STV0297;
--		}
--
--		/* setup for DVB by default */
--		if (av7110->analog_tuner_flags & ANALOG_TUNER_VES1820) {
--			if (ves1820_writereg(av7110->dev, 0x09, 0x0f, 0x20))
--				dprintk(1, "setting band in demodulator failed\n");
--		} else if (av7110->analog_tuner_flags & ANALOG_TUNER_STV0297) {
--			saa7146_setgpio(av7110->dev, 1, SAA7146_GPIO_OUTLO); // TDA9819 pin9(STD)
--			saa7146_setgpio(av7110->dev, 3, SAA7146_GPIO_OUTLO); // TDA9819 pin30(VIF)
--		}
--
--		/* init the saa7113 */
--		while (*i != 0xff) {
--			if (i2c_writereg(av7110, 0x48, i[0], i[1]) != 1) {
--				dprintk(1, "saa7113 initialization failed @ card %d", av7110->dvb_adapter.num);
--				break;
--			}
--			i += 2;
--		}
--		/* setup msp for analog sound: B/G Dual-FM */
--		msp_writereg(av7110, MSP_WR_DEM, 0x00bb, 0x02d0); // AD_CV
--		msp_writereg(av7110, MSP_WR_DEM, 0x0001,  3); // FIR1
--		msp_writereg(av7110, MSP_WR_DEM, 0x0001, 18); // FIR1
--		msp_writereg(av7110, MSP_WR_DEM, 0x0001, 27); // FIR1
--		msp_writereg(av7110, MSP_WR_DEM, 0x0001, 48); // FIR1
--		msp_writereg(av7110, MSP_WR_DEM, 0x0001, 66); // FIR1
--		msp_writereg(av7110, MSP_WR_DEM, 0x0001, 72); // FIR1
--		msp_writereg(av7110, MSP_WR_DEM, 0x0005,  4); // FIR2
--		msp_writereg(av7110, MSP_WR_DEM, 0x0005, 64); // FIR2
--		msp_writereg(av7110, MSP_WR_DEM, 0x0005,  0); // FIR2
--		msp_writereg(av7110, MSP_WR_DEM, 0x0005,  3); // FIR2
--		msp_writereg(av7110, MSP_WR_DEM, 0x0005, 18); // FIR2
--		msp_writereg(av7110, MSP_WR_DEM, 0x0005, 27); // FIR2
--		msp_writereg(av7110, MSP_WR_DEM, 0x0005, 48); // FIR2
--		msp_writereg(av7110, MSP_WR_DEM, 0x0005, 66); // FIR2
--		msp_writereg(av7110, MSP_WR_DEM, 0x0005, 72); // FIR2
--		msp_writereg(av7110, MSP_WR_DEM, 0x0083, 0xa000); // MODE_REG
--		msp_writereg(av7110, MSP_WR_DEM, 0x0093, 0x00aa); // DCO1_LO 5.74MHz
--		msp_writereg(av7110, MSP_WR_DEM, 0x009b, 0x04fc); // DCO1_HI
--		msp_writereg(av7110, MSP_WR_DEM, 0x00a3, 0x038e); // DCO2_LO 5.5MHz
--		msp_writereg(av7110, MSP_WR_DEM, 0x00ab, 0x04c6); // DCO2_HI
--		msp_writereg(av7110, MSP_WR_DEM, 0x0056, 0); // LOAD_REG 1/2
--	}
--
--	memcpy(standard, dvb_standard, sizeof(struct saa7146_standard) * 2);
--	/* set dd1 stream a & b */
--	saa7146_write(av7110->dev, DD1_STREAM_B, 0x00000000);
--	saa7146_write(av7110->dev, DD1_INIT, 0x03000700);
--	saa7146_write(av7110->dev, MC2, (MASK_09 | MASK_25 | MASK_10 | MASK_26));
--
--	return 0;
--}
--
--int av7110_init_v4l(struct av7110 *av7110)
--{
--	struct saa7146_dev* dev = av7110->dev;
--	struct saa7146_ext_vv *vv_data;
+-	struct mxb *mxb;
 -	int ret;
 -
--	/* special case DVB-C: these cards have an analog tuner
--	   plus need some special handling, so we have separate
--	   saa7146_ext_vv data for these... */
--	if (av7110->analog_tuner_flags)
--		vv_data = &av7110_vv_data_c;
--	else
--		vv_data = &av7110_vv_data_st;
--	ret = saa7146_vv_init(dev, vv_data);
+-	DEB_EE("dev:%p\n", dev);
 -
+-	ret = saa7146_vv_init(dev, &vv_data);
 -	if (ret) {
--		ERR("cannot init capture device. skipping\n");
--		return -ENODEV;
+-		ERR("Error in saa7146_vv_init()");
+-		return ret;
 -	}
--	vv_data->vid_ops.vidioc_enum_input = vidioc_enum_input;
--	vv_data->vid_ops.vidioc_g_input = vidioc_g_input;
--	vv_data->vid_ops.vidioc_s_input = vidioc_s_input;
--	vv_data->vid_ops.vidioc_g_tuner = vidioc_g_tuner;
--	vv_data->vid_ops.vidioc_s_tuner = vidioc_s_tuner;
--	vv_data->vid_ops.vidioc_g_frequency = vidioc_g_frequency;
--	vv_data->vid_ops.vidioc_s_frequency = vidioc_s_frequency;
--	vv_data->vid_ops.vidioc_enumaudio = vidioc_enumaudio;
--	vv_data->vid_ops.vidioc_g_audio = vidioc_g_audio;
--	vv_data->vid_ops.vidioc_s_audio = vidioc_s_audio;
--	vv_data->vid_ops.vidioc_g_fmt_vbi_cap = NULL;
 -
--	vv_data->vbi_ops.vidioc_g_tuner = vidioc_g_tuner;
--	vv_data->vbi_ops.vidioc_s_tuner = vidioc_s_tuner;
--	vv_data->vbi_ops.vidioc_g_frequency = vidioc_g_frequency;
--	vv_data->vbi_ops.vidioc_s_frequency = vidioc_s_frequency;
--	vv_data->vbi_ops.vidioc_g_fmt_vbi_cap = NULL;
--	vv_data->vbi_ops.vidioc_g_sliced_vbi_cap = vidioc_g_sliced_vbi_cap;
--	vv_data->vbi_ops.vidioc_g_fmt_sliced_vbi_out = vidioc_g_fmt_sliced_vbi_out;
--	vv_data->vbi_ops.vidioc_s_fmt_sliced_vbi_out = vidioc_s_fmt_sliced_vbi_out;
--
--	if (FW_VERSION(av7110->arm_app) < 0x2623)
--		vv_data->capabilities &= ~V4L2_CAP_SLICED_VBI_OUTPUT;
--
--	if (saa7146_register_device(&av7110->v4l_dev, dev, "av7110", VFL_TYPE_VIDEO)) {
--		ERR("cannot register capture device. skipping\n");
+-	if (mxb_probe(dev)) {
 -		saa7146_vv_release(dev);
--		return -ENODEV;
+-		return -1;
 -	}
--	if (FW_VERSION(av7110->arm_app) >= 0x2623) {
--		if (saa7146_register_device(&av7110->vbi_dev, dev, "av7110", VFL_TYPE_VBI))
--			ERR("cannot register vbi v4l2 device. skipping\n");
+-	mxb = (struct mxb *)dev->ext_priv;
+-
+-	vv_data.vid_ops.vidioc_enum_input = vidioc_enum_input;
+-	vv_data.vid_ops.vidioc_g_input = vidioc_g_input;
+-	vv_data.vid_ops.vidioc_s_input = vidioc_s_input;
+-	vv_data.vid_ops.vidioc_querystd = vidioc_querystd;
+-	vv_data.vid_ops.vidioc_g_tuner = vidioc_g_tuner;
+-	vv_data.vid_ops.vidioc_s_tuner = vidioc_s_tuner;
+-	vv_data.vid_ops.vidioc_g_frequency = vidioc_g_frequency;
+-	vv_data.vid_ops.vidioc_s_frequency = vidioc_s_frequency;
+-	vv_data.vid_ops.vidioc_enumaudio = vidioc_enumaudio;
+-	vv_data.vid_ops.vidioc_g_audio = vidioc_g_audio;
+-	vv_data.vid_ops.vidioc_s_audio = vidioc_s_audio;
+-#ifdef CONFIG_VIDEO_ADV_DEBUG
+-	vv_data.vid_ops.vidioc_g_register = vidioc_g_register;
+-	vv_data.vid_ops.vidioc_s_register = vidioc_s_register;
+-#endif
+-	if (saa7146_register_device(&mxb->video_dev, dev, "mxb", VFL_TYPE_VIDEO)) {
+-		ERR("cannot register capture v4l2 device. skipping.\n");
+-		saa7146_vv_release(dev);
+-		return -1;
 -	}
+-
+-	/* initialization stuff (vbi) (only for revision > 0 and for extensions which want it)*/
+-	if (MXB_BOARD_CAN_DO_VBI(dev)) {
+-		if (saa7146_register_device(&mxb->vbi_dev, dev, "mxb", VFL_TYPE_VBI)) {
+-			ERR("cannot register vbi v4l2 device. skipping.\n");
+-		}
+-	}
+-
+-	pr_info("found Multimedia eXtension Board #%d\n", mxb_num);
+-
+-	mxb_num++;
+-	mxb_init_done(dev);
 -	return 0;
 -}
 -
--int av7110_exit_v4l(struct av7110 *av7110)
+-static int mxb_detach(struct saa7146_dev *dev)
 -{
--	struct saa7146_dev* dev = av7110->dev;
+-	struct mxb *mxb = (struct mxb *)dev->ext_priv;
 -
--	saa7146_unregister_device(&av7110->v4l_dev, av7110->dev);
--	saa7146_unregister_device(&av7110->vbi_dev, av7110->dev);
+-	DEB_EE("dev:%p\n", dev);
 -
+-	/* mute audio on tea6420s */
+-	tea6420_route(mxb, 6);
+-
+-	saa7146_unregister_device(&mxb->video_dev,dev);
+-	if (MXB_BOARD_CAN_DO_VBI(dev))
+-		saa7146_unregister_device(&mxb->vbi_dev, dev);
 -	saa7146_vv_release(dev);
 -
+-	mxb_num--;
+-
+-	i2c_del_adapter(&mxb->i2c_adapter);
+-	kfree(mxb);
+-
 -	return 0;
 -}
 -
+-static int std_callback(struct saa7146_dev *dev, struct saa7146_standard *standard)
+-{
+-	struct mxb *mxb = (struct mxb *)dev->ext_priv;
 -
+-	if (V4L2_STD_PAL_I == standard->id) {
+-		v4l2_std_id std = V4L2_STD_PAL_I;
 -
--/* FIXME: these values are experimental values that look better than the
--   values from the latest "official" driver -- at least for me... (MiHu) */
+-		DEB_D("VIDIOC_S_STD: setting mxb for PAL_I\n");
+-		/* These two gpio calls set the GPIO pins that control the tda9820 */
+-		saa7146_write(dev, GPIO_CTRL, 0x00404050);
+-		saa7111a_call(mxb, core, s_gpio, 0);
+-		saa7111a_call(mxb, video, s_std, std);
+-		if (mxb->cur_input == 0)
+-			tuner_call(mxb, video, s_std, std);
+-	} else {
+-		v4l2_std_id std = V4L2_STD_PAL_BG;
+-
+-		if (mxb->cur_input)
+-			std = standard->id;
+-		DEB_D("VIDIOC_S_STD: setting mxb for PAL/NTSC/SECAM\n");
+-		/* These two gpio calls set the GPIO pins that control the tda9820 */
+-		saa7146_write(dev, GPIO_CTRL, 0x00404050);
+-		saa7111a_call(mxb, core, s_gpio, 1);
+-		saa7111a_call(mxb, video, s_std, std);
+-		if (mxb->cur_input == 0)
+-			tuner_call(mxb, video, s_std, std);
+-	}
+-	return 0;
+-}
+-
 -static struct saa7146_standard standard[] = {
 -	{
--		.name	= "PAL",	.id		= V4L2_STD_PAL_BG,
--		.v_offset	= 0x15,	.v_field	= 288,
--		.h_offset	= 0x48,	.h_pixels	= 708,
+-		.name	= "PAL-BG",	.id	= V4L2_STD_PAL_BG,
+-		.v_offset	= 0x17,	.v_field	= 288,
+-		.h_offset	= 0x14,	.h_pixels	= 680,
 -		.v_max_out	= 576,	.h_max_out	= 768,
 -	}, {
--		.name	= "NTSC",	.id		= V4L2_STD_NTSC,
--		.v_offset	= 0x10,	.v_field	= 244,
--		.h_offset	= 0x40,	.h_pixels	= 708,
--		.v_max_out	= 480,	.h_max_out	= 640,
--	}
--};
--
--static struct saa7146_standard analog_standard[] = {
--	{
--		.name	= "PAL",	.id		= V4L2_STD_PAL_BG,
--		.v_offset	= 0x1b,	.v_field	= 288,
--		.h_offset	= 0x08,	.h_pixels	= 708,
+-		.name	= "PAL-I",	.id	= V4L2_STD_PAL_I,
+-		.v_offset	= 0x17,	.v_field	= 288,
+-		.h_offset	= 0x14,	.h_pixels	= 680,
 -		.v_max_out	= 576,	.h_max_out	= 768,
 -	}, {
--		.name	= "NTSC",	.id		= V4L2_STD_NTSC,
--		.v_offset	= 0x10,	.v_field	= 244,
--		.h_offset	= 0x40,	.h_pixels	= 708,
+-		.name	= "NTSC",	.id	= V4L2_STD_NTSC,
+-		.v_offset	= 0x16,	.v_field	= 240,
+-		.h_offset	= 0x06,	.h_pixels	= 708,
 -		.v_max_out	= 480,	.h_max_out	= 640,
--	}
--};
--
--static struct saa7146_standard dvb_standard[] = {
--	{
--		.name	= "PAL",	.id		= V4L2_STD_PAL_BG,
+-	}, {
+-		.name	= "SECAM",	.id	= V4L2_STD_SECAM,
 -		.v_offset	= 0x14,	.v_field	= 288,
--		.h_offset	= 0x48,	.h_pixels	= 708,
+-		.h_offset	= 0x14,	.h_pixels	= 720,
 -		.v_max_out	= 576,	.h_max_out	= 768,
--	}, {
--		.name	= "NTSC",	.id		= V4L2_STD_NTSC,
--		.v_offset	= 0x10,	.v_field	= 244,
--		.h_offset	= 0x40,	.h_pixels	= 708,
--		.v_max_out	= 480,	.h_max_out	= 640,
 -	}
 -};
 -
--static int std_callback(struct saa7146_dev* dev, struct saa7146_standard *std)
--{
--	struct av7110 *av7110 = (struct av7110*) dev->ext_priv;
+-static struct saa7146_pci_extension_data mxb = {
+-	.ext_priv = "Multimedia eXtension Board",
+-	.ext = &extension,
+-};
 -
--	if (std->id & V4L2_STD_PAL) {
--		av7110->vidmode = AV7110_VIDEO_MODE_PAL;
--		av7110_set_vidmode(av7110, av7110->vidmode);
+-static const struct pci_device_id pci_tbl[] = {
+-	{
+-		.vendor    = PCI_VENDOR_ID_PHILIPS,
+-		.device	   = PCI_DEVICE_ID_PHILIPS_SAA7146,
+-		.subvendor = 0x0000,
+-		.subdevice = 0x0000,
+-		.driver_data = (unsigned long)&mxb,
+-	}, {
+-		.vendor	= 0,
 -	}
--	else if (std->id & V4L2_STD_NTSC) {
--		av7110->vidmode = AV7110_VIDEO_MODE_NTSC;
--		av7110_set_vidmode(av7110, av7110->vidmode);
+-};
+-
+-MODULE_DEVICE_TABLE(pci, pci_tbl);
+-
+-static struct saa7146_ext_vv vv_data = {
+-	.inputs		= MXB_INPUTS,
+-	.capabilities	= V4L2_CAP_TUNER | V4L2_CAP_VBI_CAPTURE | V4L2_CAP_AUDIO,
+-	.stds		= &standard[0],
+-	.num_stds	= ARRAY_SIZE(standard),
+-	.std_callback	= &std_callback,
+-};
+-
+-static struct saa7146_extension extension = {
+-	.name		= "Multimedia eXtension Board",
+-	.flags		= SAA7146_USE_I2C_IRQ,
+-
+-	.pci_tbl	= &pci_tbl[0],
+-	.module		= THIS_MODULE,
+-
+-	.attach		= mxb_attach,
+-	.detach		= mxb_detach,
+-
+-	.irq_mask	= 0,
+-	.irq_func	= NULL,
+-};
+-
+-static int __init mxb_init_module(void)
+-{
+-	if (saa7146_register_extension(&extension)) {
+-		DEB_S("failed to register extension\n");
+-		return -ENODEV;
 -	}
--	else
--		return -1;
 -
 -	return 0;
 -}
 -
+-static void __exit mxb_cleanup_module(void)
+-{
+-	saa7146_unregister_extension(&extension);
+-}
 -
--static struct saa7146_ext_vv av7110_vv_data_st = {
--	.inputs		= 1,
--	.audios		= 1,
--	.capabilities	= V4L2_CAP_SLICED_VBI_OUTPUT | V4L2_CAP_AUDIO,
--	.flags		= 0,
+-module_init(mxb_init_module);
+-module_exit(mxb_cleanup_module);
 -
--	.stds		= &standard[0],
--	.num_stds	= ARRAY_SIZE(standard),
--	.std_callback	= &std_callback,
--
--	.vbi_fops.open	= av7110_vbi_reset,
--	.vbi_fops.release = av7110_vbi_reset,
--	.vbi_fops.write	= av7110_vbi_write,
--};
--
--static struct saa7146_ext_vv av7110_vv_data_c = {
--	.inputs		= 1,
--	.audios		= 1,
--	.capabilities	= V4L2_CAP_TUNER | V4L2_CAP_SLICED_VBI_OUTPUT | V4L2_CAP_AUDIO,
--	.flags		= SAA7146_USE_PORT_B_FOR_VBI,
--
--	.stds		= &standard[0],
--	.num_stds	= ARRAY_SIZE(standard),
--	.std_callback	= &std_callback,
--
--	.vbi_fops.open	= av7110_vbi_reset,
--	.vbi_fops.release = av7110_vbi_reset,
--	.vbi_fops.write	= av7110_vbi_write,
--};
--
+-MODULE_DESCRIPTION("video4linux-2 driver for the Siemens-Nixdorf 'Multimedia eXtension board'");
+-MODULE_AUTHOR("Michael Hunold <michael@mihu.de>");
+-MODULE_LICENSE("GPL");
 -- 
 2.39.0
 
