@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F5A7C7112B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12666C678DE
 	for <linux-media@archiver.kernel.org>; Wed, 11 Jan 2023 11:26:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233820AbjAKLZ6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 11 Jan 2023 06:25:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54252 "EHLO
+        id S233600AbjAKLZ4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 11 Jan 2023 06:25:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232511AbjAKLYi (ORCPT
+        with ESMTP id S232509AbjAKLYi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 11 Jan 2023 06:24:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596B917052
-        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 03:24:35 -0800 (PST)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D2C11160
+        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 03:24:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C8A4261C4F
-        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 11:24:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D06C433F1;
-        Wed, 11 Jan 2023 11:24:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2D3DAB81BBB
+        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 11:24:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 237D7C433F0;
+        Wed, 11 Jan 2023 11:24:30 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCHv2 11/16] av7110: remove deprecated driver
-Date:   Wed, 11 Jan 2023 12:24:13 +0100
-Message-Id: <20230111112418.687882-12-hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv2 09/16] av7110: remove deprecated documentation
+Date:   Wed, 11 Jan 2023 12:24:11 +0100
+Message-Id: <20230111112418.687882-10-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230111112418.687882-1-hverkuil-cisco@xs4all.nl>
 References: <20230111112418.687882-1-hverkuil-cisco@xs4all.nl>
@@ -45,1882 +45,3704 @@ convert this driver to vb2.
 The hardware is very old, so the decision was made to remove it
 altogether since we want to get rid of the old vb1 framework.
 
-The last remaining files of this driver are removed in this patch.
+This patch removes the old driver documentation.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- .../media/deprecated/saa7146/av7110/Kconfig   | 106 ---
- .../media/deprecated/saa7146/av7110/Makefile  |  23 -
- .../media/deprecated/saa7146/av7110/TODO      |   9 -
- .../deprecated/saa7146/av7110/budget-patch.c  | 665 ------------------
- .../deprecated/saa7146/av7110/dvb_filter.c    | 115 ---
- .../deprecated/saa7146/av7110/dvb_filter.h    | 242 -------
- .../media/deprecated/saa7146/av7110/sp8870.c  | 609 ----------------
- .../media/deprecated/saa7146/av7110/sp8870.h  |  37 -
- 8 files changed, 1806 deletions(-)
- delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/Kconfig
- delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/Makefile
- delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/TODO
- delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/budget-patch.c
- delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/dvb_filter.c
- delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/dvb_filter.h
- delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/sp8870.c
- delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/sp8870.h
+ .../av7110/audio-bilingual-channel-select.rst |  58 ----
+ .../saa7146/av7110/audio-channel-select.rst   |  57 ----
+ .../saa7146/av7110/audio-clear-buffer.rst     |  48 ----
+ .../saa7146/av7110/audio-continue.rst         |  48 ----
+ .../saa7146/av7110/audio-fclose.rst           |  51 ----
+ .../deprecated/saa7146/av7110/audio-fopen.rst | 103 --------
+ .../saa7146/av7110/audio-fwrite.rst           |  79 ------
+ .../saa7146/av7110/audio-get-capabilities.rst |  54 ----
+ .../saa7146/av7110/audio-get-status.rst       |  54 ----
+ .../deprecated/saa7146/av7110/audio-pause.rst |  49 ----
+ .../deprecated/saa7146/av7110/audio-play.rst  |  48 ----
+ .../saa7146/av7110/audio-select-source.rst    |  56 ----
+ .../saa7146/av7110/audio-set-av-sync.rst      |  58 ----
+ .../saa7146/av7110/audio-set-bypass-mode.rst  |  62 -----
+ .../saa7146/av7110/audio-set-id.rst           |  59 -----
+ .../saa7146/av7110/audio-set-mixer.rst        |  53 ----
+ .../saa7146/av7110/audio-set-mute.rst         |  62 -----
+ .../saa7146/av7110/audio-set-streamtype.rst   |  66 -----
+ .../deprecated/saa7146/av7110/audio-stop.rst  |  48 ----
+ .../media/deprecated/saa7146/av7110/audio.rst |  27 --
+ .../saa7146/av7110/audio_data_types.rst       | 116 --------
+ .../saa7146/av7110/audio_function_calls.rst   |  30 ---
+ .../saa7146/av7110/video-clear-buffer.rst     |  54 ----
+ .../saa7146/av7110/video-command.rst          |  96 -------
+ .../saa7146/av7110/video-continue.rst         |  57 ----
+ .../saa7146/av7110/video-fast-forward.rst     |  72 -----
+ .../saa7146/av7110/video-fclose.rst           |  51 ----
+ .../deprecated/saa7146/av7110/video-fopen.rst | 111 --------
+ .../saa7146/av7110/video-freeze.rst           |  61 -----
+ .../saa7146/av7110/video-fwrite.rst           |  79 ------
+ .../saa7146/av7110/video-get-capabilities.rst |  61 -----
+ .../saa7146/av7110/video-get-event.rst        | 105 --------
+ .../saa7146/av7110/video-get-frame-count.rst  |  65 -----
+ .../saa7146/av7110/video-get-pts.rst          |  69 -----
+ .../saa7146/av7110/video-get-size.rst         |  69 -----
+ .../saa7146/av7110/video-get-status.rst       |  72 -----
+ .../deprecated/saa7146/av7110/video-play.rst  |  57 ----
+ .../saa7146/av7110/video-select-source.rst    |  76 ------
+ .../saa7146/av7110/video-set-blank.rst        |  64 -----
+ .../av7110/video-set-display-format.rst       |  60 -----
+ .../saa7146/av7110/video-set-format.rst       |  82 ------
+ .../saa7146/av7110/video-set-streamtype.rst   |  61 -----
+ .../saa7146/av7110/video-slowmotion.rst       |  72 -----
+ .../saa7146/av7110/video-stillpicture.rst     |  61 -----
+ .../deprecated/saa7146/av7110/video-stop.rst  |  74 ------
+ .../saa7146/av7110/video-try-command.rst      |  66 -----
+ .../media/deprecated/saa7146/av7110/video.rst |  36 ---
+ .../saa7146/av7110/video_function_calls.rst   |  35 ---
+ .../deprecated/saa7146/av7110/video_types.rst | 248 ------------------
+ 49 files changed, 3300 deletions(-)
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/audio-bilingual-channel-select.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/audio-channel-select.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/audio-clear-buffer.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/audio-continue.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/audio-fclose.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/audio-fopen.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/audio-fwrite.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/audio-get-capabilities.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/audio-get-status.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/audio-pause.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/audio-play.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/audio-select-source.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/audio-set-av-sync.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/audio-set-bypass-mode.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/audio-set-id.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/audio-set-mixer.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/audio-set-mute.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/audio-set-streamtype.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/audio-stop.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/audio.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/audio_data_types.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/audio_function_calls.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-clear-buffer.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-command.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-continue.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-fast-forward.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-fclose.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-fopen.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-freeze.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-fwrite.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-get-capabilities.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-get-event.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-get-frame-count.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-get-pts.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-get-size.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-get-status.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-play.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-select-source.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-set-blank.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-set-display-format.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-set-format.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-set-streamtype.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-slowmotion.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-stillpicture.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-stop.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video-try-command.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video_function_calls.rst
+ delete mode 100644 drivers/staging/media/deprecated/saa7146/av7110/video_types.rst
 
-diff --git a/drivers/staging/media/deprecated/saa7146/av7110/Kconfig b/drivers/staging/media/deprecated/saa7146/av7110/Kconfig
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/audio-bilingual-channel-select.rst b/drivers/staging/media/deprecated/saa7146/av7110/audio-bilingual-channel-select.rst
 deleted file mode 100644
-index 1571eab31926..000000000000
---- a/drivers/staging/media/deprecated/saa7146/av7110/Kconfig
+index 33b5363317f1..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/audio-bilingual-channel-select.rst
 +++ /dev/null
-@@ -1,106 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0-only
--config DVB_AV7110_IR
--	bool
--	depends on RC_CORE=y || RC_CORE = DVB_AV7110
--	default DVB_AV7110
+@@ -1,58 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.audio
 -
--config DVB_AV7110
--	tristate "AV7110 cards (DEPRECATED)"
--	depends on DVB_CORE && PCI && I2C
--	select TTPCI_EEPROM
--	select VIDEO_SAA7146_VV
--	depends on VIDEO_DEV	# dependencies of VIDEO_SAA7146_VV
--	select DVB_VES1820 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_VES1X93 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_STV0299 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_TDA8083 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_SP8870 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_STV0297 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_L64781 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_LNBP21 if MEDIA_SUBDRV_AUTOSELECT
--	help
--	  Support for SAA7146 and AV7110 based DVB cards as produced
--	  by Fujitsu-Siemens, Technotrend, Hauppauge and others.
+-.. _AUDIO_BILINGUAL_CHANNEL_SELECT:
 -
--	  This driver only supports the fullfeatured cards with
--	  onboard MPEG2 decoder.
+-==============================
+-AUDIO_BILINGUAL_CHANNEL_SELECT
+-==============================
 -
--	  This driver needs an external firmware. Please use the script
--	  "<kerneldir>/scripts/get_dvb_firmware av7110" to
--	  download/extract it, and then copy it to /usr/lib/hotplug/firmware
--	  or /lib/firmware (depending on configuration of firmware hotplug).
+-Name
+-----
 -
--	  Alternatively, you can download the file and use the kernel's
--	  EXTRA_FIRMWARE configuration option to build it into your
--	  kernel image by adding the filename to the EXTRA_FIRMWARE
--	  configuration option string.
+-AUDIO_BILINGUAL_CHANNEL_SELECT
 -
--	  This driver is deprecated and is scheduled for removal by
--	  the beginning of 2023. See the TODO file for more information.
+-.. attention:: This ioctl is deprecated
 -
--	  Say Y if you own such a card and want to use it.
+-Synopsis
+---------
 -
--config DVB_AV7110_OSD
--	bool "AV7110 OSD support (DEPRECATED)"
--	depends on DVB_AV7110
--	default y if DVB_AV7110=y || DVB_AV7110=m
--	help
--	  The AV7110 firmware provides some code to generate an OnScreenDisplay
--	  on the video output. This is kind of nonstandard and not guaranteed to
--	  be maintained.
+-.. c:macro:: AUDIO_BILINGUAL_CHANNEL_SELECT
 -
--	  Anyway, some popular DVB software like VDR uses this OSD to render
--	  its menus, so say Y if you want to use this software.
+-``int ioctl(int fd, AUDIO_BILINGUAL_CHANNEL_SELECT, struct audio_channel_select *select)``
 -
--	  This driver is deprecated and is scheduled for removal by
--	  the beginning of 2023. See the TODO file for more information.
+-Arguments
+----------
 -
--	  All other people say N.
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
 -
--config DVB_BUDGET_PATCH
--	tristate "AV7110 cards with Budget Patch (DEPRECATED)"
--	depends on DVB_BUDGET_CORE && I2C
--	depends on DVB_AV7110
--	select DVB_STV0299 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_VES1X93 if MEDIA_SUBDRV_AUTOSELECT
--	select DVB_TDA8083 if MEDIA_SUBDRV_AUTOSELECT
--	help
--	  Support for Budget Patch (full TS) modification on
--	  SAA7146+AV7110 based cards (DVB-S cards). This
--	  driver doesn't use onboard MPEG2 decoder. The
--	  card is driven in Budget-only mode. Card is
--	  required to have loaded firmware to tune properly.
--	  Firmware can be loaded by insertion and removal of
--	  standard AV7110 driver prior to loading this
--	  driver.
+-    -
 -
--	  This driver is deprecated and is scheduled for removal by
--	  the beginning of 2023. See the TODO file for more information.
+-       -  int fd
 -
--	  Say Y if you own such a card and want to use it.
+-       -  File descriptor returned by a previous call to open().
 -
--	  To compile this driver as a module, choose M here: the
--	  module will be called budget-patch.
+-    -
 -
--if DVB_AV7110
+-       -  audio_channel_select_t ch
 -
--# Frontend driver that it is used only by AV7110 driver
--# While technically independent, it doesn't make sense to keep
--# it if we drop support for AV7110, as no other driver will use it.
+-       -  Select the output format of the audio (mono left/right, stereo).
 -
--config DVB_SP8870
--	tristate "Spase sp8870 based (DEPRECATED)"
--	depends on DVB_CORE && I2C
--	default m if !MEDIA_SUBDRV_AUTOSELECT
--	help
--	  A DVB-T tuner module. Say Y when you want to support this frontend.
+-Description
+------------
 -
--	  This driver needs external firmware. Please use the command
--	  "<kerneldir>/scripts/get_dvb_firmware sp8870" to
--	  download/extract it, and then copy it to /usr/lib/hotplug/firmware
--	  or /lib/firmware (depending on configuration of firmware hotplug).
+-This ioctl is obsolete. Do not use in new drivers. It has been replaced
+-by the V4L2 ``V4L2_CID_MPEG_AUDIO_DEC_MULTILINGUAL_PLAYBACK`` control
+-for MPEG decoders controlled through V4L2.
 -
--	  This driver is deprecated and is scheduled for removal by
--	  the beginning of 2023. See the TODO file for more information.
+-This ioctl call asks the Audio Device to select the requested channel
+-for bilingual streams if possible.
 -
--endif
-diff --git a/drivers/staging/media/deprecated/saa7146/av7110/Makefile b/drivers/staging/media/deprecated/saa7146/av7110/Makefile
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/audio-channel-select.rst b/drivers/staging/media/deprecated/saa7146/av7110/audio-channel-select.rst
 deleted file mode 100644
-index c04cd0a59109..000000000000
---- a/drivers/staging/media/deprecated/saa7146/av7110/Makefile
+index 74093df92a68..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/audio-channel-select.rst
 +++ /dev/null
-@@ -1,23 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0
--#
--# Makefile for the AV7110 DVB device driver
--#
+@@ -1,57 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.audio
 -
--dvb-ttpci-objs := av7110_hw.o av7110_v4l.o av7110_av.o av7110_ca.o av7110.o \
--		  av7110_ipack.o dvb_filter.o
+-.. _AUDIO_CHANNEL_SELECT:
 -
--ifdef CONFIG_DVB_AV7110_IR
--dvb-ttpci-objs += av7110_ir.o
--endif
+-====================
+-AUDIO_CHANNEL_SELECT
+-====================
 -
--obj-$(CONFIG_DVB_BUDGET_PATCH) += budget-patch.o
+-Name
+-----
 -
--obj-$(CONFIG_DVB_AV7110) += dvb-ttpci.o
+-AUDIO_CHANNEL_SELECT
 -
--obj-$(CONFIG_DVB_SP8870) += sp8870.o
+-.. attention:: This ioctl is deprecated
 -
--ccflags-y += -I $(srctree)/drivers/media/dvb-frontends
--ccflags-y += -I $(srctree)/drivers/media/tuners
--ccflags-y += -I $(srctree)/drivers/media/common
--ccflags-y += -I $(srctree)/drivers/staging/media/deprecated/saa7146/ttpci
--ccflags-y += -I $(srctree)/drivers/staging/media/deprecated/saa7146/common
-diff --git a/drivers/staging/media/deprecated/saa7146/av7110/TODO b/drivers/staging/media/deprecated/saa7146/av7110/TODO
+-Synopsis
+---------
+-
+-.. c:macro:: AUDIO_CHANNEL_SELECT
+-
+-``int ioctl(int fd, AUDIO_CHANNEL_SELECT, struct audio_channel_select *select)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -
+-
+-       -  audio_channel_select_t ch
+-
+-       -  Select the output format of the audio (mono left/right, stereo).
+-
+-Description
+------------
+-
+-This ioctl is for Digital TV devices only. To control a V4L2 decoder use the
+-V4L2 ``V4L2_CID_MPEG_AUDIO_DEC_PLAYBACK`` control instead.
+-
+-This ioctl call asks the Audio Device to select the requested channel if
+-possible.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/audio-clear-buffer.rst b/drivers/staging/media/deprecated/saa7146/av7110/audio-clear-buffer.rst
 deleted file mode 100644
-index 38817e04bb67..000000000000
---- a/drivers/staging/media/deprecated/saa7146/av7110/TODO
+index a0ebb0278260..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/audio-clear-buffer.rst
 +++ /dev/null
-@@ -1,9 +0,0 @@
--- This driver is too old and relies on a different API.
--  Drop it from Kernel on a couple of versions.
--- Cleanup patches for the drivers here won't be accepted.
+@@ -1,48 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.audio
 -
--These drivers are now deprecated with the intent of
--removing them altogether by the beginning of 2023.
+-.. _AUDIO_CLEAR_BUFFER:
 -
--If someone is interested in doing this work, then contact the
--linux-media mailinglist (https://linuxtv.org/lists.php).
-diff --git a/drivers/staging/media/deprecated/saa7146/av7110/budget-patch.c b/drivers/staging/media/deprecated/saa7146/av7110/budget-patch.c
+-==================
+-AUDIO_CLEAR_BUFFER
+-==================
+-
+-Name
+-----
+-
+-AUDIO_CLEAR_BUFFER
+-
+-.. attention:: This ioctl is deprecated
+-
+-Synopsis
+---------
+-
+-.. c:macro:: AUDIO_CLEAR_BUFFER
+-
+-``int ioctl(int fd, AUDIO_CLEAR_BUFFER)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-Description
+------------
+-
+-This ioctl call asks the Audio Device to clear all software and hardware
+-buffers of the audio decoder device.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/audio-continue.rst b/drivers/staging/media/deprecated/saa7146/av7110/audio-continue.rst
 deleted file mode 100644
-index d173c8ade6a7..000000000000
---- a/drivers/staging/media/deprecated/saa7146/av7110/budget-patch.c
+index a2e9850f37f2..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/audio-continue.rst
 +++ /dev/null
-@@ -1,665 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * budget-patch.c: driver for Budget Patch,
-- * hardware modification of DVB-S cards enabling full TS
-- *
-- * Written by Emard <emard@softhome.net>
-- *
-- * Original idea by Roberto Deza <rdeza@unav.es>
-- *
-- * Special thanks to Holger Waechtler, Michael Hunold, Marian Durkovic
-- * and Metzlerbros
-- *
-- * the project's page is at https://linuxtv.org
-- */
+@@ -1,48 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.audio
 -
--#include "av7110.h"
--#include "av7110_hw.h"
--#include "budget.h"
--#include "stv0299.h"
--#include "ves1x93.h"
--#include "tda8083.h"
+-.. _AUDIO_CONTINUE:
 -
--#include "bsru6.h"
+-==============
+-AUDIO_CONTINUE
+-==============
 -
--DVB_DEFINE_MOD_OPT_ADAPTER_NR(adapter_nr);
+-Name
+-----
 -
--#define budget_patch budget
+-AUDIO_CONTINUE
 -
--static struct saa7146_extension budget_extension;
+-.. attention:: This ioctl is deprecated
 -
--MAKE_BUDGET_INFO(ttbp, "TT-Budget/Patch DVB-S 1.x PCI", BUDGET_PATCH);
--//MAKE_BUDGET_INFO(satel,"TT-Budget/Patch SATELCO PCI", BUDGET_TT_HW_DISEQC);
+-Synopsis
+---------
 -
--static const struct pci_device_id pci_tbl[] = {
--	MAKE_EXTENSION_PCI(ttbp,0x13c2, 0x0000),
--//        MAKE_EXTENSION_PCI(satel, 0x13c2, 0x1013),
--	{
--		.vendor    = 0,
--	}
--};
+-.. c:macro:: AUDIO_CONTINUE
 -
--/* those lines are for budget-patch to be tried
--** on a true budget card and observe the
--** behaviour of VSYNC generated by rps1.
--** this code was shamelessly copy/pasted from budget.c
--*/
--static void gpio_Set22K (struct budget *budget, int state)
--{
--	struct saa7146_dev *dev=budget->dev;
--	dprintk(2, "budget: %p\n", budget);
--	saa7146_setgpio(dev, 3, (state ? SAA7146_GPIO_OUTHI : SAA7146_GPIO_OUTLO));
--}
+-``int ioctl(int fd, AUDIO_CONTINUE)``
 -
--/* Diseqc functions only for TT Budget card */
--/* taken from the Skyvision DVB driver by
--   Ralph Metzler <rjkm@metzlerbros.de> */
+-Arguments
+----------
 -
--static void DiseqcSendBit (struct budget *budget, int data)
--{
--	struct saa7146_dev *dev=budget->dev;
--	dprintk(2, "budget: %p\n", budget);
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
 -
--	saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTHI);
--	udelay(data ? 500 : 1000);
--	saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTLO);
--	udelay(data ? 1000 : 500);
--}
+-    -  .. row 1
 -
--static void DiseqcSendByte (struct budget *budget, int data)
--{
--	int i, par=1, d;
+-       -  int fd
 -
--	dprintk(2, "budget: %p\n", budget);
+-       -  File descriptor returned by a previous call to open().
 -
--	for (i=7; i>=0; i--) {
--		d = (data>>i)&1;
--		par ^= d;
--		DiseqcSendBit(budget, d);
--	}
+-Description
+------------
 -
--	DiseqcSendBit(budget, par);
--}
+-This ioctl restarts the decoding and playing process previously paused
+-with AUDIO_PAUSE command.
 -
--static int SendDiSEqCMsg (struct budget *budget, int len, u8 *msg, unsigned long burst)
--{
--	struct saa7146_dev *dev=budget->dev;
--	int i;
+-Return Value
+-------------
 -
--	dprintk(2, "budget: %p\n", budget);
--
--	saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTLO);
--	mdelay(16);
--
--	for (i=0; i<len; i++)
--		DiseqcSendByte(budget, msg[i]);
--
--	mdelay(16);
--
--	if (burst!=-1) {
--		if (burst)
--			DiseqcSendByte(budget, 0xff);
--		else {
--			saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTHI);
--			mdelay(12);
--			udelay(500);
--			saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTLO);
--		}
--		msleep(20);
--	}
--
--	return 0;
--}
--
--/* shamelessly copy/pasted from budget.c */
--static int budget_set_tone(struct dvb_frontend *fe,
--			   enum fe_sec_tone_mode tone)
--{
--	struct budget* budget = (struct budget*) fe->dvb->priv;
--
--	switch (tone) {
--	case SEC_TONE_ON:
--		gpio_Set22K (budget, 1);
--		break;
--
--	case SEC_TONE_OFF:
--		gpio_Set22K (budget, 0);
--		break;
--
--	default:
--		return -EINVAL;
--	}
--
--	return 0;
--}
--
--static int budget_diseqc_send_master_cmd(struct dvb_frontend* fe, struct dvb_diseqc_master_cmd* cmd)
--{
--	struct budget* budget = (struct budget*) fe->dvb->priv;
--
--	SendDiSEqCMsg (budget, cmd->msg_len, cmd->msg, 0);
--
--	return 0;
--}
--
--static int budget_diseqc_send_burst(struct dvb_frontend *fe,
--				    enum fe_sec_mini_cmd minicmd)
--{
--	struct budget* budget = (struct budget*) fe->dvb->priv;
--
--	SendDiSEqCMsg (budget, 0, NULL, minicmd);
--
--	return 0;
--}
--
--static int budget_av7110_send_fw_cmd(struct budget_patch *budget, u16* buf, int length)
--{
--	int i;
--
--	dprintk(2, "budget: %p\n", budget);
--
--	for (i = 2; i < length; i++)
--	{
--		  ttpci_budget_debiwrite(budget, DEBINOSWAP, COMMAND + 2*i, 2, (u32) buf[i], 0,0);
--		  msleep(5);
--	}
--	if (length)
--		  ttpci_budget_debiwrite(budget, DEBINOSWAP, COMMAND + 2, 2, (u32) buf[1], 0,0);
--	else
--		  ttpci_budget_debiwrite(budget, DEBINOSWAP, COMMAND + 2, 2, 0, 0,0);
--	msleep(5);
--	ttpci_budget_debiwrite(budget, DEBINOSWAP, COMMAND, 2, (u32) buf[0], 0,0);
--	msleep(5);
--	return 0;
--}
--
--static void av7110_set22k(struct budget_patch *budget, int state)
--{
--	u16 buf[2] = {( COMTYPE_AUDIODAC << 8) | (state ? ON22K : OFF22K), 0};
--
--	dprintk(2, "budget: %p\n", budget);
--	budget_av7110_send_fw_cmd(budget, buf, 2);
--}
--
--static int av7110_send_diseqc_msg(struct budget_patch *budget, int len, u8 *msg, int burst)
--{
--	int i;
--	u16 buf[18] = { ((COMTYPE_AUDIODAC << 8) | SendDiSEqC),
--		16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
--
--	dprintk(2, "budget: %p\n", budget);
--
--	if (len>10)
--		len=10;
--
--	buf[1] = len+2;
--	buf[2] = len;
--
--	if (burst != -1)
--		buf[3]=burst ? 0x01 : 0x00;
--	else
--		buf[3]=0xffff;
--
--	for (i=0; i<len; i++)
--		buf[i+4]=msg[i];
--
--	budget_av7110_send_fw_cmd(budget, buf, 18);
--	return 0;
--}
--
--static int budget_patch_set_tone(struct dvb_frontend *fe,
--				 enum fe_sec_tone_mode tone)
--{
--	struct budget_patch* budget = (struct budget_patch*) fe->dvb->priv;
--
--	switch (tone) {
--	case SEC_TONE_ON:
--		av7110_set22k (budget, 1);
--		break;
--
--	case SEC_TONE_OFF:
--		av7110_set22k (budget, 0);
--		break;
--
--	default:
--		return -EINVAL;
--	}
--
--	return 0;
--}
--
--static int budget_patch_diseqc_send_master_cmd(struct dvb_frontend* fe, struct dvb_diseqc_master_cmd* cmd)
--{
--	struct budget_patch* budget = (struct budget_patch*) fe->dvb->priv;
--
--	av7110_send_diseqc_msg (budget, cmd->msg_len, cmd->msg, 0);
--
--	return 0;
--}
--
--static int budget_patch_diseqc_send_burst(struct dvb_frontend *fe,
--					  enum fe_sec_mini_cmd minicmd)
--{
--	struct budget_patch* budget = (struct budget_patch*) fe->dvb->priv;
--
--	av7110_send_diseqc_msg (budget, 0, NULL, minicmd);
--
--	return 0;
--}
--
--static int alps_bsrv2_tuner_set_params(struct dvb_frontend *fe)
--{
--	struct dtv_frontend_properties *p = &fe->dtv_property_cache;
--	struct budget_patch* budget = (struct budget_patch*) fe->dvb->priv;
--	u8 pwr = 0;
--	u8 buf[4];
--	struct i2c_msg msg = { .addr = 0x61, .flags = 0, .buf = buf, .len = sizeof(buf) };
--	u32 div = (p->frequency + 479500) / 125;
--
--	if (p->frequency > 2000000)
--		pwr = 3;
--	else if (p->frequency > 1800000)
--		pwr = 2;
--	else if (p->frequency > 1600000)
--		pwr = 1;
--	else if (p->frequency > 1200000)
--		pwr = 0;
--	else if (p->frequency >= 1100000)
--		pwr = 1;
--	else pwr = 2;
--
--	buf[0] = (div >> 8) & 0x7f;
--	buf[1] = div & 0xff;
--	buf[2] = ((div & 0x18000) >> 10) | 0x95;
--	buf[3] = (pwr << 6) | 0x30;
--
--	// NOTE: since we're using a prescaler of 2, we set the
--	// divisor frequency to 62.5kHz and divide by 125 above
--
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer (&budget->i2c_adap, &msg, 1) != 1)
--		return -EIO;
--	return 0;
--}
--
--static struct ves1x93_config alps_bsrv2_config = {
--	.demod_address = 0x08,
--	.xin = 90100000UL,
--	.invert_pwm = 0,
--};
--
--static int grundig_29504_451_tuner_set_params(struct dvb_frontend *fe)
--{
--	struct dtv_frontend_properties *p = &fe->dtv_property_cache;
--	struct budget_patch* budget = (struct budget_patch*) fe->dvb->priv;
--	u32 div;
--	u8 data[4];
--	struct i2c_msg msg = { .addr = 0x61, .flags = 0, .buf = data, .len = sizeof(data) };
--
--	div = p->frequency / 125;
--	data[0] = (div >> 8) & 0x7f;
--	data[1] = div & 0xff;
--	data[2] = 0x8e;
--	data[3] = 0x00;
--
--	if (fe->ops.i2c_gate_ctrl)
--		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer (&budget->i2c_adap, &msg, 1) != 1)
--		return -EIO;
--	return 0;
--}
--
--static struct tda8083_config grundig_29504_451_config = {
--	.demod_address = 0x68,
--};
--
--static void frontend_init(struct budget_patch* budget)
--{
--	switch(budget->dev->pci->subsystem_device) {
--	case 0x0000: // Hauppauge/TT WinTV DVB-S rev1.X
--	case 0x1013: // SATELCO Multimedia PCI
--
--		// try the ALPS BSRV2 first of all
--		budget->dvb_frontend = dvb_attach(ves1x93_attach, &alps_bsrv2_config, &budget->i2c_adap);
--		if (budget->dvb_frontend) {
--			budget->dvb_frontend->ops.tuner_ops.set_params = alps_bsrv2_tuner_set_params;
--			budget->dvb_frontend->ops.diseqc_send_master_cmd = budget_patch_diseqc_send_master_cmd;
--			budget->dvb_frontend->ops.diseqc_send_burst = budget_patch_diseqc_send_burst;
--			budget->dvb_frontend->ops.set_tone = budget_patch_set_tone;
--			break;
--		}
--
--		// try the ALPS BSRU6 now
--		budget->dvb_frontend = dvb_attach(stv0299_attach, &alps_bsru6_config, &budget->i2c_adap);
--		if (budget->dvb_frontend) {
--			budget->dvb_frontend->ops.tuner_ops.set_params = alps_bsru6_tuner_set_params;
--			budget->dvb_frontend->tuner_priv = &budget->i2c_adap;
--
--			budget->dvb_frontend->ops.diseqc_send_master_cmd = budget_diseqc_send_master_cmd;
--			budget->dvb_frontend->ops.diseqc_send_burst = budget_diseqc_send_burst;
--			budget->dvb_frontend->ops.set_tone = budget_set_tone;
--			break;
--		}
--
--		// Try the grundig 29504-451
--		budget->dvb_frontend = dvb_attach(tda8083_attach, &grundig_29504_451_config, &budget->i2c_adap);
--		if (budget->dvb_frontend) {
--			budget->dvb_frontend->ops.tuner_ops.set_params = grundig_29504_451_tuner_set_params;
--			budget->dvb_frontend->ops.diseqc_send_master_cmd = budget_diseqc_send_master_cmd;
--			budget->dvb_frontend->ops.diseqc_send_burst = budget_diseqc_send_burst;
--			budget->dvb_frontend->ops.set_tone = budget_set_tone;
--			break;
--		}
--		break;
--	}
--
--	if (budget->dvb_frontend == NULL) {
--		printk("dvb-ttpci: A frontend driver was not found for device [%04x:%04x] subsystem [%04x:%04x]\n",
--		       budget->dev->pci->vendor,
--		       budget->dev->pci->device,
--		       budget->dev->pci->subsystem_vendor,
--		       budget->dev->pci->subsystem_device);
--	} else {
--		if (dvb_register_frontend(&budget->dvb_adapter, budget->dvb_frontend)) {
--			printk("budget-av: Frontend registration failed!\n");
--			dvb_frontend_detach(budget->dvb_frontend);
--			budget->dvb_frontend = NULL;
--		}
--	}
--}
--
--/* written by Emard */
--static int budget_patch_attach (struct saa7146_dev* dev, struct saa7146_pci_extension_data *info)
--{
--	struct budget_patch *budget;
--	int err;
--	int count = 0;
--	int detected = 0;
--
--#define PATCH_RESET 0
--#define RPS_IRQ 0
--#define HPS_SETUP 0
--#if PATCH_RESET
--	saa7146_write(dev, MC1, MASK_31);
--	msleep(40);
--#endif
--#if HPS_SETUP
--	// initialize registers. Better to have it like this
--	// than leaving something unconfigured
--	saa7146_write(dev, DD1_STREAM_B, 0);
--	// port B VSYNC at rising edge
--	saa7146_write(dev, DD1_INIT, 0x00000200);  // have this in budget-core too!
--	saa7146_write(dev, BRS_CTRL, 0x00000000);  // VBI
--
--	// debi config
--	// saa7146_write(dev, DEBI_CONFIG, MASK_30|MASK_28|MASK_18);
--
--	// zero all HPS registers
--	saa7146_write(dev, HPS_H_PRESCALE, 0);                  // r68
--	saa7146_write(dev, HPS_H_SCALE, 0);                     // r6c
--	saa7146_write(dev, BCS_CTRL, 0);                        // r70
--	saa7146_write(dev, HPS_V_SCALE, 0);                     // r60
--	saa7146_write(dev, HPS_V_GAIN, 0);                      // r64
--	saa7146_write(dev, CHROMA_KEY_RANGE, 0);                // r74
--	saa7146_write(dev, CLIP_FORMAT_CTRL, 0);                // r78
--	// Set HPS prescaler for port B input
--	saa7146_write(dev, HPS_CTRL, (1<<30) | (0<<29) | (1<<28) | (0<<12) );
--	saa7146_write(dev, MC2,
--	  0 * (MASK_08 | MASK_24)  |   // BRS control
--	  0 * (MASK_09 | MASK_25)  |   // a
--	  0 * (MASK_10 | MASK_26)  |   // b
--	  1 * (MASK_06 | MASK_22)  |   // HPS_CTRL1
--	  1 * (MASK_05 | MASK_21)  |   // HPS_CTRL2
--	  0 * (MASK_01 | MASK_15)      // DEBI
--	   );
--#endif
--	// Disable RPS1 and RPS0
--	saa7146_write(dev, MC1, ( MASK_29 | MASK_28));
--	// RPS1 timeout disable
--	saa7146_write(dev, RPS_TOV1, 0);
--
--	// code for autodetection
--	// will wait for VBI_B event (vertical blank at port B)
--	// and will reset GPIO3 after VBI_B is detected.
--	// (GPIO3 should be raised high by CPU to
--	// test if GPIO3 will generate vertical blank signal
--	// in budget patch GPIO3 is connected to VSYNC_B
--	count = 0;
--#if 0
--	WRITE_RPS1(CMD_UPLOAD |
--	  MASK_10 | MASK_09 | MASK_08 | MASK_06 | MASK_05 | MASK_04 | MASK_03 | MASK_02 );
--#endif
--	WRITE_RPS1(CMD_PAUSE | EVT_VBI_B);
--	WRITE_RPS1(CMD_WR_REG_MASK | (GPIO_CTRL>>2));
--	WRITE_RPS1(GPIO3_MSK);
--	WRITE_RPS1(SAA7146_GPIO_OUTLO<<24);
--#if RPS_IRQ
--	// issue RPS1 interrupt to increment counter
--	WRITE_RPS1(CMD_INTERRUPT);
--	// at least a NOP is neede between two interrupts
--	WRITE_RPS1(CMD_NOP);
--	// interrupt again
--	WRITE_RPS1(CMD_INTERRUPT);
--#endif
--	WRITE_RPS1(CMD_STOP);
--
--#if RPS_IRQ
--	// set event counter 1 source as RPS1 interrupt (0x03)          (rE4 p53)
--	// use 0x03 to track RPS1 interrupts - increase by 1 every gpio3 is toggled
--	// use 0x15 to track VPE  interrupts - increase by 1 every vpeirq() is called
--	saa7146_write(dev, EC1SSR, (0x03<<2) | 3 );
--	// set event counter 1 threshold to maximum allowed value        (rEC p55)
--	saa7146_write(dev, ECT1R,  0x3fff );
--#endif
--	// Fix VSYNC level
--	saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTLO);
--	// Set RPS1 Address register to point to RPS code               (r108 p42)
--	saa7146_write(dev, RPS_ADDR1, dev->d_rps1.dma_handle);
--	// Enable RPS1,                                                 (rFC p33)
--	saa7146_write(dev, MC1, (MASK_13 | MASK_29 ));
--
--
--	mdelay(50);
--	saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTHI);
--	mdelay(150);
--
--
--	if( (saa7146_read(dev, GPIO_CTRL) & 0x10000000) == 0)
--		detected = 1;
--
--#if RPS_IRQ
--	printk("Event Counter 1 0x%04x\n", saa7146_read(dev, EC1R) & 0x3fff );
--#endif
--	// Disable RPS1
--	saa7146_write(dev, MC1, ( MASK_29 ));
--
--	if(detected == 0)
--		printk("budget-patch not detected or saa7146 in non-default state.\n"
--		       "try enabling resetting of 7146 with MASK_31 in MC1 register\n");
--
--	else
--		printk("BUDGET-PATCH DETECTED.\n");
--
--
--/*      OLD (Original design by Roberto Deza):
--**      This code will setup the SAA7146_RPS1 to generate a square
--**      wave on GPIO3, changing when a field (TS_HEIGHT/2 "lines" of
--**      TS_WIDTH packets) has been acquired on SAA7146_D1B video port;
--**      then, this GPIO3 output which is connected to the D1B_VSYNC
--**      input, will trigger the acquisition of the alternate field
--**      and so on.
--**      Currently, the TT_budget / WinTV_Nova cards have two ICs
--**      (74HCT4040, LVC74) for the generation of this VSYNC signal,
--**      which seems that can be done perfectly without this :-)).
--*/
--
--/*      New design (By Emard)
--**      this rps1 code will copy internal HS event to GPIO3 pin.
--**      GPIO3 is in budget-patch hardware connected to port B VSYNC
--
--**      HS is an internal event of 7146, accessible with RPS
--**      and temporarily raised high every n lines
--**      (n in defined in the RPS_THRESH1 counter threshold)
--**      I think HS is raised high on the beginning of the n-th line
--**      and remains high until this n-th line that triggered
--**      it is completely received. When the reception of n-th line
--**      ends, HS is lowered.
--
--**      To transmit data over DMA, 7146 needs changing state at
--**      port B VSYNC pin. Any changing of port B VSYNC will
--**      cause some DMA data transfer, with more or less packets loss.
--**      It depends on the phase and frequency of VSYNC and
--**      the way of 7146 is instructed to trigger on port B (defined
--**      in DD1_INIT register, 3rd nibble from the right valid
--**      numbers are 0-7, see datasheet)
--**
--**      The correct triggering can minimize packet loss,
--**      dvbtraffic should give this stable bandwidths:
--**        22k transponder = 33814 kbit/s
--**      27.5k transponder = 38045 kbit/s
--**      by experiment it is found that the best results
--**      (stable bandwidths and almost no packet loss)
--**      are obtained using DD1_INIT triggering number 2
--**      (Va at rising edge of VS Fa = HS x VS-failing forced toggle)
--**      and a VSYNC phase that occurs in the middle of DMA transfer
--**      (about byte 188*512=96256 in the DMA window).
--**
--**      Phase of HS is still not clear to me how to control,
--**      It just happens to be so. It can be seen if one enables
--**      RPS_IRQ and print Event Counter 1 in vpeirq(). Every
--**      time RPS_INTERRUPT is called, the Event Counter 1 will
--**      increment. That's how the 7146 is programmed to do event
--**      counting in this budget-patch.c
--**      I *think* HPS setting has something to do with the phase
--**      of HS but I can't be 100% sure in that.
--
--**      hardware debug note: a working budget card (including budget patch)
--**      with vpeirq() interrupt setup in mode "0x90" (every 64K) will
--**      generate 3 interrupts per 25-Hz DMA frame of 2*188*512 bytes
--**      and that means 3*25=75 Hz of interrupt frequency, as seen by
--**      watch cat /proc/interrupts
--**
--**      If this frequency is 3x lower (and data received in the DMA
--**      buffer don't start with 0x47, but in the middle of packets,
--**      whose lengths appear to be like 188 292 188 104 etc.
--**      this means VSYNC line is not connected in the hardware.
--**      (check soldering pcb and pins)
--**      The same behaviour of missing VSYNC can be duplicated on budget
--**      cards, by setting DD1_INIT trigger mode 7 in 3rd nibble.
--*/
--
--	// Setup RPS1 "program" (p35)
--	count = 0;
--
--
--	// Wait Source Line Counter Threshold                           (p36)
--	WRITE_RPS1(CMD_PAUSE | EVT_HS);
--	// Set GPIO3=1                                                  (p42)
--	WRITE_RPS1(CMD_WR_REG_MASK | (GPIO_CTRL>>2));
--	WRITE_RPS1(GPIO3_MSK);
--	WRITE_RPS1(SAA7146_GPIO_OUTHI<<24);
--#if RPS_IRQ
--	// issue RPS1 interrupt
--	WRITE_RPS1(CMD_INTERRUPT);
--#endif
--	// Wait reset Source Line Counter Threshold                     (p36)
--	WRITE_RPS1(CMD_PAUSE | RPS_INV | EVT_HS);
--	// Set GPIO3=0                                                  (p42)
--	WRITE_RPS1(CMD_WR_REG_MASK | (GPIO_CTRL>>2));
--	WRITE_RPS1(GPIO3_MSK);
--	WRITE_RPS1(SAA7146_GPIO_OUTLO<<24);
--#if RPS_IRQ
--	// issue RPS1 interrupt
--	WRITE_RPS1(CMD_INTERRUPT);
--#endif
--	// Jump to begin of RPS program                                 (p37)
--	WRITE_RPS1(CMD_JUMP);
--	WRITE_RPS1(dev->d_rps1.dma_handle);
--
--	// Fix VSYNC level
--	saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTLO);
--	// Set RPS1 Address register to point to RPS code               (r108 p42)
--	saa7146_write(dev, RPS_ADDR1, dev->d_rps1.dma_handle);
--
--	if (!(budget = kmalloc (sizeof(struct budget_patch), GFP_KERNEL)))
--		return -ENOMEM;
--
--	dprintk(2, "budget: %p\n", budget);
--
--	err = ttpci_budget_init(budget, dev, info, THIS_MODULE, adapter_nr);
--	if (err) {
--		kfree(budget);
--		return err;
--	}
--
--	// Set Source Line Counter Threshold, using BRS                 (rCC p43)
--	// It generates HS event every TS_HEIGHT lines
--	// this is related to TS_WIDTH set in register
--	// NUM_LINE_BYTE3 in budget-core.c. If NUM_LINE_BYTE
--	// low 16 bits are set to TS_WIDTH bytes (TS_WIDTH=2*188
--	//,then RPS_THRESH1
--	// should be set to trigger every TS_HEIGHT (512) lines.
--	//
--	saa7146_write(dev, RPS_THRESH1, budget->buffer_height | MASK_12 );
--
--	// saa7146_write(dev, RPS_THRESH0, ((TS_HEIGHT/2)<<16) |MASK_28| (TS_HEIGHT/2) |MASK_12 );
--	// Enable RPS1                                                  (rFC p33)
--	saa7146_write(dev, MC1, (MASK_13 | MASK_29));
--
--
--	dev->ext_priv = budget;
--
--	budget->dvb_adapter.priv = budget;
--	frontend_init(budget);
--
--	ttpci_budget_init_hooks(budget);
--
--	return 0;
--}
--
--static int budget_patch_detach (struct saa7146_dev* dev)
--{
--	struct budget_patch *budget = (struct budget_patch*) dev->ext_priv;
--	int err;
--
--	if (budget->dvb_frontend) {
--		dvb_unregister_frontend(budget->dvb_frontend);
--		dvb_frontend_detach(budget->dvb_frontend);
--	}
--	err = ttpci_budget_deinit (budget);
--
--	kfree (budget);
--
--	return err;
--}
--
--static int __init budget_patch_init(void)
--{
--	return saa7146_register_extension(&budget_extension);
--}
--
--static void __exit budget_patch_exit(void)
--{
--	saa7146_unregister_extension(&budget_extension);
--}
--
--static struct saa7146_extension budget_extension = {
--	.name           = "budget_patch dvb",
--	.flags          = 0,
--
--	.module         = THIS_MODULE,
--	.pci_tbl        = pci_tbl,
--	.attach         = budget_patch_attach,
--	.detach         = budget_patch_detach,
--
--	.irq_mask       = MASK_10,
--	.irq_func       = ttpci_budget_irq10_handler,
--};
--
--module_init(budget_patch_init);
--module_exit(budget_patch_exit);
--
--MODULE_LICENSE("GPL");
--MODULE_AUTHOR("Emard, Roberto Deza, Holger Waechtler, Michael Hunold, others");
--MODULE_DESCRIPTION("Driver for full TS modified DVB-S SAA7146+AV7110 based so-called Budget Patch cards");
-diff --git a/drivers/staging/media/deprecated/saa7146/av7110/dvb_filter.c b/drivers/staging/media/deprecated/saa7146/av7110/dvb_filter.c
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/audio-fclose.rst b/drivers/staging/media/deprecated/saa7146/av7110/audio-fclose.rst
 deleted file mode 100644
-index 8c2eca5dcdc9..000000000000
---- a/drivers/staging/media/deprecated/saa7146/av7110/dvb_filter.c
+index 77857d578e83..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/audio-fclose.rst
 +++ /dev/null
-@@ -1,115 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--#include <linux/kernel.h>
--#include <linux/module.h>
--#include <linux/string.h>
--#include "dvb_filter.h"
+@@ -1,51 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.audio
 -
--static u32 freq[4] = {480, 441, 320, 0};
+-.. _audio_fclose:
 -
--static unsigned int ac3_bitrates[32] =
--    {32,40,48,56,64,80,96,112,128,160,192,224,256,320,384,448,512,576,640,
--     0,0,0,0,0,0,0,0,0,0,0,0,0};
+-========================
+-Digital TV audio close()
+-========================
 -
--static u32 ac3_frames[3][32] =
--    {{64,80,96,112,128,160,192,224,256,320,384,448,512,640,768,896,1024,
--      1152,1280,0,0,0,0,0,0,0,0,0,0,0,0,0},
--     {69,87,104,121,139,174,208,243,278,348,417,487,557,696,835,975,1114,
--      1253,1393,0,0,0,0,0,0,0,0,0,0,0,0,0},
--     {96,120,144,168,192,240,288,336,384,480,576,672,768,960,1152,1344,
--      1536,1728,1920,0,0,0,0,0,0,0,0,0,0,0,0,0}};
+-Name
+-----
 -
--int dvb_filter_get_ac3info(u8 *mbuf, int count, struct dvb_audio_info *ai, int pr)
--{
--	u8 *headr;
--	int found = 0;
--	int c = 0;
--	u8 frame = 0;
--	int fr = 0;
+-Digital TV audio close()
 -
--	while ( !found  && c < count){
--		u8 *b = mbuf+c;
+-.. attention:: This ioctl is deprecated
 -
--		if ( b[0] == 0x0b &&  b[1] == 0x77 )
--			found = 1;
--		else {
--			c++;
--		}
--	}
+-Synopsis
+---------
 -
--	if (!found) return -1;
--	if (pr)
--		printk(KERN_DEBUG "Audiostream: AC3");
+-.. c:function:: int close(int fd)
 -
--	ai->off = c;
--	if (c+5 >= count) return -1;
+-Arguments
+----------
 -
--	ai->layer = 0;  // 0 for AC3
--	headr = mbuf+c+2;
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
 -
--	frame = (headr[2]&0x3f);
--	ai->bit_rate = ac3_bitrates[frame >> 1]*1000;
+-    -  .. row 1
 -
--	if (pr)
--		printk(KERN_CONT "  BRate: %d kb/s", (int) ai->bit_rate/1000);
+-       -  int fd
 -
--	ai->frequency = (headr[2] & 0xc0 ) >> 6;
--	fr = (headr[2] & 0xc0 ) >> 6;
--	ai->frequency = freq[fr]*100;
--	if (pr)
--		printk(KERN_CONT "  Freq: %d Hz\n", (int) ai->frequency);
+-       -  File descriptor returned by a previous call to open().
 -
--	ai->framesize = ac3_frames[fr][frame >> 1];
--	if ((frame & 1) &&  (fr == 1)) ai->framesize++;
--	ai->framesize = ai->framesize << 1;
--	if (pr)
--		printk(KERN_DEBUG "  Framesize %d\n", (int) ai->framesize);
+-Description
+------------
 -
--	return 0;
--}
+-This system call closes a previously opened audio device.
 -
--void dvb_filter_pes2ts_init(struct dvb_filter_pes2ts *p2ts, unsigned short pid,
--			    dvb_filter_pes2ts_cb_t *cb, void *priv)
--{
--	unsigned char *buf=p2ts->buf;
+-Return Value
+-------------
 -
--	buf[0]=0x47;
--	buf[1]=(pid>>8);
--	buf[2]=pid&0xff;
--	p2ts->cc=0;
--	p2ts->cb=cb;
--	p2ts->priv=priv;
--}
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
 -
--int dvb_filter_pes2ts(struct dvb_filter_pes2ts *p2ts, unsigned char *pes,
--		      int len, int payload_start)
--{
--	unsigned char *buf=p2ts->buf;
--	int ret=0, rest;
+-    -  .. row 1
 -
--	//len=6+((pes[4]<<8)|pes[5]);
+-       -  ``EBADF``
 -
--	if (payload_start)
--		buf[1]|=0x40;
--	else
--		buf[1]&=~0x40;
--	while (len>=184) {
--		buf[3]=0x10|((p2ts->cc++)&0x0f);
--		memcpy(buf+4, pes, 184);
--		if ((ret=p2ts->cb(p2ts->priv, buf)))
--			return ret;
--		len-=184; pes+=184;
--		buf[1]&=~0x40;
--	}
--	if (!len)
--		return 0;
--	buf[3]=0x30|((p2ts->cc++)&0x0f);
--	rest=183-len;
--	if (rest) {
--		buf[5]=0x00;
--		if (rest-1)
--			memset(buf+6, 0xff, rest-1);
--	}
--	buf[4]=rest;
--	memcpy(buf+5+rest, pes, len);
--	return p2ts->cb(p2ts->priv, buf);
--}
-diff --git a/drivers/staging/media/deprecated/saa7146/av7110/dvb_filter.h b/drivers/staging/media/deprecated/saa7146/av7110/dvb_filter.h
+-       -  fd is not a valid open file descriptor.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/audio-fopen.rst b/drivers/staging/media/deprecated/saa7146/av7110/audio-fopen.rst
 deleted file mode 100644
-index 67a3c6333bca..000000000000
---- a/drivers/staging/media/deprecated/saa7146/av7110/dvb_filter.h
+index 774daaab3bad..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/audio-fopen.rst
 +++ /dev/null
-@@ -1,242 +0,0 @@
--/*
-- * dvb_filter.h
-- *
-- * Copyright (C) 2003 Convergence GmbH
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public License
-- * as published by the Free Software Foundation; either version 2.1
-- * of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- */
+@@ -1,103 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.audio
 -
--#ifndef _DVB_FILTER_H_
--#define _DVB_FILTER_H_
+-.. _audio_fopen:
 -
--#include <linux/slab.h>
+-=======================
+-Digital TV audio open()
+-=======================
 -
--#include <media/demux.h>
+-Name
+-----
 -
--typedef int (dvb_filter_pes2ts_cb_t) (void *, unsigned char *);
+-Digital TV audio open()
 -
--struct dvb_filter_pes2ts {
--	unsigned char buf[188];
--	unsigned char cc;
--	dvb_filter_pes2ts_cb_t *cb;
--	void *priv;
--};
+-.. attention:: This ioctl is deprecated
 -
--void dvb_filter_pes2ts_init(struct dvb_filter_pes2ts *p2ts, unsigned short pid,
--			    dvb_filter_pes2ts_cb_t *cb, void *priv);
+-Synopsis
+---------
 -
--int dvb_filter_pes2ts(struct dvb_filter_pes2ts *p2ts, unsigned char *pes,
--		      int len, int payload_start);
+-.. c:function:: int open(const char *deviceName, int flags)
 -
+-Arguments
+----------
 -
--#define PROG_STREAM_MAP  0xBC
--#define PRIVATE_STREAM1  0xBD
--#define PADDING_STREAM   0xBE
--#define PRIVATE_STREAM2  0xBF
--#define AUDIO_STREAM_S   0xC0
--#define AUDIO_STREAM_E   0xDF
--#define VIDEO_STREAM_S   0xE0
--#define VIDEO_STREAM_E   0xEF
--#define ECM_STREAM       0xF0
--#define EMM_STREAM       0xF1
--#define DSM_CC_STREAM    0xF2
--#define ISO13522_STREAM  0xF3
--#define PROG_STREAM_DIR  0xFF
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
 -
--#define DVB_PICTURE_START    0x00
--#define DVB_USER_START       0xb2
--#define DVB_SEQUENCE_HEADER  0xb3
--#define DVB_SEQUENCE_ERROR   0xb4
--#define DVB_EXTENSION_START  0xb5
--#define DVB_SEQUENCE_END     0xb7
--#define DVB_GOP_START        0xb8
--#define DVB_EXCEPT_SLICE     0xb0
+-    -  .. row 1
 -
--#define SEQUENCE_EXTENSION           0x01
--#define SEQUENCE_DISPLAY_EXTENSION   0x02
--#define PICTURE_CODING_EXTENSION     0x08
--#define QUANT_MATRIX_EXTENSION       0x03
--#define PICTURE_DISPLAY_EXTENSION    0x07
+-       -  const char \*deviceName
 -
--#define I_FRAME 0x01
--#define B_FRAME 0x02
--#define P_FRAME 0x03
+-       -  Name of specific audio device.
 -
--/* Initialize sequence_data */
--#define INIT_HORIZONTAL_SIZE        720
--#define INIT_VERTICAL_SIZE          576
--#define INIT_ASPECT_RATIO          0x02
--#define INIT_FRAME_RATE            0x03
--#define INIT_DISP_HORIZONTAL_SIZE   540
--#define INIT_DISP_VERTICAL_SIZE     576
+-    -  .. row 2
 -
+-       -  int flags
 -
--//flags2
--#define PTS_DTS_FLAGS    0xC0
--#define ESCR_FLAG        0x20
--#define ES_RATE_FLAG     0x10
--#define DSM_TRICK_FLAG   0x08
--#define ADD_CPY_FLAG     0x04
--#define PES_CRC_FLAG     0x02
--#define PES_EXT_FLAG     0x01
+-       -  A bit-wise OR of the following flags:
 -
--//pts_dts flags
--#define PTS_ONLY         0x80
--#define PTS_DTS          0xC0
+-    -  .. row 3
 -
--#define TS_SIZE        188
--#define TRANS_ERROR    0x80
--#define PAY_START      0x40
--#define TRANS_PRIO     0x20
--#define PID_MASK_HI    0x1F
--//flags
--#define TRANS_SCRMBL1  0x80
--#define TRANS_SCRMBL2  0x40
--#define ADAPT_FIELD    0x20
--#define PAYLOAD        0x10
--#define COUNT_MASK     0x0F
+-       -
+-       -  O_RDONLY read-only access
 -
--// adaptation flags
--#define DISCON_IND     0x80
--#define RAND_ACC_IND   0x40
--#define ES_PRI_IND     0x20
--#define PCR_FLAG       0x10
--#define OPCR_FLAG      0x08
--#define SPLICE_FLAG    0x04
--#define TRANS_PRIV     0x02
--#define ADAP_EXT_FLAG  0x01
+-    -  .. row 4
 -
--// adaptation extension flags
--#define LTW_FLAG       0x80
--#define PIECE_RATE     0x40
--#define SEAM_SPLICE    0x20
+-       -
+-       -  O_RDWR read/write access
 -
+-    -  .. row 5
 -
--#define MAX_PLENGTH 0xFFFF
--#define MMAX_PLENGTH (256*MAX_PLENGTH)
+-       -
+-       -  O_NONBLOCK open in non-blocking mode
 -
--#ifndef IPACKS
--#define IPACKS 2048
--#endif
+-    -  .. row 6
 -
--struct ipack {
--	int size;
--	int found;
--	u8 *buf;
--	u8 cid;
--	u32 plength;
--	u8 plen[2];
--	u8 flag1;
--	u8 flag2;
--	u8 hlength;
--	u8 pts[5];
--	u16 *pid;
--	int mpeg;
--	u8 check;
--	int which;
--	int done;
--	void *data;
--	void (*func)(u8 *buf,  int size, void *priv);
--	int count;
--	int repack_subids;
--};
+-       -
+-       -  (blocking mode is the default)
 -
--struct dvb_video_info {
--	u32 horizontal_size;
--	u32 vertical_size;
--	u32 aspect_ratio;
--	u32 framerate;
--	u32 video_format;
--	u32 bit_rate;
--	u32 comp_bit_rate;
--	u32 vbv_buffer_size;
--	s16 vbv_delay;
--	u32 CSPF;
--	u32 off;
--};
+-Description
+------------
 -
--#define OFF_SIZE 4
--#define FIRST_FIELD 0
--#define SECOND_FIELD 1
--#define VIDEO_FRAME_PICTURE 0x03
+-This system call opens a named audio device (e.g.
+-/dev/dvb/adapter0/audio0) for subsequent use. When an open() call has
+-succeeded, the device will be ready for use. The significance of
+-blocking or non-blocking mode is described in the documentation for
+-functions where there is a difference. It does not affect the semantics
+-of the open() call itself. A device opened in blocking mode can later be
+-put into non-blocking mode (and vice versa) using the F_SETFL command
+-of the fcntl system call. This is a standard system call, documented in
+-the Linux manual page for fcntl. Only one user can open the Audio Device
+-in O_RDWR mode. All other attempts to open the device in this mode will
+-fail, and an error code will be returned. If the Audio Device is opened
+-in O_RDONLY mode, the only ioctl call that can be used is
+-AUDIO_GET_STATUS. All other call will return with an error code.
 -
--struct mpg_picture {
--	int       channel;
--	struct dvb_video_info vinfo;
--	u32      *sequence_gop_header;
--	u32      *picture_header;
--	s32       time_code;
--	int       low_delay;
--	int       closed_gop;
--	int       broken_link;
--	int       sequence_header_flag;
--	int       gop_flag;
--	int       sequence_end_flag;
+-Return Value
+-------------
 -
--	u8        profile_and_level;
--	s32       picture_coding_parameter;
--	u32       matrix[32];
--	s8        matrix_change_flag;
+-.. tabularcolumns:: |p{2.5cm}|p{15.0cm}|
 -
--	u8        picture_header_parameter;
--  /* bit 0 - 2: bwd f code
--     bit 3    : fpb vector
--     bit 4 - 6: fwd f code
--     bit 7    : fpf vector */
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
 -
--	int       mpeg1_flag;
--	int       progressive_sequence;
--	int       sequence_display_extension_flag;
--	u32       sequence_header_data;
--	s16       last_frame_centre_horizontal_offset;
--	s16       last_frame_centre_vertical_offset;
+-    -  .. row 1
 -
--	u32       pts[2]; /* [0] 1st field, [1] 2nd field */
--	int       top_field_first;
--	int       repeat_first_field;
--	int       progressive_frame;
--	int       bank;
--	int       forward_bank;
--	int       backward_bank;
--	int       compress;
--	s16       frame_centre_horizontal_offset[OFF_SIZE];
--		  /* [0-2] 1st field, [3] 2nd field */
--	s16       frame_centre_vertical_offset[OFF_SIZE];
--		  /* [0-2] 1st field, [3] 2nd field */
--	s16       temporal_reference[2];
--		  /* [0] 1st field, [1] 2nd field */
+-       -  ``ENODEV``
 -
--	s8        picture_coding_type[2];
--		  /* [0] 1st field, [1] 2nd field */
--	s8        picture_structure[2];
--		  /* [0] 1st field, [1] 2nd field */
--	s8        picture_display_extension_flag[2];
--		  /* [0] 1st field, [1] 2nd field */
--		  /* picture_display_extenion() 0:no 1:exit*/
--	s8        pts_flag[2];
--		  /* [0] 1st field, [1] 2nd field */
--};
+-       -  Device driver not loaded/available.
 -
--struct dvb_audio_info {
--	int layer;
--	u32 bit_rate;
--	u32 frequency;
--	u32 mode;
--	u32 mode_extension ;
--	u32 emphasis;
--	u32 framesize;
--	u32 off;
--};
+-    -  .. row 2
 -
--int dvb_filter_get_ac3info(u8 *mbuf, int count, struct dvb_audio_info *ai, int pr);
+-       -  ``EBUSY``
 -
+-       -  Device or resource busy.
 -
--#endif
-diff --git a/drivers/staging/media/deprecated/saa7146/av7110/sp8870.c b/drivers/staging/media/deprecated/saa7146/av7110/sp8870.c
+-    -  .. row 3
+-
+-       -  ``EINVAL``
+-
+-       -  Invalid argument.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/audio-fwrite.rst b/drivers/staging/media/deprecated/saa7146/av7110/audio-fwrite.rst
 deleted file mode 100644
-index 9767159aeb9b..000000000000
---- a/drivers/staging/media/deprecated/saa7146/av7110/sp8870.c
+index 7b096ac2b6c4..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/audio-fwrite.rst
 +++ /dev/null
-@@ -1,609 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
--    Driver for Spase SP8870 demodulator
+@@ -1,79 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.audio
 -
--    Copyright (C) 1999 Juergen Peitz
+-.. _audio_fwrite:
 -
+-=========================
+-Digital TV audio write()
+-=========================
 -
--*/
--/*
-- * This driver needs external firmware. Please use the command
-- * "<kerneldir>/scripts/get_dvb_firmware alps_tdlb7" to
-- * download/extract it, and then copy it to /usr/lib/hotplug/firmware
-- * or /lib/firmware (depending on configuration of firmware hotplug).
-- */
--#define SP8870_DEFAULT_FIRMWARE "dvb-fe-sp8870.fw"
+-Name
+-----
 -
--#include <linux/init.h>
--#include <linux/module.h>
--#include <linux/device.h>
--#include <linux/firmware.h>
--#include <linux/delay.h>
--#include <linux/string.h>
--#include <linux/slab.h>
+-Digital TV audio write()
 -
--#include <media/dvb_frontend.h>
--#include "sp8870.h"
+-.. attention:: This ioctl is deprecated
 -
+-Synopsis
+---------
 -
--struct sp8870_state {
+-.. c:function:: size_t write(int fd, const void *buf, size_t count)
 -
--	struct i2c_adapter* i2c;
+-Arguments
+----------
 -
--	const struct sp8870_config* config;
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
 -
--	struct dvb_frontend frontend;
+-    -  .. row 1
 -
--	/* demodulator private data */
--	u8 initialised:1;
--};
+-       -  int fd
 -
--static int debug;
--#define dprintk(args...) \
--	do { \
--		if (debug) printk(KERN_DEBUG "sp8870: " args); \
--	} while (0)
+-       -  File descriptor returned by a previous call to open().
 -
--/* firmware size for sp8870 */
--#define SP8870_FIRMWARE_SIZE 16382
+-    -  .. row 2
 -
--/* starting point for firmware in file 'Sc_main.mc' */
--#define SP8870_FIRMWARE_OFFSET 0x0A
+-       -  void \*buf
 -
--static int sp8870_writereg (struct sp8870_state* state, u16 reg, u16 data)
--{
--	u8 buf [] = { reg >> 8, reg & 0xff, data >> 8, data & 0xff };
--	struct i2c_msg msg = { .addr = state->config->demod_address, .flags = 0, .buf = buf, .len = 4 };
--	int err;
+-       -  Pointer to the buffer containing the PES data.
 -
--	if ((err = i2c_transfer (state->i2c, &msg, 1)) != 1) {
--		dprintk ("%s: writereg error (err == %i, reg == 0x%02x, data == 0x%02x)\n", __func__, err, reg, data);
--		return -EREMOTEIO;
--	}
+-    -  .. row 3
 -
--	return 0;
--}
+-       -  size_t count
 -
--static int sp8870_readreg (struct sp8870_state* state, u16 reg)
--{
--	int ret;
--	u8 b0 [] = { reg >> 8 , reg & 0xff };
--	u8 b1 [] = { 0, 0 };
--	struct i2c_msg msg [] = { { .addr = state->config->demod_address, .flags = 0, .buf = b0, .len = 2 },
--			   { .addr = state->config->demod_address, .flags = I2C_M_RD, .buf = b1, .len = 2 } };
+-       -  Size of buf.
 -
--	ret = i2c_transfer (state->i2c, msg, 2);
+-Description
+------------
 -
--	if (ret != 2) {
--		dprintk("%s: readreg error (ret == %i)\n", __func__, ret);
--		return -1;
--	}
+-This system call can only be used if AUDIO_SOURCE_MEMORY is selected
+-in the ioctl call AUDIO_SELECT_SOURCE. The data provided shall be in
+-PES format. If O_NONBLOCK is not specified the function will block
+-until buffer space is available. The amount of data to be transferred is
+-implied by count.
 -
--	return (b1[0] << 8 | b1[1]);
--}
+-Return Value
+-------------
 -
--static int sp8870_firmware_upload (struct sp8870_state* state, const struct firmware *fw)
--{
--	struct i2c_msg msg;
--	const char *fw_buf = fw->data;
--	int fw_pos;
--	u8 tx_buf[255];
--	int tx_len;
--	int err = 0;
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
 -
--	dprintk ("%s: ...\n", __func__);
+-    -  .. row 1
 -
--	if (fw->size < SP8870_FIRMWARE_SIZE + SP8870_FIRMWARE_OFFSET)
--		return -EINVAL;
+-       -  ``EPERM``
 -
--	// system controller stop
--	sp8870_writereg(state, 0x0F00, 0x0000);
+-       -  Mode AUDIO_SOURCE_MEMORY not selected.
 -
--	// instruction RAM register hiword
--	sp8870_writereg(state, 0x8F08, ((SP8870_FIRMWARE_SIZE / 2) & 0xFFFF));
+-    -  .. row 2
 -
--	// instruction RAM MWR
--	sp8870_writereg(state, 0x8F0A, ((SP8870_FIRMWARE_SIZE / 2) >> 16));
+-       -  ``ENOMEM``
 -
--	// do firmware upload
--	fw_pos = SP8870_FIRMWARE_OFFSET;
--	while (fw_pos < SP8870_FIRMWARE_SIZE + SP8870_FIRMWARE_OFFSET){
--		tx_len = (fw_pos <= SP8870_FIRMWARE_SIZE + SP8870_FIRMWARE_OFFSET - 252) ? 252 : SP8870_FIRMWARE_SIZE + SP8870_FIRMWARE_OFFSET - fw_pos;
--		// write register 0xCF0A
--		tx_buf[0] = 0xCF;
--		tx_buf[1] = 0x0A;
--		memcpy(&tx_buf[2], fw_buf + fw_pos, tx_len);
--		msg.addr = state->config->demod_address;
--		msg.flags = 0;
--		msg.buf = tx_buf;
--		msg.len = tx_len + 2;
--		if ((err = i2c_transfer (state->i2c, &msg, 1)) != 1) {
--			printk("%s: firmware upload failed!\n", __func__);
--			printk ("%s: i2c error (err == %i)\n", __func__, err);
--			return err;
--		}
--		fw_pos += tx_len;
--	}
+-       -  Attempted to write more data than the internal buffer can hold.
 -
--	dprintk ("%s: done!\n", __func__);
--	return 0;
--};
+-    -  .. row 3
 -
--static void sp8870_microcontroller_stop (struct sp8870_state* state)
--{
--	sp8870_writereg(state, 0x0F08, 0x000);
--	sp8870_writereg(state, 0x0F09, 0x000);
+-       -  ``EBADF``
 -
--	// microcontroller STOP
--	sp8870_writereg(state, 0x0F00, 0x000);
--}
--
--static void sp8870_microcontroller_start (struct sp8870_state* state)
--{
--	sp8870_writereg(state, 0x0F08, 0x000);
--	sp8870_writereg(state, 0x0F09, 0x000);
--
--	// microcontroller START
--	sp8870_writereg(state, 0x0F00, 0x001);
--	// not documented but if we don't read 0x0D01 out here
--	// we don't get a correct data valid signal
--	sp8870_readreg(state, 0x0D01);
--}
--
--static int sp8870_read_data_valid_signal(struct sp8870_state* state)
--{
--	return (sp8870_readreg(state, 0x0D02) > 0);
--}
--
--static int configure_reg0xc05 (struct dtv_frontend_properties *p, u16 *reg0xc05)
--{
--	int known_parameters = 1;
--
--	*reg0xc05 = 0x000;
--
--	switch (p->modulation) {
--	case QPSK:
--		break;
--	case QAM_16:
--		*reg0xc05 |= (1 << 10);
--		break;
--	case QAM_64:
--		*reg0xc05 |= (2 << 10);
--		break;
--	case QAM_AUTO:
--		known_parameters = 0;
--		break;
--	default:
--		return -EINVAL;
--	}
--
--	switch (p->hierarchy) {
--	case HIERARCHY_NONE:
--		break;
--	case HIERARCHY_1:
--		*reg0xc05 |= (1 << 7);
--		break;
--	case HIERARCHY_2:
--		*reg0xc05 |= (2 << 7);
--		break;
--	case HIERARCHY_4:
--		*reg0xc05 |= (3 << 7);
--		break;
--	case HIERARCHY_AUTO:
--		known_parameters = 0;
--		break;
--	default:
--		return -EINVAL;
--	}
--
--	switch (p->code_rate_HP) {
--	case FEC_1_2:
--		break;
--	case FEC_2_3:
--		*reg0xc05 |= (1 << 3);
--		break;
--	case FEC_3_4:
--		*reg0xc05 |= (2 << 3);
--		break;
--	case FEC_5_6:
--		*reg0xc05 |= (3 << 3);
--		break;
--	case FEC_7_8:
--		*reg0xc05 |= (4 << 3);
--		break;
--	case FEC_AUTO:
--		known_parameters = 0;
--		break;
--	default:
--		return -EINVAL;
--	}
--
--	if (known_parameters)
--		*reg0xc05 |= (2 << 1);	/* use specified parameters */
--	else
--		*reg0xc05 |= (1 << 1);	/* enable autoprobing */
--
--	return 0;
--}
--
--static int sp8870_wake_up(struct sp8870_state* state)
--{
--	// enable TS output and interface pins
--	return sp8870_writereg(state, 0xC18, 0x00D);
--}
--
--static int sp8870_set_frontend_parameters(struct dvb_frontend *fe)
--{
--	struct dtv_frontend_properties *p = &fe->dtv_property_cache;
--	struct sp8870_state* state = fe->demodulator_priv;
--	int  err;
--	u16 reg0xc05;
--
--	if ((err = configure_reg0xc05(p, &reg0xc05)))
--		return err;
--
--	// system controller stop
--	sp8870_microcontroller_stop(state);
--
--	// set tuner parameters
--	if (fe->ops.tuner_ops.set_params) {
--		fe->ops.tuner_ops.set_params(fe);
--		if (fe->ops.i2c_gate_ctrl) fe->ops.i2c_gate_ctrl(fe, 0);
--	}
--
--	// sample rate correction bit [23..17]
--	sp8870_writereg(state, 0x0319, 0x000A);
--
--	// sample rate correction bit [16..0]
--	sp8870_writereg(state, 0x031A, 0x0AAB);
--
--	// integer carrier offset
--	sp8870_writereg(state, 0x0309, 0x0400);
--
--	// fractional carrier offset
--	sp8870_writereg(state, 0x030A, 0x0000);
--
--	// filter for 6/7/8 Mhz channel
--	if (p->bandwidth_hz == 6000000)
--		sp8870_writereg(state, 0x0311, 0x0002);
--	else if (p->bandwidth_hz == 7000000)
--		sp8870_writereg(state, 0x0311, 0x0001);
--	else
--		sp8870_writereg(state, 0x0311, 0x0000);
--
--	// scan order: 2k first = 0x0000, 8k first = 0x0001
--	if (p->transmission_mode == TRANSMISSION_MODE_2K)
--		sp8870_writereg(state, 0x0338, 0x0000);
--	else
--		sp8870_writereg(state, 0x0338, 0x0001);
--
--	sp8870_writereg(state, 0xc05, reg0xc05);
--
--	// read status reg in order to clear pending irqs
--	err = sp8870_readreg(state, 0x200);
--	if (err < 0)
--		return err;
--
--	// system controller start
--	sp8870_microcontroller_start(state);
--
--	return 0;
--}
--
--static int sp8870_init (struct dvb_frontend* fe)
--{
--	struct sp8870_state* state = fe->demodulator_priv;
--	const struct firmware *fw = NULL;
--
--	sp8870_wake_up(state);
--	if (state->initialised) return 0;
--	state->initialised = 1;
--
--	dprintk ("%s\n", __func__);
--
--
--	/* request the firmware, this will block until someone uploads it */
--	printk("sp8870: waiting for firmware upload (%s)...\n", SP8870_DEFAULT_FIRMWARE);
--	if (state->config->request_firmware(fe, &fw, SP8870_DEFAULT_FIRMWARE)) {
--		printk("sp8870: no firmware upload (timeout or file not found?)\n");
--		return -EIO;
--	}
--
--	if (sp8870_firmware_upload(state, fw)) {
--		printk("sp8870: writing firmware to device failed\n");
--		release_firmware(fw);
--		return -EIO;
--	}
--	release_firmware(fw);
--	printk("sp8870: firmware upload complete\n");
--
--	/* enable TS output and interface pins */
--	sp8870_writereg(state, 0xc18, 0x00d);
--
--	// system controller stop
--	sp8870_microcontroller_stop(state);
--
--	// ADC mode
--	sp8870_writereg(state, 0x0301, 0x0003);
--
--	// Reed Solomon parity bytes passed to output
--	sp8870_writereg(state, 0x0C13, 0x0001);
--
--	// MPEG clock is suppressed if no valid data
--	sp8870_writereg(state, 0x0C14, 0x0001);
--
--	/* bit 0x010: enable data valid signal */
--	sp8870_writereg(state, 0x0D00, 0x010);
--	sp8870_writereg(state, 0x0D01, 0x000);
--
--	return 0;
--}
--
--static int sp8870_read_status(struct dvb_frontend *fe,
--			      enum fe_status *fe_status)
--{
--	struct sp8870_state* state = fe->demodulator_priv;
--	int status;
--	int signal;
--
--	*fe_status = 0;
--
--	status = sp8870_readreg (state, 0x0200);
--	if (status < 0)
--		return -EIO;
--
--	signal = sp8870_readreg (state, 0x0303);
--	if (signal < 0)
--		return -EIO;
--
--	if (signal > 0x0F)
--		*fe_status |= FE_HAS_SIGNAL;
--	if (status & 0x08)
--		*fe_status |= FE_HAS_SYNC;
--	if (status & 0x04)
--		*fe_status |= FE_HAS_LOCK | FE_HAS_CARRIER | FE_HAS_VITERBI;
--
--	return 0;
--}
--
--static int sp8870_read_ber (struct dvb_frontend* fe, u32 * ber)
--{
--	struct sp8870_state* state = fe->demodulator_priv;
--	int ret;
--	u32 tmp;
--
--	*ber = 0;
--
--	ret = sp8870_readreg(state, 0xC08);
--	if (ret < 0)
--		return -EIO;
--
--	tmp = ret & 0x3F;
--
--	ret = sp8870_readreg(state, 0xC07);
--	if (ret < 0)
--		return -EIO;
--
--	tmp = ret << 6;
--	if (tmp >= 0x3FFF0)
--		tmp = ~0;
--
--	*ber = tmp;
--
--	return 0;
--}
--
--static int sp8870_read_signal_strength(struct dvb_frontend* fe,  u16 * signal)
--{
--	struct sp8870_state* state = fe->demodulator_priv;
--	int ret;
--	u16 tmp;
--
--	*signal = 0;
--
--	ret = sp8870_readreg (state, 0x306);
--	if (ret < 0)
--		return -EIO;
--
--	tmp = ret << 8;
--
--	ret = sp8870_readreg (state, 0x303);
--	if (ret < 0)
--		return -EIO;
--
--	tmp |= ret;
--
--	if (tmp)
--		*signal = 0xFFFF - tmp;
--
--	return 0;
--}
--
--static int sp8870_read_uncorrected_blocks (struct dvb_frontend* fe, u32* ublocks)
--{
--	struct sp8870_state* state = fe->demodulator_priv;
--	int ret;
--
--	*ublocks = 0;
--
--	ret = sp8870_readreg(state, 0xC0C);
--	if (ret < 0)
--		return -EIO;
--
--	if (ret == 0xFFFF)
--		ret = ~0;
--
--	*ublocks = ret;
--
--	return 0;
--}
--
--/* number of trials to recover from lockup */
--#define MAXTRIALS 5
--/* maximum checks for data valid signal */
--#define MAXCHECKS 100
--
--/* only for debugging: counter for detected lockups */
--static int lockups;
--/* only for debugging: counter for channel switches */
--static int switches;
--
--static int sp8870_set_frontend(struct dvb_frontend *fe)
--{
--	struct dtv_frontend_properties *p = &fe->dtv_property_cache;
--	struct sp8870_state* state = fe->demodulator_priv;
--
--	/*
--	    The firmware of the sp8870 sometimes locks up after setting frontend parameters.
--	    We try to detect this by checking the data valid signal.
--	    If it is not set after MAXCHECKS we try to recover the lockup by setting
--	    the frontend parameters again.
--	*/
--
--	int err = 0;
--	int valid = 0;
--	int trials = 0;
--	int check_count = 0;
--
--	dprintk("%s: frequency = %i\n", __func__, p->frequency);
--
--	for (trials = 1; trials <= MAXTRIALS; trials++) {
--
--		err = sp8870_set_frontend_parameters(fe);
--		if (err)
--			return err;
--
--		for (check_count = 0; check_count < MAXCHECKS; check_count++) {
--//			valid = ((sp8870_readreg(i2c, 0x0200) & 4) == 0);
--			valid = sp8870_read_data_valid_signal(state);
--			if (valid) {
--				dprintk("%s: delay = %i usec\n",
--					__func__, check_count * 10);
--				break;
--			}
--			udelay(10);
--		}
--		if (valid)
--			break;
--	}
--
--	if (!valid) {
--		printk("%s: firmware crash!!!!!!\n", __func__);
--		return -EIO;
--	}
--
--	if (debug) {
--		if (valid) {
--			if (trials > 1) {
--				printk("%s: firmware lockup!!!\n", __func__);
--				printk("%s: recovered after %i trial(s))\n",  __func__, trials - 1);
--				lockups++;
--			}
--		}
--		switches++;
--		printk("%s: switches = %i lockups = %i\n", __func__, switches, lockups);
--	}
--
--	return 0;
--}
--
--static int sp8870_sleep(struct dvb_frontend* fe)
--{
--	struct sp8870_state* state = fe->demodulator_priv;
--
--	// tristate TS output and disable interface pins
--	return sp8870_writereg(state, 0xC18, 0x000);
--}
--
--static int sp8870_get_tune_settings(struct dvb_frontend* fe, struct dvb_frontend_tune_settings* fesettings)
--{
--	fesettings->min_delay_ms = 350;
--	fesettings->step_size = 0;
--	fesettings->max_drift = 0;
--	return 0;
--}
--
--static int sp8870_i2c_gate_ctrl(struct dvb_frontend* fe, int enable)
--{
--	struct sp8870_state* state = fe->demodulator_priv;
--
--	if (enable) {
--		return sp8870_writereg(state, 0x206, 0x001);
--	} else {
--		return sp8870_writereg(state, 0x206, 0x000);
--	}
--}
--
--static void sp8870_release(struct dvb_frontend* fe)
--{
--	struct sp8870_state* state = fe->demodulator_priv;
--	kfree(state);
--}
--
--static const struct dvb_frontend_ops sp8870_ops;
--
--struct dvb_frontend* sp8870_attach(const struct sp8870_config* config,
--				   struct i2c_adapter* i2c)
--{
--	struct sp8870_state* state = NULL;
--
--	/* allocate memory for the internal state */
--	state = kzalloc(sizeof(struct sp8870_state), GFP_KERNEL);
--	if (state == NULL) goto error;
--
--	/* setup the state */
--	state->config = config;
--	state->i2c = i2c;
--	state->initialised = 0;
--
--	/* check if the demod is there */
--	if (sp8870_readreg(state, 0x0200) < 0) goto error;
--
--	/* create dvb_frontend */
--	memcpy(&state->frontend.ops, &sp8870_ops, sizeof(struct dvb_frontend_ops));
--	state->frontend.demodulator_priv = state;
--	return &state->frontend;
--
--error:
--	kfree(state);
--	return NULL;
--}
--
--static const struct dvb_frontend_ops sp8870_ops = {
--	.delsys = { SYS_DVBT },
--	.info = {
--		.name			= "Spase SP8870 DVB-T",
--		.frequency_min_hz	= 470 * MHz,
--		.frequency_max_hz	= 860 * MHz,
--		.frequency_stepsize_hz	= 166666,
--		.caps			= FE_CAN_FEC_1_2 | FE_CAN_FEC_2_3 |
--					  FE_CAN_FEC_3_4 | FE_CAN_FEC_5_6 |
--					  FE_CAN_FEC_7_8 | FE_CAN_FEC_AUTO |
--					  FE_CAN_QPSK | FE_CAN_QAM_16 |
--					  FE_CAN_QAM_64 | FE_CAN_QAM_AUTO |
--					  FE_CAN_HIERARCHY_AUTO |  FE_CAN_RECOVER
--	},
--
--	.release = sp8870_release,
--
--	.init = sp8870_init,
--	.sleep = sp8870_sleep,
--	.i2c_gate_ctrl = sp8870_i2c_gate_ctrl,
--
--	.set_frontend = sp8870_set_frontend,
--	.get_tune_settings = sp8870_get_tune_settings,
--
--	.read_status = sp8870_read_status,
--	.read_ber = sp8870_read_ber,
--	.read_signal_strength = sp8870_read_signal_strength,
--	.read_ucblocks = sp8870_read_uncorrected_blocks,
--};
--
--module_param(debug, int, 0644);
--MODULE_PARM_DESC(debug, "Turn on/off frontend debugging (default:off).");
--
--MODULE_DESCRIPTION("Spase SP8870 DVB-T Demodulator driver");
--MODULE_AUTHOR("Juergen Peitz");
--MODULE_LICENSE("GPL");
--
--EXPORT_SYMBOL(sp8870_attach);
-diff --git a/drivers/staging/media/deprecated/saa7146/av7110/sp8870.h b/drivers/staging/media/deprecated/saa7146/av7110/sp8870.h
+-       -  fd is not a valid open file descriptor.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/audio-get-capabilities.rst b/drivers/staging/media/deprecated/saa7146/av7110/audio-get-capabilities.rst
 deleted file mode 100644
-index 5eacf39f425e..000000000000
---- a/drivers/staging/media/deprecated/saa7146/av7110/sp8870.h
+index 6d9eb71dad17..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/audio-get-capabilities.rst
 +++ /dev/null
-@@ -1,37 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
--    Driver for Spase SP8870 demodulator
+@@ -1,54 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.audio
 -
--    Copyright (C) 1999 Juergen Peitz
+-.. _AUDIO_GET_CAPABILITIES:
+-
+-======================
+-AUDIO_GET_CAPABILITIES
+-======================
+-
+-Name
+-----
+-
+-AUDIO_GET_CAPABILITIES
+-
+-.. attention:: This ioctl is deprecated
+-
+-Synopsis
+---------
+-
+-.. c:macro:: AUDIO_GET_CAPABILITIES
+-
+-``int ioctl(int fd, AUDIO_GET_CAPABILITIES, unsigned int *cap)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -
+-
+-       -  unsigned int \*cap
+-
+-       -  Returns a bit array of supported sound formats.
+-
+-Description
+------------
+-
+-This ioctl call asks the Audio Device to tell us about the decoding
+-capabilities of the audio hardware.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/audio-get-status.rst b/drivers/staging/media/deprecated/saa7146/av7110/audio-get-status.rst
+deleted file mode 100644
+index 7ae8db2e65e9..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/audio-get-status.rst
++++ /dev/null
+@@ -1,54 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.audio
+-
+-.. _AUDIO_GET_STATUS:
+-
+-================
+-AUDIO_GET_STATUS
+-================
+-
+-Name
+-----
+-
+-AUDIO_GET_STATUS
+-
+-.. attention:: This ioctl is deprecated
+-
+-Synopsis
+---------
+-
+-.. c:macro:: AUDIO_GET_STATUS
+-
+-``int ioctl(int fd, AUDIO_GET_STATUS, struct audio_status *status)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -
+-
+-       -  struct audio_status \*status
+-
+-       -  Returns the current state of Audio Device.
+-
+-Description
+------------
+-
+-This ioctl call asks the Audio Device to return the current state of the
+-Audio Device.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/audio-pause.rst b/drivers/staging/media/deprecated/saa7146/av7110/audio-pause.rst
+deleted file mode 100644
+index d37d1ddce4df..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/audio-pause.rst
++++ /dev/null
+@@ -1,49 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.audio
+-
+-.. _AUDIO_PAUSE:
+-
+-===========
+-AUDIO_PAUSE
+-===========
+-
+-Name
+-----
+-
+-AUDIO_PAUSE
+-
+-.. attention:: This ioctl is deprecated
+-
+-Synopsis
+---------
+-
+-.. c:macro:: AUDIO_PAUSE
+-
+-``int ioctl(int fd, AUDIO_PAUSE)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-Description
+------------
+-
+-This ioctl call suspends the audio stream being played. Decoding and
+-playing are paused. It is then possible to restart again decoding and
+-playing process of the audio stream using AUDIO_CONTINUE command.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/audio-play.rst b/drivers/staging/media/deprecated/saa7146/av7110/audio-play.rst
+deleted file mode 100644
+index e591930b6ca7..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/audio-play.rst
++++ /dev/null
+@@ -1,48 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.audio
+-
+-.. _AUDIO_PLAY:
+-
+-==========
+-AUDIO_PLAY
+-==========
+-
+-Name
+-----
+-
+-AUDIO_PLAY
+-
+-.. attention:: This ioctl is deprecated
+-
+-Synopsis
+---------
+-
+-.. c:macro:: AUDIO_PLAY
+-
+-``int ioctl(int fd, AUDIO_PLAY)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-Description
+------------
+-
+-This ioctl call asks the Audio Device to start playing an audio stream
+-from the selected source.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/audio-select-source.rst b/drivers/staging/media/deprecated/saa7146/av7110/audio-select-source.rst
+deleted file mode 100644
+index 6a0c0f365eb1..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/audio-select-source.rst
++++ /dev/null
+@@ -1,56 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.audio
+-
+-.. _AUDIO_SELECT_SOURCE:
+-
+-===================
+-AUDIO_SELECT_SOURCE
+-===================
+-
+-Name
+-----
+-
+-AUDIO_SELECT_SOURCE
+-
+-.. attention:: This ioctl is deprecated
+-
+-Synopsis
+---------
+-
+-.. c:macro:: AUDIO_SELECT_SOURCE
+-
+-``int ioctl(int fd, AUDIO_SELECT_SOURCE, struct audio_stream_source *source)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -
+-
+-       -  audio_stream_source_t source
+-
+-       -  Indicates the source that shall be used for the Audio stream.
+-
+-Description
+------------
+-
+-This ioctl call informs the audio device which source shall be used for
+-the input data. The possible sources are demux or memory. If
+-AUDIO_SOURCE_MEMORY is selected, the data is fed to the Audio Device
+-through the write command.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/audio-set-av-sync.rst b/drivers/staging/media/deprecated/saa7146/av7110/audio-set-av-sync.rst
+deleted file mode 100644
+index 85a8016bf025..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/audio-set-av-sync.rst
++++ /dev/null
+@@ -1,58 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.audio
+-
+-.. _AUDIO_SET_AV_SYNC:
+-
+-=================
+-AUDIO_SET_AV_SYNC
+-=================
+-
+-Name
+-----
+-
+-AUDIO_SET_AV_SYNC
+-
+-.. attention:: This ioctl is deprecated
+-
+-Synopsis
+---------
+-
+-.. c:macro:: AUDIO_SET_AV_SYNC
+-
+-``int ioctl(int fd, AUDIO_SET_AV_SYNC, boolean state)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -
+-
+-       -  boolean state
+-
+-       -  Tells the Digital TV subsystem if A/V synchronization shall be ON or OFF.
+-
+-          TRUE: AV-sync ON
+-
+-          FALSE: AV-sync OFF
+-
+-Description
+------------
+-
+-This ioctl call asks the Audio Device to turn ON or OFF A/V
+-synchronization.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/audio-set-bypass-mode.rst b/drivers/staging/media/deprecated/saa7146/av7110/audio-set-bypass-mode.rst
+deleted file mode 100644
+index 80d551a2053a..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/audio-set-bypass-mode.rst
++++ /dev/null
+@@ -1,62 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.audio
+-
+-.. _AUDIO_SET_BYPASS_MODE:
+-
+-=====================
+-AUDIO_SET_BYPASS_MODE
+-=====================
+-
+-Name
+-----
+-
+-AUDIO_SET_BYPASS_MODE
+-
+-.. attention:: This ioctl is deprecated
+-
+-Synopsis
+---------
+-
+-.. c:macro:: AUDIO_SET_BYPASS_MODE
+-
+-``int ioctl(int fd, AUDIO_SET_BYPASS_MODE, boolean mode)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -
+-
+-       -  boolean mode
+-
+-       -  Enables or disables the decoding of the current Audio stream in
+-	  the Digital TV subsystem.
+-
+-          TRUE: Bypass is disabled
+-
+-          FALSE: Bypass is enabled
+-
+-Description
+------------
+-
+-This ioctl call asks the Audio Device to bypass the Audio decoder and
+-forward the stream without decoding. This mode shall be used if streams
+-that can't be handled by the Digital TV system shall be decoded. Dolby
+-DigitalTM streams are automatically forwarded by the Digital TV subsystem if
+-the hardware can handle it.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/audio-set-id.rst b/drivers/staging/media/deprecated/saa7146/av7110/audio-set-id.rst
+deleted file mode 100644
+index 39ad846d412d..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/audio-set-id.rst
++++ /dev/null
+@@ -1,59 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.audio
+-
+-.. _AUDIO_SET_ID:
+-
+-============
+-AUDIO_SET_ID
+-============
+-
+-Name
+-----
+-
+-AUDIO_SET_ID
+-
+-.. attention:: This ioctl is deprecated
+-
+-Synopsis
+---------
+-
+-.. c:macro:: AUDIO_SET_ID
+-
+-``int ioctl(int fd, AUDIO_SET_ID, int id)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -
+-
+-       -  int id
+-
+-       -  audio sub-stream id
+-
+-Description
+------------
+-
+-This ioctl selects which sub-stream is to be decoded if a program or
+-system stream is sent to the video device. If no audio stream type is
+-set the id has to be in [0xC0,0xDF] for MPEG sound, in [0x80,0x87] for
+-AC3 and in [0xA0,0xA7] for LPCM. More specifications may follow for
+-other stream types. If the stream type is set the id just specifies the
+-substream id of the audio stream and only the first 5 bits are
+-recognized.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/audio-set-mixer.rst b/drivers/staging/media/deprecated/saa7146/av7110/audio-set-mixer.rst
+deleted file mode 100644
+index 45dbdf4801e0..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/audio-set-mixer.rst
++++ /dev/null
+@@ -1,53 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.audio
+-
+-.. _AUDIO_SET_MIXER:
+-
+-===============
+-AUDIO_SET_MIXER
+-===============
+-
+-Name
+-----
+-
+-AUDIO_SET_MIXER
+-
+-.. attention:: This ioctl is deprecated
+-
+-Synopsis
+---------
+-
+-.. c:macro:: AUDIO_SET_MIXER
+-
+-``int ioctl(int fd, AUDIO_SET_MIXER, struct audio_mixer *mix)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -
+-
+-       -  audio_mixer_t \*mix
+-
+-       -  mixer settings.
+-
+-Description
+------------
+-
+-This ioctl lets you adjust the mixer settings of the audio decoder.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/audio-set-mute.rst b/drivers/staging/media/deprecated/saa7146/av7110/audio-set-mute.rst
+deleted file mode 100644
+index 987751f92967..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/audio-set-mute.rst
++++ /dev/null
+@@ -1,62 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.audio
+-
+-.. _AUDIO_SET_MUTE:
+-
+-==============
+-AUDIO_SET_MUTE
+-==============
+-
+-Name
+-----
+-
+-AUDIO_SET_MUTE
+-
+-.. attention:: This ioctl is deprecated
+-
+-Synopsis
+---------
+-
+-.. c:macro:: AUDIO_SET_MUTE
+-
+-``int ioctl(int fd, AUDIO_SET_MUTE, boolean state)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -
+-
+-       -  boolean state
+-
+-       -  Indicates if audio device shall mute or not.
+-
+-          TRUE: Audio Mute
+-
+-          FALSE: Audio Un-mute
+-
+-Description
+------------
+-
+-This ioctl is for Digital TV devices only. To control a V4L2 decoder use the
+-V4L2 :ref:`VIDIOC_DECODER_CMD` with the
+-``V4L2_DEC_CMD_START_MUTE_AUDIO`` flag instead.
+-
+-This ioctl call asks the audio device to mute the stream that is
+-currently being played.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/audio-set-streamtype.rst b/drivers/staging/media/deprecated/saa7146/av7110/audio-set-streamtype.rst
+deleted file mode 100644
+index 77d73c74882f..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/audio-set-streamtype.rst
++++ /dev/null
+@@ -1,66 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.audio
+-
+-.. _AUDIO_SET_STREAMTYPE:
+-
+-====================
+-AUDIO_SET_STREAMTYPE
+-====================
+-
+-Name
+-----
+-
+-AUDIO_SET_STREAMTYPE
+-
+-.. attention:: This ioctl is deprecated
+-
+-Synopsis
+---------
+-
+-.. c:macro:: AUDIO_SET_STREAMTYPE
+-
+-``int ioctl(fd, AUDIO_SET_STREAMTYPE, int type)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -
+-
+-       -  int type
+-
+-       -  stream type
+-
+-Description
+------------
+-
+-This ioctl tells the driver which kind of audio stream to expect. This
+-is useful if the stream offers several audio sub-streams like LPCM and
+-AC3.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
 -
 -
--*/
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
 -
--#ifndef SP8870_H
--#define SP8870_H
+-    -  .. row 1
 -
--#include <linux/dvb/frontend.h>
--#include <linux/firmware.h>
+-       -  ``EINVAL``
 -
--struct sp8870_config
--{
--	/* the demodulator's i2c address */
--	u8 demod_address;
+-       -  type is not a valid or supported stream type.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/audio-stop.rst b/drivers/staging/media/deprecated/saa7146/av7110/audio-stop.rst
+deleted file mode 100644
+index d77f786fd797..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/audio-stop.rst
++++ /dev/null
+@@ -1,48 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.audio
 -
--	/* request firmware for device */
--	int (*request_firmware)(struct dvb_frontend* fe, const struct firmware **fw, char* name);
--};
+-.. _AUDIO_STOP:
 -
--#if IS_REACHABLE(CONFIG_DVB_SP8870)
--extern struct dvb_frontend* sp8870_attach(const struct sp8870_config* config,
--					  struct i2c_adapter* i2c);
--#else
--static inline struct dvb_frontend* sp8870_attach(const struct sp8870_config* config,
--					  struct i2c_adapter* i2c)
--{
--	printk(KERN_WARNING "%s: driver disabled by Kconfig\n", __func__);
--	return NULL;
--}
--#endif // CONFIG_DVB_SP8870
+-==========
+-AUDIO_STOP
+-==========
 -
--#endif // SP8870_H
+-Name
+-----
+-
+-AUDIO_STOP
+-
+-.. attention:: This ioctl is deprecated
+-
+-Synopsis
+---------
+-
+-.. c:macro:: AUDIO_STOP
+-
+-``int ioctl(int fd, AUDIO_STOP)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-Description
+------------
+-
+-This ioctl call asks the Audio Device to stop playing the current
+-stream.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/audio.rst b/drivers/staging/media/deprecated/saa7146/av7110/audio.rst
+deleted file mode 100644
+index aa753336b31f..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/audio.rst
++++ /dev/null
+@@ -1,27 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-
+-.. _dvb_audio:
+-
+-#######################
+-Digital TV Audio Device
+-#######################
+-
+-The Digital TV audio device controls the MPEG2 audio decoder of the Digital
+-TV hardware. It can be accessed through ``/dev/dvb/adapter?/audio?``. Data
+-types and ioctl definitions can be accessed by including
+-``linux/dvb/audio.h`` in your application.
+-
+-Please note that some Digital TV cards don't have their own MPEG decoder, which
+-results in the omission of the audio and video device.
+-
+-These ioctls were also used by V4L2 to control MPEG decoders implemented
+-in V4L2. The use of these ioctls for that purpose has been made obsolete
+-and proper V4L2 ioctls or controls have been created to replace that
+-functionality.
+-
+-
+-.. toctree::
+-    :maxdepth: 1
+-
+-    audio_data_types
+-    audio_function_calls
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/audio_data_types.rst b/drivers/staging/media/deprecated/saa7146/av7110/audio_data_types.rst
+deleted file mode 100644
+index 4744529136a8..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/audio_data_types.rst
++++ /dev/null
+@@ -1,116 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-
+-.. _audio_data_types:
+-
+-****************
+-Audio Data Types
+-****************
+-
+-This section describes the structures, data types and defines used when
+-talking to the audio device.
+-
+-.. c:type:: audio_stream_source
+-
+-The audio stream source is set through the AUDIO_SELECT_SOURCE call
+-and can take the following values, depending on whether we are replaying
+-from an internal (demux) or external (user write) source.
+-
+-
+-.. code-block:: c
+-
+-    typedef enum {
+-	AUDIO_SOURCE_DEMUX,
+-	AUDIO_SOURCE_MEMORY
+-    } audio_stream_source_t;
+-
+-AUDIO_SOURCE_DEMUX selects the demultiplexer (fed either by the
+-frontend or the DVR device) as the source of the video stream. If
+-AUDIO_SOURCE_MEMORY is selected the stream comes from the application
+-through the ``write()`` system call.
+-
+-
+-.. c:type:: audio_play_state
+-
+-The following values can be returned by the AUDIO_GET_STATUS call
+-representing the state of audio playback.
+-
+-
+-.. code-block:: c
+-
+-    typedef enum {
+-	AUDIO_STOPPED,
+-	AUDIO_PLAYING,
+-	AUDIO_PAUSED
+-    } audio_play_state_t;
+-
+-
+-.. c:type:: audio_channel_select
+-
+-The audio channel selected via AUDIO_CHANNEL_SELECT is determined by
+-the following values.
+-
+-
+-.. code-block:: c
+-
+-    typedef enum {
+-	AUDIO_STEREO,
+-	AUDIO_MONO_LEFT,
+-	AUDIO_MONO_RIGHT,
+-	AUDIO_MONO,
+-	AUDIO_STEREO_SWAPPED
+-    } audio_channel_select_t;
+-
+-
+-.. c:type:: audio_status
+-
+-The AUDIO_GET_STATUS call returns the following structure informing
+-about various states of the playback operation.
+-
+-
+-.. code-block:: c
+-
+-    typedef struct audio_status {
+-	boolean AV_sync_state;
+-	boolean mute_state;
+-	audio_play_state_t play_state;
+-	audio_stream_source_t stream_source;
+-	audio_channel_select_t channel_select;
+-	boolean bypass_mode;
+-	audio_mixer_t mixer_state;
+-    } audio_status_t;
+-
+-
+-.. c:type:: audio_mixer
+-
+-The following structure is used by the AUDIO_SET_MIXER call to set the
+-audio volume.
+-
+-
+-.. code-block:: c
+-
+-    typedef struct audio_mixer {
+-	unsigned int volume_left;
+-	unsigned int volume_right;
+-    } audio_mixer_t;
+-
+-
+-.. _audio_encodings:
+-
+-audio encodings
+-===============
+-
+-A call to AUDIO_GET_CAPABILITIES returns an unsigned integer with the
+-following bits set according to the hardwares capabilities.
+-
+-
+-.. code-block:: c
+-
+-     #define AUDIO_CAP_DTS    1
+-     #define AUDIO_CAP_LPCM   2
+-     #define AUDIO_CAP_MP1    4
+-     #define AUDIO_CAP_MP2    8
+-     #define AUDIO_CAP_MP3   16
+-     #define AUDIO_CAP_AAC   32
+-     #define AUDIO_CAP_OGG   64
+-     #define AUDIO_CAP_SDDS 128
+-     #define AUDIO_CAP_AC3  256
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/audio_function_calls.rst b/drivers/staging/media/deprecated/saa7146/av7110/audio_function_calls.rst
+deleted file mode 100644
+index fa5ba9539caf..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/audio_function_calls.rst
++++ /dev/null
+@@ -1,30 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-
+-.. _audio_function_calls:
+-
+-********************
+-Audio Function Calls
+-********************
+-
+-.. toctree::
+-    :maxdepth: 1
+-
+-    audio-fopen
+-    audio-fclose
+-    audio-fwrite
+-    audio-stop
+-    audio-play
+-    audio-pause
+-    audio-continue
+-    audio-select-source
+-    audio-set-mute
+-    audio-set-av-sync
+-    audio-set-bypass-mode
+-    audio-channel-select
+-    audio-bilingual-channel-select
+-    audio-get-status
+-    audio-get-capabilities
+-    audio-clear-buffer
+-    audio-set-id
+-    audio-set-mixer
+-    audio-set-streamtype
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-clear-buffer.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-clear-buffer.rst
+deleted file mode 100644
+index a7730559bbb2..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-clear-buffer.rst
++++ /dev/null
+@@ -1,54 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _VIDEO_CLEAR_BUFFER:
+-
+-==================
+-VIDEO_CLEAR_BUFFER
+-==================
+-
+-Name
+-----
+-
+-VIDEO_CLEAR_BUFFER
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:macro:: VIDEO_CLEAR_BUFFER
+-
+-``int ioctl(fd, VIDEO_CLEAR_BUFFER)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -  .. row 2
+-
+-       -  int request
+-
+-       -  Equals VIDEO_CLEAR_BUFFER for this command.
+-
+-Description
+------------
+-
+-This ioctl call clears all video buffers in the driver and in the
+-decoder hardware.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-command.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-command.rst
+deleted file mode 100644
+index cae9445eb3af..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-command.rst
++++ /dev/null
+@@ -1,96 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _VIDEO_COMMAND:
+-
+-=============
+-VIDEO_COMMAND
+-=============
+-
+-Name
+-----
+-
+-VIDEO_COMMAND
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:macro:: VIDEO_COMMAND
+-
+-``int ioctl(int fd, VIDEO_COMMAND, struct video_command *cmd)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -  .. row 2
+-
+-       -  int request
+-
+-       -  Equals VIDEO_COMMAND for this command.
+-
+-    -  .. row 3
+-
+-       -  struct video_command \*cmd
+-
+-       -  Commands the decoder.
+-
+-Description
+------------
+-
+-This ioctl is obsolete. Do not use in new drivers. For V4L2 decoders
+-this ioctl has been replaced by the
+-:ref:`VIDIOC_DECODER_CMD` ioctl.
+-
+-This ioctl commands the decoder. The ``video_command`` struct is a
+-subset of the ``v4l2_decoder_cmd`` struct, so refer to the
+-:ref:`VIDIOC_DECODER_CMD` documentation for
+-more information.
+-
+-.. c:type:: video_command
+-
+-.. code-block:: c
+-
+-	/* The structure must be zeroed before use by the application
+-	This ensures it can be extended safely in the future. */
+-	struct video_command {
+-		__u32 cmd;
+-		__u32 flags;
+-		union {
+-			struct {
+-				__u64 pts;
+-			} stop;
+-
+-			struct {
+-				/* 0 or 1000 specifies normal speed,
+-				1 specifies forward single stepping,
+-				-1 specifies backward single stepping,
+-				>1: playback at speed/1000 of the normal speed,
+-				<-1: reverse playback at (-speed/1000) of the normal speed. */
+-				__s32 speed;
+-				__u32 format;
+-			} play;
+-
+-			struct {
+-				__u32 data[16];
+-			} raw;
+-		};
+-	};
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-continue.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-continue.rst
+deleted file mode 100644
+index bc34bf3989e4..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-continue.rst
++++ /dev/null
+@@ -1,57 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _VIDEO_CONTINUE:
+-
+-==============
+-VIDEO_CONTINUE
+-==============
+-
+-Name
+-----
+-
+-VIDEO_CONTINUE
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:macro:: VIDEO_CONTINUE
+-
+-``int ioctl(fd, VIDEO_CONTINUE)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -  .. row 2
+-
+-       -  int request
+-
+-       -  Equals VIDEO_CONTINUE for this command.
+-
+-Description
+------------
+-
+-This ioctl is for Digital TV devices only. To control a V4L2 decoder use the
+-V4L2 :ref:`VIDIOC_DECODER_CMD` instead.
+-
+-This ioctl call restarts decoding and playing processes of the video
+-stream which was played before a call to VIDEO_FREEZE was made.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-fast-forward.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-fast-forward.rst
+deleted file mode 100644
+index e71fa8d6965b..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-fast-forward.rst
++++ /dev/null
+@@ -1,72 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _VIDEO_FAST_FORWARD:
+-
+-==================
+-VIDEO_FAST_FORWARD
+-==================
+-
+-Name
+-----
+-
+-VIDEO_FAST_FORWARD
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:macro:: VIDEO_FAST_FORWARD
+-
+-``int ioctl(fd, VIDEO_FAST_FORWARD, int nFrames)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -  .. row 2
+-
+-       -  int request
+-
+-       -  Equals VIDEO_FAST_FORWARD for this command.
+-
+-    -  .. row 3
+-
+-       -  int nFrames
+-
+-       -  The number of frames to skip.
+-
+-Description
+------------
+-
+-This ioctl call asks the Video Device to skip decoding of N number of
+-I-frames. This call can only be used if VIDEO_SOURCE_MEMORY is
+-selected.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+-
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  ``EPERM``
+-
+-       -  Mode VIDEO_SOURCE_MEMORY not selected.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-fclose.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-fclose.rst
+deleted file mode 100644
+index 01d24d548439..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-fclose.rst
++++ /dev/null
+@@ -1,51 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _video_fclose:
+-
+-=================
+-dvb video close()
+-=================
+-
+-Name
+-----
+-
+-dvb video close()
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:function:: int close(int fd)
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-Description
+------------
+-
+-This system call closes a previously opened video device.
+-
+-Return Value
+-------------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  ``EBADF``
+-
+-       -  fd is not a valid open file descriptor.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-fopen.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-fopen.rst
+deleted file mode 100644
+index 1371b083e4e8..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-fopen.rst
++++ /dev/null
+@@ -1,111 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _video_fopen:
+-
+-================
+-dvb video open()
+-================
+-
+-Name
+-----
+-
+-dvb video open()
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:function:: int open(const char *deviceName, int flags)
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  const char \*deviceName
+-
+-       -  Name of specific video device.
+-
+-    -  .. row 2
+-
+-       -  int flags
+-
+-       -  A bit-wise OR of the following flags:
+-
+-    -  .. row 3
+-
+-       -
+-       -  O_RDONLY read-only access
+-
+-    -  .. row 4
+-
+-       -
+-       -  O_RDWR read/write access
+-
+-    -  .. row 5
+-
+-       -
+-       -  O_NONBLOCK open in non-blocking mode
+-
+-    -  .. row 6
+-
+-       -
+-       -  (blocking mode is the default)
+-
+-Description
+------------
+-
+-This system call opens a named video device (e.g.
+-/dev/dvb/adapter0/video0) for subsequent use.
+-
+-When an open() call has succeeded, the device will be ready for use. The
+-significance of blocking or non-blocking mode is described in the
+-documentation for functions where there is a difference. It does not
+-affect the semantics of the open() call itself. A device opened in
+-blocking mode can later be put into non-blocking mode (and vice versa)
+-using the F_SETFL command of the fcntl system call. This is a standard
+-system call, documented in the Linux manual page for fcntl. Only one
+-user can open the Video Device in O_RDWR mode. All other attempts to
+-open the device in this mode will fail, and an error-code will be
+-returned. If the Video Device is opened in O_RDONLY mode, the only
+-ioctl call that can be used is VIDEO_GET_STATUS. All other call will
+-return an error code.
+-
+-Return Value
+-------------
+-
+-.. tabularcolumns:: |p{2.5cm}|p{15.0cm}|
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  ``ENODEV``
+-
+-       -  Device driver not loaded/available.
+-
+-    -  .. row 2
+-
+-       -  ``EINTERNAL``
+-
+-       -  Internal error.
+-
+-    -  .. row 3
+-
+-       -  ``EBUSY``
+-
+-       -  Device or resource busy.
+-
+-    -  .. row 4
+-
+-       -  ``EINVAL``
+-
+-       -  Invalid argument.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-freeze.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-freeze.rst
+deleted file mode 100644
+index 4321f257cb70..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-freeze.rst
++++ /dev/null
+@@ -1,61 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _VIDEO_FREEZE:
+-
+-============
+-VIDEO_FREEZE
+-============
+-
+-Name
+-----
+-
+-VIDEO_FREEZE
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:macro:: VIDEO_FREEZE
+-
+-``int ioctl(fd, VIDEO_FREEZE)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -  .. row 2
+-
+-       -  int request
+-
+-       -  Equals VIDEO_FREEZE for this command.
+-
+-Description
+------------
+-
+-This ioctl is for Digital TV devices only. To control a V4L2 decoder use the
+-V4L2 :ref:`VIDIOC_DECODER_CMD` instead.
+-
+-This ioctl call suspends the live video stream being played. Decoding
+-and playing are frozen. It is then possible to restart the decoding and
+-playing process of the video stream using the VIDEO_CONTINUE command.
+-If VIDEO_SOURCE_MEMORY is selected in the ioctl call
+-VIDEO_SELECT_SOURCE, the Digital TV subsystem will not decode any more data
+-until the ioctl call VIDEO_CONTINUE or VIDEO_PLAY is performed.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-fwrite.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-fwrite.rst
+deleted file mode 100644
+index a07fd7d7a40e..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-fwrite.rst
++++ /dev/null
+@@ -1,79 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _video_fwrite:
+-
+-=================
+-dvb video write()
+-=================
+-
+-Name
+-----
+-
+-dvb video write()
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:function:: size_t write(int fd, const void *buf, size_t count)
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -  .. row 2
+-
+-       -  void \*buf
+-
+-       -  Pointer to the buffer containing the PES data.
+-
+-    -  .. row 3
+-
+-       -  size_t count
+-
+-       -  Size of buf.
+-
+-Description
+------------
+-
+-This system call can only be used if VIDEO_SOURCE_MEMORY is selected
+-in the ioctl call VIDEO_SELECT_SOURCE. The data provided shall be in
+-PES format, unless the capability allows other formats. If O_NONBLOCK
+-is not specified the function will block until buffer space is
+-available. The amount of data to be transferred is implied by count.
+-
+-Return Value
+-------------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  ``EPERM``
+-
+-       -  Mode VIDEO_SOURCE_MEMORY not selected.
+-
+-    -  .. row 2
+-
+-       -  ``ENOMEM``
+-
+-       -  Attempted to write more data than the internal buffer can hold.
+-
+-    -  .. row 3
+-
+-       -  ``EBADF``
+-
+-       -  fd is not a valid open file descriptor.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-get-capabilities.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-get-capabilities.rst
+deleted file mode 100644
+index 01e09f56656c..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-get-capabilities.rst
++++ /dev/null
+@@ -1,61 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _VIDEO_GET_CAPABILITIES:
+-
+-======================
+-VIDEO_GET_CAPABILITIES
+-======================
+-
+-Name
+-----
+-
+-VIDEO_GET_CAPABILITIES
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:macro:: VIDEO_GET_CAPABILITIES
+-
+-``int ioctl(fd, VIDEO_GET_CAPABILITIES, unsigned int *cap)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -  .. row 2
+-
+-       -  int request
+-
+-       -  Equals VIDEO_GET_CAPABILITIES for this command.
+-
+-    -  .. row 3
+-
+-       -  unsigned int \*cap
+-
+-       -  Pointer to a location where to store the capability information.
+-
+-Description
+------------
+-
+-This ioctl call asks the video device about its decoding capabilities.
+-On success it returns and integer which has bits set according to the
+-defines in section ??.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-get-event.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-get-event.rst
+deleted file mode 100644
+index 90382bc36cfe..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-get-event.rst
++++ /dev/null
+@@ -1,105 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _VIDEO_GET_EVENT:
+-
+-===============
+-VIDEO_GET_EVENT
+-===============
+-
+-Name
+-----
+-
+-VIDEO_GET_EVENT
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:macro:: VIDEO_GET_EVENT
+-
+-``int ioctl(fd, VIDEO_GET_EVENT, struct video_event *ev)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -  .. row 2
+-
+-       -  int request
+-
+-       -  Equals VIDEO_GET_EVENT for this command.
+-
+-    -  .. row 3
+-
+-       -  struct video_event \*ev
+-
+-       -  Points to the location where the event, if any, is to be stored.
+-
+-Description
+------------
+-
+-This ioctl is for Digital TV devices only. To get events from a V4L2 decoder
+-use the V4L2 :ref:`VIDIOC_DQEVENT` ioctl instead.
+-
+-This ioctl call returns an event of type video_event if available. If
+-an event is not available, the behavior depends on whether the device is
+-in blocking or non-blocking mode. In the latter case, the call fails
+-immediately with errno set to ``EWOULDBLOCK``. In the former case, the call
+-blocks until an event becomes available. The standard Linux poll()
+-and/or select() system calls can be used with the device file descriptor
+-to watch for new events. For select(), the file descriptor should be
+-included in the exceptfds argument, and for poll(), POLLPRI should be
+-specified as the wake-up condition. Read-only permissions are sufficient
+-for this ioctl call.
+-
+-.. c:type:: video_event
+-
+-.. code-block:: c
+-
+-	struct video_event {
+-		__s32 type;
+-	#define VIDEO_EVENT_SIZE_CHANGED	1
+-	#define VIDEO_EVENT_FRAME_RATE_CHANGED	2
+-	#define VIDEO_EVENT_DECODER_STOPPED 	3
+-	#define VIDEO_EVENT_VSYNC 		4
+-		long timestamp;
+-		union {
+-			video_size_t size;
+-			unsigned int frame_rate;	/* in frames per 1000sec */
+-			unsigned char vsync_field;	/* unknown/odd/even/progressive */
+-		} u;
+-	};
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  ``EWOULDBLOCK``
+-
+-       -  There is no event pending, and the device is in non-blocking mode.
+-
+-    -  .. row 2
+-
+-       -  ``EOVERFLOW``
+-
+-       -  Overflow in event queue - one or more events were lost.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-get-frame-count.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-get-frame-count.rst
+deleted file mode 100644
+index b48ac8c58a41..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-get-frame-count.rst
++++ /dev/null
+@@ -1,65 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _VIDEO_GET_FRAME_COUNT:
+-
+-=====================
+-VIDEO_GET_FRAME_COUNT
+-=====================
+-
+-Name
+-----
+-
+-VIDEO_GET_FRAME_COUNT
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:macro:: VIDEO_GET_FRAME_COUNT
+-
+-``int ioctl(int fd, VIDEO_GET_FRAME_COUNT, __u64 *pts)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -  .. row 2
+-
+-       -  int request
+-
+-       -  Equals VIDEO_GET_FRAME_COUNT for this command.
+-
+-    -  .. row 3
+-
+-       -  __u64 \*pts
+-
+-       -  Returns the number of frames displayed since the decoder was
+-	  started.
+-
+-Description
+------------
+-
+-This ioctl is obsolete. Do not use in new drivers. For V4L2 decoders
+-this ioctl has been replaced by the ``V4L2_CID_MPEG_VIDEO_DEC_FRAME``
+-control.
+-
+-This ioctl call asks the Video Device to return the number of displayed
+-frames since the decoder was started.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-get-pts.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-get-pts.rst
+deleted file mode 100644
+index fedaff41be0b..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-get-pts.rst
++++ /dev/null
+@@ -1,69 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _VIDEO_GET_PTS:
+-
+-=============
+-VIDEO_GET_PTS
+-=============
+-
+-Name
+-----
+-
+-VIDEO_GET_PTS
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:macro:: VIDEO_GET_PTS
+-
+-``int ioctl(int fd, VIDEO_GET_PTS, __u64 *pts)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -  .. row 2
+-
+-       -  int request
+-
+-       -  Equals VIDEO_GET_PTS for this command.
+-
+-    -  .. row 3
+-
+-       -  __u64 \*pts
+-
+-       -  Returns the 33-bit timestamp as defined in ITU T-REC-H.222.0 /
+-	  ISO/IEC 13818-1.
+-
+-	  The PTS should belong to the currently played frame if possible,
+-	  but may also be a value close to it like the PTS of the last
+-	  decoded frame or the last PTS extracted by the PES parser.
+-
+-Description
+------------
+-
+-This ioctl is obsolete. Do not use in new drivers. For V4L2 decoders
+-this ioctl has been replaced by the ``V4L2_CID_MPEG_VIDEO_DEC_PTS``
+-control.
+-
+-This ioctl call asks the Video Device to return the current PTS
+-timestamp.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-get-size.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-get-size.rst
+deleted file mode 100644
+index de34331c5bd1..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-get-size.rst
++++ /dev/null
+@@ -1,69 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _VIDEO_GET_SIZE:
+-
+-==============
+-VIDEO_GET_SIZE
+-==============
+-
+-Name
+-----
+-
+-VIDEO_GET_SIZE
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:macro:: VIDEO_GET_SIZE
+-
+-``int ioctl(int fd, VIDEO_GET_SIZE, video_size_t *size)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -  .. row 2
+-
+-       -  int request
+-
+-       -  Equals VIDEO_GET_SIZE for this command.
+-
+-    -  .. row 3
+-
+-       -  video_size_t \*size
+-
+-       -  Returns the size and aspect ratio.
+-
+-Description
+------------
+-
+-This ioctl returns the size and aspect ratio.
+-
+-.. c:type:: video_size_t
+-
+-.. code-block::c
+-
+-	typedef struct {
+-		int w;
+-		int h;
+-		video_format_t aspect_ratio;
+-	} video_size_t;
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-get-status.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-get-status.rst
+deleted file mode 100644
+index 9b86fbf411d4..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-get-status.rst
++++ /dev/null
+@@ -1,72 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _VIDEO_GET_STATUS:
+-
+-================
+-VIDEO_GET_STATUS
+-================
+-
+-Name
+-----
+-
+-VIDEO_GET_STATUS
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:macro:: VIDEO_GET_STATUS
+-
+-``int ioctl(fd, VIDEO_GET_STATUS, struct video_status *status)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -  .. row 2
+-
+-       -  int request
+-
+-       -  Equals VIDEO_GET_STATUS for this command.
+-
+-    -  .. row 3
+-
+-       -  struct video_status \*status
+-
+-       -  Returns the current status of the Video Device.
+-
+-Description
+------------
+-
+-This ioctl call asks the Video Device to return the current status of
+-the device.
+-
+-.. c:type:: video_status
+-
+-.. code-block:: c
+-
+-	struct video_status {
+-		int                   video_blank;   /* blank video on freeze? */
+-		video_play_state_t    play_state;    /* current state of playback */
+-		video_stream_source_t stream_source; /* current source (demux/memory) */
+-		video_format_t        video_format;  /* current aspect ratio of stream*/
+-		video_displayformat_t display_format;/* selected cropping mode */
+-	};
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-play.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-play.rst
+deleted file mode 100644
+index 35ac8b98fdbf..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-play.rst
++++ /dev/null
+@@ -1,57 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _VIDEO_PLAY:
+-
+-==========
+-VIDEO_PLAY
+-==========
+-
+-Name
+-----
+-
+-VIDEO_PLAY
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:macro:: VIDEO_PLAY
+-
+-``int ioctl(fd, VIDEO_PLAY)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -  .. row 2
+-
+-       -  int request
+-
+-       -  Equals VIDEO_PLAY for this command.
+-
+-Description
+------------
+-
+-This ioctl is for Digital TV devices only. To control a V4L2 decoder use the
+-V4L2 :ref:`VIDIOC_DECODER_CMD` instead.
+-
+-This ioctl call asks the Video Device to start playing a video stream
+-from the selected source.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-select-source.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-select-source.rst
+deleted file mode 100644
+index 929a20985d53..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-select-source.rst
++++ /dev/null
+@@ -1,76 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _VIDEO_SELECT_SOURCE:
+-
+-===================
+-VIDEO_SELECT_SOURCE
+-===================
+-
+-Name
+-----
+-
+-VIDEO_SELECT_SOURCE
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:macro:: VIDEO_SELECT_SOURCE
+-
+-``int ioctl(fd, VIDEO_SELECT_SOURCE, video_stream_source_t source)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -  .. row 2
+-
+-       -  int request
+-
+-       -  Equals VIDEO_SELECT_SOURCE for this command.
+-
+-    -  .. row 3
+-
+-       -  video_stream_source_t source
+-
+-       -  Indicates which source shall be used for the Video stream.
+-
+-Description
+------------
+-
+-This ioctl is for Digital TV devices only. This ioctl was also supported by the
+-V4L2 ivtv driver, but that has been replaced by the ivtv-specific
+-``IVTV_IOC_PASSTHROUGH_MODE`` ioctl.
+-
+-This ioctl call informs the video device which source shall be used for
+-the input data. The possible sources are demux or memory. If memory is
+-selected, the data is fed to the video device through the write command.
+-
+-.. c:type:: video_stream_source_t
+-
+-.. code-block:: c
+-
+-	typedef enum {
+-		VIDEO_SOURCE_DEMUX, /* Select the demux as the main source */
+-		VIDEO_SOURCE_MEMORY /* If this source is selected, the stream
+-				comes from the user through the write
+-				system call */
+-	} video_stream_source_t;
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-set-blank.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-set-blank.rst
+deleted file mode 100644
+index 70249a6ba125..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-set-blank.rst
++++ /dev/null
+@@ -1,64 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _VIDEO_SET_BLANK:
+-
+-===============
+-VIDEO_SET_BLANK
+-===============
+-
+-Name
+-----
+-
+-VIDEO_SET_BLANK
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:macro:: VIDEO_SET_BLANK
+-
+-``int ioctl(fd, VIDEO_SET_BLANK, boolean mode)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -  .. row 2
+-
+-       -  int request
+-
+-       -  Equals VIDEO_SET_BLANK for this command.
+-
+-    -  .. row 3
+-
+-       -  boolean mode
+-
+-       -  TRUE: Blank screen when stop.
+-
+-    -  .. row 4
+-
+-       -
+-       -  FALSE: Show last decoded frame.
+-
+-Description
+------------
+-
+-This ioctl call asks the Video Device to blank out the picture.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-set-display-format.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-set-display-format.rst
+deleted file mode 100644
+index 1de4f40ae732..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-set-display-format.rst
++++ /dev/null
+@@ -1,60 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _VIDEO_SET_DISPLAY_FORMAT:
+-
+-========================
+-VIDEO_SET_DISPLAY_FORMAT
+-========================
+-
+-Name
+-----
+-
+-VIDEO_SET_DISPLAY_FORMAT
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:macro:: VIDEO_SET_DISPLAY_FORMAT
+-
+-``int ioctl(fd, VIDEO_SET_DISPLAY_FORMAT)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -  .. row 2
+-
+-       -  int request
+-
+-       -  Equals VIDEO_SET_DISPLAY_FORMAT for this command.
+-
+-    -  .. row 3
+-
+-       -  video_display_format_t format
+-
+-       -  Selects the video format to be used.
+-
+-Description
+------------
+-
+-This ioctl call asks the Video Device to select the video format to be
+-applied by the MPEG chip on the video.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-set-format.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-set-format.rst
+deleted file mode 100644
+index bb64e37ae081..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-set-format.rst
++++ /dev/null
+@@ -1,82 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _VIDEO_SET_FORMAT:
+-
+-================
+-VIDEO_SET_FORMAT
+-================
+-
+-Name
+-----
+-
+-VIDEO_SET_FORMAT
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:macro:: VIDEO_SET_FORMAT
+-
+-``int ioctl(fd, VIDEO_SET_FORMAT, video_format_t format)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -  .. row 2
+-
+-       -  int request
+-
+-       -  Equals VIDEO_SET_FORMAT for this command.
+-
+-    -  .. row 3
+-
+-       -  video_format_t format
+-
+-       -  video format of TV as defined in section ??.
+-
+-Description
+------------
+-
+-This ioctl sets the screen format (aspect ratio) of the connected output
+-device (TV) so that the output of the decoder can be adjusted
+-accordingly.
+-
+-.. c:type:: video_format_t
+-
+-.. code-block:: c
+-
+-	typedef enum {
+-		VIDEO_FORMAT_4_3,     /* Select 4:3 format */
+-		VIDEO_FORMAT_16_9,    /* Select 16:9 format. */
+-		VIDEO_FORMAT_221_1    /* 2.21:1 */
+-	} video_format_t;
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+-
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  ``EINVAL``
+-
+-       -  format is not a valid video format.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-set-streamtype.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-set-streamtype.rst
+deleted file mode 100644
+index 1f31c048bdbc..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-set-streamtype.rst
++++ /dev/null
+@@ -1,61 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _VIDEO_SET_STREAMTYPE:
+-
+-====================
+-VIDEO_SET_STREAMTYPE
+-====================
+-
+-Name
+-----
+-
+-VIDEO_SET_STREAMTYPE
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:macro:: VIDEO_SET_STREAMTYPE
+-
+-``int ioctl(fd, VIDEO_SET_STREAMTYPE, int type)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -  .. row 2
+-
+-       -  int request
+-
+-       -  Equals VIDEO_SET_STREAMTYPE for this command.
+-
+-    -  .. row 3
+-
+-       -  int type
+-
+-       -  stream type
+-
+-Description
+------------
+-
+-This ioctl tells the driver which kind of stream to expect being written
+-to it. If this call is not used the default of video PES is used. Some
+-drivers might not support this call and always expect PES.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-slowmotion.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-slowmotion.rst
+deleted file mode 100644
+index 1478fcc30cb8..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-slowmotion.rst
++++ /dev/null
+@@ -1,72 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _VIDEO_SLOWMOTION:
+-
+-================
+-VIDEO_SLOWMOTION
+-================
+-
+-Name
+-----
+-
+-VIDEO_SLOWMOTION
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:macro:: VIDEO_SLOWMOTION
+-
+-``int ioctl(fd, VIDEO_SLOWMOTION, int nFrames)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -  .. row 2
+-
+-       -  int request
+-
+-       -  Equals VIDEO_SLOWMOTION for this command.
+-
+-    -  .. row 3
+-
+-       -  int nFrames
+-
+-       -  The number of times to repeat each frame.
+-
+-Description
+------------
+-
+-This ioctl call asks the video device to repeat decoding frames N number
+-of times. This call can only be used if VIDEO_SOURCE_MEMORY is
+-selected.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+-
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  ``EPERM``
+-
+-       -  Mode VIDEO_SOURCE_MEMORY not selected.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-stillpicture.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-stillpicture.rst
+deleted file mode 100644
+index d25384222a20..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-stillpicture.rst
++++ /dev/null
+@@ -1,61 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _VIDEO_STILLPICTURE:
+-
+-==================
+-VIDEO_STILLPICTURE
+-==================
+-
+-Name
+-----
+-
+-VIDEO_STILLPICTURE
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:macro:: VIDEO_STILLPICTURE
+-
+-``int ioctl(fd, VIDEO_STILLPICTURE, struct video_still_picture *sp)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -  .. row 2
+-
+-       -  int request
+-
+-       -  Equals VIDEO_STILLPICTURE for this command.
+-
+-    -  .. row 3
+-
+-       -  struct video_still_picture \*sp
+-
+-       -  Pointer to a location where an I-frame and size is stored.
+-
+-Description
+------------
+-
+-This ioctl call asks the Video Device to display a still picture
+-(I-frame). The input data shall contain an I-frame. If the pointer is
+-NULL, then the current displayed still picture is blanked.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-stop.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-stop.rst
+deleted file mode 100644
+index 96f61c5b48a2..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-stop.rst
++++ /dev/null
+@@ -1,74 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _VIDEO_STOP:
+-
+-==========
+-VIDEO_STOP
+-==========
+-
+-Name
+-----
+-
+-VIDEO_STOP
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:macro:: VIDEO_STOP
+-
+-``int ioctl(fd, VIDEO_STOP, boolean mode)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -  .. row 2
+-
+-       -  int request
+-
+-       -  Equals VIDEO_STOP for this command.
+-
+-    -  .. row 3
+-
+-       -  Boolean mode
+-
+-       -  Indicates how the screen shall be handled.
+-
+-    -  .. row 4
+-
+-       -
+-       -  TRUE: Blank screen when stop.
+-
+-    -  .. row 5
+-
+-       -
+-       -  FALSE: Show last decoded frame.
+-
+-Description
+------------
+-
+-This ioctl is for Digital TV devices only. To control a V4L2 decoder use the
+-V4L2 :ref:`VIDIOC_DECODER_CMD` instead.
+-
+-This ioctl call asks the Video Device to stop playing the current
+-stream. Depending on the input parameter, the screen can be blanked out
+-or displaying the last decoded frame.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video-try-command.rst b/drivers/staging/media/deprecated/saa7146/av7110/video-try-command.rst
+deleted file mode 100644
+index 79bf3dfb8a32..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video-try-command.rst
++++ /dev/null
+@@ -1,66 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-.. c:namespace:: DTV.video
+-
+-.. _VIDEO_TRY_COMMAND:
+-
+-=================
+-VIDEO_TRY_COMMAND
+-=================
+-
+-Name
+-----
+-
+-VIDEO_TRY_COMMAND
+-
+-.. attention:: This ioctl is deprecated.
+-
+-Synopsis
+---------
+-
+-.. c:macro:: VIDEO_TRY_COMMAND
+-
+-``int ioctl(int fd, VIDEO_TRY_COMMAND, struct video_command *cmd)``
+-
+-Arguments
+----------
+-
+-.. flat-table::
+-    :header-rows:  0
+-    :stub-columns: 0
+-
+-    -  .. row 1
+-
+-       -  int fd
+-
+-       -  File descriptor returned by a previous call to open().
+-
+-    -  .. row 2
+-
+-       -  int request
+-
+-       -  Equals VIDEO_TRY_COMMAND for this command.
+-
+-    -  .. row 3
+-
+-       -  struct video_command \*cmd
+-
+-       -  Try a decoder command.
+-
+-Description
+------------
+-
+-This ioctl is obsolete. Do not use in new drivers. For V4L2 decoders
+-this ioctl has been replaced by the
+-:ref:`VIDIOC_TRY_DECODER_CMD <VIDIOC_DECODER_CMD>` ioctl.
+-
+-This ioctl tries a decoder command. The ``video_command`` struct is a
+-subset of the ``v4l2_decoder_cmd`` struct, so refer to the
+-:ref:`VIDIOC_TRY_DECODER_CMD <VIDIOC_DECODER_CMD>` documentation
+-for more information.
+-
+-Return Value
+-------------
+-
+-On success 0 is returned, on error -1 and the ``errno`` variable is set
+-appropriately. The generic error codes are described at the
+-:ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video.rst b/drivers/staging/media/deprecated/saa7146/av7110/video.rst
+deleted file mode 100644
+index 808705b769a1..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video.rst
++++ /dev/null
+@@ -1,36 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-
+-.. _dvb_video:
+-
+-#######################
+-Digital TV Video Device
+-#######################
+-
+-The Digital TV video device controls the MPEG2 video decoder of the Digital
+-TV hardware. It can be accessed through **/dev/dvb/adapter0/video0**. Data
+-types and ioctl definitions can be accessed by including
+-**linux/dvb/video.h** in your application.
+-
+-Note that the Digital TV video device only controls decoding of the MPEG video
+-stream, not its presentation on the TV or computer screen. On PCs this
+-is typically handled by an associated video4linux device, e.g.
+-**/dev/video**, which allows scaling and defining output windows.
+-
+-Some Digital TV cards don't have their own MPEG decoder, which results in the
+-omission of the audio and video device as well as the video4linux
+-device.
+-
+-The ioctls that deal with SPUs (sub picture units) and navigation
+-packets are only supported on some MPEG decoders made for DVD playback.
+-
+-These ioctls were also used by V4L2 to control MPEG decoders implemented
+-in V4L2. The use of these ioctls for that purpose has been made obsolete
+-and proper V4L2 ioctls or controls have been created to replace that
+-functionality.
+-
+-
+-.. toctree::
+-    :maxdepth: 1
+-
+-    video_types
+-    video_function_calls
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video_function_calls.rst b/drivers/staging/media/deprecated/saa7146/av7110/video_function_calls.rst
+deleted file mode 100644
+index 20a897be5dca..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video_function_calls.rst
++++ /dev/null
+@@ -1,35 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-
+-.. _video_function_calls:
+-
+-********************
+-Video Function Calls
+-********************
+-
+-.. toctree::
+-    :maxdepth: 1
+-
+-    video-fopen
+-    video-fclose
+-    video-fwrite
+-    video-stop
+-    video-play
+-    video-freeze
+-    video-continue
+-    video-select-source
+-    video-set-blank
+-    video-get-status
+-    video-get-frame-count
+-    video-get-pts
+-    video-get-event
+-    video-command
+-    video-try-command
+-    video-get-size
+-    video-set-display-format
+-    video-stillpicture
+-    video-fast-forward
+-    video-slowmotion
+-    video-get-capabilities
+-    video-clear-buffer
+-    video-set-streamtype
+-    video-set-format
+diff --git a/drivers/staging/media/deprecated/saa7146/av7110/video_types.rst b/drivers/staging/media/deprecated/saa7146/av7110/video_types.rst
+deleted file mode 100644
+index c4557d328b7a..000000000000
+--- a/drivers/staging/media/deprecated/saa7146/av7110/video_types.rst
++++ /dev/null
+@@ -1,248 +0,0 @@
+-.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+-
+-.. _video_types:
+-
+-****************
+-Video Data Types
+-****************
+-
+-
+-.. _video-format-t:
+-
+-video_format_t
+-==============
+-
+-The ``video_format_t`` data type defined by
+-
+-
+-.. code-block:: c
+-
+-    typedef enum {
+-	VIDEO_FORMAT_4_3,     /* Select 4:3 format */
+-	VIDEO_FORMAT_16_9,    /* Select 16:9 format. */
+-	VIDEO_FORMAT_221_1    /* 2.21:1 */
+-    } video_format_t;
+-
+-is used in the VIDEO_SET_FORMAT function (??) to tell the driver which
+-aspect ratio the output hardware (e.g. TV) has. It is also used in the
+-data structures video_status (??) returned by VIDEO_GET_STATUS (??)
+-and video_event (??) returned by VIDEO_GET_EVENT (??) which report
+-about the display format of the current video stream.
+-
+-
+-.. _video-displayformat-t:
+-
+-video_displayformat_t
+-=====================
+-
+-In case the display format of the video stream and of the display
+-hardware differ the application has to specify how to handle the
+-cropping of the picture. This can be done using the
+-VIDEO_SET_DISPLAY_FORMAT call (??) which accepts
+-
+-
+-.. code-block:: c
+-
+-    typedef enum {
+-	VIDEO_PAN_SCAN,       /* use pan and scan format */
+-	VIDEO_LETTER_BOX,     /* use letterbox format */
+-	VIDEO_CENTER_CUT_OUT  /* use center cut out format */
+-    } video_displayformat_t;
+-
+-as argument.
+-
+-
+-.. _video-stream-source-t:
+-
+-video_stream_source_t
+-=====================
+-
+-The video stream source is set through the VIDEO_SELECT_SOURCE call
+-and can take the following values, depending on whether we are replaying
+-from an internal (demuxer) or external (user write) source.
+-
+-
+-.. code-block:: c
+-
+-    typedef enum {
+-	VIDEO_SOURCE_DEMUX, /* Select the demux as the main source */
+-	VIDEO_SOURCE_MEMORY /* If this source is selected, the stream
+-		       comes from the user through the write
+-		       system call */
+-    } video_stream_source_t;
+-
+-VIDEO_SOURCE_DEMUX selects the demultiplexer (fed either by the
+-frontend or the DVR device) as the source of the video stream. If
+-VIDEO_SOURCE_MEMORY is selected the stream comes from the application
+-through the **write()** system call.
+-
+-
+-.. _video-play-state-t:
+-
+-video_play_state_t
+-==================
+-
+-The following values can be returned by the VIDEO_GET_STATUS call
+-representing the state of video playback.
+-
+-
+-.. code-block:: c
+-
+-    typedef enum {
+-	VIDEO_STOPPED, /* Video is stopped */
+-	VIDEO_PLAYING, /* Video is currently playing */
+-	VIDEO_FREEZED  /* Video is freezed */
+-    } video_play_state_t;
+-
+-
+-.. c:type:: video_command
+-
+-struct video_command
+-====================
+-
+-The structure must be zeroed before use by the application This ensures
+-it can be extended safely in the future.
+-
+-
+-.. code-block:: c
+-
+-    struct video_command {
+-	__u32 cmd;
+-	__u32 flags;
+-	union {
+-	    struct {
+-		__u64 pts;
+-	    } stop;
+-
+-	    struct {
+-		/* 0 or 1000 specifies normal speed,
+-		   1 specifies forward single stepping,
+-		   -1 specifies backward single stepping,
+-		   >>1: playback at speed/1000 of the normal speed,
+-		   <-1: reverse playback at (-speed/1000) of the normal speed. */
+-		__s32 speed;
+-		__u32 format;
+-	    } play;
+-
+-	    struct {
+-		__u32 data[16];
+-	    } raw;
+-	};
+-    };
+-
+-
+-.. _video-size-t:
+-
+-video_size_t
+-============
+-
+-
+-.. code-block:: c
+-
+-    typedef struct {
+-	int w;
+-	int h;
+-	video_format_t aspect_ratio;
+-    } video_size_t;
+-
+-
+-.. c:type:: video_event
+-
+-struct video_event
+-==================
+-
+-The following is the structure of a video event as it is returned by the
+-VIDEO_GET_EVENT call.
+-
+-
+-.. code-block:: c
+-
+-    struct video_event {
+-	__s32 type;
+-    #define VIDEO_EVENT_SIZE_CHANGED    1
+-    #define VIDEO_EVENT_FRAME_RATE_CHANGED  2
+-    #define VIDEO_EVENT_DECODER_STOPPED     3
+-    #define VIDEO_EVENT_VSYNC       4
+-	long timestamp;
+-	union {
+-	    video_size_t size;
+-	    unsigned int frame_rate;    /* in frames per 1000sec */
+-	    unsigned char vsync_field;  /* unknown/odd/even/progressive */
+-	} u;
+-    };
+-
+-
+-.. c:type:: video_status
+-
+-struct video_status
+-===================
+-
+-The VIDEO_GET_STATUS call returns the following structure informing
+-about various states of the playback operation.
+-
+-
+-.. code-block:: c
+-
+-    struct video_status {
+-	int                   video_blank;   /* blank video on freeze? */
+-	video_play_state_t    play_state;    /* current state of playback */
+-	video_stream_source_t stream_source; /* current source (demux/memory) */
+-	video_format_t        video_format;  /* current aspect ratio of stream */
+-	video_displayformat_t display_format;/* selected cropping mode */
+-    };
+-
+-If video_blank is set video will be blanked out if the channel is
+-changed or if playback is stopped. Otherwise, the last picture will be
+-displayed. play_state indicates if the video is currently frozen,
+-stopped, or being played back. The stream_source corresponds to the
+-selected source for the video stream. It can come either from the
+-demultiplexer or from memory. The video_format indicates the aspect
+-ratio (one of 4:3 or 16:9) of the currently played video stream.
+-Finally, display_format corresponds to the selected cropping mode in
+-case the source video format is not the same as the format of the output
+-device.
+-
+-
+-.. c:type:: video_still_picture
+-
+-struct video_still_picture
+-==========================
+-
+-An I-frame displayed via the VIDEO_STILLPICTURE call is passed on
+-within the following structure.
+-
+-
+-.. code-block:: c
+-
+-    /* pointer to and size of a single iframe in memory */
+-    struct video_still_picture {
+-	char *iFrame;        /* pointer to a single iframe in memory */
+-	int32_t size;
+-    };
+-
+-
+-.. _video_caps:
+-
+-video capabilities
+-==================
+-
+-A call to VIDEO_GET_CAPABILITIES returns an unsigned integer with the
+-following bits set according to the hardwares capabilities.
+-
+-
+-.. code-block:: c
+-
+-     /* bit definitions for capabilities: */
+-     /* can the hardware decode MPEG1 and/or MPEG2? */
+-     #define VIDEO_CAP_MPEG1   1
+-     #define VIDEO_CAP_MPEG2   2
+-     /* can you send a system and/or program stream to video device?
+-	(you still have to open the video and the audio device but only
+-	 send the stream to the video device) */
+-     #define VIDEO_CAP_SYS     4
+-     #define VIDEO_CAP_PROG    8
+-     /* can the driver also handle SPU, NAVI and CSS encoded data?
+-	(CSS API is not present yet) */
+-     #define VIDEO_CAP_SPU    16
+-     #define VIDEO_CAP_NAVI   32
+-     #define VIDEO_CAP_CSS    64
 -- 
 2.39.0
 
