@@ -2,115 +2,157 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51C10C5479D
-	for <linux-media@archiver.kernel.org>; Wed, 11 Jan 2023 09:21:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52E75C67871
+	for <linux-media@archiver.kernel.org>; Wed, 11 Jan 2023 09:54:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbjAKJUo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 11 Jan 2023 04:20:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53820 "EHLO
+        id S238800AbjAKJyV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 11 Jan 2023 04:54:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjAKJTu (ORCPT
+        with ESMTP id S235993AbjAKJxo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 11 Jan 2023 04:19:50 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705BC114B
-        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 01:19:39 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id ay40so10639142wmb.2
-        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 01:19:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5JkE8k+zb6V8XAsdWBYWdOcqpT4YkPRqlcEpPrFh1Mg=;
-        b=NN8bbzG32j/Fvv6jjEGG9bL8osozCnlyMafcRK3SkjAW3nn6SLlG75IJ8PfqZmf2W/
-         WqlJokplJSTsJL9GoNnUrTRVSUaLFKVyH0w/8U9KWzzGrR4bh8eh2WQXagEcWRfoOIu8
-         QwvasTG4ypvW3CNjN0BzinfOIdBnERXF/ca7FUIC1CO+3vVmsLd0fW8Ju5rm1DeJ+8EO
-         c1EvGLqVTfDBYQzml0XBYpcZaM7WTJKudiuos98/hTetLMnuKzvYNzvCeXu8ldIDLNE4
-         MnhjugfAolunskgCgaDIRMYx/D6B/lJTTu7zMW32EwpL9sDFPr6Lm34PqanEuPGwCMTv
-         Eddg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5JkE8k+zb6V8XAsdWBYWdOcqpT4YkPRqlcEpPrFh1Mg=;
-        b=156skVz038G+nmNRStU+Pdbd2ZYLMUn2XOlManUFy3F72QQPV8m2cENsNcRNcQKEff
-         hsMv+AC+ju6+2OO6MfDPXOcfaHGaiXKa8pjPT6YVwh7BdEKRGCz6p1aUyN6ZVL9MdAmL
-         lrmI5v6JWg+WvisQLZG7y0TMJlOFFD4N204eG8ua6nNnsA9sC79FMdOidyahTzgPY6zU
-         4bYddNNznZKpy5zfJY6RDJfVNeQYbxyrnKBtC1SWhcqnpQWCaWJGk/pDVPSVgUJWlu/3
-         xdOC+6mhIyXtFltv/LNkRrkpNSHNqF6CqmZFwnARtde3MkNBUjgvVBxaPE8esnKsr5iT
-         ACQg==
-X-Gm-Message-State: AFqh2ko9sHHNjG1X5MWgbGc409QYP5uJy5jc0rTbS7n69gdk/iuwL1Ks
-        G3I6PJSo/+pGZ92wP3Vg+lYC+Q==
-X-Google-Smtp-Source: AMrXdXueETs+9QMmUplpsdR2JoM7cnnfCNkCjsejlTKSruG40GsXye6Bu9UvxFfBHAdM4QOI2zwzVw==
-X-Received: by 2002:a05:600c:4f96:b0:3d9:ed3b:5b3e with SMTP id n22-20020a05600c4f9600b003d9ed3b5b3emr8928750wmq.19.1673428778035;
-        Wed, 11 Jan 2023 01:19:38 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id n14-20020a05600c4f8e00b003c6b7f5567csm5442557wmq.0.2023.01.11.01.19.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 01:19:37 -0800 (PST)
-Message-ID: <a5aa6c41-941c-8337-d83a-ead2775ba864@linaro.org>
-Date:   Wed, 11 Jan 2023 10:19:35 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v5 1/6] dt-bindings: media: platform: visconti: Add
- Toshiba Visconti Video Input Interface bindings
-Content-Language: en-US
-To:     Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Wed, 11 Jan 2023 04:53:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3A5D109;
+        Wed, 11 Jan 2023 01:51:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9221EB81B76;
+        Wed, 11 Jan 2023 09:51:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54F6DC433F1;
+        Wed, 11 Jan 2023 09:51:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1673430685;
+        bh=z0ZYgHqL1YLvYl+ue5zNy1KMy+u3shk6BmiAvHiQZSA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xZGcZ5JDRrdXTJbt9tLPDzh24ToBaCeG04aIrg63SxaV0mqioT6pGZXGHiVeh9ZOU
+         sO0JuLfJTFUVrJVMPgoU9Fwio7tkoa1uh4VeY/xzIKAbqvAAsfPDw+kuuk3E42lxBv
+         sJ9yu85to26aoTWWeVLBJDsI3mtwYFGQ3RchmYyA=
+Date:   Wed, 11 Jan 2023 10:51:22 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Len Brown <lenb@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Wolfram Sang <wsa@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230111022433.25950-1-yuji2.ishikawa@toshiba.co.jp>
- <20230111022433.25950-2-yuji2.ishikawa@toshiba.co.jp>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230111022433.25950-2-yuji2.ishikawa@toshiba.co.jp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Frank Rowand <frowand.list@gmail.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        Jilin Yuan <yuanjilin@cdjrlc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
+ const *
+Message-ID: <Y76GmvOD9KxSuD7o@kroah.com>
+References: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
+ <20221123122523.1332370-3-gregkh@linuxfoundation.org>
+ <CAJZ5v0gqD_TW3iGLAiH=us1B0-JLGtv2VGTJjQwiWxCmris9ag@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gqD_TW3iGLAiH=us1B0-JLGtv2VGTJjQwiWxCmris9ag@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 11/01/2023 03:24, Yuji Ishikawa wrote:
-> Adds the Device Tree binding documentation that allows to describe
-> the Video Input Interface found in Toshiba Visconti SoCs.
+On Wed, Nov 23, 2022 at 01:38:05PM +0100, Rafael J. Wysocki wrote:
+> On Wed, Nov 23, 2022 at 1:25 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > The uevent() callback in struct device_type should not be modifying the
+> > device that is passed into it, so mark it as a const * and propagate the
+> > function signature changes out into all relevant subsystems that use
+> > this callback.
+> >
+> > Cc: Jens Axboe <axboe@kernel.dk>
+> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > Cc: Len Brown <lenb@kernel.org>
+> > Cc: Stefan Richter <stefanr@s5r6.in-berlin.de>
+> > Cc: Wolfram Sang <wsa@kernel.org>
+> > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > Cc: Sean Young <sean@mess.org>
+> > Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: Frank Rowand <frowand.list@gmail.com>
+> > Cc: Maximilian Luz <luzmaximilian@gmail.com>
+> > Cc: Hans de Goede <hdegoede@redhat.com>
+> > Cc: Mark Gross <markgross@kernel.org>
+> > Cc: Vinod Koul <vkoul@kernel.org>
+> > Cc: Bard Liao <yung-chuan.liao@linux.intel.com>
+> > Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> > Cc: Sanyog Kale <sanyog.r.kale@intel.com>
+> > Cc: Andreas Noever <andreas.noever@gmail.com>
+> > Cc: Michael Jamet <michael.jamet@intel.com>
+> > Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > Cc: Yehezkel Bernat <YehezkelShB@gmail.com>
+> > Cc: Jiri Slaby <jirislaby@kernel.org>
+> > Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+> > Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+> > Cc: Chaitanya Kulkarni <kch@nvidia.com>
+> > Cc: Ming Lei <ming.lei@redhat.com>
+> > Cc: Jilin Yuan <yuanjilin@cdjrlc.com>
+> > Cc: Alan Stern <stern@rowland.harvard.edu>
+> > Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Ira Weiny <ira.weiny@intel.com>
+> > Cc: Dan Williams <dan.j.williams@intel.com>
+> > Cc: Won Chung <wonchung@google.com>
+> > Cc: alsa-devel@alsa-project.org
+> > Cc: devicetree@vger.kernel.org
+> > Cc: linux-acpi@vger.kernel.org
+> > Cc: linux-block@vger.kernel.org
+> > Cc: linux-i2c@vger.kernel.org
+> > Cc: linux-i3c@lists.infradead.org
+> > Cc: linux-input@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: linux-media@vger.kernel.org
+> > Cc: linux-serial@vger.kernel.org
+> > Cc: linux-usb@vger.kernel.org
+> > Cc: linux1394-devel@lists.sourceforge.net
+> > Cc: platform-driver-x86@vger.kernel.org
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > 
-> Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-> Reviewed-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-> ---
-> Changelog v2:
-> - no change
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Changelog v3:
-> - no change
-> 
-> Changelog v4:
-> - fix style problems at the v3 patch
-> - remove "index" member
-> - update example
-> 
-> Changelog v5:
-> - no change
+> (which my ACPI maintainer hat on).
 
-No change? so all comments got ignored?
+thanks for the review, I'll add it to the v2 patch.
 
-This is a friendly reminder during the review process.
-
-It seems my previous comments were not fully addressed. Maybe my
-feedback got lost between the quotes, maybe you just forgot to apply it.
-Please go back to the previous discussion and either implement all
-requested changes or keep discussing them.
-
-Thank you.
-
-Best regards,
-Krzysztof
-
+greg k-h
