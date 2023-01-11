@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C36FC6379F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ACA30C678D6
 	for <linux-media@archiver.kernel.org>; Wed, 11 Jan 2023 10:53:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232511AbjAKKxW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 11 Jan 2023 05:53:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
+        id S238735AbjAKKxX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 11 Jan 2023 05:53:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238611AbjAKKxL (ORCPT
+        with ESMTP id S238629AbjAKKxN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 11 Jan 2023 05:53:11 -0500
+        Wed, 11 Jan 2023 05:53:13 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6A1101D
-        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 02:53:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328D72018
+        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 02:53:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 37268B81BB1
-        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 10:53:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31CD7C433EF;
-        Wed, 11 Jan 2023 10:53:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8F7F7B81BAD
+        for <linux-media@vger.kernel.org>; Wed, 11 Jan 2023 10:53:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 816E3C433D2;
+        Wed, 11 Jan 2023 10:53:06 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 03/13] fsl-viu: remove deprecated driver
-Date:   Wed, 11 Jan 2023 11:52:48 +0100
-Message-Id: <20230111105258.547471-4-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 05/13] zr364xx: remove deprecated driver
+Date:   Wed, 11 Jan 2023 11:52:50 +0100
+Message-Id: <20230111105258.547471-6-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230111105258.547471-1-hverkuil-cisco@xs4all.nl>
 References: <20230111105258.547471-1-hverkuil-cisco@xs4all.nl>
@@ -38,7 +38,7 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The fsl-viu driver does not use the vb2 framework for streaming
+The zr364xx driver does not use the vb2 framework for streaming
 video, instead it uses the old vb1 framework and nobody stepped in to
 convert this driver to vb2.
 
@@ -47,88 +47,254 @@ altogether since we want to get rid of the old vb1 framework.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- .../admin-guide/media/platform-cardlist.rst   |    1 -
+ .../admin-guide/media/dvb-drivers.rst         |    1 -
+ .../admin-guide/media/other-usb-cardlist.rst  |   11 -
+ .../admin-guide/media/usb-cardlist.rst        |    1 -
+ Documentation/admin-guide/media/zr364xx.rst   |  102 -
+ MAINTAINERS                                   |   10 -
  drivers/staging/media/Kconfig                 |    1 -
  drivers/staging/media/Makefile                |    1 -
- .../staging/media/deprecated/fsl-viu/Kconfig  |   15 -
- .../staging/media/deprecated/fsl-viu/Makefile |    2 -
- drivers/staging/media/deprecated/fsl-viu/TODO |    7 -
- .../media/deprecated/fsl-viu/fsl-viu.c        | 1599 -----------------
- 7 files changed, 1626 deletions(-)
- delete mode 100644 drivers/staging/media/deprecated/fsl-viu/Kconfig
- delete mode 100644 drivers/staging/media/deprecated/fsl-viu/Makefile
- delete mode 100644 drivers/staging/media/deprecated/fsl-viu/TODO
- delete mode 100644 drivers/staging/media/deprecated/fsl-viu/fsl-viu.c
+ .../staging/media/deprecated/zr364xx/Kconfig  |   18 -
+ .../staging/media/deprecated/zr364xx/Makefile |    3 -
+ drivers/staging/media/deprecated/zr364xx/TODO |    7 -
+ .../media/deprecated/zr364xx/zr364xx.c        | 1635 -----------------
+ 11 files changed, 1790 deletions(-)
+ delete mode 100644 Documentation/admin-guide/media/zr364xx.rst
+ delete mode 100644 drivers/staging/media/deprecated/zr364xx/Kconfig
+ delete mode 100644 drivers/staging/media/deprecated/zr364xx/Makefile
+ delete mode 100644 drivers/staging/media/deprecated/zr364xx/TODO
+ delete mode 100644 drivers/staging/media/deprecated/zr364xx/zr364xx.c
 
-diff --git a/Documentation/admin-guide/media/platform-cardlist.rst b/Documentation/admin-guide/media/platform-cardlist.rst
-index ac73c4166d1e..c0c22b3f469d 100644
---- a/Documentation/admin-guide/media/platform-cardlist.rst
-+++ b/Documentation/admin-guide/media/platform-cardlist.rst
-@@ -30,7 +30,6 @@ exynos-fimc-is     EXYNOS4x12 FIMC-IS (Imaging Subsystem)
- exynos-fimc-lite   EXYNOS FIMC-LITE camera interface
- exynos-gsc         Samsung Exynos G-Scaler
- exy                Samsung S5P/EXYNOS4 SoC series Camera Subsystem
--fsl-viu            Freescale VIU
- imx-pxp            i.MX Pixel Pipeline (PXP)
- isdf               TI DM365 ISIF video capture
- mmp_camera         Marvell Armada 610 integrated camera controller
+diff --git a/Documentation/admin-guide/media/dvb-drivers.rst b/Documentation/admin-guide/media/dvb-drivers.rst
+index 8df637c375f9..66fa4edd0606 100644
+--- a/Documentation/admin-guide/media/dvb-drivers.rst
++++ b/Documentation/admin-guide/media/dvb-drivers.rst
+@@ -13,4 +13,3 @@ Digital TV driver-specific documentation
+ 	opera-firmware
+ 	technisat
+ 	ttusb-dec
+-	zr364xx
+diff --git a/Documentation/admin-guide/media/other-usb-cardlist.rst b/Documentation/admin-guide/media/other-usb-cardlist.rst
+index 843f1c509cbc..fb88db50e861 100644
+--- a/Documentation/admin-guide/media/other-usb-cardlist.rst
++++ b/Documentation/admin-guide/media/other-usb-cardlist.rst
+@@ -75,15 +75,4 @@ dvb-ttusb_dec	  Technotrend/Hauppauge MPEG decoder
+ 		  DEC2540-t				  0b48:1009
+ usbtv		  Fushicai USBTV007 Audio-Video Grabber	  1b71:3002, 1f71:3301,
+ 							  1f71:3306
+-zr364xx		  USB ZR364XX Camera			  08ca:0109, 041e:4024,
+-							  0d64:0108, 0546:3187,
+-							  0d64:3108, 0595:4343,
+-							  0bb0:500d, 0feb:2004,
+-							  055f:b500, 08ca:2062,
+-							  052b:1a18, 04c8:0729,
+-							  04f2:a208, 0784:0040,
+-							  06d6:0034, 0a17:0062,
+-							  06d6:003b, 0a17:004e,
+-							  041e:405d, 08ca:2102,
+-							  06d6:003d
+ ================  ======================================  =====================
+diff --git a/Documentation/admin-guide/media/usb-cardlist.rst b/Documentation/admin-guide/media/usb-cardlist.rst
+index d5fd7249033d..071ec3958b3a 100644
+--- a/Documentation/admin-guide/media/usb-cardlist.rst
++++ b/Documentation/admin-guide/media/usb-cardlist.rst
+@@ -99,7 +99,6 @@ ttusb_dec               Technotrend/Hauppauge USB DEC devices
+ usbtv                   USBTV007 video capture
+ uvcvideo                USB Video Class (UVC)
+ zd1301                  ZyDAS ZD1301
+-zr364xx                 USB ZR364XX Camera
+ ======================  =========================================================
+ 
+ .. toctree::
+diff --git a/Documentation/admin-guide/media/zr364xx.rst b/Documentation/admin-guide/media/zr364xx.rst
+deleted file mode 100644
+index 7291e54b8be3..000000000000
+--- a/Documentation/admin-guide/media/zr364xx.rst
++++ /dev/null
+@@ -1,102 +0,0 @@
+-.. SPDX-License-Identifier: GPL-2.0
+-
+-Zoran 364xx based USB webcam module
+-===================================
+-
+-site: http://royale.zerezo.com/zr364xx/
+-
+-mail: royale@zerezo.com
+-
+-
+-Introduction
+-------------
+-
+-
+-This brings support under Linux for the Aiptek PocketDV 3300 and similar
+-devices in webcam mode. If you just want to get on your PC the pictures
+-and movies on the camera, you should use the usb-storage module instead.
+-
+-The driver works with several other cameras in webcam mode (see the list
+-below).
+-
+-Possible chipsets are : ZR36430 (ZR36430BGC) and
+-maybe ZR36431, ZR36440, ZR36442...
+-
+-You can try the experience changing the vendor/product ID values (look
+-at the source code).
+-
+-You can get these values by looking at /var/log/messages when you plug
+-your camera, or by typing : cat /sys/kernel/debug/usb/devices.
+-
+-
+-Install
+--------
+-
+-In order to use this driver, you must compile it with your kernel,
+-with the following config options::
+-
+-    ./scripts/config -e USB
+-    ./scripts/config -m MEDIA_SUPPORT
+-    ./scripts/config -e MEDIA_USB_SUPPORT
+-    ./scripts/config -e MEDIA_CAMERA_SUPPORT
+-    ./scripts/config -m USB_ZR364XX
+-
+-Usage
+------
+-
+-modprobe zr364xx debug=X mode=Y
+-
+-- debug      : set to 1 to enable verbose debug messages
+-- mode       : 0 = 320x240, 1 = 160x120, 2 = 640x480
+-
+-You can then use the camera with V4L2 compatible applications, for
+-example Ekiga.
+-
+-To capture a single image, try this: dd if=/dev/video0 of=test.jpg bs=1M
+-count=1
+-
+-links
+------
+-
+-http://mxhaard.free.fr/ (support for many others cams including some Aiptek PocketDV)
+-http://www.harmwal.nl/pccam880/ (this project also supports cameras based on this chipset)
+-
+-Supported devices
+------------------
+-
+-======  =======  ==============  ====================
+-Vendor  Product  Distributor     Model
+-======  =======  ==============  ====================
+-0x08ca  0x0109   Aiptek          PocketDV 3300
+-0x08ca  0x0109   Maxell          Maxcam PRO DV3
+-0x041e  0x4024   Creative        PC-CAM 880
+-0x0d64  0x0108   Aiptek          Fidelity 3200
+-0x0d64  0x0108   Praktica        DCZ 1.3 S
+-0x0d64  0x0108   Genius          Digital Camera (?)
+-0x0d64  0x0108   DXG Technology  Fashion Cam
+-0x0546  0x3187   Polaroid        iON 230
+-0x0d64  0x3108   Praktica        Exakta DC 2200
+-0x0d64  0x3108   Genius          G-Shot D211
+-0x0595  0x4343   Concord         Eye-Q Duo 1300
+-0x0595  0x4343   Concord         Eye-Q Duo 2000
+-0x0595  0x4343   Fujifilm        EX-10
+-0x0595  0x4343   Ricoh           RDC-6000
+-0x0595  0x4343   Digitrex        DSC 1300
+-0x0595  0x4343   Firstline       FDC 2000
+-0x0bb0  0x500d   Concord         EyeQ Go Wireless
+-0x0feb  0x2004   CRS Electronic  3.3 Digital Camera
+-0x0feb  0x2004   Packard Bell    DSC-300
+-0x055f  0xb500   Mustek          MDC 3000
+-0x08ca  0x2062   Aiptek          PocketDV 5700
+-0x052b  0x1a18   Chiphead        Megapix V12
+-0x04c8  0x0729   Konica          Revio 2
+-0x04f2  0xa208   Creative        PC-CAM 850
+-0x0784  0x0040   Traveler        Slimline X5
+-0x06d6  0x0034   Trust           Powerc@m 750
+-0x0a17  0x0062   Pentax          Optio 50L
+-0x06d6  0x003b   Trust           Powerc@m 970Z
+-0x0a17  0x004e   Pentax          Optio 50
+-0x041e  0x405d   Creative        DiVi CAM 516
+-0x08ca  0x2102   Aiptek          DV T300
+-0x06d6  0x003d   Trust           Powerc@m 910Z
+-======  =======  ==============  ====================
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f814ab594ea4..1a95b9bc6824 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -21719,16 +21719,6 @@ S:	Orphan
+ W:	http://linux-lc100020.sourceforge.net
+ F:	drivers/net/wireless/zydas/zd1201.*
+ 
+-USB ZR364XX DRIVER
+-M:	Antoine Jacquet <royale@zerezo.com>
+-L:	linux-usb@vger.kernel.org
+-L:	linux-media@vger.kernel.org
+-S:	Maintained
+-W:	http://royale.zerezo.com/zr364xx/
+-T:	git git://linuxtv.org/media_tree.git
+-F:	Documentation/admin-guide/media/zr364xx*
+-F:	drivers/staging/media/deprecated/zr364xx/
+-
+ USER-MODE LINUX (UML)
+ M:	Richard Weinberger <richard@nod.at>
+ M:	Anton Ivanov <anton.ivanov@cambridgegreys.com>
 diff --git a/drivers/staging/media/Kconfig b/drivers/staging/media/Kconfig
-index 8d6c26e48609..257bb35af36f 100644
+index d1c7e7597a10..57699d4fc232 100644
 --- a/drivers/staging/media/Kconfig
 +++ b/drivers/staging/media/Kconfig
-@@ -52,7 +52,6 @@ menuconfig STAGING_MEDIA_DEPRECATED
- 
- if STAGING_MEDIA_DEPRECATED
- source "drivers/staging/media/deprecated/atmel/Kconfig"
--source "drivers/staging/media/deprecated/fsl-viu/Kconfig"
+@@ -55,7 +55,6 @@ source "drivers/staging/media/deprecated/atmel/Kconfig"
  source "drivers/staging/media/deprecated/saa7146/Kconfig"
- source "drivers/staging/media/deprecated/stkwebcam/Kconfig"
  source "drivers/staging/media/deprecated/tm6000/Kconfig"
+ source "drivers/staging/media/deprecated/vpfe_capture/Kconfig"
+-source "drivers/staging/media/deprecated/zr364xx/Kconfig"
+ endif
+ 
+ endif
 diff --git a/drivers/staging/media/Makefile b/drivers/staging/media/Makefile
-index 1f2c00cae4db..55e7479f91cf 100644
+index da2e4f0fb7cb..591e1df6e83e 100644
 --- a/drivers/staging/media/Makefile
 +++ b/drivers/staging/media/Makefile
-@@ -11,7 +11,6 @@ obj-$(CONFIG_VIDEO_SUNXI)	+= sunxi/
+@@ -10,6 +10,5 @@ obj-$(CONFIG_VIDEO_SUNXI)	+= sunxi/
  obj-$(CONFIG_VIDEO_TEGRA)	+= tegra-video/
  obj-$(CONFIG_VIDEO_IPU3_IMGU)	+= ipu3/
  obj-$(CONFIG_VIDEO_TM6000)	+= deprecated/tm6000/
--obj-$(CONFIG_VIDEO_VIU)		+= deprecated/fsl-viu/
- obj-$(CONFIG_USB_ZR364XX)	+= deprecated/zr364xx/
+-obj-$(CONFIG_USB_ZR364XX)	+= deprecated/zr364xx/
  obj-y += deprecated/vpfe_capture/
  obj-y += deprecated/saa7146/
-diff --git a/drivers/staging/media/deprecated/fsl-viu/Kconfig b/drivers/staging/media/deprecated/fsl-viu/Kconfig
+diff --git a/drivers/staging/media/deprecated/zr364xx/Kconfig b/drivers/staging/media/deprecated/zr364xx/Kconfig
 deleted file mode 100644
-index 399892c69a18..000000000000
---- a/drivers/staging/media/deprecated/fsl-viu/Kconfig
+index ea29c9d8dca2..000000000000
+--- a/drivers/staging/media/deprecated/zr364xx/Kconfig
 +++ /dev/null
-@@ -1,15 +0,0 @@
+@@ -1,18 +0,0 @@
 -# SPDX-License-Identifier: GPL-2.0-only
--config VIDEO_VIU
--	tristate "NXP VIU Video Driver (DEPRECATED)"
--	depends on V4L_PLATFORM_DRIVERS
--	depends on VIDEO_DEV && (PPC_MPC512x || COMPILE_TEST) && I2C
--	select VIDEOBUF_DMA_CONTIG
+-config USB_ZR364XX
+-	tristate "USB ZR364XX Camera support (DEPRECATED)"
+-	depends on USB && VIDEO_DEV
+-	select VIDEOBUF_GEN
+-	select VIDEOBUF_VMALLOC
 -	help
--	  Support for Freescale VIU video driver. This device captures
--	  video data, or overlays video on DIU frame buffer.
+-	  Say Y here if you want to connect this type of camera to your
+-	  computer's USB port.
+-	  See <file:Documentation/admin-guide/media/zr364xx.rst> for more info
+-	  and list of supported cameras.
 -
 -	  This driver is deprecated and is scheduled for removal by
 -	  the beginning of 2023. See the TODO file for more information.
 -
--	  Say Y here if you want to enable VIU device on MPC5121e Rev2+.
--	  In doubt, say N.
-diff --git a/drivers/staging/media/deprecated/fsl-viu/Makefile b/drivers/staging/media/deprecated/fsl-viu/Makefile
+-	  To compile this driver as a module, choose M here: the
+-	  module will be called zr364xx.
+-
+diff --git a/drivers/staging/media/deprecated/zr364xx/Makefile b/drivers/staging/media/deprecated/zr364xx/Makefile
 deleted file mode 100644
-index 931ec56ad08c..000000000000
---- a/drivers/staging/media/deprecated/fsl-viu/Makefile
+index edab017d499c..000000000000
+--- a/drivers/staging/media/deprecated/zr364xx/Makefile
 +++ /dev/null
-@@ -1,2 +0,0 @@
+@@ -1,3 +0,0 @@
 -# SPDX-License-Identifier: GPL-2.0-only
--obj-$(CONFIG_VIDEO_VIU) += fsl-viu.o
-diff --git a/drivers/staging/media/deprecated/fsl-viu/TODO b/drivers/staging/media/deprecated/fsl-viu/TODO
+-obj-$(CONFIG_USB_ZR364XX)       += zr364xx.o
+-
+diff --git a/drivers/staging/media/deprecated/zr364xx/TODO b/drivers/staging/media/deprecated/zr364xx/TODO
 deleted file mode 100644
 index ecb30a429689..000000000000
---- a/drivers/staging/media/deprecated/fsl-viu/TODO
+--- a/drivers/staging/media/deprecated/zr364xx/TODO
 +++ /dev/null
 @@ -1,7 +0,0 @@
 -This is one of the few drivers still not using the vb2
@@ -138,490 +304,407 @@ index ecb30a429689..000000000000
 -In order to keep this driver it has to be converted to vb2.
 -If someone is interested in doing this work, then contact the
 -linux-media mailinglist (https://linuxtv.org/lists.php).
-diff --git a/drivers/staging/media/deprecated/fsl-viu/fsl-viu.c b/drivers/staging/media/deprecated/fsl-viu/fsl-viu.c
+diff --git a/drivers/staging/media/deprecated/zr364xx/zr364xx.c b/drivers/staging/media/deprecated/zr364xx/zr364xx.c
 deleted file mode 100644
-index afc96f6db2a1..000000000000
---- a/drivers/staging/media/deprecated/fsl-viu/fsl-viu.c
+index 538a330046ec..000000000000
+--- a/drivers/staging/media/deprecated/zr364xx/zr364xx.c
 +++ /dev/null
-@@ -1,1599 +0,0 @@
+@@ -1,1635 +0,0 @@
 -// SPDX-License-Identifier: GPL-2.0-or-later
 -/*
-- * Copyright 2008-2010 Freescale Semiconductor, Inc. All Rights Reserved.
+- * Zoran 364xx based USB webcam module version 0.73
 - *
-- *  Freescale VIU video driver
+- * Allows you to use your USB webcam with V4L2 applications
+- * This is still in heavy development !
 - *
-- *  Authors: Hongjun Chen <hong-jun.chen@freescale.com>
-- *	     Porting to 2.6.35 by DENX Software Engineering,
-- *	     Anatolij Gustschin <agust@denx.de>
+- * Copyright (C) 2004  Antoine Jacquet <royale@zerezo.com>
+- * http://royale.zerezo.com/zr364xx/
+- *
+- * Heavily inspired by usb-skeleton.c, vicam.c, cpia.c and spca50x.c drivers
+- * V4L2 version inspired by meye.c driver
+- *
+- * Some video buffer code by Lamarque based on s2255drv.c and vivi.c drivers.
 - */
 -
+-
 -#include <linux/module.h>
--#include <linux/clk.h>
--#include <linux/kernel.h>
--#include <linux/i2c.h>
 -#include <linux/init.h>
--#include <linux/interrupt.h>
--#include <linux/io.h>
--#include <linux/of_address.h>
--#include <linux/of_irq.h>
--#include <linux/of_platform.h>
+-#include <linux/usb.h>
+-#include <linux/vmalloc.h>
 -#include <linux/slab.h>
+-#include <linux/highmem.h>
 -#include <media/v4l2-common.h>
--#include <media/v4l2-device.h>
 -#include <media/v4l2-ioctl.h>
+-#include <media/v4l2-device.h>
 -#include <media/v4l2-ctrls.h>
 -#include <media/v4l2-fh.h>
 -#include <media/v4l2-event.h>
--#include <media/videobuf-dma-contig.h>
+-#include <media/videobuf-vmalloc.h>
 -
--#define DRV_NAME		"fsl_viu"
--#define VIU_VERSION		"0.5.1"
 -
--#define BUFFER_TIMEOUT		msecs_to_jiffies(500)  /* 0.5 seconds */
+-/* Version Information */
+-#define DRIVER_VERSION "0.7.4"
+-#define DRIVER_AUTHOR "Antoine Jacquet, http://royale.zerezo.com/"
+-#define DRIVER_DESC "Zoran 364xx"
 -
--#define	VIU_VID_MEM_LIMIT	4	/* Video memory limit, in Mb */
 -
--/* I2C address of video decoder chip is 0x4A */
--#define VIU_VIDEO_DECODER_ADDR	0x25
+-/* Camera */
+-#define FRAMES 1
+-#define MAX_FRAME_SIZE 200000
+-#define BUFFER_SIZE 0x1000
+-#define CTRL_TIMEOUT 500
 -
--static int info_level;
+-#define ZR364XX_DEF_BUFS	4
+-#define ZR364XX_READ_IDLE	0
+-#define ZR364XX_READ_FRAME	1
 -
--#define dprintk(level, fmt, arg...)					\
--	do {								\
--		if (level <= info_level)				\
--			printk(KERN_DEBUG "viu: " fmt , ## arg);	\
+-/* Debug macro */
+-#define DBG(fmt, args...) \
+-	do { \
+-		if (debug) { \
+-			printk(KERN_INFO KBUILD_MODNAME " " fmt, ##args); \
+-		} \
 -	} while (0)
 -
--/*
-- * Basic structures
-- */
--struct viu_fmt {
--	u32   fourcc;		/* v4l2 format id */
--	u32   pixelformat;
--	int   depth;
+-/*#define FULL_DEBUG 1*/
+-#ifdef FULL_DEBUG
+-#define _DBG DBG
+-#else
+-#define _DBG(fmt, args...)
+-#endif
+-
+-/* Init methods, need to find nicer names for these
+- * the exact names of the chipsets would be the best if someone finds it */
+-#define METHOD0 0
+-#define METHOD1 1
+-#define METHOD2 2
+-#define METHOD3 3
+-
+-
+-/* Module parameters */
+-static int debug;
+-static int mode;
+-
+-
+-/* Module parameters interface */
+-module_param(debug, int, 0644);
+-MODULE_PARM_DESC(debug, "Debug level");
+-module_param(mode, int, 0644);
+-MODULE_PARM_DESC(mode, "0 = 320x240, 1 = 160x120, 2 = 640x480");
+-
+-
+-/* Devices supported by this driver
+- * .driver_info contains the init method used by the camera */
+-static const struct usb_device_id device_table[] = {
+-	{USB_DEVICE(0x08ca, 0x0109), .driver_info = METHOD0 },
+-	{USB_DEVICE(0x041e, 0x4024), .driver_info = METHOD0 },
+-	{USB_DEVICE(0x0d64, 0x0108), .driver_info = METHOD0 },
+-	{USB_DEVICE(0x0546, 0x3187), .driver_info = METHOD0 },
+-	{USB_DEVICE(0x0d64, 0x3108), .driver_info = METHOD0 },
+-	{USB_DEVICE(0x0595, 0x4343), .driver_info = METHOD0 },
+-	{USB_DEVICE(0x0bb0, 0x500d), .driver_info = METHOD0 },
+-	{USB_DEVICE(0x0feb, 0x2004), .driver_info = METHOD0 },
+-	{USB_DEVICE(0x055f, 0xb500), .driver_info = METHOD0 },
+-	{USB_DEVICE(0x08ca, 0x2062), .driver_info = METHOD2 },
+-	{USB_DEVICE(0x052b, 0x1a18), .driver_info = METHOD1 },
+-	{USB_DEVICE(0x04c8, 0x0729), .driver_info = METHOD0 },
+-	{USB_DEVICE(0x04f2, 0xa208), .driver_info = METHOD0 },
+-	{USB_DEVICE(0x0784, 0x0040), .driver_info = METHOD1 },
+-	{USB_DEVICE(0x06d6, 0x0034), .driver_info = METHOD0 },
+-	{USB_DEVICE(0x0a17, 0x0062), .driver_info = METHOD2 },
+-	{USB_DEVICE(0x06d6, 0x003b), .driver_info = METHOD0 },
+-	{USB_DEVICE(0x0a17, 0x004e), .driver_info = METHOD2 },
+-	{USB_DEVICE(0x041e, 0x405d), .driver_info = METHOD2 },
+-	{USB_DEVICE(0x08ca, 0x2102), .driver_info = METHOD3 },
+-	{USB_DEVICE(0x06d6, 0x003d), .driver_info = METHOD0 },
+-	{}			/* Terminating entry */
 -};
 -
--static struct viu_fmt formats[] = {
+-MODULE_DEVICE_TABLE(usb, device_table);
+-
+-/* frame structure */
+-struct zr364xx_framei {
+-	unsigned long ulState;	/* ulState:ZR364XX_READ_IDLE,
+-					   ZR364XX_READ_FRAME */
+-	void *lpvbits;		/* image data */
+-	unsigned long cur_size;	/* current data copied to it */
+-};
+-
+-/* image buffer structure */
+-struct zr364xx_bufferi {
+-	unsigned long dwFrames;			/* number of frames in buffer */
+-	struct zr364xx_framei frame[FRAMES];	/* array of FRAME structures */
+-};
+-
+-struct zr364xx_dmaqueue {
+-	struct list_head	active;
+-	struct zr364xx_camera	*cam;
+-};
+-
+-struct zr364xx_pipeinfo {
+-	u32 transfer_size;
+-	u8 *transfer_buffer;
+-	u32 state;
+-	void *stream_urb;
+-	void *cam;	/* back pointer to zr364xx_camera struct */
+-	u32 err_count;
+-	u32 idx;
+-};
+-
+-struct zr364xx_fmt {
+-	u32 fourcc;
+-	int depth;
+-};
+-
+-/* image formats.  */
+-static const struct zr364xx_fmt formats[] = {
 -	{
--		.fourcc		= V4L2_PIX_FMT_RGB565,
--		.pixelformat	= V4L2_PIX_FMT_RGB565,
--		.depth		= 16,
--	}, {
--		.fourcc		= V4L2_PIX_FMT_RGB32,
--		.pixelformat	= V4L2_PIX_FMT_RGB32,
--		.depth		= 32,
+-		.fourcc = V4L2_PIX_FMT_JPEG,
+-		.depth = 24
 -	}
 -};
 -
--struct viu_dev;
--struct viu_buf;
+-/* Camera stuff */
+-struct zr364xx_camera {
+-	struct usb_device *udev;	/* save off the usb device pointer */
+-	struct usb_interface *interface;/* the interface for this device */
+-	struct v4l2_device v4l2_dev;
+-	struct v4l2_ctrl_handler ctrl_handler;
+-	struct video_device vdev;	/* v4l video device */
+-	struct v4l2_fh *owner;		/* owns the streaming */
+-	int nb;
+-	struct zr364xx_bufferi		buffer;
+-	int skip;
+-	int width;
+-	int height;
+-	int method;
+-	struct mutex lock;
+-
+-	spinlock_t		slock;
+-	struct zr364xx_dmaqueue	vidq;
+-	int			last_frame;
+-	int			cur_frame;
+-	unsigned long		frame_count;
+-	int			b_acquire;
+-	struct zr364xx_pipeinfo	pipe[1];
+-
+-	u8			read_endpoint;
+-
+-	const struct zr364xx_fmt *fmt;
+-	struct videobuf_queue	vb_vidq;
+-	bool was_streaming;
+-};
 -
 -/* buffer for one video frame */
--struct viu_buf {
+-struct zr364xx_buffer {
 -	/* common v4l buffer stuff -- must be first */
 -	struct videobuf_buffer vb;
--	struct viu_fmt *fmt;
+-	const struct zr364xx_fmt *fmt;
 -};
 -
--struct viu_dmaqueue {
--	struct viu_dev		*dev;
--	struct list_head	active;
--	struct list_head	queued;
--	struct timer_list	timeout;
--};
--
--struct viu_status {
--	u32 field_irq;
--	u32 vsync_irq;
--	u32 hsync_irq;
--	u32 vstart_irq;
--	u32 dma_end_irq;
--	u32 error_irq;
--};
--
--struct viu_reg {
--	u32 status_cfg;
--	u32 luminance;
--	u32 chroma_r;
--	u32 chroma_g;
--	u32 chroma_b;
--	u32 field_base_addr;
--	u32 dma_inc;
--	u32 picture_count;
--	u32 req_alarm;
--	u32 alpha;
--} __attribute__ ((packed));
--
--struct viu_dev {
--	struct v4l2_device	v4l2_dev;
--	struct v4l2_ctrl_handler hdl;
--	struct mutex		lock;
--	spinlock_t		slock;
--	int			users;
--
--	struct device		*dev;
--	/* various device info */
--	struct video_device	*vdev;
--	struct viu_dmaqueue	vidq;
--	enum v4l2_field		capfield;
--	int			field;
--	int			first;
--	int			dma_done;
--
--	/* Hardware register area */
--	struct viu_reg __iomem	*vr;
--
--	/* Interrupt vector */
--	int			irq;
--	struct viu_status	irqs;
--
--	/* video overlay */
--	struct v4l2_framebuffer	ovbuf;
--	struct viu_fmt		*ovfmt;
--	unsigned int		ovenable;
--	enum v4l2_field		ovfield;
--
--	/* crop */
--	struct v4l2_rect	crop_current;
--
--	/* clock pointer */
--	struct clk		*clk;
--
--	/* decoder */
--	struct v4l2_subdev	*decoder;
--
--	v4l2_std_id		std;
--};
--
--struct viu_fh {
--	/* must remain the first field of this struct */
--	struct v4l2_fh		fh;
--	struct viu_dev		*dev;
--
--	/* video capture */
--	struct videobuf_queue	vb_vidq;
--	spinlock_t		vbq_lock; /* spinlock for the videobuf queue */
--
--	/* video overlay */
--	struct v4l2_window	win;
--	struct v4l2_clip	clips[1];
--
--	/* video capture */
--	struct viu_fmt		*fmt;
--	int			width, height, sizeimage;
--	enum v4l2_buf_type	type;
--};
--
--static struct viu_reg reg_val;
--
--/*
-- * Macro definitions of VIU registers
-- */
--
--/* STATUS_CONFIG register */
--enum status_config {
--	SOFT_RST		= 1 << 0,
--
--	ERR_MASK		= 0x0f << 4,	/* Error code mask */
--	ERR_NO			= 0x00,		/* No error */
--	ERR_DMA_V		= 0x01 << 4,	/* DMA in vertical active */
--	ERR_DMA_VB		= 0x02 << 4,	/* DMA in vertical blanking */
--	ERR_LINE_TOO_LONG	= 0x04 << 4,	/* Line too long */
--	ERR_TOO_MANG_LINES	= 0x05 << 4,	/* Too many lines in field */
--	ERR_LINE_TOO_SHORT	= 0x06 << 4,	/* Line too short */
--	ERR_NOT_ENOUGH_LINE	= 0x07 << 4,	/* Not enough lines in field */
--	ERR_FIFO_OVERFLOW	= 0x08 << 4,	/* FIFO overflow */
--	ERR_FIFO_UNDERFLOW	= 0x09 << 4,	/* FIFO underflow */
--	ERR_1bit_ECC		= 0x0a << 4,	/* One bit ECC error */
--	ERR_MORE_ECC		= 0x0b << 4,	/* Two/more bits ECC error */
--
--	INT_FIELD_EN		= 0x01 << 8,	/* Enable field interrupt */
--	INT_VSYNC_EN		= 0x01 << 9,	/* Enable vsync interrupt */
--	INT_HSYNC_EN		= 0x01 << 10,	/* Enable hsync interrupt */
--	INT_VSTART_EN		= 0x01 << 11,	/* Enable vstart interrupt */
--	INT_DMA_END_EN		= 0x01 << 12,	/* Enable DMA end interrupt */
--	INT_ERROR_EN		= 0x01 << 13,	/* Enable error interrupt */
--	INT_ECC_EN		= 0x01 << 14,	/* Enable ECC interrupt */
--
--	INT_FIELD_STATUS	= 0x01 << 16,	/* field interrupt status */
--	INT_VSYNC_STATUS	= 0x01 << 17,	/* vsync interrupt status */
--	INT_HSYNC_STATUS	= 0x01 << 18,	/* hsync interrupt status */
--	INT_VSTART_STATUS	= 0x01 << 19,	/* vstart interrupt status */
--	INT_DMA_END_STATUS	= 0x01 << 20,	/* DMA end interrupt status */
--	INT_ERROR_STATUS	= 0x01 << 21,	/* error interrupt status */
--
--	DMA_ACT			= 0x01 << 27,	/* Enable DMA transfer */
--	FIELD_NO		= 0x01 << 28,	/* Field number */
--	DITHER_ON		= 0x01 << 29,	/* Dithering is on */
--	ROUND_ON		= 0x01 << 30,	/* Round is on */
--	MODE_32BIT		= 1UL << 31,	/* Data in RGBa888,
--						 * 0 in RGB565
--						 */
--};
--
--#define norm_maxw()	720
--#define norm_maxh()	576
--
--#define INT_ALL_STATUS	(INT_FIELD_STATUS | INT_VSYNC_STATUS | \
--			 INT_HSYNC_STATUS | INT_VSTART_STATUS | \
--			 INT_DMA_END_STATUS | INT_ERROR_STATUS)
--
--#define NUM_FORMATS	ARRAY_SIZE(formats)
--
--static irqreturn_t viu_intr(int irq, void *dev_id);
--
--static struct viu_fmt *format_by_fourcc(int fourcc)
+-/* function used to send initialisation commands to the camera */
+-static int send_control_msg(struct usb_device *udev, u8 request, u16 value,
+-			    u16 index, unsigned char *cp, u16 size)
 -{
--	int i;
+-	int status;
 -
--	for (i = 0; i < NUM_FORMATS; i++) {
--		if (formats[i].pixelformat == fourcc)
--			return formats + i;
--	}
+-	unsigned char *transfer_buffer = kmemdup(cp, size, GFP_KERNEL);
+-	if (!transfer_buffer)
+-		return -ENOMEM;
 -
--	dprintk(0, "unknown pixelformat:'%4.4s'\n", (char *)&fourcc);
--	return NULL;
+-	status = usb_control_msg(udev,
+-				 usb_sndctrlpipe(udev, 0),
+-				 request,
+-				 USB_DIR_OUT | USB_TYPE_VENDOR |
+-				 USB_RECIP_DEVICE, value, index,
+-				 transfer_buffer, size, CTRL_TIMEOUT);
+-
+-	kfree(transfer_buffer);
+-	return status;
 -}
 -
--static void viu_start_dma(struct viu_dev *dev)
--{
--	struct viu_reg __iomem *vr = dev->vr;
 -
--	dev->field = 0;
+-/* Control messages sent to the camera to initialize it
+- * and launch the capture */
+-typedef struct {
+-	unsigned int value;
+-	unsigned int size;
+-	unsigned char *bytes;
+-} message;
 -
--	/* Enable DMA operation */
--	iowrite32be(SOFT_RST, &vr->status_cfg);
--	iowrite32be(INT_FIELD_EN, &vr->status_cfg);
--}
+-/* method 0 */
+-static unsigned char m0d1[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+-static unsigned char m0d2[] = { 0, 0, 0, 0, 0, 0 };
+-static unsigned char m0d3[] = { 0, 0 };
+-static message m0[] = {
+-	{0x1f30, 0, NULL},
+-	{0xd000, 0, NULL},
+-	{0x3370, sizeof(m0d1), m0d1},
+-	{0x2000, 0, NULL},
+-	{0x2f0f, 0, NULL},
+-	{0x2610, sizeof(m0d2), m0d2},
+-	{0xe107, 0, NULL},
+-	{0x2502, 0, NULL},
+-	{0x1f70, 0, NULL},
+-	{0xd000, 0, NULL},
+-	{0x9a01, sizeof(m0d3), m0d3},
+-	{-1, -1, NULL}
+-};
 -
--static void viu_stop_dma(struct viu_dev *dev)
--{
--	struct viu_reg __iomem *vr = dev->vr;
--	int cnt = 100;
--	u32 status_cfg;
+-/* method 1 */
+-static unsigned char m1d1[] = { 0xff, 0xff };
+-static unsigned char m1d2[] = { 0x00, 0x00 };
+-static message m1[] = {
+-	{0x1f30, 0, NULL},
+-	{0xd000, 0, NULL},
+-	{0xf000, 0, NULL},
+-	{0x2000, 0, NULL},
+-	{0x2f0f, 0, NULL},
+-	{0x2650, 0, NULL},
+-	{0xe107, 0, NULL},
+-	{0x2502, sizeof(m1d1), m1d1},
+-	{0x1f70, 0, NULL},
+-	{0xd000, 0, NULL},
+-	{0xd000, 0, NULL},
+-	{0xd000, 0, NULL},
+-	{0x9a01, sizeof(m1d2), m1d2},
+-	{-1, -1, NULL}
+-};
 -
--	iowrite32be(0, &vr->status_cfg);
+-/* method 2 */
+-static unsigned char m2d1[] = { 0xff, 0xff };
+-static message m2[] = {
+-	{0x1f30, 0, NULL},
+-	{0xf000, 0, NULL},
+-	{0x2000, 0, NULL},
+-	{0x2f0f, 0, NULL},
+-	{0x2650, 0, NULL},
+-	{0xe107, 0, NULL},
+-	{0x2502, sizeof(m2d1), m2d1},
+-	{0x1f70, 0, NULL},
+-	{-1, -1, NULL}
+-};
 -
--	/* Clear pending interrupts */
--	status_cfg = ioread32be(&vr->status_cfg);
--	if (status_cfg & 0x3f0000)
--		iowrite32be(status_cfg & 0x3f0000, &vr->status_cfg);
+-/* init table */
+-static message *init[4] = { m0, m1, m2, m2 };
 -
--	if (status_cfg & DMA_ACT) {
--		do {
--			status_cfg = ioread32be(&vr->status_cfg);
--			if (status_cfg & INT_DMA_END_STATUS)
--				break;
--		} while (cnt--);
 -
--		if (cnt < 0) {
--			/* timed out, issue soft reset */
--			iowrite32be(SOFT_RST, &vr->status_cfg);
--			iowrite32be(0, &vr->status_cfg);
--		} else {
--			/* clear DMA_END and other pending irqs */
--			iowrite32be(status_cfg & 0x3f0000, &vr->status_cfg);
--		}
--	}
+-/* JPEG static data in header (Huffman table, etc) */
+-static unsigned char header1[] = {
+-	0xFF, 0xD8,
+-	/*
+-	0xFF, 0xE0, 0x00, 0x10, 'J', 'F', 'I', 'F',
+-	0x00, 0x01, 0x01, 0x00, 0x33, 0x8A, 0x00, 0x00, 0x33, 0x88,
+-	*/
+-	0xFF, 0xDB, 0x00, 0x84
+-};
+-static unsigned char header2[] = {
+-	0xFF, 0xC4, 0x00, 0x1F, 0x00, 0x00, 0x01, 0x05, 0x01, 0x01, 0x01,
+-	0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+-	0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B,
+-	0xFF, 0xC4, 0x00, 0xB5, 0x10, 0x00, 0x02, 0x01, 0x03, 0x03, 0x02,
+-	0x04, 0x03, 0x05, 0x05, 0x04, 0x04, 0x00, 0x00, 0x01, 0x7D, 0x01,
+-	0x02, 0x03, 0x00, 0x04, 0x11, 0x05, 0x12, 0x21, 0x31, 0x41, 0x06,
+-	0x13, 0x51, 0x61, 0x07, 0x22, 0x71, 0x14, 0x32, 0x81, 0x91, 0xA1,
+-	0x08, 0x23, 0x42, 0xB1, 0xC1, 0x15, 0x52, 0xD1, 0xF0, 0x24, 0x33,
+-	0x62, 0x72, 0x82, 0x09, 0x0A, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x25,
+-	0x26, 0x27, 0x28, 0x29, 0x2A, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39,
+-	0x3A, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x53, 0x54,
+-	0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x63, 0x64, 0x65, 0x66, 0x67,
+-	0x68, 0x69, 0x6A, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A,
+-	0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x92, 0x93, 0x94,
+-	0x95, 0x96, 0x97, 0x98, 0x99, 0x9A, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6,
+-	0xA7, 0xA8, 0xA9, 0xAA, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7, 0xB8,
+-	0xB9, 0xBA, 0xC2, 0xC3, 0xC4, 0xC5, 0xC6, 0xC7, 0xC8, 0xC9, 0xCA,
+-	0xD2, 0xD3, 0xD4, 0xD5, 0xD6, 0xD7, 0xD8, 0xD9, 0xDA, 0xE1, 0xE2,
+-	0xE3, 0xE4, 0xE5, 0xE6, 0xE7, 0xE8, 0xE9, 0xEA, 0xF1, 0xF2, 0xF3,
+-	0xF4, 0xF5, 0xF6, 0xF7, 0xF8, 0xF9, 0xFA, 0xFF, 0xC4, 0x00, 0x1F,
+-	0x01, 0x00, 0x03, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+-	0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x02, 0x03, 0x04,
+-	0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0xFF, 0xC4, 0x00, 0xB5,
+-	0x11, 0x00, 0x02, 0x01, 0x02, 0x04, 0x04, 0x03, 0x04, 0x07, 0x05,
+-	0x04, 0x04, 0x00, 0x01, 0x02, 0x77, 0x00, 0x01, 0x02, 0x03, 0x11,
+-	0x04, 0x05, 0x21, 0x31, 0x06, 0x12, 0x41, 0x51, 0x07, 0x61, 0x71,
+-	0x13, 0x22, 0x32, 0x81, 0x08, 0x14, 0x42, 0x91, 0xA1, 0xB1, 0xC1,
+-	0x09, 0x23, 0x33, 0x52, 0xF0, 0x15, 0x62, 0x72, 0xD1, 0x0A, 0x16,
+-	0x24, 0x34, 0xE1, 0x25, 0xF1, 0x17, 0x18, 0x19, 0x1A, 0x26, 0x27,
+-	0x28, 0x29, 0x2A, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x43, 0x44,
+-	0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x53, 0x54, 0x55, 0x56, 0x57,
+-	0x58, 0x59, 0x5A, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6A,
+-	0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A, 0x82, 0x83, 0x84,
+-	0x85, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x92, 0x93, 0x94, 0x95, 0x96,
+-	0x97, 0x98, 0x99, 0x9A, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, 0xA8,
+-	0xA9, 0xAA, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7, 0xB8, 0xB9, 0xBA,
+-	0xC2, 0xC3, 0xC4, 0xC5, 0xC6, 0xC7, 0xC8, 0xC9, 0xCA, 0xD2, 0xD3,
+-	0xD4, 0xD5, 0xD6, 0xD7, 0xD8, 0xD9, 0xDA, 0xE2, 0xE3, 0xE4, 0xE5,
+-	0xE6, 0xE7, 0xE8, 0xE9, 0xEA, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7,
+-	0xF8, 0xF9, 0xFA, 0xFF, 0xC0, 0x00, 0x11, 0x08, 0x00, 0xF0, 0x01,
+-	0x40, 0x03, 0x01, 0x21, 0x00, 0x02, 0x11, 0x01, 0x03, 0x11, 0x01,
+-	0xFF, 0xDA, 0x00, 0x0C, 0x03, 0x01, 0x00, 0x02, 0x11, 0x03, 0x11,
+-	0x00, 0x3F, 0x00
+-};
+-static unsigned char header3;
 -
--	dev->field = 0;
--}
+-/* ------------------------------------------------------------------
+-   Videobuf operations
+-   ------------------------------------------------------------------*/
 -
--static int restart_video_queue(struct viu_dmaqueue *vidq)
--{
--	struct viu_buf *buf, *prev;
--
--	dprintk(1, "%s vidq=%p\n", __func__, vidq);
--	if (!list_empty(&vidq->active)) {
--		buf = list_entry(vidq->active.next, struct viu_buf, vb.queue);
--		dprintk(2, "restart_queue [%p/%d]: restart dma\n",
--			buf, buf->vb.i);
--
--		viu_stop_dma(vidq->dev);
--
--		/* cancel all outstanding capture requests */
--		list_for_each_entry_safe(buf, prev, &vidq->active, vb.queue) {
--			list_del(&buf->vb.queue);
--			buf->vb.state = VIDEOBUF_ERROR;
--			wake_up(&buf->vb.done);
--		}
--		mod_timer(&vidq->timeout, jiffies+BUFFER_TIMEOUT);
--		return 0;
--	}
--
--	prev = NULL;
--	for (;;) {
--		if (list_empty(&vidq->queued))
--			return 0;
--		buf = list_entry(vidq->queued.next, struct viu_buf, vb.queue);
--		if (prev == NULL) {
--			list_move_tail(&buf->vb.queue, &vidq->active);
--
--			dprintk(1, "Restarting video dma\n");
--			viu_stop_dma(vidq->dev);
--			viu_start_dma(vidq->dev);
--
--			buf->vb.state = VIDEOBUF_ACTIVE;
--			mod_timer(&vidq->timeout, jiffies+BUFFER_TIMEOUT);
--			dprintk(2, "[%p/%d] restart_queue - first active\n",
--				buf, buf->vb.i);
--
--		} else if (prev->vb.width  == buf->vb.width  &&
--			   prev->vb.height == buf->vb.height &&
--			   prev->fmt       == buf->fmt) {
--			list_move_tail(&buf->vb.queue, &vidq->active);
--			buf->vb.state = VIDEOBUF_ACTIVE;
--			dprintk(2, "[%p/%d] restart_queue - move to active\n",
--				buf, buf->vb.i);
--		} else {
--			return 0;
--		}
--		prev = buf;
--	}
--}
--
--static void viu_vid_timeout(struct timer_list *t)
--{
--	struct viu_dev *dev = from_timer(dev, t, vidq.timeout);
--	struct viu_buf *buf;
--	struct viu_dmaqueue *vidq = &dev->vidq;
--
--	while (!list_empty(&vidq->active)) {
--		buf = list_entry(vidq->active.next, struct viu_buf, vb.queue);
--		list_del(&buf->vb.queue);
--		buf->vb.state = VIDEOBUF_ERROR;
--		wake_up(&buf->vb.done);
--		dprintk(1, "viu/0: [%p/%d] timeout\n", buf, buf->vb.i);
--	}
--
--	restart_video_queue(vidq);
--}
--
--/*
-- * Videobuf operations
-- */
 -static int buffer_setup(struct videobuf_queue *vq, unsigned int *count,
 -			unsigned int *size)
 -{
--	struct viu_fh *fh = vq->priv_data;
+-	struct zr364xx_camera *cam = vq->priv_data;
 -
--	*size = fh->width * fh->height * fh->fmt->depth >> 3;
+-	*size = cam->width * cam->height * (cam->fmt->depth >> 3);
+-
 -	if (*count == 0)
--		*count = 32;
+-		*count = ZR364XX_DEF_BUFS;
 -
--	while (*size * *count > VIU_VID_MEM_LIMIT * 1024 * 1024)
--		(*count)--;
+-	if (*size * *count > ZR364XX_DEF_BUFS * 1024 * 1024)
+-		*count = (ZR364XX_DEF_BUFS * 1024 * 1024) / *size;
 -
--	dprintk(1, "%s, count=%d, size=%d\n", __func__, *count, *size);
 -	return 0;
 -}
 -
--static void free_buffer(struct videobuf_queue *vq, struct viu_buf *buf)
+-static void free_buffer(struct videobuf_queue *vq, struct zr364xx_buffer *buf)
 -{
--	struct videobuf_buffer *vb = &buf->vb;
--	void *vaddr = NULL;
+-	_DBG("%s\n", __func__);
 -
--	videobuf_waiton(vq, &buf->vb, 0, 0);
--
--	if (vq->int_ops && vq->int_ops->vaddr)
--		vaddr = vq->int_ops->vaddr(vb);
--
--	if (vaddr)
--		videobuf_dma_contig_free(vq, &buf->vb);
--
+-	videobuf_vmalloc_free(&buf->vb);
 -	buf->vb.state = VIDEOBUF_NEEDS_INIT;
 -}
 -
--inline int buffer_activate(struct viu_dev *dev, struct viu_buf *buf)
--{
--	struct viu_reg __iomem *vr = dev->vr;
--	int bpp;
--
--	/* setup the DMA base address */
--	reg_val.field_base_addr = videobuf_to_dma_contig(&buf->vb);
--
--	dprintk(1, "buffer_activate [%p/%d]: dma addr 0x%lx\n",
--		buf, buf->vb.i, (unsigned long)reg_val.field_base_addr);
--
--	/* interlace is on by default, set horizontal DMA increment */
--	reg_val.status_cfg = 0;
--	bpp = buf->fmt->depth >> 3;
--	switch (bpp) {
--	case 2:
--		reg_val.status_cfg &= ~MODE_32BIT;
--		reg_val.dma_inc = buf->vb.width * 2;
--		break;
--	case 4:
--		reg_val.status_cfg |= MODE_32BIT;
--		reg_val.dma_inc = buf->vb.width * 4;
--		break;
--	default:
--		dprintk(0, "doesn't support color depth(%d)\n",
--			bpp * 8);
--		return -EINVAL;
--	}
--
--	/* setup picture_count register */
--	reg_val.picture_count = (buf->vb.height / 2) << 16 |
--				buf->vb.width;
--
--	reg_val.status_cfg |= DMA_ACT | INT_DMA_END_EN | INT_FIELD_EN;
--
--	buf->vb.state = VIDEOBUF_ACTIVE;
--	dev->capfield = buf->vb.field;
--
--	/* reset dma increment if needed */
--	if (!V4L2_FIELD_HAS_BOTH(buf->vb.field))
--		reg_val.dma_inc = 0;
--
--	iowrite32be(reg_val.dma_inc, &vr->dma_inc);
--	iowrite32be(reg_val.picture_count, &vr->picture_count);
--	iowrite32be(reg_val.field_base_addr, &vr->field_base_addr);
--	mod_timer(&dev->vidq.timeout, jiffies + BUFFER_TIMEOUT);
--	return 0;
--}
--
--static int buffer_prepare(struct videobuf_queue *vq,
--			  struct videobuf_buffer *vb,
+-static int buffer_prepare(struct videobuf_queue *vq, struct videobuf_buffer *vb,
 -			  enum v4l2_field field)
 -{
--	struct viu_fh  *fh  = vq->priv_data;
--	struct viu_buf *buf = container_of(vb, struct viu_buf, vb);
+-	struct zr364xx_camera *cam = vq->priv_data;
+-	struct zr364xx_buffer *buf = container_of(vb, struct zr364xx_buffer,
+-						  vb);
 -	int rc;
 -
--	BUG_ON(fh->fmt == NULL);
--
--	if (fh->width  < 48 || fh->width  > norm_maxw() ||
--	    fh->height < 32 || fh->height > norm_maxh())
--		return -EINVAL;
--	buf->vb.size = (fh->width * fh->height * fh->fmt->depth) >> 3;
--	if (buf->vb.baddr != 0 && buf->vb.bsize < buf->vb.size)
+-	DBG("%s, field=%d\n", __func__, field);
+-	if (!cam->fmt)
 -		return -EINVAL;
 -
--	if (buf->fmt       != fh->fmt	 ||
--	    buf->vb.width  != fh->width  ||
--	    buf->vb.height != fh->height ||
--	    buf->vb.field  != field) {
--		buf->fmt       = fh->fmt;
--		buf->vb.width  = fh->width;
--		buf->vb.height = fh->height;
--		buf->vb.field  = field;
+-	buf->vb.size = cam->width * cam->height * (cam->fmt->depth >> 3);
+-
+-	if (buf->vb.baddr != 0 && buf->vb.bsize < buf->vb.size) {
+-		DBG("invalid buffer prepare\n");
+-		return -EINVAL;
 -	}
+-
+-	buf->fmt = cam->fmt;
+-	buf->vb.width = cam->width;
+-	buf->vb.height = cam->height;
+-	buf->vb.field = field;
 -
 -	if (buf->vb.state == VIDEOBUF_NEEDS_INIT) {
 -		rc = videobuf_iolock(vq, &buf->vb, NULL);
--		if (rc != 0)
+-		if (rc < 0)
 -			goto fail;
--
--		buf->vb.width  = fh->width;
--		buf->vb.height = fh->height;
--		buf->vb.field  = field;
--		buf->fmt       = fh->fmt;
 -	}
 -
 -	buf->vb.state = VIDEOBUF_PREPARED;
 -	return 0;
--
 -fail:
 -	free_buffer(vq, buf);
 -	return rc;
@@ -629,1120 +712,1239 @@ index afc96f6db2a1..000000000000
 -
 -static void buffer_queue(struct videobuf_queue *vq, struct videobuf_buffer *vb)
 -{
--	struct viu_buf       *buf     = container_of(vb, struct viu_buf, vb);
--	struct viu_fh        *fh      = vq->priv_data;
--	struct viu_dev       *dev     = fh->dev;
--	struct viu_dmaqueue  *vidq    = &dev->vidq;
--	struct viu_buf       *prev;
+-	struct zr364xx_buffer *buf = container_of(vb, struct zr364xx_buffer,
+-						  vb);
+-	struct zr364xx_camera *cam = vq->priv_data;
 -
--	if (!list_empty(&vidq->queued)) {
--		dprintk(1, "adding vb queue=%p\n", &buf->vb.queue);
--		dprintk(1, "vidq pointer 0x%p, queued 0x%p\n",
--				vidq, &vidq->queued);
--		dprintk(1, "dev %p, queued: self %p, next %p, head %p\n",
--			dev, &vidq->queued, vidq->queued.next,
--			vidq->queued.prev);
--		list_add_tail(&buf->vb.queue, &vidq->queued);
--		buf->vb.state = VIDEOBUF_QUEUED;
--		dprintk(2, "[%p/%d] buffer_queue - append to queued\n",
--			buf, buf->vb.i);
--	} else if (list_empty(&vidq->active)) {
--		dprintk(1, "adding vb active=%p\n", &buf->vb.queue);
--		list_add_tail(&buf->vb.queue, &vidq->active);
--		buf->vb.state = VIDEOBUF_ACTIVE;
--		mod_timer(&vidq->timeout, jiffies+BUFFER_TIMEOUT);
--		dprintk(2, "[%p/%d] buffer_queue - first active\n",
--			buf, buf->vb.i);
+-	_DBG("%s\n", __func__);
 -
--		buffer_activate(dev, buf);
--	} else {
--		dprintk(1, "adding vb queue2=%p\n", &buf->vb.queue);
--		prev = list_entry(vidq->active.prev, struct viu_buf, vb.queue);
--		if (prev->vb.width  == buf->vb.width  &&
--		    prev->vb.height == buf->vb.height &&
--		    prev->fmt       == buf->fmt) {
--			list_add_tail(&buf->vb.queue, &vidq->active);
--			buf->vb.state = VIDEOBUF_ACTIVE;
--			dprintk(2, "[%p/%d] buffer_queue - append to active\n",
--				buf, buf->vb.i);
--		} else {
--			list_add_tail(&buf->vb.queue, &vidq->queued);
--			buf->vb.state = VIDEOBUF_QUEUED;
--			dprintk(2, "[%p/%d] buffer_queue - first queued\n",
--				buf, buf->vb.i);
--		}
--	}
+-	buf->vb.state = VIDEOBUF_QUEUED;
+-	list_add_tail(&buf->vb.queue, &cam->vidq.active);
 -}
 -
 -static void buffer_release(struct videobuf_queue *vq,
--				struct videobuf_buffer *vb)
+-			   struct videobuf_buffer *vb)
 -{
--	struct viu_buf *buf  = container_of(vb, struct viu_buf, vb);
--	struct viu_fh  *fh   = vq->priv_data;
--	struct viu_dev *dev  = (struct viu_dev *)fh->dev;
+-	struct zr364xx_buffer *buf = container_of(vb, struct zr364xx_buffer,
+-						  vb);
 -
--	viu_stop_dma(dev);
+-	_DBG("%s\n", __func__);
 -	free_buffer(vq, buf);
 -}
 -
--static const struct videobuf_queue_ops viu_video_qops = {
--	.buf_setup      = buffer_setup,
--	.buf_prepare    = buffer_prepare,
--	.buf_queue      = buffer_queue,
--	.buf_release    = buffer_release,
+-static const struct videobuf_queue_ops zr364xx_video_qops = {
+-	.buf_setup = buffer_setup,
+-	.buf_prepare = buffer_prepare,
+-	.buf_queue = buffer_queue,
+-	.buf_release = buffer_release,
 -};
 -
--/*
-- * IOCTL vidioc handling
+-/********************/
+-/* V4L2 integration */
+-/********************/
+-static int zr364xx_vidioc_streamon(struct file *file, void *priv,
+-				   enum v4l2_buf_type type);
+-
+-static ssize_t zr364xx_read(struct file *file, char __user *buf, size_t count,
+-			    loff_t * ppos)
+-{
+-	struct zr364xx_camera *cam = video_drvdata(file);
+-	int err = 0;
+-
+-	_DBG("%s\n", __func__);
+-
+-	if (!buf)
+-		return -EINVAL;
+-
+-	if (!count)
+-		return -EINVAL;
+-
+-	if (mutex_lock_interruptible(&cam->lock))
+-		return -ERESTARTSYS;
+-
+-	err = zr364xx_vidioc_streamon(file, file->private_data,
+-				V4L2_BUF_TYPE_VIDEO_CAPTURE);
+-	if (err == 0) {
+-		DBG("%s: reading %d bytes at pos %d.\n", __func__,
+-				(int) count, (int) *ppos);
+-
+-		/* NoMan Sux ! */
+-		err = videobuf_read_one(&cam->vb_vidq, buf, count, ppos,
+-					file->f_flags & O_NONBLOCK);
+-	}
+-	mutex_unlock(&cam->lock);
+-	return err;
+-}
+-
+-/* video buffer vmalloc implementation based partly on VIVI driver which is
+- *          Copyright (c) 2006 by
+- *                  Mauro Carvalho Chehab <mchehab--a.t--infradead.org>
+- *                  Ted Walther <ted--a.t--enumera.com>
+- *                  John Sokol <sokol--a.t--videotechnology.com>
+- *                  http://v4l.videotechnology.com/
+- *
 - */
--static int vidioc_querycap(struct file *file, void *priv,
--			   struct v4l2_capability *cap)
+-static void zr364xx_fillbuff(struct zr364xx_camera *cam,
+-			     struct zr364xx_buffer *buf,
+-			     int jpgsize)
 -{
--	strscpy(cap->driver, "viu", sizeof(cap->driver));
--	strscpy(cap->card, "viu", sizeof(cap->card));
--	strscpy(cap->bus_info, "platform:viu", sizeof(cap->bus_info));
--	return 0;
--}
+-	int pos = 0;
+-	const char *tmpbuf;
+-	char *vbuf = videobuf_to_vmalloc(&buf->vb);
+-	unsigned long last_frame;
 -
--static int vidioc_enum_fmt(struct file *file, void  *priv,
--					struct v4l2_fmtdesc *f)
--{
--	int index = f->index;
+-	if (!vbuf)
+-		return;
 -
--	if (f->index >= NUM_FORMATS)
--		return -EINVAL;
--
--	f->pixelformat = formats[index].fourcc;
--	return 0;
--}
--
--static int vidioc_g_fmt_cap(struct file *file, void *priv,
--					struct v4l2_format *f)
--{
--	struct viu_fh *fh = priv;
--
--	f->fmt.pix.width        = fh->width;
--	f->fmt.pix.height       = fh->height;
--	f->fmt.pix.field        = fh->vb_vidq.field;
--	f->fmt.pix.pixelformat  = fh->fmt->pixelformat;
--	f->fmt.pix.bytesperline =
--			(f->fmt.pix.width * fh->fmt->depth) >> 3;
--	f->fmt.pix.sizeimage	= fh->sizeimage;
--	f->fmt.pix.colorspace	= V4L2_COLORSPACE_SMPTE170M;
--	return 0;
--}
--
--static int vidioc_try_fmt_cap(struct file *file, void *priv,
--					struct v4l2_format *f)
--{
--	struct viu_fmt *fmt;
--	unsigned int maxw, maxh;
--
--	fmt = format_by_fourcc(f->fmt.pix.pixelformat);
--	if (!fmt) {
--		dprintk(1, "Fourcc format (0x%08x) invalid.",
--			f->fmt.pix.pixelformat);
--		return -EINVAL;
--	}
--
--	maxw  = norm_maxw();
--	maxh  = norm_maxh();
--
--	f->fmt.pix.field = V4L2_FIELD_INTERLACED;
--	if (f->fmt.pix.height < 32)
--		f->fmt.pix.height = 32;
--	if (f->fmt.pix.height > maxh)
--		f->fmt.pix.height = maxh;
--	if (f->fmt.pix.width < 48)
--		f->fmt.pix.width = 48;
--	if (f->fmt.pix.width > maxw)
--		f->fmt.pix.width = maxw;
--	f->fmt.pix.width &= ~0x03;
--	f->fmt.pix.bytesperline =
--		(f->fmt.pix.width * fmt->depth) >> 3;
--	f->fmt.pix.sizeimage = f->fmt.pix.height * f->fmt.pix.bytesperline;
--	f->fmt.pix.colorspace = V4L2_COLORSPACE_SMPTE170M;
--
--	return 0;
--}
--
--static int vidioc_s_fmt_cap(struct file *file, void *priv,
--					struct v4l2_format *f)
--{
--	struct viu_fh *fh = priv;
--	int ret;
--
--	ret = vidioc_try_fmt_cap(file, fh, f);
--	if (ret < 0)
--		return ret;
--
--	fh->fmt           = format_by_fourcc(f->fmt.pix.pixelformat);
--	fh->width         = f->fmt.pix.width;
--	fh->height        = f->fmt.pix.height;
--	fh->sizeimage     = f->fmt.pix.sizeimage;
--	fh->vb_vidq.field = f->fmt.pix.field;
--	fh->type          = f->type;
--	return 0;
--}
--
--static int vidioc_g_fmt_overlay(struct file *file, void *priv,
--					struct v4l2_format *f)
--{
--	struct viu_fh *fh = priv;
--
--	f->fmt.win = fh->win;
--	return 0;
--}
--
--static int verify_preview(struct viu_dev *dev, struct v4l2_window *win)
--{
--	enum v4l2_field field;
--	int maxw, maxh;
--
--	if (dev->ovbuf.base == NULL)
--		return -EINVAL;
--	if (dev->ovfmt == NULL)
--		return -EINVAL;
--	if (win->w.width < 48 || win->w.height < 32)
--		return -EINVAL;
--
--	field = win->field;
--	maxw  = dev->crop_current.width;
--	maxh  = dev->crop_current.height;
--
--	if (field == V4L2_FIELD_ANY) {
--		field = (win->w.height > maxh/2)
--			? V4L2_FIELD_INTERLACED
--			: V4L2_FIELD_TOP;
--	}
--	switch (field) {
--	case V4L2_FIELD_TOP:
--	case V4L2_FIELD_BOTTOM:
--		maxh = maxh / 2;
--		break;
--	case V4L2_FIELD_INTERLACED:
--		break;
--	default:
--		return -EINVAL;
--	}
--
--	win->field = field;
--	if (win->w.width > maxw)
--		win->w.width = maxw;
--	if (win->w.height > maxh)
--		win->w.height = maxh;
--	return 0;
--}
--
--inline void viu_activate_overlay(struct viu_reg __iomem *vr)
--{
--	iowrite32be(reg_val.field_base_addr, &vr->field_base_addr);
--	iowrite32be(reg_val.dma_inc, &vr->dma_inc);
--	iowrite32be(reg_val.picture_count, &vr->picture_count);
--}
--
--static int viu_setup_preview(struct viu_dev *dev, struct viu_fh *fh)
--{
--	int bpp;
--
--	dprintk(1, "%s %dx%d\n", __func__,
--		fh->win.w.width, fh->win.w.height);
--
--	reg_val.status_cfg = 0;
--
--	/* setup window */
--	reg_val.picture_count = (fh->win.w.height / 2) << 16 |
--				fh->win.w.width;
--
--	/* setup color depth and dma increment */
--	bpp = dev->ovfmt->depth / 8;
--	switch (bpp) {
--	case 2:
--		reg_val.status_cfg &= ~MODE_32BIT;
--		reg_val.dma_inc = fh->win.w.width * 2;
--		break;
--	case 4:
--		reg_val.status_cfg |= MODE_32BIT;
--		reg_val.dma_inc = fh->win.w.width * 4;
--		break;
--	default:
--		dprintk(0, "device doesn't support color depth(%d)\n",
--			bpp * 8);
--		return -EINVAL;
--	}
--
--	dev->ovfield = fh->win.field;
--	if (!V4L2_FIELD_HAS_BOTH(dev->ovfield))
--		reg_val.dma_inc = 0;
--
--	reg_val.status_cfg |= DMA_ACT | INT_DMA_END_EN | INT_FIELD_EN;
--
--	/* setup the base address of the overlay buffer */
--	reg_val.field_base_addr = (u32)(long)dev->ovbuf.base;
--
--	return 0;
--}
--
--static int vidioc_s_fmt_overlay(struct file *file, void *priv,
--					struct v4l2_format *f)
--{
--	struct viu_fh  *fh  = priv;
--	struct viu_dev *dev = (struct viu_dev *)fh->dev;
--	unsigned long  flags;
--	int err;
--
--	err = verify_preview(dev, &f->fmt.win);
--	if (err)
--		return err;
--
--	fh->win = f->fmt.win;
--
--	spin_lock_irqsave(&dev->slock, flags);
--	viu_setup_preview(dev, fh);
--	spin_unlock_irqrestore(&dev->slock, flags);
--	return 0;
--}
--
--static int vidioc_try_fmt_overlay(struct file *file, void *priv,
--					struct v4l2_format *f)
--{
--	return 0;
--}
--
--static int vidioc_overlay(struct file *file, void *priv, unsigned int on)
--{
--	struct viu_fh  *fh  = priv;
--	struct viu_dev *dev = (struct viu_dev *)fh->dev;
--	unsigned long  flags;
--
--	if (on) {
--		spin_lock_irqsave(&dev->slock, flags);
--		viu_activate_overlay(dev->vr);
--		dev->ovenable = 1;
--
--		/* start dma */
--		viu_start_dma(dev);
--		spin_unlock_irqrestore(&dev->slock, flags);
+-	last_frame = cam->last_frame;
+-	if (last_frame != -1) {
+-		tmpbuf = (const char *)cam->buffer.frame[last_frame].lpvbits;
+-		switch (buf->fmt->fourcc) {
+-		case V4L2_PIX_FMT_JPEG:
+-			buf->vb.size = jpgsize;
+-			memcpy(vbuf, tmpbuf, buf->vb.size);
+-			break;
+-		default:
+-			printk(KERN_DEBUG KBUILD_MODNAME ": unknown format?\n");
+-		}
+-		cam->last_frame = -1;
 -	} else {
--		viu_stop_dma(dev);
--		dev->ovenable = 0;
+-		printk(KERN_ERR KBUILD_MODNAME ": =======no frame\n");
+-		return;
+-	}
+-	DBG("%s: Buffer %p size= %d\n", __func__, vbuf, pos);
+-	/* tell v4l buffer was filled */
+-
+-	buf->vb.field_count = cam->frame_count * 2;
+-	buf->vb.ts = ktime_get_ns();
+-	buf->vb.state = VIDEOBUF_DONE;
+-}
+-
+-static int zr364xx_got_frame(struct zr364xx_camera *cam, int jpgsize)
+-{
+-	struct zr364xx_dmaqueue *dma_q = &cam->vidq;
+-	struct zr364xx_buffer *buf;
+-	unsigned long flags = 0;
+-	int rc = 0;
+-
+-	DBG("wakeup: %p\n", &dma_q);
+-	spin_lock_irqsave(&cam->slock, flags);
+-
+-	if (list_empty(&dma_q->active)) {
+-		DBG("No active queue to serve\n");
+-		rc = -1;
+-		goto unlock;
+-	}
+-	buf = list_entry(dma_q->active.next,
+-			 struct zr364xx_buffer, vb.queue);
+-
+-	if (!waitqueue_active(&buf->vb.done)) {
+-		/* no one active */
+-		rc = -1;
+-		goto unlock;
+-	}
+-	list_del(&buf->vb.queue);
+-	buf->vb.ts = ktime_get_ns();
+-	DBG("[%p/%d] wakeup\n", buf, buf->vb.i);
+-	zr364xx_fillbuff(cam, buf, jpgsize);
+-	wake_up(&buf->vb.done);
+-	DBG("wakeup [buf/i] [%p/%d]\n", buf, buf->vb.i);
+-unlock:
+-	spin_unlock_irqrestore(&cam->slock, flags);
+-	return rc;
+-}
+-
+-/* this function moves the usb stream read pipe data
+- * into the system buffers.
+- * returns 0 on success, EAGAIN if more data to process (call this
+- * function again).
+- */
+-static int zr364xx_read_video_callback(struct zr364xx_camera *cam,
+-					struct zr364xx_pipeinfo *pipe_info,
+-					struct urb *purb)
+-{
+-	unsigned char *pdest;
+-	unsigned char *psrc;
+-	s32 idx = cam->cur_frame;
+-	struct zr364xx_framei *frm = &cam->buffer.frame[idx];
+-	int i = 0;
+-	unsigned char *ptr = NULL;
+-
+-	_DBG("buffer to user\n");
+-
+-	/* swap bytes if camera needs it */
+-	if (cam->method == METHOD0) {
+-		u16 *buf = (u16 *)pipe_info->transfer_buffer;
+-		for (i = 0; i < purb->actual_length/2; i++)
+-			swab16s(buf + i);
 -	}
 -
--	return 0;
--}
--
--static int vidioc_g_fbuf(struct file *file, void *priv, struct v4l2_framebuffer *arg)
--{
--	struct viu_fh  *fh = priv;
--	struct viu_dev *dev = fh->dev;
--	struct v4l2_framebuffer *fb = arg;
--
--	*fb = dev->ovbuf;
--	fb->capability = V4L2_FBUF_CAP_LIST_CLIPPING;
--	return 0;
--}
--
--static int vidioc_s_fbuf(struct file *file, void *priv, const struct v4l2_framebuffer *arg)
--{
--	struct viu_fh  *fh = priv;
--	struct viu_dev *dev = fh->dev;
--	const struct v4l2_framebuffer *fb = arg;
--	struct viu_fmt *fmt;
--
--	if (!capable(CAP_SYS_ADMIN) && !capable(CAP_SYS_RAWIO))
--		return -EPERM;
--
--	/* check args */
--	fmt = format_by_fourcc(fb->fmt.pixelformat);
--	if (fmt == NULL)
+-	/* search done.  now find out if should be acquiring */
+-	if (!cam->b_acquire) {
+-		/* we found a frame, but this channel is turned off */
+-		frm->ulState = ZR364XX_READ_IDLE;
 -		return -EINVAL;
--
--	/* ok, accept it */
--	dev->ovbuf = *fb;
--	dev->ovfmt = fmt;
--	if (dev->ovbuf.fmt.bytesperline == 0) {
--		dev->ovbuf.fmt.bytesperline =
--			dev->ovbuf.fmt.width * fmt->depth / 8;
 -	}
+-
+-	psrc = (u8 *)pipe_info->transfer_buffer;
+-	ptr = pdest = frm->lpvbits;
+-
+-	if (frm->ulState == ZR364XX_READ_IDLE) {
+-		if (purb->actual_length < 128) {
+-			/* header incomplete */
+-			dev_info(&cam->udev->dev,
+-				 "%s: buffer (%d bytes) too small to hold jpeg header. Discarding.\n",
+-				 __func__, purb->actual_length);
+-			return -EINVAL;
+-		}
+-
+-		frm->ulState = ZR364XX_READ_FRAME;
+-		frm->cur_size = 0;
+-
+-		_DBG("jpeg header, ");
+-		memcpy(ptr, header1, sizeof(header1));
+-		ptr += sizeof(header1);
+-		header3 = 0;
+-		memcpy(ptr, &header3, 1);
+-		ptr++;
+-		memcpy(ptr, psrc, 64);
+-		ptr += 64;
+-		header3 = 1;
+-		memcpy(ptr, &header3, 1);
+-		ptr++;
+-		memcpy(ptr, psrc + 64, 64);
+-		ptr += 64;
+-		memcpy(ptr, header2, sizeof(header2));
+-		ptr += sizeof(header2);
+-		memcpy(ptr, psrc + 128,
+-		       purb->actual_length - 128);
+-		ptr += purb->actual_length - 128;
+-		_DBG("header : %d %d %d %d %d %d %d %d %d\n",
+-		    psrc[0], psrc[1], psrc[2],
+-		    psrc[3], psrc[4], psrc[5],
+-		    psrc[6], psrc[7], psrc[8]);
+-		frm->cur_size = ptr - pdest;
+-	} else {
+-		if (frm->cur_size + purb->actual_length > MAX_FRAME_SIZE) {
+-			dev_info(&cam->udev->dev,
+-				 "%s: buffer (%d bytes) too small to hold frame data. Discarding frame data.\n",
+-				 __func__, MAX_FRAME_SIZE);
+-		} else {
+-			pdest += frm->cur_size;
+-			memcpy(pdest, psrc, purb->actual_length);
+-			frm->cur_size += purb->actual_length;
+-		}
+-	}
+-	/*_DBG("cur_size %lu urb size %d\n", frm->cur_size,
+-		purb->actual_length);*/
+-
+-	if (purb->actual_length < pipe_info->transfer_size) {
+-		_DBG("****************Buffer[%d]full*************\n", idx);
+-		cam->last_frame = cam->cur_frame;
+-		cam->cur_frame++;
+-		/* end of system frame ring buffer, start at zero */
+-		if (cam->cur_frame == cam->buffer.dwFrames)
+-			cam->cur_frame = 0;
+-
+-		/* frame ready */
+-		/* go back to find the JPEG EOI marker */
+-		ptr = pdest = frm->lpvbits;
+-		ptr += frm->cur_size - 2;
+-		while (ptr > pdest) {
+-			if (*ptr == 0xFF && *(ptr + 1) == 0xD9
+-			    && *(ptr + 2) == 0xFF)
+-				break;
+-			ptr--;
+-		}
+-		if (ptr == pdest)
+-			DBG("No EOI marker\n");
+-
+-		/* Sometimes there is junk data in the middle of the picture,
+-		 * we want to skip this bogus frames */
+-		while (ptr > pdest) {
+-			if (*ptr == 0xFF && *(ptr + 1) == 0xFF
+-			    && *(ptr + 2) == 0xFF)
+-				break;
+-			ptr--;
+-		}
+-		if (ptr != pdest) {
+-			DBG("Bogus frame ? %d\n", ++(cam->nb));
+-		} else if (cam->b_acquire) {
+-			/* we skip the 2 first frames which are usually buggy */
+-			if (cam->skip)
+-				cam->skip--;
+-			else {
+-				_DBG("jpeg(%lu): %d %d %d %d %d %d %d %d\n",
+-				    frm->cur_size,
+-				    pdest[0], pdest[1], pdest[2], pdest[3],
+-				    pdest[4], pdest[5], pdest[6], pdest[7]);
+-
+-				zr364xx_got_frame(cam, frm->cur_size);
+-			}
+-		}
+-		cam->frame_count++;
+-		frm->ulState = ZR364XX_READ_IDLE;
+-		frm->cur_size = 0;
+-	}
+-	/* done successfully */
 -	return 0;
 -}
 -
--static int vidioc_reqbufs(struct file *file, void *priv,
--				struct v4l2_requestbuffers *p)
+-static int zr364xx_vidioc_querycap(struct file *file, void *priv,
+-				   struct v4l2_capability *cap)
 -{
--	struct viu_fh *fh = priv;
+-	struct zr364xx_camera *cam = video_drvdata(file);
 -
--	return videobuf_reqbufs(&fh->vb_vidq, p);
--}
--
--static int vidioc_querybuf(struct file *file, void *priv,
--					struct v4l2_buffer *p)
--{
--	struct viu_fh *fh = priv;
--
--	return videobuf_querybuf(&fh->vb_vidq, p);
--}
--
--static int vidioc_qbuf(struct file *file, void *priv, struct v4l2_buffer *p)
--{
--	struct viu_fh *fh = priv;
--
--	return videobuf_qbuf(&fh->vb_vidq, p);
--}
--
--static int vidioc_dqbuf(struct file *file, void *priv, struct v4l2_buffer *p)
--{
--	struct viu_fh *fh = priv;
--
--	return videobuf_dqbuf(&fh->vb_vidq, p,
--				file->f_flags & O_NONBLOCK);
--}
--
--static int vidioc_streamon(struct file *file, void *priv, enum v4l2_buf_type i)
--{
--	struct viu_fh *fh = priv;
--	struct viu_dev *dev = fh->dev;
--
--	if (fh->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
--		return -EINVAL;
--	if (fh->type != i)
--		return -EINVAL;
--
--	if (dev->ovenable)
--		dev->ovenable = 0;
--
--	viu_start_dma(fh->dev);
--
--	return videobuf_streamon(&fh->vb_vidq);
--}
--
--static int vidioc_streamoff(struct file *file, void *priv, enum v4l2_buf_type i)
--{
--	struct viu_fh  *fh = priv;
--
--	if (fh->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
--		return -EINVAL;
--	if (fh->type != i)
--		return -EINVAL;
--
--	viu_stop_dma(fh->dev);
--
--	return videobuf_streamoff(&fh->vb_vidq);
--}
--
--#define decoder_call(viu, o, f, args...) \
--	v4l2_subdev_call(viu->decoder, o, f, ##args)
--
--static int vidioc_querystd(struct file *file, void *priv, v4l2_std_id *std_id)
--{
--	struct viu_fh *fh = priv;
--
--	decoder_call(fh->dev, video, querystd, std_id);
+-	strscpy(cap->driver, DRIVER_DESC, sizeof(cap->driver));
+-	if (cam->udev->product)
+-		strscpy(cap->card, cam->udev->product, sizeof(cap->card));
+-	strscpy(cap->bus_info, dev_name(&cam->udev->dev),
+-		sizeof(cap->bus_info));
 -	return 0;
 -}
 -
--static int vidioc_s_std(struct file *file, void *priv, v4l2_std_id id)
+-static int zr364xx_vidioc_enum_input(struct file *file, void *priv,
+-				     struct v4l2_input *i)
 -{
--	struct viu_fh *fh = priv;
--
--	fh->dev->std = id;
--	decoder_call(fh->dev, video, s_std, id);
--	return 0;
--}
--
--static int vidioc_g_std(struct file *file, void *priv, v4l2_std_id *std_id)
--{
--	struct viu_fh *fh = priv;
--
--	*std_id = fh->dev->std;
--	return 0;
--}
--
--/* only one input in this driver */
--static int vidioc_enum_input(struct file *file, void *priv,
--					struct v4l2_input *inp)
--{
--	struct viu_fh *fh = priv;
--
--	if (inp->index != 0)
+-	if (i->index != 0)
 -		return -EINVAL;
--
--	inp->type = V4L2_INPUT_TYPE_CAMERA;
--	inp->std = fh->dev->vdev->tvnorms;
--	strscpy(inp->name, "Camera", sizeof(inp->name));
+-	strscpy(i->name, DRIVER_DESC " Camera", sizeof(i->name));
+-	i->type = V4L2_INPUT_TYPE_CAMERA;
 -	return 0;
 -}
 -
--static int vidioc_g_input(struct file *file, void *priv, unsigned int *i)
+-static int zr364xx_vidioc_g_input(struct file *file, void *priv,
+-				  unsigned int *i)
 -{
 -	*i = 0;
 -	return 0;
 -}
 -
--static int vidioc_s_input(struct file *file, void *priv, unsigned int i)
+-static int zr364xx_vidioc_s_input(struct file *file, void *priv,
+-				  unsigned int i)
 -{
--	struct viu_fh *fh = priv;
--
--	if (i)
+-	if (i != 0)
 -		return -EINVAL;
--
--	decoder_call(fh->dev, video, s_routing, i, 0, 0);
 -	return 0;
 -}
 -
--inline void viu_activate_next_buf(struct viu_dev *dev,
--				struct viu_dmaqueue *viuq)
+-static int zr364xx_s_ctrl(struct v4l2_ctrl *ctrl)
 -{
--	struct viu_dmaqueue *vidq = viuq;
--	struct viu_buf *buf;
+-	struct zr364xx_camera *cam =
+-		container_of(ctrl->handler, struct zr364xx_camera, ctrl_handler);
+-	int temp;
 -
--	/* launch another DMA operation for an active/queued buffer */
--	if (!list_empty(&vidq->active)) {
--		buf = list_entry(vidq->active.next, struct viu_buf,
--					vb.queue);
--		dprintk(1, "start another queued buffer: 0x%p\n", buf);
--		buffer_activate(dev, buf);
--	} else if (!list_empty(&vidq->queued)) {
--		buf = list_entry(vidq->queued.next, struct viu_buf,
--					vb.queue);
--		list_del(&buf->vb.queue);
--
--		dprintk(1, "start another queued buffer: 0x%p\n", buf);
--		list_add_tail(&buf->vb.queue, &vidq->active);
--		buf->vb.state = VIDEOBUF_ACTIVE;
--		buffer_activate(dev, buf);
--	}
--}
--
--inline void viu_default_settings(struct viu_reg __iomem *vr)
--{
--	iowrite32be(0x9512A254, &vr->luminance);
--	iowrite32be(0x03310000, &vr->chroma_r);
--	iowrite32be(0x06600F38, &vr->chroma_g);
--	iowrite32be(0x00000409, &vr->chroma_b);
--	iowrite32be(0x000000ff, &vr->alpha);
--	iowrite32be(0x00000090, &vr->req_alarm);
--	dprintk(1, "status reg: 0x%08x, field base: 0x%08x\n",
--		ioread32be(&vr->status_cfg), ioread32be(&vr->field_base_addr));
--}
--
--static void viu_overlay_intr(struct viu_dev *dev, u32 status)
--{
--	struct viu_reg __iomem *vr = dev->vr;
--
--	if (status & INT_DMA_END_STATUS)
--		dev->dma_done = 1;
--
--	if (status & INT_FIELD_STATUS) {
--		if (dev->dma_done) {
--			u32 addr = reg_val.field_base_addr;
--
--			dev->dma_done = 0;
--			if (status & FIELD_NO)
--				addr += reg_val.dma_inc;
--
--			iowrite32be(addr, &vr->field_base_addr);
--			iowrite32be(reg_val.dma_inc, &vr->dma_inc);
--			iowrite32be((status & 0xffc0ffff) |
--				 (status & INT_ALL_STATUS) |
--				 reg_val.status_cfg, &vr->status_cfg);
--		} else if (status & INT_VSYNC_STATUS) {
--			iowrite32be((status & 0xffc0ffff) |
--				 (status & INT_ALL_STATUS) |
--				 reg_val.status_cfg, &vr->status_cfg);
--		}
--	}
--}
--
--static void viu_capture_intr(struct viu_dev *dev, u32 status)
--{
--	struct viu_dmaqueue *vidq = &dev->vidq;
--	struct viu_reg __iomem *vr = dev->vr;
--	struct viu_buf *buf;
--	int field_num;
--	int need_two;
--	int dma_done = 0;
--
--	field_num = status & FIELD_NO;
--	need_two = V4L2_FIELD_HAS_BOTH(dev->capfield);
--
--	if (status & INT_DMA_END_STATUS) {
--		dma_done = 1;
--		if (((field_num == 0) && (dev->field == 0)) ||
--		    (field_num && (dev->field == 1)))
--			dev->field++;
+-	switch (ctrl->id) {
+-	case V4L2_CID_BRIGHTNESS:
+-		/* hardware brightness */
+-		send_control_msg(cam->udev, 1, 0x2001, 0, NULL, 0);
+-		temp = (0x60 << 8) + 127 - ctrl->val;
+-		send_control_msg(cam->udev, 1, temp, 0, NULL, 0);
+-		break;
+-	default:
+-		return -EINVAL;
 -	}
 -
--	if (status & INT_FIELD_STATUS) {
--		dprintk(1, "irq: field %d, done %d\n",
--			!!field_num, dma_done);
--		if (unlikely(dev->first)) {
--			if (field_num == 0) {
--				dev->first = 0;
--				dprintk(1, "activate first buf\n");
--				viu_activate_next_buf(dev, vidq);
--			} else
--				dprintk(1, "wait field 0\n");
--			return;
--		}
--
--		/* setup buffer address for next dma operation */
--		if (!list_empty(&vidq->active)) {
--			u32 addr = reg_val.field_base_addr;
--
--			if (field_num && need_two) {
--				addr += reg_val.dma_inc;
--				dprintk(1, "field 1, 0x%lx, dev field %d\n",
--					(unsigned long)addr, dev->field);
--			}
--			iowrite32be(addr, &vr->field_base_addr);
--			iowrite32be(reg_val.dma_inc, &vr->dma_inc);
--			iowrite32be((status & 0xffc0ffff) |
--				 (status & INT_ALL_STATUS) |
--				 reg_val.status_cfg, &vr->status_cfg);
--			return;
--		}
--	}
--
--	if (dma_done && field_num && (dev->field == 2)) {
--		dev->field = 0;
--		buf = list_entry(vidq->active.next,
--				 struct viu_buf, vb.queue);
--		dprintk(1, "viu/0: [%p/%d] 0x%lx/0x%lx: dma complete\n",
--			buf, buf->vb.i,
--			(unsigned long)videobuf_to_dma_contig(&buf->vb),
--			(unsigned long)ioread32be(&vr->field_base_addr));
--
--		if (waitqueue_active(&buf->vb.done)) {
--			list_del(&buf->vb.queue);
--			buf->vb.ts = ktime_get_ns();
--			buf->vb.state = VIDEOBUF_DONE;
--			buf->vb.field_count++;
--			wake_up(&buf->vb.done);
--		}
--		/* activate next dma buffer */
--		viu_activate_next_buf(dev, vidq);
--	}
--}
--
--static irqreturn_t viu_intr(int irq, void *dev_id)
--{
--	struct viu_dev *dev  = (struct viu_dev *)dev_id;
--	struct viu_reg __iomem *vr = dev->vr;
--	u32 status;
--	u32 error;
--
--	status = ioread32be(&vr->status_cfg);
--
--	if (status & INT_ERROR_STATUS) {
--		dev->irqs.error_irq++;
--		error = status & ERR_MASK;
--		if (error)
--			dprintk(1, "Err: error(%d), times:%d!\n",
--				error >> 4, dev->irqs.error_irq);
--		/* Clear interrupt error bit and error flags */
--		iowrite32be((status & 0xffc0ffff) | INT_ERROR_STATUS,
--			    &vr->status_cfg);
--	}
--
--	if (status & INT_DMA_END_STATUS) {
--		dev->irqs.dma_end_irq++;
--		dev->dma_done = 1;
--		dprintk(2, "VIU DMA end interrupt times: %d\n",
--					dev->irqs.dma_end_irq);
--	}
--
--	if (status & INT_HSYNC_STATUS)
--		dev->irqs.hsync_irq++;
--
--	if (status & INT_FIELD_STATUS) {
--		dev->irqs.field_irq++;
--		dprintk(2, "VIU field interrupt times: %d\n",
--					dev->irqs.field_irq);
--	}
--
--	if (status & INT_VSTART_STATUS)
--		dev->irqs.vstart_irq++;
--
--	if (status & INT_VSYNC_STATUS) {
--		dev->irqs.vsync_irq++;
--		dprintk(2, "VIU vsync interrupt times: %d\n",
--			dev->irqs.vsync_irq);
--	}
--
--	/* clear all pending irqs */
--	status = ioread32be(&vr->status_cfg);
--	iowrite32be((status & 0xffc0ffff) | (status & INT_ALL_STATUS),
--		    &vr->status_cfg);
--
--	if (dev->ovenable) {
--		viu_overlay_intr(dev, status);
--		return IRQ_HANDLED;
--	}
--
--	/* Capture mode */
--	viu_capture_intr(dev, status);
--	return IRQ_HANDLED;
--}
--
--/*
-- * File operations for the device
-- */
--static int viu_open(struct file *file)
--{
--	struct video_device *vdev = video_devdata(file);
--	struct viu_dev *dev = video_get_drvdata(vdev);
--	struct viu_fh *fh;
--	struct viu_reg __iomem *vr;
--	int minor = vdev->minor;
--	u32 status_cfg;
--
--	dprintk(1, "viu: open (minor=%d)\n", minor);
--
--	dev->users++;
--	if (dev->users > 1) {
--		dev->users--;
--		return -EBUSY;
--	}
--
--	vr = dev->vr;
--
--	dprintk(1, "open minor=%d type=%s users=%d\n", minor,
--		v4l2_type_names[V4L2_BUF_TYPE_VIDEO_CAPTURE], dev->users);
--
--	if (mutex_lock_interruptible(&dev->lock)) {
--		dev->users--;
--		return -ERESTARTSYS;
--	}
--
--	/* allocate and initialize per filehandle data */
--	fh = kzalloc(sizeof(*fh), GFP_KERNEL);
--	if (!fh) {
--		dev->users--;
--		mutex_unlock(&dev->lock);
--		return -ENOMEM;
--	}
--
--	v4l2_fh_init(&fh->fh, vdev);
--	file->private_data = fh;
--	fh->dev = dev;
--
--	fh->type     = V4L2_BUF_TYPE_VIDEO_CAPTURE;
--	fh->fmt      = format_by_fourcc(V4L2_PIX_FMT_RGB32);
--	fh->width    = norm_maxw();
--	fh->height   = norm_maxh();
--	dev->crop_current.width  = fh->width;
--	dev->crop_current.height = fh->height;
--
--	dprintk(1, "Open: fh=%p, dev=%p, dev->vidq=%p\n", fh, dev, &dev->vidq);
--	dprintk(1, "Open: list_empty queued=%d\n",
--		list_empty(&dev->vidq.queued));
--	dprintk(1, "Open: list_empty active=%d\n",
--		list_empty(&dev->vidq.active));
--
--	viu_default_settings(vr);
--
--	status_cfg = ioread32be(&vr->status_cfg);
--	iowrite32be(status_cfg & ~(INT_VSYNC_EN | INT_HSYNC_EN |
--				INT_FIELD_EN | INT_VSTART_EN |
--				INT_DMA_END_EN | INT_ERROR_EN | INT_ECC_EN),
--		    &vr->status_cfg);
--
--	status_cfg = ioread32be(&vr->status_cfg);
--	iowrite32be(status_cfg | INT_ALL_STATUS, &vr->status_cfg);
--
--	spin_lock_init(&fh->vbq_lock);
--	videobuf_queue_dma_contig_init(&fh->vb_vidq, &viu_video_qops,
--				       dev->dev, &fh->vbq_lock,
--				       fh->type, V4L2_FIELD_INTERLACED,
--				       sizeof(struct viu_buf), fh,
--				       &fh->dev->lock);
--	v4l2_fh_add(&fh->fh);
--	mutex_unlock(&dev->lock);
 -	return 0;
 -}
 -
--static ssize_t viu_read(struct file *file, char __user *data, size_t count,
--			loff_t *ppos)
+-static int zr364xx_vidioc_enum_fmt_vid_cap(struct file *file,
+-				       void *priv, struct v4l2_fmtdesc *f)
 -{
--	struct viu_fh *fh = file->private_data;
--	struct viu_dev *dev = fh->dev;
--	int ret = 0;
+-	if (f->index > 0)
+-		return -EINVAL;
+-	f->pixelformat = formats[0].fourcc;
+-	return 0;
+-}
 -
--	dprintk(2, "%s\n", __func__);
--	if (dev->ovenable)
--		dev->ovenable = 0;
+-static char *decode_fourcc(__u32 pixelformat, char *buf)
+-{
+-	buf[0] = pixelformat & 0xff;
+-	buf[1] = (pixelformat >> 8) & 0xff;
+-	buf[2] = (pixelformat >> 16) & 0xff;
+-	buf[3] = (pixelformat >> 24) & 0xff;
+-	buf[4] = '\0';
+-	return buf;
+-}
 -
--	if (fh->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) {
--		if (mutex_lock_interruptible(&dev->lock))
--			return -ERESTARTSYS;
--		viu_start_dma(dev);
--		ret = videobuf_read_stream(&fh->vb_vidq, data, count,
--				ppos, 0, file->f_flags & O_NONBLOCK);
--		mutex_unlock(&dev->lock);
+-static int zr364xx_vidioc_try_fmt_vid_cap(struct file *file, void *priv,
+-				      struct v4l2_format *f)
+-{
+-	struct zr364xx_camera *cam = video_drvdata(file);
+-	char pixelformat_name[5];
+-
+-	if (!cam)
+-		return -ENODEV;
+-
+-	if (f->fmt.pix.pixelformat != V4L2_PIX_FMT_JPEG) {
+-		DBG("%s: unsupported pixelformat V4L2_PIX_FMT_%s\n", __func__,
+-		    decode_fourcc(f->fmt.pix.pixelformat, pixelformat_name));
+-		return -EINVAL;
+-	}
+-
+-	if (!(f->fmt.pix.width == 160 && f->fmt.pix.height == 120) &&
+-	    !(f->fmt.pix.width == 640 && f->fmt.pix.height == 480)) {
+-		f->fmt.pix.width = 320;
+-		f->fmt.pix.height = 240;
+-	}
+-
+-	f->fmt.pix.field = V4L2_FIELD_NONE;
+-	f->fmt.pix.bytesperline = f->fmt.pix.width * 2;
+-	f->fmt.pix.sizeimage = f->fmt.pix.height * f->fmt.pix.bytesperline;
+-	f->fmt.pix.colorspace = V4L2_COLORSPACE_JPEG;
+-	DBG("%s: V4L2_PIX_FMT_%s (%d) ok!\n", __func__,
+-	    decode_fourcc(f->fmt.pix.pixelformat, pixelformat_name),
+-	    f->fmt.pix.field);
+-	return 0;
+-}
+-
+-static int zr364xx_vidioc_g_fmt_vid_cap(struct file *file, void *priv,
+-				    struct v4l2_format *f)
+-{
+-	struct zr364xx_camera *cam;
+-
+-	if (!file)
+-		return -ENODEV;
+-	cam = video_drvdata(file);
+-
+-	f->fmt.pix.pixelformat = formats[0].fourcc;
+-	f->fmt.pix.field = V4L2_FIELD_NONE;
+-	f->fmt.pix.width = cam->width;
+-	f->fmt.pix.height = cam->height;
+-	f->fmt.pix.bytesperline = f->fmt.pix.width * 2;
+-	f->fmt.pix.sizeimage = f->fmt.pix.height * f->fmt.pix.bytesperline;
+-	f->fmt.pix.colorspace = V4L2_COLORSPACE_JPEG;
+-	return 0;
+-}
+-
+-static int zr364xx_vidioc_s_fmt_vid_cap(struct file *file, void *priv,
+-				    struct v4l2_format *f)
+-{
+-	struct zr364xx_camera *cam = video_drvdata(file);
+-	struct videobuf_queue *q = &cam->vb_vidq;
+-	char pixelformat_name[5];
+-	int ret = zr364xx_vidioc_try_fmt_vid_cap(file, cam, f);
+-	int i;
+-
+-	if (ret < 0)
 -		return ret;
+-
+-	mutex_lock(&q->vb_lock);
+-
+-	if (videobuf_queue_is_busy(&cam->vb_vidq)) {
+-		DBG("%s queue busy\n", __func__);
+-		ret = -EBUSY;
+-		goto out;
 -	}
--	return 0;
--}
 -
--static __poll_t viu_poll(struct file *file, struct poll_table_struct *wait)
--{
--	struct viu_fh *fh = file->private_data;
--	struct videobuf_queue *q = &fh->vb_vidq;
--	struct viu_dev *dev = fh->dev;
--	__poll_t req_events = poll_requested_events(wait);
--	__poll_t res = v4l2_ctrl_poll(file, wait);
+-	if (cam->owner) {
+-		DBG("%s can't change format after started\n", __func__);
+-		ret = -EBUSY;
+-		goto out;
+-	}
 -
--	if (V4L2_BUF_TYPE_VIDEO_CAPTURE != fh->type)
--		return EPOLLERR;
+-	cam->width = f->fmt.pix.width;
+-	cam->height = f->fmt.pix.height;
+-	DBG("%s: %dx%d mode selected\n", __func__,
+-		 cam->width, cam->height);
+-	f->fmt.pix.bytesperline = f->fmt.pix.width * 2;
+-	f->fmt.pix.sizeimage = f->fmt.pix.height * f->fmt.pix.bytesperline;
+-	f->fmt.pix.colorspace = V4L2_COLORSPACE_JPEG;
+-	cam->vb_vidq.field = f->fmt.pix.field;
 -
--	if (!(req_events & (EPOLLIN | EPOLLRDNORM)))
--		return res;
+-	if (f->fmt.pix.width == 160 && f->fmt.pix.height == 120)
+-		mode = 1;
+-	else if (f->fmt.pix.width == 640 && f->fmt.pix.height == 480)
+-		mode = 2;
+-	else
+-		mode = 0;
 -
--	mutex_lock(&dev->lock);
--	res |= videobuf_poll_stream(file, q, wait);
--	mutex_unlock(&dev->lock);
--	return res;
--}
+-	m0d1[0] = mode;
+-	m1[2].value = 0xf000 + mode;
+-	m2[1].value = 0xf000 + mode;
 -
--static int viu_release(struct file *file)
--{
--	struct viu_fh *fh = file->private_data;
--	struct viu_dev *dev = fh->dev;
--	int minor = video_devdata(file)->minor;
+-	/* special case for METHOD3, the modes are different */
+-	if (cam->method == METHOD3) {
+-		switch (mode) {
+-		case 1:
+-			m2[1].value = 0xf000 + 4;
+-			break;
+-		case 2:
+-			m2[1].value = 0xf000 + 0;
+-			break;
+-		default:
+-			m2[1].value = 0xf000 + 1;
+-			break;
+-		}
+-	}
 -
--	mutex_lock(&dev->lock);
--	viu_stop_dma(dev);
--	videobuf_stop(&fh->vb_vidq);
--	videobuf_mmap_free(&fh->vb_vidq);
--	v4l2_fh_del(&fh->fh);
--	v4l2_fh_exit(&fh->fh);
--	mutex_unlock(&dev->lock);
+-	header2[437] = cam->height / 256;
+-	header2[438] = cam->height % 256;
+-	header2[439] = cam->width / 256;
+-	header2[440] = cam->width % 256;
 -
--	kfree(fh);
+-	for (i = 0; init[cam->method][i].size != -1; i++) {
+-		ret =
+-		    send_control_msg(cam->udev, 1, init[cam->method][i].value,
+-				     0, init[cam->method][i].bytes,
+-				     init[cam->method][i].size);
+-		if (ret < 0) {
+-			dev_err(&cam->udev->dev,
+-			   "error during resolution change sequence: %d\n", i);
+-			goto out;
+-		}
+-	}
 -
--	dev->users--;
--	dprintk(1, "close (minor=%d, users=%d)\n",
--		minor, dev->users);
--	return 0;
--}
+-	/* Added some delay here, since opening/closing the camera quickly,
+-	 * like Ekiga does during its startup, can crash the webcam
+-	 */
+-	mdelay(100);
+-	cam->skip = 2;
+-	ret = 0;
 -
--static void viu_reset(struct viu_reg __iomem *reg)
--{
--	iowrite32be(0, &reg->status_cfg);
--	iowrite32be(0x9512a254, &reg->luminance);
--	iowrite32be(0x03310000, &reg->chroma_r);
--	iowrite32be(0x06600f38, &reg->chroma_g);
--	iowrite32be(0x00000409, &reg->chroma_b);
--	iowrite32be(0, &reg->field_base_addr);
--	iowrite32be(0, &reg->dma_inc);
--	iowrite32be(0x01e002d0, &reg->picture_count);
--	iowrite32be(0x00000090, &reg->req_alarm);
--	iowrite32be(0x000000ff, &reg->alpha);
--}
+-out:
+-	mutex_unlock(&q->vb_lock);
 -
--static int viu_mmap(struct file *file, struct vm_area_struct *vma)
--{
--	struct viu_fh *fh = file->private_data;
--	struct viu_dev *dev = fh->dev;
--	int ret;
--
--	dprintk(1, "mmap called, vma=%p\n", vma);
--
--	if (mutex_lock_interruptible(&dev->lock))
--		return -ERESTARTSYS;
--	ret = videobuf_mmap_mapper(&fh->vb_vidq, vma);
--	mutex_unlock(&dev->lock);
--
--	dprintk(1, "vma start=0x%08lx, size=%ld, ret=%d\n",
--		(unsigned long)vma->vm_start,
--		(unsigned long)vma->vm_end-(unsigned long)vma->vm_start,
--		ret);
--
+-	DBG("%s: V4L2_PIX_FMT_%s (%d) ok!\n", __func__,
+-	    decode_fourcc(f->fmt.pix.pixelformat, pixelformat_name),
+-	    f->fmt.pix.field);
 -	return ret;
 -}
 -
--static const struct v4l2_file_operations viu_fops = {
--	.owner		= THIS_MODULE,
--	.open		= viu_open,
--	.release	= viu_release,
--	.read		= viu_read,
--	.poll		= viu_poll,
--	.unlocked_ioctl	= video_ioctl2, /* V4L2 ioctl handler */
--	.mmap		= viu_mmap,
+-static int zr364xx_vidioc_reqbufs(struct file *file, void *priv,
+-			  struct v4l2_requestbuffers *p)
+-{
+-	struct zr364xx_camera *cam = video_drvdata(file);
+-
+-	if (cam->owner && cam->owner != priv)
+-		return -EBUSY;
+-	return videobuf_reqbufs(&cam->vb_vidq, p);
+-}
+-
+-static int zr364xx_vidioc_querybuf(struct file *file,
+-				void *priv,
+-				struct v4l2_buffer *p)
+-{
+-	int rc;
+-	struct zr364xx_camera *cam = video_drvdata(file);
+-	rc = videobuf_querybuf(&cam->vb_vidq, p);
+-	return rc;
+-}
+-
+-static int zr364xx_vidioc_qbuf(struct file *file,
+-				void *priv,
+-				struct v4l2_buffer *p)
+-{
+-	int rc;
+-	struct zr364xx_camera *cam = video_drvdata(file);
+-	_DBG("%s\n", __func__);
+-	if (cam->owner && cam->owner != priv)
+-		return -EBUSY;
+-	rc = videobuf_qbuf(&cam->vb_vidq, p);
+-	return rc;
+-}
+-
+-static int zr364xx_vidioc_dqbuf(struct file *file,
+-				void *priv,
+-				struct v4l2_buffer *p)
+-{
+-	int rc;
+-	struct zr364xx_camera *cam = video_drvdata(file);
+-	_DBG("%s\n", __func__);
+-	if (cam->owner && cam->owner != priv)
+-		return -EBUSY;
+-	rc = videobuf_dqbuf(&cam->vb_vidq, p, file->f_flags & O_NONBLOCK);
+-	return rc;
+-}
+-
+-static void read_pipe_completion(struct urb *purb)
+-{
+-	struct zr364xx_pipeinfo *pipe_info;
+-	struct zr364xx_camera *cam;
+-	int pipe;
+-
+-	pipe_info = purb->context;
+-	_DBG("%s %p, status %d\n", __func__, purb, purb->status);
+-	if (!pipe_info) {
+-		printk(KERN_ERR KBUILD_MODNAME ": no context!\n");
+-		return;
+-	}
+-
+-	cam = pipe_info->cam;
+-	if (!cam) {
+-		printk(KERN_ERR KBUILD_MODNAME ": no context!\n");
+-		return;
+-	}
+-
+-	/* if shutting down, do not resubmit, exit immediately */
+-	if (purb->status == -ESHUTDOWN) {
+-		DBG("%s, err shutdown\n", __func__);
+-		pipe_info->err_count++;
+-		return;
+-	}
+-
+-	if (pipe_info->state == 0) {
+-		DBG("exiting USB pipe\n");
+-		return;
+-	}
+-
+-	if (purb->actual_length > pipe_info->transfer_size) {
+-		dev_err(&cam->udev->dev, "wrong number of bytes\n");
+-		return;
+-	}
+-
+-	if (purb->status == 0)
+-		zr364xx_read_video_callback(cam, pipe_info, purb);
+-	else {
+-		pipe_info->err_count++;
+-		DBG("%s: failed URB %d\n", __func__, purb->status);
+-	}
+-
+-	pipe = usb_rcvbulkpipe(cam->udev, cam->read_endpoint);
+-
+-	/* reuse urb */
+-	usb_fill_bulk_urb(pipe_info->stream_urb, cam->udev,
+-			  pipe,
+-			  pipe_info->transfer_buffer,
+-			  pipe_info->transfer_size,
+-			  read_pipe_completion, pipe_info);
+-
+-	if (pipe_info->state != 0) {
+-		purb->status = usb_submit_urb(pipe_info->stream_urb,
+-					      GFP_ATOMIC);
+-
+-		if (purb->status)
+-			dev_err(&cam->udev->dev,
+-				"error submitting urb (error=%i)\n",
+-				purb->status);
+-	} else
+-		DBG("read pipe complete state 0\n");
+-}
+-
+-static int zr364xx_start_readpipe(struct zr364xx_camera *cam)
+-{
+-	int pipe;
+-	int retval;
+-	struct zr364xx_pipeinfo *pipe_info = cam->pipe;
+-	pipe = usb_rcvbulkpipe(cam->udev, cam->read_endpoint);
+-	DBG("%s: start pipe IN x%x\n", __func__, cam->read_endpoint);
+-
+-	pipe_info->state = 1;
+-	pipe_info->err_count = 0;
+-	pipe_info->stream_urb = usb_alloc_urb(0, GFP_KERNEL);
+-	if (!pipe_info->stream_urb)
+-		return -ENOMEM;
+-	/* transfer buffer allocated in board_init */
+-	usb_fill_bulk_urb(pipe_info->stream_urb, cam->udev,
+-			  pipe,
+-			  pipe_info->transfer_buffer,
+-			  pipe_info->transfer_size,
+-			  read_pipe_completion, pipe_info);
+-
+-	DBG("submitting URB %p\n", pipe_info->stream_urb);
+-	retval = usb_submit_urb(pipe_info->stream_urb, GFP_KERNEL);
+-	if (retval) {
+-		usb_free_urb(pipe_info->stream_urb);
+-		printk(KERN_ERR KBUILD_MODNAME ": start read pipe failed\n");
+-		return retval;
+-	}
+-
+-	return 0;
+-}
+-
+-static void zr364xx_stop_readpipe(struct zr364xx_camera *cam)
+-{
+-	struct zr364xx_pipeinfo *pipe_info;
+-
+-	if (!cam) {
+-		printk(KERN_ERR KBUILD_MODNAME ": invalid device\n");
+-		return;
+-	}
+-	DBG("stop read pipe\n");
+-	pipe_info = cam->pipe;
+-	if (pipe_info) {
+-		if (pipe_info->state != 0)
+-			pipe_info->state = 0;
+-
+-		if (pipe_info->stream_urb) {
+-			/* cancel urb */
+-			usb_kill_urb(pipe_info->stream_urb);
+-			usb_free_urb(pipe_info->stream_urb);
+-			pipe_info->stream_urb = NULL;
+-		}
+-	}
+-	return;
+-}
+-
+-/* starts acquisition process */
+-static int zr364xx_start_acquire(struct zr364xx_camera *cam)
+-{
+-	int j;
+-
+-	DBG("start acquire\n");
+-
+-	cam->last_frame = -1;
+-	cam->cur_frame = 0;
+-	for (j = 0; j < FRAMES; j++) {
+-		cam->buffer.frame[j].ulState = ZR364XX_READ_IDLE;
+-		cam->buffer.frame[j].cur_size = 0;
+-	}
+-	cam->b_acquire = 1;
+-	return 0;
+-}
+-
+-static inline int zr364xx_stop_acquire(struct zr364xx_camera *cam)
+-{
+-	cam->b_acquire = 0;
+-	return 0;
+-}
+-
+-static int zr364xx_prepare(struct zr364xx_camera *cam)
+-{
+-	int res;
+-	int i, j;
+-
+-	for (i = 0; init[cam->method][i].size != -1; i++) {
+-		res = send_control_msg(cam->udev, 1, init[cam->method][i].value,
+-				     0, init[cam->method][i].bytes,
+-				     init[cam->method][i].size);
+-		if (res < 0) {
+-			dev_err(&cam->udev->dev,
+-				"error during open sequence: %d\n", i);
+-			return res;
+-		}
+-	}
+-
+-	cam->skip = 2;
+-	cam->last_frame = -1;
+-	cam->cur_frame = 0;
+-	cam->frame_count = 0;
+-	for (j = 0; j < FRAMES; j++) {
+-		cam->buffer.frame[j].ulState = ZR364XX_READ_IDLE;
+-		cam->buffer.frame[j].cur_size = 0;
+-	}
+-	v4l2_ctrl_handler_setup(&cam->ctrl_handler);
+-	return 0;
+-}
+-
+-static int zr364xx_vidioc_streamon(struct file *file, void *priv,
+-				   enum v4l2_buf_type type)
+-{
+-	struct zr364xx_camera *cam = video_drvdata(file);
+-	int res;
+-
+-	DBG("%s\n", __func__);
+-
+-	if (type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-		return -EINVAL;
+-
+-	if (cam->owner && cam->owner != priv)
+-		return -EBUSY;
+-
+-	res = zr364xx_prepare(cam);
+-	if (res)
+-		return res;
+-	res = videobuf_streamon(&cam->vb_vidq);
+-	if (res == 0) {
+-		zr364xx_start_acquire(cam);
+-		cam->owner = file->private_data;
+-	}
+-	return res;
+-}
+-
+-static int zr364xx_vidioc_streamoff(struct file *file, void *priv,
+-				    enum v4l2_buf_type type)
+-{
+-	struct zr364xx_camera *cam = video_drvdata(file);
+-
+-	DBG("%s\n", __func__);
+-	if (type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-		return -EINVAL;
+-	if (cam->owner && cam->owner != priv)
+-		return -EBUSY;
+-	zr364xx_stop_acquire(cam);
+-	return videobuf_streamoff(&cam->vb_vidq);
+-}
+-
+-
+-/* open the camera */
+-static int zr364xx_open(struct file *file)
+-{
+-	struct zr364xx_camera *cam = video_drvdata(file);
+-	int err;
+-
+-	DBG("%s\n", __func__);
+-
+-	if (mutex_lock_interruptible(&cam->lock))
+-		return -ERESTARTSYS;
+-
+-	err = v4l2_fh_open(file);
+-	if (err)
+-		goto out;
+-
+-	/* Added some delay here, since opening/closing the camera quickly,
+-	 * like Ekiga does during its startup, can crash the webcam
+-	 */
+-	mdelay(100);
+-	err = 0;
+-
+-out:
+-	mutex_unlock(&cam->lock);
+-	DBG("%s: %d\n", __func__, err);
+-	return err;
+-}
+-
+-static void zr364xx_board_uninit(struct zr364xx_camera *cam)
+-{
+-	unsigned long i;
+-
+-	zr364xx_stop_readpipe(cam);
+-
+-	/* release sys buffers */
+-	for (i = 0; i < FRAMES; i++) {
+-		if (cam->buffer.frame[i].lpvbits) {
+-			DBG("vfree %p\n", cam->buffer.frame[i].lpvbits);
+-			vfree(cam->buffer.frame[i].lpvbits);
+-		}
+-		cam->buffer.frame[i].lpvbits = NULL;
+-	}
+-
+-	/* release transfer buffer */
+-	kfree(cam->pipe->transfer_buffer);
+-}
+-
+-static void zr364xx_release(struct v4l2_device *v4l2_dev)
+-{
+-	struct zr364xx_camera *cam =
+-		container_of(v4l2_dev, struct zr364xx_camera, v4l2_dev);
+-
+-	videobuf_mmap_free(&cam->vb_vidq);
+-	v4l2_ctrl_handler_free(&cam->ctrl_handler);
+-	zr364xx_board_uninit(cam);
+-	v4l2_device_unregister(&cam->v4l2_dev);
+-	kfree(cam);
+-}
+-
+-/* release the camera */
+-static int zr364xx_close(struct file *file)
+-{
+-	struct zr364xx_camera *cam;
+-	struct usb_device *udev;
+-	int i;
+-
+-	DBG("%s\n", __func__);
+-	cam = video_drvdata(file);
+-
+-	mutex_lock(&cam->lock);
+-	udev = cam->udev;
+-
+-	if (file->private_data == cam->owner) {
+-		/* turn off stream */
+-		if (cam->b_acquire)
+-			zr364xx_stop_acquire(cam);
+-		videobuf_streamoff(&cam->vb_vidq);
+-
+-		for (i = 0; i < 2; i++) {
+-			send_control_msg(udev, 1, init[cam->method][i].value,
+-					0, init[cam->method][i].bytes,
+-					init[cam->method][i].size);
+-		}
+-		cam->owner = NULL;
+-	}
+-
+-	/* Added some delay here, since opening/closing the camera quickly,
+-	 * like Ekiga does during its startup, can crash the webcam
+-	 */
+-	mdelay(100);
+-	mutex_unlock(&cam->lock);
+-	return v4l2_fh_release(file);
+-}
+-
+-
+-static int zr364xx_mmap(struct file *file, struct vm_area_struct *vma)
+-{
+-	struct zr364xx_camera *cam = video_drvdata(file);
+-	int ret;
+-
+-	if (!cam) {
+-		DBG("%s: cam == NULL\n", __func__);
+-		return -ENODEV;
+-	}
+-	DBG("mmap called, vma=%p\n", vma);
+-
+-	ret = videobuf_mmap_mapper(&cam->vb_vidq, vma);
+-
+-	DBG("vma start=0x%08lx, size=%ld, ret=%d\n",
+-		(unsigned long)vma->vm_start,
+-		(unsigned long)vma->vm_end - (unsigned long)vma->vm_start, ret);
+-	return ret;
+-}
+-
+-static __poll_t zr364xx_poll(struct file *file,
+-			       struct poll_table_struct *wait)
+-{
+-	struct zr364xx_camera *cam = video_drvdata(file);
+-	struct videobuf_queue *q = &cam->vb_vidq;
+-	__poll_t res = v4l2_ctrl_poll(file, wait);
+-
+-	_DBG("%s\n", __func__);
+-
+-	return res | videobuf_poll_stream(file, q, wait);
+-}
+-
+-static const struct v4l2_ctrl_ops zr364xx_ctrl_ops = {
+-	.s_ctrl = zr364xx_s_ctrl,
 -};
 -
--static const struct v4l2_ioctl_ops viu_ioctl_ops = {
--	.vidioc_querycap	= vidioc_querycap,
--	.vidioc_enum_fmt_vid_cap  = vidioc_enum_fmt,
--	.vidioc_g_fmt_vid_cap     = vidioc_g_fmt_cap,
--	.vidioc_try_fmt_vid_cap   = vidioc_try_fmt_cap,
--	.vidioc_s_fmt_vid_cap     = vidioc_s_fmt_cap,
--	.vidioc_enum_fmt_vid_overlay = vidioc_enum_fmt,
--	.vidioc_g_fmt_vid_overlay = vidioc_g_fmt_overlay,
--	.vidioc_try_fmt_vid_overlay = vidioc_try_fmt_overlay,
--	.vidioc_s_fmt_vid_overlay = vidioc_s_fmt_overlay,
--	.vidioc_overlay	      = vidioc_overlay,
--	.vidioc_g_fbuf	      = vidioc_g_fbuf,
--	.vidioc_s_fbuf	      = vidioc_s_fbuf,
--	.vidioc_reqbufs       = vidioc_reqbufs,
--	.vidioc_querybuf      = vidioc_querybuf,
--	.vidioc_qbuf          = vidioc_qbuf,
--	.vidioc_dqbuf         = vidioc_dqbuf,
--	.vidioc_g_std         = vidioc_g_std,
--	.vidioc_s_std         = vidioc_s_std,
--	.vidioc_querystd      = vidioc_querystd,
--	.vidioc_enum_input    = vidioc_enum_input,
--	.vidioc_g_input       = vidioc_g_input,
--	.vidioc_s_input       = vidioc_s_input,
--	.vidioc_streamon      = vidioc_streamon,
--	.vidioc_streamoff     = vidioc_streamoff,
--	.vidioc_log_status    = v4l2_ctrl_log_status,
+-static const struct v4l2_file_operations zr364xx_fops = {
+-	.owner = THIS_MODULE,
+-	.open = zr364xx_open,
+-	.release = zr364xx_close,
+-	.read = zr364xx_read,
+-	.mmap = zr364xx_mmap,
+-	.unlocked_ioctl = video_ioctl2,
+-	.poll = zr364xx_poll,
+-};
+-
+-static const struct v4l2_ioctl_ops zr364xx_ioctl_ops = {
+-	.vidioc_querycap	= zr364xx_vidioc_querycap,
+-	.vidioc_enum_fmt_vid_cap = zr364xx_vidioc_enum_fmt_vid_cap,
+-	.vidioc_try_fmt_vid_cap	= zr364xx_vidioc_try_fmt_vid_cap,
+-	.vidioc_s_fmt_vid_cap	= zr364xx_vidioc_s_fmt_vid_cap,
+-	.vidioc_g_fmt_vid_cap	= zr364xx_vidioc_g_fmt_vid_cap,
+-	.vidioc_enum_input	= zr364xx_vidioc_enum_input,
+-	.vidioc_g_input		= zr364xx_vidioc_g_input,
+-	.vidioc_s_input		= zr364xx_vidioc_s_input,
+-	.vidioc_streamon	= zr364xx_vidioc_streamon,
+-	.vidioc_streamoff	= zr364xx_vidioc_streamoff,
+-	.vidioc_reqbufs         = zr364xx_vidioc_reqbufs,
+-	.vidioc_querybuf        = zr364xx_vidioc_querybuf,
+-	.vidioc_qbuf            = zr364xx_vidioc_qbuf,
+-	.vidioc_dqbuf           = zr364xx_vidioc_dqbuf,
+-	.vidioc_log_status      = v4l2_ctrl_log_status,
 -	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
 -	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
 -};
 -
--static const struct video_device viu_template = {
--	.name		= "FSL viu",
--	.fops		= &viu_fops,
--	.minor		= -1,
--	.ioctl_ops	= &viu_ioctl_ops,
--	.release	= video_device_release,
--
--	.tvnorms        = V4L2_STD_NTSC_M | V4L2_STD_PAL,
--	.device_caps	= V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING |
--			  V4L2_CAP_VIDEO_OVERLAY | V4L2_CAP_READWRITE,
+-static const struct video_device zr364xx_template = {
+-	.name = DRIVER_DESC,
+-	.fops = &zr364xx_fops,
+-	.ioctl_ops = &zr364xx_ioctl_ops,
+-	.release = video_device_release_empty,
+-	.device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_READWRITE |
+-		       V4L2_CAP_STREAMING,
 -};
 -
--static int viu_of_probe(struct platform_device *op)
+-
+-
+-/*******************/
+-/* USB integration */
+-/*******************/
+-static int zr364xx_board_init(struct zr364xx_camera *cam)
 -{
--	struct viu_dev *viu_dev;
--	struct video_device *vdev;
--	struct resource r;
--	struct viu_reg __iomem *viu_regs;
--	struct i2c_adapter *ad;
--	int ret, viu_irq;
--	struct clk *clk;
+-	struct zr364xx_pipeinfo *pipe = cam->pipe;
+-	unsigned long i;
+-	int err;
 -
--	ret = of_address_to_resource(op->dev.of_node, 0, &r);
--	if (ret) {
--		dev_err(&op->dev, "Can't parse device node resource\n");
--		return -ENODEV;
+-	DBG("board init: %p\n", cam);
+-	memset(pipe, 0, sizeof(*pipe));
+-	pipe->cam = cam;
+-	pipe->transfer_size = BUFFER_SIZE;
+-
+-	pipe->transfer_buffer = kzalloc(pipe->transfer_size,
+-					GFP_KERNEL);
+-	if (!pipe->transfer_buffer) {
+-		DBG("out of memory!\n");
+-		return -ENOMEM;
 -	}
 -
--	viu_irq = irq_of_parse_and_map(op->dev.of_node, 0);
--	if (!viu_irq) {
--		dev_err(&op->dev, "Error while mapping the irq\n");
--		return -EINVAL;
+-	cam->b_acquire = 0;
+-	cam->frame_count = 0;
+-
+-	/*** start create system buffers ***/
+-	for (i = 0; i < FRAMES; i++) {
+-		/* always allocate maximum size for system buffers */
+-		cam->buffer.frame[i].lpvbits = vmalloc(MAX_FRAME_SIZE);
+-
+-		DBG("valloc %p, idx %lu, pdata %p\n",
+-			&cam->buffer.frame[i], i,
+-			cam->buffer.frame[i].lpvbits);
+-		if (!cam->buffer.frame[i].lpvbits) {
+-			printk(KERN_INFO KBUILD_MODNAME ": out of memory. Using less frames\n");
+-			break;
+-		}
 -	}
 -
--	/* request mem region */
--	if (!devm_request_mem_region(&op->dev, r.start,
--				     sizeof(struct viu_reg), DRV_NAME)) {
--		dev_err(&op->dev, "Error while requesting mem region\n");
--		ret = -EBUSY;
--		goto err_irq;
+-	if (i == 0) {
+-		printk(KERN_INFO KBUILD_MODNAME ": out of memory. Aborting\n");
+-		err = -ENOMEM;
+-		goto err_free;
+-	} else
+-		cam->buffer.dwFrames = i;
+-
+-	/* make sure internal states are set */
+-	for (i = 0; i < FRAMES; i++) {
+-		cam->buffer.frame[i].ulState = ZR364XX_READ_IDLE;
+-		cam->buffer.frame[i].cur_size = 0;
 -	}
 -
--	/* remap registers */
--	viu_regs = devm_ioremap(&op->dev, r.start, sizeof(struct viu_reg));
--	if (!viu_regs) {
--		dev_err(&op->dev, "Can't map register set\n");
--		ret = -ENOMEM;
--		goto err_irq;
--	}
+-	cam->cur_frame = 0;
+-	cam->last_frame = -1;
+-	/*** end create system buffers ***/
 -
--	/* Prepare our private structure */
--	viu_dev = devm_kzalloc(&op->dev, sizeof(struct viu_dev), GFP_KERNEL);
--	if (!viu_dev) {
--		dev_err(&op->dev, "Can't allocate private structure\n");
--		ret = -ENOMEM;
--		goto err_irq;
--	}
+-	/* start read pipe */
+-	err = zr364xx_start_readpipe(cam);
+-	if (err)
+-		goto err_free_frames;
 -
--	viu_dev->vr = viu_regs;
--	viu_dev->irq = viu_irq;
--	viu_dev->dev = &op->dev;
--
--	/* init video dma queues */
--	INIT_LIST_HEAD(&viu_dev->vidq.active);
--	INIT_LIST_HEAD(&viu_dev->vidq.queued);
--
--	snprintf(viu_dev->v4l2_dev.name,
--		 sizeof(viu_dev->v4l2_dev.name), "%s", "VIU");
--	ret = v4l2_device_register(viu_dev->dev, &viu_dev->v4l2_dev);
--	if (ret < 0) {
--		dev_err(&op->dev, "v4l2_device_register() failed: %d\n", ret);
--		goto err_irq;
--	}
--
--	ad = i2c_get_adapter(0);
--	if (!ad) {
--		ret = -EFAULT;
--		dev_err(&op->dev, "couldn't get i2c adapter\n");
--		goto err_v4l2;
--	}
--
--	v4l2_ctrl_handler_init(&viu_dev->hdl, 5);
--	if (viu_dev->hdl.error) {
--		ret = viu_dev->hdl.error;
--		dev_err(&op->dev, "couldn't register control\n");
--		goto err_i2c;
--	}
--	/* This control handler will inherit the control(s) from the
--	   sub-device(s). */
--	viu_dev->v4l2_dev.ctrl_handler = &viu_dev->hdl;
--	viu_dev->decoder = v4l2_i2c_new_subdev(&viu_dev->v4l2_dev, ad,
--			"saa7113", VIU_VIDEO_DECODER_ADDR, NULL);
--
--	timer_setup(&viu_dev->vidq.timeout, viu_vid_timeout, 0);
--	viu_dev->std = V4L2_STD_NTSC_M;
--	viu_dev->first = 1;
--
--	/* Allocate memory for video device */
--	vdev = video_device_alloc();
--	if (vdev == NULL) {
--		ret = -ENOMEM;
--		goto err_hdl;
--	}
--
--	*vdev = viu_template;
--
--	vdev->v4l2_dev = &viu_dev->v4l2_dev;
--
--	viu_dev->vdev = vdev;
--
--	/* initialize locks */
--	mutex_init(&viu_dev->lock);
--	viu_dev->vdev->lock = &viu_dev->lock;
--	spin_lock_init(&viu_dev->slock);
--
--	video_set_drvdata(viu_dev->vdev, viu_dev);
--
--	mutex_lock(&viu_dev->lock);
--
--	ret = video_register_device(viu_dev->vdev, VFL_TYPE_VIDEO, -1);
--	if (ret < 0) {
--		video_device_release(viu_dev->vdev);
--		goto err_unlock;
--	}
--
--	/* enable VIU clock */
--	clk = devm_clk_get(&op->dev, "ipg");
--	if (IS_ERR(clk)) {
--		dev_err(&op->dev, "failed to lookup the clock!\n");
--		ret = PTR_ERR(clk);
--		goto err_vdev;
--	}
--	ret = clk_prepare_enable(clk);
--	if (ret) {
--		dev_err(&op->dev, "failed to enable the clock!\n");
--		goto err_vdev;
--	}
--	viu_dev->clk = clk;
--
--	/* reset VIU module */
--	viu_reset(viu_dev->vr);
--
--	/* install interrupt handler */
--	if (request_irq(viu_dev->irq, viu_intr, 0, "viu", (void *)viu_dev)) {
--		dev_err(&op->dev, "Request VIU IRQ failed.\n");
--		ret = -ENODEV;
--		goto err_clk;
--	}
--
--	mutex_unlock(&viu_dev->lock);
--
--	dev_info(&op->dev, "Freescale VIU Video Capture Board\n");
--	return ret;
--
--err_clk:
--	clk_disable_unprepare(viu_dev->clk);
--err_vdev:
--	video_unregister_device(viu_dev->vdev);
--err_unlock:
--	mutex_unlock(&viu_dev->lock);
--err_hdl:
--	v4l2_ctrl_handler_free(&viu_dev->hdl);
--err_i2c:
--	i2c_put_adapter(ad);
--err_v4l2:
--	v4l2_device_unregister(&viu_dev->v4l2_dev);
--err_irq:
--	irq_dispose_mapping(viu_irq);
--	return ret;
--}
--
--static int viu_of_remove(struct platform_device *op)
--{
--	struct v4l2_device *v4l2_dev = platform_get_drvdata(op);
--	struct viu_dev *dev = container_of(v4l2_dev, struct viu_dev, v4l2_dev);
--	struct v4l2_subdev *sdev = list_entry(v4l2_dev->subdevs.next,
--					      struct v4l2_subdev, list);
--	struct i2c_client *client = v4l2_get_subdevdata(sdev);
--
--	free_irq(dev->irq, (void *)dev);
--	irq_dispose_mapping(dev->irq);
--
--	clk_disable_unprepare(dev->clk);
--
--	v4l2_ctrl_handler_free(&dev->hdl);
--	video_unregister_device(dev->vdev);
--	i2c_put_adapter(client->adapter);
--	v4l2_device_unregister(&dev->v4l2_dev);
+-	DBG(": board initialized\n");
 -	return 0;
+-
+-err_free_frames:
+-	for (i = 0; i < FRAMES; i++)
+-		vfree(cam->buffer.frame[i].lpvbits);
+-err_free:
+-	kfree(cam->pipe->transfer_buffer);
+-	cam->pipe->transfer_buffer = NULL;
+-	return err;
 -}
+-
+-static int zr364xx_probe(struct usb_interface *intf,
+-			 const struct usb_device_id *id)
+-{
+-	struct usb_device *udev = interface_to_usbdev(intf);
+-	struct zr364xx_camera *cam = NULL;
+-	struct usb_host_interface *iface_desc;
+-	struct usb_endpoint_descriptor *endpoint;
+-	struct v4l2_ctrl_handler *hdl;
+-	int err;
+-	int i;
+-
+-	DBG("probing...\n");
+-
+-	dev_info(&intf->dev, DRIVER_DESC " compatible webcam plugged\n");
+-	dev_info(&intf->dev, "model %04x:%04x detected\n",
+-		 le16_to_cpu(udev->descriptor.idVendor),
+-		 le16_to_cpu(udev->descriptor.idProduct));
+-
+-	cam = kzalloc(sizeof(*cam), GFP_KERNEL);
+-	if (!cam)
+-		return -ENOMEM;
+-
+-	err = v4l2_device_register(&intf->dev, &cam->v4l2_dev);
+-	if (err < 0) {
+-		dev_err(&udev->dev, "couldn't register v4l2_device\n");
+-		goto free_cam;
+-	}
+-	hdl = &cam->ctrl_handler;
+-	v4l2_ctrl_handler_init(hdl, 1);
+-	v4l2_ctrl_new_std(hdl, &zr364xx_ctrl_ops,
+-			  V4L2_CID_BRIGHTNESS, 0, 127, 1, 64);
+-	if (hdl->error) {
+-		err = hdl->error;
+-		dev_err(&udev->dev, "couldn't register control\n");
+-		goto free_hdlr_and_unreg_dev;
+-	}
+-	/* save the init method used by this camera */
+-	cam->method = id->driver_info;
+-	mutex_init(&cam->lock);
+-	cam->vdev = zr364xx_template;
+-	cam->vdev.lock = &cam->lock;
+-	cam->vdev.v4l2_dev = &cam->v4l2_dev;
+-	cam->vdev.ctrl_handler = &cam->ctrl_handler;
+-	video_set_drvdata(&cam->vdev, cam);
+-
+-	cam->udev = udev;
+-
+-	switch (mode) {
+-	case 1:
+-		dev_info(&udev->dev, "160x120 mode selected\n");
+-		cam->width = 160;
+-		cam->height = 120;
+-		break;
+-	case 2:
+-		dev_info(&udev->dev, "640x480 mode selected\n");
+-		cam->width = 640;
+-		cam->height = 480;
+-		break;
+-	default:
+-		dev_info(&udev->dev, "320x240 mode selected\n");
+-		cam->width = 320;
+-		cam->height = 240;
+-		break;
+-	}
+-
+-	m0d1[0] = mode;
+-	m1[2].value = 0xf000 + mode;
+-	m2[1].value = 0xf000 + mode;
+-
+-	/* special case for METHOD3, the modes are different */
+-	if (cam->method == METHOD3) {
+-		switch (mode) {
+-		case 1:
+-			m2[1].value = 0xf000 + 4;
+-			break;
+-		case 2:
+-			m2[1].value = 0xf000 + 0;
+-			break;
+-		default:
+-			m2[1].value = 0xf000 + 1;
+-			break;
+-		}
+-	}
+-
+-	header2[437] = cam->height / 256;
+-	header2[438] = cam->height % 256;
+-	header2[439] = cam->width / 256;
+-	header2[440] = cam->width % 256;
+-
+-	cam->nb = 0;
+-
+-	DBG("dev: %p, udev %p interface %p\n", cam, cam->udev, intf);
+-
+-	/* set up the endpoint information  */
+-	iface_desc = intf->cur_altsetting;
+-	DBG("num endpoints %d\n", iface_desc->desc.bNumEndpoints);
+-	for (i = 0; i < iface_desc->desc.bNumEndpoints; ++i) {
+-		endpoint = &iface_desc->endpoint[i].desc;
+-		if (!cam->read_endpoint && usb_endpoint_is_bulk_in(endpoint)) {
+-			/* we found the bulk in endpoint */
+-			cam->read_endpoint = endpoint->bEndpointAddress;
+-		}
+-	}
+-
+-	if (!cam->read_endpoint) {
+-		err = -ENOMEM;
+-		dev_err(&intf->dev, "Could not find bulk-in endpoint\n");
+-		goto free_hdlr_and_unreg_dev;
+-	}
+-
+-	/* v4l */
+-	INIT_LIST_HEAD(&cam->vidq.active);
+-	cam->vidq.cam = cam;
+-
+-	usb_set_intfdata(intf, cam);
+-
+-	/* load zr364xx board specific */
+-	err = zr364xx_board_init(cam);
+-	if (err)
+-		goto free_hdlr_and_unreg_dev;
+-	err = v4l2_ctrl_handler_setup(hdl);
+-	if (err)
+-		goto board_uninit;
+-
+-	spin_lock_init(&cam->slock);
+-
+-	cam->fmt = formats;
+-
+-	videobuf_queue_vmalloc_init(&cam->vb_vidq, &zr364xx_video_qops,
+-				    NULL, &cam->slock,
+-				    V4L2_BUF_TYPE_VIDEO_CAPTURE,
+-				    V4L2_FIELD_NONE,
+-				    sizeof(struct zr364xx_buffer), cam, &cam->lock);
+-
+-	err = video_register_device(&cam->vdev, VFL_TYPE_VIDEO, -1);
+-	if (err) {
+-		dev_err(&udev->dev, "video_register_device failed\n");
+-		goto board_uninit;
+-	}
+-	cam->v4l2_dev.release = zr364xx_release;
+-
+-	dev_info(&udev->dev, DRIVER_DESC " controlling device %s\n",
+-		 video_device_node_name(&cam->vdev));
+-	return 0;
+-
+-board_uninit:
+-	zr364xx_board_uninit(cam);
+-free_hdlr_and_unreg_dev:
+-	v4l2_ctrl_handler_free(hdl);
+-	v4l2_device_unregister(&cam->v4l2_dev);
+-free_cam:
+-	kfree(cam);
+-	return err;
+-}
+-
+-
+-static void zr364xx_disconnect(struct usb_interface *intf)
+-{
+-	struct zr364xx_camera *cam = usb_get_intfdata(intf);
+-
+-	mutex_lock(&cam->lock);
+-	usb_set_intfdata(intf, NULL);
+-	dev_info(&intf->dev, DRIVER_DESC " webcam unplugged\n");
+-	video_unregister_device(&cam->vdev);
+-	v4l2_device_disconnect(&cam->v4l2_dev);
+-
+-	/* stops the read pipe if it is running */
+-	if (cam->b_acquire)
+-		zr364xx_stop_acquire(cam);
+-
+-	zr364xx_stop_readpipe(cam);
+-	mutex_unlock(&cam->lock);
+-	v4l2_device_put(&cam->v4l2_dev);
+-}
+-
 -
 -#ifdef CONFIG_PM
--static int viu_suspend(struct platform_device *op, pm_message_t state)
+-static int zr364xx_suspend(struct usb_interface *intf, pm_message_t message)
 -{
--	struct v4l2_device *v4l2_dev = platform_get_drvdata(op);
--	struct viu_dev *dev = container_of(v4l2_dev, struct viu_dev, v4l2_dev);
+-	struct zr364xx_camera *cam = usb_get_intfdata(intf);
 -
--	clk_disable(dev->clk);
+-	cam->was_streaming = cam->b_acquire;
+-	if (!cam->was_streaming)
+-		return 0;
+-	zr364xx_stop_acquire(cam);
+-	zr364xx_stop_readpipe(cam);
 -	return 0;
 -}
 -
--static int viu_resume(struct platform_device *op)
+-static int zr364xx_resume(struct usb_interface *intf)
 -{
--	struct v4l2_device *v4l2_dev = platform_get_drvdata(op);
--	struct viu_dev *dev = container_of(v4l2_dev, struct viu_dev, v4l2_dev);
+-	struct zr364xx_camera *cam = usb_get_intfdata(intf);
+-	int res;
 -
--	clk_enable(dev->clk);
+-	if (!cam->was_streaming)
+-		return 0;
+-
+-	res = zr364xx_start_readpipe(cam);
+-	if (res)
+-		return res;
+-
+-	res = zr364xx_prepare(cam);
+-	if (res)
+-		goto err_prepare;
+-
+-	zr364xx_start_acquire(cam);
 -	return 0;
+-
+-err_prepare:
+-	zr364xx_stop_readpipe(cam);
+-	return res;
 -}
 -#endif
 -
--/*
-- * Initialization and module stuff
-- */
--static const struct of_device_id mpc512x_viu_of_match[] = {
--	{
--		.compatible = "fsl,mpc5121-viu",
--	},
--	{},
--};
--MODULE_DEVICE_TABLE(of, mpc512x_viu_of_match);
+-/**********************/
+-/* Module integration */
+-/**********************/
 -
--static struct platform_driver viu_of_platform_driver = {
--	.probe = viu_of_probe,
--	.remove = viu_of_remove,
+-static struct usb_driver zr364xx_driver = {
+-	.name = "zr364xx",
+-	.probe = zr364xx_probe,
+-	.disconnect = zr364xx_disconnect,
 -#ifdef CONFIG_PM
--	.suspend = viu_suspend,
--	.resume = viu_resume,
+-	.suspend = zr364xx_suspend,
+-	.resume = zr364xx_resume,
+-	.reset_resume = zr364xx_resume,
 -#endif
--	.driver = {
--		.name = DRV_NAME,
--		.of_match_table = mpc512x_viu_of_match,
--	},
+-	.id_table = device_table
 -};
 -
--module_platform_driver(viu_of_platform_driver);
+-module_usb_driver(zr364xx_driver);
 -
--MODULE_DESCRIPTION("Freescale Video-In(VIU)");
--MODULE_AUTHOR("Hongjun Chen");
+-MODULE_AUTHOR(DRIVER_AUTHOR);
+-MODULE_DESCRIPTION(DRIVER_DESC);
 -MODULE_LICENSE("GPL");
--MODULE_VERSION(VIU_VERSION);
+-MODULE_VERSION(DRIVER_VERSION);
 -- 
 2.39.0
 
