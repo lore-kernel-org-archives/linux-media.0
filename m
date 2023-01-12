@@ -2,48 +2,43 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE5F9C54EBD
-	for <linux-media@archiver.kernel.org>; Thu, 12 Jan 2023 04:12:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FC05C54EBC
+	for <linux-media@archiver.kernel.org>; Thu, 12 Jan 2023 04:12:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236522AbjALEMS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 11 Jan 2023 23:12:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48880 "EHLO
+        id S236806AbjALEMg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 11 Jan 2023 23:12:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231458AbjALEL7 (ORCPT
+        with ESMTP id S236529AbjALEMC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 11 Jan 2023 23:11:59 -0500
+        Wed, 11 Jan 2023 23:12:02 -0500
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0784C729;
-        Wed, 11 Jan 2023 20:11:53 -0800 (PST)
-X-UUID: 3c8312be922f11eda06fc9ecc4dadd91-20230112
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F074C73F;
+        Wed, 11 Jan 2023 20:11:55 -0800 (PST)
+X-UUID: 3d75cfa4922f11eda06fc9ecc4dadd91-20230112
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=6rzkbVy/YDnF2Z2bhC8/+OezJngcH2UhwFZPahpgES8=;
-        b=MaGt4qGXMiZYB5y4Sgw2LVZFERGs99Y64+0Nh5L55vRw3BVBoxMT/o+rwRWgmSSaijzGE+imYdwu41gyAl7VF5N5/NPRIlqQqhA1yHluDXt5NQRoYgafBQvsihZl2e9vHrM302QY7SgiJl7edOPIcdPga63w5f2egch4xNIGJXE=;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=LWVItFchAxjQJyYfmQOrb6XjujvdQkI5SlHsF0+sIgg=;
+        b=ltBoOkmu1NLrzbQAq28P052jhcluYSYKlxwMoYtTAlnVK6jY0UYZgyBr7DqcINP0+z9h+V1x++LGM+2mBB4p0Y4Ai1cciihSEsNkSbrm1i50hEFo+TvqsMLwwtcG8+WuKr3VccowM4rFs9c9xzqSbMQhMn2IeyYUkKux/+V2veI=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.17,REQID:331ee35e-62c6-4b8d-80e6-8d212ccefa63,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.17,REQID:331ee35e-62c6-4b8d-80e6-8d212ccefa63,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:543e81c,CLOUDID:a98295f5-ff42-4fb0-b929-626456a83c14,B
-        ulkID:230112121150RAS22AU2,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
-        I:0,OSA:0
-X-CID-APTURL: Status:success,Category:nil,Trust:0,Unknown:0,Malicious:0
+X-CID-O-INFO: VERSION:1.1.17,REQID:9c6f8cf6-8996-48ef-842f-8b5b237d1baf,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:543e81c,CLOUDID:1db66b54-dd49-462e-a4be-2143a3ddc739,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
 X-CID-BVR: 0,NGT
-X-UUID: 3c8312be922f11eda06fc9ecc4dadd91-20230112
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+X-UUID: 3d75cfa4922f11eda06fc9ecc4dadd91-20230112
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 332061807; Thu, 12 Jan 2023 12:11:49 +0800
+        with ESMTP id 1055710536; Thu, 12 Jan 2023 12:11:51 +0800
 Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 12 Jan 2023 12:11:48 +0800
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 12 Jan 2023 12:11:50 +0800
 Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
  mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 12 Jan 2023 12:11:46 +0800
+ 15.2.792.15 via Frontend Transport; Thu, 12 Jan 2023 12:11:49 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Chen-Yu Tsai <wenst@chromium.org>,
@@ -64,9 +59,9 @@ CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v3,5/7] media: mediatek: vcodec: remove unused lat_buf
-Date:   Thu, 12 Jan 2023 12:11:38 +0800
-Message-ID: <20230112041140.833-6-yunfei.dong@mediatek.com>
+Subject: [PATCH v3,7/7] media: mediatek: vcodec: change lat thread decode error condition
+Date:   Thu, 12 Jan 2023 12:11:40 +0800
+Message-ID: <20230112041140.833-8-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230112041140.833-1-yunfei.dong@mediatek.com>
 References: <20230112041140.833-1-yunfei.dong@mediatek.com>
@@ -78,51 +73,60 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Remove unused lat_buf from core list, or leading to core list access
-NULL point.
+If lat thread can't get lat buffer, it should be that current instance
+don't be schedulded, the driver can't free the src buffer directly.
 
-Fixes: 365e4ba01df4 ("media: mtk-vcodec: Add work queue for core hardware decode")
+Fixes: 7b182b8d9c85 ("media: mediatek: vcodec: Refactor get and put capture buffer flow")
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
- .../platform/mediatek/vcodec/vdec_msg_queue.c  | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+ .../platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c     | 6 ++++--
+ .../platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c  | 2 +-
+ .../platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c     | 2 +-
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-index ce7c82e38103..cdc539a46cb9 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-@@ -177,7 +177,7 @@ bool vdec_msg_queue_wait_lat_buf_full(struct vdec_msg_queue *msg_queue)
- 	struct vdec_lat_buf *buf, *tmp;
- 	struct list_head *list_core[3];
- 	struct vdec_msg_queue_ctx *core_ctx;
--	int ret, i, in_core_count = 0;
-+	int ret, i, in_core_count = 0, count = 0;
- 	long timeout_jiff;
- 
- 	core_ctx = &msg_queue->ctx->dev->msg_queue_core_ctx;
-@@ -204,8 +204,20 @@ bool vdec_msg_queue_wait_lat_buf_full(struct vdec_msg_queue *msg_queue)
- 			       msg_queue->lat_ctx.ready_num);
- 		return true;
- 	}
--	mtk_v4l2_err("failed with lat buf isn't full: %d",
--		     msg_queue->lat_ctx.ready_num);
-+
-+	spin_lock(&core_ctx->ready_lock);
-+	list_for_each_entry_safe(buf, tmp, &core_ctx->ready_queue, core_list) {
-+		if (buf && buf->ctx == msg_queue->ctx) {
-+			count++;
-+			list_del(&buf->core_list);
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
+index ffbcee04dc26..04beb3f08eea 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
+@@ -258,8 +258,10 @@ static void mtk_vdec_worker(struct work_struct *work)
+ 		if (src_buf_req)
+ 			v4l2_ctrl_request_complete(src_buf_req, &ctx->ctrl_hdl);
+ 	} else {
+-		v4l2_m2m_src_buf_remove(ctx->m2m_ctx);
+-		v4l2_m2m_buf_done(vb2_v4l2_src, state);
++		if (ret != -EAGAIN) {
++			v4l2_m2m_src_buf_remove(ctx->m2m_ctx);
++			v4l2_m2m_buf_done(vb2_v4l2_src, state);
 +		}
-+	}
-+	spin_unlock(&core_ctx->ready_lock);
-+
-+	mtk_v4l2_err("failed with lat buf isn't full: list(%d %d) count:%d",
-+		     atomic_read(&msg_queue->lat_list_cnt),
-+		     atomic_read(&msg_queue->core_list_cnt), count);
-+
- 	return false;
+ 		v4l2_m2m_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx);
+ 	}
  }
- 
+diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
+index 8f262e86bb05..07774b6a3dbd 100644
+--- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
++++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
+@@ -574,7 +574,7 @@ static int vdec_h264_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+ 	lat_buf = vdec_msg_queue_dqbuf(&inst->ctx->msg_queue.lat_ctx);
+ 	if (!lat_buf) {
+ 		mtk_vcodec_err(inst, "failed to get lat buffer");
+-		return -EINVAL;
++		return -EAGAIN;
+ 	}
+ 	share_info = lat_buf->private_data;
+ 	src_buf_info = container_of(bs, struct mtk_video_dec_buf, bs_buffer);
+diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+index cbb6728b8a40..cf16cf2807f0 100644
+--- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
++++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+@@ -2070,7 +2070,7 @@ static int vdec_vp9_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+ 	lat_buf = vdec_msg_queue_dqbuf(&instance->ctx->msg_queue.lat_ctx);
+ 	if (!lat_buf) {
+ 		mtk_vcodec_err(instance, "Failed to get VP9 lat buf\n");
+-		return -EBUSY;
++		return -EAGAIN;
+ 	}
+ 	pfc = (struct vdec_vp9_slice_pfc *)lat_buf->private_data;
+ 	if (!pfc) {
 -- 
 2.18.0
 
