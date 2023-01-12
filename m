@@ -2,121 +2,132 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 090D6C54EBC
-	for <linux-media@archiver.kernel.org>; Thu, 12 Jan 2023 14:44:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64B6EC54EBC
+	for <linux-media@archiver.kernel.org>; Thu, 12 Jan 2023 15:07:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239817AbjALOoJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Jan 2023 09:44:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38194 "EHLO
+        id S240337AbjALPHP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Jan 2023 10:07:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239928AbjALOnc (ORCPT
+        with ESMTP id S240255AbjALPGm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Jan 2023 09:43:32 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A694763192;
-        Thu, 12 Jan 2023 06:32:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673533955; x=1705069955;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ib3vyisFDI6K4betGWmHI2M4r3YZdqPwbAKOST8VhdY=;
-  b=G2uGCVNmmQ+D4sR3M84UvgEn6CiT6XDhV1BOn0rrAPteRguX95ncAXhM
-   WebUIzG85+NwBXY6Tt1RmdY8YKeR/dAtAr5V7CeYqAq1ZAe9EBy3Pr0k3
-   c+56dM++sxUxZJ7QcnUEx35QHIoiMq87QpbmZ01su8dVU0BaTOYcH7s9X
-   SZ7wH8WQZxsxsy8cc98Vd8wEnWKwdBF0Vs/OOf4jCVKM7yZnvqG8Gp2W+
-   ju503yEVZw78NciCwgOJxQgtfW3LNZwK5HDqCBU2SBYoEdBWL4UnNvolg
-   KTZPTKRZBjt6Jip63Pbv7uPrufD+33WI9phDVVp8z6wD9e/NtVSR+6Mij
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="388188525"
-X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="388188525"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 06:15:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="765632315"
-X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="765632315"
-Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 12 Jan 2023 06:15:16 -0800
-Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pFyMN-000AAE-1j;
-        Thu, 12 Jan 2023 14:15:15 +0000
-Date:   Thu, 12 Jan 2023 22:14:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     tumic@gpxsee.org, Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lizhi Hou <lizhi.hou@amd.com>,
-        Martin =?utf-8?B?VMWvbWE=?= <martin.tuma@digiteqautomotive.com>
-Subject: Re: [RESEND PATCH v4 1/1] Added Digiteq Automotive MGB4 driver
-Message-ID: <202301122241.aanYtERe-lkp@intel.com>
-References: <20230112130458.2836-2-tumic@gpxsee.org>
+        Thu, 12 Jan 2023 10:06:42 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CE85D6B7
+        for <linux-media@vger.kernel.org>; Thu, 12 Jan 2023 06:55:21 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id v25so28746543lfe.12
+        for <linux-media@vger.kernel.org>; Thu, 12 Jan 2023 06:55:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=eVbemLweSFtIyStHy3sTEbPBu0/XrJNey3w3MbOOwEE=;
+        b=ttXHb70rHqfCHVOXsf6Q5SH1fqRM+CaHYdV4Tqag+Er5QQiTg0y1+Wwg4Lq6Icz8gk
+         07i9ZLd/4+zAk4eYIHRoIOn3cakEH9OrLhtM4IBNH+83PyySuj8LBD/SySlLt3ixgQaM
+         HNv24AlUoYpaTKgZGYTqIGfYKQ7Xdvcpjthr21TzD2BxPttH9lZZxXs1+klT64JNwILS
+         woxLHVoX26DOx1pxijJOZllJliT9/OwUkXzUBSArrCH5WrF2ppYUXt4ZJF1sLIO7HyOb
+         wdG2WRVMc/aByObJ3YGG+mqAavghifEazNoGYj6xE35Z200zToR0Nl9VQIyx22iGsGoo
+         tHjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eVbemLweSFtIyStHy3sTEbPBu0/XrJNey3w3MbOOwEE=;
+        b=i/SjkzPbckB69xB3iImiH52sxuo59XAH/z0961Yl1idkfr6QrTMHsD8e5fv5bqPuAS
+         5BKCVGv8xWiGxltpyaJdB8tuxeqfbMcAdAFQOw/Pa8lXljyX2btpXiFELfBj7lsqoOVd
+         rVvOB+wsEg6i0WDKl92HkGkGEFgPvWk30oikZ3vHZ1x9FCy+GWAoTrrfUAVopJjit1Hc
+         7J20B81FiHyHm+L0kUsjaLW8prGS0Vi784ZZ5Fm3AS9pzbytW210xEvUeOpPwTqhzAjZ
+         cPOUwZFs2VL7PmCrretuc4FcRDJOPoP29xDDVZynEp9M58Uta4LsZqwSAZO9X5Zn/1cC
+         wV/g==
+X-Gm-Message-State: AFqh2kr2ga49DC1aVsFA6hBllXwNrmL+9qIBmxJclZ0SlRMv8XfFzebt
+        A0o8aAuZ+fNlgBL2PA8Vye4lDCt+No9gqDKRhorW1w==
+X-Google-Smtp-Source: AMrXdXt+v1FWLQNKkH6B+Roo5NSENxZFIjpoigv8VLgU4hO/6DIdLqekSCezf+AaI9MGINFaBKiRdOxPUMcZG4OlTuk=
+X-Received: by 2002:a05:6512:388e:b0:4ca:f6a4:455a with SMTP id
+ n14-20020a056512388e00b004caf6a4455amr6689684lft.321.1673535319553; Thu, 12
+ Jan 2023 06:55:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230112130458.2836-2-tumic@gpxsee.org>
+References: <20230101-patch-series-v2-6-2-rc1-v2-0-fa1897efac14@collabora.com> <20230101-patch-series-v2-6-2-rc1-v2-4-fa1897efac14@collabora.com>
+In-Reply-To: <20230101-patch-series-v2-6-2-rc1-v2-4-fa1897efac14@collabora.com>
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date:   Thu, 12 Jan 2023 11:55:07 -0300
+Message-ID: <CAAEAJfBuA=gTpyeKs5mj0_1z+x5sZhse2OGPP5nmb5E6XNjBKw@mail.gmail.com>
+Subject: Re: [PATCH v2 04/12] staging: media: rkvdec: Block start streaming
+ until both queues run
+To:     Sebastian Fricke <sebastian.fricke@collabora.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Alex Bee <knaerzche@gmail.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Collabora Kernel-domain <kernel@collabora.com>,
+        Robert Beckett <bob.beckett@collabora.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Hi Sebastian,
 
-Thank you for the patch! Perhaps something to improve:
+On Thu, Jan 12, 2023 at 9:56 AM Sebastian Fricke
+<sebastian.fricke@collabora.com> wrote:
+>
+> Ensure that both the CAPTURE and the OUTPUT queue are running (e.g. busy
+> -> have buffers allocated) before starting the actual streaming process.
+>
 
-[auto build test WARNING on media-tree/master]
-[also build test WARNING on linus/master v6.2-rc3 next-20230112]
-[cannot apply to sailus-media-tree/streams]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Usually, you want to write the "why" in the commit description,
+instead of the "what",
+which is (hopefully) more or less clear by reading the commit change.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/tumic-gpxsee-org/Added-Digiteq-Automotive-MGB4-driver/20230112-191715
-base:   git://linuxtv.org/media_tree.git master
-patch link:    https://lore.kernel.org/r/20230112130458.2836-2-tumic%40gpxsee.org
-patch subject: [RESEND PATCH v4 1/1] Added Digiteq Automotive MGB4 driver
-reproduce:
-        make versioncheck
+The commit description should have enough information to understand
+what is the impact of merging the commit (or what is the bug without
+the merging the commit).
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+If you are fixing a spec violation, adding a reference to the spec is important,
+if you are fixing a v4l2-compliance, pasting the error, etc.
 
-versioncheck warnings: (new ones prefixed by >>)
-   INFO PATH=/opt/cross/clang/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-   /usr/bin/timeout -k 100 3h /usr/bin/make W=1 --keep-going HOSTCC=gcc-11 CC=gcc-11 -j32 ARCH=x86_64 versioncheck
-   find ./* \( -name SCCS -o -name BitKeeper -o -name .svn -o -name CVS -o -name .pc -o -name .hg -o -name .git \) -prune -o \
-   	-name '*.[hcS]' -type f -print | sort \
-   	| xargs perl -w ./scripts/checkversion.pl
-   ./drivers/accessibility/speakup/genmap.c: 13 linux/version.h not needed.
-   ./drivers/accessibility/speakup/makemapdata.c: 13 linux/version.h not needed.
->> ./drivers/media/pci/mgb4/mgb4_core.c: 21 linux/version.h not needed.
->> ./drivers/media/pci/mgb4/mgb4_i2c.c: 11 linux/version.h not needed.
->> ./drivers/media/pci/mgb4/mgb4_trigger.c: 13 linux/version.h not needed.
-   ./drivers/net/ethernet/qlogic/qede/qede.h: 10 linux/version.h not needed.
-   ./drivers/net/ethernet/qlogic/qede/qede_ethtool.c: 7 linux/version.h not needed.
-   ./drivers/scsi/cxgbi/libcxgbi.h: 27 linux/version.h not needed.
-   ./drivers/scsi/mpi3mr/mpi3mr.h: 32 linux/version.h not needed.
-   ./drivers/scsi/qedi/qedi_dbg.h: 14 linux/version.h not needed.
-   ./drivers/soc/tegra/cbb/tegra-cbb.c: 19 linux/version.h not needed.
-   ./drivers/soc/tegra/cbb/tegra194-cbb.c: 26 linux/version.h not needed.
-   ./drivers/soc/tegra/cbb/tegra234-cbb.c: 27 linux/version.h not needed.
-   ./drivers/staging/media/atomisp/include/linux/atomisp.h: 23 linux/version.h not needed.
-   ./init/version-timestamp.c: 5 linux/version.h not needed.
-   ./samples/trace_events/trace_custom_sched.c: 11 linux/version.h not needed.
-   ./sound/soc/codecs/cs42l42.c: 14 linux/version.h not needed.
-   ./tools/lib/bpf/bpf_helpers.h: 289: need linux/version.h
-   ./tools/perf/tests/bpf-script-example.c: 60: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-kbuild.c: 21: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-prologue.c: 47: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-relocation.c: 51: need linux/version.h
-   ./tools/testing/selftests/bpf/progs/dev_cgroup.c: 9 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/netcnt_prog.c: 3 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_map_lock.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_send_signal_kern.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_spin_lock.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_tcp_estats.c: 37 linux/version.h not needed.
-   ./tools/testing/selftests/wireguard/qemu/init.c: 27 linux/version.h not needed.
+> Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+> ---
+>  drivers/staging/media/rkvdec/rkvdec.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+> index c849f6c20279..e0e95d06e216 100644
+> --- a/drivers/staging/media/rkvdec/rkvdec.c
+> +++ b/drivers/staging/media/rkvdec/rkvdec.c
+> @@ -562,6 +562,13 @@ static int rkvdec_start_streaming(struct vb2_queue *q, unsigned int count)
+>         if (V4L2_TYPE_IS_CAPTURE(q->type))
+>                 return 0;
+>
+> +       /*
+> +        * Make sure that both the output and the capture queue are running
+> +        */
+> +       if (rkvdec_queue_busy(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) == 0 ||
+> +           rkvdec_queue_busy(ctx, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) == 0)
+> +               return -EAGAIN;
+> +
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+IIRC, this is already handled by Videobuf2 core, see the comment for
+vb2_start_streaming,
+in drivers/media/common/videobuf2/videobuf2-core.c. There's also a
+!q->num_buffers check
+in vb2_core_streamon.
+
+In general, if you see some kind of bug in a generic logic like this,
+it's a red flag that something is wrong at the core level.
+
+Thanks!
+Ezequiel
+
+>         desc = ctx->coded_fmt_desc;
+>         if (WARN_ON(!desc))
+>                 return -EINVAL;
+>
+> --
+> 2.25.1
