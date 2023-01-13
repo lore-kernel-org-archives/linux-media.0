@@ -2,30 +2,30 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54F15C61DB3
-	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 09:57:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60BF2C54EBE
+	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 09:57:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240868AbjAMJ5Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Jan 2023 04:57:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44820 "EHLO
+        id S240879AbjAMJ51 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Jan 2023 04:57:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240751AbjAMJ47 (ORCPT
+        with ESMTP id S240780AbjAMJ5A (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:56:59 -0500
+        Fri, 13 Jan 2023 04:57:00 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6526699C
-        for <linux-media@vger.kernel.org>; Fri, 13 Jan 2023 01:54:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C5B6718D
+        for <linux-media@vger.kernel.org>; Fri, 13 Jan 2023 01:54:15 -0800 (PST)
 Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <m.tretter@pengutronix.de>)
-        id 1pGGlH-0003cp-Mo; Fri, 13 Jan 2023 10:54:11 +0100
+        id 1pGGlI-0003cp-OR; Fri, 13 Jan 2023 10:54:12 +0100
 From:   Michael Tretter <m.tretter@pengutronix.de>
-Date:   Fri, 13 Jan 2023 10:54:09 +0100
-Subject: [PATCH v2 03/16] media: imx-pxp: extract helper function to setup data path
+Date:   Fri, 13 Jan 2023 10:54:11 +0100
+Subject: [PATCH v2 05/16] media: imx-pxp: disable LUT block
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230112-imx-pxp-v2-3-e2281da1db55@pengutronix.de>
+Message-Id: <20230112-imx-pxp-v2-5-e2281da1db55@pengutronix.de>
 References: <20230112-imx-pxp-v2-0-e2281da1db55@pengutronix.de>
 In-Reply-To: <20230112-imx-pxp-v2-0-e2281da1db55@pengutronix.de>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
@@ -48,102 +48,49 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The driver must configure the data path through the Pixel Pipeline.
+The LUT block is always configured in bypass mode.
 
-Currently, the driver is using a fixed setup, but once there are
-different pipeline configurations, it is helpful to have a dedicated
-function for determining the register value for the data path.
+Take it entirely out of the pipeline by disabling it and routing the
+data path around the LUT.
 
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 ---
-Changelog:
+Changelog
 
 v2: none
 ---
- drivers/media/platform/nxp/imx-pxp.c | 62 ++++++++++++++++++++++++------------
- 1 file changed, 42 insertions(+), 20 deletions(-)
+ drivers/media/platform/nxp/imx-pxp.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/media/platform/nxp/imx-pxp.c b/drivers/media/platform/nxp/imx-pxp.c
-index 5b671c6e5cae..675fd00faaac 100644
+index 78e778d68e64..bf3be989a552 100644
 --- a/drivers/media/platform/nxp/imx-pxp.c
 +++ b/drivers/media/platform/nxp/imx-pxp.c
-@@ -724,6 +724,47 @@ static void pxp_setup_csc(struct pxp_ctx *ctx)
- 	}
- }
+@@ -735,11 +735,10 @@ static u32 pxp_data_path_ctrl0(struct pxp_ctx *ctx)
+ 	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX13_SEL(3);
+ 	/* Select Rotation */
+ 	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX12_SEL(0);
+-	/* Select LUT */
+-	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX11_SEL(0);
++	/* Bypass LUT */
++	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX11_SEL(1);
+ 	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX10_SEL(3);
+-	/* Select MUX8 for LUT */
+-	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX9_SEL(1);
++	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX9_SEL(3);
+ 	/* Select CSC 2 */
+ 	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX8_SEL(0);
+ 	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX7_SEL(3);
+@@ -964,7 +963,7 @@ static int pxp_start(struct pxp_ctx *ctx, struct vb2_v4l2_buffer *in_vb,
+ 	/* ungate, enable PS/AS/OUT and PXP operation */
+ 	writel(BM_PXP_CTRL_IRQ_ENABLE, dev->mmio + HW_PXP_CTRL_SET);
+ 	writel(BM_PXP_CTRL_ENABLE | BM_PXP_CTRL_ENABLE_CSC2 |
+-	       BM_PXP_CTRL_ENABLE_LUT | BM_PXP_CTRL_ENABLE_ROTATE0 |
++	       BM_PXP_CTRL_ENABLE_ROTATE0 |
+ 	       BM_PXP_CTRL_ENABLE_PS_AS_OUT, dev->mmio + HW_PXP_CTRL_SET);
  
-+static u32 pxp_data_path_ctrl0(struct pxp_ctx *ctx)
-+{
-+	u32 ctrl0;
-+
-+	ctrl0 = 0;
-+	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX15_SEL(0);
-+	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX14_SEL(1);
-+	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX13_SEL(0);
-+	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX12_SEL(0);
-+	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX11_SEL(0);
-+	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX10_SEL(0);
-+	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX9_SEL(1);
-+	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX8_SEL(0);
-+	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX7_SEL(0);
-+	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX6_SEL(0);
-+	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX5_SEL(0);
-+	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX4_SEL(0);
-+	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX3_SEL(0);
-+	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX2_SEL(0);
-+	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX1_SEL(0);
-+	ctrl0 |= BF_PXP_DATA_PATH_CTRL0_MUX0_SEL(0);
-+
-+	return ctrl0;
-+}
-+
-+static void pxp_set_data_path(struct pxp_ctx *ctx)
-+{
-+	struct pxp_dev *dev = ctx->dev;
-+	u32 ctrl0;
-+	u32 ctrl1;
-+
-+	ctrl0 = pxp_data_path_ctrl0(ctx);
-+
-+	ctrl1 = 0;
-+	ctrl1 |= BF_PXP_DATA_PATH_CTRL1_MUX17_SEL(1);
-+	ctrl1 |= BF_PXP_DATA_PATH_CTRL1_MUX16_SEL(1);
-+
-+	writel(ctrl0, dev->mmio + HW_PXP_DATA_PATH_CTRL0);
-+	writel(ctrl1, dev->mmio + HW_PXP_DATA_PATH_CTRL1);
-+}
-+
- static int pxp_start(struct pxp_ctx *ctx, struct vb2_v4l2_buffer *in_vb,
- 		     struct vb2_v4l2_buffer *out_vb)
- {
-@@ -910,26 +951,7 @@ static int pxp_start(struct pxp_ctx *ctx, struct vb2_v4l2_buffer *in_vb,
- 	/* bypass LUT */
- 	writel(BM_PXP_LUT_CTRL_BYPASS, dev->mmio + HW_PXP_LUT_CTRL);
- 
--	writel(BF_PXP_DATA_PATH_CTRL0_MUX15_SEL(0)|
--	       BF_PXP_DATA_PATH_CTRL0_MUX14_SEL(1)|
--	       BF_PXP_DATA_PATH_CTRL0_MUX13_SEL(0)|
--	       BF_PXP_DATA_PATH_CTRL0_MUX12_SEL(0)|
--	       BF_PXP_DATA_PATH_CTRL0_MUX11_SEL(0)|
--	       BF_PXP_DATA_PATH_CTRL0_MUX10_SEL(0)|
--	       BF_PXP_DATA_PATH_CTRL0_MUX9_SEL(1)|
--	       BF_PXP_DATA_PATH_CTRL0_MUX8_SEL(0)|
--	       BF_PXP_DATA_PATH_CTRL0_MUX7_SEL(0)|
--	       BF_PXP_DATA_PATH_CTRL0_MUX6_SEL(0)|
--	       BF_PXP_DATA_PATH_CTRL0_MUX5_SEL(0)|
--	       BF_PXP_DATA_PATH_CTRL0_MUX4_SEL(0)|
--	       BF_PXP_DATA_PATH_CTRL0_MUX3_SEL(0)|
--	       BF_PXP_DATA_PATH_CTRL0_MUX2_SEL(0)|
--	       BF_PXP_DATA_PATH_CTRL0_MUX1_SEL(0)|
--	       BF_PXP_DATA_PATH_CTRL0_MUX0_SEL(0),
--	       dev->mmio + HW_PXP_DATA_PATH_CTRL0);
--	writel(BF_PXP_DATA_PATH_CTRL1_MUX17_SEL(1) |
--	       BF_PXP_DATA_PATH_CTRL1_MUX16_SEL(1),
--	       dev->mmio + HW_PXP_DATA_PATH_CTRL1);
-+	pxp_set_data_path(ctx);
- 
- 	writel(0xffff, dev->mmio + HW_PXP_IRQ_MASK);
- 
+ 	return 0;
 
 -- 
 2.30.2
