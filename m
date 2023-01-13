@@ -2,97 +2,137 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4709C54EBE
-	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 15:26:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9205C54EBD
+	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 15:32:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjAMP0n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Jan 2023 10:26:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46850 "EHLO
+        id S229789AbjAMPcP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Jan 2023 10:32:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbjAMP0P (ORCPT
+        with ESMTP id S229773AbjAMPbv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Jan 2023 10:26:15 -0500
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288F47278D;
-        Fri, 13 Jan 2023 07:18:56 -0800 (PST)
-Received: by mail-oi1-f175.google.com with SMTP id n8so17958266oih.0;
-        Fri, 13 Jan 2023 07:18:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ieDDnBbNB9JJsaMwpNzXJlERKk1wwpqLtOrBhJRfGpo=;
-        b=IZra8qjrcHr3eLbPGF9QPAUCfQ/039Fts8ql1H2MrriLwt0C+pWfFHzqSsotqYsAkf
-         ZGo295nFFgvvEGxogSV2+JT7dob+NPjhG6hSRVsSZStYXkIyyc7dRVaEMIjGOPDCY9UK
-         O66HdNI62tmqqgNk4dw9CPXy91TGjtJr2fqRjuM7anMwV5/cU60RP24hQt89WtTVNqD6
-         qm59rGQO/Vh2r/WPj3KKafL7EkljDSCZrJJCFgAedT0SCouSgdjtS6bWTso0aNsabsX3
-         OemNwBFGDatZgl2lLsDvvKLMAj/NRVfdqPyDzT0KS1DNd7eaaeYFdj7LiY8ZZyIznUot
-         XpvQ==
-X-Gm-Message-State: AFqh2kpj4Uo7mbYOiA4tQZeNtkdhNKVxyY6iHmSGExsuQsB6IR7DIX8d
-        9wfsKuz4lP2bsRMc5dSsNQ==
-X-Google-Smtp-Source: AMrXdXvKjUuXqtnMP8HRUWF6KklExF2oSAG2rWu9CjnEqT3LUV2kOArvIgWmH2DzIBq+esFLR8R2ag==
-X-Received: by 2002:a05:6808:996:b0:364:c003:e1ba with SMTP id a22-20020a056808099600b00364c003e1bamr517132oic.46.1673623135307;
-        Fri, 13 Jan 2023 07:18:55 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w11-20020a0568080d4b00b0035c422bb303sm9298016oik.19.2023.01.13.07.18.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 07:18:54 -0800 (PST)
-Received: (nullmailer pid 2206759 invoked by uid 1000);
-        Fri, 13 Jan 2023 15:18:53 -0000
-Date:   Fri, 13 Jan 2023 09:18:53 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Subject: Re: remove arch/sh
-Message-ID: <20230113151853.GA2184281-robh@kernel.org>
-References: <20230113062339.1909087-1-hch@lst.de>
+        Fri, 13 Jan 2023 10:31:51 -0500
+Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C216495AB;
+        Fri, 13 Jan 2023 07:25:21 -0800 (PST)
+Received: from mgb4.digiteq.red (unknown [62.77.71.229])
+        by mx.gpxsee.org (Postfix) with ESMTPSA id 1464BE44D;
+        Fri, 13 Jan 2023 16:25:19 +0100 (CET)
+From:   tumic@gpxsee.org
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lizhi Hou <lizhi.hou@amd.com>,
+        =?UTF-8?q?Martin=20T=C5=AFma?= <martin.tuma@digiteqautomotive.com>
+Subject: [PATCH v5 0/1] Digiteq Automotive MGB4 driver
+Date:   Fri, 13 Jan 2023 18:26:35 +0100
+Message-Id: <20230113172636.2590-1-tumic@gpxsee.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113062339.1909087-1-hch@lst.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 07:23:17AM +0100, Christoph Hellwig wrote:
-> Hi all,
-> 
-> arch/sh has been a long drag because it supports a lot of SOCs, and most
-> of them haven't even been converted to device tree infrastructure.  These
-> SOCs are generally obsolete as well, and all of the support has been barely
-> maintained for almost 10 years, and not at all for more than 1 year.
-> 
-> Drop arch/sh and everything that depends on it.
-> 
-> Diffstat:
->  Documentation/sh/booting.rst                             |   12 
->  Documentation/sh/features.rst                            |    3 
->  Documentation/sh/index.rst                               |   56 
->  Documentation/sh/new-machine.rst                         |  277 -
->  Documentation/sh/register-banks.rst                      |   40 
+From: Martin Tůma <martin.tuma@digiteqautomotive.com>
 
-Can you please also remove:
+Hi,
+This patch adds a driver for the Digiteq Automotive MGB4 grabber card.
+MGB4 is a modular frame grabber PCIe card for automotive video interfaces
+(FPD-Link and GMSL for now). It is based on a Xilinx FPGA and uses their
+XDMA IP core for DMA transfers. Additionally, Xilinx I2C and SPI IP cores
+which already have drivers in linux are used in the design.
 
-Documentation/devicetree/bindings/mtd/flctl-nand.txt
-Documentation/devicetree/bindings/interrupt-controller/jcore,aic.txt
-Documentation/devicetree/bindings/spi/jcore,spi.txt
-Documentation/devicetree/bindings/timer/jcore,pit.txt
+The driver is a quite standard v4l2 driver, with one exception - there are
+a lot of sysfs options that may/must be set before opening the v4l2 device
+to adapt the card on a specific signal (see mgb4.rst for details)
+as the card must be able to work with various signal sources (or displays)
+that can not be auto-detected.
 
-Rob
+I have run the driver through the v4l2-compliance test suite for both the
+input and the output and the results look fine to me (I can provide the
+output if required).
+
+The patch requires the new XDMA v10 driver from Xilinx/AMD from the dmaengine
+mailing list to compile/work:
+https://www.spinics.net/lists/dmaengine/msg32151.html
+
+Changes in v5:
+* Removed unused <linux/version.h> includes
+
+Changes in v4:
+* Redesigned the signal change handling logic. Now using the propper timings
+  API in the video input driver and a propper open() syscall check/logic in
+  the video output driver.
+* Fixed all minor issues from v3 review.
+* 'checkpatch.pl --strict' used for checking the code.
+
+Changes in v3:
+* Rebased the DMA transfers part to use the new XDMA driver from Xilinx/AMD
+
+Changes in v2:
+* Completely rewritten the original Xilinx's XDMA driver to meet kernel code
+  standards.
+* Added all required "to" and "cc" mail addresses.
+
+Martin Tůma (1):
+  Added Digiteq Automotive MGB4 driver
+
+ Documentation/admin-guide/media/mgb4.rst      | 352 ++++++++
+ .../admin-guide/media/pci-cardlist.rst        |   1 +
+ .../admin-guide/media/v4l-drivers.rst         |   1 +
+ MAINTAINERS                                   |   7 +
+ drivers/media/pci/Kconfig                     |   1 +
+ drivers/media/pci/Makefile                    |   1 +
+ drivers/media/pci/mgb4/Kconfig                |  17 +
+ drivers/media/pci/mgb4/Makefile               |   6 +
+ drivers/media/pci/mgb4/mgb4_cmt.c             | 247 ++++++
+ drivers/media/pci/mgb4/mgb4_cmt.h             |  16 +
+ drivers/media/pci/mgb4/mgb4_core.c            | 641 ++++++++++++++
+ drivers/media/pci/mgb4/mgb4_core.h            |  65 ++
+ drivers/media/pci/mgb4/mgb4_dma.c             | 123 +++
+ drivers/media/pci/mgb4/mgb4_dma.h             |  18 +
+ drivers/media/pci/mgb4/mgb4_i2c.c             | 140 +++
+ drivers/media/pci/mgb4/mgb4_i2c.h             |  35 +
+ drivers/media/pci/mgb4/mgb4_io.h              |  39 +
+ drivers/media/pci/mgb4/mgb4_regs.c            |  30 +
+ drivers/media/pci/mgb4/mgb4_regs.h            |  35 +
+ drivers/media/pci/mgb4/mgb4_sysfs.h           |  18 +
+ drivers/media/pci/mgb4/mgb4_sysfs_in.c        | 780 ++++++++++++++++
+ drivers/media/pci/mgb4/mgb4_sysfs_out.c       | 732 +++++++++++++++
+ drivers/media/pci/mgb4/mgb4_sysfs_pci.c       |  86 ++
+ drivers/media/pci/mgb4/mgb4_trigger.c         | 208 +++++
+ drivers/media/pci/mgb4/mgb4_trigger.h         |   8 +
+ drivers/media/pci/mgb4/mgb4_vin.c             | 830 ++++++++++++++++++
+ drivers/media/pci/mgb4/mgb4_vin.h             |  63 ++
+ drivers/media/pci/mgb4/mgb4_vout.c            | 501 +++++++++++
+ drivers/media/pci/mgb4/mgb4_vout.h            |  58 ++
+ 29 files changed, 5059 insertions(+)
+ create mode 100644 Documentation/admin-guide/media/mgb4.rst
+ create mode 100644 drivers/media/pci/mgb4/Kconfig
+ create mode 100644 drivers/media/pci/mgb4/Makefile
+ create mode 100644 drivers/media/pci/mgb4/mgb4_cmt.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_cmt.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_core.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_core.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_dma.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_dma.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_i2c.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_i2c.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_io.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_regs.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_regs.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_in.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_out.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_pci.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_trigger.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_trigger.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vin.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vin.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vout.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vout.h
+
+-- 
+2.39.0
+
