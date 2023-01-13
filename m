@@ -2,34 +2,34 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F833C54EBD
-	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 11:52:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA203C54EBD
+	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 11:52:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240696AbjAMLwT convert rfc822-to-8bit (ORCPT
+        id S241492AbjAMLwW convert rfc822-to-8bit (ORCPT
         <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Jan 2023 06:52:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35960 "EHLO
+        Fri, 13 Jan 2023 06:52:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233010AbjAMLvX (ORCPT
+        with ESMTP id S241289AbjAMLvZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Jan 2023 06:51:23 -0500
+        Fri, 13 Jan 2023 06:51:25 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204A04F111
-        for <linux-media@vger.kernel.org>; Fri, 13 Jan 2023 03:46:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9604F4F138
+        for <linux-media@vger.kernel.org>; Fri, 13 Jan 2023 03:46:31 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1pGIVr-0007tr-DV; Fri, 13 Jan 2023 12:46:23 +0100
+        id 1pGIVx-000830-TF; Fri, 13 Jan 2023 12:46:29 +0100
 Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1pGIVq-005ks6-Ne; Fri, 13 Jan 2023 12:46:22 +0100
+        id 1pGIVx-005ksS-7W; Fri, 13 Jan 2023 12:46:29 +0100
 Received: from pza by lupine with local (Exim 4.94.2)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1pGIVp-0005vn-De; Fri, 13 Jan 2023 12:46:21 +0100
-Message-ID: <95abb97ae97e5d9b30e2a5177ed551802a7c94eb.camel@pengutronix.de>
-Subject: Re: [PATCH v2 05/16] media: imx-pxp: disable LUT block
+        id 1pGIVv-0005wM-VG; Fri, 13 Jan 2023 12:46:27 +0100
+Message-ID: <2eb1e5cdf0e187d9414c133da41a0152cb06caa5.camel@pengutronix.de>
+Subject: Re: [PATCH v2 07/16] media: imx-pxp: add support for i.MX7D
 From:   Philipp Zabel <p.zabel@pengutronix.de>
 To:     Michael Tretter <m.tretter@pengutronix.de>,
         linux-media@vger.kernel.org, devicetree@vger.kernel.org,
@@ -41,10 +41,10 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Alexander Stein <alexander.stein@ew.tq-group.com>,
         kernel@pengutronix.de, linux-imx@nxp.com,
         linux-arm-kernel@lists.infradead.org
-Date:   Fri, 13 Jan 2023 12:46:21 +0100
-In-Reply-To: <20230112-imx-pxp-v2-5-e2281da1db55@pengutronix.de>
+Date:   Fri, 13 Jan 2023 12:46:27 +0100
+In-Reply-To: <20230112-imx-pxp-v2-7-e2281da1db55@pengutronix.de>
 References: <20230112-imx-pxp-v2-0-e2281da1db55@pengutronix.de>
-         <20230112-imx-pxp-v2-5-e2281da1db55@pengutronix.de>
+         <20230112-imx-pxp-v2-7-e2281da1db55@pengutronix.de>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 User-Agent: Evolution 3.38.3-1+deb11u1 
@@ -58,10 +58,9 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 On Fr, 2023-01-13 at 10:54 +0100, Michael Tretter wrote:
-> The LUT block is always configured in bypass mode.
-> 
-> Take it entirely out of the pipeline by disabling it and routing the
-> data path around the LUT.
+> The i.MX7D needs a different data path configuration than the i.MX6ULL.
+> Configure the data path as close as possible to the data path on the
+> i.MX6ULL.
 > 
 > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
