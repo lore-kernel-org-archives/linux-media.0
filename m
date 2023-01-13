@@ -2,239 +2,132 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89F8CC54EBD
-	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 14:15:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2C09C54EBE
+	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 15:13:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241928AbjAMOPU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Jan 2023 09:15:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40336 "EHLO
+        id S229500AbjAMPNm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Jan 2023 10:13:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242119AbjAMOOC (ORCPT
+        with ESMTP id S229653AbjAMPNP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Jan 2023 09:14:02 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602526E0C9
-        for <linux-media@vger.kernel.org>; Fri, 13 Jan 2023 06:13:08 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id y25so33289200lfa.9
-        for <linux-media@vger.kernel.org>; Fri, 13 Jan 2023 06:13:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HLMxgYnqS/4/TB7UwvI/vIGP7m316E2G7fHeJE1jpg8=;
-        b=AgTJXz4WlI46LfMJr07WPO9BhmaVxpE2iOif1zm+Oqp2iZVRniRVH567A90yVL5zdT
-         q1XZFC3xt7nD6cJNMVIvsOZecK0s9anCwlI3UWXh2ZdrPj0tZocJmc/VU9ZcuJg6dyTK
-         APxb7T3i87E3Xsmq+DLDOIjYhftZV8wQrUz9GGXYm1vlT2HYb8Q8EXQCe5dVC28w94XB
-         5f7UeCZX30k7tILF7DrEO0D4HJzPbpfVs418KVMVGS9QCsqtum44qhS7GAzZ0+irSILU
-         ipDxlxLSFw7DLoQehGVG7EYWuzAgSdyGCk1kY45FvWcJvcItZFLeF+D4HXs+ejyIVgO+
-         HwvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HLMxgYnqS/4/TB7UwvI/vIGP7m316E2G7fHeJE1jpg8=;
-        b=VZOHcdUEAkK3nAsRZ9x03tXFEYB4t9EIPnQeQ8FirqYn/um+HAZSHJzC7Bu7hVvNOE
-         RpSQsj5eAquJVsLnVIx1DL2/FLbRqxEMHT370Aj+KqkN8OI6Jz+xa5LZooKvBE1cjYKv
-         exsRkT7RuGtLRwYmAjbMU3OxVTJHxzuMVDDke1cilFpLd+j2ux3wCSkFmj2SzpRozgs2
-         skHjtiXYzVQEsCuBOoPftPj+X7nHC9nQ+PpqNJ0+07zfAKotyUZdzjgFuCSoK7jts4iA
-         28m9Vqvb0fJ7mDIiV1JLlYidxqGAZsUSmDeGevdIAfYinQdAcDSOcwj1a2yAzb8oSxJZ
-         xrCw==
-X-Gm-Message-State: AFqh2kqVz6CC1BwVcyE+ViRES7C2i8geYGudHIPXvdQ4vSQ8hNffjDKi
-        yFSwlt8tKgIqVNYlexoDptMhwwQQtSo9Aoik+NChmg==
-X-Google-Smtp-Source: AMrXdXutSMAOZy9HzarrHShlHiOo8HAv9jYGW08xHIKS5auBxnj5lfCkvop1Nhs4GtEDmbJ2Th7fITLFBqZcAAXkUY0=
-X-Received: by 2002:a05:6512:708:b0:4ca:fab6:91db with SMTP id
- b8-20020a056512070800b004cafab691dbmr3403772lfs.202.1673619186692; Fri, 13
- Jan 2023 06:13:06 -0800 (PST)
+        Fri, 13 Jan 2023 10:13:15 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA04A745BA;
+        Fri, 13 Jan 2023 07:03:07 -0800 (PST)
+Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6FB386602DD6;
+        Fri, 13 Jan 2023 15:03:03 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1673622186;
+        bh=fogr+uZTaVcUpklPH0FPHlfhwcndHj9i6ZT507O7UGQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VeGyHLZ/upyjgtilOjqJrXGwTdYKAMuw+7A7dyr+7WeRnHKKKpAPwDtpFEAC55HqS
+         naqUxpBvDoZ9P9ht3i6t3ZEXKk5b9WmLI9n/8tytAi6e8cFgsQfoet7FFZ4p0OqE0J
+         vUChAcB4qNG4RvZ8bnHQLBdHdeYjUyeB6fXdfFODBdughAm9Cd2057qXWs2e1iJGnF
+         xIUZvk6pgWLB+yzlU8kIwuw4w2/oFNWSaoIHjRVBInek65tEXmjA0M7ocnqlaqzQ/W
+         NiI+EqzJ9xwww7PUrDKKLn+MczaEkJQAHb3jFJTcOUCWabf63+uyqaGLibxHwZXdvj
+         G0D0odut2rJbQ==
+Date:   Fri, 13 Jan 2023 10:02:40 -0500
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Yunfei Dong =?utf-8?B?KOiRo+S6kemjnik=?= 
+        <Yunfei.Dong@mediatek.com>
+Cc:     "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "nicolas@ndufresne.ca" <nicolas@ndufresne.ca>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        George Sun =?utf-8?B?KOWtmeaelyk=?= <George.Sun@mediatek.com>,
+        Tiffany Lin =?utf-8?B?KOael+aFp+ePiik=?= 
+        <tiffany.lin@mediatek.com>,
+        "stevecho@chromium.org" <stevecho@chromium.org>,
+        "frkoenig@chromium.org" <frkoenig@chromium.org>,
+        Xiaoyong Lu =?utf-8?B?KOWNouWwj+WLhyk=?= 
+        <Xiaoyong.Lu@mediatek.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        Irui Wang =?utf-8?B?KOeOi+eRnik=?= <Irui.Wang@mediatek.com>,
+        "tfiga@google.com" <tfiga@google.com>,
+        "benjamin.gaignard@collabora.com" <benjamin.gaignard@collabora.com>,
+        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "hsinyi@chromium.org" <hsinyi@chromium.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Andrew-CT Chen =?utf-8?B?KOmZs+aZuui/qik=?= 
+        <Andrew-CT.Chen@mediatek.com>,
+        "acourbot@chromium.org" <acourbot@chromium.org>
+Subject: Re: [PATCH v7, 5/7] media: mediatek: vcodec: Different codec using
+ different capture format
+Message-ID: <20230113150240.6tqi3kc7cdu3xr65@notapiano>
+References: <20220518123004.18286-1-yunfei.dong@mediatek.com>
+ <20220518123004.18286-6-yunfei.dong@mediatek.com>
+ <20230112205825.wb5qcqhh5kwvyi3y@notapiano>
+ <2fe7132f2fcc3fb4724a34c3c4a918b821c845a3.camel@mediatek.com>
 MIME-Version: 1.0
-References: <20230113131257.661079-1-benjamin.gaignard@collabora.com>
-In-Reply-To: <20230113131257.661079-1-benjamin.gaignard@collabora.com>
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Fri, 13 Jan 2023 11:12:53 -0300
-Message-ID: <CAAEAJfAnoe+rL=9yFV1crhoaFa9uWaaJq3nCeS+QZPLi_xnsOw@mail.gmail.com>
-Subject: Re: [PATCH v2] media: verisilicon: HEVC: Only propose 10 bits
- compatible pixels formats
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     p.zabel@pengutronix.de, mchehab@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, hverkuil-cisco@xs4all.nl,
-        nicolas.dufresne@collabora.co.uk, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2fe7132f2fcc3fb4724a34c3c4a918b821c845a3.camel@mediatek.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Benjamin,
+On Fri, Jan 13, 2023 at 03:25:46AM +0000, Yunfei Dong (董云飞) wrote:
+> Hi Nicolas,
+> 
+> Thanks for your information.
+> On Thu, 2023-01-12 at 15:58 -0500, Nícolas F. R. A. Prado wrote:
+> > On Wed, May 18, 2022 at 08:30:02PM +0800, Yunfei Dong wrote:
+> > > Vp8 need to use MM21, but vp9 and h264 need to use HyFbc mode
+> > > for mt8195. Vp8/vp9/h264 use the same MM21 format for mt8192.
+> > 
+> > Hi Yunfei,
+> > 
+> > why do VP9 and H264 need to use HyFbc (is this the same as MT21C?)
+> > mode on
+> > MT8195? The SCP firmware on linux-firmware for MT8195 [1] only has
+> > MM21
+> > available and based on my testing it works just fine. And contrary to
+> > what the
+> > commit message states this logic is also being applied to MT8192,
+> > preventing it
+> > to use MM21 when there are more than one format available.
+> > 
+> The kernel driver not support dynamic switch mt21c and mm21. The driver
+> flow as below:
+> 1: If there are mt21c and mm21: h264/vp9/av1 will use mt21c(vp8 use
+> mm21 always);
+> 2: If there are only mt21c or mm21 will use this format only.
+> 
+> But the scp.img is changed to support mt21c and mm21, the kernel driver
+> will use mt21c. Or force the kernel driver only support mm21(small
+> effort).
+> 
+> But the best solution is changed the driver to dynamic switch mt21c and
+> mm21, need to discuss the enum and set format flow(middle effort).
 
-On Fri, Jan 13, 2023 at 10:13 AM Benjamin Gaignard
-<benjamin.gaignard@collabora.com> wrote:
->
-> When decoding a 10bits bitstreams HEVC driver should only expose
-> 10bits pixel formats.
-> To fulfill this requirement it is needed to call hantro_reset_raw_fmt()
-> when bit depth change and to correctly set match_depth in pixel formats
-> enumeration.
->
-> Fixes: dc39473d0340 ("media: hantro: imx8m: Enable 10bit decoding")
->
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> ---
-> version 2:
-> - Also remove struct hantro_ctx *ctx variable in hantro_try_ctrl()
->
->  .../media/platform/verisilicon/hantro_drv.c   | 40 +++++++++++++++----
->  .../media/platform/verisilicon/hantro_v4l2.c  |  2 +-
->  .../media/platform/verisilicon/hantro_v4l2.h  |  1 +
->  .../media/platform/verisilicon/imx8m_vpu_hw.c |  2 +
->  4 files changed, 36 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
-> index 8cb4a68c9119..e824e87618db 100644
-> --- a/drivers/media/platform/verisilicon/hantro_drv.c
-> +++ b/drivers/media/platform/verisilicon/hantro_drv.c
-> @@ -251,11 +251,6 @@ queue_init(void *priv, struct vb2_queue *src_vq, struct vb2_queue *dst_vq)
->
->  static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
->  {
-> -       struct hantro_ctx *ctx;
-> -
-> -       ctx = container_of(ctrl->handler,
-> -                          struct hantro_ctx, ctrl_handler);
-> -
+Agreed. The aim should be to get this dynamic format switching implemented in
+the driver so that the firmware can expose both formats and userspace can
+select any of them to use.
 
-This change is unrelated to this commit.
+However, as you said that solution will take more effort, so in the meantime,
+given that currently only mm21 is supported by gstreamer, I think forcing the
+kernel driver to always select mm21 makes the most sense right now. That way it
+doesn't matter whether the firmware has mm21 or mm21+mt21c, decoding will keep
+working with gstreamer using mm21.
 
->         if (ctrl->id == V4L2_CID_STATELESS_H264_SPS) {
->                 const struct v4l2_ctrl_h264_sps *sps = ctrl->p_new.p_h264_sps;
->
-> @@ -274,8 +269,6 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
->                 if (sps->bit_depth_luma_minus8 != 0 && sps->bit_depth_luma_minus8 != 2)
->                         /* Only 8-bit and 10-bit are supported */
->                         return -EINVAL;
-> -
-> -               ctx->bit_depth = sps->bit_depth_luma_minus8 + 8;
->         } else if (ctrl->id == V4L2_CID_STATELESS_VP9_FRAME) {
->                 const struct v4l2_ctrl_vp9_frame *dec_params = ctrl->p_new.p_vp9_frame;
->
-> @@ -286,6 +279,32 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
->         return 0;
->  }
->
-> +static int hantro_hevc_s_ctrl(struct v4l2_ctrl *ctrl)
-> +{
-> +       struct hantro_ctx *ctx;
-> +
-> +       ctx = container_of(ctrl->handler,
-> +                          struct hantro_ctx, ctrl_handler);
-> +
-> +       vpu_debug(1, "s_ctrl: id = %d, val = %d\n", ctrl->id, ctrl->val);
-> +
-> +       switch (ctrl->id) {
-> +       case V4L2_CID_STATELESS_HEVC_SPS:
-> +               const struct v4l2_ctrl_hevc_sps *sps = ctrl->p_new.p_hevc_sps;
-> +               int bit_depth = sps->bit_depth_luma_minus8 + 8;
-> +
-> +               if (ctx->bit_depth != bit_depth) {
-> +                       ctx->bit_depth = bit_depth;
-> +                       hantro_reset_raw_fmt(ctx);
-
-We need to propagate the EBUSY error from hantro_set_fmt_cap,
-to hantro_reset_raw_fmt, so this operation can fail if the capture
-queue has buffers allocated.
-
-Keep in mind, we have to make sure the hantro_ctx state
-remains unchanged when the operation fails.
-
-The entire hantro_v4l2.c format negotiation is done without this
-case in mind (controls can change the format enumeration),
-so this new case needs some refactoring.
-
-I also think we need v4l2-compliance tests for it.
-
-Thanks!
-Ezequiel
-
-
-> +               }
-> +               break;
-> +       default:
-> +               return -EINVAL;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
->  static int hantro_jpeg_s_ctrl(struct v4l2_ctrl *ctrl)
->  {
->         struct hantro_ctx *ctx;
-> @@ -328,6 +347,11 @@ static const struct v4l2_ctrl_ops hantro_ctrl_ops = {
->         .try_ctrl = hantro_try_ctrl,
->  };
->
-> +static const struct v4l2_ctrl_ops hantro_hevc_ctrl_ops = {
-> +       .s_ctrl = hantro_hevc_s_ctrl,
-> +       .try_ctrl = hantro_try_ctrl,
-> +};
-> +
->  static const struct v4l2_ctrl_ops hantro_jpeg_ctrl_ops = {
->         .s_ctrl = hantro_jpeg_s_ctrl,
->  };
-> @@ -470,7 +494,7 @@ static const struct hantro_ctrl controls[] = {
->                 .codec = HANTRO_HEVC_DECODER,
->                 .cfg = {
->                         .id = V4L2_CID_STATELESS_HEVC_SPS,
-> -                       .ops = &hantro_ctrl_ops,
-> +                       .ops = &hantro_hevc_ctrl_ops,
->                 },
->         }, {
->                 .codec = HANTRO_HEVC_DECODER,
-> diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
-> index 2c7a805289e7..0025e049dd26 100644
-> --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
-> +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
-> @@ -398,7 +398,7 @@ hantro_reset_encoded_fmt(struct hantro_ctx *ctx)
->                 hantro_set_fmt_out(ctx, fmt);
->  }
->
-> -static void
-> +void
->  hantro_reset_raw_fmt(struct hantro_ctx *ctx)
->  {
->         const struct hantro_fmt *raw_vpu_fmt;
-> diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.h b/drivers/media/platform/verisilicon/hantro_v4l2.h
-> index 64f6f57e9d7a..f642560aed93 100644
-> --- a/drivers/media/platform/verisilicon/hantro_v4l2.h
-> +++ b/drivers/media/platform/verisilicon/hantro_v4l2.h
-> @@ -21,6 +21,7 @@
->  extern const struct v4l2_ioctl_ops hantro_ioctl_ops;
->  extern const struct vb2_ops hantro_queue_ops;
->
-> +void hantro_reset_raw_fmt(struct hantro_ctx *ctx);
->  void hantro_reset_fmts(struct hantro_ctx *ctx);
->  int hantro_get_format_depth(u32 fourcc);
->  const struct hantro_fmt *
-> diff --git a/drivers/media/platform/verisilicon/imx8m_vpu_hw.c b/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
-> index b390228fd3b4..f850d8bddef6 100644
-> --- a/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
-> +++ b/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
-> @@ -152,6 +152,7 @@ static const struct hantro_fmt imx8m_vpu_g2_postproc_fmts[] = {
->         {
->                 .fourcc = V4L2_PIX_FMT_NV12,
->                 .codec_mode = HANTRO_MODE_NONE,
-> +               .match_depth = true,
->                 .postprocessed = true,
->                 .frmsize = {
->                         .min_width = FMT_MIN_WIDTH,
-> @@ -165,6 +166,7 @@ static const struct hantro_fmt imx8m_vpu_g2_postproc_fmts[] = {
->         {
->                 .fourcc = V4L2_PIX_FMT_P010,
->                 .codec_mode = HANTRO_MODE_NONE,
-> +               .match_depth = true,
->                 .postprocessed = true,
->                 .frmsize = {
->                         .min_width = FMT_MIN_WIDTH,
-> --
-> 2.34.1
->
+Thanks,
+Nícolas
