@@ -2,131 +2,187 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 496B0C54EBE
-	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 08:23:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA899C61DB3
+	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 08:26:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240676AbjAMIXG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Jan 2023 03:23:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33580 "EHLO
+        id S229887AbjAMI0H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Jan 2023 03:26:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240858AbjAMIWg (ORCPT
+        with ESMTP id S231429AbjAMI0E (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Jan 2023 03:22:36 -0500
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9D22022;
-        Fri, 13 Jan 2023 00:19:48 -0800 (PST)
-Received: by mail-qt1-f172.google.com with SMTP id j15so13047252qtv.4;
-        Fri, 13 Jan 2023 00:19:48 -0800 (PST)
+        Fri, 13 Jan 2023 03:26:04 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1EDC1C135
+        for <linux-media@vger.kernel.org>; Fri, 13 Jan 2023 00:26:02 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id ud5so50607552ejc.4
+        for <linux-media@vger.kernel.org>; Fri, 13 Jan 2023 00:26:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ow5pZFQZCEYCIqWOTwm6DkLVewzWxSQ2hqbyfaIYUMw=;
+        b=AC8rsonIaKcS2a/AKPnyvkOrD5LKOz/E/kypsJqKNj44ntLKk+BZQq0pJYwlExETvH
+         MqJQIHgjIl49HUPLbLmq7kDUTnHbIYva0FXIOZYmPbaGDh1Y3/SLNQhcvvcQV33S6Oqw
+         LWzMeZPhLmbEJ+aXOMPimAuZu0ot1TeNjbfPtLhZcajjKLL2xYNnr7xK62Hq/ECXivB9
+         KR9q2u4MqGg6UDBTgMDMZg2zfotH7Eda07Tz57yWnykG44VGzeLan0+FW6jaHQbJKUpW
+         MQYKFwWhW943wKe9d3rdjA0Vn9dJG//JCfFDTLFLqNrNa34NXsm30uhRzZqVFR3dtRYL
+         oPGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MowQaQp0G9uX2jhG1rQLtIGSPC7S+MJhKLN+g9WmpVM=;
-        b=el2XoDs9Rx15fpn1LkUmpizUAlrQktSLBbXWFPUan3PrdWaITXGPK4gXy5odfK/be2
-         xYV5v/6RF3GbIz0QDmX8Hgl+dZExurKd0xQT+/IbvMyJ0qrxL3A+RpLtldiM9OLgR1cq
-         hvrdRRJBDQGAFrdmpCh+KDMSxmG0GhIBYXUPC4EiQPkAoDDOldcNKRgPNvaGewXZLWmk
-         9gFrnL6/WRbWFSHEIm/Ixj4xPZ4NsQnTgbwP/XdEElRtYEam4hlECmj/dIL99tgFaZme
-         DCGS+eJh10LKslT207MZuVAQGBCvh7fqEa/DrZOh4UQ109fS4DcYVI97RuRPa/buQoSV
-         IiMw==
-X-Gm-Message-State: AFqh2krWXEOYU1LKIBgksuqgpuGjN2QdZrxD9D4EfoSlrRUgYTGPUd3o
-        ssVr/XINvnR/maM1Enm0TJcmL2Po8Z6EbA==
-X-Google-Smtp-Source: AMrXdXt2A3y0C7fYLdtAO5xHmkf9XuWzBkFjZ07LasgooqTk66dX7n7EUkumqmFKc7fjlBxZxWui1g==
-X-Received: by 2002:ac8:4a97:0:b0:3a8:1ca1:b489 with SMTP id l23-20020ac84a97000000b003a81ca1b489mr94322090qtq.60.1673597987448;
-        Fri, 13 Jan 2023 00:19:47 -0800 (PST)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id bq25-20020a05622a1c1900b003a57a317c17sm10211765qtb.74.2023.01.13.00.19.46
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ow5pZFQZCEYCIqWOTwm6DkLVewzWxSQ2hqbyfaIYUMw=;
+        b=wZMxi0DfrM1KafMyF6MDggd1YFO3X2A2wnePAAgA+F/WVkDV05u5LckEd3DwPSyQDY
+         BJcYHLnt45Q8s2AWLt0aBJv0b+EL7HZCyBJCL47FP2sRDdLWSt06Glgc72CtUudurpxw
+         h6mVm0BJQxRowjB6NGXWCCtQh92O5FLgQFI6SqE2extE3KEjUiGG69lgIBr4+gfTHF1M
+         /hvYxces/n1CBjv4VehJdCuarLPlQ0bs6q3fGyT98cQ4ohGTFEG3taGWkvpT4mOvZbYN
+         7u4otPyXjhbGaEWWiURgL86uAdaEnMWD+TgvmUsP3l26umxQfmszSWSjK7+Io246dbv0
+         it9w==
+X-Gm-Message-State: AFqh2kpwnzwFV/ZUyJqppWx9qp49W6nQ/o8yVVvb+1XGS7i4VS9HJUXD
+        fIFwj+l6iRKw+PCzW+eMP25JoA==
+X-Google-Smtp-Source: AMrXdXvtfAJKfd+dEPUQgGjDwVPJIsdk/au7/BL5yCsi6a/MUx3IfCt5RfR2t5rlFGwdCkF3RMDP/g==
+X-Received: by 2002:a17:907:2587:b0:7c0:ac4b:8b9 with SMTP id ad7-20020a170907258700b007c0ac4b08b9mr56938493ejc.14.1673598361438;
+        Fri, 13 Jan 2023 00:26:01 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id hq15-20020a1709073f0f00b0084c4b87a69csm8258399ejc.153.2023.01.13.00.25.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 00:19:46 -0800 (PST)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-4c24993965eso268088687b3.12;
-        Fri, 13 Jan 2023 00:19:46 -0800 (PST)
-X-Received: by 2002:a05:690c:313:b0:37e:6806:a5f9 with SMTP id
- bg19-20020a05690c031300b0037e6806a5f9mr3489142ywb.47.1673597985912; Fri, 13
- Jan 2023 00:19:45 -0800 (PST)
+        Fri, 13 Jan 2023 00:26:00 -0800 (PST)
+Message-ID: <07ecf7cf-4a68-0f80-0452-3737b7d7922d@linaro.org>
+Date:   Fri, 13 Jan 2023 09:25:58 +0100
 MIME-Version: 1.0
-References: <20230113062339.1909087-1-hch@lst.de> <20230113062339.1909087-2-hch@lst.de>
- <Y8EMZ0GI5rtor9xr@pendragon.ideasonboard.com> <Y8EOWGVmwEElKGE4@pendragon.ideasonboard.com>
-In-Reply-To: <Y8EOWGVmwEElKGE4@pendragon.ideasonboard.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 13 Jan 2023 09:19:34 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXRkUu3AuLs7X30ki1votAQfBU3HWvWB6qMQJBSUEr6WA@mail.gmail.com>
-Message-ID: <CAMuHMdXRkUu3AuLs7X30ki1votAQfBU3HWvWB6qMQJBSUEr6WA@mail.gmail.com>
-Subject: Re: [PATCH 01/22] gpu/drm: remove the shmobile drm driver
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 01/10] dt-bindings: media: mediatek,vcodec: Remove
+ dma-ranges property
+Content-Language: en-US
+To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>, nfraprado@collabora.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
+        libo.kang@mediatek.com, Yunfei Dong <yunfei.dong@mediatek.com>,
+        kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>,
+        chengci.xu@mediatek.com, youlin.pei@mediatek.com,
+        anan.sun@mediatek.com, Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>
+References: <20230113060133.9394-1-yong.wu@mediatek.com>
+ <20230113060133.9394-2-yong.wu@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230113060133.9394-2-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 8:55 AM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
-> On Fri, Jan 13, 2023 at 09:46:49AM +0200, Laurent Pinchart wrote:
-> > On Fri, Jan 13, 2023 at 07:23:18AM +0100, Christoph Hellwig wrote:
-> > > This driver depends on ARM && ARCH_SHMOBILE, but ARCH_SHMOBILE can only be
-> > > set for each/sh, making the driver dead code except for the COMPILE_TEST
-> > > case.
-> > >
-> > > Signed-off-by: Christoph Hellwig <hch@lst.de>
-> >
-> > No objection from me.
-> >
-> > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->
-> To expand a little bit on this, ARCH_SHMOBILE used to be set for the
-> ARM-based shmobile SoCs too, until
->
-> commit 08e735233ea29b17bfec8e4cb302e799d9f920b8
-> Author: Geert Uytterhoeven <geert+renesas@glider.be>
-> Date:   Tue Aug 28 17:10:10 2018 +0200
->
->     ARM: shmobile: Remove the ARCH_SHMOBILE Kconfig symbol
->
->     All drivers for Renesas ARM SoCs have gained proper ARCH_RENESAS
->     platform dependencies.  Hence finish the conversion from ARCH_SHMOBILE
->     to ARCH_RENESAS for Renesas 32-bit ARM SoCs, as started by commit
->     9b5ba0df4ea4f940 ("ARM: shmobile: Introduce ARCH_RENESAS").
->
->     Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
->     Acked-by: Arnd Bergmann <arnd@arndb.de>
->     Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
->
-> merged in v4.20. The DRM shmobile driver's Kconfig entry wasn't updated,
-> making it dead code indeed.
+On 13/01/2023 07:01, Yong Wu wrote:
+> MediaTek iommu has already controlled the masters' iova ranges by the
+> master's larb/port id. then the dma-ranges property is unnecessary for
 
-Note that it wasn't updated because this driver was not used on Renesas
-ARM platforms, due to the lack of DT bindings and DT support, so it
-didn't make sense to make it selectable.
+Sentences in English always start with a capital letter, however also
+they do not start with "Then". Make it a proper a proper sentence.
 
-> I haven't tested this driver in ages, hence my lack of objection, but
-> someone may want to keep it for the pre-R-Car ARM SoCs.
+> the master's node. the master is vcodec here.
 
-Indeed, this driver should work with the R-Mobile A1 (which made it
-into orbit, so we could call it the first member of R-Space ;-) and
-SH-Mobile AG5 SoCs.  The major blocker is the lack of DT bindings.
+Unnecessary or invalid? Don't you depend now on some feature of driver
+added for example recently?
 
-Gr{oetje,eeting}s,
+> 
+> Cc: Tiffany Lin <tiffany.lin@mediatek.com>
+> Cc: Andrew-CT Chen <andrew-ct.chen@mediatek.com>
+> Cc: Yunfei Dong <yunfei.dong@mediatek.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 
-                        Geert
+There is little point in storing output of get_maintainers.pl forever in
+the git log. If you need it for some reason, please keep it after ---.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> Cc: Matthias Brugger <matthias.bgg@gmail.com>
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> ---
+>  .../devicetree/bindings/media/mediatek,vcodec-decoder.yaml | 5 -----
+>  .../devicetree/bindings/media/mediatek,vcodec-encoder.yaml | 5 -----
+>  .../bindings/media/mediatek,vcodec-subdev-decoder.yaml     | 7 -------
+>  3 files changed, 17 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
+> index aa55ca65d6ed..fad59b486d5d 100644
+> --- a/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
+> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
+> @@ -56,11 +56,6 @@ properties:
+>        List of the hardware port in respective IOMMU block for current Socs.
+>        Refer to bindings/iommu/mediatek,iommu.yaml.
+>  
+> -  dma-ranges:
+> -    maxItems: 1
+> -    description: |
+> -      Describes the physical address space of IOMMU maps to memory.
+> -
+>    mediatek,vpu:
+>      $ref: /schemas/types.yaml#/definitions/phandle
+>      description:
+> diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
+> index 0f2ea8d9a10c..a2051b31fa29 100644
+> --- a/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
+> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
+> @@ -49,11 +49,6 @@ properties:
+>        List of the hardware port in respective IOMMU block for current Socs.
+>        Refer to bindings/iommu/mediatek,iommu.yaml.
+>  
+> -  dma-ranges:
+> -    maxItems: 1
+> -    description: |
+> -      Describes the physical address space of IOMMU maps to memory.
+> -
+>    mediatek,vpu:
+>      $ref: /schemas/types.yaml#/definitions/phandle
+>      description:
+> diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
+> index c4f20acdc1f8..290594bc91cc 100644
+> --- a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
+> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
+> @@ -76,11 +76,6 @@ properties:
+>        The node of system control processor (SCP), using
+>        the remoteproc & rpmsg framework.
+>  
+> -  dma-ranges:
+> -    maxItems: 1
+> -    description: |
+> -      Describes the physical address space of IOMMU maps to memory.
+> -
+>    "#address-cells":
+>      const: 2
+>  
+> @@ -203,7 +198,6 @@ required:
+>    - reg
+>    - iommus
+>    - mediatek,scp
+> -  - dma-ranges
+>    - ranges
+>  
+>  if:
+> @@ -236,7 +230,6 @@ examples:
+>              compatible = "mediatek,mt8192-vcodec-dec";
+>              mediatek,scp = <&scp>;
+>              iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>;
+> -            dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
+>              #address-cells = <2>;
+>              #size-cells = <2>;
+>              ranges = <0 0 0 0x16000000 0 0x40000>;
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best regards,
+Krzysztof
+
