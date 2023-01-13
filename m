@@ -2,43 +2,43 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 353A7C54EBD
-	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 06:57:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76E7EC61DB3
+	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 06:57:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240774AbjAMG5C (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Jan 2023 01:57:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56642 "EHLO
+        id S230223AbjAMG5F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Jan 2023 01:57:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235363AbjAMGz4 (ORCPT
+        with ESMTP id S240830AbjAMGzx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Jan 2023 01:55:56 -0500
+        Fri, 13 Jan 2023 01:55:53 -0500
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9072F714AA;
-        Thu, 12 Jan 2023 22:41:13 -0800 (PST)
-X-UUID: 428e24a8930d11eda06fc9ecc4dadd91-20230113
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C05171494;
+        Thu, 12 Jan 2023 22:41:12 -0800 (PST)
+X-UUID: 41e61f7e930d11eda06fc9ecc4dadd91-20230113
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=pgMKWf8cswrcZe1AKhWsFWsHR/fVUbTFef1NB0mRUw8=;
-        b=hiLi3lUacpMceljQ6Lulvx1tGtUKnzahqxgcb2kXriMlg7az0RDhatdlA9N7jiDJCytWk3nQ2oaYEksYGGflNoJG9osuMlXgdSYpEZmiUSKymLdJcAImUlvm9KN7oe+CNcKqWQOCUumakldOZ4OIQQef7lmSeyjS09lLfBvnpyg=;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=z3jvBq8prIW+2nxTySolV2oTR+8wYM/Zd0sr863uT3o=;
+        b=UaAjTgBTe5X8cbCCJRF7WV8Oeo05dTL+FnMkvL5vq9b0YntASyWcV+3KVxGIUPE/IVIXOfRitJB56DPJ7DzrFoURR8rd/t7lqGn32pIM2GAm4zhWJciy6Qd3lzwyxZTTDYLNZgrLPh9gL5wvcrOfpe37QheOUxZmGLyX+90XvCU=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.17,REQID:6e5401c6-6f8b-42c5-9521-515fe798d94f,IP:0,U
-        RL:0,TC:0,Content:0,EDM:-30,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-30
-X-CID-META: VersionHash:543e81c,CLOUDID:171b8c54-dd49-462e-a4be-2143a3ddc739,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:2,IP:nil,UR
-        L:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
-X-CID-BVR: 0
-X-UUID: 428e24a8930d11eda06fc9ecc4dadd91-20230113
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+X-CID-O-INFO: VERSION:1.1.17,REQID:061cbabb-8932-4146-b5ea-b6af25ba8275,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:543e81c,CLOUDID:27f0b5f5-ff42-4fb0-b929-626456a83c14,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
+X-CID-BVR: 0,NGT
+X-UUID: 41e61f7e930d11eda06fc9ecc4dadd91-20230113
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
         (envelope-from <moudy.ho@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 801805891; Fri, 13 Jan 2023 14:41:07 +0800
+        with ESMTP id 2108194176; Fri, 13 Jan 2023 14:41:06 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 13 Jan 2023 14:41:07 +0800
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 13 Jan 2023 14:41:05 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Fri, 13 Jan 2023 14:41:07 +0800
+ 15.2.792.15 via Frontend Transport; Fri, 13 Jan 2023 14:41:06 +0800
 From:   Moudy Ho <moudy.ho@mediatek.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
@@ -49,12 +49,10 @@ CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         <linux-kernel@vger.kernel.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Moudy Ho <moudy.ho@mediatek.com>
-Subject: [PATCH v5 09/12] media: platform: mtk-mdp3: dynamically allocate component clocks
-Date:   Fri, 13 Jan 2023 14:41:01 +0800
-Message-ID: <20230113064104.22402-10-moudy.ho@mediatek.com>
+Subject: [PATCH v5 00/12] Add support for multiple chips
+Date:   Fri, 13 Jan 2023 14:40:52 +0800
+Message-ID: <20230113064104.22402-1-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230113064104.22402-1-moudy.ho@mediatek.com>
-References: <20230113064104.22402-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
@@ -62,168 +60,183 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-For extensibility of adding more MDP3 components in the further, the
-magic number is removed by dynamically allocating component clocks.
+Changes since v4:
+- Rebase on linux-next.
+- Fix potential frame size overflow in "mtk-mdp3-regs.c".
+- Fix OOB in MDP3 component clocks in "mtk-mdp3-comp.*".
+- Reconfigure the shared memory between MDP3 kerenl and SCP.
 
-Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
----
- .../platform/mediatek/mdp3/mtk-mdp3-comp.c    | 49 +++++++++++--------
- .../platform/mediatek/mdp3/mtk-mdp3-comp.h    |  3 +-
- 2 files changed, 31 insertions(+), 21 deletions(-)
+Changes since v3:
+- Rebase on linux-next.
+- In the file "mtk-mdp3-m2m.c", use the limited resolution defined by
+  each platform to replace the default format.
+- Add platform ID in driver data, and refine shared memory structure preprocessing.
+- Simplify the way to get mutex ID in function "mdp_path_subfrm_require".
 
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-index 8f4786cc4416..6288c11e979a 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-@@ -670,7 +670,8 @@ int mdp_comp_clock_on(struct device *dev, struct mdp_comp *comp)
- {
- 	int i, ret;
- 
--	if (comp->comp_dev) {
-+	/* Only DMA capable components need the pm control */
-+	if (comp->comp_dev && is_dma_capable(comp->type)) {
- 		ret = pm_runtime_resume_and_get(comp->comp_dev);
- 		if (ret < 0) {
- 			dev_err(dev,
-@@ -680,7 +681,7 @@ int mdp_comp_clock_on(struct device *dev, struct mdp_comp *comp)
- 		}
- 	}
- 
--	for (i = 0; i < ARRAY_SIZE(comp->clks); i++) {
-+	for (i = 0; i < comp->clk_num; i++) {
- 		if (IS_ERR_OR_NULL(comp->clks[i]))
- 			continue;
- 		ret = clk_prepare_enable(comp->clks[i]);
-@@ -700,7 +701,7 @@ int mdp_comp_clock_on(struct device *dev, struct mdp_comp *comp)
- 			continue;
- 		clk_disable_unprepare(comp->clks[i]);
- 	}
--	if (comp->comp_dev)
-+	if (comp->comp_dev && is_dma_capable(comp->type))
- 		pm_runtime_put_sync(comp->comp_dev);
- 
- 	return ret;
-@@ -710,13 +711,13 @@ void mdp_comp_clock_off(struct device *dev, struct mdp_comp *comp)
- {
- 	int i;
- 
--	for (i = 0; i < ARRAY_SIZE(comp->clks); i++) {
-+	for (i = 0; i < comp->clk_num; i++) {
- 		if (IS_ERR_OR_NULL(comp->clks[i]))
- 			continue;
- 		clk_disable_unprepare(comp->clks[i]);
- 	}
- 
--	if (comp->comp_dev)
-+	if (comp->comp_dev && is_dma_capable(comp->type))
- 		pm_runtime_put(comp->comp_dev);
- }
- 
-@@ -795,7 +796,7 @@ static int mdp_comp_init(struct mdp_dev *mdp, struct device_node *node,
- 			 struct mdp_comp *comp, enum mtk_mdp_comp_id id)
- {
- 	struct device *dev = &mdp->pdev->dev;
--	int clk_num;
-+	struct platform_device *pdev_c;
- 	int clk_ofst;
- 	int i;
- 	s32 event;
-@@ -805,6 +806,14 @@ static int mdp_comp_init(struct mdp_dev *mdp, struct device_node *node,
- 		return -EINVAL;
- 	}
- 
-+	pdev_c = of_find_device_by_node(node);
-+	if (!pdev_c) {
-+		dev_warn(dev, "can't find platform device of node:%s\n",
-+			 node->name);
-+		return -ENODEV;
-+	}
-+
-+	comp->comp_dev = &pdev_c->dev;
- 	comp->public_id = id;
- 	comp->type = mdp->mdp_data->comp_data[id].match.type;
- 	comp->inner_id = mdp->mdp_data->comp_data[id].match.inner_id;
-@@ -812,10 +821,15 @@ static int mdp_comp_init(struct mdp_dev *mdp, struct device_node *node,
- 	comp->ops = mdp_comp_ops[comp->type];
- 	__mdp_comp_init(mdp, node, comp);
- 
--	clk_num = mdp->mdp_data->comp_data[id].info.clk_num;
-+	comp->clk_num = mdp->mdp_data->comp_data[id].info.clk_num;
-+	comp->clks = devm_kzalloc(dev, sizeof(struct clk *) * comp->clk_num,
-+				  GFP_KERNEL);
-+	if (!comp->clks)
-+		return -ENOMEM;
-+
- 	clk_ofst = mdp->mdp_data->comp_data[id].info.clk_ofst;
- 
--	for (i = 0; i < clk_num; i++) {
-+	for (i = 0; i < comp->clk_num; i++) {
- 		comp->clks[i] = of_clk_get(node, i + clk_ofst);
- 		if (IS_ERR(comp->clks[i]))
- 			break;
-@@ -852,6 +866,11 @@ static void mdp_comp_deinit(struct mdp_comp *comp)
- 	if (!comp)
- 		return;
- 
-+	if (comp->comp_dev && comp->clks) {
-+		devm_kfree(&comp->mdp_dev->pdev->dev, comp->clks);
-+		comp->clks = NULL;
-+	}
-+
- 	if (comp->regs)
- 		iounmap(comp->regs);
- }
-@@ -933,7 +952,8 @@ void mdp_comp_destroy(struct mdp_dev *mdp)
- 
- 	for (i = 0; i < ARRAY_SIZE(mdp->comp); i++) {
- 		if (mdp->comp[i]) {
--			pm_runtime_disable(mdp->comp[i]->comp_dev);
-+			if (is_dma_capable(mdp->comp[i]->type))
-+				pm_runtime_disable(mdp->comp[i]->comp_dev);
- 			mdp_comp_deinit(mdp->comp[i]);
- 			devm_kfree(mdp->comp[i]->comp_dev, mdp->comp[i]);
- 			mdp->comp[i] = NULL;
-@@ -945,7 +965,6 @@ int mdp_comp_config(struct mdp_dev *mdp)
- {
- 	struct device *dev = &mdp->pdev->dev;
- 	struct device_node *node, *parent;
--	struct platform_device *pdev;
- 	int ret;
- 
- 	memset(mdp_comp_alias_id, 0, sizeof(mdp_comp_alias_id));
-@@ -986,18 +1005,8 @@ int mdp_comp_config(struct mdp_dev *mdp)
- 		}
- 
- 		/* Only DMA capable components need the pm control */
--		comp->comp_dev = NULL;
- 		if (!is_dma_capable(comp->type))
- 			continue;
--
--		pdev = of_find_device_by_node(node);
--		if (!pdev) {
--			dev_warn(dev, "can't find platform device of node:%s\n",
--				 node->name);
--			return -ENODEV;
--		}
--
--		comp->comp_dev = &pdev->dev;
- 		pm_runtime_enable(comp->comp_dev);
- 	}
- 
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.h
-index 5188aa0821c4..8d2ab9184f58 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.h
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.h
-@@ -159,7 +159,8 @@ struct mdp_comp {
- 	void __iomem			*regs;
- 	phys_addr_t			reg_base;
- 	u8				subsys_id;
--	struct clk			*clks[6];
-+	u8				clk_num;
-+	struct clk			**clks;
- 	struct device			*comp_dev;
- 	enum mdp_comp_type		type;
- 	enum mtk_mdp_comp_id		public_id;
+Changes since v2:
+- Depend on :
+  [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=687004
+- Split the shared memory header(mtk-img-ipi.h) by preprocessing instead, and
+  classify the generic parts into "mtk-mdp3-type.h", and move
+  chip-specific parts to"mt8183/mdp3-comp-mt8183.h".
+
+Changes since v1:
+- Depend on :
+  [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=687004
+- For hardware-specific structures in the shared memory header(mtk-img-ipi.h),
+  split the relevant functions and structure definitions.
+
+Hi,
+
+To support multiple chips, a chip configuration header file needs to be created
+and the relevant information split and moved into it.
+
+The v4l2-compliance test results list is as follows:
+v4l2-compliance 1.23.0-4942, 32 bits, 32-bit time_t
+v4l2-compliance SHA: 4cf258c24026 2022-07-28 15:43:45
+
+Compliance test for mtk-mdp3 device /dev/video0:
+
+Driver Info:
+	Driver name      : mtk-mdp3
+	Card type        : MediaTek MDP3
+	Bus info         : platform:14001000.mdp3-rdma0
+	Driver version   : 6.2.0
+	Capabilities     : 0x84204000
+		Video Memory-to-Memory Multiplanar
+		Streaming
+		Extended Pix Format
+		Device Capabilities
+	Device Caps      : 0x04204000
+		Video Memory-to-Memory Multiplanar
+		Streaming
+		Extended Pix Format
+
+Required ioctls:
+	test VIDIOC_QUERYCAP: OK
+	test invalid ioctls: OK
+
+Allow for multiple opens:
+	test second /dev/video0 open: OK
+	test VIDIOC_QUERYCAP: OK
+	test VIDIOC_G/S_PRIORITY: OK
+	test for unlimited opens: OK
+
+Debug ioctls:
+	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+	test VIDIOC_LOG_STATUS: OK (Not Supported)
+
+Input ioctls:
+	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+	test VIDIOC_ENUMAUDIO: OK (Not Supported)
+	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDIO: OK (Not Supported)
+	Inputs: 0 Audio Inputs: 0 Tuners: 0
+
+Output ioctls:
+	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+	Outputs: 0 Audio Outputs: 0 Modulators: 0
+
+Input/Output configuration ioctls:
+	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+	test VIDIOC_G/S_EDID: OK (Not Supported)
+
+Control ioctls:
+	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+	test VIDIOC_QUERYCTRL: OK
+	test VIDIOC_G/S_CTRL: OK
+	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+	Standard Controls: 4 Private Controls: 0
+
+Format ioctls:
+	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+	test VIDIOC_G/S_PARM: OK (Not Supported)
+	test VIDIOC_G_FBUF: OK (Not Supported)
+	test VIDIOC_G_FMT: OK
+	test VIDIOC_TRY_FMT: OK
+	test VIDIOC_S_FMT: OK
+	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+	test Cropping: OK
+	test Composing: OK
+	test Scaling: OK
+
+Codec ioctls:
+	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+
+Buffer ioctls:
+	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+	test VIDIOC_EXPBUF: OK
+	test Requests: OK (Not Supported)
+	test TIME32/64: OK
+
+Test input 0:
+
+Streaming ioctls:
+	test read/write: OK (Not Supported)
+	test blocking wait: OK
+    (snip)
+	test MMAP (no poll): OK
+	(snip)
+	test MMAP (select): OK
+    (snip)
+	test MMAP (epoll): OK
+	test USERPTR (no poll): OK (Not Supported)
+	test USERPTR (select): OK (Not Supported)
+	test DMABUF: Cannot test, specify --expbuf-device
+
+Stream using all formats:
+	(snip)
+Total for mtk-mdp3 device /dev/video0: 1174, Succeeded: 1174, Failed: 0, Warnings: 0
+
+Moudy Ho (12):
+  media: platform: mtk-mdp3: fix potential frame size overflow in
+    mdp_try_fmt_mplane()
+  media: platform: mtk-mdp3: add chip configuration header file
+  media: platform: mtk-mdp3: chip config split about component settings
+  media: platform: mtk-mdp3: chip config split about subcomponents
+  media: platform: mtk-mdp3: chip config split about color format
+  media: platform: mtk-mdp3: chip config split about resolution
+    limitations
+  media: platform: mtk-mdp3: chip config split about pipe info
+  media: platform: mtk-mdp3: extend mdp_color format for compressed mode
+  media: platform: mtk-mdp3: dynamically allocate component clocks
+  media: platform: mtk-mdp3: Split general definitions used in MDP3
+  media: platform: mtk-mdp3: decompose hardware-related information in
+    shared memory
+  media: platform: mtk-mdp3: reconfigure shared memory
+
+ .../mediatek/mdp3/mt8183/mdp3-comp-mt8183.h   | 144 +++++
+ .../mediatek/mdp3/mt8183/mdp3-plat-mt8183.h   | 409 +++++++++++++
+ .../platform/mediatek/mdp3/mtk-img-ipi.h      | 188 +-----
+ .../platform/mediatek/mdp3/mtk-mdp3-cmdq.c    | 145 +++--
+ .../platform/mediatek/mdp3/mtk-mdp3-comp.c    | 567 ++++++++++++------
+ .../platform/mediatek/mdp3/mtk-mdp3-comp.h    |  27 +-
+ .../platform/mediatek/mdp3/mtk-mdp3-core.c    |  49 +-
+ .../platform/mediatek/mdp3/mtk-mdp3-core.h    |  18 +-
+ .../platform/mediatek/mdp3/mtk-mdp3-m2m.c     |  28 +-
+ .../platform/mediatek/mdp3/mtk-mdp3-m2m.h     |   1 -
+ .../platform/mediatek/mdp3/mtk-mdp3-regs.c    | 287 +--------
+ .../platform/mediatek/mdp3/mtk-mdp3-regs.h    | 214 +++----
+ .../platform/mediatek/mdp3/mtk-mdp3-type.h    |  53 ++
+ .../platform/mediatek/mdp3/mtk-mdp3-vpu.c     | 194 +++---
+ .../platform/mediatek/mdp3/mtk-mdp3-vpu.h     |  29 +-
+ 15 files changed, 1397 insertions(+), 956 deletions(-)
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mt8183/mdp3-comp-mt8183.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mt8183/mdp3-plat-mt8183.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-type.h
+
 -- 
 2.18.0
 
