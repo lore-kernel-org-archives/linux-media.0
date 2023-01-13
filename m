@@ -2,187 +2,141 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA899C61DB3
-	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 08:26:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8851C54EBE
+	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 08:26:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjAMI0H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Jan 2023 03:26:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38060 "EHLO
+        id S231429AbjAMI0N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Jan 2023 03:26:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231429AbjAMI0E (ORCPT
+        with ESMTP id S229462AbjAMI0L (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Jan 2023 03:26:04 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1EDC1C135
-        for <linux-media@vger.kernel.org>; Fri, 13 Jan 2023 00:26:02 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id ud5so50607552ejc.4
-        for <linux-media@vger.kernel.org>; Fri, 13 Jan 2023 00:26:02 -0800 (PST)
+        Fri, 13 Jan 2023 03:26:11 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C1A321B2
+        for <linux-media@vger.kernel.org>; Fri, 13 Jan 2023 00:26:07 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id z1-20020a17090a66c100b00226f05b9595so8582487pjl.0
+        for <linux-media@vger.kernel.org>; Fri, 13 Jan 2023 00:26:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ow5pZFQZCEYCIqWOTwm6DkLVewzWxSQ2hqbyfaIYUMw=;
-        b=AC8rsonIaKcS2a/AKPnyvkOrD5LKOz/E/kypsJqKNj44ntLKk+BZQq0pJYwlExETvH
-         MqJQIHgjIl49HUPLbLmq7kDUTnHbIYva0FXIOZYmPbaGDh1Y3/SLNQhcvvcQV33S6Oqw
-         LWzMeZPhLmbEJ+aXOMPimAuZu0ot1TeNjbfPtLhZcajjKLL2xYNnr7xK62Hq/ECXivB9
-         KR9q2u4MqGg6UDBTgMDMZg2zfotH7Eda07Tz57yWnykG44VGzeLan0+FW6jaHQbJKUpW
-         MQYKFwWhW943wKe9d3rdjA0Vn9dJG//JCfFDTLFLqNrNa34NXsm30uhRzZqVFR3dtRYL
-         oPGA==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HCiFP9JVqQYcltnhJxOwMzt0TI6SjVJUyNuyOtFokuQ=;
+        b=e/UJMPBniTVg2GO6GZVo02MR6qRIoVE3kwcoylx1CAZ4skOPbDYphENuDrlumE9hF1
+         9EdMGgoZN+FRJQng9AXQHTxO7ELGAEllUe91V4zzb9VIkZOvhKySWb9pYzzbY5Ge3zco
+         e1eQO+uaXuGth6A4ouvTknEZzjyUQw5y9kMQ0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ow5pZFQZCEYCIqWOTwm6DkLVewzWxSQ2hqbyfaIYUMw=;
-        b=wZMxi0DfrM1KafMyF6MDggd1YFO3X2A2wnePAAgA+F/WVkDV05u5LckEd3DwPSyQDY
-         BJcYHLnt45Q8s2AWLt0aBJv0b+EL7HZCyBJCL47FP2sRDdLWSt06Glgc72CtUudurpxw
-         h6mVm0BJQxRowjB6NGXWCCtQh92O5FLgQFI6SqE2extE3KEjUiGG69lgIBr4+gfTHF1M
-         /hvYxces/n1CBjv4VehJdCuarLPlQ0bs6q3fGyT98cQ4ohGTFEG3taGWkvpT4mOvZbYN
-         7u4otPyXjhbGaEWWiURgL86uAdaEnMWD+TgvmUsP3l26umxQfmszSWSjK7+Io246dbv0
-         it9w==
-X-Gm-Message-State: AFqh2kpwnzwFV/ZUyJqppWx9qp49W6nQ/o8yVVvb+1XGS7i4VS9HJUXD
-        fIFwj+l6iRKw+PCzW+eMP25JoA==
-X-Google-Smtp-Source: AMrXdXvtfAJKfd+dEPUQgGjDwVPJIsdk/au7/BL5yCsi6a/MUx3IfCt5RfR2t5rlFGwdCkF3RMDP/g==
-X-Received: by 2002:a17:907:2587:b0:7c0:ac4b:8b9 with SMTP id ad7-20020a170907258700b007c0ac4b08b9mr56938493ejc.14.1673598361438;
-        Fri, 13 Jan 2023 00:26:01 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id hq15-20020a1709073f0f00b0084c4b87a69csm8258399ejc.153.2023.01.13.00.25.58
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HCiFP9JVqQYcltnhJxOwMzt0TI6SjVJUyNuyOtFokuQ=;
+        b=WITQVSd2sW1KM6+Tk079vujJY9fsddQu1ltwl9F2LFPVJ68MiRgMVQy+PrJyKsbp0F
+         +lxV1P5epN57k9nRlI4qnrsgoT4MXLoPoYrYTlnLw12YqKPc835HSFXuK+16HkGmp8nc
+         dpxjoCa/GvQDtpaDsMk/vZHUFeEjkusqCIo9hQAqYlrV09hU9/X15T9LeDCGPPfkNh5F
+         TqM9WmuuPHgskYOVkEqvd6cHpMWDEBCU6FU3brfbrOWhiDH92ZgiQVUma/GyHmwRyObU
+         qa2gNHXgFljsqXqF0zcMjTXQBdZwMMELuhFT1etdRNW/MtCR+1dAJ4anCu0QEuu7aAhI
+         yzKQ==
+X-Gm-Message-State: AFqh2koP/k2cxiNm0hvmkKVpn3Vq+OpvChrkkXjzO5s5daME0Z8nkS+F
+        1DfQzg/Ns782QwNMF36p647IwUCvh/WgP6Zd
+X-Google-Smtp-Source: AMrXdXsy52P6vVVtKQ1Duame0j8ZN5N3AiBTzyDEkYNPDrycXghp5q+dS6/sTpDgsQ0lXLwS62p+Qw==
+X-Received: by 2002:a17:902:a717:b0:188:640f:f41e with SMTP id w23-20020a170902a71700b00188640ff41emr80177367plq.4.1673598366201;
+        Fri, 13 Jan 2023 00:26:06 -0800 (PST)
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com. [209.85.215.174])
+        by smtp.gmail.com with ESMTPSA id u7-20020a17090341c700b00186e34524e3sm13490602ple.136.2023.01.13.00.26.04
+        for <linux-media@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 00:26:00 -0800 (PST)
-Message-ID: <07ecf7cf-4a68-0f80-0452-3737b7d7922d@linaro.org>
-Date:   Fri, 13 Jan 2023 09:25:58 +0100
+        Fri, 13 Jan 2023 00:26:04 -0800 (PST)
+Received: by mail-pg1-f174.google.com with SMTP id 78so14500903pgb.8
+        for <linux-media@vger.kernel.org>; Fri, 13 Jan 2023 00:26:04 -0800 (PST)
+X-Received: by 2002:a62:1501:0:b0:589:8362:c7ce with SMTP id
+ 1-20020a621501000000b005898362c7cemr1385816pfv.21.1673598363988; Fri, 13 Jan
+ 2023 00:26:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 01/10] dt-bindings: media: mediatek,vcodec: Remove
- dma-ranges property
-Content-Language: en-US
-To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+References: <20230111-uvc_privacy_subdev-v1-0-f859ac9a01e3@chromium.org>
+In-Reply-To: <20230111-uvc_privacy_subdev-v1-0-f859ac9a01e3@chromium.org>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Fri, 13 Jan 2023 09:25:52 +0100
+X-Gmail-Original-Message-ID: <CANiDSCuq483Eha-KfUM_1y4zb0sC8rNgf-yki5SjiUo3czaKBw@mail.gmail.com>
+Message-ID: <CANiDSCuq483Eha-KfUM_1y4zb0sC8rNgf-yki5SjiUo3czaKBw@mail.gmail.com>
+Subject: Re: [PATCH RFC 0/3] meida: uvcvideo: reimplement privacy gpio as a
+ separate subdevice
+To:     Yunke Cao <yunkec@chromium.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>, nfraprado@collabora.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
-        libo.kang@mediatek.com, Yunfei Dong <yunfei.dong@mediatek.com>,
-        kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>,
-        chengci.xu@mediatek.com, youlin.pei@mediatek.com,
-        anan.sun@mediatek.com, Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>
-References: <20230113060133.9394-1-yong.wu@mediatek.com>
- <20230113060133.9394-2-yong.wu@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230113060133.9394-2-yong.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 13/01/2023 07:01, Yong Wu wrote:
-> MediaTek iommu has already controlled the masters' iova ranges by the
-> master's larb/port id. then the dma-ranges property is unnecessary for
+Hi Yunke
 
-Sentences in English always start with a capital letter, however also
-they do not start with "Then". Make it a proper a proper sentence.
+Thank you very much for the patchset :)
 
-> the master's node. the master is vcodec here.
+On Wed, 11 Jan 2023 at 09:52, Yunke Cao <yunkec@chromium.org> wrote:
+>
+> privacy_gpio in uvc were added as V4L2_CID_PRIVACY in uvc video node in
+> https://lore.kernel.org/all/20201223133528.55014-1-ribalda@chromium.org/
+>
+> Userspace applications often require to constantly poll privacy control.
+> Currently, polling privacy control requires keeping the video node open,
+> which prevents the camera from autosuspending.
+>
+> This patchset adds a separate v4l2 subdevice. Userspace access the gpio
+> via V4L2_CID_PRIVACY in the new subdevice. Applications can poll the
+> privacy control status without opening the video node and activate the
+> camera.
+>
+> The non-gpio V4L2_CID_PRIVACY in uvc is not affected.
 
-Unnecessary or invalid? Don't you depend now on some feature of driver
-added for example recently?
+Since this is a RFC, lets focus on the idea and not on the code itself.
 
-> 
-> Cc: Tiffany Lin <tiffany.lin@mediatek.com>
-> Cc: Andrew-CT Chen <andrew-ct.chen@mediatek.com>
-> Cc: Yunfei Dong <yunfei.dong@mediatek.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+- I am missing a reference to the subdevice from the media device. How
+will a user figure out that /dev/v4l-subdev0 is the privacy gpio of
+/dev/media0 and not /dev/media1?. Thake a look to the "ancillary
+links"
+- We have already exposed the control as part of the main video
+device, that means that we need to keep that API. The control on
+/dev/v4l-subdev0 should "mirror" the control on /dev/video0
+- There is no need to v4l2_ctrl_fill_event(), if you modify the
+control with a set controll function, the media controller should take
+care of everything
 
-There is little point in storing output of get_maintainers.pl forever in
-the git log. If you need it for some reason, please keep it after ---.
+@Sakari Ailus @Hans Verkuil : Assuming a correct implementation, how
+would you feel about exposing a privacy gpio as a subdevice?
 
-> Cc: Matthias Brugger <matthias.bgg@gmail.com>
-> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+
+Thanks!!!
+
+
+>
+> Suggested-by: Ricardo Ribalda <ribalda@chromium.org>
+> Signed-off-by: Yunke Cao <yunkec@chromium.org>
 > ---
->  .../devicetree/bindings/media/mediatek,vcodec-decoder.yaml | 5 -----
->  .../devicetree/bindings/media/mediatek,vcodec-encoder.yaml | 5 -----
->  .../bindings/media/mediatek,vcodec-subdev-decoder.yaml     | 7 -------
->  3 files changed, 17 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
-> index aa55ca65d6ed..fad59b486d5d 100644
-> --- a/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
-> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
-> @@ -56,11 +56,6 @@ properties:
->        List of the hardware port in respective IOMMU block for current Socs.
->        Refer to bindings/iommu/mediatek,iommu.yaml.
->  
-> -  dma-ranges:
-> -    maxItems: 1
-> -    description: |
-> -      Describes the physical address space of IOMMU maps to memory.
-> -
->    mediatek,vpu:
->      $ref: /schemas/types.yaml#/definitions/phandle
->      description:
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
-> index 0f2ea8d9a10c..a2051b31fa29 100644
-> --- a/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
-> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
-> @@ -49,11 +49,6 @@ properties:
->        List of the hardware port in respective IOMMU block for current Socs.
->        Refer to bindings/iommu/mediatek,iommu.yaml.
->  
-> -  dma-ranges:
-> -    maxItems: 1
-> -    description: |
-> -      Describes the physical address space of IOMMU maps to memory.
-> -
->    mediatek,vpu:
->      $ref: /schemas/types.yaml#/definitions/phandle
->      description:
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> index c4f20acdc1f8..290594bc91cc 100644
-> --- a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> @@ -76,11 +76,6 @@ properties:
->        The node of system control processor (SCP), using
->        the remoteproc & rpmsg framework.
->  
-> -  dma-ranges:
-> -    maxItems: 1
-> -    description: |
-> -      Describes the physical address space of IOMMU maps to memory.
-> -
->    "#address-cells":
->      const: 2
->  
-> @@ -203,7 +198,6 @@ required:
->    - reg
->    - iommus
->    - mediatek,scp
-> -  - dma-ranges
->    - ranges
->  
->  if:
-> @@ -236,7 +230,6 @@ examples:
->              compatible = "mediatek,mt8192-vcodec-dec";
->              mediatek,scp = <&scp>;
->              iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>;
-> -            dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
->              #address-cells = <2>;
->              #size-cells = <2>;
->              ranges = <0 0 0 0x16000000 0 0x40000>;
+> Yunke Cao (3):
+>       media: v4l2-ctrls: Expose v4l2_ctrl_fill_event()
+>       media: uvcvideo: remove entity privacy control in the uvc video node
+>       media: uvcvideo: reimplement privacy GPIO as a separate subdevice
+>
+>  drivers/media/usb/uvc/uvc_ctrl.c          | 17 -------
+>  drivers/media/usb/uvc/uvc_driver.c        | 44 ++----------------
+>  drivers/media/usb/uvc/uvc_entity.c        | 76 +++++++++++++++++++++++++++++++
+>  drivers/media/usb/uvc/uvcvideo.h          | 19 +++++---
+>  drivers/media/v4l2-core/v4l2-ctrls-core.c |  9 ++--
+>  include/media/v4l2-ctrls.h                | 12 +++++
+>  6 files changed, 111 insertions(+), 66 deletions(-)
+> ---
+> base-commit: 7dd4b804e08041ff56c88bdd8da742d14b17ed25
+> change-id: 20230111-uvc_privacy_subdev-1e7a167e86eb
+>
+> Best regards,
+> --
+> Yunke Cao <yunkec@chromium.org>
 
-Best regards,
-Krzysztof
 
+
+-- 
+Ricardo Ribalda
