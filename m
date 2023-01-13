@@ -2,200 +2,251 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EA59C54EBD
-	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 16:54:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82593C3DA78
+	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 17:52:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbjAMQyq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Jan 2023 11:54:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41536 "EHLO
+        id S229819AbjAMRwp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Jan 2023 12:52:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbjAMQyJ (ORCPT
+        with ESMTP id S229540AbjAMRwF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Jan 2023 11:54:09 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03337E67
-        for <linux-media@vger.kernel.org>; Fri, 13 Jan 2023 08:51:48 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id fy8so53531649ejc.13
-        for <linux-media@vger.kernel.org>; Fri, 13 Jan 2023 08:51:47 -0800 (PST)
+        Fri, 13 Jan 2023 12:52:05 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56A4801C9
+        for <linux-media@vger.kernel.org>; Fri, 13 Jan 2023 09:44:57 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id b17so16640170pld.7
+        for <linux-media@vger.kernel.org>; Fri, 13 Jan 2023 09:44:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n5VKVZUHVx22mM/bIIAc7NzbLe37QkHYvE9f9wX8QW8=;
-        b=vNsbnSKz1GdnDcjANX07Eh1TPUTsE3sZz4UgqxgIxPPW1iAvFUpAcCBfG/px0AQ+Nf
-         Bn7Qt61/Rolm0QvEF1QdUwcMezQrgIoX3FVVZDMRpUXUB2x4IAViej4ai7DTtfGYzbT8
-         yqIfFZamQr5RV55GiRchpqmvnS5MlwzEnAJX/01cW51i0ukHdpdXWZ83gX57+O/8E6J9
-         Qc/gWHCbHTk+sCrrnLRPZrA96jKyX5RcZhlxAi7CpSRd25K9r6vWzCiRrz0a3kjaF/ZT
-         iSTQBvsQ40vxKmQ/wE+GgDL8Ht09aPRqv0en/qSBBMmtKfuq9KzW6bfHy8IgqpCnOO/d
-         JiZg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pLt9de0LDCfu8kuQzBDp+TaLCYcUmljKR8shPxDtjPg=;
+        b=eTh+DJyd60T9yon0NvdDlxkZXo2HDZsVVNmm15JIQn+ouDmLBkty460XH8BTDek6t/
+         qMlD1R7QbUZjw/hH8h9v8p7fxqTp5/xmg28u6OSL8IsOiqzY+41nh665p5ohFNeYR/16
+         75Nwg9+pDOQ6oCxG6d+wuIWq8B789WhFgBWVPDAsexsgj9FNBcyHtRys0yBieGYGRBQs
+         uUJX+8secv7Fjx/NXP4mjUVuz5ITadMwbYImUm/LcKi3bZggbj7JT1RK3pHzT9LwriNv
+         Jjmx1hUC7rdmNuxcB4Es2Ydp7MucJTrZe57D91+tcmcrCAx/6XfVpB32+18jRKrMvRFN
+         zuAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n5VKVZUHVx22mM/bIIAc7NzbLe37QkHYvE9f9wX8QW8=;
-        b=zToSvDWcEixBgS/xepgdiHaLhIYmtvA4dbC7TA/BdYkCm2OOWVtOSJJGbs+E8IlTN0
-         bwREp/SmbDbvF2Yf2EMlaXR6AI+Wt83repkjs5fsGwZCaCVQ3eAihSeKz3MDyC6G+v0h
-         YD3xMvTbmzSJ2t48CjiPflBt3KRegFEJ0aHmjBUcbWu1Jz2Pr5+QpMfYUz54phCjguaC
-         xqnAGdqhL6Qdp0kvmSx+1S12zdW+6bUxn7fZaAqUPtDJ6peIsHqfXUWRjqdYuMEv9qNA
-         N9/eKy5VCy99oMd78zbGKLRF27FAag+p9AUtR3ltSUoIJ0rXfRGejOYft3l9sJtFU4zb
-         pZzQ==
-X-Gm-Message-State: AFqh2kqwsZFcXaX9yZryQEBJK+jIkaedg4ZLcUlf/Arxr0sEMioR4t5d
-        mGsA9C+1BJScDIikBskmpQ42Fw==
-X-Google-Smtp-Source: AMrXdXu+6c75vpvRqaVKxqv3ZA98GJYV1k02Wwz15Qn+yFXkdoMJMK6NmJ348MKGwxaHj3pZHARWPg==
-X-Received: by 2002:a17:906:c18d:b0:843:770e:777d with SMTP id g13-20020a170906c18d00b00843770e777dmr68623230ejz.11.1673628706634;
-        Fri, 13 Jan 2023 08:51:46 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id en6-20020a056402528600b00499b3d09bd2sm6192043edb.91.2023.01.13.08.51.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 08:51:46 -0800 (PST)
-Message-ID: <58d9c99d-942a-7d55-64dc-31d936076b90@linaro.org>
-Date:   Fri, 13 Jan 2023 17:51:44 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pLt9de0LDCfu8kuQzBDp+TaLCYcUmljKR8shPxDtjPg=;
+        b=F/Qsbyv5lrD7CnZkMNcIkOPmd7t5TAn3wweunn+IDHdQrBOsio0SaDKvj1yhf+pETl
+         bb+D6WzKlKnjz+ZjqME2cF3+bbayySSt7m4TuNKP+tde/qu8g2Gwy3Rk+ldfgA6Pqp+8
+         rvULTkoeuVUAsCNI870+e8O/MmNlPNKgQ2CdJcLDJzPs91jEr+MNuwCrEz9pfashZ8df
+         EO8OCecmv9Kg6NZC58DHDabm4UB7MzLxGRytrntF4XNopGTJsVnxBzYtwRb2GG7IxXzD
+         I4rDX05JoF5dpcbTjBnZoAyyqnxKd7ixizD7SInC9ktiiNbO3kRn4MguHNFd72thdWRt
+         dkjg==
+X-Gm-Message-State: AFqh2kr1KmVf+ab6tXOzne4puJbPaIc5QtxvWS6QAIYXzSKtV5ycgH+X
+        gQ9OaOK+UyKm3ULgQTYhiHCmcEM45YqtS2hW8Js=
+X-Google-Smtp-Source: AMrXdXsgR2EzuXmq3mMGjSPJKTH8qsP7/ARPP4NaraMZ8GgJ85Ruxtgc0CT8cGpcRZJkULsoZ0njKS5cDENmSWllsZ8=
+X-Received: by 2002:a17:903:12c7:b0:194:586a:77b6 with SMTP id
+ io7-20020a17090312c700b00194586a77b6mr23836plb.139.1673631896900; Fri, 13 Jan
+ 2023 09:44:56 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 01/16] dt-bindings: media: fsl-pxp: convert to yaml
-Content-Language: en-US
-To:     Michael Tretter <m.tretter@pengutronix.de>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-arm-kernel@lists.infradead.org
-References: <20230112-imx-pxp-v2-0-e2281da1db55@pengutronix.de>
- <20230112-imx-pxp-v2-1-e2281da1db55@pengutronix.de>
- <bba093d0-e648-61b3-f4d7-b48d43e35920@linaro.org>
- <20230113150943.GC20866@pengutronix.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230113150943.GC20866@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220712000251.13607-1-laurent.pinchart@ideasonboard.com>
+ <20220712000251.13607-8-laurent.pinchart@ideasonboard.com>
+ <CAHCN7xKq+a05P4RKtToLiCqW4ZCQEYjKBpuS6Q0hOv4y3i8n+g@mail.gmail.com>
+ <Y0QgWDNor/YKWcZ/@pendragon.ideasonboard.com> <CAHCN7xKJ_oeVs1PXiuE+-8CLNfi5EEwYckJA3amu+94u4KQEnA@mail.gmail.com>
+ <DM6PR18MB3603AAC96A056B2E027538C6B02B9@DM6PR18MB3603.namprd18.prod.outlook.com>
+ <Y2lMUBY4J/Elaioe@pendragon.ideasonboard.com>
+In-Reply-To: <Y2lMUBY4J/Elaioe@pendragon.ideasonboard.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Fri, 13 Jan 2023 11:44:45 -0600
+Message-ID: <CAHCN7x+1kCuGjMFecfURQ88spmXUbWzZ9aXpX2-OPUtgRoGHzA@mail.gmail.com>
+Subject: Re: [PATCH v2 7/7] media: nxp: Add i.MX8 ISI driver
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Martin Vaklev <mvaklev@thermal.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
+        "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 13/01/2023 16:09, Michael Tretter wrote:
->>> +properties:
->>> +  compatible:
->>> +    oneOf:
->>> +      - const: fsl,imx6ul-pxp
->>> +      - const: fsl,imx6ull-pxp
->>> +      - const: fsl,imx7d-pxp
->>
->> These three are an enum.
-> 
-> These are alternatives to the 'items:' entry below.
-> 
-> Are you suggesting to use the following statement?
-> 
-> oneOf:
->   - enum:
->       - fsl,imx6ul-pxp
->       - fsl,imx6ull-pxp
->       - fsl,imx7d-pxp
->   - items:
->       - enum:
->           - fsl,imx6sll-pxp
->           - fsl,imx6sx-pxp
+On Mon, Nov 7, 2022 at 12:20 PM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hi Martin,
+>
+> On Wed, Oct 19, 2022 at 02:47:39AM +0000, Martin Vaklev wrote:
+> > On Monday, October 10, 2022 7:21 PM, Adam Ford wrote:
+> > > On Mon, Oct 10, 2022 at 8:38 AM Laurent Pinchart wrote:
+> > > > On Mon, Oct 10, 2022 at 07:27:14AM -0500, Adam Ford wrote:
+> > > > > On Mon, Jul 11, 2022 at 7:06 PM Laurent Pinchart wrote:
+> > > > > >
+> > > > > > The Image Sensing Interface (ISI) combines image processing
+> > > > > > pipelines with DMA engines to process and capture frames
+> > > > > > originating from a variety of sources. The inputs to the ISI go
+> > > > > > through Pixel Link interfaces, and their number and nature is
+> > > > > > SoC-dependent. They cover both capture interfaces (MIPI CSI-2 RX,
+> > > HDMI RX) and memory inputs.
+> > > > > >
 
-Yes.
+Laurent,
 
-> 
-> Why is this better than the one that I used?
+Out of curiosity, I know this series was based on some updates to the
+media system that were pending.  Do you know if those dependencies
+have propagated and whether or not this series may get accepted?
 
-Because that's the convention - use enum for enumeration which nicely
-groups all of them and is the easiest to read.
-
-> 
->>
->>> +      - items:
->>> +          - enum:
->>> +              - fsl,imx6sll-pxp
->>> +              - fsl,imx6sx-pxp
->>> +          - const: fsl,imx6ull-pxp
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +  interrupts:
->>> +    minItems: 1
->>> +    maxItems: 2
->>> +
->>> +  clocks:
->>> +    maxItems: 1
->>> +
->>> +  clock-names:
->>> +    const: axi
->>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +  - interrupts
->>> +  - clocks
->>> +  - clock-names
->>> +
->>> +allOf:
->>> +  - if:
->>> +      properties:
->>> +        compatible:
->>> +          contains:
->>> +            enum:
->>> +              - fsl,imx6sx-pxp
->>> +    then:
->>> +      properties:
->>> +        interrupts:
->>> +          numItems: 1
->>
->> That's not correct syntax... I am surprised that it works. Did you test
->> the bindings?
-> 
-> I copied this syntax from renesas,wdt.yaml and ran
-> 
-> 	make ARCH=arm dtbs_check DT_SCHEMA_FILES=fsl,imx6ull-pxp.yaml
-> 
-> with SOC_IMX7D=y, SOC_IMX6UL=y, SOC_IMX6SLL=y, and SOC_IMX6SX=y. The latter
-> two were not enabled in the v1, which is why it didn't catch the missing
-> compatibles.
-> 
-> On a closer look, I just saw that the checker ignored the schema due to the
-> incorrect syntax and didn't produce any further errors. With the syntax fixed,
-> the checker now produces also a few more errors about power-domains, which I
-> will fix in v3.
-> 
-> Is this syntax correct?
-> 
-> allOf:
->   - if:
->       properties:
->         compatible:
->           contains:
->             enum:
->               - fsl,imx6sx-pxp
->     then:
->       properties:
->         interrupts:
->           minItems: 1
-
-Drop this one
-
-
->           maxItems: 1
->     else:
->       properties:
->         interrupts:
->           minItems: 2
->           maxItems: 2
-> 
-> Michael
-
-Rest is ok
-
-Best regards,
-Krzysztof
-
+> > > > > > Signed-off-by: Christian Hemp <c.hemp@phytec.de>
+> > > > > > Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
+> > > > > > Signed-off-by: Guoniu Zhou <guoniu.zhou@nxp.com>
+> > > > > > Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+> > > > > > Signed-off-by: Laurent Pinchart
+> > > > > > <laurent.pinchart@ideasonboard.com>
+> > > > > > Signed-off-by: Stefan Riedmueller <s.riedmueller@phytec.de>
+> > > > >
+> > > > > I did some testing on the imx8m Nano using the code from Laurent's
+> > > > > git repo as a starting point using an OV5640 camera.  I was able to
+> > > > > capture an image, but there is a solid green line at the top of the
+> > > > > image.  I am attaching a screenshot of my ceiling fan.  It's a
+> > > > > little blurry since it was spinning, but I have taken other images
+> > > > > and this green line remains. It's unclear to me if it's a camera
+> > > > > issue, CSIS issue or an ISI issue, but I was curious to know if
+> > > > > anyone has seen this on an imx8m Plus?
+> > > > >
+> > > > > I'm going to try to run a similar test on an imx8m Mini when I get
+> > > > > some more time.  I don't recall seeing this before, but I know there
+> > > > > have been some updates to the OV5640 and CSIS drivers.  The same
+> > > > > camera works on the Mini, but it has a different capture part, but I
+> > > > > think the CSIS is the same, so I'm hoping it might narrow the issue
+> > > > > down to ISI or not.
+> > > >
+> > > > Could you provide the same image in PNG format ? The lossless
+> > > > compression of JPEG creates artifacts that make it difficult to see
+> > > > what should be attributed to capture issues and what is caused by the
+> > > > compression.
+> > >
+> > > I changed the output of the ISI to RGB and captured it as a PNG instead of
+> > > the JPEG, and the green bar disappeared.  I then re-ran it with JPEG again,
+> > > and the green bar returned.  I decided to convert to RGB, then capture as
+> > > JPEG, and the green bar stayed, so it appears to be limited to the JPEG
+> > > converstion and not the ISI.
+> > >
+> > > I'll run some more experiments when I have more time, but for now , I guess
+> > > there is nothing to worry about.  Sorry for the noise.
+> > >
+> > > adam
+> >
+> > I did more testing on an imx8mn with ov5640 and I definitely see the
+> > issue and believe this to be a capture issue. I set up my pipeline to
+> > run natively in UYVY8_1X16 format all the way across and captured to a
+> > memory buffer. I do see the first green line (essentially all 0s in
+> > YUV format) and there are 8 pixels of other garbage at the beginning
+> > of the line (pictures attached). This only happens on the first frame
+> > when streaming is started. All consecutive frames are intact and
+> > shifted up by 1 line in reference to the first one.
+>
+> I suppose that the first frame starts with an extra line, and subsequent
+> frames are correct. It would be nice to confirm that with a test
+> pattern. The square test pattern may be a good match.
+>
+> Also, it would be useful to prefill the buffers with a known pattern, to
+> see if the first line is written with 0s, or not written at all.
+>
+> > I also get several
+> > IRQ events reported on each stream start:
+> >
+> > [12724.275344] imx-mipi-csis 32e30000.mipi-csi: SOT Error events: 1
+> > [12724.281372] imx-mipi-csis 32e30000.mipi-csi: Lost Frame Start Error events: 195
+> > [12724.288682] imx-mipi-csis 32e30000.mipi-csi: CRC Error events: 186
+> >
+> > A few things that come to mind which I intend to further verify:
+> > - Check whether the HS_SETTLE and CLK_SETTLE times are being
+> >   appropriately set; they appear to be calculated rather than being set
+> >   by a DT property
+>
+> I'm more confident about the HS settle value than the CLK settle value.
+> The former is computed from the clock frequency and should be OK
+> assuming "standard" timings on the CSI-2 source side. The CLK settle
+> value is missing proper documentation in the NXP reference manuals, so
+> there's a big question mark there.
+>
+> > - Check if receiver is potentially enabled prior to sensor powered up
+> >   and properly entered LP-11 stop state, which would cause the noise on
+> >   the line to be interpreted by the receiver
+>
+> That could cause some issues indeed.
+>
+> > - Test different image frame sizes as this is captured in 640x480
+> >
+> > > > > > ---
+> > > > > >  MAINTAINERS                                   |    7 +
+> > > > > >  drivers/media/platform/nxp/Kconfig            |    2 +
+> > > > > >  drivers/media/platform/nxp/Makefile           |    1 +
+> > > > > >  drivers/media/platform/nxp/imx8-isi/Kconfig   |   22 +
+> > > > > >  drivers/media/platform/nxp/imx8-isi/Makefile  |    9 +
+> > > > > >  .../platform/nxp/imx8-isi/imx8-isi-core.c     |  646 +++++++
+> > > > > >  .../platform/nxp/imx8-isi/imx8-isi-core.h     |  394 +++++
+> > > > > >  .../platform/nxp/imx8-isi/imx8-isi-crossbar.c |  529 ++++++
+> > > > > >  .../platform/nxp/imx8-isi/imx8-isi-debug.c    |  109 ++
+> > > > > >  .../media/platform/nxp/imx8-isi/imx8-isi-hw.c |  651 +++++++
+> > > > > >  .../platform/nxp/imx8-isi/imx8-isi-m2m.c      |  858 ++++++++++
+> > > > > >  .../platform/nxp/imx8-isi/imx8-isi-pipe.c     |  867 ++++++++++
+> > > > > >  .../platform/nxp/imx8-isi/imx8-isi-regs.h     |  418 +++++
+> > > > > >  .../platform/nxp/imx8-isi/imx8-isi-video.c    | 1513 +++++++++++++++++
+> > > > > >  14 files changed, 6026 insertions(+)  create mode 100644
+> > > > > > drivers/media/platform/nxp/imx8-isi/Kconfig
+> > > > > >  create mode 100644 drivers/media/platform/nxp/imx8-isi/Makefile
+> > > > > >  create mode 100644
+> > > > > > drivers/media/platform/nxp/imx8-isi/imx8-isi-core.c
+> > > > > >  create mode 100644
+> > > > > > drivers/media/platform/nxp/imx8-isi/imx8-isi-core.h
+> > > > > >  create mode 100644
+> > > > > > drivers/media/platform/nxp/imx8-isi/imx8-isi-crossbar.c
+> > > > > >  create mode 100644
+> > > > > > drivers/media/platform/nxp/imx8-isi/imx8-isi-debug.c
+> > > > > >  create mode 100644
+> > > > > > drivers/media/platform/nxp/imx8-isi/imx8-isi-hw.c
+> > > > > >  create mode 100644
+> > > > > > drivers/media/platform/nxp/imx8-isi/imx8-isi-m2m.c
+> > > > > >  create mode 100644
+> > > > > > drivers/media/platform/nxp/imx8-isi/imx8-isi-pipe.c
+> > > > > >  create mode 100644
+> > > > > > drivers/media/platform/nxp/imx8-isi/imx8-isi-regs.h
+> > > > > >  create mode 100644
+> > > > > > drivers/media/platform/nxp/imx8-isi/imx8-isi-video.c
+> > > > > >
+> > > > > > diff --git a/MAINTAINERS b/MAINTAINERS index
+> > > > > > 1fc9ead83d2a..02327b4d8c9f 100644
+> > > > > > --- a/MAINTAINERS
+> > > > > > +++ b/MAINTAINERS
+> > > > > > @@ -14270,6 +14270,13 @@ F: Documentation/devicetree/bindings/clock/imx*
+> > > > > >  F:     drivers/clk/imx/
+> > > > > >  F:     include/dt-bindings/clock/imx*
+> > > > > >
+> > > > > > +NXP i.MX 8M ISI DRIVER
+> > > > > > +M:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > > > > > +L:     linux-media@vger.kernel.org
+> > > > > > +S:     Maintained
+> > > > > > +F:     Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
+> > > > > > +F:     drivers/media/platform/nxp/imx8-isi/
+> > > > > > +
+> > > > > >  NXP i.MX 8MQ DCSS DRIVER
+> > > > > >  M:     Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
+> > > > > >  R:     Lucas Stach <l.stach@pengutronix.de>
+> > > > > > diff --git a/drivers/media/platform/nxp/Kconfig
+> > > > > > b/drivers/media/platform/nxp/Kconfig
+> > > > > > index 1ac0a6e91111..0f5f8976ae78 100644
+> > > > > > --- a/drivers/media/platform/nxp/Kconfig
+> > > > > > +++ b/drivers/media/platform/nxp/Kconfig
+> > > > > > @@ -27,6 +27,8 @@ config VIDEO_VIU
+> > > > > >           Say Y here if you want to enable VIU device on MPC5121e Rev2+.
+> > > > > >           In doubt, say N.
+> > > > > >
+> > > > >
+> > > > > <snip>
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
