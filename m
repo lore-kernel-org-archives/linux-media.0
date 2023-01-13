@@ -2,30 +2,30 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F3D8C54EBE
-	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 09:57:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C1F2C54EBE
+	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 09:57:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239619AbjAMJ5h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Jan 2023 04:57:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42904 "EHLO
+        id S232730AbjAMJ5j (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Jan 2023 04:57:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241070AbjAMJ5D (ORCPT
+        with ESMTP id S231154AbjAMJ5E (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:57:03 -0500
+        Fri, 13 Jan 2023 04:57:04 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55F7676C6
-        for <linux-media@vger.kernel.org>; Fri, 13 Jan 2023 01:54:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B6D676D9
+        for <linux-media@vger.kernel.org>; Fri, 13 Jan 2023 01:54:18 -0800 (PST)
 Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <m.tretter@pengutronix.de>)
-        id 1pGGlL-0003cp-Ct; Fri, 13 Jan 2023 10:54:15 +0100
+        id 1pGGlM-0003cp-El; Fri, 13 Jan 2023 10:54:16 +0100
 From:   Michael Tretter <m.tretter@pengutronix.de>
-Date:   Fri, 13 Jan 2023 10:54:16 +0100
-Subject: [PATCH v2 10/16] media: imx-pxp: Don't set bus_info manually in .querycap()
+Date:   Fri, 13 Jan 2023 10:54:18 +0100
+Subject: [PATCH v2 12/16] media: imx-pxp: Pass pixel format value to find_format()
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230112-imx-pxp-v2-10-e2281da1db55@pengutronix.de>
+Message-Id: <20230112-imx-pxp-v2-12-e2281da1db55@pengutronix.de>
 References: <20230112-imx-pxp-v2-0-e2281da1db55@pengutronix.de>
 In-Reply-To: <20230112-imx-pxp-v2-0-e2281da1db55@pengutronix.de>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
@@ -50,10 +50,10 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-The v4l2_capability.bus_info field is set by the V4L2 core when left
-empty by the .querycap() handler. This is the recommended practice, in
-order to ensure bus_info coherence between drivers. Don't set it
-manually.
+The find_format() function looks up format information for a given pixel
+format. It takes a v4l2_format pointer, but only uses the contained
+pixel format value. To prepare it for being used by callers that don't
+have v4l2_format, modify it to take the pixel format value directly.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Reviewed-by: Michael Tretter <m.tretter@pengutronix.de>
@@ -65,22 +65,65 @@ v2:
 
 - Pick from https://lore.kernel.org/linux-media/20230112172507.30579-1-laurent.pinchart@ideasonboard.com
 ---
- drivers/media/platform/nxp/imx-pxp.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/media/platform/nxp/imx-pxp.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/media/platform/nxp/imx-pxp.c b/drivers/media/platform/nxp/imx-pxp.c
-index ad11ac530f96..86ccc3c4aae3 100644
+index 351e76ee32ca..9e2e522d9241 100644
 --- a/drivers/media/platform/nxp/imx-pxp.c
 +++ b/drivers/media/platform/nxp/imx-pxp.c
-@@ -1107,8 +1107,6 @@ static int pxp_querycap(struct file *file, void *priv,
- {
- 	strscpy(cap->driver, MEM2MEM_NAME, sizeof(cap->driver));
- 	strscpy(cap->card, MEM2MEM_NAME, sizeof(cap->card));
--	snprintf(cap->bus_info, sizeof(cap->bus_info),
--			"platform:%s", MEM2MEM_NAME);
- 	return 0;
- }
+@@ -176,14 +176,14 @@ enum {
+ 	V4L2_M2M_DST = 1,
+ };
  
+-static struct pxp_fmt *find_format(struct v4l2_format *f)
++static struct pxp_fmt *find_format(unsigned int pixelformat)
+ {
+ 	struct pxp_fmt *fmt;
+ 	unsigned int k;
+ 
+ 	for (k = 0; k < NUM_FORMATS; k++) {
+ 		fmt = &formats[k];
+-		if (fmt->fourcc == f->fmt.pix.pixelformat)
++		if (fmt->fourcc == pixelformat)
+ 			break;
+ 	}
+ 
+@@ -1256,10 +1256,10 @@ static int pxp_try_fmt_vid_cap(struct file *file, void *priv,
+ 	struct pxp_fmt *fmt;
+ 	struct pxp_ctx *ctx = file2ctx(file);
+ 
+-	fmt = find_format(f);
++	fmt = find_format(f->fmt.pix.pixelformat);
+ 	if (!fmt) {
+ 		f->fmt.pix.pixelformat = formats[0].fourcc;
+-		fmt = find_format(f);
++		fmt = find_format(f->fmt.pix.pixelformat);
+ 	}
+ 	if (!(fmt->types & MEM2MEM_CAPTURE)) {
+ 		v4l2_err(&ctx->dev->v4l2_dev,
+@@ -1284,10 +1284,10 @@ static int pxp_try_fmt_vid_out(struct file *file, void *priv,
+ 	struct pxp_fmt *fmt;
+ 	struct pxp_ctx *ctx = file2ctx(file);
+ 
+-	fmt = find_format(f);
++	fmt = find_format(f->fmt.pix.pixelformat);
+ 	if (!fmt) {
+ 		f->fmt.pix.pixelformat = formats[0].fourcc;
+-		fmt = find_format(f);
++		fmt = find_format(f->fmt.pix.pixelformat);
+ 	}
+ 	if (!(fmt->types & MEM2MEM_OUTPUT)) {
+ 		v4l2_err(&ctx->dev->v4l2_dev,
+@@ -1320,7 +1320,7 @@ static int pxp_s_fmt(struct pxp_ctx *ctx, struct v4l2_format *f)
+ 		return -EBUSY;
+ 	}
+ 
+-	q_data->fmt		= find_format(f);
++	q_data->fmt		= find_format(f->fmt.pix.pixelformat);
+ 	q_data->width		= f->fmt.pix.width;
+ 	q_data->height		= f->fmt.pix.height;
+ 	q_data->bytesperline	= f->fmt.pix.bytesperline;
 
 -- 
 2.30.2
