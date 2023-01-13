@@ -2,30 +2,30 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CFC9C678D6
-	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 09:57:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D40C6C678D7
+	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 09:57:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241316AbjAMJ5f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Jan 2023 04:57:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
+        id S241320AbjAMJ5g (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Jan 2023 04:57:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240906AbjAMJ5A (ORCPT
+        with ESMTP id S241076AbjAMJ5E (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:57:00 -0500
+        Fri, 13 Jan 2023 04:57:04 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB37A671A8
-        for <linux-media@vger.kernel.org>; Fri, 13 Jan 2023 01:54:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681A36718B
+        for <linux-media@vger.kernel.org>; Fri, 13 Jan 2023 01:54:18 -0800 (PST)
 Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <m.tretter@pengutronix.de>)
-        id 1pGGlK-0003cp-BO; Fri, 13 Jan 2023 10:54:14 +0100
+        id 1pGGlL-0003cp-Ts; Fri, 13 Jan 2023 10:54:15 +0100
 From:   Michael Tretter <m.tretter@pengutronix.de>
-Date:   Fri, 13 Jan 2023 10:54:14 +0100
-Subject: [PATCH v2 08/16] ARM: dts: imx7d: add node for PXP
+Date:   Fri, 13 Jan 2023 10:54:17 +0100
+Subject: [PATCH v2 11/16] media: imx-pxp: Add media controller support
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230112-imx-pxp-v2-8-e2281da1db55@pengutronix.de>
+Message-Id: <20230112-imx-pxp-v2-11-e2281da1db55@pengutronix.de>
 References: <20230112-imx-pxp-v2-0-e2281da1db55@pengutronix.de>
 In-Reply-To: <20230112-imx-pxp-v2-0-e2281da1db55@pengutronix.de>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
@@ -48,40 +48,96 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The i.MX7d contains a Pixel Pipeline in version 3.0. Add the device tree
-node to make it available.
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
+Register a media device for the PXP, using the v4l2-mem2mem MC
+infrastructure to populate the media graph. No media device operation is
+implemented, the main use of the MC API is to allow consistent discovery
+of media devices for userspace.
+
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Michael Tretter <m.tretter@pengutronix.de>
 Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 ---
 Changelog
 
-v2:
+Changes since v1:
 
-- fix alignment
+- Drop manual setting of bus_info
+- Pick from https://lore.kernel.org/linux-media/20230112172507.30579-1-laurent.pinchart@ideasonboard.com
 ---
- arch/arm/boot/dts/imx7d.dtsi | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/media/platform/nxp/imx-pxp.c | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/arch/arm/boot/dts/imx7d.dtsi b/arch/arm/boot/dts/imx7d.dtsi
-index 7ceb7c09f7ad..4b94b8afb55d 100644
---- a/arch/arm/boot/dts/imx7d.dtsi
-+++ b/arch/arm/boot/dts/imx7d.dtsi
-@@ -165,6 +165,15 @@ pcie_phy: pcie-phy@306d0000 {
- 		  reg = <0x306d0000 0x10000>;
- 		  status = "disabled";
- 	};
-+
-+	pxp: pxp@30700000 {
-+		compatible = "fsl,imx7d-pxp";
-+		reg = <0x30700000 0x10000>;
-+		interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 46 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&clks IMX7D_PXP_CLK>;
-+		clock-names = "axi";
-+	};
- };
+diff --git a/drivers/media/platform/nxp/imx-pxp.c b/drivers/media/platform/nxp/imx-pxp.c
+index 86ccc3c4aae3..351e76ee32ca 100644
+--- a/drivers/media/platform/nxp/imx-pxp.c
++++ b/drivers/media/platform/nxp/imx-pxp.c
+@@ -24,6 +24,7 @@
+ #include <linux/sched.h>
+ #include <linux/slab.h>
  
- &aips3 {
++#include <media/media-device.h>
+ #include <media/v4l2-ctrls.h>
+ #include <media/v4l2-device.h>
+ #include <media/v4l2-event.h>
+@@ -201,6 +202,9 @@ struct pxp_pdata {
+ struct pxp_dev {
+ 	struct v4l2_device	v4l2_dev;
+ 	struct video_device	vfd;
++#ifdef CONFIG_MEDIA_CONTROLLER
++	struct media_device	mdev;
++#endif
+ 
+ 	struct clk		*clk;
+ 	void __iomem		*mmio;
+@@ -1815,8 +1819,34 @@ static int pxp_probe(struct platform_device *pdev)
+ 		goto err_m2m;
+ 	}
+ 
++#ifdef CONFIG_MEDIA_CONTROLLER
++	dev->mdev.dev = &pdev->dev;
++	strscpy(dev->mdev.model, MEM2MEM_NAME, sizeof(dev->mdev.model));
++	media_device_init(&dev->mdev);
++	dev->v4l2_dev.mdev = &dev->mdev;
++
++	ret = v4l2_m2m_register_media_controller(dev->m2m_dev, vfd,
++						 MEDIA_ENT_F_PROC_VIDEO_PIXEL_FORMATTER);
++	if (ret) {
++		dev_err(&pdev->dev, "Failed to initialize media device\n");
++		goto err_vfd;
++	}
++
++	ret = media_device_register(&dev->mdev);
++	if (ret) {
++		dev_err(&pdev->dev, "Failed to register media device\n");
++		goto err_m2m_mc;
++	}
++#endif
++
+ 	return 0;
+ 
++#ifdef CONFIG_MEDIA_CONTROLLER
++err_m2m_mc:
++	v4l2_m2m_unregister_media_controller(dev->m2m_dev);
++err_vfd:
++	video_unregister_device(vfd);
++#endif
+ err_m2m:
+ 	v4l2_m2m_release(dev->m2m_dev);
+ err_v4l2:
+@@ -1837,6 +1867,11 @@ static int pxp_remove(struct platform_device *pdev)
+ 	clk_disable_unprepare(dev->clk);
+ 
+ 	v4l2_info(&dev->v4l2_dev, "Removing " MEM2MEM_NAME);
++
++#ifdef CONFIG_MEDIA_CONTROLLER
++	media_device_unregister(&dev->mdev);
++	v4l2_m2m_unregister_media_controller(dev->m2m_dev);
++#endif
+ 	video_unregister_device(&dev->vfd);
+ 	v4l2_m2m_release(dev->m2m_dev);
+ 	v4l2_device_unregister(&dev->v4l2_dev);
 
 -- 
 2.30.2
