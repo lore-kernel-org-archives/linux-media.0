@@ -2,156 +2,120 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78742C67871
-	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 05:27:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DE7EC54EBE
+	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 06:06:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237953AbjAMF1T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Jan 2023 00:27:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32876 "EHLO
+        id S240559AbjAMGGd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Jan 2023 01:06:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234573AbjAMF02 (ORCPT
+        with ESMTP id S240225AbjAMGF5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Jan 2023 00:26:28 -0500
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2051.outbound.protection.outlook.com [40.107.7.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E79961319;
-        Thu, 12 Jan 2023 21:26:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nDvomM20gxJUBjdlU4Lqx82zw+jZmCG/2RjcUE9QPjtrTKlmgmY/JKbFtoXU37ahreXztNPexS2vnD1sv3c6WfxdrDZgNd8g+uFNQzj904Dvt80LKtWm7jCMjDErEK2IY0/L7qlJAlvrc5snRuUWIRjR0C2n6EU72+6986Wg2Fe4VGWe+VdmJ6hVrERAWyUbcbn4/QNu4KvO34f58kW5jQqc11pxrQCA6siu2aHYVrAHz2pfDNicvAcgnxQGRt302dia8YLp4rkKchDHYL19Zusi7gyiGuyrlKSG4+rVSbUx9qsmZ7mE+d3yt0YpGahIfeOFSXv8ep3dHeH9NQaAGA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bZFW5qfP/3fmDN96yw4B3bYfhN3k1vpunXPTAW6utwM=;
- b=Fp5ExSPLVG83cbmY9ud4as8EOBkWzPv8qTWM9k80xYbxYWXwDPJdr55JCMXcezbpOOvTTW9ZKzimhf4kwZBzWGA7XyFlznSsY2OlCb5qLZMh/JNQMjLgWOlztROtAfp90xthOsQQSgKsAg0El8x/82z9jFUUtbzEH5EMWJTb56QGBeKBa63WdHiGHKB/vftXa7NEcTEx3MYIR0cGordAWhvE5WzXJ+VqvbOOpLviSMFdb6SFn8hMDgOpc06cpJNAmiz6siBKJ5RiBmQa1CSha2zreCx3kg2xoFyWlLiFsAcUanVqVwYrXG0NII6SOkLOq/6IqWpxjAfG0CcDg3c7bw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bZFW5qfP/3fmDN96yw4B3bYfhN3k1vpunXPTAW6utwM=;
- b=fNPKe2gMoj+mWJkmUBML1W3m9PNA/yyYhyhuA4/H/0z7HgWiJuBEh/F6eEHKNEnY34Aj+wJ3xKesIVW4yudOAt9tuMFEvLPSCmMbdLtl0xMtDr2aMVR0owlxnwex18poC7WE7MDl+5Y2YPR6TDkLfXAguBmVkoJgrzzEiJpmWig=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
- by DBBPR04MB8043.eurprd04.prod.outlook.com (2603:10a6:10:1e7::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.12; Fri, 13 Jan
- 2023 05:26:07 +0000
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::3a82:42b3:f1ed:5c3d]) by AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::3a82:42b3:f1ed:5c3d%7]) with mapi id 15.20.6002.013; Fri, 13 Jan 2023
- 05:26:07 +0000
-From:   Ming Qian <ming.qian@nxp.com>
-To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl
-Cc:     shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        xiahong.bao@nxp.com, eagle.zhou@nxp.com, tao.jiang_2@nxp.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] media: amphion: correct the unspecified color space
-Date:   Fri, 13 Jan 2023 13:25:51 +0800
-Message-Id: <20230113052551.23708-1-ming.qian@nxp.com>
-X-Mailer: git-send-email 2.38.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR01CA0112.apcprd01.prod.exchangelabs.com
- (2603:1096:4:40::16) To AM6PR04MB6341.eurprd04.prod.outlook.com
- (2603:10a6:20b:d8::14)
+        Fri, 13 Jan 2023 01:05:57 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C526EC9C;
+        Thu, 12 Jan 2023 22:01:57 -0800 (PST)
+X-UUID: c657f6de930711ed945fc101203acc17-20230113
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Hdle5V7QXR2zTmjlt0LMbJJW0v+QKgrPewNuxqT7LDg=;
+        b=oljS6ef5LU/F4OnPUhsxmVjN1REtVbri739opsWDWcZuNy+rrCLi5sURR/KvoYE//nSgR7aWyV5VRV34cSghUvZjztmtxzn3ez7QMu46ksE1fLlKb94/4/LXISJvhNFgRlwz+xF1rtPN4E2UA32pAASy9xTo4d3TFawaQm9xAio=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.17,REQID:fc0aeba4-1d16-43d1-9627-d26e3dd7f1be,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.17,REQID:fc0aeba4-1d16-43d1-9627-d26e3dd7f1be,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:543e81c,CLOUDID:deea8a54-dd49-462e-a4be-2143a3ddc739,B
+        ulkID:230113140153R71N1EKA,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
+        I:0,OSA:0
+X-CID-APTURL: Status:success,Category:nil,Trust:0,Unknown:0,Malicious:0
+X-CID-BVR: 0
+X-UUID: c657f6de930711ed945fc101203acc17-20230113
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 745863996; Fri, 13 Jan 2023 14:01:52 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 13 Jan 2023 14:01:50 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Fri, 13 Jan 2023 14:01:49 +0800
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     Joerg Roedel <joro@8bytes.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>, <nfraprado@collabora.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <mingyuan.ma@mediatek.com>, <yf.wang@mediatek.com>,
+        <libo.kang@mediatek.com>, Yunfei Dong <yunfei.dong@mediatek.com>,
+        kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>,
+        <chengci.xu@mediatek.com>, <youlin.pei@mediatek.com>,
+        <anan.sun@mediatek.com>
+Subject: [PATCH 00/10] Adjust the dma-ranges for MTK IOMMU
+Date:   Fri, 13 Jan 2023 14:01:23 +0800
+Message-ID: <20230113060133.9394-1-yong.wu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR04MB6341:EE_|DBBPR04MB8043:EE_
-X-MS-Office365-Filtering-Correlation-Id: a205ce03-d1ba-4d93-36f1-08daf526abf2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TBePorAdx8K+WP1fgZXKrKJ1CLK8QTBGWFZrHPks8uzf5AeDsUsxPpgIdI+YnUm2XIjmfIj+7FTeWxmP1YGYkPSGwTKyBLEftzKo29X1nFF/WVsHo3KcaB/xCSsSE6FxKrERiJhiwRc/RuThMlOcstWoseswQSwooeu0X0cmlM5TwyCkJ0++93CXuA+20RJg9T7s+QeDbAtUqqWYUy//W25euvR3OSeQpECkk5aWKZrzVGqerc7jA/g+SFmIik3B3JVk+i+BrctgKZXoiHzoKkYMS/G2ddt/YHsGRfUV4ayUX31/oE6ybZEurLNDYvvwK+CUfqw+h0VgSCTcYlpZ3xD7ZcsS5UF3ZUHVjgLTNHutChCXNq1Esoj3AL58TUkLlaVbmOqCwWZBOjbqj1ebtKdvaV86dgo8x1O7nKfQJ0oAgSEzU3FfnQ7KWnd40ylkp36C2UTIED0YHttNoICOR9V26tOUHs1LcQfoKxe6dUOWxEhf/oGPsZxLCLOzYab9xgsFPZSwmOZiJ4Irl1DHtjDMH4R9e4cNnEcsKxZiyHHtBc5Qu2s2Ln/dC2O99GxmKcAVPN6qVg7zGQ+rqsXEt08bh9rT6ookY6AT75JGTk3JsAAY/wcJiUlmnvBqfIw9dbswyIbKgb9t+0BDUJBbeuhVre2XAo8+20wrFA/2lWBqolvHN4ilgpHbi5lQTkVq700JWMGCp/xRbYpyIT78xw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(396003)(136003)(39860400002)(366004)(451199015)(8936002)(66946007)(66556008)(7416002)(4326008)(26005)(86362001)(66476007)(41300700001)(8676002)(5660300002)(186003)(478600001)(36756003)(2906002)(6486002)(52116002)(44832011)(316002)(6666004)(1076003)(6512007)(6506007)(2616005)(38100700002)(38350700002)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2JIID5zU7MuSMOStY8+81b0hRmULjlBV+MDk7kyaEv2A3hOlRuQKMzs/9nsX?=
- =?us-ascii?Q?V9Uj3pSiH4cMXqTFbz2VYOj8lle9CdmoUdmE+x7D9xY+5XP9w6HWyIyWK0ay?=
- =?us-ascii?Q?6ufnLoV8eqld5fN8SWAvGREyYUW7fXzvU6GVcE/xEezdSjWBkRk2T/7GZfYD?=
- =?us-ascii?Q?npqQnfJyjqOK0lm10TkWK2osYilTQscfeIIQ0K3C4OeHFQgHLb0/Y7atu8u5?=
- =?us-ascii?Q?y+o6ZQCQjUlA0Y5/TBnnmyRl2NyjM8w0VuoCX1teRGzhjTVCgF2lRCQy0sfq?=
- =?us-ascii?Q?d8VPmrTiSU/C8+g/z5VWRS6qqYKg8iK7jI957EN0CrTdpl14TW0IgPjgCHYc?=
- =?us-ascii?Q?b+HT0XkvBgR0Rex1HsXoqsTLdRx1adb29LFJv8vMGvobq6r5Jgqnr370Q/9C?=
- =?us-ascii?Q?aSSshPSeFlo47CiTxvaTeq4Dhlzy2K5ED65+p1ToLMDS2/T39mEGGhyVWknB?=
- =?us-ascii?Q?k2QJOvdVcBdkiDlZaLuBUamYcfJ6ywGXPRC81jspu3pOyLdSXVT+Zo42YQ2O?=
- =?us-ascii?Q?1wlJZ9yC2CRYq5SsnzoJhb5vZjwC3w8ztqPgGdBD8XFHuk8zTTVovjywFmM4?=
- =?us-ascii?Q?6GTYGr8HMgWVSY2o9mH4Aa5rddYhXI11R/co5cQG0BG7r3XiQbUeIqt1yCgk?=
- =?us-ascii?Q?+FCnk9nEoIgOjhtUl4AcR0OiOcdp2MlykJyocq+L2dZPa6bnUqKAuCA7TsQ8?=
- =?us-ascii?Q?I49fAtv3kAwUgY2o51VsuAe2XQAYC/lHncbPvfuSK70O1/QeakFVZaMfI+pV?=
- =?us-ascii?Q?Q91ez88NReit9ldeE5RFbAy9AqSN7Tos4DqDKaCziJdAYf50FcHWkHJli7u1?=
- =?us-ascii?Q?DPtKyxQPyOqWLD2qIwpEgBdsV/E5HbOt2dnf9M7SbVaiuw7fBr3Q/RKwgBuF?=
- =?us-ascii?Q?7tiu++Cx7KND7a5c07zAi0AnGwH4TfD5hCoBM1+VWuEPeC/KEJzTh8cYt3Ry?=
- =?us-ascii?Q?IqTvHjYK8ApEzNkr5HZRMx8xPWZm68/Q1V2q/dXhxCYaSOLHENrX+iJy8OLJ?=
- =?us-ascii?Q?+51AziakYJUTnZ+HfrbECwwda8Cc4ZaDMVpk95zZJ7Nn0LAWDLmr7hgcBRqr?=
- =?us-ascii?Q?jDblsG/T4jNnFtlZP8+3I+PcnQbrFgzJrsM88pKdLM/k43pbQXEJq7HLULc/?=
- =?us-ascii?Q?FxnzJNpca6zzlSxoVriCqHjDyMm3ZaqBNiucy87avjElecu/KwMScO4PdMQK?=
- =?us-ascii?Q?VAW3osgcsHZEs3xsJHN+gQ+Tf5UWQFWY3ogI4V3oJ2nWCXzgPtrZucROfDjH?=
- =?us-ascii?Q?djSTKqb7aAQF42bVoOxA1vlJIHE5GazuEwMb88t3hdqf5T2o2YIhObc4GJrK?=
- =?us-ascii?Q?TtyQWTVh4PV8uegLcJcF4+yW9V9HOjamLWtRwVQqs+59Dd9uSAfYguvelcyw?=
- =?us-ascii?Q?UMoTApZ4ubmNR+97KDPqMf2p0Mktgt0NGEmWE+NwSx5hU9p24MT/jHLfeaMi?=
- =?us-ascii?Q?GPsS6sgdBgi1puNHnkmjbaM2jbtEFcrA7zG+NjBba8eSjpZWkXkJkzQ9uSnt?=
- =?us-ascii?Q?q6WnrkU9AtQkc1DSRCvBiF/zqzwnAWW0h4vngIq1f5jAHwIlXkHhTgU3s3aT?=
- =?us-ascii?Q?mxZfvu63/fGRZQAYbyVKnXCCZqSLOsmSjZwej/NE?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a205ce03-d1ba-4d93-36f1-08daf526abf2
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2023 05:26:07.1967
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ImFOAavRVQL/AoC4VrZ1V5avyPnidEXdhr6CWi83HEwVLKMTDllzU08I6As8JBOjkjBdBzUgMeKz7QrDdRLhyA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB8043
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-in the E.2.1 of Rec. ITU-T H.264 (06/2019),
-0 of cloour primaries is reserved, and 2 is unspecified.
-driver can map V4L2_COLORSPACE_LAST to 0,
-and map V4L2_COLORSPACE_DEFAULT to 2.
+After commit f1ad5338a4d5 ("of: Fix "dma-ranges" handling for bus
+controllers"), the dma-ranges is not allowed for dts leaf node.
+but we still would like to separate the different masters into
+different iova regions. Thus we adjust the internal flow, separate
+the 16GB iova range by the master HW larbid/portid and add the
+dma-ranges property in the parent "soc" node. This also could avoid
+the users forget/abuse the iova regions.
 
-v4l2_xfer_func and v4l2_ycbcr_encoding are similar case.
+The commit f1ad5338a4d5 doesn't introduce the regression for us in
+upstream, currently mt8195 vcodec/jpeg use the parent/child node.
+thus I don't add "Fixes:" tag.
 
-Fixes: 3cd084519c6f ("media: amphion: add vpu v4l2 m2m support")
-Signed-off-by: Ming Qian <ming.qian@nxp.com>
----
- drivers/media/platform/amphion/vpu_color.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+In this series, I add functions for mt8192/mt8195/mt8186, mt8188 will
+be in its special patchset. and the previous mt8173/mt8183...support
+0-4GB only, no need this function.
 
-diff --git a/drivers/media/platform/amphion/vpu_color.c b/drivers/media/platform/amphion/vpu_color.c
-index 80b9a53fd1c1..4ae435cbc5cd 100644
---- a/drivers/media/platform/amphion/vpu_color.c
-+++ b/drivers/media/platform/amphion/vpu_color.c
-@@ -17,7 +17,7 @@
- #include "vpu_helpers.h"
- 
- static const u8 colorprimaries[] = {
--	0,
-+	V4L2_COLORSPACE_LAST,
- 	V4L2_COLORSPACE_REC709,         /*Rec. ITU-R BT.709-6*/
- 	0,
- 	0,
-@@ -31,7 +31,7 @@ static const u8 colorprimaries[] = {
- };
- 
- static const u8 colortransfers[] = {
--	0,
-+	V4L2_XFER_FUNC_LAST,
- 	V4L2_XFER_FUNC_709,             /*Rec. ITU-R BT.709-6*/
- 	0,
- 	0,
-@@ -53,7 +53,7 @@ static const u8 colortransfers[] = {
- };
- 
- static const u8 colormatrixcoefs[] = {
--	0,
-+	V4L2_YCBCR_ENC_LAST,
- 	V4L2_YCBCR_ENC_709,              /*Rec. ITU-R BT.709-6*/
- 	0,
- 	0,
+Base on v6.2-rc3.
+
+Yong Wu (10):
+  dt-bindings: media: mediatek,vcodec: Remove dma-ranges property
+  dt-bindings: media: mediatek,jpeg: Remove dma-ranges property
+  iommu/mediatek: Get regionid from larb/port id
+  iommu/mediatek: mt8195: Add larb_region_msk
+  iommu/mediatek: mt8186: add larb_region_msk
+  iommu/mediatek: mt8192: add larb_region_msk
+  iommu/mediatek: Add a gap for the iova regions
+  arm64: dts: mt8195: Add dma-ranges for the parent "soc" node
+  arm64: dts: mt8195: Remove the unnecessary dma-ranges
+  arm64: dts: mt8186: Add dma-ranges for the parent "soc" node
+
+ .../media/mediatek,mt8195-jpegdec.yaml        |  7 --
+ .../media/mediatek,mt8195-jpegenc.yaml        |  7 --
+ .../media/mediatek,vcodec-decoder.yaml        |  5 -
+ .../media/mediatek,vcodec-encoder.yaml        |  5 -
+ .../media/mediatek,vcodec-subdev-decoder.yaml |  7 --
+ .../bindings/media/mediatek-jpeg-encoder.yaml |  5 -
+ arch/arm64/boot/dts/mediatek/mt8186.dtsi      |  1 +
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  2 +-
+ drivers/iommu/mtk_iommu.c                     | 95 ++++++++++++++-----
+ 9 files changed, 72 insertions(+), 62 deletions(-)
+
 -- 
-2.38.1
+2.18.0
+
 
