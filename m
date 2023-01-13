@@ -2,30 +2,30 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4ED5CC61DB3
-	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 09:57:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 230E7C678D8
+	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 09:57:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234855AbjAMJ5m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Jan 2023 04:57:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45214 "EHLO
+        id S240938AbjAMJ5p (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Jan 2023 04:57:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234010AbjAMJ5F (ORCPT
+        with ESMTP id S240865AbjAMJ5L (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:57:05 -0500
+        Fri, 13 Jan 2023 04:57:11 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7500168CA2
-        for <linux-media@vger.kernel.org>; Fri, 13 Jan 2023 01:54:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322C76ADB7
+        for <linux-media@vger.kernel.org>; Fri, 13 Jan 2023 01:54:21 -0800 (PST)
 Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <m.tretter@pengutronix.de>)
-        id 1pGGlM-0003cp-W1; Fri, 13 Jan 2023 10:54:17 +0100
+        id 1pGGlO-0003cp-2u; Fri, 13 Jan 2023 10:54:18 +0100
 From:   Michael Tretter <m.tretter@pengutronix.de>
-Date:   Fri, 13 Jan 2023 10:54:19 +0100
-Subject: [PATCH v2 13/16] media: imx-pxp: Implement frame size enumeration
+Date:   Fri, 13 Jan 2023 10:54:21 +0100
+Subject: [PATCH v2 15/16] media: imx-pxp: Use non-threaded IRQ
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230112-imx-pxp-v2-13-e2281da1db55@pengutronix.de>
+Message-Id: <20230112-imx-pxp-v2-15-e2281da1db55@pengutronix.de>
 References: <20230112-imx-pxp-v2-0-e2281da1db55@pengutronix.de>
 In-Reply-To: <20230112-imx-pxp-v2-0-e2281da1db55@pengutronix.de>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
@@ -50,60 +50,41 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Implement support for the VIDIOC_ENUM_FRAMESIZES ioctl.
+There's no need to use threaded IRQs with the PXP, as the interrupt
+handler doesn't need to sleep and doesn't perform any time-consuming
+operation. Switch to regular IRQ handler.
+
+This fixes lockups of the PXP noticed on i.MX7, where the PXP would stop
+generating interrupts after a variable number of frames (from a few
+dozens to a few hundreds). The root cause is however unknown.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Reviewed-by: Michael Tretter <m.tretter@pengutronix.de>
 Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 ---
-Changes since v1:
+Changes since v2:
 
-- Use 1 << ALIGN_*
-- Pick from https://lore.kernel.org/linux-media/20230112172507.30579-1-laurent.pinchart@ideasonboard.com/
+- Drop IRQF_TRIGGER_HIGH
+- pick from https://lore.kernel.org/linux-media/20230112172507.30579-1-laurent.pinchart@ideasonboard.com/
 ---
- drivers/media/platform/nxp/imx-pxp.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ drivers/media/platform/nxp/imx-pxp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/platform/nxp/imx-pxp.c b/drivers/media/platform/nxp/imx-pxp.c
-index 9e2e522d9241..f34eba62f7d6 100644
+index 124d272194d1..b8a7e49cbc08 100644
 --- a/drivers/media/platform/nxp/imx-pxp.c
 +++ b/drivers/media/platform/nxp/imx-pxp.c
-@@ -1379,6 +1379,26 @@ static int pxp_s_fmt_vid_out(struct file *file, void *priv,
- 	return 0;
- }
+@@ -1798,8 +1798,8 @@ static int pxp_probe(struct platform_device *pdev)
  
-+static int pxp_enum_framesizes(struct file *file, void *fh,
-+			       struct v4l2_frmsizeenum *fsize)
-+{
-+	if (fsize->index > 0)
-+		return -EINVAL;
-+
-+	if (!find_format(fsize->pixel_format))
-+		return -EINVAL;
-+
-+	fsize->type = V4L2_FRMSIZE_TYPE_STEPWISE;
-+	fsize->stepwise.min_width = MIN_W;
-+	fsize->stepwise.max_width = MAX_W;
-+	fsize->stepwise.step_width = 1 << ALIGN_W;
-+	fsize->stepwise.min_height = MIN_H;
-+	fsize->stepwise.max_height = MAX_H;
-+	fsize->stepwise.step_height = 1 << ALIGN_H;
-+
-+	return 0;
-+}
-+
- static u8 pxp_degrees_to_rot_mode(u32 degrees)
- {
- 	switch (degrees) {
-@@ -1447,6 +1467,8 @@ static const struct v4l2_ioctl_ops pxp_ioctl_ops = {
- 	.vidioc_try_fmt_vid_out	= pxp_try_fmt_vid_out,
- 	.vidioc_s_fmt_vid_out	= pxp_s_fmt_vid_out,
+ 	spin_lock_init(&dev->irqlock);
  
-+	.vidioc_enum_framesizes	= pxp_enum_framesizes,
-+
- 	.vidioc_reqbufs		= v4l2_m2m_ioctl_reqbufs,
- 	.vidioc_querybuf	= v4l2_m2m_ioctl_querybuf,
- 	.vidioc_qbuf		= v4l2_m2m_ioctl_qbuf,
+-	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL, pxp_irq_handler,
+-			IRQF_ONESHOT, dev_name(&pdev->dev), dev);
++	ret = devm_request_irq(&pdev->dev, irq, pxp_irq_handler, 0,
++			       dev_name(&pdev->dev), dev);
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "Failed to request irq: %d\n", ret);
+ 		return ret;
 
 -- 
 2.30.2
