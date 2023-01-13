@@ -2,43 +2,48 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F1E7C61DB3
-	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 09:04:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8918C677F1
+	for <linux-media@archiver.kernel.org>; Fri, 13 Jan 2023 09:04:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240961AbjAMJEB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Jan 2023 04:04:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
+        id S234352AbjAMJEF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Jan 2023 04:04:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237529AbjAMJDf (ORCPT
+        with ESMTP id S238106AbjAMJDg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:03:35 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C146085D;
-        Fri, 13 Jan 2023 01:03:31 -0800 (PST)
-X-UUID: 238c5462932111eda06fc9ecc4dadd91-20230113
+        Fri, 13 Jan 2023 04:03:36 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF10F58D2E;
+        Fri, 13 Jan 2023 01:03:33 -0800 (PST)
+X-UUID: 22a98d8a932111ed945fc101203acc17-20230113
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=pS+OWjxijqtFjcS8F4N9ImdEjhFUpagjlcTfT7BcI+k=;
-        b=ANnKm08xkXFTNcEE3UTfsWDg+/pSpyXuJHR7aO+oOSMU+V9EIrhIL63Gna+nTJz3qmdnwuRUtOENN36scsFJNBYp3pcv4xPL41mOjq8eiFw6SQsnSDTEglwL5DVRA1EC025vCVvAVC0FBrf7rbxEyEGhN+0ii6Win797GXzMKVE=;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=n+RUOk3Rle4lLsgGHrL3lemq9bhmr34XSLUuqCNTckc=;
+        b=DdTHc//uTZWeYLxtkWYVleje6gPt9nio9CIl444BE6KFoAvmEFaQGoa94Og1amKvo+5vtuUAv0kmmaCdhm3ZH67xVP/TfmlUS7tAfDSFaaScQdWr9IDrpaKQhz9+pmdbnEEAQT0u68ClXLaMLC5ZJtXObjB1QUdV0pgfe+7jOtc=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.17,REQID:a121a090-2389-4382-9bc6-d3f12189399b,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:543e81c,CLOUDID:d574baf5-ff42-4fb0-b929-626456a83c14,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
+X-CID-O-INFO: VERSION:1.1.17,REQID:8608efb0-7511-46c7-9f10-012604be4bae,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.17,REQID:8608efb0-7511-46c7-9f10-012604be4bae,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:543e81c,CLOUDID:9574baf5-ff42-4fb0-b929-626456a83c14,B
+        ulkID:230113170327DG2H6TI1,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
+        I:0,OSA:0
+X-CID-APTURL: Status:success,Category:nil,Trust:0,Unknown:0,Malicious:0
 X-CID-BVR: 0,NGT
-X-UUID: 238c5462932111eda06fc9ecc4dadd91-20230113
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+X-UUID: 22a98d8a932111ed945fc101203acc17-20230113
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
         (envelope-from <moudy.ho@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1671334196; Fri, 13 Jan 2023 17:03:25 +0800
+        with ESMTP id 818923578; Fri, 13 Jan 2023 17:03:24 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
  mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 13 Jan 2023 17:03:24 +0800
+ Fri, 13 Jan 2023 17:03:23 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Fri, 13 Jan 2023 17:03:24 +0800
+ 15.2.792.15 via Frontend Transport; Fri, 13 Jan 2023 17:03:23 +0800
 From:   Moudy Ho <moudy.ho@mediatek.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
@@ -49,9 +54,9 @@ CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         <linux-kernel@vger.kernel.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Moudy Ho <moudy.ho@mediatek.com>
-Subject: [PATCH v3 12/13] media: platform: mtk-mdp3: add mt8195 MDP3 component settings
-Date:   Fri, 13 Jan 2023 17:03:20 +0800
-Message-ID: <20230113090321.25128-13-moudy.ho@mediatek.com>
+Subject: [PATCH v3 04/13] media: platform: mtk-mdp3: add support second sets of MUTEX
+Date:   Fri, 13 Jan 2023 17:03:12 +0800
+Message-ID: <20230113090321.25128-5-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20230113090321.25128-1-moudy.ho@mediatek.com>
 References: <20230113090321.25128-1-moudy.ho@mediatek.com>
@@ -62,1392 +67,375 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Extend the component settings used in MT8195 MDP3.
-Besides, all component settings need to be read in a specific way to
-align shared memory data structure lengths in each platform.
+After configuring the second set of MMSYS (VPPSYS1), a corresponding
+second set of MUTEX (MUTEX2) is required to help handle SOF/EOF
 
 Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 ---
- .../platform/mediatek/mdp3/mtk-mdp3-cmdq.c    |  57 ++
- .../platform/mediatek/mdp3/mtk-mdp3-comp.c    | 781 +++++++++++++++++-
- 2 files changed, 836 insertions(+), 2 deletions(-)
+ .../platform/mediatek/mdp3/mtk-mdp3-cmdq.c    | 136 ++++++++++++------
+ .../platform/mediatek/mdp3/mtk-mdp3-core.c    |  30 +++-
+ .../platform/mediatek/mdp3/mtk-mdp3-core.h    |   9 ++
+ 3 files changed, 123 insertions(+), 52 deletions(-)
 
 diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c
-index f21dfce9098e..9b65e653cae6 100644
+index b2ae2f88cbb9..2936701a9cc9 100644
 --- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c
 +++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c
-@@ -38,6 +38,10 @@ static bool is_output_disabled(int p_id, const struct img_compparam *param, u32
- 		num = CFG_COMP(MT8183, param, num_subfrms);
- 		dis_output = CFG_COMP(MT8183, param, frame.output_disable);
- 		dis_tile = CFG_COMP(MT8183, param, frame.output_disable);
-+	} else if (CFG_CHECK(MT8195, p_id)) {
-+		num = CFG_COMP(MT8195, param, num_subfrms);
-+		dis_output = CFG_COMP(MT8195, param, frame.output_disable);
-+		dis_tile = CFG_COMP(MT8195, param, frame.output_disable);
- 	}
- 
+@@ -43,40 +43,74 @@ static bool is_output_disabled(int p_id, const struct img_compparam *param, u32
  	return (count < num) ? (dis_output || dis_tile) : true;
-@@ -113,6 +117,8 @@ static int mdp_path_subfrm_require(const struct mdp_path *path,
+ }
  
- 	if (CFG_CHECK(MT8183, p_id))
- 		num_comp = CFG_GET(MT8183, path->config, num_components);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		num_comp = CFG_GET(MT8195, path->config, num_components);
- 
- 	/* Decide which mutex to use based on the current pipeline */
- 	index = __get_pipe(path->mdp_dev, path->comps[0].comp->public_id);
-@@ -126,6 +132,9 @@ static int mdp_path_subfrm_require(const struct mdp_path *path,
- 
- 		if (CFG_CHECK(MT8183, p_id))
- 			inner_id = CFG_GET(MT8183, path->config, components[index].type);
-+		else if (CFG_CHECK(MT8195, p_id))
-+			inner_id = CFG_GET(MT8195, path->config, components[index].type);
-+
- 		if (is_dummy_engine(path->mdp_dev, inner_id))
- 			continue;
- 		ctx = &path->comps[index];
-@@ -166,12 +175,17 @@ static int mdp_path_subfrm_run(const struct mdp_path *path,
- 
- 	if (CFG_CHECK(MT8183, p_id))
- 		num_comp = CFG_GET(MT8183, path->config, num_components);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		num_comp = CFG_GET(MT8195, path->config, num_components);
- 
- 	/* Wait WROT SRAM shared to DISP RDMA */
- 	/* Clear SOF event for each engine */
- 	for (index = 0; index < num_comp; index++) {
- 		if (CFG_CHECK(MT8183, p_id))
- 			inner_id = CFG_GET(MT8183, path->config, components[index].type);
-+		else if (CFG_CHECK(MT8195, p_id))
-+			inner_id = CFG_GET(MT8195, path->config, components[index].type);
-+
- 		if (is_dummy_engine(path->mdp_dev, inner_id))
- 			continue;
- 		ctx = &path->comps[index];
-@@ -190,6 +204,9 @@ static int mdp_path_subfrm_run(const struct mdp_path *path,
- 	for (index = 0; index < num_comp; index++) {
- 		if (CFG_CHECK(MT8183, p_id))
- 			inner_id = CFG_GET(MT8183, path->config, components[index].type);
-+		else if (CFG_CHECK(MT8195, p_id))
-+			inner_id = CFG_GET(MT8195, path->config, components[index].type);
-+
- 		if (is_dummy_engine(path->mdp_dev, inner_id))
- 			continue;
- 		ctx = &path->comps[index];
-@@ -212,6 +229,8 @@ static int mdp_path_ctx_init(struct mdp_dev *mdp, struct mdp_path *path)
- 
- 	if (CFG_CHECK(MT8183, p_id))
- 		num_comp = CFG_GET(MT8183, path->config, num_components);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		num_comp = CFG_GET(MT8195, path->config, num_components);
- 
- 	if (num_comp < 1)
- 		return -EINVAL;
-@@ -221,10 +240,15 @@ static int mdp_path_ctx_init(struct mdp_dev *mdp, struct mdp_path *path)
- 
- 		if (CFG_CHECK(MT8183, p_id))
- 			inner_id = CFG_GET(MT8183, path->config, components[index].type);
-+		else if (CFG_CHECK(MT8195, p_id))
-+			inner_id = CFG_GET(MT8195, path->config, components[index].type);
-+
- 		if (is_dummy_engine(path->mdp_dev, inner_id))
- 			continue;
- 		if (CFG_CHECK(MT8183, p_id))
- 			param = (void *)CFG_ADDR(MT8183, path->config, components[index]);
-+		else if (CFG_CHECK(MT8195, p_id))
-+			param = (void *)CFG_ADDR(MT8195, path->config, components[index]);
- 		ret = mdp_comp_ctx_config(mdp, &path->comps[index],
- 					  param, path->param);
- 		if (ret)
-@@ -248,9 +272,13 @@ static int mdp_path_config_subfrm(struct mdp_cmdq_cmd *cmd,
- 
- 	if (CFG_CHECK(MT8183, p_id))
- 		num_comp = CFG_GET(MT8183, path->config, num_components);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		num_comp = CFG_GET(MT8195, path->config, num_components);
- 
- 	if (CFG_CHECK(MT8183, p_id))
- 		ctrl = CFG_ADDR(MT8183, path->config, ctrls[count]);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		ctrl = CFG_ADDR(MT8195, path->config, ctrls[count]);
- 
- 	/* Acquire components */
- 	ret = mdp_path_subfrm_require(path, cmd, &pipe, count);
-@@ -266,6 +294,9 @@ static int mdp_path_config_subfrm(struct mdp_cmdq_cmd *cmd,
- 	for (index = (num_comp - 1); index >= 0; index--) {
- 		if (CFG_CHECK(MT8183, p_id))
- 			inner_id = CFG_GET(MT8183, path->config, components[index].type);
-+		else if (CFG_CHECK(MT8195, p_id))
-+			inner_id = CFG_GET(MT8195, path->config, components[index].type);
-+
- 		if (is_dummy_engine(path->mdp_dev, inner_id))
- 			continue;
- 		ctx = &path->comps[index];
-@@ -283,6 +314,9 @@ static int mdp_path_config_subfrm(struct mdp_cmdq_cmd *cmd,
- 	for (index = 0; index < num_comp; index++) {
- 		if (CFG_CHECK(MT8183, p_id))
- 			inner_id = CFG_GET(MT8183, path->config, components[index].type);
-+		else if (CFG_CHECK(MT8195, p_id))
-+			inner_id = CFG_GET(MT8195, path->config, components[index].type);
-+
- 		if (is_dummy_engine(path->mdp_dev, inner_id))
- 			continue;
- 		ctx = &path->comps[index];
-@@ -296,6 +330,9 @@ static int mdp_path_config_subfrm(struct mdp_cmdq_cmd *cmd,
- 	for (index = 0; index < num_comp; index++) {
- 		if (CFG_CHECK(MT8183, p_id))
- 			inner_id = CFG_GET(MT8183, path->config, components[index].type);
-+		else if (CFG_CHECK(MT8195, p_id))
-+			inner_id = CFG_GET(MT8195, path->config, components[index].type);
-+
- 		if (is_dummy_engine(path->mdp_dev, inner_id))
- 			continue;
- 		ctx = &path->comps[index];
-@@ -325,15 +362,22 @@ static int mdp_path_config(struct mdp_dev *mdp, struct mdp_cmdq_cmd *cmd,
- 
- 	if (CFG_CHECK(MT8183, p_id))
- 		num_comp = CFG_GET(MT8183, path->config, num_components);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		num_comp = CFG_GET(MT8195, path->config, num_components);
- 
- 	if (CFG_CHECK(MT8183, p_id))
- 		num_sub = CFG_GET(MT8183, path->config, num_subfrms);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		num_sub = CFG_GET(MT8195, path->config, num_subfrms);
- 
- 	/* Config path frame */
- 	/* Reset components */
- 	for (index = 0; index < num_comp; index++) {
- 		if (CFG_CHECK(MT8183, p_id))
- 			inner_id = CFG_GET(MT8183, path->config, components[index].type);
-+		else if (CFG_CHECK(MT8195, p_id))
-+			inner_id = CFG_GET(MT8195, path->config, components[index].type);
-+
- 		if (is_dummy_engine(path->mdp_dev, inner_id))
- 			continue;
- 		ctx = &path->comps[index];
-@@ -348,11 +392,16 @@ static int mdp_path_config(struct mdp_dev *mdp, struct mdp_cmdq_cmd *cmd,
- 
- 		if (CFG_CHECK(MT8183, p_id))
- 			inner_id = CFG_GET(MT8183, path->config, components[index].type);
-+		else if (CFG_CHECK(MT8195, p_id))
-+			inner_id = CFG_GET(MT8195, path->config, components[index].type);
-+
- 		if (is_dummy_engine(path->mdp_dev, inner_id))
- 			continue;
- 
- 		if (CFG_CHECK(MT8183, p_id))
- 			out = CFG_COMP(MT8183, ctx->param, outputs[0]);
-+		else if (CFG_CHECK(MT8195, p_id))
-+			out = CFG_COMP(MT8195, ctx->param, outputs[0]);
- 
- 		compose = path->composes[out];
- 		ctx = &path->comps[index];
-@@ -371,6 +420,9 @@ static int mdp_path_config(struct mdp_dev *mdp, struct mdp_cmdq_cmd *cmd,
- 	for (index = 0; index < num_comp; index++) {
- 		if (CFG_CHECK(MT8183, p_id))
- 			inner_id = CFG_GET(MT8183, path->config, components[index].type);
-+		else if (CFG_CHECK(MT8195, p_id))
-+			inner_id = CFG_GET(MT8195, path->config, components[index].type);
-+
- 		if (is_dummy_engine(path->mdp_dev, inner_id))
- 			continue;
- 		ctx = &path->comps[index];
-@@ -525,6 +577,8 @@ int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
- 
- 	if (CFG_CHECK(MT8183, p_id))
- 		num_comp = CFG_GET(MT8183, param->config, num_components);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		num_comp = CFG_GET(MT8195, param->config, num_components);
- 	else
- 		goto err_destroy_pkt;
- 	comps = kcalloc(num_comp, sizeof(*comps), GFP_KERNEL);
-@@ -578,6 +632,9 @@ int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
- 
- 		if (CFG_CHECK(MT8183, p_id))
- 			inner_id = CFG_GET(MT8183, path->config, components[i].type);
-+		else if (CFG_CHECK(MT8195, p_id))
-+			inner_id = CFG_GET(MT8195, path->config, components[i].type);
-+
- 		if (is_dummy_engine(mdp, inner_id))
- 			continue;
- 		memcpy(&comps[i], path->comps[i].comp,
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-index 1bce431414c6..3ae04ef7d4a7 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-@@ -15,6 +15,14 @@
- #include "mdp_reg_rdma.h"
- #include "mdp_reg_ccorr.h"
- #include "mdp_reg_rsz.h"
-+#include "mdp_reg_fg.h"
-+#include "mdp_reg_aal.h"
-+#include "mdp_reg_tdshp.h"
-+#include "mdp_reg_hdr.h"
-+#include "mdp_reg_color.h"
-+#include "mdp_reg_ovl.h"
-+#include "mdp_reg_pad.h"
-+#include "mdp_reg_merge.h"
- #include "mdp_reg_wrot.h"
- #include "mdp_reg_wdma.h"
- 
-@@ -114,6 +122,7 @@ static int config_rdma_frame(struct mdp_comp_ctx *ctx,
- 	bool en_ufo = MDP_COLOR_IS_UFP(colorformat);
- 	phys_addr_t base = ctx->comp->reg_base;
- 	u8 subsys_id = ctx->comp->subsys_id;
-+	u32 rdma_con_mask = 0;
- 	u32 reg = 0;
- 
- 	if (mdp_cfg && mdp_cfg->rdma_support_10bit) {
-@@ -134,6 +143,8 @@ static int config_rdma_frame(struct mdp_comp_ctx *ctx,
- 	/* Setup source frame info */
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, rdma.src_ctrl);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, rdma.src_ctrl);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_CON, reg,
- 		     0x03C8FE0F);
- 
-@@ -142,69 +153,161 @@ static int config_rdma_frame(struct mdp_comp_ctx *ctx,
- 			/* Setup source buffer base */
- 			if (CFG_CHECK(MT8183, p_id))
- 				reg = CFG_COMP(MT8183, ctx->param, rdma.ufo_dec_y);
-+			else if (CFG_CHECK(MT8195, p_id))
-+				reg = CFG_COMP(MT8195, ctx->param, rdma.ufo_dec_y);
- 			MM_REG_WRITE(cmd, subsys_id,
- 				     base, MDP_RDMA_UFO_DEC_LENGTH_BASE_Y,
- 				     reg, 0xFFFFFFFF);
-+
- 			if (CFG_CHECK(MT8183, p_id))
- 				reg = CFG_COMP(MT8183, ctx->param, rdma.ufo_dec_c);
-+			else if (CFG_CHECK(MT8195, p_id))
-+				reg = CFG_COMP(MT8195, ctx->param, rdma.ufo_dec_c);
- 			MM_REG_WRITE(cmd, subsys_id,
- 				     base, MDP_RDMA_UFO_DEC_LENGTH_BASE_C,
- 				     reg, 0xFFFFFFFF);
-+
- 			/* Set 10bit source frame pitch */
- 			if (block10bit) {
- 				if (CFG_CHECK(MT8183, p_id))
- 					reg = CFG_COMP(MT8183, ctx->param, rdma.mf_bkgd_in_pxl);
-+				else if (CFG_CHECK(MT8195, p_id))
-+					reg = CFG_COMP(MT8195, ctx->param, rdma.mf_bkgd_in_pxl);
- 				MM_REG_WRITE(cmd, subsys_id,
- 					     base, MDP_RDMA_MF_BKGD_SIZE_IN_PXL,
- 					     reg, 0x001FFFFF);
- 			}
- 		}
+-static int mdp_path_subfrm_require(const struct mdp_path *path,
+-				   struct mdp_cmdq_cmd *cmd,
+-				   s32 *mutex_id, u32 count)
++static struct mtk_mutex *__get_mutex(const struct mdp_dev *mdp_dev,
++				     const struct mdp_pipe_info *p)
+ {
+-	const int p_id = path->mdp_dev->mdp_data->mdp_plat_id;
+-	const struct mdp_comp_ctx *ctx;
+-	const struct mtk_mdp_driver_data *data = path->mdp_dev->mdp_data;
+-	struct device *dev = &path->mdp_dev->pdev->dev;
+-	struct mtk_mutex **mutex = path->mdp_dev->mdp_mutex;
+-	int id, index;
+-	u32 num_comp = 0;
++	struct mtk_mutex *m;
  
 -	if (CFG_CHECK(MT8183, p_id))
-+	if (CFG_CHECK(MT8183, p_id)) {
- 		reg = CFG_COMP(MT8183, ctx->param, rdma.control);
-+		rdma_con_mask = 0x1110;
-+	} else if (CFG_CHECK(MT8195, p_id)) {
-+		reg = CFG_COMP(MT8195, ctx->param, rdma.control);
-+		rdma_con_mask = 0x1130;
-+	}
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_CON, reg,
--		     0x1110);
-+		     rdma_con_mask);
-+
- 	/* Setup source buffer base */
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, rdma.iova[0]);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, rdma.iova[0]);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_BASE_0, reg,
- 		     0xFFFFFFFF);
-+
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, rdma.iova[1]);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, rdma.iova[1]);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_BASE_1, reg,
- 		     0xFFFFFFFF);
-+
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, rdma.iova[2]);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, rdma.iova[2]);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_BASE_2, reg,
- 		     0xFFFFFFFF);
-+
- 	/* Setup source buffer end */
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, rdma.iova_end[0]);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, rdma.iova_end[0]);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_END_0,
- 		     reg, 0xFFFFFFFF);
-+
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, rdma.iova_end[1]);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, rdma.iova_end[1]);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_END_1,
- 		     reg, 0xFFFFFFFF);
-+
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, rdma.iova_end[2]);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, rdma.iova_end[2]);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_END_2,
- 		     reg, 0xFFFFFFFF);
-+
- 	/* Setup source frame pitch */
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, rdma.mf_bkgd);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, rdma.mf_bkgd);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_MF_BKGD_SIZE_IN_BYTE,
- 		     reg, 0x001FFFFF);
-+
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, rdma.sf_bkgd);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, rdma.sf_bkgd);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SF_BKGD_SIZE_IN_BYTE,
- 		     reg, 0x001FFFFF);
-+
- 	/* Setup color transform */
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, rdma.transform);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, rdma.transform);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_TRANSFORM_0,
- 		     reg, 0x0F110000);
+-		num_comp = CFG_GET(MT8183, path->config, num_components);
++	if (p->mmsys_id)
++		m = mdp_dev->mdp_mutex2[p->mutex_id];
++	else
++		m = mdp_dev->mdp_mutex[p->mutex_id];
  
-+	if (mdp_cfg && mdp_cfg->rdma_esl_setting) {
-+		if (CFG_CHECK(MT8195, p_id))
-+			reg = CFG_COMP(MT8195, ctx->param, rdma.dmabuf_con0);
-+		MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_DMABUF_CON_0,
-+			     reg, 0x0FFF00FF);
+-	/* Decide which mutex to use based on the current pipeline */
+-	switch (path->comps[0].comp->public_id) {
++	return m;
++}
 +
-+		if (CFG_CHECK(MT8195, p_id))
-+			reg = CFG_COMP(MT8195, ctx->param, rdma.ultra_th_high_con0);
-+		MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_ULTRA_TH_HIGH_CON_0,
-+			     reg, 0x3FFFFFFF);
++static enum mdp_pipe_id __get_pipe(const struct mdp_dev *mdp_dev,
++				   enum mtk_mdp_comp_id id)
++{
++	enum mdp_pipe_id pipe_id;
 +
-+		if (CFG_CHECK(MT8195, p_id))
-+			reg = CFG_COMP(MT8195, ctx->param, rdma.ultra_th_low_con0);
-+		MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_ULTRA_TH_LOW_CON_0,
-+			     reg, 0x3FFFFFFF);
-+
-+		if (CFG_CHECK(MT8195, p_id))
-+			reg = CFG_COMP(MT8195, ctx->param, rdma.dmabuf_con1);
-+		MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_DMABUF_CON_1,
-+			     reg, 0x0F7F007F);
-+
-+		if (CFG_CHECK(MT8195, p_id))
-+			reg = CFG_COMP(MT8195, ctx->param, rdma.ultra_th_high_con1);
-+		MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_ULTRA_TH_HIGH_CON_1,
-+			     reg, 0x3FFFFFFF);
-+
-+		if (CFG_CHECK(MT8195, p_id))
-+			reg = CFG_COMP(MT8195, ctx->param, rdma.ultra_th_low_con1);
-+		MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_ULTRA_TH_LOW_CON_1,
-+			     reg, 0x3FFFFFFF);
-+
-+		if (CFG_CHECK(MT8195, p_id))
-+			reg = CFG_COMP(MT8195, ctx->param, rdma.dmabuf_con2);
-+		MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_DMABUF_CON_2,
-+			     reg, 0x0F3F003F);
-+
-+		if (CFG_CHECK(MT8195, p_id))
-+			reg = CFG_COMP(MT8195, ctx->param, rdma.ultra_th_high_con2);
-+		MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_ULTRA_TH_HIGH_CON_2,
-+			     reg, 0x3FFFFFFF);
-+
-+		if (CFG_CHECK(MT8195, p_id))
-+			reg = CFG_COMP(MT8195, ctx->param, rdma.ultra_th_low_con2);
-+		MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_ULTRA_TH_LOW_CON_2,
-+			     reg, 0x3FFFFFFF);
-+
-+		if (CFG_CHECK(MT8195, p_id))
-+			reg = CFG_COMP(MT8195, ctx->param, rdma.dmabuf_con3);
-+		MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_DMABUF_CON_3,
-+			     reg, 0x0F3F003F);
-+	}
-+
- 	return 0;
- }
- 
-@@ -226,6 +329,8 @@ static int config_rdma_subfrm(struct mdp_comp_ctx *ctx,
- 	/* Set Y pixel offset */
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, rdma.subfrms[index].offset[0]);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, rdma.subfrms[index].offset[0]);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_OFFSET_0,
- 		     reg, 0xFFFFFFFF);
- 
-@@ -234,6 +339,8 @@ static int config_rdma_subfrm(struct mdp_comp_ctx *ctx,
- 		if (mdp_cfg->rdma_support_10bit && block10bit && en_ufo) {
- 			if (CFG_CHECK(MT8183, p_id))
- 				reg = CFG_COMP(MT8183, ctx->param, rdma.subfrms[index].offset_0_p);
-+			else if (CFG_CHECK(MT8195, p_id))
-+				reg = CFG_COMP(MT8195, ctx->param, rdma.subfrms[index].offset_0_p);
- 			MM_REG_WRITE(cmd, subsys_id, base,
- 				     MDP_RDMA_SRC_OFFSET_0_P,
- 				     reg, 0xFFFFFFFF);
-@@ -243,32 +350,49 @@ static int config_rdma_subfrm(struct mdp_comp_ctx *ctx,
- 	/* Set U pixel offset */
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, rdma.subfrms[index].offset[1]);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, rdma.subfrms[index].offset[1]);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_OFFSET_1,
- 		     reg, 0xFFFFFFFF);
-+
- 	/* Set V pixel offset */
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, rdma.subfrms[index].offset[2]);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, rdma.subfrms[index].offset[2]);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_OFFSET_2,
- 		     reg, 0xFFFFFFFF);
-+
- 	/* Set source size */
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, rdma.subfrms[index].src);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, rdma.subfrms[index].src);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_MF_SRC_SIZE, reg,
- 		     0x1FFF1FFF);
-+
- 	/* Set target size */
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, rdma.subfrms[index].clip);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, rdma.subfrms[index].clip);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_MF_CLIP_SIZE,
- 		     reg, 0x1FFF1FFF);
-+
- 	/* Set crop offset */
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, rdma.subfrms[index].clip_ofst);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, rdma.subfrms[index].clip_ofst);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_MF_OFFSET_1,
- 		     reg, 0x003F001F);
- 
- 	if (CFG_CHECK(MT8183, p_id)) {
- 		csf_l = CFG_COMP(MT8183, ctx->param, subfrms[index].in.left);
- 		csf_r = CFG_COMP(MT8183, ctx->param, subfrms[index].in.right);
-+	} else if (CFG_CHECK(MT8195, p_id)) {
-+		csf_l = CFG_COMP(MT8195, ctx->param, subfrms[index].in.left);
-+		csf_r = CFG_COMP(MT8195, ctx->param, subfrms[index].in.right);
++	switch (id) {
+ 	case MDP_COMP_RDMA0:
+-		index = MDP_PIPE_RDMA0;
++		pipe_id = MDP_PIPE_RDMA0;
+ 		break;
+ 	case MDP_COMP_ISP_IMGI:
+-		index = MDP_PIPE_IMGI;
++		pipe_id = MDP_PIPE_IMGI;
+ 		break;
+ 	case MDP_COMP_WPEI:
+-		index = MDP_PIPE_WPEI;
++		pipe_id = MDP_PIPE_WPEI;
+ 		break;
+ 	case MDP_COMP_WPEI2:
+-		index = MDP_PIPE_WPEI2;
++		pipe_id = MDP_PIPE_WPEI2;
++		break;
++	case MDP_COMP_RDMA1:
++		pipe_id = MDP_PIPE_RDMA1;
++		break;
++	case MDP_COMP_RDMA2:
++		pipe_id = MDP_PIPE_RDMA2;
++		break;
++	case MDP_COMP_RDMA3:
++		pipe_id = MDP_PIPE_RDMA3;
+ 		break;
+ 	default:
+-		dev_err(dev, "Unknown pipeline and no mutex is assigned");
+-		return -EINVAL;
++		/* Avoid exceptions when operating MUTEX */
++		pipe_id = MDP_PIPE_RDMA0;
++		dev_err(&mdp_dev->pdev->dev, "Unknown pipeline id %d", id);
++		break;
  	}
- 	if (mdp_cfg && mdp_cfg->rdma_upsample_repeat_only)
- 		if ((csf_r - csf_l + 1) > 320)
-@@ -305,6 +429,61 @@ static const struct mdp_comp_ops rdma_ops = {
- 	.wait_comp_event = wait_rdma_event,
- };
- 
-+static int init_fg(struct mdp_comp_ctx *ctx, struct mdp_cmdq_cmd *cmd)
-+{
-+	phys_addr_t base = ctx->comp->reg_base;
-+	u16 subsys_id = ctx->comp->subsys_id;
+-	*mutex_id = data->pipe_info[index].mutex_id;
 +
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_FG_TRIGGER, BIT(2), BIT(2));
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_FG_TRIGGER, 0x0, BIT(2));
-+
-+	return 0;
++	return pipe_id;
 +}
 +
-+static int config_fg_frame(struct mdp_comp_ctx *ctx,
-+			   struct mdp_cmdq_cmd *cmd,
-+			   const struct v4l2_rect *compose)
++static int mdp_path_subfrm_require(const struct mdp_path *path,
++				   struct mdp_cmdq_cmd *cmd,
++				   struct mdp_pipe_info *p, u32 count)
 +{
-+	phys_addr_t base = ctx->comp->reg_base;
-+	u16 subsys_id = ctx->comp->subsys_id;
-+	u32 reg = 0;
++	const int p_id = path->mdp_dev->mdp_data->mdp_plat_id;
++	const struct mdp_comp_ctx *ctx;
++	const struct mtk_mdp_driver_data *data = path->mdp_dev->mdp_data;
++	struct mtk_mutex *mutex;
++	int id, index;
++	u32 num_comp = 0;
 +
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, fg.ctrl_0);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_FG_FG_CTRL_0, reg, BIT(0));
++	if (CFG_CHECK(MT8183, p_id))
++		num_comp = CFG_GET(MT8183, path->config, num_components);
 +
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, fg.ck_en);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_FG_FG_CK_EN, reg, 0x7);
-+
-+	return 0;
-+}
-+
-+static int config_fg_subfrm(struct mdp_comp_ctx *ctx,
-+			    struct mdp_cmdq_cmd *cmd, u32 index)
-+{
-+	phys_addr_t base = ctx->comp->reg_base;
-+	u16 subsys_id = ctx->comp->subsys_id;
-+	u32 reg = 0;
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, fg.subfrms[index].info_0);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_FG_TILE_INFO_0, reg, 0xFFFFFFFF);
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, fg.subfrms[index].info_1);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_FG_TILE_INFO_1, reg, 0xFFFFFFFF);
-+
-+	return 0;
-+}
-+
-+static const struct mdp_comp_ops fg_ops = {
-+	.get_comp_flag = get_comp_flag,
-+	.init_comp = init_fg,
-+	.config_frame = config_fg_frame,
-+	.config_subfrm = config_fg_subfrm,
-+};
-+
- static int init_rsz(struct mdp_comp_ctx *ctx, struct mdp_cmdq_cmd *cmd)
- {
- 	phys_addr_t base = ctx->comp->reg_base;
-@@ -315,6 +494,10 @@ static int init_rsz(struct mdp_comp_ctx *ctx, struct mdp_cmdq_cmd *cmd)
- 	MM_REG_WRITE(cmd, subsys_id, base, PRZ_ENABLE, 0x0, BIT(16));
- 	/* Enable RSZ */
- 	MM_REG_WRITE(cmd, subsys_id, base, PRZ_ENABLE, BIT(0), BIT(0));
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		mtk_mmsys_vpp_rsz_dcm_config(ctx->comp->mdp_dev->mdp_mmsys2, true);
-+
- 	return 0;
- }
++	/* Decide which mutex to use based on the current pipeline */
++	index = __get_pipe(path->mdp_dev, path->comps[0].comp->public_id);
++	memcpy(p, &data->pipe_info[index], sizeof(struct mdp_pipe_info));
++	mutex = __get_mutex(path->mdp_dev, p);
  
-@@ -322,13 +505,19 @@ static int config_rsz_frame(struct mdp_comp_ctx *ctx,
- 			    struct mdp_cmdq_cmd *cmd,
- 			    const struct v4l2_rect *compose)
- {
-+	const struct mdp_platform_config *mdp_cfg = __get_plat_cfg(ctx);
- 	phys_addr_t base = ctx->comp->reg_base;
- 	u8 subsys_id = ctx->comp->subsys_id;
- 	bool bypass = FALSE;
- 	u32 reg = 0;
- 
-+	if (mdp_cfg && mdp_cfg->rsz_etc_control)
-+		MM_REG_WRITE(cmd, subsys_id, base, RSZ_ETC_CONTROL, 0x0, 0xFFFFFFFF);
+ 	/* Set mutex mod */
+ 	for (index = 0; index < num_comp; index++) {
+@@ -84,29 +118,28 @@ static int mdp_path_subfrm_require(const struct mdp_path *path,
+ 		if (is_output_disabled(p_id, ctx->param, count))
+ 			continue;
+ 		id = ctx->comp->public_id;
+-		mtk_mutex_write_mod(mutex[*mutex_id],
+-				    data->mdp_mutex_table_idx[id], false);
++		mtk_mutex_write_mod(mutex, data->mdp_mutex_table_idx[id], false);
 +
- 	if (CFG_CHECK(MT8183, p_id))
- 		bypass = CFG_COMP(MT8183, ctx->param, frame.bypass);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		bypass = CFG_COMP(MT8195, ctx->param, frame.bypass);
- 
- 	if (bypass) {
- 		/* Disable RSZ */
-@@ -338,20 +527,32 @@ static int config_rsz_frame(struct mdp_comp_ctx *ctx,
- 
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, rsz.control1);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, rsz.control1);
- 	MM_REG_WRITE(cmd, subsys_id, base, PRZ_CONTROL_1, reg,
- 		     0x03FFFDF3);
-+
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, rsz.control2);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, rsz.control2);
- 	MM_REG_WRITE(cmd, subsys_id, base, PRZ_CONTROL_2, reg,
- 		     0x0FFFC290);
-+
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, rsz.coeff_step_x);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, rsz.coeff_step_x);
- 	MM_REG_WRITE(cmd, subsys_id, base, PRZ_HORIZONTAL_COEFF_STEP,
- 		     reg, 0x007FFFFF);
-+
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, rsz.coeff_step_y);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, rsz.coeff_step_y);
- 	MM_REG_WRITE(cmd, subsys_id, base, PRZ_VERTICAL_COEFF_STEP,
- 		     reg, 0x007FFFFF);
-+
- 	return 0;
- }
- 
-@@ -361,21 +562,30 @@ static int config_rsz_subfrm(struct mdp_comp_ctx *ctx,
- 	const struct mdp_platform_config *mdp_cfg = __get_plat_cfg(ctx);
- 	phys_addr_t base = ctx->comp->reg_base;
- 	u8 subsys_id = ctx->comp->subsys_id;
-+	u32 id;
- 	u32 csf_l = 0, csf_r = 0;
- 	u32 reg = 0;
- 
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, rsz.subfrms[index].control2);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, rsz.subfrms[index].control2);
- 	MM_REG_WRITE(cmd, subsys_id, base, PRZ_CONTROL_2, reg,
- 		     0x00003800);
-+
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, rsz.subfrms[index].src);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, rsz.subfrms[index].src);
- 	MM_REG_WRITE(cmd, subsys_id, base, PRZ_INPUT_IMAGE, reg,
- 		     0xFFFFFFFF);
- 
- 	if (CFG_CHECK(MT8183, p_id)) {
- 		csf_l = CFG_COMP(MT8183, ctx->param, subfrms[index].in.left);
- 		csf_r = CFG_COMP(MT8183, ctx->param, subfrms[index].in.right);
-+	} else if (CFG_CHECK(MT8195, p_id)) {
-+		csf_l = CFG_COMP(MT8195, ctx->param, subfrms[index].in.left);
-+		csf_r = CFG_COMP(MT8195, ctx->param, subfrms[index].in.right);
  	}
- 	if (mdp_cfg && mdp_cfg->rsz_disable_dcm_small_sample)
- 		if ((csf_r - csf_l + 1) <= 16)
-@@ -384,37 +594,95 @@ static int config_rsz_subfrm(struct mdp_comp_ctx *ctx,
  
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, subfrms[index].luma.left);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, subfrms[index].luma.left);
- 	MM_REG_WRITE(cmd, subsys_id, base, PRZ_LUMA_HORIZONTAL_INTEGER_OFFSET,
- 		     reg, 0xFFFF);
-+
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, subfrms[index].luma.left_subpix);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, subfrms[index].luma.left_subpix);
- 	MM_REG_WRITE(cmd, subsys_id,
- 		     base, PRZ_LUMA_HORIZONTAL_SUBPIXEL_OFFSET,
- 		     reg, 0x1FFFFF);
-+
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, subfrms[index].luma.top);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, subfrms[index].luma.top);
- 	MM_REG_WRITE(cmd, subsys_id, base, PRZ_LUMA_VERTICAL_INTEGER_OFFSET,
- 		     reg, 0xFFFF);
-+
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, subfrms[index].luma.top_subpix);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, subfrms[index].luma.top_subpix);
- 	MM_REG_WRITE(cmd, subsys_id, base, PRZ_LUMA_VERTICAL_SUBPIXEL_OFFSET,
- 		     reg, 0x1FFFFF);
-+
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, subfrms[index].chroma.left);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, subfrms[index].chroma.left);
- 	MM_REG_WRITE(cmd, subsys_id,
- 		     base, PRZ_CHROMA_HORIZONTAL_INTEGER_OFFSET,
- 		     reg, 0xFFFF);
-+
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, subfrms[index].chroma.left_subpix);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, subfrms[index].chroma.left_subpix);
- 	MM_REG_WRITE(cmd, subsys_id,
- 		     base, PRZ_CHROMA_HORIZONTAL_SUBPIXEL_OFFSET,
- 		     reg, 0x1FFFFF);
+-	mtk_mutex_write_sof(mutex[*mutex_id],
+-			    MUTEX_SOF_IDX_SINGLE_MODE);
++	mtk_mutex_write_sof(mutex, MUTEX_SOF_IDX_SINGLE_MODE);
  
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, rsz.subfrms[index].clip);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, rsz.subfrms[index].clip);
- 	MM_REG_WRITE(cmd, subsys_id, base, PRZ_OUTPUT_IMAGE, reg,
- 		     0xFFFFFFFF);
+ 	return 0;
+ }
  
-+	if (CFG_CHECK(MT8195, p_id)) {
-+		struct mdp_comp *merge;
-+		const struct mtk_mdp_driver_data *data = ctx->comp->mdp_dev->mdp_data;
-+		enum mtk_mdp_comp_id public_id = ctx->comp->public_id;
+ static int mdp_path_subfrm_run(const struct mdp_path *path,
+ 			       struct mdp_cmdq_cmd *cmd,
+-			       s32 *mutex_id, u32 count)
++			       struct mdp_pipe_info *p, u32 count)
+ {
+ 	const int p_id = path->mdp_dev->mdp_data->mdp_plat_id;
+ 	const struct mdp_comp_ctx *ctx;
+ 	struct device *dev = &path->mdp_dev->pdev->dev;
+-	struct mtk_mutex **mutex = path->mdp_dev->mdp_mutex;
++	struct mtk_mutex *mutex;
+ 	int index;
+ 	u32 num_comp = 0;
+ 	s32 event;
+ 
+-	if (-1 == *mutex_id) {
++	if (-1 == p->mutex_id) {
+ 		dev_err(dev, "Incorrect mutex id");
+ 		return -EINVAL;
+ 	}
+@@ -126,7 +159,8 @@ static int mdp_path_subfrm_run(const struct mdp_path *path,
+ 	}
+ 
+ 	/* Enable the mutex */
+-	mtk_mutex_enable_by_cmdq(mutex[*mutex_id], (void *)&cmd->pkt);
++	mutex = __get_mutex(path->mdp_dev, p);
++	mtk_mutex_enable_by_cmdq(mutex, (void *)&cmd->pkt);
+ 
+ 	/* Wait SOF events and clear mutex modules (optional) */
+ 	for (index = 0; index < num_comp; index++) {
+@@ -173,7 +207,7 @@ static int mdp_path_config_subfrm(struct mdp_cmdq_cmd *cmd,
+ 	const struct img_mmsys_ctrl *ctrl = NULL;
+ 	const struct img_mux *set;
+ 	struct mdp_comp_ctx *ctx;
+-	s32 mutex_id;
++	struct mdp_pipe_info pipe;
+ 	int index, ret;
+ 	u32 num_comp = 0;
+ 
+@@ -184,7 +218,7 @@ static int mdp_path_config_subfrm(struct mdp_cmdq_cmd *cmd,
+ 		ctrl = CFG_ADDR(MT8183, path->config, ctrls[count]);
+ 
+ 	/* Acquire components */
+-	ret = mdp_path_subfrm_require(path, cmd, &mutex_id, count);
++	ret = mdp_path_subfrm_require(path, cmd, &pipe, count);
+ 	if (ret)
+ 		return ret;
+ 	/* Enable mux settings */
+@@ -203,7 +237,7 @@ static int mdp_path_config_subfrm(struct mdp_cmdq_cmd *cmd,
+ 			return ret;
+ 	}
+ 	/* Run components */
+-	ret = mdp_path_subfrm_run(path, cmd, &mutex_id, count);
++	ret = mdp_path_subfrm_run(path, cmd, &pipe, count);
+ 	if (ret)
+ 		return ret;
+ 	/* Wait components done */
+@@ -327,13 +361,15 @@ static void mdp_auto_release_work(struct work_struct *work)
+ {
+ 	struct mdp_cmdq_cmd *cmd;
+ 	struct mdp_dev *mdp;
+-	int id;
++	struct mtk_mutex *mutex;
++	enum mdp_pipe_id pipe_id;
+ 
+ 	cmd = container_of(work, struct mdp_cmdq_cmd, auto_release_work);
+ 	mdp = cmd->mdp;
+ 
+-	id = mdp->mdp_data->pipe_info[MDP_PIPE_RDMA0].mutex_id;
+-	mtk_mutex_unprepare(mdp->mdp_mutex[id]);
++	pipe_id = __get_pipe(mdp, cmd->comps[0].public_id);
++	mutex = __get_mutex(mdp, &mdp->mdp_data->pipe_info[pipe_id]);
++	mtk_mutex_unprepare(mutex);
+ 	mdp_comp_clocks_off(&mdp->pdev->dev, cmd->comps,
+ 			    cmd->num_comps);
+ 
+@@ -353,7 +389,7 @@ static void mdp_handle_cmdq_callback(struct mbox_client *cl, void *mssg)
+ 	struct cmdq_cb_data *data;
+ 	struct mdp_dev *mdp;
+ 	struct device *dev;
+-	int id;
++	enum mdp_pipe_id pipe_id;
+ 
+ 	if (!mssg) {
+ 		pr_info("%s:no callback data\n", __func__);
+@@ -378,9 +414,12 @@ static void mdp_handle_cmdq_callback(struct mbox_client *cl, void *mssg)
+ 
+ 	INIT_WORK(&cmd->auto_release_work, mdp_auto_release_work);
+ 	if (!queue_work(mdp->clock_wq, &cmd->auto_release_work)) {
++		struct mtk_mutex *mutex;
 +
-+		switch (public_id) {
-+		case MDP_COMP_RSZ2:
-+			merge = ctx->comp->mdp_dev->comp[MDP_COMP_MERGE2];
-+			break;
-+		case MDP_COMP_RSZ3:
-+			merge = ctx->comp->mdp_dev->comp[MDP_COMP_MERGE3];
-+			break;
-+		default:
-+			goto rsz_subfrm_done;
-+		}
-+		id = data->comp_data[public_id].match.alias_id;
-+		if (CFG_CHECK(MT8195, p_id))
-+			reg = CFG_COMP(MT8195, ctx->param, rsz.subfrms[index].rsz_switch);
-+		mtk_mmsys_vpp_rsz_merge_config(ctx->comp->mdp_dev->mdp_mmsys2, id, reg);
-+
-+		if (CFG_CHECK(MT8195, p_id))
-+			reg = CFG_COMP(MT8195, ctx->param, rsz.subfrms[index].merge_cfg);
-+		MM_REG_WRITE(cmd, merge->subsys_id, merge->reg_base,
-+			     MDP_MERGE_CFG_0, reg, 0xFFFFFFFF);
-+		MM_REG_WRITE(cmd, merge->subsys_id, merge->reg_base,
-+			     MDP_MERGE_CFG_4, reg, 0xFFFFFFFF);
-+		MM_REG_WRITE(cmd, merge->subsys_id, merge->reg_base,
-+			     MDP_MERGE_CFG_24, reg, 0xFFFFFFFF);
-+		MM_REG_WRITE(cmd, merge->subsys_id, merge->reg_base,
-+			     MDP_MERGE_CFG_25, reg, 0xFFFFFFFF);
-+
-+		/* Bypass mode */
-+		MM_REG_WRITE(cmd, merge->subsys_id, merge->reg_base,
-+			     MDP_MERGE_CFG_12, BIT(0), 0xFFFFFFFF);
-+		MM_REG_WRITE(cmd, merge->subsys_id, merge->reg_base,
-+			     MDP_MERGE_ENABLE, BIT(0), 0xFFFFFFFF);
+ 		dev_err(dev, "%s:queue_work fail!\n", __func__);
+-		id = mdp->mdp_data->pipe_info[MDP_PIPE_RDMA0].mutex_id;
+-		mtk_mutex_unprepare(mdp->mdp_mutex[id]);
++		pipe_id = __get_pipe(mdp, cmd->comps[0].public_id);
++		mutex = __get_mutex(mdp, &mdp->mdp_data->pipe_info[pipe_id]);
++		mtk_mutex_unprepare(mutex);
+ 		mdp_comp_clocks_off(&mdp->pdev->dev, cmd->comps,
+ 				    cmd->num_comps);
+ 
+@@ -402,6 +441,8 @@ int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
+ 	struct mdp_comp *comps = NULL;
+ 	struct device *dev = &mdp->pdev->dev;
+ 	const int p_id = mdp->mdp_data->mdp_plat_id;
++	struct mtk_mutex *mutex = NULL;
++	enum mdp_pipe_id pipe_id;
+ 	int i, ret;
+ 	u32 num_comp = 0;
+ 
+@@ -437,13 +478,6 @@ int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
+ 		goto err_free_comps;
+ 	}
+ 
+-	i = mdp->mdp_data->pipe_info[MDP_PIPE_RDMA0].mutex_id;
+-	ret = mtk_mutex_prepare(mdp->mdp_mutex[i]);
+-	if (ret) {
+-		dev_err(dev, "Fail to enable mutex clk\n");
+-		goto err_free_path;
+-	}
+-
+ 	path->mdp_dev = mdp;
+ 	path->config = param->config;
+ 	path->param = param->param;
+@@ -463,6 +497,14 @@ int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
+ 		goto err_free_path;
+ 	}
+ 
++	pipe_id = __get_pipe(mdp, path->comps[0].comp->public_id);
++	mutex = __get_mutex(mdp, &mdp->mdp_data->pipe_info[pipe_id]);
++	ret = mtk_mutex_prepare(mutex);
++	if (ret) {
++		dev_err(dev, "Fail to enable mutex clk\n");
++		goto err_free_path;
 +	}
 +
-+rsz_subfrm_done:
- 	return 0;
- }
+ 	ret = mdp_path_config(mdp, cmd, path);
+ 	if (ret) {
+ 		dev_err(dev, "mdp_path_config error\n");
+@@ -503,8 +545,8 @@ int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
+ 	mdp_comp_clocks_off(&mdp->pdev->dev, cmd->comps,
+ 			    cmd->num_comps);
+ err_free_path:
+-	i = mdp->mdp_data->pipe_info[MDP_PIPE_RDMA0].mutex_id;
+-	mtk_mutex_unprepare(mdp->mdp_mutex[i]);
++	if (mutex)
++		mtk_mutex_unprepare(mutex);
+ 	kfree(path);
+ err_free_comps:
+ 	kfree(comps);
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+index 927d3d65751a..56c42bd3f16b 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+@@ -161,8 +161,10 @@ void mdp_video_device_release(struct video_device *vdev)
+ 	vb2_dma_contig_clear_max_seg_size(&mdp->pdev->dev);
  
-@@ -431,6 +699,9 @@ static int advance_rsz_subfrm(struct mdp_comp_ctx *ctx,
- 		if (CFG_CHECK(MT8183, p_id)) {
- 			csf_l = CFG_COMP(MT8183, ctx->param, subfrms[index].in.left);
- 			csf_r = CFG_COMP(MT8183, ctx->param, subfrms[index].in.right);
-+		} else if (CFG_CHECK(MT8195, p_id)) {
-+			csf_l = CFG_COMP(MT8195, ctx->param, subfrms[index].in.left);
-+			csf_r = CFG_COMP(MT8195, ctx->param, subfrms[index].in.right);
+ 	mdp_comp_destroy(mdp);
+-	for (i = 0; i < MDP_PIPE_MAX; i++)
++	for (i = 0; i < MDP_PIPE_MAX; i++) {
+ 		mtk_mutex_put(mdp->mdp_mutex[i]);
++		mtk_mutex_put(mdp->mdp_mutex2[i]);
++	}
+ 
+ 	mdp_vpu_shared_mem_free(&mdp->vpu);
+ 	v4l2_m2m_release(mdp->m2m_dev);
+@@ -205,12 +207,28 @@ static int mdp_probe(struct platform_device *pdev)
+ 		ret = -ENODEV;
+ 		goto err_destroy_device;
+ 	}
++	mm2_pdev = __get_pdev_by_id(pdev, mm_pdev, MDP_INFRA_MUTEX2);
++	/* MUTEX2 must works with MMSYS2 */
++	if ((IS_ERR(mm2_pdev)) ||
++	    (mm2_pdev && IS_ERR_OR_NULL(mdp->mdp_mmsys2))) {
++		ret = -ENODEV;
++		goto err_destroy_device;
++	}
+ 	for (i = 0; i < mdp->mdp_data->pipe_info_len; i++) {
++		struct platform_device *p;
++		struct mtk_mutex **m;
++		u32 id;
++
+ 		mutex_id = mdp->mdp_data->pipe_info[i].mutex_id;
+-		if (mdp->mdp_mutex[mutex_id])
++		id = mdp->mdp_data->pipe_info[i].mmsys_id;
++		p = (id && mm2_pdev) ? mm2_pdev : mm_pdev;
++		m = (id && mm2_pdev) ?
++			mdp->mdp_mutex2 : mdp->mdp_mutex;
++
++		if (m[mutex_id])
+ 			continue;
+-		mdp->mdp_mutex[mutex_id] = mtk_mutex_get(&mm_pdev->dev);
+-		if (!mdp->mdp_mutex[mutex_id]) {
++		m[mutex_id] = mtk_mutex_get(&p->dev);
++		if (!m[mutex_id]) {
+ 			ret = -ENODEV;
+ 			goto err_free_mutex;
  		}
- 
- 		if ((csf_r - csf_l + 1) <= 16)
-@@ -449,6 +720,410 @@ static const struct mdp_comp_ops rsz_ops = {
- 	.advance_subfrm = advance_rsz_subfrm,
+@@ -291,8 +309,10 @@ static int mdp_probe(struct platform_device *pdev)
+ err_deinit_comp:
+ 	mdp_comp_destroy(mdp);
+ err_free_mutex:
+-	for (i = 0; i < mdp->mdp_data->pipe_info_len; i++)
++	for (i = 0; i < mdp->mdp_data->pipe_info_len; i++) {
+ 		mtk_mutex_put(mdp->mdp_mutex[i]);
++		mtk_mutex_put(mdp->mdp_mutex2[i]);
++	}
+ err_destroy_device:
+ 	kfree(mdp);
+ err_return:
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
+index 0b40ccfd376c..ce9e2b9850e6 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
+@@ -22,6 +22,7 @@ enum mdp_infra_id {
+ 	MDP_INFRA_MMSYS,
+ 	MDP_INFRA_MMSYS2,
+ 	MDP_INFRA_MUTEX,
++	MDP_INFRA_MUTEX2,
+ 	MDP_INFRA_SCP,
+ 	MDP_INFRA_MAX
+ };
+@@ -48,6 +49,13 @@ enum mdp_pipe_id {
+ 	MDP_PIPE_WPEI2,
+ 	MDP_PIPE_IMGI,
+ 	MDP_PIPE_RDMA0,
++	MDP_PIPE_RDMA1,
++	MDP_PIPE_RDMA2,
++	MDP_PIPE_RDMA3,
++	MDP_PIPE_SPLIT,
++	MDP_PIPE_SPLIT2,
++	MDP_PIPE_VPP0_SOUT,
++	MDP_PIPE_VPP1_SOUT,
+ 	MDP_PIPE_MAX
  };
  
-+static int init_aal(struct mdp_comp_ctx *ctx, struct mdp_cmdq_cmd *cmd)
-+{
-+	phys_addr_t base = ctx->comp->reg_base;
-+	u16 subsys_id = ctx->comp->subsys_id;
-+
-+	/* Always set MDP_AAL enable to 1 */
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_AAL_EN, BIT(0), BIT(0));
-+
-+	return 0;
-+}
-+
-+static int config_aal_frame(struct mdp_comp_ctx *ctx,
-+			    struct mdp_cmdq_cmd *cmd,
-+			    const struct v4l2_rect *compose)
-+{
-+	phys_addr_t base = ctx->comp->reg_base;
-+	u16 subsys_id = ctx->comp->subsys_id;
-+	u32 reg = 0;
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, aal.cfg_main);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_AAL_CFG_MAIN, reg, BIT(7));
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, aal.cfg);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_AAL_CFG, reg, BIT(0));
-+
-+	return 0;
-+}
-+
-+static int config_aal_subfrm(struct mdp_comp_ctx *ctx,
-+			     struct mdp_cmdq_cmd *cmd, u32 index)
-+{
-+	phys_addr_t base = ctx->comp->reg_base;
-+	u16 subsys_id = ctx->comp->subsys_id;
-+	u32 reg = 0;
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, aal.subfrms[index].src);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_AAL_SIZE,
-+		     reg, MDP_AAL_SIZE_MASK);
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, aal.subfrms[index].clip_ofst);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_AAL_OUTPUT_OFFSET,
-+		     reg, 0x00FF00FF);
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, aal.subfrms[index].clip);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_AAL_OUTPUT_SIZE,
-+		     reg, MDP_AAL_OUTPUT_SIZE_MASK);
-+
-+	return 0;
-+}
-+
-+static const struct mdp_comp_ops aal_ops = {
-+	.get_comp_flag = get_comp_flag,
-+	.init_comp = init_aal,
-+	.config_frame = config_aal_frame,
-+	.config_subfrm = config_aal_subfrm,
-+};
-+
-+static int init_hdr(struct mdp_comp_ctx *ctx, struct mdp_cmdq_cmd *cmd)
-+{
-+	phys_addr_t base = ctx->comp->reg_base;
-+	u16 subsys_id = ctx->comp->subsys_id;
-+
-+	/* Always set MDP_HDR enable to 1 */
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_HDR_TOP, BIT(0), BIT(0));
-+
-+	return 0;
-+}
-+
-+static int config_hdr_frame(struct mdp_comp_ctx *ctx,
-+			    struct mdp_cmdq_cmd *cmd,
-+			    const struct v4l2_rect *compose)
-+{
-+	phys_addr_t base = ctx->comp->reg_base;
-+	u16 subsys_id = ctx->comp->subsys_id;
-+	u32 reg = 0;
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, hdr.top);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_HDR_TOP, reg, BIT(29) | BIT(28));
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, hdr.relay);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_HDR_RELAY, reg, BIT(0));
-+
-+	return 0;
-+}
-+
-+static int config_hdr_subfrm(struct mdp_comp_ctx *ctx,
-+			     struct mdp_cmdq_cmd *cmd, u32 index)
-+{
-+	phys_addr_t base = ctx->comp->reg_base;
-+	u16 subsys_id = ctx->comp->subsys_id;
-+	u32 reg = 0;
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, hdr.subfrms[index].win_size);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_HDR_TILE_POS,
-+		     reg, MDP_HDR_TILE_POS_MASK);
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, hdr.subfrms[index].src);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_HDR_SIZE_0, reg, 0x1FFF1FFF);
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, hdr.subfrms[index].clip_ofst0);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_HDR_SIZE_1, reg, 0x1FFF1FFF);
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, hdr.subfrms[index].clip_ofst1);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_HDR_SIZE_2, reg, 0x1FFF1FFF);
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, hdr.subfrms[index].hist_ctrl_0);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_HDR_HIST_CTRL_0, reg, 0x00003FFF);
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, hdr.subfrms[index].hist_ctrl_1);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_HDR_HIST_CTRL_1, reg, 0x00003FFF);
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, hdr.subfrms[index].hdr_top);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_HDR_TOP, reg, BIT(6) | BIT(5));
-+
-+	/* Enable histogram */
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, hdr.subfrms[index].hist_addr);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_HDR_HIST_ADDR, reg, BIT(9));
-+
-+	return 0;
-+}
-+
-+static const struct mdp_comp_ops hdr_ops = {
-+	.get_comp_flag = get_comp_flag,
-+	.init_comp = init_hdr,
-+	.config_frame = config_hdr_frame,
-+	.config_subfrm = config_hdr_subfrm,
-+};
-+
-+static void reset_luma_hist(struct mdp_comp_ctx *ctx, struct mdp_cmdq_cmd *cmd)
-+{
-+	const struct mdp_platform_config *mdp_cfg = __get_plat_cfg(ctx);
-+	phys_addr_t base = ctx->comp->reg_base;
-+	u16 subsys_id = ctx->comp->subsys_id;
-+	u32 hist_num = mdp_cfg->tdshp_hist_num;
-+	u32 i;
-+
-+	/* Reset histogram */
-+	for (i = 0; i <= hist_num; i++)
-+		MM_REG_WRITE_MASK(cmd, subsys_id, base,
-+				  (MDP_LUMA_HIST_INIT + (i << 2)),
-+				  0, 0xFFFFFFFF);
-+
-+	if (mdp_cfg && mdp_cfg->tdshp_constrain)
-+		MM_REG_WRITE(cmd, subsys_id, base,
-+			     MDP_DC_TWO_D_W1_RESULT_INIT, 0, 0xFFFFFFFF);
-+
-+	if (mdp_cfg && mdp_cfg->tdshp_contour)
-+		for (i = 0; i < hist_num; i++)
-+			MM_REG_WRITE_MASK(cmd, subsys_id, base,
-+					  (MDP_CONTOUR_HIST_INIT + (i << 2)),
-+					  0, 0xFFFFFFFF);
-+}
-+
-+static int init_tdshp(struct mdp_comp_ctx *ctx, struct mdp_cmdq_cmd *cmd)
-+{
-+	phys_addr_t base = ctx->comp->reg_base;
-+	u16 subsys_id = ctx->comp->subsys_id;
-+
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_TDSHP_CTRL, BIT(0), BIT(0));
-+	/* Enable FIFO */
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_TDSHP_CFG, BIT(1), BIT(1));
-+	reset_luma_hist(ctx, cmd);
-+
-+	return 0;
-+}
-+
-+static int config_tdshp_frame(struct mdp_comp_ctx *ctx,
-+			      struct mdp_cmdq_cmd *cmd,
-+			      const struct v4l2_rect *compose)
-+{
-+	phys_addr_t base = ctx->comp->reg_base;
-+	u16 subsys_id = ctx->comp->subsys_id;
-+	u32 reg = 0;
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, tdshp.cfg);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_TDSHP_CFG, reg, BIT(0));
-+
-+	return 0;
-+}
-+
-+static int config_tdshp_subfrm(struct mdp_comp_ctx *ctx,
-+			       struct mdp_cmdq_cmd *cmd, u32 index)
-+{
-+	phys_addr_t base = ctx->comp->reg_base;
-+	u16 subsys_id = ctx->comp->subsys_id;
-+	u32 reg = 0;
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, tdshp.subfrms[index].src);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_TDSHP_INPUT_SIZE,
-+		     reg, MDP_TDSHP_INPUT_SIZE_MASK);
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, tdshp.subfrms[index].clip_ofst);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_TDSHP_OUTPUT_OFFSET,
-+		     reg, 0x00FF00FF);
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, tdshp.subfrms[index].clip);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_TDSHP_OUTPUT_SIZE,
-+		     reg, MDP_TDSHP_OUTPUT_SIZE_MASK);
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, tdshp.subfrms[index].hist_cfg_0);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_HIST_CFG_00, reg, 0xFFFFFFFF);
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, tdshp.subfrms[index].hist_cfg_1);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_HIST_CFG_01, reg, 0xFFFFFFFF);
-+
-+	return 0;
-+}
-+
-+static const struct mdp_comp_ops tdshp_ops = {
-+	.get_comp_flag = get_comp_flag,
-+	.init_comp = init_tdshp,
-+	.config_frame = config_tdshp_frame,
-+	.config_subfrm = config_tdshp_subfrm,
-+};
-+
-+static int init_color(struct mdp_comp_ctx *ctx, struct mdp_cmdq_cmd *cmd)
-+{
-+	phys_addr_t base = ctx->comp->reg_base;
-+	u16 subsys_id = ctx->comp->subsys_id;
-+
-+	MM_REG_WRITE(cmd, subsys_id, base,
-+		     MDP_COLOR_START, 0x1, BIT(1) | BIT(0));
-+	MM_REG_WRITE(cmd, subsys_id, base,
-+		     MDP_COLOR_WIN_X_MAIN, 0xFFFF0000, 0xFFFFFFFF);
-+	MM_REG_WRITE(cmd, subsys_id, base,
-+		     MDP_COLOR_WIN_Y_MAIN, 0xFFFF0000, 0xFFFFFFFF);
-+
-+	/* Reset color matrix */
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_COLOR_CM1_EN, 0x0, BIT(0));
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_COLOR_CM2_EN, 0x0, BIT(0));
-+
-+	/* Enable interrupt */
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_COLOR_INTEN, 0x7, 0x7);
-+
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_COLOR_OUT_SEL, 0x333, 0x333);
-+
-+	return 0;
-+}
-+
-+static int config_color_frame(struct mdp_comp_ctx *ctx,
-+			      struct mdp_cmdq_cmd *cmd,
-+			      const struct v4l2_rect *compose)
-+{
-+	phys_addr_t base = ctx->comp->reg_base;
-+	u16 subsys_id = ctx->comp->subsys_id;
-+	u32 reg = 0;
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, color.start);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_COLOR_START,
-+		     reg, MDP_COLOR_START_MASK);
-+
-+	return 0;
-+}
-+
-+static int config_color_subfrm(struct mdp_comp_ctx *ctx,
-+			       struct mdp_cmdq_cmd *cmd, u32 index)
-+{
-+	phys_addr_t base = ctx->comp->reg_base;
-+	u16 subsys_id = ctx->comp->subsys_id;
-+	u32 reg = 0;
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, color.subfrms[index].in_hsize);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_COLOR_INTERNAL_IP_WIDTH,
-+		     reg, 0x00003FFF);
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, color.subfrms[index].in_vsize);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_COLOR_INTERNAL_IP_HEIGHT,
-+		     reg, 0x00003FFF);
-+
-+	return 0;
-+}
-+
-+static const struct mdp_comp_ops color_ops = {
-+	.get_comp_flag = get_comp_flag,
-+	.init_comp = init_color,
-+	.config_frame = config_color_frame,
-+	.config_subfrm = config_color_subfrm,
-+};
-+
-+static int init_ovl(struct mdp_comp_ctx *ctx, struct mdp_cmdq_cmd *cmd)
-+{
-+	phys_addr_t base = ctx->comp->reg_base;
-+	u16 subsys_id = ctx->comp->subsys_id;
-+
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_OVL_EN,
-+		     BIT(0), MDP_OVL_EN_MASK);
-+
-+	/* Set to relay mode */
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_OVL_SRC_CON,
-+		     BIT(9), MDP_OVL_SRC_CON_MASK);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_OVL_DP_CON,
-+		     BIT(0), MDP_OVL_DP_CON_MASK);
-+
-+	return 0;
-+}
-+
-+static int config_ovl_frame(struct mdp_comp_ctx *ctx,
-+			    struct mdp_cmdq_cmd *cmd,
-+			    const struct v4l2_rect *compose)
-+{
-+	phys_addr_t base = ctx->comp->reg_base;
-+	u16 subsys_id = ctx->comp->subsys_id;
-+	u32 reg = 0;
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, ovl.L0_con);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_OVL_L0_CON, reg, BIT(29) | BIT(28));
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, ovl.src_con);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_OVL_SRC_CON, reg, BIT(0));
-+
-+	return 0;
-+}
-+
-+static int config_ovl_subfrm(struct mdp_comp_ctx *ctx,
-+			     struct mdp_cmdq_cmd *cmd, u32 index)
-+{
-+	phys_addr_t base = ctx->comp->reg_base;
-+	u16 subsys_id = ctx->comp->subsys_id;
-+	u32 reg = 0;
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, ovl.subfrms[index].L0_src_size);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_OVL_L0_SRC_SIZE,
-+		     reg, MDP_OVL_L0_SRC_SIZE_MASK);
-+
-+	/* Setup output size */
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, ovl.subfrms[index].roi_size);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_OVL_ROI_SIZE,
-+		     reg, MDP_OVL_ROI_SIZE_MASK);
-+
-+	return 0;
-+}
-+
-+static const struct mdp_comp_ops ovl_ops = {
-+	.get_comp_flag = get_comp_flag,
-+	.init_comp = init_ovl,
-+	.config_frame = config_ovl_frame,
-+	.config_subfrm = config_ovl_subfrm,
-+};
-+
-+static int init_pad(struct mdp_comp_ctx *ctx, struct mdp_cmdq_cmd *cmd)
-+{
-+	phys_addr_t base = ctx->comp->reg_base;
-+	u16 subsys_id = ctx->comp->subsys_id;
-+
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_PAD_CON,
-+		     BIT(1), MDP_PAD_CON_MASK);
-+	/* Reset */
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_PAD_W_SIZE,
-+		     0, MDP_PAD_W_SIZE_MASK);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_PAD_H_SIZE,
-+		     0, MDP_PAD_H_SIZE_MASK);
-+
-+	return 0;
-+}
-+
-+static int config_pad_subfrm(struct mdp_comp_ctx *ctx,
-+			     struct mdp_cmdq_cmd *cmd, u32 index)
-+{
-+	phys_addr_t base = ctx->comp->reg_base;
-+	u16 subsys_id = ctx->comp->subsys_id;
-+	u32 reg = 0;
-+
-+	if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, pad.subfrms[index].pic_size);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_PAD_PIC_SIZE,
-+		     reg, MDP_PAD_PIC_SIZE_MASK);
-+
-+	return 0;
-+}
-+
-+static const struct mdp_comp_ops pad_ops = {
-+	.get_comp_flag = get_comp_flag,
-+	.init_comp = init_pad,
-+	.config_subfrm = config_pad_subfrm,
-+};
-+
- static int init_wrot(struct mdp_comp_ctx *ctx, struct mdp_cmdq_cmd *cmd)
- {
- 	phys_addr_t base = ctx->comp->reg_base;
-@@ -457,6 +1132,11 @@ static int init_wrot(struct mdp_comp_ctx *ctx, struct mdp_cmdq_cmd *cmd)
- 	/* Reset WROT */
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_SOFT_RST, BIT(0), BIT(0));
- 	MM_REG_POLL(cmd, subsys_id, base, VIDO_SOFT_RST_STAT, BIT(0), BIT(0));
-+
-+	/* Reset setting */
-+	if (CFG_CHECK(MT8195, p_id))
-+		MM_REG_WRITE(cmd, subsys_id, base, VIDO_CTRL, 0x0, 0xFFFFFFFF);
-+
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_SOFT_RST, 0x0, BIT(0));
- 	MM_REG_POLL(cmd, subsys_id, base, VIDO_SOFT_RST_STAT, 0x0, BIT(0));
- 	return 0;
-@@ -474,57 +1154,120 @@ static int config_wrot_frame(struct mdp_comp_ctx *ctx,
- 	/* Write frame base address */
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, wrot.iova[0]);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, wrot.iova[0]);
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_BASE_ADDR, reg,
- 		     0xFFFFFFFF);
-+
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, wrot.iova[1]);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, wrot.iova[1]);
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_BASE_ADDR_C, reg,
- 		     0xFFFFFFFF);
-+
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, wrot.iova[2]);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, wrot.iova[2]);
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_BASE_ADDR_V, reg,
- 		     0xFFFFFFFF);
-+
-+	if (mdp_cfg) {
-+		if (mdp_cfg->wrot_support_10bit) {
-+			if (CFG_CHECK(MT8195, p_id))
-+				reg = CFG_COMP(MT8195, ctx->param, wrot.scan_10bit);
-+			MM_REG_WRITE(cmd, subsys_id, base, VIDO_SCAN_10BIT,
-+				     reg, 0x0000000F);
-+
-+			if (CFG_CHECK(MT8195, p_id))
-+				reg = CFG_COMP(MT8195, ctx->param, wrot.pending_zero);
-+			MM_REG_WRITE(cmd, subsys_id, base, VIDO_PENDING_ZERO,
-+				     reg, 0x04000000);
-+		}
-+
-+		if (CFG_CHECK(MT8195, p_id)) {
-+			reg = CFG_COMP(MT8195, ctx->param, wrot.bit_number);
-+			MM_REG_WRITE(cmd, subsys_id, base, VIDO_CTRL_2,
-+				     reg, 0x00000007);
-+		}
-+	}
-+
- 	/* Write frame related registers */
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, wrot.control);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, wrot.control);
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_CTRL, reg,
- 		     0xF131510F);
-+
-+	/* Write pre-ultra threshold */
-+	if (CFG_CHECK(MT8195, p_id)) {
-+		reg = CFG_COMP(MT8195, ctx->param, wrot.pre_ultra);
-+		MM_REG_WRITE(cmd, subsys_id, base, VIDO_DMA_PREULTRA, reg,
-+			     0x00FFFFFF);
-+	}
-+
- 	/* Write frame Y pitch */
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, wrot.stride[0]);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, wrot.stride[0]);
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_STRIDE, reg,
- 		     0x0000FFFF);
-+
- 	/* Write frame UV pitch */
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, wrot.stride[1]);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, wrot.stride[1]);
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_STRIDE_C, reg,
- 		     0xFFFF);
-+
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, wrot.stride[2]);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, wrot.stride[2]);
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_STRIDE_V, reg,
- 		     0xFFFF);
-+
- 	/* Write matrix control */
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, wrot.mat_ctrl);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, wrot.mat_ctrl);
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_MAT_CTRL, reg, 0xF3);
+@@ -71,6 +79,7 @@ struct mdp_dev {
+ 	struct device				*mdp_mmsys;
+ 	struct device				*mdp_mmsys2;
+ 	struct mtk_mutex			*mdp_mutex[MDP_PIPE_MAX];
++	struct mtk_mutex			*mdp_mutex2[MDP_PIPE_MAX];
+ 	struct mdp_comp				*comp[MDP_MAX_COMP_COUNT];
+ 	const struct mtk_mdp_driver_data	*mdp_data;
  
- 	/* Set the fixed ALPHA as 0xFF */
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_DITHER, 0xFF000000,
- 		     0xFF000000);
-+
- 	/* Set VIDO_EOL_SEL */
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_RSV_1, BIT(31), BIT(31));
-+
- 	/* Set VIDO_FIFO_TEST */
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, wrot.fifo_test);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, wrot.fifo_test);
-+
- 	if (reg != 0)
- 		MM_REG_WRITE(cmd, subsys_id, base, VIDO_FIFO_TEST,
- 			     reg, 0xFFF);
-+
- 	/* Filter enable */
- 	if (mdp_cfg && mdp_cfg->wrot_filter_constraint) {
- 		if (CFG_CHECK(MT8183, p_id))
- 			reg = CFG_COMP(MT8183, ctx->param, wrot.filter);
-+		else if (CFG_CHECK(MT8195, p_id))
-+			reg = CFG_COMP(MT8195, ctx->param, wrot.filter);
- 		MM_REG_WRITE(cmd, subsys_id, base, VIDO_MAIN_BUF_SIZE,
- 			     reg, 0x77);
-+
-+		/* Turn off WROT dma dcm */
-+		if (CFG_CHECK(MT8195, p_id))
-+			MM_REG_WRITE(cmd, subsys_id, base, VIDO_ROT_EN,
-+				     (0x1 << 23) + (0x1 << 20), 0x900000);
- 	}
- 
- 	return 0;
-@@ -540,35 +1283,54 @@ static int config_wrot_subfrm(struct mdp_comp_ctx *ctx,
- 	/* Write Y pixel offset */
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, wrot.subfrms[index].offset[0]);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, wrot.subfrms[index].offset[0]);
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_OFST_ADDR,
- 		     reg, 0x0FFFFFFF);
-+
- 	/* Write U pixel offset */
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, wrot.subfrms[index].offset[1]);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, wrot.subfrms[index].offset[1]);
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_OFST_ADDR_C,
- 		     reg, 0x0FFFFFFF);
-+
- 	/* Write V pixel offset */
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, wrot.subfrms[index].offset[2]);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, wrot.subfrms[index].offset[2]);
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_OFST_ADDR_V,
- 		     reg, 0x0FFFFFFF);
-+
- 	/* Write source size */
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, wrot.subfrms[index].src);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, wrot.subfrms[index].src);
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_IN_SIZE, reg,
- 		     0x1FFF1FFF);
-+
- 	/* Write target size */
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, wrot.subfrms[index].clip);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, wrot.subfrms[index].clip);
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_TAR_SIZE, reg,
- 		     0x1FFF1FFF);
-+
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, wrot.subfrms[index].clip_ofst);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, wrot.subfrms[index].clip_ofst);
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_CROP_OFST, reg,
- 		     0x1FFF1FFF);
- 
- 	if (CFG_CHECK(MT8183, p_id))
- 		reg = CFG_COMP(MT8183, ctx->param, wrot.subfrms[index].main_buf);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		reg = CFG_COMP(MT8195, ctx->param, wrot.subfrms[index].main_buf);
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_MAIN_BUF_SIZE,
- 		     reg, 0x1FFF7F00);
- 
-@@ -778,6 +1540,13 @@ static const struct mdp_comp_ops *mdp_comp_ops[MDP_COMP_TYPE_COUNT] = {
- 	[MDP_COMP_TYPE_WROT] =		&wrot_ops,
- 	[MDP_COMP_TYPE_WDMA] =		&wdma_ops,
- 	[MDP_COMP_TYPE_CCORR] =		&ccorr_ops,
-+	[MDP_COMP_TYPE_HDR] =		&hdr_ops,
-+	[MDP_COMP_TYPE_FG] =		&fg_ops,
-+	[MDP_COMP_TYPE_AAL] =		&aal_ops,
-+	[MDP_COMP_TYPE_TDSHP] =		&tdshp_ops,
-+	[MDP_COMP_TYPE_COLOR] =		&color_ops,
-+	[MDP_COMP_TYPE_OVL] =		&ovl_ops,
-+	[MDP_COMP_TYPE_PAD] =		&pad_ops,
- };
- 
- static const struct of_device_id mdp_comp_dt_ids[] = {
-@@ -1235,6 +2004,8 @@ int mdp_comp_ctx_config(struct mdp_dev *mdp, struct mdp_comp_ctx *ctx,
- 
- 	if (CFG_CHECK(MT8183, p_id))
- 		arg = CFG_COMP(MT8183, param, type);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		arg = CFG_COMP(MT8195, param, type);
- 	else
- 		return -EINVAL;
- 	public_id = get_comp_public_id(mdp, arg);
-@@ -1252,16 +2023,22 @@ int mdp_comp_ctx_config(struct mdp_dev *mdp, struct mdp_comp_ctx *ctx,
- 	ctx->param = param;
- 	if (CFG_CHECK(MT8183, p_id))
- 		arg = CFG_COMP(MT8183, param, input);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		arg = CFG_COMP(MT8195, param, input);
- 	else
- 		return -EINVAL;
- 	ctx->input = &frame->inputs[arg];
- 	if (CFG_CHECK(MT8183, p_id))
- 		idx = CFG_COMP(MT8183, param, num_outputs);
-+	else if (CFG_CHECK(MT8195, p_id))
-+		idx = CFG_COMP(MT8195, param, num_outputs);
- 	else
- 		return -EINVAL;
- 	for (i = 0; i < idx; i++) {
- 		if (CFG_CHECK(MT8183, p_id))
- 			arg = CFG_COMP(MT8183, param, outputs[i]);
-+		else if (CFG_CHECK(MT8195, p_id))
-+			arg = CFG_COMP(MT8195, param, outputs[i]);
- 		else
- 			return -EINVAL;
- 		ctx->outputs[i] = &frame->outputs[arg];
 -- 
 2.18.0
 
