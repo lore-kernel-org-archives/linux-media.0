@@ -2,121 +2,107 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9D93C3DA78
-	for <linux-media@archiver.kernel.org>; Sun, 15 Jan 2023 21:49:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF862C46467
+	for <linux-media@archiver.kernel.org>; Sun, 15 Jan 2023 23:45:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbjAOVtF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 15 Jan 2023 16:49:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48122 "EHLO
+        id S231544AbjAOXpj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 15 Jan 2023 18:45:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231428AbjAOVtD (ORCPT
+        with ESMTP id S231616AbjAOXpi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 15 Jan 2023 16:49:03 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A6718141
-        for <linux-media@vger.kernel.org>; Sun, 15 Jan 2023 13:48:59 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 59A41308;
-        Sun, 15 Jan 2023 22:48:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673819337;
-        bh=xuE3d1IAsU9mNxqKz7mbxFoHBmVCgTrZvTH2ARy5UOU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=c8GF47e7WOdphVIqMFqu952Q7Of73uhkAiy13Nqt7FTgOLOkCiz+i4LpKfN4/x8Cx
-         RFh/8AfGi05QNGTDMBEMvjnINR65WdQnAjmoap+j26sw3Hy82IfHpGcmXrKACSCDjU
-         5NKMIV9OKFivj1VBYmOA/yvSBid3XbEiiHJWgrlI=
-Date:   Sun, 15 Jan 2023 23:48:57 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     linux-media@vger.kernel.org
-Cc:     Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Ricardo Ribalda <ribalda@chromium.org>
-Subject: [GIT PULL FOR v6.3] [v3] uvcvideo changes
-Message-ID: <Y8R0yfSL+1BNi/f3@pendragon.ideasonboard.com>
+        Sun, 15 Jan 2023 18:45:38 -0500
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3395113537
+        for <linux-media@vger.kernel.org>; Sun, 15 Jan 2023 15:45:37 -0800 (PST)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 870DE85258;
+        Mon, 16 Jan 2023 00:45:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1673826335;
+        bh=W+XMQB6+qD6def5W7Q0EXnQMXiW2/ldThjmVsVy0qMY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=SHmRDB3Qk2ebmbbu+fjTGbSwEMNiQmmT6X+r1ZVOMUYYqY/1zur5PQH6bkNKGI93y
+         EOtkaivZdQDx2ud/bnb5ZfE2e4Nnk0mt+06FfvCSx5zuK/FidFD46xAzgI8xc5ZKwB
+         v+luOk3Mz23AbEe521DlqBJA/Rkkp1FW+E8/qjzm8S+j3MrFO69YEmg7pqCzPYV5rZ
+         jFWE7jlRoXdOeQMal5b34eak5IZFyu4JCwTAqB/bzwG0XTGiLdhtw99uX2MfUnGw5m
+         Rnpklol37fzuY5lIlSWxeobwTpG2RoAFTOq1500yARletSidJo6b5023D2XqDY7ycf
+         HSv5sPWFniKhg==
+Message-ID: <02b50474-8ce0-31e8-92f5-653774d24d4e@denx.de>
+Date:   Mon, 16 Jan 2023 00:45:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] media: uvcvideo: Add GUID for BGRA/X 8:8:8:8
+Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        William Manley <will@williammanley.net>
+References: <20230110195331.175103-1-marex@denx.de>
+ <Y8CUo17laYyY9/c2@pendragon.ideasonboard.com>
+ <3dcf0665-a3ba-1279-2bc8-0e5d6f9319bc@denx.de>
+ <Y8Rw0Ok9JpoflkEt@pendragon.ideasonboard.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <Y8Rw0Ok9JpoflkEt@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+On 1/15/23 22:32, Laurent Pinchart wrote:
+> Hi Marek,
+> 
+> On Fri, Jan 13, 2023 at 02:03:33AM +0100, Marek Vasut wrote:
+>> On 1/13/23 00:15, Laurent Pinchart wrote:
+>>> On Tue, Jan 10, 2023 at 08:53:31PM +0100, Marek Vasut wrote:
+>>>> The Cypress EZUSB FX3 UVC example can be configured to report pixel
+>>>> format "e436eb7e-524f-11ce-9f53-0020af0ba770". This is its GUID for
+>>>> BGRA/X 8:8:8:8.
+>>>>
+>>>> The UVC 1.5 spec [1] only defines GUIDs for YUY2, NV12, M420 and I420.
+>>>> This seems to be an extension documented in the Microsoft Windows Media
+>>>> Format SDK[2]. This Media Format SDK defines this GUID as corresponding
+>>>> to `MEDIASUBTYPE_RGB32`.
+>>>>
+>>>> Note that in my case, the FX3 UVC can output either channel order,
+>>>> BGR or RGB or any other mix for that matter. Since Linux commit
+>>>> 1b8dc32286a1a ("[media] uvcvideo: Add GUID for BGR 8:8:8")
+>>>> defined a GUID for `MEDIASUBTYPE_RGB24` channel order as BGR, keep
+>>>> this change consistent and define `MEDIASUBTYPE_RGB32` as BGR as well.
+>>>
+>>> I'd like to see documentation of the MEDIASUBTYPE_RGB32 format that
+>>> indicates the components order precisely. While there's a high chance it
+>>> maps to a BGR (in the V4L2 nomenclature) format, there would still be
+>>> two different options for the A or X component.
+>>
+>> Maybe this ?
+>>
+>> https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/DirectShow/uncompressed-rgb-video-subtypes.md
+>>
+>> "
+>> Remarks
+>> ...
+>> For RGB 32, every pixel is an RGBQUAD. Each color is one byte, with a
+>> value from 0 to 255, inclusive. The memory layout is:
+>> Byte    0       1       2       3
+>> Value   Blue    Green   Red     Alpha or Don't Care
+>> "
+>>
+>> Maps to
+>>
+>> drivers/media/v4l2-core/v4l2-ioctl.c:   case V4L2_PIX_FMT_BGR32:
+>> descr = "32-bit BGRA/X 8-8-8-8"; break;
+> 
+> Thank you for digging it up. Looks good to me, except that
+> V4L2_PIX_FMT_BGR32 is deprecated (see
+> https://linuxtv.org/downloads/v4l-dvb-apis/userspace-api/v4l/pixfmt-rgb.html#deprecated-rgb-formats).
+> You should use V4L2_PIX_FMT_BGRA32 or V4L2_PIX_FMT_BGRX32 instead.
 
-Here's a third attempt at a pull request for the uvcvideo driver, fixing
-a compilation warning that I had missed.
-
-The first commit in the branch (50459f103edf "media: uvcvideo: Remove
-format descriptions") may need to be merged in the linux-usb tree as
-well, as it would conflict with work from Michael Grzeschik on the UVC
-gadget side. I've thus based this pull request on v6.2-rc1, making sure
-it can be used as a stable branch for Michael. Please merge it as-is,
-without cherry-picking.
-
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
-
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/pinchartl/linux.git tags/media-uvc-next-20230115
-
-for you to fetch changes up to b839212988575c701aab4d3d9ca15e44c87e383c:
-
-  media: uvcvideo: Silence memcpy() run-time false positive warnings (2023-01-15 23:45:15 +0200)
-
-----------------------------------------------------------------
-uvcvideo fixes and improvements
-
-----------------------------------------------------------------
-Guenter Roeck (1):
-      media: uvcvideo: Handle errors from calls to usb_string
-
-Hans Verkuil (2):
-      media: uvcvideo: Check for INACTIVE in uvc_ctrl_is_accessible()
-      media: uvcvideo: Improve error logging in uvc_query_ctrl()
-
-Kees Cook (1):
-      media: uvcvideo: Silence memcpy() run-time false positive warnings
-
-Laurent Pinchart (2):
-      media: uvcvideo: Remove format descriptions
-      media: uvcvideo: Factor out usb_string() calls
-
-Pedro Guilherme Siqueira Moreira (3):
-      media: uvcvideo: Fix missing newline after declarations
-      media: uvcvideo: Fix assignment inside if condition
-      media: uvcvideo: Fix usage of symbolic permissions to octal
-
-Ricardo Ribalda (18):
-      media: uvcvideo: Handle cameras with invalid descriptors
-      media: uvcvideo: Only create input devs if hw supports it
-      media: uvcvideo: Remove void casting for the status endpoint
-      media: uvcvideo: Recover stalled ElGato devices
-      media: uvcvideo: Limit power line control for Acer EasyCamera
-      media: uvcvideo: Return -EACCES for Wrong state error
-      media: uvcvideo: Do not return positive errors in uvc_query_ctrl()
-      media: uvcvideo: Fix handling on Bitmask controls
-      media: uvcvideo: Refactor __uvc_ctrl_add_mapping
-      media: uvcvideo: Limit power line control for Acer EasyCamera
-      media: uvcvideo: Extend documentation of uvc_video_clock_decode()
-      media: uvcvideo: Implement mask for V4L2_CTRL_TYPE_MENU
-      media: uvcvideo: Refactor uvc_ctrl_mappings_uvcXX
-      media: uvcvideo: Refactor power_line_frequency_controls_limited
-      media: uvcvideo: Fix power line control for Lenovo Integrated Camera
-      media: uvcvideo: Use standard names for menus
-      media: uvcvideo: Fix race condition with usb_kill_urb
-      media: uvcvideo: Quirk for autosuspend in Logitech B910 and C910
-
- drivers/media/usb/uvc/uvc_ctrl.c   | 342 +++++++++++++++++++++++++++----------
- drivers/media/usb/uvc/uvc_driver.c | 181 +++++++++++---------
- drivers/media/usb/uvc/uvc_entity.c |   2 +-
- drivers/media/usb/uvc/uvc_status.c | 125 +++++++++-----
- drivers/media/usb/uvc/uvc_v4l2.c   | 111 ++++++++----
- drivers/media/usb/uvc/uvc_video.c  |  58 +++++--
- drivers/media/usb/uvc/uvcvideo.h   |  39 ++++-
- include/uapi/linux/uvcvideo.h      |   6 +-
- 8 files changed, 596 insertions(+), 268 deletions(-)
-
--- 
-Regards,
-
-Laurent Pinchart
+V4L2_PIX_FMT_XBGR32 , right ?
