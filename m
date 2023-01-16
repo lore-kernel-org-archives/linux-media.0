@@ -2,38 +2,38 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADD4FC46467
-	for <linux-media@archiver.kernel.org>; Mon, 16 Jan 2023 14:56:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD488C54EBE
+	for <linux-media@archiver.kernel.org>; Mon, 16 Jan 2023 14:56:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232795AbjAPO4Y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Jan 2023 09:56:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51844 "EHLO
+        id S232523AbjAPO4Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Jan 2023 09:56:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232541AbjAPOz5 (ORCPT
+        with ESMTP id S232643AbjAPO4B (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Jan 2023 09:55:57 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283432200B
-        for <linux-media@vger.kernel.org>; Mon, 16 Jan 2023 06:44:58 -0800 (PST)
+        Mon, 16 Jan 2023 09:56:01 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6ED26873
+        for <linux-media@vger.kernel.org>; Mon, 16 Jan 2023 06:45:02 -0800 (PST)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 866EBE7B;
-        Mon, 16 Jan 2023 15:44:56 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0DA331211;
+        Mon, 16 Jan 2023 15:45:00 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673880296;
-        bh=wBMaV5rZGT8o9SL9tuMyRgiQjuzW1I+XsfSkgzvBAzA=;
+        s=mail; t=1673880301;
+        bh=irV9W4lIfBwcElNntp/8epdHcNjLNu+RmFt7zHbhXho=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DWPPrreCXOGzwqHYXUlHz+oePZ6XzvvJCjZmXq1dGSYkg2I80pCIh798I5xcgl53L
-         87N46t/NRWe5JpfDTvmJmR65EjBu+38RAVOdBW74ez5BS4LTDWQU5lgLv0YXoPUn9t
-         ZocVWWFTjeG/LmF8ISM+oKMndonj4q0oE5nEBLPs=
+        b=ocTK9TPRaqXAiF+MELmdcMfjGt0UiRpsumiMXeVUZF+QqPZskKemlk1Q+DqFp0ih2
+         /du8SFbryaazGL39J5BbfuS5tY3MYBLLFLtoMDbgA+Il3kwMKUSkZPsCiMMgm9Tm8F
+         4MlGGoqlsjQ6E/IvGEZ0IzjYXYV8ngYeM56OeK+o=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
         Manivannan Sadhasivam <mani@kernel.org>,
         Alexander Stein <alexander.stein@ew.tq-group.com>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH v3 02/17] media: i2c: imx290: Factor out subdev init and cleanup to functions
-Date:   Mon, 16 Jan 2023 16:44:39 +0200
-Message-Id: <20230116144454.1012-3-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v3 05/17] media: i2c: imx290: Pass format and mode to imx290_calc_pixel_rate()
+Date:   Mon, 16 Jan 2023 16:44:42 +0200
+Message-Id: <20230116144454.1012-6-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.38.2
 In-Reply-To: <20230116144454.1012-1-laurent.pinchart@ideasonboard.com>
 References: <20230116144454.1012-1-laurent.pinchart@ideasonboard.com>
@@ -43,237 +43,88 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The probe() function is large. Make it more readable by factoring the
-subdev initialization code out. While at it, rename the error labels as
-the "free_" prefix isn't accurate.
+Avoid accessing the imx290 current_format and current_mode fields in
+imx290_calc_pixel_rate() to prepare for the removal of those fields.
+Among the two callers of the function, imx290_ctrl_update() has an
+explicit mode pointer already, and we can also give it a format pointer.
+Use those explicitly.
 
-No functional change intended.
+While at it, inline the imx290_get_link_freq() function in
+imx290_calc_pixel_rate() as it is only called there.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 ---
+Changes since v2:
+
+- Really drop format argument from imx290_calc_pixel_rate()
+
 Changes since v1:
 
-- Free control handler in imx290_subdev_init() error path
+- Drop format argument from imx290_calc_pixel_rate()
 ---
- drivers/media/i2c/imx290.c | 108 +++++++++++++++++++++----------------
- 1 file changed, 62 insertions(+), 46 deletions(-)
+ drivers/media/i2c/imx290.c | 22 ++++++++--------------
+ 1 file changed, 8 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-index ca2fa57c28fe..5529bd39238f 100644
+index 4ad6eab4f2e2..25671ded7c2a 100644
 --- a/drivers/media/i2c/imx290.c
 +++ b/drivers/media/i2c/imx290.c
-@@ -1015,6 +1015,47 @@ static const struct media_entity_operations imx290_subdev_entity_ops = {
- 	.link_validate = v4l2_subdev_link_validate,
- };
- 
-+static int imx290_subdev_init(struct imx290 *imx290)
-+{
-+	struct i2c_client *client = to_i2c_client(imx290->dev);
-+	int ret;
-+
-+	/*
-+	 * Initialize the frame format. In particular, imx290->current_mode
-+	 * and imx290->bpp are set to defaults: imx290_calc_pixel_rate() call
-+	 * below relies on these fields.
-+	 */
-+	imx290_entity_init_cfg(&imx290->sd, NULL);
-+
-+	ret = imx290_ctrl_init(imx290);
-+	if (ret < 0) {
-+		dev_err(imx290->dev, "Control initialization error %d\n", ret);
-+		return ret;
-+	}
-+
-+	v4l2_i2c_subdev_init(&imx290->sd, client, &imx290_subdev_ops);
-+	imx290->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-+	imx290->sd.dev = imx290->dev;
-+	imx290->sd.entity.ops = &imx290_subdev_entity_ops;
-+	imx290->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-+
-+	imx290->pad.flags = MEDIA_PAD_FL_SOURCE;
-+	ret = media_entity_pads_init(&imx290->sd.entity, 1, &imx290->pad);
-+	if (ret < 0) {
-+		dev_err(imx290->dev, "Could not register media entity\n");
-+		v4l2_ctrl_handler_free(&imx290->ctrls);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void imx290_subdev_cleanup(struct imx290 *imx290)
-+{
-+	media_entity_cleanup(&imx290->sd.entity);
-+	v4l2_ctrl_handler_free(&imx290->ctrls);
-+}
-+
- /* ----------------------------------------------------------------------------
-  * Power management
-  */
-@@ -1147,10 +1188,10 @@ static int imx290_probe(struct i2c_client *client)
- 	fwnode_handle_put(endpoint);
- 	if (ret == -ENXIO) {
- 		dev_err(dev, "Unsupported bus type, should be CSI2\n");
--		goto free_err;
-+		goto err_endpoint;
- 	} else if (ret) {
- 		dev_err(dev, "Parsing endpoint node failed\n");
--		goto free_err;
-+		goto err_endpoint;
- 	}
- 
- 	/* Get number of data lanes */
-@@ -1158,7 +1199,7 @@ static int imx290_probe(struct i2c_client *client)
- 	if (imx290->nlanes != 2 && imx290->nlanes != 4) {
- 		dev_err(dev, "Invalid data lanes: %d\n", imx290->nlanes);
- 		ret = -EINVAL;
--		goto free_err;
-+		goto err_endpoint;
- 	}
- 
- 	dev_dbg(dev, "Using %u data lanes\n", imx290->nlanes);
-@@ -1166,7 +1207,7 @@ static int imx290_probe(struct i2c_client *client)
- 	if (!ep.nr_of_link_frequencies) {
- 		dev_err(dev, "link-frequency property not found in DT\n");
- 		ret = -EINVAL;
--		goto free_err;
-+		goto err_endpoint;
- 	}
- 
- 	/* Check that link frequences for all the modes are in device tree */
-@@ -1174,7 +1215,7 @@ static int imx290_probe(struct i2c_client *client)
- 	if (fq) {
- 		dev_err(dev, "Link frequency of %lld is not supported\n", fq);
- 		ret = -EINVAL;
--		goto free_err;
-+		goto err_endpoint;
- 	}
- 
- 	/* get system clock (xclk) */
-@@ -1182,14 +1223,14 @@ static int imx290_probe(struct i2c_client *client)
- 	if (IS_ERR(imx290->xclk)) {
- 		dev_err(dev, "Could not get xclk");
- 		ret = PTR_ERR(imx290->xclk);
--		goto free_err;
-+		goto err_endpoint;
- 	}
- 
- 	ret = fwnode_property_read_u32(dev_fwnode(dev), "clock-frequency",
- 				       &xclk_freq);
- 	if (ret) {
- 		dev_err(dev, "Could not get xclk frequency\n");
--		goto free_err;
-+		goto err_endpoint;
- 	}
- 
- 	/* external clock must be 37.125 MHz */
-@@ -1197,19 +1238,19 @@ static int imx290_probe(struct i2c_client *client)
- 		dev_err(dev, "External clock frequency %u is not supported\n",
- 			xclk_freq);
- 		ret = -EINVAL;
--		goto free_err;
-+		goto err_endpoint;
- 	}
- 
- 	ret = clk_set_rate(imx290->xclk, xclk_freq);
- 	if (ret) {
- 		dev_err(dev, "Could not set xclk frequency\n");
--		goto free_err;
-+		goto err_endpoint;
- 	}
- 
- 	ret = imx290_get_regulators(dev, imx290);
- 	if (ret < 0) {
- 		dev_err(dev, "Cannot get regulators\n");
--		goto free_err;
-+		goto err_endpoint;
- 	}
- 
- 	imx290->rst_gpio = devm_gpiod_get_optional(dev, "reset",
-@@ -1217,48 +1258,26 @@ static int imx290_probe(struct i2c_client *client)
- 	if (IS_ERR(imx290->rst_gpio)) {
- 		dev_err(dev, "Cannot get reset gpio\n");
- 		ret = PTR_ERR(imx290->rst_gpio);
--		goto free_err;
-+		goto err_endpoint;
- 	}
- 
- 	mutex_init(&imx290->lock);
- 
--	/*
--	 * Initialize the frame format. In particular, imx290->current_mode
--	 * and imx290->bpp are set to defaults: imx290_calc_pixel_rate() call
--	 * below relies on these fields.
--	 */
--	imx290_entity_init_cfg(&imx290->sd, NULL);
--
--	ret = imx290_ctrl_init(imx290);
--	if (ret < 0) {
--		dev_err(dev, "Control initialization error %d\n", ret);
--		goto free_mutex;
--	}
--
--	v4l2_i2c_subdev_init(&imx290->sd, client, &imx290_subdev_ops);
--	imx290->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
--	imx290->sd.dev = &client->dev;
--	imx290->sd.entity.ops = &imx290_subdev_entity_ops;
--	imx290->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
--
--	imx290->pad.flags = MEDIA_PAD_FL_SOURCE;
--	ret = media_entity_pads_init(&imx290->sd.entity, 1, &imx290->pad);
--	if (ret < 0) {
--		dev_err(dev, "Could not register media entity\n");
--		goto free_ctrl;
--	}
-+	ret = imx290_subdev_init(imx290);
-+	if (ret)
-+		goto err_mutex;
- 
- 	ret = v4l2_async_register_subdev(&imx290->sd);
- 	if (ret < 0) {
- 		dev_err(dev, "Could not register v4l2 device\n");
--		goto free_entity;
-+		goto err_subdev;
- 	}
- 
- 	/* Power on the device to match runtime PM state below */
- 	ret = imx290_power_on(dev);
- 	if (ret < 0) {
- 		dev_err(dev, "Could not power on the device\n");
--		goto free_entity;
-+		goto err_subdev;
- 	}
- 
- 	pm_runtime_set_active(dev);
-@@ -1269,13 +1288,11 @@ static int imx290_probe(struct i2c_client *client)
- 
+@@ -547,21 +547,14 @@ static int imx290_write_current_format(struct imx290 *imx290)
  	return 0;
+ }
  
--free_entity:
--	media_entity_cleanup(&imx290->sd.entity);
--free_ctrl:
--	v4l2_ctrl_handler_free(&imx290->ctrls);
--free_mutex:
-+err_subdev:
-+	imx290_subdev_cleanup(imx290);
-+err_mutex:
- 	mutex_destroy(&imx290->lock);
--free_err:
-+err_endpoint:
- 	v4l2_fwnode_endpoint_free(&ep);
+-static s64 imx290_get_link_freq(struct imx290 *imx290)
++static u64 imx290_calc_pixel_rate(struct imx290 *imx290,
++				  const struct imx290_mode *mode)
+ {
+-	u8 index = imx290->current_mode->link_freq_index;
+-
+-	return *(imx290_link_freqs_ptr(imx290) + index);
+-}
+-
+-static u64 imx290_calc_pixel_rate(struct imx290 *imx290)
+-{
+-	s64 link_freq = imx290_get_link_freq(imx290);
+-	u8 nlanes = imx290->nlanes;
++	s64 link_freq = imx290_link_freqs_ptr(imx290)[mode->link_freq_index];
+ 	u64 pixel_rate;
  
- 	return ret;
-@@ -1287,8 +1304,7 @@ static void imx290_remove(struct i2c_client *client)
- 	struct imx290 *imx290 = to_imx290(sd);
+ 	/* pixel rate = link_freq * 2 * nr_of_lanes / bits_per_sample */
+-	pixel_rate = link_freq * 2 * nlanes;
++	pixel_rate = link_freq * 2 * imx290->nlanes;
+ 	do_div(pixel_rate, imx290->bpp);
+ 	return pixel_rate;
+ }
+@@ -649,7 +642,7 @@ static void imx290_ctrl_update(struct imx290 *imx290,
  
- 	v4l2_async_unregister_subdev(sd);
--	media_entity_cleanup(&sd->entity);
--	v4l2_ctrl_handler_free(sd->ctrl_handler);
-+	imx290_subdev_cleanup(imx290);
+ 	__v4l2_ctrl_s_ctrl(imx290->link_freq, mode->link_freq_index);
+ 	__v4l2_ctrl_s_ctrl_int64(imx290->pixel_rate,
+-				 imx290_calc_pixel_rate(imx290));
++				 imx290_calc_pixel_rate(imx290, mode));
  
- 	mutex_destroy(&imx290->lock);
+ 	__v4l2_ctrl_modify_range(imx290->hblank, hblank, hblank, 1, hblank);
+ 	__v4l2_ctrl_modify_range(imx290->vblank, vblank, vblank, 1, vblank);
+@@ -659,6 +652,7 @@ static int imx290_ctrl_init(struct imx290 *imx290)
+ {
+ 	struct v4l2_fwnode_device_properties props;
+ 	unsigned int blank;
++	u64 pixel_rate;
+ 	int ret;
  
+ 	ret = v4l2_fwnode_device_parse(imx290->dev, &props);
+@@ -696,10 +690,10 @@ static int imx290_ctrl_init(struct imx290 *imx290)
+ 	if (imx290->link_freq)
+ 		imx290->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ 
++	pixel_rate = imx290_calc_pixel_rate(imx290, imx290->current_mode);
+ 	imx290->pixel_rate = v4l2_ctrl_new_std(&imx290->ctrls, &imx290_ctrl_ops,
+ 					       V4L2_CID_PIXEL_RATE,
+-					       1, INT_MAX, 1,
+-					       imx290_calc_pixel_rate(imx290));
++					       1, INT_MAX, 1, pixel_rate);
+ 
+ 	v4l2_ctrl_new_std_menu_items(&imx290->ctrls, &imx290_ctrl_ops,
+ 				     V4L2_CID_TEST_PATTERN,
 -- 
 Regards,
 
