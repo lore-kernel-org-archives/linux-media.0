@@ -2,196 +2,89 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93FFEC46467
-	for <linux-media@archiver.kernel.org>; Mon, 16 Jan 2023 10:23:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7365C46467
+	for <linux-media@archiver.kernel.org>; Mon, 16 Jan 2023 10:24:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjAPKW7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Jan 2023 05:22:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39496 "EHLO
+        id S230215AbjAPKYD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Jan 2023 05:24:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbjAPKWw (ORCPT
+        with ESMTP id S230178AbjAPKYB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Jan 2023 05:22:52 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2425A12847
-        for <linux-media@vger.kernel.org>; Mon, 16 Jan 2023 02:22:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1673864571; x=1705400571;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=NUP5fnyNj1np4jPJaZ3S4gga5XVVIi1dS4qfOdAmhXk=;
-  b=JtGLnD+IDJRCvRXcI41imO/g/a4Pj4KswcHwjoDYllJOnZQR06hy0XdS
-   6C5wRpgBnyRWVvepijlj/Y8TTpqzKyBHUpKHnCz0z+i7dONiGWpp16k/S
-   wKyxE5uKmIfQuXlts32OHwESgrWoGjriezmm0hHgFZjpdeSyPXSRf3LWw
-   P9u39Szx1p4s8EaxAtcYzg6M4MIKAI0OVi0hsnq1kFYtUVJoHqGv3XZNS
-   5k1D6q/tmUdXBX0Wkz0TOA+bc+nv6sMikhmqnm5csfcY5ss/4ZBJPreKY
-   KzkZq6zjVBGiwOa63mriYZ9qnJgOaJ41BSqsin479wamKXi3rktdip1I+
-   g==;
-X-IronPort-AV: E=Sophos;i="5.97,220,1669071600"; 
-   d="scan'208";a="28445519"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 16 Jan 2023 11:22:49 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Mon, 16 Jan 2023 11:22:49 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Mon, 16 Jan 2023 11:22:49 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1673864569; x=1705400569;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=NUP5fnyNj1np4jPJaZ3S4gga5XVVIi1dS4qfOdAmhXk=;
-  b=UF+BfciEueW30R/DUnLahVEPLZZ7Sym2KcR2aERnUoXaAzq4hoV4hxZx
-   Zvnj5BdIVcpO8MCzPkVisymPy3xGTxrTJOYJPEZPxUeCgXV9A44HaxM/P
-   t7r1Fm/75bFUaj3jKUSsWIO9FICBSjHyRUJ40TieUVilf83l75OS7NwX4
-   k63CFH4fKVs11eWCPOvZXhTk3rOz/dfI0doyS6Aiv+utK8oTnYUf9j6ow
-   QLnWPjKrYiXal9q1ime1i1GZfYDa98vD9WhFngz9cZZnCINyO+wMSH492
-   sCCGTq70luRaKFlV6CC7y+Yyy1yv3ctmqWn3Q0ZmGfojN5uy0qNnM6nNv
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,220,1669071600"; 
-   d="scan'208";a="28445518"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 16 Jan 2023 11:22:49 +0100
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id B3C69280056;
-        Mon, 16 Jan 2023 11:22:48 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     linux-media@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: Re: [PATCH v2 05/17] media: i2c: imx290: Pass format and mode to imx290_calc_pixel_rate()
-Date:   Mon, 16 Jan 2023 11:22:49 +0100
-Message-ID: <2867010.e9J7NaK4W3@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20230114171802.13878-5-laurent.pinchart@ideasonboard.com>
-References: <20230114171727.13830-1-laurent.pinchart@ideasonboard.com> <20230114171802.13878-1-laurent.pinchart@ideasonboard.com> <20230114171802.13878-5-laurent.pinchart@ideasonboard.com>
+        Mon, 16 Jan 2023 05:24:01 -0500
+X-Greylist: delayed 1078 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 16 Jan 2023 02:24:00 PST
+Received: from smtpq1.tb.mail.iss.as9143.net (smtpq1.tb.mail.iss.as9143.net [212.54.42.164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB8718AAC
+        for <linux-media@vger.kernel.org>; Mon, 16 Jan 2023 02:24:00 -0800 (PST)
+Received: from [212.54.42.106] (helo=smtp2.tb.mail.iss.as9143.net)
+        by smtpq1.tb.mail.iss.as9143.net with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <rudy@grumpydevil.homelinux.org>)
+        id 1pHMNM-0007Pz-Nt
+        for linux-media@vger.kernel.org; Mon, 16 Jan 2023 11:06:00 +0100
+Received: from imail.office.romunt.nl ([217.63.22.158])
+        by smtp2.tb.mail.iss.as9143.net with ESMTPA
+        id HMMypYVenrOocHMNMpb8ZK; Mon, 16 Jan 2023 11:06:00 +0100
+X-Env-Mailfrom: rudy@grumpydevil.homelinux.org
+X-Env-Rcptto: linux-media@vger.kernel.org
+X-SourceIP: 217.63.22.158
+X-CNFS-Analysis: v=2.4 cv=SKKEFsjH c=1 sm=1 tr=0 ts=63c52188 cx=a_exe
+ a=K8yjpyJtwLN9Y/90wpXtDw==:117 a=K8yjpyJtwLN9Y/90wpXtDw==:17
+ a=IkcTkHD0fZMA:10 a=RvmDmJFTN0MA:10 a=VZaRRX5orF0V-of73P0A:9 a=QEXdDO2ut3YA:10
+Received: from [192.168.30.70] (meriadoc.office.romunt.nl [192.168.30.70])
+        by imail.office.romunt.nl (8.15.2/8.15.2/Debian-14~deb10u1) with ESMTP id 30GA5XMe011744;
+        Mon, 16 Jan 2023 11:05:34 +0100
+Message-ID: <485c3f3f-b523-8908-8a83-7e7321f96d0b@grumpydevil.homelinux.org>
+Date:   Mon, 16 Jan 2023 11:05:28 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCHv2 00/16] staging/media: remove most deprecated drivers
+To:     Corinna Vinschen <vinschen@redhat.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     linux-media@vger.kernel.org
+References: <Y8UepVxVuihu4Vjj@calimero.vinschen.de>
+Content-Language: en-US
+From:   Rudy Zijlstra <rudy@grumpydevil.homelinux.org>
+In-Reply-To: <Y8UepVxVuihu4Vjj@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.7 at imail
+X-Virus-Status: Clean
+X-CMAE-Envelope: MS4xfCrRAI+nfuyrHoby8U+NHSo5uoT3yuT67RR4WgApjEemX4chx8cLP8xA1NeQexEC6Yl7wHMz0ULEkEn+y5bmVTJP5EWeYP5w1i+w1V76IJuqT6381Y0q
+ GMWOi2JHkd8OurJCRVdRPHBPRPfkmORHYVyp8ZWFQCoV3L302Z978u/kXL29ITtXEE/V4Mgoc3iy3Ee3AVqGWYVVuKOHxn06USE1mAG+uxHmCFzPoPe656RB
+ 2V4ZS30oj412tj9khtkaEcdsCppBC/Ifev1EkKryPHWQnRmymBqENgzRTNIJUi3+
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent,
-
-thanks for the update.
-
-Am Samstag, 14. Januar 2023, 18:17:50 CET schrieb Laurent Pinchart:
-> Avoid accessing the imx290 current_format and current_mode fields in
-> imx290_calc_pixel_rate() to prepare for the removal of those fields.
-> Among the two callers of the function, imx290_ctrl_update() has an
-> explicit mode pointer already, and we can also give it a format pointer.
-> Use those explicitly.
-> 
-> While at it, inline the imx290_get_link_freq() function in
-> imx290_calc_pixel_rate() as it is only called there.
-> 
-> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> ---
-> Changes since v1:
-> 
-> - Drop format argument from imx290_calc_pixel_rate()
-> ---
->  drivers/media/i2c/imx290.c | 27 ++++++++++++---------------
->  1 file changed, 12 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-> index 4ad6eab4f2e2..8f141df74e2f 100644
-> --- a/drivers/media/i2c/imx290.c
-> +++ b/drivers/media/i2c/imx290.c
-> @@ -547,21 +547,15 @@ static int imx290_write_current_format(struct imx290
-> *imx290) return 0;
->  }
-> 
-> -static s64 imx290_get_link_freq(struct imx290 *imx290)
-> +static u64 imx290_calc_pixel_rate(struct imx290 *imx290,
-> +				  const struct v4l2_mbus_framefmt 
-*format,
-
-Maybe some mishap, but the format parameter is still here.
-Otherwise:
-Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-
-> +				  const struct imx290_mode *mode)
->  {
-> -	u8 index = imx290->current_mode->link_freq_index;
-> -
-> -	return *(imx290_link_freqs_ptr(imx290) + index);
-> -}
-> -
-> -static u64 imx290_calc_pixel_rate(struct imx290 *imx290)
-> -{
-> -	s64 link_freq = imx290_get_link_freq(imx290);
-> -	u8 nlanes = imx290->nlanes;
-> +	s64 link_freq = imx290_link_freqs_ptr(imx290)[mode-
->link_freq_index];
->  	u64 pixel_rate;
-> 
->  	/* pixel rate = link_freq * 2 * nr_of_lanes / bits_per_sample */
-> -	pixel_rate = link_freq * 2 * nlanes;
-> +	pixel_rate = link_freq * 2 * imx290->nlanes;
->  	do_div(pixel_rate, imx290->bpp);
->  	return pixel_rate;
->  }
-> @@ -635,6 +629,7 @@ static const char * const imx290_test_pattern_menu[] = {
-> };
-> 
->  static void imx290_ctrl_update(struct imx290 *imx290,
-> +			       const struct v4l2_mbus_framefmt *format,
->  			       const struct imx290_mode *mode)
->  {
->  	unsigned int hblank = mode->hmax - mode->width;
-> @@ -649,7 +644,7 @@ static void imx290_ctrl_update(struct imx290 *imx290,
-> 
->  	__v4l2_ctrl_s_ctrl(imx290->link_freq, mode->link_freq_index);
->  	__v4l2_ctrl_s_ctrl_int64(imx290->pixel_rate,
-> -				 imx290_calc_pixel_rate(imx290));
-> +				 imx290_calc_pixel_rate(imx290, 
-format, mode));
-> 
->  	__v4l2_ctrl_modify_range(imx290->hblank, hblank, hblank, 1, hblank);
->  	__v4l2_ctrl_modify_range(imx290->vblank, vblank, vblank, 1, vblank);
-> @@ -659,6 +654,7 @@ static int imx290_ctrl_init(struct imx290 *imx290)
->  {
->  	struct v4l2_fwnode_device_properties props;
->  	unsigned int blank;
-> +	u64 pixel_rate;
->  	int ret;
-> 
->  	ret = v4l2_fwnode_device_parse(imx290->dev, &props);
-> @@ -696,10 +692,11 @@ static int imx290_ctrl_init(struct imx290 *imx290)
->  	if (imx290->link_freq)
->  		imx290->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> 
-> +	pixel_rate = imx290_calc_pixel_rate(imx290, &imx290->current_format,
-> +					    imx290->current_mode);
->  	imx290->pixel_rate = v4l2_ctrl_new_std(&imx290->ctrls, 
-&imx290_ctrl_ops,
->  					       V4L2_CID_PIXEL_RATE,
-> -					       1, INT_MAX, 1,
-> -					       
-imx290_calc_pixel_rate(imx290));
-> +					       1, INT_MAX, 1, 
-pixel_rate);
-> 
->  	v4l2_ctrl_new_std_menu_items(&imx290->ctrls, &imx290_ctrl_ops,
->  				     V4L2_CID_TEST_PATTERN,
-> @@ -920,7 +917,7 @@ static int imx290_set_fmt(struct v4l2_subdev *sd,
->  		imx290->current_mode = mode;
->  		imx290->bpp = imx290_formats[i].bpp;
-> 
-> -		imx290_ctrl_update(imx290, mode);
-> +		imx290_ctrl_update(imx290, &fmt->format, mode);
->  	}
-> 
->  	*format = fmt->format;
+Hans,
 
 
 
+On 16-01-2023 10:53, Corinna Vinschen wrote:
+> Hi Hans,
+>
+> I only learned about this yesterday, so I hope I'm not too late.
+>
+> Please don't do that.  You're about to remove working drivers used by a
+> lot of people.
+>
+> If you remove them from the Linux kernel, you will leave *lots* of DVB-C
+> and DVB-S card users behind.  They will update their TV recording
+> machines to a newer system at one point and suddenly their ability to
+> record from TV is gone forever.
+>
+> I'm personally affected by this as well.  We're using a machine with
+> four Technotrend S2-3200 Budget DVB-S2 cards for TV recordings using
+> the VDR package.  This card is apparently handled by the code under
+> drivers/staging/media/deprecated/saa7146.
+
+This being the case (from another user), should those drivers be deprecated?
+
+
+Cheers
+
+
+Rudy
 
