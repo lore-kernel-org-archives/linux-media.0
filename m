@@ -2,43 +2,43 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 503C7C54EBE
-	for <linux-media@archiver.kernel.org>; Mon, 16 Jan 2023 03:22:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 861A0C46467
+	for <linux-media@archiver.kernel.org>; Mon, 16 Jan 2023 03:22:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231892AbjAPDWY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 15 Jan 2023 22:22:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60172 "EHLO
+        id S231908AbjAPDWZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 15 Jan 2023 22:22:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231827AbjAPDWF (ORCPT
+        with ESMTP id S231835AbjAPDWG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 15 Jan 2023 22:22:05 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060087AAE;
-        Sun, 15 Jan 2023 19:22:00 -0800 (PST)
-X-UUID: ea94b00e954c11eda06fc9ecc4dadd91-20230116
+        Sun, 15 Jan 2023 22:22:06 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C1E76A4;
+        Sun, 15 Jan 2023 19:22:03 -0800 (PST)
+X-UUID: eadb59e6954c11ed945fc101203acc17-20230116
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=OVklQduRJZoNu28g7cGAMwCu/b6wC9ZCCjv4NTD+fhs=;
-        b=Kzv3LCaGu/d63mbZiGvY9Ml7ZC2uZUMDkj9UeYzMvwTCXs4PslEml7GOGp/PKC5AJUjCgsgCKnIp6MvEByDB1i5FE1Asj06lJYZkTMe5EOGPu2PzjBY+9d1ZN2XSAiq83wmeVljGk2lypc24ShiUWTl38cHBLmQW6AiDb84aGEU=;
-X-CID-P-RULE: Spam_GS6885AD
-X-CID-O-INFO: VERSION:1.1.17,REQID:766ff088-49eb-4d2c-a755-aa12eff2763e,IP:0,U
-        RL:0,TC:0,Content:27,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS6885AD,ACT
-        ION:quarantine,TS:122
-X-CID-INFO: VERSION:1.1.17,REQID:766ff088-49eb-4d2c-a755-aa12eff2763e,IP:0,URL
-        :0,TC:0,Content:27,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:122
-X-CID-META: VersionHash:543e81c,CLOUDID:3cf8ba54-dd49-462e-a4be-2143a3ddc739,B
-        ulkID:230113170350R1X9K4GF,BulkQuantity:7,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:4,EDM:-3,IP:nil,URL:0,File:nil,Bulk:41,QS:nil,BEC:nil,COL:0,OSI
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=yI0/MJ3SDEiuC4nBdoUnbCOoT52f/xg0zqsHGYfXxCA=;
+        b=RZ7AdPJ2HVb/nYpzY4w+lMukIsUh+Cq2ewruTTfKTBukTLoyRPWOtBARkzUHMvqjMK0k/wQwPao4/w0WcuKwY61EEqG6TOUrww/ISPt8U8GBXUNnUTy4bNurfwKXOzJFNwA/yqcD25qb1/9zIE1eRvgd2FfkvdOzTpwf8Dy757o=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.17,REQID:1530d215-57fd-4a6e-b831-798c40af4386,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:90
+X-CID-INFO: VERSION:1.1.17,REQID:1530d215-57fd-4a6e-b831-798c40af4386,IP:0,URL
+        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
+        N:quarantine,TS:90
+X-CID-META: VersionHash:543e81c,CLOUDID:46f6558c-8530-4eff-9f77-222cf6e2895b,B
+        ulkID:230113170357QD90ASW0,BulkQuantity:6,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:41,QS:nil,BEC:nil,COL:0,OSI
         :0,OSA:0
 X-CID-APTURL: Status:success,Category:nil,Trust:0,Unknown:0,Malicious:0
-X-CID-BVR: 0,NGT
-X-UUID: ea94b00e954c11eda06fc9ecc4dadd91-20230116
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+X-CID-BVR: 0
+X-UUID: eadb59e6954c11ed945fc101203acc17-20230116
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
         (envelope-from <moudy.ho@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1166170205; Mon, 16 Jan 2023 11:21:50 +0800
+        with ESMTP id 694426333; Mon, 16 Jan 2023 11:21:50 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.792.15; Mon, 16 Jan 2023 11:21:49 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
@@ -55,9 +55,9 @@ CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Moudy Ho <moudy.ho@mediatek.com>
-Subject: [RESEND v3 10/13] media: platform: mtk-mdp3: add mt8195 platform configuration
-Date:   Mon, 16 Jan 2023 11:21:44 +0800
-Message-ID: <20230116032147.23607-11-moudy.ho@mediatek.com>
+Subject: [RESEND v3 13/13] media: platform: mtk-mdp3: add support for parallel pipe to improve FPS
+Date:   Mon, 16 Jan 2023 11:21:47 +0800
+Message-ID: <20230116032147.23607-14-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20230116032147.23607-1-moudy.ho@mediatek.com>
 References: <20230116032147.23607-1-moudy.ho@mediatek.com>
@@ -68,810 +68,554 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add MT8195 MDP3 basic configuration in header file "mdp3-plat-mt8195.h"
-and corresponding driver data.
+In advanced chips, MDP3 has the ability to have multiple pipelines
+process the same frame in parallel.
+In order to implement it, multiple CMDQ clients and packets need to
+be configured simultaneously.
 
 Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 ---
- .../mediatek/mdp3/mt8195/mdp3-plat-mt8195.h   | 664 ++++++++++++++++++
- .../platform/mediatek/mdp3/mtk-img-ipi.h      |   1 +
- .../platform/mediatek/mdp3/mtk-mdp3-comp.c    |  36 +
- .../platform/mediatek/mdp3/mtk-mdp3-core.c    |  19 +
- .../platform/mediatek/mdp3/mtk-mdp3-core.h    |   6 +
- 5 files changed, 726 insertions(+)
- create mode 100644 drivers/media/platform/mediatek/mdp3/mt8195/mdp3-plat-mt8195.h
+ .../mediatek/mdp3/mt8195/mdp3-plat-mt8195.h   |   5 +
+ .../platform/mediatek/mdp3/mtk-mdp3-cmdq.c    | 194 +++++++++++++-----
+ .../platform/mediatek/mdp3/mtk-mdp3-cmdq.h    |   1 +
+ .../platform/mediatek/mdp3/mtk-mdp3-core.c    |  21 +-
+ .../platform/mediatek/mdp3/mtk-mdp3-core.h    |  12 +-
+ .../platform/mediatek/mdp3/mtk-mdp3-m2m.c     |  15 ++
+ .../platform/mediatek/mdp3/mtk-mdp3-regs.c    |  18 ++
+ .../platform/mediatek/mdp3/mtk-mdp3-regs.h    |   1 +
+ .../platform/mediatek/mdp3/mtk-mdp3-vpu.c     |   3 +-
+ 9 files changed, 208 insertions(+), 62 deletions(-)
 
 diff --git a/drivers/media/platform/mediatek/mdp3/mt8195/mdp3-plat-mt8195.h b/drivers/media/platform/mediatek/mdp3/mt8195/mdp3-plat-mt8195.h
-new file mode 100644
-index 000000000000..48bb4d2401cf
---- /dev/null
+index 48bb4d2401cf..340a976360d1 100644
+--- a/drivers/media/platform/mediatek/mdp3/mt8195/mdp3-plat-mt8195.h
 +++ b/drivers/media/platform/mediatek/mdp3/mt8195/mdp3-plat-mt8195.h
-@@ -0,0 +1,664 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (c) 2022 MediaTek Inc.
-+ * Author: Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
-+ */
-+
-+#ifndef __MDP3_PLAT_MT8195_H__
-+#define __MDP3_PLAT_MT8195_H__
-+
-+static const struct mdp_platform_config mt8195_plat_cfg = {
-+	.rdma_support_10bit             = true,
-+	.rdma_rsz1_sram_sharing         = false,
-+	.rdma_upsample_repeat_only      = false,
-+	.rdma_esl_setting		= true,
-+	.rdma_event_num			= 4,
-+	.rsz_disable_dcm_small_sample   = false,
-+	.rsz_etc_control		= true,
-+	.wrot_filter_constraint		= false,
-+	.wrot_event_num			= 4,
-+	.tdshp_hist_num			= 17,
-+	.tdshp_constrain		= true,
-+	.tdshp_contour			= true,
-+};
-+
-+static const struct of_device_id mt8195_mdp_probe_infra[MDP_INFRA_MAX] = {
-+	[MDP_INFRA_MMSYS] = { .compatible = "mediatek,mt8195-vppsys0" },
-+	[MDP_INFRA_MMSYS2] = { .compatible = "mediatek,mt8195-vppsys1" },
-+	[MDP_INFRA_MUTEX] = { .compatible = "mediatek,mt8195-vpp-mutex" },
-+	[MDP_INFRA_MUTEX2] = { .compatible = "mediatek,mt8195-vpp-mutex" },
-+	[MDP_INFRA_SCP] = { .compatible = "mediatek,mt8195-scp" }
-+};
-+
-+static const struct mdp_pipe_info mt8195_pipe_info[] = {
-+	[MDP_PIPE_WPEI] = {MDP_PIPE_WPEI, 0, 0},
-+	[MDP_PIPE_WPEI2] = {MDP_PIPE_WPEI2, 0, 1},
-+	[MDP_PIPE_IMGI] = {MDP_PIPE_IMGI, 0, 2},
-+	[MDP_PIPE_RDMA0] = {MDP_PIPE_RDMA0, 0, 3},
-+	[MDP_PIPE_RDMA1] = {MDP_PIPE_RDMA1, 1, 1},
-+	[MDP_PIPE_RDMA2] = {MDP_PIPE_RDMA2, 1, 2},
-+	[MDP_PIPE_RDMA3] = {MDP_PIPE_RDMA3, 1, 3},
-+	[MDP_PIPE_SPLIT] = {MDP_PIPE_SPLIT, 1, 4},
-+	[MDP_PIPE_SPLIT2] = {MDP_PIPE_SPLIT2, 1, 3},
-+	[MDP_PIPE_VPP1_SOUT] = {MDP_PIPE_VPP1_SOUT, 0, 4},
-+	[MDP_PIPE_VPP0_SOUT] = {MDP_PIPE_VPP0_SOUT, 1, 5},
-+};
-+
-+static const u32 mt8195_mutex_idx[MDP_MAX_COMP_COUNT] = {
-+	[MDP_COMP_RDMA0] = MUTEX_MOD_IDX_MDP_RDMA0,
-+	[MDP_COMP_RDMA1] = MUTEX_MOD_IDX_MDP_RDMA1,
-+	[MDP_COMP_RDMA2] = MUTEX_MOD_IDX_MDP_RDMA2,
-+	[MDP_COMP_RDMA3] = MUTEX_MOD_IDX_MDP_RDMA3,
-+	[MDP_COMP_STITCH] = MUTEX_MOD_IDX_MDP_STITCH0,
-+	[MDP_COMP_FG0] = MUTEX_MOD_IDX_MDP_FG0,
-+	[MDP_COMP_FG1] = MUTEX_MOD_IDX_MDP_FG1,
-+	[MDP_COMP_FG2] = MUTEX_MOD_IDX_MDP_FG2,
-+	[MDP_COMP_FG3] = MUTEX_MOD_IDX_MDP_FG3,
-+	[MDP_COMP_HDR0] = MUTEX_MOD_IDX_MDP_HDR0,
-+	[MDP_COMP_HDR1] = MUTEX_MOD_IDX_MDP_HDR1,
-+	[MDP_COMP_HDR2] = MUTEX_MOD_IDX_MDP_HDR2,
-+	[MDP_COMP_HDR3] = MUTEX_MOD_IDX_MDP_HDR3,
-+	[MDP_COMP_AAL0] = MUTEX_MOD_IDX_MDP_AAL0,
-+	[MDP_COMP_AAL1] = MUTEX_MOD_IDX_MDP_AAL1,
-+	[MDP_COMP_AAL2] = MUTEX_MOD_IDX_MDP_AAL2,
-+	[MDP_COMP_AAL3] = MUTEX_MOD_IDX_MDP_AAL3,
-+	[MDP_COMP_RSZ0] = MUTEX_MOD_IDX_MDP_RSZ0,
-+	[MDP_COMP_RSZ1] = MUTEX_MOD_IDX_MDP_RSZ1,
-+	[MDP_COMP_RSZ2] = MUTEX_MOD_IDX_MDP_RSZ2,
-+	[MDP_COMP_RSZ3] = MUTEX_MOD_IDX_MDP_RSZ3,
-+	[MDP_COMP_MERGE2] = MUTEX_MOD_IDX_MDP_MERGE2,
-+	[MDP_COMP_MERGE3] = MUTEX_MOD_IDX_MDP_MERGE3,
-+	[MDP_COMP_TDSHP0] = MUTEX_MOD_IDX_MDP_TDSHP0,
-+	[MDP_COMP_TDSHP1] = MUTEX_MOD_IDX_MDP_TDSHP1,
-+	[MDP_COMP_TDSHP2] = MUTEX_MOD_IDX_MDP_TDSHP2,
-+	[MDP_COMP_TDSHP3] = MUTEX_MOD_IDX_MDP_TDSHP3,
-+	[MDP_COMP_COLOR0] = MUTEX_MOD_IDX_MDP_COLOR0,
-+	[MDP_COMP_COLOR1] = MUTEX_MOD_IDX_MDP_COLOR1,
-+	[MDP_COMP_COLOR2] = MUTEX_MOD_IDX_MDP_COLOR2,
-+	[MDP_COMP_COLOR3] = MUTEX_MOD_IDX_MDP_COLOR3,
-+	[MDP_COMP_OVL0] = MUTEX_MOD_IDX_MDP_OVL0,
-+	[MDP_COMP_OVL1] = MUTEX_MOD_IDX_MDP_OVL1,
-+	[MDP_COMP_PAD0] = MUTEX_MOD_IDX_MDP_PAD0,
-+	[MDP_COMP_PAD1] = MUTEX_MOD_IDX_MDP_PAD1,
-+	[MDP_COMP_PAD2] = MUTEX_MOD_IDX_MDP_PAD2,
-+	[MDP_COMP_PAD3] = MUTEX_MOD_IDX_MDP_PAD3,
-+	[MDP_COMP_TCC0] = MUTEX_MOD_IDX_MDP_TCC0,
-+	[MDP_COMP_TCC1] = MUTEX_MOD_IDX_MDP_TCC1,
-+	[MDP_COMP_WROT0] = MUTEX_MOD_IDX_MDP_WROT0,
-+	[MDP_COMP_WROT1] = MUTEX_MOD_IDX_MDP_WROT1,
-+	[MDP_COMP_WROT2] = MUTEX_MOD_IDX_MDP_WROT2,
-+	[MDP_COMP_WROT3] = MUTEX_MOD_IDX_MDP_WROT3,
-+};
-+
-+static const struct of_device_id mt8195_sub_comp_dt_ids[] = {
-+	{}
-+};
-+
-+enum mt8195_mdp_comp_id {
-+	/* MT8195 Comp id */
-+	/* ISP */
-+	MT8195_MDP_COMP_WPEI = 0,
-+	MT8195_MDP_COMP_WPEO,           /* 1 */
-+	MT8195_MDP_COMP_WPEI2,          /* 2 */
-+	MT8195_MDP_COMP_WPEO2,          /* 3 */
-+
-+	/* MDP */
-+	MT8195_MDP_COMP_CAMIN,          /* 4 */
-+	MT8195_MDP_COMP_CAMIN2,         /* 5 */
-+	MT8195_MDP_COMP_SPLIT,          /* 6 */
-+	MT8195_MDP_COMP_SPLIT2,         /* 7 */
-+	MT8195_MDP_COMP_RDMA0,          /* 8 */
-+	MT8195_MDP_COMP_RDMA1,          /* 9 */
-+	MT8195_MDP_COMP_RDMA2,          /* 10 */
-+	MT8195_MDP_COMP_RDMA3,          /* 11 */
-+	MT8195_MDP_COMP_STITCH,         /* 12 */
-+	MT8195_MDP_COMP_FG0,            /* 13 */
-+	MT8195_MDP_COMP_FG1,            /* 14 */
-+	MT8195_MDP_COMP_FG2,            /* 15 */
-+	MT8195_MDP_COMP_FG3,            /* 16 */
-+	MT8195_MDP_COMP_TO_SVPP2MOUT,   /* 17 */
-+	MT8195_MDP_COMP_TO_SVPP3MOUT,   /* 18 */
-+	MT8195_MDP_COMP_TO_WARP0MOUT,   /* 19 */
-+	MT8195_MDP_COMP_TO_WARP1MOUT,   /* 20 */
-+	MT8195_MDP_COMP_VPP0_SOUT,      /* 21 */
-+	MT8195_MDP_COMP_VPP1_SOUT,      /* 22 */
-+	MT8195_MDP_COMP_PQ0_SOUT,       /* 23 */
-+	MT8195_MDP_COMP_PQ1_SOUT,       /* 24 */
-+	MT8195_MDP_COMP_HDR0,           /* 25 */
-+	MT8195_MDP_COMP_HDR1,           /* 26 */
-+	MT8195_MDP_COMP_HDR2,           /* 27 */
-+	MT8195_MDP_COMP_HDR3,           /* 28 */
-+	MT8195_MDP_COMP_AAL0,           /* 29 */
-+	MT8195_MDP_COMP_AAL1,           /* 30 */
-+	MT8195_MDP_COMP_AAL2,           /* 31 */
-+	MT8195_MDP_COMP_AAL3,           /* 32 */
-+	MT8195_MDP_COMP_RSZ0,           /* 33 */
-+	MT8195_MDP_COMP_RSZ1,           /* 34 */
-+	MT8195_MDP_COMP_RSZ2,           /* 35 */
-+	MT8195_MDP_COMP_RSZ3,           /* 36 */
-+	MT8195_MDP_COMP_TDSHP0,         /* 37 */
-+	MT8195_MDP_COMP_TDSHP1,         /* 38 */
-+	MT8195_MDP_COMP_TDSHP2,         /* 39 */
-+	MT8195_MDP_COMP_TDSHP3,         /* 40 */
-+	MT8195_MDP_COMP_COLOR0,         /* 41 */
-+	MT8195_MDP_COMP_COLOR1,         /* 42 */
-+	MT8195_MDP_COMP_COLOR2,         /* 43 */
-+	MT8195_MDP_COMP_COLOR3,         /* 44 */
-+	MT8195_MDP_COMP_OVL0,           /* 45 */
-+	MT8195_MDP_COMP_OVL1,           /* 46 */
-+	MT8195_MDP_COMP_PAD0,           /* 47 */
-+	MT8195_MDP_COMP_PAD1,           /* 48 */
-+	MT8195_MDP_COMP_PAD2,           /* 49 */
-+	MT8195_MDP_COMP_PAD3,           /* 50 */
-+	MT8195_MDP_COMP_TCC0,           /* 51 */
-+	MT8195_MDP_COMP_TCC1,           /* 52 */
-+	MT8195_MDP_COMP_WROT0,          /* 53 */
-+	MT8195_MDP_COMP_WROT1,          /* 54 */
-+	MT8195_MDP_COMP_WROT2,          /* 55 */
-+	MT8195_MDP_COMP_WROT3,          /* 56 */
-+	MT8195_MDP_COMP_MERGE2,         /* 57 */
-+	MT8195_MDP_COMP_MERGE3,         /* 58 */
-+
-+	MT8195_MDP_COMP_VDO0DL0,        /* 59 */
-+	MT8195_MDP_COMP_VDO1DL0,        /* 60 */
-+	MT8195_MDP_COMP_VDO0DL1,        /* 61 */
-+	MT8195_MDP_COMP_VDO1DL1,        /* 62 */
-+};
-+
-+static const struct mdp_comp_data mt8195_mdp_comp_data[MDP_MAX_COMP_COUNT] = {
-+	[MDP_COMP_WPEI] = {
-+		{MDP_COMP_TYPE_WPEI, 0, MT8195_MDP_COMP_WPEI, 0},
-+		{0, 0, 0}
-+	},
-+	[MDP_COMP_WPEO] = {
-+		{MDP_COMP_TYPE_EXTO, 2, MT8195_MDP_COMP_WPEO, 0},
-+		{0, 0, 0}
-+	},
-+	[MDP_COMP_WPEI2] = {
-+		{MDP_COMP_TYPE_WPEI, 1, MT8195_MDP_COMP_WPEI2, 0},
-+		{0, 0, 0}
-+	},
-+	[MDP_COMP_WPEO2] = {
-+		{MDP_COMP_TYPE_EXTO, 3, MT8195_MDP_COMP_WPEO2, 0},
-+		{0, 0, 0}
-+	},
-+	[MDP_COMP_CAMIN] = {
-+		{MDP_COMP_TYPE_DL_PATH, 0, MT8195_MDP_COMP_CAMIN, 0},
-+		{3, 3, 0}
-+	},
-+	[MDP_COMP_CAMIN2] = {
-+		{MDP_COMP_TYPE_DL_PATH, 1, MT8195_MDP_COMP_CAMIN2, 0},
-+		{3, 6, 0}
-+	},
-+	[MDP_COMP_SPLIT] = {
-+		{MDP_COMP_TYPE_SPLIT, 0, MT8195_MDP_COMP_SPLIT, 1},
-+		{7, 0, 0}
-+	},
-+	[MDP_COMP_SPLIT2] = {
-+		{MDP_COMP_TYPE_SPLIT, 1, MT8195_MDP_COMP_SPLIT2, 1},
-+		{7, 0, 0}
-+	},
-+	[MDP_COMP_RDMA0] = {
-+		{MDP_COMP_TYPE_RDMA, 0, MT8195_MDP_COMP_RDMA0, 0},
-+		{3, 0, 0}
-+	},
-+	[MDP_COMP_RDMA1] = {
-+		{MDP_COMP_TYPE_RDMA, 1, MT8195_MDP_COMP_RDMA1, 1},
-+		{3, 0, 0}
-+	},
-+	[MDP_COMP_RDMA2] = {
-+		{MDP_COMP_TYPE_RDMA, 2, MT8195_MDP_COMP_RDMA2, 1},
-+		{3, 0, 0}
-+	},
-+	[MDP_COMP_RDMA3] = {
-+		{MDP_COMP_TYPE_RDMA, 3, MT8195_MDP_COMP_RDMA3, 1},
-+		{3, 0, 0}
-+	},
-+	[MDP_COMP_STITCH] = {
-+		{MDP_COMP_TYPE_STITCH, 0, MT8195_MDP_COMP_STITCH, 0},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_FG0] = {
-+		{MDP_COMP_TYPE_FG, 0, MT8195_MDP_COMP_FG0, 0},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_FG1] = {
-+		{MDP_COMP_TYPE_FG, 1, MT8195_MDP_COMP_FG1, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_FG2] = {
-+		{MDP_COMP_TYPE_FG, 2, MT8195_MDP_COMP_FG2, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_FG3] = {
-+		{MDP_COMP_TYPE_FG, 3, MT8195_MDP_COMP_FG3, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_HDR0] = {
-+		{MDP_COMP_TYPE_HDR, 0, MT8195_MDP_COMP_HDR0, 0},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_HDR1] = {
-+		{MDP_COMP_TYPE_HDR, 1, MT8195_MDP_COMP_HDR1, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_HDR2] = {
-+		{MDP_COMP_TYPE_HDR, 2, MT8195_MDP_COMP_HDR2, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_HDR3] = {
-+		{MDP_COMP_TYPE_HDR, 3, MT8195_MDP_COMP_HDR3, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_AAL0] = {
-+		{MDP_COMP_TYPE_AAL, 0, MT8195_MDP_COMP_AAL0, 0},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_AAL1] = {
-+		{MDP_COMP_TYPE_AAL, 1, MT8195_MDP_COMP_AAL1, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_AAL2] = {
-+		{MDP_COMP_TYPE_AAL, 2, MT8195_MDP_COMP_AAL2, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_AAL3] = {
-+		{MDP_COMP_TYPE_AAL, 3, MT8195_MDP_COMP_AAL3, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_RSZ0] = {
-+		{MDP_COMP_TYPE_RSZ, 0, MT8195_MDP_COMP_RSZ0, 0},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_RSZ1] = {
-+		{MDP_COMP_TYPE_RSZ, 1, MT8195_MDP_COMP_RSZ1, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_RSZ2] = {
-+		{MDP_COMP_TYPE_RSZ, 2, MT8195_MDP_COMP_RSZ2, 1},
-+		{2, 0, 0},
-+		{true, MDP_COMP_MERGE2}
-+	},
-+	[MDP_COMP_RSZ3] = {
-+		{MDP_COMP_TYPE_RSZ, 3, MT8195_MDP_COMP_RSZ3, 1},
-+		{2, 0, 0},
-+		{true, MDP_COMP_MERGE3}
-+	},
-+	[MDP_COMP_TDSHP0] = {
-+		{MDP_COMP_TYPE_TDSHP, 0, MT8195_MDP_COMP_TDSHP0, 0},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_TDSHP1] = {
-+		{MDP_COMP_TYPE_TDSHP, 1, MT8195_MDP_COMP_TDSHP1, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_TDSHP2] = {
-+		{MDP_COMP_TYPE_TDSHP, 2, MT8195_MDP_COMP_TDSHP2, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_TDSHP3] = {
-+		{MDP_COMP_TYPE_TDSHP, 3, MT8195_MDP_COMP_TDSHP3, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_COLOR0] = {
-+		{MDP_COMP_TYPE_COLOR, 0, MT8195_MDP_COMP_COLOR0, 0},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_COLOR1] = {
-+		{MDP_COMP_TYPE_COLOR, 1, MT8195_MDP_COMP_COLOR1, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_COLOR2] = {
-+		{MDP_COMP_TYPE_COLOR, 2, MT8195_MDP_COMP_COLOR2, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_COLOR3] = {
-+		{MDP_COMP_TYPE_COLOR, 3, MT8195_MDP_COMP_COLOR3, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_OVL0] = {
-+		{MDP_COMP_TYPE_OVL, 0, MT8195_MDP_COMP_OVL0, 0},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_OVL1] = {
-+		{MDP_COMP_TYPE_OVL, 1, MT8195_MDP_COMP_OVL1, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_PAD0] = {
-+		{MDP_COMP_TYPE_PAD, 0, MT8195_MDP_COMP_PAD0, 0},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_PAD1] = {
-+		{MDP_COMP_TYPE_PAD, 1, MT8195_MDP_COMP_PAD1, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_PAD2] = {
-+		{MDP_COMP_TYPE_PAD, 2, MT8195_MDP_COMP_PAD2, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_PAD3] = {
-+		{MDP_COMP_TYPE_PAD, 3, MT8195_MDP_COMP_PAD3, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_TCC0] = {
-+		{MDP_COMP_TYPE_TCC, 0, MT8195_MDP_COMP_TCC0, 0},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_TCC1] = {
-+		{MDP_COMP_TYPE_TCC, 1, MT8195_MDP_COMP_TCC1, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_WROT0] = {
-+		{MDP_COMP_TYPE_WROT, 0, MT8195_MDP_COMP_WROT0, 0},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_WROT1] = {
-+		{MDP_COMP_TYPE_WROT, 1, MT8195_MDP_COMP_WROT1, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_WROT2] = {
-+		{MDP_COMP_TYPE_WROT, 2, MT8195_MDP_COMP_WROT2, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_WROT3] = {
-+		{MDP_COMP_TYPE_WROT, 3, MT8195_MDP_COMP_WROT3, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_MERGE2] = {
-+		{MDP_COMP_TYPE_MERGE, 0, MT8195_MDP_COMP_MERGE2, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_MERGE3] = {
-+		{MDP_COMP_TYPE_MERGE, 1, MT8195_MDP_COMP_MERGE3, 1},
-+		{1, 0, 0}
-+	},
-+	[MDP_COMP_PQ0_SOUT] = {
-+		{MDP_COMP_TYPE_DUMMY, 0, MT8195_MDP_COMP_PQ0_SOUT, 0},
-+		{0, 0, 0}
-+	},
-+	[MDP_COMP_PQ1_SOUT] = {
-+		{MDP_COMP_TYPE_DUMMY, 1, MT8195_MDP_COMP_PQ1_SOUT, 1},
-+		{0, 0, 0}
-+	},
-+	[MDP_COMP_TO_WARP0MOUT] = {
-+		{MDP_COMP_TYPE_DUMMY, 2, MT8195_MDP_COMP_TO_WARP0MOUT, 0},
-+		{0, 0, 0}
-+	},
-+	[MDP_COMP_TO_WARP1MOUT] = {
-+		{MDP_COMP_TYPE_DUMMY, 3, MT8195_MDP_COMP_TO_WARP1MOUT, 0},
-+		{0, 0, 0}
-+	},
-+	[MDP_COMP_TO_SVPP2MOUT] = {
-+		{MDP_COMP_TYPE_DUMMY, 4, MT8195_MDP_COMP_TO_SVPP2MOUT, 1},
-+		{0, 0, 0}
-+	},
-+	[MDP_COMP_TO_SVPP3MOUT] = {
-+		{MDP_COMP_TYPE_DUMMY, 5, MT8195_MDP_COMP_TO_SVPP3MOUT, 1},
-+		{0, 0, 0}
-+	},
-+	[MDP_COMP_VPP0_SOUT] = {
-+		{MDP_COMP_TYPE_PATH, 0, MT8195_MDP_COMP_VPP0_SOUT, 1},
-+		{4, 9, 0}
-+	},
-+	[MDP_COMP_VPP1_SOUT] = {
-+		{MDP_COMP_TYPE_PATH, 1, MT8195_MDP_COMP_VPP1_SOUT, 0},
-+		{2, 13, 0}
-+	},
-+	[MDP_COMP_VDO0DL0] = {
-+		{MDP_COMP_TYPE_DL_PATH, 0, MT8195_MDP_COMP_VDO0DL0, 1},
-+		{1, 15, 0}
-+	},
-+	[MDP_COMP_VDO1DL0] = {
-+		{MDP_COMP_TYPE_DL_PATH, 0, MT8195_MDP_COMP_VDO1DL0, 1},
-+		{1, 17, 0}
-+	},
-+	[MDP_COMP_VDO0DL1] = {
-+		{MDP_COMP_TYPE_DL_PATH, 0, MT8195_MDP_COMP_VDO0DL1, 1},
-+		{1, 18, 0}
-+	},
-+	[MDP_COMP_VDO1DL1] = {
-+		{MDP_COMP_TYPE_DL_PATH, 0, MT8195_MDP_COMP_VDO1DL1, 1},
-+		{1, 16, 0}
-+	},
-+};
-+
-+/*
-+ * All 10-bit related formats are not added in the basic format list,
-+ * please add the corresponding format settings before use.
-+ */
-+static const struct mdp_format mt8195_formats[] = {
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_GREY,
-+		.mdp_color	= MDP_COLOR_GREY,
-+		.depth		= { 8 },
-+		.row_depth	= { 8 },
-+		.num_planes	= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_RGB565X,
-+		.mdp_color	= MDP_COLOR_BGR565,
-+		.depth		= { 16 },
-+		.row_depth	= { 16 },
-+		.num_planes	= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_RGB565,
-+		.mdp_color	= MDP_COLOR_RGB565,
-+		.depth		= { 16 },
-+		.row_depth	= { 16 },
-+		.num_planes	= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_RGB24,
-+		.mdp_color	= MDP_COLOR_RGB888,
-+		.depth		= { 24 },
-+		.row_depth	= { 24 },
-+		.num_planes	= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_BGR24,
-+		.mdp_color	= MDP_COLOR_BGR888,
-+		.depth		= { 24 },
-+		.row_depth	= { 24 },
-+		.num_planes	= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_ABGR32,
-+		.mdp_color	= MDP_COLOR_BGRA8888,
-+		.depth		= { 32 },
-+		.row_depth	= { 32 },
-+		.num_planes	= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_ARGB32,
-+		.mdp_color	= MDP_COLOR_ARGB8888,
-+		.depth		= { 32 },
-+		.row_depth	= { 32 },
-+		.num_planes	= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_UYVY,
-+		.mdp_color	= MDP_COLOR_UYVY,
-+		.depth		= { 16 },
-+		.row_depth	= { 16 },
-+		.num_planes	= 1,
-+		.walign		= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_VYUY,
-+		.mdp_color	= MDP_COLOR_VYUY,
-+		.depth		= { 16 },
-+		.row_depth	= { 16 },
-+		.num_planes	= 1,
-+		.walign		= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_YUYV,
-+		.mdp_color	= MDP_COLOR_YUYV,
-+		.depth		= { 16 },
-+		.row_depth	= { 16 },
-+		.num_planes	= 1,
-+		.walign		= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_YVYU,
-+		.mdp_color	= MDP_COLOR_YVYU,
-+		.depth		= { 16 },
-+		.row_depth	= { 16 },
-+		.num_planes	= 1,
-+		.walign		= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_YUV420,
-+		.mdp_color	= MDP_COLOR_I420,
-+		.depth		= { 12 },
-+		.row_depth	= { 8 },
-+		.num_planes	= 1,
-+		.walign		= 1,
-+		.halign		= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_YVU420,
-+		.mdp_color	= MDP_COLOR_YV12,
-+		.depth		= { 12 },
-+		.row_depth	= { 8 },
-+		.num_planes	= 1,
-+		.walign		= 1,
-+		.halign		= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_NV12,
-+		.mdp_color	= MDP_COLOR_NV12,
-+		.depth		= { 12 },
-+		.row_depth	= { 8 },
-+		.num_planes	= 1,
-+		.walign		= 1,
-+		.halign		= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_NV21,
-+		.mdp_color	= MDP_COLOR_NV21,
-+		.depth		= { 12 },
-+		.row_depth	= { 8 },
-+		.num_planes	= 1,
-+		.walign		= 1,
-+		.halign		= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_NV16,
-+		.mdp_color	= MDP_COLOR_NV16,
-+		.depth		= { 16 },
-+		.row_depth	= { 8 },
-+		.num_planes	= 1,
-+		.walign		= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_NV61,
-+		.mdp_color	= MDP_COLOR_NV61,
-+		.depth		= { 16 },
-+		.row_depth	= { 8 },
-+		.num_planes	= 1,
-+		.walign		= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_NV12M,
-+		.mdp_color	= MDP_COLOR_NV12,
-+		.depth		= { 8, 4 },
-+		.row_depth	= { 8, 8 },
-+		.num_planes	= 2,
-+		.walign		= 1,
-+		.halign		= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_MM21,
-+		.mdp_color	= MDP_COLOR_420_BLK,
-+		.depth		= { 8, 4 },
-+		.row_depth	= { 8, 8 },
-+		.num_planes	= 2,
-+		.walign		= 6,
-+		.halign		= 6,
-+		.flags		= MDP_FMT_FLAG_OUTPUT,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_NV21M,
-+		.mdp_color	= MDP_COLOR_NV21,
-+		.depth		= { 8, 4 },
-+		.row_depth	= { 8, 8 },
-+		.num_planes	= 2,
-+		.walign		= 1,
-+		.halign		= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_NV16M,
-+		.mdp_color	= MDP_COLOR_NV16,
-+		.depth		= { 8, 8 },
-+		.row_depth	= { 8, 8 },
-+		.num_planes	= 2,
-+		.walign		= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_NV61M,
-+		.mdp_color	= MDP_COLOR_NV61,
-+		.depth		= { 8, 8 },
-+		.row_depth	= { 8, 8 },
-+		.num_planes	= 2,
-+		.walign		= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_YUV420M,
-+		.mdp_color	= MDP_COLOR_I420,
-+		.depth		= { 8, 2, 2 },
-+		.row_depth	= { 8, 4, 4 },
-+		.num_planes	= 3,
-+		.walign		= 1,
-+		.halign		= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_YVU420M,
-+		.mdp_color	= MDP_COLOR_YV12,
-+		.depth		= { 8, 2, 2 },
-+		.row_depth	= { 8, 4, 4 },
-+		.num_planes	= 3,
-+		.walign		= 1,
-+		.halign		= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_YUV422M,
-+		.mdp_color	= MDP_COLOR_I422,
-+		.depth		= { 8, 4, 4 },
-+		.row_depth	= { 8, 4, 4 },
-+		.num_planes	= 3,
-+		.walign		= 1,
-+		.halign		= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}, {
-+		.pixelformat	= V4L2_PIX_FMT_YVU422M,
-+		.mdp_color	= MDP_COLOR_YV16,
-+		.depth		= { 8, 4, 4 },
-+		.row_depth	= { 8, 4, 4 },
-+		.num_planes	= 3,
-+		.walign		= 1,
-+		.halign		= 1,
-+		.flags		= MDP_FMT_FLAG_OUTPUT | MDP_FMT_FLAG_CAPTURE,
-+	}
-+};
-+
-+static const struct mdp_limit mt8195_mdp_def_limit = {
-+	.out_limit = {
-+		.wmin	= 64,
-+		.hmin	= 64,
-+		.wmax	= 8192,
-+		.hmax	= 8192,
-+	},
-+	.cap_limit = {
-+		.wmin	= 64,
-+		.hmin	= 64,
-+		.wmax	= 8192,
-+		.hmax	= 8192,
-+	},
-+	.h_scale_up_max = 64,
-+	.v_scale_up_max = 64,
-+	.h_scale_down_max = 128,
-+	.v_scale_down_max = 128,
-+};
-+
-+#endif  /* __MDP3_PLAT_MT8195_H__ */
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h b/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h
-index 8c519924a78b..720e8c0b0165 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h
-@@ -116,6 +116,7 @@ struct img_frameparam {
- 
- /* Platform config indicator */
- #define MT8183 8183
-+#define MT8195 8195
- 
- #define CFG_CHECK(plat, p_id) (plat == p_id)
- 
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-index 9b1b7fbb3d6b..1bce431414c6 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-@@ -796,6 +796,42 @@ static const struct of_device_id mdp_comp_dt_ids[] = {
- 	}, {
- 		.compatible = "mediatek,mt8183-mdp3-wdma",
- 		.data = (void *)MDP_COMP_TYPE_WDMA,
-+	}, {
-+		.compatible = "mediatek,mt8195-mdp3-rdma",
-+		.data = (void *)MDP_COMP_TYPE_RDMA,
-+	}, {
-+		.compatible = "mediatek,mt8195-mdp3-split",
-+		.data = (void *)MDP_COMP_TYPE_SPLIT,
-+	}, {
-+		.compatible = "mediatek,mt8195-mdp3-stitch",
-+		.data = (void *)MDP_COMP_TYPE_STITCH,
-+	}, {
-+		.compatible = "mediatek,mt8195-mdp3-fg",
-+		.data = (void *)MDP_COMP_TYPE_FG,
-+	}, {
-+		.compatible = "mediatek,mt8195-mdp3-hdr",
-+		.data = (void *)MDP_COMP_TYPE_HDR,
-+	}, {
-+		.compatible = "mediatek,mt8195-mdp3-aal",
-+		.data = (void *)MDP_COMP_TYPE_AAL,
-+	}, {
-+		.compatible = "mediatek,mt8195-mdp3-merge",
-+		.data = (void *)MDP_COMP_TYPE_MERGE,
-+	}, {
-+		.compatible = "mediatek,mt8195-mdp3-tdshp",
-+		.data = (void *)MDP_COMP_TYPE_TDSHP,
-+	}, {
-+		.compatible = "mediatek,mt8195-mdp3-color",
-+		.data = (void *)MDP_COMP_TYPE_COLOR,
-+	}, {
-+		.compatible = "mediatek,mt8195-mdp3-ovl",
-+		.data = (void *)MDP_COMP_TYPE_OVL,
-+	}, {
-+		.compatible = "mediatek,mt8195-mdp3-pad",
-+		.data = (void *)MDP_COMP_TYPE_PAD,
-+	}, {
-+		.compatible = "mediatek,mt8195-mdp3-tcc",
-+		.data = (void *)MDP_COMP_TYPE_TCC,
- 	},
- 	{}
+@@ -661,4 +661,9 @@ static const struct mdp_limit mt8195_mdp_def_limit = {
+ 	.v_scale_down_max = 128,
  };
+ 
++static const struct v4l2_rect mt8195_mdp_pp_criteria = {
++	.width = 1920,
++	.height = 1080,
++};
++
+ #endif  /* __MDP3_PLAT_MT8195_H__ */
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c
+index 9b65e653cae6..9b555548bed8 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c
+@@ -67,6 +67,16 @@ static struct mtk_mutex *__get_mutex(const struct mdp_dev *mdp_dev,
+ 	return m;
+ }
+ 
++static u8 __get_pp_num(enum mdp_stream_type type)
++{
++	switch (type) {
++	case MDP_STREAM_TYPE_DUAL_BITBLT:
++		return MDP_PP_USED_2;
++	default:
++		return MDP_PP_USED_1;
++	}
++}
++
+ static enum mdp_pipe_id __get_pipe(const struct mdp_dev *mdp_dev,
+ 				   enum mtk_mdp_comp_id id)
+ {
+@@ -104,6 +114,44 @@ static enum mdp_pipe_id __get_pipe(const struct mdp_dev *mdp_dev,
+ 	return pipe_id;
+ }
+ 
++static struct img_config *__get_config_offset(struct mdp_dev *mdp,
++					      struct mdp_cmdq_param *param,
++					      u8 pp_idx)
++{
++	const int p_id = mdp->mdp_data->mdp_plat_id;
++	struct device *dev = &mdp->pdev->dev;
++	void *cfg_c, *cfg_n;
++	long bound = mdp->vpu.config_size;
++
++	if (pp_idx >= mdp->mdp_data->pp_used)
++		goto err_param;
++
++	if (CFG_CHECK(MT8183, p_id))
++		cfg_c = CFG_OFST(MT8183, param->config, pp_idx);
++	else if (CFG_CHECK(MT8195, p_id))
++		cfg_c = CFG_OFST(MT8195, param->config, pp_idx);
++	else
++		goto err_param;
++
++	if (CFG_CHECK(MT8183, p_id))
++		cfg_n = CFG_OFST(MT8183, param->config, pp_idx + 1);
++	else if (CFG_CHECK(MT8195, p_id))
++		cfg_n = CFG_OFST(MT8195, param->config, pp_idx + 1);
++	else
++		goto err_param;
++
++	if ((long)cfg_n - (long)mdp->vpu.config > bound) {
++		dev_err(dev, "config offset %ld OOB %ld\n", (long)cfg_n, bound);
++		cfg_c = ERR_PTR(-EFAULT);
++	}
++
++	return (struct img_config *)cfg_c;
++
++err_param:
++	cfg_c = ERR_PTR(-EINVAL);
++	return (struct img_config *)cfg_c;
++}
++
+ static int mdp_path_subfrm_require(const struct mdp_path *path,
+ 				   struct mdp_cmdq_cmd *cmd,
+ 				   struct mdp_pipe_info *p, u32 count)
+@@ -486,8 +534,19 @@ static void mdp_auto_release_work(struct work_struct *work)
+ 	mdp_comp_clocks_off(&mdp->pdev->dev, cmd->comps,
+ 			    cmd->num_comps);
+ 
+-	atomic_dec(&mdp->job_count);
+-	wake_up(&mdp->callback_wq);
++	if (atomic_dec_and_test(&mdp->job_count)) {
++		if (cmd->mdp_ctx)
++			mdp_m2m_job_finish(cmd->mdp_ctx);
++
++		if (cmd->user_cmdq_cb) {
++			struct cmdq_cb_data user_cb_data;
++
++			user_cb_data.sta = cmd->data->sta;
++			user_cb_data.pkt = cmd->data->pkt;
++			cmd->user_cmdq_cb(user_cb_data);
++		}
++		wake_up(&mdp->callback_wq);
++	}
+ 
+ 	mdp_cmdq_pkt_destroy(&cmd->pkt);
+ 	kfree(cmd->comps);
+@@ -511,20 +570,10 @@ static void mdp_handle_cmdq_callback(struct mbox_client *cl, void *mssg)
+ 
+ 	data = (struct cmdq_cb_data *)mssg;
+ 	cmd = container_of(data->pkt, struct mdp_cmdq_cmd, pkt);
++	cmd->data = data;
+ 	mdp = cmd->mdp;
+ 	dev = &mdp->pdev->dev;
+ 
+-	if (cmd->mdp_ctx)
+-		mdp_m2m_job_finish(cmd->mdp_ctx);
+-
+-	if (cmd->user_cmdq_cb) {
+-		struct cmdq_cb_data user_cb_data;
+-
+-		user_cb_data.sta = data->sta;
+-		user_cb_data.pkt = data->pkt;
+-		cmd->user_cmdq_cb(user_cb_data);
+-	}
+-
+ 	INIT_WORK(&cmd->auto_release_work, mdp_auto_release_work);
+ 	if (!queue_work(mdp->clock_wq, &cmd->auto_release_work)) {
+ 		struct mtk_mutex *mutex;
+@@ -536,8 +585,8 @@ static void mdp_handle_cmdq_callback(struct mbox_client *cl, void *mssg)
+ 		mdp_comp_clocks_off(&mdp->pdev->dev, cmd->comps,
+ 				    cmd->num_comps);
+ 
+-		atomic_dec(&mdp->job_count);
+-		wake_up(&mdp->callback_wq);
++		if (atomic_dec_and_test(&mdp->job_count))
++			wake_up(&mdp->callback_wq);
+ 
+ 		mdp_cmdq_pkt_destroy(&cmd->pkt);
+ 		kfree(cmd->comps);
+@@ -547,40 +596,44 @@ static void mdp_handle_cmdq_callback(struct mbox_client *cl, void *mssg)
+ 	}
+ }
+ 
+-int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
++static struct mdp_cmdq_cmd *mdp_cmdq_prepare(struct mdp_dev *mdp,
++					     struct mdp_cmdq_param *param,
++					     u8 pp_idx)
+ {
+ 	struct mdp_path *path = NULL;
+ 	struct mdp_cmdq_cmd *cmd = NULL;
+ 	struct mdp_comp *comps = NULL;
+ 	struct device *dev = &mdp->pdev->dev;
+ 	const int p_id = mdp->mdp_data->mdp_plat_id;
++	struct img_config *config;
+ 	struct mtk_mutex *mutex = NULL;
+ 	enum mdp_pipe_id pipe_id;
+-	int i, ret;
+-	u32 num_comp = 0;
++	int i, ret = -ECANCELED;
++	u32 num_comp;
+ 
+-	atomic_inc(&mdp->job_count);
+-	if (atomic_read(&mdp->suspended)) {
+-		atomic_dec(&mdp->job_count);
+-		return -ECANCELED;
++	config = __get_config_offset(mdp, param, pp_idx);
++	if (IS_ERR(config)) {
++		ret = PTR_ERR(config);
++		goto err_uninit;
+ 	}
+ 
++	if (CFG_CHECK(MT8183, p_id))
++		num_comp = CFG_GET(MT8183, config, num_components);
++	else if (CFG_CHECK(MT8195, p_id))
++		num_comp = CFG_GET(MT8195, config, num_components);
++	else
++		goto err_uninit;
++
+ 	cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
+ 	if (!cmd) {
+ 		ret = -ENOMEM;
+-		goto err_cancel_job;
++		goto err_uninit;
+ 	}
+ 
+-	ret = mdp_cmdq_pkt_create(mdp->cmdq_clt, &cmd->pkt, SZ_16K);
++	ret = mdp_cmdq_pkt_create(mdp->cmdq_clt[pp_idx], &cmd->pkt, SZ_16K);
+ 	if (ret)
+ 		goto err_free_cmd;
+ 
+-	if (CFG_CHECK(MT8183, p_id))
+-		num_comp = CFG_GET(MT8183, param->config, num_components);
+-	else if (CFG_CHECK(MT8195, p_id))
+-		num_comp = CFG_GET(MT8195, param->config, num_components);
+-	else
+-		goto err_destroy_pkt;
+ 	comps = kcalloc(num_comp, sizeof(*comps), GFP_KERNEL);
+ 	if (!comps) {
+ 		ret = -ENOMEM;
+@@ -594,7 +647,7 @@ int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
+ 	}
+ 
+ 	path->mdp_dev = mdp;
+-	path->config = param->config;
++	path->config = config;
+ 	path->param = param->param;
+ 	for (i = 0; i < param->param->num_outputs; i++) {
+ 		path->bounds[i].left = 0;
+@@ -608,7 +661,7 @@ int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
+ 	}
+ 	ret = mdp_path_ctx_init(mdp, path);
+ 	if (ret) {
+-		dev_err(dev, "mdp_path_ctx_init error\n");
++		dev_err(dev, "mdp_path_ctx_init error %d\n", pp_idx);
+ 		goto err_free_path;
+ 	}
+ 
+@@ -616,13 +669,13 @@ int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
+ 	mutex = __get_mutex(mdp, &mdp->mdp_data->pipe_info[pipe_id]);
+ 	ret = mtk_mutex_prepare(mutex);
+ 	if (ret) {
+-		dev_err(dev, "Fail to enable mutex clk\n");
++		dev_err(dev, "Fail to enable mutex %d clk\n", pp_idx);
+ 		goto err_free_path;
+ 	}
+ 
+ 	ret = mdp_path_config(mdp, cmd, path);
+ 	if (ret) {
+-		dev_err(dev, "mdp_path_config error\n");
++		dev_err(dev, "mdp_path_config error %d\n", pp_idx);
+ 		goto err_free_path;
+ 	}
+ 	cmdq_pkt_finalize(&cmd->pkt);
+@@ -641,7 +694,7 @@ int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
+ 		       sizeof(struct mdp_comp));
+ 	}
+ 
+-	mdp->cmdq_clt->client.rx_callback = mdp_handle_cmdq_callback;
++	mdp->cmdq_clt[pp_idx]->client.rx_callback = mdp_handle_cmdq_callback;
+ 	cmd->mdp = mdp;
+ 	cmd->user_cmdq_cb = param->cmdq_cb;
+ 	cmd->user_cb_data = param->cb_data;
+@@ -649,26 +702,9 @@ int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
+ 	cmd->num_comps = num_comp;
+ 	cmd->mdp_ctx = param->mdp_ctx;
+ 
+-	ret = mdp_comp_clocks_on(&mdp->pdev->dev, cmd->comps, cmd->num_comps);
+-	if (ret)
+-		goto err_free_path;
+-
+-	dma_sync_single_for_device(mdp->cmdq_clt->chan->mbox->dev,
+-				   cmd->pkt.pa_base, cmd->pkt.cmd_buf_size,
+-				   DMA_TO_DEVICE);
+-	ret = mbox_send_message(mdp->cmdq_clt->chan, &cmd->pkt);
+-	if (ret < 0) {
+-		dev_err(dev, "mbox send message fail %d!\n", ret);
+-		goto err_clock_off;
+-	}
+-	mbox_client_txdone(mdp->cmdq_clt->chan, 0);
+-
+ 	kfree(path);
+-	return 0;
++	return cmd;
+ 
+-err_clock_off:
+-	mdp_comp_clocks_off(&mdp->pdev->dev, cmd->comps,
+-			    cmd->num_comps);
+ err_free_path:
+ 	if (mutex)
+ 		mtk_mutex_unprepare(mutex);
+@@ -679,8 +715,58 @@ int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
+ 	mdp_cmdq_pkt_destroy(&cmd->pkt);
+ err_free_cmd:
+ 	kfree(cmd);
++err_uninit:
++	return ERR_PTR(ret);
++}
++
++int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
++{
++	struct mdp_cmdq_cmd *cmd[MDP_PP_MAX] = {NULL};
++	struct device *dev = &mdp->pdev->dev;
++	int i, ret;
++	u8 pp_used = __get_pp_num(param->param->type);
++
++	atomic_set(&mdp->job_count, pp_used);
++	if (atomic_read(&mdp->suspended)) {
++		atomic_set(&mdp->job_count, 0);
++		return -ECANCELED;
++	}
++
++	for (i = 0; i < pp_used; i++) {
++		cmd[i] = mdp_cmdq_prepare(mdp, param, i);
++		if (IS_ERR_OR_NULL(cmd[i])) {
++			ret = PTR_ERR(cmd[i]);
++			goto err_cancel_job;
++		}
++	}
++
++	for (i = 0; i < pp_used; i++) {
++		ret = mdp_comp_clocks_on(&mdp->pdev->dev, cmd[i]->comps, cmd[i]->num_comps);
++		if (ret)
++			goto err_clock_off;
++	}
++
++	for (i = 0; i < pp_used; i++) {
++		dma_sync_single_for_device(mdp->cmdq_clt[i]->chan->mbox->dev,
++					   cmd[i]->pkt.pa_base, cmd[i]->pkt.cmd_buf_size,
++					   DMA_TO_DEVICE);
++
++		ret = mbox_send_message(mdp->cmdq_clt[i]->chan, &cmd[i]->pkt);
++		if (ret < 0) {
++			dev_err(dev, "mbox send message fail %d!\n", ret);
++			i = pp_used;
++			goto err_clock_off;
++		}
++		mbox_client_txdone(mdp->cmdq_clt[i]->chan, 0);
++	}
++	return 0;
++
++err_clock_off:
++	while (--i >= 0)
++		mdp_comp_clocks_off(&mdp->pdev->dev, cmd[i]->comps,
++				    cmd[i]->num_comps);
+ err_cancel_job:
+-	atomic_dec(&mdp->job_count);
++	atomic_set(&mdp->job_count, 0);
+ 
+ 	return ret;
+ }
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.h
+index 43475b862ddb..53a30ad7e0b0 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.h
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.h
+@@ -29,6 +29,7 @@ struct mdp_cmdq_cmd {
+ 	struct cmdq_pkt pkt;
+ 	s32 *event;
+ 	struct mdp_dev *mdp;
++	struct cmdq_cb_data *data;
+ 	void (*user_cmdq_cb)(struct cmdq_cb_data data);
+ 	void *user_cb_data;
+ 	struct mdp_comp *comps;
 diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-index 6e3abadef6cd..1699da1c684b 100644
+index 1699da1c684b..948c0bf183ca 100644
 --- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
 +++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-@@ -16,6 +16,7 @@
- #include "mtk-mdp3-core.h"
- #include "mtk-mdp3-m2m.h"
- #include "mt8183/mdp3-plat-mt8183.h"
-+#include "mt8195/mdp3-plat-mt8195.h"
- 
- static const struct mtk_mdp_driver_data mt8183_mdp_driver_data = {
- 	.mdp_plat_id = MT8183,
-@@ -32,10 +33,28 @@ static const struct mtk_mdp_driver_data mt8183_mdp_driver_data = {
+@@ -31,6 +31,7 @@ static const struct mtk_mdp_driver_data mt8183_mdp_driver_data = {
+ 	.format = mt8183_formats,
+ 	.format_len = ARRAY_SIZE(mt8183_formats),
  	.def_limit = &mt8183_mdp_def_limit,
++	.pp_used = MDP_PP_USED_1,
  };
  
-+static const struct mtk_mdp_driver_data mt8195_mdp_driver_data = {
-+	.mdp_plat_id = MT8195,
-+	.mdp_probe_infra = mt8195_mdp_probe_infra,
-+	.mdp_sub_comp_dt_ids = mt8195_sub_comp_dt_ids,
-+	.mdp_cfg = &mt8195_plat_cfg,
-+	.mdp_mutex_table_idx = mt8195_mutex_idx,
-+	.comp_data = mt8195_mdp_comp_data,
-+	.comp_data_len = ARRAY_SIZE(mt8195_mdp_comp_data),
-+	.pipe_info = mt8195_pipe_info,
-+	.pipe_info_len = ARRAY_SIZE(mt8195_pipe_info),
-+	.format = mt8195_formats,
-+	.format_len = ARRAY_SIZE(mt8195_formats),
-+	.def_limit = &mt8195_mdp_def_limit,
-+};
-+
- static const struct of_device_id mdp_of_ids[] = {
- 	{ .compatible = "mediatek,mt8183-mdp3-rdma",
- 	  .data = &mt8183_mdp_driver_data,
- 	},
-+	{ .compatible = "mediatek,mt8195-mdp3-rdma",
-+	  .data = &mt8195_mdp_driver_data,
-+	},
- 	{},
+ static const struct mtk_mdp_driver_data mt8195_mdp_driver_data = {
+@@ -46,6 +47,8 @@ static const struct mtk_mdp_driver_data mt8195_mdp_driver_data = {
+ 	.format = mt8195_formats,
+ 	.format_len = ARRAY_SIZE(mt8195_formats),
+ 	.def_limit = &mt8195_mdp_def_limit,
++	.pp_criteria = &mt8195_mdp_pp_criteria,
++	.pp_used = MDP_PP_USED_2,
  };
- MODULE_DEVICE_TABLE(of, mdp_of_ids);
+ 
+ static const struct of_device_id mdp_of_ids[] = {
+@@ -170,6 +173,10 @@ void mdp_video_device_release(struct video_device *vdev)
+ 	struct mdp_dev *mdp = (struct mdp_dev *)video_get_drvdata(vdev);
+ 	int i;
+ 
++	for (i = 0; i < mdp->mdp_data->pp_used; i++)
++		if (mdp->cmdq_clt[i])
++			cmdq_mbox_destroy(mdp->cmdq_clt[i]);
++
+ 	scp_put(mdp->scp);
+ 
+ 	destroy_workqueue(mdp->job_wq);
+@@ -291,10 +298,12 @@ static int mdp_probe(struct platform_device *pdev)
+ 	mutex_init(&mdp->vpu_lock);
+ 	mutex_init(&mdp->m2m_lock);
+ 
+-	mdp->cmdq_clt = cmdq_mbox_create(dev, 0);
+-	if (IS_ERR(mdp->cmdq_clt)) {
+-		ret = PTR_ERR(mdp->cmdq_clt);
+-		goto err_put_scp;
++	for (i = 0; i < mdp->mdp_data->pp_used; i++) {
++		mdp->cmdq_clt[i] = cmdq_mbox_create(dev, i);
++		if (IS_ERR(mdp->cmdq_clt[i])) {
++			ret = PTR_ERR(mdp->cmdq_clt[i]);
++			goto err_mbox_destroy;
++		}
+ 	}
+ 
+ 	init_waitqueue_head(&mdp->callback_wq);
+@@ -323,8 +332,8 @@ static int mdp_probe(struct platform_device *pdev)
+ err_unregister_device:
+ 	v4l2_device_unregister(&mdp->v4l2_dev);
+ err_mbox_destroy:
+-	cmdq_mbox_destroy(mdp->cmdq_clt);
+-err_put_scp:
++	while (--i >= 0)
++		cmdq_mbox_destroy(mdp->cmdq_clt[i]);
+ 	scp_put(mdp->scp);
+ err_destroy_clock_wq:
+ 	destroy_workqueue(mdp->clock_wq);
 diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
-index a9beb8bd440b..24d2ec5b52da 100644
+index 24d2ec5b52da..3d5e98f215da 100644
 --- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
 +++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
-@@ -40,10 +40,16 @@ struct mdp_platform_config {
- 	bool	rdma_support_10bit;
- 	bool	rdma_rsz1_sram_sharing;
- 	bool	rdma_upsample_repeat_only;
-+	bool	rdma_esl_setting;
- 	u32	rdma_event_num;
- 	bool	rsz_disable_dcm_small_sample;
-+	bool	rsz_etc_control;
- 	bool	wrot_filter_constraint;
-+	bool	wrot_support_10bit;
- 	u32	wrot_event_num;
-+	u32	tdshp_hist_num;
-+	bool	tdshp_constrain;
-+	bool	tdshp_contour;
+@@ -68,6 +68,14 @@ enum mdp_pipe_id {
+ 	MDP_PIPE_MAX
  };
  
- /* indicate which mutex is used by each pipepline */
++/* MDP parallel pipe control */
++enum {
++	MDP_PP_USED_1 = 1,
++	MDP_PP_USED_2 = 2,
++};
++
++#define MDP_PP_MAX MDP_PP_USED_2
++
+ struct mtk_mdp_driver_data {
+ 	const int mdp_plat_id;
+ 	const struct of_device_id *mdp_probe_infra;
+@@ -78,6 +86,8 @@ struct mtk_mdp_driver_data {
+ 	unsigned int comp_data_len;
+ 	const struct mdp_pipe_info *pipe_info;
+ 	unsigned int pipe_info_len;
++	const struct v4l2_rect *pp_criteria;
++	const u8 pp_used;
+ 	const struct mdp_format *format;
+ 	unsigned int format_len;
+ 	const struct mdp_limit *def_limit;
+@@ -102,7 +112,7 @@ struct mdp_dev {
+ 	s32					vpu_count;
+ 	u32					id_count;
+ 	struct ida				mdp_ida;
+-	struct cmdq_client			*cmdq_clt;
++	struct cmdq_client			*cmdq_clt[MDP_PP_MAX];
+ 	wait_queue_head_t			callback_wq;
+ 
+ 	struct v4l2_device			v4l2_dev;
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
+index f0a293ab0688..24ca33f59d73 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
+@@ -87,6 +87,9 @@ static void mdp_m2m_device_run(void *priv)
+ 	dst_vb = v4l2_m2m_next_dst_buf(ctx->m2m_ctx);
+ 	mdp_set_dst_config(&param.outputs[0], frame, &dst_vb->vb2_buf);
+ 
++	if (mdp_check_pp_enable(ctx->mdp_dev, frame))
++		param.type = MDP_STREAM_TYPE_DUAL_BITBLT;
++
+ 	ret = mdp_vpu_process(&ctx->mdp_dev->vpu, &param);
+ 	if (ret) {
+ 		dev_err(&ctx->mdp_dev->pdev->dev,
+@@ -101,6 +104,18 @@ static void mdp_m2m_device_run(void *priv)
+ 	task.cb_data = NULL;
+ 	task.mdp_ctx = ctx;
+ 
++	if (atomic_read(&ctx->mdp_dev->job_count)) {
++		ret = wait_event_timeout(ctx->mdp_dev->callback_wq,
++					 !atomic_read(&ctx->mdp_dev->job_count),
++					 2 * HZ);
++		if (ret == 0) {
++			dev_err(&ctx->mdp_dev->pdev->dev,
++				"%d jobs not yet done\n",
++				atomic_read(&ctx->mdp_dev->job_count));
++			goto worker_end;
++		}
++	}
++
+ 	ret = mdp_cmdq_send(ctx->mdp_dev, &task);
+ 	if (ret) {
+ 		dev_err(&ctx->mdp_dev->pdev->dev,
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.c
+index 39093180b98d..9f11ed7e68f7 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.c
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.c
+@@ -302,6 +302,24 @@ int mdp_check_scaling_ratio(const struct v4l2_rect *crop,
+ 	return 0;
+ }
+ 
++bool mdp_check_pp_enable(struct mdp_dev *mdp, struct mdp_frame *frame)
++{
++	u32 s, r1, r2;
++
++	if (!mdp || !frame)
++		return false;
++
++	if (!mdp->mdp_data->pp_criteria)
++		return false;
++
++	s = mdp->mdp_data->pp_criteria->width *
++		mdp->mdp_data->pp_criteria->height;
++	r1 = frame->crop.c.width * frame->crop.c.height;
++	r2 = frame->compose.width * frame->compose.height;
++
++	return (r1 >= s || r2 >= s);
++}
++
+ /* Stride that is accepted by MDP HW */
+ static u32 mdp_fmt_get_stride(const struct mdp_format *fmt,
+ 			      u32 bytesperline, unsigned int plane)
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.h
+index e9ab8ac2c0e8..b0c8f9f00820 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.h
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.h
+@@ -368,6 +368,7 @@ int mdp_try_crop(struct mdp_m2m_ctx *ctx, struct v4l2_rect *r,
+ int mdp_check_scaling_ratio(const struct v4l2_rect *crop,
+ 			    const struct v4l2_rect *compose, s32 rotation,
+ 	const struct mdp_limit *limit);
++bool mdp_check_pp_enable(struct mdp_dev *mdp, struct mdp_frame *frame);
+ void mdp_set_src_config(struct img_input *in,
+ 			struct mdp_frame *frame, struct vb2_buffer *vb);
+ void mdp_set_dst_config(struct img_output *out,
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.c
+index f3cef77720a2..af148006164b 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.c
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.c
+@@ -198,6 +198,7 @@ int mdp_vpu_dev_init(struct mdp_vpu_dev *vpu, struct mtk_scp *scp,
+ 	};
+ 	struct mdp_dev *mdp = vpu_to_mdp(vpu);
+ 	int err;
++	u8 pp_num = mdp->mdp_data->pp_used;
+ 
+ 	init_completion(&vpu->ipi_acked);
+ 	vpu->scp = scp;
+@@ -211,7 +212,7 @@ int mdp_vpu_dev_init(struct mdp_vpu_dev *vpu, struct mtk_scp *scp,
+ 	mutex_lock(vpu->lock);
+ 	vpu->work_size = ALIGN(vpu->work_size, 64);
+ 	vpu->param_size = ALIGN(sizeof(struct img_ipi_frameparam), 64);
+-	vpu->config_size = ALIGN(sizeof(struct img_config), 64);
++	vpu->config_size = ALIGN(sizeof(struct img_config) * pp_num, 64);
+ 	err = mdp_vpu_shared_mem_alloc(vpu);
+ 	mutex_unlock(vpu->lock);
+ 	if (err) {
 -- 
 2.18.0
 
