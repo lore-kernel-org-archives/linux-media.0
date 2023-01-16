@@ -2,48 +2,48 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2449CC677F1
-	for <linux-media@archiver.kernel.org>; Mon, 16 Jan 2023 03:22:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86AEAC54EBE
+	for <linux-media@archiver.kernel.org>; Mon, 16 Jan 2023 03:22:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231886AbjAPDWQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 15 Jan 2023 22:22:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
+        id S231840AbjAPDWT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 15 Jan 2023 22:22:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231819AbjAPDWF (ORCPT
+        with ESMTP id S231810AbjAPDWE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 15 Jan 2023 22:22:05 -0500
+        Sun, 15 Jan 2023 22:22:04 -0500
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE67D7A89;
-        Sun, 15 Jan 2023 19:21:56 -0800 (PST)
-X-UUID: ea073daa954c11eda06fc9ecc4dadd91-20230116
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2F27A97;
+        Sun, 15 Jan 2023 19:21:58 -0800 (PST)
+X-UUID: ea9b39d8954c11eda06fc9ecc4dadd91-20230116
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=jVSBXePscyAR1IBlhg2abs0nVfWiz7yFEJuZRdMiMP0=;
-        b=F5g1hbdTWysmQcEhmH0jXfD+G5/nyvvqsTBOCVwmsLkY3k6+na9GMjo090WTE7PUln2KZrwRDg1ij7wBqS3bFkSQ0mmQL38dVHTvncBxytCOtYyHyQNNMuRxKSdYARxsAWfTi1gWUjWPrufr5/fXNqe5x8LJ72MufbUc8+ZAdDA=;
-X-CID-P-RULE: Spam_GS6885AD
-X-CID-O-INFO: VERSION:1.1.17,REQID:10832afb-626d-4cd5-978e-12cf294f1581,IP:0,U
-        RL:25,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS6885AD,AC
-        TION:quarantine,TS:115
-X-CID-INFO: VERSION:1.1.17,REQID:10832afb-626d-4cd5-978e-12cf294f1581,IP:0,URL
-        :25,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:115
-X-CID-META: VersionHash:543e81c,CLOUDID:02d2e4f5-ff42-4fb0-b929-626456a83c14,B
-        ulkID:230113170325BIMKJSRP,BulkQuantity:6,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:41,QS:nil,BEC:nil,COL:0,
-        OSI:0,OSA:0
-X-CID-APTURL: Status:success,Category:nil,Trust:0,Unknown:12,Malicious:0
-X-CID-BVR: 0
-X-UUID: ea073daa954c11eda06fc9ecc4dadd91-20230116
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=8MCV3LWuemSF0zpvHWCgCKEgR1CAQBw+WQx6QagnncE=;
+        b=Idmzp9Qw+cPCJ3pxejJRK49i+a6bac3wrIlUO3vug7x97YM1Te2Rn2rpUGaKDdVnED3E+GOnfnaUHJoddZR/uAS6K7wR9FFULTWb0rUA2WL/WgHyejpVGsn5dJBQZZWDiKdABjjmOlZlWe7ROXbZy5q1Krh0xuZMmMVQaCuqutE=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.17,REQID:0aa267cf-b8b2-4278-b452-ca35389600a8,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:70
+X-CID-INFO: VERSION:1.1.17,REQID:0aa267cf-b8b2-4278-b452-ca35389600a8,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:70
+X-CID-META: VersionHash:543e81c,CLOUDID:ced2e4f5-ff42-4fb0-b929-626456a83c14,B
+        ulkID:2301131703279LH23KUD,BulkQuantity:7,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:41,QS:nil,BEC:nil,COL:0,OSI
+        :0,OSA:0
+X-CID-APTURL: Status:success,Category:nil,Trust:0,Unknown:0,Malicious:0
+X-CID-BVR: 0,NGT
+X-UUID: ea9b39d8954c11eda06fc9ecc4dadd91-20230116
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
         (envelope-from <moudy.ho@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1437603459; Mon, 16 Jan 2023 11:21:49 +0800
+        with ESMTP id 695081176; Mon, 16 Jan 2023 11:21:50 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 16 Jan 2023 11:21:48 +0800
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 16 Jan 2023 11:21:49 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Mon, 16 Jan 2023 11:21:48 +0800
+ 15.2.792.15 via Frontend Transport; Mon, 16 Jan 2023 11:21:49 +0800
 From:   Moudy Ho <moudy.ho@mediatek.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -55,9 +55,9 @@ CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Moudy Ho <moudy.ho@mediatek.com>
-Subject: [RESEND v3 01/13] dt-binding: mediatek: add bindings for MediaTek mt8195 MDP3 components
-Date:   Mon, 16 Jan 2023 11:21:35 +0800
-Message-ID: <20230116032147.23607-2-moudy.ho@mediatek.com>
+Subject: [RESEND v3 07/13] media: platform: mtk-mdp3: avoid multiple driver registrations
+Date:   Mon, 16 Jan 2023 11:21:41 +0800
+Message-ID: <20230116032147.23607-8-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20230116032147.23607-1-moudy.ho@mediatek.com>
 References: <20230116032147.23607-1-moudy.ho@mediatek.com>
@@ -68,894 +68,60 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch adds support for MT8195 MDP3 RDMA, and introduce more
-MDP3 components present in MT8195.
+The number of MDP3 driver probes depends on the registered clocks of MMSYS.
+Because VPPSYS0 and VPPSYS1 are used in MT8195 MDP3, it is necessary to
+avoid multiple driver registrations.
 
 Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 ---
- .../bindings/media/mediatek,mdp3-aal.yaml     | 63 ++++++++++++++++
- .../bindings/media/mediatek,mdp3-color.yaml   | 63 ++++++++++++++++
- .../bindings/media/mediatek,mdp3-fg.yaml      | 63 ++++++++++++++++
- .../bindings/media/mediatek,mdp3-hdr.yaml     | 62 +++++++++++++++
- .../bindings/media/mediatek,mdp3-merge.yaml   | 63 ++++++++++++++++
- .../bindings/media/mediatek,mdp3-ovl.yaml     | 63 ++++++++++++++++
- .../bindings/media/mediatek,mdp3-pad.yaml     | 63 ++++++++++++++++
- .../bindings/media/mediatek,mdp3-rdma.yaml    | 30 +++++---
- .../bindings/media/mediatek,mdp3-rsz.yaml     | 11 ++-
- .../bindings/media/mediatek,mdp3-split.yaml   | 75 +++++++++++++++++++
- .../bindings/media/mediatek,mdp3-stitch.yaml  | 63 ++++++++++++++++
- .../bindings/media/mediatek,mdp3-tcc.yaml     | 62 +++++++++++++++
- .../bindings/media/mediatek,mdp3-tdshp.yaml   | 63 ++++++++++++++++
- 13 files changed, 731 insertions(+), 13 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-aal.yaml
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-color.yaml
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-fg.yaml
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-hdr.yaml
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-merge.yaml
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-ovl.yaml
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-pad.yaml
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-split.yaml
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-stitch.yaml
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-tcc.yaml
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-tdshp.yaml
+ drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c | 7 ++++++-
+ drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h | 1 +
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-aal.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-aal.yaml
-new file mode 100644
-index 000000000000..d2e1b5245778
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-aal.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/mediatek,mdp3-aal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek Media Data Path 3 AAL
-+
-+maintainers:
-+  - Matthias Brugger <matthias.bgg@gmail.com>
-+  - Moudy Ho <moudy.ho@mediatek.com>
-+
-+description:
-+  One of Media Data Path 3 (MDP3) components is responsible for backlight
-+  power saving and sunlight visibility improving.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mediatek,mt8195-mdp3-aal
-+
-+  reg:
-+    maxItems: 1
-+
-+  mediatek,gce-client-reg:
-+    description:
-+      The register of client driver can be configured by gce with 4 arguments
-+      defined in this property, such as phandle of gce, subsys id,
-+      register offset and size.
-+      Each subsys id is mapping to a base address of display function blocks
-+      register which is defined in the gce header
-+      include/dt-bindings/gce/<chip>-gce.h.
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - mediatek,gce-client-reg
-+  - clocks
-+  - power-domains
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/mt8195-clk.h>
-+    #include <dt-bindings/gce/mt8195-gce.h>
-+    #include <dt-bindings/power/mt8195-power.h>
-+
-+    mdp3-aal0@14005000 {
-+        compatible = "mediatek,mt8195-mdp3-aal";
-+        reg = <0x14005000 0x1000>;
-+        mediatek,gce-client-reg = <&gce1 SUBSYS_1400XXXX 0x5000 0x1000>;
-+        clocks = <&vppsys0 CLK_VPP0_MDP_AAL>;
-+        power-domains = <&spm MT8195_POWER_DOMAIN_VPPSYS0>;
-+    };
-diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-color.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-color.yaml
-new file mode 100644
-index 000000000000..1d8aa5dc76b9
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-color.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/mediatek,mdp3-color.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek Media Data Path 3 COLOR
-+
-+maintainers:
-+  - Matthias Brugger <matthias.bgg@gmail.com>
-+  - Moudy Ho <moudy.ho@mediatek.com>
-+
-+description:
-+  One of Media Data Path 3 (MDP3) components used to adjust hue, luma and
-+  saturation to get better picture quality.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mediatek,mt8195-mdp3-color
-+
-+  reg:
-+    maxItems: 1
-+
-+  mediatek,gce-client-reg:
-+    description:
-+      The register of client driver can be configured by gce with 4 arguments
-+      defined in this property, such as phandle of gce, subsys id,
-+      register offset and size.
-+      Each subsys id is mapping to a base address of display function blocks
-+      register which is defined in the gce header
-+      include/dt-bindings/gce/<chip>-gce.h.
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - mediatek,gce-client-reg
-+  - clocks
-+  - power-domains
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/mt8195-clk.h>
-+    #include <dt-bindings/gce/mt8195-gce.h>
-+    #include <dt-bindings/power/mt8195-power.h>
-+
-+    mdp3-color0@14008000 {
-+        compatible = "mediatek,mt8195-mdp3-color";
-+        reg = <0x14008000 0x1000>;
-+        mediatek,gce-client-reg = <&gce1 SUBSYS_1400XXXX 0x8000 0x1000>;
-+        clocks = <&vppsys0 CLK_VPP0_MDP_COLOR>;
-+        power-domains = <&spm MT8195_POWER_DOMAIN_VPPSYS0>;
-+    };
-diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-fg.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-fg.yaml
-new file mode 100644
-index 000000000000..4e7dd18dc5ad
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-fg.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/mediatek,mdp3-fg.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek Media Data Path 3 FG
-+
-+maintainers:
-+  - Matthias Brugger <matthias.bgg@gmail.com>
-+  - Moudy Ho <moudy.ho@mediatek.com>
-+
-+description:
-+  One of Media Data Path 3 (MDP3) components used to add film grain
-+  according to AV1 spec.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mediatek,mt8195-mdp3-fg
-+
-+  reg:
-+    maxItems: 1
-+
-+  mediatek,gce-client-reg:
-+    description:
-+      The register of client driver can be configured by gce with 4 arguments
-+      defined in this property, such as phandle of gce, subsys id,
-+      register offset and size.
-+      Each subsys id is mapping to a base address of display function blocks
-+      register which is defined in the gce header
-+      include/dt-bindings/gce/<chip>-gce.h.
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - mediatek,gce-client-reg
-+  - clocks
-+  - power-domains
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/mt8195-clk.h>
-+    #include <dt-bindings/gce/mt8195-gce.h>
-+    #include <dt-bindings/power/mt8195-power.h>
-+
-+    mdp3-fg0@14002000 {
-+        compatible = "mediatek,mt8195-mdp3-fg";
-+        reg = <0x14002000 0x1000>;
-+        mediatek,gce-client-reg = <&gce1 SUBSYS_1400XXXX 0x2000 0x1000>;
-+        clocks = <&vppsys0 CLK_VPP0_MDP_FG>;
-+        power-domains = <&spm MT8195_POWER_DOMAIN_VPPSYS0>;
-+    };
-diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-hdr.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-hdr.yaml
-new file mode 100644
-index 000000000000..6a2486b420c6
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-hdr.yaml
-@@ -0,0 +1,62 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/mediatek,mdp3-hdr.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek Media Data Path 3 HDR
-+
-+maintainers:
-+  - Matthias Brugger <matthias.bgg@gmail.com>
-+  - Moudy Ho <moudy.ho@mediatek.com>
-+
-+description:
-+  One of Media Data Path 3 (MDP3) components used to perform HDR to SDR
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mediatek,mt8195-mdp3-hdr
-+
-+  reg:
-+    maxItems: 1
-+
-+  mediatek,gce-client-reg:
-+    description:
-+      The register of client driver can be configured by gce with 4 arguments
-+      defined in this property, such as phandle of gce, subsys id,
-+      register offset and size.
-+      Each subsys id is mapping to a base address of display function blocks
-+      register which is defined in the gce header
-+      include/dt-bindings/gce/<chip>-gce.h.
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - mediatek,gce-client-reg
-+  - clocks
-+  - power-domains
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/mt8195-clk.h>
-+    #include <dt-bindings/gce/mt8195-gce.h>
-+    #include <dt-bindings/power/mt8195-power.h>
-+
-+    mdp3-hdr0@14004000 {
-+        compatible = "mediatek,mt8195-mdp3-hdr";
-+        reg = <0x14004000 0x1000>;
-+        mediatek,gce-client-reg = <&gce1 SUBSYS_1400XXXX 0x4000 0x1000>;
-+        clocks = <&vppsys0 CLK_VPP0_MDP_HDR>;
-+        power-domains = <&spm MT8195_POWER_DOMAIN_VPPSYS0>;
-+    };
-diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-merge.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-merge.yaml
-new file mode 100644
-index 000000000000..e561f43aea65
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-merge.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/mediatek,mdp3-merge.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek Media Data Path 3 MERGE
-+
-+maintainers:
-+  - Matthias Brugger <matthias.bgg@gmail.com>
-+  - Moudy Ho <moudy.ho@mediatek.com>
-+
-+description:
-+  One of Media Data Path 3 (MDP3) components used to merge
-+  two slice-per-line inputs into one side-by-side output.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mediatek,mt8195-mdp3-merge
-+
-+  reg:
-+    maxItems: 1
-+
-+  mediatek,gce-client-reg:
-+    description:
-+      The register of client driver can be configured by gce with 4 arguments
-+      defined in this property, such as phandle of gce, subsys id,
-+      register offset and size.
-+      Each subsys id is mapping to a base address of display function blocks
-+      register which is defined in the gce header
-+      include/dt-bindings/gce/<chip>-gce.h.
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - mediatek,gce-client-reg
-+  - clocks
-+  - power-domains
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/mt8195-clk.h>
-+    #include <dt-bindings/gce/mt8195-gce.h>
-+    #include <dt-bindings/power/mt8195-power.h>
-+
-+    mdp3-merge0@14f1a000 {
-+        compatible = "mediatek,mt8195-mdp3-merge";
-+        reg = <0x14f1a000 0x1000>;
-+        mediatek,gce-client-reg = <&gce1 SUBSYS_14f1XXXX 0xa000 0x1000>;
-+        clocks = <&vppsys1 CLK_VPP1_SVPP2_VPP_MERGE>;
-+        power-domains = <&spm MT8195_POWER_DOMAIN_VPPSYS1>;
-+    };
-diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-ovl.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-ovl.yaml
-new file mode 100644
-index 000000000000..5d0e7f44339b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-ovl.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/mediatek,mdp3-ovl.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek Media Data Path 3 OVL
-+
-+maintainers:
-+  - Matthias Brugger <matthias.bgg@gmail.com>
-+  - Moudy Ho <moudy.ho@mediatek.com>
-+
-+description:
-+  One of Media Data Path 3 (MDP3) components used to perform
-+  alpha blending from the memory.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mediatek,mt8195-mdp3-ovl
-+
-+  reg:
-+    maxItems: 1
-+
-+  mediatek,gce-client-reg:
-+    description:
-+      The register of client driver can be configured by gce with 4 arguments
-+      defined in this property, such as phandle of gce, subsys id,
-+      register offset and size.
-+      Each subsys id is mapping to a base address of display function blocks
-+      register which is defined in the gce header
-+      include/dt-bindings/gce/<chip>-gce.h.
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - mediatek,gce-client-reg
-+  - clocks
-+  - power-domains
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/mt8195-clk.h>
-+    #include <dt-bindings/gce/mt8195-gce.h>
-+    #include <dt-bindings/power/mt8195-power.h>
-+
-+    mdp3-ovl0@14009000 {
-+        compatible = "mediatek,mt8195-mdp3-ovl";
-+        reg = <0x14009000 0x1000>;
-+        mediatek,gce-client-reg = <&gce1 SUBSYS_1400XXXX 0x9000 0x1000>;
-+        clocks = <&vppsys0 CLK_VPP0_MDP_OVL>;
-+        power-domains = <&spm MT8195_POWER_DOMAIN_VPPSYS0>;
-+    };
-diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-pad.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-pad.yaml
-new file mode 100644
-index 000000000000..6041e3d27f73
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-pad.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/mediatek,mdp3-pad.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek Media Data Path 3 PADDING
-+
-+maintainers:
-+  - Matthias Brugger <matthias.bgg@gmail.com>
-+  - Moudy Ho <moudy.ho@mediatek.com>
-+
-+description:
-+  One of Media Data Path 3 (MDP3) components used to insert
-+  pre-defined color or alpha value to arbitrary side of image.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mediatek,mt8195-mdp3-pad
-+
-+  reg:
-+    maxItems: 1
-+
-+  mediatek,gce-client-reg:
-+    description:
-+      The register of client driver can be configured by gce with 4 arguments
-+      defined in this property, such as phandle of gce, subsys id,
-+      register offset and size.
-+      Each subsys id is mapping to a base address of display function blocks
-+      register which is defined in the gce header
-+      include/dt-bindings/gce/<chip>-gce.h.
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - mediatek,gce-client-reg
-+  - clocks
-+  - power-domains
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/mt8195-clk.h>
-+    #include <dt-bindings/gce/mt8195-gce.h>
-+    #include <dt-bindings/power/mt8195-power.h>
-+
-+    mdp3-pad0@1400a000 {
-+        compatible = "mediatek,mt8195-mdp3-pad";
-+        reg = <0x1400a000 0x1000>;
-+        mediatek,gce-client-reg = <&gce1 SUBSYS_1400XXXX 0xa000 0x1000>;
-+        clocks = <&vppsys0 CLK_VPP0_PADDING>;
-+        power-domains = <&spm MT8195_POWER_DOMAIN_VPPSYS0>;
-+    };
-diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
-index 9cfc0c7d23e0..4917dc8132a0 100644
---- a/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
-+++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
-@@ -20,8 +20,9 @@ description: |
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+index 56c42bd3f16b..6e3abadef6cd 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+@@ -187,6 +187,11 @@ static int mdp_probe(struct platform_device *pdev)
+ 	mdp->pdev = pdev;
+ 	mdp->mdp_data = of_device_get_match_data(&pdev->dev);
  
- properties:
-   compatible:
--    items:
--      - const: mediatek,mt8183-mdp3-rdma
-+    enum:
-+      - mediatek,mt8183-mdp3-rdma
-+      - mediatek,mt8195-mdp3-rdma
++	if (strcmp(dev->of_node->name, MDP_NODE_NAME)) {
++		platform_set_drvdata(pdev, mdp);
++		goto success_return;
++	}
++
+ 	mm_pdev = __get_pdev_by_id(pdev, NULL, MDP_INFRA_MMSYS);
+ 	if (IS_ERR_OR_NULL(mm_pdev)) {
+ 		ret = -ENODEV;
+@@ -224,7 +229,6 @@ static int mdp_probe(struct platform_device *pdev)
+ 		p = (id && mm2_pdev) ? mm2_pdev : mm_pdev;
+ 		m = (id && mm2_pdev) ?
+ 			mdp->mdp_mutex2 : mdp->mdp_mutex;
+-
+ 		if (m[mutex_id])
+ 			continue;
+ 		m[mutex_id] = mtk_mutex_get(&p->dev);
+@@ -293,6 +297,7 @@ static int mdp_probe(struct platform_device *pdev)
+ 		goto err_unregister_device;
+ 	}
  
-   reg:
-     maxItems: 1
-@@ -46,20 +47,28 @@ properties:
-     $ref: /schemas/types.yaml#/definitions/uint32-array
++success_return:
+ 	dev_dbg(dev, "mdp-%d registered successfully\n", pdev->id);
+ 	return 0;
  
-   power-domains:
--    maxItems: 1
-+    oneOf:
-+      - items:
-+          - description: for RDMA
-+      - items:
-+          - description: for vppsys 0
-+          - description: for vppsys 1
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
+index ce9e2b9850e6..e3e60b106c72 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
+@@ -14,6 +14,7 @@
+ #include "mtk-mdp3-comp.h"
+ #include "mtk-mdp3-vpu.h"
  
-   clocks:
--    items:
--      - description: RDMA clock
--      - description: RSZ clock
-+    minItems: 2
-+    maxItems: 19
- 
-   iommus:
--    maxItems: 1
-+    oneOf:
-+      - items:
-+          - description: RDMA port
-+      - items:
-+          - description: RDMA port
-+          - description: RDMA to WROT DL port
- 
-   mboxes:
--    items:
--      - description: used for 1st data pipe from RDMA
--      - description: used for 2nd data pipe from RDMA
-+    minItems: 1
-+    maxItems: 5
- 
- required:
-   - compatible
-@@ -69,7 +78,6 @@ required:
-   - power-domains
-   - clocks
-   - iommus
--  - mboxes
- 
- additionalProperties: false
- 
-diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml
-index 78f9de6192ef..fd7f495c2a43 100644
---- a/Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml
-+++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml
-@@ -42,13 +42,20 @@ properties:
-     $ref: /schemas/types.yaml#/definitions/uint32-array
- 
-   clocks:
--    minItems: 1
-+    oneOf:
-+      - items:
-+          - description: rsz clock
-+      - items:
-+          - description: rsz clock
-+          - description: the blended component's clock
-+
-+  power-domains:
-+    maxItems: 1
- 
- required:
-   - compatible
-   - reg
-   - mediatek,gce-client-reg
--  - mediatek,gce-events
-   - clocks
- 
- additionalProperties: false
-diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-split.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-split.yaml
-new file mode 100644
-index 000000000000..fc9c85334af2
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-split.yaml
-@@ -0,0 +1,75 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/mediatek,mdp3-split.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek Media Data Path 3 SPLIT
-+
-+maintainers:
-+  - Matthias Brugger <matthias.bgg@gmail.com>
-+  - Moudy Ho <moudy.ho@mediatek.com>
-+
-+description:
-+  One of Media Data Path 3 (MDP3) components used to split hdmi rx into two stream
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mediatek,mt8195-mdp3-split
-+
-+  reg:
-+    maxItems: 1
-+
-+  mediatek,gce-client-reg:
-+    description:
-+      The register of client driver can be configured by gce with 4 arguments
-+      defined in this property, such as phandle of gce, subsys id,
-+      register offset and size.
-+      Each subsys id is mapping to a base address of display function blocks
-+      register which is defined in the gce header
-+      include/dt-bindings/gce/<chip>-gce.h.
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: Engine Clock
-+      - description: HDMI Clock
-+      - description: MDHI Clock
-+      - description: Digital Clock
-+      - description: Digital Clock
-+      - description: Digital Clock
-+      - description: HS Clock
-+
-+  power-domains:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - mediatek,gce-client-reg
-+  - clocks
-+  - power-domains
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/mt8195-clk.h>
-+    #include <dt-bindings/gce/mt8195-gce.h>
-+    #include <dt-bindings/power/mt8195-power.h>
-+
-+    mdp3-split0@14f06000 {
-+        compatible = "mediatek,mt8195-mdp3-split";
-+        reg = <0x14f06000 0x1000>;
-+        mediatek,gce-client-reg = <&gce1 SUBSYS_14f0XXXX 0x6000 0x1000>;
-+        clocks = <&vppsys1 CLK_VPP1_VPP_SPLIT>,
-+                 <&vppsys1 CLK_VPP1_HDMI_META>,
-+                 <&vppsys1 CLK_VPP1_VPP_SPLIT_HDMI>,
-+                 <&vppsys1 CLK_VPP1_DGI_IN>,
-+                 <&vppsys1 CLK_VPP1_DGI_OUT>,
-+                 <&vppsys1 CLK_VPP1_VPP_SPLIT_DGI>,
-+                 <&vppsys1 CLK_VPP1_VPP_SPLIT_26M>;
-+        power-domains = <&spm MT8195_POWER_DOMAIN_VPPSYS0>;
-+    };
-diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-stitch.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-stitch.yaml
-new file mode 100644
-index 000000000000..234d80873543
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-stitch.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/mediatek,mdp3-stitch.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek Media Data Path 3 STITCH
-+
-+maintainers:
-+  - Matthias Brugger <matthias.bgg@gmail.com>
-+  - Moudy Ho <moudy.ho@mediatek.com>
-+
-+description:
-+  One of Media Data Path 3 (MDP3) components used to combine multiple video frame
-+  with overlapping fields of view to produce a segmented panorame.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mediatek,mt8195-mdp3-stitch
-+
-+  reg:
-+    maxItems: 1
-+
-+  mediatek,gce-client-reg:
-+    description:
-+      The register of client driver can be configured by gce with 4 arguments
-+      defined in this property, such as phandle of gce, subsys id,
-+      register offset and size.
-+      Each subsys id is mapping to a base address of display function blocks
-+      register which is defined in the gce header
-+      include/dt-bindings/gce/<chip>-gce.h.
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - mediatek,gce-client-reg
-+  - clocks
-+  - power-domains
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/mt8195-clk.h>
-+    #include <dt-bindings/gce/mt8195-gce.h>
-+    #include <dt-bindings/power/mt8195-power.h>
-+
-+    mdp3-stich0@14003000 {
-+        compatible = "mediatek,mt8195-mdp3-stitch";
-+        reg = <0x14003000 0x1000>;
-+        mediatek,gce-client-reg = <&gce1 SUBSYS_1400XXXX 0x3000 0x1000>;
-+        clocks = <&vppsys0 CLK_VPP0_STITCH>;
-+        power-domains = <&spm MT8195_POWER_DOMAIN_VPPSYS0>;
-+    };
-diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-tcc.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-tcc.yaml
-new file mode 100644
-index 000000000000..60acc00fb10f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-tcc.yaml
-@@ -0,0 +1,62 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/mediatek,mdp3-tcc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek Media Data Path 3 TCC
-+
-+maintainers:
-+  - Matthias Brugger <matthias.bgg@gmail.com>
-+
-+description:
-+  One of Media Data Path 3 (MDP3) components used to support
-+  HDR gamma curve conversion HDR displays.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mediatek,mt8195-mdp3-tcc
-+
-+  reg:
-+    maxItems: 1
-+
-+  mediatek,gce-client-reg:
-+    description:
-+      The register of client driver can be configured by gce with 4 arguments
-+      defined in this property, such as phandle of gce, subsys id,
-+      register offset and size.
-+      Each subsys id is mapping to a base address of display function blocks
-+      register which is defined in the gce header
-+      include/dt-bindings/gce/<chip>-gce.h.
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - mediatek,gce-client-reg
-+  - clocks
-+  - power-domains
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/mt8195-clk.h>
-+    #include <dt-bindings/gce/mt8195-gce.h>
-+    #include <dt-bindings/power/mt8195-power.h>
-+
-+    mdp3-tcc0@1400b000 {
-+        compatible = "mediatek,mt8195-mdp3-tcc";
-+        reg = <0x1400b000 0x1000>;
-+        mediatek,gce-client-reg = <&gce1 SUBSYS_1400XXXX 0xb000 0x1000>;
-+        clocks = <&vppsys0 CLK_VPP0_MDP_TCC>;
-+        power-domains = <&spm MT8195_POWER_DOMAIN_VPPSYS0>;
-+    };
-diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-tdshp.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-tdshp.yaml
-new file mode 100644
-index 000000000000..d2bc99ead190
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-tdshp.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/mediatek,mdp3-tdshp.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek Media Data Path 3 TDSHP
-+
-+maintainers:
-+  - Matthias Brugger <matthias.bgg@gmail.com>
-+  - Moudy Ho <moudy.ho@mediatek.com>
-+
-+description:
-+  One of Media Data Path 3 (MDP3) components used to improve image
-+  sharpness and contrast.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mediatek,mt8195-mdp3-tdshp
-+
-+  reg:
-+    maxItems: 1
-+
-+  mediatek,gce-client-reg:
-+    description:
-+      The register of client driver can be configured by gce with 4 arguments
-+      defined in this property, such as phandle of gce, subsys id,
-+      register offset and size.
-+      Each subsys id is mapping to a base address of display function blocks
-+      register which is defined in the gce header
-+      include/dt-bindings/gce/<chip>-gce.h.
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - mediatek,gce-client-reg
-+  - clocks
-+  - power-domains
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/mt8195-clk.h>
-+    #include <dt-bindings/gce/mt8195-gce.h>
-+    #include <dt-bindings/power/mt8195-power.h>
-+
-+    mdp3-tdshp0@14007000 {
-+        compatible = "mediatek,mt8195-mdp3-tdshp";
-+        reg = <0x14007000 0x1000>;
-+        mediatek,gce-client-reg = <&gce1 SUBSYS_1400XXXX 0x7000 0x1000>;
-+        clocks = <&vppsys0 CLK_VPP0_MDP_TDSHP>;
-+        power-domains = <&spm MT8195_POWER_DOMAIN_VPPSYS0>;
-+    };
++#define MDP_NODE_NAME		"mdp3-rdma0"
+ #define MDP_MODULE_NAME		"mtk-mdp3"
+ #define MDP_DEVICE_NAME		"MediaTek MDP3"
+ #define MDP_PHANDLE_NAME	"mediatek,mdp3"
 -- 
 2.18.0
 
