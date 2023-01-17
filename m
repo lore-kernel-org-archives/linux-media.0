@@ -2,106 +2,103 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D342C54E76
-	for <linux-media@archiver.kernel.org>; Tue, 17 Jan 2023 17:31:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C850C54E76
+	for <linux-media@archiver.kernel.org>; Tue, 17 Jan 2023 18:42:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbjAQRbg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Jan 2023 12:31:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53300 "EHLO
+        id S231642AbjAQSmM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Jan 2023 13:42:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235304AbjAQR11 (ORCPT
+        with ESMTP id S234193AbjAQShy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Jan 2023 12:27:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A794995E;
-        Tue, 17 Jan 2023 09:26:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC940614EA;
-        Tue, 17 Jan 2023 17:26:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24485C433D2;
-        Tue, 17 Jan 2023 17:26:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673976409;
-        bh=EXkWvmS2L/OCsuWKSVec76+Ewe99CqDEoweaQMO5UgY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=XfuwvSBN/Ec/MGZH+bwy8rk40+MfcdkaBuBmCIerqEwcfsMCw/8ceAp8tYUaJ88za
-         uxGDbHfaE94z6a5DtAxN2aUGK0JYa/oUXEerODPJF+ljv8NbcqR4XRQZLROgerpOKN
-         KMei4jmesJ/Vde1NipQU81cUacWsg6q2bPhZf0CBhpBtNHfKmZoO04D0qVnFIvm4HK
-         7JH/rhANh9egfwJ4A1Rw/UoIcEZY1GrdaX2XLXSEQfJgK/kegd61gMR9YQpF8Kwcj9
-         kDbCbzZ1GpL7EcDBMpsTvtTO9VBzXDHizLxUAof5jYRq5amzxNbnpsZQtz7QYYVzYI
-         26ckpwQCVJRfg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Bin Liu <bin.liu@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        kyrie wu <kyrie.wu@mediatek.com>,
-        irui wang <irui.wang@mediatek.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: mtk_jpeg_core: avoid unused-variable warning
-Date:   Tue, 17 Jan 2023 18:26:33 +0100
-Message-Id: <20230117172644.3044265-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.0
+        Tue, 17 Jan 2023 13:37:54 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCFE302BD;
+        Tue, 17 Jan 2023 10:08:38 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id jr10so20585443qtb.7;
+        Tue, 17 Jan 2023 10:08:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mNtUwk8pZ+4ME/1vifRLekNO13Wg5Zu56Lt21b5zZ/E=;
+        b=NUkTrZoP7W+dbV5M8TQ8QZ6EJ7AeGCEJe1YDCK4M3eOtriQU0VMF0jrTQfZKZ04nX3
+         tObhhl6SQ2s5vYRuVz0gifyjTCXvFFqjWl+foeDKQjIJ1LSYJjYBhUE1xbKZtrcLqo2Z
+         WLSR545diQKAiZhOEwCRqYEnywadjsPloZrSJW1WjO9wH7ptol5kfIBGQT2J6Z+oPcUq
+         e5bKJNMfyBEPGKCPfLlc5LXIRFHEPjarEbVgrNua0YSVPStVGuCH2Ws6+4vRqOqHIOeR
+         oKWk5W/o7VnUE7D8rQpa5OwRaV6ErauCSQr0Tq2X2N6redlnD2o1Cs9bxxQz1s0511XO
+         CYlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mNtUwk8pZ+4ME/1vifRLekNO13Wg5Zu56Lt21b5zZ/E=;
+        b=ZgPhYhv5ojWf06JPhu+SzYaYXr1rEa7yVPVCPuxf6wwbJ7T6YANfkmk1tCwIaWAsqd
+         0RrkWIkuFkwdoxUnukAUCO4n29fKxF+Tf9IMOgyTgkL0w6OfJEGWU1j3pU9H1kOkPf/X
+         jwS0OBPYVFQfdeDSjiQzrlIYaTiepiKhGC8hb8jIXMDme4sttpWVuJO5/G4pIWSx8SlX
+         alnYjSY7AyXqrPaHaSpECAYcKUz+0/F5VxmO/EJ1MYB+oaIkoTSqevRveq52BwuVokmB
+         VtFbVmV4YHJK1BWESh8gHvzFvnvKJ/ieVybLUCS3sO83QUqVl95dxkqWRHerNHDV0Cpk
+         i7JQ==
+X-Gm-Message-State: AFqh2kr0NEAefj1jd6dwJTo0Or9YQNulbkfRXc0aUjvFeddP2hPiDBho
+        6/mTQ3lDDVFzjvx4a79+wF9VR5EFdyByTkTdBcM=
+X-Google-Smtp-Source: AMrXdXvNpef78aF7A4F+6Aj+fH25NTbcazp1VYsDIP18+HyLQeo70AF3aJANwdtMB6J/E6tCNsz6V29gc0SCtxWin7k=
+X-Received: by 2002:a05:622a:5c8c:b0:3b6:30c5:6d26 with SMTP id
+ ge12-20020a05622a5c8c00b003b630c56d26mr188562qtb.429.1673978917903; Tue, 17
+ Jan 2023 10:08:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <Y8bARLuFubMVILIN@smile.fi.intel.com> <20230117161659.31232-1-bpappas@pappasbrent.com>
+In-Reply-To: <20230117161659.31232-1-bpappas@pappasbrent.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 17 Jan 2023 20:08:01 +0200
+Message-ID: <CAHp75VcxaSXeMNmkPoMnA+zjp+JWmHp5aE+2yPhXaqxMC6QWEQ@mail.gmail.com>
+Subject: Re: [PATCH v2] media: atomisp: pci: Replace bytes macros with functions
+To:     Brent Pappas <bpappas@pappasbrent.com>
+Cc:     andy@kernel.org, ailus@linux.intel.com, error27@gmail.com,
+        gregkh@linuxfoundation.org, hdegoede@redhat.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, mchehab@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Tue, Jan 17, 2023 at 6:17 PM Brent Pappas <bpappas@pappasbrent.com> wrote:
+>
+> Thank you for the advice Andy.
+> I took a look in overflow.h and found the size_mul function, I assume this
+> is what I should be using to prevent accidental overflow.
+> I also removed the inline keyword from the function definitions because
+> Dan (error27@gmail.com) recommended that I do so in reply to an earlier
+> patch I submitted.
 
-The only reference to mtk8195_jpegenc_drvdata is inside of an #ifdef:
+Now you need to properly form a commit message. What you have done
+above is good for the comment (goes near to changelog).
 
-drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1879:32: error: 'mtk8195_jpegenc_drvdata' defined but not used [-Werror=unused-variable]
- 1879 | static struct mtk_jpeg_variant mtk8195_jpegenc_drvdata = {
-      |                                ^~~~~~~~~~~~~~~~~~~~~~~
+...
 
-Fix this by just removing the #ifdef and the corresponding
-of_match_ptr(). They don't actually serve any purpose here since the
-driver is only usable when CONFIG_OF is enabled, and build testing
-without that is not a problem.
+> +static size_t fpntbl_bytes(const struct ia_css_binary *binary)
+> +{
+> +       return size_mul(sizeof(char),
+> +                       size_mul(binary->in_frame_info.res.height,
+> +                                binary->in_frame_info.padded_width));
 
-Fixes: 934e8bccac95 ("mtk-jpegenc: support jpegenc multi-hardware")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+I recommend using array_size() and array3_size() rather than open coding them.
 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-index 969516a940ba..bd12e73492e5 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-@@ -1898,7 +1898,6 @@ static const struct mtk_jpeg_variant mtk8195_jpegdec_drvdata = {
- 	.cap_q_default_fourcc = V4L2_PIX_FMT_YUV420M,
- };
- 
--#if defined(CONFIG_OF)
- static const struct of_device_id mtk_jpeg_match[] = {
- 	{
- 		.compatible = "mediatek,mt8173-jpgdec",
-@@ -1924,14 +1923,13 @@ static const struct of_device_id mtk_jpeg_match[] = {
- };
- 
- MODULE_DEVICE_TABLE(of, mtk_jpeg_match);
--#endif
- 
- static struct platform_driver mtk_jpeg_driver = {
- 	.probe = mtk_jpeg_probe,
- 	.remove = mtk_jpeg_remove,
- 	.driver = {
- 		.name           = MTK_JPEG_NAME,
--		.of_match_table = of_match_ptr(mtk_jpeg_match),
-+		.of_match_table = mtk_jpeg_match,
- 		.pm             = &mtk_jpeg_pm_ops,
- 	},
- };
+> +}
+
+...
+
+> +       return size_mul(sizeof(unsigned short),
+
+> +                               size_mul(binary->sctbl_height,
+> +                                        size_mul(binary->sctbl_aligned_width_per_color,
+> +                                                 IA_CSS_SC_NUM_COLORS)));
+
+array3_size()
+
+and so on.
+
 -- 
-2.39.0
-
+With Best Regards,
+Andy Shevchenko
