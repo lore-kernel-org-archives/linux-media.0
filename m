@@ -2,77 +2,103 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C4CCC004D4
-	for <linux-media@archiver.kernel.org>; Thu, 19 Jan 2023 14:10:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E794C46467
+	for <linux-media@archiver.kernel.org>; Thu, 19 Jan 2023 14:12:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231421AbjASOKe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Jan 2023 09:10:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33550 "EHLO
+        id S231531AbjASOMA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Jan 2023 09:12:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbjASOJO (ORCPT
+        with ESMTP id S231494AbjASOLX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Jan 2023 09:09:14 -0500
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829D982D56;
-        Thu, 19 Jan 2023 06:08:24 -0800 (PST)
-Received: by mail-qv1-xf2a.google.com with SMTP id y8so1567612qvn.11;
-        Thu, 19 Jan 2023 06:08:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lI7bNBM712aJHyLKJ5fyHPeJK8BWNRSC3RcpgvndO94=;
-        b=KHtYoiEGDHvGcMAIId58pIH/ad712Vd1Ipc/s9+GUT72Bk5MszZ/aYutEJu4zAuVCu
-         OFCTh5hVApxS6FTKAQaWZsjqmW37l5RoZ+Juat+KT05dMBkJHHH1Zy+HcP7nd9KVni8T
-         fjpZWSFZ/epe9iIS/fOYd96JzirjpCrUHwLaD1xOh3D4HuEILxQEtGr0yIKKwoLizZ49
-         9A3lIx2RODW7WnKBTl4jiJFvha0jVi0lys5EI+Y77zVlyaSZVtcsg+OYDXP4hAHQlSes
-         c3aq/uLhTlNjanPmyp/41DZ4vyhxiq97KRceC9aqb2MssK8tL002ApEoMUEoLowi1QNK
-         kQ3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lI7bNBM712aJHyLKJ5fyHPeJK8BWNRSC3RcpgvndO94=;
-        b=n2qR8lbph1PkJPgSr2Kdy6vl6+liNYyAsYSXiOErxXH80Nb4IccCMHxaW4gbrSUjqJ
-         z32C99pa8eQbFmNT+1x1B47KcX7TM+kNIL7glQ5NbO0XcZHTrGr2M168WlPKHNWh/C5B
-         NQMQWQyrYEMYdItiDrDNt2KzKFfvd1fXOYyuiatAv2TZq3dyP+iU7b7xyo7soZCiWtHt
-         l2wsTGFIh3k6U3iDzBXwQgTOtVbK1XFhnDhyE8f7jJ9NrKb+69S8+Dpxf5w/91U+AcNV
-         2upCc+ZHf6kJAjVnMV3I1LZ8jwtm0RH6S31FdKTu+EPAMW8VSA4FdZ7tm5ZGko4xdrBK
-         ydtw==
-X-Gm-Message-State: AFqh2kqZGjdSIEVM+KEFJp32rGHwKN//DuWT+S+Y4/fAfsB6zaIqKkoR
-        5BdWtO4pFs/mpcbVzkbuW4sLY9BNMFMIpEBSbDo=
-X-Google-Smtp-Source: AMrXdXsH7RqaoxO0iZCH40SaRq1NMTaoNUhOBacXaJih3JlcUdNFDSYkeyz/5LfMLBYhKnC1N/vUZsTKn5dr0MMMxWM=
-X-Received: by 2002:a05:6214:4c08:b0:4c7:1ebf:719f with SMTP id
- qh8-20020a0562144c0800b004c71ebf719fmr418413qvb.64.1674137266231; Thu, 19 Jan
- 2023 06:07:46 -0800 (PST)
+        Thu, 19 Jan 2023 09:11:23 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8483B829A5;
+        Thu, 19 Jan 2023 06:09:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674137389; x=1705673389;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PNmoKYRJVjDp4F17/eUveCKQAApp+O2ZjxB9O8O8wrg=;
+  b=hgyugTjKw7I53S+5Vl8pekG7zY5XHdmtEEdXX01A0rGAi9MbL9JGz9uG
+   HSBUPlJ8w5QWkkzuS3AlucMXTq+4LNFaXZ0tE7ly9ciVoK9xOPirtkMSX
+   9p022+D8XthVHs9zgsA/OOuG6+618jM3BjzbtThuTQijViK2VAnxRv55p
+   5rJyKDnRx4GsEP2MNpRzLlv9qvmApx8KgFPbDyFi3dD1VluY5ro5CE0xg
+   hLpQXcbCgMcxOZBCBrHJ/pizXrOAL4394iAhH3/3gXLNVdPDz8/WRE7M/
+   At/zH2Lte8y/6c3svA2j9fBVRqNbj/gBYaBfFLCvN/fhCHxwd/MSIlT9g
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="327369183"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="327369183"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 06:04:12 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="690636743"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="690636743"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 06:04:10 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id A7F4C20497;
+        Thu, 19 Jan 2023 16:04:08 +0200 (EET)
+Date:   Thu, 19 Jan 2023 14:04:08 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-acpi@vger.kernel.org, rafael@kernel.org,
+        linux-media@vger.kernel.org, heikki.krogerus@linux.intel.com
+Subject: Re: [PATCH 2/8] ACPI: property: Parse _CRS CSI-2 descriptor
+Message-ID: <Y8lN2FuKZksOlS0J@paasikivi.fi.intel.com>
+References: <20230117122244.2546597-1-sakari.ailus@linux.intel.com>
+ <20230117122244.2546597-3-sakari.ailus@linux.intel.com>
+ <Y8ax6TUtTCO6qQmz@smile.fi.intel.com>
 MIME-Version: 1.0
-References: <20230119134218.12280-1-bpappas@pappasbrent.com>
-In-Reply-To: <20230119134218.12280-1-bpappas@pappasbrent.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 19 Jan 2023 16:07:10 +0200
-Message-ID: <CAHp75Vc4QS=Gr-DSvf7pzCKktqGPfno4TBDmicj5CKgyHGjSsw@mail.gmail.com>
-Subject: Re: [PATCH] media: atomisp: pci: sh_css: Replace macro
- STATS_ENABLED() with function
-To:     Brent Pappas <bpappas@pappasbrent.com>
-Cc:     hdegoede@redhat.com, mchehab@kernel.org,
-        sakari.ailus@linux.intel.com, gregkh@linuxfoundation.org,
-        andy@kernel.org, colin.i.king@gmail.com,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8ax6TUtTCO6qQmz@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 3:43 PM Brent Pappas <bpappas@pappasbrent.com> wrote:
->
-> Replace the macro STATS_ENABLED() with a static function to conform to
-> Linux coding style standards.
+Hi Andy,
 
-I believe the best approach here is to drop that completely and move
-its content to be inline in the only caller.
+On Tue, Jan 17, 2023 at 04:34:17PM +0200, Andy Shevchenko wrote:
+> On Tue, Jan 17, 2023 at 02:22:38PM +0200, Sakari Ailus wrote:
+> > Parse newly added ACPI _CRS CSI-2 descriptor for CSI-2 and camera
+> > configuration. For now, only figure out where the descriptor is present in
+> > order to allow adding information from it to related devices.
+> 
+> ...
+> 
+> > +/*
+> > + * MIPI DisCo for Imaging support.
+> > + *
+> > + * Copyright (C) 2022 Intel Corporation
+> 
+> 2023?
+
+Yes.
+
+> 
+> > + */
+> 
+> ...
+> 
+> > +#include <linux/acpi.h>
+> > +#include <linux/module.h>
+> 
+> > +#include <linux/kernel.h>
+> 
+> Not sure why you need this one instead of corresponding types.h and might be a
+> few others (seems list.h, string.h at least).
+
+Good catch.
+
+I'll fix these for v2.
+
+> 
+> > +#include <linux/overflow.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/sort.h>
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Sakari Ailus
