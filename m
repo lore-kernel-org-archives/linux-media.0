@@ -2,163 +2,131 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED2A4C00A5A
-	for <linux-media@archiver.kernel.org>; Thu, 19 Jan 2023 13:48:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFB30C678D6
+	for <linux-media@archiver.kernel.org>; Thu, 19 Jan 2023 14:06:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbjASNsL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Jan 2023 08:48:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
+        id S231587AbjASOGr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Jan 2023 09:06:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230518AbjASNsI (ORCPT
+        with ESMTP id S231346AbjASOGH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Jan 2023 08:48:08 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA371B8
-        for <linux-media@vger.kernel.org>; Thu, 19 Jan 2023 05:47:55 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id c124so2469264ybb.13
-        for <linux-media@vger.kernel.org>; Thu, 19 Jan 2023 05:47:55 -0800 (PST)
+        Thu, 19 Jan 2023 09:06:07 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257FD7ED4D;
+        Thu, 19 Jan 2023 06:05:25 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id z9so1596286qtv.5;
+        Thu, 19 Jan 2023 06:05:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PSMpJcgB4/iWUNMRjULR1MuJgnZtYsNt64IxI/yg8y8=;
-        b=eDVBeDp6HGMjUZ+KWIDom7Mh6Xqh62t/zpEx0yeX5zBGVXqKMMBK3817KAy67sh9Nu
-         iLrH3wQEBzIwDR3pmWTeIW05HXE+IdMRth3fUg4NvViFR/tFTcPVuryHoWor1ecMPQyf
-         IDuB5L5zwaIWMsEShLu285cRaoBklCKi/qxmw4JF/aYQVqyJFpX3yo0XryH/NmmnXnLx
-         uzSjlPJi0ZlGcz4VezPnDnTedMDXRFquanUoDqjeUEp+4LTx0fpqaZncSfsK5p4D85KL
-         ss20MK9rSaAgE7ODMwm7GbuSixRglGKENvSUegJqF9jVd7xzpFTAsnIr/GOrrnrHHR4H
-         p6QA==
+        bh=Ft7thjbRH4LJ4g7+2BJEIJ9urL8mlxCTfapdcA4PqOw=;
+        b=HyN2Alg0QrsNjLNYPsCofmAJLoKDcGujNS5jA9XNFa368CIhjpDmx5yU+7YVKsTkeO
+         sxR+g9sRZ9sW2TBq1IGxcRHAw8lAklG/uUD9Ihb5LIWyNe130ZvJy8KKT+i8UHFm8DAg
+         HkSbdaFxhxSN2/AAAMtDl9ry9D8nNgmn+7q+uQHlBWL1fUOjwf+5j9G/MM7tmnNvN1s2
+         hrjeqiqUC/T04jz7Uffvqdi5ODIqyey8LgPTtrYNzVreUfBkjmeFkXhSknfEXY20C6d0
+         0qO2myc1jCpfZffpLK13Avo/hoDL0sBe6RgvoYA6LvEA9SY3YNo6yXNzmSrSJGYsFLHX
+         1cyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=PSMpJcgB4/iWUNMRjULR1MuJgnZtYsNt64IxI/yg8y8=;
-        b=DqneXqVUUdXyuyy5DkjKNulSAy9BUfmidNPFs0L6N0R4zbTbNAc6rSYhHrV2Liq2J0
-         ZCRywP7mbhOT6eMBjBX1gS1bJUbY9bwKsH/+WJwunBSEZ2+3xoYvQnsGyZeQnSoPcmIZ
-         Y9PJ9toKJN7mn8zDyQNX1saGWHnj+QaGqdd5rWXUkxgXZmWsByks66raM2xxMrGepjKM
-         ZYgrCBV/xLD6kKtHh1iPxt5rZWFTzhd2gYyJqk+ngvGI+rdv+s4kq1jzifAsCW3RVPU1
-         qNtYgFdCfqrTnIWUzteVQ6SLtJB44o2gaRaZweOMb2Wq8pzYc00aX3DwEB1uz7yEWcBj
-         qX1g==
-X-Gm-Message-State: AFqh2kpZJxoeB7IfKeU++uKviEUHK1vfxH8feCJRbqNF7HfWcMedCgVG
-        QXUFqOdMn5Ll8GI+oFc9jZXaYeP+yXkpykFNs1lyvQ==
-X-Google-Smtp-Source: AMrXdXtrMjpr+dkPCI15Z1YrTq3vEIqG9HQKNS7sllyosNcJ1sz9FAEKCEyXXbIAukoxGI1iBD0VmTuYLITNqakQYJY=
-X-Received: by 2002:a25:d1d0:0:b0:6f8:c792:bde9 with SMTP id
- i199-20020a25d1d0000000b006f8c792bde9mr1371077ybg.614.1674136074295; Thu, 19
- Jan 2023 05:47:54 -0800 (PST)
+        bh=Ft7thjbRH4LJ4g7+2BJEIJ9urL8mlxCTfapdcA4PqOw=;
+        b=28L7jkL74pP8S0JL60birJVgdFVj2x8Y562VraUW88CqKn9QOCORfZUak4RiYJn4QA
+         p9GgY53ClyYugrCAEjM7zVKfebSDZ6bb2P/+ezz0jQmBi/lQKr8DOsv+IqDokjjXOqbG
+         lIS+8xKKMrB3gzPZmbM7fqvD35LXDrA0PIJDo03Tcg+Pf2r1kvz7swqWUGlayHIqiCUB
+         khGC+IHm7b5uT0W5qC8rar+wIjHOR1Yf8SK2A0HKn82tQehaLXuvd0YGj8RtZQ5VTM/q
+         jTToD4MYIuv5faTLEGPGN+S6J6J9oQ5Pkb8VF8u5HjiZ7uJN2yr4ilHMq0sM36HRCs7F
+         gHEQ==
+X-Gm-Message-State: AFqh2koETem6UaSta7i07a5OQ08w4BiHoeGQo/ZQ4XM6rXD2yLnq9STM
+        JiZpi9PZwygTIoopfRrv7lETpCDtb59riE86R9VrvzpKVOAjRw==
+X-Google-Smtp-Source: AMrXdXtpdkaiJY+9UQssHRSKf8fV67Umulvs+fCQ/+/WV37TboW6oXmuyl49po/RcLfB4bPlBhIwo2sdLJTkXqdAV3U=
+X-Received: by 2002:a05:622a:5c8c:b0:3b6:30c5:6d26 with SMTP id
+ ge12-20020a05622a5c8c00b003b630c56d26mr529704qtb.429.1674137124390; Thu, 19
+ Jan 2023 06:05:24 -0800 (PST)
 MIME-Version: 1.0
-References: <20230118115810.21979-1-umang.jain@ideasonboard.com>
- <b1a26368-3753-0d32-434b-e220dd9c06b4@i2se.com> <CAMEGJJ1=dix7gWvV3Jxef-M-ExFZRTASQCr+6sn_dGsEQ=deYQ@mail.gmail.com>
- <Y8lHqd9FlxiXTLuW@kroah.com>
-In-Reply-To: <Y8lHqd9FlxiXTLuW@kroah.com>
-From:   Phil Elwell <phil@raspberrypi.com>
-Date:   Thu, 19 Jan 2023 13:47:44 +0000
-Message-ID: <CAMEGJJ1oZ9XFw0609PrEABAgDwvapbc3hG4hJ=vBekUOepdiWw@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/4] Drop custom logging
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Umang Jain <umang.jain@ideasonboard.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+References: <20230119130053.111344-1-hdegoede@redhat.com> <20230119130053.111344-5-hdegoede@redhat.com>
+In-Reply-To: <20230119130053.111344-5-hdegoede@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 19 Jan 2023 16:04:48 +0200
+Message-ID: <CAHp75VcCEJVx71H9MqNqPP+KAMDzgpx5v1P9h_h375ejeMa2+g@mail.gmail.com>
+Subject: Re: [PATCH v4 04/11] leds: led-class: Add generic [devm_]led_get()
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Scally <djrscally@gmail.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-kernel@vger.kernel.org
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        platform-driver-x86@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-gpio@vger.kernel.org, Kate Hsuan <hpa@redhat.com>,
+        Mark Pearson <markpearson@lenovo.com>,
+        Andy Yeh <andy.yeh@intel.com>, Hao Yao <hao.yao@intel.com>,
+        linux-media@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, 19 Jan 2023 at 13:37, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Thu, Jan 19, 2023 at 3:01 PM Hans de Goede <hdegoede@redhat.com> wrote:
 >
-> On Thu, Jan 19, 2023 at 01:31:12PM +0000, Phil Elwell wrote:
-> > Hi all,
-> >
-> >
-> > On Wed, 18 Jan 2023 at 17:55, Stefan Wahren <stefan.wahren@i2se.com> wrote:
-> > >
-> > > Hi Umang,
-> > >
-> > > [add Phil]
-> > >
-> > > Am 18.01.23 um 12:58 schrieb Umang Jain:
-> > > > Drop custom logging from the vchiq interface.
-> > > > Mostly of them are replaced with dev_dbg and friends
-> > > > and/or pr_info and friends.
-> > > >
-> > > > The debugfs log levels (in 4/4) are mapped to kernel
-> > > > logs levels (coming from include/linux/kern_levels.h)
-> > > > Would like some thoughts on it as I am not sure (hence
-> > > > marking this is RFC)
-> > > >
-> > > >  From drivers/staging/vc04_services/interface/TODO:
-> > > >
-> > > > """
-> > > > * Cleanup logging mechanism
-> > > >
-> > > > The driver should probably be using the standard kernel logging mechanisms
-> > > > such as dev_info, dev_dbg, and friends.
-> > >
-> > > i don't have any experience with vchiq logging/debug. So i'm not sure if
-> > > it's acceptable to lose the second log level dimension (like
-> > > vchiq_arm_log_level) completely. Complex drivers like brcmfmac have a
-> > > debug mask to avoid log spamming [1]. Maybe this is a compromise.
-> > >
-> > > Btw some loglevel locations has already been messed up during
-> > > refactoring :-(
-> > >
-> > > [1] - drivers/net/wireless/broadcom/brcm80211/brcmfmac/debug.h
-> > >
-> > > > """
-> > > >
-> > > > Umang Jain (4):
-> > > >    staging: vc04_services: vchiq_core: Drop custom logging
-> > > >    staging: vc04_services: vchiq_arm: Drop custom logging
-> > > >    staging: vc04_services: Drop custom logging
-> > > >    staging: vc04_services: Drop remnants of custom logging
-> > > >
-> > > >   .../interface/vchiq_arm/vchiq_arm.c           | 151 +++---
-> > > >   .../interface/vchiq_arm/vchiq_connected.c     |   5 +-
-> > > >   .../interface/vchiq_arm/vchiq_core.c          | 479 ++++++++----------
-> > > >   .../interface/vchiq_arm/vchiq_core.h          |  39 --
-> > > >   .../interface/vchiq_arm/vchiq_debugfs.c       |  26 +-
-> > > >   .../interface/vchiq_arm/vchiq_dev.c           |  78 ++-
-> > > >   6 files changed, 329 insertions(+), 449 deletions(-)
-> > > >
-> >
-> > Thanks for the nudge - this patch set hasn't yet made its way through
-> > the sluggish rpi-kernel moderation.
-> >
-> > I understand the desire to remove the custom logging. I don't welcome
-> > the loss of flexibility that comes with such a strategy
+> Add a generic [devm_]led_get() method which can be used on both devicetree
+> and non devicetree platforms to get a LED classdev associated with
+> a specific function on a specific device, e.g. the privacy LED associated
+> with a specific camera sensor.
 >
-> What "loss of flexibility"?  You now have access to the full dynamic
-> debugging facilities that all of the rest of the kernel has.  What is
-> lacking?
+> Note unlike of_led_get() this takes a string describing the function
+> rather then an index. This is done because e.g. camera sensors might
 
-Perhaps I've missed something, either in this patch set or the kernel
-as a whole, but how is one supposed to set different logging levels on
-different facilities within a driver/module, or even for the module as
-a whole? I don't consider anything that requires reference to
-individual lines in the source code to be a suitable replacement,
-clever though it is.
+than
 
-> > , but I'm not
-> > going to argue about it. What's harder to understand is the state that
-> > this patchset leaves VCHIQ logging in. From what I can see, the
-> > per-service logging control has gone, but the code still contains
-> > macros that hint at something useful. Similarly, the debugfs support
-> > is completely vestigial, giving the appearance of control while
-> > actually achieving nothing.
+> have a privacy LED, or a flash LED, or both and using an index
+> approach leaves it unclear what the function of index 0 is if there is
+> only 1 LED.
 >
-> The debugfs files should also be removed if they don't do anything
-> anymore.
+> This uses a lookup-table mechanism for non devicetree platforms.
+> This allows the platform code to map specific LED class_dev-s to a specific
+> device,function combinations this way.
 >
-> thanks,
->
-> greg k-h
+> For devicetree platforms getting the LED by function-name could be made
+> to work using the standard devicetree pattern of adding a -names string
+> array to map names to the indexes.
+
+...
+
+> +/*
+> + * This is used to tell led_get() device which led_classdev to return for
+> + * a specific consumer device-name, function pair on non devicetree platforms.
+> + * Note all strings must be set.
+> + */
+> +struct led_lookup_data {
+> +       struct list_head list;
+> +       const char *led_name;
+> +       const char *consumer_dev_name;
+> +       const char *consumer_function;
+> +};
+
+I'm wondering if it would be better to have something like
+
+struct led_function_map {
+       const char *name;
+       const char *function;
+};
+
+struct led_lookup_data {
+       struct list_head list;
+       const char *dev_name;
+       const struct led_function_map map[];
+};
+
+as you may have more than one LED per the device and it would be a
+more compressed list in this case. I'm basically referring to the GPIO
+lookup table.
+
+-- 
+With Best Regards,
+Andy Shevchenko
