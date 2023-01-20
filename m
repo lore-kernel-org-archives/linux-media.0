@@ -2,107 +2,169 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B4F8C05027
-	for <linux-media@archiver.kernel.org>; Fri, 20 Jan 2023 11:01:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DE75C05027
+	for <linux-media@archiver.kernel.org>; Fri, 20 Jan 2023 11:46:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjATLBK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 20 Jan 2023 06:01:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
+        id S229766AbjATLqO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 20 Jan 2023 06:46:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjATLBI (ORCPT
+        with ESMTP id S229518AbjATLqN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 20 Jan 2023 06:01:08 -0500
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CE7F81994;
-        Fri, 20 Jan 2023 03:01:01 -0800 (PST)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 30KArkBe026992;
-        Fri, 20 Jan 2023 04:53:46 -0600
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 30KArgxi026991;
-        Fri, 20 Jan 2023 04:53:42 -0600
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Fri, 20 Jan 2023 04:53:41 -0600
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Rob Landley <rob@landley.net>
-Cc:     "Michael.Karcher" <Michael.Karcher@fu-berlin.de>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-xtensa@linux-xtensa.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-sh@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-mips@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-Subject: Re: Calculating array sizes in C - was: Re: Build regressions/improvements in v6.2-rc1
-Message-ID: <20230120105341.GI25951@gate.crashing.org>
-References: <alpine.DEB.2.22.394.2212270933530.311423@ramsan.of.borg> <c05bee5d-0d69-289b-fe4b-98f4cd31a4f5@physik.fu-berlin.de> <CAMuHMdXNJveXHeS=g-aHbnxtyACxq1wCeaTg8LbpYqJTCqk86g@mail.gmail.com> <3800eaa8-a4da-b2f0-da31-6627176cb92e@physik.fu-berlin.de> <CAMuHMdWbBRkhecrqcir92TgZnffMe8ku2t7PcVLqA6e6F-j=iw@mail.gmail.com> <429140e0-72fe-c91c-53bc-124d33ab5ffa@physik.fu-berlin.de> <CAMuHMdWpHSsAB3WosyCVgS6+t4pU35Xfj3tjmdCDoyS2QkS7iw@mail.gmail.com> <0d238f02-4d78-6f14-1b1b-f53f0317a910@physik.fu-berlin.de> <1732342f-49fe-c20e-b877-bc0a340e1a50@fu-berlin.de> <0f51dac4-836b-0ff2-38c6-5521745c1c88@landley.net>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        Fri, 20 Jan 2023 06:46:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C03C4917D3
+        for <linux-media@vger.kernel.org>; Fri, 20 Jan 2023 03:45:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674215129;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=+xBTgrMv6S8fIj4ApiuQ/EJHLwe2ANp/pmA1QNvT0+4=;
+        b=E48d++NupgISC2ZddxLGv5Hj67geC/O3+M7DrCfum2+FMKxU+lLXBlwDy+NMpncHmbhGYg
+        VFNaYiOmmNkhgBN3NjG+GEbJTTMew/Fbfh1LaYENIC8T7fcDLJw3Y1GZktZDLYl1WTaL40
+        FagfhwodXLZUu5oF8uFY5BZDWMTo7WA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-436-seib045dNIKrzp_1vQdwcA-1; Fri, 20 Jan 2023 06:45:28 -0500
+X-MC-Unique: seib045dNIKrzp_1vQdwcA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 756773806108;
+        Fri, 20 Jan 2023 11:45:27 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.195.101])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C2CB6140EBF6;
+        Fri, 20 Jan 2023 11:45:24 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        platform-driver-x86@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-gpio@vger.kernel.org, Kate Hsuan <hpa@redhat.com>,
+        Mark Pearson <markpearson@lenovo.com>,
+        Andy Yeh <andy.yeh@intel.com>, Hao Yao <hao.yao@intel.com>,
+        linux-media@vger.kernel.org
+Subject: [PATCH v5 00/11] leds: lookup-table support + int3472/media privacy LED support
+Date:   Fri, 20 Jan 2023 12:45:13 +0100
+Message-Id: <20230120114524.408368-1-hdegoede@redhat.com>
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0f51dac4-836b-0ff2-38c6-5521745c1c88@landley.net>
-User-Agent: Mutt/1.4.2.3i
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 09:31:21PM -0600, Rob Landley wrote:
-> On 1/19/23 16:11, Michael.Karcher wrote:
-> > I don't see a clear bug at this point. We are talking about the C expression
-> > 
-> >    __same_type((void*)0, (void*)0)? 0 : sizeof((void*)0)/sizeof(*((void*0))
+Hi All,
 
-(__same_type is a kernel macro, it expands to something with
-__builtin_compatible_type()).
+Here is version 5 of my series to adjust the INT3472 code's handling of
+the privacy LED on x86 laptops with MIPI camera(s) so that it will also
+work on devices which have a privacy-LED GPIO but not a clk-enable GPIO
+(so that we cannot just tie the LED state to the clk-enable state).
 
-> *(void*) is type "void" which does not have a size.
+Changes in v5:
+- Rename lookup-table names to match those from the gpio and reset lookups:
+  s/led_name/provider/
+  s/consumer_dev_name/dev_id/
+  s/consumer_function/con_id/
+- Add static inline wrappers for the v4l2_async debugfs init/exit funcs,
+  to fix build errors when CONFIG_V4L2_ASYNC is not enabled
 
-It has size 1, in GCC, so that you can do arithmetic on pointers to
-void.  This is a long-standing and very widely used GCC extension.
+Changes in v4:
+- Rename new __led_get() helper to led_module_get()
+- Drop of/devicetree support from "led-class: Add generic [devm_]led_get()"
+- Add RFC patch to re-add of/devicetree support to show that the new
+  led_get() can easily be extended with dt support when the need for this
+  arises (proof-of-concept dt code, not intended for merging)
+- New patch to built async and fwnode code into videodev.ko,
+  to avoid issues with some of the new LED code getting builtin vs
+  other parts possibly being in a module
+- Move the led_get() call to v4l2_async_register_subdev_sensor()
+- Move the led_disable_sysfs() call to be done at led_get() time
+- Address some other minor review comments
 
-"""
-6.24 Arithmetic on 'void'- and Function-Pointers
-================================================
+Changes in v3:
+- Due to popular request by multiple people this new version now models
+  the privacy LED as a LED class device. This requires being able to
+  "tie" the LED class device to a specific camera sensor (some devices
+  have multiple sensors + privacy-LEDs).
 
-In GNU C, addition and subtraction operations are supported on pointers
-to 'void' and on pointers to functions.  This is done by treating the
-size of a 'void' or of a function as 1.
+Patches 1-5 are LED subsystem patches for this. 1 is a bug fix, 2-4 add
+the new [devm_]led_get() functions. Patch 5 is the RFC patch adding dt
+support to led_get() and is not intended for merging.
 
- A consequence of this is that 'sizeof' is also allowed on 'void' and on
-function types, and returns 1.
+Patch 6 + 7 add generic privacy-LED support to the v4l2-core/v4l2-subdev.c
+code automatically enabling the privacy-LED when s_stream(subdev, 1)
+is called. So that we don't need to add privacy-LED code to all the
+camera sensor drivers separately (as requested by Sakari).
 
- The option '-Wpointer-arith' requests a warning if these extensions are
-used.
-"""
+Patches 8-11 are patches to the platform specific INT3472 code to register
+privacy-LED class devices + lookup table entries for privacy-LEDs described
+in the special INT3472 ACPI nodes found on x86 devices with MIPI cameras.
 
-> The problem is gcc "optimizing out" an earlier type check, the same way it
-> "optimizes out" checks for signed integer math overflowing, or "optimizes out" a
-> comparison to pointers from two different local variables from different
-> function calls trying to calculate the amount of stack used, or "optimizes out"
+Assuming at least the LED maintainers are happy with the approach suggested
+here, the first step to merging this would be to merge patches 1-4 and then
+provide an immutable branch with those to merge for the other subsystems
+since the other changes depend on these.
 
-Are you saying something in the kernel code here is invalid code?
-Because your other examples are.
+If you are one of the folks who requested the new LED lookup table +
+led_get() approach I would appreciate a Reviewed-by or Acked-by for
+patches 1-4.
 
-> using char *x = (char *)1; as a flag value and then doing "if (!(x-1)) because
-> it can "never happen"...
+This series has been tested on:
 
-Like here.  And no, this is not allowed by -fno-strict-aliasing.
+- Lenovo ThinkPad X1 Yoga gen 7, IPU6, front: ov2740 with privacy LED
+- Dell Latitude 9420, IPU 6, front: ov01a1s with privacy LED
+- Mirosoft Surface Go, IPU3, front: ov5693 with privacy LED
+                              back: ov8865 with privacy LED (pled not yet supported)
 
-> > I suggest to file a bug against gcc complaining about a "spurious 
-> > warning", and using "-Werror -Wno-error-sizeof-pointer-div" until gcc is 
-> > adapted to not emit the warning about the pointer division if the result 
-> > is not used.
+Regards,
 
-Yeah.  If the first operand of a conditional operator is non-zero, the
-second operand is not evaluated, and if the first is zero, the third
-operand is not evaluated.  It is better if we do not warn about
-something we do not evaluate.  In cases like here where it is clear at
-compile time which branch is taken, that shouldn't be too hard.
-
-Can someone please file a GCC PR?  With reduced testcase preferably.
+Hans
 
 
-Segher
+Hans de Goede (11):
+  leds: led-class: Add missing put_device() to led_put()
+  leds: led-class: Add led_module_get() helper
+  leds: led-class: Add __devm_led_get() helper
+  leds: led-class: Add generic [devm_]led_get()
+  [RFC] leds: led-class: Add devicetree support to led_get()
+  media: v4l2-core: Built async and fwnode code into videodev.ko
+  media: v4l2-core: Make the v4l2-core code enable/disable the privacy
+    LED if present
+  platform/x86: int3472/discrete: Refactor GPIO to sensor mapping
+  platform/x86: int3472/discrete: Create a LED class device for the
+    privacy LED
+  platform/x86: int3472/discrete: Move GPIO request to
+    skl_int3472_register_clock()
+  platform/x86: int3472/discrete: Get the polarity from the _DSM entry
+
+ drivers/leds/led-class.c                      | 173 +++++++++++++++---
+ drivers/media/v4l2-core/Kconfig               |   4 +-
+ drivers/media/v4l2-core/Makefile              |   4 +-
+ drivers/media/v4l2-core/v4l2-async.c          |  17 +-
+ drivers/media/v4l2-core/v4l2-dev-priv.h       |  19 ++
+ drivers/media/v4l2-core/v4l2-dev.c            |   8 +
+ drivers/media/v4l2-core/v4l2-fwnode.c         |  21 ++-
+ drivers/media/v4l2-core/v4l2-subdev.c         |  18 ++
+ drivers/platform/x86/intel/int3472/Makefile   |   2 +-
+ .../x86/intel/int3472/clk_and_regulator.c     |  34 +++-
+ drivers/platform/x86/intel/int3472/common.h   |  18 +-
+ drivers/platform/x86/intel/int3472/discrete.c | 100 +++++-----
+ drivers/platform/x86/intel/int3472/led.c      |  74 ++++++++
+ include/linux/leds.h                          |  21 +++
+ include/media/v4l2-subdev.h                   |   3 +
+ 15 files changed, 399 insertions(+), 117 deletions(-)
+ create mode 100644 drivers/media/v4l2-core/v4l2-dev-priv.h
+ create mode 100644 drivers/platform/x86/intel/int3472/led.c
+
+-- 
+2.39.0
+
