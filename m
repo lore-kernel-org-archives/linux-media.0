@@ -2,136 +2,119 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E2ABC678D6
-	for <linux-media@archiver.kernel.org>; Fri, 20 Jan 2023 05:37:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D266C05027
+	for <linux-media@archiver.kernel.org>; Fri, 20 Jan 2023 06:57:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjATFhd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 20 Jan 2023 00:37:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42220 "EHLO
+        id S229697AbjATG5N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 20 Jan 2023 01:57:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230362AbjATFgu (ORCPT
+        with ESMTP id S229461AbjATG5M (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 20 Jan 2023 00:36:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC52110276;
-        Thu, 19 Jan 2023 21:33:25 -0800 (PST)
+        Fri, 20 Jan 2023 01:57:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3765CE68;
+        Thu, 19 Jan 2023 22:57:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65B3CB82268;
-        Thu, 19 Jan 2023 13:37:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95D6EC433EF;
-        Thu, 19 Jan 2023 13:37:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 157F561E31;
+        Fri, 20 Jan 2023 06:57:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D85E0C433D2;
+        Fri, 20 Jan 2023 06:57:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674135468;
-        bh=sO75cV7afKYaRCZB2EF0QM3uKzcgi0tN7kGZsXY3dqk=;
+        s=korg; t=1674197830;
+        bh=iR8irKikdBBBq/MCs+R8NpDj23hq/KzA4TkNi6TBP8Q=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k7zzqJLN4b0SJLtEuq0d+WrSWejXA73Nx/iuuFKS9ftvinCN4cbyMwNDjn04POiGz
-         zLDPaZqPrNvur38ttXU3yj2gZZqjkNyi0xO9b6Ugo/r+GfeONiVhG4yPmyL8G/lbrs
-         mkg+aoki1ZSrnvaMwxx9ehbXgyIhady/thHEu6yc=
-Date:   Thu, 19 Jan 2023 14:37:45 +0100
+        b=H0K24k7BAgiK7lxn63tFMmRcFoHwbkqE/Szqh/Q3W5ZEECuX1CTHdtYYXrDzUeApt
+         NRIHT/qjW92gzrGNryJjZ+Ij4ixh52Zi2tEiLkYSbov0GltugTmO/uCepxbP5hLAfp
+         WBTP9ESvUQo1ps9FfH8Nq0jkjzqq7/+DKThXqqeA=
+Date:   Fri, 20 Jan 2023 07:57:06 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Phil Elwell <phil@raspberrypi.com>
-Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Umang Jain <umang.jain@ideasonboard.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Umang Jain <umang.jain@ideasonboard.com>,
+        linux-staging@lists.linux.dev,
         linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Adrien Thierry <athierry@redhat.com>,
         Dan Carpenter <error27@gmail.com>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] Drop custom logging
-Message-ID: <Y8lHqd9FlxiXTLuW@kroah.com>
-References: <20230118115810.21979-1-umang.jain@ideasonboard.com>
- <b1a26368-3753-0d32-434b-e220dd9c06b4@i2se.com>
- <CAMEGJJ1=dix7gWvV3Jxef-M-ExFZRTASQCr+6sn_dGsEQ=deYQ@mail.gmail.com>
+        Paul Elder <paul.elder@ideasonboard.com>
+Subject: Re: [PATCH v5 2/6] staging: vc04_services: bcm2835-audio: Drop
+ include Makefile directive
+Message-ID: <Y8o7Qrg8MhCgkALk@kroah.com>
+References: <20230119115503.268693-1-umang.jain@ideasonboard.com>
+ <20230119115503.268693-3-umang.jain@ideasonboard.com>
+ <Y8nuJfuzW9QBcSVd@pendragon.ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMEGJJ1=dix7gWvV3Jxef-M-ExFZRTASQCr+6sn_dGsEQ=deYQ@mail.gmail.com>
+In-Reply-To: <Y8nuJfuzW9QBcSVd@pendragon.ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 01:31:12PM +0000, Phil Elwell wrote:
-> Hi all,
+On Fri, Jan 20, 2023 at 03:28:05AM +0200, Laurent Pinchart wrote:
+> Hi Umang,
 > 
+> Thank you for the patch.
 > 
-> On Wed, 18 Jan 2023 at 17:55, Stefan Wahren <stefan.wahren@i2se.com> wrote:
-> >
-> > Hi Umang,
-> >
-> > [add Phil]
-> >
-> > Am 18.01.23 um 12:58 schrieb Umang Jain:
-> > > Drop custom logging from the vchiq interface.
-> > > Mostly of them are replaced with dev_dbg and friends
-> > > and/or pr_info and friends.
-> > >
-> > > The debugfs log levels (in 4/4) are mapped to kernel
-> > > logs levels (coming from include/linux/kern_levels.h)
-> > > Would like some thoughts on it as I am not sure (hence
-> > > marking this is RFC)
-> > >
-> > >  From drivers/staging/vc04_services/interface/TODO:
-> > >
-> > > """
-> > > * Cleanup logging mechanism
-> > >
-> > > The driver should probably be using the standard kernel logging mechanisms
-> > > such as dev_info, dev_dbg, and friends.
-> >
-> > i don't have any experience with vchiq logging/debug. So i'm not sure if
-> > it's acceptable to lose the second log level dimension (like
-> > vchiq_arm_log_level) completely. Complex drivers like brcmfmac have a
-> > debug mask to avoid log spamming [1]. Maybe this is a compromise.
-> >
-> > Btw some loglevel locations has already been messed up during
-> > refactoring :-(
-> >
-> > [1] - drivers/net/wireless/broadcom/brcm80211/brcmfmac/debug.h
-> >
-> > > """
-> > >
-> > > Umang Jain (4):
-> > >    staging: vc04_services: vchiq_core: Drop custom logging
-> > >    staging: vc04_services: vchiq_arm: Drop custom logging
-> > >    staging: vc04_services: Drop custom logging
-> > >    staging: vc04_services: Drop remnants of custom logging
-> > >
-> > >   .../interface/vchiq_arm/vchiq_arm.c           | 151 +++---
-> > >   .../interface/vchiq_arm/vchiq_connected.c     |   5 +-
-> > >   .../interface/vchiq_arm/vchiq_core.c          | 479 ++++++++----------
-> > >   .../interface/vchiq_arm/vchiq_core.h          |  39 --
-> > >   .../interface/vchiq_arm/vchiq_debugfs.c       |  26 +-
-> > >   .../interface/vchiq_arm/vchiq_dev.c           |  78 ++-
-> > >   6 files changed, 329 insertions(+), 449 deletions(-)
-> > >
+> On Thu, Jan 19, 2023 at 05:24:59PM +0530, Umang Jain wrote:
+> > Drop the include directive they can break the build one only wants to
+> > build a subdirectory. Replace with "../" for the includes, in the
+> > bcm2835.h instead.
 > 
-> Thanks for the nudge - this patch set hasn't yet made its way through
-> the sluggish rpi-kernel moderation.
+> I assume you meant
 > 
-> I understand the desire to remove the custom logging. I don't welcome
-> the loss of flexibility that comes with such a strategy
+> Drop the include directive. They can break the build, when one only
+> wants to build a subdirectory.
+> 
+> > Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+> > ---
+> >  drivers/staging/vc04_services/bcm2835-audio/Makefile  | 2 --
+> >  drivers/staging/vc04_services/bcm2835-audio/bcm2835.h | 3 ++-
+> >  2 files changed, 2 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/staging/vc04_services/bcm2835-audio/Makefile b/drivers/staging/vc04_services/bcm2835-audio/Makefile
+> > index fc7ac6112a3e..01ceebdf88e7 100644
+> > --- a/drivers/staging/vc04_services/bcm2835-audio/Makefile
+> > +++ b/drivers/staging/vc04_services/bcm2835-audio/Makefile
+> > @@ -1,5 +1,3 @@
+> >  # SPDX-License-Identifier: GPL-2.0
+> >  obj-$(CONFIG_SND_BCM2835)	+= snd-bcm2835.o
+> >  snd-bcm2835-objs		:= bcm2835.o bcm2835-ctl.o bcm2835-pcm.o bcm2835-vchiq.o
+> > -
+> > -ccflags-y += -I $(srctree)/$(src)/../include
+> 
+> The reason for this, I assume, is that the driver is in staging. The
+> vchiq.h file should live in include/linux/raspberrypi/, not
+> drivers/staging/vc04_services/include/linux/raspberrypi/, so an
+> additional include directory is added in order to use
+> 
+> #include <linux/raspberrypi/vchiq.h>
+> 
+> When the code will get out of staging, vchiq.h will go to
+> include/linux/raspberrypi/, the extra include directory will be dropped,
+> and all will be well without having to change any source file.
+> 
+> With this patch, we'll have to undo the change below to
+> drivers/staging/vc04_services/bcm2835-audio/bcm2835.h when vc04_services
+> will get out of staging.
+> 
+> Greg, is that what you prefer ?
 
-What "loss of flexibility"?  You now have access to the full dynamic
-debugging facilities that all of the rest of the kernel has.  What is
-lacking?
+I prefer the drivers to NOT use include ccflags in the kernel as it
+breaks the build when trying to build just a subdirectory.  If/when this
+code ever gets out of staging, then the include lines can be fixed up to
+point to the correct location of wherever the files move to.
 
-> , but I'm not
-> going to argue about it. What's harder to understand is the state that
-> this patchset leaves VCHIQ logging in. From what I can see, the
-> per-service logging control has gone, but the code still contains
-> macros that hint at something useful. Similarly, the debugfs support
-> is completely vestigial, giving the appearance of control while
-> actually achieving nothing.
-
-The debugfs files should also be removed if they don't do anything
-anymore.
+So I like this patch, but as I couldn't take the first one, this and the
+rest did not apply so I'll wait for them to be resubmitted.
 
 thanks,
 
