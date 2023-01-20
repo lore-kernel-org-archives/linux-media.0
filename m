@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE797C27C76
-	for <linux-media@archiver.kernel.org>; Fri, 20 Jan 2023 11:47:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3DB8C27C76
+	for <linux-media@archiver.kernel.org>; Fri, 20 Jan 2023 11:47:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjATLrq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 20 Jan 2023 06:47:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55456 "EHLO
+        id S229977AbjATLru (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 20 Jan 2023 06:47:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbjATLrn (ORCPT
+        with ESMTP id S229967AbjATLrr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 20 Jan 2023 06:47:43 -0500
+        Fri, 20 Jan 2023 06:47:47 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F732AA7F7
-        for <linux-media@vger.kernel.org>; Fri, 20 Jan 2023 03:46:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FCBB1ED2
+        for <linux-media@vger.kernel.org>; Fri, 20 Jan 2023 03:46:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674215160;
+        s=mimecast20190719; t=1674215162;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Bbe9z/QfPbRLjMmd2NdM01X6iKaiDeiCdG9jE+MnnFg=;
-        b=Vgmvz3XdlmRbwDtJqaB6skmUWQJAFqbFag43umsurUJfkeL/GcJBzWX6EMjHwbhIRR7WO4
-        d6sl7W/QYvoRGX+Skq4+ESvRgYIYEohQwZMYtbt0wwDkZWHw7G32VOkNmL96cRxWd+WkPD
-        MUW+lYSaD1jTm9M9GSkHoHK7CicsAJM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=eMy2u3fS8UlwWS+/xo+vJepWt/qH7+/2b1RLoZSn4uU=;
+        b=cOdKzov9JK7rjjO53yDZfu5SCoXFvCw+9tK2V7UtBB/L4K+MZTRRdbhyfz0SB9nvKWCMcP
+        dltblrvyMqBj3N8uMM1vkO6cQXg10tRe77hK8plR/AkWBMpNJK22rl1ZWCrdcHXZSqV178
+        nv2Wr2PRXuiTNoMA81Xx1uliJtUI+AQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-397-tbw3YMK6PTSyJA0Jihx4nQ-1; Fri, 20 Jan 2023 06:45:53 -0500
-X-MC-Unique: tbw3YMK6PTSyJA0Jihx4nQ-1
+ us-mta-211-XN4TBbSaNgyh0dyB5D4tag-1; Fri, 20 Jan 2023 06:45:59 -0500
+X-MC-Unique: XN4TBbSaNgyh0dyB5D4tag-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B040E85C064;
-        Fri, 20 Jan 2023 11:45:52 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8B51B29AB3FF;
+        Fri, 20 Jan 2023 11:45:58 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.195.101])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 49F30140EBF6;
-        Fri, 20 Jan 2023 11:45:48 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0B339140EBF6;
+        Fri, 20 Jan 2023 11:45:55 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mark Gross <markgross@kernel.org>,
         Andy Shevchenko <andy@kernel.org>, Pavel Machek <pavel@ucw.cz>,
@@ -53,9 +53,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Mark Pearson <markpearson@lenovo.com>,
         Andy Yeh <andy.yeh@intel.com>, Hao Yao <hao.yao@intel.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH v5 04/11] leds: led-class: Add generic [devm_]led_get()
-Date:   Fri, 20 Jan 2023 12:45:17 +0100
-Message-Id: <20230120114524.408368-5-hdegoede@redhat.com>
+Subject: [PATCH v5 06/11] media: v4l2-core: Built async and fwnode code into videodev.ko
+Date:   Fri, 20 Jan 2023 12:45:19 +0100
+Message-Id: <20230120114524.408368-7-hdegoede@redhat.com>
 In-Reply-To: <20230120114524.408368-1-hdegoede@redhat.com>
 References: <20230120114524.408368-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -65,184 +65,243 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a generic [devm_]led_get() method which can be used on both devicetree
-and non devicetree platforms to get a LED classdev associated with
-a specific function on a specific device, e.g. the privacy LED associated
-with a specific camera sensor.
+Currently the videodev.ko code may be builtin while e.g. v4l2-fwnode.ko
+is build as a module.
 
-Note unlike of_led_get() this takes a string describing the function
-rather then an index. This is done because e.g. camera sensors might
-have a privacy LED, or a flash LED, or both and using an index
-approach leaves it unclear what the function of index 0 is if there is
-only 1 LED.
+This makes it hard to add code depending on other subsystems spanning
+both videodev.ko and v4l2-fwnode.ko. Specifically this block adding code
+depending on the LED subsystem.
 
-This uses a lookup-table mechanism for non devicetree platforms.
-This allows the platform code to map specific LED class_dev-s to a specific
-device,function combinations this way.
+This is made even harder because CONFIG_V4L2_FWNODE is selected,
+not depended on so it itself cannot depend on another subsystem without
+editing all the Kconfig symbols selecting it to also list the dependency
+and there are many of such symbols.
 
-For devicetree platforms getting the LED by function-name could be made
-to work using the standard devicetree pattern of adding a -names string
-array to map names to the indexes.
+Adding a "select LED_CLASS if NEW_LEDS" to CONFIG_V4L2_FWNODE leads
+to Kconfig erroring out with "error: recursive dependency detected!".
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+To fix this dependency mess, change the V4L2_FWNODE and V4L2_ASYNC
+(which V4L2_FWNODE selects) Kconfig symbols from tristate to bools and
+link their code into videodev.ko instead of making them separate modules.
+
+This will allow using IS_REACHABLE(LED_CLASS) for the new LED integration
+code without needing to worry that it expands to 0 in some places and
+1 in other places because some of the code being builtin vs modular.
+
+On x86_64 this leads to the following size changes for videodev.ko
+
+[hans@shalem linux]$ size drivers/media/v4l2-core/videodev.ko
+
+Before:
+   text	   data	    bss	    dec	    hex	filename
+ 218206	  14395	   2448	 235049	  39629 drivers/media/v4l2-core/videodev.ko
+After:
+   text	   data	    bss	    dec	    hex	filename
+ 243213	  17615	   2456	 263284	  40474	drivers/media/v4l2-core/videodev.ko
+
+So (as expected) there is some increase in size here, but it
+really is not that much.
+
+And the uncompressed no-debuginfo .ko file disk-usage actually shrinks
+by 17 KiB (comparing the slightly larger videodev.ko against the
+3 original modules) and loading time will also be better.
+
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
 Changes in v5:
-- Rename lookup-table names to match those from the gpio and reset lookups:
-  s/led_name/provider/
-  s/consumer_dev_name/dev_id/
-  s/consumer_function/con_id/
+- Add a new v4l2-dev-priv.h for the async debugfs prototypes and add
+  static inline wrappers there when CONFIG_V4L2_ASYNC is not enabled
 
 Changes in v4:
-- Split out support for led_get() devicetree name-based lookup support
-  into a separate RFC patch as there currently are no users for this
-- Use kstrdup_const() / kfree_const() for the led_name
+- New patch in v4 of this patch-set
 ---
- drivers/leds/led-class.c | 84 ++++++++++++++++++++++++++++++++++++++++
- include/linux/leds.h     | 21 ++++++++++
- 2 files changed, 105 insertions(+)
+ drivers/media/v4l2-core/Kconfig         |  4 ++--
+ drivers/media/v4l2-core/Makefile        |  4 ++--
+ drivers/media/v4l2-core/v4l2-async.c    | 17 ++++-------------
+ drivers/media/v4l2-core/v4l2-dev-priv.h | 19 +++++++++++++++++++
+ drivers/media/v4l2-core/v4l2-dev.c      |  8 ++++++++
+ drivers/media/v4l2-core/v4l2-fwnode.c   |  6 ------
+ 6 files changed, 35 insertions(+), 23 deletions(-)
+ create mode 100644 drivers/media/v4l2-core/v4l2-dev-priv.h
 
-diff --git a/drivers/leds/led-class.c b/drivers/leds/led-class.c
-index 4904d140a560..0c4b8d8d2b4f 100644
---- a/drivers/leds/led-class.c
-+++ b/drivers/leds/led-class.c
-@@ -23,6 +23,8 @@
- #include "leds.h"
+diff --git a/drivers/media/v4l2-core/Kconfig b/drivers/media/v4l2-core/Kconfig
+index 348559bc2468..73574d946010 100644
+--- a/drivers/media/v4l2-core/Kconfig
++++ b/drivers/media/v4l2-core/Kconfig
+@@ -68,11 +68,11 @@ config V4L2_FLASH_LED_CLASS
+ 	  When in doubt, say N.
  
- static struct class *leds_class;
-+static DEFINE_MUTEX(leds_lookup_lock);
-+static LIST_HEAD(leds_lookup_list);
+ config V4L2_FWNODE
+-	tristate
++	bool
+ 	select V4L2_ASYNC
  
- static ssize_t brightness_show(struct device *dev,
- 		struct device_attribute *attr, char *buf)
-@@ -317,6 +319,88 @@ struct led_classdev *__must_check devm_of_led_get(struct device *dev,
- }
- EXPORT_SYMBOL_GPL(devm_of_led_get);
+ config V4L2_ASYNC
+-	tristate
++	bool
  
-+/**
-+ * led_get() - request a LED device via the LED framework
-+ * @dev: device for which to get the LED device
-+ * @con_id: name of the LED from the device's point of view
-+ *
-+ * @return a pointer to a LED device or ERR_PTR(errno) on failure.
-+ */
-+struct led_classdev *led_get(struct device *dev, char *con_id)
-+{
-+	struct led_lookup_data *lookup;
-+	const char *provider = NULL;
-+	struct device *led_dev;
+ # Used by drivers that need Videobuf modules
+ config VIDEOBUF_GEN
+diff --git a/drivers/media/v4l2-core/Makefile b/drivers/media/v4l2-core/Makefile
+index 41d91bd10cf2..8c5a1ab8d939 100644
+--- a/drivers/media/v4l2-core/Makefile
++++ b/drivers/media/v4l2-core/Makefile
+@@ -15,7 +15,9 @@ videodev-objs	:=	v4l2-dev.o v4l2-ioctl.o v4l2-device.o v4l2-fh.o \
+ 
+ # Please keep it alphabetically sorted by Kconfig name
+ # (e. g. LC_ALL=C sort Makefile)
++videodev-$(CONFIG_V4L2_ASYNC) += v4l2-async.o
+ videodev-$(CONFIG_COMPAT) += v4l2-compat-ioctl32.o
++videodev-$(CONFIG_V4L2_FWNODE) += v4l2-fwnode.o
+ videodev-$(CONFIG_MEDIA_CONTROLLER) += v4l2-mc.o
+ videodev-$(CONFIG_SPI) += v4l2-spi.o
+ videodev-$(CONFIG_TRACEPOINTS) += v4l2-trace.o
+@@ -24,9 +26,7 @@ videodev-$(CONFIG_VIDEO_V4L2_I2C) += v4l2-i2c.o
+ # Please keep it alphabetically sorted by Kconfig name
+ # (e. g. LC_ALL=C sort Makefile)
+ 
+-obj-$(CONFIG_V4L2_ASYNC) += v4l2-async.o
+ obj-$(CONFIG_V4L2_FLASH_LED_CLASS) += v4l2-flash-led-class.o
+-obj-$(CONFIG_V4L2_FWNODE) += v4l2-fwnode.o
+ obj-$(CONFIG_V4L2_H264) += v4l2-h264.o
+ obj-$(CONFIG_V4L2_JPEG_HELPER) += v4l2-jpeg.o
+ obj-$(CONFIG_V4L2_MEM2MEM_DEV) += v4l2-mem2mem.o
+diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+index 2f1b718a9189..024d6b82b50a 100644
+--- a/drivers/media/v4l2-core/v4l2-async.c
++++ b/drivers/media/v4l2-core/v4l2-async.c
+@@ -11,7 +11,6 @@
+ #include <linux/i2c.h>
+ #include <linux/list.h>
+ #include <linux/mm.h>
+-#include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+@@ -24,6 +23,8 @@
+ #include <media/v4l2-fwnode.h>
+ #include <media/v4l2-subdev.h>
+ 
++#include "v4l2-dev-priv.h"
 +
-+	mutex_lock(&leds_lookup_lock);
-+	list_for_each_entry(lookup, &leds_lookup_list, list) {
-+		if (!strcmp(lookup->dev_id, dev_name(dev)) &&
-+		    !strcmp(lookup->con_id, con_id)) {
-+			provider = kstrdup_const(lookup->provider, GFP_KERNEL);
-+			break;
-+		}
-+	}
-+	mutex_unlock(&leds_lookup_lock);
-+
-+	if (!provider)
-+		return ERR_PTR(-ENOENT);
-+
-+	led_dev = class_find_device_by_name(leds_class, provider);
-+	kfree_const(provider);
-+
-+	return led_module_get(led_dev);
-+}
-+EXPORT_SYMBOL_GPL(led_get);
-+
-+/**
-+ * devm_led_get() - request a LED device via the LED framework
-+ * @dev: device for which to get the LED device
-+ * @con_id: name of the LED from the device's point of view
-+ *
-+ * The LED device returned from this function is automatically released
-+ * on driver detach.
-+ *
-+ * @return a pointer to a LED device or ERR_PTR(errno) on failure.
-+ */
-+struct led_classdev *devm_led_get(struct device *dev, char *con_id)
-+{
-+	struct led_classdev *led;
-+
-+	led = led_get(dev, con_id);
-+	if (IS_ERR(led))
-+		return led;
-+
-+	return __devm_led_get(dev, led);
-+}
-+EXPORT_SYMBOL_GPL(devm_led_get);
-+
-+/**
-+ * led_add_lookup() - Add a LED lookup table entry
-+ * @led_lookup: the lookup table entry to add
-+ *
-+ * Add a LED lookup table entry. On systems without devicetree the lookup table
-+ * is used by led_get() to find LEDs.
-+ */
-+void led_add_lookup(struct led_lookup_data *led_lookup)
-+{
-+	mutex_lock(&leds_lookup_lock);
-+	list_add_tail(&led_lookup->list, &leds_lookup_list);
-+	mutex_unlock(&leds_lookup_lock);
-+}
-+EXPORT_SYMBOL_GPL(led_add_lookup);
-+
-+/**
-+ * led_remove_lookup() - Remove a LED lookup table entry
-+ * @led_lookup: the lookup table entry to remove
-+ */
-+void led_remove_lookup(struct led_lookup_data *led_lookup)
-+{
-+	mutex_lock(&leds_lookup_lock);
-+	list_del(&led_lookup->list);
-+	mutex_unlock(&leds_lookup_lock);
-+}
-+EXPORT_SYMBOL_GPL(led_remove_lookup);
-+
- static int led_classdev_next_name(const char *init_name, char *name,
- 				  size_t len)
+ static int v4l2_async_nf_call_bound(struct v4l2_async_notifier *n,
+ 				    struct v4l2_subdev *subdev,
+ 				    struct v4l2_async_subdev *asd)
+@@ -900,25 +901,15 @@ DEFINE_SHOW_ATTRIBUTE(pending_subdevs);
+ 
+ static struct dentry *v4l2_async_debugfs_dir;
+ 
+-static int __init v4l2_async_init(void)
++void __init v4l2_async_debugfs_init(void)
  {
-diff --git a/include/linux/leds.h b/include/linux/leds.h
-index ba4861ec73d3..8d6767072ebf 100644
---- a/include/linux/leds.h
-+++ b/include/linux/leds.h
-@@ -39,6 +39,21 @@ enum led_default_state {
- 	LEDS_DEFSTATE_KEEP	= 2,
- };
+ 	v4l2_async_debugfs_dir = debugfs_create_dir("v4l2-async", NULL);
+ 	debugfs_create_file("pending_async_subdevices", 0444,
+ 			    v4l2_async_debugfs_dir, NULL,
+ 			    &pending_subdevs_fops);
+-
+-	return 0;
+ }
  
-+/**
-+ * struct led_lookup_data - represents a single LED lookup entry
+-static void __exit v4l2_async_exit(void)
++void __exit v4l2_async_debugfs_exit(void)
+ {
+ 	debugfs_remove_recursive(v4l2_async_debugfs_dir);
+ }
+-
+-subsys_initcall(v4l2_async_init);
+-module_exit(v4l2_async_exit);
+-
+-MODULE_AUTHOR("Guennadi Liakhovetski <g.liakhovetski@gmx.de>");
+-MODULE_AUTHOR("Sakari Ailus <sakari.ailus@linux.intel.com>");
+-MODULE_AUTHOR("Ezequiel Garcia <ezequiel@collabora.com>");
+-MODULE_LICENSE("GPL");
+diff --git a/drivers/media/v4l2-core/v4l2-dev-priv.h b/drivers/media/v4l2-core/v4l2-dev-priv.h
+new file mode 100644
+index 000000000000..b5b1ee78be20
+--- /dev/null
++++ b/drivers/media/v4l2-core/v4l2-dev-priv.h
+@@ -0,0 +1,19 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/*
++ * Video capture interface for Linux version 2 private header.
 + *
-+ * @list: internal list of all LED lookup entries
-+ * @provider: name of led_classdev providing the LED
-+ * @dev_id: name of the device associated with this LED
-+ * @con_id: name of the LED from the device's point of view
++ * Copyright (C) 2023 Hans de Goede <hdegoede@redhat.com>
 + */
-+struct led_lookup_data {
-+	struct list_head list;
-+	const char *provider;
-+	const char *dev_id;
-+	const char *con_id;
-+};
 +
- struct led_init_data {
- 	/* device fwnode handle */
- 	struct fwnode_handle *fwnode;
-@@ -211,6 +226,12 @@ void devm_led_classdev_unregister(struct device *parent,
- void led_classdev_suspend(struct led_classdev *led_cdev);
- void led_classdev_resume(struct led_classdev *led_cdev);
++#ifndef _V4L2_DEV_PRIV_H_
++#define _V4L2_DEV_PRIV_H_
++
++#if IS_ENABLED(CONFIG_V4L2_ASYNC)
++void v4l2_async_debugfs_init(void);
++void v4l2_async_debugfs_exit(void);
++#else
++static inline void v4l2_async_debugfs_init(void) {}
++static inline void v4l2_async_debugfs_exit(void) {}
++#endif
++
++#endif
+diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
+index 397d553177fa..10ba2e4196a6 100644
+--- a/drivers/media/v4l2-core/v4l2-dev.c
++++ b/drivers/media/v4l2-core/v4l2-dev.c
+@@ -31,6 +31,8 @@
+ #include <media/v4l2-ioctl.h>
+ #include <media/v4l2-event.h>
  
-+void led_add_lookup(struct led_lookup_data *led_lookup);
-+void led_remove_lookup(struct led_lookup_data *led_lookup);
++#include "v4l2-dev-priv.h"
 +
-+struct led_classdev *__must_check led_get(struct device *dev, char *con_id);
-+struct led_classdev *__must_check devm_led_get(struct device *dev, char *con_id);
-+
- extern struct led_classdev *of_led_get(struct device_node *np, int index);
- extern void led_put(struct led_classdev *led_cdev);
- struct led_classdev *__must_check devm_of_led_get(struct device *dev,
+ #define VIDEO_NUM_DEVICES	256
+ #define VIDEO_NAME              "video4linux"
+ 
+@@ -1190,6 +1192,7 @@ static int __init videodev_init(void)
+ 		return -EIO;
+ 	}
+ 
++	v4l2_async_debugfs_init();
+ 	return 0;
+ }
+ 
+@@ -1197,6 +1200,7 @@ static void __exit videodev_exit(void)
+ {
+ 	dev_t dev = MKDEV(VIDEO_MAJOR, 0);
+ 
++	v4l2_async_debugfs_exit();
+ 	class_unregister(&video_class);
+ 	unregister_chrdev_region(dev, VIDEO_NUM_DEVICES);
+ }
+@@ -1205,6 +1209,10 @@ subsys_initcall(videodev_init);
+ module_exit(videodev_exit)
+ 
+ MODULE_AUTHOR("Alan Cox, Mauro Carvalho Chehab <mchehab@kernel.org>, Bill Dirks, Justin Schoeman, Gerd Knorr");
++MODULE_AUTHOR("Guennadi Liakhovetski <g.liakhovetski@gmx.de>");
++MODULE_AUTHOR("Sakari Ailus <sakari.ailus@linux.intel.com>");
++MODULE_AUTHOR("Ezequiel Garcia <ezequiel@collabora.com>");
++MODULE_AUTHOR("Sylwester Nawrocki <s.nawrocki@samsung.com>");
+ MODULE_DESCRIPTION("Video4Linux2 core driver");
+ MODULE_LICENSE("GPL");
+ MODULE_ALIAS_CHARDEV_MAJOR(VIDEO_MAJOR);
+diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
+index 3d9533c1b202..c8a2264262bc 100644
+--- a/drivers/media/v4l2-core/v4l2-fwnode.c
++++ b/drivers/media/v4l2-core/v4l2-fwnode.c
+@@ -17,7 +17,6 @@
+ #include <linux/acpi.h>
+ #include <linux/kernel.h>
+ #include <linux/mm.h>
+-#include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/property.h>
+ #include <linux/slab.h>
+@@ -1328,8 +1327,3 @@ int v4l2_async_register_subdev_sensor(struct v4l2_subdev *sd)
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(v4l2_async_register_subdev_sensor);
+-
+-MODULE_LICENSE("GPL");
+-MODULE_AUTHOR("Sakari Ailus <sakari.ailus@linux.intel.com>");
+-MODULE_AUTHOR("Sylwester Nawrocki <s.nawrocki@samsung.com>");
+-MODULE_AUTHOR("Guennadi Liakhovetski <g.liakhovetski@gmx.de>");
 -- 
 2.39.0
 
