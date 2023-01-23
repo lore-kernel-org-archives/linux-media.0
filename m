@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACC8DC38142
-	for <linux-media@archiver.kernel.org>; Mon, 23 Jan 2023 12:55:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBDB6C05027
+	for <linux-media@archiver.kernel.org>; Mon, 23 Jan 2023 12:56:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231979AbjAWMzw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Jan 2023 07:55:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56984 "EHLO
+        id S230107AbjAWM4t (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Jan 2023 07:56:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231967AbjAWMzv (ORCPT
+        with ESMTP id S232064AbjAWMzQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Jan 2023 07:55:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3057610242
-        for <linux-media@vger.kernel.org>; Mon, 23 Jan 2023 04:55:00 -0800 (PST)
+        Mon, 23 Jan 2023 07:55:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196DE23D81
+        for <linux-media@vger.kernel.org>; Mon, 23 Jan 2023 04:54:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674478499;
+        s=mimecast20190719; t=1674478460;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=n6jh7l4Ac7bZgyhvHj1SvpODNBVaS174AfoY/F7nqAQ=;
-        b=SsxcqT+K9kJWap2usnC65StaEiJEJciyAJqQby64j6bH0r9v28OpFF/+T82MqMykQXc+RP
-        2YGIMT8lps5Alq2v1JfersIMO0LfLsOSnuIccGg7XbD7uZvO7MS9BwsMpVkSV3sSsxQCD1
-        FQBfim5ID55HSKkdI89KLSPX4O3uanM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=SKbOH0BR33uLs1vJ10EylfjGvfanaIg0BFq5Tid95/k=;
+        b=ENiEfDty477cYqa/AkvdUBarIy27k6BS3MOoD4C6Ls6M8kJ8EYvBZEo7h7ghgpPsz3uq7e
+        PfJ1SbDtO54tRgvoGsOipagPn2zC2QoRaSlsqpdgEX2hAJgvkWk68Pc5rF/nmNrWUAfEba
+        /oZGLgILa3RpYAtH+Cvygz6+F+VR6Kw=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-516-_kwng64HNlu_HKyoDaxJpw-1; Mon, 23 Jan 2023 07:54:56 -0500
-X-MC-Unique: _kwng64HNlu_HKyoDaxJpw-1
+ us-mta-477-VpfrHOgKOTmjFhUtH1YxvA-1; Mon, 23 Jan 2023 07:54:17 -0500
+X-MC-Unique: VpfrHOgKOTmjFhUtH1YxvA-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B5E93101A55E;
-        Mon, 23 Jan 2023 12:54:55 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 78DDF1C07541;
+        Mon, 23 Jan 2023 12:54:16 +0000 (UTC)
 Received: from x1.localdomain.com (unknown [10.39.194.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 44D7BC15BA0;
-        Mon, 23 Jan 2023 12:54:53 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AE958C15BA0;
+        Mon, 23 Jan 2023 12:54:13 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -47,11 +47,10 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Yury Luneff <yury.lunev@gmail.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        Brent Pappas <bpappas@pappasbrent.com>
-Subject: [PATCH 56/57] media: atomisp: pci: hive_isp_css_common: host: vmem: Replace SUBWORD macros with functions
-Date:   Mon, 23 Jan 2023 13:52:04 +0100
-Message-Id: <20230123125205.622152-57-hdegoede@redhat.com>
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: [PATCH 42/57] media: atomisp: ov2680: Remove unused data-types and defines from ov2680.h
+Date:   Mon, 23 Jan 2023 13:51:50 +0100
+Message-Id: <20230123125205.622152-43-hdegoede@redhat.com>
 In-Reply-To: <20230123125205.622152-1-hdegoede@redhat.com>
 References: <20230123125205.622152-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -61,67 +60,110 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Brent Pappas <bpappas@pappasbrent.com>
+Remove a bunch of unused data-types and defines from ov2680.h.
 
-Replace the macros SUBWORD() and INV_SUBWORD() with functions to comply
-with Linux coding style standards.
-
-Signed-off-by: Brent Pappas <bpappas@pappasbrent.com>
-Link: https://lore.kernel.org/r/20230120182625.23227-1-bpappas@pappasbrent.com
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- .../pci/hive_isp_css_common/host/vmem.c       | 20 +++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+ drivers/staging/media/atomisp/i2c/ov2680.h | 60 ----------------------
+ 1 file changed, 60 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/vmem.c b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/vmem.c
-index 6620f091442f..d9cdfbc50197 100644
---- a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/vmem.c
-+++ b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/vmem.c
-@@ -28,10 +28,18 @@ typedef hive_uedge *hive_wide;
- /* Copied from SDK: sim_semantics.c */
+diff --git a/drivers/staging/media/atomisp/i2c/ov2680.h b/drivers/staging/media/atomisp/i2c/ov2680.h
+index 20ef59928cb1..189d1b2b7584 100644
+--- a/drivers/staging/media/atomisp/i2c/ov2680.h
++++ b/drivers/staging/media/atomisp/i2c/ov2680.h
+@@ -46,45 +46,11 @@
  
- /* subword bits move like this:         MSB[____xxxx____]LSB -> MSB[00000000xxxx]LSB */
--#define SUBWORD(w, start, end)     (((w) & (((1ULL << ((end) - 1)) - 1) << 1 | 1)) >> (start))
-+static inline hive_uedge
-+subword(hive_uedge w, unsigned int start, unsigned int end)
-+{
-+	return (w & (((1ULL << (end - 1)) - 1) << 1 | 1)) >> start;
-+}
+ #define OV2680_FOCAL_LENGTH_NUM	334	/*3.34mm*/
  
- /* inverse subword bits move like this: MSB[xxxx____xxxx]LSB -> MSB[xxxx0000xxxx]LSB */
--#define INV_SUBWORD(w, start, end) ((w) & (~(((1ULL << ((end) - 1)) - 1) << 1 | 1) | ((1ULL << (start)) - 1)))
-+static inline hive_uedge
-+inv_subword(hive_uedge w, unsigned int start, unsigned int end)
-+{
-+	return w & (~(((1ULL << (end - 1)) - 1) << 1 | 1) | ((1ULL << start) - 1));
-+}
+-#define OV2680_BIN_FACTOR_MAX 4
+-
+ #define MAX_FMTS		1
  
- #define uedge_bits (8 * sizeof(hive_uedge))
- #define move_lower_bits(target, target_bit, src, src_bit) move_subword(target, target_bit, src, 0, src_bit)
-@@ -50,18 +58,18 @@ move_subword(
- 	unsigned int start_bit  = target_bit % uedge_bits;
- 	unsigned int subword_width = src_end - src_start;
+-/* sensor_mode_data read_mode adaptation */
+-#define OV2680_READ_MODE_BINNING_ON	0x0400
+-#define OV2680_READ_MODE_BINNING_OFF	0x00
+ #define OV2680_INTEGRATION_TIME_MARGIN	8
+-
+-#define OV2680_MAX_EXPOSURE_VALUE	0xFFF1
+-#define OV2680_MAX_GAIN_VALUE		0xFF
+-
+-/*
+- * focal length bits definition:
+- * bits 31-16: numerator, bits 15-0: denominator
+- */
+-#define OV2680_FOCAL_LENGTH_DEFAULT 0x1B70064
+-
+-/*
+- * current f-number bits definition:
+- * bits 31-16: numerator, bits 15-0: denominator
+- */
+-#define OV2680_F_NUMBER_DEFAULT 0x18000a
+-
+-/*
+- * f-number range bits definition:
+- * bits 31-24: max f-number numerator
+- * bits 23-16: max f-number denominator
+- * bits 15-8: min f-number numerator
+- * bits 7-0: min f-number denominator
+- */
+-#define OV2680_F_NUMBER_RANGE 0x180a180a
+ #define OV2680_ID	0x2680
  
--	hive_uedge src_subword = SUBWORD(src, src_start, src_end);
-+	hive_uedge src_subword = subword(src, src_start, src_end);
+-#define OV2680_FINE_INTG_TIME_MIN 0
+-#define OV2680_FINE_INTG_TIME_MAX_MARGIN 0
+-#define OV2680_COARSE_INTG_TIME_MIN 1
+-#define OV2680_COARSE_INTG_TIME_MAX_MARGIN 6
+-
+ /*
+  * OV2680 System control registers
+  */
+@@ -147,19 +113,6 @@
+ #define OV2680_START_STREAMING			0x01
+ #define OV2680_STOP_STREAMING			0x00
  
- 	if (subword_width + start_bit > uedge_bits) { /* overlap */
- 		hive_uedge old_val1;
--		hive_uedge old_val0 = INV_SUBWORD(target[start_elem], start_bit, uedge_bits);
-+		hive_uedge old_val0 = inv_subword(target[start_elem], start_bit, uedge_bits);
+-#define OV2680_INVALID_CONFIG	0xffffffff
+-
+-struct regval_list {
+-	u16 reg_num;
+-	u8 value;
+-};
+-
+-struct ov2680_format {
+-	u8 *desc;
+-	u32 pixelformat;
+-	struct ov2680_reg *regs;
+-};
+-
+ /*
+  * ov2680 device structure.
+  */
+@@ -216,18 +169,6 @@ static inline struct v4l2_subdev *ctrl_to_sd(struct v4l2_ctrl *ctrl)
+ 			     ctrls.handler)->sd;
+ }
  
- 		target[start_elem] = old_val0 | (src_subword << start_bit);
--		old_val1 = INV_SUBWORD(target[start_elem + 1], 0,
-+		old_val1 = inv_subword(target[start_elem + 1], 0,
- 				       subword_width + start_bit - uedge_bits);
- 		target[start_elem + 1] = old_val1 | (src_subword >> (uedge_bits - start_bit));
- 	} else {
--		hive_uedge old_val = INV_SUBWORD(target[start_elem], start_bit,
-+		hive_uedge old_val = inv_subword(target[start_elem], start_bit,
- 						 start_bit + subword_width);
+-#define OV2680_MAX_WRITE_BUF_SIZE	30
+-
+-struct ov2680_write_buffer {
+-	u16 addr;
+-	u8 data[OV2680_MAX_WRITE_BUF_SIZE];
+-};
+-
+-struct ov2680_write_ctrl {
+-	int index;
+-	struct ov2680_write_buffer buffer;
+-};
+-
+ static struct ov2680_reg const ov2680_global_setting[] = {
+ 	{0x0103, 0x01},
+ 	{0x3002, 0x00},
+@@ -304,7 +245,6 @@ static struct ov2680_reg const ov2680_global_setting[] = {
+ 	{0x5793, 0x00},
+ 	{0x5794, 0x03}, //based OV2680_R1A_AM10.ovt,Adjust DPC setting (57xx) on 14/06/13
+ 	{0x0100, 0x00},	//stream off
+-
+ 	{}
+ };
  
- 		target[start_elem] = old_val | (src_subword << start_bit);
 -- 
 2.39.0
 
