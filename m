@@ -2,62 +2,62 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E02D6C25B50
-	for <linux-media@archiver.kernel.org>; Mon, 23 Jan 2023 10:10:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D96DBC54EB4
+	for <linux-media@archiver.kernel.org>; Mon, 23 Jan 2023 10:10:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbjAWKKK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Jan 2023 05:10:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36594 "EHLO
+        id S231827AbjAWKKS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Jan 2023 05:10:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231720AbjAWKKI (ORCPT
+        with ESMTP id S231768AbjAWKKM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Jan 2023 05:10:08 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E726E398
-        for <linux-media@vger.kernel.org>; Mon, 23 Jan 2023 02:10:05 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id z5so10255730wrt.6
-        for <linux-media@vger.kernel.org>; Mon, 23 Jan 2023 02:10:05 -0800 (PST)
+        Mon, 23 Jan 2023 05:10:12 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD36213D60
+        for <linux-media@vger.kernel.org>; Mon, 23 Jan 2023 02:10:06 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id d14so6569647wrr.9
+        for <linux-media@vger.kernel.org>; Mon, 23 Jan 2023 02:10:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Vk3/4zGC4vaP3JAISpcs7adXGbsqb5n1p++8mkCPqRs=;
-        b=MMPgOtfoI2j+ih+wcRxk5PFgCEJn/T+1p4w/72XLAt6gLMnjYIUTq6ZY0iKWnnEtvL
-         L2f1u5tV27sJIuMPP4IJFqfvXBJspspnQP7lnfBqaylFPQmzp5xy7zSBadyGILWRqQqx
-         CFu8wgExZsMHN1YqRLpStNy1TBS+NTFvo9SdUY94ttWU1UNG2SmBCOqzTbit5BgD2o88
-         l2zQY6mmbeLVq+VEFbJoMjmSHlNjcP3DwPenlhJC1eyvwvYr1gRBRzDLHPqcR+DV84TO
-         Tp/dBxlIDCGl3PvlGqeHj+N0DHQe2Lp0cGO8aj+4XcI870TCZODQ1uoE+34YiXzbjXz/
-         EF7Q==
+        bh=GGsfIAFzoH7ggFb2voxRa7ZKIwz9PZMg5nKhBB1/kDo=;
+        b=Xym58FVi/DyBHzoH5aFBOh1zqQtKsbxeJoh30xeVcts5R8r+TNBO0kMt4zeXDHFr8F
+         HKIOtA5Te56KxdrZp+PwbV6jqqz4IIr6ek1oCdi1wqakg3VeTdmNYXT8AV4hA4FkpUwb
+         RJwSLPpcTSTE1iL2LmxubojKsnoVwPOkEvL8xIyrNYVmfM3eNSguXyLunrnjCOZuXIpO
+         S3cAutOmEpI4Da153O1lCX4NPzliTH4PuxQ1jUA5FCri/UXHpRrGYcXfe6FMpB/Wa7md
+         DuJBl/ASQWwUnYopd/CuLLOH9ZGT9reXwj44KOqpuMmDs2SBWu9KPLoBRNjiPuxqLJj1
+         Ewww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Vk3/4zGC4vaP3JAISpcs7adXGbsqb5n1p++8mkCPqRs=;
-        b=Z9s/uVfcVGsIvBSxHUFmI2KDzWEQdEzEbpNjQQaFuidczAITxMmKr1tJbpaUPHlpvG
-         jXzT7GEc2gtTt2W7S2vMH6Y2QQ78BKVXgK19rWaSjNuXakMWGH0234aJX549SJuQtKZE
-         TckC+7uv1/W53buVSGF4OQfeDS5fOzlWZNgxpYxbaKFYhAHWGvSVMNfBfcZAHZhxn/uT
-         sksEm66BdUkzRabaCKsfwkRz+7vYp01xvsyw6f5VZEXe/pAGSAxDc4WYuht6wVtLj2TY
-         7FtWStLxqObGHyzKw84nEhL1SVWoACAIF9aVcIlF6ImGOWaiwP2xZSbL1caV6QLJ3h4I
-         tUxg==
-X-Gm-Message-State: AFqh2krWx4C3E1z4jgCRyIPi5nwhHq+VPIuvb76x7tsm1YSqtvONjFet
-        rsmeGMzezkWAiVSd0kdhTpHLqA==
-X-Google-Smtp-Source: AMrXdXv5n6gQQPpGitCuhpTioRST8hVeitfmO5EXEg2uiFHqkKOrVye2NrLcVnE/rL1MFgPzkBUkng==
-X-Received: by 2002:adf:f150:0:b0:2bf:963e:f9ac with SMTP id y16-20020adff150000000b002bf963ef9acmr8918210wro.18.1674468603610;
-        Mon, 23 Jan 2023 02:10:03 -0800 (PST)
+        bh=GGsfIAFzoH7ggFb2voxRa7ZKIwz9PZMg5nKhBB1/kDo=;
+        b=KkUvQHe9cdPVgM0jTSS0YNHRCri1jPoPpZ+46lqdnpPTKsC6X0uO8D/mWurH+bKHiU
+         xCUi0Rgbp8d3HanSeJb4tXj8xnw7unBsuTqSNVoHVCAXNeTmjhDZfySZSzl56Y4A9iqc
+         d6wbhJnjkl9J3JJIoQPGqo/sZmIRlFQ8JrEKruCWRTBXslmGQCm9foP8c5CT9N64gOMs
+         EK2Mbcw4ruluXET0Xsk14DWm9BPFCk+0U/h/HMK9UsJawIc3ZuXlpUeXgbzH+oGRjXXN
+         vGT3/Oj57VP2fM4LfVNaE0GovMgFXlYpeDIlDzt/nvugczJOGgFYnFEcK/gfapMKgZW9
+         /vXg==
+X-Gm-Message-State: AFqh2koGXwOjC9ywGU0spF1Il2IhyMimtZIiOaSPGcNQsQKxUCs0zc6Y
+        lvFDMqLSS1TNPYZHpVyPzUeHsw==
+X-Google-Smtp-Source: AMrXdXsuzAGVJdfpkA4r0vuPCPAnhlDTbdaJ8hZuZDAIdxluKGkX6uczQJsOtnSp0EZuPyQGa9j6xw==
+X-Received: by 2002:adf:e44d:0:b0:2bd:f31e:3460 with SMTP id t13-20020adfe44d000000b002bdf31e3460mr19527988wrm.2.1674468606016;
+        Mon, 23 Jan 2023 02:10:06 -0800 (PST)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id m9-20020a056000024900b002bdec340a1csm22670403wrz.110.2023.01.23.02.10.01
+        by smtp.gmail.com with ESMTPSA id m9-20020a056000024900b002bdec340a1csm22670403wrz.110.2023.01.23.02.10.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 02:10:02 -0800 (PST)
+        Mon, 23 Jan 2023 02:10:05 -0800 (PST)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Mon, 23 Jan 2023 11:09:59 +0100
-Subject: [PATCH v3 2/7] dt-bindings: nvmem: convert
- amlogic-meson-mx-efuse.txt to dt-schema
+Date:   Mon, 23 Jan 2023 11:10:01 +0100
+Subject: [PATCH v3 4/7] dt-bindings: media: convert meson-ir.txt to
+ dt-schema
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221117-b4-amlogic-bindings-convert-v3-2-e28dd31e3bed@linaro.org>
+Message-Id: <20221117-b4-amlogic-bindings-convert-v3-4-e28dd31e3bed@linaro.org>
 References: <20221117-b4-amlogic-bindings-convert-v3-0-e28dd31e3bed@linaro.org>
 In-Reply-To: <20221117-b4-amlogic-bindings-convert-v3-0-e28dd31e3bed@linaro.org>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
@@ -80,110 +80,104 @@ To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-watchdog@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org
+        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 X-Mailer: b4 0.12.0
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convert the Amlogic Meson6 eFuse bindings to dt-schema.
+Convert the Amlogic Meson IR remote control receiver bindings to
+dt-schema.
 
+Take in account the used variant with amlogic,meson-gx-ir.
+
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- .../bindings/nvmem/amlogic,meson6-efuse.yaml       | 57 ++++++++++++++++++++++
- .../bindings/nvmem/amlogic-meson-mx-efuse.txt      | 22 ---------
- 2 files changed, 57 insertions(+), 22 deletions(-)
+ .../bindings/media/amlogic,meson6-ir.yaml          | 47 ++++++++++++++++++++++
+ .../devicetree/bindings/media/meson-ir.txt         | 20 ---------
+ 2 files changed, 47 insertions(+), 20 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/nvmem/amlogic,meson6-efuse.yaml b/Documentation/devicetree/bindings/nvmem/amlogic,meson6-efuse.yaml
+diff --git a/Documentation/devicetree/bindings/media/amlogic,meson6-ir.yaml b/Documentation/devicetree/bindings/media/amlogic,meson6-ir.yaml
 new file mode 100644
-index 000000000000..84b3dfd21e09
+index 000000000000..3f9fa92703bb
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/nvmem/amlogic,meson6-efuse.yaml
-@@ -0,0 +1,57 @@
++++ b/Documentation/devicetree/bindings/media/amlogic,meson6-ir.yaml
+@@ -0,0 +1,47 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/nvmem/amlogic,meson6-efuse.yaml#
++$id: http://devicetree.org/schemas/media/amlogic,meson6-ir.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Amlogic Meson6 eFuse
++title: Amlogic Meson IR remote control receiver
 +
 +maintainers:
 +  - Neil Armstrong <neil.armstrong@linaro.org>
-+  - Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 +
 +allOf:
-+  - $ref: nvmem.yaml#
++  - $ref: rc.yaml#
 +
 +properties:
 +  compatible:
-+    enum:
-+      - amlogic,meson6-efuse
-+      - amlogic,meson8-efuse
-+      - amlogic,meson8b-efuse
++    oneOf:
++      - enum:
++          - amlogic,meson6-ir
++          - amlogic,meson8b-ir
++          - amlogic,meson-gxbb-ir
++      - items:
++          - const: amlogic,meson-gx-ir
++          - const: amlogic,meson-gxbb-ir
 +
 +  reg:
 +    maxItems: 1
 +
-+  clocks:
++  interrupts:
 +    maxItems: 1
-+
-+  clock-names:
-+    const: core
 +
 +required:
 +  - compatible
 +  - reg
-+  - clocks
-+  - clock-names
++  - interrupts
 +
 +unevaluatedProperties: false
 +
 +examples:
 +  - |
-+    efuse: efuse@0 {
-+        compatible = "amlogic,meson6-efuse";
-+        reg = <0x0 0x2000>;
-+        clocks = <&clk_efuse>;
-+        clock-names = "core";
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+
-+        ethernet_mac_address: mac@1b4 {
-+            reg = <0x1b4 0x6>;
-+        };
-+
-+        temperature_calib: calib@1f4 {
-+             reg = <0x1f4 0x4>;
-+        };
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    ir-receiver@c8100480 {
++        compatible = "amlogic,meson6-ir";
++        reg = <0xc8100480 0x20>;
++        interrupts = <GIC_SPI 15 IRQ_TYPE_EDGE_RISING>;
 +    };
-diff --git a/Documentation/devicetree/bindings/nvmem/amlogic-meson-mx-efuse.txt b/Documentation/devicetree/bindings/nvmem/amlogic-meson-mx-efuse.txt
+diff --git a/Documentation/devicetree/bindings/media/meson-ir.txt b/Documentation/devicetree/bindings/media/meson-ir.txt
 deleted file mode 100644
-index a3c63954a1a4..000000000000
---- a/Documentation/devicetree/bindings/nvmem/amlogic-meson-mx-efuse.txt
+index efd9d29a8f10..000000000000
+--- a/Documentation/devicetree/bindings/media/meson-ir.txt
 +++ /dev/null
-@@ -1,22 +0,0 @@
--Amlogic Meson6/Meson8/Meson8b efuse
+@@ -1,20 +0,0 @@
+-* Amlogic Meson IR remote control receiver
 -
--Required Properties:
--- compatible: depending on the SoC this should be one of:
--	- "amlogic,meson6-efuse"
--	- "amlogic,meson8-efuse"
--	- "amlogic,meson8b-efuse"
--- reg: base address and size of the efuse registers
--- clocks: a reference to the efuse core gate clock
--- clock-names: must be "core"
+-Required properties:
+- - compatible	: depending on the platform this should be one of:
+-		  - "amlogic,meson6-ir"
+-		  - "amlogic,meson8b-ir"
+-		  - "amlogic,meson-gxbb-ir"
+- - reg		: physical base address and length of the device registers
+- - interrupts	: a single specifier for the interrupt from the device
 -
--All properties and sub-nodes as well as the consumer bindings
--defined in nvmem.txt in this directory are also supported.
--
+-Optional properties:
+- - linux,rc-map-name:	see rc.txt file in the same directory.
 -
 -Example:
--	efuse: nvmem@0 {
--		compatible = "amlogic,meson8-efuse";
--		reg = <0x0 0x2000>;
--		clocks = <&clkc CLKID_EFUSE>;
--		clock-names = "core";
+-
+-	ir-receiver@c8100480 {
+-		compatible= "amlogic,meson6-ir";
+-		reg = <0xc8100480 0x20>;
+-		interrupts = <0 15 1>;
 -	};
 
 -- 
