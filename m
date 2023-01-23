@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 466B7C38142
-	for <linux-media@archiver.kernel.org>; Mon, 23 Jan 2023 12:55:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E5C7C54E94
+	for <linux-media@archiver.kernel.org>; Mon, 23 Jan 2023 12:55:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbjAWMzl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Jan 2023 07:55:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
+        id S231959AbjAWMzm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Jan 2023 07:55:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231959AbjAWMzk (ORCPT
+        with ESMTP id S231909AbjAWMzm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Jan 2023 07:55:40 -0500
+        Mon, 23 Jan 2023 07:55:42 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A621E5FD
-        for <linux-media@vger.kernel.org>; Mon, 23 Jan 2023 04:54:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40387EE8
+        for <linux-media@vger.kernel.org>; Mon, 23 Jan 2023 04:54:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674478489;
+        s=mimecast20190719; t=1674478496;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zHUJ+C02E6YmrRlLtAxumEjggrRU0c9ROhtMF06hV2w=;
-        b=dIV6zUKtUUfWFpx3Q2qStzgryhkrlCGoa3QD0k+JlpSwoqA1EiC+PZWs0YPjw6D7895Hru
-        oGCeGBF76rP80a0zY2Omm7vtJePSf52Cp6HOageqs8GVEQUIeMZTGwJhcYnTmwFj9uX2ho
-        Vy0vGeJxMKqkhBZ/w4FV+Fv4fJWIt3A=
+        bh=p6Zd/wDI+nNIVoG+zQod0qss1S1Ndy0FhgH5kRELa6A=;
+        b=hqmrgUmlFuWdAKWCLInFClg4FD7DD91A3IPSdgnGLcdt+ZNfwJde12VEwvi1qD7OXSZJTo
+        yPOqv3Jk7dAfw09RLPQL0jW+EkHc0pRUCx5PfEEbF5nyStvWz8ysD6l23zlkNLbluw4b/N
+        3guxJMTI2mJK/0mdC4EBHO3VE5aprKA=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-646-dO6RnIt-PgW7AABz4bggDw-1; Mon, 23 Jan 2023 07:54:44 -0500
-X-MC-Unique: dO6RnIt-PgW7AABz4bggDw-1
+ us-mta-224-OPCGUI7JMEmha7JR5wbVOw-1; Mon, 23 Jan 2023 07:54:53 -0500
+X-MC-Unique: OPCGUI7JMEmha7JR5wbVOw-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CA396101A521;
-        Mon, 23 Jan 2023 12:54:43 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0C99788B7A0;
+        Mon, 23 Jan 2023 12:54:53 +0000 (UTC)
 Received: from x1.localdomain.com (unknown [10.39.194.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A380EC15BA0;
-        Mon, 23 Jan 2023 12:54:41 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EB881C15BA0;
+        Mon, 23 Jan 2023 12:54:49 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -47,10 +47,12 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Yury Luneff <yury.lunev@gmail.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 52/57] media: atomisp: ov2722: Fix GPIO1 polarity
-Date:   Mon, 23 Jan 2023 13:52:00 +0100
-Message-Id: <20230123125205.622152-53-hdegoede@redhat.com>
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        Brent Pappas <bpappas@pappasbrent.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: [PATCH 55/57] media: atomisp: pci: Replace bytes macros with functions
+Date:   Mon, 23 Jan 2023 13:52:03 +0100
+Message-Id: <20230123125205.622152-56-hdegoede@redhat.com>
 In-Reply-To: <20230123125205.622152-1-hdegoede@redhat.com>
 References: <20230123125205.622152-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,37 +62,102 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The comment claims the PWDN pin is active when pulled down in other words,
-it is /power-down so it needs to be driven high to get the sensor
-powered-up (not powered down) and flag is 1 when powering-up the sensor
-so the ! is wrong, drop it.
+From: Brent Pappas <bpappas@pappasbrent.com>
 
-This also matches with the schematics which I have which shows GPIO1 also
-enables a 3.3v line to the sensor-module which controls the privacy-LED
-and indeed before this patch the privacy LED was inverted from what it
-should be (and the sensor did not work).
+Replace the function-like macros FPNTBL_BYTES(), SCTBL_BYTES(), and
+MORPH_PLANE_BYTES() with functions to comply with Linux coding style
+standards.
+Replace multiplication with calls to array_size() and array3_size()
+to prevent accidental arithmetic overflow.
 
+Signed-off-by: Brent Pappas <bpappas@pappasbrent.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Link: https://lore.kernel.org/r/20230118160739.26059-1-bpappas@pappasbrent.com
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/staging/media/atomisp/i2c/atomisp-ov2722.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ .../staging/media/atomisp/pci/sh_css_params.c | 38 +++++++++++--------
+ 1 file changed, 23 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c b/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-index d874e12da8cc..83d036b5d772 100644
---- a/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-+++ b/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-@@ -512,10 +512,7 @@ static int gpio_ctrl(struct v4l2_subdev *sd, bool flag)
- 	 * before PWDN# when turning it on or off.
- 	 */
- 	ret = dev->platform_data->gpio0_ctrl(sd, flag);
--	/*
--	 *ov2722 PWDN# active high when pull down,opposite to the convention
--	 */
--	ret |= dev->platform_data->gpio1_ctrl(sd, !flag);
-+	ret |= dev->platform_data->gpio1_ctrl(sd, flag);
- 	return ret;
- }
+diff --git a/drivers/staging/media/atomisp/pci/sh_css_params.c b/drivers/staging/media/atomisp/pci/sh_css_params.c
+index f08564f58242..588f2adab058 100644
+--- a/drivers/staging/media/atomisp/pci/sh_css_params.c
++++ b/drivers/staging/media/atomisp/pci/sh_css_params.c
+@@ -98,17 +98,27 @@
+ #include "sh_css_frac.h"
+ #include "ia_css_bufq.h"
  
+-#define FPNTBL_BYTES(binary) \
+-	(sizeof(char) * (binary)->in_frame_info.res.height * \
+-	 (binary)->in_frame_info.padded_width)
++static size_t fpntbl_bytes(const struct ia_css_binary *binary)
++{
++	return array3_size(sizeof(char),
++			   binary->in_frame_info.res.height,
++			   binary->in_frame_info.padded_width);
++}
+ 
+-#define SCTBL_BYTES(binary) \
+-	(sizeof(unsigned short) * (binary)->sctbl_height * \
+-	 (binary)->sctbl_aligned_width_per_color * IA_CSS_SC_NUM_COLORS)
++static size_t sctbl_bytes(const struct ia_css_binary *binary)
++{
++	return size_mul(sizeof(unsigned short),
++			array3_size(binary->sctbl_height,
++				    binary->sctbl_aligned_width_per_color,
++				    IA_CSS_SC_NUM_COLORS));
++}
+ 
+-#define MORPH_PLANE_BYTES(binary) \
+-	(SH_CSS_MORPH_TABLE_ELEM_BYTES * (binary)->morph_tbl_aligned_width * \
+-	 (binary)->morph_tbl_height)
++static size_t morph_plane_bytes(const struct ia_css_binary *binary)
++{
++	return array3_size(SH_CSS_MORPH_TABLE_ELEM_BYTES,
++			   binary->morph_tbl_aligned_width,
++			   binary->morph_tbl_height);
++}
+ 
+ /* We keep a second copy of the ptr struct for the SP to access.
+    Again, this would not be necessary on the chip. */
+@@ -3279,7 +3289,7 @@ sh_css_params_write_to_ddr_internal(
+ 	if (binary->info->sp.enable.fpnr) {
+ 		buff_realloced = reallocate_buffer(&ddr_map->fpn_tbl,
+ 						   &ddr_map_size->fpn_tbl,
+-						   (size_t)(FPNTBL_BYTES(binary)),
++						   fpntbl_bytes(binary),
+ 						   params->config_changed[IA_CSS_FPN_ID],
+ 						   &err);
+ 		if (err) {
+@@ -3304,7 +3314,7 @@ sh_css_params_write_to_ddr_internal(
+ 
+ 		buff_realloced = reallocate_buffer(&ddr_map->sc_tbl,
+ 						   &ddr_map_size->sc_tbl,
+-						   SCTBL_BYTES(binary),
++						   sctbl_bytes(binary),
+ 						   params->sc_table_changed,
+ 						   &err);
+ 		if (err) {
+@@ -3538,8 +3548,7 @@ sh_css_params_write_to_ddr_internal(
+ 			buff_realloced |=
+ 			    reallocate_buffer(virt_addr_tetra_x[i],
+ 					    virt_size_tetra_x[i],
+-					    (size_t)
+-					    (MORPH_PLANE_BYTES(binary)),
++					    morph_plane_bytes(binary),
+ 					    params->morph_table_changed,
+ 					    &err);
+ 			if (err) {
+@@ -3549,8 +3558,7 @@ sh_css_params_write_to_ddr_internal(
+ 			buff_realloced |=
+ 			    reallocate_buffer(virt_addr_tetra_y[i],
+ 					    virt_size_tetra_y[i],
+-					    (size_t)
+-					    (MORPH_PLANE_BYTES(binary)),
++					    morph_plane_bytes(binary),
+ 					    params->morph_table_changed,
+ 					    &err);
+ 			if (err) {
 -- 
 2.39.0
 
