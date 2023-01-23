@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BB44C05027
-	for <linux-media@archiver.kernel.org>; Mon, 23 Jan 2023 12:55:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98F09C38142
+	for <linux-media@archiver.kernel.org>; Mon, 23 Jan 2023 12:55:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231848AbjAWMzQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Jan 2023 07:55:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56438 "EHLO
+        id S232054AbjAWMzT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Jan 2023 07:55:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232054AbjAWMzO (ORCPT
+        with ESMTP id S232050AbjAWMzP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Jan 2023 07:55:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28C217165
-        for <linux-media@vger.kernel.org>; Mon, 23 Jan 2023 04:54:25 -0800 (PST)
+        Mon, 23 Jan 2023 07:55:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D14F6E91
+        for <linux-media@vger.kernel.org>; Mon, 23 Jan 2023 04:54:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674478465;
+        s=mimecast20190719; t=1674478457;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=uOkZEalNhjLdTgAVP/P1gBb1Uxe47U1A+S57RGEcnVk=;
-        b=Ls/9y8t1SLn54WLubIgPocuntYxYx9z1l6iTbhgNdjfWKNCYTfQ4wlathT0Hj43Gxv/TNT
-        D3HcMCberM91T+j7BG62SlMDwhD2y9sdRI03TbKzFfYlG0uJmgFLcogrlsgl+j60Aey/vQ
-        xwxF0nX5xibhx8vAm+KJo+BZZyLOBjI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=9F84eUOqTteOn9ZaWHcd57l4YmKpYzxnYD9qd/O+FK0=;
+        b=SWb2u3rBLgX4Os89E9pMjTbtT+B1evA1fNIchhfmhvtB7tvnMO+YLZcm42mh4W2RTENRDR
+        ySLp0ARnTSK+thBFbNvp5HUcgsWd084EUeiONMIad5d3aoxWUuPi0U5k2CcIy/tkLt+eq7
+        s5gSfxtkYz0F0a+dv4tZirYEDHjnwnI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-161-EzyygqafNtOTVj6_-7GO2w-1; Mon, 23 Jan 2023 07:54:20 -0500
-X-MC-Unique: EzyygqafNtOTVj6_-7GO2w-1
+ us-mta-424-xhFJ5YblM7KCf4HCY5TtHQ-1; Mon, 23 Jan 2023 07:54:14 -0500
+X-MC-Unique: xhFJ5YblM7KCf4HCY5TtHQ-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 583B31C07542;
-        Mon, 23 Jan 2023 12:54:19 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 67FC818E0047;
+        Mon, 23 Jan 2023 12:54:13 +0000 (UTC)
 Received: from x1.localdomain.com (unknown [10.39.194.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D8C40C15BA0;
-        Mon, 23 Jan 2023 12:54:16 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 27EF8C15BA0;
+        Mon, 23 Jan 2023 12:54:10 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 43/57] media: atomisp: ov2680: Drop MAX_FMTS define
-Date:   Mon, 23 Jan 2023 13:51:51 +0100
-Message-Id: <20230123125205.622152-44-hdegoede@redhat.com>
+Subject: [PATCH 41/57] media: atomisp: ov2680: Fix frame_size list
+Date:   Mon, 23 Jan 2023 13:51:49 +0100
+Message-Id: <20230123125205.622152-42-hdegoede@redhat.com>
 In-Reply-To: <20230123125205.622152-1-hdegoede@redhat.com>
 References: <20230123125205.622152-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,40 +60,50 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The ov2680 only supports a single format, there is no need to
-use a define for this.
+3 fixes for the framesize list:
+
+1. Drop modes < 640x480, these are made by significant cropping,
+   leading to such a small remainig field-of-view that they are
+   not really usable
+
+2. 1616x1082 is presumably intended to be 1600x1080 + 16 pixels
+   padding in both dimensions, but the height is wrong.
+   Change this to 1616x1096.
+
+3. The 800x600 mode is missing the 16 pixels padding and
+   720x592 is missing 16 pixels padding in its width and
+   the 720x576 base mode is a mode with non square pixels,
+   while the sensor has square pixels.
+   Replace both with 768x576 + 16 pixels padding -> 784x592
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/staging/media/atomisp/i2c/atomisp-ov2680.c | 2 +-
- drivers/staging/media/atomisp/i2c/ov2680.h         | 2 --
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ drivers/staging/media/atomisp/i2c/atomisp-ov2680.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c b/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
-index 81fd36b09090..994b6fe40069 100644
+index 432539dd274c..81fd36b09090 100644
 --- a/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
 +++ b/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
-@@ -687,7 +687,7 @@ static int ov2680_enum_mbus_code(struct v4l2_subdev *sd,
- 				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
+@@ -700,17 +700,13 @@ static int ov2680_enum_frame_size(struct v4l2_subdev *sd,
  {
--	if (code->index >= MAX_FMTS)
-+	if (code->index)
- 		return -EINVAL;
- 
- 	code->code = MEDIA_BUS_FMT_SBGGR10_1X10;
-diff --git a/drivers/staging/media/atomisp/i2c/ov2680.h b/drivers/staging/media/atomisp/i2c/ov2680.h
-index 189d1b2b7584..5aa46f669715 100644
---- a/drivers/staging/media/atomisp/i2c/ov2680.h
-+++ b/drivers/staging/media/atomisp/i2c/ov2680.h
-@@ -46,8 +46,6 @@
- 
- #define OV2680_FOCAL_LENGTH_NUM	334	/*3.34mm*/
- 
--#define MAX_FMTS		1
--
- #define OV2680_INTEGRATION_TIME_MARGIN	8
- #define OV2680_ID	0x2680
+ 	static const struct v4l2_frmsize_discrete ov2680_frame_sizes[] = {
+ 		{ 1616, 1216 },
+-		{ 1616, 1082 },
++		{ 1616, 1096 },
+ 		{ 1616,  916 },
+ 		{ 1456, 1096 },
+ 		{ 1296,  976 },
+ 		{ 1296,  736 },
+-		{  800,  600 },
+-		{  720,  592 },
++		{  784,  592 },
+ 		{  656,  496 },
+-		{  336,  256 },
+-		{  352,  288 },
+-		{  176,  144 },
+ 	};
+ 	int index = fse->index;
  
 -- 
 2.39.0
