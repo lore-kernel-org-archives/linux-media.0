@@ -2,261 +2,188 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C02BBC38142
-	for <linux-media@archiver.kernel.org>; Mon, 23 Jan 2023 15:30:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3653DC54E94
+	for <linux-media@archiver.kernel.org>; Mon, 23 Jan 2023 15:38:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbjAWPaT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Jan 2023 10:30:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37316 "EHLO
+        id S232742AbjAWPiM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Jan 2023 10:38:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230428AbjAWPaR (ORCPT
+        with ESMTP id S232743AbjAWPiF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:30:17 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95DC410258
-        for <linux-media@vger.kernel.org>; Mon, 23 Jan 2023 07:30:16 -0800 (PST)
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="388416622"
-X-IronPort-AV: E=Sophos;i="5.97,239,1669104000"; 
-   d="scan'208";a="388416622"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 07:30:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="693941400"
-X-IronPort-AV: E=Sophos;i="5.97,239,1669104000"; 
-   d="scan'208";a="693941400"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 23 Jan 2023 07:30:07 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andy@kernel.org>)
-        id 1pJylq-00Dnkq-0E;
-        Mon, 23 Jan 2023 17:30:06 +0200
-Date:   Mon, 23 Jan 2023 17:30:05 +0200
-From:   Andy Shevchenko <andy@kernel.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Yury Luneff <yury.lunev@gmail.com>,
-        Nable <nable.maininbox@googlemail.com>,
-        andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH 15/57] media: atomisp: Drop atomisp_init_pipe()
-Message-ID: <Y86n/Wz5Ed45Ve1d@smile.fi.intel.com>
-References: <20230123125205.622152-1-hdegoede@redhat.com>
- <20230123125205.622152-16-hdegoede@redhat.com>
+        Mon, 23 Jan 2023 10:38:05 -0500
+X-Greylist: delayed 4192 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 Jan 2023 07:38:03 PST
+Received: from 5.mo552.mail-out.ovh.net (5.mo552.mail-out.ovh.net [188.165.45.220])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C9D5FE9
+        for <linux-media@vger.kernel.org>; Mon, 23 Jan 2023 07:38:02 -0800 (PST)
+Received: from mxplan5.mail.ovh.net (unknown [10.109.143.167])
+        by mo552.mail-out.ovh.net (Postfix) with ESMTPS id 731DB2B568;
+        Mon, 23 Jan 2023 13:10:17 +0000 (UTC)
+Received: from kaod.org (37.59.142.109) by DAG4EX2.mxp5.local (172.16.2.32)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Mon, 23 Jan
+ 2023 14:10:10 +0100
+Authentication-Results: garm.ovh; auth=pass (GARM-109S0035e8cf7e5-490b-4306-97b9-26c7bcdb01f8,
+                    A67B952EB2D8D9A0A9F9E7F867E869D975DF4B5D) smtp.auth=clg@kaod.org
+X-OVh-ClientIp: 82.64.250.170
+Message-ID: <d1743abc-3d9f-cdf4-dfbe-67aac4b1b8cd@kaod.org>
+Date:   Mon, 23 Jan 2023 14:10:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123125205.622152-16-hdegoede@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 02/13] spi: Replace all spi->chip_select and
+ spi->cs_gpiod references with function call
+Content-Language: en-US
+To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+        <broonie@kernel.org>, <miquel.raynal@bootlin.com>,
+        <richard@nod.at>, <vigneshr@ti.com>, <jic23@kernel.org>,
+        <tudor.ambarus@microchip.com>, <pratyush@kernel.org>,
+        <sanju.mehta@amd.com>, <chin-ting_kuo@aspeedtech.com>,
+        <kdasu.kdev@gmail.com>, <f.fainelli@gmail.com>,
+        <rjui@broadcom.com>, <sbranden@broadcom.com>,
+        <eajames@linux.ibm.com>, <olteanv@gmail.com>, <han.xu@nxp.com>,
+        <john.garry@huawei.com>, <shawnguo@kernel.org>,
+        <s.hauer@pengutronix.de>, <narmstrong@baylibre.com>,
+        <khilman@baylibre.com>, <matthias.bgg@gmail.com>,
+        <haibo.chen@nxp.com>, <linus.walleij@linaro.org>,
+        <daniel@zonque.org>, <haojian.zhuang@gmail.com>,
+        <robert.jarzmik@free.fr>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <heiko@sntech.de>,
+        <krzysztof.kozlowski@linaro.org>, <andi@etezian.org>,
+        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
+        <wens@csie.org>, <jernej.skrabec@gmail.com>, <samuel@sholland.org>,
+        <masahisa.kojima@linaro.org>, <jaswinder.singh@linaro.org>,
+        <rostedt@goodmis.org>, <mingo@redhat.com>,
+        <l.stelmach@samsung.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <alex.aring@gmail.com>, <stefan@datenfreihafen.org>,
+        <kvalo@kernel.org>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <skomatineni@nvidia.com>,
+        <sumit.semwal@linaro.org>, <christian.koenig@amd.com>,
+        <j.neuschaefer@gmx.net>, <vireshk@kernel.org>, <rmfrfs@gmail.com>,
+        <johan@kernel.org>, <elder@kernel.org>,
+        <gregkh@linuxfoundation.org>
+CC:     <git@amd.com>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <joel@jms.id.au>,
+        <andrew@aj.id.au>, <radu_nicolae.pirea@upb.ro>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <claudiu.beznea@microchip.com>,
+        <bcm-kernel-feedback-list@broadcom.com>, <fancer.lancer@gmail.com>,
+        <kernel@pengutronix.de>, <festevam@gmail.com>, <linux-imx@nxp.com>,
+        <jbrunet@baylibre.com>, <martin.blumenstingl@googlemail.com>,
+        <avifishman70@gmail.com>, <tmaimon77@gmail.com>,
+        <tali.perry1@gmail.com>, <venture@google.com>, <yuenn@google.com>,
+        <benjaminfair@google.com>, <yogeshgaur.83@gmail.com>,
+        <konrad.dybcio@somainline.org>, <alim.akhtar@samsung.com>,
+        <ldewangan@nvidia.com>, <michal.simek@amd.com>,
+        <linux-aspeed@lists.ozlabs.org>, <openbmc@lists.ozlabs.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-rpi-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-rockchip@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-sunxi@lists.linux.dev>, <linux-tegra@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-wpan@vger.kernel.org>,
+        <libertas-dev@lists.infradead.org>,
+        <linux-wireless@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        <lars@metafoo.de>, <Michael.Hennerich@analog.com>,
+        <linux-iio@vger.kernel.org>, <michael@walle.cc>,
+        <palmer@dabbelt.com>, <linux-riscv@lists.infradead.org>,
+        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <greybus-dev@lists.linaro.org>, <linux-staging@lists.linux.dev>,
+        <amitrkcian2002@gmail.com>
+References: <20230119185342.2093323-1-amit.kumar-mahapatra@amd.com>
+ <20230119185342.2093323-3-amit.kumar-mahapatra@amd.com>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <20230119185342.2093323-3-amit.kumar-mahapatra@amd.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [37.59.142.109]
+X-ClientProxiedBy: DAG6EX2.mxp5.local (172.16.2.52) To DAG4EX2.mxp5.local
+ (172.16.2.32)
+X-Ovh-Tracer-GUID: d8c081e3-7749-496f-b92b-664d73f13c17
+X-Ovh-Tracer-Id: 9743537793859029808
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedruddukedgfeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgihesthekredttdefjeenucfhrhhomhepveorughrihgtucfnvgcuifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpeffudefleeiudejfeffhfejffeigffhhffhvdekieejheelvdeufffhjedtheeggeenucfkphepuddvjedrtddrtddruddpfeejrdehledrudegvddruddtleenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoegtlhhgsehkrghougdrohhrgheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheprghmihhtrdhkuhhmrghrqdhmrghhrghprghtrhgrsegrmhgurdgtohhmpdhkohhnrhgrugdrugihsggtihhosehsohhmrghinhhlihhnvgdrohhrghdphihoghgvshhhghgruhhrrdekfeesghhmrghilhdrtghomhdpsggvnhhjrghmihhnfhgrihhrsehgohhoghhlvgdrtghomhdphihuvghnnhesghhoohhglhgvrdgtohhmpdhvvghnthhurhgvsehgohhoghhlvgdrtghomhdpthgrlhhirdhpvghrrhihudesghhmrghilhdrtghomhdpthhmrghimhhonhejjeesghhmrghilhdrtg
+ homhdprghvihhfihhshhhmrghnjedtsehgmhgrihhlrdgtohhmpdhmrghrthhinhdrsghluhhmvghnshhtihhnghhlsehgohhoghhlvghmrghilhdrtghomhdplhhinhhugidqihhmgiesnhigphdrtghomhdpfhgvshhtvghvrghmsehgmhgrihhlrdgtohhmpdgrlhhimhdrrghkhhhtrghrsehsrghmshhunhhgrdgtohhmpdhkvghrnhgvlhesphgvnhhguhhtrhhonhhigidruggvpdgstghmqdhkvghrnhgvlhdqfhgvvggusggrtghkqdhlihhsthessghrohgruggtohhmrdgtohhmpdgtlhgruhguihhurdgsvgiinhgvrgesmhhitghrohgthhhiphdrtghomhdprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhhitgholhgrshdrfhgvrhhrvgesmhhitghrohgthhhiphdrtghomhdprhgrughupghnihgtohhlrggvrdhpihhrvggrsehuphgsrdhrohdprghnughrvgifsegrjhdrihgurdgruhdpjhhovghlsehjmhhsrdhiugdrrghupdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdplhhinhhugidqshhpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdpghhithesrghmugdrtghomhdpghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhfrghntggvrhdrlhgrnhgtvghrsehgmhgrihhlrdgtohhmpdhluggvfigrnhhgrghnsehnvhhiughirgdrtghomhdpmhhitghhrghlrdhsihhmvghksegrmhgurdgtohhmpdhlihhnuhigqdgrshhpvggvuge
+ slhhishhtshdrohiilhgrsghsrdhorhhgpdhgrhgvhigsuhhsqdguvghvsehlihhsthhsrdhlihhnrghrohdrohhrghdpughrihdquggvvhgvlheslhhishhtshdrfhhrvggvuggvshhkthhophdrohhrghdplhhinhhugidqmhgvughirgesvhhgvghrrdhkvghrnhgvlhdrohhrghdplhhinhhugidqrhhishgtvheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdpphgrlhhmvghrsegurggssggvlhhtrdgtohhmpdhmihgthhgrvghlseifrghllhgvrdgttgdplhhinhhugidqihhiohesvhhgvghrrdhkvghrnhgvlhdrohhrghdpofhitghhrggvlhdrjfgvnhhnvghrihgthhesrghnrghlohhgrdgtohhmpdhlrghrshesmhgvthgrfhhoohdruggvpdhlihhnuhigqdhmthgusehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhlihhnuhigqdifihhrvghlvghsshesvhhgvghrrdhkvghrnhgvlhdrohhrghdplhhisggvrhhtrghsqdguvghvsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhlihhnuhigqdifphgrnhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhtvghgrhgrsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhsuhhngihisehlihhsthhsrdhlihhnuhigrdguvghvpdhlihhnuhigqdhsthhmfedvsehsthdqmhguqdhmrghilhhmrghnrdhsthhorhhmrhgvphhlhidrtghomhdplhhinhhugidqshgrmhhsuhhn
+ ghdqshhotgesvhhgvghrrdhkvghrnhgvlhdrohhrghdplhhinhhugidqrhhotghktghhihhpsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhlihhnuhigqdgrrhhmqdhmshhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhmvgguihgrthgvkheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdplhhinhhugidqrghmlhhoghhitgeslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdplhhinhhugidqrhhpihdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdpohhpvghnsghmtgeslhhishhtshdrohiilhgrsghsrdhorhhgpdgvlhguvghrsehkvghrnhgvlhdrohhrghdplhhinhhugidqshhtrghgihhngheslhhishhtshdrlhhinhhugidruggvvhdpjhhohhgrnheskhgvrhhnvghlrdhorhhgpdhvihhrvghshhhksehkvghrnhgvlhdrohhrghdphhgrohhjihgrnhdriihhuhgrnhhgsehgmhgrihhlrdgtohhmpdgurghnihgvlhesiihonhhquhgvrdhorhhgpdhlihhnuhhsrdifrghllhgvihhjsehlihhnrghrohdrohhrghdphhgrihgsohdrtghhvghnsehngihprdgtohhmpdhmrghtthhhihgrshdrsghgghesghhmrghilhdrtghomhdpshdrhhgruhgvrhesphgvnhhguhhtrhhonhhigidruggvpdhshhgrfihnghhuoheskhgvrhhnvghlrdhorhhgpdhjohhhnhdrghgrr
+ hhrhieshhhurgifvghirdgtohhmpdhhrghnrdiguhesnhigphdrtghomhdpohhlthgvrghnvhesghhmrghilhdrtghomhdpvggrjhgrmhgvsheslhhinhhugidrihgsmhdrtghomhdprhhosggvrhhtrdhjrghriihmihhksehfrhgvvgdrfhhrpdhssghrrghnuggvnhessghrohgruggtohhmrdgtohhmpdhfrdhfrghinhgvlhhlihesghhmrghilhdrtghomhdpkhgurghsuhdrkhguvghvsehgmhgrihhlrdgtohhmpdgthhhinhdqthhinhhgpghkuhhosegrshhpvggvughtvggthhdrtghomhdpshgrnhhjuhdrmhgvhhhtrgesrghmugdrtghomhdpphhrrghthihushhhsehkvghrnhgvlhdrohhrghdpthhuughorhdrrghmsggrrhhushesmhhitghrohgthhhiphdrtghomhdpjhhitgdvfeeskhgvrhhnvghlrdhorhhgpdhvihhgnhgvshhhrhesthhirdgtohhmpdhrihgthhgrrhgusehnohgurdgrthdpmhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomhdpsghrohhonhhivgeskhgvrhhnvghlrdhorhhgpdhrjhhuihessghrohgruggtohhmrdgtohhmpdgrghhrohhssheskhgvrhhnvghlrdhorhhgpdgsjhhorhhnrdgrnhguvghrshhsohhnsehlihhnrghrohdrohhrghdphhgvihhkohesshhnthgvtghhrdguvgdpjhdrnhgvuhhstghhrggvfhgvrhesghhmgidrnhgvthdptghhrhhishhtihgrnhdrkhhovghnihhgsegrmhgurdgtohhmpdhsuhhmihhtrdhsvghmfigrlheslhhinhgrrhhordhorhhgpdhskh
+ homhgrthhinhgvnhhisehnvhhiughirgdrtghomhdpjhhonhgrthhhrghnhhesnhhvihguihgrrdgtohhmpdhthhhivghrrhihrdhrvgguihhnghesghhmrghilhdrtghomhdpkhhvrghloheskhgvrhhnvghlrdhorhhgpdhsthgvfhgrnhesuggrthgvnhhfrhgvihhhrghfvghnrdhorhhgpdgrlhgvgidrrghrihhnghesghhmrghilhdrtghomhdpphgrsggvnhhisehrvgguhhgrthdrtghomhdpkhhusggrsehkvghrnhgvlhdrohhrghdpvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdpuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdplhdrshhtvghlmhgrtghhsehsrghmshhunhhgrdgtohhmpdhmihhnghhosehrvgguhhgrthdrtghomhdprhhoshhtvgguthesghhoohgumhhishdrohhrghdpjhgrshifihhnuggvrhdrshhinhhghheslhhinhgrrhhordhorhhgpdhmrghsrghhihhsrgdrkhhojhhimhgrsehlihhnrghrohdrohhrghdpshgrmhhuvghlsehshhholhhlrghnugdrohhrghdpjhgvrhhnvghjrdhskhhrrggsvggtsehgmhgrihhlrdgtohhmpdifvghnshestghsihgvrdhorhhgpdgrlhgvgigrnhgurhgvrdhtohhrghhuvgesfhhoshhsrdhsthdrtghomhdpmhgtohhquhgvlhhinhdrshhtmhefvdesghhmrghilhdrtghomhdprghnughisegvthgviihirghnrdhorhhgpdhkrhiihihsiihtohhfrdhkohiilhhofihskhhisehlihhnrghrohdrohhrghdprhhmfhhrfhhssehgmhgrihhlrdgtohhmpdg
+ rmhhithhrkhgtihgrnhdvtddtvdesghhmrghilhdrtghomhdpoffvtefjohhsthepmhhoheehvddpmhhouggvpehsmhhtphhouhht
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 01:51:23PM +0100, Hans de Goede wrote:
-> atomisp_init_pipe() does 3 things:
-> 
-> 1. Init a bunch of list-heads / locks
-> 2. Init the vb_queue for the videodev (aka pipe)
-> 3. zero the per-frame parameters related variables of the pipe
-> 
-> 1. and 2. really should not be done at file-open time, but once at probe.
-> Currently the code is getting away with doing this on every videodev-open
-> because only 1 open is allowed at a time.
-> 
-> 1. is already done at probe time by atomisp_init_subdev_pipe(), move 2. to
-> atomisp_init_subdev_pipe() so that it is also done once at probe.
-> 
-> As for 3. The per-frame parameters can only be set from a qbuf ioctl,
-> which can only happen after a reqbufs ioctl and atomisp_buf_cleanup
-> already zeros the per-frame parameters when the buffers are released,
-> so 3. is not necessary at all.
+On 1/19/23 19:53, Amit Kumar Mahapatra wrote:
+> diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
+> index 873ff2cf72c9..b7a9ec550ba1 100644
+> --- a/drivers/spi/spi-aspeed-smc.c
+> +++ b/drivers/spi/spi-aspeed-smc.c
+> @@ -296,7 +296,7 @@ static const struct aspeed_spi_data ast2400_spi_data;
+>   static int do_aspeed_spi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+>   {
+>   	struct aspeed_spi *aspi = spi_controller_get_devdata(mem->spi->master);
+> -	struct aspeed_spi_chip *chip = &aspi->chips[mem->spi->chip_select];
+> +	struct aspeed_spi_chip *chip = &aspi->chips[spi_get_chipselect(mem->spi, 0)];
+>   	u32 addr_mode, addr_mode_backup;
+>   	u32 ctl_val;
+>   	int ret = 0;
+> @@ -377,7 +377,8 @@ static const char *aspeed_spi_get_name(struct spi_mem *mem)
+>   	struct aspeed_spi *aspi = spi_controller_get_devdata(mem->spi->master);
+>   	struct device *dev = aspi->dev;
+>   
+> -	return devm_kasprintf(dev, GFP_KERNEL, "%s.%d", dev_name(dev), mem->spi->chip_select);
+> +	return devm_kasprintf(dev, GFP_KERNEL, "%s.%d", dev_name(dev),
+> +			      spi_get_chipselect(mem->spi, 0));
+>   }
+>   
+>   struct aspeed_spi_window {
+> @@ -553,7 +554,7 @@ static int aspeed_spi_do_calibration(struct aspeed_spi_chip *chip);
+>   static int aspeed_spi_dirmap_create(struct spi_mem_dirmap_desc *desc)
+>   {
+>   	struct aspeed_spi *aspi = spi_controller_get_devdata(desc->mem->spi->master);
+> -	struct aspeed_spi_chip *chip = &aspi->chips[desc->mem->spi->chip_select];
+> +	struct aspeed_spi_chip *chip = &aspi->chips[spi_get_chipselect(desc->mem->spi, 0)];
+>   	struct spi_mem_op *op = &desc->info.op_tmpl;
+>   	u32 ctl_val;
+>   	int ret = 0;
+> @@ -620,7 +621,7 @@ static ssize_t aspeed_spi_dirmap_read(struct spi_mem_dirmap_desc *desc,
+>   				      u64 offset, size_t len, void *buf)
+>   {
+>   	struct aspeed_spi *aspi = spi_controller_get_devdata(desc->mem->spi->master);
+> -	struct aspeed_spi_chip *chip = &aspi->chips[desc->mem->spi->chip_select];
+> +	struct aspeed_spi_chip *chip = &aspi->chips[spi_get_chipselect(desc->mem->spi, 0)];
+>   
+>   	/* Switch to USER command mode if mapping window is too small */
+>   	if (chip->ahb_window_size < offset + len) {
+> @@ -670,7 +671,7 @@ static int aspeed_spi_setup(struct spi_device *spi)
+>   {
+>   	struct aspeed_spi *aspi = spi_controller_get_devdata(spi->master);
+>   	const struct aspeed_spi_data *data = aspi->data;
+> -	unsigned int cs = spi->chip_select;
+> +	unsigned int cs = spi_get_chipselect(spi, 0);
+>   	struct aspeed_spi_chip *chip = &aspi->chips[cs];
+>   
+>   	chip->aspi = aspi;
+> @@ -697,7 +698,7 @@ static int aspeed_spi_setup(struct spi_device *spi)
+>   static void aspeed_spi_cleanup(struct spi_device *spi)
+>   {
+>   	struct aspeed_spi *aspi = spi_controller_get_devdata(spi->master);
+> -	unsigned int cs = spi->chip_select;
+> +	unsigned int cs = spi_get_chipselect(spi, 0);
+>   
+>   	aspeed_spi_chip_enable(aspi, cs, false);
+>   
 
-Reviewed-by: Andy Shevchenko <andy@kernel.org>
+For the Aspeed driver,
 
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> ---
->  .../staging/media/atomisp/pci/atomisp_fops.c  | 40 +--------------
->  .../staging/media/atomisp/pci/atomisp_fops.h  |  1 +
->  .../media/atomisp/pci/atomisp_subdev.c        | 49 +++++++++++++++----
->  3 files changed, 41 insertions(+), 49 deletions(-)
-> 
-> diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-> index 036ad339b344..7f4934ff9cab 100644
-> --- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
-> +++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-> @@ -624,7 +624,7 @@ static void atomisp_buf_cleanup(struct vb2_buffer *vb)
->  	hmm_free(frame->data);
->  }
->  
-> -static const struct vb2_ops atomisp_vb2_ops = {
-> +const struct vb2_ops atomisp_vb2_ops = {
->  	.queue_setup		= atomisp_queue_setup,
->  	.buf_init		= atomisp_buf_init,
->  	.buf_cleanup		= atomisp_buf_cleanup,
-> @@ -633,40 +633,6 @@ static const struct vb2_ops atomisp_vb2_ops = {
->  	.stop_streaming		= atomisp_stop_streaming,
->  };
->  
-> -static int atomisp_init_pipe(struct atomisp_video_pipe *pipe)
-> -{
-> -	int ret;
-> -
-> -	/* init locks */
-> -	spin_lock_init(&pipe->irq_lock);
-> -	mutex_init(&pipe->vb_queue_mutex);
-> -
-> -	/* Init videobuf2 queue structure */
-> -	pipe->vb_queue.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-> -	pipe->vb_queue.io_modes = VB2_MMAP | VB2_USERPTR;
-> -	pipe->vb_queue.buf_struct_size = sizeof(struct ia_css_frame);
-> -	pipe->vb_queue.ops = &atomisp_vb2_ops;
-> -	pipe->vb_queue.mem_ops = &vb2_vmalloc_memops;
-> -	pipe->vb_queue.timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
-> -	ret = vb2_queue_init(&pipe->vb_queue);
-> -	if (ret)
-> -		return ret;
-> -
-> -	pipe->vdev.queue = &pipe->vb_queue;
-> -	pipe->vdev.queue->lock = &pipe->vb_queue_mutex;
-> -
-> -	INIT_LIST_HEAD(&pipe->activeq);
-> -	INIT_LIST_HEAD(&pipe->buffers_waiting_for_param);
-> -	INIT_LIST_HEAD(&pipe->per_frame_params);
-> -	memset(pipe->frame_request_config_id, 0,
-> -	       VIDEO_MAX_FRAME * sizeof(unsigned int));
-> -	memset(pipe->frame_params, 0,
-> -	       VIDEO_MAX_FRAME *
-> -	       sizeof(struct atomisp_css_params_with_list *));
-> -
-> -	return 0;
-> -}
-> -
->  static void atomisp_dev_init_struct(struct atomisp_device *isp)
->  {
->  	unsigned int i;
-> @@ -773,10 +739,6 @@ static int atomisp_open(struct file *file)
->  		return -EBUSY;
->  	}
->  
-> -	ret = atomisp_init_pipe(pipe);
-> -	if (ret)
-> -		goto error;
-> -
->  	if (atomisp_dev_users(isp)) {
->  		dev_dbg(isp->dev, "skip init isp in open\n");
->  		goto init_subdev;
-> diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.h b/drivers/staging/media/atomisp/pci/atomisp_fops.h
-> index 2efc5245e571..883c1851c1c9 100644
-> --- a/drivers/staging/media/atomisp/pci/atomisp_fops.h
-> +++ b/drivers/staging/media/atomisp/pci/atomisp_fops.h
-> @@ -31,6 +31,7 @@ unsigned int atomisp_sub_dev_users(struct atomisp_sub_device *asd);
->  
->  int atomisp_qbuffers_to_css(struct atomisp_sub_device *asd);
->  
-> +extern const struct vb2_ops atomisp_vb2_ops;
->  extern const struct v4l2_file_operations atomisp_fops;
->  
->  #endif /* __ATOMISP_FOPS_H__ */
-> diff --git a/drivers/staging/media/atomisp/pci/atomisp_subdev.c b/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-> index fc9e07bf63ae..c32db4ffb778 100644
-> --- a/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-> +++ b/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-> @@ -25,9 +25,11 @@
->  
->  #include <media/v4l2-event.h>
->  #include <media/v4l2-mediabus.h>
-> +#include <media/videobuf2-vmalloc.h>
->  #include "atomisp_cmd.h"
->  #include "atomisp_common.h"
->  #include "atomisp_compat.h"
-> +#include "atomisp_fops.h"
->  #include "atomisp_internal.h"
->  
->  const struct atomisp_in_fmt_conv atomisp_in_fmt_conv[] = {
-> @@ -1023,14 +1025,31 @@ static const struct v4l2_ctrl_config ctrl_depth_mode = {
->  	.def = 0,
->  };
->  
-> -static void atomisp_init_subdev_pipe(struct atomisp_sub_device *asd,
-> -				     struct atomisp_video_pipe *pipe, enum v4l2_buf_type buf_type)
-> +static int atomisp_init_subdev_pipe(struct atomisp_sub_device *asd,
-> +				    struct atomisp_video_pipe *pipe, enum v4l2_buf_type buf_type)
->  {
-> +	int ret;
-> +
->  	pipe->type = buf_type;
->  	pipe->asd = asd;
->  	pipe->isp = asd->isp;
->  	spin_lock_init(&pipe->irq_lock);
->  	mutex_init(&pipe->vb_queue_mutex);
-> +
-> +	/* Init videobuf2 queue structure */
-> +	pipe->vb_queue.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-> +	pipe->vb_queue.io_modes = VB2_MMAP | VB2_USERPTR;
-> +	pipe->vb_queue.buf_struct_size = sizeof(struct ia_css_frame);
-> +	pipe->vb_queue.ops = &atomisp_vb2_ops;
-> +	pipe->vb_queue.mem_ops = &vb2_vmalloc_memops;
-> +	pipe->vb_queue.timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
-> +	ret = vb2_queue_init(&pipe->vb_queue);
-> +	if (ret)
-> +		return ret;
-> +
-> +	pipe->vdev.queue = &pipe->vb_queue;
-> +	pipe->vdev.queue->lock = &pipe->vb_queue_mutex;
-> +
->  	INIT_LIST_HEAD(&pipe->buffers_in_css);
->  	INIT_LIST_HEAD(&pipe->activeq);
->  	INIT_LIST_HEAD(&pipe->buffers_waiting_for_param);
-> @@ -1040,6 +1059,8 @@ static void atomisp_init_subdev_pipe(struct atomisp_sub_device *asd,
->  	memset(pipe->frame_params,
->  	       0, VIDEO_MAX_FRAME *
->  	       sizeof(struct atomisp_css_params_with_list *));
-> +
-> +	return 0;
->  }
->  
->  /*
-> @@ -1085,17 +1106,25 @@ static int isp_subdev_init_entities(struct atomisp_sub_device *asd)
->  	if (ret < 0)
->  		return ret;
->  
-> -	atomisp_init_subdev_pipe(asd, &asd->video_out_preview,
-> -				 V4L2_BUF_TYPE_VIDEO_CAPTURE);
-> +	ret = atomisp_init_subdev_pipe(asd, &asd->video_out_preview,
-> +				       V4L2_BUF_TYPE_VIDEO_CAPTURE);
-> +	if (ret)
-> +		return ret;
->  
-> -	atomisp_init_subdev_pipe(asd, &asd->video_out_vf,
-> -				 V4L2_BUF_TYPE_VIDEO_CAPTURE);
-> +	ret = atomisp_init_subdev_pipe(asd, &asd->video_out_vf,
-> +				       V4L2_BUF_TYPE_VIDEO_CAPTURE);
-> +	if (ret)
-> +		return ret;
->  
-> -	atomisp_init_subdev_pipe(asd, &asd->video_out_capture,
-> -				 V4L2_BUF_TYPE_VIDEO_CAPTURE);
-> +	ret = atomisp_init_subdev_pipe(asd, &asd->video_out_capture,
-> +				       V4L2_BUF_TYPE_VIDEO_CAPTURE);
-> +	if (ret)
-> +		return ret;
->  
-> -	atomisp_init_subdev_pipe(asd, &asd->video_out_video_capture,
-> -				 V4L2_BUF_TYPE_VIDEO_CAPTURE);
-> +	ret = atomisp_init_subdev_pipe(asd, &asd->video_out_video_capture,
-> +				       V4L2_BUF_TYPE_VIDEO_CAPTURE);
-> +	if (ret)
-> +		return ret;
->  
->  	ret = atomisp_video_init(&asd->video_out_capture, "CAPTURE",
->  				 ATOMISP_RUN_MODE_STILL_CAPTURE);
-> -- 
-> 2.39.0
-> 
+Reviewed-by: Cédric Le Goater <clg@kaod.org>
 
--- 
-With Best Regards,
-Andy Shevchenko
+Thanks,
 
-
+C.
