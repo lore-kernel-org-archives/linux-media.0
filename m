@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E401C05027
-	for <linux-media@archiver.kernel.org>; Mon, 23 Jan 2023 12:54:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1524C38142
+	for <linux-media@archiver.kernel.org>; Mon, 23 Jan 2023 12:54:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231928AbjAWMyE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Jan 2023 07:54:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55316 "EHLO
+        id S231937AbjAWMyN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Jan 2023 07:54:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231918AbjAWMyD (ORCPT
+        with ESMTP id S231918AbjAWMyM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Jan 2023 07:54:03 -0500
+        Mon, 23 Jan 2023 07:54:12 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30C6144A5
-        for <linux-media@vger.kernel.org>; Mon, 23 Jan 2023 04:53:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940443A97
+        for <linux-media@vger.kernel.org>; Mon, 23 Jan 2023 04:53:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674478393;
+        s=mimecast20190719; t=1674478399;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DWIGvqnloz9zXSWVxXbHL6Et1a4eFn7QrHwwasc0GMQ=;
-        b=eYPN8KvBILC14QKdKCY5+mIzZ6B2NQO+HbttTuMhwyz9wWaea92etyB7I2dAmQI+2+km9f
-        2Ua74SbAgJqHAel7l1QZLT2u4DSbcWBUsEQfVu/wI8bU9KEe9c6H8OHhXAZnvA/ireqr52
-        rsnvDdjIYgUiTMTBaD+r7PdWSZqMxls=
+        bh=QPIEt4XoxUJhPGifff+vnGaEwfkXr7O5Vx+g3WMGvOM=;
+        b=NYlQDljPmcQuUrsvBjdEJuGkrmOjz8ekszXJmJEXHkbVuKxhN1vuJWeLOlgL9PL1jAgRzr
+        fYUzNZwVMr/ho6JU28cHQRknWv1fpMH/9dBoo+8aEEOqwn8n0sro8AivOAvGBfmOtSrEPD
+        srjEU/FX4AD0/WBEtRxMAhc9ce4zWZ8=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-439-Cvy_IqkUOp2mE4nxA5Zh-A-1; Mon, 23 Jan 2023 07:53:09 -0500
-X-MC-Unique: Cvy_IqkUOp2mE4nxA5Zh-A-1
+ us-mta-339-DvZ5yzcGPyGnkvKM4MLlpw-1; Mon, 23 Jan 2023 07:53:15 -0500
+X-MC-Unique: DvZ5yzcGPyGnkvKM4MLlpw-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 02C70858F0E;
-        Mon, 23 Jan 2023 12:53:09 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9F0AF8828C2;
+        Mon, 23 Jan 2023 12:53:14 +0000 (UTC)
 Received: from x1.localdomain.com (unknown [10.39.194.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6BF66C15BA0;
-        Mon, 23 Jan 2023 12:53:06 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5C0D9C15BA0;
+        Mon, 23 Jan 2023 12:53:12 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 21/57] media: atomisp: Remove atomisp_gmin_find_subdev()
-Date:   Mon, 23 Jan 2023 13:51:29 +0100
-Message-Id: <20230123125205.622152-22-hdegoede@redhat.com>
+Subject: [PATCH 23/57] media: atomisp: Fix WARN() when the vb2 start_streaming callback fails
+Date:   Mon, 23 Jan 2023 13:51:31 +0100
+Message-Id: <20230123125205.622152-24-hdegoede@redhat.com>
 In-Reply-To: <20230123125205.622152-1-hdegoede@redhat.com>
 References: <20230123125205.622152-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,194 +60,115 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-atomisp_gmin_find_subdev() can be used to lookup a subdev
-given its i2c-adapter + i2c-client-address.
+The videobuf2-core expects buffers to be put back in the queued state
+when the vb2 start_streaming callback fails. But the atomisp
+atomisp_flush_video_pipe() would unconditionally return them to the core
+in an error state.
 
-But the only caller of it reads this from the intel_v4l2_subdev_table
-struct and that same struct already contains a pointer to the v4l2_subdev.
+This triggers the following warning in the videobuf2-core:
 
-So this function is not necessary, drop it and modify its only caller
-to directly take the subdev from the intel_v4l2_subdev_table struct.
+drivers/media/common/videobuf2/videobuf2-core.c:1652:
+	/*
+	 * If done_list is not empty, then start_streaming() didn't call
+	 * vb2_buffer_done(vb, VB2_BUF_STATE_QUEUED) but STATE_ERROR or
+	 * STATE_DONE.
+	 */
+	WARN_ON(!list_empty(&q->done_list));
 
-Also drop struct intel_v4l2_subdev_i2c_board_info since that now no
-longer is used.
+Fix this by adding a state argument to atomisp_flush_video_pipe() and use
+VB2_BUF_STATE_QUEUED as state when atomisp_start_streaming() fails.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- .../include/linux/atomisp_gmin_platform.h     |  2 -
- .../atomisp/include/linux/atomisp_platform.h  |  6 ---
- .../media/atomisp/pci/atomisp_gmin_platform.c | 27 ----------
- .../staging/media/atomisp/pci/atomisp_v4l2.c  | 54 +++----------------
- 4 files changed, 7 insertions(+), 82 deletions(-)
+ drivers/staging/media/atomisp/pci/atomisp_cmd.c | 17 +++++++++--------
+ drivers/staging/media/atomisp/pci/atomisp_cmd.h |  3 ++-
+ .../staging/media/atomisp/pci/atomisp_ioctl.c   |  4 ++--
+ 3 files changed, 13 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/include/linux/atomisp_gmin_platform.h b/drivers/staging/media/atomisp/include/linux/atomisp_gmin_platform.h
-index 5463d11d4295..64bd54835c32 100644
---- a/drivers/staging/media/atomisp/include/linux/atomisp_gmin_platform.h
-+++ b/drivers/staging/media/atomisp/include/linux/atomisp_gmin_platform.h
-@@ -21,8 +21,6 @@
- int atomisp_register_i2c_module(struct v4l2_subdev *subdev,
- 				struct camera_sensor_platform_data *plat_data,
- 				enum intel_v4l2_subdev_type type);
--struct v4l2_subdev *atomisp_gmin_find_subdev(struct i2c_adapter *adapter,
--	struct i2c_board_info *board_info);
- int atomisp_gmin_remove_subdev(struct v4l2_subdev *sd);
- int gmin_get_var_int(struct device *dev, bool is_gmin,
- 		     const char *var, int def);
-diff --git a/drivers/staging/media/atomisp/include/linux/atomisp_platform.h b/drivers/staging/media/atomisp/include/linux/atomisp_platform.h
-index 559a497975c5..82973aa0e1eb 100644
---- a/drivers/staging/media/atomisp/include/linux/atomisp_platform.h
-+++ b/drivers/staging/media/atomisp/include/linux/atomisp_platform.h
-@@ -125,13 +125,7 @@ struct intel_v4l2_subdev_id {
- 	enum atomisp_camera_port    port;
- };
- 
--struct intel_v4l2_subdev_i2c_board_info {
--	struct i2c_board_info board_info;
--	int i2c_adapter_id;
--};
--
- struct intel_v4l2_subdev_table {
--	struct intel_v4l2_subdev_i2c_board_info v4l2_subdev;
- 	enum intel_v4l2_subdev_type type;
- 	enum atomisp_camera_port port;
- 	struct v4l2_subdev *subdev;
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-index 6116d3c62315..234088711f29 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-@@ -147,7 +147,6 @@ int atomisp_register_i2c_module(struct v4l2_subdev *subdev,
- 				enum intel_v4l2_subdev_type type)
- {
- 	int i;
--	struct i2c_board_info *bi;
- 	struct gmin_subdev *gs;
- 	struct i2c_client *client = v4l2_get_subdevdata(subdev);
- 	struct acpi_device *adev = ACPI_COMPANION(&client->dev);
-@@ -181,36 +180,10 @@ int atomisp_register_i2c_module(struct v4l2_subdev *subdev,
- 	pdata.subdevs[i].type = type;
- 	pdata.subdevs[i].port = gs->csi_port;
- 	pdata.subdevs[i].subdev = subdev;
--	pdata.subdevs[i].v4l2_subdev.i2c_adapter_id = client->adapter->nr;
--
--	/* Convert i2c_client to i2c_board_info */
--	bi = &pdata.subdevs[i].v4l2_subdev.board_info;
--	memcpy(bi->type, client->name, I2C_NAME_SIZE);
--	bi->flags = client->flags;
--	bi->addr = client->addr;
--	bi->irq = client->irq;
--	bi->platform_data = plat_data;
--
- 	return 0;
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.c b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
+index 01c9845b9f28..b9e7ad57040e 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_cmd.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
+@@ -679,7 +679,8 @@ void atomisp_buffer_done(struct ia_css_frame *frame, enum vb2_buffer_state state
+ 	vb2_buffer_done(&frame->vb.vb2_buf, state);
  }
- EXPORT_SYMBOL_GPL(atomisp_register_i2c_module);
  
--struct v4l2_subdev *atomisp_gmin_find_subdev(struct i2c_adapter *adapter,
--	struct i2c_board_info *board_info)
--{
--	int i;
--
--	for (i = 0; i < MAX_SUBDEVS && pdata.subdevs[i].type; i++) {
--		struct intel_v4l2_subdev_table *sd = &pdata.subdevs[i];
--
--		if (sd->v4l2_subdev.i2c_adapter_id == adapter->nr &&
--		    sd->v4l2_subdev.board_info.addr == board_info->addr)
--			return sd->subdev;
--	}
--	return NULL;
--}
--EXPORT_SYMBOL_GPL(atomisp_gmin_find_subdev);
--
- int atomisp_gmin_remove_subdev(struct v4l2_subdev *sd)
+-void atomisp_flush_video_pipe(struct atomisp_video_pipe *pipe, bool warn_on_css_frames)
++void atomisp_flush_video_pipe(struct atomisp_video_pipe *pipe, enum vb2_buffer_state state,
++			      bool warn_on_css_frames)
  {
- 	int i, j;
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-index 2a949d3dc5d1..ba628f7cf385 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-@@ -937,45 +937,9 @@ static int atomisp_subdev_probe(struct atomisp_device *isp)
- 	/* FIXME: should, instead, use I2C probe */
+ 	struct ia_css_frame *frame, *_frame;
+ 	unsigned long irqflags;
+@@ -689,15 +690,15 @@ void atomisp_flush_video_pipe(struct atomisp_video_pipe *pipe, bool warn_on_css_
+ 	list_for_each_entry_safe(frame, _frame, &pipe->buffers_in_css, queue) {
+ 		if (warn_on_css_frames)
+ 			dev_warn(pipe->isp->dev, "Warning: CSS frames queued on flush\n");
+-		atomisp_buffer_done(frame, VB2_BUF_STATE_ERROR);
++		atomisp_buffer_done(frame, state);
+ 	}
  
- 	for (subdevs = pdata->subdevs; subdevs->type; ++subdevs) {
--		struct v4l2_subdev *subdev;
--		struct i2c_board_info *board_info =
--			    &subdevs->v4l2_subdev.board_info;
--		struct i2c_adapter *adapter =
--		    i2c_get_adapter(subdevs->v4l2_subdev.i2c_adapter_id);
--
--		dev_info(isp->dev, "Probing Subdev %s\n", board_info->type);
--
--		if (!adapter) {
--			dev_err(isp->dev,
--				"Failed to find i2c adapter for subdev %s\n",
--				board_info->type);
--			break;
--		}
--
--		/* In G-Min, the sensor devices will already be probed
--		 * (via ACPI) and registered, do not create new
--		 * ones */
--		subdev = atomisp_gmin_find_subdev(adapter, board_info);
--		if (!subdev) {
--			dev_warn(isp->dev, "Subdev %s not found\n",
--				 board_info->type);
--			continue;
--		}
--		ret = v4l2_device_register_subdev(&isp->v4l2_dev, subdev);
--		if (ret) {
--			dev_warn(isp->dev, "Subdev %s detection fail\n",
--				 board_info->type);
-+		ret = v4l2_device_register_subdev(&isp->v4l2_dev, subdevs->subdev);
-+		if (ret)
- 			continue;
--		}
--
--		if (!subdev) {
--			dev_warn(isp->dev, "Subdev %s detection fail\n",
--				 board_info->type);
--			continue;
--		}
--
--		dev_info(isp->dev, "Subdev %s successfully register\n",
--			 board_info->type);
+ 	list_for_each_entry_safe(frame, _frame, &pipe->activeq, queue)
+-		atomisp_buffer_done(frame, VB2_BUF_STATE_ERROR);
++		atomisp_buffer_done(frame, state);
  
- 		switch (subdevs->type) {
- 		case RAW_CAMERA:
-@@ -992,7 +956,7 @@ static int atomisp_subdev_probe(struct atomisp_device *isp)
+ 	list_for_each_entry_safe(frame, _frame, &pipe->buffers_waiting_for_param, queue) {
+ 		pipe->frame_request_config_id[frame->vb.vb2_buf.index] = 0;
+-		atomisp_buffer_done(frame, VB2_BUF_STATE_ERROR);
++		atomisp_buffer_done(frame, state);
+ 	}
  
- 			isp->inputs[isp->input_cnt].type = subdevs->type;
- 			isp->inputs[isp->input_cnt].port = subdevs->port;
--			isp->inputs[isp->input_cnt].camera = subdev;
-+			isp->inputs[isp->input_cnt].camera = subdevs->subdev;
- 			isp->inputs[isp->input_cnt].sensor_index = 0;
- 			/*
- 			 * initialize the subdev frame size, then next we can
-@@ -1004,22 +968,18 @@ static int atomisp_subdev_probe(struct atomisp_device *isp)
- 			break;
- 		case CAMERA_MOTOR:
- 			if (isp->motor) {
--				dev_warn(isp->dev,
--					 "too many atomisp motors, ignored %s\n",
--					 board_info->type);
-+				dev_warn(isp->dev, "too many atomisp motors\n");
- 				continue;
- 			}
--			isp->motor = subdev;
-+			isp->motor = subdevs->subdev;
- 			break;
- 		case LED_FLASH:
- 		case XENON_FLASH:
- 			if (isp->flash) {
--				dev_warn(isp->dev,
--					 "too many atomisp flash devices, ignored %s\n",
--					 board_info->type);
-+				dev_warn(isp->dev, "too many atomisp flash devices\n");
- 				continue;
- 			}
--			isp->flash = subdev;
-+			isp->flash = subdevs->subdev;
- 			break;
- 		default:
- 			dev_dbg(isp->dev, "unknown subdev probed\n");
+ 	spin_unlock_irqrestore(&pipe->irq_lock, irqflags);
+@@ -706,10 +707,10 @@ void atomisp_flush_video_pipe(struct atomisp_video_pipe *pipe, bool warn_on_css_
+ /* Returns queued buffers back to video-core */
+ void atomisp_flush_bufs_and_wakeup(struct atomisp_sub_device *asd)
+ {
+-	atomisp_flush_video_pipe(&asd->video_out_capture, false);
+-	atomisp_flush_video_pipe(&asd->video_out_vf, false);
+-	atomisp_flush_video_pipe(&asd->video_out_preview, false);
+-	atomisp_flush_video_pipe(&asd->video_out_video_capture, false);
++	atomisp_flush_video_pipe(&asd->video_out_capture, VB2_BUF_STATE_ERROR, false);
++	atomisp_flush_video_pipe(&asd->video_out_vf, VB2_BUF_STATE_ERROR, false);
++	atomisp_flush_video_pipe(&asd->video_out_preview, VB2_BUF_STATE_ERROR, false);
++	atomisp_flush_video_pipe(&asd->video_out_video_capture, VB2_BUF_STATE_ERROR, false);
+ }
+ 
+ /* clean out the parameters that did not apply */
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.h b/drivers/staging/media/atomisp/pci/atomisp_cmd.h
+index a10577df10cb..733b9f8cd06f 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_cmd.h
++++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.h
+@@ -57,7 +57,8 @@ struct atomisp_video_pipe *atomisp_to_video_pipe(struct video_device *dev);
+ int atomisp_reset(struct atomisp_device *isp);
+ int atomisp_buffers_in_css(struct atomisp_video_pipe *pipe);
+ void atomisp_buffer_done(struct ia_css_frame *frame, enum vb2_buffer_state state);
+-void atomisp_flush_video_pipe(struct atomisp_video_pipe *pipe, bool warn_on_css_frames);
++void atomisp_flush_video_pipe(struct atomisp_video_pipe *pipe, enum vb2_buffer_state state,
++			      bool warn_on_css_frames);
+ void atomisp_flush_bufs_and_wakeup(struct atomisp_sub_device *asd);
+ void atomisp_clear_css_buffer_counters(struct atomisp_sub_device *asd);
+ 
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+index 77856cbc5ba7..c15bb0b7458b 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+@@ -1339,7 +1339,7 @@ int atomisp_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 
+ 	ret = atomisp_css_start(asd, css_pipe_id, false);
+ 	if (ret) {
+-		atomisp_flush_video_pipe(pipe, true);
++		atomisp_flush_video_pipe(pipe, VB2_BUF_STATE_QUEUED, true);
+ 		goto out_unlock;
+ 	}
+ 
+@@ -1515,7 +1515,7 @@ void atomisp_stop_streaming(struct vb2_queue *vq)
+ 	css_pipe_id = atomisp_get_css_pipe_id(asd);
+ 	atomisp_css_stop(asd, css_pipe_id, false);
+ 
+-	atomisp_flush_video_pipe(pipe, true);
++	atomisp_flush_video_pipe(pipe, VB2_BUF_STATE_ERROR, true);
+ 
+ 	atomisp_subdev_cleanup_pending_events(asd);
+ stopsensor:
 -- 
 2.39.0
 
