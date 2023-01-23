@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC2ADC05027
-	for <linux-media@archiver.kernel.org>; Mon, 23 Jan 2023 12:55:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 378B7C05027
+	for <linux-media@archiver.kernel.org>; Mon, 23 Jan 2023 12:55:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231911AbjAWMzY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Jan 2023 07:55:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56630 "EHLO
+        id S232035AbjAWMz0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Jan 2023 07:55:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbjAWMzV (ORCPT
+        with ESMTP id S231807AbjAWMzZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Jan 2023 07:55:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB043A97
-        for <linux-media@vger.kernel.org>; Mon, 23 Jan 2023 04:54:27 -0800 (PST)
+        Mon, 23 Jan 2023 07:55:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC3F14E9F
+        for <linux-media@vger.kernel.org>; Mon, 23 Jan 2023 04:54:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674478467;
+        s=mimecast20190719; t=1674478481;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ML8PPYOy7vUfhVzDFptP9dbDSTMZ35faMjijsVcT0Rk=;
-        b=Ddw5XoTzgyHKZBsi67Ndl/UWD236PY1xW/s/Zhx/P0+tmzLXm2BaXBKj7EnIT2Mai9zPOL
-        xdV2T+2O/XCWgzJpMONbk4rm/QXaK5Yy1Jcmnhcu7QsWRIp2fIPN7uFWcaoYfxGgbYbm/a
-        +gFuEyf7+Msp/Rk5I/l/m4XTTAoTIkc=
+        bh=UtOK/HWNZH+qL5ZXF+cCXTlQOh44nlku8hLbqoDJs4U=;
+        b=JhViXGEuX3jBpG1FCvBFt9e2B1irSiUPbNMW2DKWfPNkpxf/f7J8t6QWPZj3sjEWWDK1gt
+        hmxSc+RBKkgzTKJpWoZjZyAdtz8LIOBtW2xv6v76jIMNOtARFKErW+Qe7meghDZGwXlBnP
+        A1G0MOZ0dyrUDkbh5a8YxRXDLG5oV44=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-74-Bxho3K-bNnWEgMBMbQ9Zbw-1; Mon, 23 Jan 2023 07:54:22 -0500
-X-MC-Unique: Bxho3K-bNnWEgMBMbQ9Zbw-1
+ us-mta-119-gnPVpXcyMHKmqk_mYeCRYw-1; Mon, 23 Jan 2023 07:54:35 -0500
+X-MC-Unique: gnPVpXcyMHKmqk_mYeCRYw-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 39B3E101AA78;
-        Mon, 23 Jan 2023 12:54:22 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 38B6785A588;
+        Mon, 23 Jan 2023 12:54:35 +0000 (UTC)
 Received: from x1.localdomain.com (unknown [10.39.194.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AE924C15BA0;
-        Mon, 23 Jan 2023 12:54:19 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 15DA3C15BA0;
+        Mon, 23 Jan 2023 12:54:32 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 44/57] media: atomisp: ov2680: Consistently indent define values
-Date:   Mon, 23 Jan 2023 13:51:52 +0100
-Message-Id: <20230123125205.622152-45-hdegoede@redhat.com>
+Subject: [PATCH 49/57] media: atomisp: ov2680: Use devm_kzalloc() for sensor data struct
+Date:   Mon, 23 Jan 2023 13:51:57 +0100
+Message-Id: <20230123125205.622152-50-hdegoede@redhat.com>
 In-Reply-To: <20230123125205.622152-1-hdegoede@redhat.com>
 References: <20230123125205.622152-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,86 +60,80 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the same indentation level for all #define values.
+Use devm_kzalloc() to allocate the sensor data struct. It is always free-ed
+as the last step of probe-error-exit or remove, so it can be devm-managed.
+
+This will make unwinding things easier when support is added to the ov2680
+code to use standard GPIO APIs instead of the custom atomisp_gmin code.
+
+This also allows dropping the out_free label and use direct return
+on errors.
+
+This may seem like a functional change since the out_free label also
+did a v4l2_device_unregister_subdev() but at the 2 changed returns
+the device is not registered yet, so that always is a no-op and can
+be dropped.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/staging/media/atomisp/i2c/ov2680.h | 36 +++++++++++-----------
- 1 file changed, 18 insertions(+), 18 deletions(-)
+ .../staging/media/atomisp/i2c/atomisp-ov2680.c   | 16 ++++------------
+ 1 file changed, 4 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/i2c/ov2680.h b/drivers/staging/media/atomisp/i2c/ov2680.h
-index 5aa46f669715..f0641dd611c3 100644
---- a/drivers/staging/media/atomisp/i2c/ov2680.h
-+++ b/drivers/staging/media/atomisp/i2c/ov2680.h
-@@ -44,10 +44,10 @@
- /* If possible send 16 extra rows / lines to the ISP as padding */
- #define OV2680_END_MARGIN			16
+diff --git a/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c b/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
+index 5f26508a1e5a..2b4673092b6a 100644
+--- a/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
++++ b/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
+@@ -780,7 +780,6 @@ static void ov2680_remove(struct i2c_client *client)
+ 	media_entity_cleanup(&sensor->sd.entity);
+ 	v4l2_ctrl_handler_free(&sensor->ctrls.handler);
+ 	pm_runtime_disable(&client->dev);
+-	kfree(sensor);
+ }
  
--#define OV2680_FOCAL_LENGTH_NUM	334	/*3.34mm*/
-+#define OV2680_FOCAL_LENGTH_NUM			334	/*3.34mm*/
+ static int ov2680_probe(struct i2c_client *client)
+@@ -789,7 +788,7 @@ static int ov2680_probe(struct i2c_client *client)
+ 	int ret;
+ 	void *pdata;
  
--#define OV2680_INTEGRATION_TIME_MARGIN	8
--#define OV2680_ID	0x2680
-+#define OV2680_INTEGRATION_TIME_MARGIN		8
-+#define OV2680_ID				0x2680
+-	sensor = kzalloc(sizeof(*sensor), GFP_KERNEL);
++	sensor = devm_kzalloc(&client->dev, sizeof(*sensor), GFP_KERNEL);
+ 	if (!sensor)
+ 		return -ENOMEM;
  
- /*
-  * OV2680 System control registers
-@@ -61,23 +61,23 @@
- #define OV2680_SC_CMMN_SCCB_ID			0x302B /* 0x300C*/
- #define OV2680_SC_CMMN_SUB_ID			0x302A /* process, version*/
+@@ -801,10 +800,8 @@ static int ov2680_probe(struct i2c_client *client)
+ 	pdata = gmin_camera_platform_data(&sensor->sd,
+ 					  ATOMISP_INPUT_FORMAT_RAW_10,
+ 					  atomisp_bayer_order_bggr);
+-	if (!pdata) {
+-		ret = -EINVAL;
+-		goto out_free;
+-	}
++	if (!pdata)
++		return -EINVAL;
  
--#define OV2680_GROUP_ACCESS							0x3208 /*Bit[7:4] Group control, Bit[3:0] Group ID*/
-+#define OV2680_GROUP_ACCESS			0x3208 /*Bit[7:4] Group control, Bit[3:0] Group ID*/
+ 	pm_runtime_set_suspended(&client->dev);
+ 	pm_runtime_enable(&client->dev);
+@@ -813,7 +810,7 @@ static int ov2680_probe(struct i2c_client *client)
  
- #define OV2680_REG_EXPOSURE_PK_HIGH		0x3500
- #define OV2680_REG_GAIN_PK			0x350a
+ 	ret = ov2680_s_config(&sensor->sd, client->irq, pdata);
+ 	if (ret)
+-		goto out_free;
++		return ret;
  
--#define OV2680_HORIZONTAL_START_H					0x3800 /*Bit[11:8]*/
--#define OV2680_HORIZONTAL_START_L					0x3801 /*Bit[7:0]*/
--#define OV2680_VERTICAL_START_H						0x3802 /*Bit[11:8]*/
--#define OV2680_VERTICAL_START_L						0x3803 /*Bit[7:0]*/
--#define OV2680_HORIZONTAL_END_H						0x3804 /*Bit[11:8]*/
--#define OV2680_HORIZONTAL_END_L						0x3805 /*Bit[7:0]*/
--#define OV2680_VERTICAL_END_H						0x3806 /*Bit[11:8]*/
--#define OV2680_VERTICAL_END_L						0x3807 /*Bit[7:0]*/
--#define OV2680_HORIZONTAL_OUTPUT_SIZE_H				0x3808 /*Bit[3:0]*/
--#define OV2680_HORIZONTAL_OUTPUT_SIZE_L				0x3809 /*Bit[7:0]*/
--#define OV2680_VERTICAL_OUTPUT_SIZE_H				0x380a /*Bit[3:0]*/
--#define OV2680_VERTICAL_OUTPUT_SIZE_L				0x380b /*Bit[7:0]*/
-+#define OV2680_HORIZONTAL_START_H		0x3800 /*Bit[11:8]*/
-+#define OV2680_HORIZONTAL_START_L		0x3801 /*Bit[7:0]*/
-+#define OV2680_VERTICAL_START_H			0x3802 /*Bit[11:8]*/
-+#define OV2680_VERTICAL_START_L			0x3803 /*Bit[7:0]*/
-+#define OV2680_HORIZONTAL_END_H			0x3804 /*Bit[11:8]*/
-+#define OV2680_HORIZONTAL_END_L			0x3805 /*Bit[7:0]*/
-+#define OV2680_VERTICAL_END_H			0x3806 /*Bit[11:8]*/
-+#define OV2680_VERTICAL_END_L			0x3807 /*Bit[7:0]*/
-+#define OV2680_HORIZONTAL_OUTPUT_SIZE_H		0x3808 /*Bit[3:0]*/
-+#define OV2680_HORIZONTAL_OUTPUT_SIZE_L		0x3809 /*Bit[7:0]*/
-+#define OV2680_VERTICAL_OUTPUT_SIZE_H		0x380a /*Bit[3:0]*/
-+#define OV2680_VERTICAL_OUTPUT_SIZE_L		0x380b /*Bit[7:0]*/
- #define OV2680_HTS_H				0x380c
- #define OV2680_HTS_L				0x380d
- #define OV2680_VTS_H				0x380e
-@@ -89,7 +89,7 @@
- #define OV2680_X_INC				0x3814
- #define OV2680_Y_INC				0x3815
+ 	sensor->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+ 	sensor->pad.flags = MEDIA_PAD_FL_SOURCE;
+@@ -840,11 +837,6 @@ static int ov2680_probe(struct i2c_client *client)
+ 	}
  
--#define OV2680_FRAME_OFF_NUM						0x4202
-+#define OV2680_FRAME_OFF_NUM			0x4202
+ 	return 0;
+-out_free:
+-	dev_dbg(&client->dev, "+++ out free\n");
+-	v4l2_device_unregister_subdev(&sensor->sd);
+-	kfree(sensor);
+-	return ret;
+ }
  
- /*Flip/Mirror*/
- #define OV2680_REG_FORMAT1			0x3820
-@@ -98,7 +98,7 @@
- #define OV2680_MWB_RED_GAIN_H			0x5004/*0x3400*/
- #define OV2680_MWB_GREEN_GAIN_H			0x5006/*0x3402*/
- #define OV2680_MWB_BLUE_GAIN_H			0x5008/*0x3404*/
--#define OV2680_MWB_GAIN_MAX				0x0fff
-+#define OV2680_MWB_GAIN_MAX			0x0fff
- 
- #define OV2680_REG_ISP_CTRL00			0x5080
- 
+ static int ov2680_suspend(struct device *dev)
 -- 
 2.39.0
 
