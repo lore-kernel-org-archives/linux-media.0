@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF315C54E94
-	for <linux-media@archiver.kernel.org>; Mon, 23 Jan 2023 12:53:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6EFDC54EB4
+	for <linux-media@archiver.kernel.org>; Mon, 23 Jan 2023 12:53:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbjAWMxl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S231921AbjAWMxl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 23 Jan 2023 07:53:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231917AbjAWMxk (ORCPT
+        with ESMTP id S231918AbjAWMxk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 23 Jan 2023 07:53:40 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA17310252
-        for <linux-media@vger.kernel.org>; Mon, 23 Jan 2023 04:52:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1177B10418
+        for <linux-media@vger.kernel.org>; Mon, 23 Jan 2023 04:53:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674478374;
+        s=mimecast20190719; t=1674478380;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=eJveKrkYDrKereox+XfsOm3RlJxwF6382gp5GwfBtxo=;
-        b=VU2piMFR8GINRvBuMrlgtFE80omJ8wGTvwm5S7rm5K+t1+8EAFI/N+DzNAbsqPPHGJRxiy
-        p1K0vXDHijJ25UYpKiEeyPLS3iwO81bB8jgQiQbkioDZoFhGyPXYE30IaAuUxrRLhAefq6
-        gDOLSM/9jjuwQwTGJK9mg/jI7sxT17Y=
+        bh=VrU0rsbYpaz4Bk5O8TbzzS2vAsX/4ylVYGmmg72h8no=;
+        b=eZ/qNpwlaj9Kj//LmpmOVChAnn7CF42DLT9kr5eXRvfjJk6bt9B9JMc1xlpKDiAX7xebDA
+        BA8OM9EpOTMFF/CJI5aBY6/S/qM2Lnnjg2cutrpqHKwVMz+BxKsOBVIWEIG8vHn8qq6FnW
+        Bu6B+Eu8qiVbPJAr5vn6szOWU6xpDR0=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-546-e4Jo5s5COL23bias47BpKw-1; Mon, 23 Jan 2023 07:52:50 -0500
-X-MC-Unique: e4Jo5s5COL23bias47BpKw-1
+ us-mta-100-5Kxs0s22NKuGO036itcfUw-1; Mon, 23 Jan 2023 07:52:55 -0500
+X-MC-Unique: 5Kxs0s22NKuGO036itcfUw-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2A40018A6465;
-        Mon, 23 Jan 2023 12:52:50 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4807418A6460;
+        Mon, 23 Jan 2023 12:52:55 +0000 (UTC)
 Received: from x1.localdomain.com (unknown [10.39.194.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E20CFC15BA0;
-        Mon, 23 Jan 2023 12:52:47 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C8AD9C15BAD;
+        Mon, 23 Jan 2023 12:52:52 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 14/57] media: atomisp: Check buffer index is in range inside atomisp_qbuf_wrapper()
-Date:   Mon, 23 Jan 2023 13:51:22 +0100
-Message-Id: <20230123125205.622152-15-hdegoede@redhat.com>
+Subject: [PATCH 16/57] media: atomisp: Remove unnecessary memset(foo, 0, sizeof(foo)) calls
+Date:   Mon, 23 Jan 2023 13:51:24 +0100
+Message-Id: <20230123125205.622152-17-hdegoede@redhat.com>
 In-Reply-To: <20230123125205.622152-1-hdegoede@redhat.com>
 References: <20230123125205.622152-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,28 +60,31 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Check buffer index is in range inside atomisp_qbuf_wrapper() before
-using it do index pipe->frame_request_config_id[].
+The memory for all of struct atomisp_video_pipe is kzalloc()-ed in
+atomisp_subdev_init() so there is no need to memset parts of
+struct atomisp_video_pipe to 0.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/staging/media/atomisp/pci/atomisp_ioctl.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/staging/media/atomisp/pci/atomisp_subdev.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-index 9cb9685d91bb..d0dd3dbd6f6a 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-@@ -1056,6 +1056,9 @@ static int atomisp_qbuf_wrapper(struct file *file, void *fh, struct v4l2_buffer
- 	struct atomisp_video_pipe *pipe = atomisp_to_video_pipe(vdev);
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_subdev.c b/drivers/staging/media/atomisp/pci/atomisp_subdev.c
+index c32db4ffb778..eb8f319fca5c 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_subdev.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_subdev.c
+@@ -1054,11 +1054,6 @@ static int atomisp_init_subdev_pipe(struct atomisp_sub_device *asd,
+ 	INIT_LIST_HEAD(&pipe->activeq);
+ 	INIT_LIST_HEAD(&pipe->buffers_waiting_for_param);
+ 	INIT_LIST_HEAD(&pipe->per_frame_params);
+-	memset(pipe->frame_request_config_id,
+-	       0, VIDEO_MAX_FRAME * sizeof(unsigned int));
+-	memset(pipe->frame_params,
+-	       0, VIDEO_MAX_FRAME *
+-	       sizeof(struct atomisp_css_params_with_list *));
  
- 	/* FIXME this abuse of buf->reserved2 comes from the original atomisp buffer handling */
-+	if (buf->index >= vdev->queue->num_buffers)
-+		return -EINVAL;
-+
- 	if (!atomisp_is_vf_pipe(pipe) &&
- 	    (buf->reserved2 & ATOMISP_BUFFER_HAS_PER_FRAME_SETTING)) {
- 		/* this buffer will have a per-frame parameter */
+ 	return 0;
+ }
 -- 
 2.39.0
 
