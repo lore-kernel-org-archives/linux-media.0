@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06E19C54EB4
-	for <linux-media@archiver.kernel.org>; Mon, 23 Jan 2023 12:53:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBA1FC38142
+	for <linux-media@archiver.kernel.org>; Mon, 23 Jan 2023 12:53:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231911AbjAWMxe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Jan 2023 07:53:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55108 "EHLO
+        id S231913AbjAWMxk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Jan 2023 07:53:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231899AbjAWMxc (ORCPT
+        with ESMTP id S231894AbjAWMxi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Jan 2023 07:53:32 -0500
+        Mon, 23 Jan 2023 07:53:38 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5586610242
-        for <linux-media@vger.kernel.org>; Mon, 23 Jan 2023 04:52:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4141027C
+        for <linux-media@vger.kernel.org>; Mon, 23 Jan 2023 04:52:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674478371;
+        s=mimecast20190719; t=1674478376;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rGCS+K6zqHpgeB9hHHezw2+r4hjhsEXXusi0+AjRFw0=;
-        b=YKLQpuNxBgpaQrtiO5gosDkT30RYur5cEt7v0HKjQBkrkVkJd+tI22LRnc1OuUvg92o9UP
-        bDc0nUv7Z8gGrgeSToEsRBj3iXx1mRyIZMeevvugUSxB4Wc/Y/7iynfFuyRKBj/ppQADrC
-        mT52yYCdNHutWAAgmQzIXkZt5crP7us=
+        bh=LZl5g5bTsbEcUO7RlARIfpvblLUPRXnsn+7DSKyKHqA=;
+        b=R/Nj8JEPvUpBKU4+QnL7PIueT5KLos4rLs+hOjK3HwXKcrDWCKe2YU/EzUvroh6MWLVg1m
+        HHlos+94fyLwSeMzMXG6QJxWELxCpwVXYwq6Z3ZlR6BKrcj21fAOy9zMtGTpXpiJWZRSZj
+        oc3lMiqB1J704aqZk4xIDorVnBk6KJE=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-267-wm9qY1mSOAGcz0YugzEbrg-1; Mon, 23 Jan 2023 07:52:48 -0500
-X-MC-Unique: wm9qY1mSOAGcz0YugzEbrg-1
+ us-mta-623-igM7pXy2P-Om6fAICfQKCw-1; Mon, 23 Jan 2023 07:52:53 -0500
+X-MC-Unique: igM7pXy2P-Om6fAICfQKCw-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 95F89811E6E;
-        Mon, 23 Jan 2023 12:52:47 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6797D8030A0;
+        Mon, 23 Jan 2023 12:52:52 +0000 (UTC)
 Received: from x1.localdomain.com (unknown [10.39.194.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EB5EFC15BA0;
-        Mon, 23 Jan 2023 12:52:44 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8A386C15BAE;
+        Mon, 23 Jan 2023 12:52:50 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 13/57] media: atomisp: Remove deferred firmware loading support
-Date:   Mon, 23 Jan 2023 13:51:21 +0100
-Message-Id: <20230123125205.622152-14-hdegoede@redhat.com>
+Subject: [PATCH 15/57] media: atomisp: Drop atomisp_init_pipe()
+Date:   Mon, 23 Jan 2023 13:51:23 +0100
+Message-Id: <20230123125205.622152-16-hdegoede@redhat.com>
 In-Reply-To: <20230123125205.622152-1-hdegoede@redhat.com>
 References: <20230123125205.622152-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,142 +60,201 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Make atomisp behave like any othet drivers and have it load the firmware
-at probe time (as it was already doing by default).
+atomisp_init_pipe() does 3 things:
 
-The deferred firmware loading support needlessly complicates the
-v4l2_file_operations.open callback (atomisp_open()), getting in
-the way of allowing multiple opens like a normal v4l2 device would.
+1. Init a bunch of list-heads / locks
+2. Init the vb_queue for the videodev (aka pipe)
+3. zero the per-frame parameters related variables of the pipe
+
+1. and 2. really should not be done at file-open time, but once at probe.
+Currently the code is getting away with doing this on every videodev-open
+because only 1 open is allowed at a time.
+
+1. is already done at probe time by atomisp_init_subdev_pipe(), move 2. to
+atomisp_init_subdev_pipe() so that it is also done once at probe.
+
+As for 3. The per-frame parameters can only be set from a qbuf ioctl,
+which can only happen after a reqbufs ioctl and atomisp_buf_cleanup
+already zeros the per-frame parameters when the buffers are released,
+so 3. is not necessary at all.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- .../staging/media/atomisp/pci/atomisp_fops.c  | 25 -----------
- .../staging/media/atomisp/pci/atomisp_fops.h  |  2 -
- .../staging/media/atomisp/pci/atomisp_v4l2.c  | 42 +++++++------------
- 3 files changed, 14 insertions(+), 55 deletions(-)
+ .../staging/media/atomisp/pci/atomisp_fops.c  | 40 +--------------
+ .../staging/media/atomisp/pci/atomisp_fops.h  |  1 +
+ .../media/atomisp/pci/atomisp_subdev.c        | 49 +++++++++++++++----
+ 3 files changed, 41 insertions(+), 49 deletions(-)
 
 diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-index 682239ea042f..036ad339b344 100644
+index 036ad339b344..7f4934ff9cab 100644
 --- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
 +++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-@@ -757,25 +757,6 @@ static int atomisp_open(struct file *file)
- 	mutex_lock(&isp->mutex);
+@@ -624,7 +624,7 @@ static void atomisp_buf_cleanup(struct vb2_buffer *vb)
+ 	hmm_free(frame->data);
+ }
  
- 	asd->subdev.devnode = vdev;
--	/* Deferred firmware loading case. */
--	if (isp->css_env.isp_css_fw.bytes == 0) {
--		dev_err(isp->dev, "Deferred firmware load.\n");
--		isp->firmware = atomisp_load_firmware(isp);
--		if (!isp->firmware) {
--			dev_err(isp->dev, "Failed to load ISP firmware.\n");
--			ret = -ENOENT;
--			goto error;
--		}
--		ret = atomisp_css_load_firmware(isp);
--		if (ret) {
--			dev_err(isp->dev, "Failed to init css.\n");
--			goto error;
--		}
--		/* No need to keep FW in memory anymore. */
--		release_firmware(isp->firmware);
--		isp->firmware = NULL;
--		isp->css_env.isp_css_fw.data = NULL;
--	}
+-static const struct vb2_ops atomisp_vb2_ops = {
++const struct vb2_ops atomisp_vb2_ops = {
+ 	.queue_setup		= atomisp_queue_setup,
+ 	.buf_init		= atomisp_buf_init,
+ 	.buf_cleanup		= atomisp_buf_cleanup,
+@@ -633,40 +633,6 @@ static const struct vb2_ops atomisp_vb2_ops = {
+ 	.stop_streaming		= atomisp_stop_streaming,
+ };
  
- 	if (!isp->input_cnt) {
- 		dev_err(isp->dev, "no camera attached\n");
-@@ -901,12 +882,6 @@ static int atomisp_release(struct file *file)
- 
- 	atomisp_destroy_pipes_stream_force(asd);
- 
--	if (defer_fw_load) {
--		ia_css_unload_firmware();
--		isp->css_env.isp_css_fw.data = NULL;
--		isp->css_env.isp_css_fw.bytes = 0;
--	}
+-static int atomisp_init_pipe(struct atomisp_video_pipe *pipe)
+-{
+-	int ret;
 -
- 	ret = v4l2_subdev_call(isp->flash, core, s_power, 0);
- 	if (ret < 0 && ret != -ENODEV && ret != -ENOIOCTLCMD)
- 		dev_warn(isp->dev, "Failed to power-off flash\n");
+-	/* init locks */
+-	spin_lock_init(&pipe->irq_lock);
+-	mutex_init(&pipe->vb_queue_mutex);
+-
+-	/* Init videobuf2 queue structure */
+-	pipe->vb_queue.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+-	pipe->vb_queue.io_modes = VB2_MMAP | VB2_USERPTR;
+-	pipe->vb_queue.buf_struct_size = sizeof(struct ia_css_frame);
+-	pipe->vb_queue.ops = &atomisp_vb2_ops;
+-	pipe->vb_queue.mem_ops = &vb2_vmalloc_memops;
+-	pipe->vb_queue.timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
+-	ret = vb2_queue_init(&pipe->vb_queue);
+-	if (ret)
+-		return ret;
+-
+-	pipe->vdev.queue = &pipe->vb_queue;
+-	pipe->vdev.queue->lock = &pipe->vb_queue_mutex;
+-
+-	INIT_LIST_HEAD(&pipe->activeq);
+-	INIT_LIST_HEAD(&pipe->buffers_waiting_for_param);
+-	INIT_LIST_HEAD(&pipe->per_frame_params);
+-	memset(pipe->frame_request_config_id, 0,
+-	       VIDEO_MAX_FRAME * sizeof(unsigned int));
+-	memset(pipe->frame_params, 0,
+-	       VIDEO_MAX_FRAME *
+-	       sizeof(struct atomisp_css_params_with_list *));
+-
+-	return 0;
+-}
+-
+ static void atomisp_dev_init_struct(struct atomisp_device *isp)
+ {
+ 	unsigned int i;
+@@ -773,10 +739,6 @@ static int atomisp_open(struct file *file)
+ 		return -EBUSY;
+ 	}
+ 
+-	ret = atomisp_init_pipe(pipe);
+-	if (ret)
+-		goto error;
+-
+ 	if (atomisp_dev_users(isp)) {
+ 		dev_dbg(isp->dev, "skip init isp in open\n");
+ 		goto init_subdev;
 diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.h b/drivers/staging/media/atomisp/pci/atomisp_fops.h
-index 10e43126b693..2efc5245e571 100644
+index 2efc5245e571..883c1851c1c9 100644
 --- a/drivers/staging/media/atomisp/pci/atomisp_fops.h
 +++ b/drivers/staging/media/atomisp/pci/atomisp_fops.h
-@@ -33,6 +33,4 @@ int atomisp_qbuffers_to_css(struct atomisp_sub_device *asd);
+@@ -31,6 +31,7 @@ unsigned int atomisp_sub_dev_users(struct atomisp_sub_device *asd);
  
+ int atomisp_qbuffers_to_css(struct atomisp_sub_device *asd);
+ 
++extern const struct vb2_ops atomisp_vb2_ops;
  extern const struct v4l2_file_operations atomisp_fops;
  
--extern bool defer_fw_load;
--
  #endif /* __ATOMISP_FOPS_H__ */
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-index aa05c69a5c6b..2a949d3dc5d1 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-@@ -58,12 +58,6 @@ static uint skip_fwload;
- module_param(skip_fwload, uint, 0644);
- MODULE_PARM_DESC(skip_fwload, "Skip atomisp firmware load");
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_subdev.c b/drivers/staging/media/atomisp/pci/atomisp_subdev.c
+index fc9e07bf63ae..c32db4ffb778 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_subdev.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_subdev.c
+@@ -25,9 +25,11 @@
  
--/* memory optimization: deferred firmware loading */
--bool defer_fw_load;
--module_param(defer_fw_load, bool, 0644);
--MODULE_PARM_DESC(defer_fw_load,
--		 "Defer FW loading until device is opened (default:disable)");
--
- /* cross componnet debug message flag */
- int dbg_level;
- module_param(dbg_level, int, 0644);
-@@ -1514,21 +1508,17 @@ static int atomisp_pci_probe(struct pci_dev *pdev, const struct pci_device_id *i
- 	isp->max_isr_latency = ATOMISP_MAX_ISR_LATENCY;
+ #include <media/v4l2-event.h>
+ #include <media/v4l2-mediabus.h>
++#include <media/videobuf2-vmalloc.h>
+ #include "atomisp_cmd.h"
+ #include "atomisp_common.h"
+ #include "atomisp_compat.h"
++#include "atomisp_fops.h"
+ #include "atomisp_internal.h"
  
- 	/* Load isp firmware from user space */
--	if (!defer_fw_load) {
--		isp->firmware = atomisp_load_firmware(isp);
--		if (!isp->firmware) {
--			err = -ENOENT;
--			dev_dbg(&pdev->dev, "Firmware load failed\n");
--			goto load_fw_fail;
--		}
-+	isp->firmware = atomisp_load_firmware(isp);
-+	if (!isp->firmware) {
-+		err = -ENOENT;
-+		dev_dbg(&pdev->dev, "Firmware load failed\n");
-+		goto load_fw_fail;
-+	}
+ const struct atomisp_in_fmt_conv atomisp_in_fmt_conv[] = {
+@@ -1023,14 +1025,31 @@ static const struct v4l2_ctrl_config ctrl_depth_mode = {
+ 	.def = 0,
+ };
  
--		err = sh_css_check_firmware_version(isp->dev, isp->firmware->data);
--		if (err) {
--			dev_dbg(&pdev->dev, "Firmware version check failed\n");
--			goto fw_validation_fail;
--		}
--	} else {
--		dev_info(&pdev->dev, "Firmware load will be deferred\n");
-+	err = sh_css_check_firmware_version(isp->dev, isp->firmware->data);
-+	if (err) {
-+		dev_dbg(&pdev->dev, "Firmware version check failed\n");
-+		goto fw_validation_fail;
- 	}
+-static void atomisp_init_subdev_pipe(struct atomisp_sub_device *asd,
+-				     struct atomisp_video_pipe *pipe, enum v4l2_buf_type buf_type)
++static int atomisp_init_subdev_pipe(struct atomisp_sub_device *asd,
++				    struct atomisp_video_pipe *pipe, enum v4l2_buf_type buf_type)
+ {
++	int ret;
++
+ 	pipe->type = buf_type;
+ 	pipe->asd = asd;
+ 	pipe->isp = asd->isp;
+ 	spin_lock_init(&pipe->irq_lock);
+ 	mutex_init(&pipe->vb_queue_mutex);
++
++	/* Init videobuf2 queue structure */
++	pipe->vb_queue.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
++	pipe->vb_queue.io_modes = VB2_MMAP | VB2_USERPTR;
++	pipe->vb_queue.buf_struct_size = sizeof(struct ia_css_frame);
++	pipe->vb_queue.ops = &atomisp_vb2_ops;
++	pipe->vb_queue.mem_ops = &vb2_vmalloc_memops;
++	pipe->vb_queue.timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
++	ret = vb2_queue_init(&pipe->vb_queue);
++	if (ret)
++		return ret;
++
++	pipe->vdev.queue = &pipe->vb_queue;
++	pipe->vdev.queue->lock = &pipe->vb_queue_mutex;
++
+ 	INIT_LIST_HEAD(&pipe->buffers_in_css);
+ 	INIT_LIST_HEAD(&pipe->activeq);
+ 	INIT_LIST_HEAD(&pipe->buffers_waiting_for_param);
+@@ -1040,6 +1059,8 @@ static void atomisp_init_subdev_pipe(struct atomisp_sub_device *asd,
+ 	memset(pipe->frame_params,
+ 	       0, VIDEO_MAX_FRAME *
+ 	       sizeof(struct atomisp_css_params_with_list *));
++
++	return 0;
+ }
  
- 	pci_set_master(pdev);
-@@ -1628,14 +1618,10 @@ static int atomisp_pci_probe(struct pci_dev *pdev, const struct pci_device_id *i
- 	}
+ /*
+@@ -1085,17 +1106,25 @@ static int isp_subdev_init_entities(struct atomisp_sub_device *asd)
+ 	if (ret < 0)
+ 		return ret;
  
- 	/* Load firmware into ISP memory */
--	if (!defer_fw_load) {
--		err = atomisp_css_load_firmware(isp);
--		if (err) {
--			dev_err(&pdev->dev, "Failed to init css.\n");
--			goto css_init_fail;
--		}
--	} else {
--		dev_dbg(&pdev->dev, "Skip css init.\n");
-+	err = atomisp_css_load_firmware(isp);
-+	if (err) {
-+		dev_err(&pdev->dev, "Failed to init css.\n");
-+		goto css_init_fail;
- 	}
- 	/* Clear FW image from memory */
- 	release_firmware(isp->firmware);
+-	atomisp_init_subdev_pipe(asd, &asd->video_out_preview,
+-				 V4L2_BUF_TYPE_VIDEO_CAPTURE);
++	ret = atomisp_init_subdev_pipe(asd, &asd->video_out_preview,
++				       V4L2_BUF_TYPE_VIDEO_CAPTURE);
++	if (ret)
++		return ret;
+ 
+-	atomisp_init_subdev_pipe(asd, &asd->video_out_vf,
+-				 V4L2_BUF_TYPE_VIDEO_CAPTURE);
++	ret = atomisp_init_subdev_pipe(asd, &asd->video_out_vf,
++				       V4L2_BUF_TYPE_VIDEO_CAPTURE);
++	if (ret)
++		return ret;
+ 
+-	atomisp_init_subdev_pipe(asd, &asd->video_out_capture,
+-				 V4L2_BUF_TYPE_VIDEO_CAPTURE);
++	ret = atomisp_init_subdev_pipe(asd, &asd->video_out_capture,
++				       V4L2_BUF_TYPE_VIDEO_CAPTURE);
++	if (ret)
++		return ret;
+ 
+-	atomisp_init_subdev_pipe(asd, &asd->video_out_video_capture,
+-				 V4L2_BUF_TYPE_VIDEO_CAPTURE);
++	ret = atomisp_init_subdev_pipe(asd, &asd->video_out_video_capture,
++				       V4L2_BUF_TYPE_VIDEO_CAPTURE);
++	if (ret)
++		return ret;
+ 
+ 	ret = atomisp_video_init(&asd->video_out_capture, "CAPTURE",
+ 				 ATOMISP_RUN_MODE_STILL_CAPTURE);
 -- 
 2.39.0
 
