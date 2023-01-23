@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05002C05027
-	for <linux-media@archiver.kernel.org>; Mon, 23 Jan 2023 12:55:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE60DC05027
+	for <linux-media@archiver.kernel.org>; Mon, 23 Jan 2023 12:55:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231970AbjAWMzp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Jan 2023 07:55:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56212 "EHLO
+        id S231978AbjAWMzw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Jan 2023 07:55:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231909AbjAWMzo (ORCPT
+        with ESMTP id S231976AbjAWMzu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Jan 2023 07:55:44 -0500
+        Mon, 23 Jan 2023 07:55:50 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0099038
-        for <linux-media@vger.kernel.org>; Mon, 23 Jan 2023 04:54:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23D912050
+        for <linux-media@vger.kernel.org>; Mon, 23 Jan 2023 04:55:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674478493;
+        s=mimecast20190719; t=1674478503;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=bdIXTawJTduh811KfBvk9GD+FMR9V4IQSL778HiVQ6c=;
-        b=VZRY/hmkxSZ3WgPdMaA4VyenYrT0HM6ByvUZ7l7DW1c+EDgC96EKnjUOAxJ3exAoOQGWwa
-        fb68IpMAx+ffY3fqatKKS1Rlq/PsXmEaRrvXKF4s/psc6dA5oXiYr5ZQoFXXmPL8uec05i
-        3I1GWr+7Phh47Hb/Ay1hohcHM6z8QAE=
+        bh=16MnBMk2IU1/t2ec244aWVhCzqiNnyAcC3F8mtqfB38=;
+        b=Cq/O8uceICOs9KP1BXt3HK3Y9x8OJnPs3zfRFbYHVeFriC9hRy7bv1ppvjMyIZUcKrNKGf
+        7HV8T8hhyQqNleXDDlVXU+9Uu2239cym0RJBINwxiK0Gzb+Y+dsu1W2gwinuKa8id9cfMZ
+        uP45HvvytpLPFuahkEu1nNuNFudCDxw=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-202--ah8cFJbMEqYJcME93wuJA-1; Mon, 23 Jan 2023 07:54:50 -0500
-X-MC-Unique: -ah8cFJbMEqYJcME93wuJA-1
+ us-mta-386-sXXPwZ77MW6y-vZjVmJkNg-1; Mon, 23 Jan 2023 07:54:59 -0500
+X-MC-Unique: sXXPwZ77MW6y-vZjVmJkNg-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8BD2A2805581;
-        Mon, 23 Jan 2023 12:54:49 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2F9471C07540;
+        Mon, 23 Jan 2023 12:54:59 +0000 (UTC)
 Received: from x1.localdomain.com (unknown [10.39.194.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F2FCFC15BA0;
-        Mon, 23 Jan 2023 12:54:46 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 00C62C15BA0;
+        Mon, 23 Jan 2023 12:54:55 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -47,10 +47,13 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Yury Luneff <yury.lunev@gmail.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 54/57] media: atomisp: ov2722: Power on sensor from set_fmt() callback
-Date:   Mon, 23 Jan 2023 13:52:02 +0100
-Message-Id: <20230123125205.622152-55-hdegoede@redhat.com>
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        Brent Pappas <bpappas@pappasbrent.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Dan Carpenter <error27@gmail.com>
+Subject: [PATCH 57/57] media: atomisp: pci: sh_css: Inline single invocation of macro STATS_ENABLED()
+Date:   Mon, 23 Jan 2023 13:52:05 +0100
+Message-Id: <20230123125205.622152-58-hdegoede@redhat.com>
 In-Reply-To: <20230123125205.622152-1-hdegoede@redhat.com>
 References: <20230123125205.622152-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,92 +63,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Depending on which order userspace makes various v4l2 calls, the sensor
-might still be powered down when set_fmt is called.
+From: Brent Pappas <bpappas@pappasbrent.com>
 
-What should really happen here is delay the writing of the mode-related
-registers till streaming is started, but for now use the same quick fix
-as the atomisp_ov2680 / atomisp_gc0310 code and call power_up() from
-set_fmt() in combination with keeping track of the power-state to avoid
-doing the power-up sequence twice.
+Inline the single invocation of the macro STATS_ENABLED().
+The macro abstraction is not necessary because the logic behind it is only
+used once.
 
+Signed-off-by: Brent Pappas <bpappas@pappasbrent.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Reviewed-by: Dan Carpenter <error27@gmail.com>
+Link: https://lore.kernel.org/r/20230120171408.16099-1-bpappas@pappasbrent.com
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/staging/media/atomisp/i2c/atomisp-ov2722.c | 12 ++++++++++++
- drivers/staging/media/atomisp/i2c/ov2722.h         |  2 +-
- 2 files changed, 13 insertions(+), 1 deletion(-)
+ drivers/staging/media/atomisp/pci/sh_css.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c b/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-index e09c80d1f9ec..5d2e6e2e72f0 100644
---- a/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-+++ b/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-@@ -528,6 +528,9 @@ static int power_up(struct v4l2_subdev *sd)
- 		return -ENODEV;
- 	}
+diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
+index 726cb7aa4ecd..93789500416f 100644
+--- a/drivers/staging/media/atomisp/pci/sh_css.c
++++ b/drivers/staging/media/atomisp/pci/sh_css.c
+@@ -97,9 +97,6 @@
+  */
+ #define JPEG_BYTES (16 * 1024 * 1024)
  
-+	if (dev->power_on == 1)
-+		return 0; /* Already on */
-+
- 	/* power control */
- 	ret = power_ctrl(sd, 1);
- 	if (ret)
-@@ -552,6 +555,7 @@ static int power_up(struct v4l2_subdev *sd)
- 	/* according to DS, 20ms is needed between PWDN and i2c access */
- 	msleep(20);
+-#define STATS_ENABLED(stage) (stage && stage->binary && stage->binary->info && \
+-	(stage->binary->info->sp.enable.s3a || stage->binary->info->sp.enable.dis))
+-
+ struct sh_css my_css;
  
-+	dev->power_on = 1;
- 	return 0;
- 
- fail_clk:
-@@ -575,6 +579,9 @@ static int power_down(struct v4l2_subdev *sd)
- 		return -ENODEV;
- 	}
- 
-+	if (dev->power_on == 0)
-+		return 0; /* Already off */
-+
- 	ret = dev->platform_data->flisclk_ctrl(sd, 0);
- 	if (ret)
- 		dev_err(&client->dev, "flisclk failed\n");
-@@ -592,6 +599,7 @@ static int power_down(struct v4l2_subdev *sd)
- 	if (ret)
- 		dev_err(&client->dev, "vprog failed.\n");
- 
-+	dev->power_on = 0;
- 	return ret;
- }
- 
-@@ -669,6 +677,9 @@ static int ov2722_set_fmt(struct v4l2_subdev *sd,
- 
- 	mutex_lock(&dev->input_lock);
- 
-+	/* s_power has not been called yet for std v4l2 clients (camorama) */
-+	power_up(sd);
-+
- 	dev->pixels_per_line = dev->res->pixels_per_line;
- 	dev->lines_per_frame = dev->res->lines_per_frame;
- 
-@@ -959,6 +970,7 @@ static int ov2722_probe(struct i2c_client *client)
- 		return -ENOMEM;
- 
- 	mutex_init(&dev->input_lock);
-+	dev->power_on = -1;
- 
- 	dev->res = &ov2722_res_preview[0];
- 	v4l2_i2c_subdev_init(&dev->sd, client, &ov2722_ops);
-diff --git a/drivers/staging/media/atomisp/i2c/ov2722.h b/drivers/staging/media/atomisp/i2c/ov2722.h
-index 020743a944c4..640d3ffcaa5c 100644
---- a/drivers/staging/media/atomisp/i2c/ov2722.h
-+++ b/drivers/staging/media/atomisp/i2c/ov2722.h
-@@ -198,7 +198,7 @@ struct ov2722_device {
- 	struct ov2722_resolution *res;
- 
- 	struct camera_sensor_platform_data *platform_data;
--	int run_mode;
-+	int power_on;
- 	u16 pixels_per_line;
- 	u16 lines_per_frame;
- 	u8 type;
+ int  __printf(1, 0) (*sh_css_printf)(const char *fmt, va_list args) = NULL;
+@@ -3743,7 +3740,9 @@ ia_css_pipe_enqueue_buffer(struct ia_css_pipe *pipe,
+ 			 * The SP will read the params after it got
+ 			 * empty 3a and dis
+ 			 */
+-			if (STATS_ENABLED(stage)) {
++			if (stage->binary && stage->binary->info &&
++			    (stage->binary->info->sp.enable.s3a ||
++			     stage->binary->info->sp.enable.dis)) {
+ 				/* there is a stage that needs it */
+ 				return_err = ia_css_bufq_enqueue_buffer(thread_id,
+ 									queue_id,
 -- 
 2.39.0
 
