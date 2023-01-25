@@ -2,228 +2,259 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD5EAC27C76
-	for <linux-media@archiver.kernel.org>; Wed, 25 Jan 2023 20:26:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C491CC54EED
+	for <linux-media@archiver.kernel.org>; Wed, 25 Jan 2023 22:41:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236255AbjAYU0M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 25 Jan 2023 15:26:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57156 "EHLO
+        id S234990AbjAYWlU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 25 Jan 2023 17:41:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236250AbjAYU0K (ORCPT
+        with ESMTP id S229459AbjAYWlU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 25 Jan 2023 15:26:10 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1A73028B;
-        Wed, 25 Jan 2023 12:26:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1674678342; bh=CJpm4j5WqE7F3iRYq1S3DuSbryZhT069+nPX/zvi+bs=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=V9ok/lQnUyyS3t2OfQcz6fyi1hPhg0Zd/g/uQJkDX/dJGpV+tivroGjbFhe8IYUOf
-         Am+UKcCVYKUXidEdBCh/UQx+jjcwzjXeB16f8T67r3ZM0fhtQu03TpzthlWFAaLMsh
-         t0qNuS3+tSSU27V0Hlfuxuyr+lrzc8GwHYT0oUeTm3uK5i9RDJtbWzXJoXKos2bjjC
-         58vGdW1LTL7L36rg96X0vDQiR7LrIRTOWb93gf5snPAkABqWr+GRArY8OrncR7LKoO
-         PqOixaC94GLjXGa33+Sxl4ttrj0Ktd891AS1EHFk8YAW/DQQxHxzIpNHczxoMmRik/
-         LUlpgNE+KvTSg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from methusalisk.wuest.de ([84.148.50.251]) by mail.gmx.net
- (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1M6lpM-1pKE6y2tQ6-008NuF; Wed, 25 Jan 2023 21:25:42 +0100
-Received: from dolon (dolon.wuest.de [192.168.0.179])
-        by methusalisk.wuest.de (Postfix) with ESMTP id EF4092C01A4;
-        Wed, 25 Jan 2023 21:25:40 +0100 (CET)
-Date:   Wed, 25 Jan 2023 21:25:40 +0100
-From:   Daniel Scheller <d.scheller@gmx.net>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Berni <bernhard@turmann.eu>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        Sean V Kelley <sean.v.kelley@linux.intel.com>,
-        linux-media@vger.kernel.org
-Subject: Re: [bugzilla-daemon@bugzilla.kernel.org: [Bug 208507] New:
- BISECTED: i2c timeout loading module ddbridge with commit
- d2345d1231d80ecbea5fb764eb43123440861462]
-Message-ID: <20230125212540.54d967cc@dolon>
-In-Reply-To: <20230125170506.GA1175690@bhelgaas>
-References: <20200709191722.GA6054@bjorn-Precision-5520>
-        <20230125170506.GA1175690@bhelgaas>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+        Wed, 25 Jan 2023 17:41:20 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC5F5A830;
+        Wed, 25 Jan 2023 14:41:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674686479; x=1706222479;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=gM+J4ZnB2GOeTY84F6jFfce2lS7Hj616p56xjd2yHbg=;
+  b=mvvymuxbIASjP3dlLaJ1AsFoqllI8R7hUqThMNh7uvDWkf/GGoVM53dh
+   KqcIaFSLlA7VesmdCYT7v+Qudg/GNI/t7yuEr7fjM/QZD7WAwI1zVpaOX
+   A417eFg+/kQ83vqzFJbpyrDRs5VrXGNywOJzqFBBr4SQfbDL72AM31CVz
+   10iwAN3rrOR+quBMNjn2TdcK5ZzrevfkjUCzTRXo/BuaNKYE6c/5UygTK
+   I5tblGzEIxDpZ95czVbWnYw14+TqwacZb5Aa1fmQNXlRDdT6U/zElc0mU
+   dA3gbnJqwZQ+CDFJbRSBPmnMgQS8Wev+tMtzNIsEIWL923XNbVXNdEx3/
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="389040001"
+X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
+   d="scan'208";a="389040001"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 14:41:18 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="786604541"
+X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
+   d="scan'208";a="786604541"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 14:41:16 -0800
+Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 434F3122210;
+        Thu, 26 Jan 2023 00:41:14 +0200 (EET)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
+        (envelope-from <sakari.ailus@linux.intel.com>)
+        id 1pKoS7-001gPI-7Q; Thu, 26 Jan 2023 00:41:11 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-acpi@vger.kernel.org
+Cc:     linux-media@vger.kernel.org, rafael@kernel.org,
+        andriy.shevchenko@linux.intel.com, heikki.krogerus@linux.intel.com
+Subject: [PATCH v3 1/8] ACPI: property: Parse data node string references in properties
+Date:   Thu, 26 Jan 2023 00:40:54 +0200
+Message-Id: <20230125224101.401285-2-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230125224101.401285-1-sakari.ailus@linux.intel.com>
+References: <20230125224101.401285-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:hOiHlGCUCbcOAJKvIxj8VK3sVF3IyFIrl/z+CLbUCkzUzd6JpyF
- 8NUccm+OgflFbFoEpf3h9T0q5Wm+ZsgtDSYZsyJazmCl+DlOi11mkq1LBGm7KSHcVBkIhm2
- yU+26mwGp0SKa+O/HX7qHsmmGzBh0hL239UDVf6X7jBO40H7ZYD8uYuoDyiPdaoe6i/47ua
- JbVA+uvzR7pzk7MWe2Ipw==
-UI-OutboundReport: notjunk:1;M01:P0:uTnuksO/OLw=;OBgQllEbNiOsN9MHXuDrDzIy0gy
- k1qpKgUgkhkOI9eUc39Sdd375OJIhnHfid0erdiT4p+XUliuPKeqNwUfkXnWXYR1W4DkGgBCY
- 4950JEBaPfo+BvhIOYIAOGlBIW9sud3Oyl6QjEyUsrcgoPuoLAIaM7uUR23MX9AuCvsGVyda+
- 0+praQFgTf+fHLji449fDVQA9MAMqSjAZ04+lFYIJOp94QA2LuRz/jXBOz1fOtBoXg61+uom4
- /V3VBBlXTMVv2CpROHJH9AOlb/cEqww6nI0pu1yc8hlO8qdCBG4OVvQ3QsTb48YR10cc1iZvm
- SBwkvLRiSM9t4VJwq9i0Bv2UgpxTJY7zqdGnwAcDA1YqYcRBqWWGYWEUoJcXOBYRX6rwsbBn0
- JOBNzsdCEY4eOdYAYt2q8QbXdK7i/r+NlMQnbd1SiGKVELiXYis1tn9gG3FPwMNzxYMaitqy7
- dRwHQaA1WR/yppvKQEtj6U+Jeg14gVNm6aDnXTVPAvqJoqE1ssSAs7wZNlKoJ02NkOzSpX5/N
- 3Wj4nkw6OgzLRUCu6BeMmrJWxw653iLyRh5WFQw3RQeL5KuE5m0KISElw2Yuwabw8yh7zqQfL
- 5DTiGqZUgJtPqQWf0dLh1RttppKaolmu5vnh9gepIYWteFNf1MiNQ7dnDV5LsEEweDKUHFevu
- OYZmMVjq9oowS6YcSbflvGDFNc3P3x73upB9tjs+PFtUnXAGws122K0VSOyhnIy9I9Z0AAqKr
- QXa5/LY3O1auI0e+bmCeYSxeRgyVx2kMVnNSYW3KI6OSCqWYdSN3LWiEmCCpwN1oOwRhk86kg
- S9O7LTeaITFLqsbsBl6gc+hSxKZ70HFupGD/xRMQDd7oXOCKqr6LhCOeKpLviYBtodBZnuKY7
- HfL8F/3+q7SMPGGniu5zxCzanwrakkEwc2iI8yyUnj0iXI4ShDiaTjwY3WUUJdSpKV5sn/Kqy
- gUl+gjX73C7iKzg/dWSATOFDojQ=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Am Wed, 25 Jan 2023 11:05:06 -0600
-schrieb Bjorn Helgaas <helgaas@kernel.org>:
+Add support for parsing property references using strings, besides
+reference objects that were previously supported. This allows also
+referencing data nodes which was not possible with reference objects.
 
-> [+cc Salvatore, Mauro, Daniel, linux-media]
->
-> On Thu, Jul 09, 2020 at 02:17:22PM -0500, Bjorn Helgaas wrote:
-> > Bisected to Debian commit d2345d1231d8, which is a backport of the
-> > upstream commit b88bf6c3b6ff ("PCI: Add boot interrupt quirk
-> > mechanism for Xeon chipsets").
-> >
-> > Reporter confirmed that reverting the Debian backport from 4.19.132
-> > fixes the problem.
-> >
-> > ----- Forwarded message from bugzilla-daemon@bugzilla.kernel.org
-> > -----
-> >
-> > Date: Thu, 09 Jul 2020 15:01:11 +0000
-> > From: bugzilla-daemon@bugzilla.kernel.org
-> > To: bjorn@helgaas.com
-> > Subject: [Bug 208507] New: BISECTED: i2c timeout loading module
-> > ddbridge with commit d2345d1231d80ecbea5fb764eb43123440861462
-> > Message-ID: <bug-208507-41252@https.bugzilla.kernel.org/>
-> >
-> > https://bugzilla.kernel.org/show_bug.cgi?id=3D208507
-> >
-> >             Bug ID: 208507
-> >            Summary: BISECTED: i2c timeout loading module ddbridge
-> > with commit d2345d1231d80ecbea5fb764eb43123440861462
-> >            Product: Drivers
-> >            Version: 2.5
-> >     Kernel Version: 4.19.132
-> >           Hardware: x86-64
-> >                 OS: Linux
-> >               Tree: Mainline
-> >             Status: NEW
-> >           Severity: normal
-> >           Priority: P1
-> >          Component: PCI
-> >           Assignee: drivers_pci@kernel-bugs.osdl.org
-> >           Reporter: bernhard@turmann.eu
-> >         Regression: Yes
-> >
-> > Created attachment 290179
-> >   -->
-> > https://bugzilla.kernel.org/attachment.cgi?id=3D290179&action=3Dedit
-> > dmesg on 4.19.132
-> >
-> > OS: Debian 10.4 Buster
-> > CPU: Intel(R) Xeon(R) CPU D-1541 @ 2.10GHz
-> > Hardware: Supermicro  Super Server
-> > Mainboard: Supermicro X10SDV
-> > DVB card: Digital Devices Cine S2 V7 Advanced DVB adapter
-> >
-> > Issue:
-> > =3D=3D=3D=3D=3D
-> > Loading kernel module ddbridge fails with i2c timeouts, see
-> > attached dmesg. The dvb media adapter is unusable.
-> > This happened after Linux kernel upgrade from 4.19.98-1+deb10u1 to
-> > 4.19.118-2+deb10u1.
-> >
-> > A git bisect based on the Debian kernel repo on branch buster
-> > identified as first bad commit:
-> > [1fb0eb795661ab9e697c3a053b35aa4dc3b81165] Update to 4.19.116.
-> >
-> > Another git bisect based on upstream Linux kernel repo on branch
-> > v4.19.y identified as first bad commit:
-> > [d2345d1231d80ecbea5fb764eb43123440861462] PCI: Add boot interrupt
-> > quirk mechanism for Xeon chipsets.
-> >
-> > Other affected Debian kernel version: 5.6.14+2~bpo10+1
-> > I tested this version via buster-backports, because so far I was
-> > unable to build my own kernel from 5.6.y or even 5.7.y.
-> >
-> > Workaround:
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > Reverting the mentioned commit
-> > d2345d1231d80ecbea5fb764eb43123440861462 on top of 4.19.132 is
-> > fixing the problem. Reverting the same commit on 4.19.118 or
-> > 4.19.116 is also fixing the problem.
->
-> Sorry, I dropped the ball on this.
->
-> Berni has verified that this problem still exists in v6.1.4, and has
-> attached current dmesg logs and lspci output.
->
-> Sean's comment
-> (https://bugzilla.kernel.org/show_bug.cgi?id=3D208507#c18) suggests
-> this is actually a ddbridge driver issue related to INTx emulation or
-> MSI support.
->
-> Berni confirmed that the i2c timeouts happen when
-> CONFIG_DVB_DDBRIDGE_MSIENABLE is not enabled, and that enabling MSI
-> via the "ddbridge.msi=3D1" module parameter avoids the i2c timeouts.
->
-> The Kconfig help for DVB_DDBRIDGE_MSIENABLE:
->
->   Use PCI MSI (Message Signaled Interrupts) per default. Enabling this
->   might lead to I2C errors originating from the bridge in conjunction
->   with certain SATA controllers, requiring a reload of the ddbridge
->   module. MSI can still be disabled by passing msi=3D0 as option, as
->   this will just change the msi option default value.
->
-> suggests that there may be an i2c or SATA issue that could be fixed so
-> ddbridge MSI could be always enabled.  But I don't know about that
-> underlying issue.
->
-> Per MAINTAINERS, the ddbridge driver looks orphaned, so I cc'd the
-> media folks and Daniel, who might know something about the MSI issues,
-> based on adaf4df70521 ("media: ddbridge: Kconfig option to control the
-> MSI modparam default").
+Also add pr_fmt() macro to prefix printouts.
 
-Bjorn/all,
+While at it, update copyright.
 
-I'll try to at least clarify from what I remember from "back then",
-since it's over 4,5 years that I last actively worked on mainlining the
-vendor driver and not being affiliated with the vendor at all.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/acpi/property.c | 110 ++++++++++++++++++++++++++++++++++------
+ 1 file changed, 94 insertions(+), 16 deletions(-)
 
-MSI being defaulted to disabled with the possibility to try
-ddbridge.msi=3D1 is the result of quite a bit of user feedback mainly at
-vdr-portal.de, recommendations from the vendor itself in case of I2C
-troubles with their cards, plus an explanation from them (been in
-contact with the vendor at that time) telling me that "some"
-PCIe/chipsets are buggy especially with regards to MSI and thus can
-cause trouble with their cards. Also, in addition, I experienced I2C
-troubles with ddbridge.msi=3D1 myself so I decided to make the default
-"0" (with an option to toggle the default marked as "dangerous" due to
-the known possible issues) as this worked the best for everyone who
-opted for testing the mainlined driver code. Due to lack of real
-knowledge about chipsets, PCIe, interrupts and so on, and lack of
-technical docs about the cards, we could only assume we're dealing with
-some sort of incompatibility between the cards and possibly certain
-components, though ddbridge.msi=3D0 made everything play nicely with each
-other.
+diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
+index b8d9eb9a433ed..2b69b25c405c5 100644
+--- a/drivers/acpi/property.c
++++ b/drivers/acpi/property.c
+@@ -2,14 +2,17 @@
+ /*
+  * ACPI device specific properties support.
+  *
+- * Copyright (C) 2014, Intel Corporation
++ * Copyright (C) 2014--2023, Intel Corporation
+  * All rights reserved.
+  *
+  * Authors: Mika Westerberg <mika.westerberg@linux.intel.com>
+- *          Darren Hart <dvhart@linux.intel.com>
+- *          Rafael J. Wysocki <rafael.j.wysocki@intel.com>
++ *	    Darren Hart <dvhart@linux.intel.com>
++ *	    Rafael J. Wysocki <rafael.j.wysocki@intel.com>
++ *	    Sakari Ailus <sakari.ailus@linux.intel.com>
+  */
+ 
++#define pr_fmt(fmt) "ACPI: " fmt
++
+ #include <linux/acpi.h>
+ #include <linux/device.h>
+ #include <linux/export.h>
+@@ -795,7 +798,8 @@ acpi_fwnode_get_named_child_node(const struct fwnode_handle *fwnode,
+ static int acpi_get_ref_args(struct fwnode_reference_args *args,
+ 			     struct fwnode_handle *ref_fwnode,
+ 			     const union acpi_object **element,
+-			     const union acpi_object *end, size_t num_args)
++			     const union acpi_object *end, size_t num_args,
++			     bool subnode_string)
+ {
+ 	u32 nargs = 0, i;
+ 
+@@ -803,13 +807,16 @@ static int acpi_get_ref_args(struct fwnode_reference_args *args,
+ 	 * Find the referred data extension node under the
+ 	 * referred device node.
+ 	 */
+-	for (; *element < end && (*element)->type == ACPI_TYPE_STRING;
+-	     (*element)++) {
+-		const char *child_name = (*element)->string.pointer;
+-
+-		ref_fwnode = acpi_fwnode_get_named_child_node(ref_fwnode, child_name);
+-		if (!ref_fwnode)
+-			return -EINVAL;
++	if (subnode_string) {
++		for (; *element < end && (*element)->type == ACPI_TYPE_STRING;
++		     (*element)++) {
++			const char *child_name = (*element)->string.pointer;
++
++			ref_fwnode = acpi_fwnode_get_named_child_node(ref_fwnode,
++								      child_name);
++			if (!ref_fwnode)
++				return -EINVAL;
++		}
+ 	}
+ 
+ 	/*
+@@ -820,7 +827,8 @@ static int acpi_get_ref_args(struct fwnode_reference_args *args,
+ 	for (i = 0; (*element) + i < end && i < num_args; i++) {
+ 		acpi_object_type type = (*element)[i].type;
+ 
+-		if (type == ACPI_TYPE_LOCAL_REFERENCE)
++		if (type == ACPI_TYPE_LOCAL_REFERENCE ||
++		    (!subnode_string && type == ACPI_TYPE_STRING))
+ 			break;
+ 
+ 		if (type == ACPI_TYPE_INTEGER)
+@@ -844,6 +852,43 @@ static int acpi_get_ref_args(struct fwnode_reference_args *args,
+ 	return 0;
+ }
+ 
++static struct fwnode_handle *
++acpi_parse_string_ref(const struct fwnode_handle *fwnode, const char *refstring)
++{
++	acpi_handle scope, handle;
++	struct acpi_data_node *dn;
++	struct acpi_device *device;
++	acpi_status status;
++
++	if (is_acpi_device_node(fwnode)) {
++		scope = to_acpi_device_node(fwnode)->handle;
++	} else if (is_acpi_data_node(fwnode)) {
++		scope = to_acpi_data_node(fwnode)->handle;
++	} else {
++		pr_err("bad node type for node %pfw\n", fwnode);
++		return ERR_PTR(-EINVAL);
++	}
++
++	status = acpi_get_handle(scope, refstring, &handle);
++	if (ACPI_FAILURE(status)) {
++		acpi_handle_debug(scope, "can't get handle for %s", refstring);
++		return ERR_PTR(-EINVAL);
++	}
++
++	device = acpi_fetch_acpi_dev(handle);
++	if (device)
++		return acpi_fwnode_handle(device);
++
++	status = acpi_get_data_full(handle, acpi_nondev_subnode_tag,
++				    (void **)&dn, NULL);
++	if (ACPI_FAILURE(status) || !dn) {
++		acpi_handle_debug(handle, "can't find subnode");
++		return ERR_PTR(-EINVAL);
++	}
++
++	return &dn->fwnode;
++}
++
+ /**
+  * __acpi_node_get_property_reference - returns handle to the referenced object
+  * @fwnode: Firmware node to get the property from
+@@ -886,6 +931,7 @@ int __acpi_node_get_property_reference(const struct fwnode_handle *fwnode,
+ 	const union acpi_object *element, *end;
+ 	const union acpi_object *obj;
+ 	const struct acpi_device_data *data;
++	struct fwnode_handle *ref_fwnode;
+ 	struct acpi_device *device;
+ 	int ret, idx = 0;
+ 
+@@ -909,16 +955,29 @@ int __acpi_node_get_property_reference(const struct fwnode_handle *fwnode,
+ 
+ 		args->fwnode = acpi_fwnode_handle(device);
+ 		args->nargs = 0;
++		return 0;
++	case ACPI_TYPE_STRING:
++		if (index)
++			return -ENOENT;
++
++		ref_fwnode = acpi_parse_string_ref(fwnode, obj->string.pointer);
++		if (IS_ERR(ref_fwnode))
++			return PTR_ERR(ref_fwnode);
++
++		args->fwnode = ref_fwnode;
++		args->nargs = 0;
++
+ 		return 0;
+ 	case ACPI_TYPE_PACKAGE:
+ 		/*
+ 		 * If it is not a single reference, then it is a package of
+-		 * references followed by number of ints as follows:
++		 * references, followed by number of ints as follows:
+ 		 *
+ 		 *  Package () { REF, INT, REF, INT, INT }
+ 		 *
+-		 * The index argument is then used to determine which reference
+-		 * the caller wants (along with the arguments).
++		 * Here, REF may be either a local reference or a string. The
++		 * index argument is then used to determine which reference the
++		 * caller wants (along with the arguments).
+ 		 */
+ 		break;
+ 	default:
+@@ -942,7 +1001,26 @@ int __acpi_node_get_property_reference(const struct fwnode_handle *fwnode,
+ 
+ 			ret = acpi_get_ref_args(idx == index ? args : NULL,
+ 						acpi_fwnode_handle(device),
+-						&element, end, num_args);
++						&element, end, num_args, true);
++			if (ret < 0)
++				return ret;
++
++			if (idx == index)
++				return 0;
++
++			break;
++		case ACPI_TYPE_STRING:
++			ref_fwnode =
++				acpi_parse_string_ref(fwnode,
++						      element->string.pointer);
++			if (IS_ERR(ref_fwnode))
++				return PTR_ERR(ref_fwnode);
++
++			element++;
++
++			ret = acpi_get_ref_args(idx == index ? args : NULL,
++						ref_fwnode, &element, end,
++						num_args, false);
+ 			if (ret < 0)
+ 				return ret;
+ 
+-- 
+2.30.2
 
-Regarding #208507, I see that there are chipsets and/or platforms that
-either soft-disable legacy IRQ signalling/routing (via the
-mentioned/reverted/bisected commit), or even don't support this at all
-and thus make MSI a requirement, and causing interrupts not being
-serviced at all if MSI isn't available or enabled by the device.
-
-If it is possible to query the underlying subsystems regarding
-availability of legacy interrupt signalling, I guess the best option is
-to perform such evaluation in the ddbridge driver during setup and
-enable MSI signalling if that's the only option regardless of
-ddbridge.msi=3Dx, what seems safe on such platforms according to the
-reporter (card running fine with msi=3D1).
-
-I'll happily provide patches for such a change though I would very
-welcome any guidance on the subsystem query topic.
-
-Best regards,
-Daniel
