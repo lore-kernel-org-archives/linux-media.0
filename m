@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B601C54EED
-	for <linux-media@archiver.kernel.org>; Wed, 25 Jan 2023 17:37:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB2E7C54E94
+	for <linux-media@archiver.kernel.org>; Wed, 25 Jan 2023 17:37:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236137AbjAYRhj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 25 Jan 2023 12:37:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59776 "EHLO
+        id S236181AbjAYRhl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 25 Jan 2023 12:37:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236113AbjAYRhi (ORCPT
+        with ESMTP id S236141AbjAYRhk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 25 Jan 2023 12:37:38 -0500
+        Wed, 25 Jan 2023 12:37:40 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22C45A360
-        for <linux-media@vger.kernel.org>; Wed, 25 Jan 2023 09:37:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444285867A
+        for <linux-media@vger.kernel.org>; Wed, 25 Jan 2023 09:37:39 -0800 (PST)
 Received: from uno.LocalDomain (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 346D2188E;
-        Wed, 25 Jan 2023 18:37:30 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 66BF31AEF;
+        Wed, 25 Jan 2023 18:37:32 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674668251;
-        bh=8JU7sJ2ljljJsNbMiSjJN5c8kK/fxi4OzT+BXQnCE0I=;
+        s=mail; t=1674668252;
+        bh=BycciKnCJJNO55QmqQMo4O3x4cDe5k+KPzmD9tgvbvs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ogG6TImT7fNLB1N2GUeXBll96dpa8Ac/TAFPxH5fxITZHfXDC39QWro3+nq5JvZqG
-         v8frXZ1tv5T32X4e9I8hvPeYoOz1+HmL6sS8nx43BbvqksXvbImGezoZfkTiE8nWp8
-         UWourEJNqLRUilLbLNpbzWIjo7vIybArwMRTvS8k=
+        b=kkSfgkrjJSDn9q6lR+Z6V3v95B9glIkeatc9XTQsG/rQCmgu2Qz3esJ4QPIysX8Iu
+         mkCbJeuqp3TvEpboMSlacWOeN30c7jk/Kqpoc/dfhi23mTCdT8HCLYTFhdHP0lhbL1
+         Wp/sPuG2tKjQuHQRwUZFunSOf2fRUDoHDIAaB9VI=
 From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 To:     Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
         Luca Weiss <luca@z3ntu.xyz>
@@ -32,9 +32,9 @@ Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
         laurent.pinchart@ideasonboard.com, sakari.ailus@iki.fi,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org (open list:OMNIVISION OV5670 SENSOR DRIVER)
-Subject: [PATCH v4 3/8] media: i2c: ov5670: Probe clocks with OF
-Date:   Wed, 25 Jan 2023 18:37:02 +0100
-Message-Id: <20230125173707.127687-4-jacopo.mondi@ideasonboard.com>
+Subject: [PATCH v4 5/8] media: i2c: ov5670: Probe GPIOs
+Date:   Wed, 25 Jan 2023 18:37:04 +0100
+Message-Id: <20230125173707.127687-6-jacopo.mondi@ideasonboard.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230125173707.127687-1-jacopo.mondi@ideasonboard.com>
 References: <20230125173707.127687-1-jacopo.mondi@ideasonboard.com>
@@ -44,69 +44,78 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support for probing the main system clock using the common clock
-framework and its OF bindings.
+The OV5670 has a powerdown and reset pin, named respectively "PWDN" and
+"XSHUTDOWN".
 
-Maintain ACPI compatibility by falling back to parse 'clock-frequency'.
+Optionally probe the gpios connected to the pins during the driver probe
+routine.
 
 Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/i2c/ov5670.c | 25 +++++++++++++++++++++----
- 1 file changed, 21 insertions(+), 4 deletions(-)
+ drivers/media/i2c/ov5670.c | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
 diff --git a/drivers/media/i2c/ov5670.c b/drivers/media/i2c/ov5670.c
-index 07a396c8ab68..c8beb2bc3d0f 100644
+index 95bdbf628556..6843b2d9a2d4 100644
 --- a/drivers/media/i2c/ov5670.c
 +++ b/drivers/media/i2c/ov5670.c
-@@ -2,6 +2,7 @@
- // Copyright (c) 2017 Intel Corporation.
+@@ -3,6 +3,7 @@
  
  #include <linux/acpi.h>
-+#include <linux/clk.h>
+ #include <linux/clk.h>
++#include <linux/gpio/consumer.h>
  #include <linux/i2c.h>
  #include <linux/mod_devicetable.h>
  #include <linux/module.h>
-@@ -2475,13 +2476,10 @@ static int ov5670_probe(struct i2c_client *client)
- 	struct ov5670 *ov5670;
- 	const char *err_msg;
- 	u32 input_clk = 0;
-+	struct clk *clk;
- 	bool full_power;
- 	int ret;
+@@ -1843,6 +1844,10 @@ struct ov5670 {
+ 	/* Regulators */
+ 	struct regulator_bulk_data supplies[OV5670_NUM_SUPPLIES];
  
--	device_property_read_u32(&client->dev, "clock-frequency", &input_clk);
--	if (input_clk != 19200000)
--		return -EINVAL;
--
- 	ov5670 = devm_kzalloc(&client->dev, sizeof(*ov5670), GFP_KERNEL);
- 	if (!ov5670) {
- 		ret = -ENOMEM;
-@@ -2489,6 +2487,25 @@ static int ov5670_probe(struct i2c_client *client)
++	/* Power-down and reset gpios. */
++	struct gpio_desc *pwdn_gpio; /* PWDNB pin. */
++	struct gpio_desc *reset_gpio; /* XSHUTDOWN pin. */
++
+ 	/* To serialize asynchronus callbacks */
+ 	struct mutex mutex;
+ 
+@@ -2495,6 +2500,23 @@ static int ov5670_regulators_probe(struct ov5670 *ov5670)
+ 				       ov5670->supplies);
+ }
+ 
++static int ov5670_gpio_probe(struct ov5670 *ov5670)
++{
++	struct i2c_client *client = v4l2_get_subdevdata(&ov5670->sd);
++
++	ov5670->pwdn_gpio = devm_gpiod_get_optional(&client->dev, "powerdown",
++						    GPIOD_OUT_LOW);
++	if (IS_ERR(ov5670->pwdn_gpio))
++		return PTR_ERR(ov5670->pwdn_gpio);
++
++	ov5670->reset_gpio = devm_gpiod_get_optional(&client->dev, "reset",
++						     GPIOD_OUT_LOW);
++	if (IS_ERR(ov5670->reset_gpio))
++		return PTR_ERR(ov5670->reset_gpio);
++
++	return 0;
++}
++
+ static int ov5670_probe(struct i2c_client *client)
+ {
+ 	struct ov5670 *ov5670;
+@@ -2539,6 +2561,12 @@ static int ov5670_probe(struct i2c_client *client)
  		goto error_print;
  	}
  
-+	/* OF uses the common clock framework, ACPI uses "clock-frequency". */
-+	if (is_of_node(dev_fwnode(&client->dev))) {
-+		clk = devm_clk_get(&client->dev, NULL);
-+		if (IS_ERR(clk))
-+			return dev_err_probe(&client->dev, PTR_ERR(clk),
-+					     "error getting clock\n");
-+
-+		input_clk = clk_get_rate(clk);
-+	} else {
-+		device_property_read_u32(&client->dev, "clock-frequency",
-+					 &input_clk);
++	ret = ov5670_gpio_probe(ov5670);
++	if (ret) {
++		err_msg = "GPIO probe failed";
++		goto error_print;
 +	}
 +
-+	if (input_clk != 19200000) {
-+		dev_err(&client->dev,
-+			"Unsupported clock frequency %u\n", input_clk);
-+		return -EINVAL;
-+	}
-+
- 	/* Initialize subdev */
- 	v4l2_i2c_subdev_init(&ov5670->sd, client, &ov5670_subdev_ops);
- 
+ 	full_power = acpi_dev_state_d0(&client->dev);
+ 	if (full_power) {
+ 		/* Check module identity */
 -- 
 2.39.0
 
