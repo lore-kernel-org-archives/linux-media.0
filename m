@@ -2,36 +2,37 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ED25C61D97
-	for <linux-media@archiver.kernel.org>; Wed, 25 Jan 2023 22:49:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 104E7C27C76
+	for <linux-media@archiver.kernel.org>; Wed, 25 Jan 2023 22:49:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235526AbjAYWtR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 25 Jan 2023 17:49:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46852 "EHLO
+        id S235936AbjAYWtX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 25 Jan 2023 17:49:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235570AbjAYWtQ (ORCPT
+        with ESMTP id S235570AbjAYWtV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 25 Jan 2023 17:49:16 -0500
+        Wed, 25 Jan 2023 17:49:21 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D383546145
-        for <linux-media@vger.kernel.org>; Wed, 25 Jan 2023 14:49:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A031E46D6C
+        for <linux-media@vger.kernel.org>; Wed, 25 Jan 2023 14:49:17 -0800 (PST)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 28A6C98C;
-        Wed, 25 Jan 2023 23:49:08 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 424301204;
+        Wed, 25 Jan 2023 23:49:11 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674686948;
-        bh=2aXCENgTbwKGzxdpkhGHPm/ITLTkvpHEEPS4G/dH+h0=;
+        s=mail; t=1674686951;
+        bh=iWyxCABCUH1+Oa9WBObvLCm5NZEfkNwi8EYP1C0wEic=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PLfhcU4U+mPzWxubvGsPaF7tnTiBqqLAbkTGxqWUxfg9XTf8Pn1tM1x5wkq2U3lVc
-         ymOCfKM389gok8GIZhmQMUJwpdksWRtT0vI2Rf5zW87vJn4XDesLY1++2Qe6jYPid8
-         ympnMy+2iP9GKjioMswzgcsM+kRkSJ3bSDVlJgko=
+        b=gpTd4luHg0UgZ9nk3tgesQEW3ZbbdWV8xM89tkSVEF/58F9JK4TGZs+ku5yNIDdOe
+         1yKCGQ6YoPBNwJqi2sUPcmhlllUoDu5N/kWKDH+Qm9JaOTO97TNHkg61RMK4rYyS7v
+         4iByG0i+JvBl/HqY8PTznX5R71b3efjCZP59C6l8=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Dongsoo Nathaniel Kim <dongsoo45.kim@samsung.com>,
         HeungJun Kim <riverful.kim@samsung.com>
-Subject: [RFC PATCH 5/8] media: i2c: Drop unused noon010pc30 camera sensor driver
-Date:   Thu, 26 Jan 2023 00:48:53 +0200
-Message-Id: <20230125224856.22266-6-laurent.pinchart@ideasonboard.com>
+Subject: [RFC PATCH 7/8] media: i2c: Drop unused sr030pc30 camera sensor driver
+Date:   Thu, 26 Jan 2023 00:48:55 +0200
+Message-Id: <20230125224856.22266-8-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230125224856.22266-1-laurent.pinchart@ideasonboard.com>
 References: <20230125224856.22266-1-laurent.pinchart@ideasonboard.com>
@@ -41,102 +42,97 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The noon010pc30 camera sensor driver doesn't support DT and relies on
-platform data. The last board files supplying platform data for that
-device have been removed from the kernel in v3.16. A device tree file
-referencing the device has been added in v3.17, but without
-corresponding DT bindings, and with DT support in the driver. The driver
-thus hasn't been used since v316. Drop it.
+The sr030pc30 camera sensor driver doesn't support DT and relies on
+platform data. No board file has ever provided platform data for that
+device. The driver has thus never been used in the mainline kernel since
+its introduction in v2.6.37. Drop it.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
  .../admin-guide/media/i2c-cardlist.rst        |   1 -
- drivers/media/i2c/Kconfig                     |   8 -
+ drivers/media/i2c/Kconfig                     |   6 -
  drivers/media/i2c/Makefile                    |   1 -
- drivers/media/i2c/noon010pc30.c               | 821 ------------------
- include/media/i2c/noon010pc30.h               |  21 -
- 5 files changed, 852 deletions(-)
- delete mode 100644 drivers/media/i2c/noon010pc30.c
- delete mode 100644 include/media/i2c/noon010pc30.h
+ drivers/media/i2c/sr030pc30.c                 | 762 ------------------
+ include/media/i2c/sr030pc30.h                 |  17 -
+ 5 files changed, 787 deletions(-)
+ delete mode 100644 drivers/media/i2c/sr030pc30.c
+ delete mode 100644 include/media/i2c/sr030pc30.h
 
 diff --git a/Documentation/admin-guide/media/i2c-cardlist.rst b/Documentation/admin-guide/media/i2c-cardlist.rst
-index 35660b6c6cf5..e6c2ae43d02d 100644
+index b9a3a561183f..ada06fd8a377 100644
 --- a/Documentation/admin-guide/media/i2c-cardlist.rst
 +++ b/Documentation/admin-guide/media/i2c-cardlist.rst
-@@ -79,7 +79,6 @@ mt9t112       Aptina MT9T111/MT9T112
- mt9v011       Micron mt9v011 sensor
- mt9v032       Micron MT9V032 sensor
- mt9v111       Aptina MT9V111 sensor
--noon010pc30   Siliconfile NOON010PC30 sensor
- ov13858       OmniVision OV13858 sensor
- ov13b10       OmniVision OV13B10 sensor
- ov2640        OmniVision OV2640 sensor
+@@ -105,7 +105,6 @@ s5c73m3       Samsung S5C73M3 sensor
+ s5k4ecgx      Samsung S5K4ECGX sensor
+ s5k5baf       Samsung S5K5BAF sensor
+ s5k6a3        Samsung S5K6A3 sensor
+-sr030pc30     Siliconfile SR030PC30 sensor
+ vs6624        ST VS6624 sensor
+ ============  ==========================================================
+ 
 diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index f8823a837763..57e0e7169848 100644
+index 00bb460f1340..062cae8976ab 100644
 --- a/drivers/media/i2c/Kconfig
 +++ b/drivers/media/i2c/Kconfig
-@@ -298,14 +298,6 @@ config VIDEO_MT9V111
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called mt9v111.
+@@ -743,12 +743,6 @@ config VIDEO_S5K6A3
+ 	  This is a V4L2 sensor driver for Samsung S5K6A3 raw
+ 	  camera sensor.
  
--config VIDEO_NOON010PC30
--	tristate "Siliconfile NOON010PC30 sensor support"
+-config VIDEO_SR030PC30
+-	tristate "Siliconfile SR030PC30 sensor support"
 -	depends on I2C && VIDEO_DEV
--	select MEDIA_CONTROLLER
--	select VIDEO_V4L2_SUBDEV_API
 -	help
--	  This driver supports NOON010PC30 CIF camera from Siliconfile
+-	  This driver supports SR030PC30 VGA camera from Siliconfile
 -
- config VIDEO_OG01A1B
- 	tristate "OmniVision OG01A1B sensor support"
- 	depends on I2C && VIDEO_DEV
+ config VIDEO_ST_VGXY61
+ 	tristate "ST VGXY61 sensor support"
+ 	depends on OF && GPIOLIB && VIDEO_DEV && I2C
 diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-index 4d5962549c17..8e147169fa2d 100644
+index ee523e8a0dd0..3076dec9e655 100644
 --- a/drivers/media/i2c/Makefile
 +++ b/drivers/media/i2c/Makefile
-@@ -64,7 +64,6 @@ obj-$(CONFIG_VIDEO_MT9T112) += mt9t112.o
- obj-$(CONFIG_VIDEO_MT9V011) += mt9v011.o
- obj-$(CONFIG_VIDEO_MT9V032) += mt9v032.o
- obj-$(CONFIG_VIDEO_MT9V111) += mt9v111.o
--obj-$(CONFIG_VIDEO_NOON010PC30) += noon010pc30.o
- obj-$(CONFIG_VIDEO_OG01A1B) += og01a1b.o
- obj-$(CONFIG_VIDEO_OV02A10) += ov02a10.o
- obj-$(CONFIG_VIDEO_OV08D10) += ov08d10.o
-diff --git a/drivers/media/i2c/noon010pc30.c b/drivers/media/i2c/noon010pc30.c
+@@ -110,7 +110,6 @@ obj-$(CONFIG_VIDEO_SAA7127) += saa7127.o
+ obj-$(CONFIG_VIDEO_SAA717X) += saa717x.o
+ obj-$(CONFIG_VIDEO_SAA7185) += saa7185.o
+ obj-$(CONFIG_VIDEO_SONY_BTF_MPX) += sony-btf-mpx.o
+-obj-$(CONFIG_VIDEO_SR030PC30) += sr030pc30.o
+ obj-$(CONFIG_VIDEO_ST_MIPID02) += st-mipid02.o
+ obj-$(CONFIG_VIDEO_ST_VGXY61) += st-vgxy61.o
+ obj-$(CONFIG_VIDEO_TC358743) += tc358743.o
+diff --git a/drivers/media/i2c/sr030pc30.c b/drivers/media/i2c/sr030pc30.c
 deleted file mode 100644
-index 144bef2835f7..000000000000
---- a/drivers/media/i2c/noon010pc30.c
+index a83c8bf1c5dd..000000000000
+--- a/drivers/media/i2c/sr030pc30.c
 +++ /dev/null
-@@ -1,821 +0,0 @@
+@@ -1,762 +0,0 @@
 -// SPDX-License-Identifier: GPL-2.0-or-later
 -/*
-- * Driver for SiliconFile NOON010PC30 CIF (1/11") Image Sensor with ISP
+- * Driver for SiliconFile SR030PC30 VGA (1/10-Inch) Image Sensor with ISP
 - *
-- * Copyright (C) 2010 - 2011 Samsung Electronics Co., Ltd.
-- * Contact: Sylwester Nawrocki, <s.nawrocki@samsung.com>
+- * Copyright (C) 2010 Samsung Electronics Co., Ltd
+- * Author: Sylwester Nawrocki, s.nawrocki@samsung.com
 - *
-- * Initial register configuration based on a driver authored by
-- * HeungJun Kim <riverful.kim@samsung.com>.
+- * Based on original driver authored by Dongsoo Nathaniel Kim
+- * and HeungJun Kim <riverful.kim@samsung.com>.
+- *
+- * Based on mt9v011 Micron Digital Image Sensor driver
+- * Copyright (c) 2009 Mauro Carvalho Chehab
 - */
 -
--#include <linux/delay.h>
--#include <linux/gpio/consumer.h>
 -#include <linux/i2c.h>
+-#include <linux/delay.h>
 -#include <linux/slab.h>
--#include <linux/regulator/consumer.h>
--#include <media/i2c/noon010pc30.h>
--#include <linux/videodev2.h>
 -#include <linux/module.h>
--#include <media/v4l2-ctrls.h>
 -#include <media/v4l2-device.h>
--#include <media/v4l2-mediabus.h>
 -#include <media/v4l2-subdev.h>
+-#include <media/v4l2-mediabus.h>
+-#include <media/v4l2-ctrls.h>
+-#include <media/i2c/sr030pc30.h>
 -
 -static int debug;
 -module_param(debug, int, 0644);
--MODULE_PARM_DESC(debug, "Enable module debug trace. Set to 1 to enable.");
 -
--#define MODULE_NAME		"NOON010PC30"
+-#define MODULE_NAME	"SR030PC30"
 -
 -/*
 - * Register offsets within a page
@@ -146,114 +142,141 @@ index 144bef2835f7..000000000000
 -#define PAGEMODE_REG		0x03
 -#define DEVICE_ID_REG		0x0004
 -#define NOON010PC30_ID		0x86
--#define VDO_CTL_REG(n)		(0x0010 + (n))
+-#define SR030PC30_ID		0x8C
+-#define VDO_CTL1_REG		0x0010
+-#define SUBSAMPL_NONE_VGA	0
+-#define SUBSAMPL_QVGA		0x10
+-#define SUBSAMPL_QQVGA		0x20
+-#define VDO_CTL2_REG		0x0011
 -#define SYNC_CTL_REG		0x0012
--/* Window size and position */
--#define WIN_ROWH_REG		0x0013
--#define WIN_ROWL_REG		0x0014
--#define WIN_COLH_REG		0x0015
--#define WIN_COLL_REG		0x0016
--#define WIN_HEIGHTH_REG		0x0017
--#define WIN_HEIGHTL_REG		0x0018
--#define WIN_WIDTHH_REG		0x0019
--#define WIN_WIDTHL_REG		0x001A
--#define HBLANKH_REG		0x001B
--#define HBLANKL_REG		0x001C
--#define VSYNCH_REG		0x001D
--#define VSYNCL_REG		0x001E
--/* VSYNC control */
--#define VS_CTL_REG(n)		(0x00A1 + (n))
--/* page 1 */
--#define ISP_CTL_REG(n)		(0x0110 + (n))
--#define YOFS_REG		0x0119
--#define DARK_YOFS_REG		0x011A
--#define SAT_CTL_REG		0x0120
--#define BSAT_REG		0x0121
--#define RSAT_REG		0x0122
--/* Color correction */
--#define CMC_CTL_REG		0x0130
--#define CMC_OFSGH_REG		0x0133
--#define CMC_OFSGL_REG		0x0135
--#define CMC_SIGN_REG		0x0136
--#define CMC_GOFS_REG		0x0137
--#define CMC_COEF_REG(n)		(0x0138 + (n))
--#define CMC_OFS_REG(n)		(0x0141 + (n))
--/* Gamma correction */
--#define GMA_CTL_REG		0x0160
--#define GMA_COEF_REG(n)		(0x0161 + (n))
--/* Lens Shading */
--#define LENS_CTRL_REG		0x01D0
--#define LENS_XCEN_REG		0x01D1
--#define LENS_YCEN_REG		0x01D2
--#define LENS_RC_REG		0x01D3
--#define LENS_GC_REG		0x01D4
--#define LENS_BC_REG		0x01D5
--#define L_AGON_REG		0x01D6
--#define L_AGOFF_REG		0x01D7
--/* Page 3 - Auto Exposure */
--#define AE_CTL_REG(n)		(0x0310 + (n))
--#define AE_CTL9_REG		0x032C
--#define AE_CTL10_REG		0x032D
--#define AE_YLVL_REG		0x031C
--#define AE_YTH_REG(n)		(0x031D + (n))
--#define AE_WGT_REG		0x0326
--#define EXP_TIMEH_REG		0x0333
--#define EXP_TIMEM_REG		0x0334
--#define EXP_TIMEL_REG		0x0335
--#define EXP_MMINH_REG		0x0336
--#define EXP_MMINL_REG		0x0337
--#define EXP_MMAXH_REG		0x0338
--#define EXP_MMAXM_REG		0x0339
--#define EXP_MMAXL_REG		0x033A
--/* Page 4 - Auto White Balance */
--#define AWB_CTL_REG(n)		(0x0410 + (n))
--#define AWB_ENABE		0x80
--#define AWB_WGHT_REG		0x0419
--#define BGAIN_PAR_REG(n)	(0x044F + (n))
--/* Manual white balance, when AWB_CTL2[0]=1 */
--#define MWB_RGAIN_REG		0x0466
--#define MWB_BGAIN_REG		0x0467
--
--/* The token to mark an array end */
+-#define WIN_ROWH_REG		0x0020
+-#define WIN_ROWL_REG		0x0021
+-#define WIN_COLH_REG		0x0022
+-#define WIN_COLL_REG		0x0023
+-#define WIN_HEIGHTH_REG		0x0024
+-#define WIN_HEIGHTL_REG		0x0025
+-#define WIN_WIDTHH_REG		0x0026
+-#define WIN_WIDTHL_REG		0x0027
+-#define HBLANKH_REG		0x0040
+-#define HBLANKL_REG		0x0041
+-#define VSYNCH_REG		0x0042
+-#define VSYNCL_REG		0x0043
+-/* page 10 */
+-#define ISP_CTL_REG(n)		(0x1010 + (n))
+-#define YOFS_REG		0x1040
+-#define DARK_YOFS_REG		0x1041
+-#define AG_ABRTH_REG		0x1050
+-#define SAT_CTL_REG		0x1060
+-#define BSAT_REG		0x1061
+-#define RSAT_REG		0x1062
+-#define AG_SAT_TH_REG		0x1063
+-/* page 11 */
+-#define ZLPF_CTRL_REG		0x1110
+-#define ZLPF_CTRL2_REG		0x1112
+-#define ZLPF_AGH_THR_REG	0x1121
+-#define ZLPF_THR_REG		0x1160
+-#define ZLPF_DYN_THR_REG	0x1160
+-/* page 12 */
+-#define YCLPF_CTL1_REG		0x1240
+-#define YCLPF_CTL2_REG		0x1241
+-#define YCLPF_THR_REG		0x1250
+-#define BLPF_CTL_REG		0x1270
+-#define BLPF_THR1_REG		0x1274
+-#define BLPF_THR2_REG		0x1275
+-/* page 14 - Lens Shading Compensation */
+-#define LENS_CTRL_REG		0x1410
+-#define LENS_XCEN_REG		0x1420
+-#define LENS_YCEN_REG		0x1421
+-#define LENS_R_COMP_REG		0x1422
+-#define LENS_G_COMP_REG		0x1423
+-#define LENS_B_COMP_REG		0x1424
+-/* page 15 - Color correction */
+-#define CMC_CTL_REG		0x1510
+-#define CMC_OFSGH_REG		0x1514
+-#define CMC_OFSGL_REG		0x1516
+-#define CMC_SIGN_REG		0x1517
+-/* Color correction coefficients */
+-#define CMC_COEF_REG(n)		(0x1530 + (n))
+-/* Color correction offset coefficients */
+-#define CMC_OFS_REG(n)		(0x1540 + (n))
+-/* page 16 - Gamma correction */
+-#define GMA_CTL_REG		0x1610
+-/* Gamma correction coefficients 0.14 */
+-#define GMA_COEF_REG(n)		(0x1630 + (n))
+-/* page 20 - Auto Exposure */
+-#define AE_CTL1_REG		0x2010
+-#define AE_CTL2_REG		0x2011
+-#define AE_FRM_CTL_REG		0x2020
+-#define AE_FINE_CTL_REG(n)	(0x2028 + (n))
+-#define EXP_TIMEH_REG		0x2083
+-#define EXP_TIMEM_REG		0x2084
+-#define EXP_TIMEL_REG		0x2085
+-#define EXP_MMINH_REG		0x2086
+-#define EXP_MMINL_REG		0x2087
+-#define EXP_MMAXH_REG		0x2088
+-#define EXP_MMAXM_REG		0x2089
+-#define EXP_MMAXL_REG		0x208A
+-/* page 22 - Auto White Balance */
+-#define AWB_CTL1_REG		0x2210
+-#define AWB_ENABLE		0x80
+-#define AWB_CTL2_REG		0x2211
+-#define MWB_ENABLE		0x01
+-/* RGB gain control (manual WB) when AWB_CTL1[7]=0 */
+-#define AWB_RGAIN_REG		0x2280
+-#define AWB_GGAIN_REG		0x2281
+-#define AWB_BGAIN_REG		0x2282
+-#define AWB_RMAX_REG		0x2283
+-#define AWB_RMIN_REG		0x2284
+-#define AWB_BMAX_REG		0x2285
+-#define AWB_BMIN_REG		0x2286
+-/* R, B gain range in bright light conditions */
+-#define AWB_RMAXB_REG		0x2287
+-#define AWB_RMINB_REG		0x2288
+-#define AWB_BMAXB_REG		0x2289
+-#define AWB_BMINB_REG		0x228A
+-/* manual white balance, when AWB_CTL2[0]=1 */
+-#define MWB_RGAIN_REG		0x22B2
+-#define MWB_BGAIN_REG		0x22B3
+-/* the token to mark an array end */
 -#define REG_TERM		0xFFFF
 -
--struct noon010_format {
+-/* Minimum and maximum exposure time in ms */
+-#define EXPOS_MIN_MS		1
+-#define EXPOS_MAX_MS		125
+-
+-struct sr030pc30_info {
+-	struct v4l2_subdev sd;
+-	struct v4l2_ctrl_handler hdl;
+-	const struct sr030pc30_platform_data *pdata;
+-	const struct sr030pc30_format *curr_fmt;
+-	const struct sr030pc30_frmsize *curr_win;
+-	unsigned int hflip:1;
+-	unsigned int vflip:1;
+-	unsigned int sleep:1;
+-	struct {
+-		/* auto whitebalance control cluster */
+-		struct v4l2_ctrl *awb;
+-		struct v4l2_ctrl *red;
+-		struct v4l2_ctrl *blue;
+-	};
+-	struct {
+-		/* auto exposure control cluster */
+-		struct v4l2_ctrl *autoexp;
+-		struct v4l2_ctrl *exp;
+-	};
+-	u8 i2c_reg_page;
+-};
+-
+-struct sr030pc30_format {
 -	u32 code;
 -	enum v4l2_colorspace colorspace;
 -	u16 ispctl1_reg;
 -};
 -
--struct noon010_frmsize {
+-struct sr030pc30_frmsize {
 -	u16 width;
 -	u16 height;
 -	int vid_ctl1;
--};
--
--static const char * const noon010_supply_name[] = {
--	"vdd_core", "vddio", "vdda"
--};
--
--#define NOON010_NUM_SUPPLIES ARRAY_SIZE(noon010_supply_name)
--
--struct noon010_info {
--	struct v4l2_subdev sd;
--	struct media_pad pad;
--	struct v4l2_ctrl_handler hdl;
--	struct regulator_bulk_data supply[NOON010_NUM_SUPPLIES];
--	struct gpio_desc *reset;
--	struct gpio_desc *stby;
--
--	/* Protects the struct members below */
--	struct mutex lock;
--
--	const struct noon010_format *curr_fmt;
--	const struct noon010_frmsize *curr_win;
--	unsigned int apply_new_cfg:1;
--	unsigned int streaming:1;
--	unsigned int hflip:1;
--	unsigned int vflip:1;
--	unsigned int power:1;
--	u8 i2c_reg_page;
 -};
 -
 -struct i2c_regval {
@@ -261,25 +284,25 @@ index 144bef2835f7..000000000000
 -	u16 val;
 -};
 -
--/* Supported resolutions. */
--static const struct noon010_frmsize noon010_sizes[] = {
+-/* supported resolutions */
+-static const struct sr030pc30_frmsize sr030pc30_sizes[] = {
 -	{
--		.width		= 352,
--		.height		= 288,
--		.vid_ctl1	= 0,
+-		.width		= 640,
+-		.height		= 480,
+-		.vid_ctl1	= SUBSAMPL_NONE_VGA,
 -	}, {
--		.width		= 176,
--		.height		= 144,
--		.vid_ctl1	= 0x10,
+-		.width		= 320,
+-		.height		= 240,
+-		.vid_ctl1	= SUBSAMPL_QVGA,
 -	}, {
--		.width		= 88,
--		.height		= 72,
--		.vid_ctl1	= 0x20,
+-		.width		= 160,
+-		.height		= 120,
+-		.vid_ctl1	= SUBSAMPL_QQVGA,
 -	},
 -};
 -
--/* Supported pixel formats. */
--static const struct noon010_format noon010_formats[] = {
+-/* supported pixel formats */
+-static const struct sr030pc30_format sr030pc30_formats[] = {
 -	{
 -		.code		= MEDIA_BUS_FMT_YUYV8_2X8,
 -		.colorspace	= V4L2_COLORSPACE_JPEG,
@@ -303,56 +326,74 @@ index 144bef2835f7..000000000000
 -	},
 -};
 -
--static const struct i2c_regval noon010_base_regs[] = {
--	{ WIN_COLL_REG,		0x06 },	{ HBLANKL_REG,		0x7C },
+-static const struct i2c_regval sr030pc30_base_regs[] = {
+-	/* Window size and position within pixel matrix */
+-	{ WIN_ROWH_REG,		0x00 }, { WIN_ROWL_REG,		0x06 },
+-	{ WIN_COLH_REG,		0x00 },	{ WIN_COLL_REG,		0x06 },
+-	{ WIN_HEIGHTH_REG,	0x01 }, { WIN_HEIGHTL_REG,	0xE0 },
+-	{ WIN_WIDTHH_REG,	0x02 }, { WIN_WIDTHL_REG,	0x80 },
+-	{ HBLANKH_REG,		0x01 }, { HBLANKL_REG,		0x50 },
+-	{ VSYNCH_REG,		0x00 }, { VSYNCL_REG,		0x14 },
+-	{ SYNC_CTL_REG,		0 },
 -	/* Color corection and saturation */
--	{ ISP_CTL_REG(0),	0x30 }, { ISP_CTL_REG(2),	0x30 },
--	{ YOFS_REG,		0x80 }, { DARK_YOFS_REG,	0x04 },
+-	{ ISP_CTL_REG(0),	0x30 }, { YOFS_REG,		0x80 },
+-	{ DARK_YOFS_REG,	0x04 }, { AG_ABRTH_REG,		0x78 },
 -	{ SAT_CTL_REG,		0x1F }, { BSAT_REG,		0x90 },
--	{ CMC_CTL_REG,		0x0F }, { CMC_OFSGH_REG,	0x3C },
--	{ CMC_OFSGL_REG,	0x2C }, { CMC_SIGN_REG,		0x3F },
--	{ CMC_COEF_REG(0),	0x79 }, { CMC_OFS_REG(0),	0x00 },
--	{ CMC_COEF_REG(1),	0x39 }, { CMC_OFS_REG(1),	0x00 },
--	{ CMC_COEF_REG(2),	0x00 }, { CMC_OFS_REG(2),	0x00 },
--	{ CMC_COEF_REG(3),	0x11 }, { CMC_OFS_REG(3),	0x8B },
--	{ CMC_COEF_REG(4),	0x65 }, { CMC_OFS_REG(4),	0x07 },
--	{ CMC_COEF_REG(5),	0x14 }, { CMC_OFS_REG(5),	0x04 },
--	{ CMC_COEF_REG(6),	0x01 }, { CMC_OFS_REG(6),	0x9C },
--	{ CMC_COEF_REG(7),	0x33 }, { CMC_OFS_REG(7),	0x89 },
--	{ CMC_COEF_REG(8),	0x74 }, { CMC_OFS_REG(8),	0x25 },
+-	{ AG_SAT_TH_REG,	0xF0 }, { 0x1064,		0x80 },
+-	{ CMC_CTL_REG,		0x03 }, { CMC_OFSGH_REG,	0x3C },
+-	{ CMC_OFSGL_REG,	0x2C }, { CMC_SIGN_REG,		0x2F },
+-	{ CMC_COEF_REG(0),	0xCB }, { CMC_OFS_REG(0),	0x87 },
+-	{ CMC_COEF_REG(1),	0x61 }, { CMC_OFS_REG(1),	0x18 },
+-	{ CMC_COEF_REG(2),	0x16 }, { CMC_OFS_REG(2),	0x91 },
+-	{ CMC_COEF_REG(3),	0x23 }, { CMC_OFS_REG(3),	0x94 },
+-	{ CMC_COEF_REG(4),	0xCE }, { CMC_OFS_REG(4),	0x9f },
+-	{ CMC_COEF_REG(5),	0x2B }, { CMC_OFS_REG(5),	0x33 },
+-	{ CMC_COEF_REG(6),	0x01 }, { CMC_OFS_REG(6),	0x00 },
+-	{ CMC_COEF_REG(7),	0x34 }, { CMC_OFS_REG(7),	0x94 },
+-	{ CMC_COEF_REG(8),	0x75 }, { CMC_OFS_REG(8),	0x14 },
+-	/* Color corection coefficients */
+-	{ GMA_CTL_REG,		0x03 },	{ GMA_COEF_REG(0),	0x00 },
+-	{ GMA_COEF_REG(1),	0x19 },	{ GMA_COEF_REG(2),	0x26 },
+-	{ GMA_COEF_REG(3),	0x3B },	{ GMA_COEF_REG(4),	0x5D },
+-	{ GMA_COEF_REG(5),	0x79 }, { GMA_COEF_REG(6),	0x8E },
+-	{ GMA_COEF_REG(7),	0x9F },	{ GMA_COEF_REG(8),	0xAF },
+-	{ GMA_COEF_REG(9),	0xBD },	{ GMA_COEF_REG(10),	0xCA },
+-	{ GMA_COEF_REG(11),	0xDD }, { GMA_COEF_REG(12),	0xEC },
+-	{ GMA_COEF_REG(13),	0xF7 },	{ GMA_COEF_REG(14),	0xFF },
+-	/* Noise reduction, Z-LPF, YC-LPF and BLPF filters setup */
+-	{ ZLPF_CTRL_REG,	0x99 }, { ZLPF_CTRL2_REG,	0x0E },
+-	{ ZLPF_AGH_THR_REG,	0x29 }, { ZLPF_THR_REG,		0x0F },
+-	{ ZLPF_DYN_THR_REG,	0x63 }, { YCLPF_CTL1_REG,	0x23 },
+-	{ YCLPF_CTL2_REG,	0x3B }, { YCLPF_THR_REG,	0x05 },
+-	{ BLPF_CTL_REG,		0x1D }, { BLPF_THR1_REG,	0x05 },
+-	{ BLPF_THR2_REG,	0x04 },
 -	/* Automatic white balance */
--	{ AWB_CTL_REG(0),	0x78 }, { AWB_CTL_REG(1),	0x2E },
--	{ AWB_CTL_REG(2),	0x20 }, { AWB_CTL_REG(3),	0x85 },
+-	{ AWB_CTL1_REG,		0xFB }, { AWB_CTL2_REG,		0x26 },
+-	{ AWB_RMAX_REG,		0x54 }, { AWB_RMIN_REG,		0x2B },
+-	{ AWB_BMAX_REG,		0x57 }, { AWB_BMIN_REG,		0x29 },
+-	{ AWB_RMAXB_REG,	0x50 }, { AWB_RMINB_REG,	0x43 },
+-	{ AWB_BMAXB_REG,	0x30 }, { AWB_BMINB_REG,	0x22 },
 -	/* Auto exposure */
--	{ AE_CTL_REG(0),	0xDC }, { AE_CTL_REG(1),	0x81 },
--	{ AE_CTL_REG(2),	0x30 }, { AE_CTL_REG(3),	0xA5 },
--	{ AE_CTL_REG(4),	0x40 }, { AE_CTL_REG(5),	0x51 },
--	{ AE_CTL_REG(6),	0x33 }, { AE_CTL_REG(7),	0x7E },
--	{ AE_CTL9_REG,		0x00 }, { AE_CTL10_REG,		0x02 },
--	{ AE_YLVL_REG,		0x44 },	{ AE_YTH_REG(0),	0x34 },
--	{ AE_YTH_REG(1),	0x30 },	{ AE_WGT_REG,		0xD5 },
+-	{ AE_CTL1_REG,		0x8C }, { AE_CTL2_REG,		0x04 },
+-	{ AE_FRM_CTL_REG,	0x01 }, { AE_FINE_CTL_REG(0),	0x3F },
+-	{ AE_FINE_CTL_REG(1),	0xA3 }, { AE_FINE_CTL_REG(3),	0x34 },
 -	/* Lens shading compensation */
 -	{ LENS_CTRL_REG,	0x01 }, { LENS_XCEN_REG,	0x80 },
--	{ LENS_YCEN_REG,	0x70 }, { LENS_RC_REG,		0x53 },
--	{ LENS_GC_REG,		0x40 }, { LENS_BC_REG,		0x3E },
+-	{ LENS_YCEN_REG,	0x70 }, { LENS_R_COMP_REG,	0x53 },
+-	{ LENS_G_COMP_REG,	0x40 }, { LENS_B_COMP_REG,	0x3e },
 -	{ REG_TERM,		0 },
 -};
 -
--static inline struct noon010_info *to_noon010(struct v4l2_subdev *sd)
+-static inline struct sr030pc30_info *to_sr030pc30(struct v4l2_subdev *sd)
 -{
--	return container_of(sd, struct noon010_info, sd);
+-	return container_of(sd, struct sr030pc30_info, sd);
 -}
 -
--static inline struct v4l2_subdev *to_sd(struct v4l2_ctrl *ctrl)
--{
--	return &container_of(ctrl->handler, struct noon010_info, hdl)->sd;
--}
--
--static inline int set_i2c_page(struct noon010_info *info,
+-static inline int set_i2c_page(struct sr030pc30_info *info,
 -			       struct i2c_client *client, unsigned int reg)
 -{
--	u32 page = reg >> 8 & 0xFF;
 -	int ret = 0;
+-	u32 page = reg >> 8 & 0xFF;
 -
 -	if (info->i2c_reg_page != page && (reg & 0xFF) != 0x03) {
 -		ret = i2c_smbus_write_byte_data(client, PAGEMODE_REG, page);
@@ -365,31 +406,31 @@ index 144bef2835f7..000000000000
 -static int cam_i2c_read(struct v4l2_subdev *sd, u32 reg_addr)
 -{
 -	struct i2c_client *client = v4l2_get_subdevdata(sd);
--	struct noon010_info *info = to_noon010(sd);
--	int ret = set_i2c_page(info, client, reg_addr);
+-	struct sr030pc30_info *info = to_sr030pc30(sd);
 -
--	if (ret)
--		return ret;
--	return i2c_smbus_read_byte_data(client, reg_addr & 0xFF);
+-	int ret = set_i2c_page(info, client, reg_addr);
+-	if (!ret)
+-		ret = i2c_smbus_read_byte_data(client, reg_addr & 0xFF);
+-	return ret;
 -}
 -
 -static int cam_i2c_write(struct v4l2_subdev *sd, u32 reg_addr, u32 val)
 -{
 -	struct i2c_client *client = v4l2_get_subdevdata(sd);
--	struct noon010_info *info = to_noon010(sd);
--	int ret = set_i2c_page(info, client, reg_addr);
+-	struct sr030pc30_info *info = to_sr030pc30(sd);
 -
--	if (ret)
--		return ret;
--	return i2c_smbus_write_byte_data(client, reg_addr & 0xFF, val);
+-	int ret = set_i2c_page(info, client, reg_addr);
+-	if (!ret)
+-		ret = i2c_smbus_write_byte_data(
+-			client, reg_addr & 0xFF, val);
+-	return ret;
 -}
 -
--static inline int noon010_bulk_write_reg(struct v4l2_subdev *sd,
--					 const struct i2c_regval *msg)
+-static inline int sr030pc30_bulk_write_reg(struct v4l2_subdev *sd,
+-				const struct i2c_regval *msg)
 -{
 -	while (msg->addr != REG_TERM) {
 -		int ret = cam_i2c_write(sd, msg->addr, msg->val);
--
 -		if (ret)
 -			return ret;
 -		msg++;
@@ -398,85 +439,74 @@ index 144bef2835f7..000000000000
 -}
 -
 -/* Device reset and sleep mode control */
--static int noon010_power_ctrl(struct v4l2_subdev *sd, bool reset, bool sleep)
+-static int sr030pc30_pwr_ctrl(struct v4l2_subdev *sd,
+-				     bool reset, bool sleep)
 -{
--	struct noon010_info *info = to_noon010(sd);
+-	struct sr030pc30_info *info = to_sr030pc30(sd);
 -	u8 reg = sleep ? 0xF1 : 0xF0;
 -	int ret = 0;
 -
--	if (reset) {
+-	if (reset)
 -		ret = cam_i2c_write(sd, POWER_CTRL_REG, reg | 0x02);
--		udelay(20);
--	}
 -	if (!ret) {
 -		ret = cam_i2c_write(sd, POWER_CTRL_REG, reg);
--		if (reset && !ret)
--			info->i2c_reg_page = -1;
+-		if (!ret) {
+-			info->sleep = sleep;
+-			if (reset)
+-				info->i2c_reg_page = -1;
+-		}
 -	}
 -	return ret;
 -}
 -
--/* Automatic white balance control */
--static int noon010_enable_autowhitebalance(struct v4l2_subdev *sd, int on)
+-static int sr030pc30_set_flip(struct v4l2_subdev *sd)
 -{
--	int ret;
+-	struct sr030pc30_info *info = to_sr030pc30(sd);
 -
--	ret = cam_i2c_write(sd, AWB_CTL_REG(1), on ? 0x2E : 0x2F);
--	if (!ret)
--		ret = cam_i2c_write(sd, AWB_CTL_REG(0), on ? 0xFB : 0x7B);
--	return ret;
--}
--
--/* Called with struct noon010_info.lock mutex held */
--static int noon010_set_flip(struct v4l2_subdev *sd, int hflip, int vflip)
--{
--	struct noon010_info *info = to_noon010(sd);
--	int reg, ret;
--
--	reg = cam_i2c_read(sd, VDO_CTL_REG(1));
+-	s32 reg = cam_i2c_read(sd, VDO_CTL2_REG);
 -	if (reg < 0)
 -		return reg;
 -
 -	reg &= 0x7C;
--	if (hflip)
+-	if (info->hflip)
 -		reg |= 0x01;
--	if (vflip)
+-	if (info->vflip)
 -		reg |= 0x02;
+-	return cam_i2c_write(sd, VDO_CTL2_REG, reg | 0x80);
+-}
 -
--	ret = cam_i2c_write(sd, VDO_CTL_REG(1), reg | 0x80);
--	if (!ret) {
--		info->hflip = hflip;
--		info->vflip = vflip;
--	}
+-/* Configure resolution, color format and image flip */
+-static int sr030pc30_set_params(struct v4l2_subdev *sd)
+-{
+-	struct sr030pc30_info *info = to_sr030pc30(sd);
+-	int ret;
+-
+-	if (!info->curr_win)
+-		return -EINVAL;
+-
+-	/* Configure the resolution through subsampling */
+-	ret = cam_i2c_write(sd, VDO_CTL1_REG,
+-			    info->curr_win->vid_ctl1);
+-
+-	if (!ret && info->curr_fmt)
+-		ret = cam_i2c_write(sd, ISP_CTL_REG(0),
+-				info->curr_fmt->ispctl1_reg);
+-	if (!ret)
+-		ret = sr030pc30_set_flip(sd);
+-
 -	return ret;
 -}
 -
--/* Configure resolution and color format */
--static int noon010_set_params(struct v4l2_subdev *sd)
--{
--	struct noon010_info *info = to_noon010(sd);
--
--	int ret = cam_i2c_write(sd, VDO_CTL_REG(0),
--				info->curr_win->vid_ctl1);
--	if (ret)
--		return ret;
--	return cam_i2c_write(sd, ISP_CTL_REG(0),
--			     info->curr_fmt->ispctl1_reg);
--}
--
 -/* Find nearest matching image pixel size. */
--static int noon010_try_frame_size(struct v4l2_mbus_framefmt *mf,
--				  const struct noon010_frmsize **size)
+-static int sr030pc30_try_frame_size(struct v4l2_mbus_framefmt *mf)
 -{
 -	unsigned int min_err = ~0;
--	int i = ARRAY_SIZE(noon010_sizes);
--	const struct noon010_frmsize *fsize = &noon010_sizes[0],
--		*match = NULL;
--
+-	int i = ARRAY_SIZE(sr030pc30_sizes);
+-	const struct sr030pc30_frmsize *fsize = &sr030pc30_sizes[0],
+-					*match = NULL;
 -	while (i--) {
 -		int err = abs(fsize->width - mf->width)
 -				+ abs(fsize->height - mf->height);
--
 -		if (err < min_err) {
 -			min_err = err;
 -			match = fsize;
@@ -486,476 +516,380 @@ index 144bef2835f7..000000000000
 -	if (match) {
 -		mf->width  = match->width;
 -		mf->height = match->height;
--		if (size)
--			*size = match;
 -		return 0;
 -	}
 -	return -EINVAL;
 -}
 -
--/* Called with info.lock mutex held */
--static int power_enable(struct noon010_info *info)
+-static int sr030pc30_s_ctrl(struct v4l2_ctrl *ctrl)
 -{
--	int ret;
--
--	if (info->power) {
--		v4l2_info(&info->sd, "%s: sensor is already on\n", __func__);
--		return 0;
--	}
--
--	/* Assert standby: line should be flagged active low in descriptor */
--	if (info->stby)
--		gpiod_set_value(info->stby, 1);
--
--	/* Assert reset: line should be flagged active low in descriptor */
--	if (info->reset)
--		gpiod_set_value(info->reset, 1);
--
--	ret = regulator_bulk_enable(NOON010_NUM_SUPPLIES, info->supply);
--	if (ret)
--		return ret;
--
--	/* De-assert reset and standby */
--	if (info->reset) {
--		msleep(50);
--		gpiod_set_value(info->reset, 0);
--	}
--	if (info->stby) {
--		udelay(1000);
--		gpiod_set_value(info->stby, 0);
--	}
--	/* Cycle reset: assert and deassert */
--	if (info->reset) {
--		udelay(1000);
--		gpiod_set_value(info->reset, 1);
--		msleep(100);
--		gpiod_set_value(info->reset, 0);
--		msleep(20);
--	}
--	info->power = 1;
--
--	v4l2_dbg(1, debug, &info->sd,  "%s: sensor is on\n", __func__);
--	return 0;
--}
--
--/* Called with info.lock mutex held */
--static int power_disable(struct noon010_info *info)
--{
--	int ret;
--
--	if (!info->power) {
--		v4l2_info(&info->sd, "%s: sensor is already off\n", __func__);
--		return 0;
--	}
--
--	ret = regulator_bulk_disable(NOON010_NUM_SUPPLIES, info->supply);
--	if (ret)
--		return ret;
--
--	/* Assert standby and reset */
--	if (info->stby)
--		gpiod_set_value(info->stby, 1);
--
--	if (info->reset)
--		gpiod_set_value(info->reset, 1);
--
--	info->power = 0;
--
--	v4l2_dbg(1, debug, &info->sd,  "%s: sensor is off\n", __func__);
--
--	return 0;
--}
--
--static int noon010_s_ctrl(struct v4l2_ctrl *ctrl)
--{
--	struct v4l2_subdev *sd = to_sd(ctrl);
--	struct noon010_info *info = to_noon010(sd);
+-	struct sr030pc30_info *info =
+-		container_of(ctrl->handler, struct sr030pc30_info, hdl);
+-	struct v4l2_subdev *sd = &info->sd;
 -	int ret = 0;
 -
 -	v4l2_dbg(1, debug, sd, "%s: ctrl_id: %d, value: %d\n",
--		 __func__, ctrl->id, ctrl->val);
--
--	mutex_lock(&info->lock);
--	/*
--	 * If the device is not powered up by the host driver do
--	 * not apply any controls to H/W at this time. Instead
--	 * the controls will be restored right after power-up.
--	 */
--	if (!info->power)
--		goto unlock;
+-			 __func__, ctrl->id, ctrl->val);
 -
 -	switch (ctrl->id) {
 -	case V4L2_CID_AUTO_WHITE_BALANCE:
--		ret = noon010_enable_autowhitebalance(sd, ctrl->val);
--		break;
--	case V4L2_CID_BLUE_BALANCE:
--		ret = cam_i2c_write(sd, MWB_BGAIN_REG, ctrl->val);
--		break;
--	case V4L2_CID_RED_BALANCE:
--		ret =  cam_i2c_write(sd, MWB_RGAIN_REG, ctrl->val);
--		break;
+-		if (ctrl->is_new) {
+-			ret = cam_i2c_write(sd, AWB_CTL2_REG,
+-					ctrl->val ? 0x2E : 0x2F);
+-			if (!ret)
+-				ret = cam_i2c_write(sd, AWB_CTL1_REG,
+-						ctrl->val ? 0xFB : 0x7B);
+-		}
+-		if (!ret && info->blue->is_new)
+-			ret = cam_i2c_write(sd, MWB_BGAIN_REG, info->blue->val);
+-		if (!ret && info->red->is_new)
+-			ret = cam_i2c_write(sd, MWB_RGAIN_REG, info->red->val);
+-		return ret;
+-
+-	case V4L2_CID_EXPOSURE_AUTO:
+-		/* auto anti-flicker is also enabled here */
+-		if (ctrl->is_new)
+-			ret = cam_i2c_write(sd, AE_CTL1_REG,
+-				ctrl->val == V4L2_EXPOSURE_AUTO ? 0xDC : 0x0C);
+-		if (info->exp->is_new) {
+-			unsigned long expos = info->exp->val;
+-
+-			expos = expos * info->pdata->clk_rate / (8 * 1000);
+-
+-			if (!ret)
+-				ret = cam_i2c_write(sd, EXP_TIMEH_REG,
+-						expos >> 16 & 0xFF);
+-			if (!ret)
+-				ret = cam_i2c_write(sd, EXP_TIMEM_REG,
+-						expos >> 8 & 0xFF);
+-			if (!ret)
+-				ret = cam_i2c_write(sd, EXP_TIMEL_REG,
+-						expos & 0xFF);
+-		}
+-		return ret;
 -	default:
--		ret = -EINVAL;
--	}
--unlock:
--	mutex_unlock(&info->lock);
--	return ret;
--}
--
--static int noon010_enum_mbus_code(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_state *sd_state,
--				  struct v4l2_subdev_mbus_code_enum *code)
--{
--	if (code->index >= ARRAY_SIZE(noon010_formats))
 -		return -EINVAL;
+-	}
 -
--	code->code = noon010_formats[code->index].code;
 -	return 0;
 -}
 -
--static int noon010_get_fmt(struct v4l2_subdev *sd,
--			   struct v4l2_subdev_state *sd_state,
--			   struct v4l2_subdev_format *fmt)
+-static int sr030pc30_enum_mbus_code(struct v4l2_subdev *sd,
+-		struct v4l2_subdev_state *sd_state,
+-		struct v4l2_subdev_mbus_code_enum *code)
 -{
--	struct noon010_info *info = to_noon010(sd);
+-	if (!code || code->pad ||
+-	    code->index >= ARRAY_SIZE(sr030pc30_formats))
+-		return -EINVAL;
+-
+-	code->code = sr030pc30_formats[code->index].code;
+-	return 0;
+-}
+-
+-static int sr030pc30_get_fmt(struct v4l2_subdev *sd,
+-		struct v4l2_subdev_state *sd_state,
+-		struct v4l2_subdev_format *format)
+-{
 -	struct v4l2_mbus_framefmt *mf;
+-	struct sr030pc30_info *info = to_sr030pc30(sd);
 -
--	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		if (sd_state) {
--			mf = v4l2_subdev_get_try_format(sd, sd_state, 0);
--			fmt->format = *mf;
--		}
--		return 0;
--	}
--	mf = &fmt->format;
+-	if (!format || format->pad)
+-		return -EINVAL;
 -
--	mutex_lock(&info->lock);
--	mf->width = info->curr_win->width;
--	mf->height = info->curr_win->height;
--	mf->code = info->curr_fmt->code;
--	mf->colorspace = info->curr_fmt->colorspace;
--	mf->field = V4L2_FIELD_NONE;
+-	mf = &format->format;
 -
--	mutex_unlock(&info->lock);
+-	if (!info->curr_win || !info->curr_fmt)
+-		return -EINVAL;
+-
+-	mf->width	= info->curr_win->width;
+-	mf->height	= info->curr_win->height;
+-	mf->code	= info->curr_fmt->code;
+-	mf->colorspace	= info->curr_fmt->colorspace;
+-	mf->field	= V4L2_FIELD_NONE;
+-
 -	return 0;
 -}
 -
 -/* Return nearest media bus frame format. */
--static const struct noon010_format *noon010_try_fmt(struct v4l2_subdev *sd,
--					    struct v4l2_mbus_framefmt *mf)
+-static const struct sr030pc30_format *try_fmt(struct v4l2_subdev *sd,
+-					      struct v4l2_mbus_framefmt *mf)
 -{
--	int i = ARRAY_SIZE(noon010_formats);
+-	int i;
 -
--	while (--i)
--		if (mf->code == noon010_formats[i].code)
+-	sr030pc30_try_frame_size(mf);
+-
+-	for (i = 0; i < ARRAY_SIZE(sr030pc30_formats); i++) {
+-		if (mf->code == sr030pc30_formats[i].code)
 -			break;
--	mf->code = noon010_formats[i].code;
+-	}
+-	if (i == ARRAY_SIZE(sr030pc30_formats))
+-		i = 0;
 -
--	return &noon010_formats[i];
+-	mf->code = sr030pc30_formats[i].code;
+-
+-	return &sr030pc30_formats[i];
 -}
 -
--static int noon010_set_fmt(struct v4l2_subdev *sd,
--			   struct v4l2_subdev_state *sd_state,
--			   struct v4l2_subdev_format *fmt)
+-/* Return nearest media bus frame format. */
+-static int sr030pc30_set_fmt(struct v4l2_subdev *sd,
+-		struct v4l2_subdev_state *sd_state,
+-		struct v4l2_subdev_format *format)
 -{
--	struct noon010_info *info = to_noon010(sd);
--	const struct noon010_frmsize *size = NULL;
--	const struct noon010_format *nf;
+-	struct sr030pc30_info *info = sd ? to_sr030pc30(sd) : NULL;
+-	const struct sr030pc30_format *fmt;
 -	struct v4l2_mbus_framefmt *mf;
--	int ret = 0;
 -
--	nf = noon010_try_fmt(sd, &fmt->format);
--	noon010_try_frame_size(&fmt->format, &size);
--	fmt->format.colorspace = V4L2_COLORSPACE_JPEG;
--	fmt->format.field = V4L2_FIELD_NONE;
+-	if (!sd || !format)
+-		return -EINVAL;
 -
--	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		if (sd_state) {
--			mf = v4l2_subdev_get_try_format(sd, sd_state, 0);
--			*mf = fmt->format;
--		}
+-	mf = &format->format;
+-	if (format->pad)
+-		return -EINVAL;
+-
+-	fmt = try_fmt(sd, mf);
+-	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
+-		sd_state->pads->try_fmt = *mf;
 -		return 0;
 -	}
--	mutex_lock(&info->lock);
--	if (!info->streaming) {
--		info->apply_new_cfg = 1;
--		info->curr_fmt = nf;
--		info->curr_win = size;
--	} else {
--		ret = -EBUSY;
--	}
--	mutex_unlock(&info->lock);
--	return ret;
+-
+-	info->curr_fmt = fmt;
+-
+-	return sr030pc30_set_params(sd);
 -}
 -
--/* Called with struct noon010_info.lock mutex held */
--static int noon010_base_config(struct v4l2_subdev *sd)
+-static int sr030pc30_base_config(struct v4l2_subdev *sd)
 -{
--	int ret = noon010_bulk_write_reg(sd, noon010_base_regs);
--	if (!ret)
--		ret = noon010_set_params(sd);
--	if (!ret)
--		ret = noon010_set_flip(sd, 1, 0);
--
--	return ret;
--}
--
--static int noon010_s_power(struct v4l2_subdev *sd, int on)
--{
--	struct noon010_info *info = to_noon010(sd);
+-	struct sr030pc30_info *info = to_sr030pc30(sd);
 -	int ret;
+-	unsigned long expmin, expmax;
 -
--	mutex_lock(&info->lock);
--	if (on) {
--		ret = power_enable(info);
--		if (!ret)
--			ret = noon010_base_config(sd);
--	} else {
--		noon010_power_ctrl(sd, false, true);
--		ret = power_disable(info);
+-	ret = sr030pc30_bulk_write_reg(sd, sr030pc30_base_regs);
+-	if (!ret) {
+-		info->curr_fmt = &sr030pc30_formats[0];
+-		info->curr_win = &sr030pc30_sizes[0];
+-		ret = sr030pc30_set_params(sd);
 -	}
--	mutex_unlock(&info->lock);
+-	if (!ret)
+-		ret = sr030pc30_pwr_ctrl(sd, false, false);
 -
--	/* Restore the controls state */
--	if (!ret && on)
--		ret = v4l2_ctrl_handler_setup(&info->hdl);
--
--	return ret;
--}
--
--static int noon010_s_stream(struct v4l2_subdev *sd, int on)
--{
--	struct noon010_info *info = to_noon010(sd);
--	int ret = 0;
--
--	mutex_lock(&info->lock);
--	if (!info->streaming != !on) {
--		ret = noon010_power_ctrl(sd, false, !on);
--		if (!ret)
--			info->streaming = on;
--	}
--	if (!ret && on && info->apply_new_cfg) {
--		ret = noon010_set_params(sd);
--		if (!ret)
--			info->apply_new_cfg = 0;
--	}
--	mutex_unlock(&info->lock);
--	return ret;
--}
--
--static int noon010_log_status(struct v4l2_subdev *sd)
--{
--	struct noon010_info *info = to_noon010(sd);
--
--	v4l2_ctrl_handler_log_status(&info->hdl, sd->name);
--	return 0;
--}
--
--static int noon010_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
--{
--	struct v4l2_mbus_framefmt *mf = v4l2_subdev_get_try_format(sd,
--								   fh->state,
--								   0);
--
--	mf->width = noon010_sizes[0].width;
--	mf->height = noon010_sizes[0].height;
--	mf->code = noon010_formats[0].code;
--	mf->colorspace = V4L2_COLORSPACE_JPEG;
--	mf->field = V4L2_FIELD_NONE;
--	return 0;
--}
--
--static const struct v4l2_subdev_internal_ops noon010_subdev_internal_ops = {
--	.open = noon010_open,
--};
--
--static const struct v4l2_ctrl_ops noon010_ctrl_ops = {
--	.s_ctrl = noon010_s_ctrl,
--};
--
--static const struct v4l2_subdev_core_ops noon010_core_ops = {
--	.s_power	= noon010_s_power,
--	.log_status	= noon010_log_status,
--};
--
--static const struct v4l2_subdev_pad_ops noon010_pad_ops = {
--	.enum_mbus_code	= noon010_enum_mbus_code,
--	.get_fmt	= noon010_get_fmt,
--	.set_fmt	= noon010_set_fmt,
--};
--
--static const struct v4l2_subdev_video_ops noon010_video_ops = {
--	.s_stream	= noon010_s_stream,
--};
--
--static const struct v4l2_subdev_ops noon010_ops = {
--	.core	= &noon010_core_ops,
--	.pad	= &noon010_pad_ops,
--	.video	= &noon010_video_ops,
--};
--
--/* Return 0 if NOON010PC30L sensor type was detected or -ENODEV otherwise. */
--static int noon010_detect(struct i2c_client *client, struct noon010_info *info)
--{
--	int ret;
--
--	ret = power_enable(info);
 -	if (ret)
 -		return ret;
 -
--	ret = i2c_smbus_read_byte_data(client, DEVICE_ID_REG);
--	if (ret < 0)
--		dev_err(&client->dev, "I2C read failed: 0x%X\n", ret);
+-	expmin = EXPOS_MIN_MS * info->pdata->clk_rate / (8 * 1000);
+-	expmax = EXPOS_MAX_MS * info->pdata->clk_rate / (8 * 1000);
 -
--	power_disable(info);
+-	v4l2_dbg(1, debug, sd, "%s: expmin= %lx, expmax= %lx", __func__,
+-		 expmin, expmax);
 -
--	return ret == NOON010PC30_ID ? 0 : -ENODEV;
+-	/* Setting up manual exposure time range */
+-	ret = cam_i2c_write(sd, EXP_MMINH_REG, expmin >> 8 & 0xFF);
+-	if (!ret)
+-		ret = cam_i2c_write(sd, EXP_MMINL_REG, expmin & 0xFF);
+-	if (!ret)
+-		ret = cam_i2c_write(sd, EXP_MMAXH_REG, expmax >> 16 & 0xFF);
+-	if (!ret)
+-		ret = cam_i2c_write(sd, EXP_MMAXM_REG, expmax >> 8 & 0xFF);
+-	if (!ret)
+-		ret = cam_i2c_write(sd, EXP_MMAXL_REG, expmax & 0xFF);
+-
+-	return ret;
 -}
 -
--static int noon010_probe(struct i2c_client *client)
+-static int sr030pc30_s_power(struct v4l2_subdev *sd, int on)
 -{
--	struct noon010_info *info;
--	struct v4l2_subdev *sd;
--	const struct noon010pc30_platform_data *pdata
+-	struct i2c_client *client = v4l2_get_subdevdata(sd);
+-	struct sr030pc30_info *info = to_sr030pc30(sd);
+-	const struct sr030pc30_platform_data *pdata = info->pdata;
+-	int ret;
+-
+-	if (pdata == NULL) {
+-		WARN(1, "No platform data!\n");
+-		return -EINVAL;
+-	}
+-
+-	/*
+-	 * Put sensor into power sleep mode before switching off
+-	 * power and disabling MCLK.
+-	 */
+-	if (!on)
+-		sr030pc30_pwr_ctrl(sd, false, true);
+-
+-	/* set_power controls sensor's power and clock */
+-	if (pdata->set_power) {
+-		ret = pdata->set_power(&client->dev, on);
+-		if (ret)
+-			return ret;
+-	}
+-
+-	if (on) {
+-		ret = sr030pc30_base_config(sd);
+-	} else {
+-		ret = 0;
+-		info->curr_win = NULL;
+-		info->curr_fmt = NULL;
+-	}
+-
+-	return ret;
+-}
+-
+-static const struct v4l2_ctrl_ops sr030pc30_ctrl_ops = {
+-	.s_ctrl = sr030pc30_s_ctrl,
+-};
+-
+-static const struct v4l2_subdev_core_ops sr030pc30_core_ops = {
+-	.s_power	= sr030pc30_s_power,
+-};
+-
+-static const struct v4l2_subdev_pad_ops sr030pc30_pad_ops = {
+-	.enum_mbus_code = sr030pc30_enum_mbus_code,
+-	.get_fmt	= sr030pc30_get_fmt,
+-	.set_fmt	= sr030pc30_set_fmt,
+-};
+-
+-static const struct v4l2_subdev_ops sr030pc30_ops = {
+-	.core	= &sr030pc30_core_ops,
+-	.pad	= &sr030pc30_pad_ops,
+-};
+-
+-/*
+- * Detect sensor type. Return 0 if SR030PC30 was detected
+- * or -ENODEV otherwise.
+- */
+-static int sr030pc30_detect(struct i2c_client *client)
+-{
+-	const struct sr030pc30_platform_data *pdata
 -		= client->dev.platform_data;
 -	int ret;
--	int i;
+-
+-	/* Enable sensor's power and clock */
+-	if (pdata->set_power) {
+-		ret = pdata->set_power(&client->dev, 1);
+-		if (ret)
+-			return ret;
+-	}
+-
+-	ret = i2c_smbus_read_byte_data(client, DEVICE_ID_REG);
+-
+-	if (pdata->set_power)
+-		pdata->set_power(&client->dev, 0);
+-
+-	if (ret < 0) {
+-		dev_err(&client->dev, "%s: I2C read failed\n", __func__);
+-		return ret;
+-	}
+-
+-	return ret == SR030PC30_ID ? 0 : -ENODEV;
+-}
+-
+-
+-static int sr030pc30_probe(struct i2c_client *client)
+-{
+-	struct sr030pc30_info *info;
+-	struct v4l2_subdev *sd;
+-	struct v4l2_ctrl_handler *hdl;
+-	const struct sr030pc30_platform_data *pdata
+-		= client->dev.platform_data;
+-	int ret;
 -
 -	if (!pdata) {
--		dev_err(&client->dev, "No platform data!\n");
+-		dev_err(&client->dev, "No platform data!");
 -		return -EIO;
 -	}
+-
+-	ret = sr030pc30_detect(client);
+-	if (ret)
+-		return ret;
 -
 -	info = devm_kzalloc(&client->dev, sizeof(*info), GFP_KERNEL);
 -	if (!info)
 -		return -ENOMEM;
 -
--	mutex_init(&info->lock);
 -	sd = &info->sd;
--	v4l2_i2c_subdev_init(sd, client, &noon010_ops);
--	/* Static name; NEVER use in new drivers! */
--	strscpy(sd->name, MODULE_NAME, sizeof(sd->name));
+-	info->pdata = client->dev.platform_data;
 -
--	sd->internal_ops = &noon010_subdev_internal_ops;
--	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+-	v4l2_i2c_subdev_init(sd, client, &sr030pc30_ops);
 -
--	v4l2_ctrl_handler_init(&info->hdl, 3);
+-	hdl = &info->hdl;
+-	v4l2_ctrl_handler_init(hdl, 6);
+-	info->awb = v4l2_ctrl_new_std(hdl, &sr030pc30_ctrl_ops,
+-			V4L2_CID_AUTO_WHITE_BALANCE, 0, 1, 1, 1);
+-	info->red = v4l2_ctrl_new_std(hdl, &sr030pc30_ctrl_ops,
+-			V4L2_CID_RED_BALANCE, 0, 127, 1, 64);
+-	info->blue = v4l2_ctrl_new_std(hdl, &sr030pc30_ctrl_ops,
+-			V4L2_CID_BLUE_BALANCE, 0, 127, 1, 64);
+-	info->autoexp = v4l2_ctrl_new_std(hdl, &sr030pc30_ctrl_ops,
+-			V4L2_CID_EXPOSURE_AUTO, 0, 1, 1, 1);
+-	info->exp = v4l2_ctrl_new_std(hdl, &sr030pc30_ctrl_ops,
+-			V4L2_CID_EXPOSURE, EXPOS_MIN_MS, EXPOS_MAX_MS, 1, 30);
+-	sd->ctrl_handler = hdl;
+-	if (hdl->error) {
+-		int err = hdl->error;
 -
--	v4l2_ctrl_new_std(&info->hdl, &noon010_ctrl_ops,
--			  V4L2_CID_AUTO_WHITE_BALANCE, 0, 1, 1, 1);
--	v4l2_ctrl_new_std(&info->hdl, &noon010_ctrl_ops,
--			  V4L2_CID_RED_BALANCE, 0, 127, 1, 64);
--	v4l2_ctrl_new_std(&info->hdl, &noon010_ctrl_ops,
--			  V4L2_CID_BLUE_BALANCE, 0, 127, 1, 64);
--
--	sd->ctrl_handler = &info->hdl;
--
--	ret = info->hdl.error;
--	if (ret)
--		goto np_err;
+-		v4l2_ctrl_handler_free(hdl);
+-		return err;
+-	}
+-	v4l2_ctrl_auto_cluster(3, &info->awb, 0, false);
+-	v4l2_ctrl_auto_cluster(2, &info->autoexp, V4L2_EXPOSURE_MANUAL, false);
+-	v4l2_ctrl_handler_setup(hdl);
 -
 -	info->i2c_reg_page	= -1;
--	info->curr_fmt		= &noon010_formats[0];
--	info->curr_win		= &noon010_sizes[0];
+-	info->hflip		= 1;
 -
--	/* Request reset asserted so we get put into reset */
--	info->reset = devm_gpiod_get(&client->dev, "reset", GPIOD_OUT_HIGH);
--	if (IS_ERR(info->reset)) {
--		ret = PTR_ERR(info->reset);
--		goto np_err;
--	}
--	gpiod_set_consumer_name(info->reset, "NOON010PC30 NRST");
--
--	/* Request standby asserted so we get put into standby */
--	info->stby = devm_gpiod_get(&client->dev, "standby", GPIOD_OUT_HIGH);
--	if (IS_ERR(info->stby)) {
--		ret = PTR_ERR(info->stby);
--		goto np_err;
--	}
--	gpiod_set_consumer_name(info->reset, "NOON010PC30 STBY");
--
--	for (i = 0; i < NOON010_NUM_SUPPLIES; i++)
--		info->supply[i].supply = noon010_supply_name[i];
--
--	ret = devm_regulator_bulk_get(&client->dev, NOON010_NUM_SUPPLIES,
--				 info->supply);
--	if (ret)
--		goto np_err;
--
--	info->pad.flags = MEDIA_PAD_FL_SOURCE;
--	sd->entity.function = MEDIA_ENT_F_CAM_SENSOR;
--	ret = media_entity_pads_init(&sd->entity, 1, &info->pad);
--	if (ret < 0)
--		goto np_err;
--
--	ret = noon010_detect(client, info);
--	if (!ret)
--		return 0;
--
--np_err:
--	v4l2_ctrl_handler_free(&info->hdl);
--	v4l2_device_unregister_subdev(sd);
--	return ret;
+-	return 0;
 -}
 -
--static void noon010_remove(struct i2c_client *client)
+-static void sr030pc30_remove(struct i2c_client *client)
 -{
 -	struct v4l2_subdev *sd = i2c_get_clientdata(client);
--	struct noon010_info *info = to_noon010(sd);
 -
 -	v4l2_device_unregister_subdev(sd);
--	v4l2_ctrl_handler_free(&info->hdl);
--	media_entity_cleanup(&sd->entity);
+-	v4l2_ctrl_handler_free(sd->ctrl_handler);
 -}
 -
--static const struct i2c_device_id noon010_id[] = {
+-static const struct i2c_device_id sr030pc30_id[] = {
 -	{ MODULE_NAME, 0 },
 -	{ },
 -};
--MODULE_DEVICE_TABLE(i2c, noon010_id);
+-MODULE_DEVICE_TABLE(i2c, sr030pc30_id);
 -
 -
--static struct i2c_driver noon010_i2c_driver = {
+-static struct i2c_driver sr030pc30_i2c_driver = {
 -	.driver = {
 -		.name = MODULE_NAME
 -	},
--	.probe_new	= noon010_probe,
--	.remove		= noon010_remove,
--	.id_table	= noon010_id,
+-	.probe_new	= sr030pc30_probe,
+-	.remove		= sr030pc30_remove,
+-	.id_table	= sr030pc30_id,
 -};
 -
--module_i2c_driver(noon010_i2c_driver);
+-module_i2c_driver(sr030pc30_i2c_driver);
 -
--MODULE_DESCRIPTION("Siliconfile NOON010PC30 camera driver");
+-MODULE_DESCRIPTION("Siliconfile SR030PC30 camera driver");
 -MODULE_AUTHOR("Sylwester Nawrocki <s.nawrocki@samsung.com>");
 -MODULE_LICENSE("GPL");
-diff --git a/include/media/i2c/noon010pc30.h b/include/media/i2c/noon010pc30.h
+diff --git a/include/media/i2c/sr030pc30.h b/include/media/i2c/sr030pc30.h
 deleted file mode 100644
-index 1880dad25cf0..000000000000
---- a/include/media/i2c/noon010pc30.h
+index 84c602d681fa..000000000000
+--- a/include/media/i2c/sr030pc30.h
 +++ /dev/null
-@@ -1,21 +0,0 @@
+@@ -1,17 +0,0 @@
 -/* SPDX-License-Identifier: GPL-2.0-or-later */
 -/*
-- * Driver header for NOON010PC30L camera sensor chip.
+- * Driver header for SR030PC30 camera sensor
 - *
 - * Copyright (c) 2010 Samsung Electronics, Co. Ltd
 - * Contact: Sylwester Nawrocki <s.nawrocki@samsung.com>
 - */
 -
--#ifndef NOON010PC30_H
--#define NOON010PC30_H
+-#ifndef SR030PC30_H
+-#define SR030PC30_H
 -
--/**
-- * struct noon010pc30_platform_data - platform data
-- * @clk_rate: the clock frequency in Hz
-- */
--
--struct noon010pc30_platform_data {
--	unsigned long clk_rate;
+-struct sr030pc30_platform_data {
+-	unsigned long clk_rate;	/* master clock frequency in Hz */
+-	int (*set_power)(struct device *dev, int on);
 -};
 -
--#endif /* NOON010PC30_H */
+-#endif /* SR030PC30_H */
 -- 
 Regards,
 
