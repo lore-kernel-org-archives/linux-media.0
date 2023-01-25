@@ -2,225 +2,1488 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DD3AC54EED
-	for <linux-media@archiver.kernel.org>; Wed, 25 Jan 2023 10:26:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CB6FC54E94
+	for <linux-media@archiver.kernel.org>; Wed, 25 Jan 2023 10:55:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235564AbjAYK0S (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 25 Jan 2023 05:26:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
+        id S235264AbjAYKzz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 25 Jan 2023 05:55:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235467AbjAYK0R (ORCPT
+        with ESMTP id S235229AbjAYKzy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 25 Jan 2023 05:26:17 -0500
-Received: from mo-csw.securemx.jp (mo-csw1115.securemx.jp [210.130.202.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D79A303C7;
-        Wed, 25 Jan 2023 02:26:14 -0800 (PST)
-Received: by mo-csw.securemx.jp (mx-mo-csw1115) id 30PAPblU003975; Wed, 25 Jan 2023 19:25:38 +0900
-X-Iguazu-Qid: 2wGr5g72Qg5UDArwup
-X-Iguazu-QSIG: v=2; s=0; t=1674642337; q=2wGr5g72Qg5UDArwup; m=Ie7n3otFoMyN3vAtuaxvL9oktvWNELN2oPO0NilkXEE=
-Received: from imx12-a.toshiba.co.jp ([38.106.60.135])
-        by relay.securemx.jp (mx-mr1113) id 30PAPZ1A005220
-        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 25 Jan 2023 19:25:36 +0900
-X-SA-MID: 49732430
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RZAKY5HnSUyCecKfi7zZbvh8QIr3u031mQrYAxS9NN/h10CrR9gBOqzxmTl+CEuWaETqKlSSPJ8B59ymzfXsh9Ii8O7XAwzKOyT8Vfrw2BZhIB2VG3m43U+5xgtY+ajz9DQWpjMXTl5OVciOqvEonlFc6L/+zGjaoFT+VI0w1GJ3Fb/ojwyJw2KW+hzBuY9sbYMN2mVWnpkDp9inmwavLrCaCi1fY57/eLbA9kkOsYctMvOChMPK5DoYipZD8JyFG8MtKG0YhTe4M3Iadl32s5DBc+cmypCTFyMwgM1mehiRT0ZVP6tEouhAXb7I+pMkWxu94gdVwQUZIMxVZTNz+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KT6yyDFQNLJf/mEqfsPUvk/nk5j4iMurUE3EK7BBiHU=;
- b=d7zPpSttH6mWmHj7HMWUcePBob4WLXKXLwPODc41N6s7hiCVIvAylZxcGTahj32V5mkH3htIiFM4OzaayMFjElzQQbXMEV1NQKhjkBuBqObxssBL2N9KKbC7Qlntowh5PwTKKIlIyQeFQLM4nizJ4jjqqdvCBzGPBnm60ZJ5wN2GSUVOsb1Xt1HxtnIIC4deCe+PfsFiiCFx+9nbDjrhEpGzNOrjj1RY3ANHWVAHXkWo6kgXNErSqOVj0gbqR+e8xgzUez3CEs60uRDt/I8A8moYbeAy93kCbYSEVRM9KBwt0g3VRX3g4ckKHFzoD3iLN76hfxlBt+6InzeBW9el8w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=toshiba.co.jp; dmarc=pass action=none
- header.from=toshiba.co.jp; dkim=pass header.d=toshiba.co.jp; arc=none
-From:   <yuji2.ishikawa@toshiba.co.jp>
-To:     <laurent.pinchart@ideasonboard.com>, <hverkuil@xs4all.nl>
-CC:     <mchehab@kernel.org>, <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <rafael.j.wysocki@intel.com>, <broonie@kernel.org>,
-        <linux-media@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: RE: [PATCH v5 3/6] media: platform: visconti: Add Toshiba Visconti
- Video Input Interface driver user interace
-Thread-Topic: [PATCH v5 3/6] media: platform: visconti: Add Toshiba Visconti
- Video Input Interface driver user interace
-Thread-Index: AQHZJWPtmelSVsjZq0uVz/vT5NgNQq6iiBUAgADeugCAC5bFoA==
-Date:   Wed, 25 Jan 2023 10:20:27 +0000
-X-TSB-HOP2: ON
-Message-ID: <TYAPR01MB620161823BA912502CEF0A5992CE9@TYAPR01MB6201.jpnprd01.prod.outlook.com>
-References: <20230111022433.25950-1-yuji2.ishikawa@toshiba.co.jp>
- <20230111022433.25950-4-yuji2.ishikawa@toshiba.co.jp>
- <2b412539-2236-b41f-c777-bc9e9cf99d66@xs4all.nl>
- <Y8dFlFkVJS/6+Ib1@pendragon.ideasonboard.com>
-In-Reply-To: <Y8dFlFkVJS/6+Ib1@pendragon.ideasonboard.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=toshiba.co.jp;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYAPR01MB6201:EE_|TYCPR01MB11709:EE_
-x-ms-office365-filtering-correlation-id: d5f96a83-4c45-4e8d-efc8-08dafebdc792
-x-ld-processed: f109924e-fb71-4ba0-b2cc-65dcdf6fbe4f,ExtAddr,ExtFwd
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: meWzXlFTuaBjni2MNWc8UgZxz9Yfju9todSamjMCJMujaMjk0+Cp80W1Mn0aPOYQ/2rJJd/dHZROlYelj2axpxTOmXhC1FxpTq8T/8GfwbGRYBCF7DoSz3+Ww4WO9xjO9miCl9jYCKXn6wgM8wFx7mAdjlfP5OGJulO3n+d0nMzULV0/Wij+QHmenZBtkzOvoRTRDdDMc+ps56yTfJdm8Q6j+sVO0yNIGyDypxcV6Rpqe5Kbc1a4dF0VFfiDGFYg/HPAW7VmqRaX2Qr8Dc1AkqvJx2XrYA8pvmvKduYCbNZctyCfFKHtPp4u/MxqM2tgmd/S0EaDcGVcaD/T8W3ZPTPggp5zJ6mJfcNlVekwGRDr7XGV6usJPOPA2d2o5f9ZS6CmJzsmMcQ17yj1bdlLMg8L+aHTN1uJ5M6AnJFyadNDlietM+hGGMfehbPK6+ZTw2we1iY6bl6Eonk6l60qSExzYSTinRvxLwZ116tq8H8593yWUitT6r+f7VlCRY1cnOB60+hzGCcAjPbDEM359TqXOU9d4VZo5rPiv1lkZJa8TkonsMcW/j8xJ13KE7ru7DYXXpZYXv4Ppe2P56WfhqQ0VYxG9tP9Yp2QHhU4AYNJ5ftiqQum462U4gStyBh10r3gXBfT1ZubIz7MImNkoWLh7dwBhRngNfUIJvf0HBn3S1lTzkUYNRHOJvMsCAb9BxHtAIKPNtpp/gc8Wu54pw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYAPR01MB6201.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(346002)(39860400002)(366004)(396003)(451199018)(5660300002)(83380400001)(8936002)(2906002)(33656002)(52536014)(7416002)(9686003)(26005)(478600001)(38070700005)(186003)(122000001)(38100700002)(76116006)(316002)(54906003)(64756008)(66476007)(4326008)(86362001)(8676002)(66556008)(66946007)(55016003)(66446008)(110136005)(6506007)(55236004)(53546011)(71200400001)(41300700001)(7696005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NUV0NENCZUlMc042OUNhYzd1ZjN1RjFzbjdVOVJMb1RyaUI4Q2hmWUxUM0dO?=
- =?utf-8?B?a2huWERjWGJ6TXhKYTJQODZzNk1KUmNBZGZNY1R5TlhWYTY1TlAvTFFOb0Jn?=
- =?utf-8?B?b2RUVFloWE1tUzZ2a2RBV09DT3VsYlAzcFVlL0R2QWcrakJJZThsenBVZlQ3?=
- =?utf-8?B?aU41SHMxUEl5bFNMQlVPbjYvNklMVUZ5ejlidk8wSzU0ZVhpbUNhUWFjYm5T?=
- =?utf-8?B?S1ZtVHN0emhVYWtqeWJmbWNOaTV3YjMvSUM4NkJaZ3RTNFJLVUppME9sRExo?=
- =?utf-8?B?alBqenFSdExGb1JaemltanV4c2UvQ1NYYUpVUlR6UVlka0piaU1KTkU3ZlNC?=
- =?utf-8?B?NHZORTNTUU4rQnBremw5dnpRSzJCNE9hM0drclVoWFUxYmJCcDljT054YTB6?=
- =?utf-8?B?ajQ3YjJqVkFEVzl0MktMVkE3amc1alhMR3ZhL0V2d2pEYlRZNlYveGZGZGIx?=
- =?utf-8?B?OW9Ta3JvSFpPRGxOSTF1Mms1cTRPdkQ5YWdEeTZ0dnJUN2wzQm1rVVFsMnJq?=
- =?utf-8?B?dG82WW9aNnRQOVgyV0U3RjBhaGpia3FzcStscVRUeW9abEVYSS9OR3djdW1C?=
- =?utf-8?B?RG5JcnpMaGFKd2pSbjFHNThUVyt6ZTAydEY1Um93VVAyNjFUS1lMTWtWcVpw?=
- =?utf-8?B?bHVMNTh3emVFWGQxdGtucDFBRktheUY0NmgrcTZlOE5qM1A0UkdvVXRtMmZ3?=
- =?utf-8?B?MGVCUWFQMFlZdDBkVU10SVUxeHhWSkF0M1drejBETDZJbjZmVUhxWndLNTln?=
- =?utf-8?B?WTBwQnJ1Z05SVkpFTnJjYjZhQk9rMWJhQURPSXBIM1pwL0tkcWQzaFZZa2Ey?=
- =?utf-8?B?SXRZZVZGaUVCNWs3eXFTTkgvWnpkL3NPaE1YNWpaQTQ0bW1LNlhxZG4vSXNP?=
- =?utf-8?B?V21QdWZoTjN0STVMcWRUZGdJMjNVOVpCS2FvRVdBL2s4N0dzUWJuRHB0akxV?=
- =?utf-8?B?Vm9yRU1xRmJsTmVISjlJZncxeHMrTTZpQksyR2dwU0VnelBZSDBsZENWUlll?=
- =?utf-8?B?UGNkU0QwbTdWZGNycXVTcEJtSEpNaTkzdDdaNEdmaW56NXp5ZCtMVUNNakNS?=
- =?utf-8?B?Z0JCdkVqTStSRC9jN0xIQ3N3SFJjZzR3UnFKUStWQmVqRFN1NjBVVllDQk10?=
- =?utf-8?B?aS82ZnlyS2tTa0o4NmFubk1FM3VpSENlazVvOXBITTRCaVp1MHFMc3lWR3Zk?=
- =?utf-8?B?MDBJOGZ1L0V1dmp0NEc3bTkzWkp1bk9OUWRmNXh4ZmEyVlNrY0h5cE5nNHRT?=
- =?utf-8?B?Rks3ZktwbXgyRTQ0bXBwQ21oSklzblllOWNpUjdkeWdWRUtURjBxOURpd0cw?=
- =?utf-8?B?MEZRL3RlNjd3eVZMeGtGWE10bHdXdDR2c3IrSjIwZ1IzalBZNU80b2V0KzUx?=
- =?utf-8?B?cTZXNnVPWm16VWYzbzhtc3cwUkJKcUIzYnllOWN4KzNTaEpWNTRvK0E3K3V5?=
- =?utf-8?B?aHZVTnl1ZEhyWTVoZlNyK3REVGtTLzVMeGxDRTJ3YXhHUEV2bzFUVVo2K21L?=
- =?utf-8?B?Z0NQTUJLbUkyN0VzUmdRREt5U1lvMnZ5cHFJY3N3R2ZNWlIyc2xYMmF0YmxO?=
- =?utf-8?B?eGZWVHZwaUo4MEJuRzI2ZjR0L0swbFdKaGhxM0hEL1N4cVBBM0J2eHRHeVRF?=
- =?utf-8?B?RE01bkZGM2hiWDdQQ0creWhncGMxTVRNSmNjWDlsTzFHMWI5dFp0Wk9ZVUJy?=
- =?utf-8?B?cnpPYXIvNmNUeU9BT2N5YXBPTXJMSGhRa2s3RTBZa2RCVUNOZytPMlNYWUVQ?=
- =?utf-8?B?QWNhZzJTSmVCS1FaM2RsU1pmZE1yaU9pVTJSQTl2QTM2L0l5cldsd29MYnl2?=
- =?utf-8?B?RnJOVHhhU0pzNlgyOTV5NmZFMXFBMnJkd0NEMGhQV3psYThIV2lqczJtcFRX?=
- =?utf-8?B?VndqTDFwOHdTZmVseUxtSXljalBINGJ4WjhmT0tiWkoraUtUeW5qUGpVZVh4?=
- =?utf-8?B?WTdZVjFMSGdqeFFOVm9SVVAwcEN0ZUpIL0p4YlBIdWIrbDMyUjF3d0ViOS8y?=
- =?utf-8?B?R2xmYzBBZHVMMFljZVFlaTF2bzgxMjJKOGJmQnhjMmpYVDJGSU1obWp5enRK?=
- =?utf-8?B?Q0RMZndPd1hWMDJNbTkwa1p1TlFmaUpVL2l2VnUzd3BxWjFPVmtUN1ZqaEdI?=
- =?utf-8?B?MkpHNWkrRXJwdytkTXFsSmswTHdzM0V3Ri9YcDQrd2Jnd3c4KzJ1TW5qS3c5?=
- =?utf-8?B?MFE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 25 Jan 2023 05:55:54 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010DB271A;
+        Wed, 25 Jan 2023 02:55:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674644150; x=1706180150;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5/ulkEDZfA5IqpV+7wV8KGaIpMrtQpi8hGrA7J5orWY=;
+  b=fRD6XTwSlh7gW6tvd4nlUQ+A9YsLjteCmDEDPX+4DMH638Yu6N0Fo6Hx
+   27OBwDlB7QO3adixgJnWCplrYILNMvfjjX0vKgTSKnSv7iT9zff+G1l5J
+   3IjDkO7rmPwlcHHpULrPieY+aqIDbzvQMjdwK/UUbk0fz+f/5ubYUdMBy
+   SXit3snESJ9HJAQWjw3RlzY9LhyMyk7/oWlI9cdH54n9La2dVq7VeST6o
+   9/WDl3i0UlWVmctq63++Oz2dfHKm7TyBxJ+AnX7R7rS51jGU3gJvzHlTd
+   OSq76bDmCzvIwMziuYKrpQ6gt066ZMFf58ktlZtQu35yrnjcrTtbJGLXY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="306879034"
+X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
+   d="scan'208";a="306879034"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 02:55:49 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="612379940"
+X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
+   d="scan'208";a="612379940"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 02:55:43 -0800
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id CDD3D120C31;
+        Wed, 25 Jan 2023 12:55:39 +0200 (EET)
+Date:   Wed, 25 Jan 2023 12:55:39 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Michael Riesch <michael.riesch@wolfvision.net>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>
+Subject: Re: [PATCH v2 2/2] media: i2c: add imx415 cmos image sensor driver
+Message-ID: <Y9EKqwfDSsF31dLZ@kekkonen.localdomain>
+References: <20230124060107.3922237-1-michael.riesch@wolfvision.net>
+ <20230124060107.3922237-3-michael.riesch@wolfvision.net>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYAPR01MB6201.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d5f96a83-4c45-4e8d-efc8-08dafebdc792
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jan 2023 10:20:27.6291
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: f109924e-fb71-4ba0-b2cc-65dcdf6fbe4f
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JqX1cwkuFZ25h6odXzPuGeCZyMOTvCz3hAoNASIpky3QBFFac1BygqhaLrQ4n/VHnxIV10wogLmkimpyWiDoI5jauyR9aJn4peELdNw4OPE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB11709
-X-OriginatorOrg: toshiba.co.jp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230124060107.3922237-3-michael.riesch@wolfvision.net>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-SGVsbG8sDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogTGF1cmVudCBQ
-aW5jaGFydCA8bGF1cmVudC5waW5jaGFydEBpZGVhc29uYm9hcmQuY29tPg0KPiBTZW50OiBXZWRu
-ZXNkYXksIEphbnVhcnkgMTgsIDIwMjMgMTA6MDQgQU0NCj4gVG86IEhhbnMgVmVya3VpbCA8aHZl
-cmt1aWxAeHM0YWxsLm5sPg0KPiBDYzogaXNoaWthd2EgeXVqaSjnn7Plt50g5oKg5Y+4IOKXi++8
-su+8pO+8o+KWoe+8oe+8qe+8tO+8o+KXi++8pe+8oemWiykNCj4gPHl1amkyLmlzaGlrYXdhQHRv
-c2hpYmEuY28uanA+OyBNYXVybyBDYXJ2YWxobyBDaGVoYWINCj4gPG1jaGVoYWJAa2VybmVsLm9y
-Zz47IGl3YW1hdHN1IG5vYnVoaXJvKOWyqeadviDkv6HmtIsg4pah77yz77y377yj4pev77yh77yj
-77y0KQ0KPiA8bm9idWhpcm8xLml3YW1hdHN1QHRvc2hpYmEuY28uanA+OyBSb2IgSGVycmluZyA8
-cm9iaCtkdEBrZXJuZWwub3JnPjsNCj4gS3J6eXN6dG9mIEtvemxvd3NraSA8a3J6eXN6dG9mLmtv
-emxvd3NraStkdEBsaW5hcm8ub3JnPjsgUmFmYWVsIEogLiBXeXNvY2tpDQo+IDxyYWZhZWwuai53
-eXNvY2tpQGludGVsLmNvbT47IE1hcmsgQnJvd24gPGJyb29uaWVAa2VybmVsLm9yZz47DQo+IGxp
-bnV4LW1lZGlhQHZnZXIua2VybmVsLm9yZzsgbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRl
-YWQub3JnOw0KPiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBkZXZpY2V0cmVlQHZnZXIu
-a2VybmVsLm9yZw0KPiBTdWJqZWN0OiBSZTogW1BBVENIIHY1IDMvNl0gbWVkaWE6IHBsYXRmb3Jt
-OiB2aXNjb250aTogQWRkIFRvc2hpYmEgVmlzY29udGkNCj4gVmlkZW8gSW5wdXQgSW50ZXJmYWNl
-IGRyaXZlciB1c2VyIGludGVyYWNlDQo+IA0KPiBIZWxsbywNCj4gDQo+IE9uIFR1ZSwgSmFuIDE3
-LCAyMDIzIGF0IDEyOjQ3OjEwUE0gKzAxMDAsIEhhbnMgVmVya3VpbCB3cm90ZToNCj4gPiBNb3Jl
-IGNvbW1lbnRzIGJlbG93Og0KPiA+DQo+ID4gT24gMTEvMDEvMjAyMyAwMzoyNCwgWXVqaSBJc2hp
-a2F3YSB3cm90ZToNCj4gPiA+IEFkZCBzdXBwb3J0IHRvIFZpZGVvIElucHV0IEludGVyZmFjZSBv
-biBUb3NoaWJhIFZpc2NvbnRpIEFSTSBTb0NzLg0KPiA+ID4gVGhlIGludGVyZmFjZSBkZXZpY2Ug
-aW5jbHVkZXMgQ1NJMiBSZWNlaXZlciwgZnJhbWUgZ3JhYmJlciwgdmlkZW8NCj4gPiA+IERNQUMg
-YW5kIGltYWdlIHNpZ25hbCBwcm9jZXNzb3IuDQo+ID4gPiBUaGlzIHBhdGNoIHByb3ZpZGVzIHRo
-ZSB1c2VyIGludGVyZmFjZSBsYXllci4NCj4gPiA+DQo+ID4gPiBBIGRyaXZlciBpbnN0YW5jZSBw
-cm92aWRlcyB0aHJlZSAvZGV2L3ZpZGVvWCBkZXZpY2UgZmlsZXM7IG9uZSBmb3INCj4gPiA+IFJH
-QiBpbWFnZSBjYXB0dXJlLCBhbm90aGVyIG9uZSBmb3Igb3B0aW9uYWwgUkdCIGNhcHR1cmUgd2l0
-aA0KPiA+ID4gZGlmZmVyZW50IHBhcmFtZXRlcnMgYW5kIHRoZSBsYXN0IG9uZSBmb3IgUkFXIGNh
-cHR1cmUuDQo+ID4gPg0KPiA+ID4gVGhyb3VnaCB0aGUgZGV2aWNlIGZpbGVzLCB0aGUgZHJpdmVy
-IHByb3ZpZGVzIHN0cmVhbWluZyAoRE1BLUJVRikNCj4gaW50ZXJmYWNlLg0KPiA+ID4gQSB1c2Vy
-bGFuZCBhcHBsaWNhdGlvbiBzaG91bGQgZmVlZCBETUEtQlVGIGluc3RhbmNlcyBmb3IgY2FwdHVy
-ZSBidWZmZXJzLg0KPiA+ID4NCj4gPiA+IFRoZSBkcml2ZXIgaXMgYmFzZWQgb24gbWVkaWEgY29u
-dHJvbGxlciBmcmFtZXdvcmsuDQo+ID4gPiBJdHMgb3BlcmF0aW9ucyBhcmUgcm91Z2hseSBtYXBw
-ZWQgdG8gdHdvIHN1YmRyaXZlcnM7IG9uZSBmb3IgSVNQIGFuZA0KPiA+ID4gQ1NJMiByZWNlaXZl
-ciAoeWllbGRzIDEgaW5zdGFuY2UpLCB0aGUgb3RoZXIgZm9yIGNhcHR1cmUgKHlpZWxkcyAzDQo+
-ID4gPiBpbnN0YW5jZXMgZm9yIGVhY2ggY2FwdHVyZSBtb2RlKS4NCj4gPiA+DQo+ID4gPiBTaWdu
-ZWQtb2ZmLWJ5OiBZdWppIElzaGlrYXdhIDx5dWppMi5pc2hpa2F3YUB0b3NoaWJhLmNvLmpwPg0K
-PiA+ID4gLS0tDQo+ID4gPiBDaGFuZ2Vsb2cgdjI6DQo+ID4gPiAtIFJlc2VuZCB2MSBiZWNhdXNl
-IGEgcGF0Y2ggZXhjZWVkcyBzaXplIGxpbWl0Lg0KPiA+ID4NCj4gPiA+IENoYW5nZWxvZyB2MzoN
-Cj4gPiA+IC0gQWRhcHRlZCB0byBtZWRpYSBjb250cm9sIGZyYW1ld29yaw0KPiA+ID4gLSBJbnRy
-b2R1Y2VkIElTUCBzdWJkZXZpY2UsIGNhcHR1cmUgZGV2aWNlDQo+ID4gPiAtIFJlbW92ZSBwcml2
-YXRlIElPQ1RMcyBhbmQgYWRkIHZlbmRvciBzcGVjaWZpYyBWNEwyIGNvbnRyb2xzDQo+ID4gPiAt
-IENoYW5nZSBmdW5jdGlvbiBuYW1lIGF2b2lkaW5nIGNhbWVsY2FzZSBhbmQgdXBwZXJjYXNlIGxl
-dHRlcnMNCj4gPiA+DQo+ID4gPiBDaGFuZ2Vsb2cgdjQ6DQo+ID4gPiAtIFNwbGl0IHBhdGNoZXMg
-YmVjYXVzZSB0aGUgdjMgcGF0Y2ggZXhjZWVkcyBzaXplIGxpbWl0DQo+ID4gPiAtIFN0b3AgdXNp
-bmcgSUQgbnVtYmVyIHRvIGlkZW50aWZ5IGRyaXZlciBpbnN0YW5jZToNCj4gPiA+ICAgLSBVc2Ug
-ZHluYW1pY2FsbHkgYWxsb2NhdGVkIHN0cnVjdHVyZSB0byBob2xkIEhXIHNwZWNpZmljIGNvbnRl
-eHQsDQo+ID4gPiAgICAgaW5zdGVhZCBvZiBzdGF0aWMgb25lLg0KPiA+ID4gICAtIENhbGwgSFcg
-bGF5ZXIgZnVuY3Rpb25zIHdpdGggdGhlIGNvbnRleHQgc3RydWN0dXJlIGluc3RlYWQgb2YgSUQN
-Cj4gPiA+IG51bWJlcg0KPiA+ID4gLSBVc2UgcG1fcnVudGltZSB0byB0cmlnZ2VyIGluaXRpYWxp
-emF0aW9uIG9mIEhXDQo+ID4gPiAgIGFsb25nIHdpdGggb3Blbi9jbG9zZSBvZiBkZXZpY2UgZmls
-ZXMuDQo+ID4gPg0KPiA+ID4gQ2hhbmdlbG9nIHY1Og0KPiA+ID4gLSBGaXggY29kaW5nIHN0eWxl
-IHByb2JsZW1zIGluIHZpaWYuYw0KPiA+ID4gLS0tDQo+ID4gPiAgZHJpdmVycy9tZWRpYS9wbGF0
-Zm9ybS92aXNjb250aS9NYWtlZmlsZSAgICAgIHwgICAgMSArDQo+ID4gPiAgZHJpdmVycy9tZWRp
-YS9wbGF0Zm9ybS92aXNjb250aS92aWlmLmMgICAgICAgIHwgIDU0NSArKysrKysrKw0KPiA+ID4g
-IGRyaXZlcnMvbWVkaWEvcGxhdGZvcm0vdmlzY29udGkvdmlpZi5oICAgICAgICB8ICAyMDMgKysr
-DQo+ID4gPiAgLi4uL21lZGlhL3BsYXRmb3JtL3Zpc2NvbnRpL3ZpaWZfY2FwdHVyZS5jICAgIHwg
-MTIwMQ0KPiArKysrKysrKysrKysrKysrKw0KPiA+ID4gIGRyaXZlcnMvbWVkaWEvcGxhdGZvcm0v
-dmlzY29udGkvdmlpZl9pc3AuYyAgICB8ICA4NDYgKysrKysrKysrKysrDQo+ID4gPiAgNSBmaWxl
-cyBjaGFuZ2VkLCAyNzk2IGluc2VydGlvbnMoKykgIGNyZWF0ZSBtb2RlIDEwMDY0NA0KPiA+ID4g
-ZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS92aXNjb250aS92aWlmLmMNCj4gPiA+ICBjcmVhdGUgbW9k
-ZSAxMDA2NDQgZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS92aXNjb250aS92aWlmLmgNCj4gPiA+ICBj
-cmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS92aXNjb250aS92aWlmX2Nh
-cHR1cmUuYw0KPiA+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL21lZGlhL3BsYXRmb3Jt
-L3Zpc2NvbnRpL3ZpaWZfaXNwLmMNCj4gDQo+IFtzbmlwXQ0KPiANCj4gPiA+ICtzdGF0aWMgaW50
-IHZpaWZfc19lZGlkKHN0cnVjdCBmaWxlICpmaWxlLCB2b2lkICpmaCwgc3RydWN0DQo+ID4gPiAr
-djRsMl9lZGlkICplZGlkKSB7DQo+ID4gPiArCXN0cnVjdCB2aWlmX2RldmljZSAqdmlpZl9kZXYg
-PSB2aWRlb19kcnZkYXRhX3RvX2NhcGRldihmaWxlKS0+dmlpZl9kZXY7DQo+ID4gPiArCXN0cnVj
-dCB2aWlmX3N1YmRldiAqdmlpZl9zZCA9IHZpaWZfZGV2LT5zZDsNCj4gPiA+ICsNCj4gPiA+ICsJ
-cmV0dXJuIHY0bDJfc3ViZGV2X2NhbGwodmlpZl9zZC0+djRsMl9zZCwgcGFkLCBzZXRfZWRpZCwg
-ZWRpZCk7IH0NCj4gPg0KPiA+IEhhcyB0aGlzIGRyaXZlciBiZWVuIHRlc3RlZCB3aXRoIGFuIEhE
-TUkgcmVjZWl2ZXI/IElmIG5vdCwgdGhlbiBJDQo+ID4gd291bGQgcmVjb21tZW5kIGRyb3BwaW5n
-IHN1cHBvcnQgZm9yIGl0IHVudGlsIHlvdSBhY3R1YWxseSBjYW4gdGVzdCB3aXRoIHN1Y2gNCj4g
-aGFyZHdhcmUuDQo+ID4NCj4gPiBUaGUgRFZfVElNSU5HUyBBUEkgaXMgZm9yIEhETUkvRFZJL0Rp
-c3BsYXlQb3J0IGV0Yy4gaW50ZXJmYWNlcywgaXQncw0KPiA+IG5vdCBtZWFudCBmb3IgQ1NJIGFu
-ZCBzaW1pbGFyIGludGVyZmFjZXMuDQo+IA0KPiBNb3JlIHRoYW4gdGhhdCwgZm9yIE1DLWJhc2Vk
-IGRyaXZlcnMsIHRoZSB2aWRlbyBub2RlIHNob3VsZCAqbmV2ZXIqIGZvcndhcmQNCj4gaW9jdGxz
-IHRvIGEgY29ubmVjdGVkIHN1YmRldi4gVGhlICpvbmx5KiB2YWxpZCBjYWxscyB0bw0KPiB2NGwy
-X3N1YmRldl9jYWxsKCkgaW4gdGhpcyBmaWxlIGFyZQ0KPiANCj4gLSB0byB2aWRlby5zX3N0cmVh
-bSgpIGluIHRoZSBzdGFydCBhbmQgc3RvcCBzdHJlYW1pbmcgaGFuZGxlcg0KPiANCj4gLSB0byBw
-YWQuZ19mbXQoKSB3aGVuIHN0YXJ0aW5nIHN0cmVhbWluZyB0byB2YWxpZGF0ZSB0aGF0IHRoZSBj
-b25uZWN0ZWQNCj4gICBzdWJkZXYgb3V0cHV0cyBhIGZvcm1hdCBjb21wYXRpYmxlIHdpdGggdGhl
-IGZvcm1hdCBzZXQgb24gdGhlIHZpZGVvDQo+ICAgY2FwdHVyZSBkZXZpY2UNCj4gDQo+IFRoYXQn
-cyBpdCwgbm90aGluZyBlbHNlLCBhbGwgb3RoZXIgY2FsbHMgdG8gdjRsMl9zdWJkZXZfY2FsbCgp
-IG11c3QgYmUgZHJvcHBlZCBmcm9tDQo+IHRoZSBpbXBsZW1lbnRhdGlvbiBvZiB0aGUgdmlkZW9f
-ZGV2aWNlLg0KPiANCg0KVGhhbmsgeW91IGZvciB5b3VyIGNvbW1lbnQuIEkgdW5kZXJzdGFuZCB0
-aGUgcmVzdHJpY3Rpb24uDQpJJ2xsIHJlbW92ZSBmb2xsb3dpbmcgZnVuY3Rpb25zIGNvcnJlc3Bv
-bmRpbmcgdG8gaW9jdGxzLg0KDQoqIHZpaWZfZW51bV9pbnB1dA0KKiB2aWlmX2dfc2VsZWN0aW9u
-DQoqIHZpaWZfc19zZWxlY3Rpb24NCiogdmlpZl9kdl90aW1pbmdzX2NhcA0KKiB2aWlmX2VudW1f
-ZHZfdGltaW5ncw0KKiB2aWlmX2dfZHZfdGltaW5ncw0KKiB2aWlmX3NfZHZfdGltaW5ncw0KKiB2
-aWlmX3F1ZXJ5X2R2X3RpbWluZ3MNCiogdmlpZl9nX2VkaWQNCiogdmlpZl9zX2VkaWQNCiogdmlp
-Zl9nX3Bhcm0NCiogdmlpZl9zX3Bhcm0NCiogdmlpZl9lbnVtX2ZyYW1lc2l6ZXMNCiogdmlpZl9l
-bnVtX2ZyYW1laW50ZXJ2YWxzDQoNCkkgY2FuIGNhbGwgc3ViZGV2aWNlcyBkaXJlY3RseSBpZiBJ
-IG5lZWQuIElzIGl0IGEgY29ycmVjdCB1bmRlcnN0YW5kaW5nPw0KDQpBcyBmb3IgdmlpZl90cnlf
-Zm10X3ZpZF9jYXAgYW5kIHZpaWZfc19mbXRfdmlkX2NhcCwgDQpJJ2xsIHJlbW92ZSBwYWQuZ19m
-bXQoKSBjYWxsIHdoaWNoIGlzIGZvciBjaGVja2luZyBwaXhlbCBmb3JtYXQuDQpUaGUgY2hlY2sg
-d2lsbCBiZSBtb3ZlZCB0byB2aWlmX2NhcHR1cmVfbGlua192YWxpZGF0ZSgpIHZhbGlkYXRpb24g
-cm91dGluZSB0cmlnZ2VyZWQgYnkgYSBzdGFydCBzdHJlYW1pbmcgZXZlbnQuDQoNCj4gW3NuaXBd
-DQo+IA0KPiAtLQ0KPiBSZWdhcmRzLA0KPiANCj4gTGF1cmVudCBQaW5jaGFydA0KDQpSZWdhcmRz
-LA0KWXVqaSBJc2hpa2F3YQ0K
+Hi Michael,
 
+Thanks for the patchset.
+
+Looks good in general, please see my comments below.
+
+On Tue, Jan 24, 2023 at 07:01:07AM +0100, Michael Riesch wrote:
+> From: Gerald Loacker <gerald.loacker@wolfvision.net>
+> 
+> Add driver for the Sony IMX415 CMOS image sensor.
+> 
+> Signed-off-by: Gerald Loacker <gerald.loacker@wolfvision.net>
+> Co-developed-by: Michael Riesch <michael.riesch@wolfvision.net>
+> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+> ---
+> v2:
+>  - no changes
+> 
+>  MAINTAINERS                |    1 +
+>  drivers/media/i2c/Kconfig  |   14 +
+>  drivers/media/i2c/Makefile |    1 +
+>  drivers/media/i2c/imx415.c | 1296 ++++++++++++++++++++++++++++++++++++
+>  4 files changed, 1312 insertions(+)
+>  create mode 100644 drivers/media/i2c/imx415.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index c9fa893bf649..803bcfa0d102 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19499,6 +19499,7 @@ L:	linux-media@vger.kernel.org
+>  S:	Maintained
+>  T:	git git://linuxtv.org/media_tree.git
+>  F:	Documentation/devicetree/bindings/media/i2c/sony,imx415.yaml
+> +F:	drivers/media/i2c/imx415.c
+>  
+>  SONY MEMORYSTICK SUBSYSTEM
+>  M:	Maxim Levitsky <maximlevitsky@gmail.com>
+> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+> index 833241897d63..f7c3d6232c15 100644
+> --- a/drivers/media/i2c/Kconfig
+> +++ b/drivers/media/i2c/Kconfig
+> @@ -228,6 +228,20 @@ config VIDEO_IMX412
+>  	  To compile this driver as a module, choose M here: the
+>  	  module will be called imx412.
+>  
+> +config VIDEO_IMX415
+> +	tristate "Sony IMX415 sensor support"
+> +	depends on OF_GPIO
+> +	depends on I2C && VIDEO_DEV
+> +	select VIDEO_V4L2_SUBDEV_API
+> +	select MEDIA_CONTROLLER
+> +	select V4L2_FWNODE
+> +	help
+> +	  This is a Video4Linux2 sensor driver for the Sony
+> +	  IMX415 camera.
+> +
+> +	  To compile this driver as a module, choose M here: the
+> +	  module will be called imx415.
+> +
+>  config VIDEO_MAX9271_LIB
+>  	tristate
+>  
+> diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
+> index 4d6c052bb5a7..810c615d7e32 100644
+> --- a/drivers/media/i2c/Makefile
+> +++ b/drivers/media/i2c/Makefile
+> @@ -48,6 +48,7 @@ obj-$(CONFIG_VIDEO_IMX334) += imx334.o
+>  obj-$(CONFIG_VIDEO_IMX335) += imx335.o
+>  obj-$(CONFIG_VIDEO_IMX355) += imx355.o
+>  obj-$(CONFIG_VIDEO_IMX412) += imx412.o
+> +obj-$(CONFIG_VIDEO_IMX415) += imx415.o
+>  obj-$(CONFIG_VIDEO_IR_I2C) += ir-kbd-i2c.o
+>  obj-$(CONFIG_VIDEO_ISL7998X) += isl7998x.o
+>  obj-$(CONFIG_VIDEO_KS0127) += ks0127.o
+> diff --git a/drivers/media/i2c/imx415.c b/drivers/media/i2c/imx415.c
+> new file mode 100644
+> index 000000000000..a8f0b7e0bee8
+> --- /dev/null
+> +++ b/drivers/media/i2c/imx415.c
+> @@ -0,0 +1,1296 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Driver for the Sony IMX415 CMOS Image Sensor.
+> + *
+> + * Copyright (C) 2022 WolfVision GmbH.
+
+You can use 2023 now.
+
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/gpio/consumer.h>
+> +#include <linux/i2c.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/regmap.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/slab.h>
+> +#include <linux/videodev2.h>
+> +
+> +#include <media/v4l2-ctrls.h>
+> +#include <media/v4l2-fwnode.h>
+> +#include <media/v4l2-subdev.h>
+> +
+> +#define IMX415_PIXEL_ARRAY_TOP	  0
+> +#define IMX415_PIXEL_ARRAY_LEFT	  0
+> +#define IMX415_PIXEL_ARRAY_WIDTH  3864
+> +#define IMX415_PIXEL_ARRAY_HEIGHT 2192
+> +#define IMX415_PIXEL_ARRAY_VBLANK 58
+> +
+> +#define IMX415_NUM_CLK_PARAM_REGS 11
+> +
+> +#define IMX415_REG_8BIT(n)	  ((1 << 16) | (n))
+> +#define IMX415_REG_16BIT(n)	  ((2 << 16) | (n))
+> +#define IMX415_REG_24BIT(n)	  ((3 << 16) | (n))
+> +#define IMX415_REG_SIZE_SHIFT	  16
+> +#define IMX415_REG_ADDR_MASK	  0xffff
+> +
+> +#define IMX415_MODE		  IMX415_REG_8BIT(0x3000)
+> +#define IMX415_MODE_OPERATING	  (0)
+> +#define IMX415_MODE_STANDBY	  BIT(0)
+> +#define IMX415_REGHOLD		  IMX415_REG_8BIT(0x3001)
+> +#define IMX415_REGHOLD_INVALID	  (0)
+> +#define IMX415_REGHOLD_VALID	  BIT(0)
+> +#define IMX415_XMSTA		  IMX415_REG_8BIT(0x3002)
+> +#define IMX415_XMSTA_START	  (0)
+> +#define IMX415_XMSTA_STOP	  BIT(0)
+> +#define IMX415_BCWAIT_TIME	  IMX415_REG_16BIT(0x3008)
+> +#define IMX415_CPWAIT_TIME	  IMX415_REG_16BIT(0x300A)
+> +#define IMX415_WINMODE		  IMX415_REG_8BIT(0x301C)
+> +#define IMX415_ADDMODE		  IMX415_REG_8BIT(0x3022)
+> +#define IMX415_REVERSE		  IMX415_REG_8BIT(0x3030)
+> +#define IMX415_HREVERSE_SHIFT	  (0)
+> +#define IMX415_VREVERSE_SHIFT	  BIT(0)
+> +#define IMX415_ADBIT		  IMX415_REG_8BIT(0x3031)
+> +#define IMX415_MDBIT		  IMX415_REG_8BIT(0x3032)
+> +#define IMX415_SYS_MODE		  IMX415_REG_8BIT(0x3033)
+> +#define IMX415_OUTSEL		  IMX415_REG_8BIT(0x30C0)
+> +#define IMX415_DRV		  IMX415_REG_8BIT(0x30C1)
+> +#define IMX415_VMAX		  IMX415_REG_24BIT(0x3024)
+> +#define IMX415_HMAX		  IMX415_REG_16BIT(0x3028)
+> +#define IMX415_SHR0		  IMX415_REG_24BIT(0x3050)
+> +#define IMX415_GAIN_PCG_0	  IMX415_REG_16BIT(0x3090)
+> +#define IMX415_AGAIN_MIN	  0
+> +#define IMX415_AGAIN_MAX	  100
+> +#define IMX415_AGAIN_STEP	  1
+> +#define IMX415_BLKLEVEL		  IMX415_REG_16BIT(0x30E2)
+> +#define IMX415_BLKLEVEL_DEFAULT	  50
+> +#define IMX415_TPG_EN_DUOUT	  IMX415_REG_8BIT(0x30E4)
+> +#define IMX415_TPG_PATSEL_DUOUT	  IMX415_REG_8BIT(0x30E6)
+> +#define IMX415_TPG_COLORWIDTH	  IMX415_REG_8BIT(0x30E8)
+> +#define IMX415_TESTCLKEN_MIPI	  IMX415_REG_8BIT(0x3110)
+> +#define IMX415_INCKSEL1		  IMX415_REG_8BIT(0x3115)
+> +#define IMX415_INCKSEL2		  IMX415_REG_8BIT(0x3116)
+> +#define IMX415_INCKSEL3		  IMX415_REG_16BIT(0x3118)
+> +#define IMX415_INCKSEL4		  IMX415_REG_16BIT(0x311A)
+> +#define IMX415_INCKSEL5		  IMX415_REG_8BIT(0x311E)
+> +#define IMX415_DIG_CLP_MODE	  IMX415_REG_8BIT(0x32C8)
+> +#define IMX415_WRJ_OPEN		  IMX415_REG_8BIT(0x3390)
+> +#define IMX415_SENSOR_INFO	  IMX415_REG_16BIT(0x3F12)
+> +#define IMX415_SENSOR_INFO_MASK	  0xFFF
+> +#define IMX415_CHIP_ID		  0x514
+> +#define IMX415_LANEMODE		  IMX415_REG_16BIT(0x4001)
+> +#define IMX415_LANEMODE_2	  1
+> +#define IMX415_LANEMODE_4	  3
+> +#define IMX415_TXCLKESC_FREQ	  IMX415_REG_16BIT(0x4004)
+> +#define IMX415_INCKSEL6		  IMX415_REG_8BIT(0x400C)
+> +#define IMX415_TCLKPOST		  IMX415_REG_16BIT(0x4018)
+> +#define IMX415_TCLKPREPARE	  IMX415_REG_16BIT(0x401A)
+> +#define IMX415_TCLKTRAIL	  IMX415_REG_16BIT(0x401C)
+> +#define IMX415_TCLKZERO		  IMX415_REG_16BIT(0x401E)
+> +#define IMX415_THSPREPARE	  IMX415_REG_16BIT(0x4020)
+> +#define IMX415_THSZERO		  IMX415_REG_16BIT(0x4022)
+> +#define IMX415_THSTRAIL		  IMX415_REG_16BIT(0x4024)
+> +#define IMX415_THSEXIT		  IMX415_REG_16BIT(0x4026)
+> +#define IMX415_TLPX		  IMX415_REG_16BIT(0x4028)
+> +#define IMX415_INCKSEL7		  IMX415_REG_8BIT(0x4074)
+> +
+> +struct imx415_reg {
+> +	u32 address;
+> +	u32 val;
+> +};
+> +
+> +static const char *const imx415_supply_names[] = {
+> +	"dvdd",
+> +	"ovdd",
+> +	"avdd",
+> +};
+> +
+> +/*
+> + * The IMX415 data sheet uses lane rates but v4l2 uses link frequency to
+> + * describe MIPI CSI-2 speed. This driver uses lane rates wherever possible
+> + * and converts them to link frequencies by a factor of two when needed.
+> + */
+> +static const s64 link_freq_menu_items[] = {
+> +	594000000 / 2,	720000000 / 2,	891000000 / 2,
+> +	1440000000 / 2, 1485000000 / 2,
+> +};
+> +
+> +struct imx415_clk_params {
+> +	u64 lane_rate;
+> +	u64 inck;
+> +	struct imx415_reg regs[IMX415_NUM_CLK_PARAM_REGS];
+> +};
+> +
+> +/* INCK Settings - includes all lane rate and INCK dependent registers */
+> +static const struct imx415_clk_params imx415_clk_params[] = {
+> +	{
+> +		.lane_rate = 594000000,
+> +		.inck = 27000000,
+> +		.regs[0] = { IMX415_BCWAIT_TIME, 0x05D },
+> +		.regs[1] = { IMX415_CPWAIT_TIME, 0x042 },
+> +		.regs[2] = { IMX415_SYS_MODE, 0x7 },
+> +		.regs[3] = { IMX415_INCKSEL1, 0x00 },
+> +		.regs[4] = { IMX415_INCKSEL2, 0x23 },
+> +		.regs[5] = { IMX415_INCKSEL3, 0x084 },
+> +		.regs[6] = { IMX415_INCKSEL4, 0x0E7 },
+> +		.regs[7] = { IMX415_INCKSEL5, 0x23 },
+> +		.regs[8] = { IMX415_INCKSEL6, 0x0 },
+> +		.regs[9] = { IMX415_INCKSEL7, 0x1 },
+> +		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x06C0 },
+> +	},
+> +	{
+> +		.lane_rate = 720000000,
+> +		.inck = 24000000,
+> +		.regs[0] = { IMX415_BCWAIT_TIME, 0x054 },
+> +		.regs[1] = { IMX415_CPWAIT_TIME, 0x03B },
+> +		.regs[2] = { IMX415_SYS_MODE, 0x9 },
+> +		.regs[3] = { IMX415_INCKSEL1, 0x00 },
+> +		.regs[4] = { IMX415_INCKSEL2, 0x23 },
+> +		.regs[5] = { IMX415_INCKSEL3, 0x0B4 },
+> +		.regs[6] = { IMX415_INCKSEL4, 0x0FC },
+> +		.regs[7] = { IMX415_INCKSEL5, 0x23 },
+> +		.regs[8] = { IMX415_INCKSEL6, 0x0 },
+> +		.regs[9] = { IMX415_INCKSEL7, 0x1 },
+> +		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x0600 },
+> +	},
+> +	{
+> +		.lane_rate = 891000000,
+> +		.inck = 27000000,
+> +		.regs[0] = { IMX415_BCWAIT_TIME, 0x05D },
+> +		.regs[1] = { IMX415_CPWAIT_TIME, 0x042 },
+> +		.regs[2] = { IMX415_SYS_MODE, 0x5 },
+> +		.regs[3] = { IMX415_INCKSEL1, 0x00 },
+> +		.regs[4] = { IMX415_INCKSEL2, 0x23 },
+> +		.regs[5] = { IMX415_INCKSEL3, 0x0C6 },
+> +		.regs[6] = { IMX415_INCKSEL4, 0x0E7 },
+> +		.regs[7] = { IMX415_INCKSEL5, 0x23 },
+> +		.regs[8] = { IMX415_INCKSEL6, 0x0 },
+> +		.regs[9] = { IMX415_INCKSEL7, 0x1 },
+> +		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x06C0 },
+> +	},
+> +	{
+> +		.lane_rate = 1440000000,
+> +		.inck = 24000000,
+> +		.regs[0] = { IMX415_BCWAIT_TIME, 0x054 },
+> +		.regs[1] = { IMX415_CPWAIT_TIME, 0x03B },
+> +		.regs[2] = { IMX415_SYS_MODE, 0x8 },
+> +		.regs[3] = { IMX415_INCKSEL1, 0x00 },
+> +		.regs[4] = { IMX415_INCKSEL2, 0x23 },
+> +		.regs[5] = { IMX415_INCKSEL3, 0x0B4 },
+> +		.regs[6] = { IMX415_INCKSEL4, 0x0FC },
+> +		.regs[7] = { IMX415_INCKSEL5, 0x23 },
+> +		.regs[8] = { IMX415_INCKSEL6, 0x1 },
+> +		.regs[9] = { IMX415_INCKSEL7, 0x0 },
+> +		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x0600 },
+> +	},
+> +	{
+> +		.lane_rate = 1485000000,
+> +		.inck = 27000000,
+> +		.regs[0] = { IMX415_BCWAIT_TIME, 0x05D },
+> +		.regs[1] = { IMX415_CPWAIT_TIME, 0x042 },
+> +		.regs[2] = { IMX415_SYS_MODE, 0x8 },
+> +		.regs[3] = { IMX415_INCKSEL1, 0x00 },
+> +		.regs[4] = { IMX415_INCKSEL2, 0x23 },
+> +		.regs[5] = { IMX415_INCKSEL3, 0x0A5 },
+> +		.regs[6] = { IMX415_INCKSEL4, 0x0E7 },
+> +		.regs[7] = { IMX415_INCKSEL5, 0x23 },
+> +		.regs[8] = { IMX415_INCKSEL6, 0x1 },
+> +		.regs[9] = { IMX415_INCKSEL7, 0x0 },
+> +		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x06C0 },
+> +	},
+> +};
+> +
+> +/* all-pixel 2-lane 720 Mbps 15.74 Hz mode */
+> +static const struct imx415_reg imx415_mode_2_720[] = {
+> +	{ IMX415_VMAX, 0x08CA },
+> +	{ IMX415_HMAX, 0x07F0 },
+> +	{ IMX415_LANEMODE, IMX415_LANEMODE_2 },
+> +	{ IMX415_TCLKPOST, 0x006F },
+> +	{ IMX415_TCLKPREPARE, 0x002F },
+> +	{ IMX415_TCLKTRAIL, 0x002F },
+> +	{ IMX415_TCLKZERO, 0x00BF },
+> +	{ IMX415_THSPREPARE, 0x002F },
+> +	{ IMX415_THSZERO, 0x0057 },
+> +	{ IMX415_THSTRAIL, 0x002F },
+> +	{ IMX415_THSEXIT, 0x004F },
+> +	{ IMX415_TLPX, 0x0027 },
+> +};
+> +
+> +/* all-pixel 2-lane 1440 Mbps 30.01 Hz mode */
+> +static const struct imx415_reg imx415_mode_2_1440[] = {
+> +	{ IMX415_VMAX, 0x08CA },
+> +	{ IMX415_HMAX, 0x042A },
+> +	{ IMX415_LANEMODE, IMX415_LANEMODE_2 },
+> +	{ IMX415_TCLKPOST, 0x009F },
+> +	{ IMX415_TCLKPREPARE, 0x0057 },
+> +	{ IMX415_TCLKTRAIL, 0x0057 },
+> +	{ IMX415_TCLKZERO, 0x0187 },
+> +	{ IMX415_THSPREPARE, 0x005F },
+> +	{ IMX415_THSZERO, 0x00A7 },
+> +	{ IMX415_THSTRAIL, 0x005F },
+> +	{ IMX415_THSEXIT, 0x0097 },
+> +	{ IMX415_TLPX, 0x004F },
+> +};
+> +
+> +/* all-pixel 4-lane 891 Mbps 30 Hz mode */
+> +static const struct imx415_reg imx415_mode_4_891[] = {
+> +	{ IMX415_VMAX, 0x08CA },
+> +	{ IMX415_HMAX, 0x044C },
+> +	{ IMX415_LANEMODE, IMX415_LANEMODE_4 },
+> +	{ IMX415_TCLKPOST, 0x007F },
+> +	{ IMX415_TCLKPREPARE, 0x0037 },
+> +	{ IMX415_TCLKTRAIL, 0x0037 },
+> +	{ IMX415_TCLKZERO, 0x00F7 },
+> +	{ IMX415_THSPREPARE, 0x003F },
+> +	{ IMX415_THSZERO, 0x006F },
+> +	{ IMX415_THSTRAIL, 0x003F },
+> +	{ IMX415_THSEXIT, 0x005F },
+> +	{ IMX415_TLPX, 0x002F },
+> +};
+> +
+> +struct imx415_mode_reg_list {
+> +	u32 num_of_regs;
+> +	const struct imx415_reg *regs;
+> +};
+> +
+> +/*
+> + * Mode : number of lanes, lane rate and frame rate dependent settings
+> + *
+> + * pixel_rate and hmax_pix are needed to calculate hblank for the v4l2 ctrl
+> + * interface. These values can not be found in the data sheet and should be
+> + * treated as virtual values. Use following table when adding new modes.
+> + *
+> + * lane_rate  lanes    fps     hmax_pix   pixel_rate
+> + *
+> + *     594      2     10.000     4400       99000000
+> + *     891      2     15.000     4400      148500000
+> + *     720      2     15.748     4064      144000000
+> + *    1782      2     30.000     4400      297000000
+> + *    2079      2     30.000     4400      297000000
+> + *    1440      2     30.019     4510      304615385
+> + *
+> + *     594      4     20.000     5500      247500000
+> + *     594      4     25.000     4400      247500000
+> + *     720      4     25.000     4400      247500000
+> + *     720      4     30.019     4510      304615385
+> + *     891      4     30.000     4400      297000000
+> + *    1440      4     30.019     4510      304615385
+> + *    1440      4     60.038     4510      609230769
+> + *    1485      4     60.000     4400      594000000
+> + *    1782      4     60.000     4400      594000000
+> + *    2079      4     60.000     4400      594000000
+> + *    2376      4     90.164     4392      891000000
+> + */
+> +struct imx415_mode {
+> +	u64 lane_rate;
+> +	u32 lanes;
+> +	u32 hmax_pix;
+> +	u64 pixel_rate;
+> +	struct imx415_mode_reg_list reg_list;
+> +};
+> +
+> +/* mode configs */
+> +static const struct imx415_mode supported_modes[] = {
+> +	{
+> +		.lane_rate = 720000000,
+> +		.lanes = 2,
+> +		.hmax_pix = 4064,
+> +		.pixel_rate = 144000000,
+> +		.reg_list = {
+> +			.num_of_regs = ARRAY_SIZE(imx415_mode_2_720),
+> +			.regs = imx415_mode_2_720,
+> +		},
+> +	},
+> +	{
+> +		.lane_rate = 1440000000,
+> +		.lanes = 2,
+> +		.hmax_pix = 4510,
+> +		.pixel_rate = 304615385,
+> +		.reg_list = {
+> +			.num_of_regs = ARRAY_SIZE(imx415_mode_2_1440),
+> +			.regs = imx415_mode_2_1440,
+> +		},
+> +	},
+> +	{
+> +		.lane_rate = 891000000,
+> +		.lanes = 4,
+> +		.hmax_pix = 4400,
+> +		.pixel_rate = 297000000,
+> +		.reg_list = {
+> +			.num_of_regs = ARRAY_SIZE(imx415_mode_4_891),
+> +			.regs = imx415_mode_4_891,
+> +		},
+> +	},
+> +};
+> +
+> +static const struct regmap_config imx415_regmap_config = {
+> +	.reg_bits = 16,
+> +	.val_bits = 8,
+> +};
+> +
+> +static const char *const imx415_test_pattern_menu[] = {
+> +	"disabled",
+> +	"solid black",
+> +	"solid white",
+> +	"solid dark gray",
+> +	"solid light gray",
+> +	"stripes light/dark grey",
+> +	"stripes dark/light grey",
+> +	"stripes black/dark grey",
+> +	"stripes dark grey/black",
+> +	"stripes black/white",
+> +	"stripes white/black",
+> +	"horizontal color bar",
+> +	"vertical color bar",
+> +};
+> +
+> +struct imx415 {
+> +	struct device *dev;
+> +	struct clk *clk;
+> +	struct regulator_bulk_data supplies[ARRAY_SIZE(imx415_supply_names)];
+> +	struct gpio_desc *reset;
+> +	struct regmap *regmap;
+> +
+> +	const struct imx415_clk_params *clk_params;
+> +
+> +	bool streaming;
+> +
+> +	struct v4l2_subdev subdev;
+> +	struct media_pad pad;
+> +
+> +	struct v4l2_ctrl_handler ctrls;
+> +	struct v4l2_ctrl *hblank;
+> +	struct v4l2_ctrl *vblank;
+> +	struct v4l2_ctrl *exposure;
+> +	struct v4l2_ctrl *again;
+> +	struct v4l2_ctrl *pixel_rate;
+> +	struct v4l2_ctrl *hflip;
+> +	struct v4l2_ctrl *vflip;
+> +	struct v4l2_ctrl *link_freq;
+
+Only store controls you need.
+
+> +
+> +	int cur_mode;
+> +	int num_data_lanes;
+
+unsigned int, please.
+
+> +};
+> +
+> +/*
+> + * This table includes fixed register settings and a bunch of undocumented
+> + * registers that have to be set to another value than default.
+> + */
+> +static const struct imx415_reg imx415_init_table[] = {
+> +	/* use all-pixel readout mode, no flip */
+> +	{ IMX415_WINMODE, 0x00 },
+> +	{ IMX415_ADDMODE, 0x00 },
+> +	{ IMX415_REVERSE, 0x00 },
+> +	/* use RAW 10-bit mode */
+> +	{ IMX415_ADBIT, 0x00 },
+> +	{ IMX415_MDBIT, 0x00 },
+> +	/* output VSYNC on XVS and low on XHS */
+> +	{ IMX415_OUTSEL, 0x22 },
+> +	{ IMX415_DRV, 0x00 },
+> +
+> +	/* SONY magic registers */
+> +	{ IMX415_REG_8BIT(0x32D4), 0x21 },
+> +	{ IMX415_REG_8BIT(0x32EC), 0xA1 },
+> +	{ IMX415_REG_8BIT(0x3452), 0x7F },
+> +	{ IMX415_REG_8BIT(0x3453), 0x03 },
+> +	{ IMX415_REG_8BIT(0x358A), 0x04 },
+> +	{ IMX415_REG_8BIT(0x35A1), 0x02 },
+> +	{ IMX415_REG_8BIT(0x36BC), 0x0C },
+> +	{ IMX415_REG_8BIT(0x36CC), 0x53 },
+> +	{ IMX415_REG_8BIT(0x36CD), 0x00 },
+> +	{ IMX415_REG_8BIT(0x36CE), 0x3C },
+> +	{ IMX415_REG_8BIT(0x36D0), 0x8C },
+> +	{ IMX415_REG_8BIT(0x36D1), 0x00 },
+> +	{ IMX415_REG_8BIT(0x36D2), 0x71 },
+> +	{ IMX415_REG_8BIT(0x36D4), 0x3C },
+> +	{ IMX415_REG_8BIT(0x36D6), 0x53 },
+> +	{ IMX415_REG_8BIT(0x36D7), 0x00 },
+> +	{ IMX415_REG_8BIT(0x36D8), 0x71 },
+> +	{ IMX415_REG_8BIT(0x36DA), 0x8C },
+> +	{ IMX415_REG_8BIT(0x36DB), 0x00 },
+> +	{ IMX415_REG_8BIT(0x3724), 0x02 },
+> +	{ IMX415_REG_8BIT(0x3726), 0x02 },
+> +	{ IMX415_REG_8BIT(0x3732), 0x02 },
+> +	{ IMX415_REG_8BIT(0x3734), 0x03 },
+> +	{ IMX415_REG_8BIT(0x3736), 0x03 },
+> +	{ IMX415_REG_8BIT(0x3742), 0x03 },
+> +	{ IMX415_REG_8BIT(0x3862), 0xE0 },
+> +	{ IMX415_REG_8BIT(0x38CC), 0x30 },
+> +	{ IMX415_REG_8BIT(0x38CD), 0x2F },
+> +	{ IMX415_REG_8BIT(0x395C), 0x0C },
+> +	{ IMX415_REG_8BIT(0x3A42), 0xD1 },
+> +	{ IMX415_REG_8BIT(0x3A4C), 0x77 },
+> +	{ IMX415_REG_8BIT(0x3AE0), 0x02 },
+> +	{ IMX415_REG_8BIT(0x3AEC), 0x0C },
+> +	{ IMX415_REG_8BIT(0x3B00), 0x2E },
+> +	{ IMX415_REG_8BIT(0x3B06), 0x29 },
+> +	{ IMX415_REG_8BIT(0x3B98), 0x25 },
+> +	{ IMX415_REG_8BIT(0x3B99), 0x21 },
+> +	{ IMX415_REG_8BIT(0x3B9B), 0x13 },
+> +	{ IMX415_REG_8BIT(0x3B9C), 0x13 },
+> +	{ IMX415_REG_8BIT(0x3B9D), 0x13 },
+> +	{ IMX415_REG_8BIT(0x3B9E), 0x13 },
+> +	{ IMX415_REG_8BIT(0x3BA1), 0x00 },
+> +	{ IMX415_REG_8BIT(0x3BA2), 0x06 },
+> +	{ IMX415_REG_8BIT(0x3BA3), 0x0B },
+> +	{ IMX415_REG_8BIT(0x3BA4), 0x10 },
+> +	{ IMX415_REG_8BIT(0x3BA5), 0x14 },
+> +	{ IMX415_REG_8BIT(0x3BA6), 0x18 },
+> +	{ IMX415_REG_8BIT(0x3BA7), 0x1A },
+> +	{ IMX415_REG_8BIT(0x3BA8), 0x1A },
+> +	{ IMX415_REG_8BIT(0x3BA9), 0x1A },
+> +	{ IMX415_REG_8BIT(0x3BAC), 0xED },
+> +	{ IMX415_REG_8BIT(0x3BAD), 0x01 },
+> +	{ IMX415_REG_8BIT(0x3BAE), 0xF6 },
+> +	{ IMX415_REG_8BIT(0x3BAF), 0x02 },
+> +	{ IMX415_REG_8BIT(0x3BB0), 0xA2 },
+> +	{ IMX415_REG_8BIT(0x3BB1), 0x03 },
+> +	{ IMX415_REG_8BIT(0x3BB2), 0xE0 },
+> +	{ IMX415_REG_8BIT(0x3BB3), 0x03 },
+> +	{ IMX415_REG_8BIT(0x3BB4), 0xE0 },
+> +	{ IMX415_REG_8BIT(0x3BB5), 0x03 },
+> +	{ IMX415_REG_8BIT(0x3BB6), 0xE0 },
+> +	{ IMX415_REG_8BIT(0x3BB7), 0x03 },
+> +	{ IMX415_REG_8BIT(0x3BB8), 0xE0 },
+> +	{ IMX415_REG_8BIT(0x3BBA), 0xE0 },
+> +	{ IMX415_REG_8BIT(0x3BBC), 0xDA },
+> +	{ IMX415_REG_8BIT(0x3BBE), 0x88 },
+> +	{ IMX415_REG_8BIT(0x3BC0), 0x44 },
+> +	{ IMX415_REG_8BIT(0x3BC2), 0x7B },
+> +	{ IMX415_REG_8BIT(0x3BC4), 0xA2 },
+> +	{ IMX415_REG_8BIT(0x3BC8), 0xBD },
+> +	{ IMX415_REG_8BIT(0x3BCA), 0xBD },
+> +};
+> +
+> +static inline struct imx415 *to_imx415(struct v4l2_subdev *sd)
+> +{
+> +	return container_of(sd, struct imx415, subdev);
+> +}
+> +
+> +static int imx415_read(struct imx415 *sensor, u32 addr)
+> +{
+> +	u8 data[3] = { 0, 0, 0 };
+
+Explicitly initialise the first entry only.
+
+> +	int ret;
+> +
+> +	ret = regmap_raw_read(sensor->regmap, addr & IMX415_REG_ADDR_MASK, data,
+> +			      (addr >> IMX415_REG_SIZE_SHIFT) & 3);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return (data[2] << 16) | (data[1] << 8) | data[0];
+> +}
+> +
+> +static int imx415_write(struct imx415 *sensor, u32 addr, u32 value)
+> +{
+> +	u8 data[3] = { value & 0xff, (value >> 8) & 0xff, value >> 16 };
+> +	int ret;
+> +
+> +	ret = regmap_raw_write(sensor->regmap, addr & IMX415_REG_ADDR_MASK,
+> +			       data, (addr >> IMX415_REG_SIZE_SHIFT) & 3);
+> +	if (ret < 0)
+> +		dev_err_ratelimited(sensor->dev,
+> +				    "%u-bit write to 0x%04x failed: %d\n",
+> +				    ((addr >> IMX415_REG_SIZE_SHIFT) & 3) * 8,
+> +				    addr & IMX415_REG_ADDR_MASK, ret);
+> +
+> +	return ret;
+> +}
+> +
+> +static int imx415_set_testpattern(struct imx415 *sensor, int val)
+> +{
+> +	int ret;
+> +
+> +	if (val) {
+> +		ret = imx415_write(sensor, IMX415_BLKLEVEL, 0x00);
+> +		if (ret)
+> +			return ret;
+> +		ret = imx415_write(sensor, IMX415_TPG_EN_DUOUT, 0x01);
+> +		if (ret)
+> +			return ret;
+> +		ret = imx415_write(sensor, IMX415_TPG_PATSEL_DUOUT, val - 1);
+> +		if (ret)
+> +			return ret;
+> +		ret = imx415_write(sensor, IMX415_TPG_COLORWIDTH, 0x01);
+> +		if (ret)
+> +			return ret;
+> +		ret = imx415_write(sensor, IMX415_TESTCLKEN_MIPI, 0x20);
+> +		if (ret)
+> +			return ret;
+> +		ret = imx415_write(sensor, IMX415_DIG_CLP_MODE, 0x00);
+> +		if (ret)
+> +			return ret;
+> +		ret = imx415_write(sensor, IMX415_WRJ_OPEN, 0x00);
+> +	} else {
+> +		ret = imx415_write(sensor, IMX415_BLKLEVEL,
+> +				   IMX415_BLKLEVEL_DEFAULT);
+> +		if (ret)
+> +			return ret;
+> +		ret = imx415_write(sensor, IMX415_TPG_EN_DUOUT, 0x00);
+> +		if (ret)
+> +			return ret;
+> +		ret = imx415_write(sensor, IMX415_TESTCLKEN_MIPI, 0x00);
+> +		if (ret)
+> +			return ret;
+> +		ret = imx415_write(sensor, IMX415_DIG_CLP_MODE, 0x01);
+> +		if (ret)
+> +			return ret;
+> +		ret = imx415_write(sensor, IMX415_WRJ_OPEN, 0x01);
+> +	}
+> +	return ret;
+> +}
+> +
+> +static int imx415_s_ctrl(struct v4l2_ctrl *ctrl)
+> +{
+> +	struct imx415 *sensor = container_of(ctrl->handler, struct imx415,
+> +					     ctrls);
+> +	const struct v4l2_mbus_framefmt *format;
+> +	struct v4l2_subdev_state *state;
+> +	unsigned int vmax;
+> +	unsigned int flip;
+> +
+> +	if (!sensor->streaming)
+> +		return 0;
+> +
+> +	state = v4l2_subdev_get_locked_active_state(&sensor->subdev);
+> +	format = v4l2_subdev_get_pad_format(&sensor->subdev, state, 0);
+> +
+> +	switch (ctrl->id) {
+> +	case V4L2_CID_EXPOSURE:
+> +		/* clamp the exposure value to VMAX. */
+> +		vmax = format->height + sensor->vblank->cur.val;
+> +		ctrl->val = min_t(int, ctrl->val, vmax);
+> +		return imx415_write(sensor, IMX415_SHR0, vmax - ctrl->val);
+> +
+> +	case V4L2_CID_ANALOGUE_GAIN:
+> +		/* analogue gain in 0.3 dB step size */
+> +		return imx415_write(sensor, IMX415_GAIN_PCG_0, ctrl->val);
+> +
+> +	case V4L2_CID_HFLIP:
+> +	case V4L2_CID_VFLIP:
+> +		flip = (sensor->hflip->val << IMX415_HREVERSE_SHIFT) |
+> +		       (sensor->vflip->val << IMX415_VREVERSE_SHIFT);
+> +		return imx415_write(sensor, IMX415_REVERSE, flip);
+> +
+> +	case V4L2_CID_TEST_PATTERN:
+> +		return imx415_set_testpattern(sensor, ctrl->val);
+> +
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static const struct v4l2_ctrl_ops imx415_ctrl_ops = {
+> +	.s_ctrl = imx415_s_ctrl,
+> +};
+> +
+> +static int imx415_ctrls_init(struct imx415 *sensor)
+> +{
+> +	struct v4l2_fwnode_device_properties props;
+> +	u64 pixel_rate = supported_modes[sensor->cur_mode].pixel_rate;
+> +	u64 lane_rate = supported_modes[sensor->cur_mode].lane_rate;
+> +	u32 exposure_max = IMX415_PIXEL_ARRAY_HEIGHT +
+> +			   IMX415_PIXEL_ARRAY_VBLANK - 8;
+> +	u32 hblank;
+> +	unsigned int i;
+> +	int ret;
+> +
+> +	ret = v4l2_fwnode_device_parse(sensor->dev, &props);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	v4l2_ctrl_handler_init(&sensor->ctrls, 9);
+> +
+> +	for (i = 0; i < ARRAY_SIZE(link_freq_menu_items); ++i) {
+> +		if (lane_rate == link_freq_menu_items[i] * 2)
+> +			break;
+> +	}
+> +	if (i == ARRAY_SIZE(link_freq_menu_items)) {
+> +		return dev_err_probe(sensor->dev, -EINVAL,
+> +				     "lane rate %llu not supported\n",
+> +				     lane_rate);
+> +	}
+> +
+> +	sensor->link_freq =
+> +		v4l2_ctrl_new_int_menu(&sensor->ctrls, &imx415_ctrl_ops,
+> +				       V4L2_CID_LINK_FREQ,
+> +				       ARRAY_SIZE(link_freq_menu_items) - 1, i,
+> +				       link_freq_menu_items);
+> +
+> +	if (sensor->link_freq)
+> +		sensor->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+> +
+> +	sensor->exposure = v4l2_ctrl_new_std(&sensor->ctrls, &imx415_ctrl_ops,
+> +					     V4L2_CID_EXPOSURE, 4, exposure_max,
+> +					     1, exposure_max);
+> +
+> +	sensor->again = v4l2_ctrl_new_std(&sensor->ctrls, &imx415_ctrl_ops,
+> +					  V4L2_CID_ANALOGUE_GAIN,
+> +					  IMX415_AGAIN_MIN, IMX415_AGAIN_MAX,
+> +					  IMX415_AGAIN_STEP, IMX415_AGAIN_MIN);
+> +
+> +	hblank = supported_modes[sensor->cur_mode].hmax_pix -
+> +		 IMX415_PIXEL_ARRAY_WIDTH;
+> +	sensor->hblank = v4l2_ctrl_new_std(&sensor->ctrls, &imx415_ctrl_ops,
+> +					   V4L2_CID_HBLANK, hblank, hblank, 1,
+> +					   hblank);
+> +	if (sensor->hblank)
+> +		sensor->hblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+> +
+> +	sensor->vblank = v4l2_ctrl_new_std(&sensor->ctrls, &imx415_ctrl_ops,
+> +					   V4L2_CID_VBLANK,
+> +					   IMX415_PIXEL_ARRAY_VBLANK,
+> +					   IMX415_PIXEL_ARRAY_VBLANK, 1,
+> +					   IMX415_PIXEL_ARRAY_VBLANK);
+> +	if (sensor->vblank)
+> +		sensor->vblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+> +
+> +	/*
+> +	 * The pixel rate used here is a virtual value and can be used for
+> +	 * calculating the frame rate together with hblank. It may not
+> +	 * necessarily be the physically correct pixel clock.
+> +	 */
+> +	sensor->pixel_rate = v4l2_ctrl_new_std(&sensor->ctrls, NULL,
+> +					       V4L2_CID_PIXEL_RATE, pixel_rate,
+> +					       pixel_rate, 1, pixel_rate);
+> +
+> +	sensor->hflip = v4l2_ctrl_new_std(&sensor->ctrls, &imx415_ctrl_ops,
+> +					  V4L2_CID_HFLIP, 0, 1, 1, 0);
+> +	sensor->vflip = v4l2_ctrl_new_std(&sensor->ctrls, &imx415_ctrl_ops,
+> +					  V4L2_CID_VFLIP, 0, 1, 1, 0);
+> +
+> +	v4l2_ctrl_new_std_menu_items(&sensor->ctrls, &imx415_ctrl_ops,
+> +				     V4L2_CID_TEST_PATTERN,
+> +				     ARRAY_SIZE(imx415_test_pattern_menu) - 1,
+> +				     0, 0, imx415_test_pattern_menu);
+> +
+> +	v4l2_ctrl_new_fwnode_properties(&sensor->ctrls, &imx415_ctrl_ops,
+> +					&props);
+> +
+> +	if (sensor->ctrls.error) {
+> +		dev_err_probe(sensor->dev, sensor->ctrls.error,
+> +			      "failed to add controls\n");
+> +		v4l2_ctrl_handler_free(&sensor->ctrls);
+> +		return sensor->ctrls.error;
+> +	}
+> +	sensor->subdev.ctrl_handler = &sensor->ctrls;
+> +
+> +	return 0;
+> +}
+> +
+> +static int imx415_set_mode(struct imx415 *sensor, int mode)
+> +{
+> +	const struct imx415_reg *reg;
+> +	unsigned int i;
+> +	int ret = 0;
+> +
+> +	if (mode >= ARRAY_SIZE(supported_modes)) {
+> +		dev_err(sensor->dev, "Mode %d not supported\n", mode);
+> +		return -EINVAL;
+> +	}
+> +
+> +	for (i = 0; i < supported_modes[mode].reg_list.num_of_regs; ++i) {
+> +		reg = &supported_modes[mode].reg_list.regs[i];
+> +		ret = imx415_write(sensor, reg->address, reg->val);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	for (i = 0; i < IMX415_NUM_CLK_PARAM_REGS; ++i) {
+> +		reg = &sensor->clk_params->regs[i];
+> +		ret = imx415_write(sensor, reg->address, reg->val);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int imx415_setup(struct imx415 *sensor, struct v4l2_subdev_state *state)
+> +{
+> +	unsigned int i;
+> +	int ret;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(imx415_init_table); ++i) {
+> +		ret = imx415_write(sensor, imx415_init_table[i].address,
+> +				   imx415_init_table[i].val);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return imx415_set_mode(sensor, sensor->cur_mode);
+> +}
+> +
+> +static int imx415_stream_on(struct imx415 *sensor)
+> +{
+> +	int ret;
+> +
+> +	ret = imx415_write(sensor, IMX415_MODE, IMX415_MODE_OPERATING);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* wait at least 24 ms for internal regulator stabilization */
+> +	msleep(30);
+
+This is a very, very long time to wait for a regulator. Most probably
+either the time is too long or we're waiting for something else.
+
+> +
+> +	return imx415_write(sensor, IMX415_XMSTA, IMX415_XMSTA_START);
+> +}
+> +
+> +static int imx415_stream_off(struct imx415 *sensor)
+> +{
+> +	int ret;
+> +
+> +	ret = imx415_write(sensor, IMX415_XMSTA, IMX415_XMSTA_STOP);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return imx415_write(sensor, IMX415_MODE, IMX415_MODE_STANDBY);
+> +}
+> +
+> +static int imx415_s_stream(struct v4l2_subdev *sd, int enable)
+> +{
+> +	struct imx415 *sensor = to_imx415(sd);
+> +	struct v4l2_subdev_state *state;
+> +	int ret;
+> +
+> +	state = v4l2_subdev_lock_and_get_active_state(sd);
+> +
+> +	if (!enable) {
+> +		ret = imx415_stream_off(sensor);
+> +
+> +		pm_runtime_mark_last_busy(sensor->dev);
+> +		pm_runtime_put_autosuspend(sensor->dev);
+> +
+> +		sensor->streaming = false;
+> +
+> +		goto unlock;
+> +	}
+> +
+> +	ret = pm_runtime_resume_and_get(sensor->dev);
+> +	if (ret < 0)
+> +		goto unlock;
+> +
+> +	ret = imx415_setup(sensor, state);
+> +	if (ret < 0)
+> +		goto err_pm;
+> +
+> +	/*
+> +	 * Set streaming to true to ensure __v4l2_ctrl_handler_setup() will set
+> +	 * the controls. The flag is reset to false further down if an error
+> +	 * occurs.
+> +	 */
+> +	sensor->streaming = true;
+> +
+> +	ret = __v4l2_ctrl_handler_setup(&sensor->ctrls);
+> +	if (ret < 0)
+> +		goto err_pm;
+> +
+> +	ret = imx415_stream_on(sensor);
+> +	if (ret)
+> +		goto err_pm;
+> +
+> +unlock:
+> +	v4l2_subdev_unlock_state(state);
+> +
+> +	return ret;
+> +
+> +err_pm:
+> +	/*
+> +	 * In case of error, turn the power off synchronously as the device
+> +	 * likely has no other chance to recover.
+> +	 */
+> +	pm_runtime_put_sync(sensor->dev);
+> +	sensor->streaming = false;
+> +
+> +	goto unlock;
+> +}
+> +
+> +static int imx415_enum_mbus_code(struct v4l2_subdev *sd,
+> +				 struct v4l2_subdev_state *state,
+> +				 struct v4l2_subdev_mbus_code_enum *code)
+> +{
+> +	if (code->index != 0)
+> +		return -EINVAL;
+> +
+> +	code->code = MEDIA_BUS_FMT_SGBRG10_1X10;
+> +
+> +	return 0;
+> +}
+> +
+> +static int imx415_enum_frame_size(struct v4l2_subdev *sd,
+> +				  struct v4l2_subdev_state *state,
+> +				  struct v4l2_subdev_frame_size_enum *fse)
+> +{
+> +	const struct v4l2_mbus_framefmt *format;
+> +
+> +	format = v4l2_subdev_get_pad_format(sd, state, fse->pad);
+> +
+> +	if (fse->index > 0 || fse->code != format->code)
+> +		return -EINVAL;
+> +
+> +	fse->min_width = IMX415_PIXEL_ARRAY_WIDTH;
+> +	fse->max_width = fse->min_width;
+> +	fse->min_height = IMX415_PIXEL_ARRAY_HEIGHT;
+> +	fse->max_height = fse->min_height;
+> +	return 0;
+> +}
+> +
+> +static int imx415_get_format(struct v4l2_subdev *sd,
+> +			     struct v4l2_subdev_state *state,
+> +			     struct v4l2_subdev_format *fmt)
+> +{
+> +	fmt->format = *v4l2_subdev_get_pad_format(sd, state, fmt->pad);
+> +
+> +	return 0;
+> +}
+> +
+> +static int imx415_set_format(struct v4l2_subdev *sd,
+> +			     struct v4l2_subdev_state *state,
+> +			     struct v4l2_subdev_format *fmt)
+> +{
+> +	struct v4l2_mbus_framefmt *format;
+> +
+> +	format = v4l2_subdev_get_pad_format(sd, state, fmt->pad);
+> +
+> +	format->width = fmt->format.width;
+> +	format->height = fmt->format.height;
+> +	format->code = MEDIA_BUS_FMT_SGBRG10_1X10;
+> +	format->field = V4L2_FIELD_NONE;
+> +	format->colorspace = V4L2_COLORSPACE_RAW;
+> +	format->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
+> +	format->quantization = V4L2_QUANTIZATION_DEFAULT;
+> +	format->xfer_func = V4L2_XFER_FUNC_NONE;
+> +
+> +	fmt->format = *format;
+> +	return 0;
+> +}
+> +
+> +static int imx415_get_selection(struct v4l2_subdev *sd,
+> +				struct v4l2_subdev_state *sd_state,
+> +				struct v4l2_subdev_selection *sel)
+> +{
+> +	switch (sel->target) {
+> +	case V4L2_SEL_TGT_CROP:
+> +	case V4L2_SEL_TGT_CROP_DEFAULT:
+> +	case V4L2_SEL_TGT_CROP_BOUNDS:
+> +		sel->r.top = IMX415_PIXEL_ARRAY_TOP;
+> +		sel->r.left = IMX415_PIXEL_ARRAY_LEFT;
+> +		sel->r.width = IMX415_PIXEL_ARRAY_WIDTH;
+> +		sel->r.height = IMX415_PIXEL_ARRAY_HEIGHT;
+> +
+> +		return 0;
+> +	}
+> +
+> +	return -EINVAL;
+> +}
+> +
+> +static int imx415_init_cfg(struct v4l2_subdev *sd,
+> +			   struct v4l2_subdev_state *state)
+> +{
+> +	struct v4l2_subdev_format format = {
+> +		.format = {
+> +			.width = IMX415_PIXEL_ARRAY_WIDTH,
+> +			.height = IMX415_PIXEL_ARRAY_HEIGHT,
+> +		},
+> +	};
+> +
+> +	imx415_set_format(sd, state, &format);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct v4l2_subdev_video_ops imx415_subdev_video_ops = {
+> +	.s_stream = imx415_s_stream,
+> +};
+> +
+> +static const struct v4l2_subdev_pad_ops imx415_subdev_pad_ops = {
+> +	.enum_mbus_code = imx415_enum_mbus_code,
+> +	.enum_frame_size = imx415_enum_frame_size,
+> +	.get_fmt = imx415_get_format,
+> +	.set_fmt = imx415_set_format,
+> +	.get_selection = imx415_get_selection,
+> +	.init_cfg = imx415_init_cfg,
+> +};
+> +
+> +static const struct v4l2_subdev_ops imx415_subdev_ops = {
+> +	.video = &imx415_subdev_video_ops,
+> +	.pad = &imx415_subdev_pad_ops,
+> +};
+> +
+> +static int imx415_subdev_init(struct imx415 *sensor)
+> +{
+> +	struct i2c_client *client = to_i2c_client(sensor->dev);
+> +	int ret;
+> +
+> +	v4l2_i2c_subdev_init(&sensor->subdev, client, &imx415_subdev_ops);
+> +
+> +	ret = imx415_ctrls_init(sensor);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	sensor->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+
+Add V4L2_SUBDEV_FL_HAS_EVENTS.
+
+> +	sensor->pad.flags = MEDIA_PAD_FL_SOURCE;
+> +	sensor->subdev.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+> +	ret = media_entity_pads_init(&sensor->subdev.entity, 1, &sensor->pad);
+> +	if (ret < 0) {
+> +		v4l2_ctrl_handler_free(&sensor->ctrls);
+> +		return ret;
+> +	}
+> +
+> +	sensor->subdev.state_lock = sensor->subdev.ctrl_handler->lock;
+> +	v4l2_subdev_init_finalize(&sensor->subdev);
+> +
+> +	return ret;
+> +}
+> +
+> +static void imx415_subdev_cleanup(struct imx415 *sensor)
+> +{
+> +	media_entity_cleanup(&sensor->subdev.entity);
+> +	v4l2_ctrl_handler_free(&sensor->ctrls);
+> +}
+> +
+> +static int imx415_power_on(struct imx415 *sensor)
+> +{
+> +	int ret;
+> +
+> +	ret = regulator_bulk_enable(ARRAY_SIZE(sensor->supplies),
+> +				    sensor->supplies);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = gpiod_direction_output(sensor->reset, 0);
+
+Setting the direction should be done during probe, otherwise use
+gpiod_set_value().
+
+> +	if (ret < 0)
+> +		goto err_supply;
+> +
+> +	udelay(1);
+> +
+> +	ret = clk_prepare_enable(sensor->clk);
+> +	if (ret < 0)
+> +		goto err_reset;
+> +
+> +	/*
+> +	 * Data sheet states that 20 us are required before communication start,
+> +	 * but this doesn't work in all cases. Use 100 us to be on the safe
+> +	 * side.
+> +	 */
+> +	usleep_range(100, 200);
+> +
+> +	return 0;
+> +
+> +err_reset:
+> +	gpiod_direction_output(sensor->reset, 1);
+> +err_supply:
+> +	regulator_bulk_disable(ARRAY_SIZE(sensor->supplies), sensor->supplies);
+> +	return ret;
+> +}
+> +
+> +static void imx415_power_off(struct imx415 *sensor)
+> +{
+> +	clk_disable_unprepare(sensor->clk);
+> +	gpiod_direction_output(sensor->reset, 1);
+> +	regulator_bulk_disable(ARRAY_SIZE(sensor->supplies), sensor->supplies);
+> +}
+> +
+> +static int imx415_identify_model(struct imx415 *sensor)
+> +{
+> +	int model, ret;
+> +
+> +	/*
+> +	 * While most registers can be read when the sensor is in standby, this
+> +	 * is not the case of the sensor info register :-(
+> +	 */
+> +	ret = imx415_write(sensor, IMX415_MODE, IMX415_MODE_OPERATING);
+> +	if (ret < 0)
+> +		return dev_err_probe(sensor->dev, ret,
+> +				     "failed to get sensor out of standby\n");
+> +
+> +	/*
+> +	 * According to the datasheet we have to wait at least 63 us after
+> +	 * leaving standby mode. But this doesn't work even after 30 ms.
+> +	 * So probably this should be 63 ms and therefore we wait for 80 ms.
+> +	 */
+> +	msleep(80);
+
+Wow.
+
+> +
+> +	ret = imx415_read(sensor, IMX415_SENSOR_INFO);
+> +	if (ret < 0) {
+> +		dev_err_probe(sensor->dev, ret,
+> +			      "failed to read sensor information\n");
+> +		goto done;
+> +	}
+> +
+> +	model = ret & IMX415_SENSOR_INFO_MASK;
+> +
+> +	switch (model) {
+> +	case IMX415_CHIP_ID:
+> +		dev_info(sensor->dev, "Detected IMX415 image sensor\n");
+> +		break;
+> +	default:
+> +		ret = dev_err_probe(sensor->dev, -ENODEV,
+> +				    "invalid device model 0x%04x\n", model);
+> +		goto done;
+> +	}
+> +
+> +done:
+> +	imx415_write(sensor, IMX415_MODE, IMX415_MODE_STANDBY);
+> +	return ret;
+> +}
+> +
+> +static int imx415_check_inck(unsigned long inck, u64 link_frequency)
+> +{
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(imx415_clk_params); ++i) {
+> +		if ((imx415_clk_params[i].lane_rate == link_frequency * 2) &&
+> +		    imx415_clk_params[i].inck == inck)
+> +			break;
+> +	}
+> +
+> +	if (i == ARRAY_SIZE(imx415_clk_params))
+> +		return -EINVAL;
+> +	else
+> +		return 0;
+> +}
+> +
+> +static int imx415_parse_hw_config(struct imx415 *sensor)
+> +{
+> +	struct v4l2_fwnode_endpoint bus_cfg = {
+> +		.bus_type = V4L2_MBUS_CSI2_DPHY,
+> +	};
+> +	struct fwnode_handle *ep;
+> +	u64 lane_rate;
+> +	unsigned long inck;
+> +	unsigned int i, j;
+> +	int ret;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(sensor->supplies); ++i)
+> +		sensor->supplies[i].supply = imx415_supply_names[i];
+> +
+> +	ret = devm_regulator_bulk_get(sensor->dev, ARRAY_SIZE(sensor->supplies),
+> +				      sensor->supplies);
+> +	if (ret)
+> +		return dev_err_probe(sensor->dev, ret,
+> +				     "failed to get supplies\n");
+> +
+> +	sensor->reset = devm_gpiod_get_optional(sensor->dev, "reset",
+> +						GPIOD_OUT_HIGH);
+> +	if (IS_ERR(sensor->reset))
+> +		return dev_err_probe(sensor->dev, PTR_ERR(sensor->reset),
+> +				     "failed to get reset GPIO\n");
+> +
+> +	sensor->clk = devm_clk_get(sensor->dev, "inck");
+> +	if (IS_ERR(sensor->clk))
+> +		return dev_err_probe(sensor->dev, PTR_ERR(sensor->clk),
+> +				     "failed to get clock\n");
+> +
+> +	ep = fwnode_graph_get_next_endpoint(dev_fwnode(sensor->dev), NULL);
+> +	if (!ep)
+> +		return -ENXIO;
+> +
+> +	ret = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
+> +	fwnode_handle_put(ep);
+> +	if (ret)
+> +		return ret;
+> +
+> +	switch (bus_cfg.bus.mipi_csi2.num_data_lanes) {
+> +	case 2:
+> +	case 4:
+> +		sensor->num_data_lanes = bus_cfg.bus.mipi_csi2.num_data_lanes;
+> +		break;
+> +	default:
+> +		ret = dev_err_probe(sensor->dev, -EINVAL,
+> +				    "invalid number of CSI2 data lanes %d\n",
+> +				    bus_cfg.bus.mipi_csi2.num_data_lanes);
+> +		goto done_endpoint_free;
+> +	}
+> +
+> +	if (!bus_cfg.nr_of_link_frequencies) {
+> +		ret = dev_err_probe(sensor->dev, -EINVAL,
+> +				    "no link frequencies defined");
+> +		goto done_endpoint_free;
+> +	}
+> +
+> +	/*
+> +	 * Check if there exists a sensor mode defined for current INCK,
+> +	 * number of lanes and given lane rates.
+> +	 */
+> +	inck = clk_get_rate(sensor->clk);
+> +	for (i = 0; i < bus_cfg.nr_of_link_frequencies; ++i) {
+> +		if (imx415_check_inck(inck, bus_cfg.link_frequencies[i])) {
+> +			dev_err(sensor->dev,
+
+dev_dbg() perhaps?
+
+> +				"INCK %lu Hz not supported for this link freq",
+> +				inck);
+> +			continue;
+> +		}
+> +
+> +		for (j = 0; j < ARRAY_SIZE(supported_modes); ++j) {
+> +			if (sensor->num_data_lanes != supported_modes[j].lanes)
+> +				continue;
+> +			if (bus_cfg.link_frequencies[i] * 2 !=
+> +			    supported_modes[j].lane_rate)
+> +				continue;
+> +			sensor->cur_mode = j;
+> +			goto found_mode;
+
+You can use break here if you add sensor->cur_mode check for the loop. Or
+remove the condition below.
+
+> +		}
+> +	}
+> +	if (i == bus_cfg.nr_of_link_frequencies) {
+> +		ret = dev_err_probe(sensor->dev, -EINVAL,
+> +				    "no valid sensor mode defined\n");
+> +		goto done_endpoint_free;
+> +	}
+> +
+> +found_mode:
+> +	lane_rate = supported_modes[sensor->cur_mode].lane_rate;
+> +	for (i = 0; i < ARRAY_SIZE(imx415_clk_params); ++i) {
+> +		if (lane_rate == imx415_clk_params[i].lane_rate &&
+> +		    inck == imx415_clk_params[i].inck) {
+> +			sensor->clk_params = &imx415_clk_params[i];
+> +			break;
+> +		}
+> +	}
+> +	if (i == ARRAY_SIZE(imx415_clk_params)) {
+> +		ret = dev_err_probe(sensor->dev, -EINVAL,
+> +				    "Mode %d not supported\n",
+> +				    sensor->cur_mode);
+> +		goto done_endpoint_free;
+> +	}
+> +
+> +	dev_dbg(sensor->dev, "clock: %lu Hz, lane_rate: %llu bps, lanes: %d\n",
+> +		inck, lane_rate, sensor->num_data_lanes);
+> +
+> +done_endpoint_free:
+> +	v4l2_fwnode_endpoint_free(&bus_cfg);
+> +
+> +	return ret;
+> +}
+> +
+> +static int imx415_probe(struct i2c_client *client)
+> +{
+> +	struct imx415 *sensor;
+> +	int ret;
+> +
+> +	sensor = devm_kzalloc(&client->dev, sizeof(*sensor), GFP_KERNEL);
+> +	if (!sensor)
+> +		return -ENOMEM;
+> +
+> +	sensor->dev = &client->dev;
+> +
+> +	ret = imx415_parse_hw_config(sensor);
+> +	if (ret)
+> +		return ret;
+> +
+> +	sensor->regmap = devm_regmap_init_i2c(client, &imx415_regmap_config);
+> +	if (IS_ERR(sensor->regmap))
+> +		return PTR_ERR(sensor->regmap);
+> +
+> +	/*
+> +	 * Enable power management. The driver supports runtime PM, but needs to
+> +	 * work when runtime PM is disabled in the kernel. To that end, power
+> +	 * the sensor on manually here, identify it, and fully initialize it.
+> +	 */
+> +	ret = imx415_power_on(sensor);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = imx415_identify_model(sensor);
+> +	if (ret < 0)
+> +		goto err_power;
+> +
+> +	ret = imx415_subdev_init(sensor);
+> +	if (ret < 0)
+> +		goto err_power;
+> +
+> +	/*
+> +	 * Enable runtime PM. As the device has been powered manually, mark it
+> +	 * as active, and increase the usage count without resuming the device.
+> +	 */
+> +	pm_runtime_set_active(sensor->dev);
+> +	pm_runtime_get_noresume(sensor->dev);
+> +	pm_runtime_enable(sensor->dev);
+> +
+> +	ret = v4l2_async_register_subdev_sensor(&sensor->subdev);
+> +	if (ret < 0)
+> +		goto err_pm;
+> +
+> +	/*
+> +	 * Finally, enable autosuspend and decrease the usage count. The device
+> +	 * will get suspended after the autosuspend delay, turning the power
+> +	 * off.
+> +	 */
+> +	pm_runtime_set_autosuspend_delay(sensor->dev, 1000);
+> +	pm_runtime_use_autosuspend(sensor->dev);
+> +	pm_runtime_put_autosuspend(sensor->dev);
+> +
+> +	return 0;
+> +
+> +err_pm:
+> +	pm_runtime_disable(sensor->dev);
+> +	pm_runtime_put_noidle(sensor->dev);
+> +	imx415_subdev_cleanup(sensor);
+> +err_power:
+> +	imx415_power_off(sensor);
+> +	return ret;
+> +}
+> +
+> +static void imx415_remove(struct i2c_client *client)
+> +{
+> +	struct v4l2_subdev *subdev = i2c_get_clientdata(client);
+> +	struct imx415 *sensor = to_imx415(subdev);
+> +
+> +	v4l2_async_unregister_subdev(subdev);
+> +
+> +	imx415_subdev_cleanup(sensor);
+> +
+> +	/*
+> +	 * Disable runtime PM. In case runtime PM is disabled in the kernel,
+> +	 * make sure to turn power off manually.
+> +	 */
+> +	pm_runtime_disable(sensor->dev);
+> +	if (!pm_runtime_status_suspended(sensor->dev))
+> +		imx415_power_off(sensor);
+> +	pm_runtime_set_suspended(sensor->dev);
+> +}
+> +
+> +static int imx415_runtime_resume(struct device *dev)
+> +{
+> +	struct i2c_client *client = to_i2c_client(dev);
+> +	struct v4l2_subdev *subdev = i2c_get_clientdata(client);
+> +	struct imx415 *sensor = to_imx415(subdev);
+> +
+> +	return imx415_power_on(sensor);
+> +}
+> +
+> +static int imx415_runtime_suspend(struct device *dev)
+> +{
+> +	struct i2c_client *client = to_i2c_client(dev);
+> +	struct v4l2_subdev *subdev = i2c_get_clientdata(client);
+> +	struct imx415 *sensor = to_imx415(subdev);
+> +
+> +	imx415_power_off(sensor);
+> +
+> +	return 0;
+> +}
+> +
+> +static DEFINE_RUNTIME_DEV_PM_OPS(imx415_pm_ops, imx415_runtime_suspend,
+> +				 imx415_runtime_resume, NULL);
+> +
+> +static const struct of_device_id imx415_of_match[] = {
+> +	{ .compatible = "sony,imx415" },
+> +	{ /* sentinel */ }
+> +};
+> +
+> +MODULE_DEVICE_TABLE(of, imx415_of_match);
+> +
+> +static struct i2c_driver imx415_driver = {
+> +	.probe_new = imx415_probe,
+> +	.remove = imx415_remove,
+> +	.driver = {
+> +		.name = "imx415",
+> +		.of_match_table = imx415_of_match,
+> +		.pm = pm_ptr(&imx415_pm_ops),
+> +	},
+> +};
+> +
+> +module_i2c_driver(imx415_driver);
+> +
+> +MODULE_DESCRIPTION("Sony IMX415 image sensor driver");
+> +MODULE_AUTHOR("Gerald Loacker <gerald.loacker@wolfvision.net>");
+> +MODULE_AUTHOR("Michael Riesch <michael.riesch@wolfvision.net>");
+> +MODULE_LICENSE("GPL");
+
+-- 
+Kind regards,
+
+Sakari Ailus
