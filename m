@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3BF4C05027
-	for <linux-media@archiver.kernel.org>; Thu, 26 Jan 2023 15:07:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 591ABC05027
+	for <linux-media@archiver.kernel.org>; Thu, 26 Jan 2023 15:07:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231562AbjAZPHE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Jan 2023 10:07:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40702 "EHLO
+        id S231784AbjAZPHH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Jan 2023 10:07:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbjAZPHC (ORCPT
+        with ESMTP id S230516AbjAZPHF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 Jan 2023 10:07:02 -0500
+        Thu, 26 Jan 2023 10:07:05 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27ABF34303
-        for <linux-media@vger.kernel.org>; Thu, 26 Jan 2023 07:07:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D74E34303
+        for <linux-media@vger.kernel.org>; Thu, 26 Jan 2023 07:07:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D58861886
-        for <linux-media@vger.kernel.org>; Thu, 26 Jan 2023 15:07:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EA4BC4339B;
-        Thu, 26 Jan 2023 15:07:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF9A06188A
+        for <linux-media@vger.kernel.org>; Thu, 26 Jan 2023 15:07:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A58EC433D2;
+        Thu, 26 Jan 2023 15:07:02 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Daniel Almeida <daniel.almeida@collabora.com>
-Subject: [PATCH 01/17] media: visl: make visl_qops static
-Date:   Thu, 26 Jan 2023 16:06:41 +0100
-Message-Id: <20230126150657.367921-2-hverkuil-cisco@xs4all.nl>
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+Subject: [PATCH 03/17] media: i2c: s5c73m3: return 0 instead of 'ret'.
+Date:   Thu, 26 Jan 2023 16:06:43 +0100
+Message-Id: <20230126150657.367921-4-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230126150657.367921-1-hverkuil-cisco@xs4all.nl>
 References: <20230126150657.367921-1-hverkuil-cisco@xs4all.nl>
@@ -38,29 +38,29 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This struct can be static. This fixes a sparse warning:
+Since 'ret' is known to be 0, just return '0'. This fixes a smatch warning:
 
-visl-video.c:690:22: warning: symbol 'visl_qops' was not declared. Should it be static?
+s5c73m3-core.c:439 __s5c73m3_s_stream() warn: missing error code? 'ret'
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: Daniel Almeida <daniel.almeida@collabora.com>
+Cc: Sylwester Nawrocki <s.nawrocki@samsung.com>
 ---
- drivers/media/test-drivers/visl/visl-video.c | 2 +-
+ drivers/media/i2c/s5c73m3/s5c73m3-core.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/test-drivers/visl/visl-video.c b/drivers/media/test-drivers/visl/visl-video.c
-index b08664dfbe5f..7cac6a6456eb 100644
---- a/drivers/media/test-drivers/visl/visl-video.c
-+++ b/drivers/media/test-drivers/visl/visl-video.c
-@@ -687,7 +687,7 @@ static void visl_buf_request_complete(struct vb2_buffer *vb)
- 	v4l2_ctrl_request_complete(vb->req_obj.req, &ctx->hdl);
- }
+diff --git a/drivers/media/i2c/s5c73m3/s5c73m3-core.c b/drivers/media/i2c/s5c73m3/s5c73m3-core.c
+index 59b03b0860d5..85d5f76386be 100644
+--- a/drivers/media/i2c/s5c73m3/s5c73m3-core.c
++++ b/drivers/media/i2c/s5c73m3/s5c73m3-core.c
+@@ -436,7 +436,7 @@ static int __s5c73m3_s_stream(struct s5c73m3 *state, struct v4l2_subdev *sd,
+ 	state->streaming = !!on;
  
--const struct vb2_ops visl_qops = {
-+static const struct vb2_ops visl_qops = {
- 	.queue_setup          = visl_queue_setup,
- 	.buf_out_validate     = visl_buf_out_validate,
- 	.buf_prepare          = visl_buf_prepare,
+ 	if (!on)
+-		return ret;
++		return 0;
+ 
+ 	if (state->apply_fiv) {
+ 		ret = s5c73m3_set_frame_rate(state);
 -- 
 2.39.0
 
