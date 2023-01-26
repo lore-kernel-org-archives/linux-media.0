@@ -2,40 +2,41 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E852C61D97
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F0C7C61DB3
 	for <linux-media@archiver.kernel.org>; Thu, 26 Jan 2023 23:15:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233218AbjAZXPS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Jan 2023 18:15:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37426 "EHLO
+        id S231874AbjAZXPV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Jan 2023 18:15:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232345AbjAZXPQ (ORCPT
+        with ESMTP id S230205AbjAZXPQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 26 Jan 2023 18:15:16 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5590B14E9C
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE3A4B8AE
         for <linux-media@vger.kernel.org>; Thu, 26 Jan 2023 15:15:15 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mgr@pengutronix.de>)
-        id 1pLBSX-0004JB-Gu; Fri, 27 Jan 2023 00:15:09 +0100
+        id 1pLBSY-0004J8-2u; Fri, 27 Jan 2023 00:15:10 +0100
 Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <mgr@pengutronix.de>)
-        id 1pLBSX-000fEr-K4; Fri, 27 Jan 2023 00:15:08 +0100
+        id 1pLBSX-000fEl-AL; Fri, 27 Jan 2023 00:15:08 +0100
 Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <mgr@pengutronix.de>)
-        id 1pLBSV-00EH88-MA; Fri, 27 Jan 2023 00:15:07 +0100
+        id 1pLBSV-00EH7z-Kl; Fri, 27 Jan 2023 00:15:07 +0100
 From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
 To:     laurent.pinchart@ideasonboard.com
 Cc:     gregkh@linuxfoundation.org, mchehab@kernel.org,
         hverkuil-cisco@xs4all.nl, linux-usb@vger.kernel.org,
         linux-media@vger.kernel.org, kernel@pengutronix.de,
-        Daniel Scally <dan.scally@ideasonboard.com>
-Subject: [PATCH v3 4/5] usb: uvc: make uvc_format_desc table const
-Date:   Fri, 27 Jan 2023 00:14:55 +0100
-Message-Id: <20230126231456.3402323-5-m.grzeschik@pengutronix.de>
+        Marek Vasut <marex@denx.de>,
+        Ricardo Ribalda <ricardo@ribalda.com>
+Subject: [PATCH v3 1/5] media: uvcvideo: Add GUID for BGRA/X 8:8:8:8
+Date:   Fri, 27 Jan 2023 00:14:52 +0100
+Message-Id: <20230126231456.3402323-2-m.grzeschik@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230126231456.3402323-1-m.grzeschik@pengutronix.de>
 References: <20230126231456.3402323-1-m.grzeschik@pengutronix.de>
@@ -49,106 +50,66 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Since the uvc_fmts array can not be modified we declare it const and
-change every user of the uvc_format_by_guid function aswell.
+From: Marek Vasut <marex@denx.de>
 
+The Cypress EZUSB FX3 UVC example can be configured to report pixel
+format "e436eb7e-524f-11ce-9f53-0020af0ba770". This is its GUID for
+BGRA/X 8:8:8:8.
+
+The UVC 1.5 spec [1] only defines GUIDs for YUY2, NV12, M420 and I420.
+This seems to be an extension documented in the Microsoft Windows Media
+Format SDK[2]. This Media Format SDK defines this GUID as corresponding
+to `MEDIASUBTYPE_RGB32`, which is confirmed by [4] as `MEDIASUBTYPE_ARGB32`
+has different GUID.
+
+Note that in my case, the FX3 UVC can output either channel order,
+BGR or RGB or any other mix for that matter. Since Linux commit
+1b8dc32286a1a ("[media] uvcvideo: Add GUID for BGR 8:8:8")
+defined a GUID for `MEDIASUBTYPE_RGB24` channel order as BGR, keep
+this change consistent and define `MEDIASUBTYPE_RGB32` as BGR as well.
+Document [3] also indicates the channel order is BGR.
+
+[1] https://www.usb.org/document-library/video-class-v15-document-set
+[2] https://learn.microsoft.com/en-us/windows/win32/wmformat/media-type-identifiers
+[3] https://learn.microsoft.com/en-us/windows/win32/directshow/uncompressed-rgb-video-subtypes
+[4] https://gix.github.io/media-types/
+
+Signed-off-by: Marek Vasut <marex@denx.de>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
-Tested-by: Daniel Scally <dan.scally@ideasonboard.com>
+Reviewed-by: Ricardo Ribalda <ricardo@ribalda.com>
 Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-
 ---
-v1 -> v2: - added reviewed and tested tags
-v2 -> v3: - no changes
+v1 -> v3: - added to the series
 
- drivers/media/common/uvc.c             | 4 ++--
- drivers/media/usb/uvc/uvc_driver.c     | 2 +-
- drivers/usb/gadget/function/uvc_v4l2.c | 8 ++++----
- include/linux/usb/uvc.h                | 2 +-
- 4 files changed, 8 insertions(+), 8 deletions(-)
+ include/media/v4l2-uvc.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/media/common/uvc.c b/drivers/media/common/uvc.c
-index bb96d9e26d8019..2b4df3e8f48aa6 100644
---- a/drivers/media/common/uvc.c
-+++ b/drivers/media/common/uvc.c
-@@ -11,7 +11,7 @@
-  * Video formats
-  */
- 
--static struct uvc_format_desc uvc_fmts[] = {
-+static const struct uvc_format_desc uvc_fmts[] = {
- 	{
- 		.name		= "YUV 4:2:2 (YUYV)",
- 		.guid		= UVC_GUID_FORMAT_YUY2,
-@@ -204,7 +204,7 @@ static struct uvc_format_desc uvc_fmts[] = {
+diff --git a/include/media/v4l2-uvc.h b/include/media/v4l2-uvc.h
+index f83e31661333bb..b010a36fc1d951 100644
+--- a/include/media/v4l2-uvc.h
++++ b/include/media/v4l2-uvc.h
+@@ -99,6 +99,9 @@
+ #define UVC_GUID_FORMAT_BGR3 \
+ 	{ 0x7d, 0xeb, 0x36, 0xe4, 0x4f, 0x52, 0xce, 0x11, \
+ 	 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70}
++#define UVC_GUID_FORMAT_BGR4 \
++	{ 0x7e, 0xeb, 0x36, 0xe4, 0x4f, 0x52, 0xce, 0x11, \
++	 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70}
+ #define UVC_GUID_FORMAT_M420 \
+ 	{ 'M',  '4',  '2',  '0', 0x00, 0x00, 0x10, 0x00, \
+ 	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
+@@ -266,6 +269,11 @@ static struct uvc_format_desc uvc_fmts[] = {
+ 		.guid		= UVC_GUID_FORMAT_BGR3,
+ 		.fcc		= V4L2_PIX_FMT_BGR24,
  	},
- };
- 
--struct uvc_format_desc *uvc_format_by_guid(const u8 guid[16])
-+const struct uvc_format_desc *uvc_format_by_guid(const u8 guid[16])
- {
- 	unsigned int len = ARRAY_SIZE(uvc_fmts);
- 	unsigned int i;
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index edf8c4a201a8ab..7aefa76a42b316 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -225,7 +225,7 @@ static int uvc_parse_format(struct uvc_device *dev,
- {
- 	struct usb_interface *intf = streaming->intf;
- 	struct usb_host_interface *alts = intf->cur_altsetting;
--	struct uvc_format_desc *fmtdesc;
-+	const struct uvc_format_desc *fmtdesc;
- 	struct uvc_frame *frame;
- 	const unsigned char *start = buffer;
- 	unsigned int width_multiplier = 1;
-diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index 7435df0cf2a847..21e573e628f4e7 100644
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -27,10 +27,10 @@
- #include "uvc_v4l2.h"
- #include "uvc_configfs.h"
- 
--static struct uvc_format_desc *to_uvc_format(struct uvcg_format *uformat)
-+static const struct uvc_format_desc *to_uvc_format(struct uvcg_format *uformat)
- {
- 	char guid[16] = UVC_GUID_FORMAT_MJPEG;
--	struct uvc_format_desc *format;
-+	const struct uvc_format_desc *format;
- 	struct uvcg_uncompressed *unc;
- 
- 	if (uformat->type == UVCG_UNCOMPRESSED) {
-@@ -119,7 +119,7 @@ static struct uvcg_format *find_format_by_pix(struct uvc_device *uvc,
- 	struct uvcg_format *uformat = NULL;
- 
- 	list_for_each_entry(format, &uvc->header->formats, entry) {
--		struct uvc_format_desc *fmtdesc = to_uvc_format(format->fmt);
-+		const struct uvc_format_desc *fmtdesc = to_uvc_format(format->fmt);
- 
- 		if (fmtdesc->fcc == pixelformat) {
- 			uformat = format->fmt;
-@@ -364,7 +364,7 @@ uvc_v4l2_enum_format(struct file *file, void *fh, struct v4l2_fmtdesc *f)
- {
- 	struct video_device *vdev = video_devdata(file);
- 	struct uvc_device *uvc = video_get_drvdata(vdev);
--	struct uvc_format_desc *fmtdesc;
-+	const struct uvc_format_desc *fmtdesc;
- 	struct uvcg_format *uformat;
- 
- 	if (f->index >= uvc->header->num_fmt)
-diff --git a/include/linux/usb/uvc.h b/include/linux/usb/uvc.h
-index 8cebb46602a118..b0210c5c5406b3 100644
---- a/include/linux/usb/uvc.h
-+++ b/include/linux/usb/uvc.h
-@@ -154,6 +154,6 @@ struct uvc_format_desc {
- 	u32 fcc;
- };
- 
--struct uvc_format_desc *uvc_format_by_guid(const u8 guid[16]);
-+const struct uvc_format_desc *uvc_format_by_guid(const u8 guid[16]);
- 
- #endif /* __LINUX_V4L2_UVC_H */
++	{
++		.name		= "BGRA/X 8:8:8:8 (BGR4)",
++		.guid		= UVC_GUID_FORMAT_BGR4,
++		.fcc		= V4L2_PIX_FMT_XBGR32,
++	},
+ 	{
+ 		.name		= "H.264",
+ 		.guid		= UVC_GUID_FORMAT_H264,
 -- 
 2.30.2
 
