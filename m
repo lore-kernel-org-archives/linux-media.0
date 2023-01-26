@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56006C61DA4
-	for <linux-media@archiver.kernel.org>; Thu, 26 Jan 2023 15:07:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37F5EC05027
+	for <linux-media@archiver.kernel.org>; Thu, 26 Jan 2023 15:07:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbjAZPHS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Jan 2023 10:07:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40946 "EHLO
+        id S232305AbjAZPH3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Jan 2023 10:07:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbjAZPHO (ORCPT
+        with ESMTP id S232032AbjAZPHT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 Jan 2023 10:07:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479256B9B5
-        for <linux-media@vger.kernel.org>; Thu, 26 Jan 2023 07:07:13 -0800 (PST)
+        Thu, 26 Jan 2023 10:07:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C871B6BBD7
+        for <linux-media@vger.kernel.org>; Thu, 26 Jan 2023 07:07:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0031CB81DEF
-        for <linux-media@vger.kernel.org>; Thu, 26 Jan 2023 15:07:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E27C8C4339B;
-        Thu, 26 Jan 2023 15:07:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B082B818D3
+        for <linux-media@vger.kernel.org>; Thu, 26 Jan 2023 15:07:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 886CAC4339B;
+        Thu, 26 Jan 2023 15:07:13 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>
-Subject: [PATCH 09/17] media: nxp: imx-jpeg: replace dummy gotos by returns
-Date:   Thu, 26 Jan 2023 16:06:49 +0100
-Message-Id: <20230126150657.367921-10-hverkuil-cisco@xs4all.nl>
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Subject: [PATCH 12/17] media: ti: davinci: vpbe_display.c: return 0 instead of 'ret'.
+Date:   Thu, 26 Jan 2023 16:06:52 +0100
+Message-Id: <20230126150657.367921-13-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230126150657.367921-1-hverkuil-cisco@xs4all.nl>
 References: <20230126150657.367921-1-hverkuil-cisco@xs4all.nl>
@@ -38,80 +38,29 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The err_irq and err_clk labels just did a 'return ret'. So
-drop these and replace them by just a return.
+Since 'ret' is known to be 0, just return '0'. This fixes a smatch warning:
 
-This fixes a smatch warning:
-
-mxc-jpeg.c:2492 mxc_jpeg_probe() warn: missing unwind goto?
+vpbe_display.c:1152 vpbe_display_open() warn: missing error code? 'err'
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: Mirela Rabulea <mirela.rabulea@nxp.com>
+Cc: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
 ---
- .../media/platform/nxp/imx-jpeg/mxc-jpeg.c    | 19 ++++++-------------
- 1 file changed, 6 insertions(+), 13 deletions(-)
+ drivers/media/platform/ti/davinci/vpbe_display.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-index 6cd015a35f7c..552d0900cb26 100644
---- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-+++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-@@ -2445,7 +2445,7 @@ static int mxc_jpeg_probe(struct platform_device *pdev)
- 	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
- 	if (ret) {
- 		dev_err(&pdev->dev, "No suitable DMA available.\n");
--		goto err_irq;
-+		return ret;
- 	}
+diff --git a/drivers/media/platform/ti/davinci/vpbe_display.c b/drivers/media/platform/ti/davinci/vpbe_display.c
+index 9ea70817538e..ea2d0795d1e2 100644
+--- a/drivers/media/platform/ti/davinci/vpbe_display.c
++++ b/drivers/media/platform/ti/davinci/vpbe_display.c
+@@ -1149,7 +1149,7 @@ static int vpbe_display_open(struct file *file)
  
- 	jpeg->base_reg = devm_platform_ioremap_resource(pdev, 0);
-@@ -2454,16 +2454,14 @@ static int mxc_jpeg_probe(struct platform_device *pdev)
+ 	/* leaving if layer is already initialized */
+ 	if (!v4l2_fh_is_singular_file(file))
+-		return err;
++		return 0;
  
- 	for (slot = 0; slot < MXC_MAX_SLOTS; slot++) {
- 		dec_irq = platform_get_irq(pdev, slot);
--		if (dec_irq < 0) {
--			ret = dec_irq;
--			goto err_irq;
--		}
-+		if (dec_irq < 0)
-+			return dec_irq;
- 		ret = devm_request_irq(&pdev->dev, dec_irq, mxc_jpeg_dec_irq,
- 				       0, pdev->name, jpeg);
- 		if (ret) {
- 			dev_err(&pdev->dev, "Failed to request irq %d (%d)\n",
- 				dec_irq, ret);
--			goto err_irq;
-+			return ret;
- 		}
- 	}
- 
-@@ -2475,15 +2473,13 @@ static int mxc_jpeg_probe(struct platform_device *pdev)
- 	jpeg->clk_ipg = devm_clk_get(dev, "ipg");
- 	if (IS_ERR(jpeg->clk_ipg)) {
- 		dev_err(dev, "failed to get clock: ipg\n");
--		ret = PTR_ERR(jpeg->clk_ipg);
--		goto err_clk;
-+		return PTR_ERR(jpeg->clk_ipg);
- 	}
- 
- 	jpeg->clk_per = devm_clk_get(dev, "per");
- 	if (IS_ERR(jpeg->clk_per)) {
- 		dev_err(dev, "failed to get clock: per\n");
--		ret = PTR_ERR(jpeg->clk_per);
--		goto err_clk;
-+		return PTR_ERR(jpeg->clk_per);
- 	}
- 
- 	ret = mxc_jpeg_attach_pm_domains(jpeg);
-@@ -2569,9 +2565,6 @@ static int mxc_jpeg_probe(struct platform_device *pdev)
- 
- err_register:
- 	mxc_jpeg_detach_pm_domains(jpeg);
--
--err_irq:
--err_clk:
- 	return ret;
- }
- 
+ 	if (!layer->usrs) {
+ 		if (mutex_lock_interruptible(&layer->opslock))
 -- 
 2.39.0
 
