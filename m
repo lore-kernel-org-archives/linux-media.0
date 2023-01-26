@@ -2,273 +2,392 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA013C05027
-	for <linux-media@archiver.kernel.org>; Thu, 26 Jan 2023 12:47:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55A8AC54E94
+	for <linux-media@archiver.kernel.org>; Thu, 26 Jan 2023 13:04:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236432AbjAZMri (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Jan 2023 07:47:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
+        id S232090AbjAZNEZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Jan 2023 08:04:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236606AbjAZMrT (ORCPT
+        with ESMTP id S229847AbjAZNEY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 Jan 2023 07:47:19 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB896E40F
-        for <linux-media@vger.kernel.org>; Thu, 26 Jan 2023 04:47:10 -0800 (PST)
-Received: from uno.LocalDomain (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C2B68149C;
-        Thu, 26 Jan 2023 13:46:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674737218;
-        bh=F6jCWMrAui85RLSgfLlMIj7v2PgU9ScllPifAqQym5w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y/3WnTGwfOmQ57OthG3kAb5djwncuDLt4XblSaViaS9vdVt21czD+u7+vKEUoFiZS
-         Bk7LkHRHPaKY/GPjpcJPuAUDagsE4hidQB9MbocXMD+Jp8wr1AVKrlLZhnCUXl9m54
-         i57ta6u7nJ0Oqcm722thhrXtvSkfZq1jWg87LrhA=
-From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-To:     Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-        Luca Weiss <luca@z3ntu.xyz>
-Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        laurent.pinchart@ideasonboard.com, sakari.ailus@iki.fi,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org,
-        Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-Subject: [PATCH v5 8/9] media: i2c: ov5670: Add .get_selection() support
-Date:   Thu, 26 Jan 2023 13:46:31 +0100
-Message-Id: <20230126124632.45842-9-jacopo.mondi@ideasonboard.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230126124632.45842-1-jacopo.mondi@ideasonboard.com>
-References: <20230126124632.45842-1-jacopo.mondi@ideasonboard.com>
+        Thu, 26 Jan 2023 08:04:24 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C0F5B9D;
+        Thu, 26 Jan 2023 05:04:22 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id ay1so935719pfb.7;
+        Thu, 26 Jan 2023 05:04:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DWm7eTwMrQ0nGf/JK2vIcHfVCjcE6fqVapxuyiP5nZs=;
+        b=QjQ/mw7zS0d8OuG50f45yMu6roPKZx4ifq/QIBEmBHXF7CdRotHToMgqOISjMIX8H3
+         UuHdqSafkG6DeCD8Ucx5LR02WsAxn5NO1cqikERyNwyz1FCU9gQ+/NFSOst05HWr0Bbr
+         RM9YZb2YVf8smjIirsqQJnovKAkkcxLddAqV5+hSa6ucEOr7DmgMsX26oypBdSZj6/54
+         wkbom29UlpJaMCXJHufTYSKD9QIchNjR77+/aRtdjvdwHRZu67V5eNg1JS8u8j8dTLBq
+         AlDBaYcBUXBT9rPYmM6ixjErejCr7MuzLgSkDycznkLKzcaZbFWeBmD5WtB0X7ttUC2p
+         ICqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DWm7eTwMrQ0nGf/JK2vIcHfVCjcE6fqVapxuyiP5nZs=;
+        b=ZuZjMBzlzM5yccICQNjgvLIXMZmdgrVjPrJ8CAGBNL2RST+baeML5t7FGLJVQB3NeT
+         3YlVcoCwP5n7X1bfvZ2Oubt20IUiBhsI/IX4dGLABDuhwZTouYa1Nc1U6IzUXD1NFEzL
+         xph4OiLxZP2srKz9kRRpQ2cBU916VYWlKbG8otvkfFev+mAMueaC/LnA4zcOyyhnr6rc
+         JrWRnWMoyPhlZLeylFBICyK2/lyjYREPfJVAayNOjOHiD6v/3SizEH9lA0kRzm0o56qn
+         qz2wbDXAickxSDU4xL3RSrEPTXYEW1D2KjzUXtq1tTXrTnFOiTt6NLm+JBsF2lTxOmjV
+         2LUg==
+X-Gm-Message-State: AFqh2kqouzHyQfpE0HCx25F0XFmSWhS756xfj2872qeuP5Hh5rff3mzR
+        U9NX4u85Pcpe8BSr66OTlpLOznIMpMQq/BwBu/c=
+X-Google-Smtp-Source: AMrXdXtCeVQoLv6CyfSO3ueCDjKx91U9VwCMOiXexoV2QAmArRgcvHyw2ygCiNUsT+BnHtM8ZYxZbSlyG88bESwCDWI=
+X-Received: by 2002:a63:cc01:0:b0:4d0:370b:5027 with SMTP id
+ x1-20020a63cc01000000b004d0370b5027mr3485511pgf.8.1674738261053; Thu, 26 Jan
+ 2023 05:04:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230126003320.10047-1-laurent.pinchart@ideasonboard.com>
+ <20230126003320.10047-2-laurent.pinchart@ideasonboard.com>
+ <CAHCN7x+PcBk-Y+t3AP4saJK=tntYr85btTzQMFD=WL+KYQfHGg@mail.gmail.com>
+ <Y9Jehk+qOXkaI3SH@pendragon.ideasonboard.com> <Y9Jvm1GxfNRhPBP/@pendragon.ideasonboard.com>
+In-Reply-To: <Y9Jvm1GxfNRhPBP/@pendragon.ideasonboard.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Thu, 26 Jan 2023 07:04:09 -0600
+Message-ID: <CAHCN7x+GO7mL9myhqP4xGe12_wAF37rr8n5TcN7Cx8a=gOytPQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: media: Add i.MX8 ISI DT bindings
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
+        linux-imx@nxp.com, kernel@pengutronix.de,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+On Thu, Jan 26, 2023 at 6:18 AM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> On Thu, Jan 26, 2023 at 01:05:43PM +0200, Laurent Pinchart wrote:
+> > Hi Adam,
+> >
+> > On Wed, Jan 25, 2023 at 08:36:41PM -0600, Adam Ford wrote:
+> > > On Wed, Jan 25, 2023 at 6:33 PM Laurent Pinchart wrote:
+> > > >
+> > > > The Image Sensing Interface (ISI) combines image processing pipelines
+> > > > with DMA engines to process and capture frames originating from a
+> > > > variety of sources. The inputs to the ISI go through Pixel Link
+> > > > interfaces, and their number and nature is SoC-dependent. They cover
+> > > > both capture interfaces (MIPI CSI-2 RX, HDMI RX) and memory inputs.
+> > > >
+> > > > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > > > ---
+> > > > Changes since v2:
+> > > >
+> > > > - Describe the interrupts property
+> > > > - Set global minItems and maxItems for interrupts
+> > > > - Set maxItems for power-domains
+> > > >
+> > > > Changes since v1:
+> > > >
+> > > > - Fix compatible string checks in conditional schema
+> > > > - Fix interrupts property handling
+> > > > ---
+> > > >  .../bindings/media/nxp,imx8-isi.yaml          | 152 ++++++++++++++++++
+> > > >  1 file changed, 152 insertions(+)
+> > > >  create mode 100644 Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml b/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..130fa41b9d8e
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
+> > > > @@ -0,0 +1,152 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: http://devicetree.org/schemas/media/nxp,imx8-isi.yaml#
+> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > +
+> > > > +title: i.MX8 Image Sensing Interface
+> > > > +
+> > > > +maintainers:
+> > > > +  - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > > > +
+> > > > +description: |
+> > > > +  The Image Sensing Interface (ISI) combines image processing pipelines with
+> > > > +  DMA engines to process and capture frames originating from a variety of
+> > > > +  sources. The inputs to the ISI go through Pixel Link interfaces, and their
+> > > > +  number and nature is SoC-dependent. They cover both capture interfaces (MIPI
+> > > > +  CSI-2 RX, HDMI RX, ...) and display engine outputs for writeback support.
+> > > > +
+> > > > +properties:
+> > > > +  compatible:
+> > > > +    enum:
+> > > > +      - fsl,imx8mn-isi
+> > > > +      - fsl,imx8mp-isi
+> > > > +
+> > > > +  reg:
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  clocks:
+> > > > +    items:
+> > > > +      - description: The AXI clock
+> > > > +      - description: The APB clock
+> > > > +      # TODO: Check if the per-channel ipg_proc_clk clocks need to be specified
+> > > > +      # as well, in case some SoCs have the ability to control them separately.
+> > > > +      # This may be the case of the i.MX8[DQ]X(P)
+> > > > +
+> > > > +  clock-names:
+> > > > +    items:
+> > > > +      - const: axi
+> > > > +      - const: apb
+> > > > +
+> > > > +  fsl,blk-ctrl:
+> > > > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > > > +    description:
+> > > > +      A phandle referencing the block control that contains the CSIS to ISI
+> > > > +      gasket.
+> > > > +
+> > > > +  interrupts:
+> > > > +    description: Processing pipeline interrupts, one per pipeline
+> > > > +    minItems: 1
+> > > > +    maxItems: 2
+> > > > +
+> > > > +  power-domains:
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  ports:
+> > > > +    $ref: /schemas/graph.yaml#/properties/ports
+> > > > +    description: |
+> > > > +      Ports represent the Pixel Link inputs to the ISI. Their number and
+> > > > +      assignment are model-dependent. Each port shall have a single endpoint.
+> > > > +
+> > > > +    patternProperties:
+> > > > +      "^port@[0-9]$":
+> > > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > > +        unevaluatedProperties: false
+> > > > +
+> > > > +    unevaluatedProperties: false
+> > > > +
+> > > > +required:
+> > > > +  - compatible
+> > > > +  - reg
+> > > > +  - interrupts
+> > > > +  - clocks
+> > > > +  - clock-names
+> > > > +  - fsl,blk-ctrl
+> > > > +  - ports
+> > > > +
+> > > > +allOf:
+> > > > +  - if:
+> > > > +      properties:
+> > > > +        compatible:
+> > > > +          contains:
+> > > > +            const: fsl,imx8mn-isi
+> > > > +    then:
+> > > > +      properties:
+> > > > +        interrupts:
+> > > > +          maxItems: 1
+> > > > +        ports:
+> > > > +          properties:
+> > > > +            port@0:
+> > > > +              description: MIPI CSI-2 RX
+> > > > +          required:
+> > > > +            - port@0
+> > >
+> > > The imx8mn only has one port for the ISI.  When I compile the device
+> > > tree with W=1, I get the following:
+> > > arch/arm64/boot/dts/freescale/imx8mn.dtsi:1058.11-1068.7: Warning
+> > > (graph_child_address): /soc@0/bus@32c00000/isi@32e20000/ports: graph
+> > > node has single child node 'port@0', #address-cells/#size-cells are
+> > > not necessary
+> >
+> > The only appropriate answer to this is of course aaaarrrrghhhhhhhh.
+> >
+> > > Should the "ports" node be replaced with a single port with port@0 removed?
+> > >
+> > > The device tree would look something like:
+> > >
+> > > port {
+> > >     isi_in: endpoint {
+> > >         remote-endpoint = <&mipi_csi_out>;
+> > >     };
+> > > };
+> >
+> > I understand why DT tools (and before them, DT maintainers) recommend
+> > (or require ?) single-port devices to use the short-hand syntax without
+> > a ports node. In this specific case, or in the more general case of
+> > devices that can have a variable number of ports depending on how
+> > they're instantiated in a particular SoC, allowing a ports node to have
+> > a single port child would be best I believe, as it would make DT
+> > bindings more consistent, and simpler.
+> >
+> > > With the above, the messages go away, and I can still see the media
+> > > pipeline and the video captures.  I am not good with YAML, so I am not
+> > > exactly sure how to code that in YAML form.
+> >
+> > It's possible, and I can do so, but I'll wait for feedback from DT
+> > maintainers.
+>
+> Here's a patch on top of this one to support port/ports depending on the
+> number of ports. Adam, could you test it ? Could you also share the
 
-Add support for the .get_selection() pad operation to the ov5670 sensor
-driver.
+I can test it tonight.
 
-Report the native sensor size (pixel array), the crop bounds (readable
-pixel array area) and the current and default analog crop rectangles.
+> i.MX8MN DT node for the ISI ? I'd like to add it as an example to the
+> bindings.
 
-Currently all driver's modes use an analog crop rectangle of size
-[12, 4, 2600, 1952]. Instead of hardcoding the value in the operation
-implementation, ad an .analog_crop field to the sensor's modes
-definitions, to make sure that if any mode gets added, its crop
-rectangle will be defined as well.
+Here is git repo where took your stuff and added the Nano stuff:
 
-While at it re-sort the modes' field definition order to match the
-declaration order and initialize the crop rectangle in init_cfg().
+https://github.com/aford173/linux/commit/f1ab727b4f6429aab281a3269ff4567008b72de3
 
-Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
- drivers/media/i2c/ov5670.c | 89 +++++++++++++++++++++++++++++++++++---
- 1 file changed, 83 insertions(+), 6 deletions(-)
+Once the bindings are accepted, I'll push this (or similar) patch to the LKML.
 
-diff --git a/drivers/media/i2c/ov5670.c b/drivers/media/i2c/ov5670.c
-index 8f4350898b36..8655993ee9b0 100644
---- a/drivers/media/i2c/ov5670.c
-+++ b/drivers/media/i2c/ov5670.c
-@@ -74,6 +74,10 @@
- #define OV5670_REG_VALUE_16BIT		2
- #define OV5670_REG_VALUE_24BIT		3
- 
-+/* Pixel Array */
-+#define OV5670_NATIVE_WIDTH		2624
-+#define OV5670_NATIVE_HEIGHT		1980
-+
- /* Initial number of frames to skip to avoid possible garbage */
- #define OV5670_NUM_OF_SKIP_FRAMES	2
- 
-@@ -116,10 +120,25 @@ struct ov5670_mode {
- 	/* Link frequency needed for this resolution */
- 	u32 link_freq_index;
- 
-+	/* Analog crop rectangle */
-+	const struct v4l2_rect *analog_crop;
-+
- 	/* Sensor register settings for this resolution */
- 	const struct ov5670_reg_list reg_list;
- };
- 
-+/*
-+ * All the modes supported by the driver are obtained by subsampling the
-+ * full pixel array. The below values are reflected in registers from
-+ * 03800-0x3807 in the modes register-value tables.
-+ */
-+static const struct v4l2_rect ov5670_analog_crop = {
-+	.left	= 12,
-+	.top	= 4,
-+	.width	= 2600,
-+	.height	= 1952,
-+};
-+
- static const struct ov5670_reg mipi_data_rate_840mbps[] = {
- 	{0x0300, 0x04},
- 	{0x0301, 0x00},
-@@ -1767,66 +1786,73 @@ static const struct ov5670_mode supported_modes[] = {
- 		.height = 1944,
- 		.vts_def = OV5670_VTS_30FPS,
- 		.vts_min = OV5670_VTS_30FPS,
-+		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
-+		.analog_crop = &ov5670_analog_crop,
- 		.reg_list = {
- 			.num_of_regs = ARRAY_SIZE(mode_2592x1944_regs),
- 			.regs = mode_2592x1944_regs,
- 		},
--		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
- 	},
- 	{
- 		.width = 1296,
- 		.height = 972,
- 		.vts_def = OV5670_VTS_30FPS,
- 		.vts_min = 996,
-+		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
-+		.analog_crop = &ov5670_analog_crop,
- 		.reg_list = {
- 			.num_of_regs = ARRAY_SIZE(mode_1296x972_regs),
- 			.regs = mode_1296x972_regs,
- 		},
--		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
- 	},
- 	{
- 		.width = 648,
- 		.height = 486,
- 		.vts_def = OV5670_VTS_30FPS,
- 		.vts_min = 516,
-+		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
-+		.analog_crop = &ov5670_analog_crop,
- 		.reg_list = {
- 			.num_of_regs = ARRAY_SIZE(mode_648x486_regs),
- 			.regs = mode_648x486_regs,
- 		},
--		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
- 	},
- 	{
- 		.width = 2560,
- 		.height = 1440,
- 		.vts_def = OV5670_VTS_30FPS,
- 		.vts_min = OV5670_VTS_30FPS,
-+		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
-+		.analog_crop = &ov5670_analog_crop,
- 		.reg_list = {
- 			.num_of_regs = ARRAY_SIZE(mode_2560x1440_regs),
- 			.regs = mode_2560x1440_regs,
- 		},
--		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
- 	},
- 	{
- 		.width = 1280,
- 		.height = 720,
- 		.vts_def = OV5670_VTS_30FPS,
- 		.vts_min = 1020,
-+
-+		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
-+		.analog_crop = &ov5670_analog_crop,
- 		.reg_list = {
- 			.num_of_regs = ARRAY_SIZE(mode_1280x720_regs),
- 			.regs = mode_1280x720_regs,
- 		},
--		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
- 	},
- 	{
- 		.width = 640,
- 		.height = 360,
- 		.vts_def = OV5670_VTS_30FPS,
- 		.vts_min = 510,
-+		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
-+		.analog_crop = &ov5670_analog_crop,
- 		.reg_list = {
- 			.num_of_regs = ARRAY_SIZE(mode_640x360_regs),
- 			.regs = mode_640x360_regs,
- 		},
--		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
- 	}
- };
- 
-@@ -2167,6 +2193,7 @@ static int ov5670_init_cfg(struct v4l2_subdev *sd,
- 	struct v4l2_mbus_framefmt *fmt =
- 				v4l2_subdev_get_try_format(sd, state, 0);
- 	const struct ov5670_mode *default_mode = &supported_modes[0];
-+	struct v4l2_rect *crop = v4l2_subdev_get_try_crop(sd, state, 0);
- 
- 	fmt->width = default_mode->width;
- 	fmt->height = default_mode->height;
-@@ -2177,6 +2204,8 @@ static int ov5670_init_cfg(struct v4l2_subdev *sd,
- 	fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
- 	fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(V4L2_COLORSPACE_SRGB);
- 
-+	*crop = *default_mode->analog_crop;
-+
- 	return 0;
- }
- 
-@@ -2505,6 +2534,52 @@ static const struct v4l2_subdev_core_ops ov5670_core_ops = {
- 	.unsubscribe_event = v4l2_event_subdev_unsubscribe,
- };
- 
-+static const struct v4l2_rect *
-+__ov5670_get_pad_crop(struct ov5670 *sensor, struct v4l2_subdev_state *state,
-+		      unsigned int pad, enum v4l2_subdev_format_whence which)
-+{
-+	const struct ov5670_mode *mode = sensor->cur_mode;
-+
-+	switch (which) {
-+	case V4L2_SUBDEV_FORMAT_TRY:
-+		return v4l2_subdev_get_try_crop(&sensor->sd, state, pad);
-+	case V4L2_SUBDEV_FORMAT_ACTIVE:
-+		return mode->analog_crop;
-+	}
-+
-+	return NULL;
-+}
-+
-+static int ov5670_get_selection(struct v4l2_subdev *subdev,
-+				struct v4l2_subdev_state *state,
-+				struct v4l2_subdev_selection *sel)
-+{
-+	struct ov5670 *sensor = to_ov5670(subdev);
-+
-+	switch (sel->target) {
-+	case V4L2_SEL_TGT_CROP:
-+		mutex_lock(&sensor->mutex);
-+		sel->r = *__ov5670_get_pad_crop(sensor, state, sel->pad,
-+						sel->which);
-+		mutex_unlock(&sensor->mutex);
-+		break;
-+	case V4L2_SEL_TGT_NATIVE_SIZE:
-+	case V4L2_SEL_TGT_CROP_BOUNDS:
-+		sel->r.top = 0;
-+		sel->r.left = 0;
-+		sel->r.width = OV5670_NATIVE_WIDTH;
-+		sel->r.height = OV5670_NATIVE_HEIGHT;
-+		break;
-+	case V4L2_SEL_TGT_CROP_DEFAULT:
-+		sel->r = ov5670_analog_crop;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
- static const struct v4l2_subdev_video_ops ov5670_video_ops = {
- 	.s_stream = ov5670_set_stream,
- };
-@@ -2515,6 +2590,8 @@ static const struct v4l2_subdev_pad_ops ov5670_pad_ops = {
- 	.get_fmt = ov5670_get_pad_format,
- 	.set_fmt = ov5670_set_pad_format,
- 	.enum_frame_size = ov5670_enum_frame_size,
-+	.get_selection = ov5670_get_selection,
-+	.set_selection = ov5670_get_selection,
- };
- 
- static const struct v4l2_subdev_sensor_ops ov5670_sensor_ops = {
--- 
-2.39.0
+adam
 
+>
+> diff --git a/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml b/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
+> index cead41a017bf..8bbdc4ed929d 100644
+> --- a/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
+> +++ b/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
+> @@ -52,11 +52,21 @@ properties:
+>    power-domains:
+>      maxItems: 1
+>
+> +  port:
+> +    $ref: /schemas/graph.yaml#/properties/port
+> +    description: |
+> +      The port represents the Pixel Link input to the ISI. It shall have a
+> +      single endpoint. This property is only used for ISI instances with a
+> +      single port (as in the i.MX8MN). For instances that includes multiple
+> +      ports, the 'ports' property shall be used instead.
+> +
+>    ports:
+>      $ref: /schemas/graph.yaml#/properties/ports
+>      description: |
+>        Ports represent the Pixel Link inputs to the ISI. Their number and
+> -      assignment are model-dependent. Each port shall have a single endpoint.
+> +      assignment are model-dependent. For ISI instances that have a single
+> +      port, the 'port' property should be used instead. Each port shall have a
+> +      single endpoint.
+>
+>  required:
+>    - compatible
+> @@ -65,7 +75,6 @@ required:
+>    - clocks
+>    - clock-names
+>    - fsl,blk-ctrl
+> -  - ports
+>
+>  allOf:
+>    - if:
+> @@ -77,12 +86,11 @@ allOf:
+>        properties:
+>          interrupts:
+>            maxItems: 1
+> -        ports:
+> -          properties:
+> -            port@0:
+> -              description: MIPI CSI-2 RX
+> -          required:
+> -            - port@0
+> +        port:
+> +          description: MIPI CSI-2 RX
+> +        ports: false
+> +      required:
+> +        - port
+>
+>    - if:
+>        properties:
+> @@ -93,6 +101,7 @@ allOf:
+>        properties:
+>          interrupts:
+>            maxItems: 2
+> +        port: false
+>          ports:
+>            properties:
+>              port@0:
+> @@ -102,6 +111,8 @@ allOf:
+>            required:
+>              - port@0
+>              - port@1
+> +      required:
+> +        - ports
+>
+>  additionalProperties: false
+>
+> > > > +
+> > > > +  - if:
+> > > > +      properties:
+> > > > +        compatible:
+> > > > +          contains:
+> > > > +            const: fsl,imx8mp-isi
+> > > > +    then:
+> > > > +      properties:
+> > > > +        interrupts:
+> > > > +          maxItems: 2
+> > > > +        ports:
+> > > > +          properties:
+> > > > +            port@0:
+> > > > +              description: MIPI CSI-2 RX 0
+> > > > +            port@1:
+> > > > +              description: MIPI CSI-2 RX 1
+> > > > +          required:
+> > > > +            - port@0
+> > > > +            - port@1
+> > > > +
+> > > > +additionalProperties: false
+> > > > +
+> > > > +examples:
+> > > > +  - |
+> > > > +    #include <dt-bindings/clock/imx8mp-clock.h>
+> > > > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > > > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > > > +
+> > > > +    isi@32e00000 {
+> > > > +        compatible = "fsl,imx8mp-isi";
+> > > > +        reg = <0x32e00000 0x4000>;
+> > > > +        interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>,
+> > > > +                     <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>;
+> > > > +        clocks = <&clk IMX8MP_CLK_MEDIA_AXI_ROOT>,
+> > > > +                 <&clk IMX8MP_CLK_MEDIA_APB_ROOT>;
+> > > > +        clock-names = "axi", "apb";
+> > > > +        fsl,blk-ctrl = <&media_blk_ctrl>;
+> > > > +        power-domains = <&mediamix_pd>;
+> > > > +
+> > > > +        ports {
+> > > > +            #address-cells = <1>;
+> > > > +            #size-cells = <0>;
+> > > > +
+> > > > +            port@0 {
+> > > > +                reg = <0>;
+> > > > +                isi_in_0: endpoint {
+> > > > +                    remote-endpoint = <&mipi_csi_0_out>;
+> > > > +                };
+> > > > +            };
+> > > > +
+> > > > +            port@1 {
+> > > > +                reg = <1>;
+> > > > +                isi_in_1: endpoint {
+> > > > +                    remote-endpoint = <&mipi_csi_1_out>;
+> > > > +                };
+> > > > +            };
+> > > > +        };
+> > > > +    };
+> > > > +
+> > > > +...
+> >
+> > --
+> > Regards,
+> >
+> > Laurent Pinchart
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
