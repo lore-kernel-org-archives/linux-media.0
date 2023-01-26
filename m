@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 196D7C61DA4
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED67AC52D11
 	for <linux-media@archiver.kernel.org>; Thu, 26 Jan 2023 16:59:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231810AbjAZQ7l (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Jan 2023 11:59:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
+        id S231731AbjAZQ7m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Jan 2023 11:59:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjAZQ7i (ORCPT
+        with ESMTP id S231722AbjAZQ7k (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 Jan 2023 11:59:38 -0500
+        Thu, 26 Jan 2023 11:59:40 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2D461863
-        for <linux-media@vger.kernel.org>; Thu, 26 Jan 2023 08:59:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7F662246
+        for <linux-media@vger.kernel.org>; Thu, 26 Jan 2023 08:59:39 -0800 (PST)
 Received: from uno.LocalDomain (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B46B112EF;
-        Thu, 26 Jan 2023 17:59:31 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2D1911817;
+        Thu, 26 Jan 2023 17:59:33 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674752372;
-        bh=ZXJMuhvhVeCHyWTDFa3WHetvyoZQ8v6PWcYSFGYLB5s=;
+        s=mail; t=1674752373;
+        bh=69xnISzEUh+DGjzY4XGKEPDV2S5bYUz844LICJ4WNKE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ty5dqudj2qSTK9mjpNI0kq76ebpd2c1S+jo6U+KsLrgTO+ngI8g/4e3A9Rcc/q6Vs
-         meH1S8GI6CeYqa4J6hpqNkvngSoay6qJTAwCgkSUBFSnTbR81AAYWOjbav7yerDLU/
-         VG5FUJ4q7ht6vCelX40ZkSRkyc9iUZkAMu9rdGew=
+        b=MTu+ebpEBLj88fZ7EQIQ5l2e5CZwSl6AYP2XT3H6BSGh3qCKz7FUowsBMzZ22PKIx
+         V2yGjOmM52f9HsGj5AbaPwZ63WMX5LLAXesrEfi/95sTQZYLcUmyqD8Ruy5jPPSyWp
+         v/9Dxi10Xeg3nlwPCpWZ+VhBrk6S4T+CIrd1IugY=
 From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 To:     Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
         Luca Weiss <luca@z3ntu.xyz>
@@ -32,9 +32,9 @@ Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
         laurent.pinchart@ideasonboard.com, sakari.ailus@iki.fi,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org
-Subject: [PATCH v6 7/9] media: i2c: ov5670: Implement init_cfg
-Date:   Thu, 26 Jan 2023 17:59:07 +0100
-Message-Id: <20230126165909.121302-8-jacopo.mondi@ideasonboard.com>
+Subject: [PATCH v6 9/9] media: i2c: ov5670: Handle RO controls in set_ctrl
+Date:   Thu, 26 Jan 2023 17:59:09 +0100
+Message-Id: <20230126165909.121302-10-jacopo.mondi@ideasonboard.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230126165909.121302-1-jacopo.mondi@ideasonboard.com>
 References: <20230126165909.121302-1-jacopo.mondi@ideasonboard.com>
@@ -44,102 +44,64 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Implement the .init_cfg() pad operation and initialize the default
-format with the default full resolution mode 2592x1944.
+The ov5670 driver registers three controls as read-only:
+- V4L2_CID_PIXEL_RATE
+- V4L2_CID_LINK_FREQ
+- V4L2_CID_HBLANK
 
-With .init_cfg() pad operation implemented the deprecated .open()
-internal operation can now be dropped.
+The driver updates the range of HBLANK with __v4l2_ctrl_modify_range()
+and updates the values of PIXEL_RATE and LINK_FREQ with an
+explicit call to __v4l2_ctrl_s_ctrl() in ov5670_set_pad_format() time.
 
+This causes the .set_ctrl handler to be called on these controls
+causing a non-fatal warning to be emitted:
+
+	ov5670_set_ctrl Unhandled id:0x9e0902, val:0x824
+
+This is currently only critical for HBLANK, as LINK_FREQ and PIXEL_RATE
+currently only support a single value, and the v4l2-ctrl framework skips
+calling .set_ctrl() if the current control value is not changed.
+
+Expand the ov5670_set_ctrl() callback to handle the above controls
+to remove the above warning and defend against future expansions
+of the supported pixel rates and link frequencies.
+
+Also be stricter and return an error value if a control is actually not
+handled.
+
+Reported-by: Luca Weiss <luca@z3ntu.xyz>
 Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 ---
- drivers/media/i2c/ov5670.c | 46 +++++++++++++++++---------------------
- 1 file changed, 20 insertions(+), 26 deletions(-)
+ drivers/media/i2c/ov5670.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/i2c/ov5670.c b/drivers/media/i2c/ov5670.c
-index 47fedbe37ced..898f564e0c3e 100644
+index e2a3db7e4e20..da02d01f2e37 100644
 --- a/drivers/media/i2c/ov5670.c
 +++ b/drivers/media/i2c/ov5670.c
-@@ -1962,27 +1962,6 @@ static int ov5670_write_reg_list(struct ov5670 *ov5670,
- 	return ov5670_write_regs(ov5670, r_list->regs, r_list->num_of_regs);
- }
- 
--/* Open sub-device */
--static int ov5670_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
--{
--	struct ov5670 *ov5670 = to_ov5670(sd);
--	struct v4l2_mbus_framefmt *try_fmt =
--				v4l2_subdev_get_try_format(sd, fh->state, 0);
--
--	mutex_lock(&ov5670->mutex);
--
--	/* Initialize try_fmt */
--	try_fmt->width = ov5670->cur_mode->width;
--	try_fmt->height = ov5670->cur_mode->height;
--	try_fmt->code = MEDIA_BUS_FMT_SGRBG10_1X10;
--	try_fmt->field = V4L2_FIELD_NONE;
--
--	/* No crop or compose */
--	mutex_unlock(&ov5670->mutex);
--
--	return 0;
--}
--
- static int ov5670_update_digital_gain(struct ov5670 *ov5670, u32 d_gain)
- {
- 	int ret;
-@@ -2182,6 +2161,25 @@ static int ov5670_init_controls(struct ov5670 *ov5670)
- 	return ret;
- }
- 
-+static int ov5670_init_cfg(struct v4l2_subdev *sd,
-+			   struct v4l2_subdev_state *state)
-+{
-+	struct v4l2_mbus_framefmt *fmt =
-+				v4l2_subdev_get_try_format(sd, state, 0);
-+	const struct ov5670_mode *default_mode = &supported_modes[0];
-+
-+	fmt->width = default_mode->width;
-+	fmt->height = default_mode->height;
-+	fmt->code = MEDIA_BUS_FMT_SGRBG10_1X10;
-+	fmt->field = V4L2_FIELD_NONE;
-+	fmt->colorspace = V4L2_COLORSPACE_SRGB;
-+	fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(V4L2_COLORSPACE_SRGB);
-+	fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
-+	fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(V4L2_COLORSPACE_SRGB);
-+
-+	return 0;
-+}
-+
- static int ov5670_enum_mbus_code(struct v4l2_subdev *sd,
- 				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
-@@ -2513,6 +2511,7 @@ static const struct v4l2_subdev_video_ops ov5670_video_ops = {
- };
- 
- static const struct v4l2_subdev_pad_ops ov5670_pad_ops = {
-+	.init_cfg = ov5670_init_cfg,
- 	.enum_mbus_code = ov5670_enum_mbus_code,
- 	.get_fmt = ov5670_get_pad_format,
- 	.set_fmt = ov5670_set_pad_format,
-@@ -2534,10 +2533,6 @@ static const struct media_entity_operations ov5670_subdev_entity_ops = {
- 	.link_validate = v4l2_subdev_link_validate,
- };
- 
--static const struct v4l2_subdev_internal_ops ov5670_internal_ops = {
--	.open = ov5670_open,
--};
--
- static int ov5670_regulators_probe(struct ov5670 *ov5670)
- {
+@@ -2038,7 +2038,7 @@ static int ov5670_set_ctrl(struct v4l2_ctrl *ctrl)
+ 					     struct ov5670, ctrl_handler);
  	struct i2c_client *client = v4l2_get_subdevdata(&ov5670->sd);
-@@ -2640,7 +2635,6 @@ static int ov5670_probe(struct i2c_client *client)
- 		goto error_mutex_destroy;
- 	}
+ 	s64 max;
+-	int ret = 0;
++	int ret;
  
--	ov5670->sd.internal_ops = &ov5670_internal_ops;
- 	ov5670->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
- 			    V4L2_SUBDEV_FL_HAS_EVENTS;
- 	ov5670->sd.entity.ops = &ov5670_subdev_entity_ops;
+ 	/* Propagate change of current control to all related controls */
+ 	switch (ctrl->id) {
+@@ -2077,7 +2077,13 @@ static int ov5670_set_ctrl(struct v4l2_ctrl *ctrl)
+ 	case V4L2_CID_TEST_PATTERN:
+ 		ret = ov5670_enable_test_pattern(ov5670, ctrl->val);
+ 		break;
++	case V4L2_CID_HBLANK:
++	case V4L2_CID_LINK_FREQ:
++	case V4L2_CID_PIXEL_RATE:
++		ret = 0;
++		break;
+ 	default:
++		ret = -EINVAL;
+ 		dev_info(&client->dev, "%s Unhandled id:0x%x, val:0x%x\n",
+ 			 __func__, ctrl->id, ctrl->val);
+ 		break;
 -- 
 2.39.0
 
