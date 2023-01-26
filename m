@@ -2,41 +2,40 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F0C7C61DB3
-	for <linux-media@archiver.kernel.org>; Thu, 26 Jan 2023 23:15:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BEF8C636CC
+	for <linux-media@archiver.kernel.org>; Thu, 26 Jan 2023 23:15:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231874AbjAZXPV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Jan 2023 18:15:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37478 "EHLO
+        id S233418AbjAZXPW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Jan 2023 18:15:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbjAZXPQ (ORCPT
+        with ESMTP id S233217AbjAZXPR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 Jan 2023 18:15:16 -0500
+        Thu, 26 Jan 2023 18:15:17 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE3A4B8AE
-        for <linux-media@vger.kernel.org>; Thu, 26 Jan 2023 15:15:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8DE2E811
+        for <linux-media@vger.kernel.org>; Thu, 26 Jan 2023 15:15:16 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mgr@pengutronix.de>)
-        id 1pLBSY-0004J8-2u; Fri, 27 Jan 2023 00:15:10 +0100
+        id 1pLBSX-0004JE-HN; Fri, 27 Jan 2023 00:15:09 +0100
 Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <mgr@pengutronix.de>)
-        id 1pLBSX-000fEl-AL; Fri, 27 Jan 2023 00:15:08 +0100
+        id 1pLBSX-000fEu-Qq; Fri, 27 Jan 2023 00:15:08 +0100
 Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <mgr@pengutronix.de>)
-        id 1pLBSV-00EH7z-Kl; Fri, 27 Jan 2023 00:15:07 +0100
+        id 1pLBSV-00EH8B-MW; Fri, 27 Jan 2023 00:15:07 +0100
 From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
 To:     laurent.pinchart@ideasonboard.com
 Cc:     gregkh@linuxfoundation.org, mchehab@kernel.org,
         hverkuil-cisco@xs4all.nl, linux-usb@vger.kernel.org,
         linux-media@vger.kernel.org, kernel@pengutronix.de,
-        Marek Vasut <marex@denx.de>,
-        Ricardo Ribalda <ricardo@ribalda.com>
-Subject: [PATCH v3 1/5] media: uvcvideo: Add GUID for BGRA/X 8:8:8:8
-Date:   Fri, 27 Jan 2023 00:14:52 +0100
-Message-Id: <20230126231456.3402323-2-m.grzeschik@pengutronix.de>
+        Daniel Scally <dan.scally@ideasonboard.com>
+Subject: [PATCH v3 5/5] usb: uvc: use v4l2_fill_fmtdesc instead of open coded format name
+Date:   Fri, 27 Jan 2023 00:14:56 +0100
+Message-Id: <20230126231456.3402323-6-m.grzeschik@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230126231456.3402323-1-m.grzeschik@pengutronix.de>
 References: <20230126231456.3402323-1-m.grzeschik@pengutronix.de>
@@ -50,66 +49,253 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Marek Vasut <marex@denx.de>
+Since v4l2_fill_fmtdesc will be called in the ioctl v4l_enum_fmt anyway.
+We can set the format description and compressed flag from v4l_fill_fmtdesc
+and can remove the extra name field in uvc_format_desc.
 
-The Cypress EZUSB FX3 UVC example can be configured to report pixel
-format "e436eb7e-524f-11ce-9f53-0020af0ba770". This is its GUID for
-BGRA/X 8:8:8:8.
-
-The UVC 1.5 spec [1] only defines GUIDs for YUY2, NV12, M420 and I420.
-This seems to be an extension documented in the Microsoft Windows Media
-Format SDK[2]. This Media Format SDK defines this GUID as corresponding
-to `MEDIASUBTYPE_RGB32`, which is confirmed by [4] as `MEDIASUBTYPE_ARGB32`
-has different GUID.
-
-Note that in my case, the FX3 UVC can output either channel order,
-BGR or RGB or any other mix for that matter. Since Linux commit
-1b8dc32286a1a ("[media] uvcvideo: Add GUID for BGR 8:8:8")
-defined a GUID for `MEDIASUBTYPE_RGB24` channel order as BGR, keep
-this change consistent and define `MEDIASUBTYPE_RGB32` as BGR as well.
-Document [3] also indicates the channel order is BGR.
-
-[1] https://www.usb.org/document-library/video-class-v15-document-set
-[2] https://learn.microsoft.com/en-us/windows/win32/wmformat/media-type-identifiers
-[3] https://learn.microsoft.com/en-us/windows/win32/directshow/uncompressed-rgb-video-subtypes
-[4] https://gix.github.io/media-types/
-
-Signed-off-by: Marek Vasut <marex@denx.de>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Ricardo Ribalda <ricardo@ribalda.com>
+Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
+Tested-by: Daniel Scally <dan.scally@ideasonboard.com>
 Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+
 ---
-v1 -> v3: - added to the series
+v1 -> v2: - added reviewed and tested tags
+v2 -> v3: - removed corresponding code in uvc_driver
+          - using call from v4l_enum_fmt in uvc_v4l2.c
 
- include/media/v4l2-uvc.h | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/media/common/uvc.c             | 38 --------------------------
+ drivers/usb/gadget/function/uvc_v4l2.c |  6 ----
+ include/linux/usb/uvc.h                |  1 -
+ 3 files changed, 45 deletions(-)
 
-diff --git a/include/media/v4l2-uvc.h b/include/media/v4l2-uvc.h
-index f83e31661333bb..b010a36fc1d951 100644
---- a/include/media/v4l2-uvc.h
-+++ b/include/media/v4l2-uvc.h
-@@ -99,6 +99,9 @@
- #define UVC_GUID_FORMAT_BGR3 \
- 	{ 0x7d, 0xeb, 0x36, 0xe4, 0x4f, 0x52, 0xce, 0x11, \
- 	 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70}
-+#define UVC_GUID_FORMAT_BGR4 \
-+	{ 0x7e, 0xeb, 0x36, 0xe4, 0x4f, 0x52, 0xce, 0x11, \
-+	 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70}
- #define UVC_GUID_FORMAT_M420 \
- 	{ 'M',  '4',  '2',  '0', 0x00, 0x00, 0x10, 0x00, \
- 	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-@@ -266,6 +269,11 @@ static struct uvc_format_desc uvc_fmts[] = {
+diff --git a/drivers/media/common/uvc.c b/drivers/media/common/uvc.c
+index 2b4df3e8f48aa6..9c0ba7a6c185b1 100644
+--- a/drivers/media/common/uvc.c
++++ b/drivers/media/common/uvc.c
+@@ -13,192 +13,154 @@
+ 
+ static const struct uvc_format_desc uvc_fmts[] = {
+ 	{
+-		.name		= "YUV 4:2:2 (YUYV)",
+ 		.guid		= UVC_GUID_FORMAT_YUY2,
+ 		.fcc		= V4L2_PIX_FMT_YUYV,
+ 	},
+ 	{
+-		.name		= "YUV 4:2:2 (YUYV)",
+ 		.guid		= UVC_GUID_FORMAT_YUY2_ISIGHT,
+ 		.fcc		= V4L2_PIX_FMT_YUYV,
+ 	},
+ 	{
+-		.name		= "YUV 4:2:0 (NV12)",
+ 		.guid		= UVC_GUID_FORMAT_NV12,
+ 		.fcc		= V4L2_PIX_FMT_NV12,
+ 	},
+ 	{
+-		.name		= "MJPEG",
+ 		.guid		= UVC_GUID_FORMAT_MJPEG,
+ 		.fcc		= V4L2_PIX_FMT_MJPEG,
+ 	},
+ 	{
+-		.name		= "YVU 4:2:0 (YV12)",
+ 		.guid		= UVC_GUID_FORMAT_YV12,
+ 		.fcc		= V4L2_PIX_FMT_YVU420,
+ 	},
+ 	{
+-		.name		= "YUV 4:2:0 (I420)",
+ 		.guid		= UVC_GUID_FORMAT_I420,
+ 		.fcc		= V4L2_PIX_FMT_YUV420,
+ 	},
+ 	{
+-		.name		= "YUV 4:2:0 (M420)",
+ 		.guid		= UVC_GUID_FORMAT_M420,
+ 		.fcc		= V4L2_PIX_FMT_M420,
+ 	},
+ 	{
+-		.name		= "YUV 4:2:2 (UYVY)",
+ 		.guid		= UVC_GUID_FORMAT_UYVY,
+ 		.fcc		= V4L2_PIX_FMT_UYVY,
+ 	},
+ 	{
+-		.name		= "Greyscale 8-bit (Y800)",
+ 		.guid		= UVC_GUID_FORMAT_Y800,
+ 		.fcc		= V4L2_PIX_FMT_GREY,
+ 	},
+ 	{
+-		.name		= "Greyscale 8-bit (Y8  )",
+ 		.guid		= UVC_GUID_FORMAT_Y8,
+ 		.fcc		= V4L2_PIX_FMT_GREY,
+ 	},
+ 	{
+-		.name		= "Greyscale 8-bit (D3DFMT_L8)",
+ 		.guid		= UVC_GUID_FORMAT_D3DFMT_L8,
+ 		.fcc		= V4L2_PIX_FMT_GREY,
+ 	},
+ 	{
+-		.name		= "IR 8-bit (L8_IR)",
+ 		.guid		= UVC_GUID_FORMAT_KSMEDIA_L8_IR,
+ 		.fcc		= V4L2_PIX_FMT_GREY,
+ 	},
+ 	{
+-		.name		= "Greyscale 10-bit (Y10 )",
+ 		.guid		= UVC_GUID_FORMAT_Y10,
+ 		.fcc		= V4L2_PIX_FMT_Y10,
+ 	},
+ 	{
+-		.name		= "Greyscale 12-bit (Y12 )",
+ 		.guid		= UVC_GUID_FORMAT_Y12,
+ 		.fcc		= V4L2_PIX_FMT_Y12,
+ 	},
+ 	{
+-		.name		= "Greyscale 16-bit (Y16 )",
+ 		.guid		= UVC_GUID_FORMAT_Y16,
+ 		.fcc		= V4L2_PIX_FMT_Y16,
+ 	},
+ 	{
+-		.name		= "BGGR Bayer (BY8 )",
+ 		.guid		= UVC_GUID_FORMAT_BY8,
+ 		.fcc		= V4L2_PIX_FMT_SBGGR8,
+ 	},
+ 	{
+-		.name		= "BGGR Bayer (BA81)",
+ 		.guid		= UVC_GUID_FORMAT_BA81,
+ 		.fcc		= V4L2_PIX_FMT_SBGGR8,
+ 	},
+ 	{
+-		.name		= "GBRG Bayer (GBRG)",
+ 		.guid		= UVC_GUID_FORMAT_GBRG,
+ 		.fcc		= V4L2_PIX_FMT_SGBRG8,
+ 	},
+ 	{
+-		.name		= "GRBG Bayer (GRBG)",
+ 		.guid		= UVC_GUID_FORMAT_GRBG,
+ 		.fcc		= V4L2_PIX_FMT_SGRBG8,
+ 	},
+ 	{
+-		.name		= "RGGB Bayer (RGGB)",
+ 		.guid		= UVC_GUID_FORMAT_RGGB,
+ 		.fcc		= V4L2_PIX_FMT_SRGGB8,
+ 	},
+ 	{
+-		.name		= "RGB565",
+ 		.guid		= UVC_GUID_FORMAT_RGBP,
+ 		.fcc		= V4L2_PIX_FMT_RGB565,
+ 	},
+ 	{
+-		.name		= "BGR 8:8:8 (BGR3)",
  		.guid		= UVC_GUID_FORMAT_BGR3,
  		.fcc		= V4L2_PIX_FMT_BGR24,
  	},
-+	{
-+		.name		= "BGRA/X 8:8:8:8 (BGR4)",
-+		.guid		= UVC_GUID_FORMAT_BGR4,
-+		.fcc		= V4L2_PIX_FMT_XBGR32,
-+	},
  	{
- 		.name		= "H.264",
+-		.name		= "BGRA/X 8:8:8:8 (BGR4)",
+ 		.guid		= UVC_GUID_FORMAT_BGR4,
+ 		.fcc		= V4L2_PIX_FMT_XBGR32,
+ 	},
+ 	{
+-		.name		= "H.264",
  		.guid		= UVC_GUID_FORMAT_H264,
+ 		.fcc		= V4L2_PIX_FMT_H264,
+ 	},
+ 	{
+-		.name		= "H.265",
+ 		.guid		= UVC_GUID_FORMAT_H265,
+ 		.fcc		= V4L2_PIX_FMT_HEVC,
+ 	},
+ 	{
+-		.name		= "Greyscale 8 L/R (Y8I)",
+ 		.guid		= UVC_GUID_FORMAT_Y8I,
+ 		.fcc		= V4L2_PIX_FMT_Y8I,
+ 	},
+ 	{
+-		.name		= "Greyscale 12 L/R (Y12I)",
+ 		.guid		= UVC_GUID_FORMAT_Y12I,
+ 		.fcc		= V4L2_PIX_FMT_Y12I,
+ 	},
+ 	{
+-		.name		= "Depth data 16-bit (Z16)",
+ 		.guid		= UVC_GUID_FORMAT_Z16,
+ 		.fcc		= V4L2_PIX_FMT_Z16,
+ 	},
+ 	{
+-		.name		= "Bayer 10-bit (SRGGB10P)",
+ 		.guid		= UVC_GUID_FORMAT_RW10,
+ 		.fcc		= V4L2_PIX_FMT_SRGGB10P,
+ 	},
+ 	{
+-		.name		= "Bayer 16-bit (SBGGR16)",
+ 		.guid		= UVC_GUID_FORMAT_BG16,
+ 		.fcc		= V4L2_PIX_FMT_SBGGR16,
+ 	},
+ 	{
+-		.name		= "Bayer 16-bit (SGBRG16)",
+ 		.guid		= UVC_GUID_FORMAT_GB16,
+ 		.fcc		= V4L2_PIX_FMT_SGBRG16,
+ 	},
+ 	{
+-		.name		= "Bayer 16-bit (SRGGB16)",
+ 		.guid		= UVC_GUID_FORMAT_RG16,
+ 		.fcc		= V4L2_PIX_FMT_SRGGB16,
+ 	},
+ 	{
+-		.name		= "Bayer 16-bit (SGRBG16)",
+ 		.guid		= UVC_GUID_FORMAT_GR16,
+ 		.fcc		= V4L2_PIX_FMT_SGRBG16,
+ 	},
+ 	{
+-		.name		= "Depth data 16-bit (Z16)",
+ 		.guid		= UVC_GUID_FORMAT_INVZ,
+ 		.fcc		= V4L2_PIX_FMT_Z16,
+ 	},
+ 	{
+-		.name		= "Greyscale 10-bit (Y10 )",
+ 		.guid		= UVC_GUID_FORMAT_INVI,
+ 		.fcc		= V4L2_PIX_FMT_Y10,
+ 	},
+ 	{
+-		.name		= "IR:Depth 26-bit (INZI)",
+ 		.guid		= UVC_GUID_FORMAT_INZI,
+ 		.fcc		= V4L2_PIX_FMT_INZI,
+ 	},
+ 	{
+-		.name		= "4-bit Depth Confidence (Packed)",
+ 		.guid		= UVC_GUID_FORMAT_CNF4,
+ 		.fcc		= V4L2_PIX_FMT_CNF4,
+ 	},
+ 	{
+-		.name		= "HEVC",
+ 		.guid		= UVC_GUID_FORMAT_HEVC,
+ 		.fcc		= V4L2_PIX_FMT_HEVC,
+ 	},
+diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+index 21e573e628f4e7..3f0a9795c0d45d 100644
+--- a/drivers/usb/gadget/function/uvc_v4l2.c
++++ b/drivers/usb/gadget/function/uvc_v4l2.c
+@@ -374,15 +374,9 @@ uvc_v4l2_enum_format(struct file *file, void *fh, struct v4l2_fmtdesc *f)
+ 	if (!uformat)
+ 		return -EINVAL;
+ 
+-	if (uformat->type != UVCG_UNCOMPRESSED)
+-		f->flags |= V4L2_FMT_FLAG_COMPRESSED;
+-
+ 	fmtdesc = to_uvc_format(uformat);
+ 	f->pixelformat = fmtdesc->fcc;
+ 
+-	strscpy(f->description, fmtdesc->name, sizeof(f->description));
+-	f->description[strlen(fmtdesc->name) - 1] = 0;
+-
+ 	return 0;
+ }
+ 
+diff --git a/include/linux/usb/uvc.h b/include/linux/usb/uvc.h
+index b0210c5c5406b3..88d96095bcb163 100644
+--- a/include/linux/usb/uvc.h
++++ b/include/linux/usb/uvc.h
+@@ -149,7 +149,6 @@
+ 	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
+ 
+ struct uvc_format_desc {
+-	char *name;
+ 	u8 guid[16];
+ 	u32 fcc;
+ };
 -- 
 2.30.2
 
