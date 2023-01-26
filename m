@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2C62C05027
-	for <linux-media@archiver.kernel.org>; Thu, 26 Jan 2023 12:47:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8051EC61DA2
+	for <linux-media@archiver.kernel.org>; Thu, 26 Jan 2023 12:47:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236368AbjAZMrI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Jan 2023 07:47:08 -0500
+        id S236609AbjAZMrU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Jan 2023 07:47:20 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236037AbjAZMrE (ORCPT
+        with ESMTP id S232925AbjAZMrQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 Jan 2023 07:47:04 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15EB66F9A
-        for <linux-media@vger.kernel.org>; Thu, 26 Jan 2023 04:47:02 -0800 (PST)
+        Thu, 26 Jan 2023 07:47:16 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158F76C100
+        for <linux-media@vger.kernel.org>; Thu, 26 Jan 2023 04:47:06 -0800 (PST)
 Received: from uno.LocalDomain (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 698271254;
-        Thu, 26 Jan 2023 13:46:55 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 32FC612EF;
+        Thu, 26 Jan 2023 13:46:57 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674737215;
-        bh=7Ur6WazrHGmAkomdY6iX3LBpNO0v+G+W0eprodEVILQ=;
+        s=mail; t=1674737217;
+        bh=lrr6L5YLONkNwE9d9XUrOKsFugVnbmXQItS0mH4vxtc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KzxVwJXu21OItR+3BqTBT6ZwoBXXw0hLL+1VBTvFeK2VblW76gmeKEmvFSC6ImuV6
-         NdFz6ZZtIV1QZJFFv5kDte5Ui2aEfiBuSow3XZR91YsYC/ofCfX8SMKwxQMLaVQ3Hg
-         Zxub0t0y5DqV71XP80Wo6Vaxkt5ZS7RQIWNqy2wI=
+        b=vla/DuaqPEN9KdxZOUMeS6gzbBJ6GJnoc+AfMBWN0t0vgj+LJWzHK+mOyNkQb5WZS
+         IlmrMFxVHbovuGZzKzbCmRBzvgIO/0gnD2JaTKe61lO9zOZd4cnspGMjuc9le9HpVC
+         AgOfPVuzyhVlFvBIrC3LvERs7O0H4dXz7uqrHo7I=
 From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 To:     Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
         Luca Weiss <luca@z3ntu.xyz>
@@ -32,9 +32,9 @@ Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
         laurent.pinchart@ideasonboard.com, sakari.ailus@iki.fi,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org
-Subject: [PATCH v5 4/9] media: i2c: ov5670: Probe regulators
-Date:   Thu, 26 Jan 2023 13:46:27 +0100
-Message-Id: <20230126124632.45842-5-jacopo.mondi@ideasonboard.com>
+Subject: [PATCH v5 7/9] media: i2c: ov5670: Implement init_cfg
+Date:   Thu, 26 Jan 2023 13:46:30 +0100
+Message-Id: <20230126124632.45842-8-jacopo.mondi@ideasonboard.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230126124632.45842-1-jacopo.mondi@ideasonboard.com>
 References: <20230126124632.45842-1-jacopo.mondi@ideasonboard.com>
@@ -44,86 +44,102 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The OV5670 has three power supplies (AVDD, DOVDD and DVDD).
+Implement the .init_cfg() pad operation and initialize the default
+format with the default full resolution mode 2592x1944.
 
-Probe them in the driver to prepare controlling with runtime_pm
-operations.
+With .init_cfg() pad operation implemented the deprecated .open()
+internal operation can now be dropped.
 
 Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/i2c/ov5670.c | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ drivers/media/i2c/ov5670.c | 46 +++++++++++++++++---------------------
+ 1 file changed, 20 insertions(+), 26 deletions(-)
 
 diff --git a/drivers/media/i2c/ov5670.c b/drivers/media/i2c/ov5670.c
-index c8beb2bc3d0f..95bdbf628556 100644
+index 12091a5c992e..8f4350898b36 100644
 --- a/drivers/media/i2c/ov5670.c
 +++ b/drivers/media/i2c/ov5670.c
-@@ -8,6 +8,7 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/pm_runtime.h>
-+#include <linux/regulator/consumer.h>
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-device.h>
- #include <media/v4l2-event.h>
-@@ -86,6 +87,14 @@ struct ov5670_link_freq_config {
- 	const struct ov5670_reg_list reg_list;
- };
+@@ -1962,27 +1962,6 @@ static int ov5670_write_reg_list(struct ov5670 *ov5670,
+ 	return ov5670_write_regs(ov5670, r_list->regs, r_list->num_of_regs);
+ }
  
-+static const char * const ov5670_supply_names[] = {
-+	"avdd",		/* Analog power */
-+	"dvdd",		/* Digital power */
-+	"dovdd",	/* Digital output power */
-+};
-+
-+#define OV5670_NUM_SUPPLIES ARRAY_SIZE(ov5670_supply_names)
-+
- struct ov5670_mode {
- 	/* Frame width in pixels */
- 	u32 width;
-@@ -1831,6 +1840,9 @@ struct ov5670 {
- 	/* Current mode */
- 	const struct ov5670_mode *cur_mode;
+-/* Open sub-device */
+-static int ov5670_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+-{
+-	struct ov5670 *ov5670 = to_ov5670(sd);
+-	struct v4l2_mbus_framefmt *try_fmt =
+-				v4l2_subdev_get_try_format(sd, fh->state, 0);
+-
+-	mutex_lock(&ov5670->mutex);
+-
+-	/* Initialize try_fmt */
+-	try_fmt->width = ov5670->cur_mode->width;
+-	try_fmt->height = ov5670->cur_mode->height;
+-	try_fmt->code = MEDIA_BUS_FMT_SGRBG10_1X10;
+-	try_fmt->field = V4L2_FIELD_NONE;
+-
+-	/* No crop or compose */
+-	mutex_unlock(&ov5670->mutex);
+-
+-	return 0;
+-}
+-
+ static int ov5670_update_digital_gain(struct ov5670 *ov5670, u32 d_gain)
+ {
+ 	int ret;
+@@ -2182,6 +2161,25 @@ static int ov5670_init_controls(struct ov5670 *ov5670)
+ 	return ret;
+ }
  
-+	/* Regulators */
-+	struct regulator_bulk_data supplies[OV5670_NUM_SUPPLIES];
-+
- 	/* To serialize asynchronus callbacks */
- 	struct mutex mutex;
- 
-@@ -2471,6 +2483,18 @@ static const struct v4l2_subdev_internal_ops ov5670_internal_ops = {
- 	.open = ov5670_open,
- };
- 
-+static int ov5670_regulators_probe(struct ov5670 *ov5670)
++static int ov5670_init_cfg(struct v4l2_subdev *sd,
++			   struct v4l2_subdev_state *state)
 +{
-+	struct i2c_client *client = v4l2_get_subdevdata(&ov5670->sd);
-+	unsigned int i;
++	struct v4l2_mbus_framefmt *fmt =
++				v4l2_subdev_get_try_format(sd, state, 0);
++	const struct ov5670_mode *default_mode = &supported_modes[0];
 +
-+	for (i = 0; i < OV5670_NUM_SUPPLIES; i++)
-+		ov5670->supplies[i].supply = ov5670_supply_names[i];
++	fmt->width = default_mode->width;
++	fmt->height = default_mode->height;
++	fmt->code = MEDIA_BUS_FMT_SGRBG10_1X10;
++	fmt->field = V4L2_FIELD_NONE;
++	fmt->colorspace = V4L2_COLORSPACE_SRGB;
++	fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(V4L2_COLORSPACE_SRGB);
++	fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
++	fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(V4L2_COLORSPACE_SRGB);
 +
-+	return devm_regulator_bulk_get(&client->dev, OV5670_NUM_SUPPLIES,
-+				       ov5670->supplies);
++	return 0;
 +}
 +
- static int ov5670_probe(struct i2c_client *client)
- {
- 	struct ov5670 *ov5670;
-@@ -2509,6 +2533,12 @@ static int ov5670_probe(struct i2c_client *client)
- 	/* Initialize subdev */
- 	v4l2_i2c_subdev_init(&ov5670->sd, client, &ov5670_subdev_ops);
+ static int ov5670_enum_mbus_code(struct v4l2_subdev *sd,
+ 				 struct v4l2_subdev_state *sd_state,
+ 				 struct v4l2_subdev_mbus_code_enum *code)
+@@ -2512,6 +2510,7 @@ static const struct v4l2_subdev_video_ops ov5670_video_ops = {
+ };
  
-+	ret = ov5670_regulators_probe(ov5670);
-+	if (ret) {
-+		err_msg = "Regulators probe failed";
-+		goto error_print;
-+	}
-+
- 	full_power = acpi_dev_state_d0(&client->dev);
- 	if (full_power) {
- 		/* Check module identity */
+ static const struct v4l2_subdev_pad_ops ov5670_pad_ops = {
++	.init_cfg = ov5670_init_cfg,
+ 	.enum_mbus_code = ov5670_enum_mbus_code,
+ 	.get_fmt = ov5670_get_pad_format,
+ 	.set_fmt = ov5670_set_pad_format,
+@@ -2533,10 +2532,6 @@ static const struct media_entity_operations ov5670_subdev_entity_ops = {
+ 	.link_validate = v4l2_subdev_link_validate,
+ };
+ 
+-static const struct v4l2_subdev_internal_ops ov5670_internal_ops = {
+-	.open = ov5670_open,
+-};
+-
+ static int ov5670_regulators_probe(struct ov5670 *ov5670)
+ {
+ 	struct i2c_client *client = v4l2_get_subdevdata(&ov5670->sd);
+@@ -2645,7 +2640,6 @@ static int ov5670_probe(struct i2c_client *client)
+ 		goto error_mutex_destroy;
+ 	}
+ 
+-	ov5670->sd.internal_ops = &ov5670_internal_ops;
+ 	ov5670->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
+ 			    V4L2_SUBDEV_FL_HAS_EVENTS;
+ 	ov5670->sd.entity.ops = &ov5670_subdev_entity_ops;
 -- 
 2.39.0
 
