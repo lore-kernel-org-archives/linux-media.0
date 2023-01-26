@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 607D2C54E94
-	for <linux-media@archiver.kernel.org>; Thu, 26 Jan 2023 15:07:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 507B9C05027
+	for <linux-media@archiver.kernel.org>; Thu, 26 Jan 2023 15:07:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbjAZPHd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Jan 2023 10:07:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41190 "EHLO
+        id S232207AbjAZPHi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Jan 2023 10:07:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232109AbjAZPH2 (ORCPT
+        with ESMTP id S232172AbjAZPH2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 26 Jan 2023 10:07:28 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE4B6BBF2
-        for <linux-media@vger.kernel.org>; Thu, 26 Jan 2023 07:07:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E196BBEC
+        for <linux-media@vger.kernel.org>; Thu, 26 Jan 2023 07:07:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CF799B81CC0
-        for <linux-media@vger.kernel.org>; Thu, 26 Jan 2023 15:07:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE95BC433EF;
-        Thu, 26 Jan 2023 15:07:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE93EB81DEF
+        for <linux-media@vger.kernel.org>; Thu, 26 Jan 2023 15:07:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D26EBC433A4;
+        Thu, 26 Jan 2023 15:07:16 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: [PATCH 13/17] media: i2c: ov7670: 0 instead of -EINVAL was returned
-Date:   Thu, 26 Jan 2023 16:06:53 +0100
-Message-Id: <20230126150657.367921-14-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 15/17] media: i2c: adp1653: introduce 'no_child' label
+Date:   Thu, 26 Jan 2023 16:06:55 +0100
+Message-Id: <20230126150657.367921-16-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230126150657.367921-1-hverkuil-cisco@xs4all.nl>
 References: <20230126150657.367921-1-hverkuil-cisco@xs4all.nl>
@@ -38,31 +38,49 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If the media bus is unsupported, then return -EINVAL. Instead it
-returned 'ret' which happened to be 0.
+The code mixed gotos and returns, which confused smatch. Add a no_child
+label before the 'return -EINVAL;' to help smatch understand this.
+It's a bit more consistent as well.
 
-This fixes a smatch warning:
+This fixes this smatch warning:
 
-ov7670.c:1843 ov7670_parse_dt() warn: missing error code? 'ret'
+adp1653.c:444 adp1653_of_init() warn: missing unwind goto?
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ov7670.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/adp1653.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/i2c/ov7670.c b/drivers/media/i2c/ov7670.c
-index 27db0a07de1f..b1bb0833571e 100644
---- a/drivers/media/i2c/ov7670.c
-+++ b/drivers/media/i2c/ov7670.c
-@@ -1840,7 +1840,7 @@ static int ov7670_parse_dt(struct device *dev,
+diff --git a/drivers/media/i2c/adp1653.c b/drivers/media/i2c/adp1653.c
+index a61a77de6eee..136bca801db7 100644
+--- a/drivers/media/i2c/adp1653.c
++++ b/drivers/media/i2c/adp1653.c
+@@ -420,7 +420,7 @@ static int adp1653_of_init(struct i2c_client *client,
  
- 	if (bus_cfg.bus_type != V4L2_MBUS_PARALLEL) {
- 		dev_err(dev, "Unsupported media bus type\n");
--		return ret;
-+		return -EINVAL;
- 	}
- 	info->mbus_config = bus_cfg.bus.parallel.flags;
+ 	child = of_get_child_by_name(node, "flash");
+ 	if (!child)
+-		return -EINVAL;
++		goto no_child;
+ 
+ 	if (of_property_read_u32(child, "flash-timeout-us",
+ 				 &pd->max_flash_timeout))
+@@ -441,7 +441,7 @@ static int adp1653_of_init(struct i2c_client *client,
+ 
+ 	child = of_get_child_by_name(node, "indicator");
+ 	if (!child)
+-		return -EINVAL;
++		goto no_child;
+ 
+ 	if (of_property_read_u32(child, "led-max-microamp",
+ 				 &pd->max_indicator_intensity))
+@@ -459,6 +459,7 @@ static int adp1653_of_init(struct i2c_client *client,
+ err:
+ 	dev_err(&client->dev, "Required property not found\n");
+ 	of_node_put(child);
++no_child:
+ 	return -EINVAL;
+ }
  
 -- 
 2.39.0
