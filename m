@@ -2,97 +2,233 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F634C27C76
-	for <linux-media@archiver.kernel.org>; Thu, 26 Jan 2023 00:29:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03D72C54EAA
+	for <linux-media@archiver.kernel.org>; Thu, 26 Jan 2023 00:33:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236278AbjAZA34 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 25 Jan 2023 19:29:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40268 "EHLO
+        id S236237AbjAZAdb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 25 Jan 2023 19:33:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236298AbjAZA3o (ORCPT
+        with ESMTP id S236206AbjAZAda (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 25 Jan 2023 19:29:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551F143457
-        for <linux-media@vger.kernel.org>; Wed, 25 Jan 2023 16:28:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674692931;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=JbyYoo+iTg/7s516SgITKP/ggW6rCx9usz1BqFXsKhg=;
-        b=Ox2HPXAL4gaTS65NoPT365CGTga2f/U/ma6DHusamY1h/gRqjGS+Ysn+D5TKn3XSnugkpe
-        C5/fHeiSOwbCTdbBXrJoYDdRkLwOGKIhHozVj0MwjOG3pImpDlfYlHrx88AB7qKGHh7yV0
-        F3DmSywfB6riJyE5tkRP7SDJbvRIQxo=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-79-2eSca8CWPp6Xp6otfW2rAg-1; Wed, 25 Jan 2023 19:28:50 -0500
-X-MC-Unique: 2eSca8CWPp6Xp6otfW2rAg-1
-Received: by mail-ej1-f72.google.com with SMTP id gn31-20020a1709070d1f00b0087024adbba2so211457ejc.20
-        for <linux-media@vger.kernel.org>; Wed, 25 Jan 2023 16:28:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JbyYoo+iTg/7s516SgITKP/ggW6rCx9usz1BqFXsKhg=;
-        b=sZhtYcjQY7hqzeSlt0E2qoKgzMbXXM7GWIM4z/evMSyLMPGifpX2vKaMmnZY4ITLpf
-         UgrXiPOA/02Q+QVCzTPSCuKxB3vZy6ovSrlT32nKWH07KJCvf1YxKZrzFMai0ox1CNPy
-         Hhwz/C9tn6945M934bfsGyqDmNQmhv3rANkRzzyop89Ly5LlJzg1uaJ/vBV2eOpFR8K6
-         CNUMSfWgOG8pe/O0tlor4h299Q8skxvSr0KU58AislRpT8s6FSNUzhwkpddsHgEN7cxb
-         Sx75SsTiubLt9Bpu/G1agUgaBAHxyDc38rz+a6DFQ+UDfdpSntLssvn6SAxfiLdbWZ1h
-         D2aA==
-X-Gm-Message-State: AFqh2kqR3zieaDDCTp4IKcRY130qsdmLZftcZB1gHNC1prnqAWMRSnRL
-        AOogU2nhO9+34n9re5rXgIoWuv8oWofexLJcsLWmoSWt/R0Yoc6vo6pYW4zzsMlvcx80G3quPLs
-        m+Q7QOFidiI64unWdvvvUVkU=
-X-Received: by 2002:a05:6402:5419:b0:463:9193:404a with SMTP id ev25-20020a056402541900b004639193404amr36659378edb.21.1674692929038;
-        Wed, 25 Jan 2023 16:28:49 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvGz2LNpp1BEszvXNVD/n0jXIZ8CQsApiWD0Hl3aVbSLJvpgJWIyT48ddPBP9ROdENyzemY5A==
-X-Received: by 2002:a05:6402:5419:b0:463:9193:404a with SMTP id ev25-20020a056402541900b004639193404amr36659373edb.21.1674692928896;
-        Wed, 25 Jan 2023 16:28:48 -0800 (PST)
-Received: from pollux.. ([2a02:810d:4b3f:de78:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id j15-20020aa7de8f000000b0049622a61f8fsm3009706edv.30.2023.01.25.16.28.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 16:28:48 -0800 (PST)
-From:   Danilo Krummrich <dakr@redhat.com>
-To:     christian.koenig@amd.com, Arvind.Yadav@amd.com,
-        sumit.semwal@linaro.org, gustavo@padovan.org
-Cc:     dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Danilo Krummrich <dakr@redhat.com>
-Subject: [PATCH] dma-buf: actually set signaling bit for private sub fences
-Date:   Thu, 26 Jan 2023 01:28:44 +0100
-Message-Id: <20230126002844.339593-1-dakr@redhat.com>
+        Wed, 25 Jan 2023 19:33:30 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A399A3D0BA;
+        Wed, 25 Jan 2023 16:33:28 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 84B8BA39;
+        Thu, 26 Jan 2023 01:33:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1674693206;
+        bh=z7RkTtYG8lgZrF7a6lDKTOpv7Rkx7HBKUwZLuGA7lNY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BLqy8Dp3vNZcpnHlSSycZBg2nfPzDARppJh5VvwOKzhS7YDiNpcaALfJRe3tlBQMx
+         2Y8/3SEeKJcCr61WDfw0ceflL+z26npXkuf1KBEaVaVMFJ0IU7bgc2rRo32eqaqcU6
+         N/bdrscqPXnFtrlCMxE2DdZZgsq7m4BVql+eOok0=
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
+        linux-imx@nxp.com, kernel@pengutronix.de,
+        Adam Ford <aford173@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org
+Subject: [PATCH v3 1/2] dt-bindings: media: Add i.MX8 ISI DT bindings
+Date:   Thu, 26 Jan 2023 02:33:19 +0200
+Message-Id: <20230126003320.10047-2-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230126003320.10047-1-laurent.pinchart@ideasonboard.com>
+References: <20230126003320.10047-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In dma_fence_allocate_private_stub() set the signaling bit of the newly
-allocated private stub fence rather than the signaling bit of the
-shared dma_fence_stub.
+The Image Sensing Interface (ISI) combines image processing pipelines
+with DMA engines to process and capture frames originating from a
+variety of sources. The inputs to the ISI go through Pixel Link
+interfaces, and their number and nature is SoC-dependent. They cover
+both capture interfaces (MIPI CSI-2 RX, HDMI RX) and memory inputs.
 
-Fixes: c85d00d4fd8b ("dma-buf: set signaling bit for the stub fence")
-Signed-off-by: Danilo Krummrich <dakr@redhat.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/dma-buf/dma-fence.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes since v2:
 
-diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
-index 406b4e26f538..0de0482cd36e 100644
---- a/drivers/dma-buf/dma-fence.c
-+++ b/drivers/dma-buf/dma-fence.c
-@@ -167,7 +167,7 @@ struct dma_fence *dma_fence_allocate_private_stub(void)
- 		       0, 0);
- 
- 	set_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT,
--		&dma_fence_stub.flags);
-+		&fence->flags);
- 
- 	dma_fence_signal(fence);
- 
+- Describe the interrupts property
+- Set global minItems and maxItems for interrupts
+- Set maxItems for power-domains
+
+Changes since v1:
+
+- Fix compatible string checks in conditional schema
+- Fix interrupts property handling
+---
+ .../bindings/media/nxp,imx8-isi.yaml          | 152 ++++++++++++++++++
+ 1 file changed, 152 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
+
+diff --git a/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml b/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
+new file mode 100644
+index 000000000000..130fa41b9d8e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
+@@ -0,0 +1,152 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/nxp,imx8-isi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: i.MX8 Image Sensing Interface
++
++maintainers:
++  - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
++
++description: |
++  The Image Sensing Interface (ISI) combines image processing pipelines with
++  DMA engines to process and capture frames originating from a variety of
++  sources. The inputs to the ISI go through Pixel Link interfaces, and their
++  number and nature is SoC-dependent. They cover both capture interfaces (MIPI
++  CSI-2 RX, HDMI RX, ...) and display engine outputs for writeback support.
++
++properties:
++  compatible:
++    enum:
++      - fsl,imx8mn-isi
++      - fsl,imx8mp-isi
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: The AXI clock
++      - description: The APB clock
++      # TODO: Check if the per-channel ipg_proc_clk clocks need to be specified
++      # as well, in case some SoCs have the ability to control them separately.
++      # This may be the case of the i.MX8[DQ]X(P)
++
++  clock-names:
++    items:
++      - const: axi
++      - const: apb
++
++  fsl,blk-ctrl:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      A phandle referencing the block control that contains the CSIS to ISI
++      gasket.
++
++  interrupts:
++    description: Processing pipeline interrupts, one per pipeline
++    minItems: 1
++    maxItems: 2
++
++  power-domains:
++    maxItems: 1
++
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++    description: |
++      Ports represent the Pixel Link inputs to the ISI. Their number and
++      assignment are model-dependent. Each port shall have a single endpoint.
++
++    patternProperties:
++      "^port@[0-9]$":
++        $ref: /schemas/graph.yaml#/properties/port
++        unevaluatedProperties: false
++
++    unevaluatedProperties: false
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++  - fsl,blk-ctrl
++  - ports
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: fsl,imx8mn-isi
++    then:
++      properties:
++        interrupts:
++          maxItems: 1
++        ports:
++          properties:
++            port@0:
++              description: MIPI CSI-2 RX
++          required:
++            - port@0
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: fsl,imx8mp-isi
++    then:
++      properties:
++        interrupts:
++          maxItems: 2
++        ports:
++          properties:
++            port@0:
++              description: MIPI CSI-2 RX 0
++            port@1:
++              description: MIPI CSI-2 RX 1
++          required:
++            - port@0
++            - port@1
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/imx8mp-clock.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    isi@32e00000 {
++        compatible = "fsl,imx8mp-isi";
++        reg = <0x32e00000 0x4000>;
++        interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&clk IMX8MP_CLK_MEDIA_AXI_ROOT>,
++                 <&clk IMX8MP_CLK_MEDIA_APB_ROOT>;
++        clock-names = "axi", "apb";
++        fsl,blk-ctrl = <&media_blk_ctrl>;
++        power-domains = <&mediamix_pd>;
++
++        ports {
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            port@0 {
++                reg = <0>;
++                isi_in_0: endpoint {
++                    remote-endpoint = <&mipi_csi_0_out>;
++                };
++            };
++
++            port@1 {
++                reg = <1>;
++                isi_in_1: endpoint {
++                    remote-endpoint = <&mipi_csi_1_out>;
++                };
++            };
++        };
++    };
++
++...
 -- 
-2.39.1
+Regards,
+
+Laurent Pinchart
 
