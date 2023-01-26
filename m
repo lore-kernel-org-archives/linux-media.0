@@ -2,99 +2,144 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D26AC05027
-	for <linux-media@archiver.kernel.org>; Thu, 26 Jan 2023 17:06:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F0DAC61DA3
+	for <linux-media@archiver.kernel.org>; Thu, 26 Jan 2023 17:06:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbjAZRGR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Jan 2023 12:06:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43734 "EHLO
+        id S231599AbjAZRGT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Jan 2023 12:06:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjAZRGP (ORCPT
+        with ESMTP id S229721AbjAZRGR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 Jan 2023 12:06:15 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CAB59EE
-        for <linux-media@vger.kernel.org>; Thu, 26 Jan 2023 09:06:09 -0800 (PST)
+        Thu, 26 Jan 2023 12:06:17 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6495B5B90;
+        Thu, 26 Jan 2023 09:06:16 -0800 (PST)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5EF882B3;
-        Thu, 26 Jan 2023 18:06:07 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 99BCED77;
+        Thu, 26 Jan 2023 18:06:10 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674752767;
-        bh=FlcoGWof9onn1qBOdfroYivCOvL0cQh2/y187duiPKo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=DjGBU0yajW3lkgQZ02lWBrp3co179Yj2uxKzRhrLVXWfRaesQHerDPrp6qOtoupmL
-         pEw9Z2dWGanWOMI9+/VzTVAvKdq8bwF2y+SX6WpUOo0mP7EJVd136ghaQzBhAvCvje
-         gBPrWXNydavcBcfRCvYVirGenqcNeX8hkSA/gI78=
+        s=mail; t=1674752770;
+        bh=+hdXPGbzHByKztFlx+pbbcoPvK2k/6UnHURKhPfQPa0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=A4qRNWbAG6psE412xsvEIudchprjemfUq93uzbsxNaRqbqtk7I1ouADisiE/mF5XL
+         NmiAL9MsreT5t0cCzGGzV4Ed6CGnIEb2dTiN04PeBT3wMKDrSE3y3+bkqA2/ceflGf
+         GHprg898Ggw97GYfkCLr295m53Szl+qX1O98XNSw=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
         Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
         linux-imx@nxp.com, kernel@pengutronix.de,
-        Adam Ford <aford173@gmail.com>
-Subject: [PATCH v4 0/3] media: nxp: i.MX8 ISI driver
-Date:   Thu, 26 Jan 2023 19:06:00 +0200
-Message-Id: <20230126170603.11896-1-laurent.pinchart@ideasonboard.com>
+        Adam Ford <aford173@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org
+Subject: [PATCH v4 2/3] dt-bindings: media: imx8-isi: Use 'port' instead of 'ports' for i.MX8MN
+Date:   Thu, 26 Jan 2023 19:06:02 +0200
+Message-Id: <20230126170603.11896-3-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230126170603.11896-1-laurent.pinchart@ideasonboard.com>
+References: <20230126170603.11896-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ .../bindings/media/nxp,imx8-isi.yaml          | 39 +++++++++++--------
+ 1 file changed, 22 insertions(+), 17 deletions(-)
 
-This patch series adds a new driver for the Imaging Sensor Interface,
-an IP core found in various NXP i.MX8 SoCs, including the i.MX8MN and
-the i.MX8MP.
-
-This v4 addresses a review comment on the DT bindings, and adds an
-example for the i.MX8MN integration (in 1/3).
-
-Patch 2/3 is new and moves the bindings from using a 'ports' node with a
-single 'port' to just a 'port' node for the i.MX8MN. I don't like it
-much as it makes the bindings more complicated, but I can live with that
-if there's no other option. I've kept the patch separate to show the
-impact and make it easy to drop it if needed. I can squash it with 1/3
-or keep it separate when sending a pull request, I don't mind either
-way.
-
-The driver, in patch 3/3, is unchanged.
-
-Laurent Pinchart (3):
-  dt-bindings: media: Add i.MX8 ISI DT bindings
-  dt-bindings: media: imx8-isi: Use 'port' instead of 'ports' for
-    i.MX8MN
-  media: nxp: Add i.MX8 ISI driver
-
- .../bindings/media/nxp,imx8-isi.yaml          |  178 ++
- MAINTAINERS                                   |    7 +
- drivers/media/platform/nxp/Kconfig            |    2 +
- drivers/media/platform/nxp/Makefile           |    1 +
- drivers/media/platform/nxp/imx8-isi/Kconfig   |   22 +
- drivers/media/platform/nxp/imx8-isi/Makefile  |    8 +
- .../platform/nxp/imx8-isi/imx8-isi-core.c     |  645 +++++++
- .../platform/nxp/imx8-isi/imx8-isi-core.h     |  395 +++++
- .../platform/nxp/imx8-isi/imx8-isi-crossbar.c |  529 ++++++
- .../platform/nxp/imx8-isi/imx8-isi-debug.c    |  109 ++
- .../media/platform/nxp/imx8-isi/imx8-isi-hw.c |  651 +++++++
- .../platform/nxp/imx8-isi/imx8-isi-m2m.c      |  858 ++++++++++
- .../platform/nxp/imx8-isi/imx8-isi-pipe.c     |  867 ++++++++++
- .../platform/nxp/imx8-isi/imx8-isi-regs.h     |  418 +++++
- .../platform/nxp/imx8-isi/imx8-isi-video.c    | 1512 +++++++++++++++++
- 15 files changed, 6202 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
- create mode 100644 drivers/media/platform/nxp/imx8-isi/Kconfig
- create mode 100644 drivers/media/platform/nxp/imx8-isi/Makefile
- create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-core.c
- create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-core.h
- create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-crossbar.c
- create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-debug.c
- create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-hw.c
- create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-m2m.c
- create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-pipe.c
- create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-regs.h
- create mode 100644 drivers/media/platform/nxp/imx8-isi/imx8-isi-video.c
-
+diff --git a/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml b/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
+index 6038b9b5ab36..121594569395 100644
+--- a/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
++++ b/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
+@@ -52,11 +52,21 @@ properties:
+   power-domains:
+     maxItems: 1
+ 
++  port:
++    $ref: /schemas/graph.yaml#/properties/port
++    description: |
++      The port represents the Pixel Link input to the ISI. It shall have a
++      single endpoint. This property is only used for ISI instances with a
++      single port (as in the i.MX8MN). For instances that includes multiple
++      ports, the 'ports' property shall be used instead.
++
+   ports:
+     $ref: /schemas/graph.yaml#/properties/ports
+     description: |
+       Ports represent the Pixel Link inputs to the ISI. Their number and
+-      assignment are model-dependent. Each port shall have a single endpoint.
++      assignment are model-dependent. For ISI instances that have a single
++      port, the 'port' property should be used instead. Each port shall have a
++      single endpoint.
+ 
+ required:
+   - compatible
+@@ -65,7 +75,6 @@ required:
+   - clocks
+   - clock-names
+   - fsl,blk-ctrl
+-  - ports
+ 
+ allOf:
+   - if:
+@@ -77,12 +86,11 @@ allOf:
+       properties:
+         interrupts:
+           maxItems: 1
+-        ports:
+-          properties:
+-            port@0:
+-              description: MIPI CSI-2 RX
+-          required:
+-            - port@0
++        port:
++          description: MIPI CSI-2 RX
++        ports: false
++      required:
++        - port
+ 
+   - if:
+       properties:
+@@ -93,6 +101,7 @@ allOf:
+       properties:
+         interrupts:
+           maxItems: 2
++        port: false
+         ports:
+           properties:
+             port@0:
+@@ -102,6 +111,8 @@ allOf:
+           required:
+             - port@0
+             - port@1
++      required:
++        - ports
+ 
+ additionalProperties: false
+ 
+@@ -122,15 +133,9 @@ examples:
+         fsl,blk-ctrl = <&disp_blk_ctrl>;
+         power-domains = <&disp_blk_ctrl IMX8MN_DISPBLK_PD_ISI>;
+ 
+-        ports {
+-            #address-cells = <1>;
+-            #size-cells = <0>;
+-
+-            port@0 {
+-                reg = <0>;
+-                isi_in: endpoint {
+-                    remote-endpoint = <&mipi_csi_out>;
+-                };
++        port {
++            isi_in: endpoint {
++                remote-endpoint = <&mipi_csi_out>;
+             };
+         };
+     };
 -- 
 Regards,
 
