@@ -2,173 +2,162 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 631D9C54EAA
-	for <linux-media@archiver.kernel.org>; Fri, 27 Jan 2023 20:38:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0A8BC61DA7
+	for <linux-media@archiver.kernel.org>; Fri, 27 Jan 2023 20:39:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231782AbjA0Ui5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 27 Jan 2023 15:38:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43962 "EHLO
+        id S231908AbjA0UjK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 Jan 2023 15:39:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjA0Ui4 (ORCPT
+        with ESMTP id S231783AbjA0UjJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 Jan 2023 15:38:56 -0500
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D89CF2116;
-        Fri, 27 Jan 2023 12:38:55 -0800 (PST)
-Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id AB26D1B002FC;
-        Fri, 27 Jan 2023 22:38:52 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1674851932;
+        Fri, 27 Jan 2023 15:39:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DB9199C3
+        for <linux-media@vger.kernel.org>; Fri, 27 Jan 2023 12:37:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674851870;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5KhyN0Q2sGDJOkmy7tcK0emY6Xv02kvPQJ0s5MeFnl8=;
-        b=RcCwRPhaSCzB4pXWlRwb8SuR0d9NxuDK083T1WbGiZh3BkazsceigYZy2I4vDH4aO3Fcic
-        lpv4c9MgoqOiF9fuv0fiTIUM3AHPSNK2QFJgcBk8CzVHfaoIk6rULXQIPsK7scdCAayPL/
-        tehDTN4sUW1EbL86FWNbY51qh2Tb1lHwGz1Upv002eLLg+szg7rWsRz/vrHeFGz4yfu6L0
-        saxpTTTDJ/X3IA2rXSw6Gt9SHpMjiWALnklPcglY/I0BcyqsAWlmnQb9x93B6foc+iTjEa
-        3DO5c1FPkpLnKOZwg8Y4veXlcomQ3P+D64yxtIkY09YXMyVP4QWHel2Og+zHog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1674851932;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5KhyN0Q2sGDJOkmy7tcK0emY6Xv02kvPQJ0s5MeFnl8=;
-        b=OJ/5cPA8Vv7a5rczNz8/b8aip5kIX7XtkEzgeKcP9UP0isJI8uIJytiiqPlXMv7B15yGco
-        yCEiIWtkPebd93KggYI5ya+HVMghj9cFHB9X+KHL0ULYviFGs0X/ovBlXQX5jq8b+s3AUI
-        jllG5sRs5pwHuKHZSe3NchQ2CHcrg9dQc/ImEHX/bncx0l8+Cn26PQ5Kh8C7djOvmwJvZ7
-        AKKjc6LkmgCMK1jms/j9fJ2i29CLC/Mg/WCDNBeP/KdmuN2GC3LxHwHXEFOMiuATxOjvKt
-        Ua3UTVaLCublKfm1TKkf/bk6kiXjWBYnM8UaMV0JYaDUuwclrzAqxpuLi6+rgA==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1674851932; a=rsa-sha256;
-        cv=none;
-        b=OvijUE//NxPNuR/p/SjvDh2wyEdoWLFhl0edb2Nyl8ZnIVpED/gASxT13MpnEv2FC4OaQi
-        +ZxGGZ3tRuc4vKU/PFo5bnpdDQBntnItWRs7sNvB7qIGZ6GeRndD67ur1xBGwnHGXiKhCt
-        ahnuYogUipyKQBfwV1Cc75I6KpNuWmZWsYe2U065qFXTHwZ72zCnDl+/OaX+3jruhllI2H
-        9Nxtsm190ZHmW6in8AtFnB9N2DORilXMz2MVWKd4n9WNyrJwh+A+CNnUbAlV+8NyK9g27M
-        al8zIk6cmNZQF6Z82IBdjF4J/DMVyneWWi/tP/OemMnI7J8Rlvg36CXQblA46A==
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        bh=xT+sMb53YKOY8Wu0RJ8DpPc3Z6j34v11O/P+urbWZ3o=;
+        b=cenhv1d2mXRAXMxwuGKdlbeyoTMN4VEZY0R6TN7cYBF7SPULEEc9vtMSjjSttFeRQbNh+O
+        LPV3eDl5DWnncDxqdH4Bmh4XYalNY6af8vIBnfhmwqMHAYYP9XJZF/2057MxLBVvc0QeKe
+        TnuzNLM+sjkS19bxIkXL0hIqjzFrciU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-90-c0UUVRjtM-G4j9FEx979tg-1; Fri, 27 Jan 2023 15:37:43 -0500
+X-MC-Unique: c0UUVRjtM-G4j9FEx979tg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 4E61A634C91;
-        Fri, 27 Jan 2023 22:38:40 +0200 (EET)
-Date:   Fri, 27 Jan 2023 22:38:39 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-        Luca Weiss <luca@z3ntu.xyz>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        laurent.pinchart@ideasonboard.com,
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4A82688B783;
+        Fri, 27 Jan 2023 20:37:43 +0000 (UTC)
+Received: from x1.localdomain.com (unknown [10.39.192.53])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C5D1B492C14;
+        Fri, 27 Jan 2023 20:37:39 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Mark Gross <mgross@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Daniel Scally <djrscally@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 1/9] media: dt-bindings: Add OV5670
-Message-ID: <Y9Q2T3h50eudVbbb@valkosipuli.retiisi.eu>
-References: <20230126165909.121302-1-jacopo.mondi@ideasonboard.com>
- <20230126165909.121302-2-jacopo.mondi@ideasonboard.com>
- <482b464b-c5fb-8af2-b0f7-4388fccea3fd@linaro.org>
- <20230127181435.3d5rnrg5omxhn6l7@uno.localdomain>
- <00139f11-76b0-138a-2f7b-c67d149eb25e@linaro.org>
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        platform-driver-x86@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Kate Hsuan <hpa@redhat.com>,
+        Mark Pearson <markpearson@lenovo.com>,
+        Andy Yeh <andy.yeh@intel.com>, Hao Yao <hao.yao@intel.com>,
+        linux-media@vger.kernel.org
+Subject: [PATCH v6 2/5] platform/x86: int3472/discrete: Refactor GPIO to sensor mapping
+Date:   Fri, 27 Jan 2023 21:37:26 +0100
+Message-Id: <20230127203729.10205-3-hdegoede@redhat.com>
+In-Reply-To: <20230127203729.10205-1-hdegoede@redhat.com>
+References: <20230127203729.10205-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00139f11-76b0-138a-2f7b-c67d149eb25e@linaro.org>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Krzysztof,
+Add a helper function to map the type returned by the _DSM
+method to a function name + the default polarity for that function.
 
-On Fri, Jan 27, 2023 at 08:58:20PM +0100, Krzysztof Kozlowski wrote:
-> On 27/01/2023 19:14, Jacopo Mondi wrote:
-> > Hi Krzysztof
-> > 
-> > On Fri, Jan 27, 2023 at 03:19:08PM +0100, Krzysztof Kozlowski wrote:
-> >> On 26/01/2023 17:59, Jacopo Mondi wrote:
-> >>> Add the bindings documentation for Omnivision OV5670 image sensor.
-> >>>
-> >>> Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-> >>> ---
-> >>
-> >> (...)
-> >>
-> >>> +
-> >>> +  dovdd-supply:
-> >>> +    description: Digital I/O circuit power. Typically 2.8V or 1.8V.
-> >>> +
-> >>> +  port:
-> >>> +    $ref: /schemas/graph.yaml#/$defs/port-base
-> >>> +    additionalProperties: false
-> >>> +
-> >>> +    properties:
-> >>> +      endpoint:
-> >>> +        $ref: /schemas/media/video-interfaces.yaml#
-> >>> +        unevaluatedProperties: false
-> >>> +
-> >>> +        properties:
-> >>> +          data-lanes:
-> >>> +            minItems: 1
-> >>> +            maxItems: 2
-> >>> +            items:
-> >>> +              enum: [1, 2]
-> >>> +
-> >>> +          clock-noncontinuous: true
-> >>
-> >> You do not need this. Drop.
-> >>
-> > 
-> > Is this due to "unevaluatedProperties: false" ?
-> > 
-> > I read you recent explanation to a similar question on the Visconti
-> > bindings. Let me summarize my understanding:
-> > 
-> > For a given schema a property could be
-> > - required
-> >         required:
-> >           - foo
-> > 
-> > - optional
-> >         by default with "unevaluatedProperties: false"
-> >         "foo: true" with "additionalProperties: false"
-> > 
-> > - forbidden
-> >         "foo: false" with "unevaluatedProperties: false"
-> >         by default wiht "additionalProperties: false"
-> > 
-> > clock-noncontinuous is defined in video-interfaces.yaml. as I specify
-> > "unevaluatedProperties: false" does it mean
-> > all the properties defined in video-interfaces.yaml are optionally
-> > accepted ? If that's the case that's not what I want as
-> > clock-noncontinuous is -the only- property from that file we want to
-> > accept here (and data-lanes ofc).
-> > 
-> > Should I change "unevaluatedProperties: false" to
-> > "additionalProperties: false" and keep "clock-noncontinuous: true"  ?
-> >
-> 
-> Why would you disallow other properties? Just because driver does not
-> use them? That's not correct, driver change but bindings should stay the
-> same.
+And fold the INT3472_GPIO_TYPE_RESET and INT3472_GPIO_TYPE_POWERDOWN
+cases into a single generic case.
 
-The clock-noncontinuous property is relevant for the hardware. There are
-some properties not listed here that might be relevant (for all camera
-sensors) but most properties in video-interfaces.yaml are not applicable to
-this device.
+This is a preparation patch for further GPIO mapping changes.
 
-I also think is be useful to say what is relevant in DT bindings, as the
-other sources of information left are hardware datasheets (if you have
-access to them) or the driver (which is supposed not to be relevant for the
-bindings).
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+Changes in v3:
+- Add break to default case
 
+Changes in v2:
+- Make the helper function doing the type -> function mapping,
+  also return a default polarity for the function.
+---
+ drivers/platform/x86/intel/int3472/discrete.c | 45 +++++++++++++++----
+ 1 file changed, 36 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/platform/x86/intel/int3472/discrete.c b/drivers/platform/x86/intel/int3472/discrete.c
+index c42c3faa2c32..708d51f9b41d 100644
+--- a/drivers/platform/x86/intel/int3472/discrete.c
++++ b/drivers/platform/x86/intel/int3472/discrete.c
+@@ -188,6 +188,36 @@ static int skl_int3472_map_gpio_to_clk(struct int3472_discrete_device *int3472,
+ 	return 0;
+ }
+ 
++static void int3472_get_func_and_polarity(u8 type, const char **func, u32 *polarity)
++{
++	switch (type) {
++	case INT3472_GPIO_TYPE_RESET:
++		*func = "reset";
++		*polarity = GPIO_ACTIVE_LOW;
++		break;
++	case INT3472_GPIO_TYPE_POWERDOWN:
++		*func = "powerdown";
++		*polarity = GPIO_ACTIVE_LOW;
++		break;
++	case INT3472_GPIO_TYPE_CLK_ENABLE:
++		*func = "clk-enable";
++		*polarity = GPIO_ACTIVE_HIGH;
++		break;
++	case INT3472_GPIO_TYPE_PRIVACY_LED:
++		*func = "privacy-led";
++		*polarity = GPIO_ACTIVE_HIGH;
++		break;
++	case INT3472_GPIO_TYPE_POWER_ENABLE:
++		*func = "power-enable";
++		*polarity = GPIO_ACTIVE_HIGH;
++		break;
++	default:
++		*func = "unknown";
++		*polarity = GPIO_ACTIVE_HIGH;
++		break;
++	}
++}
++
+ /**
+  * skl_int3472_handle_gpio_resources: Map PMIC resources to consuming sensor
+  * @ares: A pointer to a &struct acpi_resource
+@@ -227,6 +257,8 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
+ 	struct acpi_resource_gpio *agpio;
+ 	union acpi_object *obj;
+ 	const char *err_msg;
++	const char *func;
++	u32 polarity;
+ 	int ret;
+ 	u8 type;
+ 
+@@ -250,19 +282,14 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
+ 
+ 	type = obj->integer.value & 0xff;
+ 
++	int3472_get_func_and_polarity(type, &func, &polarity);
++
+ 	switch (type) {
+ 	case INT3472_GPIO_TYPE_RESET:
+-		ret = skl_int3472_map_gpio_to_sensor(int3472, agpio, "reset",
+-						     GPIO_ACTIVE_LOW);
+-		if (ret)
+-			err_msg = "Failed to map reset pin to sensor\n";
+-
+-		break;
+ 	case INT3472_GPIO_TYPE_POWERDOWN:
+-		ret = skl_int3472_map_gpio_to_sensor(int3472, agpio, "powerdown",
+-						     GPIO_ACTIVE_LOW);
++		ret = skl_int3472_map_gpio_to_sensor(int3472, agpio, func, polarity);
+ 		if (ret)
+-			err_msg = "Failed to map powerdown pin to sensor\n";
++			err_msg = "Failed to map GPIO pin to sensor\n";
+ 
+ 		break;
+ 	case INT3472_GPIO_TYPE_CLK_ENABLE:
 -- 
-Kind regards,
+2.39.1
 
-Sakari Ailus
