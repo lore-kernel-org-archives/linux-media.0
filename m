@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0A8BC61DA7
-	for <linux-media@archiver.kernel.org>; Fri, 27 Jan 2023 20:39:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D954EC636CB
+	for <linux-media@archiver.kernel.org>; Fri, 27 Jan 2023 20:39:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231908AbjA0UjK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 27 Jan 2023 15:39:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43772 "EHLO
+        id S231810AbjA0UjL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 Jan 2023 15:39:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231783AbjA0UjJ (ORCPT
+        with ESMTP id S231889AbjA0UjK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 Jan 2023 15:39:09 -0500
+        Fri, 27 Jan 2023 15:39:10 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DB9199C3
-        for <linux-media@vger.kernel.org>; Fri, 27 Jan 2023 12:37:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF0A23DA1
+        for <linux-media@vger.kernel.org>; Fri, 27 Jan 2023 12:37:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674851870;
+        s=mimecast20190719; t=1674851876;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xT+sMb53YKOY8Wu0RJ8DpPc3Z6j34v11O/P+urbWZ3o=;
-        b=cenhv1d2mXRAXMxwuGKdlbeyoTMN4VEZY0R6TN7cYBF7SPULEEc9vtMSjjSttFeRQbNh+O
-        LPV3eDl5DWnncDxqdH4Bmh4XYalNY6af8vIBnfhmwqMHAYYP9XJZF/2057MxLBVvc0QeKe
-        TnuzNLM+sjkS19bxIkXL0hIqjzFrciU=
+        bh=2ppB7ywFgHXA+3xriXOqk+nTwyuMULDNe8dPC5namGk=;
+        b=T6gNtmkvgX2HniHNrHQgy3bwmouvbmMZB0DS+BY3dznzNmmaPlpj/2EKkm+YWRxcTakMi/
+        jlmQriEHCKtxnhhG6yqwkcGdcLKxp5FooWv9buUGkfxJ/WVRIQFpQGoyeC+rNaMJqYD6me
+        EzdQYRtKyBD2V9il6sKVqDjnSRLOfiU=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-90-c0UUVRjtM-G4j9FEx979tg-1; Fri, 27 Jan 2023 15:37:43 -0500
-X-MC-Unique: c0UUVRjtM-G4j9FEx979tg-1
+ us-mta-592-KppIYMjRPSuY3-oFrGq4_g-1; Fri, 27 Jan 2023 15:37:53 -0500
+X-MC-Unique: KppIYMjRPSuY3-oFrGq4_g-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4A82688B783;
-        Fri, 27 Jan 2023 20:37:43 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3410288B77F;
+        Fri, 27 Jan 2023 20:37:52 +0000 (UTC)
 Received: from x1.localdomain.com (unknown [10.39.192.53])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C5D1B492C14;
-        Fri, 27 Jan 2023 20:37:39 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8885D492C18;
+        Fri, 27 Jan 2023 20:37:49 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mark Gross <mgross@linux.intel.com>,
         Andy Shevchenko <andy@kernel.org>,
@@ -52,9 +52,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Mark Pearson <markpearson@lenovo.com>,
         Andy Yeh <andy.yeh@intel.com>, Hao Yao <hao.yao@intel.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH v6 2/5] platform/x86: int3472/discrete: Refactor GPIO to sensor mapping
-Date:   Fri, 27 Jan 2023 21:37:26 +0100
-Message-Id: <20230127203729.10205-3-hdegoede@redhat.com>
+Subject: [PATCH v6 5/5] platform/x86: int3472/discrete: Get the polarity from the _DSM entry
+Date:   Fri, 27 Jan 2023 21:37:29 +0100
+Message-Id: <20230127203729.10205-6-hdegoede@redhat.com>
 In-Reply-To: <20230127203729.10205-1-hdegoede@redhat.com>
 References: <20230127203729.10205-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -64,100 +64,112 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a helper function to map the type returned by the _DSM
-method to a function name + the default polarity for that function.
+According to:
+https://github.com/intel/ipu6-drivers/blob/master/patch/int3472-support-independent-clock-and-LED-gpios-5.17%2B.patch
 
-And fold the INT3472_GPIO_TYPE_RESET and INT3472_GPIO_TYPE_POWERDOWN
-cases into a single generic case.
+Bits 31-24 of the _DSM pin entry integer value codes the active-value,
+that is the actual physical signal (0 or 1) which needs to be output on
+the pin to turn the sensor chip on (to make it active).
 
-This is a preparation patch for further GPIO mapping changes.
+So if bits 31-24 are 0 for a reset pin, then the actual value of the reset
+pin needs to be 0 to take the chip out of reset. IOW in this case the reset
+signal is active-high rather then the default active-low.
+
+And if bits 31-24 are 0 for a clk-en pin then the actual value of the clk
+pin needs to be 0 to enable the clk. So in this case the clk-en signal
+is active-low rather then the default active-high.
+
+IOW if bits 31-24 are 0 for a pin, then the default polarity of the pin
+is inverted.
+
+Add a check for this and also propagate this new polarity to the clock
+registration.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
-Changes in v3:
-- Add break to default case
+ .../platform/x86/intel/int3472/clk_and_regulator.c  |  5 ++++-
+ drivers/platform/x86/intel/int3472/common.h         |  2 +-
+ drivers/platform/x86/intel/int3472/discrete.c       | 13 +++++++++++--
+ 3 files changed, 16 insertions(+), 4 deletions(-)
 
-Changes in v2:
-- Make the helper function doing the type -> function mapping,
-  also return a default polarity for the function.
----
- drivers/platform/x86/intel/int3472/discrete.c | 45 +++++++++++++++----
- 1 file changed, 36 insertions(+), 9 deletions(-)
-
+diff --git a/drivers/platform/x86/intel/int3472/clk_and_regulator.c b/drivers/platform/x86/intel/int3472/clk_and_regulator.c
+index 626e5e86f4e0..1086c3d83494 100644
+--- a/drivers/platform/x86/intel/int3472/clk_and_regulator.c
++++ b/drivers/platform/x86/intel/int3472/clk_and_regulator.c
+@@ -87,7 +87,7 @@ static const struct clk_ops skl_int3472_clock_ops = {
+ };
+ 
+ int skl_int3472_register_clock(struct int3472_discrete_device *int3472,
+-			       struct acpi_resource_gpio *agpio)
++			       struct acpi_resource_gpio *agpio, u32 polarity)
+ {
+ 	char *path = agpio->resource_source.string_ptr;
+ 	struct clk_init_data init = {
+@@ -105,6 +105,9 @@ int skl_int3472_register_clock(struct int3472_discrete_device *int3472,
+ 		return dev_err_probe(int3472->dev, PTR_ERR(int3472->clock.ena_gpio),
+ 				     "getting clk-enable GPIO\n");
+ 
++	if (polarity == GPIO_ACTIVE_LOW)
++		gpiod_toggle_active_low(int3472->clock.ena_gpio);
++
+ 	/* Ensure the pin is in output mode and non-active state */
+ 	gpiod_direction_output(int3472->clock.ena_gpio, 0);
+ 
+diff --git a/drivers/platform/x86/intel/int3472/common.h b/drivers/platform/x86/intel/int3472/common.h
+index 0d4fa7d00b5f..61688e450ce5 100644
+--- a/drivers/platform/x86/intel/int3472/common.h
++++ b/drivers/platform/x86/intel/int3472/common.h
+@@ -122,7 +122,7 @@ int skl_int3472_get_sensor_adev_and_name(struct device *dev,
+ 					 const char **name_ret);
+ 
+ int skl_int3472_register_clock(struct int3472_discrete_device *int3472,
+-			       struct acpi_resource_gpio *agpio);
++			       struct acpi_resource_gpio *agpio, u32 polarity);
+ void skl_int3472_unregister_clock(struct int3472_discrete_device *int3472);
+ 
+ int skl_int3472_register_regulator(struct int3472_discrete_device *int3472,
 diff --git a/drivers/platform/x86/intel/int3472/discrete.c b/drivers/platform/x86/intel/int3472/discrete.c
-index c42c3faa2c32..708d51f9b41d 100644
+index b7752c2b798d..96963e30ab6c 100644
 --- a/drivers/platform/x86/intel/int3472/discrete.c
 +++ b/drivers/platform/x86/intel/int3472/discrete.c
-@@ -188,6 +188,36 @@ static int skl_int3472_map_gpio_to_clk(struct int3472_discrete_device *int3472,
- 	return 0;
- }
- 
-+static void int3472_get_func_and_polarity(u8 type, const char **func, u32 *polarity)
-+{
-+	switch (type) {
-+	case INT3472_GPIO_TYPE_RESET:
-+		*func = "reset";
-+		*polarity = GPIO_ACTIVE_LOW;
-+		break;
-+	case INT3472_GPIO_TYPE_POWERDOWN:
-+		*func = "powerdown";
-+		*polarity = GPIO_ACTIVE_LOW;
-+		break;
-+	case INT3472_GPIO_TYPE_CLK_ENABLE:
-+		*func = "clk-enable";
-+		*polarity = GPIO_ACTIVE_HIGH;
-+		break;
-+	case INT3472_GPIO_TYPE_PRIVACY_LED:
-+		*func = "privacy-led";
-+		*polarity = GPIO_ACTIVE_HIGH;
-+		break;
-+	case INT3472_GPIO_TYPE_POWER_ENABLE:
-+		*func = "power-enable";
-+		*polarity = GPIO_ACTIVE_HIGH;
-+		break;
-+	default:
-+		*func = "unknown";
-+		*polarity = GPIO_ACTIVE_HIGH;
-+		break;
-+	}
-+}
-+
- /**
-  * skl_int3472_handle_gpio_resources: Map PMIC resources to consuming sensor
-  * @ares: A pointer to a &struct acpi_resource
-@@ -227,6 +257,8 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
+@@ -220,11 +220,11 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
+ 	struct int3472_discrete_device *int3472 = data;
  	struct acpi_resource_gpio *agpio;
  	union acpi_object *obj;
++	u8 active_value, type;
  	const char *err_msg;
-+	const char *func;
-+	u32 polarity;
+ 	const char *func;
+ 	u32 polarity;
  	int ret;
- 	u8 type;
+-	u8 type;
  
-@@ -250,19 +282,14 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
+ 	if (!acpi_gpio_get_io_resource(ares, &agpio))
+ 		return 1;
+@@ -248,6 +248,15 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
  
- 	type = obj->integer.value & 0xff;
+ 	int3472_get_func_and_polarity(type, &func, &polarity);
  
-+	int3472_get_func_and_polarity(type, &func, &polarity);
++	/* If bits 31-24 of the _DSM entry are all 0 then the signal is inverted */
++	active_value = obj->integer.value >> 24;
++	if (!active_value)
++		polarity ^= GPIO_ACTIVE_LOW;
++
++	dev_dbg(int3472->dev, "%s %s pin %d active-%s\n", func,
++		agpio->resource_source.string_ptr, agpio->pin_table[0],
++		(polarity == GPIO_ACTIVE_HIGH) ? "high" : "low");
 +
  	switch (type) {
  	case INT3472_GPIO_TYPE_RESET:
--		ret = skl_int3472_map_gpio_to_sensor(int3472, agpio, "reset",
--						     GPIO_ACTIVE_LOW);
--		if (ret)
--			err_msg = "Failed to map reset pin to sensor\n";
--
--		break;
  	case INT3472_GPIO_TYPE_POWERDOWN:
--		ret = skl_int3472_map_gpio_to_sensor(int3472, agpio, "powerdown",
--						     GPIO_ACTIVE_LOW);
-+		ret = skl_int3472_map_gpio_to_sensor(int3472, agpio, func, polarity);
- 		if (ret)
--			err_msg = "Failed to map powerdown pin to sensor\n";
-+			err_msg = "Failed to map GPIO pin to sensor\n";
+@@ -257,7 +266,7 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
  
  		break;
  	case INT3472_GPIO_TYPE_CLK_ENABLE:
+-		ret = skl_int3472_register_clock(int3472, agpio);
++		ret = skl_int3472_register_clock(int3472, agpio, polarity);
+ 		if (ret)
+ 			err_msg = "Failed to register clock\n";
+ 
 -- 
 2.39.1
 
