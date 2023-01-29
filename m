@@ -2,38 +2,38 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61209C636D6
-	for <linux-media@archiver.kernel.org>; Sun, 29 Jan 2023 09:43:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A656C05027
+	for <linux-media@archiver.kernel.org>; Sun, 29 Jan 2023 09:43:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232789AbjA2JnE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 29 Jan 2023 04:43:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51416 "EHLO
+        id S233855AbjA2JnG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 29 Jan 2023 04:43:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232759AbjA2Jm6 (ORCPT
+        with ESMTP id S232698AbjA2Jm6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 29 Jan 2023 04:42:58 -0500
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E206EA2;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10ED4EEC;
         Sun, 29 Jan 2023 01:42:53 -0800 (PST)
 Received: from [192.168.178.23] (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id DA49CCDE29;
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 64425CD5C9;
         Sun, 29 Jan 2023 09:42:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1674985372; bh=fIplo9JpImpQeisw7bapzCgXeb9xPVwhFZKge8ht7KI=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=PAjFT6mwjS3L63nLMj10WYEUkN6ll5AQt/IXGx9zhBGCAMY7TUoZiYvqDmZ8eeJhX
-         rbF8T3QfrTBf8d/CNrsNSuKi73B+OFlRqJVSXMWbF3gg3m8nhNv+gRUPxA7UHez2gJ
-         G05jw65ZTIAMg/zrkpfTy7pIpkOU9OLfrlUlOE2s=
+        t=1674985371; bh=5cZ3PSR8RMhBCiVLHiSjlSfXJ/EKM4Jw/LuRNYgOOw4=;
+        h=From:Subject:Date:To:Cc;
+        b=kdlwVaiUdlXqsxb8G7+c7YgWAIwzgXyrvC0bDVhTI94ptxg7o9blo1ATM6X4FjpT1
+         HeiZPi3CSu1QMzzcx5LLkDJW3lGhj7alJS9C1S7/M35nrA9EOA2XxR8r6PNWhzJ2rv
+         cARsORt3Qdmdr9Vls1+p+239/hmZdeb/KkTN8d1A=
 From:   Luca Weiss <luca@z3ntu.xyz>
-Date:   Sun, 29 Jan 2023 10:42:36 +0100
-Subject: [PATCH 2/4] media: i2c: ov2685: Add print for power on write
- failed
+Subject: [PATCH 0/4] Improvements for OmniVision OV2685 driver
+Date:   Sun, 29 Jan 2023 10:42:34 +0100
+Message-Id: <20230129-ov2685-improvements-v1-0-f281bd49399c@z3ntu.xyz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230129-ov2685-improvements-v1-2-f281bd49399c@z3ntu.xyz>
-References: <20230129-ov2685-improvements-v1-0-f281bd49399c@z3ntu.xyz>
-In-Reply-To: <20230129-ov2685-improvements-v1-0-f281bd49399c@z3ntu.xyz>
+X-B4-Tracking: v=1; b=H4sIAIo/1mMC/x2OQQ6CMBAAv0J6dkm7KIJfMR7askgP22LXNBrC3
+ y0eJ5lJZlNCOZCoW7OpTCVISLGCOTXKLzY+CcJUWaHGThscIRXshwsEXnMqxBTfAk53bvKz8Th
+ qVUtnhcBlG/1ytC+fGFh4GK9n6FvTfsFbpmzxkNdMc/j8F+6Pff8B+CvB5JIAAAA=
 To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Shunqian Zheng <zhengsq@rock-chips.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -41,52 +41,46 @@ To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
 Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Luca Weiss <luca@z3ntu.xyz>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=852; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=fIplo9JpImpQeisw7bapzCgXeb9xPVwhFZKge8ht7KI=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBj1j+YkQM6n+QsokVKigwFK5cBsCkYGjl+8gx6I8bu
- mnqR84qJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCY9Y/mAAKCRBy2EO4nU3XVtWbEA
- CFHa4eVdFWJ8fw5jhJA6GUKKjvGnkKmp8SPepUjCxRSp9SWvzZG4B+Am4tgUAjz303KwyiYd4CEetP
- Qhd5pPtPWmq+lxt39gc7nltKjLAwqktTtOrH3F3gytBi9+6cozRA9BFxlNknhGXWxa8ipGge41NC0r
- 01OIpLD+LWRCMUdUs8XzzOV/3+M5a+Yk0z7vNPM7b/IZvwyjIF3Q3VUM1PgJi4rX/71+ZZQJtByJUU
- oY0NJRMThJmIWu9ez69YQI5f8jtuLE+0o4yiuTEyFH7/ShdILqfmGMeBn+H0UFASF75p8DSonirkZr
- +67nc3SR15+azeZPYP7nChALEaN+nW7nv5u5a2keQ/AVAkKyEV7pgm30+Or1Aa5UivFQirbTdod951
- 7S1mwnCj6Nh7Z7pOynxvP1F9+mRUj54sWiMmCUqHay1SP+ZuvmJghCnWgkNe7YdJKXuec7UMqK3LKj
- wHgDqsC00j7L+bcg5yWDIUfqvAgv7dethCmvKqSAPYZTHqt/vJSGeCMs5C1OrnRM1yIfgOjUoNUeKQ
- mpg82wl6evHnTZVKYYQJP1QOZvDb5LcRomULoVjeCyn2czk+s5H241OgvHlq2SYEufGsj8yKtqTpZ+
- zwsXfkNdfS7Cm+JfgRUaTP+w/KXWS24yarh5RKm1LLCwcxN2p8C0YdFmASLg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=859; i=luca@z3ntu.xyz;
+ h=from:subject:message-id; bh=5cZ3PSR8RMhBCiVLHiSjlSfXJ/EKM4Jw/LuRNYgOOw4=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBj1j+WxAnPEP89xWG0wDUYNJdiMsDrJZusltKTlGLo
+ HUwbw2qJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCY9Y/lgAKCRBy2EO4nU3XVlXiEA
+ DLq7jWibpR9b2CjyyJ3EMWjP1Gbcg695AmImGxRk2VLJTk7VA1F6ac1kh2IHSzrU6F7f3fZgvxpCed
+ bARa7d6iRdgwQz1Kn5bNUPoWqdh/YK0MzdghP1DjpCq0o+Yu0k0/MHErbDGmNyAS5g660YQtoc5K7B
+ 1QymTw3HdWfaRR9mHfxf81Iw7btWcCQBWV3ktD7W4L3qL7F8rnqpJIooaoyx4TZnp/6WylPUSyadS1
+ SOKr2NhRv9AIjc2UUTJbTo2K3wzEm/3mzBgTTpxubM8Zc8LqLZWyH34JP4SC0sAn9n9ax6aH1dMx83
+ 9cqQaNMVxdS3P4InoEj2p+qocgDMUxQ2Wc0m7cE1xGHuIAS6HTdbAydsO/kS2f4SS7Iqwqz5OuJdQb
+ +V0cpZqUi0BFDvgcyouYVsm5qMxq2MGt607NY3XoOyP8JhywG0lRa6bAfE3vmMFucacLrs5TZInQ3e
+ +0nO9brIHF4GQyznbviNlow545Lzeaj1qM4F/Me+yh5+409qLBUT6fZ/Ygu2ah4U4W8ArPyvVBqpBg
+ z3uwichgMSrX4W8A5KI+4xU2JjdWVjL0CbPoeWdWFewX9wosw0PY97yZKxYzf/RGWX8y569d1EGUO9
+ L6Y+7DNFz2dvaQqYz0KjrBwu42kUXEtak3DROU3p2LCLDQf4Om3ZTpr03cOg==
 X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
  fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If the sensor doens't power up correctly, for example due to incorrect
-devicetree description, the power up i2c writes will fail.
+The first two patches make the sensor work in my setup, and adds a
+missing error print that can happen when the dts is wrong.
 
-Add an error print for this situation.
+The last two patches add extra API support for orientation/rotation and
+get_selection that is wanted by libcamera to function correctly.
 
 Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
- drivers/media/i2c/ov2685.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Luca Weiss (4):
+      media: i2c: ov2685: Make reset gpio optional
+      media: i2c: ov2685: Add print for power on write failed
+      media: i2c: ov2685: Add controls from fwnode
+      media: i2c: ov2685: Add .get_selection() support
 
-diff --git a/drivers/media/i2c/ov2685.c b/drivers/media/i2c/ov2685.c
-index a422f4c8a2eb..844a91dbc8e5 100644
---- a/drivers/media/i2c/ov2685.c
-+++ b/drivers/media/i2c/ov2685.c
-@@ -419,8 +419,10 @@ static int __ov2685_power_on(struct ov2685 *ov2685)
- 	 * writing register before .s_stream() as a workaround
- 	 */
- 	ret = ov2685_write_array(ov2685->client, ov2685->cur_mode->reg_list);
--	if (ret)
-+	if (ret) {
-+		dev_err(dev, "Failed to set regs for power on\n");
- 		goto disable_supplies;
-+	}
- 
- 	return 0;
- 
+ drivers/media/i2c/ov2685.c | 78 ++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 76 insertions(+), 2 deletions(-)
+---
+base-commit: b4c97ca9bb2381580a132a6c71b0e93ac6a4524a
+change-id: 20230129-ov2685-improvements-b03bdcf1c290
 
+Best regards,
 -- 
-2.39.1
+Luca Weiss <luca@z3ntu.xyz>
 
