@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 941B8C54EED
-	for <linux-media@archiver.kernel.org>; Mon, 30 Jan 2023 13:58:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 230CCC636CD
+	for <linux-media@archiver.kernel.org>; Mon, 30 Jan 2023 13:58:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236757AbjA3N6e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Jan 2023 08:58:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38840 "EHLO
+        id S236787AbjA3N6f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Jan 2023 08:58:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234538AbjA3N6c (ORCPT
+        with ESMTP id S236722AbjA3N6e (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Jan 2023 08:58:32 -0500
+        Mon, 30 Jan 2023 08:58:34 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8C43A869;
-        Mon, 30 Jan 2023 05:58:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B3F2799E;
+        Mon, 30 Jan 2023 05:58:15 -0800 (PST)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:e655:2335:9172:6e39])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A18BB6602E28;
-        Mon, 30 Jan 2023 13:58:11 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 99C456602ECB;
+        Mon, 30 Jan 2023 13:58:12 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675087092;
-        bh=WeghlRFY57k/XRhbZSebcHWkeNrEWgqxdzHNHRFL4B0=;
+        s=mail; t=1675087093;
+        bh=C/QAyRDA/waqPf4kFAS8tK6asJ/IhGRhX08Vka5WQCc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hGHd/1fIa/fiHQw+gZPozUKn1REan6qdtb2P6kIlNO4kg+or97jIq2XqgEUwU975u
-         XEdyIDwriPgCR3LD2apWphe27j+VO3ltuVg+lxcA2aI+gkpP2187UK29+Mh/eTTrM6
-         t2CPcDF6Yxb2+vm58ObPFWOVkyJBenqtaXQ4lsTvu1Y9SjdKeKho+n2a8tu5G5TuLb
-         /ABGmjrSfiOJkJd6uV3eLVFKlAiyIWsE4d58j3AHTugp1LaCXyYEdf5y6bqk2WU08g
-         +HuHpVhNRrWP7Lmph1kBwARKm8K8ULuKVEIAuBFumRk8Ax1g+31VFuh2gva4L+scvK
-         7zqI/LGJDUj8w==
+        b=SfUSiJ2wJQ24d6ulRQN2KZk741WuDEwIFzdvGLpIrVhYp0K9qLF3a3YKV+fxA313D
+         9umQx9ogVFNwH31/1Uh1VVmbwyQICualFayd0be7aPpbtW6EED/+12WNMzVF3R+BRz
+         rhkm0iTWl1bBNf6OMt3E19vu5DM76y2MxuYKUO0yX/dProNS+SxIQsH+BjB59KmqSR
+         j1L0YvApI6cAviPm8YvkwvCkWJTkavUiBwD/GHCSdhfROXL1WrBUlCz/QV0V8QndOs
+         e5LdNh4r6oXwkw1tr1U8eIFZyue8SQv3gXv8K5ucNbv3b6TlLbqmknOBs34Y1JLP3x
+         4EHxw5Hj8KzJg==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
         mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
@@ -41,9 +41,9 @@ Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v6 1/5] media: verisilicon: Do not set context src/dst formats in reset functions
-Date:   Mon, 30 Jan 2023 14:57:58 +0100
-Message-Id: <20230130135802.744743-2-benjamin.gaignard@collabora.com>
+Subject: [PATCH v6 3/5] media: verisilicon: Do not set ctx->bit_depth in hantro_try_ctrl()
+Date:   Mon, 30 Jan 2023 14:58:00 +0100
+Message-Id: <20230130135802.744743-4-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230130135802.744743-1-benjamin.gaignard@collabora.com>
 References: <20230130135802.744743-1-benjamin.gaignard@collabora.com>
@@ -53,51 +53,78 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Setting context source and destination formats should only be done
-in hantro_set_fmt_out() and hantro_set_fmt_cap() after check that
-the targeted queue is not busy.
-Remove these calls from hantro_reset_encoded_fmt() and
-hantro_reset_raw_fmt() to clean the driver.
+In hantro_try_ctrl() we should only check the values inside
+control parameters and not set ctx->bit_depth. That must
+be done in controls set function.
+Create a set control function for hevc where ctx->bit_depth is
+set at the right time.
 
 Fixes: dc39473d0340 ("media: hantro: imx8m: Enable 10bit decoding")
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/media/platform/verisilicon/hantro_v4l2.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ .../media/platform/verisilicon/hantro_drv.c   | 27 ++++++++++++++++---
+ 1 file changed, 24 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
-index 2c7a805289e7..33cb865238de 100644
---- a/drivers/media/platform/verisilicon/hantro_v4l2.c
-+++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
-@@ -381,13 +381,10 @@ hantro_reset_encoded_fmt(struct hantro_ctx *ctx)
+diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
+index 8cb4a68c9119..715075f15596 100644
+--- a/drivers/media/platform/verisilicon/hantro_drv.c
++++ b/drivers/media/platform/verisilicon/hantro_drv.c
+@@ -274,8 +274,6 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
+ 		if (sps->bit_depth_luma_minus8 != 0 && sps->bit_depth_luma_minus8 != 2)
+ 			/* Only 8-bit and 10-bit are supported */
+ 			return -EINVAL;
+-
+-		ctx->bit_depth = sps->bit_depth_luma_minus8 + 8;
+ 	} else if (ctrl->id == V4L2_CID_STATELESS_VP9_FRAME) {
+ 		const struct v4l2_ctrl_vp9_frame *dec_params = ctrl->p_new.p_vp9_frame;
  
- 	vpu_fmt = hantro_get_default_fmt(ctx, true);
+@@ -324,6 +322,24 @@ static int hantro_vp9_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	return 0;
+ }
  
--	if (ctx->is_encoder) {
--		ctx->vpu_dst_fmt = vpu_fmt;
-+	if (ctx->is_encoder)
- 		fmt = &ctx->dst_fmt;
--	} else {
--		ctx->vpu_src_fmt = vpu_fmt;
-+	else
- 		fmt = &ctx->src_fmt;
--	}
++static int hantro_hevc_s_ctrl(struct v4l2_ctrl *ctrl)
++{
++	struct hantro_ctx *ctx;
++
++	ctx = container_of(ctrl->handler,
++			   struct hantro_ctx, ctrl_handler);
++
++	switch (ctrl->id) {
++	case V4L2_CID_STATELESS_HEVC_SPS:
++		ctx->bit_depth = ctrl->p_new.p_hevc_sps->bit_depth_luma_minus8 + 8;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
+ static const struct v4l2_ctrl_ops hantro_ctrl_ops = {
+ 	.try_ctrl = hantro_try_ctrl,
+ };
+@@ -336,6 +352,11 @@ static const struct v4l2_ctrl_ops hantro_vp9_ctrl_ops = {
+ 	.s_ctrl = hantro_vp9_s_ctrl,
+ };
  
- 	hantro_reset_fmt(fmt, vpu_fmt);
- 	fmt->width = vpu_fmt->frmsize.min_width;
-@@ -407,11 +404,9 @@ hantro_reset_raw_fmt(struct hantro_ctx *ctx)
- 	raw_vpu_fmt = hantro_get_default_fmt(ctx, false);
- 
- 	if (ctx->is_encoder) {
--		ctx->vpu_src_fmt = raw_vpu_fmt;
- 		raw_fmt = &ctx->src_fmt;
- 		encoded_fmt = &ctx->dst_fmt;
- 	} else {
--		ctx->vpu_dst_fmt = raw_vpu_fmt;
- 		raw_fmt = &ctx->dst_fmt;
- 		encoded_fmt = &ctx->src_fmt;
- 	}
++static const struct v4l2_ctrl_ops hantro_hevc_ctrl_ops = {
++	.try_ctrl = hantro_try_ctrl,
++	.s_ctrl = hantro_hevc_s_ctrl,
++};
++
+ #define HANTRO_JPEG_ACTIVE_MARKERS	(V4L2_JPEG_ACTIVE_MARKER_APP0 | \
+ 					 V4L2_JPEG_ACTIVE_MARKER_COM | \
+ 					 V4L2_JPEG_ACTIVE_MARKER_DQT | \
+@@ -470,7 +491,7 @@ static const struct hantro_ctrl controls[] = {
+ 		.codec = HANTRO_HEVC_DECODER,
+ 		.cfg = {
+ 			.id = V4L2_CID_STATELESS_HEVC_SPS,
+-			.ops = &hantro_ctrl_ops,
++			.ops = &hantro_hevc_ctrl_ops,
+ 		},
+ 	}, {
+ 		.codec = HANTRO_HEVC_DECODER,
 -- 
 2.34.1
 
