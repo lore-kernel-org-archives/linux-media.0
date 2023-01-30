@@ -2,171 +2,111 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70CDCC636CB
-	for <linux-media@archiver.kernel.org>; Mon, 30 Jan 2023 14:20:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90606C54EED
+	for <linux-media@archiver.kernel.org>; Mon, 30 Jan 2023 15:59:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237570AbjA3OUQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Jan 2023 09:20:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33254 "EHLO
+        id S237555AbjA3P7W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Jan 2023 10:59:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237694AbjA3OTv (ORCPT
+        with ESMTP id S237769AbjA3P7I (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Jan 2023 09:19:51 -0500
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084F53F28B;
-        Mon, 30 Jan 2023 06:18:34 -0800 (PST)
-Received: from booty.fritz.box (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id 7FD83100013;
-        Mon, 30 Jan 2023 14:17:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1675088278;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hDiV5rOlFdW2m46RMT95urn/gnlTWYvRe5STpBeX4qE=;
-        b=dTaZ8ekiaoFzA+GugG7iQ4Xe6kD5t4varRI3pqUp4Q7RP1J8/w/XYJ571hQdL/RUtFsiXj
-        E3r4mXwheiX11D8+PPevN0da7Mofffbao/J+goXMsSht6DPOg+fp8fWisdKlmc+j1Mj7Go
-        ecMMPXTQTfX/qYiUGiDX18m9cSjHJqiEyvnkHKF4C3vkue3mnAdx/BPplpu9ZZFfJvgE9V
-        LEO9sR5sYH3GK2f3FWgr0TmJ2BORM6GM/yCoqPZheAPyr2OdXNllzQDgRE4O5U71CfWKML
-        vgGTagCPTBJMFJsvc5Yayq/iWEpM5n958HfJeY5InGiYgXNS2EgKaLarjdk56Q==
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Richard Leitner <richard.leitner@skidata.com>
-Subject: [PATCH v4 20/21] staging: media: tegra-video: add H/V flip controls
-Date:   Mon, 30 Jan 2023 15:16:02 +0100
-Message-Id: <20230130141603.323221-21-luca.ceresoli@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230130141603.323221-1-luca.ceresoli@bootlin.com>
-References: <20230130141603.323221-1-luca.ceresoli@bootlin.com>
+        Mon, 30 Jan 2023 10:59:08 -0500
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D153F286;
+        Mon, 30 Jan 2023 07:58:42 -0800 (PST)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-1631b928691so15508195fac.11;
+        Mon, 30 Jan 2023 07:58:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=92ylG2q5d+cXOP0ReRMncsJUB/Zg6KaFUynLvEqS9XA=;
+        b=GxqCXAFdNRUNfkOQ6x2LF0tuNWhroSu/zjFqsNQjWTfB7uoICx1Huxu2kyHFVGCzfD
+         Vgjpp9k42+7TYt3ObUd4D5Eh1s9dYFSu7ZhImvmRRulVUMPyt9IbnYXP1taHn5boku6V
+         65YzkgWshH6c/JmumSj5dG8Gd3KiKJvFOoUvbOUGFYElEq/fjsasDIb/Y/q3YPGIvYvd
+         mqnQE+L7752S19qSbbAQk16sBwA1lx2nQIkTuw2fiakOKnXL/zm/nGb2Oo4UNcEfX9Tv
+         In28WgzpGC0D8YQjolmPiK5coLurlEeUuhS+t2/lxCFg7v043iW/flXdtMPfvAqt/Mpj
+         Fnmw==
+X-Gm-Message-State: AFqh2koGI7zxAaoy6+d8wTvKkhqmoQ/vU/rStQ+osiC92jRW2alYb0dp
+        zzjUghaYyo1YeNBqUq36Ug==
+X-Google-Smtp-Source: AMrXdXt0IHRcFx9GapnPz7re2QJTCPhvFjUUyqmVAx1CEICu0Q4iLGY8886mGxNbCmnlazAHZIoeJw==
+X-Received: by 2002:a05:687c:209:b0:15f:2e5:96ae with SMTP id ax9-20020a05687c020900b0015f02e596aemr19945434oac.27.1675094321901;
+        Mon, 30 Jan 2023 07:58:41 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id e8-20020a9d5608000000b0066b9a6bf3bcsm5526341oti.12.2023.01.30.07.58.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 07:58:41 -0800 (PST)
+Received: (nullmailer pid 2722384 invoked by uid 1000);
+        Mon, 30 Jan 2023 15:58:40 -0000
+Date:   Mon, 30 Jan 2023 09:58:40 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        chiranjeevi.rapolu@intel.com, luca@z3ntu.xyz,
+        krzysztof.kozlowski+dt@linaro.org,
+        laurent.pinchart@ideasonboard.com, sakari.ailus@iki.fi,
+        mchehab@kernel.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v6.1] media: dt-bindings: Add OV5670
+Message-ID: <20230130155840.GA2706990-robh@kernel.org>
+References: <20230126165909.121302-2-jacopo.mondi@ideasonboard.com>
+ <20230128112736.8000-1-jacopo.mondi@ideasonboard.com>
+ <b4794490-b059-373a-dec0-58fcd2344f6f@linaro.org>
+ <20230129121132.uamuvywdsuah5ivn@uno.localdomain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230129121132.uamuvywdsuah5ivn@uno.localdomain>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Tegra20 can do horizontal and vertical image flip, but Tegra210 cannot
-(either the hardware, or this driver).
+On Sun, Jan 29, 2023 at 01:11:32PM +0100, Jacopo Mondi wrote:
+> On Sun, Jan 29, 2023 at 12:40:03PM +0100, Krzysztof Kozlowski wrote:
+> > On 28/01/2023 12:27, Jacopo Mondi wrote:
+> > > Add the bindings documentation for Omnivision OV5670 image sensor.
+> > >
+> > > Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+> > > ---
+> > > v6->6.1
+> > > - Use additionalProperties: false for endpoint properties from
+> > >   video-interfaces.yaml
+> > > - List 'remote-endpoint' among the accepted endpoint properties
+> > >   now that we use additionalProperties: false
+> >
+> > b4 diff '20230128112736.8000-1-jacopo.mondi@ideasonboard.com'
+> > Could not create fake-am range for lower series v1
+> >
+> > Can you send patches in a way it does not break out workflows? Why
+> > making our review process more difficult?
+> 
+> Because it's a nit on a 10 patches series with no other changes
+> requested ?
 
-In preparation to adding Tegra20 support, add a flag in struct tegra_vi_soc
-so the generic vi.c code knows whether the flip controls should be added or
-not.
+So? Think of patch series as an 'email transport' for your git branches. 
+If you rebase your branch, that's a whole new branch to send.
 
-Also provide a generic implementation that simply sets two flags in the
-channel struct. The Tegra20 implementation will enable flipping at stream
-start based on those flags.
+> What is difficult exactly ?
 
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+In addition to 'b4 diff', if a maintainer is applying this series, for a 
+v7 they just do:
 
----
+b4 shazam msgid-of-v7
 
-Changed in v4:
- - Added review tags
+For v6.1, they do:
 
-No changes in v3
-No changes in v2
----
- drivers/staging/media/tegra-video/vi.c | 14 +++++++++++++-
- drivers/staging/media/tegra-video/vi.h |  8 ++++++++
- 2 files changed, 21 insertions(+), 1 deletion(-)
+b4 shazam msgid-of-v6
+git rebase -i ...
+<stop on patch 1>
+git reset --hard HEAD^
+b4 shazam msgid-of-v6.1
+git rebase --continue
 
-diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
-index 4a066b61ab8e..d1c6877163c2 100644
---- a/drivers/staging/media/tegra-video/vi.c
-+++ b/drivers/staging/media/tegra-video/vi.c
-@@ -29,7 +29,7 @@
- #include "vi.h"
- #include "video.h"
- 
--#define MAX_CID_CONTROLS		1
-+#define MAX_CID_CONTROLS		3
- 
- /**
-  * struct tegra_vi_graph_entity - Entity in the video graph
-@@ -893,6 +893,12 @@ static int vi_s_ctrl(struct v4l2_ctrl *ctrl)
- 	case V4L2_CID_TEGRA_SYNCPT_TIMEOUT_RETRY:
- 		chan->syncpt_timeout_retry = ctrl->val;
- 		break;
-+	case V4L2_CID_HFLIP:
-+		chan->hflip = ctrl->val;
-+		break;
-+	case V4L2_CID_VFLIP:
-+		chan->vflip = ctrl->val;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -964,6 +970,12 @@ static int tegra_channel_setup_ctrl_handler(struct tegra_vi_channel *chan)
- 		v4l2_ctrl_handler_free(&chan->ctrl_handler);
- 		return ret;
- 	}
-+
-+	if (chan->vi->soc->has_h_v_flip) {
-+		v4l2_ctrl_new_std(&chan->ctrl_handler, &vi_ctrl_ops, V4L2_CID_HFLIP, 0, 1, 1, 0);
-+		v4l2_ctrl_new_std(&chan->ctrl_handler, &vi_ctrl_ops, V4L2_CID_VFLIP, 0, 1, 1, 0);
-+	}
-+
- #endif
- 
- 	/* setup the controls */
-diff --git a/drivers/staging/media/tegra-video/vi.h b/drivers/staging/media/tegra-video/vi.h
-index 0503eb678556..8fa817757059 100644
---- a/drivers/staging/media/tegra-video/vi.h
-+++ b/drivers/staging/media/tegra-video/vi.h
-@@ -74,6 +74,7 @@ struct tegra_vi_ops {
-  * @hw_revision: VI hw_revision
-  * @vi_max_channels: supported max streaming channels
-  * @vi_max_clk_hz: VI clock max frequency
-+ * @has_h_v_flip: the chip can do H adn V flip, and the driver implements it
-  */
- struct tegra_vi_soc {
- 	const struct tegra_video_format *video_formats;
-@@ -83,6 +84,7 @@ struct tegra_vi_soc {
- 	u32 hw_revision;
- 	unsigned int vi_max_channels;
- 	unsigned int vi_max_clk_hz;
-+	bool has_h_v_flip:1;
- };
- 
- /**
-@@ -170,6 +172,9 @@ struct tegra_vi {
-  * @syncpt_timeout_retry: syncpt timeout retry count for the capture
-  * @pg_mode: test pattern generator mode (disabled/direct/patch)
-  * @notifier: V4L2 asynchronous subdevs notifier
-+ *
-+ * @hflip: Horizontal flip is enabled
-+ * @vflip: Vertical flip is enabled
-  */
- struct tegra_vi_channel {
- 	struct list_head list;
-@@ -218,6 +223,9 @@ struct tegra_vi_channel {
- 	enum tegra_vi_pg_mode pg_mode;
- 
- 	struct v4l2_async_notifier notifier;
-+
-+	bool hflip:1;
-+	bool vflip:1;
- };
- 
- /**
--- 
-2.34.1
+Which one makes the maintainer's life easier?
 
+If it's a CI job trying to apply and test this, there's no way it's 
+going to do the second case.
+
+Rob
