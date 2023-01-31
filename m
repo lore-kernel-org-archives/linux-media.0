@@ -2,63 +2,63 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40475C636CD
-	for <linux-media@archiver.kernel.org>; Tue, 31 Jan 2023 19:21:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B36E3C636CC
+	for <linux-media@archiver.kernel.org>; Tue, 31 Jan 2023 19:21:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbjAaTVV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Jan 2023 14:21:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37118 "EHLO
+        id S231676AbjAaTVW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Jan 2023 14:21:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbjAaTVG (ORCPT
+        with ESMTP id S231142AbjAaTVM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 Jan 2023 14:21:06 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A44599AF
-        for <linux-media@vger.kernel.org>; Tue, 31 Jan 2023 11:20:58 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id q10so15219661wrm.4
-        for <linux-media@vger.kernel.org>; Tue, 31 Jan 2023 11:20:58 -0800 (PST)
+        Tue, 31 Jan 2023 14:21:12 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18EFF59B4C
+        for <linux-media@vger.kernel.org>; Tue, 31 Jan 2023 11:21:04 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so13257517wmb.2
+        for <linux-media@vger.kernel.org>; Tue, 31 Jan 2023 11:21:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=raspberrypi.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=W5McuJ2hRZrWx+uYtLO8QBzTJ9fuESjuMdU73e0TzLA=;
-        b=s6sgjx2jimyUaoKyGGZXhTNlC4TcrIfwNDF1wpvcBNLh1IaOYAAhsK7LXT45TB3R0D
-         eyAk523tRxkVx3w00erIRhkjhUWGsa5RM56UzC1wfsy7OE9LsUgNRVFYd45gBPTd3b1S
-         /LSBZpR0DotPJTNPQk+YTmzEmlN2qFy90/W3d439E4SG1W7yv4rpqBjhbGm6ntu+HWWZ
-         KKnMA3d6+02Zqk65duVThhkCtDGsBPYaTJOKWoTsORO7iMKpHbWdIe5zRz4CbZJ5I88Q
-         b7MVKxJabV28zZr637rrFvA+7Ib69QZwfIszLGq2lQ9EtjummTCbIboypRtfJPBehTPn
-         AVGw==
+        bh=9iqMwjkZPhZJ3cGG7p2ATQbb1Iz8vPEA/Svjw84DMf8=;
+        b=T0l7WtiHYwPy9jMqOnQzIz7GdDoXkLt1eZMkX8cxkp1OoefmCtMeHwzymfUF0FkfFx
+         SKvdg/1xTvh69NCpC156rBZW/n5yS+PIm/KfIIJ7kozPqv6JOBGgYy4PpX1OrDy9xf7/
+         u8eYphYEvwa2mw0ypyb5yYjouiIcFUDRLm02O2oQzHcrejS6riAH0r+XJZ/5eO94irAj
+         R2GXe0nNkikQBWSS86Tpc2Oyt7sYUHiC96eUOX54b9jv49fgIBC5BezWRwZf3sh0yTCY
+         Mn7lsgmyrh4saOpC2+0j1ArT4ILP3kd1MuJOvfVg+w8+qzQote2yoNOEYB8emYTD500g
+         b7HQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=W5McuJ2hRZrWx+uYtLO8QBzTJ9fuESjuMdU73e0TzLA=;
-        b=AoPCJwSXqtM7gL9Bc1KU5MCj7f+F8ON3ImOew7Mt4HwrMs4prbVuInH5wj+zRoyCSi
-         pMtiLxuoKWE/ys8oCh2yMOY0w/IzHuxSOqiFpqNWCyOKjSQTgniA7PtmnfhooWKJyyLJ
-         IlI3cGIe+ouolMIFCB3nmG81piluDuh+oidlgyX3d/BPKRLNQE6UUe+Knc831cKO5XYA
-         aDe0z1I6Eub26f6zB5XZiqYCwFrjx0FKHWDzyHnOmieYMpCez3oDfAn3sleHPOlgo9v3
-         b8QCoYpTo2h2Lmnwd3zW2Hx2kSgdI1WheqxzGTj2ln6P59mbAKNFiEkQRP/sga7+Lv69
-         RtLw==
-X-Gm-Message-State: AO0yUKUpP1iHb91RBhydRkZKPRVXbg89i4d3VOF40WgmYuyCxaJK1la3
-        p8Gjnksqbd7oqdC8T+3Rz7lQ86n1jOP5BFWS
-X-Google-Smtp-Source: AK7set/JPjn9n9VoNB2/5M4o5xd5uwP8v8rDeJDJvAFuOglgmYRV1aGJXAaZNaQv9qJKRIMAcWawCA==
-X-Received: by 2002:adf:c754:0:b0:2ba:dce5:ee28 with SMTP id b20-20020adfc754000000b002badce5ee28mr164864wrh.18.1675192858175;
-        Tue, 31 Jan 2023 11:20:58 -0800 (PST)
+        bh=9iqMwjkZPhZJ3cGG7p2ATQbb1Iz8vPEA/Svjw84DMf8=;
+        b=zTscYsrzVcP6L/PzmIrsmzbqu+MPkqKvsXgF+38j/qjMtixa0tuap+KC9Ax0lEEJfi
+         uedWU3dMWghPbnpvRa0qoREE87ah4EA8gAE51y1yY7C5h7Tv2otxG24l/jrsPVBfekOI
+         PCm/boVyaaAqF1N3Pblv18JfOj3oI+mWodeh3wIV+HFU09w39VgTWObgTyuZD7N9H7UK
+         uEzX3/xERNy0xBtVUjxarfp7Edt7Kz0fSJOHbxxCXymH36icHXe6B7mFslJfeQwbjZwo
+         aIWC8RCQiODveiQk0+RlDXX/NVnMcflxEZhnQj8GZF04MkAnwwr2MGnCQZGdOFwfqzum
+         shDQ==
+X-Gm-Message-State: AO0yUKUNalSiJnKJMStJpesBNVDiRhMMUueIR+1rG94SFspH/3a1ulKW
+        f7yUqNKvxIsFIh8eDPhRXI1sLQ==
+X-Google-Smtp-Source: AK7set8Cg5DRumtVJEsvTwN8HIWFiGyugNdx8HFgOxfLP5KNV2a79LDC93so9I6tArlGohLuN7yZdA==
+X-Received: by 2002:a05:600c:2057:b0:3dd:1b3c:1ca2 with SMTP id p23-20020a05600c205700b003dd1b3c1ca2mr5882381wmg.22.1675192862669;
+        Tue, 31 Jan 2023 11:21:02 -0800 (PST)
 Received: from dave-Ubuntu2204.. (194.15.169.217.in-addr.arpa. [217.169.15.194])
-        by smtp.googlemail.com with ESMTPSA id x9-20020a05600c21c900b003dc434b39c7sm3527512wmj.0.2023.01.31.11.20.56
+        by smtp.googlemail.com with ESMTPSA id x9-20020a05600c21c900b003dc434b39c7sm3527512wmj.0.2023.01.31.11.21.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 11:20:57 -0800 (PST)
+        Tue, 31 Jan 2023 11:21:02 -0800 (PST)
 From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
 To:     Manivannan Sadhasivam <mani@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         linux-media@vger.kernel.org
 Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH 06/11] media: i2c: imx290: Use CSI timings as per datasheet
-Date:   Tue, 31 Jan 2023 19:20:11 +0000
-Message-Id: <20230131192016.3476937-7-dave.stevenson@raspberrypi.com>
+Subject: [PATCH 09/11] media: i2c: imx290: Remove duplicated write to IMX290_CTRL_07
+Date:   Tue, 31 Jan 2023 19:20:14 +0000
+Message-Id: <20230131192016.3476937-10-dave.stevenson@raspberrypi.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230131192016.3476937-1-dave.stevenson@raspberrypi.com>
 References: <20230131192016.3476937-1-dave.stevenson@raspberrypi.com>
@@ -68,190 +68,29 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit "98e0500eadb7 media: i2c: imx290: Add configurable link frequency
-and pixel rate" added support for the increased link frequencies
-on 2 data lanes, but didn't update the CSI timing registers in
-accordance with the datasheet.
+IMX290_CTRL_07 was written from both imx290_global_init_settings
+and imx290_1080p_settings and imx290_720p_settings.
 
-Use the specified settings.
+Remove it from imx290_global_init_settings as the setting varies
+based on the mode.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 ---
- drivers/media/i2c/imx290.c | 126 +++++++++++++++++++++++++++++++------
- 1 file changed, 106 insertions(+), 20 deletions(-)
+ drivers/media/i2c/imx290.c | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-index 6bcfa535872f..9ddd6382b127 100644
+index 3413d83369ba..5202ef3cc3e6 100644
 --- a/drivers/media/i2c/imx290.c
 +++ b/drivers/media/i2c/imx290.c
-@@ -174,6 +174,18 @@ struct imx290_mode {
- 	u32 data_size;
- };
+@@ -219,7 +219,6 @@ static inline struct imx290 *to_imx290(struct v4l2_subdev *_sd)
+  */
  
-+struct imx290_csi_cfg {
-+	u16 repitition;
-+	u16 tclkpost;
-+	u16 thszero;
-+	u16 thsprepare;
-+	u16 tclktrail;
-+	u16 thstrail;
-+	u16 tclkzero;
-+	u16 tclkprepare;
-+	u16 tlpx;
-+};
-+
- struct imx290 {
- 	struct device *dev;
- 	struct clk *xclk;
-@@ -273,16 +285,6 @@ static const struct imx290_regval imx290_1080p_settings[] = {
- 	{ IMX290_INCKSEL4, 0x01 },
- 	{ IMX290_INCKSEL5, 0x1a },
- 	{ IMX290_INCKSEL6, 0x1a },
--	/* data rate settings */
--	{ IMX290_REPETITION, 0x10 },
--	{ IMX290_TCLKPOST, 87 },
--	{ IMX290_THSZERO, 55 },
--	{ IMX290_THSPREPARE, 31 },
--	{ IMX290_TCLKTRAIL, 31 },
--	{ IMX290_THSTRAIL, 31 },
--	{ IMX290_TCLKZERO, 119 },
--	{ IMX290_TCLKPREPARE, 31 },
--	{ IMX290_TLPX, 23 },
- };
- 
- static const struct imx290_regval imx290_720p_settings[] = {
-@@ -298,16 +300,6 @@ static const struct imx290_regval imx290_720p_settings[] = {
- 	{ IMX290_INCKSEL4, 0x01 },
- 	{ IMX290_INCKSEL5, 0x1a },
- 	{ IMX290_INCKSEL6, 0x1a },
--	/* data rate settings */
--	{ IMX290_REPETITION, 0x10 },
--	{ IMX290_TCLKPOST, 79 },
--	{ IMX290_THSZERO, 47 },
--	{ IMX290_THSPREPARE, 23 },
--	{ IMX290_TCLKTRAIL, 23 },
--	{ IMX290_THSTRAIL, 23 },
--	{ IMX290_TCLKZERO, 87 },
--	{ IMX290_TCLKPREPARE, 23 },
--	{ IMX290_TLPX, 23 },
- };
- 
- static const struct imx290_regval imx290_10bit_settings[] = {
-@@ -328,6 +320,58 @@ static const struct imx290_regval imx290_12bit_settings[] = {
- 	{ IMX290_CSI_DT_FMT, IMX290_CSI_DT_FMT_RAW12 },
- };
- 
-+static const struct imx290_csi_cfg imx290_csi_222_75mhz = {
-+	/* 222.25MHz or 445.5Mbit/s per lane */
-+	.repitition = 0x10,
-+	.tclkpost = 87,
-+	.thszero = 55,
-+	.thsprepare = 31,
-+	.tclktrail = 31,
-+	.thstrail = 31,
-+	.tclkzero = 119,
-+	.tclkprepare = 31,
-+	.tlpx = 23,
-+};
-+
-+static const struct imx290_csi_cfg imx290_csi_445_5mhz = {
-+	/* 445.5MHz or 891Mbit/s per lane */
-+	.repitition = 0x00,
-+	.tclkpost = 119,
-+	.thszero = 103,
-+	.thsprepare = 71,
-+	.tclktrail = 55,
-+	.thstrail = 63,
-+	.tclkzero = 255,
-+	.tclkprepare = 63,
-+	.tlpx = 55,
-+};
-+
-+static const struct imx290_csi_cfg imx290_csi_148_5mhz = {
-+	/* 148.5MHz or 297Mbit/s per lane */
-+	.repitition = 0x10,
-+	.tclkpost = 79,
-+	.thszero = 47,
-+	.thsprepare = 23,
-+	.tclktrail = 23,
-+	.thstrail = 23,
-+	.tclkzero = 87,
-+	.tclkprepare = 23,
-+	.tlpx = 23,
-+};
-+
-+static const struct imx290_csi_cfg imx290_csi_297mhz = {
-+	/* 297MHz or 594Mbit/s per lane */
-+	.repitition = 0x00,
-+	.tclkpost = 103,
-+	.thszero = 87,
-+	.thsprepare = 47,
-+	.tclktrail = 39,
-+	.thstrail = 47,
-+	.tclkzero = 191,
-+	.tclkprepare = 47,
-+	.tlpx = 39,
-+};
-+
- /* supported link frequencies */
- #define FREQ_INDEX_1080P	0
- #define FREQ_INDEX_720P		1
-@@ -536,6 +580,42 @@ static int imx290_set_black_level(struct imx290 *imx290,
- 			    black_level >> (16 - bpp), err);
- }
- 
-+static int imx290_set_csi_config(struct imx290 *imx290)
-+{
-+	const s64 *link_freqs = imx290_link_freqs_ptr(imx290);
-+	const struct imx290_csi_cfg *csi_cfg;
-+	int ret = 0;
-+
-+	switch (link_freqs[imx290->current_mode->link_freq_index]) {
-+	case 445500000:
-+		csi_cfg = &imx290_csi_445_5mhz;
-+		break;
-+	case 297000000:
-+		csi_cfg = &imx290_csi_297mhz;
-+		break;
-+	case 222750000:
-+		csi_cfg = &imx290_csi_222_75mhz;
-+		break;
-+	case 148500000:
-+		csi_cfg = &imx290_csi_148_5mhz;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	imx290_write(imx290, IMX290_REPETITION, csi_cfg->repitition, &ret);
-+	imx290_write(imx290, IMX290_TCLKPOST, csi_cfg->tclkpost, &ret);
-+	imx290_write(imx290, IMX290_THSZERO, csi_cfg->thszero, &ret);
-+	imx290_write(imx290, IMX290_THSPREPARE, csi_cfg->thsprepare, &ret);
-+	imx290_write(imx290, IMX290_TCLKTRAIL, csi_cfg->tclktrail, &ret);
-+	imx290_write(imx290, IMX290_THSTRAIL, csi_cfg->thstrail, &ret);
-+	imx290_write(imx290, IMX290_TCLKZERO, csi_cfg->tclkzero, &ret);
-+	imx290_write(imx290, IMX290_TCLKPREPARE, csi_cfg->tclkprepare, &ret);
-+	imx290_write(imx290, IMX290_TLPX, csi_cfg->tlpx, &ret);
-+
-+	return ret;
-+}
-+
- static int imx290_setup_format(struct imx290 *imx290,
- 			       const struct v4l2_mbus_framefmt *format)
- {
-@@ -748,6 +828,12 @@ static int imx290_start_streaming(struct imx290 *imx290,
- 		return ret;
- 	}
- 
-+	ret = imx290_set_csi_config(imx290);
-+	if (ret < 0) {
-+		dev_err(imx290->dev, "Could not set csi cfg\n");
-+		return ret;
-+	}
-+
- 	/* Apply the register values related to current frame format */
- 	format = v4l2_subdev_get_pad_format(&imx290->sd, state, 0);
- 	ret = imx290_setup_format(imx290, format);
+ static const struct imx290_regval imx290_global_init_settings[] = {
+-	{ IMX290_CTRL_07, IMX290_WINMODE_1080P },
+ 	{ IMX290_EXTCK_FREQ, 0x2520 },
+ 	{ IMX290_WINWV_OB, 12 },
+ 	{ IMX290_WINPH, 0 },
 -- 
 2.34.1
 
