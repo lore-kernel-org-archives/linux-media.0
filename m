@@ -2,63 +2,63 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F737C636D4
-	for <linux-media@archiver.kernel.org>; Tue, 31 Jan 2023 19:21:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 980A5C38142
+	for <linux-media@archiver.kernel.org>; Tue, 31 Jan 2023 19:21:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbjAaTVW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Jan 2023 14:21:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
+        id S231297AbjAaTVX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Jan 2023 14:21:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231671AbjAaTVK (ORCPT
+        with ESMTP id S231789AbjAaTVP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 Jan 2023 14:21:10 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE70C59B6B
-        for <linux-media@vger.kernel.org>; Tue, 31 Jan 2023 11:21:01 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so13257480wmb.2
-        for <linux-media@vger.kernel.org>; Tue, 31 Jan 2023 11:21:01 -0800 (PST)
+        Tue, 31 Jan 2023 14:21:15 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979A8589A6
+        for <linux-media@vger.kernel.org>; Tue, 31 Jan 2023 11:21:05 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id o18so5740593wrj.3
+        for <linux-media@vger.kernel.org>; Tue, 31 Jan 2023 11:21:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=raspberrypi.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PjJEsG45mLeURzUgdM3mVE0Cbt3Vk1VNsiHoyn2V0po=;
-        b=LhiHpu/Xxe2cXMWELkR0k8wPd4/a1iJMw5Lo5G4WXskT6rP0AjdGaBGHuPdu5f5NhZ
-         w4sNr6IwTApF1nNeCkfQKv/dlMWPENrjnEDDZu4u3JwDMq5QX6wCm4ri32IPCEZYTP9S
-         3u6RaLrvXmJHnsZzAIEyAs+G6TvyfREnBg3iA1cNijxWwpfn26FY0L8cmawkptqGAeAV
-         m+ODfv9jEPVNCgJIvQH0Xl79nFqMypp0vAZ27OBjjkWnCWNs5At+LzmPqAnpEn01MTBN
-         ITkLjTB8pK1Sfa2qfzFkxWE8NCaI/s+89jFM1WRjaolQdafBrOuMfSBRMqdltAGQeFze
-         t4WA==
+        bh=LmLsXD5N2VDr1p+YGeciMrKRrG4q8uLP5itzXU5xuBQ=;
+        b=D0nUoP7nGU/qfQRqaky69JGzpST8Q/zfsZsQcNWVc95sTyuB9RPYNkzjQPjX+sh+Bo
+         0aS8+6o1muPhhRAol2AGKT1JRlnJZyfMbnN+eXZnwHikTSCMzEQtVHJgtxPIrS6/9oTQ
+         9ODplCwG7Ig5K1+PxLW4kmqQD4eq/s2BUjPUQiTsWdQSRX1dofFEDie+4JRxRHxFHTx5
+         fA1IkYu94KPLJR8ZzkJ3tYTTX8uAErA0QJ23UvihoNfNEcnlTFZXkH9I/OfRizR88fYh
+         vRFGkQBBLEfZBcVZHvioEpEijasMP9cMmgapgDC0pYgRu2cQWYR+W/TMec7KvWzmnUz/
+         oczw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PjJEsG45mLeURzUgdM3mVE0Cbt3Vk1VNsiHoyn2V0po=;
-        b=HsqF9kpJv+80aFH9h1ZduvCWO9RycIffI/vDC0bgZuOGUSjdUGLr98afTWNvdeJOFT
-         6Yf5x2LDaGoPttcysUzPN/HJoh5+Q6r702jiYvuyEU8VaPQJ9SnzU5RbqOZMYMlf1ux2
-         +U4vaikc7WAhImOioQTK6rCeEzsNzfI7R7X4+yOBliClFCJ+Nx0arAesWhPju/AwFw/C
-         Ss3EGUIs/d3yQyc/b096IgUGluvDhAepPjkGW1vg3wBg5LpcuXc5Z0JS1GfojOD0nc9i
-         OA1VUQpNMdFDtNCiCCRHa6x38pRw+rTOomOuzeeeknkXjIbvQDKpSopB9ZoobVLawE8P
-         lPDA==
-X-Gm-Message-State: AFqh2krDKvNmySZsEg3oTtGPSy97GmzinsnsTkLSUPkg52Tqp4t67qK4
-        8LD1qH4oNCtXN3cE4HNM7Yu8Kc01be7Lkmm7
-X-Google-Smtp-Source: AMrXdXvrisYkELLUBE+tC5UKwZz6TOE/OH86R8JVDdxGgbVmknQ0jNYoRrd1kozq+QFBqxKohAREtQ==
-X-Received: by 2002:a05:600c:35c1:b0:3db:1424:e781 with SMTP id r1-20020a05600c35c100b003db1424e781mr49509908wmq.23.1675192861270;
-        Tue, 31 Jan 2023 11:21:01 -0800 (PST)
+        bh=LmLsXD5N2VDr1p+YGeciMrKRrG4q8uLP5itzXU5xuBQ=;
+        b=iE2bNCJ94wBGY0yO51c+vBpIwnA8cEnSV7N/y/Orq2NQUX7YBQq47jSnCuAGpksj1q
+         IUCEEZsKrhEdm6xSlirhSysNOr0MCA6nKywHC5XyEK4SCyR2a6xYICY1KimzXYrVwTeG
+         K8vETRjt9bn/+ozb0ETl83/pvZ/+HLBf5nrJ/uOkZoM/Zz841/wPDDmHpOxn2YIvFyUh
+         cwcrlBqD8IUa2jeaaGinc/y1v0/HAwnPJGT8prVbHM1vgVUY2K1M4aaS0i9bZ+JrAgEG
+         6rR6/bEL8dhyax+/imzIl7kC30kMWKwLQgAtWUt82ASwcS3LKtkyinoyKZW/s8WdvQMD
+         o71Q==
+X-Gm-Message-State: AO0yUKWyzXOhLJ1bEkgkuql9ICKGQU9oRdQgbSo8WZ+fMWsteIKTZ1NJ
+        EuFKFSj+/JuSR+qJT+upSmDxJA==
+X-Google-Smtp-Source: AK7set+uIJJ+7/+aeAvoU8mxo0eKFi9pqg2ptdHLMBtGKodzXMdWoXPKvxkGM0A2p3btjj48zYxBrw==
+X-Received: by 2002:a5d:634b:0:b0:2bf:b0ff:737b with SMTP id b11-20020a5d634b000000b002bfb0ff737bmr3537255wrw.36.1675192864141;
+        Tue, 31 Jan 2023 11:21:04 -0800 (PST)
 Received: from dave-Ubuntu2204.. (194.15.169.217.in-addr.arpa. [217.169.15.194])
-        by smtp.googlemail.com with ESMTPSA id x9-20020a05600c21c900b003dc434b39c7sm3527512wmj.0.2023.01.31.11.20.59
+        by smtp.googlemail.com with ESMTPSA id x9-20020a05600c21c900b003dc434b39c7sm3527512wmj.0.2023.01.31.11.21.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 11:21:00 -0800 (PST)
+        Tue, 31 Jan 2023 11:21:03 -0800 (PST)
 From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
 To:     Manivannan Sadhasivam <mani@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         linux-media@vger.kernel.org
 Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH 08/11] media: i2c: imx290: Convert V4L2_CID_VBLANK to read/write
-Date:   Tue, 31 Jan 2023 19:20:13 +0000
-Message-Id: <20230131192016.3476937-9-dave.stevenson@raspberrypi.com>
+Subject: [PATCH 10/11] media: i2c: imx290: Add support for 74.25MHz external clock
+Date:   Tue, 31 Jan 2023 19:20:15 +0000
+Message-Id: <20230131192016.3476937-11-dave.stevenson@raspberrypi.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230131192016.3476937-1-dave.stevenson@raspberrypi.com>
 References: <20230131192016.3476937-1-dave.stevenson@raspberrypi.com>
@@ -68,195 +68,263 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The driver exposed V4L2_CID_HBLANK as a read only control to allow
-for exposure calculations and determination of the frame rate.
+The sensor supports either a 37.125 or 74.25MHz external, but
+the driver only supported 37.125MHz.
 
-Convert to a read/write control so that the frame rate can be
-controlled.
-V4L2_CID_VBLANK also sets the limits for the exposure control,
-therefore exposure ranges have to be updated when vblank changes.
-
-This also updates the default VMAX in 720p mode from 1125 to
-750 to achieve 60fps and follow the datasheet.
+Add the relevant register configuration for either clock
+frequency option.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 ---
- drivers/media/i2c/imx290.c | 57 ++++++++++++++++++++++++++++++--------
- 1 file changed, 45 insertions(+), 12 deletions(-)
+ drivers/media/i2c/imx290.c | 120 +++++++++++++++++++++++++++++++------
+ 1 file changed, 103 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-index 9006be6e5e7c..3413d83369ba 100644
+index 5202ef3cc3e6..7f6746f74040 100644
 --- a/drivers/media/i2c/imx290.c
 +++ b/drivers/media/i2c/imx290.c
-@@ -46,6 +46,7 @@
- #define IMX290_BLKLEVEL					IMX290_REG_16BIT(0x300a)
- #define IMX290_GAIN					IMX290_REG_8BIT(0x3014)
- #define IMX290_VMAX					IMX290_REG_24BIT(0x3018)
-+#define IMX290_VMAX_MAX					0x3ffff
- #define IMX290_HMAX					IMX290_REG_16BIT(0x301c)
- #define IMX290_HMAX_MAX					0xffff
- #define IMX290_SHS1					IMX290_REG_24BIT(0x3020)
-@@ -106,8 +107,6 @@
+@@ -102,6 +102,7 @@
+ #define IMX290_TCLKPREPARE				IMX290_REG_16BIT(0x3452)
+ #define IMX290_TLPX					IMX290_REG_16BIT(0x3454)
+ #define IMX290_X_OUT_SIZE				IMX290_REG_16BIT(0x3472)
++#define IMX290_INCKSEL7					IMX290_REG_8BIT(0x3480)
+ 
+ #define IMX290_PGCTRL_REGEN				BIT(0)
  #define IMX290_PGCTRL_THRU				BIT(1)
- #define IMX290_PGCTRL_MODE(n)				((n) << 4)
+@@ -159,11 +160,27 @@
  
--#define IMX290_VMAX_DEFAULT				1125
--
- #define IMX290_PIXEL_RATE				148500000
- /*
-  * The IMX290 pixel array is organized as follows:
-@@ -169,6 +168,7 @@ struct imx290_mode {
- 	u32 width;
- 	u32 height;
- 	u32 hmax_min;
-+	u32 vmax_min;
- 	u8 link_freq_index;
+ #define IMX290_NUM_SUPPLIES				3
  
- 	const struct imx290_regval *data;
-@@ -206,6 +206,7 @@ struct imx290 {
- 	struct v4l2_ctrl *link_freq;
- 	struct v4l2_ctrl *hblank;
- 	struct v4l2_ctrl *vblank;
-+	struct v4l2_ctrl *exposure;
++#define CLK_37_125	0
++#define CLK_74_25	1
++#define NUM_CLK		2
++
+ struct imx290_regval {
+ 	u32 reg;
+ 	u32 val;
  };
  
- static inline struct imx290 *to_imx290(struct v4l2_subdev *_sd)
-@@ -219,7 +220,6 @@ static inline struct imx290 *to_imx290(struct v4l2_subdev *_sd)
++/*
++ * Clock configuration for registers INCKSEL1 to INCKSEL6.
++ */
++struct imx290_clk_cfg {
++	u8 incksel1;
++	u8 incksel2;
++	u8 incksel3;
++	u8 incksel4;
++	u8 incksel5;
++	u8 incksel6;
++};
++
+ struct imx290_mode {
+ 	u32 width;
+ 	u32 height;
+@@ -173,6 +190,8 @@ struct imx290_mode {
+ 
+ 	const struct imx290_regval *data;
+ 	u32 data_size;
++
++	const struct imx290_clk_cfg *clk_cfg;
+ };
+ 
+ struct imx290_csi_cfg {
+@@ -191,6 +210,7 @@ struct imx290 {
+ 	struct device *dev;
+ 	struct clk *xclk;
+ 	struct regmap *regmap;
++	u32 xclk_freq;
+ 	u8 nlanes;
+ 	u8 mono;
+ 
+@@ -219,7 +239,6 @@ static inline struct imx290 *to_imx290(struct v4l2_subdev *_sd)
+  */
  
  static const struct imx290_regval imx290_global_init_settings[] = {
- 	{ IMX290_CTRL_07, IMX290_WINMODE_1080P },
--	{ IMX290_VMAX, IMX290_VMAX_DEFAULT },
- 	{ IMX290_EXTCK_FREQ, 0x2520 },
+-	{ IMX290_EXTCK_FREQ, 0x2520 },
  	{ IMX290_WINWV_OB, 12 },
  	{ IMX290_WINPH, 0 },
-@@ -412,6 +412,7 @@ static const struct imx290_mode imx290_modes_2lanes[] = {
- 		.width = 1920,
- 		.height = 1080,
- 		.hmax_min = 2200,
-+		.vmax_min = 1125,
- 		.link_freq_index = FREQ_INDEX_1080P,
- 		.data = imx290_1080p_settings,
- 		.data_size = ARRAY_SIZE(imx290_1080p_settings),
-@@ -420,6 +421,7 @@ static const struct imx290_mode imx290_modes_2lanes[] = {
- 		.width = 1280,
- 		.height = 720,
- 		.hmax_min = 3300,
-+		.vmax_min = 750,
- 		.link_freq_index = FREQ_INDEX_720P,
- 		.data = imx290_720p_settings,
- 		.data_size = ARRAY_SIZE(imx290_720p_settings),
-@@ -431,6 +433,7 @@ static const struct imx290_mode imx290_modes_4lanes[] = {
- 		.width = 1920,
- 		.height = 1080,
- 		.hmax_min = 2200,
-+		.vmax_min = 1125,
- 		.link_freq_index = FREQ_INDEX_1080P,
- 		.data = imx290_1080p_settings,
- 		.data_size = ARRAY_SIZE(imx290_1080p_settings),
-@@ -439,6 +442,7 @@ static const struct imx290_mode imx290_modes_4lanes[] = {
- 		.width = 1280,
- 		.height = 720,
- 		.hmax_min = 3300,
-+		.vmax_min = 750,
- 		.link_freq_index = FREQ_INDEX_720P,
- 		.data = imx290_720p_settings,
- 		.data_size = ARRAY_SIZE(imx290_720p_settings),
-@@ -645,7 +649,7 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
- 					     struct imx290, ctrls);
- 	const struct v4l2_mbus_framefmt *format;
- 	struct v4l2_subdev_state *state;
--	int ret = 0;
-+	int ret = 0, vmax;
- 
- 	/*
- 	 * Return immediately for controls that don't need to be applied to the
-@@ -654,6 +658,18 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
- 	if (ctrl->flags & V4L2_CTRL_FLAG_READ_ONLY)
- 		return 0;
- 
-+	if (ctrl->id == V4L2_CID_VBLANK) {
-+		u32 vmax = ctrl->val + imx290->current_mode->height;
+ 	{ IMX290_WINPV, 0 },
+@@ -269,7 +288,16 @@ static const struct imx290_regval imx290_global_init_settings[] = {
+ 	{ IMX290_REG_8BIT(0x33b0), 0x50 },
+ 	{ IMX290_REG_8BIT(0x33b2), 0x1a },
+ 	{ IMX290_REG_8BIT(0x33b3), 0x04 },
+-	{ IMX290_REG_8BIT(0x3480), 0x49 },
++};
 +
-+		/*
-+		 * Changing vblank changes the allowed range for exposure.
-+		 * We don't supply the current exposure as default here as it
-+		 * may lie outside the new range. We will reset it just below.
-+		 */
-+		__v4l2_ctrl_modify_range(imx290->exposure,
-+					 1, vmax - 2, 1, vmax - 2);
-+	}
++static const struct imx290_regval imx290_37_125mhz_clock[] = {
++	{ IMX290_EXTCK_FREQ, 0x2520 },
++	{ IMX290_INCKSEL7, 0x49 },
++};
 +
- 	/* V4L2 controls values will be applied only when power is already up */
- 	if (!pm_runtime_get_if_in_use(imx290->dev))
- 		return 0;
-@@ -666,9 +682,23 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
- 		ret = imx290_write(imx290, IMX290_GAIN, ctrl->val, NULL);
- 		break;
++static const struct imx290_regval imx290_74_25mhz_clock[] = {
++	{ IMX290_EXTCK_FREQ, 0x4a40 },
++	{ IMX290_INCKSEL7, 0x92 },
+ };
  
-+	case V4L2_CID_VBLANK:
-+		ret = imx290_write(imx290, IMX290_VMAX,
-+				   ctrl->val + imx290->current_mode->height,
-+				   NULL);
-+		/*
-+		 * Due to the way that exposure is programmed in this sensor in
-+		 * relation to VMAX, we have to reprogramme it whenever VMAX is
-+		 * changed.
-+		 * Update ctrl so that the V4L2_CID_EXPOSURE case can refer to
-+		 * it.
-+		 */
-+		ctrl = imx290->exposure;
-+		fallthrough;
- 	case V4L2_CID_EXPOSURE:
-+		vmax = imx290->vblank->val + imx290->current_mode->height;
- 		ret = imx290_write(imx290, IMX290_SHS1,
--				   IMX290_VMAX_DEFAULT - ctrl->val - 1, NULL);
-+				   vmax - ctrl->val - 1, NULL);
- 		break;
+ static const struct imx290_regval imx290_1080p_settings[] = {
+@@ -279,12 +307,6 @@ static const struct imx290_regval imx290_1080p_settings[] = {
+ 	{ IMX290_OPB_SIZE_V, 10 },
+ 	{ IMX290_X_OUT_SIZE, 1920 },
+ 	{ IMX290_Y_OUT_SIZE, 1080 },
+-	{ IMX290_INCKSEL1, 0x18 },
+-	{ IMX290_INCKSEL2, 0x03 },
+-	{ IMX290_INCKSEL3, 0x20 },
+-	{ IMX290_INCKSEL4, 0x01 },
+-	{ IMX290_INCKSEL5, 0x1a },
+-	{ IMX290_INCKSEL6, 0x1a },
+ };
  
- 	case V4L2_CID_TEST_PATTERN:
-@@ -725,13 +755,15 @@ static void imx290_ctrl_update(struct imx290 *imx290,
- {
- 	unsigned int hblank_min = mode->hmax_min - mode->width;
- 	unsigned int hblank_max = IMX290_HMAX_MAX - mode->width;
--	unsigned int vblank = IMX290_VMAX_DEFAULT - mode->height;
-+	unsigned int vblank_min = mode->vmax_min - mode->height;
-+	unsigned int vblank_max = IMX290_VMAX_MAX - mode->height;
+ static const struct imx290_regval imx290_720p_settings[] = {
+@@ -294,12 +316,6 @@ static const struct imx290_regval imx290_720p_settings[] = {
+ 	{ IMX290_OPB_SIZE_V, 4 },
+ 	{ IMX290_X_OUT_SIZE, 1280 },
+ 	{ IMX290_Y_OUT_SIZE, 720 },
+-	{ IMX290_INCKSEL1, 0x20 },
+-	{ IMX290_INCKSEL2, 0x00 },
+-	{ IMX290_INCKSEL3, 0x20 },
+-	{ IMX290_INCKSEL4, 0x01 },
+-	{ IMX290_INCKSEL5, 0x1a },
+-	{ IMX290_INCKSEL6, 0x1a },
+ };
  
- 	__v4l2_ctrl_s_ctrl(imx290->link_freq, mode->link_freq_index);
- 
- 	__v4l2_ctrl_modify_range(imx290->hblank, hblank_min, hblank_max, 1,
- 				 hblank_min);
--	__v4l2_ctrl_modify_range(imx290->vblank, vblank, vblank, 1, vblank);
-+	__v4l2_ctrl_modify_range(imx290->vblank, vblank_min, vblank_max, 1,
-+				 vblank_min);
+ static const struct imx290_regval imx290_10bit_settings[] = {
+@@ -405,6 +421,48 @@ static inline int imx290_link_freqs_num(const struct imx290 *imx290)
+ 		return ARRAY_SIZE(imx290_link_freq_4lanes);
  }
  
- static int imx290_ctrl_init(struct imx290 *imx290)
-@@ -761,9 +793,12 @@ static int imx290_ctrl_init(struct imx290 *imx290)
- 	v4l2_ctrl_new_std(&imx290->ctrls, &imx290_ctrl_ops,
- 			  V4L2_CID_ANALOGUE_GAIN, 0, 100, 1, 0);
++static const struct imx290_clk_cfg imx290_1080p_clock_config[NUM_CLK] = {
++	[CLK_37_125] = {
++		/* 37.125MHz clock config */
++		.incksel1 = 0x18,
++		.incksel2 = 0x03,
++		.incksel3 = 0x20,
++		.incksel4 = 0x01,
++		.incksel5 = 0x1a,
++		.incksel6 = 0x1a,
++	},
++	[CLK_74_25] = {
++		/* 74.25MHz clock config */
++		.incksel1 = 0x0c,
++		.incksel2 = 0x03,
++		.incksel3 = 0x10,
++		.incksel4 = 0x01,
++		.incksel5 = 0x1b,
++		.incksel6 = 0x1b,
++	},
++};
++
++static const struct imx290_clk_cfg imx290_720p_clock_config[NUM_CLK] = {
++	[CLK_37_125] = {
++		/* 37.125MHz clock config */
++		.incksel1 = 0x20,
++		.incksel2 = 0x00,
++		.incksel3 = 0x20,
++		.incksel4 = 0x01,
++		.incksel5 = 0x1a,
++		.incksel6 = 0x1a,
++	},
++	[CLK_74_25] = {
++		/* 74.25MHz clock config */
++		.incksel1 = 0x10,
++		.incksel2 = 0x00,
++		.incksel3 = 0x10,
++		.incksel4 = 0x01,
++		.incksel5 = 0x1b,
++		.incksel6 = 0x1b,
++	},
++};
++
+ /* Mode configs */
+ static const struct imx290_mode imx290_modes_2lanes[] = {
+ 	{
+@@ -415,6 +473,7 @@ static const struct imx290_mode imx290_modes_2lanes[] = {
+ 		.link_freq_index = FREQ_INDEX_1080P,
+ 		.data = imx290_1080p_settings,
+ 		.data_size = ARRAY_SIZE(imx290_1080p_settings),
++		.clk_cfg = imx290_1080p_clock_config,
+ 	},
+ 	{
+ 		.width = 1280,
+@@ -424,6 +483,7 @@ static const struct imx290_mode imx290_modes_2lanes[] = {
+ 		.link_freq_index = FREQ_INDEX_720P,
+ 		.data = imx290_720p_settings,
+ 		.data_size = ARRAY_SIZE(imx290_720p_settings),
++		.clk_cfg = imx290_720p_clock_config,
+ 	},
+ };
  
--	v4l2_ctrl_new_std(&imx290->ctrls, &imx290_ctrl_ops,
--			  V4L2_CID_EXPOSURE, 1, IMX290_VMAX_DEFAULT - 2, 1,
--			  IMX290_VMAX_DEFAULT - 2);
-+	/*
-+	 * Correct range will be determined through imx290_ctrl_update setting
-+	 * V4L2_CID_VBLANK.
-+	 */
-+	imx290->exposure = v4l2_ctrl_new_std(&imx290->ctrls, &imx290_ctrl_ops,
-+					     V4L2_CID_EXPOSURE, 1, 1, 1, 1);
+@@ -436,6 +496,7 @@ static const struct imx290_mode imx290_modes_4lanes[] = {
+ 		.link_freq_index = FREQ_INDEX_1080P,
+ 		.data = imx290_1080p_settings,
+ 		.data_size = ARRAY_SIZE(imx290_1080p_settings),
++		.clk_cfg = imx290_1080p_clock_config,
+ 	},
+ 	{
+ 		.width = 1280,
+@@ -445,6 +506,7 @@ static const struct imx290_mode imx290_modes_4lanes[] = {
+ 		.link_freq_index = FREQ_INDEX_720P,
+ 		.data = imx290_720p_settings,
+ 		.data_size = ARRAY_SIZE(imx290_720p_settings),
++		.clk_cfg = imx290_720p_clock_config,
+ 	},
+ };
  
- 	/*
- 	 * Set the link frequency, pixel rate, horizontal blanking and vertical
-@@ -795,8 +830,6 @@ static int imx290_ctrl_init(struct imx290 *imx290)
+@@ -563,6 +625,23 @@ static int imx290_set_register_array(struct imx290 *imx290,
+ 	return 0;
+ }
  
- 	imx290->vblank = v4l2_ctrl_new_std(&imx290->ctrls, &imx290_ctrl_ops,
- 					   V4L2_CID_VBLANK, 1, 1, 1, 1);
--	if (imx290->vblank)
--		imx290->vblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
++static int imx290_set_clock(struct imx290 *imx290)
++{
++	int clk_idx = (imx290->xclk_freq == 37125000) ? 0 : 1;
++	const struct imx290_mode *mode = imx290->current_mode;
++	const struct imx290_clk_cfg *clk_cfg = &mode->clk_cfg[clk_idx];
++	int ret = 0;
++
++	imx290_write(imx290, IMX290_INCKSEL1, clk_cfg->incksel1, &ret);
++	imx290_write(imx290, IMX290_INCKSEL2, clk_cfg->incksel2, &ret);
++	imx290_write(imx290, IMX290_INCKSEL3, clk_cfg->incksel3, &ret);
++	imx290_write(imx290, IMX290_INCKSEL4, clk_cfg->incksel4, &ret);
++	imx290_write(imx290, IMX290_INCKSEL5, clk_cfg->incksel5, &ret);
++	imx290_write(imx290, IMX290_INCKSEL6, clk_cfg->incksel6, &ret);
++
++	return ret;
++}
++
+ static int imx290_set_data_lanes(struct imx290 *imx290)
+ {
+ 	int ret = 0;
+@@ -863,6 +942,13 @@ static int imx290_start_streaming(struct imx290 *imx290,
+ 		return ret;
+ 	}
  
- 	v4l2_ctrl_new_fwnode_properties(&imx290->ctrls, &imx290_ctrl_ops,
- 					&props);
++	/* Set clock parameters based on mode and xclk */
++	ret = imx290_set_clock(imx290);
++	if (ret < 0) {
++		dev_err(imx290->dev, "Could not set clocks\n");
++		return ret;
++	}
++
+ 	/* Set data lane count */
+ 	ret = imx290_set_data_lanes(imx290);
+ 	if (ret < 0) {
+@@ -1259,14 +1345,14 @@ static int imx290_init_clk(struct imx290 *imx290)
+ 	int ret;
+ 
+ 	ret = fwnode_property_read_u32(dev_fwnode(imx290->dev),
+-				       "clock-frequency", &xclk_freq);
++				       "clock-frequency", &imx290->xclk_freq);
+ 	if (ret) {
+ 		dev_err(imx290->dev, "Could not get xclk frequency\n");
+ 		return ret;
+ 	}
+ 
+-	/* external clock must be 37.125 MHz */
+-	if (xclk_freq != 37125000) {
++	/* external clock must be 37.125 MHz or 74.25MHz */
++	if (imx290->xclk_freq != 37125000 && imx290->xclk_freq != 74250000) {
+ 		dev_err(imx290->dev, "External clock frequency %u is not supported\n",
+ 			xclk_freq);
+ 		return -EINVAL;
 -- 
 2.34.1
 
