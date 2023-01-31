@@ -2,127 +2,139 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A99E0C636CC
-	for <linux-media@archiver.kernel.org>; Tue, 31 Jan 2023 13:01:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9080BC38142
+	for <linux-media@archiver.kernel.org>; Tue, 31 Jan 2023 13:03:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbjAaNBI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Jan 2023 08:01:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35936 "EHLO
+        id S231686AbjAaNDr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Jan 2023 08:03:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjAaNBG (ORCPT
+        with ESMTP id S230481AbjAaNDq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 Jan 2023 08:01:06 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190134C0EF;
-        Tue, 31 Jan 2023 05:01:05 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so12394735wma.1;
-        Tue, 31 Jan 2023 05:01:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VcbQEiUfrn1ZLUYtm1to7N6PATT0Q4d4Al24IcBS9+8=;
-        b=gxbalLRF7g/piLUDzum6ebHhSbBaltk6UMjAP7SzNURpivtTQRNbXwLEF3xjaouFBn
-         jtFHwMyOW0WxQK0V1w2+IWl0yv85YcEJXQf6uPgkCbbSV6zGUMvwpM8jO54q0LJmsfzE
-         Sn+g6BOpSl2VHk6D7eM0XrTl34FLD9+JxoVqEcjU4QX8LfQlYpCbtWtzySRmxaTAeiN2
-         Yho9h0l1V3OoxmRXvtL6RwynC9iju0zES5zGPs6pd2AaktDox1ymMdOjA/tRnwTAIp5L
-         +woUlu2SxAF3KNorJCpALEkhhOF+HRlFpsYDcDjt9frz5AKSF7B80R8n6Bg6o4yi4UAd
-         qz3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VcbQEiUfrn1ZLUYtm1to7N6PATT0Q4d4Al24IcBS9+8=;
-        b=g3ycmcJmGxADuAkDuyk85H444mLRexcacPILOnZo8ThX8ymIvqV535YvN0K3G/wTQD
-         DqhwCN2JXh/s66oK7LkyrOq4VTo803Myx4HAJ2Vahc6Xw5hARylvMuJ69wNhc9eQvhxw
-         duu3daoHEOuBYcOP5fqU7uGF+vmgITpgN1u3qnIqByhSOnuTcOw5fpfX7FADYY+tmZal
-         Qjirwv5dhD8Jo6BIulE6lNJ0VE1JHvbA/zBlPWEbvt2KL2e0CCTQ/tqHiJxvTNe3sVFC
-         AXOuaHP7I9nUKgqp+m0ak8IPNnm3pOLxbzpQOmUkNVdGawxA/U10wWXcfkXUGI5FZ+Sn
-         0m3A==
-X-Gm-Message-State: AFqh2kozHCIpCbdhCY7jkuJRE4Qd55beZonWIOkd+qWskXu7Je4tOzD7
-        RYm4T5NhmM1TBmZYyoqpsv0=
-X-Google-Smtp-Source: AMrXdXuDDJd2SOnxH8EH5v5wZHtF9KUTDRi/lGRngFPYhNv4y5IUyuOEIXA9HCw05LZe4uX1KZugCA==
-X-Received: by 2002:a05:600c:a4e:b0:3db:14d0:65be with SMTP id c14-20020a05600c0a4e00b003db14d065bemr48389876wmq.34.1675170063488;
-        Tue, 31 Jan 2023 05:01:03 -0800 (PST)
-Received: from smtpclient.apple ([167.99.200.149])
-        by smtp.gmail.com with ESMTPSA id g8-20020adfe408000000b002bdda9856b5sm14901344wrm.50.2023.01.31.05.01.01
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 31 Jan 2023 05:01:02 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH] media: rc: add keymap for Beelink Mini MXIII remote
-From:   Christian Hewitt <christianshewitt@gmail.com>
-In-Reply-To: <Y9kJfPqtd98wIQ6r@gofer.mess.org>
-Date:   Tue, 31 Jan 2023 17:00:59 +0400
-Cc:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <34CD7297-AC0A-404D-B90C-D00FA861A43E@gmail.com>
-References: <20230128034117.3983105-1-christianshewitt@gmail.com>
- <6e953652-4a24-6f3c-74e7-07c25fa1c6c1@linaro.org>
- <Y9YwbiJz9vOBejdL@gofer.mess.org> <20230130213020.GA3541260-robh@kernel.org>
- <Y9kJfPqtd98wIQ6r@gofer.mess.org>
-To:     Sean Young <sean@mess.org>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
+        Tue, 31 Jan 2023 08:03:46 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7171210A92;
+        Tue, 31 Jan 2023 05:03:44 -0800 (PST)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:d507:461a:a036:bf89])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id EBE026602EBE;
+        Tue, 31 Jan 2023 13:03:42 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675170223;
+        bh=9xkh7Mz6B7KCpRaWkFO7AHPjQWKFgdQpvDXYN313zu0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=oipKafPzVPw8hqVNYxENXzkcnaBChLBb9p5uLxcXowHc83se6TvPnTtuXiqOY6Pui
+         PnCMBNyqLqSlduR19Hlh5SkhQskD+q8sby5zGWibidnDtFAPWxZZlfYc0e7FwMxs0y
+         FQlK8CHH+Ag/FPnMNBuqJCGL5U5NybJ6uBkPRSGJcfqZ12JdR5Dzi+xMJ8axkxBnWW
+         jJAkxMkp2Kc/IoZh3jAFYP3NEflBhGRM9k2SdQL1KcyNktMyXrMTJLWCBV+6/3vd2D
+         77KKDoBQtctUqfq2sM69aOl1uZCcKLT+dcof7L0pLjv1dGUSNGjbjLEBQNI7sMu+hf
+         Phc63SR015EsA==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.co.uk
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v7 2/5] media: verisilicon: Do not use ctx fields as format storage when resetting
+Date:   Tue, 31 Jan 2023 14:03:24 +0100
+Message-Id: <20230131130327.776899-3-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230131130327.776899-1-benjamin.gaignard@collabora.com>
+References: <20230131130327.776899-1-benjamin.gaignard@collabora.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Source and destination pixel formats fields of context structure should
+not be used as storage when resetting the format.
+Use local variables instead and let hantro_set_fmt_out() and
+hantro_set_fmt_cap() set them correctly later.
 
-> On 31 Jan 2023, at 4:28 pm, Sean Young <sean@mess.org> wrote:
->=20
-> On Mon, Jan 30, 2023 at 03:30:20PM -0600, Rob Herring wrote:
->> On Sun, Jan 29, 2023 at 08:38:06AM +0000, Sean Young wrote:
->>> On Sat, Jan 28, 2023 at 11:11:32AM +0100, Krzysztof Kozlowski wrote:
->>>> On 28/01/2023 04:41, Christian Hewitt wrote:
->>>>> Add a keymap and bindings for the simple IR (NEC) remote used with
->>>>> the Beelink Mini MXIII Android STB device.
->>>>>=20
->>>>> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
->>>>> ---
->>>>> .../devicetree/bindings/media/rc.yaml         |  1 +
->>>>> drivers/media/rc/keymaps/Makefile             |  1 +
->>>>> drivers/media/rc/keymaps/rc-beelink-mxiii.c   | 54 =
-+++++++++++++++++++
->>>>> include/media/rc-map.h                        |  1 +
->>>>> 4 files changed, 57 insertions(+)
->>>>> create mode 100644 drivers/media/rc/keymaps/rc-beelink-mxiii.c
->>>>>=20
->>>>> diff --git a/Documentation/devicetree/bindings/media/rc.yaml =
-b/Documentation/devicetree/bindings/media/rc.yaml
->>>>> index 266f1d5cae51..f390a5d2c82d 100644
->>>>> --- a/Documentation/devicetree/bindings/media/rc.yaml
->>>>> +++ b/Documentation/devicetree/bindings/media/rc.yaml
->>>>> @@ -39,6 +39,7 @@ properties:
->>>>>       - rc-avertv-303
->>>>>       - rc-azurewave-ad-tu700
->>>>>       - rc-beelink-gs1
->>>>> +      - rc-beelink-mxiii
->>>>=20
->>>> Bindings are separate patches. Didn't you get such feedback =
-already?
->>>=20
->>> The only change for new keymaps is an added entry to the rc-map-name =
-enum.
->>> In the past, new keymaps have been accepted with that single line in =
-the
->>> same commit.
->>=20
->> It's been a checkpatch.pl warning since 2018. The separation is so =
-that=20
->> commit messages in the DT only repo[1] make sense.
->=20
-> Ok, makes sense.=20
+Fixes: dc39473d0340 ("media: hantro: imx8m: Enable 10bit decoding")
 
-I will resend v2 series(s) with the bindings separated. Are there any =
-other
-issues to address?
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+---
+ .../media/platform/verisilicon/hantro_v4l2.c  | 40 +++++++++----------
+ 1 file changed, 18 insertions(+), 22 deletions(-)
 
-Christian=
+diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
+index 33cb865238de..e60151a8a401 100644
+--- a/drivers/media/platform/verisilicon/hantro_v4l2.c
++++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+@@ -377,47 +377,43 @@ static void
+ hantro_reset_encoded_fmt(struct hantro_ctx *ctx)
+ {
+ 	const struct hantro_fmt *vpu_fmt;
+-	struct v4l2_pix_format_mplane *fmt;
++	struct v4l2_pix_format_mplane fmt;
+ 
+ 	vpu_fmt = hantro_get_default_fmt(ctx, true);
++	if (!vpu_fmt)
++		return;
+ 
++	hantro_reset_fmt(&fmt, vpu_fmt);
++	fmt.width = vpu_fmt->frmsize.min_width;
++	fmt.height = vpu_fmt->frmsize.min_height;
+ 	if (ctx->is_encoder)
+-		fmt = &ctx->dst_fmt;
+-	else
+-		fmt = &ctx->src_fmt;
+-
+-	hantro_reset_fmt(fmt, vpu_fmt);
+-	fmt->width = vpu_fmt->frmsize.min_width;
+-	fmt->height = vpu_fmt->frmsize.min_height;
+-	if (ctx->is_encoder)
+-		hantro_set_fmt_cap(ctx, fmt);
++		hantro_set_fmt_cap(ctx, &fmt);
+ 	else
+-		hantro_set_fmt_out(ctx, fmt);
++		hantro_set_fmt_out(ctx, &fmt);
+ }
+ 
+ static void
+ hantro_reset_raw_fmt(struct hantro_ctx *ctx)
+ {
+ 	const struct hantro_fmt *raw_vpu_fmt;
+-	struct v4l2_pix_format_mplane *raw_fmt, *encoded_fmt;
++	struct v4l2_pix_format_mplane raw_fmt, *encoded_fmt;
+ 
+ 	raw_vpu_fmt = hantro_get_default_fmt(ctx, false);
++	if (!raw_vpu_fmt)
++		return;
+ 
+-	if (ctx->is_encoder) {
+-		raw_fmt = &ctx->src_fmt;
++	if (ctx->is_encoder)
+ 		encoded_fmt = &ctx->dst_fmt;
+-	} else {
+-		raw_fmt = &ctx->dst_fmt;
++	else
+ 		encoded_fmt = &ctx->src_fmt;
+-	}
+ 
+-	hantro_reset_fmt(raw_fmt, raw_vpu_fmt);
+-	raw_fmt->width = encoded_fmt->width;
+-	raw_fmt->height = encoded_fmt->height;
++	hantro_reset_fmt(&raw_fmt, raw_vpu_fmt);
++	raw_fmt.width = encoded_fmt->width;
++	raw_fmt.height = encoded_fmt->height;
+ 	if (ctx->is_encoder)
+-		hantro_set_fmt_out(ctx, raw_fmt);
++		hantro_set_fmt_out(ctx, &raw_fmt);
+ 	else
+-		hantro_set_fmt_cap(ctx, raw_fmt);
++		hantro_set_fmt_cap(ctx, &raw_fmt);
+ }
+ 
+ void hantro_reset_fmts(struct hantro_ctx *ctx)
+-- 
+2.34.1
+
