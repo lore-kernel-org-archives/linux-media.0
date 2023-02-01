@@ -2,50 +2,50 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55E97C636D7
-	for <linux-media@archiver.kernel.org>; Wed,  1 Feb 2023 21:45:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67DACC636D4
+	for <linux-media@archiver.kernel.org>; Wed,  1 Feb 2023 21:46:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbjBAVp5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Feb 2023 16:45:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
+        id S230487AbjBAVp7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Feb 2023 16:45:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbjBAVpy (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Feb 2023 16:45:54 -0500
+        with ESMTP id S230523AbjBAVp4 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Feb 2023 16:45:56 -0500
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC1966EEB
-        for <linux-media@vger.kernel.org>; Wed,  1 Feb 2023 13:45:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9DB6812D
+        for <linux-media@vger.kernel.org>; Wed,  1 Feb 2023 13:45:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675287951; x=1706823951;
+  t=1675287953; x=1706823953;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=gRnTqFdSnV/PtsbR89EbHPCsvx9fLVJgjrTdVHvFkGQ=;
-  b=TVcy/+/vWPxLt9MSUNep+Gv3vDFyy7WK+ye60Oozojsap7/mUvoMVRdh
-   kkOhW+h8EHPJby8IzHXzT67qDVB49Ss2cCuJ/u3KBrq/Nb7hy1QOVgSCy
-   aA6rYDepQ/rP+ZwK5A9skYztJFXL8qdlaYOBtqi71ZIILl1q3VBmGzdXv
-   WBhhwxL4QT3MYez962bJ2clA9iMdZ9LR0bPAKjhQk85idDefBMwEcWHU7
-   JyltbehTj/qphvht5wY/iGXiee65uW8Gm9jpDa0y4Pq6Bl5becPctoZJe
-   NrLMcYSoQZCtU5N7wwuhDKxismwv1/rKlKTnvyGIs+NwlAB5d186gFG3a
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="330415632"
+  bh=AiymkVisz2X6EMCSt4cggDqcXeMWHyq5B/W47nd2Gfk=;
+  b=gUszZNifB69ueuK/PrL93cLymT/8gryZy+cpKIU4km76mYfBqU1EiBkX
+   zkUIGwdgu9BcuiIDkzEVYto6ysqnWnb3Bx3Cbue2mpPyLn9e93HfY2o02
+   f4AYSyCQp0SxKwsR/oXQxDU2U0GLv4DmT1iRtgT/S8qSHsjtiXBSfOrUL
+   rMcZCyCuWNNFqGGP2tLEaf6yUIQD7onGpkTrLc+8QYQIGyNG6MAQ1vI1B
+   IcyIs7VVnRlKp35Xtk7E6K4hPOtakfMcwJ0Qiq5eufYBNq1Rz2+4eOzhl
+   7OMpsxn/bk2zuhsv4QYgpVBtEgGTblX+yR7fy10vEFKjYjfg+W2qO97J9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="330415638"
 X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="330415632"
+   d="scan'208";a="330415638"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 13:45:46 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="695527303"
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 13:45:48 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="695527306"
 X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="695527303"
+   d="scan'208";a="695527306"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 13:45:45 -0800
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 13:45:47 -0800
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 1C37212276E;
-        Wed,  1 Feb 2023 23:45:43 +0200 (EET)
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 48FB212279A;
+        Wed,  1 Feb 2023 23:45:44 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com, hverkuil@xs4all.nl
-Subject: [PATCH 08/26] media device: Drop nop release callback
-Date:   Wed,  1 Feb 2023 23:45:17 +0200
-Message-Id: <20230201214535.347075-9-sakari.ailus@linux.intel.com>
+Subject: [PATCH 10/26] media-device: Delete character device early
+Date:   Wed,  1 Feb 2023 23:45:19 +0200
+Message-Id: <20230201214535.347075-11-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230201214535.347075-1-sakari.ailus@linux.intel.com>
 References: <20230201214535.347075-1-sakari.ailus@linux.intel.com>
@@ -55,38 +55,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The release callback is only used to print a debug message. Drop it. (It
-will be re-introduced later in a different form.)
+The parent of the character device related to the media devnode is the media
+devnode. Thus the character device needs to be released before the media
+devnode's release function. Move it to unregistering of the media devnode,
+which mirrors adding the character device in conjunction with registering
+the media devnode.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/mc/mc-device.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/media/mc/mc-devnode.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/media/mc/mc-device.c b/drivers/media/mc/mc-device.c
-index 5c2e65717c19..64cc6921a8bc 100644
---- a/drivers/media/mc/mc-device.c
-+++ b/drivers/media/mc/mc-device.c
-@@ -570,11 +570,6 @@ static DEVICE_ATTR_RO(model);
-  * Registration/unregistration
-  */
+diff --git a/drivers/media/mc/mc-devnode.c b/drivers/media/mc/mc-devnode.c
+index 7e22938dfd81..8bc7450ac144 100644
+--- a/drivers/media/mc/mc-devnode.c
++++ b/drivers/media/mc/mc-devnode.c
+@@ -51,9 +51,6 @@ static void media_devnode_release(struct device *cd)
  
--static void media_device_release(struct media_devnode *devnode)
--{
--	dev_dbg(devnode->parent, "Media device released\n");
--}
+ 	mutex_lock(&media_devnode_lock);
+ 
+-	/* Delete the cdev on this minor as well */
+-	cdev_del(&devnode->cdev);
 -
- static void __media_device_unregister_entity(struct media_entity *entity)
- {
- 	struct media_device *mdev = entity->graph_obj.mdev;
-@@ -722,7 +717,6 @@ int __must_check __media_device_register(struct media_device *mdev,
- 	/* Register the device node. */
- 	mdev->devnode.fops = &media_device_fops;
- 	mdev->devnode.parent = mdev->dev;
--	mdev->devnode.release = media_device_release;
+ 	/* Mark device node number as free */
+ 	clear_bit(devnode->minor, media_devnode_nums);
  
- 	/* Set version 0 to indicate user-space that the graph is static */
- 	mdev->topology_version = 0;
+@@ -270,6 +267,7 @@ void media_devnode_unregister(struct media_devnode *devnode)
+ 	clear_bit(MEDIA_FLAG_REGISTERED, &devnode->flags);
+ 	mutex_unlock(&media_devnode_lock);
+ 
++	cdev_del(&devnode->cdev);
+ 	device_unregister(&devnode->dev);
+ }
+ 
 -- 
 2.30.2
 
