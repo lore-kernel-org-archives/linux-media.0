@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A66DFC636D6
-	for <linux-media@archiver.kernel.org>; Wed,  1 Feb 2023 07:33:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15177C636D4
+	for <linux-media@archiver.kernel.org>; Wed,  1 Feb 2023 07:33:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231905AbjBAHdi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Feb 2023 02:33:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
+        id S229940AbjBAHdj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Feb 2023 02:33:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjBAHdg (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Feb 2023 02:33:36 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3543D11140;
-        Tue, 31 Jan 2023 23:33:28 -0800 (PST)
-X-UUID: b5b3dc08a20211ed945fc101203acc17-20230201
+        with ESMTP id S231841AbjBAHdh (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Feb 2023 02:33:37 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B3118B00;
+        Tue, 31 Jan 2023 23:33:32 -0800 (PST)
+X-UUID: b7940dc2a20211eda06fc9ecc4dadd91-20230201
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=88pRMCVl/UXV909ZRbmU0TQkYikt3A2ZWXIraNYULyw=;
-        b=N4Qb8eaUdEXT7rXoAPalF8ezWO4inOdxSbemKlt8oI4tp6ki+fNMf8Zv7VAtHFzatpu4XqmMHy1dq6azy3f6ATFvuJt6wlufJRII06GQTJBjz8fFsAyfXBtklQVbgHULPCUbm6ysdXDAUz/numbI0SQB0VFdwulofAYPte/HOyw=;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=VGOhPn9WiWW6pB8TKxx2qIP4+8wsLCqYE4xeDwAEtJ4=;
+        b=qT1993y0I3RvxMNc7KjeboxE9amQ0jYnRrshcmu3RYjCQHwbgcSredDWXppRfFl4eIfC1T0EKilEMU0/4pD7ETBdjX5pZ+mNpNKa3IeC7kfVCItWFt/fycrbvc5tiHppIGIJoYWlXu6u8ONxBtx9AIXLR6d1krBAwVi1r2oaHtM=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.18,REQID:7de75d24-44f1-46c9-bcc7-e74fd3776c5f,IP:0,U
-        RL:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:25
-X-CID-META: VersionHash:3ca2d6b,CLOUDID:7ca51ef7-ff42-4fb0-b929-626456a83c14,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:5,IP:nil,UR
-        L:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
-X-CID-BVR: 0
-X-UUID: b5b3dc08a20211ed945fc101203acc17-20230201
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
+X-CID-O-INFO: VERSION:1.1.18,REQID:e546e14d-a9e7-444b-8735-7d77946e8034,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:3ca2d6b,CLOUDID:6ba58f8d-8530-4eff-9f77-222cf6e2895b,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
+X-CID-BVR: 0,NGT
+X-UUID: b7940dc2a20211eda06fc9ecc4dadd91-20230201
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 612455149; Wed, 01 Feb 2023 15:33:24 +0800
+        with ESMTP id 611283494; Wed, 01 Feb 2023 15:33:27 +0800
 Received: from mtkmbs13n2.mediatek.inc (172.21.101.194) by
  mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 1 Feb 2023 15:33:22 +0800
+ 15.2.792.15; Wed, 1 Feb 2023 15:33:25 +0800
 Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
  mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Wed, 1 Feb 2023 15:33:21 +0800
+ 15.2.792.15 via Frontend Transport; Wed, 1 Feb 2023 15:33:24 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Chen-Yu Tsai <wenst@chromium.org>,
@@ -58,9 +58,9 @@ CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v4,3/7] media: mediatek: vcodec: move lat_buf to the top of core list
-Date:   Wed, 1 Feb 2023 15:33:12 +0800
-Message-ID: <20230201073316.27923-4-yunfei.dong@mediatek.com>
+Subject: [PATCH v4,6/7] media: mediatek: vcodec: making sure queue_work successfully
+Date:   Wed, 1 Feb 2023 15:33:15 +0800
+Message-ID: <20230201073316.27923-7-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230201073316.27923-1-yunfei.dong@mediatek.com>
 References: <20230201073316.27923-1-yunfei.dong@mediatek.com>
@@ -72,78 +72,110 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Current instance will decode done when begin to wait lat buf full,
-move the lat_buf of current instance to the top of core list to make
-sure current instance's lat_buf will be used firstly.
+Putting core work to work queue using queue_work maybe fail, call
+queue_work again when the count of core work in work queue is less
+than core_list_cnt, making sure all the buffer in core list can be
+scheduled.
 
 Fixes: 365e4ba01df4 ("media: mtk-vcodec: Add work queue for core hardware decode")
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- .../platform/mediatek/vcodec/vdec_msg_queue.c | 21 ++++++++++++++++++-
+ .../platform/mediatek/vcodec/vdec_msg_queue.c | 31 ++++++++++++++-----
  .../platform/mediatek/vcodec/vdec_msg_queue.h |  2 ++
- 2 files changed, 22 insertions(+), 1 deletion(-)
+ 2 files changed, 25 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-index ad5002ca953e..0da6e3e2ef0b 100644
+index cdc539a46cb9..f3073d1e7f42 100644
 --- a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
 +++ b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-@@ -174,8 +174,26 @@ void vdec_msg_queue_update_ube_wptr(struct vdec_msg_queue *msg_queue, uint64_t u
- 
- bool vdec_msg_queue_wait_lat_buf_full(struct vdec_msg_queue *msg_queue)
+@@ -71,6 +71,7 @@ static void vdec_msg_queue_dec(struct vdec_msg_queue *msg_queue, int hardware_in
+ int vdec_msg_queue_qbuf(struct vdec_msg_queue_ctx *msg_ctx, struct vdec_lat_buf *buf)
  {
-+	struct vdec_lat_buf *buf, *tmp;
-+	struct list_head *list_core[3];
-+	struct vdec_msg_queue_ctx *core_ctx;
-+	int ret, i, in_core_count = 0;
- 	long timeout_jiff;
--	int ret;
-+
-+	core_ctx = &msg_queue->ctx->dev->msg_queue_core_ctx;
-+	spin_lock(&core_ctx->ready_lock);
-+	list_for_each_entry_safe(buf, tmp, &core_ctx->ready_queue, core_list) {
-+		if (buf && buf->ctx == msg_queue->ctx) {
-+			list_core[in_core_count++] = &buf->core_list;
-+			list_del(&buf->core_list);
+ 	struct list_head *head;
++	int status;
+ 
+ 	head = vdec_get_buf_list(msg_ctx->hardware_index, buf);
+ 	if (!head) {
+@@ -83,11 +84,17 @@ int vdec_msg_queue_qbuf(struct vdec_msg_queue_ctx *msg_ctx, struct vdec_lat_buf
+ 	msg_ctx->ready_num++;
+ 
+ 	vdec_msg_queue_inc(&buf->ctx->msg_queue, msg_ctx->hardware_index);
+-	if (msg_ctx->hardware_index != MTK_VDEC_CORE)
++	if (msg_ctx->hardware_index != MTK_VDEC_CORE) {
+ 		wake_up_all(&msg_ctx->ready_to_use);
+-	else
+-		queue_work(buf->ctx->dev->core_workqueue,
+-			   &buf->ctx->msg_queue.core_work);
++	} else {
++		if (buf->ctx->msg_queue.core_work_cnt <
++			atomic_read(&buf->ctx->msg_queue.core_list_cnt)) {
++			status = queue_work(buf->ctx->dev->core_workqueue,
++					    &buf->ctx->msg_queue.core_work);
++			if (status)
++				buf->ctx->msg_queue.core_work_cnt++;
 +		}
 +	}
-+
-+	for (i = 0; i < in_core_count; i++) {
-+		list_add(list_core[in_core_count - (1 + i)], &core_ctx->ready_queue);
-+		queue_work(msg_queue->ctx->dev->core_workqueue, &msg_queue->core_work);
-+	}
-+	spin_unlock(&core_ctx->ready_lock);
  
- 	timeout_jiff = msecs_to_jiffies(1000 * (NUM_BUFFER_COUNT + 2));
- 	ret = wait_event_timeout(msg_queue->lat_ctx.ready_to_use,
-@@ -257,6 +275,7 @@ int vdec_msg_queue_init(struct vdec_msg_queue *msg_queue,
- 	if (msg_queue->wdma_addr.size)
+ 	mtk_v4l2_debug(3, "enqueue buf type: %d addr: 0x%p num: %d",
+ 		       msg_ctx->hardware_index, buf, msg_ctx->ready_num);
+@@ -254,6 +261,7 @@ static void vdec_msg_queue_core_work(struct work_struct *work)
+ 		container_of(msg_queue, struct mtk_vcodec_ctx, msg_queue);
+ 	struct mtk_vcodec_dev *dev = ctx->dev;
+ 	struct vdec_lat_buf *lat_buf;
++	int status;
+ 
+ 	lat_buf = vdec_msg_queue_dqbuf(&dev->msg_queue_core_ctx);
+ 	if (!lat_buf)
+@@ -270,11 +278,17 @@ static void vdec_msg_queue_core_work(struct work_struct *work)
+ 	vdec_msg_queue_qbuf(&ctx->msg_queue.lat_ctx, lat_buf);
+ 
+ 	wake_up_all(&ctx->msg_queue.core_dec_done);
+-	if (atomic_read(&lat_buf->ctx->msg_queue.core_list_cnt)) {
+-		mtk_v4l2_debug(3, "re-schedule to decode for core: %d",
+-			       dev->msg_queue_core_ctx.ready_num);
+-		queue_work(dev->core_workqueue, &msg_queue->core_work);
++	spin_lock(&dev->msg_queue_core_ctx.ready_lock);
++	lat_buf->ctx->msg_queue.core_work_cnt--;
++
++	if (lat_buf->ctx->msg_queue.core_work_cnt <
++		atomic_read(&lat_buf->ctx->msg_queue.core_list_cnt)) {
++		status = queue_work(lat_buf->ctx->dev->core_workqueue,
++				    &lat_buf->ctx->msg_queue.core_work);
++		if (status)
++			lat_buf->ctx->msg_queue.core_work_cnt++;
+ 	}
++	spin_unlock(&dev->msg_queue_core_ctx.ready_lock);
+ }
+ 
+ int vdec_msg_queue_init(struct vdec_msg_queue *msg_queue,
+@@ -289,6 +303,7 @@ int vdec_msg_queue_init(struct vdec_msg_queue *msg_queue,
  		return 0;
  
-+	msg_queue->ctx = ctx;
+ 	msg_queue->ctx = ctx;
++	msg_queue->core_work_cnt = 0;
  	vdec_msg_queue_init_ctx(&msg_queue->lat_ctx, MTK_VDEC_LAT0);
  	INIT_WORK(&msg_queue->core_work, vdec_msg_queue_core_work);
  
 diff --git a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
-index b1aa5572ba49..56280d6682c5 100644
+index a75c04418f52..a5d44bc97c16 100644
 --- a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
 +++ b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
-@@ -72,6 +72,7 @@ struct vdec_lat_buf {
-  * @wdma_wptr_addr: ube write point
-  * @core_work: core hardware work
-  * @lat_ctx: used to store lat buffer list
-+ * @ctx: point to mtk_vcodec_ctx
-  *
+@@ -77,6 +77,7 @@ struct vdec_lat_buf {
   * @lat_list_cnt: used to record each instance lat list count
   * @core_list_cnt: used to record each instance core list count
-@@ -85,6 +86,7 @@ struct vdec_msg_queue {
- 
- 	struct work_struct core_work;
- 	struct vdec_msg_queue_ctx lat_ctx;
-+	struct mtk_vcodec_ctx *ctx;
- 
+  * @core_dec_done: core work queue decode done event
++ * @core_work_cnt: the number of core work in work queue
+  */
+ struct vdec_msg_queue {
+ 	struct vdec_lat_buf lat_buf[NUM_BUFFER_COUNT];
+@@ -92,6 +93,7 @@ struct vdec_msg_queue {
  	atomic_t lat_list_cnt;
  	atomic_t core_list_cnt;
+ 	wait_queue_head_t core_dec_done;
++	int core_work_cnt;
+ };
+ 
+ /**
 -- 
 2.18.0
 
