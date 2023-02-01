@@ -2,50 +2,50 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89A05C05027
-	for <linux-media@archiver.kernel.org>; Wed,  1 Feb 2023 21:46:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16FDDC64EC3
+	for <linux-media@archiver.kernel.org>; Wed,  1 Feb 2023 21:46:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbjBAVqG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Feb 2023 16:46:06 -0500
+        id S231364AbjBAVqH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Feb 2023 16:46:07 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbjBAVqE (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Feb 2023 16:46:04 -0500
+        with ESMTP id S230508AbjBAVqF (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Feb 2023 16:46:05 -0500
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D3168128
-        for <linux-media@vger.kernel.org>; Wed,  1 Feb 2023 13:46:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD44168AC5
+        for <linux-media@vger.kernel.org>; Wed,  1 Feb 2023 13:46:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675287961; x=1706823961;
+  t=1675287963; x=1706823963;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ZUurEOy8ElwcaUTXxPIydMqSnjPXWrdqw8HIZK8djbU=;
-  b=e2vizJpuw6lbNgzPyfVYJDQLe8SRAQGpGLXW3maI8+fqng3qwdLRVrFf
-   2/VmfAFQTZqYVAgS1Ko0Zi3FOATgSc+QLZ8yX5cx0FKJbLz31xWbh+ggF
-   j/QU9GB2garVecNQehFTFU0p5CcZtlUxGf2wjTS2zNoJVAVjb5mSQEUOW
-   j32vftcicipjdEJFfEw+w8Ae0Lv3HsFuGqOTevVPnmK7ZhFBcqkABFfmv
-   y/CHy3Wt9DeCbdjVDLP3o2U7kbu1K0+eyHFeXQZ/FW6aLhqZ9fHAUVHLw
-   C3Q64wY9jtt48JhZYitx4qQGZrwAmvmhS/R7lP/7vlqdu7UEXFGWK0dmC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="330415661"
+  bh=0vjvXljbF9nkb2tybijGMYSFUDEMczyzv12TKKFVfdY=;
+  b=GVxMb9EWPBQyasUhpbgbAes5cKR5DKVLY1Y3WNezbV/P36y6ONp4f7z0
+   +WOaxa4yZJUynGISyCzpvye7SwGM04rZ6RpblKIuajaaPlHTnC4jfSoth
+   JgtrKu1PAKEcCCf7iRnSU2XhsJopIQDirc0HpFcYAQ3Qfs1HhQRoBfCOI
+   JR0MXDbNw5x2CbMjaA8ab9gXyj0CEsnHT97EOrEgJbzHrNm7fazctJWrN
+   ddnt1Tthud4MC2ODiZwS4O0XoWyZY8pHeDWFGm3PUXiFdOIBgA7SB4ZGL
+   wpUEnZLTmoSP2KEEJLpJsDzO78G7zDXQ5EdKTuToAMtlFo65VVtxWJBGI
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="330415668"
 X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="330415661"
+   d="scan'208";a="330415668"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 13:45:52 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="695527314"
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 13:45:53 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="695527317"
 X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="695527314"
+   d="scan'208";a="695527317"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 13:45:50 -0800
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 13:45:52 -0800
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 09979122774;
-        Wed,  1 Feb 2023 23:45:47 +0200 (EET)
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 68F401227A0;
+        Wed,  1 Feb 2023 23:45:49 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     laurent.pinchart@ideasonboard.com, hverkuil@xs4all.nl
-Subject: [PATCH 15/26] v4l: Acquire a reference to the media device for every video device
-Date:   Wed,  1 Feb 2023 23:45:24 +0200
-Message-Id: <20230201214535.347075-16-sakari.ailus@linux.intel.com>
+Subject: [PATCH 17/26] omap3isp: Release the isp device struct by media device callback
+Date:   Wed,  1 Feb 2023 23:45:26 +0200
+Message-Id: <20230201214535.347075-18-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230201214535.347075-1-sakari.ailus@linux.intel.com>
 References: <20230201214535.347075-1-sakari.ailus@linux.intel.com>
@@ -55,57 +55,79 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The video device depends on the existence of its media device --- if there
-is one. Acquire a reference to it.
+Use the media device release callback to release the isp device's data
+structure. This approach has the benefit of not releasing memory which may
+still be accessed through open file handles whilst the isp driver is being
+unbound.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/v4l2-core/v4l2-dev.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ drivers/media/platform/ti/omap3isp/isp.c | 25 ++++++++++++++++++------
+ 1 file changed, 19 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
-index 397d553177fa..6386948eefaa 100644
---- a/drivers/media/v4l2-core/v4l2-dev.c
-+++ b/drivers/media/v4l2-core/v4l2-dev.c
-@@ -176,6 +176,9 @@ static void v4l2_device_release(struct device *cd)
- {
- 	struct video_device *vdev = to_video_device(cd);
- 	struct v4l2_device *v4l2_dev = vdev->v4l2_dev;
-+#ifdef CONFIG_MEDIA_CONTROLLER
-+	struct media_device *mdev = v4l2_dev->mdev;
-+#endif
- 
- 	mutex_lock(&videodev_lock);
- 	if (WARN_ON(video_devices[vdev->minor] != vdev)) {
-@@ -198,8 +201,8 @@ static void v4l2_device_release(struct device *cd)
- 
- 	mutex_unlock(&videodev_lock);
- 
--#if defined(CONFIG_MEDIA_CONTROLLER)
--	if (v4l2_dev->mdev && vdev->vfl_dir != VFL_DIR_M2M) {
-+#ifdef CONFIG_MEDIA_CONTROLLER
-+	if (mdev && vdev->vfl_dir != VFL_DIR_M2M) {
- 		/* Remove interfaces and interface links */
- 		media_devnode_remove(vdev->intf_devnode);
- 		if (vdev->entity.function != MEDIA_ENT_F_UNKNOWN)
-@@ -225,6 +228,11 @@ static void v4l2_device_release(struct device *cd)
- 	/* Decrease v4l2_device refcount */
- 	if (v4l2_dev)
- 		v4l2_device_put(v4l2_dev);
-+
-+#ifdef CONFIG_MEDIA_CONTROLLER
-+	if (mdev)
-+		media_device_put(mdev);
-+#endif
+diff --git a/drivers/media/platform/ti/omap3isp/isp.c b/drivers/media/platform/ti/omap3isp/isp.c
+index e7327e38482d..9665f1eb345e 100644
+--- a/drivers/media/platform/ti/omap3isp/isp.c
++++ b/drivers/media/platform/ti/omap3isp/isp.c
+@@ -649,8 +649,11 @@ static irqreturn_t isp_isr(int irq, void *_isp)
+ 	return IRQ_HANDLED;
  }
  
- static struct class video_class = {
-@@ -872,6 +880,7 @@ static int video_register_media_controller(struct video_device *vdev)
++static void isp_release(struct media_device *mdev);
++
+ static const struct media_device_ops isp_media_ops = {
+ 	.link_notify = v4l2_pipeline_link_notify,
++	.release = isp_release,
+ };
  
- 	/* FIXME: how to create the other interface links? */
+ /* -----------------------------------------------------------------------------
+@@ -1607,7 +1610,6 @@ static void isp_unregister_entities(struct isp_device *isp)
+ 	omap3isp_stat_unregister_entities(&isp->isp_hist);
  
-+	media_device_get(vdev->v4l2_dev->mdev);
+ 	v4l2_device_unregister(&isp->v4l2_dev);
+-	media_device_cleanup(&isp->media_dev);
+ }
+ 
+ static int isp_link_entity(
+@@ -1955,6 +1957,19 @@ static void isp_detach_iommu(struct isp_device *isp)
  #endif
+ }
+ 
++static void isp_release(struct media_device *mdev)
++{
++	struct isp_device *isp =
++		container_of(mdev, struct isp_device, media_dev);
++
++	isp_cleanup_modules(isp);
++
++	media_entity_enum_cleanup(&isp->crashed);
++	v4l2_async_notifier_cleanup(&isp->notifier);
++
++	kfree(isp);
++}
++
+ static int isp_attach_iommu(struct isp_device *isp)
+ {
+ #ifdef CONFIG_ARM_DMA_USE_IOMMU
+@@ -2003,17 +2018,15 @@ static int isp_remove(struct platform_device *pdev)
+ 
+ 	v4l2_async_nf_unregister(&isp->notifier);
+ 	isp_unregister_entities(isp);
+-	isp_cleanup_modules(isp);
++
+ 	isp_xclk_cleanup(isp);
+ 
+ 	__omap3isp_get(isp, false);
+ 	isp_detach_iommu(isp);
+ 	__omap3isp_put(isp, false);
+ 
+-	media_entity_enum_cleanup(&isp->crashed);
+-	v4l2_async_nf_cleanup(&isp->notifier);
+-
+-	kfree(isp);
++	/* May release isp immediately */
++	media_device_put(&isp->media_dev);
+ 
  	return 0;
  }
 -- 
