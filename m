@@ -2,271 +2,104 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BE13C636D4
-	for <linux-media@archiver.kernel.org>; Wed,  1 Feb 2023 07:04:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F08F8C636D4
+	for <linux-media@archiver.kernel.org>; Wed,  1 Feb 2023 07:33:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbjBAHEF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Feb 2023 02:04:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46410 "EHLO
+        id S230266AbjBAHdf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Feb 2023 02:33:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbjBAHEE (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Feb 2023 02:04:04 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8DF711C;
-        Tue, 31 Jan 2023 23:03:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1675235021; x=1706771021;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=zZzUBgAz009x45fbn90mob7kNuwe+12Mpt+4kTnJGyU=;
-  b=mPTp31HBtF5JckAO4gfTG2XZ5d21yVaB95DL/Pj64VIob7ikEDNg+BRS
-   IC5e0YzuBNVl0wkX+yI1jJ9fDj90G9UodIna6w86YwhxWdV25Ta2EVJfe
-   VXT9aQD0fb8wJOL6jSitlWq1SZpUjpD/w2dZx+NzxRf1XDz0jUVUfyzfo
-   sXoCPHhDG3Qclc3yQbYZGh4nNaEaBilW2FB3dH1fZIGI5PZW9h/uTt+bJ
-   Ll9mUfepCZlZVs5L5P+r1HfY4+bHzRPP2ocbm01xFxo7YeVXEQsCDpDj6
-   hHTaUurMdJq9cLG/t2Cxw9uGY5dON7/KRUiu5ylr0DyASRdIdzTiTxKFX
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,263,1669071600"; 
-   d="scan'208";a="28787735"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 01 Feb 2023 08:03:38 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Wed, 01 Feb 2023 08:03:38 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Wed, 01 Feb 2023 08:03:38 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1675235018; x=1706771018;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=zZzUBgAz009x45fbn90mob7kNuwe+12Mpt+4kTnJGyU=;
-  b=iq4STJFus1ppexBYHB/5+Vmg4VQGhzwOVB3v561Fp1quIbDKHrk4BacD
-   D2tTdyT9mZYeHafIMTDa2/ULiAs+u9xjCNuq1SOQgKz+2wd7Kc5RvCoQc
-   +eKJa8M1xwjva1cFVhqeVOO6O9iJ6HIYy8BaoJzsiRrbJ+kk3z5FRBxnl
-   a5a1PpKYpBGXPZsWtoFtnltqkWUGf7dZpkJ8/HxNoHWf14qiuHHn4uCKz
-   6fE7gcfTD2HIWCT2TfpBVW5I7p/iG5BJZrBMeFtfPtTfE3zvG5ZbxJYAg
-   5y3F0p9r771p7rMCwnbaT0bwjFusvqXVKHKDYFMmb7sMI4iu9/1zbp1mg
-   A==;
-X-IronPort-AV: E=Sophos;i="5.97,263,1669071600"; 
-   d="scan'208";a="28787734"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 01 Feb 2023 08:03:38 +0100
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 7043F280056;
-        Wed,  1 Feb 2023 08:03:38 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: Re: [PATCH 2/2] media: i2c: imx290: Add support for the mono sensor variant.
-Date:   Wed, 01 Feb 2023 08:03:36 +0100
-Message-ID: <5647238.DvuYhMxLoT@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20230131190700.3476796-3-dave.stevenson@raspberrypi.com>
-References: <20230131190700.3476796-1-dave.stevenson@raspberrypi.com> <20230131190700.3476796-3-dave.stevenson@raspberrypi.com>
+        with ESMTP id S229770AbjBAHde (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Feb 2023 02:33:34 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736F839280;
+        Tue, 31 Jan 2023 23:33:26 -0800 (PST)
+X-UUID: b48bf9b4a20211ed945fc101203acc17-20230201
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=gz7OdVfZErCQdXy+fRjQiUvbIcVWxDyhc2LsrCgb9is=;
+        b=rTxonek8ID5oMGsI+c48QCIVSehhumk1cnVy4C1kNU9ST4VlCOYbIMcJu60UyASOOI4hDpbkcmvOP9ksGGECC95aQzk+r8zYHRV2vaQ/D/txyyFkIlgzLsUpRObsdN7BKaWm+497Vtb3Ie7GG8fzAFpTAHJF84/Q3yEfA9DGbgk=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.18,REQID:913115e3-2d96-4d6a-bb1c-8b1928f21b2d,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.18,REQID:913115e3-2d96-4d6a-bb1c-8b1928f21b2d,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:3ca2d6b,CLOUDID:06a51ef7-ff42-4fb0-b929-626456a83c14,B
+        ulkID:230201153323CDW8L4LK,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0
+X-CID-BVR: 0
+X-UUID: b48bf9b4a20211ed945fc101203acc17-20230201
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 982533512; Wed, 01 Feb 2023 15:33:22 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.194) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 1 Feb 2023 15:33:21 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Wed, 1 Feb 2023 15:33:20 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>
+CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v4,2/7] media: mediatek: vcodec: using each instance lat_buf count replace core ready list
+Date:   Wed, 1 Feb 2023 15:33:11 +0800
+Message-ID: <20230201073316.27923-3-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230201073316.27923-1-yunfei.dong@mediatek.com>
+References: <20230201073316.27923-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dave,
+Core Hardware decoder depends on each instance lat_buf count,
+calling queue_work decode again when the lat_buf count of each instance
+isn't zero.
 
-Am Dienstag, 31. Januar 2023, 20:07:00 CET schrieb Dave Stevenson:
-> The IMX290 module is available as either mono or colour (Bayer).
-> 
-> Update the driver so that it can advertise the correct mono
-> formats instead of the colour ones.
-> 
-> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> ---
->  drivers/media/i2c/imx290.c | 47 ++++++++++++++++++++++++--------------
->  1 file changed, 30 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-> index 49d6c8bdec41..a370f1102334 100644
-> --- a/drivers/media/i2c/imx290.c
-> +++ b/drivers/media/i2c/imx290.c
-> @@ -13,6 +13,7 @@
->  #include <linux/gpio/consumer.h>
->  #include <linux/i2c.h>
->  #include <linux/module.h>
-> +#include <linux/of_device.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/regmap.h>
->  #include <linux/regulator/consumer.h>
-> @@ -177,6 +178,7 @@ struct imx290 {
->  	struct clk *xclk;
->  	struct regmap *regmap;
->  	u8 nlanes;
-> +	u8 mono;
-> 
->  	struct v4l2_subdev sd;
->  	struct media_pad pad;
-> @@ -414,7 +416,8 @@ static inline int imx290_modes_num(const struct imx290
-> *imx290) }
-> 
->  struct imx290_format_info {
-> -	u32 code;
-> +	/* Array of codes. [0] is for colour, [1] is for mono. */
-> +	u32 code[2];
+Fixes: 365e4ba01df4 ("media: mtk-vcodec: Add work queue for core hardware decode")
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Please use a define for that.
-
->  	u8 bpp;
->  	const struct imx290_regval *regs;
->  	unsigned int num_regs;
-> @@ -422,26 +425,27 @@ struct imx290_format_info {
-> 
->  static const struct imx290_format_info imx290_formats[] = {
->  	{
-> -		.code = MEDIA_BUS_FMT_SRGGB10_1X10,
-> +		.code = { MEDIA_BUS_FMT_SRGGB10_1X10, 
-MEDIA_BUS_FMT_Y10_1X10 },
->  		.bpp = 10,
->  		.regs = imx290_10bit_settings,
->  		.num_regs = ARRAY_SIZE(imx290_10bit_settings),
->  	}, {
-> -		.code = MEDIA_BUS_FMT_SRGGB12_1X12,
-> +		.code = { MEDIA_BUS_FMT_SRGGB12_1X12, 
-MEDIA_BUS_FMT_Y12_1X12 },
->  		.bpp = 12,
->  		.regs = imx290_12bit_settings,
->  		.num_regs = ARRAY_SIZE(imx290_12bit_settings),
->  	}
->  };
-> 
-> -static const struct imx290_format_info *imx290_format_info(u32 code)
-> +static const struct imx290_format_info *
-> +imx290_format_info(const struct imx290 *imx290, u32 code)
->  {
->  	unsigned int i;
-> 
->  	for (i = 0; i < ARRAY_SIZE(imx290_formats); ++i) {
->  		const struct imx290_format_info *info = 
-&imx290_formats[i];
-> 
-> -		if (info->code == code)
-> +		if (info->code[imx290->mono] == code)
->  			return info;
->  	}
-> 
-> @@ -536,7 +540,7 @@ static int imx290_set_black_level(struct imx290 *imx290,
-> const struct v4l2_mbus_framefmt *format,
->  				  unsigned int black_level, int *err)
->  {
-> -	unsigned int bpp = imx290_format_info(format->code)->bpp;
-> +	unsigned int bpp = imx290_format_info(imx290, format->code)->bpp;
-> 
->  	return imx290_write(imx290, IMX290_BLKLEVEL,
->  			    black_level >> (16 - bpp), err);
-> @@ -548,7 +552,7 @@ static int imx290_setup_format(struct imx290 *imx290,
->  	const struct imx290_format_info *info;
->  	int ret;
-> 
-> -	info = imx290_format_info(format->code);
-> +	info = imx290_format_info(imx290, format->code);
-> 
->  	ret = imx290_set_register_array(imx290, info->regs, info->num_regs);
->  	if (ret < 0) {
-> @@ -844,10 +848,12 @@ static int imx290_enum_mbus_code(struct v4l2_subdev
-> *sd, struct v4l2_subdev_state *sd_state,
->  				 struct v4l2_subdev_mbus_code_enum 
-*code)
->  {
-> +	const struct imx290 *imx290 = to_imx290(sd);
-> +
->  	if (code->index >= ARRAY_SIZE(imx290_formats))
->  		return -EINVAL;
-> 
-> -	code->code = imx290_formats[code->index].code;
-> +	code->code = imx290_formats[code->index].code[imx290->mono];
-> 
->  	return 0;
->  }
-> @@ -859,7 +865,7 @@ static int imx290_enum_frame_size(struct v4l2_subdev
-> *sd, const struct imx290 *imx290 = to_imx290(sd);
->  	const struct imx290_mode *imx290_modes = imx290_modes_ptr(imx290);
-> 
-> -	if (!imx290_format_info(fse->code))
-> +	if (!imx290_format_info(imx290, fse->code))
->  		return -EINVAL;
-> 
->  	if (fse->index >= imx290_modes_num(imx290))
-> @@ -888,8 +894,8 @@ static int imx290_set_fmt(struct v4l2_subdev *sd,
->  	fmt->format.width = mode->width;
->  	fmt->format.height = mode->height;
-> 
-> -	if (!imx290_format_info(fmt->format.code))
-> -		fmt->format.code = imx290_formats[0].code;
-> +	if (!imx290_format_info(imx290, fmt->format.code))
-> +		fmt->format.code = imx290_formats[0].code[imx290->mono];
-> 
->  	fmt->format.field = V4L2_FIELD_NONE;
-> 
-> @@ -1177,16 +1183,29 @@ static s64 imx290_check_link_freqs(const struct
-> imx290 *imx290, return 0;
->  }
-> 
-> +static const struct of_device_id imx290_of_match[] = {
-> +	{ .compatible = "sony,imx290" },
-> +	{ .compatible = "sony,imx290-mono", .data = (void *)1 },
-
-Would you mind using a model specific struct? I have a patch on my stack 
-adding support for imx327. There are some imx327 specific writes to registers 
-during initialization. I do not mind adding this struct later though.
-
-Best regards
-Alexander
-
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, imx290_of_match);
-> +
->  static int imx290_parse_dt(struct imx290 *imx290)
->  {
-> +	struct i2c_client *client = to_i2c_client(imx290->dev);
->  	/* Only CSI2 is supported for now: */
->  	struct v4l2_fwnode_endpoint ep = {
->  		.bus_type = V4L2_MBUS_CSI2_DPHY
->  	};
-> +	const struct of_device_id *match;
->  	struct fwnode_handle *endpoint;
->  	int ret;
->  	s64 fq;
-> 
-> +	match = i2c_of_match_device(imx290_of_match, client);
-> +	if (match)
-> +		imx290->mono = match->data ? 1 : 0;
-> +
->  	endpoint = fwnode_graph_get_next_endpoint(dev_fwnode(imx290->dev), 
-NULL);
->  	if (!endpoint) {
->  		dev_err(imx290->dev, "Endpoint node not found\n");
-> @@ -1351,12 +1370,6 @@ static void imx290_remove(struct i2c_client *client)
->  	pm_runtime_set_suspended(imx290->dev);
->  }
-> 
-> -static const struct of_device_id imx290_of_match[] = {
-> -	{ .compatible = "sony,imx290" },
-> -	{ /* sentinel */ }
-> -};
-> -MODULE_DEVICE_TABLE(of, imx290_of_match);
-> -
->  static struct i2c_driver imx290_i2c_driver = {
->  	.probe_new  = imx290_probe,
->  	.remove = imx290_remove,
-
-
-
+diff --git a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
+index 3f016c87d722..ad5002ca953e 100644
+--- a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
++++ b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
+@@ -239,7 +239,7 @@ static void vdec_msg_queue_core_work(struct work_struct *work)
+ 	mtk_vcodec_dec_disable_hardware(ctx, MTK_VDEC_CORE);
+ 	vdec_msg_queue_qbuf(&ctx->msg_queue.lat_ctx, lat_buf);
+ 
+-	if (!list_empty(&dev->msg_queue_core_ctx.ready_queue)) {
++	if (atomic_read(&lat_buf->ctx->msg_queue.core_list_cnt)) {
+ 		mtk_v4l2_debug(3, "re-schedule to decode for core: %d",
+ 			       dev->msg_queue_core_ctx.ready_num);
+ 		queue_work(dev->core_workqueue, &msg_queue->core_work);
+-- 
+2.18.0
 
