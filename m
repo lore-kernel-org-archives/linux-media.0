@@ -2,177 +2,271 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61F88C05027
-	for <linux-media@archiver.kernel.org>; Wed,  1 Feb 2023 06:05:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BE13C636D4
+	for <linux-media@archiver.kernel.org>; Wed,  1 Feb 2023 07:04:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjBAGFQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Feb 2023 01:05:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45486 "EHLO
+        id S230306AbjBAHEF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Feb 2023 02:04:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231543AbjBAGFO (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Feb 2023 01:05:14 -0500
-Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2041.outbound.protection.outlook.com [40.107.249.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B21A5CFD5;
-        Tue, 31 Jan 2023 22:04:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AOrtEwbyvA0JKfeC6dkMK8GX5a37JXhSps2R08Vvv9EjXzYZ/aTeICUT6YqLoF5c+FqKL7azho++dWTsrHHw7bENOI7nU/F8O6vvthhdbKFe7JLAEJNHExMU5B4n9gGxM098Xn3rWdbAEJBfub0pUSmQ753BvuxlCYlhu0//XgQpi92EUMayX1hStEhUD3GAfXP+2P9r1zSNHNC80R2o8CRkQeGMazYpQ6JE+vpflW1/eWpckNhSZw1DcnaCibk1JZ1yHJcQrzJ+hRNkgVC4zxbNyb4YgcKo04zwp7fOQ5XZGdKEat6hQJ9+pFI7avG5m1CmyWjEY+2CZsmPwmegGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8HtPUGDrL90dDHNDgqSHbRFOdqqqZXS5JUCzQX0fw9o=;
- b=MXFBQuD33BKGfzgZUpcbqrF8jGKzcz39er1bD/YK9S9eW4aBLxPuGAdH+JDMGMTEpW/SJ6Mg/cDcMJFVzrjleWA8B9ZeUanJpBslNcE25KCcVRHxzE4Llj0iMc0te5hMZjdZPPC7a/NJQ4qo2rOQA23h4LH+QSovjQXi4iwg/ERguF187hUDMejSvERacctgIXBoeqeh1U+dBF6BVI94ALWY29eh/sZHxuhztk4Tuv0pU1IiV3CD8xuweAnSXYFWzcqklGKFBk8mlr1sqc2gPIwZd5UOrmnd55vz0mvmjq7yyl9crehrNNUQSHiK96r6CA+EdwwKB+c4zzmcyjdZlA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8HtPUGDrL90dDHNDgqSHbRFOdqqqZXS5JUCzQX0fw9o=;
- b=CtUIwAifUDSZkPj/Ygtyw1BnVAJHW365FtVpGJ5aZatoJpWxxDKWw5iWF8VAfGIIPgnL/2YNopKRD4mKhdKcpOsrw4vglGsMqt/qz4Sy4sTeknPNbObr+R0JkkEIkuGrirJkQXD3aTeaQYa9p5fj3uRu7X5R3x8y5AY86TOcm1c=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
- by DB9PR04MB8429.eurprd04.prod.outlook.com (2603:10a6:10:242::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.38; Wed, 1 Feb
- 2023 06:03:45 +0000
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::3a82:42b3:f1ed:5c3d]) by AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::3a82:42b3:f1ed:5c3d%7]) with mapi id 15.20.6043.036; Wed, 1 Feb 2023
- 06:03:45 +0000
-From:   Ming Qian <ming.qian@nxp.com>
-To:     mchehab@kernel.org, mirela.rabulea@oss.nxp.com,
-        hverkuil-cisco@xs4all.nl
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, xiahong.bao@nxp.com, linux-imx@nxp.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 07/10] media: imx-jpeg: Refine the function mxc_jpeg_find_format
-Date:   Wed,  1 Feb 2023 14:02:29 +0800
-Message-Id: <f06483c5545de188aebc609e8004cf6df2291bc0.1675230665.git.ming.qian@nxp.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <cover.1675230665.git.ming.qian@nxp.com>
-References: <cover.1675230665.git.ming.qian@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0012.apcprd02.prod.outlook.com
- (2603:1096:4:194::7) To AM6PR04MB6341.eurprd04.prod.outlook.com
- (2603:10a6:20b:d8::14)
+        with ESMTP id S230282AbjBAHEE (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Feb 2023 02:04:04 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8DF711C;
+        Tue, 31 Jan 2023 23:03:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1675235021; x=1706771021;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=zZzUBgAz009x45fbn90mob7kNuwe+12Mpt+4kTnJGyU=;
+  b=mPTp31HBtF5JckAO4gfTG2XZ5d21yVaB95DL/Pj64VIob7ikEDNg+BRS
+   IC5e0YzuBNVl0wkX+yI1jJ9fDj90G9UodIna6w86YwhxWdV25Ta2EVJfe
+   VXT9aQD0fb8wJOL6jSitlWq1SZpUjpD/w2dZx+NzxRf1XDz0jUVUfyzfo
+   sXoCPHhDG3Qclc3yQbYZGh4nNaEaBilW2FB3dH1fZIGI5PZW9h/uTt+bJ
+   Ll9mUfepCZlZVs5L5P+r1HfY4+bHzRPP2ocbm01xFxo7YeVXEQsCDpDj6
+   hHTaUurMdJq9cLG/t2Cxw9uGY5dON7/KRUiu5ylr0DyASRdIdzTiTxKFX
+   w==;
+X-IronPort-AV: E=Sophos;i="5.97,263,1669071600"; 
+   d="scan'208";a="28787735"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 01 Feb 2023 08:03:38 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 01 Feb 2023 08:03:38 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 01 Feb 2023 08:03:38 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1675235018; x=1706771018;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=zZzUBgAz009x45fbn90mob7kNuwe+12Mpt+4kTnJGyU=;
+  b=iq4STJFus1ppexBYHB/5+Vmg4VQGhzwOVB3v561Fp1quIbDKHrk4BacD
+   D2tTdyT9mZYeHafIMTDa2/ULiAs+u9xjCNuq1SOQgKz+2wd7Kc5RvCoQc
+   +eKJa8M1xwjva1cFVhqeVOO6O9iJ6HIYy8BaoJzsiRrbJ+kk3z5FRBxnl
+   a5a1PpKYpBGXPZsWtoFtnltqkWUGf7dZpkJ8/HxNoHWf14qiuHHn4uCKz
+   6fE7gcfTD2HIWCT2TfpBVW5I7p/iG5BJZrBMeFtfPtTfE3zvG5ZbxJYAg
+   5y3F0p9r771p7rMCwnbaT0bwjFusvqXVKHKDYFMmb7sMI4iu9/1zbp1mg
+   A==;
+X-IronPort-AV: E=Sophos;i="5.97,263,1669071600"; 
+   d="scan'208";a="28787734"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 01 Feb 2023 08:03:38 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 7043F280056;
+        Wed,  1 Feb 2023 08:03:38 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+Subject: Re: [PATCH 2/2] media: i2c: imx290: Add support for the mono sensor variant.
+Date:   Wed, 01 Feb 2023 08:03:36 +0100
+Message-ID: <5647238.DvuYhMxLoT@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20230131190700.3476796-3-dave.stevenson@raspberrypi.com>
+References: <20230131190700.3476796-1-dave.stevenson@raspberrypi.com> <20230131190700.3476796-3-dave.stevenson@raspberrypi.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR04MB6341:EE_|DB9PR04MB8429:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5b612d9f-48d7-43cd-69ea-08db041a13ea
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nHEanYDuc4A0XDXMqGR6Y4bDT7zpdvPcJYd5/wnoDrIETKXxeHzTAbPWP3nC0MXYMYUFRLXsnib+owxJUwpV1IGe0Gd3+HkbdhQRdYXeLoPf33UqbtrPVeXtex0aQcqzlmYLZwvZKIOxyIM5YjSlNF75CcBgF1j+B8NTTAf+jmrwx7sk5z0t/vGEWlbMeBak/pNas0hg0hVuqk54pjlsF+PVsmBThwJOqjpx19jVJK7+fm8ZUguVLyu1DGKK3OoHEKlnjXO7rMonIKu50aruhWa2W6mWW4tkP7145Ni0FeaYMl6Qqtp65LOPVNXWXfisLgsQuIysMBQLwyFVIAukIZKGj7war3jjsTG9QIYsko3ycGmxu2ZjBheBk+f648hF3h5gFb8ZM3KEKgKNFvGo0zmXZvDoNit1xrFQjegFUhrdChAA2AbHwSumTFYaMT6lytD69VmzS31oh1siE4H7Xdbzl3tVMlNm/SCAE54bNGEcCPy7uaxHfgEUf4SOcqk3ICB+bN6HVR7UMbdXMAmMoKymLYSsHS/AhtNoPIJtmSLEBUMzzb5ipjT7mqEU+QSPOQLn36pK/3PnMYtsp7FfUNSWkvsGplsqw46kl9d/z4FhDvQv9iOfoaaV7eF9TmABDCGlTbhAhYfX7BF/irn+IGQ95U9Fr1Bdrb69uGl/CKYgkFvvnS51ls3S4klsx9jMKcOiZT/VlyBk1Q52VS1IdQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(39860400002)(136003)(346002)(396003)(376002)(451199018)(38100700002)(52116002)(2616005)(38350700002)(36756003)(7416002)(8936002)(86362001)(5660300002)(44832011)(316002)(41300700001)(2906002)(83380400001)(6506007)(6512007)(8676002)(4326008)(186003)(26005)(478600001)(66476007)(66556008)(6666004)(6486002)(66946007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?v/BWDLPciA9jQCHnzrDCT4a8yzdBvqYBHsfqZIY2jRl0u0Z/jP1g0lM5yGfu?=
- =?us-ascii?Q?D1t68YGmxDS1yHTL20irxxxBWWhbZl/5GflQNIdvqzoik5kB1lmvJQ1L7hr5?=
- =?us-ascii?Q?KwBvGQ4giHLebqe8/ax8jk+zjQISLh8cO8iY/uvgoL+OYl/DvoWIuc8MqAe8?=
- =?us-ascii?Q?gFPSGCluDn7nmvyO0nequDGknFEqJVIyuLjF8IuYdgAwQVI9alrQnoSKJLe/?=
- =?us-ascii?Q?fh8RtfVypQoUmbcZJA8X2LDjgPIFxJ3Q+UuAcpqcF15fINvJ+9A7ESu+EZo3?=
- =?us-ascii?Q?k5M33wgZoAjRsn/Kxe3VqiUFBbo1weiYOeRxuWatigk3j7UDfhH2z29B5/I+?=
- =?us-ascii?Q?EbGouH/7vfAiByPaWgjeHLv5S7jf6ObcCqsRvkKmG4hMaZQTj/wCwPfDxLct?=
- =?us-ascii?Q?JrGDeVJ1QDYo1jGqnVuLGgnKTKb2iKF4n8ik0BIa++ZXqsWYe+3EPoJSMpi5?=
- =?us-ascii?Q?XfGAC2f+mVB6H2L8unCrsFRW0DRzSFuznlxGyu+xST+19F8xs61JphcPlvDq?=
- =?us-ascii?Q?BwI9LJKZV6ixfmt23PGco4lJ6Oak6wLJYWy7uvtvUt7h8DRdYReLw57MZnLL?=
- =?us-ascii?Q?CtqmQMfVES6Ofo9NbrkZUpnHK7a5X//A3a/2ND4BkCKvwEuk0+uM2UDii2eh?=
- =?us-ascii?Q?knVY6ua0+7yXcrZwg4/nWLbIxbeUnPV/xH1uJPxu08BLwS6HTID17rbTQGs/?=
- =?us-ascii?Q?fxNYe8Uu1hYygNHlczyA/IMGjEb0N3PdRvkKHb/7JuZ6rp2ZVCXBSfO6NUCC?=
- =?us-ascii?Q?0dQ4S0p5y8NYnp2rtDQ83Zr04+3qapGp3HvuUh1oIi4vNXqttymm1S9cKwqw?=
- =?us-ascii?Q?p05kFq2vuN8kd4lLJA9CDl1/0wgOxPPYHeXm0kUO4FadQpoYzxpdRWnPJsdZ?=
- =?us-ascii?Q?dRKBSVYBULmr1BmWW6Ex3bfqlQCYFd1mLmbv70qrLPgJ2D6vyG8/vN5kPmqs?=
- =?us-ascii?Q?3STgA3/9yZluYt+dSHw3pwk7rM0Dyw8G4g4ybktNP8hY/fm/+S1JlHws9A3B?=
- =?us-ascii?Q?xH4ZAaDczPwG5OEV/SFYZd1SPviYhGkdvGVk/KlxbE1oGpmPIRtnnZ9p9nRg?=
- =?us-ascii?Q?baPpWgI+qTokEwSxqbAjmvrGtLEZGkMcbvPdEHmiHNY1MA11v/miv1cnnqb8?=
- =?us-ascii?Q?Y1HovQFg0PD5fYOgNMLVIcajmOcK/nwC1rhpoUaFw+JYu6Fh0FxbPU2tfQBX?=
- =?us-ascii?Q?gSTORGg7jcK+mDGvfvEoC3DzAL+MBAqP3vIxWwqOb3fHI54v3euri+q1IznK?=
- =?us-ascii?Q?4gYtlP3x674TQQpuYWQl7PvukSeGWpxy6rBMllFw2IGOw7yjEf+bt/L6i6ux?=
- =?us-ascii?Q?ZPRE0vG74g/EDAlw7QgNvIBGbQ8WI3ydoF36wZ92AsCICedxRmsS5MlYW67S?=
- =?us-ascii?Q?vBRVuQQJAsg7y5C5KiYJQvGQ0lfb1hJNB1gBXJu/ozW3lub6w4yq3RN37lOH?=
- =?us-ascii?Q?cGTVxqWbOWcm/J+tM/c2abIZ0iF0+X1mcqYcf9W96Ri03LE8epmC16CCtNfJ?=
- =?us-ascii?Q?shl4E7tdKFpY4FxOX1USw1rx6AifB6Wrz8OxV+magmFx1vUWII+0KJBXjPLG?=
- =?us-ascii?Q?zJhTvilU8JIq6YaRJeX0OohnLUUq+2ukTPsllRVX?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5b612d9f-48d7-43cd-69ea-08db041a13ea
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2023 06:03:45.4566
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7nQSti0SC1n3fpselcbEq7qdGVVgZqpaY8rNUvKPKkYN0QtAAqGsZ2hrU3714JxG0uQN1cn5gwxSe6NPCEFg+g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8429
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-remove the unused parameter ctx
+Hi Dave,
 
-Signed-off-by: Ming Qian <ming.qian@nxp.com>
----
- drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
+Am Dienstag, 31. Januar 2023, 20:07:00 CET schrieb Dave Stevenson:
+> The IMX290 module is available as either mono or colour (Bayer).
+> 
+> Update the driver so that it can advertise the correct mono
+> formats instead of the colour ones.
+> 
+> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+> ---
+>  drivers/media/i2c/imx290.c | 47 ++++++++++++++++++++++++--------------
+>  1 file changed, 30 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
+> index 49d6c8bdec41..a370f1102334 100644
+> --- a/drivers/media/i2c/imx290.c
+> +++ b/drivers/media/i2c/imx290.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/gpio/consumer.h>
+>  #include <linux/i2c.h>
+>  #include <linux/module.h>
+> +#include <linux/of_device.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/regmap.h>
+>  #include <linux/regulator/consumer.h>
+> @@ -177,6 +178,7 @@ struct imx290 {
+>  	struct clk *xclk;
+>  	struct regmap *regmap;
+>  	u8 nlanes;
+> +	u8 mono;
+> 
+>  	struct v4l2_subdev sd;
+>  	struct media_pad pad;
+> @@ -414,7 +416,8 @@ static inline int imx290_modes_num(const struct imx290
+> *imx290) }
+> 
+>  struct imx290_format_info {
+> -	u32 code;
+> +	/* Array of codes. [0] is for colour, [1] is for mono. */
+> +	u32 code[2];
 
-diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-index f085f14d676a..70b6eea733e7 100644
---- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-+++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-@@ -420,8 +420,7 @@ static int enum_fmt(const struct mxc_jpeg_fmt *mxc_formats, int n,
- 	return 0;
- }
- 
--static const struct mxc_jpeg_fmt *mxc_jpeg_find_format(struct mxc_jpeg_ctx *ctx,
--						       u32 pixelformat)
-+static const struct mxc_jpeg_fmt *mxc_jpeg_find_format(u32 pixelformat)
- {
- 	unsigned int k;
- 
-@@ -1562,7 +1561,7 @@ static int mxc_jpeg_parse(struct mxc_jpeg_ctx *ctx, struct vb2_buffer *vb)
- 	if (fourcc == 0)
- 		return -EINVAL;
- 
--	jpeg_src_buf->fmt = mxc_jpeg_find_format(ctx, fourcc);
-+	jpeg_src_buf->fmt = mxc_jpeg_find_format(fourcc);
- 	jpeg_src_buf->w = header.frame.width;
- 	jpeg_src_buf->h = header.frame.height;
- 	ctx->header_parsed = true;
-@@ -1702,11 +1701,11 @@ static void mxc_jpeg_set_default_params(struct mxc_jpeg_ctx *ctx)
- 	int i;
- 
- 	if (ctx->mxc_jpeg->mode == MXC_JPEG_ENCODE) {
--		out_q->fmt = mxc_jpeg_find_format(ctx, MXC_JPEG_DEFAULT_PFMT);
--		cap_q->fmt = mxc_jpeg_find_format(ctx, V4L2_PIX_FMT_JPEG);
-+		out_q->fmt = mxc_jpeg_find_format(MXC_JPEG_DEFAULT_PFMT);
-+		cap_q->fmt = mxc_jpeg_find_format(V4L2_PIX_FMT_JPEG);
- 	} else {
--		out_q->fmt = mxc_jpeg_find_format(ctx, V4L2_PIX_FMT_JPEG);
--		cap_q->fmt = mxc_jpeg_find_format(ctx, MXC_JPEG_DEFAULT_PFMT);
-+		out_q->fmt = mxc_jpeg_find_format(V4L2_PIX_FMT_JPEG);
-+		cap_q->fmt = mxc_jpeg_find_format(MXC_JPEG_DEFAULT_PFMT);
- 	}
- 
- 	for (i = 0; i < 2; i++) {
-@@ -1950,7 +1949,7 @@ static int mxc_jpeg_try_fmt(struct v4l2_format *f,
- 		 pix_mp->height : MXC_JPEG_MAX_HEIGHT;
- 	int i;
- 
--	fmt = mxc_jpeg_find_format(ctx, fourcc);
-+	fmt = mxc_jpeg_find_format(fourcc);
- 	if (!fmt || fmt->flags != mxc_jpeg_get_fmt_type(ctx, f->type)) {
- 		dev_warn(ctx->mxc_jpeg->dev, "Format not supported: %c%c%c%c, use the default.\n",
- 			 (fourcc & 0xff),
-@@ -1958,7 +1957,7 @@ static int mxc_jpeg_try_fmt(struct v4l2_format *f,
- 			 (fourcc >> 16) & 0xff,
- 			 (fourcc >> 24) & 0xff);
- 		fourcc = mxc_jpeg_get_default_fourcc(ctx, f->type);
--		fmt = mxc_jpeg_find_format(ctx, fourcc);
-+		fmt = mxc_jpeg_find_format(fourcc);
- 		if (!fmt)
- 			return -EINVAL;
- 		f->fmt.pix_mp.pixelformat = fourcc;
--- 
-2.38.1
+Please use a define for that.
+
+>  	u8 bpp;
+>  	const struct imx290_regval *regs;
+>  	unsigned int num_regs;
+> @@ -422,26 +425,27 @@ struct imx290_format_info {
+> 
+>  static const struct imx290_format_info imx290_formats[] = {
+>  	{
+> -		.code = MEDIA_BUS_FMT_SRGGB10_1X10,
+> +		.code = { MEDIA_BUS_FMT_SRGGB10_1X10, 
+MEDIA_BUS_FMT_Y10_1X10 },
+>  		.bpp = 10,
+>  		.regs = imx290_10bit_settings,
+>  		.num_regs = ARRAY_SIZE(imx290_10bit_settings),
+>  	}, {
+> -		.code = MEDIA_BUS_FMT_SRGGB12_1X12,
+> +		.code = { MEDIA_BUS_FMT_SRGGB12_1X12, 
+MEDIA_BUS_FMT_Y12_1X12 },
+>  		.bpp = 12,
+>  		.regs = imx290_12bit_settings,
+>  		.num_regs = ARRAY_SIZE(imx290_12bit_settings),
+>  	}
+>  };
+> 
+> -static const struct imx290_format_info *imx290_format_info(u32 code)
+> +static const struct imx290_format_info *
+> +imx290_format_info(const struct imx290 *imx290, u32 code)
+>  {
+>  	unsigned int i;
+> 
+>  	for (i = 0; i < ARRAY_SIZE(imx290_formats); ++i) {
+>  		const struct imx290_format_info *info = 
+&imx290_formats[i];
+> 
+> -		if (info->code == code)
+> +		if (info->code[imx290->mono] == code)
+>  			return info;
+>  	}
+> 
+> @@ -536,7 +540,7 @@ static int imx290_set_black_level(struct imx290 *imx290,
+> const struct v4l2_mbus_framefmt *format,
+>  				  unsigned int black_level, int *err)
+>  {
+> -	unsigned int bpp = imx290_format_info(format->code)->bpp;
+> +	unsigned int bpp = imx290_format_info(imx290, format->code)->bpp;
+> 
+>  	return imx290_write(imx290, IMX290_BLKLEVEL,
+>  			    black_level >> (16 - bpp), err);
+> @@ -548,7 +552,7 @@ static int imx290_setup_format(struct imx290 *imx290,
+>  	const struct imx290_format_info *info;
+>  	int ret;
+> 
+> -	info = imx290_format_info(format->code);
+> +	info = imx290_format_info(imx290, format->code);
+> 
+>  	ret = imx290_set_register_array(imx290, info->regs, info->num_regs);
+>  	if (ret < 0) {
+> @@ -844,10 +848,12 @@ static int imx290_enum_mbus_code(struct v4l2_subdev
+> *sd, struct v4l2_subdev_state *sd_state,
+>  				 struct v4l2_subdev_mbus_code_enum 
+*code)
+>  {
+> +	const struct imx290 *imx290 = to_imx290(sd);
+> +
+>  	if (code->index >= ARRAY_SIZE(imx290_formats))
+>  		return -EINVAL;
+> 
+> -	code->code = imx290_formats[code->index].code;
+> +	code->code = imx290_formats[code->index].code[imx290->mono];
+> 
+>  	return 0;
+>  }
+> @@ -859,7 +865,7 @@ static int imx290_enum_frame_size(struct v4l2_subdev
+> *sd, const struct imx290 *imx290 = to_imx290(sd);
+>  	const struct imx290_mode *imx290_modes = imx290_modes_ptr(imx290);
+> 
+> -	if (!imx290_format_info(fse->code))
+> +	if (!imx290_format_info(imx290, fse->code))
+>  		return -EINVAL;
+> 
+>  	if (fse->index >= imx290_modes_num(imx290))
+> @@ -888,8 +894,8 @@ static int imx290_set_fmt(struct v4l2_subdev *sd,
+>  	fmt->format.width = mode->width;
+>  	fmt->format.height = mode->height;
+> 
+> -	if (!imx290_format_info(fmt->format.code))
+> -		fmt->format.code = imx290_formats[0].code;
+> +	if (!imx290_format_info(imx290, fmt->format.code))
+> +		fmt->format.code = imx290_formats[0].code[imx290->mono];
+> 
+>  	fmt->format.field = V4L2_FIELD_NONE;
+> 
+> @@ -1177,16 +1183,29 @@ static s64 imx290_check_link_freqs(const struct
+> imx290 *imx290, return 0;
+>  }
+> 
+> +static const struct of_device_id imx290_of_match[] = {
+> +	{ .compatible = "sony,imx290" },
+> +	{ .compatible = "sony,imx290-mono", .data = (void *)1 },
+
+Would you mind using a model specific struct? I have a patch on my stack 
+adding support for imx327. There are some imx327 specific writes to registers 
+during initialization. I do not mind adding this struct later though.
+
+Best regards
+Alexander
+
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, imx290_of_match);
+> +
+>  static int imx290_parse_dt(struct imx290 *imx290)
+>  {
+> +	struct i2c_client *client = to_i2c_client(imx290->dev);
+>  	/* Only CSI2 is supported for now: */
+>  	struct v4l2_fwnode_endpoint ep = {
+>  		.bus_type = V4L2_MBUS_CSI2_DPHY
+>  	};
+> +	const struct of_device_id *match;
+>  	struct fwnode_handle *endpoint;
+>  	int ret;
+>  	s64 fq;
+> 
+> +	match = i2c_of_match_device(imx290_of_match, client);
+> +	if (match)
+> +		imx290->mono = match->data ? 1 : 0;
+> +
+>  	endpoint = fwnode_graph_get_next_endpoint(dev_fwnode(imx290->dev), 
+NULL);
+>  	if (!endpoint) {
+>  		dev_err(imx290->dev, "Endpoint node not found\n");
+> @@ -1351,12 +1370,6 @@ static void imx290_remove(struct i2c_client *client)
+>  	pm_runtime_set_suspended(imx290->dev);
+>  }
+> 
+> -static const struct of_device_id imx290_of_match[] = {
+> -	{ .compatible = "sony,imx290" },
+> -	{ /* sentinel */ }
+> -};
+> -MODULE_DEVICE_TABLE(of, imx290_of_match);
+> -
+>  static struct i2c_driver imx290_i2c_driver = {
+>  	.probe_new  = imx290_probe,
+>  	.remove = imx290_remove,
+
+
+
 
