@@ -2,80 +2,76 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 052E9C38142
-	for <linux-media@archiver.kernel.org>; Wed,  1 Feb 2023 16:12:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 946D4C05027
+	for <linux-media@archiver.kernel.org>; Wed,  1 Feb 2023 16:12:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232032AbjBAQMB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Feb 2023 11:12:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47994 "EHLO
+        id S232280AbjBAQMC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Feb 2023 11:12:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjBAQMA (ORCPT
+        with ESMTP id S230200AbjBAQMA (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Wed, 1 Feb 2023 11:12:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DB174A78
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F289F6A735
         for <linux-media@vger.kernel.org>; Wed,  1 Feb 2023 08:11:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EE624B8217E
-        for <linux-media@vger.kernel.org>; Wed,  1 Feb 2023 16:11:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15C82C433EF;
-        Wed,  1 Feb 2023 16:11:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9022D6185D
+        for <linux-media@vger.kernel.org>; Wed,  1 Feb 2023 16:11:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 413AEC433EF;
+        Wed,  1 Feb 2023 16:11:57 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     Andy Walls <awalls@md.metrocast.net>
-Subject: [PATCH 0/8] cx18: convert to vb2
-Date:   Wed,  1 Feb 2023 17:11:45 +0100
-Message-Id: <20230201161153.883376-1-hverkuil-cisco@xs4all.nl>
+Cc:     Andy Walls <awalls@md.metrocast.net>,
+        Hans Verkuil <hans.verkuil@cisco.com>
+Subject: [PATCH 2/8] v4l2-dev.c: check for V4L2_CAP_STREAMING to enable streaming ioctls
+Date:   Wed,  1 Feb 2023 17:11:47 +0100
+Message-Id: <20230201161153.883376-3-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230201161153.883376-1-hverkuil-cisco@xs4all.nl>
+References: <20230201161153.883376-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series converts cx18 to use the vb2 instead of the videobuf
-framework. It also fixes a number of issues reported by v4l2-compliance.
+From: Hans Verkuil <hans.verkuil@cisco.com>
 
-This driver is unusual because it creates two video nodes: one is for
-MPEG only, the other is for raw video. The first only supports read(),
-the second supports both streaming and read.
+Rather than checking which device type it is, just check the STREAMING
+cap since that indicates support for streaming ioctls.
 
-Converting cx18 to vb2 uncovered two corner cases in the v4l2 core that
-were not handled quite right: one in vb2_read where the owner of the
-queue was set too late (that caused problems in cx18 that expects it
-to be set when start_streaming is called), and the other was in v4l2-dev.c
-where the streaming ioctls were enable when they shouldn't. Rather than
-trying a heuristic based on the device node type, just check CAP_STREAMING.
+Some drivers only support READWRITE (typically MPEG encoders).
 
-As vb2 conversions go, this one wasn't too bad.
+Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
+---
+ drivers/media/v4l2-core/v4l2-dev.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Regards,
-
-	Hans
-
-Hans Verkuil (8):
-  vb2: set owner before calling vb2_read
-  v4l2-dev.c: check for V4L2_CAP_STREAMING to enable streaming ioctls
-  cx18: convert to vb2
-  cx18: fix incorrect input counting
-  cx18: properly report pixelformats
-  cx18: missing CAP_AUDIO for vbi stream
-  cx18: reorder fmt_vid_cap functions in cx18-ioctl.c
-  cx18: fix format compliance issues
-
- .../media/common/videobuf2/videobuf2-v4l2.c   |   5 +-
- drivers/media/pci/cx18/Kconfig                |   2 +-
- drivers/media/pci/cx18/cx18-driver.c          |   4 +-
- drivers/media/pci/cx18/cx18-driver.h          |  25 +-
- drivers/media/pci/cx18/cx18-fileops.c         |  85 +---
- drivers/media/pci/cx18/cx18-fileops.h         |   3 +-
- drivers/media/pci/cx18/cx18-ioctl.c           | 387 +++++++-----------
- drivers/media/pci/cx18/cx18-mailbox.c         |  27 +-
- drivers/media/pci/cx18/cx18-streams.c         | 275 +++++++------
- drivers/media/v4l2-core/v4l2-dev.c            |   5 +-
- 10 files changed, 351 insertions(+), 467 deletions(-)
-
+diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
+index 397d553177fa..f81279492682 100644
+--- a/drivers/media/v4l2-core/v4l2-dev.c
++++ b/drivers/media/v4l2-core/v4l2-dev.c
+@@ -556,6 +556,7 @@ static void determine_valid_ioctls(struct video_device *vdev)
+ 	bool is_rx = vdev->vfl_dir != VFL_DIR_TX;
+ 	bool is_tx = vdev->vfl_dir != VFL_DIR_RX;
+ 	bool is_io_mc = vdev->device_caps & V4L2_CAP_IO_MC;
++	bool has_streaming = vdev->device_caps & V4L2_CAP_STREAMING;
+ 
+ 	bitmap_zero(valid_ioctls, BASE_VIDIOC_PRIVATE);
+ 
+@@ -708,8 +709,8 @@ static void determine_valid_ioctls(struct video_device *vdev)
+ 		SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_sdr_out);
+ 	}
+ 
+-	if (is_vid || is_vbi || is_sdr || is_tch || is_meta) {
+-		/* ioctls valid for video, vbi, sdr, touch and metadata */
++	if (has_streaming) {
++		/* ioctls valid for streaming I/O */
+ 		SET_VALID_IOCTL(ops, VIDIOC_REQBUFS, vidioc_reqbufs);
+ 		SET_VALID_IOCTL(ops, VIDIOC_QUERYBUF, vidioc_querybuf);
+ 		SET_VALID_IOCTL(ops, VIDIOC_QBUF, vidioc_qbuf);
 -- 
 2.39.0
 
