@@ -2,151 +2,85 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17980C63797
-	for <linux-media@archiver.kernel.org>; Wed,  1 Feb 2023 16:58:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0492C38142
+	for <linux-media@archiver.kernel.org>; Wed,  1 Feb 2023 17:07:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231620AbjBAQ6D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Feb 2023 11:58:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57668 "EHLO
+        id S231644AbjBARHU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Feb 2023 12:07:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231543AbjBAQ6A (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Feb 2023 11:58:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E6A7B402;
-        Wed,  1 Feb 2023 08:57:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D37961889;
-        Wed,  1 Feb 2023 16:57:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B4DFC433D2;
-        Wed,  1 Feb 2023 16:57:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675270673;
-        bh=wgoFWDzet3MEnQEk+UbM8HUIOsFtAK8npPJ49HGAO1o=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=u9X4Gr7TjZ6UkgVwjSehC9yfCUt//67EjPYTXTHnJ+aTE6aXNoDaG/fZz03jXnElM
-         c315hFd6D+lNgE3Ekgg0QaNB3z7pxxWqm4plvstpHb14GQ0FGDiib2q7//3OZr4/JT
-         i0jWp+SqAe/OVftlr6AN17B1kIJdLkIF0i/EuIo2IVSpqxiD6qKmMLkB+1ogV6NLc6
-         JidEOiKwk15fIiFO+dc5Qsvoe66Y0tsqMeopIu++n7efbaGm5W5Uc31U7fqGait52w
-         WnE8sOF8lc6h19Dd3hynSSTPWQGh4Vapzj+sPUAC+hBsgiEQz8Z/aI5T8L99Afd+Hr
-         1f40qveSqB9TQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        jic23@kernel.org, tudor.ambarus@microchip.com, pratyush@kernel.org,
-        sanju.mehta@amd.com, chin-ting_kuo@aspeedtech.com, clg@kaod.org,
-        kdasu.kdev@gmail.com, f.fainelli@gmail.com, rjui@broadcom.com,
-        sbranden@broadcom.com, eajames@linux.ibm.com, olteanv@gmail.com,
-        han.xu@nxp.com, john.garry@huawei.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, khilman@baylibre.com,
-        matthias.bgg@gmail.com, haibo.chen@nxp.com,
-        linus.walleij@linaro.org, daniel@zonque.org,
-        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
-        agross@kernel.org, heiko@sntech.de, krzysztof.kozlowski@linaro.org,
-        andi@etezian.org, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        masahisa.kojima@linaro.org, jaswinder.singh@linaro.org,
-        rostedt@goodmis.org, mingo@redhat.com, l.stelmach@samsung.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, alex.aring@gmail.com, stefan@datenfreihafen.org,
-        kvalo@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
-        skomatineni@nvidia.com, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, j.neuschaefer@gmx.net,
-        vireshk@kernel.org, rmfrfs@gmail.com, johan@kernel.org,
-        elder@kernel.org, gregkh@linuxfoundation.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Cc:     git@amd.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, joel@jms.id.au, andrew@aj.id.au,
-        radu_nicolae.pirea@upb.ro, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        bcm-kernel-feedback-list@broadcom.com, fancer.lancer@gmail.com,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        yogeshgaur.83@gmail.com, konrad.dybcio@somainline.org,
-        alim.akhtar@samsung.com, ldewangan@nvidia.com,
-        michal.simek@amd.com, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
-        libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org,
-        linux-mtd@lists.infradead.org, lars@metafoo.de,
-        Michael.Hennerich@analog.com, linux-iio@vger.kernel.org,
-        michael@walle.cc, palmer@dabbelt.com,
-        linux-riscv@lists.infradead.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, greybus-dev@lists.linaro.org,
-        linux-staging@lists.linux.dev, amitrkcian2002@gmail.com
-In-Reply-To: <20230119185342.2093323-1-amit.kumar-mahapatra@amd.com>
-References: <20230119185342.2093323-1-amit.kumar-mahapatra@amd.com>
-Subject: Re: (subset) [PATCH v2 00/13] spi: Add support for
- stacked/parallel memories
-Message-Id: <167527065195.537421.10361370461620477483.b4-ty@kernel.org>
-Date:   Wed, 01 Feb 2023 16:57:31 +0000
+        with ESMTP id S229597AbjBARHT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Feb 2023 12:07:19 -0500
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F859019;
+        Wed,  1 Feb 2023 09:07:16 -0800 (PST)
+Received: from [192.168.178.23] (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id A4A83CD5EB;
+        Wed,  1 Feb 2023 17:07:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1675271234; bh=mU7WO+CJjepkCD5wdLsQaRzi/CFzaplHDhayDwUy6aA=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc;
+        b=b2Bh+LKHoX3KAH1UKadOHh9E1tdN13Qf7BuwSpo4jr4/dV+jESpmtLqltSTbn+W6B
+         ZeMUfubzDnlr4P2/GQu/M4Xg4U0FlRH/Uo4qQVJAF2o95WFuH3lkSDp4ti/dGwTari
+         9oKigdBt5w7Cbj1Y2di0ip5TYjKV8pavVdk1EPxg=
+From:   Luca Weiss <luca@z3ntu.xyz>
+Date:   Wed, 01 Feb 2023 18:06:58 +0100
+Subject: [PATCH v2 1/4] media: i2c: ov2685: Make reset gpio optional
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20230129-ov2685-improvements-v2-1-210400f2b63e@z3ntu.xyz>
+References: <20230129-ov2685-improvements-v2-0-210400f2b63e@z3ntu.xyz>
+In-Reply-To: <20230129-ov2685-improvements-v2-0-210400f2b63e@z3ntu.xyz>
+To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>
 X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=953; i=luca@z3ntu.xyz;
+ h=from:subject:message-id; bh=mU7WO+CJjepkCD5wdLsQaRzi/CFzaplHDhayDwUy6aA=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBj2pw/44cBYLYqME0Suaw12Qm51b7+wZrJgODj3ilO
+ BGXhH0GJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCY9qcPwAKCRBy2EO4nU3XViUND/
+ 9LDqVTJP5Rq64Wk2VvpY4Kz4p77GTLO8ULRGU/cQzF9ce9oPOrGCTLMm35RI1QpXS10X2WTVjKoRGZ
+ ErDeZuhgw/nusCg+uBfdL15c2h5rHyKll/H712EMKY70GiQ6bnNuQr4FlBc+z0H2h+P3YYGPMWGqq4
+ SDBQrb2tzjJ6EebqFVZoR4ualFXX0vTz+rzcQ7WKb9aauur46h9HFrVutNjK4TKJip0ZS4TdRMD0zi
+ 95yx9SjOCG8sulKzcAACmJcerQBGqYRtWMVLHTo8VWFCJyVcylUyseZuRYttTDXV57Nkp81S0v5RNy
+ Lr5bz4zpQIRS6WRrmRGDTWhRDrp+La5nvkHZSLJcdEfjxgtitamQwcVSK5gge17PMpmDchS98T1Oez
+ 25NWpq0a4Td4pIyYtXIp8dZFS7r15DkmLufsWY2DXAkvP86pgmC8DZ5wkCwmzqL96IUGzid3tAJr1d
+ fdz5cpXscgJtEG6ZZLXnvwwdjxBct3E+WBpS65vFu/xaodmbXfudPPBnmvzBbZyH2Z8AwY4l+V2K/v
+ hCeZJa2cMM69abm6oFA3fb4DooVgoAGBDAy0dR2wK3IXLsCOfyE9fewbTnxfFfNDqoYA2FhQtqqi3W
+ +ReNa9fXd2Yj4YqFc2yESBzF5MUp/rH+LMCJXGsphhQP2KfNLsCSjC4bHokg==
+X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
+ fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, 20 Jan 2023 00:23:29 +0530, Amit Kumar Mahapatra wrote:
-> This patch is in the continuation to the discussions which happened on
-> 'commit f89504300e94 ("spi: Stacked/parallel memories bindings")' for
-> adding dt-binding support for stacked/parallel memories.
-> 
-> This patch series updated the spi-nor, spi core and the spi drivers
-> to add stacked and parallel memories support.
-> 
-> [...]
+In some setups XSHUTDOWN is connected to DOVDD when it's unused,
+therefore treat the reset gpio as optional.
 
-Applied to
+Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+ drivers/media/i2c/ov2685.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+diff --git a/drivers/media/i2c/ov2685.c b/drivers/media/i2c/ov2685.c
+index a3b524f15d89..a422f4c8a2eb 100644
+--- a/drivers/media/i2c/ov2685.c
++++ b/drivers/media/i2c/ov2685.c
+@@ -734,7 +734,7 @@ static int ov2685_probe(struct i2c_client *client,
+ 	if (clk_get_rate(ov2685->xvclk) != OV2685_XVCLK_FREQ)
+ 		dev_warn(dev, "xvclk mismatched, modes are based on 24MHz\n");
+ 
+-	ov2685->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
++	ov2685->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
+ 	if (IS_ERR(ov2685->reset_gpio)) {
+ 		dev_err(dev, "Failed to get reset-gpios\n");
+ 		return -EINVAL;
 
-Thanks!
-
-[01/13] spi: Add APIs in spi core to set/get spi->chip_select and spi->cs_gpiod
-        commit: 303feb3cc06ac0665d0ee9c1414941200e60e8a3
-[02/13] spi: Replace all spi->chip_select and spi->cs_gpiod references with function call
-        (no commit info)
-[03/13] net: Replace all spi->chip_select and spi->cs_gpiod references with function call
-        (no commit info)
-[04/13] iio: imu: Replace all spi->chip_select and spi->cs_gpiod references with function call
-        (no commit info)
-[05/13] mtd: devices: Replace all spi->chip_select and spi->cs_gpiod references with function call
-        (no commit info)
-[06/13] staging: Replace all spi->chip_select and spi->cs_gpiod references with function call
-        (no commit info)
-[07/13] platform/x86: serial-multi-instantiate: Replace all spi->chip_select and spi->cs_gpiod references with function call
-        (no commit info)
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+2.39.1
 
