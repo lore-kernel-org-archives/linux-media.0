@@ -2,34 +2,34 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0492C38142
-	for <linux-media@archiver.kernel.org>; Wed,  1 Feb 2023 17:07:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ABEFC636D7
+	for <linux-media@archiver.kernel.org>; Wed,  1 Feb 2023 17:07:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231644AbjBARHU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Feb 2023 12:07:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34528 "EHLO
+        id S231786AbjBARHV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Feb 2023 12:07:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjBARHT (ORCPT
+        with ESMTP id S229608AbjBARHT (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Wed, 1 Feb 2023 12:07:19 -0500
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F859019;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D717113D77;
         Wed,  1 Feb 2023 09:07:16 -0800 (PST)
 Received: from [192.168.178.23] (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id A4A83CD5EB;
-        Wed,  1 Feb 2023 17:07:14 +0000 (UTC)
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 1D103CDFDF;
+        Wed,  1 Feb 2023 17:07:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1675271234; bh=mU7WO+CJjepkCD5wdLsQaRzi/CFzaplHDhayDwUy6aA=;
+        t=1675271235; bh=oEhtXi5Cp2INDY3zPTIo52DB0I1+lAGCjPcLcIpaDFU=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=b2Bh+LKHoX3KAH1UKadOHh9E1tdN13Qf7BuwSpo4jr4/dV+jESpmtLqltSTbn+W6B
-         ZeMUfubzDnlr4P2/GQu/M4Xg4U0FlRH/Uo4qQVJAF2o95WFuH3lkSDp4ti/dGwTari
-         9oKigdBt5w7Cbj1Y2di0ip5TYjKV8pavVdk1EPxg=
+        b=hlmabRtzYoS1PcRzF0Rb+tgv0qZCuNrfPMKRHpBMLEix5ztcgu6t6Je1Ss+os9QTw
+         0lxMpVc+QbkGAs61I4+V9fzsrPRuSLXIbhV0T/cbeX5qb7WFaRgRlGff1KVIA61/v5
+         u2/2Tb/ka6IJxApszJLb6Hk1GwlnXKzO5MKBe5SY=
 From:   Luca Weiss <luca@z3ntu.xyz>
-Date:   Wed, 01 Feb 2023 18:06:58 +0100
-Subject: [PATCH v2 1/4] media: i2c: ov2685: Make reset gpio optional
+Date:   Wed, 01 Feb 2023 18:07:00 +0100
+Subject: [PATCH v2 3/4] media: i2c: ov2685: Add controls from fwnode
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230129-ov2685-improvements-v2-1-210400f2b63e@z3ntu.xyz>
+Message-Id: <20230129-ov2685-improvements-v2-3-210400f2b63e@z3ntu.xyz>
 References: <20230129-ov2685-improvements-v2-0-210400f2b63e@z3ntu.xyz>
 In-Reply-To: <20230129-ov2685-improvements-v2-0-210400f2b63e@z3ntu.xyz>
 To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
@@ -39,47 +39,77 @@ To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
 Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Luca Weiss <luca@z3ntu.xyz>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=953; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=mU7WO+CJjepkCD5wdLsQaRzi/CFzaplHDhayDwUy6aA=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBj2pw/44cBYLYqME0Suaw12Qm51b7+wZrJgODj3ilO
- BGXhH0GJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCY9qcPwAKCRBy2EO4nU3XViUND/
- 9LDqVTJP5Rq64Wk2VvpY4Kz4p77GTLO8ULRGU/cQzF9ce9oPOrGCTLMm35RI1QpXS10X2WTVjKoRGZ
- ErDeZuhgw/nusCg+uBfdL15c2h5rHyKll/H712EMKY70GiQ6bnNuQr4FlBc+z0H2h+P3YYGPMWGqq4
- SDBQrb2tzjJ6EebqFVZoR4ualFXX0vTz+rzcQ7WKb9aauur46h9HFrVutNjK4TKJip0ZS4TdRMD0zi
- 95yx9SjOCG8sulKzcAACmJcerQBGqYRtWMVLHTo8VWFCJyVcylUyseZuRYttTDXV57Nkp81S0v5RNy
- Lr5bz4zpQIRS6WRrmRGDTWhRDrp+La5nvkHZSLJcdEfjxgtitamQwcVSK5gge17PMpmDchS98T1Oez
- 25NWpq0a4Td4pIyYtXIp8dZFS7r15DkmLufsWY2DXAkvP86pgmC8DZ5wkCwmzqL96IUGzid3tAJr1d
- fdz5cpXscgJtEG6ZZLXnvwwdjxBct3E+WBpS65vFu/xaodmbXfudPPBnmvzBbZyH2Z8AwY4l+V2K/v
- hCeZJa2cMM69abm6oFA3fb4DooVgoAGBDAy0dR2wK3IXLsCOfyE9fewbTnxfFfNDqoYA2FhQtqqi3W
- +ReNa9fXd2Yj4YqFc2yESBzF5MUp/rH+LMCJXGsphhQP2KfNLsCSjC4bHokg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1764; i=luca@z3ntu.xyz;
+ h=from:subject:message-id; bh=oEhtXi5Cp2INDY3zPTIo52DB0I1+lAGCjPcLcIpaDFU=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBj2pxAEugegsWx8BDNcW3lxPTH2z+UdUfc568iKMji
+ Zluxm/mJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCY9qcQAAKCRBy2EO4nU3XVvW9D/
+ 91MFrxf/QOOEiv+4vFvK8Wf5vYcQof0Z5w6csy8eCFOzHeAnm15N292R4is+ezXc3veNWsWxhKkp2B
+ erO6x1vXHVtmnLUPKarMU+USkID+984KH1QufKZU9pRtTJ0MPSKAmeBbzjTyROBf0EYbgV/NwyF6+y
+ R1xYnEzA6RhLlheOX4TltTu19t7eixtfHZkTmwk62OCNZDQSdademjz3SwuIF1rJTFphNgvh0ErYoW
+ tT0xDKsw0wABEOSAOPk8vHJl70pBcAjwFjcNGpbQbi3lAZ+X0FJhTa+acCtIV/PuUGSiMRL4OKinug
+ JL3l899Vu2eqx7+DnBBzWkxwTvGejd9M0A2EgVPRaKdml8MbJm7K8M5XQ0/UaCyJtX4WD5w4DQyl+D
+ F01WgDpJTyH/9yahUdIMWIIp/nSqGd6tMsf8AQ+i53qYZ+YAmXumIaRmTCbpeK1wJuvAbSxdjoj+Ql
+ noTvPy+3sHuZ0/ZyuEtBuY5Jntd5YAr8hsjNuukhxZ11Inmg7zaOi7mba0dFlWpQ9hl7EPB23vc4fQ
+ oczHsjjc0EuDzkd2lQjXHO3HLJzSQGkM43hBpcLRPlkW3Axyy0KLnQ0a8HCf7JbOB8QQu+HjTOH9Sz
+ qPHuW2S4lZCb3qZpUdrRgLc+8Y2yAc0ZTyjSlYSw+DW03H6bxhubpJ/JmZ/w==
 X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
  fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In some setups XSHUTDOWN is connected to DOVDD when it's unused,
-therefore treat the reset gpio as optional.
+Add V4L2_CID_CAMERA_ORIENTATION and V4L2_CID_CAMERA_SENSOR_ROTATION
+controls to the ov2685 driver by attempting to parse them from firmware.
 
-Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
- drivers/media/i2c/ov2685.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/ov2685.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/i2c/ov2685.c b/drivers/media/i2c/ov2685.c
-index a3b524f15d89..a422f4c8a2eb 100644
+index 844a91dbc8e5..e9e59a3ed7d5 100644
 --- a/drivers/media/i2c/ov2685.c
 +++ b/drivers/media/i2c/ov2685.c
-@@ -734,7 +734,7 @@ static int ov2685_probe(struct i2c_client *client,
- 	if (clk_get_rate(ov2685->xvclk) != OV2685_XVCLK_FREQ)
- 		dev_warn(dev, "xvclk mismatched, modes are based on 24MHz\n");
+@@ -17,6 +17,7 @@
+ #include <media/media-entity.h>
+ #include <media/v4l2-async.h>
+ #include <media/v4l2-ctrls.h>
++#include <media/v4l2-fwnode.h>
+ #include <media/v4l2-subdev.h>
  
--	ov2685->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
-+	ov2685->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
- 	if (IS_ERR(ov2685->reset_gpio)) {
- 		dev_err(dev, "Failed to get reset-gpios\n");
- 		return -EINVAL;
+ #define CHIP_ID				0x2685
+@@ -613,13 +614,14 @@ static int ov2685_initialize_controls(struct ov2685 *ov2685)
+ 	const struct ov2685_mode *mode;
+ 	struct v4l2_ctrl_handler *handler;
+ 	struct v4l2_ctrl *ctrl;
++	struct v4l2_fwnode_device_properties props;
+ 	u64 exposure_max;
+ 	u32 pixel_rate, h_blank;
+ 	int ret;
+ 
+ 	handler = &ov2685->ctrl_handler;
+ 	mode = ov2685->cur_mode;
+-	ret = v4l2_ctrl_handler_init(handler, 8);
++	ret = v4l2_ctrl_handler_init(handler, 10);
+ 	if (ret)
+ 		return ret;
+ 	handler->lock = &ov2685->mutex;
+@@ -661,6 +663,15 @@ static int ov2685_initialize_controls(struct ov2685 *ov2685)
+ 				ARRAY_SIZE(ov2685_test_pattern_menu) - 1,
+ 				0, 0, ov2685_test_pattern_menu);
+ 
++	/* set properties from fwnode (e.g. rotation, orientation) */
++	ret = v4l2_fwnode_device_parse(&ov2685->client->dev, &props);
++	if (ret)
++		goto err_free_handler;
++
++	ret = v4l2_ctrl_new_fwnode_properties(handler, &ov2685_ctrl_ops, &props);
++	if (ret)
++		goto err_free_handler;
++
+ 	if (handler->error) {
+ 		ret = handler->error;
+ 		dev_err(&ov2685->client->dev,
 
 -- 
 2.39.1
