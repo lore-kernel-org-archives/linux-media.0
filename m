@@ -2,93 +2,61 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3123FC636D4
-	for <linux-media@archiver.kernel.org>; Thu,  2 Feb 2023 10:03:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A889AC05027
+	for <linux-media@archiver.kernel.org>; Thu,  2 Feb 2023 10:09:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbjBBKDF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 2 Feb 2023 05:03:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43528 "EHLO
+        id S231790AbjBBKJa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 2 Feb 2023 05:09:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjBBKDD (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Feb 2023 05:03:03 -0500
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832043A97
-        for <linux-media@vger.kernel.org>; Thu,  2 Feb 2023 02:02:58 -0800 (PST)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-4b718cab0e4so19238207b3.9
-        for <linux-media@vger.kernel.org>; Thu, 02 Feb 2023 02:02:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yJzW53IuloyduIjuDpeyHuvtPwbWveSeqDHuN025brk=;
-        b=Vks3Bu67QVtaZjqKEf8VZXwCPQADEPehhWMW7nERW8os1q6BoKGZqlPJTx8hfSzRHU
-         y0+pubSYKycw87QukXP7xxV3m88miJ+fYEibbpDN3Vg0bLUXcujLTkdtrGQ6YNAvjZQT
-         xkyC+CxEm06wtkfExPFUMuDANE7A/M319en6ITK7iKrCjXwmihiwEuQ/pkczMIZlXDfc
-         OT/DgiPuX7DqtAKIIiS9u6BG2mkeR0xpX3AQtoxXXY7/KL3y/nREt3Ld9Zu0x/crL+oY
-         nCEmF9wduI3ahiUvWj/WVIvQ1/7Hv3IbGemo65x5RGQZ1WI9C7feMGLG1RmDpFOn0BN9
-         /zvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yJzW53IuloyduIjuDpeyHuvtPwbWveSeqDHuN025brk=;
-        b=xe0IhCzQQ/4B/OY2rJTxuSc6Td62L4FXV+5KGwN/TEUSN+FfYoUd0NmYYzd/yAo1PK
-         de6SNMw/jQ0bPGLl3lo8kJmZztGLgy+uv9bK/Ku4di04zatdNJRr0Uvos6I3axqRgYQn
-         LMkcnsKWcpQtyDPe3If4In12r/ZlE1xGqTKqO9px06Mh1np2ziN3I9+YRDhpC7hyu4j+
-         lYyMW7sGpM2pxFJLfCGjm7pbH2oXqDiquC9B59gZzxqPc4/6D0p0oOk5O7U3DZTyU+rv
-         tfNBMrgtYDUIAi6i7+NCZqZCEgppcVDOTsWc0csfRWxLArxK1bpK9TT+Qkxz+V0W7iif
-         hRng==
-X-Gm-Message-State: AO0yUKX7K4+1LzzQ+QeixYhdclG97em6t7JGyww7/dZm3FLHvQuApcUX
-        WO92h+41rIRILTB88Rtmled9Hy8shOewHK2qxXMlEA==
-X-Google-Smtp-Source: AK7set+gzkLWtXfxrJHJOEXhQHzI1CPd49w2oBTe+ZpCeOcmyFbqbUKwWlFvdxMCpYWpRAY0ZDPw6WpQPDBhtxPbgI8=
-X-Received: by 2002:a0d:dfd6:0:b0:51b:1df9:ebac with SMTP id
- i205-20020a0ddfd6000000b0051b1df9ebacmr661975ywe.138.1675332177717; Thu, 02
- Feb 2023 02:02:57 -0800 (PST)
+        with ESMTP id S232002AbjBBKJ0 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Feb 2023 05:09:26 -0500
+X-Greylist: delayed 136 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Feb 2023 02:09:23 PST
+Received: from mxd-2-a73.seznam.cz (mxd-2-a73.seznam.cz [IPv6:2a02:598:64:8a00::1000:a73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C6D86E85
+        for <linux-media@vger.kernel.org>; Thu,  2 Feb 2023 02:09:23 -0800 (PST)
+Received: from email.seznam.cz
+        by smtpc-mxd-68566d4878-kvdfc
+        (smtpc-mxd-68566d4878-kvdfc [2a02:598:64:8a00::1000:a73])
+        id 6ad55984ca0be2ce6a3567ef;
+        Thu, 02 Feb 2023 11:09:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=email.cz;
+        s=szn20221014; t=1675332562;
+        bh=2HtJIEdDTUc0jD6+r5V0EN7uPQpPgWuCljoInRvP5pM=;
+        h=Received:Message-ID:Date:MIME-Version:User-Agent:To:From:Subject:
+         Content-Type:Content-Transfer-Encoding:X-Antivirus:
+         X-Antivirus-Status;
+        b=Uy6lbvVKLz99hFG2VMHOPzcNGkEW7m9lh8IXImhuAYSGj0dCKwAovZctmf3V1HTcU
+         8FktS7Oi8HQ4aeKzqCqSS/CXltfDS9S9oSHmexV8Ez53Towpn+hlAD0l+THVtAzhge
+         gstjo1OoEwz6TR8vC7u5wZB7tAXP7sD5Crv5DnGFLTDts6mfMSfKA7eAuPD7hF5k9Z
+         Mwy79S70FM1QxCdPilwXuPlm1+hCQnZN+royQZ3VD+H8Vgyw09iCUCx2cxNNBAa87B
+         ENKOwgt0R0IiBmRtyQU36aExukF4kjTIQZAAIoTIoeHi59+ezEX3MbQlQa3OQNY9p2
+         NAxgcOpL9CxfA==
+Received: from [192.168.20.101]
+        (78-157-178-145-static.silesnet.cz [78.157.178.145])
+        by smtpd-relay-8644fbf87-f96fh (smtpd/2.0.3) with ESMTPA
+        id f7075be0-564a-4633-b7e7-ecddcd597160;
+        Thu, 02 Feb 2023 11:06:55 +0100
+Message-ID: <54c56099-501d-eb96-69d7-1237c9dd82a2@email.cz>
+Date:   Thu, 2 Feb 2023 11:06:54 +0100
 MIME-Version: 1.0
-References: <20221115121237.28361-2-quic_vboma@quicinc.com> <20230202064712.5804-1-quic_vboma@quicinc.com>
-In-Reply-To: <20230202064712.5804-1-quic_vboma@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 2 Feb 2023 12:02:46 +0200
-Message-ID: <CAA8EJpomzsY+mgjVzpTG3tn+UGtUufEesM1QJcJS4ZK6thQkCQ@mail.gmail.com>
-Subject: Re: [PATCH V2 0/1] Fix for VP9 DRC and Decoder STOP issue.
-To:     quic_vboma@quicinc.com
-Cc:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.6.1
+To:     linux-media@vger.kernel.org
+From:   =?UTF-8?Q?Martin_Jank=c5=af?= <mjanku@email.cz>
+Subject: DVB-T2 USB Sony cxd2858, 0572:2886
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Antivirus: Avast (VPS 230131-14, 31.1.2023), Outbound message
+X-Antivirus-Status: Clean
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, 2 Feb 2023 at 08:47, <quic_vboma@quicinc.com> wrote:
->
-> From: Viswanath Boma <quic_vboma@quicinc.com>
->
-> Tested the changes on v5.15 and v5.4 kernels .
+Hi,
 
-Please test your patches properly. It is 6.2-rc already.
+I'm trying to connect a Mygica T230 DVB-T/T2/C USB stick with Sony 
+CXD2858, idVendor 0572, idProduct 2886 to my Ubuntu server 20.04 with 
+5.4.0 kernel, but with no success. May I ask for a hint or help?
 
-> For testing Chrome Utilities were used .
->
-> Viswanath Boma (1):
->   venus: Enable sufficient sequence change support for sc7180 and fix
->     for Decoder STOP command issue.
->
->  drivers/media/platform/qcom/venus/core.h       | 18 ++++++++++++++++++
->  drivers/media/platform/qcom/venus/hfi_cmds.c   |  1 +
->  drivers/media/platform/qcom/venus/hfi_helper.h |  2 ++
->  drivers/media/platform/qcom/venus/hfi_msgs.c   | 11 +++++++++--
->  drivers/media/platform/qcom/venus/vdec.c       | 12 +++++++++++-
->  5 files changed, 41 insertions(+), 3 deletions(-)
-
-
-
--- 
-With best wishes
-Dmitry
+Thank you, Martin
