@@ -2,86 +2,87 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 316ECC05027
-	for <linux-media@archiver.kernel.org>; Thu,  2 Feb 2023 03:08:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67E0DC636D3
+	for <linux-media@archiver.kernel.org>; Thu,  2 Feb 2023 03:35:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231643AbjBBDIg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Feb 2023 22:08:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48144 "EHLO
+        id S229651AbjBBDfU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Feb 2023 22:35:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjBBDIe (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Feb 2023 22:08:34 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C8A1E2A8
-        for <linux-media@vger.kernel.org>; Wed,  1 Feb 2023 19:08:32 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id bp15so981169lfb.13
-        for <linux-media@vger.kernel.org>; Wed, 01 Feb 2023 19:08:31 -0800 (PST)
+        with ESMTP id S231705AbjBBDfS (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Feb 2023 22:35:18 -0500
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBECC1420F;
+        Wed,  1 Feb 2023 19:35:12 -0800 (PST)
+Received: by mail-vs1-xe2a.google.com with SMTP id k4so512790vsc.4;
+        Wed, 01 Feb 2023 19:35:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UTG/N+FIzozjyzMAk2A+UY7YYT2l6fondG21b2HZC34=;
-        b=aoOIQoXkvWUiMHkuQToZpVld5NFZUQVLUuEp1sz9hKAsMzBSlntGsiEDEbIS2OCGRX
-         HRWib/qoTsbA3jvjf3+O5EWgfmS7uFYEhQO6MoDZ+1Z6AnAIyly3F4BdyVYshEp7vxCH
-         Vgj7J0uLlpM181jIC81ZgyS/vMHu4Io1BZhDAvk4szDu0Str8e+XnAG6zcJQbS9Kbo3N
-         X50pBvQXhCUhuck0KRRjiF9V28oBQ3Ts81s4n1t94ygX2uQDq+LJiHQr7+O/FJ6Dm10t
-         DdMKDKxMNevGqu3c/t7btfEyvWpM/Uqq8GFTDgdRED3lRHsdZ4Euh1YMmlIrUdrQHw0y
-         Vwtw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QiX3UcRTZwH0PLnaIsBgvLzcPBnC8tyuWq+Tqoi57VM=;
+        b=LQUc4BmX3WhY4mCYLPKfRRvqUABK3NtdI6frXZWIw2784c3oIQ4Vos7Gfhs7jCn7FK
+         ynUp9byn/0vh/mgPEfgfa2s6HUwC/x8103svoUAmaCr6lqe6qs+ynwJfzZgpGprvNqEa
+         K/fIl+LWWDS910UYITK51n3aU2u9jfgox/mCClFrVHeiduGiwSkhWUMy+45sDj4wPY+l
+         b5/3gDmJDha/kuSwQr68eyFDIoKXruksNowHFRr20PCvEL9wSAvc4tYoIVNHX6fLRDvW
+         4xHfgSrKFDpE065ma9Lr8QwzS8MfsoWf64vPignS7vm5f1KXPQQY7q0Nd285c7QcfD65
+         5v/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UTG/N+FIzozjyzMAk2A+UY7YYT2l6fondG21b2HZC34=;
-        b=Zc49/4NU9rO+Wp4qBomMdcocYLHlNJb/kpxiFiA/L842k6mNluW2U/4CgM5lj5NFsS
-         gV/Tg4Dq2v+Noz0KRARVExGoYTWebq8dtWgnLEUl5EP050XnwvhjdpsDKau+zWgQ8h9T
-         HcZ4EFQl6xho4AwwLsRuCOeujq8gIX/rWMwz161WNBZV9JKmEimuI/g21/PJgvG5kWav
-         gKwpHkeBhZ+mZsDh0v2qPCzUSc1oL61JMuT21tiC/Uo4otzsVh4Np2xQSybrD7LfIV8o
-         z36iGI+SneS6DM4iheaouBwSAUzbcbT3UvIhpyaHQe+ryHgtw9oZrWsCKrSqaM32GmyU
-         U0YA==
-X-Gm-Message-State: AO0yUKUhXvW3xA8HdLYKClv786vyGdRo1FDA8vOIlX+R/6m9IDRLu2la
-        1tf//xCxw6B90oDqW0mI0SvUKLWcfsw=
-X-Google-Smtp-Source: AK7set+oabLxrgl+VEcun+4qovTBPnzfqQ2Cula/jypTH7iXV8Aieisa/ucGV2fQcIiwKvmZfbQ2nQ==
-X-Received: by 2002:a05:6512:ac9:b0:4d8:5e8e:b138 with SMTP id n9-20020a0565120ac900b004d85e8eb138mr1432680lfu.14.1675307310258;
-        Wed, 01 Feb 2023 19:08:30 -0800 (PST)
-Received: from smtpclient.apple (95-31-161-212.broadband.corbina.ru. [95.31.161.212])
-        by smtp.gmail.com with ESMTPSA id 14-20020a2eb94e000000b0029066c8906dsm654940ljs.23.2023.02.01.19.08.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 01 Feb 2023 19:08:29 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.2\))
-Subject: Monochrome sensor support (Y8 Y10)
-From:   Anton Litvinov <desperex@gmail.com>
-In-Reply-To: <B7B12DB4-8AC0-47E4-88D4-69FFB457E55F@gmail.com>
-Date:   Thu, 2 Feb 2023 06:08:29 +0300
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <007079E5-6D01-40FA-9CD3-F0C023F6847E@gmail.com>
-References: <B7B12DB4-8AC0-47E4-88D4-69FFB457E55F@gmail.com>
-To:     Dafna Hirschfeld <dafna@fastmail.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.2)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QiX3UcRTZwH0PLnaIsBgvLzcPBnC8tyuWq+Tqoi57VM=;
+        b=Zn6n2kuFcxwCGLNjGcSX93+joORiNiE/pbcXE6tnJU6vfz/2ka0botMq21SdvdP54X
+         bB6s3uBuh0PQdU6P5Xee8sVOQ2L2lsdU7sT75XTlf3EE5SKQnRqDdATne0c+owAc4q9p
+         cYXKmcu0XhypOhH9b+VqcbIHvBbxLmfqL4DmDM6DOqZ8L/V9ggz6mZ1yDjIJbHToMpvV
+         gHYuNo9niZ1N8ph9PSD0d7HxLKQ47wb5ue5AkApEexjisBYTcXQfS9qaXpVelLcX9957
+         2v0ypzuM+hWMObzT1GKKSUTCzMfcik4m76vz1YrloiC5dw2mRP/fohkcAutwPcqOLxo9
+         J8jw==
+X-Gm-Message-State: AO0yUKUMUmk5Qc5n6+6ptr8ZDh1nFU+CBvFcvDEyITuhdROg7Ss5aMeo
+        XlQhyE6kLD8s2Ba3zwGAQvLChfwM3axzW2aj28c=
+X-Google-Smtp-Source: AK7set97jRS3svZhsG5T+qiZsHY/NEQaMcAWihNka2rtA4CCpDWrOkoxXYP4/3EZzRL1yy4Mm6pL6xwG6axK7PFRcMA=
+X-Received: by 2002:a05:6102:1276:b0:3ee:4ef8:45d3 with SMTP id
+ q22-20020a056102127600b003ee4ef845d3mr691400vsg.64.1675308911888; Wed, 01 Feb
+ 2023 19:35:11 -0800 (PST)
+MIME-Version: 1.0
+References: <20221227095123.2447948-1-milkfafa@gmail.com> <20221227095123.2447948-8-milkfafa@gmail.com>
+ <b8f173c0-6d40-d6aa-543e-fa8b06557f4f@molgen.mpg.de> <CADnNmFr1naRfam=z0p-4hEugSDJy_HCK8XZyQJ0eFirnmwuH4A@mail.gmail.com>
+ <4d64e3f9-57a3-c6be-2709-36e9a1617bf9@molgen.mpg.de> <CADnNmFqFMBUj07oAZze3eeXAR0hbep4p9za=XNu5YrLVqUex=w@mail.gmail.com>
+In-Reply-To: <CADnNmFqFMBUj07oAZze3eeXAR0hbep4p9za=XNu5YrLVqUex=w@mail.gmail.com>
+From:   Kun-Fa Lin <milkfafa@gmail.com>
+Date:   Thu, 2 Feb 2023 11:35:00 +0800
+Message-ID: <CADnNmFqtUMnyCCnKfk3DUJ-VLgJdwC8X6fznVYCF6V5jeZ2bNw@mail.gmail.com>
+Subject: Re: [PATCH v10 7/7] media: nuvoton: Add driver for NPCM video capture
+ and encode engine
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        andrzej.p@collabora.com, kwliu@nuvoton.com,
+        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, kflin@nuvoton.com,
+        linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dafna!
-This is sort of enhancement request to support MEDIA_BUS_FMT_Y8_1X8 and =
-MEDIA_BUS_FMT_Y10_1X10 formats on RKISP1 media platform.
-I=E2=80=99ve got Radxa=E2=80=99s Rock Pi 4B, greyscale sensor raw camera =
-supporting only above formats and a desire to extend format support.=20
-Actually I already tried to port these changes - =
-https://github.com/JeffyCN/mirrors/commit/72e4ba0ccf477a6d90f40a2fb5e3bc9e=
-5025093b to mainline kernel v6.1+, I was able to set up the pipeline and =
-=E2=80=9Cstart=E2=80=9D streaming without getting Broken pipe error, but =
-eventually it failed here - =
-https://github.com/torvalds/linux/blob/v6.1/drivers/media/platform/rockchi=
-p/rkisp1/rkisp1-capture.c#L962
+Hi Paul,
 
-So if this kind of enhancement activity is of any interest to you or =
-parties involved, let=E2=80=99s kick it!
-UPDATE: Sent plain text
+> > >>> +MODULE_LICENSE("GPL");
+> > >>
+> > >> Not GPL v2?
 
-Cheers, Anton
+When using GPL v2, I got this warning from checkpatch.pl:
 
+WARNING: Prefer "GPL" over "GPL v2" - see commit bf7fbeeae6db
+("module: Cure the MODULE_LICENSE "GPL" vs. "GPL v2" bogosity")
+#2104: FILE: drivers/media/platform/nuvoton/npcm-video.c:1816:
++MODULE_LICENSE("GPL v2");
+
+It looks better to keep GPL, do you have any suggestions?
+
+Regards,
+Marvin
