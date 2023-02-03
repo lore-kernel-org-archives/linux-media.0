@@ -2,54 +2,55 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67F0FC64EC3
-	for <linux-media@archiver.kernel.org>; Fri,  3 Feb 2023 10:02:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 354F6C636D6
+	for <linux-media@archiver.kernel.org>; Fri,  3 Feb 2023 10:02:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233060AbjBCKC5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Feb 2023 05:02:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52242 "EHLO
+        id S233089AbjBCKC6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Feb 2023 05:02:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233048AbjBCKCw (ORCPT
+        with ESMTP id S232911AbjBCKCw (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Fri, 3 Feb 2023 05:02:52 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4F293AF0;
-        Fri,  3 Feb 2023 02:02:48 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id ay1so3182855pfb.7;
-        Fri, 03 Feb 2023 02:02:48 -0800 (PST)
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379D379221;
+        Fri,  3 Feb 2023 02:02:47 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id l4-20020a17090a850400b0023013402671so8297303pjn.5;
+        Fri, 03 Feb 2023 02:02:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qZM2kRnUMq/5JxUqAj92h8CE9Ys20GpS+bcD8sHbxGY=;
-        b=MoBwsiFh+PQwRc+ml6iuRDqdl5/NFddPFYIwdi7shrfKdxQojJlglETNVcoxcFbeq7
-         UQJl43hvF2JW+oxHrqZ+PYm/8YFRae3V0NrPaa5mTWI15gXYGncVGae9cCjpG4CRqMiA
-         9Pj/x71a+1UhhPgRzHSlzVh6c2OeFmzl6woB/kPM1ATos4UIxHPHaPyDOJtH8wzgGaPO
-         DkOEa4bmsfqANA9W0VKMMobCnKbwjAegUkH6avPb67JGriW6ySxlSlYNDw8esdDqQ5tq
-         zt+gRScqxTBmdYI7AEl0bwX4sIa2Wv8t0T5OYVEzI8GAeVcWMrOHsv8qoHjy703uRwYJ
-         T6rg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BG2QYvy6NMh3jkUceNvjWVdBbpNIzuoerxuxOO9e15w=;
+        b=hNvMzC7RPAckWz7Z2Qk/u9uDSOaeNgibp3y0pbCj3dUMyWcnazq467VyDLAE7Uj3d+
+         Hp1zHYFUQ+ymjA7vvesMXLXQlR3ZCGtO9nDPjDrmvHtiqAoCVkotR9iYfdok792ktY22
+         dVbbMPbKQ8mPs/e46SBPxHxARgmpU+mJBjSHv7thd/lpp2k4Un9JMnxjGLuncHxF/RUL
+         pD8y2Ml8GRwWXIGIRZwhE+wB3poEavRbZNRLXJC2N5MOnf/NjtwXM+bJswMQEBnLw2+e
+         Xqlt9ngIcG5w09YsTnyzVSncicip44pBj1M14JwwvKa/zkHmDIBYC1WZD4vRNBzKI4e9
+         Xn4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qZM2kRnUMq/5JxUqAj92h8CE9Ys20GpS+bcD8sHbxGY=;
-        b=yWpB9vR5kwExjTmrJujLyl8oQ9owArNYiFDrnATnlYitXOO+D7Q/HV0ozAHnRw4FuO
-         vjPfBIL0U1R/Wkm87YIoZdS2MH6VFpb/7CLoMSFShRUeNH1lltALWpuatIpP6NG8NRbr
-         jYUFL+kwiQbZRsqFjGZEuMrzagEVRdp7qCDj6LUZ4H31Cksa011H/7SHMqm6ZPnBn2Jt
-         aC4BVJvSeGJScTulQ2+d38Ce1U7aL3Byq4lUFuZ7HfXbTm5FJ2Zt1zCTIbx5aD7DWoNe
-         p0rOFJ6uI0TOl6ickmeI2cFMcrXbHfh76a6sTvo72rlUcn3uBfwd5wJopG1md8j7aJG6
-         cmmA==
-X-Gm-Message-State: AO0yUKXt8sNxrldSSuWMFXLgBGIP6Ydv/vdcUzXS0xJTLlfSWSU9hj8O
-        c8xvIScXhQZoCDnx/AL2Skg=
-X-Google-Smtp-Source: AK7set90g3y3uA58nDdc57a7ikxwpTnV8UfDIaEQROixtGcb1zi0SwtESdeyB1ms4FZFJ3dF2+AdIg==
-X-Received: by 2002:a05:6a00:1d85:b0:593:a3f1:7c04 with SMTP id z5-20020a056a001d8500b00593a3f17c04mr8761934pfw.8.1675418567508;
-        Fri, 03 Feb 2023 02:02:47 -0800 (PST)
-Received: from debian.me (subs10b-223-255-225-232.three.co.id. [223.255.225.232])
-        by smtp.gmail.com with ESMTPSA id h2-20020a056a00230200b005898fcb7c1bsm1322187pfh.177.2023.02.03.02.02.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BG2QYvy6NMh3jkUceNvjWVdBbpNIzuoerxuxOO9e15w=;
+        b=DV6TmOWk5edNvnbIowdCeE+hqRu0gqsjF5A+E+5cRkc979Y3W8jneOOtABdp6BXZyX
+         J5YxrAfAUsc77dxb1hB3g299cdz25KlB79kf2jMTPVXuIbfUgkw73e6DNgTBXzZaK9E2
+         a03pRIbUMuKTNbsTGuaBjgAvFGzMp3BDcfZz4UCMeJRlr5PWMxjq6EYizs0Y17wenS6E
+         qYP3qbNqDZtPkppW/HCXGZr0tqnL73G6D97UrrKaBeG5EOqpM6EJJImqulG4Unbcfsjk
+         eDtHosASC0ukI+ucHt0X+ghxAlnOtdM++liXCmj0YEnwgYqR2McaYrt03S/L1iHv/FRJ
+         tYGg==
+X-Gm-Message-State: AO0yUKVrTRnUI/66q4TdoI5oKdV9ge6aEXO6TS7fMaFK/voWUeQ9pHvN
+        +l3pW3+UChj6KE22DJH4XU4=
+X-Google-Smtp-Source: AK7set+R0TEkeypd3nINmPSzcBNxBayigz71nAlhY7yu1gmDzLP7p9w777hoCF2OhaAxhY11nHoCIQ==
+X-Received: by 2002:a17:903:234f:b0:194:4b98:42c8 with SMTP id c15-20020a170903234f00b001944b9842c8mr11309975plh.28.1675418566654;
         Fri, 03 Feb 2023 02:02:46 -0800 (PST)
+Received: from debian.me (subs09b-223-255-225-232.three.co.id. [223.255.225.232])
+        by smtp.gmail.com with ESMTPSA id e12-20020a170902784c00b00192b23b8451sm1194930pln.108.2023.02.03.02.02.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 02:02:45 -0800 (PST)
 Received: by debian.me (Postfix, from userid 1000)
-        id 01B981055BB; Fri,  3 Feb 2023 17:02:41 +0700 (WIB)
+        id 7B73E1054B4; Fri,  3 Feb 2023 17:02:41 +0700 (WIB)
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
 To:     Intel Graphics Development List <intel-gfx@lists.freedesktop.org>,
         DRI Development List <dri-devel@lists.freedesktop.org>,
@@ -76,35 +77,51 @@ Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Hans de Goede <hdegoede@redhat.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH 0/3] htmldocs fixes for next-20230203
-Date:   Fri,  3 Feb 2023 17:02:12 +0700
-Message-Id: <20230203100215.31852-1-bagasdotme@gmail.com>
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: [PATCH 2/3] drm/scheduler: Fix elapsed_ns kernel-doc error
+Date:   Fri,  3 Feb 2023 17:02:14 +0700
+Message-Id: <20230203100215.31852-3-bagasdotme@gmail.com>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230203100215.31852-1-bagasdotme@gmail.com>
+References: <20230203100215.31852-1-bagasdotme@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=683; i=bagasdotme@gmail.com; h=from:subject; bh=nAqFypAiZuomaGsgK+qGsO/TWXGkM+TOboIWhpu6fPE=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDMl3bs/Zx6DeNWPyHO/4uWqzTIRO5L1fe3PivJY695cfLve9 2OpQ2lHKwiDGxSArpsgyKZGv6fQuI5EL7WsdYeawMoEMYeDiFICJ9C1h+B84Z3HYYaODyTlujAbnnS eXeDVt2p+5bN2Vxf9OeC6IOjyBkWHPo5c2AmbLPigoTbEp/KQVInNX7vySwz7vK2fMMn66dg8fAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1195; i=bagasdotme@gmail.com; h=from:subject; bh=qrXofAp66flXv+Lia5rtjdHHkc9E4+c8afVKnwKMo98=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDMl3bi8LuVLl4BMdt8Vjx6WHU75L7q76orZFacUmve8tRyp5 vLTyOkpZGMS4GGTFFFkmJfI1nd5lJHKhfa0jzBxWJpAhDFycAjAR7wkM/4v/hf88NL12XtLb9addPR 9ETmTL89Vyub4v7u8H15mdgasYGVbbNJpdPNs3mVXUd8bzWzedfun4a+bJhHr5T7lnbZOdww8A
 X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Here are small htmldocs fixes for htmldocs warnings that are recently
-reported for next-20230203. Each patch can be applied separately by
-respective maintainers.
+Stephen Rothwell reported htmldocs warnings:
 
-Bagas Sanjaya (3):
-  drm/i915/doc: Escape wildcard in method names
-  drm/scheduler: Fix elapsed_ns kernel-doc error
-  media: v4l2-core: Describe privacy_led field of v4l2_subdev
+include/drm/gpu_scheduler.h:232: warning: Incorrect use of kernel-doc format:          * @elapsed_ns
+include/drm/gpu_scheduler.h:238: warning: Function parameter or member 'elapsed_ns' not described in 'drm_sched_entity'
 
- drivers/gpu/drm/i915/gt/intel_workarounds.c | 6 +++---
- include/drm/gpu_scheduler.h                 | 2 +-
- include/media/v4l2-subdev.h                 | 1 +
- 3 files changed, 5 insertions(+), 4 deletions(-)
+Fix the error by appending missing colon to @elapsed_ns name in its
+kernel-doc comment.
 
+Link: https://lore.kernel.org/linux-next/20230203135027.1a4679d3@canb.auug.org.au/
+Fixes: 248cd9b265fca6 ("drm/scheduler: track GPU active time per entity")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ include/drm/gpu_scheduler.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-base-commit: 4fafd96910add124586b549ad005dcd179de8a18
+diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
+index 9a50365621ed8d..9db9e5e504eeb3 100644
+--- a/include/drm/gpu_scheduler.h
++++ b/include/drm/gpu_scheduler.h
+@@ -229,7 +229,7 @@ struct drm_sched_entity {
+ 	struct rb_node			rb_tree_node;
+ 
+ 	/**
+-	 * @elapsed_ns
++	 * @elapsed_ns:
+ 	 *
+ 	 * Records the amount of time where jobs from this entity were active
+ 	 * on the GPU.
 -- 
 An old man doll... just what I always wanted! - Clara
 
