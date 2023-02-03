@@ -2,126 +2,92 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 354F6C636D6
-	for <linux-media@archiver.kernel.org>; Fri,  3 Feb 2023 10:02:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFF9BC61DA4
+	for <linux-media@archiver.kernel.org>; Fri,  3 Feb 2023 10:13:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233089AbjBCKC6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Feb 2023 05:02:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52240 "EHLO
+        id S233166AbjBCKNw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Feb 2023 05:13:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232911AbjBCKCw (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Feb 2023 05:02:52 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379D379221;
-        Fri,  3 Feb 2023 02:02:47 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id l4-20020a17090a850400b0023013402671so8297303pjn.5;
-        Fri, 03 Feb 2023 02:02:47 -0800 (PST)
+        with ESMTP id S231526AbjBCKNv (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Feb 2023 05:13:51 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4EE18168
+        for <linux-media@vger.kernel.org>; Fri,  3 Feb 2023 02:13:50 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id h16so4148678wrz.12
+        for <linux-media@vger.kernel.org>; Fri, 03 Feb 2023 02:13:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BG2QYvy6NMh3jkUceNvjWVdBbpNIzuoerxuxOO9e15w=;
-        b=hNvMzC7RPAckWz7Z2Qk/u9uDSOaeNgibp3y0pbCj3dUMyWcnazq467VyDLAE7Uj3d+
-         Hp1zHYFUQ+ymjA7vvesMXLXQlR3ZCGtO9nDPjDrmvHtiqAoCVkotR9iYfdok792ktY22
-         dVbbMPbKQ8mPs/e46SBPxHxARgmpU+mJBjSHv7thd/lpp2k4Un9JMnxjGLuncHxF/RUL
-         pD8y2Ml8GRwWXIGIRZwhE+wB3poEavRbZNRLXJC2N5MOnf/NjtwXM+bJswMQEBnLw2+e
-         Xqlt9ngIcG5w09YsTnyzVSncicip44pBj1M14JwwvKa/zkHmDIBYC1WZD4vRNBzKI4e9
-         Xn4A==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bJ04MCttDfZJyvWfMTXvBLaMw4c/LHLqATbSxP5hNWU=;
+        b=IKUMGCGHmzLhiOWTDujUR0e9kqL4rNY/EZDl0RJ2vF5wH0sc0SVWaXapFJs+w1OnN2
+         2Rp1BU5CH+PgrOiJ3+TnE3KG4Yy8Msq6le8m1gBQVXssbKRcpTUZ6ah8BBXqmZyvdTJQ
+         cy6xwHPm0+htYV3nof7uxG9tqV06eK7IjHVKV/NiPl44lvTQxwN2/CWatehrwAF43PC0
+         HtCDL9on6esnrIX1s42YeAXQuw2ZXhuPWOqu3Ur0kzuetcTrs+4vEeIl8S3EM37YkMic
+         pebre9dgx9CC8LF0IxRl62B7WJXvdqOE1lXoJi8gvcJUn02XWmwoHX4ZLJRaIltdTMVq
+         cUuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BG2QYvy6NMh3jkUceNvjWVdBbpNIzuoerxuxOO9e15w=;
-        b=DV6TmOWk5edNvnbIowdCeE+hqRu0gqsjF5A+E+5cRkc979Y3W8jneOOtABdp6BXZyX
-         J5YxrAfAUsc77dxb1hB3g299cdz25KlB79kf2jMTPVXuIbfUgkw73e6DNgTBXzZaK9E2
-         a03pRIbUMuKTNbsTGuaBjgAvFGzMp3BDcfZz4UCMeJRlr5PWMxjq6EYizs0Y17wenS6E
-         qYP3qbNqDZtPkppW/HCXGZr0tqnL73G6D97UrrKaBeG5EOqpM6EJJImqulG4Unbcfsjk
-         eDtHosASC0ukI+ucHt0X+ghxAlnOtdM++liXCmj0YEnwgYqR2McaYrt03S/L1iHv/FRJ
-         tYGg==
-X-Gm-Message-State: AO0yUKVrTRnUI/66q4TdoI5oKdV9ge6aEXO6TS7fMaFK/voWUeQ9pHvN
-        +l3pW3+UChj6KE22DJH4XU4=
-X-Google-Smtp-Source: AK7set+R0TEkeypd3nINmPSzcBNxBayigz71nAlhY7yu1gmDzLP7p9w777hoCF2OhaAxhY11nHoCIQ==
-X-Received: by 2002:a17:903:234f:b0:194:4b98:42c8 with SMTP id c15-20020a170903234f00b001944b9842c8mr11309975plh.28.1675418566654;
-        Fri, 03 Feb 2023 02:02:46 -0800 (PST)
-Received: from debian.me (subs09b-223-255-225-232.three.co.id. [223.255.225.232])
-        by smtp.gmail.com with ESMTPSA id e12-20020a170902784c00b00192b23b8451sm1194930pln.108.2023.02.03.02.02.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 02:02:45 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 7B73E1054B4; Fri,  3 Feb 2023 17:02:41 +0700 (WIB)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Intel Graphics Development List <intel-gfx@lists.freedesktop.org>,
-        DRI Development List <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Gustavo Sousa <gustavo.sousa@intel.com>,
-        Balasubramani Vivekanandan <balasubramani.vivekanandan@intel.com>,
-        Matt Atwood <matthew.s.atwood@intel.com>,
-        =?UTF-8?q?Jos=C3=A9=20Roberto=20de=20Souza?= <jose.souza@intel.com>,
-        Srinivasan Shanmugam <srinivasan.s@intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: [PATCH 2/3] drm/scheduler: Fix elapsed_ns kernel-doc error
-Date:   Fri,  3 Feb 2023 17:02:14 +0700
-Message-Id: <20230203100215.31852-3-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230203100215.31852-1-bagasdotme@gmail.com>
-References: <20230203100215.31852-1-bagasdotme@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bJ04MCttDfZJyvWfMTXvBLaMw4c/LHLqATbSxP5hNWU=;
+        b=rXMKRcdXkD6Foh4Lt89jnzI4XC+EYNAMXtLiQD0uBroJYSJruyYmp1ezyBzKhhsdPJ
+         aWLapiHICZjI6zkStA77wLC37oKXUwkIRmZEUHou6n+uGgNKYUgcouWdTBQHg4Ea6SKX
+         PmrFGGhjgk+G6w600gNWAm++V/HgMSNhvovrkGF4ER2xa+BPCqVdh+LU46T8nAE934Bq
+         2Y+/RDZ0Yzwim7RKkKl0/Bs6nmiVVRrzC2AyJF5H4kfy1QLSGDmm48drXPIKzwOJ8ydG
+         pSc6S9fQzSgAuJ8LQPRdUUXorShvARvwMM669iMHoR0DRgsiHSYDV2ltLP+2efpj4AVz
+         NXjg==
+X-Gm-Message-State: AO0yUKUH24rBz1w6VsbN2FcpC034dUzP42UFYYtE+8+gZPGepiIC7p7X
+        V7Nds1tIE6rTZwh0wOfqNvdOpw==
+X-Google-Smtp-Source: AK7set+DqCMkB4MchgXpJWJp60gl/APaBlnfmCG8rEEslPdnyDcp2NNrdI3hGHA2LJwdlzZYrz/VGQ==
+X-Received: by 2002:adf:fb82:0:b0:2c2:ad22:40ba with SMTP id a2-20020adffb82000000b002c2ad2240bamr7541698wrr.68.1675419228838;
+        Fri, 03 Feb 2023 02:13:48 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id o5-20020a5d6845000000b002bdff778d87sm1597196wrw.34.2023.02.03.02.13.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 02:13:48 -0800 (PST)
+Message-ID: <b3a5899f-05b7-c14c-b9de-a48fe0747646@linaro.org>
+Date:   Fri, 3 Feb 2023 11:13:46 +0100
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1195; i=bagasdotme@gmail.com; h=from:subject; bh=qrXofAp66flXv+Lia5rtjdHHkc9E4+c8afVKnwKMo98=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDMl3bi8LuVLl4BMdt8Vjx6WHU75L7q76orZFacUmve8tRyp5 vLTyOkpZGMS4GGTFFFkmJfI1nd5lJHKhfa0jzBxWJpAhDFycAjAR7wkM/4v/hf88NL12XtLb9addPR 9ETmTL89Vyub4v7u8H15mdgasYGVbbNJpdPNs3mVXUd8bzWzedfun4a+bJhHr5T7lnbZOdww8A
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 1/2] dt-bindings: media: rc: add rc-dreambox binding
+To:     Christian Hewitt <christianshewitt@gmail.com>,
+        Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Emanuel Strobel <emanuel.strobel@yahoo.com>
+References: <20230203093405.1616564-1-christianshewitt@gmail.com>
+ <20230203093405.1616564-2-christianshewitt@gmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230203093405.1616564-2-christianshewitt@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Stephen Rothwell reported htmldocs warnings:
+On 03/02/2023 10:34, Christian Hewitt wrote:
+> Add a binding for the rc-dreambox remote keymap
+> 
+> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
 
-include/drm/gpu_scheduler.h:232: warning: Incorrect use of kernel-doc format:          * @elapsed_ns
-include/drm/gpu_scheduler.h:238: warning: Function parameter or member 'elapsed_ns' not described in 'drm_sched_entity'
+If there is going to be resend:
 
-Fix the error by appending missing colon to @elapsed_ns name in its
-kernel-doc comment.
+Subject: drop second/last, redundant "bindins". The "dt-bindings" prefix
+is already stating that these are bindings.
 
-Link: https://lore.kernel.org/linux-next/20230203135027.1a4679d3@canb.auug.org.au/
-Fixes: 248cd9b265fca6 ("drm/scheduler: track GPU active time per entity")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- include/drm/gpu_scheduler.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> ---
 
-diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
-index 9a50365621ed8d..9db9e5e504eeb3 100644
---- a/include/drm/gpu_scheduler.h
-+++ b/include/drm/gpu_scheduler.h
-@@ -229,7 +229,7 @@ struct drm_sched_entity {
- 	struct rb_node			rb_tree_node;
- 
- 	/**
--	 * @elapsed_ns
-+	 * @elapsed_ns:
- 	 *
- 	 * Records the amount of time where jobs from this entity were active
- 	 * on the GPU.
--- 
-An old man doll... just what I always wanted! - Clara
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
