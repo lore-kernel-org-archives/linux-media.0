@@ -2,122 +2,292 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73613C64EC7
-	for <linux-media@archiver.kernel.org>; Fri,  3 Feb 2023 10:41:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 386EBC636D6
+	for <linux-media@archiver.kernel.org>; Fri,  3 Feb 2023 10:56:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232300AbjBCKlX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Feb 2023 05:41:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38636 "EHLO
+        id S232949AbjBCK4h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Feb 2023 05:56:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjBCKlT (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Feb 2023 05:41:19 -0500
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF2B1BCD;
-        Fri,  3 Feb 2023 02:41:18 -0800 (PST)
-Received: by mail-qt1-f177.google.com with SMTP id g8so4900859qtq.13;
-        Fri, 03 Feb 2023 02:41:18 -0800 (PST)
+        with ESMTP id S233068AbjBCK4Y (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Feb 2023 05:56:24 -0500
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9678672669
+        for <linux-media@vger.kernel.org>; Fri,  3 Feb 2023 02:56:13 -0800 (PST)
+Received: by mail-ua1-x92b.google.com with SMTP id u3so901947uae.0
+        for <linux-media@vger.kernel.org>; Fri, 03 Feb 2023 02:56:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=raspberrypi.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nOuZ7FWsN6MrrC9sg1gIZtTV4wY9KaukHJUsIQSiEEI=;
+        b=RMb4zQIUyTglhYwOS5mRVvYLQwa373IuWg6WtgmIrsuqweAO0lUJ08FRKQRhmzOzUx
+         /N2fcmhyoAvvjm+e6KRDGcrpXqi0dQcf9aGVq+306keL8GdqDuyFgwQlPJHnTXcNvGiG
+         t6sp8IkqXvErvfALzYLUAQoLQarKHc53PJsuwuWYdT6BXk7e42xiSGht/5exSSBshGUm
+         ueJMBFHFKEe1VeFOLQ+pW9xJkv1QYMDs0E0GRDC0EKYSjXVTUxp0Oaw8aIq2PCcqhocN
+         YfIGvyCM4uTP1STIxAcr1MN6hozEm4DLeGO8NgmUJ2jemi1gFDGlX3IU4tpGS8Y5cQdr
+         UlRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7A9k4QSf8av6qzMk9PJKNV90s0Q4PXBSAXyaJlyJVU8=;
-        b=am+1AT4lhoVM6wqmxALHPFCLZUMPsYWhGo62zC7G+AtkY86Opme3by+3C0DEnxtJKP
-         JXHTy9dpYDeDQD8+A8kxGjP0/Z45o4NFhedPIKsftsbS9eFr7J1ZwGCQtG7ti0UojZ9k
-         mQRU/+i8aOEHs+RIntLkgqXhe2S+7xtMSvhizF7IIOHf3YwtFHBlM+fJOzMrKGqVDsHT
-         Pb3jhGNQ+ct1mjcriME4qjGzNMuxYWQlUzxQMOwDKpR6AdlHDj7Lu2vil5fPjcvj+3Li
-         lqc5smXXWwhHcWknsdLPvGMcZfGQ3dlqoywHozKD1y5GiWhHfpLqXI6ykJigkRwIxXOv
-         kzvw==
-X-Gm-Message-State: AO0yUKWvF1f0VsFcoCJ7dx+hcgAfKLyDRrGEYQfFKvz0z20gl3m9dpmy
-        R8Q6wGqY+H3IKQpW1hCAPWcLRcYpOMrpJg==
-X-Google-Smtp-Source: AK7set+00rykB5Nae53BloQzE0HluidqWGrvcn6wS/Sj78GrbnuGE+A6Txy+8UtQaFzP8LGpaBaySg==
-X-Received: by 2002:a05:622a:1ce:b0:3b6:334b:2cbc with SMTP id t14-20020a05622a01ce00b003b6334b2cbcmr19738789qtw.65.1675420877133;
-        Fri, 03 Feb 2023 02:41:17 -0800 (PST)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id o14-20020ac872ce000000b003b62bc6cd1csm1298100qtp.82.2023.02.03.02.41.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 02:41:17 -0800 (PST)
-Received: by mail-yb1-f174.google.com with SMTP id 123so5721369ybv.6;
-        Fri, 03 Feb 2023 02:41:16 -0800 (PST)
-X-Received: by 2002:a25:9c83:0:b0:7bf:d201:60cb with SMTP id
- y3-20020a259c83000000b007bfd20160cbmr900933ybo.365.1675420405273; Fri, 03 Feb
- 2023 02:33:25 -0800 (PST)
+        bh=nOuZ7FWsN6MrrC9sg1gIZtTV4wY9KaukHJUsIQSiEEI=;
+        b=R1FeMZ6qE+W32luA2rWZq3c7TitV/tskA2CDzounySCz9le+ztsMaeRgyzY21HKkEV
+         6FD8LAlwyokwLra44HYxzK3jtChn13St519kfTyBG2aANSW6ShnrJ0doKsz6mPbgT5mi
+         Dzv8DOOMzHXDTEGq5wGs9Xlswk5MDnKQkwCouIbJDYXnhKdfAs5gh5B2WLzfmTgf+O5R
+         MvrKJioN/JFjprcFzQ3D++nNj8XqDlWoOuXzMkCzr6u9bUGwq+oYDdJPUKARDHW61QN1
+         MTku4yXpImAZIUVC5peU7/hVT8paqpfaYckw9NxLTuzV8pibgVWejrk3DCWiC880Txx2
+         3y1w==
+X-Gm-Message-State: AO0yUKWy28InEM8cSo4Qd09yP4vp+TOJaG1FWLhg1Ik6fq8VTVaNUcKk
+        NdhDwSTk9KFwiwdvtlXrWV+q5aQPN9m90it38K/Hdw==
+X-Google-Smtp-Source: AK7set/1a5vyavZDupR+OWrVdKgR4QCPsfHYmNonU/m4H2ynVhoqxzlor2Pi8PrfJhKuI2lUX+gH6EkFpnXfN8MM8YQ=
+X-Received: by 2002:ab0:49e9:0:b0:662:b4d9:ff5f with SMTP id
+ f38-20020ab049e9000000b00662b4d9ff5fmr1570182uad.46.1675421772612; Fri, 03
+ Feb 2023 02:56:12 -0800 (PST)
 MIME-Version: 1.0
-References: <20230113062339.1909087-1-hch@lst.de> <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
- <20230116071306.GA15848@lst.de> <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
- <20230203071423.GA24833@lst.de> <afd056a95d21944db1dc0c9708f692dd1f7bb757.camel@physik.fu-berlin.de>
- <20230203083037.GA30738@lst.de> <d10fe31b2af6cf4e03618f38ca9d3ca5c72601ed.camel@physik.fu-berlin.de>
-In-Reply-To: <d10fe31b2af6cf4e03618f38ca9d3ca5c72601ed.camel@physik.fu-berlin.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 3 Feb 2023 11:33:13 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUitVfW088YOmqYm4kwbKwkwb22fAakHcu6boxv7dXDfQ@mail.gmail.com>
-Message-ID: <CAMuHMdUitVfW088YOmqYm4kwbKwkwb22fAakHcu6boxv7dXDfQ@mail.gmail.com>
-Subject: Re: remove arch/sh
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+References: <20230203102439.237527-1-alexander.stein@ew.tq-group.com> <20230203102439.237527-3-alexander.stein@ew.tq-group.com>
+In-Reply-To: <20230203102439.237527-3-alexander.stein@ew.tq-group.com>
+From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date:   Fri, 3 Feb 2023 10:55:55 +0000
+Message-ID: <CAPY8ntDd06gLmETbi0S=2Y3ES40_5HJ_zZ0sx+cbHwtPq-XHow@mail.gmail.com>
+Subject: Re: [PATCH 2/2] media: i2c: imx290: Add support for imx327 variant
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Adrian,
+Hi Alexander
 
-On Fri, Feb 3, 2023 at 11:29 AM John Paul Adrian Glaubitz
-<glaubitz@physik.fu-berlin.de> wrote:
-> On Fri, 2023-02-03 at 09:30 +0100, Christoph Hellwig wrote:
-> > On Fri, Feb 03, 2023 at 09:24:46AM +0100, John Paul Adrian Glaubitz wrote:
-> > > Since this is my very first time stepping up as a kernel maintainer, I was hoping
-> > > to get some pointers on what to do to make this happen.
-> > >
-> > > So far, we have set up a new kernel tree and I have set up a local development and
-> > > test environment for SH kernels using my SH7785LCR board as the target platform.
-> > >
-> > > Do I just need to send a patch asking to change the corresponding entry in the
-> > > MAINTAINERS file?
-> >
-> > I'm not sure a there is a document, but:
-> >
-> >  - add the MAINTAINERS change to your tree
-> >  - ask Stephen to get your tree included in linux-next
-> >
-> > then eventually send a pull request to Linus with all of that.  Make
-> > sure it's been in linux-next for a while.
+On Fri, 3 Feb 2023 at 10:24, Alexander Stein
+<alexander.stein@ew.tq-group.com> wrote:
 >
-> OK, thanks for the pointers! Will try to get this done by next week.
+> Both sensors are quite similar. Their specs only differ regarding LVDS
+> and parallel output but are identical regarding MIPI-CSI-2 interface.
+> But they use a different init setting of hard-coded values, taken from
+> the datasheet.
 >
-> We're still discussing among SuperH developer community whether there will be a second
-> maintainer, so please bear with us a few more days. I will collect patches in the
-> meantime.
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+>  drivers/media/i2c/imx290.c | 88 +++++++++++++++++++++++++++++++++-----
+>  1 file changed, 77 insertions(+), 11 deletions(-)
+>
+> diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
+> index e642e1df520d..337252b2ec15 100644
+> --- a/drivers/media/i2c/imx290.c
+> +++ b/drivers/media/i2c/imx290.c
+> @@ -164,6 +164,36 @@
+>  #define CLK_74_25      1
+>  #define NUM_CLK                2
+>
+> +enum imx290_model {
+> +       IMX290,
+> +       IMX290_MONO,
+> +       IMX327,
+> +};
+> +
+> +struct imx290_device_data {
+> +       enum imx290_model model;
+> +       const char *name;
+> +       u8 mono;
+> +};
+> +
+> +static const struct imx290_device_data imx290_models[] = {
+> +       [IMX290] = {
+> +               .model = IMX290,
+> +               .name = "imx290",
+> +               .mono = 0,
+> +       },
+> +       [IMX290_MONO] = {
+> +               .model = IMX290_MONO,
+> +               .name = "imx290-mono",
+> +               .mono = 1,
+> +       },
+> +       [IMX327] = {
+> +               .model = IMX327,
+> +               .name = "imx327",
+> +               .mono = 0,
+> +       },
+> +};
+> +
+>  struct imx290_regval {
+>         u32 reg;
+>         u32 val;
+> @@ -210,9 +240,9 @@ struct imx290 {
+>         struct device *dev;
+>         struct clk *xclk;
+>         struct regmap *regmap;
+> +       const struct imx290_device_data *devdata;
+>         u32 xclk_freq;
+>         u8 nlanes;
+> -       u8 mono;
+>
+>         struct v4l2_subdev sd;
+>         struct media_pad pad;
+> @@ -240,7 +270,7 @@ static inline struct imx290 *to_imx290(struct v4l2_subdev *_sd)
+>   * Modes and formats
+>   */
+>
+> -static const struct imx290_regval imx290_global_init_settings[] = {
+> +static const struct imx290_regval imx290_global_init_settings_290[] = {
+>         { IMX290_WINWV_OB, 12 },
+>         { IMX290_WINPH, 0 },
+>         { IMX290_WINPV, 0 },
+> @@ -292,6 +322,23 @@ static const struct imx290_regval imx290_global_init_settings[] = {
+>         { IMX290_REG_8BIT(0x33b3), 0x04 },
+>  };
+>
+> +static const struct imx290_regval imx290_global_init_settings_327[] = {
+> +       { IMX290_WINWV_OB, 12 },
+> +       { IMX290_WINPH, 0 },
+> +       { IMX290_WINPV, 0 },
+> +       { IMX290_WINWH, 1948 },
+> +       { IMX290_WINWV, 1097 },
+> +       { IMX290_XSOUTSEL, IMX290_XSOUTSEL_XVSOUTSEL_VSYNC |
+> +                          IMX290_XSOUTSEL_XHSOUTSEL_HSYNC },
+> +       { IMX290_REG_8BIT(0x3011), 0x0A },
 
-Thanks a lot!
+What datasheet are you working from? Mine (2019/03/25) has a
+correction listed at v0.3 of:
+Register 3011h setting 0Ah -> 02h
 
-If you need any help with process, setup, ... don't hesitate to ask
-(on e.g. #renesas-soc on Libera).
+> +       { IMX290_REG_8BIT(0x3012), 0x64 },
+> +       { IMX290_REG_8BIT(0x3013), 0x00 },
+> +       { IMX290_REG_8BIT(0x309e), 0x4A },
+> +       { IMX290_REG_8BIT(0x309f), 0x4A },
 
-Gr{oetje,eeting}s,
+309e/f undocumented in my datasheet beyond "default value 5Ah, set to "4Ah"".
+Not documented in imx290 or imx462 datasheets either. I'll read it
+back from IMX290 and IMX462 when I get to the office and see if 0x4a
+is the default anyway, in which case it can be generic.
 
-                        Geert
+> +       { IMX290_REG_8BIT(0x3128), 0x04 },
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Correction v0.3 - register address 3128h deleted.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> +       { IMX290_REG_8BIT(0x313b), 0x41 },
+
+Correction v0.3 - Register address 313Bh setting 41h -> 61h.
+
+
+I'll check the defaults on imx290 and imx462, because there is no harm
+in adding those register writes if they happen to be the defaults.
+There is also a fair amount of duplication between
+imx290_global_init_settings_290 and imx290_global_init_settings_327 -
+it'd be nice to reduce it down to the minimum set of diffs.
+
+> +};
+> +
+>  static const struct imx290_regval imx290_37_125mhz_clock[] = {
+>         { IMX290_EXTCK_FREQ, 0x2520 },
+>         { IMX290_INCKSEL7, 0x49 },
+> @@ -558,7 +605,7 @@ imx290_format_info(const struct imx290 *imx290, u32 code)
+>         for (i = 0; i < ARRAY_SIZE(imx290_formats); ++i) {
+>                 const struct imx290_format_info *info = &imx290_formats[i];
+>
+> -               if (info->code[imx290->mono] == code)
+> +               if (info->code[imx290->devdata->mono] == code)
+>                         return info;
+>         }
+>
+> @@ -957,11 +1004,27 @@ static int imx290_start_streaming(struct imx290 *imx290,
+>                                   struct v4l2_subdev_state *state)
+>  {
+>         const struct v4l2_mbus_framefmt *format;
+> +       const struct imx290_regval *regs;
+> +       unsigned int reg_num;
+>         int ret;
+>
+> +       switch (imx290->devdata->model) {
+> +       case IMX290:
+> +       case IMX290_MONO:
+> +               regs = imx290_global_init_settings_290;
+> +               reg_num = ARRAY_SIZE(imx290_global_init_settings_290);
+> +               break;
+> +       case IMX327:
+> +               regs = imx290_global_init_settings_327;
+> +               reg_num = ARRAY_SIZE(imx290_global_init_settings_327);
+> +               break;
+> +       default:
+> +               dev_err(imx290->dev, "Invalid model: %u\n", imx290->devdata->model);
+> +               return -EINVAL;
+> +       }
+> +
+>         /* Set init register settings */
+> -       ret = imx290_set_register_array(imx290, imx290_global_init_settings,
+> -                                       ARRAY_SIZE(imx290_global_init_settings));
+> +       ret = imx290_set_register_array(imx290, regs, reg_num);
+>         if (ret < 0) {
+>                 dev_err(imx290->dev, "Could not set init registers\n");
+>                 return ret;
+> @@ -1072,7 +1135,7 @@ static int imx290_enum_mbus_code(struct v4l2_subdev *sd,
+>         if (code->index >= ARRAY_SIZE(imx290_formats))
+>                 return -EINVAL;
+>
+> -       code->code = imx290_formats[code->index].code[imx290->mono];
+> +       code->code = imx290_formats[code->index].code[imx290->devdata->mono];
+>
+>         return 0;
+>  }
+> @@ -1114,7 +1177,7 @@ static int imx290_set_fmt(struct v4l2_subdev *sd,
+>         fmt->format.height = mode->height;
+>
+>         if (!imx290_format_info(imx290, fmt->format.code))
+> -               fmt->format.code = imx290_formats[0].code[imx290->mono];
+> +               fmt->format.code = imx290_formats[0].code[imx290->devdata->mono];
+>
+>         fmt->format.field = V4L2_FIELD_NONE;
+>         fmt->format.colorspace = V4L2_COLORSPACE_RAW;
+> @@ -1422,8 +1485,9 @@ static s64 imx290_check_link_freqs(const struct imx290 *imx290,
+>  }
+>
+>  static const struct of_device_id imx290_of_match[] = {
+> -       { .compatible = "sony,imx290" },
+> -       { .compatible = "sony,imx290-mono", .data = (void *)1 },
+> +       { .compatible = "sony,imx290", .data = &imx290_models[IMX290] },
+> +       { .compatible = "sony,imx290-mono", .data = &imx290_models[IMX290_MONO] },
+> +       { .compatible = "sony,imx327",  .data = &imx290_models[IMX327] },
+
+Based on Laurent's requests my parent to this set will be switching to
+imx290 (as legacy), imx290lqr and imx290llr as the compatible strings.
+imx327 ought to follow the same pattern.
+
+  Dave
+
+>         { /* sentinel */ }
+>  };
+>  MODULE_DEVICE_TABLE(of, imx290_of_match);
+> @@ -1441,8 +1505,7 @@ static int imx290_parse_dt(struct imx290 *imx290)
+>         s64 fq;
+>
+>         match = i2c_of_match_device(imx290_of_match, client);
+> -       if (match)
+> -               imx290->mono = match->data ? 1 : 0;
+> +       imx290->devdata = match->data;
+>
+>         endpoint = fwnode_graph_get_next_endpoint(dev_fwnode(imx290->dev), NULL);
+>         if (!endpoint) {
+> @@ -1561,6 +1624,9 @@ static int imx290_probe(struct i2c_client *client)
+>         if (ret)
+>                 goto err_pm;
+>
+> +       v4l2_i2c_subdev_set_name(&imx290->sd, client,
+> +                                imx290->devdata->name, NULL);
+> +
+>         /*
+>          * Finally, register the V4L2 subdev. This must be done after
+>          * initializing everything as the subdev can be used immediately after
+> --
+> 2.34.1
+>
