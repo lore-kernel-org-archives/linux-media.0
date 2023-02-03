@@ -2,240 +2,140 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78B90C05027
-	for <linux-media@archiver.kernel.org>; Fri,  3 Feb 2023 19:19:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89C7EC64EC3
+	for <linux-media@archiver.kernel.org>; Fri,  3 Feb 2023 20:57:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233223AbjBCTTE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Feb 2023 14:19:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
+        id S232338AbjBCU5y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Feb 2023 15:57:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233652AbjBCTS7 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Feb 2023 14:18:59 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7134F783C3
-        for <linux-media@vger.kernel.org>; Fri,  3 Feb 2023 11:18:45 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id ba1so1479817wrb.5
-        for <linux-media@vger.kernel.org>; Fri, 03 Feb 2023 11:18:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eVb2HFMgTJ3usCiBzIHZIOSS+2N4i8CB0Qx5yT0IF7Q=;
-        b=XYnWn2+rxvrgIV6AA45Hybehe2D5jRXuJrmMQUeUdD25xIc56unlCAgwRj59i1VQoa
-         JkSdThl7OSh6V9Vda8KiV1w7Ua3iKDn8A7Kp0QT6PrUu7RSJlC8OZrGxKWGWFKGIZtf8
-         9x/5zMNH+7A+1B9jtfvrCYDTIURwzqLQ2vB+RFPvNbL08tOiIeaEAfJ4dhSzyAR0duoj
-         VW61QFm0mdGzoCPNu1acXGni8lH0+qZ9ORMiTRH4BQ7l+bwGhZEMnqlYOnvMXlJGpR/q
-         8ievbZzfAO9I0z/y8wP72tQ/Ea0u8MiyaxnX73kHQAxlk6oaazpkkCqNWMHl3r4C4CqN
-         zvuw==
+        with ESMTP id S229448AbjBCU5w (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Feb 2023 15:57:52 -0500
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C104F928F2;
+        Fri,  3 Feb 2023 12:57:50 -0800 (PST)
+Received: by mail-ot1-f46.google.com with SMTP id 70-20020a9d084c000000b0068bccf754f1so1742405oty.7;
+        Fri, 03 Feb 2023 12:57:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eVb2HFMgTJ3usCiBzIHZIOSS+2N4i8CB0Qx5yT0IF7Q=;
-        b=0rj34GaXD1ZrZu/HrrRg9IBA/CjviU2My1+k509YwyYClf9rRMKZikFL7MRhUXr862
-         2pyfzeQzHr51Cx5Ij0ue0UvRV6plSla0oNAir22TolnGcnZsB+quh4kvpnoBEoWDxzVe
-         NqAAoQryH7VXxjC0qtqgQxljOk/Oh4M9wlqz7UYJ08eEZAOe6IsdjZDLlWRUKZl6jfqq
-         sjKZNn/EF+np6Nz5tCZNN3QexvCJQVd3QWwM78/To43bpreCgHK36PhftprU8x5UwsKs
-         52jOoQ538Soq3vO9t1iQfBTH7i5J6PFx5RhpCU1X1gQkdsBsqwJ0aPUJ16cU6Tnh7O0T
-         1dEQ==
-X-Gm-Message-State: AO0yUKXOaUM2tsD3Q3cYvr6IPd2pYieAODnh5Ajq4RIiQyuW2KUHMUby
-        0Sv4danXSlH2XRNnLjXpiAnj2A==
-X-Google-Smtp-Source: AK7set9gYktPXgDg42quCWFbwX3rcNsG+xnUXKnREt6mujYiJnbBqgf0RUZuc2FqELIndHNz5kdc8Q==
-X-Received: by 2002:a05:6000:1843:b0:2bf:d776:1c9a with SMTP id c3-20020a056000184300b002bfd7761c9amr13171096wri.4.1675451925408;
-        Fri, 03 Feb 2023 11:18:45 -0800 (PST)
-Received: from dave-Ubuntu2204.pitowers.org ([93.93.133.154])
-        by smtp.googlemail.com with ESMTPSA id f6-20020a5d5686000000b002c3daaef051sm1348637wrv.82.2023.02.03.11.18.41
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DTUpcYkNxPIlJHACYCYR7pDb1Buy+e4lFP4bk5Zgp34=;
+        b=D6kjA0iDCoHbJoW0/A85Gd/DEhgeFoqvSv2XUAWEbb1o+0YfaV5M3siOzoHq6v+lem
+         V8B6SLkgyxx/W3zB640h3M9fhSuQRaR8LNQQOuiUzmt1QdoYEVcn76JrF6ewHHqp3BxN
+         Hy2T0sAe3/8AOzMRx9zYqk92gEFBgmAH0ufB0/8eI8xfuhJfuVaupJ3T1XZ1archyji/
+         Nola6qXtDnqlRQdvhMBBBSETrlm+Jd6/+GcxoM2hwr0JFnTnXCwe2grgSZIh27ikr6Um
+         mpX2POkA56H64IeN4GJVZ1uydAwgcMldwGbymiD8KpgUN+uUj18tRkFOctge3sIMEhyG
+         8cTg==
+X-Gm-Message-State: AO0yUKVPGuB7WkOnxV5ZFvTP+YeGM2mRoFmSfcEhOqt90HjqZ1lrYGhk
+        EH1ec8I1KvYGvqaHgJ3Iqw==
+X-Google-Smtp-Source: AK7set/idxy63+ygBDyPnMqtJWkCkCzx9MyU4A+nT1Br4FymPkR4Z0JILK7N/Htqiz/3btTinW8cgQ==
+X-Received: by 2002:a05:6830:1e57:b0:68b:b721:8f1c with SMTP id e23-20020a0568301e5700b0068bb7218f1cmr6718583otj.27.1675457869992;
+        Fri, 03 Feb 2023 12:57:49 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c22-20020a9d6856000000b0068bd5af9b82sm1611458oto.43.2023.02.03.12.57.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 11:18:41 -0800 (PST)
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-To:     Manivannan Sadhasivam <mani@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH v2 12/13] media: i2c: imx290: Add support for H & V Flips
-Date:   Fri,  3 Feb 2023 19:18:10 +0000
-Message-Id: <20230203191811.947697-13-dave.stevenson@raspberrypi.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230203191811.947697-1-dave.stevenson@raspberrypi.com>
-References: <20230203191811.947697-1-dave.stevenson@raspberrypi.com>
+        Fri, 03 Feb 2023 12:57:49 -0800 (PST)
+Received: (nullmailer pid 873929 invoked by uid 1000);
+        Fri, 03 Feb 2023 20:57:48 -0000
+Date:   Fri, 3 Feb 2023 14:57:48 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Gatien Chevallier <gatien.chevallier@foss.st.com>
+Cc:     Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        krzysztof.kozlowski+dt@linaro.org, alexandre.torgue@foss.st.com,
+        vkoul@kernel.org, jic23@kernel.org, olivier.moysan@foss.st.com,
+        arnaud.pouliquen@foss.st.com, mchehab@kernel.org,
+        fabrice.gasnier@foss.st.com, ulf.hansson@linaro.org,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 2/6] dt-bindings: treewide: add feature-domains
+ description in binding files
+Message-ID: <20230203205748.GA860175-robh@kernel.org>
+References: <20230127164040.1047583-1-gatien.chevallier@foss.st.com>
+ <20230127164040.1047583-3-gatien.chevallier@foss.st.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230127164040.1047583-3-gatien.chevallier@foss.st.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The sensor supports H & V flips, so add the relevant hooks for
-V4L2_CID_HFLIP and V4L2_CID_VFLIP to configure them.
+On Fri, Jan 27, 2023 at 05:40:36PM +0100, Gatien Chevallier wrote:
+> feature-domains is an optional property that allows a peripheral to
+> refer to one or more feature domain controller(s).
+> 
+> Description of this property is added to all peripheral binding files of
+> the peripheral under the STM32 System Bus. It allows an accurate
+> representation of the hardware, where various peripherals are connected
+> to this firewall bus. The firewall can then check the peripheral accesses
+> before allowing it to probe.
+> 
+> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+> ---
+> 
+> Patch not present in V1 and V2.
+> 
+>  Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml | 5 +++++
+>  Documentation/devicetree/bindings/dma/st,stm32-dma.yaml     | 5 +++++
+>  Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml  | 5 +++++
+>  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml     | 5 +++++
+>  Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml | 5 +++++
+>  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml     | 5 +++++
+>  Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml | 5 +++++
+>  Documentation/devicetree/bindings/media/st,stm32-cec.yaml   | 5 +++++
+>  Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml  | 5 +++++
+>  .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml      | 5 +++++
+>  Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml | 5 +++++
+>  Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml  | 6 ++++++
+>  Documentation/devicetree/bindings/mmc/arm,pl18x.yaml        | 5 +++++
+>  Documentation/devicetree/bindings/net/stm32-dwmac.yaml      | 5 +++++
+>  .../devicetree/bindings/phy/phy-stm32-usbphyc.yaml          | 5 +++++
+>  .../devicetree/bindings/regulator/st,stm32-vrefbuf.yaml     | 5 +++++
+>  Documentation/devicetree/bindings/rng/st,stm32-rng.yaml     | 5 +++++
+>  Documentation/devicetree/bindings/serial/st,stm32-uart.yaml | 5 +++++
+>  Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml   | 5 +++++
+>  Documentation/devicetree/bindings/sound/st,stm32-sai.yaml   | 5 +++++
+>  .../devicetree/bindings/sound/st,stm32-spdifrx.yaml         | 5 +++++
+>  Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml    | 5 +++++
+>  Documentation/devicetree/bindings/spi/st,stm32-spi.yaml     | 5 +++++
+>  Documentation/devicetree/bindings/usb/dwc2.yaml             | 5 +++++
+>  24 files changed, 121 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
+> index 4ccb335e8063..cb2ad7d5fdb5 100644
+> --- a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
+> +++ b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
+> @@ -41,6 +41,11 @@ properties:
+>      maximum: 2
+>      default: 0
+>  
+> +  feature-domains:
+> +    $ref: /schemas/feature-controllers/feature-domain-controller.yaml#/properties/feature-domains
 
-Note that the Bayer order is maintained as the readout area
-shifts by 1 pixel in the appropriate direction (note the
-comment about the top margin being 8 pixels whilst the bottom
-margin is 9). The V4L2_SEL_TGT_CROP region is therefore
-adjusted appropriately.
+Not how common properties work. Consumer properties should be in a 
+schema with 'select: true' (the one you are referencing) and here you 
+just need to define the entries. Like clocks, power-domains, etc.
 
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
----
- drivers/media/i2c/imx290.c | 51 ++++++++++++++++++++++++++++++++++----
- 1 file changed, 46 insertions(+), 5 deletions(-)
+> +    minItems: 1
+> +    maxItems: 3
 
-diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-index 045d27b4d31b..7167eb1edb9b 100644
---- a/drivers/media/i2c/imx290.c
-+++ b/drivers/media/i2c/imx290.c
-@@ -208,6 +208,7 @@ struct imx290_mode {
- 	u32 hmax_min;
- 	u32 vmax_min;
- 	u8 link_freq_index;
-+	u8 ctrl_07;
- 
- 	const struct imx290_regval *data;
- 	u32 data_size;
-@@ -248,6 +249,10 @@ struct imx290 {
- 	struct v4l2_ctrl *hblank;
- 	struct v4l2_ctrl *vblank;
- 	struct v4l2_ctrl *exposure;
-+	struct {
-+		struct v4l2_ctrl *hflip;
-+		struct v4l2_ctrl *vflip;
-+	};
- };
- 
- static inline struct imx290 *to_imx290(struct v4l2_subdev *_sd)
-@@ -325,7 +330,6 @@ static const struct imx290_regval xclk_regs[][IMX290_NUM_CLK_REGS] = {
- 
- static const struct imx290_regval imx290_1080p_settings[] = {
- 	/* mode settings */
--	{ IMX290_CTRL_07, IMX290_WINMODE_1080P },
- 	{ IMX290_WINWV_OB, 12 },
- 	{ IMX290_OPB_SIZE_V, 10 },
- 	{ IMX290_X_OUT_SIZE, 1920 },
-@@ -334,7 +338,6 @@ static const struct imx290_regval imx290_1080p_settings[] = {
- 
- static const struct imx290_regval imx290_720p_settings[] = {
- 	/* mode settings */
--	{ IMX290_CTRL_07, IMX290_WINMODE_720P },
- 	{ IMX290_WINWV_OB, 6 },
- 	{ IMX290_OPB_SIZE_V, 4 },
- 	{ IMX290_X_OUT_SIZE, 1280 },
-@@ -494,6 +497,7 @@ static const struct imx290_mode imx290_modes_2lanes[] = {
- 		.hmax_min = 2200,
- 		.vmax_min = 1125,
- 		.link_freq_index = FREQ_INDEX_1080P,
-+		.ctrl_07 = IMX290_WINMODE_1080P,
- 		.data = imx290_1080p_settings,
- 		.data_size = ARRAY_SIZE(imx290_1080p_settings),
- 		.clk_cfg = imx290_1080p_clock_config,
-@@ -504,6 +508,7 @@ static const struct imx290_mode imx290_modes_2lanes[] = {
- 		.hmax_min = 3300,
- 		.vmax_min = 750,
- 		.link_freq_index = FREQ_INDEX_720P,
-+		.ctrl_07 = IMX290_WINMODE_720P,
- 		.data = imx290_720p_settings,
- 		.data_size = ARRAY_SIZE(imx290_720p_settings),
- 		.clk_cfg = imx290_720p_clock_config,
-@@ -517,6 +522,7 @@ static const struct imx290_mode imx290_modes_4lanes[] = {
- 		.hmax_min = 2200,
- 		.vmax_min = 1125,
- 		.link_freq_index = FREQ_INDEX_1080P,
-+		.ctrl_07 = IMX290_WINMODE_1080P,
- 		.data = imx290_1080p_settings,
- 		.data_size = ARRAY_SIZE(imx290_1080p_settings),
- 		.clk_cfg = imx290_1080p_clock_config,
-@@ -527,6 +533,7 @@ static const struct imx290_mode imx290_modes_4lanes[] = {
- 		.hmax_min = 3300,
- 		.vmax_min = 750,
- 		.link_freq_index = FREQ_INDEX_720P,
-+		.ctrl_07 = IMX290_WINMODE_720P,
- 		.data = imx290_720p_settings,
- 		.data_size = ARRAY_SIZE(imx290_720p_settings),
- 		.clk_cfg = imx290_720p_clock_config,
-@@ -835,6 +842,20 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
- 				   NULL);
- 		break;
- 
-+	case V4L2_CID_HFLIP:
-+	case V4L2_CID_VFLIP:
-+	{
-+		u32 reg;
-+
-+		reg = imx290->current_mode->ctrl_07;
-+		if (imx290->hflip->val)
-+			reg |= IMX290_HREVERSE;
-+		if (imx290->vflip->val)
-+			reg |= IMX290_VREVERSE;
-+		ret = imx290_write(imx290, IMX290_CTRL_07, reg, NULL);
-+		break;
-+	}
-+
- 	default:
- 		ret = -EINVAL;
- 		break;
-@@ -887,7 +908,7 @@ static int imx290_ctrl_init(struct imx290 *imx290)
- 	if (ret < 0)
- 		return ret;
- 
--	v4l2_ctrl_handler_init(&imx290->ctrls, 9);
-+	v4l2_ctrl_handler_init(&imx290->ctrls, 11);
- 
- 	/*
- 	 * The sensor has an analog gain and a digital gain, both controlled
-@@ -944,6 +965,12 @@ static int imx290_ctrl_init(struct imx290 *imx290)
- 	imx290->vblank = v4l2_ctrl_new_std(&imx290->ctrls, &imx290_ctrl_ops,
- 					   V4L2_CID_VBLANK, 1, 1, 1, 1);
- 
-+	imx290->hflip = v4l2_ctrl_new_std(&imx290->ctrls, &imx290_ctrl_ops,
-+					  V4L2_CID_HFLIP, 0, 1, 1, 0);
-+	imx290->vflip = v4l2_ctrl_new_std(&imx290->ctrls, &imx290_ctrl_ops,
-+					  V4L2_CID_VFLIP, 0, 1, 1, 0);
-+	v4l2_ctrl_cluster(2, &imx290->hflip);
-+
- 	v4l2_ctrl_new_fwnode_properties(&imx290->ctrls, &imx290_ctrl_ops,
- 					&props);
- 
-@@ -1065,6 +1092,13 @@ static int imx290_set_stream(struct v4l2_subdev *sd, int enable)
- 		pm_runtime_put_autosuspend(imx290->dev);
- 	}
- 
-+	/*
-+	 * vflip and hflip should not be changed during streaming as the sensor
-+	 * will produce an invalid frame.
-+	 */
-+	__v4l2_ctrl_grab(imx290->vflip, enable);
-+	__v4l2_ctrl_grab(imx290->hflip, enable);
-+
- unlock:
- 	v4l2_subdev_unlock_state(state);
- 	return ret;
-@@ -1147,16 +1181,23 @@ static int imx290_get_selection(struct v4l2_subdev *sd,
- 				struct v4l2_subdev_state *sd_state,
- 				struct v4l2_subdev_selection *sel)
- {
-+	struct imx290 *imx290 = to_imx290(sd);
- 	struct v4l2_mbus_framefmt *format;
- 
- 	switch (sel->target) {
- 	case V4L2_SEL_TGT_CROP: {
- 		format = v4l2_subdev_get_pad_format(sd, sd_state, 0);
- 
-+		/*
-+		 * The sensor moves the readout by 1 pixel based on flips to
-+		 * keep the Bayer order the same.
-+		 */
- 		sel->r.top = IMX920_PIXEL_ARRAY_MARGIN_TOP
--			   + (IMX290_PIXEL_ARRAY_RECORDING_HEIGHT - format->height) / 2;
-+			   + (IMX290_PIXEL_ARRAY_RECORDING_HEIGHT - format->height) / 2
-+			   + imx290->vflip->val;
- 		sel->r.left = IMX920_PIXEL_ARRAY_MARGIN_LEFT
--			    + (IMX290_PIXEL_ARRAY_RECORDING_WIDTH - format->width) / 2;
-+			    + (IMX290_PIXEL_ARRAY_RECORDING_WIDTH - format->width) / 2
-+			    + imx290->hflip->val;
- 		sel->r.width = format->width;
- 		sel->r.height = format->height;
- 
--- 
-2.34.1
+Why is this variable and what is each entry?
 
+I still don't like the naming. Everything is a feature and a domain... 
+
+It might be a bit easier to come up with a name with multiple users of 
+this binding presented. I'm hesistant to define any new common binding 
+with only 1 user as I've said multiple times on this binding.
+
+Rob
