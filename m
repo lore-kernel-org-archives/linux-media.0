@@ -2,84 +2,167 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5053DC61DA4
-	for <linux-media@archiver.kernel.org>; Sat,  4 Feb 2023 20:39:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28816C636D3
+	for <linux-media@archiver.kernel.org>; Sun,  5 Feb 2023 11:00:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232523AbjBDUjV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 4 Feb 2023 15:39:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55362 "EHLO
+        id S229505AbjBELAb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 5 Feb 2023 06:00:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231654AbjBDUjU (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 4 Feb 2023 15:39:20 -0500
-X-Greylist: delayed 546 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 04 Feb 2023 12:39:19 PST
-Received: from mr85p00im-zteg06021901.me.com (mr85p00im-zteg06021901.me.com [17.58.23.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAC6222EB
-        for <linux-media@vger.kernel.org>; Sat,  4 Feb 2023 12:39:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1675542613; bh=wdmroSnk2VRzxsnC/4QQ06ZZXjkhU/5Tb87n4HWe2pE=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=wQhqV4pIgexziHbg3XW/PmP8qVUeu4uc9JxffwW1lMjgHnQ6ypKJbmbPvMnhM+4th
-         EiGOCmKt+YKR2VxC9pYLbU9PMcp80qv1EVdZlfHWjfDbdtm7GiMa9uDftDrBkynjeB
-         Y5DD4UjOxnhoVrwqfpvgiJIfK9HFKA7nBVwINx3zQZ1ZKmFysPKPOS/k9CsjmUSoHE
-         anBYVzUetYwN1vhlwRsL8VkQHQFQMJAezpBTG5jAJQ20ZxBkSotoa+IZOiUTffRZ1t
-         96Ifvq8kNNgj/5pDzT1ACS67VLZyTrkDedU+qwIS/puUk39ze2X5TOIf1ElSdenz17
-         8PvQO0o2w60+g==
-Received: from localhost (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
-        by mr85p00im-zteg06021901.me.com (Postfix) with ESMTPSA id E25E3740A0B;
-        Sat,  4 Feb 2023 20:30:12 +0000 (UTC)
-From:   Alain Volmat <avolmat@me.com>
-To:     Patrice Chotard <patrice.chotard@foss.st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Alain Volmat <avolmat@me.com>, kernel test robot <lkp@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] media: sti: c8sectpfe: drop of_match_ptr() to avoid unused variables
-Date:   Sat,  4 Feb 2023 21:29:40 +0100
-Message-Id: <20230204202941.139974-1-avolmat@me.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229453AbjBELAa (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 5 Feb 2023 06:00:30 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09E4193FB;
+        Sun,  5 Feb 2023 03:00:28 -0800 (PST)
+Received: from [2001:67c:1810:f055:bde0:6d5b:d664:e19a]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pOcl1-0003DL-By; Sun, 05 Feb 2023 12:00:27 +0100
+Message-ID: <b2007bc9-b05f-eb17-a373-9587b01d3788@leemhuis.info>
+Date:   Sun, 5 Feb 2023 12:00:26 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: -y6n3fMLjC9oNm25ppWtRkpNx3LCANb_
-X-Proofpoint-ORIG-GUID: -y6n3fMLjC9oNm25ppWtRkpNx3LCANb_
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.11.62.513.0000000_definitions?=
- =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2021-12-02?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- mlxlogscore=958 bulkscore=0 clxscore=1011 spamscore=0 mlxscore=0
- phishscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2302040184
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 2/3] venus: firmware: Correct non-pix start and end
+ addresses
+Content-Language: en-US, de-DE
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Nathan Hebert <nhebert@chromium.org>
+References: <20221005083730.963322-1-stanimir.varbanov@linaro.org>
+ <20221005083730.963322-3-stanimir.varbanov@linaro.org>
+ <Y9LSMap+jRxbtpC8@google.com>
+From:   "Linux kernel regression tracking (#adding)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <Y9LSMap+jRxbtpC8@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1675594829;3718c9dd;
+X-HE-SMSGID: 1pOcl1-0003DL-By
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When CONFIG_OF is not set, "of_match_ptr(<match_table>)" compiles to NULL,
-which leaves <match_table> unused, leading to warning such as:
+[TLDR: I'm adding this report to the list of tracked Linux kernel
+regressions; the text you find below is based on a few templates
+paragraphs you might have encountered already in similar form.
+See link in footer if these mails annoy you.]
 
-drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:1175:34:
-warning: unused variable 'c8sectpfe_match' [-Wunused-const-variable]
+On 26.01.23 20:19, Matthias Kaehlcke wrote:
 
-Drop the of_match_ptr usage to avoid such warning.
+> On Wed, Oct 05, 2022 at 11:37:29AM +0300, Stanimir Varbanov wrote:
+>> The default values for those registers are zero.
+>>
+>> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+>> ---
+>>  drivers/media/platform/qcom/venus/firmware.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/media/platform/qcom/venus/firmware.c b/drivers/media/platform/qcom/venus/firmware.c
+>> index 3851cedc3329..71e43611d1cf 100644
+>> --- a/drivers/media/platform/qcom/venus/firmware.c
+>> +++ b/drivers/media/platform/qcom/venus/firmware.c
+>> @@ -38,8 +38,8 @@ static void venus_reset_cpu(struct venus_core *core)
+>>  	writel(fw_size, wrapper_base + WRAPPER_FW_END_ADDR);
+>>  	writel(0, wrapper_base + WRAPPER_CPA_START_ADDR);
+>>  	writel(fw_size, wrapper_base + WRAPPER_CPA_END_ADDR);
+>> -	writel(fw_size, wrapper_base + WRAPPER_NONPIX_START_ADDR);
+>> -	writel(fw_size, wrapper_base + WRAPPER_NONPIX_END_ADDR);
+>> +	writel(0, wrapper_base + WRAPPER_NONPIX_START_ADDR);
+>> +	writel(0, wrapper_base + WRAPPER_NONPIX_END_ADDR);
+>>  
+>>  	if (IS_V6(core)) {
+>>  		/* Bring XTSS out of reset */
+> 
+> I found that this commit prevents the AOSS from entering sleep mode during
+> system suspend at least on sc7180 and sc7280. AOSS not entering sleep mode
+> leads to a (apparently significant) increase in S3 power consumption, on
+> trogdor and herobrine it prevents the system from staying suspended, because
+> the embedded controller detect the condition and wakes the sytem up again.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Alain Volmat <avolmat@me.com>
----
- drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for the report. To be sure the issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+tracking bot:
 
-diff --git a/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c b/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
-index c38b62d4f1ae..67d4db0abd8a 100644
---- a/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
-+++ b/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
-@@ -1175,7 +1175,7 @@ MODULE_DEVICE_TABLE(of, c8sectpfe_match);
- static struct platform_driver c8sectpfe_driver = {
- 	.driver = {
- 		.name = "c8sectpfe",
--		.of_match_table = of_match_ptr(c8sectpfe_match),
-+		.of_match_table = c8sectpfe_match,
- 	},
- 	.probe	= c8sectpfe_probe,
- 	.remove	= c8sectpfe_remove,
--- 
-2.34.1
+#regzbot ^introduced a837e5161cfffbb32
+#regzbot title meida: venus: firmware: AOSS doesn't seel anymore on at
+least sc7180 and sc7280
+#regzbot ignore-activity
 
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (the parent of this mail). See page linked in footer for
+details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
+
+> Testing is slightly involved, since unfortunately this is not the only issue
+> in v6.2-rcN that impacts AOSS sleep.
+> 
+> To reach AOSS sleep you also have to revert this commit:
+> 
+> 3a39049f88e4 soc: qcom: rpmhpd: Use highest corner until sync_state
+
+FWIW, for anyone that like me is wondering about that story, it can be
+found here:
+https://lore.kernel.org/all/Y9v%2Fz8CYik3faHh7@google.com/
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
+
+> And apply something like the diff below (or enable the bwmon driver).
+> 
+> On a trogdor device you will see something like this when AOSS doesn't
+> enter sleep mode during system suspend:
+> 
+>   [   32.882869] EC detected sleep transition timeout. Total sleep transitions: 0
+>   [   32.882886] WARNING: CPU: 7 PID: 5682 at drivers/platform/chrome/cros_ec.c:146 cros_ec_sleep_event+0x100/0x10c
+>   [   32.900393] Modules linked in: uinput veth uvcvideo videobuf2_vmalloc venus_enc venus_dec videobuf2_dma_contig videobuf2_memops onboard_usb_hub cros_ec_typec typec hci_uart btqca xt_MASQUERADE venus_core v4l2_mem2mem videobuf2_v4l2 videobuf2_common qcom_q6v5_mss qcom_pil_v
+>   [   32.940015] CPU: 7 PID: 5682 Comm: cat Tainted: G        W          6.1.0-rc2+ #295 d14276115b3f6b03fc99220174e5d7724847cbd6
+>   [   32.951525] Hardware name: Google Villager (rev1+) with LTE (DT)
+>   [   32.957695] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>   [   32.964848] pc : cros_ec_sleep_event+0x100/0x10c
+>   [   32.969596] lr : cros_ec_sleep_event+0x100/0x10c
+> 
+> I'm also happy to help with testing if you have a candidate fix.
+>
+> --
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index 0adf13399e64..c1f6952764c5 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -3488,7 +3488,7 @@ IPCC_MPROC_SIGNAL_GLINK_QMP
+>                 };
+> 
+>                 pmu@9091000 {
+> 		-                       compatible = "qcom,sc7280-llcc-bwmon";
+> 		+                       // compatible = "qcom,sc7280-llcc-bwmon";
+> 		                        reg = <0 0x9091000 0 0x1000>;
+> 
+>                         interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
+> 			@@ -3528,7 +3528,7 @@ opp-7 {
+> 			                };
+> 
+>                 pmu@90b6400 {
+> 		-                       compatible = "qcom,sc7280-cpu-bwmon", "qcom,msm8998-bwmon";
+> 		+                       // compatible = "qcom,sc7280-cpu-bwmon", "qcom,msm8998-bwmon";
+> 		                        reg = <0 0x090b6400 0 0x600>;
+> 
+>                         interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
