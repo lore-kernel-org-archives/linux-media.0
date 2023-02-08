@@ -2,87 +2,81 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C286C05027
-	for <linux-media@archiver.kernel.org>; Wed,  8 Feb 2023 09:01:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D432BC636CC
+	for <linux-media@archiver.kernel.org>; Wed,  8 Feb 2023 09:07:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbjBHJBV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Feb 2023 04:01:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48866 "EHLO
+        id S230414AbjBHJHE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Feb 2023 04:07:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjBHJBT (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Feb 2023 04:01:19 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B003B3609C;
-        Wed,  8 Feb 2023 01:01:18 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4PBYrX6pknz4xq27;
-        Wed,  8 Feb 2023 17:01:16 +0800 (CST)
-Received: from xaxapp03.zte.com.cn ([10.88.97.17])
-        by mse-fl1.zte.com.cn with SMTP id 318913nN035729;
-        Wed, 8 Feb 2023 17:01:03 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Wed, 8 Feb 2023 17:01:06 +0800 (CST)
-Date:   Wed, 8 Feb 2023 17:01:06 +0800 (CST)
-X-Zmail-TransId: 2af963e364d24ec19659
-X-Mailer: Zmail v1.0
-Message-ID: <202302081701061413187@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <mchehab@kernel.org>
-Cc:     <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
-        <ye.xingchen@zte.com.cn>, <hugues.fruchet@st.com>,
-        <linux-media@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBtZWRpYTogcGxhdGZvcm06IHN0bTMyOiB1c2XCoGRldm1fcGxhdGZvcm1fZ2V0X2FuZF9pb3JlbWFwX3Jlc291cmNlKCk=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 318913nN035729
-X-Fangmail-Gw-Spam-Type: 0
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63E364DC.001/4PBYrX6pknz4xq27
+        with ESMTP id S229490AbjBHJHC (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Feb 2023 04:07:02 -0500
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492376A47;
+        Wed,  8 Feb 2023 01:07:02 -0800 (PST)
+Received: by mail-qt1-f179.google.com with SMTP id g18so17661674qtb.6;
+        Wed, 08 Feb 2023 01:07:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OdYqGAJyRa8qIJ+NrQDA6JinRoUIu5AZ1ShXzwXorPU=;
+        b=g56U72kM6wX+4U3wpigDdOeEQf12flOAkAcJCTovpKa971mriW0AxjksT/cubNQhDp
+         nK/qLHJBclSABNGTTIKwrsny4PsOr6Ar2qqvZ7R6vnd5Qbuh4I7fp3CLELovVPczZaKc
+         gXfIdSeSKv3s6pzW1dYVOUu54o4nDtDV/lRGBsYfYnYzNh0mpfyYn87yEbMURSSFP0Cw
+         dMyJzlBE/lqNr0YYlfPkkfoNQpFppQ1UL3wWv/nCCuvL27rNblVBFdokSuYUjCS1sUDr
+         anxg+trIEIWBuhnDn7qmb5QHyh4Wo+6YwrEQnBVyV+pgrrjbABvHPSNCwfEmhQ/ZfaGG
+         HX2w==
+X-Gm-Message-State: AO0yUKVoZ7xMiCY4kqTxCGt41Zgzw/q3ClaLvJmG7vv7XqInYzHdDiPX
+        U8y4Jv/0ASkcC5vF6yFA5dS6lT2W9+0sYA==
+X-Google-Smtp-Source: AK7set/w8WBFBdHszyxDzfte+DwElncOzTbNRqYjyxHVEf7FCNT89S/zRED/jsva8EayF9Um+PhuUQ==
+X-Received: by 2002:a05:622a:118d:b0:3b8:2ce4:3e9 with SMTP id m13-20020a05622a118d00b003b82ce403e9mr11850313qtk.32.1675847221263;
+        Wed, 08 Feb 2023 01:07:01 -0800 (PST)
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
+        by smtp.gmail.com with ESMTPSA id h26-20020ac8515a000000b003b82cb8748dsm10941442qtn.96.2023.02.08.01.07.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Feb 2023 01:07:00 -0800 (PST)
+Received: by mail-yb1-f174.google.com with SMTP id d189so13312317ybc.0;
+        Wed, 08 Feb 2023 01:07:00 -0800 (PST)
+X-Received: by 2002:a5b:508:0:b0:8a3:59a4:340e with SMTP id
+ o8-20020a5b0508000000b008a359a4340emr727677ybp.604.1675847220466; Wed, 08 Feb
+ 2023 01:07:00 -0800 (PST)
+MIME-Version: 1.0
+References: <202302081659401393135@zte.com.cn>
+In-Reply-To: <202302081659401393135@zte.com.cn>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 8 Feb 2023 10:06:48 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdULPv3qLCPSzcWrgdbq6MNnx1NjxXC+6kUGhQOqasGRLg@mail.gmail.com>
+Message-ID: <CAMuHMdULPv3qLCPSzcWrgdbq6MNnx1NjxXC+6kUGhQOqasGRLg@mail.gmail.com>
+Subject: Re: [PATCH] media: platform: renesas: use devm_platform_get_and_ioremap_resource()
+To:     ye.xingchen@zte.com.cn
+Cc:     niklas.soderlund@ragnatech.se, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Ye Xingchen <ye.xingchen@zte.com.cn>
+On Wed, Feb 8, 2023 at 10:02 AM <ye.xingchen@zte.com.cn> wrote:
+> From: Ye Xingchen <ye.xingchen@zte.com.cn>
+>
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
+>
+> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
----
- drivers/media/platform/st/stm32/dma2d/dma2d.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Gr{oetje,eeting}s,
 
-diff --git a/drivers/media/platform/st/stm32/dma2d/dma2d.c b/drivers/media/platform/st/stm32/dma2d/dma2d.c
-index 9706aa41b5d2..8e92efb842bf 100644
---- a/drivers/media/platform/st/stm32/dma2d/dma2d.c
-+++ b/drivers/media/platform/st/stm32/dma2d/dma2d.c
-@@ -603,7 +603,6 @@ static int dma2d_probe(struct platform_device *pdev)
- {
- 	struct dma2d_dev *dev;
- 	struct video_device *vfd;
--	struct resource *res;
- 	int ret = 0;
+                        Geert
 
- 	dev = devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
-@@ -614,9 +613,7 @@ static int dma2d_probe(struct platform_device *pdev)
- 	mutex_init(&dev->mutex);
- 	atomic_set(&dev->num_inst, 0);
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--
--	dev->regs = devm_ioremap_resource(&pdev->dev, res);
-+	dev->regs = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
- 	if (IS_ERR(dev->regs))
- 		return PTR_ERR(dev->regs);
-
--- 
-2.25.1
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
