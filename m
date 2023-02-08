@@ -2,95 +2,69 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2B25C636D7
-	for <linux-media@archiver.kernel.org>; Wed,  8 Feb 2023 21:28:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE989C636D6
+	for <linux-media@archiver.kernel.org>; Wed,  8 Feb 2023 22:16:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbjBHV2N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Feb 2023 16:28:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
+        id S232386AbjBHWQq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Feb 2023 17:16:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231698AbjBHV17 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Feb 2023 16:27:59 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481B01E9E6;
-        Wed,  8 Feb 2023 13:27:58 -0800 (PST)
+        with ESMTP id S232398AbjBHWQn (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Feb 2023 17:16:43 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDEFA3755D;
+        Wed,  8 Feb 2023 14:16:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675891678; x=1707427678;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=oneykZrR+STVd3OhHwvigHCRETDt1//PquS0qMtfgRY=;
-  b=DwDShrRRpt8DM8S1ddGJtTuXS3gz38V017pJfj4KSsw331XmYy+EB/2S
-   i0qU7c+Ya7yrwNY+oXM1ZuTzbWYNptCCpXfL42MPM1T1Kz/8Vg2k1Lzoj
-   o+RxXpk2TGHo77J9Fzo/v+grasaKWN5LA3TLYRAT4Vdpk/FmwFp/nlEY0
-   8OQspJX1GBfr48rR5pnWFIp7jExmgJkvfXawWuZb3s3JgjaQ2CmRfhejH
-   IJuvbjlYdEL7MKWrjtQ4porB87FT6Yr+h8kNJ8gF/ilzhE7XNpXkxjHjO
-   eqFlSoV531A4CNMZQojDiuF/GqXepy3RJ2mVJH6kwgWdtJxMpWJO52kHd
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="327625785"
+  t=1675894598; x=1707430598;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=l3HMKANKT06QhSwevMDgDpXf1tEHYJtuiJZ0WpFg+0s=;
+  b=Qxufv5ef15jO3eD8E+vGs90hZd+HmgjanmeLBvuxrF9D8Zo1OOGmrZV/
+   2JlPcDYwYmAGwU8N2M/5zDm7tMSKvssPxqET/3MF+VPZ4syrILhWadJ36
+   Hf+2bLK53bQ7YW0ld5xqHyCb50ITkiA0nGOJ9W+3HbPqr8rEAysgfvTKO
+   GizXtDSfQuPQ2+XplghiCEDeGfgdDbUwKo8KDz1ZJMa0vDWpmQ9DxY/eo
+   4Mp7wub7ey0OcSLPfPdHV85QkE3ggZYe9Wg4PWt0F2Xgz9GKYlJxAmd2N
+   roIb2Pm4gVQXnXHB3Vt5/Zitu4UkoQzfrpoGoYch/ZCoeWSbDv9jqPK0e
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="394534481"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="327625785"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 13:27:56 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="667394089"
+   d="scan'208";a="394534481"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 14:16:38 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="810093623"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="667394089"
+   d="scan'208";a="810093623"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 13:27:54 -0800
-Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id D27CB12288B;
-        Wed,  8 Feb 2023 23:27:47 +0200 (EET)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
-        (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1pPryM-00DMZS-UC; Wed, 08 Feb 2023 23:27:22 +0200
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 14:16:36 -0800
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id 95F4D1218E2;
+        Thu,  9 Feb 2023 00:16:33 +0200 (EET)
+Date:   Thu, 9 Feb 2023 00:16:33 +0200
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-acpi@vger.kernel.org
-Cc:     linux-media@vger.kernel.org, rafael@kernel.org,
+To:     kernel test robot <lkp@intel.com>
+Cc:     linux-acpi@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
+        linux-media@vger.kernel.org, rafael@kernel.org,
         andriy.shevchenko@linux.intel.com, heikki.krogerus@linux.intel.com
-Subject: [PATCH v5 7/8] ACPI: property: Skip MIPI property table without "mipi-img" prefix
-Date:   Wed,  8 Feb 2023 23:27:11 +0200
-Message-Id: <20230208212712.3184953-8-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230208212712.3184953-1-sakari.ailus@linux.intel.com>
-References: <20230208212712.3184953-1-sakari.ailus@linux.intel.com>
+Subject: Re: [PATCH v4 2/8] ACPI: property: Parse _CRS CSI-2 descriptor
+Message-ID: <Y+QfQUflAJHmFI1l@kekkonen.localdomain>
+References: <20230208152807.3064242-3-sakari.ailus@linux.intel.com>
+ <202302090442.og7NHYTZ-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202302090442.og7NHYTZ-lkp@intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-For all _DSD properties, skip going through the MIPI DisCo for Imaging
-property name substitution table if the property doesn't have "mipi-img-"
-prefix.
+On Thu, Feb 09, 2023 at 04:43:45AM +0800, kernel test robot wrote:
+> >> drivers/acpi/mipi.c:205:6: warning: no previous prototype for 'acpi_crs_csi2_alloc_fill_swnodes' [-Wmissing-prototypes]
+>      205 | void acpi_crs_csi2_alloc_fill_swnodes(size_t ports_count, acpi_handle handle)
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/acpi/mipi.c | 5 +++++
- 1 file changed, 5 insertions(+)
+I was wondering what wast the actual problem here as having no prototype
+isn't an issue really. The function should have been static, of course.
+I'll address this in v6, but waiting for other comments for now.
 
-diff --git a/drivers/acpi/mipi.c b/drivers/acpi/mipi.c
-index 258a2b351dcf3..62e8f3c6006d7 100644
---- a/drivers/acpi/mipi.c
-+++ b/drivers/acpi/mipi.c
-@@ -730,6 +730,8 @@ void acpi_init_swnodes(struct acpi_device *device)
- 	primary->secondary = software_node_fwnode(ads->nodes);
- }
- 
-+#define MIPI_IMG_PREFIX "mipi-img-"
-+
- static const struct mipi_disco_prop {
- 	const char *mipi_prop;
- 	const char *dt_prop;
-@@ -756,6 +758,9 @@ void acpi_properties_prepare_mipi(union acpi_object *elements)
- 	char *e0 = elements[0].string.pointer;
- 	unsigned int i;
- 
-+	if (!str_has_prefix(elements[0].string.pointer, MIPI_IMG_PREFIX))
-+		return;
-+
- 	/* Replace MIPI DisCo for Imaging property names with DT equivalents. */
- 	for (i = 0; i < ARRAY_SIZE(mipi_disco_props); i++) {
- 		if (!strcmp(mipi_disco_props[i].mipi_prop, e0)) {
 -- 
-2.30.2
-
+Sakari Ailus
