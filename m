@@ -2,115 +2,176 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D562C636D3
-	for <linux-media@archiver.kernel.org>; Wed,  8 Feb 2023 09:07:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7C47C05027
+	for <linux-media@archiver.kernel.org>; Wed,  8 Feb 2023 09:08:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbjBHJHU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Feb 2023 04:07:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52324 "EHLO
+        id S229700AbjBHJI5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Feb 2023 04:08:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbjBHJHO (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Feb 2023 04:07:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21784458BD
-        for <linux-media@vger.kernel.org>; Wed,  8 Feb 2023 01:06:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675847183;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SRi2tCsuOLJoQz16HbU6hg4NjL1uIMJ9unPVHJd4sSM=;
-        b=bVnr9rtXZcfErStTzX61lPu6lsdVitO6ETRaFV9riYCTDkWgK69E2eioxKg0X0wJr53S4Y
-        kThL6wLV9wdWccLglGLqOrlwIjc57pmdWDeFnPWtgKG1hR+o0wKY/AQFD5XMGKQN7T9+Q8
-        T45cCX/tNi9etKdS16s+nbzmbLMyR4A=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-551-rBHqdbsiN3KNbDnbxw7PWg-1; Wed, 08 Feb 2023 04:06:22 -0500
-X-MC-Unique: rBHqdbsiN3KNbDnbxw7PWg-1
-Received: by mail-wm1-f71.google.com with SMTP id j20-20020a05600c1c1400b003dc5dd44c0cso8593905wms.8
-        for <linux-media@vger.kernel.org>; Wed, 08 Feb 2023 01:06:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SRi2tCsuOLJoQz16HbU6hg4NjL1uIMJ9unPVHJd4sSM=;
-        b=nhmIoaJI8aA/eQrdWVxpaUjdDWFQvEMqCEShtTThKs/2cg6jWDHMrUe1uVfTVjKOHB
-         6KBGaZxiirxEDeLkzUjG4c1wKp+U2RETH8bm0OU+XaXrKhAYxB/HF8cIjz6CZszWic/Y
-         qymm6RN8uaAFwG+hVQX7MGpLSrvuOAM9APhNwPRi0hyCi235zQ8Xaq/aYX3RVVqAhP2N
-         zWncIbOSTMOdGiGGo++xGRj0UP/GYJqPF2ONLLW66CQzQbvSLUelusstPIRt7lvQPKmx
-         zHzukdXWRrvRGb52EEPTLV2Ku5JkYOTP/Qd9Sp2PA7AkgzeYPpPA0Ee3MC6NMCt8jkUw
-         tcng==
-X-Gm-Message-State: AO0yUKW9SRX3ruwksDIRaSEQFLB/eCK2FgIrSmEOpNvJrEGzxfHXVbYC
-        o3YZv9Y5uNNAZK0PljDYo+MT27ojdxy3+e4VGuxm2Vg5GdtC6aMKRNSA3g5qCimltlaA8T4h4aE
-        EVomy/EnEo/1ZhoRuQhol6bc=
-X-Received: by 2002:adf:e3cc:0:b0:2c3:df05:b1a with SMTP id k12-20020adfe3cc000000b002c3df050b1amr5904239wrm.71.1675847181116;
-        Wed, 08 Feb 2023 01:06:21 -0800 (PST)
-X-Google-Smtp-Source: AK7set/k/7l50TXIQVYYeZY67BmTWHXujQFNMNbuLHWBhMgxQfjdhadxx3tu6ctEY4QeFNCcCLrSlg==
-X-Received: by 2002:adf:e3cc:0:b0:2c3:df05:b1a with SMTP id k12-20020adfe3cc000000b002c3df050b1amr5904210wrm.71.1675847180947;
-        Wed, 08 Feb 2023 01:06:20 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id k6-20020adfb346000000b0027cb20605e3sm13397155wrd.105.2023.02.08.01.06.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 01:06:20 -0800 (PST)
-Message-ID: <ef09bc9f-d570-be11-238b-bd34063917fc@redhat.com>
-Date:   Wed, 8 Feb 2023 10:06:19 +0100
+        with ESMTP id S229632AbjBHJI4 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Feb 2023 04:08:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF3C3AB0
+        for <linux-media@vger.kernel.org>; Wed,  8 Feb 2023 01:08:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DFC83B81C0C
+        for <linux-media@vger.kernel.org>; Wed,  8 Feb 2023 09:08:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A767C4339C;
+        Wed,  8 Feb 2023 09:08:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675847332;
+        bh=qLQ0yIS4/XneFDdiO9GpY2yycubjfIvYvG9WiCAX/8I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=MYGr8WpKJKjr9rvCzBRrTNSulG1vTPTTkwHqDta5hAaDbGUgSA0ExOEPXbSSAS4c4
+         Z+rvAXySuPqvjiUBGh2Hd+FzCsnKyfSMkX8NV7y9h5aHeATdzIUx7ZypvzRie30GDA
+         G7UDlhmzcu50tfX1q8tGMWi4NRNaQdwsUvGMMbshicNJd5SCW8QOtLkyy5bGjuialH
+         BytHhaUqfWZ1PteHE8k8CS31cVujYueK6VXlkx4Nhihw4bSoVD2yS8kEvDqPNZWOfL
+         gEKifJIHknv2TSFbtiqliXZT2XadKyyx0TDrsMnun2r/uwKaJzFevepjQ7iVBKP86G
+         LOoiVCmnkhw2w==
+Date:   Wed, 8 Feb 2023 10:08:47 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Stefan Herdler <herdler@nurfuerspam.de>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, Manu Abraham <abraham.manu@gmail.com>,
+        Tomasz Maciej Nowak <tmn505@gmail.com>,
+        Corinna Vinschen <vinschen@redhat.com>,
+        Soeren Moch <smoch@web.de>
+Subject: Re: Future of the SAA7146 drivers
+Message-ID: <20230208100847.3ec87576@coco.lan>
+In-Reply-To: <026b1342-2b0f-f61d-ea33-63f3992d1473@nurfuerspam.de>
+References: <c78a2740-1b80-2ea2-dc5c-4ead440ff9ed@nurfuerspam.de>
+        <c093e775-e863-f886-e819-e8a929775a89@xs4all.nl>
+        <a24d4645-ac78-9990-92c3-7c04282f190e@nurfuerspam.de>
+        <20ceeb7f-336a-b51c-8cc8-128cc9ebcd2e@xs4all.nl>
+        <014db0ee-55fe-2966-a531-b8c23e97b402@web.de>
+        <d9197b80-335c-ee70-eccc-ad04c026cbc9@xs4all.nl>
+        <8fb1799b-5ed1-9d26-54fc-b47abe0c13cf@nurfuerspam.de>
+        <df796e6c-c82f-8734-3de6-8446bd0b48ab@web.de>
+        <014a6ade-dddb-6c0d-a59a-186e0b0aa3c2@nurfuerspam.de>
+        <44cc2154-9224-510d-1f9c-34ae49f01c73@nurfuerspam.de>
+        <c735aadc-80cd-9332-6661-638cad63afa2@xs4all.nl>
+        <026b1342-2b0f-f61d-ea33-63f3992d1473@nurfuerspam.de>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] Revert "venus: firmware: Correct non-pix start and end
- addresses"
-Content-Language: en-US
-To:     Vikash Garodia <vgarodia@qti.qualcomm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mka@chromium.org" <mka@chromium.org>
-Cc:     Albert Esteve <aesteve@redhat.com>,
-        "stanimir.varbanov@linaro.org" <stanimir.varbanov@linaro.org>,
-        Enric Balletbo i Serra <eballetb@redhat.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        "Vikash Garodia (QUIC)" <quic_vgarodia@quicinc.com>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Fritz Koenig <frkoenig@google.com>,
-        "Dikshita Agarwal (QUIC)" <quic_dikshita@quicinc.com>,
-        "Rajeshwar Kurapaty (QUIC)" <quic_rkurapat@quicinc.com>
-References: <20230207102254.1446461-1-javierm@redhat.com>
- <DM8PR02MB8169809493BF2822E6C29EECF3DB9@DM8PR02MB8169.namprd02.prod.outlook.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <DM8PR02MB8169809493BF2822E6C29EECF3DB9@DM8PR02MB8169.namprd02.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello Vikash,
+Em Mon, 6 Feb 2023 01:06:47 +0100
+Stefan Herdler <herdler@nurfuerspam.de> escreveu:
 
-On 2/7/23 17:40, Vikash Garodia wrote:
-> Hi Javier and Matthias,
-> Can we try the attached patch if that fixes the suspend issue for sc7180 and sc7280 ?
-> 
+> Hi Hans,
+>=20
+> On 03/02/23 09:50, Hans Verkuil wrote:
+> > On 03/02/2023 01:58, Stefan Herdler wrote: =20
+> >> Hi Hans,
+> >>
+> >> It's me again, sorry.
+> >>
+> >> S=C3=B6ren wrote to me that he dislikes the idea of driver specific
+> >> headerfile and will refuse to maintain the driver if there is any chan=
+ge.
+> >>
+> >> I can't tell more, I'm just the messenger, sorry. =20
+> >
+> > No problem, I think we'll just leave it as-is.
+> >
+> > The reality is that 1) there are very few developers with in-depth DVB
+> > knowledge in the media subsystem, and 2) they don't have time. =20
+>=20
+> S=C3=B6rens "no changes" means absolutely no changes.
+> That includes filenames, position, basically everything.
 
-I tested your attached patch on an SC7180 machine (HP X2 Chromebook) and as Matthias
-mentioned, it still causes the driver's probe to fail:
+It won't make any sense to warrant that any Kernel files will be kept=20
+as-is forever. If one wants a fixed driver, just use a LTS distro.
+=20
+> His main concern is that distributions may packages if build brakes.
+> I wasn't aware of that since Friday. (Poor communication, sorry.)
 
-[ 2119.063779] qcom-venus aa00000.video-codec: non legacy binding
-[ 2119.085695] platform video-firmware.0: Adding to iommu group 11
-[ 2119.156302] arm-smmu 15000000.iommu: Unhandled context fault: fsr=0x402, iova=0x000000b0, fsynr=0x61, cbfrsynra=0xc40, cb=7
-[ 2119.259382] qcom-venus aa00000.video-codec: failed to reset venus core
-[ 2119.267782] platform video-firmware.0: Removing from iommu group 11
-[ 2119.275052] qcom-venus: probe of aa00000.video-codec failed with error -110
+Distributions can handle changes on Kernel files, provided that any
+changes would also be applied at the userspace apps (if this is the
+case).
 
--- 
-Best regards,
+> This concern is not completely unjustified.
+> Especially if it happens without notice and no update is available.
+>=20
+> The download links of the vdr-plugin seems to be broken, which might be
+> fatal in this case.
+> It happened this summer when vdr switched from FTP to GIT. I suppose it
+> was inadvertently and can be fixed quickly.
+> I'll take care of it, a missing source isn't good anyway.
+>=20
+> Until today I wasn't aware of that either.
+> I focused on the kernel and used a local copy so far.
+>=20
+> >
+> > Also, the DVB drivers that are in the kernel seem to be doing fine:
+> > bug reports are rare. This videobuf issue is the first in years that
+> > cropped up and this too is really only analog video as well, it's just
+> > that it affects DVB boards as well since the same driver is used.
+> >
+> > The av7110 has always been an unusual card and some API decisions were
+> > made in the past that do not fit well into our current ideas how this
+> > should work. But frankly, I personally have no interest in getting
+> > involved in that 'fight'. =20
+>=20
+> Me neither.
+> But it looks like I already managed to get between the lines :-(.
+> >
+> > BTW, I looked at your av7110api.diff patch and that is a good first ste=
+p.
+> > I do thing that the existing video.h/audio.h/osd.h should be replaced
+> > with versions that just include av7110.h, =20
+>=20
+> For clarification:
+> I mentioned the API-conversion under the impression the av7110 driver is
+> almost already gone and that it might be the only chance to save it.
+> I do not really want this conversion, I still prefer to avoid it.
+> But if the choice is between driver removal and API-conversion, I'll
+> take the latter.
+>=20
+> Please inform us early, if Linux-Media decides the API-conversion is
+> necessary and has to be done.
+> I guess it takes at least 1/2 year to distribute the updates.
+> Unfortunately, S=C3=B6ren most likely won't be "in the boat" anymore, in =
+this
+> case. But that is his own decision.
+>=20
+> Anyhow, this is topic for later, as you wrote recently.
+> First thing to do is the videobuf conversion.
+>=20
+> In the next weeks I'll be busy with other things and probably don't find
+> much time for this hobby.
+> But other modifications to the driver doesn't make much sense while
+> videobuf conversion is in progress anyway.
+>=20
+> Please cc me if you're done with videobuf conversion. I might overlook
+> it otherwise.
+> I'll take a look at the compliance-tool then and try to fix as much I can.
+>=20
+> > with a big fat notice that
+> > these APIs are now av7110 specific =20
+> Don't worry there are only the 2 fullfeatured-cards using this API and
+> just because of historical reasons. The driver of the "new"
+> HD-fullfeatured-card dates back to 2008 (*).
+> Meanwhile here have been written several specific output-device-plugins
+> for vdr using V4L-API, vaapi, vdpau, ...
+> There are no plans to use this part of the DVB-API ever again.
 
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+Ok. If that's the case, maybe we can just keep the api without changes.
 
+Yet, in order to move av7110 out of staging, we should finish documenting
+the API (or drop the unused/undocumented parts of it).
+
+> (* The driver is out-of-tree and doesn't count. It is just about the date=
+.)
+>   (as they have almost always been in
+> > practice).
+
+Thanks,
+Mauro
