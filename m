@@ -2,55 +2,59 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64EBDC636D4
-	for <linux-media@archiver.kernel.org>; Wed,  8 Feb 2023 09:09:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BDC3DC636CC
+	for <linux-media@archiver.kernel.org>; Wed,  8 Feb 2023 09:09:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbjBHJJd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Feb 2023 04:09:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54526 "EHLO
+        id S230092AbjBHJJf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Feb 2023 04:09:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbjBHJJR (ORCPT
+        with ESMTP id S230514AbjBHJJR (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Wed, 8 Feb 2023 04:09:17 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9938D2F7B9;
-        Wed,  8 Feb 2023 01:09:07 -0800 (PST)
-X-UUID: 38882674a79011eda06fc9ecc4dadd91-20230208
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABE9457E2;
+        Wed,  8 Feb 2023 01:09:05 -0800 (PST)
+X-UUID: 397958e6a79011ed945fc101203acc17-20230208
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=Psco9otWfPZGFGZ//xLO6jrRtyy0L0FihrkDoRsQh0I=;
-        b=WVhLrqBWkd+9ITSJXzqF960OhDx4QOa3//Ov3vytN4HDf2XJtfMX98bc2us2zqJ2J7QTXxiVKW8VWJ3XpGx9ZdHHm+RM1ODs8yLdp7GYTkd8lmGUNEWAicQvQh15R4I6fPttslR4w4Rj1rGfPHEqz4mrsKWwVT3ICm8A3On3AOQ=;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=ax2XuNfUBHBtpr8vujDc9/6SPxBC3TVYTjEygh12S44=;
+        b=imAsgPsT3+EQk9JCEFOVoPcey86vG+6uh95u4453Pcq45t3R4d98WUUSIa4hgow1EyHkaZACFsTz4G5TkOwbdxNWacIem1WjaW0YjmBuwHwG+mKR2ZaGsVOr6dwCWqDehKtRdbfp+uaSgRNCd9VNxiMvtM3dAMq7NrucxdYWWAU=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.19,REQID:ac22fd18-912f-46c3-93c2-aaa5115e2ade,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:885ddb2,CLOUDID:d972aa56-dd49-462e-a4be-2143a3ddc739,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-O-INFO: VERSION:1.1.19,REQID:ac9706ec-6042-4778-ac72-499cc7a65a09,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:70
+X-CID-INFO: VERSION:1.1.19,REQID:ac9706ec-6042-4778-ac72-499cc7a65a09,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:70
+X-CID-META: VersionHash:885ddb2,CLOUDID:ff72aa56-dd49-462e-a4be-2143a3ddc739,B
+        ulkID:230208170900S5227Y1W,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,CO
+        L:0,OSI:0,OSA:0,AV:0
 X-CID-BVR: 0
-X-UUID: 38882674a79011eda06fc9ecc4dadd91-20230208
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+X-UUID: 397958e6a79011ed945fc101203acc17-20230208
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
         (envelope-from <moudy.ho@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 43930625; Wed, 08 Feb 2023 17:08:58 +0800
+        with ESMTP id 114881155; Wed, 08 Feb 2023 17:08:59 +0800
 Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 8 Feb 2023 17:08:57 +0800
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 8 Feb 2023 17:08:58 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Wed, 8 Feb 2023 17:08:57 +0800
+ 15.2.792.15 via Frontend Transport; Wed, 8 Feb 2023 17:08:58 +0800
 From:   Moudy Ho <moudy.ho@mediatek.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
+        "Ping-Hsun Wu" <ping-hsun.wu@mediatek.com>
 CC:     <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Moudy Ho <moudy.ho@mediatek.com>
-Subject: [PATCH v6 07/12] media: platform: mtk-mdp3: chip config split about pipe info
-Date:   Wed, 8 Feb 2023 17:08:50 +0800
-Message-ID: <20230208090855.18934-8-moudy.ho@mediatek.com>
+Subject: [PATCH v6 12/12] media: platform: mtk-mdp3: reconfigure shared memory
+Date:   Wed, 8 Feb 2023 17:08:55 +0800
+Message-ID: <20230208090855.18934-13-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20230208090855.18934-1-moudy.ho@mediatek.com>
 References: <20230208090855.18934-1-moudy.ho@mediatek.com>
@@ -61,231 +65,443 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In MDP3, a pipe is used to represent a data path which
-consisting of different components and MUTEX, as shown in
-the following diagram:
+For performance and multi-chip support, use dynamic layout instead of
+statically configured pools.
+Divide the shared memory into the 3 64-bit aligned layouts listed below:
 
-                     +----------------------------+
-                     |           MUTEX [*1]       |
-                     +----------------------------+
-                        S ^ S ^  S ^  S ^  S ^
-                        | | | |  | |  | |  | |
-                        | | | |  | |  | |  | |
-         +--------------+ | | |  | |  | |  | +-------------+
-         | +--------------+ | |  | |  | |  +-------------+ |
-         | |         +------+ |  | |  | +------+         | |
-         | |         | +------+  | |  +------+ |         | |
-         | |         | |         | |         | |         | |
-         | |         | |         | |         | |         | |
-         v E         v E         v E         v E         v E
-      +-------+    +-----+    +-------+    +-----+    +-------+
-B>--->| RDMA0 |>-->| PQ  |>-->| RSZ0  |>-->| PQ  |>-->| WROT0 |>-->B
-      +-------+    +-----+    +-------+    +-----+    +-------+
+    vpu->param_addr  -> +-----------------------------------------+
+                        |                                         |
+                        | To SCP : Input frame parameters         |
+                        |          (struct img_ipi_frameparam)    |
+                        |                                         |
+                        +-----------------------------------------+
 
-[*1] MUTEX is SOF/EOF signal controller
-[*2] S = Start of frame (SOF)
-[*3] E = End of frame (EOF)
-[*4] B = frame buffer
+    vpu->work_addr   -> +-----------------------------------------+
+                        |                                         |
+                        | In SCP : Reserve for SCP calculation    |
+                        |                                         |
+                        +-----------------------------------------+
 
-More pipes will be introduced in future chips for applications such as
-higher frame rate frequency, which should integrate and reorder related
-information into specific chip config file.
+    vpu->config_addr -> +-----------------------------------------+
+                        |                                         |
+                        | From SCP : Output component config      |
+                        |            (struct img_config)          |
+                        |                                         |
+                        +-----------------------------------------+
 
 Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 ---
- .../platform/mediatek/mdp3/mdp_cfg_data.c     |  9 ++++++++
- .../platform/mediatek/mdp3/mtk-mdp3-cmdq.c    | 23 ++++++++++++-------
- .../platform/mediatek/mdp3/mtk-mdp3-core.c    | 13 +++++++----
- .../platform/mediatek/mdp3/mtk-mdp3-core.h    | 11 +++++++--
- 4 files changed, 41 insertions(+), 15 deletions(-)
+ .../platform/mediatek/mdp3/mdp_sm_mt8183.h    |   4 +-
+ .../platform/mediatek/mdp3/mtk-mdp3-m2m.c     |  13 +-
+ .../platform/mediatek/mdp3/mtk-mdp3-m2m.h     |   1 -
+ .../platform/mediatek/mdp3/mtk-mdp3-vpu.c     | 193 ++++++++----------
+ .../platform/mediatek/mdp3/mtk-mdp3-vpu.h     |  29 +--
+ 5 files changed, 95 insertions(+), 145 deletions(-)
 
-diff --git a/drivers/media/platform/mediatek/mdp3/mdp_cfg_data.c b/drivers/media/platform/mediatek/mdp3/mdp_cfg_data.c
-index 6fb8fd6f0bb1..9d1a080d1b65 100644
---- a/drivers/media/platform/mediatek/mdp3/mdp_cfg_data.c
-+++ b/drivers/media/platform/mediatek/mdp3/mdp_cfg_data.c
-@@ -400,6 +400,13 @@ static const struct mdp_limit mt8183_mdp_def_limit = {
- 	.v_scale_down_max = 128,
- };
+diff --git a/drivers/media/platform/mediatek/mdp3/mdp_sm_mt8183.h b/drivers/media/platform/mediatek/mdp3/mdp_sm_mt8183.h
+index effc75615af9..85637084520f 100644
+--- a/drivers/media/platform/mediatek/mdp3/mdp_sm_mt8183.h
++++ b/drivers/media/platform/mediatek/mdp3/mdp_sm_mt8183.h
+@@ -11,8 +11,8 @@
  
-+static const struct mdp_pipe_info mt8183_pipe_info[] = {
-+	[MDP_PIPE_WPEI] = {MDP_PIPE_WPEI, 0},
-+	[MDP_PIPE_WPEI2] = {MDP_PIPE_WPEI2, 1},
-+	[MDP_PIPE_IMGI] = {MDP_PIPE_IMGI, 2},
-+	[MDP_PIPE_RDMA0] = {MDP_PIPE_RDMA0, 3}
-+};
-+
- const struct mtk_mdp_driver_data mt8183_mdp_driver_data = {
- 	.mdp_probe_infra = mt8183_mdp_probe_infra,
- 	.mdp_cfg = &mt8183_plat_cfg,
-@@ -410,6 +417,8 @@ const struct mtk_mdp_driver_data mt8183_mdp_driver_data = {
- 	.format = mt8183_formats,
- 	.format_len = ARRAY_SIZE(mt8183_formats),
- 	.def_limit = &mt8183_mdp_def_limit,
-+	.pipe_info = mt8183_pipe_info,
-+	.pipe_info_len = ARRAY_SIZE(mt8183_pipe_info),
- };
+ /*
+  * ISP-MDP generic output information
+- * MD5 of the target SCP blob:
+- *     6da52bdcf4bf76a0983b313e1d4745d6
++ * MD5 of the target SCP prebuild:
++ *     2d995ddb5c3b0cf26e96d6a823481886
+  */
  
- s32 mdp_cfg_get_id_inner(struct mdp_dev *mdp_dev, enum mtk_mdp_comp_id id)
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c
-index dcd77f65b0e3..bff14e4944c5 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c
-@@ -50,21 +50,22 @@ static int mdp_path_subfrm_require(const struct mdp_path *path,
- 	/* Decide which mutex to use based on the current pipeline */
- 	switch (path->comps[0].comp->public_id) {
- 	case MDP_COMP_RDMA0:
--		*mutex_id = MDP_PIPE_RDMA0;
-+		index = MDP_PIPE_RDMA0;
- 		break;
- 	case MDP_COMP_ISP_IMGI:
--		*mutex_id = MDP_PIPE_IMGI;
-+		index = MDP_PIPE_IMGI;
- 		break;
- 	case MDP_COMP_WPEI:
--		*mutex_id = MDP_PIPE_WPEI;
-+		index = MDP_PIPE_WPEI;
- 		break;
- 	case MDP_COMP_WPEI2:
--		*mutex_id = MDP_PIPE_WPEI2;
-+		index = MDP_PIPE_WPEI2;
- 		break;
- 	default:
- 		dev_err(dev, "Unknown pipeline and no mutex is assigned");
- 		return -EINVAL;
- 	}
-+	*mutex_id = data->pipe_info[index].mutex_id;
+ #define IMG_MAX_SUBFRAMES_8183      14
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
+index eba181fa50ad..f0a293ab0688 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
+@@ -87,14 +87,14 @@ static void mdp_m2m_device_run(void *priv)
+ 	dst_vb = v4l2_m2m_next_dst_buf(ctx->m2m_ctx);
+ 	mdp_set_dst_config(&param.outputs[0], frame, &dst_vb->vb2_buf);
  
- 	/* Set mutex mod */
- 	for (index = 0; index < config->num_components; index++) {
-@@ -286,11 +287,13 @@ static void mdp_auto_release_work(struct work_struct *work)
- {
- 	struct mdp_cmdq_cmd *cmd;
- 	struct mdp_dev *mdp;
-+	int id;
- 
- 	cmd = container_of(work, struct mdp_cmdq_cmd, auto_release_work);
- 	mdp = cmd->mdp;
- 
--	mtk_mutex_unprepare(mdp->mdp_mutex[MDP_PIPE_RDMA0]);
-+	id = mdp->mdp_data->pipe_info[MDP_PIPE_RDMA0].mutex_id;
-+	mtk_mutex_unprepare(mdp->mdp_mutex[id]);
- 	mdp_comp_clocks_off(&mdp->pdev->dev, cmd->comps,
- 			    cmd->num_comps);
- 
-@@ -310,6 +313,7 @@ static void mdp_handle_cmdq_callback(struct mbox_client *cl, void *mssg)
- 	struct cmdq_cb_data *data;
- 	struct mdp_dev *mdp;
- 	struct device *dev;
-+	int id;
- 
- 	if (!mssg) {
- 		pr_info("%s:no callback data\n", __func__);
-@@ -335,7 +339,8 @@ static void mdp_handle_cmdq_callback(struct mbox_client *cl, void *mssg)
- 	INIT_WORK(&cmd->auto_release_work, mdp_auto_release_work);
- 	if (!queue_work(mdp->clock_wq, &cmd->auto_release_work)) {
- 		dev_err(dev, "%s:queue_work fail!\n", __func__);
--		mtk_mutex_unprepare(mdp->mdp_mutex[MDP_PIPE_RDMA0]);
-+		id = mdp->mdp_data->pipe_info[MDP_PIPE_RDMA0].mutex_id;
-+		mtk_mutex_unprepare(mdp->mdp_mutex[id]);
- 		mdp_comp_clocks_off(&mdp->pdev->dev, cmd->comps,
- 				    cmd->num_comps);
- 
-@@ -387,7 +392,8 @@ int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
- 		goto err_free_comps;
- 	}
- 
--	ret = mtk_mutex_prepare(mdp->mdp_mutex[MDP_PIPE_RDMA0]);
-+	i = mdp->mdp_data->pipe_info[MDP_PIPE_RDMA0].mutex_id;
-+	ret = mtk_mutex_prepare(mdp->mdp_mutex[i]);
+-	ret = mdp_vpu_process(&ctx->vpu, &param);
++	ret = mdp_vpu_process(&ctx->mdp_dev->vpu, &param);
  	if (ret) {
- 		dev_err(dev, "Fail to enable mutex clk\n");
- 		goto err_free_path;
-@@ -453,7 +459,8 @@ int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
- 	mdp_comp_clocks_off(&mdp->pdev->dev, cmd->comps,
- 			    cmd->num_comps);
- err_free_path:
--	mtk_mutex_unprepare(mdp->mdp_mutex[MDP_PIPE_RDMA0]);
-+	i = mdp->mdp_data->pipe_info[MDP_PIPE_RDMA0].mutex_id;
-+	mtk_mutex_unprepare(mdp->mdp_mutex[i]);
- 	kfree(path);
- err_free_comps:
- 	kfree(comps);
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-index 207b54f84fc0..91fea0c13651 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-@@ -153,7 +153,7 @@ static int mdp_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct mdp_dev *mdp;
- 	struct platform_device *mm_pdev;
--	int ret, i;
-+	int ret, i, mutex_id;
- 
- 	mdp = kzalloc(sizeof(*mdp), GFP_KERNEL);
- 	if (!mdp) {
-@@ -176,9 +176,12 @@ static int mdp_probe(struct platform_device *pdev)
- 		ret = -ENODEV;
- 		goto err_destroy_device;
+ 		dev_err(&ctx->mdp_dev->pdev->dev,
+ 			"VPU MDP process failed: %d\n", ret);
+ 		goto worker_end;
  	}
--	for (i = 0; i < MDP_PIPE_MAX; i++) {
--		mdp->mdp_mutex[i] = mtk_mutex_get(&mm_pdev->dev);
--		if (!mdp->mdp_mutex[i]) {
-+	for (i = 0; i < mdp->mdp_data->pipe_info_len; i++) {
-+		mutex_id = mdp->mdp_data->pipe_info[i].mutex_id;
-+		if (mdp->mdp_mutex[mutex_id])
-+			continue;
-+		mdp->mdp_mutex[mutex_id] = mtk_mutex_get(&mm_pdev->dev);
-+		if (!mdp->mdp_mutex[mutex_id]) {
- 			ret = -ENODEV;
- 			goto err_free_mutex;
- 		}
-@@ -259,7 +262,7 @@ static int mdp_probe(struct platform_device *pdev)
- err_deinit_comp:
- 	mdp_comp_destroy(mdp);
- err_free_mutex:
--	for (i = 0; i < MDP_PIPE_MAX; i++)
-+	for (i = 0; i < mdp->mdp_data->pipe_info_len; i++)
- 		mtk_mutex_put(mdp->mdp_mutex[i]);
- err_destroy_device:
- 	kfree(mdp);
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
-index a312c1007e96..59a1c88d8184 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
-@@ -43,10 +43,10 @@ struct mdp_platform_config {
  
- /* indicate which mutex is used by each pipepline */
- enum mdp_pipe_id {
--	MDP_PIPE_RDMA0,
--	MDP_PIPE_IMGI,
- 	MDP_PIPE_WPEI,
- 	MDP_PIPE_WPEI2,
-+	MDP_PIPE_IMGI,
-+	MDP_PIPE_RDMA0,
- 	MDP_PIPE_MAX
- };
+-	task.config = ctx->vpu.config;
++	task.config = ctx->mdp_dev->vpu.config;
+ 	task.param = &param;
+ 	task.composes[0] = &frame->compose;
+ 	task.cmdq_cb = NULL;
+@@ -150,11 +150,6 @@ static int mdp_m2m_start_streaming(struct vb2_queue *q, unsigned int count)
  
-@@ -60,6 +60,8 @@ struct mtk_mdp_driver_data {
- 	const struct mdp_format *format;
- 	unsigned int format_len;
- 	const struct mdp_limit *def_limit;
-+	const struct mdp_pipe_info *pipe_info;
-+	unsigned int pipe_info_len;
- };
+ 	if (!mdp_m2m_ctx_is_state_set(ctx, MDP_VPU_INIT)) {
+ 		ret = mdp_vpu_get_locked(ctx->mdp_dev);
+-		if (ret)
+-			return ret;
+-
+-		ret = mdp_vpu_ctx_init(&ctx->vpu, &ctx->mdp_dev->vpu,
+-				       MDP_DEV_M2M);
+ 		if (ret) {
+ 			dev_err(&ctx->mdp_dev->pdev->dev,
+ 				"VPU init failed %d\n", ret);
+@@ -635,10 +630,8 @@ static int mdp_m2m_release(struct file *file)
  
- struct mdp_dev {
-@@ -91,6 +93,11 @@ struct mdp_dev {
- 	atomic_t				job_count;
- };
+ 	mutex_lock(&mdp->m2m_lock);
+ 	v4l2_m2m_ctx_release(ctx->m2m_ctx);
+-	if (mdp_m2m_ctx_is_state_set(ctx, MDP_VPU_INIT)) {
+-		mdp_vpu_ctx_deinit(&ctx->vpu);
++	if (mdp_m2m_ctx_is_state_set(ctx, MDP_VPU_INIT))
+ 		mdp_vpu_put_locked(mdp);
+-	}
  
-+struct mdp_pipe_info {
-+	enum mdp_pipe_id pipe_id;
-+	u32 mutex_id;
-+};
+ 	v4l2_ctrl_handler_free(&ctx->ctrl_handler);
+ 	v4l2_fh_del(&ctx->fh);
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.h
+index 61ddbaf1bf13..dfc59e5b3b87 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.h
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.h
+@@ -33,7 +33,6 @@ struct mdp_m2m_ctx {
+ 	struct v4l2_ctrl_handler	ctrl_handler;
+ 	struct mdp_m2m_ctrls		ctrls;
+ 	struct v4l2_m2m_ctx		*m2m_ctx;
+-	struct mdp_vpu_ctx		vpu;
+ 	u32				frame_count[MDP_M2M_MAX];
+ 
+ 	struct mdp_frameparam		curr_param;
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.c
+index a72bed927bb6..49fc2e9d45dd 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.c
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.c
+@@ -10,7 +10,6 @@
+ #include "mtk-mdp3-core.h"
+ 
+ #define MDP_VPU_MESSAGE_TIMEOUT 500U
+-#define vpu_alloc_size		0x600000
+ 
+ static inline struct mdp_dev *vpu_to_mdp(struct mdp_vpu_dev *vpu)
+ {
+@@ -19,23 +18,63 @@ static inline struct mdp_dev *vpu_to_mdp(struct mdp_vpu_dev *vpu)
+ 
+ static int mdp_vpu_shared_mem_alloc(struct mdp_vpu_dev *vpu)
+ {
+-	if (vpu->work && vpu->work_addr)
+-		return 0;
++	struct device *dev;
+ 
+-	vpu->work = dma_alloc_coherent(scp_get_device(vpu->scp), vpu_alloc_size,
+-				       &vpu->work_addr, GFP_KERNEL);
++	if (IS_ERR_OR_NULL(vpu))
++		goto err_return;
+ 
+-	if (!vpu->work)
+-		return -ENOMEM;
+-	else
+-		return 0;
++	dev = scp_get_device(vpu->scp);
 +
- int mdp_vpu_get_locked(struct mdp_dev *mdp);
- void mdp_vpu_put_locked(struct mdp_dev *mdp);
- int mdp_vpu_register(struct mdp_dev *mdp);
++	if (!vpu->param) {
++		vpu->param = dma_alloc_wc(dev, vpu->param_size,
++					  &vpu->param_addr, GFP_KERNEL);
++		if (!vpu->param)
++			goto err_return;
++	}
++
++	if (!vpu->work) {
++		vpu->work = dma_alloc_wc(dev, vpu->work_size,
++					 &vpu->work_addr, GFP_KERNEL);
++		if (!vpu->work)
++			goto err_free_param;
++	}
++
++	if (!vpu->config) {
++		vpu->config = dma_alloc_wc(dev, vpu->config_size,
++					   &vpu->config_addr, GFP_KERNEL);
++		if (!vpu->config)
++			goto err_free_work;
++	}
++
++	return 0;
++
++err_free_work:
++	dma_free_wc(dev, vpu->work_size, vpu->work, vpu->work_addr);
++	vpu->work = NULL;
++err_free_param:
++	dma_free_wc(dev, vpu->param_size, vpu->param, vpu->param_addr);
++	vpu->param = NULL;
++err_return:
++	return -ENOMEM;
+ }
+ 
+ void mdp_vpu_shared_mem_free(struct mdp_vpu_dev *vpu)
+ {
++	struct device *dev;
++
++	if (IS_ERR_OR_NULL(vpu))
++		return;
++
++	dev = scp_get_device(vpu->scp);
++
++	if (vpu->param && vpu->param_addr)
++		dma_free_wc(dev, vpu->param_size, vpu->param, vpu->param_addr);
++
+ 	if (vpu->work && vpu->work_addr)
+-		dma_free_coherent(scp_get_device(vpu->scp), vpu_alloc_size,
+-				  vpu->work, vpu->work_addr);
++		dma_free_wc(dev, vpu->work_size, vpu->work, vpu->work_addr);
++
++	if (vpu->config && vpu->config_addr)
++		dma_free_wc(dev, vpu->config_size, vpu->config, vpu->config_addr);
+ }
+ 
+ static void mdp_vpu_ipi_handle_init_ack(void *data, unsigned int len,
+@@ -69,16 +108,16 @@ static void mdp_vpu_ipi_handle_frame_ack(void *data, unsigned int len,
+ 	struct img_sw_addr *addr = (struct img_sw_addr *)data;
+ 	struct img_ipi_frameparam *param =
+ 		(struct img_ipi_frameparam *)(unsigned long)addr->va;
+-	struct mdp_vpu_ctx *ctx =
+-		(struct mdp_vpu_ctx *)(unsigned long)param->drv_data;
++	struct mdp_vpu_dev *vpu =
++		(struct mdp_vpu_dev *)(unsigned long)param->drv_data;
+ 
+ 	if (param->state) {
+-		struct mdp_dev *mdp = vpu_to_mdp(ctx->vpu_dev);
++		struct mdp_dev *mdp = vpu_to_mdp(vpu);
+ 
+ 		dev_err(&mdp->pdev->dev, "VPU MDP failure:%d\n", param->state);
+ 	}
+-	ctx->vpu_dev->status = param->state;
+-	complete(&ctx->vpu_dev->ipi_acked);
++	vpu->status = param->state;
++	complete(&vpu->ipi_acked);
+ }
+ 
+ int mdp_vpu_register(struct mdp_dev *mdp)
+@@ -157,9 +196,6 @@ int mdp_vpu_dev_init(struct mdp_vpu_dev *vpu, struct mtk_scp *scp,
+ 	struct mdp_ipi_init_msg msg = {
+ 		.drv_data = (unsigned long)vpu,
+ 	};
+-	size_t mem_size;
+-	phys_addr_t pool;
+-	const size_t pool_size = sizeof(struct mdp_config_pool);
+ 	struct mdp_dev *mdp = vpu_to_mdp(vpu);
+ 	int err;
+ 
+@@ -172,34 +208,29 @@ int mdp_vpu_dev_init(struct mdp_vpu_dev *vpu, struct mtk_scp *scp,
+ 		goto err_work_size;
+ 	/* vpu work_size was set in mdp_vpu_ipi_handle_init_ack */
+ 
+-	mem_size = vpu_alloc_size;
++	mutex_lock(vpu->lock);
++	vpu->work_size = ALIGN(vpu->work_size, 64);
++	vpu->param_size = ALIGN(sizeof(struct img_ipi_frameparam), 64);
++	vpu->config_size = ALIGN(sizeof(struct img_config), 64);
+ 	err = mdp_vpu_shared_mem_alloc(vpu);
++	mutex_unlock(vpu->lock);
+ 	if (err) {
+ 		dev_err(&mdp->pdev->dev, "VPU memory alloc fail!");
+ 		goto err_mem_alloc;
+ 	}
+ 
+-	pool = ALIGN((uintptr_t)vpu->work + vpu->work_size, 8);
+-	if (pool + pool_size - (uintptr_t)vpu->work > mem_size) {
+-		dev_err(&mdp->pdev->dev,
+-			"VPU memory insufficient: %zx + %zx > %zx",
+-			vpu->work_size, pool_size, mem_size);
+-		err = -ENOMEM;
+-		goto err_mem_size;
+-	}
+-
+ 	dev_dbg(&mdp->pdev->dev,
+-		"VPU work:%pK pa:%pad sz:%zx pool:%pa sz:%zx (mem sz:%zx)",
++		"VPU param:%pK pa:%pad sz:%zx, work:%pK pa:%pad sz:%zx, config:%pK pa:%pad sz:%zx",
++		vpu->param, &vpu->param_addr, vpu->param_size,
+ 		vpu->work, &vpu->work_addr, vpu->work_size,
+-		&pool, pool_size, mem_size);
+-	vpu->pool = (struct mdp_config_pool *)(uintptr_t)pool;
++		vpu->config, &vpu->config_addr, vpu->config_size);
++
+ 	msg.work_addr = vpu->work_addr;
+ 	msg.work_size = vpu->work_size;
+ 	err = mdp_vpu_sendmsg(vpu, SCP_IPI_MDP_INIT, &msg, sizeof(msg));
+ 	if (err)
+ 		goto err_work_size;
+ 
+-	memset(vpu->pool, 0, sizeof(*vpu->pool));
+ 	return 0;
+ 
+ err_work_size:
+@@ -212,7 +243,6 @@ int mdp_vpu_dev_init(struct mdp_vpu_dev *vpu, struct mtk_scp *scp,
+ 		break;
+ 	}
+ 	return err;
+-err_mem_size:
+ err_mem_alloc:
+ 	return err;
+ }
+@@ -227,88 +257,31 @@ int mdp_vpu_dev_deinit(struct mdp_vpu_dev *vpu)
+ 	return mdp_vpu_sendmsg(vpu, SCP_IPI_MDP_DEINIT, &msg, sizeof(msg));
+ }
+ 
+-static struct img_config *mdp_config_get(struct mdp_vpu_dev *vpu,
+-					 enum mdp_config_id id, uint32_t *addr)
++int mdp_vpu_process(struct mdp_vpu_dev *vpu, struct img_ipi_frameparam *param)
+ {
+-	struct img_config *config;
+-
+-	if (id < 0 || id >= MDP_CONFIG_POOL_SIZE)
+-		return ERR_PTR(-EINVAL);
++	struct mdp_dev *mdp = vpu_to_mdp(vpu);
++	struct img_sw_addr addr;
+ 
+ 	mutex_lock(vpu->lock);
+-	vpu->pool->cfg_count[id]++;
+-	config = &vpu->pool->configs[id];
+-	*addr = vpu->work_addr + ((uintptr_t)config - (uintptr_t)vpu->work);
+-	mutex_unlock(vpu->lock);
+-
+-	return config;
+-}
+-
+-static int mdp_config_put(struct mdp_vpu_dev *vpu,
+-			  enum mdp_config_id id,
+-			  const struct img_config *config)
+-{
+-	int err = 0;
+-
+-	if (id < 0 || id >= MDP_CONFIG_POOL_SIZE)
+-		return -EINVAL;
+-	if (vpu->lock)
+-		mutex_lock(vpu->lock);
+-	if (!vpu->pool->cfg_count[id] || config != &vpu->pool->configs[id])
+-		err = -EINVAL;
+-	else
+-		vpu->pool->cfg_count[id]--;
+-	if (vpu->lock)
++	if (mdp_vpu_shared_mem_alloc(vpu)) {
++		dev_err(&mdp->pdev->dev, "VPU memory alloc fail!");
+ 		mutex_unlock(vpu->lock);
+-	return err;
+-}
+-
+-int mdp_vpu_ctx_init(struct mdp_vpu_ctx *ctx, struct mdp_vpu_dev *vpu,
+-		     enum mdp_config_id id)
+-{
+-	ctx->config = mdp_config_get(vpu, id, &ctx->inst_addr);
+-	if (IS_ERR(ctx->config)) {
+-		int err = PTR_ERR(ctx->config);
+-
+-		ctx->config = NULL;
+-		return err;
++		return -ENOMEM;
+ 	}
+-	ctx->config_id = id;
+-	ctx->vpu_dev = vpu;
+-	return 0;
+-}
+ 
+-int mdp_vpu_ctx_deinit(struct mdp_vpu_ctx *ctx)
+-{
+-	int err = mdp_config_put(ctx->vpu_dev, ctx->config_id, ctx->config);
++	memset(vpu->param, 0, vpu->param_size);
++	memset(vpu->work, 0, vpu->work_size);
++	memset(vpu->config, 0, vpu->config_size);
+ 
+-	ctx->config_id = 0;
+-	ctx->config = NULL;
+-	ctx->inst_addr = 0;
+-	return err;
+-}
++	param->self_data.va = (unsigned long)vpu->work;
++	param->self_data.pa = vpu->work_addr;
++	param->config_data.va = (unsigned long)vpu->config;
++	param->config_data.pa = vpu->config_addr;
++	param->drv_data = (unsigned long)vpu;
++	memcpy(vpu->param, param, sizeof(*param));
+ 
+-int mdp_vpu_process(struct mdp_vpu_ctx *ctx, struct img_ipi_frameparam *param)
+-{
+-	struct mdp_vpu_dev *vpu = ctx->vpu_dev;
+-	struct mdp_dev *mdp = vpu_to_mdp(vpu);
+-	struct img_sw_addr addr;
+-
+-	if (!ctx->vpu_dev->work || !ctx->vpu_dev->work_addr) {
+-		if (mdp_vpu_shared_mem_alloc(vpu)) {
+-			dev_err(&mdp->pdev->dev, "VPU memory alloc fail!");
+-			return -ENOMEM;
+-		}
+-	}
+-	memset((void *)ctx->vpu_dev->work, 0, ctx->vpu_dev->work_size);
+-	memset(ctx->config, 0, sizeof(*ctx->config));
+-	param->config_data.va = (unsigned long)ctx->config;
+-	param->config_data.pa = ctx->inst_addr;
+-	param->drv_data = (unsigned long)ctx;
+-
+-	memcpy((void *)ctx->vpu_dev->work, param, sizeof(*param));
+-	addr.pa = ctx->vpu_dev->work_addr;
+-	addr.va = (uintptr_t)ctx->vpu_dev->work;
+-	return mdp_vpu_sendmsg(ctx->vpu_dev, SCP_IPI_MDP_FRAME,
+-		&addr, sizeof(addr));
++	addr.pa = vpu->param_addr;
++	addr.va = (unsigned long)vpu->param;
++	mutex_unlock(vpu->lock);
++	return mdp_vpu_sendmsg(vpu, SCP_IPI_MDP_FRAME, &addr, sizeof(addr));
+ }
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.h
+index 244b3a32d689..ad3551bc0730 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.h
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.h
+@@ -37,42 +37,27 @@ struct mdp_ipi_deinit_msg {
+ 	u32	work_addr;
+ } __packed;
+ 
+-enum mdp_config_id {
+-	MDP_DEV_M2M = 0,
+-	MDP_CONFIG_POOL_SIZE	/* ALWAYS keep at the end */
+-};
+-
+-struct mdp_config_pool {
+-	u64			cfg_count[MDP_CONFIG_POOL_SIZE];
+-	struct img_config	configs[MDP_CONFIG_POOL_SIZE];
+-};
+-
+ struct mdp_vpu_dev {
+ 	/* synchronization protect for accessing vpu working buffer info */
+ 	struct mutex		*lock;
+ 	struct mtk_scp		*scp;
+ 	struct completion	ipi_acked;
++	void			*param;
++	dma_addr_t		param_addr;
++	size_t			param_size;
+ 	void			*work;
+ 	dma_addr_t		work_addr;
+ 	size_t			work_size;
+-	struct mdp_config_pool	*pool;
++	void			*config;
++	dma_addr_t		config_addr;
++	size_t			config_size;
+ 	u32			status;
+ };
+ 
+-struct mdp_vpu_ctx {
+-	struct mdp_vpu_dev	*vpu_dev;
+-	u32			config_id;
+-	struct img_config	*config;
+-	u32			inst_addr;
+-};
+-
+ void mdp_vpu_shared_mem_free(struct mdp_vpu_dev *vpu);
+ int mdp_vpu_dev_init(struct mdp_vpu_dev *vpu, struct mtk_scp *scp,
+ 		     struct mutex *lock /* for sync */);
+ int mdp_vpu_dev_deinit(struct mdp_vpu_dev *vpu);
+-int mdp_vpu_ctx_init(struct mdp_vpu_ctx *ctx, struct mdp_vpu_dev *vpu,
+-		     enum mdp_config_id id);
+-int mdp_vpu_ctx_deinit(struct mdp_vpu_ctx *ctx);
+-int mdp_vpu_process(struct mdp_vpu_ctx *vpu, struct img_ipi_frameparam *param);
++int mdp_vpu_process(struct mdp_vpu_dev *vpu, struct img_ipi_frameparam *param);
+ 
+ #endif  /* __MTK_MDP3_VPU_H__ */
 -- 
 2.18.0
 
