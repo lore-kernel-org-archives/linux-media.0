@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16F2AC636D3
-	for <linux-media@archiver.kernel.org>; Wed,  8 Feb 2023 05:10:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91EFDC636CC
+	for <linux-media@archiver.kernel.org>; Wed,  8 Feb 2023 05:10:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbjBHFKP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Feb 2023 00:10:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47238 "EHLO
+        id S230447AbjBHFKX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Feb 2023 00:10:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbjBHFKC (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Feb 2023 00:10:02 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838B442BE0;
-        Tue,  7 Feb 2023 21:09:53 -0800 (PST)
+        with ESMTP id S230495AbjBHFKO (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Feb 2023 00:10:14 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F9E442C4;
+        Tue,  7 Feb 2023 21:09:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1675832994; x=1707368994;
+  t=1675832999; x=1707368999;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=bvzL8yBXjkbs6PX1KeNsY7o8KthoIvKiuovYJNPFyVI=;
-  b=hXsNUL5Vm55hJuXF6/PNwIbjku+kjcUJbszp+zXLYYVAVsK2d0A4WFpt
-   Q6eyRHEGGaIRDvu7jdK6sLjNBwDwzTC2B0QPFiFW/7BLWsgbuB5d0RPPV
-   WC+KxPM8M5uglgf/QGGu9L8dzs+3YhIDWHSmnANPaO8X/r8gTlwffJ+NW
-   I/2DSyVKKibOdNoG5kYbSAILYYY17M4y2gdoxOyCMFQ3VPPAXiMHrvhhP
-   IqPtzKFEKTSI0WkTpY//lvP7j3BCGaoYulPXAeObsboF8avlNiSEqzWnl
-   6gUyNUOlJrGY0ftpOjjwiR8mJFbillgfgEYsGXiGsoprBw7W4O8qrfulq
-   A==;
+  bh=+szvL+ndfqTkBWLkYZZHX8t/alFfcilUJhnbtl8bXGo=;
+  b=zOo5Y7AeV1Dyz0wj2O+l+l8jRlRpJXp0pjY/cWN+RKxrRVj4HbGOLT13
+   90lUX8moIoWDLZ0smc6iVWcuXyF94mqjpkB5+tw3m1U8iXtDbZdQsrPmQ
+   Sd0Xy7OINWJ36sfuHlMDSiC2FztJilv1qePHfpIu1QrOUNKCjOnnnOhAt
+   m8S18Bw5JLgGWYVkjpF7pHvkgZa2CSZXNFVnDk3gboi/HyaG4GdNGoOs+
+   MC4DhQeByl8Cz6k6TwZYfa9bdPRn3FJ/o0O/+G5MylPphTPXniiPCswir
+   Oyh76TDrAlt3VOC1+R7HvH9zSbnVvcWJXFPE2bn+GXY4YYRre/MNF2pGX
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.97,280,1669100400"; 
-   d="scan'208";a="200025004"
+   d="scan'208";a="136078388"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Feb 2023 22:09:54 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Feb 2023 22:09:48 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 7 Feb 2023 22:09:51 -0700
+ 15.1.2507.16; Tue, 7 Feb 2023 22:09:38 -0700
 Received: from microchip1-OptiPlex-9020.microchip.com (10.10.115.15) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Tue, 7 Feb 2023 22:09:47 -0700
+ 15.1.2507.16 via Frontend Transport; Tue, 7 Feb 2023 22:09:33 -0700
 From:   shravan kumar <shravan.chippa@microchip.com>
 To:     <paul.j.murphy@intel.com>, <daniele.alessandrelli@intel.com>,
         <mchehab@kernel.org>, <robh+dt@kernel.org>,
@@ -47,10 +47,11 @@ CC:     <kernel@pengutronix.de>, <festevam@gmail.com>, <linux-imx@nxp.com>,
         <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <shravan.chippa@microchip.com>, Sakari Ailus <sakari.ailus@iki.fi>
-Subject: [PATCH v11 4/5] dt-bindings: media: i2c: imx334 add new link_freq
-Date:   Wed, 8 Feb 2023 10:39:14 +0530
-Message-ID: <20230208050915.1958183-5-shravan.chippa@microchip.com>
+        <shravan.chippa@microchip.com>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Subject: [PATCH v11 2/5] media: i2c: imx334: add missing reset values for mode 3840x2160_regs[]
+Date:   Wed, 8 Feb 2023 10:39:12 +0530
+Message-ID: <20230208050915.1958183-3-shravan.chippa@microchip.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230208050915.1958183-1-shravan.chippa@microchip.com>
 References: <20230208050915.1958183-1-shravan.chippa@microchip.com>
@@ -63,27 +64,61 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Shravan Chippa <shravan.chippa@microchip.com>
 
-Add new supported link frequency in dt example.
+There are some missing reset reg_mode values for the 3840x2160@60
+resolution. The camera sensor still works in 3840x2160@60 resolution mode
+because of the register reset values. This is an issue when we change the
+modes dynamically. As an example, when we change the mode from 1920x1080@30
+ resolution to 3840x2160@60 resoultion then the mode values will be written
+to the registers from the array mode_3840x2160_regs[] which gives the wrong
+output which is incorrect resolution.
 
-Suggested-by: Sakari Ailus <sakari.ailus@iki.fi>
+So add the missing reset values to the mode_3840x2160_regs[].
+
+Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 Signed-off-by: Shravan Chippa <shravan.chippa@microchip.com>
 ---
- Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/imx334.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml
-index f5055b9db693..09533496b20c 100644
---- a/Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml
-@@ -82,7 +82,7 @@ examples:
-                 imx334: endpoint {
-                     remote-endpoint = <&cam>;
-                     data-lanes = <1 2 3 4>;
--                    link-frequencies = /bits/ 64 <891000000>;
-+                    link-frequencies = /bits/ 64 <891000000 445500000>;
-                 };
-             };
-         };
+diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
+index ebacba3059b3..40ece08f20f5 100644
+--- a/drivers/media/i2c/imx334.c
++++ b/drivers/media/i2c/imx334.c
+@@ -166,6 +166,7 @@ static const struct imx334_reg mode_3840x2160_regs[] = {
+ 	{0x3288, 0x21},
+ 	{0x328a, 0x02},
+ 	{0x302c, 0x3c},
++	{0x302d, 0x00},
+ 	{0x302e, 0x00},
+ 	{0x302f, 0x0f},
+ 	{0x3076, 0x70},
+@@ -240,7 +241,26 @@ static const struct imx334_reg mode_3840x2160_regs[] = {
+ 	{0x3794, 0x7a},
+ 	{0x3796, 0xa1},
+ 	{0x3e04, 0x0e},
++	{0x319e, 0x00},
+ 	{0x3a00, 0x01},
++	{0x3a18, 0xbf},
++	{0x3a19, 0x00},
++	{0x3a1a, 0x67},
++	{0x3a1b, 0x00},
++	{0x3a1c, 0x6f},
++	{0x3a1d, 0x00},
++	{0x3a1e, 0xd7},
++	{0x3a1f, 0x01},
++	{0x3a20, 0x6f},
++	{0x3a21, 0x00},
++	{0x3a22, 0xcf},
++	{0x3a23, 0x00},
++	{0x3a24, 0x6f},
++	{0x3a25, 0x00},
++	{0x3a26, 0xb7},
++	{0x3a27, 0x00},
++	{0x3a28, 0x5f},
++	{0x3a29, 0x00},
+ };
+ 
+ /* Supported sensor mode configurations */
 -- 
 2.34.1
 
