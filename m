@@ -2,82 +2,92 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75382C05027
-	for <linux-media@archiver.kernel.org>; Wed,  8 Feb 2023 15:27:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0062EC05027
+	for <linux-media@archiver.kernel.org>; Wed,  8 Feb 2023 15:28:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231464AbjBHP1k (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Feb 2023 10:27:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
+        id S231650AbjBHP2v (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Feb 2023 10:28:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjBHP1h (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Feb 2023 10:27:37 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A77C301AD;
-        Wed,  8 Feb 2023 07:27:36 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D5660E79;
-        Wed,  8 Feb 2023 16:27:34 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1675870055;
-        bh=v2kB8dThcKfo0PAIArXh+N1F/eUzy2P5U/bncrQmbsE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R7awEdcAld66PPze9JPXGjcVTmnb/GpMRs1PpsZkPs9hanKBY640Wx12a6BgNtEM4
-         T73mh/Cuepm9EgZLhnpfB4NXAjeF5Gev1afA+YiG8Ls4bgRB/pOb8aPyt49hzWnVf2
-         q5ZKOhfa2Kg0hRVDKYpdl4WCY4y75/A9BNFRRbWI=
-Date:   Wed, 8 Feb 2023 17:27:33 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: Re: [PATCH v1 1/1] media: i2c: imx290: Use
- device_property_read_u32() directly
-Message-ID: <Y+O/ZbAa3zu1nSI0@pendragon.ideasonboard.com>
-References: <20230208113348.16880-1-andriy.shevchenko@linux.intel.com>
+        with ESMTP id S231629AbjBHP2s (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Feb 2023 10:28:48 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1513772A0;
+        Wed,  8 Feb 2023 07:28:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675870128; x=1707406128;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=4Omzh3EBkFsKkaEjSu30BIFaElbuCTq5BekfLAtiEko=;
+  b=JrPPDz3FBzAO1ITAEyOJ6ZN2uVgcBL9xizBHyiYhXfQRz3Pf1vdmPzp2
+   uXBU0CNe2A1C5ko+6q3P51FwYKI7NQh7TmRFfR0ouhnL0RYPG8indwCuV
+   QL1Pewe/pgEjhpWpcqSE/PoBcJ6YsfT9ZhWGL+qmY3gEiHVDfHofc6Wip
+   N90Z6KJoOcI0Wn+zxMR9XnmQpsgmJP4z26wWOJSV3EZDHBrLX4qjt7yAr
+   yB63HppP1GfptbNsULjIBKkfzR4jV6RnVsWNhiQXiK6NvvQ4JgTU+9+z6
+   t7Fn3r9qe6e7R5nMfH8GAQdHvC1QPSQ0dVNKf0C0TOuFgug80VEESK6Z+
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="310182268"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="310182268"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 07:28:46 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="617237829"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="617237829"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 07:28:44 -0800
+Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 0AC0A121915;
+        Wed,  8 Feb 2023 17:28:42 +0200 (EET)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
+        (envelope-from <sakari.ailus@linux.intel.com>)
+        id 1pPmMr-00CrAJ-Gf; Wed, 08 Feb 2023 17:28:17 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-acpi@vger.kernel.org
+Cc:     linux-media@vger.kernel.org, rafael@kernel.org,
+        andriy.shevchenko@linux.intel.com, heikki.krogerus@linux.intel.com
+Subject: [PATCH v4 3/8] device property: Add SOFTWARE_NODE() macro for defining software nodes
+Date:   Wed,  8 Feb 2023 17:28:02 +0200
+Message-Id: <20230208152807.3064242-4-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230208152807.3064242-1-sakari.ailus@linux.intel.com>
+References: <20230208152807.3064242-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230208113348.16880-1-andriy.shevchenko@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Andy,
+Add SOFTWARE_NODE() macro in order to make defining software nodes look
+nicer. This is analogous to different PROPERTY_ENTRY_*() macros for
+defining properties.
 
-Thank you for the patch.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+ include/linux/property.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-On Wed, Feb 08, 2023 at 01:33:48PM +0200, Andy Shevchenko wrote:
-> No need to call fwnode_property_read_u32(dev_fwnode()), when
-> we have already existing helper. So use it.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/media/i2c/imx290.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-> index 330098a0772d..e7aa2ecdcc88 100644
-> --- a/drivers/media/i2c/imx290.c
-> +++ b/drivers/media/i2c/imx290.c
-> @@ -1137,8 +1137,7 @@ static int imx290_init_clk(struct imx290 *imx290)
->  	u32 xclk_freq;
->  	int ret;
->  
-> -	ret = fwnode_property_read_u32(dev_fwnode(imx290->dev),
-> -				       "clock-frequency", &xclk_freq);
-> +	ret = device_property_read_u32(imx290->dev, "clock-frequency", &xclk_freq);
-
-I'd break the line here.
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
->  	if (ret) {
->  		dev_err(imx290->dev, "Could not get xclk frequency\n");
->  		return ret;
-
+diff --git a/include/linux/property.h b/include/linux/property.h
+index 37179e3abad5c..6745a86bc9b97 100644
+--- a/include/linux/property.h
++++ b/include/linux/property.h
+@@ -477,6 +477,13 @@ struct software_node {
+ 	const struct property_entry *properties;
+ };
+ 
++#define SOFTWARE_NODE(_name_, _properties_, _parent_)	\
++	(struct software_node) {			\
++		.name = _name_,				\
++		.properties = _properties_,		\
++		.parent = _parent_,			\
++	}
++
+ bool is_software_node(const struct fwnode_handle *fwnode);
+ const struct software_node *
+ to_software_node(const struct fwnode_handle *fwnode);
 -- 
-Regards,
+2.30.2
 
-Laurent Pinchart
