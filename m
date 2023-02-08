@@ -2,204 +2,174 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6142EC05027
-	for <linux-media@archiver.kernel.org>; Wed,  8 Feb 2023 09:15:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 056F2C6379F
+	for <linux-media@archiver.kernel.org>; Wed,  8 Feb 2023 09:24:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbjBHJPQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Feb 2023 04:15:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
+        id S231336AbjBHJY1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Feb 2023 04:24:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbjBHJO0 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Feb 2023 04:14:26 -0500
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2124.outbound.protection.outlook.com [40.107.215.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F7846D5D;
-        Wed,  8 Feb 2023 01:13:05 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WuvSTLY2gFzKhWSNo67MUb6dT6i+072hscyBnc7S2r0qKmeetAPhrg9BGc6hKG9YBahj7c6S8xQyRyAKOzVoBne0IJNxTZr+AGiYNzq16n+VTnuh6vsJggezsUvaZPVwvv0ae3aaZdAehvFkuXqkFLHWfhFqcAZhZxsh4GvZ8SOTiNWCNKJDs7oeWX53vYYkWqTopCOEoDGoY55Uxoy11u3UY1n9H/4ln+TDaJXjkSrEQwYCpbgmdEr1fOCtr0gUjJYxOLD3BJeHr4rjegMqFWNSfrlTwS8Ma6nVjQ5+FyfY4OH1W2+IJ7PUA/C+2iNVM8uTgjt/hy9dSvVHsnLmRw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8y2G7QLTRROgDp1QW3nK15qSOjDA/1lx48/HutSAp5g=;
- b=HOMa6+JtAk9HhAVPJBK3RPFRSQROwqf0i+ZrEMX0jFJC51K6PH2MIBPxagt9pNVip0/OqghwwTk+afCaIPynUMCSVfs4vUYX3ERBZlsokzB1XSWKAPYjur8WCApDkr9u/0hVU2VHT1dmfx6yMFURyiNA4d8MviY6D1W9gig1DHUdwVneeKS5jVElMElUg/gnoNkbl+qJ+SJp+L0DcvexQ6hbHUzol4oURndNE3M2zPjVczZ9bzTlNqirkyGZjoGb4p1Qf7NND2csnlngFxp/Q6RbJdwXchHpt3DAd8ylaj6iGnQAUacqsXyxDLIGcH0jxl+ZY1GS1cEUM5NynGaPhA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8y2G7QLTRROgDp1QW3nK15qSOjDA/1lx48/HutSAp5g=;
- b=wiYJBdvm1ZMIb8STarlCMFXUnENnYvdKl0XeMxP4b4DKhtpqKlZDg6vgYkvCFOytsqtxoJoWBwqakiLGUVnwK83KElcLpaJ6/zJNICOzNr18azW5GBK44lEi2Q0YjD3g8MexkMZX3vmg15CxE/20u95mhkFF1y5xPMcQBTusmZM=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by TYCPR01MB12014.jpnprd01.prod.outlook.com (2603:1096:400:3e1::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Wed, 8 Feb
- 2023 09:12:14 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::343d:7339:78e5:a46e]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::343d:7339:78e5:a46e%7]) with mapi id 15.20.6064.035; Wed, 8 Feb 2023
- 09:12:14 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
+        with ESMTP id S230480AbjBHJX5 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Feb 2023 04:23:57 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DBC46177;
+        Wed,  8 Feb 2023 01:22:16 -0800 (PST)
+X-UUID: 10eb6584a79211ed945fc101203acc17-20230208
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=sTcd5STRnuK7xCbQsEglB5nymULefmR2b/uY4gEB4RY=;
+        b=i+SVle+hftAyWS3EHjkA+0x3ViYXGRzqmokdNfvOq8EHqv++jJvepsd/e60mIOos/rZFEjUCWw6pIrkMyYxsp3sAWTS3wYEfGUCictmC/WuaJ5p22Y8z8/7P68Lbe18+J7CZTUCaeqP5zmktfZdC491DcWb79fjGq/5gpt32tWg=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.19,REQID:94e386ad-5932-4dad-8abb-ccfacbad5947,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:885ddb2,CLOUDID:3e85458e-8530-4eff-9f77-222cf6e2895b,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-UUID: 10eb6584a79211ed945fc101203acc17-20230208
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1289664395; Wed, 08 Feb 2023 17:22:10 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 8 Feb 2023 17:22:10 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Wed, 8 Feb 2023 17:22:10 +0800
+From:   Moudy Ho <moudy.ho@mediatek.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-CC:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v4 1/2] media: dt-bindings: media: renesas,vsp1: Document
- RZ/V2L VSPD bindings
-Thread-Topic: [PATCH v4 1/2] media: dt-bindings: media: renesas,vsp1: Document
- RZ/V2L VSPD bindings
-Thread-Index: AQHY/qlsiqUPLyRiZEakeAuWQTj/0q6ivSewgCKAQiA=
-Date:   Wed, 8 Feb 2023 09:12:13 +0000
-Message-ID: <OS0PR01MB59224810FCA39B4E7CCAF2A886D89@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20221122193415.1873179-1-biju.das.jz@bp.renesas.com>
- <OS0PR01MB5922EED83E05EC0B6EEC245986C69@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-In-Reply-To: <OS0PR01MB5922EED83E05EC0B6EEC245986C69@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYCPR01MB12014:EE_
-x-ms-office365-filtering-correlation-id: 64c99f39-3687-466a-1802-08db09b49158
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Hn98hzDiJbmPK014L/aSz7utIIo26YqG/nkZzakp/mx1uiNmBnN1kBwHvqJ+i41tlpfd8VRL9BnjJJeJwtAxpDFagOojZ7/lx+/zH0LukFW4m//4vXJ9Azmk7rhw3OPwWoYMz7LW1m/TUwThhzLmh3OBZo4hrd3yvUVAErkSllAN5LE+MsxfScUWQZK2XfBkqhsqEyZbXqXEITy7mDirE6qWwPlaokzyilm8ffEpH32hi4g7LyUaStvEKxzTAdPjLaIpN3Vg4KlyEYW42zcq1XsaOPZKF/dW3Y/8u6G7674FktkM2O7w8KK3q2hijd5elqEvC7CCpBbM8n4rPI5VKMFPOep4YeIXbAR0moRXBijnLQ838TVmxK7tiRlZpxCHGG051+SMLW8j5tq47Uqx5DRIqZeFQMRNp2Cv/IrbEBctR1AuidISSW8XS3TdoQcu0PbfJdI3m26tXL8lcT6Wzrjiawhu+O1HPbCIezgRR9ylZa4+EPWsKgoEYZ8eJDdlLLpKQVHrSl2FMu8+wW6Br6Z1O791roUusegirk8xnIHfba91s21BoPTtTFPYrDXjuHL5GSewLaJ1oIoFOe8eGOxB+8eCvUr+WGtCIBxhPD6k4cyhXItjMfiZsbk21yTWvNrq+WMZUy5EkiisqGs8g/UJD4kfe9LK6tdHIqWxalcvc3HE+HrJl/X7xOeGB/kApB8Fjc6LNq6WtLkYWyA0LhHS0Fj0+gLTyu8P69FQDD0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(396003)(39860400002)(346002)(136003)(451199018)(38100700002)(122000001)(86362001)(2906002)(33656002)(38070700005)(316002)(54906003)(110136005)(41300700001)(5660300002)(66556008)(7416002)(76116006)(52536014)(8936002)(55016003)(83380400001)(8676002)(4326008)(66476007)(64756008)(66446008)(6506007)(66946007)(53546011)(966005)(478600001)(26005)(9686003)(186003)(7696005)(71200400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?H4aFsnNnWyKnVlDp/2cPQvwo/Da9Po5lfwDIrUWM7C91H864lPJ0JdNHAQdx?=
- =?us-ascii?Q?gHNFOnjg8CvunrJjnK1M25MwbSdGn14nUrPcRpKzVktXnevpy3QpzV308O2K?=
- =?us-ascii?Q?wlnrRUcrLVVcm1cUrUdeQsXe3IK94rT21XFLtmzsw3OfGB/J6N7wSJh7BJP7?=
- =?us-ascii?Q?YNKd4bYLsb1Y3NF74PGXnzQEB6GrbvVhYv0Sz04WmOUAfkmqKmoXAX8J2VIJ?=
- =?us-ascii?Q?aqIJp+l/+R2pF5NwgRvmU5SObyVZyrZ6cHesu7tVOBaTZn45WwN1pP42q/9h?=
- =?us-ascii?Q?xMEWT8DKQ/XUG11Ym2J2W61/LPKSbaPmleqqrh4/Jb2Cf+c+nWf3omc5//wP?=
- =?us-ascii?Q?6dD4nLCrS+2Yt8ppV3lATN+gFCffT2GS5ojexnFA5deTgwBbLiDIwBNxxh/c?=
- =?us-ascii?Q?WVpxjrw+jH8m+E9vNdqssJMIhqDS6Jq1/Og0v0ZyRJCB0SAug9XjFB5EHLtf?=
- =?us-ascii?Q?KSMnOc5mLLTQpL4/XRIUBHG5dRvFXqblAKGjnpi2PD3zMvMGGZl28eL0OPN6?=
- =?us-ascii?Q?JzBmqcWylhw2MrIJ4tr05nIAHAW/swgji68xsF83eEQQrNLtLeJfN9w/wx7Y?=
- =?us-ascii?Q?U4ShA/3/+XaAC2cWkBnHZcGme3dvta0AQJ2wr+xvEqwGTj0216i5hzt+5fQy?=
- =?us-ascii?Q?E5nO76eEx0ILixXGqn1HuFyO1hYB66CPBwUOwonw75TK90SOx5juABMmVZAE?=
- =?us-ascii?Q?ZsQbdgfBjW59SprhI4I7JC6nnWe5NTtz7L/GGIlPo46cvVSvRLKZZM6esWUI?=
- =?us-ascii?Q?5cn1vmRa5QH2j7Xj/KD0va5Uzr6nh2GGvuUEythjE7lq+eIaCO1XbtKn9OeL?=
- =?us-ascii?Q?SpS+gX7+JhVdGxV5UqyqWfMF7BzHxT1PGdHs1scLTJ7DR7BIvgSae4HqoGAe?=
- =?us-ascii?Q?Tkf6aOGeyGf8MuuFRMm1f4X5nsZU2xout6vWGNJJy93c/b0Xzp3AHRZFdoFT?=
- =?us-ascii?Q?jsogt04leUBNUqsGIHuWKge0PajasQzaIRUFvjgUj+Ko6OG65JX9xy6jTv4V?=
- =?us-ascii?Q?wx0c75/Lswfu3dc7qFhb3AJEWn4sO83+bSyV/qy9E998xsPljPDVDwEyXOg3?=
- =?us-ascii?Q?3pM5UaNaaM0CpeSKcH41XtYo5BDGCeIJSV7CWq+Xb27zfykzmMMZkYWXXqPQ?=
- =?us-ascii?Q?XArX/gbLzaeHKF2Y9j6J4W88KfxSld6J6eqIlNx/ftj11ZFl4Uv3Itnmvi2b?=
- =?us-ascii?Q?KrmcvpCx/RXG9GzKgVeH0FX1a7QYVzoQRhSLp7+NLQ0FwqYs4p3HaggObCbF?=
- =?us-ascii?Q?k6+LV/wYb8ZrvE2W0U/VNvMeVDeHzvGVB4K042WiLq5RLruV5D4KWfMM0CnZ?=
- =?us-ascii?Q?J9oIms/SZpDiw27OkfHduXJu9y2Hpfvdhb8z/YQysZiip6jvURTYaqF6VtzO?=
- =?us-ascii?Q?rSV18kHQLzOKlsucngQPU8BdOIXA7piN0K8OKclS4K9ctPT+sC9QbQR8lhp6?=
- =?us-ascii?Q?nkBeYSRTABvG+Sj2DuA3XuFgdkuCe44yQsf0Dg0f+lF/6pCMoHHvITK5XhZP?=
- =?us-ascii?Q?9m36+Of7KOyIfZGBUWoUcrwSrH6s1SOyEFaDNS3rjzW8XvTU13vYmxKUA84G?=
- =?us-ascii?Q?H6gWfK7Sx6E7Myq/bsdaxM0vBD9mI6HtvxB8QHS4c/7eGTWfvmclyn4C2PgW?=
- =?us-ascii?Q?tw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Moudy Ho <moudy.ho@mediatek.com>
+Subject: [PATCH v4 01/16] dt-binding: mediatek: correct MDP3 node with generic names
+Date:   Wed, 8 Feb 2023 17:21:54 +0800
+Message-ID: <20230208092209.19472-2-moudy.ho@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20230208092209.19472-1-moudy.ho@mediatek.com>
+References: <20230208092209.19472-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 64c99f39-3687-466a-1802-08db09b49158
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2023 09:12:13.9665
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: UXi9NHNbbbW3A6k4pTe9WGcA2/MtVFAhD2XQuAZN5T0gWGDwrrG4yxphqmKB/Xn25seavbCqZ8vOBOxEDFVv2A2xqBjqzhhYxoRTN7he6n8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB12014
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi All,
+The DMA-related nodes RDMA/WROT in MDP3 should be changed to generic names.
+In addition, fix improper space indent in example.
 
-Gentle ping. Does this patch to be taken by media subsystem or dt?
+Fixes: 4ad7b39623ab ("media: dt-binding: mediatek: add bindings for MediaTek MDP3 components")
+Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+---
+ .../bindings/media/mediatek,mdp3-rdma.yaml    | 29 +++++++++++--------
+ .../bindings/media/mediatek,mdp3-wrot.yaml    | 23 +++++++++------
+ 2 files changed, 31 insertions(+), 21 deletions(-)
 
-Is there any chance that it can be taken for v6.3?
-
-Cheers,
-Biju
-
-> Subject: RE: [PATCH v4 1/2] media: dt-bindings: media: renesas,vsp1:
-> Document RZ/V2L VSPD bindings
->=20
-> Hi all,
->=20
-> Gentle ping.
->=20
-> This patch is reviewed by both Krzysztof Kozlowski and Geert
->=20
-> It is blocking for accepting SoC dtsi patches[1] through renesas-soc tree=
- 1]
-> https://lore.kernel.org/all/20221122213529.2103849-1-
-> biju.das.jz@bp.renesas.com
->=20
-> Cheers,
-> Biju
->=20
-> > -----Original Message-----
-> > From: Biju Das <biju.das.jz@bp.renesas.com>
-> > Sent: 22 November 2022 19:34
-> > To: Mauro Carvalho Chehab <mchehab@kernel.org>; Rob Herring
-> > <robh+dt@kernel.org>; Krzysztof Kozlowski
-> > <krzysztof.kozlowski+dt@linaro.org>
-> > Cc: Biju Das <biju.das.jz@bp.renesas.com>; Laurent Pinchart
-> > <laurent.pinchart@ideasonboard.com>; Kieran Bingham
-> > <kieran.bingham+renesas@ideasonboard.com>;
-> > linux-media@vger.kernel.org; linux-renesas-soc@vger.kernel.org;
-> > devicetree@vger.kernel.org; Geert Uytterhoeven
-> > <geert+renesas@glider.be>; Fabrizio Castro
-> > <fabrizio.castro.jz@renesas.com>
-> > Subject: [PATCH v4 1/2] media: dt-bindings: media: renesas,vsp1:
-> > Document RZ/V2L VSPD bindings
-> >
-> > Document VSPD found in RZ/V2L SoC. The VSPD block is identical to
-> > RZ/G2L SoC and therefore use RZ/G2L fallback to avoid any driver change=
-s.
-> >
-> > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> > ---
-> > * New patch
-> > ---
-> >  .../devicetree/bindings/media/renesas,vsp1.yaml     | 13 +++++++++----
-> >  1 file changed, 9 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/media/renesas,vsp1.yaml
-> > b/Documentation/devicetree/bindings/media/renesas,vsp1.yaml
-> > index 7a8f32473852..3265e922647c 100644
-> > --- a/Documentation/devicetree/bindings/media/renesas,vsp1.yaml
-> > +++ b/Documentation/devicetree/bindings/media/renesas,vsp1.yaml
-> > @@ -16,10 +16,15 @@ description:
-> >
-> >  properties:
-> >    compatible:
-> > -    enum:
-> > -      - renesas,r9a07g044-vsp2 # RZ/G2L
-> > -      - renesas,vsp1 # R-Car Gen2 and RZ/G1
-> > -      - renesas,vsp2 # R-Car Gen3 and RZ/G2
-> > +    oneOf:
-> > +      - enum:
-> > +          - renesas,r9a07g044-vsp2 # RZ/G2L
-> > +          - renesas,vsp1 # R-Car Gen2 and RZ/G1
-> > +          - renesas,vsp2 # R-Car Gen3 and RZ/G2
-> > +      - items:
-> > +          - enum:
-> > +              - renesas,r9a07g054-vsp2    # RZ/V2L
-> > +          - const: renesas,r9a07g044-vsp2 # RZ/G2L fallback
-> >
-> >    reg:
-> >      maxItems: 1
-> > --
-> > 2.25.1
+diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
+index 9cfc0c7d23e0..46730687c662 100644
+--- a/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
++++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
+@@ -61,6 +61,9 @@ properties:
+       - description: used for 1st data pipe from RDMA
+       - description: used for 2nd data pipe from RDMA
+ 
++  '#dma-cells':
++    const: 1
++
+ required:
+   - compatible
+   - reg
+@@ -70,6 +73,7 @@ required:
+   - clocks
+   - iommus
+   - mboxes
++  - '#dma-cells'
+ 
+ additionalProperties: false
+ 
+@@ -80,16 +84,17 @@ examples:
+     #include <dt-bindings/power/mt8183-power.h>
+     #include <dt-bindings/memory/mt8183-larb-port.h>
+ 
+-    mdp3_rdma0: mdp3-rdma0@14001000 {
+-      compatible = "mediatek,mt8183-mdp3-rdma";
+-      reg = <0x14001000 0x1000>;
+-      mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x1000 0x1000>;
+-      mediatek,gce-events = <CMDQ_EVENT_MDP_RDMA0_SOF>,
+-                            <CMDQ_EVENT_MDP_RDMA0_EOF>;
+-      power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
+-      clocks = <&mmsys CLK_MM_MDP_RDMA0>,
+-               <&mmsys CLK_MM_MDP_RSZ1>;
+-      iommus = <&iommu>;
+-      mboxes = <&gce 20 CMDQ_THR_PRIO_LOWEST>,
+-               <&gce 21 CMDQ_THR_PRIO_LOWEST>;
++    dma-controller@14001000 {
++        compatible = "mediatek,mt8183-mdp3-rdma";
++        reg = <0x14001000 0x1000>;
++        mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x1000 0x1000>;
++        mediatek,gce-events = <CMDQ_EVENT_MDP_RDMA0_SOF>,
++                              <CMDQ_EVENT_MDP_RDMA0_EOF>;
++        power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
++        clocks = <&mmsys CLK_MM_MDP_RDMA0>,
++                 <&mmsys CLK_MM_MDP_RSZ1>;
++        iommus = <&iommu>;
++        mboxes = <&gce 20 CMDQ_THR_PRIO_LOWEST>,
++                 <&gce 21 CMDQ_THR_PRIO_LOWEST>;
++        #dma-cells = <1>;
+     };
+diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-wrot.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-wrot.yaml
+index 0baa77198fa2..64ea98aa0592 100644
+--- a/Documentation/devicetree/bindings/media/mediatek,mdp3-wrot.yaml
++++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-wrot.yaml
+@@ -50,6 +50,9 @@ properties:
+   iommus:
+     maxItems: 1
+ 
++  '#dma-cells':
++    const: 1
++
+ required:
+   - compatible
+   - reg
+@@ -58,6 +61,7 @@ required:
+   - power-domains
+   - clocks
+   - iommus
++  - '#dma-cells'
+ 
+ additionalProperties: false
+ 
+@@ -68,13 +72,14 @@ examples:
+     #include <dt-bindings/power/mt8183-power.h>
+     #include <dt-bindings/memory/mt8183-larb-port.h>
+ 
+-    mdp3_wrot0: mdp3-wrot0@14005000 {
+-      compatible = "mediatek,mt8183-mdp3-wrot";
+-      reg = <0x14005000 0x1000>;
+-      mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x5000 0x1000>;
+-      mediatek,gce-events = <CMDQ_EVENT_MDP_WROT0_SOF>,
+-                            <CMDQ_EVENT_MDP_WROT0_EOF>;
+-      power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
+-      clocks = <&mmsys CLK_MM_MDP_WROT0>;
+-      iommus = <&iommu>;
++    dma-controller@14005000 {
++        compatible = "mediatek,mt8183-mdp3-wrot";
++        reg = <0x14005000 0x1000>;
++        mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x5000 0x1000>;
++        mediatek,gce-events = <CMDQ_EVENT_MDP_WROT0_SOF>,
++                              <CMDQ_EVENT_MDP_WROT0_EOF>;
++        power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
++        clocks = <&mmsys CLK_MM_MDP_WROT0>;
++        iommus = <&iommu>;
++        #dma-cells = <1>;
+     };
+-- 
+2.18.0
 
