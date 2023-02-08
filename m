@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3398C05027
-	for <linux-media@archiver.kernel.org>; Wed,  8 Feb 2023 15:29:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D077FC64EC4
+	for <linux-media@archiver.kernel.org>; Wed,  8 Feb 2023 15:29:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231672AbjBHP3E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Feb 2023 10:29:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
+        id S231680AbjBHP3F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Feb 2023 10:29:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbjBHP2x (ORCPT
+        with ESMTP id S231671AbjBHP2x (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Wed, 8 Feb 2023 10:28:53 -0500
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B023B0DE;
-        Wed,  8 Feb 2023 07:28:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E58460A2;
+        Wed,  8 Feb 2023 07:28:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1675870130; x=1707406130;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=s2Y4uGmnsEcoAeaVe4ItJE78auTjalmyMjYhLV7sN2U=;
-  b=Svacg6UMRKo4bnMCB+KTz+SEMYSkr4pQgW1E8rE2XnIHledjn/T71dGx
-   +5FaJEexVyNNbMJYuTdHmQB04ZOhRnmBMvQjnZO0ldqE4lc1dihh8Bb81
-   YmdOXvSGk2WKoTg39vFBsY0YPl7EKzrUF7m9Wr6SIeTCuczzUMAZPiMAl
-   TlK0jmKroltmWOVZRDi7pfcNpD7bQbofEnVBn1J40pYUbdTq06urvpYFI
-   44ro3CdUlStb6W0FoniXm0RVcQ2HsOzQAkZ1vU/oYAfQ0UlBUtdC9IvxJ
-   4Z0mI05g39cob/qnZ5ZXBqnm4eyU+TvMT1O7jjRGupBW6zl6GL3pOPQrk
+  bh=mTOuPCsFEr7gB8QcmL6khggV1MI+u32EFif7XTnAEuk=;
+  b=HUbz0r9IChhBITgT2DiGVqw3oKfE7z8FeioBwBaiZ8gAV04trxoBNP5L
+   fDGosTap8cYIHHZ2NjL5Nca/5bsmmtulLXm/eLGIcUxes0hHKSwwuZIXE
+   wfDGptR6WXq36hy0Xcl0nT0+uzFKKWjw93tdCjaNSbzVefsb/c9t4il4+
+   mMplVTjq7U9PovScBc1QVh8OZaq0scLw2BiBwvZLG0ab56Y0+mUck6+JB
+   Wb6iz1djqOvzOiipbqSITKgmUIssgSEfPgIj7C9gjVACuW0sopdS0682x
+   UoPpvxFKsUnaxnEN9vMx8ykSslzqYJ1vCvnKE1hXXAINf68aq9deKOBZ3
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="310182284"
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="310182275"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="310182284"
+   d="scan'208";a="310182275"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
   by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 07:28:47 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="617237830"
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="617237828"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="617237830"
+   d="scan'208";a="617237828"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 07:28:45 -0800
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 07:28:44 -0800
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 08C7612190B;
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 0EC811221E4;
         Wed,  8 Feb 2023 17:28:42 +0200 (EET)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1pPmMr-00CrAG-G4; Wed, 08 Feb 2023 17:28:17 +0200
+        id 1pPmMr-00CrAM-H2; Wed, 08 Feb 2023 17:28:17 +0200
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-acpi@vger.kernel.org
 Cc:     linux-media@vger.kernel.org, rafael@kernel.org,
         andriy.shevchenko@linux.intel.com, heikki.krogerus@linux.intel.com
-Subject: [PATCH v4 2/8] ACPI: property: Parse _CRS CSI-2 descriptor
-Date:   Wed,  8 Feb 2023 17:28:01 +0200
-Message-Id: <20230208152807.3064242-3-sakari.ailus@linux.intel.com>
+Subject: [PATCH v4 4/8] ACPI: property: Generate camera swnodes for ACPI and DisCo for Imaging
+Date:   Wed,  8 Feb 2023 17:28:03 +0200
+Message-Id: <20230208152807.3064242-5-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230208152807.3064242-1-sakari.ailus@linux.intel.com>
 References: <20230208152807.3064242-1-sakari.ailus@linux.intel.com>
@@ -59,483 +59,568 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Parse newly added ACPI _CRS CSI-2 descriptor for CSI-2 and camera
-configuration. For now, only figure out where the descriptor is present in
-order to allow adding information from it to related devices.
+Generate software nodes for information parsed from ACPI _CRS for CSI-2 as
+well as MIPI DisCo for Imaging spec. The software nodes are compliant with
+existing ACPI or DT definitions and are parsed by relevant drivers without
+changes.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/acpi/Makefile   |   2 +-
- drivers/acpi/internal.h |   7 +
- drivers/acpi/mipi.c     | 358 ++++++++++++++++++++++++++++++++++++++++
- drivers/acpi/scan.c     |  16 +-
- include/acpi/acpi_bus.h |  11 ++
- 5 files changed, 389 insertions(+), 5 deletions(-)
- create mode 100644 drivers/acpi/mipi.c
+ drivers/acpi/internal.h |   1 +
+ drivers/acpi/mipi.c     | 353 ++++++++++++++++++++++++++++++++++++++++
+ drivers/acpi/scan.c     |  19 +++
+ include/acpi/acpi_bus.h |  70 ++++++++
+ 4 files changed, 443 insertions(+)
 
-diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
-index a5b649e71ab1b..a98fa1bc15548 100644
---- a/drivers/acpi/Makefile
-+++ b/drivers/acpi/Makefile
-@@ -37,7 +37,7 @@ acpi-$(CONFIG_ACPI_SLEEP)	+= proc.o
- # ACPI Bus and Device Drivers
- #
- acpi-y				+= bus.o glue.o
--acpi-y				+= scan.o
-+acpi-y				+= scan.o mipi.o
- acpi-y				+= resource.o
- acpi-y				+= acpi_processor.o
- acpi-y				+= processor_core.o
 diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
-index ec584442fb298..1ec4aa92bf17a 100644
+index 1ec4aa92bf17a..fac87404e294c 100644
 --- a/drivers/acpi/internal.h
 +++ b/drivers/acpi/internal.h
-@@ -282,4 +282,11 @@ void acpi_init_lpit(void);
- static inline void acpi_init_lpit(void) { }
- #endif
+@@ -288,5 +288,6 @@ static inline void acpi_init_lpit(void) { }
  
-+/*--------------------------------------------------------------------------
-+				ACPI and MIPI DisCo for Imaging conversion
-+  -------------------------------------------------------------------------- */
-+
-+void acpi_crs_csi2_swnodes_del_free(void);
-+void acpi_bus_scan_crs_csi2(acpi_handle handle);
-+
+ void acpi_crs_csi2_swnodes_del_free(void);
+ void acpi_bus_scan_crs_csi2(acpi_handle handle);
++void acpi_init_swnodes(struct acpi_device *device);
+ 
  #endif /* _ACPI_INTERNAL_H_ */
 diff --git a/drivers/acpi/mipi.c b/drivers/acpi/mipi.c
-new file mode 100644
-index 0000000000000..0df6147dc8c9d
---- /dev/null
+index 0df6147dc8c9d..c3ceee1d119e7 100644
+--- a/drivers/acpi/mipi.c
 +++ b/drivers/acpi/mipi.c
-@@ -0,0 +1,358 @@
-+// SPDX-License-Identifier: GPL-2.0-only
+@@ -14,6 +14,8 @@
+ #include <linux/sort.h>
+ #include <linux/string.h>
+ 
++#include <media/v4l2-fwnode.h>
++
+ #include "internal.h"
+ 
+ /* Temporary ACPI device handle to software node data structure mapping */
+@@ -25,6 +27,18 @@ struct crs_csi2_swnodes {
+ 
+ static LIST_HEAD(crs_csi2_swnodes);
+ 
++/* Obtain pre-allocated software nodes for an ACPI device handle */
++static struct acpi_device_software_nodes *crs_csi2_swnode_get(acpi_handle handle)
++{
++	struct crs_csi2_swnodes *swnodes;
++
++	list_for_each_entry(swnodes, &crs_csi2_swnodes, list)
++		if (swnodes->handle == handle)
++			return swnodes->ads;
++
++	return NULL;
++}
++
+ static void crs_csi2_swnode_del_free(struct crs_csi2_swnodes *swnodes)
+ {
+ 	list_del(&swnodes->list);
+@@ -170,6 +184,35 @@ struct acpi_handle_ref {
+ 
+ #define NO_CSI2_PORT (~1U)
+ 
 +/*
-+ * MIPI DisCo for Imaging support.
++ * Return next free entry in ports array of a software nodes related to an ACPI
++ * device.
++ */
++static unsigned int next_csi2_port_index(struct acpi_device_software_nodes *ads,
++					 unsigned int port_nr)
++{
++	unsigned int i;
++
++	for (i = 0; i < ads->num_ports; i++) {
++		struct acpi_device_software_node_port *port = &ads->ports[i];
++
++		if (port->port_nr == port_nr)
++			return i;
++
++		if (port->port_nr == NO_CSI2_PORT) {
++			port->port_nr = port_nr;
++			return i;
++		}
++	}
++
++	return NO_CSI2_PORT;
++}
++
++/* Print graph port name into a buffer, return non-zero if failed. */
++#define GRAPH_PORT_NAME(var, num)					    \
++	(snprintf((var), sizeof(var), SWNODE_GRAPH_PORT_NAME_FMT, (num)) >= \
++	 sizeof(var))
++
+ static int crs_handle_cmp(const void *__a, const void *__b)
+ {
+ 	const struct acpi_handle_ref *a = __a, *b = __b;
+@@ -258,6 +301,9 @@ void acpi_crs_csi2_alloc_fill_swnodes(size_t ports_count, acpi_handle handle)
+ 	list_add(&swnodes->list, &crs_csi2_swnodes);
+ }
+ 
++#define ACPI_CRS_CSI2_PHY_TYPE_C	0
++#define ACPI_CRS_CSI2_PHY_TYPE_D	1
++
+ /**
+  * acpi_bus_scan_crs_csi2 - Scan a device and its child devices for _CRS CSI-2
+  *
+@@ -277,6 +323,8 @@ void acpi_crs_csi2_alloc_fill_swnodes(size_t ports_count, acpi_handle handle)
+  * 4. Allocate memory for swnodes each ACPI device requires later on, and
+  *    generate a list of such allocations.
+  *
++ * 5. Set up properties for software nodes.
 + *
-+ * Copyright (C) 2023 Intel Corporation
-+ */
+  * Note that struct acpi_device isn't available yet at this time.
+  *
+  * acpi_scan_lock in scan.c must be held when calling this function.
+@@ -352,7 +400,312 @@ void acpi_bus_scan_crs_csi2(acpi_handle handle)
+ 		this_count = this->count;
+ 	}
+ 
++	/*
++	 * Allocate and set up necessary software nodes for each device and set
++	 * up properties from _CRS CSI2 descriptor.
++	 */
++	list_for_each_entry(csi2, &csi2_all.crs_csi2_head, list) {
++		struct acpi_device_software_nodes *local_swnodes;
++		struct crs_csi2_instance *inst;
 +
-+#include <linux/acpi.h>
-+#include <linux/list.h>
-+#include <linux/module.h>
-+#include <linux/overflow.h>
-+#include <linux/types.h>
-+#include <linux/slab.h>
-+#include <linux/sort.h>
-+#include <linux/string.h>
++		local_swnodes = crs_csi2_swnode_get(csi2->handle);
++		if (WARN_ON_ONCE(!local_swnodes))
++			continue;
 +
-+#include "internal.h"
++		list_for_each_entry(inst, &csi2->buses, list) {
++			struct acpi_device_software_nodes *remote_swnodes;
++			struct acpi_device_software_node_port *local_port;
++			struct acpi_device_software_node_port *remote_port;
++			struct software_node *local_node, *remote_node;
++			unsigned int local_index, remote_index;
++			unsigned int bus_type;
 +
-+/* Temporary ACPI device handle to software node data structure mapping */
-+struct crs_csi2_swnodes {
-+	struct list_head list;
-+	acpi_handle handle;
-+	struct acpi_device_software_nodes *ads;
-+};
++			remote_swnodes = crs_csi2_swnode_get(inst->remote_handle);
++			if (WARN_ON_ONCE(!remote_swnodes))
++				continue;
 +
-+static LIST_HEAD(crs_csi2_swnodes);
++			local_index = next_csi2_port_index(local_swnodes, inst->csi2.local_port_instance);
++			remote_index = next_csi2_port_index(remote_swnodes, inst->csi2.resource_source.index);
 +
-+static void crs_csi2_swnode_del_free(struct crs_csi2_swnodes *swnodes)
-+{
-+	list_del(&swnodes->list);
-+	kfree(swnodes);
-+}
++			if (WARN_ON_ONCE(local_index >= local_swnodes->num_ports) ||
++			    WARN_ON_ONCE(remote_index >= remote_swnodes->num_ports))
++				goto out_free;
 +
-+void acpi_crs_csi2_swnodes_del_free(void)
-+{
-+	struct crs_csi2_swnodes *swnodes, *swnodes_tmp;
++			switch (inst->csi2.phy_type) {
++			case ACPI_CRS_CSI2_PHY_TYPE_C:
++				bus_type = V4L2_FWNODE_BUS_TYPE_CSI2_CPHY;
++				break;
++			case ACPI_CRS_CSI2_PHY_TYPE_D:
++				bus_type = V4L2_FWNODE_BUS_TYPE_CSI2_DPHY;
++				break;
++			default:
++				acpi_handle_info(handle,
++						 "ignoring CSI-2 PHY type %u\n",
++						 inst->csi2.phy_type);
++				continue;
++			}
 +
-+	list_for_each_entry_safe(swnodes, swnodes_tmp, &crs_csi2_swnodes, list)
-+		crs_csi2_swnode_del_free(swnodes);
-+}
++			local_port = &local_swnodes->ports[local_index];
++			local_node = &local_swnodes->nodes[ACPI_DEVICE_SWNODE_EP(local_index)];
++			local_port->remote_ep_ref[0] = SOFTWARE_NODE_REFERENCE(local_node);
++			local_port->crs_csi2_local = true;
 +
-+/*
-+ * Description of a _CRS CSI2 resource descriptor before software node creation
-+ */
-+struct crs_csi2_instance {
-+	struct list_head list;
-+	struct acpi_resource_csi2_serialbus csi2;
-+	acpi_handle remote_handle;
-+	char remote_name[];
-+};
++			remote_port = &remote_swnodes->ports[remote_index];
++			remote_node = &remote_swnodes->nodes[ACPI_DEVICE_SWNODE_EP(remote_index)];
++			remote_port->remote_ep_ref[0] = SOFTWARE_NODE_REFERENCE(remote_node);
 +
-+/* Temporary list of ACPI device nodes with _CRS CSI2 resource descriptors */
-+struct crs_csi2 {
-+	struct list_head list;
-+	acpi_handle handle;
-+	struct list_head buses;
-+};
++			local_port->ep_props[ACPI_DEVICE_SWNODE_EP_REMOTE_EP] =
++				PROPERTY_ENTRY_REF_ARRAY("remote-endpoint",
++							 remote_port->remote_ep_ref);
++			local_port->ep_props[ACPI_DEVICE_SWNODE_EP_BUS_TYPE] =
++				PROPERTY_ENTRY_U32("bus-type", bus_type);
++			local_port->ep_props[ACPI_DEVICE_SWNODE_EP_REG] =
++				PROPERTY_ENTRY_U32("reg", 0);
++			local_port->port_props[ACPI_DEVICE_SWNODE_PRT_REG] =
++				PROPERTY_ENTRY_U32("reg", inst->csi2.local_port_instance);
++			if (GRAPH_PORT_NAME(local_port->port_name,
++					    inst->csi2.local_port_instance))
++				acpi_handle_warn(handle,
++						 "name for local port %u too long",
++						 inst->csi2.local_port_instance);
 +
-+/*
-+ * Context for collecting _CRS CSI2 resource descriptors during ACPI namespace
-+ * walk
-+ */
-+struct scan_check_crs_csi2_context {
-+	struct list_head res_head;
-+	acpi_handle handle;
-+	size_t handle_count;
-+};
-+
-+/* Context for scanning ACPI device nodes for _CRS CSI2 resource descriptors */
-+struct crs_csi2_all {
-+	struct list_head crs_csi2_head;
-+	size_t handle_count;
-+};
-+
-+/* Scan a single CSI2 resource descriptor in _CRS */
-+static acpi_status scan_check_crs_csi2_instance(struct acpi_resource *res,
-+						void *context)
-+{
-+	struct scan_check_crs_csi2_context *inst_context = context;
-+	struct acpi_resource_csi2_serialbus *csi2;
-+	struct crs_csi2_instance *inst;
-+	acpi_handle remote_handle;
-+
-+	if (res->type != ACPI_RESOURCE_TYPE_SERIAL_BUS)
-+		return AE_OK;
-+
-+	csi2 = &res->data.csi2_serial_bus;
-+
-+	if (csi2->type != ACPI_RESOURCE_SERIAL_TYPE_CSI2)
-+		return AE_OK;
-+
-+	if (!csi2->resource_source.string_length) {
-+		acpi_handle_debug(inst_context->handle,
-+				  "invalid resource source string length\n");
-+		return AE_OK;
++			remote_port->ep_props[ACPI_DEVICE_SWNODE_EP_REMOTE_EP] =
++				PROPERTY_ENTRY_REF_ARRAY("remote-endpoint", local_port->remote_ep_ref);
++			remote_port->ep_props[ACPI_DEVICE_SWNODE_EP_BUS_TYPE] =
++				PROPERTY_ENTRY_U32("bus-type", bus_type);
++			remote_port->ep_props[ACPI_DEVICE_SWNODE_EP_REG] =
++				PROPERTY_ENTRY_U32("reg", 0);
++			remote_port->port_props[ACPI_DEVICE_SWNODE_PRT_REG] =
++				PROPERTY_ENTRY_U32("reg",
++						   inst->csi2.resource_source.index);
++			if (GRAPH_PORT_NAME(remote_port->port_name,
++					    inst->csi2.resource_source.index))
++				acpi_handle_warn(handle,
++						 "name for remote port %u too long",
++						 inst->csi2.resource_source.index);
++		}
 +	}
 +
-+	if (ACPI_FAILURE(acpi_get_handle(NULL, csi2->resource_source.string_ptr,
-+					 &remote_handle))) {
-+		acpi_handle_warn(inst_context->handle,
-+				 "cannot get handle for %s\n",
-+				 csi2->resource_source.string_ptr);
-+		return AE_OK;
++out_free:
+ 	kfree(handle_refs);
+ 
+ 	crs_csi2_release(&csi2_all.crs_csi2_head);
+ }
++
++/*
++ * Get the index of the next property in the property array, with a given
++ * maximum values.
++ */
++#define NEXT_PROPERTY(index, max)				\
++	(WARN_ON(++(index) > ACPI_DEVICE_SWNODE_##max + 1) ?	\
++	 ACPI_DEVICE_SWNODE_##max : (index) - 1)
++
++static struct fwnode_handle *get_mipi_port_handle(struct acpi_device *device,
++						  unsigned int port)
++{
++	static const char mipi_port_prefix[] = "mipi-img-port-";
++	char mipi_port_name[sizeof(mipi_port_prefix) + 2];
++
++	if (snprintf(mipi_port_name, sizeof(mipi_port_name), "%s%u",
++		     mipi_port_prefix, port) >= sizeof(mipi_port_name)) {
++		acpi_handle_info(acpi_device_handle(device),
++				 "mipi port name too long for port %u\n", port);
++		return NULL;
 +	}
 +
-+	/*
-+	 * Allocate space to store the _CRS CSI2 entry and its data and add it
-+	 * to the list.
-+	 */
-+	inst = kmalloc(struct_size(inst, remote_name, csi2->resource_source.string_length),
-+		       GFP_KERNEL);
-+	if (!inst)
-+		return AE_OK;
-+
-+	inst->csi2 = *csi2;
-+	strscpy(inst->remote_name, csi2->resource_source.string_ptr,
-+		csi2->resource_source.string_length);
-+	inst->csi2.resource_source.string_ptr = inst->remote_name;
-+	inst->remote_handle = remote_handle;
-+
-+	list_add(&inst->list, &inst_context->res_head);
-+
-+	inst_context->handle_count++;
-+
-+	return AE_OK;
++	return fwnode_get_named_child_node(acpi_fwnode_handle(device),
++					   mipi_port_name);
 +}
 +
-+/*
-+ * Find all devices with _CRS CSI2 resource descriptors and collect them
-+ * into a list for later use
-+ */
-+static acpi_status scan_check_crs_csi2(acpi_handle handle, u32 nesting_level,
-+				       void *context, void **ret)
++static void init_port_csi2_common(struct acpi_device *device,
++				  struct fwnode_handle *mipi_port_fwnode,
++				  unsigned int *ep_prop_index,
++				  unsigned int port_nr)
 +{
-+	struct scan_check_crs_csi2_context inst_context = {
-+		.handle = handle,
-+		.res_head = LIST_HEAD_INIT(inst_context.res_head),
-+	};
-+	struct crs_csi2_all *csi2_all = context;
-+	struct crs_csi2 *csi2;
++	unsigned int port_index = next_csi2_port_index(device->swnodes, port_nr);
++	struct acpi_device_software_nodes *ads = device->swnodes;
++	struct acpi_device_software_node_port *port = &ads->ports[port_index];
++	unsigned int num_lanes = 0;
++	u8 val[ARRAY_SIZE(port->data_lanes)];
++	int ret;
 +
-+	acpi_walk_resources(handle, METHOD_NAME__CRS,
-+			    scan_check_crs_csi2_instance, &inst_context);
++	*ep_prop_index = ACPI_DEVICE_SWNODE_EP_CLOCK_LANES;
 +
-+	if (list_empty(&inst_context.res_head))
-+		return AE_OK;
++	if (GRAPH_PORT_NAME(port->port_name, port_nr))
++		return;
 +
-+	/*
-+	 * Found entry, so allocate memory for it, fill it and add it to the
-+	 * list.
-+	 */
-+	csi2 = kmalloc(sizeof(*csi2), GFP_KERNEL);
-+	if (!csi2)
-+		return AE_OK;
++	ads->nodes[ACPI_DEVICE_SWNODE_PRT(port_index)] =
++		SOFTWARE_NODE(port->port_name, port->port_props,
++			      &ads->nodes[ACPI_DEVICE_SWNODE_ROOT]);
 +
-+	csi2->handle = handle;
-+	list_replace(&inst_context.res_head, &csi2->buses);
-+	list_add(&csi2->list, &csi2_all->crs_csi2_head);
++	ret = fwnode_property_read_u8(mipi_port_fwnode, "mipi-img-clock-lane", val);
++	if (!ret) {
++		port->ep_props[NEXT_PROPERTY(*ep_prop_index, EP_CLOCK_LANES)] =
++			PROPERTY_ENTRY_U32("clock-lanes", *val);
++	}
++	ret = fwnode_property_count_u8(mipi_port_fwnode, "mipi-img-data-lanes");
++	if (ret > 0) {
++		num_lanes = ret;
 +
-+	/* This handle plus remote handles in _CRS CSI2 resource descriptors */
-+	csi2_all->handle_count += 1 + inst_context.handle_count;
-+
-+	return AE_OK;
-+}
-+
-+struct acpi_handle_ref {
-+	acpi_handle handle;
-+	unsigned int count;
-+};
-+
-+#define NO_CSI2_PORT (~1U)
-+
-+static int crs_handle_cmp(const void *__a, const void *__b)
-+{
-+	const struct acpi_handle_ref *a = __a, *b = __b;
-+
-+	return a->handle < b->handle ? -1 : a->handle > b->handle;
-+}
-+
-+/*
-+ * Release entries in temporary storage of ACPI device nodes with _CRS CSI2
-+ * resource descriptors.
-+ */
-+static void crs_csi2_release(struct list_head *crs_csi2_handles)
-+{
-+	struct crs_csi2 *csi2, *csi2_tmp;
-+
-+	list_for_each_entry_safe(csi2, csi2_tmp, crs_csi2_handles, list) {
-+		struct crs_csi2_instance *inst, *inst_tmp;
-+
-+		list_for_each_entry_safe(inst, inst_tmp, &csi2->buses, list) {
-+			list_del(&inst->list);
-+			kfree(inst);
++		if (num_lanes > ARRAY_SIZE(port->data_lanes)) {
++			acpi_handle_warn(acpi_device_handle(device),
++					 "too many data lanes (%u)\n",
++					 num_lanes);
++			num_lanes = ARRAY_SIZE(port->data_lanes);
 +		}
 +
-+		list_del(&csi2->list);
-+		kfree(csi2);
++		ret = fwnode_property_read_u8_array(mipi_port_fwnode, "mipi-img-data-lanes",
++						    val, num_lanes);
++		if (!ret) {
++			unsigned int i;
++
++			for (i = 0; i < num_lanes; i++)
++				port->data_lanes[i] = val[i];
++
++			port->ep_props[NEXT_PROPERTY(*ep_prop_index, EP_DATA_LANES)] =
++				PROPERTY_ENTRY_U32_ARRAY_LEN("data-lanes", port->data_lanes,
++							     num_lanes);
++		}
 +	}
++
++	ret = fwnode_property_count_u8(mipi_port_fwnode, "mipi-img-lane-polarities");
++	if (ret > 0) {
++		unsigned int bytes = min_t(unsigned int, ret, sizeof(val));
++
++		fwnode_property_read_u8_array(mipi_port_fwnode,
++					      "mipi-img-lane-polarities",
++					      val, bytes);
++
++		/* Total number of lanes here is clock lane + data lanes */
++		if (bytes * BITS_PER_TYPE(u8) >= 1 + num_lanes) {
++			unsigned int i;
++
++			/* Move polarity bits to the lane polarity u32 array */
++			for (i = 0; i < 1 + num_lanes; i++)
++				port->lane_polarities[i] =
++					(bool)(val[i >> 3] & (1 << (i & 7)));
++
++			port->ep_props[NEXT_PROPERTY(*ep_prop_index, EP_LANE_POLARITIES)] =
++				PROPERTY_ENTRY_U32_ARRAY_LEN("lane-polarities",
++							     port->lane_polarities,
++							     1 + num_lanes);
++		} else {
++			acpi_handle_warn(acpi_device_handle(device),
++					 "too few lane polarity bytes (%u)\n",
++					 bytes);
++		}
++	}
++
++	ads->nodes[ACPI_DEVICE_SWNODE_EP(port_index)] =
++		SOFTWARE_NODE("endpoint@0", ads->ports[port_index].ep_props,
++			      &ads->nodes[ACPI_DEVICE_SWNODE_PRT(port_index)]);
 +}
 +
-+/*
-+ * Allocate memory and set up software nodes for an ACPI device with given
-+ * number of CSI-2 ports.
-+ */
-+void acpi_crs_csi2_alloc_fill_swnodes(size_t ports_count, acpi_handle handle)
++static void init_port_csi2_local(struct acpi_device *device,
++				 unsigned int port_nr)
 +{
-+	struct acpi_device_software_nodes *ads;
-+	struct crs_csi2_swnodes *swnodes;
-+	size_t alloc_size;
-+	unsigned int i;
-+	bool overflow;
-+	void *end;
++	unsigned int port_index = next_csi2_port_index(device->swnodes, port_nr);
++	struct fwnode_handle *mipi_port_fwnode =
++		get_mipi_port_handle(device, port_nr);
++	struct acpi_device_software_node_port *port =
++		&device->swnodes->ports[port_index];
++	unsigned int ep_prop_index;
++	int ret;
 +
-+	/*
-+	 * Allocate memory for ports, node pointers (number of nodes +
-+	 * 1 (guardian), nodes (root + number of ports * 2 (for for
-+	 * every port there is an endpoint)).
-+	 */
-+	overflow = check_mul_overflow(sizeof(*ads->ports) +
-+				      sizeof(*ads->nodes) * 2 +
-+				      sizeof(*ads->nodeptrs) * 2,
-+				      ports_count, &alloc_size);
-+	overflow = overflow ||
-+		   check_add_overflow(sizeof(*ads) + sizeof(*ads->nodes) +
-+				      sizeof(*ads->nodeptrs) * 2,
-+				      alloc_size, &alloc_size);
-+	if (overflow) {
-+		acpi_handle_warn(handle,
-+				 "too many _CRS CSI2 resource handles (%zu)",
-+				 ports_count);
-+		return;
++	init_port_csi2_common(device, mipi_port_fwnode, &ep_prop_index, port_nr);
++
++	ret = fwnode_property_count_u64(mipi_port_fwnode, "mipi-img-link-frequencies");
++	if (ret > 0) {
++		unsigned int num_link_freqs = ret;
++
++		if (num_link_freqs > ARRAY_SIZE(port->link_frequencies)) {
++			acpi_handle_info(acpi_device_handle(device),
++					 "too many link frequencies %u\n",
++					 num_link_freqs);
++			num_link_freqs = ARRAY_SIZE(port->link_frequencies);
++		}
++
++		ret = fwnode_property_read_u64_array(mipi_port_fwnode,
++						     "mipi-img-link-frequencies",
++						     port->link_frequencies,
++						     num_link_freqs);
++		if (!ret)
++			port->ep_props[NEXT_PROPERTY(ep_prop_index, EP_LINK_FREQUENCIES)] =
++				PROPERTY_ENTRY_U64_ARRAY_LEN("link-frequencies",
++							     port->link_frequencies,
++							     num_link_freqs);
++		else
++			acpi_handle_info(acpi_device_handle(device),
++					 "can't get link frequencies (%d)\n",
++					 ret);
 +	}
 +
-+	swnodes = kzalloc(sizeof(*swnodes), GFP_KERNEL);
-+	ads = kzalloc(alloc_size, GFP_KERNEL);
-+	ads->ports = (void *)(ads + 1);
-+	ads->nodes = (void *)(ads->ports + ports_count);
-+	ads->nodeptrs = (void *)(ads->nodes +
-+				 ports_count * 2 + 1);
-+	end = ads->nodeptrs + ports_count * 2 + 2;
-+	if (!swnodes || !ads || WARN_ON((void *)ads + alloc_size != end)) {
-+		kfree(swnodes);
-+		kfree(ads);
-+		acpi_handle_debug(handle,
-+				  "cannot allocate for %zu software nodes\n",
-+				  ports_count);
-+		return;
-+	}
++	fwnode_handle_put(mipi_port_fwnode);
++}
 +
-+	ads->num_ports = ports_count;
-+	for (i = 0; i < ports_count * 2 + 1; i++)
-+		ads->nodeptrs[i] = &ads->nodes[i];
-+	ads->nodeptrs[i] = NULL;
-+	for (i = 0; i < ports_count; i++)
-+		ads->ports[i].port_nr = NO_CSI2_PORT;
-+	swnodes->handle = handle;
-+	swnodes->ads = ads;
-+	list_add(&swnodes->list, &crs_csi2_swnodes);
++static void init_port_csi2_remote(struct acpi_device *device,
++				  unsigned int port_nr)
++{
++	struct fwnode_handle *mipi_port_fwnode = get_mipi_port_handle(device, port_nr);
++	unsigned int ep_prop_index;
++
++	init_port_csi2_common(device, mipi_port_fwnode, &ep_prop_index, port_nr);
++
++	fwnode_handle_put(mipi_port_fwnode);
 +}
 +
 +/**
-+ * acpi_bus_scan_crs_csi2 - Scan a device and its child devices for _CRS CSI-2
++ * acpi_init_swnodes - Set up software nodes for properties gathered elsewhere
 + *
-+ * @handle: Root of the ACPI Namespace branch to scan
++ * @device: ACPI device for which the software nodes are initialised
 + *
-+ * This function does a number of things:
-+ *
-+ * 1. Iteratively scan all ACPI device nodes starting from a handle for _CRS
-+ *    CSI-2 instances. The instances are stored for later use.
-+ *
-+ * 2. Count how many references to other devices _CRS CSI-2 instances have in
-+ *    total.
-+ *
-+ * 3. Count the number of references to other devices for each _CRS CSI-2
-+ *    instance.
-+ *
-+ * 4. Allocate memory for swnodes each ACPI device requires later on, and
-+ *    generate a list of such allocations.
-+ *
-+ * Note that struct acpi_device isn't available yet at this time.
++ * Initialise and register software nodes for properties for which the data is
++ * gathered elsewhere, e.g. _CRS CSI-2 descriptors. The process itself takes
++ * place before this function is called.
 + *
 + * acpi_scan_lock in scan.c must be held when calling this function.
 + */
-+void acpi_bus_scan_crs_csi2(acpi_handle handle)
++void acpi_init_swnodes(struct acpi_device *device)
 +{
-+	struct acpi_handle_ref *handle_refs;
-+	struct acpi_handle_ref *this = NULL;
-+	struct crs_csi2_all csi2_all = {
-+		.crs_csi2_head = LIST_HEAD_INIT(csi2_all.crs_csi2_head),
-+	};
-+	size_t this_count;
-+	unsigned int curr = 0;
-+	struct crs_csi2 *csi2;
++	struct acpi_device_software_nodes *ads;
++	struct acpi_buffer buffer = { .length = ACPI_ALLOCATE_BUFFER };
++	struct fwnode_handle *primary;
++	unsigned int i;
++	int ret;
 +
-+	/*
-+	 * Collect the devices that have a _CRS CSI-2 resource. Each CSI-2 TX
-+	 * port has one.
-+	 */
-+	acpi_walk_namespace(ACPI_TYPE_DEVICE, handle, ACPI_UINT32_MAX,
-+			    scan_check_crs_csi2, NULL, &csi2_all, NULL);
-+
-+	/* No handles? Bail out here. */
-+	if (!csi2_all.handle_count)
++	device->swnodes = ads = crs_csi2_swnode_get(device->handle);
++	if (!ads)
 +		return;
 +
-+	handle_refs = kcalloc(csi2_all.handle_count + 1, sizeof(*handle_refs),
-+			      GFP_KERNEL);
-+	if (!handle_refs) {
-+		acpi_handle_debug(handle, "no memory for %zu handle refs\n",
-+				  csi2_all.handle_count + 1);
++	if (ACPI_FAILURE(acpi_get_name(device->handle, ACPI_FULL_PATHNAME, &buffer))) {
++		acpi_handle_warn(acpi_device_handle(device), "cannot get path name\n");
 +		return;
 +	}
 +
-+	/* Associate handles to the number of references. */
-+	list_for_each_entry(csi2, &csi2_all.crs_csi2_head, list) {
-+		struct crs_csi2_instance *inst;
-+		struct acpi_handle_ref *handle_ref;
++	ads->nodes[ACPI_DEVICE_SWNODE_ROOT] =
++		SOFTWARE_NODE(buffer.pointer, ads->dev_props, NULL);
 +
-+		handle_ref = &handle_refs[curr++];
-+		handle_ref->handle = csi2->handle;
++	for (i = 0; i < ads->num_ports; i++) {
++		struct acpi_device_software_node_port *port = &ads->ports[i];
 +
-+		list_for_each_entry(inst, &csi2->buses, list) {
-+			handle_refs[curr].handle = inst->remote_handle;
-+			handle_refs[curr].count = 1;
-+			handle_ref->count++;
-+			curr++;
-+		}
++		if (port->crs_csi2_local)
++			init_port_csi2_local(device, port->port_nr);
++		else
++			init_port_csi2_remote(device, port->port_nr);
 +	}
 +
-+	handle_refs[curr].handle = NULL;
-+
-+	/* Sort the handles by remote so duplicates canbe easily found */
-+	sort(handle_refs, csi2_all.handle_count, sizeof(*handle_refs), crs_handle_cmp, NULL);
++	ret = software_node_register_node_group(ads->nodeptrs);
++	if (ret < 0) {
++		acpi_handle_warn(acpi_device_handle(device),
++				 "cannot register software nodes (%d)!\n", ret);
++		device->swnodes = NULL;
++		return;
++	}
 +
 +	/*
-+	 * Finally count references in each handle, allocate space for device
-+	 * specific ports, properties and fill the _CRS CSI2 descriptor
-+	 * originated data.
++	 * Note we can't use set_secondary_fwnode() here as the device's
++	 * primary fwnode hasn't been set yet.
 +	 */
-+	this = handle_refs;
-+	this_count = this->count;
-+	for (curr = 1; curr < csi2_all.handle_count + 1; curr++) {
-+		/* Weed out duplicate receiver devices */
-+		if (this->handle == handle_refs[curr].handle) {
-+			this_count += handle_refs[curr].count;
-+			continue;
-+		}
-+
-+		acpi_crs_csi2_alloc_fill_swnodes(this_count, this->handle);
-+
-+		this = &handle_refs[curr];
-+		this_count = this->count;
-+	}
-+
-+	kfree(handle_refs);
-+
-+	crs_csi2_release(&csi2_all.crs_csi2_head);
++	primary = acpi_fwnode_handle(device);
++	primary->secondary = software_node_fwnode(ads->nodes);
 +}
 diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-index 0c6f06abe3f47..50de874b8f208 100644
+index 50de874b8f208..9cc30c9c87080 100644
 --- a/drivers/acpi/scan.c
 +++ b/drivers/acpi/scan.c
-@@ -2423,9 +2423,12 @@ EXPORT_SYMBOL_GPL(acpi_dev_get_next_consumer_dev);
- int acpi_bus_scan(acpi_handle handle)
- {
- 	struct acpi_device *device = NULL;
-+	int ret = 0;
- 
- 	acpi_bus_scan_second_pass = false;
- 
-+	acpi_bus_scan_crs_csi2(handle);
-+
- 	/* Pass 1: Avoid enumerating devices with missing dependencies. */
- 
- 	if (ACPI_SUCCESS(acpi_bus_check_add(handle, true, &device)))
-@@ -2433,13 +2436,15 @@ int acpi_bus_scan(acpi_handle handle)
- 				    acpi_bus_check_add_1, NULL, NULL,
- 				    (void **)&device);
- 
--	if (!device)
--		return -ENODEV;
-+	if (!device) {
-+		ret = -ENODEV;
-+		goto out_release;
-+	}
- 
- 	acpi_bus_attach(device, (void *)true);
- 
- 	if (!acpi_bus_scan_second_pass)
--		return 0;
-+		goto out_release;
- 
- 	/* Pass 2: Enumerate all of the remaining devices. */
- 
-@@ -2452,7 +2457,10 @@ int acpi_bus_scan(acpi_handle handle)
- 
- 	acpi_bus_attach(device, NULL);
- 
--	return 0;
-+out_release:
-+	acpi_crs_csi2_swnodes_del_free();
-+
-+	return ret;
+@@ -449,10 +449,28 @@ static void acpi_free_power_resources_lists(struct acpi_device *device)
+ 	}
  }
- EXPORT_SYMBOL(acpi_bus_scan);
  
++static void acpi_free_swnodes(struct acpi_device *device)
++{
++	struct acpi_device_software_nodes *ads = device->swnodes;
++	struct fwnode_handle *primary;
++
++	if (!ads)
++		return;
++
++	software_node_unregister_node_group(ads->nodeptrs);
++	primary = acpi_fwnode_handle(device);
++	primary->secondary = NULL;
++	kfree(ads->nodes[ACPI_DEVICE_SWNODE_ROOT].name);
++	kfree(ads);
++
++	device->swnodes = NULL;
++}
++
+ static void acpi_device_release(struct device *dev)
+ {
+ 	struct acpi_device *acpi_dev = to_acpi_device(dev);
+ 
++	acpi_free_swnodes(acpi_dev);
+ 	acpi_free_properties(acpi_dev);
+ 	acpi_free_pnp_ids(&acpi_dev->pnp);
+ 	acpi_free_power_resources_lists(acpi_dev);
+@@ -1771,6 +1789,7 @@ void acpi_init_device_object(struct acpi_device *device, acpi_handle handle,
+ 	acpi_device_get_busid(device);
+ 	acpi_set_pnp_ids(handle, &device->pnp, type);
+ 	acpi_init_properties(device);
++	acpi_init_swnodes(device);
+ 	acpi_bus_get_flags(device);
+ 	device->flags.match_driver = false;
+ 	device->flags.initialized = true;
 diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
-index e44be31115a67..a05fe22c1175c 100644
+index a05fe22c1175c..e05d1c1f6ac23 100644
 --- a/include/acpi/acpi_bus.h
 +++ b/include/acpi/acpi_bus.h
-@@ -360,6 +360,17 @@ struct acpi_device_data {
+@@ -360,15 +360,84 @@ struct acpi_device_data {
  
  struct acpi_gpio_mapping;
  
-+struct acpi_device_software_node_port {
-+	unsigned int port_nr;
++enum acpi_device_swnode_dev_props {
++	ACPI_DEVICE_SWNODE_DEV_NUM_OF,
++	ACPI_DEVICE_SWNODE_DEV_NUM_ENTRIES
 +};
 +
-+struct acpi_device_software_nodes {
-+	struct acpi_device_software_node_port *ports;
-+	struct software_node *nodes;
-+	const struct software_node **nodeptrs;
-+	unsigned int num_ports;
++enum acpi_device_swnode_port_props {
++	ACPI_DEVICE_SWNODE_PRT_REG,
++	ACPI_DEVICE_SWNODE_PRT_NUM_OF,
++	ACPI_DEVICE_SWNODE_PRT_NUM_ENTRIES
 +};
 +
++enum acpi_device_swnode_ep_props {
++	ACPI_DEVICE_SWNODE_EP_REMOTE_EP,
++	ACPI_DEVICE_SWNODE_EP_BUS_TYPE,
++	ACPI_DEVICE_SWNODE_EP_REG,
++	ACPI_DEVICE_SWNODE_EP_CLOCK_LANES,
++	ACPI_DEVICE_SWNODE_EP_DATA_LANES,
++	ACPI_DEVICE_SWNODE_EP_LANE_POLARITIES,
++	/* TX only */
++	ACPI_DEVICE_SWNODE_EP_LINK_FREQUENCIES,
++	ACPI_DEVICE_SWNODE_EP_NUM_OF,
++	ACPI_DEVICE_SWNODE_EP_NUM_ENTRIES
++};
++
++#define ACPI_DEVICE_SWNODE_ROOT			0
++/*
++ * Each device has a root swnode plus two times as many nodes as the
++ * number of CSI-2 ports.
++ */
++#define ACPI_DEVICE_SWNODE_PRT(port)		(1 + 2 * (port))
++#define ACPI_DEVICE_SWNODE_EP(endpoint)	\
++	(ACPI_DEVICE_SWNODE_PRT(endpoint) + 1)
++
++#define ACPI_DEVICE_SWNODE_CSI2_DATA_LANES		4
++
++/**
++ * struct acpi_device_software_node_port: Software nodes for MIPI DisCo for
++ *					  Imaging support
++ * @port_name: the name of the port
++ * @data_lanes: "data-lanes" property values
++ * @lane_polarities: "lane-polarities" property values
++ * @link_frequencies: "link_frequencies" property values
++ * @port_nr: the number of the port
++ * @crs_crs2_local: whether the _CRS CSI2 record is local to the port (i.e. the
++ *		    port is a transmitter port)
++ * port_props: the port properties
++ * ep_props: the endpoint properties
++ * remote_ep_ref: reference to the remote endpoint
++ */
+ struct acpi_device_software_node_port {
++	char port_name[8];
++	u32 data_lanes[ACPI_DEVICE_SWNODE_CSI2_DATA_LANES];
++	u32 lane_polarities[1 /* clock lane */ +
++			    ACPI_DEVICE_SWNODE_CSI2_DATA_LANES];
++	u64 link_frequencies[4];
+ 	unsigned int port_nr;
++	bool crs_csi2_local;
++
++	struct property_entry port_props[ACPI_DEVICE_SWNODE_PRT_NUM_ENTRIES];
++	struct property_entry ep_props[ACPI_DEVICE_SWNODE_EP_NUM_ENTRIES];
++
++	struct software_node_ref_args remote_ep_ref[1];
+ };
+ 
++/**
++ * struct acpi_device_software_nodes - Software nodes for an ACPI device
++ * @ports: information related to each port and endpoint within a port
++ * @nodes: software nodes for root as well as ports and endpoints
++ * @nodeprts: array of software node pointers, for (un)registering them
++ * @num_ports: the number of ports
++ */
+ struct acpi_device_software_nodes {
+ 	struct acpi_device_software_node_port *ports;
+ 	struct software_node *nodes;
+ 	const struct software_node **nodeptrs;
+ 	unsigned int num_ports;
++
++	struct property_entry dev_props[ACPI_DEVICE_SWNODE_DEV_NUM_ENTRIES];
+ };
+ 
  /* Device */
- struct acpi_device {
- 	u32 pld_crc;
+@@ -377,6 +446,7 @@ struct acpi_device {
+ 	int device_type;
+ 	acpi_handle handle;		/* no handle for fixed hardware */
+ 	struct fwnode_handle fwnode;
++	struct acpi_device_software_nodes *swnodes;
+ 	struct list_head wakeup_list;
+ 	struct list_head del_list;
+ 	struct acpi_device_status status;
 -- 
 2.30.2
 
