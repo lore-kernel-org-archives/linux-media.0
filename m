@@ -2,165 +2,111 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D089C636D3
-	for <linux-media@archiver.kernel.org>; Wed,  8 Feb 2023 21:05:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A911CC05027
+	for <linux-media@archiver.kernel.org>; Wed,  8 Feb 2023 21:27:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232080AbjBHVFP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Feb 2023 16:05:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40138 "EHLO
+        id S231531AbjBHV1g (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Feb 2023 16:27:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232357AbjBHVEq (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Feb 2023 16:04:46 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690C9125AB;
-        Wed,  8 Feb 2023 13:04:19 -0800 (PST)
+        with ESMTP id S231489AbjBHV1f (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Feb 2023 16:27:35 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310D71E5D7;
+        Wed,  8 Feb 2023 13:27:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675890259; x=1707426259;
+  t=1675891654; x=1707427654;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=FZG9PLpoY1qYgYnRoz88BAvdkbKCEGF3ZT8rJwxcgmM=;
-  b=IHMKQX6I52i1SYeYDHr4jrs3gIuJdgjUh2emylHyWjXuAgWO0tKcU037
-   +Ba/dukktNYTMGEAnVdzzB2NS8GMjtl3CT1evCZkN3bm3/MQcz+g86jfn
-   DI3ShKEm+KZq9bKRANpaDoh+1F/nxfC6GdBjbRy+4Eun+I8QSjhmS5bqx
-   KIM5WYe8viNpsgwL37EulYTCSKP5xUyiKk26bpTgIt0vXF1GmOTeGR0JO
-   r/mEK0x21cNZ1xGTD3zddwdI85kV92yEY5Srm6fRlnhzsWmxk8p2yaO5t
-   HRguKNf3CGlK/4DvnDT9EfTLVYEoSqjIcv0joQYkz7WJ++SKnmQ/lFbzS
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="332048278"
+  bh=zY/5QQL5G7M2ItNNs5xB/kWxPlChJgQ3KM+vywG553k=;
+  b=EF8Rh5KTulqFvawvwnqeU8dyEvqhi4HH/9ba4DyzCXnm50lm+OkaHD1n
+   QGAp+YSsAWCPwtw6PlOxo3t1MSJdylLqi4l8i2l2RD0WvwcK7y83ZHOcm
+   6XxwLcUTPawmI0A/QCAv3mLIVcO7rdOrkPpuGfiigOMEGs0NxxS2KXmM3
+   +rblHyc+o43EecP0rDwllS8Wgo/EOv1OsySnWJ2OvbH7K5Wm0JoAgF4BV
+   YasDMs/XfbwaNtInPYclaPCyUS2Iw1Ei+HHfnX190nPJ7NlxJkoSWqQid
+   elTMC2eLpzrMqLjjO/8dUAYUqOt3DiV9OCNYXMTW2pCMGBnoJDheXHgpk
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="313566121"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="332048278"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 13:04:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="996284230"
+   d="scan'208";a="313566121"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 13:27:33 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="756180407"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="996284230"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Feb 2023 13:04:15 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pPrby-0004eM-0b;
-        Wed, 08 Feb 2023 21:04:14 +0000
-Date:   Thu, 9 Feb 2023 05:04:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-acpi@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
-        rafael@kernel.org, andriy.shevchenko@linux.intel.com,
-        heikki.krogerus@linux.intel.com
-Subject: Re: [PATCH v4 2/8] ACPI: property: Parse _CRS CSI-2 descriptor
-Message-ID: <202302090459.kIM95vle-lkp@intel.com>
-References: <20230208152807.3064242-3-sakari.ailus@linux.intel.com>
+   d="scan'208";a="756180407"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 13:27:32 -0800
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id 5ADCB120D20;
+        Wed,  8 Feb 2023 23:27:29 +0200 (EET)
+Date:   Wed, 8 Feb 2023 23:27:29 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-acpi@vger.kernel.org, linux-media@vger.kernel.org,
+        rafael@kernel.org, heikki.krogerus@linux.intel.com
+Subject: Re: [PATCH v4 6/8] ACPI: property: Rename parsed MIPI DisCo for
+ Imaging properties
+Message-ID: <Y+QTwQq07XvRLQt/@kekkonen.localdomain>
+References: <20230208152807.3064242-1-sakari.ailus@linux.intel.com>
+ <20230208152807.3064242-7-sakari.ailus@linux.intel.com>
+ <Y+PUO3a8ZOq0Haa2@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230208152807.3064242-3-sakari.ailus@linux.intel.com>
+In-Reply-To: <Y+PUO3a8ZOq0Haa2@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari,
+On Wed, Feb 08, 2023 at 06:56:27PM +0200, Andy Shevchenko wrote:
+> On Wed, Feb 08, 2023 at 05:28:05PM +0200, Sakari Ailus wrote:
+> > MIPI DisCo for Imaging defines properties for sensor-adjacent devices such
+> > as EEPROM, LED flash or lens VCM as either device or sub-node references.
+> > This is compliant with existing DT definitions apart from property names.
+> > 
+> > Rename parsed MIPI-defined properties so drivers will have a unified view
+> > of them as defined in DT and already parsed by drivers. This can be done
+> > in-place as the MIPI-defined property strings are always longer than the
+> > DT one. This also results in loss of constness in parser function
+> > arguments.
+> > 
+> > Individual bindings to devices could define the references differently
+> > between MIPI DisCo for Imaging and DT, in terms of device or sub-node
+> > references. This will still need to be handled in the drivers themselves.
+> 
+> ...
+> 
+> > +void acpi_properties_prepare_mipi(union acpi_object *elements)
+> > +{
+> > +	unsigned int i;
+> > +
+> > +	/* Replace MIPI DisCo for Imaging property names with DT equivalents. */
+> > +	for (i = 0; i < ARRAY_SIZE(mipi_disco_props); i++) {
+> > +		if (!strcmp(mipi_disco_props[i].mipi_prop,
+> > +			    elements[0].string.pointer)) {
+> 
+> 	/* const ? */ char *e0 = elements[0].string.pointer;
 
-I love your patch! Perhaps something to improve:
+Yes, and can be placed outside the loop.
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on sailus-media-tree/streams linus/master v6.2-rc7 next-20230208]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sakari-Ailus/ACPI-property-Parse-data-node-string-references-in-properties/20230208-233112
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20230208152807.3064242-3-sakari.ailus%40linux.intel.com
-patch subject: [PATCH v4 2/8] ACPI: property: Parse _CRS CSI-2 descriptor
-config: x86_64-rhel-8.3-syz (https://download.01.org/0day-ci/archive/20230209/202302090459.kIM95vle-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/d78f47f2d5051c50bdcea131da1779ec0fc8e266
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sakari-Ailus/ACPI-property-Parse-data-node-string-references-in-properties/20230208-233112
-        git checkout d78f47f2d5051c50bdcea131da1779ec0fc8e266
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/acpi/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/20230208152807.3064242-3-sakari.ailus@linux.intel.com
-
-All warnings (new ones prefixed by >>):
-
->> drivers/acpi/mipi.c:205:6: warning: no previous prototype for 'acpi_crs_csi2_alloc_fill_swnodes' [-Wmissing-prototypes]
-     205 | void acpi_crs_csi2_alloc_fill_swnodes(size_t ports_count, acpi_handle handle)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/acpi_crs_csi2_alloc_fill_swnodes +205 drivers/acpi/mipi.c
-
-   200	
-   201	/*
-   202	 * Allocate memory and set up software nodes for an ACPI device with given
-   203	 * number of CSI-2 ports.
-   204	 */
- > 205	void acpi_crs_csi2_alloc_fill_swnodes(size_t ports_count, acpi_handle handle)
-   206	{
-   207		struct acpi_device_software_nodes *ads;
-   208		struct crs_csi2_swnodes *swnodes;
-   209		size_t alloc_size;
-   210		unsigned int i;
-   211		bool overflow;
-   212		void *end;
-   213	
-   214		/*
-   215		 * Allocate memory for ports, node pointers (number of nodes +
-   216		 * 1 (guardian), nodes (root + number of ports * 2 (for for
-   217		 * every port there is an endpoint)).
-   218		 */
-   219		overflow = check_mul_overflow(sizeof(*ads->ports) +
-   220					      sizeof(*ads->nodes) * 2 +
-   221					      sizeof(*ads->nodeptrs) * 2,
-   222					      ports_count, &alloc_size);
-   223		overflow = overflow ||
-   224			   check_add_overflow(sizeof(*ads) + sizeof(*ads->nodes) +
-   225					      sizeof(*ads->nodeptrs) * 2,
-   226					      alloc_size, &alloc_size);
-   227		if (overflow) {
-   228			acpi_handle_warn(handle,
-   229					 "too many _CRS CSI2 resource handles (%zu)",
-   230					 ports_count);
-   231			return;
-   232		}
-   233	
-   234		swnodes = kzalloc(sizeof(*swnodes), GFP_KERNEL);
-   235		ads = kzalloc(alloc_size, GFP_KERNEL);
-   236		ads->ports = (void *)(ads + 1);
-   237		ads->nodes = (void *)(ads->ports + ports_count);
-   238		ads->nodeptrs = (void *)(ads->nodes +
-   239					 ports_count * 2 + 1);
-   240		end = ads->nodeptrs + ports_count * 2 + 2;
-   241		if (!swnodes || !ads || WARN_ON((void *)ads + alloc_size != end)) {
-   242			kfree(swnodes);
-   243			kfree(ads);
-   244			acpi_handle_debug(handle,
-   245					  "cannot allocate for %zu software nodes\n",
-   246					  ports_count);
-   247			return;
-   248		}
-   249	
-   250		ads->num_ports = ports_count;
-   251		for (i = 0; i < ports_count * 2 + 1; i++)
-   252			ads->nodeptrs[i] = &ads->nodes[i];
-   253		ads->nodeptrs[i] = NULL;
-   254		for (i = 0; i < ports_count; i++)
-   255			ads->ports[i].port_nr = NO_CSI2_PORT;
-   256		swnodes->handle = handle;
-   257		swnodes->ads = ads;
-   258		list_add(&swnodes->list, &crs_csi2_swnodes);
-   259	}
-   260	
+> 	...
+> 
+> 		if (!strcmp(mipi_disco_props[i].mipi_prop, e0)) {
+> 
+> > +			WARN_ON(strscpy(elements[0].string.pointer,
+> > +					mipi_disco_props[i].dt_prop,
+> > +					elements[0].string.length) < 0);
+> 
+> 			WARN_ON(strscpy(e0, mipi_disco_props[i].dt_prop,
+> 					elements[0].string.pointer) < 0);
+> ?
+> 
+> > +			break;
+> > +		}
+> > +	}
+> > +}
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Sakari Ailus
