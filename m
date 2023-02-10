@@ -2,172 +2,74 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 505CEC636D7
-	for <linux-media@archiver.kernel.org>; Fri, 10 Feb 2023 20:34:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96275C05027
+	for <linux-media@archiver.kernel.org>; Fri, 10 Feb 2023 22:56:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233826AbjBJUeQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 10 Feb 2023 15:34:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
+        id S229563AbjBJW41 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 10 Feb 2023 17:56:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233731AbjBJUeO (ORCPT
+        with ESMTP id S229520AbjBJW40 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 10 Feb 2023 15:34:14 -0500
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBB75775D;
-        Fri, 10 Feb 2023 12:34:13 -0800 (PST)
-Received: from [192.168.178.23] (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 222ACCE079;
-        Fri, 10 Feb 2023 20:33:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1676061222; bh=NimFQ8qTxjNMgj+QJDqXqhUucdJGF+U/6niOgptmXB8=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=vT6EaXsmYjbRdliJC/oZgD/XpS9m6T2sInNLpwkwxGt69M1CxvOtFPLZHFudEMYik
-         cVbhaMQxcLozFm2Z5L/405bqsGSkEJZGt74/GoTfIz7xxHybUEjndubYAWv/K71Bia
-         bQrecKGDqlWp7+iDdeWNhcP6xKMnfoGaPyI3TdE8=
-From:   Luca Weiss <luca@z3ntu.xyz>
-Date:   Fri, 10 Feb 2023 21:33:17 +0100
-Subject: [PATCH 1/2] media: i2c: ov5670: Use dev_err_probe in probe
- function
+        Fri, 10 Feb 2023 17:56:26 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7AD26586;
+        Fri, 10 Feb 2023 14:56:25 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 55668886;
+        Fri, 10 Feb 2023 23:56:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1676069784;
+        bh=HlMIBUjC0BU9Jb7s8XXv15LvZLpgq8Ao2/R1GtyHTyc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Spbqt+F0Fb7K4oY7iRoLM6lvzR6BJlMHqyC4NIdtpCnbrYP9/hFQ5aGqnydXw9xGI
+         OF2Rz8Df1Mm5++YNouLe21f3fs6PstMuvq65VnOJMqfZc/r3kwKVPGz5bqnU9kj+0A
+         vULxcvY/MiirfH8W2rzCXEV286EWaW4iwG5hi3S0=
+From:   Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 0/2] media: i2c: adv7604: Fix handling of video adjustments
+Date:   Sat, 11 Feb 2023 00:56:20 +0200
+Message-Id: <20230210225622.24411-1-laurent.pinchart+renesas@ideasonboard.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230210-ov5670-single-lane-v1-1-71835d39c1ce@z3ntu.xyz>
-References: <20230210-ov5670-single-lane-v1-0-71835d39c1ce@z3ntu.xyz>
-In-Reply-To: <20230210-ov5670-single-lane-v1-0-71835d39c1ce@z3ntu.xyz>
-To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Luca Weiss <luca@z3ntu.xyz>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3379; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=NimFQ8qTxjNMgj+QJDqXqhUucdJGF+U/6niOgptmXB8=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBj5qokHxG/8/bw3S2N9IqcfHeeZIpYxPYx71uRA
- d76VwsUEcmJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCY+aqJAAKCRBy2EO4nU3X
- VrOAEACSF5Wq58lQPsy3r7xIH2SMSNKdyDtDAguCSDEp67NGovwnk3CukeZbQyi/GQP4489Xx9H
- YgfS5Nk6q0eCtSZm2Gv/IbX9NiJGODjspG/PV0Q52VqDPsjFJCDpDwRgeOc60hpabx0cKm1+ScT
- 1UF+ODRntvxUfY6IgxpJz6aYQpVAvsSMbbiaYIkzwiXkgTLwvBNkDIBe2/cUI448QeMWsV4lTTP
- iwDH2Lmv2IRN9iqu7VNYH2fXdPOej0GG3XCCI7fMxj45cYPMoxzvZseaMex8s4eCvhRrM1oJ1GR
- MaAJOxbnkCBuWpyP1e0Zqh+GwpMTiA1VBb8Wyrikje+C6/TWOiwBdipshL3p3728rO+eC9N9qxA
- YE3UVmNEsaTG4GnPYSrH46kq9CzekDeWbA+eYgzryqZ5SsMEw38E0XSYIWI/b16wz0Wkc+AVaPV
- qHlzMm4RPKb6p7ZzRju8wdOF2bqeOFJF2sHNtAxhfKnCJrMwRXaeS6982V4jU99FXxgUkuuXIdM
- UuiFLzFS3C8dxi+plGV9dk8mU54yzSsmij7LfYQJNSHbvE/9dTVhA/tb8ii9l1IXrJrwnAGFO6H
- RXGuWOcNXJN7Vvj4h4T28o4r04OzUf7i0ZLSPEFtrAELZc9udK8sBvgQHSyLhpI8mH3Cx52qGht
- PbsLfGibgZdnAQQ==
-X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
- fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Replace the unusual const char *err_msg usage with dev_err_probe which
-also handles -EPROBE_DEFER better by not printing the message to kmsg.
+Hello,
 
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
----
- drivers/media/i2c/ov5670.c | 37 ++++++++++++-------------------------
- 1 file changed, 12 insertions(+), 25 deletions(-)
+This small series fixes two issues with video adjustments (brightness,
+contrast, saturation and hue) in the adv7604 driver. Patch 1/2 makes
+those controls effective (they currently have no effect), and patch 2/2
+fixes the range of the hue control.
 
-diff --git a/drivers/media/i2c/ov5670.c b/drivers/media/i2c/ov5670.c
-index f79d908f4531..189920571df2 100644
---- a/drivers/media/i2c/ov5670.c
-+++ b/drivers/media/i2c/ov5670.c
-@@ -2648,17 +2648,13 @@ static int ov5670_gpio_probe(struct ov5670 *ov5670)
- static int ov5670_probe(struct i2c_client *client)
- {
- 	struct ov5670 *ov5670;
--	const char *err_msg;
- 	u32 input_clk = 0;
- 	bool full_power;
- 	int ret;
- 
- 	ov5670 = devm_kzalloc(&client->dev, sizeof(*ov5670), GFP_KERNEL);
--	if (!ov5670) {
--		ret = -ENOMEM;
--		err_msg = "devm_kzalloc() error";
--		goto error_print;
--	}
-+	if (!ov5670)
-+		return -ENOMEM;
- 
- 	ov5670->xvclk = devm_clk_get(&client->dev, NULL);
- 	if (!IS_ERR_OR_NULL(ov5670->xvclk))
-@@ -2680,29 +2676,23 @@ static int ov5670_probe(struct i2c_client *client)
- 	v4l2_i2c_subdev_init(&ov5670->sd, client, &ov5670_subdev_ops);
- 
- 	ret = ov5670_regulators_probe(ov5670);
--	if (ret) {
--		err_msg = "Regulators probe failed";
--		goto error_print;
--	}
-+	if (ret)
-+		return dev_err_probe(&client->dev, ret, "Regulators probe failed\n");
- 
- 	ret = ov5670_gpio_probe(ov5670);
--	if (ret) {
--		err_msg = "GPIO probe failed";
--		goto error_print;
--	}
-+	if (ret)
-+		return dev_err_probe(&client->dev, ret, "GPIO probe failed\n");
- 
- 	full_power = acpi_dev_state_d0(&client->dev);
- 	if (full_power) {
- 		ret = ov5670_runtime_resume(&client->dev);
--		if (ret) {
--			err_msg = "Power up failed";
--			goto error_print;
--		}
-+		if (ret)
-+			return dev_err_probe(&client->dev, ret, "Power up failed\n");
- 
- 		/* Check module identity */
- 		ret = ov5670_identify_module(ov5670);
- 		if (ret) {
--			err_msg = "ov5670_identify_module() error";
-+			dev_err_probe(&client->dev, ret, "ov5670_identify_module() error\n");
- 			goto error_power_off;
- 		}
- 	}
-@@ -2714,7 +2704,7 @@ static int ov5670_probe(struct i2c_client *client)
- 
- 	ret = ov5670_init_controls(ov5670);
- 	if (ret) {
--		err_msg = "ov5670_init_controls() error";
-+		dev_err_probe(&client->dev, ret, "ov5670_init_controls() error\n");
- 		goto error_mutex_destroy;
- 	}
- 
-@@ -2727,7 +2717,7 @@ static int ov5670_probe(struct i2c_client *client)
- 	ov5670->pad.flags = MEDIA_PAD_FL_SOURCE;
- 	ret = media_entity_pads_init(&ov5670->sd.entity, 1, &ov5670->pad);
- 	if (ret) {
--		err_msg = "media_entity_pads_init() error";
-+		dev_err_probe(&client->dev, ret, "media_entity_pads_init() error\n");
- 		goto error_handler_free;
- 	}
- 
-@@ -2741,7 +2731,7 @@ static int ov5670_probe(struct i2c_client *client)
- 	/* Async register for subdev */
- 	ret = v4l2_async_register_subdev_sensor(&ov5670->sd);
- 	if (ret < 0) {
--		err_msg = "v4l2_async_register_subdev() error";
-+		dev_err_probe(&client->dev, ret, "v4l2_async_register_subdev() error\n");
- 		goto error_pm_disable;
- 	}
- 
-@@ -2764,9 +2754,6 @@ static int ov5670_probe(struct i2c_client *client)
- 	if (full_power)
- 		ov5670_runtime_suspend(&client->dev);
- 
--error_print:
--	dev_err(&client->dev, "%s: %s %d\n", __func__, err_msg, ret);
--
- 	return ret;
- }
- 
+I have successfully tested the series with an ADV7612. The ADV7604 and
+ADV7611 documentation of the hue control differs from the ADV7612, but I
+believe that's because earlier documentation was incorrect. It could
+still be useful to test the series with an ADV7604 or ADV7611.
+
+In patch 2/2 I've decided to represent the hue value as an unsigned
+8-bit integer, mapping to the [0°, 360°[ range. Using a signed value
+would map to the [-180°, 180°[ range instead, without making any other
+difference (and without requiring any modification to the patch other
+than changing the range). I don't have a strong preference between the
+two options, and I'm pretty sure we can freely pick one without any fear
+of an impact on existing userspace applications as patch 1/2 shows that
+the hue control has currently no effect.
+
+Laurent Pinchart (2):
+  media: i2c: adv7604: Enable video adjustment
+  media: i2c: adv7604: Fix range of hue control
+
+ drivers/media/i2c/adv7604.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
 -- 
-2.39.1
+Regards,
+
+Laurent Pinchart
 
