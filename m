@@ -2,256 +2,92 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D920EC61DA4
-	for <linux-media@archiver.kernel.org>; Sat, 11 Feb 2023 13:47:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10B90C61DA4
+	for <linux-media@archiver.kernel.org>; Sat, 11 Feb 2023 14:23:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbjBKNrm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 11 Feb 2023 08:47:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
+        id S229553AbjBKOXo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 11 Feb 2023 09:23:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjBKNrl (ORCPT
+        with ESMTP id S229447AbjBKOXn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 11 Feb 2023 08:47:41 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B4928200
-        for <linux-media@vger.kernel.org>; Sat, 11 Feb 2023 05:47:39 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id h16so7817983wrz.12
-        for <linux-media@vger.kernel.org>; Sat, 11 Feb 2023 05:47:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1RtrS8mLtl7ssVBCGB2QEC8eHd7/s0+c6vonCW3UXCY=;
-        b=lNTCUPyKJh67Sp45u9X7lDBFO3QWb+wjDKRFL7yoUvliYg1+MpNteOmztjMJEsLapN
-         pWbJOY/aTu4zPeshTOyW7aq7/tnvh0jGpf61UAY3QP74rLCtfgrksK+Ne5hbns+/StKM
-         d+0cn05eTZ+ZQbIcSALV1jA+xV+53Qyd+XOgcujfong1TPfu0O+dd/kjLScuhWEXb2xD
-         Citjpu+mMvYBcqxJybPP332tnWwqturUht8l60XnXgdV6cbTw39QRzDYo3s3H6pEsKdW
-         YbvCnLT1gv2fvmHAhd5I2rDYuiBTR+S4J8rKBs2Q4OKchyk1HRyW7PT5wF9uh9RsuMlr
-         uaqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1RtrS8mLtl7ssVBCGB2QEC8eHd7/s0+c6vonCW3UXCY=;
-        b=NxBYy2sg1f4qJn57wcSsf0ExT6DNpXIHcfc5pAqHIHClWawXQQXkmylkXHjehJUdq9
-         D6NM6H/MerWpRwrSLgywMIiRdLzH82UFeGzs5KcOb72tMshK92dirj+oZRpVcgBRGPYV
-         izjh+7PbigEnVMoxEY7qotv2EU+CljJJTQ941cekeK9NF40Zq0q+iTUBEotIB5HdPYcD
-         suhFZjehKaqlW7JGXXyWRvYSxe2VP0GTy8vDU7FPgAhb+EtAiuJjv3tLT6sCPLqOAguq
-         tuBKVxXHXmlIqBaz7iJJWdFjpSjwEzoFo4w58O/vkeG5/gerbxAxzloXX20HqkmA+42Z
-         SOhg==
-X-Gm-Message-State: AO0yUKXFKFWrjeiISFIUezAzXiop8uc4nsYhtqPbRwtezaWBOlsNlvdw
-        KvcO09K5VtiGz/TWyPJSWR5Agg==
-X-Google-Smtp-Source: AK7set8uab1hRAPzEt+iup9dx4I6F+c3TfUmqNTMUc36rapfNi9/19ZWTFvQcsWtzjhVHWijRHusIw==
-X-Received: by 2002:a5d:5389:0:b0:2c3:f808:2d97 with SMTP id d9-20020a5d5389000000b002c3f8082d97mr15682310wrv.43.1676123257958;
-        Sat, 11 Feb 2023 05:47:37 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id y9-20020adfee09000000b002c550eb062fsm1118055wrn.14.2023.02.11.05.47.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Feb 2023 05:47:37 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/3] media: dt-bindings: i2c: samsung,s5k5baf: convert to dtschema
-Date:   Sat, 11 Feb 2023 14:47:30 +0100
-Message-Id: <20230211134731.85957-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230211134731.85957-1-krzysztof.kozlowski@linaro.org>
-References: <20230211134731.85957-1-krzysztof.kozlowski@linaro.org>
+        Sat, 11 Feb 2023 09:23:43 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC98D23C6C;
+        Sat, 11 Feb 2023 06:23:41 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pQqmy-000309-Cp; Sat, 11 Feb 2023 15:23:40 +0100
+Message-ID: <3d702234-88b3-42ae-9b12-0ccf19bd9bcb@leemhuis.info>
+Date:   Sat, 11 Feb 2023 15:23:39 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 2/3] venus: firmware: Correct non-pix start and end
+ addresses
+Content-Language: en-US, de-DE
+From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Nathan Hebert <nhebert@chromium.org>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
+          Linux regressions mailing list 
+          <regressions@lists.linux.dev>
+References: <20221005083730.963322-1-stanimir.varbanov@linaro.org>
+ <20221005083730.963322-3-stanimir.varbanov@linaro.org>
+ <Y9LSMap+jRxbtpC8@google.com>
+ <b2007bc9-b05f-eb17-a373-9587b01d3788@leemhuis.info>
+In-Reply-To: <b2007bc9-b05f-eb17-a373-9587b01d3788@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676125421;f3f8427f;
+X-HE-SMSGID: 1pQqmy-000309-Cp
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convert the Samsung S5K5BAF image sensor bindings to DT schema.
+[TLDR: This mail in primarily relevant for Linux regression tracking. A
+change or fix related to the regression discussed in this thread was
+posted or applied, but it did not use a Link: tag to point to the
+report, as Linus and the documentation call for. Things happen, no
+worries -- but now the regression tracking bot needs to be told manually
+about the fix. See link in footer if these mails annoy you.]
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/media/i2c/samsung,s5k5baf.yaml   | 101 ++++++++++++++++++
- .../bindings/media/samsung-s5k5baf.txt        |  58 ----------
- 2 files changed, 101 insertions(+), 58 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/samsung,s5k5baf.yaml
- delete mode 100644 Documentation/devicetree/bindings/media/samsung-s5k5baf.txt
+On 05.02.23 12:00, Linux kernel regression tracking (#adding) wrote:
+> On 26.01.23 20:19, Matthias Kaehlcke wrote:
+>> On Wed, Oct 05, 2022 at 11:37:29AM +0300, Stanimir Varbanov wrote:
+>>> The default values for those registers are zero.
+>>>
+>>> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+> [...]
+>> I found that this commit prevents the AOSS from entering sleep mode during
+>> system suspend at least on sc7180 and sc7280. AOSS not entering sleep mode
+>> leads to a (apparently significant) increase in S3 power consumption, on
+>> trogdor and herobrine it prevents the system from staying suspended, because
+>> the embedded controller detect the condition and wakes the sytem up again.
+> 
+> Thanks for the report. To be sure the issue doesn't fall through the
+> cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+> tracking bot:
+> 
+> #regzbot ^introduced a837e5161cfffbb32
+> #regzbot title meida: venus: firmware: AOSS doesn't seel anymore on at
+> least sc7180 and sc7280
+> #regzbot ignore-activity
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/samsung,s5k5baf.yaml b/Documentation/devicetree/bindings/media/i2c/samsung,s5k5baf.yaml
-new file mode 100644
-index 000000000000..c8f2955e0825
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/samsung,s5k5baf.yaml
-@@ -0,0 +1,101 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/samsung,s5k5baf.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Samsung S5K5BAF UXGA 1/5" 2M CMOS Image Sensor with embedded SoC ISP
-+
-+maintainers:
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-+
-+properties:
-+  compatible:
-+    const: samsung,s5k5baf
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: mclk
-+
-+  clock-frequency:
-+    default: 24000000
-+    description: mclk clock frequency
-+
-+  rstn-gpios:
-+    maxItems: 1
-+    description: RSTN pin
-+
-+  stbyn-gpios:
-+    maxItems: 1
-+    description: STDBYN pin
-+
-+  vdda-supply:
-+    description: Analog power supply 2.8V (2.6V to 3.0V)
-+
-+  vddio-supply:
-+    description: I/O power supply 1.8V (1.65V to 1.95V) or 2.8V (2.5V to 3.1V)
-+
-+  vddreg-supply:
-+    description:
-+      Regulator input power supply 1.8V (1.7V to 1.9V) or 2.8V (2.6V to 3.0)
-+
-+  port:
-+    $ref: /schemas/graph.yaml#/$defs/port-base
-+    additionalProperties: false
-+
-+    properties:
-+      endpoint:
-+        $ref: /schemas/media/video-interfaces.yaml#
-+        unevaluatedProperties: false
-+
-+        properties:
-+          data-lanes:
-+            items:
-+              - const: 1
-+
-+required:
-+  - compatible
-+  - clocks
-+  - clock-names
-+  - rstn-gpios
-+  - stbyn-gpios
-+  - vdda-supply
-+  - vddio-supply
-+  - vddreg-supply
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        sensor@2d {
-+            compatible = "samsung,s5k5baf";
-+            reg = <0x2d>;
-+            clocks = <&camera 0>;
-+            clock-names = "mclk";
-+            clock-frequency = <24000000>;
-+            rstn-gpios = <&gpl2 1 GPIO_ACTIVE_LOW>;
-+            stbyn-gpios = <&gpl2 0 GPIO_ACTIVE_LOW>;
-+            vdda-supply = <&cam_io_en_reg>;
-+            vddio-supply = <&vtcam_reg>;
-+            vddreg-supply = <&vt_core_15v_reg>;
-+
-+            port {
-+                endpoint {
-+                    remote-endpoint = <&csis1_ep>;
-+                    data-lanes = <1>;
-+                };
-+            };
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/media/samsung-s5k5baf.txt b/Documentation/devicetree/bindings/media/samsung-s5k5baf.txt
-deleted file mode 100644
-index 1f51e0439c96..000000000000
---- a/Documentation/devicetree/bindings/media/samsung-s5k5baf.txt
-+++ /dev/null
-@@ -1,58 +0,0 @@
--Samsung S5K5BAF UXGA 1/5" 2M CMOS Image Sensor with embedded SoC ISP
----------------------------------------------------------------------
--
--Required properties:
--
--- compatible	  : "samsung,s5k5baf";
--- reg		  : I2C slave address of the sensor;
--- vdda-supply	  : analog power supply 2.8V (2.6V to 3.0V);
--- vddreg-supply	  : regulator input power supply 1.8V (1.7V to 1.9V)
--		    or 2.8V (2.6V to 3.0);
--- vddio-supply	  : I/O power supply 1.8V (1.65V to 1.95V)
--		    or 2.8V (2.5V to 3.1V);
--- stbyn-gpios	  : GPIO connected to STDBYN pin;
--- rstn-gpios	  : GPIO connected to RSTN pin;
--- clocks	  : list of phandle and clock specifier pairs
--		    according to common clock bindings for the
--		    clocks described in clock-names;
--- clock-names	  : should include "mclk" for the sensor's master clock;
--
--Optional properties:
--
--- clock-frequency : the frequency at which the "mclk" clock should be
--		    configured to operate, in Hz; if this property is not
--		    specified default 24 MHz value will be used.
--
--The device node should contain one 'port' child node with one child 'endpoint'
--node, according to the bindings defined in Documentation/devicetree/bindings/
--media/video-interfaces.txt. The following are properties specific to those
--nodes.
--
--endpoint node
---------------
--
--- data-lanes : (optional) specifies MIPI CSI-2 data lanes as covered in
--	       video-interfaces.txt. If present it should be <1> - the device
--	       supports only one data lane without re-mapping.
--
--Example:
--
--s5k5bafx@2d {
--	compatible = "samsung,s5k5baf";
--	reg = <0x2d>;
--	vdda-supply = <&cam_io_en_reg>;
--	vddreg-supply = <&vt_core_15v_reg>;
--	vddio-supply = <&vtcam_reg>;
--	stbyn-gpios = <&gpl2 0 1>;
--	rstn-gpios = <&gpl2 1 1>;
--	clock-names = "mclk";
--	clocks = <&clock_cam 0>;
--	clock-frequency = <24000000>;
--
--	port {
--		s5k5bafx_ep: endpoint {
--			remote-endpoint = <&csis1_ep>;
--			data-lanes = <1>;
--		};
--	};
--};
--- 
-2.34.1
+#regzbot monitor:
+https://lore.kernel.org/all/20230207102254.1446461-1-javierm@redhat.com/
+#regzbot ignore-activity
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
+
+
 
