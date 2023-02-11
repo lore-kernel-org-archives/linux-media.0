@@ -2,66 +2,63 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37068C64ED6
-	for <linux-media@archiver.kernel.org>; Sat, 11 Feb 2023 14:53:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3D0BC636D7
+	for <linux-media@archiver.kernel.org>; Sat, 11 Feb 2023 14:54:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjBKOxf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 11 Feb 2023 09:53:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51112 "EHLO
+        id S229546AbjBKOyu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 11 Feb 2023 09:54:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjBKOxd (ORCPT
+        with ESMTP id S229491AbjBKOyt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 11 Feb 2023 09:53:33 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E735A24487
-        for <linux-media@vger.kernel.org>; Sat, 11 Feb 2023 06:53:30 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id y1so7967417wru.2
-        for <linux-media@vger.kernel.org>; Sat, 11 Feb 2023 06:53:30 -0800 (PST)
+        Sat, 11 Feb 2023 09:54:49 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3552423C49
+        for <linux-media@vger.kernel.org>; Sat, 11 Feb 2023 06:54:48 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id u10so5814877wmj.3
+        for <linux-media@vger.kernel.org>; Sat, 11 Feb 2023 06:54:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e2DssklKEH3ZguQjL4NDllo4Z1dy35eEP2bGhtEhl6s=;
-        b=FZI+OfgR7SJGOMNw/UbKzhBFgEVU6gBpUQG5HA0dLmpOFB5eZf4iBUKMvyeZHz/sla
-         3PvgA+27V6C7+rklffJ3l5nKZerI9ae8+FQov0H+hEOtjLojcq5KxT1Np+weNYMOPIUJ
-         U6A6BgzDN7kj4MnFcyhr6TRDGJ7Z1kh55E4mwy65DrsRROiX8K5KUjWf48QKQ0U3aVST
-         YwMOUmTr5DuIcbUv8dnLQqT91dDuXX1m+Wv1i8rxbIebyQglMzZopagqFMovx8N5ctIj
-         scHwHClWsoEnkJIZ5MirqdIixVkZUR/K9K28P+ojsYhWotzM5RIthab9u0tDQcebXkYQ
-         s91Q==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jn/NwubQ+zEtFvy1opP9siq6wDAyoCUmytLcQZmL+Eo=;
+        b=NZ8kJ6T8xl5urrLZo6wcYKT11JvA0qfvci/9E50o7Vi39XAA/3RZyhhBdJB0+B+4rs
+         MXYm63oXKzJjftx//qsZRNmFhCYOgUfIeWMl8MSwR/WuBHQG6aLhf4gJRP8ZYvsdzV/R
+         5EyXahd5ikoStT4voc7YwDtlhU+Xt4+dhH8wBRvGYinUp5fIOF5lEunOC9V2iYm5DUBd
+         M35QCrZZSFGAgK2BHO2kuI7VAEZ1osL5Ax/2Fs4N2ap6TuBDwe41b7dnTijD7jOue2gU
+         Yf4RmtyFDveIn+8QbRhiygfrkh8JDlyeuTl0EI17tK/ePio8saTh2kKK8eZ94YSm/3eD
+         gnQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e2DssklKEH3ZguQjL4NDllo4Z1dy35eEP2bGhtEhl6s=;
-        b=JC++MpYM2JlVYipai9Q2GA4NN+WObBYgcUTRnHBUSVfXsRhsiI3eRVqnxBa3yocDKh
-         i5eAGQjnS4VihEFh8jx1AqPzOuBSMfcaRbNPV+JjtthaO4aNakt5k81kFq74gpiXbfof
-         1k1wUSYCD2TA2HeTOOGRterLZgHvqRO30mHLwLToPskWyrzRwPG4iVyXVRirl9xQGx7C
-         GX4QT2rAI4nHtvmlpVR5SkHo8EBOyxJCwyP1CCCJ33AkbTfp/PA7gPnBFMs8BObDEMfs
-         MF9SWu0lKcv7jTkiAD4q/lHfDZ1lsE9HKMEPdo77YD8t/zala0v86FCzxn+SsuuOEXA6
-         R6Sw==
-X-Gm-Message-State: AO0yUKWcxsKi+hKs6e3gHKq8xKZHcEhRy9+E3qgUSyC7FvgdwHiQOA9p
-        OS1P9caoMfcrLMrwlSGr12d0Sw==
-X-Google-Smtp-Source: AK7set8GHnUlrRqf0bg0vD1Mqg7SqB7HOHPxNL6wrvcTzU1e9hyIF2bCYZDTWhDWeUuwd/y4tibsRQ==
-X-Received: by 2002:adf:f34d:0:b0:2c5:3fce:423b with SMTP id e13-20020adff34d000000b002c53fce423bmr5990452wrp.4.1676127209326;
-        Sat, 11 Feb 2023 06:53:29 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Jn/NwubQ+zEtFvy1opP9siq6wDAyoCUmytLcQZmL+Eo=;
+        b=MousWgrQViRqoc52LTcBdDnd+ps2A/PUyUMWpAeUHTjJHukDjx+hnYE8C75xeDdDxl
+         PF9QGwtK0kteLVSGJ6zZ8GiVjbq8bGGUitSq6jywlWl7Huydic2/JlYvc1TZeCFyIm4T
+         AMC72/fpmo+viMMZODIMj2vKDM4GuouYYhNaXO7IaIMsao3A/SLN/swzxUr974Vd7ULP
+         frXsCo3K7ksCIDrtrLB67eHyYhW67vXxzQqdRmpW3sQosLgdH4DbYtoAk4N8aqMTIDvH
+         PgICF0TPj0IFmfTWXhL2kf1ikV4yYRV9aMDB26rU/CFTGy0qatwJCXGQJg7gGz60K/ZR
+         GSVg==
+X-Gm-Message-State: AO0yUKWqrXmQBAYR2zE1hnD2g8uXOkZjKEWInAEBMLBkN81emb8RukqK
+        U4y+JQFn0oJeONrsG4vjyNdMcA==
+X-Google-Smtp-Source: AK7set86peNDh/jd4JGvxSt7XJ1/En++ul0f2LOa5KP3BLJfA7FNExoRjKej2sWdXXWnXgduNZGQFg==
+X-Received: by 2002:a05:600c:2e87:b0:3e0:1a9:b1f5 with SMTP id p7-20020a05600c2e8700b003e001a9b1f5mr15138849wmn.28.1676127286812;
+        Sat, 11 Feb 2023 06:54:46 -0800 (PST)
 Received: from sleipner.berto.se (p54ac5802.dip0.t-ipconnect.de. [84.172.88.2])
-        by smtp.googlemail.com with ESMTPSA id u10-20020a5d514a000000b002c3e28d0343sm6091344wrt.85.2023.02.11.06.53.28
+        by smtp.googlemail.com with ESMTPSA id l4-20020a7bc444000000b003d9fba3c7a4sm10771987wmi.16.2023.02.11.06.54.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Feb 2023 06:53:28 -0800 (PST)
+        Sat, 11 Feb 2023 06:54:46 -0800 (PST)
 From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
 To:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org
 Cc:     linux-renesas-soc@vger.kernel.org,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH 2/3] media: rcar-csi2: Prepare for C-PHY support
-Date:   Sat, 11 Feb 2023 15:53:09 +0100
-Message-Id: <20230211145310.3819989-3-niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH] media: rcar-isp: Add support for R-Car V4H
+Date:   Sat, 11 Feb 2023 15:54:36 +0100
+Message-Id: <20230211145436.3820935-1-niklas.soderlund+renesas@ragnatech.se>
 X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230211145310.3819989-1-niklas.soderlund+renesas@ragnatech.se>
-References: <20230211145310.3819989-1-niklas.soderlund+renesas@ragnatech.se>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -69,199 +66,27 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Gen4 will support both D-PHY and C-PHY, while Gen3 only supports D-PHY.
-Add two flags to the device information structure to be able to record
-what each SoC supports.
-
-Extend the device node parsing to accept both CSI_2 D-PHY and C-PHY
-buses, while at the same time taking the SoC support into account.
+Add support for R-Car V4H. The ISP Channel Selector is used to route
+channels to the different VIN modules. The ISP CS found in the V4H is
+very similar to the one found on the V3U.
 
 Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 ---
- .../platform/renesas/rcar-vin/rcar-csi2.c     | 71 +++++++++++++++----
- 1 file changed, 59 insertions(+), 12 deletions(-)
+ drivers/media/platform/renesas/rcar-isp.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-csi2.c b/drivers/media/platform/renesas/rcar-vin/rcar-csi2.c
-index 180926a2722d..5fa4a29064fd 100644
---- a/drivers/media/platform/renesas/rcar-vin/rcar-csi2.c
-+++ b/drivers/media/platform/renesas/rcar-vin/rcar-csi2.c
-@@ -490,6 +490,8 @@ struct rcar_csi2_info {
- 	unsigned int num_channels;
- 	bool clear_ulps;
- 	bool use_isp;
-+	bool support_dphy;
-+	bool support_cphy;
+diff --git a/drivers/media/platform/renesas/rcar-isp.c b/drivers/media/platform/renesas/rcar-isp.c
+index 10b3474f93a4..ed9d8ca56730 100644
+--- a/drivers/media/platform/renesas/rcar-isp.c
++++ b/drivers/media/platform/renesas/rcar-isp.c
+@@ -433,6 +433,7 @@ static int risp_probe_resources(struct rcar_isp *isp,
+ 
+ static const struct of_device_id risp_of_id_table[] = {
+ 	{ .compatible = "renesas,r8a779a0-isp" },
++	{ .compatible = "renesas,r8a779g0-isp" },
+ 	{ /* sentinel */ },
  };
- 
- struct rcar_csi2 {
-@@ -511,6 +513,7 @@ struct rcar_csi2 {
- 	struct v4l2_mbus_framefmt mf;
- 	int stream_count;
- 
-+	bool cphy;
- 	unsigned short lanes;
- 	unsigned char lane_swap[4];
- };
-@@ -665,9 +668,17 @@ static int rcsi2_get_active_lanes(struct rcar_csi2 *priv,
- 		return ret;
- 	}
- 
--	if (mbus_config.type != V4L2_MBUS_CSI2_DPHY) {
--		dev_err(priv->dev, "Unsupported media bus type %u\n",
--			mbus_config.type);
-+	switch (mbus_config.type) {
-+	case V4L2_MBUS_CSI2_CPHY:
-+		if (!priv->cphy)
-+			return -EINVAL;
-+		break;
-+	case V4L2_MBUS_CSI2_DPHY:
-+		if (priv->cphy)
-+			return -EINVAL;
-+		break;
-+	default:
-+		dev_err(priv->dev, "Unsupported media bus type %u\n", mbus_config.type);
- 		return -EINVAL;
- 	}
- 
-@@ -1025,15 +1036,41 @@ static int rcsi2_parse_v4l2(struct rcar_csi2 *priv,
- 	if (vep->base.port || vep->base.id)
- 		return -ENOTCONN;
- 
--	if (vep->bus_type != V4L2_MBUS_CSI2_DPHY) {
--		dev_err(priv->dev, "Unsupported bus: %u\n", vep->bus_type);
--		return -EINVAL;
--	}
--
- 	priv->lanes = vep->bus.mipi_csi2.num_data_lanes;
--	if (priv->lanes != 1 && priv->lanes != 2 && priv->lanes != 4) {
--		dev_err(priv->dev, "Unsupported number of data-lanes: %u\n",
--			priv->lanes);
-+
-+	switch (vep->bus_type) {
-+	case V4L2_MBUS_CSI2_DPHY:
-+		if (!priv->info->support_dphy) {
-+			dev_err(priv->dev, "D-PHY not supported\n");
-+			return -EINVAL;
-+		}
-+
-+		if (priv->lanes != 1 && priv->lanes != 2 && priv->lanes != 4) {
-+			dev_err(priv->dev,
-+				"Unsupported number of data-lanes for D-PHY: %u\n",
-+				priv->lanes);
-+			return -EINVAL;
-+		}
-+
-+		priv->cphy = false;
-+		break;
-+	case V4L2_MBUS_CSI2_CPHY:
-+		if (!priv->info->support_cphy) {
-+			dev_err(priv->dev, "C-PHY not supported\n");
-+			return -EINVAL;
-+		}
-+
-+		if (priv->lanes != 3) {
-+			dev_err(priv->dev,
-+				"Unsupported number of data-lanes for C-PHY: %u\n",
-+				priv->lanes);
-+			return -EINVAL;
-+		}
-+
-+		priv->cphy = true;
-+		break;
-+	default:
-+		dev_err(priv->dev, "Unsupported bus: %u\n", vep->bus_type);
- 		return -EINVAL;
- 	}
- 
-@@ -1057,7 +1094,7 @@ static int rcsi2_parse_dt(struct rcar_csi2 *priv)
- 	struct fwnode_handle *fwnode;
- 	struct fwnode_handle *ep;
- 	struct v4l2_fwnode_endpoint v4l2_ep = {
--		.bus_type = V4L2_MBUS_CSI2_DPHY
-+		.bus_type = V4L2_MBUS_UNKNOWN,
- 	};
- 	int ret;
- 
-@@ -1378,6 +1415,7 @@ static const struct rcar_csi2_info rcar_csi2_info_r8a7795 = {
- 	.csi0clkfreqrange = 0x20,
- 	.num_channels = 4,
- 	.clear_ulps = true,
-+	.support_dphy = true,
- };
- 
- static const struct rcar_csi2_info rcar_csi2_info_r8a7795es1 = {
-@@ -1385,6 +1423,7 @@ static const struct rcar_csi2_info rcar_csi2_info_r8a7795es1 = {
- 	.enter_standby = rcsi2_enter_standby_gen3,
- 	.hsfreqrange = hsfreqrange_m3w_h3es1,
- 	.num_channels = 4,
-+	.support_dphy = true,
- };
- 
- static const struct rcar_csi2_info rcar_csi2_info_r8a7795es2 = {
-@@ -1395,6 +1434,7 @@ static const struct rcar_csi2_info rcar_csi2_info_r8a7795es2 = {
- 	.csi0clkfreqrange = 0x20,
- 	.num_channels = 4,
- 	.clear_ulps = true,
-+	.support_dphy = true,
- };
- 
- static const struct rcar_csi2_info rcar_csi2_info_r8a7796 = {
-@@ -1402,6 +1442,7 @@ static const struct rcar_csi2_info rcar_csi2_info_r8a7796 = {
- 	.enter_standby = rcsi2_enter_standby_gen3,
- 	.hsfreqrange = hsfreqrange_m3w_h3es1,
- 	.num_channels = 4,
-+	.support_dphy = true,
- };
- 
- static const struct rcar_csi2_info rcar_csi2_info_r8a77961 = {
-@@ -1409,6 +1450,7 @@ static const struct rcar_csi2_info rcar_csi2_info_r8a77961 = {
- 	.enter_standby = rcsi2_enter_standby_gen3,
- 	.hsfreqrange = hsfreqrange_m3w_h3es1,
- 	.num_channels = 4,
-+	.support_dphy = true,
- };
- 
- static const struct rcar_csi2_info rcar_csi2_info_r8a77965 = {
-@@ -1419,6 +1461,7 @@ static const struct rcar_csi2_info rcar_csi2_info_r8a77965 = {
- 	.csi0clkfreqrange = 0x20,
- 	.num_channels = 4,
- 	.clear_ulps = true,
-+	.support_dphy = true,
- };
- 
- static const struct rcar_csi2_info rcar_csi2_info_r8a77970 = {
-@@ -1427,6 +1470,7 @@ static const struct rcar_csi2_info rcar_csi2_info_r8a77970 = {
- 	.start_receiver = rcsi2_start_receiver_gen3,
- 	.enter_standby = rcsi2_enter_standby_gen3,
- 	.num_channels = 4,
-+	.support_dphy = true,
- };
- 
- static const struct rcar_csi2_info rcar_csi2_info_r8a77980 = {
-@@ -1436,6 +1480,7 @@ static const struct rcar_csi2_info rcar_csi2_info_r8a77980 = {
- 	.hsfreqrange = hsfreqrange_h3_v3h_m3n,
- 	.csi0clkfreqrange = 0x20,
- 	.clear_ulps = true,
-+	.support_dphy = true,
- };
- 
- static const struct rcar_csi2_info rcar_csi2_info_r8a77990 = {
-@@ -1444,6 +1489,7 @@ static const struct rcar_csi2_info rcar_csi2_info_r8a77990 = {
- 	.start_receiver = rcsi2_start_receiver_gen3,
- 	.enter_standby = rcsi2_enter_standby_gen3,
- 	.num_channels = 2,
-+	.support_dphy = true,
- };
- 
- static const struct rcar_csi2_info rcar_csi2_info_r8a779a0 = {
-@@ -1454,6 +1500,7 @@ static const struct rcar_csi2_info rcar_csi2_info_r8a779a0 = {
- 	.csi0clkfreqrange = 0x20,
- 	.clear_ulps = true,
- 	.use_isp = true,
-+	.support_dphy = true,
- };
- 
- static const struct of_device_id rcar_csi2_of_table[] = {
+ MODULE_DEVICE_TABLE(of, risp_of_id_table);
 -- 
 2.39.1
 
