@@ -2,147 +2,138 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4954C636CC
-	for <linux-media@archiver.kernel.org>; Sun, 12 Feb 2023 00:35:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA035C64EC4
+	for <linux-media@archiver.kernel.org>; Sun, 12 Feb 2023 00:51:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbjBLAfx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 11 Feb 2023 19:35:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33422 "EHLO
+        id S229620AbjBLAvq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 11 Feb 2023 19:51:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjBLAfw (ORCPT
+        with ESMTP id S229629AbjBLAvp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 11 Feb 2023 19:35:52 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DEBFF2E
-        for <linux-media@vger.kernel.org>; Sat, 11 Feb 2023 16:35:50 -0800 (PST)
+        Sat, 11 Feb 2023 19:51:45 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A6E17CFD
+        for <linux-media@vger.kernel.org>; Sat, 11 Feb 2023 16:51:42 -0800 (PST)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 764D5706;
-        Sun, 12 Feb 2023 01:35:48 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B7DCFD01;
+        Sun, 12 Feb 2023 01:51:40 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1676162148;
-        bh=n0RFB/6c2hTSJW4a+4voQ8Qe9VCRkozGrMSRjFdW5OA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i6xQusE1dHgMJ1UbixHKNpGCiiDeh2GuaIS3ingq4BEP2MYcdgc+c00rDfCGl6AKS
-         p3L7Essvff5P2GP+pZwl4JSCzNm1zBXVGyX1k8CNcRExWrYnurneU280q2ZqQPCTJF
-         kJJH8gNrY5sC8HH1/HxB4jm2KDyz784fUBDpuxh0=
-Date:   Sun, 12 Feb 2023 02:35:46 +0200
+        s=mail; t=1676163101;
+        bh=FCQQkI8QwDPOF/fgyhp4/xaKXorK5Q2STBKsGBpmJjE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=M+wtCKIaXvPLXOzNkEorOW4wCxqInV6eJLTaek2+7LdXY9W/hL526P1zZmQaphGkw
+         LfvVEpYG6x2rIIStv3C2OAyaThc3roaMdXqJ8EIbmEh7qxPhZYA8pvZHFTPyv+RIq2
+         PXJ2Gj04TFi/9+EU9rtv8NBTbEok9B64avHshsJw=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org
-Subject: Re: [PATCH 1/1] utils: Allow choosing v4l2-tracer-gen.pl output
-Message-ID: <Y+g0YgfGPhr5c70K@pendragon.ideasonboard.com>
-References: <20230212001657.21098-1-sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     ezequiel@collabora.com, gjasny@googlemail.com, hverkuil@xs4all.nl,
+        kieran.bingham@ideasonboard.com, mchehab@kernel.org,
+        nicolas@ndufresne.ca, p.zabel@pengutronix.de, rosenp@gmail.com,
+        sakari.ailus@iki.fi, sean@mess.org, user.vdr@gmail.com,
+        xavier.claessens@collabora.com, deborah.brouwer@collabora.com,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: [v4l-utils] [PATCH v8 1/6] utils: Allow choosing v4l2-tracer-gen.pl output
+Date:   Sun, 12 Feb 2023 02:51:32 +0200
+Message-Id: <20230212005137.12025-2-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230212005137.12025-1-laurent.pinchart@ideasonboard.com>
+References: <20230212005137.12025-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230212001657.21098-1-sakari.ailus@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari,
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-Thank you for the patch.
+In v4l2-tracer-gen.pl, add support for setting the output directory for
+the generated files and choosing which ones to generate (common, trace or
+retrace). The default is to generate them all in the current directory,
+i.e. what the script used to do.
 
-On Sun, Feb 12, 2023 at 02:16:57AM +0200, Sakari Ailus wrote:
-> In v4l2-tracer-gen.pl, add support for setting the output directory for
-> the generated files and choosing which ones to generate (common, trace or
-> retrace). The default is to generate them all in the current directory,
-> i.e. what the script used to do.
-> 
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  utils/v4l2-tracer/v4l2-tracer-gen.pl | 36 ++++++++++++++++++++++++----
->  1 file changed, 31 insertions(+), 5 deletions(-)
-> 
-> diff --git a/utils/v4l2-tracer/v4l2-tracer-gen.pl b/utils/v4l2-tracer/v4l2-tracer-gen.pl
-> index fe648182..8192a5bf 100755
-> --- a/utils/v4l2-tracer/v4l2-tracer-gen.pl
-> +++ b/utils/v4l2-tracer/v4l2-tracer-gen.pl
-> @@ -2,6 +2,16 @@
->  # SPDX-License-Identifier: GPL-2.0-only */
->  # Copyright 2022 Collabora Ltd.
->  
-> +my $outdir = "";
-> +my %outtype = ( "common" => 1, "trace" => 1, "retrace" => 1 );
-> +
-> +while ($ARGV[0] =~ /^-/) {
-> +	my $arg = shift @ARGV;
-> +
-> +	$outdir = shift @ARGV if $arg eq "-o";
-> +	%outtype = (shift @ARGV => 1) if $arg eq '-t';
-> +}
-> +
->  sub convert_type_to_json_type {
->  	my $type = shift;
->  	if ($type eq __u8 || $type eq char || $type eq __u16 || $type eq __s8 || $type eq __s16 || $type eq __s32 || $type eq 'int') {
-> @@ -696,29 +706,45 @@ sub struct_gen_ctrl {
->  	printf $fh_retrace_cpp "}\n\n";
->  }
->  
-> -open($fh_trace_cpp, '>', 'trace-gen.cpp') or die "Could not open trace-gen.cpp for writing";
-> +sub do_open($$) {
-> +	my ($type, $fname) = @_;
-> +	my $fh;
-> +
-> +	if (defined $outtype{$type}) {
-> +		$fname = $outdir . $fname;
-
-It would be nice to add a directory separator if outdir doesn't end with
-'/'. I'll do so here with
-
-                $fname = "$outdir/$fname";
-
-and with outdir initialized to "." instead of "" above.
-
-I'll include the updated version in my meson patch series.
-
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+[Append a '/' automatically between $outdir and $fname]
 Tested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ utils/v4l2-tracer/v4l2-tracer-gen.pl | 36 ++++++++++++++++++++++++----
+ 1 file changed, 31 insertions(+), 5 deletions(-)
 
-Thanks a lot for your help.
-
-> +	} else {
-> +		$fname = "/dev/null";
-> +	}
-> +
-> +	open($fh, "> $fname") or die "Could not open $fname for writing";
-> +
-> +	return $fh;
-> +}
-> +
-> +
-> +$fh_trace_cpp = do_open("trace", "trace-gen.cpp");
->  printf $fh_trace_cpp "/* SPDX-License-Identifier: GPL-2.0-only */\n/*\n * Copyright 2022 Collabora Ltd.\n";
->  printf $fh_trace_cpp " *\n * AUTOMATICALLY GENERATED BY \'%s\' DO NOT EDIT\n */\n\n", __FILE__;
->  printf $fh_trace_cpp "#include \"v4l2-tracer-common.h\"\n\n";
->  
-> -open($fh_trace_h, '>', 'trace-gen.h') or die "Could not open trace-gen.h for writing";
-> +$fh_trace_h = do_open("trace", "trace-gen.h");
->  printf $fh_trace_h "/* SPDX-License-Identifier: GPL-2.0-only */\n/*\n * Copyright 2022 Collabora Ltd.\n";
->  printf $fh_trace_h " *\n * AUTOMATICALLY GENERATED BY \'%s\' DO NOT EDIT\n */\n\n", __FILE__;
->  printf $fh_trace_h "\#ifndef TRACE_GEN_H\n";
->  printf $fh_trace_h "\#define TRACE_GEN_H\n\n";
->  
-> -open($fh_retrace_cpp, '>', 'retrace-gen.cpp') or die "Could not open retrace-gen.cpp for writing";
-> +$fh_retrace_cpp = do_open("retrace", "retrace-gen.cpp");
->  printf $fh_retrace_cpp "/* SPDX-License-Identifier: GPL-2.0-only */\n/*\n * Copyright 2022 Collabora Ltd.\n";
->  printf $fh_retrace_cpp " *\n * AUTOMATICALLY GENERATED BY \'%s\' DO NOT EDIT\n */\n\n", __FILE__;
->  printf $fh_retrace_cpp "#include \"v4l2-tracer-common.h\"\n\n";
->  
-> -open($fh_retrace_h, '>', 'retrace-gen.h') or die "Could not open retrace-gen.h for writing";
-> +$fh_retrace_h = do_open("retrace", "retrace-gen.h");
->  printf $fh_retrace_h "/* SPDX-License-Identifier: GPL-2.0-only */\n/*\n * Copyright 2022 Collabora Ltd.\n";
->  printf $fh_retrace_h " *\n * AUTOMATICALLY GENERATED BY \'%s\' DO NOT EDIT\n */\n\n", __FILE__;
->  printf $fh_retrace_h "\#ifndef RETRACE_GEN_H\n";
->  printf $fh_retrace_h "\#define RETRACE_GEN_H\n\n";
->  
-> -open($fh_common_info_h, '>', 'v4l2-tracer-info-gen.h') or die "Could not open v4l2-tracer-info-gen.h for writing";
-> +$fh_common_info_h = do_open("common", "v4l2-tracer-info-gen.h");
->  printf $fh_common_info_h "/* SPDX-License-Identifier: GPL-2.0-only */\n/*\n * Copyright 2022 Collabora Ltd.\n";
->  printf $fh_common_info_h " *\n * AUTOMATICALLY GENERATED BY \'%s\' DO NOT EDIT\n */\n\n", __FILE__;
->  printf $fh_common_info_h "\#ifndef V4L2_TRACER_INFO_GEN_H\n";
-
+diff --git a/utils/v4l2-tracer/v4l2-tracer-gen.pl b/utils/v4l2-tracer/v4l2-tracer-gen.pl
+index fe648182ac34..f7454e7f0bab 100755
+--- a/utils/v4l2-tracer/v4l2-tracer-gen.pl
++++ b/utils/v4l2-tracer/v4l2-tracer-gen.pl
+@@ -2,6 +2,16 @@
+ # SPDX-License-Identifier: GPL-2.0-only */
+ # Copyright 2022 Collabora Ltd.
+ 
++my $outdir = ".";
++my %outtype = ( "common" => 1, "trace" => 1, "retrace" => 1 );
++
++while ($ARGV[0] =~ /^-/) {
++	my $arg = shift @ARGV;
++
++	$outdir = shift @ARGV if $arg eq "-o";
++	%outtype = (shift @ARGV => 1) if $arg eq '-t';
++}
++
+ sub convert_type_to_json_type {
+ 	my $type = shift;
+ 	if ($type eq __u8 || $type eq char || $type eq __u16 || $type eq __s8 || $type eq __s16 || $type eq __s32 || $type eq 'int') {
+@@ -696,29 +706,45 @@ sub struct_gen_ctrl {
+ 	printf $fh_retrace_cpp "}\n\n";
+ }
+ 
+-open($fh_trace_cpp, '>', 'trace-gen.cpp') or die "Could not open trace-gen.cpp for writing";
++sub do_open($$) {
++	my ($type, $fname) = @_;
++	my $fh;
++
++	if (defined $outtype{$type}) {
++		$fname = "$outdir/$fname";
++	} else {
++		$fname = "/dev/null";
++	}
++
++	open($fh, "> $fname") or die "Could not open $fname for writing";
++
++	return $fh;
++}
++
++
++$fh_trace_cpp = do_open("trace", "trace-gen.cpp");
+ printf $fh_trace_cpp "/* SPDX-License-Identifier: GPL-2.0-only */\n/*\n * Copyright 2022 Collabora Ltd.\n";
+ printf $fh_trace_cpp " *\n * AUTOMATICALLY GENERATED BY \'%s\' DO NOT EDIT\n */\n\n", __FILE__;
+ printf $fh_trace_cpp "#include \"v4l2-tracer-common.h\"\n\n";
+ 
+-open($fh_trace_h, '>', 'trace-gen.h') or die "Could not open trace-gen.h for writing";
++$fh_trace_h = do_open("trace", "trace-gen.h");
+ printf $fh_trace_h "/* SPDX-License-Identifier: GPL-2.0-only */\n/*\n * Copyright 2022 Collabora Ltd.\n";
+ printf $fh_trace_h " *\n * AUTOMATICALLY GENERATED BY \'%s\' DO NOT EDIT\n */\n\n", __FILE__;
+ printf $fh_trace_h "\#ifndef TRACE_GEN_H\n";
+ printf $fh_trace_h "\#define TRACE_GEN_H\n\n";
+ 
+-open($fh_retrace_cpp, '>', 'retrace-gen.cpp') or die "Could not open retrace-gen.cpp for writing";
++$fh_retrace_cpp = do_open("retrace", "retrace-gen.cpp");
+ printf $fh_retrace_cpp "/* SPDX-License-Identifier: GPL-2.0-only */\n/*\n * Copyright 2022 Collabora Ltd.\n";
+ printf $fh_retrace_cpp " *\n * AUTOMATICALLY GENERATED BY \'%s\' DO NOT EDIT\n */\n\n", __FILE__;
+ printf $fh_retrace_cpp "#include \"v4l2-tracer-common.h\"\n\n";
+ 
+-open($fh_retrace_h, '>', 'retrace-gen.h') or die "Could not open retrace-gen.h for writing";
++$fh_retrace_h = do_open("retrace", "retrace-gen.h");
+ printf $fh_retrace_h "/* SPDX-License-Identifier: GPL-2.0-only */\n/*\n * Copyright 2022 Collabora Ltd.\n";
+ printf $fh_retrace_h " *\n * AUTOMATICALLY GENERATED BY \'%s\' DO NOT EDIT\n */\n\n", __FILE__;
+ printf $fh_retrace_h "\#ifndef RETRACE_GEN_H\n";
+ printf $fh_retrace_h "\#define RETRACE_GEN_H\n\n";
+ 
+-open($fh_common_info_h, '>', 'v4l2-tracer-info-gen.h') or die "Could not open v4l2-tracer-info-gen.h for writing";
++$fh_common_info_h = do_open("common", "v4l2-tracer-info-gen.h");
+ printf $fh_common_info_h "/* SPDX-License-Identifier: GPL-2.0-only */\n/*\n * Copyright 2022 Collabora Ltd.\n";
+ printf $fh_common_info_h " *\n * AUTOMATICALLY GENERATED BY \'%s\' DO NOT EDIT\n */\n\n", __FILE__;
+ printf $fh_common_info_h "\#ifndef V4L2_TRACER_INFO_GEN_H\n";
 -- 
 Regards,
 
 Laurent Pinchart
+
