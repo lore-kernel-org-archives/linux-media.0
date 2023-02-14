@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 052C3C61DA4
-	for <linux-media@archiver.kernel.org>; Tue, 14 Feb 2023 14:06:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59180C64ED6
+	for <linux-media@archiver.kernel.org>; Tue, 14 Feb 2023 14:06:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232631AbjBNOGO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Feb 2023 09:06:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
+        id S232731AbjBNOGP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Feb 2023 09:06:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232179AbjBNOGK (ORCPT
+        with ESMTP id S231878AbjBNOGK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 14 Feb 2023 09:06:10 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7718B1B57D;
-        Tue, 14 Feb 2023 06:06:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABA61C7D3;
+        Tue, 14 Feb 2023 06:06:07 -0800 (PST)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:37c0:9b2b:ec16:1f37])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C98A96602169;
-        Tue, 14 Feb 2023 14:06:04 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C7FB16602172;
+        Tue, 14 Feb 2023 14:06:05 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676383565;
-        bh=bhnO24On4r3VyKtUOKpWBYh2OEyQQ5x6bFUZv59MOAw=;
+        s=mail; t=1676383566;
+        bh=G7EbYqzzKPwX7xpqO9DZV8LtV7c0Hlez9HUiWRVZSXw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pg6OBVJyaQHluVAsZrbWTHr74qoKpTLpqDz4PGiCAzfgEGGzPzupN9PDr9ZSt9kHM
-         QbqJaGlSb6UNjuOZuCsFhv0vRcb7SZslGMNQqKP1qK5viqRwpNiAIWXM4TXW/U5mq4
-         4tk0yDXaeZfPd16elZtbrzBAcCnURe4nK0zXn5qFcfE8sCXsuaeK7avr8VtE28/2QH
-         GPaqL4HP+mI241EFbeuHXuaxZs1VA+q4MbHYlLskq6CaQ8Rzq8QrhnMuik8agjTbGh
-         VTvYCvBZ8QE6rhcroroHUMiyzG4yB7HC9uuVpPd6oqcVRjEEE5kC3e+f+WD+L4nsEa
-         0ATn2bMOAhKGw==
+        b=jNBUSaxLuCb9s7IPPazbObUXmKwq8TrTqFn6CaKkmqv4GPJo6pO0tBGPUS/ltp50O
+         Tm5Vs/6qKP4sSlEK3z8EQchSPe6MdU8ExDbBetdA6ffU2jOceP0nAkLFtBfi+cAjrJ
+         H4sBqgzGl3mpuz/wPKIBV2X2d6Rc1p9lcFM3MysBE0pO0G5SERVsRbW11P7fu+yVx0
+         SXyVsGcoVKMhfKYPNx44rgEyZeg10oi/4AeQGyy8FnsYXe7XGXY06BHtc9Qny3wYGg
+         iVv2vOa+3UXd734WGttemZU0ecIK1LOGIlf7kN08/+qo8LwOTQ1/G1mTlAQeYDYtto
+         ORrP/mnoCnpTA==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
         mchehab@kernel.org, robh+dt@kernel.org,
@@ -41,11 +41,10 @@ To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
 Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v4 01/12] dt-bindings: media: rockchip-vpu: Add rk3588 vpu compatible
-Date:   Tue, 14 Feb 2023 15:05:46 +0100
-Message-Id: <20230214140557.537984-2-benjamin.gaignard@collabora.com>
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v4 03/12] media: Add NV12_10LE40_4L4 pixel format
+Date:   Tue, 14 Feb 2023 15:05:48 +0100
+Message-Id: <20230214140557.537984-4-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230214140557.537984-1-benjamin.gaignard@collabora.com>
 References: <20230214140557.537984-1-benjamin.gaignard@collabora.com>
@@ -55,26 +54,76 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add compatible for rk3588 AV1 vpu decoder.
+NV12_10LE40_4L4 is the 10-bits per component version of
+NV12_4L4 pixel format.
 
+Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/media/rockchip-vpu.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst | 4 ++++
+ drivers/media/v4l2-core/v4l2-common.c                       | 1 +
+ drivers/media/v4l2-core/v4l2-ioctl.c                        | 1 +
+ include/uapi/linux/videodev2.h                              | 1 +
+ 4 files changed, 7 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-index 6cc4d3e5a61d..8454df53f5cb 100644
---- a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-+++ b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-@@ -24,6 +24,7 @@ properties:
-           - rockchip,rk3399-vpu
-           - rockchip,px30-vpu
-           - rockchip,rk3568-vpu
-+          - rockchip,rk3588-av1-vpu
-       - items:
-           - const: rockchip,rk3188-vpu
-           - const: rockchip,rk3066-vpu
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+index f1d5bb7b806d..8805213a75f8 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+@@ -270,6 +270,7 @@ of the luma plane.
+ .. _V4L2-PIX-FMT-NV12MT:
+ .. _V4L2-PIX-FMT-NV12MT-16X16:
+ .. _V4L2-PIX-FMT-NV12-4L4:
++.. _V4L2-PIX-FMT-NV12-10LE40-4L4:
+ .. _V4L2-PIX-FMT-NV12-16L16:
+ .. _V4L2-PIX-FMT-NV12-32L32:
+ .. _V4L2-PIX-FMT-NV12M-8L128:
+@@ -306,6 +307,9 @@ tiles linearly in memory. The line stride and image height must be
+ aligned to a multiple of 4. The layouts of the luma and chroma planes are
+ identical.
+ 
++``V4L2_PIX_FMT_NV12_10LE40_4L4`` is similar to ``V4L2_PIX_FMT_NV12_4L4``
++and stores 10 bits pixels in 4x4 tiles.
++
+ ``V4L2_PIX_FMT_NV12_16L16`` stores pixels in 16x16 tiles, and stores
+ tiles linearly in memory. The line stride and image height must be
+ aligned to a multiple of 16. The layouts of the luma and chroma planes are
+diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+index 9cb0895dea1c..7f46c45982d6 100644
+--- a/drivers/media/v4l2-core/v4l2-common.c
++++ b/drivers/media/v4l2-core/v4l2-common.c
+@@ -278,6 +278,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
+ 
+ 		/* Tiled YUV formats */
+ 		{ .format = V4L2_PIX_FMT_NV12_4L4, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 2, .vdiv = 2 },
++		{ .format = V4L2_PIX_FMT_NV12_10LE40_4L4, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 5, 10, 0, 0 }, .bpp_div = { 4, 4, 1, 1 }, .hdiv = 2, .vdiv = 2 },
+ 		{ .format = V4L2_PIX_FMT_P010_4L4, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 4, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 2, .vdiv = 2 },
+ 
+ 		/* YUV planar formats, non contiguous variant */
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 1fd9b0041554..ea8afc8c9250 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1351,6 +1351,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+ 	case V4L2_PIX_FMT_NV12_4L4:	descr = "Y/UV 4:2:0 (4x4 Linear)"; break;
+ 	case V4L2_PIX_FMT_NV12_16L16:	descr = "Y/UV 4:2:0 (16x16 Linear)"; break;
+ 	case V4L2_PIX_FMT_NV12_32L32:   descr = "Y/UV 4:2:0 (32x32 Linear)"; break;
++	case V4L2_PIX_FMT_NV12_10LE40_4L4: descr = "10-bit YUV 4:2:0 (4x4 Linear)"; break;
+ 	case V4L2_PIX_FMT_P010_4L4:	descr = "10-bit Y/UV 4:2:0 (4x4 Linear)"; break;
+ 	case V4L2_PIX_FMT_NV12M:	descr = "Y/UV 4:2:0 (N-C)"; break;
+ 	case V4L2_PIX_FMT_NV21M:	descr = "Y/VU 4:2:0 (N-C)"; break;
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 3dec002cb420..f034cf3a6e6d 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -653,6 +653,7 @@ struct v4l2_pix_format {
+ #define V4L2_PIX_FMT_NV12_4L4 v4l2_fourcc('V', 'T', '1', '2')   /* 12  Y/CbCr 4:2:0  4x4 tiles */
+ #define V4L2_PIX_FMT_NV12_16L16 v4l2_fourcc('H', 'M', '1', '2') /* 12  Y/CbCr 4:2:0 16x16 tiles */
+ #define V4L2_PIX_FMT_NV12_32L32 v4l2_fourcc('S', 'T', '1', '2') /* 12  Y/CbCr 4:2:0 32x32 tiles */
++#define V4L2_PIX_FMT_NV12_10LE40_4L4 v4l2_fourcc('V', 'T', '1', '5')
+ #define V4L2_PIX_FMT_P010_4L4 v4l2_fourcc('T', '0', '1', '0') /* 12  Y/CbCr 4:2:0 10-bit 4x4 macroblocks */
+ #define V4L2_PIX_FMT_NV12_8L128       v4l2_fourcc('A', 'T', '1', '2') /* Y/CbCr 4:2:0 8x128 tiles */
+ #define V4L2_PIX_FMT_NV12_10BE_8L128  v4l2_fourcc_be('A', 'X', '1', '2') /* Y/CbCr 4:2:0 10-bit 8x128 tiles */
 -- 
 2.34.1
 
