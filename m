@@ -2,153 +2,124 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2DCBC61DA4
-	for <linux-media@archiver.kernel.org>; Tue, 14 Feb 2023 08:20:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C80C3C64ED6
+	for <linux-media@archiver.kernel.org>; Tue, 14 Feb 2023 09:09:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231888AbjBNIUp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Feb 2023 03:20:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
+        id S232290AbjBNJJG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Feb 2023 04:09:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231982AbjBNIUn (ORCPT
+        with ESMTP id S232237AbjBNJIp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Feb 2023 03:20:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBDC206BF
-        for <linux-media@vger.kernel.org>; Tue, 14 Feb 2023 00:20:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 14 Feb 2023 04:08:45 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B234C1E1D2;
+        Tue, 14 Feb 2023 01:07:42 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 65D7561388
-        for <linux-media@vger.kernel.org>; Tue, 14 Feb 2023 08:20:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D482C433EF
-        for <linux-media@vger.kernel.org>; Tue, 14 Feb 2023 08:20:38 +0000 (UTC)
-Message-ID: <2d210fee-42d3-00dc-1591-1e70d4d69a84@xs4all.nl>
-Date:   Tue, 14 Feb 2023 09:20:36 +0100
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0F042660216A;
+        Tue, 14 Feb 2023 09:07:16 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676365637;
+        bh=exml4rk8nqwZKBNU5UVCpjJdwJUrGJx/1QP9f2Pscz0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ElAUuXnIEuGj+oHHRkeho+XGKOxgC9yqdGkGy2tGbAIG8xbFjE5dtadhKMCD5dC9M
+         Keux8qe+dMHe1Fwr0osNgSZRdqXq/kHIWLcaJY6f0tDyMIjNgKUD3ErAqK1wxT/LRg
+         oZqwTfxDUmEHc6YgYxZ83s/pXKx1HMwpB62BRrIZI0oe1zxp57SEX/EiFhB93vEnDP
+         RpvvOd5cr16Qf9cTyedRrskLH07xQSH/IUVNjgGKWp8xCUu3evk0z+02OCyrR4qw+5
+         Pr1OPcRjUHi6XDiEG9lhaO2iljeLK3i9gGLpHiUg2sagLDoJ/0IN9PpVauJ2DH70Bt
+         0q9+dUmbALnMw==
+Message-ID: <ab778f16-3cda-6c06-c5a5-6a4b4d1b3974@collabora.com>
+Date:   Tue, 14 Feb 2023 10:07:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v3 04/11] iommu/mediatek: Get regionid from larb/port id
 Content-Language: en-US
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH] admin-guide/media/cec.rst: update CEC debugging doc
-Content-Type: text/plain; charset=UTF-8
+To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>, nfraprado@collabora.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev, mingyuan.ma@mediatek.com,
+        yf.wang@mediatek.com, jianjiao.zeng@mediatek.com,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>,
+        chengci.xu@mediatek.com, youlin.pei@mediatek.com,
+        anan.sun@mediatek.com
+References: <20230214031114.926-1-yong.wu@mediatek.com>
+ <20230214031114.926-5-yong.wu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230214031114.926-5-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The documentation on how to create your own Raspberry Pi CEC debugger was a
-bit out of date. Update it to the Raspberry Pi 4B, drop the mention of the RTC
-and a link to a picture that no longer works.
+Il 14/02/23 04:11, Yong Wu ha scritto:
+> After commit f1ad5338a4d5 ("of: Fix "dma-ranges" handling for bus
+> controllers"), the dma-ranges is not allowed for dts leaf node.
+> but we still would like to separate to different masters
+> into different iova regions.
+> 
+> Thus we have to separate it by the HW larbid and portid. For example,
+> larb1/2 are in region2 and larb3 is in region3. The problem is that
+> some ports inside a larb are in region4 while some ports inside this
+> larb are in region5. Therefore I define a "iova_region_larb_msk" to help
+> record the information for each a port. Take a example for a larb:
+>   [1] = ~0: means all ports in this larb are in region1;
+>   [2] = BIT(3) | BIT(4): means port3/4 in this larb are region2;
+>   [3] = ~(BIT(3) | BIT(4)): means all the other ports except port3/4
+>                             in this larb are region3.
+> 
+> This method also avoids the users forget/abuse the iova regions.
+> 
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> ---
+>   drivers/iommu/mtk_iommu.c | 47 ++++++++++++++++++++++-----------------
+>   1 file changed, 27 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+> index ab53edcb221f..7e2cb3b8cac8 100644
+> --- a/drivers/iommu/mtk_iommu.c
+> +++ b/drivers/iommu/mtk_iommu.c
+> @@ -8,7 +8,6 @@
+>   #include <linux/clk.h>
+>   #include <linux/component.h>
+>   #include <linux/device.h>
+> -#include <linux/dma-direct.h>
+>   #include <linux/err.h>
+>   #include <linux/interrupt.h>
+>   #include <linux/io.h>
+> @@ -212,6 +211,11 @@ struct mtk_iommu_plat_data {
+>   	struct {
+>   		unsigned int	iova_region_nr;
+>   		const struct mtk_iommu_iova_region	*iova_region;
+> +		/*
+> +		 * Indicate the correspondence between larbs/ports and regions.
+> +		 * The index is same with iova_region.
 
-Also reorganize the text to make it easier to follow and change the pins to
-match the pins I use.
+* The index is the same as iova_region and larb port numbers are
+* described as bit positions.
+* For example, storing BIT(0) at index 2 means "port 0 is in region 2".
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
-diff --git a/Documentation/admin-guide/media/cec.rst b/Documentation/admin-guide/media/cec.rst
-index 14ec3ff317c2..b046d87b0674 100644
---- a/Documentation/admin-guide/media/cec.rst
-+++ b/Documentation/admin-guide/media/cec.rst
-@@ -296,34 +296,24 @@ broadcast messages twice to reduce the chance of them being lost. Specifically
- Making a CEC debugger
- =====================
+That's most probably the best short explanation that we can give, so that nobody
+goes crazy with understanding this one.
 
--By using a Raspberry Pi 2B/3/4 and some cheap components you can make
-+By using a Raspberry Pi 4B and some cheap components you can make
- your own low-level CEC debugger.
+After fixing that comment, you totally deserve my
 
--Here is a picture of my setup:
--
--https://hverkuil.home.xs4all.nl/rpi3-cec.jpg
--
--It's a Raspberry Pi 3 together with a breadboard and some breadboard wires:
--
--http://www.dx.com/p/diy-40p-male-to-female-male-to-male-female-to-female-dupont-line-wire-3pcs-356089#.WYLOOXWGN7I
--
--Finally on of these HDMI female-female passthrough connectors (full soldering type 1):
-+The critical component is one of these HDMI female-female passthrough connectors
-+(full soldering type 1):
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
- https://elabbay.myshopify.com/collections/camera/products/hdmi-af-af-v1a-hdmi-type-a-female-to-hdmi-type-a-female-pass-through-adapter-breakout-board?variant=45533926147
+Cheers!
 
--We've tested this and it works up to 4kp30 (297 MHz). The quality is not high
--enough to pass-through 4kp60 (594 MHz).
--
--I also added an RTC and a breakout shield:
--
--https://www.amazon.com/Makerfire%C2%AE-Raspberry-Module-DS1307-Battery/dp/B00ZOXWHK4
-+The video quality is variable and certainly not enough to pass-through 4kp60
-+(594 MHz) video. You might be able to support 4kp30, but more likely you will
-+be limited to 1080p60 (148.5 MHz). But for CEC testing that is fine.
 
--https://www.dx.com/p/raspberry-pi-gpio-expansion-board-breadboard-easy-multiplexing-board-one-to-three-with-screw-for-raspberry-pi-2-3-b-b-2729992.html#.YGRCG0MzZ7I
-+You need a breadboard and some breadboard wires:
-
--These two are not needed but they make life a bit easier.
-+http://www.dx.com/p/diy-40p-male-to-female-male-to-male-female-to-female-dupont-line-wire-3pcs-356089#.WYLOOXWGN7I
-
--If you want to monitor the HPD line as well, then you need one of these
--level shifters:
-+If you want to monitor the HPD and/or 5V lines as well, then you need one of
-+these 5V to 3.3V level shifters:
-
- https://www.adafruit.com/product/757
-
-@@ -331,34 +321,42 @@ https://www.adafruit.com/product/757
- can get similar things).
-
- The CEC pin of the HDMI connector needs to be connected to these pins:
--CE0/IO8 and CE1/IO7 (pull-up GPIOs). The (optional) HPD pin of the HDMI
--connector should be connected (via a level shifter to convert the 5V
--to 3.3V) to these pins: IO17 and IO27. The (optional) 5V pin of the HDMI
--connector should be connected (via a level shifter) to these pins: IO22
--and IO24. Monitoring the HPD an 5V lines is not necessary, but it is helpful.
-+GPIO 6 and GPIO 7. The optional HPD pin of the HDMI connector should
-+be connected via the level shifter to these pins: GPIO 23 and GPIO 12.
-+The optional 5V pin of the HDMI connector should be connected via the
-+level shifter to these pins: GPIO 25 and GPIO 22. Monitoring the HPD and
-+5V lines is not necessary, but it is helpful.
-+
-+This device tree addition in ``arch/arm/boot/dts/bcm2711-rpi-4-b.dts``
-+will hook up the cec-gpio driver correctly::
-
--This kernel patch will hook up the cec-gpio driver correctly to
--e.g. ``arch/arm/boot/dts/bcm2837-rpi-3-b-plus.dts``::
-+	cec@6 {
-+		compatible = "cec-gpio";
-+		cec-gpios = <&gpio 6 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
-+		hpd-gpios = <&gpio 23 GPIO_ACTIVE_HIGH>;
-+		v5-gpios = <&gpio 25 GPIO_ACTIVE_HIGH>;
-+	};
-
- 	cec@7 {
- 		compatible = "cec-gpio";
- 		cec-gpios = <&gpio 7 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
--		hpd-gpios = <&gpio 17 GPIO_ACTIVE_HIGH>;
-+		hpd-gpios = <&gpio 12 GPIO_ACTIVE_HIGH>;
- 		v5-gpios = <&gpio 22 GPIO_ACTIVE_HIGH>;
- 	};
-
--	cec@8 {
--		compatible = "cec-gpio";
--		cec-gpios = <&gpio 8 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
--		hpd-gpios = <&gpio 27 GPIO_ACTIVE_HIGH>;
--		v5-gpios = <&gpio 24 GPIO_ACTIVE_HIGH>;
--	};
-+If you haven't hooked up the HPD and/or 5V lines, then just delete those
-+lines.
-
- This dts change will enable two cec GPIO devices: I typically use one to
- send/receive CEC commands and the other to monitor. If you monitor using
- an unconfigured CEC adapter then it will use GPIO interrupts which makes
- monitoring very accurate.
-
-+If you just want to monitor traffic, then a single instance is sufficient.
-+The minimum configuration is one HDMI female-female passthrough connector
-+and connecting the CEC pin to GPIO 6 on the Raspberry Pi using a single
-+female-female breadboard wire.
-+
- The documentation on how to use the error injection is here: :ref:`cec_pin_error_inj`.
-
- ``cec-ctl --monitor-pin`` will do low-level CEC bus sniffing and analysis.
