@@ -2,41 +2,38 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C59E2C6379F
-	for <linux-media@archiver.kernel.org>; Wed, 15 Feb 2023 22:30:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90E2FC64ED6
+	for <linux-media@archiver.kernel.org>; Wed, 15 Feb 2023 22:30:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbjBOWaM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Feb 2023 17:30:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33030 "EHLO
+        id S229721AbjBOWaO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Feb 2023 17:30:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjBOWaK (ORCPT
+        with ESMTP id S229726AbjBOWaN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Feb 2023 17:30:10 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC0530295;
-        Wed, 15 Feb 2023 14:30:09 -0800 (PST)
+        Wed, 15 Feb 2023 17:30:13 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702DF37B6D
+        for <linux-media@vger.kernel.org>; Wed, 15 Feb 2023 14:30:12 -0800 (PST)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1C286465;
-        Wed, 15 Feb 2023 23:30:07 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 00CA7475;
+        Wed, 15 Feb 2023 23:30:10 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1676500207;
-        bh=l+clC6WIppIJdkCBIFOcnTMxtLFtXa5ptPUjSCQRiZ4=;
+        s=mail; t=1676500211;
+        bh=oVV45dd9BKMhy6GwDg7AQeYiWJVyPrN0YqOB+M9cgss=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U/cZOqn09RWcTPw8LO0MZWS56McRlW+Zyts/7YX5FTOYiq5D29bM4k9OJJ9JKROLy
-         bn0b65T4wnwUutMQN9DmotSA9WVucuyTdpQSU/IMyrQm68trIiVar+0zrixFC91AIE
-         D7aeVYxumT4p3tmtoCNNKbE+EWF9vOoJoC/vseAI=
+        b=bHiF56wOjjAW8xSE7rLSMV30cbz8b2OQ20HmRqEnGRwtNRI/wEzDujSQ2Iy3zZM3U
+         nZAMEbZ4aaN4Fs4vaiIO0WGHd9fBFpiKY2YP+H1ZilUKWZF41C7TsMElY4wPU4V+Ri
+         kag0YdQfFbn1CK/92ByouGwOIg32138Ih3wTsj7o=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
         Manivannan Sadhasivam <mani@kernel.org>,
         Sakari Ailus <sakari.ailus@iki.fi>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org
-Subject: [PATCH v3 01/15] media: dt-bindings: media: i2c: Add mono version to IMX290 bindings
-Date:   Thu, 16 Feb 2023 00:29:49 +0200
-Message-Id: <20230215223003.30170-2-laurent.pinchart@ideasonboard.com>
+        Alexander Stein <alexander.stein@ew.tq-group.com>
+Subject: [PATCH v3 03/15] media: i2c: imx290: Match kernel coding style on whitespace
+Date:   Thu, 16 Feb 2023 00:29:51 +0200
+Message-Id: <20230215223003.30170-4-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230215223003.30170-1-laurent.pinchart@ideasonboard.com>
 References: <20230215223003.30170-1-laurent.pinchart@ideasonboard.com>
@@ -48,73 +45,65 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-The IMX290 module is available as either monochrome or colour and
-the variant is not detectable at runtime.
-
-Add a new compatible string for the monochrome version, based on the
-full device name IMX290LLR. For consistency, add a new compatible string
-for the colour version based on the IMX290LQR full device name, and
-deprecate the current ambiguous compatible string.
+Fix up a couple of coding style issues regarding missing blank
+lines after declarations, double blank lines, and incorrect
+indentation.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Acked-by: Rob Herring <robh@kernel.org>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Tested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
-Changes since v2:
+ drivers/media/i2c/imx290.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-- Deprecate the sony,imx290 compatible
-- Update the example to use the new sony,imx290lqr compatible.
----
- .../bindings/media/i2c/sony,imx290.yaml       | 24 +++++++++++++------
- 1 file changed, 17 insertions(+), 7 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx290.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx290.yaml
-index 21377daae026..cafb6e1a7150 100644
---- a/Documentation/devicetree/bindings/media/i2c/sony,imx290.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/sony,imx290.yaml
-@@ -12,15 +12,25 @@ maintainers:
+diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
+index febb8aeb9252..a8acc785d995 100644
+--- a/drivers/media/i2c/imx290.c
++++ b/drivers/media/i2c/imx290.c
+@@ -106,7 +106,6 @@
  
- description: |-
-   The Sony IMX290 is a 1/2.8-Inch CMOS Solid-state image sensor with Square
--  Pixel for Color Cameras. It is programmable through I2C and 4-wire
--  interfaces. The sensor output is available via CMOS logic parallel SDR
--  output, Low voltage LVDS DDR output and CSI-2 serial data output. The CSI-2
--  bus is the default. No bindings have been defined for the other busses.
-+  Pixel, available in either mono or colour variants. It is programmable
-+  through I2C and 4-wire interfaces.
+ #define IMX290_VMAX_DEFAULT				1125
+ 
+-
+ /*
+  * The IMX290 pixel array is organized as follows:
+  *
+@@ -350,6 +349,7 @@ static const s64 imx290_link_freq_2lanes[] = {
+ 	[FREQ_INDEX_1080P] = 445500000,
+ 	[FREQ_INDEX_720P] = 297000000,
+ };
 +
-+  The sensor output is available via CMOS logic parallel SDR output, Low voltage
-+  LVDS DDR output and CSI-2 serial data output. The CSI-2 bus is the default.
-+  No bindings have been defined for the other busses.
-+
-+  imx290lqr is the full model identifier for the colour variant. "sony,imx290"
-+  is treated the same as this as it was the original compatible string.
-+  imx290llr is the mono version of the sensor.
+ static const s64 imx290_link_freq_4lanes[] = {
+ 	[FREQ_INDEX_1080P] = 222750000,
+ 	[FREQ_INDEX_720P] = 148500000,
+@@ -485,7 +485,7 @@ static int __always_unused imx290_read(struct imx290 *imx290, u32 addr, u32 *val
+ 			      data, (addr >> IMX290_REG_SIZE_SHIFT) & 3);
+ 	if (ret < 0) {
+ 		dev_err(imx290->dev, "%u-bit read from 0x%04x failed: %d\n",
+-			 ((addr >> IMX290_REG_SIZE_SHIFT) & 3) * 8,
++			((addr >> IMX290_REG_SIZE_SHIFT) & 3) * 8,
+ 			 addr & IMX290_REG_ADDR_MASK, ret);
+ 		return ret;
+ 	}
+@@ -506,7 +506,7 @@ static int imx290_write(struct imx290 *imx290, u32 addr, u32 value, int *err)
+ 			       data, (addr >> IMX290_REG_SIZE_SHIFT) & 3);
+ 	if (ret < 0) {
+ 		dev_err(imx290->dev, "%u-bit write to 0x%04x failed: %d\n",
+-			 ((addr >> IMX290_REG_SIZE_SHIFT) & 3) * 8,
++			((addr >> IMX290_REG_SIZE_SHIFT) & 3) * 8,
+ 			 addr & IMX290_REG_ADDR_MASK, ret);
+ 		if (err)
+ 			*err = ret;
+@@ -772,8 +772,7 @@ static int imx290_start_streaming(struct imx290 *imx290,
  
- properties:
-   compatible:
--    enum:
--      - sony,imx290
-+    oneOf:
-+      - enum:
-+          - sony,imx290lqr # Colour
-+          - sony,imx290llr # Monochrome
-+      - const: sony,imx290
-+        deprecated: true
- 
-   reg:
-     maxItems: 1
-@@ -101,7 +111,7 @@ examples:
-         #size-cells = <0>;
- 
-         imx290: camera-sensor@1a {
--            compatible = "sony,imx290";
-+            compatible = "sony,imx290lqr";
-             reg = <0x1a>;
- 
-             pinctrl-names = "default";
+ 	/* Set init register settings */
+ 	ret = imx290_set_register_array(imx290, imx290_global_init_settings,
+-					ARRAY_SIZE(
+-						imx290_global_init_settings));
++					ARRAY_SIZE(imx290_global_init_settings));
+ 	if (ret < 0) {
+ 		dev_err(imx290->dev, "Could not set init registers\n");
+ 		return ret;
 -- 
 Regards,
 
