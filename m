@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70D04C677F1
-	for <linux-media@archiver.kernel.org>; Sat, 18 Feb 2023 21:16:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EEE44C64ED9
+	for <linux-media@archiver.kernel.org>; Sat, 18 Feb 2023 21:16:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbjBRVQI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 18 Feb 2023 16:16:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42098 "EHLO
+        id S229836AbjBRVQJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 18 Feb 2023 16:16:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbjBRVPz (ORCPT
+        with ESMTP id S229817AbjBRVQG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 18 Feb 2023 16:15:55 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2280015C8C;
-        Sat, 18 Feb 2023 13:15:54 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id a5-20020a17090a70c500b00236679bc70cso13689pjm.4;
-        Sat, 18 Feb 2023 13:15:54 -0800 (PST)
+        Sat, 18 Feb 2023 16:16:06 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91A713D7C;
+        Sat, 18 Feb 2023 13:15:56 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id o9so1553787plk.12;
+        Sat, 18 Feb 2023 13:15:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=792an2SD05nhQRGBlD0Pg2RQ7VfR74mQEP4A4mqZ6Pk=;
-        b=HM20qQN2yIU6PxWiMZEoSu3nueB6cRdZunRf/0WsasLxrWwG6jTJzi54FYZ5B5NZGd
-         oiDKEt41GpKHkAkJ5gTVtA1j+PltUu0tI95VttL8G5W+qQnSbySKu7+cSjvKNge6QQ5J
-         Pj2F3mRJmuteKR/t3CJoExZNh0GN57mlIvR6bySQe8r5eZLlOCXNqZxX5bjf/dupH9z3
-         IXqeOipa7lBiO9XbbbNImG/WCaemmgM46GgIE8Xh55pnP/LLLgxjXjr+DHt1NcdxFObQ
-         14PQ97rq81/QGaBdPs+HGfOyKwPzT8UnCAi8zNIuZLDmVStTVtSKfIFcJehu18xb5BVp
-         cE9g==
+        bh=RYIkCiW1P3MTuGNaXnYInZXOL6oL98BTswmIrYI3+hc=;
+        b=eQ/2i4WtARuumdk6wu3UFqAW69ZW8h3tfauASKVW6UiPkF3AV+YCLi3IsnRxxMwg0g
+         CUIDHLV4BZqXknqttTtk+bXdQ6ljF08ejS9/UaWYQhGdaghr+KWH/71gNpnwDfzQ/UH5
+         nBW8tWukaXtSxhoyOsYUBlBageDHZMcz+vUTvBGG9/D5e4fM1azL9Vg9cP2p+UYvndt2
+         AHl5A36OpTJ8bpk7MfIg49zDicp0C2GaVHxplb2BU6oIc7LsUP5oMXTq3g1kIWHJce+H
+         XGKorRr6oiJXunUlrDyMsUxILj9/VBJnJZI1d9zF9ycS3uV11lNRCp0g7026hwsHpCwE
+         JhRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=792an2SD05nhQRGBlD0Pg2RQ7VfR74mQEP4A4mqZ6Pk=;
-        b=XmkjRTJUMuQzArRsYXYU+r3c9jw5UfF6rsTbn/sri85sibNdmoOzRFssTXU0cl4J2W
-         BKqioXKYAkiT2mLOnHKYpLTZ4QS5RCWcRvhhmG8ZdS+rbxE9KQeNVofrWMEo4u6oL8mt
-         awB+MsNmNQmjM41pkoqsCRDG458NJgsITQPKnFn2VZ6L9MHEKi89V9zNRsqjwE1yFQZI
-         8N1J+uduDsYiWGbc7OU1SiS+5uDU3aBNA/WB252mRSisZyE1Pp7iwpipMDxtuST4jcXy
-         jI/e5drvU5l68Sr/QLM56zvBLqTHZZ3oZ/+kd/SOwvR6diwShDYh4MUvewU+MpXoF3jI
-         ZNiA==
-X-Gm-Message-State: AO0yUKUj+K6wHyY473ZTULIS/PG4Xv8t0MhoodRJi3gFk7HcovHn5Mif
-        L49ojjq/waezaNh6jM2s+Ck=
-X-Google-Smtp-Source: AK7set/QRHtfFq0gaLBBtupUc42V0jJFczyxE24VpZirzrpITI3ga4mB8wxlcDavsOCQ4hY8/UcUUA==
-X-Received: by 2002:a17:90a:357:b0:233:f990:d646 with SMTP id 23-20020a17090a035700b00233f990d646mr1577488pjf.35.1676754953521;
-        Sat, 18 Feb 2023 13:15:53 -0800 (PST)
+        bh=RYIkCiW1P3MTuGNaXnYInZXOL6oL98BTswmIrYI3+hc=;
+        b=Cbf+1pS36nIWOhUBT7qVafeLUocqxkZ9ouS2pgEfesUdYU62aisMY47ys/j+crWR8x
+         GJxGn9ZOkU0nfNaKgR8syXXLTerszhGSeiGFeaO6hoKRDxAUvuX+hj18GDoSAPybcZFK
+         kpLPXGCJKLY/cHMRqc5yyebUs2GzSbyzK0gHANE5N3640yBjU1hjVHGoZW0dlzOyO3nl
+         qGfNHq/jEqrCPolq3nr4NPWs8NofJyYyxgklM8W6siaCFFjO9LffAZ1I5w9NavcrVuxE
+         1XY5GO9RZbcid8fa6QeM+t47ShEKlBTdZg7/BOsuEfNfIkCne3jMaKT3DLz3qXLEwXMy
+         iFiQ==
+X-Gm-Message-State: AO0yUKXQyYey09Q8aGcYvqgnaq+vWWbE9q90iGv7qv5U0V8niwXHaago
+        Z9sEHK1Ag+YDFJpQqH+kAyk=
+X-Google-Smtp-Source: AK7set+6yJ/VIDgvzJ07sbwRoyqtX5Z4gVUluKE0+5jQloSvZWFq8eCN7xusPVn+H7cDq6VHJfZzWQ==
+X-Received: by 2002:a17:902:8504:b0:199:30a6:376c with SMTP id bj4-20020a170902850400b0019930a6376cmr3106041plb.68.1676754956327;
+        Sat, 18 Feb 2023 13:15:56 -0800 (PST)
 Received: from localhost (c-73-67-135-195.hsd1.or.comcast.net. [73.67.135.195])
-        by smtp.gmail.com with ESMTPSA id bv21-20020a17090af19500b00231261061a5sm1254130pjb.5.2023.02.18.13.15.53
+        by smtp.gmail.com with ESMTPSA id h12-20020a170902eecc00b0019a96871e09sm5072653plb.211.2023.02.18.13.15.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Feb 2023 13:15:53 -0800 (PST)
+        Sat, 18 Feb 2023 13:15:55 -0800 (PST)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
@@ -63,13 +63,14 @@ Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
         Simon Ser <contact@emersion.fr>,
         Rob Clark <robdclark@chromium.org>,
         Sumit Semwal <sumit.semwal@linaro.org>,
+        Gustavo Padovan <gustavo@padovan.org>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        linux-media@vger.kernel.org (open list:DMA BUFFER SHARING FRAMEWORK),
+        linux-media@vger.kernel.org (open list:SYNC FILE FRAMEWORK),
         linaro-mm-sig@lists.linaro.org (moderated list:DMA BUFFER SHARING
         FRAMEWORK), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v4 04/14] dma-buf/dma-resv: Add a way to set fence deadline
-Date:   Sat, 18 Feb 2023 13:15:47 -0800
-Message-Id: <20230218211608.1630586-5-robdclark@gmail.com>
+Subject: [PATCH v4 06/14] dma-buf/sync_file: Support (E)POLLPRI
+Date:   Sat, 18 Feb 2023 13:15:49 -0800
+Message-Id: <20230218211608.1630586-7-robdclark@gmail.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230218211608.1630586-1-robdclark@gmail.com>
 References: <20230218211608.1630586-1-robdclark@gmail.com>
@@ -81,58 +82,38 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-Add a way to set a deadline on remaining resv fences according to the
-requested usage.
+Allow userspace to use the EPOLLPRI/POLLPRI flag to indicate an urgent
+wait (as opposed to a "housekeeping" wait to know when to cleanup after
+some work has completed).  Usermode components of GPU driver stacks
+often poll() on fence fd's to know when it is safe to do things like
+free or reuse a buffer, but they can also poll() on a fence fd when
+waiting to read back results from the GPU.  The EPOLLPRI/POLLPRI flag
+lets the kernel differentiate these two cases.
 
 Signed-off-by: Rob Clark <robdclark@chromium.org>
 ---
- drivers/dma-buf/dma-resv.c | 19 +++++++++++++++++++
- include/linux/dma-resv.h   |  2 ++
- 2 files changed, 21 insertions(+)
+ drivers/dma-buf/sync_file.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/dma-buf/dma-resv.c b/drivers/dma-buf/dma-resv.c
-index 1c76aed8e262..0c86f6d577ab 100644
---- a/drivers/dma-buf/dma-resv.c
-+++ b/drivers/dma-buf/dma-resv.c
-@@ -684,6 +684,25 @@ long dma_resv_wait_timeout(struct dma_resv *obj, enum dma_resv_usage usage,
- }
- EXPORT_SYMBOL_GPL(dma_resv_wait_timeout);
+diff --git a/drivers/dma-buf/sync_file.c b/drivers/dma-buf/sync_file.c
+index fb6ca1032885..c30b2085ee0a 100644
+--- a/drivers/dma-buf/sync_file.c
++++ b/drivers/dma-buf/sync_file.c
+@@ -192,6 +192,14 @@ static __poll_t sync_file_poll(struct file *file, poll_table *wait)
+ {
+ 	struct sync_file *sync_file = file->private_data;
  
-+/**
-+ * dma_resv_set_deadline - Set a deadline on reservation's objects fences
-+ * @obj: the reservation object
-+ * @usage: controls which fences to include, see enum dma_resv_usage.
-+ * @deadline: the requested deadline (MONOTONIC)
-+ */
-+void dma_resv_set_deadline(struct dma_resv *obj, enum dma_resv_usage usage,
-+			   ktime_t deadline)
-+{
-+	struct dma_resv_iter cursor;
-+	struct dma_fence *fence;
++	/*
++	 * The POLLPRI/EPOLLPRI flag can be used to signal that
++	 * userspace wants the fence to signal ASAP, express this
++	 * as an immediate deadline.
++	 */
++	if (poll_requested_events(wait) & EPOLLPRI)
++		dma_fence_set_deadline(sync_file->fence, ktime_get());
 +
-+	dma_resv_iter_begin(&cursor, obj, usage);
-+	dma_resv_for_each_fence_unlocked(&cursor, fence) {
-+		dma_fence_set_deadline(fence, deadline);
-+	}
-+	dma_resv_iter_end(&cursor);
-+}
-+EXPORT_SYMBOL_GPL(dma_resv_set_deadline);
+ 	poll_wait(file, &sync_file->wq, wait);
  
- /**
-  * dma_resv_test_signaled - Test if a reservation object's fences have been
-diff --git a/include/linux/dma-resv.h b/include/linux/dma-resv.h
-index 0637659a702c..8d0e34dad446 100644
---- a/include/linux/dma-resv.h
-+++ b/include/linux/dma-resv.h
-@@ -479,6 +479,8 @@ int dma_resv_get_singleton(struct dma_resv *obj, enum dma_resv_usage usage,
- int dma_resv_copy_fences(struct dma_resv *dst, struct dma_resv *src);
- long dma_resv_wait_timeout(struct dma_resv *obj, enum dma_resv_usage usage,
- 			   bool intr, unsigned long timeout);
-+void dma_resv_set_deadline(struct dma_resv *obj, enum dma_resv_usage usage,
-+			   ktime_t deadline);
- bool dma_resv_test_signaled(struct dma_resv *obj, enum dma_resv_usage usage);
- void dma_resv_describe(struct dma_resv *obj, struct seq_file *seq);
- 
+ 	if (list_empty(&sync_file->cb.node) &&
 -- 
 2.39.1
 
