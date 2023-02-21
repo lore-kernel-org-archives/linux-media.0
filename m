@@ -2,75 +2,141 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 890CBC636D7
-	for <linux-media@archiver.kernel.org>; Tue, 21 Feb 2023 13:57:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FD1BC61DA3
+	for <linux-media@archiver.kernel.org>; Tue, 21 Feb 2023 14:32:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233982AbjBUN5m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 21 Feb 2023 08:57:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47032 "EHLO
+        id S233810AbjBUOcL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 21 Feb 2023 09:32:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233949AbjBUN5l (ORCPT
+        with ESMTP id S230115AbjBUOcK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 21 Feb 2023 08:57:41 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548862A980;
-        Tue, 21 Feb 2023 05:57:35 -0800 (PST)
-Received: from ideasonboard.com (host-87-16-53-160.retail.telecomitalia.it [87.16.53.160])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2EA61519;
-        Tue, 21 Feb 2023 14:57:33 +0100 (CET)
+        Tue, 21 Feb 2023 09:32:10 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A2228D0B
+        for <linux-media@vger.kernel.org>; Tue, 21 Feb 2023 06:32:09 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2E89C59D;
+        Tue, 21 Feb 2023 15:32:07 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1676987853;
-        bh=jpHQRZlW4o49GCucGmzwL3i5f+RGD1N3eNLklO3dM30=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YSeB7qlTK6/ypFDpsNffIpRKZZPgzlXRnQ9kzKubtuIjylKlAI33RX93Z2nxCPQKV
-         yOfR/mEEa5e6DL8VIADtHan6aGv4RnZdXel6hA185qBKbbYWKhEwAETZXI+XlBn6re
-         kXhJuEyVg8FV8SxFLv8r6l3h77XgZf6MNna/CI7A=
-Date:   Tue, 21 Feb 2023 14:57:30 +0100
-From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-To:     Paul Elder <paul.elder@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, Dafna Hirschfeld <dafna@fastmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] media: rkisp1: Miscellaneous improvements
-Message-ID: <20230221135730.zyfg3ainjg7btfzv@uno.localdomain>
-References: <20221117084217.3892680-1-paul.elder@ideasonboard.com>
+        s=mail; t=1676989927;
+        bh=5EYQM7xl3L+oo1PZ5Ms5v7uzAa08b9jI2YzUxmM6GL0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hcX0v/low8mDMazKGU5a0FG7U3hjcjzWZX/UlQ33H21WiO52HoKFYL6gg5txdFly5
+         inJ4ShRDapFNf1KRneQ2uFlPPjhxAbfljJ+UEb/4qfNlFtQP9h3ryKE9FReF53jmqC
+         rezAR8Ij0PStrjpyatKjGbMn/7X2jjesoPOkqy9c=
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     gjasny@googlemail.com, hverkuil@xs4all.nl,
+        kieran.bingham@ideasonboard.com, mchehab@kernel.org,
+        nicolas@ndufresne.ca, p.zabel@pengutronix.de, rosenp@gmail.com,
+        sakari.ailus@iki.fi, sean@mess.org, user.vdr@gmail.com,
+        xavier.claessens@collabora.com, deborah.brouwer@collabora.com,
+        ariel@vanguardiasur.com.ar, ezequiel@vanguardiasur.com.ar,
+        tomi.valkeinen@ideasonboard.com
+Subject: [v4l-utils] [PATCH v9 1/7] utils: Allow choosing v4l2-tracer-gen.pl output
+Date:   Tue, 21 Feb 2023 16:31:58 +0200
+Message-Id: <20230221143204.26591-2-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230221143204.26591-1-laurent.pinchart@ideasonboard.com>
+References: <20230221143204.26591-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221117084217.3892680-1-paul.elder@ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-On Thu, Nov 17, 2022 at 05:42:14PM +0900, Paul Elder wrote:
-> This patch series adds small improvements to the rkisp1 driver:
-> - Add NV16M and NV61M output
-> - Implement ENUM_FRAMESIZES
->
-> As well as a small code cleanup.
->
-> These patches have been sent before individually, so really this is a
-> resend, which also bunches them together.
->
-> Laurent Pinchart (1):
->   media: rkisp1: Make local immutable array variables static const
->
-> Paul Elder (2):
->   media: rkisp1: Add NV16M and NV61M to output formats
->   media: rkisp1: Implement ENUM_FRAMESIZES
+In v4l2-tracer-gen.pl, add support for setting the output directory for
+the generated files and choosing which ones to generate (common, trace or
+retrace). The default is to generate them all in the current directory,
+i.e. what the script used to do.
 
-Has this series fell into cracks ? Support for VIDIOC_ENUM_FRAMESIZES
-in particular is a relevant feature and seems not controversial at all...
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+[Append a '/' automatically between $outdir and $fname]
+Tested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Tested-by: Niklas Söderlund <niklas.soderlund@ragnatech.se>
+---
+ utils/v4l2-tracer/v4l2-tracer-gen.pl | 36 ++++++++++++++++++++++++----
+ 1 file changed, 31 insertions(+), 5 deletions(-)
 
->
->  .../platform/rockchip/rkisp1/rkisp1-capture.c | 64 +++++++++++++++++--
->  1 file changed, 60 insertions(+), 4 deletions(-)
->
-> --
-> 2.35.1
->
+diff --git a/utils/v4l2-tracer/v4l2-tracer-gen.pl b/utils/v4l2-tracer/v4l2-tracer-gen.pl
+index fe648182ac34..f7454e7f0bab 100755
+--- a/utils/v4l2-tracer/v4l2-tracer-gen.pl
++++ b/utils/v4l2-tracer/v4l2-tracer-gen.pl
+@@ -2,6 +2,16 @@
+ # SPDX-License-Identifier: GPL-2.0-only */
+ # Copyright 2022 Collabora Ltd.
+ 
++my $outdir = ".";
++my %outtype = ( "common" => 1, "trace" => 1, "retrace" => 1 );
++
++while ($ARGV[0] =~ /^-/) {
++	my $arg = shift @ARGV;
++
++	$outdir = shift @ARGV if $arg eq "-o";
++	%outtype = (shift @ARGV => 1) if $arg eq '-t';
++}
++
+ sub convert_type_to_json_type {
+ 	my $type = shift;
+ 	if ($type eq __u8 || $type eq char || $type eq __u16 || $type eq __s8 || $type eq __s16 || $type eq __s32 || $type eq 'int') {
+@@ -696,29 +706,45 @@ sub struct_gen_ctrl {
+ 	printf $fh_retrace_cpp "}\n\n";
+ }
+ 
+-open($fh_trace_cpp, '>', 'trace-gen.cpp') or die "Could not open trace-gen.cpp for writing";
++sub do_open($$) {
++	my ($type, $fname) = @_;
++	my $fh;
++
++	if (defined $outtype{$type}) {
++		$fname = "$outdir/$fname";
++	} else {
++		$fname = "/dev/null";
++	}
++
++	open($fh, "> $fname") or die "Could not open $fname for writing";
++
++	return $fh;
++}
++
++
++$fh_trace_cpp = do_open("trace", "trace-gen.cpp");
+ printf $fh_trace_cpp "/* SPDX-License-Identifier: GPL-2.0-only */\n/*\n * Copyright 2022 Collabora Ltd.\n";
+ printf $fh_trace_cpp " *\n * AUTOMATICALLY GENERATED BY \'%s\' DO NOT EDIT\n */\n\n", __FILE__;
+ printf $fh_trace_cpp "#include \"v4l2-tracer-common.h\"\n\n";
+ 
+-open($fh_trace_h, '>', 'trace-gen.h') or die "Could not open trace-gen.h for writing";
++$fh_trace_h = do_open("trace", "trace-gen.h");
+ printf $fh_trace_h "/* SPDX-License-Identifier: GPL-2.0-only */\n/*\n * Copyright 2022 Collabora Ltd.\n";
+ printf $fh_trace_h " *\n * AUTOMATICALLY GENERATED BY \'%s\' DO NOT EDIT\n */\n\n", __FILE__;
+ printf $fh_trace_h "\#ifndef TRACE_GEN_H\n";
+ printf $fh_trace_h "\#define TRACE_GEN_H\n\n";
+ 
+-open($fh_retrace_cpp, '>', 'retrace-gen.cpp') or die "Could not open retrace-gen.cpp for writing";
++$fh_retrace_cpp = do_open("retrace", "retrace-gen.cpp");
+ printf $fh_retrace_cpp "/* SPDX-License-Identifier: GPL-2.0-only */\n/*\n * Copyright 2022 Collabora Ltd.\n";
+ printf $fh_retrace_cpp " *\n * AUTOMATICALLY GENERATED BY \'%s\' DO NOT EDIT\n */\n\n", __FILE__;
+ printf $fh_retrace_cpp "#include \"v4l2-tracer-common.h\"\n\n";
+ 
+-open($fh_retrace_h, '>', 'retrace-gen.h') or die "Could not open retrace-gen.h for writing";
++$fh_retrace_h = do_open("retrace", "retrace-gen.h");
+ printf $fh_retrace_h "/* SPDX-License-Identifier: GPL-2.0-only */\n/*\n * Copyright 2022 Collabora Ltd.\n";
+ printf $fh_retrace_h " *\n * AUTOMATICALLY GENERATED BY \'%s\' DO NOT EDIT\n */\n\n", __FILE__;
+ printf $fh_retrace_h "\#ifndef RETRACE_GEN_H\n";
+ printf $fh_retrace_h "\#define RETRACE_GEN_H\n\n";
+ 
+-open($fh_common_info_h, '>', 'v4l2-tracer-info-gen.h') or die "Could not open v4l2-tracer-info-gen.h for writing";
++$fh_common_info_h = do_open("common", "v4l2-tracer-info-gen.h");
+ printf $fh_common_info_h "/* SPDX-License-Identifier: GPL-2.0-only */\n/*\n * Copyright 2022 Collabora Ltd.\n";
+ printf $fh_common_info_h " *\n * AUTOMATICALLY GENERATED BY \'%s\' DO NOT EDIT\n */\n\n", __FILE__;
+ printf $fh_common_info_h "\#ifndef V4L2_TRACER_INFO_GEN_H\n";
+-- 
+Regards,
+
+Laurent Pinchart
+
