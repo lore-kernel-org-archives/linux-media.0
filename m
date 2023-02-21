@@ -2,246 +2,958 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C55DC61DA3
-	for <linux-media@archiver.kernel.org>; Tue, 21 Feb 2023 08:45:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06AC2C6379F
+	for <linux-media@archiver.kernel.org>; Tue, 21 Feb 2023 09:56:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233570AbjBUIor (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 21 Feb 2023 03:44:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
+        id S234105AbjBUJ40 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 21 Feb 2023 04:56:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232613AbjBUIop (ORCPT
+        with ESMTP id S234054AbjBUJ4V (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 21 Feb 2023 03:44:45 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820E64C14;
-        Tue, 21 Feb 2023 00:44:40 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31L3gt5B000674;
-        Tue, 21 Feb 2023 08:44:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=lJZJskjBOHx/iQdeXfb+9gcEIWXD+YzO5L8KNARmCUc=;
- b=JIGb11jPom7O65wXfWmsXc8rEIVlR109S00E+EHfIEe14QXLycXvd86pUskbfj0TpBEG
- 9u8nQsVpwCc7tKekoLq4nj7sDvhbHiwe7XCjPTpjbHTHNyQkm6HerTu6u9pgsusG9FvM
- s775y01CrKGf1IvlEF5xXWp5iPGeqyOLDCQ5Da7NYhtMh9XfbrVcizuIUvTpuuvN55jz
- GbRq97MzE9rOaB4a0ZDQfWo/Wz/MkKWGkxTm1w0GMug+clG7wOUb8aevI/kpRI5Aeb16
- 7cdPD7BA+4B2vIaBzaaj6VemEx64cHtLNU8BWPqytQfDzpKL75T1mx5lxgjd1wv8/LM+ zg== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ntp98fcq4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Feb 2023 08:44:31 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31L8iUwq027469
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Feb 2023 08:44:30 GMT
-Received: from [10.251.44.63] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 21 Feb
- 2023 00:44:26 -0800
-Message-ID: <8243cc42-236c-20e3-74dc-1f130ab1dcf6@quicinc.com>
-Date:   Tue, 21 Feb 2023 10:44:24 +0200
+        Tue, 21 Feb 2023 04:56:21 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F657ED7
+        for <linux-media@vger.kernel.org>; Tue, 21 Feb 2023 01:55:49 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 14BD92E4;
+        Tue, 21 Feb 2023 10:55:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1676973347;
+        bh=KUIp5BEdmNV/GlcsCQU92hY+6Bk/qenUe6ezYkHHczY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ojI8BnCRJX0Fauxzl+Cnd6bMV9udEauBWJ6eJu0DXhCo8OByvQKmW99V89f1gEQVx
+         G9KNdNH/pwQ9dT6qsdbMvccuUooeSjxOe6hCVSB5+bFz5VTnHKBs9AXUbQt6RS+J+z
+         REbOInBM7mgrixCZzKmbEJVCZmUOBs0EJbk6/PGc=
+Message-ID: <f0e27b25-dfd8-8e3d-0d27-8c9d8d30bc16@ideasonboard.com>
+Date:   Tue, 21 Feb 2023 11:55:42 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v7 0/4] media: camss: sm8250: Virtual channels support for
- SM8250
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [v4l-utils] [PATCH v8 0/6] Switch build system to meson
 Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <akapatra@quicinc.com>, <jzala@quicinc.com>, <todor.too@gmail.com>
-CC:     <agross@kernel.org>, <konrad.dybcio@somainline.org>,
-        <mchehab@kernel.org>, <cgera@qti.qualcomm.com>,
-        <gchinnab@quicinc.com>, <ayasan@qti.qualcomm.com>,
-        <laurent.pinchart@ideasonboard.com>
-References: <20221209094037.1148-1-quic_mmitkov@quicinc.com>
- <662d68f7-6160-263d-6e4d-e3687d5cf8eb@quicinc.com>
- <7565d38c-d8f4-39e0-8547-fbb511f6d649@quicinc.com>
- <894e3ce6-0f2b-608b-ec4e-09083704f429@linaro.org>
-From:   "Milen Mitkov (Consultant)" <quic_mmitkov@quicinc.com>
-In-Reply-To: <894e3ce6-0f2b-608b-ec4e-09083704f429@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, ezequiel@collabora.com,
+        gjasny@googlemail.com, hverkuil@xs4all.nl,
+        kieran.bingham@ideasonboard.com, mchehab@kernel.org,
+        nicolas@ndufresne.ca, p.zabel@pengutronix.de, rosenp@gmail.com,
+        sakari.ailus@iki.fi, sean@mess.org, user.vdr@gmail.com,
+        xavier.claessens@collabora.com, deborah.brouwer@collabora.com
+References: <20230212005137.12025-1-laurent.pinchart@ideasonboard.com>
+ <2fedb527-6faf-7d9b-592c-32862c18bcfa@ideasonboard.com>
+ <Y/PfKEYpZwMMi0wt@pendragon.ideasonboard.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <Y/PfKEYpZwMMi0wt@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 5hFQGPJ6yhUNnT9m3V5Ri1iNguX4ry4Y
-X-Proofpoint-ORIG-GUID: 5hFQGPJ6yhUNnT9m3V5Ri1iNguX4ry4Y
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-21_04,2023-02-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
- adultscore=0 priorityscore=1501 malwarescore=0 suspectscore=0
- lowpriorityscore=0 bulkscore=0 clxscore=1015 impostorscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302210074
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-
-On 20/02/2023 14:26, Bryan O'Donoghue wrote:
-> On 20/02/2023 12:18, Milen Mitkov (Consultant) wrote:
->> On 31/01/2023 11:00, Milen Mitkov (Consultant) wrote:
->>> On 09/12/2022 11:40, quic_mmitkov@quicinc.com wrote:
->>>> From: Milen Mitkov <quic_mmitkov@quicinc.com>
->>>>
->>>> For v7:
->>>> - Fix an issue with output state for different versions of the IFE
->>>>    hardware (for platforms different from QRB5, e.g. QRB3).
->>>>
->>>> For v6:
->>>> - Fix for a potential race condition in csid
->>>> - More detailed description on how to use/test this feature in
->>>>    user-space in the last patch.
->>>>
->>>> For v5:
->>>> - Use entity->use_count instead of s_stream subdev call ret code to
->>>>    check if another instance of the pipeline is running. Prevents an
->>>>    error on 6.1 and up, when stopping one of several simultaneous
->>>>    instances.
->>>> - flush buffers instead of just returning if the pipeline didn't 
->>>> start.
->>>>
->>>> For v4:
->>>> - fixes the warning reported by the kernel test robot
->>>> - tiny code change to enable the vc functionality with the 
->>>> partially-applied
->>>>    multistream patches on linux-next (tested on tag:next-20221010)
->>>>
->>>> For v3:
->>>> - setting the sink pad format on the CSID entity will now propagate 
->>>> the
->>>>    format to the source pads to keep the subdev in a valid internal 
->>>> state.
->>>> - code syntax improvements
->>>>
->>>> For v2:
->>>> - code syntax improvements
->>>> - The info print for the enabled VCs was demoted to a dbg print. 
->>>> Can be
->>>>    enabled with dynamic debug, e.g.:
->>>> echo "file drivers/media/platform/qcom/camss/* +p" > 
->>>> /sys/kernel/debug/dynamic_debug/control
->>>>
->>>> NOTE: These changes depend on the multistream series, that as of yet
->>>> is still not merged upstream. However, part of the
->>>> multistream patches are merged in linux-next (tested on
->>>> tag:next-20221010), including the patch that introduces the
->>>> video_device_pipeline_alloc_start() functionality. This allows
->>>> applying and using this series on linux-next without applying the
->>>> complete multistream set.
->>>>
->>>> The CSID hardware on SM8250 can demux the input data stream into
->>>> maximum of 4 multiple streams depending on virtual channel (vc)
->>>> or data type (dt) configuration.
->>>>
->>>> Situations in which demuxing is useful:
->>>> - HDR sensors that produce a 2-frame HDR output, e.g. a light and a 
->>>> dark frame
->>>>    (the setup we used for testing, with the imx412 sensor),
->>>>    or a 3-frame HDR output - light, medium-lit, dark frame.
->>>> - sensors with additional metadata that is streamed over a different
->>>>    virtual channel/datatype.
->>>> - sensors that produce frames with multiple resolutions in the same 
->>>> pixel
->>>>    data stream
->>>>
->>>> With these changes, the CSID entity has, as it did previously, a 
->>>> single
->>>> sink port (0), and always exposes 4 source ports (1, 2,3, 4). The
->>>> virtual channel configuration is determined by which of the source 
->>>> ports
->>>> are linked to an output VFE line. For example, the link below will
->>>> configure the CSID driver to enable vc 0 and vc 1:
->>>>
->>>> media-ctl -l '"msm_csid0":1->"msm_vfe0_rdi0":0[1]'
->>>> media-ctl -l '"msm_csid0":2->"msm_vfe0_rdi1":0[1]'
->>>>
->>>> which will be demuxed and propagated into /dev/video0
->>>> and /dev/video1 respectively. With this, the userspace can use
->>>> any normal V4L2 client app to start/stop/queue/dequeue from these
->>>> video nodes. Tested with the yavta app.
->>>>
->>>> The format of each RDI channel of the used VFE(s) (msm_vfe0_rdi0,
->>>> msm_vfe0_rdi1,...) must also be configured explicitly.
->>>>
->>>> Note that in order to keep a valid internal subdevice state,
->>>> setting the sink pad format of the CSID subdevice will propagate
->>>> this format to the source pads. However, since the CSID hardware
->>>> can demux the input stream into several streams each of which can
->>>> be a different format, in that case each source pad's
->>>> format must be set individually, e.g.:
->>>>
->>>> media-ctl -V '"msm_csid0":1[fmt:SRGGB10/3840x2160]'
->>>> media-ctl -V '"msm_csid0":2[fmt:SRGGB10/960x540]'
->>>>
->>>> Milen Mitkov (4):
->>>>    media: camss: sm8250: Virtual channels for CSID
->>>>    media: camss: vfe: Reserve VFE lines on stream start and link to 
->>>> CSID
->>>>    media: camss: vfe-480: Multiple outputs support for SM8250
->>>>    media: camss: sm8250: Pipeline starting and stopping for multiple
->>>>      virtual channels
->>>>
->>>>   .../platform/qcom/camss/camss-csid-gen2.c     | 54 ++++++++++------
->>>>   .../media/platform/qcom/camss/camss-csid.c    | 44 +++++++++----
->>>>   .../media/platform/qcom/camss/camss-csid.h    | 11 +++-
->>>>   .../media/platform/qcom/camss/camss-vfe-170.c |  4 +-
->>>>   .../media/platform/qcom/camss/camss-vfe-480.c | 61 
->>>> ++++++++++++-------
->>>>   .../platform/qcom/camss/camss-vfe-gen1.c      |  4 +-
->>>>   drivers/media/platform/qcom/camss/camss-vfe.c |  1 +
->>>>   .../media/platform/qcom/camss/camss-video.c   | 21 ++++++-
->>>>   drivers/media/platform/qcom/camss/camss.c     |  2 +-
->>>>   9 files changed, 138 insertions(+), 64 deletions(-)
+On 20/02/2023 22:59, Laurent Pinchart wrote:
+> Hi Tomi,
+> 
+> On Mon, Feb 20, 2023 at 01:13:09PM +0200, Tomi Valkeinen wrote:
+>> On 12/02/2023 02:51, Laurent Pinchart wrote:
+>>> Hello everybody,
 >>>
->>> Hi guys,
+>>> This series is the latest (and greatest) attempt to switch v4l-utils
+>>> from autotools to meson.
 >>>
->>> just a ping for this series.
+>>> Compared to v7, the series has been rebased on top of the latest master
+>>> branch, and lots of fixes have been added. All review comments should
+>>> have been addressed. Detailed changelogs are included in individual
+>>> patches, in particular in patch 3/6.
 >>>
->>> Laurent, I sent you an email with answers to the questions you 
->>> requested. I read your reply that you'll review these changes in the 
->>> context of the multi-stream API, but this series doesn't really use 
->>> the multi-stream API, just a note.
+>>> The rebase was a bit painful due to the new v4l2-tracer tool and its
+>>> code generation script. While meson handles code generation fine, it
+>>> required fixes to the script to be able to specify the output directory
+>>> and to generate the trace and retrace sources separately. Many thanks to
+>>> Sakari for his help with this, which I've included in this series as
+>>> patch 1/6.
 >>>
->>> Cheers,
+>>> Gregor, I haven't included the Tested-by tag you gave on v7 as v8
+>>> contains many small changes. Sorry about that.
 >>>
->>> Milen
+>>> The patches are based on 3 pending patches for v4l-utils that have been
+>>> posted to the list in the last couple of days:
 >>>
->> Hi there,
+>>> - libv4lconvert: Don't ignore return value of ftruncate()
+>>> - keytable: Add -fno-stack-protector compilation option
+>>> - configure.ac: Add option to disable compilation of v4l2-tracer
+>>>
+>>> None are strictly required, but I've included the equivalent of the
+>>> second and third patches in the meson support, so I wanted to base the
+>>> patches on top of the autotools' equivalent. I expect those three
+>>> patches to be merged soon.
+>>>
+>>> As far as I can tell, meson support is now ready. I can address review
+>>> comments in a v9 if there are any, but I'd like to merge it soon to
+>>> avoid another painful rebase. I'll be available to fix issues on top if
+>>> any problem is encountered later.
+>>>
+>>> A tag that includes this series can be found at
+>>>
+>>>           git://linuxtv.org/pinchartl/v4l-utils.git tags/meson-v8
 >>
->> Just another ping..:)
+>> If I build this for x86 or arm64 with default options, it builds fine. If I build for arm32 (against my buildroot rootfs), the build fails:
 >>
->> Please let me know if there's anything I could do (improve/fix/code 
->> differently/etc.) to help get this series merged.
->>
->>
->> Best Regards,
->>
->> Milen
->>
->>
->>
->
-> Well, we need to re-verify it works on linux-next.
->
-> Other than that it seems OK to me.
->
-> ---
-> bod
+>> [197/254] Compiling C object contrib/test/v4l2gl.p/v4l2gl.c.o
+>> FAILED: contrib/test/v4l2gl.p/v4l2gl.c.o
+>> ccache /home/tomba/work/buildroot/output32/host/bin/arm-buildroot-linux-gnueabihf-gcc -Icontrib/test/v4l2gl.p -Icontrib/test -I../contrib/test -I../lib/include -I../include -I/home/tomba/work/buildroot/output32/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include -I/home/tomba/work/buildroot/output32/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libdrm -I/home/tomba/work/buildroot/output32/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/valgrind -I. -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=gnu99 -O2 -g -Wpointer-arith -D_GNU_SOURCE -DPROMOTED_MODE_T=int -DENABLE_NLS -MD -MQ contrib/test/v4l2gl.p/v4l2gl.c.o -MF contrib/test/v4l2gl.p/v4l2gl.c.o.d -o contrib/test/v4l2gl.p/v4l2gl.c.o -c ../contrib/test/v4l2gl.c
+>> ../contrib/test/v4l2gl.c:268:60: error: expected ‘,’ or ‘;’ before ‘V4L_UTILS_VERSION’
+>>     268 | const char *argp_program_version = "V4L2 grabber version " V4L_UTILS_VERSION;
+>>         |                                                            ^~~~~~~~~~~~~~~~~
+> 
+> Thank you for the report. I've test-compiled for arm32, but my build
+> environment may not have the features needed by v4l2gl.c, so it may have
+> been skipped. Would you be able to check what goes wrong ? v4l2gl.c
+> includes config.h, so V4L_UTILS_VERSION should be defined. Does your
+> config.h (generated in the build directory) define V4L_UTILS_VERSION ?
+> Does your buildroot environment provide a config.h that is being picked
+> instead ?
 
-Thanks Bryan,
+Here's my attempt fixing this. Works for me for x86, arm32 and arm64 builds:
 
-I just re-tested on latest linux-next (next-20230221 tag) and the set 
-applies and, judging by the standard set of tests I did, works as 
-expected and doesn't break anything.
+ From 1c6df0f68e46ad56e527d4696d3c40a173b9f505 Mon Sep 17 00:00:00 2001
+From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Date: Tue, 21 Feb 2023 11:43:11 +0200
+Subject: [PATCH] meson: use -include to include config.h instead of -I.
 
+Use -include to get config.h included, instead of -I. and having the
+source files include the config.h. The issue with the latter is that -I.
+is rather late in the command line, and there may be config.h lurking in
+some other project include dir (e.g. valgrind's).
 
-Best Regards,
+Note that this doesn't handle including the android-config.h (I think
+the meson build files break that anyway, as they don't have the project
+root in include path). I believe this would be best handled by somehow
+detecting android in the main meson.build file, and adding
+android-config.h with -include instead of the config.h
 
-Milen
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+---
+  contrib/test/mc_nextgen_test.c          | 2 --
+  contrib/test/pixfmt-test.c              | 2 --
+  contrib/test/v4l2gl.c                   | 1 -
+  contrib/test/v4l2grab.c                 | 1 -
+  lib/libdvbv5/countries.c                | 1 -
+  lib/libdvbv5/dvb-dev-local.c            | 2 --
+  lib/libdvbv5/dvb-dev-remote.c           | 3 ---
+  lib/libdvbv5/dvb-dev.c                  | 2 --
+  lib/libdvbv5/dvb-fe.c                   | 2 --
+  lib/libdvbv5/dvb-file.c                 | 2 --
+  lib/libdvbv5/dvb-log.c                  | 2 --
+  lib/libdvbv5/dvb-sat.c                  | 2 --
+  lib/libdvbv5/dvb-scan.c                 | 2 --
+  lib/libdvbv5/dvb-vdr-format.c           | 2 --
+  lib/libdvbv5/parse_string.c             | 1 -
+  lib/libv4l-mplane/libv4l-mplane.c       | 1 -
+  lib/libv4l1/libv4l1.c                   | 1 -
+  lib/libv4l1/v4l1compat.c                | 1 -
+  lib/libv4l2/libv4l2.c                   | 5 -----
+  lib/libv4l2/log.c                       | 5 -----
+  lib/libv4l2/v4l2-plugin-android.c       | 5 -----
+  lib/libv4l2/v4l2-plugin.c               | 1 -
+  lib/libv4l2/v4l2convert.c               | 5 -----
+  lib/libv4l2rds/libv4l2rds.c             | 1 -
+  lib/libv4lconvert/jl2005bcd.c           | 5 -----
+  lib/libv4lconvert/jpeg.c                | 5 -----
+  lib/libv4lconvert/jpeg_memsrcdest.c     | 5 -----
+  lib/libv4lconvert/libv4lconvert-priv.h  | 5 -----
+  lib/libv4lconvert/libv4lconvert.c       | 5 -----
+  meson.build                             | 2 +-
+  utils/cec-compliance/cec-compliance.h   | 6 ------
+  utils/cec-ctl/cec-ctl.cpp               | 6 ------
+  utils/cec-ctl/cec-pin.cpp               | 6 ------
+  utils/cec-follower/cec-follower.h       | 6 ------
+  utils/cx18-ctl/cx18-ctl.c               | 1 -
+  utils/dvb/dvb-fe-tool.c                 | 1 -
+  utils/dvb/dvb-format-convert.c          | 2 --
+  utils/dvb/dvbv5-daemon.c                | 3 ---
+  utils/dvb/dvbv5-scan.c                  | 2 --
+  utils/dvb/dvbv5-zap.c                   | 2 --
+  utils/ir-ctl/ir-ctl.c                   | 2 --
+  utils/keytable/keytable.c               | 1 -
+  utils/media-ctl/libmediactl.c           | 2 --
+  utils/media-ctl/options.h               | 2 --
+  utils/qv4l2/alsa_stream.c               | 2 --
+  utils/qv4l2/capture-win-gl.h            | 2 --
+  utils/qv4l2/general-tab.h               | 2 --
+  utils/qv4l2/qv4l2.h                     | 2 --
+  utils/qvidcap/qvidcap.h                 | 2 --
+  utils/v4l2-compliance/v4l2-compliance.h | 6 ------
+  utils/v4l2-ctl/v4l2-ctl.h               | 6 ------
+  utils/v4l2-dbg/v4l2-dbg.cpp             | 6 ------
+  utils/v4l2-sysfs-path/v4l2-sysfs-path.c | 1 -
+  utils/v4l2-tracer/libv4l2tracer.cpp     | 1 -
+  utils/v4l2-tracer/v4l2-tracer-common.h  | 1 -
+  55 files changed, 1 insertion(+), 151 deletions(-)
+
+diff --git a/contrib/test/mc_nextgen_test.c b/contrib/test/mc_nextgen_test.c
+index 6086ceb4..11254a0a 100644
+--- a/contrib/test/mc_nextgen_test.c
++++ b/contrib/test/mc_nextgen_test.c
+@@ -19,8 +19,6 @@
+   * Or, point your browser to http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+   * */
+  
+-#include <config.h>
+-
+  #include <linux/media.h>
+  
+  #include <argp.h>
+diff --git a/contrib/test/pixfmt-test.c b/contrib/test/pixfmt-test.c
+index 43a11c4e..1cae69aa 100644
+--- a/contrib/test/pixfmt-test.c
++++ b/contrib/test/pixfmt-test.c
+@@ -20,8 +20,6 @@
+  
+  #define _GNU_SOURCE 1
+  
+-#include <config.h>
+-
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <stdbool.h>
+diff --git a/contrib/test/v4l2gl.c b/contrib/test/v4l2gl.c
+index 4df3910e..dc665fcc 100644
+--- a/contrib/test/v4l2gl.c
++++ b/contrib/test/v4l2gl.c
+@@ -12,7 +12,6 @@
+   */
+  
+  #include <argp.h>
+-#include <config.h>
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+diff --git a/contrib/test/v4l2grab.c b/contrib/test/v4l2grab.c
+index d8f2c97a..0983f918 100644
+--- a/contrib/test/v4l2grab.c
++++ b/contrib/test/v4l2grab.c
+@@ -12,7 +12,6 @@
+   */
+  
+  #include <argp.h>
+-#include <config.h>
+  #include <errno.h>
+  #include <fcntl.h>
+  #include <linux/videodev2.h>
+diff --git a/lib/libdvbv5/countries.c b/lib/libdvbv5/countries.c
+index 609add0b..a6e5f415 100644
+--- a/lib/libdvbv5/countries.c
++++ b/lib/libdvbv5/countries.c
+@@ -15,7 +15,6 @@
+   *
+   */
+  
+-#include <config.h>
+  #include "libdvbv5/countries.h"
+  
+  #include <ctype.h>
+diff --git a/lib/libdvbv5/dvb-dev-local.c b/lib/libdvbv5/dvb-dev-local.c
+index a5e3979f..ea511471 100644
+--- a/lib/libdvbv5/dvb-dev-local.c
++++ b/lib/libdvbv5/dvb-dev-local.c
+@@ -27,8 +27,6 @@
+  #include <unistd.h>
+  #include <string.h>
+  
+-#include <config.h>
+-
+  #ifdef HAVE_PTHREAD
+  #  include <pthread.h>
+  #endif
+diff --git a/lib/libdvbv5/dvb-dev-remote.c b/lib/libdvbv5/dvb-dev-remote.c
+index 536f0acf..de4d11e4 100644
+--- a/lib/libdvbv5/dvb-dev-remote.c
++++ b/lib/libdvbv5/dvb-dev-remote.c
+@@ -20,9 +20,6 @@
+  #define _LARGEFILE_SOURCE 1
+  #define _LARGEFILE64_SOURCE 1
+  
+-#include <config.h>
+-
+-
+  #ifdef HAVE_BACKTRACE
+  #include <execinfo.h>
+  #endif
+diff --git a/lib/libdvbv5/dvb-dev.c b/lib/libdvbv5/dvb-dev.c
+index c379f402..4bf87fca 100644
+--- a/lib/libdvbv5/dvb-dev.c
++++ b/lib/libdvbv5/dvb-dev.c
+@@ -23,8 +23,6 @@
+  #include <unistd.h>
+  #include <string.h>
+  
+-#include <config.h>
+-
+  #include "dvb-fe-priv.h"
+  #include "dvb-dev-priv.h"
+  
+diff --git a/lib/libdvbv5/dvb-fe.c b/lib/libdvbv5/dvb-fe.c
+index beda5cd8..7848fcda 100644
+--- a/lib/libdvbv5/dvb-fe.c
++++ b/lib/libdvbv5/dvb-fe.c
+@@ -30,8 +30,6 @@
+  #include <unistd.h>
+  #include <stdarg.h>
+  
+-#include <config.h>
+-
+  #ifdef ENABLE_NLS
+  # include "gettext.h"
+  # include <libintl.h>
+diff --git a/lib/libdvbv5/dvb-file.c b/lib/libdvbv5/dvb-file.c
+index 4187de9d..51e86d41 100644
+--- a/lib/libdvbv5/dvb-file.c
++++ b/lib/libdvbv5/dvb-file.c
+@@ -50,8 +50,6 @@
+  #include <libdvbv5/desc_hierarchy.h>
+  #include <libdvbv5/countries.h>
+  
+-#include <config.h>
+-
+  #ifdef ENABLE_NLS
+  # include "gettext.h"
+  # include <libintl.h>
+diff --git a/lib/libdvbv5/dvb-log.c b/lib/libdvbv5/dvb-log.c
+index f92da5f8..5aa6906d 100644
+--- a/lib/libdvbv5/dvb-log.c
++++ b/lib/libdvbv5/dvb-log.c
+@@ -24,8 +24,6 @@
+  #include <unistd.h>
+  #include <stdarg.h>
+  
+-#include <config.h>
+-
+  #ifdef ENABLE_NLS
+  # include "gettext.h"
+  # include <libintl.h>
+diff --git a/lib/libdvbv5/dvb-sat.c b/lib/libdvbv5/dvb-sat.c
+index 71ded425..36a42344 100644
+--- a/lib/libdvbv5/dvb-sat.c
++++ b/lib/libdvbv5/dvb-sat.c
+@@ -25,8 +25,6 @@
+  #include "dvb-fe-priv.h"
+  #include <libdvbv5/dvb-v5-std.h>
+  
+-#include <config.h>
+-
+  #ifdef ENABLE_NLS
+  # include "gettext.h"
+  # include <libintl.h>
+diff --git a/lib/libdvbv5/dvb-scan.c b/lib/libdvbv5/dvb-scan.c
+index 5c8aca96..af4f1691 100644
+--- a/lib/libdvbv5/dvb-scan.c
++++ b/lib/libdvbv5/dvb-scan.c
+@@ -61,8 +61,6 @@
+  #include <libdvbv5/desc_t2_delivery.h>
+  #include <libdvbv5/desc_sat.h>
+  
+-#include <config.h>
+-
+  #ifdef ENABLE_NLS
+  # include "gettext.h"
+  # include <libintl.h>
+diff --git a/lib/libdvbv5/dvb-vdr-format.c b/lib/libdvbv5/dvb-vdr-format.c
+index d2365712..9c8728c6 100644
+--- a/lib/libdvbv5/dvb-vdr-format.c
++++ b/lib/libdvbv5/dvb-vdr-format.c
+@@ -23,8 +23,6 @@
+  #include <libdvbv5/dvb-file.h>
+  #include <libdvbv5/dvb-v5-std.h>
+  
+-#include <config.h>
+-
+  #ifdef ENABLE_NLS
+  # include "gettext.h"
+  # include <libintl.h>
+diff --git a/lib/libdvbv5/parse_string.c b/lib/libdvbv5/parse_string.c
+index d354f497..e673343c 100644
+--- a/lib/libdvbv5/parse_string.c
++++ b/lib/libdvbv5/parse_string.c
+@@ -21,7 +21,6 @@
+   *   c.f. EN 300 468 annex A
+   */
+  
+-#include <config.h>
+  #include <iconv.h>
+  #include <stdio.h>
+  #include <stdlib.h>
+diff --git a/lib/libv4l-mplane/libv4l-mplane.c b/lib/libv4l-mplane/libv4l-mplane.c
+index 2f685a73..071e9bc7 100644
+--- a/lib/libv4l-mplane/libv4l-mplane.c
++++ b/lib/libv4l-mplane/libv4l-mplane.c
+@@ -16,7 +16,6 @@
+   * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA  02110-1335  USA
+   */
+  
+-#include <config.h>
+  #include <errno.h>
+  #include <stdint.h>
+  #include <stdio.h>
+diff --git a/lib/libv4l1/libv4l1.c b/lib/libv4l1/libv4l1.c
+index b4efa995..ec903305 100644
+--- a/lib/libv4l1/libv4l1.c
++++ b/lib/libv4l1/libv4l1.c
+@@ -47,7 +47,6 @@
+        in turn will call v4l1_open, so therefor v4l1_open (for example) may not
+        use the regular open()!
+  */
+-#include <config.h>
+  #include <errno.h>
+  #include <stdarg.h>
+  #include <stdio.h>
+diff --git a/lib/libv4l1/v4l1compat.c b/lib/libv4l1/v4l1compat.c
+index e5c9e562..705d7d4b 100644
+--- a/lib/libv4l1/v4l1compat.c
++++ b/lib/libv4l1/v4l1compat.c
+@@ -24,7 +24,6 @@
+  #undef _FILE_OFFSET_BITS
+  #define _LARGEFILE64_SOURCE 1
+  
+-#include <config.h>
+  #include <stdlib.h>
+  #include <stdarg.h>
+  #include <fcntl.h>
+diff --git a/lib/libv4l2/libv4l2.c b/lib/libv4l2/libv4l2.c
+index 9ebf8c18..032a4f1c 100644
+--- a/lib/libv4l2/libv4l2.c
++++ b/lib/libv4l2/libv4l2.c
+@@ -55,11 +55,6 @@
+     When modifications are made, one should be careful that this behavior is
+     preserved.
+   */
+-#ifdef ANDROID
+-#include <android-config.h>
+-#else
+-#include <config.h>
+-#endif
+  #include <errno.h>
+  #include <stdarg.h>
+  #include <stdio.h>
+diff --git a/lib/libv4l2/log.c b/lib/libv4l2/log.c
+index 9517b86f..0e0e70b3 100644
+--- a/lib/libv4l2/log.c
++++ b/lib/libv4l2/log.c
+@@ -18,11 +18,6 @@
+  # Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA  02110-1335  USA
+   */
+  
+-#ifdef ANDROID
+-#include <android-config.h>
+-#else
+-#include <config.h>
+-#endif
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+diff --git a/lib/libv4l2/v4l2-plugin-android.c b/lib/libv4l2/v4l2-plugin-android.c
+index c4ebc658..1aee111c 100644
+--- a/lib/libv4l2/v4l2-plugin-android.c
++++ b/lib/libv4l2/v4l2-plugin-android.c
+@@ -16,11 +16,6 @@
+  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  */
+  
+-#ifdef ANDROID
+-#include <android-config.h>
+-#else
+-#include <config.h>
+-#endif
+  #include <stdarg.h>
+  #include <dlfcn.h>
+  #include <fcntl.h>
+diff --git a/lib/libv4l2/v4l2-plugin.c b/lib/libv4l2/v4l2-plugin.c
+index ff42eed4..e2356cb6 100644
+--- a/lib/libv4l2/v4l2-plugin.c
++++ b/lib/libv4l2/v4l2-plugin.c
+@@ -16,7 +16,6 @@
+  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  */
+  
+-#include <config.h>
+  #include <stdarg.h>
+  #include <dlfcn.h>
+  #include <fcntl.h>
+diff --git a/lib/libv4l2/v4l2convert.c b/lib/libv4l2/v4l2convert.c
+index 13ca4cfb..97bed9a9 100644
+--- a/lib/libv4l2/v4l2convert.c
++++ b/lib/libv4l2/v4l2convert.c
+@@ -28,11 +28,6 @@
+  #undef _FILE_OFFSET_BITS
+  #define _LARGEFILE64_SOURCE 1
+  
+-#ifdef ANDROID
+-#include <android-config.h>
+-#else
+-#include <config.h>
+-#endif
+  #include <stdarg.h>
+  #include <stdlib.h>
+  #include <fcntl.h>
+diff --git a/lib/libv4l2rds/libv4l2rds.c b/lib/libv4l2rds/libv4l2rds.c
+index 2e67d060..4bc01721 100644
+--- a/lib/libv4l2rds/libv4l2rds.c
++++ b/lib/libv4l2rds/libv4l2rds.c
+@@ -10,7 +10,6 @@
+  #include <stdlib.h>
+  #include <string.h>
+  #include <time.h>
+-#include <config.h>
+  #include <sys/types.h>
+  #include <sys/mman.h>
+  
+diff --git a/lib/libv4lconvert/jl2005bcd.c b/lib/libv4lconvert/jl2005bcd.c
+index ec7103d5..707c3205 100644
+--- a/lib/libv4lconvert/jl2005bcd.c
++++ b/lib/libv4lconvert/jl2005bcd.c
+@@ -23,11 +23,6 @@
+   * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+   */
+  
+-#ifdef ANDROID
+-#include <android-config.h>
+-#else
+-#include <config.h>
+-#endif
+  #include <stdlib.h>
+  #include <string.h>
+  
+diff --git a/lib/libv4lconvert/jpeg.c b/lib/libv4lconvert/jpeg.c
+index 15f8dec7..ebfc8149 100644
+--- a/lib/libv4lconvert/jpeg.c
++++ b/lib/libv4lconvert/jpeg.c
+@@ -16,11 +16,6 @@
+  # Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA  02110-1335  USA
+   */
+  
+-#ifdef ANDROID
+-#include <android-config.h>
+-#else
+-#include <config.h>
+-#endif
+  #include <errno.h>
+  #include <stdlib.h>
+  #include "libv4lconvert-priv.h"
+diff --git a/lib/libv4lconvert/jpeg_memsrcdest.c b/lib/libv4lconvert/jpeg_memsrcdest.c
+index 0540470f..6c09efe9 100644
+--- a/lib/libv4lconvert/jpeg_memsrcdest.c
++++ b/lib/libv4lconvert/jpeg_memsrcdest.c
+@@ -16,11 +16,6 @@
+  
+  /* this is not a core library module, so it doesn't define JPEG_INTERNALS */
+  
+-#ifdef ANDROID
+-#include <android-config.h>
+-#else
+-#include <config.h>
+-#endif
+  #include <stdlib.h>
+  #include <stdio.h>
+  
+diff --git a/lib/libv4lconvert/libv4lconvert-priv.h b/lib/libv4lconvert/libv4lconvert-priv.h
+index 0fd6a102..ff2f4a75 100644
+--- a/lib/libv4lconvert/libv4lconvert-priv.h
++++ b/lib/libv4lconvert/libv4lconvert-priv.h
+@@ -19,11 +19,6 @@
+  #ifndef __LIBV4LCONVERT_PRIV_H
+  #define __LIBV4LCONVERT_PRIV_H
+  
+-#ifdef ANDROID
+-#include <android-config.h>
+-#else
+-#include <config.h>
+-#endif
+  #include <stdio.h>
+  #include <stdint.h>
+  #include <sys/types.h>
+diff --git a/lib/libv4lconvert/libv4lconvert.c b/lib/libv4lconvert/libv4lconvert.c
+index 201dcf45..80f39dc4 100644
+--- a/lib/libv4lconvert/libv4lconvert.c
++++ b/lib/libv4lconvert/libv4lconvert.c
+@@ -16,11 +16,6 @@
+  # Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA  02110-1335  USA
+   */
+  
+-#ifdef ANDROID
+-#include <android-config.h>
+-#else
+-#include <config.h>
+-#endif
+  #include <errno.h>
+  #include <string.h>
+  #include <stdlib.h>
+diff --git a/meson.build b/meson.build
+index 8c933908..f8f1bb97 100644
+--- a/meson.build
++++ b/meson.build
+@@ -39,7 +39,7 @@ conf.set('PATCH', as_patch_version)
+  common_arguments = [
+      '-Wpointer-arith',
+      '-D_GNU_SOURCE',
+-    '-I.', # Needed for config.h
++    '-include', meson.current_build_dir() / 'config.h',
+      '-DPROMOTED_MODE_T=int',
+      '-DENABLE_NLS',
+  ]
+diff --git a/utils/cec-compliance/cec-compliance.h b/utils/cec-compliance/cec-compliance.h
+index 34ed9a81..44f8643d 100644
+--- a/utils/cec-compliance/cec-compliance.h
++++ b/utils/cec-compliance/cec-compliance.h
+@@ -11,12 +11,6 @@
+  #include <linux/cec-funcs.h>
+  #include "cec-htng-funcs.h"
+  
+-#ifdef ANDROID
+-#include <android-config.h>
+-#else
+-#include <config.h>
+-#endif
+-
+  #include <cec-info.h>
+  
+  #include <vector>
+diff --git a/utils/cec-ctl/cec-ctl.cpp b/utils/cec-ctl/cec-ctl.cpp
+index 015d2763..11fb7e7e 100644
+--- a/utils/cec-ctl/cec-ctl.cpp
++++ b/utils/cec-ctl/cec-ctl.cpp
+@@ -25,12 +25,6 @@
+  #include "cec-log.h"
+  #include "cec-parse.h"
+  
+-#ifdef __ANDROID__
+-#include <android-config.h>
+-#else
+-#include <config.h>
+-#endif
+-
+  #include "cec-ctl.h"
+  #include "compiler.h"
+  
+diff --git a/utils/cec-ctl/cec-pin.cpp b/utils/cec-ctl/cec-pin.cpp
+index cf4b6d34..f3500555 100644
+--- a/utils/cec-ctl/cec-pin.cpp
++++ b/utils/cec-ctl/cec-pin.cpp
+@@ -8,12 +8,6 @@
+  #include <linux/cec.h>
+  #include "cec-htng.h"
+  
+-#ifdef __ANDROID__
+-#include <android-config.h>
+-#else
+-#include <config.h>
+-#endif
+-
+  #include "cec-ctl.h"
+  #include "cec-log.h"
+  
+diff --git a/utils/cec-follower/cec-follower.h b/utils/cec-follower/cec-follower.h
+index 54f4df52..dc0a5530 100644
+--- a/utils/cec-follower/cec-follower.h
++++ b/utils/cec-follower/cec-follower.h
+@@ -11,12 +11,6 @@
+  #include <linux/cec-funcs.h>
+  #include "cec-htng-funcs.h"
+  
+-#ifdef ANDROID
+-#include <android-config.h>
+-#else
+-#include <config.h>
+-#endif
+-
+  #include <cec-info.h>
+  #include <cec-log.h>
+  #include <set>
+diff --git a/utils/cx18-ctl/cx18-ctl.c b/utils/cx18-ctl/cx18-ctl.c
+index 16a2c82f..8586f72d 100644
+--- a/utils/cx18-ctl/cx18-ctl.c
++++ b/utils/cx18-ctl/cx18-ctl.c
+@@ -19,7 +19,6 @@
+      Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA  02110-1335  USA
+   */
+  
+-#include <config.h>
+  #include <unistd.h>
+  #include <stdlib.h>
+  #include <stdio.h>
+diff --git a/utils/dvb/dvb-fe-tool.c b/utils/dvb/dvb-fe-tool.c
+index 92b90905..994fa4e8 100644
+--- a/utils/dvb/dvb-fe-tool.c
++++ b/utils/dvb/dvb-fe-tool.c
+@@ -20,7 +20,6 @@
+  
+  #include "libdvbv5/dvb-file.h"
+  #include "libdvbv5/dvb-dev.h"
+-#include <config.h>
+  #include <argp.h>
+  #include <signal.h>
+  #include <stdlib.h>
+diff --git a/utils/dvb/dvb-format-convert.c b/utils/dvb/dvb-format-convert.c
+index d9019e50..e4bd95df 100644
+--- a/utils/dvb/dvb-format-convert.c
++++ b/utils/dvb/dvb-format-convert.c
+@@ -29,8 +29,6 @@
+  #include <sys/time.h>
+  #include <argp.h>
+  
+-#include <config.h>
+-
+  #ifdef ENABLE_NLS
+  # define _(string) gettext(string)
+  # include "gettext.h"
+diff --git a/utils/dvb/dvbv5-daemon.c b/utils/dvb/dvbv5-daemon.c
+index d9b70181..669b3321 100644
+--- a/utils/dvb/dvbv5-daemon.c
++++ b/utils/dvb/dvbv5-daemon.c
+@@ -24,14 +24,11 @@
+  #define _LARGEFILE_SOURCE 1
+  #define _LARGEFILE64_SOURCE 1
+  
+-#include <config.h>
+-
+  #ifdef HAVE_BACKTRACE
+  #include <execinfo.h>
+  #endif
+  
+  #include <argp.h>
+-#include <config.h>
+  #include <endian.h>
+  #include <netinet/in.h>
+  #include <poll.h>
+diff --git a/utils/dvb/dvbv5-scan.c b/utils/dvb/dvbv5-scan.c
+index 0a522433..9f47ead7 100644
+--- a/utils/dvb/dvbv5-scan.c
++++ b/utils/dvb/dvbv5-scan.c
+@@ -30,8 +30,6 @@
+  #include <sys/time.h>
+  #include <argp.h>
+  
+-#include <config.h>
+-
+  #ifdef ENABLE_NLS
+  # define _(string) gettext(string)
+  # include "gettext.h"
+diff --git a/utils/dvb/dvbv5-zap.c b/utils/dvb/dvbv5-zap.c
+index 1cd6989f..5f84e101 100644
+--- a/utils/dvb/dvbv5-zap.c
++++ b/utils/dvb/dvbv5-zap.c
+@@ -49,8 +49,6 @@
+  #include <sys/time.h>
+  #include <time.h>
+  
+-#include <config.h>
+-
+  #ifdef ENABLE_NLS
+  # define _(string) gettext(string)
+  # include "gettext.h"
+diff --git a/utils/ir-ctl/ir-ctl.c b/utils/ir-ctl/ir-ctl.c
+index 240a3752..3c389bd9 100644
+--- a/utils/ir-ctl/ir-ctl.c
++++ b/utils/ir-ctl/ir-ctl.c
+@@ -26,8 +26,6 @@
+  #include <argp.h>
+  #include <sysexits.h>
+  
+-#include <config.h>
+-
+  #include <linux/lirc.h>
+  
+  #include "ir-encode.h"
+diff --git a/utils/keytable/keytable.c b/utils/keytable/keytable.c
+index 6cd1244f..c47211fa 100644
+--- a/utils/keytable/keytable.c
++++ b/utils/keytable/keytable.c
+@@ -12,7 +12,6 @@
+     GNU General Public License for more details.
+   */
+  
+-#include <config.h>
+  #include <ctype.h>
+  #include <errno.h>
+  #include <fcntl.h>
+diff --git a/utils/media-ctl/libmediactl.c b/utils/media-ctl/libmediactl.c
+index 1fd6525b..a18b063e 100644
+--- a/utils/media-ctl/libmediactl.c
++++ b/utils/media-ctl/libmediactl.c
+@@ -19,8 +19,6 @@
+   * along with this program. If not, see <http://www.gnu.org/licenses/>.
+   */
+  
+-#include "config.h"
+-
+  #include <sys/ioctl.h>
+  #include <sys/stat.h>
+  #include <sys/types.h>
+diff --git a/utils/media-ctl/options.h b/utils/media-ctl/options.h
+index b1751f56..7e0556fc 100644
+--- a/utils/media-ctl/options.h
++++ b/utils/media-ctl/options.h
+@@ -22,8 +22,6 @@
+  #ifndef __OPTIONS_H
+  #define __OPTIONS_H
+  
+-#include <config.h>
+-
+  struct media_options
+  {
+  	const char *devname;
+diff --git a/utils/qv4l2/alsa_stream.c b/utils/qv4l2/alsa_stream.c
+index 2dca283b..8f5246db 100644
+--- a/utils/qv4l2/alsa_stream.c
++++ b/utils/qv4l2/alsa_stream.c
+@@ -26,8 +26,6 @@
+   *
+   */
+  
+-#include <config.h>
+-
+  #ifdef HAVE_ALSA
+  #include "alsa_stream.h"
+  
+diff --git a/utils/qv4l2/capture-win-gl.h b/utils/qv4l2/capture-win-gl.h
+index 35235d7a..e27b2b3f 100644
+--- a/utils/qv4l2/capture-win-gl.h
++++ b/utils/qv4l2/capture-win-gl.h
+@@ -6,8 +6,6 @@
+  #ifndef CAPTURE_WIN_GL_H
+  #define CAPTURE_WIN_GL_H
+  
+-#include <config.h>
+-
+  #ifdef HAVE_QTGL
+  #define GL_GLEXT_PROTOTYPES
+  #define QT_NO_OPENGL_ES_2
+diff --git a/utils/qv4l2/general-tab.h b/utils/qv4l2/general-tab.h
+index 9b4b5bcd..f5ec73e5 100644
+--- a/utils/qv4l2/general-tab.h
++++ b/utils/qv4l2/general-tab.h
+@@ -21,8 +21,6 @@
+  #ifndef GENERAL_TAB_H
+  #define GENERAL_TAB_H
+  
+-#include <config.h>
+-
+  #include <QSpinBox>
+  #include <QCheckBox>
+  #include <QDoubleSpinBox>
+diff --git a/utils/qv4l2/qv4l2.h b/utils/qv4l2/qv4l2.h
+index aaba74d0..99d1f30b 100644
+--- a/utils/qv4l2/qv4l2.h
++++ b/utils/qv4l2/qv4l2.h
+@@ -20,8 +20,6 @@
+  #ifndef QV4L2_H
+  #define QV4L2_H
+  
+-#include <config.h>
+-
+  #include <QMainWindow>
+  #include <QTabWidget>
+  #include <QSignalMapper>
+diff --git a/utils/qvidcap/qvidcap.h b/utils/qvidcap/qvidcap.h
+index 7292d8e7..40b1b4e6 100644
+--- a/utils/qvidcap/qvidcap.h
++++ b/utils/qvidcap/qvidcap.h
+@@ -8,8 +8,6 @@
+  #ifndef QVIDCAP_H
+  #define QVIDCAP_H
+  
+-#include <config.h>
+-
+  // Must come before cv4l-helpers.h
+  #include <libv4l2.h>
+  
+diff --git a/utils/v4l2-compliance/v4l2-compliance.h b/utils/v4l2-compliance/v4l2-compliance.h
+index e574c06c..020e56a9 100644
+--- a/utils/v4l2-compliance/v4l2-compliance.h
++++ b/utils/v4l2-compliance/v4l2-compliance.h
+@@ -29,12 +29,6 @@
+  #include <linux/v4l2-subdev.h>
+  #include <linux/media.h>
+  
+-#ifdef ANDROID
+-#include <android-config.h>
+-#else
+-#include <config.h>
+-#endif
+-
+  #ifndef NO_LIBV4L2
+  #include <libv4l2.h>
+  #endif
+diff --git a/utils/v4l2-ctl/v4l2-ctl.h b/utils/v4l2-ctl/v4l2-ctl.h
+index 70a80ade..8f2726ea 100644
+--- a/utils/v4l2-ctl/v4l2-ctl.h
++++ b/utils/v4l2-ctl/v4l2-ctl.h
+@@ -1,12 +1,6 @@
+  #ifndef _V4L2_CTL_H
+  #define _V4L2_CTL_H
+  
+-#ifdef ANDROID
+-#include <android-config.h>
+-#else
+-#include <config.h>
+-#endif
+-
+  #include <linux/videodev2.h>
+  #include <linux/v4l2-subdev.h>
+  #include <v4l-getsubopt.h>
+diff --git a/utils/v4l2-dbg/v4l2-dbg.cpp b/utils/v4l2-dbg/v4l2-dbg.cpp
+index f6a9f433..bd08b4cf 100644
+--- a/utils/v4l2-dbg/v4l2-dbg.cpp
++++ b/utils/v4l2-dbg/v4l2-dbg.cpp
+@@ -27,12 +27,6 @@
+  #include <sys/ioctl.h>
+  #include <unistd.h>
+  
+-#ifdef ANDROID
+-#include <android-config.h>
+-#else
+-#include <config.h>
+-#endif
+-
+  #ifdef HAVE_SYS_KLOG_H
+  #include <sys/klog.h>
+  #endif
+diff --git a/utils/v4l2-sysfs-path/v4l2-sysfs-path.c b/utils/v4l2-sysfs-path/v4l2-sysfs-path.c
+index c440b24f..d1ad7edb 100644
+--- a/utils/v4l2-sysfs-path/v4l2-sysfs-path.c
++++ b/utils/v4l2-sysfs-path/v4l2-sysfs-path.c
+@@ -24,7 +24,6 @@
+   *	Mauro Carvalho Chehab
+   */
+  
+-#include <config.h>
+  #include "../libmedia_dev/get_media_devices.h"
+  #include <stdio.h>
+  #include <argp.h>
+diff --git a/utils/v4l2-tracer/libv4l2tracer.cpp b/utils/v4l2-tracer/libv4l2tracer.cpp
+index 6b438628..c5b0e9c0 100644
+--- a/utils/v4l2-tracer/libv4l2tracer.cpp
++++ b/utils/v4l2-tracer/libv4l2tracer.cpp
+@@ -4,7 +4,6 @@
+   */
+  
+  #include "trace.h"
+-#include <config.h> /* For PROMOTED_MODE_T */
+  #include <dlfcn.h>
+  #include <stdarg.h>
+  
+diff --git a/utils/v4l2-tracer/v4l2-tracer-common.h b/utils/v4l2-tracer/v4l2-tracer-common.h
+index 0bdb125d..10362acb 100644
+--- a/utils/v4l2-tracer/v4l2-tracer-common.h
++++ b/utils/v4l2-tracer/v4l2-tracer-common.h
+@@ -8,7 +8,6 @@
+  
+  #include "v4l2-info.h"
+  #include "codec-fwht.h"
+-#include "config.h"
+  #include "media-info.h"
+  #include <algorithm>
+  #include <dirent.h>
+-- 
+2.34.1
+
 
 
