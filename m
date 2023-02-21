@@ -2,226 +2,118 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CE1BC64ED6
-	for <linux-media@archiver.kernel.org>; Tue, 21 Feb 2023 15:00:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CB23C636D7
+	for <linux-media@archiver.kernel.org>; Tue, 21 Feb 2023 15:03:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234596AbjBUPA4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 21 Feb 2023 10:00:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
+        id S234651AbjBUPDh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 21 Feb 2023 10:03:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233992AbjBUPAx (ORCPT
+        with ESMTP id S234123AbjBUPDf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 21 Feb 2023 10:00:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7732B60C
-        for <linux-media@vger.kernel.org>; Tue, 21 Feb 2023 07:00:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676991599;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cCHQpVhGQcTxlg2tn6KMidOIFhUN3/xM0/6PlOWePJI=;
-        b=GAjO7n6Vbs5QG41tCaiF2XH7gbMhIya506mrxSgcYbqMpKoLOpGZxNMxEDgQhwQyyDp8eD
-        4CyJdymO9yXjKi0zLbX2STaMLiJq9H9Ae3W2rgd0IVLXk8wwZXvcgUsFx5k4WjoOvJQedX
-        M3JnaLyZaLRl+wH+IcrfIa3mMqlfLkc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-42-cXq6VLyWNfW62EdGlqZboQ-1; Tue, 21 Feb 2023 09:59:55 -0500
-X-MC-Unique: cXq6VLyWNfW62EdGlqZboQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AD82B811E9C;
-        Tue, 21 Feb 2023 14:59:54 +0000 (UTC)
-Received: from x1.localdomain.com (unknown [10.39.195.177])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 95D562026D4B;
-        Tue, 21 Feb 2023 14:59:51 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>, Kate Hsuan <hpa@redhat.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Yury Luneff <yury.lunev@gmail.com>,
-        Nable <nable.maininbox@googlemail.com>,
-        andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 10/10] media: atomisp: Remove online_process setting
-Date:   Tue, 21 Feb 2023 15:59:06 +0100
-Message-Id: <20230221145906.8113-11-hdegoede@redhat.com>
-In-Reply-To: <20230221145906.8113-1-hdegoede@redhat.com>
-References: <20230221145906.8113-1-hdegoede@redhat.com>
+        Tue, 21 Feb 2023 10:03:35 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4356F2118;
+        Tue, 21 Feb 2023 07:03:15 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pUUAi-0002sD-Ml; Tue, 21 Feb 2023 16:03:12 +0100
+Message-ID: <9a0bfef8-0b5d-f4d0-a8a5-4bbcacc5c0fb@leemhuis.info>
+Date:   Tue, 21 Feb 2023 16:03:11 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH] Revert "venus: firmware: Correct non-pix start and end
+ addresses"
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     Vikash Garodia <vgarodia@qti.qualcomm.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mka@chromium.org" <mka@chromium.org>,
+        Albert Esteve <aesteve@redhat.com>,
+        "stanimir.varbanov@linaro.org" <stanimir.varbanov@linaro.org>,
+        Enric Balletbo i Serra <eballetb@redhat.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        "Vikash Garodia (QUIC)" <quic_vgarodia@quicinc.com>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        Fritz Koenig <frkoenig@google.com>,
+        "Dikshita Agarwal (QUIC)" <quic_dikshita@quicinc.com>,
+        "Rajeshwar Kurapaty (QUIC)" <quic_rkurapat@quicinc.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+References: <20230207102254.1446461-1-javierm@redhat.com>
+ <DM8PR02MB8169809493BF2822E6C29EECF3DB9@DM8PR02MB8169.namprd02.prod.outlook.com>
+ <ef09bc9f-d570-be11-238b-bd34063917fc@redhat.com>
+ <70c01751-1dd7-c4bd-a96e-94dea437aa40@redhat.com>
+ <DM8PR02MB81696369DBFE619E43F81EEFF3DE9@DM8PR02MB8169.namprd02.prod.outlook.com>
+ <e87344c6-acef-7f3f-5cac-24961dbd9401@redhat.com>
+ <6f97a117-0d9c-e21b-9adf-50f2233ba9e3@leemhuis.info>
+ <ea283f0a-ca72-447e-ce87-68c1bbee793e@leemhuis.info>
+ <CAFOAJEdBbzqkGVqw+vgNYNxyaTHwvjFyskTwjycP820L2tOctA@mail.gmail.com>
+ <b548da46-bf91-6f1c-4b63-4002109056bc@leemhuis.info>
+In-Reply-To: <b548da46-bf91-6f1c-4b63-4002109056bc@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676991795;fc75e8d9;
+X-HE-SMSGID: 1pUUAi-0002sD-Ml
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-online_process is always true, remove it.
+On 15.02.23 14:18, Linux regression tracking (Thorsten Leemhuis) wrote:
+> On 15.02.23 11:57, Javier Martinez Canillas wrote:
+>> On Wed, Feb 15, 2023 at 11:53 AM Linux regression tracking (Thorsten
+>> Leemhuis) <regressions@leemhuis.info> wrote:
+>>> On 11.02.23 15:27, Linux regression tracking (Thorsten Leemhuis) wrote:
+>>>> On 10.02.23 11:07, Javier Martinez Canillas wrote:
+>>>>> On 2/10/23 10:22, Vikash Garodia wrote:
+>>>>>
+>>>>>>> So what should we do about this folks? Since not allowing the driver to probe on
+>>>>>>> at least SC7180 is a quite serious regression, can we revert for now until a proper
+>>>>>>> fix is figured out?
+>>>>>> I am able to repro this issue on sc7180 and discussing with firmware team on the cause
+>>>>>> of reset failure. The original patch was raised for fixing rare SMMU faults during warm
+>>>>>> boot of video hardware. Hence looking to understand the regressing part before we
+>>>>>> proceed to revert.
+>>>>> Great, if you are working on a proper fix then that would be much better indeed.
+>>>> Yeah, that's great, but OTOH: there is almost certainly just one week
+>>>> before 6.2 will be released. Ideally this should be fixed by then.
+>>>> Vikash, do you think that's in the cards? If not: why not revert this
+>>>> now to make sure 6.2 works fine?
+>>> Hmm, no reply. And we meanwhile have Wednesday and 6.2 is almost
+>>> certainly going to be out on Sunday. And the problem was called "a quite
+>>> serious regression" above. So why not quickly fix this with the revert,
+>>> as proposed earlier?
+>>> Vikash? Javier?
+>>
+>> I agree with you, that we should land this revert and then properly
+>> fix the page fault issue in v6.3.
+>>
+>> But it's not my call, the v4l2/media folks have to decide that.
+> 
+> In that case: Mauro, what's your opinion here?
+> 
+> Thread starts here:
+> https://lore.kernel.org/lkml/20230207102254.1446461-1-javierm@redhat.com/
+> 
+> Regression report:
+> https://lore.kernel.org/lkml/Y9LSMap%2BjRxbtpC8@google.com/
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- .../staging/media/atomisp/pci/atomisp_cmd.c   | 30 ++-----------------
- .../media/atomisp/pci/atomisp_compat.h        |  4 ---
- .../media/atomisp/pci/atomisp_compat_css20.c  |  8 -----
- .../staging/media/atomisp/pci/atomisp_fops.c  |  1 -
- .../media/atomisp/pci/atomisp_subdev.h        |  4 ---
- 5 files changed, 3 insertions(+), 44 deletions(-)
+No reply from Mauro and Linus chose to not apply the revert I pointed
+him to. That at this point leads to the question:
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.c b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-index 937cfe9489fc..b8112721f0a7 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-@@ -1622,11 +1622,6 @@ int atomisp_formats(struct atomisp_sub_device *asd, int flag,
- void atomisp_free_internal_buffers(struct atomisp_sub_device *asd)
- {
- 	atomisp_free_css_parameters(&asd->params.css_param);
--
--	if (asd->raw_output_frame) {
--		ia_css_frame_free(asd->raw_output_frame);
--		asd->raw_output_frame = NULL;
--	}
- }
- 
- static void atomisp_update_grid_info(struct atomisp_sub_device *asd,
-@@ -4221,7 +4216,6 @@ static int css_input_resolution_changed(struct atomisp_sub_device *asd,
- 
- static int atomisp_set_fmt_to_isp(struct video_device *vdev,
- 				  struct ia_css_frame_info *output_info,
--				  struct ia_css_frame_info *raw_output_info,
- 				  struct v4l2_pix_format *pix,
- 				  unsigned int source_pad)
- {
-@@ -4372,20 +4366,13 @@ static int atomisp_set_fmt_to_isp(struct video_device *vdev,
- 
- 		/* in case of ANR, force capture pipe to offline mode */
- 		atomisp_css_capture_enable_online(asd, ATOMISP_INPUT_STREAM_GENERAL,
--						  asd->params.low_light ?
--						  false : asd->params.online_process);
-+						  !asd->params.low_light);
- 
- 		configure_output = atomisp_css_capture_configure_output;
- 		get_frame_info = atomisp_css_capture_get_output_frame_info;
- 		configure_pp_input = atomisp_css_capture_configure_pp_input;
- 		pipe_id = IA_CSS_PIPE_ID_CAPTURE;
- 
--		if (!asd->params.online_process) {
--			ret = atomisp_css_capture_get_output_raw_frame_info(asd,
--				raw_output_info);
--			if (ret)
--				return ret;
--		}
- 		if (asd->run_mode->val != ATOMISP_RUN_MODE_STILL_CAPTURE) {
- 			dev_err(isp->dev,
- 				"Need to set the running mode first\n");
-@@ -4430,16 +4417,6 @@ static int atomisp_set_fmt_to_isp(struct video_device *vdev,
- 	}
- 
- 	atomisp_update_grid_info(asd, pipe_id, source_pad);
--
--	/* Free the raw_dump buffer first */
--	ia_css_frame_free(asd->raw_output_frame);
--	asd->raw_output_frame = NULL;
--
--	if (!asd->params.online_process &&
--	    ia_css_frame_allocate_from_info(&asd->raw_output_frame,
--		    raw_output_info))
--		return -ENOMEM;
--
- 	return 0;
- }
- 
-@@ -4595,7 +4572,7 @@ int atomisp_set_fmt(struct video_device *vdev, struct v4l2_format *f)
- 	struct atomisp_sub_device *asd = pipe->asd;
- 	const struct atomisp_format_bridge *format_bridge;
- 	const struct atomisp_format_bridge *snr_format_bridge;
--	struct ia_css_frame_info output_info, raw_output_info;
-+	struct ia_css_frame_info output_info;
- 	struct v4l2_pix_format snr_fmt;
- 	struct v4l2_pix_format backup_fmt, s_fmt;
- 	unsigned int dvs_env_w = 0, dvs_env_h = 0;
-@@ -4912,8 +4889,7 @@ int atomisp_set_fmt(struct video_device *vdev, struct v4l2_format *f)
- 	}
- 
- set_fmt_to_isp:
--	ret = atomisp_set_fmt_to_isp(vdev, &output_info, &raw_output_info,
--				     &f->fmt.pix, source_pad);
-+	ret = atomisp_set_fmt_to_isp(vdev, &output_info, &f->fmt.pix, source_pad);
- 	if (ret) {
- 		dev_warn(isp->dev, "Can't set format on ISP. Error %d\n", ret);
- 		return -EINVAL;
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat.h b/drivers/staging/media/atomisp/pci/atomisp_compat.h
-index 06d54c9bcb49..707509922784 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_compat.h
-+++ b/drivers/staging/media/atomisp/pci/atomisp_compat.h
-@@ -303,10 +303,6 @@ int atomisp_css_copy_get_output_frame_info(
-     unsigned int stream_index,
-     struct ia_css_frame_info *info);
- 
--int atomisp_css_capture_get_output_raw_frame_info(
--    struct atomisp_sub_device *asd,
--    struct ia_css_frame_info *info);
--
- int atomisp_css_preview_get_output_frame_info(
-     struct atomisp_sub_device *asd,
-     struct ia_css_frame_info *info);
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-index 10be77c478b8..a1c1c9b1e806 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-@@ -2630,14 +2630,6 @@ int atomisp_css_capture_get_viewfinder_frame_info(
- 				ATOMISP_CSS_VF_FRAME, IA_CSS_PIPE_ID_CAPTURE);
- }
- 
--int atomisp_css_capture_get_output_raw_frame_info(
--    struct atomisp_sub_device *asd,
--    struct ia_css_frame_info *info)
--{
--	return __get_frame_info(asd, ATOMISP_INPUT_STREAM_GENERAL, info,
--				ATOMISP_CSS_RAW_FRAME, IA_CSS_PIPE_ID_CAPTURE);
--}
--
- int atomisp_css_copy_get_output_frame_info(
-     struct atomisp_sub_device *asd,
-     unsigned int stream_index,
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-index d8d4c412f66a..7f757f510190 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-@@ -564,7 +564,6 @@ static void atomisp_subdev_init_struct(struct atomisp_sub_device *asd)
- 	asd->params.fpn_en = false;
- 	asd->params.xnr_en = false;
- 	asd->params.false_color = 0;
--	asd->params.online_process = 1;
- 	asd->params.yuv_ds_en = 0;
- 	/* s3a grid not enabled for any pipe */
- 	asd->params.s3a_enabled_pipe = IA_CSS_PIPE_ID_NUM;
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_subdev.h b/drivers/staging/media/atomisp/pci/atomisp_subdev.h
-index df6e2a8c5f84..bcb0fe8d0538 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_subdev.h
-+++ b/drivers/staging/media/atomisp/pci/atomisp_subdev.h
-@@ -183,9 +183,6 @@ struct atomisp_css_params {
- };
- 
- struct atomisp_subdev_params {
--	/* FIXME: Determines whether raw capture buffer are being passed to
--	 * user space. Unimplemented for now. */
--	int online_process;
- 	int yuv_ds_en;
- 	unsigned int color_effect;
- 	bool gdc_cac_en;
-@@ -303,7 +300,6 @@ struct atomisp_sub_device {
- 	spinlock_t dis_stats_lock;
- 
- 	struct ia_css_frame *vf_frame; /* TODO: needed? */
--	struct ia_css_frame *raw_output_frame;
- 	enum atomisp_frame_status frame_status[VIDEO_MAX_FRAME];
- 
- 	/* This field specifies which camera (v4l2 input) is selected. */
--- 
-2.39.1
+Vikash, did you or somebody else make any progress to fix this properly?
 
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+#regzbot poke
