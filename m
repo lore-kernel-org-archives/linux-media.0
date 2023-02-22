@@ -2,159 +2,187 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55A18C6379F
-	for <linux-media@archiver.kernel.org>; Wed, 22 Feb 2023 11:33:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5ABBC636D6
+	for <linux-media@archiver.kernel.org>; Wed, 22 Feb 2023 12:26:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbjBVLdN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Feb 2023 06:33:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54252 "EHLO
+        id S231986AbjBVM05 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Feb 2023 07:26:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjBVLdM (ORCPT
+        with ESMTP id S231932AbjBVM04 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Feb 2023 06:33:12 -0500
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E34BDD3;
-        Wed, 22 Feb 2023 03:33:11 -0800 (PST)
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPS id 7A0221B000EF;
-        Wed, 22 Feb 2023 13:33:08 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1677065588;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CcIvoKjfBTRbIIqYyMX0XFzcIbMfENOSK0nzO975d+Q=;
-        b=h76KPf57YBboQX5pjTosmDgXqFigwhJJb0oobn9Xg7thJEu/IjVoQaiZzWvYUA0mJtiR3X
-        45Kr6bwCqfzAL6V+4IDGtcA39EC23e9taHOMxGDHfFnoPVoMffyFoSasjXgySDcPt61+tg
-        misAmGrLm8wOqbLqDK4xnADqYDvMGZ3q73e7MTGiOCxEFt/qufXHUXOAoue+W/qfejBzeB
-        5Eg8FXFVOY2Sx95qfSiqVJKKP5EzduDBpp/GJsf9kR7ip9J3ACsIiJPoRwaFLQsNLqq7yh
-        jqiijNC89gSB/jI0wCRaThJO3x7pB2h/1ddo+doExNiDYJNW6ijn35IDsLN05A==
-Received: from hillosipuli.retiisi.eu (dkzbhx1tyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4502:69d6::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 9240E20173;
-        Wed, 22 Feb 2023 13:33:03 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1677065583;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CcIvoKjfBTRbIIqYyMX0XFzcIbMfENOSK0nzO975d+Q=;
-        b=eNbYLOja9Ul8ZGBAaAyE5e7wria8q0u++2b+5b6ReuZiBWAuI8W68hEodeLDAiX3cUvfUJ
-        3rozgKFqW8whIx7Gmy0WfVSy8JWyEH5ErO3xwfAkY9kYRvO3o/rMssZ4JgwdKjuD8Yx3Zk
-        4AVhFFbRBIQXKLJ6Lf4mqcSGOEd4XFM=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1677065583;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CcIvoKjfBTRbIIqYyMX0XFzcIbMfENOSK0nzO975d+Q=;
-        b=KsYVC4JaVKB/nIVlZmpNNvXmhDI8QlhljNCbUeaYkOxKbpBToPYSjbBO+v+B77WBHGdoHP
-        dKlvXkdKDaw06yvqE8jGylZppX+0owMqOWtzwp7qL/wqPuYqzoH4eA86i1d7QAcROZLQQL
-        ien8FXUoHzme2MBYG7pwVvSmnZcvHjE=
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1677065583; a=rsa-sha256; cv=none;
-        b=nHWESDN6LiLuYyOnJ7oz1tQUUBvmAvHLbmc6nNsJuAi7pe8aNj1xT217zAwJDmkhHZLL6f
-        n+bx5vXHjdpjU1gfS72zGCV1o8WQzXbM1gS/bse/cNzfoP+QZxP2UMAjYtm3Ya6u2Qs6ow
-        XYxt2NzDaI0MAqrlDetzhLmdnL5P2Aw=
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 39806634C91;
-        Wed, 22 Feb 2023 13:32:50 +0200 (EET)
-Date:   Wed, 22 Feb 2023 13:32:50 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Shravan.Chippa@microchip.com
-Cc:     Conor.Dooley@microchip.com, paul.j.murphy@intel.com,
-        daniele.alessandrelli@intel.com, mchehab@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        jacopo.mondi@ideasonboard.com, Prakash.Battu@microchip.com
-Subject: Re: [PATCH v11 3/5] media: i2c: imx334: support lower bandwidth mode
-Message-ID: <Y/X9YiLJxDfLPNUX@valkosipuli.retiisi.eu>
-References: <20230208050915.1958183-1-shravan.chippa@microchip.com>
- <20230208050915.1958183-4-shravan.chippa@microchip.com>
- <Y/Xc9RCmO8P8eKtL@valkosipuli.retiisi.eu>
- <Y/XnWOomz2N9fCvc@wendy>
- <Y/XoXZJUKKGzGVVL@valkosipuli.retiisi.eu>
- <Y/XpClyi9KMtLKcF@valkosipuli.retiisi.eu>
- <PH0PR11MB5611D8EE3F896FC0BE9A842E81AA9@PH0PR11MB5611.namprd11.prod.outlook.com>
+        Wed, 22 Feb 2023 07:26:56 -0500
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD9C3B228
+        for <linux-media@vger.kernel.org>; Wed, 22 Feb 2023 04:26:28 -0800 (PST)
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230222121732epoutp017c643e37596c973af88c980025895d85~GJLCi9YPG2008620086epoutp01E
+        for <linux-media@vger.kernel.org>; Wed, 22 Feb 2023 12:17:32 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230222121732epoutp017c643e37596c973af88c980025895d85~GJLCi9YPG2008620086epoutp01E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1677068252;
+        bh=PSfpRN1ZrrDiozNhb/4WL/U0F9Nyc66kIfC4wuUaWIY=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=W6Zzjc59QZV4mw3Cwu4oVkauCKscjlMjHCvjm5Em/zbp4abDwOpbx3d3FTwGcMMkI
+         lAo3nIzMjv5w+NJjtam9vDc/dy1rGPUj4vZn5B3TnMpjtnqySYBe5Q/vpX3Xu8sNIA
+         wC6IesTfrWiqNefeCReE92Jyd+mb1yHkTjebh+vY=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20230222121731epcas5p2b3d75265b03c429bb449141e873cd028~GJLB1kR_92233922339epcas5p2v;
+        Wed, 22 Feb 2023 12:17:31 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.181]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4PMFXT6MjMz4x9Q1; Wed, 22 Feb
+        2023 12:17:29 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        0B.70.06765.9D706F36; Wed, 22 Feb 2023 21:17:29 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230222091248epcas5p106a21c53641daa6173ed8b0c4d907f61~GGpwZ9b4f1901919019epcas5p14;
+        Wed, 22 Feb 2023 09:12:48 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230222091248epsmtrp268eb4412e36cc41aada52e410bb65f1f~GGpwXhG2Y1700217002epsmtrp2-;
+        Wed, 22 Feb 2023 09:12:48 +0000 (GMT)
+X-AuditID: b6c32a4b-20fff70000011a6d-88-63f607d99d3e
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8E.FD.17995.09CD5F36; Wed, 22 Feb 2023 18:12:48 +0900 (KST)
+Received: from FDSFTE308 (unknown [107.122.81.79]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230222091245epsmtip267f5ba70273187d55ca7a71fd7f626ae~GGptSVn_70245402454epsmtip2H;
+        Wed, 22 Feb 2023 09:12:45 +0000 (GMT)
+From:   "Aakarsh Jain" <aakarsh.jain@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Cc:     <m.szyprowski@samsung.com>, <andrzej.hajda@intel.com>,
+        <mchehab@kernel.org>, <hverkuil-cisco@xs4all.nl>,
+        <ezequiel@vanguardiasur.com.ar>, <jernej.skrabec@gmail.com>,
+        <benjamin.gaignard@collabora.com>, <stanimir.varbanov@linaro.org>,
+        <dillon.minfei@gmail.com>, <david.plowman@raspberrypi.com>,
+        <mark.rutland@arm.com>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <andi@etezian.org>, <alim.akhtar@samsung.com>,
+        <aswani.reddy@samsung.com>, <pankaj.dubey@samsung.com>,
+        <linux-fsd@tesla.com>
+In-Reply-To: <1c5eae73-04fa-722c-b6b2-8a39576ad1c5@linaro.org>
+Subject: RE: [Patch v3 01/15] dt-bindings: media: s5p-mfc: Add new DT schema
+ for MFC
+Date:   Wed, 22 Feb 2023 14:42:43 +0530
+Message-ID: <000001d9469d$d537bd30$7fa73790$@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR11MB5611D8EE3F896FC0BE9A842E81AA9@PH0PR11MB5611.namprd11.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQIjXZOHgvokXGuofbg3rWbxTFZEMQGGfBLcASb/h3kBi+ufA64koKHw
+Content-Language: en-in
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xTdxTH8+u9fUBSuBQXfsNp8C7MAQFaLHAxoGYacuOTxWwamJam3FBC
+        X+str+0PkMEYL4eKOjsEBewSxsCV90sZlDCq0TEcFVMQeQQLUVnrGCjOtVzY+O9zzvme3/ec
+        3y8/HiK4zPXlpah0lFYlVeAcd7S1P+DD4DHukkx45o2QmKxs5RA1y3Ms4nGNAyX6mlq4RPOD
+        7xHih8FeNlFluscm2n6ZQomfnzqrw1fGUWKuqgEQNv0Eh+hZcIqN06Ns4sn8CWKks4JDlNxs
+        YRM/mca5xA3LMIswGFdZRHXLSy6R32PiEnlfm1j7fMj6ynpAto/XAtJSa0fIDv04l6zptrFI
+        Y10hh7SOdnPIptpsMn/gFUqeba4D5D+5V7lkkcnCIR3G7aT5Lwc3ziM+NVpOSZMorR+lkqmT
+        UlTJMfih45L9kvAIoShYFEVE4n4qqZKKwQ8cjguOTVE4bwD3S5cq0pypOClN46F7orXqNB3l
+        J1fTuhic0iQpNGJNCC1V0mmq5BAVpdstEgrDwp3CxFT5865ioJnFMntt4hzQ5lEE3HgQE8Pi
+        W3ZQBNx5AqwLwJwxA4cJ7ABO/lGwHjgAbBtZARst95YWWUyhE8DesQ6UCeYAPNv4O8ul4mCh
+        8LG5hO0qbMEGnGc1P0FcAYL9jcDZ2zMcl8oN2wPLLxoQF3tjn8I80zLbxSjmD5vba1AX87Eo
+        aL7QjzDsBYeuzKzlESwIGq4vIMxMfnBl1uDs5TndYuHL3COMxAcOrJSs+ULM7AYf3TGzGf0B
+        aDYZuQx7w/nB5nX2hY7nPRyGZXC62rZ+vgI2dpejDO+FvQ8qUJcXggXAxs5QJr0NXjQ3sBhf
+        D1j6eobF5PmwvXKDP4AV1uX1Ed6D/T/eAGUA12/aTL9pM/2mFfT/u10DaB14l9LQymSKDtfs
+        UlEZ/724TK00grUfEnioHUxNLob0ARYP9AHIQ/At/Ld8h0zAT5JmfUFp1RJtmoKi+0C487rP
+        Ib7vyNTOL6bSSUTiKKE4IiJCHLUrQoT78HfGDMkEWLJUR6VSlIbSbvSxeG6+OSw0aMq/7M/f
+        jIlxSxhujpymLa2+NrF5+JrBUrWt3i3jk5GDUSdjKuRTdx3zBZJsTuwdIt0+MTf7ML+ksvZ1
+        mOC74+MvrGOeixcsGQfPdJ/KLl0+r2rKP7bT8Kz6m6O7T7eshnWdTsp6dL7ae9Tff6utZOEg
+        cvNzi+jbvMzQrUjrxEOl5wv3Nzs6qFuGu5F7g6LjvT5buF+u2N53tGLxtl3u8Wtzof1kPftZ
+        gZK+9PY6bHg/5NxS3qR1VS6wDkg8yxJPTSasNg6+uhRwOHDo457ZBZxbuiPL+jSBvf+jI/ov
+        ky1kenz5sVzrWCzsirXts1/t0qKF90985SXrNA8X1ydkXsZRWi4VBSJaWvovFT6ouKoEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrPIsWRmVeSWpSXmKPExsWy7bCSvO6EO1+TDZ7dMrV4MG8bm8XiH8+Z
+        LO4v/sxicWjzVnaLLVdmM1ssP36A1WL+kXOsFtsPPmKx2PgCKHtx5l0Wi+fz1zFavJx1j81i
+        72ug4k2Pr7FaPHwVbnF51xw2i54NW1kt1h65y26x9PpFJotlm/4wWSza+oXdonXvEXaLlrYj
+        TA7iHmvmrWH02HF3CaPH9SWfmD12zrrL7rF4z0smj02rOtk87lzbw+axeUm9R+vRXywefVtW
+        MXr8a5rL7tF15Dqbx+dNch6nvn5mD+CL4rJJSc3JLEst0rdL4Mo4eXgCU8F8gYq9m44wNzB+
+        5O1i5OSQEDCROPftA1MXIxeHkMAORon+DztZIBIyEv/bjrFD2MISK/89Z4coesooMXPWEyaQ
+        BJuAvsT9Uz2sIAkRgZNA3WdawBxmgW4WicZXrVBzPzNKnDx8HWwWp4CdxJSpy5i7GDk4hAVC
+        JHZ/qwMJswioSmzZsRhsNa+ApcSpyYeZIWxBiZMzn4DFmQW0JZ7efApnL1v4mhniPAWJn0+X
+        sYKMFBFwk/jS5AtRIi5x9GcP8wRG4VlIJs1CMmkWkkmzkLQsYGRZxSiZWlCcm55bbFhglJda
+        rlecmFtcmpeul5yfu4kRnEa0tHYw7ln1Qe8QIxMH4yFGCQ5mJRHe/7yfk4V4UxIrq1KL8uOL
+        SnNSiw8xSnOwKInzXug6GS8kkJ5YkpqdmlqQWgSTZeLglGpgurgvOTr1JtPGc0XT35rPZZ+2
+        +OIPiSS9nBitncF/714tPxLfr+w6/f5a3/Ctn15vbW5+72rmcczL7KN4EZ+t/dlcdc1Uybjk
+        a37iKZN2+Wtwm1dVMfC8vbHt9dSse1svdVRuT2h1NVm+/Ur5efWnnHy3y/yKi212x+7fF2Sa
+        oKW9cqf6IyGPx5yXrNa5Lvw5T7BL09Qu28en9IWb+Z1b5pr2cv/3PD7kXL1j7ufl2k8CpH6t
+        OfP2LK+mhcqH1Ql2AY4WhbzCXEbP/21udL3Ktzv9VbffZeYuZaaV5Yn3fj2Y22Wka3Dxme9h
+        /uJX3FnR9/VvLptzcdICsw2LnD5+9LM0PNjgneHN/JopRDhZiaU4I9FQi7moOBEADCwZnpID
+        AAA=
+X-CMS-MailID: 20230222091248epcas5p106a21c53641daa6173ed8b0c4d907f61
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221011125142epcas5p13c858a5f27830fb1de50fa51e9730eca
+References: <20221011122516.32135-1-aakarsh.jain@samsung.com>
+        <CGME20221011125142epcas5p13c858a5f27830fb1de50fa51e9730eca@epcas5p1.samsung.com>
+        <20221011122516.32135-2-aakarsh.jain@samsung.com>
+        <1c5eae73-04fa-722c-b6b2-8a39576ad1c5@linaro.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 10:20:56AM +0000, Shravan.Chippa@microchip.com wrote:
-> Hi Sakari,
-> 
-> > -----Original Message-----
-> > From: Sakari Ailus <sakari.ailus@iki.fi>
-> > Sent: 22 February 2023 03:36 PM
-> > To: Conor Dooley - M52691 <Conor.Dooley@microchip.com>
-> > Cc: shravan Chippa - I35088 <Shravan.Chippa@microchip.com>;
-> > paul.j.murphy@intel.com; daniele.alessandrelli@intel.com;
-> > mchehab@kernel.org; robh+dt@kernel.org;
-> > krzysztof.kozlowski+dt@linaro.org; shawnguo@kernel.org;
-> > s.hauer@pengutronix.de; kernel@pengutronix.de; festevam@gmail.com;
-> > linux-imx@nxp.com; linux-media@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
-> > kernel@lists.infradead.org; Jacopo Mondi
-> > <jacopo.mondi@ideasonboard.com>; Battu Prakash Reddy - I30399
-> > <Prakash.Battu@microchip.com>
-> > Subject: Re: [PATCH v11 3/5] media: i2c: imx334: support lower bandwidth
-> > mode
-> > 
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the
-> > content is safe
-> > 
-> > On Wed, Feb 22, 2023 at 12:03:10PM +0200, Sakari Ailus wrote:
-> > > On Wed, Feb 22, 2023 at 09:58:48AM +0000, Conor Dooley wrote:
-> > > > On Wed, Feb 22, 2023 at 11:14:29AM +0200, Sakari Ailus wrote:
-> > > > > On Wed, Feb 08, 2023 at 10:39:13AM +0530, shravan kumar wrote:
-> > > > > > From: Shravan Chippa <shravan.chippa@microchip.com>
-> > > >
-> > > > > > @@ -666,11 +885,26 @@ static int imx334_init_pad_cfg(struct
-> > v4l2_subdev *sd,
-> > > > > >         struct v4l2_subdev_format fmt = { 0 };
-> > > > > >
-> > > > > >         fmt.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY :
-> > V4L2_SUBDEV_FORMAT_ACTIVE;
-> > > > > > -       imx334_fill_pad_format(imx334, &supported_mode, &fmt);
-> > > > > > +       imx334_fill_pad_format(imx334, &supported_modes[0],
-> > > > > > + &fmt);
-> > > > >
-> > > > > Now that there are multiple modes supported, this would appear to
-> > > > > get the width, height as well as the other fields (apart from mbus
-> > > > > code) from the first mode.
-> > > >
-> > > > Is this statement supposed to be a request to change something, or
-> > > > just a throwaway comment? It's a little hard for me to understand
-> > > > your intention here, sorry.
-> > >
-> > > Just pointing to what looks like a bug.
-> > 
-> > Ah, my bad. Please ignore the comment.
-> > 
-> > This is indeed about init_cfg(), not s_fmt().
-> > 
-> 
-> I will try to fix init_cfg()
 
-There's no problem with it. Please ignore my original comment on this.
 
--- 
-Sakari Ailus
+> -----Original Message-----
+> From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40linaro.org=5D
+> Sent: 21 February 2023 21:56
+> To: aakarsh jain <aakarsh.jain=40samsung.com>; linux-arm-
+> kernel=40lists.infradead.org; linux-media=40vger.kernel.org; linux-
+> kernel=40vger.kernel.org; devicetree=40vger.kernel.org
+> Cc: m.szyprowski=40samsung.com; andrzej.hajda=40intel.com;
+> mchehab=40kernel.org; hverkuil-cisco=40xs4all.nl;
+> ezequiel=40vanguardiasur.com.ar; jernej.skrabec=40gmail.com;
+> benjamin.gaignard=40collabora.com; stanimir.varbanov=40linaro.org;
+> dillon.minfei=40gmail.com; david.plowman=40raspberrypi.com;
+> mark.rutland=40arm.com; robh+dt=40kernel.org; krzk+dt=40kernel.org;
+> andi=40etezian.org; alim.akhtar=40samsung.com; aswani.reddy=40samsung.com=
+;
+> pankaj.dubey=40samsung.com; linux-fsd=40tesla.com; smitha.t=40samsung.com
+> Subject: Re: =5BPatch v3 01/15=5D dt-bindings: media: s5p-mfc: Add new DT
+> schema for MFC
+>=20
+> On 11/10/2022 14:25, aakarsh jain wrote:
+> > From: Smitha T Murthy <smitha.t=40samsung.com>
+> >
+> > Convert DT schema for s5p-mfc in yaml format
+> >
+> > Cc: linux-fsd=40tesla.com
+> > Signed-off-by: Smitha T Murthy <smitha.t=40samsung.com>
+> > Signed-off-by: Aakarsh Jain <aakarsh.jain=40samsung.com>
+> > ---
+> >  .../devicetree/bindings/media/s5p-mfc.txt     =7C  75 --------
+> >  .../bindings/media/samsung,s5p-mfc.yaml       =7C 163
+> ++++++++++++++++++
+>=20
+> Hi Aakarsh,
+>=20
+> Any plans for new version of this DT schema conversion? The Samsung MFC
+> is one of last remaining bigger pieces for conversion. We already have 10=
+0%
+> bindings compliance for ARM64 but the MFC is missing for ARMv7:
+>=20
+> https://protect2.fireeye.com/v1/url?k=3D9661b377-f7eaa63c-96603838-
+> 74fe485fb305-bc4c89dbd0204557&q=3D1&e=3D1485ea1d-43e8-4541-8078-
+> 4d13ff6cc42f&u=3Dhttps%3A%2F%2Fpastebin.com%2FD8jXnjEe
+> (that's on my pending branch with all patches from LKML collected).
+>=20
+> Best regards,
+> Krzysztof
+
+Hi Krzysztof,
+
+I was little occupied with other stuff. I will fix all warnings and errors.=
+ Will post the patch soon.
+
+Thanks,
+Aakarsh
+
+
