@@ -2,308 +2,108 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A539DC61DA4
-	for <linux-media@archiver.kernel.org>; Thu, 23 Feb 2023 08:13:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97B49C64ED8
+	for <linux-media@archiver.kernel.org>; Thu, 23 Feb 2023 08:19:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233446AbjBWINh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 Feb 2023 03:13:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
+        id S233317AbjBWIT4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 Feb 2023 03:19:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233338AbjBWINb (ORCPT
+        with ESMTP id S233487AbjBWITu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 23 Feb 2023 03:13:31 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7CFF498A7;
-        Thu, 23 Feb 2023 00:13:28 -0800 (PST)
-X-UUID: ef9117e6b35111ed945fc101203acc17-20230223
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=Gn2kibkOu2BpBaNvPK5fRP0sBK77AQfIg4Roa4SkH2Q=;
-        b=e+D7LlVMEpRcYj30QUVcRp1Z21pNGyrr4Exxpd/1ZIq8ykn6fLYGRXkYTUisLz3yVsZ3Q78EYa2F75++Gk7IFNtfFVy1j7anaGykUtOWzgkCl1dQghWgaSV8MLUxX4C3sHEf0bOyuuN+EaU5A+WOzli8WSDznrphXU1JlvODRQ8=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.20,REQID:c5b493c1-79ee-49ad-9967-7170850c1d84,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:70
-X-CID-INFO: VERSION:1.1.20,REQID:c5b493c1-79ee-49ad-9967-7170850c1d84,IP:0,URL
-        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:70
-X-CID-META: VersionHash:25b5999,CLOUDID:b20159b1-beed-4dfc-bd9c-e1b22fa6ccc4,B
-        ulkID:230223161322DDLYE2TR,BulkQuantity:1,Recheck:0,SF:38|29|28|17|19|48,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:43,QS:nil,BEC:nil,COL
-        :0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-UUID: ef9117e6b35111ed945fc101203acc17-20230223
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1897907847; Thu, 23 Feb 2023 16:13:21 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 23 Feb 2023 16:13:20 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 23 Feb 2023 16:13:19 +0800
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <nicolas.dufresne@collabora.com>, kyrie wu <kyrie.wu@mediatek.com>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
-        <maoguang.meng@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        "Irui Wang" <irui.wang@mediatek.com>
-Subject: [V1,6/7] media: mtk-jpeg: refactor some variables
-Date:   Thu, 23 Feb 2023 16:13:11 +0800
-Message-ID: <20230223081312.29296-7-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230223081312.29296-1-irui.wang@mediatek.com>
-References: <20230223081312.29296-1-irui.wang@mediatek.com>
+        Thu, 23 Feb 2023 03:19:50 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F3E82332E;
+        Thu, 23 Feb 2023 00:19:49 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 700BE4DE;
+        Thu, 23 Feb 2023 09:19:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1677140387;
+        bh=5EOibZQ0HJbQ6x9yMUFp5YDt5+g4o8fKiW3Z+uQtCuU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GQuSYsy0zR5uyNYtB1IbKCcE9We8ROM9oesyGuEA2ogLVQ+9Cn5jZqsgXWUjo2vsO
+         KtT0EskdmSzw6/N5956nT1omZnnAA0+YAv61+yE9TJBNYatcUIxHetllKMAh7fWOEz
+         Pe8abxdHxgnThV5kw5jl2cvSJNaCQ0vpRalMzglU=
+Message-ID: <e7ab123a-5899-8eba-8255-b0e18bf8944f@ideasonboard.com>
+Date:   Thu, 23 Feb 2023 10:19:43 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v10 0/8] i2c-atr and FPDLink
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>
+References: <20230222132907.594690-1-tomi.valkeinen@ideasonboard.com>
+ <Y/YjlW2byyHKamxl@smile.fi.intel.com> <Y/Yj8OnYHLyiinMi@smile.fi.intel.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <Y/Yj8OnYHLyiinMi@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: kyrie wu <kyrie.wu@mediatek.com>
+On 22/02/2023 16:17, Andy Shevchenko wrote:
+> On Wed, Feb 22, 2023 at 04:15:50PM +0200, Andy Shevchenko wrote:
+>> On Wed, Feb 22, 2023 at 03:28:59PM +0200, Tomi Valkeinen wrote:
+>>> Hi,
+>>>
+>>> You can find v9 from:
+>>>
+>>> https://lore.kernel.org/all/20230216140747.445477-1-tomi.valkeinen@ideasonboard.com/
+>>>
+>>> Diff to v9 included below.
+>>>
+>>> Main changes in v10:
+>>> - Switch pre-increments to post-increments
+>>> - Add macros for FPD3_RX_ID lengths
+>>> - Use regmap_bulk_read in 16 bit reg accessors
+>>
+>> Thanks!
+>> I have no more remarks, nice job!
+>>
+>> One thing below to just look at and if you want / have time / chance update.
+> 
+> ...
+> 
+>>> +	ret = regmap_bulk_read(priv->regmap, reg, &__v, 2);
+>>
+>> sizeof()
+>>
+>> ...
+>>
+>>> +	ret = regmap_bulk_read(priv->regmap, reg, &__v, 2);
+>>
+>> Ditto.
+> 
+> Here is a formal tag for patches 1, 2, 6, 7, and 8
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Refactor some variables to reduce redundancy
-and optimize the initialization process.
+Thanks for the thorough reviews!
 
-Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
-Signed-off-by: irui wang <irui.wang@mediatek.com>
----
- .../platform/mediatek/jpeg/mtk_jpeg_core.c    | 31 ++++++++++++++-----
- .../platform/mediatek/jpeg/mtk_jpeg_core.h    | 18 ++++-------
- .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.c  | 16 +++-------
- .../platform/mediatek/jpeg/mtk_jpeg_enc_hw.c  | 16 +++-------
- 4 files changed, 37 insertions(+), 44 deletions(-)
+I'll do the changes above.
 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-index e89195f1989c..ab06c1ee80d4 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-@@ -1004,8 +1004,8 @@ static void mtk_jpegenc_worker(struct work_struct *work)
- retry_select:
- 	hw_id = mtk_jpegenc_get_hw(ctx);
- 	if (hw_id < 0) {
--		ret = wait_event_interruptible(jpeg->enc_hw_wq,
--					       atomic_read(&jpeg->enchw_rdy) > 0);
-+		ret = wait_event_interruptible(jpeg->hw_wq,
-+					       atomic_read(&jpeg->hw_rdy) > 0);
- 		if (ret != 0 || (i++ > MTK_JPEG_MAX_RETRY_TIME)) {
- 			dev_err(jpeg->dev, "%s : %d, all HW are busy\n",
- 				__func__, __LINE__);
-@@ -1016,7 +1016,7 @@ static void mtk_jpegenc_worker(struct work_struct *work)
- 		goto retry_select;
- 	}
- 
--	atomic_dec(&jpeg->enchw_rdy);
-+	atomic_dec(&jpeg->hw_rdy);
- 	src_buf = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
- 	if (!src_buf)
- 		goto getbuf_fail;
-@@ -1073,7 +1073,7 @@ static void mtk_jpegenc_worker(struct work_struct *work)
- 	v4l2_m2m_buf_done(src_buf, buf_state);
- 	v4l2_m2m_buf_done(dst_buf, buf_state);
- getbuf_fail:
--	atomic_inc(&jpeg->enchw_rdy);
-+	atomic_inc(&jpeg->hw_rdy);
- 	mtk_jpegenc_put_hw(jpeg, hw_id);
- 	v4l2_m2m_job_finish(jpeg->m2m_dev, ctx->fh.m2m_ctx);
- }
-@@ -1198,8 +1198,8 @@ static void mtk_jpegdec_worker(struct work_struct *work)
- retry_select:
- 	hw_id = mtk_jpegdec_get_hw(ctx);
- 	if (hw_id < 0) {
--		ret = wait_event_interruptible_timeout(jpeg->dec_hw_wq,
--						       atomic_read(&jpeg->dechw_rdy) > 0,
-+		ret = wait_event_interruptible_timeout(jpeg->hw_wq,
-+						       atomic_read(&jpeg->hw_rdy) > 0,
- 						       MTK_JPEG_HW_TIMEOUT_MSEC);
- 		if (ret != 0 || (i++ > MTK_JPEG_MAX_RETRY_TIME)) {
- 			dev_err(jpeg->dev, "%s : %d, all HW are busy\n",
-@@ -1211,7 +1211,7 @@ static void mtk_jpegdec_worker(struct work_struct *work)
- 		goto retry_select;
- 	}
- 
--	atomic_dec(&jpeg->dechw_rdy);
-+	atomic_dec(&jpeg->hw_rdy);
- 	src_buf = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
- 	if (!src_buf)
- 		goto getbuf_fail;
-@@ -1290,7 +1290,7 @@ static void mtk_jpegdec_worker(struct work_struct *work)
- 	v4l2_m2m_buf_done(src_buf, buf_state);
- 	v4l2_m2m_buf_done(dst_buf, buf_state);
- getbuf_fail:
--	atomic_inc(&jpeg->dechw_rdy);
-+	atomic_inc(&jpeg->hw_rdy);
- 	mtk_jpegdec_put_hw(jpeg, hw_id);
- 	v4l2_m2m_job_finish(jpeg->m2m_dev, ctx->fh.m2m_ctx);
- }
-@@ -1710,6 +1710,8 @@ static int mtk_jpeg_single_core_init(struct platform_device *pdev,
- static int mtk_jpeg_probe(struct platform_device *pdev)
- {
- 	struct mtk_jpeg_dev *jpeg;
-+	struct device_node *child;
-+	int num_child = 0;
- 	int ret;
- 
- 	jpeg = devm_kzalloc(&pdev->dev, sizeof(*jpeg), GFP_KERNEL);
-@@ -1733,6 +1735,19 @@ static int mtk_jpeg_probe(struct platform_device *pdev)
- 			v4l2_err(&jpeg->v4l2_dev, "mtk_jpeg_single_core_init failed.");
- 			return -EINVAL;
- 		}
-+	} else {
-+		init_waitqueue_head(&jpeg->hw_wq);
-+
-+		for_each_child_of_node(pdev->dev.of_node, child)
-+			num_child++;
-+
-+		atomic_set(&jpeg->hw_rdy, num_child);
-+
-+		jpeg->workqueue = alloc_ordered_workqueue(MTK_JPEG_NAME,
-+							  WQ_MEM_RECLAIM
-+							  | WQ_FREEZABLE);
-+		if (!jpeg->workqueue)
-+			return -EINVAL;
- 	}
- 
- 	ret = v4l2_device_register(&pdev->dev, &jpeg->v4l2_dev);
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-index 83cf35a12b7a..89242e407dc9 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-@@ -203,14 +203,11 @@ struct mtk_jpegdec_comp_dev {
-  * @job_timeout_work:	IRQ timeout structure
-  * @variant:		driver variant to be used
-  * @reg_encbase:	jpg encode register base addr
-- * @enc_hw_dev:		jpg encode hardware device
-- * @enc_hw_wq:		jpg encode wait queue
-- * @enchw_rdy:		jpg encode hw ready flag
-+ * @enc_hw_dev:	jpg encode hardware device
-+ * @hw_wq:		jpg wait queue
-+ * @hw_rdy:		jpg hw ready flag
-  * @reg_decbase:	jpg decode register base addr
-- * @dec_hw_dev:		jpg decode hardware device
-- * @dec_hw_wq:		jpg decode wait queue
-- * @dec_workqueue:	jpg decode work queue
-- * @dechw_rdy:		jpg decode hw ready flag
-+ * @dec_hw_dev:	jpg decode hardware device
-  */
- struct mtk_jpeg_dev {
- 	struct mutex		lock;
-@@ -227,14 +224,11 @@ struct mtk_jpeg_dev {
- 
- 	void __iomem *reg_encbase[MTK_JPEGENC_HW_MAX];
- 	struct mtk_jpegenc_comp_dev *enc_hw_dev[MTK_JPEGENC_HW_MAX];
--	wait_queue_head_t enc_hw_wq;
--	atomic_t enchw_rdy;
-+	wait_queue_head_t hw_wq;
-+	atomic_t hw_rdy;
- 
- 	void __iomem *reg_decbase[MTK_JPEGDEC_HW_MAX];
- 	struct mtk_jpegdec_comp_dev *dec_hw_dev[MTK_JPEGDEC_HW_MAX];
--	wait_queue_head_t dec_hw_wq;
--	struct workqueue_struct	*dec_workqueue;
--	atomic_t dechw_rdy;
- };
- 
- /**
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-index 5b47bd83c5ce..b7c2de2489b0 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-@@ -503,8 +503,8 @@ static void mtk_jpegdec_timeout_work(struct work_struct *work)
- 	clk_disable_unprepare(cjpeg->jdec_clk.clks->clk);
- 	pm_runtime_put(cjpeg->dev);
- 	cjpeg->hw_state = MTK_JPEG_HW_IDLE;
--	atomic_inc(&master_jpeg->dechw_rdy);
--	wake_up(&master_jpeg->dec_hw_wq);
-+	atomic_inc(&master_jpeg->hw_rdy);
-+	wake_up(&master_jpeg->hw_wq);
- 	v4l2_m2m_buf_done(src_buf, buf_state);
- 	mtk_jpegdec_put_buf(cjpeg);
- }
-@@ -551,8 +551,8 @@ static irqreturn_t mtk_jpegdec_hw_irq_handler(int irq, void *priv)
- 	clk_disable_unprepare(jpeg->jdec_clk.clks->clk);
- 
- 	jpeg->hw_state = MTK_JPEG_HW_IDLE;
--	wake_up(&master_jpeg->dec_hw_wq);
--	atomic_inc(&master_jpeg->dechw_rdy);
-+	wake_up(&master_jpeg->hw_wq);
-+	atomic_inc(&master_jpeg->hw_rdy);
- 
- 	return IRQ_HANDLED;
- }
-@@ -608,20 +608,12 @@ static int mtk_jpegdec_hw_probe(struct platform_device *pdev)
- 	dev->plat_dev = pdev;
- 	dev->dev = &pdev->dev;
- 
--	init_waitqueue_head(&master_dev->dec_hw_wq);
--	master_dev->workqueue = alloc_ordered_workqueue(MTK_JPEG_NAME,
--							WQ_MEM_RECLAIM
--							| WQ_FREEZABLE);
--	if (!master_dev->workqueue)
--		return -EINVAL;
--
- 	ret = devm_add_action_or_reset(&pdev->dev,
- 				       mtk_jpegdec_destroy_workqueue,
- 				       master_dev->workqueue);
- 	if (ret)
- 		return ret;
- 
--	atomic_set(&master_dev->dechw_rdy, MTK_JPEGDEC_HW_MAX);
- 	spin_lock_init(&dev->hw_lock);
- 	dev->hw_state = MTK_JPEG_HW_IDLE;
- 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-index c2bc0b531b32..e35ee1bdce3d 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-@@ -248,8 +248,8 @@ static void mtk_jpegenc_timeout_work(struct work_struct *work)
- 	clk_disable_unprepare(cjpeg->venc_clk.clks->clk);
- 	pm_runtime_put(cjpeg->dev);
- 	cjpeg->hw_state = MTK_JPEG_HW_IDLE;
--	atomic_inc(&master_jpeg->enchw_rdy);
--	wake_up(&master_jpeg->enc_hw_wq);
-+	atomic_inc(&master_jpeg->hw_rdy);
-+	wake_up(&master_jpeg->hw_wq);
- 	v4l2_m2m_buf_done(src_buf, buf_state);
- 	mtk_jpegenc_put_buf(cjpeg);
- }
-@@ -288,8 +288,8 @@ static irqreturn_t mtk_jpegenc_hw_irq_handler(int irq, void *priv)
- 	clk_disable_unprepare(jpeg->venc_clk.clks->clk);
- 
- 	jpeg->hw_state = MTK_JPEG_HW_IDLE;
--	wake_up(&master_jpeg->enc_hw_wq);
--	atomic_inc(&master_jpeg->enchw_rdy);
-+	wake_up(&master_jpeg->hw_wq);
-+	atomic_inc(&master_jpeg->hw_rdy);
- 
- 	return IRQ_HANDLED;
- }
-@@ -340,14 +340,6 @@ static int mtk_jpegenc_hw_probe(struct platform_device *pdev)
- 	dev->plat_dev = pdev;
- 	dev->dev = &pdev->dev;
- 
--	init_waitqueue_head(&master_dev->enc_hw_wq);
--	master_dev->workqueue = alloc_ordered_workqueue(MTK_JPEG_NAME,
--							WQ_MEM_RECLAIM
--							| WQ_FREEZABLE);
--	if (!master_dev->workqueue)
--		return -EINVAL;
--
--	atomic_set(&master_dev->enchw_rdy, MTK_JPEGENC_HW_MAX);
- 	spin_lock_init(&dev->hw_lock);
- 	dev->hw_state = MTK_JPEG_HW_IDLE;
- 
--- 
-2.18.0
+I also got kernel test bot mails about the "ID '%.*s'\n" printks (have 
+to typecast the sizeof to int), which I also need to fix.
+
+  Tomi
 
