@@ -2,47 +2,43 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66C1FC64ED8
-	for <linux-media@archiver.kernel.org>; Thu, 23 Feb 2023 08:13:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E9B5C636D7
+	for <linux-media@archiver.kernel.org>; Thu, 23 Feb 2023 08:13:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233298AbjBWINa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 Feb 2023 03:13:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
+        id S233379AbjBWINc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 Feb 2023 03:13:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232802AbjBWIN1 (ORCPT
+        with ESMTP id S232115AbjBWIN1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 23 Feb 2023 03:13:27 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F71A498AF;
-        Thu, 23 Feb 2023 00:13:25 -0800 (PST)
-X-UUID: ed6a18aab35111ed945fc101203acc17-20230223
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EAC498AD;
+        Thu, 23 Feb 2023 00:13:24 -0800 (PST)
+X-UUID: ef0b0e26b35111eda06fc9ecc4dadd91-20230223
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=zKQNhHm6N//epT/kKKmOBAV+Pxos4Bzj8k8OKQmEryU=;
-        b=CEH9PjTOQFSD3jfIGhhqVn4KGLVzN9YcXdGhq/CrSJ1Ct6wIcZE+zWVk9cJEEaEuT1/TAScDPXP8ck88tsIZaFBQvlPocXAabHZbhJwcJkf9vJFceXIPGtLKphcHZLnQPdqFF/rsLhxPmbVXHUyP+n+nKHWKkzqrzwa2GLMoGN8=;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=E32PwqnhE80CiZUxZ6uWYUqazqWNe/vh/gd6x779/5A=;
+        b=WZxmcdhYvxlb9EJR2nA45nzY7bEJA5/W/rLvwMf7Sf4MIvkX7U40iHpHofNKLoWJW58Yxy1RiYDHutKUYNuIdCssBO8J9FgMaHguZQb27RnLtaxDtaOAM5Z6wqjgCVk54HE5R6jQiD+1aZ80cSFS2yxoFKkqwSWfhnjnYyCU/VM=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.20,REQID:922cd7d1-aded-4d41-afef-441fb634c8ea,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:70
-X-CID-INFO: VERSION:1.1.20,REQID:922cd7d1-aded-4d41-afef-441fb634c8ea,IP:0,URL
-        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:70
-X-CID-META: VersionHash:25b5999,CLOUDID:0c87e6f3-ddba-41c3-91d9-10eeade8eac7,B
-        ulkID:230223161319I53H5PP3,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,CO
-        L:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-UUID: ed6a18aab35111ed945fc101203acc17-20230223
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+X-CID-O-INFO: VERSION:1.1.20,REQID:e2d54818-7d78-4db6-9c43-b5180de4401d,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:25b5999,CLOUDID:5887e6f3-ddba-41c3-91d9-10eeade8eac7,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-UUID: ef0b0e26b35111eda06fc9ecc4dadd91-20230223
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
         (envelope-from <irui.wang@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 699362284; Thu, 23 Feb 2023 16:13:17 +0800
+        with ESMTP id 963153462; Thu, 23 Feb 2023 16:13:20 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
  mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 23 Feb 2023 16:13:16 +0800
+ 15.2.792.15; Thu, 23 Feb 2023 16:13:18 +0800
 Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
  mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 23 Feb 2023 16:13:15 +0800
+ 15.2.792.15 via Frontend Transport; Thu, 23 Feb 2023 16:13:18 +0800
 From:   Irui Wang <irui.wang@mediatek.com>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -57,9 +53,9 @@ CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         <maoguang.meng@mediatek.com>,
         Yunfei Dong <yunfei.dong@mediatek.com>,
         Irui Wang <irui.wang@mediatek.com>
-Subject: [V1,1/7] media: mtk-jpeg: Fixes jpeghw multi-core judgement
-Date:   Thu, 23 Feb 2023 16:13:06 +0800
-Message-ID: <20230223081312.29296-2-irui.wang@mediatek.com>
+Subject: [V1,4/7] media: mtk-jpeg: reconstructs the initialization mode of worker
+Date:   Thu, 23 Feb 2023 16:13:09 +0800
+Message-ID: <20230223081312.29296-5-irui.wang@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230223081312.29296-1-irui.wang@mediatek.com>
 References: <20230223081312.29296-1-irui.wang@mediatek.com>
@@ -73,73 +69,67 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: kyrie wu <kyrie.wu@mediatek.com>
 
-some chips have multi-hw, but others have only one,
-modify the condition of multi-hw judgement
-
-Fixes: 934e8bccac95 ("mtk-jpegenc: support jpegenc multi-hardware")
+exclude is_jpgenc_multihw or is_jpgdec_multihw for judgment,
+and re-initialize jpeg worker.
 
 Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
 Signed-off-by: irui wang <irui.wang@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 5 ++++-
+ drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 9 +++------
  drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h | 2 ++
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-index 969516a940ba..6d052747a15e 100644
+index d940dc5ede74..e89195f1989c 100644
 --- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
 +++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-@@ -1692,7 +1692,7 @@ static int mtk_jpeg_probe(struct platform_device *pdev)
- 		return -EINVAL;
+@@ -1575,12 +1575,7 @@ static int mtk_jpeg_open(struct file *file)
+ 		goto free;
  	}
  
--	if (list_empty(&pdev->dev.devres_head)) {
-+	if (!jpeg->variant->multi_core) {
- 		INIT_DELAYED_WORK(&jpeg->job_timeout_work,
- 				  mtk_jpeg_job_timeout_work);
- 
-@@ -1874,6 +1874,7 @@ static const struct mtk_jpeg_variant mtk_jpeg_drvdata = {
- 	.ioctl_ops = &mtk_jpeg_enc_ioctl_ops,
+-	if (jpeg->is_jpgenc_multihw)
+-		INIT_WORK(&ctx->jpeg_work, mtk_jpegenc_worker);
+-
+-	if (jpeg->is_jpgdec_multihw)
+-		INIT_WORK(&ctx->jpeg_work, mtk_jpegdec_worker);
+-
++	INIT_WORK(&ctx->jpeg_work, jpeg->variant->jpeg_worker);
+ 	INIT_LIST_HEAD(&ctx->dst_done_queue);
+ 	spin_lock_init(&ctx->done_queue_lock);
+ 	v4l2_fh_init(&ctx->fh, vfd);
+@@ -1901,6 +1896,7 @@ static struct mtk_jpeg_variant mtk8195_jpegenc_drvdata = {
  	.out_q_default_fourcc = V4L2_PIX_FMT_YUYV,
  	.cap_q_default_fourcc = V4L2_PIX_FMT_JPEG,
-+	.multi_core = false,
- };
- 
- static struct mtk_jpeg_variant mtk8195_jpegenc_drvdata = {
-@@ -1885,6 +1886,7 @@ static struct mtk_jpeg_variant mtk8195_jpegenc_drvdata = {
- 	.ioctl_ops = &mtk_jpeg_enc_ioctl_ops,
- 	.out_q_default_fourcc = V4L2_PIX_FMT_YUYV,
- 	.cap_q_default_fourcc = V4L2_PIX_FMT_JPEG,
-+	.multi_core = true,
+ 	.multi_core = true,
++	.jpeg_worker = mtk_jpegenc_worker,
  };
  
  static const struct mtk_jpeg_variant mtk8195_jpegdec_drvdata = {
-@@ -1896,6 +1898,7 @@ static const struct mtk_jpeg_variant mtk8195_jpegdec_drvdata = {
- 	.ioctl_ops = &mtk_jpeg_dec_ioctl_ops,
+@@ -1913,6 +1909,7 @@ static const struct mtk_jpeg_variant mtk8195_jpegdec_drvdata = {
  	.out_q_default_fourcc = V4L2_PIX_FMT_JPEG,
  	.cap_q_default_fourcc = V4L2_PIX_FMT_YUV420M,
-+	.multi_core = true,
+ 	.multi_core = true,
++	.jpeg_worker = mtk_jpegdec_worker,
  };
  
  #if defined(CONFIG_OF)
 diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-index b9126476be8f..f87358cc9f47 100644
+index f87358cc9f47..e118a0175f75 100644
 --- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
 +++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-@@ -60,6 +60,7 @@ enum mtk_jpeg_ctx_state {
-  * @ioctl_ops:			the callback of jpeg v4l2_ioctl_ops
+@@ -61,6 +61,7 @@ enum mtk_jpeg_ctx_state {
   * @out_q_default_fourcc:	output queue default fourcc
   * @cap_q_default_fourcc:	capture queue default fourcc
-+ * @multi_core:		mark jpeg hw is multi_core or not
+  * @multi_core:		mark jpeg hw is multi_core or not
++ * @jpeg_worker:		jpeg dec or enc worker
   */
  struct mtk_jpeg_variant {
  	struct clk_bulk_data *clks;
-@@ -74,6 +75,7 @@ struct mtk_jpeg_variant {
- 	const struct v4l2_ioctl_ops *ioctl_ops;
+@@ -76,6 +77,7 @@ struct mtk_jpeg_variant {
  	u32 out_q_default_fourcc;
  	u32 cap_q_default_fourcc;
-+	bool multi_core;
+ 	bool multi_core;
++	void (*jpeg_worker)(struct work_struct *work);
  };
  
  struct mtk_jpeg_src_buf {
