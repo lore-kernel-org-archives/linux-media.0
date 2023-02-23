@@ -2,92 +2,135 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EAE0C636D7
-	for <linux-media@archiver.kernel.org>; Thu, 23 Feb 2023 10:05:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3DECC636D6
+	for <linux-media@archiver.kernel.org>; Thu, 23 Feb 2023 10:55:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233489AbjBWKFb convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 Feb 2023 05:05:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38304 "EHLO
+        id S233248AbjBWKzE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 Feb 2023 05:55:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233345AbjBWKFa (ORCPT
+        with ESMTP id S232166AbjBWKy6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 23 Feb 2023 05:05:30 -0500
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7F9126DA;
-        Thu, 23 Feb 2023 02:05:29 -0800 (PST)
-Received: by mail-qv1-f47.google.com with SMTP id m4so11735309qvq.3;
-        Thu, 23 Feb 2023 02:05:29 -0800 (PST)
+        Thu, 23 Feb 2023 05:54:58 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F1952DC1
+        for <linux-media@vger.kernel.org>; Thu, 23 Feb 2023 02:54:37 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id d7so5930940pfu.4
+        for <linux-media@vger.kernel.org>; Thu, 23 Feb 2023 02:54:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y+u5xMcW4Y2qj7hU/yc7EVZ6q+PSRWjd2qMgYmQ68mA=;
+        b=Vqpl6GEDKWLrDiSa4lHIVaPMXIPVvbdvz7WpQ7WUtFG/WgbKoH0TVXJlGIr3w+cvIB
+         JPkVKocc9ourApdVdilJ8YbEbUnyIecqbNSoDRXjCvTrMiXeCR6tHQxtPu7oJAbQQT0I
+         lkbnKcXxYRWP7oiPpuq6vAtfPpJ7fou65WTc4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tdCwJLGWDIYRp41XbM2Nna+4xZbVZgFLaw4EHMUxJtY=;
-        b=brTnjo+nxo/rbREFY5z2VplOl19Mg73qxQJNWSbsLwsRNGCcEp+qz22AxyWtZK8/fo
-         ZkWqY9GxnFD/wlMStl8HrhhJ9At9KzKHb8ptRfk8MiDCPcppr8RGUs2dj9hltE+ak2L3
-         fxtOcUTaVdjr1JSCz89C3jBvUlsug1BJGus+qdJZfRfwlgircVE/VpJAEZIyBtQGsRVD
-         kzLQlTuq6T3o6GGm4S5If/UMIPgsWjxAkZ7q63VQ5s1Ode7dUCHffUNcVHFYwKxz5xRt
-         UBW0BhFWlzoyUU1Y1IJibMVTZ6kSqKnBa6ne2a3JSPYUvvs1Q0NrYimx5Kzu+3MGZUbX
-         CW8w==
-X-Gm-Message-State: AO0yUKX1ZldR2feAnyfXIHYuMSL0NMXOGxcINQn9hfr58zhpJNY90K4H
-        1difWU0Lmia0Q9jk1IYclm5xr8+O4AgcoSqr
-X-Google-Smtp-Source: AK7set+ZwLFwQoA75PblZbvFc5muH4pCTBGm7B68ltsdX+r2MBPDw7rP6iN34+U1sBFi3zB6UAJxgQ==
-X-Received: by 2002:ad4:5ecc:0:b0:56c:2344:a58b with SMTP id jm12-20020ad45ecc000000b0056c2344a58bmr18597608qvb.12.1677146728157;
-        Thu, 23 Feb 2023 02:05:28 -0800 (PST)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id 145-20020a370397000000b0073b79edf46csm2237927qkd.83.2023.02.23.02.05.27
+        bh=Y+u5xMcW4Y2qj7hU/yc7EVZ6q+PSRWjd2qMgYmQ68mA=;
+        b=QvhFO7WwUy+7nVDMxByNXm59ZGZEK+CU3QBH7Svwo/sNlzr4kHNpvMFUXXKzsxA+Xx
+         1tjfu2cC4SqJBT0pl83bfcZ3ZTHT10aWZv+VRclwB9smQacYM3ChbXpSC6vIgB/pdX1j
+         9Ucd098RBoijYTYGk7YkND00K9jqkp/btnxzhC/a5sHXNqpJilwxnTQKi73TsVO7P6/m
+         bOo19HfwPgg4Lc1163Ax3wMa8bdhbBFN/FoeKQ5lfovNRUNZOp79B02orWOR+2/gijdu
+         uFkJWd8NFtsb0vxRec9CqQZr6ew0xn0Y4DPLukVWc6/H3Oicz5dpHMmEz5HxXazfD1Jc
+         928A==
+X-Gm-Message-State: AO0yUKV7FbE1Nx6zEE677FyMUQPzVzpSNep8pfKidfyQX5nY6w7kNUxj
+        greiOesNeDsO6Jeb/6BGAXTD0AxGanuVnm9d
+X-Google-Smtp-Source: AK7set8WCiX0S30gut3q3jOVQjtTfGSggBHsl/1D/OJQXYbPLpuVgfAGy6Lu54/h6Dulza/oZScp1A==
+X-Received: by 2002:aa7:9d1c:0:b0:5db:ba06:1825 with SMTP id k28-20020aa79d1c000000b005dbba061825mr1880885pfp.3.1677149673614;
+        Thu, 23 Feb 2023 02:54:33 -0800 (PST)
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com. [209.85.214.171])
+        by smtp.gmail.com with ESMTPSA id 10-20020aa7914a000000b0058bacd6c4e8sm1221310pfi.207.2023.02.23.02.54.32
+        for <linux-media@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 02:05:27 -0800 (PST)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-536bbef1c5eso173926477b3.9;
-        Thu, 23 Feb 2023 02:05:27 -0800 (PST)
-X-Received: by 2002:a5b:cc:0:b0:95d:6b4f:a73c with SMTP id d12-20020a5b00cc000000b0095d6b4fa73cmr1783602ybp.7.1677146727374;
- Thu, 23 Feb 2023 02:05:27 -0800 (PST)
+        Thu, 23 Feb 2023 02:54:33 -0800 (PST)
+Received: by mail-pl1-f171.google.com with SMTP id l15so13466314pls.1
+        for <linux-media@vger.kernel.org>; Thu, 23 Feb 2023 02:54:32 -0800 (PST)
+X-Received: by 2002:a17:903:2402:b0:19c:9999:e922 with SMTP id
+ e2-20020a170903240200b0019c9999e922mr1194063plo.5.1677149672172; Thu, 23 Feb
+ 2023 02:54:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20230222221249.1324102-1-niklas.soderlund+renesas@ragnatech.se> <20230222221249.1324102-2-niklas.soderlund+renesas@ragnatech.se>
-In-Reply-To: <20230222221249.1324102-2-niklas.soderlund+renesas@ragnatech.se>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 23 Feb 2023 11:05:13 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW91bgHDTy61HMp1EhiJuEnkNM8b7KxvPbAQksGTa=fLw@mail.gmail.com>
-Message-ID: <CAMuHMdW91bgHDTy61HMp1EhiJuEnkNM8b7KxvPbAQksGTa=fLw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] media: i2c: adv748x: Fix lookup of DV timings
-To:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+References: <83f9ba3c-18bb-e0cd-e5ac-7c3281f2b5f8@willerding.net>
+In-Reply-To: <83f9ba3c-18bb-e0cd-e5ac-7c3281f2b5f8@willerding.net>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Thu, 23 Feb 2023 11:54:20 +0100
+X-Gmail-Original-Message-ID: <CANiDSCvNua4iuisDyp2E-7EZfwDCgx-2hyTK3rmB7HOUB=bszg@mail.gmail.com>
+Message-ID: <CANiDSCvNua4iuisDyp2E-7EZfwDCgx-2hyTK3rmB7HOUB=bszg@mail.gmail.com>
+Subject: Re: UVC device not yet supported
+To:     Lutz <lutz@willerding.net>
+Cc:     linux-media@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Niklas,
+Hi Lutz
 
-On Wed, Feb 22, 2023 at 11:15 PM Niklas Söderlund
-<niklas.soderlund+renesas@ragnatech.se> wrote:
-> The loop to match the requested timings with the ones supported by the
-> driver is incorrect. It always iterates thru the whole array of
-> supported modes. The bounds check after the loop always triggers
-> resulting in adv748x_hdmi_set_video_timings() always returning -EINVAL.
+Can you try:
+ls -la /dev/video*
+and then
+v4l2-ctl --all -d /dev/videoX
+for all the /dev/video devices that you found?
+
+Thanks!
+
+On Thu, 23 Feb 2023 at 10:34, Lutz <lutz@willerding.net> wrote:
 >
-> Fix this by correcting the lookup to break the loop when a match is
-> found.
+> Hi,
+>
+> just got a Endoskop camera from pearl, very cheap device (12,99=E2=82=AC)=
+ and
+> connected it to a debian 11.
+>
+> I'm trying to get a picture or stream from this camera, an came across
+> this page:
+>
+> https://www.ideasonboard.org/uvc/
+>
+> There is a section you'd like to be notified if a UVC device is not
+> listed there.
+>
+> So this is my motivation to email you :)
+>
+>
+> Device is recogniced and listed in lsusb:
+>
+> Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+> Bus 001 Device 008: ID 04cf:8819 Myson Century, Inc. USB 2.0 SD/MMC Reade=
+r
+> ---> Bus 001 Device 009: ID 1908:2311 GEMBIRD Generic UVC 1.00 camera
+> [AppoTech AX2311]  <---
+> Bus 001 Device 006: ID 05e3:0608 Genesys Logic, Inc. Hub
+> Bus 001 Device 004: ID 0b05:19af ASUSTek Computer, Inc. AURA LED Controll=
+er
+> Bus 001 Device 007: ID 046d:c326 Logitech, Inc. Washable Keyboard K310
+> Bus 001 Device 005: ID 0557:8021 ATEN International Co., Ltd Hub
+> Bus 001 Device 003: ID 0409:005a NEC Corp. HighSpeed Hub
+> Bus 001 Device 002: ID 041e:4083 Creative Technology, Ltd Live! Cam
+> Socialize [VF0640]
+> Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+>
+> but no usable video device is created - at least i can not get a picture
+> from it.
+>
+> The Creative Live! Cam does create a stream. I think this problem could
+> be solvable by some udev rules?
+>
+> there is also a hw-probe for my machine:
+>
+> https://linux-hardware.org/?probe=3D4f19f71811
+>
+> tia for any hints
+>
+> lutz willerding
+>
+>
 
-Nice catch!
 
-> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-
-Fixes: 3e89586a64dfd286 ("media: i2c: adv748x: add adv748x driver")
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--=20
+Ricardo Ribalda
