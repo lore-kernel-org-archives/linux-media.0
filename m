@@ -2,53 +2,54 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2123DC7EE2F
-	for <linux-media@archiver.kernel.org>; Fri, 24 Feb 2023 20:02:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1B75C6FA8E
+	for <linux-media@archiver.kernel.org>; Fri, 24 Feb 2023 20:02:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbjBXUCC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 24 Feb 2023 15:02:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54310 "EHLO
+        id S229841AbjBXUCJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 24 Feb 2023 15:02:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjBXUCC (ORCPT
+        with ESMTP id S229537AbjBXUCF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 24 Feb 2023 15:02:02 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55A614EA6;
-        Fri, 24 Feb 2023 12:02:00 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id nw10-20020a17090b254a00b00233d7314c1cso3954236pjb.5;
-        Fri, 24 Feb 2023 12:02:00 -0800 (PST)
+        Fri, 24 Feb 2023 15:02:05 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714A5231DC;
+        Fri, 24 Feb 2023 12:02:04 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id ky4so653694plb.3;
+        Fri, 24 Feb 2023 12:02:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mk1VF7nfT+6id+DUlBftm181VOn00OpXZ9aoQ8/9Ri4=;
-        b=lyvITwMHa5/MbF1J88r6mzMkAUSoXLwCAGhy6wsMTOayyUihm+WpWPPkxpvWAdS7vi
-         NXhNb8mywFTPtQ83mEPdA5LWmVb5FdU7PBfd/io2R9mg+tm2sRs+7Tc7WSb9kCYdCnnm
-         h3PvF0uwo/nt5wu53SbYYoOjkz2DDck2XcH9yzzK4GjjlgXLsL64hVw+y3akAQd/BH5h
-         mip4ouSJlaJt/Vjv9FwgJgl6hpMNrtfehzmr+LjVOLeC7g2RKPLxs+huy11MC2XYtvwJ
-         JGK2egmAG9YZn1hGsA7YUaRyl/fSgPa35jU0zjEIuB+tDD2AfuBCQrHiNue8hYzFZgqJ
-         gBjQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MohZmh6ZcfzJn1OmRfs/o8+oM4ZPKLi2FB+4LPpL34o=;
+        b=gBGdyrytMMtai+cnotBNgRYWcmeJ847XewFJda51kAb8/nryk4VPWYeo6WnGeqr/ib
+         Z38zXiOt2/PJaBNCvg4J8afTwkAatILSkWbllJFbchya9js70V1jArUtpb+vMbf/HJQz
+         Piksuw8wgQW0HYiOiOjb3ZlarmynmgNYPnVZYSbh+DcSulVoaUJbM4Z1uMon2TM+hM/h
+         XUuOhPtP8rFevkNUXLE0ul0iQJsF1f01tHxkpRaZKqPabY8u4JtExrgzG74Uk/xhu4y8
+         YsaNjOjrBaQKRI1R46XA9Cj0cGHyVKwC80ge8zynfJ+/CN37pPfFjF7FwmHJO6fyS0xW
+         bVVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mk1VF7nfT+6id+DUlBftm181VOn00OpXZ9aoQ8/9Ri4=;
-        b=6yIeOD28L+LEkZy8tAnHuqiPL3SfJFtg4JPer1cv3JLG82YaFiz59hepulOcpi9ecV
-         XtBqWk8rTGg5NuZW1SnhuSVJ7WFs+5s+jswZR7APQlmckeyUe9Pb6+Gu3cFiMZHZaAIv
-         a1R6Z0mBIL5fntiw1E/MFu05MRx64h/pxmPGviG4Qpw5jTAQEeWN8zQDyadr6ELXXV2F
-         WRMtP3RDDuyAHuGo/Z9+ZlVxpi/eLb2sOEsXAJAdrenv9wjuCg3macigUkB8/OnpGuSN
-         px+4GqCG1RDyq9BpKSmnm8MQjU7lt7aZQtzjP26Y2Q9OnPfRl6yH+PkZt7Cy64WDvOs8
-         VhPg==
-X-Gm-Message-State: AO0yUKWadohWU1PUuKn+WzNvfnepR7Riv0waXWysHxzl0LVV0MdZCHaZ
-        fo5m9AJl2m0fuNmDqG9h6iU=
-X-Google-Smtp-Source: AK7set/MCGgw4sWMEQil+Zu1uL8C35OoLNVcgddzAVBaEcb5RsD58//mSqRogHKbudTmp5Q9jYP+Pw==
-X-Received: by 2002:a17:90a:19c5:b0:237:1f17:68ad with SMTP id 5-20020a17090a19c500b002371f1768admr15713350pjj.18.1677268919978;
-        Fri, 24 Feb 2023 12:01:59 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MohZmh6ZcfzJn1OmRfs/o8+oM4ZPKLi2FB+4LPpL34o=;
+        b=Py3qe73vtBDNV0qw4NvDbKOkOGFcHmG9pYbLZGXkSo/3X4vs7ZwGhjBNtn38UnwFYb
+         sBRv/thCMKgYr4pnmxz2sigdtEdHEWQhCHvs2qmfULuDgyl8KNjv3vtm1stJ0tEIRGjP
+         PTOM95EpDDj/gu1IBtVVKkW8ns79k5Ty8A6GJkJ1v/edbindoTnu0EW2ckEyXF8UcUR1
+         ZxqcEbU8oyvyN1QRWi4BhbiDIsmpXlboiSOxs5JNuccnQ1GkTb2FEyd53Jbzo5tcyZn7
+         CD4/Lim6O4SCPDW8PyG/ueDFCTY3owp77iyfT7b/5L5JSR6d+fNKPReYF6d9K+5iYYBY
+         /1EQ==
+X-Gm-Message-State: AO0yUKVw76oZukqUlmxw/cg3GNToZ9NDU378DJFkcyRyevxUyuZ+yzTZ
+        6vatzL954ItzDX2n4PyUpVc=
+X-Google-Smtp-Source: AK7set/Kb1gXpnZFU2Ydyaifih98zDZ6wbcQF//PkQ/+Dlh0wE5fq6Lk5cn+4EktKB1GNubNLYLuDw==
+X-Received: by 2002:a17:902:d4ce:b0:19a:b6bf:1e16 with SMTP id o14-20020a170902d4ce00b0019ab6bf1e16mr19838114plg.51.1677268923860;
+        Fri, 24 Feb 2023 12:02:03 -0800 (PST)
 Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id t12-20020a17090ae50c00b002376d85844dsm31654pjy.51.2023.02.24.12.01.59
+        by smtp.gmail.com with ESMTPSA id iy15-20020a170903130f00b0019cb131b8a5sm4769703plb.32.2023.02.24.12.02.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 12:01:59 -0800 (PST)
+        Fri, 24 Feb 2023 12:02:03 -0800 (PST)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
@@ -62,25 +63,18 @@ Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
         Simon Ser <contact@emersion.fr>,
         Luben Tuikov <luben.tuikov@amd.com>,
         Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
         Gustavo Padovan <gustavo@padovan.org>,
-        intel-gfx@lists.freedesktop.org,
+        linux-media@vger.kernel.org (open list:SYNC FILE FRAMEWORK),
         linaro-mm-sig@lists.linaro.org (moderated list:DMA BUFFER SHARING
-        FRAMEWORK),
-        linux-arm-msm@vger.kernel.org (open list:DRM DRIVER FOR MSM ADRENO GPU),
-        linux-kernel@vger.kernel.org (open list),
-        linux-media@vger.kernel.org (open list:DMA BUFFER SHARING FRAMEWORK),
-        Liu Shixin <liushixin2@huawei.com>,
-        Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>
-Subject: [PATCH v6 00/15] dma-fence: Deadline awareness
-Date:   Fri, 24 Feb 2023 12:01:28 -0800
-Message-Id: <20230224200155.2510320-1-robdclark@gmail.com>
+        FRAMEWORK), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v6 02/15] dma-buf/fence-array: Add fence deadline support
+Date:   Fri, 24 Feb 2023 12:01:30 -0800
+Message-Id: <20230224200155.2510320-3-robdclark@gmail.com>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230224200155.2510320-1-robdclark@gmail.com>
+References: <20230224200155.2510320-1-robdclark@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -90,90 +84,42 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
+Propagate the deadline to all the fences in the array.
 
-This series adds a deadline hint to fences, so realtime deadlines
-such as vblank can be communicated to the fence signaller for power/
-frequency management decisions.
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+Reviewed-by: Christian König <christian.koenig@amd.com>
+---
+ drivers/dma-buf/dma-fence-array.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-This is partially inspired by a trick i915 does, but implemented
-via dma-fence for a couple of reasons:
-
-1) To continue to be able to use the atomic helpers
-2) To support cases where display and gpu are different drivers
-
-This iteration adds a dma-fence ioctl to set a deadline (both to
-support igt-tests, and compositors which delay decisions about which
-client buffer to display), and a sw_sync ioctl to read back the
-deadline.  IGT tests utilizing these can be found at:
-
-  https://gitlab.freedesktop.org/robclark/igt-gpu-tools/-/commits/fence-deadline
-
-
-v1: https://patchwork.freedesktop.org/series/93035/
-v2: Move filtering out of later deadlines to fence implementation
-    to avoid increasing the size of dma_fence
-v3: Add support in fence-array and fence-chain; Add some uabi to
-    support igt tests and userspace compositors.
-v4: Rebase, address various comments, and add syncobj deadline
-    support, and sync_file EPOLLPRI based on experience with perf/
-    freq issues with clvk compute workloads on i915 (anv)
-v5: Clarify that this is a hint as opposed to a more hard deadline
-    guarantee, switch to using u64 ns values in UABI (still absolute
-    CLOCK_MONOTONIC values), drop syncobj related cap and driver
-    feature flag in favor of allowing count_handles==0 for probing
-    kernel support.
-v6: Re-work vblank helper to calculate time of _start_ of vblank,
-    and work correctly if the last vblank event was more than a
-    frame ago.  Add (mostly unrelated) drm/msm patch which also
-    uses the vblank helper.  Use dma_fence_chain_contained().  More
-    verbose syncobj UABI comments.  Drop DMA_FENCE_FLAG_HAS_DEADLINE_BIT.
-
-Rob Clark (15):
-  dma-buf/dma-fence: Add deadline awareness
-  dma-buf/fence-array: Add fence deadline support
-  dma-buf/fence-chain: Add fence deadline support
-  dma-buf/dma-resv: Add a way to set fence deadline
-  dma-buf/sync_file: Add SET_DEADLINE ioctl
-  dma-buf/sync_file: Support (E)POLLPRI
-  dma-buf/sw_sync: Add fence deadline support
-  drm/scheduler: Add fence deadline support
-  drm/syncobj: Add deadline support for syncobj waits
-  drm/vblank: Add helper to get next vblank time
-  drm/atomic-helper: Set fence deadline for vblank
-  drm/msm: Add deadline based boost support
-  drm/msm: Add wait-boost support
-  drm/msm/atomic: Switch to vblank_start helper
-  drm/i915: Add deadline based boost support
-
- drivers/dma-buf/dma-fence-array.c       | 11 ++++
- drivers/dma-buf/dma-fence-chain.c       | 12 ++++
- drivers/dma-buf/dma-fence.c             | 20 +++++++
- drivers/dma-buf/dma-resv.c              | 22 ++++++++
- drivers/dma-buf/sw_sync.c               | 58 +++++++++++++++++++
- drivers/dma-buf/sync_debug.h            |  2 +
- drivers/dma-buf/sync_file.c             | 27 +++++++++
- drivers/gpu/drm/drm_atomic_helper.c     | 36 ++++++++++++
- drivers/gpu/drm/drm_syncobj.c           | 64 ++++++++++++++++-----
- drivers/gpu/drm/drm_vblank.c            | 52 ++++++++++++++---
- drivers/gpu/drm/i915/i915_request.c     | 20 +++++++
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 15 -----
- drivers/gpu/drm/msm/msm_atomic.c        |  8 ++-
- drivers/gpu/drm/msm/msm_drv.c           | 12 ++--
- drivers/gpu/drm/msm/msm_fence.c         | 74 +++++++++++++++++++++++++
- drivers/gpu/drm/msm/msm_fence.h         | 20 +++++++
- drivers/gpu/drm/msm/msm_gem.c           |  5 ++
- drivers/gpu/drm/msm/msm_kms.h           |  8 ---
- drivers/gpu/drm/scheduler/sched_fence.c | 46 +++++++++++++++
- drivers/gpu/drm/scheduler/sched_main.c  |  2 +-
- include/drm/drm_vblank.h                |  1 +
- include/drm/gpu_scheduler.h             | 17 ++++++
- include/linux/dma-fence.h               | 19 +++++++
- include/linux/dma-resv.h                |  2 +
- include/uapi/drm/drm.h                  | 17 ++++++
- include/uapi/drm/msm_drm.h              | 14 ++++-
- include/uapi/linux/sync_file.h          | 26 +++++++++
- 27 files changed, 555 insertions(+), 55 deletions(-)
-
+diff --git a/drivers/dma-buf/dma-fence-array.c b/drivers/dma-buf/dma-fence-array.c
+index 5c8a7084577b..9b3ce8948351 100644
+--- a/drivers/dma-buf/dma-fence-array.c
++++ b/drivers/dma-buf/dma-fence-array.c
+@@ -123,12 +123,23 @@ static void dma_fence_array_release(struct dma_fence *fence)
+ 	dma_fence_free(fence);
+ }
+ 
++static void dma_fence_array_set_deadline(struct dma_fence *fence,
++					 ktime_t deadline)
++{
++	struct dma_fence_array *array = to_dma_fence_array(fence);
++	unsigned i;
++
++	for (i = 0; i < array->num_fences; ++i)
++		dma_fence_set_deadline(array->fences[i], deadline);
++}
++
+ const struct dma_fence_ops dma_fence_array_ops = {
+ 	.get_driver_name = dma_fence_array_get_driver_name,
+ 	.get_timeline_name = dma_fence_array_get_timeline_name,
+ 	.enable_signaling = dma_fence_array_enable_signaling,
+ 	.signaled = dma_fence_array_signaled,
+ 	.release = dma_fence_array_release,
++	.set_deadline = dma_fence_array_set_deadline,
+ };
+ EXPORT_SYMBOL(dma_fence_array_ops);
+ 
 -- 
 2.39.1
 
