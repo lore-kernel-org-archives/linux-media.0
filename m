@@ -2,62 +2,61 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F209C6FA8E
-	for <linux-media@archiver.kernel.org>; Tue, 28 Feb 2023 15:25:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F997C64ED6
+	for <linux-media@archiver.kernel.org>; Tue, 28 Feb 2023 15:25:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbjB1PZo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Feb 2023 10:25:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41574 "EHLO
+        id S230073AbjB1PZs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Feb 2023 10:25:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbjB1PZW (ORCPT
+        with ESMTP id S230082AbjB1PZZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Feb 2023 10:25:22 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BAC30E98
-        for <linux-media@vger.kernel.org>; Tue, 28 Feb 2023 07:24:55 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id g17so13713425lfv.4
-        for <linux-media@vger.kernel.org>; Tue, 28 Feb 2023 07:24:55 -0800 (PST)
+        Tue, 28 Feb 2023 10:25:25 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D964311ED
+        for <linux-media@vger.kernel.org>; Tue, 28 Feb 2023 07:24:58 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id bi9so13731047lfb.2
+        for <linux-media@vger.kernel.org>; Tue, 28 Feb 2023 07:24:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677597895;
+        d=linaro.org; s=google; t=1677597898;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=mv+5dN06QajiFNtKq3cylP0qYElk+b0EFltGbtCWW5s=;
-        b=KLqV2kBPxpqQedLLP2jyVH3dv78B+IiH2UApRHAUkV6hehtDudrXUtxm8t7KBLwV/S
-         JrT4Ua/HFFKaXd4XObOSCVdRFZTO1uRpw9yHezvZomea882YUXrYb6FytSllzRIVCGRH
-         2ieI6yRUz/4xVuD9yyQ65jQ1yTO40+KBj7mQsh0MMWEI8zWW7fPy1Ec+MbZ3HpGY1Jmu
-         n67+NSUzlPoRvkyozoDJSPfA3mxTIdxDB2RCxT5y9NkIEhgP4CHI0NGRRzYe/wer8wgV
-         Qv8xFXApmHJ1BUARK91jPZJnmnAkJa9OCOEiAOKZJUR8UWYK6Pax2/HQrzvkleBYiU1g
-         KTQg==
+        bh=fJjwnbg62VoIV+g3wGZJB6SG8RdF3Rb2KodyCGNCoVc=;
+        b=cJfVw7oQOlKU4uqeWqmtJ5mDnND5Gv9eSCxPp0BsF5PoDjIjVMRJC2MxwQZSXgymI+
+         dKLGvLOpWWq4rCY3ksf51uDjqPHyOYKZNMboWomL8t2gFZ0MvoEbesMBgzGD+NdkH+oI
+         VQRyH6H7pU4aMb6H28lg6dlXhaRsDe67xkrJln6CAfm3PfR45iygkKA8oX6mAg595wva
+         cLYBFWDgstzW3PAsHNuoIE86yox1/pB8lbGe7kyYsq3x1OM/6TJyAtBfy+yJpjtapSxZ
+         aGEHL9VQu+EUnf37xz86UOrIfT8zpzS1TdbtytWkc25YUL7zsW52odFjqO9qZhFpd7dk
+         dLRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677597895;
+        d=1e100.net; s=20210112; t=1677597898;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mv+5dN06QajiFNtKq3cylP0qYElk+b0EFltGbtCWW5s=;
-        b=fbb4R9hTZ0+5x3fbYOmRkYp5PaXnEYklqA4e2o221emPY+BZs9adj5SvWaGjxLEMvD
-         xKabRuYgbGftGdObCgLbwGEwCCrqQDbswrxu6IQOtus8HUIOA7xdEBY5iqa0s1HeEKpY
-         1G1Xjr8V5u991aznDW3yVIfSRSboqGz+zZTACEHmfBDtiW5oer1YcO1f9hdOL2GcK1Zt
-         LhgsaQzqVIS5SYj9bL0DVGKar9bbrWmNnuahXx/9lrEUyeJ700qxkG6kBaR38Or12p4E
-         5UNzjaM2xTiZGGTRn/4adJpC9rFTO0XfcFxvSYKULcttetu9+IVcp6wfNGMivoHsHXDc
-         O/Nw==
-X-Gm-Message-State: AO0yUKUIhLJIZLqzrdx5rZJSfqOF4V/DzGdvfIvTWMVoU7cDsLLOIzXN
-        Bk1kjL+YSjqs0Goyty6W/JAYpA==
-X-Google-Smtp-Source: AK7set8V7zZSECX4B4EzCidKb2bc4mpAjprKUNmvbZsREWvIVZfvcp54SeRwDyRFYNl1B7n7ElgSnQ==
-X-Received: by 2002:ac2:59c5:0:b0:4b5:6042:d136 with SMTP id x5-20020ac259c5000000b004b56042d136mr918294lfn.22.1677597894820;
-        Tue, 28 Feb 2023 07:24:54 -0800 (PST)
+        bh=fJjwnbg62VoIV+g3wGZJB6SG8RdF3Rb2KodyCGNCoVc=;
+        b=sm47Y2VQ1AAEWrmmMHwQbkrvEUke5j4k3wPfZ+iqLWt3rCblETpsYvdaVB3Mq+N/Xh
+         94LaB9PXrSldeg0lZRMUgDt5CIKlhiuUkxYhUszvsZDZDEOWrioJEbe+M0EIujRg82XV
+         Rhs+85H4EkPKzazDhvztr7kH+p/6XEEwB7VcCIXsSZ62pU4dBM5Wcv7wKogVPcen0BUK
+         RC2he76cvDXq7WjYwB1mUSanSMg5hTdrY34jO+bDBXeW2EHEjLtTIJVuKgsE1kXiByAm
+         fAACSPF9417xQzUPPWfLZd6E+eiMY3ZexUzuBBcoOvw8bACvgxR64Fc9E+DfuzCJPWxK
+         HMOw==
+X-Gm-Message-State: AO0yUKWHwyZxq4AXvJGOTG5N4bBaZwCcLmFwoZZiQbsNQBOyuNUJiIqq
+        HkwqNG0twL9h8lODS5PaBRb9Iw==
+X-Google-Smtp-Source: AK7set8UYDVFnY2+lyiFY7qPi22KfVMPxTjtT30Ki4wGunWOCQOsWO3ZMXvyYbHOlXkTCUkSAm0Hzg==
+X-Received: by 2002:ac2:5495:0:b0:4db:3ddf:2fc5 with SMTP id t21-20020ac25495000000b004db3ddf2fc5mr750310lfk.26.1677597898068;
+        Tue, 28 Feb 2023 07:24:58 -0800 (PST)
 Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id h17-20020ac250d1000000b004db3aa3c542sm1363688lfm.47.2023.02.28.07.24.53
+        by smtp.gmail.com with ESMTPSA id h17-20020ac250d1000000b004db3aa3c542sm1363688lfm.47.2023.02.28.07.24.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 07:24:54 -0800 (PST)
+        Tue, 28 Feb 2023 07:24:57 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 28 Feb 2023 16:24:37 +0100
-Subject: [PATCH 13/18] media: venus: hfi_platform: Check vpu_version
- instead of device compatible
+Date:   Tue, 28 Feb 2023 16:24:39 +0100
+Subject: [PATCH 15/18] media: venus: Remap bufreq fields on HFI6XX
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230228-topic-venus-v1-13-58c2c88384e9@linaro.org>
+Message-Id: <20230228-topic-venus-v1-15-58c2c88384e9@linaro.org>
 References: <20230228-topic-venus-v1-0-58c2c88384e9@linaro.org>
 In-Reply-To: <20230228-topic-venus-v1-0-58c2c88384e9@linaro.org>
 To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
@@ -77,37 +76,46 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Vikash Garodia <vgarodia@codeaurora.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1677597872; l=890;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677597872; l=1320;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=3bmF96yM+QeLlPRbGOz/QxxJqjmwlG7of1Yk2fGr9GA=;
- b=jpgQaZLqM13yEMK+h/OFBgzPaEzZbooIJVn7HfPIUyzKP41ZQlz6Xd2WOp+5KcfwsiUhV7XhBk+H
- 1O/uvXECBU7gwqicK5TcpgMawKJblW3ZeTIB+4G7OajEe+qtLvM+
+ bh=Ipj+E/2GvopXMeiZXXenFNo3rbuaiPJoqniqEV4u6f4=;
+ b=yYpFAHD9FEt/i9ifsU+1GvHIR8MWYsRt5J4PXpoTTHuH+fNa/f/UmbQduZ8iuroDwnbr9T8jzEte
+ F9wZPOoRA4hpSNdmzRjSj7VBvuKLMUjW+xb+rmSqKHWb2KihgCFb
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is not a matter of the host SoC, but the VPU chip in Venus. Fix it.
+Similarly to HFI4XX, the fields are remapped on 6XX as well. Fix it.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/media/platform/qcom/venus/hfi_platform.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/qcom/venus/hfi_helper.h | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/hfi_platform.c b/drivers/media/platform/qcom/venus/hfi_platform.c
-index f07f554bc5fe..d163d5b0e6b7 100644
---- a/drivers/media/platform/qcom/venus/hfi_platform.c
-+++ b/drivers/media/platform/qcom/venus/hfi_platform.c
-@@ -80,7 +80,7 @@ hfi_platform_get_codecs(struct venus_core *core, u32 *enc_codecs, u32 *dec_codec
- 	if (plat->codecs)
- 		plat->codecs(enc_codecs, dec_codecs, count);
+diff --git a/drivers/media/platform/qcom/venus/hfi_helper.h b/drivers/media/platform/qcom/venus/hfi_helper.h
+index d2d6719a2ba4..8d683a6e07af 100644
+--- a/drivers/media/platform/qcom/venus/hfi_helper.h
++++ b/drivers/media/platform/qcom/venus/hfi_helper.h
+@@ -1152,11 +1152,14 @@ struct hfi_buffer_display_hold_count_actual {
  
--	if (of_device_is_compatible(core->dev->of_node, "qcom,sc7280-venus")) {
-+	if (IS_IRIS2_1(core)) {
- 		*enc_codecs &= ~HFI_VIDEO_CODEC_VP8;
- 		*dec_codecs &= ~HFI_VIDEO_CODEC_VP8;
- 	}
+ /* HFI 4XX reorder the fields, use these macros */
+ #define HFI_BUFREQ_HOLD_COUNT(bufreq, ver)	\
+-	((ver) == HFI_VERSION_4XX ? 0 : (bufreq)->hold_count)
++	((ver) == HFI_VERSION_4XX || (ver) == HFI_VERSION_6XX \
++	? 0 : (bufreq)->hold_count)
+ #define HFI_BUFREQ_COUNT_MIN(bufreq, ver)	\
+-	((ver) == HFI_VERSION_4XX ? (bufreq)->hold_count : (bufreq)->count_min)
++	((ver) == HFI_VERSION_4XX || (ver) == HFI_VERSION_6XX \
++	? (bufreq)->hold_count : (bufreq)->count_min)
+ #define HFI_BUFREQ_COUNT_MIN_HOST(bufreq, ver)	\
+-	((ver) == HFI_VERSION_4XX ? (bufreq)->count_min : 0)
++	((ver) == HFI_VERSION_4XX || (ver) == HFI_VERSION_6XX \
++	? (bufreq)->count_min : 0)
+ 
+ struct hfi_buffer_requirements {
+ 	u32 type;
 
 -- 
 2.39.2
