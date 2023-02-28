@@ -2,62 +2,62 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A01C0C64EC7
-	for <linux-media@archiver.kernel.org>; Tue, 28 Feb 2023 15:26:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7436C7EE32
+	for <linux-media@archiver.kernel.org>; Tue, 28 Feb 2023 15:26:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbjB1PZ7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Feb 2023 10:25:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41742 "EHLO
+        id S230154AbjB1P0A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Feb 2023 10:26:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjB1PZ0 (ORCPT
+        with ESMTP id S229932AbjB1PZf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Feb 2023 10:25:26 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0599F311F2
+        Tue, 28 Feb 2023 10:25:35 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182ED311F3
         for <linux-media@vger.kernel.org>; Tue, 28 Feb 2023 07:25:00 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id t11so13742377lfr.1
+Received: by mail-lf1-x12b.google.com with SMTP id s22so13686338lfi.9
         for <linux-media@vger.kernel.org>; Tue, 28 Feb 2023 07:24:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677597899;
+        d=linaro.org; s=google; t=1677597896;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rAMzs8/D3GkG+CLqKGbHIOZMNVZdBT4zUxTTserKPM8=;
-        b=fTgj4BQCye+QFJd+TGndcz2V9/HhFq0+naoyvEm/uDRLku4WyQtKvAtlJhPp4SupqG
-         03d2+CGa5rPvz/RZhx2iXmyHJNE01HNe5B3hc1OS8n21Wrge8iMKG77irEA6svfiWRwP
-         Chye183mpWQXFhJ0EMNbdGh1P0q8LwNFlRHuEwLOFwc2I4GPMRDJO2fhkoIXkmK/YOA+
-         Ad1hKGU709/4exBqQukrrr+ZTW8uhr5Ys/rfSQQ1wovXl842tG1BdiHzdYVAbWLhOrNN
-         2sxY1jF67YahceJ4mXwxntNkWRwwZdD9zbKfYFDcrrWAd7odpz+vUf6+eASTY4Rwf76f
-         CO+Q==
+        bh=rGxFL4MVhFGQlNfkdvC0F8xmFUE9FZn8c53afBHcPpw=;
+        b=Sz1rSd05Z20rHlYSzZ38KwCwlmpPalfs6vDSUJvu85qVs0S3SdHjRnZTdSvG2k0KW9
+         XJiuKbJRFxyntrgCrBpPkLDmlrR1GlLORpr0gDIr0DxN8R6vBjWHze6YtZ3DxKgj+L0A
+         vwHZDgAb6jSHDCGNvUz4Mv+5VTcnkA57Jx11qRoHYV9ybOMr51AXn5EsAE7WuX1qkV/x
+         eQDo7wNcXM8g0YWjjVqlJRWEj3gBvjrAot+pIcZl1Y8fCOYT8iuvNXOMZ+nJ5xmxi3a4
+         Hfg7gVf4BhT5e+Ggam3o4e7QhRmW3ag52g5DENCEIQ6fdJMuIHE2XKQq7HzanKzx1+yc
+         THDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677597899;
+        d=1e100.net; s=20210112; t=1677597896;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rAMzs8/D3GkG+CLqKGbHIOZMNVZdBT4zUxTTserKPM8=;
-        b=o9asF+GRU+rWlSxwSwODE8csNt3ih1PsJA2c/dO6+NzW9SDuszbdYtKIpot14DIhqm
-         nK8ER17y/wqRPsOakXH+jowZI7CgbTRXcDJ2QZ295RbuPNHbyp9dTTSGDroR7L532zs5
-         cBX5o1VKEwxeS6g04N6HN2gGnfS0eGbnsFCTybQeQltWBxgAup86A9As3rFIYh0I3YKi
-         7h2ilGoNrP1/PLCpQzp/JhKCo8nMKJySChPr0bmWQ4Gd+65FDhMwPAhy2vA4KJTJlwvx
-         b9P9zep3+EyZcJJiBaVAikfKZipLKDnouyybm/ivH4ktqhuOb9mu1srUXisJFMeEOPqF
-         Z58A==
-X-Gm-Message-State: AO0yUKV2VmngvBs5mR2bzX0avzSm9x+XUf1Vc/DYp1bld+nBXo0OsHOB
-        ZuhnGQAk5bC0mhXHBIvJGLcbAA==
-X-Google-Smtp-Source: AK7set+/cCDe2GEbeV+EAu62iuyEYXwZj8GsS0QpzdKFcLS0jioAOhtq4u3WdA8CdzDzg9ZhKNPzUQ==
-X-Received: by 2002:a19:ad05:0:b0:4dc:4c4e:4e57 with SMTP id t5-20020a19ad05000000b004dc4c4e4e57mr780174lfc.57.1677597899573;
-        Tue, 28 Feb 2023 07:24:59 -0800 (PST)
+        bh=rGxFL4MVhFGQlNfkdvC0F8xmFUE9FZn8c53afBHcPpw=;
+        b=TLFKw+n3qv135a0Eusi49hIhe6FOkDkKGGzCfTq0EZZx2191BmsOYD1tunl1YZfhSi
+         RDmijb4o6bKcj/83eXrZIGIowa1H0HdnkAZqV27ScjGwm88CoijCA8Gny9iduYd7Yn6T
+         Z1GSppHxtMIwNppZnA/LwKc14FImLb4MTr+0Obek52Qnn8w5MFMxbjDTraObOayDD7JO
+         +cDSnCWdDaEY/hjZJUKAwC2VY0MNgPow8wOzVIqZaolmYJZjDjTf5SrWlu+X11OwQCJe
+         GCvrVG8jgG/InGNK/j1QhhnXrveCP4BrEfq9AbxsjMRjyKymm/z594Z6iW9+2XbW5ZZK
+         0NIg==
+X-Gm-Message-State: AO0yUKURFjKxiqa8anhW22SnjL9UU14sc1lcq1ryjDY61aVyDatvtsCA
+        uh6ABajYrWrNVv4kFS46Uq/ImQ==
+X-Google-Smtp-Source: AK7set9ExYDRDA5/DRFbFN76ugSfsnisPOu/hE32eU9BnT6XpxnnIIUTVCIuGZwPNA6O4iUVGLcbdg==
+X-Received: by 2002:a05:6512:15c:b0:4dd:a633:2ae4 with SMTP id m28-20020a056512015c00b004dda6332ae4mr747452lfo.39.1677597896457;
+        Tue, 28 Feb 2023 07:24:56 -0800 (PST)
 Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id h17-20020ac250d1000000b004db3aa3c542sm1363688lfm.47.2023.02.28.07.24.58
+        by smtp.gmail.com with ESMTPSA id h17-20020ac250d1000000b004db3aa3c542sm1363688lfm.47.2023.02.28.07.24.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 07:24:59 -0800 (PST)
+        Tue, 28 Feb 2023 07:24:56 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 28 Feb 2023 16:24:40 +0100
-Subject: [PATCH 16/18] media: venus: Introduce accessors for remapped
- hfi_buffer_reqs members
+Date:   Tue, 28 Feb 2023 16:24:38 +0100
+Subject: [PATCH 14/18] media: venus: vdec: Fix version check in
+ vdec_set_work_route()
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230228-topic-venus-v1-16-58c2c88384e9@linaro.org>
+Message-Id: <20230228-topic-venus-v1-14-58c2c88384e9@linaro.org>
 References: <20230228-topic-venus-v1-0-58c2c88384e9@linaro.org>
 In-Reply-To: <20230228-topic-venus-v1-0-58c2c88384e9@linaro.org>
 To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
@@ -77,225 +77,38 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Vikash Garodia <vgarodia@codeaurora.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1677597872; l=7822;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677597872; l=889;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=L4FYzle02y9uvKTHIHpQ1Os6j/IrMhV3ERNraLbSNOQ=;
- b=OT8V9DbcUPVFRNWzvCmVFMGfnPjmVy1mAj8oY+MnaHdgURKutDemmqwPiXnJHsx+SCwt84zmCfPM
- tv9qsk06DaPi1xq4YlQJlZdrKeZYCUPmbV0C3/67Y0r5TeIZOcO6
+ bh=NR98BB9al4sSkxNIa6+yGGigc06GdfYg0LINSGvViP4=;
+ b=bq1okqrJvNNOMyG7tqrD1u4NAbhi5TdjqmEpSiH61gAAHn93cFWepoEQeNmUOWEqDPCUA+8apBAS
+ o9+CJ0S9Bkl1stfo1KlchiZ070Wsl3ZZ0Mwgq0ubcaCkZLBqbpCN
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Currently we have macros to access these, but they don't provide a
-way to override the remapped fields. Replace the macros with actual
-get/set pairs to fix that.
+This is not so much V6-dependent as it's IRIS(1|2|2_1). Fix it.
 
+Fixes: 6483a8cbea54 ("media: venus: vdec: set work route to fw")
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/media/platform/qcom/venus/helpers.c    |  2 +-
- drivers/media/platform/qcom/venus/hfi_helper.h | 64 +++++++++++++++++++++-----
- drivers/media/platform/qcom/venus/hfi_msgs.c   |  2 +-
- drivers/media/platform/qcom/venus/vdec.c       |  8 ++--
- drivers/media/platform/qcom/venus/vdec_ctrls.c |  2 +-
- drivers/media/platform/qcom/venus/venc.c       |  4 +-
- drivers/media/platform/qcom/venus/venc_ctrls.c |  2 +-
- 7 files changed, 63 insertions(+), 21 deletions(-)
+ drivers/media/platform/qcom/venus/vdec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
-index ab6a29ffc81e..502f45da84fb 100644
---- a/drivers/media/platform/qcom/venus/helpers.c
-+++ b/drivers/media/platform/qcom/venus/helpers.c
-@@ -189,7 +189,7 @@ int venus_helper_alloc_dpb_bufs(struct venus_inst *inst)
- 	if (ret)
- 		return ret;
- 
--	count = HFI_BUFREQ_COUNT_MIN(&bufreq, ver);
-+	count = hfi_bufreq_get_count_min(&bufreq, ver);
- 
- 	for (i = 0; i < count; i++) {
- 		buf = kzalloc(sizeof(*buf), GFP_KERNEL);
-diff --git a/drivers/media/platform/qcom/venus/hfi_helper.h b/drivers/media/platform/qcom/venus/hfi_helper.h
-index 8d683a6e07af..8c35670f02f3 100644
---- a/drivers/media/platform/qcom/venus/hfi_helper.h
-+++ b/drivers/media/platform/qcom/venus/hfi_helper.h
-@@ -1150,17 +1150,6 @@ struct hfi_buffer_display_hold_count_actual {
- 	u32 hold_count;
- };
- 
--/* HFI 4XX reorder the fields, use these macros */
--#define HFI_BUFREQ_HOLD_COUNT(bufreq, ver)	\
--	((ver) == HFI_VERSION_4XX || (ver) == HFI_VERSION_6XX \
--	? 0 : (bufreq)->hold_count)
--#define HFI_BUFREQ_COUNT_MIN(bufreq, ver)	\
--	((ver) == HFI_VERSION_4XX || (ver) == HFI_VERSION_6XX \
--	? (bufreq)->hold_count : (bufreq)->count_min)
--#define HFI_BUFREQ_COUNT_MIN_HOST(bufreq, ver)	\
--	((ver) == HFI_VERSION_4XX || (ver) == HFI_VERSION_6XX \
--	? (bufreq)->count_min : 0)
--
- struct hfi_buffer_requirements {
- 	u32 type;
- 	u32 size;
-@@ -1172,6 +1161,59 @@ struct hfi_buffer_requirements {
- 	u32 alignment;
- };
- 
-+/* Starting with HFI 4XX, some properties were swapped.. */
-+static inline u32 hfi_bufreq_get_hold_count(struct hfi_buffer_requirements *req,
-+					    u32 ver)
-+{
-+	if (ver == HFI_VERSION_4XX || ver == HFI_VERSION_6XX)
-+		return 0;
-+
-+	return req->hold_count;
-+};
-+
-+static inline u32 hfi_bufreq_get_count_min(struct hfi_buffer_requirements *req,
-+					   u32 ver)
-+{
-+	if (ver == HFI_VERSION_4XX || ver == HFI_VERSION_6XX)
-+		return req->hold_count;
-+
-+	return req->count_min;
-+};
-+
-+static inline u32 hfi_bufreq_get_count_min_host(struct hfi_buffer_requirements *req,
-+						u32 ver)
-+{
-+	if (ver == HFI_VERSION_4XX || ver == HFI_VERSION_6XX)
-+		return req->count_min;
-+
-+	return 0;
-+};
-+
-+static inline void hfi_bufreq_set_hold_count(struct hfi_buffer_requirements *req,
-+					     u32 ver, u32 val)
-+{
-+	if (ver == HFI_VERSION_4XX || ver == HFI_VERSION_6XX)
-+		return;
-+
-+	req->hold_count = val;
-+};
-+
-+static inline void hfi_bufreq_set_count_min(struct hfi_buffer_requirements *req,
-+					    u32 ver, u32 val)
-+{
-+	if (ver == HFI_VERSION_4XX || ver == HFI_VERSION_6XX)
-+		req->hold_count = val;
-+
-+	req->count_min = val;
-+};
-+
-+static inline void hfi_bufreq_set_count_min_host(struct hfi_buffer_requirements *req,
-+						 u32 ver, u32 val)
-+{
-+	if (ver == HFI_VERSION_4XX || ver == HFI_VERSION_6XX)
-+		req->count_min = val;
-+};
-+
- struct hfi_data_payload {
- 	u32 size;
- 	u8 data[1];
-diff --git a/drivers/media/platform/qcom/venus/hfi_msgs.c b/drivers/media/platform/qcom/venus/hfi_msgs.c
-index df96db3761a7..c320ebbdb24e 100644
---- a/drivers/media/platform/qcom/venus/hfi_msgs.c
-+++ b/drivers/media/platform/qcom/venus/hfi_msgs.c
-@@ -99,7 +99,7 @@ static void event_seq_changed(struct venus_core *core, struct venus_inst *inst,
- 		case HFI_PROPERTY_CONFIG_BUFFER_REQUIREMENTS:
- 			data_ptr += sizeof(u32);
- 			bufreq = (struct hfi_buffer_requirements *)data_ptr;
--			event.buf_count = HFI_BUFREQ_COUNT_MIN(bufreq, ver);
-+			event.buf_count = hfi_bufreq_get_count_min(bufreq, ver);
- 			data_ptr += sizeof(*bufreq);
- 			break;
- 		case HFI_INDEX_EXTRADATA_INPUT_CROP:
 diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index f55d6cce163c..3149b032a1e8 100644
+index 4ceaba37e2e5..f55d6cce163c 100644
 --- a/drivers/media/platform/qcom/venus/vdec.c
 +++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -857,13 +857,13 @@ static int vdec_num_buffers(struct venus_inst *inst, unsigned int *in_num,
- 	if (ret)
- 		return ret;
+@@ -688,7 +688,7 @@ static int vdec_set_work_route(struct venus_inst *inst)
+ 	u32 ptype = HFI_PROPERTY_PARAM_WORK_ROUTE;
+ 	struct hfi_video_work_route wr;
  
--	*in_num = HFI_BUFREQ_COUNT_MIN(&bufreq, ver);
-+	*in_num = hfi_bufreq_get_count_min(&bufreq, ver);
+-	if (!IS_V6(inst->core))
++	if (!(IS_IRIS1(inst->core) || IS_IRIS2(inst->core) || IS_IRIS2_1(inst->core)))
+ 		return 0;
  
- 	ret = venus_helper_get_bufreq(inst, HFI_BUFFER_OUTPUT, &bufreq);
- 	if (ret)
- 		return ret;
- 
--	*out_num = HFI_BUFREQ_COUNT_MIN(&bufreq, ver);
-+	*out_num = hfi_bufreq_get_count_min(&bufreq, ver);
- 
- 	return 0;
- }
-@@ -977,14 +977,14 @@ static int vdec_verify_conf(struct venus_inst *inst)
- 		return ret;
- 
- 	if (inst->num_output_bufs < bufreq.count_actual ||
--	    inst->num_output_bufs < HFI_BUFREQ_COUNT_MIN(&bufreq, ver))
-+	    inst->num_output_bufs < hfi_bufreq_get_count_min(&bufreq, ver))
- 		return -EINVAL;
- 
- 	ret = venus_helper_get_bufreq(inst, HFI_BUFFER_INPUT, &bufreq);
- 	if (ret)
- 		return ret;
- 
--	if (inst->num_input_bufs < HFI_BUFREQ_COUNT_MIN(&bufreq, ver))
-+	if (inst->num_input_bufs < hfi_bufreq_get_count_min(&bufreq, ver))
- 		return -EINVAL;
- 
- 	return 0;
-diff --git a/drivers/media/platform/qcom/venus/vdec_ctrls.c b/drivers/media/platform/qcom/venus/vdec_ctrls.c
-index fbe12a608b21..7e0f29bf7fae 100644
---- a/drivers/media/platform/qcom/venus/vdec_ctrls.c
-+++ b/drivers/media/platform/qcom/venus/vdec_ctrls.c
-@@ -79,7 +79,7 @@ static int vdec_op_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
- 	case V4L2_CID_MIN_BUFFERS_FOR_CAPTURE:
- 		ret = venus_helper_get_bufreq(inst, HFI_BUFFER_OUTPUT, &bufreq);
- 		if (!ret)
--			ctrl->val = HFI_BUFREQ_COUNT_MIN(&bufreq, ver);
-+			ctrl->val = hfi_bufreq_get_count_min(&bufreq, ver);
- 		break;
- 	default:
- 		return -EINVAL;
-diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
-index cdb12546c4fa..0ad5f9926c2e 100644
---- a/drivers/media/platform/qcom/venus/venc.c
-+++ b/drivers/media/platform/qcom/venus/venc.c
-@@ -1131,7 +1131,7 @@ static int venc_verify_conf(struct venus_inst *inst)
- 		return ret;
- 
- 	if (inst->num_output_bufs < bufreq.count_actual ||
--	    inst->num_output_bufs < HFI_BUFREQ_COUNT_MIN(&bufreq, ver))
-+	    inst->num_output_bufs < hfi_bufreq_get_count_min(&bufreq, ver))
- 		return -EINVAL;
- 
- 	ret = venus_helper_get_bufreq(inst, HFI_BUFFER_INPUT, &bufreq);
-@@ -1139,7 +1139,7 @@ static int venc_verify_conf(struct venus_inst *inst)
- 		return ret;
- 
- 	if (inst->num_input_bufs < bufreq.count_actual ||
--	    inst->num_input_bufs < HFI_BUFREQ_COUNT_MIN(&bufreq, ver))
-+	    inst->num_input_bufs < hfi_bufreq_get_count_min(&bufreq, ver))
- 		return -EINVAL;
- 
- 	return 0;
-diff --git a/drivers/media/platform/qcom/venus/venc_ctrls.c b/drivers/media/platform/qcom/venus/venc_ctrls.c
-index 7468e43800a9..d9d2a293f3ef 100644
---- a/drivers/media/platform/qcom/venus/venc_ctrls.c
-+++ b/drivers/media/platform/qcom/venus/venc_ctrls.c
-@@ -358,7 +358,7 @@ static int venc_op_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
- 	case V4L2_CID_MIN_BUFFERS_FOR_OUTPUT:
- 		ret = venus_helper_get_bufreq(inst, HFI_BUFFER_INPUT, &bufreq);
- 		if (!ret)
--			ctrl->val = HFI_BUFREQ_COUNT_MIN(&bufreq, ver);
-+			ctrl->val = hfi_bufreq_get_count_min(&bufreq, ver);
- 		break;
- 	default:
- 		return -EINVAL;
+ 	wr.video_work_route = inst->core->res->num_vpp_pipes;
 
 -- 
 2.39.2
