@@ -2,71 +2,69 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F33EBC64EC7
-	for <linux-media@archiver.kernel.org>; Tue, 28 Feb 2023 15:26:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34607C64EC7
+	for <linux-media@archiver.kernel.org>; Tue, 28 Feb 2023 15:28:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbjB1P0v (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Feb 2023 10:26:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40042 "EHLO
+        id S229690AbjB1P2y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Feb 2023 10:28:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjB1PYx (ORCPT
+        with ESMTP id S229882AbjB1P2v (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Feb 2023 10:24:53 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B2930E8D
-        for <linux-media@vger.kernel.org>; Tue, 28 Feb 2023 07:24:47 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id f41so13646186lfv.13
-        for <linux-media@vger.kernel.org>; Tue, 28 Feb 2023 07:24:47 -0800 (PST)
+        Tue, 28 Feb 2023 10:28:51 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5952B2A9
+        for <linux-media@vger.kernel.org>; Tue, 28 Feb 2023 07:28:18 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id j19-20020a05600c1c1300b003e9b564fae9so9830648wms.2
+        for <linux-media@vger.kernel.org>; Tue, 28 Feb 2023 07:28:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677597887;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pfXCDnSGYPCMSV9KjGFpz0bE/u8I9Ovc8VZm+qsFkfI=;
-        b=Q6oE6tw9A5p6GgBxquD0kIGwuwm6O4I/lh0LBv3v+d24PbHvCqA1EpI4+VmTDZyh/w
-         WySG95QOp5/siDHdL+d0YJGVBDR++d52SmB+gITzSpvCyPyZdEopn1Ku8h35PsUd9OFW
-         RxlLUJsw+WoLePiODBj+L5NXJ/KoJcgbNpFqtXyfve+NhTj/3JChLMKF76dXCkp+9+0c
-         srl1OyYSjsXAZ+9Q5bCGujYKhdZbFGEWa/k8EC+vT5po6urdYMualTO21dnjExEzLK1e
-         NVMaKm55nqziA+Gs0Bur4EfcBnjODJ/Ezzd6gOPLmKyrPdq9k80iVyVdIvrw98VzrmB+
-         U8+w==
+        d=linaro.org; s=google; t=1677598016;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0RjwqNYuTFMG2IO0+Vd14lDNGU8DWJ7+GpSDnYJ8/gg=;
+        b=E927HRfOT6XUhwBALhxCrjyI1lY38itoPCunu2w0rN+d0h+qI32uNfgLJ88VNeMGkq
+         Wwp+rXgPQ/WGa71qdKocJfWHvL40Ugt2DFcVDErkek9e6erdE8Oi8inivbI7poQ03qSa
+         Eqcij1pvywZt4SuVB6FXfgLDc6RpttKk041buTStmbKlZoQ+aGV1W21KHkR9HaVf5omB
+         sL2rkOAUSvduV7yQi6wgohQOnHYeeJEahDgF/pnW89PRDR2h3n67ai0gpyM47UULuDwa
+         GMukIvVQscq0BB1jbQIIhOvVtzykGlmDvGX+4k9ILdX/q5gGFchZGWkY1K1LlYCPGgT9
+         Ri9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677597887;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pfXCDnSGYPCMSV9KjGFpz0bE/u8I9Ovc8VZm+qsFkfI=;
-        b=O3TnwHz1U1ly19yiY0luiGn4KmIoDftDyklmMrgXqPd4WOlRULMsnO4LXnMIKarWVy
-         fwqEK6a6lR251NtYS11MlWel96sJLr9zQhpMQtQrOI++4ktXYTKW9Yb+kUwx4imaJnJe
-         eCHx8f0zN6dD/T2zP/l/leY5jCwa8YF6CyuDJN0zRswGNddzAvIaBZJWaQ9RFr7X1QfU
-         6dce1DnbGdJITkf2i+glDhkoq6+DPlukBrzD2izht2l3QHITrrPVf7nG+dUCVi54IFq7
-         OlVBVg0IXyD+T+t2cBdTLmlKWC9FX/mG5GZN4ONHxRTXM8ERc3g69s34X8HPoj1Rocqs
-         dSsw==
-X-Gm-Message-State: AO0yUKWYlIKDqm3yrQbiZpqxEMPp1EjyapHSnnH63/PRDGvmKxkM239V
-        VYFgnAXqZTQggNiODDr15ICvVg==
-X-Google-Smtp-Source: AK7set/RWrkF30CJYtmVxOARcAfI8MHJoux1IqIAE9xsQO1Ls7jT4+jOPVXNQHaN613N+SuC/shyeg==
-X-Received: by 2002:ac2:52af:0:b0:4da:f436:d423 with SMTP id r15-20020ac252af000000b004daf436d423mr752939lfm.21.1677597887017;
-        Tue, 28 Feb 2023 07:24:47 -0800 (PST)
-Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id h17-20020ac250d1000000b004db3aa3c542sm1363688lfm.47.2023.02.28.07.24.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 07:24:46 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 28 Feb 2023 16:24:32 +0100
-Subject: [PATCH 08/18] media: venus: hfi_venus: Fix version checks in
- venus_halt_axi()
+        d=1e100.net; s=20210112; t=1677598016;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0RjwqNYuTFMG2IO0+Vd14lDNGU8DWJ7+GpSDnYJ8/gg=;
+        b=5FR81ybxLsmy6NysjfdaN9Gl4WxVd2c4kl5C9NvcEc/B1BXtI1wwo0Sw+ASmrQHhFX
+         jnsMSE7h9E5OutX0R1EFPPw39XBoYEylvjJAyvpz3Qpy1wwke9c9qcrZBVOWLYqBpsK2
+         CW6utxr4x8xLtn4wnBqiHz21Z0Yv1TzlmrqzIxd1DfM8GTOfMCIfsNCSqzdi1ErHVi2a
+         9kw0gfw94oT8qy/Z617gAcg7Akf7QG7898aSeLLqvXOD0dVif4uquMtgRHYyu6NRrquu
+         m6XGRexR4zVjqlfhNu4TStvuYOx5rb5Zwgyh1IntG28y/1hjetHyYYlD6c30e0aBAVTu
+         lI+Q==
+X-Gm-Message-State: AO0yUKVGqYp4PIT/Y8dD7gbfjm3bdhkXkhpT83BMsERu90WAbJfv+BbH
+        kc22xp0PtXxB8brSxp63cz5UFQ==
+X-Google-Smtp-Source: AK7set8OIbj0DAiNzhatg5Ye0rStDXxLNYfJfRC6kJEwO1mD6qKQuz2vH3Uqrk1N7ZHJUoLnxg04xg==
+X-Received: by 2002:a05:600c:3c8a:b0:3ea:c654:acf1 with SMTP id bg10-20020a05600c3c8a00b003eac654acf1mr2559133wmb.3.1677598015793;
+        Tue, 28 Feb 2023 07:26:55 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id ja6-20020a05600c556600b003dfefe115b9sm13008760wmb.0.2023.02.28.07.26.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Feb 2023 07:26:55 -0800 (PST)
+Message-ID: <99eeebc6-69aa-c6ba-139b-92672c299747@linaro.org>
+Date:   Tue, 28 Feb 2023 15:26:54 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230228-topic-venus-v1-8-58c2c88384e9@linaro.org>
-References: <20230228-topic-venus-v1-0-58c2c88384e9@linaro.org>
-In-Reply-To: <20230228-topic-venus-v1-0-58c2c88384e9@linaro.org>
-To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 01/18] media: venus: hfi_venus: Set
+ venus_sys_idle_indicator to false on V6
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
         Vikash Garodia <quic_vgarodia@quicinc.com>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Dikshita Agarwal <dikshita@qti.qualcomm.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
         Dikshita Agarwal <dikshita@codeaurora.org>,
         Mansur Alisha Shaik <mansur@codeaurora.org>,
         Jonathan Marek <jonathan@marek.ca>
@@ -74,49 +72,32 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>,
         linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Vikash Garodia <vgarodia@codeaurora.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1677597872; l=1179;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=vcJCyKKGC7W2leXuwnA0vfyXrDyJXcgxDMnLgbkLNUQ=;
- b=s9z0ihnhSdd53PCcE7vAgn1D8+UghQlKIAvON5ygD8Wwgjm4G2pXiVypjRpWXierXW9LevxoYJJi
- XBCfNQAxCUGjXBX/3Agz/jqF8gVvKtcrGF+/CoWqjcK2UE+cIKBr
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+        Vikash Garodia <vgarodia@codeaurora.org>
+References: <20230228-topic-venus-v1-0-58c2c88384e9@linaro.org>
+ <20230228-topic-venus-v1-1-58c2c88384e9@linaro.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20230228-topic-venus-v1-1-58c2c88384e9@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Only IRIS2(_1) should enter the until-now-IS_V6() path and the
-condition for skipping part of it should be IS_IRIS2_1 and not the
-number of VPP pipes. Fix that.
+On 28/02/2023 15:24, Konrad Dybcio wrote:
+> This call does not seem to have been cast on any kernel with support
+> for VPU-1.0 or newer (and by extension, HFI6 and newer). 
 
-Fixes: 4b0b6e147dc9 ("media: venus: hfi: Add 6xx AXI halt logic")
-Fixes: 78d434ba8659 ("media: venus: hfi: Skip AON register programming for V6 1pipe")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+We tested this on sm8250
+
+Restrict it
+> to V4 only, as it seems to have been enabled by mistake and causes a
+> hang & reboot to EDL on at least one occasion with SM6115 / AR50L
+> 
+> Fixes: 7ed9e0b3393c ("media: venus: hfi, vdec: v6 Add IS_V6() to existing IS_V4() if locations")
+> Signed-off-by: Konrad Dybcio<konrad.dybcio@linaro.org>
+
+Right. This may indeed fix it for you on SM6115, could you test it on 
+RB5 and verify the above statement ?
+
 ---
- drivers/media/platform/qcom/venus/hfi_venus.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
-index 4d785e53aa0b..0d137e070407 100644
---- a/drivers/media/platform/qcom/venus/hfi_venus.c
-+++ b/drivers/media/platform/qcom/venus/hfi_venus.c
-@@ -550,10 +550,10 @@ static int venus_halt_axi(struct venus_hfi_device *hdev)
- 	u32 mask_val;
- 	int ret;
- 
--	if (IS_V6(hdev->core)) {
-+	if (IS_IRIS2(hdev->core) || IS_IRIS2_1(hdev->core)) {
- 		writel(0x3, cpu_cs_base + CPU_CS_X2RPMH_V6);
- 
--		if (hdev->core->res->num_vpp_pipes == 1)
-+		if (IS_IRIS2_1(hdev->core))
- 			goto skip_aon_mvp_noc;
- 
- 		writel(0x1, aon_base + AON_WRAPPER_MVP_NOC_LPI_CONTROL);
-
--- 
-2.39.2
-
+bod
