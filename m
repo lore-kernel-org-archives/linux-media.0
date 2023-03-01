@@ -2,62 +2,102 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBF97C7EE2D
-	for <linux-media@archiver.kernel.org>; Wed,  1 Mar 2023 11:14:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2B31C64ED6
+	for <linux-media@archiver.kernel.org>; Wed,  1 Mar 2023 11:18:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229437AbjCALOX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Mar 2023 06:14:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54590 "EHLO
+        id S229826AbjCALS4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Mar 2023 06:18:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjCALN5 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Mar 2023 06:13:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35E6366B3
-        for <linux-media@vger.kernel.org>; Wed,  1 Mar 2023 03:13:50 -0800 (PST)
+        with ESMTP id S229812AbjCALSy (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Mar 2023 06:18:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57AD1A48A
+        for <linux-media@vger.kernel.org>; Wed,  1 Mar 2023 03:18:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BB637B80FF0
-        for <linux-media@vger.kernel.org>; Wed,  1 Mar 2023 11:13:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF498C4339B;
-        Wed,  1 Mar 2023 11:13:46 +0000 (UTC)
-Message-ID: <6f66a0f5-1f0d-b8c5-469b-b211fbe5ab04@xs4all.nl>
-Date:   Wed, 1 Mar 2023 12:13:45 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Hugues Fruchet <hugues.fruchet@foss.st.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27DB66121F
+        for <linux-media@vger.kernel.org>; Wed,  1 Mar 2023 11:18:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 212A2C433D2
+        for <linux-media@vger.kernel.org>; Wed,  1 Mar 2023 11:18:51 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH] media: stm32: dma2d: remove unused fb_buf
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     linux-media@vger.kernel.org
+Subject: [RFC PATCH 0/9] Remove destructive video overlay and clipping
+Date:   Wed,  1 Mar 2023 12:18:41 +0100
+Message-Id: <20230301111850.607515-1-hverkuil-cisco@xs4all.nl>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Drop the unused struct v4l2_framebuffer fb_buf in struct dma2d_ctx.
+Destructive video overlay support relies on userspace passing the address of
+the framebuffer to the driver with VIDIOC_S_FBUF. The PCI driver can then DMA
+the captured frame straight into the framebuffer. This was useful 20 years ago,
+but today not so much.
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-CC: Hugues Fruchet <hugues.fruchet@foss.st.com>
----
- drivers/media/platform/st/stm32/dma2d/dma2d.h | 2 --
- 1 file changed, 2 deletions(-)
+Typically userspace would get the address from the /dev/fbX device using the
+FBIOGET_FSCREENINFO ioctl.
 
-diff --git a/drivers/media/platform/st/stm32/dma2d/dma2d.h b/drivers/media/platform/st/stm32/dma2d/dma2d.h
-index 3f03a7ca9ee3..af12739fc774 100644
---- a/drivers/media/platform/st/stm32/dma2d/dma2d.h
-+++ b/drivers/media/platform/st/stm32/dma2d/dma2d.h
-@@ -90,8 +90,6 @@ struct dma2d_ctx {
- 	struct dma2d_frame	cap;
- 	struct dma2d_frame	out;
- 	struct dma2d_frame	bg;
--	/* fb_buf always point to bg address */
--	struct v4l2_framebuffer	fb_buf;
- 	/*
- 	 * MODE[17:16] of DMA2D_CR
- 	 */
+But drm_fb_helper.c sets the smem_start field explicitly to 0 unless:
+
+1) CONFIG_DRM_FBDEV_LEAK_PHYS_SMEM is set, and
+2) CONFIG_EXPERT is set, and
+3) set the drm_kms_helper module parameter drm_leak_fbdev_smem to 1.
+
+Effectively destructive overlay support is dead today.
+
+This patch series removes it from the remaining drivers.
+
+As a result the support for clipping using clipping rectangles or
+a bitmap can now also be removed.
+
+Regards,
+
+	Hans
+
+Hans Verkuil (9):
+  saa7146: drop overlay support
+  saa7134: drop overlay support
+  bttv: drop overlay support
+  vivid: drop overlay support
+  vivid: drop bitmap and clipping output overlay support
+  v4l2-core: drop v4l2_window clipping and bitmap support
+  videodev.h: drop V4L2_FBUF_CAP_LIST/BITMAP_CLIPPING
+  v4l2-core: zero field base in struct v4l2_framebuffer
+  Documentation: userspace-api: media: drop clipping, destructive
+    overlays
+
+ .../userspace-api/media/v4l/dev-overlay.rst   |  10 +-
+ .../userspace-api/media/v4l/vidioc-g-fbuf.rst |  52 +--
+ drivers/media/common/saa7146/saa7146_fops.c   |  22 -
+ drivers/media/common/saa7146/saa7146_hlp.c    | 296 ------------
+ drivers/media/common/saa7146/saa7146_video.c  | 326 +------------
+ drivers/media/pci/bt8xx/Kconfig               |   2 +-
+ drivers/media/pci/bt8xx/btcx-risc.c           | 153 ------
+ drivers/media/pci/bt8xx/bttv-cards.c          |  15 -
+ drivers/media/pci/bt8xx/bttv-driver.c         | 436 +-----------------
+ drivers/media/pci/bt8xx/bttv-risc.c           | 131 ------
+ drivers/media/pci/bt8xx/bttvp.h               |  28 +-
+ drivers/media/pci/saa7134/saa7134-cards.c     |   1 -
+ drivers/media/pci/saa7134/saa7134-core.c      |  32 --
+ drivers/media/pci/saa7134/saa7134-video.c     | 411 +----------------
+ drivers/media/pci/saa7134/saa7134.h           |  13 -
+ drivers/media/test-drivers/vivid/vivid-core.c |  49 +-
+ drivers/media/test-drivers/vivid/vivid-core.h |  19 -
+ .../test-drivers/vivid/vivid-kthread-cap.c    | 131 +-----
+ .../media/test-drivers/vivid/vivid-vid-cap.c  | 272 -----------
+ .../media/test-drivers/vivid/vivid-vid-cap.h  |   3 -
+ .../media/test-drivers/vivid/vivid-vid-out.c  |  74 ---
+ drivers/media/v4l2-core/v4l2-compat-ioctl32.c |  83 +---
+ drivers/media/v4l2-core/v4l2-ioctl.c          |  77 +---
+ drivers/staging/media/av7110/av7110_v4l.c     |  17 +-
+ include/media/drv-intf/saa7146_vv.h           |  21 -
+ include/uapi/linux/videodev2.h                |   2 +
+ 26 files changed, 90 insertions(+), 2586 deletions(-)
+
 -- 
 2.39.1
 
