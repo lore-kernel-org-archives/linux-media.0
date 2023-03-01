@@ -2,117 +2,234 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B494C64ED6
-	for <linux-media@archiver.kernel.org>; Wed,  1 Mar 2023 09:38:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D453EC64EC7
+	for <linux-media@archiver.kernel.org>; Wed,  1 Mar 2023 09:40:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjCAJiy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Mar 2023 04:38:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
+        id S229561AbjCAJk3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Mar 2023 04:40:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjCAJix (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Mar 2023 04:38:53 -0500
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [20.232.28.96])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1E12C2412B;
-        Wed,  1 Mar 2023 01:38:51 -0800 (PST)
-Received: from ubuntu.localdomain (unknown [106.117.98.179])
-        by mail-app3 (Coremail) with SMTP id cC_KCgCHCLVWGP9jxVKcDQ--.89S2;
-        Wed, 01 Mar 2023 17:18:25 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-media@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl, Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH] media: usb: siano: Fix warning due to null work_func_t function pointer
-Date:   Wed,  1 Mar 2023 17:18:13 +0800
-Message-Id: <20230301091813.82543-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cC_KCgCHCLVWGP9jxVKcDQ--.89S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAry8JFyDtFyDXrW5uFWxZwb_yoW5CFW3pw
-        18XrWjkFW8JF1Yyrn8Ar1UG3W5J3WxZa48GrW7Wr1rWF1rG3W7Xa48KFWjkryUtr4UZrya
-        yF90q34xtr1jgaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUka14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4U
-        JVW0owA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFWl
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
-        6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUIhFcUUUUU=
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgsBAVZdtd2CmAAIs4
+        with ESMTP id S229511AbjCAJk2 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Mar 2023 04:40:28 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA3732502
+        for <linux-media@vger.kernel.org>; Wed,  1 Mar 2023 01:40:27 -0800 (PST)
+Received: from ideasonboard.com (host-87-18-61-24.retail.telecomitalia.it [87.18.61.24])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 16FC7890;
+        Wed,  1 Mar 2023 10:40:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1677663625;
+        bh=lQIVQV/agWruxQ1vlBhwG6lJjPSPxb/8Ow9sDIZGrcw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VE827GIlWpIXfzavemcv5e4s/tgY9qRRLneLLjkomlyFDLMMblsBO8rzeM29TSPVk
+         LCkY3ZS+pWkO2iLIAG1YTbORhOUzurp76RZwQPI5TS4O7ashfdXbcF2DQu4RNgwkIk
+         LN5zguX2rhiibFU7UI3fQMh6iFhwRF70RolgJ5Uw=
+Date:   Wed, 1 Mar 2023 10:40:20 +0100
+From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        linux-media@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Jai Luthra <j-luthra@ti.com>,
+        Vaishnav Achath <vaishnav.a@ti.com>
+Subject: Re: [PATCH v2 3/4] media: ti: cal: Implement get_frame_desc for
+ camera-rx
+Message-ID: <20230301094020.wgjwdv76v7jctpcc@uno.localdomain>
+References: <20230228171620.330978-1-tomi.valkeinen@ideasonboard.com>
+ <20230228171620.330978-4-tomi.valkeinen@ideasonboard.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230228171620.330978-4-tomi.valkeinen@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The previous commit ebad8e731c1c ("media: usb: siano: Fix use after
-free bugs caused by do_submit_urb") adds cancel_work_sync() in
-smsusb_stop_streaming(). But smsusb_stop_streaming() may be called,
-even if the work_struct surb->wq has not been initialized. As a result,
-the warning will occur. One of the processes that could lead to warning
-is shown below:
+Hi Tomi
 
-smsusb_probe()
-  smsusb_init_device()
-    if (!dev->in_ep || !dev->out_ep || align < 0) {
-         smsusb_term_device(intf);
-           smsusb_stop_streaming()
-             cancel_work_sync(&dev->surbs[i].wq);
-               __cancel_work_timer()
-                 __flush_work()
-                   if (WARN_ON(!work->func)) // work->func is null
+On Tue, Feb 28, 2023 at 07:16:19PM +0200, Tomi Valkeinen wrote:
+> CAL uses get_frame_desc to get the VC and DT for the incoming CSI-2
+> stream, but does it in a bit hacky way. Clean this up by implementing
+> .get_frame_desc to camera-rx, and calling that from cal.c.
+>
+> No functional change intended.
+>
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> ---
+>  drivers/media/platform/ti/cal/cal-camerarx.c | 62 +++++++++++---------
+>  drivers/media/platform/ti/cal/cal.c          | 30 ++++------
+>  drivers/media/platform/ti/cal/cal.h          |  2 -
+>  3 files changed, 47 insertions(+), 47 deletions(-)
+>
+> diff --git a/drivers/media/platform/ti/cal/cal-camerarx.c b/drivers/media/platform/ti/cal/cal-camerarx.c
+> index 3dfcb276d367..95e0ad59a39b 100644
+> --- a/drivers/media/platform/ti/cal/cal-camerarx.c
+> +++ b/drivers/media/platform/ti/cal/cal-camerarx.c
+> @@ -589,33 +589,6 @@ static int cal_camerarx_parse_dt(struct cal_camerarx *phy)
+>  	return ret;
+>  }
+>
+> -int cal_camerarx_get_remote_frame_desc(struct cal_camerarx *phy,
+> -				       struct v4l2_mbus_frame_desc *desc)
+> -{
+> -	struct media_pad *pad;
+> -	int ret;
+> -
+> -	if (!phy->source)
+> -		return -EPIPE;
+> -
+> -	pad = media_pad_remote_pad_first(&phy->pads[CAL_CAMERARX_PAD_SINK]);
+> -	if (!pad)
+> -		return -EPIPE;
+> -
+> -	ret = v4l2_subdev_call(phy->source, pad, get_frame_desc, pad->index,
+> -			       desc);
+> -	if (ret)
+> -		return ret;
+> -
+> -	if (desc->type != V4L2_MBUS_FRAME_DESC_TYPE_CSI2) {
+> -		dev_err(phy->cal->dev,
+> -			"Frame descriptor does not describe CSI-2 link");
+> -		return -EINVAL;
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+>  /* ------------------------------------------------------------------
+>   *	V4L2 Subdev Operations
+>   * ------------------------------------------------------------------
+> @@ -772,6 +745,40 @@ static int cal_camerarx_sd_init_cfg(struct v4l2_subdev *sd,
+>  	return cal_camerarx_sd_set_fmt(sd, state, &format);
+>  }
+>
+> +static int cal_camerarx_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
+> +				       struct v4l2_mbus_frame_desc *fd)
+> +{
+> +	struct cal_camerarx *phy = to_cal_camerarx(sd);
+> +	struct v4l2_mbus_frame_desc remote_desc;
+> +	const struct media_pad *remote_pad;
+> +	int ret;
+> +
+> +	remote_pad = media_pad_remote_pad_first(&phy->pads[CAL_CAMERARX_PAD_SINK]);
+> +	if (!remote_pad)
+> +		return -EPIPE;
+> +
+> +	ret = v4l2_subdev_call(phy->source, pad, get_frame_desc,
+> +			       remote_pad->index, &remote_desc);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (remote_desc.type != V4L2_MBUS_FRAME_DESC_TYPE_CSI2) {
+> +		dev_err(phy->cal->dev,
+> +			"Frame descriptor does not describe CSI-2 link");
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (remote_desc.num_entries > 1)
+> +		dev_dbg(phy->cal->dev,
+> +			"Multiple streams not supported in remote frame descriptor, using the first one\n");
 
-The log reported by syzbot is shown below:
+Maybe WARN_ONCE, but doesn't really matter as I presume this will go
+away in next patch
 
-WARNING: CPU: 0 PID: 897 at kernel/workqueue.c:3066 __flush_work+0x798/0xa80 kernel/workqueue.c:3063
-Modules linked in:
-CPU: 0 PID: 897 Comm: kworker/0:2 Not tainted 6.2.0-rc1-syzkaller #0
-RIP: 0010:__flush_work+0x798/0xa80 kernel/workqueue.c:3066
-...
-RSP: 0018:ffffc9000464ebf8 EFLAGS: 00010246
-RAX: 1ffff11002dbb420 RBX: 0000000000000021 RCX: 1ffffffff204fa4e
-RDX: dffffc0000000000 RSI: 0000000000000001 RDI: ffff888016dda0e8
-RBP: ffffc9000464ed98 R08: 0000000000000001 R09: ffffffff90253b2f
-R10: 0000000000000001 R11: 0000000000000000 R12: ffff888016dda0e8
-R13: ffff888016dda0e8 R14: ffff888016dda100 R15: 0000000000000001
-FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffd4331efe8 CR3: 000000000b48e000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __cancel_work_timer+0x315/0x460 kernel/workqueue.c:3160
- smsusb_stop_streaming drivers/media/usb/siano/smsusb.c:182 [inline]
- smsusb_term_device+0xda/0x2d0 drivers/media/usb/siano/smsusb.c:344
- smsusb_init_device+0x400/0x9ce drivers/media/usb/siano/smsusb.c:419
- smsusb_probe+0xbbd/0xc55 drivers/media/usb/siano/smsusb.c:567
-...
+> +
+> +	fd->type = V4L2_MBUS_FRAME_DESC_TYPE_CSI2;
 
-This patch adds check before cancel_work_sync(). If surb->wq has not
-been initialized, the cancel_work_sync() will not be executed.
+Is the bus between CAL and camera-rx a CSI-2 bus ??
 
-Fixes: ebad8e731c1c ("media: usb: siano: Fix use after free bugs caused by do_submit_urb")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
- drivers/media/usb/siano/smsusb.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+As this mostly serves to transport to CAL the DT and VC, I guess it's
+fine
 
-diff --git a/drivers/media/usb/siano/smsusb.c b/drivers/media/usb/siano/smsusb.c
-index 6f443c542c6..640737d3b8a 100644
---- a/drivers/media/usb/siano/smsusb.c
-+++ b/drivers/media/usb/siano/smsusb.c
-@@ -179,7 +179,8 @@ static void smsusb_stop_streaming(struct smsusb_device_t *dev)
- 
- 	for (i = 0; i < MAX_URBS; i++) {
- 		usb_kill_urb(&dev->surbs[i].urb);
--		cancel_work_sync(&dev->surbs[i].wq);
-+		if (dev->surbs[i].wq.func)
-+			cancel_work_sync(&dev->surbs[i].wq);
- 
- 		if (dev->surbs[i].cb) {
- 			smscore_putbuffer(dev->coredev, dev->surbs[i].cb);
--- 
-2.17.1
+Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 
+> +	fd->num_entries = 1;
+> +	fd->entry[0] = remote_desc.entry[0];
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct v4l2_subdev_video_ops cal_camerarx_video_ops = {
+>  	.s_stream = cal_camerarx_sd_s_stream,
+>  };
+> @@ -782,6 +789,7 @@ static const struct v4l2_subdev_pad_ops cal_camerarx_pad_ops = {
+>  	.enum_frame_size = cal_camerarx_sd_enum_frame_size,
+>  	.get_fmt = v4l2_subdev_get_fmt,
+>  	.set_fmt = cal_camerarx_sd_set_fmt,
+> +	.get_frame_desc = cal_camerarx_get_frame_desc,
+>  };
+>
+>  static const struct v4l2_subdev_ops cal_camerarx_subdev_ops = {
+> diff --git a/drivers/media/platform/ti/cal/cal.c b/drivers/media/platform/ti/cal/cal.c
+> index 760c58cb3b3e..bb782193cf65 100644
+> --- a/drivers/media/platform/ti/cal/cal.c
+> +++ b/drivers/media/platform/ti/cal/cal.c
+> @@ -446,30 +446,24 @@ static bool cal_ctx_wr_dma_stopped(struct cal_ctx *ctx)
+>  }
+>
+>  static int
+> -cal_get_remote_frame_desc_entry(struct cal_camerarx *phy,
+> +cal_get_remote_frame_desc_entry(struct cal_ctx *ctx,
+>  				struct v4l2_mbus_frame_desc_entry *entry)
+>  {
+>  	struct v4l2_mbus_frame_desc fd;
+> +	struct media_pad *phy_source_pad;
+>  	int ret;
+>
+> -	ret = cal_camerarx_get_remote_frame_desc(phy, &fd);
+> -	if (ret) {
+> -		if (ret != -ENOIOCTLCMD)
+> -			dev_err(phy->cal->dev,
+> -				"Failed to get remote frame desc: %d\n", ret);
+> -		return ret;
+> -	}
+> -
+> -	if (fd.num_entries == 0) {
+> -		dev_err(phy->cal->dev,
+> -			"No streams found in the remote frame descriptor\n");
+> -
+> +	phy_source_pad = media_pad_remote_pad_first(&ctx->pad);
+> +	if (!phy_source_pad)
+>  		return -ENODEV;
+> -	}
+>
+> -	if (fd.num_entries > 1)
+> -		dev_dbg(phy->cal->dev,
+> -			"Multiple streams not supported in remote frame descriptor, using the first one\n");
+> +	ret = v4l2_subdev_call(&ctx->phy->subdev, pad, get_frame_desc,
+> +			       phy_source_pad->index, &fd);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (fd.num_entries != 1)
+> +		return -EINVAL;
+>
+>  	*entry = fd.entry[0];
+>
+> @@ -481,7 +475,7 @@ int cal_ctx_prepare(struct cal_ctx *ctx)
+>  	struct v4l2_mbus_frame_desc_entry entry;
+>  	int ret;
+>
+> -	ret = cal_get_remote_frame_desc_entry(ctx->phy, &entry);
+> +	ret = cal_get_remote_frame_desc_entry(ctx, &entry);
+>
+>  	if (ret == -ENOIOCTLCMD) {
+>  		ctx->vc = 0;
+> diff --git a/drivers/media/platform/ti/cal/cal.h b/drivers/media/platform/ti/cal/cal.h
+> index 55d4736fed18..0856297adc0b 100644
+> --- a/drivers/media/platform/ti/cal/cal.h
+> +++ b/drivers/media/platform/ti/cal/cal.h
+> @@ -319,8 +319,6 @@ const struct cal_format_info *cal_format_by_code(u32 code);
+>
+>  void cal_quickdump_regs(struct cal_dev *cal);
+>
+> -int cal_camerarx_get_remote_frame_desc(struct cal_camerarx *phy,
+> -				       struct v4l2_mbus_frame_desc *desc);
+>  void cal_camerarx_disable(struct cal_camerarx *phy);
+>  void cal_camerarx_i913_errata(struct cal_camerarx *phy);
+>  struct cal_camerarx *cal_camerarx_create(struct cal_dev *cal,
+> --
+> 2.34.1
+>
