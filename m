@@ -2,31 +2,31 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDC80C678D4
-	for <linux-media@archiver.kernel.org>; Thu,  2 Mar 2023 13:03:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6E1BC7EE33
+	for <linux-media@archiver.kernel.org>; Thu,  2 Mar 2023 13:03:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbjCBNDt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 2 Mar 2023 08:03:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34918 "EHLO
+        id S229970AbjCBNDv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 2 Mar 2023 08:03:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbjCBNDs (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Mar 2023 08:03:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC51518A8B
-        for <linux-media@vger.kernel.org>; Thu,  2 Mar 2023 05:03:47 -0800 (PST)
+        with ESMTP id S229969AbjCBNDu (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Mar 2023 08:03:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19BC19F2B
+        for <linux-media@vger.kernel.org>; Thu,  2 Mar 2023 05:03:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65279B811F3
-        for <linux-media@vger.kernel.org>; Thu,  2 Mar 2023 13:03:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E627C433D2;
-        Thu,  2 Mar 2023 13:03:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A894B81227
+        for <linux-media@vger.kernel.org>; Thu,  2 Mar 2023 13:03:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7490CC4339C;
+        Thu,  2 Mar 2023 13:03:46 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 12/17] media: mxb: update the tvnorms when changing input
-Date:   Thu,  2 Mar 2023 14:03:25 +0100
-Message-Id: <20230302130330.1125172-13-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 14/17] media: mxb: allow tuner/input/audio ioctls for vbi
+Date:   Thu,  2 Mar 2023 14:03:27 +0100
+Message-Id: <20230302130330.1125172-15-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230302130330.1125172-1-hverkuil-cisco@xs4all.nl>
 References: <20230302130330.1125172-1-hverkuil-cisco@xs4all.nl>
@@ -36,31 +36,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The tuner input uses different tvnorms compared to the
-S-Video/Composite inputs. So update the tvnorms field
-in struct video_device when switching inputs.
+The vbi stream comes from the same video input as the video
+stream. So all the related ioctls to that are just as valid
+for the vbi stream.
+
+Add these.
 
 This fixes a V4L2 compliance issue.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/pci/saa7146/mxb.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/media/pci/saa7146/mxb.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
 diff --git a/drivers/media/pci/saa7146/mxb.c b/drivers/media/pci/saa7146/mxb.c
-index 557ba89cd12d..3b0c475c7ab4 100644
+index 3b0c475c7ab4..8f1843baa732 100644
 --- a/drivers/media/pci/saa7146/mxb.c
 +++ b/drivers/media/pci/saa7146/mxb.c
-@@ -512,6 +512,9 @@ static int vidioc_s_input(struct file *file, void *fh, unsigned int input)
- 	if (err)
- 		return err;
- 
-+	mxb->video_dev.tvnorms = mxb_inputs[input].std;
-+	mxb->vbi_dev.tvnorms = mxb_inputs[input].std;
-+
- 	/* switch video in saa7111a */
- 	if (saa7111a_call(mxb, video, s_routing, i, SAA7111_FMT_CCIR, 0))
- 		pr_err("VIDIOC_S_INPUT: could not address saa7111a\n");
+@@ -706,6 +706,17 @@ static int mxb_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_data
+ 	vv_data.vid_ops.vidioc_g_register = vidioc_g_register;
+ 	vv_data.vid_ops.vidioc_s_register = vidioc_s_register;
+ #endif
++	vv_data.vbi_ops.vidioc_enum_input = vidioc_enum_input;
++	vv_data.vbi_ops.vidioc_g_input = vidioc_g_input;
++	vv_data.vbi_ops.vidioc_s_input = vidioc_s_input;
++	vv_data.vbi_ops.vidioc_querystd = vidioc_querystd;
++	vv_data.vbi_ops.vidioc_g_tuner = vidioc_g_tuner;
++	vv_data.vbi_ops.vidioc_s_tuner = vidioc_s_tuner;
++	vv_data.vbi_ops.vidioc_g_frequency = vidioc_g_frequency;
++	vv_data.vbi_ops.vidioc_s_frequency = vidioc_s_frequency;
++	vv_data.vbi_ops.vidioc_enumaudio = vidioc_enumaudio;
++	vv_data.vbi_ops.vidioc_g_audio = vidioc_g_audio;
++	vv_data.vbi_ops.vidioc_s_audio = vidioc_s_audio;
+ 	if (saa7146_register_device(&mxb->video_dev, dev, "mxb", VFL_TYPE_VIDEO)) {
+ 		ERR("cannot register capture v4l2 device. skipping.\n");
+ 		saa7146_vv_release(dev);
 -- 
 2.39.1
 
