@@ -2,92 +2,91 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 948A7C7EE30
-	for <linux-media@archiver.kernel.org>; Thu,  2 Mar 2023 09:38:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44A0AC6FA8E
+	for <linux-media@archiver.kernel.org>; Thu,  2 Mar 2023 10:00:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbjCBJio (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 2 Mar 2023 04:38:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
+        id S229695AbjCBKAO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 2 Mar 2023 05:00:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjCBJim (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Mar 2023 04:38:42 -0500
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 939B04EDF;
-        Thu,  2 Mar 2023 01:38:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=y+5KY
-        JiUtormz/jrT3bvfPhN0fTpLqDXBrS1X7+kgf8=; b=Luv9SL5uJJDc9RSVtLhqv
-        H9FG72kJFfqQAOmyzaVfLaS/CFaD6A9hWOTI0mplCS4xd1hJpyNtV36t7IiUt8lj
-        KEVn5axzv/lW9q8UksXsGSVD6IRLnj8RA4MFC2/5PgAQD1wCULqBGilUSTQvpy+b
-        D95rK4oukGMRnYo6HvacS8=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g0-1 (Coremail) with SMTP id _____wC3v4NNbgBkGKUVBw--.35501S2;
-        Thu, 02 Mar 2023 17:37:17 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     mchehab@kernel.org
-Cc:     bin.liu@mediatek.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH] media: mtk-jpeg: Fix use after free bug due to uncanceled work
-Date:   Thu,  2 Mar 2023 17:37:15 +0800
-Message-Id: <20230302093715.811758-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229484AbjCBJ7N (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Mar 2023 04:59:13 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306A248E2D
+        for <linux-media@vger.kernel.org>; Thu,  2 Mar 2023 01:58:17 -0800 (PST)
+Received: from desky.lan (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6157798C;
+        Thu,  2 Mar 2023 10:57:53 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1677751073;
+        bh=3pNb+r4GCc1U5jxrZ2M009sao4/pMCjL/TvBNoa43k4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=KJELN3+s5hDkRaRUkTNHXPL4TpmWB7l5arbydYzeyuEgItJFqk1Mgxx5Nr8tYCnui
+         lDatTttgSMSwPf3cM0djA9IQXW5OPdEVaRdRKnQivrCqsJ4maJRyb/NlHMeS2qcSyv
+         /ocvEMgofTljg6DhjXwJg84WoSJMEcWTolTNq4nY=
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v2 1/3] media: subdev: Use 'shall' instead of 'may' in route validation
+Date:   Thu,  2 Mar 2023 11:57:46 +0200
+Message-Id: <20230302095748.100898-2-tomi.valkeinen@ideasonboard.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230302095748.100898-1-tomi.valkeinen@ideasonboard.com>
+References: <20230302095748.100898-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wC3v4NNbgBkGKUVBw--.35501S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7uF17uw15Jr4xtw4xCFy7trb_yoW8Xry7pr
-        ZxK3yDCrWUWrs0qr1UJ3WUAF1rCw1rKa1xWr17uw4Iv3y3Jrs7JryFya48tFWIyF92k3Wr
-        Jr10q3s7GrWDZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi-6pkUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBzg8mU2I0XgIo4gAAs0
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In mtk_jpeg_probe, &jpeg->job_timeout_work is bound with
-mtk_jpeg_job_timeout_work. Then mtk_jpeg_dec_device_run
-and mtk_jpeg_enc_device_run may be called to start the
-work.
-If we remove the module which will call mtk_jpeg_remove
-to make cleanup, there may be a unfinished work. The
-possible sequence is as follows, which will cause a
-typical UAF bug.
+Route validation docs use the word 'may'. Change that to 'shall' for
+emphasis.
 
-Fix it by canceling the work before cleanup in the mtk_jpeg_remove
-
-CPU0                  CPU1
-
-                    |mtk_jpeg_job_timeout_work
-mtk_jpeg_remove     |
-  v4l2_m2m_release  |
-    kfree(m2m_dev); |
-                    |
-                    | v4l2_m2m_get_curr_priv
-                    |   m2m_dev->curr_ctx //use
-
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/v4l2-core/v4l2-subdev.c | 2 +-
+ include/media/v4l2-subdev.h           | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-index 969516a940ba..364513e7897e 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-@@ -1793,7 +1793,7 @@ static int mtk_jpeg_probe(struct platform_device *pdev)
- static int mtk_jpeg_remove(struct platform_device *pdev)
- {
- 	struct mtk_jpeg_dev *jpeg = platform_get_drvdata(pdev);
--
-+	cancel_delayed_work(&jpeg->job_timeout_work);
- 	pm_runtime_disable(&pdev->dev);
- 	video_unregister_device(jpeg->vdev);
- 	v4l2_m2m_release(jpeg->m2m_dev);
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index dff1d9be7841..8308d20f1bd1 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -1694,7 +1694,7 @@ int v4l2_subdev_routing_validate(struct v4l2_subdev *sd,
+ 
+ 		/*
+ 		 * V4L2_SUBDEV_ROUTING_NO_STREAM_MIX: Streams on the same pad
+-		 * may not be routed to streams on different pads.
++		 * shall not be routed to streams on different pads.
+ 		 */
+ 		if (disallow & V4L2_SUBDEV_ROUTING_NO_STREAM_MIX) {
+ 			if (remote_pads[route->sink_pad] != U32_MAX &&
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index 17773be4a4ee..3649f11a4c35 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -1638,13 +1638,13 @@ u64 v4l2_subdev_state_xlate_streams(const struct v4l2_subdev_state *state,
+  * enum v4l2_subdev_routing_restriction - Subdevice internal routing restrictions
+  *
+  * @V4L2_SUBDEV_ROUTING_NO_1_TO_N:
+- *	an input stream may not be routed to multiple output streams (stream
++ *	an input stream shall not be routed to multiple output streams (stream
+  *	duplication)
+  * @V4L2_SUBDEV_ROUTING_NO_N_TO_1:
+- *	multiple input streams may not be routed to the same output stream
++ *	multiple input streams shall not be routed to the same output stream
+  *	(stream merging)
+  * @V4L2_SUBDEV_ROUTING_NO_STREAM_MIX:
+- *	streams on the same pad may not be routed to streams on different pads
++ *	streams on the same pad shall not be routed to streams on different pads
+  * @V4L2_SUBDEV_ROUTING_ONLY_1_TO_1:
+  *	only non-overlapping 1-to-1 stream routing is allowed (a combination of
+  *	@V4L2_SUBDEV_ROUTING_NO_1_TO_N and @V4L2_SUBDEV_ROUTING_NO_N_TO_1)
 -- 
-2.25.1
+2.34.1
 
