@@ -2,127 +2,91 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2629C7EE30
-	for <linux-media@archiver.kernel.org>; Thu,  2 Mar 2023 13:03:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CF9BC678D4
+	for <linux-media@archiver.kernel.org>; Thu,  2 Mar 2023 13:03:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbjCBNDj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S229854AbjCBNDj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 2 Mar 2023 08:03:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34572 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbjCBNDi (ORCPT
+        with ESMTP id S229868AbjCBNDi (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 2 Mar 2023 08:03:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E40A18B31
-        for <linux-media@vger.kernel.org>; Thu,  2 Mar 2023 05:03:37 -0800 (PST)
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED9D18175
+        for <linux-media@vger.kernel.org>; Thu,  2 Mar 2023 05:03:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA1EA615C6
-        for <linux-media@vger.kernel.org>; Thu,  2 Mar 2023 13:03:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F2EFC433D2;
-        Thu,  2 Mar 2023 13:03:35 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A1C53CE1F14
+        for <linux-media@vger.kernel.org>; Thu,  2 Mar 2023 13:03:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 889B7C433D2
+        for <linux-media@vger.kernel.org>; Thu,  2 Mar 2023 13:03:32 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 03/17] media: common: saa7146: replace BUG_ON by WARN_ON
-Date:   Thu,  2 Mar 2023 14:03:16 +0100
-Message-Id: <20230302130330.1125172-4-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 00/17] saa7146: convert to vb2
+Date:   Thu,  2 Mar 2023 14:03:13 +0100
+Message-Id: <20230302130330.1125172-1-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230302130330.1125172-1-hverkuil-cisco@xs4all.nl>
-References: <20230302130330.1125172-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-No need for BUG_ON, WARN_ON is a lot friendlier.
+This series converts the saa7146 driver to vb2.
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- drivers/media/common/saa7146/saa7146_core.c | 11 +++++++----
- drivers/media/common/saa7146/saa7146_fops.c |  6 ++++--
- drivers/media/common/saa7146/saa7146_hlp.c  |  7 ++++---
- 3 files changed, 15 insertions(+), 9 deletions(-)
+This sits on top of the overlay removal patch:
 
-diff --git a/drivers/media/common/saa7146/saa7146_core.c b/drivers/media/common/saa7146/saa7146_core.c
-index e50fa0ff7c5d..f15caf54771b 100644
---- a/drivers/media/common/saa7146/saa7146_core.c
-+++ b/drivers/media/common/saa7146/saa7146_core.c
-@@ -37,7 +37,8 @@ void saa7146_setgpio(struct saa7146_dev *dev, int port, u32 data)
- {
- 	u32 value = 0;
- 
--	BUG_ON(port > 3);
-+	if (WARN_ON(port > 3))
-+		return;
- 
- 	value = saa7146_read(dev, GPIO_CTRL);
- 	value &= ~(0xff << (8*port));
-@@ -148,7 +149,8 @@ static struct scatterlist* vmalloc_to_sg(unsigned char *virt, int nr_pages)
- 		pg = vmalloc_to_page(virt);
- 		if (NULL == pg)
- 			goto err;
--		BUG_ON(PageHighMem(pg));
-+		if (WARN_ON(PageHighMem(pg)))
-+			return NULL;
- 		sg_set_page(&sglist[i], pg, PAGE_SIZE, 0);
- 	}
- 	return sglist;
-@@ -239,8 +241,9 @@ int saa7146_pgtable_build_single(struct pci_dev *pci, struct saa7146_pgtable *pt
- 	int nr_pages = 0;
- 	int i,p;
- 
--	BUG_ON(0 == sglen);
--	BUG_ON(list->offset > PAGE_SIZE);
-+	if (WARN_ON(!sglen) ||
-+	    WARN_ON(list->offset > PAGE_SIZE))
-+		return -EIO;
- 
- 	/* if we have a user buffer, the first page may not be
- 	   aligned to a page boundary. */
-diff --git a/drivers/media/common/saa7146/saa7146_fops.c b/drivers/media/common/saa7146/saa7146_fops.c
-index 3cb3ee7855ee..4645545c3719 100644
---- a/drivers/media/common/saa7146/saa7146_fops.c
-+++ b/drivers/media/common/saa7146/saa7146_fops.c
-@@ -68,7 +68,8 @@ int saa7146_buffer_queue(struct saa7146_dev *dev,
- 	assert_spin_locked(&dev->slock);
- 	DEB_EE("dev:%p, dmaq:%p, buf:%p\n", dev, q, buf);
- 
--	BUG_ON(!q);
-+	if (WARN_ON(!q))
-+		return -EIO;
- 
- 	if (NULL == q->curr) {
- 		q->curr = buf;
-@@ -109,7 +110,8 @@ void saa7146_buffer_next(struct saa7146_dev *dev,
- {
- 	struct saa7146_buf *buf,*next = NULL;
- 
--	BUG_ON(!q);
-+	if (WARN_ON(!q))
-+		return;
- 
- 	DEB_INT("dev:%p, dmaq:%p, vbi:%d\n", dev, q, vbi);
- 
-diff --git a/drivers/media/common/saa7146/saa7146_hlp.c b/drivers/media/common/saa7146/saa7146_hlp.c
-index 69101f93a12e..b99c0d6fddd1 100644
---- a/drivers/media/common/saa7146/saa7146_hlp.c
-+++ b/drivers/media/common/saa7146/saa7146_hlp.c
-@@ -542,9 +542,10 @@ static int calculate_video_dma_grab_planar(struct saa7146_dev* dev, struct saa71
- 	int height = pix->height;
- 	enum v4l2_field field = pix->field;
- 
--	BUG_ON(0 == buf->pt[0].dma);
--	BUG_ON(0 == buf->pt[1].dma);
--	BUG_ON(0 == buf->pt[2].dma);
-+	if (WARN_ON(!buf->pt[0].dma) ||
-+	    WARN_ON(!buf->pt[1].dma) ||
-+	    WARN_ON(!buf->pt[2].dma))
-+		return -1;
- 
- 	DEB_CAP("[size=%dx%d,fields=%s]\n",
- 		width, height, v4l2_field_names[field]);
+https://patchwork.linuxtv.org/project/linux-media/patch/20230302125731.1124945-2-hverkuil-cisco@xs4all.nl/
+
+Tested with my mxb board and limited testing with a Hexium Orion board.
+
+Note: the av7110 has sliced VBI output support, I suspect that might
+no longer work. I do have an av7110 board, but it has no analog HW.
+
+I'll try to find someone to test this for me.
+
+Regards,
+
+	Hans
+
+Hans Verkuil (17):
+  media: saa7146: drop 'dev' and 'resources' from struct saa7146_fh
+  media: common: saa7146: drop 'fmt' from struct saa7146_buf
+  media: common: saa7146: replace BUG_ON by WARN_ON
+  staging: media: av7110: replace BUG_ON by WARN_ON
+  media: common: saa7146: fix broken V4L2_PIX_FMT_YUV422P support
+  media: common: saa7146: use for_each_sg_dma_page
+  media: saa7146: convert to vb2
+  media: common: saa7146: fix compliance problems with field handling
+  media: common: saa7146: check minimum video format size
+  media: common: saa7146: fall back to V4L2_PIX_FMT_BGR24
+  media: common: saa7146: allow S_STD(G_STD)
+  media: mxb: update the tvnorms when changing input
+  media: common: saa7146: add support for missing
+    .vidioc_try_fmt_vbi_cap
+  media: mxb: allow tuner/input/audio ioctls for vbi
+  media: common: saa7146: allow AUDIO ioctls for the vbi stream
+  media: common: saa7146: drop USERPTR support
+  media: pci: saa7146: advertise only those TV standard that are
+    supported
+
+ drivers/media/common/saa7146/Kconfig         |   2 +-
+ drivers/media/common/saa7146/saa7146_core.c  |  40 +-
+ drivers/media/common/saa7146/saa7146_fops.c  | 342 ++--------
+ drivers/media/common/saa7146/saa7146_hlp.c   |  44 +-
+ drivers/media/common/saa7146/saa7146_vbi.c   | 286 ++++-----
+ drivers/media/common/saa7146/saa7146_video.c | 637 ++++++-------------
+ drivers/media/pci/saa7146/hexium_gemini.c    |  23 +-
+ drivers/media/pci/saa7146/hexium_orion.c     |  23 +-
+ drivers/media/pci/saa7146/mxb.c              |  53 +-
+ drivers/media/pci/ttpci/budget-av.c          |   4 +-
+ drivers/staging/media/av7110/av7110.c        |   6 +-
+ drivers/staging/media/av7110/av7110_hw.c     |   3 +-
+ drivers/staging/media/av7110/av7110_v4l.c    |  35 +-
+ include/media/drv-intf/saa7146_vv.h          |  38 +-
+ 14 files changed, 505 insertions(+), 1031 deletions(-)
+
 -- 
 2.39.1
 
