@@ -2,218 +2,100 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5746C7EE30
-	for <linux-media@archiver.kernel.org>; Thu,  2 Mar 2023 10:08:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3F53C678D4
+	for <linux-media@archiver.kernel.org>; Thu,  2 Mar 2023 10:41:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbjCBKIY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 2 Mar 2023 05:08:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57204 "EHLO
+        id S229973AbjCBKlX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 2 Mar 2023 05:41:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbjCBKIL (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Mar 2023 05:08:11 -0500
+        with ESMTP id S229747AbjCBKlW (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Mar 2023 05:41:22 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AADF210CD
-        for <linux-media@vger.kernel.org>; Thu,  2 Mar 2023 02:08:09 -0800 (PST)
-Received: from desky.lan (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C2381A1C;
-        Thu,  2 Mar 2023 11:08:04 +0100 (CET)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DDD3524C
+        for <linux-media@vger.kernel.org>; Thu,  2 Mar 2023 02:41:20 -0800 (PST)
+Received: from ideasonboard.com (host-87-18-61-24.retail.telecomitalia.it [87.18.61.24])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 92BFE56A;
+        Thu,  2 Mar 2023 11:41:18 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1677751685;
-        bh=Wi5aZi3JIGLlR9YkEJ4S0BTD4KuXGDdvwWXpXQADGXI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PdBYG4/PxoklhkMuh569FjUJEZRqyz6NBiE1LSahUfNBt5yYzcrv07fUPP+0MbMI6
-         sez1o4jCukFkYPKPKRJq6iJTo2v8b/ify+aUOypnW5jnDvtBJYfkBT/sCbJLIFChHD
-         QZRux7TIsyLx+6T0VOjuP59ddGogmm9DrvGPUOfk=
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-To:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        linux-media@vger.kernel.org,
+        s=mail; t=1677753679;
+        bh=V7Gw3+UX4UgVQsudZqNfsrGcz9Z8uN0X9EZLC/LOP68=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L11KOXy1F0Sse+rk9LZ89wJv9+1QZiiDDEwqLIQjyRmH5o6kDuOE1VDJN2n1PNDbt
+         Q3oDjKz0eax7GB9gjbTuZDNS0n6HIqLHVFzrgwoTZ+lOSoe55Q2QFtHBgHMyYj6hGQ
+         y+WqL9lOAUhDIHmpfH103/7ZPGdE6KfrxmlD3l4Y=
+Date:   Thu, 2 Mar 2023 11:41:15 +0100
+From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Jai Luthra <j-luthra@ti.com>,
-        Vaishnav Achath <vaishnav.a@ti.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v3 4/5] media: ti: cal: Implement get_frame_desc for camera-rx
-Date:   Thu,  2 Mar 2023 12:07:54 +0200
-Message-Id: <20230302100755.191164-5-tomi.valkeinen@ideasonboard.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230302100755.191164-1-tomi.valkeinen@ideasonboard.com>
-References: <20230302100755.191164-1-tomi.valkeinen@ideasonboard.com>
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Subject: Re: [PATCH v2 1/3] media: subdev: Use 'shall' instead of 'may' in
+ route validation
+Message-ID: <20230302104115.npffi5av4g7v25l3@uno.localdomain>
+References: <20230302095748.100898-1-tomi.valkeinen@ideasonboard.com>
+ <20230302095748.100898-2-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230302095748.100898-2-tomi.valkeinen@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-CAL uses get_frame_desc to get the VC and DT for the incoming CSI-2
-stream, but does it in a bit hacky way. Clean this up by implementing
-.get_frame_desc to camera-rx, and calling that from cal.c.
+Hi Tomi,
+   thanks!
 
-No functional change intended.
+On Thu, Mar 02, 2023 at 11:57:46AM +0200, Tomi Valkeinen wrote:
+> Route validation docs use the word 'may'. Change that to 'shall' for
+> emphasis.
+>
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 
-Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
----
- drivers/media/platform/ti/cal/cal-camerarx.c | 62 +++++++++++---------
- drivers/media/platform/ti/cal/cal.c          | 30 ++++------
- drivers/media/platform/ti/cal/cal.h          |  2 -
- 3 files changed, 47 insertions(+), 47 deletions(-)
 
-diff --git a/drivers/media/platform/ti/cal/cal-camerarx.c b/drivers/media/platform/ti/cal/cal-camerarx.c
-index bc09c3f1446d..1a4273bbe752 100644
---- a/drivers/media/platform/ti/cal/cal-camerarx.c
-+++ b/drivers/media/platform/ti/cal/cal-camerarx.c
-@@ -589,33 +589,6 @@ static int cal_camerarx_parse_dt(struct cal_camerarx *phy)
- 	return ret;
- }
- 
--int cal_camerarx_get_remote_frame_desc(struct cal_camerarx *phy,
--				       struct v4l2_mbus_frame_desc *desc)
--{
--	struct media_pad *pad;
--	int ret;
--
--	if (!phy->source)
--		return -EPIPE;
--
--	pad = media_pad_remote_pad_first(&phy->pads[CAL_CAMERARX_PAD_SINK]);
--	if (!pad)
--		return -EPIPE;
--
--	ret = v4l2_subdev_call(phy->source, pad, get_frame_desc, pad->index,
--			       desc);
--	if (ret)
--		return ret;
--
--	if (desc->type != V4L2_MBUS_FRAME_DESC_TYPE_CSI2) {
--		dev_err(phy->cal->dev,
--			"Frame descriptor does not describe CSI-2 link");
--		return -EINVAL;
--	}
--
--	return 0;
--}
--
- /* ------------------------------------------------------------------
-  *	V4L2 Subdev Operations
-  * ------------------------------------------------------------------
-@@ -772,6 +745,40 @@ static int cal_camerarx_sd_init_cfg(struct v4l2_subdev *sd,
- 	return cal_camerarx_sd_set_fmt(sd, state, &format);
- }
- 
-+static int cal_camerarx_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
-+				       struct v4l2_mbus_frame_desc *fd)
-+{
-+	struct cal_camerarx *phy = to_cal_camerarx(sd);
-+	struct v4l2_mbus_frame_desc remote_desc;
-+	const struct media_pad *remote_pad;
-+	int ret;
-+
-+	remote_pad = media_pad_remote_pad_first(&phy->pads[CAL_CAMERARX_PAD_SINK]);
-+	if (!remote_pad)
-+		return -EPIPE;
-+
-+	ret = v4l2_subdev_call(phy->source, pad, get_frame_desc,
-+			       remote_pad->index, &remote_desc);
-+	if (ret)
-+		return ret;
-+
-+	if (remote_desc.type != V4L2_MBUS_FRAME_DESC_TYPE_CSI2) {
-+		cal_err(phy->cal,
-+			"Frame descriptor does not describe CSI-2 link");
-+		return -EINVAL;
-+	}
-+
-+	if (remote_desc.num_entries > 1)
-+		cal_err(phy->cal,
-+			"Multiple streams not supported in remote frame descriptor, using the first one\n");
-+
-+	fd->type = V4L2_MBUS_FRAME_DESC_TYPE_CSI2;
-+	fd->num_entries = 1;
-+	fd->entry[0] = remote_desc.entry[0];
-+
-+	return 0;
-+}
-+
- static const struct v4l2_subdev_video_ops cal_camerarx_video_ops = {
- 	.s_stream = cal_camerarx_sd_s_stream,
- };
-@@ -782,6 +789,7 @@ static const struct v4l2_subdev_pad_ops cal_camerarx_pad_ops = {
- 	.enum_frame_size = cal_camerarx_sd_enum_frame_size,
- 	.get_fmt = v4l2_subdev_get_fmt,
- 	.set_fmt = cal_camerarx_sd_set_fmt,
-+	.get_frame_desc = cal_camerarx_get_frame_desc,
- };
- 
- static const struct v4l2_subdev_ops cal_camerarx_subdev_ops = {
-diff --git a/drivers/media/platform/ti/cal/cal.c b/drivers/media/platform/ti/cal/cal.c
-index cea6ba54024f..8b0f0afa9249 100644
---- a/drivers/media/platform/ti/cal/cal.c
-+++ b/drivers/media/platform/ti/cal/cal.c
-@@ -446,30 +446,24 @@ static bool cal_ctx_wr_dma_stopped(struct cal_ctx *ctx)
- }
- 
- static int
--cal_get_remote_frame_desc_entry(struct cal_camerarx *phy,
-+cal_get_remote_frame_desc_entry(struct cal_ctx *ctx,
- 				struct v4l2_mbus_frame_desc_entry *entry)
- {
- 	struct v4l2_mbus_frame_desc fd;
-+	struct media_pad *phy_source_pad;
- 	int ret;
- 
--	ret = cal_camerarx_get_remote_frame_desc(phy, &fd);
--	if (ret) {
--		if (ret != -ENOIOCTLCMD)
--			dev_err(phy->cal->dev,
--				"Failed to get remote frame desc: %d\n", ret);
--		return ret;
--	}
--
--	if (fd.num_entries == 0) {
--		dev_err(phy->cal->dev,
--			"No streams found in the remote frame descriptor\n");
--
-+	phy_source_pad = media_pad_remote_pad_first(&ctx->pad);
-+	if (!phy_source_pad)
- 		return -ENODEV;
--	}
- 
--	if (fd.num_entries > 1)
--		dev_dbg(phy->cal->dev,
--			"Multiple streams not supported in remote frame descriptor, using the first one\n");
-+	ret = v4l2_subdev_call(&ctx->phy->subdev, pad, get_frame_desc,
-+			       phy_source_pad->index, &fd);
-+	if (ret)
-+		return ret;
-+
-+	if (fd.num_entries != 1)
-+		return -EINVAL;
- 
- 	*entry = fd.entry[0];
- 
-@@ -481,7 +475,7 @@ int cal_ctx_prepare(struct cal_ctx *ctx)
- 	struct v4l2_mbus_frame_desc_entry entry;
- 	int ret;
- 
--	ret = cal_get_remote_frame_desc_entry(ctx->phy, &entry);
-+	ret = cal_get_remote_frame_desc_entry(ctx, &entry);
- 
- 	if (ret == -ENOIOCTLCMD) {
- 		ctx->vc = 0;
-diff --git a/drivers/media/platform/ti/cal/cal.h b/drivers/media/platform/ti/cal/cal.h
-index 55d4736fed18..0856297adc0b 100644
---- a/drivers/media/platform/ti/cal/cal.h
-+++ b/drivers/media/platform/ti/cal/cal.h
-@@ -319,8 +319,6 @@ const struct cal_format_info *cal_format_by_code(u32 code);
- 
- void cal_quickdump_regs(struct cal_dev *cal);
- 
--int cal_camerarx_get_remote_frame_desc(struct cal_camerarx *phy,
--				       struct v4l2_mbus_frame_desc *desc);
- void cal_camerarx_disable(struct cal_camerarx *phy);
- void cal_camerarx_i913_errata(struct cal_camerarx *phy);
- struct cal_camerarx *cal_camerarx_create(struct cal_dev *cal,
--- 
-2.34.1
-
+> ---
+>  drivers/media/v4l2-core/v4l2-subdev.c | 2 +-
+>  include/media/v4l2-subdev.h           | 6 +++---
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+> index dff1d9be7841..8308d20f1bd1 100644
+> --- a/drivers/media/v4l2-core/v4l2-subdev.c
+> +++ b/drivers/media/v4l2-core/v4l2-subdev.c
+> @@ -1694,7 +1694,7 @@ int v4l2_subdev_routing_validate(struct v4l2_subdev *sd,
+>
+>  		/*
+>  		 * V4L2_SUBDEV_ROUTING_NO_STREAM_MIX: Streams on the same pad
+> -		 * may not be routed to streams on different pads.
+> +		 * shall not be routed to streams on different pads.
+>  		 */
+>  		if (disallow & V4L2_SUBDEV_ROUTING_NO_STREAM_MIX) {
+>  			if (remote_pads[route->sink_pad] != U32_MAX &&
+> diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+> index 17773be4a4ee..3649f11a4c35 100644
+> --- a/include/media/v4l2-subdev.h
+> +++ b/include/media/v4l2-subdev.h
+> @@ -1638,13 +1638,13 @@ u64 v4l2_subdev_state_xlate_streams(const struct v4l2_subdev_state *state,
+>   * enum v4l2_subdev_routing_restriction - Subdevice internal routing restrictions
+>   *
+>   * @V4L2_SUBDEV_ROUTING_NO_1_TO_N:
+> - *	an input stream may not be routed to multiple output streams (stream
+> + *	an input stream shall not be routed to multiple output streams (stream
+>   *	duplication)
+>   * @V4L2_SUBDEV_ROUTING_NO_N_TO_1:
+> - *	multiple input streams may not be routed to the same output stream
+> + *	multiple input streams shall not be routed to the same output stream
+>   *	(stream merging)
+>   * @V4L2_SUBDEV_ROUTING_NO_STREAM_MIX:
+> - *	streams on the same pad may not be routed to streams on different pads
+> + *	streams on the same pad shall not be routed to streams on different pads
+>   * @V4L2_SUBDEV_ROUTING_ONLY_1_TO_1:
+>   *	only non-overlapping 1-to-1 stream routing is allowed (a combination of
+>   *	@V4L2_SUBDEV_ROUTING_NO_1_TO_N and @V4L2_SUBDEV_ROUTING_NO_N_TO_1)
+> --
+> 2.34.1
+>
