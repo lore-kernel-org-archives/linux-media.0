@@ -2,22 +2,21 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB0A8C7EE2F
-	for <linux-media@archiver.kernel.org>; Thu,  2 Mar 2023 07:05:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F817C6FA8E
+	for <linux-media@archiver.kernel.org>; Thu,  2 Mar 2023 07:05:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229445AbjCBHFU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 2 Mar 2023 02:05:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
+        id S229888AbjCBHFm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 2 Mar 2023 02:05:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbjCBHFS (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Mar 2023 02:05:18 -0500
-X-Greylist: delayed 903 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Mar 2023 23:04:38 PST
+        with ESMTP id S229844AbjCBHFl (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Mar 2023 02:05:41 -0500
 Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B6E38E99;
-        Wed,  1 Mar 2023 23:04:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3102342BC8;
+        Wed,  1 Mar 2023 23:04:59 -0800 (PST)
 Received: from droid10-sz.amlogic.com (10.28.11.69) by mail-sh.amlogic.com
  (10.18.11.5) with Microsoft SMTP Server id 15.1.2507.13; Thu, 2 Mar 2023
- 14:34:28 +0800
+ 14:34:51 +0800
 From:   zelong dong <zelong.dong@amlogic.com>
 To:     Neil Armstrong <neil.armstrong@linaro.org>,
         Sean Young <sean@mess.org>,
@@ -28,10 +27,12 @@ To:     Neil Armstrong <neil.armstrong@linaro.org>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 CC:     <linux-media@vger.kernel.org>, <linux-amlogic@lists.infradead.org>,
         <devicetree@vger.kernel.org>, Zelong Dong <zelong.dong@amlogic.com>
-Subject: [PATCH 0/3] media: rc: meson-s4: support RC_DRIVER_SCANCODE driver
-Date:   Thu, 2 Mar 2023 14:33:59 +0800
-Message-ID: <20230302063402.42708-1-zelong.dong@amlogic.com>
+Subject: [PATCH 2/3] dt-bindings: media: Add compatible for Meson-S4 IR Controller
+Date:   Thu, 2 Mar 2023 14:34:01 +0800
+Message-ID: <20230302063402.42708-3-zelong.dong@amlogic.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20230302063402.42708-1-zelong.dong@amlogic.com>
+References: <20230302063402.42708-1-zelong.dong@amlogic.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -42,23 +43,32 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Zelong Dong <zelong.dong@amlogic.com>
 
-This patchset adds IR controller driver support for Meson-S4 SoC.
+Add new compatible for Amlogic's Meson-S4 IR Controller
 
-Meson IR Controller supports hardware decoder in Meson-8B and later
-SoC. So far, protocol NEC/RC-6/XMP could be decoded in hardware.
-DTS property 'amlogic,ir-support-hw-decode' can enable this feature.
+Signed-off-by: Zelong Dong <zelong.dong@amlogic.com>
+---
+ Documentation/devicetree/bindings/media/meson-ir.txt | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Zelong Dong (3):
-  media: rc: meson-ir: support rc driver type RC_DRIVER_SCANCODE
-  dt-bindings: media: Add compatible for Meson-S4 IR Controller
-  arm64: dts: meson: add IR controller for Meson-S4 SoC
-
- .../devicetree/bindings/media/meson-ir.txt    |   3 +
- .../dts/amlogic/meson-s4-s805x2-aq222.dts     |   6 +
- arch/arm64/boot/dts/amlogic/meson-s4.dtsi     |  16 +
- drivers/media/rc/meson-ir.c                   | 713 ++++++++++++++++--
- 4 files changed, 657 insertions(+), 81 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/media/meson-ir.txt b/Documentation/devicetree/bindings/media/meson-ir.txt
+index efd9d29a8f10..2a6662edd04d 100644
+--- a/Documentation/devicetree/bindings/media/meson-ir.txt
++++ b/Documentation/devicetree/bindings/media/meson-ir.txt
+@@ -5,11 +5,14 @@ Required properties:
+ 		  - "amlogic,meson6-ir"
+ 		  - "amlogic,meson8b-ir"
+ 		  - "amlogic,meson-gxbb-ir"
++		  - "amlogic,meson-s4-ir"
+  - reg		: physical base address and length of the device registers
+  - interrupts	: a single specifier for the interrupt from the device
+ 
+ Optional properties:
+  - linux,rc-map-name:	see rc.txt file in the same directory.
++ - amlogic,ir-support-hw-decode: enable hardware IR Decoder, and register
++				 rc driver as type RC_DRIVER_SCANCODE
+ 
+ Example:
+ 
 -- 
 2.35.1
 
