@@ -2,91 +2,80 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CF9BC678D4
-	for <linux-media@archiver.kernel.org>; Thu,  2 Mar 2023 13:03:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D55EC7EE36
+	for <linux-media@archiver.kernel.org>; Thu,  2 Mar 2023 13:03:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjCBNDj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 2 Mar 2023 08:03:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34576 "EHLO
+        id S229911AbjCBNDl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 2 Mar 2023 08:03:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbjCBNDi (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Mar 2023 08:03:38 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED9D18175
-        for <linux-media@vger.kernel.org>; Thu,  2 Mar 2023 05:03:36 -0800 (PST)
+        with ESMTP id S229625AbjCBNDk (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Mar 2023 08:03:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A235919F2B
+        for <linux-media@vger.kernel.org>; Thu,  2 Mar 2023 05:03:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A1C53CE1F14
-        for <linux-media@vger.kernel.org>; Thu,  2 Mar 2023 13:03:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 889B7C433D2
-        for <linux-media@vger.kernel.org>; Thu,  2 Mar 2023 13:03:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5AE4FB811F3
+        for <linux-media@vger.kernel.org>; Thu,  2 Mar 2023 13:03:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A53BC4339B;
+        Thu,  2 Mar 2023 13:03:36 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH 00/17] saa7146: convert to vb2
-Date:   Thu,  2 Mar 2023 14:03:13 +0100
-Message-Id: <20230302130330.1125172-1-hverkuil-cisco@xs4all.nl>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 04/17] staging: media: av7110: replace BUG_ON by WARN_ON
+Date:   Thu,  2 Mar 2023 14:03:17 +0100
+Message-Id: <20230302130330.1125172-5-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230302130330.1125172-1-hverkuil-cisco@xs4all.nl>
+References: <20230302130330.1125172-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series converts the saa7146 driver to vb2.
+No need for BUG_ON, WARN_ON is a lot friendlier.
 
-This sits on top of the overlay removal patch:
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ drivers/staging/media/av7110/av7110.c    | 6 ++++--
+ drivers/staging/media/av7110/av7110_hw.c | 3 ++-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-https://patchwork.linuxtv.org/project/linux-media/patch/20230302125731.1124945-2-hverkuil-cisco@xs4all.nl/
-
-Tested with my mxb board and limited testing with a Hexium Orion board.
-
-Note: the av7110 has sliced VBI output support, I suspect that might
-no longer work. I do have an av7110 board, but it has no analog HW.
-
-I'll try to find someone to test this for me.
-
-Regards,
-
-	Hans
-
-Hans Verkuil (17):
-  media: saa7146: drop 'dev' and 'resources' from struct saa7146_fh
-  media: common: saa7146: drop 'fmt' from struct saa7146_buf
-  media: common: saa7146: replace BUG_ON by WARN_ON
-  staging: media: av7110: replace BUG_ON by WARN_ON
-  media: common: saa7146: fix broken V4L2_PIX_FMT_YUV422P support
-  media: common: saa7146: use for_each_sg_dma_page
-  media: saa7146: convert to vb2
-  media: common: saa7146: fix compliance problems with field handling
-  media: common: saa7146: check minimum video format size
-  media: common: saa7146: fall back to V4L2_PIX_FMT_BGR24
-  media: common: saa7146: allow S_STD(G_STD)
-  media: mxb: update the tvnorms when changing input
-  media: common: saa7146: add support for missing
-    .vidioc_try_fmt_vbi_cap
-  media: mxb: allow tuner/input/audio ioctls for vbi
-  media: common: saa7146: allow AUDIO ioctls for the vbi stream
-  media: common: saa7146: drop USERPTR support
-  media: pci: saa7146: advertise only those TV standard that are
-    supported
-
- drivers/media/common/saa7146/Kconfig         |   2 +-
- drivers/media/common/saa7146/saa7146_core.c  |  40 +-
- drivers/media/common/saa7146/saa7146_fops.c  | 342 ++--------
- drivers/media/common/saa7146/saa7146_hlp.c   |  44 +-
- drivers/media/common/saa7146/saa7146_vbi.c   | 286 ++++-----
- drivers/media/common/saa7146/saa7146_video.c | 637 ++++++-------------
- drivers/media/pci/saa7146/hexium_gemini.c    |  23 +-
- drivers/media/pci/saa7146/hexium_orion.c     |  23 +-
- drivers/media/pci/saa7146/mxb.c              |  53 +-
- drivers/media/pci/ttpci/budget-av.c          |   4 +-
- drivers/staging/media/av7110/av7110.c        |   6 +-
- drivers/staging/media/av7110/av7110_hw.c     |   3 +-
- drivers/staging/media/av7110/av7110_v4l.c    |  35 +-
- include/media/drv-intf/saa7146_vv.h          |  38 +-
- 14 files changed, 505 insertions(+), 1031 deletions(-)
-
+diff --git a/drivers/staging/media/av7110/av7110.c b/drivers/staging/media/av7110/av7110.c
+index df81a9b744c2..a5a431c14ea7 100644
+--- a/drivers/staging/media/av7110/av7110.c
++++ b/drivers/staging/media/av7110/av7110.c
+@@ -1106,9 +1106,11 @@ static int dvb_get_stc(struct dmx_demux *demux, unsigned int num,
+ 	struct av7110 *av7110;
+ 
+ 	/* pointer casting paranoia... */
+-	BUG_ON(!demux);
++	if (WARN_ON(!demux))
++		return -EIO;
+ 	dvbdemux = demux->priv;
+-	BUG_ON(!dvbdemux);
++	if (WARN_ON(!dvbdemux))
++		return -EIO;
+ 	av7110 = dvbdemux->priv;
+ 
+ 	dprintk(4, "%p\n", av7110);
+diff --git a/drivers/staging/media/av7110/av7110_hw.c b/drivers/staging/media/av7110/av7110_hw.c
+index 93ca31e38ddd..a0be37717259 100644
+--- a/drivers/staging/media/av7110/av7110_hw.c
++++ b/drivers/staging/media/av7110/av7110_hw.c
+@@ -1007,7 +1007,8 @@ static int OSDSetBlock(struct av7110 *av7110, int x0, int y0,
+ 
+ 	if (av7110->bmp_state == BMP_LOADING) {
+ 		/* possible if syscall is repeated by -ERESTARTSYS and if firmware cannot abort */
+-		BUG_ON (FW_VERSION(av7110->arm_app) >= 0x261e);
++		if (WARN_ON(FW_VERSION(av7110->arm_app) >= 0x261e))
++			return -EIO;
+ 		rc = WaitUntilBmpLoaded(av7110);
+ 		if (rc)
+ 			return rc;
 -- 
 2.39.1
 
