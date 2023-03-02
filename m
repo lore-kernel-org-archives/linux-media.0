@@ -2,28 +2,28 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87693C678D4
-	for <linux-media@archiver.kernel.org>; Thu,  2 Mar 2023 10:08:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49F11C7EE36
+	for <linux-media@archiver.kernel.org>; Thu,  2 Mar 2023 10:08:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjCBKIW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 2 Mar 2023 05:08:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57194 "EHLO
+        id S229897AbjCBKIX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 2 Mar 2023 05:08:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbjCBKIJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Mar 2023 05:08:09 -0500
+        with ESMTP id S230078AbjCBKIG (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Mar 2023 05:08:06 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2213582
-        for <linux-media@vger.kernel.org>; Thu,  2 Mar 2023 02:08:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBABB3582
+        for <linux-media@vger.kernel.org>; Thu,  2 Mar 2023 02:08:04 -0800 (PST)
 Received: from desky.lan (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 19C6B9D9;
-        Thu,  2 Mar 2023 11:08:04 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B7EDD98C;
+        Thu,  2 Mar 2023 11:08:02 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1677751684;
-        bh=nVbHRwvLgoYoV+tmXtBrhfyW+cF2ZNwbUWFHgAw7aes=;
+        s=mail; t=1677751683;
+        bh=6bPNx9PLAZlq+iAcjoeLEjrJIvJsN+G7HX0SmYbhcwY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Gwbo/k8kwHxajyWbWQ4ptmemrW/4G6L/mI8lerQLGM2p09hv8ZJc2O8f/tC2h+Srn
-         mT+fyz0zIZstWG2pE34hE19QF+XTY+YtCWJfQk6AfQugx0uMiN3bUIGqd4TDNmsyX+
-         mmnSRR93fwFBbDO8SNcb5yN9s2iAQwnznMLYGnWM=
+        b=WSjegdrEcLqPm3aZk53708j11e8YjquEZe8Wa9//CP+ZfxFoQBfvl33HFGVsZwkGM
+         JNsuw8eXDbGdcqzujFOAY6IUN63VE60TquDrnNxPq+zJY9CYrGsoxajG+s4vW5jSCu
+         D2I46keMjVi826Bhl08rBgdBGVxnokQKRqwb6Uc8=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
         linux-media@vger.kernel.org,
@@ -33,9 +33,9 @@ Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
         Jai Luthra <j-luthra@ti.com>,
         Vaishnav Achath <vaishnav.a@ti.com>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v3 3/5] media: ti: cal: Use subdev state
-Date:   Thu,  2 Mar 2023 12:07:53 +0200
-Message-Id: <20230302100755.191164-4-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v3 1/5] media: ti: cal: Clean up mbus formats uses
+Date:   Thu,  2 Mar 2023 12:07:51 +0200
+Message-Id: <20230302100755.191164-2-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230302100755.191164-1-tomi.valkeinen@ideasonboard.com>
 References: <20230302100755.191164-1-tomi.valkeinen@ideasonboard.com>
@@ -45,382 +45,111 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Change TI CAL driver to use subdev state. No functional changes
-(intended).
+Clean up the CAL drivers uses of mbus formats:
 
-This allows us to get rid of the 'formats' field, as the formats are
-kept in the state, and also the 'mutex' as we already have state locking.
+- Switch all YUV formats from 2X8 formats to 1X16, as those are what
+  should be used for CSI-2 bus.
+
+- Drop 24 and 32 bit formats, as the driver doesn't support them (see
+  cal_ctx_pix_proc_config()).
+
+- Switch RGB565_2X8_LE to RGB565_1X16 (for the same reason as for the
+  YUV formats) and drop RGB565_2X8_BE as it cannot be supported with
+  CSI-2.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 ---
- drivers/media/platform/ti/cal/cal-camerarx.c | 131 +++++--------------
- drivers/media/platform/ti/cal/cal-video.c    |  21 ++-
- drivers/media/platform/ti/cal/cal.h          |   8 --
- 3 files changed, 53 insertions(+), 107 deletions(-)
+ drivers/media/platform/ti/cal/cal-camerarx.c |  2 +-
+ drivers/media/platform/ti/cal/cal-video.c    |  2 +-
+ drivers/media/platform/ti/cal/cal.c          | 36 ++++----------------
+ 3 files changed, 8 insertions(+), 32 deletions(-)
 
 diff --git a/drivers/media/platform/ti/cal/cal-camerarx.c b/drivers/media/platform/ti/cal/cal-camerarx.c
-index 97208d542f9e..bc09c3f1446d 100644
+index 16ae52879a79..267089b0fea0 100644
 --- a/drivers/media/platform/ti/cal/cal-camerarx.c
 +++ b/drivers/media/platform/ti/cal/cal-camerarx.c
-@@ -50,10 +50,16 @@ static s64 cal_camerarx_get_ext_link_freq(struct cal_camerarx *phy)
- 	struct v4l2_mbus_config_mipi_csi2 *mipi_csi2 = &phy->endpoint.bus.mipi_csi2;
- 	u32 num_lanes = mipi_csi2->num_data_lanes;
+@@ -817,7 +817,7 @@ static int cal_camerarx_sd_init_cfg(struct v4l2_subdev *sd,
+ 		.format = {
+ 			.width = 640,
+ 			.height = 480,
+-			.code = MEDIA_BUS_FMT_UYVY8_2X8,
++			.code = MEDIA_BUS_FMT_UYVY8_1X16,
+ 			.field = V4L2_FIELD_NONE,
+ 			.colorspace = V4L2_COLORSPACE_SRGB,
+ 			.ycbcr_enc = V4L2_YCBCR_ENC_601,
+diff --git a/drivers/media/platform/ti/cal/cal-video.c b/drivers/media/platform/ti/cal/cal-video.c
+index ca906a9e4222..ed92e23d4b16 100644
+--- a/drivers/media/platform/ti/cal/cal-video.c
++++ b/drivers/media/platform/ti/cal/cal-video.c
+@@ -894,7 +894,7 @@ static int cal_ctx_v4l2_init_mc_format(struct cal_ctx *ctx)
  	const struct cal_format_info *fmtinfo;
-+	struct v4l2_subdev_state *state;
-+	struct v4l2_mbus_framefmt *fmt;
- 	u32 bpp;
- 	s64 freq;
+ 	struct v4l2_pix_format *pix_fmt = &ctx->v_fmt.fmt.pix;
  
--	fmtinfo = cal_format_by_code(phy->formats[CAL_CAMERARX_PAD_SINK].code);
-+	state = v4l2_subdev_get_locked_active_state(&phy->subdev);
-+
-+	fmt = v4l2_subdev_get_pad_format(&phy->subdev, state, CAL_CAMERARX_PAD_SINK);
-+
-+	fmtinfo = cal_format_by_code(fmt->code);
+-	fmtinfo = cal_format_by_code(MEDIA_BUS_FMT_UYVY8_2X8);
++	fmtinfo = cal_format_by_code(MEDIA_BUS_FMT_UYVY8_1X16);
  	if (!fmtinfo)
  		return -EINVAL;
  
-@@ -620,34 +626,20 @@ static inline struct cal_camerarx *to_cal_camerarx(struct v4l2_subdev *sd)
- 	return container_of(sd, struct cal_camerarx, subdev);
- }
- 
--static struct v4l2_mbus_framefmt *
--cal_camerarx_get_pad_format(struct cal_camerarx *phy,
--			    struct v4l2_subdev_state *state,
--			    unsigned int pad, u32 which)
--{
--	switch (which) {
--	case V4L2_SUBDEV_FORMAT_TRY:
--		return v4l2_subdev_get_try_format(&phy->subdev, state, pad);
--	case V4L2_SUBDEV_FORMAT_ACTIVE:
--		return &phy->formats[pad];
--	default:
--		return NULL;
--	}
--}
--
- static int cal_camerarx_sd_s_stream(struct v4l2_subdev *sd, int enable)
- {
- 	struct cal_camerarx *phy = to_cal_camerarx(sd);
-+	struct v4l2_subdev_state *state;
- 	int ret = 0;
- 
--	mutex_lock(&phy->mutex);
-+	state = v4l2_subdev_lock_and_get_active_state(sd);
- 
- 	if (enable)
- 		ret = cal_camerarx_start(phy);
- 	else
- 		cal_camerarx_stop(phy);
- 
--	mutex_unlock(&phy->mutex);
-+	v4l2_subdev_unlock_state(state);
- 
- 	return ret;
- }
-@@ -657,62 +649,44 @@ static int cal_camerarx_sd_enum_mbus_code(struct v4l2_subdev *sd,
- 					  struct v4l2_subdev_mbus_code_enum *code)
- {
- 	struct cal_camerarx *phy = to_cal_camerarx(sd);
--	int ret = 0;
--
--	mutex_lock(&phy->mutex);
- 
- 	/* No transcoding, source and sink codes must match. */
- 	if (cal_rx_pad_is_source(code->pad)) {
- 		struct v4l2_mbus_framefmt *fmt;
- 
--		if (code->index > 0) {
--			ret = -EINVAL;
--			goto out;
--		}
-+		if (code->index > 0)
-+			return -EINVAL;
- 
--		fmt = cal_camerarx_get_pad_format(phy, state,
--						  CAL_CAMERARX_PAD_SINK,
--						  code->which);
-+		fmt = v4l2_subdev_get_pad_format(&phy->subdev, state,
-+						 CAL_CAMERARX_PAD_SINK);
- 		code->code = fmt->code;
- 	} else {
--		if (code->index >= cal_num_formats) {
--			ret = -EINVAL;
--			goto out;
--		}
-+		if (code->index >= cal_num_formats)
-+			return -EINVAL;
- 
- 		code->code = cal_formats[code->index].code;
- 	}
- 
--out:
--	mutex_unlock(&phy->mutex);
--
--	return ret;
-+	return 0;
- }
- 
- static int cal_camerarx_sd_enum_frame_size(struct v4l2_subdev *sd,
- 					   struct v4l2_subdev_state *state,
- 					   struct v4l2_subdev_frame_size_enum *fse)
- {
--	struct cal_camerarx *phy = to_cal_camerarx(sd);
- 	const struct cal_format_info *fmtinfo;
--	int ret = 0;
- 
- 	if (fse->index > 0)
- 		return -EINVAL;
- 
--	mutex_lock(&phy->mutex);
--
- 	/* No transcoding, source and sink formats must match. */
- 	if (cal_rx_pad_is_source(fse->pad)) {
- 		struct v4l2_mbus_framefmt *fmt;
- 
--		fmt = cal_camerarx_get_pad_format(phy, state,
--						  CAL_CAMERARX_PAD_SINK,
--						  fse->which);
--		if (fse->code != fmt->code) {
--			ret = -EINVAL;
--			goto out;
--		}
-+		fmt = v4l2_subdev_get_pad_format(sd, state,
-+						 CAL_CAMERARX_PAD_SINK);
-+		if (fse->code != fmt->code)
-+			return -EINVAL;
- 
- 		fse->min_width = fmt->width;
- 		fse->max_width = fmt->width;
-@@ -720,10 +694,8 @@ static int cal_camerarx_sd_enum_frame_size(struct v4l2_subdev *sd,
- 		fse->max_height = fmt->height;
- 	} else {
- 		fmtinfo = cal_format_by_code(fse->code);
--		if (!fmtinfo) {
--			ret = -EINVAL;
--			goto out;
--		}
-+		if (!fmtinfo)
-+			return -EINVAL;
- 
- 		fse->min_width = CAL_MIN_WIDTH_BYTES * 8 / ALIGN(fmtinfo->bpp, 8);
- 		fse->max_width = CAL_MAX_WIDTH_BYTES * 8 / ALIGN(fmtinfo->bpp, 8);
-@@ -731,27 +703,6 @@ static int cal_camerarx_sd_enum_frame_size(struct v4l2_subdev *sd,
- 		fse->max_height = CAL_MAX_HEIGHT_LINES;
- 	}
- 
--out:
--	mutex_unlock(&phy->mutex);
--
--	return ret;
--}
--
--static int cal_camerarx_sd_get_fmt(struct v4l2_subdev *sd,
--				   struct v4l2_subdev_state *state,
--				   struct v4l2_subdev_format *format)
--{
--	struct cal_camerarx *phy = to_cal_camerarx(sd);
--	struct v4l2_mbus_framefmt *fmt;
--
--	mutex_lock(&phy->mutex);
--
--	fmt = cal_camerarx_get_pad_format(phy, state, format->pad,
--					  format->which);
--	format->format = *fmt;
--
--	mutex_unlock(&phy->mutex);
--
- 	return 0;
- }
- 
-@@ -759,14 +710,13 @@ static int cal_camerarx_sd_set_fmt(struct v4l2_subdev *sd,
- 				   struct v4l2_subdev_state *state,
- 				   struct v4l2_subdev_format *format)
- {
--	struct cal_camerarx *phy = to_cal_camerarx(sd);
- 	const struct cal_format_info *fmtinfo;
- 	struct v4l2_mbus_framefmt *fmt;
- 	unsigned int bpp;
- 
- 	/* No transcoding, source and sink formats must match. */
- 	if (cal_rx_pad_is_source(format->pad))
--		return cal_camerarx_sd_get_fmt(sd, state, format);
-+		return v4l2_subdev_get_fmt(sd, state, format);
- 
- 	/*
- 	 * Default to the first format if the requested media bus code isn't
-@@ -790,20 +740,13 @@ static int cal_camerarx_sd_set_fmt(struct v4l2_subdev *sd,
- 
- 	/* Store the format and propagate it to the source pad. */
- 
--	mutex_lock(&phy->mutex);
--
--	fmt = cal_camerarx_get_pad_format(phy, state,
--					  CAL_CAMERARX_PAD_SINK,
--					  format->which);
-+	fmt = v4l2_subdev_get_pad_format(sd, state, CAL_CAMERARX_PAD_SINK);
- 	*fmt = format->format;
- 
--	fmt = cal_camerarx_get_pad_format(phy, state,
--					  CAL_CAMERARX_PAD_FIRST_SOURCE,
--					  format->which);
-+	fmt = v4l2_subdev_get_pad_format(sd, state,
-+					 CAL_CAMERARX_PAD_FIRST_SOURCE);
- 	*fmt = format->format;
- 
--	mutex_unlock(&phy->mutex);
--
- 	return 0;
- }
- 
-@@ -837,7 +780,7 @@ static const struct v4l2_subdev_pad_ops cal_camerarx_pad_ops = {
- 	.init_cfg = cal_camerarx_sd_init_cfg,
- 	.enum_mbus_code = cal_camerarx_sd_enum_mbus_code,
- 	.enum_frame_size = cal_camerarx_sd_enum_frame_size,
--	.get_fmt = cal_camerarx_sd_get_fmt,
-+	.get_fmt = v4l2_subdev_get_fmt,
- 	.set_fmt = cal_camerarx_sd_set_fmt,
- };
- 
-@@ -872,7 +815,6 @@ struct cal_camerarx *cal_camerarx_create(struct cal_dev *cal,
- 	phy->instance = instance;
- 
- 	spin_lock_init(&phy->vc_lock);
--	mutex_init(&phy->mutex);
- 
- 	phy->res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
- 						(instance == 0) ?
-@@ -881,8 +823,7 @@ struct cal_camerarx *cal_camerarx_create(struct cal_dev *cal,
- 	phy->base = devm_ioremap_resource(cal->dev, phy->res);
- 	if (IS_ERR(phy->base)) {
- 		cal_err(cal, "failed to ioremap\n");
--		ret = PTR_ERR(phy->base);
--		goto err_destroy_mutex;
-+		return ERR_CAST(phy->base);
- 	}
- 
- 	cal_dbg(1, cal, "ioresource %s at %pa - %pa\n",
-@@ -890,11 +831,11 @@ struct cal_camerarx *cal_camerarx_create(struct cal_dev *cal,
- 
- 	ret = cal_camerarx_regmap_init(cal, phy);
- 	if (ret)
--		goto err_destroy_mutex;
-+		return ERR_PTR(ret);
- 
- 	ret = cal_camerarx_parse_dt(phy);
- 	if (ret)
--		goto err_destroy_mutex;
-+		return ERR_PTR(ret);
- 
- 	/* Initialize the V4L2 subdev and media entity. */
- 	sd = &phy->subdev;
-@@ -913,23 +854,23 @@ struct cal_camerarx *cal_camerarx_create(struct cal_dev *cal,
- 	if (ret)
- 		goto err_node_put;
- 
--	ret = cal_camerarx_sd_init_cfg(sd, NULL);
-+	ret = v4l2_subdev_init_finalize(sd);
- 	if (ret)
- 		goto err_entity_cleanup;
- 
- 	ret = v4l2_device_register_subdev(&cal->v4l2_dev, sd);
- 	if (ret)
--		goto err_entity_cleanup;
-+		goto err_free_state;
- 
- 	return phy;
- 
-+err_free_state:
-+	v4l2_subdev_cleanup(sd);
- err_entity_cleanup:
- 	media_entity_cleanup(&phy->subdev.entity);
- err_node_put:
- 	of_node_put(phy->source_ep_node);
- 	of_node_put(phy->source_node);
--err_destroy_mutex:
--	mutex_destroy(&phy->mutex);
- 	return ERR_PTR(ret);
- }
- 
-@@ -939,8 +880,8 @@ void cal_camerarx_destroy(struct cal_camerarx *phy)
- 		return;
- 
- 	v4l2_device_unregister_subdev(&phy->subdev);
-+	v4l2_subdev_cleanup(&phy->subdev);
- 	media_entity_cleanup(&phy->subdev.entity);
- 	of_node_put(phy->source_ep_node);
- 	of_node_put(phy->source_node);
--	mutex_destroy(&phy->mutex);
- }
-diff --git a/drivers/media/platform/ti/cal/cal-video.c b/drivers/media/platform/ti/cal/cal-video.c
-index ed92e23d4b16..a8abcd0fee17 100644
---- a/drivers/media/platform/ti/cal/cal-video.c
-+++ b/drivers/media/platform/ti/cal/cal-video.c
-@@ -687,21 +687,34 @@ static void cal_release_buffers(struct cal_ctx *ctx,
- static int cal_video_check_format(struct cal_ctx *ctx)
- {
- 	const struct v4l2_mbus_framefmt *format;
-+	struct v4l2_subdev_state *state;
- 	struct media_pad *remote_pad;
-+	int ret = 0;
- 
- 	remote_pad = media_pad_remote_pad_first(&ctx->pad);
- 	if (!remote_pad)
- 		return -ENODEV;
- 
--	format = &ctx->phy->formats[remote_pad->index];
-+	state = v4l2_subdev_lock_and_get_active_state(&ctx->phy->subdev);
-+
-+	format = v4l2_subdev_get_pad_format(&ctx->phy->subdev, state, remote_pad->index);
-+	if (!format) {
-+		ret = -EINVAL;
-+		goto out;
-+	}
- 
- 	if (ctx->fmtinfo->code != format->code ||
- 	    ctx->v_fmt.fmt.pix.height != format->height ||
- 	    ctx->v_fmt.fmt.pix.width != format->width ||
--	    ctx->v_fmt.fmt.pix.field != format->field)
--		return -EPIPE;
-+	    ctx->v_fmt.fmt.pix.field != format->field) {
-+		ret = -EPIPE;
-+		goto out;
-+	}
- 
--	return 0;
-+out:
-+	v4l2_subdev_unlock_state(state);
-+
-+	return ret;
- }
- 
- static int cal_start_streaming(struct vb2_queue *vq, unsigned int count)
-diff --git a/drivers/media/platform/ti/cal/cal.h b/drivers/media/platform/ti/cal/cal.h
-index de73d6d21b6f..55d4736fed18 100644
---- a/drivers/media/platform/ti/cal/cal.h
-+++ b/drivers/media/platform/ti/cal/cal.h
-@@ -177,7 +177,6 @@ struct cal_camerarx {
- 
- 	struct v4l2_subdev	subdev;
- 	struct media_pad	pads[CAL_CAMERARX_NUM_PADS];
--	struct v4l2_mbus_framefmt	formats[CAL_CAMERARX_NUM_PADS];
- 
- 	/* protects the vc_* fields below */
- 	spinlock_t		vc_lock;
-@@ -185,13 +184,6 @@ struct cal_camerarx {
- 	u16			vc_frame_number[4];
- 	u32			vc_sequence[4];
- 
--	/*
--	 * Lock for camerarx ops. Protects:
--	 * - formats
--	 * - enable_count
--	 */
--	struct mutex		mutex;
--
- 	unsigned int		enable_count;
- };
- 
+diff --git a/drivers/media/platform/ti/cal/cal.c b/drivers/media/platform/ti/cal/cal.c
+index 1236215ec70e..cea6ba54024f 100644
+--- a/drivers/media/platform/ti/cal/cal.c
++++ b/drivers/media/platform/ti/cal/cal.c
+@@ -61,48 +61,24 @@ MODULE_PARM_DESC(mc_api, "activates the MC API");
+ const struct cal_format_info cal_formats[] = {
+ 	{
+ 		.fourcc		= V4L2_PIX_FMT_YUYV,
+-		.code		= MEDIA_BUS_FMT_YUYV8_2X8,
++		.code		= MEDIA_BUS_FMT_YUYV8_1X16,
+ 		.bpp		= 16,
+ 	}, {
+ 		.fourcc		= V4L2_PIX_FMT_UYVY,
+-		.code		= MEDIA_BUS_FMT_UYVY8_2X8,
++		.code		= MEDIA_BUS_FMT_UYVY8_1X16,
+ 		.bpp		= 16,
+ 	}, {
+ 		.fourcc		= V4L2_PIX_FMT_YVYU,
+-		.code		= MEDIA_BUS_FMT_YVYU8_2X8,
++		.code		= MEDIA_BUS_FMT_YVYU8_1X16,
+ 		.bpp		= 16,
+ 	}, {
+ 		.fourcc		= V4L2_PIX_FMT_VYUY,
+-		.code		= MEDIA_BUS_FMT_VYUY8_2X8,
++		.code		= MEDIA_BUS_FMT_VYUY8_1X16,
+ 		.bpp		= 16,
+ 	}, {
+-		.fourcc		= V4L2_PIX_FMT_RGB565, /* gggbbbbb rrrrrggg */
+-		.code		= MEDIA_BUS_FMT_RGB565_2X8_LE,
++		.fourcc		= V4L2_PIX_FMT_RGB565,
++		.code		= MEDIA_BUS_FMT_RGB565_1X16,
+ 		.bpp		= 16,
+-	}, {
+-		.fourcc		= V4L2_PIX_FMT_RGB565X, /* rrrrrggg gggbbbbb */
+-		.code		= MEDIA_BUS_FMT_RGB565_2X8_BE,
+-		.bpp		= 16,
+-	}, {
+-		.fourcc		= V4L2_PIX_FMT_RGB555, /* gggbbbbb arrrrrgg */
+-		.code		= MEDIA_BUS_FMT_RGB555_2X8_PADHI_LE,
+-		.bpp		= 16,
+-	}, {
+-		.fourcc		= V4L2_PIX_FMT_RGB555X, /* arrrrrgg gggbbbbb */
+-		.code		= MEDIA_BUS_FMT_RGB555_2X8_PADHI_BE,
+-		.bpp		= 16,
+-	}, {
+-		.fourcc		= V4L2_PIX_FMT_RGB24, /* rgb */
+-		.code		= MEDIA_BUS_FMT_RGB888_2X12_LE,
+-		.bpp		= 24,
+-	}, {
+-		.fourcc		= V4L2_PIX_FMT_BGR24, /* bgr */
+-		.code		= MEDIA_BUS_FMT_RGB888_2X12_BE,
+-		.bpp		= 24,
+-	}, {
+-		.fourcc		= V4L2_PIX_FMT_RGB32, /* argb */
+-		.code		= MEDIA_BUS_FMT_ARGB8888_1X32,
+-		.bpp		= 32,
+ 	}, {
+ 		.fourcc		= V4L2_PIX_FMT_SBGGR8,
+ 		.code		= MEDIA_BUS_FMT_SBGGR8_1X8,
 -- 
 2.34.1
 
