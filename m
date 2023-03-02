@@ -2,28 +2,28 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9881C7EE33
-	for <linux-media@archiver.kernel.org>; Thu,  2 Mar 2023 10:00:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E749C6FA8E
+	for <linux-media@archiver.kernel.org>; Thu,  2 Mar 2023 10:01:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbjCBKAP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 2 Mar 2023 05:00:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40150 "EHLO
+        id S229540AbjCBKAp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 2 Mar 2023 05:00:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230508AbjCBJ7K (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Mar 2023 04:59:10 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D421A27D4B
-        for <linux-media@vger.kernel.org>; Thu,  2 Mar 2023 01:58:12 -0800 (PST)
+        with ESMTP id S230256AbjCBKAd (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Mar 2023 05:00:33 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E131846158
+        for <linux-media@vger.kernel.org>; Thu,  2 Mar 2023 01:59:56 -0800 (PST)
 Received: from desky.lan (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B966056A;
-        Thu,  2 Mar 2023 10:57:52 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id AC2A99D9;
+        Thu,  2 Mar 2023 10:57:54 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1677751073;
-        bh=lktQp6sphM4fhV/fBuKbg3/47HK6tJVPOZjhbec40YY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=QF0KYoD7NbNuETjhpuX3eXAWgzGJ7mMejkVINymSPjuHhkYY8ebfgAtk1WurptxCf
-         1vjcdwYnJBbjG/BeVBq7konnv12z0bXORiAQO5AQ9sn6MgqjTLIYfd67OkmAtxQOD6
-         3vC5ebUQrnkUokxkRH+dTrXXQd8pHUPXCzRVgwxs=
+        s=mail; t=1677751075;
+        bh=otiRC0BQdJgKPfjBrBRQAMDUNyp1x42gTyLKsgyg4GM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BmBzRKUwAQGLJ/az30QEh69a9reQ2wM7ZZMTgUCMEABzZonyRDrGa7lDLznl4dF+Y
+         rjj38SafAHcmVLV78rJT0lUrTmKg64DsdSD5tSe5txEWqNrQbY4Mr7eDW2KuPIfGgm
+         A0KGFAekJce7w8jLJ2AHt8lLLRHmadKOlhCZE+qM=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -32,107 +32,139 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org,
         Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v2 0/3] media: subdev: Routing validation improvements
-Date:   Thu,  2 Mar 2023 11:57:45 +0200
-Message-Id: <20230302095748.100898-1-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v2 3/3] media: subdev: Add V4L2_SUBDEV_ROUTING_NO_MULTIPLEXING
+Date:   Thu,  2 Mar 2023 11:57:48 +0200
+Message-Id: <20230302095748.100898-4-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230302095748.100898-1-tomi.valkeinen@ideasonboard.com>
+References: <20230302095748.100898-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+A common case with subdev routing is that on the subdevice just before
+the DMA engines (video nodes), no multiplexing is allowed on the source
+pads, as the DMA engine can only handle a single stream.
 
-v1 can be found here:
+In some other situations one might also want to do the same check on the
+sink side.
 
-https://lore.kernel.org/all/20230228092346.101105-1-tomi.valkeinen@ideasonboard.com/
+Add new routing validation flags to check these:
+V4L2_SUBDEV_ROUTING_NO_SINK_MULTIPLEXING and
+V4L2_SUBDEV_ROUTING_NO_SOURCE_MULTIPLEXING.
 
-v2 contains only doc/comment changes. Diff to v1 below.
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+---
+ drivers/media/v4l2-core/v4l2-subdev.c | 36 ++++++++++++++++++++++++---
+ include/media/v4l2-subdev.h           | 11 ++++++++
+ 2 files changed, 44 insertions(+), 3 deletions(-)
 
- Tomi
-
-Tomi Valkeinen (3):
-  media: subdev: Use 'shall' instead of 'may' in route validation
-  media: subdev: Split V4L2_SUBDEV_ROUTING_NO_STREAM_MIX
-  media: subdev: Add V4L2_SUBDEV_ROUTING_NO_MULTIPLEXING
-
- drivers/media/v4l2-core/v4l2-subdev.c | 45 ++++++++++++++++++++++++---
- include/media/v4l2-subdev.h           | 32 ++++++++++++++++---
- 2 files changed, 68 insertions(+), 9 deletions(-)
-
-Interdiff against v1:
 diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index ae74a48dd2ba..3650eb3a413f 100644
+index 8e91f169ad9e..3650eb3a413f 100644
 --- a/drivers/media/v4l2-core/v4l2-subdev.c
 +++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -1694,9 +1694,8 @@ int v4l2_subdev_routing_validate(struct v4l2_subdev *sd,
+@@ -1664,7 +1664,8 @@ int v4l2_subdev_routing_validate(struct v4l2_subdev *sd,
+ 	unsigned int i, j;
+ 	int ret = -EINVAL;
+ 
+-	if (disallow & V4L2_SUBDEV_ROUTING_NO_STREAM_MIX) {
++	if (disallow & (V4L2_SUBDEV_ROUTING_NO_STREAM_MIX |
++			V4L2_SUBDEV_ROUTING_NO_MULTIPLEXING)) {
+ 		remote_pads = kcalloc(sd->entity.num_pads, sizeof(*remote_pads),
+ 				      GFP_KERNEL);
+ 		if (!remote_pads)
+@@ -1704,8 +1705,6 @@ int v4l2_subdev_routing_validate(struct v4l2_subdev *sd,
+ 					i, "sink");
+ 				goto out;
+ 			}
+-
+-			remote_pads[route->sink_pad] = route->source_pad;
  		}
  
  		/*
--		 * V4L2_SUBDEV_ROUTING_NO_SINK_STREAM_MIX: Streams on the same
--		 * sink pad may not be routed to streams on different source
--		 * pads.
-+		 * V4L2_SUBDEV_ROUTING_NO_SINK_STREAM_MIX: all streams from a
-+		 * sink pad must be routed to a single source pad.
- 		 */
- 		if (disallow & V4L2_SUBDEV_ROUTING_NO_SINK_STREAM_MIX) {
- 			if (remote_pads[route->sink_pad] != U32_MAX &&
-@@ -1709,9 +1708,8 @@ int v4l2_subdev_routing_validate(struct v4l2_subdev *sd,
+@@ -1720,7 +1719,38 @@ int v4l2_subdev_routing_validate(struct v4l2_subdev *sd,
+ 					i, "source");
+ 				goto out;
+ 			}
++		}
++
++		/*
++		 * V4L2_SUBDEV_ROUTING_NO_SINK_MULTIPLEXING: Pads on the sink
++		 * side can not do stream multiplexing, i.e. there can be only
++		 * a single stream in a sink pad.
++		 */
++		if (disallow & V4L2_SUBDEV_ROUTING_NO_SINK_MULTIPLEXING) {
++			if (remote_pads[route->sink_pad] != U32_MAX) {
++				dev_dbg(sd->dev,
++					"route %u attempts to multiplex on %s pad %u\n",
++					i, "sink", route->sink_pad);
++				goto out;
++			}
++		}
+ 
++		/*
++		 * V4L2_SUBDEV_ROUTING_NO_SOURCE_MULTIPLEXING: Pads on the
++		 * source side can not do stream multiplexing, i.e. there can
++		 * be only a single stream in a source pad.
++		 */
++		if (disallow & V4L2_SUBDEV_ROUTING_NO_SOURCE_MULTIPLEXING) {
++			if (remote_pads[route->source_pad] != U32_MAX) {
++				dev_dbg(sd->dev,
++					"route %u attempts to multiplex on %s pad %u\n",
++					i, "source", route->source_pad);
++				goto out;
++			}
++		}
++
++		if (remote_pads) {
++			remote_pads[route->sink_pad] = route->source_pad;
+ 			remote_pads[route->source_pad] = route->sink_pad;
  		}
  
- 		/*
--		 * V4L2_SUBDEV_ROUTING_NO_SOURCE_STREAM_MIX: Streams on the same
--		 * source pad may not be routed to streams on different sink
--		 * pads.
-+		 * V4L2_SUBDEV_ROUTING_NO_SOURCE_STREAM_MIX: all streams on a
-+		 * source pad must originate from a single sink pad.
- 		 */
- 		if (disallow & V4L2_SUBDEV_ROUTING_NO_SOURCE_STREAM_MIX) {
- 			if (remote_pads[route->source_pad] != U32_MAX &&
 diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index 4a8d45e2c804..fa300019844b 100644
+index fb4fddb9b599..fa300019844b 100644
 --- a/include/media/v4l2-subdev.h
 +++ b/include/media/v4l2-subdev.h
-@@ -1638,26 +1638,29 @@ u64 v4l2_subdev_state_xlate_streams(const struct v4l2_subdev_state *state,
-  * enum v4l2_subdev_routing_restriction - Subdevice internal routing restrictions
-  *
-  * @V4L2_SUBDEV_ROUTING_NO_1_TO_N:
-- *	an input stream may not be routed to multiple output streams (stream
-+ *	an input stream shall not be routed to multiple output streams (stream
-  *	duplication)
-  * @V4L2_SUBDEV_ROUTING_NO_N_TO_1:
-- *	multiple input streams may not be routed to the same output stream
-+ *	multiple input streams shall not be routed to the same output stream
-  *	(stream merging)
-  * @V4L2_SUBDEV_ROUTING_NO_SINK_STREAM_MIX:
-- *	streams on the same sink pad may not be routed to streams on different
-- *	source pads
-+ *	all streams from a sink pad must be routed to a single source pad
+@@ -1647,6 +1647,10 @@ u64 v4l2_subdev_state_xlate_streams(const struct v4l2_subdev_state *state,
+  *	all streams from a sink pad must be routed to a single source pad
   * @V4L2_SUBDEV_ROUTING_NO_SOURCE_STREAM_MIX:
-- *	streams on the same source pad may not be routed to streams on different
-- *	sink pads
-+ *	all streams on a source pad must originate from a single sink pad
-  * @V4L2_SUBDEV_ROUTING_NO_SOURCE_MULTIPLEXING:
-- *	source pads may not contain multiplexed streams
+  *	all streams on a source pad must originate from a single sink pad
++ * @V4L2_SUBDEV_ROUTING_NO_SOURCE_MULTIPLEXING:
 + *	source pads shall not contain multiplexed streams
-  * @V4L2_SUBDEV_ROUTING_NO_SINK_MULTIPLEXING:
-- *	sink pads may not contain multiplexed streams
++ * @V4L2_SUBDEV_ROUTING_NO_SINK_MULTIPLEXING:
 + *	sink pads shall not contain multiplexed streams
   * @V4L2_SUBDEV_ROUTING_ONLY_1_TO_1:
   *	only non-overlapping 1-to-1 stream routing is allowed (a combination of
   *	@V4L2_SUBDEV_ROUTING_NO_1_TO_N and @V4L2_SUBDEV_ROUTING_NO_N_TO_1)
-  * @V4L2_SUBDEV_ROUTING_NO_STREAM_MIX:
-- *	streams on the same pad may not be routed to streams on different pads
-+ *	all streams from a sink pad must be routed to a single source pad, and
-+ *	that source pad shall not get routes from any other sink pad
-+ *	(a combination of @V4L2_SUBDEV_ROUTING_NO_SINK_STREAM_MIX and
-+ *	@V4L2_SUBDEV_ROUTING_NO_SOURCE_STREAM_MIX)
+@@ -1655,18 +1659,25 @@ u64 v4l2_subdev_state_xlate_streams(const struct v4l2_subdev_state *state,
+  *	that source pad shall not get routes from any other sink pad
+  *	(a combination of @V4L2_SUBDEV_ROUTING_NO_SINK_STREAM_MIX and
+  *	@V4L2_SUBDEV_ROUTING_NO_SOURCE_STREAM_MIX)
 + * @V4L2_SUBDEV_ROUTING_NO_MULTIPLEXING:
 + *	no multiplexed streams allowed on either source or sink sides.
   */
  enum v4l2_subdev_routing_restriction {
  	V4L2_SUBDEV_ROUTING_NO_1_TO_N = BIT(0),
+ 	V4L2_SUBDEV_ROUTING_NO_N_TO_1 = BIT(1),
+ 	V4L2_SUBDEV_ROUTING_NO_SINK_STREAM_MIX = BIT(2),
+ 	V4L2_SUBDEV_ROUTING_NO_SOURCE_STREAM_MIX = BIT(3),
++	V4L2_SUBDEV_ROUTING_NO_SINK_MULTIPLEXING = BIT(4),
++	V4L2_SUBDEV_ROUTING_NO_SOURCE_MULTIPLEXING = BIT(5),
+ 	V4L2_SUBDEV_ROUTING_ONLY_1_TO_1 =
+ 		V4L2_SUBDEV_ROUTING_NO_1_TO_N |
+ 		V4L2_SUBDEV_ROUTING_NO_N_TO_1,
+ 	V4L2_SUBDEV_ROUTING_NO_STREAM_MIX =
+ 		V4L2_SUBDEV_ROUTING_NO_SINK_STREAM_MIX |
+ 		V4L2_SUBDEV_ROUTING_NO_SOURCE_STREAM_MIX,
++	V4L2_SUBDEV_ROUTING_NO_MULTIPLEXING =
++		V4L2_SUBDEV_ROUTING_NO_SINK_MULTIPLEXING |
++		V4L2_SUBDEV_ROUTING_NO_SOURCE_MULTIPLEXING,
+ };
+ 
+ /**
 -- 
 2.34.1
 
