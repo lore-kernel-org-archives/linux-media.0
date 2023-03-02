@@ -2,31 +2,31 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6E1BC7EE33
-	for <linux-media@archiver.kernel.org>; Thu,  2 Mar 2023 13:03:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4A55C7EE30
+	for <linux-media@archiver.kernel.org>; Thu,  2 Mar 2023 13:03:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjCBNDv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S229969AbjCBNDv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 2 Mar 2023 08:03:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjCBNDu (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Mar 2023 08:03:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19BC19F2B
+        with ESMTP id S229955AbjCBNDt (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Mar 2023 08:03:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8951C18B31
         for <linux-media@vger.kernel.org>; Thu,  2 Mar 2023 05:03:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5A894B81227
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46E18B8121A
         for <linux-media@vger.kernel.org>; Thu,  2 Mar 2023 13:03:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7490CC4339C;
-        Thu,  2 Mar 2023 13:03:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79660C433EF;
+        Thu,  2 Mar 2023 13:03:45 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 14/17] media: mxb: allow tuner/input/audio ioctls for vbi
-Date:   Thu,  2 Mar 2023 14:03:27 +0100
-Message-Id: <20230302130330.1125172-15-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 13/17] media: common: saa7146: add support for missing .vidioc_try_fmt_vbi_cap
+Date:   Thu,  2 Mar 2023 14:03:26 +0100
+Message-Id: <20230302130330.1125172-14-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230302130330.1125172-1-hverkuil-cisco@xs4all.nl>
 References: <20230302130330.1125172-1-hverkuil-cisco@xs4all.nl>
@@ -36,41 +36,28 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The vbi stream comes from the same video input as the video
-stream. So all the related ioctls to that are just as valid
-for the vbi stream.
-
-Add these.
+Support for VIDIOC_TRY_FMT for the vbi device was missing.
+Add it.
 
 This fixes a V4L2 compliance issue.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/pci/saa7146/mxb.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/media/common/saa7146/saa7146_video.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/pci/saa7146/mxb.c b/drivers/media/pci/saa7146/mxb.c
-index 3b0c475c7ab4..8f1843baa732 100644
---- a/drivers/media/pci/saa7146/mxb.c
-+++ b/drivers/media/pci/saa7146/mxb.c
-@@ -706,6 +706,17 @@ static int mxb_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_data
- 	vv_data.vid_ops.vidioc_g_register = vidioc_g_register;
- 	vv_data.vid_ops.vidioc_s_register = vidioc_s_register;
- #endif
-+	vv_data.vbi_ops.vidioc_enum_input = vidioc_enum_input;
-+	vv_data.vbi_ops.vidioc_g_input = vidioc_g_input;
-+	vv_data.vbi_ops.vidioc_s_input = vidioc_s_input;
-+	vv_data.vbi_ops.vidioc_querystd = vidioc_querystd;
-+	vv_data.vbi_ops.vidioc_g_tuner = vidioc_g_tuner;
-+	vv_data.vbi_ops.vidioc_s_tuner = vidioc_s_tuner;
-+	vv_data.vbi_ops.vidioc_g_frequency = vidioc_g_frequency;
-+	vv_data.vbi_ops.vidioc_s_frequency = vidioc_s_frequency;
-+	vv_data.vbi_ops.vidioc_enumaudio = vidioc_enumaudio;
-+	vv_data.vbi_ops.vidioc_g_audio = vidioc_g_audio;
-+	vv_data.vbi_ops.vidioc_s_audio = vidioc_s_audio;
- 	if (saa7146_register_device(&mxb->video_dev, dev, "mxb", VFL_TYPE_VIDEO)) {
- 		ERR("cannot register capture v4l2 device. skipping.\n");
- 		saa7146_vv_release(dev);
+diff --git a/drivers/media/common/saa7146/saa7146_video.c b/drivers/media/common/saa7146/saa7146_video.c
+index 305af9ade9c4..bd125ffdb8b1 100644
+--- a/drivers/media/common/saa7146/saa7146_video.c
++++ b/drivers/media/common/saa7146/saa7146_video.c
+@@ -522,6 +522,7 @@ const struct v4l2_ioctl_ops saa7146_video_ioctl_ops = {
+ const struct v4l2_ioctl_ops saa7146_vbi_ioctl_ops = {
+ 	.vidioc_querycap             = vidioc_querycap,
+ 	.vidioc_g_fmt_vbi_cap        = vidioc_g_fmt_vbi_cap,
++	.vidioc_try_fmt_vbi_cap      = vidioc_g_fmt_vbi_cap,
+ 	.vidioc_s_fmt_vbi_cap        = vidioc_g_fmt_vbi_cap,
+ 	.vidioc_g_std                = vidioc_g_std,
+ 	.vidioc_s_std                = vidioc_s_std,
 -- 
 2.39.1
 
