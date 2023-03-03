@@ -2,72 +2,187 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CD39C7EE2F
-	for <linux-media@archiver.kernel.org>; Fri,  3 Mar 2023 14:44:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23F6EC64EC4
+	for <linux-media@archiver.kernel.org>; Fri,  3 Mar 2023 14:49:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbjCCOoG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Mar 2023 09:44:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
+        id S231169AbjCCOs7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Mar 2023 09:48:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbjCCOoF (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Mar 2023 09:44:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26046A5D3
-        for <linux-media@vger.kernel.org>; Fri,  3 Mar 2023 06:44:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB82961828
-        for <linux-media@vger.kernel.org>; Fri,  3 Mar 2023 14:44:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D149EC433D2
-        for <linux-media@vger.kernel.org>; Fri,  3 Mar 2023 14:44:02 +0000 (UTC)
-Message-ID: <893a7e34-1d98-23e2-4d27-d25cb3ee5bf0@xs4all.nl>
-Date:   Fri, 3 Mar 2023 15:44:00 +0100
+        with ESMTP id S230158AbjCCOs6 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Mar 2023 09:48:58 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA913D919;
+        Fri,  3 Mar 2023 06:48:57 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id bi17so1968343oib.3;
+        Fri, 03 Mar 2023 06:48:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677854936;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=95fD1OMocm4n8bJJC6tFnFtkplpEQySvwjBizvI/Tpo=;
+        b=H8QbelVEw4Vh8BarvpWGCoSzGSZZvuUsFbB+c82/q20vffUTswfFY2u+Tl0R3sXrbW
+         cFKl8/7P2yLWoKR1UV5jhiJfMbPITDEreXyy3XUd3Bx+EePTrtoW9mrK6wscRkoJ+2aJ
+         5fjoNNJzTeh5EoCDXG3GysgWY338xt4aBazpADFEOOpjcX08urE7ZuZGcrmHjRu/uNll
+         6wekbPxRCxNR6/RU2Jo+llW1KSCE+U/RMRtNk1Bjv+Ogrl1ILAEF4/5YyQNmzXZeqBGb
+         +m066zgXiE7fg+2WBqFBzKeXmpaWIPJHHVW6knXxmSiKugJXUMdzE/fK+fI6SYy+sDv7
+         YpWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677854936;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=95fD1OMocm4n8bJJC6tFnFtkplpEQySvwjBizvI/Tpo=;
+        b=Bt8kIWxOcjV2/VYhD0cMc21nJQYs8fADk/y3OwQ/dsy1ymjMBh+7Qo9v9YJWTcDmFY
+         BxkOzDR3jhjCTZGMyAR5dk0ZlEOUkqs3wWr5PVcXD3Zb5ObNA7nsZchPkTb8KUoiKFA/
+         89H05vTHlPhhXWUpd+Qiq1NKDi07Kj0V+zNOW2vxN9MkyCkns5TP6gdzNwsv9jhUNISk
+         UcJBQ5Kst/EQtDMZq9rYwYaGb/e8aaXlNKlMwuaSWV8XgEfChaRKFn6wSQwRevzrsEze
+         j8Ovn1GFNF97loD2DmOaZkmZBxkvY0zvVtITkf9fJHKiHzWKrmRdnKOlL65uf46eRPdI
+         VeJQ==
+X-Gm-Message-State: AO0yUKXL0CmDUcZxQqYdk7fYh1wsXXbXd7YN87Z4O4XEynf18vvKLhnR
+        zAxSUO0bZ+x99P1LDDw6gO48rwpqedMGq38mZ0U=
+X-Google-Smtp-Source: AK7set+3e72I1aKOy6TuglUkJuSkxFy00dwwauEHhVb/G5t4QUiLGNGQh5N5d5lD2/Blvvsq/7AIUvcQeTiZih4TE1k=
+X-Received: by 2002:a05:6808:354:b0:384:692c:56c9 with SMTP id
+ j20-20020a056808035400b00384692c56c9mr624924oie.3.1677854936419; Fri, 03 Mar
+ 2023 06:48:56 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [ANN] Request for Topics for a Media Summit June 26th
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20230302235356.3148279-1-robdclark@gmail.com> <20230302235356.3148279-16-robdclark@gmail.com>
+ <ZAFnqbycMleLmRe9@intel.com> <3bded9d7-9796-4a9b-7c11-aac994d4fdc6@linux.intel.com>
+In-Reply-To: <3bded9d7-9796-4a9b-7c11-aac994d4fdc6@linux.intel.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Fri, 3 Mar 2023 06:48:43 -0800
+Message-ID: <CAF6AEGs6QYTESuwB8E9cTbv9LqQX16tz6-geeu9BCyFos9=sOA@mail.gmail.com>
+Subject: Re: [PATCH v9 15/15] drm/i915: Add deadline based boost support
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Simon Ser <contact@emersion.fr>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        intel-gfx@lists.freedesktop.org,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>, Matt Turner <mattst88@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi all,
+On Fri, Mar 3, 2023 at 1:58 AM Tvrtko Ursulin
+<tvrtko.ursulin@linux.intel.com> wrote:
+>
+>
+> On 03/03/2023 03:21, Rodrigo Vivi wrote:
+> > On Thu, Mar 02, 2023 at 03:53:37PM -0800, Rob Clark wrote:
+> >> From: Rob Clark <robdclark@chromium.org>
+> >>
+> >
+> > missing some wording here...
+> >
+> >> v2: rebase
+> >>
+> >> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> >> ---
+> >>   drivers/gpu/drm/i915/i915_request.c | 20 ++++++++++++++++++++
+> >>   1 file changed, 20 insertions(+)
+> >>
+> >> diff --git a/drivers/gpu/drm/i915/i915_request.c b/drivers/gpu/drm/i915/i915_request.c
+> >> index 7503dcb9043b..44491e7e214c 100644
+> >> --- a/drivers/gpu/drm/i915/i915_request.c
+> >> +++ b/drivers/gpu/drm/i915/i915_request.c
+> >> @@ -97,6 +97,25 @@ static bool i915_fence_enable_signaling(struct dma_fence *fence)
+> >>      return i915_request_enable_breadcrumb(to_request(fence));
+> >>   }
+> >>
+> >> +static void i915_fence_set_deadline(struct dma_fence *fence, ktime_t deadline)
+> >> +{
+> >> +    struct i915_request *rq = to_request(fence);
+> >> +
+> >> +    if (i915_request_completed(rq))
+> >> +            return;
+> >> +
+> >> +    if (i915_request_started(rq))
+> >> +            return;
+> >
+> > why do we skip the boost if already started?
+> > don't we want to boost the freq anyway?
+>
+> I'd wager Rob is just copying the current i915 wait boost logic.
 
-I am planning to organize another Media Summit on June 26th, co-located
-with the Embedded Open Source Summit in Prague:
+Yup, and probably incorrectly.. Matt reported fewer boosts/sec
+compared to your RFC, this could be the bug
 
-https://events.linuxfoundation.org/embedded-open-source-summit/
+> >> +
+> >> +    /*
+> >> +     * TODO something more clever for deadlines that are in the
+> >> +     * future.  I think probably track the nearest deadline in
+> >> +     * rq->timeline and set timer to trigger boost accordingly?
+> >> +     */
+> >
+> > I'm afraid it will be very hard to find some heuristics of what's
+> > late enough for the boost no?
+> > I mean, how early to boost the freq on an upcoming deadline for the
+> > timer?
+>
+> We can off load this patch from Rob and deal with it separately, or
+> after the fact?
 
-I've put in a request for a room with the Linux Foundation and I am waiting
-for the result of that. For once I was early with my request, so I have good
-hope we'll get a room. Expect the format to be similar to what we did in
-Dublin last year.
+That is completely my intention, I expect you to replace my i915 patch ;-)
 
-I'm a bit early with this 'Request for Topics' as well, but this allows
-everyone who plans to be in Prague to take this into account.
+Rough idea when everyone is happy with the core bits is to setup an
+immutable branch without the driver specific patches, which could be
+merged into drm-next and $driver-next and then each driver team can
+add there own driver patches on top
 
-So if you have a topic that you want to discuss, just reply. It would be
-very much appreciated if you can also add a guesstimate of the time you
-need for your topic.
+BR,
+-R
 
-Once I have the details of the room and how many people it can hold, then
-I will send out a second email asking people to register with me if you
-want to join.
-
-Regarding remote participation: only if there is really no other way.
-Meeting face-to-face once a year is important IMHO, and attending remotely
-is a poor substitute. That said, if it is really necessary to set something
-up, then I can do the same I did in Dublin, setting up a Webex meeting.
-That worked reasonably well, except that I will need to bring a better
-speaker since I learned that the laptop speaker was pretty bad.
-
-So, if you have topics for the meeting, just reply!
-
-Regards,
-
-	Hans
+> It's a half solution without a smarter scheduler too. Like
+> https://lore.kernel.org/all/20210208105236.28498-10-chris@chris-wilson.co.uk/,
+> or if GuC plans to do something like that at any point.
+>
+> Or bump the priority too if deadline is looming?
+>
+> IMO it is not very effective to fiddle with the heuristic on an ad-hoc
+> basis. For instance I have a new heuristics which improves the
+> problematic OpenCL cases for further 5% (relative to the current
+> waitboost improvement from adding missing syncobj waitboost). But I
+> can't really test properly for regressions over platforms, stacks,
+> workloads.. :(
+>
+> Regards,
+>
+> Tvrtko
+>
+> >
+> >> +
+> >> +    intel_rps_boost(rq);
+> >> +}
+> >> +
+> >>   static signed long i915_fence_wait(struct dma_fence *fence,
+> >>                                 bool interruptible,
+> >>                                 signed long timeout)
+> >> @@ -182,6 +201,7 @@ const struct dma_fence_ops i915_fence_ops = {
+> >>      .signaled = i915_fence_signaled,
+> >>      .wait = i915_fence_wait,
+> >>      .release = i915_fence_release,
+> >> +    .set_deadline = i915_fence_set_deadline,
+> >>   };
+> >>
+> >>   static void irq_execute_cb(struct irq_work *wrk)
+> >> --
+> >> 2.39.1
+> >>
