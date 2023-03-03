@@ -2,45 +2,47 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90455C7EE33
-	for <linux-media@archiver.kernel.org>; Fri,  3 Mar 2023 21:45:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF694C64EC4
+	for <linux-media@archiver.kernel.org>; Fri,  3 Mar 2023 21:46:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232168AbjCCVpC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Mar 2023 16:45:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54896 "EHLO
+        id S232488AbjCCVq1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Mar 2023 16:46:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232139AbjCCVoR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Mar 2023 16:44:17 -0500
+        with ESMTP id S232185AbjCCVpD (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Mar 2023 16:45:03 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 965154B82A;
-        Fri,  3 Mar 2023 13:43:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24B465C6E;
+        Fri,  3 Mar 2023 13:44:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6ECDC61941;
-        Fri,  3 Mar 2023 21:43:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E88DC4339B;
-        Fri,  3 Mar 2023 21:43:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CFFB61941;
+        Fri,  3 Mar 2023 21:43:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36C53C433A7;
+        Fri,  3 Mar 2023 21:43:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677879803;
-        bh=+O1tPn4wrXUQ1XEJE0xzcUDk4ho6GG93RTc/wxWagL0=;
+        s=k20201202; t=1677879839;
+        bh=WQ/AFTgJmQr/mPiSgZxL3KFvJ3Y/Dj8btyJ8583Tz6Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uTYOSNiSpgsoVZBBxjYKBv0SSDz27lczlVWgLUIdgFi5e1y1lfhhq6QUQyeGVK12l
-         dH5WWNFH6cNE6mvDLCeTgY87UPSYxdXEjDrKendBIdIC0jc7gtzQEkn8rx8zCSCj8r
-         JLaKr4rXWh4MgZr1IJ+WDzPTbqJqGJKjn0Df5u1h/jjc/aX3wPsB/9Tw0IFLv3bkxh
-         A5PSdRO9TvAbel5YMTzIdAgJBR3pc1mJS2NdINf+OQcMAHQKwGPtSlPpfd792y2ByA
-         Gt10Z8mUnxH2Wyl8fRuiTYbrQ26w5CjVn8PAmg5EnCoGJHO5g/rb+uO/euf+WjLfs6
-         tibPPrxsDuX+g==
+        b=HM7oqnyY1AExs6UY/qpBwtgS7INOAwi3eefHGKALmqKUc16wqdN3kguqynpxlj79q
+         ep+mdGWs5tNLis+WWuYS1B9ucsFTKIAG9IqiKuY63NhqI5Ragjj1QsnxXXLLnd/zMa
+         CPPa9PKXZQ4y1ylrXo4lKpsLIW6vw1YQLwcUOf89rKmMiS09+EJ9L/HDFRUxXy4nxZ
+         ixfOOU6n+zW+fgYKfnIt9BCLI2Wx/kdtDgGRNxr+AaxKbM/NrinA9yznNl5sJ3EI3F
+         x0sREv/pLNkH0rJJQpxtqN0jBtThimKwxkTV5pYYppK+biBkNZ3aMmNTiuw3W/fbNV
+         WzUZqGZUiwmNw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ricardo Ribalda <ribalda@chromium.org>,
-        syzbot <syzkaller@googlegroups.com>,
+Cc:     Marek Vasut <marex@denx.de>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Ricardo Ribalda <ricardo@ribalda.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
         linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 05/60] media: uvcvideo: Handle cameras with invalid descriptors
-Date:   Fri,  3 Mar 2023 16:42:19 -0500
-Message-Id: <20230303214315.1447666-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 21/60] media: uvcvideo: Add GUID for BGRA/X 8:8:8:8
+Date:   Fri,  3 Mar 2023 16:42:35 -0500
+Message-Id: <20230303214315.1447666-21-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230303214315.1447666-1-sashal@kernel.org>
 References: <20230303214315.1447666-1-sashal@kernel.org>
@@ -52,34 +54,69 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Ricardo Ribalda <ribalda@chromium.org>
+From: Marek Vasut <marex@denx.de>
 
-[ Upstream commit 41ddb251c68ac75c101d3a50a68c4629c9055e4c ]
+[ Upstream commit 015d44c2b700ba9639dd29672ba362796cc0be54 ]
 
-If the source entity does not contain any pads, do not create a link.
+The Cypress EZUSB FX3 UVC example can be configured to report pixel
+format "e436eb7e-524f-11ce-9f53-0020af0ba770". This is its GUID for
+BGRA/X 8:8:8:8.
 
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+The UVC 1.5 spec [1] only defines GUIDs for YUY2, NV12, M420 and I420.
+This seems to be an extension documented in the Microsoft Windows Media
+Format SDK[2]. This Media Format SDK defines this GUID as corresponding
+to `MEDIASUBTYPE_RGB32`, which is confirmed by [4] as `MEDIASUBTYPE_ARGB32`
+has different GUID.
+
+Note that in my case, the FX3 UVC can output either channel order,
+BGR or RGB or any other mix for that matter. Since Linux commit
+1b8dc32286a1a ("[media] uvcvideo: Add GUID for BGR 8:8:8")
+defined a GUID for `MEDIASUBTYPE_RGB24` channel order as BGR, keep
+this change consistent and define `MEDIASUBTYPE_RGB32` as BGR as well.
+Document [3] also indicates the channel order is BGR.
+
+[1] https://www.usb.org/document-library/video-class-v15-document-set
+[2] https://learn.microsoft.com/en-us/windows/win32/wmformat/media-type-identifiers
+[3] https://learn.microsoft.com/en-us/windows/win32/directshow/uncompressed-rgb-video-subtypes
+[4] https://gix.github.io/media-types/
+
+Signed-off-by: Marek Vasut <marex@denx.de>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Ricardo Ribalda <ricardo@ribalda.com>
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Link: https://lore.kernel.org/r/20230126231456.3402323-2-m.grzeschik@pengutronix.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/uvc/uvc_entity.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/media/v4l2-uvc.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/media/usb/uvc/uvc_entity.c b/drivers/media/usb/uvc/uvc_entity.c
-index 7c4d2f93d3513..cc68dd24eb42d 100644
---- a/drivers/media/usb/uvc/uvc_entity.c
-+++ b/drivers/media/usb/uvc/uvc_entity.c
-@@ -37,7 +37,7 @@ static int uvc_mc_create_links(struct uvc_video_chain *chain,
- 			continue;
- 
- 		remote = uvc_entity_by_id(chain->dev, entity->baSourceID[i]);
--		if (remote == NULL)
-+		if (remote == NULL || remote->num_pads == 0)
- 			return -EINVAL;
- 
- 		source = (UVC_ENTITY_TYPE(remote) == UVC_TT_STREAMING)
+diff --git a/include/media/v4l2-uvc.h b/include/media/v4l2-uvc.h
+index f83e31661333b..b010a36fc1d95 100644
+--- a/include/media/v4l2-uvc.h
++++ b/include/media/v4l2-uvc.h
+@@ -99,6 +99,9 @@
+ #define UVC_GUID_FORMAT_BGR3 \
+ 	{ 0x7d, 0xeb, 0x36, 0xe4, 0x4f, 0x52, 0xce, 0x11, \
+ 	 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70}
++#define UVC_GUID_FORMAT_BGR4 \
++	{ 0x7e, 0xeb, 0x36, 0xe4, 0x4f, 0x52, 0xce, 0x11, \
++	 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70}
+ #define UVC_GUID_FORMAT_M420 \
+ 	{ 'M',  '4',  '2',  '0', 0x00, 0x00, 0x10, 0x00, \
+ 	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
+@@ -266,6 +269,11 @@ static struct uvc_format_desc uvc_fmts[] = {
+ 		.guid		= UVC_GUID_FORMAT_BGR3,
+ 		.fcc		= V4L2_PIX_FMT_BGR24,
+ 	},
++	{
++		.name		= "BGRA/X 8:8:8:8 (BGR4)",
++		.guid		= UVC_GUID_FORMAT_BGR4,
++		.fcc		= V4L2_PIX_FMT_XBGR32,
++	},
+ 	{
+ 		.name		= "H.264",
+ 		.guid		= UVC_GUID_FORMAT_H264,
 -- 
 2.39.2
 
