@@ -2,46 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B88BFC7EE33
-	for <linux-media@archiver.kernel.org>; Fri,  3 Mar 2023 01:39:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42244C6FA8E
+	for <linux-media@archiver.kernel.org>; Fri,  3 Mar 2023 01:39:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbjCCBjB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 2 Mar 2023 20:39:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47016 "EHLO
+        id S229715AbjCCBjE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 2 Mar 2023 20:39:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbjCCBi7 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Mar 2023 20:38:59 -0500
+        with ESMTP id S229972AbjCCBjA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Mar 2023 20:39:00 -0500
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD651559D5;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD475559C3;
         Thu,  2 Mar 2023 17:38:57 -0800 (PST)
-X-UUID: 250dcb4ab96411ed945fc101203acc17-20230303
+X-UUID: 246de544b96411ed945fc101203acc17-20230303
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=9DQofAeFrBxPPPvGnYQlYOOSVP8o9jLoEG7CCSLrzSw=;
-        b=MSpSyLl4HRXqwxI1IZw9epQMrFY9U7OP8waozNBW0n1HOYX1U0p73YLJTGwCIl7vNvNxHW0lVPIrzzLrsePqZRMQjBX6Wh85KyXgYr72c6xhrUzv9Bp+CNkBAUVWjJV9a7yAwzlrK1WzTY9LYxbijr8vstzeaaUiTp/KBw8B5PA=;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=UF5HxZGrnT9l0ObgLg61S3SwBqbR0DHrc+ITe5j3i9U=;
+        b=DDZp0Aaro1IJZ6jEH4rKi2hYrLH/CBiPUsbEkldGo0Y+ueASVnrN7pMexjwRF2wzDT3dFu9sqtSchojw3wFhPWVPJENDNQ/2ToBQV/yYxQsO7Cn/X+Lab/yfJOm6yHTmJNO2VEuHBjY2/fGLNV2npv4Z/hTxKiEkm+0Tjtbfn8Q=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.20,REQID:5d2a662d-f5b5-40b3-8754-4498fb8b0470,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.20,REQID:5d2a662d-f5b5-40b3-8754-4498fb8b0470,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:25b5999,CLOUDID:b3880db2-beed-4dfc-bd9c-e1b22fa6ccc4,B
-        ulkID:230303093850BO85MRVR,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0
+X-CID-O-INFO: VERSION:1.1.20,REQID:a9b8185d-5768-4495-833b-c65601ff9cd9,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:25b5999,CLOUDID:1f389bf4-ddba-41c3-91d9-10eeade8eac7,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
 X-CID-BVR: 0
-X-UUID: 250dcb4ab96411ed945fc101203acc17-20230303
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+X-UUID: 246de544b96411ed945fc101203acc17-20230303
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
         (envelope-from <allen-kh.cheng@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1681171590; Fri, 03 Mar 2023 09:38:48 +0800
+        with ESMTP id 180331520; Fri, 03 Mar 2023 09:38:47 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Fri, 3 Mar 2023 09:38:47 +0800
+ 15.2.1118.25; Fri, 3 Mar 2023 09:38:46 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Fri, 3 Mar 2023 09:38:47 +0800
+ 15.2.1118.25 via Frontend Transport; Fri, 3 Mar 2023 09:38:46 +0800
 From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
@@ -53,60 +49,102 @@ CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         <linux-kernel@vger.kernel.org>,
         <linux-mediatek@lists.infradead.org>, <yunfei.dong@mediatek.com>,
         Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Subject: [RESEND 5/6] media: dt-bindings: media: mediatek: vcodec: Change the max reg value to 2
-Date:   Fri, 3 Mar 2023 09:38:41 +0800
-Message-ID: <20230303013842.23259-6-allen-kh.cheng@mediatek.com>
+Subject: [RESEND 3/6] arm64: dts: mt8192: Add video-codec nodes
+Date:   Fri, 3 Mar 2023 09:38:39 +0800
+Message-ID: <20230303013842.23259-4-allen-kh.cheng@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20230303013842.23259-1-allen-kh.cheng@mediatek.com>
 References: <20230303013842.23259-1-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Yunfei Dong <yunfei.dong@mediatek.com>
+Add video-codec lat and core nodes for mt8192 SoC.
 
-Need to add racing control register base in device node for mt8195 support
-inner racing mode. Changing the max reg value from 1 to 2.
-
-Adding the description for VDEC_SYS and VDEC_MISC.
-
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Acked-by: Rob Herring <robh@kernel.org>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
 Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- .../bindings/media/mediatek,vcodec-subdev-decoder.yaml      | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi | 59 ++++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-index 51c0ff7baa52..cfd13a6b6b68 100644
---- a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-+++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-@@ -61,7 +61,10 @@ properties:
-       - mediatek,mt8195-vcodec-dec
+diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+index 87b91c8feaf9..f0dc7a943a90 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+@@ -1517,6 +1517,65 @@
+ 			power-domains = <&spm MT8192_POWER_DOMAIN_ISP2>;
+ 		};
  
-   reg:
--    maxItems: 1
-+    minItems: 1
-+    items:
-+      - description: VDEC_SYS register space
-+      - description: VDEC_RACING_CTRL register space
- 
-   iommus:
-     minItems: 1
-@@ -98,6 +101,7 @@ patternProperties:
- 
-       reg:
-         maxItems: 1
-+        description: VDEC_MISC register space
- 
-       interrupts:
-         maxItems: 1
++		vcodec_dec: video-codec@16000000 {
++			compatible = "mediatek,mt8192-vcodec-dec";
++			reg = <0 0x16000000 0 0x1000>;
++			mediatek,scp = <&scp>;
++			iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>;
++			#address-cells = <2>;
++			#size-cells = <2>;
++			ranges = <0 0 0 0x16000000 0 0x26000>;
++
++			video-codec@10000 {
++				compatible = "mediatek,mtk-vcodec-lat";
++				reg = <0x0 0x10000 0 0x800>;
++				interrupts = <GIC_SPI 426 IRQ_TYPE_LEVEL_HIGH 0>;
++				iommus = <&iommu0 M4U_PORT_L5_VDEC_LAT0_VLD_EXT>,
++					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_VLD2_EXT>,
++					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_AVC_MV_EXT>,
++					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_PRED_RD_EXT>,
++					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_TILE_EXT>,
++					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_WDMA_EXT>,
++					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_RG_CTRL_DMA_EXT>,
++					 <&iommu0 M4U_PORT_L5_VDEC_UFO_ENC_EXT>;
++				clocks = <&topckgen CLK_TOP_VDEC_SEL>,
++					 <&vdecsys_soc CLK_VDEC_SOC_VDEC>,
++					 <&vdecsys_soc CLK_VDEC_SOC_LAT>,
++					 <&vdecsys_soc CLK_VDEC_SOC_LARB1>,
++					 <&topckgen CLK_TOP_MAINPLL_D4>;
++				clock-names = "sel", "soc-vdec", "soc-lat", "vdec", "top";
++				assigned-clocks = <&topckgen CLK_TOP_VDEC_SEL>;
++				assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D4>;
++				power-domains = <&spm MT8192_POWER_DOMAIN_VDEC>;
++			};
++
++			video-codec@25000 {
++				compatible = "mediatek,mtk-vcodec-core";
++				reg = <0 0x25000 0 0x1000>;
++				interrupts = <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH 0>;
++				iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>,
++					 <&iommu0 M4U_PORT_L4_VDEC_UFO_EXT>,
++					 <&iommu0 M4U_PORT_L4_VDEC_PP_EXT>,
++					 <&iommu0 M4U_PORT_L4_VDEC_PRED_RD_EXT>,
++					 <&iommu0 M4U_PORT_L4_VDEC_PRED_WR_EXT>,
++					 <&iommu0 M4U_PORT_L4_VDEC_PPWRAP_EXT>,
++					 <&iommu0 M4U_PORT_L4_VDEC_TILE_EXT>,
++					 <&iommu0 M4U_PORT_L4_VDEC_VLD_EXT>,
++					 <&iommu0 M4U_PORT_L4_VDEC_VLD2_EXT>,
++					 <&iommu0 M4U_PORT_L4_VDEC_AVC_MV_EXT>,
++					 <&iommu0 M4U_PORT_L4_VDEC_RG_CTRL_DMA_EXT>;
++				clocks = <&topckgen CLK_TOP_VDEC_SEL>,
++					 <&vdecsys CLK_VDEC_VDEC>,
++					 <&vdecsys CLK_VDEC_LAT>,
++					 <&vdecsys CLK_VDEC_LARB1>,
++					 <&topckgen CLK_TOP_MAINPLL_D4>;
++				clock-names = "sel", "soc-vdec", "soc-lat", "vdec", "top";
++				assigned-clocks = <&topckgen CLK_TOP_VDEC_SEL>;
++				assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D4>;
++				power-domains = <&spm MT8192_POWER_DOMAIN_VDEC2>;
++			};
++		};
++
+ 		larb5: larb@1600d000 {
+ 			compatible = "mediatek,mt8192-smi-larb";
+ 			reg = <0 0x1600d000 0 0x1000>;
 -- 
 2.18.0
 
