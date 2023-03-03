@@ -2,125 +2,137 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0532CC6FA99
-	for <linux-media@archiver.kernel.org>; Fri,  3 Mar 2023 22:17:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5C4CC61DA3
+	for <linux-media@archiver.kernel.org>; Fri,  3 Mar 2023 22:20:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233672AbjCCWRj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Mar 2023 17:17:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
+        id S232355AbjCCWU4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Mar 2023 17:20:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233621AbjCCWRX (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Mar 2023 17:17:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EDA43D09E;
-        Fri,  3 Mar 2023 14:08:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 026D261912;
-        Fri,  3 Mar 2023 21:51:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5195C433EF;
-        Fri,  3 Mar 2023 21:51:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677880281;
-        bh=Br50V+ZnNhKeUVmf1H88XflaSYA3zbjNUSaOrfbHpWM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L0Wgj2qDMYr7AQFFunxAnGexnwRXj41XfheavwO4sQNH9ThQWN7YWlj2Dp73Ahdw/
-         2uXKlv/22ez+DVr7ejBSi69+v/MiAkOp+L5BIU6bdV3QorAgVbad15r3DUWG3n/DEN
-         M10p5eVyq7bMRTBYHiwIAV7dwH08VMMfs8aaRdkMd/hoae6WtB50Y8/GEMWE9hfPsr
-         X7GJJ+ZO9cmyRf0HO7C4myHQ+bm9TdwZkTHEpy9iYruGmrWIunUXZc3w5CkIZpxxYi
-         kXKl6tYBhJNPTsNy5u9kGPM7Uf/kIR6xDR/XGWpONnVXpZwWkjJ02fE/UU6YbDF9O8
-         LSMB76p+PtvfA==
-Date:   Fri, 3 Mar 2023 21:51:12 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
+        with ESMTP id S232383AbjCCWUk (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Mar 2023 17:20:40 -0500
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8203EEB7E;
+        Fri,  3 Mar 2023 14:12:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1677881560; x=1709417560;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gBGQIz/KK+1MKmUrNx1EnCdZxItixQoWNB8185256gE=;
+  b=lZW/QdXXTQvSGd3vjXKIwIYlxFH9Lr33WPBU5ZMlkzuSF7q+qaZLrsqo
+   tFJH/qbmrvvUKsLdjNbCyJSWxuDAeC+Tpes1duj5o1e5OKxVMTCNhcS/x
+   lTAFErxaAUYIVBOvOw60NoZJR6DfiQ60rL7mG8/x7Dju8lQdN6e85VIab
+   o=;
+X-IronPort-AV: E=Sophos;i="5.98,231,1673913600"; 
+   d="scan'208";a="189551306"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-b1c0e1d0.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 22:09:26 +0000
+Received: from EX13MTAUWB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2c-m6i4x-b1c0e1d0.us-west-2.amazon.com (Postfix) with ESMTPS id 5DCB78231C;
+        Fri,  3 Mar 2023 22:09:22 +0000 (UTC)
+Received: from EX19D047UWB002.ant.amazon.com (10.13.138.34) by
+ EX13MTAUWB002.ant.amazon.com (10.43.161.202) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.45; Fri, 3 Mar 2023 22:09:21 +0000
+Received: from amazon.com (10.187.170.20) by EX19D047UWB002.ant.amazon.com
+ (10.13.138.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.24; Fri, 3 Mar
+ 2023 22:09:20 +0000
+Date:   Fri, 3 Mar 2023 15:09:18 -0700
+From:   Jordan Crouse <jorcrous@amazon.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+CC:     <linux-kernel@vger.kernel.org>, Albert Esteve <aesteve@redhat.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Sergio Lopez <slp@redhat.com>,
+        Enric Balletbo i Serra <eballetb@redhat.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-media@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-gpio@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-riscv@lists.infradead.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: yamllint: Require a space after a comment
- '#'
-Message-ID: <cdad5aa0-bd94-4137-9063-af45e94a25b7@spud>
-References: <20230303214223.49451-1-robh@kernel.org>
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-media@vger.kernel.org>
+Subject: Re: [PATCH] media: venus: dec: Fix capture formats enumeration order
+Message-ID: <20230303220918.qr5ydbin3nye3qtz@amazon.com>
+References: <20230210081835.2054482-1-javierm@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="mffVr3k4EP4yfp2t"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230303214223.49451-1-robh@kernel.org>
+In-Reply-To: <20230210081835.2054482-1-javierm@redhat.com>
+X-Originating-IP: [10.187.170.20]
+X-ClientProxiedBy: EX19D031UWA003.ant.amazon.com (10.13.139.47) To
+ EX19D047UWB002.ant.amazon.com (10.13.138.34)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+On Fri, Feb 10, 2023 at 09:18:35AM +0100, Javier Martinez Canillas wrote:
+> Commit 9593126dae3e ("media: venus: Add a handling of QC08C compressed
+> format") and commit cef92b14e653 ("media: venus: Add a handling of QC10C
+> compressed format") added support for the QC08C and QC10C compressed
+> formats respectively.
+> 
+> But these also caused a regression, because the new formats where added
+> at the beginning of the vdec_formats[] array and the vdec_inst_init()
+> function sets the default format output and capture using fixed indexes
+> of that array:
+> 
+> static void vdec_inst_init(struct venus_inst *inst)
+> {
+> ...
+> 	inst->fmt_out = &vdec_formats[8];
+> 	inst->fmt_cap = &vdec_formats[0];
+> ...
+> }
+> 
+> Since now V4L2_PIX_FMT_NV12 is not the first entry in the array anymore,
+> the default capture format is not set to that as it was done before.
+> 
+> Both commits changed the first index to keep inst->fmt_out default format
+> set to V4L2_PIX_FMT_H264, but did not update the latter to keep .fmt_out
+> default format set to V4L2_PIX_FMT_NV12.
+> 
+> Rather than updating the index to the current V4L2_PIX_FMT_NV12 position,
+> let's reorder the entries so that this format is the first entry again.
+> 
+> This would also make VIDIOC_ENUM_FMT report the V4L2_PIX_FMT_NV12 format
+> with an index 0 as it did before the QC08C and QC10C formats were added.
+> 
+> Fixes: 9593126dae3e ("media: venus: Add a handling of QC08C compressed format")
+> Fixes: cef92b14e653 ("media: venus: Add a handling of QC10C compressed format")
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 
---mffVr3k4EP4yfp2t
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I just came across this issue independently and can confirm this patch fixes
+the GStreamer V4L2 decoder on QRB5165.
 
-On Fri, Mar 03, 2023 at 03:42:23PM -0600, Rob Herring wrote:
-> Enable yamllint to check the prefered commenting style of requiring a
-> space after a comment character '#'. Fix the cases in the tree which
-> have a warning with this enabled. Most cases just need a space after the
-> '#'. A couple of cases with comments which were not intended to be
-> comments are revealed. Those were in ti,sa2ul.yaml, ti,cal.yaml, and
-> brcm,bcmgenet.yaml.
->=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
+Tested-by: Jordan Crouse <jorcrous@amazon.com>
+
 > ---
-
-> Cc: Conor Dooley <conor.dooley@microchip.com>
-
-> diff --git a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yam=
-l b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
-> index 1051690e3753..74a817cc7d94 100644
-> --- a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
-> @@ -22,7 +22,7 @@ properties:
->        - items:
->            - const: microchip,mpfs-qspi
->            - const: microchip,coreqspi-rtl-v2
-> -      - const: microchip,coreqspi-rtl-v2 #FPGA QSPI
-> +      - const: microchip,coreqspi-rtl-v2 # FPGA QSPI
->        - const: microchip,mpfs-spi
-
-I had to think for a minute as to what that comment even meant...
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-Thanks,
-Conor.
-
---mffVr3k4EP4yfp2t
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAJr0AAKCRB4tDGHoIJi
-0rHgAP9euC+7Ztk0BIMgxdrJzAjogpoZQH6UzawtcdI6SIq2nQD/d5Bvci5DVqMV
-DWn8X2un+KM/vLbl8yUpHlGFB4QKwQY=
-=v1U9
------END PGP SIGNATURE-----
-
---mffVr3k4EP4yfp2t--
+> 
+>  drivers/media/platform/qcom/venus/vdec.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+> index 4ceaba37e2e5..bb14bea9fe09 100644
+> --- a/drivers/media/platform/qcom/venus/vdec.c
+> +++ b/drivers/media/platform/qcom/venus/vdec.c
+> @@ -31,15 +31,15 @@
+>   */
+>  static const struct venus_format vdec_formats[] = {
+>  	{
+> -		.pixfmt = V4L2_PIX_FMT_QC08C,
+> +		.pixfmt = V4L2_PIX_FMT_NV12,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+>  	}, {
+> -		.pixfmt = V4L2_PIX_FMT_QC10C,
+> +		.pixfmt = V4L2_PIX_FMT_QC08C,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+> -	},{
+> -		.pixfmt = V4L2_PIX_FMT_NV12,
+> +	}, {
+> +		.pixfmt = V4L2_PIX_FMT_QC10C,
+>  		.num_planes = 1,
+>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+>  	}, {
