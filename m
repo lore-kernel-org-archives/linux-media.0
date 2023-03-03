@@ -2,128 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D57E9C61DA4
-	for <linux-media@archiver.kernel.org>; Fri,  3 Mar 2023 22:25:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79C0CC61DA3
+	for <linux-media@archiver.kernel.org>; Fri,  3 Mar 2023 22:29:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233720AbjCCWZy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Mar 2023 17:25:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
+        id S232819AbjCCW3l (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Mar 2023 17:29:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232829AbjCCWZj (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Mar 2023 17:25:39 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110B33BD8E
-        for <linux-media@vger.kernel.org>; Fri,  3 Mar 2023 14:18:20 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pYDaM-0007X5-7q; Fri, 03 Mar 2023 23:09:06 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pYDaF-001eHQ-77; Fri, 03 Mar 2023 23:08:59 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pYDaE-001xZG-GT; Fri, 03 Mar 2023 23:08:58 +0100
-Date:   Fri, 3 Mar 2023 23:08:56 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Ajay Gupta <ajayg@nvidia.com>,
-        Peter Senna Tschudin <peter.senna@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        linux-mtd@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, Evgeniy Polyakov <zbr@ioremap.net>,
-        Crt Mori <cmo@melexis.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Peter Rosin <peda@axentia.se>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: Re: [PATCH v2 0/9] i2c: Switch .probe() to not take an id parameter
-Message-ID: <20230303220856.ebloz7kjw7sskxym@pengutronix.de>
-References: <20230226222654.1741900-1-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S231916AbjCCW32 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Mar 2023 17:29:28 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436F86A06D;
+        Fri,  3 Mar 2023 14:23:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Ta8NbV6xh96XFRK6QkpcNvtsb8leATV9ZUMVK/pqiW4=; b=MN0nz4mv3XiN3vGUGBw9DHBLZz
+        KgGZsmYGI4gJH98GtS7DF6I/ejfGDDijv/FOEdzfG0vnXdxK9qFr+mXYZlJxEIsb5qhf1Qqqpauo7
+        QOVL1zMs/tNpXfeXKiCWbVtHV6Fl3yk9diWpt7mB5AkYIXNL87POBOz5bDqx3g5vaWXSRDoAhPzFG
+        VV8WVJA0RHTpMSZ+iDUdol+nE6R+EtBvIIaEnvKlfONEX5kscP97pbSHbi+e89uZlO4lViTylh4Bs
+        QaFu9XRdiHTi1BjidybX3zaOvW6SQmGokeI0Ie5ZyEVKzU5OFHwG5GCNvwrYq25hun5D7wCtblcZo
+        E89cFSHw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pYDms-007iaP-4c; Fri, 03 Mar 2023 22:22:02 +0000
+Date:   Fri, 3 Mar 2023 14:22:02 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH 00/17] MODULE_LICENSE removals, sixth tranche
+Message-ID: <ZAJzCvTI67NgbJiY@bombadil.infradead.org>
+References: <20230302211759.30135-1-nick.alcock@oracle.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jphhkeygsgtmhvzu"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230226222654.1741900-1-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+In-Reply-To: <20230302211759.30135-1-nick.alcock@oracle.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Stupid question, if you're removing MODULE_LICENSE() than why keep the
+other stupid MODULE_*() crap too? If its of no use, be gone!
 
---jphhkeygsgtmhvzu
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello,
-
-On Sun, Feb 26, 2023 at 11:26:45PM +0100, Uwe Kleine-K=F6nig wrote:
-> this is v2 of the series. I send it a bit earlier than I planned to do th=
-at
-> initially because I failed to send v1 completely to the linux-i2c list.
->=20
-> Changes since (implicit) v1:
->  - Added Acks for patches #5, #6 and #8
->  - Fixed kernel doc as pointed out by Luca Ceresoli (patch #7)
->  - Send all patches to linux-i2c mailing list
->  - Rebased to current Linus' tree.
->    This reduces the list of prerequisite patches to two.
->=20
-> I updated
->=20
-> 	https://git.pengutronix.de/git/ukl/linux i2c-probe-new
->=20
-> accordingly.
-
-Linus tree now contains all patches that are a prerequisite for this
-series. I rebased the above branch again on top of linus/master and now
-it contains only the change sets included in this series.
-
-Also no unexpected new usages of .probe() appeared in Linus's tree (nor
-in next). Also there are no changes to any of the files touched by this
-series in next.
-
-So this series is ready to be applied once Linus cuts -rc1.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---jphhkeygsgtmhvzu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmQCb/UACgkQwfwUeK3K
-7AkuXgf/SMwWwnMqZjGgBPUDM9VgxnIlfQtagDo9nbprjQzoh3Ib5rPoV0hS3hvB
-47qsOgOL5iA240b8zcxn8IatQDJaPiDl7F06lLmWFEvMrhA233m84hU/U/O/0xbY
-0WuHom/ABjZwJ2JEl+qFUiE1Cm5r89LhYCw4UEXTG6Wn1dtuUb5Roq+uVAVjQxSS
-0aAP77IklhKDSPlpdnGXgiY1NrMiWmJWpFEyTLhNeqI7l9djO5tHLbezUcb2E4nU
-Xsz0eWpOmh85Eq8BhIFPY8CigES8ePIragUO4rxneI1ewhYWpvjEklysWIC0SO98
-Z9CJvnehDyeveIhwgTJsgtK21N7mxA==
-=QY8V
------END PGP SIGNATURE-----
-
---jphhkeygsgtmhvzu--
+  Luis
