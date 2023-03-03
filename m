@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BECB9C678D4
-	for <linux-media@archiver.kernel.org>; Fri,  3 Mar 2023 01:38:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99966C7EE3A
+	for <linux-media@archiver.kernel.org>; Fri,  3 Mar 2023 01:38:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbjCCBiz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 2 Mar 2023 20:38:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46562 "EHLO
+        id S229958AbjCCBi5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 2 Mar 2023 20:38:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbjCCBit (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Mar 2023 20:38:49 -0500
+        with ESMTP id S229951AbjCCBiw (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Mar 2023 20:38:52 -0500
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E16CC30;
-        Thu,  2 Mar 2023 17:38:48 -0800 (PST)
-X-UUID: 22929828b96411eda06fc9ecc4dadd91-20230303
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD9A1ABDF;
+        Thu,  2 Mar 2023 17:38:51 -0800 (PST)
+X-UUID: 24216a48b96411eda06fc9ecc4dadd91-20230303
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=NPDcbWjUVSoLLjMtO/Z1QwJgNEyxQ1YYYXl9gvsi2R0=;
-        b=mwVx8okudEN/QBfAKR/FusnfwemjkOe5nZJnJih36Hv7O8m9RIK9WygvzSfe8vnZsaX6exbl4+U2G72CXoPnVJKJDsoN6hXSDmujTTjIXi6a5bXMBBURloxt77aXfI4WMCi1OZqdeDBo5jqFAdUK4W0FL4ui8JBTV9HalrsgIXs=;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=tyMuc6+z6Czz6mBk9Fo6HyijgYmHTnDSU3jNKbiRzWU=;
+        b=H/pVhggzKmW/NSqylZHPxYrKNz9i5+wZ8DbK+eAN9iHz9eV+ACfoUko2UmGwPyfjnGY2g+YomMebii51FQvDs1DTjtLQ961HUMOgMsWW2QOX9k33kGjcGuu/OpifzEmgFkqtpVgIpy9ZJw8cOemBYBZ2o0HwMtvzwa6rHP2RqnA=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.20,REQID:455c1fa1-6c9a-49c4-b21b-562cdc834dc6,IP:0,U
+X-CID-O-INFO: VERSION:1.1.20,REQID:58bea8c9-ebb1-42ff-8302-73edfa7593ef,IP:0,U
         RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
         :release,TS:-5
-X-CID-META: VersionHash:25b5999,CLOUDID:faf02c27-564d-42d9-9875-7c868ee415ec,B
+X-CID-META: VersionHash:25b5999,CLOUDID:e4379bf4-ddba-41c3-91d9-10eeade8eac7,B
         ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
 X-CID-BVR: 0
-X-UUID: 22929828b96411eda06fc9ecc4dadd91-20230303
+X-UUID: 24216a48b96411eda06fc9ecc4dadd91-20230303
 Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
         (envelope-from <allen-kh.cheng@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1370251418; Fri, 03 Mar 2023 09:38:44 +0800
+        with ESMTP id 1195944537; Fri, 03 Mar 2023 09:38:47 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
  mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Fri, 3 Mar 2023 09:38:44 +0800
+ 15.2.1118.25; Fri, 3 Mar 2023 09:38:45 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Fri, 3 Mar 2023 09:38:44 +0800
+ 15.2.1118.25 via Frontend Transport; Fri, 3 Mar 2023 09:38:45 +0800
 From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
@@ -49,10 +49,12 @@ CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         <linux-kernel@vger.kernel.org>,
         <linux-mediatek@lists.infradead.org>, <yunfei.dong@mediatek.com>,
         "Allen-KH Cheng" <allen-kh.cheng@mediatek.com>
-Subject: [RESEND 0/6] media: mediatek: Update video decoder nodes for MT8195 and MT8192
-Date:   Fri, 3 Mar 2023 09:38:36 +0800
-Message-ID: <20230303013842.23259-1-allen-kh.cheng@mediatek.com>
+Subject: [RESEND 2/6] media: dt-bindings: media: mediatek: Remove "dma-ranges" property for decoder
+Date:   Fri, 3 Mar 2023 09:38:38 +0800
+Message-ID: <20230303013842.23259-3-allen-kh.cheng@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20230303013842.23259-1-allen-kh.cheng@mediatek.com>
+References: <20230303013842.23259-1-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
@@ -61,31 +63,57 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series is based on matthias github v6.3-tmp. Since there is a
-dependence in the following series, I resend a series for them.
+Because the decoder nodes already make use of the iommus property to
+configure the IOMMU for address translations, having a dma-ranges
+property makes no sense.
 
-patchwork.kernel.org/project/linux-mediatek/list/?series=702423
-patchwork.kernel.org/project/linux-mediatek/list/?series=702078
+In fact, after commit f1ad5338a4d5 ("of: Fix "dma-ranges" handling for
+bus controllers"), having a dma-ranges property causes IOMMU faults.
 
-Allen-KH Cheng (3):
-  media: dt-bindings: media: mediatek: Rename child node names for
-    decoder
-  media: dt-bindings: media: mediatek: Remove "dma-ranges" property for
-    decoder
-  arm64: dts: mt8192: Add video-codec nodes
+Remove the dma-ranges property and update the example.
 
-Yunfei Dong (3):
-  media: dt-bindings: media: mediatek: vcodec: adapt to the
-    'clock-names' of different platforms
-  media: dt-bindings: media: mediatek: vcodec: Change the max reg value
-    to 2
-  arm64: dts: mt8195: Add video decoder node
+Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+---
+ .../bindings/media/mediatek,vcodec-subdev-decoder.yaml     | 7 -------
+ 1 file changed, 7 deletions(-)
 
- .../media/mediatek,vcodec-subdev-decoder.yaml | 113 +++++++-----------
- arch/arm64/boot/dts/mediatek/mt8192.dtsi      |  59 +++++++++
- arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  70 +++++++++++
- 3 files changed, 173 insertions(+), 69 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
+index 46308cdaacc0..7efc70ae4406 100644
+--- a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
++++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
+@@ -76,11 +76,6 @@ properties:
+       The node of system control processor (SCP), using
+       the remoteproc & rpmsg framework.
+ 
+-  dma-ranges:
+-    maxItems: 1
+-    description: |
+-      Describes the physical address space of IOMMU maps to memory.
+-
+   "#address-cells":
+     const: 2
+ 
+@@ -151,7 +146,6 @@ required:
+   - reg
+   - iommus
+   - mediatek,scp
+-  - dma-ranges
+   - ranges
+ 
+ if:
+@@ -185,7 +179,6 @@ examples:
+             compatible = "mediatek,mt8192-vcodec-dec";
+             mediatek,scp = <&scp>;
+             iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>;
+-            dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
+             #address-cells = <2>;
+             #size-cells = <2>;
+             ranges = <0 0 0 0x16000000 0 0x40000>;
 -- 
 2.18.0
 
