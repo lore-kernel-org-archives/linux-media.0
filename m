@@ -2,90 +2,154 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 661A7C64EC4
-	for <linux-media@archiver.kernel.org>; Fri,  3 Mar 2023 18:07:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C53AC7EE2F
+	for <linux-media@archiver.kernel.org>; Fri,  3 Mar 2023 18:20:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbjCCSHh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Mar 2023 13:07:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53044 "EHLO
+        id S231566AbjCCSUw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Mar 2023 13:20:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbjCCSHe (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Mar 2023 13:07:34 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CEE85CC3E
-        for <linux-media@vger.kernel.org>; Fri,  3 Mar 2023 10:07:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677866853; x=1709402853;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=GZyMaXHbFflI1g1OKv8E9Ip+mABa8xB+mE52QM4gOLE=;
-  b=jyLaBMPO93L/kk8lxKlWgZBnJWeV+DRnXg4c0ubzCz19oAdgD7EC3sTG
-   l8OPtX0fGhUO9rrqwAxyNBeqVI5d2TQGFlH5VY+2ca8OZNqcAALT6uIsj
-   z4Ooa9gxT1zq3ReizK8ml0cG8VMs/c2FcQPtirKbPK3eVDB7d+Ex0pYZi
-   npQm3qHCicT/WdEHoS+LK1XUnsFntZ/DO16DD2f3rICJN/bcXhrPjK89z
-   Q1e9/q5A6zqeQAuUHnaWDPLmg5cYc0+C4XS39VMmgyeLmYoJeX/7eYXgJ
-   VcqsYvTRkfTjM2uRlKrJNM1wlr6uq3yYFtgEWsoS+ffhawddlyfN8OVkx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="421382500"
-X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
-   d="scan'208";a="421382500"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 10:05:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="652876985"
-X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
-   d="scan'208";a="652876985"
-Received: from icg-kernel3.bj.intel.com ([172.16.126.100])
-  by orsmga006.jf.intel.com with ESMTP; 03 Mar 2023 10:05:50 -0800
-From:   bingbu.cao@intel.com
-To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, djrscally@gmail.com
-Cc:     bingbu.cao@linux.intel.com, bingbu.cao@intel.com
-Subject: [PATCH v2] media: ipu3-cio2: support more camera sensors in cio2-bridge
-Date:   Sat,  4 Mar 2023 02:15:03 +0800
-Message-Id: <20230303181504.1813469-1-bingbu.cao@intel.com>
-X-Mailer: git-send-email 2.39.1
+        with ESMTP id S231550AbjCCSUv (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Mar 2023 13:20:51 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D88EC79;
+        Fri,  3 Mar 2023 10:20:49 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id z5so2251479ilq.0;
+        Fri, 03 Mar 2023 10:20:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=axdACOpDgX4dqbHNbIgw6l/7ldg/vQEmMI8fQauJgl8=;
+        b=QczMEiEgQw99JTo6idDjCmdUY+sExwLtJY3/KxeKkvYdy0yKmdUEPD0dgjI7WTlutJ
+         tdoXP8gPcHCyv03Mt3F59SccC5tXpCy4xMbgV/Va1gbe1xpd7QRnEuJeCjvKLDCVnxiy
+         GTAst35/hfaVx/jtfzPmqmH2i3H7VA6+h6eACYF+gFiKRcy6SHcNGVuCKb632mAE5FFD
+         jyMD/rneQS2DLsvlGqrApDw2hWb5Wei9gvmhqogPv1qmFtOkgQ/Wsze9U8yuRtejB+l+
+         Al2mUiQ0CI6j6QyECn0Tmf0ZM/+uervRLoZ9A7RtA3ORLXu8ei5N1WedxMbhvS36QH8Q
+         2FCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=axdACOpDgX4dqbHNbIgw6l/7ldg/vQEmMI8fQauJgl8=;
+        b=volTYS2s52JX9k841D/3xL34NI9/077AJKsUZDbW1xUOU8DapPPnAGYpfNvE+J1EI5
+         HYP2ieyMj9L6MZ7jdsetUMpQTaMmk5Q4BdsYkBYOQqO2UuvyGIxGDSxKbV5p9fWn39bp
+         2M8+Qiqstbs5Hh/b/DV2ihopV4k5mMO3m3Xno8RjlT/LNMZEh/GZYfCDSZVX1sVurneH
+         euaOvUa7gxzD/C47QKCaAR1/9xto0qKATA110cDl1zds2kiESSCwh0knktl6FAxTHUE6
+         g1rqf59NEPTxL4EyK298EluJB5h8gKwkU0A37r4kjUEvqQCedZDD/iLc7Zwam0b+/RU/
+         jVtw==
+X-Gm-Message-State: AO0yUKXnMrYddHQ+l5eTLxk6gmAQb62bH4jJPgEPEkEeb9jPuNr8TtJ/
+        WzsK21Eoiyw6VfSYXJr8O19lurFJP+/9EDP1L0s=
+X-Google-Smtp-Source: AK7set8Qed7nPAs7RH0XEMozjccCh754nLRwreSB3nR6IUtV2hYZym8/5UTUtz+kyz5kn3EXFUYQKPVWknxcgmIQOPA=
+X-Received: by 2002:a05:6e02:130f:b0:315:9761:6965 with SMTP id
+ g15-20020a056e02130f00b0031597616965mr1232665ilr.5.1677867649207; Fri, 03 Mar
+ 2023 10:20:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230302235356.3148279-1-robdclark@gmail.com> <20230302235356.3148279-16-robdclark@gmail.com>
+ <ZAFnqbycMleLmRe9@intel.com> <3bded9d7-9796-4a9b-7c11-aac994d4fdc6@linux.intel.com>
+ <CAF6AEGs6QYTESuwB8E9cTbv9LqQX16tz6-geeu9BCyFos9=sOA@mail.gmail.com> <a5ced581-4060-0fa2-d2fc-d18beee6fdb5@linux.intel.com>
+In-Reply-To: <a5ced581-4060-0fa2-d2fc-d18beee6fdb5@linux.intel.com>
+From:   Matt Turner <mattst88@gmail.com>
+Date:   Fri, 3 Mar 2023 13:20:38 -0500
+Message-ID: <CAEdQ38FLf0jX6oWCkmx+xwgF8YAH8xSwhw5RUGC3xwdDBr7NVQ@mail.gmail.com>
+Subject: Re: [PATCH v9 15/15] drm/i915: Add deadline based boost support
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Simon Ser <contact@emersion.fr>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        intel-gfx@lists.freedesktop.org,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Bingbu Cao <bingbu.cao@intel.com>
+On Fri, Mar 3, 2023 at 10:08=E2=80=AFAM Tvrtko Ursulin
+<tvrtko.ursulin@linux.intel.com> wrote:
+>
+>
+> On 03/03/2023 14:48, Rob Clark wrote:
+> > On Fri, Mar 3, 2023 at 1:58 AM Tvrtko Ursulin
+> > <tvrtko.ursulin@linux.intel.com> wrote:
+> >>
+> >>
+> >> On 03/03/2023 03:21, Rodrigo Vivi wrote:
+> >>> On Thu, Mar 02, 2023 at 03:53:37PM -0800, Rob Clark wrote:
+> >>>> From: Rob Clark <robdclark@chromium.org>
+> >>>>
+> >>>
+> >>> missing some wording here...
+> >>>
+> >>>> v2: rebase
+> >>>>
+> >>>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> >>>> ---
+> >>>>    drivers/gpu/drm/i915/i915_request.c | 20 ++++++++++++++++++++
+> >>>>    1 file changed, 20 insertions(+)
+> >>>>
+> >>>> diff --git a/drivers/gpu/drm/i915/i915_request.c b/drivers/gpu/drm/i=
+915/i915_request.c
+> >>>> index 7503dcb9043b..44491e7e214c 100644
+> >>>> --- a/drivers/gpu/drm/i915/i915_request.c
+> >>>> +++ b/drivers/gpu/drm/i915/i915_request.c
+> >>>> @@ -97,6 +97,25 @@ static bool i915_fence_enable_signaling(struct dm=
+a_fence *fence)
+> >>>>       return i915_request_enable_breadcrumb(to_request(fence));
+> >>>>    }
+> >>>>
+> >>>> +static void i915_fence_set_deadline(struct dma_fence *fence, ktime_=
+t deadline)
+> >>>> +{
+> >>>> +    struct i915_request *rq =3D to_request(fence);
+> >>>> +
+> >>>> +    if (i915_request_completed(rq))
+> >>>> +            return;
+> >>>> +
+> >>>> +    if (i915_request_started(rq))
+> >>>> +            return;
+> >>>
+> >>> why do we skip the boost if already started?
+> >>> don't we want to boost the freq anyway?
+> >>
+> >> I'd wager Rob is just copying the current i915 wait boost logic.
+> >
+> > Yup, and probably incorrectly.. Matt reported fewer boosts/sec
+> > compared to your RFC, this could be the bug
+>
+> Hm, there I have preserved this same !i915_request_started logic.
+>
+> Presumably it's not just fewer boosts but lower performance. How is he
+> setting the deadline? Somehow from clFlush or so?
+>
+> Regards,
+>
+> Tvrtko
+>
+> P.S. Take note that I did not post the latest version of my RFC. The one
+> where I fix the fence chain and array misses you pointed out. I did not
+> think it would be worthwhile given no universal love for it, but if
+> people are testing with it more widely that I was aware perhaps I should.
 
-Add more camera sensors into the supported camera sensors list
-to make cio2-bridge to support more camera sensors.
-
-Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
----
-Changes from v1:
- - remove some sensors without available drivers
- - add .link_frequencies for each sensor
-
----
- drivers/media/pci/intel/ipu3/cio2-bridge.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/drivers/media/pci/intel/ipu3/cio2-bridge.c b/drivers/media/pci/intel/ipu3/cio2-bridge.c
-index dfefe0d8aa95..d59bec8a94e2 100644
---- a/drivers/media/pci/intel/ipu3/cio2-bridge.c
-+++ b/drivers/media/pci/intel/ipu3/cio2-bridge.c
-@@ -29,6 +29,14 @@ static const struct cio2_sensor_config cio2_supported_sensors[] = {
- 	CIO2_SENSOR_CONFIG("INT347E", 1, 319200000),
- 	/* Omnivision OV2680 */
- 	CIO2_SENSOR_CONFIG("OVTI2680", 0),
-+	/* Omnivision ov8856 */
-+	CIO2_SENSOR_CONFIG("OVTI8856", 3, 180000000, 360000000, 720000000),
-+	/* Omnivision ov2740 */
-+	CIO2_SENSOR_CONFIG("INT3474", 1, 360000000),
-+	/* Hynix hi556 */
-+	CIO2_SENSOR_CONFIG("INT3537", 1, 437000000),
-+	/* Omnivision ov13b10 */
-+	CIO2_SENSOR_CONFIG("OVTIDB10", 1, 560000000),
- };
- 
- static const struct cio2_property_names prop_names = {
--- 
-2.39.1
-
+Yep, that would be great. We're interested in it for ChromeOS. Please
+Cc me on the series when you send it.
