@@ -2,48 +2,47 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95C80C7EE32
-	for <linux-media@archiver.kernel.org>; Fri,  3 Mar 2023 21:49:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A099C87FDD
+	for <linux-media@archiver.kernel.org>; Fri,  3 Mar 2023 21:51:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232796AbjCCVt1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Mar 2023 16:49:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
+        id S232775AbjCCVva (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Mar 2023 16:51:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232646AbjCCVsb (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Mar 2023 16:48:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D65267020;
-        Fri,  3 Mar 2023 13:45:34 -0800 (PST)
+        with ESMTP id S232817AbjCCVtk (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Mar 2023 16:49:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9056D6C194;
+        Fri,  3 Mar 2023 13:46:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 49930618CB;
-        Fri,  3 Mar 2023 21:43:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 340A4C433B0;
-        Fri,  3 Mar 2023 21:43:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2630AB81A24;
+        Fri,  3 Mar 2023 21:45:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B1F2C4339B;
+        Fri,  3 Mar 2023 21:45:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677879802;
-        bh=f+LvyHlOGKyqPsk5/PQRUb7Qh3vD1phxX0BJKeT/fo4=;
+        s=k20201202; t=1677879941;
+        bh=7574X1hwbqg4QN/la26Ml847EQYEq4/UjrU14i+pEGo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jIH78MrKIC0YdPnQX4jjlaf4PKzoIURbTopES8CaaRo/nL4PBZZ6RNvwGQurIgJ45
-         QIfuaFBRIYMT9Z+u7drF4G/+XL7//aMcIIwyD/Lw04m1QlAW3Ab04y14hmiEgaQu7A
-         WFr0LZkFwVI+O9i/ayi93TTgFT0CeBSUtB4dNCENB8QT72R/w8xtSDzv+jxrHcftIV
-         ElrbkhKJrIWx578bVRlEfGwMcXAhK/ustDshJXdtcrFgNSWlAzoOXKAFcT6UZKUAIj
-         tU+IH6Fj6lzbZlvwkTJ4W7VoEhW8ACQePO9I/QejB6PC2NC+/qmt1JFUftMqG23xeH
-         4Cf5MIjmiagIQ==
+        b=u5TfM+Mhv1CXshgZtLjZHf3IWdaFkdud1KULWWTzXyMo3ldoS0a6PpgG9ddvvONkm
+         bwc4Nt+NpmDpzoJlcshWbPuzGcMNIgWQFOaztrPB+yi1AL7sm2qkSi3AfvPH/CNTlO
+         1i3iUPfWf92b0zP+7Vm6D3o/FKXygD2IzofUJrJKzzJxGnt+tbH5YrF/AH0SA/sb0M
+         khbjv0IgPIuampWk5zhM05cZC7y5/1/6OJRWOQ3JAUY4Vkp5REXf0vJVa7zFdLzFBM
+         0XsetG7pnBnPlmDdBeyNWqqtXKo0OrrdN1cjn8Drg28aHwiUWVHsA4q6akPr1R4Aa2
+         W0piB2DOCxZ9g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+Cc:     Ricardo Ribalda <ribalda@chromium.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
         linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 04/60] media: uvcvideo: Remove format descriptions
-Date:   Fri,  3 Mar 2023 16:42:18 -0500
-Message-Id: <20230303214315.1447666-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 06/50] media: uvcvideo: Quirk for autosuspend in Logitech B910 and C910
+Date:   Fri,  3 Mar 2023 16:44:47 -0500
+Message-Id: <20230303214531.1450154-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230303214315.1447666-1-sashal@kernel.org>
-References: <20230303214315.1447666-1-sashal@kernel.org>
+In-Reply-To: <20230303214531.1450154-1-sashal@kernel.org>
+References: <20230303214531.1450154-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -52,134 +51,136 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+From: Ricardo Ribalda <ribalda@chromium.org>
 
-[ Upstream commit 50459f103edfe47c9a599d766a850ef6014936c5 ]
+[ Upstream commit 136effa754b57632f99574fc4a3433e0cfc031d9 ]
 
-The V4L2 core overwrites format descriptions in v4l_fill_fmtdesc(),
-there's no need to manually set the descriptions in the driver. This
-prepares for removal of the format descriptions from the uvc_fmts table.
+Logitech B910 and C910 firmware are unable to recover from a USB
+autosuspend. When it resumes, the device is in a state where it only
+produces invalid frames. Eg:
 
-Unlike V4L2, UVC makes a distinction between the SD-DV, SDL-DV and HD-DV
-formats. It also indicates whether the DV format uses 50Hz or 60Hz. This
-information is parsed by the driver to construct a format name string
-that is printed in a debug message, but serves no other purpose as V4L2
-has a single V4L2_PIX_FMT_DV pixel format that covers all those cases.
+$ echo 0xFFFF > /sys/module/uvcvideo/parameters/trace # enable verbose log
+$ yavta -c1 -n1 --file='frame#.jpg' --format MJPEG --size=1920x1080 /dev/video1
+[350438.435219] uvcvideo: uvc_v4l2_open
+[350438.529794] uvcvideo: Resuming interface 2
+[350438.529801] uvcvideo: Resuming interface 3
+[350438.529991] uvcvideo: Trying format 0x47504a4d (MJPG): 1920x1080.
+[350438.529996] uvcvideo: Using default frame interval 33333.3 us (30.0 fps).
+[350438.551496] uvcvideo: uvc_v4l2_mmap
+[350438.555890] uvcvideo: Device requested 3060 B/frame bandwidth.
+[350438.555896] uvcvideo: Selecting alternate setting 11 (3060 B/frame bandwidth).
+[350438.556362] uvcvideo: Allocated 5 URB buffers of 32x3060 bytes each.
+[350439.316468] uvcvideo: Marking buffer as bad (error bit set).
+[350439.316475] uvcvideo: Frame complete (EOF found).
+[350439.316477] uvcvideo: EOF in empty payload.
+[350439.316484] uvcvideo: frame 1 stats: 149/261/417 packets, 1/149/417 pts (early initial), 416/417 scr, last pts/stc/sof 2976325734/2978107243/249
+[350439.384510] uvcvideo: Marking buffer as bad (error bit set).
+[350439.384516] uvcvideo: Frame complete (EOF found).
+[350439.384518] uvcvideo: EOF in empty payload.
+[350439.384525] uvcvideo: frame 2 stats: 265/379/533 packets, 1/265/533 pts (early initial), 532/533 scr, last pts/stc/sof 2979524454/2981305193/316
+[350439.448472] uvcvideo: Marking buffer as bad (error bit set).
+[350439.448478] uvcvideo: Frame complete (EOF found).
+[350439.448480] uvcvideo: EOF in empty payload.
+[350439.448487] uvcvideo: frame 3 stats: 265/377/533 packets, 1/265/533 pts (early initial), 532/533 scr, last pts/stc/sof 2982723174/2984503144/382
+...(loop)...
 
-As the information is available in the UVC descriptors, and thus
-accessible to users with lsusb if they really care, don't log it in a
-debug message and drop the format name string to simplify the code.
+The devices can leave this invalid state if the alternate setting of
+the streaming interface is toggled.
 
+This patch adds a quirk for this device so it can be autosuspended
+properly.
+
+lsusb -v:
+Bus 001 Device 049: ID 046d:0821 Logitech, Inc. HD Webcam C910
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass          239 Miscellaneous Device
+  bDeviceSubClass         2
+  bDeviceProtocol         1 Interface Association
+  bMaxPacketSize0        64
+  idVendor           0x046d Logitech, Inc.
+  idProduct          0x0821 HD Webcam C910
+  bcdDevice            0.10
+  iManufacturer           0
+  iProduct                0
+  iSerial                 1 390022B0
+  bNumConfigurations      1
+
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
-Reviewed-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/uvc/uvc_driver.c | 24 ++----------------------
- drivers/media/usb/uvc/uvc_v4l2.c   |  2 --
- drivers/media/usb/uvc/uvcvideo.h   |  2 --
- 3 files changed, 2 insertions(+), 26 deletions(-)
+ drivers/media/usb/uvc/uvc_driver.c | 18 ++++++++++++++++++
+ drivers/media/usb/uvc/uvc_video.c  | 11 +++++++++++
+ drivers/media/usb/uvc/uvcvideo.h   |  1 +
+ 3 files changed, 30 insertions(+)
 
 diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 215fb483efb00..cfc18fbeaf6b6 100644
+index de32985f235fc..3e80a8c2c995a 100644
 --- a/drivers/media/usb/uvc/uvc_driver.c
 +++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -251,14 +251,10 @@ static int uvc_parse_format(struct uvc_device *dev,
- 		fmtdesc = uvc_format_by_guid(&buffer[5]);
+@@ -2684,6 +2684,24 @@ static const struct usb_device_id uvc_ids[] = {
+ 	  .bInterfaceSubClass	= 1,
+ 	  .bInterfaceProtocol	= 0,
+ 	  .driver_info		= (kernel_ulong_t)&uvc_quirk_probe_minmax },
++	/* Logitech, Webcam C910 */
++	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
++				| USB_DEVICE_ID_MATCH_INT_INFO,
++	  .idVendor		= 0x046d,
++	  .idProduct		= 0x0821,
++	  .bInterfaceClass	= USB_CLASS_VIDEO,
++	  .bInterfaceSubClass	= 1,
++	  .bInterfaceProtocol	= 0,
++	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_WAKE_AUTOSUSPEND)},
++	/* Logitech, Webcam B910 */
++	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
++				| USB_DEVICE_ID_MATCH_INT_INFO,
++	  .idVendor		= 0x046d,
++	  .idProduct		= 0x0823,
++	  .bInterfaceClass	= USB_CLASS_VIDEO,
++	  .bInterfaceSubClass	= 1,
++	  .bInterfaceProtocol	= 0,
++	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_WAKE_AUTOSUSPEND)},
+ 	/* Logitech Quickcam Fusion */
+ 	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+ 				| USB_DEVICE_ID_MATCH_INT_INFO,
+diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+index 1b4cc934109e8..af2c6cb9fa3c4 100644
+--- a/drivers/media/usb/uvc/uvc_video.c
++++ b/drivers/media/usb/uvc/uvc_video.c
+@@ -1951,6 +1951,17 @@ static int uvc_video_start_transfer(struct uvc_streaming *stream,
+ 			"Selecting alternate setting %u (%u B/frame bandwidth)\n",
+ 			altsetting, best_psize);
  
- 		if (fmtdesc != NULL) {
--			strscpy(format->name, fmtdesc->name,
--				sizeof(format->name));
- 			format->fcc = fmtdesc->fcc;
- 		} else {
- 			dev_info(&streaming->intf->dev,
- 				 "Unknown video format %pUl\n", &buffer[5]);
--			snprintf(format->name, sizeof(format->name), "%pUl\n",
--				&buffer[5]);
- 			format->fcc = 0;
- 		}
- 
-@@ -270,8 +266,6 @@ static int uvc_parse_format(struct uvc_device *dev,
- 		 */
- 		if (dev->quirks & UVC_QUIRK_FORCE_Y8) {
- 			if (format->fcc == V4L2_PIX_FMT_YUYV) {
--				strscpy(format->name, "Greyscale 8-bit (Y8  )",
--					sizeof(format->name));
- 				format->fcc = V4L2_PIX_FMT_GREY;
- 				format->bpp = 8;
- 				width_multiplier = 2;
-@@ -312,7 +306,6 @@ static int uvc_parse_format(struct uvc_device *dev,
- 			return -EINVAL;
- 		}
- 
--		strscpy(format->name, "MJPEG", sizeof(format->name));
- 		format->fcc = V4L2_PIX_FMT_MJPEG;
- 		format->flags = UVC_FMT_FLAG_COMPRESSED;
- 		format->bpp = 0;
-@@ -328,17 +321,7 @@ static int uvc_parse_format(struct uvc_device *dev,
- 			return -EINVAL;
- 		}
- 
--		switch (buffer[8] & 0x7f) {
--		case 0:
--			strscpy(format->name, "SD-DV", sizeof(format->name));
--			break;
--		case 1:
--			strscpy(format->name, "SDL-DV", sizeof(format->name));
--			break;
--		case 2:
--			strscpy(format->name, "HD-DV", sizeof(format->name));
--			break;
--		default:
-+		if ((buffer[8] & 0x7f) > 2) {
- 			uvc_dbg(dev, DESCR,
- 				"device %d videostreaming interface %d: unknown DV format %u\n",
- 				dev->udev->devnum,
-@@ -346,9 +329,6 @@ static int uvc_parse_format(struct uvc_device *dev,
- 			return -EINVAL;
- 		}
- 
--		strlcat(format->name, buffer[8] & (1 << 7) ? " 60Hz" : " 50Hz",
--			sizeof(format->name));
--
- 		format->fcc = V4L2_PIX_FMT_DV;
- 		format->flags = UVC_FMT_FLAG_COMPRESSED | UVC_FMT_FLAG_STREAM;
- 		format->bpp = 0;
-@@ -375,7 +355,7 @@ static int uvc_parse_format(struct uvc_device *dev,
- 		return -EINVAL;
- 	}
- 
--	uvc_dbg(dev, DESCR, "Found format %s\n", format->name);
-+	uvc_dbg(dev, DESCR, "Found format %p4cc", &format->fcc);
- 
- 	buflen -= buffer[0];
- 	buffer += buffer[0];
-diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-index f4d4c33b6dfbd..dcd178d249b6b 100644
---- a/drivers/media/usb/uvc/uvc_v4l2.c
-+++ b/drivers/media/usb/uvc/uvc_v4l2.c
-@@ -660,8 +660,6 @@ static int uvc_ioctl_enum_fmt(struct uvc_streaming *stream,
- 	fmt->flags = 0;
- 	if (format->flags & UVC_FMT_FLAG_COMPRESSED)
- 		fmt->flags |= V4L2_FMT_FLAG_COMPRESSED;
--	strscpy(fmt->description, format->name, sizeof(fmt->description));
--	fmt->description[sizeof(fmt->description) - 1] = 0;
- 	fmt->pixelformat = format->fcc;
- 	return 0;
- }
++		/*
++		 * Some devices, namely the Logitech C910 and B910, are unable
++		 * to recover from a USB autosuspend, unless the alternate
++		 * setting of the streaming interface is toggled.
++		 */
++		if (stream->dev->quirks & UVC_QUIRK_WAKE_AUTOSUSPEND) {
++			usb_set_interface(stream->dev->udev, intfnum,
++					  altsetting);
++			usb_set_interface(stream->dev->udev, intfnum, 0);
++		}
++
+ 		ret = usb_set_interface(stream->dev->udev, intfnum, altsetting);
+ 		if (ret < 0)
+ 			return ret;
 diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index df93db259312e..b60e4ae95e815 100644
+index efeb3f8bf9357..ab50e2ddbcf26 100644
 --- a/drivers/media/usb/uvc/uvcvideo.h
 +++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -264,8 +264,6 @@ struct uvc_format {
- 	u32 fcc;
- 	u32 flags;
+@@ -209,6 +209,7 @@
+ #define UVC_QUIRK_RESTORE_CTRLS_ON_INIT	0x00000400
+ #define UVC_QUIRK_FORCE_Y8		0x00000800
+ #define UVC_QUIRK_FORCE_BPP		0x00001000
++#define UVC_QUIRK_WAKE_AUTOSUSPEND	0x00002000
  
--	char name[32];
--
- 	unsigned int nframes;
- 	struct uvc_frame *frame;
- };
+ /* Format flags */
+ #define UVC_FMT_FLAG_COMPRESSED		0x00000001
 -- 
 2.39.2
 
