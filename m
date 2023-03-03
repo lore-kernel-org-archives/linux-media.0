@@ -2,42 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42244C6FA8E
-	for <linux-media@archiver.kernel.org>; Fri,  3 Mar 2023 01:39:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A40B8C7EE36
+	for <linux-media@archiver.kernel.org>; Fri,  3 Mar 2023 01:39:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbjCCBjE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 2 Mar 2023 20:39:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
+        id S229996AbjCCBjC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 2 Mar 2023 20:39:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjCCBjA (ORCPT
+        with ESMTP id S229971AbjCCBjA (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 2 Mar 2023 20:39:00 -0500
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD475559C3;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3FA5552A;
         Thu,  2 Mar 2023 17:38:57 -0800 (PST)
-X-UUID: 246de544b96411ed945fc101203acc17-20230303
+X-UUID: 245c3d6cb96411ed945fc101203acc17-20230303
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=UF5HxZGrnT9l0ObgLg61S3SwBqbR0DHrc+ITe5j3i9U=;
-        b=DDZp0Aaro1IJZ6jEH4rKi2hYrLH/CBiPUsbEkldGo0Y+ueASVnrN7pMexjwRF2wzDT3dFu9sqtSchojw3wFhPWVPJENDNQ/2ToBQV/yYxQsO7Cn/X+Lab/yfJOm6yHTmJNO2VEuHBjY2/fGLNV2npv4Z/hTxKiEkm+0Tjtbfn8Q=;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=BFH3u90gQu6CGSoKIn5r02HFDVd5hW7dCnj1CEuoUp0=;
+        b=e6wOhWilXjps1X1tRVQ9Oz2nVXgC9FOM9APwQXlwgwMMhHJaCuu5PqfIQaPlgnuLAt3qdyy22X3EVPpjci84t0Z6m4kYBJwdnPCerU2JFUlYG6+m7FvOeXCn7LNuoNT8jZYXutLsFTyNSCsOEpJQyd43/uHffoSucct0HjgF9pM=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.20,REQID:a9b8185d-5768-4495-833b-c65601ff9cd9,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:25b5999,CLOUDID:1f389bf4-ddba-41c3-91d9-10eeade8eac7,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-O-INFO: VERSION:1.1.20,REQID:604cd57d-e854-4f84-a1d1-810a5cc82c5c,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:70
+X-CID-INFO: VERSION:1.1.20,REQID:604cd57d-e854-4f84-a1d1-810a5cc82c5c,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:70
+X-CID-META: VersionHash:25b5999,CLOUDID:b4880db2-beed-4dfc-bd9c-e1b22fa6ccc4,B
+        ulkID:230303093849V0GIIFBN,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0
 X-CID-BVR: 0
-X-UUID: 246de544b96411ed945fc101203acc17-20230303
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+X-UUID: 245c3d6cb96411ed945fc101203acc17-20230303
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
         (envelope-from <allen-kh.cheng@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 180331520; Fri, 03 Mar 2023 09:38:47 +0800
+        with ESMTP id 941020051; Fri, 03 Mar 2023 09:38:47 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Fri, 3 Mar 2023 09:38:46 +0800
+ 15.2.1118.25; Fri, 3 Mar 2023 09:38:44 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Fri, 3 Mar 2023 09:38:46 +0800
+ 15.2.1118.25 via Frontend Transport; Fri, 3 Mar 2023 09:38:44 +0800
 From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
@@ -49,102 +53,137 @@ CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         <linux-kernel@vger.kernel.org>,
         <linux-mediatek@lists.infradead.org>, <yunfei.dong@mediatek.com>,
         Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Subject: [RESEND 3/6] arm64: dts: mt8192: Add video-codec nodes
-Date:   Fri, 3 Mar 2023 09:38:39 +0800
-Message-ID: <20230303013842.23259-4-allen-kh.cheng@mediatek.com>
+Subject: [RESEND 1/6] media: dt-bindings: media: mediatek: Rename child node names for decoder
+Date:   Fri, 3 Mar 2023 09:38:37 +0800
+Message-ID: <20230303013842.23259-2-allen-kh.cheng@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20230303013842.23259-1-allen-kh.cheng@mediatek.com>
 References: <20230303013842.23259-1-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add video-codec lat and core nodes for mt8192 SoC.
+In order to make the names of the child nodes more generic, we rename
+"vcodec-lat" and "vcodec-core" to "video-codec" for decoder in
+patternProperties and example.
 
 Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
 Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- arch/arm64/boot/dts/mediatek/mt8192.dtsi | 59 ++++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
+ .../media/mediatek,vcodec-subdev-decoder.yaml | 61 ++-----------------
+ 1 file changed, 5 insertions(+), 56 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-index 87b91c8feaf9..f0dc7a943a90 100644
---- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-@@ -1517,6 +1517,65 @@
- 			power-domains = <&spm MT8192_POWER_DOMAIN_ISP2>;
- 		};
+diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
+index c4f20acdc1f8..46308cdaacc0 100644
+--- a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
++++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
+@@ -91,12 +91,13 @@ properties:
  
-+		vcodec_dec: video-codec@16000000 {
-+			compatible = "mediatek,mt8192-vcodec-dec";
-+			reg = <0 0x16000000 0 0x1000>;
-+			mediatek,scp = <&scp>;
-+			iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>;
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges = <0 0 0 0x16000000 0 0x26000>;
-+
-+			video-codec@10000 {
-+				compatible = "mediatek,mtk-vcodec-lat";
-+				reg = <0x0 0x10000 0 0x800>;
-+				interrupts = <GIC_SPI 426 IRQ_TYPE_LEVEL_HIGH 0>;
-+				iommus = <&iommu0 M4U_PORT_L5_VDEC_LAT0_VLD_EXT>,
-+					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_VLD2_EXT>,
-+					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_AVC_MV_EXT>,
-+					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_PRED_RD_EXT>,
-+					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_TILE_EXT>,
-+					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_WDMA_EXT>,
-+					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_RG_CTRL_DMA_EXT>,
-+					 <&iommu0 M4U_PORT_L5_VDEC_UFO_ENC_EXT>;
-+				clocks = <&topckgen CLK_TOP_VDEC_SEL>,
-+					 <&vdecsys_soc CLK_VDEC_SOC_VDEC>,
-+					 <&vdecsys_soc CLK_VDEC_SOC_LAT>,
-+					 <&vdecsys_soc CLK_VDEC_SOC_LARB1>,
-+					 <&topckgen CLK_TOP_MAINPLL_D4>;
-+				clock-names = "sel", "soc-vdec", "soc-lat", "vdec", "top";
-+				assigned-clocks = <&topckgen CLK_TOP_VDEC_SEL>;
-+				assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D4>;
-+				power-domains = <&spm MT8192_POWER_DOMAIN_VDEC>;
-+			};
-+
-+			video-codec@25000 {
-+				compatible = "mediatek,mtk-vcodec-core";
-+				reg = <0 0x25000 0 0x1000>;
-+				interrupts = <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH 0>;
-+				iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_UFO_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_PP_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_PRED_RD_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_PRED_WR_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_PPWRAP_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_TILE_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_VLD_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_VLD2_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_AVC_MV_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_RG_CTRL_DMA_EXT>;
-+				clocks = <&topckgen CLK_TOP_VDEC_SEL>,
-+					 <&vdecsys CLK_VDEC_VDEC>,
-+					 <&vdecsys CLK_VDEC_LAT>,
-+					 <&vdecsys CLK_VDEC_LARB1>,
-+					 <&topckgen CLK_TOP_MAINPLL_D4>;
-+				clock-names = "sel", "soc-vdec", "soc-lat", "vdec", "top";
-+				assigned-clocks = <&topckgen CLK_TOP_VDEC_SEL>;
-+				assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D4>;
-+				power-domains = <&spm MT8192_POWER_DOMAIN_VDEC2>;
-+			};
-+		};
-+
- 		larb5: larb@1600d000 {
- 			compatible = "mediatek,mt8192-smi-larb";
- 			reg = <0 0x1600d000 0 0x1000>;
+ # Required child node:
+ patternProperties:
+-  '^vcodec-lat@[0-9a-f]+$':
++  '^video-codec@[0-9a-f]+$':
+     type: object
+ 
+     properties:
+       compatible:
+         enum:
++          - mediatek,mtk-vcodec-core
+           - mediatek,mtk-vcodec-lat
+           - mediatek,mtk-vcodec-lat-soc
+ 
+@@ -145,59 +146,6 @@ patternProperties:
+ 
+     additionalProperties: false
+ 
+-  '^vcodec-core@[0-9a-f]+$':
+-    type: object
+-
+-    properties:
+-      compatible:
+-        const: mediatek,mtk-vcodec-core
+-
+-      reg:
+-        maxItems: 1
+-
+-      interrupts:
+-        maxItems: 1
+-
+-      iommus:
+-        minItems: 1
+-        maxItems: 32
+-        description: |
+-          List of the hardware port in respective IOMMU block for current Socs.
+-          Refer to bindings/iommu/mediatek,iommu.yaml.
+-
+-      clocks:
+-        maxItems: 5
+-
+-      clock-names:
+-        items:
+-          - const: sel
+-          - const: soc-vdec
+-          - const: soc-lat
+-          - const: vdec
+-          - const: top
+-
+-      assigned-clocks:
+-        maxItems: 1
+-
+-      assigned-clock-parents:
+-        maxItems: 1
+-
+-      power-domains:
+-        maxItems: 1
+-
+-    required:
+-      - compatible
+-      - reg
+-      - interrupts
+-      - iommus
+-      - clocks
+-      - clock-names
+-      - assigned-clocks
+-      - assigned-clock-parents
+-      - power-domains
+-
+-    additionalProperties: false
+-
+ required:
+   - compatible
+   - reg
+@@ -211,6 +159,7 @@ if:
+     compatible:
+       contains:
+         enum:
++          - mediatek,mtk-vcodec-core
+           - mediatek,mtk-vcodec-lat
+ 
+ then:
+@@ -241,7 +190,7 @@ examples:
+             #size-cells = <2>;
+             ranges = <0 0 0 0x16000000 0 0x40000>;
+             reg = <0 0x16000000 0 0x1000>;		/* VDEC_SYS */
+-            vcodec-lat@10000 {
++            video-codec@10000 {
+                 compatible = "mediatek,mtk-vcodec-lat";
+                 reg = <0 0x10000 0 0x800>;
+                 interrupts = <GIC_SPI 426 IRQ_TYPE_LEVEL_HIGH 0>;
+@@ -264,7 +213,7 @@ examples:
+                 power-domains = <&spm MT8192_POWER_DOMAIN_VDEC>;
+             };
+ 
+-            vcodec-core@25000 {
++            video-codec@25000 {
+                 compatible = "mediatek,mtk-vcodec-core";
+                 reg = <0 0x25000 0 0x1000>;
+                 interrupts = <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH 0>;
 -- 
 2.18.0
 
