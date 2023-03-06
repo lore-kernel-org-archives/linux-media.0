@@ -2,112 +2,158 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88F9EC6FD1A
-	for <linux-media@archiver.kernel.org>; Mon,  6 Mar 2023 06:37:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F6A6C61DA4
+	for <linux-media@archiver.kernel.org>; Mon,  6 Mar 2023 08:33:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbjCFGhO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 6 Mar 2023 01:37:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
+        id S229816AbjCFIdo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 6 Mar 2023 03:33:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjCFGhN (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Mar 2023 01:37:13 -0500
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505F3D515;
-        Sun,  5 Mar 2023 22:37:12 -0800 (PST)
-Received: from toolbox.int.toradex.com ([213.55.225.231]) by
- mrelay.perfora.net (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id
- 0MDiGW-1pnxup1YiM-00HA0v; Mon, 06 Mar 2023 07:36:58 +0100
-From:   Marcel Ziswiler <marcel@ziswiler.com>
-To:     linux-media@vger.kernel.org
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>, kernel@pengutronix.de,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        Aishwarya Kothari <aishwarya.kothari@toradex.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] media: i2c: ov5640: Implement get_mbus_config
-Date:   Mon,  6 Mar 2023 07:36:49 +0100
-Message-Id: <20230306063649.7387-1-marcel@ziswiler.com>
-X-Mailer: git-send-email 2.36.1
+        with ESMTP id S229799AbjCFIdm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Mar 2023 03:33:42 -0500
+X-Greylist: delayed 965 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Mar 2023 00:33:02 PST
+Received: from smtp16.bhosted.nl (smtp16.bhosted.nl [IPv6:2a02:9e0:8000::27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3321CAE5
+        for <linux-media@vger.kernel.org>; Mon,  6 Mar 2023 00:33:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=protonic.nl; s=202111;
+        h=message-id:references:in-reply-to:reply-to:subject:cc:to:from:date:
+         content-transfer-encoding:content-type:mime-version:from;
+        bh=iGJBerep9CUnwc0kKc070FLg5wgjahdY5flMGzZYQMs=;
+        b=oDYibHiF3QQbdSnLfVFRXWqS6z3NQmb6kugL8YV+AzvXesLHyr5JzoQv36TlUtoc6W5KCotN1l9wN
+         9LSOB4Bu9Yfgb0XpMplMCVfXibebalo7a5aESxI1lFy0L3DA6RZo6UFgR79W8gl98jQrxQ/tLvd2T2
+         0xEQnuRgzH1ORWF+wpRq+raboR/TqFqi3nosbBYytoNMkARO5GE2FASMRvbgozacXT968pNevzID08
+         kd2Bb6hh7pzuv819gTpRFHFjwmhc4+RnlmqnZW8aNjXY3z24ty79Y1uQG7spYocRbf484LhNNLEwf4
+         6CAVA7hl0v6jQA7FXN1mdH2h85/uHYw==
+X-MSG-ID: 412d5329-bbf7-11ed-829c-0050569d2c73
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:U5q3Uzpu7O0mLu2MHa+N3aU6TzuolB/G+0u48wmiI71QRmt2rVf
- FczmGewXuqOKGed/nKo1KZ0J6qv5fd+KkgfrzwUo91Vgh9Kf5PHIc9LsN+w2aXa7O2rffBz
- JgrVqoqiicTp5h93slLp1cWuS4WklL4Cyk3s+S3jJG4EauW8phOjVQGT3Oqj8nXiunH+yX8
- rjWvYEsfMixgdU0ulIbgg==
-UI-OutboundReport: notjunk:1;M01:P0:HAgWnUUvlSQ=;rNGwRX+DE7mdzFWkYDWnNzmB04t
- DMCyQorcQaqeXoHS+pUB0eU8cCI443lUMQe8PXHqFCyigfH2gAXnXkwJgQjkkkoD8fp0IZpKl
- 7bYd7WIox/bTR2j1VQBqkWmslysUTQEVjptJZzs6zwC33QcI4T9zP45dp8p+A5/vwl2ljRaTM
- 1LEW8Cf8nutrikxEhwkjRYG1jpTUJMY8y2/c4qHYprDEKbi/VBPB7USLZYtnwE4CvJxwvVGUc
- kfewNPIaQCOlUj6oCEsqHpSm1XhxM2tmWp/I7Mbc+vp4237j9r35GtLnirCiozm6/IA0GNj91
- ZbuBuUhsFPCuExSerxjA0yjPXM3xAPC65RVopEoX6Ck07lv8IITBlGeyvEjGQnNJmhSpxOqIJ
- Atz66QBuKNs4jwVi/23PUKY4ox0CPqmVq8dsooOBnFatozwTVEKM7lM/HB5IFq6z8FmjJpmif
- vEq/BTlpavkAm8T1U4vV2tV+dumB7JCGipxZmtlSeqqIntLKw+8SQnPTxrEO3VgfflC3yho/k
- /+VXIsoysjkySoevlWL0Rndds2jSCjZVAZBMmcEWNFI4AjsFh1tdeoEMSTh9hcrZG7ITR0+DH
- V9J++LJKsa3TvAfbQH0PDshm6VnXMXn1LbcUZS2JsDFkJu7Yv0rsbEhno0TayQ6ok1iO02W+X
- 3Oo/FabfSTXxx6zROhIrPdmXiBAhNYFGjvupZRzH5Q==
+Date:   Mon, 06 Mar 2023 09:16:54 +0100
+From:   Robin van der Gracht <robin@protonic.nl>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Fix SPI and I2C bus node names in examples
+Organization: Protonic Holland
+Reply-To: robin@protonic.nl
+Mail-Reply-To: robin@protonic.nl
+In-Reply-To: <CANiq72mm9qX8uuS2y_vvtcza2hAgG3zFEy24koQTfSEOWkKDYQ@mail.gmail.com>
+References: <20230228215433.3944508-1-robh@kernel.org>
+ <CANiq72mm9qX8uuS2y_vvtcza2hAgG3zFEy24koQTfSEOWkKDYQ@mail.gmail.com>
+Message-ID: <61190cb766083d73ef3b1455dcf3ff61@protonic.nl>
+X-Sender: robin@protonic.nl
+User-Agent: Roundcube Webmail/1.3.1 
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Aishwarya Kothari <aishwarya.kothari@toradex.com>
+> From: Rob Herring <robh@kernel.org>
+> Date: Tue, Feb 28, 2023 at 10:54 PM
+> Subject: [PATCH] dt-bindings: Fix SPI and I2C bus node names in 
+> examples
+> To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: <devicetree@vger.kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+> Benson Leung <bleung@chromium.org>, Guenter Roeck
+> <groeck@chromium.org>, Stephen Boyd <sboyd@kernel.org>, Andrzej Hajda
+> <andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>,
+> Robert Foss <rfoss@kernel.org>, Thierry Reding
+> <thierry.reding@gmail.com>, Sam Ravnborg <sam@ravnborg.org>, MyungJoo
+> Ham <myungjoo.ham@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>,
+> Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
+> <brgl@bgdev.pl>, Pavel Machek <pavel@ucw.cz>, Lee Jones
+> <lee@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, David S.
+> Miller <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+> Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+> Wolfgang Grandegger <wg@grandegger.com>, Kalle Valo
+> <kvalo@kernel.org>, Sebastian Reichel <sre@kernel.org>, Mark Brown
+> <broonie@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+> <linux-clk@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+> <linux-gpio@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+> <linux-leds@vger.kernel.org>, <linux-media@vger.kernel.org>,
+> <netdev@vger.kernel.org>, <linux-can@vger.kernel.org>,
+> <linux-wireless@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+> <alsa-devel@alsa-project.org>, <linux-usb@vger.kernel.org>
+> 
+> 
+> SPI and I2C bus node names are expected to be "spi" or "i2c",
+> respectively, with nothing else, a unit-address, or a '-N' index. A
+> pattern of 'spi0' or 'i2c0' or similar has crept in. Fix all these
+> cases. Mostly scripted with the following commands:
+> 
+> git grep -l '\si2c[0-9] {' Documentation/devicetree/ | xargs sed -i -e
+> 's/i2c[0-9] {/i2c {/'
+> git grep -l '\sspi[0-9] {' Documentation/devicetree/ | xargs sed -i -e
+> 's/spi[0-9] {/spi {/'
+> 
+> With this, a few errors in examples were exposed and fixed.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: Benson Leung <bleung@chromium.org>
+> Cc: Guenter Roeck <groeck@chromium.org>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+> Cc: Neil Armstrong <neil.armstrong@linaro.org>
+> Cc: Robert Foss <rfoss@kernel.org>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
+> Cc: Chanwoo Choi <cw00.choi@samsung.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Lee Jones <lee@kernel.org>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Wolfgang Grandegger <wg@grandegger.com>
+> Cc: Kalle Valo <kvalo@kernel.org>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-clk@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-i2c@vger.kernel.org
+> Cc: linux-leds@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-can@vger.kernel.org
+> Cc: linux-wireless@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-usb@vger.kernel.org
+> ---
+>  .../bindings/auxdisplay/holtek,ht16k33.yaml       |  2 +-
 
-Implement the introduced get_mbus_config operation to report the
-config of the MIPI CSI-2, BT.656 and Parallel interface.
+....
 
-Signed-off-by: Aishwarya Kothari <aishwarya.kothari@toradex.com>
-Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+>  86 files changed, 110 insertions(+), 103 deletions(-)
+> 
+> diff --git 
+> a/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
+> b/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
+> index fc4873deb76f..286e726cd052 100644
+> --- a/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
+> +++ b/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
+> @@ -72,7 +72,7 @@ examples:
+>      #include <dt-bindings/interrupt-controller/irq.h>
+>      #include <dt-bindings/input/input.h>
+>      #include <dt-bindings/leds/common.h>
+> -    i2c1 {
+> +    i2c {
+>              #address-cells = <1>;
+>              #size-cells = <0>;
 
----
-
-Changes in v2:
-- Take care of MIPI CSI-2, BT.656 and Parallel interface as
-  pointed out by Jacopo. Thanks!
-
- drivers/media/i2c/ov5640.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
-
-diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index 1536649b9e90..43373416fcba 100644
---- a/drivers/media/i2c/ov5640.c
-+++ b/drivers/media/i2c/ov5640.c
-@@ -3774,6 +3774,24 @@ static int ov5640_init_cfg(struct v4l2_subdev *sd,
- 	return 0;
- }
- 
-+static int ov5640_get_mbus_config(struct v4l2_subdev *sd,
-+				   unsigned int pad,
-+				   struct v4l2_mbus_config *cfg)
-+{
-+	struct ov5640_dev *sensor = to_ov5640_dev(sd);
-+
-+	cfg->type = sensor->ep.bus_type;
-+	if (ov5640_is_csi2(sensor)) {
-+		cfg->bus.mipi_csi2.num_data_lanes =
-+			sensor->ep.bus.mipi_csi2.num_data_lanes;
-+		cfg->bus.mipi_csi2.flags = sensor->ep.bus.mipi_csi2.flags;
-+	} else {
-+		cfg->bus.parallel.flags = sensor->ep.bus.parallel.flags;
-+	}
-+
-+	return 0;
-+}
-+
- static const struct v4l2_subdev_core_ops ov5640_core_ops = {
- 	.log_status = v4l2_ctrl_subdev_log_status,
- 	.subscribe_event = v4l2_ctrl_subdev_subscribe_event,
-@@ -3794,6 +3812,7 @@ static const struct v4l2_subdev_pad_ops ov5640_pad_ops = {
- 	.get_selection = ov5640_get_selection,
- 	.enum_frame_size = ov5640_enum_frame_size,
- 	.enum_frame_interval = ov5640_enum_frame_interval,
-+	.get_mbus_config = ov5640_get_mbus_config,
- };
- 
- static const struct v4l2_subdev_ops ov5640_subdev_ops = {
--- 
-2.36.1
-
+Acked-by: Robin van der Gracht <robin@protonic.nl>
