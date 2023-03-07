@@ -2,423 +2,313 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E864AC678D4
-	for <linux-media@archiver.kernel.org>; Tue,  7 Mar 2023 14:26:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0962C6FD1E
+	for <linux-media@archiver.kernel.org>; Tue,  7 Mar 2023 14:31:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbjCGO0w (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 7 Mar 2023 09:26:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50052 "EHLO
+        id S230337AbjCGObd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 7 Mar 2023 09:31:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjCGO0e (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Mar 2023 09:26:34 -0500
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6B78B063;
-        Tue,  7 Mar 2023 06:22:04 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 4A2C1FDA32;
-        Tue,  7 Mar 2023 06:21:34 -0800 (PST)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ZqnTiE5Y3381; Tue,  7 Mar 2023 06:21:32 -0800 (PST)
-Message-ID: <41417ffce644975b3be0d52fb7ac584b3a7c3b1b.camel@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1678198892; bh=PXg1g9DbHfRAU2wFYxadouVQpnzufg0hm5gUPdHVCkM=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=IsN1PgOXYo9Inr1/urcREMcFvYS8wiavLIFD0sShda/JwjrCBCTiqDB6aaqjTTf/r
-         Gy3+iamkWrCbAWLzT5uBMVKGFXZViuPq/ROfLTFuLWjkXulGYYh+SlIKN4KUJoGhSf
-         p9wmRyNGrNFFAK1YuuTrNHOIzNtOV7Vz7cHY8M46al92ZFxgQRPaBdW8bMv3dtSjFY
-         pHI4BmK98WkfDX8sWM1fxl2VK13yDkkKZLspv+ziHgMJtX6teaSy5KgK7UrgF3YHIn
-         gPkxb/9bNNWRQC2lZRvFNzYO3mEpkNjG/Ev8rg+5FE0usJIJPve1zOFxt4XOYBgnY1
-         TvVyagRhh7lGQ==
-Subject: Re: [PATCH] media: imx: imx8mq-mipi-csi2: Use V4L2 subdev active
- state
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     slongerbeam@gmail.com, p.zabel@pengutronix.de, mchehab@kernel.org,
-        gregkh@linuxfoundation.org, shawnguo@kernel.org,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@puri.sm
-Date:   Tue, 07 Mar 2023 15:21:25 +0100
-In-Reply-To: <20230307132536.GG22827@pendragon.ideasonboard.com>
-References: <20230307121729.1419120-1-martin.kepplinger@puri.sm>
-         <20230307132536.GG22827@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1+deb11u1 
+        with ESMTP id S229755AbjCGOa4 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Mar 2023 09:30:56 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82EB3E62E;
+        Tue,  7 Mar 2023 06:26:48 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: linasend@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 81BB142058;
+        Tue,  7 Mar 2023 14:26:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1678199207;
+        bh=odEitMmgQnLv6N8I5beA3x4xEAfKw5Q0o5W+1zb1Uq0=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc;
+        b=RC0KNZdRAjm8I6dSNwqjpDJWYHk41dpDkvn1rl6ayJTvGPU1ivz3uCnyKA6WQy/n1
+         R60Zce/vvBHuycoyN3hawXRPjGiwzLplHZbKrY8XWrRpJC1z6uRT0zp4hXKXKEMYz4
+         ppO7x3pDfCTBzt2pEd3dgZJXKlN3hyWqDa6wkGCypMmXLAtxw+M+YoYG21bI+drXYR
+         bAvp1yvGdGMzlV/5JE0P3bkmKnhKyr5Uyy58J7zNpC6uZNFBgNCQ4YVKa+wH8Ppmza
+         9iJ1EqjZ+pSZ3vRoyX2/GZMkELY03THlB6TTOJ6uqM6tSgSCWD+O61EUgj56wgwlFH
+         pE1feT/nwHBIQ==
+From:   Asahi Lina <lina@asahilina.net>
+Date:   Tue, 07 Mar 2023 23:25:26 +0900
+Subject: [PATCH RFC 01/18] rust: drm: ioctl: Add DRM ioctl abstraction
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+Message-Id: <20230307-rust-drm-v1-1-917ff5bc80a8@asahilina.net>
+References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
+In-Reply-To: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Karol Herbst <kherbst@redhat.com>,
+        Ella Stanforth <ella@iglunix.org>,
+        Faith Ekstrand <faith.ekstrand@collabora.com>,
+        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-sgx@vger.kernel.org, asahi@lists.linux.dev,
+        Asahi Lina <lina@asahilina.net>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678199191; l=9667;
+ i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
+ bh=odEitMmgQnLv6N8I5beA3x4xEAfKw5Q0o5W+1zb1Uq0=;
+ b=pVDYzlEsrw9so/OnmS15cqXJNcC01JKoowKgcvrbpThVxIO7BRruz7od9ntExpWQktPx4YCXO
+ EwvtHQIBKysAyqQfsbYwJ6r30+3rae8H4xWsD5WZClGGRTizDqcEogo
+X-Developer-Key: i=lina@asahilina.net; a=ed25519;
+ pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Am Dienstag, dem 07.03.2023 um 15:25 +0200 schrieb Laurent Pinchart:
-> Hi Martin,
-> 
-> Thank you for the patch.
-> 
-> On Tue, Mar 07, 2023 at 01:17:29PM +0100, Martin Kepplinger wrote:
-> > Simplify the driver by using the V4L2 subdev active state API to
-> > store
-> > the active format.
-> > 
-> > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > ---
-> >  drivers/staging/media/imx/imx8mq-mipi-csi2.c | 108 +++++++--------
-> > ----
-> >  1 file changed, 37 insertions(+), 71 deletions(-)
-> > 
-> > diff --git a/drivers/staging/media/imx/imx8mq-mipi-csi2.c
-> > b/drivers/staging/media/imx/imx8mq-mipi-csi2.c
-> > index c0d0bf770096..066409782058 100644
-> > --- a/drivers/staging/media/imx/imx8mq-mipi-csi2.c
-> > +++ b/drivers/staging/media/imx/imx8mq-mipi-csi2.c
-> > @@ -119,9 +119,7 @@ struct csi_state {
-> >  
-> >         struct v4l2_mbus_config_mipi_csi2 bus;
-> >  
-> > -       struct mutex lock; /* Protect csi2_fmt, format_mbus, state,
-> > hs_settle */
-> > -       const struct csi2_pix_format *csi2_fmt;
-> > -       struct v4l2_mbus_framefmt format_mbus[MIPI_CSI2_PADS_NUM];
-> > +       struct mutex lock; /* Protect state and hs_settle */
-> 
-> The hs_settle value is computed in imx8mq_mipi_csi_calc_hs_settle()
-> and
-> used in imx8mq_mipi_csi_system_enable(), both called from
-> imx8mq_mipi_csi_start_stream(). You could return it from the first
-> function, pass it to the second one, and drop it from the structure.
-> That can be done in a separate patch.
-> 
-> I think the state variable could also be dropped, which would allow
-> dropping the lock.
+DRM drivers need to be able to declare which driver-specific ioctls they
+support. This abstraction adds the required types and a helper macro to
+generate the ioctl definition inside the DRM driver.
 
-yes, I plan to do get rid of the driver state and lock later.
+Note that this macro is not usable until further bits of the
+abstraction are in place (but it will not fail to compile on its own, if
+not called).
 
-> 
-> >         u32 state;
-> >         u32 hs_settle;
-> >  
-> > @@ -328,10 +326,18 @@ static int
-> > imx8mq_mipi_csi_calc_hs_settle(struct csi_state *state)
-> >         u32 lane_rate;
-> >         unsigned long esc_clk_rate;
-> >         u32 min_ths_settle, max_ths_settle, ths_settle_ns,
-> > esc_clk_period_ns;
-> > +       const struct v4l2_mbus_framefmt *fmt;
-> > +       const struct csi2_pix_format *csi2_fmt;
-> > +       struct v4l2_subdev_state *sd_state;
-> >  
-> >         /* Calculate the line rate from the pixel rate. */
-> > +
-> > +       sd_state = v4l2_subdev_lock_and_get_active_state(&state-
-> > >sd);
-> 
-> You need to unlock the state when you're done with it. I would call
-> v4l2_subdev_lock_and_get_active_state() in
-> imx8mq_mipi_csi_start_stream() and unlock it there, and pass the
-> state
-> to imx8mq_mipi_csi_calc_hs_settle(). This will prepare for the future
-> when the V4L2 core will pass the state to the .s_stream() handler.
+Signed-off-by: Asahi Lina <lina@asahilina.net>
+---
+ drivers/gpu/drm/Kconfig         |   7 ++
+ rust/bindings/bindings_helper.h |   2 +
+ rust/kernel/drm/ioctl.rs        | 147 ++++++++++++++++++++++++++++++++++++++++
+ rust/kernel/drm/mod.rs          |   5 ++
+ rust/kernel/lib.rs              |   2 +
+ 5 files changed, 163 insertions(+)
 
-thanks! will do and send a v2 early in this case.
+diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+index dc0f94f02a82..dab8f0f9aa96 100644
+--- a/drivers/gpu/drm/Kconfig
++++ b/drivers/gpu/drm/Kconfig
+@@ -27,6 +27,13 @@ menuconfig DRM
+ 	  details.  You should also select and configure AGP
+ 	  (/dev/agpgart) support if it is available for your platform.
+ 
++# Rust abstractions cannot be built as modules currently, so force them as
++# bool by using these intermediate symbols. In the future these could be
++# tristate once abstractions themselves can be built as modules.
++config RUST_DRM
++	bool "Rust support for the DRM subsystem"
++	depends on DRM=y
++
+ config DRM_MIPI_DBI
+ 	tristate
+ 	depends on DRM
+diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
+index 91bb7906ca5a..2687bef1676f 100644
+--- a/rust/bindings/bindings_helper.h
++++ b/rust/bindings/bindings_helper.h
+@@ -6,6 +6,7 @@
+  * Sorted alphabetically.
+  */
+ 
++#include <drm/drm_ioctl.h>
+ #include <linux/delay.h>
+ #include <linux/device.h>
+ #include <linux/dma-mapping.h>
+@@ -23,6 +24,7 @@
+ #include <linux/sysctl.h>
+ #include <linux/timekeeping.h>
+ #include <linux/xarray.h>
++#include <uapi/drm/drm.h>
+ 
+ /* `bindgen` gets confused at certain things. */
+ const gfp_t BINDINGS_GFP_KERNEL = GFP_KERNEL;
+diff --git a/rust/kernel/drm/ioctl.rs b/rust/kernel/drm/ioctl.rs
+new file mode 100644
+index 000000000000..10304efbd5f1
+--- /dev/null
++++ b/rust/kernel/drm/ioctl.rs
+@@ -0,0 +1,147 @@
++// SPDX-License-Identifier: GPL-2.0 OR MIT
++#![allow(non_snake_case)]
++
++//! DRM IOCTL definitions.
++//!
++//! C header: [`include/linux/drm/drm_ioctl.h`](../../../../include/linux/drm/drm_ioctl.h)
++
++use crate::ioctl;
++
++const BASE: u32 = bindings::DRM_IOCTL_BASE as u32;
++
++/// Construct a DRM ioctl number with no argument.
++pub const fn IO(nr: u32) -> u32 {
++    ioctl::_IO(BASE, nr)
++}
++
++/// Construct a DRM ioctl number with a read-only argument.
++pub const fn IOR<T>(nr: u32) -> u32 {
++    ioctl::_IOR::<T>(BASE, nr)
++}
++
++/// Construct a DRM ioctl number with a write-only argument.
++pub const fn IOW<T>(nr: u32) -> u32 {
++    ioctl::_IOW::<T>(BASE, nr)
++}
++
++/// Construct a DRM ioctl number with a read-write argument.
++pub const fn IOWR<T>(nr: u32) -> u32 {
++    ioctl::_IOWR::<T>(BASE, nr)
++}
++
++/// Descriptor type for DRM ioctls. Use the `declare_drm_ioctls!{}` macro to construct them.
++pub type DrmIoctlDescriptor = bindings::drm_ioctl_desc;
++
++/// This is for ioctl which are used for rendering, and require that the file descriptor is either
++/// for a render node, or if it’s a legacy/primary node, then it must be authenticated.
++pub const AUTH: u32 = bindings::drm_ioctl_flags_DRM_AUTH;
++
++/// This must be set for any ioctl which can change the modeset or display state. Userspace must
++/// call the ioctl through a primary node, while it is the active master.
++///
++/// Note that read-only modeset ioctl can also be called by unauthenticated clients, or when a
++/// master is not the currently active one.
++pub const MASTER: u32 = bindings::drm_ioctl_flags_DRM_MASTER;
++
++/// Anything that could potentially wreak a master file descriptor needs to have this flag set.
++///
++/// Current that’s only for the SETMASTER and DROPMASTER ioctl, which e.g. logind can call to force
++/// a non-behaving master (display compositor) into compliance.
++///
++/// This is equivalent to callers with the SYSADMIN capability.
++pub const ROOT_ONLY: u32 = bindings::drm_ioctl_flags_DRM_ROOT_ONLY;
++
++/// Whether drm_ioctl_desc.func should be called with the DRM BKL held or not. Enforced as the
++/// default for all modern drivers, hence there should never be a need to set this flag.
++///
++/// Do not use anywhere else than for the VBLANK_WAIT IOCTL, which is the only legacy IOCTL which
++/// needs this.
++pub const UNLOCKED: u32 = bindings::drm_ioctl_flags_DRM_UNLOCKED;
++
++/// This is used for all ioctl needed for rendering only, for drivers which support render nodes.
++/// This should be all new render drivers, and hence it should be always set for any ioctl with
++/// `AUTH` set. Note though that read-only query ioctl might have this set, but have not set
++/// DRM_AUTH because they do not require authentication.
++pub const RENDER_ALLOW: u32 = bindings::drm_ioctl_flags_DRM_RENDER_ALLOW;
++
++/// Declare the DRM ioctls for a driver.
++///
++/// Each entry in the list should have the form:
++///
++/// `(ioctl_number, argument_type, flags, user_callback),`
++///
++/// `argument_type` is the type name within the `bindings` crate.
++/// `user_callback` should have the following prototype:
++///
++/// ```
++/// fn foo(device: &kernel::drm::device::Device<Self>,
++///        data: &mut bindings::argument_type,
++///        file: &kernel::drm::file::File<Self::File>,
++/// )
++/// ```
++/// where `Self` is the drm::drv::Driver implementation these ioctls are being declared within.
++///
++/// # Examples
++///
++/// ```
++/// kernel::declare_drm_ioctls! {
++///     (FOO_GET_PARAM, drm_foo_get_param, ioctl::RENDER_ALLOW, my_get_param_handler),
++/// }
++/// ```
++///
++#[macro_export]
++macro_rules! declare_drm_ioctls {
++    ( $(($cmd:ident, $struct:ident, $flags:expr, $func:expr)),* $(,)? ) => {
++        const IOCTLS: &'static [$crate::drm::ioctl::DrmIoctlDescriptor] = {
++            const _:() = {
++                let i: u32 = $crate::bindings::DRM_COMMAND_BASE;
++                // Assert that all the IOCTLs are in the right order and there are no gaps,
++                // and that the sizeof of the specified type is correct.
++                $(
++                    let cmd: u32 = $crate::macros::concat_idents!($crate::bindings::DRM_IOCTL_, $cmd);
++                    ::core::assert!(i == $crate::ioctl::_IOC_NR(cmd));
++                    ::core::assert!(core::mem::size_of::<$crate::bindings::$struct>() == $crate::ioctl::_IOC_SIZE(cmd));
++                    let i: u32 = i + 1;
++                )*
++            };
++
++            let ioctls = &[$(
++                $crate::bindings::drm_ioctl_desc {
++                    cmd: $crate::macros::concat_idents!($crate::bindings::DRM_IOCTL_, $cmd) as u32,
++                    func: {
++                        #[allow(non_snake_case)]
++                        unsafe extern "C" fn $cmd(
++                                raw_dev: *mut $crate::bindings::drm_device,
++                                raw_data: *mut ::core::ffi::c_void,
++                                raw_file_priv: *mut $crate::bindings::drm_file,
++                        ) -> core::ffi::c_int {
++                            // SAFETY: We never drop this, and the DRM core ensures the device lives
++                            // while callbacks are being called.
++                            //
++                            // FIXME: Currently there is nothing enforcing that the types of the
++                            // dev/file match the current driver these ioctls are being declared
++                            // for, and it's not clear how to enforce this within the type system.
++                            let dev = ::core::mem::ManuallyDrop::new(unsafe {
++                                $crate::drm::device::Device::from_raw(raw_dev)
++                            });
++                            // SAFETY: This is just the ioctl argument, which hopefully has the right type
++                            // (we've done our best checking the size).
++                            let data = unsafe { &mut *(raw_data as *mut $crate::bindings::$struct) };
++                            // SAFETY: This is just the DRM file structure
++                            let file = unsafe { $crate::drm::file::File::from_raw(raw_file_priv) };
++
++                            match $func(&*dev, data, &file) {
++                                Err(e) => e.to_kernel_errno(),
++                                Ok(i) => i.try_into().unwrap_or(ERANGE.to_kernel_errno()),
++                            }
++                        }
++                        Some($cmd)
++                    },
++                    flags: $flags,
++                    name: $crate::c_str!(::core::stringify!($cmd)).as_char_ptr(),
++                }
++            ),*];
++            ioctls
++        };
++    };
++}
+diff --git a/rust/kernel/drm/mod.rs b/rust/kernel/drm/mod.rs
+new file mode 100644
+index 000000000000..9ec6d7cbcaf3
+--- /dev/null
++++ b/rust/kernel/drm/mod.rs
+@@ -0,0 +1,5 @@
++// SPDX-License-Identifier: GPL-2.0 OR MIT
++
++//! DRM subsystem abstractions.
++
++pub mod ioctl;
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index 7903490816bf..cb23d24c6718 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -37,6 +37,8 @@ mod build_assert;
+ pub mod delay;
+ pub mod device;
+ pub mod driver;
++#[cfg(CONFIG_RUST_DRM)]
++pub mod drm;
+ pub mod error;
+ pub mod io_buffer;
+ pub mod io_mem;
 
-> 
-> Another candidate for a separate patch would be to rename the state
-> variables to csi, to avoid confusion with the subdev state.
-> 
-> > +       fmt = v4l2_subdev_get_pad_format(&state->sd, sd_state,
-> > MIPI_CSI2_PAD_SINK);
-> > +       csi2_fmt = find_csi2_format(fmt->code);
-> > +
-> >         link_freq = v4l2_get_link_freq(state->src_sd->ctrl_handler,
-> > -                                      state->csi2_fmt->width,
-> > +                                      csi2_fmt->width,
-> >                                        state->bus.num_data_lanes *
-> > 2);
-> >         if (link_freq < 0) {
-> >                 dev_err(state->dev, "Unable to obtain link
-> > frequency: %d\n",
-> > @@ -455,29 +461,14 @@ static int imx8mq_mipi_csi_s_stream(struct
-> > v4l2_subdev *sd, int enable)
-> >         return ret;
-> >  }
-> >  
-> > -static struct v4l2_mbus_framefmt *
-> > -imx8mq_mipi_csi_get_format(struct csi_state *state,
-> > -                          struct v4l2_subdev_state *sd_state,
-> > -                          enum v4l2_subdev_format_whence which,
-> > -                          unsigned int pad)
-> > -{
-> > -       if (which == V4L2_SUBDEV_FORMAT_TRY)
-> > -               return v4l2_subdev_get_try_format(&state->sd,
-> > sd_state, pad);
-> > -
-> > -       return &state->format_mbus[pad];
-> > -}
-> > -
-> >  static int imx8mq_mipi_csi_init_cfg(struct v4l2_subdev *sd,
-> >                                     struct v4l2_subdev_state
-> > *sd_state)
-> >  {
-> > -       struct csi_state *state = mipi_sd_to_csi2_state(sd);
-> >         struct v4l2_mbus_framefmt *fmt_sink;
-> >         struct v4l2_mbus_framefmt *fmt_source;
-> > -       enum v4l2_subdev_format_whence which;
-> >  
-> > -       which = sd_state ? V4L2_SUBDEV_FORMAT_TRY :
-> > V4L2_SUBDEV_FORMAT_ACTIVE;
-> > -       fmt_sink = imx8mq_mipi_csi_get_format(state, sd_state,
-> > which,
-> > -                                             MIPI_CSI2_PAD_SINK);
-> > +       fmt_sink = v4l2_subdev_get_pad_format(sd, sd_state,
-> > MIPI_CSI2_PAD_SINK);
-> > +       fmt_source = v4l2_subdev_get_pad_format(sd, sd_state,
-> > MIPI_CSI2_PAD_SOURCE);
-> >  
-> >         fmt_sink->code = MEDIA_BUS_FMT_SGBRG10_1X10;
-> >         fmt_sink->width = MIPI_CSI2_DEF_PIX_WIDTH;
-> > @@ -491,38 +482,15 @@ static int imx8mq_mipi_csi_init_cfg(struct
-> > v4l2_subdev *sd,
-> >                 V4L2_MAP_QUANTIZATION_DEFAULT(false, fmt_sink-
-> > >colorspace,
-> >                                               fmt_sink->ycbcr_enc);
-> >  
-> > -       fmt_source = imx8mq_mipi_csi_get_format(state, sd_state,
-> > which,
-> > -
-> >                                                MIPI_CSI2_PAD_SOURCE)
-> > ;
-> >         *fmt_source = *fmt_sink;
-> >  
-> >         return 0;
-> >  }
-> >  
-> > -static int imx8mq_mipi_csi_get_fmt(struct v4l2_subdev *sd,
-> > -                                  struct v4l2_subdev_state
-> > *sd_state,
-> > -                                  struct v4l2_subdev_format
-> > *sdformat)
-> > -{
-> > -       struct csi_state *state = mipi_sd_to_csi2_state(sd);
-> > -       struct v4l2_mbus_framefmt *fmt;
-> > -
-> > -       fmt = imx8mq_mipi_csi_get_format(state, sd_state, sdformat-
-> > >which,
-> > -                                        sdformat->pad);
-> > -
-> > -       mutex_lock(&state->lock);
-> > -
-> > -       sdformat->format = *fmt;
-> > -
-> > -       mutex_unlock(&state->lock);
-> > -
-> > -       return 0;
-> > -}
-> > -
-> >  static int imx8mq_mipi_csi_enum_mbus_code(struct v4l2_subdev *sd,
-> >                                           struct v4l2_subdev_state
-> > *sd_state,
-> >                                           struct
-> > v4l2_subdev_mbus_code_enum *code)
-> >  {
-> > -       struct csi_state *state = mipi_sd_to_csi2_state(sd);
-> > -
-> >         /*
-> >          * We can't transcode in any way, the source format is
-> > identical
-> >          * to the sink format.
-> > @@ -533,8 +501,7 @@ static int
-> > imx8mq_mipi_csi_enum_mbus_code(struct v4l2_subdev *sd,
-> >                 if (code->index > 0)
-> >                         return -EINVAL;
-> >  
-> > -               fmt = imx8mq_mipi_csi_get_format(state, sd_state,
-> > code->which,
-> > -                                                code->pad);
-> > +               fmt = v4l2_subdev_get_pad_format(sd, sd_state,
-> > code->pad);
-> >                 code->code = fmt->code;
-> >                 return 0;
-> >         }
-> > @@ -554,8 +521,7 @@ static int imx8mq_mipi_csi_set_fmt(struct
-> > v4l2_subdev *sd,
-> >                                    struct v4l2_subdev_state
-> > *sd_state,
-> >                                    struct v4l2_subdev_format
-> > *sdformat)
-> >  {
-> > -       struct csi_state *state = mipi_sd_to_csi2_state(sd);
-> > -       struct csi2_pix_format const *csi2_fmt;
-> > +       const struct csi2_pix_format *csi2_fmt;
-> >         struct v4l2_mbus_framefmt *fmt;
-> >  
-> >         /*
-> > @@ -563,7 +529,7 @@ static int imx8mq_mipi_csi_set_fmt(struct
-> > v4l2_subdev *sd,
-> >          * modified.
-> >          */
-> >         if (sdformat->pad == MIPI_CSI2_PAD_SOURCE)
-> > -               return imx8mq_mipi_csi_get_fmt(sd, sd_state,
-> > sdformat);
-> > +               return v4l2_subdev_get_fmt(sd, sd_state, sdformat);
-> >  
-> >         if (sdformat->pad != MIPI_CSI2_PAD_SINK)
-> >                 return -EINVAL;
-> > @@ -572,10 +538,7 @@ static int imx8mq_mipi_csi_set_fmt(struct
-> > v4l2_subdev *sd,
-> >         if (!csi2_fmt)
-> >                 csi2_fmt = &imx8mq_mipi_csi_formats[0];
-> >  
-> > -       fmt = imx8mq_mipi_csi_get_format(state, sd_state, sdformat-
-> > >which,
-> > -                                        sdformat->pad);
-> > -
-> > -       mutex_lock(&state->lock);
-> > +       fmt = v4l2_subdev_get_pad_format(sd, sd_state, sdformat-
-> > >pad);
-> >  
-> >         fmt->code = csi2_fmt->code;
-> >         fmt->width = sdformat->format.width;
-> > @@ -584,16 +547,9 @@ static int imx8mq_mipi_csi_set_fmt(struct
-> > v4l2_subdev *sd,
-> >         sdformat->format = *fmt;
-> >  
-> >         /* Propagate the format from sink to source. */
-> > -       fmt = imx8mq_mipi_csi_get_format(state, sd_state, sdformat-
-> > >which,
-> > -                                        MIPI_CSI2_PAD_SOURCE);
-> > +       fmt = v4l2_subdev_get_pad_format(sd, sd_state,
-> > MIPI_CSI2_PAD_SOURCE);
-> >         *fmt = sdformat->format;
-> >  
-> > -       /* Store the CSI2 format descriptor for active formats. */
-> > -       if (sdformat->which == V4L2_SUBDEV_FORMAT_ACTIVE)
-> > -               state->csi2_fmt = csi2_fmt;
-> > -
-> > -       mutex_unlock(&state->lock);
-> > -
-> >         return 0;
-> >  }
-> >  
-> > @@ -604,7 +560,7 @@ static const struct v4l2_subdev_video_ops
-> > imx8mq_mipi_csi_video_ops = {
-> >  static const struct v4l2_subdev_pad_ops imx8mq_mipi_csi_pad_ops =
-> > {
-> >         .init_cfg               = imx8mq_mipi_csi_init_cfg,
-> >         .enum_mbus_code         = imx8mq_mipi_csi_enum_mbus_code,
-> > -       .get_fmt                = imx8mq_mipi_csi_get_fmt,
-> > +       .get_fmt                = v4l2_subdev_get_fmt,
-> >         .set_fmt                = imx8mq_mipi_csi_set_fmt,
-> >  };
-> >  
-> > @@ -821,6 +777,7 @@ static const struct dev_pm_ops
-> > imx8mq_mipi_csi_pm_ops = {
-> >  static int imx8mq_mipi_csi_subdev_init(struct csi_state *state)
-> >  {
-> >         struct v4l2_subdev *sd = &state->sd;
-> > +       int ret;
-> >  
-> >         v4l2_subdev_init(sd, &imx8mq_mipi_csi_subdev_ops);
-> >         sd->owner = THIS_MODULE;
-> > @@ -834,15 +791,22 @@ static int imx8mq_mipi_csi_subdev_init(struct
-> > csi_state *state)
-> >  
-> >         sd->dev = state->dev;
-> >  
-> > -       state->csi2_fmt = &imx8mq_mipi_csi_formats[0];
-> > -       imx8mq_mipi_csi_init_cfg(sd, NULL);
-> > -
-> >         state->pads[MIPI_CSI2_PAD_SINK].flags = MEDIA_PAD_FL_SINK
-> >                                          |
-> > MEDIA_PAD_FL_MUST_CONNECT;
-> >         state->pads[MIPI_CSI2_PAD_SOURCE].flags =
-> > MEDIA_PAD_FL_SOURCE
-> >                                            |
-> > MEDIA_PAD_FL_MUST_CONNECT;
-> > -       return media_entity_pads_init(&sd->entity,
-> > MIPI_CSI2_PADS_NUM,
-> > -                                     state->pads);
-> > +       ret = media_entity_pads_init(&sd->entity,
-> > MIPI_CSI2_PADS_NUM,
-> > +                                    state->pads);
-> > +       if (ret)
-> > +               return ret;
-> > +
-> > +       ret = v4l2_subdev_init_finalize(sd);
-> > +       if (ret) {
-> > +               media_entity_cleanup(&sd->entity);
-> > +               return ret;
-> > +       }
-> > +
-> > +       return 0;
-> >  }
-> >  
-> >  static void imx8mq_mipi_csi_release_icc(struct platform_device
-> > *pdev)
-> > @@ -949,6 +913,10 @@ static int imx8mq_mipi_csi_probe(struct
-> > platform_device *pdev)
-> >         if (ret)
-> >                 goto mutex;
-> >  
-> > +       ret = imx8mq_mipi_csi_async_register(state);
-> > +       if (ret < 0)
-> > +               goto cleanup;
-> > +
-> >         /* Enable runtime PM. */
-> >         pm_runtime_enable(dev);
-> >         if (!pm_runtime_enabled(dev)) {
-> 
-> You should still enable runtime PM after registering the subdev,
-> otherwise someone may get hold of the subdev and call an operation
-> that
-> depending on runtime PM being enabled before you get a chance to
-> enable
-> it.
-
-oh that slipped in, sorry.
-
-> 
-> It would also be nice to suspend the device at the end of probe
-> (using
-> pm runtime autosuspend), that's a candidate for another patch.
-> 
-
-thanks for the quick feedback!
-
-                          martin
-
-
-> > @@ -957,10 +925,6 @@ static int imx8mq_mipi_csi_probe(struct
-> > platform_device *pdev)
-> >                         goto icc;
-> >         }
-> >  
-> > -       ret = imx8mq_mipi_csi_async_register(state);
-> > -       if (ret < 0)
-> > -               goto cleanup;
-> > -
-> >         return 0;
-> >  
-> >  cleanup:
-> > @@ -968,6 +932,7 @@ static int imx8mq_mipi_csi_probe(struct
-> > platform_device *pdev)
-> >         imx8mq_mipi_csi_runtime_suspend(&pdev->dev);
-> >  
-> >         media_entity_cleanup(&state->sd.entity);
-> > +       v4l2_subdev_cleanup(&state->sd);
-> >         v4l2_async_nf_unregister(&state->notifier);
-> >         v4l2_async_nf_cleanup(&state->notifier);
-> >         v4l2_async_unregister_subdev(&state->sd);
-> > @@ -991,6 +956,7 @@ static int imx8mq_mipi_csi_remove(struct
-> > platform_device *pdev)
-> >         pm_runtime_disable(&pdev->dev);
-> >         imx8mq_mipi_csi_runtime_suspend(&pdev->dev);
-> >         media_entity_cleanup(&state->sd.entity);
-> > +       v4l2_subdev_cleanup(&state->sd);
-> >         mutex_destroy(&state->lock);
-> >         pm_runtime_set_suspended(&pdev->dev);
-> >         imx8mq_mipi_csi_release_icc(pdev);
-> 
-
+-- 
+2.35.1
 
