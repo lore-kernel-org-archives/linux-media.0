@@ -2,111 +2,147 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BFEDC678D4
-	for <linux-media@archiver.kernel.org>; Mon,  6 Mar 2023 16:41:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5518C64EC4
+	for <linux-media@archiver.kernel.org>; Tue,  7 Mar 2023 01:34:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbjCFQky (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 6 Mar 2023 11:40:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52330 "EHLO
+        id S229815AbjCGBet (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 6 Mar 2023 20:34:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbjCFQkX (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Mar 2023 11:40:23 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7F937F0B
-        for <linux-media@vger.kernel.org>; Mon,  6 Mar 2023 08:38:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678120738; x=1709656738;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OlHXlK+OxQRliz0q6R5s/LJC2K4a66Pjf4QM0bOUvPY=;
-  b=g2hI8HPxMN0kdGacNDh9JhB3JhiCQpqam8c5lqnufqMNEiu+lbQ57oNQ
-   up55XcFPrpK6Y5L4NX7opi1qVdwwy1GQ0/70EH1t8fz8nXZW2WKtyd2Qm
-   tXamADmXhmroZusY4gixLOANr3sAuYJBfljyucqKPLY10DdUB8Ts+I6+m
-   x2rHJXWzReuLIKtN6Li1S3ikZ0Q8WVENBX1N6VgPGKschPxQKKJop4q0V
-   7XiHWCw5sJBCrOG2B6ubs+TxmcVZbD3tPNo0rLH08pr93ooRAGb/QfOFt
-   ZI2yHQJo2EJ1GJHUxw0eIfhm5p/J+IC2Yze0A+7jdwGQ2RCLIf+rJ4B8K
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="335622677"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="335622677"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 08:35:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="850358222"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="850358222"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 06 Mar 2023 08:35:13 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pZDnr-00GWMX-0y;
-        Mon, 06 Mar 2023 18:35:11 +0200
-Date:   Mon, 6 Mar 2023 18:35:10 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Cao, Bingbu" <bingbu.cao@intel.com>
-Cc:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-        "djrscally@gmail.com" <djrscally@gmail.com>,
-        "bingbu.cao@linux.intel.com" <bingbu.cao@linux.intel.com>
-Subject: Re: [PATCH] media: ipu3-cio2: support multiple sensors and VCMs with
- HID name
-Message-ID: <ZAYWPpcjOghZ5L33@smile.fi.intel.com>
-References: <20230303144432.2108677-1-bingbu.cao@intel.com>
- <ZAXN9EszoxHt+F7w@smile.fi.intel.com>
- <DM8PR11MB565375ACA9BECCB175EE931199B69@DM8PR11MB5653.namprd11.prod.outlook.com>
+        with ESMTP id S230000AbjCGBef (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Mar 2023 20:34:35 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34894ECF1;
+        Mon,  6 Mar 2023 17:34:33 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id a2so12562079plm.4;
+        Mon, 06 Mar 2023 17:34:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678152873;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yPR0+brHjZoqQtZO+fXmGA/3VIbn0at5kpY2oa01Goo=;
+        b=ZzsOiUFkovXfrLu5+zCbuz3k1Ge5qq+m+5pDUzByYC2TKkw+946Cpg7VUHNFzzFCW4
+         yHt95jMqISaIokc0ppTUE/t0FXgfqKRyQ94A/+LHmRx8XlerrmWla8SuZJ2XyM+MIldK
+         gRIXSCpRaTifRtJ6NKGd8UsucLf3Ra22NrH/w+2twUvQKn0xAdn1qHswmSNG+V3qRddn
+         Gsoners++l25PmZSTVi0TMIefTGZ3FbE2hK63Q3h/q96slMOSNPNPXbBzhiLyD9cMycC
+         lEQAH4JS8CRL+p5vCo4WZmA0HluEFGv5qenlYs0PH+mZHnTmp8G0lTFJwH78GorWy889
+         D0fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678152873;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yPR0+brHjZoqQtZO+fXmGA/3VIbn0at5kpY2oa01Goo=;
+        b=i/LsK3TtqhyoXSZ435X6S/aZGMf1fpPwuf3ofH36aokww0oRGILL0esRZwLMBq5+2f
+         oKvLFErR+W2XsAsB7PIUFpDPTbh/WOvXEpClbPpRXc5jjhRUrLgeWvZeGv6vJUNGbwBv
+         rJLakYBUya8UVgXEj+HkvraqCZR3PGsW45Mwh8/J3qCIj1fcf8WHELvKggVx6Z+WygGm
+         w6jEKm3Ezf1LH24nYpAjLD4qCEwW3UgVYm88zLtujgrpn8ti3gNBa3hns7nq0/bOs24h
+         oopILE8IriE+VMB53/XFMIE3vREk6zAc3HXPKNcRO0qwy9Utpg8jTkCZh+ABF5/TvJlc
+         Cl0g==
+X-Gm-Message-State: AO0yUKUW4+wk64ZCtTbEnduEiL5RXpxa1/nZRvkvLBDCst9BoQ1RVXM6
+        xr38BttSMWwcKzY+UH4/z8ZaNkV+75fYBQ==
+X-Google-Smtp-Source: AK7set92/wJgWVlIwq7R7wJzs2hbh3DXTEytPcsRWrIHoz7OU7jfRBYhvxaXN1Km/tbBQCoC1oZUDQ==
+X-Received: by 2002:a05:6a20:918a:b0:cd:9664:3d5a with SMTP id v10-20020a056a20918a00b000cd96643d5amr14598342pzd.22.1678152873019;
+        Mon, 06 Mar 2023 17:34:33 -0800 (PST)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id v25-20020aa78519000000b005d4e89b69e5sm6821422pfn.127.2023.03.06.17.34.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 17:34:32 -0800 (PST)
+Message-ID: <29380b3e-1daa-3aef-1749-dbd9960ba620@gmail.com>
+Date:   Tue, 7 Mar 2023 10:34:28 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM8PR11MB565375ACA9BECCB175EE931199B69@DM8PR11MB5653.namprd11.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+From:   Akira Yokosawa <akiyks@gmail.com>
+Subject: [PATCH v2 1/2] media: Fix building pdfdocs
+To:     linux-media@vger.kernel.org, linux-doc@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        dri-devel@lists.freedesktop.org
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 01:33:30PM +0000, Cao, Bingbu wrote:
-> > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Sent: Monday, March 6, 2023 19:27
-> > On Fri, Mar 03, 2023 at 10:44:32PM +0800, bingbu.cao@intel.com wrote:
+From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 
-...
+Commit 8d0e3fc61abd ("media: Add 2-10-10-10 RGB formats") added
+documentation for a few new RGB formats. The table has column-width
+specifiers for 34 columns used in pdfdocs build.
 
-> > > +	if (sensor->ssdb.vcmtype) {
-> > > +		scnprintf(vcm_name, sizeof(vcm_name), "%s-%u",
-> > > +			  cio2_vcm_types[sensor->ssdb.vcmtype - 1],
-> > > +			  sensor->ssdb.link);
-> > 
-> > Is using 'c' variant a cargo cult? Otherwise explain, why dropping the
-> > last part of the number is not a problem.
-> 
-> Sorry, I can't understand. What is cargo cult?
+However, the new table has a couple of rows with 35 columns which
+confused Sphinx's latex builder. The resulting .tex file causes
+an error in a later stage of a pdfdocs build.
 
-Use of sCnprintf(). I.o.w. can you explain the point of using it instead of
-simply snprintf()?
+Remove the trailing empty dash lines to fix the issue.
 
-> > > +		nodes[SWNODE_VCM] = NODE_VCM(vcm_name);
-> > > +	}
+Fixes: 8d0e3fc61abd ("media: Add 2-10-10-10 RGB formats")
+Reported-by: Akira Yokosawa <akiyks@gmail.com>
+Link: https://lore.kernel.org/r/12250823-8445-5854-dfb8-b92c0ff0851e@gmail.com/
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Tested-by: Akira Yokosawa <akiyks@gmail.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+  [akiyks: explain the cause of build error]
+Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+---
+Hi all,
 
-...
+Now that this fix missed v6.3-rc1, I went forward and amended the
+Changelog to explain what was wrong in the offending commit.
+I see that docs-next is ready for fixes to v6.3-rc1, but when the -media
+tree gets ready, this can be picked by Mauro.
+Either route is fine by me.
+I'd really like to have this issue fixed sooner rather than later.
 
-> > > +		scnprintf(sensor->name, sizeof(sensor->name), "%s-%u",
-> > > +			  cfg->hid, sensor->ssdb.link);
+As a follow-up, patch 2/2 adjusts the column width specifiers.
 
-Ditto.
+        Thanks, Akira
+--
+v2: Changelog: explain the root cause,
+    rebased on v6.3-rc1,
+    picked tags from v1 thread.
+v1: https://lore.kernel.org/r/20230208082916.68377-1-tomi.valkeinen@ideasonboard.com/
 
-...
+Documentation/userspace-api/media/v4l/pixfmt-rgb.rst | 3 ---
+ 1 file changed, 3 deletions(-)
 
-> > > -	char name[ACPI_ID_LEN];
-> > > +	char name[ACPI_ID_LEN + 4];
-> > 
-> > Why 4 is chosen? This needs an explanation.
-> 
-> 'link' is u8, so it is supposed to be max 4 characters along with '-'.
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst b/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
+index d330aeb4d3eb..ea545ed1aeaa 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
+@@ -868,7 +868,6 @@ number of bits for each component.
+       - r\ :sub:`4`
+       - r\ :sub:`3`
+       - r\ :sub:`2`
+-      -
+     * .. _V4L2-PIX-FMT-RGBA1010102:
+ 
+       - ``V4L2_PIX_FMT_RGBA1010102``
+@@ -909,7 +908,6 @@ number of bits for each component.
+       - r\ :sub:`4`
+       - r\ :sub:`3`
+       - r\ :sub:`2`
+-      -
+     * .. _V4L2-PIX-FMT-ARGB2101010:
+ 
+       - ``V4L2_PIX_FMT_ARGB2101010``
+@@ -950,7 +948,6 @@ number of bits for each component.
+       - r\ :sub:`6`
+       - r\ :sub:`5`
+       - r\ :sub:`4`
+-      -
+ 
+ .. raw:: latex
+ 
 
-It should be mentioned somewhere.
-
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 
