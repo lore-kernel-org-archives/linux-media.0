@@ -2,358 +2,241 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC0CDC6FD1A
-	for <linux-media@archiver.kernel.org>; Tue,  7 Mar 2023 15:08:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26A4EC678D4
+	for <linux-media@archiver.kernel.org>; Tue,  7 Mar 2023 15:10:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbjCGPIw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 7 Mar 2023 10:08:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54860 "EHLO
+        id S229880AbjCGPKo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 7 Mar 2023 10:10:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbjCGPIX (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Mar 2023 10:08:23 -0500
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24FDD9477D;
-        Tue,  7 Mar 2023 07:02:18 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 236B0FDA80;
-        Tue,  7 Mar 2023 07:01:31 -0800 (PST)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id BxXrkvE0NLeg; Tue,  7 Mar 2023 07:01:30 -0800 (PST)
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1678201289; bh=dtdkOCwy9s3nPyIuBhfBbGTaTHH+9miRiDC5P18TY3k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uazh8/EX05g6B7O50HxjZ/SOXJ8DmgYh1xmt8PHk1pe6NsX68HFHnqPjNEYgNNYgp
-         5JjA1rKifkkuZGMLCqg2ObhaN0+RDO1RLxXo0Uwha4FLc/ymsZxMvOU9c0rKG3p9OW
-         4GHYRPZO3/zO4SRI9ImMxT4orvfvY6krvpc9kS/31yEBQuLXfbNe+MOTuLOgU9qHwC
-         PUtAPGO2wAbPttuQCOXEckxHUCU7vS6uXNM6qmPccMoiZ3CXQ6zA/PZtxDettRJ90W
-         7NOrldBPnc81BDZ6uHOAivyAexPlMYvCduUKIa4oouIy7bRAjCL8ISdfMdG1V3Iy8+
-         6Z/+TnDfNmaFQ==
-To:     laurent.pinchart@ideasonboard.com, slongerbeam@gmail.com,
-        p.zabel@pengutronix.de, mchehab@kernel.org,
-        gregkh@linuxfoundation.org, shawnguo@kernel.org
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@puri.sm, Martin Kepplinger <martin.kepplinger@puri.sm>
-Subject: [PATCH v2 1/2] media: imx: imx8mq-mipi-csi2: Use V4L2 subdev active state
-Date:   Tue,  7 Mar 2023 16:00:46 +0100
-Message-Id: <20230307150047.1486186-2-martin.kepplinger@puri.sm>
-In-Reply-To: <20230307150047.1486186-1-martin.kepplinger@puri.sm>
-References: <20230307150047.1486186-1-martin.kepplinger@puri.sm>
+        with ESMTP id S231204AbjCGPKB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Mar 2023 10:10:01 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC8B96F27;
+        Tue,  7 Mar 2023 07:04:15 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id x7so6252708pff.7;
+        Tue, 07 Mar 2023 07:04:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678201449;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zJC6ppNXdptWxKcEOX7x0S+/F8CH+y6Fc32ATnadci8=;
+        b=XvFthOYx+sU/tzNPD+dtk7FgxE2/Vlj9RMUv0R3PD/DOQbexHuauL3yD85zeVRT+vP
+         YeUvHwcgigsOP6EidL3/7yBVxCfoV7/llLET84NkXiB5Ggl+23pZj3Y0LTDFC3+I9YNc
+         fJ908eUyPglbWqHFnnZdEBAmggbXj5QVjLXoCqpg1uKcQX6JsdqXNNayTEZXQn3x93zy
+         X+Cp19uZiJ/0PDGyjVoSOZ1jbp0B6I+AaNR638goP5WS/NT6och0TDIrB4ZXwJEgV3Bm
+         XBQS8fjFHmEeS1tvz/ig2uBzAbyghiRb8v3VaIljNlwpryTXgF1oYMv7d/sTyxeWnKbq
+         +nmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678201449;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zJC6ppNXdptWxKcEOX7x0S+/F8CH+y6Fc32ATnadci8=;
+        b=47iXNSk6A6owArdC/9TMdkj9HoO2stFl8fvz9Qbd/y2VTdguHoN7C4gEtKIECe2jNW
+         jgkIC6wlgsUALhLE3147XA4HF5Tx3IYDzyQyGmeZii+xtpXZAcV/TM5T8VhyFx0sV8d8
+         UUFlVY/g9FuVZAdUoiSMlwP8cSB6QIsNwQgP2ItAfh4lzjr2q49lFhySmXFE65bmpr5V
+         tWAAfQKMgzI4OaJsc/89sSzscGOZG04L2ESFqcgcLxICm8LSyxajTEHZ5jvHFKrwwYyN
+         pmHp3jDWtNsElkkpVusb3Rhw6vUPONCzsrHmxyfDgEYsfk5O6nJS/YuJmnUiiQi2QZXV
+         WdEA==
+X-Gm-Message-State: AO0yUKXHk+0Afync54lDmTE9j5CRaLeUi4j0CwljAVoR8VmNVrRTnC+n
+        3mzp5Ui8erRsuO/08QbRGccIuh1ZyReaQHqd3d0=
+X-Google-Smtp-Source: AK7set80EW60Dpt+BsD4F9qsxuHP/2Wp/5EkLzq+MFPQ3yH4YSYrQ6BPQecdqz+ML7g/qdQOvAfgqcOfRTyvJGoIHS0=
+X-Received: by 2002:a63:ee12:0:b0:503:2583:effb with SMTP id
+ e18-20020a63ee12000000b005032583effbmr5292025pgi.9.1678201449167; Tue, 07 Mar
+ 2023 07:04:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230306062633.200427-1-zyytlz.wz@163.com> <CAJedcCzeVwwi9SkkwouFXUAVhF-tKF4dkqsFqVQwszSwY1SJ0A@mail.gmail.com>
+ <57c17bfd-83f3-fcce-0eab-e28469fb0ced@collabora.com> <11c2bce1e5286ad3a9a5be2ee59c2beac168f135.camel@mediatek.com>
+In-Reply-To: <11c2bce1e5286ad3a9a5be2ee59c2beac168f135.camel@mediatek.com>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Tue, 7 Mar 2023 23:03:57 +0800
+Message-ID: <CAJedcCx13sz5h=fWvJU38P_1W-zd6yZe=iSMpO28_E_kAqUGDA@mail.gmail.com>
+Subject: Re: [RESEND PATCH] media: mtk-jpeg: Fix use after free bug due to
+ uncanceled work
+To:     =?UTF-8?B?SXJ1aSBXYW5nICjnjovnkZ4p?= <Irui.Wang@mediatek.com>
+Cc:     "zyytlz.wz@163.com" <zyytlz.wz@163.com>,
+        =?UTF-8?B?S3lyaWUgV3UgKOWQtOaZlyk=?= <Kyrie.Wu@mediatek.com>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "alex000young@gmail.com" <alex000young@gmail.com>,
+        =?UTF-8?B?QmluIExpdSAo5YiY5b2sKQ==?= <bin.liu@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "1395428693sheep@gmail.com" <1395428693sheep@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Simplify the driver by using the V4L2 subdev active state API to store
-the active format.
+The timer function was set in mtk_jpeg_probe with
+mtk_jpeg_job_timeout_work function.
+And the worker is started in mtk_jpeg_dec_device_run.
+There are two functions (mtk_jpeg_enc_irq and mtk_jpeg_dec_irq) which
+may cancel the worker.
+They are used as IRQ handler function which is saved as function
+pointer in a variable.
+In mtk_jpeg_probe, they are registered by devm_request_irq:
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
----
- drivers/staging/media/imx/imx8mq-mipi-csi2.c | 118 ++++++++-----------
- 1 file changed, 46 insertions(+), 72 deletions(-)
+ret =3D devm_request_irq(&pdev->dev,
+               jpeg_irq,
+               jpeg->variant->irq_handler,
+               0,
+               pdev->name, jpeg);
+    if (ret) {
+      dev_err(&pdev->dev, "Failed to request jpeg_irq %d (%d)\n",
+        jpeg_irq, ret);
+      return ret;
+    }
 
-diff --git a/drivers/staging/media/imx/imx8mq-mipi-csi2.c b/drivers/staging/media/imx/imx8mq-mipi-csi2.c
-index c0d0bf770096..1aa8622a3bae 100644
---- a/drivers/staging/media/imx/imx8mq-mipi-csi2.c
-+++ b/drivers/staging/media/imx/imx8mq-mipi-csi2.c
-@@ -119,9 +119,7 @@ struct csi_state {
- 
- 	struct v4l2_mbus_config_mipi_csi2 bus;
- 
--	struct mutex lock; /* Protect csi2_fmt, format_mbus, state, hs_settle */
--	const struct csi2_pix_format *csi2_fmt;
--	struct v4l2_mbus_framefmt format_mbus[MIPI_CSI2_PADS_NUM];
-+	struct mutex lock; /* Protect state and hs_settle */
- 	u32 state;
- 	u32 hs_settle;
- 
-@@ -322,16 +320,23 @@ static int imx8mq_mipi_csi_clk_get(struct csi_state *state)
- 	return devm_clk_bulk_get(state->dev, CSI2_NUM_CLKS, state->clks);
- }
- 
--static int imx8mq_mipi_csi_calc_hs_settle(struct csi_state *state)
-+static int imx8mq_mipi_csi_calc_hs_settle(struct csi_state *state,
-+					  struct v4l2_subdev_state *sd_state)
- {
- 	s64 link_freq;
- 	u32 lane_rate;
- 	unsigned long esc_clk_rate;
- 	u32 min_ths_settle, max_ths_settle, ths_settle_ns, esc_clk_period_ns;
-+	const struct v4l2_mbus_framefmt *fmt;
-+	const struct csi2_pix_format *csi2_fmt;
- 
- 	/* Calculate the line rate from the pixel rate. */
-+
-+	fmt = v4l2_subdev_get_pad_format(&state->sd, sd_state, MIPI_CSI2_PAD_SINK);
-+	csi2_fmt = find_csi2_format(fmt->code);
-+
- 	link_freq = v4l2_get_link_freq(state->src_sd->ctrl_handler,
--				       state->csi2_fmt->width,
-+				       csi2_fmt->width,
- 				       state->bus.num_data_lanes * 2);
- 	if (link_freq < 0) {
- 		dev_err(state->dev, "Unable to obtain link frequency: %d\n",
-@@ -380,7 +385,8 @@ static int imx8mq_mipi_csi_calc_hs_settle(struct csi_state *state)
- 	return 0;
- }
- 
--static int imx8mq_mipi_csi_start_stream(struct csi_state *state)
-+static int imx8mq_mipi_csi_start_stream(struct csi_state *state,
-+					struct v4l2_subdev_state *sd_state)
- {
- 	int ret;
- 
-@@ -389,7 +395,7 @@ static int imx8mq_mipi_csi_start_stream(struct csi_state *state)
- 		return ret;
- 
- 	imx8mq_mipi_csi_set_params(state);
--	ret = imx8mq_mipi_csi_calc_hs_settle(state);
-+	ret = imx8mq_mipi_csi_calc_hs_settle(state, sd_state);
- 	if (ret)
- 		return ret;
- 
-@@ -415,6 +421,7 @@ static struct csi_state *mipi_sd_to_csi2_state(struct v4l2_subdev *sdev)
- static int imx8mq_mipi_csi_s_stream(struct v4l2_subdev *sd, int enable)
- {
- 	struct csi_state *state = mipi_sd_to_csi2_state(sd);
-+	struct v4l2_subdev_state *sd_state;
- 	int ret = 0;
- 
- 	if (enable) {
-@@ -431,7 +438,9 @@ static int imx8mq_mipi_csi_s_stream(struct v4l2_subdev *sd, int enable)
- 			goto unlock;
- 		}
- 
--		ret = imx8mq_mipi_csi_start_stream(state);
-+		sd_state = v4l2_subdev_lock_and_get_active_state(sd);
-+
-+		ret = imx8mq_mipi_csi_start_stream(state, sd_state);
- 		if (ret < 0)
- 			goto unlock;
- 
-@@ -440,6 +449,8 @@ static int imx8mq_mipi_csi_s_stream(struct v4l2_subdev *sd, int enable)
- 			goto unlock;
- 
- 		state->state |= ST_STREAMING;
-+
-+		v4l2_subdev_unlock_state(sd_state);
- 	} else {
- 		v4l2_subdev_call(state->src_sd, video, s_stream, 0);
- 		imx8mq_mipi_csi_stop_stream(state);
-@@ -455,29 +466,14 @@ static int imx8mq_mipi_csi_s_stream(struct v4l2_subdev *sd, int enable)
- 	return ret;
- }
- 
--static struct v4l2_mbus_framefmt *
--imx8mq_mipi_csi_get_format(struct csi_state *state,
--			   struct v4l2_subdev_state *sd_state,
--			   enum v4l2_subdev_format_whence which,
--			   unsigned int pad)
--{
--	if (which == V4L2_SUBDEV_FORMAT_TRY)
--		return v4l2_subdev_get_try_format(&state->sd, sd_state, pad);
--
--	return &state->format_mbus[pad];
--}
--
- static int imx8mq_mipi_csi_init_cfg(struct v4l2_subdev *sd,
- 				    struct v4l2_subdev_state *sd_state)
- {
--	struct csi_state *state = mipi_sd_to_csi2_state(sd);
- 	struct v4l2_mbus_framefmt *fmt_sink;
- 	struct v4l2_mbus_framefmt *fmt_source;
--	enum v4l2_subdev_format_whence which;
- 
--	which = sd_state ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
--	fmt_sink = imx8mq_mipi_csi_get_format(state, sd_state, which,
--					      MIPI_CSI2_PAD_SINK);
-+	fmt_sink = v4l2_subdev_get_pad_format(sd, sd_state, MIPI_CSI2_PAD_SINK);
-+	fmt_source = v4l2_subdev_get_pad_format(sd, sd_state, MIPI_CSI2_PAD_SOURCE);
- 
- 	fmt_sink->code = MEDIA_BUS_FMT_SGBRG10_1X10;
- 	fmt_sink->width = MIPI_CSI2_DEF_PIX_WIDTH;
-@@ -491,38 +487,15 @@ static int imx8mq_mipi_csi_init_cfg(struct v4l2_subdev *sd,
- 		V4L2_MAP_QUANTIZATION_DEFAULT(false, fmt_sink->colorspace,
- 					      fmt_sink->ycbcr_enc);
- 
--	fmt_source = imx8mq_mipi_csi_get_format(state, sd_state, which,
--						MIPI_CSI2_PAD_SOURCE);
- 	*fmt_source = *fmt_sink;
- 
- 	return 0;
- }
- 
--static int imx8mq_mipi_csi_get_fmt(struct v4l2_subdev *sd,
--				   struct v4l2_subdev_state *sd_state,
--				   struct v4l2_subdev_format *sdformat)
--{
--	struct csi_state *state = mipi_sd_to_csi2_state(sd);
--	struct v4l2_mbus_framefmt *fmt;
--
--	fmt = imx8mq_mipi_csi_get_format(state, sd_state, sdformat->which,
--					 sdformat->pad);
--
--	mutex_lock(&state->lock);
--
--	sdformat->format = *fmt;
--
--	mutex_unlock(&state->lock);
--
--	return 0;
--}
--
- static int imx8mq_mipi_csi_enum_mbus_code(struct v4l2_subdev *sd,
- 					  struct v4l2_subdev_state *sd_state,
- 					  struct v4l2_subdev_mbus_code_enum *code)
- {
--	struct csi_state *state = mipi_sd_to_csi2_state(sd);
--
- 	/*
- 	 * We can't transcode in any way, the source format is identical
- 	 * to the sink format.
-@@ -533,8 +506,7 @@ static int imx8mq_mipi_csi_enum_mbus_code(struct v4l2_subdev *sd,
- 		if (code->index > 0)
- 			return -EINVAL;
- 
--		fmt = imx8mq_mipi_csi_get_format(state, sd_state, code->which,
--						 code->pad);
-+		fmt = v4l2_subdev_get_pad_format(sd, sd_state, code->pad);
- 		code->code = fmt->code;
- 		return 0;
- 	}
-@@ -554,8 +526,7 @@ static int imx8mq_mipi_csi_set_fmt(struct v4l2_subdev *sd,
- 				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_format *sdformat)
- {
--	struct csi_state *state = mipi_sd_to_csi2_state(sd);
--	struct csi2_pix_format const *csi2_fmt;
-+	const struct csi2_pix_format *csi2_fmt;
- 	struct v4l2_mbus_framefmt *fmt;
- 
- 	/*
-@@ -563,7 +534,7 @@ static int imx8mq_mipi_csi_set_fmt(struct v4l2_subdev *sd,
- 	 * modified.
- 	 */
- 	if (sdformat->pad == MIPI_CSI2_PAD_SOURCE)
--		return imx8mq_mipi_csi_get_fmt(sd, sd_state, sdformat);
-+		return v4l2_subdev_get_fmt(sd, sd_state, sdformat);
- 
- 	if (sdformat->pad != MIPI_CSI2_PAD_SINK)
- 		return -EINVAL;
-@@ -572,10 +543,7 @@ static int imx8mq_mipi_csi_set_fmt(struct v4l2_subdev *sd,
- 	if (!csi2_fmt)
- 		csi2_fmt = &imx8mq_mipi_csi_formats[0];
- 
--	fmt = imx8mq_mipi_csi_get_format(state, sd_state, sdformat->which,
--					 sdformat->pad);
--
--	mutex_lock(&state->lock);
-+	fmt = v4l2_subdev_get_pad_format(sd, sd_state, sdformat->pad);
- 
- 	fmt->code = csi2_fmt->code;
- 	fmt->width = sdformat->format.width;
-@@ -584,16 +552,9 @@ static int imx8mq_mipi_csi_set_fmt(struct v4l2_subdev *sd,
- 	sdformat->format = *fmt;
- 
- 	/* Propagate the format from sink to source. */
--	fmt = imx8mq_mipi_csi_get_format(state, sd_state, sdformat->which,
--					 MIPI_CSI2_PAD_SOURCE);
-+	fmt = v4l2_subdev_get_pad_format(sd, sd_state, MIPI_CSI2_PAD_SOURCE);
- 	*fmt = sdformat->format;
- 
--	/* Store the CSI2 format descriptor for active formats. */
--	if (sdformat->which == V4L2_SUBDEV_FORMAT_ACTIVE)
--		state->csi2_fmt = csi2_fmt;
--
--	mutex_unlock(&state->lock);
--
- 	return 0;
- }
- 
-@@ -604,7 +565,7 @@ static const struct v4l2_subdev_video_ops imx8mq_mipi_csi_video_ops = {
- static const struct v4l2_subdev_pad_ops imx8mq_mipi_csi_pad_ops = {
- 	.init_cfg		= imx8mq_mipi_csi_init_cfg,
- 	.enum_mbus_code		= imx8mq_mipi_csi_enum_mbus_code,
--	.get_fmt		= imx8mq_mipi_csi_get_fmt,
-+	.get_fmt		= v4l2_subdev_get_fmt,
- 	.set_fmt		= imx8mq_mipi_csi_set_fmt,
- };
- 
-@@ -732,6 +693,7 @@ static int imx8mq_mipi_csi_pm_resume(struct device *dev)
- {
- 	struct v4l2_subdev *sd = dev_get_drvdata(dev);
- 	struct csi_state *state = mipi_sd_to_csi2_state(sd);
-+	struct v4l2_subdev_state *sd_state;
- 	int ret = 0;
- 
- 	mutex_lock(&state->lock);
-@@ -741,7 +703,9 @@ static int imx8mq_mipi_csi_pm_resume(struct device *dev)
- 		ret = imx8mq_mipi_csi_clk_enable(state);
- 	}
- 	if (state->state & ST_STREAMING) {
--		ret = imx8mq_mipi_csi_start_stream(state);
-+		sd_state = v4l2_subdev_lock_and_get_active_state(sd);
-+		ret = imx8mq_mipi_csi_start_stream(state, sd_state);
-+		v4l2_subdev_unlock_state(sd_state);
- 		if (ret)
- 			goto unlock;
- 	}
-@@ -821,6 +785,7 @@ static const struct dev_pm_ops imx8mq_mipi_csi_pm_ops = {
- static int imx8mq_mipi_csi_subdev_init(struct csi_state *state)
- {
- 	struct v4l2_subdev *sd = &state->sd;
-+	int ret;
- 
- 	v4l2_subdev_init(sd, &imx8mq_mipi_csi_subdev_ops);
- 	sd->owner = THIS_MODULE;
-@@ -834,15 +799,22 @@ static int imx8mq_mipi_csi_subdev_init(struct csi_state *state)
- 
- 	sd->dev = state->dev;
- 
--	state->csi2_fmt = &imx8mq_mipi_csi_formats[0];
--	imx8mq_mipi_csi_init_cfg(sd, NULL);
--
- 	state->pads[MIPI_CSI2_PAD_SINK].flags = MEDIA_PAD_FL_SINK
- 					 | MEDIA_PAD_FL_MUST_CONNECT;
- 	state->pads[MIPI_CSI2_PAD_SOURCE].flags = MEDIA_PAD_FL_SOURCE
- 					   | MEDIA_PAD_FL_MUST_CONNECT;
--	return media_entity_pads_init(&sd->entity, MIPI_CSI2_PADS_NUM,
--				      state->pads);
-+	ret = media_entity_pads_init(&sd->entity, MIPI_CSI2_PADS_NUM,
-+				     state->pads);
-+	if (ret)
-+		return ret;
-+
-+	ret = v4l2_subdev_init_finalize(sd);
-+	if (ret) {
-+		media_entity_cleanup(&sd->entity);
-+		return ret;
-+	}
-+
-+	return 0;
- }
- 
- static void imx8mq_mipi_csi_release_icc(struct platform_device *pdev)
-@@ -968,6 +940,7 @@ static int imx8mq_mipi_csi_probe(struct platform_device *pdev)
- 	imx8mq_mipi_csi_runtime_suspend(&pdev->dev);
- 
- 	media_entity_cleanup(&state->sd.entity);
-+	v4l2_subdev_cleanup(&state->sd);
- 	v4l2_async_nf_unregister(&state->notifier);
- 	v4l2_async_nf_cleanup(&state->notifier);
- 	v4l2_async_unregister_subdev(&state->sd);
-@@ -991,6 +964,7 @@ static int imx8mq_mipi_csi_remove(struct platform_device *pdev)
- 	pm_runtime_disable(&pdev->dev);
- 	imx8mq_mipi_csi_runtime_suspend(&pdev->dev);
- 	media_entity_cleanup(&state->sd.entity);
-+	v4l2_subdev_cleanup(&state->sd);
- 	mutex_destroy(&state->lock);
- 	pm_runtime_set_suspended(&pdev->dev);
- 	imx8mq_mipi_csi_release_icc(pdev);
--- 
-2.30.2
+However, if we remove the module without triggering the irq, the
+worker will never be removed.
 
+As for the schedule, mtk_jpeg_dec_device_run and
+mtk_jpeg_enc_device_run will start the worker.
+The schedule invoking is quite complicated. As far as I know, the
+invoking chain is as follows:
+
+v4l2_m2m_init->v4l2_m2m_device_run_work->v4l2_m2m_try_run
+
+the v4l2_m2m_device_run_work function is also a worker which is set in
+v4l2_m2m_init and started in
+v4l2_m2m_schedule_next_job.
+
+Before calling remove function, the  mtk_jpeg_release was invoked to
+release the related resource.
+
+v4l2_m2m_cancel_job will cancel the job by calling
+m2m_dev->m2m_ops->job_abort(m2m_ctx->priv).
+
+But this will only cancel the current queue by
+list_del(&m2m_dev->curr_ctx->queue);
+
+I think this can not cancel the posted task mentioned before. So I
+think if mtk_jpeg_job_timeout_work
+
+is working on, and using jpeg->m2m_dev after freeing it in
+mtk_jpeg_remove, it will cause a UAF bug.
+
+static int mtk_jpeg_release(struct file *file)
+{
+  struct mtk_jpeg_dev *jpeg =3D video_drvdata(file);
+  struct mtk_jpeg_ctx *ctx =3D mtk_jpeg_fh_to_ctx(file->private_data);
+
+  mutex_lock(&jpeg->lock);
+  v4l2_ctrl_handler_free(&ctx->ctrl_hdl);
+  [1] v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
+  v4l2_fh_del(&ctx->fh);
+  v4l2_fh_exit(&ctx->fh);
+  kfree(ctx);
+  mutex_unlock(&jpeg->lock);
+  return 0;
+}
+
+void v4l2_m2m_ctx_release(struct v4l2_m2m_ctx *m2m_ctx)
+{
+  /* wait until the current context is dequeued from job_queue */
+  [2] v4l2_m2m_cancel_job(m2m_ctx);
+
+  vb2_queue_release(&m2m_ctx->cap_q_ctx.q);
+  vb2_queue_release(&m2m_ctx->out_q_ctx.q);
+
+  kfree(m2m_ctx);
+}
+
+Note that all of this is static analysis, which may be false positive.
+Feel free to tell me if there is something I've missed.
+
+Regard,
+Zheng
+
+Irui Wang (=E7=8E=8B=E7=91=9E) <Irui.Wang@mediatek.com> =E4=BA=8E2023=E5=B9=
+=B43=E6=9C=887=E6=97=A5=E5=91=A8=E4=BA=8C 18:23=E5=86=99=E9=81=93=EF=BC=9A
+>
+> Dear Angelo and Zheng,
+>
+> Thanks for your patch and comments.
+>
+> Dear Kyrie,
+>
+> Please help to check this, thanks.
+>
+> Best Regards
+>
+> On Tue, 2023-03-07 at 10:49 +0100, AngeloGioacchino Del Regno wrote:
+> > Il 07/03/23 10:27, Zheng Hacker ha scritto:
+> > > Hi,
+> > >
+> > > Is there anyone who can help with this? I can provide more details
+> > > like invoking chain if needed.
+> > >
+> >
+> > Providing more details is always good. Please do.
+> >
+> > Meanwhile, adding Irui Wang to the loop: he's doing mtk-jpeg.
+> >
+> > Regards,
+> > Angelo
+> >
+> > > Thanks,
+> > > Zheng
+> > >
+> > > Zheng Wang <zyytlz.wz@163.com> =E4=BA=8E2023=E5=B9=B43=E6=9C=886=E6=
+=97=A5=E5=91=A8=E4=B8=80 14:28=E5=86=99=E9=81=93=EF=BC=9A
+> > > >
+> > > > In mtk_jpeg_probe, &jpeg->job_timeout_work is bound with
+> > > > mtk_jpeg_job_timeout_work. Then mtk_jpeg_dec_device_run
+> > > > and mtk_jpeg_enc_device_run may be called to start the
+> > > > work.
+> > > > If we remove the module which will call mtk_jpeg_remove
+> > > > to make cleanup, there may be a unfinished work. The
+> > > > possible sequence is as follows, which will cause a
+> > > > typical UAF bug.
+> > > >
+> > > > Fix it by canceling the work before cleanup in the
+> > > > mtk_jpeg_remove
+> > > >
+> > > > CPU0                  CPU1
+> > > >
+> > > >                      |mtk_jpeg_job_timeout_work
+> > > > mtk_jpeg_remove     |
+> > > >    v4l2_m2m_release  |
+> > > >      kfree(m2m_dev); |
+> > > >                      |
+> > > >                      | v4l2_m2m_get_curr_priv
+> > > >                      |   m2m_dev->curr_ctx //use
+> > > >
+> > > > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> > > > ---
+> > > >   drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 2 +-
+> > > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+> > > > b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+> > > > index 969516a940ba..364513e7897e 100644
+> > > > --- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+> > > > +++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+> > > > @@ -1793,7 +1793,7 @@ static int mtk_jpeg_probe(struct
+> > > > platform_device *pdev)
+> > > >   static int mtk_jpeg_remove(struct platform_device *pdev)
+> > > >   {
+> > > >          struct mtk_jpeg_dev *jpeg =3D platform_get_drvdata(pdev);
+> > > > -
+> > > > +       cancel_delayed_work(&jpeg->job_timeout_work);
+> > > >          pm_runtime_disable(&pdev->dev);
+> > > >          video_unregister_device(jpeg->vdev);
+> > > >          v4l2_m2m_release(jpeg->m2m_dev);
+> > > > --
+> > > > 2.25.1
+> > > >
+> >
+> >
+> >
