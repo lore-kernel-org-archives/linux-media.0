@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAE33C6FD20
-	for <linux-media@archiver.kernel.org>; Wed,  8 Mar 2023 13:53:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C367C678D5
+	for <linux-media@archiver.kernel.org>; Wed,  8 Mar 2023 13:53:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231496AbjCHNxG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Mar 2023 08:53:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53082 "EHLO
+        id S231669AbjCHNxh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Mar 2023 08:53:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231597AbjCHNxA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Mar 2023 08:53:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7695B7EE9;
-        Wed,  8 Mar 2023 05:52:57 -0800 (PST)
+        with ESMTP id S231665AbjCHNxI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Mar 2023 08:53:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D15D1557C;
+        Wed,  8 Mar 2023 05:53:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 20ACEB81CE4;
-        Wed,  8 Mar 2023 13:52:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE36AC433A7;
-        Wed,  8 Mar 2023 13:52:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD5DD61830;
+        Wed,  8 Mar 2023 13:53:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34747C433EF;
+        Wed,  8 Mar 2023 13:53:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678283574;
-        bh=VHnhsadzPGHqJRv9MI6xvp4gg6SnAwL1GGVQ7RBfbOg=;
+        s=k20201202; t=1678283584;
+        bh=9aLc/dZMv1Mnb+n+JFuQAMUSSBE8ceuGdKrYlkpVbcc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SUyV/CIL2Uksw628kRRyhFuxsGA0Uhkr3iNlsL/hZnwf2MDwclV2lXGVSd7dD6wC5
-         k1U28L6hP9GE6vom8HKakZIdipoWGJIN8x5GsWQi2/KBHRiuwVfPWct2vAA0KqnwOj
-         jYCAJEzlHgKfq9yp0rS7vllJn8WmlPSu6tFWOBaC0FATbTd5IY/1Hn1Cfehq+qV7v0
-         3axlHhimvkCsqZKOUzzNGSTPO2873bg2FIrsK6K11eo4QjRTf8r/2pIP7mSuZHu/6c
-         hjBO5BJMI0zpDOXNMvHTEvoS/R0Q1BihBa/+J55STkxNO8PAtCjGDO9zBnqt5u6xxT
-         hCLqRQaHXTukg==
+        b=EBdYY8FqQNPeNO4pEQ1O1m5xyLG7341tUmr3+POATx365HFz22uccXx8aLVIbPz5z
+         GcG82LNKPIfu6xn8vcz2n4SkdK+mwk/2z5qFzhP0u4WHb3CzeX09A+6eyBYopWDDEu
+         aNsH+zdpUhB+dOw19nupoVnk6IreaUnolAn7Frjv7+WsCMd9yXzZcnUZw8vsPk+RSb
+         pXG2fqQXwst9PrVGQxXbVmzUVEXZdcRIJ2EF7ploLcFAjeegFa3V0wDJgTJEI6osP1
+         DV6Lc6cstbGyOM+DzhcKGMd/kehJMfX3WstyqViGfmuABs3iiz/slh4fsen1BYXTMV
+         Y0EKCItCxHSbA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Paul Elder <paul.elder@ideasonboard.com>,
@@ -41,12 +41,12 @@ Cc:     Paul Elder <paul.elder@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, slongerbeam@gmail.com,
         linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 2/3] media: ov5640: Fix analogue gain control
-Date:   Wed,  8 Mar 2023 08:52:46 -0500
-Message-Id: <20230308135250.2927358-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 2/3] media: ov5640: Fix analogue gain control
+Date:   Wed,  8 Mar 2023 08:52:55 -0500
+Message-Id: <20230308135300.2927409-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230308135250.2927358-1-sashal@kernel.org>
-References: <20230308135250.2927358-1-sashal@kernel.org>
+In-Reply-To: <20230308135300.2927409-1-sashal@kernel.org>
+References: <20230308135300.2927409-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -128,10 +128,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index 3f6d715efa823..1dfd409dfb2b0 100644
+index db5a19babe67d..a141552531f7e 100644
 --- a/drivers/media/i2c/ov5640.c
 +++ b/drivers/media/i2c/ov5640.c
-@@ -3458,7 +3458,7 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
+@@ -2776,7 +2776,7 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
  	/* Auto/manual gain */
  	ctrls->auto_gain = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_AUTOGAIN,
  					     0, 1, 1, 1);
