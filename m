@@ -2,61 +2,61 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 657FBC74A4B
-	for <linux-media@archiver.kernel.org>; Wed,  8 Mar 2023 13:29:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 074DAC7618B
+	for <linux-media@archiver.kernel.org>; Wed,  8 Mar 2023 13:29:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbjCHN3Y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Mar 2023 08:29:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59980 "EHLO
+        id S231332AbjCHN30 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Mar 2023 08:29:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231352AbjCHN2u (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Mar 2023 08:28:50 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A527359831
-        for <linux-media@vger.kernel.org>; Wed,  8 Mar 2023 05:27:39 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id az36so9815392wmb.1
-        for <linux-media@vger.kernel.org>; Wed, 08 Mar 2023 05:27:39 -0800 (PST)
+        with ESMTP id S231265AbjCHN2s (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Mar 2023 08:28:48 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA395709F
+        for <linux-media@vger.kernel.org>; Wed,  8 Mar 2023 05:27:37 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id j19-20020a05600c1c1300b003e9b564fae9so1291418wms.2
+        for <linux-media@vger.kernel.org>; Wed, 08 Mar 2023 05:27:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678282058;
+        d=linaro.org; s=google; t=1678282056;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=RRiMwFjCYTBiVehS5Zjzxk4QhzySk5Q8XvQ2DTwvGYo=;
-        b=M13CIKtbt6NdnMF3xUVK+U+fIwa5lvxX7UMTgBXkq9LltkKeHAyVwTCDF/go/LFD8U
-         6bug2hBb9pxq16K9n/VVCT/PKd3mY+caJksEYqlWyTlUA6l55FmWHpX/nfPNAXGjeIFB
-         Fhd7eUiXeSdq+HfeAFF36WX7dEdR3NydVV3LDdKmukSbQGKapP3NVvfhwnh3i/Opkt/x
-         hqmL+tZiIIdW8tA1EzdlHziQ/coCtLM13Lbe4DVPZH0f6gZNWXZzmuAaZyxDJ6ebtngS
-         cENJUlpWFd85+3HKL7nLdnxp8GvpH3CJtA++mRQHthCLRUQEO7jFPMraW+1V2rkZU9l3
-         x8aA==
+        bh=2Ant/XgNH9Mz+PQiWqAx1zFtyj2dAe3bMZujLHEh+y8=;
+        b=WXqUMYL0a8IT8f5OooqeitOtaiZKJHg8wPd4NN9u3fp4VuS/miAIgSx8HtEwF7qB5M
+         eu5IFS2qUvaOeizdzGcRgjLZYgM27pAuhFkkQnIzOGSNbUpQo2g9b7Xc7Aj28EV9jEBw
+         f+Jd22UIrdE34dIRSipgCWWC87VkPZmsCesBkxl3L99ECQF1/MSoiZEw+uZuEsCGda+Z
+         dVegfJQ4OQnpuAbdq2YvL7WYzKf7s8Q3wWFBvb07KtLyvpC/yaj6ngzMiVMWkQ/FmMXP
+         vn41fyHQD0GfRYGFpTKLja+agQpCq7Crd2i9XfmqU0F/tb91Ca352JXdqSZ0NxhurRI+
+         NUAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678282058;
+        d=1e100.net; s=20210112; t=1678282056;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RRiMwFjCYTBiVehS5Zjzxk4QhzySk5Q8XvQ2DTwvGYo=;
-        b=n2iLMXovwZjx/sqFSLYUycFH4hFYjy3/XB3YB7+AcvK+TcHOdx/01kuuX29F3npeMv
-         /OH91tjijMLvXjJ8Wi8cXBPme+DsL+s0NqzhamEl+4D2aTav+Reblzctp7vfT4EJwN8i
-         RzaAHXsROF61cjxQuviZz9S8vTYfJ09SAioLw4FBSeTw14BgAyW11jr6a953SRzzRFXZ
-         hCuKgutBem/q7LF78AhCuEyQo3RRrwA8hBiMJ1gr9xuWO8lqVl+DqyNT0tjrjplIDSog
-         mS0qkLEP815mDoqpkHoxL4P3+b8n5sH5KtH96NQxMKpQ5bx+on4t98MOhT+5A7erhQ5q
-         ZB4A==
-X-Gm-Message-State: AO0yUKX9dm949XsYHguXAB61Tw2yqCPdbAfbBP+zlLFzZAwLXQAGvNe1
-        Bg6eEnDwArNn7b6PKi/KvDI5tA==
-X-Google-Smtp-Source: AK7set951sS/BhgEGaC8nI1yOV82Lm95r8nqh+ea9T47x6/Z1PG+rb2KYuae4aHocOJmhElbdw+z8w==
-X-Received: by 2002:a05:600c:a09:b0:3ea:c100:e974 with SMTP id z9-20020a05600c0a0900b003eac100e974mr17176799wmp.26.1678282058156;
-        Wed, 08 Mar 2023 05:27:38 -0800 (PST)
+        bh=2Ant/XgNH9Mz+PQiWqAx1zFtyj2dAe3bMZujLHEh+y8=;
+        b=iF5eDx/JdDj6MwvOiYdrJX96IeuDTe6JAPJmvBOVYANNvBAPFvXxSrYAIPoDC3HAnC
+         UBhyfMEUhXUpJnEIZzrzj6NctOF9zGPOpKszKJkUbz3vmoMCt6dhfCY8NxdAeFtL7yfq
+         VbD7IZewJ3SxXSXXhRIzAjxboWtNfubewGLUNsLL05RXUS9iYMoo0SDQ9N0ytRaODgTy
+         Q2iS53JacFFDqAx8LnyCQd38QokvrDgYH9o9Z2yTeOBI78Anea6LB9pAqVS5aM5CowWc
+         lgtrYsI9zDDVEn2psi9tsZyrj+sI1MaLmz5F8AnRy3YdEp17ykcAfGU9mnKOmzkK+f1O
+         PfAw==
+X-Gm-Message-State: AO0yUKU5Cv2oEZMKcL631qznv5/n92W/phocK8C3SYO+9K3dSq2CXfqg
+        EJncdj7NhksPLZR4i1fadPLanA==
+X-Google-Smtp-Source: AK7set/1ELme98l5oC0/7/3I/lSuHSYKEShvVU0WSv0ERoWF3Hk/WoJqFegPB1e60qS6nOgwTAkBBA==
+X-Received: by 2002:a05:600c:4ecb:b0:3e7:b17f:9af1 with SMTP id g11-20020a05600c4ecb00b003e7b17f9af1mr16783260wmq.22.1678282056158;
+        Wed, 08 Mar 2023 05:27:36 -0800 (PST)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id q14-20020a05600c46ce00b003daffc2ecdesm20631491wmo.13.2023.03.08.05.27.37
+        by smtp.gmail.com with ESMTPSA id q14-20020a05600c46ce00b003daffc2ecdesm20631491wmo.13.2023.03.08.05.27.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 05:27:37 -0800 (PST)
+        Wed, 08 Mar 2023 05:27:35 -0800 (PST)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Wed, 08 Mar 2023 14:27:32 +0100
-Subject: [PATCH v4 4/5] dt-bindings: timer: convert
- timer/amlogic,meson6-timer.txt to dt-schema
+Date:   Wed, 08 Mar 2023 14:27:30 +0100
+Subject: [PATCH v4 2/5] dt-bindings: nvmem: convert
+ amlogic-meson-mx-efuse.txt to dt-schema
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221117-b4-amlogic-bindings-convert-v4-4-34e623dbf789@linaro.org>
+Message-Id: <20221117-b4-amlogic-bindings-convert-v4-2-34e623dbf789@linaro.org>
 References: <20221117-b4-amlogic-bindings-convert-v4-0-34e623dbf789@linaro.org>
 In-Reply-To: <20221117-b4-amlogic-bindings-convert-v4-0-34e623dbf789@linaro.org>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
@@ -82,104 +82,106 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convert the Amlogic Meson6 SoCs Timer Controller bindings to dt-schema.
+Convert the Amlogic Meson6 eFuse bindings to dt-schema.
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- .../bindings/timer/amlogic,meson6-timer.txt        | 22 ---------
- .../bindings/timer/amlogic,meson6-timer.yaml       | 54 ++++++++++++++++++++++
- 2 files changed, 54 insertions(+), 22 deletions(-)
+ .../bindings/nvmem/amlogic,meson6-efuse.yaml       | 57 ++++++++++++++++++++++
+ .../bindings/nvmem/amlogic-meson-mx-efuse.txt      | 22 ---------
+ 2 files changed, 57 insertions(+), 22 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/timer/amlogic,meson6-timer.txt b/Documentation/devicetree/bindings/timer/amlogic,meson6-timer.txt
-deleted file mode 100644
-index a9da22bda912..000000000000
---- a/Documentation/devicetree/bindings/timer/amlogic,meson6-timer.txt
-+++ /dev/null
-@@ -1,22 +0,0 @@
--Amlogic Meson6 SoCs Timer Controller
--
--Required properties:
--
--- compatible : should be "amlogic,meson6-timer"
--- reg : Specifies base physical address and size of the registers.
--- interrupts : The four interrupts, one for each timer event
--- clocks : phandles to the pclk (system clock) and XTAL clocks
--- clock-names : must contain "pclk" and "xtal"
--
--Example:
--
--timer@c1109940 {
--	compatible = "amlogic,meson6-timer";
--	reg = <0xc1109940 0x14>;
--	interrupts = <GIC_SPI 10 IRQ_TYPE_EDGE_RISING>,
--		     <GIC_SPI 11 IRQ_TYPE_EDGE_RISING>,
--		     <GIC_SPI 6 IRQ_TYPE_EDGE_RISING>,
--		     <GIC_SPI 29 IRQ_TYPE_EDGE_RISING>;
--	clocks = <&xtal>, <&clk81>;
--	clock-names = "xtal", "pclk";
--};
-diff --git a/Documentation/devicetree/bindings/timer/amlogic,meson6-timer.yaml b/Documentation/devicetree/bindings/timer/amlogic,meson6-timer.yaml
+diff --git a/Documentation/devicetree/bindings/nvmem/amlogic,meson6-efuse.yaml b/Documentation/devicetree/bindings/nvmem/amlogic,meson6-efuse.yaml
 new file mode 100644
-index 000000000000..8381a5404ef7
+index 000000000000..84b3dfd21e09
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/timer/amlogic,meson6-timer.yaml
-@@ -0,0 +1,54 @@
++++ b/Documentation/devicetree/bindings/nvmem/amlogic,meson6-efuse.yaml
+@@ -0,0 +1,57 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/timer/amlogic,meson6-timer.yaml#
++$id: http://devicetree.org/schemas/nvmem/amlogic,meson6-efuse.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Amlogic Meson6 SoCs Timer Controller
++title: Amlogic Meson6 eFuse
 +
 +maintainers:
 +  - Neil Armstrong <neil.armstrong@linaro.org>
 +  - Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 +
++allOf:
++  - $ref: nvmem.yaml#
++
 +properties:
 +  compatible:
-+    const: amlogic,meson6-timer
++    enum:
++      - amlogic,meson6-efuse
++      - amlogic,meson8-efuse
++      - amlogic,meson8b-efuse
 +
 +  reg:
 +    maxItems: 1
 +
-+  interrupts:
-+    maxItems: 4
-+    description: per-timer event interrupts
-+
 +  clocks:
-+    maxItems: 2
++    maxItems: 1
 +
 +  clock-names:
-+    items:
-+      - const: xtal
-+      - const: pclk
++    const: core
 +
 +required:
 +  - compatible
 +  - reg
-+  - interrupts
 +  - clocks
 +  - clock-names
 +
-+additionalProperties: false
++unevaluatedProperties: false
 +
 +examples:
 +  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    timer@c1109940 {
-+        compatible = "amlogic,meson6-timer";
-+        reg = <0xc1109940 0x14>;
-+        interrupts = <GIC_SPI 10 IRQ_TYPE_EDGE_RISING>,
-+                     <GIC_SPI 11 IRQ_TYPE_EDGE_RISING>,
-+                     <GIC_SPI 6 IRQ_TYPE_EDGE_RISING>,
-+                     <GIC_SPI 29 IRQ_TYPE_EDGE_RISING>;
-+        clocks = <&xtal>, <&clk81>;
-+        clock-names = "xtal", "pclk";
++    efuse: efuse@0 {
++        compatible = "amlogic,meson6-efuse";
++        reg = <0x0 0x2000>;
++        clocks = <&clk_efuse>;
++        clock-names = "core";
++        #address-cells = <1>;
++        #size-cells = <1>;
++
++        ethernet_mac_address: mac@1b4 {
++            reg = <0x1b4 0x6>;
++        };
++
++        temperature_calib: calib@1f4 {
++             reg = <0x1f4 0x4>;
++        };
 +    };
+diff --git a/Documentation/devicetree/bindings/nvmem/amlogic-meson-mx-efuse.txt b/Documentation/devicetree/bindings/nvmem/amlogic-meson-mx-efuse.txt
+deleted file mode 100644
+index a3c63954a1a4..000000000000
+--- a/Documentation/devicetree/bindings/nvmem/amlogic-meson-mx-efuse.txt
++++ /dev/null
+@@ -1,22 +0,0 @@
+-Amlogic Meson6/Meson8/Meson8b efuse
+-
+-Required Properties:
+-- compatible: depending on the SoC this should be one of:
+-	- "amlogic,meson6-efuse"
+-	- "amlogic,meson8-efuse"
+-	- "amlogic,meson8b-efuse"
+-- reg: base address and size of the efuse registers
+-- clocks: a reference to the efuse core gate clock
+-- clock-names: must be "core"
+-
+-All properties and sub-nodes as well as the consumer bindings
+-defined in nvmem.txt in this directory are also supported.
+-
+-
+-Example:
+-	efuse: nvmem@0 {
+-		compatible = "amlogic,meson8-efuse";
+-		reg = <0x0 0x2000>;
+-		clocks = <&clkc CLKID_EFUSE>;
+-		clock-names = "core";
+-	};
 
 -- 
 2.34.1
