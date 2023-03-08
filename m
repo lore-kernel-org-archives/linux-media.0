@@ -2,46 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B07A1C742A7
-	for <linux-media@archiver.kernel.org>; Wed,  8 Mar 2023 13:53:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD527C678D5
+	for <linux-media@archiver.kernel.org>; Wed,  8 Mar 2023 13:53:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231613AbjCHNxB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Mar 2023 08:53:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
+        id S231646AbjCHNxE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Mar 2023 08:53:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231522AbjCHNwv (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Mar 2023 08:52:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E4A93E2E;
-        Wed,  8 Mar 2023 05:52:49 -0800 (PST)
+        with ESMTP id S231576AbjCHNxA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Mar 2023 08:53:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B489B77F;
+        Wed,  8 Mar 2023 05:52:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D4E5B81CD1;
-        Wed,  8 Mar 2023 13:52:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AB78C433A0;
-        Wed,  8 Mar 2023 13:52:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 599D0B81CE6;
+        Wed,  8 Mar 2023 13:52:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 451A0C433EF;
+        Wed,  8 Mar 2023 13:52:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678283566;
-        bh=IE8qS5BZjRP1hk6pObkDOAIk+im9REl+RhxULGxLLLA=;
+        s=k20201202; t=1678283576;
+        bh=cMc+h0EdzLDs1AgWG9sov4h4C2Yo60GqELjLDqqHhHg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bfhORVtNiILnVWsR1hAo5gfum21L62C2YhSQlTZVbh+DDSI3iQFg9fXXeilL92OOz
-         fh2rshsjlF6IH82wbsRZHeakAe+qc1OIuOu2l3W71BdC7vmc3moPiLQNVenkRp2Gg7
-         GCNPidlohumxibp3fUJDwxS6VcFT9sdQWmsbpjL8lxvzTJ+lzcMJPgcmRS4hu7BHwm
-         xEZvwf1+Mb5RCI0rBtAMs8h9PGkEMmqdt6J01EsuUAWppd39KI1WyzTi/yZ+rMqabt
-         SKXI9uN3dPPYsOStmGNESY7/t1rzpouOUBfRfUp2fVwfD7Ra/JkdLOv1tD2IoLsPNB
-         BqV6uittBqQ/g==
+        b=Jnoxu2SE1C2hT0Peq768NbMw5KpxGsVrDawvWKSjUusvhyounr7fXlslcWG0Wst+t
+         4bhBNd3ENebPBTAi2ipXRVgT9yjDUFCqGUcmmnCFddFxGWFNNR65fP6EDGD+ED+Gh7
+         nwklVEPPrUrCcVkRDxE3c1dfo8J+areCsBnRu6+YzUzj11ylXGxNZEiZuG5kNkOmPY
+         G/PQA+zsjIzK8b1nJNrj8iTFdv2OeL0uzRMrDpYZs9lqnNd6rxnG7hiZD6Hm/R4AYs
+         yvjRxnjar5JPYDNSG8v4Wt+2gnf2/lYxhRGotwlruZa8SquCBNUZoQWntEEXWJy5D4
+         WBiJq+9CLYbNw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Li Jun <jun.li@nxp.com>, Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.2 3/3] media: rc: gpio-ir-recv: add remove function
-Date:   Wed,  8 Mar 2023 08:52:37 -0500
-Message-Id: <20230308135241.2927306-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 3/3] media: rc: gpio-ir-recv: add remove function
+Date:   Wed,  8 Mar 2023 08:52:47 -0500
+Message-Id: <20230308135250.2927358-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230308135241.2927306-1-sashal@kernel.org>
-References: <20230308135241.2927306-1-sashal@kernel.org>
+In-Reply-To: <20230308135250.2927358-1-sashal@kernel.org>
+References: <20230308135250.2927358-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -149,10 +149,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 18 insertions(+)
 
 diff --git a/drivers/media/rc/gpio-ir-recv.c b/drivers/media/rc/gpio-ir-recv.c
-index 8f1fff7af6c93..8dbe780dae4e7 100644
+index 22e524b69806a..a56c844d7f816 100644
 --- a/drivers/media/rc/gpio-ir-recv.c
 +++ b/drivers/media/rc/gpio-ir-recv.c
-@@ -126,6 +126,23 @@ static int gpio_ir_recv_probe(struct platform_device *pdev)
+@@ -130,6 +130,23 @@ static int gpio_ir_recv_probe(struct platform_device *pdev)
  				"gpio-ir-recv-irq", gpio_dev);
  }
  
@@ -176,7 +176,7 @@ index 8f1fff7af6c93..8dbe780dae4e7 100644
  #ifdef CONFIG_PM
  static int gpio_ir_recv_suspend(struct device *dev)
  {
-@@ -185,6 +202,7 @@ MODULE_DEVICE_TABLE(of, gpio_ir_recv_of_match);
+@@ -189,6 +206,7 @@ MODULE_DEVICE_TABLE(of, gpio_ir_recv_of_match);
  
  static struct platform_driver gpio_ir_recv_driver = {
  	.probe  = gpio_ir_recv_probe,
