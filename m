@@ -2,84 +2,216 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D974DC678D5
-	for <linux-media@archiver.kernel.org>; Wed,  8 Mar 2023 12:55:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2730AC74A5B
+	for <linux-media@archiver.kernel.org>; Wed,  8 Mar 2023 13:29:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbjCHMz3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Mar 2023 07:55:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60284 "EHLO
+        id S231652AbjCHN3U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Mar 2023 08:29:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjCHMz3 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Mar 2023 07:55:29 -0500
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D86185F53A
-        for <linux-media@vger.kernel.org>; Wed,  8 Mar 2023 04:55:26 -0800 (PST)
-Received: from ubuntu.localdomain (unknown [10.181.231.123])
-        by mail-app3 (Coremail) with SMTP id cC_KCgA3uLSzhQhkHKv8DQ--.28372S2;
-        Wed, 08 Mar 2023 20:55:22 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-media@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH] media: netup_unidvb: fix use-after-free bug caused by del_timer()
-Date:   Wed,  8 Mar 2023 20:55:14 +0800
-Message-Id: <20230308125514.4208-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cC_KCgA3uLSzhQhkHKv8DQ--.28372S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CF4kAF45Cw13CF47Gw48WFg_yoW8XFyxpr
-        WkuF1qyFykJ3y2yw10kw1DWr95X34fJry8Ga48Ca93Ars3Wr18Gw4jk347ZFs7C3WDAFs3
-        Gr1rXFy3JF17GrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkI1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
-        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
-        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jrv_JF1lIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgYIAVZdtd-V3AAWsz
+        with ESMTP id S231582AbjCHN2r (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Mar 2023 08:28:47 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A804654C87
+        for <linux-media@vger.kernel.org>; Wed,  8 Mar 2023 05:27:36 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id o11-20020a05600c4fcb00b003eb33ea29a8so1151869wmq.1
+        for <linux-media@vger.kernel.org>; Wed, 08 Mar 2023 05:27:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678282055;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lmEi8wNJscjPO+bec5z+80AcbDQKdl+RtO68ZSQp6ss=;
+        b=o87adaDBDRi1jspFRXHeIkb0MdJBBV1RczVpmdOJrmQ/dFkVY9zFt21MICkbcRMXqS
+         2Xz4mzlugTLS2+8pZvXJlzw+MEKb1YbNQyOB5mhljVkS0iUzBuNKpv6Hv7LmvcuLACXW
+         k9XAyP2A5zlAXEEXLQIVZuLGEWQScp4lAGbwdzFI3cMiOTasMUGtR6gO9clZH1I2i9FE
+         /IUL/i8VQSL+gfb/J1r5+DxnD+pQSZ5ACic4a76FwXg/ELv/ylXkJgSg/e2mldJIxogE
+         Sj+ImmHx6NVEnOwnO3VIGY/xbOftTcgR4jip2RiUhy9lg9jcXjlAlqm5DAo0iNQxrXkF
+         /nYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678282055;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lmEi8wNJscjPO+bec5z+80AcbDQKdl+RtO68ZSQp6ss=;
+        b=EOG+zyQlNe3Kza0VVyolL7J+MzRVYPfQ+bC+1U5qqTXOevuxTVPPK8FAuyZssnRVWS
+         qrbH6W6BpWvEessBYSBjDKe+1tncyGA02ncBTD53ojYb0FIbrA8XJPxyesIq4UlAd6Ir
+         YSI7sq+9fwux0BMs9OJByhEP3uY/XjaVycpWj1OCYL5Io+osuTX/IlQl+gea87HgcbaO
+         kmSbdnB32uyfiMXNN67ZRpAlUG5XPtY8c5MY4lMk8ErrH4jH4WmenGgWBJQdgMjpRnq4
+         VM8qZeuw790/u2elH5lGyl10snA8g88bA7V7jb+5BZQtKJ127WWUMl+JXYaJ1IsAfD2C
+         kZyw==
+X-Gm-Message-State: AO0yUKXMSJg7bldOtgGfGH41ELKsFFWF+VOxAi/9ezgSxJEaS1jj9G/n
+        SPpAXqcd9JkA6AXY6NNYvdjzig==
+X-Google-Smtp-Source: AK7set9XoOryhZWnyW8AHMLxThSn39SsEh/W3bEv/6kZUZvgH92zdspBySQfvg+Nn2VFJ6kIWw+2VA==
+X-Received: by 2002:a05:600c:19c6:b0:3eb:383c:1870 with SMTP id u6-20020a05600c19c600b003eb383c1870mr15600750wmq.11.1678282055122;
+        Wed, 08 Mar 2023 05:27:35 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id q14-20020a05600c46ce00b003daffc2ecdesm20631491wmo.13.2023.03.08.05.27.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 05:27:34 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Wed, 08 Mar 2023 14:27:29 +0100
+Subject: [PATCH v4 1/5] dt-bindings: nvmem: convert amlogic-efuse.txt to
+ dt-schema
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20221117-b4-amlogic-bindings-convert-v4-1-34e623dbf789@linaro.org>
+References: <20221117-b4-amlogic-bindings-convert-v4-0-34e623dbf789@linaro.org>
+In-Reply-To: <20221117-b4-amlogic-bindings-convert-v4-0-34e623dbf789@linaro.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.12.1
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When Universal DVB card is detaching, netup_unidvb_dma_fini()
-uses del_timer() to stop dma->timeout timer. But when timer
-handler netup_unidvb_dma_timeout() is running, del_timer()
-could not stop it. As a result, the use-after-free bug could
-happen. The process is shown below:
+Convert the  Amlogic Meson GX eFuse bindings to dt-schema.
 
-    (cleanup routine)          |        (timer routine)
-                               | mod_timer(&dev->tx_sim_timer, ..)
-netup_unidvb_finidev()         | (wait a time)
-  netup_unidvb_dma_fini()      | netup_unidvb_dma_timeout()
-    del_timer(&dma->timeout);  |
-      kfree(ndev); //FREE      |
-                               |   ndev->pci_dev->dev //USE
+Take in account the used variant with amlogic,meson-gx-efuse.
 
-Fix by changing del_timer() to del_timer_sync().
-
-Fixes: 52b1eaf4c59a ("[media] netup_unidvb: NetUP Universal DVB-S/S2/T/T2/C PCI-E card driver")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- drivers/media/pci/netup_unidvb/netup_unidvb_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../bindings/nvmem/amlogic,meson-gxbb-efuse.yaml   | 57 ++++++++++++++++++++++
+ .../devicetree/bindings/nvmem/amlogic-efuse.txt    | 48 ------------------
+ 2 files changed, 57 insertions(+), 48 deletions(-)
 
-diff --git a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
-index 8287851b5ff..aaa1d2dedeb 100644
---- a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
-+++ b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
-@@ -697,7 +697,7 @@ static void netup_unidvb_dma_fini(struct netup_unidvb_dev *ndev, int num)
- 	netup_unidvb_dma_enable(dma, 0);
- 	msleep(50);
- 	cancel_work_sync(&dma->work);
--	del_timer(&dma->timeout);
-+	del_timer_sync(&dma->timeout);
- }
- 
- static int netup_unidvb_dma_setup(struct netup_unidvb_dev *ndev)
+diff --git a/Documentation/devicetree/bindings/nvmem/amlogic,meson-gxbb-efuse.yaml b/Documentation/devicetree/bindings/nvmem/amlogic,meson-gxbb-efuse.yaml
+new file mode 100644
+index 000000000000..e49c2754ff55
+--- /dev/null
++++ b/Documentation/devicetree/bindings/nvmem/amlogic,meson-gxbb-efuse.yaml
+@@ -0,0 +1,57 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/nvmem/amlogic,meson-gxbb-efuse.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Amlogic Meson GX eFuse
++
++maintainers:
++  - Neil Armstrong <neil.armstrong@linaro.org>
++
++allOf:
++  - $ref: nvmem.yaml#
++
++properties:
++  compatible:
++    oneOf:
++      - const: amlogic,meson-gxbb-efuse
++      - items:
++          - const: amlogic,meson-gx-efuse
++          - const: amlogic,meson-gxbb-efuse
++
++  clocks:
++    maxItems: 1
++
++  secure-monitor:
++    description: phandle to the secure-monitor node
++    $ref: /schemas/types.yaml#/definitions/phandle
++
++required:
++  - compatible
++  - clocks
++  - secure-monitor
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    efuse: efuse {
++        compatible = "amlogic,meson-gxbb-efuse";
++        clocks = <&clk_efuse>;
++        #address-cells = <1>;
++        #size-cells = <1>;
++        secure-monitor = <&sm>;
++
++        sn: sn@14 {
++            reg = <0x14 0x10>;
++        };
++
++        eth_mac: mac@34 {
++            reg = <0x34 0x10>;
++        };
++
++        bid: bid@46 {
++            reg = <0x46 0x30>;
++        };
++    };
+diff --git a/Documentation/devicetree/bindings/nvmem/amlogic-efuse.txt b/Documentation/devicetree/bindings/nvmem/amlogic-efuse.txt
+deleted file mode 100644
+index f7b3ed74db54..000000000000
+--- a/Documentation/devicetree/bindings/nvmem/amlogic-efuse.txt
++++ /dev/null
+@@ -1,48 +0,0 @@
+-= Amlogic Meson GX eFuse device tree bindings =
+-
+-Required properties:
+-- compatible: should be "amlogic,meson-gxbb-efuse"
+-- clocks: phandle to the efuse peripheral clock provided by the
+-	  clock controller.
+-- secure-monitor: phandle to the secure-monitor node
+-
+-= Data cells =
+-Are child nodes of eFuse, bindings of which as described in
+-bindings/nvmem/nvmem.txt
+-
+-Example:
+-
+-	efuse: efuse {
+-		compatible = "amlogic,meson-gxbb-efuse";
+-		clocks = <&clkc CLKID_EFUSE>;
+-		#address-cells = <1>;
+-		#size-cells = <1>;
+-		secure-monitor = <&sm>;
+-
+-		sn: sn@14 {
+-			reg = <0x14 0x10>;
+-		};
+-
+-		eth_mac: eth_mac@34 {
+-			reg = <0x34 0x10>;
+-		};
+-
+-		bid: bid@46 {
+-			reg = <0x46 0x30>;
+-		};
+-	};
+-
+-	sm: secure-monitor {
+-		compatible = "amlogic,meson-gxbb-sm";
+-	};
+-
+-= Data consumers =
+-Are device nodes which consume nvmem data cells.
+-
+-For example:
+-
+-	eth_mac {
+-		...
+-		nvmem-cells = <&eth_mac>;
+-		nvmem-cell-names = "eth_mac";
+-	};
+
 -- 
-2.17.1
+2.34.1
 
