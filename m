@@ -2,64 +2,63 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADA07C742A7
-	for <linux-media@archiver.kernel.org>; Wed,  8 Mar 2023 13:29:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99904C64EC4
+	for <linux-media@archiver.kernel.org>; Wed,  8 Mar 2023 13:29:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231518AbjCHN3T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Mar 2023 08:29:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33218 "EHLO
+        id S229878AbjCHN3W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Mar 2023 08:29:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbjCHN2q (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Mar 2023 08:28:46 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7CB521CA
-        for <linux-media@vger.kernel.org>; Wed,  8 Mar 2023 05:27:35 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id j3so9815441wms.2
-        for <linux-media@vger.kernel.org>; Wed, 08 Mar 2023 05:27:35 -0800 (PST)
+        with ESMTP id S231322AbjCHN2s (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Mar 2023 08:28:48 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27B558B64
+        for <linux-media@vger.kernel.org>; Wed,  8 Mar 2023 05:27:38 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id t25-20020a1c7719000000b003eb052cc5ccso1281042wmi.4
+        for <linux-media@vger.kernel.org>; Wed, 08 Mar 2023 05:27:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678282054;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OdwwU4SZN57jLYc65t0m5q4ozMpywaQn61AKlSTUX90=;
-        b=IclhcuJS4r1Wj2ehrUiQszZVBZTK9pO+Jzz3ws3adJeDGl9owEEGIiGcVUW13/SMxq
-         LbouAPpbFGidcW3e55BFNSbWPG/Dqd/Ax3JiNEdSHzOZx3W2/8Cpnu7hApu9W/YmYlv2
-         oCF7VvOGQXSmcAnxFI0hv07Utk4sy4minVn62OUM8YGlovGBi+B+3uPn3NCBVznwBiYX
-         OVEsTdXyXtu8tDSzoa8dnDfCp9kxs+2XxY9UmYHCvFuMIYe8QaQOBqJml1LqL6C/DDBw
-         +qHs3BWrtNrutM/e9SZDIyKsi33nVgzO65wAkLrlLvQ8t/ADACMb1wFu3EU90cCovQ6Q
-         AxCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678282054;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=linaro.org; s=google; t=1678282057;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=OdwwU4SZN57jLYc65t0m5q4ozMpywaQn61AKlSTUX90=;
-        b=2npzsmmZeiXVCrzFq93CAutPHedIP5YJcGutdsLnlD6kCA2RswbeEbC7GUTQCddpaB
-         kaToErxPvtpn8mQee5OJqchousB9X33e7pKpIGx/RRPzqqcZ9PQVrKOqIHrIdOBta3Do
-         J4JCToTRDoKza5PCiHII2IDEKris2eecCvPUaxNBqbPmHzY3n/z+a8u97JKwkHfRabAE
-         2SmF6iFTLWZBMrD43x1kNo8o11dAORcFxgUMdkApdhzPrZO8wXWtU1pf3TMEEP7DJlm5
-         4t6CCWJYoyHm3gmHhwrHUZ2GOdcpD9cNA2E7oXRW4aMA4tGcyZ9+2MvD84bOL22OT0pr
-         9oSA==
-X-Gm-Message-State: AO0yUKUfBIqaWmttAe2Q2YqCEKK+eBy3LBmg3Dn8bVs3dQZ73sbk6UWb
-        vwBHajWIbg1+Ik+eIFV6Ur2SFA==
-X-Google-Smtp-Source: AK7set/Soq1Fvcc7qflRPe93eB2KPEmH/FcDQNhIB1coy2br5SfxGWWl32ofzfkJtiUodMwJmk65YA==
-X-Received: by 2002:a05:600c:4509:b0:3eb:32ff:da8 with SMTP id t9-20020a05600c450900b003eb32ff0da8mr17310245wmo.16.1678282054125;
-        Wed, 08 Mar 2023 05:27:34 -0800 (PST)
+        bh=GGsfIAFzoH7ggFb2voxRa7ZKIwz9PZMg5nKhBB1/kDo=;
+        b=RGSXu0Au/OStV2NM/0YvoZTI7AGTJM3zMg3PryrOMmpyGC4h500kgahiSAnsyy/aSE
+         n45yXvt6Y6ijCpO2ir3tg29zUiwxa5LL9B9nfFuhPKuO8pYtI8b1o1XHs2/RcJSQvOzQ
+         tP2qsl+Wee/jJ4xRPvlheF0T4TCOc9Q/0XJFV26tZ7ioieWqBpDLxTujUBFxi+R1IVnW
+         S77IMMxWE4vQOnaNJ4KD/hpHVapMURtJQgggAtFI5tvjhojdsvgtYa1Dmor8E5mKJDCm
+         WsDEWHF3V/l9R8ReTe+7RusxhEoLXDuJXL/p0j9thw3t8J8PG6C+usKUaBheCKo5G5cj
+         u6vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678282057;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GGsfIAFzoH7ggFb2voxRa7ZKIwz9PZMg5nKhBB1/kDo=;
+        b=gXI1+z77um/K0VkjTdnvL5VaKUu4TNRzW0+brTgfolbP6y3V/pQyQ0fOWqm+gEK/ub
+         4e7CsFVeCfNm5IVd7ZluHaPFDaFn67+IGmz81TwjkhzxayEzhiobJNpeJqhnQlnjD967
+         FYdYWgzDQAdkdlE21QrYZifDnXh6waAwuh458/DHtD/sTdTR7EMRn3htbpokPM9bfHvy
+         DxrztQHB1rqffRONNGWRedqRNj7y15FvDZREHYNpZLSKItMwT5mA8NEbSc4A0BwLeQLO
+         ys4sSa8FXDKjl/Ibr1u7ABBvLa7ckbhv8lj2WOwIbODDJWVjR0kHPhUed0i8thqBhrRA
+         svDQ==
+X-Gm-Message-State: AO0yUKUgvFhwjnNCb7GQp4FL9ofNG72qDdFyUCCsL3D/JCYZ22//Dv6m
+        LrJixCoPUlHAWaPdiyMCQx9TmA==
+X-Google-Smtp-Source: AK7set9AkaO3fICbB6hanCc+LoI++IJ871oRs/LA4EM9OgroiYmgyzeKlirQrH98pqeOuWJEFGALFg==
+X-Received: by 2002:a05:600c:4590:b0:3e2:2467:d3f5 with SMTP id r16-20020a05600c459000b003e22467d3f5mr15464209wmo.25.1678282057149;
+        Wed, 08 Mar 2023 05:27:37 -0800 (PST)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id q14-20020a05600c46ce00b003daffc2ecdesm20631491wmo.13.2023.03.08.05.27.33
+        by smtp.gmail.com with ESMTPSA id q14-20020a05600c46ce00b003daffc2ecdesm20631491wmo.13.2023.03.08.05.27.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 05:27:33 -0800 (PST)
+        Wed, 08 Mar 2023 05:27:36 -0800 (PST)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [PATCH v4 0/5] dt-bindings: first batch of dt-schema conversions
- for Amlogic Meson bindings
-Date:   Wed, 08 Mar 2023 14:27:28 +0100
-Message-Id: <20221117-b4-amlogic-bindings-convert-v4-0-34e623dbf789@linaro.org>
+Date:   Wed, 08 Mar 2023 14:27:31 +0100
+Subject: [PATCH v4 3/5] dt-bindings: media: convert meson-ir.txt to
+ dt-schema
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAECNCGQC/5XNwWrDMBAE0F8JOneDtLIcO6f8R+hB8m7sBVcCy
- RGE4H+v2lvpJTkNM4c3T1U4Cxd1PjxV5ipFUmyl+zioafFxZhBqXaFGNMacIHTgv9Y0ywRBIkm
- cC0wpVs4bDHwzdHLUYU+qCcEXhpB9nJZmxPu6tnGRsqX8+H2spsX1Nbwa0GBvGp0bxzD2w2WV6
- HM6pjyrzwZXfAPDH6z3pJ0OoUf3D7NvYLZhjAORNWwD0x9s3/dvD0BBOWYBAAA=
+Message-Id: <20221117-b4-amlogic-bindings-convert-v4-3-34e623dbf789@linaro.org>
+References: <20221117-b4-amlogic-bindings-convert-v4-0-34e623dbf789@linaro.org>
+In-Reply-To: <20221117-b4-amlogic-bindings-convert-v4-0-34e623dbf789@linaro.org>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -83,93 +82,99 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Batch conversion of the following bindings:
-- amlogic-efuse.txt
-- amlogic-meson-mx-efuse.txt
-- meson-wdt.txt
-- meson-ir.txt
-- rtc-meson.txt
-- amlogic,meson6-timer.txt
-- amlogic,meson-pcie.txt
+Convert the Amlogic Meson IR remote control receiver bindings to
+dt-schema.
 
-Martin Blumenstingl was also added as bindings maintainer for Meson6/8/8b
-related bindings.
+Take in account the used variant with amlogic,meson-gx-ir.
 
-Remaining conversions:
-- meson,pinctrl.txt
-- pwm-meson.txt
-- amlogic,meson-gpio-intc.txt
-- amlogic,meson-mx-sdio.txt
-- rtc-meson-vrtc.txt
-- amlogic,axg-sound-card.txt
-- amlogic,axg-fifo.txt
-- amlogic,axg-pdm.txt
-- amlogic,axg-spdifout.txt
-- amlogic,axg-tdm-formatters.txt
-- amlogic,axg-spdifin.txt
-- amlogic,axg-tdm-iface.txt
-- amlogic,g12a-tohdmitx.txt
-- amlogic,axg-audio-clkc.txt
-- amlogic,gxbb-clkc.txt
-- amlogic,gxbb-aoclkc.txt
-- amlogic,meson8b-clkc.txt
-
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
-Changes in v4:
-- Rebased on v6.3-rc1
-- Added Reviewed-by
-- Removed applied patch
-- Link to v3: https://lore.kernel.org/r/20221117-b4-amlogic-bindings-convert-v3-0-e28dd31e3bed@linaro.org
+ .../bindings/media/amlogic,meson6-ir.yaml          | 47 ++++++++++++++++++++++
+ .../devicetree/bindings/media/meson-ir.txt         | 20 ---------
+ 2 files changed, 47 insertions(+), 20 deletions(-)
 
-Changes in v3:
-- Dropped applied patches
-- Added acked/reviewed-by tags
-- patch 3: removed invalid secure-monitor property
-- patch 4: added a note on the commit message about the meson8 compatible
-- patch 9: fixed mmc compatible bindings
-- patch 1-: unified PCIe instead on PCIE + PCIe
-- Link to v2: https://lore.kernel.org/r/20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org
+diff --git a/Documentation/devicetree/bindings/media/amlogic,meson6-ir.yaml b/Documentation/devicetree/bindings/media/amlogic,meson6-ir.yaml
+new file mode 100644
+index 000000000000..3f9fa92703bb
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/amlogic,meson6-ir.yaml
+@@ -0,0 +1,47 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/amlogic,meson6-ir.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Amlogic Meson IR remote control receiver
++
++maintainers:
++  - Neil Armstrong <neil.armstrong@linaro.org>
++
++allOf:
++  - $ref: rc.yaml#
++
++properties:
++  compatible:
++    oneOf:
++      - enum:
++          - amlogic,meson6-ir
++          - amlogic,meson8b-ir
++          - amlogic,meson-gxbb-ir
++      - items:
++          - const: amlogic,meson-gx-ir
++          - const: amlogic,meson-gxbb-ir
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    ir-receiver@c8100480 {
++        compatible = "amlogic,meson6-ir";
++        reg = <0xc8100480 0x20>;
++        interrupts = <GIC_SPI 15 IRQ_TYPE_EDGE_RISING>;
++    };
+diff --git a/Documentation/devicetree/bindings/media/meson-ir.txt b/Documentation/devicetree/bindings/media/meson-ir.txt
+deleted file mode 100644
+index efd9d29a8f10..000000000000
+--- a/Documentation/devicetree/bindings/media/meson-ir.txt
++++ /dev/null
+@@ -1,20 +0,0 @@
+-* Amlogic Meson IR remote control receiver
+-
+-Required properties:
+- - compatible	: depending on the platform this should be one of:
+-		  - "amlogic,meson6-ir"
+-		  - "amlogic,meson8b-ir"
+-		  - "amlogic,meson-gxbb-ir"
+- - reg		: physical base address and length of the device registers
+- - interrupts	: a single specifier for the interrupt from the device
+-
+-Optional properties:
+- - linux,rc-map-name:	see rc.txt file in the same directory.
+-
+-Example:
+-
+-	ir-receiver@c8100480 {
+-		compatible= "amlogic,meson6-ir";
+-		reg = <0xc8100480 0x20>;
+-		interrupts = <0 15 1>;
+-	};
 
-Changes in v2:
-- rebased on v6.2-rc1
-- patch 1: fixed power-controller, added const: amlogic,meson-gx-sm
-- patch 2: added const: amlogic,meson-gx-efuse, fixed secure-monitor type
-- patch 3: updated example subnodes to match reality
-- patch 4: added reviewed-by, added interrupts, added const: amlogic,meson8m2-wdt
-- patch 5: added reviewed-by, added const: amlogic,meson-gx-ir
-- patch 6: dropped applied
-- patch 7: dropped patch, replaced with deprecated in the title of the TXt bindings
-- patch 8: fixed title, added reviewed-by, added interrupt description
-- patch 9: fixed example indent, added reviewed-by
-- patch 10: fixed const: amlogic,meson-gx-mmc case, fixed indentation
-- patch 11: added reviewed-by, fixed title, fixed bindings after rebase, added clocks/clock-names as required
-- patch 12: added reviewed-by
-- Link to v1: https://lore.kernel.org/r/20221117-b4-amlogic-bindings-convert-v1-0-3f025599b968@linaro.org
-
----
-Neil Armstrong (5):
-      dt-bindings: nvmem: convert amlogic-efuse.txt to dt-schema
-      dt-bindings: nvmem: convert amlogic-meson-mx-efuse.txt to dt-schema
-      dt-bindings: media: convert meson-ir.txt to dt-schema
-      dt-bindings: timer: convert timer/amlogic,meson6-timer.txt to dt-schema
-      dt-bindings: PCI: convert amlogic,meson-pcie.txt to dt-schema
-
- .../bindings/media/amlogic,meson6-ir.yaml          |  47 ++++++++
- .../devicetree/bindings/media/meson-ir.txt         |  20 ---
- .../bindings/nvmem/amlogic,meson-gxbb-efuse.yaml   |  57 +++++++++
- .../bindings/nvmem/amlogic,meson6-efuse.yaml       |  57 +++++++++
- .../devicetree/bindings/nvmem/amlogic-efuse.txt    |  48 --------
- .../bindings/nvmem/amlogic-meson-mx-efuse.txt      |  22 ----
- .../devicetree/bindings/pci/amlogic,axg-pcie.yaml  | 134 +++++++++++++++++++++
- .../devicetree/bindings/pci/amlogic,meson-pcie.txt |  70 -----------
- .../bindings/timer/amlogic,meson6-timer.txt        |  22 ----
- .../bindings/timer/amlogic,meson6-timer.yaml       |  54 +++++++++
- 10 files changed, 349 insertions(+), 182 deletions(-)
----
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-change-id: 20221117-b4-amlogic-bindings-convert-8ef1d75d426d
-
-Best regards,
 -- 
-Neil Armstrong <neil.armstrong@linaro.org>
+2.34.1
 
