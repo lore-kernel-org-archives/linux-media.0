@@ -2,106 +2,80 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5A4EC61DA4
-	for <linux-media@archiver.kernel.org>; Thu,  9 Mar 2023 07:19:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2797FC76186
+	for <linux-media@archiver.kernel.org>; Thu,  9 Mar 2023 07:30:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbjCIHTH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Mar 2023 02:19:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36076 "EHLO
+        id S230022AbjCIHa1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Mar 2023 02:30:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjCIHTF (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Mar 2023 02:19:05 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975FE5C9FB;
-        Wed,  8 Mar 2023 23:19:04 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id c10so867754pfv.13;
-        Wed, 08 Mar 2023 23:19:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678346339;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QfbJWUJGHH8nwSfPSekGj2SZwrexl9k35Jou//imJw0=;
-        b=SRZq3YHPj7/9HEc5G/hdmOiAH/cKObd8ba0wfRV07PEPjCoUEUxJUHeBohmZbHAvv7
-         r5ZigLdDFmjuKch3qWx86Y1QVVbigO95zw1uRzfUJ1AqGh0Sggu9a6HEkmLheAtE1/5N
-         bUXhmMGToE1NeGe6GJwh7I0QkD/c1BynyUFvBY7+NDmKVUwyinHY37ZztWmfPg9tGb5D
-         gDeBwBvBwv8mfMbe4aFtjdOR+V8cqdWKsGJJIyFYI80vz0/KM8PIAApY/sYAphhEbT4k
-         9Ei7DTpGftHhyfolQ/08Akg1Ocbec7C8nuxPZnWAt/0v9o13EGlMu8Pg6WnSWsk5tqr/
-         fIuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678346339;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QfbJWUJGHH8nwSfPSekGj2SZwrexl9k35Jou//imJw0=;
-        b=cy16nK8TjCHZENc/Fz6CsJgEmcMtwk0BFGlLRmpz6Jmwwzj+3BZe8Pelgi3wGWr/Uo
-         Hd1lx2RK2rthndYsCuLoYeSA7pVem3k1YjJtqBWm1AZVS8GYXqKIgRsI1AuM8WfexUkj
-         ZxwN6CvGXwhJfWSbdAxCZcA43GhoU7rloT9SkqPGkzgbLd+AWoqmYyRrOichM/UkvVHS
-         aIIj2rFItDk5G9gtMwn4rShxoCXPlx4kLMJozEYvXPQl18ZcDH4p7FF3A1SY9b9jD1VH
-         niE9uXdgJd5JXj86tbfRWEqXe5hqyDpdzhmRyCgR2mSTLoSsOdVlnyx5oePmp5vG+r+p
-         3NtA==
-X-Gm-Message-State: AO0yUKW8krAjTONFj4NOzUU5DmcM/Dvf7vi+6mkeu6/YXmn09XP2OB6i
-        5HCAuv7VTg8f1M0wNleeeLJOCGyNW2CFBAvqn8o=
-X-Google-Smtp-Source: AK7set/YWz7gZWkSMgyWc4wK6u9AzoqdFmwidNxJTC2APdBlFoKugVHoojpe26sybxvLybjN3eFc6dIyeU9+EBx9Q8w=
-X-Received: by 2002:a62:824b:0:b0:61d:d277:e077 with SMTP id
- w72-20020a62824b000000b0061dd277e077mr1678177pfd.0.1678346339043; Wed, 08 Mar
- 2023 23:18:59 -0800 (PST)
+        with ESMTP id S229852AbjCIHaY (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Mar 2023 02:30:24 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAA662FDE;
+        Wed,  8 Mar 2023 23:30:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CA2E2CE228E;
+        Thu,  9 Mar 2023 07:30:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DFAE8C433AA;
+        Thu,  9 Mar 2023 07:30:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678347019;
+        bh=pLu2EUjm0EUWWJ8Bq7EHf6FFQCmBn3/LFHoWP+HFOaM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=TRQuKn87mlc14w2ao4dBhX1cwTkgy+XNoKUXHEVGLpkVkwA961dPU03wWDtoaRCoA
+         KyBg+99tIz4BIEUt4yRJjLm4kakaKOhBW2bABom535uQzWsAYQzIuv2b1wGgbxVv1I
+         h99HVGsJH5XnneOV/MClhLyGOSNsyynn8EROjm+3GxkFpvcDqjJgsJvhOCzKNNWsad
+         T7AURXwMYPT/hjEhGGqeiGj61NUZLPgN9CxIxpcYVno1yA6HaIr2DDe7b/W8+MxBYs
+         sw45PH57JbFR6WTsYZyqATB+g1nHYdBuBvdZyVhillv7JBDYRYVwybV3DK0ya5tBtz
+         fVjbtpLQp/f2A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CB1B0E61B60;
+        Thu,  9 Mar 2023 07:30:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230302093715.811758-1-zyytlz.wz@163.com> <d27127a1-2572-4ad4-b69c-8a6f53384009@roeck-us.net>
- <CAJedcCxYQYmORfnqcdudFKwy9hhU=mZh_d9MM7x+37ies2S-MA@mail.gmail.com> <e03134f9-9433-ab6b-170a-8ce752fccdeb@roeck-us.net>
-In-Reply-To: <e03134f9-9433-ab6b-170a-8ce752fccdeb@roeck-us.net>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Thu, 9 Mar 2023 15:18:45 +0800
-Message-ID: <CAJedcCy_cXh1jH4HT0hzG1NnQR5Gz9fTodAT_2trRRd=BWp57w@mail.gmail.com>
-Subject: Re: [PATCH] media: mtk-jpeg: Fix use after free bug due to uncanceled work
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, mchehab@kernel.org,
-        bin.liu@mediatek.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, 1395428693sheep@gmail.com,
-        alex000young@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 00/11] tree-wide: remove support for Renesas R-Car H3 ES1
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167834701982.22182.9521763384207545073.git-patchwork-notify@kernel.org>
+Date:   Thu, 09 Mar 2023 07:30:19 +0000
+References: <20230307163041.3815-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20230307163041.3815-1-wsa+renesas@sang-engineering.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-renesas-soc@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Guenter Roeck <linux@roeck-us.net> =E4=BA=8E2023=E5=B9=B43=E6=9C=889=E6=97=
-=A5=E5=91=A8=E5=9B=9B 13:30=E5=86=99=E9=81=93=EF=BC=9A
->
-> On 3/8/23 19:58, Zheng Hacker wrote:
-> > Hi,
-> >
-> > Thanks for your reply. I think you're right. I don't know if there is
-> > other method to stop new work from enqueing. Could you please give me
-> > some advice about the fix?
-> >
->
-> Top-posting is discouraged.
->
+Hello:
 
-Sorry I forgot that. Thanks for the kind reminder.
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-> Anyway -
-> I don't know the code well enough to suggest a solution.
-> It all depends on the driver architecture. The maintainers might
-> have a better idea.
->
+On Tue,  7 Mar 2023 17:30:28 +0100 you wrote:
+> Because H3 ES1 becomes an increasing maintenance burden and was only available
+> to a development group, we decided to remove upstream support for it. Here are
+> the patches to remove driver changes. Review tags have been gathered before
+> during an internal discussion. Only change since the internal version is a
+> plain rebase to v6.3-rc1. A branch with all removals is here:
+> 
+> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/h3es1-removal
+> 
+> [...]
 
-Yes, some related developers have reached out to me and discussed fixes wit=
-h me.
+Here is the summary with links:
+  - [07/11] ravb: remove R-Car H3 ES1.* handling
+    https://git.kernel.org/netdev/net-next/c/6bf0ad7f2917
 
-> A worse problem appears to be that the worker is also canceled
-> from mtk_jpeg_enc_irq() and mtk_jpeg_dec_irq(). Those are non-threaded
-> interrupt handlers which, as far as I know, must not sleep and thus
-> can not call cancel_delayed_work_sync(). I have no idea how to solve
-> that problem either.
->
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-I'd be glad to pass along your thoughts and recommendations to the
-relevant parties.
 
-Best regards,
-Zheng
