@@ -2,190 +2,112 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A75BC6FD1F
-	for <linux-media@archiver.kernel.org>; Thu,  9 Mar 2023 14:46:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2425CC61DA4
+	for <linux-media@archiver.kernel.org>; Thu,  9 Mar 2023 14:46:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232076AbjCIOqD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Mar 2023 09:46:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53460 "EHLO
+        id S232102AbjCIOqL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Mar 2023 09:46:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232141AbjCIOpG (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Mar 2023 09:45:06 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD494FD292
-        for <linux-media@vger.kernel.org>; Thu,  9 Mar 2023 06:44:22 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id cw28so7936832edb.5
-        for <linux-media@vger.kernel.org>; Thu, 09 Mar 2023 06:44:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678373060;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OqmvUbZhLfOLwhFDS2wZLjxzrgKFRfOQHbUU0CPsFYY=;
-        b=VKrNMvZPlKm1Qz4l+fhTQC7XAAcpAauJauBDIzx9QoOHSHipsD306AV7r1NqL6TaF9
-         ekGVH1m7BoCibiMaXP4121CJHRm40qye645wa5lXUYx4vN4y5atPzSIZpCJnDVLKBYQg
-         GMZXkoMsZfCGgDE48E5JcNx6EQ6rH6ymeI6DQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678373060;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OqmvUbZhLfOLwhFDS2wZLjxzrgKFRfOQHbUU0CPsFYY=;
-        b=JjVdjnKHF77B6pife7/YbimJv4JU0iHv1eTIortzjfeNhfYLzVsSeI67JdnqbqVC3J
-         v9vbdxYTaCNLdo17wDeBIJersoZkq7mCc10DT2YavRAqICtOmVZChfhabmML3Q+jaKCq
-         xeebdYpqjPJGvb1s//fXj/pN5RE5iI6khNDmTBUQJ+fsR85BLWTP2jIvklbFep7OhaCc
-         uUgO0LjFJTG0UsdhHv3h50OYunWSmj2LWFGvxr+Rjmq2Fctcs8HO3LjWJOiOWvWr9Yhx
-         FqbmxfFQdMigkltR6MXTOru6AWsXxuS+l9Dq3PeDkM1Vh4lUy8MuAvA1aOrMDc/B25dV
-         NZeA==
-X-Gm-Message-State: AO0yUKU/5SADtSRrzbZvP1ouX129j5agnLWTANKk3YyMQebZQkls2rOh
-        T89dyeCBlohtErH6QwS2RmgSSQ==
-X-Google-Smtp-Source: AK7set9+/MuV+LFCg5aZ2c/GZhF+5kEy6+jk9dhV/nNG+hcAYVLtkzyHCM28rTHNrAkTG3Z5hRu93A==
-X-Received: by 2002:a17:906:da89:b0:8b1:7de6:e292 with SMTP id xh9-20020a170906da8900b008b17de6e292mr29214835ejb.9.1678373060768;
-        Thu, 09 Mar 2023 06:44:20 -0800 (PST)
-Received: from alco.roam.corp.google.com ([2620:0:1059:10:1645:7aa4:a765:1966])
-        by smtp.gmail.com with ESMTPSA id l6-20020a50d6c6000000b004bdcc480c41sm9708931edj.96.2023.03.09.06.44.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 06:44:20 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Thu, 09 Mar 2023 15:44:05 +0100
-Subject: [PATCH v2 1/3] media: uvcvideo: Cancel async worker earlier
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230309-guenter-mini-v2-1-e6410d590d43@chromium.org>
-References: <20230309-guenter-mini-v2-0-e6410d590d43@chromium.org>
-In-Reply-To: <20230309-guenter-mini-v2-0-e6410d590d43@chromium.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Ricardo Ribalda <ribalda@chromium.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Max Staudt <mstaudt@chromium.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sean Paul <seanpaul@chromium.org>,
-        Tomasz Figa <tfiga@chromium.org>,
+        with ESMTP id S231429AbjCIOpK (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Mar 2023 09:45:10 -0500
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF2BF0FC6;
+        Thu,  9 Mar 2023 06:44:24 -0800 (PST)
+Received: from booty.fritz.box (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 4B1ADFF811;
+        Thu,  9 Mar 2023 14:44:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678373063;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W/OR7OgnmlOPfrWXLXRWbh6OKG8j6mLzoFN0/Tk8wec=;
+        b=CbKpbUvHPKZKeLHRnz7WYILQ81JnStNHpLdpk3lWRK7nHH6k6JtfP7YndpftVUetHpL/rW
+        EMwmLqY8PFFhIZyp1+kNqqrGcpdTrRg5LvefLp1YvNX0rlEEaAkOCVpW0g+e+IIm3YUXmo
+        bS0/jBP7PiZdJBGkrnvWQ0kgaRA+PNhhosOa2WphrFDbk6Vat4wR/4q1KSK5iylQ6g5vhN
+        S8tQ3EHCqtATBHpvO6dPHWi+YGCG6BzSEclBTKIs04x3yow213i5P3EkloHzlMAqUEs7mY
+        6WBA25JJRSyKpKMz+BGdZC1Jq16vqEK/V8nXL4NoM+dYU3NcoI3DWqtLD5I5+g==
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4230; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=c4r9Zh1+85Fx2Zh7mY0BgdJ1GoRPl8v5yT/Vrh7HusA=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBkCfC9Wtr20EFiqZKoGO6jW6rq3jpfSZDg8FcEUYBd
- fOXf4dqJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCZAnwvQAKCRDRN9E+zzrEiHpAD/
- 9zHvYkkEbMQEPYZu3fsJnJjirfXct3kHO7LHKKArNySruobQeuVulNDi4chIzFt3atGrtwUFlrz63/
- XQJgEqyJT/t1ZFWDON120/lnUk5OOWbvc36uclhNdJKLnghbdgYSCdbblZrLzYqHcCs+oIJ+yFw4ZA
- 9rNgDpnFbjn4lrd1TyMUqIsEE7n4ZVuQfV8Q2sIPAh+fxqcr9MIstymbE5BANTHzroshhfxxIBhLNr
- 1G37pGkyqEd67SHwc16tWa3Tur7lghpgKacL7J7rFDiy+PyiEjBZl01ay+LYAskZlMfh2bAUUgQigy
- +rzB4PQsCzHn3FhTojVlB4eE1dZP6/WEu4d/Yv/8dyRTgUlB9289RJXL26PXCIqYZIBvfRAKtICX+E
- fFWtdoeg3jIuBsi6SG8VSsgh3TP39BZlmvZpLYFXCBoD9Ra7p4QCcsx6Kj9ryDIUo9f2cCOyYsJAhU
- VYdAFs9WkHzTqSqpoBoOIblfy5WO9SrH+glqpjSFBcLKO8+U9NmCucC341czL5fBoW2/Jyw3d0PzH+
- LSIKtRa6+zspflNkqtBN7JCphrXqVMeW2LqyJ9dUxdssmJLBnkmrHeqIQCNygnhknWBXacUYUhPTFO
- 511Q+7FK6qqsFISv8cRaVgg9WW5MUvD8T8GjI7dM9q6SaxVL/6wHmWFm7P3w==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Richard Leitner <richard.leitner@skidata.com>
+Subject: [RESEND PATCH v4 18/21] staging: media: tegra-video: add syncpts for Tegra20 to struct tegra_vi
+Date:   Thu,  9 Mar 2023 15:43:17 +0100
+Message-Id: <20230309144320.2937553-19-luca.ceresoli@bootlin.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230309144320.2937553-1-luca.ceresoli@bootlin.com>
+References: <20230309144320.2937553-1-luca.ceresoli@bootlin.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+In preparation to implement Tegra20 parallel video capture, add a variable
+to hold the required syncpt and document all the syncpt variables.
 
-So far the asynchronous control worker was canceled only in
-uvc_ctrl_cleanup_device. This is much later than the call to
-uvc_disconnect. However, after the call to uvc_disconnect returns,
-there must be no more USB activity. This can result in all kinds
-of problems in the USB code. One observed example:
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
 
-URB ffff993e83d0bc00 submitted while active
-WARNING: CPU: 0 PID: 4046 at drivers/usb/core/urb.c:364 usb_submit_urb+0x4ba/0x55e
-Modules linked in: <...>
-CPU: 0 PID: 4046 Comm: kworker/0:35 Not tainted 4.19.139 #18
-Hardware name: Google Phaser/Phaser, BIOS Google_Phaser.10952.0.0 08/09/2018
-Workqueue: events uvc_ctrl_status_event_work [uvcvideo]
-RIP: 0010:usb_submit_urb+0x4ba/0x55e
-Code: <...>
-RSP: 0018:ffffb08d471ebde8 EFLAGS: 00010246
-RAX: a6da85d923ea5d00 RBX: ffff993e71985928 RCX: 0000000000000000
-RDX: ffff993f37a1de90 RSI: ffff993f37a153d0 RDI: ffff993f37a153d0
-RBP: ffffb08d471ebe28 R08: 000000000000003b R09: 001424bf85822e96
-R10: 0000001000000000 R11: ffffffff975a4398 R12: ffff993e83d0b000
-R13: ffff993e83d0bc00 R14: 0000000000000000 R15: 00000000fffffff0
-FS:  0000000000000000(0000) GS:ffff993f37a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000ec9c0000 CR3: 000000025b160000 CR4: 0000000000340ef0
-Call Trace:
- uvc_ctrl_status_event_work+0xd6/0x107 [uvcvideo]
- process_one_work+0x19b/0x4c5
- worker_thread+0x10d/0x286
- kthread+0x138/0x140
- ? process_one_work+0x4c5/0x4c5
- ? kthread_associate_blkcg+0xc1/0xc1
- ret_from_fork+0x1f/0x40
-
-Introduce new function uvc_ctrl_stop_device() to cancel the worker
-and call it from uvc_unregister_video() to solve the problem.
-
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Reviewed-by: Tomasz Figa <tfiga@chromium.org>
-Reviewed-by: Sean Paul <seanpaul@chromium.org>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/usb/uvc/uvc_ctrl.c   | 11 +++++++----
- drivers/media/usb/uvc/uvc_driver.c |  1 +
- drivers/media/usb/uvc/uvcvideo.h   |  1 +
- 3 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index 5e9d3da862dd..769c1d2a2f45 100644
---- a/drivers/media/usb/uvc/uvc_ctrl.c
-+++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -2757,14 +2757,17 @@ static void uvc_ctrl_cleanup_mappings(struct uvc_device *dev,
- 	}
- }
- 
--void uvc_ctrl_cleanup_device(struct uvc_device *dev)
-+void uvc_ctrl_stop_device(struct uvc_device *dev)
- {
--	struct uvc_entity *entity;
--	unsigned int i;
--
- 	/* Can be uninitialized if we are aborting on probe error. */
- 	if (dev->async_ctrl.work.func)
- 		cancel_work_sync(&dev->async_ctrl.work);
-+}
-+
-+void uvc_ctrl_cleanup_device(struct uvc_device *dev)
-+{
-+	struct uvc_entity *entity;
-+	unsigned int i;
- 
- 	/* Free controls and control mappings for all entities. */
- 	list_for_each_entry(entity, &dev->entities, list) {
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 7aefa76a42b3..4be6dfeaa295 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -1893,6 +1893,7 @@ static void uvc_unregister_video(struct uvc_device *dev)
- 	}
- 
- 	uvc_status_unregister(dev);
-+	uvc_ctrl_stop_device(dev);
- 
- 	if (dev->vdev.dev)
- 		v4l2_device_unregister(&dev->vdev);
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index 9a596c8d894a..50f171e7381b 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -760,6 +760,7 @@ int uvc_query_v4l2_menu(struct uvc_video_chain *chain,
- int uvc_ctrl_add_mapping(struct uvc_video_chain *chain,
- 			 const struct uvc_control_mapping *mapping);
- int uvc_ctrl_init_device(struct uvc_device *dev);
-+void uvc_ctrl_stop_device(struct uvc_device *dev);
- void uvc_ctrl_cleanup_device(struct uvc_device *dev);
- int uvc_ctrl_restore_values(struct uvc_device *dev);
- bool uvc_ctrl_status_event_async(struct urb *urb, struct uvc_video_chain *chain,
+Changed in v4:
+ - Added review tags
 
+Changed in v3:
+ - recycle mw_ack_sp[0] instead of adding out_sp
+
+No changes in v2
+---
+ drivers/staging/media/tegra-video/vi.h | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/staging/media/tegra-video/vi.h b/drivers/staging/media/tegra-video/vi.h
+index 8fadca33bcc9..d5e1ed4217e0 100644
+--- a/drivers/staging/media/tegra-video/vi.h
++++ b/drivers/staging/media/tegra-video/vi.h
+@@ -117,11 +117,13 @@ struct tegra_vi {
+  * @vi: Tegra video input device structure
+  * @frame_start_sp: host1x syncpoint pointer to synchronize programmed capture
+  *		start condition with hardware frame start events through host1x
+- *		syncpoint counters.
++ *		syncpoint counters. (Tegra210)
+  * @mw_ack_sp: host1x syncpoint pointer to synchronize programmed memory write
+  *		ack trigger condition with hardware memory write done at end of
+- *		frame through host1x syncpoint counters.
++ *		frame through host1x syncpoint counters (On Tegra20 used for the
++ *              OUT_1 syncpt)
+  * @sp_incr_lock: protects cpu syncpoint increment.
++ * @next_out_sp_idx: next expected value for mw_ack_sp[0], i.e. OUT_1 (Tegra20)
+  *
+  * @kthread_start_capture: kthread to start capture of single frame when
+  *		vb buffer is available. This thread programs VI CSI hardware
+@@ -173,6 +175,7 @@ struct tegra_vi_channel {
+ 	struct host1x_syncpt *mw_ack_sp[GANG_PORTS_MAX];
+ 	/* protects the cpu syncpoint increment */
+ 	spinlock_t sp_incr_lock[GANG_PORTS_MAX];
++	u32 next_out_sp_idx;
+ 
+ 	struct task_struct *kthread_start_capture;
+ 	wait_queue_head_t start_wait;
 -- 
-2.40.0.rc0.216.gc4246ad0f0-goog-b4-0.11.0-dev-696ae
+2.34.1
+
