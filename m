@@ -2,304 +2,238 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 967BCC6FA99
-	for <linux-media@archiver.kernel.org>; Fri, 10 Mar 2023 06:24:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02102C6FD19
+	for <linux-media@archiver.kernel.org>; Fri, 10 Mar 2023 09:00:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjCJGYV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 10 Mar 2023 01:24:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37096 "EHLO
+        id S229845AbjCJJAM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 10 Mar 2023 04:00:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbjCJGYN (ORCPT
+        with ESMTP id S229668AbjCJI7R (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 10 Mar 2023 01:24:13 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6558104617;
-        Thu,  9 Mar 2023 22:24:11 -0800 (PST)
-X-UUID: 28235888bf0c11ed945fc101203acc17-20230310
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=Gn2kibkOu2BpBaNvPK5fRP0sBK77AQfIg4Roa4SkH2Q=;
-        b=kP0EbAlH3BXHBdiBt2rS2Lx1EZc7vyY9VSml8AeOzPgbddRDcbfeMSqErbC14YZlf5JgBwJZF2We1U9AOQ2mQdVpDHp5s9RK/zXxZGX2yycM5iidCr0uwYSrIwY24yvTEFXYBonXCSAmX1oY5R9wFGzEfjiqS3J3EAFR7fgoLaE=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.20,REQID:13df1942-a35a-45bb-bf8d-4c06697edb24,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:25b5999,CLOUDID:1949f127-564d-42d9-9875-7c868ee415ec,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-UUID: 28235888bf0c11ed945fc101203acc17-20230310
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 398728192; Fri, 10 Mar 2023 14:24:05 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Fri, 10 Mar 2023 14:24:03 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Fri, 10 Mar 2023 14:24:02 +0800
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <nicolas.dufresne@collabora.com>, kyrie wu <kyrie.wu@mediatek.com>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Fri, 10 Mar 2023 03:59:17 -0500
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16260DBF1
+        for <linux-media@vger.kernel.org>; Fri, 10 Mar 2023 00:52:53 -0800 (PST)
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230310085251epoutp018a33d4366c17c59f7cf9ed233273453c~LAs5uQp4L0831108311epoutp01J
+        for <linux-media@vger.kernel.org>; Fri, 10 Mar 2023 08:52:51 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230310085251epoutp018a33d4366c17c59f7cf9ed233273453c~LAs5uQp4L0831108311epoutp01J
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1678438371;
+        bh=mbTVRARZa00Wt/5CaAguT27mR1eA5Av02KT8R3nPBik=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=X5v4ImQh9eXPvpsQWKDGg1dPyVjoYR2PPw86qkaRXGY+HRZBvhpgUQap4s2W8B6b1
+         nWELVP2bZnZYdbMgP6ncVbhfAA7i5aLP2JlO3b4p1lyfYHdOfFW/aZFRtLndKu4Ofw
+         0M2dqW3dmRkGpmIP/E2c1TNC9KbWzWasKP9Bpimc=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20230310085251epcas5p3d9549dfb79fde065675ca9164922d34b~LAs5CMCwI2685626856epcas5p3B;
+        Fri, 10 Mar 2023 08:52:51 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.178]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4PY0Dx21RVz4x9Q7; Fri, 10 Mar
+        2023 08:52:49 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        56.E4.55678.0EFEA046; Fri, 10 Mar 2023 17:52:48 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20230309084828epcas5p414b1687d51abf484520820d9d6fe7582~Ks-yEME0L3190631906epcas5p48;
+        Thu,  9 Mar 2023 08:48:28 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230309084828epsmtrp17eb7966e64f8b8d175cfaa027eaf651f~Ks-yDNo6E1369313693epsmtrp1c;
+        Thu,  9 Mar 2023 08:48:28 +0000 (GMT)
+X-AuditID: b6c32a4a-6a3ff7000000d97e-3a-640aefe08848
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        75.73.18071.C5D99046; Thu,  9 Mar 2023 17:48:28 +0900 (KST)
+Received: from FDSFTE308 (unknown [107.122.81.79]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230309084825epsmtip18cbce813f46e6abc911beaebbba9431b~Ks-vB-hZa1043310433epsmtip1T;
+        Thu,  9 Mar 2023 08:48:24 +0000 (GMT)
+From:   "Aakarsh Jain" <aakarsh.jain@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
-        <maoguang.meng@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        "Irui Wang" <irui.wang@mediatek.com>
-Subject: [V2,6/7] media: mtk-jpeg: refactor some variables
-Date:   Fri, 10 Mar 2023 14:23:54 +0800
-Message-ID: <20230310062355.9963-7-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230310062355.9963-1-irui.wang@mediatek.com>
-References: <20230310062355.9963-1-irui.wang@mediatek.com>
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Cc:     <m.szyprowski@samsung.com>, <andrzej.hajda@intel.com>,
+        <mchehab@kernel.org>, <hverkuil-cisco@xs4all.nl>,
+        <ezequiel@vanguardiasur.com.ar>, <jernej.skrabec@gmail.com>,
+        <benjamin.gaignard@collabora.com>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <stanimir.varbanov@linaro.org>, <dillon.minfei@gmail.com>,
+        <david.plowman@raspberrypi.com>, <mark.rutland@arm.com>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>, <andi@etezian.org>,
+        <alim.akhtar@samsung.com>, <aswani.reddy@samsung.com>,
+        <pankaj.dubey@samsung.com>
+In-Reply-To: <81e78cf6-b8b3-0cab-d190-aa22abbc5c2d@linaro.org>
+Subject: RE: [Patch v6] dt-bindings: media: s5p-mfc: convert bindings to
+ json-schema
+Date:   Thu, 9 Mar 2023 14:18:23 +0530
+Message-ID: <001901d95263$eac4b460$c04e1d20$@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQHxIgKtygHqPU4mHAhqu15r4A65nwLsA7LZAklDK9wB4osi/QJmoqxPAoFahrkB+xU0e65SqsaA
+Content-Language: en-in
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xTVxzHPb1tb0tSvSKGs2Yz5brIQ4HWtXhYQPdQd6OyNVumU6d4pTcF
+        6SttcZMlo2Q8HGM4CMRQETeLLIMC41EBKRtWGIMlCmJkbnQ8JxYUpiiPTXGlLRv/fc7vfL/n
+        +/udk8PD/AtxIS9JY2T0GlpFcv3Yl6+FBocPT/spxPUPABoqvcxFlvlxFhq0zLCRo96Go4Zb
+        5zD0bWcbB11ov85BjVdH2Kj2nnu3t9jJRuMXqgFymf/gorx7wxhqnXQ76kZvc1DflRIuyv3e
+        xkFV7U4cXervZaHyuqcsdNH2GEeZre04yshqZ70WSFlLrYBqcpYBqr/sEUY1m504ZbG7WFRd
+        xedcauC2nUvVl6VRmR1/s6m8hgpA5bT3c6mZug1U95MZXC44lByTyNAKRi9iNAlaRZJGGUvu
+        fS/+zXhZlFgSLolG20iRhlYzseTOffLw3Ukq9/Sk6CStSnGX5LTBQEZuj9FrU4yMKFFrMMaS
+        jE6h0kl1EQZabUjRKCM0jPFViVi8VeYWHktObF5w4DrXlo9tdzeZwGxwDuDzICGFppEcLAf4
+        8fyJFgArK38G3sUjABcnnnK8i1kA+3Jd7GVL9mfP2N6NVgAL27p8/nEA52vH8SUVl4iEg925
+        HnsA0QHgUMOwR4UR2WyYf9MEllR8YjucbKnElngdsR8O157mLjGbeBlOX7d78gRENLTZM3Av
+        r4VdxWOeOkZshuXfTGLenkRw4c9yzhIHEIfcXdTiXk0g7FjI9QRDooUPa3se+gw7YWN9DcvL
+        6+BEZwPuZSF0ncnycQIcvejy6VWwxl7ou4AdsO1WiZt57oBQWHMl0lt+CRZ1V7O8uavhl/+M
+        +Y4XwKbSZd4ESwbmOV5+EV6rvAS+AqR5xWjmFaOZV4xg/j/ta8CuAC8wOoNayRhkuq0a5qP/
+        njxBq64Dnu8RtqcJDA/9FeEALB5wAMjDyADBnJCn8Bco6FOpjF4br09RMQYHkLnvOx8Trk/Q
+        uv+XxhgvkUaLpVFRUdLoV6IkZKAgOLYrwZ9Q0kYmmWF0jH7Zx+LxhSYWSZPzG7ekE0cirKsG
+        d237Nf3wnCwv7s75L0KOWvvibhhn3+WbY0zyzvGDan5WD5+4oQxMD3peJM+dypZZ0uTPOoKO
+        EG2TjaEBkScejx7+ceNqrmzDqt2LGXs/uR80GXfGuWDtOW0+Czb3lsnFjY0FUwMPkOROVcEB
+        vvTEd82yXXLmw59MofGxO/KOP9ljEQcxpgmcWZO2q+H9t0bWFjk1uP6dkxGLrtTjNy0j3WZh
+        x9nFxMVi6y+FFZ9WP/RPxQSjd48Zz73xW8XUvum8EKnug4OnbCPrq3CRWRq45u0DweoSV1rz
+        /qtHQ7od93//IbNA2ZX/nJ7LMNnLx4pfTzlfpQ4j2YZEWhKG6Q30v0CdL3KnBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUzMcRzHfX/Pd9vpp4u+l5bcZGGV87SvsVgzfksM81BpON3Peahz7vJQ
+        SHSKStrabF1Ej3IiXV2h8nBOVkKJcuYi6cFCJqaaxN2N9d/783m93+/P948vg7v+IjyYXaoY
+        XqOSR0kpIVH5QOrlF3FBoJidVyBA73IqKZQ/2IOht/kDBDKXm2hU8SIbR5cf3SPRRctTElXd
+        f0+gst6/tDnLRqCei9cB+qhvp1B6bweOavv+JoydrSRquX2eQmk3TCS6ZrHRqLCtGUNFxl8Y
+        yjN9p9HJWguNdEkWbKk7V5JTAribtgLAtRV8w7lbehvN5dd8xDij4TTFvWmtobjygmPcyYfD
+        BJdeYQBciqWN4gaMXlzDjwF6jShcuFjBR+06wGsCArcJd74+FakulB6ymQvxBPBSkgIEDGTn
+        weTEESIFCBlXthrA8iuppBN4wtGkOtqpxfDK7x7aaeoC8Pm3OswOKDYAvm1II+3Aja0H8Gyj
+        zjHgbBYBX2bYXfZIAg5PVz8j7BEBGwj7qq/idi1m18PhBJPjHsFOg/1PaxweEbsQmmp0tFNP
+        gPVZHxx7nJ0Fu6xd/3VRbh/ufJ83HOoqcvS4seFwsKyMdnrc4cOhNDwDiPVjqvRjqvRjqvRj
+        IpcAYQASXq2NVkZrZWqZij/or5VHa/erlP6Re6ONwPFBZs64CaoMX/3NAGOAGUAGl7qJfnow
+        CleRQh4bx2v2btXsj+K1ZjCZIaTuoqaU+q2urFIew+/heTWv+UcxRuCRgDXuK5J4Zi/NFv2c
+        YY3zzU1uWdkYFOi9LxQLok3xWOmrZdawE73BG12aLmyeikQNTYnpc0KO8CW5On5tbJWqrnO4
+        7hn5RNYZkTixuzg1hwpSSr0VzZPCzKpSl1Vwoa/P5KTKWC8id9GmRs66FrGLhBuCDk/383ZZ
+        ccq2I3TT9k/k/bhyMnx2cF6o0uNMyyOfvpz5Eq2A2nK8+0imYon7lLh4okFDDrXfXfIhtbZf
+        6mP9PNh9dE9P5teQu4+bWHXH8t0tU873rx4BrbKO6evEu8XyvJhaXcYDn6N+XxZMMGSOTy49
+        Z7oa2TkyGt8/97mECy8e9/rWtDC956hgW3tA8B0pod0pl83ENVr5HzlpS16PAwAA
+X-CMS-MailID: 20230309084828epcas5p414b1687d51abf484520820d9d6fe7582
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230301035153epcas5p40f576188a9a69835c1050135219a3720
+References: <CGME20230301035153epcas5p40f576188a9a69835c1050135219a3720@epcas5p4.samsung.com>
+        <20230301035144.8645-1-aakarsh.jain@samsung.com>
+        <8b5bea40-6f7b-1d00-ac23-83a28c7dacbc@linaro.org>
+        <046b01d94d1a$418146a0$c483d3e0$@samsung.com>
+        <9b93849d-d4a4-67ba-e8a0-ee6c7209bd65@linaro.org>
+        <000701d95257$e97ebd50$bc7c37f0$@samsung.com>
+        <81e78cf6-b8b3-0cab-d190-aa22abbc5c2d@linaro.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: kyrie wu <kyrie.wu@mediatek.com>
 
-Refactor some variables to reduce redundancy
-and optimize the initialization process.
 
-Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
-Signed-off-by: irui wang <irui.wang@mediatek.com>
----
- .../platform/mediatek/jpeg/mtk_jpeg_core.c    | 31 ++++++++++++++-----
- .../platform/mediatek/jpeg/mtk_jpeg_core.h    | 18 ++++-------
- .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.c  | 16 +++-------
- .../platform/mediatek/jpeg/mtk_jpeg_enc_hw.c  | 16 +++-------
- 4 files changed, 37 insertions(+), 44 deletions(-)
-
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-index e89195f1989c..ab06c1ee80d4 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-@@ -1004,8 +1004,8 @@ static void mtk_jpegenc_worker(struct work_struct *work)
- retry_select:
- 	hw_id = mtk_jpegenc_get_hw(ctx);
- 	if (hw_id < 0) {
--		ret = wait_event_interruptible(jpeg->enc_hw_wq,
--					       atomic_read(&jpeg->enchw_rdy) > 0);
-+		ret = wait_event_interruptible(jpeg->hw_wq,
-+					       atomic_read(&jpeg->hw_rdy) > 0);
- 		if (ret != 0 || (i++ > MTK_JPEG_MAX_RETRY_TIME)) {
- 			dev_err(jpeg->dev, "%s : %d, all HW are busy\n",
- 				__func__, __LINE__);
-@@ -1016,7 +1016,7 @@ static void mtk_jpegenc_worker(struct work_struct *work)
- 		goto retry_select;
- 	}
- 
--	atomic_dec(&jpeg->enchw_rdy);
-+	atomic_dec(&jpeg->hw_rdy);
- 	src_buf = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
- 	if (!src_buf)
- 		goto getbuf_fail;
-@@ -1073,7 +1073,7 @@ static void mtk_jpegenc_worker(struct work_struct *work)
- 	v4l2_m2m_buf_done(src_buf, buf_state);
- 	v4l2_m2m_buf_done(dst_buf, buf_state);
- getbuf_fail:
--	atomic_inc(&jpeg->enchw_rdy);
-+	atomic_inc(&jpeg->hw_rdy);
- 	mtk_jpegenc_put_hw(jpeg, hw_id);
- 	v4l2_m2m_job_finish(jpeg->m2m_dev, ctx->fh.m2m_ctx);
- }
-@@ -1198,8 +1198,8 @@ static void mtk_jpegdec_worker(struct work_struct *work)
- retry_select:
- 	hw_id = mtk_jpegdec_get_hw(ctx);
- 	if (hw_id < 0) {
--		ret = wait_event_interruptible_timeout(jpeg->dec_hw_wq,
--						       atomic_read(&jpeg->dechw_rdy) > 0,
-+		ret = wait_event_interruptible_timeout(jpeg->hw_wq,
-+						       atomic_read(&jpeg->hw_rdy) > 0,
- 						       MTK_JPEG_HW_TIMEOUT_MSEC);
- 		if (ret != 0 || (i++ > MTK_JPEG_MAX_RETRY_TIME)) {
- 			dev_err(jpeg->dev, "%s : %d, all HW are busy\n",
-@@ -1211,7 +1211,7 @@ static void mtk_jpegdec_worker(struct work_struct *work)
- 		goto retry_select;
- 	}
- 
--	atomic_dec(&jpeg->dechw_rdy);
-+	atomic_dec(&jpeg->hw_rdy);
- 	src_buf = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
- 	if (!src_buf)
- 		goto getbuf_fail;
-@@ -1290,7 +1290,7 @@ static void mtk_jpegdec_worker(struct work_struct *work)
- 	v4l2_m2m_buf_done(src_buf, buf_state);
- 	v4l2_m2m_buf_done(dst_buf, buf_state);
- getbuf_fail:
--	atomic_inc(&jpeg->dechw_rdy);
-+	atomic_inc(&jpeg->hw_rdy);
- 	mtk_jpegdec_put_hw(jpeg, hw_id);
- 	v4l2_m2m_job_finish(jpeg->m2m_dev, ctx->fh.m2m_ctx);
- }
-@@ -1710,6 +1710,8 @@ static int mtk_jpeg_single_core_init(struct platform_device *pdev,
- static int mtk_jpeg_probe(struct platform_device *pdev)
- {
- 	struct mtk_jpeg_dev *jpeg;
-+	struct device_node *child;
-+	int num_child = 0;
- 	int ret;
- 
- 	jpeg = devm_kzalloc(&pdev->dev, sizeof(*jpeg), GFP_KERNEL);
-@@ -1733,6 +1735,19 @@ static int mtk_jpeg_probe(struct platform_device *pdev)
- 			v4l2_err(&jpeg->v4l2_dev, "mtk_jpeg_single_core_init failed.");
- 			return -EINVAL;
- 		}
-+	} else {
-+		init_waitqueue_head(&jpeg->hw_wq);
-+
-+		for_each_child_of_node(pdev->dev.of_node, child)
-+			num_child++;
-+
-+		atomic_set(&jpeg->hw_rdy, num_child);
-+
-+		jpeg->workqueue = alloc_ordered_workqueue(MTK_JPEG_NAME,
-+							  WQ_MEM_RECLAIM
-+							  | WQ_FREEZABLE);
-+		if (!jpeg->workqueue)
-+			return -EINVAL;
- 	}
- 
- 	ret = v4l2_device_register(&pdev->dev, &jpeg->v4l2_dev);
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-index 83cf35a12b7a..89242e407dc9 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-@@ -203,14 +203,11 @@ struct mtk_jpegdec_comp_dev {
-  * @job_timeout_work:	IRQ timeout structure
-  * @variant:		driver variant to be used
-  * @reg_encbase:	jpg encode register base addr
-- * @enc_hw_dev:		jpg encode hardware device
-- * @enc_hw_wq:		jpg encode wait queue
-- * @enchw_rdy:		jpg encode hw ready flag
-+ * @enc_hw_dev:	jpg encode hardware device
-+ * @hw_wq:		jpg wait queue
-+ * @hw_rdy:		jpg hw ready flag
-  * @reg_decbase:	jpg decode register base addr
-- * @dec_hw_dev:		jpg decode hardware device
-- * @dec_hw_wq:		jpg decode wait queue
-- * @dec_workqueue:	jpg decode work queue
-- * @dechw_rdy:		jpg decode hw ready flag
-+ * @dec_hw_dev:	jpg decode hardware device
-  */
- struct mtk_jpeg_dev {
- 	struct mutex		lock;
-@@ -227,14 +224,11 @@ struct mtk_jpeg_dev {
- 
- 	void __iomem *reg_encbase[MTK_JPEGENC_HW_MAX];
- 	struct mtk_jpegenc_comp_dev *enc_hw_dev[MTK_JPEGENC_HW_MAX];
--	wait_queue_head_t enc_hw_wq;
--	atomic_t enchw_rdy;
-+	wait_queue_head_t hw_wq;
-+	atomic_t hw_rdy;
- 
- 	void __iomem *reg_decbase[MTK_JPEGDEC_HW_MAX];
- 	struct mtk_jpegdec_comp_dev *dec_hw_dev[MTK_JPEGDEC_HW_MAX];
--	wait_queue_head_t dec_hw_wq;
--	struct workqueue_struct	*dec_workqueue;
--	atomic_t dechw_rdy;
- };
- 
- /**
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-index 5b47bd83c5ce..b7c2de2489b0 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-@@ -503,8 +503,8 @@ static void mtk_jpegdec_timeout_work(struct work_struct *work)
- 	clk_disable_unprepare(cjpeg->jdec_clk.clks->clk);
- 	pm_runtime_put(cjpeg->dev);
- 	cjpeg->hw_state = MTK_JPEG_HW_IDLE;
--	atomic_inc(&master_jpeg->dechw_rdy);
--	wake_up(&master_jpeg->dec_hw_wq);
-+	atomic_inc(&master_jpeg->hw_rdy);
-+	wake_up(&master_jpeg->hw_wq);
- 	v4l2_m2m_buf_done(src_buf, buf_state);
- 	mtk_jpegdec_put_buf(cjpeg);
- }
-@@ -551,8 +551,8 @@ static irqreturn_t mtk_jpegdec_hw_irq_handler(int irq, void *priv)
- 	clk_disable_unprepare(jpeg->jdec_clk.clks->clk);
- 
- 	jpeg->hw_state = MTK_JPEG_HW_IDLE;
--	wake_up(&master_jpeg->dec_hw_wq);
--	atomic_inc(&master_jpeg->dechw_rdy);
-+	wake_up(&master_jpeg->hw_wq);
-+	atomic_inc(&master_jpeg->hw_rdy);
- 
- 	return IRQ_HANDLED;
- }
-@@ -608,20 +608,12 @@ static int mtk_jpegdec_hw_probe(struct platform_device *pdev)
- 	dev->plat_dev = pdev;
- 	dev->dev = &pdev->dev;
- 
--	init_waitqueue_head(&master_dev->dec_hw_wq);
--	master_dev->workqueue = alloc_ordered_workqueue(MTK_JPEG_NAME,
--							WQ_MEM_RECLAIM
--							| WQ_FREEZABLE);
--	if (!master_dev->workqueue)
--		return -EINVAL;
--
- 	ret = devm_add_action_or_reset(&pdev->dev,
- 				       mtk_jpegdec_destroy_workqueue,
- 				       master_dev->workqueue);
- 	if (ret)
- 		return ret;
- 
--	atomic_set(&master_dev->dechw_rdy, MTK_JPEGDEC_HW_MAX);
- 	spin_lock_init(&dev->hw_lock);
- 	dev->hw_state = MTK_JPEG_HW_IDLE;
- 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-index c2bc0b531b32..e35ee1bdce3d 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-@@ -248,8 +248,8 @@ static void mtk_jpegenc_timeout_work(struct work_struct *work)
- 	clk_disable_unprepare(cjpeg->venc_clk.clks->clk);
- 	pm_runtime_put(cjpeg->dev);
- 	cjpeg->hw_state = MTK_JPEG_HW_IDLE;
--	atomic_inc(&master_jpeg->enchw_rdy);
--	wake_up(&master_jpeg->enc_hw_wq);
-+	atomic_inc(&master_jpeg->hw_rdy);
-+	wake_up(&master_jpeg->hw_wq);
- 	v4l2_m2m_buf_done(src_buf, buf_state);
- 	mtk_jpegenc_put_buf(cjpeg);
- }
-@@ -288,8 +288,8 @@ static irqreturn_t mtk_jpegenc_hw_irq_handler(int irq, void *priv)
- 	clk_disable_unprepare(jpeg->venc_clk.clks->clk);
- 
- 	jpeg->hw_state = MTK_JPEG_HW_IDLE;
--	wake_up(&master_jpeg->enc_hw_wq);
--	atomic_inc(&master_jpeg->enchw_rdy);
-+	wake_up(&master_jpeg->hw_wq);
-+	atomic_inc(&master_jpeg->hw_rdy);
- 
- 	return IRQ_HANDLED;
- }
-@@ -340,14 +340,6 @@ static int mtk_jpegenc_hw_probe(struct platform_device *pdev)
- 	dev->plat_dev = pdev;
- 	dev->dev = &pdev->dev;
- 
--	init_waitqueue_head(&master_dev->enc_hw_wq);
--	master_dev->workqueue = alloc_ordered_workqueue(MTK_JPEG_NAME,
--							WQ_MEM_RECLAIM
--							| WQ_FREEZABLE);
--	if (!master_dev->workqueue)
--		return -EINVAL;
--
--	atomic_set(&master_dev->enchw_rdy, MTK_JPEGENC_HW_MAX);
- 	spin_lock_init(&dev->hw_lock);
- 	dev->hw_state = MTK_JPEG_HW_IDLE;
- 
--- 
-2.18.0
-
+> -----Original Message-----
+> From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40linaro.org=5D
+> Sent: 09 March 2023 13:41
+> To: Aakarsh Jain <aakarsh.jain=40samsung.com>; linux-arm-
+> kernel=40lists.infradead.org; linux-media=40vger.kernel.org; linux-
+> kernel=40vger.kernel.org; devicetree=40vger.kernel.org
+> Cc: m.szyprowski=40samsung.com; andrzej.hajda=40intel.com;
+> mchehab=40kernel.org; hverkuil-cisco=40xs4all.nl;
+> ezequiel=40vanguardiasur.com.ar; jernej.skrabec=40gmail.com;
+> benjamin.gaignard=40collabora.com; krzysztof.kozlowski+dt=40linaro.org;
+> stanimir.varbanov=40linaro.org; dillon.minfei=40gmail.com;
+> david.plowman=40raspberrypi.com; mark.rutland=40arm.com;
+> robh+dt=40kernel.org; krzk+dt=40kernel.org; andi=40etezian.org;
+> alim.akhtar=40samsung.com; aswani.reddy=40samsung.com;
+> pankaj.dubey=40samsung.com
+> Subject: Re: =5BPatch v6=5D dt-bindings: media: s5p-mfc: convert bindings=
+ to json-
+> schema
+>=20
+> On 09/03/2023 08:22, Aakarsh Jain wrote:
+> >
+> >
+> >> -----Original Message-----
+> >> From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40linaro.org=
+=5D
+> >> Sent: 09 March 2023 12:15
+> >> To: Aakarsh Jain <aakarsh.jain=40samsung.com>; linux-arm-
+> >> kernel=40lists.infradead.org; linux-media=40vger.kernel.org; linux-
+> >> kernel=40vger.kernel.org; devicetree=40vger.kernel.org
+> >> Cc: m.szyprowski=40samsung.com; andrzej.hajda=40intel.com;
+> >> mchehab=40kernel.org; hverkuil-cisco=40xs4all.nl;
+> >> ezequiel=40vanguardiasur.com.ar; jernej.skrabec=40gmail.com;
+> >> benjamin.gaignard=40collabora.com; krzysztof.kozlowski+dt=40linaro.org=
+;
+> >> stanimir.varbanov=40linaro.org; dillon.minfei=40gmail.com;
+> >> david.plowman=40raspberrypi.com; mark.rutland=40arm.com;
+> >> robh+dt=40kernel.org; krzk+dt=40kernel.org; andi=40etezian.org;
+> >> alim.akhtar=40samsung.com; aswani.reddy=40samsung.com;
+> >> pankaj.dubey=40samsung.com
+> >> Subject: Re: =5BPatch v6=5D dt-bindings: media: s5p-mfc: convert bindi=
+ngs
+> >> to json- schema
+> >>
+> >> On 02/03/2023 16:18, Aakarsh Jain wrote:
+> >>>>
+> >>>> iommus:
+> >>>>   maxItems: 1
+> >>>> iommu-names: false
+> >>>>
+> >>> I am getting compilation errors with above property set and its
+> >>> breaking the
+> >> bindings.
+> >>> If we see these two nodes in dtsi files.
+> >>>                mfc: codec=4013400000 =7B
+> >>>                         compatible =3D =22samsung,mfc-v5=22; ..
+> >>>                         iommus =3D <&sysmmu_mfc_l>, <&sysmmu_mfc_r>;
+> >>>                         iommu-names =3D =22left=22, =22right=22; =7D =
+And
+> >>>               mfc: codec=4013400000 =7B
+> >>>                         compatible =3D =22samsung,exynos3250-mfc=22, =
+=22samsung,mfc-
+> v7=22;
+> >>>                         reg =3D <0x13400000 0x10000>; ...
+> >>>                         iommus =3D <&sysmmu_mfc>;
+> >>>                 =7D;
+> >>> There is no iommu-names property for compatible
+> =22samsung,exynos3250-
+> >> mfc, samsung,mfc-v7=22, that=E2=80=99s=20why=20I=20kept=0D=0A>=20>>>=
+=20=20=20=20=20=20=20=20=20iommus:=0D=0A>=20>>>=20=20=20=20=20=20=20=20=20=
+=20=20minItems:=201=0D=0A>=20>>>=20=20=20=20=20=20=20=20=20=20=20maxItems:=
+=202=0D=0A>=20>>>=20I=20would=20even=20go=20with=20below=20if=20you=20agree=
+?=0D=0A>=20>>>=20=20=20=20=20=20=20=20=20iommus:=0D=0A>=20>>>=20=20=20=20=
+=20=20=20=20=20=20=20minItems:=201=0D=0A>=20>>>=20=20=20=20=20=20=20=20=20=
+=20=20maxItems:=202=0D=0A>=20>>>=20=20=20=20=20=20=20=20=20iommus-names:=20=
+false=0D=0A>=20>>=0D=0A>=20>>=20No,=20I=20don't=20agree.=20Why=20do=20you=
+=20need=20two=20IOMMUs=20for=20Exynos3250?=0D=0A>=20>>>=0D=0A>=20>=20Here=
+=20IOMMUs=20minItems:1=20is=20meant=20for=20Exynos3250=20while=20IOMMUs=0D=
+=0A>=20maxItems:2=20meant=20for=20samsung,mfc-v5(Exynos=204).=0D=0A>=20>=20=
+As=20you=20suggested=0D=0A>=20>=20iommus:=0D=0A>=20>=20=20=20maxItems:=201=
+=0D=0A>=20>=20iommu-names:=20false=0D=0A>=20>=0D=0A>=20>=20won't=20fit=20he=
+re.=0D=0A>=20>=20Since=20IOMMUs=20maxItems=20is=202=20here=20for=20Exynos4.=
+=20Giving=20maxItems:2=20alone=0D=0A>=20will=20also=20break=20the=20binding=
+s.=20Thanks=20why=20suggested=0D=0A>=20>=20=20=20=20=20=20=20=20=20=20iommu=
+s:=0D=0A>=20>=20=20=20=20=20=20=20=20=20=20=20=20minItems:=201=0D=0A>=20>=
+=20=20=20=20=20=20=20=20=20=20=20=20maxItems:=202=0D=0A>=20=0D=0A>=20Are=20=
+you=20sure=20you=20are=20putting=20this=20in=20correct=20place?=20This=20is=
+=20if:then=20for=0D=0A>=20Exynos3250,=20isn't=20it?=0D=0A>=20=0D=0AIts=20no=
+t=20only=20for=20Exynos3250,=20its=20along=20with=20Exynos4=20since=20their=
+=20clock=20properties=20are=20same=0D=0AallOf:=0D=0A=20=20-=20if:=0D=0A=20=
+=20=20=20=20=20properties:=0D=0A=20=20=20=20=20=20=20=20compatible:=0D=0A=
+=20=20=20=20=20=20=20=20=20=20contains:=0D=0A=20=20=20=20=20=20=20=20=20=20=
+=20=20enum:=0D=0A=20=20=20=20=20=20=20=20=20=20=20=20=20=20-=20samsung,mfc-=
+v5=20=20=20=20=20=20=20=20=23Exynos4=0D=0A=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20-=20samsung,exynos3250-mfc=0D=0A=20=20=20=20then:=0D=0A=20=20=20=
+=20=20=20properties:=0D=0A=20=20=20=20=20=20=20=20clocks:=0D=0A=20=20=20=20=
+=20=20=20=20=20=20maxItems:=202=0D=0A=20=20=20=20=20=20=20=20clock-names:=
+=0D=0A=20=20=20=20=20=20=20=20=20=20items:=0D=0A=20=20=20=20=20=20=20=20=20=
+=20=20=20-=20const:=20mfc=0D=0A=20=20=20=20=20=20=20=20=20=20=20=20-=20cons=
+t:=20sclk_mfc=0D=0A=20=20=20=20=20=20=20=20iommus:=0D=0A=20=20=20=20=20=20=
+=20=20=20=20minItems:=201=0D=0A=20=20=20=20=20=20=20=20=20=20maxItems:=202=
+=0D=0A=0D=0Aor=20do=20I=20keep=20different=20if:then=20condition=20for=20bo=
+th=20Exynos3250=20and=20Exynos4=20for=20IOMMUs=20property=20?=0D=0A=0D=0A>=
+=20Best=20regards,=0D=0A>=20Krzysztof=0D=0A=0D=0A=0D=0A
