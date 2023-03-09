@@ -2,150 +2,274 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F20FEC6FD1C
-	for <linux-media@archiver.kernel.org>; Thu,  9 Mar 2023 12:58:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CF8AC6FD1C
+	for <linux-media@archiver.kernel.org>; Thu,  9 Mar 2023 12:58:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231363AbjCIM6J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Mar 2023 07:58:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
+        id S231302AbjCIM6a (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Mar 2023 07:58:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231228AbjCIM5d (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Mar 2023 07:57:33 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3406F2090
-        for <linux-media@vger.kernel.org>; Thu,  9 Mar 2023 04:56:54 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id o12so6528501edb.9
-        for <linux-media@vger.kernel.org>; Thu, 09 Mar 2023 04:56:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678366569;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iMAXkHtzZVXUIYSgEhnqVkH5iil6F/pIxroVXvOBotI=;
-        b=NsOgtDKW0v1J0PerqA4rmY1XfO0Y8aYIdvklcqGgVCvR83ZRI+T1ckbqPde7SpjItx
-         gZBAl/dC9Zp70nsZFHjiQVXQV31jLl2CZih4ew9OnpLk4msTY5L08R6EbSweVigzk4/x
-         zBv0W9g7zPyO52SzdBC3UUZIkoKolTMa/huaE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678366569;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iMAXkHtzZVXUIYSgEhnqVkH5iil6F/pIxroVXvOBotI=;
-        b=KFwyH3y82dDDlOnvKCYvwO6cAegk3OE52OIpsnhuyTotapwaqil+KUl/LNgrAARXZS
-         t4iiwmrjrCRaHwfuQD90wQA7Sqi2SKjilPGW2GXmLAQ3BWSmXvAI/myPSoeIiEZIXqB7
-         TVPqBHHLNFfo6ijNQ7owJjWzVf42o5sZ2J1xVZxxMQiF9sFofVW1Ht80sCLA57M/n0vM
-         dDU2588SvXQhi6G2Xgym2E41bIZ1U1q9qWrG2a7qcl7ULyiTMhjeTC7YBN9wwK4KrjyG
-         tX2FXZBnKUZWEorA5I2Jw3AiMkcMStjB0DROSDMuWIz2jH4bY4nQItEqsYbzbWSeeO/i
-         d0OA==
-X-Gm-Message-State: AO0yUKXe+VspE2W5YC1PRiroe3riO7CgZwZvsT4HnVNtKf8VdNAs4hTi
-        wmbreL1cVrMS5iKKHbGa3j5Z/A==
-X-Google-Smtp-Source: AK7set8hnCjeT/yiz3LZDqdTB5UAJ3v/QGaUt9MRSSOzmg2epU1SY0oae/2ce+pf7J87ffwSh1sE2w==
-X-Received: by 2002:aa7:d357:0:b0:4af:6a7e:9218 with SMTP id m23-20020aa7d357000000b004af6a7e9218mr21053463edr.42.1678366569494;
-        Thu, 09 Mar 2023 04:56:09 -0800 (PST)
-Received: from alco.roam.corp.google.com ([2620:0:1059:10:1645:7aa4:a765:1966])
-        by smtp.gmail.com with ESMTPSA id hy26-20020a1709068a7a00b008d92897cc29sm8799523ejc.37.2023.03.09.04.56.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 04:56:09 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Thu, 09 Mar 2023 13:55:19 +0100
-Subject: [PATCH v6 5/5] media: uvcvideo: Fix hw timestamp handling for slow FPS
+        with ESMTP id S231286AbjCIM5s (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Mar 2023 07:57:48 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0EAEF20B6
+        for <linux-media@vger.kernel.org>; Thu,  9 Mar 2023 04:57:12 -0800 (PST)
+Received: from localhost.localdomain (unknown [194.146.248.75])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: andrzej.p)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 61D466603017;
+        Thu,  9 Mar 2023 12:57:04 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678366624;
+        bh=entfAdk0ocbZ1yRpBO0Bbv0rQYXvI1fo/Jz6oOdvS0Q=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BAvH7EPC4NOgTxhkqJgt/+HZ22+H2DQ2UecgeU76nBhFphu3xXI8Vr0pSwLMSpt1h
+         3HxZcCli0EtuWC1pwAhSc6kv1z6qG77j/6xUvZjMe9yRWxUz1q73d1cIawuufzFlTY
+         ipSSXhvk6XgbPx6jW4Sr6sA+6L+cc4A8S9TzC4sFwC2oYlOr5syVKpNpdRSJ2n/8Cd
+         3fRNAUv6saqZba6JD2Rip9FYX019PNT+Ca8j71xHnD0MTmilmAxekVEleILXRUN7T5
+         vIXERryOu0wIe/NcaK6V13Glv9jNs1HVMwpWLZ2zeixQnK7X0EroezMobuymJEhJpb
+         oiLJHtl6nNIPw==
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+To:     linux-media@vger.kernel.org
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        kernel@collabora.com
+Subject: [RFC 1/2] media: uapi: Add VP8 stateless encoder controls
+Date:   Thu,  9 Mar 2023 13:56:50 +0100
+Message-Id: <20230309125651.23911-2-andrzej.p@collabora.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230309125651.23911-1-andrzej.p@collabora.com>
+References: <20230309125651.23911-1-andrzej.p@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20220920-resend-hwtimestamp-v6-5-c7a99299ec35@chromium.org>
-References: <20220920-resend-hwtimestamp-v6-0-c7a99299ec35@chromium.org>
-In-Reply-To: <20220920-resend-hwtimestamp-v6-0-c7a99299ec35@chromium.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org, "hn.chen" <hn.chen@sunplusit.com>
-X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2432; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=BkEYNPgQFikUx3ehYbVZ7ucDEzERBb5OFmbVLs51fjc=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBkCddiI0AjI40kE9YpN74xp7ZzsdAfpfwQMB18nkKv
- Rnn7RxOJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCZAnXYgAKCRDRN9E+zzrEiJLqD/
- 9Sln6eswFHpBkcgQ7zVvZmsAAMSt6u2TvjDhNj+uKGB3T7NgPECGoScjtN6mQ/ALrk9TjEQ5cA/zpy
- syX5uFtWEb00ZX0Jz1E4F5Vg/tUXDRrhqxiyf+p50JolqVhmronpTAnxq7loh8HDgEVGaMyHSSXx2S
- urhUhVwW8ztFtlSvK1Nfn3FXjg/tunhga7KHWkvPBLQdIPBtgnx3fnO8TnYGx/WDn9C2ra/kbJ9sU2
- 8ByWavtyo3znu8CE22D6RQ+NHo120lJO3A4ctKUFfqUb5hgWpPbOzRzci76B5FExqpe9RJsEzQLD04
- /X+6M0be/U0DS+zfTFFcEraXCaclrhPakiNTEcwQOat/Z5APbkXtlnnRtLjulysbS6fQdoDiIdMk8Y
- jNpi1djE7ExfSaZsHCKkI1fO29wWF2dkvqk43GFLyaxuTGdShzgaorgDjK/pawjFbNrqDuXG56eOYl
- RK8vNpdGgP+TOk1uIOKGCNvFuxUqy7zAXWuZr07tIGdncn49OAdtqPRKitBTJsGKOJBhaqojBYRK5Y
- tGLnz05oQplnH+gVAL/hCqxWUMrjxqpcM8+3ng/LqZUqs7M8noVEVMQBBjooqIwyMNN2lZJmawR5wZ
- ewqPjGqziCT25lsatxFJRGbL2ABYf/x/jwQ7mw8VTHGAI0KjjtCcx3zq2KzQ==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In UVC 1.5 we get a single clock value per frame. With the current
-buffer size of 32, FPS slowers than 32 might roll-over twice.
+Add uAPI for stateless VP8 encoders.
 
-The current code cannot handle two roll-over and provide invalid
-timestamps.
-
-Revome all the samples from the circular buffer that are more than two
-rollovers old, so the algorithm always provides good timestamps.
-
-Note that we are removing values that are more than one second old,
-which means that there is enough distance between the two points that
-we use for the interpolation to provide good values.
-
-Tested-by: HungNien Chen <hn.chen@sunplusit.com>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 ---
- drivers/media/usb/uvc/uvc_video.c | 15 +++++++++++++++
- drivers/media/usb/uvc/uvcvideo.h  |  1 +
- 2 files changed, 16 insertions(+)
+ drivers/media/v4l2-core/v4l2-ctrls-core.c | 16 ++++
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c |  5 ++
+ include/media/v4l2-ctrls.h                |  1 +
+ include/uapi/linux/v4l2-controls.h        | 91 +++++++++++++++++++++++
+ include/uapi/linux/videodev2.h            |  3 +
+ 5 files changed, 116 insertions(+)
 
-diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index 0bb862e8c803..6f2bb0dc991c 100644
---- a/drivers/media/usb/uvc/uvc_video.c
-+++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -473,6 +473,20 @@ static void uvc_video_clock_add_sample(struct uvc_clock *clock,
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+index 29169170880a..5055e75d37bb 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+@@ -335,6 +335,9 @@ void v4l2_ctrl_type_op_log(const struct v4l2_ctrl *ctrl)
+ 	case V4L2_CTRL_TYPE_VP9_FRAME:
+ 		pr_cont("VP9_FRAME");
+ 		break;
++	case V4L2_CTRL_TYPE_VP8_ENCODE_PARAMS:
++		pr_cont("VP8_ENCODE_PARAMS");
++		break;
+ 	case V4L2_CTRL_TYPE_HEVC_SPS:
+ 		pr_cont("HEVC_SPS");
+ 		break;
+@@ -568,6 +571,7 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
+ 	struct v4l2_ctrl_hevc_pps *p_hevc_pps;
+ 	struct v4l2_ctrl_hdr10_mastering_display *p_hdr10_mastering;
+ 	struct v4l2_ctrl_hevc_decode_params *p_hevc_decode_params;
++	struct v4l2_ctrl_vp8_encode_params *p_vp8_encode_params;
+ 	struct v4l2_area *area;
+ 	void *p = ptr.p + idx * ctrl->elem_size;
+ 	unsigned int i;
+@@ -918,6 +922,15 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
+ 			return -EINVAL;
+ 		break;
  
- 	spin_lock_irqsave(&clock->lock, flags);
- 
-+	/* Delete last overflows */
-+	if (clock->head == clock->last_sof_overflow)
-+		clock->last_sof_overflow = -1;
++	case V4L2_CTRL_TYPE_VP8_ENCODE_PARAMS:
++		p_vp8_encode_params = p;
++		if (p_vp8_encode_params->loop_filter_level > 63)
++			return -EINVAL;
 +
-+	/* Handle overflows */
-+	if (clock->count > 0 && clock->last_sof > sample->dev_sof) {
-+		/* Remove data from the last^2 overflows */
-+		if (clock->last_sof_overflow != -1)
-+			clock->count = (clock->head - clock->last_sof_overflow)
-+								% clock->count;
-+		clock->last_sof_overflow = clock->head;
-+	}
++		if (p_vp8_encode_params->sharpness_level > 7)
++			return -EINVAL;
++		break;
 +
-+	/* Add sample */
- 	memcpy(&clock->samples[clock->head], sample, sizeof(*sample));
- 	clock->head = (clock->head + 1) % clock->size;
- 	clock->count = min(clock->count + 1, clock->size);
-@@ -605,6 +619,7 @@ static void uvc_video_clock_reset(struct uvc_clock *clock)
- 	clock->head = 0;
- 	clock->count = 0;
- 	clock->last_sof = -1;
-+	clock->last_sof_overflow = -1;
- 	clock->sof_offset = -1;
- }
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -1602,6 +1615,9 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
+ 	case V4L2_CTRL_TYPE_VP9_FRAME:
+ 		elem_size = sizeof(struct v4l2_ctrl_vp9_frame);
+ 		break;
++	case V4L2_CTRL_TYPE_VP8_ENCODE_PARAMS:
++		elem_size = sizeof(struct v4l2_ctrl_vp8_encode_params);
++		break;
+ 	case V4L2_CTRL_TYPE_AREA:
+ 		elem_size = sizeof(struct v4l2_area);
+ 		break;
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+index 564fedee2c88..935bd9a07bad 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+@@ -1182,6 +1182,8 @@ const char *v4l2_ctrl_get_name(u32 id)
+ 	case V4L2_CID_STATELESS_MPEG2_QUANTISATION:		return "MPEG-2 Quantisation Matrices";
+ 	case V4L2_CID_STATELESS_VP9_COMPRESSED_HDR:	return "VP9 Probabilities Updates";
+ 	case V4L2_CID_STATELESS_VP9_FRAME:			return "VP9 Frame Decode Parameters";
++	case V4L2_CID_STATELESS_VP8_ENCODE_PARAMS:		return "VP8 Encode Parameters";
++	case V4L2_CID_STATELESS_VP8_ENCODE_QP:			return "VP8 Encode QP";
+ 	case V4L2_CID_STATELESS_HEVC_SPS:			return "HEVC Sequence Parameter Set";
+ 	case V4L2_CID_STATELESS_HEVC_PPS:			return "HEVC Picture Parameter Set";
+ 	case V4L2_CID_STATELESS_HEVC_SLICE_PARAMS:		return "HEVC Slice Parameters";
+@@ -1531,6 +1533,9 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+ 	case V4L2_CID_STATELESS_VP9_FRAME:
+ 		*type = V4L2_CTRL_TYPE_VP9_FRAME;
+ 		break;
++	case V4L2_CID_STATELESS_VP8_ENCODE_PARAMS:
++		*type = V4L2_CTRL_TYPE_VP8_ENCODE_PARAMS;
++		break;
+ 	case V4L2_CID_UNIT_CELL_SIZE:
+ 		*type = V4L2_CTRL_TYPE_AREA;
+ 		*flags |= V4L2_CTRL_FLAG_READ_ONLY;
+diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
+index e59d9a234631..2c4d5d293872 100644
+--- a/include/media/v4l2-ctrls.h
++++ b/include/media/v4l2-ctrls.h
+@@ -81,6 +81,7 @@ union v4l2_ctrl_ptr {
+ 	struct v4l2_ctrl_hdr10_cll_info *p_hdr10_cll;
+ 	struct v4l2_ctrl_hdr10_mastering_display *p_hdr10_mastering;
+ 	struct v4l2_area *p_area;
++	struct v4l2_ctrl_vp8_encode_params *p_vp8_encode_params;
+ 	void *p;
+ 	const void *p_const;
+ };
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index b73a8ba7df6c..8b4795a601a5 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -2750,6 +2750,97 @@ struct v4l2_ctrl_vp9_compressed_hdr {
+ 	struct v4l2_vp9_mv_probs mv;
+ };
  
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index 07b2fdb80adf..bf9f5162b833 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -499,6 +499,7 @@ struct uvc_streaming {
- 		unsigned int head;
- 		unsigned int count;
- 		unsigned int size;
-+		unsigned int last_sof_overflow;
++#define V4L2_CID_STATELESS_VP8_ENCODE_PARAMS	(V4L2_CID_CODEC_STATELESS_BASE + 501)
++
++#define V4L2_VP8_FRAME_FLAG_SHOWFRAME			0x1
++#define V4L2_VP8_FRAME_FLAG_GOLDEN_REFRESH		0x2
++#define V4L2_VP8_FRAME_FLAG_ALTREF_REFRESH		0x4
++#define V4L2_VP8_FRAME_FLAG_SEGMENT_ENABLED		0x8
++#define V4L2_VP8_FRAME_FLAG_LOOP_FILTER_ADJ_ENABLED	0x10
++#define V4L2_VP8_FRAME_FLAG_REFRESH_ENTROPY_PROBS	0x20
++
++#define V4L2_VP8_FRAME_TYPE_KEYFRAME	0
++#define V4L2_VP8_FRAME_TYPE_INTER	1
++
++#define V4L2_VP8_FRAME_COLOR_SPACE_YUV		0
++#define V4L2_VP8_FRAME_COLOR_SPACE_RESERVED	1
++
++#define V4L2_VP8_FRAME_CLAMPING_REQUIRED	0
++#define V4L2_VP8_FRAME_CLAMPING_NO		1
++
++#define V4L2_VP8_FRAME_FILTER_TYPE_NORMAL	0
++#define V4L2_VP8_FRAME_FILTER_TYPE_SIMPLE	1
++
++#define V4L2_VP8_FRAME_NBR_DCT_PARTITIONS_1	0
++#define V4L2_VP8_FRAME_NBR_DCT_PARTITIONS_2	1
++#define V4L2_VP8_FRAME_NBR_DCT_PARTITIONS_4	2
++#define V4L2_VP8_FRAME_NBR_DCT_PARTITIONS_8	3
++
++#define V4L2_VP8_FRAME_GOLDEN_KEEP		0
++#define V4L2_VP8_FRAME_GOLDEN_LASTFRAME		1
++#define V4L2_VP8_FRAME_GOLDEN_ALTREF		2
++
++#define V4L2_VP8_FRAME_ALTREF_KEEP		0
++#define V4L2_VP8_FRAME_ALTREF_LASTFRAME		1
++#define V4L2_VP8_FRAME_ALTREF_GOLDEN		2
++
++#define V4L2_VP8_FRAME_REF_LAST		0
++#define V4L2_VP8_FRAME_REF_GOLDEN	1
++#define V4L2_VP8_FRAME_REF_ALT		2
++
++/**
++ * struct v4l2_ctrl_vp8_encode_params - VP8 encode parameters
++ * @flags: combination of V4L2_VP8_FRAME_FLAG_{} flags.
++ * @frame_type: specifies the frame type (key or inter).
++ *		Set to one of V4L2_VP8_FRAME_TYPE_{}.
++ * @color_space: defines the YUV color space of the sequence.
++ *		 V4L2_VP8_FRAME_TYPE_INTER frames shall set this field to zero.
++ *		 Set to one of V4L2_VP8_FRAME_COLOR_SPACE_{}.
++ * @clamping_type: defines pixel value clamping type.
++ *		   V4L2_VP8_FRAME_TYPE_INTER frames shall set this field to zero.
++ *		   Set to one of V4L2_VP8_FRAME_CLAMPING_{}.
++ * @loop_filter_type: selects the type of loop filter applied.
++ *		      Set to one of V4L2_VP8_FRAME_FILTER_TYPE_{}.
++ * @loop_filter_level: sets the strength of the applied loop filter.
++ *		       Set to a value from the rage 0..63.
++ * @sharpness_level: sets the sharpness of the applied loop filter.
++ *		     Set to a value from the range 0..7.
++ * @log2_nbr_of_dct_partitions: determines the number of separate partitions
++ *				containing the DCT coefficients of macroblocks.
++ *				Set to one of V4L2_VP8_FRAME_NBR_DCT_PARTITIONS_{}.
++ * @prob_intra: indicates the probability of an intra macroblock.
++ *		Set to a value from the range 0..255.
++ * @prob_last: indicates the probability that the last reference frame is used for inter-prediction.
++ *	       Set to a value from the range 0..255.
++ * @prob_gf: indicates the probability that the golden reference frame is used for inter-prediction.
++ *	     Set to a value from the range 0..255.
++ * @copy_buffer_to_golden: specifies the golden frame refresh strategy.
++ *			   Set to one of V4L2_VP8_FRAME_FLAG_GOLDEN_{}.
++ * @copy_buffer_to_alternate: specifies the atlref frame refresh strategy.
++ *			      Set to one of V4L2_VP8_FRAME_FLAG_ALTREF_{}.
++ * @reference_type: specifies what kind of reference to use for current inter frame.
++ *		    V4L2_VP8_FRAME_TYPE_KEYFRAME shall set this field to zero.
++ *		    Set to one of V4L2_VP8_FRAME_REF_{}.
++ */
++struct v4l2_ctrl_vp8_encode_params {
++	__u32 flags;
++	__u8 frame_type;
++	__u8 color_space;
++	__u8 clamping_type;
++	__u8 loop_filter_type;
++	__u8 loop_filter_level;
++	__u8 sharpness_level;
++	__u8 log2_nbr_of_dct_partitions;
++	__u8 prob_intra;
++	__u8 prob_last;
++	__u8 prob_gf;
++	__u8 copy_buffer_to_golden;
++	__u8 copy_buffer_to_alternate;
++	__u8 reference_type;
++};
++
++#define V4L2_CID_STATELESS_VP8_ENCODE_QP	(V4L2_CID_CODEC_STATELESS_BASE + 502)
++
+ /* MPEG-compression definitions kept for backwards compatibility */
+ #ifndef __KERNEL__
+ #define V4L2_CTRL_CLASS_MPEG            V4L2_CTRL_CLASS_CODEC
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 1befd181a4cc..71932ceba248 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -1804,6 +1804,7 @@ struct v4l2_ext_control {
+ 		struct v4l2_ctrl_hevc_slice_params __user *p_hevc_slice_params;
+ 		struct v4l2_ctrl_hevc_scaling_matrix __user *p_hevc_scaling_matrix;
+ 		struct v4l2_ctrl_hevc_decode_params __user *p_hevc_decode_params;
++		struct v4l2_ctrl_vp8_encode_params __user *p_vp8_encode_params;
+ 		void __user *ptr;
+ 	};
+ } __attribute__ ((packed));
+@@ -1877,6 +1878,8 @@ enum v4l2_ctrl_type {
+ 	V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS	= 0x0272,
+ 	V4L2_CTRL_TYPE_HEVC_SCALING_MATRIX	= 0x0273,
+ 	V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS	= 0x0274,
++
++	V4L2_CTRL_TYPE_VP8_ENCODE_PARAMS	= 0x0280,
+ };
  
- 		u16 last_sof;
- 		u16 sof_offset;
-
+ /*  Used in the VIDIOC_QUERYCTRL ioctl for querying controls */
 -- 
-2.40.0.rc0.216.gc4246ad0f0-goog-b4-0.11.0-dev-696ae
+2.25.1
+
