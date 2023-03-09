@@ -2,167 +2,72 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E86C5C6FD1F
-	for <linux-media@archiver.kernel.org>; Thu,  9 Mar 2023 05:35:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1E9EC64EC4
+	for <linux-media@archiver.kernel.org>; Thu,  9 Mar 2023 05:39:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjCIFfS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Mar 2023 00:35:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34238 "EHLO
+        id S229606AbjCIFjI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Mar 2023 00:39:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjCIFer (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Mar 2023 00:34:47 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96E53599;
-        Wed,  8 Mar 2023 21:32:55 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: lina@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id E169542037;
-        Thu,  9 Mar 2023 05:32:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1678339974;
-        bh=vxS54uTlGMR5PzLTnPcns+95VipCQ+Izczvmh+Eu4cc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=r1C05zelm2ip3ely1YRxB+0WCulNo9AUwrUESJxQv2yj7gW7cyqSVF5NJf0d9LtGP
-         zBOVwJVY6yoLBsYWmKSu7CEyZojI9S42pTyme0FnYLoUVXFizgjoHE2PynxMbZsFpS
-         Ntl9VZwbrUCyrmruackUcRXRfZh+ZhVsETUxLtKY+rXYUEmUjrgWL9NfoosLLPoYeL
-         6ZrufQazfcWRHnkMRbvvwde5y4FCVBWa1rbnbqAMiVpi0TDBSNGCq3blEmhtQ489se
-         SYJ9MTtHZLNIiXGQAWvAbGG5mXxhTztPoEdiF+uOUmV7VNA709JYANjos6FWlkOwcU
-         meO9fF+DG6/Ng==
-Message-ID: <93a57598-9deb-85f2-ebd9-8605404c1ef8@asahilina.net>
-Date:   Thu, 9 Mar 2023 14:32:45 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH RFC 01/18] rust: drm: ioctl: Add DRM ioctl abstraction
-Content-Language: en-US
-To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     linaro-mm-sig@lists.linaro.org, rust-for-linux@vger.kernel.org,
-        Karol Herbst <kherbst@redhat.com>, asahi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Mary <mary@mary.zone>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-sgx@vger.kernel.org, Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
+        with ESMTP id S229623AbjCIFjF (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Mar 2023 00:39:05 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AB28C949
+        for <linux-media@vger.kernel.org>; Wed,  8 Mar 2023 21:39:02 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id p20so843404plw.13
+        for <linux-media@vger.kernel.org>; Wed, 08 Mar 2023 21:39:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678340342;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xhklRBnV/Opvy0t0Yzw2NCc36CUqt3IMSPiX/GAGA6Y=;
+        b=d1pBPwwx/G4iR3gkX3fnB3XsruRKN1m/HearGIjGkz70oU2uG2d5Cc+9aBqng1jpjc
+         4UKUclTyaZTr07yHOtmIHAbGrNYlTFpIqL0aQIuUjJntlTPpSKg+33tOuoFjsDgQlLgp
+         l6NiLXIi3aF/UFMrx4r2l9Q1ehF8lKXeWEHho=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678340342;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xhklRBnV/Opvy0t0Yzw2NCc36CUqt3IMSPiX/GAGA6Y=;
+        b=X7+faPpDGz8T66dmpxJCQizj2jvcUo8Rb8B64FF9IybCxfpvZFzSliV3NMV/6h96h9
+         nfYORkEImQbeZ/yCKMAjZFbDW7EfgF9BrRR287EaIN7SYVGOZ4BxPwXykm1V0U+l1TZj
+         PWmKzOrk+TYpVvp5GLBPbOrA2uo1Y0tJuWcN+nQakrB1x4Vv+I+tUVkFdwL7K1HuAtIu
+         k/1cePIYcSwlOwR9Swcd1X77Q/74FabR/2snfJFxBqrWlyV36ioOHrfPcj1AQCNd7tsH
+         JPxIfcMuLn56ChG4s73X3E5SlVR9uj86B2ARLV0IGbCoFzyG6TT7X28NTTbjhwOKV3bv
+         8c/A==
+X-Gm-Message-State: AO0yUKWCmXWKx9O6E1jLRQnsdUwOru7JZZZOwH4+JsaErZAr2VxTiAt8
+        5oB2GOR+CLt7xMdHnPrxghoXarJ7SSP0HuttZjgc8Q==
+X-Google-Smtp-Source: AK7set+/kUGJJGVbpRECA/8RazumSkR7LCsi9LhXnm+HBiRYykSCjWb+JBFQyAemQkn5eBhSoInSXA==
+X-Received: by 2002:a17:90b:3c49:b0:233:e1e6:33d4 with SMTP id pm9-20020a17090b3c4900b00233e1e633d4mr21168440pjb.47.1678340341959;
+        Wed, 08 Mar 2023 21:39:01 -0800 (PST)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id g2-20020a17090a708200b002310ed024adsm677060pjk.12.2023.03.08.21.38.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 21:39:01 -0800 (PST)
+Date:   Thu, 9 Mar 2023 14:38:57 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "hn.chen" <hn.chen@sunplusit.com>, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-1-917ff5bc80a8@asahilina.net>
- <c047e11f-33d0-6af4-21c3-adb384b68d8b@igalia.com>
-From:   Asahi Lina <lina@asahilina.net>
-In-Reply-To: <c047e11f-33d0-6af4-21c3-adb384b68d8b@igalia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH RESEND v5 1/5] media: uvc: Ignore empty TS packets
+Message-ID: <20230309053857.GC1045797@google.com>
+References: <20220920-resend-hwtimestamp-v5-0-139d1a144614@chromium.org>
+ <20220920-resend-hwtimestamp-v5-1-139d1a144614@chromium.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920-resend-hwtimestamp-v5-1-139d1a144614@chromium.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 08/03/2023 00.32, Maíra Canal wrote:
-> On 3/7/23 11:25, Asahi Lina wrote:
->> DRM drivers need to be able to declare which driver-specific ioctls they
->> support. This abstraction adds the required types and a helper macro to
->> generate the ioctl definition inside the DRM driver.
->>
->> Note that this macro is not usable until further bits of the
->> abstraction are in place (but it will not fail to compile on its own, if
->> not called).
->>
->> Signed-off-by: Asahi Lina <lina@asahilina.net>
->> ---
->>   drivers/gpu/drm/Kconfig         |   7 ++
->>   rust/bindings/bindings_helper.h |   2 +
->>   rust/kernel/drm/ioctl.rs        | 147 ++++++++++++++++++++++++++++++++++++++++
->>   rust/kernel/drm/mod.rs          |   5 ++
->>   rust/kernel/lib.rs              |   2 +
->>   5 files changed, 163 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
->> index dc0f94f02a82..dab8f0f9aa96 100644
->> --- a/drivers/gpu/drm/Kconfig
->> +++ b/drivers/gpu/drm/Kconfig
->> @@ -27,6 +27,13 @@ menuconfig DRM
->>   	  details.  You should also select and configure AGP
->>   	  (/dev/agpgart) support if it is available for your platform.
->>   
-> 
-> [...]
-> 
->> +
->> +/// Declare the DRM ioctls for a driver.
->> +///
->> +/// Each entry in the list should have the form:
->> +///
->> +/// `(ioctl_number, argument_type, flags, user_callback),`
->> +///
->> +/// `argument_type` is the type name within the `bindings` crate.
->> +/// `user_callback` should have the following prototype:
->> +///
->> +/// ```
->> +/// fn foo(device: &kernel::drm::device::Device<Self>,
->> +///        data: &mut bindings::argument_type,
->> +///        file: &kernel::drm::file::File<Self::File>,
->> +/// )
->> +/// ```
->> +/// where `Self` is the drm::drv::Driver implementation these ioctls are being declared within.
->> +///
->> +/// # Examples
->> +///
->> +/// ```
->> +/// kernel::declare_drm_ioctls! {
->> +///     (FOO_GET_PARAM, drm_foo_get_param, ioctl::RENDER_ALLOW, my_get_param_handler),
->> +/// }
->> +/// ```
->> +///
->> +#[macro_export]
->> +macro_rules! declare_drm_ioctls {
->> +    ( $(($cmd:ident, $struct:ident, $flags:expr, $func:expr)),* $(,)? ) => {
->> +        const IOCTLS: &'static [$crate::drm::ioctl::DrmIoctlDescriptor] = {
->> +            const _:() = {
->> +                let i: u32 = $crate::bindings::DRM_COMMAND_BASE;
->> +                // Assert that all the IOCTLs are in the right order and there are no gaps,
->> +                // and that the sizeof of the specified type is correct.
-> 
-> I believe that not necessarily the IOCTLs need to be in the right order and
-> with no gaps. For example, armada_drm.h has a gap in between 0x00 and
-> 0x02 and exynos_drm.h also have gaps. Moreover, some drivers, like vgem and
-> virtgpu, start their IOCTLs with 0x01.
+On (23/03/08 23:45), Ricardo Ribalda wrote:
+[..]
+> +	/*
+> +	 * Some devices make a borderline interpretation of the UVC 1.5 standard
+> +	 * and sends packets with no data contain undefined timestamps.
 
-Yeah, we talked about this a bit... do you have any ideas about how to
-design this? I think it should be possible with a const function
-initializing an array entry by entry, we just need a two-pass macro
-(once to determine the max ioctl number, then again to actually output
-the implementation).
-
-I'm not sure why drivers would have gaps in the ioctl numbers though...
-my idea was that new drivers shouldn't need that as far as I can tell
-(you can't remove APIs after the fact due to UAPI stability guarantees,
-so as long as you don't have gaps to begin with...). But I guess if
-we're reimplementing existing drivers in Rust we'll need this... though
-maybe it makes sense to just say it's not supported and require
-reimplementations that have holes to just explicitly add dummy ioctls
-that return EINVAL? We could even provide such a dummy generic ioctl
-handler on the abstraction side, so drivers just have to add it to the
-list, or make the macro take a special token that is used for
-placeholder ioctls that don't exist (which then creates the NULL
-function pointer that the drm core interprets as invalid)...
-
-Basically I'm not sure if it makes sense to fully support noncontiguous
-ioctl numbers automagically, or just say drivers need to explicitly list
-gaps. I'd love to hear the opinion of other DRM folks about this!
-
-~~ Lina
+A nit: can this be reworded? I'm having some issues with interpretation.
