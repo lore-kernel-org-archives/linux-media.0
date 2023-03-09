@@ -2,110 +2,74 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3301EC64EC4
-	for <linux-media@archiver.kernel.org>; Thu,  9 Mar 2023 12:58:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3226C64EC4
+	for <linux-media@archiver.kernel.org>; Thu,  9 Mar 2023 12:59:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbjCIM6w (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Mar 2023 07:58:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58244 "EHLO
+        id S231229AbjCIM7X (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Mar 2023 07:59:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231192AbjCIM63 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Mar 2023 07:58:29 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D27DF1687
-        for <linux-media@vger.kernel.org>; Thu,  9 Mar 2023 04:57:46 -0800 (PST)
-Received: from localhost.localdomain (unknown [194.146.248.75])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: andrzej.p)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C2E476602FE7;
-        Thu,  9 Mar 2023 12:57:03 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678366624;
-        bh=Fa+K5mx43H80PRxNz8HGFdjywzLARrxyM7AGivxbkmM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=eop0JHHVRbR2cemyFzYWv12A3q9MNdjNt3rzrRbPizk5Mlcqx+EHcTm6kGLNdXhoz
-         ESfuq8UAz5PUQgibHuCIg96U3xKfeLOPFcHup7aTan1gnc8kVLJhz0C1OT2F8XiQBW
-         hkbC11Qh+pBRM1L7FW5s7SujC5oookzK/xmxtkc/6jnYRZyGowS1Nn2ixd3n5CaPLo
-         rh+4I5woJSfNa+bVPo9knDITeJElECBJpIgPz8u80S44ZrSPAKvzcFKS+toNl0iFpW
-         ExL3klAwlWSv/i1JvvPncxeSzh+NRJqbG9s3HYmTyFKnlxRsA3RYphQ30HHbR0kuLT
-         V2/DwWLTxh75Q==
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-To:     linux-media@vger.kernel.org
-Cc:     linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        kernel@collabora.com
-Subject: [RFC 0/2] VP8 stateless V4L2 encoding uAPI + driver
-Date:   Thu,  9 Mar 2023 13:56:49 +0100
-Message-Id: <20230309125651.23911-1-andrzej.p@collabora.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S230420AbjCIM6r (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Mar 2023 07:58:47 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264531517C
+        for <linux-media@vger.kernel.org>; Thu,  9 Mar 2023 04:57:57 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6B866589;
+        Thu,  9 Mar 2023 13:57:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1678366675;
+        bh=JvOhM9k8ZaYPv2R3BT0/QH6aJC1Xmaz/r4Rsl8a7dRI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Evx2yQnpRifx3G9Fc75FTH2ODOsiTaleTyYJhX29eSI0Pk0hYZT1Ktnwyg93WcSqB
+         2AVVSpwVR8QMfSxda7183DGeuClGfUcBZgsQSqMoKvS0gmdvGtYraaiPkLFjecR9R7
+         MZEGJ71F5KNr0GDljh8tLb2kaHLS7bf/0X5Bp7wc=
+Message-ID: <c1c67b80-1c7b-18c1-0d42-66978910db5b@ideasonboard.com>
+Date:   Thu, 9 Mar 2023 14:57:52 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/1] media: v4l: subdev: Make link validation safer
+Content-Language: en-US
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     linux-media@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Kate Hsuan <hpa@redhat.com>
+References: <20230309122716.1624141-1-sakari.ailus@linux.intel.com>
+ <89823804-7d23-334a-91b2-ea3c819232fd@redhat.com>
+ <ZAnXe9H3xg3g/f55@kekkonen.localdomain>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <ZAnXe9H3xg3g/f55@kekkonen.localdomain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dear All,
+On 09/03/2023 14:56, Sakari Ailus wrote:
+> On Thu, Mar 09, 2023 at 01:43:50PM +0100, Hans de Goede wrote:
+>> Hi Sakari,
+>>
+>> On 3/9/23 13:27, Sakari Ailus wrote:
+>>> Link validation currently accesses invalid pointers if the link passed to it
+>>> is not between two sub-devices. This is of course a driver bug.
+>>>
+>>> Ignore the error but print a debug message, as this is how it used to work
+>>> previously.
+>>>
+>>> Fixes: a6b995ed03ff ("media: subdev: use streams in v4l2_subdev_link_validate()")
+>>> Reported-by: Hans de Goede <hdegoede@redhat.com>
+>>> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+>>> Reported-and-tested-by: Hans de Goede <hdegoede@redhat.com>
+>>
+>> FWIW you have my Reported-by in there twice now ...
+> 
+> Ah, thanks. I'll drop the first tag.
 
-This two-patch series adds uAPI for stateless VP8 encoding
-and an accompanying driver using it.
+$ git grep Reported-and-tested-by Documentation/
+Documentation/process/maintainer-tip.rst:Please do not use combined tags, e.g. ``Reported-and-tested-by``, as
 
-It has been tested on an rk3399 board and there exists
-a gstreamer user:
-
-https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/3736
-
-example pipeline:
-
-gst-launch-1.0 videotestsrc num-buffers=500 ! video/x-raw,width=640,height=480 \
-! v4l2slvp8enc ! queue ! matroskamux ! filesink location=test_vp8.mkv
-
-I kindly ask for comments.
-
-Notably, the documentation for the added uAPI is missing,
-that is to be addressed when sending a patch series proper (not RFC).
-
-For the RFC I also did not care to replace a BUG_ON() in the boolean encoder.
-
-Rebased onto v6.2.
-
-Regards,
-
-Andrzej
-
-Andrzej Pietrasiewicz (2):
-  media: uapi: Add VP8 stateless encoder controls
-  media: rkvdec: Add VP8 encoder
-
- drivers/media/platform/verisilicon/Makefile   |    2 +
- drivers/media/platform/verisilicon/hantro.h   |   10 +
- .../platform/verisilicon/hantro_boolenc.c     |   69 +
- .../platform/verisilicon/hantro_boolenc.h     |   21 +
- .../media/platform/verisilicon/hantro_drv.c   |   18 +-
- .../media/platform/verisilicon/hantro_hw.h    |   90 +
- .../media/platform/verisilicon/hantro_v4l2.c  |    5 +-
- .../media/platform/verisilicon/hantro_vp8.c   |  118 ++
- .../verisilicon/rockchip_vpu2_hw_vp8_enc.c    | 1574 +++++++++++++++++
- .../platform/verisilicon/rockchip_vpu2_regs.h |    1 +
- .../platform/verisilicon/rockchip_vpu_hw.c    |   23 +-
- drivers/media/v4l2-core/v4l2-ctrls-core.c     |   16 +
- drivers/media/v4l2-core/v4l2-ctrls-defs.c     |    5 +
- include/media/v4l2-ctrls.h                    |    1 +
- include/uapi/linux/v4l2-controls.h            |   91 +
- include/uapi/linux/videodev2.h                |    3 +
- 16 files changed, 2041 insertions(+), 6 deletions(-)
- create mode 100644 drivers/media/platform/verisilicon/hantro_boolenc.c
- create mode 100644 drivers/media/platform/verisilicon/hantro_boolenc.h
- create mode 100644 drivers/media/platform/verisilicon/rockchip_vpu2_hw_vp8_enc.c
-
-
-base-commit: c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
--- 
-2.25.1
+  Tomi
 
