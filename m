@@ -2,155 +2,161 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5912C64EC4
-	for <linux-media@archiver.kernel.org>; Thu,  9 Mar 2023 14:45:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCBD6C61DA4
+	for <linux-media@archiver.kernel.org>; Thu,  9 Mar 2023 14:45:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231955AbjCIOp3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Mar 2023 09:45:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53064 "EHLO
+        id S232020AbjCIOpz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Mar 2023 09:45:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232053AbjCIOoy (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Mar 2023 09:44:54 -0500
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4765AF8A48;
-        Thu,  9 Mar 2023 06:44:11 -0800 (PST)
-Received: from booty.fritz.box (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id 46671FF805;
-        Thu,  9 Mar 2023 14:44:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678373049;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8x6ANxKmlQRR8yGJcgQ569q5zpdBXVx3vBAjyJdMrk4=;
-        b=SJz82fixkCCvzLZ1RiSQ9HMpHbJ82m2tdSyrffWE2WCG9pRxRbGMYm+njdDsq+cbGjSCap
-        jJxPBUTqBt3Yupaveb0EAk1VOrJma6Heb2aVUoTSZAWFUSUfSn/P9TuJbdGNvM2zGI96EL
-        P6AnwkivZI0FEYaWDXv56kuhcGNW6Q+BYoTj9i+mM2Zdb6K/AlNw+vBQ2CHQx8U90ek7Px
-        BaEE4ad6w/cZLGH2TR/MRLJKeuGEsONr4vuqtlax7yB2neZLiRP3gZrKbvxLcaK5g2kmGa
-        q0eDasU7+8PV4eh2CuTLg65DymWb8llMdsjKlKs9wV8GbVIRDv0ycKoiVSwRpg==
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Richard Leitner <richard.leitner@skidata.com>
-Subject: [RESEND PATCH v4 14/21] staging: media: tegra-video: move default format to soc-specific data
-Date:   Thu,  9 Mar 2023 15:43:13 +0100
-Message-Id: <20230309144320.2937553-15-luca.ceresoli@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230309144320.2937553-1-luca.ceresoli@bootlin.com>
-References: <20230309144320.2937553-1-luca.ceresoli@bootlin.com>
+        with ESMTP id S232115AbjCIOpC (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Mar 2023 09:45:02 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493FBF9EFE
+        for <linux-media@vger.kernel.org>; Thu,  9 Mar 2023 06:44:21 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id j11so7952170edq.4
+        for <linux-media@vger.kernel.org>; Thu, 09 Mar 2023 06:44:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678373059;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=j0QCaTZpFQda66tbkDh4NA2798g5mrFM2KijxKnqpqY=;
+        b=JXlcZf5TJBTXPGC4CRaGGUxnbLNWt6tq33auMN/90FORiWH3AMH77DpWVbvaymIWwB
+         SW89Bb99rq8cYHyJwN1KtIo951dij/3LxxmD8xXkrEsLVgOG+Ww/jjk9zV5HSlHY/P04
+         iJhKxP+XILgPJjWgASKARUzJh39GHmxlDktWY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678373059;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j0QCaTZpFQda66tbkDh4NA2798g5mrFM2KijxKnqpqY=;
+        b=UCjru6fAxAdsa9sBPu+MMiG/qBiQQJbqOGPgJYt4etp0WOellRJIjP7dw3WC45Ntmg
+         xwpepvkq2KTS+eIKtaQahWD+Q/gKBrD820hH4HKuJ3bw1LF6kD33GcbcVFotDn29NW+j
+         CzXIdDw6eDfqgJqKWQLrjSnA8cTAZux58ObpkfrMH7yNEZIZ33+6LuJZa434Qi62RM6e
+         li1r6Gndf2g2HzZdzd6/DN4NcyGxFxtY3lhb5UtfkW0Rg60HSWEQCgLvKeB5HpyICWCU
+         LhQhvrHreUH/HV2rlSY/sTPs8ePaVclWt0Ceeu9tVoaww2XjUf96dilyly+HJzHxlYHN
+         J1iQ==
+X-Gm-Message-State: AO0yUKWjT8d9XpY7vuS7z7ZzoAbzx129cbkh+lwtV0zOqBH4WMizMfM4
+        a/9NNQVMcbMm9UPtZodHIP3H/Q==
+X-Google-Smtp-Source: AK7set8sU/asqDzlZBJayNJABHwje8blfJCPJx2Zc8Gx6DoijRVWLy2bRAZjzpxeW3chkoaU8+mnaw==
+X-Received: by 2002:a17:906:1604:b0:879:bff:55c with SMTP id m4-20020a170906160400b008790bff055cmr24474305ejd.1.1678373059532;
+        Thu, 09 Mar 2023 06:44:19 -0800 (PST)
+Received: from alco.roam.corp.google.com ([2620:0:1059:10:1645:7aa4:a765:1966])
+        by smtp.gmail.com with ESMTPSA id l6-20020a50d6c6000000b004bdcc480c41sm9708931edj.96.2023.03.09.06.44.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 06:44:19 -0800 (PST)
+Subject: [PATCH v2 0/3] uvcvideo: Attempt N to land UVC race conditions fixes
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALTwCWQC/3WNwQqDMBBEf0X23C1JLKn21P8oPZi4mgVNYKNCkf
+ x7Q+89DW/gzZyQSZgyPJoThA7OnGIFc2nAhyHOhDxWBqNMq1rV47xT3Ehw5cjY9Z3VTnU3mjRUxQ
+ 2Z0MkQfahS3JelloHzluTzuzh0jdeftUOjQmvuo1Z+stTbpw+SVt7Xa5IZ3qWUL2dRYMywAAAA
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Thu, 09 Mar 2023 15:44:04 +0100
+Message-Id: <20230309-guenter-mini-v2-0-e6410d590d43@chromium.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Max Staudt <mstaudt@chromium.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sean Paul <seanpaul@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3209; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=QHnRbL/75sY1mg763dtX1ee9LADH3yYE98GBTazRZhk=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBkCfC2dCdyamuJtcwg32/a/jrzGAHWDnDucmFsS0bW
+ 3fMT20yJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCZAnwtgAKCRDRN9E+zzrEiEOjD/
+ wI+h055aamjDQj8n6RWHDvLNqfRqM6BUIQGHopUnkQZRlFoK5Sucbg2e6n9ZIJ2pEe6BlEPZYrxv6g
+ 8MHx0gI1BLjSj5aEDpWwQ5emZ9wlvYsm6K3l4z67lmLr6ARj2TbBzvWql8hIeypb22oxEnNtzpdYzc
+ EL4e/Umrg5Dx7WJWipslAr70Tg4kfZctuzSnnJaqd70I0ThSBjfFsYrs+6MvZtlCUZJxGvw+ecsIVu
+ 42imzYtKHsDb0+wGwkcUszX8zww5HYW1MSKQLd1eficFMdlh4RnrPV0VN7xG/PWeL0i8BqRZ0inETj
+ +QQy4f6BZItd2++M+CxDuuj5+lu1H+Fc+pMDTaY3k5JaW1W7yFDFXPnlnr92H3UcFhIahUWWhWbzsp
+ keEleIyGsDXQIazJWBHUd1Q2SvS0leefGoC6UTGt/MUzyw0UGL0brVSOdEv/zBm9Mw9R5G031Y6fva
+ mn8vZK1yAnDW5tvIen4fWq0E4mvJ9WarvUNsL8RHWmE6W0nKE+4Bn3c+bOrJuXKzGgnohCTmch7R5P
+ 8dhjuQVaqO27vZSgw8khjgtL1Q9piU/u2mI45wQcEPg5vX1xJwCa65PQ8t0D9JMs9/QIS7f/e3+WLy
+ kuzaHmE5BduEzpnMrA0HWvCtONkA9GlufqK3dw+PZQN/CwEiKxrwpGiY3LAg==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The tegra_default_format in vi.c is specific to Tegra210 CSI.
+Back in 2020 Guenter published a set of patches to fix some race
+conditions on UVC.
+https://lore.kernel.org/all/20200917022547.198090-5-linux@roeck-us.net/
 
-In preparation for adding Tegra20 VIP support, move the default format to a
-new field in the soc-specific `struct tegra_vi_soc`. Instead of an entire
-format struct, only store a pointer to an item in the existing format
-array.
+That kind of race conditions are not only seen on UVC, but are a common
+sin on almost all the kernel, so this is what it was decided back then
+that we should try to fix them at higher levels.
 
-No functional changes. The format pointed to is the same that used to be in
-vi.c.
+After that. A lot of video_is_registered() were added to the core:
 
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+```
+ribalda@alco:~/work/linux$ git grep is_registered drivers/media/v4l2-core/
+drivers/media/v4l2-core/v4l2-compat-ioctl32.c:  if (!video_is_registered(vdev))
+drivers/media/v4l2-core/v4l2-dev.c:     if (video_is_registered(vdev))
+drivers/media/v4l2-core/v4l2-dev.c:     if (video_is_registered(vdev))
+drivers/media/v4l2-core/v4l2-dev.c:     if (video_is_registered(vdev)) {
+drivers/media/v4l2-core/v4l2-dev.c:             if (video_is_registered(vdev))
+drivers/media/v4l2-core/v4l2-dev.c:     if (!video_is_registered(vdev))
+drivers/media/v4l2-core/v4l2-dev.c:     if (video_is_registered(vdev))
+drivers/media/v4l2-core/v4l2-dev.c:     if (vdev == NULL || !video_is_registered(vdev)) {
+drivers/media/v4l2-core/v4l2-dev.c:             if (video_is_registered(vdev))
+drivers/media/v4l2-core/v4l2-dev.c:     if (!vdev || !video_is_registered(vdev))
+drivers/media/v4l2-core/v4l2-ioctl.c:   if (!video_is_registered(vfd)) {
+drivers/media/v4l2-core/v4l2-subdev.c:  if (video_is_registered(vdev)) {
+```
+
+And recently Sakari is trying to land:
+https://lore.kernel.org/linux-media/20230201214535.347075-1-sakari.ailus@linux.intel.com/
+
+Which will make obsolete a lof (all?) of the video_is_registered() checks on
+Guenters patches.
+
+Besides those checks, there were some other valid races fixed on his
+patches.
+
+This series is just a rebase of what I think is missing on UVC even
+if we fixed v4l2/core with all the video_is_register() checks removed.
+
+Thanks!
+
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Max Staudt <mstaudt@chromium.org>
+Cc: Tomasz Figa <tfiga@chromium.org>
+Cc: Sakari Ailus <sakari.ailus@iki.fi>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: linux-media@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Sean Paul <seanpaul@chromium.org>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+Changes in v2:
+- Actually send the series to the ML an not only to individuals.
+- Link to v1: https://lore.kernel.org/r/20230309-guenter-mini-v1-0-627d10cf6e96@chromium.org
 
 ---
+Guenter Roeck (3):
+      media: uvcvideo: Cancel async worker earlier
+      media: uvcvideo: Lock video streams and queues while unregistering
+      media: uvcvideo: Release stream queue when unregistering video device
 
-Changed in v4:
- - Added review tags
-
-No changes in v3
-No changes in v2
+ drivers/media/usb/uvc/uvc_ctrl.c   | 11 +++++++----
+ drivers/media/usb/uvc/uvc_driver.c | 12 ++++++++++++
+ drivers/media/usb/uvc/uvcvideo.h   |  1 +
+ 3 files changed, 20 insertions(+), 4 deletions(-)
 ---
- drivers/staging/media/tegra-video/tegra210.c |  2 ++
- drivers/staging/media/tegra-video/vi.c       | 11 +----------
- drivers/staging/media/tegra-video/vi.h       |  2 ++
- 3 files changed, 5 insertions(+), 10 deletions(-)
+base-commit: 63355b9884b3d1677de6bd1517cd2b8a9bf53978
+change-id: 20230309-guenter-mini-89861b084ef1
 
-diff --git a/drivers/staging/media/tegra-video/tegra210.c b/drivers/staging/media/tegra-video/tegra210.c
-index 71483d0c19bf..28d3d05c12c4 100644
---- a/drivers/staging/media/tegra-video/tegra210.c
-+++ b/drivers/staging/media/tegra-video/tegra210.c
-@@ -771,8 +771,10 @@ const struct tegra_vi_soc tegra210_vi_soc = {
- 	.hw_revision = 3,
- 	.vi_max_channels = 6,
- #if IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG)
-+	.default_video_format = &tegra210_video_formats[0],
- 	.vi_max_clk_hz = 499200000,
- #else
-+	.default_video_format = &tegra210_video_formats[4],
- 	.vi_max_clk_hz = 998400000,
- #endif
- };
-diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
-index a76cad0e3026..3762fd273514 100644
---- a/drivers/staging/media/tegra-video/vi.c
-+++ b/drivers/staging/media/tegra-video/vi.c
-@@ -44,15 +44,6 @@ struct tegra_vi_graph_entity {
- 	struct v4l2_subdev *subdev;
- };
- 
--static const struct tegra_video_format tegra_default_format = {
--	.img_dt = TEGRA_IMAGE_DT_RAW10,
--	.bit_width = 10,
--	.code = MEDIA_BUS_FMT_SRGGB10_1X10,
--	.bpp = 2,
--	.img_fmt = TEGRA_IMAGE_FORMAT_DEF,
--	.fourcc = V4L2_PIX_FMT_SRGGB10,
--};
--
- static inline struct tegra_vi *
- host1x_client_to_vi(struct host1x_client *client)
- {
-@@ -1111,7 +1102,7 @@ static int tegra_channel_init(struct tegra_vi_channel *chan)
- 	init_waitqueue_head(&chan->done_wait);
- 
- 	/* initialize the video format */
--	chan->fmtinfo = &tegra_default_format;
-+	chan->fmtinfo = chan->vi->soc->default_video_format;
- 	chan->format.pixelformat = chan->fmtinfo->fourcc;
- 	chan->format.colorspace = V4L2_COLORSPACE_SRGB;
- 	chan->format.field = V4L2_FIELD_NONE;
-diff --git a/drivers/staging/media/tegra-video/vi.h b/drivers/staging/media/tegra-video/vi.h
-index 1021c730b595..879547073371 100644
---- a/drivers/staging/media/tegra-video/vi.h
-+++ b/drivers/staging/media/tegra-video/vi.h
-@@ -58,6 +58,7 @@ struct tegra_vi_ops {
-  *
-  * @video_formats: supported video formats
-  * @nformats: total video formats
-+ * @default_video_format: default video format (pointer to a @video_formats item)
-  * @ops: vi operations
-  * @hw_revision: VI hw_revision
-  * @vi_max_channels: supported max streaming channels
-@@ -66,6 +67,7 @@ struct tegra_vi_ops {
- struct tegra_vi_soc {
- 	const struct tegra_video_format *video_formats;
- 	const unsigned int nformats;
-+	const struct tegra_video_format *default_video_format;
- 	const struct tegra_vi_ops *ops;
- 	u32 hw_revision;
- 	unsigned int vi_max_channels;
+Best regards,
 -- 
-2.34.1
-
+Ricardo Ribalda <ribalda@chromium.org>
