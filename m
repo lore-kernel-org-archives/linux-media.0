@@ -2,61 +2,61 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 628F4C6FA99
-	for <linux-media@archiver.kernel.org>; Fri, 10 Mar 2023 19:42:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC446C74A44
+	for <linux-media@archiver.kernel.org>; Fri, 10 Mar 2023 19:42:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbjCJTmS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 10 Mar 2023 14:42:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40146 "EHLO
+        id S230058AbjCJTmU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 10 Mar 2023 14:42:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbjCJTmP (ORCPT
+        with ESMTP id S230405AbjCJTmP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 10 Mar 2023 14:42:15 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A1412EE7F
-        for <linux-media@vger.kernel.org>; Fri, 10 Mar 2023 11:42:11 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id q16so6074420wrw.2
-        for <linux-media@vger.kernel.org>; Fri, 10 Mar 2023 11:42:11 -0800 (PST)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D289D136890
+        for <linux-media@vger.kernel.org>; Fri, 10 Mar 2023 11:42:12 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id f11so6052083wrv.8
+        for <linux-media@vger.kernel.org>; Fri, 10 Mar 2023 11:42:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kynesim-co-uk.20210112.gappssmtp.com; s=20210112; t=1678477330;
+        d=kynesim-co-uk.20210112.gappssmtp.com; s=20210112; t=1678477331;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fUcnfXGHq8wlQsbMjwF+ih7GicQCSKVDP7TPdHU7uoc=;
-        b=7FI8dfb5ucfiepnEJYtHF/iJZggQGy2eyfpA24TZ5b+5+QT0tFe9GGFFhAGOXMK040
-         3x9Tjp8IL4oiHqHgB5NezmVMHtCcuEMlKN5boqFKoniyy3dFaE8wRi9FDUVsh0AwyyGy
-         HZH6hUFj71rgPR4Xm1whmyW8a9J2iH+AAh3DZeUOEXbcYD3f91NiaxdDykMgiltarobt
-         Va2t5qDfVKuT5GeXV/Uh5ai4COYFUivqVrp0GQIHrmA1NqGTzIJMEu6hEsrPLtxuAiZm
-         X6NyAcaVm8v3cqIRPbw2S4P0xmjhUiKFEw6/T5XI8810aKB4yFeZcDwWM3GPLlvbvqAV
-         Pfbg==
+        bh=/c1iseD1FkOW1sQLnk3ujWQpy2jxtIlsP7y0CDseEDE=;
+        b=5c74U1kjXlZk38JE1K97h3NKlidgpBlZ3wbk5aSsrD6fe06HUidhAbjQv3lSNE/oO+
+         b23a1yuNuTvrNjZ9lIz45cns3xly9+I1Tb9N42nNrMmjI9WoW9ZwU/p0z/5ymROwBuUn
+         KtXWV12T2l8S3Tw6EDV+E6g+PKlINiD379PXsSxOcgq+0IvgpJ8wHMR2NnLBioz0pZ2p
+         T1e6XSFAJpaKI9NJmEgXWDM0kfJMY6Mh0bVNSCs3JqVwNdEo2s0gfDqCwqexQV91Lfi7
+         iLKFRzwOykr/Dm344ZHyRXYHuYWcfE5Yse+8IgWK6q+tit0lUsM4CNALtoLN0PSCI73H
+         R9NA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678477330;
+        d=1e100.net; s=20210112; t=1678477331;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fUcnfXGHq8wlQsbMjwF+ih7GicQCSKVDP7TPdHU7uoc=;
-        b=f7oEzQEpUmIimQ+GiUHhvqAWatrGZs/p0pWeU/1cLecwgsD4ehjjO9/L2qwjIDGSdJ
-         CsMKNBpRekVp2FVh8IhRpL6hM4EH5eBjVIT4sBFbtNoyPw4kSwNKRlle+tTNX7i8Wl1X
-         svoN0W0Kk1gkkxWruWuc1iXBvnbY6kSSJM4Z4feiDIEox+NWtoKSdKmVuYsGlq2JWYyn
-         kGdPJi+Duj2xBAv4p+z24paAUR79Ye0NIxkp8pV9QYmnSKdJyeReITSyqp340IrhFWnA
-         ZNKN1zWYX4yF6hlMA5iCCaMimC5/lbXZWfssC4sMDO0bY7BmY4TxAYmjr3p+BihPG3zr
-         HRMw==
-X-Gm-Message-State: AO0yUKUEp5PkZRliyS9DUQjZo2VUSSxdHwGNnPRNjLl8pLQo9il4jDmz
-        CCXSutsb+H0/zVkUOZNqfi2/u9MpOz6GDsk5WYg=
-X-Google-Smtp-Source: AK7set9owERGbj6+LaXa/blGdByoY6V5n7n7j/INLdbA+Uq77V81CsIDWvhuLGuYNKqzgcV36S5DaQ==
-X-Received: by 2002:a5d:4e90:0:b0:2c7:e5f:e0e0 with SMTP id e16-20020a5d4e90000000b002c70e5fe0e0mr17357924wru.65.1678477330465;
-        Fri, 10 Mar 2023 11:42:10 -0800 (PST)
+        bh=/c1iseD1FkOW1sQLnk3ujWQpy2jxtIlsP7y0CDseEDE=;
+        b=KqGwj+meTxPcIFlvy2xo5GIpeKZ65RNOSXJrTYXZUyt/0e+QV/EW987cXs3FYbOyQI
+         N1zN4nsmJy35MfLSlMvRbHWlYXybxRYsemcZOB6VeqNCScGk8V+anjz5r+aH0NBp9LUW
+         CLxXg8sVRkTWIrOlvG1wml5usUrKjlwNDu51xxjNl99IYhnnqCfaoLiLDlHcxaJ2M5Cq
+         kAaaCPbqK5cgrCg+PTQ/tS2JroKfMTAL16xzpFEWV0fS3yKVlFhlzZaSGT2IlObCnWAI
+         Ph0bR15iWwtzSFeFR5JKYj1Qra0HBpJavDDkssjtZ/LbR3PdMOOTcGyVBX0JePF4wpQh
+         Js8A==
+X-Gm-Message-State: AO0yUKWjvDC67z9IBv9shTQJCDiSqhpJ7IF/QKoyaV6aC6PIM75rbsAN
+        iUzJXLi5tirKtuANPoF0bjvcx0xbfHFGgPipro4=
+X-Google-Smtp-Source: AK7set+KTSNaOHn43zgUBQqMQHEzYDlagG6cLioaWQBxDYAHuIVlwLr+SpIZHLX9u1b3ZQ8O+jU3UA==
+X-Received: by 2002:adf:f304:0:b0:2c7:1210:feaa with SMTP id i4-20020adff304000000b002c71210feaamr16912611wro.26.1678477331462;
+        Fri, 10 Mar 2023 11:42:11 -0800 (PST)
 Received: from sucnaath.outer.uphall.net (cpc1-cmbg20-2-0-cust759.5-4.cable.virginm.net. [86.21.218.248])
-        by smtp.gmail.com with ESMTPSA id n4-20020adffe04000000b002c54c92e125sm585400wrr.46.2023.03.10.11.42.10
+        by smtp.gmail.com with ESMTPSA id n4-20020adffe04000000b002c54c92e125sm585400wrr.46.2023.03.10.11.42.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 11:42:10 -0800 (PST)
+        Fri, 10 Mar 2023 11:42:11 -0800 (PST)
 From:   John Cox <jc@kynesim.co.uk>
 To:     linux-media@vger.kernel.org, nicolas@ndufresne.ca,
         hverkuil-cisco@xs4all.nl
 Cc:     John Cox <jc@kynesim.co.uk>
-Subject: [PATCH v2 2/5] media: v4l: Add Broadcom sand formats to videodev2.h
-Date:   Fri, 10 Mar 2023 19:41:18 +0000
-Message-Id: <20230310194121.61928-3-jc@kynesim.co.uk>
+Subject: [PATCH v2 4/5] media: v4l: Add Broadcom sand format descriptions to v4l2-ioctl.c
+Date:   Fri, 10 Mar 2023 19:41:20 +0000
+Message-Id: <20230310194121.61928-5-jc@kynesim.co.uk>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230310194121.61928-1-jc@kynesim.co.uk>
 References: <20230310194121.61928-1-jc@kynesim.co.uk>
@@ -66,27 +66,27 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add fourccs for Broadcom 8 and 10-bit packed 128 byte column formats to
-videodev2.h
+Add short descriptions for Broadcom 8 and 10-bit packed 128 byte
+column formats to v4l2-ioctl.h
 
 Signed-off-by: John Cox <jc@kynesim.co.uk>
 ---
- include/uapi/linux/videodev2.h | 2 ++
+ drivers/media/v4l2-core/v4l2-ioctl.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 1befd181a4cc..a836322ae5d8 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -656,6 +656,8 @@ struct v4l2_pix_format {
- #define V4L2_PIX_FMT_P010_4L4 v4l2_fourcc('T', '0', '1', '0') /* 12  Y/CbCr 4:2:0 10-bit 4x4 macroblocks */
- #define V4L2_PIX_FMT_NV12_8L128       v4l2_fourcc('A', 'T', '1', '2') /* Y/CbCr 4:2:0 8x128 tiles */
- #define V4L2_PIX_FMT_NV12_10BE_8L128  v4l2_fourcc_be('A', 'X', '1', '2') /* Y/CbCr 4:2:0 10-bit 8x128 tiles */
-+#define V4L2_PIX_FMT_NV12_C128        v4l2_fourcc('C', 'N', '1', '2') /* Y/CbCr 4:2:0 128 byte columns */
-+#define V4L2_PIX_FMT_P030_C128        v4l2_fourcc('C', 'N', '3', '0') /* Y/CbCr 4:2:0 10-bit packed 128 byte columns */
- 
- /* Tiled YUV formats, non contiguous planes */
- #define V4L2_PIX_FMT_NV12MT  v4l2_fourcc('T', 'M', '1', '2') /* 12  Y/CbCr 4:2:0 64x32 tiles */
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index b26da2650289..3120548aa139 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1353,6 +1353,8 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+ 	case V4L2_PIX_FMT_NV12_16L16:	descr = "Y/UV 4:2:0 (16x16 Linear)"; break;
+ 	case V4L2_PIX_FMT_NV12_32L32:   descr = "Y/UV 4:2:0 (32x32 Linear)"; break;
+ 	case V4L2_PIX_FMT_P010_4L4:	descr = "10-bit Y/UV 4:2:0 (4x4 Linear)"; break;
++	case V4L2_PIX_FMT_NV12_C128:	descr = "Y/UV 4:2:0 (128b column)"; break;
++	case V4L2_PIX_FMT_P030_C128:	descr = "10-bit Y/UV 4:2:0 (128b column)"; break;
+ 	case V4L2_PIX_FMT_NV12M:	descr = "Y/UV 4:2:0 (N-C)"; break;
+ 	case V4L2_PIX_FMT_NV21M:	descr = "Y/VU 4:2:0 (N-C)"; break;
+ 	case V4L2_PIX_FMT_NV16M:	descr = "Y/UV 4:2:2 (N-C)"; break;
 -- 
 2.37.2
 
