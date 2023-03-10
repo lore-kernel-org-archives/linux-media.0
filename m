@@ -2,138 +2,141 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8142C742A7
-	for <linux-media@archiver.kernel.org>; Fri, 10 Mar 2023 06:21:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8934FC6FA99
+	for <linux-media@archiver.kernel.org>; Fri, 10 Mar 2023 06:24:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjCJGVf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 10 Mar 2023 01:21:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60382 "EHLO
+        id S229800AbjCJGYM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 10 Mar 2023 01:24:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbjCJGVd (ORCPT
+        with ESMTP id S229652AbjCJGYL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 10 Mar 2023 01:21:33 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126BCF28B1;
-        Thu,  9 Mar 2023 22:21:30 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: lina@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 9B5B74249A;
-        Fri, 10 Mar 2023 06:21:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1678429288;
-        bh=Su293xjC7HJqrmGn5asY9TEfKOlU5jJ/KKsqfzIhcss=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=R8QzFV6o2vdGKfZFYwqrGUzUpvt8V7mpifvkivq1CdeGZ81gA6szdX2TQLPZg1Vis
-         ZUOnngxZUqRjp4CnEs/t36DNw2yaJ2YA34h0XwBMVKpx/9VfRrsFj3/zWM/9bnSZ4H
-         XAMA8AE6bhaTutEre8t+wC8UJWNuMceDib/bF8LxFY4yjzQXZLl/3LgFi03CLOyyaJ
-         4PyYU9fuNnkvWgswLo5icJqYJj/izs+JCuco33/A71lxWqAXX5z9VLtuFKa+ZcEZgH
-         tNW+/koH3ycaNXbShllRhrmoNIQQGA33VS2nh34xCXGQBNMbzbd+m11IWKd6CL/kRl
-         yQvngLiAhJMhA==
-Message-ID: <b61d0b3e-fc10-be79-1b37-6c7aa278d75f@asahilina.net>
-Date:   Fri, 10 Mar 2023 15:21:19 +0900
+        Fri, 10 Mar 2023 01:24:11 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9BC10460F;
+        Thu,  9 Mar 2023 22:24:08 -0800 (PST)
+X-UUID: 270e06bebf0c11eda06fc9ecc4dadd91-20230310
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=E32PwqnhE80CiZUxZ6uWYUqazqWNe/vh/gd6x779/5A=;
+        b=DqVFk4vPbygg17f21tDvW13YRRiCDbYWIR9AR2lZdhAvrII+XOo9xKK2Pblmmkn3Z7DRvATs8ua+uFT1RDosreiVoPWnQ3A/GD0/yl4cMM0SilthzEfv9pjmYUQFJN/BGGPC7fGr00olTeU9AnkBJQJITx2KOwKExAogBKSkKhs=;
+X-CID-P-RULE: Spam_GS6885AD
+X-CID-O-INFO: VERSION:1.1.20,REQID:16942212-4267-4ed4-ade8-eaa7e6f945b1,IP:0,U
+        RL:0,TC:0,Content:0,EDM:25,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS6885AD,ACT
+        ION:quarantine,TS:120
+X-CID-INFO: VERSION:1.1.20,REQID:16942212-4267-4ed4-ade8-eaa7e6f945b1,IP:0,URL
+        :0,TC:0,Content:0,EDM:25,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
+        N:quarantine,TS:120
+X-CID-META: VersionHash:25b5999,CLOUDID:4503d2b2-beed-4dfc-bd9c-e1b22fa6ccc4,B
+        ulkID:2303101035130178WOE0,BulkQuantity:5,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:5,IP:nil,URL:11|1,File:nil,Bulk:40,QS:nil,BEC:nil,COL:
+        0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-UUID: 270e06bebf0c11eda06fc9ecc4dadd91-20230310
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+        (envelope-from <irui.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1959498361; Fri, 10 Mar 2023 14:24:03 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Fri, 10 Mar 2023 14:24:01 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Fri, 10 Mar 2023 14:24:00 +0800
+From:   Irui Wang <irui.wang@mediatek.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <nicolas.dufresne@collabora.com>, kyrie wu <kyrie.wu@mediatek.com>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
+        <maoguang.meng@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        "Irui Wang" <irui.wang@mediatek.com>
+Subject: [V2,4/7] media: mtk-jpeg: reconstructs the initialization mode of worker
+Date:   Fri, 10 Mar 2023 14:23:52 +0800
+Message-ID: <20230310062355.9963-5-irui.wang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230310062355.9963-1-irui.wang@mediatek.com>
+References: <20230310062355.9963-1-irui.wang@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH RFC 01/18] rust: drm: ioctl: Add DRM ioctl abstraction
-Content-Language: en-US
-To:     Karol Herbst <kherbst@redhat.com>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>
-Cc:     =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Ella Stanforth <ella@iglunix.org>, Mary <mary@mary.zone>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        rust-for-linux@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, linux-sgx@vger.kernel.org,
-        asahi@lists.linux.dev
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-1-917ff5bc80a8@asahilina.net>
- <D9Cyx-9kbjaeb8QVBFqapDyctoDdVyu5uXEJDR41sdXUDXM1VgdRicV5huJDwfC3-T2J-R_DYHH8JZ1_aRdgbeYZFT78J9QveeeYbiTq4yU=@protonmail.com>
- <11ce9291-c17f-e73d-fb5d-13d5386fe6be@asahilina.net>
- <c9e0c6fdcd642192a59a2fea95941a773ea7b3e3.camel@collabora.com>
- <CACO55tukF-+HWUHve0YUPbq4jPFgU3szuedKLjAw55h_3uX5gg@mail.gmail.com>
-From:   Asahi Lina <lina@asahilina.net>
-In-Reply-To: <CACO55tukF-+HWUHve0YUPbq4jPFgU3szuedKLjAw55h_3uX5gg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 10/03/2023 05.39, Karol Herbst wrote:
-> On Thu, Mar 9, 2023 at 9:24 PM Faith Ekstrand
-> <faith.ekstrand@collabora.com> wrote:
->>
->> On Thu, 2023-03-09 at 15:04 +0900, Asahi Lina wrote:
->>> On 08/03/2023 02.34, Björn Roy Baron wrote:
->>>>> +                            // SAFETY: This is just the ioctl
->>>>> argument, which hopefully has the right type
->>>>> +                            // (we've done our best checking the
->>>>> size).
->>>>
->>>> In the rust tree there is the ReadableFromBytes [1] trait which
->>>> indicates that it is safe to read arbitrary bytes into the type.
->>>> Maybe you could add it as bound on the argument type when it lands
->>>> in rust-next? This way you can't end up with for example a struct
->>>> containing a bool with the byte value 2, which is UB.
->>>
->>> There's actually a much bigger story here, because that trait isn't
->>> really very useful without a way to auto-derive it. I need the same
->>> kind
->>> of guarantee for all the GPU firmware structs...
->>>
->>> There's one using only declarative macros [1] and one using proc
->>> macros
->>> [2]. And then, since ioctl arguments are declared in C UAPI header
->>> files, we need a way to be able to derive those traits for them...
->>> which
->>> I guess means bindgen changes?
->>
->> It'd be cool to be able to auto-verify that uAPI structs are all
->> tightly packed and use the right subset of types.  Maybe not possible
->> this iteration but it'd be cool to see in future.  I'd like to see it
->> for C as well, ideally.
->>
->> ~Faith
->>
-> 
-> I'm sure that with a macro you could verify that a struct definition
-> doesn't contain any gaps, just not sure on how one would enforce that.
-> Could add a trait which can only be implemented through a proc_macro?
-> Maybe we can have a proc_macro ensuring no gaps? Would be cool tech to
-> have indeed.
+From: kyrie wu <kyrie.wu@mediatek.com>
 
-You just make the trait unsafe, as usual, then implement it via that
-macro. It's how the things I linked work ^^
+exclude is_jpgenc_multihw or is_jpgdec_multihw for judgment,
+and re-initialize jpeg worker.
 
-The tricky thing with C UAPI definitions is just that we need to get
-bindgen to emit those macro instantiations around struct definitions
-somehow. Or maybe it could be done with a brute force text-based
-postprocessing pass? If we put all UAPI defs into their own crate, you
-could probably just do it with sed or a python script or something on
-the bindgen output to add it for all struct types...
+Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
+Signed-off-by: irui wang <irui.wang@mediatek.com>
+---
+ drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 9 +++------
+ drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h | 2 ++
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-@Rust folks: Should I try creating a uapi crate for this? I think we can
-just mirror the bindings crate logic, and we don't need helpers or
-anything like that here, so it shouldn't be very difficult. Then I could
-(eventually) eliminate all usage of the full bindings crate in the
-driver, and also try experimenting with stuff like this to validate all
-UAPI types and implement special traits for them...
+diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+index d940dc5ede74..e89195f1989c 100644
+--- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
++++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+@@ -1575,12 +1575,7 @@ static int mtk_jpeg_open(struct file *file)
+ 		goto free;
+ 	}
+ 
+-	if (jpeg->is_jpgenc_multihw)
+-		INIT_WORK(&ctx->jpeg_work, mtk_jpegenc_worker);
+-
+-	if (jpeg->is_jpgdec_multihw)
+-		INIT_WORK(&ctx->jpeg_work, mtk_jpegdec_worker);
+-
++	INIT_WORK(&ctx->jpeg_work, jpeg->variant->jpeg_worker);
+ 	INIT_LIST_HEAD(&ctx->dst_done_queue);
+ 	spin_lock_init(&ctx->done_queue_lock);
+ 	v4l2_fh_init(&ctx->fh, vfd);
+@@ -1901,6 +1896,7 @@ static struct mtk_jpeg_variant mtk8195_jpegenc_drvdata = {
+ 	.out_q_default_fourcc = V4L2_PIX_FMT_YUYV,
+ 	.cap_q_default_fourcc = V4L2_PIX_FMT_JPEG,
+ 	.multi_core = true,
++	.jpeg_worker = mtk_jpegenc_worker,
+ };
+ 
+ static const struct mtk_jpeg_variant mtk8195_jpegdec_drvdata = {
+@@ -1913,6 +1909,7 @@ static const struct mtk_jpeg_variant mtk8195_jpegdec_drvdata = {
+ 	.out_q_default_fourcc = V4L2_PIX_FMT_JPEG,
+ 	.cap_q_default_fourcc = V4L2_PIX_FMT_YUV420M,
+ 	.multi_core = true,
++	.jpeg_worker = mtk_jpegdec_worker,
+ };
+ 
+ #if defined(CONFIG_OF)
+diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
+index f87358cc9f47..e118a0175f75 100644
+--- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
++++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
+@@ -61,6 +61,7 @@ enum mtk_jpeg_ctx_state {
+  * @out_q_default_fourcc:	output queue default fourcc
+  * @cap_q_default_fourcc:	capture queue default fourcc
+  * @multi_core:		mark jpeg hw is multi_core or not
++ * @jpeg_worker:		jpeg dec or enc worker
+  */
+ struct mtk_jpeg_variant {
+ 	struct clk_bulk_data *clks;
+@@ -76,6 +77,7 @@ struct mtk_jpeg_variant {
+ 	u32 out_q_default_fourcc;
+ 	u32 cap_q_default_fourcc;
+ 	bool multi_core;
++	void (*jpeg_worker)(struct work_struct *work);
+ };
+ 
+ struct mtk_jpeg_src_buf {
+-- 
+2.18.0
 
-~~ Lina
