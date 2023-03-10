@@ -2,31 +2,31 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 388B8C64EC4
-	for <linux-media@archiver.kernel.org>; Fri, 10 Mar 2023 12:06:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C26C5C74A44
+	for <linux-media@archiver.kernel.org>; Fri, 10 Mar 2023 12:06:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbjCJMGJ convert rfc822-to-8bit (ORCPT
+        id S230192AbjCJMGL convert rfc822-to-8bit (ORCPT
         <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 10 Mar 2023 07:06:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
+        Fri, 10 Mar 2023 07:06:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbjCJMGC (ORCPT
+        with ESMTP id S230098AbjCJMGD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 10 Mar 2023 07:06:02 -0500
+        Fri, 10 Mar 2023 07:06:03 -0500
 Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA25F34D6;
-        Fri, 10 Mar 2023 04:05:56 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F29BF8E51;
+        Fri, 10 Mar 2023 04:05:57 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 6827D24E2B9;
-        Fri, 10 Mar 2023 20:05:55 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Mar
- 2023 20:05:55 +0800
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 3209C24E2E3;
+        Fri, 10 Mar 2023 20:05:56 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Mar
+ 2023 20:05:56 +0800
 Received: from xiaofei.localdomain (180.164.60.184) by EXMBX073.cuchost.com
  (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Mar
- 2023 20:05:54 +0800
+ 2023 20:05:55 +0800
 From:   Jack Zhu <jack.zhu@starfivetech.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Maxime Ripard <mripard@kernel.org>,
@@ -43,12 +43,14 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
 CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <jack.zhu@starfivetech.com>,
         <changhuang.liang@starfivetech.com>
-Subject: [PATCH v2 0/6] Add Starfive Camera Subsystem driver
-Date:   Fri, 10 Mar 2023 20:05:47 +0800
-Message-ID: <20230310120553.60586-1-jack.zhu@starfivetech.com>
+Subject: [PATCH v2 3/6] media: admin-guide: Add starfive_camss.rst for Starfive Camera Subsystem
+Date:   Fri, 10 Mar 2023 20:05:50 +0800
+Message-ID: <20230310120553.60586-4-jack.zhu@starfivetech.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230310120553.60586-1-jack.zhu@starfivetech.com>
+References: <20230310120553.60586-1-jack.zhu@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 X-Originating-IP: [180.164.60.184]
 X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX073.cuchost.com
  (172.16.6.83)
@@ -58,86 +60,138 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Add the file 'starfive_camss.rst' that documents the Starfive Camera
+Subsystem driver which is used for handing image sensor data.
 
-This patch series adds support for the Starfive Camera Subsystem
-found on Starfive JH7110 SoC.
-
-The driver implements V4L2, Media controller and V4L2 subdev interfaces.
-Camera sensor using V4L2 subdev interface in the kernel is supported.
-
-The driver is tested on VisionFive V2 board with IMX219 camera sensor.
-GStreamer 1.18.5 with v4l2src plugin is supported.
-
-Changes since v1:
-- Deleted starfive,jh7110-mipi-csi2.yaml.
-- Converted cdns,csi2rx.txt to cdns,csi2rx.yaml and added ‘resets’
-  properties.
-- Added ‘cdns,csi2rx.yaml’ in ‘CADENCE MIPI-CSI2 BRIDGES’ entry.
-- The following contents were modified in starfive,jh7110-camss.yaml:
-  dropped quotes from ’id’ and ‘schema’; dropped ‘|’ for ‘description’;
-  corrected the wrong or redundant words: ‘a ISP’, ‘PD ISP’;
-  dropped ‘minItems’ for ‘reg’, ‘clocks’, ‘resets’ and ‘interrupts’;
-  dropped the '_clk' and 'rst_' prefix about the 'clock-names' and
-  'reset-names';
-  changed ‘endpoint@1’ to ‘endpoint’; updated examples;
-- Updated Subject for some patches.
-- Merged patch 6, 7, 8, 9, 10, 11 into one patch.
-
-Jack Zhu (6):
-  media: dt-bindings: Add bindings for JH7110 Camera Subsystem
-  media: dt-bindings: cadence-csi2rx: Convert to DT schema
-  media: admin-guide: Add starfive_camss.rst for Starfive Camera
-    Subsystem
-  media: cadence: Add support for external dphy and JH7110 SoC
-  MAINTAINERS: Add Starfive Camera Subsystem driver
-  media: starfive: Add Starfive Camera Subsystem driver
-
- .../admin-guide/media/starfive_camss.rst      |   68 +
- .../media/starfive_camss_graph.dot            |   28 +
- .../admin-guide/media/v4l-drivers.rst         |    1 +
- .../devicetree/bindings/media/cdns,csi2rx.txt |  100 --
- .../bindings/media/cdns,csi2rx.yaml           |  163 ++
- .../bindings/media/starfive,jh7110-camss.yaml |  144 ++
- MAINTAINERS                                   |   10 +
- drivers/media/platform/Kconfig                |    1 +
- drivers/media/platform/Makefile               |    1 +
- drivers/media/platform/cadence/cdns-csi2rx.c  |  273 +++-
- drivers/media/platform/starfive/Kconfig       |   18 +
- drivers/media/platform/starfive/Makefile      |   14 +
- drivers/media/platform/starfive/stf_camss.c   |  728 +++++++++
- drivers/media/platform/starfive/stf_camss.h   |  104 ++
- drivers/media/platform/starfive/stf_common.h  |  149 ++
- drivers/media/platform/starfive/stf_isp.c     | 1079 ++++++++++++++
- drivers/media/platform/starfive/stf_isp.h     |  183 +++
- .../media/platform/starfive/stf_isp_hw_ops.c  | 1286 ++++++++++++++++
- drivers/media/platform/starfive/stf_video.c   | 1286 ++++++++++++++++
- drivers/media/platform/starfive/stf_video.h   |   89 ++
- drivers/media/platform/starfive/stf_vin.c     | 1314 +++++++++++++++++
- drivers/media/platform/starfive/stf_vin.h     |  194 +++
- .../media/platform/starfive/stf_vin_hw_ops.c  |  357 +++++
- include/uapi/linux/stf_isp_ioctl.h            |  127 ++
- 24 files changed, 7607 insertions(+), 110 deletions(-)
+Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
+---
+ .../admin-guide/media/starfive_camss.rst      | 68 +++++++++++++++++++
+ .../media/starfive_camss_graph.dot            | 28 ++++++++
+ .../admin-guide/media/v4l-drivers.rst         |  1 +
+ 3 files changed, 97 insertions(+)
  create mode 100644 Documentation/admin-guide/media/starfive_camss.rst
  create mode 100644 Documentation/admin-guide/media/starfive_camss_graph.dot
- delete mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.txt
- create mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
- create mode 100644 Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
- create mode 100644 drivers/media/platform/starfive/Kconfig
- create mode 100644 drivers/media/platform/starfive/Makefile
- create mode 100644 drivers/media/platform/starfive/stf_camss.c
- create mode 100644 drivers/media/platform/starfive/stf_camss.h
- create mode 100644 drivers/media/platform/starfive/stf_common.h
- create mode 100644 drivers/media/platform/starfive/stf_isp.c
- create mode 100644 drivers/media/platform/starfive/stf_isp.h
- create mode 100644 drivers/media/platform/starfive/stf_isp_hw_ops.c
- create mode 100644 drivers/media/platform/starfive/stf_video.c
- create mode 100644 drivers/media/platform/starfive/stf_video.h
- create mode 100644 drivers/media/platform/starfive/stf_vin.c
- create mode 100644 drivers/media/platform/starfive/stf_vin.h
- create mode 100644 drivers/media/platform/starfive/stf_vin_hw_ops.c
- create mode 100644 include/uapi/linux/stf_isp_ioctl.h
 
+diff --git a/Documentation/admin-guide/media/starfive_camss.rst b/Documentation/admin-guide/media/starfive_camss.rst
+new file mode 100644
+index 000000000000..12c5ebf794b8
+--- /dev/null
++++ b/Documentation/admin-guide/media/starfive_camss.rst
+@@ -0,0 +1,68 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++.. include:: <isonum.txt>
++
++================================
++Starfive Camera Subsystem driver
++================================
++
++Introduction
++------------
++
++This file documents the driver for the Starfive Camera Subsystem found on
++Starfive JH7110 SoC. The driver is located under drivers/media/platform/starfive.
++
++The driver implements V4L2, Media controller and v4l2_subdev interfaces.
++Camera sensor using V4L2 subdev interface in the kernel is supported.
++
++The driver has been successfully used on the Gstreamer 1.18.5 with
++v4l2src plugin.
++
++
++Starfive Camera Subsystem hardware
++----------------------------------
++
++The Starfive Camera Subsystem hardware consists of:
++
++- MIPI DPHY Receiver: receives mipi data from a MIPI camera sensor.
++- MIPI CSIRx Controller: is responsible for handling and decoding CSI2 protocol
++  based camera sensor data stream.
++- ISP: handles the image data streams from the MIPI CSIRx Controller.
++- VIN(Video In): a top-level module, is responsible for controlling power
++  and clocks to other modules, dumps the input data to memory or transfers the
++  input data to ISP.
++
++
++Topology
++--------
++
++The media controller pipeline graph is as follows:
++
++.. _starfive_camss_graph:
++
++.. kernel-figure:: starfive_camss_graph.dot
++    :alt:   starfive_camss_graph.dot
++    :align: center
++
++The driver has 5 video devices:
++
++- stf_vin0_wr_video0: capture device for images directly from the VIN module.
++- stf_vin0_isp0_video1: capture device for images without scaling.
++- stf_vin0_isp0_ss0_video2: capture device for images with adjustable
++  scale-down factor.
++- stf_vin0_isp0_ss1_video3: capture device for images with adjustable
++  scale-down factor.
++- stf_vin0_isp0_raw_video4: capture device for RAW images.
++
++The driver has 6 subdevices:
++
++- stf_isp0: is responsible for all the isp operations.
++- stf_vin0_wr: used to dump RAW images to memory.
++- stf_vin0_isp0: used to capture unscaled images for the stf_vin0_isp0_video1
++  device.
++- stf_vin0_isp0_ss0: used to resize and downsample frames for
++  the stf_vin0_isp0_ss0_video2 capture device.
++- stf_vin0_isp0_ss1: used to resize and downsample frames for
++  the stf_vin0_isp0_ss1_video3 capture device.
++- stf_vin0_isp0_raw: used to configure the camss ISP to get RAW
++  images for stf_vin0_isp0_raw_video4 capture device.
+diff --git a/Documentation/admin-guide/media/starfive_camss_graph.dot b/Documentation/admin-guide/media/starfive_camss_graph.dot
+new file mode 100644
+index 000000000000..c35dec8de254
+--- /dev/null
++++ b/Documentation/admin-guide/media/starfive_camss_graph.dot
+@@ -0,0 +1,28 @@
++digraph board {
++	rankdir=TB
++	n00000001 [label="{{<port0> 0} | stf_isp0\n/dev/v4l-subdev0 | {<port1> 1 | <port2> 2 | <port3> 3 | <port4> 4}}", shape=Mrecord, style=filled, fillcolor=green]
++	n00000001:port1 -> n00000010:port0
++	n00000001:port2 -> n00000019:port0 [style=dashed]
++	n00000001:port3 -> n00000022:port0 [style=dashed]
++	n00000001:port4 -> n0000002b:port0 [style=dashed]
++	n00000007 [label="{{<port0> 0} | stf_vin0_wr\n/dev/v4l-subdev1 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
++	n00000007:port1 -> n0000000a [style=bold]
++	n0000000a [label="stf_vin0_wr_video0\n/dev/video0", shape=box, style=filled, fillcolor=yellow]
++	n00000010 [label="{{<port0> 0} | stf_vin0_isp0\n/dev/v4l-subdev2 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
++	n00000010:port1 -> n00000013 [style=bold]
++	n00000013 [label="stf_vin0_isp0_video1\n/dev/video1", shape=box, style=filled, fillcolor=yellow]
++	n00000019 [label="{{<port0> 0} | stf_vin0_isp0_ss0\n/dev/v4l-subdev3 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
++	n00000019:port1 -> n0000001c [style=bold]
++	n0000001c [label="stf_vin0_isp0_ss0_video2\n/dev/video2", shape=box, style=filled, fillcolor=yellow]
++	n00000022 [label="{{<port0> 0} | stf_vin0_isp0_ss1\n/dev/v4l-subdev4 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
++	n00000022:port1 -> n00000025 [style=bold]
++	n00000025 [label="stf_vin0_isp0_ss1_video3\n/dev/video3", shape=box, style=filled, fillcolor=yellow]
++	n0000002b [label="{{<port0> 0} | stf_vin0_isp0_raw\n/dev/v4l-subdev5 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
++	n0000002b:port1 -> n0000002e [style=bold]
++	n0000002e [label="stf_vin0_isp0_raw_video4\n/dev/video4", shape=box, style=filled, fillcolor=yellow]
++	n0000003c [label="{{<port0> 0} | cdns_csi2rx.19800000.csi-bridge\n/dev/v4l-subdev6 | {<port1> 1 | <port2> 2 | <port3> 3 | <port4> 4}}", shape=Mrecord, style=filled, fillcolor=green]
++	n0000003c:port1 -> n00000007:port0 [style=dashed]
++	n0000003c:port1 -> n00000001:port0
++	n00000054 [label="{{} | imx219 6-0010\n/dev/v4l-subdev7 | {<port0> 0}}", shape=Mrecord, style=filled, fillcolor=green]
++	n00000054:port0 -> n0000003c:port0 [style=bold]
++}
+diff --git a/Documentation/admin-guide/media/v4l-drivers.rst b/Documentation/admin-guide/media/v4l-drivers.rst
+index 90a026ee05c6..186f8b0a082d 100644
+--- a/Documentation/admin-guide/media/v4l-drivers.rst
++++ b/Documentation/admin-guide/media/v4l-drivers.rst
+@@ -30,6 +30,7 @@ Video4Linux (V4L) driver-specific documentation
+ 	si470x
+ 	si4713
+ 	si476x
++	starfive
+ 	vimc
+ 	visl
+ 	vivid
 -- 
 2.34.1
 
