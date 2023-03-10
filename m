@@ -2,96 +2,130 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85817C64EC4
-	for <linux-media@archiver.kernel.org>; Fri, 10 Mar 2023 15:02:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10498C76186
+	for <linux-media@archiver.kernel.org>; Fri, 10 Mar 2023 15:15:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233638AbjCJPCO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 10 Mar 2023 10:02:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43174 "EHLO
+        id S233862AbjCJPPa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 10 Mar 2023 10:15:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233634AbjCJPBr (ORCPT
+        with ESMTP id S234143AbjCJPO6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 10 Mar 2023 10:01:47 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F66125D99
-        for <linux-media@vger.kernel.org>; Fri, 10 Mar 2023 06:55:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678460113; x=1709996113;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=H0Zn9Dwq+Rd2eS9wn3i+qu90aS2RfJNXIpPLQ0995Do=;
-  b=IA2UZbncNWIlw9im9cPiHZIcPrqtuWy2kpldImAQhTAFaiYQhrKvBGTc
-   1CaZdsWPBuNDtZ+M0ejGpf8d2y8nJa7STPouP36o/nd3x3HrZwmW0fpih
-   X/9fHH2LiUqFQRoUit4nQ/UelLH/fN8VAI8EX4YOid5vqWG3YI/PIEk7l
-   Bkvabp3W27gVZ1Qg185mbNW5Zdt5ptSS+CXdzx72aAaB3ivN6AHcbgm/L
-   BE0/ivaSTfIBdaLlSB9tSNbra00FTOkFQE+SutPbWQrxpZ6Xa3lJAgMoM
-   lFcj6nzDPaUH/w1QQtJCYUI17ZDpLhNdtZJ+85R14p2ff/egmWBfupxBF
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="339103654"
-X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
-   d="scan'208";a="339103654"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 06:49:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="671101334"
-X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
-   d="scan'208";a="671101334"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 10 Mar 2023 06:49:47 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pae42-000y0G-05;
-        Fri, 10 Mar 2023 16:49:46 +0200
-Date:   Fri, 10 Mar 2023 16:49:45 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     bingbu.cao@intel.com
-Cc:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
-        djrscally@gmail.com, bingbu.cao@linux.intel.com
-Subject: Re: [PATCH v2] media: ipu3-cio2: support multiple sensors and VCMs
- with HID name
-Message-ID: <ZAtDiUXvzKzsoKDX@smile.fi.intel.com>
-References: <20230307063110.1459508-1-bingbu.cao@intel.com>
+        Fri, 10 Mar 2023 10:14:58 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F127112EE6A
+        for <linux-media@vger.kernel.org>; Fri, 10 Mar 2023 07:06:19 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id n6so5867132plf.5
+        for <linux-media@vger.kernel.org>; Fri, 10 Mar 2023 07:06:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google; t=1678460724;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mI9SynFLOYtOEHXFt34hbbK+yCygpvgICPPgvO9gfV8=;
+        b=VJ1dnBmXbkWcmPGgaIqe8y1AjzPkpkCDA30L72GW1BCNILg9Ux93MdjuFClsREO7vk
+         lPuzSZIDtThvsRkSsKGr3zO9rAsKWjoosj6IS8v322FG/klrkxUO4FIp6lMfqPuj4TxI
+         7iye1Ahz/4AiFFf6VAwHflCsxCwez6c0dgsKDphb107iKdmAqMvuRIOUZ+bfwhCgORMs
+         iHbeIn5DKK69O/9p0RZAo34CKsm8KqzEPsCeBsRVrQgTElcQ7BdUZWM4zM+YwjZmMWwf
+         jpTB1yeDWY83Dl59FnSeE0Klte9uU8zLnIN4Ka4GVeK62dZ/tM49vJHupbAcFDxR1gnt
+         LTqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678460724;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mI9SynFLOYtOEHXFt34hbbK+yCygpvgICPPgvO9gfV8=;
+        b=EmPUKAXjJU0eYbCOty0Fp58AfHg6uWh1TskXtF9ays4MKOQe7vEHzDckOTQg94FX88
+         vGnCtKO308dGS7bfg+nyNL0B2NFXZxJ5n+vNigBgR5RuEZ5XaSsoEh0b1GS0ajR2TlKQ
+         sfjpDdPxm4/QZdJon9mdkWIGB6oVlqH59AXturMvM6Q6usn4ifd8W2cJ/z5tBQEHF4UC
+         aquhkiA/xf4aiKEsINvjeMskOsHz+agWHTSEhJ3gGEWdaxhDrfDkLb/ZBE1JdK1jE5Dh
+         t0ANY3+T3QwpCJdVhuLoPQXUTd3vIp6nuCge3yC2oSj1gxhx+em/vQIo1fiXZ9cNJdbo
+         Tufw==
+X-Gm-Message-State: AO0yUKWx1Eti2/xdBhrrHRbFBEYb3D2pTua3Z+siOU+DxEH6v2B5Ki8H
+        aYQDRJ2u2CcW1drotWXtfm2KDew0VyEw+YTtWsZqKg==
+X-Google-Smtp-Source: AK7set8IWRb0c5QRI0mCvofn+53toeLUf0QAqBXeiHkxJiCHSENVWUwl0Cn9xhaO9TH0b6aLOo+bYIjEMz5NYxW8+6s=
+X-Received: by 2002:a17:902:7e09:b0:199:6fd:ecf6 with SMTP id
+ b9-20020a1709027e0900b0019906fdecf6mr9641502plm.9.1678460723997; Fri, 10 Mar
+ 2023 07:05:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230307063110.1459508-1-bingbu.cao@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230130105423.1338554-1-mk@semmihalf.com> <20230130135418.1604455-1-mk@semmihalf.com>
+ <CAJMMOfNJV+eOqTgUoLLWKQe2MJ=6fXL3aaP6d=YrSBQvfhOXiA@mail.gmail.com>
+ <DM8PR02MB8169B2AC8918F8E31628F61AF3DB9@DM8PR02MB8169.namprd02.prod.outlook.com>
+ <CAJMMOfN-6fgN0VohA5ViwVXmNWtA13ycfZFoO4ys9_CLes0feA@mail.gmail.com> <CAJMMOfM41dfqx0NoiHGE=8X5hoRHo1=qPEp4KXLP1kygestEJQ@mail.gmail.com>
+In-Reply-To: <CAJMMOfM41dfqx0NoiHGE=8X5hoRHo1=qPEp4KXLP1kygestEJQ@mail.gmail.com>
+From:   =?UTF-8?Q?Micha=C5=82_Krawczyk?= <mk@semihalf.com>
+Date:   Fri, 10 Mar 2023 16:05:12 +0100
+Message-ID: <CAJMMOfN6tUzGZOkP6ZXbKCr-vszqf3nnRM-dhXfpOUSiHr2EHA@mail.gmail.com>
+Subject: Re: [PATCH v2] media: venus: dec: Fix handling of the start cmd
+To:     Vikash Garodia <vgarodia@qti.qualcomm.com>
+Cc:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        "Vikash Garodia (QUIC)" <quic_vgarodia@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mw@semihalf.com" <mw@semihalf.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 02:31:10PM +0800, bingbu.cao@intel.com wrote:
-> From: Bingbu Cao <bingbu.cao@intel.com>
-> 
-> In current cio2-bridge, it is using the hid name to register software
-> node and software node will create kobject and sysfs entry according to
-> the node name, if there are multiple sensors and VCMs which are sharing
-> same HID name, it will cause the software nodes registration failure:
-> 
-> sysfs: cannot create duplicate filename '/kernel/software_nodes/dw9714'
-> ...
+Hi,
 
-> Call Trace:
-> sysfs_create_dir_ns+0xbc/0xd0
-> kobject_add_internal
-> kobject_init_and_add
-> swnode_register
-> software_node_register
+Any update on this patch? It would be great if we could make some
+progress there (and, hopefully, finally merge it :))
 
-The above lines are not so valuable. You can remove them.
+Thanks,
+Micha=C5=82
 
-> software_node_register_nodes
-> cio2_bridge_init
-> ...
-> kobject_add_internal failed for dw9714 with -EEXIST,
-> don't try to register things with the same name in the same directory.
-> 
-> One solution is appending the sensor link(Mipi Port) in SSDB as suffix
-> of the node name to fix this problem.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+pt., 10 lut 2023 o 16:18 Micha=C5=82 Krawczyk <mk@semihalf.com> napisa=C5=
+=82(a):
+>
+> Hi,
+>
+> I'm wondering if there are any more comments for this patch? I would
+> be happy to clarify anything that's unclear or improve the code if
+> needed.
+>
+> I know it's pretty late, but it would be really great if this fix
+> could land before v6.2 is released, so I'd appreciate your help and
+> review.
+>
+> Thank you,
+> Micha=C5=82
+>
+> wt., 7 lut 2023 o 12:15 Micha=C5=82 Krawczyk <mk@semihalf.com> napisa=C5=
+=82(a):
+> >
+> > wt., 7 lut 2023 o 10:54 Vikash Garodia <vgarodia@qti.qualcomm.com> napi=
+sa=C5=82(a):
+> > > I have reviewed the patch, and the drain sequence handling looks good=
+ to me.
+> > > Could you share some details on the test client which you are using t=
+o catch this issue ?
+> >
+> > Hi Vikash,
+> >
+> > Thank you for looking at the code!
+> >
+> > I've been testing it using the Chromium implementation of the V4L2
+> > codec [1]. Meanwhile, we were running a test suite which changes the
+> > encryption method in the middle of the video decoding. This triggers
+> > the flush behavior and the Chromium sends the stop/start cmd to the
+> > V4L2 kernel component, and the test expects the video to continue the
+> > playback normally. Unfortunately, it was causing a stall of the video
+> > at the same time.
+> >
+> > [1] https://source.chromium.org/chromium/chromium/src/+/main:media/gpu/=
+v4l2/
+> >
+> > >
+> > > > Thank you,
+> > > > Micha=C5=82
+> > >
+> > > Thanks,
+> > > Vikash
