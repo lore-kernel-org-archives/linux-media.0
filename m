@@ -2,102 +2,173 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1990C61DA4
-	for <linux-media@archiver.kernel.org>; Sat, 11 Mar 2023 13:49:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17850C74A4B
+	for <linux-media@archiver.kernel.org>; Sat, 11 Mar 2023 17:36:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbjCKNtl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 11 Mar 2023 08:49:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
+        id S229767AbjCKRgZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 11 Mar 2023 12:36:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjCKNtk (ORCPT
+        with ESMTP id S229776AbjCKRgU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 11 Mar 2023 08:49:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F58830183
-        for <linux-media@vger.kernel.org>; Sat, 11 Mar 2023 05:48:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678542537;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=NcfgF3uxX783RG109c6BFmxXkTNUHbIUH8XfVEOGGVg=;
-        b=A+fvRlLPP/GxfynBVn3j7NhSLGzDeoMJZwca0eIQY1Rs/zPes6FFRgFBIKvj5o/2f9KPtW
-        9rrVPgs6Go/vb9X98iMUomW3jlyt0++gIJ/52jn058dW1niH0k9EEfWb7EtiAWnPeLXimn
-        vcEZEp1LeYszbl5qRDLc6xBbn6QpukI=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-663-uludQLNHPemyialz4stPwA-1; Sat, 11 Mar 2023 08:48:55 -0500
-X-MC-Unique: uludQLNHPemyialz4stPwA-1
-Received: by mail-qv1-f69.google.com with SMTP id s13-20020ad44b2d000000b00570ccb820abso4441463qvw.5
-        for <linux-media@vger.kernel.org>; Sat, 11 Mar 2023 05:48:55 -0800 (PST)
+        Sat, 11 Mar 2023 12:36:20 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3B74DBF3;
+        Sat, 11 Mar 2023 09:35:48 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id q65-20020a17090a17c700b0023b3ad9572cso1321908pja.5;
+        Sat, 11 Mar 2023 09:35:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678556121;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/hNSHVjc/0wTeCW3nY6/+a9GNb2nn01SoihN24q763w=;
+        b=qozX8RZWE3nHsqGuYQWSGXKqdwuAcYURpfSiPFM9IP29zTKQOtipy8O/GmxSMJd7GU
+         G2eiwcoB+mZyXyLDDUXpvQ7FntLF34u0AGf6oVPRNvrgFPSQwnLthOpkXclgCkzIqykt
+         XsFgRCjAXEqj4EvvpW6GGf+KBFrVNZHFygWILrctRWcxZJnKTE9DyEZcwP1YvleOa+DC
+         2VgJC3j67jilPpeIrAebn3TD7PpNA+M808wXx+2MqDd0zqNtlM6oAtz198FTC6Q43b3b
+         YUVGwybEQz8Kyf3aPaizKZdRKVASFecfZMRWiPpeNxvucRWy6vbAyz/rshPX/NcgukYy
+         vGoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678542535;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NcfgF3uxX783RG109c6BFmxXkTNUHbIUH8XfVEOGGVg=;
-        b=xbcvKz2YrdyatQastG/vsvlNJtn8uX4cM4NUMfPkyPMz/6RM1oXxH4h4CNAi4IfZLL
-         cPi4hLehkxKS7w8SsUnv4wj3aIxh1hpSwu3Dd2EaCx+4sKnwhJjTa/hcqqGHLYMk2J9/
-         Z2no+IdmxMJ77bupIpKDKfCvTa43JerGebCQgW+64C/2o4M3mKDPXAG4NYcTzAb3zXT0
-         Y8K4sjQqwAO2YEeAJ3dEgUTWqCpKuRgQ/IpPhQkuOdk1z8IOB/w4XgyvaqAcDu9VcEUV
-         MYxDrXD3c5k6cN+i6k1oozVNUCK+PTAc6ld+i0GAJJiXjjSHuHMvf9IJHdQLijr0OXMd
-         j4aA==
-X-Gm-Message-State: AO0yUKVGu9D3MD1B4jk6gGfttCja0VaWPovyIgqQfQJQ6Vr2V6nc1vgd
-        xgA3IOBZWl9jDvyxAQtuKed33fnvS5ie0o2tverqgG11zgm01Ru4aJ501u3Lh0nz5pHZx7AoK9v
-        S2JbNFHHP4rDlSXxIlMYw1qIR0A1qM2A=
-X-Received: by 2002:a05:6214:202f:b0:56f:37a:4561 with SMTP id 15-20020a056214202f00b0056f037a4561mr3674082qvf.34.1678542534954;
-        Sat, 11 Mar 2023 05:48:54 -0800 (PST)
-X-Google-Smtp-Source: AK7set8xesAQjqL0qnNANgZe8UUdI4rz7/wrmwGJkQJnuQKaQ4KY5AhnrWWd4s+kwBtYf47QdZG45g==
-X-Received: by 2002:a05:6214:202f:b0:56f:37a:4561 with SMTP id 15-20020a056214202f00b0056f037a4561mr3674066qvf.34.1678542534705;
-        Sat, 11 Mar 2023 05:48:54 -0800 (PST)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id q29-20020a05620a025d00b0071aacb2c76asm359026qkn.132.2023.03.11.05.48.53
+        d=1e100.net; s=20210112; t=1678556121;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/hNSHVjc/0wTeCW3nY6/+a9GNb2nn01SoihN24q763w=;
+        b=HNMXZpz+hUSMN8ZfpbL7VJSk4IZUeCI3kUsem4AHEdiJnwnBpyTiR3UrXCOKwutU3Z
+         bhDPshBfMkUo1Md6VvWTa/Rmnt47V0i77qc58XJfln7lwkydAHtyyToog4WlKgUNYq00
+         YC+GnrByeJIKm67qStXufvTa6t6aCFSN+Q548JTskuKIyhcaID8WRJ4zoULCcOMlhvU/
+         jdqTHlKQAZ55KBIBdl1aBk5R7SX4ujuOt85iRI62XWhZthgy55SSQ5PoCq3ZYqvkFIRu
+         6OO/CS8A5EK4DQGgauy6G0zk3zIqnzE8BXIts1kgTiYdn4dvaqaJo0IDjWzqypvu7ePK
+         oQmg==
+X-Gm-Message-State: AO0yUKUozpxTn+QHhAyc6s/0FrO4Demsr0sYWgQcN9rTw6OtBnRQeHh6
+        mJ9qvYf8sih3tJMeW2hH+Vs=
+X-Google-Smtp-Source: AK7set/92Kp+D6kfQAUn3G1hZMxs+D8jdl0o6Nhu2rBS+JMWAaAnTBNrnC1jHmBus8UctLlXZ2k6Xw==
+X-Received: by 2002:a05:6a20:1589:b0:cc:3f87:a80c with SMTP id h9-20020a056a20158900b000cc3f87a80cmr33316270pzj.3.1678556120656;
+        Sat, 11 Mar 2023 09:35:20 -0800 (PST)
+Received: from localhost ([2601:1c0:5080:d9fa:9b45:95de:f47d:f85e])
+        by smtp.gmail.com with ESMTPSA id d26-20020aa7815a000000b005d72e54a7e1sm1702285pfn.215.2023.03.11.09.35.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 05:48:54 -0800 (PST)
-From:   Tom Rix <trix@redhat.com>
-To:     isely@pobox.com, mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] media: pvrusb2: VIDEO_PVRUSB2 depends on DVB_CORE to use dvb_* symbols
-Date:   Sat, 11 Mar 2023 08:48:47 -0500
-Message-Id: <20230311134847.624910-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Sat, 11 Mar 2023 09:35:20 -0800 (PST)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        linux-media@vger.kernel.org (open list:SYNC FILE FRAMEWORK),
+        linaro-mm-sig@lists.linaro.org (moderated list:DMA BUFFER SHARING
+        FRAMEWORK), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 1/2] dma-buf/dma-fence: Add dma_fence_init_noref()
+Date:   Sat, 11 Mar 2023 09:35:11 -0800
+Message-Id: <20230311173513.1080397-2-robdclark@gmail.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230311173513.1080397-1-robdclark@gmail.com>
+References: <20230311173513.1080397-1-robdclark@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-A rand config causes this link error
-vmlinux.o: In function `pvr2_dvb_create':
-(.text+0x8af1d2): undefined reference to `dvb_register_adapter'
+From: Rob Clark <robdclark@chromium.org>
 
-The rand config has
-CONFIG_VIDEO_PVRUSB2=y
-CONFIG_VIDEO_DEV=y
-CONFIG_DVB_CORE=m
+Add a way to initialize a fence without touching the refcount.  This is
+useful, for example, if the fence is embedded in a drm_sched_job.  In
+this case the refcount will be initialized before the job is queued.
+But the seqno of the hw_fence is not known until job_run().
 
-VIDEO_PVRUSB2 should also depend on DVB_CORE.
-
-Signed-off-by: Tom Rix <trix@redhat.com>
+Signed-off-by: Rob Clark <robdclark@chromium.org>
 ---
- drivers/media/usb/pvrusb2/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/dma-buf/dma-fence.c | 43 ++++++++++++++++++++++++++++---------
+ include/linux/dma-fence.h   |  2 ++
+ 2 files changed, 35 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/media/usb/pvrusb2/Kconfig b/drivers/media/usb/pvrusb2/Kconfig
-index f2b64e49c5a2..9501b10b31aa 100644
---- a/drivers/media/usb/pvrusb2/Kconfig
-+++ b/drivers/media/usb/pvrusb2/Kconfig
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- config VIDEO_PVRUSB2
- 	tristate "Hauppauge WinTV-PVR USB2 support"
--	depends on VIDEO_DEV && I2C
-+	depends on VIDEO_DEV && I2C && DVB_CORE
- 	select VIDEO_TUNER
- 	select VIDEO_TVEEPROM
- 	select VIDEO_CX2341X
+diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
+index 74e36f6d05b0..97c05a465cb4 100644
+--- a/drivers/dma-buf/dma-fence.c
++++ b/drivers/dma-buf/dma-fence.c
+@@ -989,28 +989,27 @@ void dma_fence_describe(struct dma_fence *fence, struct seq_file *seq)
+ EXPORT_SYMBOL(dma_fence_describe);
+ 
+ /**
+- * dma_fence_init - Initialize a custom fence.
++ * dma_fence_init_noref - Initialize a custom fence without initializing refcount.
+  * @fence: the fence to initialize
+  * @ops: the dma_fence_ops for operations on this fence
+  * @lock: the irqsafe spinlock to use for locking this fence
+  * @context: the execution context this fence is run on
+  * @seqno: a linear increasing sequence number for this context
+  *
+- * Initializes an allocated fence, the caller doesn't have to keep its
+- * refcount after committing with this fence, but it will need to hold a
+- * refcount again if &dma_fence_ops.enable_signaling gets called.
+- *
+- * context and seqno are used for easy comparison between fences, allowing
+- * to check which fence is later by simply using dma_fence_later().
++ * Like &dma_fence_init but does not initialize the refcount.  Suitable
++ * for cases where the fence is embedded in another struct which has it's
++ * refcount initialized before the fence is initialized.  Such as embedding
++ * in a &drm_sched_job, where the job is created before knowing the seqno
++ * of the hw_fence.
+  */
+ void
+-dma_fence_init(struct dma_fence *fence, const struct dma_fence_ops *ops,
+-	       spinlock_t *lock, u64 context, u64 seqno)
++dma_fence_init_noref(struct dma_fence *fence, const struct dma_fence_ops *ops,
++		     spinlock_t *lock, u64 context, u64 seqno)
+ {
+ 	BUG_ON(!lock);
+ 	BUG_ON(!ops || !ops->get_driver_name || !ops->get_timeline_name);
++	BUG_ON(!kref_read(&fence->refcount));
+ 
+-	kref_init(&fence->refcount);
+ 	fence->ops = ops;
+ 	INIT_LIST_HEAD(&fence->cb_list);
+ 	fence->lock = lock;
+@@ -1021,4 +1020,28 @@ dma_fence_init(struct dma_fence *fence, const struct dma_fence_ops *ops,
+ 
+ 	trace_dma_fence_init(fence);
+ }
++EXPORT_SYMBOL(dma_fence_init_noref);
++
++/**
++ * dma_fence_init - Initialize a custom fence.
++ * @fence: the fence to initialize
++ * @ops: the dma_fence_ops for operations on this fence
++ * @lock: the irqsafe spinlock to use for locking this fence
++ * @context: the execution context this fence is run on
++ * @seqno: a linear increasing sequence number for this context
++ *
++ * Initializes an allocated fence, the caller doesn't have to keep its
++ * refcount after committing with this fence, but it will need to hold a
++ * refcount again if &dma_fence_ops.enable_signaling gets called.
++ *
++ * context and seqno are used for easy comparison between fences, allowing
++ * to check which fence is later by simply using dma_fence_later().
++ */
++void
++dma_fence_init(struct dma_fence *fence, const struct dma_fence_ops *ops,
++	       spinlock_t *lock, u64 context, u64 seqno)
++{
++	kref_init(&fence->refcount);
++	dma_fence_init_noref(fence, ops, lock, context, seqno);
++}
+ EXPORT_SYMBOL(dma_fence_init);
+diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
+index d54b595a0fe0..f617c78a2e0a 100644
+--- a/include/linux/dma-fence.h
++++ b/include/linux/dma-fence.h
+@@ -279,6 +279,8 @@ struct dma_fence_ops {
+ 	void (*set_deadline)(struct dma_fence *fence, ktime_t deadline);
+ };
+ 
++void dma_fence_init_noref(struct dma_fence *fence, const struct dma_fence_ops *ops,
++			  spinlock_t *lock, u64 context, u64 seqno);
+ void dma_fence_init(struct dma_fence *fence, const struct dma_fence_ops *ops,
+ 		    spinlock_t *lock, u64 context, u64 seqno);
+ 
 -- 
-2.27.0
+2.39.2
 
