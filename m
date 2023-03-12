@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD5EBC7618D
-	for <linux-media@archiver.kernel.org>; Sun, 12 Mar 2023 13:15:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D297DC6FA99
+	for <linux-media@archiver.kernel.org>; Sun, 12 Mar 2023 13:15:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbjCLNO7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 12 Mar 2023 09:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44658 "EHLO
+        id S230038AbjCLNPA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 12 Mar 2023 09:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCLNOS (ORCPT
+        with ESMTP id S230024AbjCLNOZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 12 Mar 2023 09:14:18 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3383E51CA6
-        for <linux-media@vger.kernel.org>; Sun, 12 Mar 2023 06:13:53 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id da10so38597380edb.3
-        for <linux-media@vger.kernel.org>; Sun, 12 Mar 2023 06:13:53 -0700 (PDT)
+        Sun, 12 Mar 2023 09:14:25 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE0351F8F
+        for <linux-media@vger.kernel.org>; Sun, 12 Mar 2023 06:13:55 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id ek18so7375918edb.6
+        for <linux-media@vger.kernel.org>; Sun, 12 Mar 2023 06:13:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678626829;
+        d=linaro.org; s=google; t=1678626835;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FklNTrfw75FQnVJC7no5/FQCPZiirAS85g1dWyaYnQ0=;
-        b=YAxPlJhF1+DE9jUIWYyITWyk7/AONuibeqeBOgc+dWF5fRBbLmZqbk1IYqYlHABI85
-         gz1wXPUZjU5FC3mPpXfAfbwnto9A2C8UR5j79ptmQvXc8NIm93NUj7vnZscY32eF5vOQ
-         MNqXBlnv4ABmODy3pYii1yEyd13GeBgb4NroSTWOAXhnpEoT/yi4gqdHK3skNRal/Ae+
-         3cMpgvlN2t9T17SYFpZKlQ7VLMYX986I32TaxVNtQfKWUgod+jAHKsvNHdpkbRKt4aYk
-         B2uanB4ZtOcer65Igqf0RJ3h8hJb/2Xmwgp0Xi2cgPElJofc8L4SdOxvKNLQznQt+/k0
-         yqZg==
+        bh=hGcITVAy31UtuDH6LhnS9qeMquB4EE88f+CeXXPHp2U=;
+        b=YkVf8PAZp1sjrWnpH/Du7l6KUolVfDrkiaYMszEc3PTGHc7Ipup3dDat3y6CTjWSPV
+         ETjJlT78KfnQGOAf6MGNU+mOmPzuuxdMNRmlOdRXk4Hh25EaqGkuHgJn46FjE9ICHpMo
+         7V+UVeVxiiXoAy3ZRT86gz6gnIRO7iPtSxI+cfDq1MEGhpzhtsPB6SS8I+i2QnJxByzS
+         uUKomqVb1xWi/oYuHGL4pv+q/LGkQ88cq7n9QwVXNiYDoFyM1wGXCFuvUNF2LSDpOPrD
+         QIP9fxEouE6Wi8b5wrPTL3FN+A5VP1IFQN0fwJnlBGvCFrGa9Re4rcFPt+1znXjsG5zv
+         cFuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678626829;
+        d=1e100.net; s=20210112; t=1678626835;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FklNTrfw75FQnVJC7no5/FQCPZiirAS85g1dWyaYnQ0=;
-        b=mOCWXbPm0SB7Bsjous1rEK5OBow3NbP76R994vimC3K92XBmiAKYmbDZHdQ2bvGrpk
-         GBBCvB3xu3b9tq/8VFn6o0yPtP4FpJwcn/QDpfnspNzLUZKU/RmLk96u1S7HMeR2uBli
-         W1qUxU7vg8KoM3GLnhRs0IjnqIOtF0ryp9Wx5lLgxU0VdVmtWoysN+KqlHA2Am4adsEs
-         1KCIOWO/AxaW2OTq/jh91pd0IU5hUZsC6gI+qb6WJKn8z/zHA+baC6FHxs8jNLGXCz/5
-         i358JBbPt5U0hSxKC9KrLOdpPFKPtiSSZRQ1ROvnQe+pPDC9joMTX6Mg9TXw/R1vB5gT
-         fnyg==
-X-Gm-Message-State: AO0yUKW1QKsrtG7SYhu/gxAWorODaqD4fsWPdCrrCzvNDRvpyS94AnjC
-        GOG/ZaIPaFw4ZDdYGEMNYJjY9g==
-X-Google-Smtp-Source: AK7set+1VMb4vP5AkQiutwwyqAr2RuSDyquikjNxXi+uMI4iRdw2RCO1AJJ8nzH1kwmE3q0OOnHeOw==
-X-Received: by 2002:aa7:dbc8:0:b0:4f9:deb4:b97f with SMTP id v8-20020aa7dbc8000000b004f9deb4b97fmr5865130edt.13.1678626829419;
-        Sun, 12 Mar 2023 06:13:49 -0700 (PDT)
+        bh=hGcITVAy31UtuDH6LhnS9qeMquB4EE88f+CeXXPHp2U=;
+        b=oWiur6V57hgrsifc0bvjDTtleyz3LRI2trk6m7v58ZFkJUXD3vuYVKiGW3oMBTltMK
+         ZJrurxUtIJX9750aIXKE6ke074gZ9h8UCSWAsNNBdOUh9PFfgHtuNtHrINkm7AjZD1Gb
+         IMrr+0FfZpty/CdmcObW0R2dhXn9mVkB1/jFof267svOTZ/VfsPsZtKr65BWpRdaVHyT
+         QdtKTseszcP+lQBzXSA/u9P6LUQ+d8QhqBxtZ12YLaRtOlMITD16Jm4B5yGEQrfjc7sx
+         7AMTcMQouOhk3sO8NGrVm/b/sbtz60iCao/al0HHlL/r/vUPgOKL5+ZzgAcU6V2hnfJj
+         yl+Q==
+X-Gm-Message-State: AO0yUKUzxZPpQRNRUmuBPumEQAFBa+2T1UXBN+wKruVlZ6nf/+WKfxc5
+        BkhlQoHkSDyJXp2eHtqBPPIkJA==
+X-Google-Smtp-Source: AK7set/xivJKH0hcau66sU8fJqKK2GNHVix/5Dk94HStfVumSSriO/XOviLFoDjpZUHmFVs9JDdUDg==
+X-Received: by 2002:a17:907:6d08:b0:887:dea8:b029 with SMTP id sa8-20020a1709076d0800b00887dea8b029mr36591244ejc.1.1678626835335;
+        Sun, 12 Mar 2023 06:13:55 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id r19-20020a1709067fd300b008eddbd46d7esm2213279ejs.31.2023.03.12.06.13.47
+        by smtp.gmail.com with ESMTPSA id r19-20020a1709067fd300b008eddbd46d7esm2213279ejs.31.2023.03.12.06.13.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 06:13:49 -0700 (PDT)
+        Sun, 12 Mar 2023 06:13:55 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Joe Tessler <jrt@google.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -95,9 +95,9 @@ To:     Joe Tessler <jrt@google.com>,
         linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-rockchip@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 13/28] media: platform: marvell: drop of_match_ptr for ID table
-Date:   Sun, 12 Mar 2023 14:13:03 +0100
-Message-Id: <20230312131318.351173-13-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 16/28] media: platform: sun6i-csi: drop of_match_ptr for ID table
+Date:   Sun, 12 Mar 2023 14:13:06 +0100
+Message-Id: <20230312131318.351173-16-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
 References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
@@ -113,25 +113,25 @@ used and the of_match_ptr does not have any sense (this also allows ACPI
 matching via PRP0001, even though it might not be relevant here).  This
 also fixes !CONFIG_OF error:
 
-  drivers/media/platform/marvell/mmp-driver.c:364:34: error: ‘mmpcam_of_match’ defined but not used [-Werror=unused-const-variable=]
+  drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c:401:34: error: ‘sun6i_csi_of_match’ defined but not used [-Werror=unused-const-variable=]
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/media/platform/marvell/mmp-driver.c | 2 +-
+ drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/marvell/mmp-driver.c b/drivers/media/platform/marvell/mmp-driver.c
-index ef22bf8f276c..b7747c7bae45 100644
---- a/drivers/media/platform/marvell/mmp-driver.c
-+++ b/drivers/media/platform/marvell/mmp-driver.c
-@@ -372,7 +372,7 @@ static struct platform_driver mmpcam_driver = {
- 	.remove		= mmpcam_platform_remove,
- 	.driver = {
- 		.name	= "mmp-camera",
--		.of_match_table = of_match_ptr(mmpcam_of_match),
-+		.of_match_table = mmpcam_of_match,
- 		.pm = &mmpcam_pm_ops,
- 	}
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+index e3e6650181c8..187a2419da96 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+@@ -429,7 +429,7 @@ static struct platform_driver sun6i_csi_platform_driver = {
+ 	.remove	= sun6i_csi_remove,
+ 	.driver	= {
+ 		.name		= SUN6I_CSI_NAME,
+-		.of_match_table	= of_match_ptr(sun6i_csi_of_match),
++		.of_match_table	= sun6i_csi_of_match,
+ 		.pm		= &sun6i_csi_pm_ops,
+ 	},
  };
 -- 
 2.34.1
