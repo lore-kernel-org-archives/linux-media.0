@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57E8EC6FD1F
-	for <linux-media@archiver.kernel.org>; Sun, 12 Mar 2023 13:15:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4114FC74A4B
+	for <linux-media@archiver.kernel.org>; Sun, 12 Mar 2023 13:15:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbjCLNPo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 12 Mar 2023 09:15:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
+        id S230195AbjCLNPq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 12 Mar 2023 09:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbjCLNOw (ORCPT
+        with ESMTP id S230199AbjCLNOy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 12 Mar 2023 09:14:52 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AE2244AF
-        for <linux-media@vger.kernel.org>; Sun, 12 Mar 2023 06:14:06 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id er25so10370876edb.5
-        for <linux-media@vger.kernel.org>; Sun, 12 Mar 2023 06:14:06 -0700 (PDT)
+        Sun, 12 Mar 2023 09:14:54 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801AE23DAC
+        for <linux-media@vger.kernel.org>; Sun, 12 Mar 2023 06:14:09 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id er25so10371975edb.5
+        for <linux-media@vger.kernel.org>; Sun, 12 Mar 2023 06:14:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678626837;
+        d=linaro.org; s=google; t=1678626849;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mSUxJvmcYZNHU5p44Si/GkT5n4QeYi/m+nC/+jkGmUY=;
-        b=XUpM8Rmy7PnFzNbcL0zTFiuJpFVfxvLHNToRAg/PEhIOn5i3jUDYTrbExuiifCZjBa
-         lrh/2gHR1SNfhiAIupdMYuN4BiECY5PDduKMVCgt/dKreE5Wg/tVSsTwrkD15OLzXkYx
-         Ecua631wVTD/Oxl54ZVfyIQui2oVuNhx2mQFPm7RKgxRlbbEeYYitaPl/BlXPCrgNlUX
-         XZF4sEohO6jZjxrG3VlNIM8pUxH96L5LPxy7NJI/31wC+MsSl6gwuHKl1HyQ4rEQUAi0
-         WqFYN5wDqaG6b4ITF6OJjFk5JtUhKdpb608LUw4oYj30y83+6sqO96df1Ud9vqsBjNlQ
-         hVjw==
+        bh=38C9btURbQsaMIipOhvsQvm6Dy7PKwPGkg3PY63qI38=;
+        b=m5nxwWZS+IjOxjDSLMlcc9Mw3quPwPmLZGwjL0YQEcQdFJH9ABjF8RScjIrJ48oGzx
+         CeSVDrWPupHnu88aXT4OXI198T4AmpikK45pZee6+1kcKldpWFVdMkX4Nmd0xTQHIAzb
+         7UEG5bGZNzRsmjDPRi566bc37BTemvDPj1tWmhMPE6WPiS736MVrhoVtGhBqME9a/TfC
+         XTQwjVIg0rNNsyY4DyCt4dBK+LB3XCp0pHTrn6Vef4pIhpJLOgBhUU4OybxOcH+eYCP0
+         IdU5OYQpRstCWiFkNv63Xd/bZkppmZfSaIJr5HJjB3GT7zlg/7ren+XF+nqi5vq/6hUB
+         Y2Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678626837;
+        d=1e100.net; s=20210112; t=1678626849;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mSUxJvmcYZNHU5p44Si/GkT5n4QeYi/m+nC/+jkGmUY=;
-        b=PwBafD4f9riavCbD8dt/ekVVVJsyV+wGNd5hAQ10sus9BdIb2ppAOcCdxWeSq/vrYz
-         kWGZrpVAKfCpAaKFArj/YLsEx+03MX6UUNzzMhuPam5+lUwzrlFiRppEEnuySph38HPw
-         I1Y/wfNg0DF3EIsqg/zCPaqXHbDmhy/0JUME7WpEwSse098/aSuuT1Eorf+Ze6Eho55z
-         oWDIYk/l+Ok3h16pB++f6I3+OZB2htK8OLiFnR1JWDP6K0soSFPRjXMbXyma3OdEoX4R
-         jAEYcGK2VHJnu7yJDNtUkf2p+PZXgXdbvZPaVe1kLehHRd5F5AdGhMhTrvvMxMMSvnkI
-         prLw==
-X-Gm-Message-State: AO0yUKXD/QWhPHLDCRFQiH2wCOpp0KZ0WvOt2MbZTpvSG9S1d7LFeX4x
-        ZNaDZkU8AFGVJ906Hc1SDebqaQ==
-X-Google-Smtp-Source: AK7set88AuX6ejtTeUpkVuYiIVeDjSz3hY6JSMWqIppvJBvfzaC26FemUOmCOTaRkYyk9DXQpBQS4g==
-X-Received: by 2002:a17:906:1d01:b0:923:1714:b3d0 with SMTP id n1-20020a1709061d0100b009231714b3d0mr3219717ejh.19.1678626837477;
-        Sun, 12 Mar 2023 06:13:57 -0700 (PDT)
+        bh=38C9btURbQsaMIipOhvsQvm6Dy7PKwPGkg3PY63qI38=;
+        b=6cHOE7ia5msUDNct1k0/TT6h58wOLhxuc0AiEO1O7YpkPdGh0QiB9JnrmbN0T//bjm
+         RmMAwzB91ypChQUSBnl5J/DkyKnJULPCzTdMFTDIaLjvJqgG45r1jOHBi57Mn/3+eKYu
+         IB0Egg5cFD8KS/ylljNVJBwA1ha4aLPRyDFltJyTzRuVcgPBPJRZ2J53JqoKNYi+0nN2
+         sy66EjTdjfMlBWegIo4zkrALoDPF+IUFoe4dt7RVxgqTDTdcw39TLP/c4Tq82buV6p9/
+         Dh3F0m9hzcP/i12VsNMsT16OyCWaimpjSfOWad932w1NwJ+4io49lXnHVpqtaOuSiF+8
+         t+JA==
+X-Gm-Message-State: AO0yUKVlWJaAwsCwHPa/f2A6L8Oj/EQOBloR9XUTJAfILzaE6ddzwc60
+        ykkr9F9GVTInzHDUPwkGf5Wqsg==
+X-Google-Smtp-Source: AK7set8Zl0KNYXv2AhHSd8Fn3iuvU9rRSVGaJA6ydZDA517h1/4H4uOnDfoNavy1zJht7v4B+j49+g==
+X-Received: by 2002:a05:6402:2037:b0:4c0:821a:40da with SMTP id ay23-20020a056402203700b004c0821a40damr31253519edb.34.1678626849069;
+        Sun, 12 Mar 2023 06:14:09 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id r19-20020a1709067fd300b008eddbd46d7esm2213279ejs.31.2023.03.12.06.13.55
+        by smtp.gmail.com with ESMTPSA id r19-20020a1709067fd300b008eddbd46d7esm2213279ejs.31.2023.03.12.06.14.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 06:13:57 -0700 (PDT)
+        Sun, 12 Mar 2023 06:14:08 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Joe Tessler <jrt@google.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -95,9 +95,9 @@ To:     Joe Tessler <jrt@google.com>,
         linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-rockchip@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 17/28] media: platform: sun6i-mipi-csi2: drop of_match_ptr for ID table
-Date:   Sun, 12 Mar 2023 14:13:07 +0100
-Message-Id: <20230312131318.351173-17-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 23/28] media: i2c: ov2640: drop of_match_ptr for ID table
+Date:   Sun, 12 Mar 2023 14:13:13 +0100
+Message-Id: <20230312131318.351173-23-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
 References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
@@ -108,31 +108,31 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The driver can match only via the DT table so the table should be always
-used and the of_match_ptr does not have any sense (this also allows ACPI
-matching via PRP0001, even though it might not be relevant here).  This
-also fixes !CONFIG_OF error:
+The driver will match mostly by DT table (even thought there is regular
+ID table) so there is little benefit in of_match_ptr (this also allows
+ACPI matching via PRP0001, even though it might not be relevant here).
+This also fixes !CONFIG_OF error:
 
-  drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c:751:34: error: ‘sun6i_mipi_csi2_of_match’ defined but not used [-Werror=unused-const-variable=]
+  drivers/media/i2c/ov2640.c:1290:34: error: ‘ov2640_of_match’ defined but not used [-Werror=unused-const-variable=]
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c | 2 +-
+ drivers/media/i2c/ov2640.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c b/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c
-index a220ce849b41..0851b6b4e1ff 100644
---- a/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c
-+++ b/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c
-@@ -759,7 +759,7 @@ static struct platform_driver sun6i_mipi_csi2_platform_driver = {
- 	.remove	= sun6i_mipi_csi2_remove,
- 	.driver	= {
- 		.name		= SUN6I_MIPI_CSI2_NAME,
--		.of_match_table	= of_match_ptr(sun6i_mipi_csi2_of_match),
-+		.of_match_table	= sun6i_mipi_csi2_of_match,
- 		.pm		= &sun6i_mipi_csi2_pm_ops,
+diff --git a/drivers/media/i2c/ov2640.c b/drivers/media/i2c/ov2640.c
+index 39d56838a4ef..a92c091356c5 100644
+--- a/drivers/media/i2c/ov2640.c
++++ b/drivers/media/i2c/ov2640.c
+@@ -1296,7 +1296,7 @@ MODULE_DEVICE_TABLE(of, ov2640_of_match);
+ static struct i2c_driver ov2640_i2c_driver = {
+ 	.driver = {
+ 		.name = "ov2640",
+-		.of_match_table = of_match_ptr(ov2640_of_match),
++		.of_match_table = ov2640_of_match,
  	},
- };
+ 	.probe_new = ov2640_probe,
+ 	.remove   = ov2640_remove,
 -- 
 2.34.1
 
