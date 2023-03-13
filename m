@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B13DAC6FD19
-	for <linux-media@archiver.kernel.org>; Mon, 13 Mar 2023 14:50:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 344B9C7618B
+	for <linux-media@archiver.kernel.org>; Mon, 13 Mar 2023 14:50:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231493AbjCMOuB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Mar 2023 10:50:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51340 "EHLO
+        id S231550AbjCMOuD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Mar 2023 10:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbjCMOtj (ORCPT
+        with ESMTP id S231469AbjCMOtm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Mar 2023 10:49:39 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C998743912
-        for <linux-media@vger.kernel.org>; Mon, 13 Mar 2023 07:49:30 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id cn21so19571066edb.0
-        for <linux-media@vger.kernel.org>; Mon, 13 Mar 2023 07:49:30 -0700 (PDT)
+        Mon, 13 Mar 2023 10:49:42 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC21D60D7B
+        for <linux-media@vger.kernel.org>; Mon, 13 Mar 2023 07:49:32 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id k10so49642479edk.13
+        for <linux-media@vger.kernel.org>; Mon, 13 Mar 2023 07:49:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678718969;
+        d=linaro.org; s=google; t=1678718971;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3qBG3sjrKTAghBCKa2iFwB3ZxGkMGKgf5ztXirLn58k=;
-        b=RoA7lA7BTkLuRBBg+wvZRZ4cTpcwKyLSYz6M+brUeKvgYRJ/JXxhHcV2H+kmWxzu4B
-         LdXnxKpRL9JtaXwGOlfFMuTHpgsIei6CzxCDMA17xOSFxXc2vVBmC3YYdx3Mb725Qplv
-         VkGWQ6wrPYHuzZ3pfRS00dwF6/4WkUVIyojc9HmqfvSp8N21BSUgvuBT0QG8hV7r4IuK
-         0+S6ucW64vuqyMhvRhz330MknVjldF6xEjuYKSLJ3CP4YaCGjHfIZMrwsO33D3jtKPDK
-         KQGmU8q7i9kQLmo+qkBkgEmyjXDzTWzJjKnbIvoJF1RR3iVx4l6lYA+0YcAB4dG5DKjT
-         RyDg==
+        bh=lrLO0KWJlaMlC+CZ+FE9fXZZ5oPhA3AfMaYdpj7Fkb4=;
+        b=JcS4GRaAiVv8Wz5FVAfmXy73Tujw5zGhxeb8ORlloR/9TPe1OLjh3PnvvovsDis3Yj
+         wsaQ0M6VPr0Jsug2YGkGuaqtRin8IEuF2pge/vA4g/t1va8rc68rOQ0qw9YgDWLoKN/0
+         juuljsHCGySdYXXUwOTRuV1oExe+WXK9pkKj9fdGojZx8N8CnOJDpnVCeQGBECbEj/Xt
+         zv5+qRHW357JlAVY2ECLPp3VxmNNZX9xIdFuIzrfqKtXTrCx2vQZIoTam60mLlpnepzy
+         AdmnKCYMhurrS0Kmh/jF4DKi7xH9COvZvuXQwG9twD26tGefRjDZQFnNESgOQvmbjoFF
+         tXSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678718969;
+        d=1e100.net; s=20210112; t=1678718971;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3qBG3sjrKTAghBCKa2iFwB3ZxGkMGKgf5ztXirLn58k=;
-        b=1tDN6FiPWeVabbXYqMwQTTfNyXZ3o3C8167wiXm0VVwhzGN+P2g20oebdAxxP/108O
-         plxMNLsYxNlkp8WeXp3WdK3UMNn2CdzPXrDJ1cvWqgPgCYrky3cOm2B1qJhMqbZG122I
-         kpofMtD23VpoNYHRjDbfz3uvOKBTcjuX32EKt9cMFCjQ/d+yEHkFDU4k3Yrz2VgBqUY1
-         tpHyW/kqujM4Zsg3rtvkdu5fI273xYVYLHmMhzOSJM+Jn8C9fwfVqKbt8M2jxe+NgASf
-         cjP/MsCEZR0XFKIl9wvwO+T4dZVNNAmbHWRxjP75n97Ti1Wk6AK4/uKzoc06xOoNCxsT
-         4Exw==
-X-Gm-Message-State: AO0yUKV2AJaWEJx32NSOp05QuypsxVvWxfJ85tLFtlV2UsZyuhAmhBW3
-        I/8fQvfaU3bABs6sS2CO8OYiww==
-X-Google-Smtp-Source: AK7set9eY4niUGZj5t+Du4Xm+t7YC+ZPtd7BCIDcBMgQ9AM6UbpHCIoDwoMZGddryP6OzWQObagSJA==
-X-Received: by 2002:a17:906:4e16:b0:923:4426:5fd6 with SMTP id z22-20020a1709064e1600b0092344265fd6mr6509232eju.37.1678718969280;
-        Mon, 13 Mar 2023 07:49:29 -0700 (PDT)
+        bh=lrLO0KWJlaMlC+CZ+FE9fXZZ5oPhA3AfMaYdpj7Fkb4=;
+        b=LRAfFTJkZCB1WUfbM09vqcncxQUROBiNPf+IVBtzeTm+gWBHSjRIKLfVkWgHOBncUV
+         eWWW1iqHUN5ixXXDvKhFI3ruCRSkdKGSyHdJnNmTJ96E+bsXzvC2eB/5wDslxI1aDAkA
+         XWR2WxBuCQtYpZYrKai34+j56ChR86QW20Ax/TbutBev6+Z0fAvgNN/lA8Pub+HTni80
+         pURopbr7kahSmgi87ziFnVeTuISvdXC3yuBuJL8N8FNMaxxl0F1iHYg7ECKgZqdstu53
+         Yelpt5WClaD0wqjLpq/axwZoTY+poS9wggc5L5w31WkjvZu6E2IyuEXjJgkQ/DrvQqC1
+         nsSg==
+X-Gm-Message-State: AO0yUKUXRBBVxZRd6fVg7IOmMhJYH3GFAM2jOlL9zfJBGlhLGJg1K45+
+        ZkwFWqGwuvCAYGoMG1op49WWHA==
+X-Google-Smtp-Source: AK7set8wmnPWxRvVWGzxFlfb7HUdieCBP1yA0YSGdRxA2z8d+Q/UAZzTMA1d4M6gGvfSN/lMNCNSDg==
+X-Received: by 2002:a17:906:c301:b0:878:5372:a34b with SMTP id s1-20020a170906c30100b008785372a34bmr32368968ejz.45.1678718971242;
+        Mon, 13 Mar 2023 07:49:31 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:69db:4882:d071:27c4])
-        by smtp.gmail.com with ESMTPSA id ia17-20020a170907a07100b0092153c6b549sm3030164ejc.22.2023.03.13.07.49.28
+        by smtp.gmail.com with ESMTPSA id ia17-20020a170907a07100b0092153c6b549sm3030164ejc.22.2023.03.13.07.49.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 07:49:29 -0700 (PDT)
+        Mon, 13 Mar 2023 07:49:30 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -62,9 +62,9 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Rob Herring <robh@kernel.org>
-Subject: [PATCH v4 04/10] media: dt-bindings: i2c: samsung,s5k6a3: convert to dtschema
-Date:   Mon, 13 Mar 2023 15:49:10 +0100
-Message-Id: <20230313144916.511884-5-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4 06/10] media: dt-bindings: samsung,exynos4210-csis: convert to dtschema
+Date:   Mon, 13 Mar 2023 15:49:12 +0100
+Message-Id: <20230313144916.511884-7-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230313144916.511884-1-krzysztof.kozlowski@linaro.org>
 References: <20230313144916.511884-1-krzysztof.kozlowski@linaro.org>
@@ -74,168 +74,303 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convert the Samsung S5K6A3(YX) raw image sensor bindings to DT schema.
+Convert the Samsung S5P/Exynos SoC series MIPI CSI-2 receiver (MIPI
+CSIS) bindings to DT schema.  Changes during conversion - adjust to
+existing DTS and Linux driver:
+1. Add phys and power-domains.
+2. Move samsung,csis-wclk property to the endpoint node.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Reviewed-by: Rob Herring <robh@kernel.org>
 
 ---
 
-DTS is being fixed here:
-https://lore.kernel.org/all/20230211134731.85957-3-krzysztof.kozlowski@linaro.org/
-
 Changes since v2:
 1. Add Rb tag.
+2. Move size-cells next to address-cells.
 ---
- .../bindings/media/i2c/samsung,s5k6a3.yaml    | 98 +++++++++++++++++++
- .../bindings/media/samsung-s5k6a3.txt         | 33 -------
- 2 files changed, 98 insertions(+), 33 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/samsung,s5k6a3.yaml
- delete mode 100644 Documentation/devicetree/bindings/media/samsung-s5k6a3.txt
+ .../media/samsung,exynos4210-csis.yaml        | 170 ++++++++++++++++++
+ .../bindings/media/samsung-mipi-csis.txt      |  81 ---------
+ MAINTAINERS                                   |   1 +
+ 3 files changed, 171 insertions(+), 81 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/samsung,exynos4210-csis.yaml
+ delete mode 100644 Documentation/devicetree/bindings/media/samsung-mipi-csis.txt
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/samsung,s5k6a3.yaml b/Documentation/devicetree/bindings/media/i2c/samsung,s5k6a3.yaml
+diff --git a/Documentation/devicetree/bindings/media/samsung,exynos4210-csis.yaml b/Documentation/devicetree/bindings/media/samsung,exynos4210-csis.yaml
 new file mode 100644
-index 000000000000..7e83a94124b5
+index 000000000000..dd6cc7ac1f7c
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/samsung,s5k6a3.yaml
-@@ -0,0 +1,98 @@
++++ b/Documentation/devicetree/bindings/media/samsung,exynos4210-csis.yaml
+@@ -0,0 +1,170 @@
 +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/media/i2c/samsung,s5k6a3.yaml#
++$id: http://devicetree.org/schemas/media/samsung,exynos4210-csis.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Samsung S5K6A3(YX) raw image sensor
++title: Samsung S5P/Exynos SoC series MIPI CSI-2 receiver (MIPI CSIS)
 +
 +maintainers:
 +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-+
-+description:
-+  S5K6A3(YX) is a raw image sensor with MIPI CSI-2 and CCP2 image data
-+  interfaces and CCI (I2C compatible) control bus.
++  - Sylwester Nawrocki <s.nawrocki@samsung.com>
 +
 +properties:
 +  compatible:
-+    const: samsung,s5k6a3
++    enum:
++      - samsung,s5pv210-csis
++      - samsung,exynos4210-csis
++      - samsung,exynos4212-csis
++      - samsung,exynos5250-csis
 +
 +  reg:
 +    maxItems: 1
 +
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 0
++
++  bus-width:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [2, 4]
++    description:
++      Number of data lines supported.
++
 +  clocks:
-+    maxItems: 1
++    maxItems: 2
 +
 +  clock-names:
 +    items:
-+      - const: extclk
++      - const: csis
++      - const: sclk_csis
 +
 +  clock-frequency:
-+    default: 24000000
-+    description: extclk clock frequency
++    default: 166000000
++    description:
++      The IP's main (system bus) clock frequency in Hz.
 +
-+  gpios:
++  interrupts:
 +    maxItems: 1
-+    description: GPIO connected to the RESET pin
 +
-+  afvdd-supply:
-+    description: AF (actuator) voltage supply
++  phys:
++    maxItems: 1
 +
-+  svdda-supply:
-+    description: Core voltage supply
++  phy-names:
++    items:
++      - const: csis
 +
-+  svddio-supply:
-+    description: I/O voltage supply
++  power-domains:
++    maxItems: 1
 +
-+  port:
++  vddio-supply:
++    description: MIPI CSIS I/O and PLL voltage supply (e.g. 1.8V).
++
++  vddcore-supply:
++    description: MIPI CSIS Core voltage supply (e.g. 1.1V).
++
++patternProperties:
++  "^port@[34]$":
 +    $ref: /schemas/graph.yaml#/$defs/port-base
 +    additionalProperties: false
++    description:
++      Camera input port.
 +
 +    properties:
++      reg:
++        enum: [3, 4]
++
 +      endpoint:
-+        $ref: /schemas/media/video-interfaces.yaml#
++        $ref: video-interfaces.yaml#
 +        unevaluatedProperties: false
 +
 +        properties:
 +          data-lanes:
-+            items:
-+              - const: 1
++            minItems: 1
++            maxItems: 4
++
++          samsung,csis-hs-settle:
++            $ref: /schemas/types.yaml#/definitions/uint32
++            description: Differential receiver (HS-RX) settle time.
++
++          samsung,csis-wclk:
++            type: boolean
++            description:
++              CSI-2 wrapper clock selection. If this property is present external clock
++              from CMU will be used, or the bus clock if it's not specified.
++
++        required:
++          - data-lanes
++
++    required:
++      - reg
 +
 +required:
 +  - compatible
++  - reg
++  - bus-width
 +  - clocks
 +  - clock-names
-+  - gpios
-+  - afvdd-supply
-+  - svdda-supply
-+  - svddio-supply
++  - interrupts
++  - vddio-supply
++  - vddcore-supply
++
++anyOf:
++  - required:
++      - port@3
++  - required:
++      - port@4
++
++allOf:
++  - if:
++      required:
++        - samsung,isp-wb
++    then:
++      required:
++        - samsung,sysreg
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/clock/exynos4.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
 +
-+    i2c {
++    csis@11890000 {
++        compatible = "samsung,exynos4210-csis";
++        reg = <0x11890000 0x4000>;
++        clocks = <&clock CLK_CSIS1>,
++                 <&clock CLK_SCLK_CSIS1>;
++        clock-names = "csis", "sclk_csis";
++        assigned-clocks = <&clock CLK_MOUT_CSIS1>,
++                          <&clock CLK_SCLK_CSIS1>;
++        assigned-clock-parents = <&clock CLK_MOUT_MPLL_USER_T>;
++        assigned-clock-rates = <0>, <176000000>;
++
++        interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
++
++        bus-width = <2>;
++        power-domains = <&pd_cam>;
++        phys = <&mipi_phy 2>;
++        phy-names = "csis";
++
++        vddcore-supply = <&ldo8_reg>;
++        vddio-supply = <&ldo10_reg>;
++
 +        #address-cells = <1>;
 +        #size-cells = <0>;
 +
-+        sensor@10 {
-+            compatible = "samsung,s5k6a3";
-+            reg = <0x10>;
-+            clock-frequency = <24000000>;
-+            clocks = <&camera 1>;
-+            clock-names = "extclk";
-+            gpios = <&gpm1 6 GPIO_ACTIVE_LOW>;
-+            afvdd-supply = <&ldo19_reg>;
-+            svdda-supply = <&cam_io_reg>;
-+            svddio-supply = <&ldo19_reg>;
++        /* Camera D (4) MIPI CSI-2 (CSIS1) */
++        port@4 {
++            reg = <4>;
 +
-+            port {
-+                endpoint {
-+                    remote-endpoint = <&csis1_ep>;
-+                    data-lanes = <1>;
-+                };
++            endpoint {
++                remote-endpoint = <&is_s5k6a3_ep>;
++                data-lanes = <1>;
++                samsung,csis-hs-settle = <18>;
++                samsung,csis-wclk;
 +            };
 +        };
 +    };
-diff --git a/Documentation/devicetree/bindings/media/samsung-s5k6a3.txt b/Documentation/devicetree/bindings/media/samsung-s5k6a3.txt
+diff --git a/Documentation/devicetree/bindings/media/samsung-mipi-csis.txt b/Documentation/devicetree/bindings/media/samsung-mipi-csis.txt
 deleted file mode 100644
-index cce01e82f3e3..000000000000
---- a/Documentation/devicetree/bindings/media/samsung-s5k6a3.txt
+index a4149c9434ea..000000000000
+--- a/Documentation/devicetree/bindings/media/samsung-mipi-csis.txt
 +++ /dev/null
-@@ -1,33 +0,0 @@
--Samsung S5K6A3(YX) raw image sensor
-----------------------------------
--
--S5K6A3(YX) is a raw image sensor with MIPI CSI-2 and CCP2 image data interfaces
--and CCI (I2C compatible) control bus.
+@@ -1,81 +0,0 @@
+-Samsung S5P/Exynos SoC series MIPI CSI-2 receiver (MIPI CSIS)
+--------------------------------------------------------------
 -
 -Required properties:
 -
--- compatible	: "samsung,s5k6a3";
--- reg		: I2C slave address of the sensor;
--- svdda-supply	: core voltage supply;
--- svddio-supply	: I/O voltage supply;
--- afvdd-supply	: AF (actuator) voltage supply;
--- gpios		: specifier of a GPIO connected to the RESET pin;
--- clocks	: should contain list of phandle and clock specifier pairs
--		  according to common clock bindings for the clocks described
--		  in the clock-names property;
--- clock-names	: should contain "extclk" entry for the sensor's EXTCLK clock;
+-- compatible	  : "samsung,s5pv210-csis" for S5PV210 (S5PC110),
+-		    "samsung,exynos4210-csis" for Exynos4210 (S5PC210),
+-		    "samsung,exynos4212-csis" for Exynos4212/Exynos4412,
+-		    "samsung,exynos5250-csis" for Exynos5250;
+-- reg		  : offset and length of the register set for the device;
+-- interrupts      : should contain MIPI CSIS interrupt; the format of the
+-		    interrupt specifier depends on the interrupt controller;
+-- bus-width	  : maximum number of data lanes supported (SoC specific);
+-- vddio-supply    : MIPI CSIS I/O and PLL voltage supply (e.g. 1.8V);
+-- vddcore-supply  : MIPI CSIS Core voltage supply (e.g. 1.1V);
+-- clocks	  : list of clock specifiers, corresponding to entries in
+-		    clock-names property;
+-- clock-names	  : must contain "csis", "sclk_csis" entries, matching entries
+-		    in the clocks property.
 -
 -Optional properties:
 -
--- clock-frequency : the frequency at which the "extclk" clock should be
--		    configured to operate, in Hz; if this property is not
--		    specified default 24 MHz value will be used.
+-- clock-frequency : The IP's main (system bus) clock frequency in Hz, default
+-		    value when this property is not specified is 166 MHz;
+-- samsung,csis-wclk : CSI-2 wrapper clock selection. If this property is present
+-		    external clock from CMU will be used, or the bus clock if
+-		    if it's not specified.
 -
--The common video interfaces bindings (see video-interfaces.txt) should be
--used to specify link to the image data receiver. The S5K6A3(YX) device
--node should contain one 'port' child node with an 'endpoint' subnode.
+-The device node should contain one 'port' child node with one child 'endpoint'
+-node, according to the bindings defined in Documentation/devicetree/bindings/
+-media/video-interfaces.txt. The following are properties specific to those nodes.
 -
--Following properties are valid for the endpoint node:
+-port node
+----------
 -
--- data-lanes : (optional) specifies MIPI CSI-2 data lanes as covered in
--  video-interfaces.txt.  The sensor supports only one data lane.
+-- reg		  : (required) must be 3 for camera C input (CSIS0) or 4 for
+-		    camera D input (CSIS1);
+-
+-endpoint node
+--------------
+-
+-- data-lanes	  : (required) an array specifying active physical MIPI-CSI2
+-		    data input lanes and their mapping to logical lanes; the
+-		    array's content is unused, only its length is meaningful;
+-
+-- samsung,csis-hs-settle : (optional) differential receiver (HS-RX) settle time;
+-
+-
+-Example:
+-
+-	reg0: regulator@0 {
+-	};
+-
+-	reg1: regulator@1 {
+-	};
+-
+-/* SoC properties */
+-
+-	csis_0: csis@11880000 {
+-		compatible = "samsung,exynos4210-csis";
+-		reg = <0x11880000 0x1000>;
+-		interrupts = <0 78 0>;
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-	};
+-
+-/* Board properties */
+-
+-	csis_0: csis@11880000 {
+-		clock-frequency = <166000000>;
+-		vddio-supply = <&reg0>;
+-		vddcore-supply = <&reg1>;
+-		port {
+-			reg = <3>; /* 3 - CSIS0, 4 - CSIS1 */
+-			csis0_ep: endpoint {
+-				remote-endpoint = <...>;
+-				data-lanes = <1>, <2>;
+-				samsung,csis-hs-settle = <12>;
+-			};
+-		};
+-	};
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 2892858cb040..19d0e5fb913e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -18556,6 +18556,7 @@ M:	Sylwester Nawrocki <s.nawrocki@samsung.com>
+ L:	linux-media@vger.kernel.org
+ S:	Supported
+ Q:	https://patchwork.linuxtv.org/project/linux-media/list/
++F:	Documentation/devicetree/bindings/media/samsung,exynos4210-csis.yaml
+ F:	drivers/media/platform/samsung/exynos4-is/
+ 
+ SAMSUNG SOC CLOCK DRIVERS
 -- 
 2.34.1
 
