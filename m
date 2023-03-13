@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 486DAC76195
-	for <linux-media@archiver.kernel.org>; Mon, 13 Mar 2023 14:50:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81D23C7618D
+	for <linux-media@archiver.kernel.org>; Mon, 13 Mar 2023 14:50:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231530AbjCMOuG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Mar 2023 10:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51576 "EHLO
+        id S231635AbjCMOuJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Mar 2023 10:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231589AbjCMOtq (ORCPT
+        with ESMTP id S231623AbjCMOtu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Mar 2023 10:49:46 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215DF618A2
-        for <linux-media@vger.kernel.org>; Mon, 13 Mar 2023 07:49:34 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id k10so49642904edk.13
-        for <linux-media@vger.kernel.org>; Mon, 13 Mar 2023 07:49:34 -0700 (PDT)
+        Mon, 13 Mar 2023 10:49:50 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DF55F218
+        for <linux-media@vger.kernel.org>; Mon, 13 Mar 2023 07:49:37 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id k10so49643353edk.13
+        for <linux-media@vger.kernel.org>; Mon, 13 Mar 2023 07:49:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678718973;
+        d=linaro.org; s=google; t=1678718975;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GCRErgmeOpOdikKNJ+e4bznrVD15XoSZUnn9PT0JaHo=;
-        b=demlpm6RfmuiULWuI/EkgxW8kgZmH7OCKO/5FCgPHmOiW7iP1t3A0y/ABbzeqEBt/f
-         HA3w8zcO9NQ/dAmBKRR2clAA6SLRd8pJEC6sRatCGWBTqTkjAcL+I9rmSWXR/tGpxaJc
-         LhAkIWi0r9z7qZW7pQ9CCJZzT/jGQFxZE7P1kqX+JQTv8s9GXe0vozmkRWwRoZLR07/i
-         2E7679o5OtXG1R7I2naGaTjbxGGlLjSTddszLQgNXkVUjjy1M9+dQjEi37huB3McmmTv
-         l36BRQovV/uW0P16IufySf4wOKAVD6rf+a47e90ERJgRGDWEm0XFsvI/EjH+4oyayoHj
-         qy9w==
+        bh=YVDfzqmZYB+14h3bb9VZGcnGXVUqKuJCJWyXlt4DowQ=;
+        b=CrehpXb9EboR13BKDiqkPfamk5Gt852aaO7vcqK10pQmMl6+biIIYQVmThkfx4DZL3
+         BfP61qiapnU4PVwdGgFsQb6LNDOh0H9Crr3t/gZD204kZuEHuzp83ul/fwoPv7BKDGXz
+         6kZXb2MpRKMyghc0xI/Wsyjk1eYouVaB15QKOXgYsCp3HapSeY4Zk13oHEUk8SPYe/NK
+         P5ugc5+Z2Jmr5PYc4TwZ9xPThtMsZaEckwBey3/o0ZTiOSnzPv+Lh/j/fA5Gc7mQlrrB
+         ad+k5j7fimnajOat+jnw02x7dKaPqrvsPsVjjvpDKkhOhuZdg43xGW1j0He/R5Wkz1jZ
+         a1Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678718973;
+        d=1e100.net; s=20210112; t=1678718975;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GCRErgmeOpOdikKNJ+e4bznrVD15XoSZUnn9PT0JaHo=;
-        b=bnWzW1QvsymN+nK+k5RkCSh6Hfs/JeRitA0V7DEGWz6KZeGlqyoNkp/8Ok3Gg+GLIf
-         7zlNCJX48T4HQGbPq6Q6jcEgP3dC11SebJkV/6/pmq+4U+cqsRMGBfqkfCbfbOHwcQIw
-         ZCcp12Aswg3fFUahfqa4fVXsTlpKBGKX/fTAu1guQM9Lx/dkp6/mizaNxW/kOfafgtFe
-         lKMPzLCxuQXpmkWiY9RCmqZ7g+qsjtNUGY8P4/n7dMCZc9X7o5A8AZP8oPJ7nUJTnXg2
-         6iEMgEFuRN77LUZNMyO/GHbxra05EFh9D5mJuY2QDoIsyLxSvvAA9qjtIN2yYiJkFcyN
-         9LkA==
-X-Gm-Message-State: AO0yUKUwEQBOcYyCneHzsmTjRbpyw1LJydglyuxoi3w1na8tJ/t/J0l/
-        mJz+JuCr+ioIAbTTO0AXFi/fJA==
-X-Google-Smtp-Source: AK7set94ZY0Q4UNV6FVBVqim+6i+osGZ3KSJPzB51os0atgNLNCfu03jpzIOLdF41z5hxxL3K8HVPg==
-X-Received: by 2002:a17:907:8a06:b0:889:ed81:dff7 with SMTP id sc6-20020a1709078a0600b00889ed81dff7mr43181869ejc.9.1678718973274;
-        Mon, 13 Mar 2023 07:49:33 -0700 (PDT)
+        bh=YVDfzqmZYB+14h3bb9VZGcnGXVUqKuJCJWyXlt4DowQ=;
+        b=dpe4L9t1jjm0E3ZmApDJG39MeE0U6cHXxptpMRD4IBg/onbeDGEcdF2h4naZyr2SK1
+         vMTcWsQWnBJ//aFwCb5hWnFNo5TLsWYW3MjQM6IbpMQtQ+StTnMlEFdp2009uyP1MPRH
+         Z0pcKAqXQVJO2zp6+7boxXDf3b6seSpSmUALiWk5DUtZly+FpxNCJl6opFkww7/IZPH0
+         pRXE/v+6W5KC+aR9FSvum+w0mYI4ssCoLj2BcycDCWlUem5uKtLnhFsbVa4uhy4oL9P9
+         NBo9zfcH5ti6kHBAI5YYMvtPaIWesklwCULsmsDOMhtguVJg8NRumUWkK9N89JZleC32
+         53Jw==
+X-Gm-Message-State: AO0yUKXRTV5QHX0j2CBIEghWGJ067nCK4B4ttD4aY3Isv/HESC4kqvBh
+        ICJLxHWWqVf1G7gtbd+yT/KB+g==
+X-Google-Smtp-Source: AK7set9ClA0WU9RkcfcEMl2t3exGRrg5410P/ussJnt/Czgyis+iSWyOsqghy6qj0kPWRXp5LdJgqg==
+X-Received: by 2002:a17:907:787:b0:91f:9024:bbab with SMTP id xd7-20020a170907078700b0091f9024bbabmr10562350ejb.23.1678718975350;
+        Mon, 13 Mar 2023 07:49:35 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:69db:4882:d071:27c4])
-        by smtp.gmail.com with ESMTPSA id ia17-20020a170907a07100b0092153c6b549sm3030164ejc.22.2023.03.13.07.49.32
+        by smtp.gmail.com with ESMTPSA id ia17-20020a170907a07100b0092153c6b549sm3030164ejc.22.2023.03.13.07.49.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 07:49:33 -0700 (PDT)
+        Mon, 13 Mar 2023 07:49:35 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -62,9 +62,9 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Rob Herring <robh@kernel.org>
-Subject: [PATCH v4 08/10] media: dt-bindings: samsung,exynos4212-is: convert to dtschema
-Date:   Mon, 13 Mar 2023 15:49:14 +0100
-Message-Id: <20230313144916.511884-9-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4 10/10] media: dt-bindings: samsung,s5c73m3: convert to dtschema
+Date:   Mon, 13 Mar 2023 15:49:16 +0100
+Message-Id: <20230313144916.511884-11-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230313144916.511884-1-krzysztof.kozlowski@linaro.org>
 References: <20230313144916.511884-1-krzysztof.kozlowski@linaro.org>
@@ -74,9 +74,7 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convert the Samsung Exynos4212/4412 SoC Imaging Subsystem (FIMC-IS)
-bindings to DT schema.  Changes during conversion - adjust to existing
-DTS and Linux driver: add iommus and power-domains.
+Convert the Samsung S5C73M3 8Mp camera ISP bindings to DT schema.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Reviewed-by: Rob Herring <robh@kernel.org>
@@ -84,310 +82,301 @@ Reviewed-by: Rob Herring <robh@kernel.org>
 ---
 
 Changes since v2:
-1. Move size-cells next to address-cells.
-2. Drop dead/debug code.
+1. Add Rb tag.
 ---
- .../bindings/media/exynos4-fimc-is.txt        |  50 ----
- .../media/samsung,exynos4212-fimc-is.yaml     | 220 ++++++++++++++++++
+ .../bindings/media/samsung,s5c73m3.yaml       | 165 ++++++++++++++++++
+ .../bindings/media/samsung-s5c73m3.txt        |  97 ----------
  MAINTAINERS                                   |   1 +
- 3 files changed, 221 insertions(+), 50 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/media/exynos4-fimc-is.txt
- create mode 100644 Documentation/devicetree/bindings/media/samsung,exynos4212-fimc-is.yaml
+ 3 files changed, 166 insertions(+), 97 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/samsung,s5c73m3.yaml
+ delete mode 100644 Documentation/devicetree/bindings/media/samsung-s5c73m3.txt
 
-diff --git a/Documentation/devicetree/bindings/media/exynos4-fimc-is.txt b/Documentation/devicetree/bindings/media/exynos4-fimc-is.txt
-deleted file mode 100644
-index 32ced99d4244..000000000000
---- a/Documentation/devicetree/bindings/media/exynos4-fimc-is.txt
-+++ /dev/null
-@@ -1,50 +0,0 @@
--Exynos4x12 SoC series Imaging Subsystem (FIMC-IS)
--
--The FIMC-IS is a subsystem for processing image signal from an image sensor.
--The Exynos4x12 SoC series FIMC-IS V1.5 comprises of a dedicated ARM Cortex-A5
--processor, ISP, DRC and FD IP blocks and peripheral devices such as UART, I2C
--and SPI bus controllers, PWM and ADC.
--
--fimc-is node
--------------
--
--Required properties:
--- compatible	: should be "samsung,exynos4212-fimc-is" for Exynos4212 and
--		  Exynos4412 SoCs;
--- reg		: physical base address and length of the registers set;
--- interrupts	: must contain two FIMC-IS interrupts, in order: ISP0, ISP1;
--- clocks	: list of clock specifiers, corresponding to entries in
--		  clock-names property;
--- clock-names	: must contain "ppmuispx", "ppmuispx", "lite0", "lite1"
--		  "mpll", "sysreg", "isp", "drc", "fd", "mcuisp", "gicisp",
--		  "pwm_isp", "mcuctl_isp", "uart", "ispdiv0", "ispdiv1",
--		  "mcuispdiv0", "mcuispdiv1", "aclk200", "div_aclk200",
--		  "aclk400mcuisp", "div_aclk400mcuisp" entries,
--		  matching entries in the clocks property.
--pmu subnode
-------------
--
--Required properties:
-- - reg : must contain PMU physical base address and size of the register set.
--
--The following are the FIMC-IS peripheral device nodes and can be specified
--either standalone or as the fimc-is node child nodes.
--
--i2c-isp (ISP I2C bus controller) nodes
--------------------------------------------
--
--Required properties:
--
--- compatible	: should be "samsung,exynos4212-i2c-isp" for Exynos4212 and
--		  Exynos4412 SoCs;
--- reg		: physical base address and length of the registers set;
--- clocks	: must contain gate clock specifier for this controller;
--- clock-names	: must contain "i2c_isp" entry.
--
--For the above nodes it is required to specify a pinctrl state named "default",
--according to the pinctrl bindings defined in ../pinctrl/pinctrl-bindings.txt.
--
--Device tree nodes of the image sensors' controlled directly by the FIMC-IS
--firmware must be child nodes of their corresponding ISP I2C bus controller node.
--The data link of these image sensors must be specified using the common video
--interfaces bindings, defined in video-interfaces.txt.
-diff --git a/Documentation/devicetree/bindings/media/samsung,exynos4212-fimc-is.yaml b/Documentation/devicetree/bindings/media/samsung,exynos4212-fimc-is.yaml
+diff --git a/Documentation/devicetree/bindings/media/samsung,s5c73m3.yaml b/Documentation/devicetree/bindings/media/samsung,s5c73m3.yaml
 new file mode 100644
-index 000000000000..3691cd4962b2
+index 000000000000..1b75390fdaac
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/media/samsung,exynos4212-fimc-is.yaml
-@@ -0,0 +1,220 @@
++++ b/Documentation/devicetree/bindings/media/samsung,s5c73m3.yaml
+@@ -0,0 +1,165 @@
 +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/media/samsung,exynos4212-fimc-is.yaml#
++$id: http://devicetree.org/schemas/media/samsung,s5c73m3.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Samsung Exynos4212/4412 SoC Imaging Subsystem (FIMC-IS)
++title: Samsung S5C73M3 8Mp camera ISP
 +
 +maintainers:
 +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 +  - Sylwester Nawrocki <s.nawrocki@samsung.com>
 +
 +description:
-+  The FIMC-IS is a subsystem for processing image signal from an image sensor.
-+  The Exynos4x12 SoC series FIMC-IS V1.5 comprises of a dedicated ARM Cortex-A5
-+  processor, ISP, DRC and FD IP blocks and peripheral devices such as UART, I2C
-+  and SPI bus controllers, PWM and ADC.
++  The S5C73M3 camera ISP supports MIPI CSI-2 and parallel (ITU-R BT.656)
++  video data busses. The I2C bus is the main control bus and additionally the
++  SPI bus is used, mostly for transferring the firmware to and from the
++  device. Two slave device nodes corresponding to these control bus
++  interfaces are required and should be placed under respective bus
++  controller nodes.
 +
 +properties:
 +  compatible:
-+    enum:
-+      - samsung,exynos4212-fimc-is
++    const: samsung,s5c73m3
 +
 +  reg:
 +    maxItems: 1
 +
-+  ranges: true
-+
-+  '#address-cells':
-+    const: 1
-+
-+  '#size-cells':
-+    const: 1
-+
 +  clocks:
-+    maxItems: 21
++    maxItems: 1
 +
 +  clock-names:
 +    items:
-+      - const: lite0
-+      - const: lite1
-+      - const: ppmuispx
-+      - const: ppmuispmx
-+      - const: isp
-+      - const: drc
-+      - const: fd
-+      - const: mcuisp
-+      - const: gicisp
-+      - const: mcuctl_isp
-+      - const: pwm_isp
-+      - const: ispdiv0
-+      - const: ispdiv1
-+      - const: mcuispdiv0
-+      - const: mcuispdiv1
-+      - const: mpll
-+      - const: aclk200
-+      - const: aclk400mcuisp
-+      - const: div_aclk200
-+      - const: div_aclk400mcuisp
-+      - const: uart
++      - const: cis_extclk
 +
-+  interrupts:
-+    maxItems: 2
++  clock-frequency:
++    default: 24000000
++    description: cis_extclk clock frequency.
 +
-+  iommus:
-+    maxItems: 4
-+
-+  iommu-names:
-+    items:
-+      - const: isp
-+      - const: drc
-+      - const: fd
-+      - const: mcuctl
-+
-+  power-domains:
++  standby-gpios:
 +    maxItems: 1
++    description: STANDBY pin.
 +
-+patternProperties:
-+  "^pmu@[0-9a-f]+$":
-+    type: object
++  vdda-supply:
++    description: Analog power supply (1.2V).
++
++  vdd-af-supply:
++    description: lens power supply (2.8V).
++
++  vddio-cis-supply:
++    description: CIS I/O power supply (1.2V to 1.8V).
++
++  vddio-host-supply:
++    description: Host I/O power supply (1.8V to 2.8V).
++
++  vdd-int-supply:
++    description: Digital power supply (1.2V).
++
++  vdd-reg-supply:
++    description: Regulator input power supply (2.8V).
++
++  xshutdown-gpios:
++    maxItems: 1
++    description: XSHUTDOWN pin.
++
++  port:
++    $ref: /schemas/graph.yaml#/$defs/port-base
 +    additionalProperties: false
-+    description:
-+      Node representing the SoC's Power Management Unit (duplicated with the
-+      correct PMU node in the SoC).
 +
 +    properties:
-+      reg:
-+        maxItems: 1
++      endpoint:
++        $ref: /schemas/media/video-interfaces.yaml#
++        unevaluatedProperties: false
 +
-+    required:
-+      - reg
-+
-+  "^i2c-isp@[0-9a-f]+$":
-+    type: object
-+    $ref: /schemas/i2c/i2c-controller.yaml#
-+    unevaluatedProperties: false
-+    description:
-+      ISP I2C bus controller
-+
-+    properties:
-+      compatible:
-+        const: samsung,exynos4212-i2c-isp
-+
-+      reg:
-+        maxItems: 1
-+
-+
-+      clocks:
-+        maxItems: 1
-+
-+      clock-names:
-+        items:
-+          - const: i2c_isp
-+
-+      pinctrl-0: true
-+      pinctrl-names:
-+        items:
-+          - const: default
-+
-+    required:
-+      - compatible
-+      - reg
-+      - clocks
-+      - clock-names
++        properties:
++          data-lanes:
++            items:
++              - const: 1
++              - const: 2
++              - const: 3
++              - const: 4
 +
 +required:
 +  - compatible
 +  - reg
-+  - '#address-cells'
-+  - clocks
-+  - clock-names
-+  - interrupts
-+  - ranges
-+  - '#size-cells'
 +
-+additionalProperties: false
++allOf:
++  - $ref: /schemas/spi/spi-peripheral-props.yaml#
++  - if:
++      required:
++        - spi-max-frequency
++    then:
++      properties:
++        # The SPI node is simplified firmware-transfer interface only
++        clocks: false
++        clock-names: false
++        standby-gpios: false
++        vdda-supply: false
++        vdd-af-supply: false
++        vddio-cis-supply: false
++        vddio-host-supply: false
++        vdd-int-supply: false
++        vdd-reg-supply: false
++        xshutdown-gpios: false
++        port: false
++    else:
++      required:
++        - clocks
++        - clock-names
++        - standby-gpios
++        - vdda-supply
++        - vdd-af-supply
++        - vddio-cis-supply
++        - vddio-host-supply
++        - vdd-int-supply
++        - vdd-reg-supply
++        - xshutdown-gpios
++        - port
++
++unevaluatedProperties: false
 +
 +examples:
 +  - |
-+    #include <dt-bindings/clock/exynos4.h>
 +    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
 +
-+    fimc-is@12000000 {
-+        compatible = "samsung,exynos4212-fimc-is";
-+        reg = <0x12000000 0x260000>;
-+        interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&isp_clock CLK_ISP_FIMC_LITE0>,
-+                 <&isp_clock CLK_ISP_FIMC_LITE1>,
-+                 <&isp_clock CLK_ISP_PPMUISPX>,
-+                 <&isp_clock CLK_ISP_PPMUISPMX>,
-+                 <&isp_clock CLK_ISP_FIMC_ISP>,
-+                 <&isp_clock CLK_ISP_FIMC_DRC>,
-+                 <&isp_clock CLK_ISP_FIMC_FD>,
-+                 <&isp_clock CLK_ISP_MCUISP>,
-+                 <&isp_clock CLK_ISP_GICISP>,
-+                 <&isp_clock CLK_ISP_MCUCTL_ISP>,
-+                 <&isp_clock CLK_ISP_PWM_ISP>,
-+                 <&isp_clock CLK_ISP_DIV_ISP0>,
-+                 <&isp_clock CLK_ISP_DIV_ISP1>,
-+                 <&isp_clock CLK_ISP_DIV_MCUISP0>,
-+                 <&isp_clock CLK_ISP_DIV_MCUISP1>,
-+                 <&clock CLK_MOUT_MPLL_USER_T>,
-+                 <&clock CLK_ACLK200>,
-+                 <&clock CLK_ACLK400_MCUISP>,
-+                 <&clock CLK_DIV_ACLK200>,
-+                 <&clock CLK_DIV_ACLK400_MCUISP>,
-+                 <&clock CLK_UART_ISP_SCLK>;
-+        clock-names = "lite0", "lite1", "ppmuispx",
-+                      "ppmuispmx", "isp",
-+                      "drc", "fd", "mcuisp",
-+                      "gicisp", "mcuctl_isp", "pwm_isp",
-+                      "ispdiv0", "ispdiv1", "mcuispdiv0",
-+                      "mcuispdiv1", "mpll", "aclk200",
-+                      "aclk400mcuisp", "div_aclk200",
-+                      "div_aclk400mcuisp", "uart";
-+        iommus = <&sysmmu_fimc_isp>, <&sysmmu_fimc_drc>,
-+                 <&sysmmu_fimc_fd>, <&sysmmu_fimc_mcuctl>;
-+        iommu-names = "isp", "drc", "fd", "mcuctl";
-+        power-domains = <&pd_isp>;
-+
++    i2c {
 +        #address-cells = <1>;
-+        #size-cells = <1>;
-+        ranges;
++        #size-cells = <0>;
 +
-+        pmu@10020000 {
-+            reg = <0x10020000 0x3000>;
-+        };
++        image-sensor@3c {
++            compatible = "samsung,s5c73m3";
++            reg = <0x3c>;
++            clock-frequency = <24000000>;
++            clocks = <&camera 0>;
++            clock-names = "cis_extclk";
++            standby-gpios = <&gpm0 6 GPIO_ACTIVE_LOW>;
++            vdda-supply = <&cam_vdda_reg>;
++            vdd-af-supply = <&cam_af_reg>;
++            vddio-cis-supply = <&ldo9_reg>;
++            vddio-host-supply = <&ldo18_reg>;
++            vdd-int-supply = <&buck9_reg>;
++            vdd-reg-supply = <&cam_io_reg>;
++            xshutdown-gpios = <&gpf1 3 GPIO_ACTIVE_LOW>; /* ISP_RESET */
 +
-+        i2c-isp@12140000 {
-+            compatible = "samsung,exynos4212-i2c-isp";
-+            reg = <0x12140000 0x100>;
-+            clocks = <&isp_clock CLK_ISP_I2C1_ISP>;
-+            clock-names = "i2c_isp";
-+            pinctrl-0 = <&fimc_is_i2c1>;
-+            pinctrl-names = "default";
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            image-sensor@10 {
-+                compatible = "samsung,s5k6a3";
-+                reg = <0x10>;
-+                svdda-supply = <&cam_io_reg>;
-+                svddio-supply = <&ldo19_reg>;
-+                afvdd-supply = <&ldo19_reg>;
-+                clock-frequency = <24000000>;
-+                clocks = <&camera 1>;
-+                clock-names = "extclk";
-+                gpios = <&gpm1 6 GPIO_ACTIVE_LOW>;
-+
-+                port {
-+                    endpoint {
-+                        remote-endpoint = <&csis1_ep>;
-+                        data-lanes = <1>;
-+                    };
++            port {
++                s5c73m3_ep: endpoint {
++                    remote-endpoint = <&csis0_ep>;
++                    data-lanes = <1 2 3 4>;
 +                };
 +            };
 +        };
 +    };
++
++    spi {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        image-sensor@0 {
++            compatible = "samsung,s5c73m3";
++            reg = <0>;
++            spi-max-frequency = <50000000>;
++            controller-data {
++                samsung,spi-feedback-delay = <2>;
++            };
++        };
++    };
+diff --git a/Documentation/devicetree/bindings/media/samsung-s5c73m3.txt b/Documentation/devicetree/bindings/media/samsung-s5c73m3.txt
+deleted file mode 100644
+index f0ea9adad442..000000000000
+--- a/Documentation/devicetree/bindings/media/samsung-s5c73m3.txt
++++ /dev/null
+@@ -1,97 +0,0 @@
+-Samsung S5C73M3 8Mp camera ISP
+-------------------------------
+-
+-The S5C73M3 camera ISP supports MIPI CSI-2 and parallel (ITU-R BT.656) video
+-data busses. The I2C bus is the main control bus and additionally the SPI bus
+-is used, mostly for transferring the firmware to and from the device. Two
+-slave device nodes corresponding to these control bus interfaces are required
+-and should be placed under respective bus controller nodes.
+-
+-I2C slave device node
+----------------------
+-
+-Required properties:
+-
+-- compatible	    : "samsung,s5c73m3";
+-- reg		    : I2C slave address of the sensor;
+-- vdd-int-supply    : digital power supply (1.2V);
+-- vdda-supply	    : analog power supply (1.2V);
+-- vdd-reg-supply    : regulator input power supply (2.8V);
+-- vddio-host-supply : host I/O power supply (1.8V to 2.8V);
+-- vddio-cis-supply  : CIS I/O power supply (1.2V to 1.8V);
+-- vdd-af-supply     : lens power supply (2.8V);
+-- xshutdown-gpios   : specifier of GPIO connected to the XSHUTDOWN pin;
+-- standby-gpios     : specifier of GPIO connected to the STANDBY pin;
+-- clocks	    : should contain list of phandle and clock specifier pairs
+-		      according to common clock bindings for the clocks described
+-		      in the clock-names property;
+-- clock-names	    : should contain "cis_extclk" entry for the CIS_EXTCLK clock;
+-
+-Optional properties:
+-
+-- clock-frequency   : the frequency at which the "cis_extclk" clock should be
+-		      configured to operate, in Hz; if this property is not
+-		      specified default 24 MHz value will be used.
+-
+-The common video interfaces bindings (see video-interfaces.txt) should be used
+-to specify link from the S5C73M3 to an external image data receiver. The S5C73M3
+-device node should contain one 'port' child node with an 'endpoint' subnode for
+-this purpose. The data link from a raw image sensor to the S5C73M3 can be
+-similarly specified, but it is optional since the S5C73M3 ISP and a raw image
+-sensor are usually inseparable and form a hybrid module.
+-
+-Following properties are valid for the endpoint node(s):
+-
+-endpoint subnode
+-----------------
+-
+-- data-lanes : (optional) specifies MIPI CSI-2 data lanes as covered in
+-  video-interfaces.txt. This sensor doesn't support data lane remapping
+-  and physical lane indexes in subsequent elements of the array should
+-  be only consecutive ascending values.
+-
+-SPI device node
+----------------
+-
+-Required properties:
+-
+-- compatible	    : "samsung,s5c73m3";
+-
+-For more details see description of the SPI busses bindings
+-(../spi/spi-bus.txt) and bindings of a specific bus controller.
+-
+-Example:
+-
+-i2c@138a000000 {
+-	...
+-	s5c73m3@3c {
+-		compatible = "samsung,s5c73m3";
+-		reg = <0x3c>;
+-		vdd-int-supply = <&buck9_reg>;
+-		vdda-supply = <&ldo17_reg>;
+-		vdd-reg-supply = <&cam_io_reg>;
+-		vddio-host-supply = <&ldo18_reg>;
+-		vddio-cis-supply = <&ldo9_reg>;
+-		vdd-af-supply = <&cam_af_reg>;
+-		clock-frequency = <24000000>;
+-		clocks = <&clk 0>;
+-		clock-names = "cis_extclk";
+-		xshutdown-gpios = <&gpf1 3 1>;
+-		standby-gpios = <&gpm0 1 1>;
+-		port {
+-			s5c73m3_ep: endpoint {
+-				remote-endpoint = <&csis0_ep>;
+-				data-lanes = <1 2 3 4>;
+-			};
+-		};
+-	};
+-};
+-
+-spi@1392000 {
+-	...
+-	s5c73m3_spi: s5c73m3@0 {
+-		compatible = "samsung,s5c73m3";
+-		reg = <0>;
+-		...
+-	};
+-};
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 422283b41e11..ea2bb7599da8 100644
+index 7963cae23544..bcbf0aec6ecf 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -18557,6 +18557,7 @@ L:	linux-media@vger.kernel.org
+@@ -18532,6 +18532,7 @@ M:	Sylwester Nawrocki <s.nawrocki@samsung.com>
+ M:	Andrzej Hajda <andrzej.hajda@intel.com>
+ L:	linux-media@vger.kernel.org
  S:	Supported
- Q:	https://patchwork.linuxtv.org/project/linux-media/list/
- F:	Documentation/devicetree/bindings/media/samsung,exynos4210-csis.yaml
-+F:	Documentation/devicetree/bindings/media/samsung,exynos4212-fimc-is.yaml
- F:	Documentation/devicetree/bindings/media/samsung,exynos4212-fimc-lite.yaml
- F:	drivers/media/platform/samsung/exynos4-is/
++F:	Documentation/devicetree/bindings/media/samsung,s5c73m3.yaml
+ F:	drivers/media/i2c/s5c73m3/*
  
+ SAMSUNG S5K5BAF CAMERA DRIVER
 -- 
 2.34.1
 
