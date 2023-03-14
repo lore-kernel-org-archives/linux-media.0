@@ -2,44 +2,44 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60DF0C7618B
-	for <linux-media@archiver.kernel.org>; Tue, 14 Mar 2023 11:56:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A6FCC7618D
+	for <linux-media@archiver.kernel.org>; Tue, 14 Mar 2023 11:56:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbjCNL4Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Mar 2023 07:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46356 "EHLO
+        id S231663AbjCNL40 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Mar 2023 07:56:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231624AbjCNL4Q (ORCPT
+        with ESMTP id S231630AbjCNL4Q (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 14 Mar 2023 07:56:16 -0400
 Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D3E9FBF7;
-        Tue, 14 Mar 2023 04:55:58 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32EBtW4H118702;
-        Tue, 14 Mar 2023 06:55:32 -0500
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CDF9FBF8;
+        Tue, 14 Mar 2023 04:55:59 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32EBtLjc118609;
+        Tue, 14 Mar 2023 06:55:21 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678794932;
-        bh=kdF/1Nr7CR+dcXyDeXuh/C6QNDhPFPgYOllESZB4OZ4=;
+        s=ti-com-17Q1; t=1678794921;
+        bh=hoH8JvDJMF9kb6jtv86aNPb3gPGJn4rtX1ltZYZwBtA=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=DcCSyk8qVBfM9unK0eM0tYrgH88ngjb+uA9q0lTeK8E4fPGdLZC2JwH9jQZloMKjq
-         ByWilbPQ5JX5TOFlkOH+1MiQVn2aIMRq36XOI7Bs1egTuBtPXFNaOWG+GSaZhPpLgM
-         ipoOMVZkbwhi3eK1nB70CCLuyGWrYVzgMiRTuorg=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32EBtWu4003059
+        b=BTzJFcM5QVeEDKZeJuZm66vU2YfiyRbTZ4jFP0aMW3/GA1RmUYuLgt77I4GJtcMIP
+         qIOjj2RRNJnjJQb87r9Bfq6YQ72V21409rMB0J0TQbqG09yuHsUxtKqIrxsmgJuqlN
+         VCGxiCKnr0XbOvGxDfjSaJcayA8747fC9uOMDEDg=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32EBtLTV112465
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 14 Mar 2023 06:55:32 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 14
- Mar 2023 06:55:32 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE110.ent.ti.com
+        Tue, 14 Mar 2023 06:55:21 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE110.ent.ti.com
  (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 14
+ Mar 2023 06:55:20 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 14 Mar 2023 06:55:32 -0500
+ Frontend Transport; Tue, 14 Mar 2023 06:55:20 -0500
 Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32EBtUTP002389;
-        Tue, 14 Mar 2023 06:55:31 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32EBtJ31002271;
+        Tue, 14 Mar 2023 06:55:20 -0500
 From:   Vaishnav Achath <vaishnav.a@ti.com>
 To:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <mripard@kernel.org>, <mchehab@kernel.org>, <robh+dt@kernel.org>,
@@ -51,9 +51,9 @@ CC:     <linux-kernel@vger.kernel.org>, <bparrot@ti.com>,
         <devarsht@ti.com>, <praneeth@ti.com>, <u-kumar1@ti.com>,
         <vigneshr@ti.com>, <nm@ti.com>, <martyn.welch@collabora.com>,
         <vaishnav.a@ti.com>
-Subject: [PATCH v7 07/13] media: cadence: csi2rx: Fix stream data configuration
-Date:   Tue, 14 Mar 2023 17:25:10 +0530
-Message-ID: <20230314115516.667-8-vaishnav.a@ti.com>
+Subject: [PATCH v7 01/13] media: cadence: csi2rx: Unregister v4l2 async notifier
+Date:   Tue, 14 Mar 2023 17:25:04 +0530
+Message-ID: <20230314115516.667-2-vaishnav.a@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230314115516.667-1-vaishnav.a@ti.com>
 References: <20230314115516.667-1-vaishnav.a@ti.com>
@@ -66,53 +66,65 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Pratyush Yadav <p.yadav@ti.com>
 
-Firstly, there is no VC_EN bit present in the STREAM_DATA_CFG register.
-Bit 31 is part of the VL_SELECT field. Remove it completely.
+The notifier is added to the global notifier list when registered. When
+the module is removed, the struct csi2rx_priv in which the notifier is
+embedded, is destroyed. As a result the notifier list has a reference to
+a notifier that no longer exists. This causes invalid memory accesses
+when the list is iterated over. Similar for when the probe fails.
+Unregister and clean up the notifier to avoid this.
 
-Secondly, it makes little sense to enable ith virtual channel for ith
-stream. Sure, there might be a use-case that demands it. But there might
-also be a use case that demands all streams to use the 0th virtual
-channel. Prefer this case over the former because it is less arbitrary
-and also makes it very clear what the limitations of the current driver
-is instead of giving a false impression that multiple virtual channels
-are supported.
+Fixes: 1fc3b37f34f6 ("media: v4l: cadence: Add Cadence MIPI-CSI2 RX driver")
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
 
-(no changes since v1)
+(no changes since v5)
 
- drivers/media/platform/cadence/cdns-csi2rx.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+Changes in v5:
+- Cleanup notifier in csi2rx_parse_dt() after the call to
+  v4l2_async_nf_add_fwnode_remote().
+
+Changes in v3:
+- New in v3.
+
+ drivers/media/platform/cadence/cdns-csi2rx.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
-index e80220840e93..f8ce9360bfb0 100644
+index cc3ebb0d96f6..2a23da6a0b8e 100644
 --- a/drivers/media/platform/cadence/cdns-csi2rx.c
 +++ b/drivers/media/platform/cadence/cdns-csi2rx.c
-@@ -48,7 +48,6 @@
- #define CSI2RX_STREAM_STATUS_RDY			BIT(31)
+@@ -404,8 +404,10 @@ static int csi2rx_parse_dt(struct csi2rx_priv *csi2rx)
+ 	asd = v4l2_async_nf_add_fwnode_remote(&csi2rx->notifier, fwh,
+ 					      struct v4l2_async_subdev);
+ 	of_node_put(ep);
+-	if (IS_ERR(asd))
++	if (IS_ERR(asd)) {
++		v4l2_async_nf_cleanup(&csi2rx->notifier);
+ 		return PTR_ERR(asd);
++	}
  
- #define CSI2RX_STREAM_DATA_CFG_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x008)
--#define CSI2RX_STREAM_DATA_CFG_EN_VC_SELECT		BIT(31)
- #define CSI2RX_STREAM_DATA_CFG_VC_SELECT(n)		BIT((n) + 16)
+ 	csi2rx->notifier.ops = &csi2rx_notifier_ops;
  
- #define CSI2RX_STREAM_CFG_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x00c)
-@@ -269,8 +268,11 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
- 		writel(CSI2RX_STREAM_CFG_FIFO_MODE_LARGE_BUF,
- 		       csi2rx->base + CSI2RX_STREAM_CFG_REG(i));
+@@ -467,6 +469,7 @@ static int csi2rx_probe(struct platform_device *pdev)
+ 	return 0;
  
--		writel(CSI2RX_STREAM_DATA_CFG_EN_VC_SELECT |
--		       CSI2RX_STREAM_DATA_CFG_VC_SELECT(i),
-+		/*
-+		 * Enable one virtual channel. When multiple virtual channels
-+		 * are supported this will have to be changed.
-+		 */
-+		writel(CSI2RX_STREAM_DATA_CFG_VC_SELECT(0),
- 		       csi2rx->base + CSI2RX_STREAM_DATA_CFG_REG(i));
+ err_cleanup:
++	v4l2_async_nf_unregister(&csi2rx->notifier);
+ 	v4l2_async_nf_cleanup(&csi2rx->notifier);
+ err_free_priv:
+ 	kfree(csi2rx);
+@@ -477,6 +480,8 @@ static int csi2rx_remove(struct platform_device *pdev)
+ {
+ 	struct csi2rx_priv *csi2rx = platform_get_drvdata(pdev);
  
- 		writel(CSI2RX_STREAM_CTRL_START,
++	v4l2_async_nf_unregister(&csi2rx->notifier);
++	v4l2_async_nf_cleanup(&csi2rx->notifier);
+ 	v4l2_async_unregister_subdev(&csi2rx->subdev);
+ 	kfree(csi2rx);
+ 
 -- 
 2.17.1
 
