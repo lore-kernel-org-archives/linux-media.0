@@ -2,124 +2,161 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19B3EC74A44
-	for <linux-media@archiver.kernel.org>; Tue, 14 Mar 2023 18:39:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 781EBC6FD1F
+	for <linux-media@archiver.kernel.org>; Tue, 14 Mar 2023 18:45:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231178AbjCNSjF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Mar 2023 14:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57432 "EHLO
+        id S230201AbjCNSps (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Mar 2023 14:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbjCNSjA (ORCPT
+        with ESMTP id S230100AbjCNSpq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Mar 2023 14:39:00 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67173B5B65
-        for <linux-media@vger.kernel.org>; Tue, 14 Mar 2023 11:38:32 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id cy23so65791730edb.12
-        for <linux-media@vger.kernel.org>; Tue, 14 Mar 2023 11:38:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678819077;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AuNgNT8D0EuAh1HyRh/9mY626Vq0K4RuneWS+CDoRGU=;
-        b=Z7HmxYoFox3cYFH2X6pUtjUx/WnphBH2dLE5baDvxTm+8HmhZ51ONlfq1+vZizz00h
-         MoqUdQkitikl3II9OovJ4SC3MFkTFAw46SGbkPz15Owf5BiDozeQi6p+8f2X38Cq76E7
-         ElMQL463kCFMmYsVcz/MNnLTUiOizY4q/YfXVpNmJUQTUV50vj7E2uSLbW0e0vtrO7w+
-         cpmAQJaoQ2fbNB28vatFWPR8oM9oLnenPp4BKV0GvkSPZPN08f+OdibGUcu50pUufVfY
-         oFtfomlpuUB2xBSXPjQjskd1kssmf6ASvqK/W45Nhl4a1QjhmRPD1Sg3oNi0diUB9M/T
-         ISjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678819077;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AuNgNT8D0EuAh1HyRh/9mY626Vq0K4RuneWS+CDoRGU=;
-        b=rRHGG6rVA60DKPxPKqoRQaX7rr3ROZPVynyTg0wq9qpTMJk2LgQe3563gUVsPP63UU
-         kqomaKsonRbpJJuEdq3PuzOArWoyA653AezFwMYFs7FI6QwoDJM2b19jZHfOxRe37+bc
-         tBqHkJHZ+IyjvC5CfHYWfR+Gki5zp1bOJCWkUuxkqebWaZUh485tV+VSfn2gXYxDqT4u
-         tVWAIfIpGjEau61MBANhrFcgOO04TkH1aFxCvu54GlMqSZ3Hg9g7m/fBXuDPMDCm1Dpz
-         ZI5qVTbPde4tThMEvisKXO15I9Ym0XxmSqDh+FzvnI7bo5UJMZi6AMnpwljK1j8O2n4v
-         1e4w==
-X-Gm-Message-State: AO0yUKUgPbeja3TI2q4dtDFx/vEODMg1UEGTg78JnvirkcFOONmXNWJ1
-        xBxkG+Jn97G0KALs3ev7NBjwJ/9fC5PpBLVIT8Q=
-X-Google-Smtp-Source: AK7set82bOBTZKdRnxAk1qFAzf9YFnq6NVKrvZuczwCT2pLIE3So1K51eTrLk738WixzMw0wwDDxJg==
-X-Received: by 2002:a17:906:1b10:b0:870:baa6:6762 with SMTP id o16-20020a1709061b1000b00870baa66762mr3679366ejg.14.1678819076802;
-        Tue, 14 Mar 2023 11:37:56 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:59be:4b3f:994b:e78c? ([2a02:810d:15c0:828:59be:4b3f:994b:e78c])
-        by smtp.gmail.com with ESMTPSA id c20-20020a50f614000000b004d8d2735251sm1436152edn.43.2023.03.14.11.37.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 11:37:56 -0700 (PDT)
-Message-ID: <7fc9a289-5317-6a40-73f1-b816083af8d1@linaro.org>
-Date:   Tue, 14 Mar 2023 19:37:55 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] media: dt-bindings: ov2685: convert to dtschema
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh@kernel.org>, Luca Weiss <luca@z3ntu.xyz>
-Cc:     linux-kernel@vger.kernel.org,
+        Tue, 14 Mar 2023 14:45:46 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899B3A401E;
+        Tue, 14 Mar 2023 11:45:12 -0700 (PDT)
+Received: from g550jk.localnet (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id D374BD2500;
+        Tue, 14 Mar 2023 18:33:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1678818788; bh=fHJza5nGl0uG6ilnr4LPPY4PLgKrXqdkOF8SQ67N1kY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=ZsiIufmMaKi3c7O3QK6sepAvzFn03uUdr3CKUT3VoXSwt4PKJlOVdFJSG6mYnRtKl
+         z6YxTjTZmVCR6xEsuDpr+/pK5lVUqEkqLk0ZCDzaXNeV3mC74pia+ELIIICuR5k8vM
+         IVjGYv/sDCA2ppaCyYavz41aREDHVP4LdFyBJuMc=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     Sakari Ailus <sakari.ailus@iki.fi>
+Cc:     Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         ~postmarketos/upstreaming@lists.sr.ht,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org,
         Shunqian Zheng <zhengsq@rock-chips.com>,
-        phone-devel@vger.kernel.org
+        phone-devel@vger.kernel.org,
+        Helen Koike <helen.koike@collabora.com>
+Subject: Re: [PATCH] media: dt-bindings: ov2685: convert to dtschema
+Date:   Tue, 14 Mar 2023 19:33:06 +0100
+Message-ID: <5654018.DvuYhMxLoT@z3ntu.xyz>
+In-Reply-To: <ZBBh9Euor7R24euV@valkosipuli.retiisi.eu>
 References: <20230206-ov2685-dtschema-v1-1-9e4da3474c10@z3ntu.xyz>
- <167572017056.1564123.13342855865502188090.robh@kernel.org>
- <aadd794f-8881-6ecf-4d9d-51a8a23fe4b2@linaro.org>
-In-Reply-To: <aadd794f-8881-6ecf-4d9d-51a8a23fe4b2@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <2665862.mvXUDI8C0e@z3ntu.xyz> <ZBBh9Euor7R24euV@valkosipuli.retiisi.eu>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 14/03/2023 19:37, Krzysztof Kozlowski wrote:
-> On 06/02/2023 22:50, Rob Herring wrote:
->>
->> On Mon, 06 Feb 2023 21:23:16 +0100, Luca Weiss wrote:
->>> Convert the text-based dt-bindings to yaml.
->>>
->>> Changes from original txt:
->>> * Take wording for various properties from other yaml bindings, this
->>>   removes e.g. volt amount from schema since it isn't really relevant
->>>   and the datasheet is a better source.
->>> * Don't make reset-gpios a required property since it can be tied to
->>>   DOVDD instead.
->>>
->>> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
->>> ---
->>>  .../devicetree/bindings/media/i2c/ov2685.txt       |  41 ---------
->>>  .../devicetree/bindings/media/i2c/ovti,ov2685.yaml | 101 +++++++++++++++++++++
->>>  MAINTAINERS                                        |   1 +
->>>  3 files changed, 102 insertions(+), 41 deletions(-)
->>>
->>
->> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->>
->> yamllint warnings/errors:
->>
->> dtschema/dtc warnings/errors:
->> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb: camera@3c: 'clocks' is a required property
->> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
->> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb: camera@3c: 'clock-names' is a required property
->> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
->> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb: camera@3c: 'dvdd-supply' is a required property
->> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
->> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb: camera@3c: 'avdd-supply' is a required property
->> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
->> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb: camera@3c: 'dovdd-supply' is a required property
->> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
-> 
-> These are errors from the bindings, so they must be fixed. If you do not
-> want to fix the rockchip bindings, just drop or replace the sensor in them.
+On Dienstag, 14. M=E4rz 2023 13:00:52 CET Sakari Ailus wrote:
+> Hi Luca,
+>=20
+> On Thu, Feb 09, 2023 at 05:46:48PM +0100, Luca Weiss wrote:
+> > +CC Helen Koike
+> >=20
+> > On Montag, 6. Februar 2023 22:50:08 CET Rob Herring wrote:
+> > > On Mon, 06 Feb 2023 21:23:16 +0100, Luca Weiss wrote:
+> > > > Convert the text-based dt-bindings to yaml.
+> > > >=20
+> > > > Changes from original txt:
+> > > > * Take wording for various properties from other yaml bindings, this
+> > > >=20
+> > > >   removes e.g. volt amount from schema since it isn't really releva=
+nt
+> > > >   and the datasheet is a better source.
+> > > >=20
+> > > > * Don't make reset-gpios a required property since it can be tied to
+> > > >=20
+> > > >   DOVDD instead.
+> > > >=20
+> > > > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> > > > ---
+> > > >=20
+> > > >  .../devicetree/bindings/media/i2c/ov2685.txt       |  41 ---------
+> > > >  .../devicetree/bindings/media/i2c/ovti,ov2685.yaml | 101
+> > > >  +++++++++++++++++++++ MAINTAINERS
+> > > > =20
+> > > >  |   1 +
+> > > > =20
+> > > >  3 files changed, 102 insertions(+), 41 deletions(-)
+> > >=20
+> > > My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_ch=
+eck'
+> > > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> > >=20
+> > > yamllint warnings/errors:
+> > >=20
+> > > dtschema/dtc warnings/errors:
+> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
+gs/
+> > > medi a/rockchip-isp1.example.dtb: camera@3c: 'clocks' is a required
+> > > property From schema:
+> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
+gs/
+> > > med
+> > > ia/i2c/ovti,ov2685.yaml
+> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
+gs/
+> > > med
+> > > ia/rockchip-isp1.example.dtb: camera@3c: 'clock-names' is a required
+> > > property From schema:
+> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
+gs/
+> > > med
+> > > ia/i2c/ovti,ov2685.yaml
+> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
+gs/
+> > > med
+> > > ia/rockchip-isp1.example.dtb: camera@3c: 'dvdd-supply' is a required
+> > > property From schema:
+> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
+gs/
+> > > med
+> > > ia/i2c/ovti,ov2685.yaml
+> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
+gs/
+> > > med
+> > > ia/rockchip-isp1.example.dtb: camera@3c: 'avdd-supply' is a required
+> > > property From schema:
+> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
+gs/
+> > > med
+> > > ia/i2c/ovti,ov2685.yaml
+> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
+gs/
+> > > med
+> > > ia/rockchip-isp1.example.dtb: camera@3c: 'dovdd-supply' is a required
+> > > property From schema:
+> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
+gs/
+> > > med
+> > > ia/i2c/ovti,ov2685.yaml
+> >=20
+> > Looks like rockchip-isp1.yaml uses very incomplete sensor examples in
+> > their
+> > binding example, which sort of makes sense since those bindings are
+> > showing
+> > the rockchip isp bindings and contain the bare minimum to show how a
+> > sensor is connected in dt.
+> >=20
+> > Not sure how to solve this - ov2685 is also one of three sensors that a=
+re
+> > used very abbreviated there.
+>=20
+> Could these regulators be simply made optional?
 
-Or one more: add some fake stubs. They do not matter anyway...
+Sure, from driver side it would just get dummy regulators instead.
 
-Best regards,
-Krzysztof
+Still the clocks are also missing in this rockchip example. Any suggestion=
+=20
+what to do about those?
+
+Honestly I don't want to spend too much time on some ISP docs that I don't=
+=20
+really care about, would be nice if the maintainers of that could do that...
+
+Regards
+Luca
+
+
 
