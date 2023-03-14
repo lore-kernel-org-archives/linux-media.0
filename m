@@ -2,170 +2,149 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF5CDC6FD1D
-	for <linux-media@archiver.kernel.org>; Tue, 14 Mar 2023 12:05:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D6F8C6FD1D
+	for <linux-media@archiver.kernel.org>; Tue, 14 Mar 2023 12:07:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjCNMFk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Mar 2023 08:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37614 "EHLO
+        id S231664AbjCNMHJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Mar 2023 08:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231768AbjCNMFe (ORCPT
+        with ESMTP id S231608AbjCNMG5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Mar 2023 08:05:34 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95D71C58D;
-        Tue, 14 Mar 2023 05:05:02 -0700 (PDT)
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPS id 4PbXHw1rpRz4BKJt;
-        Tue, 14 Mar 2023 14:04:11 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1678795452;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qZdVO+o6NVisvLLp0fz85lQ/En55DCtDZZ8CJdoWRLw=;
-        b=Zc1R1I3rg1hRsMfrhRw1YtTL0+SD+swa8meOGKm7k1dEwbQSj16Ii5opPRmeu904Hqk8Wl
-        LHE5P8FZGrVpfCCOf8vh/65UHb1tQzt2L/gy8TBTwYlP5O+G/gvc5DtEhr1YotI5gQfdQs
-        HxmUh1SM/P4O6TkOBGK9Wt5IGrDE7+88Sq8sxmipCtZWAgNALAD3UpUTWEbjDxpUpFIdZk
-        LfTg7MulJNWvhIkOsjVaBmZyqrYALnN8Qy1tToIgzwbwvTspeAR6hOjXTDGz2AyKiqizNH
-        DaXigB1cDHSFeWBI1qap+baUm9Z6arBmJ4mcAEv68pgrRqZ+v6MqUjsA6XnN6g==
-Received: from hillosipuli.retiisi.eu (dkzbhx1tyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4502:69d6::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 4PbXFG658tzyQx;
-        Tue, 14 Mar 2023 14:01:54 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1678795317;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qZdVO+o6NVisvLLp0fz85lQ/En55DCtDZZ8CJdoWRLw=;
-        b=g4p6lmMNIEZi5Hxya3lo2eH88giekGBrGSaNMkJJA1vCIRxaWYSrvMP1xmiMOlptEyoQUs
-        3bCxMoWjbG6wbZmBPCELDT27lHPIUx1OH6sIWi6Pa8cLqNSF9oR/lH3VP+U0h0ta577kRs
-        iWilPkVEVHG8/AmclaxCkJTWVCM0/Ik=
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1678795317; a=rsa-sha256; cv=none;
-        b=BvgKPCSD9q6pUJSAxUy+VizHYYIbjg9ezjQHh5QXGQbEZT+GCzXbVU1eLEO4U391sDQS4u
-        +HPMyX5cMepisp8vRwjTRTpBuj/bxnPgc8ugDSKe5otTQLiIwOBTjlVt0BbwX3YLPs555f
-        Ud59qiYSrCYs3qTAkg6uXrJLnMsW1z8=
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1678795317;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qZdVO+o6NVisvLLp0fz85lQ/En55DCtDZZ8CJdoWRLw=;
-        b=OkKVUPXuzmIvASe6puyQy2dN6TuBvyb+QKZfD0GrMbuycT0e4eQY84BRKIVAr1eXt3p/oW
-        sDfHnF0SOKX0niSvK1QzzepUQvH7HRfkRj4s8yJz10vSBg+ZpFQlzXt5rApHPruLKpbyez
-        SKaN1DNDcC5J3QvHiy/Ig3JeNK3EtcM=
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id CFAAB634C91;
-        Tue, 14 Mar 2023 14:00:52 +0200 (EET)
-Date:   Tue, 14 Mar 2023 14:00:52 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
-        phone-devel@vger.kernel.org,
-        Helen Koike <helen.koike@collabora.com>
-Subject: Re: [PATCH] media: dt-bindings: ov2685: convert to dtschema
-Message-ID: <ZBBh9Euor7R24euV@valkosipuli.retiisi.eu>
-References: <20230206-ov2685-dtschema-v1-1-9e4da3474c10@z3ntu.xyz>
- <167572017056.1564123.13342855865502188090.robh@kernel.org>
- <2665862.mvXUDI8C0e@z3ntu.xyz>
+        Tue, 14 Mar 2023 08:06:57 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA54BA102B
+        for <linux-media@vger.kernel.org>; Tue, 14 Mar 2023 05:06:25 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id t11so19710592lfr.1
+        for <linux-media@vger.kernel.org>; Tue, 14 Mar 2023 05:06:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112; t=1678795559;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tiwpJTGyHZGzBTJ6bO/L3VPi9zr8P9+edvack9f3BcY=;
+        b=oXKjUL3PN99TsGJfkkVW3ZjQMXxMvzk7uxSKoqFKjsZRbIj3gPJC7lry1kjKyok5ek
+         TR+sxblfDrQzDAcRUYb8XyPFJSVm9ENzaV5W0OGfMx7MWAMtGjADzQvZKrVo7IhVHMZ8
+         WssTu6DLR+8eHQ0fZGVx6FyaCm0p3fAZJ5gH+aSJVZAfGCNGvd29jsx5muLmJHhmQ1nd
+         DfVFtURAFjzBsH8RJzM5QKnHG6Jd1N4+2Ld5tzwnmTvjFvss1snC7xRjc0qbwJfTi4ST
+         KBJskFmfg0JxzFlm53ZCOjvBR8KHfDiXc2LYxTjwQ2Iwr1YNiwdUqAu+qXWHaZNhvgGu
+         L7NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678795559;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tiwpJTGyHZGzBTJ6bO/L3VPi9zr8P9+edvack9f3BcY=;
+        b=siC5Vfbu6RnLn/JXVH4aKGrPMVIYqYbYcmlkR3M0BfXjaFv2K1H9wZLfPS2B5ACMYC
+         P2pgOmBPQ8vu6QRBG3na1856fz3iTmKg19YTYLEQwLaU+OG1ecF9NwaPzkLQGV/Lk3SK
+         Cn2/kRYz2gOUUUxDTelOw8VaULeIboBtvpiwe1GMdRBG0zi7qxG2LUJ40o31HfpApGsI
+         lMKi7nbQO0+FlUzQCVYHDdKwCsbSt8jWLV0+6ZjDYv64oa0WXXe4OIZETJJTzmGykNXM
+         9HWBl5M4x7D0mqJOkFNwkZETgqGwubVe3KLL1lzjJR5fuo7rJRy8xEbxsb2tm1Ek6vCX
+         OfIQ==
+X-Gm-Message-State: AO0yUKXMky/cu53ato7GGdrpLas4BXR//srEtBKxpiQEdmNsUJutoUFf
+        X4qHGxBTPXQa5pKq9VQnpXn715XYNDmwQMi6K8DQZNbx2Q8EH87B
+X-Google-Smtp-Source: AK7set+xYCmAbdBdcQCNI7sIm82/tx9Sa1F3IEC5x1caHOueNOUHQCBW9vh55B4Cx5WeoEW5qFU+x10x7qPdCufrpck=
+X-Received: by 2002:a05:6512:502:b0:4db:38ba:618d with SMTP id
+ o2-20020a056512050200b004db38ba618dmr642772lfb.12.1678795559024; Tue, 14 Mar
+ 2023 05:05:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2665862.mvXUDI8C0e@z3ntu.xyz>
+References: <20230313154856.3691660-1-zyytlz.wz@163.com>
+In-Reply-To: <20230313154856.3691660-1-zyytlz.wz@163.com>
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date:   Tue, 14 Mar 2023 09:05:47 -0300
+Message-ID: <CAAEAJfAtwguO-EpbCLkdOBu96U9mD+mq4PxBLsLAVZLuhC6Mtw@mail.gmail.com>
+Subject: Re: [PATCH v4] media: hantro: fix use after free bug in hantro_remove
+ due to race condition
+To:     Zheng Wang <zyytlz.wz@163.com>
+Cc:     p.zabel@pengutronix.de, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        hverkuil@xs4all.nl
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Luca,
+Hi Zheng, Hans,
 
-On Thu, Feb 09, 2023 at 05:46:48PM +0100, Luca Weiss wrote:
-> +CC Helen Koike
-> 
-> On Montag, 6. Februar 2023 22:50:08 CET Rob Herring wrote:
-> > On Mon, 06 Feb 2023 21:23:16 +0100, Luca Weiss wrote:
-> > > Convert the text-based dt-bindings to yaml.
-> > > 
-> > > Changes from original txt:
-> > > * Take wording for various properties from other yaml bindings, this
-> > > 
-> > >   removes e.g. volt amount from schema since it isn't really relevant
-> > >   and the datasheet is a better source.
-> > > 
-> > > * Don't make reset-gpios a required property since it can be tied to
-> > > 
-> > >   DOVDD instead.
-> > > 
-> > > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> > > ---
-> > > 
-> > >  .../devicetree/bindings/media/i2c/ov2685.txt       |  41 ---------
-> > >  .../devicetree/bindings/media/i2c/ovti,ov2685.yaml | 101
-> > >  +++++++++++++++++++++ MAINTAINERS                                       
-> > >  |   1 +
-> > >  3 files changed, 102 insertions(+), 41 deletions(-)
-> > 
-> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> > 
-> > yamllint warnings/errors:
-> > 
-> > dtschema/dtc warnings/errors:
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/medi
-> > a/rockchip-isp1.example.dtb: camera@3c: 'clocks' is a required property From
-> > schema:
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
-> > ia/i2c/ovti,ov2685.yaml
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
-> > ia/rockchip-isp1.example.dtb: camera@3c: 'clock-names' is a required
-> > property From schema:
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
-> > ia/i2c/ovti,ov2685.yaml
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
-> > ia/rockchip-isp1.example.dtb: camera@3c: 'dvdd-supply' is a required
-> > property From schema:
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
-> > ia/i2c/ovti,ov2685.yaml
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
-> > ia/rockchip-isp1.example.dtb: camera@3c: 'avdd-supply' is a required
-> > property From schema:
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
-> > ia/i2c/ovti,ov2685.yaml
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
-> > ia/rockchip-isp1.example.dtb: camera@3c: 'dovdd-supply' is a required
-> > property From schema:
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
-> > ia/i2c/ovti,ov2685.yaml
-> 
-> Looks like rockchip-isp1.yaml uses very incomplete sensor examples in their 
-> binding example, which sort of makes sense since those bindings are showing 
-> the rockchip isp bindings and contain the bare minimum to show how a sensor is 
-> connected in dt.
-> 
-> Not sure how to solve this - ov2685 is also one of three sensors that are used 
-> very abbreviated there.
+On Mon, Mar 13, 2023 at 12:49=E2=80=AFPM Zheng Wang <zyytlz.wz@163.com> wro=
+te:
+>
+> In hantro_probe, vpu->watchdog_work is bound with
+> hantro_watchdog. Then hantro_end_prepare_run may
+> be called to start the work.
+>
+> If we close the file or remove the module which will
+> call hantro_release and hantro_remove to make cleanup,
+> there may be an unfinished work. The possible sequence
+> is as follows, which will cause a typical UAF bug.
+>
+> The same thing will happen in hantro_release, and use
+> ctx after freeing it.
+>
+> Fix it by canceling the work before cleanup in hantro_release.
+>
+> CPU0                  CPU1
+>
+>                     |hantro_watchdog
+> hantro_remove     |
+>   v4l2_m2m_release  |
+>     kfree(m2m_dev); |
+>                     |
+>                     | v4l2_m2m_get_curr_priv
+>                     |   m2m_dev->curr_ctx //use
+>
+> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> Fixes: 932a9317ac49 ("media: hantro: Add helpers to prepare/finish a run"=
+)
 
-Could these regulators be simply made optional?
+Thanks for the patch.
 
--- 
-Kind regards,
+Give me a few days to take a closer look.
 
-Sakari Ailus
+Thanks,
+Ezequiel
+
+> ---
+> v4:
+> - add Fixes label to help with the fix
+>
+> v3:
+> - use cancel_delayed_work_sync instead of cancel_delayed_work and add it =
+to
+> hantro_release suggested by Hans Verkuil
+>
+> v2:
+> - move the cancel-work-related code to hantro_remove suggested by Hans Ve=
+rkuil
+> ---
+>  drivers/media/platform/verisilicon/hantro_drv.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/me=
+dia/platform/verisilicon/hantro_drv.c
+> index b0aeedae7b65..86a4c0fa8c7d 100644
+> --- a/drivers/media/platform/verisilicon/hantro_drv.c
+> +++ b/drivers/media/platform/verisilicon/hantro_drv.c
+> @@ -597,6 +597,7 @@ static int hantro_release(struct file *filp)
+>         struct hantro_ctx *ctx =3D
+>                 container_of(filp->private_data, struct hantro_ctx, fh);
+>
+> +       cancel_delayed_work_sync(&ctx->dev->watchdog_work);
+>         /*
+>          * No need for extra locking because this was the last reference
+>          * to this file.
+> @@ -1099,6 +1100,7 @@ static int hantro_remove(struct platform_device *pd=
+ev)
+>
+>         v4l2_info(&vpu->v4l2_dev, "Removing %s\n", pdev->name);
+>
+> +       cancel_delayed_work_sync(&vpu->watchdog_work);
+>         media_device_unregister(&vpu->mdev);
+>         hantro_remove_dec_func(vpu);
+>         hantro_remove_enc_func(vpu);
+> --
+> 2.25.1
+>
