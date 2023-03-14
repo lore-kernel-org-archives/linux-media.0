@@ -2,44 +2,44 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E10BC7618D
-	for <linux-media@archiver.kernel.org>; Tue, 14 Mar 2023 11:56:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89D4CC7618A
+	for <linux-media@archiver.kernel.org>; Tue, 14 Mar 2023 11:56:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231703AbjCNL4y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Mar 2023 07:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46368 "EHLO
+        id S231629AbjCNL4x (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Mar 2023 07:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbjCNL40 (ORCPT
+        with ESMTP id S231628AbjCNL40 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 14 Mar 2023 07:56:26 -0400
 Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22349A02A1;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB13A029F;
         Tue, 14 Mar 2023 04:56:06 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32EBtaYc051532;
-        Tue, 14 Mar 2023 06:55:36 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32EBtgKl051569;
+        Tue, 14 Mar 2023 06:55:42 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678794936;
-        bh=PSh3JOfebxzHh7OMYrBExmtN8GkKJtYIG5XeSZ5WRJ8=;
+        s=ti-com-17Q1; t=1678794942;
+        bh=ddovUNv2LEGp3gIShbawH913wqA8KX1RQrHrCXJXEQo=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=Su7nFBh/KSWTs/gEusIwMC03o1mZfShIYEvkjrsIqUp/RVF3zrgz1MBWuLWmkC66u
-         LGWGfjhUFKCVZ9+5nsD6tkY3+iITTccZalS8EqCa4AyvGbYUxmDPZ7ybHw+Mr17jIf
-         IyENeFY2VCjPh5Va+/khHY9e6YdtSZM5yNmJTVtE=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32EBtaXV003130
+        b=BEODxeeC3mjlTpmQjBsG4eppkr2hZxdsR65mf3hk8Yost8oHEeV8RffpRHtd07iAv
+         VDZJqBEnDFMRZKNWsrvXWzYDeSzErKJmi0GFnzNPIYCFSrRxlTaicVS2p1YN8X3sk9
+         gma7io2O4HBdWYU1BDzPsVKwjml+vFrNLyBPq+oc=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32EBtfmK112617
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 14 Mar 2023 06:55:36 -0500
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 14 Mar 2023 06:55:42 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 14
- Mar 2023 06:55:36 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2023 06:55:41 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 14 Mar 2023 06:55:35 -0500
+ Frontend Transport; Tue, 14 Mar 2023 06:55:41 -0500
 Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32EBtYXt072629;
-        Tue, 14 Mar 2023 06:55:35 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32EBtelG002476;
+        Tue, 14 Mar 2023 06:55:41 -0500
 From:   Vaishnav Achath <vaishnav.a@ti.com>
 To:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <mripard@kernel.org>, <mchehab@kernel.org>, <robh+dt@kernel.org>,
@@ -51,9 +51,9 @@ CC:     <linux-kernel@vger.kernel.org>, <bparrot@ti.com>,
         <devarsht@ti.com>, <praneeth@ti.com>, <u-kumar1@ti.com>,
         <vigneshr@ti.com>, <nm@ti.com>, <martyn.welch@collabora.com>,
         <vaishnav.a@ti.com>
-Subject: [PATCH v7 09/13] media: cadence: csi2rx: Add link validation
-Date:   Tue, 14 Mar 2023 17:25:12 +0530
-Message-ID: <20230314115516.667-10-vaishnav.a@ti.com>
+Subject: [PATCH v7 12/13] media: dt-bindings: Add DT bindings for TI J721E CSI2RX driver
+Date:   Tue, 14 Mar 2023 17:25:15 +0530
+Message-ID: <20230314115516.667-13-vaishnav.a@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230314115516.667-1-vaishnav.a@ti.com>
 References: <20230314115516.667-1-vaishnav.a@ti.com>
@@ -66,50 +66,159 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Pratyush Yadav <p.yadav@ti.com>
 
-Add media link validation to make sure incorrectly configured pipelines
-are caught.
+TI's J721E uses the Cadence CSI2RX and DPHY peripherals to facilitate
+capture over a CSI-2 bus. The TI CSI2RX platform driver glues all the
+parts together.
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
 
-(no changes since v6)
-
-Changes in v6:
-- Drop transcoding from the commit message.
-- Make csi2rx_media_ops const.
-- Add Laurent's R-by.
+(no changes since v5)
 
 Changes in v5:
-- New in v5.
+- Add Laurent's and Rob's R-by.
 
- drivers/media/platform/cadence/cdns-csi2rx.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Changes in v2:
+- Rename to ti,j721e-csi2rx.yaml
+- Add an entry in MAINTAINERS.
+- Add a description for the binding.
+- Change compatible to ti,j721e-csi2rx to make it SoC specific.
+- Remove description from dmas, reg, power-domains.
+- Remove a limit of 2 from #address-cells and #size-cells.
+- Fix add ^ to csi-bridge subnode regex.
+- Make ranges mandatory.
+- Add unit address in example.
+- Add a reference to cdns,csi2rx in csi-bridge subnode.
+- Expand the example to include the csi-bridge subnode as well.
+- Re-order subject prefixes.
 
-diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
-index 639ade97b998..026d95d60654 100644
---- a/drivers/media/platform/cadence/cdns-csi2rx.c
-+++ b/drivers/media/platform/cadence/cdns-csi2rx.c
-@@ -478,6 +478,10 @@ static const struct v4l2_subdev_ops csi2rx_subdev_ops = {
- 	.pad		= &csi2rx_pad_ops,
- };
- 
-+static const struct media_entity_operations csi2rx_media_ops = {
-+	.link_validate = v4l2_subdev_link_validate,
-+};
+ .../bindings/media/ti,j721e-csi2rx.yaml       | 101 ++++++++++++++++++
+ MAINTAINERS                                   |   1 +
+ 2 files changed, 102 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/ti,j721e-csi2rx.yaml
+
+diff --git a/Documentation/devicetree/bindings/media/ti,j721e-csi2rx.yaml b/Documentation/devicetree/bindings/media/ti,j721e-csi2rx.yaml
+new file mode 100644
+index 000000000000..db87cfd65bed
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/ti,j721e-csi2rx.yaml
+@@ -0,0 +1,101 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/ti,j721e-csi2rx.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- static int csi2rx_async_bound(struct v4l2_async_notifier *notifier,
- 			      struct v4l2_subdev *s_subdev,
- 			      struct v4l2_async_subdev *asd)
-@@ -677,6 +681,7 @@ static int csi2rx_probe(struct platform_device *pdev)
- 	for (i = CSI2RX_PAD_SOURCE_STREAM0; i < CSI2RX_PAD_MAX; i++)
- 		csi2rx->pads[i].flags = MEDIA_PAD_FL_SOURCE;
- 	csi2rx->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-+	csi2rx->subdev.entity.ops = &csi2rx_media_ops;
++title: TI J721E CSI2RX Wrapper Device Tree Bindings
++
++description: |
++  The TI J721E CSI2RX Wrapper is a wrapper around Cadence CSI2RX bridge that
++  enables sending captured frames to memory over PSI-L DMA. In the J721E
++  Technical Reference Manual (SPRUIL1B) it is referred to as "SHIM" under the
++  CSI_RX_IF section.
++
++maintainers:
++  - Pratyush Yadav <p.yadav@ti.com>
++
++properties:
++  compatible:
++    items:
++      - const: ti,j721e-csi2rx
++
++  dmas:
++    maxItems: 1
++
++  dma-names:
++    items:
++      - const: rx0
++
++  reg:
++    maxItems: 1
++
++  power-domains:
++    maxItems: 1
++
++  ranges: true
++
++  "#address-cells": true
++
++  "#size-cells": true
++
++patternProperties:
++  "^csi-bridge@":
++    type: object
++    description: CSI2 bridge node.
++    $ref: cdns,csi2rx.yaml#
++
++required:
++  - compatible
++  - reg
++  - dmas
++  - dma-names
++  - power-domains
++  - ranges
++  - "#address-cells"
++  - "#size-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/soc/ti,sci_pm_domain.h>
++
++    ti_csi2rx0: ticsi2rx@4500000 {
++        compatible = "ti,j721e-csi2rx";
++        dmas = <&main_udmap 0x4940>;
++        dma-names = "rx0";
++        reg = <0x4500000 0x1000>;
++        power-domains = <&k3_pds 26 TI_SCI_PD_EXCLUSIVE>;
++        #address-cells = <1>;
++        #size-cells = <1>;
++        ranges;
++
++        cdns_csi2rx: csi-bridge@4504000 {
++            compatible = "cdns,csi2rx";
++            reg = <0x4504000 0x1000>;
++            clocks = <&k3_clks 26 2>, <&k3_clks 26 0>, <&k3_clks 26 2>,
++              <&k3_clks 26 2>, <&k3_clks 26 3>, <&k3_clks 26 3>;
++            clock-names = "sys_clk", "p_clk", "pixel_if0_clk",
++              "pixel_if1_clk", "pixel_if2_clk", "pixel_if3_clk";
++            phys = <&dphy0>;
++            phy-names = "dphy";
++
++            ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                csi2_0: port@0 {
++
++                    reg = <0>;
++
++                    csi2rx0_in_sensor: endpoint {
++                        remote-endpoint = <&csi2_cam0>;
++                        bus-type = <4>; /* CSI2 DPHY. */
++                        clock-lanes = <0>;
++                        data-lanes = <1 2>;
++                    };
++                };
++            };
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 69c2b0f48073..796be64bc54f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -20905,6 +20905,7 @@ TI J721E CSI2RX DRIVER
+ M:	Vaishnav Achath <vaishnav.a@ti.com>
+ L:	linux-media@vger.kernel.org
+ S:	Supported
++F:	Documentation/devicetree/bindings/media/ti,j721e-csi2rx.yaml
+ F:	drivers/media/platform/ti/j721e-csi2rx/
  
- 	ret = media_entity_pads_init(&csi2rx->subdev.entity, CSI2RX_PAD_MAX,
- 				     csi2rx->pads);
+ TI DAVINCI MACHINE SUPPORT
 -- 
 2.17.1
 
