@@ -2,101 +2,77 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2361C6FD1C
-	for <linux-media@archiver.kernel.org>; Tue, 14 Mar 2023 12:35:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89ED7C74A5B
+	for <linux-media@archiver.kernel.org>; Tue, 14 Mar 2023 12:35:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbjCNMfK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Mar 2023 08:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42904 "EHLO
+        id S230505AbjCNMfL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Mar 2023 08:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbjCNMer (ORCPT
+        with ESMTP id S231952AbjCNMfH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Mar 2023 08:34:47 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC78F10A82
-        for <linux-media@vger.kernel.org>; Tue, 14 Mar 2023 05:34:12 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (dkzbhx1tyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4502:69d6::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4PbXbN63Jrz4BKJt;
-        Tue, 14 Mar 2023 14:17:36 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1678796257;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9fciu7HlD9iZRScroZpLa07fSktz0AB/g5mN+Hwg1fE=;
-        b=Oh8JaOfEE2zxv7XrWE/wCj69c2d12cQV24aO/AcdI1+C3+t41eCLJwCSe4STisiWhoVBkb
-        6tcxr2Bh4Dlv2k86dBCeI3lLZ+7GV8X4ziXHvJeHsQxOr3TfBgovfd/Eh/6G1t7y7CX9wh
-        OTRa5kPHw+r6gTilRHqi1ZceUazIS7V1RH5n0QYPtmwLmh+/fNkUsc335Ij1t8PhBEv1Hk
-        zQ+alBOuIcSEyVrVkKeqLoVfYkmNG4cF8Ot+a8sy5xAEMc++vrFfL1b3tZX4VpnX3IUQhe
-        T3l1F/xBNFrOfiXkSHAfJbJMeOvTzuKgGa+NruNKynXAYoLI973fRjM7bnguTg==
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1678796257; a=rsa-sha256;
-        cv=none;
-        b=vyTWkIXDGDfrv6OWq4Xcelpkso2DPskqNjFK5SITlrWj5LrZjmgm0+zTBrocUBw5KDIg54
-        Rko8IFknlJ1bwrfgC5tKuAVB29ND6wrFKhdBudG/9Xu0XwKMmptNGCdcbeMRGQlyJgZFZQ
-        mKQjFmtIfaIfHmQOBMQTjBQMsYy3PWJ9Qr1Ga9HAszBcq/C6S+AKiLXPW3r2by5Up+7sz6
-        yapSHlQh6V2RMnGxZ32vl8xk4z3Wvmk0bnzX85ECLe45Sy+KCCK9McHm0yl7k+Ug3eDNvu
-        u0NEy21Y88lIVhqRle+LPS4dMdPfJccQvYpKA9OheOBBJG6ggDBUoqeSu/rIeA==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1678796257;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9fciu7HlD9iZRScroZpLa07fSktz0AB/g5mN+Hwg1fE=;
-        b=vCONT6rqsoHyNTBh+4Bk3cEJNxv/IFmXExv45tS1EMPTXyLgBLOZ2bUe95WtuRYEwYYxd6
-        nfvOq8UQOyWIkuX3cAK8V9rQSStccLPaj/Agtr9NJOGKDVJz+ecHYhBJhaheiv6HEVCN1T
-        +hI5FxFI9Eb3NF5G4dNpkOct5J+HrYI4PC3DPA+SAfu+cvEMTdDqJPN010lcKKcJZ+bsIM
-        26vIuJELiwnNy13D/7aeY8rG0Do9oBz8uUWWXoXS4OqjfP9tha/bXONAhujWwIDeuqc8T/
-        RSwiMzXrsDEF8xrTucLWxFLzkRF/b0b5Ayb93sEwXKKoFSJ1Gi+0ujb/WsDVVQ==
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 31C67634C91;
-        Tue, 14 Mar 2023 14:16:35 +0200 (EET)
-Date:   Tue, 14 Mar 2023 14:16:34 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org,
-        Dongsoo Nathaniel Kim <dongsoo45.kim@samsung.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Heungjun Kim <riverful.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Scott Jiang <scott.jiang.linux@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>
-Subject: Re: [RFC PATCH 0/8] media: i2c: Drop unused drivers
-Message-ID: <ZBBlooCwl+Nh64Uc@valkosipuli.retiisi.eu>
-References: <20230125224856.22266-1-laurent.pinchart@ideasonboard.com>
+        Tue, 14 Mar 2023 08:35:07 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C318312CD5
+        for <linux-media@vger.kernel.org>; Tue, 14 Mar 2023 05:34:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678797271; x=1710333271;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LAhAUI7dgr041uHohi7PklaRzff4NZnJ4Zev8sPvxhg=;
+  b=F13nvtsHfXKqxKimsC9HTN8Mmu/HELJs//LdFTb53aOCKOOz98bUSWjr
+   nF/A5Arm01hbiNUZgoMxbDpbRcr896Vt6ZcMyl1cLKiT3ymveoDXeDaOs
+   7tWyvXQYDBgg6QdRbuOq7ghuSEunLwLmo7+nnYYaUtp9sEUeiySQj1rCe
+   sVccrbh2ww0Px5zI2Du81fpGFq4IIjvAimZplj9EpuBAg7UPB/jFiV1Kz
+   e36GPLWpwy91Sjb5nA5RBTNgMEnDO+xee6mS+YY1+Aagwov0OL+OXXX3t
+   8WKh5AhxY4YDR90b+yjUPQllM54NEP1IDckPvTfXME/ZkRqdMfNEFrRP1
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="337434420"
+X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
+   d="scan'208";a="337434420"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 05:26:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="679070352"
+X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
+   d="scan'208";a="679070352"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 05:26:08 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id 7CC7F120D16;
+        Tue, 14 Mar 2023 14:26:05 +0200 (EET)
+Date:   Tue, 14 Mar 2023 14:26:05 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Arec Kao <arec.kao@intel.com>
+Cc:     linux-media@vger.kernel.org, bingbu.cao@linux.intel.com,
+        andy.yeh@intel.com
+Subject: Re: [PATCH v2] media: ov13b10: Support device probe in non-zero ACPI
+ D state
+Message-ID: <ZBBn3Vpmyei9Jgk7@kekkonen.localdomain>
+References: <20230314121436.13538-1-arec.kao@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230125224856.22266-1-laurent.pinchart@ideasonboard.com>
+In-Reply-To: <20230314121436.13538-1-arec.kao@intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi folks,
+Hi Arec,
 
-On Thu, Jan 26, 2023 at 12:48:48AM +0200, Laurent Pinchart wrote:
-> Laurent Pinchart (8):
->   media: i2c: Drop unused ad9389b video encoder driver
->   media: i2c: Drop unused m5mols camera sensor driver
->   media: i2c: Drop unused mt9m032 camera sensor driver
->   media: i2c: Drop unused mt9t001 camera sensor driver
->   media: i2c: Drop unused noon010pc30 camera sensor driver
->   media: i2c: Drop unused s5k6aa camera sensor driver
->   media: i2c: Drop unused sr030pc30 camera sensor driver
->   media: i2c: Drop unused vs6624 camera sensor driver
+On Tue, Mar 14, 2023 at 08:14:36PM +0800, Arec Kao wrote:
+> Tell ACPI device PM code that the driver supports the device being in
+> non-zero ACPI D state when the driver's probe function is entered.
+> 
+> Also do identification on the first access of the device, whether in
+> probe or when starting streaming.
+> 
+> Signed-off-by: Arec Kao <arec.kao@intel.com>
 
-I'd like to merge this soon, please let us know ASAP if you intend to fix
-one or more of these drivers. It is of course always possible to bring them
-back if DT / ACPI support is added.
+Please detail the changes from the previous version.
+
+This is ok for now though.
 
 -- 
 Kind regards,
