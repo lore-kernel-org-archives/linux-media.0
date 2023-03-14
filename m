@@ -2,44 +2,44 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B7D7C74A44
-	for <linux-media@archiver.kernel.org>; Tue, 14 Mar 2023 10:11:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AAB0C6FD1C
+	for <linux-media@archiver.kernel.org>; Tue, 14 Mar 2023 10:11:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbjCNKLK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Mar 2023 06:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
+        id S230242AbjCNKL2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Mar 2023 06:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbjCNKKs (ORCPT
+        with ESMTP id S230190AbjCNKLH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Mar 2023 06:10:48 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2058.outbound.protection.outlook.com [40.107.8.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664609926C;
-        Tue, 14 Mar 2023 03:10:31 -0700 (PDT)
+        Tue, 14 Mar 2023 06:11:07 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2080.outbound.protection.outlook.com [40.107.21.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E58199D7E;
+        Tue, 14 Mar 2023 03:10:37 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dQrNKCvX0PERvx5SjbgZr0vDAx98UXLUtAwUVgAhyUEGtDQE/WOsHSerC1LIHYPDDqQ9HZpDMwjKnrkuf/vmOG1NeLZzhvcACN9tZbgCYSF7zVo7/Rt6vVLq1G41N8lNbxmkj+j6kpiS+Y08mAdh247HhsPC1Bb/VfvO0tJ5J3j9Ph/BSVtjYvnJmQE14NihpfOSAspKtZqWpYNvQ5gbgO30bY3ahb7KbB0b7zc/Apuh/b29b4JC0RIZ96NjVEz0vSuIibuQVWceWS2swyvMurmqPKFL+ezbOullKyLxbNlDN7RLIuLx1C5oMQV41mJFxpJ4FmmFrBy1y/pzJGvEUw==
+ b=MbfTqEFid/QHWoH7JEDA/kgkhlGwdpj5rFOuScdzC5Z0RA3qWf5rhBcZgEVQXSe6GKoQH6OvC2TZJPYdJYeXWvRqWkAgrbOdwTrNsmpEgTT2htIM0e7t6FCtlpOciXfKji5omTx2km6oi55P6Kz923JyPQM9wrOQ54LwML/E9utpPofuz5bZstJqqp6Escm1BptahHrgQVtNcleX3OjHBz22gHNzAe7Ins0XxU4U3euKBcEopyuvcaJ3Cv2aj8Z7z27WRb13t9bLaSyH4ZED5jXa24GMDFc4+UWQ9sqeLcZanXYA3CKkC6lJdlvJ7Rhy1vEhbGQp6MVHwpSMgHQBAw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HrCBHE/Vo1gQsJNT1K4+pi9GaKVG9/ECTcSLZP8Gt2E=;
- b=eNf/BqNAB7j4qysTaTzLFJuf/Uz7aoQFsa/z/qmUqgwVvrYYAN72/VS13RJlIpbV5M+ZslbnhFC1Q0PsQZqWm7Lyw2Dsa8tsROCVamFni8hnM0Usf79Z9h7+x9P+b7dJd8pW4cfnx1rVZGQykToHW9JrUdypGPh5MWNRw3vmpy9QkCNRRCBbofcrcUcGS7/sxUX/Wy9Ur9OOj3DvvXcIN/QxPCMgvPny+SeJkSfkzbjm0qDV+hfYFY5Pzt7f+f39xUkn5BKVdACTGPWWTmx819ISOuDhREXhSXxEquX6zqm+ly5J4wqZn34XC/RcHsoPcF6LpjG7iDcV843k6mDbJQ==
+ bh=8HtPUGDrL90dDHNDgqSHbRFOdqqqZXS5JUCzQX0fw9o=;
+ b=Ojf5PZj6rDRX83DkaoDQraRCZmSBBo9zg0tswtD7zpM+NAACUSr3+CeNSaNf9UWzd468Jrq4+u+iWikfPHChHVdr4kXRzqJIMpXePK4F9JETsome1QEuhb8yuIcIKVn35SDa5y+zoZcMToLis/HgwvfrP5cZgcsnPAvNqlmVfgqsgXt8XqQCRoCJNtuEgHehi0xqzeTlKD6l9spiPk/LQmZAu0xZiF9DMTLClwpCirg74V1dW2zdk9CQCRQ69Hh40kkUTSxWQahEftL+Y9zB67Iu6O2N8MPWuZqe/fqHX1cMU3ySN6MQZcE+C21ChWqh933D4l2Bsjq5eZ2C5sEiEQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HrCBHE/Vo1gQsJNT1K4+pi9GaKVG9/ECTcSLZP8Gt2E=;
- b=Fy4qs7NNEJt2KCVUBnIPxhhYrL+KOsz6UuKzuJTHuXcSbSlWuz55mUPfRF9Wxg7/BeNfIgQOInUYwgUMY66BnsAQoKWWiBgePbRUW/wScUXI04stD39tkyieefQ70gKpPpIBuPSxF2WyJ+tOKkzRSHAs3no9xmMuTaTSbZ53zyM=
+ bh=8HtPUGDrL90dDHNDgqSHbRFOdqqqZXS5JUCzQX0fw9o=;
+ b=nPLphcCfSJkuUki5HrgWClGpNLDjkjGFzqkfGaJDuvrzfPAp1WAefZ8JNZY7HSoPCPIRMiIuV1Tfj6OkxVJZr8OM2D7Sb+u5ccPoG7ZZUWwK7YmD630cksbOo/FF5ev7N1kTkf9rCipUVMESu90YNR3FmJk/Fm8ICURgNtH/LL0=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
- by DU0PR04MB9346.eurprd04.prod.outlook.com (2603:10a6:10:356::18) with
+ by AM8PR04MB7841.eurprd04.prod.outlook.com (2603:10a6:20b:244::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Tue, 14 Mar
- 2023 10:10:06 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Tue, 14 Mar
+ 2023 10:10:26 +0000
 Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
  ([fe80::89aa:9204:790d:e46b]) by AM6PR04MB6341.eurprd04.prod.outlook.com
  ([fe80::89aa:9204:790d:e46b%5]) with mapi id 15.20.6178.024; Tue, 14 Mar 2023
- 10:10:06 +0000
+ 10:10:26 +0000
 From:   Ming Qian <ming.qian@nxp.com>
 To:     mchehab@kernel.org, mirela.rabulea@oss.nxp.com,
         hverkuil-cisco@xs4all.nl
@@ -47,9 +47,9 @@ Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
         festevam@gmail.com, xiahong.bao@nxp.com, linux-imx@nxp.com,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v4 02/10] media: Add Y012 video format
-Date:   Tue, 14 Mar 2023 18:08:45 +0800
-Message-Id: <e5fefc67731c492570bf468572c5894fdcefbb28.1678788305.git.ming.qian@nxp.com>
+Subject: [PATCH v4 07/10] media: imx-jpeg: Refine the function mxc_jpeg_find_format
+Date:   Tue, 14 Mar 2023 18:08:50 +0800
+Message-Id: <58cbaa978ccb4d9c96b169dd268bb06f17816e2f.1678788305.git.ming.qian@nxp.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <cover.1678788305.git.ming.qian@nxp.com>
 References: <cover.1678788305.git.ming.qian@nxp.com>
@@ -60,122 +60,120 @@ X-ClientProxiedBy: SI1PR02CA0028.apcprd02.prod.outlook.com
  (2603:10a6:20b:d8::14)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR04MB6341:EE_|DU0PR04MB9346:EE_
-X-MS-Office365-Filtering-Correlation-Id: 04f4570e-a256-4939-4d72-08db24744914
+X-MS-TrafficTypeDiagnostic: AM6PR04MB6341:EE_|AM8PR04MB7841:EE_
+X-MS-Office365-Filtering-Correlation-Id: bb2f2559-a9e5-41f7-3265-08db2474550e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4hwiunJkfAxhTDyn/j41yHNwMeX1Vo33h9MZll+jXQL3gCEcHukBRHXzypknwhO83TwPNdAnu+YYTcKvD4cNnAMfZajA2OXtCUyK8PFQCN9nWSHNs4lKqvJwUBNllaNAeHcEiyNwqYhy9nUsP2PFW5tBMvyd9cCMZ00hHxmDgPdl/mq+R5EKKN0KL7b6uvm7yFzfd9TGLtkJCakM4D8G1gu06BJ03NmzvJf1U1eKfnRVdw19Qh0IGPpLf7kdA8D4oCzbJKABq3gMLizaKwJBUSx+8rohvPnMD7BNRSyyp11xSuAZ/BJjOSG7aI0DEB6rd/NdDP/ExvSrzGo9N3Qon+J3XDjknXMdkJgly6CAqxKj0Okj8HRzdhn5TmhMeZ56Z1ojzj5rvGyxzT7bvloc0RtCNbZjgkvZ1Vbq1yqZ5Qo+AXjmIKXPptJPA3Bg4kLR3DJ20V1dsS7X7329oi2Jqi4QBrwi0k3uCT2Th0eW1ps/dZL8CAvZ6P0Zkw9Ii4kVmke4bi9Wx80AvvMF9jjhHfHEAugk3TZLwv4FIL86Om8PxORYn8donAsftkfjxZPnDZ3yNnLsjCGwHzNKP+PmAnPMqZ7V3mIGEYj2YzmEawjZEoiivEFCqu2mI6vmIykkttaHGzynxe5uB46bgqBV292ClPYzmNbcXF/ECjw4IkaSUDRm6pPefyY1hWY67oejnpISjF826lxQaqRzbs2/OQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(376002)(39860400002)(366004)(346002)(451199018)(2906002)(41300700001)(83380400001)(36756003)(5660300002)(7416002)(44832011)(66946007)(8676002)(66556008)(38350700002)(4326008)(66476007)(86362001)(38100700002)(316002)(8936002)(186003)(2616005)(26005)(6512007)(52116002)(478600001)(6506007)(6486002)(6666004);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: eA9uyWBo7NUiwW708lIb0yQ8RR3zj7e7kEylukJ/OPQc3N3gju+fhawtU87PCk8XBT5+SUxiqSyXSRHpo2YYivr/jT6yMs6WkxD4kpvdduvyD0HsYzBadxjjXVS6Qb1V4oCuugCCYjD3YoZmnSBEtp2+aVX3Y4BveqbQnZQz8tUwbUZHl5+WcxJjuxkVTfEdmh1ZsaZcpMipgBgpW7iUJJ7k7kjHhzVMg6Si2trzfq+lMqRY2jGTZ9a147xVr5cpZSs6RS0AzrzvvMMhK1/Ue+XMnyzUNeId2pIXKiRFkMi4ST2WjwxQuu2dSZBc1MvYlYlLLJTjaWjw7im3aCJfjwfrIVxVsmlpV0Brv6Aozy5idM00ozdg/dk3tcAxBiN16j6KpaeoXLkEjrA5EkzRAK9VunLlN5jZ4vLPi5OnLH/ZGbCGGQrmadBIajhnJYtBCES3IEiNI4GAy9U3XeE9UGP9qu0+wkk9IW/Bow0oqf72Nd4LnfNu5F6klWuGmsPV9WbrrfxUMYI3Sq++HB9h3hqYyk70Z5U58e/gPF2cjLu9nIsEjys/D3yBTo1MfS08LdgaZkO9d50CZgvmHgP5IkpCdOwxBLvLmFiK6xX85qTNo+ynqIQC7F/ptTn2UCkrkH/+h4jVjZN6vzQ43T9L52VOLMsyR/9JmyZdrtQyJFc2vM91jE7tyQeTiwRbMwyY3p3QJw3/IflOIQ5GP/2pbg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(39860400002)(366004)(376002)(136003)(451199018)(7416002)(5660300002)(8936002)(2906002)(44832011)(38350700002)(38100700002)(86362001)(36756003)(41300700001)(478600001)(66946007)(66556008)(66476007)(8676002)(6486002)(6666004)(4326008)(52116002)(83380400001)(316002)(186003)(26005)(6506007)(2616005)(6512007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MqzedhYl1R/QqMwT0hMWuhoimEUu4d4eZD84towf0FJcBa1W4nv86ipxRZ5l?=
- =?us-ascii?Q?w7TYsizZ5/f4piYIi4VrXfXlQ8ixtIi/NiNhjukQ/JgsoqMFHw8YcjsGCGiL?=
- =?us-ascii?Q?6ufFpTrYjzaZMtqB0ozBP/pdARQrrR2ATXkov++wOTUQANJz9YsD4c6RT+6N?=
- =?us-ascii?Q?xMYdBFixC15HGnfnY2juljfgeIWbYswfJ0yUc5FMREB2i0MhHf3FWx0LzLRB?=
- =?us-ascii?Q?lpeIi7oI42YLUHSDoUeuey2LhAWdT4XTvwKtBiiPhPj+InNluWdWDJzEG2iY?=
- =?us-ascii?Q?Qsx4zQ0O0ge29XrJclDkOH9AZUtD5p3+A9nG+/fArQTEJT7W7kPFbTArrdAa?=
- =?us-ascii?Q?Ea0sfJUM/XE8Z2t5ZYgB1+up8+Hw9s8D6wfmhQLsnVFTrDz1bNryz//SIySx?=
- =?us-ascii?Q?Wbu0rwzlr5qtsjt56W2tUD0We2tw7zlZnVzNCeujqnh6BdDlA7sPZnhbitv9?=
- =?us-ascii?Q?PjcqWePgOUqkXmMEYhzql1OeWa5AZdd6d9gU0JaLQSdPBTA/2ndX7CrdrI0k?=
- =?us-ascii?Q?JIP1bgnY1C8kCp3nGDzbAG+7/vsCY4MXObcPC1ldJIGTONT7KJBMkjHjP5EH?=
- =?us-ascii?Q?RnhbXHnEu6ys4KZCkNUe6a5GEteN9uhZ5ZMCw55/X6mKEBr6a0pfsrOZ9DfO?=
- =?us-ascii?Q?aGlgnkxqLQI0Mg2Uh+RqWaTs7FaLDccMjglYy3Gm55APz/x4ZCE9zHEZppvE?=
- =?us-ascii?Q?sh+gt6Kstk0V9LSzLi3YeGAoNsEiC7Jj3dBDFYHWldKyr+ZEkTbhvT1SkotG?=
- =?us-ascii?Q?QmA8uJJUfzJmn/x45+XmzmHkpuZSaz0Y/4+aprIx0lwTceMD+snvZvb/nhqA?=
- =?us-ascii?Q?rnpVSK+vIUPD7EJe911o23lThaOCIEmskBfXkOdwVHantj2AkQQt1vH12UKs?=
- =?us-ascii?Q?hw2En62OqUN/1ai6Wry6FgTtWyqBtWN+QSBGsskANBGkC2ZaWfXsAtKi7r03?=
- =?us-ascii?Q?bTTMZlUAkgx57B4XhM7y4Cdtjd/KALJ075BywhssxyWMNcjeAF9VkJDhOQU0?=
- =?us-ascii?Q?bWsnNG95maYCDDmisIUlaGtV56rDR/yYmQ+LEFuLMM8IaIydVth5dPTUupA0?=
- =?us-ascii?Q?PXUUk4aC5RxeKpJFVL15BkkwBXNFnElFNuRw4VgC94Kgz1HLmDBb8mTHX7M8?=
- =?us-ascii?Q?hywM86MpynVFuDXl7sXLC/iPa+WLu6ziqkiA2kUgf1Jm7cSXDO+ctZAkzk3l?=
- =?us-ascii?Q?pDpYxpqDfllx55D1GoM8T/blcApNKXEpa6OQjKHi/O9IQLocw8AovpvLzNmi?=
- =?us-ascii?Q?O4VfqF9S9eAZyyHuJjqlbSqIPeu14THGSDZBA6U4am1/Q6o3SwK/pg0alKBN?=
- =?us-ascii?Q?+ykxVvIEvz7hCOW04ZTPbxIbaey2wZB0o73DZk3LKH4JZ7Rd8B0D9jciEuTo?=
- =?us-ascii?Q?0QqOpQgyl/IDrgNE5BOQhtYNcHyIroGL8cvAcU1tllGMDuIXmoT67MXdcaX1?=
- =?us-ascii?Q?xPfGEHjCYdYx22m8YY8vwgL+S2jBiXYTy4yY6vUZZMTXpSjNFPqopVHH+exJ?=
- =?us-ascii?Q?FhjB0kCDmcv0/Gba0Vyk7a2OTSv84sswSm/SHSurMNgCFhO7ri/DcUUwmqtY?=
- =?us-ascii?Q?bDoDEmfRZv03yP54jwyxY+lCIRNuGiH3ruTAX2mB?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NNgur0fSIMbLvW5GPfTH0jmErDq0aLD7uSTWIhQVkYX/XiY5FoNKh++Ur37u?=
+ =?us-ascii?Q?t1NT7sYMKG/dAqC7OK3ZmXuDUfstt98/T97RjNxczBfQ3s4xPGj24XZg8zVD?=
+ =?us-ascii?Q?8KLOb5CcWSdQYXUZ5PqkZ1BzvPJWGEARBtt4MtNc8JdEv/VGxrQA9VRGNiwc?=
+ =?us-ascii?Q?sk3iSFROZCQAEUt2aIU8kdvFBTBH0xHAcJNwQhWsbb+2R3nAJwsHtVjdOAil?=
+ =?us-ascii?Q?PRJ6UEXKjpe9IsinZHhoVnE03zqjlGp7EoCFrUD5mV0Q9tG20Jy2xE1bDum6?=
+ =?us-ascii?Q?60eTZNqUV+yX7ZznRwdQnQOexXxwHuCT0gzg4gJMeaqvm3Kj5kEhZk67KVlh?=
+ =?us-ascii?Q?AsjOUv70C0NVL+df7GN+AGv8OylJA6OSvGTnDq+ji/jKai8i0cVi9Tpo99hE?=
+ =?us-ascii?Q?ZEWIkf68RwrSd30SG+MmzSZtMtJ/TA0agUX2VrUHcmzTfgU8g9DCN3lCDMs1?=
+ =?us-ascii?Q?I+VCBN6YNaAD+Q5VJqS9G4i07Iw3UMG6frU3RLRaevabdfwibC+O/xdYjLiN?=
+ =?us-ascii?Q?edNIr10q9G07JIOMJz6BDO9SkLwV17qCoOnavfkaS2/i2llKzqvYTWsqAcRr?=
+ =?us-ascii?Q?VUjbe8ArxwtVfXHuJae2TwOp04PNrKvn2vb0rFgcXWfHXjJlV51z9Ex0GvB7?=
+ =?us-ascii?Q?tw3+RIyxqJ+9yhxH33urir3pvRc1mtujzLDzY7FWYCNB6UMIqpFbxt5Z2a4S?=
+ =?us-ascii?Q?6kBnexThXMDVQoheTyaar7fm1pru8UCQEdq34GXZkKAzAoc8GWCKpxG2DqFm?=
+ =?us-ascii?Q?v19CegB9VojujAD9sAqrOnjtURtvac2bjh+6d6lpc8Ch3VOTB8evGklNZBpq?=
+ =?us-ascii?Q?o5Us9Il8K96MHQsJKix0T34D0d9+hh9qNra1WpvhPHr7MhBuVVgG/W0rSW5D?=
+ =?us-ascii?Q?yZapBo2x786b8NFmhiYkcyhrpTaw9DhWvuBxoMHjWO10SqrlHoKztPAanHvT?=
+ =?us-ascii?Q?9qJCoNgbY8QclYDRfwABkvKojtXZ+Jb1O8p3AVi+BhewKaMYoagv9i2iNB9D?=
+ =?us-ascii?Q?61hYTxPrbxtWU7yypzvMMh3nW56tQvn/EzYgAWhgfLzUrIPQFtep1V1aqsyO?=
+ =?us-ascii?Q?R9sLFGQ2HzaruV/J+FJkPnbenEtYzR183/IkFx6CAggC3vgtl9HWtbZhtxpq?=
+ =?us-ascii?Q?7CrpH7GVSSwFzOGqcfBE/r7u1iXUbA/YjK9GSnVQzXbNapBJNjSnksme8zrb?=
+ =?us-ascii?Q?JWNnUCnnf2/p0g7zaGAGC3k+4MBBPgBD9BphtAzJ0JtNHtAdEcUXXASBdGQ7?=
+ =?us-ascii?Q?uyKwdKQgHWOwjLpwexbq7ylvy+/ISK7lSd7s9Boko8WiLXJJXrKnE2LukGVc?=
+ =?us-ascii?Q?tfgk3kUjQrzLCSrxncv6IyNA5rFf7rnHSr/srxwpHKTtQ6U/os8eF7a0mWl1?=
+ =?us-ascii?Q?Sn8LJxW4AxNVjQ0FK+J9wcuog0FXEpHj6BIzrs358uxMt0rhajlWnHAQpxP0?=
+ =?us-ascii?Q?D+oJ5qESH/EbZyf3jU+pSllBc6aV3wthzZDkzlNKxwhWWbDxo5leEYIYQzBK?=
+ =?us-ascii?Q?nZCW7GldhSM+Jhkw6r6XcecjrxsIGQCYD+NJtWSaCNXFv6ok7W2uj1OHVjaV?=
+ =?us-ascii?Q?6fcSuf72nde7xYnFFw+iMQsNOVtITjkDd9q3+nJy?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 04f4570e-a256-4939-4d72-08db24744914
+X-MS-Exchange-CrossTenant-Network-Message-Id: bb2f2559-a9e5-41f7-3265-08db2474550e
 X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 10:10:06.6586
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 10:10:26.6732
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4auQeJcWiEzdHoQa5UFbRJZ0nv+AoE6w6oVB8kTkmZWxmkLm4fGO+wQS5xB7zC22Ftqmz9eeCgEZyfx/wHT2IA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR04MB9346
+X-MS-Exchange-CrossTenant-UserPrincipalName: bzWptyUeA+rYTg3lxk9XO+ybZ5atmzFkaSOujboia7updFDIZ4Eg3XZw3nrn0dk1Kzy6oDfyUrD69ldxCIgBPQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7841
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Y012 is a luma-only formats with 12-bits per pixel,
-expanded to 16bits.
-Data in the 12 high bits, zeros in the 4 low bits,
-arranged in little endian order.
+remove the unused parameter ctx
 
 Signed-off-by: Ming Qian <ming.qian@nxp.com>
 ---
- .../userspace-api/media/v4l/pixfmt-yuv-luma.rst   | 15 +++++++++++++++
- drivers/media/v4l2-core/v4l2-ioctl.c              |  1 +
- include/uapi/linux/videodev2.h                    |  1 +
- 3 files changed, 17 insertions(+)
+ drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-index 62078a01de76..7888151f2cd4 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-@@ -103,6 +103,17 @@ are often referred to as greyscale formats.
-       - ...
-       - ...
+diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+index f085f14d676a..70b6eea733e7 100644
+--- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
++++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+@@ -420,8 +420,7 @@ static int enum_fmt(const struct mxc_jpeg_fmt *mxc_formats, int n,
+ 	return 0;
+ }
  
-+    * .. _V4L2-PIX-FMT-Y012:
-+
-+      - ``V4L2_PIX_FMT_Y012``
-+      - 'Y012'
-+
-+      - Y'\ :sub:`0`\ [3:0] `0000`
-+      - Y'\ :sub:`0`\ [11:4]
-+      - ...
-+      - ...
-+      - ...
-+
-     * .. _V4L2-PIX-FMT-Y14:
+-static const struct mxc_jpeg_fmt *mxc_jpeg_find_format(struct mxc_jpeg_ctx *ctx,
+-						       u32 pixelformat)
++static const struct mxc_jpeg_fmt *mxc_jpeg_find_format(u32 pixelformat)
+ {
+ 	unsigned int k;
  
-       - ``V4L2_PIX_FMT_Y14``
-@@ -146,3 +157,7 @@ are often referred to as greyscale formats.
-     than 16 bits. For example, 10 bits per pixel uses values in the range 0 to
-     1023. For the IPU3_Y10 format 25 pixels are packed into 32 bytes, which
-     leaves the 6 most significant bits of the last byte padded with 0.
-+
-+    For Y012 and Y12 formats, Y012 place its data in the 12 high bits, with
-+    padding zeros in the 4 low bits, in contrast to Y12 format, which have
-+    its padding located in the most significant bits of the 16 bit word.
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 6489b67babfa..2cb485643562 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1307,6 +1307,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
- 	case V4L2_PIX_FMT_Y6:		descr = "6-bit Greyscale"; break;
- 	case V4L2_PIX_FMT_Y10:		descr = "10-bit Greyscale"; break;
- 	case V4L2_PIX_FMT_Y12:		descr = "12-bit Greyscale"; break;
-+	case V4L2_PIX_FMT_Y012:		descr = "12-bit Greyscale"; break;
- 	case V4L2_PIX_FMT_Y14:		descr = "14-bit Greyscale"; break;
- 	case V4L2_PIX_FMT_Y16:		descr = "16-bit Greyscale"; break;
- 	case V4L2_PIX_FMT_Y16_BE:	descr = "16-bit Greyscale BE"; break;
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index f83a9d1210fb..db06d4c4f008 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -586,6 +586,7 @@ struct v4l2_pix_format {
- #define V4L2_PIX_FMT_Y6      v4l2_fourcc('Y', '0', '6', ' ') /*  6  Greyscale     */
- #define V4L2_PIX_FMT_Y10     v4l2_fourcc('Y', '1', '0', ' ') /* 10  Greyscale     */
- #define V4L2_PIX_FMT_Y12     v4l2_fourcc('Y', '1', '2', ' ') /* 12  Greyscale     */
-+#define V4L2_PIX_FMT_Y012    v4l2_fourcc('Y', '0', '1', '2') /* 12  Greyscale     */
- #define V4L2_PIX_FMT_Y14     v4l2_fourcc('Y', '1', '4', ' ') /* 14  Greyscale     */
- #define V4L2_PIX_FMT_Y16     v4l2_fourcc('Y', '1', '6', ' ') /* 16  Greyscale     */
- #define V4L2_PIX_FMT_Y16_BE  v4l2_fourcc_be('Y', '1', '6', ' ') /* 16  Greyscale BE  */
+@@ -1562,7 +1561,7 @@ static int mxc_jpeg_parse(struct mxc_jpeg_ctx *ctx, struct vb2_buffer *vb)
+ 	if (fourcc == 0)
+ 		return -EINVAL;
+ 
+-	jpeg_src_buf->fmt = mxc_jpeg_find_format(ctx, fourcc);
++	jpeg_src_buf->fmt = mxc_jpeg_find_format(fourcc);
+ 	jpeg_src_buf->w = header.frame.width;
+ 	jpeg_src_buf->h = header.frame.height;
+ 	ctx->header_parsed = true;
+@@ -1702,11 +1701,11 @@ static void mxc_jpeg_set_default_params(struct mxc_jpeg_ctx *ctx)
+ 	int i;
+ 
+ 	if (ctx->mxc_jpeg->mode == MXC_JPEG_ENCODE) {
+-		out_q->fmt = mxc_jpeg_find_format(ctx, MXC_JPEG_DEFAULT_PFMT);
+-		cap_q->fmt = mxc_jpeg_find_format(ctx, V4L2_PIX_FMT_JPEG);
++		out_q->fmt = mxc_jpeg_find_format(MXC_JPEG_DEFAULT_PFMT);
++		cap_q->fmt = mxc_jpeg_find_format(V4L2_PIX_FMT_JPEG);
+ 	} else {
+-		out_q->fmt = mxc_jpeg_find_format(ctx, V4L2_PIX_FMT_JPEG);
+-		cap_q->fmt = mxc_jpeg_find_format(ctx, MXC_JPEG_DEFAULT_PFMT);
++		out_q->fmt = mxc_jpeg_find_format(V4L2_PIX_FMT_JPEG);
++		cap_q->fmt = mxc_jpeg_find_format(MXC_JPEG_DEFAULT_PFMT);
+ 	}
+ 
+ 	for (i = 0; i < 2; i++) {
+@@ -1950,7 +1949,7 @@ static int mxc_jpeg_try_fmt(struct v4l2_format *f,
+ 		 pix_mp->height : MXC_JPEG_MAX_HEIGHT;
+ 	int i;
+ 
+-	fmt = mxc_jpeg_find_format(ctx, fourcc);
++	fmt = mxc_jpeg_find_format(fourcc);
+ 	if (!fmt || fmt->flags != mxc_jpeg_get_fmt_type(ctx, f->type)) {
+ 		dev_warn(ctx->mxc_jpeg->dev, "Format not supported: %c%c%c%c, use the default.\n",
+ 			 (fourcc & 0xff),
+@@ -1958,7 +1957,7 @@ static int mxc_jpeg_try_fmt(struct v4l2_format *f,
+ 			 (fourcc >> 16) & 0xff,
+ 			 (fourcc >> 24) & 0xff);
+ 		fourcc = mxc_jpeg_get_default_fourcc(ctx, f->type);
+-		fmt = mxc_jpeg_find_format(ctx, fourcc);
++		fmt = mxc_jpeg_find_format(fourcc);
+ 		if (!fmt)
+ 			return -EINVAL;
+ 		f->fmt.pix_mp.pixelformat = fourcc;
 -- 
 2.38.1
 
