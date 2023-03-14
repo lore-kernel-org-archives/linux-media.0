@@ -2,161 +2,119 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 781EBC6FD1F
-	for <linux-media@archiver.kernel.org>; Tue, 14 Mar 2023 18:45:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 917EEC6FD1F
+	for <linux-media@archiver.kernel.org>; Tue, 14 Mar 2023 19:06:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbjCNSps (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Mar 2023 14:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46230 "EHLO
+        id S231267AbjCNTGw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Mar 2023 15:06:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbjCNSpq (ORCPT
+        with ESMTP id S230201AbjCNTGu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Mar 2023 14:45:46 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899B3A401E;
-        Tue, 14 Mar 2023 11:45:12 -0700 (PDT)
-Received: from g550jk.localnet (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id D374BD2500;
-        Tue, 14 Mar 2023 18:33:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1678818788; bh=fHJza5nGl0uG6ilnr4LPPY4PLgKrXqdkOF8SQ67N1kY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=ZsiIufmMaKi3c7O3QK6sepAvzFn03uUdr3CKUT3VoXSwt4PKJlOVdFJSG6mYnRtKl
-         z6YxTjTZmVCR6xEsuDpr+/pK5lVUqEkqLk0ZCDzaXNeV3mC74pia+ELIIICuR5k8vM
-         IVjGYv/sDCA2ppaCyYavz41aREDHVP4LdFyBJuMc=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-Cc:     Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
-        phone-devel@vger.kernel.org,
-        Helen Koike <helen.koike@collabora.com>
-Subject: Re: [PATCH] media: dt-bindings: ov2685: convert to dtschema
-Date:   Tue, 14 Mar 2023 19:33:06 +0100
-Message-ID: <5654018.DvuYhMxLoT@z3ntu.xyz>
-In-Reply-To: <ZBBh9Euor7R24euV@valkosipuli.retiisi.eu>
-References: <20230206-ov2685-dtschema-v1-1-9e4da3474c10@z3ntu.xyz>
- <2665862.mvXUDI8C0e@z3ntu.xyz> <ZBBh9Euor7R24euV@valkosipuli.retiisi.eu>
+        Tue, 14 Mar 2023 15:06:50 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB222B2A7;
+        Tue, 14 Mar 2023 12:06:31 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4Pbjg43XnMz49Q4J;
+        Tue, 14 Mar 2023 21:06:24 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1678820786;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yKx+lb5WLm5CP4bEB98GQrBYtZsW8RpnNc4soWPz9D4=;
+        b=GCEeTyGroXJqbf3duk2LvvTfKjzzmdAy+PgL6w6B46hUQiNM3o4bokURg5QjBXbSyRY9op
+        0TVDsZ97gU3wGUqr1pKx1ah7+2BwXDeg52JLvm8CvLtKJrMriaGOmuN0QtR+EkDx+aUkzX
+        9yp7SAAGEsVqAXe7vT2BxC6wFivcaQs4nB0SzTQ/gYG6rW4DqcxasnjafoNajiOJ2CUSln
+        h7husOv4kqXhb80hONmfJNq49mCrRPFWDP402zhFVqf7Iaw6rMTWc7HPx5v+noORJ9HsVc
+        kJ3qjYppdhBZhyf5quHIY+RNWXzk56tipYgHqSjRrW2AhzdMvzROePVYBCj5/g==
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1678820786; a=rsa-sha256;
+        cv=none;
+        b=dEZZWFtN3n1ODQxPicIBDbvYKD4exOBi19VkguV7BavPWB5KPAALOL9QE05/eSv63vX7uH
+        nKaT4D4Tq2wBZD2UfbsJSHBO6m80XhEhglz4vQaTyfaUdau+WSuYVj9X/JQdWyBTW+EIS7
+        1sPiF3xEEE10iyWZUpSGDhwmaeUsmfxlMNM0xFUXvfWgLvnOkTL+ueTGQB5bDtc1WSbok7
+        +p/l+dpfrNgi51wvtj8+T7Lul8xgUEEPf17XxdDNqUG6EctECJH/HQNf7j0IBMfNkYKZ2N
+        ct1HrYNpV6kx6oFBl3jck0ZsBqEgujTLM+Q4fyPUe5ZDX6DJeYtib+vq1NXzoA==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1678820786;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yKx+lb5WLm5CP4bEB98GQrBYtZsW8RpnNc4soWPz9D4=;
+        b=V4mC+rvMKVksYXS+08sydzOyWpNANSqh6qOjG1migkQN+OyAGdosTyCTbxNM3X7A9C8sIn
+        zrWL5Dj2401lqu4rR/xEoEV0l61mKSLTpWY7qyvXYXpxzkt9TLJTCcIm4wsA/i6bZG/l4/
+        F2Wr8fmhVhUE64j60Z5JLz1U3UXeYvoHgj7GJCtNOjCs7Bm37gbpVR+W+Hv6ecoSBpWLRR
+        rkp6dgyGylv/MEJYBlNeut4WaZfmxz68cb25p7p09f+Abi+ux2ByYgq6bk3Me8Q0/glP3f
+        U+OLeyJ4s64GwDO0ngvb0J1OHkFgqNd63+oR6Uk02GZ9n1Ehr39HwBJYYFhYBw==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 717B3634C91;
+        Tue, 14 Mar 2023 21:05:21 +0200 (EET)
+Date:   Tue, 14 Mar 2023 21:05:21 +0200
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     shravan kumar <shravan.chippa@microchip.com>
+Cc:     paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
+        mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v12 5/5] media: i2c: imx334: update pixel and link
+ frequency
+Message-ID: <ZBDFcXYeK0eB9i1v@valkosipuli.retiisi.eu>
+References: <20230301073412.1204574-1-shravan.chippa@microchip.com>
+ <20230301073412.1204574-6-shravan.chippa@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230301073412.1204574-6-shravan.chippa@microchip.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Dienstag, 14. M=E4rz 2023 13:00:52 CET Sakari Ailus wrote:
-> Hi Luca,
->=20
-> On Thu, Feb 09, 2023 at 05:46:48PM +0100, Luca Weiss wrote:
-> > +CC Helen Koike
-> >=20
-> > On Montag, 6. Februar 2023 22:50:08 CET Rob Herring wrote:
-> > > On Mon, 06 Feb 2023 21:23:16 +0100, Luca Weiss wrote:
-> > > > Convert the text-based dt-bindings to yaml.
-> > > >=20
-> > > > Changes from original txt:
-> > > > * Take wording for various properties from other yaml bindings, this
-> > > >=20
-> > > >   removes e.g. volt amount from schema since it isn't really releva=
-nt
-> > > >   and the datasheet is a better source.
-> > > >=20
-> > > > * Don't make reset-gpios a required property since it can be tied to
-> > > >=20
-> > > >   DOVDD instead.
-> > > >=20
-> > > > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> > > > ---
-> > > >=20
-> > > >  .../devicetree/bindings/media/i2c/ov2685.txt       |  41 ---------
-> > > >  .../devicetree/bindings/media/i2c/ovti,ov2685.yaml | 101
-> > > >  +++++++++++++++++++++ MAINTAINERS
-> > > > =20
-> > > >  |   1 +
-> > > > =20
-> > > >  3 files changed, 102 insertions(+), 41 deletions(-)
-> > >=20
-> > > My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_ch=
-eck'
-> > > on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> > >=20
-> > > yamllint warnings/errors:
-> > >=20
-> > > dtschema/dtc warnings/errors:
-> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
-gs/
-> > > medi a/rockchip-isp1.example.dtb: camera@3c: 'clocks' is a required
-> > > property From schema:
-> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
-gs/
-> > > med
-> > > ia/i2c/ovti,ov2685.yaml
-> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
-gs/
-> > > med
-> > > ia/rockchip-isp1.example.dtb: camera@3c: 'clock-names' is a required
-> > > property From schema:
-> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
-gs/
-> > > med
-> > > ia/i2c/ovti,ov2685.yaml
-> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
-gs/
-> > > med
-> > > ia/rockchip-isp1.example.dtb: camera@3c: 'dvdd-supply' is a required
-> > > property From schema:
-> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
-gs/
-> > > med
-> > > ia/i2c/ovti,ov2685.yaml
-> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
-gs/
-> > > med
-> > > ia/rockchip-isp1.example.dtb: camera@3c: 'avdd-supply' is a required
-> > > property From schema:
-> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
-gs/
-> > > med
-> > > ia/i2c/ovti,ov2685.yaml
-> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
-gs/
-> > > med
-> > > ia/rockchip-isp1.example.dtb: camera@3c: 'dovdd-supply' is a required
-> > > property From schema:
-> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
-gs/
-> > > med
-> > > ia/i2c/ovti,ov2685.yaml
-> >=20
-> > Looks like rockchip-isp1.yaml uses very incomplete sensor examples in
-> > their
-> > binding example, which sort of makes sense since those bindings are
-> > showing
-> > the rockchip isp bindings and contain the bare minimum to show how a
-> > sensor is connected in dt.
-> >=20
-> > Not sure how to solve this - ov2685 is also one of three sensors that a=
-re
-> > used very abbreviated there.
->=20
-> Could these regulators be simply made optional?
+Hi Shravan,
 
-Sure, from driver side it would just get dummy regulators instead.
+On Wed, Mar 01, 2023 at 01:04:12PM +0530, shravan kumar wrote:
+> @@ -885,7 +895,13 @@ static int imx334_init_pad_cfg(struct v4l2_subdev *sd,
+>  	struct v4l2_subdev_format fmt = { 0 };
+>  
+>  	fmt.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
+> -	imx334_fill_pad_format(imx334, &supported_modes[0], &fmt);
+> +	fmt->format.code = imx334->cur_code;
 
-Still the clocks are also missing in this rockchip example. Any suggestion=
-=20
-what to do about those?
+This does not compile.
 
-Honestly I don't want to spend too much time on some ISP docs that I don't=
-=20
-really care about, would be nice if the maintainers of that could do that...
+> +	imx334_fill_pad_format(imx334, imx334->cur_mode, &fmt);
+> +
+> +	__v4l2_ctrl_modify_range(imx334->link_freq_ctrl, 0,
+> +				 __fls(imx334->menu_skip_mask),
+> +				 ~(imx334->menu_skip_mask),
+> +				 __ffs(imx334->menu_skip_mask));
 
-Regards
-Luca
+You're not holding imx334->mutex here, as you should. Also accessing
+imx334->cur_code should only be done while that mutex is acquired.
 
+What's the purpose of calling __v4l2_ctrl_modify_range() here, all these
+values are static once probe() function has been called, aren't they?
 
+I'm dropping this patch for now, taking the first four.
 
+>  
+>  	return imx334_set_pad_format(sd, sd_state, &fmt);
+>  }
+
+-- 
+Kind regards,
+
+Sakari Ailus
