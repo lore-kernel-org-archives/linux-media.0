@@ -2,44 +2,44 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B945C7618D
-	for <linux-media@archiver.kernel.org>; Tue, 14 Mar 2023 11:55:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F1F8C76195
+	for <linux-media@archiver.kernel.org>; Tue, 14 Mar 2023 11:55:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231543AbjCNLzt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Mar 2023 07:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44786 "EHLO
+        id S231520AbjCNLzv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Mar 2023 07:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbjCNLzr (ORCPT
+        with ESMTP id S231526AbjCNLzr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 14 Mar 2023 07:55:47 -0400
 Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048CF86DF3;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082348A3AE;
         Tue, 14 Mar 2023 04:55:45 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32EBtULE105814;
-        Tue, 14 Mar 2023 06:55:30 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32EBtP8m105671;
+        Tue, 14 Mar 2023 06:55:25 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678794930;
-        bh=JGSN//92xgAzRXhFvRWWriqMgsTJzBHHxKA2Y6028FI=;
+        s=ti-com-17Q1; t=1678794925;
+        bh=IFJsUQk232s7e8N9uoqezRx3OBmYY8+n+kXrVuwBMoI=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=XNi/HoXEnzqQaQ77lAH5e76/8fMAZvFDq+/0IGnWvj7q6YXHToRfzmcCrkvJnqlhB
-         3fMfM6tMNDao4N5XLEjKPaoIcNTY1P/LSsuJnYXeO1xHhJQldkLL4tD6/MrC+NKrBe
-         ox9/jcf/ArwkZpNl/4vv2+P/J331OQNa0tU13Gf4=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32EBtUT3003074
+        b=iL8UVw+V8s4vUm8sj2/h7wrug3M7mhZRcR1T5acfpLO9/ylMq4AjTuq4+4VH2kEdk
+         +d4b2kOa92/XWqIU+RSZ9Cs+tGyKasqlvP97igKH2A5r6lQhUvE7+MJIqru6j7PBNh
+         GxKp/ysJzsrvMD/DE2/Cr29aQQOy7ruRNbbwwfpQ=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32EBtPp1112494
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 14 Mar 2023 06:55:30 -0500
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 14 Mar 2023 06:55:25 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 14
- Mar 2023 06:55:30 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2023 06:55:24 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 14 Mar 2023 06:55:30 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32EBtTgY111843;
-        Tue, 14 Mar 2023 06:55:29 -0500
+ Frontend Transport; Tue, 14 Mar 2023 06:55:24 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32EBtNok111799;
+        Tue, 14 Mar 2023 06:55:24 -0500
 From:   Vaishnav Achath <vaishnav.a@ti.com>
 To:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <mripard@kernel.org>, <mchehab@kernel.org>, <robh+dt@kernel.org>,
@@ -51,9 +51,9 @@ CC:     <linux-kernel@vger.kernel.org>, <bparrot@ti.com>,
         <devarsht@ti.com>, <praneeth@ti.com>, <u-kumar1@ti.com>,
         <vigneshr@ti.com>, <nm@ti.com>, <martyn.welch@collabora.com>,
         <vaishnav.a@ti.com>
-Subject: [PATCH v7 06/13] media: cadence: csi2rx: Set the STOP bit when stopping a stream
-Date:   Tue, 14 Mar 2023 17:25:09 +0530
-Message-ID: <20230314115516.667-7-vaishnav.a@ti.com>
+Subject: [PATCH v7 03/13] media: cadence: csi2rx: Add get_fmt and set_fmt pad ops
+Date:   Tue, 14 Mar 2023 17:25:06 +0530
+Message-ID: <20230314115516.667-4-vaishnav.a@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230314115516.667-1-vaishnav.a@ti.com>
 References: <20230314115516.667-1-vaishnav.a@ti.com>
@@ -66,74 +66,209 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Pratyush Yadav <p.yadav@ti.com>
 
-The stream stop procedure says that the STOP bit should be set when the
-stream is to be stopped, and then the ready bit in stream status
-register polled to make sure the STOP operation is finished.
+The format is needed to calculate the link speed for the external DPHY
+configuration. It is not right to query the format from the source
+subdev. Add get_fmt and set_fmt pad operations so that the format can be
+configured and correct bpp be selected.
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
 
-(no changes since v5)
-
-Changes in v5:
-- Change %d to %u
+Changes in v7:
 - Add Laurent's R-by.
 
- drivers/media/platform/cadence/cdns-csi2rx.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+Changes in v6:
+- Move the lock around the dereference for framefmt in
+  csi2rx_{get,set}_fmt() instead of when we get the pointer.
+- Do not return an error when an unsupported format is set. Instead
+  adjust the code to the first format in the list.
+- Not adding Laurent's R-by since I am making changes in
+  csi2rx_set_fmt() that he didn't explicitly recommend.
+
+Changes in v5:
+- Use YUV 1X16 formats instead of 2X8.
+- New in v5.
+
+ drivers/media/platform/cadence/cdns-csi2rx.c | 131 +++++++++++++++++++
+ 1 file changed, 131 insertions(+)
 
 diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
-index 8ecd889690b7..e80220840e93 100644
+index 2547903f2e8e..ae3ebdb3890d 100644
 --- a/drivers/media/platform/cadence/cdns-csi2rx.c
 +++ b/drivers/media/platform/cadence/cdns-csi2rx.c
-@@ -8,6 +8,7 @@
- #include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/io.h>
-+#include <linux/iopoll.h>
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_graph.h>
-@@ -40,8 +41,12 @@
+@@ -54,6 +54,11 @@ enum csi2rx_pads {
+ 	CSI2RX_PAD_MAX,
+ };
  
- #define CSI2RX_STREAM_CTRL_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x000)
- #define CSI2RX_STREAM_CTRL_SOFT_RST			BIT(4)
-+#define CSI2RX_STREAM_CTRL_STOP				BIT(1)
- #define CSI2RX_STREAM_CTRL_START			BIT(0)
- 
-+#define CSI2RX_STREAM_STATUS_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x004)
-+#define CSI2RX_STREAM_STATUS_RDY			BIT(31)
++struct csi2rx_fmt {
++	u32				code;
++	u8				bpp;
++};
 +
- #define CSI2RX_STREAM_DATA_CFG_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x008)
- #define CSI2RX_STREAM_DATA_CFG_EN_VC_SELECT		BIT(31)
- #define CSI2RX_STREAM_DATA_CFG_VC_SELECT(n)		BIT((n) + 16)
-@@ -304,12 +309,23 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
- static void csi2rx_stop(struct csi2rx_priv *csi2rx)
+ struct csi2rx_priv {
+ 	struct device			*dev;
+ 	unsigned int			count;
+@@ -79,12 +84,43 @@ struct csi2rx_priv {
+ 	struct v4l2_subdev		subdev;
+ 	struct v4l2_async_notifier	notifier;
+ 	struct media_pad		pads[CSI2RX_PAD_MAX];
++	struct v4l2_mbus_framefmt	fmt;
+ 
+ 	/* Remote source */
+ 	struct v4l2_subdev		*source_subdev;
+ 	int				source_pad;
+ };
+ 
++static const struct csi2rx_fmt formats[] = {
++	{
++		.code	= MEDIA_BUS_FMT_YUYV8_1X16,
++		.bpp	= 16,
++	},
++	{
++		.code	= MEDIA_BUS_FMT_UYVY8_1X16,
++		.bpp	= 16,
++	},
++	{
++		.code	= MEDIA_BUS_FMT_YVYU8_1X16,
++		.bpp	= 16,
++	},
++	{
++		.code	= MEDIA_BUS_FMT_VYUY8_1X16,
++		.bpp	= 16,
++	},
++};
++
++static const struct csi2rx_fmt *csi2rx_get_fmt_by_code(u32 code)
++{
++	unsigned int i;
++
++	for (i = 0; i < ARRAY_SIZE(formats); i++)
++		if (formats[i].code == code)
++			return &formats[i];
++
++	return NULL;
++}
++
+ static inline
+ struct csi2rx_priv *v4l2_subdev_to_csi2rx(struct v4l2_subdev *subdev)
  {
- 	unsigned int i;
-+	u32 val;
-+	int ret;
+@@ -236,12 +272,103 @@ static int csi2rx_s_stream(struct v4l2_subdev *subdev, int enable)
+ 	return ret;
+ }
  
- 	clk_prepare_enable(csi2rx->p_clk);
- 	clk_disable_unprepare(csi2rx->sys_clk);
- 
- 	for (i = 0; i < csi2rx->max_streams; i++) {
--		writel(0, csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
-+		writel(CSI2RX_STREAM_CTRL_STOP,
-+		       csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
++static struct v4l2_mbus_framefmt *
++csi2rx_get_pad_format(struct csi2rx_priv *csi2rx,
++		      struct v4l2_subdev_state *state,
++		      unsigned int pad, u32 which)
++{
++	switch (which) {
++	case V4L2_SUBDEV_FORMAT_TRY:
++		return v4l2_subdev_get_try_format(&csi2rx->subdev, state, pad);
++	case V4L2_SUBDEV_FORMAT_ACTIVE:
++		return &csi2rx->fmt;
++	default:
++		return NULL;
++	}
++}
 +
-+		ret = readl_relaxed_poll_timeout(csi2rx->base +
-+						 CSI2RX_STREAM_STATUS_REG(i),
-+						 val,
-+						 (val & CSI2RX_STREAM_STATUS_RDY),
-+						 10, 10000);
-+		if (ret)
-+			dev_warn(csi2rx->dev, "Failed to stop stream%u\n", i);
++static int csi2rx_get_fmt(struct v4l2_subdev *subdev,
++			  struct v4l2_subdev_state *state,
++			  struct v4l2_subdev_format *format)
++{
++	struct csi2rx_priv *csi2rx = v4l2_subdev_to_csi2rx(subdev);
++	struct v4l2_mbus_framefmt *framefmt;
++
++	framefmt = csi2rx_get_pad_format(csi2rx, state, format->pad,
++					 format->which);
++	if (!framefmt)
++		return -EINVAL;
++
++	mutex_lock(&csi2rx->lock);
++	format->format = *framefmt;
++	mutex_unlock(&csi2rx->lock);
++
++	return 0;
++}
++
++static int csi2rx_set_fmt(struct v4l2_subdev *subdev,
++			  struct v4l2_subdev_state *state,
++			  struct v4l2_subdev_format *format)
++{
++	struct csi2rx_priv *csi2rx = v4l2_subdev_to_csi2rx(subdev);
++	struct v4l2_mbus_framefmt *framefmt;
++
++	/* No transcoding, source and sink formats must match. */
++	if (format->pad != CSI2RX_PAD_SINK)
++		return csi2rx_get_fmt(subdev, state, format);
++
++	if (!csi2rx_get_fmt_by_code(format->format.code))
++		format->format.code = formats[0].code;
++
++	format->format.field = V4L2_FIELD_NONE;
++
++	framefmt = csi2rx_get_pad_format(csi2rx, state, format->pad,
++					 format->which);
++	if (!framefmt)
++		return -EINVAL;
++
++	mutex_lock(&csi2rx->lock);
++	*framefmt = format->format;
++	mutex_unlock(&csi2rx->lock);
++
++	return 0;
++}
++
++static int csi2rx_init_cfg(struct v4l2_subdev *subdev,
++			   struct v4l2_subdev_state *state)
++{
++	struct v4l2_subdev_format format = {
++		.which = state ? V4L2_SUBDEV_FORMAT_TRY
++			: V4L2_SUBDEV_FORMAT_ACTIVE,
++		.pad = CSI2RX_PAD_SINK,
++		.format = {
++			.width = 640,
++			.height = 480,
++			.code = MEDIA_BUS_FMT_UYVY8_1X16,
++			.field = V4L2_FIELD_NONE,
++			.colorspace = V4L2_COLORSPACE_SRGB,
++			.ycbcr_enc = V4L2_YCBCR_ENC_601,
++			.quantization = V4L2_QUANTIZATION_LIM_RANGE,
++			.xfer_func = V4L2_XFER_FUNC_SRGB,
++		},
++	};
++
++	return csi2rx_set_fmt(subdev, state, &format);
++}
++
++static const struct v4l2_subdev_pad_ops csi2rx_pad_ops = {
++	.get_fmt	= csi2rx_get_fmt,
++	.set_fmt	= csi2rx_set_fmt,
++	.init_cfg	= csi2rx_init_cfg,
++};
++
+ static const struct v4l2_subdev_video_ops csi2rx_video_ops = {
+ 	.s_stream	= csi2rx_s_stream,
+ };
  
- 		clk_disable_unprepare(csi2rx->pixel_clk[i]);
- 	}
+ static const struct v4l2_subdev_ops csi2rx_subdev_ops = {
+ 	.video		= &csi2rx_video_ops,
++	.pad		= &csi2rx_pad_ops,
+ };
+ 
+ static int csi2rx_async_bound(struct v4l2_async_notifier *notifier,
+@@ -457,6 +584,10 @@ static int csi2rx_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto err_cleanup;
+ 
++	ret = csi2rx_init_cfg(&csi2rx->subdev, NULL);
++	if (ret)
++		goto err_cleanup;
++
+ 	ret = v4l2_async_register_subdev(&csi2rx->subdev);
+ 	if (ret < 0)
+ 		goto err_cleanup;
 -- 
 2.17.1
 
