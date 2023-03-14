@@ -2,262 +2,675 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A03B8C7618D
-	for <linux-media@archiver.kernel.org>; Tue, 14 Mar 2023 11:56:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2BEEC6FD1D
+	for <linux-media@archiver.kernel.org>; Tue, 14 Mar 2023 12:01:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231713AbjCNL44 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Mar 2023 07:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46706 "EHLO
+        id S231599AbjCNMBZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Mar 2023 08:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231668AbjCNL42 (ORCPT
+        with ESMTP id S231598AbjCNMBX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Mar 2023 07:56:28 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA924A029E;
-        Tue, 14 Mar 2023 04:56:06 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32EBtJfd051493;
-        Tue, 14 Mar 2023 06:55:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678794919;
-        bh=uHm4Y10hjvWq/urDXzVMdijlz/j7xhvD4AGxkf0ml/w=;
-        h=From:To:CC:Subject:Date;
-        b=eowpk0pa2uctRQ1EAOZIeqKmonHwm58h7gwBC1t1a7+m/z0GNOOPyO5quJrFnTtyE
-         3OgMyO6VR2Indz721hNLSxICnqq61aPrfP/TkjTkA+iS/iIyHgC1cEh7CczgRSCBdk
-         aeRBUjnApNlbHlR0pZRpcTNyYGhqsNExdmHOm4V4=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32EBtJQe112447
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 14 Mar 2023 06:55:19 -0500
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 14
- Mar 2023 06:55:18 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 14 Mar 2023 06:55:18 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32EBtH31072438;
-        Tue, 14 Mar 2023 06:55:18 -0500
-From:   Vaishnav Achath <vaishnav.a@ti.com>
-To:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <mripard@kernel.org>, <mchehab@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <laurent.pinchart@ideasonboard.com>,
-        <sakari.ailus@linux.intel.com>, <tomi.valkeinen@ideasonboard.com>
-CC:     <linux-kernel@vger.kernel.org>, <bparrot@ti.com>,
-        <niklas.soderlund+renesas@ragnatech.se>, <j-luthra@ti.com>,
-        <devarsht@ti.com>, <praneeth@ti.com>, <u-kumar1@ti.com>,
-        <vigneshr@ti.com>, <nm@ti.com>, <martyn.welch@collabora.com>,
-        <vaishnav.a@ti.com>
-Subject: [PATCH v7 00/13] CSI2RX support on J721E
-Date:   Tue, 14 Mar 2023 17:25:03 +0530
-Message-ID: <20230314115516.667-1-vaishnav.a@ti.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 14 Mar 2023 08:01:23 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on20604.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5b::604])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34129A02B8;
+        Tue, 14 Mar 2023 05:00:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kM1Dk4YORMS4+boq5fx5c3U5sPGumrfyPJpsG0jtcL0YTTjBRSkSLVRExp4OgR2xbus3nazJi8mwHd7hCi12tknxkbh7qrCp3+eVrBOb3QzE9LjOsiOE/iBro+uqRI+4fhUEDYs/Ii57n59nPAjb9aMJy21bj20ZKqsKh8iQw0oWpQJF+eXNiGFTbXfVKDbeZlx6v3sEdUXCP2Ljg/92nPhz9bzaJhzslUcJhL4aX2I6i0BfttbKUA7/pc/D5sMya+XkYRusXY5VFuGF90MOTRN6zoSzAfxrdGSVaCpYNrHzD3sdsZ0e4ukJzC6GVJ63IH/ukF2BlGj0nckYVqr5Kg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qhVJSI/qi4/kLOB2+GwdSkwIkMbpb2sAbXVqTtoU3+w=;
+ b=RZHLb2OJsQItkMYPsJ8RM6EgFYfkdb25JBeuXs0OGc4jUhG0pFUVox+UC1OBTw4XBTUb7CnEENIpvE+uhcS5pM+Vi/vJoz9cC4HANAyvl19ZN1AFeDuuXMJh56ShOPnPXaGRLlecDMp40Gs/OzKaSbxctNsNBG/jKenZdWcQUy8R/hkLZ1stUUiC6QpRT3vEkdEMKYAtqd7JUcS2Sb6hklAjZOsmIHgR4lCxb+HHAIM0tsMgbWIWZREs4zHIiF9YotvRbDGV97URyuu1lyOpzhdESYyVcsgdeF4sNSCbsP/7BsKo4k/w4t8Yesd2pyrFyHxnCmPmChOOAGNskISTTQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qhVJSI/qi4/kLOB2+GwdSkwIkMbpb2sAbXVqTtoU3+w=;
+ b=tHk9DSAI/QVsDSN6nVugw9sscPYolF5n9K5OcPszkSA893roKL3hPltkdAz2Pkav8wISjq4vVD6vflgpiGufMpHQ7jzFjqURVYZuohtIlglXwtDy2rbe62DvYK0e/qPm1QyWjG2MHIZMqPrCT6bVXeee7y8pwEqCxQgNM7zfLyQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by DS0PR12MB8217.namprd12.prod.outlook.com (2603:10b6:8:f1::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Tue, 14 Mar
+ 2023 11:59:46 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::d23f:bb1:df95:3918]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::d23f:bb1:df95:3918%4]) with mapi id 15.20.6178.024; Tue, 14 Mar 2023
+ 11:59:46 +0000
+Message-ID: <0f81dac5-a0bb-9881-d418-85b2cb59b615@amd.com>
+Date:   Tue, 14 Mar 2023 12:59:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 2/2] usb: gadget: functionfs: Add DMABUF import interface
+Content-Language: en-US
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Cc:     michael.hennerich@analog.com, nuno.sa@analog.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org
+References: <20230314105257.17345-1-paul@crapouillou.net>
+ <20230314105257.17345-3-paul@crapouillou.net>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20230314105257.17345-3-paul@crapouillou.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0093.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a1::13) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|DS0PR12MB8217:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3fc2defa-853a-48fb-94f4-08db24839abc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 97kl/IrUyWSHpmNcvV/+TBxXdb4i+bmIRwbGS6RVQfwPxe6Qc5EMEgwNCLzY+s+YKkhhmpadm4BSGxSXzZM2HAlS8mSDI6ARLUCHkM9LvnA+AAZaJEoMjQGtyW2diE3sLWq2gzi2aTaog0cWayLI9X6jn1N6MHgrlFPorrMAFgq8o0Z96sGpcqAlU+0jh09KN4HAwzv9EsOmqOgbZGySwiC4jAAmMFcHEtcmn3w8H5bTmYPnrHBqprIDwure/B3CzXSP7ItsuzK5WR+fW9fr9QUi/OEvCIO8eVMfTNuwngnHMohpPzZoUJOAaiS5B6tSEYqYL2DP3vrPT2saIs9rQ/J2gOEaG198im27xp+YBtEI/P2gAMtbyxi7JyM/DK7sFw2HcR9SA7l4L8qxD9pkw+XiDU+L5a7kkywp9RTmCeX/ldjLxhWpacCgiBV5J/yCiAGzO05sqWcvUQeBttv9jZjK9J5pbTYDmRSH7Ia1YCgITCX6P5jnIRQ0Ye6tAQDpQln2y/uq4GuoSvP3riuS4u+c9O7FOZFYYfy6KAu9JiUh+ML6nKDThqkMx1edSe2Ns/DPFW/5Yr+YbVa26R1WGq0/LESn9k6gVBBOU7yxPM7KEwXbB+ohlDdBU+EB/4JVn9T/LOdoHTZOlD8wYlNO170hrXZT9mhUsF6QsqFfJ9zexKphbE4GOFa0EsXwyk0i2Y9fiiHubZe6WqxSh86gve6cwW+/SSFwVQdy7it70KY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(136003)(366004)(346002)(376002)(451199018)(86362001)(36756003)(38100700002)(31696002)(2906002)(7416002)(30864003)(41300700001)(8936002)(5660300002)(4326008)(6512007)(2616005)(186003)(26005)(6506007)(83380400001)(316002)(110136005)(8676002)(66556008)(66476007)(66946007)(6666004)(6486002)(478600001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?T0NxNXd3N0hIWWNUeUZUVllYd3ZUWFppbm00VmZLbEdzQWZoOW1yVnAwbTdh?=
+ =?utf-8?B?S3ZyVFFnNDdscGdKMHdKREowR3ROK2pkV01VMkpUSVlicnc5RWY3R1Mra2RE?=
+ =?utf-8?B?eCs2b0NRM05HdDhWSi9GYnRTNUp3M3AyZkdzb1NKa2pWTlJtWDlxaHV2Vzdi?=
+ =?utf-8?B?VmVXS1I2WS83MjRJQ2RrSnpsVnR5ZXozaWJZbndVSC9vNitJU0pPUStGYW1m?=
+ =?utf-8?B?UHVtUU14ZDJtU1R5MXBiVXZBL2ZDcGhUeTBjY3hFUmMyS2tPbFNxQW9mVDJN?=
+ =?utf-8?B?VXBqcFpZT0N5UDd6aWhMMnFQbldrRHFtaTV1V3dIVnJ4S2k1SERjTXNLanBz?=
+ =?utf-8?B?Y01jZzJBeE4wSHJhWmRaL2hIRmJkdXNZSXUvUUhhcE4zZC9MUk45b0Y4MFB2?=
+ =?utf-8?B?Qmw4TzN3QnJyZTl3RXd5c0R0TWRTT3pZbTcxeGViWGpsRHFLWVllMGw4cUxK?=
+ =?utf-8?B?RmVkM04vMHZ3YmYyK0hEcGVlQjBOcFp1cTkrYk44Tk5PeVYzOG5VcjhpYU1X?=
+ =?utf-8?B?NjJ4bzA2b3plK21RWVR2KzVNcGx6Vnl6MC9sVys0V0VSOEE4bUpHcS9JZWhh?=
+ =?utf-8?B?U3hBV2NXNUdLclM0aU5KZlBiaTdrWFphZ2VQcG10ZnlYRG9NQktzSTYveHJy?=
+ =?utf-8?B?S3lnTzRRd1loY3RPTHRzeFdkWEQxdXJybTJyUnFwWDhCRkJpMXJoRzgyMHlL?=
+ =?utf-8?B?Y0dFRDB2RE9KekpzWURJWkNRVXZlNitseFJzMlVMSTVpaXo5NXl2K0JyRkxG?=
+ =?utf-8?B?VkVjRnduV3FRWW9lUGJPdTFwS054V1I0ZlRjTnAyVWpSZGVpWktSc1BYVmRT?=
+ =?utf-8?B?Zng2S0g3OFgzVzUxcnlNOXdxeW1DNkVtTWlKNVpXdGdtYkRxanBoZmFlZFMy?=
+ =?utf-8?B?SHMyWHdyQmxiYUFzYmQ0TDBUeDBjR1E1clFoNDNOcFpZNCtLdzV3SjBMVjFp?=
+ =?utf-8?B?LzR5MDRpMEtnQmlicUxUeFNQcTY2QTNnVHFKbFRhY1VSeTQ2TmsyOWx3bGVT?=
+ =?utf-8?B?aWY4KzBjbExsK3BoZHR0TFQ4dTJwM1BrejhIbHlVZ3NWeHhIVXBRMDlid3BP?=
+ =?utf-8?B?UWRRZ3E4YjYzUS9DLzM4RzczUjFxRXRqRDFWY3g5RUJubzgrQVpQWFJ1aFQx?=
+ =?utf-8?B?enhkd0JyTDdBeDlmaHQzcWFTT2dTcVJLVWpWQlgvVkMybVRiYXRPU1JZRTMw?=
+ =?utf-8?B?TnFyRDQ2bjZHK2dITHl2aGVwZ3BXQ0MyMnVSc1JkWHFXUmtreEh5NklqdUJ0?=
+ =?utf-8?B?ZDBPUG5GZ1ZzWDhuM2tYMUVXWGNNc1A0K25xdVJRTHJwOG9iY3FmREFiRllt?=
+ =?utf-8?B?M0VTenlIcmF2MjN1a3ByZ2thSzdDdkFrR3dWaWx1Y2NWUnRwUC9SSDN6Q1ZV?=
+ =?utf-8?B?NERrc1JrTVJVb1JKeFJTR0trOUV0NzN1MFgrdVNROEJCZ0xLWlppNmQzSGla?=
+ =?utf-8?B?YWRyR21Damdpem9RUFFTUTc0QlNPendac3BMNFlWeG1CREcrUDNaa3VCY0Ey?=
+ =?utf-8?B?R05XVHNacUh4Ujh2b1ZwRE52RlVlV0U3aXlFWDlOamRWd0NZaWZzeWd4WEpG?=
+ =?utf-8?B?d0MrVEQ5OGc0dWxaOGw2YXM5TVpnaS9CTUUxdmJNTXB2ZGhQeFE2bU1lVzdN?=
+ =?utf-8?B?KzhhZ1F3RUdBOWY5cWE0M1Y4OFVtb1NjTkovTVk4TXRDMC9MeFBQMFNWL2lG?=
+ =?utf-8?B?NktJei9KcG1tQW51ZkhNQWxnN1FLZlN2WmdtU2dGRG81cEZFdjQ4YkFqaGdn?=
+ =?utf-8?B?a0R2eVNZVzJ5SXdjYmlsU09PMCtZbmw2ZVRUcTBOaXA0TWlaOVgxRCtBcUFZ?=
+ =?utf-8?B?QnN4SkYzVFZ3MUdkRHFuTk5nR3NsSGh2QVo5RExvVkM2YTdiRCtvczBLNkFY?=
+ =?utf-8?B?WWZWYkN3WkRnSSs5WlBtVVhQWnE1ODZIMlhNVFBxV0QvblQ1REFjeWh3cXY1?=
+ =?utf-8?B?NWN3dGE1TXE0MUJ2cnNxVzhlZ3lVNlQ5U0NwSFhzRVpYYXBJRVdCNDdWaWNt?=
+ =?utf-8?B?VlcyeHQxZ2hQMnlDMVpITFBGVTF3bDMrb1pvR29STjdaemtYenR5c0JNVENi?=
+ =?utf-8?B?MVkzcmxwb3JjZ1VudDJNemxwcWJZRHdUcFB0U1RJVGx3QXpOYnhOSTV0VlQ4?=
+ =?utf-8?Q?L6TO713AtJH7QqSKiIDSCdv/e?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3fc2defa-853a-48fb-94f4-08db24839abc
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 11:59:46.0766
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bs2rf00qRfOnKlfAVl7zvSg+KqhpG/V0Q2+6oKBMYpnkPDhr+/TSVveEH4e0fINt
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8217
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Am 14.03.23 um 11:52 schrieb Paul Cercueil:
+> This patch introduces three new ioctls. They all should be called on a
+> data endpoint (ie. not ep0). They are:
+>
+> - FUNCTIONFS_DMABUF_ATTACH, which takes the file descriptor of a DMABUF
+>    object to attach to the endpoint.
+>
+> - FUNCTIONFS_DMABUF_DETACH, which takes the file descriptor of the
+>    DMABUF to detach from the endpoint. Note that closing the endpoint's
+>    file descriptor will automatically detach all attached DMABUFs.
+>
+> - FUNCTIONFS_DMABUF_TRANSFER, which requests a data transfer from / to
+>    the given DMABUF. Its argument is a structure that packs the DMABUF's
+>    file descriptor, the size in bytes to transfer (which should generally
+>    be set to the size of the DMABUF), and a 'flags' field which is unused
+>    for now.
+>    Before this ioctl can be used, the related DMABUF must be attached
+>    with FUNCTIONFS_DMABUF_ATTACH.
+>
+> These three ioctls enable the FunctionFS code to transfer data between
+> the USB stack and a DMABUF object, which can be provided by a driver
+> from a completely different subsystem, in a zero-copy fashion.
+>
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>   drivers/usb/gadget/function/f_fs.c  | 398 ++++++++++++++++++++++++++++
+>   include/uapi/linux/usb/functionfs.h |  14 +-
+>   2 files changed, 411 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> index ddfc537c7526..365fb716f0ad 100644
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+> @@ -15,6 +15,9 @@
+>   /* #define VERBOSE_DEBUG */
+>   
+>   #include <linux/blkdev.h>
+> +#include <linux/dma-buf.h>
+> +#include <linux/dma-fence.h>
+> +#include <linux/dma-resv.h>
+>   #include <linux/pagemap.h>
+>   #include <linux/export.h>
+>   #include <linux/fs_parser.h>
+> @@ -124,6 +127,26 @@ struct ffs_ep {
+>   	u8				num;
+>   };
+>   
+> +struct ffs_dmabuf_priv {
+> +	struct list_head entry;
+> +	struct kref ref;
+> +	struct dma_buf_attachment *attach;
+> +	spinlock_t lock;
+> +	u64 context;
+> +};
+> +
+> +struct ffs_dma_fence {
+> +	struct dma_fence base;
+> +	struct ffs_dmabuf_priv *priv;
+> +	struct sg_table *sgt;
+> +	enum dma_data_direction dir;
+> +};
+> +
+> +static inline struct ffs_dma_fence *to_ffs_dma_fence(struct dma_fence *fence)
+> +{
+> +	return container_of(fence, struct ffs_dma_fence, base);
+> +}
+> +
+>   struct ffs_epfile {
+>   	/* Protects ep->ep and ep->req. */
+>   	struct mutex			mutex;
+> @@ -197,6 +220,8 @@ struct ffs_epfile {
+>   	unsigned char			isoc;	/* P: ffs->eps_lock */
+>   
+>   	unsigned char			_pad;
+> +
+> +	struct list_head		dmabufs;
+>   };
+>   
+>   struct ffs_buffer {
+> @@ -1279,19 +1304,354 @@ static ssize_t ffs_epfile_read_iter(struct kiocb *kiocb, struct iov_iter *to)
+>   	return res;
+>   }
+>   
+> +static void ffs_dmabuf_release(struct kref *ref)
+> +{
+> +	struct ffs_dmabuf_priv *priv = container_of(ref, struct ffs_dmabuf_priv, ref);
+> +	struct dma_buf_attachment *attach = priv->attach;
+> +	struct dma_buf *dmabuf = attach->dmabuf;
+> +
+> +	pr_debug("FFS DMABUF release\n");
+> +	dma_buf_detach(attach->dmabuf, attach);
+> +	dma_buf_put(dmabuf);
+> +
+> +	list_del(&priv->entry);
+> +	kfree(priv);
+> +}
+> +
+> +static void ffs_dmabuf_get(struct dma_buf_attachment *attach)
+> +{
+> +	struct ffs_dmabuf_priv *priv = attach->importer_priv;
+> +
+> +	kref_get(&priv->ref);
+> +}
+> +
+> +static void ffs_dmabuf_put(struct dma_buf_attachment *attach)
+> +{
+> +	struct ffs_dmabuf_priv *priv = attach->importer_priv;
+> +
+> +	kref_put(&priv->ref, ffs_dmabuf_release);
+> +}
+> +
+>   static int
+>   ffs_epfile_release(struct inode *inode, struct file *file)
+>   {
+>   	struct ffs_epfile *epfile = inode->i_private;
+> +	struct ffs_dmabuf_priv *priv, *tmp;
+>   
+>   	ENTER();
+>   
+> +	/* Close all attached DMABUFs */
+> +	list_for_each_entry_safe(priv, tmp, &epfile->dmabufs, entry) {
+> +		ffs_dmabuf_put(priv->attach);
+> +	}
+> +
+>   	__ffs_epfile_read_buffer_free(epfile);
+>   	ffs_data_closed(epfile->ffs);
+>   
+>   	return 0;
+>   }
+>   
+> +static void ffs_dmabuf_signal_done(struct ffs_dma_fence *dma_fence, int ret)
+> +{
+> +	struct ffs_dmabuf_priv *priv = dma_fence->priv;
+> +	struct dma_fence *fence = &dma_fence->base;
+> +
+> +	dma_fence_get(fence);
+> +	fence->error = ret;
+> +	dma_fence_signal(fence);
+> +
+> +	dma_buf_unmap_attachment(priv->attach, dma_fence->sgt, dma_fence->dir);
+> +	dma_fence_put(fence);
+> +	ffs_dmabuf_put(priv->attach);
+> +}
+> +
+> +static void ffs_epfile_dmabuf_io_complete(struct usb_ep *ep,
+> +					  struct usb_request *req)
+> +{
+> +	ENTER();
+> +
+> +	pr_debug("FFS: DMABUF transfer complete, status=%d\n", req->status);
+> +	ffs_dmabuf_signal_done(req->context, req->status);
+> +	usb_ep_free_request(ep, req);
+> +}
+> +
+> +static const char *ffs_dmabuf_get_driver_name(struct dma_fence *fence)
+> +{
+> +	return "functionfs";
+> +}
+> +
+> +static const char *ffs_dmabuf_get_timeline_name(struct dma_fence *fence)
+> +{
+> +	return "";
+> +}
+> +
+> +static void ffs_dmabuf_fence_release(struct dma_fence *fence)
+> +{
+> +	struct ffs_dma_fence *dma_fence = to_ffs_dma_fence(fence);
+> +
+> +	kfree(dma_fence);
+> +}
+> +
+> +static const struct dma_fence_ops ffs_dmabuf_fence_ops = {
+> +	.get_driver_name	= ffs_dmabuf_get_driver_name,
+> +	.get_timeline_name	= ffs_dmabuf_get_timeline_name,
+> +	.release		= ffs_dmabuf_fence_release,
+> +};
+> +
+> +int ffs_dma_resv_lock(struct dma_buf *dmabuf, bool nonblock)
+> +{
+> +	int ret;
+> +
+> +	ret = dma_resv_lock_interruptible(dmabuf->resv, NULL);
+> +	if (ret) {
+> +		if (ret != -EDEADLK)
+> +			goto out;
+> +		if (nonblock) {
+> +			ret = -EBUSY;
+> +			goto out;
+> +		}
+> +
+> +		ret = dma_resv_lock_slow_interruptible(dmabuf->resv, NULL);
+> +	}
+> +
+> +out:
+> +	return ret;
+> +}
+> +
+> +static struct dma_buf_attachment *
+> +ffs_dmabuf_find_attachment(struct device *dev, struct dma_buf *dmabuf,
+> +			   bool nonblock)
+> +{
+> +	struct dma_buf_attachment *elm, *attach = NULL;
+> +	int ret;
+> +
+> +	ret = ffs_dma_resv_lock(dmabuf, nonblock);
+> +	if (ret)
+> +		return ERR_PTR(ret);
+> +
+> +	list_for_each_entry(elm, &dmabuf->attachments, node) {
+> +		if (elm->dev == dev) {
+> +			attach = elm;
+> +			break;
+> +		}
+> +	}
+> +
+> +	if (attach)
+> +		ffs_dmabuf_get(elm);
+> +
+> +	dma_resv_unlock(dmabuf->resv);
+> +
+> +	return attach ?: ERR_PTR(-EPERM);
+> +}
+> +
+> +static int ffs_dmabuf_attach(struct file *file, int fd)
+> +{
+> +	struct ffs_epfile *epfile = file->private_data;
+> +	struct usb_gadget *gadget = epfile->ffs->gadget;
+> +	struct dma_buf_attachment *attach;
+> +	struct ffs_dmabuf_priv *priv;
+> +	struct dma_buf *dmabuf;
+> +	int err;
+> +
+> +	if (!gadget || !gadget->sg_supported)
+> +		return -EPERM;
+> +
+> +	dmabuf = dma_buf_get(fd);
+> +	if (IS_ERR(dmabuf))
+> +		return PTR_ERR(dmabuf);
+> +
+> +	attach = dma_buf_attach(dmabuf, gadget->dev.parent);
+> +	if (IS_ERR(attach)) {
+> +		err = PTR_ERR(attach);
+> +		goto err_dmabuf_put;
+> +	}
+> +
+> +	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+> +	if (!priv) {
+> +		err = -ENOMEM;
+> +		goto err_dmabuf_detach;
+> +	}
+> +
+> +	attach->importer_priv = priv;
+> +
+> +	priv->attach = attach;
+> +	spin_lock_init(&priv->lock);
+> +	kref_init(&priv->ref);
+> +	priv->context = dma_fence_context_alloc(1);
+> +
+> +	list_add(&priv->entry, &epfile->dmabufs);
+> +
+> +	return 0;
+> +
+> +err_dmabuf_detach:
+> +	dma_buf_detach(dmabuf, attach);
+> +err_dmabuf_put:
+> +	dma_buf_put(dmabuf);
+> +
+> +	return err;
+> +}
+> +
+> +static int ffs_dmabuf_detach(struct file *file, int fd)
+> +{
+> +	struct ffs_epfile *epfile = file->private_data;
+> +	struct usb_gadget *gadget = epfile->ffs->gadget;
+> +	bool nonblock = file->f_flags & O_NONBLOCK;
+> +	struct dma_buf_attachment *attach;
+> +	struct dma_buf *dmabuf;
+> +	int ret = 0;
+> +
+> +	dmabuf = dma_buf_get(fd);
+> +	if (IS_ERR(dmabuf))
+> +		return PTR_ERR(dmabuf);
+> +
+> +	attach = ffs_dmabuf_find_attachment(gadget->dev.parent,
+> +					    dmabuf, nonblock);
+> +	if (IS_ERR(attach)) {
+> +		ret = PTR_ERR(attach);
+> +		goto out_dmabuf_put;
+> +	}
+> +
+> +	ffs_dmabuf_put(attach);
+> +	ffs_dmabuf_put(attach);
+> +
+> +out_dmabuf_put:
+> +	dma_buf_put(dmabuf);
+> +	return ret;
+> +}
+> +
+> +static int ffs_dmabuf_transfer(struct file *file,
+> +			       const struct usb_ffs_dmabuf_transfer_req *req)
+> +{
+> +	bool dma_to_ram, nonblock = file->f_flags & O_NONBLOCK;
+> +	struct ffs_epfile *epfile = file->private_data;
+> +	struct usb_gadget *gadget = epfile->ffs->gadget;
+> +	struct dma_buf_attachment *attach;
+> +	struct ffs_dmabuf_priv *priv;
+> +	enum dma_data_direction dir;
+> +	struct ffs_dma_fence *fence;
+> +	struct usb_request *usb_req;
+> +	struct sg_table *sg_table;
+> +	struct dma_buf *dmabuf;
+> +	struct ffs_ep *ep = epfile->ep;
+> +	int ret;
+> +
+> +	if (req->flags & ~USB_FFS_DMABUF_TRANSFER_MASK)
+> +		return -EINVAL;
+> +
+> +	dmabuf = dma_buf_get(req->fd);
+> +	if (IS_ERR(dmabuf))
+> +		return PTR_ERR(dmabuf);
+> +
+> +	if (req->length > dmabuf->size || req->length == 0) {
+> +		ret = -EINVAL;
+> +		goto err_dmabuf_put;
+> +	}
+> +
+> +	attach = ffs_dmabuf_find_attachment(gadget->dev.parent,
+> +					    dmabuf, nonblock);
+> +	if (IS_ERR(attach)) {
+> +		ret = PTR_ERR(attach);
+> +		goto err_dmabuf_put;
+> +	}
+> +
+> +	priv = attach->importer_priv;
+> +
+> +	if (epfile->in)
+> +		dir = DMA_FROM_DEVICE;
+> +	else
+> +		dir = DMA_TO_DEVICE;
+> +
+> +	sg_table = dma_buf_map_attachment(attach, dir);
+> +	if (IS_ERR(sg_table)) {
+> +		ret = PTR_ERR(sg_table);
+> +		goto err_attachment_put;
+> +	}
+> +
+> +	fence = kmalloc(sizeof(*fence), GFP_KERNEL);
+> +	if (!fence) {
+> +		ret = -ENOMEM;
+> +		goto err_unmap_attachment;
+> +	}
+> +
+> +	fence->sgt = sg_table;
+> +	fence->dir = dir;
+> +	fence->priv = priv;
+> +
+> +	dma_fence_init(&fence->base, &ffs_dmabuf_fence_ops,
+> +		       &priv->lock, priv->context, 0);
 
-This series adds support for CSI2 capture on J721E. It includes some
-fixes to the Cadence CSI2RX driver, and adds the TI CSI2RX wrapper driver.
+Sequence numbers must be unique, so constantly using 0 here is quite 
+questionable.
 
-This is a V7 of the below V6 series,
-https://lore.kernel.org/all/20220121142904.4091481-1-p.yadav@ti.com/
+If you set the use_64bit_seqno flag in your fence ops structure you can 
+simply use a 64bit counter.
 
-Since Pratyush moved out of TI, I will be working on upstreaming the
-TI CSI2RX wrapper support.
+> +
+> +	usb_req = usb_ep_alloc_request(ep->ep, GFP_ATOMIC);
+> +	if (!usb_req) {
+> +		ret = -ENOMEM;
+> +		goto err_fence_put;
+> +	}
+> +
+> +	ret = ffs_dma_resv_lock(dmabuf, nonblock);
+> +	if (ret)
+> +		goto err_free_request;
+> +
+> +	/* Make sure we don't have writers */
+> +	if (!dma_resv_test_signaled(dmabuf->resv, DMA_RESV_USAGE_WRITE)) {
+> +		pr_debug("FFS WRITE fence is not signaled\n");
+> +		ret = -EBUSY;
+> +		goto err_resv_unlock;
+> +	}
+> +
+> +	dma_to_ram = dir == DMA_FROM_DEVICE;
+> +
+> +	/* If we're writing to the DMABUF, make sure we don't have readers */
+> +	if (dma_to_ram &&
+> +	    !dma_resv_test_signaled(dmabuf->resv, DMA_RESV_USAGE_READ)) {
+> +		pr_debug("FFS READ fence is not signaled\n");
+> +		ret = -EBUSY;
+> +		goto err_resv_unlock;
+> +	}
+> +
+> +	ret = dma_resv_reserve_fences(dmabuf->resv, 1);
+> +	if (ret)
+> +		goto err_resv_unlock;
 
-Tested on TI's J721E EVM with LI OV5640 sensor module.
-https://gist.github.com/vaishnavachath/f030a257d5b6569817bc9deab1c4fa77
+A dma_fence should only be published if nothing can go wrong with the 
+request any more.
 
-Also, Tested on TI AM62-SK with Pcam5C OV5640 module.
-https://gist.github.com/vaishnavachath/ff2605faa92f1a6ab5670426da28ccee
+You are doing that correctly here, but it is good practice that you also 
+don't allocate and initialize the fence before you publish it.
 
-For all newer TI platforms that TI J721E Silicon Revision 1.0, below update
-to DPHY RX driver is needed:
-https://lore.kernel.org/all/20230314073137.2153-1-vaishnav.a@ti.com/
+In other words reorder this and move the allocation and call to 
+dma_fence_init() here if possible.
 
-Changes in v7:
-- For patch 10/13 ("Add CSI2RX support for J721E"):
-- Fix incorrect value written in SHIM_PSI_CFG0_DST_TAG
-- Drop support for 2X8 formats.
-- Update maintainer to Vaishnav as Pratyush moved out of TI.
-- Address Sakari's review comments:
-- Update MAX_HEIGHT_LINES, MAX_WIDTH_BYTES to prevent overflow.
-- Assign dma_slave_config during declaration, drop memset().
-- dma_release_channel() on slave_config failure.
-- provide entity ops for the vdev entity with link_validate().
-- mutex_destroy() on ti_csi2rx_probe failure path.
-- Drop busy check in remove().
-- mutex_destroy() in ti_csi2rx_remove().
-- Address Laurent's review comments:
-- Update entries in Makefile in alphabetical order.
-- include headers in alphabetical order.
-- Drop redundant CSI DT defines and use from media/mipi-csi2.h.
-- Rename csi_df to csi_dt.
-- Drop v4l2_colorspace from ti_csi2rx_fmt and set default in
-  ti_csi2rx_v4l2_init()
-- Adjust field and not return EINVAL in ti_csi2rx_try_fmt_vid_cap().
-- inline ti_csi2rx_video_register().
-- start DMA before starting source subdev.
-- move buffer cleanup to separate function ti_csi2rx_cleanup_buffers()
-  to be used in ti_csi2rx_stop_streaming() and ti_csi2rx_start_streaming()
-  failure path.
-- Drop VB2_USERPTR, VB2_READ and V4L2_CAP_READWRITE.
-- For patch 4/13 ("media: cadence: csi2rx: Add external DPHY support"):
-- Fix multiplier and divider in v4l2_get_link_freq() which caused
-  failures during streaming.
+> +
+> +	dma_resv_add_fence(dmabuf->resv, &fence->base,
+> +			   dma_resv_usage_rw(dma_to_ram));
+> +	dma_resv_unlock(dmabuf->resv);
+> +
+> +	/* Now that the dma_fence is in place, queue the transfer. */
+> +
+> +	usb_req->length = req->length;
+> +	usb_req->buf = NULL;
+> +	usb_req->sg = sg_table->sgl;
+> +	usb_req->num_sgs = sg_nents_for_len(sg_table->sgl, req->length);
+> +	usb_req->sg_was_mapped = true;
+> +	usb_req->context  = fence;
+> +	usb_req->complete = ffs_epfile_dmabuf_io_complete;
+> +
+> +	ret = usb_ep_queue(ep->ep, usb_req, GFP_ATOMIC);
 
-Changes in v6:
-- Move the lock around the dereference for framefmt in
-  csi2rx_{get,set}_fmt() instead of when we get the pointer.
-- Do not return an error when an unsupported format is set. Instead
-  adjust the code to the first format in the list.
-- Drop variable bpp and use fmt->bpp directly.
-- Drop variable got_pm. Call phy_pm_runtime_put() unconditionally since
-  it will just return an error if runtime PM is not enabled.
-- Drop transcoding from the commit message.
-- Make csi2rx_media_ops const.
+Already using GFP_ATOMIC gets you a lot of bonus points for this patch 
+:) Background is that as soon as you have published a fence you can't 
+use GFP_KERNEL that easily any more because that memory allocation might 
+wait for the fence.
 
-Changes in v5:
-- Cleanup notifier in csi2rx_parse_dt() after the call to
-  v4l2_async_nf_add_fwnode_remote().
-- Use YUV 1X16 formats instead of 2X8.
-- Only error out when phy_pm_runtime_get_sync() returns a negative
-  value. A positive value can be returned if the phy was already
-  resumed.
-- Do not query the source subdev for format. Use the newly added
-  internal format instead.
-- Make i unsigned.
-- Change %d to %u
-- Add dependency on PHY_CADENCE_DPHY_RX instead of PHY_CADENCE_DPHY
-  since the Rx mode DPHY now has a separate driver.
-- Drop ti_csi2rx_validate_pipeline(). Pipeline validation should be done
-  at media_pipeline_start().
-- Do not assign flags.
-- Fix error handling in ti_csi2rx_start_streaming(). Free up vb2 buffers
-  when media_pipeline_start() fails.
-- Move clock description in comments under the clocks property.
-- Make ports required.
-- Add link validation to cdns-csi2rx driver.
+But even better would be to try to avoid memory allocation in the 
+critical code path altogether. Would it be possible to call this 
+function with the dma_resv_lock held?
 
-Changes in v4:
-- Drop the call to set PHY submode. It is now being done via compatible
-  on the DPHY side.
-- Acquire the media device's graph_mutex before starting the graph walk.
-- Call media_graph_walk_init() and media_graph_walk_cleanup() when
-  starting and ending the graph walk respectively.
-- Reduce max frame height and width in enum_framesizes. Currently they
-  are set to UINT_MAX but they must be a multiple of step_width, so they
-  need to be rounded down. Also, these values are absurdly large which
-  causes some userspace applications like gstreamer to trip up. While it
-  is not generally right to change the kernel for an application bug, it
-  is not such a big deal here. This change is replacing one set of
-  absurdly large arbitrary values with another set of smaller but still
-  absurdly large arbitrary values. Both limits are unlikely to be hit in
-  practice.
-- Add power-domains property.
-- Drop maxItems from clock-names.
-- Drop the type for data-lanes.
-- Drop uniqueItems from data-lanes. Move it to video-interfaces.yaml
-  instead.
-- Drop OV5640 runtime pm patch. It seems to be a bit complicated and it
-  is not exactly necessary for this series. Any CSI-2 camera will work
-  just fine, OV5640 just happens to be the one I tested with. I don't
-  want it to block this series. I will submit it as a separate patch
-  later.
+Regards,
+Christian.
 
-Changes in v3:
-- Use v4l2_get_link_freq() to calculate pixel clock.
-- Move DMA related fields in struct ti_csi2rx_dma.
-- Protect DMA buffer queue with a spinlock to make sure the queue buffer
-  and DMA callback don't race on it.
-- Track the current DMA state. It might go idle because of a lack of
-  buffers. This state can be used to restart it if needed.
-- Do not include the current buffer in the pending queue. It is slightly
-  better modelling than leaving it at the head of the pending queue.
-- Use the buffer as the callback argument, and add a reference to csi in it.
-- If queueing a buffer to DMA fails, the buffer gets leaked and DMA gets
-  stalled with. Instead, report the error to vb2 and queue the next
-  buffer in the pending queue.
-- DMA gets stalled if we run out of buffers since the callback is the
-  only one that fires subsequent transfers and it is no longer being
-  called. Check for that when queueing buffers and restart DMA if
-  needed.
-- Do not put of node until we are done using the fwnode.
-- Set inital format to UYVY 640x480.
-- Add compatible: contains: const: cdns,csi2rx to allow SoC specific
-  compatible.
-- Add more constraints for data-lanes property.
 
-Changes in v2:
-- Use phy_pm_runtime_get_sync() and phy_pm_runtime_put() before making
-  calls to set PHY mode, etc. to make sure it is ready.
-- Use dmaengine_get_dma_device() instead of directly accessing
-  dma->device->dev.
-- Do not set dst_addr_width when configuring slave DMA.
-- Move to a separate subdir and rename to j721e-csi2rx.c
-- Convert compatible to ti,j721e-csi2rx.
-- Move to use Media Controller centric APIs.
-- Improve cleanup in probe when one of the steps fails.
-- Add colorspace to formats database.
-- Set hw_revision on media_device.
-- Move video device initialization to probe time instead of register time.
-- Rename to ti,j721e-csi2rx.yaml
-- Add an entry in MAINTAINERS.
-- Add a description for the binding.
-- Change compatible to ti,j721e-csi2rx to make it SoC specific.
-- Remove description from dmas, reg, power-domains.
-- Remove a limit of 2 from #address-cells and #size-cells.
-- Fix add ^ to csi-bridge subnode regex.
-- Make ranges mandatory.
-- Add unit address in example.
-- Add a reference to cdns,csi2rx in csi-bridge subnode.
-- Expand the example to include the csi-bridge subnode as well.
-- Re-order subject prefixes.
-- Convert OV5640 to use runtime PM and drop Cadence CSI2RX s_power patch.
-- Drop subdev call wrappers from cdns-csi2rx.
-- Move VPE and CAL to a separate subdir.
-- Rename ti-csi2rx.c to j721e-csi2rx.c
-
-Pratyush Yadav (13):
-  media: cadence: csi2rx: Unregister v4l2 async notifier
-  media: cadence: csi2rx: Cleanup media entity properly
-  media: cadence: csi2rx: Add get_fmt and set_fmt pad ops
-  media: cadence: csi2rx: Add external DPHY support
-  media: cadence: csi2rx: Soft reset the streams before starting capture
-  media: cadence: csi2rx: Set the STOP bit when stopping a stream
-  media: cadence: csi2rx: Fix stream data configuration
-  media: cadence: csi2rx: Populate subdev devnode
-  media: cadence: csi2rx: Add link validation
-  media: ti: Add CSI2RX support for J721E
-  media: dt-bindings: Make sure items in data-lanes are unique
-  media: dt-bindings: Add DT bindings for TI J721E CSI2RX driver
-  media: dt-bindings: Convert Cadence CSI2RX binding to YAML
-
- .../devicetree/bindings/media/cdns,csi2rx.txt |  100 --
- .../bindings/media/cdns,csi2rx.yaml           |  176 +++
- .../bindings/media/ti,j721e-csi2rx.yaml       |  101 ++
- .../bindings/media/video-interfaces.yaml      |    1 +
- MAINTAINERS                                   |    7 +
- drivers/media/platform/cadence/cdns-csi2rx.c  |  273 ++++-
- drivers/media/platform/ti/Kconfig             |   12 +
- drivers/media/platform/ti/Makefile            |    1 +
- .../media/platform/ti/j721e-csi2rx/Makefile   |    2 +
- .../platform/ti/j721e-csi2rx/j721e-csi2rx.c   | 1022 +++++++++++++++++
- 10 files changed, 1580 insertions(+), 115 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.txt
- create mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
- create mode 100644 Documentation/devicetree/bindings/media/ti,j721e-csi2rx.yaml
- create mode 100644 drivers/media/platform/ti/j721e-csi2rx/Makefile
- create mode 100644 drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-
--- 
-2.17.1
+> +	if (ret) {
+> +		pr_warn("FFS: Failed to queue DMABUF: %d\n", ret);
+> +		ffs_dmabuf_signal_done(fence, ret);
+> +		usb_ep_free_request(ep->ep, usb_req);
+> +	}
+> +
+> +	dma_buf_put(dmabuf);
+> +
+> +	return ret;
+> +
+> +err_resv_unlock:
+> +	dma_resv_unlock(dmabuf->resv);
+> +err_free_request:
+> +	usb_ep_free_request(ep->ep, usb_req);
+> +err_fence_put:
+> +	dma_fence_put(&fence->base);
+> +err_unmap_attachment:
+> +	dma_buf_unmap_attachment(attach, sg_table, dir);
+> +err_attachment_put:
+> +	ffs_dmabuf_put(attach);
+> +err_dmabuf_put:
+> +	dma_buf_put(dmabuf);
+> +
+> +	return ret;
+> +}
+> +
+>   static long ffs_epfile_ioctl(struct file *file, unsigned code,
+>   			     unsigned long value)
+>   {
+> @@ -1364,8 +1724,45 @@ static long ffs_epfile_ioctl(struct file *file, unsigned code,
+>   			ret = -EFAULT;
+>   		return ret;
+>   	}
+> +	case FUNCTIONFS_DMABUF_ATTACH:
+> +	{
+> +		int fd;
+> +
+> +		if (copy_from_user(&fd, (void __user *)value, sizeof(fd))) {
+> +			ret = -EFAULT;
+> +			break;
+> +		}
+> +
+> +		ret = ffs_dmabuf_attach(file, fd);
+> +		break;
+> +	}
+> +	case FUNCTIONFS_DMABUF_DETACH:
+> +	{
+> +		int fd;
+> +
+> +		if (copy_from_user(&fd, (void __user *)value, sizeof(fd))) {
+> +			ret = -EFAULT;
+> +			break;
+> +		}
+> +
+> +		ret = ffs_dmabuf_detach(file, fd);
+> +		break;
+> +	}
+> +	case FUNCTIONFS_DMABUF_TRANSFER:
+> +	{
+> +		struct usb_ffs_dmabuf_transfer_req req;
+> +
+> +		if (copy_from_user(&req, (void __user *)value, sizeof(req))) {
+> +			ret = -EFAULT;
+> +			break;
+> +		}
+> +
+> +		ret = ffs_dmabuf_transfer(file, &req);
+> +		break;
+> +	}
+>   	default:
+>   		ret = -ENOTTY;
+> +		break;
+>   	}
+>   	spin_unlock_irq(&epfile->ffs->eps_lock);
+>   
+> @@ -1925,6 +2322,7 @@ static int ffs_epfiles_create(struct ffs_data *ffs)
+>   	for (i = 1; i <= count; ++i, ++epfile) {
+>   		epfile->ffs = ffs;
+>   		mutex_init(&epfile->mutex);
+> +		INIT_LIST_HEAD(&epfile->dmabufs);
+>   		if (ffs->user_flags & FUNCTIONFS_VIRTUAL_ADDR)
+>   			sprintf(epfile->name, "ep%02x", ffs->eps_addrmap[i]);
+>   		else
+> diff --git a/include/uapi/linux/usb/functionfs.h b/include/uapi/linux/usb/functionfs.h
+> index d77ee6b65328..1412ab9f8ccc 100644
+> --- a/include/uapi/linux/usb/functionfs.h
+> +++ b/include/uapi/linux/usb/functionfs.h
+> @@ -84,6 +84,15 @@ struct usb_ext_prop_desc {
+>   	__le16	wPropertyNameLength;
+>   } __attribute__((packed));
+>   
+> +/* Flags for usb_ffs_dmabuf_transfer_req->flags (none for now) */
+> +#define USB_FFS_DMABUF_TRANSFER_MASK	0x0
+> +
+> +struct usb_ffs_dmabuf_transfer_req {
+> +	int fd;
+> +	__u32 flags;
+> +	__u64 length;
+> +} __attribute__((packed));
+> +
+>   #ifndef __KERNEL__
+>   
+>   /*
+> @@ -288,6 +297,9 @@ struct usb_functionfs_event {
+>   #define	FUNCTIONFS_ENDPOINT_DESC	_IOR('g', 130, \
+>   					     struct usb_endpoint_descriptor)
+>   
+> -
+> +#define FUNCTIONFS_DMABUF_ATTACH	_IOW('g', 131, int)
+> +#define FUNCTIONFS_DMABUF_DETACH	_IOW('g', 132, int)
+> +#define FUNCTIONFS_DMABUF_TRANSFER	_IOW('g', 133, \
+> +					     struct usb_ffs_dmabuf_transfer_req)
+>   
+>   #endif /* _UAPI__LINUX_FUNCTIONFS_H__ */
 
