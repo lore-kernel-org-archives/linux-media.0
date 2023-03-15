@@ -2,58 +2,58 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA27DC6FD1D
-	for <linux-media@archiver.kernel.org>; Wed, 15 Mar 2023 13:30:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A842C7618A
+	for <linux-media@archiver.kernel.org>; Wed, 15 Mar 2023 13:30:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232214AbjCONal (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Mar 2023 09:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34702 "EHLO
+        id S232226AbjCONam (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Mar 2023 09:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231993AbjCONag (ORCPT
+        with ESMTP id S232107AbjCONag (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 15 Mar 2023 09:30:36 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8B391B79
-        for <linux-media@vger.kernel.org>; Wed, 15 Mar 2023 06:30:31 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id x3so75497852edb.10
-        for <linux-media@vger.kernel.org>; Wed, 15 Mar 2023 06:30:31 -0700 (PDT)
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3C891B6A
+        for <linux-media@vger.kernel.org>; Wed, 15 Mar 2023 06:30:29 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id x3so75497410edb.10
+        for <linux-media@vger.kernel.org>; Wed, 15 Mar 2023 06:30:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678887029;
+        d=chromium.org; s=google; t=1678887027;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nfrIME0wJIYRWxUiJsRB8/dUZqSdjz1B4rSK467QV2U=;
-        b=KHaT5VylGWcmvubhEggVy1vnsnxEkDSBrt3DeXHUsFx0R4eN1KDdZ3ymOH3PxVeKpX
-         pNHSUjoqcZN1nHEA1MDBDH64GV5eJ2F1F8kcKCYV0jRuSvEYp/mYAHlqB+bD3ClW6Ebw
-         vh2DGGYroFbQWIYp4S5befUpvtQkeYtj1r+dQ=
+        bh=a5a+6HYmuNF0NcA/SU/mW3fBSurTLFx+qA7YB8EkD48=;
+        b=lkGXUzVfMNurFTpaDvb74x5w7jDczuCxdoDbMkv4itF7+EnifGtL5hT2whGNkBD+VZ
+         JVgD5smdZm9pojK8aq6n+UbciMGKM+n4+JYa6HhruKyhL8kcIhTwJ8z2reGaPi59R26M
+         nin4rOhjgVBOIhwgFLlCj8DoAhfkOFTuUzfGM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678887029;
+        d=1e100.net; s=20210112; t=1678887027;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nfrIME0wJIYRWxUiJsRB8/dUZqSdjz1B4rSK467QV2U=;
-        b=V3KZVKKpuq+b0wXU/xql03VyTpPLFaFozHPoFoimAA4u39ZgRuIzQJnxQU069nb4fj
-         FeZD68lHzowNTdEtZxp9y6S0Zy88w47FinAsDjKs0j2tqkBrsVCPEVXPQmagZ1bJ1iIT
-         HQTPeGj4SOQxoow3wdLOEwrnWNoYzfVJQxlfGkColdj5KfhibHnn46yJfCr0H7Y6gkhH
-         3ov81yb7RYeo+flLTRSeWWREev4mH+ykQiNysNKo92nfBjTlm4YefKrzbiJJ+kNQieo4
-         tXgBG6q3OXgDVgVIRL+nZicsVJAd229CEYpPnK9iUNUr6pxYGpBoUvYfux3/Y+1HvxaA
-         228A==
-X-Gm-Message-State: AO0yUKXBitnr3Dx5UvTY8D3ZIRTQpYaxVyQbRy0MIp9sBz5rr3h28kog
-        ahJRExn++llYqOjoCoDQWOHJnw==
-X-Google-Smtp-Source: AK7set9/wL4JhG2jrBM6XmJsChWwIxp6GU1HruVLKmf4ERJUrScxkUoUv1YDYsMv5ya3e3wO+kZrIQ==
-X-Received: by 2002:a17:906:4e92:b0:878:72d0:2817 with SMTP id v18-20020a1709064e9200b0087872d02817mr6062723eju.29.1678887029512;
-        Wed, 15 Mar 2023 06:30:29 -0700 (PDT)
+        bh=a5a+6HYmuNF0NcA/SU/mW3fBSurTLFx+qA7YB8EkD48=;
+        b=y6AW6WQLC/iq+HgKiIpn5muwl2OOcVl5cQcSeNvIhvrztLVEgjxPTjKedckZDmAnQs
+         TYFudiCW7rwTMplTdY3eezxP3fXkKos5ulDhJ3/hevT8mMRAix7F5Pyg+Ci1F2aRkg/1
+         6Nvt8tlAAcwqYCyLNm+SluHWwxUQrr4kmehQdjS5RYIR/XQTH3/C+zc8z7Qq/DPy0ch/
+         BEzmsNtqHDLEKhhG+IFED8DJn0wO09QT+0owsygKNIaYoUjyO9z3CumjK0VEogZuda/b
+         xn7bA0rj13oQiViNSImGG54la18ZeNktqlshJYWYFN2fMsMdVOirM3WuTN3n4aLzU0RE
+         +duQ==
+X-Gm-Message-State: AO0yUKXIQ+DudTiMRuHRDiW9wE1zm1twvNLAani+esek8sJXRd2sLQ7h
+        gWxLC3up76BhaO67qdWwgPDcPw==
+X-Google-Smtp-Source: AK7set+Y+ixY6taQhbbIK2VWuMtXw2FdV+VTQLCwuvzqPYLgqov+sbS5JY9czYKaYCnSbxxxCYSjGw==
+X-Received: by 2002:a17:906:17ca:b0:8b1:76ca:f228 with SMTP id u10-20020a17090617ca00b008b176caf228mr6039405eje.39.1678887027610;
+        Wed, 15 Mar 2023 06:30:27 -0700 (PDT)
 Received: from alco.roam.corp.google.com ([2620:0:1059:10:491c:f627:27f0:1c4])
-        by smtp.gmail.com with ESMTPSA id ha11-20020a170906a88b00b0092043ae1a8asm2534638ejb.92.2023.03.15.06.30.28
+        by smtp.gmail.com with ESMTPSA id ha11-20020a170906a88b00b0092043ae1a8asm2534638ejb.92.2023.03.15.06.30.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 06:30:29 -0700 (PDT)
+        Wed, 15 Mar 2023 06:30:27 -0700 (PDT)
 From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 15 Mar 2023 14:30:16 +0100
-Subject: [PATCH v9 5/6] media: uvcvideo: Refactor clock circular buffer
+Date:   Wed, 15 Mar 2023 14:30:14 +0100
+Subject: [PATCH v9 3/6] media: uvcvideo: Quirk for invalid dev_sof in Logitech C922
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20220920-resend-hwtimestamp-v9-5-55a89f46f6be@chromium.org>
+Message-Id: <20220920-resend-hwtimestamp-v9-3-55a89f46f6be@chromium.org>
 References: <20220920-resend-hwtimestamp-v9-0-55a89f46f6be@chromium.org>
 In-Reply-To: <20220920-resend-hwtimestamp-v9-0-55a89f46f6be@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -63,229 +63,143 @@ Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         linux-kernel@vger.kernel.org, "hn.chen" <hn.chen@sunplusit.com>,
         linux-media@vger.kernel.org
 X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6682; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=1XOlapgZ7o2YnyPsHBz+Zu3te118klpRecTLUAUw/1Q=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBkEchskmhPNyQcOP0px7P1LeWbWNLniHOx4a86Kzhj
- 1fGkW0aJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCZBHIbAAKCRDRN9E+zzrEiPCuD/
- 9aGs1INStszDd9kwQmNc+7X/FvhIisrcqqhFYKTs8n4vMBpepipuRtuPtX925dXnuLgHgjYZP1Pae/
- /nni4S6OpCb/5Q3cqO4e5PuofG9f8c3mjwRHUYyu3sLFFgIT882ICgLKDDk4xU+tNWwnwI97FpdHFl
- x8pWWR1qnRqdci0mT+jUMpOFUvlLN2UWpdR1QwKrxGoplQQIT6pU1TGMRuxy52d1Il6iYFBS9lWBQa
- LYyNATj+nHh5iPocEq/Vx/M5WvsIJfmDLMmB3pMr93vP2T057BfFy+AgYrZxHlo8CM/qmbbYK4GtL1
- 46IhXLf69ohhBo0a0n36DSfr3LSDaYG7zZfYr49ExMBOS2sP00++hIHcgDgnNOmZzzKsGH6Qdy8dai
- dsg5FimQbfWl6Ygb1IOsMXpgMwgRIpEEDtpxcvM2IUIaZPNLxpgv+/WDFWUrC6/zmGNysGn9C8KY5Z
- KmFyEOCux16IE2SLgjF+kKGyTqEY6B7RuCCROWNeArhEz6hthfvF8f0TCeirJM6DvsQnqzOXvzqZJz
- NmGX4rrsjWfNdevApQHFjE6VsgBaFDJ8zRuKXl9fmG7R8izf6r6ATNr5i5EUSmNlYbwh6gDw8mLaJV
- 3y2DjuupdjjCDk4QXx5uvrvzkxyPvTZAkhsava5DdpqxyO4vWt0fDbwnUKaQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5234; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=5jcOY5wQypEMPaIWclRrjn20dOHGC/hJF48i1+E0AwQ=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBkEchqFy31rdemB9D0huME7IsTEWnrnkF2YuRPmJwl
+ +6uiHROJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCZBHIagAKCRDRN9E+zzrEiEQaD/
+ 4uYq2DW4edlL96kv3i1Hy2R7ZRLYbLh1nDeP6WpArdUMsIr/g/Im81vRErUGYEDEhN+kXAcaNUB99s
+ F4k0gWxZt+en5y1wqzbRuVsKUKuoG3JGIhJGIGOM0eg+apLSPa81ycrrHF3HZhVndNtggQ0v/+YH/a
+ uFfC5ecHJKsUBsjO/+2XfSnnHxqz6IH7zD77H1eXehcTP70PwvAjlF2Q4ckmMz1zueGgpy4+lVd1Zp
+ Ufnmc1bZuCMzYL9ReCUJ827WQgmvflNsL7WQowEKZ13d+O2jp8J7yfFadtSVcJyWPUt+0UHi9cWSxd
+ MSZxWQ+p5tbRjElPtY4olYxLivCt87uYcEoTIxIh4lL/K39w0cUZjw1oVPipzUnTlnbGiKFTsDArgy
+ IEZcKk1D2GekdoZ8ml5tLbsr8Tgqq6cp7auNUm1fId/MCpLhClf/TgGM7kRJxb0mntvhqF8kPYMnX0
+ HHxaH8OZK8F5/P3NSeNKJNRnQVaZtAldT8f2QAkDEwgPA5P9rJbp0SHJ/KCMTn7NesHZUuYy280TdH
+ qFWVUfAXhVjdAr9zH75cZSdlLWKlftIIkI+MIfw5Ap3CTfP3M/o1rYEXnTenOf2Jrn3F9FFjl8Y60W
+ K9Kse57pCuBprkYYUWG/E1QwDgoogoo3hhvnZvPo37fqUuyHb4QIR+g6F/Aw==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Isolate all the changes related to the clock circular buffer to its own
-function, that way we can make changes easier to the buffer logic.
+Logitech C922 internal SOF does not increases at a stable rate of 1kHz.
+This causes that the device_sof and the host_sof run at different rates,
+breaking the clock domain conversion algorithm. Eg:
 
-Also simplify the lock, by removing the circular buffer clock handling
-from uvc_video_clock_decode().
+30 (6) [-] none 30 614400 B 21.245557 21.395214 34.133 fps ts mono/SoE
+31 (7) [-] none 31 614400 B 21.275327 21.427246 33.591 fps ts mono/SoE
+32 (0) [-] none 32 614400 B 21.304739 21.459256 34.000 fps ts mono/SoE
+33 (1) [-] none 33 614400 B 21.334324 21.495274 33.801 fps ts mono/SoE
+* 34 (2) [-] none 34 614400 B 21.529237 21.527297 5.130 fps ts mono/SoE
+* 35 (3) [-] none 35 614400 B 21.649416 21.559306 8.321 fps ts mono/SoE
+36 (4) [-] none 36 614400 B 21.678789 21.595320 34.045 fps ts mono/SoE
+...
+99 (3) [-] none 99 614400 B 23.542226 23.696352 33.541 fps ts mono/SoE
+100 (4) [-] none 100 614400 B 23.571578 23.728404 34.069 fps ts mono/SoE
+101 (5) [-] none 101 614400 B 23.601425 23.760420 33.504 fps ts mono/SoE
+* 102 (6) [-] none 102 614400 B 23.798324 23.796428 5.079 fps ts mono/SoE
+* 103 (7) [-] none 103 614400 B 23.916271 23.828450 8.478 fps ts mono/SoE
+104 (0) [-] none 104 614400 B 23.945720 23.860479 33.957 fps ts mono/SoE
 
-And now that we are at it, unify the API of the clock functions.
+Instead of disabling completely the hardware timestamping for such
+hardware we take the assumption that the packet handling jitter is
+under 2ms and use the host_sof as dev_sof.
 
-Tested-by: HungNien Chen <hn.chen@sunplusit.com>
+We can think of the UVC hardware clock as a system with a coarse clock
+(the SOF) and a fine clock (the PTS). The coarse clock can be replaced
+with a clock on the same frequency, if the jitter of such clock is
+smaller than its sampling rate. That way we can save some of the
+precision of the fine clock.
+
+To probe this point we have run three experiments on the Logitech C922.
+On that experiment we run the camera at 33fps and we analyse the
+difference in msec between a frame and its predecessor. If we display
+the histogram of that value, a thinner histogram will mean a better
+meassurement. The results for:
+- original hw timestamp: https://ibb.co/D1HJJ4x
+- pure software timestamp: https://ibb.co/QC9MgVK
+- modified hw timestamp: https://ibb.co/8s9dBdk
+
+This bug in the camera firmware has been confirmed by the vendor.
+
+lsusb -v
+
+Bus 001 Device 044: ID 046d:085c Logitech, Inc. C922 Pro Stream Webcam
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass          239 Miscellaneous Device
+  bDeviceSubClass         2
+  bDeviceProtocol         1 Interface Association
+  bMaxPacketSize0        64
+  idVendor           0x046d Logitech, Inc.
+  idProduct          0x085c C922 Pro Stream Webcam
+  bcdDevice            0.16
+  iManufacturer           0
+  iProduct                2 C922 Pro Stream Webcam
+  iSerial                 1 80B912DF
+  bNumConfigurations      1
+
 Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/usb/uvc/uvc_video.c | 84 ++++++++++++++++++---------------------
- 1 file changed, 38 insertions(+), 46 deletions(-)
+ drivers/media/usb/uvc/uvc_driver.c | 9 +++++++++
+ drivers/media/usb/uvc/uvc_video.c  | 8 ++++++++
+ drivers/media/usb/uvc/uvcvideo.h   | 1 +
+ 3 files changed, 18 insertions(+)
 
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 7aefa76a42b3..678a5736c9df 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -2549,6 +2549,15 @@ static const struct usb_device_id uvc_ids[] = {
+ 	  .bInterfaceSubClass	= 1,
+ 	  .bInterfaceProtocol	= 0,
+ 	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_RESTORE_CTRLS_ON_INIT) },
++	/* Logitech HD Pro Webcam C922 */
++	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
++				| USB_DEVICE_ID_MATCH_INT_INFO,
++	  .idVendor		= 0x046d,
++	  .idProduct		= 0x085c,
++	  .bInterfaceClass	= USB_CLASS_VIDEO,
++	  .bInterfaceSubClass	= 1,
++	  .bInterfaceProtocol	= 0,
++	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_INVALID_DEVICE_SOF) },
+ 	/* Chicony CNF7129 (Asus EEE 100HE) */
+ 	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+ 				| USB_DEVICE_ID_MATCH_INT_INFO,
 diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index 6d0243ea0e07..1db0d1bc80e6 100644
+index 1f416c494acc..4d566edb73e7 100644
 --- a/drivers/media/usb/uvc/uvc_video.c
 +++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -466,19 +466,30 @@ static inline ktime_t uvc_video_get_time(void)
- 		return ktime_get_real();
- }
+@@ -547,6 +547,14 @@ uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
+ 	stream->clock.last_sof = dev_sof;
  
-+static void uvc_video_clock_add_sample(struct uvc_clock *clock,
-+				       const struct uvc_clock_sample *sample)
-+{
-+	unsigned long flags;
+ 	host_sof = usb_get_current_frame_number(stream->dev->udev);
 +
-+	spin_lock_irqsave(&clock->lock, flags);
++	/*
++	 * On some devices, like the Logitech C922, the device SOF does not run
++	 * at a stable rate of 1kHz. For those devices use the host SOF instead.
++	 */
++	if (stream->dev->quirks & UVC_QUIRK_INVALID_DEVICE_SOF)
++		dev_sof = host_sof;
 +
-+	memcpy(&clock->samples[clock->head], sample, sizeof(*sample));
-+	clock->head = (clock->head + 1) % clock->size;
-+	clock->count = min(clock->count + 1, clock->size);
-+
-+	spin_unlock_irqrestore(&clock->lock, flags);
-+
-+	clock->last_sof = sample->dev_sof;
-+}
-+
- static void
- uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
- 		       const u8 *data, int len)
- {
--	struct uvc_clock_sample *sample;
-+	struct uvc_clock_sample sample;
- 	unsigned int header_size;
- 	bool has_pts = false;
- 	bool has_scr = false;
--	unsigned long flags;
--	ktime_t time;
--	u16 host_sof;
--	u16 dev_sof;
--	u32 dev_stc;
- 
- 	switch (data[1] & (UVC_STREAM_PTS | UVC_STREAM_SCR)) {
- 	case UVC_STREAM_PTS | UVC_STREAM_SCR:
-@@ -523,11 +534,11 @@ uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
- 	 * all the data packets of the same frame contains the same SOF. In that
- 	 * case only the first one will match the host_sof.
- 	 */
--	dev_sof = get_unaligned_le16(&data[header_size - 2]);
--	if (dev_sof == stream->clock.last_sof)
-+	sample.dev_sof = get_unaligned_le16(&data[header_size - 2]);
-+	if (sample.dev_sof == stream->clock.last_sof)
- 		return;
- 
--	dev_stc = get_unaligned_le32(&data[header_size - 6]);
-+	sample.dev_stc = get_unaligned_le32(&data[header_size - 6]);
+ 	time = uvc_video_get_time();
  
  	/*
- 	 * STC (Source Time Clock) is the clock used by the camera. The UVC 1.5
-@@ -541,21 +552,19 @@ uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
- 	 * and stc and sof are zero.
- 	 */
- 	if (buf && buf->bytesused == 0 && len == header_size &&
--	    dev_stc == 0 && dev_sof == 0)
-+	    sample.dev_stc == 0 && sample.dev_sof == 0)
- 		return;
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index 9a596c8d894a..07b2fdb80adf 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -73,6 +73,7 @@
+ #define UVC_QUIRK_FORCE_Y8		0x00000800
+ #define UVC_QUIRK_FORCE_BPP		0x00001000
+ #define UVC_QUIRK_WAKE_AUTOSUSPEND	0x00002000
++#define UVC_QUIRK_INVALID_DEVICE_SOF	0x00004000
  
--	stream->clock.last_sof = dev_sof;
--
--	host_sof = usb_get_current_frame_number(stream->dev->udev);
-+	sample.host_sof = usb_get_current_frame_number(stream->dev->udev);
- 
- 	/*
- 	 * On some devices, like the Logitech C922, the device SOF does not run
- 	 * at a stable rate of 1kHz. For those devices use the host SOF instead.
- 	 */
- 	if (stream->dev->quirks & UVC_QUIRK_INVALID_DEVICE_SOF)
--		dev_sof = host_sof;
-+		sample.dev_sof = sample.host_sof;
- 
--	time = uvc_video_get_time();
-+	sample.host_time = uvc_video_get_time();
- 
- 	/*
- 	 * The UVC specification allows device implementations that can't obtain
-@@ -578,46 +587,29 @@ uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
- 	 * the 8 LSBs of the delta are kept.
- 	 */
- 	if (stream->clock.sof_offset == (u16)-1) {
--		u16 delta_sof = (host_sof - dev_sof) & 255;
-+		u16 delta_sof = (sample.host_sof - sample.dev_sof) & 255;
- 		if (delta_sof >= 10)
- 			stream->clock.sof_offset = delta_sof;
- 		else
- 			stream->clock.sof_offset = 0;
- 	}
- 
--	dev_sof = (dev_sof + stream->clock.sof_offset) & 2047;
--
--	spin_lock_irqsave(&stream->clock.lock, flags);
--
--	sample = &stream->clock.samples[stream->clock.head];
--	sample->dev_stc = dev_stc;
--	sample->dev_sof = dev_sof;
--	sample->host_sof = host_sof;
--	sample->host_time = time;
--
--	/* Update the sliding window head and count. */
--	stream->clock.head = (stream->clock.head + 1) % stream->clock.size;
-+	sample.dev_sof = (sample.dev_sof + stream->clock.sof_offset) & 2047;
-+	sample.dev_stc = get_unaligned_le32(&data[header_size - 6]);
- 
--	if (stream->clock.count < stream->clock.size)
--		stream->clock.count++;
--
--	spin_unlock_irqrestore(&stream->clock.lock, flags);
-+	uvc_video_clock_add_sample(&stream->clock, &sample);
- }
- 
--static void uvc_video_clock_reset(struct uvc_streaming *stream)
-+static void uvc_video_clock_reset(struct uvc_clock *clock)
- {
--	struct uvc_clock *clock = &stream->clock;
--
- 	clock->head = 0;
- 	clock->count = 0;
- 	clock->last_sof = -1;
- 	clock->sof_offset = -1;
- }
- 
--static int uvc_video_clock_init(struct uvc_streaming *stream)
-+static int uvc_video_clock_init(struct uvc_clock *clock)
- {
--	struct uvc_clock *clock = &stream->clock;
--
- 	spin_lock_init(&clock->lock);
- 	clock->size = 32;
- 
-@@ -626,15 +618,15 @@ static int uvc_video_clock_init(struct uvc_streaming *stream)
- 	if (clock->samples == NULL)
- 		return -ENOMEM;
- 
--	uvc_video_clock_reset(stream);
-+	uvc_video_clock_reset(clock);
- 
- 	return 0;
- }
- 
--static void uvc_video_clock_cleanup(struct uvc_streaming *stream)
-+static void uvc_video_clock_cleanup(struct uvc_clock *clock)
- {
--	kfree(stream->clock.samples);
--	stream->clock.samples = NULL;
-+	kfree(clock->samples);
-+	clock->samples = NULL;
- }
- 
- /*
-@@ -2108,7 +2100,7 @@ int uvc_video_resume(struct uvc_streaming *stream, int reset)
- 
- 	stream->frozen = 0;
- 
--	uvc_video_clock_reset(stream);
-+	uvc_video_clock_reset(&stream->clock);
- 
- 	if (!uvc_queue_streaming(&stream->queue))
- 		return 0;
-@@ -2257,7 +2249,7 @@ int uvc_video_start_streaming(struct uvc_streaming *stream)
- {
- 	int ret;
- 
--	ret = uvc_video_clock_init(stream);
-+	ret = uvc_video_clock_init(&stream->clock);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -2275,7 +2267,7 @@ int uvc_video_start_streaming(struct uvc_streaming *stream)
- error_video:
- 	usb_set_interface(stream->dev->udev, stream->intfnum, 0);
- error_commit:
--	uvc_video_clock_cleanup(stream);
-+	uvc_video_clock_cleanup(&stream->clock);
- 
- 	return ret;
- }
-@@ -2303,5 +2295,5 @@ void uvc_video_stop_streaming(struct uvc_streaming *stream)
- 		usb_clear_halt(stream->dev->udev, pipe);
- 	}
- 
--	uvc_video_clock_cleanup(stream);
-+	uvc_video_clock_cleanup(&stream->clock);
- }
+ /* Format flags */
+ #define UVC_FMT_FLAG_COMPRESSED		0x00000001
 
 -- 
 2.40.0.rc1.284.g88254d51c5-goog-b4-0.11.0-dev-696ae
