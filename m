@@ -2,290 +2,215 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DAA86C6FD1D
-	for <linux-media@archiver.kernel.org>; Wed, 15 Mar 2023 12:37:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEA7DC61DA4
+	for <linux-media@archiver.kernel.org>; Wed, 15 Mar 2023 13:09:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232908AbjCOMh3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Mar 2023 08:37:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52984 "EHLO
+        id S231220AbjCONJe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Mar 2023 09:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232212AbjCOMhK (ORCPT
+        with ESMTP id S229616AbjCONJc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Mar 2023 08:37:10 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D38A101F
-        for <linux-media@vger.kernel.org>; Wed, 15 Mar 2023 05:36:17 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id cn21so44723983edb.0
-        for <linux-media@vger.kernel.org>; Wed, 15 Mar 2023 05:36:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678883763;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tCkrkxPcp+pi7gWatTpAiQc1rhobUtJPz5SB1d3BoAs=;
-        b=HcUeL/Gsuz2rsdYJ2uO0fa6VHfLGNxucpRGvZ1v26hYlGJ+MbjoFj6bpzEzwjQvo3X
-         rfiuvdhsXlaq2a6utmzRzNIoDwXOlMDSWdRws60B76Sc4H0TbYS6ERX3p1jtxDOVO9qE
-         vi1zN8sRadkxj7p6mEcosg0spK6fdUlqIA0RU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678883763;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tCkrkxPcp+pi7gWatTpAiQc1rhobUtJPz5SB1d3BoAs=;
-        b=0prEbDKCUTLLUoU2xW5vyFA4OMnctSQP0VCtn8H4nuPe542MyzhhmY6J/nNhOmaunB
-         420rT78iyR84zSLkj75kcnUVQwKJcx5Q1L02KYpX3mZlhjyaDnmA247eS27XY4jIz0BZ
-         Vk9Jz/FO2nM3vLXudhpEdA54HHPAizBOpzDxF2/2QVkG4ok54vhuvhV+O5tI8nvBl2oc
-         HlFPhVChRrs/ZRG1ziOqvggtwxN/FDHVC2OkpB60idQCrty6xiFJ8x9dSieWKPcEmXcW
-         6H0xrpHB3ce19ZIr9T5HzXy3Nw/s51LseEIDinex6uZXHJWBie4Q5V9+RzpD9ntW7zX/
-         x6OQ==
-X-Gm-Message-State: AO0yUKUaF5WCFTh95VuqvMQo5+qCfQiNEScXCUqTfaWCzXJNOGG5o7Uj
-        TXW1nPO2qK+6ZBLaoDAyo9+dUw==
-X-Google-Smtp-Source: AK7set8ooG5NmhmFwX3pgacTuf8SZ7jUdAHMo2GbSz5y8q1Ff7WUKJbBssgq7VWXi4Il2Z69verrWQ==
-X-Received: by 2002:a05:6402:887:b0:500:2a15:f86b with SMTP id e7-20020a056402088700b005002a15f86bmr1576900edy.42.1678883762837;
-        Wed, 15 Mar 2023 05:36:02 -0700 (PDT)
-Received: from alco.roam.corp.google.com ([2620:0:1059:10:491c:f627:27f0:1c4])
-        by smtp.gmail.com with ESMTPSA id w3-20020a50c443000000b004c30e2fc6e5sm2363256edf.65.2023.03.15.05.36.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 05:36:02 -0700 (PDT)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 15 Mar 2023 13:35:41 +0100
-Subject: [PATCH v8 5/6] media: uvcvideo: Refactor clock circular buffer
+        Wed, 15 Mar 2023 09:09:32 -0400
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A964114E92;
+        Wed, 15 Mar 2023 06:09:31 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 442C8E2304;
+        Wed, 15 Mar 2023 06:09:30 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id b4q4DcU4QBRv; Wed, 15 Mar 2023 06:09:29 -0700 (PDT)
+Date:   Wed, 15 Mar 2023 14:09:14 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1678885769; bh=0YolK6eZj9BJntGS6UUbtpnOXw9MSd2uaRG11myp+R8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=FrjEcZgzsbKPKMuJEcdvtYzJUDFUFMnItYi9FOYCC3TAG4Cx2wemQvDm3q1z8FMHi
+         vH4RckUZ8eSUXxIIIijTZyWFchE3t8IhIHDktuW8LDeMmCpqQcojEBV2GGnXsDjdnn
+         B2pvhvkGt84kXI+fhX9odVz3p1dipbsS53kPwC78eS+bk2hX6RGs5fyVQdQsEuQxJY
+         I03Eoj3elEDjK3eO2R3+TUlK3BUKjhh1pUphCZH7C6m4XmVIeUPSESNwNngpkjinJp
+         50F8ke4gjbXEOC7xzkffOx89agpDD5a0x1MT3sGr2R8ETbdjk1KcXHdRkOmYs0mCY4
+         zpHAo9H+85hvw==
+From:   Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+To:     Sakari Ailus <sakari.ailus@iki.fi>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@puri.sm
+Subject: Re: [PATCHv3 1/2 RESEND] doc/media api: Try to make enum usage
+ clearer
+Message-ID: <20230315140914.707e0cc9.dorota.czaplejewicz@puri.sm>
+In-Reply-To: <ZBGahMbA1fBrKLYP@valkosipuli.retiisi.eu>
+References: <20230219120034.5819b4ac.dorota.czaplejewicz@puri.sm>
+        <ZBGahMbA1fBrKLYP@valkosipuli.retiisi.eu>
+Organization: Purism
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20220920-resend-hwtimestamp-v8-5-0edaca2e2ab3@chromium.org>
-References: <20220920-resend-hwtimestamp-v8-0-0edaca2e2ab3@chromium.org>
-In-Reply-To: <20220920-resend-hwtimestamp-v8-0-0edaca2e2ab3@chromium.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     "hn.chen" <hn.chen@sunplusit.com>, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Ricardo Ribalda <ribalda@chromium.org>
-X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6688; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=OHcMfCmrhkBCGNHm7ElXHEEK0vKCs58LRA2nG7cPcTo=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBkEbupjxjnRk77SUQR0/MIksA+fOmz1p+1MXr0m6wG
- /W7qENuJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCZBG7qQAKCRDRN9E+zzrEiBIKD/
- 9KaGJwKe7leHuiXchoYFKwsc8k7asrzgqVT08RQwIXfVsHT48FlHaCtXSdkH7K3ldGGihnbriHBsSR
- 4eMaF01UiZkWjbmEQobFgctZn/FEYjJXmY9SfLrZ+oFvwVRgvKfpugNi18VFa22kI5/A/Y5GCsJkuK
- sQ+PsVfpbCjGmCQMR8sDiCa3CgrGdrfScPifEFtwCeJkS03n4dYzKylmDbdvICDAddwTMo4WVVs2O2
- FnRRHAG/QeZQ8M09Vh6jMCn3XPKpbQUG8//g9B7LPnrnPGfdFZs6tzZecqV483Vs3EeWlTY+mBjK8x
- rYVK0WdRN+PY6sXZBpx2HASQTUHOLVZetApfTC3hJgcPc4QvtV9dmdHjbUyevQpasSaMIXY0KAIbZs
- v0bATtA9zjD8Gw7f01hmQNRDApGrAEzrcK/aooYEIWftI0ftrZq/eAxcIuUevyWSWYAmixtH8PBSie
- klxPo2R6rfDEIYHZpEW66GoopqmuojxJVGIoe0ozN2OzhPDWBLxKQCZGIozNfUTD+8HJo77nIKfQyu
- IVqw1NJt29K/W553YYrmA51cBiIbv1r0azMHYYS1l/APnmJaemznOel7aSpvlGtRlWnM/ZfsI9CI01
- zEsIFDc4eztChaSTOH5O3uBAnDTMO6iTQayBmVGlCh+cZYawocpNFfQly7RA==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+Content-Type: multipart/signed; boundary="Sig_/BV6mp6Z.cVyZ5F8YY9YWRAT";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Isolate all the changes related to the clock circular buffer to its own
-function, that way we can make changes easier to the buffer logic.
+--Sig_/BV6mp6Z.cVyZ5F8YY9YWRAT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Also simplify the lock, by removing the circular buffer clock handling
-from uvc_video_clock_decode().
+Hi,
 
-And now that we are at it, unify the API of the clock functions.
+On Wed, 15 Mar 2023 12:14:28 +0200
+Sakari Ailus <sakari.ailus@iki.fi> wrote:
 
-Tested-by: HungNien Chen <hn.chen@sunplusit.com>
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- drivers/media/usb/uvc/uvc_video.c | 84 ++++++++++++++++++---------------------
- 1 file changed, 38 insertions(+), 46 deletions(-)
+> Hi Dorota,
+>=20
+> On Sun, Feb 19, 2023 at 12:00:34PM +0100, Dorota Czaplejewicz wrote:
+> > This clarifies which side of the calls is responsible for doing what to=
+ which parts of the struct.
+> > This also explicitly states that repeating values are disallowed.
+> > It also expands the terse description of the access algorithm into more=
+ prose-like, active voice description, which trades conciseness for ease of=
+ comprehension. =20
+>=20
+> The commit message lines should be wrapped at 74 characters. Please do use
+> checkpatch.pl in the future. There is also no apparent reason to add a
+> newline after a period.
+>=20
+> The same applies to the other patch as well.
+>=20
+> I've addressed the issues this time.
 
-diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index 6d0243ea0e07..df7c400fe82e 100644
---- a/drivers/media/usb/uvc/uvc_video.c
-+++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -466,19 +466,30 @@ static inline ktime_t uvc_video_get_time(void)
- 		return ktime_get_real();
- }
- 
-+static void uvc_video_clock_add_sample(struct uvc_clock *clock,
-+				       const struct uvc_clock_sample *sample)
-+{
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&clock->lock, flags);
-+
-+	memcpy(&clock->samples[clock->head], sample, sizeof(*sample));
-+	clock->head = (clock->head + 1) % clock->size;
-+	clock->count = min(clock->count + 1, clock->size);
-+
-+	spin_unlock_irqrestore(&clock->lock, flags);
-+
-+	stream->clock.last_sof = sample.dev_sof;
-+}
-+
- static void
- uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
- 		       const u8 *data, int len)
- {
--	struct uvc_clock_sample *sample;
-+	struct uvc_clock_sample sample;
- 	unsigned int header_size;
- 	bool has_pts = false;
- 	bool has_scr = false;
--	unsigned long flags;
--	ktime_t time;
--	u16 host_sof;
--	u16 dev_sof;
--	u32 dev_stc;
- 
- 	switch (data[1] & (UVC_STREAM_PTS | UVC_STREAM_SCR)) {
- 	case UVC_STREAM_PTS | UVC_STREAM_SCR:
-@@ -523,11 +534,11 @@ uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
- 	 * all the data packets of the same frame contains the same SOF. In that
- 	 * case only the first one will match the host_sof.
- 	 */
--	dev_sof = get_unaligned_le16(&data[header_size - 2]);
--	if (dev_sof == stream->clock.last_sof)
-+	sample.dev_sof = get_unaligned_le16(&data[header_size - 2]);
-+	if (sample.dev_sof == stream->clock.last_sof)
- 		return;
- 
--	dev_stc = get_unaligned_le32(&data[header_size - 6]);
-+	sample.dev_stc = get_unaligned_le32(&data[header_size - 6]);
- 
- 	/*
- 	 * STC (Source Time Clock) is the clock used by the camera. The UVC 1.5
-@@ -541,21 +552,19 @@ uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
- 	 * and stc and sof are zero.
- 	 */
- 	if (buf && buf->bytesused == 0 && len == header_size &&
--	    dev_stc == 0 && dev_sof == 0)
-+	    sample.dev_stc == 0 && sample.dev_sof == 0)
- 		return;
- 
--	stream->clock.last_sof = dev_sof;
--
--	host_sof = usb_get_current_frame_number(stream->dev->udev);
-+	sample.host_sof = usb_get_current_frame_number(stream->dev->udev);
- 
- 	/*
- 	 * On some devices, like the Logitech C922, the device SOF does not run
- 	 * at a stable rate of 1kHz. For those devices use the host SOF instead.
- 	 */
- 	if (stream->dev->quirks & UVC_QUIRK_INVALID_DEVICE_SOF)
--		dev_sof = host_sof;
-+		sample.dev_sof = sample.host_sof;
- 
--	time = uvc_video_get_time();
-+	sample.host_time = uvc_video_get_time();
- 
- 	/*
- 	 * The UVC specification allows device implementations that can't obtain
-@@ -578,46 +587,29 @@ uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
- 	 * the 8 LSBs of the delta are kept.
- 	 */
- 	if (stream->clock.sof_offset == (u16)-1) {
--		u16 delta_sof = (host_sof - dev_sof) & 255;
-+		u16 delta_sof = (sample.host_sof - sample.dev_sof) & 255;
- 		if (delta_sof >= 10)
- 			stream->clock.sof_offset = delta_sof;
- 		else
- 			stream->clock.sof_offset = 0;
- 	}
- 
--	dev_sof = (dev_sof + stream->clock.sof_offset) & 2047;
--
--	spin_lock_irqsave(&stream->clock.lock, flags);
--
--	sample = &stream->clock.samples[stream->clock.head];
--	sample->dev_stc = dev_stc;
--	sample->dev_sof = dev_sof;
--	sample->host_sof = host_sof;
--	sample->host_time = time;
--
--	/* Update the sliding window head and count. */
--	stream->clock.head = (stream->clock.head + 1) % stream->clock.size;
-+	sample.dev_sof = (sample.dev_sof + stream->clock.sof_offset) & 2047;
-+	sample.dev_stc = get_unaligned_le32(&data[header_size - 6]);
- 
--	if (stream->clock.count < stream->clock.size)
--		stream->clock.count++;
--
--	spin_unlock_irqrestore(&stream->clock.lock, flags);
-+	uvc_video_clock_add_sample(&stream->clock, &sample);
- }
- 
--static void uvc_video_clock_reset(struct uvc_streaming *stream)
-+static void uvc_video_clock_reset(struct uvc_clock *clock)
- {
--	struct uvc_clock *clock = &stream->clock;
--
- 	clock->head = 0;
- 	clock->count = 0;
- 	clock->last_sof = -1;
- 	clock->sof_offset = -1;
- }
- 
--static int uvc_video_clock_init(struct uvc_streaming *stream)
-+static int uvc_video_clock_init(struct uvc_clock *clock)
- {
--	struct uvc_clock *clock = &stream->clock;
--
- 	spin_lock_init(&clock->lock);
- 	clock->size = 32;
- 
-@@ -626,15 +618,15 @@ static int uvc_video_clock_init(struct uvc_streaming *stream)
- 	if (clock->samples == NULL)
- 		return -ENOMEM;
- 
--	uvc_video_clock_reset(stream);
-+	uvc_video_clock_reset(clock);
- 
- 	return 0;
- }
- 
--static void uvc_video_clock_cleanup(struct uvc_streaming *stream)
-+static void uvc_video_clock_cleanup(struct uvc_clock *clock)
- {
--	kfree(stream->clock.samples);
--	stream->clock.samples = NULL;
-+	kfree(clock->samples);
-+	clock->samples = NULL;
- }
- 
- /*
-@@ -2108,7 +2100,7 @@ int uvc_video_resume(struct uvc_streaming *stream, int reset)
- 
- 	stream->frozen = 0;
- 
--	uvc_video_clock_reset(stream);
-+	uvc_video_clock_reset(&stream->clock);
- 
- 	if (!uvc_queue_streaming(&stream->queue))
- 		return 0;
-@@ -2257,7 +2249,7 @@ int uvc_video_start_streaming(struct uvc_streaming *stream)
- {
- 	int ret;
- 
--	ret = uvc_video_clock_init(stream);
-+	ret = uvc_video_clock_init(&stream->clock);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -2275,7 +2267,7 @@ int uvc_video_start_streaming(struct uvc_streaming *stream)
- error_video:
- 	usb_set_interface(stream->dev->udev, stream->intfnum, 0);
- error_commit:
--	uvc_video_clock_cleanup(stream);
-+	uvc_video_clock_cleanup(&stream->clock);
- 
- 	return ret;
- }
-@@ -2303,5 +2295,5 @@ void uvc_video_stop_streaming(struct uvc_streaming *stream)
- 		usb_clear_halt(stream->dev->udev, pipe);
- 	}
- 
--	uvc_video_clock_cleanup(stream);
-+	uvc_video_clock_cleanup(&stream->clock);
- }
+Thanks for taking a look. What is the next step?
 
--- 
-2.40.0.rc1.284.g88254d51c5-goog-b4-0.11.0-dev-696ae
+--Dorota
+>=20
+> >=20
+> > Added: mbus codes must not repeat
+> > Added: no holes in the enumeration
+> > Added: enumerations per what?
+> > Added: who fills in what in calls
+> > Changed: "zero" -> "0"
+> > Changed: "given" -> "specified"
+> >=20
+> > Still unclear how it works so didn't describe: "which". What is a "try =
+format" vs "active format"?
+> >=20
+> > Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+> > ---
+> > Hi,
+> >=20
+> > I took those patches out of the freezer. I made sure they still apply (=
+they do), and corrected some errors pointed out by Jacopo in the previous r=
+ound of reviews. =20
+>=20
+> Ditto.
+>=20
+> >=20
+> > Thanks,
+> > Dorota
+> >=20
+> >  .../v4l/vidioc-subdev-enum-mbus-code.rst      | 38 +++++++++++++------
+> >  1 file changed, 26 insertions(+), 12 deletions(-)
+> >=20
+> > diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-m=
+bus-code.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbu=
+s-code.rst
+> > index 417f1a19bcc4..63bff24d0520 100644
+> > --- a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-cod=
+e.rst
+> > +++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-cod=
+e.rst
+> > @@ -31,15 +31,28 @@ Arguments
+> >  Description
+> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > =20
+> > -To enumerate media bus formats available at a given sub-device pad
+> > -applications initialize the ``pad``, ``which`` and ``index`` fields of
+> > -struct
+> > -:c:type:`v4l2_subdev_mbus_code_enum` and
+> > -call the :ref:`VIDIOC_SUBDEV_ENUM_MBUS_CODE` ioctl with a pointer to t=
+his
+> > -structure. Drivers fill the rest of the structure or return an ``EINVA=
+L``
+> > -error code if either the ``pad`` or ``index`` are invalid. All media b=
+us
+> > -formats are enumerable by beginning at index zero and incrementing by
+> > -one until ``EINVAL`` is returned.
+> > +This call is used by the application to access the enumeration
+> > +of media bus formats for the selected pad.
+> > +
+> > +The enumerations are defined by the driver, and indexed using the ``in=
+dex`` field
+> > +of struct :c:type:`v4l2_subdev_mbus_code_enum`.
+> > +Each enumeration starts with the ``index`` of 0, and
+> > +the lowest invalid index marks the end of enumeration.
+> > +
+> > +Therefore, to enumerate media bus formats available at a given sub-dev=
+ice pad,
+> > +initialize the ``pad``, and ``which`` fields to desired values,
+> > +and set ``index`` to 0.
+> > +Then call the :ref:`VIDIOC_SUBDEV_ENUM_MBUS_CODE` ioctl
+> > +with a pointer to this structure.
+> > +
+> > +A successful call will return with the ``code`` field filled in
+> > +with a mbus code value.
+> > +Repeat with increasing ``index`` until ``EINVAL`` is received.
+> > +``EINVAL`` means that either ``pad`` is invalid,
+> > +or that there are no more codes available at this pad.
+> > +
+> > +The driver must not return the same value of ``code`` for different in=
+dices
+> > +at the same pad.
+> > =20
+> >  Available media bus formats may depend on the current 'try' formats at
+> >  other pads of the sub-device, as well as on the current active links.
+> > @@ -57,14 +70,15 @@ information about the try formats.
+> > =20
+> >      * - __u32
+> >        - ``pad``
+> > -      - Pad number as reported by the media controller API.
+> > +      - Pad number as reported by the media controller API. Filled in =
+by the application. =20
+>=20
+> Here, too...
+>=20
+> >      * - __u32
+> >        - ``index``
+> > -      - Number of the format in the enumeration, set by the applicatio=
+n.
+> > +      - Index of the mbus code in the enumeration belonging to the giv=
+en pad.
+> > +    Filled in by the application. =20
+>=20
+> Wrong indentation.
+>=20
+> >      * - __u32
+> >        - ``code``
+> >        - The media bus format code, as defined in
+> > -	:ref:`v4l2-mbus-format`.
+> > +	:ref:`v4l2-mbus-format`. Filled in by the driver.
+> >      * - __u32
+> >        - ``which``
+> >        - Media bus format codes to be enumerated, from enum =20
+>=20
+
+
+--Sig_/BV6mp6Z.cVyZ5F8YY9YWRAT
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEExKRqtqfFqmh+lu1oADBpX4S8ZncFAmQRw3oACgkQADBpX4S8
+Znd/bA/7Bxc/fWZNp6/h9Wkj2rd04kRRIZtR1+sYBks6GqZuSLRikbtMbX7jZnDK
+649yPzfqnnNVum/TF6qTWWix2zueOePBxg+oepCIOTmu6Vl+J05c9O9RtJmpft0U
+WyadXHACP1Hf+RmCZDH8Nefi3g6LojG029mxz2EBWapWrOQYsR+qAPEa4fBKrzcr
+d2soLNfJa1BpkbRqeFNx+eAuvogGbYmxPCDcAddv82KtM3SjtUrWCD9GtvTfGCT0
+YTAIcfXAfd1wgsNSme5nbZudpHodAUDwvDsQ/p3cYyCJNpZt7BcuUhCqcklNJ8pl
+Co2OAlH4LzAvy+qEzKq72Z5bG/un/l5tH3dfWeYYL1bh939RX4fyVmV+wQdhAFQ1
+8DlTYKfa35ENL0KOVyEbNq6LMKB4mFWIuqfIIcyra/zJSQSqfAO2867Xxsibnn45
+pRMua0PeSujHVcf7QA6WLVwxifUJIvgDVvcCzMWqVDY2lLPczLvUFIHk7JQOxkVr
+fXsWmvCdyOEvyTgi1BSb9xGLoKiIlZ60yQy7DLqgMXXC6ZykCr1moOE81KUGIGBR
+zH8hfSDVmXm4nJzo9Op9aCiLGJlT514ltvIma/Soaxvv7cg5SoB5TgntAKqEKshI
+mHMXyrlBqTBkCYD3aqUnvi3cFpg1xCnC0RyAv6ZJArFIkHsbVJA=
+=QeDg
+-----END PGP SIGNATURE-----
+
+--Sig_/BV6mp6Z.cVyZ5F8YY9YWRAT--
