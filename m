@@ -2,89 +2,78 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5391FC7618A
-	for <linux-media@archiver.kernel.org>; Wed, 15 Mar 2023 01:14:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E485C6FD1D
+	for <linux-media@archiver.kernel.org>; Wed, 15 Mar 2023 03:00:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbjCOBOg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Mar 2023 21:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
+        id S230155AbjCODA5 convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Mar 2023 23:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjCOBOf (ORCPT
+        with ESMTP id S229552AbjCODAz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Mar 2023 21:14:35 -0400
+        Tue, 14 Mar 2023 23:00:55 -0400
 Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A42298C0;
-        Tue, 14 Mar 2023 18:14:33 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B0F4AFF3;
+        Tue, 14 Mar 2023 20:00:50 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id BA4A324E1D1;
-        Wed, 15 Mar 2023 09:14:26 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 15 Mar
- 2023 09:14:26 +0800
-Received: from [192.168.60.77] (180.164.60.184) by EXMBX073.cuchost.com
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 6045924E2E7;
+        Wed, 15 Mar 2023 11:00:42 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 15 Mar
+ 2023 11:00:42 +0800
+Received: from xiaofei.localdomain (180.164.60.184) by EXMBX073.cuchost.com
  (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 15 Mar
- 2023 09:14:26 +0800
-Message-ID: <46943d0c-81a6-2eda-680a-43c56e9aece6@starfivetech.com>
-Date:   Wed, 15 Mar 2023 09:14:25 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1] media: admin-guide: Update rkisp1.rst
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-CC:     Dafna Hirschfeld <dafna@fastmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        <linux-media@vger.kernel.org>,
-        <linux-rockchip@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230310024056.59220-1-jack.zhu@starfivetech.com>
- <ZBBB/pM0WliJUu2i@valkosipuli.retiisi.eu>
-Content-Language: en-US
+ 2023 11:00:42 +0800
 From:   Jack Zhu <jack.zhu@starfivetech.com>
-In-Reply-To: <ZBBB/pM0WliJUu2i@valkosipuli.retiisi.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
+To:     Dafna Hirschfeld <dafna@fastmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     <linux-media@vger.kernel.org>,
+        <linux-rockchip@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <jack.zhu@starfivetech.com>
+Subject: [PATCH v2] media: admin-guide: Update rkisp1.rst
+Date:   Wed, 15 Mar 2023 11:00:40 +0800
+Message-ID: <20230315030040.107901-1-jack.zhu@starfivetech.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Type: text/plain
 X-Originating-IP: [180.164.60.184]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX073.cuchost.com
+X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX073.cuchost.com
  (172.16.6.83)
 X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Update Rockchip ISP1 driver file path
 
+Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
 
-On 2023/3/14 17:44, Sakari Ailus wrote:
-> Hi Jack,
-> 
-> On Fri, Mar 10, 2023 at 10:40:56AM +0800, Jack Zhu wrote:
->> Update Rockchip ISP1 driver file path
->> 
->> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
->> ---
->>  Documentation/admin-guide/media/rkisp1.rst | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->> 
->> diff --git a/Documentation/admin-guide/media/rkisp1.rst b/Documentation/admin-guide/media/rkisp1.rst
->> index ccf418713623..3eec078c9eff 100644
->> --- a/Documentation/admin-guide/media/rkisp1.rst
->> +++ b/Documentation/admin-guide/media/rkisp1.rst
->> @@ -10,7 +10,7 @@ Introduction
->>  ============
->>  
->>  This file documents the driver for the Rockchip ISP1 that is part of RK3288
->> -and RK3399 SoCs. The driver is located under drivers/staging/media/rkisp1
->> +and RK3399 SoCs. The driver is located under drivers/media/platform/rockchip/rkisp1
-> 
-> Applied now but going forward, please keep the lines at 80 chars or less.
+---
+Changes in v2:
+- keep that the number of characters in the line is within 80.
+---
+ Documentation/admin-guide/media/rkisp1.rst | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-OK, will modify it. Thank you for your comments.
+diff --git a/Documentation/admin-guide/media/rkisp1.rst b/Documentation/admin-guide/media/rkisp1.rst
+index ccf418713623..6f14d9561fa5 100644
+--- a/Documentation/admin-guide/media/rkisp1.rst
++++ b/Documentation/admin-guide/media/rkisp1.rst
+@@ -10,8 +10,8 @@ Introduction
+ ============
+ 
+ This file documents the driver for the Rockchip ISP1 that is part of RK3288
+-and RK3399 SoCs. The driver is located under drivers/staging/media/rkisp1
+-and uses the Media-Controller API.
++and RK3399 SoCs. The driver is located under drivers/media/platform/rockchip/
++rkisp1 and uses the Media-Controller API.
+ 
+ Revisions
+ =========
+-- 
+2.34.1
 
-> 
-> Thanks.
-> 
->>  and uses the Media-Controller API.
->>  
->>  Revisions
-> 
