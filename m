@@ -2,58 +2,58 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B45BC61DA4
-	for <linux-media@archiver.kernel.org>; Wed, 15 Mar 2023 13:30:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B2ACC7618A
+	for <linux-media@archiver.kernel.org>; Wed, 15 Mar 2023 13:30:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232152AbjCONah (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Mar 2023 09:30:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34598 "EHLO
+        id S232195AbjCONaj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Mar 2023 09:30:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232069AbjCONae (ORCPT
+        with ESMTP id S232116AbjCONae (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 15 Mar 2023 09:30:34 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A087DF9A
-        for <linux-media@vger.kernel.org>; Wed, 15 Mar 2023 06:30:28 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id cn21so45398491edb.0
-        for <linux-media@vger.kernel.org>; Wed, 15 Mar 2023 06:30:28 -0700 (PDT)
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC6819B9
+        for <linux-media@vger.kernel.org>; Wed, 15 Mar 2023 06:30:30 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id z21so10242468edb.4
+        for <linux-media@vger.kernel.org>; Wed, 15 Mar 2023 06:30:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678887027;
+        d=chromium.org; s=google; t=1678887028;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Ks+I0iL9S/eJzdcQJQgtcbFNoYKHK8Hr97Z4+vCos3E=;
-        b=gHfCVCL+KtwV3EGazhIeiRvmQifinDdtF04C+2pUjQdV1/8/ES84XLYEjUdkzB4QsU
-         TSStCHlPV1aC8PvSJQYXYl/EScKnV2JYi3AISC6OUA392cGv0mylaw+FIcpg1OunvKbT
-         RAC2B//QzWfaTxB8+Dc/EtX9u3Bg0yHMmvz/Y=
+        bh=RN9dk0TN64Mo7WHVhpVGbABaRx7Q/q6Pwknupu3adDk=;
+        b=ToM7VD9X/aUdz9PzNycBJiRnRHWzb+x6BnG96KWk4BmxIrH4T4KmFE9CHYb8s0VIQb
+         OXJrtXCcNpDCC2BcstyhWQMdvHXz1ec6jeO9iUDX3jRzzCHZ2nkxemOfvvAmRudJiLyN
+         QwCf1/RCkIN4DcBlo5NFxOciPrhEqFsLnP9Eo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678887027;
+        d=1e100.net; s=20210112; t=1678887028;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ks+I0iL9S/eJzdcQJQgtcbFNoYKHK8Hr97Z4+vCos3E=;
-        b=FAC0Ygk9Ld/5/MvCEwMQ2+sZZLNIykk/1mm49JKiVfjEF9bElI/3t7dz7Xs5jMM27V
-         oF2qlgqsVrWK67oqMVrv/V4iOlI5qtUhVXYJFWJrek6irVVPvbQovz5V2EssJG5HF3xF
-         KmRjEfpujG3TJj+tXhqi0p6Bwfl4NGyWrR1NOtjfsVXRoifChyrP6gzfVimS61QJkBr4
-         Sf8Bx11Mu9hqi2xxfDEuod4tZ7/c/27JbebGbDwvEc+tVgSl9IVduECWRMivEikc+5vi
-         +bcEUbFoG5LifvXShAICpAIJYvJOpuuvQhjrQMXJRDwoUIYPZ5AOKLMsIC0GqYmSxdzC
-         vY5Q==
-X-Gm-Message-State: AO0yUKWb0JBhU4jBexj8IXqpWn3H5Jblut6xENOk4mFJSNDqDrne2jHp
-        ZAVSW52PpY3xgZ7A7TSBzo6kQg==
-X-Google-Smtp-Source: AK7set8REglz9uHlenBcNYXEDNU7f8XywG6UdqAnZ4tGl829rZg4MXLJsMz1sNqBii07HK3EkEKmyw==
-X-Received: by 2002:a17:906:c1d0:b0:879:ab3:93cd with SMTP id bw16-20020a170906c1d000b008790ab393cdmr7663387ejb.46.1678887026905;
-        Wed, 15 Mar 2023 06:30:26 -0700 (PDT)
+        bh=RN9dk0TN64Mo7WHVhpVGbABaRx7Q/q6Pwknupu3adDk=;
+        b=yssOQFy+0mgrHEeOV+sTXcN2+51QkbgLc60zJvECjAMXABGTqXdukBAxxhvv7CdMR1
+         gwSTCiaqXTd4ur9C44Rl5akwISCyVhbZghU08h8I0TD5QKomlD1AQHbr1PlzfXq7Z3o1
+         lt0g0wdlBGMg/L5VCkTYu6ZlO3tE06hX0gsyLwML32zqyiMkv+/2+3ng7iv5jJJ0Ger0
+         0imI9j+q0eHcstdU6EiqYMKHNFILkUvUL/VH8yYkyx+zD2oXJN9TGnJFNFWONWb8cLpW
+         TzsEt1TfMifICkj2L+5T3rOeelMeu3qr4UcsmysgBMn31Zlb7Jl5io1fJNW6jvTwqbH5
+         8omQ==
+X-Gm-Message-State: AO0yUKXS0jiPeQs7OAk5vU2I4bMYNnjG2IPFF2qQaPabsPd6ZIMJ7SXO
+        EHMAoymIfeNqsqYixYvC0QZ0nA==
+X-Google-Smtp-Source: AK7set/fJXVFSOeuzgSQe2PXs17EDRO4AzvG7/0F1D6ZRxbUxr2mmqfPwktNoM57GF3T5AggYyqHVQ==
+X-Received: by 2002:a17:906:7fc2:b0:8b1:3002:bd6d with SMTP id r2-20020a1709067fc200b008b13002bd6dmr7662768ejs.31.1678887028676;
+        Wed, 15 Mar 2023 06:30:28 -0700 (PDT)
 Received: from alco.roam.corp.google.com ([2620:0:1059:10:491c:f627:27f0:1c4])
-        by smtp.gmail.com with ESMTPSA id ha11-20020a170906a88b00b0092043ae1a8asm2534638ejb.92.2023.03.15.06.30.26
+        by smtp.gmail.com with ESMTPSA id ha11-20020a170906a88b00b0092043ae1a8asm2534638ejb.92.2023.03.15.06.30.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 06:30:26 -0700 (PDT)
+        Wed, 15 Mar 2023 06:30:28 -0700 (PDT)
 From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 15 Mar 2023 14:30:13 +0100
-Subject: [PATCH v9 2/6] media: uvcvideo: Ignore empty TS packets
+Date:   Wed, 15 Mar 2023 14:30:15 +0100
+Subject: [PATCH v9 4/6] media: uvcvideo: Allow hw clock updates with buffers not full
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20220920-resend-hwtimestamp-v9-2-55a89f46f6be@chromium.org>
+Message-Id: <20220920-resend-hwtimestamp-v9-4-55a89f46f6be@chromium.org>
 References: <20220920-resend-hwtimestamp-v9-0-55a89f46f6be@chromium.org>
 In-Reply-To: <20220920-resend-hwtimestamp-v9-0-55a89f46f6be@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -63,123 +63,76 @@ Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         linux-kernel@vger.kernel.org, "hn.chen" <hn.chen@sunplusit.com>,
         linux-media@vger.kernel.org
 X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3922; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=+e1rJhTRZYFtyKcR4/N8/nQKunH8/Dqv1jSdJGbbaL4=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBkEchpR2vAg7sBI1dBwEaleUoYD6Drm9+mb10eFF4d
- hd04yCeJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCZBHIaQAKCRDRN9E+zzrEiKCRD/
- 94LdXzVScvrVV29sQ8EK2AVywlk82cd6hn4nTtlVg4uXUKQYiHC5na7f44u2FI9CSFXKwiwghgAZwd
- 5/dDjYFYPND+npCycYyq+jz4WVsrxsOoB2VyqkuOh6ydpq5d/wbKaI/FIXkx4LRexFe2/BcT7kdtN8
- QUFA8K6zLGDPpcFUspOX4Rn3kVY9V7IkklSZPOSy2z0UzR43xsNiVtAA61/D7Bw/H31K8x5PmrumE2
- z7eTr5YpcGunNBaTTFUm3jgDFSSxY4l8v6kIK7NqeJqxWtCOGqYdQLw4yt9lVlTBclitt1YQCWybjd
- s4MWoYXtL3xRZTTC7o3GbNPQr42+/E71beG2E9KpaCXvl0r2QVPMlnb4bUO6QDfE6tgJBSik4Rlm/o
- 5XHtOUvsS6FfUPZ3RlQegjRSCjM5msSzhiStAwMPt1OquSz0QsfDQxmA+CLZpy6DWOJYTUkU5tzR01
- hVGOUhF7QRK/O0NRHZxJkGSnDzZS/TmMzayHKVBGNDqBDykRPXsHJramc5e5mHuZl/s3uIsFbm+BJZ
- lZC75yL/VkAdYCiuYo4AWNv4SjSKYkEaMHrNr6Iy2v7HAXVoc+RhCITlGX7ik52DvxRvQH5Q6j83Aa
- MGuJWJeZ6HvhDgr11Mo9RByVmOa4Ccq8oWpF6OYIDOlnK+ziPoSQ4G1IrV8g==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1966; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=Ka10ItjemOVlrqrWVbbdhzTBAJcpymfvLrHEyyU17oM=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBkEchrnf062mGexzCcK14u+qoHjARmKRwxGuNN3as8
+ 6ad6scuJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCZBHIawAKCRDRN9E+zzrEiAKEEA
+ CG9+cG77r2uDQOhqdDXHVs4vEnubrbB26q41MZuaEbFiuy6ZLyB0Gx0uGOFciMs5BEi21K0hMNBCwz
+ ZDbm2aZqPJH3kHIYClkiI90s8hmPQSCHHLCHZZkvrjm7Le8uEjQBSpdP0b7rCghccnwtV8U+nLcY3s
+ q1niE+9G7ga4UY0JYZZO5AQdwpVv+FA0fTnMLEb6ovIo5K8mSg+O2u0OzwYFPEvtbZ9FflragtLgJk
+ M40o7QlRBq5TcweZHWTImH5jw4a3Qjjt5ceK2rnY10y6OGduFSlDREJxuGt4HVA8N0pCMTNDNELPeE
+ ABXNbWzuvNMwbYyRLTnFhSE+SS0efBoi1ibGRP/nXo/T1ou/4i10HKxxi6Zh8MCxBv3A8TtxcYwk9p
+ PyqYlZhLNsrKJ6xOCWz0hMcRerkUjiwEbb5s3opkvBBahno6UlrNttSK/iDvILAo68oPbkMXG6kBmN
+ +ccwfqLVr99EbK4g/+OafbkXQpePOJxwXbbqXLZNZ8O7tYE0n4BQ3ececLYeOuJuaU7JVyA9MSBOa8
+ QvmO18/mJmNMBHn4gX6AFytKK4KzYTLkmBfSJCulz8MvLsMD14QiPaNwaDiP2h/clJiwcK/TYHYwmc
+ 0mru1B96URZdV3COUAhLsFhCedb0O+ayyf1AUGf/4CsD/q+P7GmIErKutf2A==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Some SunplusIT cameras took a borderline interpretation of the UVC 1.5
-standard, and fill the PTS and SCR fields with invalid data if the
-package does not contain data.
+With UVC 1.5 we get as little as one clock sample per frame. Which means
+that it takes 32 frames to move from the software timestamp to the
+hardware timestamp method.
 
-"STC must be captured when the first video data of a video frame is put
-on the USB bus."
+This results in abrupt changes in the timestamping after 32 frames (~1
+second), resulting in noticeable artifacts when used for encoding.
 
-Eg:
-
-buffer: 0xa7755c00 len 000012 header:0x8c stc 00000000 sof 0000 pts 00000000
-buffer: 0xa7755c00 len 000012 header:0x8c stc 00000000 sof 0000 pts 00000000
-buffer: 0xa7755c00 len 000668 header:0x8c stc 73779dba sof 070c pts 7376d37a
-
-This borderline/buggy interpretation has been implemented in a variety
-of devices, from directly SunplusIT and from other OEMs that rebrand
-SunplusIT products. So quirking based on VID:PID will be problematic.
-
-All the affected modules have the following extension unit:
-VideoControl Interface Descriptor:
-  guidExtensionCode         {82066163-7050-ab49-b8cc-b3855e8d221d}
-
-But the vendor plans to use that GUID in the future and fix the bug,
-this means that we should use heuristic to figure out the broken
-packets.
-
-This patch takes care of this.
-
-lsusb of one of the affected cameras:
-
-Bus 001 Device 003: ID 1bcf:2a01 Sunplus Innovation Technology Inc.
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.01
-  bDeviceClass          239 Miscellaneous Device
-  bDeviceSubClass         2 ?
-  bDeviceProtocol         1 Interface Association
-  bMaxPacketSize0        64
-  idVendor           0x1bcf Sunplus Innovation Technology Inc.
-  idProduct          0x2a01
-  bcdDevice            0.02
-  iManufacturer           1 SunplusIT Inc
-  iProduct                2 HanChen Wise Camera
-  iSerial                 3 01.00.00
-  bNumConfigurations      1
+With this patch we modify the update algorithm to work with whatever
+amount of values are available.
 
 Tested-by: HungNien Chen <hn.chen@sunplusit.com>
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/usb/uvc/uvc_video.c | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
+ drivers/media/usb/uvc/uvc_video.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index 4ff4ab4471fe..1f416c494acc 100644
+index 4d566edb73e7..6d0243ea0e07 100644
 --- a/drivers/media/usb/uvc/uvc_video.c
 +++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -478,6 +478,7 @@ uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
- 	ktime_t time;
- 	u16 host_sof;
- 	u16 dev_sof;
-+	u32 dev_stc;
+@@ -754,10 +754,10 @@ void uvc_video_clock_update(struct uvc_streaming *stream,
  
- 	switch (data[1] & (UVC_STREAM_PTS | UVC_STREAM_SCR)) {
- 	case UVC_STREAM_PTS | UVC_STREAM_SCR:
-@@ -526,6 +527,23 @@ uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
- 	if (dev_sof == stream->clock.last_sof)
- 		return;
+ 	spin_lock_irqsave(&clock->lock, flags);
  
-+	dev_stc = get_unaligned_le32(&data[header_size - 6]);
-+
+-	if (clock->count < clock->size)
++	if (clock->count < 2)
+ 		goto done;
+ 
+-	first = &clock->samples[clock->head];
++	first = &clock->samples[(clock->head - clock->count + clock->size) % clock->size];
+ 	last = &clock->samples[(clock->head - 1 + clock->size) % clock->size];
+ 
+ 	/* First step, PTS to SOF conversion. */
+@@ -772,6 +772,17 @@ void uvc_video_clock_update(struct uvc_streaming *stream,
+ 	if (y2 < y1)
+ 		y2 += 2048 << 16;
+ 
 +	/*
-+	 * STC (Source Time Clock) is the clock used by the camera. The UVC 1.5
-+	 * standard states that it "must be captured when the first video data
-+	 * of a video frame is put on the USB bus".
-+	 * Most of the vendors, clear the `UVC_STREAM_SCR` bit when the data is
-+	 * not valid, other vendors always set the `UVC_STREAM_SCR` bit and
-+	 * expect that the driver only samples the stc if there is data on the
-+	 * packet.
-+	 * Ignore all the hardware timestamp information if there is no data
-+	 * and stc and sof are zero.
++	 * Have at least 1/4 of a second of timestamps before we
++	 * try to do any calculation. Otherwise we do not have enough
++	 * precision. This value was determined by running Android CTS
++	 * on different devices.
++	 * Dev_sof runs at 1KHz, and we have a fixed point precision of
++	 * 16 bits.
 +	 */
-+	if (buf && buf->bytesused == 0 && len == header_size &&
-+	    dev_stc == 0 && dev_sof == 0)
-+		return;
++	if ((y2 - y1) < ( (1000 / 4) << 16))
++		goto done;
 +
- 	stream->clock.last_sof = dev_sof;
- 
- 	host_sof = usb_get_current_frame_number(stream->dev->udev);
-@@ -564,7 +582,7 @@ uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
- 	spin_lock_irqsave(&stream->clock.lock, flags);
- 
- 	sample = &stream->clock.samples[stream->clock.head];
--	sample->dev_stc = get_unaligned_le32(&data[header_size - 6]);
-+	sample->dev_stc = dev_stc;
- 	sample->dev_sof = dev_sof;
- 	sample->host_sof = host_sof;
- 	sample->host_time = time;
+ 	y = (u64)(y2 - y1) * (1ULL << 31) + (u64)y1 * (u64)x2
+ 	  - (u64)y2 * (u64)x1;
+ 	y = div_u64(y, x2 - x1);
 
 -- 
 2.40.0.rc1.284.g88254d51c5-goog-b4-0.11.0-dev-696ae
