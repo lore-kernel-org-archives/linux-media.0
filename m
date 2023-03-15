@@ -2,184 +2,85 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AE3AC74A5B
-	for <linux-media@archiver.kernel.org>; Wed, 15 Mar 2023 10:16:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C05C0C61DA4
+	for <linux-media@archiver.kernel.org>; Wed, 15 Mar 2023 12:36:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232314AbjCOKQ0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Mar 2023 06:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57286 "EHLO
+        id S232791AbjCOMgU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Mar 2023 08:36:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232303AbjCOKQW (ORCPT
+        with ESMTP id S232779AbjCOMf7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Mar 2023 06:16:22 -0400
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8D41BFD;
-        Wed, 15 Mar 2023 03:15:41 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 4Pc5r70C0zzyWK;
-        Wed, 15 Mar 2023 12:15:34 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1678875335;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QBLC5PGoB3NkXvs+oeGK9GvnZ0dZH4DahY5N86jeNes=;
-        b=NjBBXfPRIwxvMLLnlq6rtXiqHtBZc7I5mDV3+A+l1o/XZGQ5TY1wHVwANtr3UxDpldTEMf
-        YObOW63ffwHNG6X57NWWD3+hJiTcbbT2w3EYd86ZXFtM+hix4DZzVIWzU6SLy/BeJu9eo7
-        WNFwmYahxqHeVyH0z6za1ICO9l82CVc=
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1678875335; a=rsa-sha256; cv=none;
-        b=XEp2UaTpFnkeI4b1W3BkA5ngOZjA3BATeOfR+SsguANctnSUaQQ7KOjm9Gd7k+YG0qFcBF
-        qLioTDwYqlPLMowGaUZZXxI3efuClhi8NpYJxrmWpxYAV7CAX841PGKPTpLAd0OiM6BuAr
-        ODZVb9uvAhYXbFD7SE5cr3J4z1HW8/Y=
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1678875335;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QBLC5PGoB3NkXvs+oeGK9GvnZ0dZH4DahY5N86jeNes=;
-        b=KCIG01c25rIFjsS9Hd7sNaYKzO88CuITKbAB4gkawAptvFWt7Q/Ag0Ji5sdObBUqS3OK0e
-        TYkneD2uu0Ba3tejhxwcA96DJm2kPs2NpaHCIMA5TimqOpaQVD2ecPxXPJnl+DUkraO/LV
-        59k0v0lLiSnM7i0ii6BRFWeyn6eBrVo=
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id A4E1A634C92;
-        Wed, 15 Mar 2023 12:14:28 +0200 (EET)
-Date:   Wed, 15 Mar 2023 12:14:28 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@puri.sm
-Subject: Re: [PATCHv3 1/2 RESEND] doc/media api: Try to make enum usage
- clearer
-Message-ID: <ZBGahMbA1fBrKLYP@valkosipuli.retiisi.eu>
-References: <20230219120034.5819b4ac.dorota.czaplejewicz@puri.sm>
+        Wed, 15 Mar 2023 08:35:59 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471CDA0B18
+        for <linux-media@vger.kernel.org>; Wed, 15 Mar 2023 05:35:02 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id i5so19848907pla.2
+        for <linux-media@vger.kernel.org>; Wed, 15 Mar 2023 05:35:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678883696;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=d6hMqbzr+2QKD7iB2OFXLRZx5MGmp0t3ch1cv5eJ1gw=;
+        b=GKTN4BoUo5bgP76roytLGlmYeYjQVEqcVO+jv76sWg4R3ZZhbmABv2SwhWZypVHKzp
+         TBXkfmrykcbxY1oM8ppnvhopObZ4J9sg+5PGE22Z9buw35pFj6Ewic4LNcDsHeDJJ9iA
+         rsjnyFWMCwVSQsgqlJRZFbXmOX5JBK4trSZu4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678883696;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=d6hMqbzr+2QKD7iB2OFXLRZx5MGmp0t3ch1cv5eJ1gw=;
+        b=b2wfQG12VXW9hRp8QBEuG5MW5g68KrdCxAxV108SYMaMJRj/ADSEeeTKuDmblmsAjq
+         ofQj62Bq1D+qsLj0a9SN8Wrb34P0exyZktVMQVwNX8/JsymzVUJ15Zq9VafBFaXkshkh
+         8kARApiPEQtLbYBwXX9ExsiykqD9F65/qpq5RIesXVwHXuBREpjdWuvhrTw9mg8hETSg
+         QbzB4SGYTiSaj+5CUKEvLDy0Ev5uTRybwEUoB2pAWko8zsshH6BHPkz6ID1uYI1ApyO4
+         lZjpBFoMnWz48e9eKc9exeLfUIfoNWjWFdiT/ndJBTYqf99stNGCUhVe+9fk2KHL2fVh
+         Y0PA==
+X-Gm-Message-State: AO0yUKVb3nY6XhoP0myj0esdD6GpRxtkU6m6eyABuI/yA+BzD9xL8LrH
+        R7t4mmqQpSCTySwVgt5ghLTqzA==
+X-Google-Smtp-Source: AK7set8GvobddgjpVu3fQSdhVar92/aE5NPVv1tR39OuqsCoW+dMd3V9AEWjpyn4dyDeH7svtT+v5g==
+X-Received: by 2002:a05:6a20:6914:b0:cb:867d:1594 with SMTP id q20-20020a056a20691400b000cb867d1594mr44353492pzj.6.1678883696547;
+        Wed, 15 Mar 2023 05:34:56 -0700 (PDT)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id d6-20020a630e06000000b00508e7bd761fsm3265190pgl.87.2023.03.15.05.34.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 05:34:56 -0700 (PDT)
+Date:   Wed, 15 Mar 2023 21:34:52 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        "hn.chen" <hn.chen@sunplusit.com>
+Subject: Re: [PATCH v7 6/6] media: uvcvideo: Fix hw timestamp handling for
+ slow FPS
+Message-ID: <20230315123452.GA1927922@google.com>
+References: <20220920-resend-hwtimestamp-v7-0-cf1d78bb8821@chromium.org>
+ <20220920-resend-hwtimestamp-v7-6-cf1d78bb8821@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230219120034.5819b4ac.dorota.czaplejewicz@puri.sm>
+In-Reply-To: <20220920-resend-hwtimestamp-v7-6-cf1d78bb8821@chromium.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dorota,
-
-On Sun, Feb 19, 2023 at 12:00:34PM +0100, Dorota Czaplejewicz wrote:
-> This clarifies which side of the calls is responsible for doing what to which parts of the struct.
-> This also explicitly states that repeating values are disallowed.
-> It also expands the terse description of the access algorithm into more prose-like, active voice description, which trades conciseness for ease of comprehension.
-
-The commit message lines should be wrapped at 74 characters. Please do use
-checkpatch.pl in the future. There is also no apparent reason to add a
-newline after a period.
-
-The same applies to the other patch as well.
-
-I've addressed the issues this time.
-
-> 
-> Added: mbus codes must not repeat
-> Added: no holes in the enumeration
-> Added: enumerations per what?
-> Added: who fills in what in calls
-> Changed: "zero" -> "0"
-> Changed: "given" -> "specified"
-> 
-> Still unclear how it works so didn't describe: "which". What is a "try format" vs "active format"?
-> 
-> Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-> ---
-> Hi,
-> 
-> I took those patches out of the freezer. I made sure they still apply (they do), and corrected some errors pointed out by Jacopo in the previous round of reviews.
-
-Ditto.
-
-> 
-> Thanks,
-> Dorota
-> 
->  .../v4l/vidioc-subdev-enum-mbus-code.rst      | 38 +++++++++++++------
->  1 file changed, 26 insertions(+), 12 deletions(-)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
-> index 417f1a19bcc4..63bff24d0520 100644
-> --- a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
-> +++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
-> @@ -31,15 +31,28 @@ Arguments
->  Description
->  ===========
+On (23/03/10 10:01), Ricardo Ribalda wrote:
+[..]
+> +++ b/drivers/media/usb/uvc/uvc_video.c
+> @@ -473,6 +473,21 @@ static void uvc_video_clock_add_sample(struct uvc_clock *clock,
 >  
-> -To enumerate media bus formats available at a given sub-device pad
-> -applications initialize the ``pad``, ``which`` and ``index`` fields of
-> -struct
-> -:c:type:`v4l2_subdev_mbus_code_enum` and
-> -call the :ref:`VIDIOC_SUBDEV_ENUM_MBUS_CODE` ioctl with a pointer to this
-> -structure. Drivers fill the rest of the structure or return an ``EINVAL``
-> -error code if either the ``pad`` or ``index`` are invalid. All media bus
-> -formats are enumerable by beginning at index zero and incrementing by
-> -one until ``EINVAL`` is returned.
-> +This call is used by the application to access the enumeration
-> +of media bus formats for the selected pad.
-> +
-> +The enumerations are defined by the driver, and indexed using the ``index`` field
-> +of struct :c:type:`v4l2_subdev_mbus_code_enum`.
-> +Each enumeration starts with the ``index`` of 0, and
-> +the lowest invalid index marks the end of enumeration.
-> +
-> +Therefore, to enumerate media bus formats available at a given sub-device pad,
-> +initialize the ``pad``, and ``which`` fields to desired values,
-> +and set ``index`` to 0.
-> +Then call the :ref:`VIDIOC_SUBDEV_ENUM_MBUS_CODE` ioctl
-> +with a pointer to this structure.
-> +
-> +A successful call will return with the ``code`` field filled in
-> +with a mbus code value.
-> +Repeat with increasing ``index`` until ``EINVAL`` is received.
-> +``EINVAL`` means that either ``pad`` is invalid,
-> +or that there are no more codes available at this pad.
-> +
-> +The driver must not return the same value of ``code`` for different indices
-> +at the same pad.
+>  	spin_lock_irqsave(&clock->lock, flags);
 >  
->  Available media bus formats may depend on the current 'try' formats at
->  other pads of the sub-device, as well as on the current active links.
-> @@ -57,14 +70,15 @@ information about the try formats.
->  
->      * - __u32
->        - ``pad``
-> -      - Pad number as reported by the media controller API.
-> +      - Pad number as reported by the media controller API. Filled in by the application.
+> +	/* Delete last overflows */
+> +	if (clock->head == clock->last_sof_overflow)
+> +		clock->last_sof_overflow = -1;
+> +
+> +	/* Handle overflows */
+> +	if (clock->count > 0 && clock->last_sof > sample->dev_sof) {
 
-Here, too...
-
->      * - __u32
->        - ``index``
-> -      - Number of the format in the enumeration, set by the application.
-> +      - Index of the mbus code in the enumeration belonging to the given pad.
-> +    Filled in by the application.
-
-Wrong indentation.
-
->      * - __u32
->        - ``code``
->        - The media bus format code, as defined in
-> -	:ref:`v4l2-mbus-format`.
-> +	:ref:`v4l2-mbus-format`. Filled in by the driver.
->      * - __u32
->        - ``which``
->        - Media bus format codes to be enumerated, from enum
-
--- 
-Regards,
-
-Sakari Ailus
+Per offline discussion, we set clock->last_sof to sameple->dev_sof
+right before uvc_video_clock_add_sample() so this condition is always
+false. clock->sof needs to be updated after overflow handling checks.
