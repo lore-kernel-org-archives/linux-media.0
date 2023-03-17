@@ -2,109 +2,103 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01548C76195
-	for <linux-media@archiver.kernel.org>; Fri, 17 Mar 2023 13:44:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEF9AC74A5B
+	for <linux-media@archiver.kernel.org>; Fri, 17 Mar 2023 15:09:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbjCQNoJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Mar 2023 09:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
+        id S231545AbjCQPJP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Mar 2023 11:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbjCQNoG (ORCPT
+        with ESMTP id S231624AbjCQPJA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Mar 2023 09:44:06 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDEB26B1;
-        Fri, 17 Mar 2023 06:44:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679060645; x=1710596645;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YnswIAVSAKSWgRwAObgdrkxFmz81bo8K0xCi5ASID54=;
-  b=eglB+EvjOmy3hyWEaA9GTGixTHo1qjw1IteoZgku6Obh8k/h65v0kyr1
-   VaZbW0cw17gkwrnhbJlFEy9TON77QQzDzpG9socn+Z7+IxRO5ui07HwrA
-   NGlTdsV2s8TUyjcVUhPmy2pvCHN9M8FFyTw7INS9hNcs/8qPlIooSLQxK
-   g8DaYS7z5iB50MaALKSwekNpqd4WqPOP7hVrMEmx9K+cifX+wfppYcX4E
-   jh489ajAGhT9/eXgfS2N3Ys7NtTOyLg10ZT2hCEcCa9tdFwnKmOGCqi7k
-   nXaoacfTuYHj8NtxNbbOie0ialvzUQgH3Oh+ovC0mYptK9vzGHlEe7U+w
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="318659214"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="318659214"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 06:44:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="680291092"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="680291092"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 17 Mar 2023 06:43:58 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1pdAN9-0053qv-2j;
-        Fri, 17 Mar 2023 15:43:55 +0200
-Date:   Fri, 17 Mar 2023 15:43:55 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-media@vger.kernel.org,
+        Fri, 17 Mar 2023 11:09:00 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D136F10DE7C;
+        Fri, 17 Mar 2023 08:08:40 -0700 (PDT)
+Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8162C66030B9;
+        Fri, 17 Mar 2023 15:07:43 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679065665;
+        bh=oDkOpASujwD4omvYh15ZgVx02nJzDslcJUvtWJE8YGA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y+3fXThjONEiG2GDz0f94e6hUKgev5us7WM1wv9muoN55JAJ1EkRRiy7/AdAYYnjz
+         xu+Cm92GqsrWm/eWOnBuouHfl0ZSju9jqP1SrRpqNYfRstB5dsC8+leTYDz6fPqs0u
+         o/tzh3xzeO7eEnI9g036SAR6q/5FHncyeCYHXKN3Jv+NlSp2zHAnkRwCBU6ubBeQaT
+         SfOrRKRZfYJ6gAl95bWAaqOQ+xW3lOGroCn8UpskrV1boNQ6YQbqp6jGjmXLIBwyar
+         +l7qlVpWRtnYa2XciTvIvz9cpxssH/HhYPAqZcAiwb4QyQPcnMiQ5QBLmHLk+bwWQw
+         N0NyKQIgAMceQ==
+Date:   Fri, 17 Mar 2023 11:07:39 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>
-Subject: Re: [PATCH v10 1/8] i2c: add I2C Address Translator (ATR) support
-Message-ID: <ZBRumwIyINlZ/pzJ@smile.fi.intel.com>
-References: <20230222132907.594690-1-tomi.valkeinen@ideasonboard.com>
- <20230222132907.594690-2-tomi.valkeinen@ideasonboard.com>
- <20230317101606.69602bba@booty>
- <b281b472-f911-1f04-2cc8-c3713e771bf6@ideasonboard.com>
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v4,1/2] media: mediatek: vcodec: Force capture queue
+ format to MM21
+Message-ID: <20230317150739.wmrik43dols5ju3a@notapiano>
+References: <20230317030833.16836-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <b281b472-f911-1f04-2cc8-c3713e771bf6@ideasonboard.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230317030833.16836-1-yunfei.dong@mediatek.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 02:36:25PM +0200, Tomi Valkeinen wrote:
-> On 17/03/2023 11:16, Luca Ceresoli wrote:
-> > On Wed, 22 Feb 2023 15:29:00 +0200
-> > Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> wrote:
-
-...
-
-> > > +	/* lock for the I2C bus segment (see struct i2c_lock_operations) */
-> > 
-> > This comment is identical to the one in the kerneldoc comments just
-> > above, I'd just remove it.
+On Fri, Mar 17, 2023 at 11:08:32AM +0800, Yunfei Dong wrote:
+> While the decoder can produce frames in both MM21 and MT21C formats, only MM21
+> is currently supported by userspace tools (like gstreamer and libyuv). In order
+> to ensure userspace keeps working after the SCP firmware is updated to support
+> both MM21 and MT21C formats, force the MM21 format for the capture queue.
 > 
-> checkpatch wants an explicit comment for each lock.
+> This is meant as a stopgap solution while dynamic format switching between
+> MM21 and MT21C isn't implemented in the driver.
+> 
+> Fixes: 7501edef6b1f ("media: mediatek: vcodec: Different codec using different capture format")
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Checkpatch is a recommendation tool and not obligation.
-
-What it does correctly is sending message that lock should be described.
-The kernel doc is good format for that, checkpatch has to gain support
-for this type of lock descriptions.
-
-> > > +	struct mutex lock;
-
-
--- 
-With Best Regards,
-Andy Shevchenko
+Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
 
+With this patch and the new firmware [1], I was able to run fluster using the
+VP8, VP9 and H.264 codecs on both MT8192 and MT8195:
+
+MT8192:
+	        VP8: 59/61
+	        VP9: 250/303
+		     0/6 (HIGH)
+	        H.264: 92/135
+		       27/69 (JVT-FR-EXT)
+
+MT8195:
+	        VP8: 59/61
+	        VP9: 276/303
+		     0/6 (HIGH)
+	        H.264: 95/135
+		       27/69 (JVT-FR-EXT)
+
+[1] https://lore.kernel.org/linux-firmware/a43524a089a783f70adbe89b83eeb01fbd405d04.camel@mediatek.com/T/#mb0591267d7921bbfada7c06ee2bda128db554648
+
+Thanks,
+Nícolas
