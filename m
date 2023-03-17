@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCAE2C7618A
-	for <linux-media@archiver.kernel.org>; Fri, 17 Mar 2023 08:24:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B3A2C74A5B
+	for <linux-media@archiver.kernel.org>; Fri, 17 Mar 2023 08:24:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231362AbjCQIYU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Mar 2023 04:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57988 "EHLO
+        id S231407AbjCQIYj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Mar 2023 04:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbjCQIXe (ORCPT
+        with ESMTP id S231135AbjCQIXn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Mar 2023 04:23:34 -0400
+        Fri, 17 Mar 2023 04:23:43 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4672630197;
-        Fri, 17 Mar 2023 01:23:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522E2A5D2;
+        Fri, 17 Mar 2023 01:23:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 88F62B824FE;
-        Fri, 17 Mar 2023 08:22:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04883C433EF;
-        Fri, 17 Mar 2023 08:22:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1AD3B824FB;
+        Fri, 17 Mar 2023 08:23:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72552C433D2;
+        Fri, 17 Mar 2023 08:23:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679041372;
-        bh=2fN05X8Hk+oG8PadKtWMVED3+Ll+rVeU4UKuOLTmoos=;
+        s=k20201202; t=1679041382;
+        bh=eVjVeNRWTWrNvZ0ADJpOpPfGExYmn5HJ+ecNEWoPDEg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aH9baG6QVrmLtZIdI8tXrP/9/h9JdO4iRzL9ptVItpVzfubVeDhu64SQG34nnfShh
-         IW3/aqBd7XXQlSDX+Z+ElfX4mUconWVPK14ovcqHvE16r92hReuGKMYXkEPtTv1Ozy
-         T6kCDLNPrKDEg9NnUdHxVm1AW6wGDSuo+DbnTDWHzEXIGhbBo7TJ5uciA/tCxKpkYd
-         8yXwFCJOMUrGt4mWlNxwiwYMTsNeHOVIchI8L9G6ARzcPcLbnWttjGbbn9k22GkLTm
-         +J6qwBY4Ydw15V3Po/I75RCWYk9/4ZrCFfwP+6F6lVW1OqtEH9dol2w58CAH2hwjuQ
-         4DFphXR+tsYCA==
+        b=Ulun32YaRazjRkzxIZjPbqKxF6ImcLWBmaPIvepaMqbz8of7ETiXZcWkPs6RE3JxL
+         2M1h8mkmBcoPxQ3wJmDd3ceuDE2Zwt59R7NXQiUEs1SWKUQfoADEX68QjACH/nQf7n
+         KsFILlJiZoHeCWYwoj/9YwQv2XozshXqfLSHMLNVpr9+mjKDSxUkgC6GR4EFLLay++
+         sze/f/kNYnk6DAF3roBOckVZdzWQyQNZEdYtVSYsZIzOfxE+esmve0pKaeAJ6xLEzi
+         zp8UluWatlfV2ZVCj8bn144UDVaep1UKS5v12Kf5UWqBKO/Q+IrwccbSgwhpbrYd4A
+         xlC/nXQYYkTTA==
 From:   Lee Jones <lee@kernel.org>
 To:     lee@kernel.org, dri-devel@lists.freedesktop.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -43,9 +43,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Sumit Semwal <sumit.semwal@linaro.org>,
         amd-gfx@lists.freedesktop.org, linux-media@vger.kernel.org,
         linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 14/37] drm/amd/amdgpu/amdgpu_vm_pt: Supply description for amdgpu_vm_pt_free_dfs()'s unlocked param
-Date:   Fri, 17 Mar 2023 08:16:55 +0000
-Message-Id: <20230317081718.2650744-15-lee@kernel.org>
+Subject: [PATCH 18/37] drm/amd/amdgpu/amdgpu_vce: Provide description for amdgpu_vce_validate_bo()'s 'p' param
+Date:   Fri, 17 Mar 2023 08:16:59 +0000
+Message-Id: <20230317081718.2650744-19-lee@kernel.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 In-Reply-To: <20230317081718.2650744-1-lee@kernel.org>
 References: <20230317081718.2650744-1-lee@kernel.org>
@@ -58,7 +58,7 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/gpu/drm/amd/amdgpu/amdgpu_vm_pt.c:683: warning: Function parameter or member 'unlocked' not described in 'amdgpu_vm_pt_free_dfs'
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c:599: warning: Function parameter or member 'p' not described in 'amdgpu_vce_validate_bo'
 
 Cc: Alex Deucher <alexander.deucher@amd.com>
 Cc: "Christian König" <christian.koenig@amd.com>
@@ -72,21 +72,21 @@ Cc: linux-media@vger.kernel.org
 Cc: linaro-mm-sig@lists.linaro.org
 Signed-off-by: Lee Jones <lee@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_vm_pt.c | 1 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_pt.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_pt.c
-index 01e42bdd8e4e8..df63dc3bca18c 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_pt.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_pt.c
-@@ -673,6 +673,7 @@ void amdgpu_vm_pt_free_work(struct work_struct *work)
-  * @adev: amdgpu device structure
-  * @vm: amdgpu vm structure
-  * @start: optional cursor where to start freeing PDs/PTs
-+ * @unlocked: vm resv unlock status
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c
+index 2fb61410b1c02..c4d65ade5c00a 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c
+@@ -585,6 +585,7 @@ static int amdgpu_vce_get_destroy_msg(struct amdgpu_ring *ring, uint32_t handle,
+ /**
+  * amdgpu_vce_validate_bo - make sure not to cross 4GB boundary
   *
-  * Free the page directory or page table level and all sub levels.
-  */
++ * @p: parser context
+  * @ib: indirect buffer to use
+  * @lo: address of lower dword
+  * @hi: address of higher dword
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
