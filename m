@@ -2,70 +2,64 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57DE8C74A5B
-	for <linux-media@archiver.kernel.org>; Fri, 17 Mar 2023 15:09:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24E60C74A5B
+	for <linux-media@archiver.kernel.org>; Fri, 17 Mar 2023 16:00:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231563AbjCQPJs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Mar 2023 11:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
+        id S231437AbjCQQAT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Mar 2023 12:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231565AbjCQPJi (ORCPT
+        with ESMTP id S231432AbjCQQAO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Mar 2023 11:09:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9306531BFE
-        for <linux-media@vger.kernel.org>; Fri, 17 Mar 2023 08:08:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679065658;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dZJU/fEEhuF9U7cN3pXMxhADcyk4jZbjIzMqrS3FEvI=;
-        b=YkEY7Us0UHA3fLIk/P7FA/kSwIT+uYh/mwA7gtOvoQYOaJqvejo7TXBwf2EacWq1wM60+9
-        1HeMHzJZHuB7B8Uls+wGAAKPv+WFk0MmXONILw+off7Z9sTpMGu7FSaDTFQkWVTWgDtuQi
-        vVl2PSRF4PWhtjAAWouAeusN3D4EIwU=
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
- [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-345-PbZ-GGAONp20HPBfRcldpQ-1; Fri, 17 Mar 2023 11:07:37 -0400
-X-MC-Unique: PbZ-GGAONp20HPBfRcldpQ-1
-Received: by mail-lj1-f197.google.com with SMTP id y43-20020a05651c222b00b00298a7bddd81so1509672ljq.22
-        for <linux-media@vger.kernel.org>; Fri, 17 Mar 2023 08:07:37 -0700 (PDT)
+        Fri, 17 Mar 2023 12:00:14 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46A55ADEB;
+        Fri, 17 Mar 2023 09:00:01 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id bo10so4110426oib.11;
+        Fri, 17 Mar 2023 09:00:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679068801;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=odT4kHXtE8kQmg/3O1COzr8+ljO71h/l65QShukUhlg=;
+        b=W8BbGPAzOjaPDAJ96i62qqFoJdcRl1vGdecRNPXVe1bmiWjCBQ63SA04kBXvSOXnW8
+         1kqb3oUdebjwM2yvHSHc+5ChQDxieYtNe0WE3M/y5DhmoDqV561q77w3tXP7D3xGEbNb
+         vmqIo5uCI6DKzfGjtvBQbBZY4PNbr4isAKIdgedrflBRrKiOX1SN1xr4V5D0QTQBesE9
+         1SOFJJ/Iotn2vn5omUYr77oKxF2z0gY9hfIFXY26KHLGNH8hsBf5T8gUjwrOsRFMFqLJ
+         Ca0VaVXHi9VatJZawkjoWAI9sq4R7UOoA8qZp9fdiBB0E1fsiBArGeK8gTM2nzzgx6Xk
+         I2uQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679065656;
+        d=1e100.net; s=20210112; t=1679068801;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dZJU/fEEhuF9U7cN3pXMxhADcyk4jZbjIzMqrS3FEvI=;
-        b=ELfkfItgCZG/6XcT0qfKPWn+VWpID0p5ZsNr0x3uNUr8ErNPkH8UQ9OaNkhlfmkgIO
-         BcdXjqDW735OTiFly3XCe5el8dVa5Tb6LjLqnt+9qAyBCF3nlUR49xHBkX1ehJHx2eXQ
-         Vvt+FIwyGixZc8DXdLUXDI4b5oOcR1EUKTtlzUcJ503MWpxN+9w6wD83HFoOHwCXu4fn
-         /xu5UNyq9ukbDulX8Ixlccl4j/qM6i+jn5U+D2JgNiWZdxTL0deUWNOW+EtqCzq/uP+c
-         S1Dkhvd+FqDH4FFGYaqZALL4MhKRyENfQwPE4GcjndowdSNd9t8rzrEahoesBkIexYpW
-         h5Og==
-X-Gm-Message-State: AO0yUKUyBHXkrEA/vVgbJZ/5wZYI6o10DeIkiDHaCs5qY+LMMBxfazcK
-        UejvlXh1Mbq3pNg2DEqSJf7egd74O1wUY7cdhSStaWcXMFJkSa0mpV1nUhBbNdukaA3/QJO319d
-        /D46iuSqljhyEKa5aE/lE4j4E4ECpuhLaYR28gvM=
-X-Received: by 2002:a19:7009:0:b0:4e8:6261:58c2 with SMTP id h9-20020a197009000000b004e8626158c2mr2512605lfc.7.1679065655841;
-        Fri, 17 Mar 2023 08:07:35 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+POVytsQS+rqGfWtdW6NULVr/TzxdPfoGfV6mMYr/se72Yd56lLKlYCXbQVCqj+CxKQBv2WyI4dF0EWqFSczU=
-X-Received: by 2002:a19:7009:0:b0:4e8:6261:58c2 with SMTP id
- h9-20020a197009000000b004e8626158c2mr2512585lfc.7.1679065655381; Fri, 17 Mar
- 2023 08:07:35 -0700 (PDT)
+        bh=odT4kHXtE8kQmg/3O1COzr8+ljO71h/l65QShukUhlg=;
+        b=D5jPsoHEQcGN0Np8nkUaq4fojcl+tpkGBO4R5lM0xwcaWWHKgrna7eqoqM+v1IOfdB
+         OZrml5rzqYeCC0VooT8t1CyEeoLz9jt4YMgF4das4AiO7A6ddZBeCQPbY/pP3d6MZPOQ
+         iP4eHWRZO8ZEvHWbN67iqTH7nCvEx7CqdKNXWGm+507clHNmHcFl+9E/5D5JuORSGpg6
+         II+S6W6/JKlpjcbAh9bDGyINmsF7YVoxA8LVwuIuXGDeptLAgrvGXdzwfjYGiIyRMQoA
+         4fseX1Yf3OUpqGURqm5V1EdpqjcIL6sYNtldBKBNT8UysliU4pp5bmfAVS7aFB8SCF4Z
+         laQg==
+X-Gm-Message-State: AO0yUKWU4kQaMY83UjPqEcXRjEqLKHrnbqvwZlnFQ3O25BCILTit6tjt
+        LuQhtzpRTh03pR4733boz0CYI6mdXINqXTXs3Q0=
+X-Google-Smtp-Source: AK7set8lV6Joe7jC2CgUms6NPoQk+LWuWbj7n/2/+PtYFXqEALI182PXHMs8oAk+dlaWXWKjXbF+xbZiIZCMqIfmSBw=
+X-Received: by 2002:a05:6808:b2f:b0:384:1e6a:bf10 with SMTP id
+ t15-20020a0568080b2f00b003841e6abf10mr2906582oij.5.1679068799344; Fri, 17 Mar
+ 2023 08:59:59 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230308155322.344664-1-robdclark@gmail.com> <20230308155322.344664-2-robdclark@gmail.com>
  <ZAtQspuFjPtGy7ze@gmail.com> <CAF6AEGsGOr5+Q10wX=5ttrWCSUJfn7gzHW8QhxFC0GDLgagMHg@mail.gmail.com>
  <ZBHNvT3BLgS3qvV5@gmail.com> <CAF6AEGu1S2CXzRxV_c5tE_H+XUGiO=n0tXjLZ_u_tW-eMqMsQw@mail.gmail.com>
  <ZBLg0t0tTVvuPuiJ@gmail.com> <CAF6AEGvV5arZThTyju_=xFFDWRbMaexgO_kkdKZuK-zeCxrN7Q@mail.gmail.com>
- <CA+hFU4xbssR+=Sf4ia5kPdsSb4y9SQUd4nx_2p1Szcbtna28CA@mail.gmail.com> <CAF6AEGuSaNAQUfbkJf2bt+VMTxYWTf0j0jiJOS6Q-6HfCLnw6Q@mail.gmail.com>
-In-Reply-To: <CAF6AEGuSaNAQUfbkJf2bt+VMTxYWTf0j0jiJOS6Q-6HfCLnw6Q@mail.gmail.com>
-From:   Sebastian Wick <sebastian.wick@redhat.com>
-Date:   Fri, 17 Mar 2023 16:07:24 +0100
-Message-ID: <CA+hFU4xH7C9+KdusqydNF_YxUc8RpN1D_KBi_cD8mMjwpjBO5A@mail.gmail.com>
+ <ZBQ/qoxP+EGI0E7R@gmail.com>
+In-Reply-To: <ZBQ/qoxP+EGI0E7R@gmail.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Fri, 17 Mar 2023 08:59:48 -0700
+Message-ID: <CAF6AEGvj6SuA63M=tBBfek0ESgU3fRvPcJLKDMn3_hgL3OdnTA@mail.gmail.com>
 Subject: Re: [PATCH v10 01/15] dma-buf/dma-fence: Add deadline awareness
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     =?UTF-8?B?Sm9uYXMgw4VkYWhs?= <jadahl@gmail.com>,
+To:     =?UTF-8?B?Sm9uYXMgw4VkYWhs?= <jadahl@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org,
         Rob Clark <robdclark@chromium.org>,
         Pekka Paalanen <pekka.paalanen@collabora.com>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -73,8 +67,7 @@ Cc:     =?UTF-8?B?Sm9uYXMgw4VkYWhs?= <jadahl@gmail.com>,
         intel-gfx@lists.freedesktop.org,
         "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
         "moderated list:DMA BUFFER SHARING FRAMEWORK" 
         <linaro-mm-sig@lists.linaro.org>,
         Luben Tuikov <luben.tuikov@amd.com>,
@@ -83,7 +76,7 @@ Cc:     =?UTF-8?B?Sm9uYXMgw4VkYWhs?= <jadahl@gmail.com>,
         Gustavo Padovan <gustavo@padovan.org>,
         Matt Turner <mattst88@gmail.com>,
         freedreno@lists.freedesktop.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
         "open list:DMA BUFFER SHARING FRAMEWORK" 
         <linux-media@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
@@ -92,416 +85,393 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 11:59=E2=80=AFPM Rob Clark <robdclark@gmail.com> wr=
-ote:
->
-> On Thu, Mar 16, 2023 at 3:22=E2=80=AFPM Sebastian Wick
-> <sebastian.wick@redhat.com> wrote:
-> >
-> > On Thu, Mar 16, 2023 at 5:29=E2=80=AFPM Rob Clark <robdclark@gmail.com>=
+On Fri, Mar 17, 2023 at 3:23=E2=80=AFAM Jonas =C3=85dahl <jadahl@gmail.com>=
  wrote:
+>
+> On Thu, Mar 16, 2023 at 09:28:55AM -0700, Rob Clark wrote:
+> > On Thu, Mar 16, 2023 at 2:26=E2=80=AFAM Jonas =C3=85dahl <jadahl@gmail.=
+com> wrote:
 > > >
-> > > On Thu, Mar 16, 2023 at 2:26=E2=80=AFAM Jonas =C3=85dahl <jadahl@gmai=
-l.com> wrote:
-> > > >
-> > > > On Wed, Mar 15, 2023 at 09:19:49AM -0700, Rob Clark wrote:
-> > > > > On Wed, Mar 15, 2023 at 6:53=E2=80=AFAM Jonas =C3=85dahl <jadahl@=
-gmail.com> wrote:
-> > > > > >
-> > > > > > On Fri, Mar 10, 2023 at 09:38:18AM -0800, Rob Clark wrote:
-> > > > > > > On Fri, Mar 10, 2023 at 7:45=E2=80=AFAM Jonas =C3=85dahl <jad=
-ahl@gmail.com> wrote:
-> > > > > > > >
-> > > > > > > > On Wed, Mar 08, 2023 at 07:52:52AM -0800, Rob Clark wrote:
-> > > > > > > > > From: Rob Clark <robdclark@chromium.org>
-> > > > > > > > >
-> > > > > > > > > Add a way to hint to the fence signaler of an upcoming de=
-adline, such as
-> > > > > > > > > vblank, which the fence waiter would prefer not to miss. =
- This is to aid
-> > > > > > > > > the fence signaler in making power management decisions, =
-like boosting
-> > > > > > > > > frequency as the deadline approaches and awareness of mis=
-sing deadlines
-> > > > > > > > > so that can be factored in to the frequency scaling.
-> > > > > > > > >
-> > > > > > > > > v2: Drop dma_fence::deadline and related logic to filter =
-duplicate
-> > > > > > > > >     deadlines, to avoid increasing dma_fence size.  The f=
-ence-context
-> > > > > > > > >     implementation will need similar logic to track deadl=
-ines of all
-> > > > > > > > >     the fences on the same timeline.  [ckoenig]
-> > > > > > > > > v3: Clarify locking wrt. set_deadline callback
-> > > > > > > > > v4: Clarify in docs comment that this is a hint
-> > > > > > > > > v5: Drop DMA_FENCE_FLAG_HAS_DEADLINE_BIT.
-> > > > > > > > > v6: More docs
-> > > > > > > > > v7: Fix typo, clarify past deadlines
-> > > > > > > > >
-> > > > > > > > > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > > > > > > > > Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.c=
-om>
-> > > > > > > > > Acked-by: Pekka Paalanen <pekka.paalanen@collabora.com>
-> > > > > > > > > Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> > > > > > > > > ---
-> > > > > > > >
-> > > > > > > > Hi Rob!
-> > > > > > > >
-> > > > > > > > >  Documentation/driver-api/dma-buf.rst |  6 +++
-> > > > > > > > >  drivers/dma-buf/dma-fence.c          | 59 ++++++++++++++=
-++++++++++++++
-> > > > > > > > >  include/linux/dma-fence.h            | 22 +++++++++++
-> > > > > > > > >  3 files changed, 87 insertions(+)
-> > > > > > > > >
-> > > > > > > > > diff --git a/Documentation/driver-api/dma-buf.rst b/Docum=
-entation/driver-api/dma-buf.rst
-> > > > > > > > > index 622b8156d212..183e480d8cea 100644
-> > > > > > > > > --- a/Documentation/driver-api/dma-buf.rst
-> > > > > > > > > +++ b/Documentation/driver-api/dma-buf.rst
-> > > > > > > > > @@ -164,6 +164,12 @@ DMA Fence Signalling Annotations
-> > > > > > > > >  .. kernel-doc:: drivers/dma-buf/dma-fence.c
-> > > > > > > > >     :doc: fence signalling annotation
-> > > > > > > > >
-> > > > > > > > > +DMA Fence Deadline Hints
-> > > > > > > > > +~~~~~~~~~~~~~~~~~~~~~~~~
-> > > > > > > > > +
-> > > > > > > > > +.. kernel-doc:: drivers/dma-buf/dma-fence.c
-> > > > > > > > > +   :doc: deadline hints
-> > > > > > > > > +
-> > > > > > > > >  DMA Fences Functions Reference
-> > > > > > > > >  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > > > > > > >
-> > > > > > > > > diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-bu=
-f/dma-fence.c
-> > > > > > > > > index 0de0482cd36e..f177c56269bb 100644
-> > > > > > > > > --- a/drivers/dma-buf/dma-fence.c
-> > > > > > > > > +++ b/drivers/dma-buf/dma-fence.c
-> > > > > > > > > @@ -912,6 +912,65 @@ dma_fence_wait_any_timeout(struct dm=
-a_fence **fences, uint32_t count,
-> > > > > > > > >  }
-> > > > > > > > >  EXPORT_SYMBOL(dma_fence_wait_any_timeout);
-> > > > > > > > >
-> > > > > > > > > +/**
-> > > > > > > > > + * DOC: deadline hints
-> > > > > > > > > + *
-> > > > > > > > > + * In an ideal world, it would be possible to pipeline a=
- workload sufficiently
-> > > > > > > > > + * that a utilization based device frequency governor co=
-uld arrive at a minimum
-> > > > > > > > > + * frequency that meets the requirements of the use-case=
-, in order to minimize
-> > > > > > > > > + * power consumption.  But in the real world there are m=
-any workloads which
-> > > > > > > > > + * defy this ideal.  For example, but not limited to:
-> > > > > > > > > + *
-> > > > > > > > > + * * Workloads that ping-pong between device and CPU, wi=
-th alternating periods
-> > > > > > > > > + *   of CPU waiting for device, and device waiting on CP=
-U.  This can result in
-> > > > > > > > > + *   devfreq and cpufreq seeing idle time in their respe=
-ctive domains and in
-> > > > > > > > > + *   result reduce frequency.
-> > > > > > > > > + *
-> > > > > > > > > + * * Workloads that interact with a periodic time based =
-deadline, such as double
-> > > > > > > > > + *   buffered GPU rendering vs vblank sync'd page flippi=
-ng.  In this scenario,
-> > > > > > > > > + *   missing a vblank deadline results in an *increase* =
-in idle time on the GPU
-> > > > > > > > > + *   (since it has to wait an additional vblank period),=
- sending a signal to
-> > > > > > > > > + *   the GPU's devfreq to reduce frequency, when in fact=
- the opposite is what is
-> > > > > > > > > + *   needed.
-> > > > > > > >
-> > > > > > > > This is the use case I'd like to get some better understand=
-ing about how
-> > > > > > > > this series intends to work, as the problematic scheduling =
-behavior
-> > > > > > > > triggered by missed deadlines has plagued compositing displ=
-ay servers
-> > > > > > > > for a long time.
-> > > > > > > >
-> > > > > > > > I apologize, I'm not a GPU driver developer, nor an OpenGL =
-driver
-> > > > > > > > developer, so I will need some hand holding when it comes t=
-o
-> > > > > > > > understanding exactly what piece of software is responsible=
- for
-> > > > > > > > communicating what piece of information.
-> > > > > > > >
-> > > > > > > > > + *
-> > > > > > > > > + * To this end, deadline hint(s) can be set on a &dma_fe=
-nce via &dma_fence_set_deadline.
-> > > > > > > > > + * The deadline hint provides a way for the waiting driv=
-er, or userspace, to
-> > > > > > > > > + * convey an appropriate sense of urgency to the signali=
-ng driver.
-> > > > > > > > > + *
-> > > > > > > > > + * A deadline hint is given in absolute ktime (CLOCK_MON=
-OTONIC for userspace
-> > > > > > > > > + * facing APIs).  The time could either be some point in=
- the future (such as
-> > > > > > > > > + * the vblank based deadline for page-flipping, or the s=
-tart of a compositor's
-> > > > > > > > > + * composition cycle), or the current time to indicate a=
-n immediate deadline
-> > > > > > > > > + * hint (Ie. forward progress cannot be made until this =
-fence is signaled).
-> > > > > > > >
-> > > > > > > > Is it guaranteed that a GPU driver will use the actual star=
-t of the
-> > > > > > > > vblank as the effective deadline? I have some memories of s=
-eing
-> > > > > > > > something about vblank evasion browsing driver code, which =
-I might have
-> > > > > > > > misunderstood, but I have yet to find whether this is somet=
-hing
-> > > > > > > > userspace can actually expect to be something it can rely o=
-n.
-> > > > > > >
-> > > > > > > I guess you mean s/GPU driver/display driver/ ?  It makes thi=
-ngs more
-> > > > > > > clear if we talk about them separately even if they happen to=
- be the
-> > > > > > > same device.
-> > > > > >
-> > > > > > Sure, sorry about being unclear about that.
-> > > > > >
-> > > > > > >
-> > > > > > > Assuming that is what you mean, nothing strongly defines what=
- the
-> > > > > > > deadline is.  In practice there is probably some buffering in=
- the
-> > > > > > > display controller.  For ex, block based (including bandwidth
-> > > > > > > compressed) formats, you need to buffer up a row of blocks to
-> > > > > > > efficiently linearize for scanout.  So you probably need to l=
-atch some
-> > > > > > > time before you start sending pixel data to the display.  But=
- details
-> > > > > > > like this are heavily implementation dependent.  I think the =
-most
-> > > > > > > reasonable thing to target is start of vblank.
-> > > > > >
-> > > > > > The driver exposing those details would be quite useful for use=
-rspace
-> > > > > > though, so that it can delay committing updates to late, but no=
-t too
-> > > > > > late. Setting a deadline to be the vblank seems easy enough, bu=
-t it
-> > > > > > isn't enough for scheduling the actual commit.
+> > > On Wed, Mar 15, 2023 at 09:19:49AM -0700, Rob Clark wrote:
+> > > > On Wed, Mar 15, 2023 at 6:53=E2=80=AFAM Jonas =C3=85dahl <jadahl@gm=
+ail.com> wrote:
 > > > > >
-> > > > > I'm not entirely sure how that would even work.. but OTOH I think=
- you
-> > > > > are talking about something on the order of 100us?  But that is a=
- bit
-> > > > > of another topic.
-> > > >
-> > > > Yes, something like that. But yea, it's not really related. Schedul=
-ing
-> > > > commits closer to the deadline has more complex behavior than that =
-too,
-> > > > e.g. the need for real time scheduling, and knowing how long it usu=
-ally
-> > > > takes to create and commit and for the kernel to process.
-> >
-> > Vblank can be really long, especially with VRR where the additional
-> > time you get to finish the frame comes from making vblank longer.
-> > Using the start of vblank as a deadline makes VRR useless. It really
-> > would be nice to have some feedback about the actual deadline from the
-> > kernel, maybe in `struct drm_event_vblank`.
+> > > > > On Fri, Mar 10, 2023 at 09:38:18AM -0800, Rob Clark wrote:
+> > > > > > On Fri, Mar 10, 2023 at 7:45=E2=80=AFAM Jonas =C3=85dahl <jadah=
+l@gmail.com> wrote:
+> > > > > > >
+> > > > > > > On Wed, Mar 08, 2023 at 07:52:52AM -0800, Rob Clark wrote:
+> > > > > > > > From: Rob Clark <robdclark@chromium.org>
+> > > > > > > >
+> > > > > > > > Add a way to hint to the fence signaler of an upcoming dead=
+line, such as
+> > > > > > > > vblank, which the fence waiter would prefer not to miss.  T=
+his is to aid
+> > > > > > > > the fence signaler in making power management decisions, li=
+ke boosting
+> > > > > > > > frequency as the deadline approaches and awareness of missi=
+ng deadlines
+> > > > > > > > so that can be factored in to the frequency scaling.
+> > > > > > > >
+> > > > > > > > v2: Drop dma_fence::deadline and related logic to filter du=
+plicate
+> > > > > > > >     deadlines, to avoid increasing dma_fence size.  The fen=
+ce-context
+> > > > > > > >     implementation will need similar logic to track deadlin=
+es of all
+> > > > > > > >     the fences on the same timeline.  [ckoenig]
+> > > > > > > > v3: Clarify locking wrt. set_deadline callback
+> > > > > > > > v4: Clarify in docs comment that this is a hint
+> > > > > > > > v5: Drop DMA_FENCE_FLAG_HAS_DEADLINE_BIT.
+> > > > > > > > v6: More docs
+> > > > > > > > v7: Fix typo, clarify past deadlines
+> > > > > > > >
+> > > > > > > > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > > > > > > > Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com=
 >
-> note that here we are only talking about the difference between
-> start/end of vblank and the deadline for the hw to latch a change for
-> the next frame.  (Which I _expect_ generally amounts to however long
-> it takes to slurp in a row of tiles)
->
-> > But yes, sorry, off topic...
-> >
-> > > > >
-> > > >
-> > > > 8-< *snip* 8-<
-> > > >
+> > > > > > > > Acked-by: Pekka Paalanen <pekka.paalanen@collabora.com>
+> > > > > > > > Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> > > > > > > > ---
 > > > > > > >
-> > > > > > > You need a fence to set the deadline, and for that work needs=
- to be
-> > > > > > > flushed.  But you can't associate a deadline with work that t=
-he kernel
-> > > > > > > is unaware of anyways.
+> > > > > > > Hi Rob!
+> > > > > > >
+> > > > > > > >  Documentation/driver-api/dma-buf.rst |  6 +++
+> > > > > > > >  drivers/dma-buf/dma-fence.c          | 59 ++++++++++++++++=
+++++++++++++
+> > > > > > > >  include/linux/dma-fence.h            | 22 +++++++++++
+> > > > > > > >  3 files changed, 87 insertions(+)
+> > > > > > > >
+> > > > > > > > diff --git a/Documentation/driver-api/dma-buf.rst b/Documen=
+tation/driver-api/dma-buf.rst
+> > > > > > > > index 622b8156d212..183e480d8cea 100644
+> > > > > > > > --- a/Documentation/driver-api/dma-buf.rst
+> > > > > > > > +++ b/Documentation/driver-api/dma-buf.rst
+> > > > > > > > @@ -164,6 +164,12 @@ DMA Fence Signalling Annotations
+> > > > > > > >  .. kernel-doc:: drivers/dma-buf/dma-fence.c
+> > > > > > > >     :doc: fence signalling annotation
+> > > > > > > >
+> > > > > > > > +DMA Fence Deadline Hints
+> > > > > > > > +~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > > > > +
+> > > > > > > > +.. kernel-doc:: drivers/dma-buf/dma-fence.c
+> > > > > > > > +   :doc: deadline hints
+> > > > > > > > +
+> > > > > > > >  DMA Fences Functions Reference
+> > > > > > > >  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > > > >
+> > > > > > > > diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/=
+dma-fence.c
+> > > > > > > > index 0de0482cd36e..f177c56269bb 100644
+> > > > > > > > --- a/drivers/dma-buf/dma-fence.c
+> > > > > > > > +++ b/drivers/dma-buf/dma-fence.c
+> > > > > > > > @@ -912,6 +912,65 @@ dma_fence_wait_any_timeout(struct dma_=
+fence **fences, uint32_t count,
+> > > > > > > >  }
+> > > > > > > >  EXPORT_SYMBOL(dma_fence_wait_any_timeout);
+> > > > > > > >
+> > > > > > > > +/**
+> > > > > > > > + * DOC: deadline hints
+> > > > > > > > + *
+> > > > > > > > + * In an ideal world, it would be possible to pipeline a w=
+orkload sufficiently
+> > > > > > > > + * that a utilization based device frequency governor coul=
+d arrive at a minimum
+> > > > > > > > + * frequency that meets the requirements of the use-case, =
+in order to minimize
+> > > > > > > > + * power consumption.  But in the real world there are man=
+y workloads which
+> > > > > > > > + * defy this ideal.  For example, but not limited to:
+> > > > > > > > + *
+> > > > > > > > + * * Workloads that ping-pong between device and CPU, with=
+ alternating periods
+> > > > > > > > + *   of CPU waiting for device, and device waiting on CPU.=
+  This can result in
+> > > > > > > > + *   devfreq and cpufreq seeing idle time in their respect=
+ive domains and in
+> > > > > > > > + *   result reduce frequency.
+> > > > > > > > + *
+> > > > > > > > + * * Workloads that interact with a periodic time based de=
+adline, such as double
+> > > > > > > > + *   buffered GPU rendering vs vblank sync'd page flipping=
+.  In this scenario,
+> > > > > > > > + *   missing a vblank deadline results in an *increase* in=
+ idle time on the GPU
+> > > > > > > > + *   (since it has to wait an additional vblank period), s=
+ending a signal to
+> > > > > > > > + *   the GPU's devfreq to reduce frequency, when in fact t=
+he opposite is what is
+> > > > > > > > + *   needed.
+> > > > > > >
+> > > > > > > This is the use case I'd like to get some better understandin=
+g about how
+> > > > > > > this series intends to work, as the problematic scheduling be=
+havior
+> > > > > > > triggered by missed deadlines has plagued compositing display=
+ servers
+> > > > > > > for a long time.
+> > > > > > >
+> > > > > > > I apologize, I'm not a GPU driver developer, nor an OpenGL dr=
+iver
+> > > > > > > developer, so I will need some hand holding when it comes to
+> > > > > > > understanding exactly what piece of software is responsible f=
+or
+> > > > > > > communicating what piece of information.
+> > > > > > >
+> > > > > > > > + *
+> > > > > > > > + * To this end, deadline hint(s) can be set on a &dma_fenc=
+e via &dma_fence_set_deadline.
+> > > > > > > > + * The deadline hint provides a way for the waiting driver=
+, or userspace, to
+> > > > > > > > + * convey an appropriate sense of urgency to the signaling=
+ driver.
+> > > > > > > > + *
+> > > > > > > > + * A deadline hint is given in absolute ktime (CLOCK_MONOT=
+ONIC for userspace
+> > > > > > > > + * facing APIs).  The time could either be some point in t=
+he future (such as
+> > > > > > > > + * the vblank based deadline for page-flipping, or the sta=
+rt of a compositor's
+> > > > > > > > + * composition cycle), or the current time to indicate an =
+immediate deadline
+> > > > > > > > + * hint (Ie. forward progress cannot be made until this fe=
+nce is signaled).
+> > > > > > >
+> > > > > > > Is it guaranteed that a GPU driver will use the actual start =
+of the
+> > > > > > > vblank as the effective deadline? I have some memories of sei=
+ng
+> > > > > > > something about vblank evasion browsing driver code, which I =
+might have
+> > > > > > > misunderstood, but I have yet to find whether this is somethi=
+ng
+> > > > > > > userspace can actually expect to be something it can rely on.
 > > > > > >
-> > > > > > That makes sense, but it might also a bit inadequate to have it=
- as the
-> > > > > > only way to tell the kernel it should speed things up. Even wit=
-h the
-> > > > > > trick i915 does, with GNOME Shell, we still end up with the fee=
-dback
-> > > > > > loop this series aims to mitigate. Doing triple buffering, i.e.=
- delaying
-> > > > > > or dropping the first frame is so far the best work around that=
- works,
-> > > > > > except doing other tricks that makes the kernel to ramp up its =
-clock.
-> > > > > > Having to rely on choosing between latency and frame drops shou=
-ld
-> > > > > > ideally not have to be made.
+> > > > > > I guess you mean s/GPU driver/display driver/ ?  It makes thing=
+s more
+> > > > > > clear if we talk about them separately even if they happen to b=
+e the
+> > > > > > same device.
 > > > > >
-> > > > > Before you have a fence, the thing you want to be speeding up is =
+> > > > > Sure, sorry about being unclear about that.
+> > > > >
+> > > > > >
+> > > > > > Assuming that is what you mean, nothing strongly defines what t=
+he
+> > > > > > deadline is.  In practice there is probably some buffering in t=
+he
+> > > > > > display controller.  For ex, block based (including bandwidth
+> > > > > > compressed) formats, you need to buffer up a row of blocks to
+> > > > > > efficiently linearize for scanout.  So you probably need to lat=
+ch some
+> > > > > > time before you start sending pixel data to the display.  But d=
+etails
+> > > > > > like this are heavily implementation dependent.  I think the mo=
+st
+> > > > > > reasonable thing to target is start of vblank.
+> > > > >
+> > > > > The driver exposing those details would be quite useful for users=
+pace
+> > > > > though, so that it can delay committing updates to late, but not =
+too
+> > > > > late. Setting a deadline to be the vblank seems easy enough, but =
+it
+> > > > > isn't enough for scheduling the actual commit.
+> > > >
+> > > > I'm not entirely sure how that would even work.. but OTOH I think y=
+ou
+> > > > are talking about something on the order of 100us?  But that is a b=
+it
+> > > > of another topic.
+> > >
+> > > Yes, something like that. But yea, it's not really related. Schedulin=
+g
+> > > commits closer to the deadline has more complex behavior than that to=
+o,
+> > > e.g. the need for real time scheduling, and knowing how long it usual=
+ly
+> > > takes to create and commit and for the kernel to process.
+> > >
+> > > >
+> > >
+> > > 8-< *snip* 8-<
+> > >
+> > > > > >
+> > > > > > You need a fence to set the deadline, and for that work needs t=
+o be
+> > > > > > flushed.  But you can't associate a deadline with work that the=
+ kernel
+> > > > > > is unaware of anyways.
+> > > > >
+> > > > > That makes sense, but it might also a bit inadequate to have it a=
+s the
+> > > > > only way to tell the kernel it should speed things up. Even with =
 the
-> > > > > CPU, not the GPU.  There are existing mechanisms for that.
+> > > > > trick i915 does, with GNOME Shell, we still end up with the feedb=
+ack
+> > > > > loop this series aims to mitigate. Doing triple buffering, i.e. d=
+elaying
+> > > > > or dropping the first frame is so far the best work around that w=
+orks,
+> > > > > except doing other tricks that makes the kernel to ramp up its cl=
+ock.
+> > > > > Having to rely on choosing between latency and frame drops should
+> > > > > ideally not have to be made.
 > > > >
-> > > > Is there no benefit to let the GPU know earlier that it should spee=
-d up,
-> > > > so that when the job queue arrives, it's already up to speed?
-> > >
-> > > Downstream we have input notifier that resumes the GPU so we can
-> > > pipeline the 1-2ms it takes to boot up the GPU with userspace.  But w=
+> > > > Before you have a fence, the thing you want to be speeding up is th=
 e
-> > > wait to boost freq until we have cmdstream to submit, since that
-> > > doesn't take as long.  What needs help initially after input is all
-> > > the stuff that happens on the CPU before the GPU can start to do
-> > > anything ;-)
+> > > > CPU, not the GPU.  There are existing mechanisms for that.
 > > >
-> > > Btw, I guess I haven't made this clear, dma-fence deadline is trying
-> > > to help the steady-state situation, rather than the input-latency
-> > > situation.  It might take a frame or two of missed deadlines for
-> > > gpufreq to arrive at a good steady-state freq.
+> > > Is there no benefit to let the GPU know earlier that it should speed =
+up,
+> > > so that when the job queue arrives, it's already up to speed?
 > >
-> > The mutter issue also is about a suboptimal steady-state.
+> > Downstream we have input notifier that resumes the GPU so we can
+> > pipeline the 1-2ms it takes to boot up the GPU with userspace.  But we
+> > wait to boost freq until we have cmdstream to submit, since that
+> > doesn't take as long.  What needs help initially after input is all
+> > the stuff that happens on the CPU before the GPU can start to do
+> > anything ;-)
+>
+> How do you deal with boosting CPU speeds downstream? Does the input
+> notifier do that too?
+
+Yes.. actually currently downstream (depending on device) we have 1 to
+3 input notifiers, one for CPU boost, one for early-PSR-exit, and one
+to get a head start on booting up the GPU.
+
 > >
-> > Truth be told, I'm not sure if this fence deadline idea fixes the
-> > issue we're seeing or at least helps sometimes. It might, it might
-> > not. What annoys me is that the compositor *knows* before any work is
-> > submitted that some work will be submitted and when it has to finish.
-> > We could maximize the chances to get everything right but having to
-> > wait for a fence to materialize in the compositor to do anything about
-> > it is suboptimal.
+> > Btw, I guess I haven't made this clear, dma-fence deadline is trying
+> > to help the steady-state situation, rather than the input-latency
+> > situation.  It might take a frame or two of missed deadlines for
+> > gpufreq to arrive at a good steady-state freq.
 >
-> Why would the app not immediately send the fence+buf to the compositor
-> as soon as it is submitted to the kernel on client process side?
+> I'm just not sure it will help. Missed deadlines set at commit hasn't
+> been enough in the past to let the kernel understand it should speed
+> things up before the next frame (which will be a whole frame late
+> without any triple buffering which should be a last resort), so I don't
+> see how it will help by adding a userspace hook to do the same thing.
 
-Some apps just are not good at this. Reading back work from the GPU,
-taking a lot of CPU time to create the GPU work, etc.
+So deadline is just a superset of "right now" and "sometime in the
+future".. and this has been useful enough for i915 that they have both
+forms, when waiting on GPU via i915 specific ioctls and when pageflip
+(assuming userspace isn't deferring composition decision and instead
+just pushing it all down to the kernel).  But this breaks down in a
+few cases:
 
-The other obvious offender: frame callbacks. Committing a buffer only
-happens after receiving a frame callback in FIFO/vsync mode which we
-try to schedule as close to the deadline as possible.
+1) non pageflip (for ex. ping-ponging between cpu and gpu) use cases
+when you wait via polling on fence fd or wait via drm_syncobj instead
+of DRM_IOCTL_I915_GEM_WAIT
+2) when userspace decides late in frame to not pageflip because app
+fence isn't signaled yet
 
-The idea that the clients are able to submit all GPU work some time
-early, then immediately commit to show up in the compositor well
-before the deadline is very idealized. We're trying to get there but
-we also only have control over the WSI so bad apps will still be bad
-apps.
+And this is all done in a way that doesn't help for situations where
+you have separate kms and render devices.  Or the kms driver doesn't
+bypass atomic helpers (ie. uses drm_atomic_helper_wait_for_fences()).
+So the technique has already proven to be useful.  This series just
+extends it beyond driver specific primitives (ie.
+dma_fence/drm_syncojb)
 
-> At any rate, it really doesn't matter how early the kernel finds out
-> about the deadline, since the point is to let the kernel driver know
-> if it is missing the deadline so that it doesn't mis-interpret stall
-> time waiting for the _next_ vblank after the one we wanted.
+> I think input latency and steady state target frequency here is tightly
+> linked; what we should aim for is to provide enough information at the
+> right time so that it does *not* take a frame or two to of missed
+> deadlines to arrive at the target frequency, as those missed deadlines
+> either means either stuttering and/or lag.
 
-That's a good point! Let's see how well this works in practice and how
-we can improve on that in the future.
+If you have some magic way for a gl/vk driver to accurately predict
+how many cycles it will take to execute a sequence of draws, I'm all
+ears.
 
-> > > > >
-> > > > > TBF I'm of the belief that there is still a need for input based =
-cpu
-> > > > > boost (and early wake-up trigger for GPU).. we have something lik=
-e
-> > > > > this in CrOS kernel.  That is a bit of a different topic, but my =
-point
-> > > > > is that fence deadlines are just one of several things we need to
-> > > > > optimize power/perf and responsiveness, rather than the single th=
-ing
-> > > > > that solves every problem under the sun ;-)
-> > > >
-> > > > Perhaps; but I believe it's a bit of a back channel of intent; the =
-piece
-> > > > of the puzzle that has the information to know whether there is nee=
-d
-> > > > actually speed up is the compositor, not the kernel.
-> > > >
-> > > > For example, pressing 'p' while a terminal is focused does not need=
- high
-> > > > frequency clocks, it just needs the terminal emulator to draw a 'p'=
- and
-> > > > the compositor to composite that update. Pressing <Super> may howev=
-er
-> > > > trigger a non-trivial animation moving a lot of stuff around on scr=
-een,
-> > > > maybe triggering Wayland clients to draw and what not, and should m=
-ost
-> > > > arguably have the ability to "warn" the kernel about the upcoming f=
-lood
-> > > > of work before it is already knocking on its door step.
-> > >
-> > > The super key is problematic, but not for the reason you think.  It i=
-s
-> > > because it is a case where we should boost on key-up instead of
-> > > key-down.. and the second key-up event comes after the cpu-boost is
-> > > already in it's cool-down period.  But even if suboptimal in cases
-> > > like this, it is still useful for touch/stylus cases where the
-> > > slightest of lag is much more perceptible.
-> > >
-> > > This is getting off topic but I kinda favor coming up with some sort
-> > > of static definition that userspace could give the kernel to let the
-> > > kernel know what input to boost on.  Or maybe something could be done
-> > > with BPF?
+Realistically, the best solution on sudden input is to overshoot and
+let freqs settle back down.
+
+But there is a lot more to input latency than GPU freq.  In UI
+workloads, even fullscreen animation, I don't really see the GPU going
+above the 2nd lowest OPP even on relatively small things like a618.
+UI input latency (touch scrolling, on-screen stylus / low-latency-ink,
+animations) are a separate issue from what this series addresses, and
+aren't too much to do with GPU freq.
+
+> That it helps with the deliberately late commit I do understand, but we
+> don't do that yet, but intend to when there is kernel uapi to lets us do
+> so without negative consequences.
+>
 > >
-> > Why? Do you think user space is so slow that it can't process the
-> > input events and then do a syscall? We need to have all input devices
-> > open anyway that can affect the system and know more about how they
-> > affect behavior than the kernel can ever know.
->
-> Again this is getting off into a different topic.  But my gut feel is
-> that the shorter the path to input cpu freq boost, the better.. since
-> however many extra cycles you add, they will be cycles with cpu (and
-> probably ddr) at lowest freq
-
-On the one hand, sure, that makes sense in theory. On the other hand,
-we won't know for sure until we try it and I suspect a RT thread in
-user space will be fast enough.
-
-> BR,
-> -R
->
+> > > >
+> > > > TBF I'm of the belief that there is still a need for input based cp=
+u
+> > > > boost (and early wake-up trigger for GPU).. we have something like
+> > > > this in CrOS kernel.  That is a bit of a different topic, but my po=
+int
+> > > > is that fence deadlines are just one of several things we need to
+> > > > optimize power/perf and responsiveness, rather than the single thin=
+g
+> > > > that solves every problem under the sun ;-)
 > > >
-> > > > >
-> > > >
-> > > > 8-< *snip* 8-<
-> > > >
-> > > > > >
-> > > > > > Is it expected that WSI's will set their own deadlines, or shou=
-ld that
-> > > > > > be the job of the compositor? For example by using compositors =
-using
-> > > > > > DMA_BUF_IOCTL_EXPORT_SYNC_FILE that you mentioned, using it to =
-set a
-> > > > > > deadline matching the vsync it most ideally will be committed t=
-o?
-> > > > > >
-> > > > >
-> > > > > I'm kind of assuming compositors, but if the WSI somehow has more
-> > > > > information about ideal presentation time, then I suppose it coul=
-d be
-> > > > > in the WSI?  I'll defer to folks who spend more time on WSI and
-> > > > > compositors to hash out the details ;-)
-> > > >
-> > > > With my compositor developer hat on, it might be best to let it be =
-up to
-> > > > the compositor, it's the one that knows if a client's content will
-> > > > actually end up anywhere visible.
-> > > >
+> > > Perhaps; but I believe it's a bit of a back channel of intent; the pi=
+ece
+> > > of the puzzle that has the information to know whether there is need
+> > > actually speed up is the compositor, not the kernel.
 > > >
-> > > wfm
-> > >
-> > > BR,
-> > > -R
-> > >
-> > > >
-> > > > Jonas
-> > > >
-> > > > >
-> > > > > BR,
-> > > > > -R
-> > >
+> > > For example, pressing 'p' while a terminal is focused does not need h=
+igh
+> > > frequency clocks, it just needs the terminal emulator to draw a 'p' a=
+nd
+> > > the compositor to composite that update. Pressing <Super> may however
+> > > trigger a non-trivial animation moving a lot of stuff around on scree=
+n,
+> > > maybe triggering Wayland clients to draw and what not, and should mos=
+t
+> > > arguably have the ability to "warn" the kernel about the upcoming flo=
+od
+> > > of work before it is already knocking on its door step.
 > >
+> > The super key is problematic, but not for the reason you think.  It is
+> > because it is a case where we should boost on key-up instead of
+> > key-down.. and the second key-up event comes after the cpu-boost is
+> > already in it's cool-down period.  But even if suboptimal in cases
+> > like this, it is still useful for touch/stylus cases where the
+> > slightest of lag is much more perceptible.
 >
+> Other keys are even more problematic. Alt, for example, does nothing,
+> Alt + Tab does some light rendering, but Alt + KeyAboveTab will,
+> depending on the current active applications, suddenly trigger N Wayland
+> surfaces to start rendering at the same time.
+>
+> >
+> > This is getting off topic but I kinda favor coming up with some sort
+> > of static definition that userspace could give the kernel to let the
+> > kernel know what input to boost on.  Or maybe something could be done
+> > with BPF?
+>
+> I have hard time seeing any static information can be enough, it's
+> depends too much on context what is expected to happen. And can a BPF
+> program really help? Unless BPF programs that pulls some internal kernel
+> strings to speed things up whenever userspace wants I don't see how it
+> is that much better.
+>
+> I don't think userspace is necessarily too slow to actively particitpate
+> in providing direct scheduling hints either. Input processing can, for
+> example, be off loaded to a real time scheduled thread, and plumbing any
+> hints about future expectations from rendering, windowing and layout
+> subsystems will be significantly easier to plumb to a real time input
+> thread than translated into static informations or BPF programs.
 
+I mean, the kernel side input handler is called from irq context long
+before even the scheduler gets involved..
+
+But I think you are over-thinking the Alt + SomeOtherKey case.  The
+important thing isn't what the other key is, it is just to know that
+Alt is a modifier key (ie. handle it on key-up instead of key-down).
+No need to over-complicate things.  It's probably enough to give the
+kernel a list of modifier+key combo's that do _something_..
+
+And like I've said before, keyboard input is the least problematic in
+terms of latency.  It is a _lot_ easier to notice lag with touch
+scrolling or stylus (on screen).  (The latter case, I think wayland
+has some catching up to do compared to CrOS or android.. you really
+need a way to allow the app to do front buffer rendering to an overlay
+for the stylus case, because even just 16ms delay is _very_
+noticeable.)
+
+BR,
+-R
