@@ -2,113 +2,152 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B212CC6FD1F
-	for <linux-media@archiver.kernel.org>; Sun, 19 Mar 2023 15:07:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32834C6FD1F
+	for <linux-media@archiver.kernel.org>; Sun, 19 Mar 2023 20:54:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbjCSPHB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 19 Mar 2023 11:07:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42128 "EHLO
+        id S230114AbjCSUy1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 19 Mar 2023 16:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjCSPG7 (ORCPT
+        with ESMTP id S229835AbjCSUy0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 19 Mar 2023 11:06:59 -0400
-Received: from www.linuxtv.org (www.linuxtv.org [130.149.80.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D0019C4A
-        for <linux-media@vger.kernel.org>; Sun, 19 Mar 2023 08:06:57 -0700 (PDT)
-Received: from builder.linuxtv.org ([140.211.167.10] helo=slave0)
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1pduca-003MJq-C1; Sun, 19 Mar 2023 15:06:56 +0000
-Received: from ip6-localhost ([::1] helo=localhost.localdomain)
-        by slave0 with esmtp (Exim 4.94.2)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1pducY-0090Ew-4N; Sun, 19 Mar 2023 15:06:54 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL FOR v6.4] v2: Drop destructive overlay support (#90525)
-Date:   Sun, 19 Mar 2023 15:06:54 +0000
-Message-Id: <20230319150654.2145828-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <7aafb16c-d6a0-f62d-dfbd-05ef87d0a5e5@xs4all.nl>
-References: 
+        Sun, 19 Mar 2023 16:54:26 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BDE72A2;
+        Sun, 19 Mar 2023 13:54:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679259264; x=1710795264;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=y5cIElhvg8EPw65qGruKREHutSyGtcC3oL5nutI/Bj0=;
+  b=H4zylHif4+Zu8aajj30t2K5GZMqO8JbOvXp791r53v0aq2IglIIxlbeE
+   jRsmDJTbp1ONCcvbLkFVATO/CE+NKtJeHMnMt2iQWbKi276Bi2JW6hnBr
+   To/s9LkAMswx2oOda+OwhMwVjT4e67yGJA1eCNxEoipSAEM+Wq5WvHRjA
+   VICFBHgXsUhR+JWjnDhY93T8xHfTue7Lou3guD+zu/dXN5JAKQVHoiE3k
+   akmaycDhb2XhUz4FI+gSXkMtz0wFU1CoSQe1mjI3NMnWMJ6mSME9hNUP0
+   GpSlrSV9NWmR2hnrKZwEKbEeQJf37Sn2TctB5tZCULfI7+43fkSIIDoaR
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="424813940"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="424813940"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2023 13:54:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="680858554"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="680858554"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 19 Mar 2023 13:54:21 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pe02m-000AeU-1S;
+        Sun, 19 Mar 2023 20:54:20 +0000
+Date:   Mon, 20 Mar 2023 04:54:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Rob Herring <robh@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Tero Kristo <kristo@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] EDAC: Use of_address_to_resource()
+Message-ID: <202303200438.ZFr6mEnr-lkp@intel.com>
+References: <20230319163224.226479-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230319163224.226479-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+Hi Rob,
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/7aafb16c-d6a0-f62d-dfbd-05ef87d0a5e5@xs4all.nl/
-Build log: https://builder.linuxtv.org/job/patchwork/290890/
-Build time: 00:35:03
-Link: https://lore.kernel.org/linux-media/7aafb16c-d6a0-f62d-dfbd-05ef87d0a5e5@xs4all.nl
+I love your patch! Yet something to improve:
 
-gpg: Signature made Thu 16 Mar 2023 04:43:59 PM UTC
-gpg:                using EDDSA key 52ADCAAE8A4F70B99ACD8D726B425DF79B1C1E76
-gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
-gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [full]
+[auto build test ERROR on ras/edac-for-next]
+[cannot apply to bp/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Summary: got 4/9 patches with issues, being 2 at build time, plus one error when buinding PDF document
+url:    https://github.com/intel-lab-lkp/linux/commits/Rob-Herring/EDAC-Use-of_address_to_resource/20230320-003703
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git edac-for-next
+patch link:    https://lore.kernel.org/r/20230319163224.226479-1-robh%40kernel.org
+patch subject: [PATCH] EDAC: Use of_address_to_resource()
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20230320/202303200438.ZFr6mEnr-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a128482ade3b4c37d55aa60604caf14e4570fbe5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Rob-Herring/EDAC-Use-of_address_to_resource/20230320-003703
+        git checkout a128482ade3b4c37d55aa60604caf14e4570fbe5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
 
-Error/warnings:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303200438.ZFr6mEnr-lkp@intel.com/
 
-patches/0001-saa7146-drop-overlay-support.patch:
+All errors (new ones prefixed by >>):
 
-    allyesconfig: return code #0:
-	../scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-	../scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-	../scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
-	../drivers/staging/media/atomisp/i2c/atomisp-ov2680.c:415 ov2680_s_stream() warn: missing error code 'ret'
-	../drivers/staging/media/atomisp/pci/atomisp_cmd.c: ../drivers/staging/media/atomisp/pci/atomisp_cmd.c:3357 atomisp_cp_dvs_6axis_config() warn: missing unwind goto?
-	../drivers/staging/media/atomisp/pci/atomisp_cmd.c: ../drivers/staging/media/atomisp/pci/atomisp_cmd.c:3456 atomisp_cp_morph_table() warn: missing unwind goto?
-
-    allyesconfig: return code #0:
-	../drivers/media/i2c/adp1653.c: ../drivers/media/i2c/adp1653.c:444 adp1653_of_init() warn: missing unwind goto?
-	../drivers/media/i2c/ov5645.c: ../drivers/media/i2c/ov5645.c:687 ov5645_set_power_on() warn: 'ov5645->xclk' from clk_prepare_enable() not released on lines: 687.
-	../drivers/media/i2c/ov5670.c: ../drivers/media/i2c/ov5670.c:2670 ov5670_probe() warn: passing zero to 'PTR_ERR'
-	SMATCH:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: :warning: array of flexible structures
-	../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: ../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c:2485 mxc_jpeg_probe() warn: missing unwind goto?
-	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2570 dvb_register() parse error: OOM: 3000032Kb sm_state_count = 1941110
-	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2570 dvb_register() warn: Function too hairy.  No more merges.
-	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2570 dvb_register() parse error: __split_smt: function too hairy.  Giving up after 54 seconds
-	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2864 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
-	../drivers/media/usb/pvrusb2/pvrusb2-hdw.c: ../drivers/media/usb/pvrusb2/pvrusb2-hdw.c:3293 pvr2_hdw_get_tuner_status() warn: inconsistent indenting
-
-patches/0003-bttv-drop-overlay-support.patch:
-
-   checkpatch.pl:
-	$ cat patches/0003-bttv-drop-overlay-support.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:298: WARNING: please, no spaces at the start of a line
-	-:298: CHECK: Avoid CamelCase: <This>
-
-patches/0006-v4l2-core-drop-v4l2_window-clipping-and-bitmap-suppo.patch:
-
-   checkpatch.pl:
-	$ cat patches/0006-v4l2-core-drop-v4l2_window-clipping-and-bitmap-suppo.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:158: WARNING: Avoid logging continuation uses where feasible
-
-patches/0007-videodev.h-drop-V4L2_FBUF_CAP_LIST-BITMAP_CLIPPING.patch:
-
-    allyesconfig: return code #0:
-	../drivers/staging/media/atomisp/i2c/atomisp-ov2680.c:415 ov2680_s_stream() warn: missing error code 'ret'
-	../drivers/staging/media/atomisp/pci/atomisp_cmd.c: ../drivers/staging/media/atomisp/pci/atomisp_cmd.c:3357 atomisp_cp_dvs_6axis_config() warn: missing unwind goto?
-	../drivers/staging/media/atomisp/pci/atomisp_cmd.c: ../drivers/staging/media/atomisp/pci/atomisp_cmd.c:3456 atomisp_cp_morph_table() warn: missing unwind goto?
-
-    allyesconfig: return code #0:
-	../drivers/media/i2c/adp1653.c: ../drivers/media/i2c/adp1653.c:444 adp1653_of_init() warn: missing unwind goto?
-	../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: ../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c:2485 mxc_jpeg_probe() warn: missing unwind goto?
-	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2570 dvb_register() parse error: OOM: 3000028Kb sm_state_count = 1939314
-	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2570 dvb_register() warn: Function too hairy.  No more merges.
-	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2570 dvb_register() parse error: __split_smt: function too hairy.  Giving up after 51 seconds
-	../drivers/media/i2c/ov5645.c: ../drivers/media/i2c/ov5645.c:687 ov5645_set_power_on() warn: 'ov5645->xclk' from clk_prepare_enable() not released on lines: 687.
-	../drivers/media/i2c/ov5670.c: ../drivers/media/i2c/ov5670.c:2670 ov5670_probe() warn: passing zero to 'PTR_ERR'
-	../drivers/media/usb/pvrusb2/pvrusb2-hdw.c: ../drivers/media/usb/pvrusb2/pvrusb2-hdw.c:3293 pvr2_hdw_get_tuner_status() warn: inconsistent indenting
-	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2878 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
+   drivers/edac/altera_edac.c: In function 'altr_s10_sdram_check_ecc_deps':
+>> drivers/edac/altera_edac.c:1108:25: error: invalid type argument of '->' (have 'struct resource')
+    1108 |         sdram_addr = res->start;
+         |                         ^~
 
 
-Error #512 when building PDF docs
+vim +1108 drivers/edac/altera_edac.c
 
+  1085	
+  1086	/*
+  1087	 * A legacy U-Boot bug only enabled memory mapped access to the ECC Enable
+  1088	 * register if ECC is enabled. Linux checks the ECC Enable register to
+  1089	 * determine ECC status.
+  1090	 * Use an SMC call (which always works) to determine ECC enablement.
+  1091	 */
+  1092	static int altr_s10_sdram_check_ecc_deps(struct altr_edac_device_dev *device)
+  1093	{
+  1094		const struct edac_device_prv_data *prv = device->data;
+  1095		unsigned long sdram_ecc_addr;
+  1096		struct arm_smccc_res result;
+  1097		struct device_node *np;
+  1098		phys_addr_t sdram_addr;
+  1099		struct resource res;
+  1100		u32 read_reg;
+  1101		int ret;
+  1102	
+  1103		np = of_find_compatible_node(NULL, NULL, "altr,sdr-ctl");
+  1104		if (!np)
+  1105			goto sdram_err;
+  1106	
+  1107		of_address_to_resource(np, 0, &res);
+> 1108		sdram_addr = res->start;
+  1109		of_node_put(np);
+  1110		sdram_ecc_addr = (unsigned long)sdram_addr + prv->ecc_en_ofst;
+  1111		arm_smccc_smc(INTEL_SIP_SMC_REG_READ, sdram_ecc_addr,
+  1112			      0, 0, 0, 0, 0, 0, &result);
+  1113		read_reg = (unsigned int)result.a1;
+  1114		ret = (int)result.a0;
+  1115		if (!ret && (read_reg & prv->ecc_enable_mask))
+  1116			return 0;
+  1117	
+  1118	sdram_err:
+  1119		edac_printk(KERN_ERR, EDAC_DEVICE,
+  1120			    "%s: No ECC present or ECC disabled.\n",
+  1121			    device->edac_dev_name);
+  1122		return -ENODEV;
+  1123	}
+  1124	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
