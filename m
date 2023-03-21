@@ -2,242 +2,193 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00AEEC6FD1D
-	for <linux-media@archiver.kernel.org>; Tue, 21 Mar 2023 10:27:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DEB3C7618D
+	for <linux-media@archiver.kernel.org>; Tue, 21 Mar 2023 10:29:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjCUK1a (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 21 Mar 2023 06:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46952 "EHLO
+        id S230008AbjCUK3T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 21 Mar 2023 06:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbjCUK1Z (ORCPT
+        with ESMTP id S229861AbjCUK3S (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 21 Mar 2023 06:27:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6200D1C5BA;
-        Tue, 21 Mar 2023 03:26:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 21 Mar 2023 06:29:18 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9A84ED4;
+        Tue, 21 Mar 2023 03:29:11 -0700 (PDT)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:f5ef:1040:e3c1:3d00])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7D6D8B8159F;
-        Tue, 21 Mar 2023 10:26:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03AF1C433EF;
-        Tue, 21 Mar 2023 10:26:11 +0000 (UTC)
-Message-ID: <9cf2736e-2b82-6dd2-7c08-dfe4705fa210@xs4all.nl>
-Date:   Tue, 21 Mar 2023 11:26:10 +0100
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E461D66030E0;
+        Tue, 21 Mar 2023 10:29:08 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679394549;
+        bh=eIuM4kCS5F3a2Rxq9DyQKfGuVUFqbcr15Idj0US/azY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=PD/X8nh1b3Ue2u3mok3/JTtJB5D1X+UkYlY960HEl60ISY44M1fcbYXIh7110eTlu
+         Q6f0LZAFFB2owr71LFgQJf8KrJy012xlc0eWRbKm1DjFPC5L3ZILSBpAa0xQ/2QELf
+         ZdHxG6lxzY6hxz4wrIMgR7dgDcre2uZrBuNhj4wqarkOtgI6hmej4U1QxkcDf9ToMg
+         lP3Z1r/NZVhVTVN0PswPmrW3isg4sJo4j8nrr7rR88BDkxxfbHhlNq6Q//2MRC0HFa
+         +nQOz3PBXiUkIkUenY4Q7qILJNZ8t79swB76ULnsqKNAT7UeQL7fCKTf8ac7/rTC82
+         jw0QHHQ1/7Y9w==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
+        ming.qian@nxp.com, shijie.qin@nxp.com, eagle.zhou@nxp.com,
+        bin.liu@mediatek.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, tiffany.lin@mediatek.com,
+        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
+        stanimir.k.varbanov@gmail.com, quic_vgarodia@quicinc.com,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        daniel.almeida@collabora.com, hverkuil-cisco@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, jernel@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v2 2/8] media: videobuf2: Make bufs array dynamic allocated
+Date:   Tue, 21 Mar 2023 11:28:49 +0100
+Message-Id: <20230321102855.346732-3-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230321102855.346732-1-benjamin.gaignard@collabora.com>
+References: <20230321102855.346732-1-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 01/10] media: Add P012 and P012M video format
-Content-Language: en-US
-To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
-        mirela.rabulea@oss.nxp.com
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, xiahong.bao@nxp.com, linux-imx@nxp.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <cover.1678788305.git.ming.qian@nxp.com>
- <42a8e54f01ae62a36ca51eeb6652cee91baf20f3.1678788305.git.ming.qian@nxp.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <42a8e54f01ae62a36ca51eeb6652cee91baf20f3.1678788305.git.ming.qian@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 14/03/2023 11:08, Ming Qian wrote:
-> P012 is a YUV format with 12-bits per component with interleaved UV,
-> like NV12, expanded to 16 bits.
-> Data in the 12 high bits, zeros in the 4 low bits,
-> arranged in little endian order.
-> And P012M has two non contiguous planes.
-> 
-> Signed-off-by: Ming Qian <ming.qian@nxp.com>
-> ---
->  .../media/v4l/pixfmt-yuv-planar.rst           | 94 +++++++++++++++++++
->  drivers/media/v4l2-core/v4l2-common.c         |  2 +
->  drivers/media/v4l2-core/v4l2-ioctl.c          |  2 +
->  include/uapi/linux/videodev2.h                |  2 +
->  4 files changed, 100 insertions(+)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> index f1d5bb7b806d..aa37c3de8808 100644
-> --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> @@ -123,6 +123,20 @@ All components are stored with the same number of bits per component.
->        - Cb, Cr
->        - Yes
->        - 4x4 tiles
-> +    * - V4L2_PIX_FMT_P012
-> +      - 'P012'
-> +      - 12
-> +      - 4:2:0
-> +      - Cb, Cr
-> +      - Yes
-> +      - Linear
-> +    * - V4L2_PIX_FMT_P012M
-> +      - 'PM12'
-> +      - 12
-> +      - 4:2:0
-> +      - Cb, Cr
-> +      - Yes
+Instead of a static array change bufs to a dynamically allocated array.
+This will allow to store more video buffer if needed.
+Protect the array with a spinlock.
 
-Shouldn't this be 'No'?
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+---
+ .../media/common/videobuf2/videobuf2-core.c   |  8 +++
+ include/media/videobuf2-core.h                | 49 ++++++++++++++++---
+ 2 files changed, 49 insertions(+), 8 deletions(-)
 
-Looks good otherwise.
-
-Regards,
-
-	Hans
-
-> +      - Linear
->      * - V4L2_PIX_FMT_NV16
->        - 'NV16'
->        - 8
-> @@ -586,6 +600,86 @@ Data in the 10 high bits, zeros in the 6 low bits, arranged in little endian ord
->        - Cb\ :sub:`11`
->        - Cr\ :sub:`11`
->  
-> +.. _V4L2-PIX-FMT-P012:
-> +.. _V4L2-PIX-FMT-P012M:
-> +
-> +P012 and P012M
-> +--------------
-> +
-> +P012 is like NV12 with 12 bits per component, expanded to 16 bits.
-> +Data in the 12 high bits, zeros in the 4 low bits, arranged in little endian order.
-> +
-> +.. flat-table:: Sample 4x4 P012 Image
-> +    :header-rows:  0
-> +    :stub-columns: 0
-> +
-> +    * - start + 0:
-> +      - Y'\ :sub:`00`
-> +      - Y'\ :sub:`01`
-> +      - Y'\ :sub:`02`
-> +      - Y'\ :sub:`03`
-> +    * - start + 8:
-> +      - Y'\ :sub:`10`
-> +      - Y'\ :sub:`11`
-> +      - Y'\ :sub:`12`
-> +      - Y'\ :sub:`13`
-> +    * - start + 16:
-> +      - Y'\ :sub:`20`
-> +      - Y'\ :sub:`21`
-> +      - Y'\ :sub:`22`
-> +      - Y'\ :sub:`23`
-> +    * - start + 24:
-> +      - Y'\ :sub:`30`
-> +      - Y'\ :sub:`31`
-> +      - Y'\ :sub:`32`
-> +      - Y'\ :sub:`33`
-> +    * - start + 32:
-> +      - Cb\ :sub:`00`
-> +      - Cr\ :sub:`00`
-> +      - Cb\ :sub:`01`
-> +      - Cr\ :sub:`01`
-> +    * - start + 40:
-> +      - Cb\ :sub:`10`
-> +      - Cr\ :sub:`10`
-> +      - Cb\ :sub:`11`
-> +      - Cr\ :sub:`11`
-> +
-> +.. flat-table:: Sample 4x4 P012M Image
-> +    :header-rows:  0
-> +    :stub-columns: 0
-> +
-> +    * - start0 + 0:
-> +      - Y'\ :sub:`00`
-> +      - Y'\ :sub:`01`
-> +      - Y'\ :sub:`02`
-> +      - Y'\ :sub:`03`
-> +    * - start0 + 8:
-> +      - Y'\ :sub:`10`
-> +      - Y'\ :sub:`11`
-> +      - Y'\ :sub:`12`
-> +      - Y'\ :sub:`13`
-> +    * - start0 + 16:
-> +      - Y'\ :sub:`20`
-> +      - Y'\ :sub:`21`
-> +      - Y'\ :sub:`22`
-> +      - Y'\ :sub:`23`
-> +    * - start0 + 24:
-> +      - Y'\ :sub:`30`
-> +      - Y'\ :sub:`31`
-> +      - Y'\ :sub:`32`
-> +      - Y'\ :sub:`33`
-> +    * -
-> +    * - start1 + 0:
-> +      - Cb\ :sub:`00`
-> +      - Cr\ :sub:`00`
-> +      - Cb\ :sub:`01`
-> +      - Cr\ :sub:`01`
-> +    * - start1 + 8:
-> +      - Cb\ :sub:`10`
-> +      - Cr\ :sub:`10`
-> +      - Cb\ :sub:`11`
-> +      - Cr\ :sub:`11`
-> +
->  
->  Fully Planar YUV Formats
->  ========================
-> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-> index 40f56e044640..a5e8ba370d33 100644
-> --- a/drivers/media/v4l2-core/v4l2-common.c
-> +++ b/drivers/media/v4l2-core/v4l2-common.c
-> @@ -267,6 +267,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
->  		{ .format = V4L2_PIX_FMT_NV24,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
->  		{ .format = V4L2_PIX_FMT_NV42,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
->  		{ .format = V4L2_PIX_FMT_P010,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_P012,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 4, 0, 0 }, .hdiv = 2, .vdiv = 2 },
->  
->  		{ .format = V4L2_PIX_FMT_YUV410,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
->  		{ .format = V4L2_PIX_FMT_YVU410,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
-> @@ -292,6 +293,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
->  		{ .format = V4L2_PIX_FMT_NV21M,   .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
->  		{ .format = V4L2_PIX_FMT_NV16M,   .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
->  		{ .format = V4L2_PIX_FMT_NV61M,   .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_P012M,   .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 2, .comp_planes = 2, .bpp = { 2, 4, 0, 0 }, .hdiv = 2, .vdiv = 2 },
->  
->  		/* Bayer RGB formats */
->  		{ .format = V4L2_PIX_FMT_SBGGR8,	.pixel_enc = V4L2_PIXEL_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-> index 87f163a89c80..6489b67babfa 100644
-> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> @@ -1352,6 +1352,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
->  	case V4L2_PIX_FMT_NV24:		descr = "Y/UV 4:4:4"; break;
->  	case V4L2_PIX_FMT_NV42:		descr = "Y/VU 4:4:4"; break;
->  	case V4L2_PIX_FMT_P010:		descr = "10-bit Y/UV 4:2:0"; break;
-> +	case V4L2_PIX_FMT_P012:		descr = "12-bit Y/UV 4:2:0"; break;
->  	case V4L2_PIX_FMT_NV12_4L4:	descr = "Y/UV 4:2:0 (4x4 Linear)"; break;
->  	case V4L2_PIX_FMT_NV12_16L16:	descr = "Y/UV 4:2:0 (16x16 Linear)"; break;
->  	case V4L2_PIX_FMT_NV12_32L32:   descr = "Y/UV 4:2:0 (32x32 Linear)"; break;
-> @@ -1362,6 +1363,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
->  	case V4L2_PIX_FMT_NV61M:	descr = "Y/VU 4:2:2 (N-C)"; break;
->  	case V4L2_PIX_FMT_NV12MT:	descr = "Y/UV 4:2:0 (64x32 MB, N-C)"; break;
->  	case V4L2_PIX_FMT_NV12MT_16X16:	descr = "Y/UV 4:2:0 (16x16 MB, N-C)"; break;
-> +	case V4L2_PIX_FMT_P012M:	descr = "12-bit Y/UV 4:2:0 (N-C)"; break;
->  	case V4L2_PIX_FMT_YUV420M:	descr = "Planar YUV 4:2:0 (N-C)"; break;
->  	case V4L2_PIX_FMT_YVU420M:	descr = "Planar YVU 4:2:0 (N-C)"; break;
->  	case V4L2_PIX_FMT_YUV422M:	descr = "Planar YUV 4:2:2 (N-C)"; break;
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> index 17a9b975177a..f83a9d1210fb 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -637,12 +637,14 @@ struct v4l2_pix_format {
->  #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/CbCr 4:4:4  */
->  #define V4L2_PIX_FMT_NV42    v4l2_fourcc('N', 'V', '4', '2') /* 24  Y/CrCb 4:4:4  */
->  #define V4L2_PIX_FMT_P010    v4l2_fourcc('P', '0', '1', '0') /* 24  Y/CbCr 4:2:0 10-bit per component */
-> +#define V4L2_PIX_FMT_P012    v4l2_fourcc('P', '0', '1', '2') /* 24  Y/CbCr 4:2:0 12-bit per component */
->  
->  /* two non contiguous planes - one Y, one Cr + Cb interleaved  */
->  #define V4L2_PIX_FMT_NV12M   v4l2_fourcc('N', 'M', '1', '2') /* 12  Y/CbCr 4:2:0  */
->  #define V4L2_PIX_FMT_NV21M   v4l2_fourcc('N', 'M', '2', '1') /* 21  Y/CrCb 4:2:0  */
->  #define V4L2_PIX_FMT_NV16M   v4l2_fourcc('N', 'M', '1', '6') /* 16  Y/CbCr 4:2:2  */
->  #define V4L2_PIX_FMT_NV61M   v4l2_fourcc('N', 'M', '6', '1') /* 16  Y/CrCb 4:2:2  */
-> +#define V4L2_PIX_FMT_P012M   v4l2_fourcc('P', 'M', '1', '2') /* 24  Y/CbCr 4:2:0 12-bit per component */
->  
->  /* three planes - Y Cb, Cr */
->  #define V4L2_PIX_FMT_YUV410  v4l2_fourcc('Y', 'U', 'V', '9') /*  9  YUV 4:1:0     */
+diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+index 79e90e338846..ae9d72f4d181 100644
+--- a/drivers/media/common/videobuf2/videobuf2-core.c
++++ b/drivers/media/common/videobuf2/videobuf2-core.c
+@@ -2452,6 +2452,13 @@ int vb2_core_queue_init(struct vb2_queue *q)
+ 	mutex_init(&q->mmap_lock);
+ 	init_waitqueue_head(&q->done_wq);
+ 
++	q->max_num_bufs = 32;
++	q->bufs = kmalloc_array(q->max_num_bufs, sizeof(*q->bufs), GFP_KERNEL | __GFP_ZERO);
++	if (!q->bufs)
++		return -ENOMEM;
++
++	spin_lock_init(&q->bufs_lock);
++
+ 	q->memory = VB2_MEMORY_UNKNOWN;
+ 
+ 	if (q->buf_struct_size == 0)
+@@ -2479,6 +2486,7 @@ void vb2_core_queue_release(struct vb2_queue *q)
+ 	mutex_lock(&q->mmap_lock);
+ 	__vb2_queue_free(q, q->num_buffers);
+ 	mutex_unlock(&q->mmap_lock);
++	kfree(q->bufs);
+ }
+ EXPORT_SYMBOL_GPL(vb2_core_queue_release);
+ 
+diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
+index 5b1e3d801546..397dbf6e61e1 100644
+--- a/include/media/videobuf2-core.h
++++ b/include/media/videobuf2-core.h
+@@ -558,6 +558,8 @@ struct vb2_buf_ops {
+  * @dma_dir:	DMA mapping direction.
+  * @bufs:	videobuf2 buffer structures
+  * @num_buffers: number of allocated/used buffers
++ * @bufs_lock: lock to protect bufs access
++ * @max_num_bufs: max number of buffers storable in bufs
+  * @queued_list: list of buffers currently queued from userspace
+  * @queued_count: number of buffers queued and ready for streaming.
+  * @owned_by_drv_count: number of buffers owned by the driver
+@@ -619,8 +621,10 @@ struct vb2_queue {
+ 	struct mutex			mmap_lock;
+ 	unsigned int			memory;
+ 	enum dma_data_direction		dma_dir;
+-	struct vb2_buffer		*bufs[VB2_MAX_FRAME];
++	struct vb2_buffer		**bufs;
+ 	unsigned int			num_buffers;
++	spinlock_t			bufs_lock;
++	size_t				max_num_bufs;
+ 
+ 	struct list_head		queued_list;
+ 	unsigned int			queued_count;
+@@ -1239,9 +1243,16 @@ static inline void vb2_clear_last_buffer_dequeued(struct vb2_queue *q)
+ static inline struct vb2_buffer *vb2_get_buffer(struct vb2_queue *q,
+ 						unsigned int index)
+ {
+-	if (index < q->num_buffers)
+-		return q->bufs[index];
+-	return NULL;
++	struct vb2_buffer *vb = NULL;
++
++	spin_lock(&q->bufs_lock);
++
++	if (index < q->max_num_bufs)
++		vb = q->bufs[index];
++
++	spin_unlock(&q->bufs_lock);
++
++	return vb;
+ }
+ 
+ /**
+@@ -1251,12 +1262,30 @@ static inline struct vb2_buffer *vb2_get_buffer(struct vb2_queue *q,
+  */
+ static inline bool vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *vb)
+ {
+-	if (vb->index < VB2_MAX_FRAME) {
++	bool ret = false;
++
++	spin_lock(&q->bufs_lock);
++
++	if (vb->index >= q->max_num_bufs) {
++		struct vb2_buffer **tmp;
++
++		tmp = krealloc_array(q->bufs, q->max_num_bufs * 2, sizeof(*q->bufs), GFP_KERNEL);
++		if (!tmp)
++			goto realloc_failed;
++
++		q->max_num_bufs *= 2;
++		q->bufs = tmp;
++	}
++
++	if (vb->index < q->max_num_bufs) {
+ 		q->bufs[vb->index] = vb;
+-		return true;
++		ret = true;
+ 	}
+ 
+-	return false;
++realloc_failed:
++	spin_unlock(&q->bufs_lock);
++
++	return ret;
+ }
+ 
+ /**
+@@ -1266,8 +1295,12 @@ static inline bool vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *
+  */
+ static inline void vb2_queue_remove_buffer(struct vb2_queue *q, struct vb2_buffer *vb)
+ {
+-	if (vb->index < VB2_MAX_FRAME)
++	spin_lock(&q->bufs_lock);
++
++	if (vb->index < q->max_num_bufs)
+ 		q->bufs[vb->index] = NULL;
++
++	spin_unlock(&q->bufs_lock);
+ }
+ 
+ /*
+-- 
+2.34.1
 
