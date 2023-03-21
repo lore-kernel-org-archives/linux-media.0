@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4624C74A5B
-	for <linux-media@archiver.kernel.org>; Tue, 21 Mar 2023 10:29:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33A68C74A5B
+	for <linux-media@archiver.kernel.org>; Tue, 21 Mar 2023 10:29:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbjCUK3e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 21 Mar 2023 06:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51118 "EHLO
+        id S230289AbjCUK3y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 21 Mar 2023 06:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbjCUK3Y (ORCPT
+        with ESMTP id S230224AbjCUK3b (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 21 Mar 2023 06:29:24 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5404F25E30;
-        Tue, 21 Mar 2023 03:29:13 -0700 (PDT)
+        Tue, 21 Mar 2023 06:29:31 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B6526866;
+        Tue, 21 Mar 2023 03:29:20 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:f5ef:1040:e3c1:3d00])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6BFB966030DF;
-        Tue, 21 Mar 2023 10:29:10 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6677C66030EF;
+        Tue, 21 Mar 2023 10:29:13 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679394551;
-        bh=MdFdpEYlrqYIfUsfLO5+Vx1D2TLTsHnVGjsRgywQ91c=;
+        s=mail; t=1679394554;
+        bh=EMn3OF0L8RhNUweBGxWkw/5f1Od9J8MG3aaxVQp6684=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PpvIKeuLF2UAhXtI2Y3ERb8aCPYRxgU20Z4XUyNaM2oM2Enq8/UU6PH5GGAxzIBEq
-         HsOcuMibVJhqGWAj4NQHpB924mcHt0cbQTIpzKdpZZnpvkjT+xiS3HRBKE1Xb1EbcM
-         f5XsyeJK5ZiHnZHrBSQDOAYq9S6kn4osoCgz1qsa16e2dTvivRB05WDvaB7C/TQvG0
-         TbfFzW5LWn0Vl3CYIn1v5qTRz/ycFwUqw/1fwp3xmByYx01yLHyCNcRAO+up+FY8iv
-         S28bzY8wcy4LUIZqt/sG4XT5j//2zCXHiiqdZwLwhuhDDY+q+ADt/GZwdeVxSkCcCY
-         xq2IYhO543Z/w==
+        b=Y23hqQqzs6tAFn+DqMz0GJdU6CSxe/Z5SBa8YO2eSNNxMgKaPaMmwgMSVVIIiql7b
+         GobkZUXf+IOl5N4j3txo1Y+rZpn4VLxMkjcZFtkmR/rF9FwwQsKDEB2JEwrmgvbMa6
+         Fcirk42ecIAPTgteU0KqPiZV5ToMdt8SDZZoYlylmKy8uYr0bAY7rvnXtaC3n1PEgQ
+         J2GIbdOULKGO7nCJR92KITx3Vk0zgIUaLmxAF7LeOwp+p3twANmF5WGkd3fyUuI76m
+         ljrabHYPxuI13etVsuyvQsIkrxP3S9Fh3EAA2eJ7lv28445AU920JosMo8KMYtS8S6
+         kIoH20etkbfLw==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
         ming.qian@nxp.com, shijie.qin@nxp.com, eagle.zhou@nxp.com,
@@ -48,9 +48,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
         linux-rockchip@lists.infradead.org, kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v2 4/8] media: videobuf2: Stop define VB2_MAX_FRAME as global
-Date:   Tue, 21 Mar 2023 11:28:51 +0100
-Message-Id: <20230321102855.346732-5-benjamin.gaignard@collabora.com>
+Subject: [PATCH v2 8/8] media: verisilicon: Use v4l2-mem2mem helpers for VIDIOC_DELETE_BUF ioctl
+Date:   Tue, 21 Mar 2023 11:28:55 +0100
+Message-Id: <20230321102855.346732-9-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230321102855.346732-1-benjamin.gaignard@collabora.com>
 References: <20230321102855.346732-1-benjamin.gaignard@collabora.com>
@@ -60,127 +60,25 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-After changing bufs arrays to a dynamic allocated array
-VB2_MAX_FRAME doesn't mean anything for videobuf2 core.
-Remove it from the core definitions but keep it for drivers internal
-needs.
+Make Hantro decoder support VIDIOC_DELETE_BUF ioctl.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/media/common/videobuf2/videobuf2-core.c               | 2 ++
- drivers/media/platform/amphion/vdec.c                         | 1 +
- .../media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c | 2 ++
- drivers/media/platform/qcom/venus/hfi.h                       | 2 ++
- drivers/media/platform/verisilicon/hantro_hw.h                | 2 ++
- drivers/staging/media/ipu3/ipu3-v4l2.c                        | 2 ++
- include/media/videobuf2-core.h                                | 1 -
- include/media/videobuf2-v4l2.h                                | 4 ----
- 8 files changed, 11 insertions(+), 5 deletions(-)
+ drivers/media/platform/verisilicon/hantro_v4l2.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-index f4da917ccf3f..3c6ced360770 100644
---- a/drivers/media/common/videobuf2/videobuf2-core.c
-+++ b/drivers/media/common/videobuf2/videobuf2-core.c
-@@ -31,6 +31,8 @@
+diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
+index d238d407f986..8f1414085f47 100644
+--- a/drivers/media/platform/verisilicon/hantro_v4l2.c
++++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+@@ -740,6 +740,7 @@ const struct v4l2_ioctl_ops hantro_ioctl_ops = {
+ 	.vidioc_dqbuf = v4l2_m2m_ioctl_dqbuf,
+ 	.vidioc_prepare_buf = v4l2_m2m_ioctl_prepare_buf,
+ 	.vidioc_create_bufs = v4l2_m2m_ioctl_create_bufs,
++	.vidioc_delete_buf = v4l2_m2m_ioctl_delete_buf,
+ 	.vidioc_expbuf = v4l2_m2m_ioctl_expbuf,
  
- #include <trace/events/vb2.h>
- 
-+#define VB2_MAX_FRAME	32
-+
- static int debug;
- module_param(debug, int, 0644);
- 
-diff --git a/drivers/media/platform/amphion/vdec.c b/drivers/media/platform/amphion/vdec.c
-index 87f9f8e90ab1..bef0c1b869be 100644
---- a/drivers/media/platform/amphion/vdec.c
-+++ b/drivers/media/platform/amphion/vdec.c
-@@ -28,6 +28,7 @@
- 
- #define VDEC_MIN_BUFFER_CAP		8
- #define VDEC_MIN_BUFFER_OUT		8
-+#define VB2_MAX_FRAME			32
- 
- struct vdec_fs_info {
- 	char name[8];
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-index f5958b6d834a..ba208caf3043 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-@@ -16,6 +16,8 @@
- #include "../vdec_drv_if.h"
- #include "../vdec_vpu_if.h"
- 
-+#define VB2_MAX_FRAME	32
-+
- /* reset_frame_context defined in VP9 spec */
- #define VP9_RESET_FRAME_CONTEXT_NONE0 0
- #define VP9_RESET_FRAME_CONTEXT_NONE1 1
-diff --git a/drivers/media/platform/qcom/venus/hfi.h b/drivers/media/platform/qcom/venus/hfi.h
-index f25d412d6553..bd5ca5a8b945 100644
---- a/drivers/media/platform/qcom/venus/hfi.h
-+++ b/drivers/media/platform/qcom/venus/hfi.h
-@@ -10,6 +10,8 @@
- 
- #include "hfi_helper.h"
- 
-+#define VB2_MAX_FRAME				32
-+
- #define VIDC_SESSION_TYPE_VPE			0
- #define VIDC_SESSION_TYPE_ENC			1
- #define VIDC_SESSION_TYPE_DEC			2
-diff --git a/drivers/media/platform/verisilicon/hantro_hw.h b/drivers/media/platform/verisilicon/hantro_hw.h
-index e83f0c523a30..9e8faf7ba6fb 100644
---- a/drivers/media/platform/verisilicon/hantro_hw.h
-+++ b/drivers/media/platform/verisilicon/hantro_hw.h
-@@ -15,6 +15,8 @@
- #include <media/v4l2-vp9.h>
- #include <media/videobuf2-core.h>
- 
-+#define VB2_MAX_FRAME	32
-+
- #define DEC_8190_ALIGN_MASK	0x07U
- 
- #define MB_DIM			16
-diff --git a/drivers/staging/media/ipu3/ipu3-v4l2.c b/drivers/staging/media/ipu3/ipu3-v4l2.c
-index e530767e80a5..6627b5c2d4d6 100644
---- a/drivers/staging/media/ipu3/ipu3-v4l2.c
-+++ b/drivers/staging/media/ipu3/ipu3-v4l2.c
-@@ -10,6 +10,8 @@
- #include "ipu3.h"
- #include "ipu3-dmamap.h"
- 
-+#define VB2_MAX_FRAME	32
-+
- /******************** v4l2_subdev_ops ********************/
- 
- #define IPU3_RUNNING_MODE_VIDEO		0
-diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
-index b8b34a993e04..4aa43c5c7c58 100644
---- a/include/media/videobuf2-core.h
-+++ b/include/media/videobuf2-core.h
-@@ -21,7 +21,6 @@
- #include <media/media-request.h>
- #include <media/frame_vector.h>
- 
--#define VB2_MAX_FRAME	(32)
- #define VB2_MAX_PLANES	(8)
- 
- /**
-diff --git a/include/media/videobuf2-v4l2.h b/include/media/videobuf2-v4l2.h
-index 5a845887850b..88a7a565170e 100644
---- a/include/media/videobuf2-v4l2.h
-+++ b/include/media/videobuf2-v4l2.h
-@@ -15,10 +15,6 @@
- #include <linux/videodev2.h>
- #include <media/videobuf2-core.h>
- 
--#if VB2_MAX_FRAME != VIDEO_MAX_FRAME
--#error VB2_MAX_FRAME != VIDEO_MAX_FRAME
--#endif
--
- #if VB2_MAX_PLANES != VIDEO_MAX_PLANES
- #error VB2_MAX_PLANES != VIDEO_MAX_PLANES
- #endif
+ 	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
 -- 
 2.34.1
 
