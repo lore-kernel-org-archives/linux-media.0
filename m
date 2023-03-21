@@ -2,35 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA7C4C77B61
-	for <linux-media@archiver.kernel.org>; Tue, 21 Mar 2023 18:04:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C28BDC74A5B
+	for <linux-media@archiver.kernel.org>; Tue, 21 Mar 2023 18:04:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbjCUSEI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 21 Mar 2023 14:04:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36306 "EHLO
+        id S230311AbjCUSEJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 21 Mar 2023 14:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbjCUSEG (ORCPT
+        with ESMTP id S230145AbjCUSEG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 21 Mar 2023 14:04:06 -0400
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0EAA28D0A;
-        Tue, 21 Mar 2023 11:04:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3285928875;
+        Tue, 21 Mar 2023 11:04:04 -0700 (PDT)
 Received: from [192.168.0.26] (2a02-8388-6582-fe80-0000-0000-0000-000c.cable.dynamic.v6.surfer.at [IPv6:2a02:8388:6582:fe80::c])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 3D5AAD255C;
-        Tue, 21 Mar 2023 18:04:03 +0000 (UTC)
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 2AE3BD2516;
+        Tue, 21 Mar 2023 18:04:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1679421843; bh=ncpXLQ6qGgg6hVHefO9DqumuQvrhX7L+dhXzJdi5hVA=;
+        t=1679421842; bh=6kJQExPvH5RZ9ofn4GgS9ik4SVqTvX/IERct3TODGKw=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=TVPCV1+Ij+FRy7+KSyMvO9Kii3m0GcVODfcxCWfYqZ95mzRNqC0mIWCJd68FMHotn
-         ZHplRNTdPweJ0fb28+JJnqZkzHenLPIk1Acy+6VRjhsN0NVZSdU48PHUKttoMCgEuE
-         H8GSaq2e06VaazXgfsp1EXlEq3M5+1z/EFiMcIAM=
+        b=pCmn+N1vHb4hKUKB9AHq8WBHW1n99tCHguviTEgSc/2iMAaiHYcUDWPLV5mX6ZwI+
+         YyE8CHIMx+8cYnw9244mNyKFs7XadOFRMx4fZI84Lzzh31/jUmQ0klnXCnM1BgFX5P
+         YQyywzF/ccB7hUBEoDgMqg8tu8XsonytFl0mUCY8=
 From:   Luca Weiss <luca@z3ntu.xyz>
-Date:   Tue, 21 Mar 2023 19:03:57 +0100
-Subject: [PATCH v3 3/3] media: i2c: ov2685: Make reset gpio optional
+Date:   Tue, 21 Mar 2023 19:03:55 +0100
+Subject: [PATCH v3 1/3] media: dt-bindings: media: rkisp1: complete ov2685
+ example
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230129-ov2685-improvements-v3-3-d9737d0707f6@z3ntu.xyz>
+Message-Id: <20230129-ov2685-improvements-v3-1-d9737d0707f6@z3ntu.xyz>
 References: <20230129-ov2685-improvements-v3-0-d9737d0707f6@z3ntu.xyz>
 In-Reply-To: <20230129-ov2685-improvements-v3-0-d9737d0707f6@z3ntu.xyz>
 To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
@@ -42,48 +43,65 @@ To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
 Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=955; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=ncpXLQ6qGgg6hVHefO9DqumuQvrhX7L+dhXzJdi5hVA=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkGfGQ02yqbUUyL+5UW3wwrvIUKbBBdDKM2vUQv
- zFYH0zH/iuJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZBnxkAAKCRBy2EO4nU3X
- VvlHD/45ASJR8lIV6H/nsRjW6prmblVEscbhEdsAukK0w8p2LeLTI6aUIuz75lxqK6V4RFpJtgU
- 8b/J28B+vgi8yCT+rJTUACGiXRydIPan/Khsjgx3MPTX8ERq9FhwWr0+A67ulslfd/OLrNbeTMW
- UTWDNca9OKuk0it8Ro0ouVt2rajWuTDHVOOhe9HWm3GnfoulXhRVPlucLmIrnYJObhoa2S/s+2b
- zaDt2QwHJMQ65CyhcRKp67O7OJ0CpaoWiiEpiQKabH0c7ZCJx3/fLBg1s1j1AUG3m+xVXVemp19
- JAeE+Pf9NL67wFfGouoqV/ek0J1nA1KusgEWrXPg5trsjen9hY0hZpAzYbwkb1M8PAqp6BwYJWQ
- 74qJNfSb4m7tFU9dCxUPa4vkhkP5Y1gEQ7q5lVos7Ey9rP6cdzu28pelN/T+ZrCn2VIHNTJcxgx
- 5aumzyGAIt35JpXT7pf0ijaEGzPK2vu1A+aYoGtiYcg6Max3N6CHLhL1ql9FfnVpWVPw3SaxUej
- 9hcitY76DZI/g1oj10fJLlYE9aK9tu2ALCXhFtDbGo5sL1N0R7tOxRGvVS4fZzRyFk7aGHd0Msq
- M9BjBUBmVp+H0EXGgf1/cEKBLWQImTRlhFzDQ6iMDz3L3GMZragCsNp8HqeTOZBi82glxiHs00V
- 4uRjtKt8e8ZoGMQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1522; i=luca@z3ntu.xyz;
+ h=from:subject:message-id; bh=6kJQExPvH5RZ9ofn4GgS9ik4SVqTvX/IERct3TODGKw=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkGfGO78PHCXVFhwGiIbUdwJM/wKfie8q7sNBGV
+ ulIMD/yNAWJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZBnxjgAKCRBy2EO4nU3X
+ VuSKEACoA/1wAi1hCrcByMyWts1Pv0rSXuAF9+4wPPYpQM3ms7m59z5MJQGuXe7PjdvQSKN6Bq+
+ LcK6RBcPRUKQaE1ljh59r2o3WpxnioTj97Y8Moo6qe3fgkKSMEnSgU3dOw+0DN99f85DTZrcNpT
+ 0LCavmTYlfGMdzA40kcw9wxi9O2qQfoNnIGapd9WmthaiWdOsaDTeOT33Ci5k+Yy3dZsQtII+JY
+ 92wM/yWIFbjVjdcRvDg2MgYw16nmZvSzBosJZfnR2LctB/WmePgqqlLfGPFaUGUVbgi26ZG3TnI
+ 266+td7XzS9MfhzDWdSE41uH3+aPgfvLgXTWXvyEU3/43ddsSNeRzgbHVuRxaTxvj3NvMU9R2ml
+ dp7tTCnC/k+e0l8jpYZvFHmNi3NotBW9KQUHG9IQjj1vzVMC+R9XWjP5HMzkf+d0CUqqbzb7EBQ
+ unnaqAqtnTfdASRtRPm4V0ewBjhpv/oaAJkmFRPedr9bpEsbbWa/PB+s9yaKE/pAzSpnEsdZ7e7
+ 8ZryWlkJSibQYa8hZx87VgLmLoJWtmrUnBLaMMUZmyvYUAInHGKx6vKnEAsn9lD4N+1Y/RTb3iY
+ C1/ZH2/eAqK4e9PTlIGUs92EU1u1eMksgV+vr3STzQM2sQPlkCtZdC+5LaFm5G25DqsgCsfWabD
+ +4823cYwGpAxa9w==
 X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
  fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In some setups XSHUTDOWN is connected to DOVDD when it's unused,
-therefore treat the reset gpio as optional.
+With the upcoming conversion of ov2685 to dt-schema let's complete the
+example so validation succeeds. At the same time fix the indentation of
+the port node in this example.
 
-Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
- drivers/media/i2c/ov2685.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../devicetree/bindings/media/rockchip-isp1.yaml      | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/i2c/ov2685.c b/drivers/media/i2c/ov2685.c
-index fdf3e06133302..f119a93e7c647 100644
---- a/drivers/media/i2c/ov2685.c
-+++ b/drivers/media/i2c/ov2685.c
-@@ -807,7 +807,7 @@ static int ov2685_probe(struct i2c_client *client)
- 	if (clk_get_rate(ov2685->xvclk) != OV2685_XVCLK_FREQ)
- 		dev_warn(dev, "xvclk mismatched, modes are based on 24MHz\n");
+diff --git a/Documentation/devicetree/bindings/media/rockchip-isp1.yaml b/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
+index b3661d7d43572..0bad7e6401486 100644
+--- a/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
++++ b/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
+@@ -212,12 +212,19 @@ examples:
+                 compatible = "ovti,ov2685";
+                 reg = <0x3c>;
  
--	ov2685->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
-+	ov2685->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
- 	if (IS_ERR(ov2685->reset_gpio)) {
- 		dev_err(dev, "Failed to get reset-gpios\n");
- 		return -EINVAL;
+-                  port {
+-                      ucam_out: endpoint {
+-                          remote-endpoint = <&mipi_in_ucam>;
+-                          data-lanes = <1>;
+-                      };
+-                  };
++                clocks = <&cru SCLK_TESTCLKOUT1>;
++                clock-names = "xvclk";
++
++                avdd-supply = <&pp2800_cam>;
++                dovdd-supply = <&pp1800>;
++                dvdd-supply = <&pp1800>;
++
++                port {
++                    ucam_out: endpoint {
++                        remote-endpoint = <&mipi_in_ucam>;
++                        data-lanes = <1>;
++                    };
++                };
+             };
+         };
+     };
 
 -- 
 2.40.0
