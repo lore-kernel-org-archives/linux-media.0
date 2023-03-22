@@ -2,48 +2,44 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06084C761A6
-	for <linux-media@archiver.kernel.org>; Wed, 22 Mar 2023 09:46:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 998F2C6FD1F
+	for <linux-media@archiver.kernel.org>; Wed, 22 Mar 2023 09:46:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbjCVJqh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Mar 2023 05:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53072 "EHLO
+        id S229800AbjCVJqn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Mar 2023 05:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbjCVJqe (ORCPT
+        with ESMTP id S231193AbjCVJqg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Mar 2023 05:46:34 -0400
+        Wed, 22 Mar 2023 05:46:36 -0400
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B0095DCB2;
-        Wed, 22 Mar 2023 02:46:33 -0700 (PDT)
-X-UUID: 6ade84a2c89611eda9a90f0bb45854f4-20230322
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FA05DED7;
+        Wed, 22 Mar 2023 02:46:34 -0700 (PDT)
+X-UUID: 69c4c93cc89611eda9a90f0bb45854f4-20230322
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=US96CU8gwOlQDNGnB1czPTrVjQZwc8zoh0dPgirX9Jo=;
-        b=lB445nTnCanSQQMflsKKhjjN1c4h49BsglPjE1GcuwmiIYO3XdqLkUOqHFeT+wLU3TOOErH6mX3bAPAo+8bID8xf3AdtzzgE5MtBkA+alTC8lxHkiMIYKqvyKRZv+6WErpFtzARO1x4DAI9CEPJXhd6CHkMPnHxJtPvws9XNq7k=;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=m42OJ7a/VMevSJv4HQdQBs5Cmygc6KpbnLdUdu2CGrA=;
+        b=mpgn0Kt37rq+qs6xTPyUnkJVCA0Nqk8jThVgZfYC+DQkqw3X4C+N5zxA7KzGy/xdyrFGKwtdHRvGyWCtwCIA2bea9oXtBii2GR/LuTmypQEb8H+ufJCZYtW4mI5f40m+MGqIY6v9pwRv/2JlD9JuS4QABs/1cLnsmv4+l/IJuQY=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:8b089333-8413-4f80-bb6f-3c91fdc53af2,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:90
-X-CID-INFO: VERSION:1.1.22,REQID:8b089333-8413-4f80-bb6f-3c91fdc53af2,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:90
-X-CID-META: VersionHash:120426c,CLOUDID:1e8005b4-beed-4dfc-bd9c-e1b22fa6ccc4,B
-        ulkID:230322174629W1R8T42K,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,CO
-        L:0,OSI:0,OSA:0,AV:0
+X-CID-O-INFO: VERSION:1.1.22,REQID:955e9927-11d8-4b3c-8d8d-070a7b55fdfa,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:120426c,CLOUDID:c91693f6-ddba-41c3-91d9-10eeade8eac7,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
 X-CID-BVR: 0,NGT
 X-CID-BAS: 0,NGT,0,_
-X-UUID: 6ade84a2c89611eda9a90f0bb45854f4-20230322
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+X-UUID: 69c4c93cc89611eda9a90f0bb45854f4-20230322
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 427927871; Wed, 22 Mar 2023 17:46:28 +0800
+        with ESMTP id 1050751798; Wed, 22 Mar 2023 17:46:26 +0800
 Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Wed, 22 Mar 2023 17:46:26 +0800
+ 15.2.1118.25; Wed, 22 Mar 2023 17:46:24 +0800
 Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
  mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Wed, 22 Mar 2023 17:46:26 +0800
+ 15.2.1118.25 via Frontend Transport; Wed, 22 Mar 2023 17:46:24 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Chen-Yu Tsai <wenst@chromium.org>,
@@ -64,9 +60,9 @@ CC:     Matthias Brugger <matthias.bgg@gmail.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v2,7/7] media: mediatek: vcodec: Add encode to support dbgfs
-Date:   Wed, 22 Mar 2023 17:46:17 +0800
-Message-ID: <20230322094617.19410-8-yunfei.dong@mediatek.com>
+Subject: [PATCH v2,5/7] media: mediatek: vcodec: Get get each instance format type
+Date:   Wed, 22 Mar 2023 17:46:15 +0800
+Message-ID: <20230322094617.19410-6-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230322094617.19410-1-yunfei.dong@mediatek.com>
 References: <20230322094617.19410-1-yunfei.dong@mediatek.com>
@@ -78,33 +74,100 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add encode to support dbgfs.
+Adding echo command to get capture and output queue format
+type:'echo -format > vdec'
 
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c | 2 ++
- 1 file changed, 2 insertions(+)
+ .../mediatek/vcodec/mtk_vcodec_dbgfs.c        | 48 +++++++++++++++++++
+ .../mediatek/vcodec/mtk_vcodec_dbgfs.h        |  1 +
+ 2 files changed, 49 insertions(+)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-index 9095186d5495..6961f66b5693 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-@@ -353,6 +353,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 		goto err_enc_reg;
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
+index 19a1dc068efd..1b1b4301a83d 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
+@@ -10,6 +10,48 @@
+ #include "mtk_vcodec_drv.h"
+ #include "mtk_vcodec_util.h"
+ 
++static void mtk_vdec_dbgfs_get_format_type(struct mtk_vcodec_ctx *ctx, char *buf,
++					   int *used, int total)
++{
++	int curr_len;
++
++	switch (ctx->current_codec) {
++	case V4L2_PIX_FMT_H264_SLICE:
++		curr_len = snprintf(buf + *used, total - *used,
++				    "\toutput format: h264 slice\n");
++		break;
++	case V4L2_PIX_FMT_VP8_FRAME:
++		curr_len = snprintf(buf + *used, total - *used,
++				    "\toutput format: vp8 slice\n");
++		break;
++	case V4L2_PIX_FMT_VP9_FRAME:
++		curr_len = snprintf(buf + *used, total - *used,
++				    "\toutput format: vp9 slice\n");
++		break;
++	default:
++		curr_len = snprintf(buf + *used, total - *used,
++				    "\tunsupported output format: 0x%x\n",
++				    ctx->current_codec);
++	}
++	*used += curr_len;
++
++	switch (ctx->capture_fourcc) {
++	case V4L2_PIX_FMT_MM21:
++		curr_len = snprintf(buf + *used, total - *used,
++				    "\tcapture format MM21\n");
++		break;
++	case V4L2_PIX_FMT_MT21C:
++		curr_len = snprintf(buf + *used, total - *used,
++				    "\tcapture format MT21C\n");
++		break;
++	default:
++		curr_len = snprintf(buf + *used, total - *used,
++				    "\tunsupported capture format: 0x%x\n",
++				    ctx->capture_fourcc);
++	}
++	*used += curr_len;
++}
++
+ static ssize_t mtk_vdec_dbgfs_write(struct file *filp, const char __user *ubuf,
+ 				    size_t count, loff_t *ppos)
+ {
+@@ -45,6 +87,9 @@ static ssize_t mtk_vdec_dbgfs_read(struct file *filp, char __user *ubuf,
+ 	if (strstr(dbgfs->dbgfs_buf, "-picinfo"))
+ 		dbgfs_index[MTK_VDEC_DBGFS_PICINFO] = true;
+ 
++	if (strstr(dbgfs->dbgfs_buf, "-format"))
++		dbgfs_index[MTK_VDEC_DBGFS_FORMAT] = true;
++
+ 	mutex_lock(&dbgfs->dbgfs_lock);
+ 	list_for_each_entry(dbgfs_inst, &dbgfs->dbgfs_head, node) {
+ 		ctx = dbgfs_inst->vcodec_ctx;
+@@ -60,6 +105,9 @@ static ssize_t mtk_vdec_dbgfs_read(struct file *filp, char __user *ubuf,
+ 					    ctx->picinfo.buf_w, ctx->picinfo.buf_h);
+ 			used_len += curr_len;
+ 		}
++
++		if (dbgfs_index[MTK_VDEC_DBGFS_FORMAT])
++			mtk_vdec_dbgfs_get_format_type(ctx, buf, &used_len, total_len);
  	}
+ 	mutex_unlock(&dbgfs->dbgfs_lock);
  
-+	mtk_vcodec_dbgfs_init(dev, true);
- 	mtk_v4l2_debug(0, "encoder %d registered as /dev/video%d",
- 		       dev->venc_pdata->core_id, vfd_enc->num);
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.h
+index de886d79ad01..9e586889717b 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.h
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.h
+@@ -15,6 +15,7 @@ struct mtk_vcodec_ctx;
+  */
+ enum mtk_vdec_dbgfs_log_index {
+ 	MTK_VDEC_DBGFS_PICINFO,
++	MTK_VDEC_DBGFS_FORMAT,
+ 	MTK_VDEC_DBGFS_MAX,
+ };
  
-@@ -463,6 +464,7 @@ static int mtk_vcodec_enc_remove(struct platform_device *pdev)
- 	if (dev->vfd_enc)
- 		video_unregister_device(dev->vfd_enc);
- 
-+	mtk_vcodec_dbgfs_deinit(dev);
- 	v4l2_device_unregister(&dev->v4l2_dev);
- 	pm_runtime_disable(dev->pm.dev);
- 	mtk_vcodec_fw_release(dev->fw_handler);
 -- 
 2.18.0
 
