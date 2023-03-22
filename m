@@ -2,28 +2,29 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FE13C6FD1F
-	for <linux-media@archiver.kernel.org>; Wed, 22 Mar 2023 09:36:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 755C4C6FD1C
+	for <linux-media@archiver.kernel.org>; Wed, 22 Mar 2023 09:36:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbjCVJgZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Mar 2023 05:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37136 "EHLO
+        id S230496AbjCVJg6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Mar 2023 05:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230461AbjCVJgX (ORCPT
+        with ESMTP id S230491AbjCVJg5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Mar 2023 05:36:23 -0400
+        Wed, 22 Mar 2023 05:36:57 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7251E5F529;
-        Wed, 22 Mar 2023 02:36:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F7F5FA69;
+        Wed, 22 Mar 2023 02:36:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1679476886;
+        s=mail; t=1679476888;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=tmRlYhR2FZnlnQJCWKDJjWOgiCSSl9pc0u4cFJUJ650=;
-        b=N+K9gfMWBsR4tD4u3Hl8NNLbTta8iPSN0ERcGscwa47kxMOGN0UFmiTqCEo0xcvmKjCd74
-        5QKS+X1c2izruTxdi+aR2/bxOzM5vWFMvFs5pp/4TwXtEn6OYJKWv7KKZgoXYHILsy+BHa
-        2AW0NIB2KkWH3t1e96o1srWamY7k2XM=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CN+sVrd+5zFw4phF+tfY1VTRoiHERXU6QZdwnYlGtLk=;
+        b=290ybhb/nQSzlWwiqepHlmfRl6bBQAeQpsu2kCX6juwdFufQnTL2q9cWMSt3BFfqDHY8C/
+        YBuHTnA/oFffaBiMc0xDnycFtNmmDF5gB1zoXuIyV3EXGi4mHcg5sJ335CVRlVNFYq5f7t
+        ko18FMhNgLfOeOQTzPqtKDHEyqvOl1o=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sumit Semwal <sumit.semwal@linaro.org>,
@@ -33,44 +34,104 @@ Cc:     michael.hennerich@analog.com, nuno.sa@analog.com,
         linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linaro-mm-sig@lists.linaro.org,
         Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 0/3] usb: gadget: functionfs: DMABUF import interface
-Date:   Wed, 22 Mar 2023 10:21:15 +0100
-Message-Id: <20230322092118.9213-1-paul@crapouillou.net>
+Subject: [PATCH v2 2/3] usb: gadget: functionfs: Factorize wait-for-endpoint code
+Date:   Wed, 22 Mar 2023 10:21:17 +0100
+Message-Id: <20230322092118.9213-3-paul@crapouillou.net>
+In-Reply-To: <20230322092118.9213-1-paul@crapouillou.net>
+References: <20230322092118.9213-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+This exact same code was duplicated in two different places.
 
-This small patchset adds three new IOCTLs that can be used to attach,
-detach, or transfer from/to a DMABUF object.
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ drivers/usb/gadget/function/f_fs.c | 48 +++++++++++++++++-------------
+ 1 file changed, 27 insertions(+), 21 deletions(-)
 
-Changes since v1:
-- patch [2/3] is new. I had to reuse a piece of code that was already
-  duplicated in the driver, so I factorized the code.
-- Make ffs_dma_resv_lock() static
-- Add MODULE_IMPORT_NS(DMA_BUF);
-- The attach/detach functions are now performed without locking the
-  eps_lock spinlock. The transfer function starts with the spinlock
-  unlocked, then locks it before allocating and queueing the USB
-  transfer.
-
-Cheers,
--Paul
-
-Paul Cercueil (3):
-  usb: gadget: Support already-mapped DMA SGs
-  usb: gadget: functionfs: Factorize wait-for-endpoint code
-  usb: gadget: functionfs: Add DMABUF import interface
-
- drivers/usb/gadget/function/f_fs.c  | 467 ++++++++++++++++++++++++++--
- drivers/usb/gadget/udc/core.c       |   7 +-
- include/linux/usb/gadget.h          |   2 +
- include/uapi/linux/usb/functionfs.h |  14 +-
- 4 files changed, 468 insertions(+), 22 deletions(-)
-
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index ddfc537c7526..8da64f0fdef0 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -947,31 +947,44 @@ static ssize_t __ffs_epfile_read_data(struct ffs_epfile *epfile,
+ 	return ret;
+ }
+ 
+-static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
++static struct ffs_ep *ffs_epfile_wait_ep(struct file *file)
+ {
+ 	struct ffs_epfile *epfile = file->private_data;
+-	struct usb_request *req;
+ 	struct ffs_ep *ep;
+-	char *data = NULL;
+-	ssize_t ret, data_len = -EINVAL;
+-	int halt;
+-
+-	/* Are we still active? */
+-	if (WARN_ON(epfile->ffs->state != FFS_ACTIVE))
+-		return -ENODEV;
++	int ret;
+ 
+ 	/* Wait for endpoint to be enabled */
+ 	ep = epfile->ep;
+ 	if (!ep) {
+ 		if (file->f_flags & O_NONBLOCK)
+-			return -EAGAIN;
++			return ERR_PTR(-EAGAIN);
+ 
+ 		ret = wait_event_interruptible(
+ 				epfile->ffs->wait, (ep = epfile->ep));
+ 		if (ret)
+-			return -EINTR;
++			return ERR_PTR(-EINTR);
+ 	}
+ 
++	return ep;
++}
++
++static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
++{
++	struct ffs_epfile *epfile = file->private_data;
++	struct usb_request *req;
++	struct ffs_ep *ep;
++	char *data = NULL;
++	ssize_t ret, data_len = -EINVAL;
++	int halt;
++
++	/* Are we still active? */
++	if (WARN_ON(epfile->ffs->state != FFS_ACTIVE))
++		return -ENODEV;
++
++	ep = ffs_epfile_wait_ep(file);
++	if (IS_ERR(ep))
++		return PTR_ERR(ep);
++
+ 	/* Do we halt? */
+ 	halt = (!io_data->read == !epfile->in);
+ 	if (halt && epfile->isoc)
+@@ -1305,16 +1318,9 @@ static long ffs_epfile_ioctl(struct file *file, unsigned code,
+ 		return -ENODEV;
+ 
+ 	/* Wait for endpoint to be enabled */
+-	ep = epfile->ep;
+-	if (!ep) {
+-		if (file->f_flags & O_NONBLOCK)
+-			return -EAGAIN;
+-
+-		ret = wait_event_interruptible(
+-				epfile->ffs->wait, (ep = epfile->ep));
+-		if (ret)
+-			return -EINTR;
+-	}
++	ep = ffs_epfile_wait_ep(file);
++	if (IS_ERR(ep))
++		return PTR_ERR(ep);
+ 
+ 	spin_lock_irq(&epfile->ffs->eps_lock);
+ 
 -- 
 2.39.2
 
