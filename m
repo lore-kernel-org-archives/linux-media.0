@@ -2,90 +2,155 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60458C6FD1C
-	for <linux-media@archiver.kernel.org>; Wed, 22 Mar 2023 03:38:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 102CCC74A5B
+	for <linux-media@archiver.kernel.org>; Wed, 22 Mar 2023 05:13:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbjCVDiQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 21 Mar 2023 23:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49420 "EHLO
+        id S229667AbjCVFNt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Mar 2023 01:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbjCVDiN (ORCPT
+        with ESMTP id S229452AbjCVFNr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 21 Mar 2023 23:38:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49BC1632F
-        for <linux-media@vger.kernel.org>; Tue, 21 Mar 2023 20:38:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 639BAB81AF2
-        for <linux-media@vger.kernel.org>; Wed, 22 Mar 2023 03:38:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD181C433EF
-        for <linux-media@vger.kernel.org>; Wed, 22 Mar 2023 03:38:03 +0000 (UTC)
-Date:   Wed, 22 Mar 2023 04:38:01 +0100
-Message-ID: <96bf9232e64281eee1ad0fd5af3efc86.hverkuil@xs4all.nl>
-From:   "Hans Verkuil" <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
+        Wed, 22 Mar 2023 01:13:47 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2052.outbound.protection.outlook.com [40.107.20.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472E850712;
+        Tue, 21 Mar 2023 22:13:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=d/bZKmhiJMrs8WXJMfp/76PWnh/glgMcIJr6ky6y3lDUtDVC8Yjy2zSY//Uns0K3cPHR8aGlKp1p55CvTxXZu6iZxbRI4hY8JVYSCU/6+kx1Nga7hgSqm+UxwOMSSztqWLo7+t6NtP2v775Kazw6Mqe52WFOBGzyf7hPqJImAVA56F4PIM3POKg462zxfzCqkmT4xbyWPgRHO22a17VDPJFRCY+g2+HYZqv81Yjy8KcZPoiYRxwa56xHW5BSfw/Oh+OmqruQibMLFpPRJB/MjbM8BJLGUW+jWS6BoHMM2Q4UkARWnv8wySeEEG18iiazYSqgefGjarnkn1oserTTCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wDH1mR+VhMofVtQNpd6NYflG2LChnMqq8vRh2iszNHo=;
+ b=WXnrfhmGgfR11lZ29u01fTOh2+boh1Q3e3oR8viKxxLPQqGEHFECxEZHX0+CSnZ0EoBKQ2Z/foRSsFNeEnAtaxCL+gV96aiki7R9przRCWLxSHxr+cDxSp3mwWjsD/J+Od+chuQ6cYR1ymEKM7w0/PRXQlZx1nOb45hE14o08laBLUB3PGBhfH84n2LNwrrA9ev6nSWUvRegtHbwsdQLuhhEkLMPJVlsUbw3LESfucvxWNmOsI2HNuun0a+TP89eM1kfIHF9JJjku27etD1sPft5V9jRlBcbMAGyZwqMlEgDgVOn/p6k/FaVJ56hpaKplPEmkbOSPiJo4nyiYEnVEA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wDH1mR+VhMofVtQNpd6NYflG2LChnMqq8vRh2iszNHo=;
+ b=Ojm4Gf1grQvqw3pwsTv+A0Tex71NLmpbxY14w1j2ZnN10RJZ0O7ZuL8sT/87J1owkaN0BBMOMiZvxQaFUw4ePULaamOg1bgb+5XDte4QP9QntGYKvaejaOjF4a5A6Rf0L/AiGi7gWyBfnzKdFzlbbmsIQvQrgYTqJhw1wWiEeNY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
+ by AM9PR04MB8100.eurprd04.prod.outlook.com (2603:10a6:20b:3e3::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
+ 2023 05:13:43 +0000
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::89aa:9204:790d:e46b]) by AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::89aa:9204:790d:e46b%5]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
+ 05:13:42 +0000
+From:   Ming Qian <ming.qian@nxp.com>
+To:     mchehab@kernel.org, mirela.rabulea@oss.nxp.com,
+        hverkuil-cisco@xs4all.nl
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, xiahong.bao@nxp.com, linux-imx@nxp.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v5 00/10] media: imx-jpeg: Add support for 12 bit extended jpeg
+Date:   Wed, 22 Mar 2023 13:13:03 +0800
+Message-Id: <cover.1679461709.git.ming.qian@nxp.com>
+X-Mailer: git-send-email 2.38.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0021.apcprd02.prod.outlook.com
+ (2603:1096:4:1f4::14) To AM6PR04MB6341.eurprd04.prod.outlook.com
+ (2603:10a6:20b:d8::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6PR04MB6341:EE_|AM9PR04MB8100:EE_
+X-MS-Office365-Filtering-Correlation-Id: 717cf8da-5d9d-4f4a-7dde-08db2a943474
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yPvFmWlIT8EMpZM1X7Wk6MlDTzRFMucrtwhmbD3gvS2SC/S9QLT+z09BtJYr62otSmtKvfUb/DpA9xnjlq6fVfM2wbRHkYtOWcFiMLZlLp+BbIF7nt2W4CjGHWdlJBEsObf0MveEyPm4XvfR3xlbqFTCTW8Bhv91v9JwTO5HFUJhs2hwX7y8TZB+z96LNQWqA3n3etSEedsuEFt74fC1GY7stY6XlEx3q2O2zHAJ5EQmcj2ncOPVCItIHoxLqJEVPjQMKD1uX8x6zmxAFUWsT4S/JLM5+dUUzvnVyRhTSqKR4MbENR0J184gtKY+Obv5ihvZuY2V0qULW1JptRWWVCiuNl9HxE5IaNY7lsMqE99KqXgYtccwrBgNYN2V5oaPKpTyemby0831LB1SMLfjmLwYAnj7h0UEeHntJPb8P7uPzb0gea2gNgX9jpgNuHD6nMhB7au8ZkSk2S2FfZ0TjkKNhJhRtQblZlrxOYS2WU+YmqIMxo+L7BksRI179NyeFP12VrPoEEP8Txqdvx5r8v/ukpyCypL1F+Z5EtgO/SS/V7xphWhfKQZXCyLit8kYCUomdz49qX1hLhOlmLcfwFxEkLPNSBSIGBx3xAnUoE1Fp9eONJ9FmPnOAI/yzfgUXq/T9UumXcbaCx0FSwpB9vjiwKUCD6Dl4ymY/9tqGw0IrnV+WEsDV28FyhbDLRT90zhM6snJ0V05VewlewDMsA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(366004)(136003)(39860400002)(376002)(396003)(451199018)(6486002)(66556008)(41300700001)(52116002)(66476007)(7416002)(478600001)(66946007)(5660300002)(8936002)(8676002)(316002)(44832011)(4326008)(36756003)(86362001)(6506007)(6512007)(186003)(26005)(6666004)(2616005)(2906002)(38350700002)(38100700002)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yjj1C8xhzRrXKH6OcZhTSzqtMpDQqkmOqG6FHr9Jy0J+UN+gOSLAJKGyVzAg?=
+ =?us-ascii?Q?+pWB3KnFQP2ye59IFcXLSNgvkoWSiz20SFGFVcZ23YbNAINn0SjdC8s/Hdz7?=
+ =?us-ascii?Q?IyLGloD72JmfbAppAKGnxFH6QLpRoxEHIe/2GVVpu4vVAUAU/xfLBpazzp9a?=
+ =?us-ascii?Q?Tgi6kJWOF1WXndAt6wmCe8s19sUgUKE+hA+CY32A44npBvXoW2JmdOBuPxGU?=
+ =?us-ascii?Q?80uZAd248wDWAMd4kZlhN2fDiQY0129YZQe8cPphRKvogOWuOlGB1OGbZxZu?=
+ =?us-ascii?Q?8QpVtZW3b/rwH23Om77E8nDITGexQ0wuT4BE5z1nlUGG6jUDqbteeCSLGqkM?=
+ =?us-ascii?Q?TSEW1DGFokeTuUqxt8lofJFMcF9TA2ip4l13VpmYcBB7+Kn2UjCWPQwPLX10?=
+ =?us-ascii?Q?r6/QoTC49vl9CJIl6TuPypb0qBU1KgwueSO/nDGJEbGDP/TWz4DxFnPkeY0U?=
+ =?us-ascii?Q?I82x4te1vVw2tac6Kd8PYzt1uD0+mZLVue5ln/AEjl+Sm9vt6NDkR5n6p0IX?=
+ =?us-ascii?Q?7Xer7bTb4RU872xK+VrHk6143zKdERxDpSystsBkOHS+448PpromNrMjdd1r?=
+ =?us-ascii?Q?rPvS8sfwbfp27RNQUXQXZxhWxbabVjVAnd4IO7ChR4eg0hfFLYCOH2dxqkUE?=
+ =?us-ascii?Q?7YioWH0GFVmfqtYUi/cllmo/aNlk8pEspsbpmAvpKMtu7xjKUdpG6lCmtlKd?=
+ =?us-ascii?Q?MuTjaXsvyjZsdA7l8LgPRH+l3xhoawoaCfXQW/wNPZPHOA96ILNiObmKQevH?=
+ =?us-ascii?Q?WCn6jqPpktPPU/42EZxKX5cSllz5mTLqDFYxa8sDc8pOi2T63oVXljJ/ETP6?=
+ =?us-ascii?Q?DkiB2TediXVuSNNbdIwhJVWkPOA9zvbe0a8/HXCyUMwAkUGSnIfr6kYCW8Vg?=
+ =?us-ascii?Q?G8lZAEwMEdbqRN2gqqRUV5OFZZ+6+u9stkzFCR6aPFtikIbxJWMOu8JH1KRF?=
+ =?us-ascii?Q?95tJ7Hty6l+9CCeh6LO5AT8ZjaFMjBdMtqe5moLkwCj7R0fosUFQfzToKQuE?=
+ =?us-ascii?Q?ZDBF8r5+uvpbHMf/Xeqj4R94ra04AluqUh3jFSeO/3wysdL6JFaM2hwISi1t?=
+ =?us-ascii?Q?2MeCG9G5m1HI56Rybua4O9LRp0PetoatOuDfH8UBi6PmoXaWNai4Xjwe1JBr?=
+ =?us-ascii?Q?MyirQGfjPaqTH1Of+L3n8fr5TKJGTYnp11dUSmghnpdnZZJGP+2VjY3+Rssq?=
+ =?us-ascii?Q?VHSDqw66e1+MPnQXPEd3E6kOB0HYoRwCrs6tYoeoCUTe+MHpGFEdon/pnV6i?=
+ =?us-ascii?Q?IgI9envHt3GL4ZDvjVtTrsbnRhh74sRrbaC54JhuLYS+Zy+0/GWNkwY4Olad?=
+ =?us-ascii?Q?8bL5WXtEGVMWdAv8/72j05+o5uosCMAWSrBfUD3YUIyCsATU/Cpl3z0qIidK?=
+ =?us-ascii?Q?a4J/6wlKiDdOX/rapaWPXt9E3CJn7DWAzTy9uMQOk1gUjqBab21REUfsFNjT?=
+ =?us-ascii?Q?dAtbP6rq8OBe4svbEJobqE64/qAy6Z4G3ZS1+c3n2DoOqhZqDhuPv13Aw7T6?=
+ =?us-ascii?Q?D8njUeWj1CmD7dk5bl1DPCB5ZiTvXbpkvNC58avJhthCrvAl/+GC1eIkWGOV?=
+ =?us-ascii?Q?fvch6ElfqNmiX0ztFKl2QAcUKWQB7OBP4fCw2iff?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 717cf8da-5d9d-4f4a-7dde-08db2a943474
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 05:13:42.8508
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NwxsIm+fvibYCMVJiY7z0K/14S7lL8tufKw9960pAygzpQNTFO2edZH4u/nUB/nf9bXo6KHVLsfq+wyUuECYTw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8100
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+the imx8 jpeg codec support ISO/IEC 10918-1 Standard Baseline and
+Extended Sequential DCT modes.
+it can support 8-bit and 12-bit per color samples.
+Currently we only enable the 8-bit jpeg,
+and we can enable the 12-bit extended jpeg
+with the new defined 12 bit pixel format.
 
-Results of the daily build of media_tree:
+v5
+- fix some description typo according to Hans's comments
 
-date:			Wed Mar 22 03:00:07 CET 2023
-media-tree git hash:	71937240a472ee551ac8de0e7429b9d49884a388
-media_build git hash:	0fe857b86addf382f6fd383948bd7736a3201403
-v4l-utils git hash:	2432069e9786d995da627fccc88589ec690cc3e8
-edid-decode git hash:	2d44e1b01c7ed7d65b20ecdce62d354841832201
-gcc version:		i686-linux-gcc (GCC) 12.2.0
-sparse repo:            git://git.kernel.org/pub/scm/devel/sparse/sparse.git
-sparse version:		v0.6.4-39-gce1a6720-dirty
-smatch repo:            git://repo.or.cz/smatch.git
-smatch version:		v0.5.0-8298-gcfe12a9b-dirty
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 9bae39424e2044f88e6a830f423201c6d71c0a0d
-host hardware:		x86_64
-host os:		6.1.0-5-amd64
+v4
+- drop format yuyv64_12, use Y212 directly
 
-linux-git-sh: OK
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-stm32: OK
-linux-git-arm-pxa: OK
-linux-git-mips: OK
-linux-git-arm-multi: OK
-linux-git-powerpc64: OK
-linux-git-arm64: OK
-linux-git-i686: WARNINGS
-linux-git-x86_64: WARNINGS
-Check COMPILE_TEST: WARNINGS: VIDEOBUF_VMALLOC VIDEOBUF_DMA_CONTIG
-Check for strcpy/strncpy/strlcpy: OK
-apps: WARNINGS
-spec-git: OK
-virtme: OK: Final Summary: 3080, Succeeded: 3080, Failed: 0, Warnings: 0
-virtme-32: OK: Final Summary: 3193, Succeeded: 3193, Failed: 0, Warnings: 0
-sparse: WARNINGS
-smatch: WARNINGS
-kerneldoc: OK
+v3
+- correct the new 12-bit format naming according to Nicolas's comments
 
-Detailed results are available here:
+v2
+- correct the new 12-bit format naming according to Hans's comments
 
-https://hverkuil.home.xs4all.nl/logs/Wednesday.log
+Ming Qian (10):
+  media: Add P012 and P012M video format
+  media: Add Y012 video format
+  media: Add Y212 v4l2 format info
+  media: Add YUV48_12 video format
+  media: Add BGR48_12 video format
+  media: Add ABGR64_12 video format
+  media: imx-jpeg: Refine the function mxc_jpeg_find_format
+  media: imx-jpeg: Clear slot next desc ptr if config error
+  media: imx-jpeg: Decoder add support for 12bit jpeg
+  media: imx-jpeg: Encoder add support for 12bit jpeg
 
-Detailed regression test results are available here:
+ .../media/v4l/pixfmt-packed-yuv.rst           |  28 ++
+ .../userspace-api/media/v4l/pixfmt-rgb.rst    |  42 +++
+ .../media/v4l/pixfmt-yuv-luma.rst             |  15 +
+ .../media/v4l/pixfmt-yuv-planar.rst           |  94 +++++
+ .../media/platform/nxp/imx-jpeg/mxc-jpeg-hw.c |  19 +-
+ .../media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h |   5 +-
+ .../media/platform/nxp/imx-jpeg/mxc-jpeg.c    | 326 ++++++++++++++++--
+ drivers/media/v4l2-core/v4l2-common.c         |   6 +
+ drivers/media/v4l2-core/v4l2-ioctl.c          |   6 +
+ include/uapi/linux/videodev2.h                |   8 +
+ 10 files changed, 523 insertions(+), 26 deletions(-)
 
-https://hverkuil.home.xs4all.nl/logs/Wednesday-test-media.log
-https://hverkuil.home.xs4all.nl/logs/Wednesday-test-media-32.log
-https://hverkuil.home.xs4all.nl/logs/Wednesday-test-media-dmesg.log
+-- 
+2.38.1
 
-Full logs are available here:
-
-https://hverkuil.home.xs4all.nl/logs/Wednesday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-https://hverkuil.home.xs4all.nl/spec/index.html
