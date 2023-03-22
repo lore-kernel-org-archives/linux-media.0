@@ -2,133 +2,105 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3BBEC6FD1F
-	for <linux-media@archiver.kernel.org>; Wed, 22 Mar 2023 09:37:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15FE0C6FD1C
+	for <linux-media@archiver.kernel.org>; Wed, 22 Mar 2023 09:37:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231124AbjCVJhL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Mar 2023 05:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38982 "EHLO
+        id S231157AbjCVJhP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Mar 2023 05:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbjCVJhI (ORCPT
+        with ESMTP id S231137AbjCVJhM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Mar 2023 05:37:08 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0F25C110;
-        Wed, 22 Mar 2023 02:36:51 -0700 (PDT)
-Received: from [IPV6:2a01:e0a:120:3210:cd0d:1462:ffab:ab3a] (unknown [IPv6:2a01:e0a:120:3210:cd0d:1462:ffab:ab3a])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0FB7566003AE;
-        Wed, 22 Mar 2023 09:36:50 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679477810;
-        bh=PG6CX5ajqtdLi2tzLr2luOtl3CwHO03O+WLnE2aRKAw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lCP+okL1HpozS00eimFUyuYxd4HkDX0N6Bt75CbT7z5LnCZHxqXlEfTWHK56NJOF8
-         ptnN6IFaQFwWGCZysac0wJ2wfoHX5mMmGvw3ZCfCYxFvdfvdt1e2DItZ/2IxcishQn
-         65d/SIqvad1YHJWySE2W8pIuDOS1HvuUwVVcNoZ2HvUQe3k+8awhw6ZLw3li29Qn0a
-         kze1mDH6SI4qHQ9ounD46I5RAbU4ZEYYgxnI30HPf/r0dSzIHvqGkejiVCuVCBLmHi
-         gveFPCKOTMlT+GA9pz3jbprSIYyni/ocKC9WzoiVxpCjQ+imuUQTvxEvI3ZrO9iv2M
-         j1YwLxCp7CTOQ==
-Message-ID: <5d5c8c7b-b926-8397-7994-623ac9b37e83@collabora.com>
-Date:   Wed, 22 Mar 2023 10:36:47 +0100
+        Wed, 22 Mar 2023 05:37:12 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65625F202;
+        Wed, 22 Mar 2023 02:37:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1679476887;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jxfNorIALSXTIcdSKIDH829B6vo4dZmRww3AUKQcurM=;
+        b=nY11iy8fR6a2aO+VbjSDeYST0gxDZ1H3hICGOlxr1xoSatxZjWgjvB/vOm6EOOTffEXXW6
+        1HJCf1NwDmxoUNOG207QaX8dJ1ezKV+dUj+GpVSIt6RdmulX3Xauvj2ny0Bs4YqNt5iGil
+        Jx0mM2Oaw+GfvIAXkLkO0opvKA+tTiY=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     michael.hennerich@analog.com, nuno.sa@analog.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH v2 1/3] usb: gadget: Support already-mapped DMA SGs
+Date:   Wed, 22 Mar 2023 10:21:16 +0100
+Message-Id: <20230322092118.9213-2-paul@crapouillou.net>
+In-Reply-To: <20230322092118.9213-1-paul@crapouillou.net>
+References: <20230322092118.9213-1-paul@crapouillou.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] media: hantro: HEVC: Fix exception handling in
- tile_buffer_reallocate()
-Content-Language: en-US
-To:     Markus Elfring <Markus.Elfring@web.de>,
-        kernel-janitors@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        Adrian Ratiu <adrian.ratiu@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     cocci@inria.fr, LKML <linux-kernel@vger.kernel.org>
-References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
- <e3aaeecf-8e74-2e74-c58a-d80e153e98f9@web.de>
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <e3aaeecf-8e74-2e74-c58a-d80e153e98f9@web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Markus,
+Add a new 'sg_was_mapped' field to the struct usb_request. This field
+can be used to indicate that the scatterlist associated to the USB
+transfer has already been mapped into the DMA space, and it does not
+have to be done internally.
 
-Thanks for your patch,
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ drivers/usb/gadget/udc/core.c | 7 ++++++-
+ include/linux/usb/gadget.h    | 2 ++
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-Le 20/03/2023 à 19:43, Markus Elfring a écrit :
-> Date: Mon, 20 Mar 2023 19:13:20 +0100
->
-> The label “err_free_tile_buffers” was used to jump to another pointer
-> check despite of the detail in the implementation of the function
-> “tile_buffer_reallocate” that it was determined already that
-> a corresponding variable contained a null pointer because of a failed
-> function call “dma_alloc_coherent”.
->
-> * Thus use an additional label instead.
->
-> * Delete a redundant check.
->
->
-> This issue was detected by using the Coccinelle software.
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index 23b0629a8774..5f2c4933769d 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -829,6 +829,11 @@ int usb_gadget_map_request_by_dev(struct device *dev,
+ 	if (req->length == 0)
+ 		return 0;
+ 
++	if (req->sg_was_mapped) {
++		req->num_mapped_sgs = req->num_sgs;
++		return 0;
++	}
++
+ 	if (req->num_sgs) {
+ 		int     mapped;
+ 
+@@ -874,7 +879,7 @@ EXPORT_SYMBOL_GPL(usb_gadget_map_request);
+ void usb_gadget_unmap_request_by_dev(struct device *dev,
+ 		struct usb_request *req, int is_in)
+ {
+-	if (req->length == 0)
++	if (req->length == 0 || req->sg_was_mapped)
+ 		return;
+ 
+ 	if (req->num_mapped_sgs) {
+diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
+index 00750f7020f3..9dd829b8974a 100644
+--- a/include/linux/usb/gadget.h
++++ b/include/linux/usb/gadget.h
+@@ -52,6 +52,7 @@ struct usb_ep;
+  * @short_not_ok: When reading data, makes short packets be
+  *     treated as errors (queue stops advancing till cleanup).
+  * @dma_mapped: Indicates if request has been mapped to DMA (internal)
++ * @sg_was_mapped: Set if the scatterlist has been mapped before the request
+  * @complete: Function called when request completes, so this request and
+  *	its buffer may be re-used.  The function will always be called with
+  *	interrupts disabled, and it must not sleep.
+@@ -111,6 +112,7 @@ struct usb_request {
+ 	unsigned		zero:1;
+ 	unsigned		short_not_ok:1;
+ 	unsigned		dma_mapped:1;
++	unsigned		sg_was_mapped:1;
+ 
+ 	void			(*complete)(struct usb_ep *ep,
+ 					struct usb_request *req);
+-- 
+2.39.2
 
-If you want to optimize the error path I think the best
-option is to return -ENOMEM when hevc_dec->tile_filter.cpu is NULL,
-remove
-	if (hevc_dec->tile_bsd.cpu)
-		dma_free_coherent(vpu->dev, hevc_dec->tile_bsd.size,
-				  hevc_dec->tile_bsd.cpu,
-				  hevc_dec->tile_bsd.dma);
-and reorder the two other dma_free to get something clean.
-
-Regards,
-Benjamin
-
->
-> Fixes: cb5dd5a0fa518dff14ff2b90837c3c8f98f4dd5c ("media: hantro: Introduce G2/HEVC decoder")
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-> ---
->   drivers/media/platform/verisilicon/hantro_hevc.c | 10 +++++-----
->   1 file changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/media/platform/verisilicon/hantro_hevc.c b/drivers/media/platform/verisilicon/hantro_hevc.c
-> index 9383fb7081f6..ac60df18efb7 100644
-> --- a/drivers/media/platform/verisilicon/hantro_hevc.c
-> +++ b/drivers/media/platform/verisilicon/hantro_hevc.c
-> @@ -109,7 +109,7 @@ static int tile_buffer_reallocate(struct hantro_ctx *ctx)
->                                  &hevc_dec->tile_filter.dma,
->                                  GFP_KERNEL);
->       if (!hevc_dec->tile_filter.cpu)
-> -        goto err_free_tile_buffers;
-> +        goto recheck_tile_sao_cpu;
->       hevc_dec->tile_filter.size = size;
->   
->       size = (VERT_SAO_RAM_SIZE * height64 * (num_tile_cols - 1) * ctx->bit_depth) / 8;
-> @@ -133,12 +133,12 @@ static int tile_buffer_reallocate(struct hantro_ctx *ctx)
->       return 0;
->   
->   err_free_tile_buffers:
-> -    if (hevc_dec->tile_filter.cpu)
-> -        dma_free_coherent(vpu->dev, hevc_dec->tile_filter.size,
-> -                  hevc_dec->tile_filter.cpu,
-> -                  hevc_dec->tile_filter.dma);
-> +    dma_free_coherent(vpu->dev, hevc_dec->tile_filter.size,
-> +              hevc_dec->tile_filter.cpu,
-> +              hevc_dec->tile_filter.dma);
->       hevc_dec->tile_filter.cpu = NULL;
->   
-> +recheck_tile_sao_cpu:
->       if (hevc_dec->tile_sao.cpu)
->           dma_free_coherent(vpu->dev, hevc_dec->tile_sao.size,
->                     hevc_dec->tile_sao.cpu,
-> --
-> 2.40.0
->
->
