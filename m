@@ -2,492 +2,604 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EB3AC6FD1F
-	for <linux-media@archiver.kernel.org>; Wed, 22 Mar 2023 09:32:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75030C6FD1F
+	for <linux-media@archiver.kernel.org>; Wed, 22 Mar 2023 09:36:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbjCVJcD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Mar 2023 05:32:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58562 "EHLO
+        id S230413AbjCVJgR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Mar 2023 05:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbjCVJcB (ORCPT
+        with ESMTP id S229764AbjCVJgQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Mar 2023 05:32:01 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1D85F23A
-        for <linux-media@vger.kernel.org>; Wed, 22 Mar 2023 02:31:56 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7C997BC1;
-        Wed, 22 Mar 2023 10:31:54 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1679477514;
-        bh=14T7oETQJC5W1ehtVpB5jntn8fM7Jgol7AnsSmA7C5s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oqacp5xclaAvJUvLD7AvuA/pF0sIrbbuR2Fa3zu56TFWlKkMJdSiPO9J3f6bLHzyo
-         3xn/y/sXJ9zcGvefZblXPB5a+3kwdA8/z6tXBCyKhiJBEPaX12q/+EKUvmsxYZyIQB
-         B7O2neSVgz3ldJCXh2ezVTOEGQDoKODdgSGlV/ZQ=
-Date:   Wed, 22 Mar 2023 11:32:01 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Subject: Re: [PATCH v2] media: v4l2-subdev: Add new ioctl for client
- capabilities
-Message-ID: <20230322093201.GL20234@pendragon.ideasonboard.com>
-References: <20230320115306.87425-1-tomi.valkeinen@ideasonboard.com>
- <6a2d08be-dfcd-1f1f-49ec-a378339c8691@xs4all.nl>
- <55edac06-3d16-bab8-007e-d432420ba019@ideasonboard.com>
+        Wed, 22 Mar 2023 05:36:16 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309155B5EB;
+        Wed, 22 Mar 2023 02:36:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1679476889;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=n9BZxja6OPxkoW/Pr/5zyuJjOVcEhn2qcfBGacm4biQ=;
+        b=wthtQQZtyOnhrcXoagzWxiGeNSkDkiK92F55Rvw8/gnwMW7uRURTfIP5aGPWyvLYOWKlKT
+        dZYDw5Plukkkb4jsnERKRMidJMCuT2Ntc2ub5gkjyLhdOFvbPh+Vd7MjOhcdMZM0N0ATi5
+        0YlnjWFPNv7irFugz8kjYJaIhIKGuFI=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     michael.hennerich@analog.com, nuno.sa@analog.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH v2 3/3] usb: gadget: functionfs: Add DMABUF import interface
+Date:   Wed, 22 Mar 2023 10:21:18 +0100
+Message-Id: <20230322092118.9213-4-paul@crapouillou.net>
+In-Reply-To: <20230322092118.9213-1-paul@crapouillou.net>
+References: <20230322092118.9213-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <55edac06-3d16-bab8-007e-d432420ba019@ideasonboard.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Tomi,
+This patch introduces three new ioctls. They all should be called on a
+data endpoint (ie. not ep0). They are:
 
-Thank you for the patch.
+- FUNCTIONFS_DMABUF_ATTACH, which takes the file descriptor of a DMABUF
+  object to attach to the endpoint.
 
-On Tue, Mar 21, 2023 at 11:25:04AM +0200, Tomi Valkeinen wrote:
-> On 21/03/2023 10:43, Hans Verkuil wrote:
-> > Hi Tomi,
-> > 
-> > Some review comments below:
-> > 
-> > On 20/03/2023 12:53, Tomi Valkeinen wrote:
-> >> Add new ioctls to set and get subdev client capabilities. Client in this
-> >> context means the userspace application which opens the subdev device
-> >> node.
+- FUNCTIONFS_DMABUF_DETACH, which takes the file descriptor of the
+  DMABUF to detach from the endpoint. Note that closing the endpoint's
+  file descriptor will automatically detach all attached DMABUFs.
 
-This should be updated based on the discussion below regarding who the
-"client" is.
+- FUNCTIONFS_DMABUF_TRANSFER, which requests a data transfer from / to
+  the given DMABUF. Its argument is a structure that packs the DMABUF's
+  file descriptor, the size in bytes to transfer (which should generally
+  be set to the size of the DMABUF), and a 'flags' field which is unused
+  for now.
+  Before this ioctl can be used, the related DMABUF must be attached
+  with FUNCTIONFS_DMABUF_ATTACH.
 
-> >> For now we only add a single flag, V4L2_SUBDEV_CLIENT_CAP_STREAMS, which
-> >> indicates that the client is streams-aware.
-> >>
-> >> The reason for needing such a flag is as follows:
-> >>
-> >> Many structs passed via ioctls, e.g. struct v4l2_subdev_format, contain
-> >> reserved fields (usually a single array field). These reserved fields
-> >> can be used to extend the ioctl. The userspace is required to zero the
-> >> reserved fields.
-> >>
-> >> We recently added a new 'stream' field to many of these structs, and the
-> >> space for the field was taken from these reserved arrays. The assumption
-> >> was that these new 'stream' fields are always initialized to zero if the
-> >> userspace does not use them. This was a mistake, as, as mentioned above,
-> >> the userspace is required to zero the _reserved_ fields. In other words,
-> >> there is no requirement to zero this new stream field, and if the
-> >> userspace doesn't use the field (which is the case for all userspace
-> >> applications at the moment), the field may contain random data.
-> >>
-> >> This shows that the way the reserved fields are defined in v4l2 is, in
-> >> my opinion, somewhat broken, but there is nothing to do about that.
+These three ioctls enable the FunctionFS code to transfer data between
+the USB stack and a DMABUF object, which can be provided by a driver
+from a completely different subsystem, in a zero-copy fashion.
 
-It's somewhat broken indeed, but for multiple reasons I think. The API
-specification mandates reserved fields to be zeroed, and that can be
-interpreted in different ways. The sane thing to do is to zero the whole
-structure first, which many applications do, and which we could argue is
-what the specification meant. We could also argue that zeroing reserved
-fields doesn't mean
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 
-	memset(foo.reserved, 0, sizeof(foo.reserved));
+---
+v2:
+- Make ffs_dma_resv_lock() static
+- Add MODULE_IMPORT_NS(DMA_BUF);
+- The attach/detach functions are now performed without locking the
+  eps_lock spinlock. The transfer function starts with the spinlock
+  unlocked, then locks it before allocating and queueing the USB
+  transfer.
+---
+ drivers/usb/gadget/function/f_fs.c  | 421 ++++++++++++++++++++++++++++
+ include/uapi/linux/usb/functionfs.h |  14 +-
+ 2 files changed, 434 insertions(+), 1 deletion(-)
 
-but instead means zeroing all the bytes that are marked as reserved in
-the version of the API that the application was compiled for. This is
-all irrelevant though: if an application that doesn't zero reserved
-fields in any way works today and breaks tomorrow, that's a regression,
-even if the application doesn't follow the API specification.
-
-Going forward I really think we need to stop adding reserved fields to
-ioctl structures, and instead extend the structures in a way that will
-change the ioctl value. The kernel will then be able to extract the
-structure size from the ioctl value, and handle backward and forward
-compatibility that way. This is what I plan to push for in review of all
-new ioctls.
-
-For extensions to existing ioctls, client capabilities are good, and
-they can possibly become useful for other purposes in the future, so I
-like this patch.
-
-> >> To fix this issue we need a way for the userspace to tell the kernel
-> >> that the userspace has indeed set the 'stream' field, and it's fine for
-> >> the kernel to access it. This is achieved with the new ioctl, which the
-> >> userspace should usually use right after opening the subdev device node.
-> >>
-> >> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> >> ---
-> >> Changes in v2:
-> >> - Addressed the review comments
-> >> - Adjusted V4L2_SUBDEV_CLIENT_CAP_STREAMS to only mean that the 'stream'
-> >>    fields are used by the userspace.
-> >>
-> >>   .../userspace-api/media/v4l/user-func.rst     |  1 +
-> >>   .../media/v4l/vidioc-subdev-g-client-cap.rst  | 74 +++++++++++++++++++
-> >>   drivers/media/v4l2-core/v4l2-subdev.c         | 63 ++++++++++++++++
-> >>   include/media/v4l2-subdev.h                   |  1 +
-> >>   include/uapi/linux/v4l2-subdev.h              | 21 ++++++
-> >>   5 files changed, 160 insertions(+)
-> >>   create mode 100644 Documentation/userspace-api/media/v4l/vidioc-subdev-g-client-cap.rst
-> >>
-> >> diff --git a/Documentation/userspace-api/media/v4l/user-func.rst b/Documentation/userspace-api/media/v4l/user-func.rst
-> >> index 228c1521f190..15ff0bf7bbe6 100644
-> >> --- a/Documentation/userspace-api/media/v4l/user-func.rst
-> >> +++ b/Documentation/userspace-api/media/v4l/user-func.rst
-> >> @@ -72,6 +72,7 @@ Function Reference
-> >>       vidioc-subdev-g-frame-interval
-> >>       vidioc-subdev-g-routing
-> >>       vidioc-subdev-g-selection
-> >> +    vidioc-subdev-g-client-cap
-> >>       vidioc-subdev-querycap
-> >>       vidioc-subscribe-event
-> >>       func-mmap
-> >> diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-client-cap.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-client-cap.rst
-> >> new file mode 100644
-> >> index 000000000000..0c4ff938f63d
-> >> --- /dev/null
-> >> +++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-client-cap.rst
-> >> @@ -0,0 +1,74 @@
-> >> +.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-> >> +.. c:namespace:: V4L
-> >> +
-> >> +.. _VIDIOC_SUBDEV_G_CLIENT_CAP:
-> >> +
-> >> +************************************************************
-> >> +ioctl VIDIOC_SUBDEV_G_CLIENT_CAP, VIDIOC_SUBDEV_S_CLIENT_CAP
-> >> +************************************************************
-> >> +
-> >> +Name
-> >> +====
-> >> +
-> >> +VIDIOC_SUBDEV_G_CLIENT_CAP - VIDIOC_SUBDEV_S_CLIENT_CAP - Get or set client
-> >> +capabilities.
-> >> +
-> >> +Synopsis
-> >> +========
-> >> +
-> >> +.. c:macro:: VIDIOC_SUBDEV_G_CLIENT_CAP
-> >> +
-> >> +``int ioctl(int fd, VIDIOC_SUBDEV_G_CLIENT_CAP, struct v4l2_subdev_client_capability *argp)``
-> >> +
-> >> +.. c:macro:: VIDIOC_SUBDEV_S_CLIENT_CAP
-> >> +
-> >> +``int ioctl(int fd, VIDIOC_SUBDEV_S_CLIENT_CAP, struct v4l2_subdev_client_capability *argp)``
-> >> +
-> >> +Arguments
-> >> +=========
-> >> +
-> >> +``fd``
-> >> +    File descriptor returned by :ref:`open() <func-open>`.
-> >> +
-> >> +``argp``
-> >> +    Pointer to struct :c:type:`v4l2_subdev_client_capability`.
-> >> +
-> >> +Description
-> >> +===========
-> >> +
-> >> +These ioctls are used to get and set the client (the application using the
-> >> +subdevice ioctls) capabilities. By default no client capabilities are set.
-> > 
-> > The client is not the application using the subdev ioctls, it is more specifically
-> > the *file handle*. If I open the subdev device twice, and set CAP_STREAMS on one,
-> > but not the other, then the first will use the 'stream' fields, and the second won't.
-> > 
-> > This is perfectly fine, but the documentation isn't clear on this important fact.
-> 
-> Hmm... I agree, it's not clear.
-> 
-> But I think the application is the client. It's the application that has 
-> the capability, or rather, the code that handles the things needed for 
-> the capability. The file handle is used to store the capability flags.
-> 
-> I need to think about better wording here. If I somehow try to use "file 
-> handle" as the client, it does sound kind of odd to me.
-
-Agreed. Maybe you can just add a sentence to state that capabilities are
-local to a file handle and not global for the process ? Conceptually
-it's easier to keep thinking about the client being an application.
-
-> >> +
-> >> +The purpose of the client capabilities are to inform the kernel of the behavior
-> >> +of the client, mainly related to maintaining compatibility with different
-> >> +kernel and userspace versions.
-> >> +
-> >> +The ``VIDIOC_SUBDEV_S_CLIENT_CAP`` will modify the struct
-> >> +:c:type:`v4l2_subdev_client_capability` to reflect the capabilities that were
-> >> +accepted. A common case for the kernel not accepting a capability is that the
-> >> +kernel is older than the headers the userspace uses, and thus the capability is
-> >> +unknown to the kernel.
-> >> +
-> >> +The ``VIDIOC_SUBDEV_S_CLIENT_CAP`` will replace all the previously set
-> >> +capabilities.
-
-I would swap those two paragraphs, to first describe what the ioctl
-does, and then give more details about how it also returns the actual
-capabilities. Or you could merge the two. Here's a proposal with misc
-improvements:
-
-
-The ``VIDIOC_SUBDEV_G_CLIENT_CAP`` ioctl returns the current client capabilities
-associated with the file handle ``fd``.
-
-The ``VIDIOC_SUBDEV_S_CLIENT_CAP`` ioctl sets client capabilities for the file
-handle ``fd``. The new capabilities fully replace the current capabilities, the
-ioctl can therefore also be used to remove capabilities that have previously
-been set.
-
-``VIDIOC_SUBDEV_S_CLIENT_CAP`` modifies the struct
-:c:type:`v4l2_subdev_client_capability` to reflect the capabilities that have
-been accepted. A common case for the kernel not accepting a capability is that
-the kernel is older than the headers the userspace uses, and thus the capability
-is unknown to the kernel.
-
-
-> >> +
-> >> +.. flat-table:: Client Capabilities
-> >> +    :header-rows:  1
-> >> +
-> >> +    * - Capability
-> >> +      - Description
-> >> +    * - ``V4L2_SUBDEV_CLIENT_CAP_STREAMS``
-> >> +      - The client is aware of streams. Setting this flag enables the use
-> >> +        of 'stream' fields (referring to the stream number) with various
-> >> +        ioctls. If this is not set (which is the default), the 'stream' fields
-> >> +        will be forced to 0 by the kernel.
-> >> +
-> >> +Return Value
-> >> +============
-> >> +
-> >> +On success 0 is returned, on error -1 and the ``errno`` variable is set
-> >> +appropriately. The generic error codes are described at the
-> >> +:ref:`Generic Error Codes <gen-errors>` chapter.
-> >> +
-> >> +ENOIOCTLCMD
-> >> +   The kernel does not support this ioctl.
-> >> diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-> >> index dff1d9be7841..9d47f4800ea8 100644
-> >> --- a/drivers/media/v4l2-core/v4l2-subdev.c
-> >> +++ b/drivers/media/v4l2-core/v4l2-subdev.c
-> >> @@ -498,8 +498,11 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
-> >>   	struct video_device *vdev = video_devdata(file);
-> >>   	struct v4l2_subdev *sd = vdev_to_v4l2_subdev(vdev);
-> >>   	struct v4l2_fh *vfh = file->private_data;
-> >> +	struct v4l2_subdev_fh *subdev_fh = to_v4l2_subdev_fh(vfh);
-> >>   	bool ro_subdev = test_bit(V4L2_FL_SUBDEV_RO_DEVNODE, &vdev->flags);
-> >>   	bool streams_subdev = sd->flags & V4L2_SUBDEV_FL_STREAMS;
-> >> +	bool client_supports_streams = subdev_fh->client_caps &
-> >> +				       V4L2_SUBDEV_CLIENT_CAP_STREAMS;
-> >>   	int rval;
-> >>   
-> >>   	switch (cmd) {
-> >> @@ -624,6 +627,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
-> >>   	case VIDIOC_SUBDEV_G_FMT: {
-> >>   		struct v4l2_subdev_format *format = arg;
-> >>   
-> >> +		if (!client_supports_streams)
-> >> +			format->stream = 0;
-> >> +
-> >>   		memset(format->reserved, 0, sizeof(format->reserved));
-> >>   		memset(format->format.reserved, 0, sizeof(format->format.reserved));
-> >>   		return v4l2_subdev_call(sd, pad, get_fmt, state, format);
-> >> @@ -635,6 +641,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
-> >>   		if (format->which != V4L2_SUBDEV_FORMAT_TRY && ro_subdev)
-> >>   			return -EPERM;
-> >>   
-> >> +		if (!client_supports_streams)
-> >> +			format->stream = 0;
-> >> +
-> >>   		memset(format->reserved, 0, sizeof(format->reserved));
-> >>   		memset(format->format.reserved, 0, sizeof(format->format.reserved));
-> >>   		return v4l2_subdev_call(sd, pad, set_fmt, state, format);
-> >> @@ -644,6 +653,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
-> >>   		struct v4l2_subdev_crop *crop = arg;
-> >>   		struct v4l2_subdev_selection sel;
-> >>   
-> >> +		if (!client_supports_streams)
-> >> +			crop->stream = 0;
-> >> +
-> >>   		memset(crop->reserved, 0, sizeof(crop->reserved));
-> >>   		memset(&sel, 0, sizeof(sel));
-> >>   		sel.which = crop->which;
-> >> @@ -665,6 +677,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
-> >>   		if (crop->which != V4L2_SUBDEV_FORMAT_TRY && ro_subdev)
-> >>   			return -EPERM;
-> >>   
-> >> +		if (!client_supports_streams)
-> >> +			crop->stream = 0;
-> >> +
-> >>   		memset(crop->reserved, 0, sizeof(crop->reserved));
-> >>   		memset(&sel, 0, sizeof(sel));
-> >>   		sel.which = crop->which;
-> >> @@ -683,6 +698,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
-> >>   	case VIDIOC_SUBDEV_ENUM_MBUS_CODE: {
-> >>   		struct v4l2_subdev_mbus_code_enum *code = arg;
-> >>   
-> >> +		if (!client_supports_streams)
-> >> +			code->stream = 0;
-> >> +
-> >>   		memset(code->reserved, 0, sizeof(code->reserved));
-> >>   		return v4l2_subdev_call(sd, pad, enum_mbus_code, state,
-> >>   					code);
-> >> @@ -691,6 +709,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
-> >>   	case VIDIOC_SUBDEV_ENUM_FRAME_SIZE: {
-> >>   		struct v4l2_subdev_frame_size_enum *fse = arg;
-> >>   
-> >> +		if (!client_supports_streams)
-> >> +			fse->stream = 0;
-> >> +
-> >>   		memset(fse->reserved, 0, sizeof(fse->reserved));
-> >>   		return v4l2_subdev_call(sd, pad, enum_frame_size, state,
-> >>   					fse);
-> >> @@ -699,6 +720,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
-> >>   	case VIDIOC_SUBDEV_G_FRAME_INTERVAL: {
-> >>   		struct v4l2_subdev_frame_interval *fi = arg;
-> >>   
-> >> +		if (!client_supports_streams)
-> >> +			fi->stream = 0;
-> >> +
-> >>   		memset(fi->reserved, 0, sizeof(fi->reserved));
-> >>   		return v4l2_subdev_call(sd, video, g_frame_interval, arg);
-> >>   	}
-> >> @@ -709,6 +733,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
-> >>   		if (ro_subdev)
-> >>   			return -EPERM;
-> >>   
-> >> +		if (!client_supports_streams)
-> >> +			fi->stream = 0;
-> >> +
-> >>   		memset(fi->reserved, 0, sizeof(fi->reserved));
-> >>   		return v4l2_subdev_call(sd, video, s_frame_interval, arg);
-> >>   	}
-> >> @@ -716,6 +743,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
-> >>   	case VIDIOC_SUBDEV_ENUM_FRAME_INTERVAL: {
-> >>   		struct v4l2_subdev_frame_interval_enum *fie = arg;
-> >>   
-> >> +		if (!client_supports_streams)
-> >> +			fie->stream = 0;
-> >> +
-> >>   		memset(fie->reserved, 0, sizeof(fie->reserved));
-> >>   		return v4l2_subdev_call(sd, pad, enum_frame_interval, state,
-> >>   					fie);
-> >> @@ -724,6 +754,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
-> >>   	case VIDIOC_SUBDEV_G_SELECTION: {
-> >>   		struct v4l2_subdev_selection *sel = arg;
-> >>   
-> >> +		if (!client_supports_streams)
-> >> +			sel->stream = 0;
-> >> +
-> >>   		memset(sel->reserved, 0, sizeof(sel->reserved));
-> >>   		return v4l2_subdev_call(
-> >>   			sd, pad, get_selection, state, sel);
-> >> @@ -735,6 +768,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
-> >>   		if (sel->which != V4L2_SUBDEV_FORMAT_TRY && ro_subdev)
-> >>   			return -EPERM;
-> >>   
-> >> +		if (!client_supports_streams)
-> >> +			sel->stream = 0;
-> >> +
-> >>   		memset(sel->reserved, 0, sizeof(sel->reserved));
-> >>   		return v4l2_subdev_call(
-> >>   			sd, pad, set_selection, state, sel);
-> >> @@ -876,6 +912,33 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
-> >>   					routing->which, &krouting);
-> >>   	}
-> >>   
-> >> +	case VIDIOC_SUBDEV_G_CLIENT_CAP: {
-> >> +		struct v4l2_subdev_client_capability *client_cap = arg;
-> >> +
-> >> +		client_cap->capabilities = subdev_fh->client_caps;
-> >> +
-> >> +		return 0;
-> >> +	}
-> >> +
-> >> +	case VIDIOC_SUBDEV_S_CLIENT_CAP: {
-> >> +		struct v4l2_subdev_client_capability *client_cap = arg;
-> >> +
-> >> +		/*
-> >> +		 * Clear V4L2_SUBDEV_CLIENT_CAP_STREAMS if streams API is not
-> >> +		 * enabled. Remove this when streams API is no longer
-> >> +		 * experimental.
-> >> +		 */
-> >> +		if (!v4l2_subdev_enable_streams_api)
-> >> +			client_cap->capabilities &= ~V4L2_SUBDEV_CLIENT_CAP_STREAMS;
-> >> +
-> >> +		/* Filter out unsupported capabilities */
-> >> +		client_cap->capabilities &= V4L2_SUBDEV_CLIENT_CAP_STREAMS;
-> >> +
-> >> +		subdev_fh->client_caps = client_cap->capabilities;
-> >> +
-> >> +		return 0;
-> >> +	}
-> >> +
-> >>   	default:
-> >>   		return v4l2_subdev_call(sd, core, ioctl, cmd, arg);
-> >>   	}
-> >> diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-> >> index 17773be4a4ee..b5bb5b802929 100644
-> >> --- a/include/media/v4l2-subdev.h
-> >> +++ b/include/media/v4l2-subdev.h
-> >> @@ -1121,6 +1121,7 @@ struct v4l2_subdev_fh {
-> >>   	struct module *owner;
-> >>   #if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
-> >>   	struct v4l2_subdev_state *state;
-> >> +	u64 client_caps;
-> >>   #endif
-> >>   };
-> >>   
-> >> diff --git a/include/uapi/linux/v4l2-subdev.h b/include/uapi/linux/v4l2-subdev.h
-> >> index 654d659de835..4a195b68f28f 100644
-> >> --- a/include/uapi/linux/v4l2-subdev.h
-> >> +++ b/include/uapi/linux/v4l2-subdev.h
-> >> @@ -233,6 +233,24 @@ struct v4l2_subdev_routing {
-> >>   	__u32 reserved[6];
-> >>   };
-> >>   
-> >> +/*
-> >> + * The client is aware of streams. Setting this flag enables the use of 'stream'
-> >> + * fields (referring to the stream number) with various ioctls. If this is not
-> >> + * set (which is the default), the 'stream' fields will be forced to 0 by the
-> >> + * kernel.
-> >> + */
-> >> + #define V4L2_SUBDEV_CLIENT_CAP_STREAMS		(1U << 0)
-> >> +
-> >> +/**
-> >> + * struct v4l2_subdev_client_capability - Capabilities of the client accessing
-> >> + *					  the subdev
-> >> + *
-> >> + * @capabilities: A bitmask of V4L2_SUBDEV_CLIENT_CAP_* flags.
-> >> + */
-> >> +struct v4l2_subdev_client_capability {
-> >> +	__u64 capabilities;
-> >> +};
-> >> +
-> >>   /* Backwards compatibility define --- to be removed */
-> >>   #define v4l2_subdev_edid v4l2_edid
-> >>   
-> >> @@ -250,6 +268,9 @@ struct v4l2_subdev_routing {
-> >>   #define VIDIOC_SUBDEV_S_SELECTION		_IOWR('V', 62, struct v4l2_subdev_selection)
-> >>   #define VIDIOC_SUBDEV_G_ROUTING			_IOWR('V', 38, struct v4l2_subdev_routing)
-> >>   #define VIDIOC_SUBDEV_S_ROUTING			_IOWR('V', 39, struct v4l2_subdev_routing)
-> >> +#define VIDIOC_SUBDEV_G_CLIENT_CAP		_IOR('V',  101, struct v4l2_subdev_client_capability)
-> >> +#define VIDIOC_SUBDEV_S_CLIENT_CAP		_IOWR('V',  102, struct v4l2_subdev_client_capability)
-> > 
-> > Can't we just use __u64 as the ioctl type? Do we need to wrap it inside a struct?
-> 
-> We could, but then we need to pass a pointer to the u64 so that the 
-> kernel can modify it (for VIDIOC_SUBDEV_S_CLIENT_CAP). I personally find 
-> it more clear from the perspective of a user to use a struct here, 
-> instead of passing a generic u64 pointer. Also, all the other ioctls use 
-> a struct.
-> 
-> So, I'm fine either way, but personally I like this one.
-
-I also prefer using a structure.
-
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 8da64f0fdef0..f5c609c83b36 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -15,6 +15,9 @@
+ /* #define VERBOSE_DEBUG */
+ 
+ #include <linux/blkdev.h>
++#include <linux/dma-buf.h>
++#include <linux/dma-fence.h>
++#include <linux/dma-resv.h>
+ #include <linux/pagemap.h>
+ #include <linux/export.h>
+ #include <linux/fs_parser.h>
+@@ -43,6 +46,8 @@
+ 
+ #define FUNCTIONFS_MAGIC	0xa647361 /* Chosen by a honest dice roll ;) */
+ 
++MODULE_IMPORT_NS(DMA_BUF);
++
+ /* Reference counter handling */
+ static void ffs_data_get(struct ffs_data *ffs);
+ static void ffs_data_put(struct ffs_data *ffs);
+@@ -124,6 +129,26 @@ struct ffs_ep {
+ 	u8				num;
+ };
+ 
++struct ffs_dmabuf_priv {
++	struct list_head entry;
++	struct kref ref;
++	struct dma_buf_attachment *attach;
++	spinlock_t lock;
++	u64 context;
++};
++
++struct ffs_dma_fence {
++	struct dma_fence base;
++	struct ffs_dmabuf_priv *priv;
++	struct sg_table *sgt;
++	enum dma_data_direction dir;
++};
++
++static inline struct ffs_dma_fence *to_ffs_dma_fence(struct dma_fence *fence)
++{
++	return container_of(fence, struct ffs_dma_fence, base);
++}
++
+ struct ffs_epfile {
+ 	/* Protects ep->ep and ep->req. */
+ 	struct mutex			mutex;
+@@ -197,6 +222,8 @@ struct ffs_epfile {
+ 	unsigned char			isoc;	/* P: ffs->eps_lock */
+ 
+ 	unsigned char			_pad;
++
++	struct list_head		dmabufs;
+ };
+ 
+ struct ffs_buffer {
+@@ -1292,19 +1319,374 @@ static ssize_t ffs_epfile_read_iter(struct kiocb *kiocb, struct iov_iter *to)
+ 	return res;
+ }
+ 
++static void ffs_dmabuf_release(struct kref *ref)
++{
++	struct ffs_dmabuf_priv *priv = container_of(ref, struct ffs_dmabuf_priv, ref);
++	struct dma_buf_attachment *attach = priv->attach;
++	struct dma_buf *dmabuf = attach->dmabuf;
++
++	pr_debug("FFS DMABUF release\n");
++	dma_buf_detach(attach->dmabuf, attach);
++	dma_buf_put(dmabuf);
++
++	list_del(&priv->entry);
++	kfree(priv);
++}
++
++static void ffs_dmabuf_get(struct dma_buf_attachment *attach)
++{
++	struct ffs_dmabuf_priv *priv = attach->importer_priv;
++
++	kref_get(&priv->ref);
++}
++
++static void ffs_dmabuf_put(struct dma_buf_attachment *attach)
++{
++	struct ffs_dmabuf_priv *priv = attach->importer_priv;
++
++	kref_put(&priv->ref, ffs_dmabuf_release);
++}
++
+ static int
+ ffs_epfile_release(struct inode *inode, struct file *file)
+ {
+ 	struct ffs_epfile *epfile = inode->i_private;
++	struct ffs_dmabuf_priv *priv, *tmp;
+ 
+ 	ENTER();
+ 
++	/* Close all attached DMABUFs */
++	list_for_each_entry_safe(priv, tmp, &epfile->dmabufs, entry) {
++		ffs_dmabuf_put(priv->attach);
++	}
++
+ 	__ffs_epfile_read_buffer_free(epfile);
+ 	ffs_data_closed(epfile->ffs);
+ 
+ 	return 0;
+ }
+ 
++static void ffs_dmabuf_signal_done(struct ffs_dma_fence *dma_fence, int ret)
++{
++	struct ffs_dmabuf_priv *priv = dma_fence->priv;
++	struct dma_fence *fence = &dma_fence->base;
++
++	dma_fence_get(fence);
++	fence->error = ret;
++	dma_fence_signal(fence);
++
++	dma_buf_unmap_attachment(priv->attach, dma_fence->sgt, dma_fence->dir);
++	dma_fence_put(fence);
++	ffs_dmabuf_put(priv->attach);
++}
++
++static void ffs_epfile_dmabuf_io_complete(struct usb_ep *ep,
++					  struct usb_request *req)
++{
++	ENTER();
++
++	pr_debug("FFS: DMABUF transfer complete, status=%d\n", req->status);
++	ffs_dmabuf_signal_done(req->context, req->status);
++	usb_ep_free_request(ep, req);
++}
++
++static const char *ffs_dmabuf_get_driver_name(struct dma_fence *fence)
++{
++	return "functionfs";
++}
++
++static const char *ffs_dmabuf_get_timeline_name(struct dma_fence *fence)
++{
++	return "";
++}
++
++static void ffs_dmabuf_fence_release(struct dma_fence *fence)
++{
++	struct ffs_dma_fence *dma_fence = to_ffs_dma_fence(fence);
++
++	kfree(dma_fence);
++}
++
++static const struct dma_fence_ops ffs_dmabuf_fence_ops = {
++	.get_driver_name	= ffs_dmabuf_get_driver_name,
++	.get_timeline_name	= ffs_dmabuf_get_timeline_name,
++	.release		= ffs_dmabuf_fence_release,
++};
++
++static int ffs_dma_resv_lock(struct dma_buf *dmabuf, bool nonblock)
++{
++	int ret;
++
++	ret = dma_resv_lock_interruptible(dmabuf->resv, NULL);
++	if (ret) {
++		if (ret != -EDEADLK)
++			goto out;
++		if (nonblock) {
++			ret = -EBUSY;
++			goto out;
++		}
++
++		ret = dma_resv_lock_slow_interruptible(dmabuf->resv, NULL);
++	}
++
++out:
++	return ret;
++}
++
++static struct dma_buf_attachment *
++ffs_dmabuf_find_attachment(struct device *dev, struct dma_buf *dmabuf,
++			   bool nonblock)
++{
++	struct dma_buf_attachment *elm, *attach = NULL;
++	int ret;
++
++	ret = ffs_dma_resv_lock(dmabuf, nonblock);
++	if (ret)
++		return ERR_PTR(ret);
++
++	list_for_each_entry(elm, &dmabuf->attachments, node) {
++		if (elm->dev == dev) {
++			attach = elm;
++			break;
++		}
++	}
++
++	if (attach)
++		ffs_dmabuf_get(elm);
++
++	dma_resv_unlock(dmabuf->resv);
++
++	return attach ?: ERR_PTR(-EPERM);
++}
++
++static int ffs_dmabuf_attach(struct file *file, int fd)
++{
++	struct ffs_epfile *epfile = file->private_data;
++	struct usb_gadget *gadget = epfile->ffs->gadget;
++	struct dma_buf_attachment *attach;
++	struct ffs_dmabuf_priv *priv;
++	struct dma_buf *dmabuf;
++	int err;
++
++	if (!gadget || !gadget->sg_supported)
++		return -EPERM;
++
++	dmabuf = dma_buf_get(fd);
++	if (IS_ERR(dmabuf))
++		return PTR_ERR(dmabuf);
++
++	attach = dma_buf_attach(dmabuf, gadget->dev.parent);
++	if (IS_ERR(attach)) {
++		err = PTR_ERR(attach);
++		goto err_dmabuf_put;
++	}
++
++	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
++	if (!priv) {
++		err = -ENOMEM;
++		goto err_dmabuf_detach;
++	}
++
++	attach->importer_priv = priv;
++
++	priv->attach = attach;
++	spin_lock_init(&priv->lock);
++	kref_init(&priv->ref);
++	priv->context = dma_fence_context_alloc(1);
++
++	list_add(&priv->entry, &epfile->dmabufs);
++
++	return 0;
++
++err_dmabuf_detach:
++	dma_buf_detach(dmabuf, attach);
++err_dmabuf_put:
++	dma_buf_put(dmabuf);
++
++	return err;
++}
++
++static int ffs_dmabuf_detach(struct file *file, int fd)
++{
++	struct ffs_epfile *epfile = file->private_data;
++	struct usb_gadget *gadget = epfile->ffs->gadget;
++	bool nonblock = file->f_flags & O_NONBLOCK;
++	struct dma_buf_attachment *attach;
++	struct dma_buf *dmabuf;
++	int ret = 0;
++
++	dmabuf = dma_buf_get(fd);
++	if (IS_ERR(dmabuf))
++		return PTR_ERR(dmabuf);
++
++	attach = ffs_dmabuf_find_attachment(gadget->dev.parent,
++					    dmabuf, nonblock);
++	if (IS_ERR(attach)) {
++		ret = PTR_ERR(attach);
++		goto out_dmabuf_put;
++	}
++
++	ffs_dmabuf_put(attach);
++	ffs_dmabuf_put(attach);
++
++out_dmabuf_put:
++	dma_buf_put(dmabuf);
++	return ret;
++}
++
++static int ffs_dmabuf_transfer(struct file *file,
++			       const struct usb_ffs_dmabuf_transfer_req *req)
++{
++	bool dma_to_ram, nonblock = file->f_flags & O_NONBLOCK;
++	struct ffs_epfile *epfile = file->private_data;
++	struct usb_gadget *gadget = epfile->ffs->gadget;
++	struct dma_buf_attachment *attach;
++	struct ffs_dmabuf_priv *priv;
++	enum dma_data_direction dir;
++	struct ffs_dma_fence *fence;
++	struct usb_request *usb_req;
++	struct sg_table *sg_table;
++	struct dma_buf *dmabuf;
++	struct ffs_ep *ep;
++	int ret;
++
++	if (req->flags & ~USB_FFS_DMABUF_TRANSFER_MASK)
++		return -EINVAL;
++
++	dmabuf = dma_buf_get(req->fd);
++	if (IS_ERR(dmabuf))
++		return PTR_ERR(dmabuf);
++
++	if (req->length > dmabuf->size || req->length == 0) {
++		ret = -EINVAL;
++		goto err_dmabuf_put;
++	}
++
++	attach = ffs_dmabuf_find_attachment(gadget->dev.parent,
++					    dmabuf, nonblock);
++	if (IS_ERR(attach)) {
++		ret = PTR_ERR(attach);
++		goto err_dmabuf_put;
++	}
++
++	priv = attach->importer_priv;
++
++	if (epfile->in)
++		dir = DMA_FROM_DEVICE;
++	else
++		dir = DMA_TO_DEVICE;
++
++	sg_table = dma_buf_map_attachment(attach, dir);
++	if (IS_ERR(sg_table)) {
++		ret = PTR_ERR(sg_table);
++		goto err_attachment_put;
++	}
++
++	ep = ffs_epfile_wait_ep(file);
++	if (IS_ERR(ep)) {
++		ret = PTR_ERR(ep);
++		goto err_unmap_attachment;
++	}
++
++	ret = ffs_dma_resv_lock(dmabuf, nonblock);
++	if (ret)
++		goto err_unmap_attachment;
++
++	/* Make sure we don't have writers */
++	if (!dma_resv_test_signaled(dmabuf->resv, DMA_RESV_USAGE_WRITE)) {
++		pr_debug("FFS WRITE fence is not signaled\n");
++		ret = -EBUSY;
++		goto err_resv_unlock;
++	}
++
++	dma_to_ram = dir == DMA_FROM_DEVICE;
++
++	/* If we're writing to the DMABUF, make sure we don't have readers */
++	if (dma_to_ram &&
++	    !dma_resv_test_signaled(dmabuf->resv, DMA_RESV_USAGE_READ)) {
++		pr_debug("FFS READ fence is not signaled\n");
++		ret = -EBUSY;
++		goto err_resv_unlock;
++	}
++
++	ret = dma_resv_reserve_fences(dmabuf->resv, 1);
++	if (ret)
++		goto err_resv_unlock;
++
++	fence = kmalloc(sizeof(*fence), GFP_KERNEL);
++	if (!fence) {
++		ret = -ENOMEM;
++		goto err_resv_unlock;
++	}
++
++	fence->sgt = sg_table;
++	fence->dir = dir;
++	fence->priv = priv;
++
++	dma_fence_init(&fence->base, &ffs_dmabuf_fence_ops,
++		       &priv->lock, priv->context, 0);
++
++	spin_lock_irq(&epfile->ffs->eps_lock);
++
++	/* In the meantime, endpoint got disabled or changed. */
++	if (epfile->ep != ep) {
++		ret = -ESHUTDOWN;
++		goto err_spin_unlock;
++	}
++
++	usb_req = usb_ep_alloc_request(ep->ep, GFP_ATOMIC);
++	if (!usb_req) {
++		ret = -ENOMEM;
++		goto err_spin_unlock;
++	}
++
++	dma_resv_add_fence(dmabuf->resv, &fence->base,
++			   dma_resv_usage_rw(dma_to_ram));
++	dma_resv_unlock(dmabuf->resv);
++
++	/* Now that the dma_fence is in place, queue the transfer. */
++
++	usb_req->length = req->length;
++	usb_req->buf = NULL;
++	usb_req->sg = sg_table->sgl;
++	usb_req->num_sgs = sg_nents_for_len(sg_table->sgl, req->length);
++	usb_req->sg_was_mapped = true;
++	usb_req->context  = fence;
++	usb_req->complete = ffs_epfile_dmabuf_io_complete;
++
++	ret = usb_ep_queue(ep->ep, usb_req, GFP_ATOMIC);
++	if (ret) {
++		usb_ep_free_request(ep->ep, usb_req);
++
++		spin_unlock_irq(&epfile->ffs->eps_lock);
++
++		pr_warn("FFS: Failed to queue DMABUF: %d\n", ret);
++		ffs_dmabuf_signal_done(fence, ret);
++		goto out_dma_buf_put;
++	}
++
++	spin_unlock_irq(&epfile->ffs->eps_lock);
++
++out_dma_buf_put:
++	dma_buf_put(dmabuf);
++
++	return ret;
++
++err_spin_unlock:
++	spin_unlock_irq(&epfile->ffs->eps_lock);
++	dma_fence_put(&fence->base);
++err_resv_unlock:
++	dma_resv_unlock(dmabuf->resv);
++err_unmap_attachment:
++	dma_buf_unmap_attachment(attach, sg_table, dir);
++err_attachment_put:
++	ffs_dmabuf_put(attach);
++err_dmabuf_put:
++	dma_buf_put(dmabuf);
++
++	return ret;
++}
++
+ static long ffs_epfile_ioctl(struct file *file, unsigned code,
+ 			     unsigned long value)
+ {
+@@ -1317,6 +1699,44 @@ static long ffs_epfile_ioctl(struct file *file, unsigned code,
+ 	if (WARN_ON(epfile->ffs->state != FFS_ACTIVE))
+ 		return -ENODEV;
+ 
++	switch (code) {
++	case FUNCTIONFS_DMABUF_ATTACH:
++	{
++		int fd;
++
++		if (copy_from_user(&fd, (void __user *)value, sizeof(fd))) {
++			ret = -EFAULT;
++			break;
++		}
++
++		return ffs_dmabuf_attach(file, fd);
++	}
++	case FUNCTIONFS_DMABUF_DETACH:
++	{
++		int fd;
++
++		if (copy_from_user(&fd, (void __user *)value, sizeof(fd))) {
++			ret = -EFAULT;
++			break;
++		}
++
++		return ffs_dmabuf_detach(file, fd);
++	}
++	case FUNCTIONFS_DMABUF_TRANSFER:
++	{
++		struct usb_ffs_dmabuf_transfer_req req;
++
++		if (copy_from_user(&req, (void __user *)value, sizeof(req))) {
++			ret = -EFAULT;
++			break;
++		}
++
++		return ffs_dmabuf_transfer(file, &req);
++	}
++	default:
++		break;
++	}
++
+ 	/* Wait for endpoint to be enabled */
+ 	ep = ffs_epfile_wait_ep(file);
+ 	if (IS_ERR(ep))
+@@ -1931,6 +2351,7 @@ static int ffs_epfiles_create(struct ffs_data *ffs)
+ 	for (i = 1; i <= count; ++i, ++epfile) {
+ 		epfile->ffs = ffs;
+ 		mutex_init(&epfile->mutex);
++		INIT_LIST_HEAD(&epfile->dmabufs);
+ 		if (ffs->user_flags & FUNCTIONFS_VIRTUAL_ADDR)
+ 			sprintf(epfile->name, "ep%02x", ffs->eps_addrmap[i]);
+ 		else
+diff --git a/include/uapi/linux/usb/functionfs.h b/include/uapi/linux/usb/functionfs.h
+index d77ee6b65328..1412ab9f8ccc 100644
+--- a/include/uapi/linux/usb/functionfs.h
++++ b/include/uapi/linux/usb/functionfs.h
+@@ -84,6 +84,15 @@ struct usb_ext_prop_desc {
+ 	__le16	wPropertyNameLength;
+ } __attribute__((packed));
+ 
++/* Flags for usb_ffs_dmabuf_transfer_req->flags (none for now) */
++#define USB_FFS_DMABUF_TRANSFER_MASK	0x0
++
++struct usb_ffs_dmabuf_transfer_req {
++	int fd;
++	__u32 flags;
++	__u64 length;
++} __attribute__((packed));
++
+ #ifndef __KERNEL__
+ 
+ /*
+@@ -288,6 +297,9 @@ struct usb_functionfs_event {
+ #define	FUNCTIONFS_ENDPOINT_DESC	_IOR('g', 130, \
+ 					     struct usb_endpoint_descriptor)
+ 
+-
++#define FUNCTIONFS_DMABUF_ATTACH	_IOW('g', 131, int)
++#define FUNCTIONFS_DMABUF_DETACH	_IOW('g', 132, int)
++#define FUNCTIONFS_DMABUF_TRANSFER	_IOW('g', 133, \
++					     struct usb_ffs_dmabuf_transfer_req)
+ 
+ #endif /* _UAPI__LINUX_FUNCTIONFS_H__ */
 -- 
-Regards,
+2.39.2
 
-Laurent Pinchart
