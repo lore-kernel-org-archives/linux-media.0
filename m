@@ -2,105 +2,237 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15FE0C6FD1C
-	for <linux-media@archiver.kernel.org>; Wed, 22 Mar 2023 09:37:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0501C6FD1C
+	for <linux-media@archiver.kernel.org>; Wed, 22 Mar 2023 09:46:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231157AbjCVJhP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Mar 2023 05:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39300 "EHLO
+        id S231130AbjCVJqb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Mar 2023 05:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbjCVJhM (ORCPT
+        with ESMTP id S229662AbjCVJqa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Mar 2023 05:37:12 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65625F202;
-        Wed, 22 Mar 2023 02:37:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1679476887;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jxfNorIALSXTIcdSKIDH829B6vo4dZmRww3AUKQcurM=;
-        b=nY11iy8fR6a2aO+VbjSDeYST0gxDZ1H3hICGOlxr1xoSatxZjWgjvB/vOm6EOOTffEXXW6
-        1HJCf1NwDmxoUNOG207QaX8dJ1ezKV+dUj+GpVSIt6RdmulX3Xauvj2ny0Bs4YqNt5iGil
-        Jx0mM2Oaw+GfvIAXkLkO0opvKA+tTiY=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     michael.hennerich@analog.com, nuno.sa@analog.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 1/3] usb: gadget: Support already-mapped DMA SGs
-Date:   Wed, 22 Mar 2023 10:21:16 +0100
-Message-Id: <20230322092118.9213-2-paul@crapouillou.net>
-In-Reply-To: <20230322092118.9213-1-paul@crapouillou.net>
-References: <20230322092118.9213-1-paul@crapouillou.net>
+        Wed, 22 Mar 2023 05:46:30 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A724F5D454;
+        Wed, 22 Mar 2023 02:46:27 -0700 (PDT)
+X-UUID: 676e0482c89611eda9a90f0bb45854f4-20230322
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=1auQmDPlDWuWCFjiGD/N9g5k0v7IBBTaFSzN1WpWw/k=;
+        b=QMcYOqGud0czJOgsVQ1TYgEg49ZgHQfgqjT+CYJ8CuEhyF8DoW0qeB+Mi/9Q/JvdTOOu9IPd1DdbXrI9EZ7sONsrHyNOY7G20LQx/LbtBuKuXOPBVp4mjOWK+ugaR/e+Zuv2H2Gtks9mHdyGye17ksZSgByi7OvEJMmPXALgJE4=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:aa4e542a-1c8b-4612-9642-0231e2b45565,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:70
+X-CID-INFO: VERSION:1.1.22,REQID:aa4e542a-1c8b-4612-9642-0231e2b45565,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:70
+X-CID-META: VersionHash:120426c,CLOUDID:8d1593f6-ddba-41c3-91d9-10eeade8eac7,B
+        ulkID:230322174623FZLCA41G,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,CO
+        L:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-UUID: 676e0482c89611eda9a90f0bb45854f4-20230322
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1705349926; Wed, 22 Mar 2023 17:46:22 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Wed, 22 Mar 2023 17:46:21 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Wed, 22 Mar 2023 17:46:20 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v2,1/7] media: mediatek: vcodec: Add debugfs interface to get debug information
+Date:   Wed, 22 Mar 2023 17:46:11 +0800
+Message-ID: <20230322094617.19410-2-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230322094617.19410-1-yunfei.dong@mediatek.com>
+References: <20230322094617.19410-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a new 'sg_was_mapped' field to the struct usb_request. This field
-can be used to indicate that the scatterlist associated to the USB
-transfer has already been mapped into the DMA space, and it does not
-have to be done internally.
+This will be useful when debugging specific issues related to kernel
+in running status.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
- drivers/usb/gadget/udc/core.c | 7 ++++++-
- include/linux/usb/gadget.h    | 2 ++
- 2 files changed, 8 insertions(+), 1 deletion(-)
+ .../media/platform/mediatek/vcodec/Makefile   |  6 ++++
+ .../mediatek/vcodec/mtk_vcodec_dbgfs.c        | 33 +++++++++++++++++++
+ .../mediatek/vcodec/mtk_vcodec_dbgfs.h        | 32 ++++++++++++++++++
+ .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |  2 ++
+ .../platform/mediatek/vcodec/mtk_vcodec_drv.h |  4 +++
+ 5 files changed, 77 insertions(+)
+ create mode 100644 drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
+ create mode 100644 drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.h
 
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 23b0629a8774..5f2c4933769d 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -829,6 +829,11 @@ int usb_gadget_map_request_by_dev(struct device *dev,
- 	if (req->length == 0)
- 		return 0;
- 
-+	if (req->sg_was_mapped) {
-+		req->num_mapped_sgs = req->num_sgs;
-+		return 0;
-+	}
+diff --git a/drivers/media/platform/mediatek/vcodec/Makefile b/drivers/media/platform/mediatek/vcodec/Makefile
+index 93e7a343b5b0..f6b750cf7077 100644
+--- a/drivers/media/platform/mediatek/vcodec/Makefile
++++ b/drivers/media/platform/mediatek/vcodec/Makefile
+@@ -44,3 +44,9 @@ endif
+ ifneq ($(CONFIG_VIDEO_MEDIATEK_VCODEC_SCP),)
+ mtk-vcodec-common-y += mtk_vcodec_fw_scp.o
+ endif
 +
- 	if (req->num_sgs) {
- 		int     mapped;
++ifneq ($(CONFIG_DEBUG_FS),)
++obj-$(CONFIG_VIDEO_MEDIATEK_VCODEC) += mtk-vcodec-dbgfs.o
++
++mtk-vcodec-dbgfs-y := mtk_vcodec_dbgfs.o
++endif
+\ No newline at end of file
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
+new file mode 100644
+index 000000000000..fb9edd379af5
+--- /dev/null
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2023 MediaTek Inc.
++ * Author: Yunfei Dong <yunfei.dong@mediatek.com>
++ */
++
++#include <linux/debugfs.h>
++
++#include "mtk_vcodec_dbgfs.h"
++#include "mtk_vcodec_drv.h"
++#include "mtk_vcodec_util.h"
++
++void mtk_vcodec_dbgfs_init(struct mtk_vcodec_dev *vcodec_dev)
++{
++	struct dentry *vcodec_root;
++
++	vcodec_dev->dbgfs.vcodec_root = debugfs_create_dir("vcodec-dec", NULL);
++	if (IS_ERR(vcodec_dev->dbgfs.vcodec_root))
++		dev_err(&vcodec_dev->plat_dev->dev, "create vcodec dir err:%d\n",
++			IS_ERR(vcodec_dev->dbgfs.vcodec_root));
++
++	vcodec_root = vcodec_dev->dbgfs.vcodec_root;
++}
++EXPORT_SYMBOL_GPL(mtk_vcodec_dbgfs_init);
++
++void mtk_vcodec_dbgfs_deinit(struct mtk_vcodec_dev *vcodec_dev)
++{
++	debugfs_remove_recursive(vcodec_dev->dbgfs.vcodec_root);
++}
++EXPORT_SYMBOL_GPL(mtk_vcodec_dbgfs_deinit);
++
++MODULE_LICENSE("GPL v2");
++MODULE_DESCRIPTION("Mediatek video codec driver");
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.h
+new file mode 100644
+index 000000000000..5eec2211cbbe
+--- /dev/null
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.h
+@@ -0,0 +1,32 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2023 MediaTek Inc.
++ * Author: Yunfei Dong <yunfei.dong@mediatek.com>
++ */
++
++#ifndef __MTK_VCODEC_DBGFS_H__
++#define __MTK_VCODEC_DBGFS_H__
++
++struct mtk_vcodec_dev;
++
++/**
++ * struct mtk_vcodec_dbgfs  - dbgfs information
++ * @vcodec_root: vcodec dbgfs entry
++ */
++struct mtk_vcodec_dbgfs {
++	struct dentry *vcodec_root;
++};
++
++#if defined(CONFIG_DEBUG_FS)
++void mtk_vcodec_dbgfs_init(struct mtk_vcodec_dev *vcodec_dev);
++void mtk_vcodec_dbgfs_deinit(struct mtk_vcodec_dev *vcodec_dev);
++#else
++static inline void mtk_vcodec_dbgfs_init(struct mtk_vcodec_dev *vcodec_dev)
++{
++}
++
++static inline void mtk_vcodec_dbgfs_deinit(struct mtk_vcodec_dev *vcodec_dev)
++{
++}
++#endif
++#endif
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
+index 174a6eec2f54..de29b1fb0436 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
+@@ -431,6 +431,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+ 		mtk_v4l2_debug(0, "media registered as /dev/media%d", vfd_dec->minor);
+ 	}
  
-@@ -874,7 +879,7 @@ EXPORT_SYMBOL_GPL(usb_gadget_map_request);
- void usb_gadget_unmap_request_by_dev(struct device *dev,
- 		struct usb_request *req, int is_in)
- {
--	if (req->length == 0)
-+	if (req->length == 0 || req->sg_was_mapped)
- 		return;
++	mtk_vcodec_dbgfs_init(dev);
+ 	mtk_v4l2_debug(0, "decoder registered as /dev/video%d", vfd_dec->minor);
  
- 	if (req->num_mapped_sgs) {
-diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
-index 00750f7020f3..9dd829b8974a 100644
---- a/include/linux/usb/gadget.h
-+++ b/include/linux/usb/gadget.h
-@@ -52,6 +52,7 @@ struct usb_ep;
-  * @short_not_ok: When reading data, makes short packets be
-  *     treated as errors (queue stops advancing till cleanup).
-  * @dma_mapped: Indicates if request has been mapped to DMA (internal)
-+ * @sg_was_mapped: Set if the scatterlist has been mapped before the request
-  * @complete: Function called when request completes, so this request and
-  *	its buffer may be re-used.  The function will always be called with
-  *	interrupts disabled, and it must not sleep.
-@@ -111,6 +112,7 @@ struct usb_request {
- 	unsigned		zero:1;
- 	unsigned		short_not_ok:1;
- 	unsigned		dma_mapped:1;
-+	unsigned		sg_was_mapped:1;
+ 	return 0;
+@@ -505,6 +506,7 @@ static int mtk_vcodec_dec_remove(struct platform_device *pdev)
+ 	if (dev->vfd_dec)
+ 		video_unregister_device(dev->vfd_dec);
  
- 	void			(*complete)(struct usb_ep *ep,
- 					struct usb_request *req);
++	mtk_vcodec_dbgfs_deinit(dev);
+ 	v4l2_device_unregister(&dev->v4l2_dev);
+ 	if (!dev->vdec_pdata->is_subdev_supported)
+ 		pm_runtime_disable(dev->pm.dev);
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+index 9acab54fd650..a7e8bb3608ac 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+@@ -16,6 +16,7 @@
+ #include <media/v4l2-mem2mem.h>
+ #include <media/videobuf2-core.h>
+ 
++#include "mtk_vcodec_dbgfs.h"
+ #include "mtk_vcodec_util.h"
+ #include "vdec_msg_queue.h"
+ 
+@@ -470,6 +471,7 @@ struct mtk_vcodec_enc_pdata {
+  * @dec_active_cnt: used to mark whether need to record register value
+  * @vdec_racing_info: record register value
+  * @dec_racing_info_mutex: mutex lock used for inner racing mode
++ * @dbgfs: debug log related information
+  */
+ struct mtk_vcodec_dev {
+ 	struct v4l2_device v4l2_dev;
+@@ -520,6 +522,8 @@ struct mtk_vcodec_dev {
+ 	u32 vdec_racing_info[132];
+ 	/* Protects access to vdec_racing_info data */
+ 	struct mutex dec_racing_info_mutex;
++
++	struct mtk_vcodec_dbgfs dbgfs;
+ };
+ 
+ static inline struct mtk_vcodec_ctx *fh_to_ctx(struct v4l2_fh *fh)
 -- 
-2.39.2
+2.18.0
 
