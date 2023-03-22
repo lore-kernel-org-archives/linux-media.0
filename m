@@ -2,94 +2,90 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4E15C6FD1D
-	for <linux-media@archiver.kernel.org>; Tue, 21 Mar 2023 21:21:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60458C6FD1C
+	for <linux-media@archiver.kernel.org>; Wed, 22 Mar 2023 03:38:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjCUVVi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 21 Mar 2023 17:21:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
+        id S230146AbjCVDiQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 21 Mar 2023 23:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjCUVVh (ORCPT
+        with ESMTP id S230090AbjCVDiN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 21 Mar 2023 17:21:37 -0400
+        Tue, 21 Mar 2023 23:38:13 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BCF4AD16
-        for <linux-media@vger.kernel.org>; Tue, 21 Mar 2023 14:21:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49BC1632F
+        for <linux-media@vger.kernel.org>; Tue, 21 Mar 2023 20:38:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A22BB81A37
-        for <linux-media@vger.kernel.org>; Tue, 21 Mar 2023 21:21:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74717C4339B;
-        Tue, 21 Mar 2023 21:21:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679433692;
-        bh=garZWxUSKZ3OIZU/fBlag4OoT0Tu3IxbPrigB3kbjws=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cU31RRY0fx/hEK/gso2x4d/nNBSULSOXJ4ir29DGFRfpzCNIugUXNpVYoIiadQb2g
-         QzMpioPy3NXooUptZmR3/+4xheGLu+7T8JmLA08hrBduol7by42jildbY6VD791el7
-         5NCMBTKXmJP/S4Ca7HAXxV/w+5gmolwMr4PSXu4TU6R50WciYUiJeLf3cY8kkl/umn
-         Obd8cliumzeURyNicRidW0D4NB8Xa3lqSZy4K2CGJl5EErzKjJZX5LjTCjz9Xu2ajI
-         RheJppRhT2r8Z9nlrZedg3AA/RM4VZmZ6uplEuDbZP3EL4fPHDp8ncesJU/bWQ7nDy
-         goi9YUzs4cY0w==
-Date:   Tue, 21 Mar 2023 22:21:26 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Gregor Jasny <gjasny@googlemail.com>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sean Young <sean@mess.org>, Hans de Goede <hdegoede@redhat.com>
-Subject: Re: v4l-utils 1.24.0 has been released
-Message-ID: <20230321222126.2490de9b@coco.lan>
-In-Reply-To: <86f5a2f0-0714-6648-eed2-cd4f11209dd5@googlemail.com>
-References: <86f5a2f0-0714-6648-eed2-cd4f11209dd5@googlemail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        by ams.source.kernel.org (Postfix) with ESMTPS id 639BAB81AF2
+        for <linux-media@vger.kernel.org>; Wed, 22 Mar 2023 03:38:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD181C433EF
+        for <linux-media@vger.kernel.org>; Wed, 22 Mar 2023 03:38:03 +0000 (UTC)
+Date:   Wed, 22 Mar 2023 04:38:01 +0100
+Message-ID: <96bf9232e64281eee1ad0fd5af3efc86.hverkuil@xs4all.nl>
+From:   "Hans Verkuil" <hverkuil-cisco@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Gregor,
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Em Thu, 23 Feb 2023 10:44:41 +0100
-Gregor Jasny <gjasny@googlemail.com> escreveu:
+Results of the daily build of media_tree:
 
-> Hello,
-> 
-> I'm happy to announce that v4l-utils 1.24.0 has been released. This will 
-> be the last version before the build system will be migrated from 
-> Autotools to Meson.
-> 
-> Changelog: 
-> https://git.linuxtv.org/v4l-utils.git/tree/ChangeLog?h=v4l-utils-1.24.0
-> Download: https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.24.0.tar.bz2
+date:			Wed Mar 22 03:00:07 CET 2023
+media-tree git hash:	71937240a472ee551ac8de0e7429b9d49884a388
+media_build git hash:	0fe857b86addf382f6fd383948bd7736a3201403
+v4l-utils git hash:	2432069e9786d995da627fccc88589ec690cc3e8
+edid-decode git hash:	2d44e1b01c7ed7d65b20ecdce62d354841832201
+gcc version:		i686-linux-gcc (GCC) 12.2.0
+sparse repo:            git://git.kernel.org/pub/scm/devel/sparse/sparse.git
+sparse version:		v0.6.4-39-gce1a6720-dirty
+smatch repo:            git://repo.or.cz/smatch.git
+smatch version:		v0.5.0-8298-gcfe12a9b-dirty
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 9bae39424e2044f88e6a830f423201c6d71c0a0d
+host hardware:		x86_64
+host os:		6.1.0-5-amd64
 
-I wouldn't mind if we would have a shorter release time for version
-1.26 - or maybe it is time to increase major, so version 2.0.
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-mips: OK
+linux-git-arm-multi: OK
+linux-git-powerpc64: OK
+linux-git-arm64: OK
+linux-git-i686: WARNINGS
+linux-git-x86_64: WARNINGS
+Check COMPILE_TEST: WARNINGS: VIDEOBUF_VMALLOC VIDEOBUF_DMA_CONTIG
+Check for strcpy/strncpy/strlcpy: OK
+apps: WARNINGS
+spec-git: OK
+virtme: OK: Final Summary: 3080, Succeeded: 3080, Failed: 0, Warnings: 0
+virtme-32: OK: Final Summary: 3193, Succeeded: 3193, Failed: 0, Warnings: 0
+sparse: WARNINGS
+smatch: WARNINGS
+kerneldoc: OK
 
-As we are now using a new building system, it would be nice to have
-a stable version frozen, with not much other changes, in order
-to allow distros to opt either to use version 1.24 with autotools
-or to migrate to the newest version, with meson, but not many other
-changes.
+Detailed results are available here:
 
-So, perhaps we should aim release a new version in 2 months or
-so, once we have enough time to do cleanups if needed and having
-media maintainers and developers familiar with the new way.
+https://hverkuil.home.xs4all.nl/logs/Wednesday.log
 
-Comments?
+Detailed regression test results are available here:
 
-PS.: on that matter, I took ahead and changed Fedora rawhide
-v4l2-utils package to use the new building system:
+https://hverkuil.home.xs4all.nl/logs/Wednesday-test-media.log
+https://hverkuil.home.xs4all.nl/logs/Wednesday-test-media-32.log
+https://hverkuil.home.xs4all.nl/logs/Wednesday-test-media-dmesg.log
 
-	https://bodhi.fedoraproject.org/updates/FEDORA-2023-43964d4d83
+Full logs are available here:
 
-That helped to identify a bug after the migration at the man page
-location, and hopefully would help to have more tests on a more
-realistic scenario (e. g. after packaged on distributions).
+https://hverkuil.home.xs4all.nl/logs/Wednesday.tar.bz2
 
-Thanks,
-Mauro
+The Media Infrastructure API from this daily build is here:
+
+https://hverkuil.home.xs4all.nl/spec/index.html
