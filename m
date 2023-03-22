@@ -2,44 +2,44 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17841C761AF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79C42C761A6
 	for <linux-media@archiver.kernel.org>; Wed, 22 Mar 2023 09:46:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbjCVJqc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Mar 2023 05:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
+        id S231161AbjCVJqd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Mar 2023 05:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbjCVJqa (ORCPT
+        with ESMTP id S231134AbjCVJqb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Mar 2023 05:46:30 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73B15DC96;
-        Wed, 22 Mar 2023 02:46:27 -0700 (PDT)
-X-UUID: 66e7b2f6c89611edb6b9f13eb10bd0fe-20230322
+        Wed, 22 Mar 2023 05:46:31 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E4F5DCAD;
+        Wed, 22 Mar 2023 02:46:30 -0700 (PDT)
+X-UUID: 68031284c89611eda9a90f0bb45854f4-20230322
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=akEC/GZ73xx89vSNdUnfCjR2mWzHXFKUONd0W+l4ZME=;
-        b=gXmfC4jZSk2qNK666eY1qIeMKtOT5U66kzsPwVTTB1uaBcVbARyayb2tjP6jtxxBVmxKIkCp8Z8D6QCZU8pJJXm2fdRqIQIdOM4+Qccdw0N43ghtJC1Ue4gcynQdjEfjRCIdGuTtMmjaWXD/q7q+rnD9RUFLorYpcrSyV7h3drw=;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=92mZB/j/7Hzvh1H2FdnRJuSeAz4j/NGjfxLL97rb2Tg=;
+        b=Um9mVRTZSHRLxezgCD3rQQvKTnn9K+JDhyxA7i4rKDhOx3o59f3V7FSDbZPs+KVH2y2uGOv0EU2HHETKaEQp6n8cAXXPPFWzU/KokjC5bVf53YikkLxMjXxJTzSmrfoLtBXEpMu6XAgJ+8P8fkS2pvreXq2+rC9sJQSYyAPkOnU=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:ce7fd9a2-6c27-4056-b835-2d26b7d43ef8,IP:0,U
+X-CID-O-INFO: VERSION:1.1.22,REQID:bfc04964-7743-4d8e-b44e-e5c14bb2d78d,IP:0,U
         RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
         N:release,TS:-25
-X-CID-META: VersionHash:120426c,CLOUDID:5b812429-564d-42d9-9875-7c868ee415ec,B
+X-CID-META: VersionHash:120426c,CLOUDID:a17f05b4-beed-4dfc-bd9c-e1b22fa6ccc4,B
         ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
         RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
 X-CID-BVR: 0,NGT
 X-CID-BAS: 0,NGT,0,_
-X-UUID: 66e7b2f6c89611edb6b9f13eb10bd0fe-20230322
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+X-UUID: 68031284c89611eda9a90f0bb45854f4-20230322
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 383714623; Wed, 22 Mar 2023 17:46:21 +0800
+        with ESMTP id 182808877; Wed, 22 Mar 2023 17:46:23 +0800
 Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
  mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Wed, 22 Mar 2023 17:46:20 +0800
+ 15.2.1118.25; Wed, 22 Mar 2023 17:46:22 +0800
 Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
  mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Wed, 22 Mar 2023 17:46:19 +0800
+ 15.2.1118.25 via Frontend Transport; Wed, 22 Mar 2023 17:46:21 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Chen-Yu Tsai <wenst@chromium.org>,
@@ -60,10 +60,12 @@ CC:     Matthias Brugger <matthias.bgg@gmail.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v2,0/7] media: mediatek: vcodec: Add debugfs file for decode and encode
-Date:   Wed, 22 Mar 2023 17:46:10 +0800
-Message-ID: <20230322094617.19410-1-yunfei.dong@mediatek.com>
+Subject: [PATCH v2,2/7] media: mediatek: vcodec: Add debug params to control different log level
+Date:   Wed, 22 Mar 2023 17:46:12 +0800
+Message-ID: <20230322094617.19410-3-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230322094617.19410-1-yunfei.dong@mediatek.com>
+References: <20230322094617.19410-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -72,43 +74,91 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Need to change kernel driver to open decode and encode debug log at current period,
-it's very unreasonable. Adding debugfs common interface to support decode and encode,
-using echo command to control debug log level and getting useful information for each
-instance.
+Add parameter mtk_vcodec_dbg to open each codec log.
+Add parameter mtk_v4l2_dbg_level to open each instance log according to
+the parameter value.
 
-patch 1 add dbgfs common interface.
-patch 2~5 support decode.
-patch 6~7 support encode
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
-changed with v1:
-- add new patch 4 and 5.
-- using cmd 'cat vdec' to show debug information instead of pr_info directly.
----
-Yunfei Dong (7):
-  media: mediatek: vcodec: Add debugfs interface to get debug
-    information
-  media: mediatek: vcodec: Add debug params to control different log
-    level
-  media: mediatek: vcodec: Add a debugfs file to get different useful
-    information
-  media: mediatek: vcodec: Get each context resolution information
-  media: mediatek: vcodec: Get get each instance format type
-  media: mediatek: vcodec: Change dbgfs interface to support encode
-  media: mediatek: vcodec: Add encode to support dbgfs
+ .../mediatek/vcodec/mtk_vcodec_dbgfs.c        |  2 ++
+ .../mediatek/vcodec/mtk_vcodec_util.c         |  8 ++++++
+ .../mediatek/vcodec/mtk_vcodec_util.h         | 25 ++++++++++++++++---
+ 3 files changed, 32 insertions(+), 3 deletions(-)
 
- .../media/platform/mediatek/vcodec/Makefile   |   6 +
- .../mediatek/vcodec/mtk_vcodec_dbgfs.c        | 196 ++++++++++++++++++
- .../mediatek/vcodec/mtk_vcodec_dbgfs.h        |  73 +++++++
- .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |   4 +
- .../platform/mediatek/vcodec/mtk_vcodec_drv.h |   4 +
- .../mediatek/vcodec/mtk_vcodec_enc_drv.c      |   2 +
- .../mediatek/vcodec/mtk_vcodec_util.c         |   8 +
- .../mediatek/vcodec/mtk_vcodec_util.h         |  25 ++-
- 8 files changed, 315 insertions(+), 3 deletions(-)
- create mode 100644 drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
- create mode 100644 drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.h
-
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
+index fb9edd379af5..b5093e4e4aa2 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
+@@ -20,6 +20,8 @@ void mtk_vcodec_dbgfs_init(struct mtk_vcodec_dev *vcodec_dev)
+ 			IS_ERR(vcodec_dev->dbgfs.vcodec_root));
+ 
+ 	vcodec_root = vcodec_dev->dbgfs.vcodec_root;
++	debugfs_create_x32("mtk_v4l2_dbg_level", 0644, vcodec_root, &mtk_v4l2_dbg_level);
++	debugfs_create_x32("mtk_vcodec_dbg", 0644, vcodec_root, &mtk_vcodec_dbg);
+ }
+ EXPORT_SYMBOL_GPL(mtk_vcodec_dbgfs_init);
+ 
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.c
+index ace78c4b5b9e..f214e6f67005 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.c
+@@ -13,6 +13,14 @@
+ #include "mtk_vcodec_drv.h"
+ #include "mtk_vcodec_util.h"
+ 
++#if defined(CONFIG_DEBUG_FS)
++int mtk_vcodec_dbg;
++EXPORT_SYMBOL(mtk_vcodec_dbg);
++
++int mtk_v4l2_dbg_level;
++EXPORT_SYMBOL(mtk_v4l2_dbg_level);
++#endif
++
+ void __iomem *mtk_vcodec_get_reg_addr(struct mtk_vcodec_ctx *data,
+ 					unsigned int reg_idx)
+ {
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
+index 71956627a0e2..938f03cab3c9 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
+@@ -35,15 +35,34 @@ struct mtk_vcodec_dev;
+ 	pr_err("[MTK_VCODEC][ERROR][%d]: " fmt "\n",		\
+ 	       ((struct mtk_vcodec_ctx *)(h)->ctx)->id, ##args)
+ 
++#if defined(CONFIG_DEBUG_FS)
++extern int mtk_v4l2_dbg_level;
++extern int mtk_vcodec_dbg;
+ 
+-#define mtk_v4l2_debug(level, fmt, args...) pr_debug(fmt, ##args)
++#define mtk_v4l2_debug(level, fmt, args...)				 \
++	do {								 \
++		if (mtk_v4l2_dbg_level >= level)			 \
++			pr_info("[MTK_V4L2] level=%d %s(),%d: " fmt "\n", \
++				level, __func__, __LINE__, ##args);	 \
++	} while (0)
+ 
+-#define mtk_v4l2_debug_enter()  mtk_v4l2_debug(3, "+")
+-#define mtk_v4l2_debug_leave()  mtk_v4l2_debug(3, "-")
++#define mtk_vcodec_debug(h, fmt, args...)				\
++	do {								\
++		if (mtk_vcodec_dbg)					\
++			pr_info("[MTK_VCODEC][%d]: %s() " fmt "\n",	\
++				((struct mtk_vcodec_ctx *)h->ctx)->id,  \
++				__func__, ##args);			\
++	} while (0)
++#else
++#define mtk_v4l2_debug(level, fmt, args...) pr_debug(fmt, ##args)
+ 
+ #define mtk_vcodec_debug(h, fmt, args...)			\
+ 	pr_debug("[MTK_VCODEC][%d]: " fmt "\n",			\
+ 		((struct mtk_vcodec_ctx *)(h)->ctx)->id, ##args)
++#endif
++
++#define mtk_v4l2_debug_enter()  mtk_v4l2_debug(3, "+")
++#define mtk_v4l2_debug_leave()  mtk_v4l2_debug(3, "-")
+ 
+ #define mtk_vcodec_debug_enter(h)  mtk_vcodec_debug(h, "+")
+ #define mtk_vcodec_debug_leave(h)  mtk_vcodec_debug(h, "-")
 -- 
 2.18.0
 
