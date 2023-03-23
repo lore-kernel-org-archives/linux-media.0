@@ -2,40 +2,37 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F91EC74A5B
-	for <linux-media@archiver.kernel.org>; Thu, 23 Mar 2023 17:58:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21B1EC77B61
+	for <linux-media@archiver.kernel.org>; Thu, 23 Mar 2023 17:58:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbjCWR6C (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 Mar 2023 13:58:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38970 "EHLO
+        id S230482AbjCWR6E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 Mar 2023 13:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjCWR6B (ORCPT
+        with ESMTP id S230267AbjCWR6C (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 23 Mar 2023 13:58:01 -0400
+        Thu, 23 Mar 2023 13:58:02 -0400
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C471BD8;
-        Thu, 23 Mar 2023 10:58:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B0E2132;
+        Thu, 23 Mar 2023 10:58:01 -0700 (PDT)
 Received: from [192.168.0.26] (2a02-8388-6582-fe80-0000-0000-0000-000c.cable.dynamic.v6.surfer.at [IPv6:2a02:8388:6582:fe80::c])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id DE51ED2580;
-        Thu, 23 Mar 2023 17:57:57 +0000 (UTC)
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id B0939D2586;
+        Thu, 23 Mar 2023 17:57:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1679594278; bh=1Vo0lWW8e+lgGTTGvxNP10JPaRio9OYS9Twy6U31giY=;
-        h=From:Subject:Date:To:Cc;
-        b=FwtEyJ56Yf1RJbBfUhqLwRdtWDR1pua461bbjyWW2dW7lWyMsIB0zcuJ//fSuNqy6
-         SPATdXdcEwpIoVWCUobXYVqqvlgaDtWB91vrjmWfOD33+T6UPF3vs/a9eIQM9QUJTe
-         LewntJTPSJPwXcYySErdPGTHwL3CqG5/y1/bRKvo=
+        t=1679594280; bh=ncpXLQ6qGgg6hVHefO9DqumuQvrhX7L+dhXzJdi5hVA=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc;
+        b=xauDcQvsQWTNROmsZ/waVuFjN6M43bG0+gulylEte6y7OK14ej1K5FV1O9BYTVy7s
+         W0JUygJ3R+0Dfj1EPZFLQYEPRkXfHgTEstC2Jq35VaWVTEzR502xYfjYWn0Q+vTjq7
+         Fvhdih/lLsHszJMrdBq1K9Sk/cI0S7WEP0JNFWmg=
 From:   Luca Weiss <luca@z3ntu.xyz>
-Subject: [PATCH v4 0/3] Improvements for OmniVision OV2685
-Date:   Thu, 23 Mar 2023 18:57:48 +0100
-Message-Id: <20230129-ov2685-improvements-v4-0-e71985c5c848@z3ntu.xyz>
+Date:   Thu, 23 Mar 2023 18:57:51 +0100
+Subject: [PATCH v4 3/3] media: i2c: ov2685: Make reset gpio optional
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAByTHGQC/43OTW7DIBAF4KtErDsWDK4xXfUeVRf81iyABFwUJ
- /Ldi7OquqiyfKN538ydVFeCq+TtdCfFtVBDTj2MLydiFpW+HATbM0GKnDKUkBtO8yuEeC65uej
- SWkFTrq3xzKCkpDe1qg50UcksR/dicoRY4yzFCNPAhg2Miq4oPJbPxflwfbzw8dnzEuqay/b4q
- LFj+v/xxoCCx5lpO0oupXm/8bR+D9ftRg6v4RMGdgMZHSn1qCfu/hr8CYN3w0rBhaWCCj/9NvZ
- 9/wEu88nXawEAAA==
+Message-Id: <20230129-ov2685-improvements-v4-3-e71985c5c848@z3ntu.xyz>
+References: <20230129-ov2685-improvements-v4-0-e71985c5c848@z3ntu.xyz>
+In-Reply-To: <20230129-ov2685-improvements-v4-0-e71985c5c848@z3ntu.xyz>
 To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -43,67 +40,51 @@ To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Shunqian Zheng <zhengsq@rock-chips.com>,
         Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        linux-kernel@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1503; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=1Vo0lWW8e+lgGTTGvxNP10JPaRio9OYS9Twy6U31giY=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkHJMf8uNkHI8h75NQ5daXnHUBp1pxxM9YhxDg0
- B0VZMWRJAiJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZByTHwAKCRBy2EO4nU3X
- Vn6+D/wMbhnYPTwD2ytJ0HutTXYpv+Zncj0jjnUxtODvqly9m/SLcz45WkZwbYHhWa4QE2c2kTC
- ltC2MZbzOYcsc9FoVbkyFiQtpcDGNS49UY/3mXuvDqmHTnpk8gwX3Q6gnL1AyzHhplrjvuSvcvT
- z19gcFajGnF8ytgsZChWhJUT1Fpd1BoPKmTwMYbdxxa2P/MApX48mx9yIxb9D5PzpNqNtnP+aWg
- DQra/AWSQzuhwRbHFlN+GHevRK+IhW+/3FG6gr7xc7V3BZkEjkSCyf/488pokmbgHYz4Gq7fSSM
- j8o4N0IRlxdh+BVLn0iftnwJvpP6X3rNOCOX4Y8waRDp+qvOX2rcMOJuFMSuhF4hSrBmkAQwQer
- FPmXtdO6glbhzWtM5rc6fJSBXIg2EziezTN4CPD3s0z4bCR0igO8VXIOpPdbFE0/O6+vwTiexqa
- MARyTDIvjyh5vihuaWEwmivmy5bSeO9xz9C0VuskULUXF0TVQNwoH01bX50ifk3EHcllVyFcDRA
- rJ4/iIH2DHC05kbBVptHLSHwU6k0imTPk1tQIESsWRf27qkD01YUSJEOsp5fQEHPTY5wWbcPtG3
- DRqDfatJE/voytw2SVi9h1voh61UiHRTam0JVUMhwo1UZYvDwI74D74AJcgED4kYvwCYEn8MNzO
- gLvHkEp3fEJbq4w==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=955; i=luca@z3ntu.xyz;
+ h=from:subject:message-id; bh=ncpXLQ6qGgg6hVHefO9DqumuQvrhX7L+dhXzJdi5hVA=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkHJMk5TIQR0cLMxfZ28w9hmVhXNFGqcUgpMKQz
+ EuErPxrI8SJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZByTJAAKCRBy2EO4nU3X
+ Vv8yD/9YkeSVJ8+GVv4ZKNLCeSGzKFGEurXBBitFIx13KhGwv5RziY1V0DEZo9hvHPi5oxoeFOp
+ lO3yy2CcMU2boIWovJT8B2fmZ42WKHX2yaMZ3934HfdMktjEQxBdRC7WFrYCLXb9vdzcHbiStiz
+ W3U0+3grhCtpqU1cSMtna9b0HY+LpC8NI5IOJHUiqowb0mS/l2RssmR/rzaueXvNm3xJA4HRjUM
+ UeJyTKdPHGV8k9xBBCzIiYHb/0313bNoP3Le4GZUlXT6e4+44HwtprbTieOZX+nIsEVxLZBXXOI
+ 4AQd/lrQC0k07nPJq4wSXeRNrFUFrORL1R/EGOM14f9Zf6j4bvg0wWj0eUMNLW4QGULhJap2L0I
+ EiI/mA/kswoSOKRv2WOn6NRW+ngrqSjlf+sekb1yKna54Crk/jkOx00MriofUcGgY7HV/+/M8hk
+ T8Exh8xIiQ9ZxmnvKyk6vCd4jJcHxCEbd2JinYgISk6iKpITn6PWthG8fD1bopzA0rShrbdejS5
+ z1aZvTIPk4dbiJumIZbwcfJx+ndflrMYA8oUAUDqzDDPYiMehxr61TAFbB7ybjTpOTzJQ14Rh3k
+ GhvdKghKRqJur9+cDOWhqIdL6GhEe3hhKkR9y2VRb+nJeLjZdcHKAce9w6g0IBrbqszykMUWQIP
+ 3AI0ruNoGN4U9EQ==
 X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
  fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convert the bindings to dt-schema. Then make the reset gpio optional in
-the driver.
+In some setups XSHUTDOWN is connected to DOVDD when it's unused,
+therefore treat the reset gpio as optional.
 
+Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
-Changes in v4:
-- Change i2c7 to i2c in binding example
-- Pick up tags from Krzysztof
-- Link to v3: https://lore.kernel.org/r/20230129-ov2685-improvements-v3-0-d9737d0707f6@z3ntu.xyz
+ drivers/media/i2c/ov2685.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes in v3:
-- Drop applied patches
-- Fix rockchip bindings example
-- Add dt-bindings patch from separate series
-- Link to v2: https://lore.kernel.org/r/20230129-ov2685-improvements-v2-0-210400f2b63e@z3ntu.xyz
+diff --git a/drivers/media/i2c/ov2685.c b/drivers/media/i2c/ov2685.c
+index fdf3e06133302..f119a93e7c647 100644
+--- a/drivers/media/i2c/ov2685.c
++++ b/drivers/media/i2c/ov2685.c
+@@ -807,7 +807,7 @@ static int ov2685_probe(struct i2c_client *client)
+ 	if (clk_get_rate(ov2685->xvclk) != OV2685_XVCLK_FREQ)
+ 		dev_warn(dev, "xvclk mismatched, modes are based on 24MHz\n");
+ 
+-	ov2685->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
++	ov2685->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
+ 	if (IS_ERR(ov2685->reset_gpio)) {
+ 		dev_err(dev, "Failed to get reset-gpios\n");
+ 		return -EINVAL;
 
-Changes in v2:
-- 3/4: Reserve more space for v4l2 handler for the new controls (Jacopo)
-- Pick up tags
-- Link to v1: https://lore.kernel.org/r/20230129-ov2685-improvements-v1-0-f281bd49399c@z3ntu.xyz
-
----
-Luca Weiss (3):
-      media: dt-bindings: media: rkisp1: complete ov2685 example
-      media: dt-bindings: ov2685: convert to dtschema
-      media: i2c: ov2685: Make reset gpio optional
-
- .../devicetree/bindings/media/i2c/ov2685.txt       |  41 ---------
- .../devicetree/bindings/media/i2c/ovti,ov2685.yaml | 101 +++++++++++++++++++++
- .../devicetree/bindings/media/rockchip-isp1.yaml   |  19 ++--
- MAINTAINERS                                        |   1 +
- drivers/media/i2c/ov2685.c                         |   2 +-
- 5 files changed, 116 insertions(+), 48 deletions(-)
----
-base-commit: f3594f0204b756638267242e26d9de611435c3ba
-change-id: 20230129-ov2685-improvements-b03bdcf1c290
-
-Best regards,
 -- 
-Luca Weiss <luca@z3ntu.xyz>
+2.40.0
 
