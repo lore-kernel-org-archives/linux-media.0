@@ -2,104 +2,102 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B35A2C6FD1C
-	for <linux-media@archiver.kernel.org>; Wed, 22 Mar 2023 04:26:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE70AC76196
+	for <linux-media@archiver.kernel.org>; Thu, 23 Mar 2023 14:55:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbjCVE05 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Mar 2023 00:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51098 "EHLO
+        id S231891AbjCWOzN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 Mar 2023 10:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjCVE04 (ORCPT
+        with ESMTP id S229548AbjCWOzM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Mar 2023 00:26:56 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707A62597B
-        for <linux-media@vger.kernel.org>; Tue, 21 Mar 2023 21:26:55 -0700 (PDT)
-Received: from fsav411.sakura.ne.jp (fsav411.sakura.ne.jp [133.242.250.110])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 32M4PHDa005049;
-        Wed, 22 Mar 2023 13:25:17 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav411.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp);
- Wed, 22 Mar 2023 13:25:17 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 32M4PHtS005046
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 22 Mar 2023 13:25:17 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <3912432e-bdf7-323a-03c6-46bb1e288b54@I-love.SAKURA.ne.jp>
-Date:   Wed, 22 Mar 2023 13:25:18 +0900
+        Thu, 23 Mar 2023 10:55:12 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BEF1A950
+        for <linux-media@vger.kernel.org>; Thu, 23 Mar 2023 07:55:10 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0AFE8720;
+        Thu, 23 Mar 2023 15:55:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1679583309;
+        bh=vA8PO5p9TRWys+TxE9XybWUba9CRKb2MyoIfYaVzHh4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r1NL56n5ORWbmc776P/QhSFYSI0KjGhcJ+QlZsZZaSfMFrjvzL1jhJ12mzV+qgO2z
+         RPOGufZUO+KXeD6DqlAEnZ7h9v9eK8YxCEX3yVuydyBfAg58/LBANDDWJ5ez5t2IJk
+         efGNiv3xrmb1ZLQbLoPM2saUmPNXmQpoUmZamNIM=
+Date:   Thu, 23 Mar 2023 16:55:15 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Subject: Re: [ANN] Request for Topics for a Media Summit June 26th
+Message-ID: <20230323145515.GA21511@pendragon.ideasonboard.com>
+References: <893a7e34-1d98-23e2-4d27-d25cb3ee5bf0@xs4all.nl>
+ <9d7133b0-185f-a38f-7b24-1c7a847aacc7@xs4all.nl>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [syzbot] [dri?] BUG: sleeping function called from invalid
- context in _vm_unmap_aliases
-Content-Language: en-US
-To:     syzbot <syzbot+a9a2bb6afe9eb31efc56@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>
-References: <0000000000006dc0c105f76c0a72@google.com>
-Cc:     Baoquan He <bhe@redhat.com>, David Hildenbrand <david@redhat.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Liu Shixin <liushixin2@huawei.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <0000000000006dc0c105f76c0a72@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <9d7133b0-185f-a38f-7b24-1c7a847aacc7@xs4all.nl>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit c53e98934f93 ("mm: vmalloc: use rwsem, mutex for vmap_area_lock and vmap_block->lock")
-is broken. We can't take mutex (a sleeping lock) inside RCU read section (an atomic context).
+Hi Hans,
 
-
-@@ -2183,7 +2184,7 @@ static void _vm_unmap_aliases(unsigned long start, unsigned long end, int flush)
-
-                rcu_read_lock();
-                list_for_each_entry_rcu(vb, &vbq->free, free_list) {
--                       spin_lock(&vb->lock);
-+                       mutex_lock(&vb->lock);
-                        if (vb->dirty && vb->dirty != VMAP_BBMAP_BITS) {
-                                unsigned long va_start = vb->va->va_start;
-                                unsigned long s, e;
-@@ -2196,7 +2197,7 @@ static void _vm_unmap_aliases(unsigned long start, unsigned long end, int flush)
-
-                                flush = 1;
-                        }
--                       spin_unlock(&vb->lock);
-+                       mutex_unlock(&vb->lock);
-                }
-                rcu_read_unlock();
-        }
-
-#syz set subsystems: mm
-
-On 2023/03/22 2:04, syzbot wrote:
-> Hello,
+On Mon, Mar 06, 2023 at 09:57:30AM +0100, Hans Verkuil wrote:
+> On 03/03/2023 15:44, Hans Verkuil wrote:
+> > Hi all,
+> > 
+> > I am planning to organize another Media Summit on June 26th, co-located
+> > with the Embedded Open Source Summit in Prague:
+> > 
+> > https://events.linuxfoundation.org/embedded-open-source-summit/
+> > 
+> > I've put in a request for a room with the Linux Foundation and I am waiting
+> > for the result of that. For once I was early with my request, so I have good
+> > hope we'll get a room. Expect the format to be similar to what we did in
+> > Dublin last year.
+> > 
+> > I'm a bit early with this 'Request for Topics' as well, but this allows
+> > everyone who plans to be in Prague to take this into account.
+> > 
+> > So if you have a topic that you want to discuss, just reply. It would be
+> > very much appreciated if you can also add a guesstimate of the time you
+> > need for your topic.
+> > 
+> > Once I have the details of the room and how many people it can hold, then
+> > I will send out a second email asking people to register with me if you
+> > want to join.
+> > 
+> > Regarding remote participation: only if there is really no other way.
+> > Meeting face-to-face once a year is important IMHO, and attending remotely
+> > is a poor substitute. That said, if it is really necessary to set something
+> > up, then I can do the same I did in Dublin, setting up a Webex meeting.
+> > That worked reasonably well, except that I will need to bring a better
+> > speaker since I learned that the laptop speaker was pretty bad.
+> > 
+> > So, if you have topics for the meeting, just reply!
 > 
-> syzbot found the following issue on:
+> I have one:
 > 
-> HEAD commit:    f3594f0204b7 Add linux-next specific files for 20230321
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=161552eec80000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=f22105589e896af1
-> dashboard link: https://syzkaller.appspot.com/bug?extid=a9a2bb6afe9eb31efc56
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> Review the subsystem development process: what can be improved?
+> Are there media developers who are interested in becoming maintainers?
+> Given the amount of traffic I would definitely like to see one or two
+> additional maintainers.
 > 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/0b755145006a/disk-f3594f02.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/fca26e328a81/vmlinux-f3594f02.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/39744d7d289f/bzImage-f3594f02.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+a9a2bb6afe9eb31efc56@syzkaller.appspotmail.com
-> 
+> Guesstimate: 45 minutes
 
+I'm sure we could spend the whole day discussing this :-) More than
+incremental improvements to the development process, I think we need to
+discuss the maintainership model in its entirety. The Linux media
+subsystem is severely understaffed (if anyone disagrees I'd be very
+interested in hearing counter-arguments), and I don't think we'll fix
+that incrementaly without considering on-boarding of additional
+maintainers, as well as retention of existing contributors. Compared to
+some other subsystems (I'm thinking about DRM in particular), we have
+*very* few contributors who stay and become maintainers. That's for me
+the most important issue to solve if we want to scale.
+
+-- 
+Regards,
+
+Laurent Pinchart
