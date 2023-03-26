@@ -2,45 +2,55 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82C41C6FD1C
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:33:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BAB25C77B61
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:33:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232554AbjCZOdI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
+        id S230129AbjCZOdJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232378AbjCZOcl (ORCPT
+        with ESMTP id S232410AbjCZOco (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 Mar 2023 10:32:41 -0400
+        Sun, 26 Mar 2023 10:32:44 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8307D84
-        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 624417DA7
+        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:42 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQC-00082Z-Cz; Sun, 26 Mar 2023 16:32:36 +0200
+        id 1pgRQ7-0007lc-KK; Sun, 26 Mar 2023 16:32:31 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQA-006rbU-5E; Sun, 26 Mar 2023 16:32:34 +0200
+        id 1pgRQ4-006rZG-7s; Sun, 26 Mar 2023 16:32:28 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ8-0088Vv-Kv; Sun, 26 Mar 2023 16:32:32 +0200
+        id 1pgRQ3-0088UK-G3; Sun, 26 Mar 2023 16:32:27 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Eugen Hristev <eugen.hristev@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 033/117] media: microchip-sama5d2-isc: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:31:00 +0200
-Message-Id: <20230326143224.572654-36-u.kleine-koenig@pengutronix.de>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Sean Young <sean@mess.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-media@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de
+Subject: [PATCH 009/117] media: stm32-cec: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:30:36 +0200
+Message-Id: <20230326143224.572654-12-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1945; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=6DLkcjBsFIXRydyOgDhKMvBKli+gRBDanO5gWRa8atU=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFauywHHSaT3npKYmgiU1TU6g94tHBpoJJO4D 3jKRP1UGWeJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWrgAKCRCPgPtYfRL+ TmPWB/9WkVzdAVu+bKuIyvCSS0xpZvohmWGbBt6Tyirkh00kZuY4HUxwsMV7HJWHKeLMDxAdq1W Yma7zktveK8hGD5BenWwRWiTlJvY13xVi7z8XCc93wM07I9h9+m8AZ+EXen0AXXaXfsiJWPQeyB YpKBoC4VpB585k02QiaYxrpowMYLdDrIsYmkCF8GwRxX81tk5tedqzavIv3Bih3VQcewIncMz9w jnQPP/C/FA3G8eLmh73SF49oURSOwjg6dJiaFoVU5kimLp0DNMpUwxuTOhWHwI8tEbk+PfEatcm N7oWefHrsZ+VRDlcTHfeuxUrhnUqvBqWerYXA9qDCs4Agy0K
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1831; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=D/UAC+t+fl8c6EjlWf6JDxvuYAMHu5bYFNCcxsw+JGM=; b=owGbwMvMwMXY3/A7olbonx/jabUkhhSFsAbrwF6Dzy1NElLhi5qCVORf8/NW/5rkxW5prSeRa Ppenr2T0ZiFgZGLQVZMkcW+cU2mVZVcZOfaf5dhBrEygUxh4OIUgIloHuRgmPi/2ny+i9XGX9Hv cj8K8asKTHh7eOVSu2VnF1Xrap96r//j2r8PXm1LZ6xN8T5y9nTDdL5ZNQEmzcbVCluNXV/Z2P2 4d0Yz3ldfqP2a+K3Sf3wTdoT9bj0uZ7imZNLdiAU9x49XX9os3W8lemcCVxrrveKYloCYXdW/rH NncoQvWm+w9eq5dTlt3r+dV+09eFp8456QY14NBdtvPt/9RtT4XiKPEUPz3uj8AoX4lhLbZo9NE Rf7PNj3bym/KJ6z4ofQ1rtlH1Tz2F5t0An+d5XbjKnvL9dEnzUiXLUvnRl6ixTMfnVJ5Vw4O+3k i2hB/bkutcdYEi2rN9Z4Kz374r53G5N/sU+X2vp325QTAQ==
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -64,40 +74,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/platform/microchip/microchip-sama5d2-isc.c | 6 ++----
+ drivers/media/cec/platform/stm32/stm32-cec.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/microchip/microchip-sama5d2-isc.c b/drivers/media/platform/microchip/microchip-sama5d2-isc.c
-index ac4715d91de6..746f4a2fa9f6 100644
---- a/drivers/media/platform/microchip/microchip-sama5d2-isc.c
-+++ b/drivers/media/platform/microchip/microchip-sama5d2-isc.c
-@@ -608,7 +608,7 @@ static int microchip_isc_probe(struct platform_device *pdev)
+diff --git a/drivers/media/cec/platform/stm32/stm32-cec.c b/drivers/media/cec/platform/stm32/stm32-cec.c
+index 7b2db46a5722..ada3d153362a 100644
+--- a/drivers/media/cec/platform/stm32/stm32-cec.c
++++ b/drivers/media/cec/platform/stm32/stm32-cec.c
+@@ -344,7 +344,7 @@ static int stm32_cec_probe(struct platform_device *pdev)
  	return ret;
  }
  
--static int microchip_isc_remove(struct platform_device *pdev)
-+static void microchip_isc_remove(struct platform_device *pdev)
+-static int stm32_cec_remove(struct platform_device *pdev)
++static void stm32_cec_remove(struct platform_device *pdev)
  {
- 	struct isc_device *isc = platform_get_drvdata(pdev);
+ 	struct stm32_cec *cec = platform_get_drvdata(pdev);
  
-@@ -624,8 +624,6 @@ static int microchip_isc_remove(struct platform_device *pdev)
- 	clk_disable_unprepare(isc->hclock);
+@@ -352,8 +352,6 @@ static int stm32_cec_remove(struct platform_device *pdev)
+ 	clk_unprepare(cec->clk_hdmi_cec);
  
- 	microchip_isc_clk_cleanup(isc);
+ 	cec_unregister_adapter(cec->adap);
 -
 -	return 0;
  }
  
- static int __maybe_unused isc_runtime_suspend(struct device *dev)
-@@ -668,7 +666,7 @@ MODULE_DEVICE_TABLE(of, microchip_isc_of_match);
+ static const struct of_device_id stm32_cec_of_match[] = {
+@@ -364,7 +362,7 @@ MODULE_DEVICE_TABLE(of, stm32_cec_of_match);
  
- static struct platform_driver microchip_isc_driver = {
- 	.probe	= microchip_isc_probe,
--	.remove	= microchip_isc_remove,
-+	.remove_new = microchip_isc_remove,
- 	.driver	= {
- 		.name		= "microchip-sama5d2-isc",
- 		.pm		= &microchip_isc_dev_pm_ops,
+ static struct platform_driver stm32_cec_driver = {
+ 	.probe  = stm32_cec_probe,
+-	.remove = stm32_cec_remove,
++	.remove_new = stm32_cec_remove,
+ 	.driver = {
+ 		.name		= CEC_NAME,
+ 		.of_match_table = stm32_cec_of_match,
 -- 
 2.39.2
 
