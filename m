@@ -2,47 +2,45 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAE78C761AF
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:33:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A60EC74A5B
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:33:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232475AbjCZOdp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60632 "EHLO
+        id S232583AbjCZOdr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231989AbjCZOcx (ORCPT
+        with ESMTP id S232479AbjCZOcx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 26 Mar 2023 10:32:53 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FFA658D
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DDB65A4
         for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:51 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQI-0008RZ-RV; Sun, 26 Mar 2023 16:32:42 +0200
+        id 1pgRQO-0000EN-8j; Sun, 26 Mar 2023 16:32:48 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQF-006rdH-KI; Sun, 26 Mar 2023 16:32:39 +0200
+        id 1pgRQM-006rfl-17; Sun, 26 Mar 2023 16:32:46 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQE-0088Xc-DI; Sun, 26 Mar 2023 16:32:38 +0200
+        id 1pgRQL-0088Zb-0O; Sun, 26 Mar 2023 16:32:45 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Dafna Hirschfeld <dafna@fastmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de
-Subject: [PATCH 060/117] media: rkisp1-dev: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:31:27 +0200
-Message-Id: <20230326143224.572654-63-u.kleine-koenig@pengutronix.de>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH 090/117] media: isp: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:31:57 +0200
+Message-Id: <20230326143224.572654-93-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1786; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=Las+mkTmyDmRr0fHmoy+1HXOXOBTIkYgBinmFYNv/w4=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFbOhKe5iFEeZtaIE2yURCxYMuGQRmTh1Y9LN B+ToOKPFUSJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWzgAKCRCPgPtYfRL+ TsngCACG7ACjJvUnzOuiMw/JoBsfe+H9JvMXYxc513dmVUlhNII4PUM+agoqvv2x87UqHjY8yZA k9X5H/WjbP839F1NxO3pT7eE3oDsbrpkBcN0uzvnarW+NM15qArGWUIe7jmx+zwEEUIAbDDodbu SAUaJscUYoxdPnU4D2w7w1FU7o47/V1jAvvQcBmz41tI5xa4YqBDvCVJWm2DfwKPkpulaEWaIfI ov521B2oGEwUPJcw5ehFyLz3SthvMmaCfyoduz7+4oUrRB+bPoh2r8MTcdKipJUlT7AnB1VcdRk Y8vuYZWcbEMStbNbNUWT7MaZF6a3ohYbwtIV/f8CHKe21Hy5
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1721; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=3VExVSSsO7/B3lm+SWJ9hExfHLfDuHO1c63efMmRrZA=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFbxKlUq2guXl9nh7e6yGwM7qnfZSdnk+oogK hBhK9CZAmOJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBW8QAKCRCPgPtYfRL+ TqTnB/9siqx02HYG7IroqTm3QTuqlVawrm3Jz/tmn/6HrubQvQP2BeKz/jc4cPAfoJhifjz0WSj E23uYRSLMAc1TmL3EIKtX93vnDLJLk+x5eCYh0i1Su9ct4uLHLD1PqnEqngPYbuLmY/9FGK230N 9TOOhNSX3FWwtyfLfMp8G647sWBlqDXvuK5lKZ2rGNsxhWkw9kyKq4vQOOUL17kkGdrEbBsl+60 aJDLJpBmfxsiIaKMbDuKyRd6y/F0jjwRx+JLn2y/+cdx7zDsVnOrrOGoh2gcKQeluUPa8q7CeUP 3s1a1BvZvv6QUjBhAh4kkfHJybAKJZADoiHtD1C9DZsRFsXQ
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -66,40 +64,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c | 6 ++----
+ drivers/media/platform/ti/omap3isp/isp.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-index f2475c6235ea..4762cb32353d 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-@@ -622,7 +622,7 @@ static int rkisp1_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
--static int rkisp1_remove(struct platform_device *pdev)
-+static void rkisp1_remove(struct platform_device *pdev)
+diff --git a/drivers/media/platform/ti/omap3isp/isp.c b/drivers/media/platform/ti/omap3isp/isp.c
+index e7327e38482d..f3aaa9e76492 100644
+--- a/drivers/media/platform/ti/omap3isp/isp.c
++++ b/drivers/media/platform/ti/omap3isp/isp.c
+@@ -1997,7 +1997,7 @@ static int isp_attach_iommu(struct isp_device *isp)
+  *
+  * Always returns 0.
+  */
+-static int isp_remove(struct platform_device *pdev)
++static void isp_remove(struct platform_device *pdev)
  {
- 	struct rkisp1_device *rkisp1 = platform_get_drvdata(pdev);
+ 	struct isp_device *isp = platform_get_drvdata(pdev);
  
-@@ -638,8 +638,6 @@ static int rkisp1_remove(struct platform_device *pdev)
- 	v4l2_device_unregister(&rkisp1->v4l2_dev);
+@@ -2014,8 +2014,6 @@ static int isp_remove(struct platform_device *pdev)
+ 	v4l2_async_nf_cleanup(&isp->notifier);
  
- 	pm_runtime_disable(&pdev->dev);
+ 	kfree(isp);
 -
 -	return 0;
  }
  
- static struct platform_driver rkisp1_drv = {
-@@ -649,7 +647,7 @@ static struct platform_driver rkisp1_drv = {
- 		.pm = &rkisp1_pm_ops,
- 	},
- 	.probe = rkisp1_probe,
--	.remove = rkisp1_remove,
-+	.remove_new = rkisp1_remove,
- };
+ enum isp_of_phy {
+@@ -2476,7 +2474,7 @@ MODULE_DEVICE_TABLE(of, omap3isp_of_table);
  
- module_platform_driver(rkisp1_drv);
+ static struct platform_driver omap3isp_driver = {
+ 	.probe = isp_probe,
+-	.remove = isp_remove,
++	.remove_new = isp_remove,
+ 	.id_table = omap3isp_id_table,
+ 	.driver = {
+ 		.name = "omap3isp",
 -- 
 2.39.2
 
