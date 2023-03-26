@@ -2,50 +2,48 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83E99C77B61
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:34:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30244C74A5B
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:34:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232524AbjCZOea (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:34:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33464 "EHLO
+        id S232602AbjCZOec (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232546AbjCZOdF (ORCPT
+        with ESMTP id S232548AbjCZOdF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 26 Mar 2023 10:33:05 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794266593
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D1765AB
         for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:58 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQS-0000UE-1O; Sun, 26 Mar 2023 16:32:52 +0200
+        id 1pgRQP-0000GD-Iz; Sun, 26 Mar 2023 16:32:49 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQQ-006rhN-4K; Sun, 26 Mar 2023 16:32:50 +0200
+        id 1pgRQM-006rg7-Qn; Sun, 26 Mar 2023 16:32:46 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQO-0088ai-Qv; Sun, 26 Mar 2023 16:32:48 +0200
+        id 1pgRQM-0088Zv-5E; Sun, 26 Mar 2023 16:32:46 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Sean Young <sean@mess.org>,
+To:     Hyun Kwon <hyun.kwon@xilinx.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, kernel@pengutronix.de
-Subject: [PATCH 107/117] media: meson-ir: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:32:14 +0200
-Message-Id: <20230326143224.572654-110-u.kleine-koenig@pengutronix.de>
+        Michal Simek <michal.simek@xilinx.com>
+Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kernel@pengutronix.de
+Subject: [PATCH 095/117] media: xilinx-csi2rxss: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:32:02 +0200
+Message-Id: <20230326143224.572654-98-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1811; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=wYp5LkcV04MNjqVKDISGMwVDxC08wU2j1G438UbXmc8=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFc8B6ECdtaukjrMUlW1e4Am7PV23oSJwTSf7 OW/cQKXajuJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBXPAAKCRCPgPtYfRL+ TjD8B/9ityswRX4rXG8YFgpVAK+DucWXEhqR7mgWOi4xafFoXQHOz1DViHXR2fqT4og3dIxxdu7 PEGwuvFcnFXLKqLrUZJjAvw2FbwFxZoIVGKATTAljND2DFkHNewqzg2oNwoPTy6lsnrMKuH2lr8 yqG5fnuSuZzCOzfGjsDx0QwQjyMb9Fo6f6KXCU0Ubb7agkNLhofwlos+0WEIjKBRSQCX17aDY+j 3fozbtMGts5Cmg2cJD8HzYzWli2I1Qw0oZFjjSXcVGKQ5zIj6FMQ/ig+Ymu31dH2t5rJvNKD3PW Y5Xufu+bEPutpRRx4q9VpqDh4mAP2h/E1t5hTHHNdUHAw7Vn
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1953; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=FZR4BFA0Qk42KswnwMjnFUu/VtbyKPil5uHT81HsGo4=; b=owGbwMvMwMXY3/A7olbonx/jabUkhhSFsD+pFaoTc9sYO8RXXfovlvmVO688aFv8lRROFX+Nl Ok1l7I7GY1ZGBi5GGTFFFnsG9dkWlXJRXau/XcZZhArE8gUBi5OAZiIJiP7//hJoZW7y091sW6S jqyxmSJjPLnkEA8vTxcTd2V8xtTkatGvk7lfP7z1vYazt/uneoDolIv7c1ZPEWFIqSiJWJDLcCv E4Jv0ng9xXUbH09NmRZzxbvyRwrNVeZ5p2/bK/uJvHz7JaHoblu5YvlHKlqkw7xhLS/RNsSO2Oy 5N/6H6zflchqZ1xbO/8xY1yNVxqfu81dnzmu1QpHC28cTWk3WSma9EdRs6xS4+ms86n+/va6Pqt 7NmV2id9LYRXWNj4L0l7+7v0x0bMn8/ynSpDW6evPHKxrkrtxzflOc7NTAh0U5EPWiVY+GjWX+V bm9UMbHwjA/NmrtWQa7yzjzW1/LyDnnzqxq9d85JDXgPAA==
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -69,40 +67,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/rc/meson-ir.c | 6 ++----
+ drivers/media/platform/xilinx/xilinx-csi2rxss.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/rc/meson-ir.c b/drivers/media/rc/meson-ir.c
-index 4b769111f78e..49aa309d1a8c 100644
---- a/drivers/media/rc/meson-ir.c
-+++ b/drivers/media/rc/meson-ir.c
-@@ -177,7 +177,7 @@ static int meson_ir_probe(struct platform_device *pdev)
- 	return 0;
+diff --git a/drivers/media/platform/xilinx/xilinx-csi2rxss.c b/drivers/media/platform/xilinx/xilinx-csi2rxss.c
+index d8a23f18cfbc..5b53745fe44e 100644
+--- a/drivers/media/platform/xilinx/xilinx-csi2rxss.c
++++ b/drivers/media/platform/xilinx/xilinx-csi2rxss.c
+@@ -1059,7 +1059,7 @@ static int xcsi2rxss_probe(struct platform_device *pdev)
+ 	return ret;
  }
  
--static int meson_ir_remove(struct platform_device *pdev)
-+static void meson_ir_remove(struct platform_device *pdev)
+-static int xcsi2rxss_remove(struct platform_device *pdev)
++static void xcsi2rxss_remove(struct platform_device *pdev)
  {
- 	struct meson_ir *ir = platform_get_drvdata(pdev);
- 	unsigned long flags;
-@@ -186,8 +186,6 @@ static int meson_ir_remove(struct platform_device *pdev)
- 	spin_lock_irqsave(&ir->lock, flags);
- 	meson_ir_set_mask(ir, IR_DEC_REG1, REG1_ENABLE, 0);
- 	spin_unlock_irqrestore(&ir->lock, flags);
+ 	struct xcsi2rxss_state *xcsi2rxss = platform_get_drvdata(pdev);
+ 	struct v4l2_subdev *subdev = &xcsi2rxss->subdev;
+@@ -1070,8 +1070,6 @@ static int xcsi2rxss_remove(struct platform_device *pdev)
+ 	mutex_destroy(&xcsi2rxss->lock);
+ 	clk_bulk_disable_unprepare(num_clks, xcsi2rxss->clks);
+ 	clk_bulk_put(num_clks, xcsi2rxss->clks);
 -
 -	return 0;
  }
  
- static void meson_ir_shutdown(struct platform_device *pdev)
-@@ -226,7 +224,7 @@ MODULE_DEVICE_TABLE(of, meson_ir_match);
+ static const struct of_device_id xcsi2rxss_of_id_table[] = {
+@@ -1086,7 +1084,7 @@ static struct platform_driver xcsi2rxss_driver = {
+ 		.of_match_table	= xcsi2rxss_of_id_table,
+ 	},
+ 	.probe			= xcsi2rxss_probe,
+-	.remove			= xcsi2rxss_remove,
++	.remove_new		= xcsi2rxss_remove,
+ };
  
- static struct platform_driver meson_ir_driver = {
- 	.probe		= meson_ir_probe,
--	.remove		= meson_ir_remove,
-+	.remove_new	= meson_ir_remove,
- 	.shutdown	= meson_ir_shutdown,
- 	.driver = {
- 		.name		= DRIVER_NAME,
+ module_platform_driver(xcsi2rxss_driver);
 -- 
 2.39.2
 
