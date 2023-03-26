@@ -2,48 +2,48 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74B98C74A5B
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:34:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33FA6C761AF
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:34:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232433AbjCZOeB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:34:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
+        id S232489AbjCZOeC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:34:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232491AbjCZOcy (ORCPT
+        with ESMTP id S232459AbjCZOcz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 Mar 2023 10:32:54 -0400
+        Sun, 26 Mar 2023 10:32:55 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B691F7EC8
-        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8317EDB
+        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:53 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQJ-0008UZ-Ty; Sun, 26 Mar 2023 16:32:43 +0200
+        id 1pgRQJ-0008TA-7P; Sun, 26 Mar 2023 16:32:43 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQH-006re5-7Z; Sun, 26 Mar 2023 16:32:41 +0200
+        id 1pgRQG-006rdf-Bt; Sun, 26 Mar 2023 16:32:40 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQG-0088YK-KM; Sun, 26 Mar 2023 16:32:40 +0200
+        id 1pgRQF-0088Xq-C4; Sun, 26 Mar 2023 16:32:39 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH 070/117] media: jpeg-core: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:31:37 +0200
-Message-Id: <20230326143224.572654-73-u.kleine-koenig@pengutronix.de>
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH 064/117] media: fimc-is: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:31:31 +0200
+Message-Id: <20230326143224.572654-67-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1887; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=K8YXHA6An9VeSpuL+P9agQFsMTbpUA1rmCBKufhs3os=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFbZwa0OM/K6Y6TcUKe458TpAeLUaR5YJ3rY+ ZtgIJ3sA4yJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBW2QAKCRCPgPtYfRL+ TqpfB/9rz1jd28FVNI1BdLMJ0DvqA2ksfzFrqunRzHssPt4Drrc94dtHxZDRaP9kTelWcHwISxu l3FHXpxRLeCVjEih7FL+YdVIDOr222YzAlJ2IOCN/gKLPP13wxBihB2VEJCMeRQI+016CjEDxLn HrbP7Wx0k5ih3jW7qDr7xHu6tF7dcn0yQ8/Mt5zzFzSYCgad9cBciAGH/yzgpIcs8zB1bbFO1Qe tB5xm/iBXHKpZ2IvdEMSQDhNAGKpnYAFX1/ZLwxzGO9j/FWke77e9pEqawo4Bej2khaKwcUNa2k iZj8kXHNdjeztVvM8n3Bx9AIBSBGIPuTiiqY2O7DoKYCWNn8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1910; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=YoQhZHlKBWG3AsLKqLOSSczqOknOqCR/k6LMBg0SGGA=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFbT3jVoeYt9UEn3O4P1tY69DK+FCDa5okK2Y KCo1VaGbd6JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBW0wAKCRCPgPtYfRL+ TlfEB/0RmiaPfSi7/Id07Mc3czBQtlK/Ppgyf/m2bHrpHFeCvm6YnFfiCH807E42bCxgYJAaqBE zMAIn+Olsji48KVxXrPLUAZik93EOLufRPEesy7zhf60FT44zKoT0OhFqXaNX+ZDBIYV/ou5CRu OrWCW9DJPYBx50iEGp9u3u+e1LYVT//iGJdARFaxLuF7nD+8WqRmH6LuGgg0CvyNhOyAGZdIntZ Rd4rxs4uDopXdAVbEbWLoGF1KkzQ1pzpuHsMwTe21gL9V+06ueWMtprTHzUMiHxFocHCtnXaqJR eucJHGeDhYKlEImTTlyUkKXoaSOZPOQs2SPOVSuijEeCrRF5
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -67,40 +67,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c | 6 ++----
+ drivers/media/platform/samsung/exynos4-is/fimc-is.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-index 55814041b8d8..c3c7e48f1b6e 100644
---- a/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-+++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-@@ -2991,7 +2991,7 @@ static int s5p_jpeg_probe(struct platform_device *pdev)
- 	return ret;
+diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-is.c b/drivers/media/platform/samsung/exynos4-is/fimc-is.c
+index a7704ff069d6..530a148fe4d3 100644
+--- a/drivers/media/platform/samsung/exynos4-is/fimc-is.c
++++ b/drivers/media/platform/samsung/exynos4-is/fimc-is.c
+@@ -915,7 +915,7 @@ static int fimc_is_suspend(struct device *dev)
  }
+ #endif /* CONFIG_PM_SLEEP */
  
--static int s5p_jpeg_remove(struct platform_device *pdev)
-+static void s5p_jpeg_remove(struct platform_device *pdev)
+-static int fimc_is_remove(struct platform_device *pdev)
++static void fimc_is_remove(struct platform_device *pdev)
  {
- 	struct s5p_jpeg *jpeg = platform_get_drvdata(pdev);
- 	int i;
-@@ -3008,8 +3008,6 @@ static int s5p_jpeg_remove(struct platform_device *pdev)
- 		for (i = jpeg->variant->num_clocks - 1; i >= 0; i--)
- 			clk_disable_unprepare(jpeg->clocks[i]);
- 	}
+ 	struct device *dev = &pdev->dev;
+ 	struct fimc_is *is = dev_get_drvdata(dev);
+@@ -932,8 +932,6 @@ static int fimc_is_remove(struct platform_device *pdev)
+ 	fimc_is_debugfs_remove(is);
+ 	release_firmware(is->fw.f_w);
+ 	fimc_is_free_cpu_memory(is);
 -
 -	return 0;
  }
  
- #ifdef CONFIG_PM
-@@ -3164,7 +3162,7 @@ static void *jpeg_get_drv_data(struct device *dev)
+ static const struct of_device_id fimc_is_of_match[] = {
+@@ -950,7 +948,7 @@ static const struct dev_pm_ops fimc_is_pm_ops = {
  
- static struct platform_driver s5p_jpeg_driver = {
- 	.probe = s5p_jpeg_probe,
--	.remove = s5p_jpeg_remove,
-+	.remove_new = s5p_jpeg_remove,
+ static struct platform_driver fimc_is_driver = {
+ 	.probe		= fimc_is_probe,
+-	.remove		= fimc_is_remove,
++	.remove_new	= fimc_is_remove,
  	.driver = {
- 		.of_match_table	= of_match_ptr(samsung_jpeg_match),
- 		.name		= S5P_JPEG_M2M_NAME,
+ 		.of_match_table	= fimc_is_of_match,
+ 		.name		= FIMC_IS_DRV_NAME,
 -- 
 2.39.2
 
