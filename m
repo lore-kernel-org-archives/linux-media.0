@@ -2,51 +2,48 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AD95C77B62
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:32:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0E76C6FD1C
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:32:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232484AbjCZOcx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:32:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59850 "EHLO
+        id S232494AbjCZOcy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:32:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232323AbjCZOch (ORCPT
+        with ESMTP id S232380AbjCZOch (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 26 Mar 2023 10:32:37 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E461265A4
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9717AB1
         for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:35 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ4-0007lJ-NI; Sun, 26 Mar 2023 16:32:28 +0200
+        id 1pgRQ5-0007m3-5H; Sun, 26 Mar 2023 16:32:29 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ4-006rZ8-1O; Sun, 26 Mar 2023 16:32:28 +0200
+        id 1pgRQ4-006rZO-El; Sun, 26 Mar 2023 16:32:28 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ1-0088Tu-Vm; Sun, 26 Mar 2023 16:32:25 +0200
+        id 1pgRQ3-0088UP-PV; Sun, 26 Mar 2023 16:32:27 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
-        Scott Chao <scott_chao@wistron.corp-partner.google.com>,
-        Rory Liu <hellojacky0226@hotmail.com>
-Cc:     Guenter Roeck <groeck@chromium.org>, linux-media@vger.kernel.org,
-        chrome-platform@lists.linux.dev, kernel@pengutronix.de
-Subject: [PATCH 002/117] media: cros-ec-cec: Don't exit early in .remove() callback
-Date:   Sun, 26 Mar 2023 16:30:29 +0200
-Message-Id: <20230326143224.572654-5-u.kleine-koenig@pengutronix.de>
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     linux-tegra@vger.kernel.org, linux-media@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH 010/117] media: tegra_cec: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:30:37 +0200
+Message-Id: <20230326143224.572654-13-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1594; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=kgeU/STcVheBqmh2v51qr6VZsSNJVCPY6dohJcgJw24=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFZ4Jv2IUB+TsS3cRYmo+391OUWzOKdO517oT nXTmcDYqVmJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWeAAKCRCPgPtYfRL+ Tn0nCACG3nHmXDsIm/agxXT0CZNZytZ+mB4wXjRqCDzfvWr9rUFyDnzKCf0bxLKSCViCk3nPcu/ 6/PQElbeTxe3RbxFfXSGo0ahlP2PcwJyHlJD8hyR+D9Ziab15xZCFkLihGxrCxokGkmBsaF3sp4 Puz4f1E7WP0LPLD1qKp8t4dY1/Gt08WAzm31yzVvYq+q/DktMX4XHvejS+i5WmzwBhrF4/lnZdI 2lMaOhQB709qHf792KJgszacE+2T0KoDPGt2MYkqn9zF4jBt0yXf26C1cWklMZ+6diUaS0Y/quF sXjILaYKhadjnN6d0Pe9z7Flk4i8Yg4MsbN2yT0VhBxqBfL8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1802; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=WdH7zj7jJfhuqfwnTFIvZL9loWPxn7zYQd+ZSpifBkg=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFaBJ/gZrFMF+ndWuQKY8bBkUcpv6VtZTD1ke iKnnmWfPpWJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWgQAKCRCPgPtYfRL+ TqsMB/9bhK7nISK4AJ6iiDvOXMZ0TL7t335DQyf5QD484DG+LlcUDp37CGlG1MZfzi5fckQvF4i LSRyNdQ3wUat+Pfp0WPrlzwVN6/ls+NH039bpF9LVBVIQfUyUWeSuaDCKZq+Hl1AWSFov0RJPB4 oRELcdf/h4URiBQjmqhz6oraiyEzjtKp5/vAF5Wx19n2TsuiM+JRTc93v8TmP2kOuR2+G7lZ3S4 VEf+K1SoOX166LOwKAqi4/OtA9UdHxs9Lb+2EA75JrZhL+yUmy9swIIQOkQxT+t6/ziCePj2YJH s08AbAOnGZ2hv/McNuMT+eKU1scWnkRWgYM4ZaqFkNlZo3Tl
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -57,45 +54,53 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Exiting early in remove without releasing all acquired resources yields
-leaks. Note that e.g. memory allocated with devm_zalloc() is freed after
-.remove() returns, even if the return code was negative.
+The .remove() callback for a platform driver returns an int which makes
+many driver authors wrongly assume it's possible to do error handling by
+returning an error code. However the value returned is (mostly) ignored
+and this typically results in resource leaks. To improve here there is a
+quest to make the remove callback return void. In the first step of this
+quest all drivers are converted to .remove_new() which already returns
+void.
 
-While blocking_notifier_chain_unregister() won't fail and so the
-change is somewhat cosmetic, platform driver's .remove callbacks are
-about to be converted to return void. To prepare that, keep the error
-message but don't return early.
+Trivially convert this driver from always returning zero in the remove
+callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/cec/platform/cros-ec/cros-ec-cec.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/media/cec/platform/tegra/tegra_cec.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-index 6ebedc71d67d..960432230bbf 100644
---- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-+++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-@@ -332,14 +332,16 @@ static int cros_ec_cec_remove(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	int ret;
+diff --git a/drivers/media/cec/platform/tegra/tegra_cec.c b/drivers/media/cec/platform/tegra/tegra_cec.c
+index 5e907395ca2e..04dc06e3c42a 100644
+--- a/drivers/media/cec/platform/tegra/tegra_cec.c
++++ b/drivers/media/cec/platform/tegra/tegra_cec.c
+@@ -421,7 +421,7 @@ static int tegra_cec_probe(struct platform_device *pdev)
+ 	return ret;
+ }
  
-+	/*
-+	 * blocking_notifier_chain_unregister() only fails if the notifier isn't
-+	 * in the list. We know it was added to it by .probe(), so there should
-+	 * be no need for error checking. Be cautious and still check.
-+	 */
- 	ret = blocking_notifier_chain_unregister(
- 			&cros_ec_cec->cros_ec->event_notifier,
- 			&cros_ec_cec->notifier);
+-static int tegra_cec_remove(struct platform_device *pdev)
++static void tegra_cec_remove(struct platform_device *pdev)
+ {
+ 	struct tegra_cec *cec = platform_get_drvdata(pdev);
+ 
+@@ -429,8 +429,6 @@ static int tegra_cec_remove(struct platform_device *pdev)
+ 
+ 	cec_notifier_cec_adap_unregister(cec->notifier, cec->adap);
+ 	cec_unregister_adapter(cec->adap);
 -
--	if (ret) {
-+	if (ret)
- 		dev_err(dev, "failed to unregister notifier\n");
--		return ret;
--	}
+-	return 0;
+ }
  
- 	cec_notifier_cec_adap_unregister(cros_ec_cec->notify,
- 					 cros_ec_cec->adap);
+ #ifdef CONFIG_PM
+@@ -467,7 +465,7 @@ static struct platform_driver tegra_cec_driver = {
+ 		.of_match_table = of_match_ptr(tegra_cec_of_match),
+ 	},
+ 	.probe = tegra_cec_probe,
+-	.remove = tegra_cec_remove,
++	.remove_new = tegra_cec_remove,
+ 
+ #ifdef CONFIG_PM
+ 	.suspend = tegra_cec_suspend,
 -- 
 2.39.2
 
