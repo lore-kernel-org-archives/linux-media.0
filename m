@@ -2,47 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E98BC74A5B
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:34:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AED32C761AF
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:34:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232527AbjCZOeS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32776 "EHLO
+        id S232596AbjCZOeT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232528AbjCZOdA (ORCPT
+        with ESMTP id S232474AbjCZOdB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 Mar 2023 10:33:00 -0400
+        Sun, 26 Mar 2023 10:33:01 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D1410F5
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBFF35A0
         for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:55 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQM-0008Vn-2h; Sun, 26 Mar 2023 16:32:46 +0200
+        id 1pgRQQ-0000NV-HX; Sun, 26 Mar 2023 16:32:50 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQI-006reH-0h; Sun, 26 Mar 2023 16:32:42 +0200
+        id 1pgRQO-006rgo-JM; Sun, 26 Mar 2023 16:32:48 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQG-0088YP-Tu; Sun, 26 Mar 2023 16:32:40 +0200
+        id 1pgRQN-0088aO-LG; Sun, 26 Mar 2023 16:32:47 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH 071/117] media: s5p_mfc: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:31:38 +0200
-Message-Id: <20230326143224.572654-74-u.kleine-koenig@pengutronix.de>
+To:     Eduardo Valentin <edubezval@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH 102/117] media: radio-platform-si4713: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:32:09 +0200
+Message-Id: <20230326143224.572654-105-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1818; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=POKZFpij1G0A5FGdAey8RIk/pX8gSv8910ObNKDVQZI=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFbbRUsksmB82lUWVdPtKzggqQbQ8MLkyWDW9 htTyQx9q3CJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBW2wAKCRCPgPtYfRL+ Tre8B/939ec9m4A8vt1/3afsJDBbytHUmyex/kph9TTBE38+OGfiQqS5sX1Y5BCsdbUU/SqWFDb /APHGPPENxRt/4gG1Y3jF8b2P9OxQ5+5N1JQW+l4L6jnNJGHCsUDdc4j6puVD0YUKitTQnB/XdB KNAoFbawf8O5cXLpuFULS3vab9ft8Dd4l/Tb+K0MGzcjIErKSVQWwk4RBsHDVk7DD8VOTuugV1C fFLbk0xlw8xRkbEZsM3377FjCocdzvfSztGfRReA6u1qek44WWjIcD/10uHr7Kck9jWgO0Xy7kK Epgo1j+wDi8jCtQPVHubvNRzpic9qeVNCedUrAt1wEo55x9N
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2081; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=latyRcX3Cuz+KrS8QqhhZjtxZX/vMr10c1SA0hWivvs=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFcdFik6RuJGFqKxtuaCXsUOpA+2AqQXC5moZ wP1y+NUcLaJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBXHQAKCRCPgPtYfRL+ Tmy4B/4wm9m7UvS6kZiEzZ+XgydNqY7dpv2rRMYoxsuaEMoG8zU7f8iuWcbsK1W73+nqR3EAOj/ qQAYFpALz4onrsMaMYwAWEmK8f8HUQBq2xBBjdECL5+eQXCwfFL6QR75dXGQuACx2Gk0fFpUM6V YxGuVe5UBB95gbUKLNqjgHp8/TTTfGLatHxB9K6MeeUjEhu2Ri7gY8+AanSR5AyosYW/F59b6/V XTfZn/N8qrP/OUrh+MJduae2OduqirCBU4jDU0KGjxsRC4KLoxK0JcWopiZ+1D9yXFAUiFw4iSS umdeeb5toUOxnh6GGM6tUYlOKc6N1kfksg3ubfDyqGvc4cq4
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -66,39 +65,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/media/radio/si4713/radio-platform-si4713.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
-index 9d2cce124a34..e30e54935d79 100644
---- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
-@@ -1431,7 +1431,7 @@ static int s5p_mfc_probe(struct platform_device *pdev)
+diff --git a/drivers/media/radio/si4713/radio-platform-si4713.c b/drivers/media/radio/si4713/radio-platform-si4713.c
+index 433f9642786d..9fdaed68a962 100644
+--- a/drivers/media/radio/si4713/radio-platform-si4713.c
++++ b/drivers/media/radio/si4713/radio-platform-si4713.c
+@@ -190,7 +190,7 @@ static int radio_si4713_pdriver_probe(struct platform_device *pdev)
  }
  
- /* Remove the driver */
--static int s5p_mfc_remove(struct platform_device *pdev)
-+static void s5p_mfc_remove(struct platform_device *pdev)
+ /* radio_si4713_pdriver_remove - remove the device */
+-static int radio_si4713_pdriver_remove(struct platform_device *pdev)
++static void radio_si4713_pdriver_remove(struct platform_device *pdev)
  {
- 	struct s5p_mfc_dev *dev = platform_get_drvdata(pdev);
- 	struct s5p_mfc_ctx *ctx;
-@@ -1463,7 +1463,6 @@ static int s5p_mfc_remove(struct platform_device *pdev)
- 	s5p_mfc_unconfigure_dma_memory(dev);
- 
- 	s5p_mfc_final_pm(dev);
+ 	struct v4l2_device *v4l2_dev = platform_get_drvdata(pdev);
+ 	struct radio_si4713_device *rsdev;
+@@ -198,8 +198,6 @@ static int radio_si4713_pdriver_remove(struct platform_device *pdev)
+ 	rsdev = container_of(v4l2_dev, struct radio_si4713_device, v4l2_dev);
+ 	video_unregister_device(&rsdev->radio_dev);
+ 	v4l2_device_unregister(&rsdev->v4l2_dev);
+-
 -	return 0;
  }
  
- #ifdef CONFIG_PM_SLEEP
-@@ -1690,7 +1689,7 @@ MODULE_DEVICE_TABLE(of, exynos_mfc_match);
+ static struct platform_driver radio_si4713_pdriver = {
+@@ -207,7 +205,7 @@ static struct platform_driver radio_si4713_pdriver = {
+ 		.name	= "radio-si4713",
+ 	},
+ 	.probe		= radio_si4713_pdriver_probe,
+-	.remove         = radio_si4713_pdriver_remove,
++	.remove_new     = radio_si4713_pdriver_remove,
+ };
  
- static struct platform_driver s5p_mfc_driver = {
- 	.probe		= s5p_mfc_probe,
--	.remove		= s5p_mfc_remove,
-+	.remove_new	= s5p_mfc_remove,
- 	.driver	= {
- 		.name	= S5P_MFC_NAME,
- 		.pm	= &s5p_mfc_pm_ops,
+ module_platform_driver(radio_si4713_pdriver);
 -- 
 2.39.2
 
