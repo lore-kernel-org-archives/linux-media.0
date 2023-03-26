@@ -2,50 +2,45 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEB1DC6FD1C
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:34:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 389ABC74A5B
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:34:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232546AbjCZOef (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60432 "EHLO
+        id S232601AbjCZOeh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232536AbjCZOdH (ORCPT
+        with ESMTP id S232526AbjCZOdK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 Mar 2023 10:33:07 -0400
+        Sun, 26 Mar 2023 10:33:10 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FB365B7
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A0A65A4
         for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:58 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQR-0000RA-8t; Sun, 26 Mar 2023 16:32:51 +0200
+        id 1pgRQT-0000a4-Hi; Sun, 26 Mar 2023 16:32:53 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQP-006rh7-CS; Sun, 26 Mar 2023 16:32:49 +0200
+        id 1pgRQR-006rhy-LG; Sun, 26 Mar 2023 16:32:51 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQO-0088ae-JD; Sun, 26 Mar 2023 16:32:48 +0200
+        id 1pgRQQ-0088bM-Vk; Sun, 26 Mar 2023 16:32:50 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, kernel@pengutronix.de
-Subject: [PATCH 106/117] media: meson-ir-tx: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:32:13 +0200
-Message-Id: <20230326143224.572654-109-u.kleine-koenig@pengutronix.de>
+To:     Antti Palosaari <crope@iki.fi>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH 117/117] media: it913x: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:32:24 +0200
+Message-Id: <20230326143224.572654-120-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1674; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=kHPP5cAhCKQcnI3fcuUH21X+adxb7h92mrf8biP7X1I=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFc2doI8Irf3L+APeL6fQdlbpWqvKqvbIdtL/ 9AfRTr1y3OJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBXNgAKCRCPgPtYfRL+ TiQPB/43rKAeYEk5tngWQ1afUwcGeaTDq/Ex5Lt4HVQ67loUPt2JA9ipfAI7uBnjBX/qYBEDItC 6TV00fMu6QEnNHjgyvSfDyiFqfQ6ccXaPLZEl6Z7E6dddPgGZevqg4rZ7iNmX4soGou0pfDaYy6 8A+ipF0AiIthobt2ZuQv3FmYh7Oo5e8f1AzZXUd5wdCfTCgk3VRarWs4LcTx4csFSMxPGOxWYkO wrcMO1sXIe/Z1+udrBVRtvdQqBHYccSxi+RdXAp0HDWuU+FesUaUGHNoXEFWKcbbmIS4Bez7Ll0 cYhPJ/8L6A61O91JsfUuakFBXJwy8/Tl/zJzDgff0M1N2IiZ
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1748; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=IWiP7BQxrMEqnTiyDeYG5YBvZSoqaHuYCH09+5LsHok=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFdhXGR3ki75ycz9AMtkzRW/wAugepMmlAUPK tJ0GM84wsuJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBXYQAKCRCPgPtYfRL+ TmRPB/9op5i/IUADzoGpd6X0DUHo2iFmwj+l7eubuh2vpVuPnqXv1ApfTBGyQ9qPLEqsAZLlFEG XDQd9UG88wUNhgoegkBYpme+bhlDf2eduPpTn8maZSxTdOm0/Kvzdp0p97UKZm3exMvqFSbkdiE PUO41dbMYeN1drfIzqC7Ch0OgqeBXV0PfRawbaK/asERFoILB7uxuB8kw6LBHVAgTnp4057XJzR /w88sn8x+gZsMPta1oTmXob2TUVNuQgsHoCUSbrE0999uyq1Y1Gsy07Y7D4zDqgLfXtL9qooWYs Z0912kgPPERbZ1NRDpEfNCE5ZQh9lGdqwgjbKrzdjOFzYLIJ
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -69,37 +64,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/rc/meson-ir-tx.c | 6 ++----
+ drivers/media/tuners/it913x.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/rc/meson-ir-tx.c b/drivers/media/rc/meson-ir-tx.c
-index abdb62b16e98..6355b79893fb 100644
---- a/drivers/media/rc/meson-ir-tx.c
-+++ b/drivers/media/rc/meson-ir-tx.c
-@@ -372,13 +372,11 @@ static int __init meson_irtx_probe(struct platform_device *pdev)
- 	return 0;
+diff --git a/drivers/media/tuners/it913x.c b/drivers/media/tuners/it913x.c
+index 7696a28fe407..4d5b1c878028 100644
+--- a/drivers/media/tuners/it913x.c
++++ b/drivers/media/tuners/it913x.c
+@@ -419,7 +419,7 @@ static int it913x_probe(struct platform_device *pdev)
+ 	return ret;
  }
  
--static int meson_irtx_remove(struct platform_device *pdev)
-+static void meson_irtx_remove(struct platform_device *pdev)
+-static int it913x_remove(struct platform_device *pdev)
++static void it913x_remove(struct platform_device *pdev)
  {
- 	struct rc_dev *rc = platform_get_drvdata(pdev);
- 
- 	rc_unregister_device(rc);
+ 	struct it913x_dev *dev = platform_get_drvdata(pdev);
+ 	struct dvb_frontend *fe = dev->fe;
+@@ -429,8 +429,6 @@ static int it913x_remove(struct platform_device *pdev)
+ 	memset(&fe->ops.tuner_ops, 0, sizeof(struct dvb_tuner_ops));
+ 	fe->tuner_priv = NULL;
+ 	kfree(dev);
 -
 -	return 0;
  }
  
- static const struct of_device_id meson_irtx_dt_match[] = {
-@@ -390,7 +388,7 @@ static const struct of_device_id meson_irtx_dt_match[] = {
- MODULE_DEVICE_TABLE(of, meson_irtx_dt_match);
+ static const struct platform_device_id it913x_id_table[] = {
+@@ -446,7 +444,7 @@ static struct platform_driver it913x_driver = {
+ 		.suppress_bind_attrs	= true,
+ 	},
+ 	.probe		= it913x_probe,
+-	.remove		= it913x_remove,
++	.remove_new	= it913x_remove,
+ 	.id_table	= it913x_id_table,
+ };
  
- static struct platform_driver meson_irtx_pd = {
--	.remove = meson_irtx_remove,
-+	.remove_new = meson_irtx_remove,
- 	.driver = {
- 		.name = DRIVER_NAME,
- 		.of_match_table = meson_irtx_dt_match,
 -- 
 2.39.2
 
