@@ -2,45 +2,45 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37C98C761AF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA9C7C6FD1C
 	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:34:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232394AbjCZOe1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:34:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
+        id S232541AbjCZOe2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232541AbjCZOdD (ORCPT
+        with ESMTP id S231258AbjCZOdD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 26 Mar 2023 10:33:03 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21D749D9
-        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D47813D
+        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:55 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQT-0000af-No; Sun, 26 Mar 2023 16:32:53 +0200
+        id 1pgRQQ-0000NA-8i; Sun, 26 Mar 2023 16:32:50 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQR-006ri1-SW; Sun, 26 Mar 2023 16:32:51 +0200
+        id 1pgRQO-006rgk-FR; Sun, 26 Mar 2023 16:32:48 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQQ-0088bI-Oa; Sun, 26 Mar 2023 16:32:50 +0200
+        id 1pgRQN-0088aK-Fa; Sun, 26 Mar 2023 16:32:47 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 116/117] media: vivid-core: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:32:23 +0200
-Message-Id: <20230326143224.572654-119-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 101/117] media: radio-wl1273: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:32:08 +0200
+Message-Id: <20230326143224.572654-104-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1741; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=psP47iJQfgDho0z51O3/c3SCet6c2oqTgrRbhvyMpa8=; b=owGbwMvMwMXY3/A7olbonx/jabUkhhSF8Gjd+R2hv2YcY6ws6xKYG3zuScXDZVHPovKfVu88a ph9fnJzJ6MxCwMjF4OsmCKLfeOaTKsqucjOtf8uwwxiZQKZwsDFKQATeV/O/j+wXsVg8/afeT2+ gWsZOCymzb82JzEtSc59o53Y8cD7SSIae4zdisyOvs5YFM7Oc3lbVyef4eHD93ucq/Myw7nldd9 N35prrB+frCJzw2aP5zZurjmn9HfGhzFprilK9Zhzos123ay6hMwcPY/fuVN8fi45HfuU1ePemR oDBlX2db0VZY+4ru/4lRAy/eXHQ6GlLLWvoldaVHxgrfj8OLVdxCq7KKjA9MPD2Ef1OTrtm90ZV u2aP3U3Y6PtnMaaxSXvLi6dNG+By89UT9nXK4SO6k5pttJ7nPtbaOVh0e8lnoWStm0r765+/uNc RV/67Pu2WZKmR1l7rygoKJV5tMQ/mOshPrl02snoo9NTAQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1951; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=m+98ILAxhB1JrJH6KUHUClHXYNnJG1ulOPSZ9Z9Phrk=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFcWYDIdXbl18q4mKEsMWqof/c2OlbGDW6GbU tcpJpBlauCJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBXFgAKCRCPgPtYfRL+ TstXB/sFt1Z1WbSQqQMATnaiD0LF8TFazz+aH/YX/1QvNCbHvgzMB2TzgD6Cq8KV7skTX5J7Bq1 27kZ4121pMpOLwATvDFe8axey6OgN0BsqyzBrhKQ5ox4is843J/l4m1durkzNrPX6/BIzMe1N9k smlHcWsPfu4/NXLOcK2iqVLxQ9uqbIaygmlg+KDMR5OgDtzpKq2154IVwzFr2L3gMJv1CSb/cCS /oxvRINLdVsekxEBarvzCxsZYi7ZoGD0EmbioLrwX2UmOud85Ns/0Rrra6mhv5tGZ3UakdiIhNt lIz5yu/aP2ecC9eWGjivWsH6RDbv+gdQ58vr721KroN3vgOY
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -64,38 +64,39 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/test-drivers/vivid/vivid-core.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/media/radio/radio-wl1273.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/test-drivers/vivid/vivid-core.c b/drivers/media/test-drivers/vivid/vivid-core.c
-index f28440e6c9f8..b4fbe32ed538 100644
---- a/drivers/media/test-drivers/vivid/vivid-core.c
-+++ b/drivers/media/test-drivers/vivid/vivid-core.c
-@@ -2058,7 +2058,7 @@ static int vivid_probe(struct platform_device *pdev)
- 	return ret;
- }
+diff --git a/drivers/media/radio/radio-wl1273.c b/drivers/media/radio/radio-wl1273.c
+index 484046471c03..e8166eac9efe 100644
+--- a/drivers/media/radio/radio-wl1273.c
++++ b/drivers/media/radio/radio-wl1273.c
+@@ -1977,7 +1977,7 @@ static const struct video_device wl1273_viddev_template = {
+ 				  V4L2_CAP_RDS_OUTPUT,
+ };
  
--static int vivid_remove(struct platform_device *pdev)
-+static void vivid_remove(struct platform_device *pdev)
+-static int wl1273_fm_radio_remove(struct platform_device *pdev)
++static void wl1273_fm_radio_remove(struct platform_device *pdev)
  {
- 	struct vivid_dev *dev;
- 	unsigned int i, j;
-@@ -2138,7 +2138,6 @@ static int vivid_remove(struct platform_device *pdev)
- 		v4l2_device_put(&dev->v4l2_dev);
- 		vivid_devs[i] = NULL;
- 	}
+ 	struct wl1273_device *radio = platform_get_drvdata(pdev);
+ 	struct wl1273_core *core = radio->core;
+@@ -1990,8 +1990,6 @@ static int wl1273_fm_radio_remove(struct platform_device *pdev)
+ 	v4l2_ctrl_handler_free(&radio->ctrl_handler);
+ 	video_unregister_device(&radio->videodev);
+ 	v4l2_device_unregister(&radio->v4l2dev);
+-
 -	return 0;
  }
  
- static void vivid_pdev_release(struct device *dev)
-@@ -2152,7 +2151,7 @@ static struct platform_device vivid_pdev = {
+ static int wl1273_fm_radio_probe(struct platform_device *pdev)
+@@ -2147,7 +2145,7 @@ static int wl1273_fm_radio_probe(struct platform_device *pdev)
  
- static struct platform_driver vivid_pdrv = {
- 	.probe		= vivid_probe,
--	.remove		= vivid_remove,
-+	.remove_new	= vivid_remove,
+ static struct platform_driver wl1273_fm_radio_driver = {
+ 	.probe		= wl1273_fm_radio_probe,
+-	.remove		= wl1273_fm_radio_remove,
++	.remove_new	= wl1273_fm_radio_remove,
  	.driver		= {
- 		.name	= "vivid",
+ 		.name	= "wl1273_fm_radio",
  	},
 -- 
 2.39.2
