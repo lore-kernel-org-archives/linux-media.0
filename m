@@ -2,49 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 684CDC761AF
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:34:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2A1BC74A5B
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:34:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232597AbjCZOed (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
+        id S232603AbjCZOef (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232544AbjCZOdI (ORCPT
+        with ESMTP id S232329AbjCZOdH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 Mar 2023 10:33:08 -0400
+        Sun, 26 Mar 2023 10:33:07 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C2776AF
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F4E6EA9
         for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:58 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQL-00006X-KL; Sun, 26 Mar 2023 16:32:45 +0200
+        id 1pgRQN-0000AI-9o; Sun, 26 Mar 2023 16:32:47 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQI-006reW-RP; Sun, 26 Mar 2023 16:32:42 +0200
+        id 1pgRQK-006rf1-02; Sun, 26 Mar 2023 16:32:44 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQI-0088Yh-0m; Sun, 26 Mar 2023 16:32:42 +0200
+        id 1pgRQI-0088Yw-Tt; Sun, 26 Mar 2023 16:32:42 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     linux-media@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de
-Subject: [PATCH 076/117] media: dma2d: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:31:43 +0200
-Message-Id: <20230326143224.572654-79-u.kleine-koenig@pengutronix.de>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, kernel@pengutronix.de
+Subject: [PATCH 080/117] media: sun6i_mipi_csi2: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:31:47 +0200
+Message-Id: <20230326143224.572654-83-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1826; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=Hf03W6FCnuJBdvXuTFOZXNHudlzADbBrZKtBOEpjYlM=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFbhWjaNCRTr78svok4/G/qcUfXFkbJZeABAx T+Yc7umm8eJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBW4QAKCRCPgPtYfRL+ TnPRB/9CMzAkMtzX9t2MUc+yuKmxmHlomkr7f1IZZ919Gdvmp3sWBbFKhor+nE/SbadRaj46216 mFmKZG0eYEnHfvWK/Pvqbj/E5urzyoFTywinaXnKS9jDLFlyz6zSvYosKqQEQNZNzkENDc/MWgp IlT3G5+SvbtX0gNJJ1/fqpZ3lbJWdTHbJ6sk0LIo5o08FNPoQtM8A4UL/aAm81R5Jkl15iyxDeR C0KQE1Dox+swebOdqRUvBar9uRN1Ir4smQEDZhz3fK3xjom0HLGFOF3MWyhGtn2gAKtpKmuc7Za mVzNVmXqG5ZifvWHKntrUJivwDcj7NUQfGk7fF/gVClnMl94
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2004; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=jQPDsQVruAOUtxy6LPdqmQOfAEZivBfr3gDXNDkVj/k=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFblvrLuiuS45ZAzXk6hDA5q01ywy1BMMtsGy f8VyU5LzueJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBW5QAKCRCPgPtYfRL+ TuxtCACtTiMScCpHJoEnxcJ7bs2eib8WhF39+8QWG7QK02o8P9nG96sJYwrrUAG5eAokqmnKEHQ 5uLfu4JvzADkO2IoIEqYkLKnfzuNP2sDsLWv0RkzhI3ShyGStQzITC9tjhXS3It91CQGcOVWMCS PamUrYmkvrcg3hhGQ1V41QhPIcW6tjSKfLZv0Auna/kF8IOQuxXzwHr+xuGWSLirBgKu1gIgbCH AFk/B5q/Tf0rR5EWCiG1f/5l6hkdbPxD0H3j0+zxafi5DWoBKfbjoG6K8neind5Msq9G5saumz3 efKoHKp1A8VvuM2RzfTHLEz9uWELE7qb7/Qfa6CvBEjsjDfx
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -68,40 +68,39 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/platform/st/stm32/dma2d/dma2d.c | 6 ++----
+ .../media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c  | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/dma2d/dma2d.c b/drivers/media/platform/st/stm32/dma2d/dma2d.c
-index 9706aa41b5d2..be56d2b5fae9 100644
---- a/drivers/media/platform/st/stm32/dma2d/dma2d.c
-+++ b/drivers/media/platform/st/stm32/dma2d/dma2d.c
-@@ -696,7 +696,7 @@ static int dma2d_probe(struct platform_device *pdev)
+diff --git a/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c b/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c
+index a220ce849b41..dce130b4c9f6 100644
+--- a/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c
++++ b/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c
+@@ -737,15 +737,13 @@ static int sun6i_mipi_csi2_probe(struct platform_device *platform_dev)
  	return ret;
  }
  
--static int dma2d_remove(struct platform_device *pdev)
-+static void dma2d_remove(struct platform_device *pdev)
+-static int sun6i_mipi_csi2_remove(struct platform_device *platform_dev)
++static void sun6i_mipi_csi2_remove(struct platform_device *platform_dev)
  {
- 	struct dma2d_dev *dev = platform_get_drvdata(pdev);
+ 	struct sun6i_mipi_csi2_device *csi2_dev =
+ 		platform_get_drvdata(platform_dev);
  
-@@ -707,8 +707,6 @@ static int dma2d_remove(struct platform_device *pdev)
- 	vb2_dma_contig_clear_max_seg_size(&pdev->dev);
- 	clk_unprepare(dev->gate);
- 	clk_put(dev->gate);
+ 	sun6i_mipi_csi2_bridge_cleanup(csi2_dev);
+ 	sun6i_mipi_csi2_resources_cleanup(csi2_dev);
 -
 -	return 0;
  }
  
- static const struct of_device_id stm32_dma2d_match[] = {
-@@ -722,7 +720,7 @@ MODULE_DEVICE_TABLE(of, stm32_dma2d_match);
+ static const struct of_device_id sun6i_mipi_csi2_of_match[] = {
+@@ -756,7 +754,7 @@ MODULE_DEVICE_TABLE(of, sun6i_mipi_csi2_of_match);
  
- static struct platform_driver dma2d_pdrv = {
- 	.probe		= dma2d_probe,
--	.remove		= dma2d_remove,
-+	.remove_new	= dma2d_remove,
- 	.driver		= {
- 		.name = DMA2D_NAME,
- 		.of_match_table = stm32_dma2d_match,
+ static struct platform_driver sun6i_mipi_csi2_platform_driver = {
+ 	.probe	= sun6i_mipi_csi2_probe,
+-	.remove	= sun6i_mipi_csi2_remove,
++	.remove_new = sun6i_mipi_csi2_remove,
+ 	.driver	= {
+ 		.name		= SUN6I_MIPI_CSI2_NAME,
+ 		.of_match_table	= of_match_ptr(sun6i_mipi_csi2_of_match),
 -- 
 2.39.2
 
