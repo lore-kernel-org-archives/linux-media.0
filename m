@@ -2,49 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2B06C77B62
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:32:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3F2BC6FD1C
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:32:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232447AbjCZOcv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S232469AbjCZOcv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Sun, 26 Mar 2023 10:32:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232371AbjCZOcg (ORCPT
+        with ESMTP id S232377AbjCZOch (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 Mar 2023 10:32:36 -0400
+        Sun, 26 Mar 2023 10:32:37 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5087A8D
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0A859DB
         for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:34 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ6-0007pl-GU; Sun, 26 Mar 2023 16:32:30 +0200
+        id 1pgRQ8-0007tF-79; Sun, 26 Mar 2023 16:32:32 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ5-006rZp-KM; Sun, 26 Mar 2023 16:32:29 +0200
+        id 1pgRQ7-006raf-J7; Sun, 26 Mar 2023 16:32:31 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ4-0088Ug-I6; Sun, 26 Mar 2023 16:32:28 +0200
+        id 1pgRQ6-0088VP-Us; Sun, 26 Mar 2023 16:32:30 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de
-Subject: [PATCH 014/117] media: ge2d: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:30:41 +0200
-Message-Id: <20230326143224.572654-17-u.kleine-koenig@pengutronix.de>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH 025/117] media: marvell: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:30:52 +0200
+Message-Id: <20230326143224.572654-28-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1851; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=1Y2LMBpcPDvt234Wp0dDVBnpVYLd4OVe9vUMJb/0CJo=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFaPHpPZLurdzamlVy431QhD+mjXxTj3yEi11 b3JX4DQ1+eJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWjwAKCRCPgPtYfRL+ TokHB/oCVX586LRzYvkBN8oWwTVDT73e7QvszRskadSAbTyrdfG0dcliNNP2ISe6ZClTGMsX//c ojHnF2SfwNbxw1J/KhNver2BUCsy1bQ0sMHPsVpJ1HHhQ7ZxOAT3MYwydcrytIyk+UHZ0K5wcWU jLAfkcBDkCvQfzI5fcZPFEsnUpHmslqTLrKCpVtu0wJ/kgwOSL4yHDt95bFIICKuWj5W6hjEYjn 1ibxLueJ8kwI6/hCJH71RofwjUL+JS/dqvhAYgPWid6NjljemM4La2jMWgNLxSKW3q7JsmT/e6i YUNsIz2i0t8LnFBj9d/gdt31vCQwmE37Kew1ZVkpPGb7cbPq
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1711; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=WkwjvPNQqZqMwM8NkSjutUkfQT+Q0krYMsrTvqspSm8=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFakvmd0VNDia30dbil7NHX0yoXlNsh04rFEE a/e5sdBM0iJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWpAAKCRCPgPtYfRL+ TpZPB/44x3gDnaufDqR9s4Wn+JRte77LQFfMUUTj/3UvYWHsDPWx9lJ0zXALwcbNsgmOAtUPUZg GctRrY2McjtSP0RAycDUxOzO64Ae9HLABaP5AyMXsU70Me48NOOTITbNFPZtGDwssp8L1wr44WP 489TUUxNLbSOIanT+husQhHs+AhdbZlAItt4VMsfy4lrDmgu00o7Jg/72ZA0jJUX6CR3kgTrd2h yJcE212G6H4Cc0smGLdgCyFKWrud/3dSI/+6GLQM3TdyFc7Vk0EcVZHLsq94wuK5goWR/winzco efQWzAEwdj06YeBoB/eATcGovCNq3wF97+7wOATcxPPt4+o9
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -68,40 +65,38 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/platform/amlogic/meson-ge2d/ge2d.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/media/platform/marvell/mmp-driver.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/amlogic/meson-ge2d/ge2d.c b/drivers/media/platform/amlogic/meson-ge2d/ge2d.c
-index 142d421a8d76..09409908ba5d 100644
---- a/drivers/media/platform/amlogic/meson-ge2d/ge2d.c
-+++ b/drivers/media/platform/amlogic/meson-ge2d/ge2d.c
-@@ -1024,7 +1024,7 @@ static int ge2d_probe(struct platform_device *pdev)
+diff --git a/drivers/media/platform/marvell/mmp-driver.c b/drivers/media/platform/marvell/mmp-driver.c
+index 964c55eacd89..e93feefb447b 100644
+--- a/drivers/media/platform/marvell/mmp-driver.c
++++ b/drivers/media/platform/marvell/mmp-driver.c
+@@ -287,14 +287,13 @@ static int mmpcam_probe(struct platform_device *pdev)
  	return ret;
  }
  
--static int ge2d_remove(struct platform_device *pdev)
-+static void ge2d_remove(struct platform_device *pdev)
+-static int mmpcam_remove(struct platform_device *pdev)
++static void mmpcam_remove(struct platform_device *pdev)
  {
- 	struct meson_ge2d *ge2d = platform_get_drvdata(pdev);
+ 	struct mmp_camera *cam = platform_get_drvdata(pdev);
+ 	struct mcam_camera *mcam = &cam->mcam;
  
-@@ -1032,8 +1032,6 @@ static int ge2d_remove(struct platform_device *pdev)
- 	v4l2_m2m_release(ge2d->m2m_dev);
- 	v4l2_device_unregister(&ge2d->v4l2_dev);
- 	clk_disable_unprepare(ge2d->clk);
--
+ 	mccic_shutdown(mcam);
+ 	pm_runtime_force_suspend(mcam->dev);
 -	return 0;
  }
  
- static const struct of_device_id meson_ge2d_match[] = {
-@@ -1047,7 +1045,7 @@ MODULE_DEVICE_TABLE(of, meson_ge2d_match);
+ /*
+@@ -360,7 +359,7 @@ MODULE_DEVICE_TABLE(of, mmpcam_of_match);
  
- static struct platform_driver ge2d_drv = {
- 	.probe = ge2d_probe,
--	.remove = ge2d_remove,
-+	.remove_new = ge2d_remove,
+ static struct platform_driver mmpcam_driver = {
+ 	.probe		= mmpcam_probe,
+-	.remove		= mmpcam_remove,
++	.remove_new	= mmpcam_remove,
  	.driver = {
- 		.name = "meson-ge2d",
- 		.of_match_table = meson_ge2d_match,
+ 		.name	= "mmp-camera",
+ 		.of_match_table = of_match_ptr(mmpcam_of_match),
 -- 
 2.39.2
 
