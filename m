@@ -2,49 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 231EAC6FD1C
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:33:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3103AC761AF
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:33:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232574AbjCZOdh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
+        id S232450AbjCZOdi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231740AbjCZOcu (ORCPT
+        with ESMTP id S232457AbjCZOcu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 26 Mar 2023 10:32:50 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2316A69
-        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2543859DB
+        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:49 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQD-000883-CG; Sun, 26 Mar 2023 16:32:37 +0200
+        id 1pgRQI-0008Qd-5v; Sun, 26 Mar 2023 16:32:42 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQB-006rbt-9w; Sun, 26 Mar 2023 16:32:35 +0200
+        id 1pgRQF-006rd9-9r; Sun, 26 Mar 2023 16:32:39 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQA-0088WT-JO; Sun, 26 Mar 2023 16:32:34 +0200
+        id 1pgRQC-0088X0-HR; Sun, 26 Mar 2023 16:32:36 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+Cc:     linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         kernel@pengutronix.de
-Subject: [PATCH 042/117] media: camss: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:31:09 +0200
-Message-Id: <20230326143224.572654-45-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 051/117] media: rcar_drif: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:31:18 +0200
+Message-Id: <20230326143224.572654-54-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1782; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=5+233wKbFI0nY/Rw2BqkK/JcpAndlkw8WmqScaqNEvo=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFa56BHcFMWxG95LEaTIhTYmvbipS2cJOM4tq h+jmB4Rj8OJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWuQAKCRCPgPtYfRL+ To2hB/4/HaXTqiAE/6bJk3JeUAywJ/RKf9KuKjMFtM/8Sq1SnaC3aWMOdvrXpbOXzF5vV+68C+7 +3a8dPSkwHIbD5CRuguN+B/zPVElF1R/6BUaJX5OdM09nKH/wPLnXxFHXDPdxWzSWAdf9Dv3MWZ 1M8jXEGgP8/tVFayO8n6THkb1Z8scZMMpdAkkAgaPE7CLb+WCkAIXunQ75W7A5oLrz14A03DUky 59beUId/6lXathw/yvh1z3gPQcCgt4Qc2TnyQttmfnDA6rsPDD3L+hy7zoMfIX9iE156EZfonum V0/qlf5bjYtfyJJ7RsbrIWsOpyfv5pUjh3beswHt7296btM8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1810; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=nwKCJTOdxQv7E7M26+wkLn98oSNhE7D9Vkt7wczeeVg=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFbEK/1kkf6o5gM9he+H8/sE9QVvHxSzHMUWj 1F3uqRa1SCJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWxAAKCRCPgPtYfRL+ TqggB/429FZpW1zigRZFsRKsuXBXU3GZQqCRMsaILtA23xmYgBYOBM5uyGOR8+/vY8F7lZaM0Qb tQYTzNl4suGeQmKTXMiLsULULaWxS+i0zp1DdWAz8PHdCiHfWQUhmBBVPOVYl7NA4k6LHAmHIhu lYyKoS15UKShVdEvuY1udzoKOyBZazbXJOCKArn1uLVSR5RlJyKvq7mVf9z4BgEdSpCXztFencO S3mDZ6JGlX9VODDlQJIgx1dpSFUrCtUvI8k5z0Mol5z+Gb4E9GOqq69LkIRBHWkBp5Dg5iGnlmQ Vf3B2taDEKtbzFk24hJsc3lSc5WasFgHUGTy9Lh6huWHojNQ
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -68,40 +65,44 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/platform/qcom/camss/camss.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/media/platform/renesas/rcar_drif.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-index 9cda284f1e71..df8a507ce8ac 100644
---- a/drivers/media/platform/qcom/camss/camss.c
-+++ b/drivers/media/platform/qcom/camss/camss.c
-@@ -1725,7 +1725,7 @@ void camss_delete(struct camss *camss)
-  *
-  * Always returns 0.
-  */
--static int camss_remove(struct platform_device *pdev)
-+static void camss_remove(struct platform_device *pdev)
+diff --git a/drivers/media/platform/renesas/rcar_drif.c b/drivers/media/platform/renesas/rcar_drif.c
+index 3fec41f6e964..3a92f4535c18 100644
+--- a/drivers/media/platform/renesas/rcar_drif.c
++++ b/drivers/media/platform/renesas/rcar_drif.c
+@@ -1433,19 +1433,17 @@ static int rcar_drif_probe(struct platform_device *pdev)
+ }
+ 
+ /* DRIF channel remove */
+-static int rcar_drif_remove(struct platform_device *pdev)
++static void rcar_drif_remove(struct platform_device *pdev)
  {
- 	struct camss *camss = platform_get_drvdata(pdev);
+ 	struct rcar_drif *ch = platform_get_drvdata(pdev);
+ 	struct rcar_drif_sdr *sdr = ch->sdr;
  
-@@ -1735,8 +1735,6 @@ static int camss_remove(struct platform_device *pdev)
+ 	/* Channel 0 will be the SDR instance */
+ 	if (ch->num)
+-		return 0;
++		return;
  
- 	if (atomic_read(&camss->ref_count) == 0)
- 		camss_delete(camss);
+ 	/* SDR instance */
+ 	rcar_drif_sdr_remove(sdr);
 -
 -	return 0;
  }
  
- static const struct of_device_id camss_dt_match[] = {
-@@ -1798,7 +1796,7 @@ static const struct dev_pm_ops camss_pm_ops = {
+ /* FIXME: Implement suspend/resume support */
+@@ -1476,7 +1474,7 @@ static struct platform_driver rcar_drif_driver = {
+ 		.pm = &rcar_drif_pm_ops,
+ 		},
+ 	.probe = rcar_drif_probe,
+-	.remove = rcar_drif_remove,
++	.remove_new = rcar_drif_remove,
+ };
  
- static struct platform_driver qcom_camss_driver = {
- 	.probe = camss_probe,
--	.remove = camss_remove,
-+	.remove_new = camss_remove,
- 	.driver = {
- 		.name = "qcom-camss",
- 		.of_match_table = camss_dt_match,
+ module_platform_driver(rcar_drif_driver);
 -- 
 2.39.2
 
