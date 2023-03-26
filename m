@@ -2,48 +2,53 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D651AC77B6C
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:33:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0863AC761AF
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:33:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232560AbjCZOdK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:33:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60334 "EHLO
+        id S231443AbjCZOdL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232411AbjCZOco (ORCPT
+        with ESMTP id S232418AbjCZOco (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 26 Mar 2023 10:32:44 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2AF7A8D
-        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123DB65AC
+        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:43 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQC-00081j-5s; Sun, 26 Mar 2023 16:32:36 +0200
+        id 1pgRQ9-0007uX-SM; Sun, 26 Mar 2023 16:32:33 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQA-006rbN-01; Sun, 26 Mar 2023 16:32:34 +0200
+        id 1pgRQ8-006rax-CH; Sun, 26 Mar 2023 16:32:32 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ9-0088W1-4g; Sun, 26 Mar 2023 16:32:33 +0200
+        id 1pgRQ7-0088Vb-J9; Sun, 26 Mar 2023 16:32:31 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH 035/117] media: vde: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:31:02 +0200
-Message-Id: <20230326143224.572654-38-u.kleine-koenig@pengutronix.de>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Moudy Ho <moudy.ho@mediatek.com>,
+        Qiheng Lin <linqiheng@huawei.com>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-media@vger.kernel.org, kernel@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH 028/117] media: mtk-mdp3-core: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:30:55 +0200
+Message-Id: <20230326143224.572654-31-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1896; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=DwvC+rbFxTPbMN3MsoLH2dmtGYionTkUjlSwJHUAVv4=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFaxEqz1BUsSzfeMNzBe48IMR2VpMvzt6Qin4 S6GyPlp+R+JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWsQAKCRCPgPtYfRL+ TkY0B/4/aM5qKHWLnx5AyelmAxDLgZjU4AwgkO8xIxD++qUNTPEykPbW1EuESF0UdxdDMOwVog+ y+Pw9sT516FzfehgAG3CCo5/8QJNb3owvegECw7XFN8jCYSZnOCRXOBpsQSCDQgbMwdTEAr17KP JlYc/RtQ2j6UHE3tvo6sc0mGNskiIAuyDqCDey9NlTGPEBkaEZFv83tVM2jyqVGXAWtpZAXs9BO ZKFB9cGSVWBo1Kxa9gJYJ3mAGEyY0Qy5t7P9rXcD8dOvdL8gQ8+O0gIdidIH2RgsmzVrbJV6QS7 vzkSrxN5i/7H9aTs9HkQblkQ47qKqPC0wn05k3u4mZ2XNL0a
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1763; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=jkf5L5dQSyQohhm9KTe95OwaXqfBXlh7AMsHg9iF88o=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFaoSBDTbn24ir03DGKWIxpj0tpH/SFo14z6b AA5Yd1GPEmJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWqAAKCRCPgPtYfRL+ ToTHB/93xJPhkrxuOzwhK6gL5NavTvpgyizxFjQDjhtkK56Kh81623SABfB5cicKJBZkmBD/Eks h7t7fWz2Nq9y+3TAfkeb6D7mfu7euvZCNFM57LMPX2fKRAIORfa4WwtcMCnQaVITlrQCL2gLOvO 4S1GPprLyao83yeakOKSYE4EtFxsma8tmSCtjgCmkOpq7N1E4ZT6nT02OYAh2akkpKLioXVf6Ad aT2DgQVfO8oFJnVMUgPH1F/bCjDXNHvRaxNrWG98hpsAQyGO96M92JYFJuhcaK4J1P8YRNYeDBY bdBT5X+A3LMyFYlcECHJVpCdNaJJuu8/o0B3KvfR/Ibl5VVF
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -67,40 +72,38 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/platform/nvidia/tegra-vde/vde.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/nvidia/tegra-vde/vde.c b/drivers/media/platform/nvidia/tegra-vde/vde.c
-index f3e863a94c5a..7157734a1550 100644
---- a/drivers/media/platform/nvidia/tegra-vde/vde.c
-+++ b/drivers/media/platform/nvidia/tegra-vde/vde.c
-@@ -378,7 +378,7 @@ static int tegra_vde_probe(struct platform_device *pdev)
- 	return err;
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+index 97edcd9d1c81..041bcad675da 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+@@ -298,14 +298,13 @@ static int mdp_probe(struct platform_device *pdev)
+ 	return ret;
  }
  
--static int tegra_vde_remove(struct platform_device *pdev)
-+static void tegra_vde_remove(struct platform_device *pdev)
+-static int mdp_remove(struct platform_device *pdev)
++static void mdp_remove(struct platform_device *pdev)
  {
- 	struct tegra_vde *vde = platform_get_drvdata(pdev);
- 	struct device *dev = &pdev->dev;
-@@ -407,8 +407,6 @@ static int tegra_vde_remove(struct platform_device *pdev)
+ 	struct mdp_dev *mdp = platform_get_drvdata(pdev);
  
- 	gen_pool_free(vde->iram_pool, (unsigned long)vde->iram,
- 		      gen_pool_size(vde->iram_pool));
--
+ 	v4l2_device_unregister(&mdp->v4l2_dev);
+ 
+ 	dev_dbg(&pdev->dev, "%s driver unloaded\n", pdev->name);
 -	return 0;
  }
  
- static void tegra_vde_shutdown(struct platform_device *pdev)
-@@ -536,7 +534,7 @@ MODULE_DEVICE_TABLE(of, tegra_vde_of_match);
+ static int __maybe_unused mdp_suspend(struct device *dev)
+@@ -345,7 +344,7 @@ static const struct dev_pm_ops mdp_pm_ops = {
  
- static struct platform_driver tegra_vde_driver = {
- 	.probe		= tegra_vde_probe,
--	.remove		= tegra_vde_remove,
-+	.remove_new	= tegra_vde_remove,
- 	.shutdown	= tegra_vde_shutdown,
- 	.driver		= {
- 		.name		= "tegra-vde",
+ static struct platform_driver mdp_driver = {
+ 	.probe		= mdp_probe,
+-	.remove		= mdp_remove,
++	.remove_new	= mdp_remove,
+ 	.driver = {
+ 		.name	= MDP_MODULE_NAME,
+ 		.pm	= &mdp_pm_ops,
 -- 
 2.39.2
 
