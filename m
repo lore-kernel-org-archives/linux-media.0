@@ -2,46 +2,50 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C2B8C74A5B
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:32:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B1A7C77B62
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:32:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232349AbjCZOck (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
+        id S232400AbjCZOcl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232348AbjCZOcf (ORCPT
+        with ESMTP id S232339AbjCZOce (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 Mar 2023 10:32:35 -0400
+        Sun, 26 Mar 2023 10:32:34 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C79F6EA9
-        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0AF565AC
+        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:32 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ6-0007pq-IZ; Sun, 26 Mar 2023 16:32:30 +0200
+        id 1pgRQ4-0007kr-D7; Sun, 26 Mar 2023 16:32:28 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ5-006rZv-N1; Sun, 26 Mar 2023 16:32:29 +0200
+        id 1pgRQ3-006rYy-LC; Sun, 26 Mar 2023 16:32:27 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ4-0088Uj-OC; Sun, 26 Mar 2023 16:32:28 +0200
+        id 1pgRQ2-0088U2-Ca; Sun, 26 Mar 2023 16:32:26 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Ming Qian <ming.qian@nxp.com>, Shijie Qin <shijie.qin@nxp.com>,
-        Zhou Peng <eagle.zhou@nxp.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 015/117] media: vpu_core: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:30:42 +0200
-Message-Id: <20230326143224.572654-18-u.kleine-koenig@pengutronix.de>
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de
+Subject: [PATCH 004/117] media: ao-cec-g12a: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:30:31 +0200
+Message-Id: <20230326143224.572654-7-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1884; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=uWJoADSe8unMBF1PXvz1xJOQaeh403qpKoHJWEMsKwk=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFaUVPNuMmBrk/3Jc7xZqrqr/DamAgknp8n6K d6g2HKKPTuJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWlAAKCRCPgPtYfRL+ TjWMB/441xL02tLrXDIlKB0U36Wq2my2ziav0yB9bhhUzZO+cX4mCqRYyo3U/Ywp0Usm1wgoFod PQ2/J1MBE/s6RMlhBdrTnainB06wa30dleElcZ7g2bKYYdNsvaDjzJTGGcGWnhi7KprMlTaBcZg Al8PnjQvCZgr9xoVLcOKYiqgbb0JwGOhRvLPaRy4jNBoxd5ekbbxFfVAb92hwHkXuR9wdF3iky+ mtdAQrC5KKUQ++rS01VX2T8adG1DAJdsciLvQvPtz4XEBxQeWG6deRpajw8NhtmHMjVvu7ExVpN Jhb3dFlvgHtur5VIaPGa9uhXH7jtuocejljpHwbCef77FFCx
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2005; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=v1wYGsh94W2lZgFeQJwM78nPF+W6bmgfpxjhbc5mNVE=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFZ71dphtajewDN9c9hG2KxI9Sc8tzx2SkZbo HDC3rcHxbKJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWewAKCRCPgPtYfRL+ Tr6rCACJ5dd9wV3bKSu9kvblrZbNIhyIOzeYRxGMF/5SPdamElcP0qqsv960558Vb6Nz1qeTP3t EhZAqGmghQIP7sia/5v9oWXOQyCtaRoHecq7X+TdL2E1BmiGmGGAh4EWX4PS2etoZ0Cp6Llblr6 yucTSe3Anc9LELmrN5Kq1TCU8/Sxv3L0dGvLR2k+yppvduOlWsD3gZAVlwmRsbVDy7/+mqTu323 GEZb18L83DSZh3DWo8felBcyQVCd+jo/agxDgy7Q+nsBzOzoRjvzMgh6JUI1c8wWCPXvQhNDcwX 92epQ4KNdNKMDy/UhyqnQyHbQtSQgdIb6hS63u8u6hH03pPC
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -65,40 +69,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/platform/amphion/vpu_core.c | 6 ++----
+ drivers/media/cec/platform/meson/ao-cec-g12a.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/amphion/vpu_core.c b/drivers/media/platform/amphion/vpu_core.c
-index f9ec1753f7c8..de23627a119a 100644
---- a/drivers/media/platform/amphion/vpu_core.c
-+++ b/drivers/media/platform/amphion/vpu_core.c
-@@ -709,7 +709,7 @@ static int vpu_core_probe(struct platform_device *pdev)
+diff --git a/drivers/media/cec/platform/meson/ao-cec-g12a.c b/drivers/media/cec/platform/meson/ao-cec-g12a.c
+index 68fe6d6a8178..51294b9b6cd5 100644
+--- a/drivers/media/cec/platform/meson/ao-cec-g12a.c
++++ b/drivers/media/cec/platform/meson/ao-cec-g12a.c
+@@ -744,7 +744,7 @@ static int meson_ao_cec_g12a_probe(struct platform_device *pdev)
  	return ret;
  }
  
--static int vpu_core_remove(struct platform_device *pdev)
-+static void vpu_core_remove(struct platform_device *pdev)
+-static int meson_ao_cec_g12a_remove(struct platform_device *pdev)
++static void meson_ao_cec_g12a_remove(struct platform_device *pdev)
  {
- 	struct device *dev = &pdev->dev;
- 	struct vpu_core *core = platform_get_drvdata(pdev);
-@@ -728,8 +728,6 @@ static int vpu_core_remove(struct platform_device *pdev)
- 	memunmap(core->rpc.virt);
- 	mutex_destroy(&core->lock);
- 	mutex_destroy(&core->cmd_lock);
+ 	struct meson_ao_cec_g12a_device *ao_cec = platform_get_drvdata(pdev);
+ 
+@@ -753,8 +753,6 @@ static int meson_ao_cec_g12a_remove(struct platform_device *pdev)
+ 	cec_notifier_cec_adap_unregister(ao_cec->notify, ao_cec->adap);
+ 
+ 	cec_unregister_adapter(ao_cec->adap);
 -
 -	return 0;
  }
  
- static int __maybe_unused vpu_core_runtime_resume(struct device *dev)
-@@ -864,7 +862,7 @@ MODULE_DEVICE_TABLE(of, vpu_core_dt_match);
+ static const struct meson_ao_cec_g12a_data ao_cec_g12a_data = {
+@@ -780,7 +778,7 @@ MODULE_DEVICE_TABLE(of, meson_ao_cec_g12a_of_match);
  
- static struct platform_driver amphion_vpu_core_driver = {
- 	.probe = vpu_core_probe,
--	.remove = vpu_core_remove,
-+	.remove_new = vpu_core_remove,
- 	.driver = {
- 		.name = "amphion-vpu-core",
- 		.of_match_table = vpu_core_dt_match,
+ static struct platform_driver meson_ao_cec_g12a_driver = {
+ 	.probe   = meson_ao_cec_g12a_probe,
+-	.remove  = meson_ao_cec_g12a_remove,
++	.remove_new = meson_ao_cec_g12a_remove,
+ 	.driver  = {
+ 		.name = "meson-ao-cec-g12a",
+ 		.of_match_table = of_match_ptr(meson_ao_cec_g12a_of_match),
 -- 
 2.39.2
 
