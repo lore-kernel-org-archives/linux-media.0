@@ -2,46 +2,45 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B187C6FD1C
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:33:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E55AC74A5B
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:33:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjCZOdu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60656 "EHLO
+        id S231929AbjCZOdv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:33:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232449AbjCZOcy (ORCPT
+        with ESMTP id S232467AbjCZOcy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 26 Mar 2023 10:32:54 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF857DB0
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E8E7ECC
         for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:52 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQK-0008Vl-Pu; Sun, 26 Mar 2023 16:32:44 +0200
+        id 1pgRQP-0000GL-69; Sun, 26 Mar 2023 16:32:49 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQH-006reG-Va; Sun, 26 Mar 2023 16:32:41 +0200
+        id 1pgRQM-006rgB-Td; Sun, 26 Mar 2023 16:32:46 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQH-0088YX-BA; Sun, 26 Mar 2023 16:32:41 +0200
+        id 1pgRQL-0088Zp-TV; Sun, 26 Mar 2023 16:32:45 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Patrice Chotard <patrice.chotard@foss.st.com>,
+To:     Philipp Zabel <p.zabel@pengutronix.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH 073/117] media: c8sectpfe-core: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:31:40 +0200
-Message-Id: <20230326143224.572654-76-u.kleine-koenig@pengutronix.de>
+Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH 094/117] media: video-mux: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:32:01 +0200
+Message-Id: <20230326143224.572654-97-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1859; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=H7nHpQzjHc2P2nAVdyZEagsXwm5a4h2lLK7N8YxEAqc=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFbdZqhYr563DtnBDGjjmqMp9STd11DCyou+A wu8xS6K0diJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBW3QAKCRCPgPtYfRL+ TtW/B/9fn10iHM3G+gmvdye0gnp0ukGjhLibCuxvyfyb2mXfQF1SbaTSlavvXW3aHbarTg10tmC U7zxHPVbTly+FCsXSqnZJTe7Pe2lau/u09Ui+F4KexHCRgcE+gyB7kjaECESPowYvotfBVXkbCT cd6WR6b2Kepz94SSmDV0YaqDGM8uVu3QqaoRjftaYEtaSGRdlOL0GoPJGK5ORrx6Im6GVesSL5r LpBQ+eNXODjXo3JK4EJXfF/m0xtxIUNkmFZcr5jGyR5cjNYBcJn8vzu7W0/EnTw52yJQGhy+b0P e0hENoar1l6XV2D7KDtWyx9qz/xjw4Q8JLzG07JYExK5ja5J
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1860; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=h1onB/c1Jnrpm4RTRzscKg21G0D/eJyhFSEGCySoO2Y=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFb1eA7MaooTUb0Xcs81sXqjXayel8WLXW6Ku pTvFH3EZ4KJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBW9QAKCRCPgPtYfRL+ TvkvCACiUUarEWB50YIbkYouYFf+P+Dus1wS0UYKfx1sdPCefJNdoD8fLfzsOs/bxAF1rbeNcms g3oUl88zSSmR/r7kU4QKxZLrQpPPW6nR6z4VpTioX70KT7w993Uey/XWyVUR1onTAdeFt13KcdM 2e3LGMZlFd6bzgN+aQ81nWYMNj0axKyc0V/fKEgxObGP0KhkKQhEa/eAwQimFDOXwjBZo/kZUOW dAc5htirvnbfdRLUvyQ9wSpiIQ7UL3kkViSLbTWB6GSH4zZzWVpe75WgeIwkB9ModyRML5Orac6 baor3/QkvdmB3bXTcZWtClPPtVquj4jvzXxPu8GHYttC6ALt
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -65,40 +64,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c | 6 ++----
+ drivers/media/platform/video-mux.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c b/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
-index c38b62d4f1ae..45ade7210d26 100644
---- a/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
-+++ b/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
-@@ -878,7 +878,7 @@ static int c8sectpfe_probe(struct platform_device *pdev)
+diff --git a/drivers/media/platform/video-mux.c b/drivers/media/platform/video-mux.c
+index 71d97042a470..1d9f32e5a917 100644
+--- a/drivers/media/platform/video-mux.c
++++ b/drivers/media/platform/video-mux.c
+@@ -481,7 +481,7 @@ static int video_mux_probe(struct platform_device *pdev)
  	return ret;
  }
  
--static int c8sectpfe_remove(struct platform_device *pdev)
-+static void c8sectpfe_remove(struct platform_device *pdev)
+-static int video_mux_remove(struct platform_device *pdev)
++static void video_mux_remove(struct platform_device *pdev)
  {
- 	struct c8sectpfei *fei = platform_get_drvdata(pdev);
- 	struct channel_info *channel;
-@@ -910,8 +910,6 @@ static int c8sectpfe_remove(struct platform_device *pdev)
- 		writel(0, fei->io + SYS_OTHER_CLKEN);
- 
- 	clk_disable_unprepare(fei->c8sectpfeclk);
+ 	struct video_mux *vmux = platform_get_drvdata(pdev);
+ 	struct v4l2_subdev *sd = &vmux->subdev;
+@@ -490,8 +490,6 @@ static int video_mux_remove(struct platform_device *pdev)
+ 	v4l2_async_nf_cleanup(&vmux->notifier);
+ 	v4l2_async_unregister_subdev(sd);
+ 	media_entity_cleanup(&sd->entity);
 -
 -	return 0;
  }
  
+ static const struct of_device_id video_mux_dt_ids[] = {
+@@ -502,7 +500,7 @@ MODULE_DEVICE_TABLE(of, video_mux_dt_ids);
  
-@@ -1178,7 +1176,7 @@ static struct platform_driver c8sectpfe_driver = {
- 		.of_match_table = of_match_ptr(c8sectpfe_match),
- 	},
- 	.probe	= c8sectpfe_probe,
--	.remove	= c8sectpfe_remove,
-+	.remove_new = c8sectpfe_remove,
- };
- 
- module_platform_driver(c8sectpfe_driver);
+ static struct platform_driver video_mux_driver = {
+ 	.probe		= video_mux_probe,
+-	.remove		= video_mux_remove,
++	.remove_new	= video_mux_remove,
+ 	.driver		= {
+ 		.of_match_table = video_mux_dt_ids,
+ 		.name = "video-mux",
 -- 
 2.39.2
 
