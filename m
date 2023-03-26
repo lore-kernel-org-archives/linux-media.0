@@ -2,45 +2,45 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC751C77B61
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:33:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD990C77B62
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:33:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232531AbjCZOdA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
+        id S232539AbjCZOdB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232389AbjCZOci (ORCPT
+        with ESMTP id S232394AbjCZOcj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 Mar 2023 10:32:38 -0400
+        Sun, 26 Mar 2023 10:32:39 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B82769A
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBBA27DAC
         for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:37 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ7-0007s9-Ff; Sun, 26 Mar 2023 16:32:31 +0200
+        id 1pgRQA-0007ve-8U; Sun, 26 Mar 2023 16:32:34 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ6-006raN-Qm; Sun, 26 Mar 2023 16:32:30 +0200
+        id 1pgRQ9-006rb6-3h; Sun, 26 Mar 2023 16:32:33 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ5-0088Uz-KW; Sun, 26 Mar 2023 16:32:29 +0200
+        id 1pgRQ8-0088Vq-Du; Sun, 26 Mar 2023 16:32:32 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Maxime Ripard <mripard@kernel.org>,
+To:     Eugen Hristev <eugen.hristev@collabora.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 019/117] media: cdns-csi2rx: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:30:46 +0200
-Message-Id: <20230326143224.572654-22-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 032/117] media: microchip-csi2dc: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:30:59 +0200
+Message-Id: <20230326143224.572654-35-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1687; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=xU65GjEXyj0opPkHlCIE1FNxFCt+HXo7iw5YGT1jyYA=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFad5W20jJL1Oi5qOiE7anvJtnHEKiCfjSxmd vWfwn9PU1aJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWnQAKCRCPgPtYfRL+ TsENB/wMGri/ANuQ1nmlCcb42kSiTHeIcYjejVlZ6ytt/FslQjhcsE7qFZLmBAAPLne+DfY2Cj4 OoV2HPPqWVGgvwiTtZSYcccyR7McPfF4Wj569PMdVQXs0/FV3kDZ8lNcQ9ZI0CZFo//zx/KZamb VxaSX//rqZ27oGQhWcE3NADwrQLStEIeQ1ZVrx1J/w7qwmEIJUs5sfWx8q4xespvCnvqz4vkcjb qngtXBpAr6cXUwveTffdXBkVR1djrg04Qk4xdBr17kgNTeJyzO2dnjSgDJ0I7nbdMmKCFP5gn77 x9i6YrTrfl2R/1ttriIbUk0/LFnex54QMKado831KUrcSXTO
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1924; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=HU+5x31YPCAtV24NFHZsy46zuBB0Z96KgSQC2taOM/E=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFatbie/x+UhsBNpmyfeH49PeVHtehzYhWAvG YxC++uN4VGJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWrQAKCRCPgPtYfRL+ Tu5+B/0TxM/hHxseSsIf4lDNHfClCQ2R6yBp4DAY/55Vqg8XOFCPH90syP8XYzIkbFYWWaB3xns WFX5WqY2EBwlaLuPPNVMOzjPw3wWE/KskrosNE2AJ+QFXIA74YzEIuLQXz+gmKOHfDj3lvtSp/+ 028/lITtZc3t29CG1XIPNP6wOZAgf0FSXPMLzjN79QcDTj+67X86qpTnt2iqGRyxCooc/Nm9Gpk Ldd3Xa3eJavj+NvFkIY6R9axPqkn//AT4J32+O3ePH4jOAMzL3h0HOd4Vf/Z5VT2WYuJiERkepG 3ER+02RKMeYt2dj0cgOHgJwlXmhIuplm4pRPtDqZ8Y0EH2Jk
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -64,38 +64,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/platform/cadence/cdns-csi2rx.c | 6 ++----
+ drivers/media/platform/microchip/microchip-csi2dc.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
-index cc3ebb0d96f6..9755d1c8ceb9 100644
---- a/drivers/media/platform/cadence/cdns-csi2rx.c
-+++ b/drivers/media/platform/cadence/cdns-csi2rx.c
-@@ -473,14 +473,12 @@ static int csi2rx_probe(struct platform_device *pdev)
+diff --git a/drivers/media/platform/microchip/microchip-csi2dc.c b/drivers/media/platform/microchip/microchip-csi2dc.c
+index d5b359f607ae..bfb3edcf018a 100644
+--- a/drivers/media/platform/microchip/microchip-csi2dc.c
++++ b/drivers/media/platform/microchip/microchip-csi2dc.c
+@@ -741,7 +741,7 @@ static int csi2dc_probe(struct platform_device *pdev)
  	return ret;
  }
  
--static int csi2rx_remove(struct platform_device *pdev)
-+static void csi2rx_remove(struct platform_device *pdev)
+-static int csi2dc_remove(struct platform_device *pdev)
++static void csi2dc_remove(struct platform_device *pdev)
  {
- 	struct csi2rx_priv *csi2rx = platform_get_drvdata(pdev);
+ 	struct csi2dc_device *csi2dc = platform_get_drvdata(pdev);
  
- 	v4l2_async_unregister_subdev(&csi2rx->subdev);
- 	kfree(csi2rx);
+@@ -751,8 +751,6 @@ static int csi2dc_remove(struct platform_device *pdev)
+ 	v4l2_async_nf_unregister(&csi2dc->notifier);
+ 	v4l2_async_nf_cleanup(&csi2dc->notifier);
+ 	media_entity_cleanup(&csi2dc->csi2dc_sd.entity);
 -
 -	return 0;
  }
  
- static const struct of_device_id csi2rx_of_table[] = {
-@@ -491,7 +489,7 @@ MODULE_DEVICE_TABLE(of, csi2rx_of_table);
+ static int __maybe_unused csi2dc_runtime_suspend(struct device *dev)
+@@ -782,7 +780,7 @@ MODULE_DEVICE_TABLE(of, csi2dc_of_match);
  
- static struct platform_driver csi2rx_driver = {
- 	.probe	= csi2rx_probe,
--	.remove	= csi2rx_remove,
-+	.remove_new = csi2rx_remove,
- 
- 	.driver	= {
- 		.name		= "cdns-csi2rx",
+ static struct platform_driver csi2dc_driver = {
+ 	.probe	= csi2dc_probe,
+-	.remove = csi2dc_remove,
++	.remove_new = csi2dc_remove,
+ 	.driver = {
+ 		.name =			"microchip-csi2dc",
+ 		.pm =			&csi2dc_dev_pm_ops,
 -- 
 2.39.2
 
