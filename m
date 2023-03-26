@@ -2,45 +2,45 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EC43C761AF
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:32:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94084C77B61
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:32:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232403AbjCZOcn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
+        id S232417AbjCZOco (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232358AbjCZOcf (ORCPT
+        with ESMTP id S232356AbjCZOcf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 26 Mar 2023 10:32:35 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BBB6593
-        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925A072B2
+        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:33 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ6-0007mb-5d; Sun, 26 Mar 2023 16:32:30 +0200
+        id 1pgRQ7-0007sS-NR; Sun, 26 Mar 2023 16:32:31 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ4-006rZX-QR; Sun, 26 Mar 2023 16:32:28 +0200
+        id 1pgRQ7-006raU-41; Sun, 26 Mar 2023 16:32:31 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ3-0088US-VS; Sun, 26 Mar 2023 16:32:27 +0200
+        id 1pgRQ6-0088VG-FQ; Sun, 26 Mar 2023 16:32:30 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Antti Palosaari <crope@iki.fi>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 011/117] media: rtl2832_sdr: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:30:38 +0200
-Message-Id: <20230326143224.572654-14-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 023/117] media: m2m-deinterlace: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:30:50 +0200
+Message-Id: <20230326143224.572654-26-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1862; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=vE13OBywjSGQAtKRy9vyU6KCfvR9dbYK8EQyoIjKxyI=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFaDpef24v6GE3tEtLjcZf2O1ymSm5hVdjig3 iTbH3k7UkuJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWgwAKCRCPgPtYfRL+ TvXLCACmYC/R1fl7aaM51Fj6pO+D/1fUAWu1Kk0JgBxYe6/fsLbY7k7flAF094PI2DaxXcvR51d CA1a+30ylC+ZTkEcvXm+5mxlH2SCMWavlctSXaFBBg7HAr581H30PymT+wUJZNasWDTP9BdEZY3 eLLEAkWobTMIVv5EQpLP7lOoK+34oEQyRVd41MDsJ0JUCEFTAz6CdN/4Uj6gdC0pW8GmFvvZqeJ wKhoap29YMvn+GI7h/QHKTThsOxH8NjM/w8qbEAVgH+lReReftjxYJOpnuAscGsH7rn5Kk/3eWH 64XettA7uZtwIeoOtO+U/5KSBWdV92GrIpcFPCtrIFhxwRho
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1724; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=+x/PkrS1Tyr7WQYINVcetSeb0sHyTBNcxeB7s1QaK1k=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFaisoF7UoJ+hz/n65RKRA7tT7Mcdrihjb9Hs vvJ83uVAEGJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWogAKCRCPgPtYfRL+ TrvoB/4kcAmXRkAFInEKf16jZIXtyBsqXvnZTj+B2HEBqMEJv4lNT1QgGw/9P1GAtaHksEBLXzc TqTydptPG5BEwKu/TTe2HlYpo75zNxTDGR6jDTapk7I9Xmi4vZUqEnoFU0U9SVaml/m643uskxJ LikTfj85SZmcs7wwRT8SH4iLye8gysqDCq2MYFGLoQsVCCKQ2y87RASJ106jH7j53w4358cnm6Q h+GWyvmFvlpzPSkRrCIadiGPL+ZmTF50NJXXgse54S8RzTX8o4mEfqfAGM6wfByLsHZ+pOXfHI7 gsif6R8A7lL0pM0SroRzb3mWF64TjjFOylHH7GZNToUbHWPz
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -64,40 +64,37 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/dvb-frontends/rtl2832_sdr.c | 6 ++----
+ drivers/media/platform/m2m-deinterlace.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/rtl2832_sdr.c b/drivers/media/dvb-frontends/rtl2832_sdr.c
-index 05f71d169726..02c619e51641 100644
---- a/drivers/media/dvb-frontends/rtl2832_sdr.c
-+++ b/drivers/media/dvb-frontends/rtl2832_sdr.c
-@@ -1463,7 +1463,7 @@ static int rtl2832_sdr_probe(struct platform_device *pdev)
+diff --git a/drivers/media/platform/m2m-deinterlace.c b/drivers/media/platform/m2m-deinterlace.c
+index 1f89e71cdccf..96b35a5d6174 100644
+--- a/drivers/media/platform/m2m-deinterlace.c
++++ b/drivers/media/platform/m2m-deinterlace.c
+@@ -984,7 +984,7 @@ static int deinterlace_probe(struct platform_device *pdev)
  	return ret;
  }
  
--static int rtl2832_sdr_remove(struct platform_device *pdev)
-+static void rtl2832_sdr_remove(struct platform_device *pdev)
+-static int deinterlace_remove(struct platform_device *pdev)
++static void deinterlace_remove(struct platform_device *pdev)
  {
- 	struct rtl2832_sdr_dev *dev = platform_get_drvdata(pdev);
+ 	struct deinterlace_dev *pcdev = platform_get_drvdata(pdev);
  
-@@ -1479,8 +1479,6 @@ static int rtl2832_sdr_remove(struct platform_device *pdev)
- 	mutex_unlock(&dev->vb_queue_lock);
- 	v4l2_device_put(&dev->v4l2_dev);
- 	module_put(pdev->dev.parent->driver->owner);
+@@ -993,13 +993,11 @@ static int deinterlace_remove(struct platform_device *pdev)
+ 	video_unregister_device(&pcdev->vfd);
+ 	v4l2_device_unregister(&pcdev->v4l2_dev);
+ 	dma_release_channel(pcdev->dma_chan);
 -
 -	return 0;
  }
  
- static struct platform_driver rtl2832_sdr_driver = {
-@@ -1488,7 +1486,7 @@ static struct platform_driver rtl2832_sdr_driver = {
- 		.name   = "rtl2832_sdr",
+ static struct platform_driver deinterlace_pdrv = {
+ 	.probe		= deinterlace_probe,
+-	.remove		= deinterlace_remove,
++	.remove_new	= deinterlace_remove,
+ 	.driver		= {
+ 		.name	= MEM2MEM_NAME,
  	},
- 	.probe          = rtl2832_sdr_probe,
--	.remove         = rtl2832_sdr_remove,
-+	.remove_new     = rtl2832_sdr_remove,
- };
- module_platform_driver(rtl2832_sdr_driver);
- 
 -- 
 2.39.2
 
