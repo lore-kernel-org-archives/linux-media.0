@@ -2,48 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92ECCC77B61
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:34:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F0D2C6FD1C
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:34:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232411AbjCZOeY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33094 "EHLO
+        id S232500AbjCZOeZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232537AbjCZOdB (ORCPT
+        with ESMTP id S232394AbjCZOdC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 Mar 2023 10:33:01 -0400
+        Sun, 26 Mar 2023 10:33:02 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB174222
-        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB76B5FD7
+        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:57 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQP-0000Gw-Iu; Sun, 26 Mar 2023 16:32:49 +0200
+        id 1pgRQT-0000Z5-7L; Sun, 26 Mar 2023 16:32:53 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQN-006rgG-4Q; Sun, 26 Mar 2023 16:32:47 +0200
+        id 1pgRQR-006rhq-9z; Sun, 26 Mar 2023 16:32:51 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQM-0088Zy-BM; Sun, 26 Mar 2023 16:32:46 +0200
+        id 1pgRQQ-0088bA-BZ; Sun, 26 Mar 2023 16:32:50 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Hyun Kwon <hyun.kwon@xilinx.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>
-Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kernel@pengutronix.de
-Subject: [PATCH 096/117] media: xilinx-tpg: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:32:03 +0200
-Message-Id: <20230326143224.572654-99-u.kleine-koenig@pengutronix.de>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        linux-media@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH 114/117] media: vimc-core: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:32:21 +0200
+Message-Id: <20230326143224.572654-117-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1821; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=xJns6D+KgLvHNTqGGeDmhK7PxGSbwNgfYYo8C86ngV8=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFcC6QJJuuLDmbbRbtEb2CCwae6rQuuT2RrzA Q3Runy9C/KJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBXAgAKCRCPgPtYfRL+ Tnv4B/4saKNNmKzJRbUFbLwE4QCi1fcCdP/2m6MeY6E2opUl6sPvm0VsgoW6XOgVm7hwM2E6Saw 9YGjXFt/Np0FsToWrOYEJvsQtjPwLcWA47/WEV5uGlljrxSi/KP1F8K7yhilqoKL/mNKEuovj4A kKhkL7DZUl19wQjRov4qHwzC3cmYPfCN5wEt79QQz1Sdqwp6oeCrsGbOOSyDCk+crsNmlq8OYDO 4H6vvMNGhqoUvqyuL6YsTWQyK2BkbMTa7vFvBoAFpQszRF03N51RUNsEB0OFdgkR7YS3etXsWAS J8Cx8RqO2kpjELOYp0dsqMb6tiXS4titQVgU4zGkcShc2G+d
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1790; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=noigLH5FPu00eRydnUiSIs9qodhVusSLw+vfqx9NHoE=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFdT+0A2BTjP/WFcRjPwax+WfrS+Zy3mOWy2v vtcDR7VmVaJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBXUwAKCRCPgPtYfRL+ TmqNB/0cG4AI97rl+lefkFeSUJczvI9xQcV1NLWsNxl3hVOIH4hfpYptIQZLvdeF/FVmVakC8g9 Zl2zwnmG6v9VNQLW1DKlApOTmBawvhd4Z9tGto5BVqCkL+j15feMuFnLWflkV7ISrZj6IrY8STf np8x4DFSGBL5XwX6x+VN1OW28ypypfHJWSP0bVLgpHqDGj4LeI1J9q4KcS/qOn0wVQL/H1uPl69 s1kLBY4z++EYBERCMTj7D2wmZTXW/z/JSYuem0CWyE5TLB/WKZLWjwG5vu3ahZdITXOdRka5Ct6 RwT2rkvfQ9m9n4aQTjO1u7MLsHpQfcCKk2s6QThnBWQJrD9v
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -67,40 +65,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/platform/xilinx/xilinx-tpg.c | 6 ++----
+ drivers/media/test-drivers/vimc/vimc-core.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/xilinx/xilinx-tpg.c b/drivers/media/platform/xilinx/xilinx-tpg.c
-index 0f2d5a0edf0c..80353ca44402 100644
---- a/drivers/media/platform/xilinx/xilinx-tpg.c
-+++ b/drivers/media/platform/xilinx/xilinx-tpg.c
-@@ -894,7 +894,7 @@ static int xtpg_probe(struct platform_device *pdev)
- 	return ret;
+diff --git a/drivers/media/test-drivers/vimc/vimc-core.c b/drivers/media/test-drivers/vimc/vimc-core.c
+index e82cfa5ffbf4..af127476e920 100644
+--- a/drivers/media/test-drivers/vimc/vimc-core.c
++++ b/drivers/media/test-drivers/vimc/vimc-core.c
+@@ -387,7 +387,7 @@ static int vimc_probe(struct platform_device *pdev)
+ 	return 0;
  }
  
--static int xtpg_remove(struct platform_device *pdev)
-+static void xtpg_remove(struct platform_device *pdev)
+-static int vimc_remove(struct platform_device *pdev)
++static void vimc_remove(struct platform_device *pdev)
  {
- 	struct xtpg_device *xtpg = platform_get_drvdata(pdev);
- 	struct v4l2_subdev *subdev = &xtpg->xvip.subdev;
-@@ -904,8 +904,6 @@ static int xtpg_remove(struct platform_device *pdev)
- 	media_entity_cleanup(&subdev->entity);
+ 	struct vimc_device *vimc = platform_get_drvdata(pdev);
  
- 	xvip_cleanup_resources(&xtpg->xvip);
+@@ -397,8 +397,6 @@ static int vimc_remove(struct platform_device *pdev)
+ 	media_device_unregister(&vimc->mdev);
+ 	v4l2_device_unregister(&vimc->v4l2_dev);
+ 	v4l2_device_put(&vimc->v4l2_dev);
 -
 -	return 0;
  }
  
- static SIMPLE_DEV_PM_OPS(xtpg_pm_ops, xtpg_pm_suspend, xtpg_pm_resume);
-@@ -923,7 +921,7 @@ static struct platform_driver xtpg_driver = {
- 		.of_match_table	= xtpg_of_id_table,
- 	},
- 	.probe			= xtpg_probe,
--	.remove			= xtpg_remove,
-+	.remove_new		= xtpg_remove,
- };
+ static void vimc_dev_release(struct device *dev)
+@@ -412,7 +410,7 @@ static struct platform_device vimc_pdev = {
  
- module_platform_driver(xtpg_driver);
+ static struct platform_driver vimc_pdrv = {
+ 	.probe		= vimc_probe,
+-	.remove		= vimc_remove,
++	.remove_new	= vimc_remove,
+ 	.driver		= {
+ 		.name	= VIMC_PDEV_NAME,
+ 	},
 -- 
 2.39.2
 
