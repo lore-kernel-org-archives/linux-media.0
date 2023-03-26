@@ -2,50 +2,47 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 208D1C6FD1C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30EF5C761AF
 	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:34:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232564AbjCZOen (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:34:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60348 "EHLO
+        id S232614AbjCZOeo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:34:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232563AbjCZOdL (ORCPT
+        with ESMTP id S232547AbjCZOdN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 Mar 2023 10:33:11 -0400
+        Sun, 26 Mar 2023 10:33:13 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C807D94
-        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:33:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38A77D99
+        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:33:02 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQI-0008RT-HP; Sun, 26 Mar 2023 16:32:42 +0200
+        id 1pgRQS-0000Ji-BJ; Sun, 26 Mar 2023 16:32:52 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQF-006rdF-IL; Sun, 26 Mar 2023 16:32:39 +0200
+        id 1pgRQN-006rgW-MV; Sun, 26 Mar 2023 16:32:47 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQD-0088XO-Ig; Sun, 26 Mar 2023 16:32:37 +0200
+        id 1pgRQN-0088aD-0S; Sun, 26 Mar 2023 16:32:47 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Yang Li <yang.lee@linux.alibaba.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
         =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Dan Carpenter <error27@gmail.com>
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 056/117] media: rzg2l-csi2: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:31:23 +0200
-Message-Id: <20230326143224.572654-59-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 099/117] media: radio-si476x: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:32:06 +0200
+Message-Id: <20230326143224.572654-102-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1924; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=zzC69ruW9ymPVD8svgpuKUjORivZYVq9oniixuEC948=; b=owGbwMvMwMXY3/A7olbonx/jabUkhhSFsFMnHX6255jxs96vY4vvdYvoLzo2jaXyleftL2W38 p6trlrayWjMwsDIxSArpshi37gm06pKLrJz7b/LMINYmUCmMHBxCsBEPvKz/6+c+un2sxLDT8kT K8ISPLQ2Fx69+qvscnFcYn86x5JN2kVTj4ruCnxZ8vz4E5F7U5l+HM0+Ocdo78nX0T8WW5Y7/bn V2nUnanvmgYBoLmeznAfJZziuTZ8oGCesLvy5Nev2gbs+AudOOi/czXab2/XZ/8royqN3nvAWxe b2/po+c1XO5vMdLc8rhDRNu9T8Tq1wesh+KmpK0/WY0M+WqT9tPYVfOH8r+nJFRlFZK0e7WawvK 5PHPVpPnclxY0bECWWV8rrPTLr15T5+EsJvmz6ptSst4w8TPHZ7SZ+KJlecTUDx+S9JoZd4tcXV DIylYqddWvyVaf6FM17nJscLfNuruuZLa2W3TA77+g1KAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1812; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=2aklwToCXXRcjaigeHXKipepUnrBG+3zgugohz+5bWU=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFcKoU41xTLAaY+LpBeprbrGWgQIyFEcBIOf2 /O5DQd0gReJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBXCgAKCRCPgPtYfRL+ TmCBB/0TpQ5NlybANWiRB8yvOnQyuYaWieYBXkJo+OyGFhXaJ4pp48uG2jRtjjLLjgYdA8uQM5I 0Zt92agnadmDd2vW8lFC08RfyT9fabGcHhBGEJAF6Olet3N9CJU/tvj92HuYEVZFv6OoK8WrkSh leVOFrwfP8yASWHCazhTITmLjv0QwIXAESSV7MRLEEkvaTqa4Sl5ewHuCqeuS70xy/hh1DUWFEl F7iwfaiKG/JGY/0qioX17ez9HhC7eS5ME5kZaBveeVWGLOAe/JFmr8QYuT/GgU9vTv8X+ICBkdI v014p9+DKlThQdv/jR+5yDZ6dUxh/wm/wP4/bG2XpwCFLeXR
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -69,40 +66,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c | 6 ++----
+ drivers/media/radio/radio-si476x.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
-index 384fb54e219a..30dad7383654 100644
---- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
-+++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
-@@ -819,7 +819,7 @@ static int rzg2l_csi2_probe(struct platform_device *pdev)
- 	return ret;
+diff --git a/drivers/media/radio/radio-si476x.c b/drivers/media/radio/radio-si476x.c
+index 171f9cc9ee5e..6061506159f1 100644
+--- a/drivers/media/radio/radio-si476x.c
++++ b/drivers/media/radio/radio-si476x.c
+@@ -1498,7 +1498,7 @@ static int si476x_radio_probe(struct platform_device *pdev)
+ 	return rval;
  }
  
--static int rzg2l_csi2_remove(struct platform_device *pdev)
-+static void rzg2l_csi2_remove(struct platform_device *pdev)
+-static int si476x_radio_remove(struct platform_device *pdev)
++static void si476x_radio_remove(struct platform_device *pdev)
  {
- 	struct rzg2l_csi2 *csi2 = platform_get_drvdata(pdev);
+ 	struct si476x_radio *radio = platform_get_drvdata(pdev);
  
-@@ -829,8 +829,6 @@ static int rzg2l_csi2_remove(struct platform_device *pdev)
- 	v4l2_subdev_cleanup(&csi2->subdev);
- 	media_entity_cleanup(&csi2->subdev.entity);
- 	pm_runtime_disable(&pdev->dev);
+@@ -1506,8 +1506,6 @@ static int si476x_radio_remove(struct platform_device *pdev)
+ 	video_unregister_device(&radio->videodev);
+ 	v4l2_device_unregister(&radio->v4l2dev);
+ 	debugfs_remove_recursive(radio->debugfs);
 -
 -	return 0;
  }
  
- static int __maybe_unused rzg2l_csi2_pm_runtime_suspend(struct device *dev)
-@@ -859,7 +857,7 @@ static const struct of_device_id rzg2l_csi2_of_table[] = {
+ MODULE_ALIAS("platform:si476x-radio");
+@@ -1517,7 +1515,7 @@ static struct platform_driver si476x_radio_driver = {
+ 		.name	= DRIVER_NAME,
+ 	},
+ 	.probe		= si476x_radio_probe,
+-	.remove		= si476x_radio_remove,
++	.remove_new	= si476x_radio_remove,
  };
+ module_platform_driver(si476x_radio_driver);
  
- static struct platform_driver rzg2l_csi2_pdrv = {
--	.remove	= rzg2l_csi2_remove,
-+	.remove_new = rzg2l_csi2_remove,
- 	.probe	= rzg2l_csi2_probe,
- 	.driver	= {
- 		.name = "rzg2l-csi2",
 -- 
 2.39.2
 
