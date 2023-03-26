@@ -2,45 +2,48 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02D6FC6FD1C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 962A6C74A5B
 	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:34:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232532AbjCZOeW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32816 "EHLO
+        id S232410AbjCZOeX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232533AbjCZOdB (ORCPT
+        with ESMTP id S232538AbjCZOdB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 26 Mar 2023 10:33:01 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A9E116
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE341BEC
         for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:55 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQO-0000Fu-TQ; Sun, 26 Mar 2023 16:32:48 +0200
+        id 1pgRQN-0000Bh-9o; Sun, 26 Mar 2023 16:32:47 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQM-006rg3-Mt; Sun, 26 Mar 2023 16:32:46 +0200
+        id 1pgRQK-006rfK-IW; Sun, 26 Mar 2023 16:32:44 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQL-0088Zl-KM; Sun, 26 Mar 2023 16:32:45 +0200
+        id 1pgRQJ-0088Z6-IJ; Sun, 26 Mar 2023 16:32:43 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 093/117] media: via-camera: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:32:00 +0200
-Message-Id: <20230326143224.572654-96-u.kleine-koenig@pengutronix.de>
+To:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, kernel@pengutronix.de
+Subject: [PATCH 083/117] media: sun8i_rotate: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:31:50 +0200
+Message-Id: <20230326143224.572654-86-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1773; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=2h6vp3wygh+fbHmZXfq4/Vx9AJtxfUJMECyNAvYwd04=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFb09U6of+mDzpe4TOPtOftDqHMmIDD4eDNsw QXpuK0/f5OJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBW9AAKCRCPgPtYfRL+ Tp1cCACN+Tn57qYVYJ5RHB4upQZ8VPnlyvyz/FoirmxlnxTBzIGF/b1ZYA8LdcrdoSLVGsYgp30 heDQx5DdEgCNeWMeHM+8xxgSnciVs4ym8wSBO0m5fy+g86aGW47RJLTDihcByr5rHr6EhnfO9Ix EfV9bQkZRc/P1uGK4/K3CRVMeM56Hr3GV/tEY1URgfDP0oT73X3olQTOrE1xw7B5uMffuhCV+bC 3yrg4/mebS4E93q3HrpVcdKzoTCqGvQsdFd0oAxY21ZxqJtHuZU8ytFLLPy5Jt0rW0c6MRMTfUo 8vfroEMevnNzdOxdatfI4SbjaJbLwE3BkIzog6AqHaSPuvXp
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1881; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=cFM9ryR39dC1zqXzbh3VAz+Gt7Z0sPw+2x4RcLkZw4A=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFbpIEMfPBt276qBqk05jpVddS6BlGOY/30xh p1HPwpPUl6JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBW6QAKCRCPgPtYfRL+ Tp+2CACiYaJ6BxRtct1ArxiFzOL90Z9VGsHEYsESMYnrw0FFTf+2xaeLeSrYRYyDRwGQspYX0Bb sy3cMaF2oDaoWgTIRLh9zqmIAviwI1OJxTWGUhKDkm2X0gi0ZmfDWRKSHvOKEgYfq3cpkKdEc3B B3l679YgpcBR9H0n47laYezHYFX7KYg6G2jyPxBfwEnsOttdZxTODoQfBtlvKbTdJkzK7JdswzZ KwL0yUD2qmBOIYlC7QbvhY1qHSzfsbd9fSytfvrgjKmN74lZ5xdwsdaLkOVlmaLW0wwqgIUquXu bJytQOZerdUI031rupAzzyJ/AKA/NAkhPmdoDA11cIxMrBrH
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -64,39 +67,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/platform/via/via-camera.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/via/via-camera.c b/drivers/media/platform/via/via-camera.c
-index 95483c84c3f2..94a1260ac393 100644
---- a/drivers/media/platform/via/via-camera.c
-+++ b/drivers/media/platform/via/via-camera.c
-@@ -1294,7 +1294,7 @@ static int viacam_probe(struct platform_device *pdev)
+diff --git a/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c b/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c
+index fbcca59a0517..bd0c4257bbff 100644
+--- a/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c
++++ b/drivers/media/platform/sunxi/sun8i-rotate/sun8i_rotate.c
+@@ -833,7 +833,7 @@ static int rotate_probe(struct platform_device *pdev)
  	return ret;
  }
  
--static int viacam_remove(struct platform_device *pdev)
-+static void viacam_remove(struct platform_device *pdev)
+-static int rotate_remove(struct platform_device *pdev)
++static void rotate_remove(struct platform_device *pdev)
  {
- 	struct via_camera *cam = via_cam_info;
- 	struct viafb_dev *viadev = pdev->dev.platform_data;
-@@ -1309,7 +1309,6 @@ static int viacam_remove(struct platform_device *pdev)
- 	v4l2_ctrl_handler_free(&cam->ctrl_handler);
- 	kfree(cam);
- 	via_cam_info = NULL;
+ 	struct rotate_dev *dev = platform_get_drvdata(pdev);
+ 
+@@ -842,8 +842,6 @@ static int rotate_remove(struct platform_device *pdev)
+ 	v4l2_device_unregister(&dev->v4l2_dev);
+ 
+ 	pm_runtime_force_suspend(&pdev->dev);
+-
 -	return 0;
  }
  
- static struct platform_driver viacam_driver = {
-@@ -1317,7 +1316,7 @@ static struct platform_driver viacam_driver = {
- 		.name = "viafb-camera",
- 	},
- 	.probe = viacam_probe,
--	.remove = viacam_remove,
-+	.remove_new = viacam_remove,
- };
+ static int rotate_runtime_resume(struct device *device)
+@@ -907,7 +905,7 @@ static const struct dev_pm_ops rotate_pm_ops = {
  
- module_platform_driver(viacam_driver);
+ static struct platform_driver rotate_driver = {
+ 	.probe		= rotate_probe,
+-	.remove		= rotate_remove,
++	.remove_new	= rotate_remove,
+ 	.driver		= {
+ 		.name		= ROTATE_NAME,
+ 		.of_match_table	= rotate_dt_match,
 -- 
 2.39.2
 
