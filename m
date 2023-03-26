@@ -2,50 +2,45 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46BF1C77B61
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:34:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EB4CC77B62
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:34:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232468AbjCZOeM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
+        id S232503AbjCZOeN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232513AbjCZOc6 (ORCPT
+        with ESMTP id S232515AbjCZOc6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 26 Mar 2023 10:32:58 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01147EC5
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF187A8F
         for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:54 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQJ-0008TG-FG; Sun, 26 Mar 2023 16:32:43 +0200
+        id 1pgRQO-0000DX-Cd; Sun, 26 Mar 2023 16:32:48 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQG-006rdi-EY; Sun, 26 Mar 2023 16:32:40 +0200
+        id 1pgRQL-006rfZ-Nv; Sun, 26 Mar 2023 16:32:45 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQE-0088Xf-LM; Sun, 26 Mar 2023 16:32:38 +0200
+        id 1pgRQJ-0088ZG-Vg; Sun, 26 Mar 2023 16:32:43 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 061/117] media: gsc-core: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:31:28 +0200
-Message-Id: <20230326143224.572654-64-u.kleine-koenig@pengutronix.de>
+To:     Benoit Parrot <bparrot@ti.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH 085/117] media: cal: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:31:52 +0200
+Message-Id: <20230326143224.572654-88-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1804; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=eCSifVDAXW1X9cqwaaO+CIz3Ffo9A6DmGqCvAijEceE=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFbPr3FL7OeCsFMG8fuH3lucwcXA/JAft3Z+O qnuaKUrJFKJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWzwAKCRCPgPtYfRL+ To6mB/0b1uRTMan64x+JAXAbjBLCzuNlTD0aJ1JMcGvaw+HooBDUHxkZcBGqZjOXYNh9JX7fzl/ +2rowxWYNLnHCr8MUHenj1HqA1ZncCV5VbOp7yfbxP5ZZocsRrD/w8bkWFiFfpRq5PhwLmGes0P rSdZZwLEfSto6Hn9dC2D9gE3zfVEydSwcAstdD7aSp3Hcgcsn9Jfot61Qx3xWnKHXA29W5t2BuA UnhBg2/5zUbbgTUPFSGkDsEVcGOWzchrapyd77nC+/pXrOfbIeW9yTXtY0xWrZV8H/6pwmWRgj4 yWzbKvRkT6iE7TEPef8MsoFq7j0VyZKUqw5Zrg0mP5ej8ogf
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1749; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=dsE/y8UiNMwNKo0iLAt+eCV1RoNcHHbald1EhTMkBiI=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFbr7yUSmw1kaY5bkc1laIGJ/wRaehBBlHJYy SXiAVakIieJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBW6wAKCRCPgPtYfRL+ TsQqCAC5mLV1njvzMB3DYN5FTc8U2JpmmggpLEOhWPRF+C6+e0fklUZvKtb9uSpQiGeaASntE3N UVehKxivPq+4GvZxAAOJHZ/kYNNfEEGnQQ0LTu1roNMQv13/mvaY+y5iJzIb0WlzFbEhejkDHpg JNLMNgnJqvLHfL9+gPspUpu1rTbPYwjajaWJ5/PJaCnSoelxaZJ0JsZfznzJJIoW/TDeO61zF7U 3O2SlwyZEkIe8u52akKnL0iCEog7NHzba7ZmcRH+dTWKvlvT5jg/VqL6nx4K0U+GwLRfvHTwsWB l89NG3YLzhQpFR2LduPTydgajvonn2fMX06hAQU8MPZWUoz+
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -69,39 +64,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/platform/samsung/exynos-gsc/gsc-core.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/media/platform/ti/cal/cal.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/samsung/exynos-gsc/gsc-core.c b/drivers/media/platform/samsung/exynos-gsc/gsc-core.c
-index b147c645ae0b..1fb34de70649 100644
---- a/drivers/media/platform/samsung/exynos-gsc/gsc-core.c
-+++ b/drivers/media/platform/samsung/exynos-gsc/gsc-core.c
-@@ -1201,7 +1201,7 @@ static int gsc_probe(struct platform_device *pdev)
+diff --git a/drivers/media/platform/ti/cal/cal.c b/drivers/media/platform/ti/cal/cal.c
+index 1236215ec70e..9c5105223d6b 100644
+--- a/drivers/media/platform/ti/cal/cal.c
++++ b/drivers/media/platform/ti/cal/cal.c
+@@ -1293,7 +1293,7 @@ static int cal_probe(struct platform_device *pdev)
  	return ret;
  }
  
--static int gsc_remove(struct platform_device *pdev)
-+static void gsc_remove(struct platform_device *pdev)
+-static int cal_remove(struct platform_device *pdev)
++static void cal_remove(struct platform_device *pdev)
  {
- 	struct gsc_dev *gsc = platform_get_drvdata(pdev);
- 	int i;
-@@ -1220,7 +1220,6 @@ static int gsc_remove(struct platform_device *pdev)
- 	pm_runtime_set_suspended(&pdev->dev);
- 
- 	dev_dbg(&pdev->dev, "%s driver unloaded\n", pdev->name);
+ 	struct cal_dev *cal = platform_get_drvdata(pdev);
+ 	unsigned int i;
+@@ -1319,8 +1319,6 @@ static int cal_remove(struct platform_device *pdev)
+ 	if (ret >= 0)
+ 		pm_runtime_put_sync(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
+-
 -	return 0;
  }
  
- #ifdef CONFIG_PM
-@@ -1311,7 +1310,7 @@ static const struct dev_pm_ops gsc_pm_ops = {
+ static int cal_runtime_resume(struct device *dev)
+@@ -1364,7 +1362,7 @@ static const struct dev_pm_ops cal_pm_ops = {
  
- static struct platform_driver gsc_driver = {
- 	.probe		= gsc_probe,
--	.remove		= gsc_remove,
-+	.remove_new	= gsc_remove,
- 	.driver = {
- 		.name	= GSC_MODULE_NAME,
- 		.pm	= &gsc_pm_ops,
+ static struct platform_driver cal_pdrv = {
+ 	.probe		= cal_probe,
+-	.remove		= cal_remove,
++	.remove_new	= cal_remove,
+ 	.driver		= {
+ 		.name	= CAL_MODULE_NAME,
+ 		.pm	= &cal_pm_ops,
 -- 
 2.39.2
 
