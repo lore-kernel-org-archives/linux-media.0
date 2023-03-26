@@ -2,46 +2,45 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBE77C761AF
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:33:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F141C77B61
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:33:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232443AbjCZOde (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
+        id S232571AbjCZOdf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:33:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232455AbjCZOcs (ORCPT
+        with ESMTP id S232440AbjCZOct (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 Mar 2023 10:32:48 -0400
+        Sun, 26 Mar 2023 10:32:49 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC2D7DA7
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F4C7D94
         for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:48 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQJ-0008UF-Iv; Sun, 26 Mar 2023 16:32:43 +0200
+        id 1pgRQI-0008So-RH; Sun, 26 Mar 2023 16:32:42 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQH-006re1-0O; Sun, 26 Mar 2023 16:32:41 +0200
+        id 1pgRQG-006rdX-5A; Sun, 26 Mar 2023 16:32:40 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQG-0088Y8-6n; Sun, 26 Mar 2023 16:32:40 +0200
+        id 1pgRQD-0088XR-Pn; Sun, 26 Mar 2023 16:32:37 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH 068/117] media: camif-core: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:31:35 +0200
-Message-Id: <20230326143224.572654-71-u.kleine-koenig@pengutronix.de>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH 057/117] media: sh_vou: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:31:24 +0200
+Message-Id: <20230326143224.572654-60-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1950; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=Cv5AoPt1iE8Vv29bdDGa7hcCGTrahdWceom2lSpe14o=; b=owGbwMvMwMXY3/A7olbonx/jabUkhhSFsOvetjV81Q58Fbt+rNTmzeWvryg6HCmmy155oZhvp kXXvB+djMYsDIxcDLJiiiz2jWsyrarkIjvX/rsMM4iVCWQKAxenAEzkwhkOhllX1jeY7Huz/WXT LZ3bbfcvOiV9Yn8uvDfXmGemWEbLc77vrQms3P+d9NnM11SHaGV7zldsOtVyiPXvjMfWBive+K4 rij4X4uWa8LChStZhYmiCaYp8ScmEwrxnTfGrNe9tv73i24UV9k32hzhLDQ33R+s328YI/Wh43m xWuLvm+0oJ476jVeU/ndYmsmeK+k4QNBHUu+oSHtiyY36Ml8LeE2JbNRI9FRuiym+YZ3EFX0h+y jm3rEPhtMJaxV5b40k1+gcm7PkQ+3rG7duGn52yXy4qei607aD84zcPJ8xyWtButscyP8yx3/HV q9MvJpzf4DOxSjBpXubX193Gr/5qbW3cLrbmgPEtpThPAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1698; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=GnkVK7SIodm7ugn6xEylj23OqmAQ9deIMvUSGLhIs1E=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFbLBdmiEleG0aVjONz4apqzeDrzl8U2Ru7rv rlCYdt/txeJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWywAKCRCPgPtYfRL+ Tm/9B/9hSK3oEKGQxVuk5inkcKQAUYxgDE4lwLhPUGs6NyHsrMlCkoj8qQjbxIEHmAMFPeNB+WS iuf0knLsYSFNsw/UvvXAwSyH+ZI4wBmFJHgdqrPO+XUXyysWfybqqj5xFTH6HXot3J6siF4/W0m 5Y9U0Ru9VipKVv6VtXjQLe2T3uprsE4MzjgFSD1NVTt9cXNcGjAD0biOnF2ych7VKBdfYP90q/a OenzkBrmuXpHLKUf4vQLrwcITnKb23DcwckFQtRSoF13Agph5Lk7Q3vtS8zeoFT9ZWwDrDXSH55 K0yxEe9SeOayrzBdHtvsPp1b7XTuotYtkIOgf2Df3kjMyOT0
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -65,40 +64,35 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/platform/samsung/s3c-camif/camif-core.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/media/platform/renesas/sh_vou.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/samsung/s3c-camif/camif-core.c b/drivers/media/platform/samsung/s3c-camif/camif-core.c
-index 6e8ef86566b7..0b50183d9230 100644
---- a/drivers/media/platform/samsung/s3c-camif/camif-core.c
-+++ b/drivers/media/platform/samsung/s3c-camif/camif-core.c
-@@ -507,7 +507,7 @@ static int s3c_camif_probe(struct platform_device *pdev)
+diff --git a/drivers/media/platform/renesas/sh_vou.c b/drivers/media/platform/renesas/sh_vou.c
+index ca4310e26c49..8fe3272a541f 100644
+--- a/drivers/media/platform/renesas/sh_vou.c
++++ b/drivers/media/platform/renesas/sh_vou.c
+@@ -1343,7 +1343,7 @@ static int sh_vou_probe(struct platform_device *pdev)
  	return ret;
  }
  
--static int s3c_camif_remove(struct platform_device *pdev)
-+static void s3c_camif_remove(struct platform_device *pdev)
+-static int sh_vou_remove(struct platform_device *pdev)
++static void sh_vou_remove(struct platform_device *pdev)
  {
- 	struct camif_dev *camif = platform_get_drvdata(pdev);
- 	struct s3c_camif_plat_data *pdata = &camif->pdata;
-@@ -521,8 +521,6 @@ static int s3c_camif_remove(struct platform_device *pdev)
- 	camif_clk_put(camif);
- 	s3c_camif_unregister_subdev(camif);
- 	pdata->gpio_put();
--
+ 	struct v4l2_device *v4l2_dev = platform_get_drvdata(pdev);
+ 	struct sh_vou_device *vou_dev = container_of(v4l2_dev,
+@@ -1356,11 +1356,10 @@ static int sh_vou_remove(struct platform_device *pdev)
+ 	video_unregister_device(&vou_dev->vdev);
+ 	i2c_put_adapter(client->adapter);
+ 	v4l2_device_unregister(&vou_dev->v4l2_dev);
 -	return 0;
  }
  
- static int s3c_camif_runtime_resume(struct device *dev)
-@@ -623,7 +621,7 @@ static const struct dev_pm_ops s3c_camif_pm_ops = {
- 
- static struct platform_driver s3c_camif_driver = {
- 	.probe		= s3c_camif_probe,
--	.remove		= s3c_camif_remove,
-+	.remove_new	= s3c_camif_remove,
- 	.id_table	= s3c_camif_driver_ids,
- 	.driver = {
- 		.name	= S3C_CAMIF_DRIVER_NAME,
+ static struct platform_driver sh_vou = {
+-	.remove  = sh_vou_remove,
++	.remove_new = sh_vou_remove,
+ 	.driver  = {
+ 		.name	= "sh-vou",
+ 	},
 -- 
 2.39.2
 
