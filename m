@@ -2,46 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0ECEAC77B61
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:32:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E2E2C761AF
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:32:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232454AbjCZOcs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59860 "EHLO
+        id S232456AbjCZOcu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:32:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232369AbjCZOcg (ORCPT
+        with ESMTP id S232372AbjCZOcg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 26 Mar 2023 10:32:36 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135267A80
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE867AAB
         for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:34 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ7-0007sO-M2; Sun, 26 Mar 2023 16:32:31 +0200
+        id 1pgRQ8-0007t0-2K; Sun, 26 Mar 2023 16:32:32 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ7-006raQ-1A; Sun, 26 Mar 2023 16:32:31 +0200
+        id 1pgRQ7-006raa-ES; Sun, 26 Mar 2023 16:32:31 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ6-0088VB-8j; Sun, 26 Mar 2023 16:32:30 +0200
+        id 1pgRQ6-0088VJ-Oj; Sun, 26 Mar 2023 16:32:30 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 022/117] media: pxa_camera: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:30:49 +0200
-Message-Id: <20230326143224.572654-25-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 024/117] media: marvell: Simplify remove callback
+Date:   Sun, 26 Mar 2023 16:30:51 +0200
+Message-Id: <20230326143224.572654-27-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1842; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=jrpOEJnFdFmE7i1O2jp+S+tb1tnnzMW7ufd8w5AMPfo=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFahI/1zsbMz1QYGND+QaSAeuIc3Bcxfwzb5v c/0Ogn7oSGJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWoQAKCRCPgPtYfRL+ TrycCACTHTqHQc+UqMuSc7jHh6OWlIq7MSuzDsUjgqkow39rxXgvpnPYqJzMuT9SdUDjUQLND9I 7gbqBGgKiDhMIYKprdV6FF06zgBGTx8mx1UyLfE2P+GqjiMpUXZ707rLpHdeTQrhesA2jNVM5Rx pWcD6UpgyNFpo6FoHmtwf0tNvlAHI92tcx7eSvUBg1v5e3lRF/x+5OZK/9a50G2rgkN3dDjffft 8/xbjp3/wkOg2eui8DtKeUgra9KyWVpDRltH6mwhovoJGFQ59mX1b10d6ryG2eAJCdK512/rANC ilNAoBLX38SjLAlZ+HDh+6G4z7pGobOl127X2tzcGTUVWzea
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1797; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=590D1CAL0pYMC213PLVi2ZUu4XhyxHq+x11/2JonYDU=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFajNsUg4ndB8z7Vo8Sv5E+wNVkolkuE9Z4CN Ilk2XUcK+WJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWowAKCRCPgPtYfRL+ Ts8RB/46TXa6W64pczpya/EuOAOJQhwdTrkiCLX69bXqCoyMiu4wP3y/OziMVIP76bTiKpcQ+71 obiG7os0g0pkifi4+fgkyEr2T30cFUXXfvrNDL0iUbN/M4WRYxbZbVhBfE6Az9le0zp9BLvbCyW rtSgnLcizDd4qVJovTDOr9yPSbLhnewQlMTooM4xGjM+SiNeWEk53XhSBOjz40BJtCO3SPZpB3x zZOOJ+WZ3qYFaWzWUf+zVNXyslp4KTTRHzghPi0wx9gQo8uk1LvLPQdHl8+jgHUx077+7/n+fbP HN7NDDjQZ21eQeAbQ3RAEPtNlQdzA5a1lFNdFNvjLzzxtOXp
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -52,53 +52,60 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The .remove() callback for a platform driver returns an int which makes
-many driver authors wrongly assume it's possible to do error handling by
-returning an error code. However the value returned is (mostly) ignored
-and this typically results in resource leaks. To improve here there is a
-quest to make the remove callback return void. In the first step of this
-quest all drivers are converted to .remove_new() which already returns
-void.
+Fold mmpcam_remove() into its only caller mmpcam_platform_remove(). Note
+that cam can never be zero, as the probe function calls
+platform_set_drvdata() with a non-NULL argument (or returns an error
+code in which case .remove() won't be called).
 
-Trivially convert this driver from always returning zero in the remove
-callback to the void returning variant.
+Also use mmpcam_remove() as the function name for the remove callback to
+align to mmpcam_probe() for .probe().
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/platform/intel/pxa_camera.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/media/platform/marvell/mmp-driver.c | 15 +++------------
+ 1 file changed, 3 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/media/platform/intel/pxa_camera.c b/drivers/media/platform/intel/pxa_camera.c
-index 54270d6b6f50..99a6973b4b54 100644
---- a/drivers/media/platform/intel/pxa_camera.c
-+++ b/drivers/media/platform/intel/pxa_camera.c
-@@ -2421,7 +2421,7 @@ static int pxa_camera_probe(struct platform_device *pdev)
- 	return err;
+diff --git a/drivers/media/platform/marvell/mmp-driver.c b/drivers/media/platform/marvell/mmp-driver.c
+index ef22bf8f276c..964c55eacd89 100644
+--- a/drivers/media/platform/marvell/mmp-driver.c
++++ b/drivers/media/platform/marvell/mmp-driver.c
+@@ -287,9 +287,9 @@ static int mmpcam_probe(struct platform_device *pdev)
+ 	return ret;
  }
  
--static int pxa_camera_remove(struct platform_device *pdev)
-+static void pxa_camera_remove(struct platform_device *pdev)
- {
- 	struct pxa_camera_dev *pcdev = platform_get_drvdata(pdev);
- 
-@@ -2437,8 +2437,6 @@ static int pxa_camera_remove(struct platform_device *pdev)
- 	v4l2_device_unregister(&pcdev->v4l2_dev);
- 
- 	dev_info(&pdev->dev, "PXA Camera driver unloaded\n");
 -
--	return 0;
+-static int mmpcam_remove(struct mmp_camera *cam)
++static int mmpcam_remove(struct platform_device *pdev)
+ {
++	struct mmp_camera *cam = platform_get_drvdata(pdev);
+ 	struct mcam_camera *mcam = &cam->mcam;
+ 
+ 	mccic_shutdown(mcam);
+@@ -297,15 +297,6 @@ static int mmpcam_remove(struct mmp_camera *cam)
+ 	return 0;
  }
  
- static const struct dev_pm_ops pxa_camera_pm = {
-@@ -2459,7 +2457,7 @@ static struct platform_driver pxa_camera_driver = {
- 		.of_match_table = of_match_ptr(pxa_camera_of_match),
- 	},
- 	.probe		= pxa_camera_probe,
--	.remove		= pxa_camera_remove,
-+	.remove_new	= pxa_camera_remove,
- };
+-static int mmpcam_platform_remove(struct platform_device *pdev)
+-{
+-	struct mmp_camera *cam = platform_get_drvdata(pdev);
+-
+-	if (cam == NULL)
+-		return -ENODEV;
+-	return mmpcam_remove(cam);
+-}
+-
+ /*
+  * Suspend/resume support.
+  */
+@@ -369,7 +360,7 @@ MODULE_DEVICE_TABLE(of, mmpcam_of_match);
  
- module_platform_driver(pxa_camera_driver);
+ static struct platform_driver mmpcam_driver = {
+ 	.probe		= mmpcam_probe,
+-	.remove		= mmpcam_platform_remove,
++	.remove		= mmpcam_remove,
+ 	.driver = {
+ 		.name	= "mmp-camera",
+ 		.of_match_table = of_match_ptr(mmpcam_of_match),
 -- 
 2.39.2
 
