@@ -2,47 +2,50 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90A00C761AF
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:34:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 208D1C6FD1C
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:34:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232556AbjCZOem (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
+        id S232564AbjCZOen (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232142AbjCZOdM (ORCPT
+        with ESMTP id S232563AbjCZOdL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 Mar 2023 10:33:12 -0400
+        Sun, 26 Mar 2023 10:33:11 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0E26594
-        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:33:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C807D94
+        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:33:00 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQS-0000Uf-44; Sun, 26 Mar 2023 16:32:52 +0200
+        id 1pgRQI-0008RT-HP; Sun, 26 Mar 2023 16:32:42 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQQ-006rhR-7B; Sun, 26 Mar 2023 16:32:50 +0200
+        id 1pgRQF-006rdF-IL; Sun, 26 Mar 2023 16:32:39 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQP-0088aq-7x; Sun, 26 Mar 2023 16:32:49 +0200
+        id 1pgRQD-0088XO-Ig; Sun, 26 Mar 2023 16:32:37 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Patrice Chotard <patrice.chotard@foss.st.com>,
-        Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH 109/117] media: st_rc: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:32:16 +0200
-Message-Id: <20230326143224.572654-112-u.kleine-koenig@pengutronix.de>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Dan Carpenter <error27@gmail.com>
+Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH 056/117] media: rzg2l-csi2: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:31:23 +0200
+Message-Id: <20230326143224.572654-59-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1688; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=dilEHo9govXasHtT6jWDl0EFBpcoZnlFPvF1NoaXW08=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFdDqXno4N3eqHrFThAzYL2IsNFr1wOEudN0m 0xs9SPDsUWJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBXQwAKCRCPgPtYfRL+ TpNeB/0UFMgu71GFrUTtlRgTTOuMjbuLF+RRHNKO76bdSr9qPImRQ0CcLhjSrAmUBGkhRwhPWHC bpQ7RjazFWwPrbO0lUuFyX/bX9Jvl+Yo7vhGfadRsn21uN5gb/+au+OAFIdsqHx9RwxntqT65+j MN50OvFz9FcnG7HRvgNqEu7HRgw9MdUq8vazOzLszUsdzrVlveka3agPPuJ1sgbIigHYHu3QkIi n5g5LwzaRz4tSVfAik4FLjOXH1DWwqhCvPKOocrdIe57d1bUeD3liOLIRJziEEHcq6kdI4F4OUx SeNve2/BRB9NDkNYY8OsuIeXE+hF2EsYSoim6ifcy7RqctDa
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1924; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=zzC69ruW9ymPVD8svgpuKUjORivZYVq9oniixuEC948=; b=owGbwMvMwMXY3/A7olbonx/jabUkhhSFsFMnHX6255jxs96vY4vvdYvoLzo2jaXyleftL2W38 p6trlrayWjMwsDIxSArpshi37gm06pKLrJz7b/LMINYmUCmMHBxCsBEPvKz/6+c+un2sxLDT8kT K8ISPLQ2Fx69+qvscnFcYn86x5JN2kVTj4ruCnxZ8vz4E5F7U5l+HM0+Ocdo78nX0T8WW5Y7/bn V2nUnanvmgYBoLmeznAfJZziuTZ8oGCesLvy5Nev2gbs+AudOOi/czXab2/XZ/8royqN3nvAWxe b2/po+c1XO5vMdLc8rhDRNu9T8Tq1wesh+KmpK0/WY0M+WqT9tPYVfOH8r+nJFRlFZK0e7WawvK 5PHPVpPnclxY0bECWWV8rrPTLr15T5+EsJvmz6ptSst4w8TPHZ7SZ+KJlecTUDx+S9JoZd4tcXV DIylYqddWvyVaf6FM17nJscLfNuruuZLa2W3TA77+g1KAA==
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -66,39 +69,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/rc/st_rc.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/rc/st_rc.c b/drivers/media/rc/st_rc.c
-index 19e987a048cc..28477aa95563 100644
---- a/drivers/media/rc/st_rc.c
-+++ b/drivers/media/rc/st_rc.c
-@@ -194,7 +194,7 @@ static int st_rc_hardware_init(struct st_rc_device *dev)
- 	return 0;
+diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
+index 384fb54e219a..30dad7383654 100644
+--- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
++++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
+@@ -819,7 +819,7 @@ static int rzg2l_csi2_probe(struct platform_device *pdev)
+ 	return ret;
  }
  
--static int st_rc_remove(struct platform_device *pdev)
-+static void st_rc_remove(struct platform_device *pdev)
+-static int rzg2l_csi2_remove(struct platform_device *pdev)
++static void rzg2l_csi2_remove(struct platform_device *pdev)
  {
- 	struct st_rc_device *rc_dev = platform_get_drvdata(pdev);
+ 	struct rzg2l_csi2 *csi2 = platform_get_drvdata(pdev);
  
-@@ -202,7 +202,6 @@ static int st_rc_remove(struct platform_device *pdev)
- 	device_init_wakeup(&pdev->dev, false);
- 	clk_disable_unprepare(rc_dev->sys_clock);
- 	rc_unregister_device(rc_dev->rdev);
+@@ -829,8 +829,6 @@ static int rzg2l_csi2_remove(struct platform_device *pdev)
+ 	v4l2_subdev_cleanup(&csi2->subdev);
+ 	media_entity_cleanup(&csi2->subdev.entity);
+ 	pm_runtime_disable(&pdev->dev);
+-
 -	return 0;
  }
  
- static int st_rc_open(struct rc_dev *rdev)
-@@ -408,7 +407,7 @@ static struct platform_driver st_rc_driver = {
- 		.pm     = &st_rc_pm_ops,
- 	},
- 	.probe = st_rc_probe,
--	.remove = st_rc_remove,
-+	.remove_new = st_rc_remove,
+ static int __maybe_unused rzg2l_csi2_pm_runtime_suspend(struct device *dev)
+@@ -859,7 +857,7 @@ static const struct of_device_id rzg2l_csi2_of_table[] = {
  };
  
- module_platform_driver(st_rc_driver);
+ static struct platform_driver rzg2l_csi2_pdrv = {
+-	.remove	= rzg2l_csi2_remove,
++	.remove_new = rzg2l_csi2_remove,
+ 	.probe	= rzg2l_csi2_probe,
+ 	.driver	= {
+ 		.name = "rzg2l-csi2",
 -- 
 2.39.2
 
