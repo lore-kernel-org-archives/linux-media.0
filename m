@@ -2,46 +2,45 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 604B1C6FD1C
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:32:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EC43C761AF
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:32:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232391AbjCZOcm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
+        id S232403AbjCZOcn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:32:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232354AbjCZOcf (ORCPT
+        with ESMTP id S232358AbjCZOcf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 26 Mar 2023 10:32:35 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7356EAF
-        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BBB6593
+        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:34 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ6-0007pf-IX; Sun, 26 Mar 2023 16:32:30 +0200
+        id 1pgRQ6-0007mb-5d; Sun, 26 Mar 2023 16:32:30 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ5-006rZq-KT; Sun, 26 Mar 2023 16:32:29 +0200
+        id 1pgRQ4-006rZX-QR; Sun, 26 Mar 2023 16:32:28 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ4-0088Uo-Uu; Sun, 26 Mar 2023 16:32:28 +0200
+        id 1pgRQ3-0088US-VS; Sun, 26 Mar 2023 16:32:27 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Ming Qian <ming.qian@nxp.com>, Shijie Qin <shijie.qin@nxp.com>,
-        Zhou Peng <eagle.zhou@nxp.com>,
+To:     Antti Palosaari <crope@iki.fi>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 016/117] media: vpu_drv: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:30:43 +0200
-Message-Id: <20230326143224.572654-19-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 011/117] media: rtl2832_sdr: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:30:38 +0200
+Message-Id: <20230326143224.572654-14-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1832; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=YZU3As1JU5uMnh48yH1TkJ4oIIARcHM6dGrTiWeWn0I=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFaZkORJbhjmkn9LW3tSQz5JIUx8MAcYoaqhz ZofIUYzkseJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWmQAKCRCPgPtYfRL+ TjCAB/9O1Fbw9ePSYF57yEPgOOo0/2KpHyyjJ125pZf7sLTuUs3bbF1pmfJnEmsajysQYOV8C1O FY5zb8Ab5Sil9D4luoKQu0Qs/ECjdXRzd2kBekbLBtgSevq4URkXdxpmy7hJ4UGq47u2l7XJEAB mNlg33otELI2rZLc+BkWK5J/kwZ+fKSdyA5e3ime3H9ln8Bl+NXOso9l9K89b/Kr3oS8C0pq2oq OjBYUYxeX9OeCAzSplVttNEovMldnksz4GIXVcTrL+ixz9WKJnjC+98hDuK8i44i7RvBs0DExbn gblSqqBtB0mvM97M5sPsPLeaN4bHt9LfL4pbJFKkC/UKqxcf
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1862; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=vE13OBywjSGQAtKRy9vyU6KCfvR9dbYK8EQyoIjKxyI=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFaDpef24v6GE3tEtLjcZf2O1ymSm5hVdjig3 iTbH3k7UkuJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWgwAKCRCPgPtYfRL+ TvXLCACmYC/R1fl7aaM51Fj6pO+D/1fUAWu1Kk0JgBxYe6/fsLbY7k7flAF094PI2DaxXcvR51d CA1a+30ylC+ZTkEcvXm+5mxlH2SCMWavlctSXaFBBg7HAr581H30PymT+wUJZNasWDTP9BdEZY3 eLLEAkWobTMIVv5EQpLP7lOoK+34oEQyRVd41MDsJ0JUCEFTAz6CdN/4Uj6gdC0pW8GmFvvZqeJ wKhoap29YMvn+GI7h/QHKTThsOxH8NjM/w8qbEAVgH+lReReftjxYJOpnuAscGsH7rn5Kk/3eWH 64XettA7uZtwIeoOtO+U/5KSBWdV92GrIpcFPCtrIFhxwRho
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -65,40 +64,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/platform/amphion/vpu_drv.c | 6 ++----
+ drivers/media/dvb-frontends/rtl2832_sdr.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/amphion/vpu_drv.c b/drivers/media/platform/amphion/vpu_drv.c
-index f01ce49d27e8..4187b2b5562f 100644
---- a/drivers/media/platform/amphion/vpu_drv.c
-+++ b/drivers/media/platform/amphion/vpu_drv.c
-@@ -157,7 +157,7 @@ static int vpu_probe(struct platform_device *pdev)
+diff --git a/drivers/media/dvb-frontends/rtl2832_sdr.c b/drivers/media/dvb-frontends/rtl2832_sdr.c
+index 05f71d169726..02c619e51641 100644
+--- a/drivers/media/dvb-frontends/rtl2832_sdr.c
++++ b/drivers/media/dvb-frontends/rtl2832_sdr.c
+@@ -1463,7 +1463,7 @@ static int rtl2832_sdr_probe(struct platform_device *pdev)
  	return ret;
  }
  
--static int vpu_remove(struct platform_device *pdev)
-+static void vpu_remove(struct platform_device *pdev)
+-static int rtl2832_sdr_remove(struct platform_device *pdev)
++static void rtl2832_sdr_remove(struct platform_device *pdev)
  {
- 	struct vpu_dev *vpu = platform_get_drvdata(pdev);
- 	struct device *dev = &pdev->dev;
-@@ -173,8 +173,6 @@ static int vpu_remove(struct platform_device *pdev)
- 	media_device_cleanup(&vpu->mdev);
- 	v4l2_device_unregister(&vpu->v4l2_dev);
- 	mutex_destroy(&vpu->lock);
+ 	struct rtl2832_sdr_dev *dev = platform_get_drvdata(pdev);
+ 
+@@ -1479,8 +1479,6 @@ static int rtl2832_sdr_remove(struct platform_device *pdev)
+ 	mutex_unlock(&dev->vb_queue_lock);
+ 	v4l2_device_put(&dev->v4l2_dev);
+ 	module_put(pdev->dev.parent->driver->owner);
 -
 -	return 0;
  }
  
- static int __maybe_unused vpu_runtime_resume(struct device *dev)
-@@ -229,7 +227,7 @@ MODULE_DEVICE_TABLE(of, vpu_dt_match);
+ static struct platform_driver rtl2832_sdr_driver = {
+@@ -1488,7 +1486,7 @@ static struct platform_driver rtl2832_sdr_driver = {
+ 		.name   = "rtl2832_sdr",
+ 	},
+ 	.probe          = rtl2832_sdr_probe,
+-	.remove         = rtl2832_sdr_remove,
++	.remove_new     = rtl2832_sdr_remove,
+ };
+ module_platform_driver(rtl2832_sdr_driver);
  
- static struct platform_driver amphion_vpu_driver = {
- 	.probe = vpu_probe,
--	.remove = vpu_remove,
-+	.remove_new = vpu_remove,
- 	.driver = {
- 		.name = "amphion-vpu",
- 		.of_match_table = vpu_dt_match,
 -- 
 2.39.2
 
