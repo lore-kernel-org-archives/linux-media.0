@@ -2,48 +2,50 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1E62C761AF
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:33:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87EB1C6FD1C
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:33:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232565AbjCZOdW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:33:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60348 "EHLO
+        id S232570AbjCZOdX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:33:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232434AbjCZOcq (ORCPT
+        with ESMTP id S232438AbjCZOcr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 Mar 2023 10:32:46 -0400
+        Sun, 26 Mar 2023 10:32:47 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178067D94
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0017DA1
         for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:45 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQA-0007qX-KM; Sun, 26 Mar 2023 16:32:34 +0200
+        id 1pgRQC-00083z-Oz; Sun, 26 Mar 2023 16:32:36 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ6-006ra3-7V; Sun, 26 Mar 2023 16:32:30 +0200
+        id 1pgRQA-006rbZ-EU; Sun, 26 Mar 2023 16:32:34 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ5-0088Ut-7N; Sun, 26 Mar 2023 16:32:29 +0200
+        id 1pgRQ9-0088W9-Hw; Sun, 26 Mar 2023 16:32:33 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Eddie James <eajames@linux.ibm.com>,
+To:     Mirela Rabulea <mirela.rabulea@nxp.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Joel Stanley <joel@jms.id.au>
-Cc:     Andrew Jeffery <andrew@aj.id.au>, linux-media@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, kernel@pengutronix.de
-Subject: [PATCH 017/117] media: aspeed-video: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:30:44 +0200
-Message-Id: <20230326143224.572654-20-u.kleine-koenig@pengutronix.de>
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     NXP Linux Team <linux-imx@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kernel@pengutronix.de
+Subject: [PATCH 037/117] media: mxc-jpeg: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:31:04 +0200
+Message-Id: <20230326143224.572654-40-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1876; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=KutP+Y7ggmovOkH+OeVwSMF2KZqCIcZODewIzhblqao=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFab2ufSfDado4VWw1jF8GYECshQZd+1a/zYg l4extXNT1OJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWmwAKCRCPgPtYfRL+ ToulCACHe8Da4FGG6yr9pXEmGcObel9MPRf1adnzUFyvkzR6IwLKPCgsOK11dGO2PnKVGe8zk61 FO+ohs1dSvLOM3MYJK1qZGCOn1fqXYBVeEkFGBeZBNeQkjVIvGi26NHIvqWuT+2nAQf1BinQzVy afjG1+u8rDvbDemgkbYniZrmNr/bYzmAgC7zcDX6emS/Qd0yyjid3+JIFXrtJaTnwSqAG7tKssB aC7AZ6XbOMypiGzO1y1rnJm2svskBsEECXiCm3gKh842J+BBctxlRgYJHQRHpRMT5zl8NBFd/Fn 3TttGRDOLyBGmP8RZOA3TbM0P+DU++97B6D/AM2ySH1Gh2pE
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1857; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=he/DS5KxYHpU6tXKKwvBsO17OKmtbjtQ3f2TV/xs1jg=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFazsqIWM1CxZL1FRbfxXtH+SlGMFWFNtycYA GLe3UUvhbGJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWswAKCRCPgPtYfRL+ TpcMB/0XNfc6SXV0I+lvFu+DCee6vfUhHM4Kzzv7ABmQJKLaSK8poHKU9AiSJ1qUsV4G9cJL0Z1 ltJylCOGJ6K205hE47qXoM7btvLrkpZhsxAYdEtfUEUnFsMmynqPT2k+08zijk++7ynn12/1qxQ ovQI8egdLEVokRaafJdcdTISKu8mdwxG2Ai0AEfw/gBSH04J+1KPTyFPe+hXGtnHcNUwsMfGCfb FiQUdKe0ZVoR52pvqWvX3vuP0rsCd3PmVyQA+ZGFmu/txTA+DoOanIszyeOSV/BEfFT7WXoXGpK MGHmBehFyqgTKZZ/ko+O2Ie9poX0QeVD7usPVziMYhF/DuAg
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -67,40 +69,39 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/platform/aspeed/aspeed-video.c | 6 ++----
+ drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/aspeed/aspeed-video.c b/drivers/media/platform/aspeed/aspeed-video.c
-index 794d4dc3a654..374eb7781936 100644
---- a/drivers/media/platform/aspeed/aspeed-video.c
-+++ b/drivers/media/platform/aspeed/aspeed-video.c
-@@ -2206,7 +2206,7 @@ static int aspeed_video_probe(struct platform_device *pdev)
- 	return 0;
- }
+diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+index f085f14d676a..4dd404d69c4e 100644
+--- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
++++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+@@ -2622,7 +2622,7 @@ static const struct dev_pm_ops	mxc_jpeg_pm_ops = {
+ 	SET_SYSTEM_SLEEP_PM_OPS(mxc_jpeg_suspend, mxc_jpeg_resume)
+ };
  
--static int aspeed_video_remove(struct platform_device *pdev)
-+static void aspeed_video_remove(struct platform_device *pdev)
+-static int mxc_jpeg_remove(struct platform_device *pdev)
++static void mxc_jpeg_remove(struct platform_device *pdev)
  {
- 	struct device *dev = &pdev->dev;
- 	struct v4l2_device *v4l2_dev = dev_get_drvdata(dev);
-@@ -2228,8 +2228,6 @@ static int aspeed_video_remove(struct platform_device *pdev)
- 	aspeed_video_free_buf(video, &video->jpeg);
- 
- 	of_reserved_mem_device_release(dev);
+ 	unsigned int slot;
+ 	struct mxc_jpeg_dev *jpeg = platform_get_drvdata(pdev);
+@@ -2635,15 +2635,13 @@ static int mxc_jpeg_remove(struct platform_device *pdev)
+ 	v4l2_m2m_release(jpeg->m2m_dev);
+ 	v4l2_device_unregister(&jpeg->v4l2_dev);
+ 	mxc_jpeg_detach_pm_domains(jpeg);
 -
 -	return 0;
  }
  
- static struct platform_driver aspeed_video_driver = {
-@@ -2238,7 +2236,7 @@ static struct platform_driver aspeed_video_driver = {
- 		.of_match_table = aspeed_video_of_match,
- 	},
- 	.probe = aspeed_video_probe,
--	.remove = aspeed_video_remove,
-+	.remove_new = aspeed_video_remove,
- };
+ MODULE_DEVICE_TABLE(of, mxc_jpeg_match);
  
- module_platform_driver(aspeed_video_driver);
+ static struct platform_driver mxc_jpeg_driver = {
+ 	.probe = mxc_jpeg_probe,
+-	.remove = mxc_jpeg_remove,
++	.remove_new = mxc_jpeg_remove,
+ 	.driver = {
+ 		.name = "mxc-jpeg",
+ 		.of_match_table = mxc_jpeg_match,
 -- 
 2.39.2
 
