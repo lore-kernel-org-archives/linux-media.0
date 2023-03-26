@@ -2,47 +2,45 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BB27C74A5B
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:33:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AF7CC6FD1C
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:33:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbjCZOdz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:33:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
+        id S232458AbjCZOd4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232433AbjCZOcy (ORCPT
+        with ESMTP id S232464AbjCZOcy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 26 Mar 2023 10:32:54 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA84A7ED2
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08BC7ED3
         for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:52 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQO-0000Fg-Sl; Sun, 26 Mar 2023 16:32:48 +0200
+        id 1pgRQO-0000FQ-Qx; Sun, 26 Mar 2023 16:32:48 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQM-006rfw-Hz; Sun, 26 Mar 2023 16:32:46 +0200
+        id 1pgRQM-006rfr-GB; Sun, 26 Mar 2023 16:32:46 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQL-0088Zh-Dn; Sun, 26 Mar 2023 16:32:45 +0200
+        id 1pgRQK-0088ZT-JA; Sun, 26 Mar 2023 16:32:44 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        kernel@pengutronix.de
-Subject: [PATCH 092/117] media: hantro_drv: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:31:59 +0200
-Message-Id: <20230326143224.572654-95-u.kleine-koenig@pengutronix.de>
+Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH 088/117] media: vpif_display: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:31:55 +0200
+Message-Id: <20230326143224.572654-91-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1845; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=TN8gitWclwX0bEZHPliWL+MpMfLhdwSxRa3vI9fej70=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFbz+QQp+nHH7O8XtcFcJSBkWVdls+Q9/cJxR 6ZND9lYh66JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBW8wAKCRCPgPtYfRL+ TkVtCACK0akQVv6Lp3WSIDoAtHERnPMPO49yB0zmpuOZE5kKHqReCRF2EDGls/IByydhEcpNnKq TWvZmrp26l21NstAP98GPS/R5pu2lOgcA4w5QU0JinvMx8CVQfV/et3GGhN5eUEys164wI0t1xz b1rx6FXjsnFkcRkrkmNYzyF879IMj4kip4X4n0GOKbN0fs011q1cicnQKnIwuBmKSxM234b7bDE DYX7rgDmsFeQXsbAQKuhTQ/1Ywiy0SkPmc1+0ko07QoYiQ7uQpDeueR70MNf1naeHzD6J9lmiad Zc9kHofDAaX7T5CX6EnqXrD7H5T0DQdnyrRFFxqpVxS5FwkS
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1772; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=5z/UCYi7pnVTwBpUoBR38shL1sqEGMgf8UyTOszeQ1M=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFbvLC73IX76nybiayNjhMhJgp8x2vYKfBY2F E6R2JjpVYyJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBW7wAKCRCPgPtYfRL+ Tuh0B/sF7oL6VX9Pz5jq/uTqN8GHNFdUIv/fkfKN7Iooq9sNXYLvtGJ/18zjZDEhZsQWXEheKxJ E+c9hKjm/COZMS2VC5nsxE7A6tnIcuQPKZCRvwoO7k23QZR3Vjvs3NFFc+JduoUHwwIl7+LDjyD eEmKpcA5BmwNoYJoGcnrbv2L5tdpfXc8Y5k2/HN53Tur9kyXRd4oM9EGTP+rREcBlGXA9xFfR49 WPYGxdxWJTBMbXqyh59afAWH8hGVPbeYLQ2Qs7/S2yxc7q29YBBEJsOmjPSdW+KY1iyGZ5JZhb0 NEj915v6Rxm+Heo8LY/+6UorvXf9Nqg4cC3KL/4Wj5LQfN8P
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -66,39 +64,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/platform/verisilicon/hantro_drv.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/media/platform/ti/davinci/vpif_display.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
-index b0aeedae7b65..ddec42d0bd49 100644
---- a/drivers/media/platform/verisilicon/hantro_drv.c
-+++ b/drivers/media/platform/verisilicon/hantro_drv.c
-@@ -1093,7 +1093,7 @@ static int hantro_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
--static int hantro_remove(struct platform_device *pdev)
-+static void hantro_remove(struct platform_device *pdev)
+diff --git a/drivers/media/platform/ti/davinci/vpif_display.c b/drivers/media/platform/ti/davinci/vpif_display.c
+index b2df81603f62..f8ec2991c667 100644
+--- a/drivers/media/platform/ti/davinci/vpif_display.c
++++ b/drivers/media/platform/ti/davinci/vpif_display.c
+@@ -1305,7 +1305,7 @@ static __init int vpif_probe(struct platform_device *pdev)
+ /*
+  * vpif_remove: It un-register channels from V4L2 driver
+  */
+-static int vpif_remove(struct platform_device *device)
++static void vpif_remove(struct platform_device *device)
  {
- 	struct hantro_dev *vpu = platform_get_drvdata(pdev);
- 
-@@ -1109,7 +1109,6 @@ static int hantro_remove(struct platform_device *pdev)
- 	reset_control_assert(vpu->resets);
- 	pm_runtime_dont_use_autosuspend(vpu->dev);
- 	pm_runtime_disable(vpu->dev);
+ 	struct channel_obj *ch;
+ 	int i;
+@@ -1321,8 +1321,6 @@ static int vpif_remove(struct platform_device *device)
+ 		video_unregister_device(&ch->video_dev);
+ 	}
+ 	free_vpif_objs();
+-
 -	return 0;
  }
  
- #ifdef CONFIG_PM
-@@ -1132,7 +1131,7 @@ static const struct dev_pm_ops hantro_pm_ops = {
+ #ifdef CONFIG_PM_SLEEP
+@@ -1399,7 +1397,7 @@ static __refdata struct platform_driver vpif_driver = {
+ 			.pm	= &vpif_pm_ops,
+ 	},
+ 	.probe	= vpif_probe,
+-	.remove	= vpif_remove,
++	.remove_new = vpif_remove,
+ };
  
- static struct platform_driver hantro_driver = {
- 	.probe = hantro_probe,
--	.remove = hantro_remove,
-+	.remove_new = hantro_remove,
- 	.driver = {
- 		   .name = DRIVER_NAME,
- 		   .of_match_table = of_match_ptr(of_hantro_match),
+ module_platform_driver(vpif_driver);
 -- 
 2.39.2
 
