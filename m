@@ -2,45 +2,50 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CF2CC6FD1C
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:33:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E71CC77B62
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:33:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232588AbjCZOds (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32812 "EHLO
+        id S232177AbjCZOdt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232372AbjCZOcx (ORCPT
+        with ESMTP id S232323AbjCZOcy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 Mar 2023 10:32:53 -0400
+        Sun, 26 Mar 2023 10:32:54 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47687D94
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B4A7DA4
         for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:51 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQN-0000Cx-PQ; Sun, 26 Mar 2023 16:32:47 +0200
+        id 1pgRQF-0008DU-0f; Sun, 26 Mar 2023 16:32:39 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQL-006rfT-Bu; Sun, 26 Mar 2023 16:32:45 +0200
+        id 1pgRQC-006rcB-FA; Sun, 26 Mar 2023 16:32:36 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQK-0088ZK-53; Sun, 26 Mar 2023 16:32:44 +0200
+        id 1pgRQA-0088WY-RK; Sun, 26 Mar 2023 16:32:34 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 086/117] media: vpif: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:31:53 +0200
-Message-Id: <20230326143224.572654-89-u.kleine-koenig@pengutronix.de>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH 043/117] media: venus: Warn only once about problems in .remove()
+Date:   Sun, 26 Mar 2023 16:31:10 +0200
+Message-Id: <20230326143224.572654-46-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1643; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=MiQAISA308S5v6FBmYIAESgilZxyA6DuhA7FnmNNhq8=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFbsKjMz4EO0Uo5xn+aSsQ1Oq7NTWDZ0/ybrQ QgUOB/8o+CJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBW7AAKCRCPgPtYfRL+ TpFWB/kByjPRX9ZyiQdYWooX2qCVZMMVJSw2iuyTko4Hv1TXsne/0+CuQi+IpkCZxqBLiXw9tr8 dIuq6tGOBvKkDw61m1cGbW4YCVJgXpZvk7w8wgOgasBeTM0kU33AZ/0cVLnAWfUU2GcWD3ueSLb rS7/b86pch1L6JdvLyLPHfGPpRPgbvxJnFVdQ4sNq4DlFaAIKOvXGcbFZlzgXTxC4MzGNcUIqz+ Z1tLv9O1JpZO3QfQ+iXjr/WupJmBX8rF8ziRNQElJidLj6i/ff16fhvVlh/8Stx0O1y3orILjc8 pi09ROuFoUZvizaJhJ83+PBPOQ85PmqObjVfqiIQV4NkdmnV
+X-Developer-Signature: v=1; a=openpgp-sha256; l=933; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=IHYTjjRoO1Dj9jBho/XeAemeh3UuJlqKxsJQQ74d7gg=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFa60NwlkPOoWfthIuMks/fTpIeXdYABrvbzv 0ohELhRjkGJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWugAKCRCPgPtYfRL+ TiuJB/425F906SreRIHRCM/qH2XlnDEOKiPIoNFmdWBORbu2QLMvd3WZPem2kI1brt+ufUGfInd Tit+xK3PZ6oblLDvYo+jIalJHmyfOliin+6YQ6jAXvd0vcxnEEdA8V53tUAa6eqt7wa3W42kRs5 K2p2NHxV/1Fy3ev7X94EQELQGUm4iDjn9gIneo2fcXuYVFAa/wQSTIDX41PE8UqjB8nna8l0sYM oBGBRXI+0OxtdyRHtj1iKez+YnsdluUM0vMQ72xV8kxvzPLct5SiQNx8Ccb3bTdtrJ7TKNaw3XO IKfh+SVHt3RQhtu1PGeScp65LcTF1uE0I1AmSJChdC20UK15
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -51,53 +56,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The .remove() callback for a platform driver returns an int which makes
-many driver authors wrongly assume it's possible to do error handling by
-returning an error code. However the value returned is (mostly) ignored
-and this typically results in resource leaks. To improve here there is a
-quest to make the remove callback return void. In the first step of this
-quest all drivers are converted to .remove_new() which already returns
-void.
+The only effect of returning an error code in a remove callback is that
+the driver core emits a warning. The device is unbound anyhow.
 
-Trivially convert this driver from always returning zero in the remove
-callback to the void returning variant.
+As the remove callback already emits a (quite verbose) warning when ret
+is non-zero, return zero to suppress the additional warning.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/platform/ti/davinci/vpif.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/media/platform/qcom/venus/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/ti/davinci/vpif.c b/drivers/media/platform/ti/davinci/vpif.c
-index 832489822706..63cdfed37bc9 100644
---- a/drivers/media/platform/ti/davinci/vpif.c
-+++ b/drivers/media/platform/ti/davinci/vpif.c
-@@ -538,7 +538,7 @@ static int vpif_probe(struct platform_device *pdev)
- 	return ret;
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index 990a1519f968..403ffb92af60 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -448,7 +448,7 @@ static int venus_remove(struct platform_device *pdev)
+ 	mutex_destroy(&core->lock);
+ 	venus_dbgfs_deinit(core);
+ 
+-	return ret;
++	return 0;
  }
  
--static int vpif_remove(struct platform_device *pdev)
-+static void vpif_remove(struct platform_device *pdev)
- {
- 	struct vpif_data *data = platform_get_drvdata(pdev);
- 
-@@ -551,8 +551,6 @@ static int vpif_remove(struct platform_device *pdev)
- 	pm_runtime_disable(&pdev->dev);
- 
- 	kfree(data);
--
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-@@ -592,7 +590,7 @@ static struct platform_driver vpif_driver = {
- 		.name	= VPIF_DRIVER_NAME,
- 		.pm	= vpif_pm_ops,
- 	},
--	.remove = vpif_remove,
-+	.remove_new = vpif_remove,
- 	.probe = vpif_probe,
- };
- 
+ static void venus_core_shutdown(struct platform_device *pdev)
 -- 
 2.39.2
 
