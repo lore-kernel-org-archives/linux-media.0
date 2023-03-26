@@ -2,110 +2,124 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 414ABC74A5B
-	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:34:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3E58C74A5B
+	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:46:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232623AbjCZOep (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32812 "EHLO
+        id S230227AbjCZOqA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232535AbjCZOdO (ORCPT
+        with ESMTP id S229640AbjCZOp7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 Mar 2023 10:33:14 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BBE34EE1
-        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:33:03 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQN-0000Ao-H7; Sun, 26 Mar 2023 16:32:47 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQK-006rf7-6S; Sun, 26 Mar 2023 16:32:44 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQJ-0088Z0-52; Sun, 26 Mar 2023 16:32:43 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, kernel@pengutronix.de
-Subject: [PATCH 081/117] media: sun8i_a83t_mipi_csi2: Convert to platform remove callback returning void
-Date:   Sun, 26 Mar 2023 16:31:48 +0200
-Message-Id: <20230326143224.572654-84-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
-References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
+        Sun, 26 Mar 2023 10:45:59 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30DF4682
+        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:45:57 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-5445009c26bso124538877b3.8
+        for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:45:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679841957;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=34KWfrJk1OWOYjGE50V1KXP7G0F1OpvWfeUVk+h/cZQ=;
+        b=sCpSUSSWfaPQD6yYox/cUzSKZz16BT68QLNHQzeeZbUZBprpHQHMQIGmvp46O5LMqk
+         WdIR4ZS/FpyYQOI2PMi0tTvjZWX31yTbbPHZ+JJcn4s0MxxiDLV6+kniu+otGQV70oqC
+         qoW53+UeTsR61zyEhhLnhA/op5qMuQuLTkX+wXczMXFxDS1/qCa4qK+Z/rtyw5bJn2or
+         v4gPiax94MUQXZkJUfeZt4L/ISP3MM0+9P4qitPc4xjyhCBnoDZUT5JU/A/Nx/7Rmn+h
+         VDdZNvxRQCHSLmnWlI+JFNTvU0X7IBEeqyn6nZjEx21xpCDVDlFMk7KVWoIs8oP/t5Kx
+         LqaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679841957;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=34KWfrJk1OWOYjGE50V1KXP7G0F1OpvWfeUVk+h/cZQ=;
+        b=WMa8NI0tZAfY3nlpPZh7YGgICMkuqtCryoQo/oNxPSpuKq9D5Fp3u5GwKA6/xx/f4V
+         1Je8/iR6Tv9urJuvlZNmjaaIS5yY/yCbF0uorqvNO/L39L6b2a95zXUz5L2bWHP4CzP+
+         UWlKbVl5BEEKi8SkoIyLEfjxUFKNKnIqlrh2F33QCUMl2pnybZM7AzoCSDpg9NsC1B3a
+         wYvz+wuU5wvBYEV3CqEnPvm5afKNgt1Lq6fUyqesI0UYARqQDU8iIokbdQ4cYofCm8oC
+         bemuovrc7Eq75XrTpTPVdiWvZMJDd7VQ6c2KcQuVMPEG7GsjAzX6cwtaeBIEIAoajOBb
+         +zrQ==
+X-Gm-Message-State: AAQBX9eCkNLabHgjLw3UR1nXE0mfy9TWLA4ASlqKK6oLryB74wQhAjm4
+        DC3ytinToi8IhaA6o6EHDkuADZG6KN6F+PjJgJicYA==
+X-Google-Smtp-Source: AKy350Y/JOwuKrNZKUyA3hhsFUn8vWbBoVETOy/PlETziuW1TPuvqv8tr6qpbmIvWMFIjBqeaLT7w7nUMYGqo+ooxkA=
+X-Received: by 2002:a81:4426:0:b0:544:5aa0:e212 with SMTP id
+ r38-20020a814426000000b005445aa0e212mr3611263ywa.6.1679841957067; Sun, 26 Mar
+ 2023 07:45:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2114; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=k9x8HzVlyO7nqBiHyTmH/ywca9Pw/7RppQDC+gh421I=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFbmAbo3t/O7sXR98QYLqTmcRer9F9ZO1B245 G0ILVvnNlWJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBW5gAKCRCPgPtYfRL+ Tl2jB/9BovhRmpZKHAU3NPpips1+iUG8LVAqyxsVRkanp+lGCOsrmCb9HFCEWuNFNzK+np/o+Tj rTxNTSg3yOLwjohHDTgTq8qhNVOX+j+QP8rB4tAu13wldgnfy5e/rZcZSrzzvj38qLi/low4452 gPfFPO9NIMAOBFHvyBbT+g40ib6zlqwenGkEGSmTQN49i+lqRUPRINUEetLC0+fLbIFuhljIs3t vn7HwQc3uCMRCioSaD4Ee8HPZ47PEkULKjFaBqVRSdvtJwK3Xiya/0LbqSTa0+OTGrNLfL1t+Ic CorzysVmLole6sZsFuAqD3S6I4K4g38P4Bss8SpHB16mmh3N
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de> <20230326143224.572654-5-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20230326143224.572654-5-u.kleine-koenig@pengutronix.de>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Sun, 26 Mar 2023 07:45:46 -0700
+Message-ID: <CABXOdTeAJaDuXP22omaxMBo6OpF6act8L6jZgUfj+busk-mesQ@mail.gmail.com>
+Subject: Re: [PATCH 002/117] media: cros-ec-cec: Don't exit early in .remove() callback
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
+        Scott Chao <scott_chao@wistron.corp-partner.google.com>,
+        Rory Liu <hellojacky0226@hotmail.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        linux-media@vger.kernel.org, chrome-platform@lists.linux.dev,
+        kernel@pengutronix.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The .remove() callback for a platform driver returns an int which makes
-many driver authors wrongly assume it's possible to do error handling by
-returning an error code. However the value returned is (mostly) ignored
-and this typically results in resource leaks. To improve here there is a
-quest to make the remove callback return void. In the first step of this
-quest all drivers are converted to .remove_new() which already returns
-void.
+On Sun, Mar 26, 2023 at 7:32=E2=80=AFAM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+>
+> Exiting early in remove without releasing all acquired resources yields
+> leaks. Note that e.g. memory allocated with devm_zalloc() is freed after
+> .remove() returns, even if the return code was negative.
+>
+> While blocking_notifier_chain_unregister() won't fail and so the
+> change is somewhat cosmetic, platform driver's .remove callbacks are
+> about to be converted to return void. To prepare that, keep the error
+> message but don't return early.
+>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-Trivially convert this driver from always returning zero in the remove
-callback to the void returning variant.
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- .../sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c       | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c b/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c
-index cd2e92ae2293..23d32e198aaa 100644
---- a/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c
-+++ b/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c
-@@ -804,15 +804,13 @@ static int sun8i_a83t_mipi_csi2_probe(struct platform_device *platform_dev)
- 	return ret;
- }
- 
--static int sun8i_a83t_mipi_csi2_remove(struct platform_device *platform_dev)
-+static void sun8i_a83t_mipi_csi2_remove(struct platform_device *platform_dev)
- {
- 	struct sun8i_a83t_mipi_csi2_device *csi2_dev =
- 		platform_get_drvdata(platform_dev);
- 
- 	sun8i_a83t_mipi_csi2_bridge_cleanup(csi2_dev);
- 	sun8i_a83t_mipi_csi2_resources_cleanup(csi2_dev);
--
--	return 0;
- }
- 
- static const struct of_device_id sun8i_a83t_mipi_csi2_of_match[] = {
-@@ -823,7 +821,7 @@ MODULE_DEVICE_TABLE(of, sun8i_a83t_mipi_csi2_of_match);
- 
- static struct platform_driver sun8i_a83t_mipi_csi2_platform_driver = {
- 	.probe	= sun8i_a83t_mipi_csi2_probe,
--	.remove	= sun8i_a83t_mipi_csi2_remove,
-+	.remove_new = sun8i_a83t_mipi_csi2_remove,
- 	.driver	= {
- 		.name		= SUN8I_A83T_MIPI_CSI2_NAME,
- 		.of_match_table	= of_match_ptr(sun8i_a83t_mipi_csi2_of_match),
--- 
-2.39.2
-
+> ---
+>  drivers/media/cec/platform/cros-ec/cros-ec-cec.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/m=
+edia/cec/platform/cros-ec/cros-ec-cec.c
+> index 6ebedc71d67d..960432230bbf 100644
+> --- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+> +++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+> @@ -332,14 +332,16 @@ static int cros_ec_cec_remove(struct platform_devic=
+e *pdev)
+>         struct device *dev =3D &pdev->dev;
+>         int ret;
+>
+> +       /*
+> +        * blocking_notifier_chain_unregister() only fails if the notifie=
+r isn't
+> +        * in the list. We know it was added to it by .probe(), so there =
+should
+> +        * be no need for error checking. Be cautious and still check.
+> +        */
+>         ret =3D blocking_notifier_chain_unregister(
+>                         &cros_ec_cec->cros_ec->event_notifier,
+>                         &cros_ec_cec->notifier);
+> -
+> -       if (ret) {
+> +       if (ret)
+>                 dev_err(dev, "failed to unregister notifier\n");
+> -               return ret;
+> -       }
+>
+>         cec_notifier_cec_adap_unregister(cros_ec_cec->notify,
+>                                          cros_ec_cec->adap);
+> --
+> 2.39.2
+>
