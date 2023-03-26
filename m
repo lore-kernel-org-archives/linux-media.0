@@ -2,46 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E2E2C761AF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2B06C77B62
 	for <linux-media@archiver.kernel.org>; Sun, 26 Mar 2023 14:32:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232456AbjCZOcu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 10:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59922 "EHLO
+        id S232447AbjCZOcv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 10:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232372AbjCZOcg (ORCPT
+        with ESMTP id S232371AbjCZOcg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 26 Mar 2023 10:32:36 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE867AAB
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5087A8D
         for <linux-media@vger.kernel.org>; Sun, 26 Mar 2023 07:32:34 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ8-0007t0-2K; Sun, 26 Mar 2023 16:32:32 +0200
+        id 1pgRQ6-0007pl-GU; Sun, 26 Mar 2023 16:32:30 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ7-006raa-ES; Sun, 26 Mar 2023 16:32:31 +0200
+        id 1pgRQ5-006rZp-KM; Sun, 26 Mar 2023 16:32:29 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pgRQ6-0088VJ-Oj; Sun, 26 Mar 2023 16:32:30 +0200
+        id 1pgRQ4-0088Ug-I6; Sun, 26 Mar 2023 16:32:28 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 024/117] media: marvell: Simplify remove callback
-Date:   Sun, 26 Mar 2023 16:30:51 +0200
-Message-Id: <20230326143224.572654-27-u.kleine-koenig@pengutronix.de>
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de
+Subject: [PATCH 014/117] media: ge2d: Convert to platform remove callback returning void
+Date:   Sun, 26 Mar 2023 16:30:41 +0200
+Message-Id: <20230326143224.572654-17-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1797; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=590D1CAL0pYMC213PLVi2ZUu4XhyxHq+x11/2JonYDU=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFajNsUg4ndB8z7Vo8Sv5E+wNVkolkuE9Z4CN Ilk2XUcK+WJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWowAKCRCPgPtYfRL+ Ts8RB/46TXa6W64pczpya/EuOAOJQhwdTrkiCLX69bXqCoyMiu4wP3y/OziMVIP76bTiKpcQ+71 obiG7os0g0pkifi4+fgkyEr2T30cFUXXfvrNDL0iUbN/M4WRYxbZbVhBfE6Az9le0zp9BLvbCyW rtSgnLcizDd4qVJovTDOr9yPSbLhnewQlMTooM4xGjM+SiNeWEk53XhSBOjz40BJtCO3SPZpB3x zZOOJ+WZ3qYFaWzWUf+zVNXyslp4KTTRHzghPi0wx9gQo8uk1LvLPQdHl8+jgHUx077+7/n+fbP HN7NDDjQZ21eQeAbQ3RAEPtNlQdzA5a1lFNdFNvjLzzxtOXp
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1851; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=1Y2LMBpcPDvt234Wp0dDVBnpVYLd4OVe9vUMJb/0CJo=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkIFaPHpPZLurdzamlVy431QhD+mjXxTj3yEi11 b3JX4DQ1+eJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCBWjwAKCRCPgPtYfRL+ TokHB/oCVX586LRzYvkBN8oWwTVDT73e7QvszRskadSAbTyrdfG0dcliNNP2ISe6ZClTGMsX//c ojHnF2SfwNbxw1J/KhNver2BUCsy1bQ0sMHPsVpJ1HHhQ7ZxOAT3MYwydcrytIyk+UHZ0K5wcWU jLAfkcBDkCvQfzI5fcZPFEsnUpHmslqTLrKCpVtu0wJ/kgwOSL4yHDt95bFIICKuWj5W6hjEYjn 1ibxLueJ8kwI6/hCJH71RofwjUL+JS/dqvhAYgPWid6NjljemM4La2jMWgNLxSKW3q7JsmT/e6i YUNsIz2i0t8LnFBj9d/gdt31vCQwmE37Kew1ZVkpPGb7cbPq
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -52,60 +55,53 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fold mmpcam_remove() into its only caller mmpcam_platform_remove(). Note
-that cam can never be zero, as the probe function calls
-platform_set_drvdata() with a non-NULL argument (or returns an error
-code in which case .remove() won't be called).
+The .remove() callback for a platform driver returns an int which makes
+many driver authors wrongly assume it's possible to do error handling by
+returning an error code. However the value returned is (mostly) ignored
+and this typically results in resource leaks. To improve here there is a
+quest to make the remove callback return void. In the first step of this
+quest all drivers are converted to .remove_new() which already returns
+void.
 
-Also use mmpcam_remove() as the function name for the remove callback to
-align to mmpcam_probe() for .probe().
+Trivially convert this driver from always returning zero in the remove
+callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/platform/marvell/mmp-driver.c | 15 +++------------
- 1 file changed, 3 insertions(+), 12 deletions(-)
+ drivers/media/platform/amlogic/meson-ge2d/ge2d.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/marvell/mmp-driver.c b/drivers/media/platform/marvell/mmp-driver.c
-index ef22bf8f276c..964c55eacd89 100644
---- a/drivers/media/platform/marvell/mmp-driver.c
-+++ b/drivers/media/platform/marvell/mmp-driver.c
-@@ -287,9 +287,9 @@ static int mmpcam_probe(struct platform_device *pdev)
+diff --git a/drivers/media/platform/amlogic/meson-ge2d/ge2d.c b/drivers/media/platform/amlogic/meson-ge2d/ge2d.c
+index 142d421a8d76..09409908ba5d 100644
+--- a/drivers/media/platform/amlogic/meson-ge2d/ge2d.c
++++ b/drivers/media/platform/amlogic/meson-ge2d/ge2d.c
+@@ -1024,7 +1024,7 @@ static int ge2d_probe(struct platform_device *pdev)
  	return ret;
  }
  
--
--static int mmpcam_remove(struct mmp_camera *cam)
-+static int mmpcam_remove(struct platform_device *pdev)
+-static int ge2d_remove(struct platform_device *pdev)
++static void ge2d_remove(struct platform_device *pdev)
  {
-+	struct mmp_camera *cam = platform_get_drvdata(pdev);
- 	struct mcam_camera *mcam = &cam->mcam;
+ 	struct meson_ge2d *ge2d = platform_get_drvdata(pdev);
  
- 	mccic_shutdown(mcam);
-@@ -297,15 +297,6 @@ static int mmpcam_remove(struct mmp_camera *cam)
- 	return 0;
+@@ -1032,8 +1032,6 @@ static int ge2d_remove(struct platform_device *pdev)
+ 	v4l2_m2m_release(ge2d->m2m_dev);
+ 	v4l2_device_unregister(&ge2d->v4l2_dev);
+ 	clk_disable_unprepare(ge2d->clk);
+-
+-	return 0;
  }
  
--static int mmpcam_platform_remove(struct platform_device *pdev)
--{
--	struct mmp_camera *cam = platform_get_drvdata(pdev);
--
--	if (cam == NULL)
--		return -ENODEV;
--	return mmpcam_remove(cam);
--}
--
- /*
-  * Suspend/resume support.
-  */
-@@ -369,7 +360,7 @@ MODULE_DEVICE_TABLE(of, mmpcam_of_match);
+ static const struct of_device_id meson_ge2d_match[] = {
+@@ -1047,7 +1045,7 @@ MODULE_DEVICE_TABLE(of, meson_ge2d_match);
  
- static struct platform_driver mmpcam_driver = {
- 	.probe		= mmpcam_probe,
--	.remove		= mmpcam_platform_remove,
-+	.remove		= mmpcam_remove,
+ static struct platform_driver ge2d_drv = {
+ 	.probe = ge2d_probe,
+-	.remove = ge2d_remove,
++	.remove_new = ge2d_remove,
  	.driver = {
- 		.name	= "mmp-camera",
- 		.of_match_table = of_match_ptr(mmpcam_of_match),
+ 		.name = "meson-ge2d",
+ 		.of_match_table = meson_ge2d_match,
 -- 
 2.39.2
 
