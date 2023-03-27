@@ -2,83 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 049C1C76195
-	for <linux-media@archiver.kernel.org>; Mon, 27 Mar 2023 08:50:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4894BC76195
+	for <linux-media@archiver.kernel.org>; Mon, 27 Mar 2023 08:52:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233491AbjC0Iup (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 27 Mar 2023 04:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49744 "EHLO
+        id S233404AbjC0IwV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 27 Mar 2023 04:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232424AbjC0IuJ (ORCPT
+        with ESMTP id S232638AbjC0Ivu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 27 Mar 2023 04:50:09 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D640AB456
-        for <linux-media@vger.kernel.org>; Mon, 27 Mar 2023 01:46:12 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id y20so10344625lfj.2
-        for <linux-media@vger.kernel.org>; Mon, 27 Mar 2023 01:46:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679906770;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3bblUISwUdvX28GVAQmZgddhk99r6Y32+A6iFqrvA9Q=;
-        b=U+2nxbg2awVjW8DK6WQY2+V6cIWknv0bO+NiHqbEheTiEFE2VMeSYymqq317GJe69/
-         XSwOv7LrXDxud9oapLO8yuTEQj7BVmGnBOfS5LRmLV9hxNBprje/+9Cm9ThgPajBEX6e
-         r5ymjh+wa5ggzmX0S9ha1sy1rdImLyPSGbbNZGdekA4YFkXo58rSzhtdUcj/Y6Kb4eRL
-         eL+ikJgu7vp/0F7mWRQpxhq1rBVoM2gftmO9LoXhDmWUx4rcdzlN5nirDeyGwcNzdADh
-         Dcy+Ddu2QmBUCc1Bccmj82u4cIahNX0ZINMFZO+u9mb099Xeuxbdpg24bcuC5AJJk79A
-         woCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679906770;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3bblUISwUdvX28GVAQmZgddhk99r6Y32+A6iFqrvA9Q=;
-        b=Ka+uQ0nzb+G0b0iBi1D3lFGVqS4c9DFHVY5KvM3CukMu692p6b835YjZR/AR3Ufvx6
-         tdW5W7FGOSjrEWPldHeq/M/MXBqNoP/bFOIhmL2EViNw/AN1n3UMez7nMXGmWrRAHlG7
-         TC/3J2Dj0RJDsIprUK+epcqEFjYS86TSvSiQomtT3aIyKAAcLEgNbxIXfScSExJnp7c3
-         Jxokds1GcmRCzGqo9ylISQ+bJgethhPwLNll4v3mJwOz4C7IYWtQFv4uQ7GoUgKHfQNM
-         rG6Yw0ygY/s8oEVxvL8M7l4AQOhm7vLSU7w4TOIQd+lcKecxFhi999z+pvS4lgYXOw1b
-         GnGw==
-X-Gm-Message-State: AAQBX9fzQeVckGHBNgFFvAF3lwY/kK+L0Mi8rhLGW4dj3FI7eHLLY4GD
-        v9sUIOgzg6R275k63ojs3wdAIg==
-X-Google-Smtp-Source: AKy350bIQMnul1Wn9w7L9g2s+pjWkdNnt9dnVvTfSXioHFe09J5toczUaODqHFcKw6Az9nHgKpzPtQ==
-X-Received: by 2002:ac2:494e:0:b0:4e7:4a3c:697 with SMTP id o14-20020ac2494e000000b004e74a3c0697mr2988056lfi.38.1679906770682;
-        Mon, 27 Mar 2023 01:46:10 -0700 (PDT)
-Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
-        by smtp.gmail.com with ESMTPSA id f17-20020a056512093100b004db0d26adb4sm4548579lft.182.2023.03.27.01.46.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Mar 2023 01:46:10 -0700 (PDT)
-Message-ID: <1db4d7f2-c4b4-6ef7-3aab-96608e84064e@linaro.org>
-Date:   Mon, 27 Mar 2023 10:46:09 +0200
+        Mon, 27 Mar 2023 04:51:50 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9736D61AF
+        for <linux-media@vger.kernel.org>; Mon, 27 Mar 2023 01:47:40 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (aztw-30-b2-v4wan-166917-cust845.vm26.cable.virginm.net [82.37.23.78])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B415F18C3;
+        Mon, 27 Mar 2023 10:42:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1679906551;
+        bh=bEkZTf+kqWERLEXroKzvQOoX1sY0IIecD6ZTB9AzsyQ=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=N8QbuDpdpKh1pmZZaAUuz3tsZms05lrEUPBw+jEbOCCasUMcIK2LVIfY+S93fnRbB
+         uWCvjjkGASHZJKM8OMfJEzaL9h60zfa/dSnyAoitNZXwSkHX74S5ynGGJNHkqKDt5R
+         xs6GnW3FkPcpcganzzzIoqpHavwpF8mlGBclsgJk=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 046/117] media: venc: Convert to platform remove callback
- returning void
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        kernel@pengutronix.de
-References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
- <20230326143224.572654-49-u.kleine-koenig@pengutronix.de>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230326143224.572654-49-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230326143224.572654-117-u.kleine-koenig@pengutronix.de>
+References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de> <20230326143224.572654-117-u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH 114/117] media: vimc-core: Convert to platform remove callback returning void
+From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, kernel@pengutronix.de
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Uwe =?utf-8?q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Date:   Mon, 27 Mar 2023 09:42:29 +0100
+Message-ID: <167990654945.2697263.6488572097757132570@Monstersaurus>
+User-Agent: alot/0.10
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-
-
-On 26.03.2023 16:31, Uwe Kleine-König wrote:
+Quoting Uwe Kleine-K=C3=B6nig (2023-03-26 15:32:21)
 > The .remove() callback for a platform driver returns an int which makes
 > many driver authors wrongly assume it's possible to do error handling by
 > returning an error code. However the value returned is (mostly) ignored
@@ -86,46 +52,50 @@ On 26.03.2023 16:31, Uwe Kleine-König wrote:
 > quest to make the remove callback return void. In the first step of this
 > quest all drivers are converted to .remove_new() which already returns
 > void.
-> 
+>=20
 > Trivially convert this driver from always returning zero in the remove
 > callback to the void returning variant.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>=20
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-Konrad
->  drivers/media/platform/qcom/venus/venc.c | 6 ++----
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+
+> ---
+>  drivers/media/test-drivers/vimc/vimc-core.c | 6 ++----
 >  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
-> index cdb12546c4fa..6d61614656a5 100644
-> --- a/drivers/media/platform/qcom/venus/venc.c
-> +++ b/drivers/media/platform/qcom/venus/venc.c
-> @@ -1492,7 +1492,7 @@ static int venc_probe(struct platform_device *pdev)
->  	return ret;
+>=20
+> diff --git a/drivers/media/test-drivers/vimc/vimc-core.c b/drivers/media/=
+test-drivers/vimc/vimc-core.c
+> index e82cfa5ffbf4..af127476e920 100644
+> --- a/drivers/media/test-drivers/vimc/vimc-core.c
+> +++ b/drivers/media/test-drivers/vimc/vimc-core.c
+> @@ -387,7 +387,7 @@ static int vimc_probe(struct platform_device *pdev)
+>         return 0;
 >  }
->  
-> -static int venc_remove(struct platform_device *pdev)
-> +static void venc_remove(struct platform_device *pdev)
+> =20
+> -static int vimc_remove(struct platform_device *pdev)
+> +static void vimc_remove(struct platform_device *pdev)
 >  {
->  	struct venus_core *core = dev_get_drvdata(pdev->dev.parent);
->  
-> @@ -1501,8 +1501,6 @@ static int venc_remove(struct platform_device *pdev)
->  
->  	if (core->pm_ops->venc_put)
->  		core->pm_ops->venc_put(core->dev_enc);
+>         struct vimc_device *vimc =3D platform_get_drvdata(pdev);
+> =20
+> @@ -397,8 +397,6 @@ static int vimc_remove(struct platform_device *pdev)
+>         media_device_unregister(&vimc->mdev);
+>         v4l2_device_unregister(&vimc->v4l2_dev);
+>         v4l2_device_put(&vimc->v4l2_dev);
 > -
-> -	return 0;
+> -       return 0;
 >  }
->  
->  static __maybe_unused int venc_runtime_suspend(struct device *dev)
-> @@ -1543,7 +1541,7 @@ MODULE_DEVICE_TABLE(of, venc_dt_match);
->  
->  static struct platform_driver qcom_venus_enc_driver = {
->  	.probe = venc_probe,
-> -	.remove = venc_remove,
-> +	.remove_new = venc_remove,
->  	.driver = {
->  		.name = "qcom-venus-encoder",
->  		.of_match_table = venc_dt_match,
+> =20
+>  static void vimc_dev_release(struct device *dev)
+> @@ -412,7 +410,7 @@ static struct platform_device vimc_pdev =3D {
+> =20
+>  static struct platform_driver vimc_pdrv =3D {
+>         .probe          =3D vimc_probe,
+> -       .remove         =3D vimc_remove,
+> +       .remove_new     =3D vimc_remove,
+>         .driver         =3D {
+>                 .name   =3D VIMC_PDEV_NAME,
+>         },
+> --=20
+> 2.39.2
+>
