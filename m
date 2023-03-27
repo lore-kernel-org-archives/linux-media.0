@@ -2,164 +2,98 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AC3AC76195
-	for <linux-media@archiver.kernel.org>; Mon, 27 Mar 2023 07:50:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5565AC76195
+	for <linux-media@archiver.kernel.org>; Mon, 27 Mar 2023 07:52:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbjC0Ht7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 27 Mar 2023 03:49:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
+        id S232071AbjC0Hwi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 27 Mar 2023 03:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232282AbjC0Htu (ORCPT
+        with ESMTP id S232389AbjC0Hwg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 27 Mar 2023 03:49:50 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53F3102
-        for <linux-media@vger.kernel.org>; Mon, 27 Mar 2023 00:49:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679903389; x=1711439389;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QqL7KgJQsGJhLnD9zMw+Kv8aTQ6n52oyKBUC4NrWpNY=;
-  b=H+uBNWIRVqguYFiglHM/nu6UGBfcnnMKtH2c8l6+XmEnAQ9bol+F4faD
-   sonYQraa1Itji5g5rdoQkE6S3TTEmdqujyGC9JST5ILjgl6XB4Ln62HPT
-   vzdDX7sxP4avD9AymPusnN8Ya64Jv+nelt7gne2UWgt/ZDKYVpnWFldBv
-   I43a6yibjyx9jOf03lo5qeXr70gwKZAolgP48zaSIQJinVScHIfegHI4S
-   7mytZmIau9GM5/4EDokd4Fm03UrZfAho4UzQ8UaeRlIs9X98kq3BzcenU
-   8sg4tkbCpA8EjpFWDFxjhHgc5VVdzw2CPbBtrQuZsyqQQBX4Pe8AoUYrP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="405126875"
-X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="405126875"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 00:49:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="929374177"
-X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="929374177"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 00:49:47 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 67A8612227E;
-        Mon, 27 Mar 2023 10:49:44 +0300 (EEST)
-Date:   Mon, 27 Mar 2023 10:49:44 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     "Wu, Wentong" <wentong.wu@intel.com>
-Cc:     "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "djrscally@gmail.com" <djrscally@gmail.com>,
-        "laurent.pinchart@ideasonboard.com" 
-        <laurent.pinchart@ideasonboard.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "bingbu.cao@linux.intel.com" <bingbu.cao@linux.intel.com>,
-        "Wang, Zhifeng" <zhifeng.wang@intel.com>,
-        "Ye, Xiang" <xiang.ye@intel.com>,
-        "Qiu, Tian Shu" <tian.shu.qiu@intel.com>
-Subject: Re: [PATCH v3 0/3] media: pci: intel: ivsc: Add driver of Intel
- Visual Sensing Controller(IVSC)
-Message-ID: <ZCFKmNKZAPwsIq/j@kekkonen.localdomain>
-References: <1679898188-14426-1-git-send-email-wentong.wu@intel.com>
- <ZCFD3aW4NRrn69LR@kekkonen.localdomain>
- <MN2PR11MB43184340CB813FFCE47AA68B8D8B9@MN2PR11MB4318.namprd11.prod.outlook.com>
+        Mon, 27 Mar 2023 03:52:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9D0C7
+        for <linux-media@vger.kernel.org>; Mon, 27 Mar 2023 00:52:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8092DB80E9E
+        for <linux-media@vger.kernel.org>; Mon, 27 Mar 2023 07:52:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 516BDC433EF;
+        Mon, 27 Mar 2023 07:52:30 +0000 (UTC)
+Message-ID: <b4bf6e40-3b76-6f48-6f3d-c47657cea2f1@xs4all.nl>
+Date:   Mon, 27 Mar 2023 09:52:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MN2PR11MB43184340CB813FFCE47AA68B8D8B9@MN2PR11MB4318.namprd11.prod.outlook.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 002/117] media: cros-ec-cec: Don't exit early in .remove()
+ callback
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
+        Scott Chao <scott_chao@wistron.corp-partner.google.com>,
+        Rory Liu <hellojacky0226@hotmail.com>
+Cc:     Guenter Roeck <groeck@chromium.org>, linux-media@vger.kernel.org,
+        chrome-platform@lists.linux.dev, kernel@pengutronix.de
+References: <20230326143224.572654-1-u.kleine-koenig@pengutronix.de>
+ <20230326143224.572654-5-u.kleine-koenig@pengutronix.de>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20230326143224.572654-5-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Wentong,
+Just ignore this reply: for some reason this patch only ended up in my
+private mailbox, but not on linux-media (and therefor also not in
+patchwork). This should hopefully cause patchwork to pick it up.
 
-On Mon, Mar 27, 2023 at 07:33:48AM +0000, Wu, Wentong wrote:
+Regards,
+
+	Hans
+
+On 26/03/2023 16:30, Uwe Kleine-König wrote:
+> Exiting early in remove without releasing all acquired resources yields
+> leaks. Note that e.g. memory allocated with devm_zalloc() is freed after
+> .remove() returns, even if the return code was negative.
 > 
+> While blocking_notifier_chain_unregister() won't fail and so the
+> change is somewhat cosmetic, platform driver's .remove callbacks are
+> about to be converted to return void. To prepare that, keep the error
+> message but don't return early.
 > 
-> > -----Original Message-----
-> > From: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > Sent: Monday, March 27, 2023 3:21 PM
-> > 
-> > Hi Wentong,
-> > 
-> > On Mon, Mar 27, 2023 at 02:23:05PM +0800, Wentong Wu wrote:
-> > > Intel Visual Sensing Controller (IVSC), codenamed "Clover Falls", is a
-> > > companion chip designed to provide secure and low power vision
-> > > capability to IA platforms. IVSC is available in existing commercial
-> > > platforms from multiple OEMs.
-> > >
-> > > The primary use case of IVSC is to bring in context awareness. IVSC
-> > > interfaces directly with the platform main camera sensor via a CSI-2
-> > > link and processes the image data with the embedded AI engine. The
-> > > detected events are sent over I2C to ISH (Intel Sensor Hub) for
-> > > additional data fusion from multiple sensors. The fusion results are
-> > > used to implement advanced use cases like:
-> > >  - Face detection to unlock screen
-> > >  - Detect user presence to manage backlight setting or waking up
-> > > system
-> > >
-> > > Since the Image Processing Unit(IPU) used on the host processor needs
-> > > to configure the CSI-2 link in normal camera usages, the CSI-2 link
-> > > and camera sensor can only be used in mutually-exclusive ways by host
-> > > IPU and IVSC. By default the IVSC owns the CSI-2 link and camera
-> > > sensor. The IPU driver can take ownership of the CSI-2 link and camera
-> > > sensor using interfaces exported via v4l2 sub-device.
-> > >
-> > > Switching ownership requires an interface with two different hardware
-> > > modules inside IVSC. The software interface to these modules is via
-> > > Intel MEI (The Intel Management Engine) commands. These two hardware
-> > > modules have two different MEI UUIDs to enumerate. These hardware
-> > modules are:
-> > >  - ACE (Algorithm Context Engine): This module is for algorithm
-> > > computing when IVSC owns camera sensor. Also ACE module controls
-> > > camera sensor's ownership. This hardware module is used to set ownership of
-> > camera sensor.
-> > >  - CSI (Camera Serial Interface): This module is used to route camera
-> > > sensor data either to IVSC or to host for IPU driver and application.
-> > >
-> > > IVSC also provides a privacy mode. When privacy mode is turned on,
-> > > camera sensor can't be used. This means that both ACE and host IPU
-> > > can't get image data. And when this mode is turned on, users are
-> > > informed via
-> > > v4l2 control API.
-> > >
-> > > In summary, to acquire ownership of camera by IPU driver, first ACE
-> > > module needs to be informed of ownership and then to setup MIPI CSI-2
-> > > link for the camera sensor and IPU.
-> > >
-> > > Implementation:
-> > > There are two different drivers to handle ACE and CSI hardware modules
-> > > inside IVSC.
-> > >  - ivsc_csi: MEI client driver to send commands and receive
-> > > notifications from CSI module.
-> > >  - ivsc_ace: MEI client driver to send commands and get status from
-> > > ACE module.
-> > > Interface is exposed via v4l2 sub-devcie APIs to acquire and release
-> > > camera sensor and CSI-2 link.
-> > 
-> > Thanks for the update.
-> > 
-> > Could you elaborate the decision of keeping the csi_bridge entirely separate
-> > from the cio2_bridge (to be turned to ipu_bridge first)? Both are doing
-> > essentially the same and using the same data structures, aren't they?
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/media/cec/platform/cros-ec/cros-ec-cec.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
 > 
-> yes, they're doing same thing to bridge the software nodes needed by
-> v4l2, but they have different type devices(pci and mei_client device) and
-> dependency. And they have same SSDB definition in DSDT, so the structures
-> are almost same.
+> diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+> index 6ebedc71d67d..960432230bbf 100644
+> --- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+> +++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+> @@ -332,14 +332,16 @@ static int cros_ec_cec_remove(struct platform_device *pdev)
+>  	struct device *dev = &pdev->dev;
+>  	int ret;
+>  
+> +	/*
+> +	 * blocking_notifier_chain_unregister() only fails if the notifier isn't
+> +	 * in the list. We know it was added to it by .probe(), so there should
+> +	 * be no need for error checking. Be cautious and still check.
+> +	 */
+>  	ret = blocking_notifier_chain_unregister(
+>  			&cros_ec_cec->cros_ec->event_notifier,
+>  			&cros_ec_cec->notifier);
+> -
+> -	if (ret) {
+> +	if (ret)
+>  		dev_err(dev, "failed to unregister notifier\n");
+> -		return ret;
+> -	}
+>  
+>  	cec_notifier_cec_adap_unregister(cros_ec_cec->notify,
+>  					 cros_ec_cec->adap);
 
-If there are differences, what are they?
-
-What comes to cio2_bridge, the fact that it's related to a PCI device
-doesn't seem to matter after initialisation so it could as well work with
-struct device.
-
-> 
-> I have no idea what the ipu bridge would be like, but IVSC csi bridge can
-> be configured via kconfig to enable/disable.
-
-Please work out the details with Bingbu.
-
-And please do wrap your lines at 74 or so.
-
--- 
-Kind regards,
-
-Sakari Ailus
