@@ -2,146 +2,130 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98805C7619A
-	for <linux-media@archiver.kernel.org>; Mon, 27 Mar 2023 12:57:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AD9AC7619A
+	for <linux-media@archiver.kernel.org>; Mon, 27 Mar 2023 13:24:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232449AbjC0M5f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 27 Mar 2023 08:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53196 "EHLO
+        id S232689AbjC0NYl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 27 Mar 2023 09:24:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232269AbjC0M51 (ORCPT
+        with ESMTP id S232306AbjC0NYG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 27 Mar 2023 08:57:27 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB064C1E;
-        Mon, 27 Mar 2023 05:56:58 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id g7so5603507pfu.2;
-        Mon, 27 Mar 2023 05:56:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679921801;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Bli4V9RIcx7UIAAcKmOg4gk20edyuK7KxYvBcBo2/s=;
-        b=jodiJ0ntyL5ba/T4VD5IGVaQlJRrrRDzihZjn4ZvRBcTojE2v2Ic21kZCH0MD4s8ze
-         YH8J0TYa9mOOz8Up855s2k7g5LBgAtpCiG4OIFr2C3RePRp+GHKy+S8VwADG7ffsTNtI
-         9BlL3ek+numxs0HIMy9J9tFJ9Ts+71muo/9LvL0pJcD2gOHJCwAfbQUtQd2bFhstafTp
-         XQQN4QgLlrOnBzG+weTYs9jjomv5ZNEu+nQd/sTP0f8dSFEDA69O2kjnrWS1w0CL0WDY
-         +8mBUGJ/391KeDSAJK+rD+tEN8gMVc0ntQXKVb7xS8KcuBM5BNdQ7n+SERuwKTlsZaF8
-         53ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679921801;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3Bli4V9RIcx7UIAAcKmOg4gk20edyuK7KxYvBcBo2/s=;
-        b=DXq72y6DWO24+BIYeRs1YGlot0JqU6LOXT0oQqvg7iDCR7Zos0xWP5wSepZlI/eaz9
-         eB4vaBHK2NNnLfEXbd9xnvxPS/Je9m1yFKUidb4tCZeZgacQDOrjTbVViQBMlTu6m9ax
-         wnXROAOYRtuOSctwa8oDy+JZRECRMQm4laaAubrUPrM9OGnVOUJ/DzUp6m2ren2EgjOu
-         ZLdT6gYvLlSzd0knICut8H9OYzW3ktUiZUA2GNT7ZvhuZDCBV1jTTvlXBBZ9F27Hme8p
-         UCGCFJwOSxWeLHroq0aYnBkXqRf434hJFRlBR06DUb727+iYRamxMbzHMcE8gL8va+93
-         WEzQ==
-X-Gm-Message-State: AAQBX9did6G/eMFyhUgufDDv/S6YDIsWA4JaWv13RWUt83r9g0dJGazZ
-        BCfHHo5XF4D2SUEQsmCUC5lMl1YTkuk=
-X-Google-Smtp-Source: AKy350Yoyz4kcVvwb/1HTF/W3bhYGDsm8hEwXmFNpmsEJUFltsJpQI9QraUnPyysozLnAEE/38XQvQ==
-X-Received: by 2002:a62:184e:0:b0:622:bbad:a2f3 with SMTP id 75-20020a62184e000000b00622bbada2f3mr11231919pfy.9.1679921801491;
-        Mon, 27 Mar 2023 05:56:41 -0700 (PDT)
-Received: from localhost.localdomain ([175.210.40.96])
-        by smtp.gmail.com with ESMTPSA id j11-20020a62e90b000000b005825b8e0540sm1375344pfh.204.2023.03.27.05.56.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 05:56:41 -0700 (PDT)
-From:   Jason Kim <sukbeom.kim@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jason Kim <sukbeom.kim@gmail.com>
-Subject: [PATCH] media: mc-device: remove unnecessary __must_check
-Date:   Mon, 27 Mar 2023 20:29:52 +0900
-Message-Id: <20230327112952.12287-1-sukbeom.kim@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 27 Mar 2023 09:24:06 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB68422C
+        for <linux-media@vger.kernel.org>; Mon, 27 Mar 2023 06:23:31 -0700 (PDT)
+Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <m.tretter@pengutronix.de>)
+        id 1pgmop-00060J-Ql; Mon, 27 Mar 2023 15:23:27 +0200
+From:   Michael Tretter <m.tretter@pengutronix.de>
+To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        linux-media@vger.kernel.org
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de,
+        mtr@pengutronix.de
+Subject: [RFC PATCH] media: hantro: respect data_offset in vb2_plane
+Date:   Mon, 27 Mar 2023 15:23:24 +0200
+Message-Id: <20230327132324.1781416-1-m.tretter@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::54
+X-SA-Exim-Mail-From: m.tretter@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In the file mc-device.c, the function
-media_device_register_entity_notify() does not need to have the
-__must_check attribute since it returns only a value of 0.
-Therefore, we can remove this attribute and change the function's
-return type.
+The vb2_plane in the vb2_v4l2_buffer may have a data_offset, which is
+written by user space to tell the driver that the data starts at an
+offset into the buffer. Currently the hantro driver assumes that the
+data starts directly at the base address of the buffer.
 
-Signed-off-by: Jason Kim <sukbeom.kim@gmail.com>
+Add the data_offset to the plane dma_address to make sure that the
+encoder actually reads the plane data if the user space put the plane
+data at an offset into the buffer. Otherwise the encoded data may not be
+the data that userspace expected to be encoded.
+
+Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 ---
- drivers/media/mc/mc-device.c           | 3 +--
- drivers/media/usb/au0828/au0828-core.c | 9 ++-------
- include/media/media-device.h           | 5 ++---
- 3 files changed, 5 insertions(+), 12 deletions(-)
+Hi,
 
-diff --git a/drivers/media/mc/mc-device.c b/drivers/media/mc/mc-device.c
-index 9e56d2ad6b94..0259ffbdcbc2 100644
---- a/drivers/media/mc/mc-device.c
-+++ b/drivers/media/mc/mc-device.c
-@@ -770,13 +770,12 @@ int __must_check __media_device_register(struct media_device *mdev,
- }
- EXPORT_SYMBOL_GPL(__media_device_register);
+Most other drivers also assume that the address returned by
+vb2_dma_contig_plane_dma_addr() is the start of the plane data. Maybe it
+would be better to change vb2_dma_contig_plane_dma_addr() to already add
+the data_offset to the plane address. However, there are a few drivers
+that already have a helper that respects the data_offset, but that seems
+to be the exception rather than the rule.
+
+What I am actually trying to achieve is to import a V4L2_PIX_FMT_NV12
+buffer from a Rockchip RGA2 (which doesn't support the multi-planar API)
+as a V4L2_PIX_FMT_NV12M buffer into the Hantro JPEG encoder (which
+doesn't support V4L2_PIX_FMT_NV12). Solving this by importing the same
+FD for each plane with a respective offset is how one would import such
+a buffer with the DRM API. Please tell me, if my approach is wrong and,
+if so, how I should solve it differently.
+
+Michael
+---
+ .../verisilicon/rockchip_vpu2_hw_jpeg_enc.c   | 24 +++++++++++++------
+ 1 file changed, 17 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/media/platform/verisilicon/rockchip_vpu2_hw_jpeg_enc.c b/drivers/media/platform/verisilicon/rockchip_vpu2_hw_jpeg_enc.c
+index 8395c4d48dd0..05df7768187d 100644
+--- a/drivers/media/platform/verisilicon/rockchip_vpu2_hw_jpeg_enc.c
++++ b/drivers/media/platform/verisilicon/rockchip_vpu2_hw_jpeg_enc.c
+@@ -32,6 +32,16 @@
  
--int __must_check media_device_register_entity_notify(struct media_device *mdev,
-+void media_device_register_entity_notify(struct media_device *mdev,
- 					struct media_entity_notify *nptr)
- {
- 	mutex_lock(&mdev->graph_mutex);
- 	list_add_tail(&nptr->list, &mdev->entity_notify);
- 	mutex_unlock(&mdev->graph_mutex);
--	return 0;
- }
- EXPORT_SYMBOL_GPL(media_device_register_entity_notify);
+ #define VEPU_JPEG_QUANT_TABLE_COUNT 16
  
-diff --git a/drivers/media/usb/au0828/au0828-core.c b/drivers/media/usb/au0828/au0828-core.c
-index a8a72d5fbd12..64739f403663 100644
---- a/drivers/media/usb/au0828/au0828-core.c
-+++ b/drivers/media/usb/au0828/au0828-core.c
-@@ -627,14 +627,9 @@ static int au0828_media_device_register(struct au0828_dev *dev,
- 	/* register entity_notify callback */
- 	dev->entity_notify.notify_data = (void *) dev;
- 	dev->entity_notify.notify = (void *) au0828_media_graph_notify;
--	ret = media_device_register_entity_notify(dev->media_dev,
-+	media_device_register_entity_notify(dev->media_dev,
- 						  &dev->entity_notify);
--	if (ret) {
--		dev_err(&udev->dev,
--			"Media Device register entity_notify Error: %d\n",
--			ret);
--		return ret;
--	}
++static dma_addr_t rockchip_vpu2_plane_dma_addr(struct vb2_buffer *vb,
++					       unsigned int plane_no)
++{
++	struct vb2_v4l2_buffer *v4l2_buf = to_vb2_v4l2_buffer(vb);
++	dma_addr_t base = vb2_dma_contig_plane_dma_addr(vb, plane_no);
++	unsigned int offset = v4l2_buf->planes[plane_no].data_offset;
 +
- 	/* set enable_source */
- 	mutex_lock(&dev->media_dev->graph_mutex);
- 	dev->media_dev->source_priv = (void *) dev;
-diff --git a/include/media/media-device.h b/include/media/media-device.h
-index 1345e6da688a..5fa89baf9666 100644
---- a/include/media/media-device.h
-+++ b/include/media/media-device.h
-@@ -373,7 +373,7 @@ void media_device_unregister_entity(struct media_entity *entity);
-  *    media_entity_notify callbacks are invoked.
-  */
- 
--int __must_check media_device_register_entity_notify(struct media_device *mdev,
-+void media_device_register_entity_notify(struct media_device *mdev,
- 					struct media_entity_notify *nptr);
- 
- /**
-@@ -453,11 +453,10 @@ static inline int media_device_register_entity(struct media_device *mdev,
- static inline void media_device_unregister_entity(struct media_entity *entity)
++	return base + offset;
++}
++
+ static void rockchip_vpu2_set_src_img_ctrl(struct hantro_dev *vpu,
+ 					   struct hantro_ctx *ctx)
  {
- }
--static inline int media_device_register_entity_notify(
-+static inline void media_device_register_entity_notify(
- 					struct media_device *mdev,
- 					struct media_entity_notify *nptr)
- {
--	return 0;
- }
- static inline void media_device_unregister_entity_notify(
- 					struct media_device *mdev,
+@@ -79,23 +89,23 @@ static void rockchip_vpu2_jpeg_enc_set_buffers(struct hantro_dev *vpu,
+ 
+ 	WARN_ON(pix_fmt->num_planes > 3);
+ 
+-	vepu_write_relaxed(vpu, vb2_dma_contig_plane_dma_addr(dst_buf, 0) +
++	vepu_write_relaxed(vpu, rockchip_vpu2_plane_dma_addr(dst_buf, 0) +
+ 				ctx->vpu_dst_fmt->header_size,
+ 			   VEPU_REG_ADDR_OUTPUT_STREAM);
+ 	vepu_write_relaxed(vpu, size_left, VEPU_REG_STR_BUF_LIMIT);
+ 
+ 	if (pix_fmt->num_planes == 1) {
+-		src[0] = vb2_dma_contig_plane_dma_addr(src_buf, 0);
++		src[0] = rockchip_vpu2_plane_dma_addr(src_buf, 0);
+ 		vepu_write_relaxed(vpu, src[0], VEPU_REG_ADDR_IN_PLANE_0);
+ 	} else if (pix_fmt->num_planes == 2) {
+-		src[0] = vb2_dma_contig_plane_dma_addr(src_buf, 0);
+-		src[1] = vb2_dma_contig_plane_dma_addr(src_buf, 1);
++		src[0] = rockchip_vpu2_plane_dma_addr(src_buf, 0);
++		src[1] = rockchip_vpu2_plane_dma_addr(src_buf, 1);
+ 		vepu_write_relaxed(vpu, src[0], VEPU_REG_ADDR_IN_PLANE_0);
+ 		vepu_write_relaxed(vpu, src[1], VEPU_REG_ADDR_IN_PLANE_1);
+ 	} else {
+-		src[0] = vb2_dma_contig_plane_dma_addr(src_buf, 0);
+-		src[1] = vb2_dma_contig_plane_dma_addr(src_buf, 1);
+-		src[2] = vb2_dma_contig_plane_dma_addr(src_buf, 2);
++		src[0] = rockchip_vpu2_plane_dma_addr(src_buf, 0);
++		src[1] = rockchip_vpu2_plane_dma_addr(src_buf, 1);
++		src[2] = rockchip_vpu2_plane_dma_addr(src_buf, 2);
+ 		vepu_write_relaxed(vpu, src[0], VEPU_REG_ADDR_IN_PLANE_0);
+ 		vepu_write_relaxed(vpu, src[1], VEPU_REG_ADDR_IN_PLANE_1);
+ 		vepu_write_relaxed(vpu, src[2], VEPU_REG_ADDR_IN_PLANE_2);
 -- 
-2.34.1
+2.30.2
 
