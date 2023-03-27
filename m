@@ -2,39 +2,43 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D465C74A5B
-	for <linux-media@archiver.kernel.org>; Mon, 27 Mar 2023 03:14:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79730C7619A
+	for <linux-media@archiver.kernel.org>; Mon, 27 Mar 2023 03:14:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232186AbjC0DOC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Mar 2023 23:14:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48694 "EHLO
+        id S232242AbjC0DOE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Mar 2023 23:14:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232192AbjC0DNz (ORCPT
+        with ESMTP id S232208AbjC0DN4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 Mar 2023 23:13:55 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F285252;
-        Sun, 26 Mar 2023 20:13:41 -0700 (PDT)
-X-UUID: 5e2235a0cc4d11eda9a90f0bb45854f4-20230327
+        Sun, 26 Mar 2023 23:13:56 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ACC14C22;
+        Sun, 26 Mar 2023 20:13:45 -0700 (PDT)
+X-UUID: 5d9403c0cc4d11edb6b9f13eb10bd0fe-20230327
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=37feK4H352MLzFfVmA6c0Q9gaAVyebOImg/IcUbn+wg=;
-        b=JqvkGLJnGEiiwAHKz0hc+b0fhdlFQ81S6lwr4iZbv6JDeTXNI35tJErNQfsIrhzLxGC/iYTNsovxRKswzwDJZ5LvMVaPAsp9XrQsNTFipcgHg2bMSRTkHfXd4RMz7FSuAuFemeguP6Dq5Se8fAlHy5o6n6YFAex43fHqB6OO05c=;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=5dmmAN53knGP8A38vOJ+8chP7YSe5P6lPPiDtcUaDnc=;
+        b=OjrRAIex9hIVUVhmnj8ikieVk4Vi3v3eqYWTIXrFKj8RzWB2lLxY0y5fl5M2mt08+p6YmkItzlhw4nXpvdCrlK6XTrwl9rYmJudhFgpkDmSRMTq+30HYXAv3r+Fu82Efjmev2X30lJaICWhNmBObRJclhUgKv8JMHs4LbL05y6A=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:85967be7-b793-4126-906c-b54174f8e003,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:120426c,CLOUDID:b4d38f29-564d-42d9-9875-7c868ee415ec,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-O-INFO: VERSION:1.1.22,REQID:7f3e2305-ce9d-4763-8e59-dba96ab0db00,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.22,REQID:7f3e2305-ce9d-4763-8e59-dba96ab0db00,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:120426c,CLOUDID:b498fef6-ddba-41c3-91d9-10eeade8eac7,B
+        ulkID:230327111339RI6GJ9G6,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0
 X-CID-BVR: 0,NGT
 X-CID-BAS: 0,NGT,0,_
-X-UUID: 5e2235a0cc4d11eda9a90f0bb45854f4-20230327
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
+X-UUID: 5d9403c0cc4d11edb6b9f13eb10bd0fe-20230327
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
         (envelope-from <moudy.ho@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1999047032; Mon, 27 Mar 2023 11:13:38 +0800
+        with ESMTP id 944995957; Mon, 27 Mar 2023 11:13:37 +0800
 Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.1118.25; Mon, 27 Mar 2023 11:13:36 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
@@ -44,15 +48,15 @@ From:   Moudy Ho <moudy.ho@mediatek.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
+        "Ping-Hsun Wu" <ping-hsun.wu@mediatek.com>
 CC:     <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Moudy Ho <moudy.ho@mediatek.com>
-Subject: [PATCH v7 06/12] media: platform: mtk-mdp3: chip config split about resolution limitations
-Date:   Mon, 27 Mar 2023 11:13:29 +0800
-Message-ID: <20230327031335.9663-7-moudy.ho@mediatek.com>
+Subject: [PATCH v7 01/12] media: platform: mtk-mdp3: fix potential frame size overflow in mdp_try_fmt_mplane()
+Date:   Mon, 27 Mar 2023 11:13:24 +0800
+Message-ID: <20230327031335.9663-2-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20230327031335.9663-1-moudy.ho@mediatek.com>
 References: <20230327031335.9663-1-moudy.ho@mediatek.com>
@@ -63,130 +67,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Due to differences in hardware design, the supported max and min
-resolutions and scaling capabilities will vary, and should be
-integrated into specific config file.
+Fix overflow risk when setting certain formats whose frame size exceeds
+a RGB24 with 7723x7723 resolution.
 
+For example, a 7723x7724 RGB24 frame:
+    1. bpl (byte per line) = 7723 * 3.
+    2. Overflow occurs when bpl * 7724 * depth.
+
+Fixes: 61890ccaefaf ("media: platform: mtk-mdp3: add MediaTek MDP3 driver")
 Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 ---
- .../platform/mediatek/mdp3/mdp_cfg_data.c     | 20 ++++++++++++++++++
- .../platform/mediatek/mdp3/mtk-mdp3-core.h    |  1 +
- .../platform/mediatek/mdp3/mtk-mdp3-m2m.c     |  5 +++--
- .../platform/mediatek/mdp3/mtk-mdp3-regs.c    | 21 +------------------
- 4 files changed, 25 insertions(+), 22 deletions(-)
+ drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/mediatek/mdp3/mdp_cfg_data.c b/drivers/media/platform/mediatek/mdp3/mdp_cfg_data.c
-index 46c005b7447f..1769bce2871e 100644
---- a/drivers/media/platform/mediatek/mdp3/mdp_cfg_data.c
-+++ b/drivers/media/platform/mediatek/mdp3/mdp_cfg_data.c
-@@ -381,6 +381,25 @@ static const struct mdp_format mt8183_formats[] = {
- 	}
- };
- 
-+static const struct mdp_limit mt8183_mdp_def_limit = {
-+	.out_limit = {
-+		.wmin	= 16,
-+		.hmin	= 16,
-+		.wmax	= 8176,
-+		.hmax	= 8176,
-+	},
-+	.cap_limit = {
-+		.wmin	= 2,
-+		.hmin	= 2,
-+		.wmax	= 8176,
-+		.hmax	= 8176,
-+	},
-+	.h_scale_up_max = 32,
-+	.v_scale_up_max = 32,
-+	.h_scale_down_max = 20,
-+	.v_scale_down_max = 128,
-+};
-+
- const struct mtk_mdp_driver_data mt8183_mdp_driver_data = {
- 	.mdp_probe_infra = mt8183_mdp_probe_infra,
- 	.mdp_cfg = &mt8183_plat_cfg,
-@@ -390,6 +409,7 @@ const struct mtk_mdp_driver_data mt8183_mdp_driver_data = {
- 	.mdp_sub_comp_dt_ids = mt8183_sub_comp_dt_ids,
- 	.format = mt8183_formats,
- 	.format_len = ARRAY_SIZE(mt8183_formats),
-+	.def_limit = &mt8183_mdp_def_limit,
- };
- 
- s32 mdp_cfg_get_id_inner(struct mdp_dev *mdp_dev, enum mtk_mdp_comp_id id)
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
-index 327da00dd1fc..a312c1007e96 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
-@@ -59,6 +59,7 @@ struct mtk_mdp_driver_data {
- 	const struct of_device_id *mdp_sub_comp_dt_ids;
- 	const struct mdp_format *format;
- 	unsigned int format_len;
-+	const struct mdp_limit *def_limit;
- };
- 
- struct mdp_dev {
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
-index f708fca228a7..27e1b1b8c6b4 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
-@@ -558,6 +558,7 @@ static int mdp_m2m_open(struct file *file)
- 	struct device *dev = &mdp->pdev->dev;
- 	int ret;
- 	struct v4l2_format default_format = {};
-+	const struct mdp_limit *limit = mdp->mdp_data->def_limit;
- 
- 	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
- 	if (!ctx)
-@@ -605,8 +606,8 @@ static int mdp_m2m_open(struct file *file)
- 
- 	/* Default format */
- 	default_format.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
--	default_format.fmt.pix_mp.width = 32;
--	default_format.fmt.pix_mp.height = 32;
-+	default_format.fmt.pix_mp.width = limit->out_limit.wmin;
-+	default_format.fmt.pix_mp.height = limit->out_limit.hmin;
- 	default_format.fmt.pix_mp.pixelformat = V4L2_PIX_FMT_YUV420M;
- 	mdp_m2m_s_fmt_mplane(file, &ctx->fh, &default_format);
- 	default_format.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
 diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.c
-index c6fecb089687..9b436b911d92 100644
+index 4e84a37ecdfc..36336d169bd9 100644
 --- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.c
 +++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.c
-@@ -12,25 +12,6 @@
- #include "mtk-mdp3-regs.h"
- #include "mtk-mdp3-m2m.h"
+@@ -4,6 +4,7 @@
+  * Author: Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
+  */
  
--static const struct mdp_limit mdp_def_limit = {
--	.out_limit = {
--		.wmin	= 16,
--		.hmin	= 16,
--		.wmax	= 8176,
--		.hmax	= 8176,
--	},
--	.cap_limit = {
--		.wmin	= 2,
--		.hmin	= 2,
--		.wmax	= 8176,
--		.hmax	= 8176,
--	},
--	.h_scale_up_max = 32,
--	.v_scale_up_max = 32,
--	.h_scale_down_max = 20,
--	.v_scale_down_max = 128,
--};
--
- static const struct mdp_format *mdp_find_fmt(const struct mtk_mdp_driver_data *mdp_data,
- 					     u32 pixelformat, u32 type)
- {
-@@ -487,7 +468,7 @@ int mdp_frameparam_init(struct mdp_dev *mdp, struct mdp_frameparam *param)
- 		return -EINVAL;
++#include <linux/math64.h>
+ #include <media/v4l2-common.h>
+ #include <media/videobuf2-v4l2.h>
+ #include <media/videobuf2-dma-contig.h>
+@@ -428,14 +429,15 @@ const struct mdp_format *mdp_try_fmt_mplane(struct v4l2_format *f,
+ 		u32 bpl = pix_mp->plane_fmt[i].bytesperline;
+ 		u32 min_si, max_si;
+ 		u32 si = pix_mp->plane_fmt[i].sizeimage;
++		u64 di;
  
- 	INIT_LIST_HEAD(&param->list);
--	param->limit = &mdp_def_limit;
-+	param->limit = mdp->mdp_data->def_limit;
- 	param->type = MDP_STREAM_TYPE_BITBLT;
+ 		bpl = clamp(bpl, min_bpl, max_bpl);
+ 		pix_mp->plane_fmt[i].bytesperline = bpl;
  
- 	frame = &param->output;
+-		min_si = (bpl * pix_mp->height * fmt->depth[i]) /
+-			 fmt->row_depth[i];
+-		max_si = (bpl * s.max_height * fmt->depth[i]) /
+-			 fmt->row_depth[i];
++		di = (u64)bpl * pix_mp->height * fmt->depth[i];
++		min_si = (u32)div_u64(di, fmt->row_depth[i]);
++		di = (u64)bpl * s.max_height * fmt->depth[i];
++		max_si = (u32)div_u64(di, fmt->row_depth[i]);
+ 
+ 		si = clamp(si, min_si, max_si);
+ 		pix_mp->plane_fmt[i].sizeimage = si;
 -- 
 2.18.0
 
