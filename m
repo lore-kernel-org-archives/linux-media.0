@@ -2,83 +2,130 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 156C1C77B6D
-	for <linux-media@archiver.kernel.org>; Tue, 28 Mar 2023 14:57:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 329A2C6FD18
+	for <linux-media@archiver.kernel.org>; Tue, 28 Mar 2023 14:58:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233625AbjC1O54 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Mar 2023 10:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33636 "EHLO
+        id S233659AbjC1O6W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Mar 2023 10:58:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233627AbjC1O5z (ORCPT
+        with ESMTP id S233657AbjC1O6P (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Mar 2023 10:57:55 -0400
+        Tue, 28 Mar 2023 10:58:15 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5F8E1B1;
-        Tue, 28 Mar 2023 07:57:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A97E1B8;
+        Tue, 28 Mar 2023 07:58:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680015472; x=1711551472;
+  t=1680015492; x=1711551492;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=yf/dZqK8obUob428nrSpjkJPjM3/65/ufbLKFfE7hSA=;
-  b=Nyr5Uo4SriwBSIYCh7QOO0YVoYvPISU9VY66ewgkRw+EOj6g6iZMslAd
-   X8ckwfBx4fgkWuHRw07hgLec6Y0ly0X1lnx0Dah7t1SVbUsos6y9tIyTH
-   B23q50vBk81HMP7dszXC91zx35SCs0Ne58ER7ufZjVQ42kiBLcinSqRrg
-   GkTLmgo4xoHbfrZdsES8e0+vDfzEqg/wAfOa1gLO2ufLU/ffBMZquBp3U
-   jHfQs4TmfwzSYyencT5d8qbOwSoPrvKzAXVMzQSPmcpf3LnQrue3BUSNa
-   //n1ERB1AsPxPvOZRhIQih5/vEprN66ix66tbHzgtQqw5sPwsRvKiZ1tX
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="342995163"
+  bh=7fPOIVZSj3TCOVHNpPirZFp1vZjCF6d5kjRz6Qcnziw=;
+  b=l/UDuprClahBfn4/g9gvjd8H/H/+XcBiAKSvJ3dVZKvA0Y/+VPvicyvB
+   vEdnQcBdHeFBiukst8FtJjDIEwnPyb9EDM+PmzuTegRaC8QrlOVIbt6s3
+   itZlLbqrCnOQgtFQ9JUf8k3fQm3/iHdboDWEIlqSJzRYUIkbRS52Nu2B1
+   shSGkkn+D+TrX8KJ7CNCDzt8H/2gfCm6tHV1AYNKGnG8bSdjGSPfHSduI
+   HsTK3oXol4sJ+GyqqkC4IdzE50jg4zcgCWsI/SFE290KXH4K18Z7Vt5YO
+   0W2JWoWGsStTToHYU6VD8mt6b6LAltETi36B9IQ+Wm40Yecq4/AGqf96z
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="342995442"
 X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="342995163"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 07:55:57 -0700
+   d="scan'208";a="342995442"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 07:56:57 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="661194941"
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="634075053"
 X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="661194941"
+   d="scan'208";a="634075053"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 07:55:57 -0700
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 07:56:57 -0700
 Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 9F0BF11F9EE;
-        Tue, 28 Mar 2023 17:55:54 +0300 (EEST)
-Date:   Tue, 28 Mar 2023 17:55:54 +0300
+        by kekkonen.fi.intel.com (Postfix) with SMTP id 4330011F937;
+        Tue, 28 Mar 2023 17:48:35 +0300 (EEST)
+Date:   Tue, 28 Mar 2023 17:48:35 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     linux-acpi@vger.kernel.org, linux-media@vger.kernel.org,
         rafael@kernel.org, heikki.krogerus@linux.intel.com
 Subject: Re: [PATCH v7 01/10] ACPI: scan: Remove the second DSDT traversal
-Message-ID: <ZCL/+sOjTVnAzA3n@kekkonen.localdomain>
+Message-ID: <ZCL+QxYmVzFzVe1E@kekkonen.localdomain>
 References: <20230328101303.1458570-1-sakari.ailus@linux.intel.com>
  <20230328101303.1458570-2-sakari.ailus@linux.intel.com>
  <ZCL9eWARHqzYuQyV@smile.fi.intel.com>
- <ZCL+QxYmVzFzVe1E@kekkonen.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZCL+QxYmVzFzVe1E@kekkonen.localdomain>
+In-Reply-To: <ZCL9eWARHqzYuQyV@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 05:48:35PM +0300, Sakari Ailus wrote:
-> > > +/**
-> > > + * acpi_bus_handle_postpone - Add an ACPI handle to a given postponed list
-> > > + * @handle: The ACPI handle
-> > > + * @head: Postponed list head
-> > > + *
-> > > + * Add a given ACPI handle to a list of ACPI objects for which the creation
-> > > + * of the device objects is to be postponed.
-> > 
-> > `kernel-doc -v ...` complains on the absence of Return section. Is it the same
-> > for you?
-> 
-> That may well be. These comments wouldn't necessarily even need to be
-> kernel-doc as the rest isn't so documented either. I can of course fix the
-> error while leaving these kernel-doc.
+Hi Andy,
 
-No warning is produced here. That would seem like a false positive as the
-function returns void.
+Thank you for the review.
+
+On Tue, Mar 28, 2023 at 05:45:13PM +0300, Andy Shevchenko wrote:
+> On Tue, Mar 28, 2023 at 01:12:54PM +0300, Sakari Ailus wrote:
+> > Collect the devices with _DEP into a list and continue processing them
+> > after a full traversal, instead of doing a full second traversal of the
+> > tree.
+> > 
+> > This makes the second DSDT traversal pass unnecessary as we already have
+> > the nodes we're interested in in a linked list.
+> 
+> ...
+> 
+> > +/**
+> > + * struct acpi_postponed_handle - A postponed ACPI handle
+> > + * @handle: The postponed handle
+> > + * @list: Entry in a postponed list
+> > + *
+> > + * One such entry represents an ACPI handle the scanning of which has been
+> > + * postponed.
+> > + */
+> > +struct acpi_postponed_handle {
+> > +	acpi_handle handle;
+> > +	struct list_head list;
+> > +};
+> 
+> If you put the list to be the first member, container_of() against it becomes a
+> no-op at compile time. Have you checked the code generation if you swap these
+> members?
+
+I haven't checked but that would seem like a reasonable thing to do. A
+pointer to the handle isn't used, unlike it is for the list.
+
+> 
+> > +/**
+> > + * struct acpi_scan_context - Context for scanning ACPI devices
+> > + * @device: The first encountered device, typically the root of the scanned tree
+> > + * @postponed_head: The list head of the postponed ACPI handles
+> > + */
+> > +struct acpi_scan_context {
+> > +	struct acpi_device *device;
+> > +	struct list_head postponed_head;
+> > +};
+> 
+> Ditto.
+> 
+> ...
+> 
+> > +/**
+> > + * acpi_bus_handle_postpone - Add an ACPI handle to a given postponed list
+> > + * @handle: The ACPI handle
+> > + * @head: Postponed list head
+> > + *
+> > + * Add a given ACPI handle to a list of ACPI objects for which the creation
+> > + * of the device objects is to be postponed.
+> 
+> `kernel-doc -v ...` complains on the absence of Return section. Is it the same
+> for you?
+
+That may well be. These comments wouldn't necessarily even need to be
+kernel-doc as the rest isn't so documented either. I can of course fix the
+error while leaving these kernel-doc.
 
 -- 
+Kind regards,
+
 Sakari Ailus
