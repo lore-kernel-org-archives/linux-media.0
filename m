@@ -2,126 +2,114 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43151C76195
-	for <linux-media@archiver.kernel.org>; Tue, 28 Mar 2023 08:59:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4693C77B61
+	for <linux-media@archiver.kernel.org>; Tue, 28 Mar 2023 09:15:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232318AbjC1I7s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Mar 2023 04:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53970 "EHLO
+        id S232419AbjC1JPT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Mar 2023 05:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbjC1I7q (ORCPT
+        with ESMTP id S232392AbjC1JPP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Mar 2023 04:59:46 -0400
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E754233
-        for <linux-media@vger.kernel.org>; Tue, 28 Mar 2023 01:59:44 -0700 (PDT)
-Received: by mail-vs1-xe30.google.com with SMTP id df34so9772917vsb.8
-        for <linux-media@vger.kernel.org>; Tue, 28 Mar 2023 01:59:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google; t=1679993983;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qW0YpQJlwsviRjPN/ckVgQ4Y5+uQmcDy83G/T+1wDu4=;
-        b=eMfu1CgPkkSnA5543I+ad4xe6aRuTO18FMVvq7dE6zYFDd8fh7VAMytmbLa8EUJAuC
-         p6Ijsa7YekySHNqEW8Gkb6NpCKfgR7eCZPaPDQFFTQqYsGHkzRUoCXDNZgLE+swCn7Z7
-         RDE3IMlKHJCes7/K1NwBEeCRm50NTNjOqQK/HtkwLHcA6t9jCFdd8tv8MqWB3r9dcJ3r
-         luILLesJ4qj9ndlGtXdox0TXFaaml73xDAbmP0cPTSF+l4NDXHmhyZbkI1DwV+XmRnam
-         df4As1IBIQKNlqr9xh/GWr42CATmkpUfYEcbMEOQ7GHDMeGD0C+BE5HvirHIG483NKvd
-         ewow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679993983;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qW0YpQJlwsviRjPN/ckVgQ4Y5+uQmcDy83G/T+1wDu4=;
-        b=JQ0Hw//oI5it88SXLxmFLSs5C7OrrEIoc4R/7zDDlCFm4hnJNwFqvR/ldceJ7nvyZ2
-         9oGSYH1e6yRmzg6IpmnbXw560Cca0Q2BHWNCGTHuDBxJH97BzhU6RRD60a1TKel43EMg
-         JdLvc0f6b9ZDYAI/7ncx6Mbe4kG7R/igSHhOvHyb0TUt28eXH4hnTDTBswJOrL+5F9IA
-         fNREER/m3QswOwVg2DkhvfKAoR3ghEZUnxyJCr79IvYtcuG1sksEQD8zBLy07DSCKRvi
-         Ky457PhnMzWMf1IhXCoFr1ejHgHH9kjH6XLSd3O9GOYyqq9HtzCMtG3x6YPccnElQ7rA
-         8qpA==
-X-Gm-Message-State: AAQBX9ewsAX/9y5NjSvCti1UItmTcBHoYdHa50K7eX/1bkyZgrhy2XnR
-        o7/BouO+p0DWYRgQueie45qOWiZI3cfqrxilRG2LyD9Do07A64fZXaE=
-X-Google-Smtp-Source: AKy350bm2PCZ+m3oh/9FcdhSD8Yt4lPj1NobJnY/JdjSplAtiIR05HCdeDTDH8QKf/AXEhIOXR9AVVXcYIy0sYX37GI=
-X-Received: by 2002:a67:d28a:0:b0:425:b211:3671 with SMTP id
- z10-20020a67d28a000000b00425b2113671mr8598062vsi.1.1679993983637; Tue, 28 Mar
- 2023 01:59:43 -0700 (PDT)
+        Tue, 28 Mar 2023 05:15:15 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09E7100;
+        Tue, 28 Mar 2023 02:15:03 -0700 (PDT)
+X-UUID: 0145ee56cd4911edb6b9f13eb10bd0fe-20230328
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=RSvJJIzc07jNs5xyFBfiiy/4bckZKwo6oSXXK8nF9/0=;
+        b=mAcwyYQ5gwQbbba4RgMcuWExThH5n0lsu7XSXKT4OORrgOEmxC8TQOZMGRsoCNj2YdIbC9KEXK8R3zJq94kW2wQYiSGzhTCXcEVElgBoUW/9gq08yZq1UzVkoKgsa1Ec5jXfWZ2aI4/4/JKpwCZ6njZJNdlmk0QNO2xdUVWnhII=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:a0116e93-fbae-4945-aa9b-9261989c2d6b,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:90
+X-CID-INFO: VERSION:1.1.22,REQID:a0116e93-fbae-4945-aa9b-9261989c2d6b,IP:0,URL
+        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
+        N:quarantine,TS:90
+X-CID-META: VersionHash:120426c,CLOUDID:778928f7-ddba-41c3-91d9-10eeade8eac7,B
+        ulkID:230328171456U74Z9494,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: 0145ee56cd4911edb6b9f13eb10bd0fe-20230328
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 17486555; Tue, 28 Mar 2023 17:14:55 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Tue, 28 Mar 2023 17:14:54 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Tue, 28 Mar 2023 17:14:53 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH 2/2] media: mediatek: vcodec: add remove function for decoder platform driver
+Date:   Tue, 28 Mar 2023 17:14:50 +0800
+Message-ID: <20230328091451.21979-2-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230328091451.21979-1-yunfei.dong@mediatek.com>
+References: <20230328091451.21979-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
-References: <d5bc46ad-0eb6-54f5-2e9e-7dd2d49ac9c9@butterbrot.org>
-In-Reply-To: <d5bc46ad-0eb6-54f5-2e9e-7dd2d49ac9c9@butterbrot.org>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Tue, 28 Mar 2023 08:59:27 +0000
-Message-ID: <CAPY8ntCT6rp-hM-SvDGrjOnvxcKkzXLLRjw=y8sSnTquFn2D2A@mail.gmail.com>
-Subject: Re: Backtrace in media_pipeline_stop with bcm2835-unicam
-To:     Florian Echtler <floe@butterbrot.org>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Florian
+Need to disable decoder power when remove decoder hardware driver, adding
+remove callback function in the definition of platform driver.
 
-On Tue, 28 Mar 2023 at 08:52, Florian Echtler <floe@butterbrot.org> wrote:
->
-> Hello everyone,
->
-> I'm running a Raspberry Pi with HQ camera as timelapse webcam. Everything seems
-> to be working fine, so this is probably relatively low priority, but I still
-> wanted to mention that I'm getting the following backtrace in
-> media_pipeline_stop for every picture taken with libcamera:
+Fixes: c05bada35f01 ("media: mtk-vcodec: Add to support multi hardware decode")
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+---
+- test pass when remove and insmod decoder hardware driver.
+---
+ .../media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c    | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-bcm2835-unicam hasn't been merged to mainline as yet - it's only in
-our downstream kernel tree.
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
+index 376db0e433d7..b753bf54ebd9 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
+@@ -193,8 +193,16 @@ static int mtk_vdec_hw_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
++static int mtk_vdec_hw_remove(struct platform_device *pdev)
++{
++	pm_runtime_disable(&pdev->dev);
++
++	return 0;
++}
++
+ static struct platform_driver mtk_vdec_driver = {
+ 	.probe	= mtk_vdec_hw_probe,
++	.remove = mtk_vdec_hw_remove,
+ 	.driver	= {
+ 		.name	= "mtk-vdec-comp",
+ 		.of_match_table = mtk_vdec_hw_match,
+-- 
+2.18.0
 
-Please raise an issue on https://github.com/raspberrypi/linux/issues/,
-or start a thread on our forums.
-
-Thanks
-  Dave
-
-> [244731.171175] ------------[ cut here ]------------
-> [244731.171210] WARNING: CPU: 0 PID: 900 at drivers/media/mc/mc-entity.c:873
-> media_pipeline_stop+0x28/0x34 [mc]
-> [244731.171417] Modules linked in: cmac algif_hash aes_arm aes_generic ecb
-> algif_skcipher af_alg bnep imx477 hci_uart btbcm bluetooth brcmfmac ecdh_generic
-> ecc libaes vc4 brcmutil sha256_generic libsha256 snd_soc_hdmi_codec 8021q garp
-> stp llc drm_display_helper cec cfg80211 drm_dma_helper drm_kms_helper
-> snd_soc_core bcm2835_unicam snd_compress v4l2_dv_timings snd_pcm_dmaengine
-> syscopyarea v4l2_fwnode sysfillrect sysimgblt bcm2835_codec(C) i2c_mux_pinctrl
-> fb_sys_fops i2c_mux raspberrypi_hwmon v4l2_async bcm2835_v4l2(C) bcm2835_isp(C)
-> v4l2_mem2mem bcm2835_mmal_vchiq(C) rfkill videobuf2_vmalloc videobuf2_dma_contig
-> videobuf2_memops videobuf2_v4l2 videobuf2_common snd_bcm2835(C) videodev snd_pcm
-> snd_timer i2c_bcm2835 snd vc_sm_cma(C) mc uio_pdrv_genirq uio fixed drm fuse
-> drm_panel_orientation_quirks backlight ip_tables x_tables ipv6
-> [244731.171829] CPU: 0 PID: 900 Comm: raspberry_fakeh Tainted: G        WC
->    6.1.19+ #1637
-> [244731.171848] Hardware name: BCM2835
-> [244731.171865]  unwind_backtrace from show_stack+0x18/0x1c
-> [244731.171904]  show_stack from dump_stack_lvl+0x34/0x58
-> [244731.171934]  dump_stack_lvl from __warn+0x7c/0xf8
-> [244731.171967]  __warn from warn_slowpath_fmt+0x60/0xcc
-> [244731.172002]  warn_slowpath_fmt from media_pipeline_stop+0x28/0x34 [mc]
-> [244731.172150]  media_pipeline_stop [mc] from unicam_stop_streaming+0x88/0x168
-> [bcm2835_unicam]
-> [244731.172343]  unicam_stop_streaming [bcm2835_unicam] from
-> __vb2_queue_cancel+0x30/0x284 [videobuf2_common]
-> [244731.172554]  __vb2_queue_cancel [videobuf2_common] from
-> vb2_core_streamoff+0x20/0xb8 [videobuf2_common]
-> [244731.172739]  vb2_core_streamoff [videobuf2_common] from
-> __video_do_ioctl+0x224/0x458 [videodev]
-> [244731.173460]  __video_do_ioctl [videodev] from video_usercopy+0x118/0x574
-> [videodev]
-> [244731.174268]  video_usercopy [videodev] from sys_ioctl+0x10c/0x90c
-> [244731.174705]  sys_ioctl from ret_fast_syscall+0x0/0x1c
-> [244731.174732] Exception stack(0xdc905fa8 to 0xdc905ff0)
-> [244731.174752] 5fa0:                   a4311ef0 a430d65c 0000000f 40045613
-> a4312f30 00000000
-> [244731.174770] 5fc0: a4311ef0 a430d65c a430d670 00000036 0238e568 00000000
-> b6e90134 0238e508
-> [244731.174783] 5fe0: a52b9d44 a4cc770c a5237940 b6d0dd4c
-> [244731.174795] ---[ end trace 0000000000000000 ]---
->
-> Best, Florian
-> --
-> SENT FROM MY DEC VT50 TERMINAL
