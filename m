@@ -2,182 +2,250 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 855EFC76195
-	for <linux-media@archiver.kernel.org>; Tue, 28 Mar 2023 09:28:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24D9EC76195
+	for <linux-media@archiver.kernel.org>; Tue, 28 Mar 2023 10:03:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232244AbjC1J2k (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Mar 2023 05:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
+        id S230333AbjC1KCi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Mar 2023 06:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbjC1J2j (ORCPT
+        with ESMTP id S232701AbjC1KCL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Mar 2023 05:28:39 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726B96180;
-        Tue, 28 Mar 2023 02:28:03 -0700 (PDT)
+        Tue, 28 Mar 2023 06:02:11 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F48B6A4E;
+        Tue, 28 Mar 2023 03:02:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679995683; x=1711531683;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/WXek2QrxRQfHYNGEo8wCjFsnFgypZubTj2Ft+Tco2g=;
-  b=DHvc+JCwtaQS2PIOkSCS2yHhN6S+wB9bjvON/bfZKIAEWM501CBJbS6o
-   EYMSD+IMRZ4JVssUbiGW4LkhjYQ0W718TTsL8BQOKbGu1GWO4kX8e04ft
-   eSKp7EcOo+CGBJ+/EOEFMsSfww2Ej7nEjOCh2+QGxXpDt/b7bkwRGgbOn
-   Zz9sb0nKJgE3OE/p24B0wEqgvFWJoazUyg5axhZMQdKKBjYllpsZescDd
-   5HouBF6siR2zNrgHHQpqVswIAlHkBd1OWumMIbZ3PwOXoJuzaPWYYZKnp
-   Zo+5RHioGYGFL99uEZIYaOO96xu95SAxNHqD82GKByGi7Ugg50ohKK+v2
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="339243143"
+  t=1679997729; x=1711533729;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=013xeHnW9lttA/KQdmfxgHU0jNti/+KDIk0yVRBwKSQ=;
+  b=aImN0zA1BU3dYio8rOQ2YxwdYzmIeF130SdpYSznYXwHhGP3x4RHqxYW
+   TsA4OZZhYOPdCRcJLVZW++MS4wot3YptX70T5TZyDKv1g1o9bs8UJiXZ8
+   qfYS707RgJrPxByHX8rpZ5eCeqrrQt2F3nuM8UO9546Y7jQV8zd3U54yt
+   Qd9OnfW5zNWILEVXDa0t+dCnd3L2eAAsKs6jwTM8EDwlrM5kUjRHW0yYt
+   0AZ4r77xY4qO/RZ2Wl1R/2xqjoPtmlE7LNFcDwpMHKrW6XtDiVeu2P65y
+   SlYtAAK66R6Gf/Fw8uIt/M3BZaKOaxLC4apfkbJGAtGDEOHkDyGIC65dV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="324419979"
 X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="339243143"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 02:28:02 -0700
+   d="scan'208";a="324419979"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 03:02:06 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="748341275"
-X-IronPort-AV: E=Sophos;i="5.98,296,1673942400"; 
-   d="scan'208";a="748341275"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 28 Mar 2023 02:27:59 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ph5cU-000IQt-0k;
-        Tue, 28 Mar 2023 09:27:58 +0000
-Date:   Tue, 28 Mar 2023 17:27:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sui Jingfeng <15330273260@189.cn>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        Li Yi <liyi@loongson.cn>
-Subject: Re: [PATCH v8 2/2] drm: add kms driver for loongson display
- controller
-Message-ID: <202303281754.jWI20j2C-lkp@intel.com>
-References: <20230320100131.1277034-3-15330273260@189.cn>
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="753078499"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="753078499"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 03:02:03 -0700
+Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 1BC3112243C;
+        Tue, 28 Mar 2023 13:02:01 +0300 (EEST)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-acpi@vger.kernel.org
+Cc:     linux-media@vger.kernel.org, rafael@kernel.org,
+        andriy.shevchenko@linux.intel.com, heikki.krogerus@linux.intel.com
+Subject: [PATCH v6 01/10] ACPI: scan: Remove the second DSDT traversal
+Date:   Tue, 28 Mar 2023 13:01:49 +0300
+Message-Id: <20230328100159.1457160-2-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230328100159.1457160-1-sakari.ailus@linux.intel.com>
+References: <20230328100159.1457160-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320100131.1277034-3-15330273260@189.cn>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sui,
+Collect the devices with _DEP into a list and continue processing them
+after a full traversal, instead of doing a full second traversal of the
+tree.
 
-Thank you for the patch! Perhaps something to improve:
+This makes the second DSDT traversal pass unnecessary as we already have
+the nodes we're interested in in a linked list.
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on linus/master v6.3-rc4 next-20230328]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/acpi/scan.c | 125 ++++++++++++++++++++++++++++++++------------
+ 1 file changed, 92 insertions(+), 33 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Jingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230320-180408
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230320100131.1277034-3-15330273260%40189.cn
-patch subject: [PATCH v8 2/2] drm: add kms driver for loongson display controller
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230328/202303281754.jWI20j2C-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/80b4115f44993f4ebf47b1cb9e8f02953575b977
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sui-Jingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230320-180408
-        git checkout 80b4115f44993f4ebf47b1cb9e8f02953575b977
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/accel/ drivers/gpu/drm/loongson/ drivers/iio/light/ drivers/media/pci/intel/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303281754.jWI20j2C-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/loongson/lsdc_drv.c:232:11: warning: variable 'gpu' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           else if (descp->chip == CHIP_LS7A2000)
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/loongson/lsdc_drv.c:235:7: note: uninitialized use occurs here
-           if (!gpu) {
-                ^~~
-   drivers/gpu/drm/loongson/lsdc_drv.c:232:7: note: remove the 'if' if its condition is always true
-           else if (descp->chip == CHIP_LS7A2000)
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/loongson/lsdc_drv.c:217:21: note: initialize the variable 'gpu' to silence this warning
-           struct pci_dev *gpu;
-                              ^
-                               = NULL
-   1 warning generated.
---
->> drivers/gpu/drm/loongson/lsdc_pll.c:188:14: warning: variable 'diff' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-                                   else if (clock_khz < computed)
-                                            ^~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/loongson/lsdc_pll.c:191:9: note: uninitialized use occurs here
-                                   if (diff < min) {
-                                       ^~~~
-   drivers/gpu/drm/loongson/lsdc_pll.c:188:10: note: remove the 'if' if its condition is always true
-                                   else if (clock_khz < computed)
-                                        ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/loongson/lsdc_pll.c:177:22: note: initialize the variable 'diff' to silence this warning
-                                   unsigned int diff;
-                                                    ^
-                                                     = 0
-   1 warning generated.
-
-
-vim +232 drivers/gpu/drm/loongson/lsdc_drv.c
-
-   212	
-   213	static int lsdc_get_dedicated_vram(struct lsdc_device *ldev,
-   214					   const struct lsdc_desc *descp)
-   215	{
-   216		struct drm_device *ddev = &ldev->base;
-   217		struct pci_dev *gpu;
-   218		resource_size_t base, size;
-   219	
-   220		/*
-   221		 * The GPU and display controller in LS7A1000/LS7A2000 are separated
-   222		 * PCIE devices, they are two devices not one. The DC does not has a
-   223		 * dedicate VRAM bar, because the BIOS engineer choose to assign the
-   224		 * VRAM to the GPU device. Sadly, after years application, this form
-   225		 * as a convention for loongson integrated graphics. Bar 2 of the GPU
-   226		 * device contain the base address and size of the VRAM, both the GPU
-   227		 * and the DC can access the on-board VRAM as long as the DMA address
-   228		 * emitted fall in [base, base + size).
-   229		 */
-   230		if (descp->chip == CHIP_LS7A1000)
-   231			gpu = pci_get_device(PCI_VENDOR_ID_LOONGSON, 0x7A15, NULL);
- > 232		else if (descp->chip == CHIP_LS7A2000)
-   233			gpu = pci_get_device(PCI_VENDOR_ID_LOONGSON, 0x7A25, NULL);
-   234	
-   235		if (!gpu) {
-   236			drm_warn(ddev, "No GPU device found\n");
-   237			return -ENODEV;
-   238		}
-   239	
-   240		base = pci_resource_start(gpu, 2);
-   241		size = pci_resource_len(gpu, 2);
-   242	
-   243		ldev->vram_base = base;
-   244		ldev->vram_size = size;
-   245	
-   246		drm_info(ddev, "dedicated vram start: 0x%llx, size: %uMB\n",
-   247			 (u64)base, (u32)(size >> 20));
-   248	
-   249		return 0;
-   250	}
-   251	
-
+diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+index 0c6f06abe3f4..df97c2babf39 100644
+--- a/drivers/acpi/scan.c
++++ b/drivers/acpi/scan.c
+@@ -2029,10 +2029,52 @@ static u32 acpi_scan_check_dep(acpi_handle handle, bool check_dep)
+ 	return count;
+ }
+ 
+-static bool acpi_bus_scan_second_pass;
++/**
++ * struct acpi_postponed_handle - A postponed ACPI handle
++ * @handle: The postponed handle
++ * @list: Entry in a postponed list
++ *
++ * One such entry represents an ACPI handle the scanning of which has been
++ * postponed.
++ */
++struct acpi_postponed_handle {
++	acpi_handle handle;
++	struct list_head list;
++};
++
++/**
++ * struct acpi_scan_context - Context for scanning ACPI devices
++ * @device: The first encountered device, typically the root of the scanned tree
++ * @postponed_head: The list head of the postponed ACPI handles
++ */
++struct acpi_scan_context {
++	struct acpi_device *device;
++	struct list_head postponed_head;
++};
++
++/**
++ * acpi_bus_handle_postpone - Add an ACPI handle to a given postponed list
++ * @handle: The ACPI handle
++ * @head: Postponed list head
++ *
++ * Add a given ACPI handle to a list of ACPI objects for which the creation
++ * of the device objects is to be postponed.
++ */
++static void acpi_bus_handle_postpone(acpi_handle handle,
++				     struct list_head *head)
++{
++	struct acpi_postponed_handle *ph;
++
++	ph = kzalloc(sizeof(*ph), GFP_KERNEL);
++	if (!ph)
++		return;
++
++	ph->handle = handle;
++	list_add(&ph->list, head);
++}
+ 
+ static acpi_status acpi_bus_check_add(acpi_handle handle, bool check_dep,
+-				      struct acpi_device **adev_p)
++				      struct acpi_scan_context *ctx)
+ {
+ 	struct acpi_device *device = acpi_fetch_acpi_dev(handle);
+ 	acpi_object_type acpi_type;
+@@ -2051,7 +2093,7 @@ static acpi_status acpi_bus_check_add(acpi_handle handle, bool check_dep,
+ 
+ 		/* Bail out if there are dependencies. */
+ 		if (acpi_scan_check_dep(handle, check_dep) > 0) {
+-			acpi_bus_scan_second_pass = true;
++			acpi_bus_handle_postpone(handle, &ctx->postponed_head);
+ 			return AE_CTRL_DEPTH;
+ 		}
+ 
+@@ -2086,22 +2128,22 @@ static acpi_status acpi_bus_check_add(acpi_handle handle, bool check_dep,
+ 	acpi_scan_init_hotplug(device);
+ 
+ out:
+-	if (!*adev_p)
+-		*adev_p = device;
++	if (!ctx->device)
++		ctx->device = device;
+ 
+ 	return AE_OK;
+ }
+ 
+ static acpi_status acpi_bus_check_add_1(acpi_handle handle, u32 lvl_not_used,
+-					void *not_used, void **ret_p)
++					void *ctx, void **unused)
+ {
+-	return acpi_bus_check_add(handle, true, (struct acpi_device **)ret_p);
++	return acpi_bus_check_add(handle, true, (struct acpi_scan_context *)ctx);
+ }
+ 
+ static acpi_status acpi_bus_check_add_2(acpi_handle handle, u32 lvl_not_used,
+-					void *not_used, void **ret_p)
++					void *ctx, void **device)
+ {
+-	return acpi_bus_check_add(handle, false, (struct acpi_device **)ret_p);
++	return acpi_bus_check_add(handle, false, (struct acpi_scan_context *)ctx);
+ }
+ 
+ static void acpi_default_enumeration(struct acpi_device *device)
+@@ -2422,37 +2464,54 @@ EXPORT_SYMBOL_GPL(acpi_dev_get_next_consumer_dev);
+  */
+ int acpi_bus_scan(acpi_handle handle)
+ {
+-	struct acpi_device *device = NULL;
+-
+-	acpi_bus_scan_second_pass = false;
+-
+-	/* Pass 1: Avoid enumerating devices with missing dependencies. */
++	struct acpi_scan_context ctx = {
++		.postponed_head = LIST_HEAD_INIT(ctx.postponed_head),
++	};
++	struct acpi_postponed_handle *ph, *tmp_ph;
++	int ret = 0;
+ 
+-	if (ACPI_SUCCESS(acpi_bus_check_add(handle, true, &device)))
++	if (ACPI_SUCCESS(acpi_bus_check_add(handle, true, &ctx)))
+ 		acpi_walk_namespace(ACPI_TYPE_ANY, handle, ACPI_UINT32_MAX,
+-				    acpi_bus_check_add_1, NULL, NULL,
+-				    (void **)&device);
+-
+-	if (!device)
+-		return -ENODEV;
+-
+-	acpi_bus_attach(device, (void *)true);
++				    acpi_bus_check_add_1, NULL, (void *)&ctx,
++				    NULL);
+ 
+-	if (!acpi_bus_scan_second_pass)
+-		return 0;
+-
+-	/* Pass 2: Enumerate all of the remaining devices. */
++	if (!ctx.device) {
++		ret = -ENODEV;
++		goto out_release;
++	}
+ 
+-	device = NULL;
++	acpi_bus_attach(ctx.device, (void *)true);
+ 
+-	if (ACPI_SUCCESS(acpi_bus_check_add(handle, false, &device)))
+-		acpi_walk_namespace(ACPI_TYPE_ANY, handle, ACPI_UINT32_MAX,
+-				    acpi_bus_check_add_2, NULL, NULL,
+-				    (void **)&device);
++	/*
++	 * Proceed to register ACPI devices that were postponed due to _DEP
++	 * objects during the namespace walk.
++	 */
++	list_for_each_entry_safe(ph, tmp_ph, &ctx.postponed_head, list) {
++		list_del(&ph->list);
++		/* Set device NULL here to obtain the root for this sub-tree. */
++		ctx.device = NULL;
++		/*
++		 * Do this manually, as the namespace walk will only include
++		 * sub-nodes, not the node itself. ctx.device is set to the
++		 * ACPI device corresponding ph->handle.
++		 */
++		acpi_bus_check_add_2(ph->handle, 0, &ctx, NULL);
++		/* Walk the rest of the sub-namespace. */
++		acpi_walk_namespace(ACPI_TYPE_ANY, ph->handle, ACPI_UINT32_MAX,
++				    acpi_bus_check_add_2, NULL, (void *)&ctx,
++				    NULL);
++		if (ctx.device)
++			acpi_bus_attach(ctx.device, NULL);
++		kfree(ph);
++	}
+ 
+-	acpi_bus_attach(device, NULL);
++out_release:
++	list_for_each_entry_safe(ph, tmp_ph, &ctx.postponed_head, list) {
++		list_del(&ph->list);
++		kfree(ph);
++	}
+ 
+-	return 0;
++	return ret;
+ }
+ EXPORT_SYMBOL(acpi_bus_scan);
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.30.2
+
