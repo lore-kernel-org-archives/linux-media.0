@@ -2,99 +2,84 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84B03C77B73
-	for <linux-media@archiver.kernel.org>; Wed, 29 Mar 2023 15:23:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77D5EC761AF
+	for <linux-media@archiver.kernel.org>; Wed, 29 Mar 2023 15:51:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbjC2PXL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 29 Mar 2023 11:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
+        id S231131AbjC2Pux (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 29 Mar 2023 11:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbjC2PXK (ORCPT
+        with ESMTP id S230381AbjC2Pup (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 29 Mar 2023 11:23:10 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218291995
-        for <linux-media@vger.kernel.org>; Wed, 29 Mar 2023 08:23:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680103388; x=1711639388;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Rt94+HvVbY+DTDFA+AEuOKciXmzngbz4PUourZhIqa4=;
-  b=NdjJ9toRIROdseyeMClHrK7DxasRmhAwWSNBuof98ck/Cgh+BTCsezYI
-   bH01IeCqT7TfOwVUnu1FKNkpeRJmYqobqHwGOVcMf2Wsp5gwyRdkLQyx9
-   CkejC8OpVw1WDGiGmJfSSNfO8wk/0eJUkTpVA49zenKUTvuBiavF7brQj
-   pjTJoHlAnPth0pSdSZBhLjCG/GjJHS55qGRn/CeghDW4scOOBNBeHf28p
-   6aNzW5B402pLkir8AjuuQqvwXshteZSCQcYcb8NYlPaBqN7NlXPFnmnVo
-   nGntj2KDaqRbmy5CACfXhRLsQqYUc5DcR/DWTZID9TvIrpNt21htAvu3z
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="368679587"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="368679587"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 08:22:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="808270510"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="808270510"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 08:22:14 -0700
-Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 4BAA51224D2;
-        Wed, 29 Mar 2023 18:22:11 +0300 (EEST)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     jacopo.mondi@ideasonboard.com
-Subject: [PATCH 1/1] media: ov5670: Fix probe on ACPI
-Date:   Wed, 29 Mar 2023 18:22:10 +0300
-Message-Id: <20230329152210.1554736-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 29 Mar 2023 11:50:45 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A3975590;
+        Wed, 29 Mar 2023 08:50:42 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.41:58922.1411433373
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id B5F0C1002C4;
+        Wed, 29 Mar 2023 23:50:40 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-7b48884fd-bkw2h with ESMTP id eb6e9529e38f423c95b77fa78b2c7ae2 for maarten.lankhorst@linux.intel.com;
+        Wed, 29 Mar 2023 23:50:41 CST
+X-Transaction-ID: eb6e9529e38f423c95b77fa78b2c7ae2
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+From:   Sui Jingfeng <15330273260@189.cn>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>
+Cc:     nathan@kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn
+Subject: [PATCH v9 1/2] MAINTAINERS: add maintainers for DRM LOONGSON driver
+Date:   Wed, 29 Mar 2023 23:50:32 +0800
+Message-Id: <20230329155033.1303550-2-15330273260@189.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230329155033.1303550-1-15330273260@189.cn>
+References: <20230329155033.1303550-1-15330273260@189.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-devm_clk_get() will return either an error or NULL, which the driver
-handles, continuing to use the clock of reading the value of the
-clock-frequency property.
+From: Sui Jingfeng <suijingfeng@loongson.cn>
 
-However, the value of ov5670->xvclk is left as-is and the other clock
-framework functions aren't capable of handling error values.
+ This patch add myself as maintainer to drm loongson driver
 
-Assign ov5670->xvclk to NULL if the clock cannot be found (apart from probe
-deferral case).
-
-Fixes: 8004c91e2095 ("media: i2c: ov5670: Use common clock framework")
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
 ---
- drivers/media/i2c/ov5670.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ MAINTAINERS | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/media/i2c/ov5670.c b/drivers/media/i2c/ov5670.c
-index f79d908f4531..50c73ad86e21 100644
---- a/drivers/media/i2c/ov5670.c
-+++ b/drivers/media/i2c/ov5670.c
-@@ -2661,14 +2661,16 @@ static int ov5670_probe(struct i2c_client *client)
- 	}
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9736e04d3bd3..d258c5b54407 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6919,6 +6919,13 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
+ F:	drivers/gpu/drm/lima/
+ F:	include/uapi/drm/lima_drm.h
  
- 	ov5670->xvclk = devm_clk_get(&client->dev, NULL);
--	if (!IS_ERR_OR_NULL(ov5670->xvclk))
-+	if (!IS_ERR_OR_NULL(ov5670->xvclk)) {
- 		input_clk = clk_get_rate(ov5670->xvclk);
--	else if (PTR_ERR(ov5670->xvclk) == -ENOENT)
-+	} else if (PTR_ERR(ov5670->xvclk) == -ENOENT) {
- 		device_property_read_u32(&client->dev, "clock-frequency",
- 					 &input_clk);
--	else
-+		ov5670->xvclk = NULL;
-+	} else {
- 		return dev_err_probe(&client->dev, PTR_ERR(ov5670->xvclk),
- 				     "error getting clock\n");
-+	}
- 
- 	if (input_clk != OV5670_XVCLK_FREQ) {
- 		dev_err(&client->dev,
++DRM DRIVERS FOR LOONGSON
++M:	Sui Jingfeng <suijingfeng@loongson.cn>
++L:	dri-devel@lists.freedesktop.org
++S:	Supported
++T:	git git://anongit.freedesktop.org/drm/drm-misc
++F:	drivers/gpu/drm/loongson/
++
+ DRM DRIVERS FOR MEDIATEK
+ M:	Chun-Kuang Hu <chunkuang.hu@kernel.org>
+ M:	Philipp Zabel <p.zabel@pengutronix.de>
 -- 
-2.30.2
+2.25.1
 
