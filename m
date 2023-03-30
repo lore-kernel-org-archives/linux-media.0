@@ -2,46 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69832C77B60
-	for <linux-media@archiver.kernel.org>; Thu, 30 Mar 2023 11:59:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CAE1C6FD1D
+	for <linux-media@archiver.kernel.org>; Thu, 30 Mar 2023 11:59:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbjC3L7W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 30 Mar 2023 07:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60984 "EHLO
+        id S231624AbjC3L7Y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 30 Mar 2023 07:59:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231472AbjC3L7T (ORCPT
+        with ESMTP id S231151AbjC3L7V (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 30 Mar 2023 07:59:19 -0400
+        Thu, 30 Mar 2023 07:59:21 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5409BA255
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73063A24F
         for <linux-media@vger.kernel.org>; Thu, 30 Mar 2023 04:59:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680177558; x=1711713558;
+  t=1680177559; x=1711713559;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=PjfW0NsAB15O0lY7WC1k+zVwG+q0AVXNp46d/1lPZws=;
-  b=PawWMlCKog3FP9zn+4Lv1shdqPcrN91rLLpAORAUHrwkQGjRFZx5eWeW
-   xIKt11qqvjXTvsxIXAM94s40Q2SGEZJrPe7BmWp0sdqWxWxruWUYqnGjD
-   /BWTmFN13GfgkqVb2RGvZVPMB9FTi+qibJAepudnk+YwLjRuo9LUydpaZ
-   5XzDoORoYt4YmTr+CTUXnvL4MYflM3Brsy9GFWniGPRAp9RpwJaYGM/8J
-   rFHWUuMLYSzq6DvHVlvNjNuPvqA8gN2l3uXKN1ZZYPZElC3z2fMpDzA+y
-   3IyndgLpDuTjFiYXD3gJ5WsRNdUv7j4E7f66w9FgPJOvCNtLpxNVx1WvU
+  bh=sRrWpVrRIZfVl/lO/WlUIj/nSKV6aMDfiMPVw4F0CBU=;
+  b=kPjor05ZR/B6pH2DmZa0Nqsuv6YIJP6DZS1o9+22IKvmIsv9lx62Fuze
+   GxaU8O4+TQ0AZw6L/qJRdUiZu1T8WSVvlQGOpPNZ6lNwm9VgZGdUZ5wXA
+   7Nn9+po7u/QWPS6D8O2q5ydZs6PguGEXf9U8fpVnJMjKpwoMBLYoRaTL4
+   eCp2m3yUiNSjjoRUdwmI78DQQyFtkmAMNjrns5yF0/YfPEz9ha4YhsjKT
+   My6s/eX3ovGCsxq3Jlpz4qhP5PNqBkGLq+x1kPjk5XI7r41Mspv9n64gj
+   eCsUKXZyKE7CWbhIHWFSzwq+tZg9Uqb1w1bYMasoHqIy7fwDUe8rBwyoo
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="406111453"
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="406111472"
 X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="406111453"
+   d="scan'208";a="406111472"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 04:59:16 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 04:59:18 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="714952928"
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="714952931"
 X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="714952928"
+   d="scan'208";a="714952931"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 04:59:12 -0700
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 04:59:14 -0700
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 762DB1224B6;
-        Thu, 30 Mar 2023 14:59:09 +0300 (EEST)
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 8A0211224DD;
+        Thu, 30 Mar 2023 14:59:12 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
@@ -50,9 +50,9 @@ Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
         aishwarya.kothari@toradex.com, Robert Foss <rfoss@kernel.org>,
         Todor Tomov <todor.too@gmail.com>,
         Hyun Kwon <hyun.kwon@xilinx.com>
-Subject: [PATCH 11/18] media: marvell: cafe: Register V4L2 device earlier
-Date:   Thu, 30 Mar 2023 14:58:46 +0300
-Message-Id: <20230330115853.1628216-12-sakari.ailus@linux.intel.com>
+Subject: [PATCH 13/18] media: omap3isp: Initialise V4L2 async notifier later
+Date:   Thu, 30 Mar 2023 14:58:48 +0300
+Message-Id: <20230330115853.1628216-14-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230330115853.1628216-1-sakari.ailus@linux.intel.com>
 References: <20230330115853.1628216-1-sakari.ailus@linux.intel.com>
@@ -62,94 +62,78 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Register V4L2 device before the async notifier so the struct device will
-be available for the notifier.
+Initialise V4L2 async notifier and parse DT for async sub-devices later,
+just before registering the notifier. This way the V4L2 device has been
+registered before initialising the notifier.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/platform/marvell/cafe-driver.c | 12 ++++++++++--
- drivers/media/platform/marvell/mcam-core.c   |  6 ------
- 2 files changed, 10 insertions(+), 8 deletions(-)
+ drivers/media/platform/ti/omap3isp/isp.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/media/platform/marvell/cafe-driver.c b/drivers/media/platform/marvell/cafe-driver.c
-index dd1bba70bd79..4d8843623255 100644
---- a/drivers/media/platform/marvell/cafe-driver.c
-+++ b/drivers/media/platform/marvell/cafe-driver.c
-@@ -536,6 +536,11 @@ static int cafe_pci_probe(struct pci_dev *pdev,
- 	if (ret)
- 		goto out_pdown;
+diff --git a/drivers/media/platform/ti/omap3isp/isp.c b/drivers/media/platform/ti/omap3isp/isp.c
+index e7327e38482d..7ccc18acb429 100644
+--- a/drivers/media/platform/ti/omap3isp/isp.c
++++ b/drivers/media/platform/ti/omap3isp/isp.c
+@@ -2002,6 +2002,7 @@ static int isp_remove(struct platform_device *pdev)
+ 	struct isp_device *isp = platform_get_drvdata(pdev);
  
-+	ret = v4l2_device_register(mcam->dev, &mcam->v4l2_dev);
-+	if (ret)
-+		goto out_smbus_shutdown;
-+
-+
- 	v4l2_async_nf_init(&mcam->notifier);
+ 	v4l2_async_nf_unregister(&isp->notifier);
++	v4l2_async_nf_cleanup(&isp->notifier);
+ 	isp_unregister_entities(isp);
+ 	isp_cleanup_modules(isp);
+ 	isp_xclk_cleanup(isp);
+@@ -2011,7 +2012,6 @@ static int isp_remove(struct platform_device *pdev)
+ 	__omap3isp_put(isp, false);
  
- 	asd = v4l2_async_nf_add_i2c(&mcam->notifier,
-@@ -544,12 +549,12 @@ static int cafe_pci_probe(struct pci_dev *pdev,
- 				    struct v4l2_async_connection);
- 	if (IS_ERR(asd)) {
- 		ret = PTR_ERR(asd);
--		goto out_smbus_shutdown;
-+		goto out_v4l2_device_unregister;
- 	}
+ 	media_entity_enum_cleanup(&isp->crashed);
+-	v4l2_async_nf_cleanup(&isp->notifier);
  
- 	ret = mccic_register(mcam);
- 	if (ret)
--		goto out_smbus_shutdown;
-+		goto out_v4l2_device_unregister;
+ 	kfree(isp);
  
- 	clkdev_create(mcam->mclk, "xclk", "%d-%04x",
- 		i2c_adapter_id(cam->i2c_adapter), ov7670_info.addr);
-@@ -565,6 +570,8 @@ static int cafe_pci_probe(struct pci_dev *pdev,
+@@ -2290,13 +2290,8 @@ static int isp_probe(struct platform_device *pdev)
  
- out_mccic_shutdown:
- 	mccic_shutdown(mcam);
-+out_v4l2_device_unregister:
-+	v4l2_device_unregister(&mcam->v4l2_dev);
- out_smbus_shutdown:
- 	cafe_smbus_shutdown(cam);
- out_pdown:
-@@ -587,6 +594,7 @@ static int cafe_pci_probe(struct pci_dev *pdev,
- static void cafe_shutdown(struct cafe_camera *cam)
- {
- 	mccic_shutdown(&cam->mcam);
-+	v4l2_device_unregister(&cam->mcam.v4l2_dev);
- 	cafe_smbus_shutdown(cam);
- 	free_irq(cam->pdev->irq, cam);
- 	pci_iounmap(cam->pdev, cam->mcam.regs);
-diff --git a/drivers/media/platform/marvell/mcam-core.c b/drivers/media/platform/marvell/mcam-core.c
-index b74a362ec075..2ecdcbcb37fd 100644
---- a/drivers/media/platform/marvell/mcam-core.c
-+++ b/drivers/media/platform/marvell/mcam-core.c
-@@ -1866,10 +1866,6 @@ int mccic_register(struct mcam_camera *cam)
- 	/*
- 	 * Register with V4L
- 	 */
--	ret = v4l2_device_register(cam->dev, &cam->v4l2_dev);
--	if (ret)
--		goto out;
+ 	mutex_init(&isp->isp_mutex);
+ 	spin_lock_init(&isp->stat_lock);
+-	v4l2_async_nf_init(&isp->notifier);
+ 	isp->dev = &pdev->dev;
+ 
+-	ret = isp_parse_of_endpoints(isp);
+-	if (ret < 0)
+-		goto error;
 -
- 	mutex_init(&cam->s_mutex);
- 	cam->state = S_NOTREADY;
- 	mcam_set_config_needed(cam, 1);
-@@ -1915,7 +1911,6 @@ int mccic_register(struct mcam_camera *cam)
+ 	isp->ref_count = 0;
  
- out:
- 	v4l2_async_nf_unregister(&cam->notifier);
--	v4l2_device_unregister(&cam->v4l2_dev);
- 	v4l2_async_nf_cleanup(&cam->notifier);
- 	return ret;
- }
-@@ -1937,7 +1932,6 @@ void mccic_shutdown(struct mcam_camera *cam)
- 		mcam_free_dma_bufs(cam);
- 	v4l2_ctrl_handler_free(&cam->ctrl_handler);
- 	v4l2_async_nf_unregister(&cam->notifier);
--	v4l2_device_unregister(&cam->v4l2_dev);
- 	v4l2_async_nf_cleanup(&cam->notifier);
- }
- EXPORT_SYMBOL_GPL(mccic_shutdown);
+ 	ret = dma_coerce_mask_and_coherent(isp->dev, DMA_BIT_MASK(32));
+@@ -2428,6 +2423,12 @@ static int isp_probe(struct platform_device *pdev)
+ 
+ 	isp->notifier.ops = &isp_subdev_notifier_ops;
+ 
++	v4l2_async_nf_init(&isp->notifier);
++
++	ret = isp_parse_of_endpoints(isp);
++	if (ret < 0)
++		goto error_register_entities;
++
+ 	ret = v4l2_async_nf_register(&isp->v4l2_dev, &isp->notifier);
+ 	if (ret)
+ 		goto error_register_entities;
+@@ -2438,6 +2439,7 @@ static int isp_probe(struct platform_device *pdev)
+ 	return 0;
+ 
+ error_register_entities:
++	v4l2_async_nf_cleanup(&isp->notifier);
+ 	isp_unregister_entities(isp);
+ error_modules:
+ 	isp_cleanup_modules(isp);
+@@ -2447,7 +2449,6 @@ static int isp_probe(struct platform_device *pdev)
+ 	isp_xclk_cleanup(isp);
+ 	__omap3isp_put(isp, false);
+ error:
+-	v4l2_async_nf_cleanup(&isp->notifier);
+ 	mutex_destroy(&isp->isp_mutex);
+ error_release_isp:
+ 	kfree(isp);
 -- 
 2.30.2
 
