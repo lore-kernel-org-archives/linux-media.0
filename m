@@ -2,46 +2,46 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12735C6FD1D
-	for <linux-media@archiver.kernel.org>; Thu, 30 Mar 2023 11:59:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20C9DC6FD1D
+	for <linux-media@archiver.kernel.org>; Thu, 30 Mar 2023 11:59:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231529AbjC3L7O (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 30 Mar 2023 07:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60750 "EHLO
+        id S231588AbjC3L7T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 30 Mar 2023 07:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231547AbjC3L7M (ORCPT
+        with ESMTP id S231150AbjC3L7S (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 30 Mar 2023 07:59:12 -0400
+        Thu, 30 Mar 2023 07:59:18 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30765A278
-        for <linux-media@vger.kernel.org>; Thu, 30 Mar 2023 04:59:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90308A274
+        for <linux-media@vger.kernel.org>; Thu, 30 Mar 2023 04:59:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680177550; x=1711713550;
+  t=1680177556; x=1711713556;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=pe3L3W0Jc5655PpyZ3QOnNBoqs7AnxrOnM1u96LgEGU=;
-  b=WYggwpuicCYuKoC+iBuEJqyrph7PwhJMitXDtj9UEXRmbaK+HnXqbAq4
-   dpvFUYRYx0QmiPfhjaJunSXxuhqT2lzunn60YoM+3v7CDTISm8nFvJjjz
-   mUxZb6cXDUPAWel1wyIuXrUxo03odx7NmQm86WUxX0KmauAt+DKL480S9
-   sUfNYx2KZP00mlFJgUiF1cmDo+BwMap5zernhhlz3DMQ9SoIQnn9eCyYy
-   33YlbyJdBAMXiEX0cEkwktKYurtZueWrYeWKRUnRPEXOfJXn0tsZePIOQ
-   b0HO5l6KrM+ZEF5xt0kGdcWFGqssEdWETY5Kw/B25C5nKcNChmjcD5162
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="406111407"
+  bh=hz45qb4MCcbGsrgCYPEXY5/UeXJqveDk3s5+xpTilGs=;
+  b=N+s5PfFvLGByTvjlGpdLifNgBUy/Tmet1hBKIqrAHJkzvb4Qst31lKmS
+   AS30oaAloRMMgWMmyUSY/1xJHeSznMkTszCW4+qKhwFVFk2rq1krjM+1K
+   RiH0G3P96A11fBlTGzOkCmYuWbEnmFpDo8XfivH15J5S659CmlAl+S+Mq
+   Yf3vU7LFasdZcQV5x/ta1qPIJxCkCM50wmRknWrNg6VmZXSaAwqfRrxYi
+   5gI10aju7H90xGFSEkMWkf39qgKhyoVOhG3AYofyRJSzQboCUE5Ne6rXw
+   gCKKoU0xPhhteSSt2xgq0ea/iTa2P6j3ZR86r0STKWWRCINB7JIIjKt3f
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="406111429"
 X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="406111407"
+   d="scan'208";a="406111429"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 04:59:09 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 04:59:12 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="714952915"
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="714952923"
 X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="714952915"
+   d="scan'208";a="714952923"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 04:59:06 -0700
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 04:59:09 -0700
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id D8D731224D9;
-        Thu, 30 Mar 2023 14:59:03 +0300 (EEST)
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id E8BE012259B;
+        Thu, 30 Mar 2023 14:59:06 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
@@ -50,466 +50,445 @@ Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
         aishwarya.kothari@toradex.com, Robert Foss <rfoss@kernel.org>,
         Todor Tomov <todor.too@gmail.com>,
         Hyun Kwon <hyun.kwon@xilinx.com>
-Subject: [PATCH 07/18] media: v4l: async: Clean up list heads and entries
-Date:   Thu, 30 Mar 2023 14:58:42 +0300
-Message-Id: <20230330115853.1628216-8-sakari.ailus@linux.intel.com>
+Subject: [PATCH 09/18] media: v4l: async: Differentiate connecting and creating sub-devices
+Date:   Thu, 30 Mar 2023 14:58:44 +0300
+Message-Id: <20230330115853.1628216-10-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230330115853.1628216-1-sakari.ailus@linux.intel.com>
 References: <20230330115853.1628216-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The naming of list heads and list entries is confusing as they're named
-similarly. Use _head for list head and _list for list entries.
+When the v4l2-async framework was introduced, the use case for it was to
+connect a camera sensor with a parallel receiver. Both tended to be rather
+simple devices with a single connection between them.
+
+The framework has been since improved in multiple ways but there are
+limitations that have remained, for instance the assumption an async
+sub-device is connected towards a single notifier and via a single link
+only.
+
+This patch adds an object that represents the device while an earlier
+patch in the series re-purposed the old struct v4l2_async_subdev as the
+connection.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/pci/intel/ipu3/ipu3-cio2-main.c |  2 +-
- .../platform/renesas/rcar-vin/rcar-core.c     |  2 +-
- .../platform/renesas/rzg2l-cru/rzg2l-core.c   |  2 +-
- drivers/media/platform/xilinx/xilinx-vipp.c   | 10 +--
- drivers/media/v4l2-core/v4l2-async.c          | 66 +++++++++----------
- .../staging/media/imx/imx-media-dev-common.c  |  2 +-
- drivers/staging/media/tegra-video/vi.c        |  6 +-
- include/media/v4l2-async.h                    | 21 +++---
- 8 files changed, 56 insertions(+), 55 deletions(-)
+ .../platform/rockchip/rkisp1/rkisp1-common.h  |   2 +-
+ .../platform/rockchip/rkisp1/rkisp1-dev.c     |   8 +-
+ drivers/media/platform/ti/omap3isp/isp.h      |   2 +-
+ drivers/media/v4l2-core/v4l2-async.c          | 163 ++++++++++++++++--
+ include/media/v4l2-async.h                    |  32 +++-
+ include/media/v4l2-subdev.h                   |   2 +-
+ 6 files changed, 179 insertions(+), 30 deletions(-)
 
-diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
-index 3b76a9d0383a..8b37c2ec8643 100644
---- a/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
-+++ b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
-@@ -1419,7 +1419,7 @@ static int cio2_notifier_complete(struct v4l2_async_notifier *notifier)
- 	unsigned int pad;
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
+index d30f0ecb1bfd..a1293c45aae1 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
+@@ -148,7 +148,7 @@ struct rkisp1_info {
+  * @port:		port number (0: MIPI, 1: Parallel)
+  */
+ struct rkisp1_sensor_async {
+-	struct v4l2_async_connection asd;
++	struct v4l2_async_subdev asd;
+ 	unsigned int index;
+ 	struct fwnode_handle *source_ep;
+ 	unsigned int lanes;
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+index 39fa98e6dbbc..5bdb1ecedf6a 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+@@ -122,12 +122,12 @@ struct rkisp1_isr_data {
+ 
+ static int rkisp1_subdev_notifier_bound(struct v4l2_async_notifier *notifier,
+ 					struct v4l2_subdev *sd,
+-					struct v4l2_async_connection *asd)
++					struct v4l2_async_connection *asc)
+ {
+ 	struct rkisp1_device *rkisp1 =
+ 		container_of(notifier, struct rkisp1_device, notifier);
+ 	struct rkisp1_sensor_async *s_asd =
+-		container_of(asd, struct rkisp1_sensor_async, asd);
++		container_of(asc->asd, struct rkisp1_sensor_async, asd);
+ 	int source_pad;
  	int ret;
  
--	list_for_each_entry(asd, &cio2->notifier.asd_list, asd_list) {
-+	list_for_each_entry(asd, &cio2->notifier.asd_head, asd_list) {
- 		s_asd = to_sensor_asd(asd);
- 		q = &cio2->queue[s_asd->csi2.port];
- 
-diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-core.c b/drivers/media/platform/renesas/rcar-vin/rcar-core.c
-index 5e53d6b7036c..1b530da1c341 100644
---- a/drivers/media/platform/renesas/rcar-vin/rcar-core.c
-+++ b/drivers/media/platform/renesas/rcar-vin/rcar-core.c
-@@ -397,7 +397,7 @@ static int rvin_group_notifier_init(struct rvin_dev *vin, unsigned int port,
- 		}
- 	}
- 
--	if (list_empty(&vin->group->notifier.asd_list))
-+	if (list_empty(&vin->group->notifier.asd_head))
- 		return 0;
- 
- 	vin->group->notifier.ops = &rvin_group_notify_ops;
-diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-core.c b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-core.c
-index 5939f5165a5e..bfef297f5ec5 100644
---- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-core.c
-+++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-core.c
-@@ -191,7 +191,7 @@ static int rzg2l_cru_mc_parse_of_graph(struct rzg2l_cru_dev *cru)
- 
- 	cru->notifier.ops = &rzg2l_cru_async_ops;
- 
--	if (list_empty(&cru->notifier.asd_list))
-+	if (list_empty(&cru->notifier.asd_head))
- 		return 0;
- 
- 	ret = v4l2_async_nf_register(&cru->v4l2_dev, &cru->notifier);
-diff --git a/drivers/media/platform/xilinx/xilinx-vipp.c b/drivers/media/platform/xilinx/xilinx-vipp.c
-index 0a16c218a50a..80157b7a28ee 100644
---- a/drivers/media/platform/xilinx/xilinx-vipp.c
-+++ b/drivers/media/platform/xilinx/xilinx-vipp.c
-@@ -56,7 +56,7 @@ xvip_graph_find_entity(struct xvip_composite_device *xdev,
- 	struct xvip_graph_entity *entity;
- 	struct v4l2_async_subdev *asd;
- 
--	list_for_each_entry(asd, &xdev->notifier.asd_list, asd_list) {
-+	list_for_each_entry(asd, &xdev->notifier.asd_head, asd_list) {
- 		entity = to_xvip_entity(asd);
- 		if (entity->asd.match.fwnode == fwnode)
- 			return entity;
-@@ -291,7 +291,7 @@ static int xvip_graph_notify_complete(struct v4l2_async_notifier *notifier)
- 	dev_dbg(xdev->dev, "notify complete, all subdevs registered\n");
- 
- 	/* Create links for every entity. */
--	list_for_each_entry(asd, &xdev->notifier.asd_list, asd_list) {
-+	list_for_each_entry(asd, &xdev->notifier.asd_head, asd_list) {
- 		entity = to_xvip_entity(asd);
- 		ret = xvip_graph_build_one(xdev, entity);
- 		if (ret < 0)
-@@ -322,7 +322,7 @@ static int xvip_graph_notify_bound(struct v4l2_async_notifier *notifier,
- 	/* Locate the entity corresponding to the bound subdev and store the
- 	 * subdev pointer.
- 	 */
--	list_for_each_entry(asd, &xdev->notifier.asd_list, asd_list) {
-+	list_for_each_entry(asd, &xdev->notifier.asd_head, asd_list) {
- 		entity = to_xvip_entity(asd);
- 
- 		if (entity->asd.match.fwnode != subdev->fwnode)
-@@ -415,7 +415,7 @@ static int xvip_graph_parse(struct xvip_composite_device *xdev)
- 	if (ret < 0)
- 		return 0;
- 
--	list_for_each_entry(asd, &xdev->notifier.asd_list, asd_list) {
-+	list_for_each_entry(asd, &xdev->notifier.asd_head, asd_list) {
- 		entity = to_xvip_entity(asd);
- 		ret = xvip_graph_parse_one(xdev, entity->asd.match.fwnode);
- 		if (ret < 0) {
-@@ -523,7 +523,7 @@ static int xvip_graph_init(struct xvip_composite_device *xdev)
- 		goto done;
- 	}
- 
--	if (list_empty(&xdev->notifier.asd_list)) {
-+	if (list_empty(&xdev->notifier.asd_head)) {
- 		dev_err(xdev->dev, "no subdev found in graph\n");
- 		ret = -ENOENT;
- 		goto done;
-diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
-index 224ebf50f2d0..fdc995dfc15c 100644
---- a/drivers/media/v4l2-core/v4l2-async.c
-+++ b/drivers/media/v4l2-core/v4l2-async.c
-@@ -133,8 +133,8 @@ static bool match_fwnode(struct v4l2_async_notifier *notifier,
- 	return match_fwnode_one(notifier, sd, sd->fwnode->secondary, match);
+@@ -165,10 +165,10 @@ static int rkisp1_subdev_notifier_complete(struct v4l2_async_notifier *notifier)
+ 	return v4l2_device_register_subdev_nodes(&rkisp1->v4l2_dev);
  }
  
--static LIST_HEAD(subdev_list);
--static LIST_HEAD(notifier_list);
-+static LIST_HEAD(subdev_head);
-+static LIST_HEAD(notifier_head);
+-static void rkisp1_subdev_notifier_destroy(struct v4l2_async_connection *asd)
++static void rkisp1_subdev_notifier_destroy(struct v4l2_async_connection *asc)
+ {
+ 	struct rkisp1_sensor_async *rk_asd =
+-		container_of(asd, struct rkisp1_sensor_async, asd);
++		container_of(asc->asd, struct rkisp1_sensor_async, asd);
+ 
+ 	fwnode_handle_put(rk_asd->source_ep);
+ }
+diff --git a/drivers/media/platform/ti/omap3isp/isp.h b/drivers/media/platform/ti/omap3isp/isp.h
+index 32ea70c8d2f9..a9d760fbf349 100644
+--- a/drivers/media/platform/ti/omap3isp/isp.h
++++ b/drivers/media/platform/ti/omap3isp/isp.h
+@@ -220,7 +220,7 @@ struct isp_device {
+ };
+ 
+ struct isp_async_subdev {
+-	struct v4l2_async_connection asd;
++	struct v4l2_async_subdev asd;
+ 	struct isp_bus_cfg bus;
+ };
+ 
+diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+index 56ce40481ec4..4c3bd64d6a00 100644
+--- a/drivers/media/v4l2-core/v4l2-async.c
++++ b/drivers/media/v4l2-core/v4l2-async.c
+@@ -134,6 +134,7 @@ static bool match_fwnode(struct v4l2_async_notifier *notifier,
+ }
+ 
+ static LIST_HEAD(subdev_head);
++static LIST_HEAD(asd_head);
+ static LIST_HEAD(notifier_head);
  static DEFINE_MUTEX(list_lock);
  
- static struct v4l2_async_subdev *
-@@ -145,7 +145,7 @@ v4l2_async_find_match(struct v4l2_async_notifier *notifier,
- 		      struct v4l2_subdev *sd, struct v4l2_async_match *match);
- 	struct v4l2_async_subdev *asd;
+@@ -304,13 +305,20 @@ static int v4l2_async_match_notify(struct v4l2_async_notifier *notifier,
+ 	struct v4l2_async_notifier *subdev_notifier;
+ 	int ret;
  
--	list_for_each_entry(asd, &notifier->waiting, list) {
-+	list_for_each_entry(asd, &notifier->waiting_head, waiting_list) {
- 		/* bus_type has been verified valid before */
- 		switch (asd->match.type) {
- 		case V4L2_ASYNC_MATCH_I2C:
-@@ -194,7 +194,7 @@ v4l2_async_find_subdev_notifier(struct v4l2_subdev *sd)
- {
- 	struct v4l2_async_notifier *n;
+-	ret = v4l2_device_register_subdev(v4l2_dev, sd);
+-	if (ret < 0)
+-		return ret;
++	if (!asc->asd->registered) {
++		ret = v4l2_device_register_subdev(v4l2_dev, sd);
++		if (ret < 0)
++			return ret;
++	}
  
--	list_for_each_entry(n, &notifier_list, list)
-+	list_for_each_entry(n, &notifier_head, notifier_list)
- 		if (n->sd == sd)
- 			return n;
- 
-@@ -219,12 +219,12 @@ v4l2_async_nf_can_complete(struct v4l2_async_notifier *notifier)
- {
- 	struct v4l2_subdev *sd;
- 
--	if (!list_empty(&notifier->waiting)) {
-+	if (!list_empty(&notifier->waiting_head)) {
- 		dev_dbg(notifier_dev(notifier), "async: waiting for subdevs\n");
- 		return false;
- 	}
- 
--	list_for_each_entry(sd, &notifier->done, async_list) {
-+	list_for_each_entry(sd, &notifier->done_head, async_list) {
- 		struct v4l2_async_notifier *subdev_notifier =
- 			v4l2_async_find_subdev_notifier(sd);
- 
-@@ -249,7 +249,7 @@ v4l2_async_nf_try_complete(struct v4l2_async_notifier *notifier)
- 	struct v4l2_async_notifier *__notifier = notifier;
- 
- 	/* Quick check whether there are still more sub-devices here. */
--	if (!list_empty(&notifier->waiting))
-+	if (!list_empty(&notifier->waiting_head))
- 		return 0;
- 
- 	if (notifier->sd)
-@@ -327,13 +327,12 @@ static int v4l2_async_match_notify(struct v4l2_async_notifier *notifier,
+ 	ret = v4l2_async_nf_call_bound(notifier, sd, asc);
+ 	if (ret < 0) {
+-		v4l2_device_unregister_subdev(sd);
++		if (asc->match.type == V4L2_ASYNC_MATCH_FWNODE)
++			dev_dbg(notifier_dev(notifier),
++				"failed binding %pfw (%d)\n",
++				asc->match.fwnode, ret);
++		if (!asc->asd->registered)
++			v4l2_device_unregister_subdev(sd);
  		return ret;
  	}
  
--	/* Remove from the waiting list */
--	list_del(&asd->list);
-+	list_del(&asd->waiting_list);
- 	sd->asd = asd;
- 	sd->notifier = notifier;
- 
- 	/* Move from the global subdevice list to notifier's done */
--	list_move(&sd->async_list, &notifier->done);
-+	list_move(&sd->async_list, &notifier->done_head);
- 
- 	/*
- 	 * See if the sub-device has a notifier. If not, return here.
-@@ -369,7 +368,7 @@ v4l2_async_nf_try_all_subdevs(struct v4l2_async_notifier *notifier)
- 		return 0;
- 
- again:
--	list_for_each_entry(sd, &subdev_list, async_list) {
-+	list_for_each_entry(sd, &subdev_head, async_list) {
- 		struct v4l2_async_subdev *asd;
- 		int ret;
- 
-@@ -411,7 +410,7 @@ v4l2_async_nf_unbind_all_subdevs(struct v4l2_async_notifier *notifier,
- {
- 	struct v4l2_subdev *sd, *tmp;
- 
--	list_for_each_entry_safe(sd, tmp, &notifier->done, async_list) {
-+	list_for_each_entry_safe(sd, tmp, &notifier->done_head, async_list) {
- 		struct v4l2_async_notifier *subdev_notifier =
- 			v4l2_async_find_subdev_notifier(sd);
- 
-@@ -420,10 +419,11 @@ v4l2_async_nf_unbind_all_subdevs(struct v4l2_async_notifier *notifier,
- 
- 		v4l2_async_nf_call_unbind(notifier, sd, sd->asd);
- 		if (readd)
--			list_add_tail(&sd->asd->list, &notifier->waiting);
-+			list_add_tail(&sd->asd->waiting_list,
-+				      &notifier->waiting_head);
- 		v4l2_async_cleanup(sd);
- 
--		list_move(&sd->async_list, &subdev_list);
-+		list_move(&sd->async_list, &subdev_head);
+@@ -322,14 +330,26 @@ static int v4l2_async_match_notify(struct v4l2_async_notifier *notifier,
+ 	 */
+ 	ret = v4l2_async_create_ancillary_links(notifier, sd);
+ 	if (ret) {
++		if (asc->match.type == V4L2_ASYNC_MATCH_FWNODE)
++			dev_dbg(notifier_dev(notifier),
++				"failed creating links for %pfw (%d)\n",
++				asc->match.fwnode, ret);
+ 		v4l2_async_nf_call_unbind(notifier, sd, asc);
+-		v4l2_device_unregister_subdev(sd);
++		list_del(&asc->asc_subdev_list);
++		if (!asc->asd->registered)
++			v4l2_device_unregister_subdev(sd);
+ 		return ret;
  	}
  
- 	notifier->parent = NULL;
-@@ -437,11 +437,11 @@ __v4l2_async_nf_has_async_subdev(struct v4l2_async_notifier *notifier,
- 	struct v4l2_async_subdev *asd;
- 	struct v4l2_subdev *sd;
+ 	list_del(&asc->waiting_list);
+-	sd->asd = asc;
+-	sd->notifier = notifier;
++	if (!sd->asd) {
++		WARN_ON(asc->asd->registered);
++		sd->asd = asc->asd;
++		sd->notifier = notifier;
++		asc->asd->registered = true;
++	} else {
++		WARN_ON(sd->asd != asc->asd);
++	}
  
--	list_for_each_entry(asd, &notifier->waiting, list)
-+	list_for_each_entry(asd, &notifier->waiting_head, waiting_list)
- 		if (asd_equal(&asd->match, match))
- 			return true;
+ 	/* Move from the global subdevice list to notifier's done */
+ 	list_move(&sd->async_list, &notifier->done_head);
+@@ -403,6 +423,21 @@ static void v4l2_async_cleanup(struct v4l2_subdev *sd)
+ 	sd->asd = NULL;
+ }
  
--	list_for_each_entry(sd, &notifier->done, async_list) {
-+	list_for_each_entry(sd, &notifier->done_head, async_list) {
++static void v4l2_async_unbind_subdev_one(struct v4l2_async_notifier *notifier,
++					 struct v4l2_subdev *sd, bool readd)
++{
++	struct v4l2_async_connection *asc, *tmp;
++
++	list_for_each_entry_safe(asc, tmp, &sd->asd->asc_head,
++				 asc_subdev_list) {
++		v4l2_async_nf_call_unbind(notifier, sd, asc);
++		list_del(&asc->asc_subdev_list);
++		if (readd)
++			list_add_tail(&asc->waiting_list,
++				      &notifier->waiting_head);
++	}
++}
++
+ /* Unbind all sub-devices in the notifier tree. */
+ static void
+ v4l2_async_nf_unbind_all_subdevs(struct v4l2_async_notifier *notifier,
+@@ -417,10 +452,8 @@ v4l2_async_nf_unbind_all_subdevs(struct v4l2_async_notifier *notifier,
+ 		if (subdev_notifier)
+ 			v4l2_async_nf_unbind_all_subdevs(subdev_notifier, true);
+ 
+-		v4l2_async_nf_call_unbind(notifier, sd, sd->asd);
+-		if (readd)
+-			list_add_tail(&sd->asd->waiting_list,
+-				      &notifier->waiting_head);
++		v4l2_async_unbind_subdev_one(notifier, sd, readd);
++
+ 		v4l2_async_cleanup(sd);
+ 
+ 		list_move(&sd->async_list, &subdev_head);
+@@ -445,8 +478,9 @@ __v4l2_async_nf_has_async_subdev(struct v4l2_async_notifier *notifier,
  		if (WARN_ON(!sd->asd))
  			continue;
  
-@@ -465,7 +465,7 @@ v4l2_async_nf_has_async_subdev(struct v4l2_async_notifier *notifier,
- 	lockdep_assert_held(&list_lock);
- 
- 	/* Check that an asd is not being added more than once. */
--	list_for_each_entry(asd, &notifier->asd_list, asd_list) {
-+	list_for_each_entry(asd, &notifier->asd_head, asd_list) {
- 		if (&asd->match == match)
- 			break;
- 		if (asd_equal(&asd->match, match))
-@@ -473,7 +473,7 @@ v4l2_async_nf_has_async_subdev(struct v4l2_async_notifier *notifier,
+-		if (asc_equal(&sd->asd->match, match))
+-			return true;
++		list_for_each_entry(asc, &sd->asd->asc_head, asc_list)
++			if (asc_equal(&asc->match, match))
++				return true;
  	}
  
- 	/* Check that an asd does not exist in other notifiers. */
--	list_for_each_entry(notifier, &notifier_list, list)
-+	list_for_each_entry(notifier, &notifier_head, notifier_list)
- 		if (__v4l2_async_nf_has_async_subdev(notifier, match))
- 			return true;
- 
-@@ -510,7 +510,7 @@ static int v4l2_async_nf_asd_valid(struct v4l2_async_notifier *notifier,
- 
- void v4l2_async_nf_init(struct v4l2_async_notifier *notifier)
- {
--	INIT_LIST_HEAD(&notifier->asd_list);
-+	INIT_LIST_HEAD(&notifier->asd_head);
+ 	return false;
+@@ -619,6 +653,18 @@ void v4l2_async_nf_unregister(struct v4l2_async_notifier *notifier)
  }
- EXPORT_SYMBOL(v4l2_async_nf_init);
+ EXPORT_SYMBOL(v4l2_async_nf_unregister);
  
-@@ -519,17 +519,17 @@ static int __v4l2_async_nf_register(struct v4l2_async_notifier *notifier)
- 	struct v4l2_async_subdev *asd;
- 	int ret;
- 
--	INIT_LIST_HEAD(&notifier->waiting);
--	INIT_LIST_HEAD(&notifier->done);
-+	INIT_LIST_HEAD(&notifier->waiting_head);
-+	INIT_LIST_HEAD(&notifier->done_head);
- 
- 	mutex_lock(&list_lock);
- 
--	list_for_each_entry(asd, &notifier->asd_list, asd_list) {
-+	list_for_each_entry(asd, &notifier->asd_head, asd_list) {
- 		ret = v4l2_async_nf_asd_valid(notifier, &asd->match, true);
- 		if (ret)
- 			goto err_unlock;
- 
--		list_add_tail(&asd->list, &notifier->waiting);
-+		list_add_tail(&asd->waiting_list, &notifier->waiting_head);
- 	}
- 
- 	ret = v4l2_async_nf_try_all_subdevs(notifier);
-@@ -541,7 +541,7 @@ static int __v4l2_async_nf_register(struct v4l2_async_notifier *notifier)
- 		goto err_unbind;
- 
- 	/* Keep also completed notifiers on the list */
--	list_add(&notifier->list, &notifier_list);
-+	list_add(&notifier->notifier_list, &notifier_head);
- 
- 	mutex_unlock(&list_lock);
- 
-@@ -606,7 +606,7 @@ __v4l2_async_nf_unregister(struct v4l2_async_notifier *notifier)
- 	notifier->sd = NULL;
- 	notifier->v4l2_dev = NULL;
- 
--	list_del(&notifier->list);
-+	list_del(&notifier->notifier_list);
- }
- 
- void v4l2_async_nf_unregister(struct v4l2_async_notifier *notifier)
-@@ -623,10 +623,10 @@ static void __v4l2_async_nf_cleanup(struct v4l2_async_notifier *notifier)
++static void release_async_subdev(struct kref *kref)
++{
++	struct v4l2_async_subdev *asd =
++		container_of_const(kref, struct v4l2_async_subdev, kref);
++
++	list_del(&asd->asd_list);
++
++	WARN_ON(!list_empty(&asd->asc_head));
++
++	kfree(asd);
++}
++
+ static void __v4l2_async_nf_cleanup(struct v4l2_async_notifier *notifier)
  {
- 	struct v4l2_async_subdev *asd, *tmp;
- 
--	if (!notifier || !notifier->asd_list.next)
-+	if (!notifier || !notifier->asd_head.next)
+ 	struct v4l2_async_connection *asc, *tmp;
+@@ -627,16 +673,24 @@ static void __v4l2_async_nf_cleanup(struct v4l2_async_notifier *notifier)
  		return;
  
--	list_for_each_entry_safe(asd, tmp, &notifier->asd_list, asd_list) {
-+	list_for_each_entry_safe(asd, tmp, &notifier->asd_head, asd_list) {
- 		switch (asd->match.type) {
+ 	list_for_each_entry_safe(asc, tmp, &notifier->asc_head, asc_list) {
++		list_del(&asc->asc_list);
++		v4l2_async_nf_call_destroy(notifier, asc);
++
+ 		switch (asc->match.type) {
  		case V4L2_ASYNC_MATCH_FWNODE:
- 			fwnode_handle_put(asd->match.fwnode);
-@@ -662,7 +662,7 @@ int __v4l2_async_nf_add_subdev(struct v4l2_async_notifier *notifier,
++			pr_debug("release async connection for fwnode %pfw\n",
++				 asc->match.fwnode);
+ 			fwnode_handle_put(asc->match.fwnode);
+ 			break;
+-		default:
++		case V4L2_ASYNC_MATCH_I2C:
++			pr_debug("release I²C async connection\n");
+ 			break;
++		default:
++			pr_debug("release invalid async connection type %u\n",
++				 asc->match.type);
+ 		}
+ 
+-		list_del(&asc->asc_list);
+-		v4l2_async_nf_call_destroy(notifier, asc);
++		kref_put(&asc->asd->kref, release_async_subdev);
+ 		kfree(asc);
+ 	}
+ }
+@@ -651,6 +705,71 @@ void v4l2_async_nf_cleanup(struct v4l2_async_notifier *notifier)
+ }
+ EXPORT_SYMBOL_GPL(v4l2_async_nf_cleanup);
+ 
++static bool async_subdev_has_connection(struct v4l2_async_notifier *notifier,
++					struct v4l2_async_subdev *asd,
++					struct v4l2_async_connection *asc)
++{
++	struct v4l2_async_connection *__asc;
++
++	list_for_each_entry(__asc, &asd->asc_head, asc_subdev_list) {
++		if (__asc->match.type != V4L2_ASYNC_MATCH_FWNODE)
++			continue;
++
++		if (__asc->match.fwnode != asc->match.fwnode)
++			continue;
++
++		dev_dbg(notifier_dev(notifier), "found!\n");
++
++		return true;
++	}
++
++	return false;
++}
++
++/* Find an async sub-device for the async connection. */
++static int v4l2_async_find_async_subdev(struct v4l2_async_notifier *notifier,
++					struct v4l2_async_connection *asc)
++{
++	struct v4l2_async_subdev *asd;
++
++	lockdep_assert_held(&list_lock);
++
++	if (asc->match.type == V4L2_ASYNC_MATCH_FWNODE)
++		dev_dbg(notifier_dev(notifier),
++			"async: looking up subdev for %pfw\n",
++			asc->match.fwnode);
++
++	/*
++	 * Matching by endpoint nodes may mean there are multiple connections to
++	 * a single device. This is only possible with fwnode matching.
++	 */
++	if (asc->match.type == V4L2_ASYNC_MATCH_FWNODE &&
++	    fwnode_graph_is_endpoint(asc->match.fwnode)) {
++		list_for_each_entry(asd, &asd_head, asd_list) {
++			if (async_subdev_has_connection(notifier, asd, asc)) {
++				kref_get(&asd->kref);
++				goto found;
++			}
++		}
++	}
++
++	dev_dbg(notifier_dev(notifier), "not found, allocating new one\n");
++
++	asd = kzalloc(sizeof(*asd), GFP_KERNEL);
++	if (!asd)
++		return -ENOMEM;
++
++	kref_init(&asd->kref);
++	INIT_LIST_HEAD(&asd->asc_head);
++	list_add(&asd->asd_list, &asd_head);
++
++found:
++	list_add(&asc->asc_subdev_list, &asd->asc_head);
++	asc->asd = asd;
++
++	return 0;
++}
++
+ int __v4l2_async_nf_add_connection(struct v4l2_async_notifier *notifier,
+ 				   struct v4l2_async_connection *asc)
+ {
+@@ -662,6 +781,10 @@ int __v4l2_async_nf_add_connection(struct v4l2_async_notifier *notifier,
  	if (ret)
  		goto unlock;
  
--	list_add_tail(&asd->asd_list, &notifier->asd_list);
-+	list_add_tail(&asd->asd_list, &notifier->asd_head);
++	ret = v4l2_async_find_async_subdev(notifier, asc);
++	if (ret)
++		goto unlock;
++
+ 	list_add_tail(&asc->asc_list, &notifier->asc_head);
  
  unlock:
+@@ -809,7 +932,7 @@ int v4l2_async_register_subdev(struct v4l2_subdev *sd)
+ 		v4l2_async_nf_unbind_all_subdevs(subdev_notifier, false);
+ 
+ 	if (sd->asd)
+-		v4l2_async_nf_call_unbind(notifier, sd, sd->asd);
++		v4l2_async_unbind_subdev_one(notifier, sd, true);
+ 	v4l2_async_cleanup(sd);
+ 
  	mutex_unlock(&list_lock);
-@@ -768,7 +768,7 @@ int v4l2_async_register_subdev(struct v4l2_subdev *sd)
+@@ -832,10 +955,12 @@ void v4l2_async_unregister_subdev(struct v4l2_subdev *sd)
  
- 	INIT_LIST_HEAD(&sd->async_list);
- 
--	list_for_each_entry(notifier, &notifier_list, list) {
-+	list_for_each_entry(notifier, &notifier_head, notifier_list) {
- 		struct v4l2_device *v4l2_dev =
- 			v4l2_async_nf_find_v4l2_dev(notifier);
- 		struct v4l2_async_subdev *asd;
-@@ -792,7 +792,7 @@ int v4l2_async_register_subdev(struct v4l2_subdev *sd)
- 	}
- 
- 	/* None matched, wait for hot-plugging */
--	list_add(&sd->async_list, &subdev_list);
-+	list_add(&sd->async_list, &subdev_head);
- 
- out_unlock:
- 	mutex_unlock(&list_lock);
-@@ -833,7 +833,7 @@ void v4l2_async_unregister_subdev(struct v4l2_subdev *sd)
  	if (sd->asd) {
  		struct v4l2_async_notifier *notifier = sd->notifier;
++		struct v4l2_async_connection *asc;
  
--		list_add(&sd->asd->list, &notifier->waiting);
-+		list_add(&sd->asd->waiting_list, &notifier->waiting_head);
+-		list_add(&sd->asd->waiting_list, &notifier->waiting_head);
++		list_for_each_entry(asc, &sd->asd->asc_head, asc_subdev_list)
++			list_add(&asc->waiting_list, &notifier->waiting_head);
  
- 		v4l2_async_nf_call_unbind(notifier, sd, sd->asd);
- 	}
-@@ -887,9 +887,9 @@ static int pending_subdevs_show(struct seq_file *s, void *data)
- 
- 	mutex_lock(&list_lock);
- 
--	list_for_each_entry(notif, &notifier_list, list) {
-+	list_for_each_entry(notif, &notifier_head, notifier_list) {
- 		seq_printf(s, "%s:\n", v4l2_async_nf_name(notif));
--		list_for_each_entry(asd, &notif->waiting, list)
-+		list_for_each_entry(asd, &notif->waiting_head, waiting_list)
- 			print_waiting_subdev(s, &asd->match);
+-		v4l2_async_nf_call_unbind(notifier, sd, sd->asd);
++		v4l2_async_unbind_subdev_one(notifier, sd, true);
  	}
  
-diff --git a/drivers/staging/media/imx/imx-media-dev-common.c b/drivers/staging/media/imx/imx-media-dev-common.c
-index e6d6ed3b1161..eaa54848df6a 100644
---- a/drivers/staging/media/imx/imx-media-dev-common.c
-+++ b/drivers/staging/media/imx/imx-media-dev-common.c
-@@ -398,7 +398,7 @@ int imx_media_dev_notifier_register(struct imx_media_dev *imxmd,
- 	int ret;
- 
- 	/* no subdevs? just bail */
--	if (list_empty(&imxmd->notifier.asd_list)) {
-+	if (list_empty(&imxmd->notifier.asd_head)) {
- 		v4l2_err(&imxmd->v4l2_dev, "no subdevs\n");
- 		return -ENODEV;
- 	}
-diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
-index 11dd142c98c5..4818646fe637 100644
---- a/drivers/staging/media/tegra-video/vi.c
-+++ b/drivers/staging/media/tegra-video/vi.c
-@@ -1563,7 +1563,7 @@ tegra_vi_graph_find_entity(struct tegra_vi_channel *chan,
- 	struct tegra_vi_graph_entity *entity;
- 	struct v4l2_async_subdev *asd;
- 
--	list_for_each_entry(asd, &chan->notifier.asd_list, asd_list) {
-+	list_for_each_entry(asd, &chan->notifier.asd_head, asd_list) {
- 		entity = to_tegra_vi_graph_entity(asd);
- 		if (entity->asd.match.fwnode == fwnode)
- 			return entity;
-@@ -1707,7 +1707,7 @@ static int tegra_vi_graph_notify_complete(struct v4l2_async_notifier *notifier)
- 	}
- 
- 	/* create links between the entities */
--	list_for_each_entry(asd, &chan->notifier.asd_list, asd_list) {
-+	list_for_each_entry(asd, &chan->notifier.asd_head, asd_list) {
- 		entity = to_tegra_vi_graph_entity(asd);
- 		ret = tegra_vi_graph_build(chan, entity);
- 		if (ret < 0)
-@@ -1874,7 +1874,7 @@ static int tegra_vi_graph_init(struct tegra_vi *vi)
- 
- 		ret = tegra_vi_graph_parse_one(chan, remote);
- 		fwnode_handle_put(remote);
--		if (ret < 0 || list_empty(&chan->notifier.asd_list))
-+		if (ret < 0 || list_empty(&chan->notifier.asd_head))
- 			continue;
- 
- 		chan->notifier.ops = &tegra_vi_async_ops;
+ 	v4l2_async_cleanup(sd);
 diff --git a/include/media/v4l2-async.h b/include/media/v4l2-async.h
-index 0c4cffd081c9..425280b4d387 100644
+index 9cf383e81a16..750bf4ddb267 100644
 --- a/include/media/v4l2-async.h
 +++ b/include/media/v4l2-async.h
-@@ -68,7 +68,7 @@ struct v4l2_async_match {
-  * @match:	struct of match type and per-bus type matching data sets
-  * @asd_list:	used to add struct v4l2_async_subdev objects to the
-  *		master notifier @asd_list
-- * @list:	used to link struct v4l2_async_subdev objects, waiting to be
-+ * @waiting_list: used to link struct v4l2_async_subdev objects, waiting to be
-  *		probed, to a notifier->waiting list
+@@ -8,6 +8,7 @@
+ #ifndef V4L2_ASYNC_H
+ #define V4L2_ASYNC_H
+ 
++#include <linux/kref.h>
+ #include <linux/list.h>
+ #include <linux/mutex.h>
+ 
+@@ -63,24 +64,47 @@ struct v4l2_async_match {
+ };
+ 
+ /**
+- * struct v4l2_async_connection - sub-device descriptor, as known to a bridge
++ * struct v4l2_async_subdev - sub-device descriptor
   *
-  * When this struct is used as a member in a driver specific struct,
-@@ -77,9 +77,10 @@ struct v4l2_async_match {
-  */
- struct v4l2_async_subdev {
- 	struct v4l2_async_match match;
++ * @kref:	kref for refcounting the subdev
++ * @asd_list:	Entry in the list of async sub-devices
++ * @subdev_list: used to link struct v4l2_async_subdev objects, waiting to be
++ *		probed, to a notifier->waiting_head list
++ * @asc_head:	head for struct v4l2_async_connection.asd_list list
++ * @registered:	whether the sub-device has been registered
++ */
++struct v4l2_async_subdev {
++	struct kref kref;
++	struct list_head asd_list;
++	struct list_head subdev_list;
++	struct list_head asc_head;
++	bool registered;
++};
 +
- 	/* v4l2-async core private: not to be used by drivers */
--	struct list_head list;
- 	struct list_head asd_list;
-+	struct list_head waiting_list;
- };
- 
- /**
-@@ -108,20 +109,20 @@ struct v4l2_async_notifier_operations {
-  * @v4l2_dev:	v4l2_device of the root notifier, NULL otherwise
-  * @sd:		sub-device that registered the notifier, NULL otherwise
-  * @parent:	parent notifier
-- * @asd_list:	master list of struct v4l2_async_subdev
-- * @waiting:	list of struct v4l2_async_subdev, waiting for their drivers
-- * @done:	list of struct v4l2_subdev, already probed
-- * @list:	member in a global list of notifiers
-+ * @asd_head:	master list of struct v4l2_async_subdev
-+ * @waiting_list: list of struct v4l2_async_subdev, waiting for their drivers
-+ * @done_head:	list of struct v4l2_subdev, already probed
-+ * @notifier_list: member in a global list of notifiers
++/**
++ * struct v4l2_async_connection - sub-device connection descriptor, as known to
++ *				  a bridge
++ *
++ * @asd:	the async sub-device related to this connection
+  * @match:	struct of match type and per-bus type matching data sets
+  * @asc_list:	used to add struct v4l2_async_connection objects to the
+  *		master notifier @asc_list
+  * @waiting_list: used to link struct v4l2_async_connection objects, waiting to
+  *		be probed, to a notifier->waiting list
++ * @asc_subdev_list:	entry in struct v4l2_async_subdev.asc_head list
+  *
+- * When this struct is used as a member in a driver specific struct,
+- * the driver specific struct shall contain the &struct
+- * v4l2_async_connection as its first member.
++ * When this struct is used as a member in a driver specific struct, the driver
++ * specific struct shall contain the &struct v4l2_async_connection as its first
++ * member.
   */
- struct v4l2_async_notifier {
- 	const struct v4l2_async_notifier_operations *ops;
- 	struct v4l2_device *v4l2_dev;
- 	struct v4l2_subdev *sd;
- 	struct v4l2_async_notifier *parent;
--	struct list_head asd_list;
--	struct list_head waiting;
--	struct list_head done;
--	struct list_head list;
-+	struct list_head asd_head;
-+	struct list_head waiting_head;
-+	struct list_head done_head;
-+	struct list_head notifier_list;
+ struct v4l2_async_connection {
++	struct v4l2_async_subdev *asd;
+ 	struct v4l2_async_match match;
+ 
+ 	/* v4l2-async core private: not to be used by drivers */
+ 	struct list_head asc_list;
+ 	struct list_head waiting_list;
++	struct list_head asc_subdev_list;
  };
  
  /**
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index a2cce11dda5c..d510fe6ea243 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -1063,7 +1063,7 @@ struct v4l2_subdev {
+ 	struct device *dev;
+ 	struct fwnode_handle *fwnode;
+ 	struct list_head async_list;
+-	struct v4l2_async_connection *asd;
++	struct v4l2_async_subdev *asd;
+ 	struct v4l2_async_notifier *notifier;
+ 	struct v4l2_async_notifier *subdev_notifier;
+ 	struct v4l2_subdev_platform_data *pdata;
 -- 
 2.30.2
 
