@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63FA2C6FD1D
-	for <linux-media@archiver.kernel.org>; Thu, 30 Mar 2023 08:49:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16D5CC77B6D
+	for <linux-media@archiver.kernel.org>; Thu, 30 Mar 2023 08:49:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbjC3It3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 30 Mar 2023 04:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
+        id S230159AbjC3Itc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 30 Mar 2023 04:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjC3It1 (ORCPT
+        with ESMTP id S230136AbjC3It1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 30 Mar 2023 04:49:27 -0400
 Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C5EE61A5;
-        Thu, 30 Mar 2023 01:49:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 575DD6A5F;
+        Thu, 30 Mar 2023 01:49:22 -0700 (PDT)
 HMM_SOURCE_IP: 10.64.8.41:44746.1405145320
 HMM_ATTACHE_NUM: 0000
 HMM_SOURCE_TYPE: SMTP
 Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id A48DB100207;
-        Thu, 30 Mar 2023 16:49:22 +0800 (CST)
+        by 189.cn (HERMES) with SMTP id 6F7861002D0;
+        Thu, 30 Mar 2023 16:49:16 +0800 (CST)
 Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-ljp89 with ESMTP id 2a8c5f62236a4e4db151dd2bf1489911 for maarten.lankhorst@linux.intel.com;
-        Thu, 30 Mar 2023 16:49:23 CST
-X-Transaction-ID: 2a8c5f62236a4e4db151dd2bf1489911
+        by gateway-151646-dep-7b48884fd-ljp89 with ESMTP id fc918797fb554a98a1ac45f56fe6f755 for maarten.lankhorst@linux.intel.com;
+        Thu, 30 Mar 2023 16:49:21 CST
+X-Transaction-ID: fc918797fb554a98a1ac45f56fe6f755
 X-Real-From: 15330273260@189.cn
 X-Receive-IP: 114.242.206.180
 X-MEDUSA-Status: 0
@@ -41,12 +41,10 @@ To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
 Cc:     nathan@kernel.org, linux-kernel@vger.kernel.org,
         dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
         linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn
-Subject: [PATCH 3/3] drm/fbdev-generic: optimize out a redundant assignment clause
-Date:   Thu, 30 Mar 2023 16:49:11 +0800
-Message-Id: <20230330084911.1565071-3-15330273260@189.cn>
+Subject: [PATCH 1/3] dma-buf/dma-buf.c: add a blank line between the two adjoining functions
+Date:   Thu, 30 Mar 2023 16:49:09 +0800
+Message-Id: <20230330084911.1565071-1-15330273260@189.cn>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230330084911.1565071-1-15330273260@189.cn>
-References: <20230330084911.1565071-1-15330273260@189.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -55,37 +53,31 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Sui Jingfeng <suijingfeng@loongson.cn>
 
- The assignment already done in drm_client_buffer_vmap(), this patch save
- a copy. No functional change.
+ Trivial cleanup, no functional change.
 
 Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
 ---
- drivers/gpu/drm/drm_fbdev_generic.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/dma-buf/dma-buf.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_fbdev_generic.c b/drivers/gpu/drm/drm_fbdev_generic.c
-index 8e5148bf40bb..be4522268927 100644
---- a/drivers/gpu/drm/drm_fbdev_generic.c
-+++ b/drivers/gpu/drm/drm_fbdev_generic.c
-@@ -183,7 +183,7 @@ static int drm_fbdev_generic_damage_blit(struct drm_fb_helper *fb_helper,
- 					 struct drm_clip_rect *clip)
+diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+index aa4ea8530cb3..485b022a31fa 100644
+--- a/drivers/dma-buf/dma-buf.c
++++ b/drivers/dma-buf/dma-buf.c
+@@ -777,10 +777,10 @@ static void mangle_sg_table(struct sg_table *sg_table)
+ 	for_each_sgtable_sg(sg_table, sg, i)
+ 		sg->page_link ^= ~0xffUL;
+ #endif
+-
+ }
+-static struct sg_table * __map_dma_buf(struct dma_buf_attachment *attach,
+-				       enum dma_data_direction direction)
++
++static struct sg_table *__map_dma_buf(struct dma_buf_attachment *attach,
++				      enum dma_data_direction direction)
  {
- 	struct drm_client_buffer *buffer = fb_helper->buffer;
--	struct iosys_map map, dst;
-+	struct iosys_map map;
- 	int ret;
- 
- 	/*
-@@ -203,8 +203,7 @@ static int drm_fbdev_generic_damage_blit(struct drm_fb_helper *fb_helper,
- 	if (ret)
- 		goto out;
- 
--	dst = map;
--	drm_fbdev_generic_damage_blit_real(fb_helper, clip, &dst);
-+	drm_fbdev_generic_damage_blit_real(fb_helper, clip, &map);
- 
- 	drm_client_buffer_vunmap(buffer);
- 
+ 	struct sg_table *sg_table;
+ 	signed long ret;
 -- 
 2.25.1
 
