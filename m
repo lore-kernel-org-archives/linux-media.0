@@ -2,101 +2,113 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F2C9C77B6E
-	for <linux-media@archiver.kernel.org>; Thu, 30 Mar 2023 14:48:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29A01C761AF
+	for <linux-media@archiver.kernel.org>; Thu, 30 Mar 2023 14:49:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbjC3Osn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 30 Mar 2023 10:48:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56570 "EHLO
+        id S231322AbjC3Otk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 30 Mar 2023 10:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjC3Osk (ORCPT
+        with ESMTP id S231934AbjC3Otj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:48:40 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3B89EF0
-        for <linux-media@vger.kernel.org>; Thu, 30 Mar 2023 07:48:36 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id ew6so77462960edb.7
-        for <linux-media@vger.kernel.org>; Thu, 30 Mar 2023 07:48:36 -0700 (PDT)
+        Thu, 30 Mar 2023 10:49:39 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D19A268
+        for <linux-media@vger.kernel.org>; Thu, 30 Mar 2023 07:49:36 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id y15so24847406lfa.7
+        for <linux-media@vger.kernel.org>; Thu, 30 Mar 2023 07:49:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20210112.gappssmtp.com; s=20210112; t=1680187715;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gisAfBuKo7G7WXLwyB+pECfo6r1KAXyHvLdY4n9RpXM=;
-        b=GBxyv/esI7p8tArGx56kiN0U7QdEbQejDP5PX+xlNFVPd20EDICDwQe0wEaU+mNAa4
-         ObqE+dXYbg2ojbpq8nDwMZjTXyMFSJ77C38mOTHQt5zMQdNcZ2pQkWdN4YPJcsegGD9x
-         3VtHU1p+l/2Pj4FzU7BPUjYaiJ2DP/83aPlgh/VnB9zoE5afIhfWtAY5Dqicd4hfEODi
-         UO+LndPPF1dZMiV6WvO5JJhdRu5yRG3r+fctsFo7sJWtvbKe1/DpGKvVR/odlHMJTuhm
-         cT3DdQ3EVnobMr+So+aQgxrSGKAo4xbweqY2Qvwu2GjCLclR2Gyzh7covxTOg9WJyS9h
-         PWTg==
+        d=ragnatech-se.20210112.gappssmtp.com; s=20210112; t=1680187774;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=VU/9sR2Gn6BU0Gika4QeRGZssdzpgS/xpjDgT6yVGt8=;
+        b=luOdiIo4Hx8rQKdQNf+nnvmIW9CweZ8RDJ5Jb++wUXig7hQudRu89S9OUo8FbwySda
+         VBl+PZx4OiHHlLkQ0xBTfPJrGdqjznpx/U71d4EqI+QemMXlzX+hpDm70gMXIutJemBR
+         NOJcFa8oE89KYB+oFrkuvf/oAObHivm6EJJSRvgeXVRY0lFJjzLo3j1QHW60QAnja08T
+         jC6GKtX8NClEoulTUtcmEORMlgZWy4m0QUxOxr3sMbhx9FpAvEic1VlNU6Ojg35LW7W8
+         KuHtaz2fWUpWXov0uAy2tA270HEoASEbwpGUE604JU8kPEy8ZpoF69VbFKsz0XezrPN+
+         z6nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680187715;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gisAfBuKo7G7WXLwyB+pECfo6r1KAXyHvLdY4n9RpXM=;
-        b=LSvnA6xQI04MCZkyMgNamXqg61zhxgYYH6G1M+SgrKb/TtwgpcCI7EHGOQlACcJWcw
-         Nq8ADFjDF9kC0rg0fASzq4kZLkCuySy6DIX5OA/BZFZ+AL/C55nMy/4VPjR6+mpkMNOJ
-         BcnqmqNyhyUeJ+tRV0swD/BvMX8scJJG+nb3laY8+ngOCKgmEuF2LAbvNZ+PjUyd5YUx
-         lsm5zoQUrFsvjwOLeCAhuDFR5ZnmMH4wUBJ3vijvLxUY8Mjcx4MOzHscmezaTLXysnLg
-         UkKBqjLYjFu4u+NWnWiAaZ57E/H+zAkjEMR4xxX12dZhtxEoEwcgQsXGQF8luAWjrbbF
-         fNCA==
-X-Gm-Message-State: AAQBX9feaDCIXQt5g6X1c493LEK/oEQTSu6dgslpglz/Q0ust94M4FU5
-        l7+bHQJlRSa9HoKNbRf987a2UQ==
-X-Google-Smtp-Source: AKy350aT9/pC3o9rvu71vgkM+m5UkXMjuItXZkZxxtxxJiwsrrmLm6k/ctAjf5bAWtzAS97IkHxtvw==
-X-Received: by 2002:a17:906:40c8:b0:921:d539:1a3a with SMTP id a8-20020a17090640c800b00921d5391a3amr23632023ejk.58.1680187715330;
-        Thu, 30 Mar 2023 07:48:35 -0700 (PDT)
-Received: from sleipner.berto.se (p54ac5f91.dip0.t-ipconnect.de. [84.172.95.145])
-        by smtp.googlemail.com with ESMTPSA id vq2-20020a170907a4c200b0093e9fb91837sm7830426ejc.76.2023.03.30.07.48.34
+        d=1e100.net; s=20210112; t=1680187774;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VU/9sR2Gn6BU0Gika4QeRGZssdzpgS/xpjDgT6yVGt8=;
+        b=TTjZrcCdIV7QT/e5Pqlm97jySfFAGByQu8dJ1AebHOnvVwbjClCnovkCC6Gd9vICpc
+         SaApziQc7xyEZfruhpp+Cy0ONtyyTiB/Nl3cU3MIOkPP/MDLBZW7X9KF02G4TjrCFATH
+         pRNX9XDyLQxaigUh/CFt1xHdK6BvfvtHJ4C7gBpK2nu3Hi/gwAK81V266RtJzWlD+sra
+         pWRb/K0tWDr2THqdy6oWz2odyGuqBYtSjPY8063b0Drx5PlJfXH5kpBCENk9XVe/KaHn
+         cUpKspHCWVkTVWsSF+uziaiRk+Pd4o4cU8bctueeCqWc7j57qEdC0zs8Mawkw6M4piQU
+         V4pQ==
+X-Gm-Message-State: AAQBX9elpb9KRGAuDsdOhmF6nBOtNj6swixcmIOOIMewAtvI+f3y6hTv
+        ZdJyZmnF2s+AcxlOE5ar4Q6ulQ==
+X-Google-Smtp-Source: AKy350YfuNaarH6edh1TVcm+uvVLdWvJ8mJR+9Ed3cqC+YFNN8IGmFsat1TRuB1TEHeVt0QaXZK0Rg==
+X-Received: by 2002:a05:6512:486:b0:4d8:71dd:5c5e with SMTP id v6-20020a056512048600b004d871dd5c5emr6852197lfq.37.1680187774095;
+        Thu, 30 Mar 2023 07:49:34 -0700 (PDT)
+Received: from localhost (h-46-59-89-207.A463.priv.bahnhof.se. [46.59.89.207])
+        by smtp.gmail.com with ESMTPSA id r28-20020ac252bc000000b004e9cad1cd7csm4835115lfm.229.2023.03.30.07.49.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 07:48:35 -0700 (PDT)
-From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        Thu, 30 Mar 2023 07:49:33 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 16:49:33 +0200
+From:   Niklas =?utf-8?Q?S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
-To:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v2 2/3] media: dt-bindings: media: renesas,csi2: Add binding for V4H
-Date:   Thu, 30 Mar 2023 16:47:30 +0200
-Message-Id: <20230330144731.3017858-3-niklas.soderlund+renesas@ragnatech.se>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230330144731.3017858-1-niklas.soderlund+renesas@ragnatech.se>
-References: <20230330144731.3017858-1-niklas.soderlund+renesas@ragnatech.se>
+To:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] media: rcar-vin: Select correct interrupt mode for
+ V4L2_FIELD_ALTERNATE
+Message-ID: <ZCWhfYCUz2ISG+Ac@oden.dyn.berto.se>
+References: <20230211205534.493789-1-niklas.soderlund+renesas@ragnatech.se>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230211205534.493789-1-niklas.soderlund+renesas@ragnatech.se>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Document support for the CSI-2 module in the Renesas V4H (r8a779g0) SoC.
+Hi Hans,
 
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Acked-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-* Changes since v1
-- Add tags from Rob and Geert.
----
- Documentation/devicetree/bindings/media/renesas,csi2.yaml | 1 +
- 1 file changed, 1 insertion(+)
+Gentle ping on this patch.
 
-diff --git a/Documentation/devicetree/bindings/media/renesas,csi2.yaml b/Documentation/devicetree/bindings/media/renesas,csi2.yaml
-index b520d6c5c102..977ab188d654 100644
---- a/Documentation/devicetree/bindings/media/renesas,csi2.yaml
-+++ b/Documentation/devicetree/bindings/media/renesas,csi2.yaml
-@@ -31,6 +31,7 @@ properties:
-           - renesas,r8a77980-csi2 # R-Car V3H
-           - renesas,r8a77990-csi2 # R-Car E3
-           - renesas,r8a779a0-csi2 # R-Car V3U
-+          - renesas,r8a779g0-csi2 # R-Car V4H
- 
-   reg:
-     maxItems: 1
+On 2023-02-11 21:55:34 +0100, Niklas Söderlund wrote:
+> When adding proper support for V4L2_FIELD_ALTERNATE it was missed that
+> this field format should trigger an interrupt for each field, not just
+> for the whole frame. Fix this by marking it as progressive in the
+> capture setup, which will then select the correct interrupt mode.
+> 
+> Tested on both Gen2 and Gen3 with the result of a doubling of the frame
+> rate for V4L2_FIELD_ALTERNATE. From a PAL video source the frame rate is
+> now 50, which is expected for alternate field capture.
+> 
+> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+> ---
+>  drivers/media/platform/renesas/rcar-vin/rcar-dma.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-dma.c b/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
+> index 23598e22adc7..2a77353f10b5 100644
+> --- a/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
+> +++ b/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
+> @@ -728,12 +728,10 @@ static int rvin_setup(struct rvin_dev *vin)
+>  	case V4L2_FIELD_SEQ_TB:
+>  	case V4L2_FIELD_SEQ_BT:
+>  	case V4L2_FIELD_NONE:
+> +	case V4L2_FIELD_ALTERNATE:
+>  		vnmc = VNMC_IM_ODD_EVEN;
+>  		progressive = true;
+>  		break;
+> -	case V4L2_FIELD_ALTERNATE:
+> -		vnmc = VNMC_IM_ODD_EVEN;
+> -		break;
+>  	default:
+>  		vnmc = VNMC_IM_ODD;
+>  		break;
+> -- 
+> 2.39.1
+> 
+
 -- 
-2.40.0
-
+Kind Regards,
+Niklas Söderlund
