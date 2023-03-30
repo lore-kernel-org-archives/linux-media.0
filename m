@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B368C761A6
-	for <linux-media@archiver.kernel.org>; Thu, 30 Mar 2023 15:41:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11865C77B62
+	for <linux-media@archiver.kernel.org>; Thu, 30 Mar 2023 15:41:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233315AbjC3PlK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 30 Mar 2023 11:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
+        id S233318AbjC3PlM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 30 Mar 2023 11:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233287AbjC3PlE (ORCPT
+        with ESMTP id S233267AbjC3PlB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:41:04 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6709777;
-        Thu, 30 Mar 2023 08:41:01 -0700 (PDT)
+        Thu, 30 Mar 2023 11:41:01 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7326335A1;
+        Thu, 30 Mar 2023 08:40:59 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:792c:96d5:14:366a])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6267D660319F;
-        Thu, 30 Mar 2023 16:40:57 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 87DA06603193;
+        Thu, 30 Mar 2023 16:40:54 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680190857;
-        bh=SFkEyJ2jkQipi8zjFY3ky+Bya3/h0EUtC+kLHT4AkTE=;
+        s=mail; t=1680190854;
+        bh=bQOfFeqoqCXSqQ11dHdmp90ArqJFyswk/HJjMlkGbwo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A2EtgEztlrHnrRU0BzaaBdBu07wYIDSUVOLhz5cKnhpNdHj30caOCnjt03N7xdosU
-         geikShiaIq4F2sPMSuSLzmu4IsFnfHQNxkyU8y5WrnBj+1FgKl/buOJ7Jotgea08Zb
-         neaVz4ISLQCXqoPGwmoA3bm2RnTw0aVqf6ilFGbECcajazFIIbuQ/AKtbaw9YSULs0
-         GfKL6B4GhYPb8uiQQkCo9RJqWUac0zG4yXnUwK21zSgqpt6A2ctSQwfNv6dHR8utBT
-         id/imiAlYszGIYTSd/fZeGw9prpEm6gHmaRNa+IJ2NS3CCu7MOpyWJg6MbGdf5sane
-         OIyN9ATe/gpGA==
+        b=lYX4FGLNEj9mOxBw9O84U0WQuaMrzwWt3vk12jOZ951mRcwsqMre/kHi+c11xJEyu
+         wnbvIOOSIEdq5H+Evs5rfu0en5OsAITllxEAXGpgxbRsxPCRdbCw1+JucV1ATr9tuv
+         5+Z+hiexA/gBPhl4uFfdjL3cZUuFOUuq29FUH3Cdwc8TNFqylozPk+UrAbbIZJ7Nxy
+         MGr4iZjFlBxFn6gEuhbtBfJWt5onvvl83pt8jnsosdwIaHzTkSQj1Jkj5EYeKKcdYh
+         GMUtWsh5ck2cNzbJMXvXnteLio0ivGoT+4cj4vhNTscUftuahv24YzJlH+f7v5tz6O
+         rsTT4TAc3w9tQ==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
         mchehab@kernel.org, robh+dt@kernel.org,
@@ -41,9 +41,9 @@ Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v5 13/13] media: AV1: Make sure that bit depth in correctly initialize
-Date:   Thu, 30 Mar 2023 17:40:43 +0200
-Message-Id: <20230330154043.1250736-14-benjamin.gaignard@collabora.com>
+Subject: [PATCH v5 07/13] media: verisilicon: Compute motion vectors size for AV1 frames
+Date:   Thu, 30 Mar 2023 17:40:37 +0200
+Message-Id: <20230330154043.1250736-8-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230330154043.1250736-1-benjamin.gaignard@collabora.com>
 References: <20230330154043.1250736-1-benjamin.gaignard@collabora.com>
@@ -53,37 +53,70 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Make sure that bit_depth field of V4L2_CTRL_TYPE_AV1_SEQUENCE
-is initialized correctly before using it.
+Compute the additional space required to store motion vectors at
+the end of the frames buffers.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/media/v4l2-core/v4l2-ctrls-core.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/media/platform/verisilicon/hantro_hw.h      | 13 +++++++++++++
+ .../media/platform/verisilicon/hantro_postproc.c    |  3 +++
+ drivers/media/platform/verisilicon/hantro_v4l2.c    |  5 +++++
+ 3 files changed, 21 insertions(+)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-index 9fd37e94db17..a662fb60f73f 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-@@ -111,6 +111,7 @@ static void std_init_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 	struct v4l2_ctrl_vp9_frame *p_vp9_frame;
- 	struct v4l2_ctrl_fwht_params *p_fwht_params;
- 	struct v4l2_ctrl_h264_scaling_matrix *p_h264_scaling_matrix;
-+	struct v4l2_ctrl_av1_sequence *p_av1_sequence;
- 	void *p = ptr.p + idx * ctrl->elem_size;
+diff --git a/drivers/media/platform/verisilicon/hantro_hw.h b/drivers/media/platform/verisilicon/hantro_hw.h
+index e83f0c523a30..bc61d4e051c7 100644
+--- a/drivers/media/platform/verisilicon/hantro_hw.h
++++ b/drivers/media/platform/verisilicon/hantro_hw.h
+@@ -417,6 +417,19 @@ hantro_hevc_mv_size(unsigned int width, unsigned int height)
+ 	return width * height / 16;
+ }
  
- 	if (ctrl->p_def.p_const)
-@@ -157,6 +158,10 @@ static void std_init_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 		p_vp9_frame->flags |= V4L2_VP9_FRAME_FLAG_X_SUBSAMPLING |
- 			V4L2_VP9_FRAME_FLAG_Y_SUBSAMPLING;
- 		break;
-+	case V4L2_CTRL_TYPE_AV1_SEQUENCE:
-+		p_av1_sequence = p;
-+		p_av1_sequence->bit_depth = 8;
-+		break;
- 	case V4L2_CTRL_TYPE_FWHT_PARAMS:
- 		p_fwht_params = p;
- 		p_fwht_params->version = V4L2_FWHT_VERSION;
++static inline unsigned short hantro_av1_num_sbs(unsigned short dimension)
++{
++	return DIV_ROUND_UP(dimension, 64);
++}
++
++static inline size_t
++hantro_av1_mv_size(unsigned int width, unsigned int height)
++{
++	size_t num_sbs = hantro_av1_num_sbs(width) * hantro_av1_num_sbs(height);
++
++	return ALIGN(num_sbs * 384, 16) * 2 + 512;
++}
++
+ int hantro_g1_mpeg2_dec_run(struct hantro_ctx *ctx);
+ int rockchip_vpu2_mpeg2_dec_run(struct hantro_ctx *ctx);
+ void hantro_mpeg2_dec_copy_qtable(u8 *qtable,
+diff --git a/drivers/media/platform/verisilicon/hantro_postproc.c b/drivers/media/platform/verisilicon/hantro_postproc.c
+index 6437423ccf3a..bb16af50719d 100644
+--- a/drivers/media/platform/verisilicon/hantro_postproc.c
++++ b/drivers/media/platform/verisilicon/hantro_postproc.c
+@@ -213,6 +213,9 @@ int hantro_postproc_alloc(struct hantro_ctx *ctx)
+ 	else if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_HEVC_SLICE)
+ 		buf_size += hantro_hevc_mv_size(pix_mp.width,
+ 						pix_mp.height);
++	else if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_AV1_FRAME)
++		buf_size += hantro_av1_mv_size(pix_mp.width,
++					       pix_mp.height);
+ 
+ 	for (i = 0; i < num_buffers; ++i) {
+ 		struct hantro_aux_buf *priv = &ctx->postproc.dec_q[i];
+diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
+index e2a8838f75f0..c218c9781e73 100644
+--- a/drivers/media/platform/verisilicon/hantro_v4l2.c
++++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+@@ -337,6 +337,11 @@ static int hantro_try_fmt(const struct hantro_ctx *ctx,
+ 			pix_mp->plane_fmt[0].sizeimage +=
+ 				hantro_hevc_mv_size(pix_mp->width,
+ 						    pix_mp->height);
++		else if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_AV1_FRAME &&
++			 !hantro_needs_postproc(ctx, fmt))
++			pix_mp->plane_fmt[0].sizeimage +=
++				hantro_av1_mv_size(pix_mp->width,
++						   pix_mp->height);
+ 	} else if (!pix_mp->plane_fmt[0].sizeimage) {
+ 		/*
+ 		 * For coded formats the application can specify
 -- 
 2.34.1
 
