@@ -2,165 +2,91 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DCA8C6FD1D
-	for <linux-media@archiver.kernel.org>; Thu, 30 Mar 2023 08:27:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6747CC77B61
+	for <linux-media@archiver.kernel.org>; Thu, 30 Mar 2023 08:49:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbjC3I1y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 30 Mar 2023 04:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
+        id S229705AbjC3Itb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 30 Mar 2023 04:49:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjC3I1x (ORCPT
+        with ESMTP id S229624AbjC3It1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 30 Mar 2023 04:27:53 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99EDE19A6
-        for <linux-media@vger.kernel.org>; Thu, 30 Mar 2023 01:27:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680164871; x=1711700871;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=ivYhZCbu4ph7UzkpH3wIgP5hhiGaPMDSo7jj++I7+H4=;
-  b=Izd4WtVGTLOxiLzFgTjNltQeY0Wm4BXKNnx+9KgMXFafyiMl+s26rnvo
-   gFwsCzujDzksmU6BlJS7f9C9UKtdDscJS5TLplk8NWL7Nf6IOEnbw3IAf
-   vd9s75nk3sy5nsL+4QIaEiSeIkxlwGVd5LNBfr06XagsMqvYthmDxrsvz
-   Zo1D/saxY0ezcqaU01cTYuzR9zRq6jDqKkLzPHPyaTzAjni0o8fTd8Oth
-   5rZTpW9w9R9iaZxx7ChnO6JARPp1FMCS1HjoLa+jQEmomsq1GOf5fPuHE
-   rYTg/wTUHNE9e1y6zvDw++avhD8hKyFbaPf11SkbmjXGtmbdTTIxxsLKu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="343555270"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="343555270"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 01:27:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="749099672"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="749099672"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 01:27:48 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 5DAD511FAD0;
-        Thu, 30 Mar 2023 11:27:46 +0300 (EEST)
-Date:   Thu, 30 Mar 2023 11:27:46 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     "Wu, Wentong" <wentong.wu@intel.com>
-Cc:     "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "djrscally@gmail.com" <djrscally@gmail.com>,
-        "laurent.pinchart@ideasonboard.com" 
-        <laurent.pinchart@ideasonboard.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "bingbu.cao@linux.intel.com" <bingbu.cao@linux.intel.com>,
-        "Wang, Zhifeng" <zhifeng.wang@intel.com>,
-        "Ye, Xiang" <xiang.ye@intel.com>,
-        "Qiu, Tian Shu" <tian.shu.qiu@intel.com>
-Subject: Re: [PATCH v3 2/3] media: pci: intel: ivsc: Add ACE submodule
-Message-ID: <ZCVIAg1h/LfrWMJY@kekkonen.localdomain>
-References: <1679898188-14426-1-git-send-email-wentong.wu@intel.com>
- <1679898188-14426-3-git-send-email-wentong.wu@intel.com>
- <ZCPw7wiHJX4nkpG3@kekkonen.localdomain>
- <MN2PR11MB4318F9FC62A33A86B9ED64FB8D8E9@MN2PR11MB4318.namprd11.prod.outlook.com>
+        Thu, 30 Mar 2023 04:49:27 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72DC36EBD;
+        Thu, 30 Mar 2023 01:49:23 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.41:44746.1405145320
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id B21471002EE;
+        Thu, 30 Mar 2023 16:49:21 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-7b48884fd-ljp89 with ESMTP id 14a233d3256440669eb13540df3b3627 for maarten.lankhorst@linux.intel.com;
+        Thu, 30 Mar 2023 16:49:22 CST
+X-Transaction-ID: 14a233d3256440669eb13540df3b3627
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+From:   Sui Jingfeng <15330273260@189.cn>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>
+Cc:     nathan@kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn
+Subject: [PATCH 2/3] drm/drm_gem.c: remove surplus else after return clause
+Date:   Thu, 30 Mar 2023 16:49:10 +0800
+Message-Id: <20230330084911.1565071-2-15330273260@189.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230330084911.1565071-1-15330273260@189.cn>
+References: <20230330084911.1565071-1-15330273260@189.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <MN2PR11MB4318F9FC62A33A86B9ED64FB8D8E9@MN2PR11MB4318.namprd11.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Wentong,
+From: Sui Jingfeng <suijingfeng@loongson.cn>
 
-On Thu, Mar 30, 2023 at 07:32:27AM +0000, Wu, Wentong wrote:
-> Hi Sakari,
-> 
-> Thanks
-> 
-> > -----Original Message-----
-> > From: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > Sent: Wednesday, March 29, 2023 4:04 PM
-> > 
-> > Hi Wentong,
-> > 
-> > On Mon, Mar 27, 2023 at 02:23:07PM +0800, Wentong Wu wrote:
-> > > ACE is a submodule of IVSC which controls camera sensor's ownership,
-> > > belonging to host or IVSC. When IVSC owns camera sensor, it is for
-> > > algorithm computing. When host wants to control camera sensor, ACE
-> > > module needs to be informed of ownership with defined interface.
-> > >
-> > > The interface is via MEI. There is a separate MEI UUID, which this
-> > > driver uses to enumerate.
-> > >
-> > > To switch ownership of camera sensor between IVSC and host, the caller
-> > > specifies the defined ownership information which will be sent to
-> > > firmware by sending MEI command.
-> > >
-> > > Device link(device_link_add) is used to set the right camera sensor
-> > > ownership before accessing the sensor via I²C. With DL_FLAG_PM_RUNTIME
-> > > and DL_FLAG_RPM_ACTIVE, the supplier device will be PM runtime resumed
-> > > before the consumer(camera sensor).
-> > > So use runtime PM callbacks to transfer the ownership between host and
-> > > IVSC.
-> > >
-> > > Signed-off-by: Wentong Wu <wentong.wu@intel.com>
-> > > ---
-> > >  drivers/media/pci/intel/ivsc/Makefile  |   3 +
-> > >  drivers/media/pci/intel/ivsc/mei_ace.c | 534
-> > > +++++++++++++++++++++++++++++++++
-> > >  2 files changed, 537 insertions(+)
-> > >  create mode 100644 drivers/media/pci/intel/ivsc/mei_ace.c
-> > >
-> > > diff --git a/drivers/media/pci/intel/ivsc/Makefile
-> > > b/drivers/media/pci/intel/ivsc/Makefile
-> > > index 7e4c5f0..a641f14 100644
-> > > --- a/drivers/media/pci/intel/ivsc/Makefile
-> > > +++ b/drivers/media/pci/intel/ivsc/Makefile
-> > > @@ -5,3 +5,6 @@
-> > >  obj-$(CONFIG_INTEL_VSC) += ivsc-csi.o  ivsc-csi-y += mei_csi.o
-> > > ivsc-csi-y += csi_bridge.o
-> > > +
-> > > +obj-$(CONFIG_INTEL_VSC) += ivsc-ace.o ivsc-ace-y += mei_ace.o
-> > > diff --git a/drivers/media/pci/intel/ivsc/mei_ace.c
-> > > b/drivers/media/pci/intel/ivsc/mei_ace.c
-> > > new file mode 100644
-> > > index 0000000..434b072
-> > > --- /dev/null
-> > > +++ b/drivers/media/pci/intel/ivsc/mei_ace.c
-> > > @@ -0,0 +1,534 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +/*
-> > > + * Copyright (C) 2023 Intel Corporation. All rights reserved.
-> > > + * Intel Visual Sensing Controller ACE Linux driver  */
-> > > +
-> > > +/*
-> > > + * To set ownership of camera sensor, there is specific command,
-> > > +which
-> > > + * is sent via MEI protocol. That's a two-step scheme where the
-> > > +firmware
-> > > + * first acks receipt of the command and later responses the command
-> > > +was
-> > > + * executed. The command sending function uses "completion" as the
-> > > + * synchronization mechanism. The notification for command is
-> > > +received
-> > > + * via a mei callback which wakes up the caller. There can be only
-> > > +one
-> > > + * outstanding command at a time.
-> > 
-> > Could you document the dependencies in the sensor initialisation (ace +
-> > csi) 
-> 
-> This is about ownership instead of dependency, if host sensor driver configure
-> sensor with ownership on IVSC, probably it will be changed by firmware somehow.
-> 
-> > and how the sensor is powered (i.e. no direct control of the PMIC from the
-> > host?)? 
-> 
-> The power line is directly connected to IVSC instead of host, when ownership
-> switched to host, sensor is already powered up by firmware. 
+ else is not generally useful after return
 
-Good. Please also document this in the comment.
+Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+---
+ drivers/gpu/drm/drm_gem.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+index a6208e2c089b..364e3733af98 100644
+--- a/drivers/gpu/drm/drm_gem.c
++++ b/drivers/gpu/drm/drm_gem.c
+@@ -1150,8 +1150,8 @@ int drm_gem_pin(struct drm_gem_object *obj)
+ {
+ 	if (obj->funcs->pin)
+ 		return obj->funcs->pin(obj);
+-	else
+-		return 0;
++
++	return 0;
+ }
+ 
+ void drm_gem_unpin(struct drm_gem_object *obj)
+@@ -1172,7 +1172,8 @@ int drm_gem_vmap(struct drm_gem_object *obj, struct iosys_map *map)
+ 	ret = obj->funcs->vmap(obj, map);
+ 	if (ret)
+ 		return ret;
+-	else if (iosys_map_is_null(map))
++
++	if (iosys_map_is_null(map))
+ 		return -ENOMEM;
+ 
+ 	return 0;
 -- 
-Kind regards,
+2.25.1
 
-Sakari Ailus
