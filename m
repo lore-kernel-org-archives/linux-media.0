@@ -2,126 +2,85 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 717D2C76196
-	for <linux-media@archiver.kernel.org>; Fri, 31 Mar 2023 09:28:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5852FC77B60
+	for <linux-media@archiver.kernel.org>; Fri, 31 Mar 2023 09:32:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbjCaJ22 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 31 Mar 2023 05:28:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58994 "EHLO
+        id S231309AbjCaJcN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 31 Mar 2023 05:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232207AbjCaJ2I (ORCPT
+        with ESMTP id S232163AbjCaJb7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 31 Mar 2023 05:28:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7F220331;
-        Fri, 31 Mar 2023 02:27:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AEA6562660;
-        Fri, 31 Mar 2023 09:27:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68DD6C433D2;
-        Fri, 31 Mar 2023 09:27:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680254827;
-        bh=h8C/nCvQ95GrVt3vhY71TCmgTeCG4/uxqnWpxM7dCvc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dsTJ8rRVglkyMZumINEy8WnEYodYuNEhZ7bk1k65j6hRSt6A+H6HSIvwtd10Q7Pew
-         mDw2gtHjx/Wcbcjzbkz+E4al5QovbvJmBTGuowMkfOeT3uswymaaryDuad3rt3skik
-         5V5Bbv3qYCq7vivephtUFBGWG86wnCgaWebo/0f/p2rqGeM9esEDofWzKN7G+RpviI
-         uGVW/qs5y+ADztJb7OtXuw83KGVnks7D3LZENOEVzA8BLUVYaq3VNB0jjOaOb5xHKz
-         KUcG4WeYIOei20QDLzRmfFPg48kD4AHMaklv91+4SWntbuAwafm2Tk9Hkn2rRjV4B2
-         yMfi7F7+H4KBw==
-From:   Lee Jones <lee@kernel.org>
-To:     lee@kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Stanley Yang <Stanley.Yang@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 18/19] drm/amd/amdgpu/sdma_v6_0: Demote a bunch of half-completed function headers
-Date:   Fri, 31 Mar 2023 10:26:06 +0100
-Message-Id: <20230331092607.700644-19-lee@kernel.org>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-In-Reply-To: <20230331092607.700644-1-lee@kernel.org>
-References: <20230331092607.700644-1-lee@kernel.org>
+        Fri, 31 Mar 2023 05:31:59 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC81F1D2CA;
+        Fri, 31 Mar 2023 02:31:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680255094; x=1711791094;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=lUSU2N5JqWgjMvUTvzHok36UOnxaJa80/TZjGFg+BT8=;
+  b=SLH359g+sQe4jAh0aQgrDweI5807Wh5S6xC8h+0I3tbwLXyRDEsx8/32
+   VrsPfROd67FiadLhPBNGRmsgFDP0a6MqA2ouOf6l02Z8gvl3kt2x0IM0P
+   MCLc9PckYqUttb7Mw2Wd5OJqx/mVXGZPAeMErren71n4a1PzFh26SgLAR
+   xxM0kHVRJ+z02EMEQOx2Ex3nK2B+64ym0nMOERc+aUvoHuwqEUG9fbHBL
+   GxFddEofcebtXSermpsBSuh+Nx5r5lWh9Pe4Ohjob7emchalQF6fo449+
+   FHAq9xBGGcKRjCZSF/pUUvUmA5K7y7rLxZySxBmqvwqnr2Ccoqcekk8ny
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="340132658"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="340132658"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 02:31:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="635228627"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="635228627"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 02:31:23 -0700
+Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id B58A81224AF;
+        Fri, 31 Mar 2023 12:31:20 +0300 (EEST)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
+        (envelope-from <sakari.ailus@linux.intel.com>)
+        id 1piB5D-00DjN4-GE; Fri, 31 Mar 2023 12:30:07 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     devicetree@vger.kernel.org
+Subject: [PATCH 1/2] MAINTAINERS: Assume ov8856 driver maintainership
+Date:   Fri, 31 Mar 2023 12:29:56 +0300
+Message-Id: <20230331092957.3272621-2-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230331092957.3272621-1-sakari.ailus@linux.intel.com>
+References: <20230331092957.3272621-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fixes the following W=1 kernel build warning(s):
+Dongchun's e-mail address is no longer valid, assign the ov8856 driver to
+myself.
 
- drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c:248: warning: Function parameter or member 'job' not described in 'sdma_v6_0_ring_emit_ib'
- drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c:248: warning: Function parameter or member 'flags' not described in 'sdma_v6_0_ring_emit_ib'
- drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c:945: warning: Function parameter or member 'timeout' not described in 'sdma_v6_0_ring_test_ib'
- drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c:1124: warning: Function parameter or member 'ring' not described in 'sdma_v6_0_ring_pad_ib'
- drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c:1175: warning: Function parameter or member 'vmid' not described in 'sdma_v6_0_ring_emit_vm_flush'
- drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c:1175: warning: Function parameter or member 'pd_addr' not described in 'sdma_v6_0_ring_emit_vm_flush'
-
-Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: "Christian König" <christian.koenig@amd.com>
-Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
-Cc: David Airlie <airlied@gmail.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: Stanley Yang <Stanley.Yang@amd.com>
-Cc: amd-gfx@lists.freedesktop.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-media@vger.kernel.org
-Cc: linaro-mm-sig@lists.linaro.org
-Signed-off-by: Lee Jones <lee@kernel.org>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c b/drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c
-index 40e6b22daa226..efea4ef30a787 100644
---- a/drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c
-@@ -233,7 +233,7 @@ static void sdma_v6_0_ring_insert_nop(struct amdgpu_ring *ring, uint32_t count)
- 			amdgpu_ring_write(ring, ring->funcs->nop);
- }
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7244781354b5a..9a6c5ac4dbe34 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15481,7 +15481,7 @@ F:	Documentation/devicetree/bindings/media/i2c/ov7740.txt
+ F:	drivers/media/i2c/ov7740.c
  
--/**
-+/*
-  * sdma_v6_0_ring_emit_ib - Schedule an IB on the DMA engine
-  *
-  * @ring: amdgpu ring pointer
-@@ -933,7 +933,7 @@ static int sdma_v6_0_ring_test_ring(struct amdgpu_ring *ring)
- 	return r;
- }
- 
--/**
-+/*
-  * sdma_v6_0_ring_test_ib - test an IB on the DMA engine
-  *
-  * @ring: amdgpu_ring structure holding ring information
-@@ -1114,7 +1114,7 @@ static void sdma_v6_0_vm_set_pte_pde(struct amdgpu_ib *ib,
- 	ib->ptr[ib->length_dw++] = count - 1; /* number of entries */
- }
- 
--/**
-+/*
-  * sdma_v6_0_ring_pad_ib - pad the IB
-  * @ib: indirect buffer to fill with padding
-  *
-@@ -1162,7 +1162,7 @@ static void sdma_v6_0_ring_emit_pipeline_sync(struct amdgpu_ring *ring)
- 			  SDMA_PKT_POLL_REGMEM_DW5_INTERVAL(4)); /* retry count, poll interval */
- }
- 
--/**
-+/*
-  * sdma_v6_0_ring_emit_vm_flush - vm flush using sDMA
-  *
-  * @ring: amdgpu_ring pointer
+ OMNIVISION OV8856 SENSOR DRIVER
+-M:	Dongchun Zhu <dongchun.zhu@mediatek.com>
++M:	Sakari Ailus <sakari.ailus@linux.intel.com>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ T:	git git://linuxtv.org/media_tree.git
 -- 
-2.40.0.348.gf938b09366-goog
+2.30.2
 
