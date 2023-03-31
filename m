@@ -2,31 +2,31 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91A02C761AF
-	for <linux-media@archiver.kernel.org>; Fri, 31 Mar 2023 12:18:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49C04C77B6C
+	for <linux-media@archiver.kernel.org>; Fri, 31 Mar 2023 12:18:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232179AbjCaMSk convert rfc822-to-8bit (ORCPT
+        id S232187AbjCaMSm convert rfc822-to-8bit (ORCPT
         <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 31 Mar 2023 08:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56296 "EHLO
+        Fri, 31 Mar 2023 08:18:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232118AbjCaMSe (ORCPT
+        with ESMTP id S232133AbjCaMSf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 31 Mar 2023 08:18:34 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9AB1EFE6;
-        Fri, 31 Mar 2023 05:18:31 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        Fri, 31 Mar 2023 08:18:35 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40DE1EFEC;
+        Fri, 31 Mar 2023 05:18:33 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id BAA1C24E21A;
-        Fri, 31 Mar 2023 20:18:30 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 31 Mar
- 2023 20:18:30 +0800
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 410DF24DC31;
+        Fri, 31 Mar 2023 20:18:27 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 31 Mar
+ 2023 20:18:27 +0800
 Received: from xiaofei.localdomain (180.164.60.184) by EXMBX073.cuchost.com
  (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 31 Mar
- 2023 20:18:30 +0800
+ 2023 20:18:26 +0800
 From:   Jack Zhu <jack.zhu@starfivetech.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Maxime Ripard <mripard@kernel.org>,
@@ -42,14 +42,12 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
 CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <jack.zhu@starfivetech.com>,
         <changhuang.liang@starfivetech.com>
-Subject: [PATCH v3 7/9] media: cadence: Add support for external dphy
-Date:   Fri, 31 Mar 2023 20:18:24 +0800
-Message-ID: <20230331121826.96973-8-jack.zhu@starfivetech.com>
+Subject: [PATCH v3 0/9] Add Starfive Camera Subsystem driver
+Date:   Fri, 31 Mar 2023 20:18:17 +0800
+Message-ID: <20230331121826.96973-1-jack.zhu@starfivetech.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230331121826.96973-1-jack.zhu@starfivetech.com>
-References: <20230331121826.96973-1-jack.zhu@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="UTF-8"
 X-Originating-IP: [180.164.60.184]
 X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX073.cuchost.com
  (172.16.6.83)
@@ -59,143 +57,135 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support for external MIPI D-PHY.
+Hi,
 
-Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
----
- drivers/media/platform/cadence/cdns-csi2rx.c | 66 +++++++++++++++++---
- 1 file changed, 56 insertions(+), 10 deletions(-)
+This patch series adds support for the Starfive Camera Subsystem
+found on Starfive JH7110 SoC.
 
-diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
-index a1555cedb349..add982edce64 100644
---- a/drivers/media/platform/cadence/cdns-csi2rx.c
-+++ b/drivers/media/platform/cadence/cdns-csi2rx.c
-@@ -31,6 +31,12 @@
- #define CSI2RX_STATIC_CFG_DLANE_MAP(llane, plane)	((plane) << (16 + (llane) * 4))
- #define CSI2RX_STATIC_CFG_LANES_MASK			GENMASK(11, 8)
- 
-+#define CSI2RX_DPHY_LANE_CTRL_REG		0x40
-+#define CSI2RX_DPHY_CL_RST			BIT(16)
-+#define CSI2RX_DPHY_DL_RST(i)			BIT((i) + 12)
-+#define CSI2RX_DPHY_CL_EN			BIT(4)
-+#define CSI2RX_DPHY_DL_EN(i)			BIT(i)
-+
- #define CSI2RX_STREAM_BASE(n)		(((n) + 1) * 0x100)
- 
- #define CSI2RX_STREAM_CTRL_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x000)
-@@ -105,6 +111,24 @@ static void csi2rx_reset(struct csi2rx_priv *csi2rx)
- 	writel(0, csi2rx->base + CSI2RX_SOFT_RESET_REG);
- }
- 
-+static int csi2rx_configure_ext_dphy(struct csi2rx_priv *csi2rx)
-+{
-+	union phy_configure_opts opts = { };
-+	int ret;
-+
-+	ret = phy_power_on(csi2rx->dphy);
-+	if (ret)
-+		return ret;
-+
-+	ret = phy_configure(csi2rx->dphy, &opts);
-+	if (ret) {
-+		phy_power_off(csi2rx->dphy);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
- static int csi2rx_start(struct csi2rx_priv *csi2rx)
- {
- 	unsigned int i;
-@@ -144,6 +168,17 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
- 	if (ret)
- 		goto err_disable_pclk;
- 
-+	/* Enable DPHY clk and data lanes. */
-+	if (csi2rx->dphy) {
-+		reg = CSI2RX_DPHY_CL_EN | CSI2RX_DPHY_CL_RST;
-+		for (i = 0; i < csi2rx->num_lanes; i++) {
-+			reg |= CSI2RX_DPHY_DL_EN(csi2rx->lanes[i] - 1);
-+			reg |= CSI2RX_DPHY_DL_RST(csi2rx->lanes[i] - 1);
-+		}
-+
-+		writel(reg, csi2rx->base + CSI2RX_DPHY_LANE_CTRL_REG);
-+	}
-+
- 	/*
- 	 * Create a static mapping between the CSI virtual channels
- 	 * and the output stream.
-@@ -177,10 +212,22 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
- 		goto err_disable_pixclk;
- 
- 	reset_control_deassert(csi2rx->sys_rst);
-+
-+	if (csi2rx->dphy) {
-+		ret = csi2rx_configure_ext_dphy(csi2rx);
-+		if (ret) {
-+			dev_err(csi2rx->dev,
-+				"Failed to configure external DPHY: %d\n", ret);
-+			goto err_disable_sysclk;
-+		}
-+	}
-+
- 	clk_disable_unprepare(csi2rx->p_clk);
- 
- 	return 0;
- 
-+err_disable_sysclk:
-+	clk_disable_unprepare(csi2rx->sys_clk);
- err_disable_pixclk:
- 	for (; i > 0; i--)
- 		clk_disable_unprepare(csi2rx->pixel_clk[i - 1]);
-@@ -211,6 +258,13 @@ static void csi2rx_stop(struct csi2rx_priv *csi2rx)
- 
- 	if (v4l2_subdev_call(csi2rx->source_subdev, video, s_stream, false))
- 		dev_warn(csi2rx->dev, "Couldn't disable our subdev\n");
-+
-+	if (csi2rx->dphy) {
-+		writel(0, csi2rx->base + CSI2RX_DPHY_LANE_CTRL_REG);
-+
-+		if (phy_power_off(csi2rx->dphy))
-+			dev_warn(csi2rx->dev, "Couldn't power off DPHY\n");
-+	}
- }
- 
- static int csi2rx_s_stream(struct v4l2_subdev *subdev, int enable)
-@@ -327,15 +381,6 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
- 		return PTR_ERR(csi2rx->dphy);
- 	}
- 
--	/*
--	 * FIXME: Once we'll have external D-PHY support, the check
--	 * will need to be removed.
--	 */
--	if (csi2rx->dphy) {
--		dev_err(&pdev->dev, "External D-PHY not supported yet\n");
--		return -EINVAL;
--	}
--
- 	ret = clk_prepare_enable(csi2rx->p_clk);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Couldn't prepare and enable P clock\n");
-@@ -365,7 +410,7 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
- 	 * FIXME: Once we'll have internal D-PHY support, the check
- 	 * will need to be removed.
- 	 */
--	if (csi2rx->has_internal_dphy) {
-+	if (!csi2rx->dphy && csi2rx->has_internal_dphy) {
- 		dev_err(&pdev->dev, "Internal D-PHY not supported yet\n");
- 		return -EINVAL;
- 	}
-@@ -492,6 +537,7 @@ static int csi2rx_probe(struct platform_device *pdev)
- 	dev_info(&pdev->dev,
- 		 "Probed CSI2RX with %u/%u lanes, %u streams, %s D-PHY\n",
- 		 csi2rx->num_lanes, csi2rx->max_lanes, csi2rx->max_streams,
-+		 csi2rx->dphy ? "external" :
- 		 csi2rx->has_internal_dphy ? "internal" : "no");
- 
- 	return 0;
+The driver implements V4L2, Media controller and V4L2 subdev interfaces.
+Camera sensor using V4L2 subdev interface in the kernel is supported.
+
+The driver is tested on VisionFive V2 board with IMX219 camera sensor.
+GStreamer 1.18.5 with v4l2src plugin is supported.
+
+Changes since v2:
+- Rebased on v6.3-rc1.
+Patch 1:
+- Modified spelling errors.
+- Added port@0.
+- Modified '$ref' of port.
+- Added 'ports' to 'required'.
+- Dropped 'stfcamss' label in example.
+- Added port@0 in example.
+- Added MAINTAINERS file.
+Patch 2:
+- Split this patch into three new patches.
+- Modified compatible property.
+- Replaced clock names with the existing names.
+- Modified 'bus-type' and 'clock-lanes'
+- Added port@2 - port@4
+- Dropped 'csi2rx' label in example.
+Patch 3:
+- Updated rst and dot file as three pipelines were deleted.
+Patch 4:
+- Split this patch into three new patches.
+- Dropped .s_power() and .get_fmt().
+- Dropped CSI-2 DT support.
+- Dropped v4l2_device_register_subdev_nodes().
+- Used assigned-clock-rates in DT to set clk value.
+- Modified 'compatible' field.
+Patch 5:
+- Deleted three pipelines. 
+- Modified 'stfcamss_clocks'/'stfcamss_resets' struct.
+- Dropped stfcamss_find_sensor() function.
+- Removed redundant code from stfcamss_of_parse_endpoint_node().
+- Modified spelling errors.
+- Rewrote stfcamss_reg_media_subdev_node() function.
+- Modified stfcamss_subdev_notifier_bound().
+- Modified stfcamss_probe() function.
+- Dropped stfcamss_suspend() and stfcamss_resume().
+- Dropped dev_info() in stfcamss_remove() function.
+- Added 'stf_' prefix for enum subdev_type.
+- Moved all includes to the top in stf_camss.h file.
+- Dropped unused fields in stfcamss struct.
+- Replaced Custom logging macros with regular macros.
+- Rewrote register read and write functions.
+- Used lowercase for all hex constants.
+- Used macro to name registers.
+- Dropped unused ioctl and stf_isp_ioctl.h file.
+
+  v2: https://lore.kernel.org/all/20230310120553.60586-1-jack.zhu@starfivetech.com/
+
+Changes since v1:
+- Deleted starfive,jh7110-mipi-csi2.yaml.
+- Converted cdns,csi2rx.txt to cdns,csi2rx.yaml and added ‘resets’
+  properties.
+- Added ‘cdns,csi2rx.yaml’ in ‘CADENCE MIPI-CSI2 BRIDGES’ entry.
+- The following contents were modified in starfive,jh7110-camss.yaml:
+  dropped quotes from ’id’ and ‘schema’; dropped ‘|’ for ‘description’;
+  corrected the wrong or redundant words: ‘a ISP’, ‘PD ISP’;
+  dropped ‘minItems’ for ‘reg’, ‘clocks’, ‘resets’ and ‘interrupts’;
+  dropped the '_clk' and 'rst_' prefix about the 'clock-names' and
+  'reset-names';
+  changed ‘endpoint@1’ to ‘endpoint’; updated examples;
+- Updated Subject for some patches.
+- Merged patch 6, 7, 8, 9, 10, 11 into one patch.
+
+Jack Zhu (9):
+  media: dt-bindings: Add bindings for JH7110 Camera Subsystem
+  media: admin-guide: Add starfive_camss.rst for Starfive Camera
+    Subsystem
+  media: dt-bindings: cadence-csi2rx: Convert to DT schema
+  media: dt-bindings: cadence-csi2rx: Add resets property
+  media: dt-bindings: cadence-csi2rx: Add starfive compatible
+  media: cadence: Add operation on reset
+  media: cadence: Add support for external dphy
+  media: cadence: Add support for JH7110 SoC
+  media: starfive: Add Starfive Camera Subsystem driver
+
+ .../admin-guide/media/starfive_camss.rst      |   57 +
+ .../media/starfive_camss_graph.dot            |   16 +
+ .../admin-guide/media/v4l-drivers.rst         |    1 +
+ .../devicetree/bindings/media/cdns,csi2rx.txt |  100 --
+ .../bindings/media/cdns,csi2rx.yaml           |  201 +++
+ .../bindings/media/starfive,jh7110-camss.yaml |  159 +++
+ MAINTAINERS                                   |   10 +
+ drivers/media/platform/Kconfig                |    1 +
+ drivers/media/platform/Makefile               |    1 +
+ drivers/media/platform/cadence/cdns-csi2rx.c  |   97 +-
+ drivers/media/platform/starfive/Kconfig       |   18 +
+ drivers/media/platform/starfive/Makefile      |   14 +
+ drivers/media/platform/starfive/stf_camss.c   |  477 +++++++
+ drivers/media/platform/starfive/stf_camss.h   |  150 +++
+ drivers/media/platform/starfive/stf_common.h  |   18 +
+ drivers/media/platform/starfive/stf_isp.c     |  737 +++++++++++
+ drivers/media/platform/starfive/stf_isp.h     |  999 ++++++++++++++
+ .../media/platform/starfive/stf_isp_hw_ops.c  |  715 ++++++++++
+ drivers/media/platform/starfive/stf_video.c   |  989 ++++++++++++++
+ drivers/media/platform/starfive/stf_video.h   |   89 ++
+ drivers/media/platform/starfive/stf_vin.c     | 1151 +++++++++++++++++
+ drivers/media/platform/starfive/stf_vin.h     |  174 +++
+ .../media/platform/starfive/stf_vin_hw_ops.c  |  211 +++
+ 23 files changed, 6275 insertions(+), 110 deletions(-)
+ create mode 100644 Documentation/admin-guide/media/starfive_camss.rst
+ create mode 100644 Documentation/admin-guide/media/starfive_camss_graph.dot
+ delete mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.txt
+ create mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+ create mode 100644 drivers/media/platform/starfive/Kconfig
+ create mode 100644 drivers/media/platform/starfive/Makefile
+ create mode 100644 drivers/media/platform/starfive/stf_camss.c
+ create mode 100644 drivers/media/platform/starfive/stf_camss.h
+ create mode 100644 drivers/media/platform/starfive/stf_common.h
+ create mode 100644 drivers/media/platform/starfive/stf_isp.c
+ create mode 100644 drivers/media/platform/starfive/stf_isp.h
+ create mode 100644 drivers/media/platform/starfive/stf_isp_hw_ops.c
+ create mode 100644 drivers/media/platform/starfive/stf_video.c
+ create mode 100644 drivers/media/platform/starfive/stf_video.h
+ create mode 100644 drivers/media/platform/starfive/stf_vin.c
+ create mode 100644 drivers/media/platform/starfive/stf_vin.h
+ create mode 100644 drivers/media/platform/starfive/stf_vin_hw_ops.c
+
 -- 
 2.34.1
 
