@@ -2,41 +2,41 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A22CCC76196
-	for <linux-media@archiver.kernel.org>; Sat,  1 Apr 2023 15:00:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2302C6FD1D
+	for <linux-media@archiver.kernel.org>; Sat,  1 Apr 2023 15:00:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbjDAPAs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 1 Apr 2023 11:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
+        id S230077AbjDAPAt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 1 Apr 2023 11:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjDAPAo (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 1 Apr 2023 11:00:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCB11CBAE
-        for <linux-media@vger.kernel.org>; Sat,  1 Apr 2023 07:59:51 -0700 (PDT)
+        with ESMTP id S229985AbjDAPAq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 1 Apr 2023 11:00:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4321CB9B
+        for <linux-media@vger.kernel.org>; Sat,  1 Apr 2023 07:59:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680361190;
+        s=mimecast20190719; t=1680361198;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=US/2IeK285PZlUA2Tl98A9Oi89YZl6NRbds6ETiMeIg=;
-        b=ZageukPlFnEPIoqba38FMN0eFoMGw3HbsV9lH0MyT73XvGZQlpKlx1s5YhYhG98lh7IQQX
-        +ozrAT4/krE/ILqNCAo4qbkrcxETZZgDY4qFKVIfWZe9UM3GrhAAUZ6Gi05nsvB6ZjSiOR
-        d8xhAWXIMmTZkXcenruoJeS7CvptkZM=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=JP5qdqrHUFH6LRRriErWEru2yLbtNJt7pxXTeJIx3gs=;
+        b=Z9AXOol+puCKTM2dNa+xRt5xJdhpsx7kJ0m201FEA8gyQR3/0eZ/mohNgiHRYN1fcByjLc
+        /y3C0JpRAJECnrO8xscvAJk6iC1xnEJHTVNac+z/d9d6/32Ww1p8z3KVF5Z+x66m6DUCFv
+        xyru//A4O+teOukuMVl9fRO7khP1pH0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-606-0XVtv_RjM9ytluGJndfBjQ-1; Sat, 01 Apr 2023 10:59:47 -0400
-X-MC-Unique: 0XVtv_RjM9ytluGJndfBjQ-1
+ us-mta-655-hJwjZVlhOuWBq82cb94ovA-1; Sat, 01 Apr 2023 10:59:53 -0400
+X-MC-Unique: hJwjZVlhOuWBq82cb94ovA-1
 Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0F65C3815F61;
-        Sat,  1 Apr 2023 14:59:47 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 616EC85A588;
+        Sat,  1 Apr 2023 14:59:52 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.39.192.49])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7F45C400F59;
-        Sat,  1 Apr 2023 14:59:45 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D65764021BC;
+        Sat,  1 Apr 2023 14:59:50 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -47,9 +47,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>, Kate Hsuan <hpa@redhat.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 06/28] media: atomisp: gc0310: Simplify gc0310_write_reg_array()
-Date:   Sat,  1 Apr 2023 16:59:04 +0200
-Message-Id: <20230401145926.596216-7-hdegoede@redhat.com>
+Subject: [PATCH 09/28] media: atomisp: gc0310: Remove non working flip-controls
+Date:   Sat,  1 Apr 2023 16:59:07 +0200
+Message-Id: <20230401145926.596216-10-hdegoede@redhat.com>
 In-Reply-To: <20230401145926.596216-1-hdegoede@redhat.com>
 References: <20230401145926.596216-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -59,148 +59,87 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Remove the complex optimization to send multiple registers in
-one i2c-transfer. None of the other sensor drivers are doing this
-and the reg-lists are only used once at stream-start time, so
-this does not need to be highly optimized.
+The gc0310_[v|h]_flip() functions are empty stubs, remove
+the non working controls.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- .../media/atomisp/i2c/atomisp-gc0310.c        | 87 +------------------
- drivers/staging/media/atomisp/i2c/gc0310.h    | 12 ---
- 2 files changed, 3 insertions(+), 96 deletions(-)
+ .../media/atomisp/i2c/atomisp-gc0310.c        | 45 -------------------
+ 1 file changed, 45 deletions(-)
 
 diff --git a/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c b/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c
-index 18aebeef6869..5974dd5bd95e 100644
+index 8f7eea39858b..93cde642ce44 100644
 --- a/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c
 +++ b/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c
-@@ -135,100 +135,19 @@ static int gc0310_write_reg(struct i2c_client *client, u16 data_length,
-  * @client: i2c driver client structure
-  * @reglist: list of registers to be written
-  * @count: number of register, value pairs in the list
-- *
-- * This function initializes a list of registers. When consecutive addresses
-- * are found in a row on the list, this function creates a buffer and sends
-- * consecutive data in a single i2c_transfer().
-- *
-- * __gc0310_flush_reg_array, __gc0310_buf_reg_array() and
-- * __gc0310_write_reg_is_consecutive() are internal functions to
-- * gc0310_write_reg_array_fast() and should be not used anywhere else.
-- *
-  */
--
--static int __gc0310_flush_reg_array(struct i2c_client *client,
--				    struct gc0310_write_ctrl *ctrl)
+@@ -144,18 +144,6 @@ static long gc0310_s_exposure(struct v4l2_subdev *sd,
+ 	return gc0310_set_exposure(sd, exp, gain, digitgain);
+ }
+ 
+-/* TO DO */
+-static int gc0310_v_flip(struct v4l2_subdev *sd, s32 value)
 -{
--	u16 size;
--
--	if (ctrl->index == 0)
--		return 0;
--
--	size = sizeof(u8) + ctrl->index; /* 8-bit address + data */
--	ctrl->buffer.addr = (u8)(ctrl->buffer.addr);
--	ctrl->index = 0;
--
--	return gc0310_i2c_write(client, size, (u8 *)&ctrl->buffer);
--}
--
--static int __gc0310_buf_reg_array(struct i2c_client *client,
--				  struct gc0310_write_ctrl *ctrl,
--				  const struct gc0310_reg *next)
--{
--	int size;
--
--	switch (next->type) {
--	case GC0310_8BIT:
--		size = 1;
--		ctrl->buffer.data[ctrl->index] = (u8)next->val;
--		break;
--	default:
--		return -EINVAL;
--	}
--
--	/* When first item is added, we need to store its starting address */
--	if (ctrl->index == 0)
--		ctrl->buffer.addr = next->reg;
--
--	ctrl->index += size;
--
--	/*
--	 * Buffer cannot guarantee free space for u32? Better flush it to avoid
--	 * possible lack of memory for next item.
--	 */
--	if (ctrl->index + sizeof(u8) >= GC0310_MAX_WRITE_BUF_SIZE)
--		return __gc0310_flush_reg_array(client, ctrl);
--
 -	return 0;
 -}
 -
--static int __gc0310_write_reg_is_consecutive(struct i2c_client *client,
--					     struct gc0310_write_ctrl *ctrl,
--					     const struct gc0310_reg *next)
+-/* TO DO */
+-static int gc0310_h_flip(struct v4l2_subdev *sd, s32 value)
 -{
--	if (ctrl->index == 0)
--		return 1;
--
--	return ctrl->buffer.addr + ctrl->index == next->reg;
+-	return 0;
 -}
 -
- static int gc0310_write_reg_array(struct i2c_client *client,
- 				  const struct gc0310_reg *reglist, int count)
+ static long gc0310_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg)
  {
--	struct gc0310_write_ctrl ctrl;
- 	int i, err;
+ 	switch (cmd) {
+@@ -186,22 +174,9 @@ static int gc0310_q_exposure(struct v4l2_subdev *sd, s32 *value)
  
--	ctrl.index = 0;
- 	for (i = 0; i < count; i++) {
--		/*
--		 * If next address is not consecutive, data needs to be
--		 * flushed before proceed.
--		 */
--		if (!__gc0310_write_reg_is_consecutive(client, &ctrl,
--						       &reglist[i])) {
--			err = __gc0310_flush_reg_array(client, &ctrl);
--			if (err)
--				return err;
--		}
--		err = __gc0310_buf_reg_array(client, &ctrl, &reglist[i]);
--		if (err) {
--			dev_err(&client->dev, "%s: write error, aborted\n",
--				__func__);
-+		err = gc0310_write_reg(client, GC0310_8BIT, reglist[i].reg, reglist[i].val);
-+		if (err)
- 			return err;
--		}
+ static int gc0310_s_ctrl(struct v4l2_ctrl *ctrl)
+ {
+-	struct gc0310_device *dev =
+-	    container_of(ctrl->handler, struct gc0310_device, ctrl_handler);
+-	struct i2c_client *client = v4l2_get_subdevdata(&dev->sd);
+ 	int ret = 0;
+ 
+ 	switch (ctrl->id) {
+-	case V4L2_CID_VFLIP:
+-		dev_dbg(&client->dev, "%s: CID_VFLIP:%d.\n",
+-			__func__, ctrl->val);
+-		ret = gc0310_v_flip(&dev->sd, ctrl->val);
+-		break;
+-	case V4L2_CID_HFLIP:
+-		dev_dbg(&client->dev, "%s: CID_HFLIP:%d.\n",
+-			__func__, ctrl->val);
+-		ret = gc0310_h_flip(&dev->sd, ctrl->val);
+-		break;
+ 	default:
+ 		ret = -EINVAL;
  	}
+@@ -242,26 +217,6 @@ static const struct v4l2_ctrl_config gc0310_controls[] = {
+ 		.def = 0x00,
+ 		.flags = 0,
+ 	},
+-	{
+-		.ops = &ctrl_ops,
+-		.id = V4L2_CID_VFLIP,
+-		.type = V4L2_CTRL_TYPE_BOOLEAN,
+-		.name = "Flip",
+-		.min = 0,
+-		.max = 1,
+-		.step = 1,
+-		.def = 0,
+-	},
+-	{
+-		.ops = &ctrl_ops,
+-		.id = V4L2_CID_HFLIP,
+-		.type = V4L2_CTRL_TYPE_BOOLEAN,
+-		.name = "Mirror",
+-		.min = 0,
+-		.max = 1,
+-		.step = 1,
+-		.def = 0,
+-	},
+ };
  
--	return __gc0310_flush_reg_array(client, &ctrl);
-+	return 0;
- }
- 
- static int gc0310_set_gain(struct v4l2_subdev *sd, int gain)
-diff --git a/drivers/staging/media/atomisp/i2c/gc0310.h b/drivers/staging/media/atomisp/i2c/gc0310.h
-index ecca3b5e42bf..a2734934fc6a 100644
---- a/drivers/staging/media/atomisp/i2c/gc0310.h
-+++ b/drivers/staging/media/atomisp/i2c/gc0310.h
-@@ -158,18 +158,6 @@ struct gc0310_reg {
- 
- #define to_gc0310_sensor(x) container_of(x, struct gc0310_device, sd)
- 
--#define GC0310_MAX_WRITE_BUF_SIZE	30
--
--struct gc0310_write_buffer {
--	u8 addr;
--	u8 data[GC0310_MAX_WRITE_BUF_SIZE];
--};
--
--struct gc0310_write_ctrl {
--	int index;
--	struct gc0310_write_buffer buffer;
--};
--
- /*
-  * Register settings for various resolution
-  */
+ static int gc0310_init(struct v4l2_subdev *sd)
 -- 
 2.39.1
 
