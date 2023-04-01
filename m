@@ -2,41 +2,41 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2650AC77B62
-	for <linux-media@archiver.kernel.org>; Sat,  1 Apr 2023 15:01:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D625C761AF
+	for <linux-media@archiver.kernel.org>; Sat,  1 Apr 2023 15:01:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbjDAPBm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 1 Apr 2023 11:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37966 "EHLO
+        id S230146AbjDAPBn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 1 Apr 2023 11:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbjDAPBc (ORCPT
+        with ESMTP id S230140AbjDAPBc (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Sat, 1 Apr 2023 11:01:32 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBB32031D
-        for <linux-media@vger.kernel.org>; Sat,  1 Apr 2023 08:00:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB44C1F7B2
+        for <linux-media@vger.kernel.org>; Sat,  1 Apr 2023 08:00:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680361232;
+        s=mimecast20190719; t=1680361228;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cb6G5JbVFv+EPtm+OowTpy5n4KazA/zY4dcxtvzMYS4=;
-        b=ZeLlZhhJBQZNgQtih6HYM0uV0Cp45qfmCqwhk8WWa77dWFq/muQQ4AgYDLcR4UPUQbItep
-        o/WIOHx5lA2gS7ueW9CL8nwbiuOoqGZuQBn166tBZRPeCrbgwdKXNCa4Z5FYd9Kb8a03t/
-        gngN/LUuhJa2wqfDepK3uKRYr6Rg3Iw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=TezODqGRq70gjY6nlZ1O4bq0QDVSc71v9rjbdJs2K48=;
+        b=fMrAP7K3gTQoqr8mcng8S5OlHhSA3JjHPRedHUdGb1F3aNkf2WE1QJuTGM2+sMhGtN/Oon
+        X/wV1QXUJsvZfBftTJSFXum4/naF3+8EpyF7O0l+xtwtQeemjvXI8/wVsHnEZTC14/EhlL
+        j/fQSPfCtOun32MGOqhWmwvL8LEqafE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-264-vSFLvIQPPuKahXq27mIAYw-1; Sat, 01 Apr 2023 11:00:28 -0400
-X-MC-Unique: vSFLvIQPPuKahXq27mIAYw-1
+ us-mta-554-fzpIHlJ3P8q1GbVLavFRng-1; Sat, 01 Apr 2023 11:00:21 -0400
+X-MC-Unique: fzpIHlJ3P8q1GbVLavFRng-1
 Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 07B662A5955F;
-        Sat,  1 Apr 2023 15:00:28 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A4A0F101A531;
+        Sat,  1 Apr 2023 15:00:20 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.39.192.49])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7C621400F59;
-        Sat,  1 Apr 2023 15:00:26 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 88C59400F59;
+        Sat,  1 Apr 2023 15:00:18 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -47,9 +47,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>, Kate Hsuan <hpa@redhat.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 27/28] media: atomisp: gmin_platform: Make DMI quirks take precedence over the _DSM table
-Date:   Sat,  1 Apr 2023 16:59:25 +0200
-Message-Id: <20230401145926.596216-28-hdegoede@redhat.com>
+Subject: [PATCH 23/28] media: atomisp: Remove unused ATOM_ISP_MAX_WIDTH_TMP and ATOM_ISP_MAX_HEIGHT_TMP
+Date:   Sat,  1 Apr 2023 16:59:21 +0200
+Message-Id: <20230401145926.596216-24-hdegoede@redhat.com>
 In-Reply-To: <20230401145926.596216-1-hdegoede@redhat.com>
 References: <20230401145926.596216-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -59,75 +59,28 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On some devices the _DSM sensor-info table contains wrong info,
-move the DMI quirk handling up to above the _DSM table check
-to allow DMI quirks to override wrong info in the _DSM table.
+Remove the unused ATOM_ISP_MAX_WIDTH_TMP and ATOM_ISP_MAX_HEIGHT_TMP
+defines.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- .../media/atomisp/pci/atomisp_gmin_platform.c | 30 +++++++------------
- 1 file changed, 11 insertions(+), 19 deletions(-)
+ drivers/staging/media/atomisp/pci/atomisp_internal.h | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-index f8d8a34d7e7f..f83de0ffaf16 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-@@ -1353,37 +1353,22 @@ static int gmin_get_config_var(struct device *maindev,
- 			       const char *var,
- 			       char *out, size_t *out_len)
- {
-+	struct acpi_device *adev = ACPI_COMPANION(maindev);
- 	efi_char16_t var16[CFG_VAR_NAME_MAX];
- 	const struct dmi_system_id *id;
--	struct device *dev = maindev;
- 	char var8[CFG_VAR_NAME_MAX];
- 	efi_status_t status;
- 	int i, ret;
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_internal.h b/drivers/staging/media/atomisp/pci/atomisp_internal.h
+index 681a9258288d..35293f2c196a 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_internal.h
++++ b/drivers/staging/media/atomisp/pci/atomisp_internal.h
+@@ -76,9 +76,6 @@
+ #define ATOM_RESOLUTION_SUBQCIF_WIDTH	128
+ #define ATOM_RESOLUTION_SUBQCIF_HEIGHT	96
  
--	/* For sensors, try first to use the _DSM table */
--	if (!is_gmin) {
--		ret = gmin_get_config_dsm_var(maindev, var, out, out_len);
--		if (!ret)
--			return 0;
--	}
+-#define ATOM_ISP_MAX_WIDTH_TMP	1280
+-#define ATOM_ISP_MAX_HEIGHT_TMP	720
 -
--	/* Fall-back to other approaches */
--
--	if (!is_gmin && ACPI_COMPANION(dev))
--		dev = &ACPI_COMPANION(dev)->dev;
--
--	if (!is_gmin)
--		ret = snprintf(var8, sizeof(var8), "%s_%s", dev_name(dev), var);
-+	if (!is_gmin && adev)
-+		ret = snprintf(var8, sizeof(var8), "%s_%s", acpi_dev_name(adev), var);
- 	else
- 		ret = snprintf(var8, sizeof(var8), "gmin_%s", var);
+ #define ATOM_ISP_I2C_BUS_1	4
+ #define ATOM_ISP_I2C_BUS_2	5
  
- 	if (ret < 0 || ret >= sizeof(var8) - 1)
- 		return -EINVAL;
- 
--	/* First check a hard-coded list of board-specific variables.
--	 * Some device firmwares lack the ability to set EFI variables at
--	 * runtime.
--	 */
-+	/* DMI based quirks override both the _DSM table and EFI variables */
- 	id = dmi_first_match(gmin_vars);
- 	if (id) {
- 		ret = gmin_get_hardcoded_var(maindev, id->driver_data, var8,
-@@ -1392,6 +1377,13 @@ static int gmin_get_config_var(struct device *maindev,
- 			return 0;
- 	}
- 
-+	/* For sensors, try first to use the _DSM table */
-+	if (!is_gmin) {
-+		ret = gmin_get_config_dsm_var(maindev, var, out, out_len);
-+		if (!ret)
-+			return 0;
-+	}
-+
- 	/* Our variable names are ASCII by construction, but EFI names
- 	 * are wide chars.  Convert and zero-pad.
- 	 */
 -- 
 2.39.1
 
