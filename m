@@ -2,91 +2,156 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA42AC761AF
-	for <linux-media@archiver.kernel.org>; Sat,  1 Apr 2023 14:31:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48CA9C76196
+	for <linux-media@archiver.kernel.org>; Sat,  1 Apr 2023 15:00:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbjDAObt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 1 Apr 2023 10:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49464 "EHLO
+        id S229792AbjDAPAk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 1 Apr 2023 11:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjDAObs (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 1 Apr 2023 10:31:48 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C511AD27;
-        Sat,  1 Apr 2023 07:31:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1680359504;
+        with ESMTP id S229667AbjDAPAj (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 1 Apr 2023 11:00:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4921D2DC
+        for <linux-media@vger.kernel.org>; Sat,  1 Apr 2023 07:59:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680361184;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hMrbsGp2VbSuKBP42mT23UvlOXpqHOgBiKJ7nTY4v2c=;
-        b=GrRe12vSlJYlfUja0UIhZA/bhg+HyUD+h3ORFit2lWeN8k0evumUNlAmn/of32pQZkb8Iq
-        OFFx6AUYaqh4qspAh+JrJ++/6jOjfefooPQ+0c+1fXJ+ftGKRMGaA4Ly24MPkHBZRk0V7j
-        szECRpOr+X05RzncynymXdY1baUJAiU=
-Message-ID: <425c1b8ea20002c6344a574cd094b4c715c67ba6.camel@crapouillou.net>
-Subject: Re: [PATCH v2 0/3] usb: gadget: functionfs: DMABUF import interface
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     michael.hennerich@analog.com, nuno.sa@analog.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-Date:   Sat, 01 Apr 2023 16:31:42 +0200
-In-Reply-To: <c6ce737d-25cc-7f22-7c0f-c0ba1420e57d@collabora.com>
-References: <20230322092118.9213-1-paul@crapouillou.net>
-         <c6ce737d-25cc-7f22-7c0f-c0ba1420e57d@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        bh=PCnCunX8zPLtEMo/fn00t95JhskXvfVoqtR5aYXZvnU=;
+        b=Y+hBUWC5tuKm6bf1x3TrEQlS9rzp91g0hGT8US3dAyKI0Rs8Sg6Y5+lvJCHyiTLTZ+r/M4
+        o+Jf6ewGuWAHkAGY1qQZA14/TnywJUp9jLVMPOrNYB1uLHjxH2Bx6208mgTq8WLC+cmGGH
+        Rk05Mp/ZRZqaPlGE1GH2uVxg14u+adE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-225-I2IOVZdDN1mR37GiUn2E5w-1; Sat, 01 Apr 2023 10:59:40 -0400
+X-MC-Unique: I2IOVZdDN1mR37GiUn2E5w-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 121ED1C04181;
+        Sat,  1 Apr 2023 14:59:40 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.39.192.49])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8581C400F59;
+        Sat,  1 Apr 2023 14:59:38 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, Kate Hsuan <hpa@redhat.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Yury Luneff <yury.lunev@gmail.com>,
+        Nable <nable.maininbox@googlemail.com>,
+        andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: [PATCH 02/28] media: atomisp: ov2680: Use v4l2_get_acpi_sensor_info() for the GPIO lookups
+Date:   Sat,  1 Apr 2023 16:59:00 +0200
+Message-Id: <20230401145926.596216-3-hdegoede@redhat.com>
+In-Reply-To: <20230401145926.596216-1-hdegoede@redhat.com>
+References: <20230401145926.596216-1-hdegoede@redhat.com>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Andrzej,
+Use the new v4l2_get_acpi_sensor_info() for the GPIO lookups,
+this uses the special Intel _DSM method to get more info about
+the GPIOs like their function and their polarity.
 
-Le vendredi 31 mars 2023 =C3=A0 11:40 +0200, Andrzej Pietrasiewicz a =C3=A9=
-crit=C2=A0:
-> Hi Paul,
->=20
-> W dniu 22.03.2023 o=C2=A010:21, Paul Cercueil pisze:
-> > Hi,
-> >=20
-> > This small patchset adds three new IOCTLs that can be used to
-> > attach,
-> > detach, or transfer from/to a DMABUF object.
-> >=20
-> > Changes since v1:
-> > - patch [2/3] is new. I had to reuse a piece of code that was
-> > already
-> > =C2=A0=C2=A0 duplicated in the driver, so I factorized the code.
-> > - Make ffs_dma_resv_lock() static
-> > - Add MODULE_IMPORT_NS(DMA_BUF);
-> > - The attach/detach functions are now performed without locking the
-> > =C2=A0=C2=A0 eps_lock spinlock. The transfer function starts with the
-> > spinlock
-> > =C2=A0=C2=A0 unlocked, then locks it before allocating and queueing the=
- USB
-> > =C2=A0=C2=A0 transfer.
-> >=20
->=20
-> Can you share an example use case for these new features?
-> Is there a userspace that excercises the new ioctls?
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ .../media/atomisp/i2c/atomisp-ov2680.c        | 26 +++----------------
+ drivers/staging/media/atomisp/i2c/ov2680.h    |  1 -
+ 2 files changed, 3 insertions(+), 24 deletions(-)
 
-We use it at Analog Devices to share buffers between the IIO subsystem
-and the USB stack, which makes it possible to stream data samples
-between a host computer and high-speed transceivers as fast as
-possible, in a zero-copy fashion.
+diff --git a/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c b/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
+index aeb38599fe13..3181276ed027 100644
+--- a/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
++++ b/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
+@@ -3,6 +3,7 @@
+  * Support for OmniVision OV2680 1080p HD camera sensor.
+  *
+  * Copyright (c) 2013 Intel Corporation. All Rights Reserved.
++ * Copyright (c) 2023 Hans de Goede <hdegoede@redhat.com>
+  *
+  * This program is free software; you can redistribute it and/or
+  * modify it under the terms of the GNU General Public License version
+@@ -614,21 +615,6 @@ static void ov2680_remove(struct i2c_client *client)
+ 	pm_runtime_disable(&client->dev);
+ }
+ 
+-/*
+- * Unlike other sensors which have both a rest and powerdown input pins,
+- * the OV2680 only has a powerdown input. But some ACPI tables still list
+- * 2 GPIOs for the OV2680 and it is unclear which to use. So try to get
+- * up to 2 GPIOs (1 mandatory, 1 optional) and control them in sync.
+- */
+-static const struct acpi_gpio_params ov2680_first_gpio = { 0, 0, true };
+-static const struct acpi_gpio_params ov2680_second_gpio = { 1, 0, true };
+-
+-static const struct acpi_gpio_mapping ov2680_gpio_mapping[] = {
+-	{ "powerdown-gpios", &ov2680_first_gpio, 1 },
+-	{ "powerdown-alt-gpios", &ov2680_second_gpio, 1 },
+-	{ },
+-};
+-
+ static int ov2680_probe(struct i2c_client *client)
+ {
+ 	struct device *dev = &client->dev;
+@@ -644,18 +630,14 @@ static int ov2680_probe(struct i2c_client *client)
+ 	sensor->client = client;
+ 	v4l2_i2c_subdev_init(&sensor->sd, client, &ov2680_ops);
+ 
+-	ret = devm_acpi_dev_add_driver_gpios(&client->dev, ov2680_gpio_mapping);
++	ret = v4l2_get_acpi_sensor_info(dev, NULL);
+ 	if (ret)
+ 		return ret;
+ 
+-	sensor->powerdown = devm_gpiod_get(dev, "powerdown", GPIOD_OUT_HIGH);
++	sensor->powerdown = devm_gpiod_get_optional(dev, "powerdown", GPIOD_OUT_HIGH);
+ 	if (IS_ERR(sensor->powerdown))
+ 		return dev_err_probe(dev, PTR_ERR(sensor->powerdown), "getting powerdown GPIO\n");
+ 
+-	sensor->powerdown_alt = devm_gpiod_get_optional(dev, "powerdown-alt", GPIOD_OUT_HIGH);
+-	if (IS_ERR(sensor->powerdown_alt))
+-		return dev_err_probe(dev, PTR_ERR(sensor->powerdown_alt), "getting powerdown-alt GPIO\n");
+-
+ 	pm_runtime_set_suspended(dev);
+ 	pm_runtime_enable(dev);
+ 	pm_runtime_set_autosuspend_delay(dev, 1000);
+@@ -699,7 +681,6 @@ static int ov2680_suspend(struct device *dev)
+ 	struct ov2680_device *sensor = to_ov2680_sensor(sd);
+ 
+ 	gpiod_set_value_cansleep(sensor->powerdown, 1);
+-	gpiod_set_value_cansleep(sensor->powerdown_alt, 1);
+ 	return 0;
+ }
+ 
+@@ -712,7 +693,6 @@ static int ov2680_resume(struct device *dev)
+ 	usleep_range(5000, 6000);
+ 
+ 	gpiod_set_value_cansleep(sensor->powerdown, 0);
+-	gpiod_set_value_cansleep(sensor->powerdown_alt, 0);
+ 
+ 	/* according to DS, 20ms is needed between PWDN and i2c access */
+ 	msleep(20);
+diff --git a/drivers/staging/media/atomisp/i2c/ov2680.h b/drivers/staging/media/atomisp/i2c/ov2680.h
+index a37af0a74a53..baf49eb0659e 100644
+--- a/drivers/staging/media/atomisp/i2c/ov2680.h
++++ b/drivers/staging/media/atomisp/i2c/ov2680.h
+@@ -114,7 +114,6 @@ struct ov2680_device {
+ 	struct mutex input_lock;
+ 	struct i2c_client *client;
+ 	struct gpio_desc *powerdown;
+-	struct gpio_desc *powerdown_alt;
+ 	bool is_streaming;
+ 
+ 	struct ov2680_mode {
+-- 
+2.39.1
 
-This will be used by Libiio:
-https://github.com/analogdevicesinc/libiio/pull/928/commits/dd348137ce37153=
-2fd952a2b249cfd96afaef7d1
-
-The code that uses these IOCTLs is not yet merged to the "master"
-branch, but will be as soon as this patchset is accepted.
-
-Cheers,
--Paul
