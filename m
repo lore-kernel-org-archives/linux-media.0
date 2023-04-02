@@ -2,51 +2,48 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 402B4C6FD1D
-	for <linux-media@archiver.kernel.org>; Sat,  1 Apr 2023 21:00:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01BB9C77B62
+	for <linux-media@archiver.kernel.org>; Sun,  2 Apr 2023 05:03:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbjDAVAf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 1 Apr 2023 17:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53384 "EHLO
+        id S230090AbjDBFDN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 2 Apr 2023 01:03:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjDAVAe (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 1 Apr 2023 17:00:34 -0400
-X-Greylist: delayed 401 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 01 Apr 2023 14:00:32 PDT
-Received: from devico.uberspace.de (devico.uberspace.de [185.26.156.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7977B1A474
-        for <linux-media@vger.kernel.org>; Sat,  1 Apr 2023 14:00:32 -0700 (PDT)
-Received: (qmail 1969 invoked by uid 990); 1 Apr 2023 20:53:49 -0000
-Authentication-Results: devico.uberspace.de;
-        auth=pass (plain)
+        with ESMTP id S229379AbjDBFDK (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 2 Apr 2023 01:03:10 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DFA1EA27;
+        Sat,  1 Apr 2023 22:03:07 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1piprn-0003eO-Bq; Sun, 02 Apr 2023 07:02:59 +0200
+Message-ID: <12c5a8f2-3082-68a2-e973-18fb957068ac@leemhuis.info>
+Date:   Sun, 2 Apr 2023 07:02:58 +0200
 MIME-Version: 1.0
-Date:   Sat, 01 Apr 2023 20:53:48 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-From:   "Leonard Lausen" <leonard@lausen.nl>
-Message-ID: <a2fec0a5855150966fa5a920216c205032965f98@lausen.nl>
-TLS-Required: No
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
 Subject: Re: [PATCH] Revert "venus: firmware: Correct non-pix start and end
  addresses"
-To:     "Javier Martinez Canillas" <javierm@redhat.com>,
-        "Dikshita Agarwal" <quic_dikshita@quicinc.com>,
-        "Vikash Garodia" <vgarodia@qti.qualcomm.com>,
-        "Linux regressions mailing list" <regressions@lists.linux.dev>,
-        "Stanimir Varbanov" <stanimir.k.varbanov@gmail.com>
+Content-Language: en-US, de-DE
+To:     Leonard Lausen <leonard@lausen.nl>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>,
+        Vikash Garodia <vgarodia@qti.qualcomm.com>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>
 Cc:     linux-kernel@vger.kernel.org, mka@chromium.org,
-        "Albert Esteve" <aesteve@redhat.com>, stanimir.varbanov@linaro.org,
-        "Enric Balletbo i Serra" <eballetb@redhat.com>,
-        "Andy Gross" <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Albert Esteve <aesteve@redhat.com>,
+        stanimir.varbanov@linaro.org,
+        Enric Balletbo i Serra <eballetb@redhat.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         "Vikash Garodia (QUIC)" <quic_vgarodia@quicinc.com>,
         linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
-        "Fritz Koenig" <frkoenig@google.com>,
+        Fritz Koenig <frkoenig@google.com>,
         "Rajeshwar Kurapaty (QUIC)" <quic_rkurapat@quicinc.com>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>
-In-Reply-To: <87edq2dus1.fsf@minerva.mail-host-address-is-not-set>
+        Mauro Carvalho Chehab <mchehab@kernel.org>
 References: <87edq2dus1.fsf@minerva.mail-host-address-is-not-set>
- <20230207102254.1446461-1-javierm@redhat.com>
- <DM8PR02MB8169809493BF2822E6C29EECF3DB9@DM8PR02MB8169.namprd02.prod.outlook.com>
  <ef09bc9f-d570-be11-238b-bd34063917fc@redhat.com>
  <70c01751-1dd7-c4bd-a96e-94dea437aa40@redhat.com>
  <DM8PR02MB81696369DBFE619E43F81EEFF3DE9@DM8PR02MB8169.namprd02.prod.outlook.com>
@@ -61,76 +58,80 @@ References: <87edq2dus1.fsf@minerva.mail-host-address-is-not-set>
  <87edq9hj4w.fsf@minerva.mail-host-address-is-not-set>
  <d18fac76-6b77-a446-5fe0-7236556e9187@quicinc.com>
  <0c84724d-08d4-ddcb-5f71-4eb8261240c6@quicinc.com>
-X-Rspamd-Bar: -
-X-Rspamd-Report: MIME_GOOD(-0.1) BAYES_HAM(-2.911118) SUSPICIOUS_RECIPS(1.5)
-X-Rspamd-Score: -1.511118
-Received: from unknown (HELO unkown) (::1)
-        by devico.uberspace.de (Haraka/3.0.1) with ESMTPSA; Sat, 01 Apr 2023 22:53:49 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=lausen.nl; s=uberspace;
-        h=from;
-        bh=aA2msNrvcbbehcgKux4cUf7WB087VIC6mCd6AEtUyEQ=;
-        b=s4XtsGVE1M/EVfLROVnFJKY2m/ZJILlhO+a2J5zOVsO9r/5JzqHXwZOaORDxQewy+/oLt/E13Z
-        HvywSLWvByzGU9FYoycym8dl/qvMUXsLGg76aiYxtRz6nMJTK6ObltrPRW4UXHjh49Nt5/w6snor
-        uZ/vF9mVBfnhYTOKqsh/167Ga0AzjuczYNQVXHHPAxfb022TAWlmScJj1evxBryqU3t/8XGf4OjU
-        Tdqcrynq20Xdv+DjkzxvJ0KElIi6CbYvd4/C9S+wu4TcVGEpjZNGByI6Ht1xE3auxBpkHazadRza
-        KR8P07gnacvy3pxinaTz10ClHrkxtuqMFuqmbMV6eemFAm8+gKf7uuy7FHHbV4g8QSrVqiokM3VD
-        VOCU7qDxTb5ddA+BTgHMOEoeNUfMe2ZxeZVCOv1CC11c9jzKHtGUxu3IGfEB+pqykhVSd1OMmvnu
-        qSt+lruwuDGYb6fnmI0Spko/H8WYomjH8zE3F1O7TiAA06PjkpoZfXlmrvo6x0v/QU7n0vbGgEZq
-        RrgV4YDpxPtJ3yzXK3VxTaxKk7VOA+LNmz/wZ8hvh3BFY/S7poQ+cJzfBkX6BGMtxd+Lgxu/wcr1
-        IYadB4A2ajHkUHnNaYkufpaNtqKB/5pnw29CNGAcn+DPkO7f5BvSS5HMdBncjiuJyuaXzX/ozbfD
-        c=
+ <a2fec0a5855150966fa5a920216c205032965f98@lausen.nl>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <a2fec0a5855150966fa5a920216c205032965f98@lausen.nl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1680411787;3e27d53d;
+X-HE-SMSGID: 1piprn-0003eO-Bq
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Javier, Dikshita, Stan,
 
-the revert wasn't applied to v6.2 series. Can you please apply it and inc=
-lude it for v6.2.10?
 
-March 6, 2023 at 5:43 AM, "Javier Martinez Canillas" <javierm@redhat.com>=
- wrote:
->> On 3/1/2023 3:15 PM, Dikshita Agarwal wrote:
->>> On 2/28/2023 9:33 PM, Javier Martinez Canillas wrote:
->>>> Javier Martinez Canillas<javierm@redhat.com>  writes:
->>>>> Vikash Garodia<vgarodia@qti.qualcomm.com>  writes:
->>>>>
->>>>>> Stan, could you please help with the revert and a pull request hav=
-ing this revert
->>>>>> alongwith other pending changes ?
+On 01.04.23 22:53, Leonard Lausen wrote:
+> Hi Javier, Dikshita, Stan,
+> 
+> the revert wasn't applied to v6.2 series. Can you please apply it and include it for v6.2.10?
+> 
+> March 6, 2023 at 5:43 AM, "Javier Martinez Canillas" <javierm@redhat.com> wrote:
+>>> On 3/1/2023 3:15 PM, Dikshita Agarwal wrote:
+>>>> On 2/28/2023 9:33 PM, Javier Martinez Canillas wrote:
+>>>>> Javier Martinez Canillas<javierm@redhat.com>  writes:
+>>>>>> Vikash Garodia<vgarodia@qti.qualcomm.com>  writes:
 >>>>>>
->>>>> Other fix posted is "media: venus: dec: Fix capture formats enumera=
-tion order":
->>>>>
->>>>> https://patchwork.kernel.org/project/linux-media/patch/202302100818=
-35.2054482-1-javierm@redhat.com/
+>>>>>>> Stan, could you please help with the revert and a pull request having this revert
+>>>>>>> alongwith other pending changes ?
+>>>>>>>
+>>>>>> Other fix posted is "media: venus: dec: Fix capture formats enumeration order":
+>>>>>>
+>>>>>> https://patchwork.kernel.org/project/linux-media/patch/20230210081835.2054482-1-javierm@redhat.com/
+>>>
+>>> Hi Javier,
+>>>
+>>> Thanks for this patch "media: venus: dec: Fix capture formats
+>>> enumeration order".
+>>>
+>>> Somehow I can't find it in my mailbox to be able to reply there.
+>>>
+>>> Could you please explain what is the regression you see here?
+>>>
 >>
->> Hi Javier,
+>> You can find the thread and explanation of the issue here:
 >>
->> Thanks for this patch "media: venus: dec: Fix capture formats
->> enumeration order".
+>> https://lore.kernel.org/lkml/Y+KPW18o%2FDa+N8UI@google.com/T/
 >>
->> Somehow I can't find it in my mailbox to be able to reply there.
->>
->> Could you please explain what is the regression you see here?
->>
->
->You can find the thread and explanation of the issue here:
->
->https://lore.kernel.org/lkml/Y+KPW18o%2FDa+N8UI@google.com/T/
->
->But Stanimir already picked it and sent a PR for v6.3 including it.
+>> But Stanimir already picked it and sent a PR for v6.3 including it.
+> 
+> While "media: venus: dec: Fix capture formats enumeration order" may have been
+> applied to v6.3,
 
-While "media: venus: dec: Fix capture formats enumeration order" may have=
- been
-applied to v6.3, this still leaves the regression introduced by "venus:
-firmware: Correct non-pix start and end addresses". As pointed out by Mat=
-thias
-Kaehlcke, the commit prevents SC7180 and sc7280 AOSS from entering sleep =
-mode
-during system suspend. This is a serious regression in v6.2 kernel series=
-.
+To me it looks like it was submitted[1], but not yet applied even to the
+media tree[2] -- while guess, maybe due problems mentioned in[3]? Or am
+I missing something?
 
-Best regards,
-Leonard Lausen
+[1]
+https://lore.kernel.org/all/20230329211655.100276-1-stanimir.k.varbanov@gmail.com/
+[2] https://git.linuxtv.org/media_tree.git/log/?h=fixes
+[3]
+https://lore.kernel.org/all/20230329214310.2503484-1-jenkins@linuxtv.org/
+
+> this still leaves the regression introduced by "venus:
+> firmware: Correct non-pix start and end addresses". As pointed out by Matthias
+> Kaehlcke, the commit prevents SC7180 and sc7280 AOSS from entering sleep mode
+> during system suspend. This is a serious regression in v6.2 kernel series.
+
+That fix is sitting in the media tree for a while and afaics still
+hasn't been sent to Linus (which is needed to get this fixed in 6.2.y).
+
+Mauro, could you maybe take care of that?
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
