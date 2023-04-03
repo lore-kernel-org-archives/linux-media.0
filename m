@@ -2,185 +2,263 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B5FEC77B6C
-	for <linux-media@archiver.kernel.org>; Mon,  3 Apr 2023 15:56:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB963C76188
+	for <linux-media@archiver.kernel.org>; Mon,  3 Apr 2023 15:57:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233128AbjDCP4t (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 Apr 2023 11:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45146 "EHLO
+        id S232902AbjDCP5S (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 Apr 2023 11:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233028AbjDCP4h (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Apr 2023 11:56:37 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7A9180;
-        Mon,  3 Apr 2023 08:56:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1680537005;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wA4riywwKKpvJAgChQaqtpae762HoiQ3X43R1omKQq4=;
-        b=w2Vbrqzju+FpRpVjzxZ2RLYiP3a1YX0fUt98d/TwX/8ordZETUPCJEcVcrO40kky/ffb9S
-        crFaELFhXS+K44RKouzy6bUJopS6o5LK2G4sSwcSpNycj2XHVf7p/0YKpt+mQ99jEQKCwj
-        YMLN5v0VHzBRjP/xQ0K8kCdC+HOP350=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Vinod Koul <vkoul@kernel.org>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        =?UTF-8?q?Nuno=20S=C3=A1?= <noname.nuno@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v3 10/11] iio: buffer-dmaengine: Support new DMABUF based userspace API
-Date:   Mon,  3 Apr 2023 17:49:54 +0200
-Message-Id: <20230403154955.216148-1-paul@crapouillou.net>
-In-Reply-To: <20230403154800.215924-1-paul@crapouillou.net>
-References: <20230403154800.215924-1-paul@crapouillou.net>
+        with ESMTP id S232868AbjDCP5B (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Apr 2023 11:57:01 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C107E210E
+        for <linux-media@vger.kernel.org>; Mon,  3 Apr 2023 08:56:40 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id y85so13017676iof.13
+        for <linux-media@vger.kernel.org>; Mon, 03 Apr 2023 08:56:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1680537399; x=1683129399;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RFe1zxSzU2I3bvo/3kZcBou8v77SsyPyI2OZuMHbibE=;
+        b=HLfjwWpb2rIC2BwxZ3+wUXnBHQ3XGF6VNw1mOzYBjtFXZJicnn8CitaS9EovRRq4/l
+         ohC67uZGuXXZ3Nct8FzthmGCVoifOU4U70yki5tQV1+vRjIGsGcgnRbbCa+xS2noDZKx
+         ZuYl7nThpYrtmGh3yT6Bf6881TnjYdrhr2/AM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680537399; x=1683129399;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RFe1zxSzU2I3bvo/3kZcBou8v77SsyPyI2OZuMHbibE=;
+        b=iHOZq4hZR7Tn0TgCuNImLJ666hqEClPHAhGwPewMfw7IFUeRp2iRQ0+dWK08PQT26W
+         LTQpzKRzarv4bSVLpdk+gMiVrhJlalso9Wt/BBZmaoiS6UuXnSaXe21RN5fUpo3UPdRl
+         W0YNmxG3F1X3MxZgTwNNG7XTKzfk5fobXhkvb7zx7MGjDmIVc4BeE0vcrGMQ6tm7v5PO
+         geizbQKZhj+j1evpTir0UOU9uN30PY3XO6tRJH0sEtJ731doP7XAOVKqL9mjtOm07nm4
+         ctyJ/aB3v4GxxelVpWKn5e1WyXyHPNmqsHiBW/bgYKtAZdedvIyjdYnwBsHBJWqsY7IV
+         s1Rg==
+X-Gm-Message-State: AO0yUKWgXzs+QUZj1LKK0dxmjmxQL2wVm0ElJ/LBxxkypK11P58OIzcZ
+        H/gqBVc5kJVyCNuAWLUaNzU3ggdlsbFW41tq4x764cvz+d54CnfJIfs=
+X-Google-Smtp-Source: AK7set+dv6kILLgSsW5OhiwMMvsJpDHj0jkLG3ftk9C2Q3IVuihcM3FeeX1WK+8h3sANIAsQbzCsnywxjghQVdTP8nI=
+X-Received: by 2002:a02:9666:0:b0:3a7:e46f:2a32 with SMTP id
+ c93-20020a029666000000b003a7e46f2a32mr14684132jai.6.1680537398876; Mon, 03
+ Apr 2023 08:56:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam: Yes
+References: <00000000000057e9d305f869eaa0@google.com>
+In-Reply-To: <00000000000057e9d305f869eaa0@google.com>
+From:   Rob Clark <robdclark@chromium.org>
+Date:   Mon, 3 Apr 2023 08:56:28 -0700
+Message-ID: <CAJs_Fx6jroBMGNtraHUZ9oBi8ubOS6RmxkF8hKCOQL3Z5vNTDw@mail.gmail.com>
+Subject: Re: [syzbot] [dri?] general protection fault in drm_crtc_next_vblank_start
+To:     syzbot <syzbot+54280c5aea19802490b5@syzkaller.appspotmail.com>
+Cc:     airlied@gmail.com, airlied@redhat.com, christian.koenig@amd.com,
+        daniel.vetter@ffwll.ch, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        sean@poorly.run, sumit.semwal@linaro.org,
+        syzkaller-bugs@googlegroups.com, tzimmermann@suse.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the functions provided by the buffer-dma core to implement the
-DMABUF userspace API in the buffer-dmaengine IIO buffer implementation.
+On Mon, Apr 3, 2023 at 12:57=E2=80=AFAM syzbot
+<syzbot+54280c5aea19802490b5@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    a6d9e3034536 Add linux-next specific files for 20230330
+> git tree:       linux-next
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=3D1001d1cdc8000=
+0
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Daceb117f79245=
+08e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3D54280c5aea19802=
+490b5
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binuti=
+ls for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D13435a2ec80=
+000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D139c9c21c8000=
+0
+>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/ec1f900ea929/dis=
+k-a6d9e303.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/fabbf89c0d22/vmlinu=
+x-a6d9e303.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/1ed05d6192fa/b=
+zImage-a6d9e303.xz
+>
+> The issue was bisected to:
+>
+> commit d39e48ca80c0960b039cb38633957f0040f63e1a
+> Author: Rob Clark <robdclark@chromium.org>
+> Date:   Fri Sep 3 18:47:54 2021 +0000
+>
+>     drm/atomic-helper: Set fence deadline for vblank
+>
 
-Since we want to be able to transfer an arbitrary number of bytes and
-not necesarily the full DMABUF, the associated scatterlist is converted
-to an array of DMA addresses + lengths, which is then passed to
-dmaengine_prep_slave_dma_array().
+should be fixed by https://patchwork.freedesktop.org/series/115992/
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+BR,
+-R
 
----
-v3: Use the new dmaengine_prep_slave_dma_array(), and adapt the code to
-    work with the new functions introduced in industrialio-buffer-dma.c.
----
- .../buffer/industrialio-buffer-dmaengine.c    | 69 ++++++++++++++++---
- include/linux/iio/buffer-dma.h                |  2 +
- 2 files changed, 60 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/iio/buffer/industrialio-buffer-dmaengine.c b/drivers/iio/buffer/industrialio-buffer-dmaengine.c
-index 866c8b84bb24..faed9c2b089c 100644
---- a/drivers/iio/buffer/industrialio-buffer-dmaengine.c
-+++ b/drivers/iio/buffer/industrialio-buffer-dmaengine.c
-@@ -65,25 +65,68 @@ static int iio_dmaengine_buffer_submit_block(struct iio_dma_buffer_queue *queue,
- 		iio_buffer_to_dmaengine_buffer(&queue->buffer);
- 	struct dma_async_tx_descriptor *desc;
- 	enum dma_transfer_direction dma_dir;
-+	unsigned int i, nents, *lenghts;
-+	struct scatterlist *sgl;
-+	unsigned long flags;
-+	dma_addr_t *addrs;
- 	size_t max_size;
- 	dma_cookie_t cookie;
-+	size_t len_total;
- 
--	max_size = min(block->size, dmaengine_buffer->max_size);
--	max_size = round_down(max_size, dmaengine_buffer->align);
-+	if (!block->bytes_used)
-+		return -EINVAL;
- 
--	if (queue->buffer.direction == IIO_BUFFER_DIRECTION_IN) {
--		block->bytes_used = max_size;
-+	if (queue->buffer.direction == IIO_BUFFER_DIRECTION_IN)
- 		dma_dir = DMA_DEV_TO_MEM;
--	} else {
-+	else
- 		dma_dir = DMA_MEM_TO_DEV;
--	}
- 
--	if (!block->bytes_used || block->bytes_used > max_size)
--		return -EINVAL;
-+	if (block->sg_table) {
-+		sgl = block->sg_table->sgl;
-+		nents = sg_nents_for_len(sgl, block->bytes_used);
-+
-+		addrs = kmalloc_array(nents, sizeof(*addrs), GFP_KERNEL);
-+		if (!addrs)
-+			return -ENOMEM;
-+
-+		lenghts = kmalloc_array(nents, sizeof(*lenghts), GFP_KERNEL);
-+		if (!lenghts) {
-+			kfree(addrs);
-+			return -ENOMEM;
-+		}
-+
-+		len_total = block->bytes_used;
- 
--	desc = dmaengine_prep_slave_single(dmaengine_buffer->chan,
--		block->phys_addr, block->bytes_used, dma_dir,
--		DMA_PREP_INTERRUPT);
-+		for (i = 0; i < nents; i++) {
-+			addrs[i] = sg_dma_address(sgl);
-+			lenghts[i] = min(sg_dma_len(sgl), len_total);
-+			len_total -= lenghts[i];
-+
-+			sgl = sg_next(sgl);
-+		}
-+
-+		flags = block->cyclic ? DMA_PREP_REPEAT : DMA_PREP_INTERRUPT;
-+
-+		desc = dmaengine_prep_slave_dma_array(dmaengine_buffer->chan,
-+						      addrs, lenghts, nents,
-+						      dma_dir, flags);
-+		kfree(addrs);
-+		kfree(lenghts);
-+	} else {
-+		max_size = min(block->size, dmaengine_buffer->max_size);
-+		max_size = round_down(max_size, dmaengine_buffer->align);
-+
-+		if (queue->buffer.direction == IIO_BUFFER_DIRECTION_IN)
-+			block->bytes_used = max_size;
-+
-+		if (block->bytes_used > max_size)
-+			return -EINVAL;
-+
-+		desc = dmaengine_prep_slave_single(dmaengine_buffer->chan,
-+						   block->phys_addr,
-+						   block->bytes_used, dma_dir,
-+						   DMA_PREP_INTERRUPT);
-+	}
- 	if (!desc)
- 		return -ENOMEM;
- 
-@@ -133,6 +176,10 @@ static const struct iio_buffer_access_funcs iio_dmaengine_buffer_ops = {
- 	.space_available = iio_dma_buffer_space_available,
- 	.release = iio_dmaengine_buffer_release,
- 
-+	.enqueue_dmabuf = iio_dma_buffer_enqueue_dmabuf,
-+	.attach_dmabuf = iio_dma_buffer_attach_dmabuf,
-+	.detach_dmabuf = iio_dma_buffer_detach_dmabuf,
-+
- 	.modes = INDIO_BUFFER_HARDWARE,
- 	.flags = INDIO_BUFFER_FLAG_FIXED_WATERMARK,
- };
-diff --git a/include/linux/iio/buffer-dma.h b/include/linux/iio/buffer-dma.h
-index e5e5817e99db..48f7ffaf0867 100644
---- a/include/linux/iio/buffer-dma.h
-+++ b/include/linux/iio/buffer-dma.h
-@@ -43,6 +43,7 @@ enum iio_block_state {
-  * @queue: Parent DMA buffer queue
-  * @kref: kref used to manage the lifetime of block
-  * @state: Current state of the block
-+ * @cyclic: True if this is a cyclic buffer
-  * @fileio: True if this buffer is used for fileio mode
-  */
- struct iio_dma_buffer_block {
-@@ -67,6 +68,7 @@ struct iio_dma_buffer_block {
- 	 */
- 	enum iio_block_state state;
- 
-+	bool cyclic;
- 	bool fileio;
- 
- 	struct dma_buf_attachment *attach;
--- 
-2.39.2
-
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D12d260c9c8=
+0000
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=3D11d260c9c8=
+0000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D16d260c9c8000=
+0
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the comm=
+it:
+> Reported-by: syzbot+54280c5aea19802490b5@syzkaller.appspotmail.com
+> Fixes: d39e48ca80c0 ("drm/atomic-helper: Set fence deadline for vblank")
+>
+> [drm] Initialized udl 0.0.1 20120220 for 1-1:0.0 on minor 2
+> [drm] Initialized udl on minor 2
+> udl 1-1:0.0: [drm] *ERROR* Read EDID byte 0 failed err ffffffb9
+> udl 1-1:0.0: [drm] Cannot find any crtc or sizes
+> general protection fault, probably for non-canonical address 0xdffffc0000=
+000028: 0000 [#1] PREEMPT SMP KASAN
+> KASAN: null-ptr-deref in range [0x0000000000000140-0x0000000000000147]
+> CPU: 0 PID: 9 Comm: kworker/0:1 Not tainted 6.3.0-rc4-next-20230330-syzka=
+ller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS G=
+oogle 03/02/2023
+> Workqueue: usb_hub_wq hub_event
+> RIP: 0010:drm_crtc_next_vblank_start+0xb3/0x2b0 drivers/gpu/drm/drm_vblan=
+k.c:1003
+> Code: e8 01 00 00 48 69 db 38 02 00 00 48 b8 00 00 00 00 00 fc ff df 49 0=
+3 9d 38 03 00 00 4c 8d ab 44 01 00 00 4c 89 ea 48 c1 ea 03 <0f> b6 14 02 4c=
+ 89 e8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 67
+> RSP: 0018:ffffc900000e6bb0 EFLAGS: 00010207
+> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> RDX: 0000000000000028 RSI: ffffffff849f2afb RDI: ffff888079558338
+> RBP: ffffc900000e6c48 R08: 0000000000000005 R09: 0000000000000000
+> R10: 0000000000000001 R11: 0000000000000010 R12: ffff8880795590d8
+> R13: 0000000000000144 R14: ffff8880795590d8 R15: dffffc0000000000
+> FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000=
+000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f17191c7688 CR3: 00000000281af000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  set_fence_deadline drivers/gpu/drm/drm_atomic_helper.c:1531 [inline]
+>  drm_atomic_helper_wait_for_fences+0x1b4/0x780 drivers/gpu/drm/drm_atomic=
+_helper.c:1578
+>  drm_atomic_helper_commit drivers/gpu/drm/drm_atomic_helper.c:2007 [inlin=
+e]
+>  drm_atomic_helper_commit+0x1bd/0x370 drivers/gpu/drm/drm_atomic_helper.c=
+:1979
+>  drm_atomic_commit+0x20a/0x300 drivers/gpu/drm/drm_atomic.c:1503
+>  drm_client_modeset_commit_atomic+0x69b/0x7e0 drivers/gpu/drm/drm_client_=
+modeset.c:1045
+>  drm_client_modeset_commit_locked+0x149/0x580 drivers/gpu/drm/drm_client_=
+modeset.c:1148
+>  drm_client_modeset_commit+0x51/0x80 drivers/gpu/drm/drm_client_modeset.c=
+:1174
+>  drm_fb_helper_single_fb_probe drivers/gpu/drm/drm_fb_helper.c:1983 [inli=
+ne]
+>  __drm_fb_helper_initial_config_and_unlock+0x118a/0x1510 drivers/gpu/drm/=
+drm_fb_helper.c:2169
+>  drm_fb_helper_initial_config drivers/gpu/drm/drm_fb_helper.c:2259 [inlin=
+e]
+>  drm_fb_helper_initial_config+0x42/0x60 drivers/gpu/drm/drm_fb_helper.c:2=
+251
+>  drm_fbdev_generic_client_hotplug+0x1ab/0x270 drivers/gpu/drm/drm_fbdev_g=
+eneric.c:281
+>  drm_fbdev_generic_setup+0x127/0x3b0 drivers/gpu/drm/drm_fbdev_generic.c:=
+343
+>  udl_usb_probe+0x120/0x190 drivers/gpu/drm/udl/udl_drv.c:120
+>  usb_probe_interface+0x30f/0x960 drivers/usb/core/driver.c:396
+>  call_driver_probe drivers/base/dd.c:579 [inline]
+>  really_probe+0x240/0xca0 drivers/base/dd.c:658
+>  __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:795
+>  driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:825
+>  __device_attach_driver+0x1d4/0x2e0 drivers/base/dd.c:953
+>  bus_for_each_drv+0x149/0x1d0 drivers/base/bus.c:457
+>  __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1025
+>  bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
+>  device_add+0x11c4/0x1c50 drivers/base/core.c:3616
+>  usb_set_configuration+0x10ee/0x1af0 drivers/usb/core/message.c:2171
+>  usb_generic_driver_probe+0xcf/0x130 drivers/usb/core/generic.c:238
+>  usb_probe_device+0xd8/0x2c0 drivers/usb/core/driver.c:293
+>  call_driver_probe drivers/base/dd.c:579 [inline]
+>  really_probe+0x240/0xca0 drivers/base/dd.c:658
+>  __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:795
+>  driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:825
+>  __device_attach_driver+0x1d4/0x2e0 drivers/base/dd.c:953
+>  bus_for_each_drv+0x149/0x1d0 drivers/base/bus.c:457
+>  __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1025
+>  bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
+>  device_add+0x11c4/0x1c50 drivers/base/core.c:3616
+>  usb_new_device+0xcb2/0x19d0 drivers/usb/core/hub.c:2575
+>  hub_port_connect drivers/usb/core/hub.c:5407 [inline]
+>  hub_port_connect_change drivers/usb/core/hub.c:5551 [inline]
+>  port_event drivers/usb/core/hub.c:5711 [inline]
+>  hub_event+0x2d9e/0x4e40 drivers/usb/core/hub.c:5793
+>  process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
+>  worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
+>  kthread+0x33e/0x440 kernel/kthread.c:379
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+>  </TASK>
+> Modules linked in:
+> ---[ end trace 0000000000000000 ]---
+> RIP: 0010:drm_crtc_next_vblank_start+0xb3/0x2b0 drivers/gpu/drm/drm_vblan=
+k.c:1003
+> Code: e8 01 00 00 48 69 db 38 02 00 00 48 b8 00 00 00 00 00 fc ff df 49 0=
+3 9d 38 03 00 00 4c 8d ab 44 01 00 00 4c 89 ea 48 c1 ea 03 <0f> b6 14 02 4c=
+ 89 e8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 67
+> RSP: 0018:ffffc900000e6bb0 EFLAGS: 00010207
+> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> RDX: 0000000000000028 RSI: ffffffff849f2afb RDI: ffff888079558338
+> RBP: ffffc900000e6c48 R08: 0000000000000005 R09: 0000000000000000
+> R10: 0000000000000001 R11: 0000000000000010 R12: ffff8880795590d8
+> R13: 0000000000000144 R14: ffff8880795590d8 R15: dffffc0000000000
+> FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000=
+000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f17191c7688 CR3: 000000002b398000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> ----------------
+> Code disassembly (best guess):
+>    0:   e8 01 00 00 48          callq  0x48000006
+>    5:   69 db 38 02 00 00       imul   $0x238,%ebx,%ebx
+>    b:   48 b8 00 00 00 00 00    movabs $0xdffffc0000000000,%rax
+>   12:   fc ff df
+>   15:   49 03 9d 38 03 00 00    add    0x338(%r13),%rbx
+>   1c:   4c 8d ab 44 01 00 00    lea    0x144(%rbx),%r13
+>   23:   4c 89 ea                mov    %r13,%rdx
+>   26:   48 c1 ea 03             shr    $0x3,%rdx
+> * 2a:   0f b6 14 02             movzbl (%rdx,%rax,1),%edx <-- trapping in=
+struction
+>   2e:   4c 89 e8                mov    %r13,%rax
+>   31:   83 e0 07                and    $0x7,%eax
+>   34:   83 c0 03                add    $0x3,%eax
+>   37:   38 d0                   cmp    %dl,%al
+>   39:   7c 08                   jl     0x43
+>   3b:   84 d2                   test   %dl,%dl
+>   3d:   0f                      .byte 0xf
+>   3e:   85                      .byte 0x85
+>   3f:   67                      addr32
+>
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisect=
+ion
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
