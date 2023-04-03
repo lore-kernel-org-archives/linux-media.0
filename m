@@ -2,199 +2,147 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 879FDC76196
-	for <linux-media@archiver.kernel.org>; Mon,  3 Apr 2023 15:41:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47D3AC761AF
+	for <linux-media@archiver.kernel.org>; Mon,  3 Apr 2023 15:49:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232494AbjDCPlw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 Apr 2023 11:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45956 "EHLO
+        id S229866AbjDCPtI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 Apr 2023 11:49:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbjDCPlu (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Apr 2023 11:41:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA6026BD
-        for <linux-media@vger.kernel.org>; Mon,  3 Apr 2023 08:41:47 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pjMIC-0004b4-3b; Mon, 03 Apr 2023 17:40:24 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pjMI6-008iaO-0i; Mon, 03 Apr 2023 17:40:18 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pjMI5-00AHwO-5x; Mon, 03 Apr 2023 17:40:17 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Deepak R Varma <drv@mailo.com>,
-        Yuan Can <yuancan@huawei.com>,
-        Simon Horman <horms@verge.net.au>,
-        Sven Van Asbroeck <TheSven73@gmail.com>,
-        Vaibhav Hiremath <hvaibhav.linux@gmail.com>,
-        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Eugen Hristev <eugen.hristev@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Maxime Ripard <mripard@kernel.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
-        Christian Gromm <christian.gromm@microchip.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Marc Dietrich <marvin24@gmx.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Umang Jain <umang.jain@ideasonboard.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     linux-staging@lists.linux.dev, kernel@pengutronix.de,
-        greybus-dev@lists.linaro.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-amlogic@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        ac100@lists.launchpad.net, linux-tegra@vger.kernel.org,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-rpi-kernel@lists.infradead.org
-Subject: [PATCH 00/24] staging: Convert to platform remove callback returning void
-Date:   Mon,  3 Apr 2023 17:39:50 +0200
-Message-Id: <20230403154014.2564054-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S232181AbjDCPtE (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Apr 2023 11:49:04 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC181709;
+        Mon,  3 Apr 2023 08:48:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1680536888;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=BEseiNY15McK7cM9hqrQ6iJMRNpnoZM7y9fQeUbgP/w=;
+        b=w3+hjfKairDEnqBYIQklEwG5hfr8XxlLBrjjXfRcfnyk82kg5dEbobFrtsIVzK/0N4ohNr
+        SbB2G1UCv6o4C/p6BypakA4C8wo6hKblMfoqeFyPpBKaiT4WqYaARtZThOH96kbS7B8KWm
+        GIsWk1BPZB6jrmqEINrmBM4nUXJDk8g=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Vinod Koul <vkoul@kernel.org>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        =?UTF-8?q?Nuno=20S=C3=A1?= <noname.nuno@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH v3 00/11] iio: new DMABUF based API, v3
+Date:   Mon,  3 Apr 2023 17:47:49 +0200
+Message-Id: <20230403154800.215924-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5012; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=QcqVobs2IGjtDB50UkJ1/XzbU0MSF7u4i5A5EQTdJQg=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkKvM0O0Tc0pjx/M/6GF+i1BCxRCmy/MPnr7RU1 yFBMKjXOfaJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCrzNAAKCRCPgPtYfRL+ Tpy2CACy6x0vU06fdXyxll9SO1keGvUJwPKWx+3c3iql31e1Lm+qBWx4HjLGWAH1BCBwe3626DH lDN1BYh6O1PbPw6fq7eefH5DBIAVGnQSOsyyOFUmo5y3kXQn60JKzxX7xSKuHzUxXXkaj6BYFEl dl3VmQyiYF0+g1PGODFTQSeX9kxjPWoD5g9e11a2P8dLs8Iu1lwVEIyHyEyjcsrYsB3Wj23JY5E t8/rn6+663fTt7WDV/oQ0q40Q54RNHtq2Ou/9xwLL/Jm63tGZ6gAnvbnQcFoAji4hrf+apNVsp/ aW4zaDe6809yWD3o9ofDidHCWNev/88M0ILROQDh07UCEMyG
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+X-Spam: Yes
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+Hi Jonathan,
 
-this series adapts the platform drivers below drivers/staging to use the
-.remove_new() callback. Compared to the traditional .remove() callback
-.remove_new() returns no value. This is a good thing because the driver
-core doesn't (and cannot) cope for errors during remove. The only effect
-of a non-zero return value in .remove() is that the driver core emits a
-warning. The device is removed anyhow and an early return from .remove()
-usually yields a resource leak.
+Here's the v3 of my patchset that introduces a new interface based on
+DMABUF objects to complement the fileio API, and adds write() support to
+the existing fileio API.
 
-By changing the remove callback to return void driver authors cannot
-reasonably assume any more that there is some kind of cleanup later.
+It changed quite a lot since V2; the IIO subsystem is now just a DMABUF
+importer, and all the complexity related to handling creation, deletion
+and export of DMABUFs (including DMA mapping etc.) is gone.
 
-All drivers in staging already return zero in their remove callback, so
-they can be trivially converted.
+This new interface will be used by Libiio. The code is ready[1] and will
+be merged to the main branch as soon as the kernel bits are accepted
+upstream.
 
-The changes to the individual drivers are all orthogonal. If I need to
-resend some patches because of some review feedback, I'd like to only
-send the patches that actually needed changes, so please pick up the
-remaining patches that don't need changing to reduce the amount of mail.
+Note that Libiio (and its server counterpart, iiod) use this new
+interface in two different ways:
+- by memory-mapping the DMABUFs to access the sample data directly,
+  which is much faster than using the existing fileio API as the sample
+  data does not need to be copied;
+- by passing the DMABUFs around directly to the USB stack, in a
+  device-to-device zero-copy fashion, using a new DMABUF interface for
+  the USB (FunctionFS to be exact) stack, which is being upstreamed in
+  parallel of this patchset [2].
 
-Best regards
-Uwe
+As for write() support, Nuno (Cc'd) said he will work on upstreaming the
+DAC counterpart of adc/adi-axi-adc.c in the next few weeks, so there
+will be a user for the buffer write() support. I hope you are okay with
+this - otherwise, we can just wait until this work is done, and I still
+benefit from sending this patchset early to get feedback.
 
-Uwe Kleine-König (24):
-  staging: axis-fifo: Convert to platform remove callback returning void
-  staging: emxx_udc: Convert to platform remove callback returning void
-  staging: fieldbus: arcx-anybus: Convert to platform remove callback
-    returning void
-  staging: greybus: arche-apb-ctrl: Convert to platform remove callback
-    returning void
-  staging: greybus: arche: Convert to platform remove callback returning
-    void
-  staging: media: atmel-sama5d2-isc: Convert to platform remove callback
-    returning void
-  staging: media: atmel-sama7g5-isc: Convert to platform remove callback
-    returning void
-  staging: media: imx-media-csi: Convert to platform remove callback
-    returning void
-  staging: media: imx-media-dev: Convert to platform remove callback
-    returning void
-  staging: media: imx6-mipi-csi2: Convert to platform remove callback
-    returning void
-  staging: media: imx8mq-mipi-csi2: Convert to platform remove callback
-    returning void
-  staging: media: meson: vdec: Convert to platform remove callback
-    returning void
-  staging: media: omap4iss: Convert to platform remove callback
-    returning void
-  staging: media: rkvdec: Convert to platform remove callback returning
-    void
-  staging: media: sunxi: cedrus: Convert to platform remove callback
-    returning void
-  staging: media: sun6i-isp: Convert to platform remove callback
-    returning void
-  staging: most: dim2: Convert to platform remove callback returning
-    void
-  staging: nvec: Convert to platform remove callback returning void
-  staging: nvec: nvec_kbd: Convert to platform remove callback returning
-    void
-  staging: nvec_power: Convert to platform remove callback returning
-    void
-  staging: nvec_ps2: Convert to platform remove callback returning void
-  staging: octeon: ethernet: Convert to platform remove callback
-    returning void
-  staging: vc04_services: bcm2835-camera: Convert to platform remove
-    callback returning void
-  staging: vc04_services: vchiq_arm: Convert to platform remove callback
-    returning void
+Finally, the dmaengine implementation for this new interface requires a
+new dmaengine API function, since dmaengine_prep_slave_sg() will always
+transfer the full scatterlist unconditionally, while we want to be able
+to transfer an arbitrary amount of bytes from/to the DMABUF. Since
+scatterlists seem to be going away soon, the new API function will take
+an array of DMA addresses + lengths. I am open to suggestions if anybody
+(especially Vinod) have a better design in mind.
 
- drivers/staging/axis-fifo/axis-fifo.c                       | 6 ++----
- drivers/staging/emxx_udc/emxx_udc.c                         | 6 ++----
- drivers/staging/fieldbus/anybuss/arcx-anybus.c              | 5 ++---
- drivers/staging/greybus/arche-apb-ctrl.c                    | 6 ++----
- drivers/staging/greybus/arche-platform.c                    | 6 ++----
- drivers/staging/media/deprecated/atmel/atmel-sama5d2-isc.c  | 6 ++----
- drivers/staging/media/deprecated/atmel/atmel-sama7g5-isc.c  | 6 ++----
- drivers/staging/media/imx/imx-media-csi.c                   | 6 ++----
- drivers/staging/media/imx/imx-media-dev.c                   | 6 ++----
- drivers/staging/media/imx/imx6-mipi-csi2.c                  | 6 ++----
- drivers/staging/media/imx/imx8mq-mipi-csi2.c                | 6 ++----
- drivers/staging/media/meson/vdec/vdec.c                     | 6 ++----
- drivers/staging/media/omap4iss/iss.c                        | 6 ++----
- drivers/staging/media/rkvdec/rkvdec.c                       | 5 ++---
- drivers/staging/media/sunxi/cedrus/cedrus.c                 | 6 ++----
- drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.c           | 6 ++----
- drivers/staging/most/dim2/dim2.c                            | 6 ++----
- drivers/staging/nvec/nvec.c                                 | 6 ++----
- drivers/staging/nvec/nvec_kbd.c                             | 6 ++----
- drivers/staging/nvec/nvec_power.c                           | 6 ++----
- drivers/staging/nvec/nvec_ps2.c                             | 6 ++----
- drivers/staging/octeon/ethernet.c                           | 5 ++---
- .../staging/vc04_services/bcm2835-camera/bcm2835-camera.c   | 6 ++----
- .../staging/vc04_services/interface/vchiq_arm/vchiq_arm.c   | 6 ++----
- 24 files changed, 48 insertions(+), 93 deletions(-)
+Cheers,
+-Paul
 
+[1]: https://github.com/analogdevicesinc/libiio/pull/928
+[2]: https://lore.kernel.org/linux-usb/425c1b8ea20002c6344a574cd094b4c715c67ba6.camel@crapouillou.net/T/#t
 
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+---
+Changelog:
+* Patches 01-02 are new;
+* Patches [03/11], [05/11] didn't change;
+* Patch [04/11]:
+    - Reorganize arguments to iio_dma_buffer_io()
+    - Change 'is_write' argument to 'is_from_user'
+    - Change (__force char *) to (__force __user char *), in
+      iio_dma_buffer_write(), since we only want to drop the "const".
+* Patch [07/11]:
+    - Get rid of the old IOCTLs. The IIO subsystem does not create or
+      manage DMABUFs anymore, and only attaches/detaches externally
+      created DMABUFs.
+    - Add IIO_BUFFER_DMABUF_CYCLIC to the supported flags.
+* Patch [09/11]:
+    Update code to provide the functions that will be used as callbacks
+    for the new IOCTLs.
+* Patch [10/11]:
+    Use the new dmaengine_prep_slave_dma_array(), and adapt the code to
+    work with the new functions introduced in industrialio-buffer-dma.c.
+* Patch [11/11]:
+    Update the documentation to reflect the new API.
+
+---
+Alexandru Ardelean (1):
+  iio: buffer-dma: split iio_dma_buffer_fileio_free() function
+
+Paul Cercueil (10):
+  dmaengine: Add API function dmaengine_prep_slave_dma_array()
+  dmaengine: dma-axi-dmac: Implement device_prep_slave_dma_array
+  iio: buffer-dma: Get rid of outgoing queue
+  iio: buffer-dma: Enable buffer write support
+  iio: buffer-dmaengine: Support specifying buffer direction
+  iio: buffer-dmaengine: Enable write support
+  iio: core: Add new DMABUF interface infrastructure
+  iio: buffer-dma: Enable support for DMABUFs
+  iio: buffer-dmaengine: Support new DMABUF based userspace API
+  Documentation: iio: Document high-speed DMABUF based API
+
+ Documentation/iio/dmabuf_api.rst              |  59 +++
+ Documentation/iio/index.rst                   |   2 +
+ drivers/dma/dma-axi-dmac.c                    |  41 ++
+ drivers/iio/adc/adi-axi-adc.c                 |   3 +-
+ drivers/iio/buffer/industrialio-buffer-dma.c  | 331 +++++++++++---
+ .../buffer/industrialio-buffer-dmaengine.c    |  77 +++-
+ drivers/iio/industrialio-buffer.c             | 402 ++++++++++++++++++
+ include/linux/dmaengine.h                     |  16 +
+ include/linux/iio/buffer-dma.h                |  40 +-
+ include/linux/iio/buffer-dmaengine.h          |   5 +-
+ include/linux/iio/buffer_impl.h               |  22 +
+ include/uapi/linux/iio/buffer.h               |  22 +
+ 12 files changed, 939 insertions(+), 81 deletions(-)
+ create mode 100644 Documentation/iio/dmabuf_api.rst
+
 -- 
 2.39.2
 
