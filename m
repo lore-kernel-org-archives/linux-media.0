@@ -2,138 +2,157 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4715DC76196
-	for <linux-media@archiver.kernel.org>; Mon,  3 Apr 2023 09:50:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD560C76196
+	for <linux-media@archiver.kernel.org>; Mon,  3 Apr 2023 09:54:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232364AbjDCJub convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 Apr 2023 05:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59570 "EHLO
+        id S231896AbjDCJy1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 Apr 2023 05:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232455AbjDCJt7 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Apr 2023 05:49:59 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A47125;
-        Mon,  3 Apr 2023 02:49:10 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 1268F24E36E;
-        Mon,  3 Apr 2023 17:48:58 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 3 Apr
- 2023 17:48:57 +0800
-Received: from [192.168.1.218] (180.164.60.184) by EXMBX073.cuchost.com
- (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 3 Apr
- 2023 17:48:57 +0800
-Message-ID: <9c132e62-7830-90bf-2c3e-1568a54eb6ec@starfivetech.com>
-Date:   Mon, 3 Apr 2023 17:48:56 +0800
+        with ESMTP id S231364AbjDCJyT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Apr 2023 05:54:19 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EAF46A9
+        for <linux-media@vger.kernel.org>; Mon,  3 Apr 2023 02:53:53 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id b20so114928285edd.1
+        for <linux-media@vger.kernel.org>; Mon, 03 Apr 2023 02:53:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680515630;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LJlrdDbF9+4E4VB54zkQelJria6H4TDQP9yMZcAgHLg=;
+        b=oCGbWw21DqLjWGRThvdqExQX1aM36eMkLTFG0IRkiJSHh1Ifh6zq0c7Lm1E5lEXkrd
+         GjMSeirGrQkQi6Wl/ykRryRlCeIKTf7xt4v5rSlDW6+rRANWCpNLE1hUcqSuGMk+QNz2
+         cFhTbrssxOzG/pM9oLemV/vjGoxTb6Lu4axMMrbuMNaBOLb4sh5qRBPMUcEtaQ19SgAJ
+         XDXM2P2B0MnRQhtlZF6Nu2uJ8/IdPtNKuXXZ8SnI3Rk3FENQGGVx6cG5te3EfKXp/daG
+         nWFgfZSlZUK7/k3mtT5rrpQ8mdFR8sL88d+7WkjW5hj2IYLfWrfIzmTNErOfYDgheEOr
+         s3BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680515630;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LJlrdDbF9+4E4VB54zkQelJria6H4TDQP9yMZcAgHLg=;
+        b=OIlqTXEUQNBRYlJXlvjZBM20N1ZQlJkg6lPaQcD4kQfjHyNt6ZtMqyi0XIm2w1ibkK
+         3QTb8JLHMlgUmP5h05dLwenZgwvX0hoX+jpNryyuRh/5gQ6eZK96LtkUFzbBSH48ZLHA
+         8PWbGK6UI9ldv2o6g+cYPFvQToUGFFZimegr+PhrwnkoWIwC0i/WYFbc3Hthj7Ee7CGV
+         UYICPs24cFRRZvmWOXwX7+T5xGpfljFSCPiy1AYt4XXggDeTRdI4atxYF2EbiHsmCN5p
+         bVaaL2oIrkcSSBoEd0ZZdC6XVRbFm6kG5onG1JmqG8MutOoiwCZZSo2MhROM3Hp83J9Q
+         F3Dg==
+X-Gm-Message-State: AAQBX9e2RN06909HCqNVb3C7z7YqiYchWewhU0n7q7nCizQ/6mMmNlcC
+        hNqP71RCUXsmaGouFHF/dD1ciA==
+X-Google-Smtp-Source: AKy350a0a1bWE0yN8qnslUgf71yktHZaBm3SnfLl9tiApjHozALcTanZo2RJWIL/xhh3Ze7qTXYG6Q==
+X-Received: by 2002:a17:907:d10:b0:925:6bcb:4796 with SMTP id gn16-20020a1709070d1000b009256bcb4796mr20077828ejc.38.1680515630517;
+        Mon, 03 Apr 2023 02:53:50 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:ae90:d80:1069:4805? ([2a02:810d:15c0:828:ae90:d80:1069:4805])
+        by smtp.gmail.com with ESMTPSA id u13-20020a1709063b8d00b0093e261cc8bcsm4337535ejf.58.2023.04.03.02.53.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 02:53:50 -0700 (PDT)
+Message-ID: <c86d2388-609c-528e-b250-90bd85b97264@linaro.org>
+Date:   Mon, 3 Apr 2023 11:53:49 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
 Subject: Re: [PATCH v3 3/9] media: dt-bindings: cadence-csi2rx: Convert to DT
  schema
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+To:     Jack Zhu <jack.zhu@starfivetech.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Maxime Ripard <mripard@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Robert Foss <rfoss@kernel.org>,
-        "Todor Tomov" <todor.too@gmail.com>,
+        Todor Tomov <todor.too@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Eugen Hristev <eugen.hristev@collabora.com>
-CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <changhuang.liang@starfivetech.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, changhuang.liang@starfivetech.com
 References: <20230331121826.96973-1-jack.zhu@starfivetech.com>
  <20230331121826.96973-4-jack.zhu@starfivetech.com>
  <0aa3a039-daf3-7e05-6da9-258335a5ca20@linaro.org>
-From:   Jack Zhu <jack.zhu@starfivetech.com>
-In-Reply-To: <0aa3a039-daf3-7e05-6da9-258335a5ca20@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [180.164.60.184]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX073.cuchost.com
- (172.16.6.83)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
+ <9c132e62-7830-90bf-2c3e-1568a54eb6ec@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <9c132e62-7830-90bf-2c3e-1568a54eb6ec@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+On 03/04/2023 11:48, Jack Zhu wrote:
+> 
+> 
+> On 2023/4/1 4:12, Krzysztof Kozlowski wrote:
+>> On 31/03/2023 14:18, Jack Zhu wrote:
+>>> Convert DT bindings document for Cadence MIPI-CSI2 RX controller
+>>> to DT schema format.
+>>>
+>>> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
+>>> ---
+>>>  .../devicetree/bindings/media/cdns,csi2rx.txt | 100 ----------
+>>>  .../bindings/media/cdns,csi2rx.yaml           | 174 ++++++++++++++++++
+>>>  MAINTAINERS                                   |   1 +
+>>>  3 files changed, 175 insertions(+), 100 deletions(-)
+>>>  delete mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.txt
+>>>  create mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/media/cdns,csi2rx.txt b/Documentation/devicetree/bindings/media/cdns,csi2rx.txt
+>>> deleted file mode 100644
+>>> index 6b02a0657ad9..000000000000
+>>> --- a/Documentation/devicetree/bindings/media/cdns,csi2rx.txt
+>>> +++ /dev/null
+>>> @@ -1,100 +0,0 @@
+>>> -Cadence MIPI-CSI2 RX controller
+>>> -===============================
+>>> -
+>>> -The Cadence MIPI-CSI2 RX controller is a CSI-2 bridge supporting up to 4 CSI
+>>> -lanes in input, and 4 different pixel streams in output.
+>>> -
+>>> -Required properties:
+>>> -  - compatible: must be set to "cdns,csi2rx" and an SoC-specific compatible
+>>
+>>
+>> ...
+>>
+>>> +$id: http://devicetree.org/schemas/media/cdns,csi2rx.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Cadence MIPI-CSI2 RX controller
+>>> +
+>>> +maintainers:
+>>> +  - Maxime Ripard <mripard@kernel.org>
+>>> +
+>>> +description:
+>>> +  The Cadence MIPI-CSI2 RX controller is a CSI-2 bridge supporting up to 4 CSI
+>>> +  lanes in input, and 4 different pixel streams in output.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    const: cdns,csi2rx
+>>
+>> That's not equivalent conversion and your commit msg does no mention any
+>> drops in compatibles.
+>>
+> The equivalent conversion refers to 'an SoC-specific compatible'?
+
+Yes.
+
+> I'm not sure that, is it enough to add a description (drop an 'SoC-specific compatible')
+> to my next version commit message?
+
+Original binding did not allow csi2rx compatible alone. Your binding
+here allows it, thus it is not simple conversion.
+
+I think patch 5 should be squashed here - with proper explanation.
+Usually new compatibles should not be messed with conversion, but this
+conversion on its own does not make much sense.
 
 
-On 2023/4/1 4:12, Krzysztof Kozlowski wrote:
-> On 31/03/2023 14:18, Jack Zhu wrote:
->> Convert DT bindings document for Cadence MIPI-CSI2 RX controller
->> to DT schema format.
->> 
->> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
->> ---
->>  .../devicetree/bindings/media/cdns,csi2rx.txt | 100 ----------
->>  .../bindings/media/cdns,csi2rx.yaml           | 174 ++++++++++++++++++
->>  MAINTAINERS                                   |   1 +
->>  3 files changed, 175 insertions(+), 100 deletions(-)
->>  delete mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.txt
->>  create mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
->> 
->> diff --git a/Documentation/devicetree/bindings/media/cdns,csi2rx.txt b/Documentation/devicetree/bindings/media/cdns,csi2rx.txt
->> deleted file mode 100644
->> index 6b02a0657ad9..000000000000
->> --- a/Documentation/devicetree/bindings/media/cdns,csi2rx.txt
->> +++ /dev/null
->> @@ -1,100 +0,0 @@
->> -Cadence MIPI-CSI2 RX controller
->> -===============================
->> -
->> -The Cadence MIPI-CSI2 RX controller is a CSI-2 bridge supporting up to 4 CSI
->> -lanes in input, and 4 different pixel streams in output.
->> -
->> -Required properties:
->> -  - compatible: must be set to "cdns,csi2rx" and an SoC-specific compatible
-> 
-> 
-> ...
-> 
->> +$id: http://devicetree.org/schemas/media/cdns,csi2rx.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Cadence MIPI-CSI2 RX controller
->> +
->> +maintainers:
->> +  - Maxime Ripard <mripard@kernel.org>
->> +
->> +description:
->> +  The Cadence MIPI-CSI2 RX controller is a CSI-2 bridge supporting up to 4 CSI
->> +  lanes in input, and 4 different pixel streams in output.
->> +
->> +properties:
->> +  compatible:
->> +    const: cdns,csi2rx
-> 
-> That's not equivalent conversion and your commit msg does no mention any
-> drops in compatibles.
-> 
-The equivalent conversion refers to 'an SoC-specific compatible'?
-I'm not sure that, is it enough to add a description (drop an 'SoC-specific compatible')
-to my next version commit message?
 
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    items:
->> +      - description: CSI2Rx system clock
->> +      - description: Gated Register bank clock for APB interface
->> +      - description: pixel Clock for Stream interface 0
->> +      - description: pixel Clock for Stream interface 1
->> +      - description: pixel Clock for Stream interface 2
->> +      - description: pixel Clock for Stream interface 3
->> +
-> 
-> Best regards,
-> Krzysztof
-> 
+Best regards,
+Krzysztof
+
