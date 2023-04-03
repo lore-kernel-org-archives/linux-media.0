@@ -2,51 +2,49 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0DC2C761A6
-	for <linux-media@archiver.kernel.org>; Mon,  3 Apr 2023 15:40:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1159C77B6C
+	for <linux-media@archiver.kernel.org>; Mon,  3 Apr 2023 15:40:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232958AbjDCPkf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 Apr 2023 11:40:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
+        id S232921AbjDCPkg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 Apr 2023 11:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232954AbjDCPkb (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Apr 2023 11:40:31 -0400
+        with ESMTP id S232959AbjDCPkd (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Apr 2023 11:40:33 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB3E2703
-        for <linux-media@vger.kernel.org>; Mon,  3 Apr 2023 08:40:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488AD26B9
+        for <linux-media@vger.kernel.org>; Mon,  3 Apr 2023 08:40:32 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pjMI8-0004c5-Cd; Mon, 03 Apr 2023 17:40:20 +0200
+        id 1pjMIA-0004bc-RK; Mon, 03 Apr 2023 17:40:22 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pjMI7-008ib3-LZ; Mon, 03 Apr 2023 17:40:19 +0200
+        id 1pjMI7-008iar-4k; Mon, 03 Apr 2023 17:40:19 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pjMI6-00AHx1-MH; Mon, 03 Apr 2023 17:40:18 +0200
+        id 1pjMI6-00AHwh-53; Mon, 03 Apr 2023 17:40:18 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+To:     Eugen Hristev <eugen.hristev@collabora.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de
-Subject: [PATCH 09/24] staging: media: imx-media-dev: Convert to platform remove callback returning void
-Date:   Mon,  3 Apr 2023 17:39:59 +0200
-Message-Id: <20230403154014.2564054-10-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 06/24] staging: media: atmel-sama5d2-isc: Convert to platform remove callback returning void
+Date:   Mon,  3 Apr 2023 17:39:56 +0200
+Message-Id: <20230403154014.2564054-7-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230403154014.2564054-1-u.kleine-koenig@pengutronix.de>
 References: <20230403154014.2564054-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1887; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=NfhFuPcQjvCDS+hPh2b2lfedYrohw4g+Wp/gtONhiGU=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkKvM/opFPgRJzRAhQ0djBHR+kH4ijtoQZPxQSH vRqdlr0X0OJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCrzPwAKCRCPgPtYfRL+ TqPrB/9lhe/gnMCeqND74AwxIS0CZ3tnSl3XYP4sBB4SzKl5yi/apYC5nuVR4nyttzMCh/U8YcB M2eGZJ9NSsA+GeU8NlBYLVr61c92He+T8fZQvcXwszDnmse8145ZtYfc0ek0fLnQSARM9jtpTJN ZrBz+68WjU+W3GJAnCfQl+/8lpKvrML3CD2Ex4uHYgUerRQxERxjelNJXphrB9QJB3DMbOerG3t D2i+09jtILM/XMTy9dn9QtvR4V4cZtngP9Zu9ziYzJzmV+GLgSiLpxyl70XfXxKEPc6OKtpRIQB mP6NdUb0C5YCppdg5Li38YiTkyPp10G3sSZ7T3r6uIkUBBS0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1907; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=3eWA9wqLohjTkdU86NEwfGho6Mb4eBfhtOu2ZNBEJRM=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkKvM7k50m5cP0X2ccwpM4B8PZF/oH0lUbfXssN 8SepfYAIL2JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZCrzOwAKCRCPgPtYfRL+ TtzHB/9I6LdPHbPBc3TvWgIX077VkCy8Pchxdxs3b5gBVFsvuYNu6eppwxpzNTfYlDUzKyDuThh dDcXIurj1WoAS+baufacQxpgeFI6zL6xgQTLIMAZWi9mDdxgHcMyDRb26GdywuHRJb4ND312yVu 3QJdN9lr/5mkY88sXbvFJkIDLlhEAD3hhpu19H4cWsYhbV0H+ROmk42Bk5HF2lw84iXSCeFdxHc cYl2F9O5TR1EOXpXoABlMRiP2k2hsWZkeL9r+EU2P27LQKlEDEAQ4y8VbQ22ZqHP55phnTKngBO oE+2I1UyF+7c14QPUylwxyGAbUWJ7cDNcYwsGF4PlvzF2DMd
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -70,40 +68,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/staging/media/imx/imx-media-dev.c | 6 ++----
+ drivers/staging/media/deprecated/atmel/atmel-sama5d2-isc.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/staging/media/imx/imx-media-dev.c b/drivers/staging/media/imx/imx-media-dev.c
-index f85462214e22..c80113905069 100644
---- a/drivers/staging/media/imx/imx-media-dev.c
-+++ b/drivers/staging/media/imx/imx-media-dev.c
-@@ -101,7 +101,7 @@ static int imx_media_probe(struct platform_device *pdev)
+diff --git a/drivers/staging/media/deprecated/atmel/atmel-sama5d2-isc.c b/drivers/staging/media/deprecated/atmel/atmel-sama5d2-isc.c
+index ba0614f981a2..cc744cea1d0e 100644
+--- a/drivers/staging/media/deprecated/atmel/atmel-sama5d2-isc.c
++++ b/drivers/staging/media/deprecated/atmel/atmel-sama5d2-isc.c
+@@ -580,7 +580,7 @@ static int atmel_isc_probe(struct platform_device *pdev)
  	return ret;
  }
  
--static int imx_media_remove(struct platform_device *pdev)
-+static void imx_media_remove(struct platform_device *pdev)
+-static int atmel_isc_remove(struct platform_device *pdev)
++static void atmel_isc_remove(struct platform_device *pdev)
  {
- 	struct imx_media_dev *imxmd =
- 		(struct imx_media_dev *)platform_get_drvdata(pdev);
-@@ -119,8 +119,6 @@ static int imx_media_remove(struct platform_device *pdev)
- 	media_device_unregister(&imxmd->md);
- 	v4l2_device_unregister(&imxmd->v4l2_dev);
- 	media_device_cleanup(&imxmd->md);
+ 	struct isc_device *isc = platform_get_drvdata(pdev);
+ 
+@@ -594,8 +594,6 @@ static int atmel_isc_remove(struct platform_device *pdev)
+ 	clk_disable_unprepare(isc->hclock);
+ 
+ 	atmel_isc_clk_cleanup(isc);
 -
 -	return 0;
  }
  
- static const struct of_device_id imx_media_dt_ids[] = {
-@@ -131,7 +129,7 @@ MODULE_DEVICE_TABLE(of, imx_media_dt_ids);
+ static int __maybe_unused isc_runtime_suspend(struct device *dev)
+@@ -638,7 +636,7 @@ MODULE_DEVICE_TABLE(of, atmel_isc_of_match);
  
- static struct platform_driver imx_media_pdrv = {
- 	.probe		= imx_media_probe,
--	.remove		= imx_media_remove,
-+	.remove_new	= imx_media_remove,
- 	.driver		= {
- 		.name	= "imx-media",
- 		.of_match_table	= imx_media_dt_ids,
+ static struct platform_driver atmel_isc_driver = {
+ 	.probe	= atmel_isc_probe,
+-	.remove	= atmel_isc_remove,
++	.remove_new = atmel_isc_remove,
+ 	.driver	= {
+ 		.name		= "atmel-sama5d2-isc",
+ 		.pm		= &atmel_isc_dev_pm_ops,
 -- 
 2.39.2
 
