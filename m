@@ -2,128 +2,92 @@ Return-Path: <linux-media-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68636C76196
-	for <linux-media@archiver.kernel.org>; Mon,  3 Apr 2023 16:24:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FDB1C76196
+	for <linux-media@archiver.kernel.org>; Mon,  3 Apr 2023 17:13:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232749AbjDCQYz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 Apr 2023 12:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
+        id S232537AbjDCRNL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 Apr 2023 13:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232835AbjDCQYl (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Apr 2023 12:24:41 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A0A35BE
-        for <linux-media@vger.kernel.org>; Mon,  3 Apr 2023 09:24:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1680539053; x=1712075053;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=TUR3EjtNbhZlzWg+BnATQOoTCZuxIFb7QTevEqWMtbU=;
-  b=2K8OdzATVkuyc6P+xMTaes7kPo8bvyLfZFzVXuLvTplTvIKL6DTxuIP7
-   y9yY3DFgJT6NfDxcLWSx/MrsdTkq5TjCWsJUWKm73/2Yjeve0/efmX0WR
-   M36Nr5Ifq60b0tAsHyTs9UF/iSaw3OaXDHrHY7TjhCHnHQ5So7LTzJszx
-   eXfL6NJp/LlRzIQG/TwfyaBIflnEyrq74RHjxDwnICtQfGBkpxAczNEGe
-   fZ4Vsu26Xl/EF9teckciTakH9OA5tFkFHbhaDA6tSMKDmmD5zKKorOilL
-   JVVM9WDjgme6bugY8iKtQWmRnFnH12pj4chdBsBH59RMPrQVOL5eZ+nUx
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.98,315,1673938800"; 
-   d="scan'208";a="207937073"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Apr 2023 09:24:11 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 3 Apr 2023 09:24:10 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Mon, 3 Apr 2023 09:24:08 -0700
-Message-ID: <3a883f8b-9f28-34cc-84f2-e6efc5186140@microchip.com>
-Date:   Mon, 3 Apr 2023 18:24:01 +0200
+        with ESMTP id S232178AbjDCRNK (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Apr 2023 13:13:10 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C36C32722;
+        Mon,  3 Apr 2023 10:13:07 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.133])
+        by gateway (Coremail) with SMTP id _____8DxldgiCStk1CUWAA--.39103S3;
+        Tue, 04 Apr 2023 01:13:06 +0800 (CST)
+Received: from openarena.loongson.cn (unknown [10.20.42.133])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxSL0gCStkqJIUAA--.16596S3;
+        Tue, 04 Apr 2023 01:13:04 +0800 (CST)
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>
+Cc:     nathan@kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org
+Subject: [PATCH v10 1/2] MAINTAINERS: add maintainers for DRM LOONGSON driver
+Date:   Tue,  4 Apr 2023 01:13:03 +0800
+Message-Id: <20230403171304.2157326-2-suijingfeng@loongson.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230403171304.2157326-1-suijingfeng@loongson.cn>
+References: <20230403171304.2157326-1-suijingfeng@loongson.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 06/24] staging: media: atmel-sama5d2-isc: Convert to
- platform remove callback returning void
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        "Eugen Hristev" <eugen.hristev@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-CC:     <linux-media@vger.kernel.org>, <linux-staging@lists.linux.dev>,
-        <linux-arm-kernel@lists.infradead.org>, <kernel@pengutronix.de>
-References: <20230403154014.2564054-1-u.kleine-koenig@pengutronix.de>
- <20230403154014.2564054-7-u.kleine-koenig@pengutronix.de>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <20230403154014.2564054-7-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxSL0gCStkqJIUAA--.16596S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvdXoW7GFyxCr4fXF17JF13JF48tFb_yoW3Zrc_Ca
+        47Z393Wr1UWFyqkaykZFZrGryYkrWfAF4rG3Zrtan5Aa4qyryDJrsrK34DKry5Ar1xKan8
+        tayrGr1SkFs3WjkaLaAFLSUrUUUU5b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        X7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
+        xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r4UJwAaw2AF
+        wI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+        Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE
+        14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7
+        AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
+        67AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
+        8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5
+        JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
+        1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
+        daVFxhVjvjDU0xZFpf9x07jr9NsUUUUU=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 03/04/2023 at 17:39, Uwe Kleine-König wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> 
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is (mostly) ignored
-> and this typically results in resource leaks. To improve here there is a
-> quest to make the remove callback return void. In the first step of this
-> quest all drivers are converted to .remove_new() which already returns
-> void.
-> 
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+ This patch add myself as maintainer to drm loongson driver
 
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-Thanks. Best regards,
-   Nicolas
+Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+---
+ MAINTAINERS | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-> ---
->   drivers/staging/media/deprecated/atmel/atmel-sama5d2-isc.c | 6 ++----
->   1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/staging/media/deprecated/atmel/atmel-sama5d2-isc.c b/drivers/staging/media/deprecated/atmel/atmel-sama5d2-isc.c
-> index ba0614f981a2..cc744cea1d0e 100644
-> --- a/drivers/staging/media/deprecated/atmel/atmel-sama5d2-isc.c
-> +++ b/drivers/staging/media/deprecated/atmel/atmel-sama5d2-isc.c
-> @@ -580,7 +580,7 @@ static int atmel_isc_probe(struct platform_device *pdev)
->          return ret;
->   }
-> 
-> -static int atmel_isc_remove(struct platform_device *pdev)
-> +static void atmel_isc_remove(struct platform_device *pdev)
->   {
->          struct isc_device *isc = platform_get_drvdata(pdev);
-> 
-> @@ -594,8 +594,6 @@ static int atmel_isc_remove(struct platform_device *pdev)
->          clk_disable_unprepare(isc->hclock);
-> 
->          atmel_isc_clk_cleanup(isc);
-> -
-> -       return 0;
->   }
-> 
->   static int __maybe_unused isc_runtime_suspend(struct device *dev)
-> @@ -638,7 +636,7 @@ MODULE_DEVICE_TABLE(of, atmel_isc_of_match);
-> 
->   static struct platform_driver atmel_isc_driver = {
->          .probe  = atmel_isc_probe,
-> -       .remove = atmel_isc_remove,
-> +       .remove_new = atmel_isc_remove,
->          .driver = {
->                  .name           = "atmel-sama5d2-isc",
->                  .pm             = &atmel_isc_dev_pm_ops,
-> --
-> 2.39.2
-> 
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9736e04d3bd3..d258c5b54407 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6919,6 +6919,13 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
+ F:	drivers/gpu/drm/lima/
+ F:	include/uapi/drm/lima_drm.h
+ 
++DRM DRIVERS FOR LOONGSON
++M:	Sui Jingfeng <suijingfeng@loongson.cn>
++L:	dri-devel@lists.freedesktop.org
++S:	Supported
++T:	git git://anongit.freedesktop.org/drm/drm-misc
++F:	drivers/gpu/drm/loongson/
++
+ DRM DRIVERS FOR MEDIATEK
+ M:	Chun-Kuang Hu <chunkuang.hu@kernel.org>
+ M:	Philipp Zabel <p.zabel@pengutronix.de>
 -- 
-Nicolas Ferre
+2.25.1
 
